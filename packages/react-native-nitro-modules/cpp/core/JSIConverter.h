@@ -6,7 +6,6 @@
 
 #include "EnumMapper.h"
 #include "HybridObject.h"
-#include "JSIHelper.h"
 #include "Promise.h"
 #include "PromiseFactory.h"
 #include "WorkletRuntimeRegistry.h"
@@ -44,7 +43,7 @@ private:
 // int <> number
 template <> struct JSIConverter<int> {
   static int fromJSI(jsi::Runtime&, const jsi::Value& arg) {
-    return static_cast<int>(arg.asNumber());
+    return static_cast<int>(arg.getNumber());
   }
   static jsi::Value toJSI(jsi::Runtime&, int arg) {
     return jsi::Value(arg);
@@ -54,7 +53,7 @@ template <> struct JSIConverter<int> {
 // double <> number
 template <> struct JSIConverter<double> {
   static double fromJSI(jsi::Runtime&, const jsi::Value& arg) {
-    return arg.asNumber();
+    return arg.getNumber();
   }
   static jsi::Value toJSI(jsi::Runtime&, double arg) {
     return jsi::Value(arg);
@@ -64,7 +63,7 @@ template <> struct JSIConverter<double> {
 // float <> number
 template <> struct JSIConverter<float> {
   static float fromJSI(jsi::Runtime&, const jsi::Value& arg) {
-    return static_cast<float>(arg.asNumber());
+    return static_cast<float>(arg.getNumber());
   }
   static jsi::Value toJSI(jsi::Runtime&, float arg) {
     return jsi::Value(static_cast<double>(arg));
@@ -74,7 +73,7 @@ template <> struct JSIConverter<float> {
 // int64_t <> BigInt
 template <> struct JSIConverter<int64_t> {
   static double fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
-    return arg.asBigInt(runtime).asInt64(runtime);
+    return arg.getBigInt(runtime).getInt64(runtime);
   }
   static jsi::Value toJSI(jsi::Runtime& runtime, int64_t arg) {
     return jsi::BigInt::fromInt64(runtime, arg);
@@ -84,7 +83,7 @@ template <> struct JSIConverter<int64_t> {
 // uint64_t <> BigInt
 template <> struct JSIConverter<uint64_t> {
   static double fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
-    return arg.asBigInt(runtime).asUint64(runtime);
+    return arg.getBigInt(runtime).getUint64(runtime);
   }
   static jsi::Value toJSI(jsi::Runtime& runtime, uint64_t arg) {
     return jsi::BigInt::fromUint64(runtime, arg);
@@ -94,7 +93,7 @@ template <> struct JSIConverter<uint64_t> {
 // bool <> boolean
 template <> struct JSIConverter<bool> {
   static bool fromJSI(jsi::Runtime&, const jsi::Value& arg) {
-    return arg.asBool();
+    return arg.getBool();
   }
   static jsi::Value toJSI(jsi::Runtime&, bool arg) {
     return jsi::Value(arg);
@@ -104,7 +103,7 @@ template <> struct JSIConverter<bool> {
 // std::string <> string
 template <> struct JSIConverter<std::string> {
   static std::string fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
-    return arg.asString(runtime).utf8(runtime);
+    return arg.getString(runtime).utf8(runtime);
   }
   static jsi::Value toJSI(jsi::Runtime& runtime, const std::string& arg) {
     return jsi::String::createFromUtf8(runtime, arg);
@@ -132,7 +131,7 @@ template <typename TInner> struct JSIConverter<std::optional<TInner>> {
 // Enum <> Union
 template <typename TEnum> struct JSIConverter<TEnum, std::enable_if_t<std::is_enum<TEnum>::value>> {
   static TEnum fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
-    std::string string = arg.asString(runtime).utf8(runtime);
+    std::string string = arg.getString(runtime).utf8(runtime);
     TEnum outEnum;
     EnumMapper::convertJSUnionToEnum(string, &outEnum);
     return outEnum;
@@ -200,7 +199,7 @@ template <typename TResult> struct JSIConverter<std::future<TResult>> {
 // [](Args...) -> T {} <> (Args...) => T
 template <typename ReturnType, typename... Args> struct JSIConverter<std::function<ReturnType(Args...)>> {
   static std::function<ReturnType(Args...)> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
-    jsi::Function function = arg.asObject(runtime).asFunction(runtime);
+    jsi::Function function = arg.getObject(runtime).getFunction(runtime);
 
     std::shared_ptr<jsi::Function> sharedFunction = JSIHelper::createSharedJsiFunction(runtime, std::move(function));
     return [&runtime, sharedFunction](Args... args) -> ReturnType {
@@ -245,7 +244,7 @@ template <typename ReturnType, typename... Args> struct JSIConverter<std::functi
 // std::vector<T> <> T[]
 template <typename ElementType> struct JSIConverter<std::vector<ElementType>> {
   static std::vector<ElementType> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
-    jsi::Array array = arg.asObject(runtime).asArray(runtime);
+    jsi::Array array = arg.getObject(runtime).getArray(runtime);
     size_t length = array.size(runtime);
 
     std::vector<ElementType> vector;
@@ -269,14 +268,14 @@ template <typename ElementType> struct JSIConverter<std::vector<ElementType>> {
 // std::unordered_map<std::string, T> <> Record<string, T>
 template <typename ValueType> struct JSIConverter<std::unordered_map<std::string, ValueType>> {
   static std::unordered_map<std::string, ValueType> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
-    jsi::Object object = arg.asObject(runtime);
+    jsi::Object object = arg.getObject(runtime);
     jsi::Array propertyNames = object.getPropertyNames(runtime);
     size_t length = propertyNames.size(runtime);
 
     std::unordered_map<std::string, ValueType> map;
     map.reserve(length);
     for (size_t i = 0; i < length; ++i) {
-      std::string key = propertyNames.getValueAtIndex(runtime, i).asString(runtime).utf8(runtime);
+      std::string key = propertyNames.getValueAtIndex(runtime, i).getString(runtime).utf8(runtime);
       jsi::Value value = object.getProperty(runtime, key.c_str());
       map.emplace(key, JSIConverter<ValueType>::fromJSI(runtime, value));
     }

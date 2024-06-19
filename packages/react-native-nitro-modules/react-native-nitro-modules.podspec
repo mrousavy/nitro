@@ -2,7 +2,7 @@ require "json"
 
 package = JSON.parse(File.read(File.join(__dir__, "package.json")))
 
-Pod::UI.puts "[NitroModules] Thank you for using NitroModules 🔥"
+Pod::UI.puts "[NitroModules] Your app is boosted by nitro modules! 🔥"
 
 Pod::Spec.new do |s|
   s.name         = "react-native-nitro-modules"

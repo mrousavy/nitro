@@ -19,8 +19,8 @@ jsi::Value Promise::createPromise(jsi::Runtime& runtime, RunPromise run) {
       runtime, jsi::PropNameID::forUtf8(runtime, "PromiseCallback"), 2,
       [=](jsi::Runtime& runtime, const jsi::Value& thisValue, const jsi::Value* arguments, size_t count) -> jsi::Value {
         // Call function
-        auto resolver = arguments[0].asObject(runtime).asFunction(runtime);
-        auto rejecter = arguments[1].asObject(runtime).asFunction(runtime);
+        auto resolver = arguments[0].getObject(runtime).getFunction(runtime);
+        auto rejecter = arguments[1].getObject(runtime).getFunction(runtime);
         auto promise = std::make_shared<Promise>(runtime, std::move(resolver), std::move(rejecter));
         run(runtime, promise);
 
