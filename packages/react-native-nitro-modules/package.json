@@ -1,5 +1,5 @@
 {
-  "name": "react-native-nitro",
+  "name": "react-native-nitro-modules",
   "version": "0.0.2",
   "description": "Nitro Modules",
   "main": "lib/commonjs/index",

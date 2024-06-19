@@ -20,7 +20,8 @@
     "@react-native/babel-preset": "0.74.84",
     "@react-native/metro-config": "0.74.84",
     "@react-native/typescript-config": "0.74.84",
-    "babel-plugin-module-resolver": "^5.0.0"
+    "babel-plugin-module-resolver": "^5.0.0",
+    "react-native-nitro-modules": "workspace:^"
   },
   "engines": {
     "node": ">=18"
