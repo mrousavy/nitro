@@ -2,6 +2,8 @@
 #
 .DS_Store
 
+**/.xcode.env.local
+
 # XDE
 .expo/
 
