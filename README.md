@@ -15,6 +15,25 @@ npm install react-native-nitro
 
 🤔
 
+## Platforms
+
+### Cross-platform
+
+Cross-platform native modules can be built with C++.
+Any custom C++ types can be used and bridged to JS with minimal overhead.
+
+JS <-> C++ type converters are statically generated ahead of time - no more dynamic lookups or runtime parser errors! 🥳
+
+### iOS
+
+iOS native modules and view components can be written either in pure C++, or pure Swift.
+Thanks to Swift 5.9, Swift Nitro Modules [bridge directly to C++](https://www.swift.org/documentation/cxx-interop/) instead of going through Objective-C message sends. Woohoo, no more Objective-C! 🥳
+
+### Android
+
+Android native modules and view components can be written either in pure C++, or pure Kotlin/Java.
+Thanks to fbjni, even complex types can be effortlessly bridged to Kotlin/Java with minimal overhead! 🔥
+
 ## Contributing
 
 See the [contributing guide](CONTRIBUTING.md) to learn how to contribute to the repository and the development workflow.
