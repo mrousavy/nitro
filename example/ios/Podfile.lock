@@ -935,7 +935,7 @@ PODS:
   - React-Mapbuffer (0.74.2):
     - glog
     - React-debug
-  - react-native-nitro (0.0.2):
+  - react-native-nitro-modules (0.0.3):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -949,6 +949,51 @@ PODS:
     - React-featureflags
     - React-graphics
     - React-ImageManager
+    - "react-native-nitro-modules/C++-Bindings (= 0.0.3)"
+    - react-native-nitro-modules/Swift-Bindings (= 0.0.3)
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-rendererdebug
+    - React-utils
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - Yoga
+  - "react-native-nitro-modules/C++-Bindings (0.0.3)":
+    - DoubleConversion
+    - glog
+    - hermes-engine
+    - RCT-Folly (= 2024.01.01.00)
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Codegen
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-rendererdebug
+    - React-utils
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - Yoga
+  - react-native-nitro-modules/Swift-Bindings (0.0.3):
+    - DoubleConversion
+    - glog
+    - hermes-engine
+    - RCT-Folly (= 2024.01.01.00)
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Codegen
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - "react-native-nitro-modules/C++-Bindings"
     - React-NativeModulesApple
     - React-RCTFabric
     - React-rendererdebug
@@ -1221,7 +1266,7 @@ DEPENDENCIES:
   - React-jsitracing (from `../../node_modules/react-native/ReactCommon/hermes/executor/`)
   - React-logger (from `../../node_modules/react-native/ReactCommon/logger`)
   - React-Mapbuffer (from `../../node_modules/react-native/ReactCommon`)
-  - react-native-nitro (from `../node_modules/react-native-nitro-modules`)
+  - react-native-nitro-modules (from `../../node_modules/react-native-nitro-modules`)
   - React-nativeconfig (from `../../node_modules/react-native/ReactCommon`)
   - React-NativeModulesApple (from `../../node_modules/react-native/ReactCommon/react/nativemodule/core/platform/ios`)
   - React-perflogger (from `../../node_modules/react-native/ReactCommon/reactperflogger`)
@@ -1313,8 +1358,8 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/react-native/ReactCommon/logger"
   React-Mapbuffer:
     :path: "../../node_modules/react-native/ReactCommon"
-  react-native-nitro:
-    :path: "../node_modules/react-native-nitro-modules"
+  react-native-nitro-modules:
+    :path: "../../node_modules/react-native-nitro-modules"
   React-nativeconfig:
     :path: "../../node_modules/react-native/ReactCommon"
   React-NativeModulesApple:
@@ -1395,7 +1440,7 @@ SPEC CHECKSUMS:
   React-jsitracing: 0fa7f78d8fdda794667cb2e6f19c874c1cf31d7e
   React-logger: 29fa3e048f5f67fe396bc08af7606426d9bd7b5d
   React-Mapbuffer: bf56147c9775491e53122a94c423ac201417e326
-  react-native-nitro: 7d2453ccc552f848a61e69f03c8e5a62b7c92ad9
+  react-native-nitro-modules: 86a3540ff46d787beccfda15bb4a0344f0253c72
   React-nativeconfig: 9f223cd321823afdecf59ed00861ab2d69ee0fc1
   React-NativeModulesApple: ff7efaff7098639db5631236cfd91d60abff04c0
   React-perflogger: 32ed45d9cee02cf6639acae34251590dccd30994
