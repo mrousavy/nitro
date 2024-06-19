@@ -9,35 +9,47 @@
   "source": "src/index",
   "files": [
     "src",
-    "lib",
-    "android",
-    "ios",
-    "cpp",
+    "react-native.config.js",
+    "lib/commonjs",
+    "lib/module",
+    "lib/typescript",
+    "android/build.gradle",
+    "android/gradle.properties",
+    "android/CMakeLists.txt",
+    "android/src",
+    "ios/**/*.h",
+    "ios/**/*.m",
+    "ios/**/*.mm",
+    "ios/**/*.cpp",
+    "ios/**/*.swift",
+    "app.plugin.js",
     "*.podspec",
-    "!ios/build",
-    "!android/build",
-    "!android/gradle",
-    "!android/gradlew",
-    "!android/gradlew.bat",
-    "!android/local.properties",
-    "!**/__tests__",
-    "!**/__fixtures__",
-    "!**/__mocks__",
-    "!**/.*"
+    "README.md"
   ],
   "scripts": {
-    "example": "yarn workspace react-native-nitro-example",
     "test": "jest",
     "typecheck": "tsc --noEmit",
+    "clean": "del-cli android/build node_modules/**/android/build lib",
     "lint": "eslint \"**/*.{js,ts,tsx}\"",
-    "clean": "del-cli android/build example/android/build example/android/app/build example/ios/build lib",
-    "prepare": "bob build",
-    "release": "release-it"
+    "release": "bob build && release-it"
   },
   "keywords": [
     "react-native",
+    "nitro",
     "ios",
-    "android"
+    "android",
+    "cpp",
+    "framework",
+    "react",
+    "swift",
+    "native",
+    "modules",
+    "fast",
+    "jsi",
+    "turbo",
+    "scaffold",
+    "template",
+    "views"
   ],
   "repository": {
     "type": "git",
@@ -67,7 +79,6 @@
     "react-native": "0.74.2",
     "react-native-builder-bob": "^0.23.2",
     "release-it": "^15.0.0",
-    "turbo": "^1.10.7",
     "typescript": "^5.2.2"
   },
   "resolutions": {
@@ -77,9 +88,6 @@
     "react": "*",
     "react-native": "*"
   },
-  "workspaces": [
-    "example"
-  ],
   "packageManager": "yarn@3.6.1",
   "jest": {
     "preset": "react-native",
@@ -101,7 +109,31 @@
     },
     "plugins": {
       "@release-it/conventional-changelog": {
-        "preset": "angular"
+        "preset": {
+          "name": "conventionalcommits",
+          "types": [
+            {
+              "type": "feat",
+              "section": "✨ Features"
+            },
+            {
+              "type": "perf",
+              "section": "💨 Performance Improvements"
+            },
+            {
+              "type": "fix",
+              "section": "🐛 Bug Fixes"
+            },
+            {
+              "type": "chore(deps)",
+              "section": "🛠️ Dependency Upgrades"
+            },
+            {
+              "type": "docs",
+              "section": "📚 Documentation"
+            }
+          ]
+        }
       }
     }
   },
