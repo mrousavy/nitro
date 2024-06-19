@@ -35,5 +35,10 @@ Pod::Spec.new do |s|
     ss.dependency "react-native-nitro-modules/C++-Bindings"
   end
 
+  # TODO: Figure out a way to automatically set the `SWIFT_OBJC_INTEROP_MODE` build setting to `objcxx` in the podspec
+  # s.user_target_xcconfig = {
+  #   "SWIFT_OBJC_INTEROP_MODE" => "objcxx",
+  # }
+
   install_modules_dependencies(s)
 end

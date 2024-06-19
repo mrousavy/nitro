@@ -7,9 +7,16 @@ Nitro Modules are highly efficient native modules exposed with a statically comp
 
 ## Installation
 
-```sh
-npm install react-native-nitro
-```
+1. Install [react-native-nitro-modules](npmjs.org/react-native-nitro-modules) from npm:
+  ```sh
+  yarn add react-native-nitro-modules
+  cd ios && pod install
+  ```
+2. Enable C++ <-> Swift interop in your Xcode Project
+  1. Open your `.xcworkspace` in Xcode
+  2. Click on your app's project on the left
+  3. Go to **Build Settings**
+  4. Search for **"C++ and Objective-C interoperability"** and set it to C++/Objective-C++ (`SWIFT_OBJC_INTEROP_MODE="objcxx"`)
 
 ## Usage
 
