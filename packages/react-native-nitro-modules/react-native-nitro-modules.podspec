@@ -22,7 +22,7 @@ Pod::Spec.new do |s|
       "cpp/**/*.{hpp,cpp}"
     ]
     ss.public_header_files = [
-      "cpp/**/*.h"
+      "cpp/**/*.{h,hpp}"
     ]
   end
 
@@ -30,6 +30,7 @@ Pod::Spec.new do |s|
     # VisionCamera Swift bindings
     ss.source_files = [
       "ios/**/*.swift",
+      "ios/**/*.h",
       "ios/**/*.modulemap",
     ]
 
