@@ -5,6 +5,13 @@ react-native-nitro
 
 Nitro Modules are highly efficient native modules exposed with a statically compiled binding layer to JSI.
 
+## TODOs
+
+- [ ] Create a TypeScript AST-parser code-generator (TypeScript interfaces -> C++/Swift/Kotlin interfaces)
+- [ ] Bridge HybridObject and Modules to Swift/Kotlin
+- [ ] Implement proper autolinking so third party modules can use NitroModules and be automatically loaded in the end-app (android/build.gradle how??)
+- [ ] Implement Views/`RawProps`
+
 ## Installation
 
 1. Install [react-native-nitro-modules](npmjs.org/react-native-nitro-modules) from npm:
