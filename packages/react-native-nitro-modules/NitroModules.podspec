@@ -5,7 +5,7 @@ package = JSON.parse(File.read(File.join(__dir__, "package.json")))
 Pod::UI.puts "[NitroModules] Your app is boosted by nitro modules! 🔥"
 
 Pod::Spec.new do |s|
-  s.name         = "react-native-nitro-modules"
+  s.name         = "NitroModules"
   s.version      = package["version"]
   s.summary      = package["description"]
   s.homepage     = package["homepage"]
@@ -15,27 +15,17 @@ Pod::Spec.new do |s|
   s.platforms    = { :ios => min_ios_version_supported }
   s.source       = { :git => "https://github.com/mrousavy/react-native-nitro.git", :tag => "#{s.version}" }
 
-  s.subspec 'C++-Bindings' do |ss|
-    # VisionCamera Core C++ bindings
-    ss.source_files = [
-      "cpp/**/*.{h,c}",
-      "cpp/**/*.{hpp,cpp}"
-    ]
-    ss.public_header_files = [
-      "cpp/**/*.{h,hpp}"
-    ]
-  end
-
-  s.subspec 'Swift-Bindings' do |ss|
-    # VisionCamera Swift bindings
-    ss.source_files = [
-      "ios/**/*.swift",
-      "ios/**/*.h",
-      "ios/**/*.modulemap",
-    ]
-
-    ss.dependency "react-native-nitro-modules/C++-Bindings"
-  end
+  # VisionCamera Core C++ bindings
+  s.source_files = [
+    "cpp/**/*.{h,c}",
+    "cpp/**/*.{hpp,cpp}",
+    "ios/**/*.swift",
+    "ios/**/*.h",
+    "ios/**/*.modulemap",
+  ]
+  s.public_header_files = [
+    "cpp/**/*.{h,hpp}"
+  ]
 
   s.pod_target_xcconfig = {
     # Enables C++ <-> Swift interop (by default it's only C)
