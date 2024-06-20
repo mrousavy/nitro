@@ -5,7 +5,7 @@ namespace margelo {
 
 using namespace facebook;
 
-static constexpr auto GLOBAL_DISPATCHER_HOLDER_NAME = "__globalDispatcher";
+static constexpr auto GLOBAL_DISPATCHER_HOLDER_NAME = "__nitroDispatcher";
 
 void Dispatcher::installRuntimeGlobalDispatcher(jsi::Runtime& runtime, std::shared_ptr<Dispatcher> dispatcher) {
   Logger::log(TAG, "Installing global Dispatcher Holder...");
@@ -24,7 +24,7 @@ std::shared_ptr<Dispatcher> Dispatcher::getRuntimeGlobalDispatcher(jsi::Runtime&
 jsi::Value Dispatcher::getRuntimeGlobalDispatcherHolder(jsi::Runtime& runtime) {
 #if DEBUG
   if (!runtime.global().hasProperty(runtime, GLOBAL_DISPATCHER_HOLDER_NAME)) {
-    throw jsi::JSError(runtime, "Failed to get current Dispatcher - the global Dispatcher "
+    throw std::runtime_error("Failed to get current Dispatcher - the global Dispatcher "
                                 "holder (global." +
                                     std::string(GLOBAL_DISPATCHER_HOLDER_NAME) +
                                     ") "

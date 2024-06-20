@@ -24,6 +24,8 @@ public:
    Gets the global Dispatcher in the given Runtime, or throws an error if not found.
   */
   static std::shared_ptr<Dispatcher> getRuntimeGlobalDispatcher(jsi::Runtime& runtime);
+  
+private:
   static jsi::Value getRuntimeGlobalDispatcherHolder(jsi::Runtime& runtime);
 
 public:

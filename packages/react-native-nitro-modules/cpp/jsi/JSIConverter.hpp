@@ -9,6 +9,7 @@
 #include "Promise.hpp"
 #include "PromiseFactory.hpp"
 #include "Dispatcher.hpp"
+#include "FunctionCache.hpp"
 #include <array>
 #include <future>
 #include <jsi/jsi.h>
@@ -21,6 +22,14 @@
 #endif
 
 namespace margelo {
+
+/**
+ The JSIConverter<T> class can convert any type from and to a jsi::Value.
+ It uses templates to statically create fromJSI/toJSI methods, and will throw compile-time errors
+ if a given type is not convertable.
+ Value types, custom types (HostObjects), and even functions with any number of arguments/types are supported.
+ This type can be extended by just creating a new template for JSIConverter in a header.
+ */
 
 using namespace facebook;
 
@@ -149,12 +158,13 @@ template <typename TResult> struct JSIConverter<std::future<TResult>> {
   }
   static jsi::Value toJSI(jsi::Runtime& runtime, std::future<TResult>&& arg) {
     auto sharedFuture = std::make_shared<std::future<TResult>>(std::move(arg));
-    return PromiseFactory::createPromise(runtime, [sharedFuture = std::move(sharedFuture)](jsi::Runtime& runtime,
-                                                                                           std::shared_ptr<Promise> promise,
-                                                                                           std::shared_ptr<Dispatcher> dispatcher) {
-      // Spawn new async thread to wait for the result
-      std::thread waiterThread([promise, &runtime, dispatcher, sharedFuture = std::move(sharedFuture)]() {
-        // wait until the future completes. we are running on a background task here.
+    auto dispatcher = Dispatcher::getRuntimeGlobalDispatcher(runtime);
+    
+    return Promise::createPromise(runtime, [sharedFuture, dispatcher](jsi::Runtime& runtime,
+                                                                      std::shared_ptr<Promise> promise) {
+      // Spawn new async thread to synchronously wait for the `future<T>` to complete
+      std::thread waiterThread([promise, &runtime, dispatcher, sharedFuture]() {
+        // synchronously wait until the `future<T>` completes. we are running on a background task here.
         sharedFuture->wait();
 
         // the async function completed successfully, resolve the promise on JS Thread
@@ -163,27 +173,27 @@ template <typename TResult> struct JSIConverter<std::future<TResult>> {
             if constexpr (std::is_same_v<TResult, void>) {
               // it's returning void, just return undefined to JS
               sharedFuture->get();
-              promise->resolve(jsi::Value::undefined());
+              promise->resolve(runtime, jsi::Value::undefined());
             } else {
               // it's returning a custom type, convert it to a jsi::Value
               TResult result = sharedFuture->get();
               jsi::Value jsResult = JSIConverter<TResult>::toJSI(runtime, result);
-              promise->resolve(std::move(jsResult));
+              promise->resolve(runtime, std::move(jsResult));
             }
           } catch (const std::exception& exception) {
             // the async function threw an error, reject the promise on JS Thread
             std::string what = exception.what();
-            promise->reject(what);
+            promise->reject(runtime, what);
           } catch (...) {
             // the async function threw a non-std error, try getting it
 #if __has_include(<cxxabi.h>)
             std::string name = __cxxabiv1::__cxa_current_exception_type()->name();
 #else
-                std::string name = "<unknown>";
+            std::string name = "<unknown>";
 #endif
-            promise->reject("Unknown non-std exception: " + name);
+            promise->reject(runtime, "Unknown non-std exception: " + name);
           }
-
+          
           // This lambda owns the promise shared pointer, and we need to call its
           // destructor on the correct thread here - otherwise it might be called
           // from the waiterThread.
@@ -198,17 +208,31 @@ template <typename TResult> struct JSIConverter<std::future<TResult>> {
 // [](Args...) -> T {} <> (Args...) => T
 template <typename ReturnType, typename... Args> struct JSIConverter<std::function<ReturnType(Args...)>> {
   static std::function<ReturnType(Args...)> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+    // Make function global - it'll be managed by the Runtime's memory, and we only have a weak_ref to it.
+    auto cache = FunctionCache::getOrCreateCache(runtime).lock();
     jsi::Function function = arg.getObject(runtime).getFunction(runtime);
-
-    // TODO: Weakify this using a RuntimeWatch so it is safely managed by the Runtime, not by us.
-    auto sharedFunction = std::make_shared<jsi::Function>(std::move(function));
+    auto sharedFunction = cache->makeGlobal(std::move(function));
+    
+    // Create a C++ function that can be called by the consumer.
+    // This will call the jsi::Function if it is still alive.
     return [&runtime, sharedFunction](Args... args) -> ReturnType {
-      jsi::Value result = sharedFunction->call(runtime, JSIConverter<std::decay_t<Args>>::toJSI(runtime, args)...);
       if constexpr (std::is_same_v<ReturnType, void>) {
         // it is a void function (returns undefined)
+        auto function = sharedFunction.lock();
+        if (!function) {
+          // runtime has already been deleted. since this returns void, we can just ignore it being deleted.
+          return;
+        }
+        function->call(runtime, JSIConverter<std::decay_t<Args>>::toJSI(runtime, args)...);
         return;
       } else {
         // it returns a custom type, parse it from the JSI value.
+        auto function = sharedFunction.lock();
+        if (!function) {
+          // runtime has already been deleted. since we expect a return value here, we need to throw.
+          throw std::runtime_error("Cannot call the given Function - the Runtime has already been destroyed!");
+        }
+        jsi::Value result = function->call(runtime, JSIConverter<std::decay_t<Args>>::toJSI(runtime, args)...);
         return JSIConverter<ReturnType>::fromJSI(runtime, std::move(result));
       }
     };
@@ -294,9 +318,7 @@ template <typename ValueType> struct JSIConverter<std::unordered_map<std::string
 
 // HybridObject <> {}
 template <typename T> struct is_shared_ptr_to_host_object : std::false_type {};
-
 template <typename T> struct is_shared_ptr_to_host_object<std::shared_ptr<T>> : std::is_base_of<jsi::HostObject, T> {};
-
 template <typename T> struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_host_object<T>::value>> {
   using TPointee = typename T::element_type;
 
@@ -354,9 +376,7 @@ template <typename T> struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_h
 
 // NativeState <> {}
 template <typename T> struct is_shared_ptr_to_native_state : std::false_type {};
-
 template <typename T> struct is_shared_ptr_to_native_state<std::shared_ptr<T>> : std::is_base_of<jsi::NativeState, T> {};
-
 template <typename T> struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_native_state<T>::value>> {
   using TPointee = typename T::element_type;
 
