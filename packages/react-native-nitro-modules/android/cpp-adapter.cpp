@@ -1,5 +1,5 @@
 #include <jni.h>
-#include "react-native-nitro.h"
+#include "react-native-nitro.hpp"
 
 extern "C"
 JNIEXPORT jdouble JNICALL

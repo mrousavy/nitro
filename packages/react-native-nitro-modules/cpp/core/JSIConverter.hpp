@@ -4,12 +4,11 @@
 
 #pragma once
 
-#include "EnumMapper.h"
-#include "HybridObject.h"
-#include "Promise.h"
-#include "PromiseFactory.h"
-#include "WorkletRuntimeRegistry.h"
-#include "threading/Dispatcher.h"
+#include "EnumMapper.hpp"
+#include "HybridObject.hpp"
+#include "Promise.hpp"
+#include "PromiseFactory.hpp"
+#include "Dispatcher.hpp"
 #include <array>
 #include <future>
 #include <jsi/jsi.h>
@@ -201,7 +200,8 @@ template <typename ReturnType, typename... Args> struct JSIConverter<std::functi
   static std::function<ReturnType(Args...)> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
     jsi::Function function = arg.getObject(runtime).getFunction(runtime);
 
-    std::shared_ptr<jsi::Function> sharedFunction = JSIHelper::createSharedJsiFunction(runtime, std::move(function));
+    // TODO: Weakify this using a RuntimeWatch so it is safely managed by the Runtime, not by us.
+    auto sharedFunction = std::make_shared<jsi::Function>(std::move(function));
     return [&runtime, sharedFunction](Args... args) -> ReturnType {
       jsi::Value result = sharedFunction->call(runtime, JSIConverter<std::decay_t<Args>>::toJSI(runtime, args)...);
       if constexpr (std::is_same_v<ReturnType, void>) {

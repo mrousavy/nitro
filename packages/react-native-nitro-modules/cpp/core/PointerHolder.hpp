@@ -4,8 +4,8 @@
 
 #pragma once
 
-#include "HybridObject.h"
-#include "Logger.h"
+#include "HybridObject.hpp"
+#include "NitroLogger.hpp"
 #include <memory>
 #include <mutex>
 

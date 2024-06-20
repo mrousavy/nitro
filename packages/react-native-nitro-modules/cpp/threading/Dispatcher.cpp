@@ -1,5 +1,5 @@
-#include "Dispatcher.h"
-#include "Logger.h"
+#include "Dispatcher.hpp"
+#include "Logger.hpp"
 
 namespace margelo {
 

@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "Dispatcher.h"
+#include "Dispatcher.hpp"
 #include <ReactCommon/CallInvoker.h>
 
 namespace margelo {

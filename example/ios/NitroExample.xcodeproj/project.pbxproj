@@ -608,6 +608,7 @@
 				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../../node_modules/react-native";
 				SDKROOT = iphoneos;
+				SWIFT_OBJC_INTEROP_MODE = objcxx;
 				USE_HERMES = true;
 			};
 			name = Debug;
@@ -683,6 +684,7 @@
 				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../../node_modules/react-native";
 				SDKROOT = iphoneos;
+				SWIFT_OBJC_INTEROP_MODE = objcxx;
 				USE_HERMES = true;
 				VALIDATE_PRODUCT = YES;
 			};

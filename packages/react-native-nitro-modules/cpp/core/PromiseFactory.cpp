@@ -5,9 +5,9 @@
 //  Created by Marc Rousavy on 11.03.24.
 //
 
-#include "PromiseFactory.h"
-#include "Logger.h"
-#include "threading/Dispatcher.h"
+#include "PromiseFactory.hpp"
+#include "Logger.hpp"
+#include "threading/Dispatcher.hpp"
 
 namespace margelo {
 

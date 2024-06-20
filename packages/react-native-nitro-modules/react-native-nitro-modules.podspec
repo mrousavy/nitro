@@ -18,7 +18,8 @@ Pod::Spec.new do |s|
   s.subspec 'C++-Bindings' do |ss|
     # VisionCamera Core C++ bindings
     ss.source_files = [
-      "cpp/**/*.{h,c,cpp}"
+      "cpp/**/*.{h,c}",
+      "cpp/**/*.{hpp,cpp}"
     ]
     ss.public_header_files = [
       "cpp/**/*.h"

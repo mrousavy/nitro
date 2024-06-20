@@ -4,8 +4,8 @@
 
 #pragma once
 
-#include "JSIConverter.h"
-#include "Logger.h"
+#include "JSIConverter.hpp"
+#include "NitroLogger.hpp"
 #include <functional>
 #include <jsi/jsi.h>
 #include <memory>

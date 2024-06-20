@@ -2,9 +2,9 @@
 // Created by Marc Rousavy on 21.02.24.
 //
 
-#include "HybridObject.h"
-#include "JSIConverter.h"
-#include "Logger.h"
+#include "HybridObject.hpp"
+#include "JSIConverter.hpp"
+#include "Logger.hpp"
 
 namespace margelo {
 
