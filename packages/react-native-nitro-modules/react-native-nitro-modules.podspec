@@ -36,7 +36,7 @@ Pod::Spec.new do |s|
   end
 
   # Enables C++ <-> Swift interop (by default it's only C)
-  s.user_target_xcconfig = {
+  s.pod_target_xcconfig = {
     "SWIFT_OBJC_INTEROP_MODE" => "objcxx",
   }
 
