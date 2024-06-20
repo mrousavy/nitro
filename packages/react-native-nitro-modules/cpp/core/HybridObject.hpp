@@ -70,9 +70,7 @@ private:
   std::unordered_map<std::string, HybridFunction> _methods;
   std::unordered_map<std::string, jsi::HostFunctionType> _getters;
   std::unordered_map<std::string, jsi::HostFunctionType> _setters;
-  std::unordered_map<jsi::Runtime*, std::unordered_map<std::string, std::shared_ptr<jsi::Function>>> _functionCache;
-  // Store a pointer to the runtime. Needed for checking if the runtime is still active, see WorkletRuntimeRegistry.
-  jsi::Runtime* _creationRuntime = nullptr;
+  std::unordered_map<jsi::Runtime*, std::unordered_map<std::string, std::weak_ptr<jsi::Function>>> _functionCache;
 
 private:
   inline void ensureInitialized(facebook::jsi::Runtime& runtime);
@@ -149,8 +147,6 @@ protected:
 
     _setters[name] = createHybridMethod(method, derivedInstance);
   }
-
-  bool isRuntimeAlive();
 };
 
 } // namespace margelo

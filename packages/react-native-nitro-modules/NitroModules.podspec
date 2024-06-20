@@ -28,6 +28,8 @@ Pod::Spec.new do |s|
   ]
 
   s.pod_target_xcconfig = {
+    # Use C++ 17
+    "CLANG_CXX_LANGUAGE_STANDARD" => "c++17",
     # Enables C++ <-> Swift interop (by default it's only C)
     "SWIFT_OBJC_INTEROP_MODE" => "objcxx",
   }

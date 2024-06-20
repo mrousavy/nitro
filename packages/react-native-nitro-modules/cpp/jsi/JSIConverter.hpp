@@ -7,7 +7,6 @@
 #include "EnumMapper.hpp"
 #include "HybridObject.hpp"
 #include "Promise.hpp"
-#include "PromiseFactory.hpp"
 #include "Dispatcher.hpp"
 #include "FunctionCache.hpp"
 #include <array>

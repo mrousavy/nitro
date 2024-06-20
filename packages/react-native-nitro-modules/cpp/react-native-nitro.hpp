@@ -1,8 +1,11 @@
 #ifndef NITRO_H
 #define NITRO_H
 
+#include "test-object/TestHybridObject.hpp"
+
 namespace nitro {
-  double multiply(double a, double b);
+
+  std::shared_ptr<margelo::TestHybridObject> createTestHybridObject();
 }
 
 #endif /* NITRO_H */

@@ -72,16 +72,17 @@ jsi::Value HybridObject::get(facebook::jsi::Runtime& runtime, const facebook::js
 
   std::string name = propName.utf8(runtime);
   auto& functionCache = _functionCache[&runtime];
-
-  if (_getters.count(name) > 0) {
-    // it's a property getter
-    return _getters[name](runtime, jsi::Value::undefined(), nullptr, 0);
-  }
-
+  
+  
   if (functionCache.count(name) > 0) {
     [[likely]];
     // cache hit
     return jsi::Value(runtime, *functionCache[name]);
+  }
+
+  if (_getters.count(name) > 0) {
+    // it's a property getter
+    return _getters[name](runtime, jsi::Value::undefined(), nullptr, 0);
   }
 
   if (_methods.count(name) > 0) {
@@ -124,16 +125,10 @@ void HybridObject::set(facebook::jsi::Runtime& runtime, const facebook::jsi::Pro
 void HybridObject::ensureInitialized(facebook::jsi::Runtime& runtime) {
   if (!_didLoadMethods) {
     [[unlikely]];
-    _creationRuntime = &runtime;
     // lazy-load all exposed methods
     loadHybridMethods();
     _didLoadMethods = true;
   }
-}
-
-bool HybridObject::isRuntimeAlive() {
-  // TODO: Fix this. We shouldn't do this. This is a bad idea.
-  return true;
 }
 
 } // namespace margelo

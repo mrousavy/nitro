@@ -10,6 +10,7 @@
 #include <jsi/jsi.h>
 #include <memory>
 #include <vector>
+#include <unordered_map>
 
 namespace margelo {
 
@@ -47,6 +48,11 @@ public:
 private:
   jsi::Runtime* _runtime;
   std::vector<std::shared_ptr<jsi::Function>> _cache;
+  
+private:
+  static std::unordered_map<jsi::Runtime*, std::weak_ptr<FunctionCache>> _globalCache;
+  
+private:
   static constexpr auto TAG = "FunctionCache";
 };
 
