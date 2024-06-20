@@ -19,7 +19,7 @@ using namespace facebook;
 /**
  Safely holds `jsi::Function` instances, managed by a `jsi::Runtime`.
  */
-class FunctionCache: public jsi::NativeState {
+class FunctionCache final: public jsi::NativeState {
 public:
   explicit FunctionCache(jsi::Runtime* runtime);
 
