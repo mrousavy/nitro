@@ -28,12 +28,6 @@ public:
   void setString(const std::string& newValue) {
     _string = newValue;
   }
-  void setEnum(TestEnum testEnum) {
-    _enum = testEnum;
-  }
-  TestEnum getEnum() {
-    return _enum;
-  }
   std::optional<std::string> getNullableString() {
     return _nullableString;
   }
@@ -83,7 +77,6 @@ public:
 private:
   int _int;
   std::string _string;
-  TestEnum _enum;
   std::optional<std::string> _nullableString;
 
   void loadHybridMethods() override;

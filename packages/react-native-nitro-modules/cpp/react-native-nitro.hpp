@@ -1,7 +1,7 @@
 #ifndef NITRO_H
 #define NITRO_H
 
-#include "test-object/TestHybridObject.hpp"
+#include "TestHybridObject.hpp"
 
 namespace nitro {
 

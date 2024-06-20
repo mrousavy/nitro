@@ -73,26 +73,32 @@ jsi::Value HybridObject::get(facebook::jsi::Runtime& runtime, const facebook::js
   std::string name = propName.utf8(runtime);
   auto& functionCache = _functionCache[&runtime];
   
-  
-  if (functionCache.count(name) > 0) {
-    [[likely]];
-    // cache hit
-    return jsi::Value(runtime, *functionCache[name]);
+  if (functionCache.contains(name)) [[likely]] {
+    // cache hit - let's see if the function is still alive..
+    std::shared_ptr<jsi::Function> function = functionCache[name].lock();
+    if (function != nullptr) [[likely]] {
+      // function is still alive, we can use it.
+      return jsi::Value(runtime, *function);
+    }
   }
 
-  if (_getters.count(name) > 0) {
-    // it's a property getter
+  if (_getters.contains(name)) {
+    // it's a property getter. call it directly
     return _getters[name](runtime, jsi::Value::undefined(), nullptr, 0);
   }
 
-  if (_methods.count(name) > 0) {
-    // cache miss - create jsi::Function and cache it.
+  if (_methods.contains(name)) {
+    // it's a function. we now need to wrap it in a jsi::Function, store it in cache, then return it.
     HybridFunction& hybridFunction = _methods.at(name);
+    // get (or create) a runtime-specific function cache
+    auto runtimeCache = FunctionCache::getOrCreateCache(runtime).lock();
+    // create the jsi::Function
     jsi::Function function = jsi::Function::createFromHostFunction(runtime, jsi::PropNameID::forUtf8(runtime, name),
                                                                    hybridFunction.parameterCount, hybridFunction.function);
-    // TODO: Weakify function using RuntimeWatch so the Runtime safely manages it's lifetime, not us.
-    functionCache[name] = std::make_shared<jsi::Function>(std::move(function));
-    return jsi::Value(runtime, *functionCache[name]);
+    // throw it into the cache
+    auto globalFunction = runtimeCache->makeGlobal(std::move(function));
+    functionCache[name] = globalFunction;
+    return jsi::Value(runtime, *globalFunction.lock());
   }
 
   if (name == "toString") {
@@ -123,8 +129,7 @@ void HybridObject::set(facebook::jsi::Runtime& runtime, const facebook::jsi::Pro
 }
 
 void HybridObject::ensureInitialized(facebook::jsi::Runtime& runtime) {
-  if (!_didLoadMethods) {
-    [[unlikely]];
+  if (!_didLoadMethods) [[unlikely]] {
     // lazy-load all exposed methods
     loadHybridMethods();
     _didLoadMethods = true;

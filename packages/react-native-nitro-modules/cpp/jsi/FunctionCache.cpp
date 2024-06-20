@@ -37,7 +37,7 @@ std::weak_ptr<FunctionCache> FunctionCache::getOrCreateCache(jsi::Runtime &runti
 }
 
 std::weak_ptr<jsi::Function> FunctionCache::makeGlobal(jsi::Function&& function) {
-  auto shared = std::make_shared<jsi::Function>(function);
+  auto shared = std::make_shared<jsi::Function>(std::move(function));
   _cache.push_back(shared);
   return std::weak_ptr(shared);
 }
