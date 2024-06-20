@@ -51,7 +51,7 @@ std::vector<jsi::PropNameID> HybridObject::getPropertyNames(facebook::jsi::Runti
   ensureInitialized(runtime);
 
   std::vector<jsi::PropNameID> result;
-  size_t totalSize = _methods.size() + _getters.size() + _setters.size();
+  size_t totalSize = _methods.size() + _getters.size() + _setters.size() + 1;
   result.reserve(totalSize);
 
   for (const auto& item : _methods) {
@@ -63,6 +63,7 @@ std::vector<jsi::PropNameID> HybridObject::getPropertyNames(facebook::jsi::Runti
   for (const auto& item : _setters) {
     result.push_back(jsi::PropNameID::forUtf8(runtime, item.first));
   }
+  result.push_back(jsi::PropNameID::forUtf8(runtime, "toString"));
   return result;
 }
 
@@ -98,10 +99,12 @@ jsi::Value HybridObject::get(facebook::jsi::Runtime& runtime, const facebook::js
     // throw it into the cache
     auto globalFunction = runtimeCache->makeGlobal(std::move(function));
     functionCache[name] = globalFunction;
+    // copy the reference & return it to JS
     return jsi::Value(runtime, *globalFunction.lock());
   }
 
   if (name == "toString") {
+    // we always have a toString function. Currently, this is not cached.
     return jsi::Function::createFromHostFunction(
         runtime, jsi::PropNameID::forUtf8(runtime, "toString"), 0,
         [=](jsi::Runtime& runtime, const jsi::Value& thisValue, const jsi::Value* args, size_t count) -> jsi::Value {
@@ -119,7 +122,7 @@ void HybridObject::set(facebook::jsi::Runtime& runtime, const facebook::jsi::Pro
 
   std::string name = propName.utf8(runtime);
 
-  if (_setters.count(name) > 0) {
+  if (_setters.contains(name) > 0) {
     // Call setter
     _setters[name](runtime, jsi::Value::undefined(), &value, 1);
     return;
