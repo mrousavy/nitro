@@ -36,8 +36,8 @@ Pod::Spec.new do |s|
     ss.dependency "react-native-nitro-modules/C++-Bindings"
   end
 
-  # Enables C++ <-> Swift interop (by default it's only C)
   s.pod_target_xcconfig = {
+    # Enables C++ <-> Swift interop (by default it's only C)
     "SWIFT_OBJC_INTEROP_MODE" => "objcxx",
   }
 

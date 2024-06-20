@@ -1,5 +1,5 @@
 #include "Dispatcher.hpp"
-#include "Logger.hpp"
+#include "NitroLogger.hpp"
 
 namespace margelo {
 

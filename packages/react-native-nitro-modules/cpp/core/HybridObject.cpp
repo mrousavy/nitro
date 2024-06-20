@@ -4,7 +4,7 @@
 
 #include "HybridObject.hpp"
 #include "JSIConverter.hpp"
-#include "Logger.hpp"
+#include "NitroLogger.hpp"
 
 namespace margelo {
 
@@ -89,8 +89,8 @@ jsi::Value HybridObject::get(facebook::jsi::Runtime& runtime, const facebook::js
     HybridFunction& hybridFunction = _methods.at(name);
     jsi::Function function = jsi::Function::createFromHostFunction(runtime, jsi::PropNameID::forUtf8(runtime, name),
                                                                    hybridFunction.parameterCount, hybridFunction.function);
-
-    functionCache[name] = JSIHelper::createSharedJsiFunction(runtime, std::move(function));
+    // TODO: Weakify function using RuntimeWatch so the Runtime safely manages it's lifetime, not us.
+    functionCache[name] = std::make_shared<jsi::Function>(std::move(function));
     return jsi::Value(runtime, *functionCache[name]);
   }
 
@@ -132,11 +132,8 @@ void HybridObject::ensureInitialized(facebook::jsi::Runtime& runtime) {
 }
 
 bool HybridObject::isRuntimeAlive() {
-  if (_creationRuntime == nullptr) {
-    [[unlikely]];
-    return false;
-  }
-  return WorkletRuntimeRegistry::isRuntimeAlive(_creationRuntime);
+  // TODO: Fix this. We shouldn't do this. This is a bad idea.
+  return true;
 }
 
 } // namespace margelo

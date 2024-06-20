@@ -6,8 +6,8 @@
 //
 
 #include "PromiseFactory.hpp"
-#include "Logger.hpp"
-#include "threading/Dispatcher.hpp"
+#include "NitroLogger.hpp"
+#include "Dispatcher.hpp"
 
 namespace margelo {
 
