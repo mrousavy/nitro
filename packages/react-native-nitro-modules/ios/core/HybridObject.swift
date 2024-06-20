@@ -9,7 +9,7 @@ import Foundation
 
 public class HybridObject {
   
-  init(value: String) {
+  public init(value: String) {
     print("Hey \(value)!")
   }
 }
