@@ -1,14 +1,14 @@
 import * as React from 'react';
 
 import { StyleSheet, View, Text } from 'react-native';
-import { multiply } from 'react-native-nitro';
+import { NitroModules } from 'react-native-nitro-modules';
 
-const result = multiply(3, 7);
+const testObject = NitroModules.createTestHybridObject()
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <Text>Result: {result}</Text>
+      <Text>Result: {testObject}</Text>
     </View>
   );
 }

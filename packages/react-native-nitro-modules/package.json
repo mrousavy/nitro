@@ -27,6 +27,7 @@
     "README.md"
   ],
   "scripts": {
+    "postinstall": "tsc",
     "test": "jest",
     "typecheck": "tsc --noEmit",
     "clean": "del-cli android/build node_modules/**/android/build lib",
@@ -87,7 +88,6 @@
     "react": "*",
     "react-native": "*"
   },
-  "packageManager": "yarn@3.6.1",
   "jest": {
     "preset": "react-native",
     "modulePathIgnorePatterns": [
@@ -181,7 +181,7 @@
     ]
   },
   "codegenConfig": {
-    "name": "RNNitroSpec",
+    "name": "NitroModulesSpec",
     "type": "modules",
     "jsSrcsDir": "src"
   }

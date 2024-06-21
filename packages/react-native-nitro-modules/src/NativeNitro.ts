@@ -1,8 +1,10 @@
 import type { TurboModule } from 'react-native';
 import { TurboModuleRegistry } from 'react-native';
+import type { UnsafeObject } from 'react-native/Libraries/Types/CodegenTypes';
 
 export interface Spec extends TurboModule {
-  multiply(a: number, b: number): number;
+  createTestHybridObject(): UnsafeObject;
 }
 
-export default TurboModuleRegistry.getEnforcing<Spec>('Nitro');
+export const NitroModules =
+  TurboModuleRegistry.getEnforcing<Spec>('NitroModulesCxx');
