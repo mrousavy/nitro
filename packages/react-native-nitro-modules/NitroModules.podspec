@@ -17,16 +17,20 @@ Pod::Spec.new do |s|
 
   # VisionCamera Core C++ bindings
   s.source_files = [
-    "cpp/**/*.{h,c}",
-    "cpp/**/*.{hpp,cpp}",
+    # Shared C++ codebase
+    "cpp/**/*.{h,hpp}",
+    "cpp/**/*.{c,cpp}",
+    # iOS codebase
+    "ios/**/*.{h,hpp}",
+    "ios/**/*.{m,mm}",
     "ios/**/*.swift",
-    "ios/**/*.h",
     "ios/**/*.modulemap",
   ]
   s.public_header_files = [
     "cpp/core/**/*.{h,hpp}",
     "cpp/threading/**/*.{h,hpp}",
-    "cpp/utils/**/*.{h,hpp}"
+    "cpp/utils/**/*.{h,hpp}",
+    "cpp/turbomodule/RegisterNativeNitroModules.hpp",
   ]
 
   s.pod_target_xcconfig = {
