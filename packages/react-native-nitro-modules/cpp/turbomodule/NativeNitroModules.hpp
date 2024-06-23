@@ -25,7 +25,11 @@ public:
   NativeNitroModules(std::shared_ptr<CallInvoker> jsInvoker);
   ~NativeNitroModules();
 
+  void install(jsi::Runtime& runtime);
   jsi::Object createTestHybridObject(jsi::Runtime& runtime);
+  
+private:
+  std::shared_ptr<CallInvoker> _callInvoker;
 };
 
 } // namespace facebook::react
