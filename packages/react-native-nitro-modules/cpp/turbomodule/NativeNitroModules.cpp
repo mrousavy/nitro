@@ -7,6 +7,7 @@
 
 #include "NativeNitroModules.hpp"
 #include "TestHybridObject.hpp"
+#include "SwiftTestHybridObject.hpp"
 #include "Dispatcher.hpp"
 #include "CallInvokerDispatcher.hpp"
 
@@ -28,6 +29,11 @@ void NativeNitroModules::install(jsi::Runtime& runtime) {
 
 jsi::Object NativeNitroModules::createTestHybridObject(jsi::Runtime &runtime) {
   auto hybrid = std::make_shared<TestHybridObject>();
+  return jsi::Object::createFromHostObject(runtime, hybrid);
+}
+
+jsi::Object NativeNitroModules::createSwiftTestHybridObject(jsi::Runtime &runtime) {
+  auto hybrid = std::make_shared<SwiftTestHybridObject>();
   return jsi::Object::createFromHostObject(runtime, hybrid);
 }
 

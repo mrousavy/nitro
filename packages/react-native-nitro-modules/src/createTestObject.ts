@@ -23,6 +23,10 @@ interface TestHybridObject {
   throwError(): void;
 }
 
-export function createTestHybridObject(): TestHybridObject {
+export function createCppTestHybridObject(): TestHybridObject {
   return NitroModules.createTestHybridObject() as TestHybridObject;
+}
+
+export function createSwiftTestHybridObject(): TestHybridObject {
+  return NitroModules.createSwiftTestHybridObject() as TestHybridObject;
 }

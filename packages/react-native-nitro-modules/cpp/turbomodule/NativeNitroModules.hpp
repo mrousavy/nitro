@@ -27,6 +27,7 @@ public:
 
   void install(jsi::Runtime& runtime);
   jsi::Object createTestHybridObject(jsi::Runtime& runtime);
+  jsi::Object createSwiftTestHybridObject(jsi::Runtime& runtime);
   
 private:
   std::shared_ptr<CallInvoker> _callInvoker;

@@ -5,6 +5,7 @@ import type { UnsafeObject } from 'react-native/Libraries/Types/CodegenTypes';
 export interface Spec extends TurboModule {
   install(): void;
   createTestHybridObject(): UnsafeObject;
+  createSwiftTestHybridObject(): UnsafeObject;
 }
 
 export const NitroModules =
