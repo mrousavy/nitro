@@ -50,7 +50,7 @@ private:
 // int <> number
 template <> struct JSIConverter<int> {
   static int fromJSI(jsi::Runtime&, const jsi::Value& arg) {
-    return static_cast<int>(arg.getNumber());
+    return static_cast<int>(arg.asNumber());
   }
   static jsi::Value toJSI(jsi::Runtime&, int arg) {
     return jsi::Value(arg);
@@ -60,7 +60,7 @@ template <> struct JSIConverter<int> {
 // double <> number
 template <> struct JSIConverter<double> {
   static double fromJSI(jsi::Runtime&, const jsi::Value& arg) {
-    return arg.getNumber();
+    return arg.asNumber();
   }
   static jsi::Value toJSI(jsi::Runtime&, double arg) {
     return jsi::Value(arg);
@@ -70,7 +70,7 @@ template <> struct JSIConverter<double> {
 // float <> number
 template <> struct JSIConverter<float> {
   static float fromJSI(jsi::Runtime&, const jsi::Value& arg) {
-    return static_cast<float>(arg.getNumber());
+    return static_cast<float>(arg.asNumber());
   }
   static jsi::Value toJSI(jsi::Runtime&, float arg) {
     return jsi::Value(static_cast<double>(arg));
@@ -80,7 +80,7 @@ template <> struct JSIConverter<float> {
 // int64_t <> BigInt
 template <> struct JSIConverter<int64_t> {
   static double fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
-    return arg.getBigInt(runtime).getInt64(runtime);
+    return arg.asBigInt(runtime).asInt64(runtime);
   }
   static jsi::Value toJSI(jsi::Runtime& runtime, int64_t arg) {
     return jsi::BigInt::fromInt64(runtime, arg);
@@ -90,7 +90,7 @@ template <> struct JSIConverter<int64_t> {
 // uint64_t <> BigInt
 template <> struct JSIConverter<uint64_t> {
   static double fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
-    return arg.getBigInt(runtime).getUint64(runtime);
+    return arg.asBigInt(runtime).asUint64(runtime);
   }
   static jsi::Value toJSI(jsi::Runtime& runtime, uint64_t arg) {
     return jsi::BigInt::fromUint64(runtime, arg);
@@ -100,7 +100,7 @@ template <> struct JSIConverter<uint64_t> {
 // bool <> boolean
 template <> struct JSIConverter<bool> {
   static bool fromJSI(jsi::Runtime&, const jsi::Value& arg) {
-    return arg.getBool();
+    return arg.asBool();
   }
   static jsi::Value toJSI(jsi::Runtime&, bool arg) {
     return jsi::Value(arg);
@@ -110,7 +110,7 @@ template <> struct JSIConverter<bool> {
 // std::string <> string
 template <> struct JSIConverter<std::string> {
   static std::string fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
-    return arg.getString(runtime).utf8(runtime);
+    return arg.asString(runtime).utf8(runtime);
   }
   static jsi::Value toJSI(jsi::Runtime& runtime, const std::string& arg) {
     return jsi::String::createFromUtf8(runtime, arg);
@@ -138,7 +138,7 @@ template <typename TInner> struct JSIConverter<std::optional<TInner>> {
 // Enum <> Union
 template <typename TEnum> struct JSIConverter<TEnum, std::enable_if_t<std::is_enum<TEnum>::value>> {
   static TEnum fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
-    std::string string = arg.getString(runtime).utf8(runtime);
+    std::string string = arg.asString(runtime).utf8(runtime);
     TEnum outEnum;
     EnumMapper::convertJSUnionToEnum(string, &outEnum);
     return outEnum;
@@ -158,7 +158,7 @@ template <typename TResult> struct JSIConverter<std::future<TResult>> {
   static jsi::Value toJSI(jsi::Runtime& runtime, std::future<TResult>&& arg) {
     auto sharedFuture = std::make_shared<std::future<TResult>>(std::move(arg));
     auto dispatcher = Dispatcher::getRuntimeGlobalDispatcher(runtime);
-    
+
     return Promise::createPromise(runtime, [sharedFuture, dispatcher](jsi::Runtime& runtime,
                                                                       std::shared_ptr<Promise> promise) {
       // Spawn new async thread to synchronously wait for the `future<T>` to complete
@@ -192,7 +192,7 @@ template <typename TResult> struct JSIConverter<std::future<TResult>> {
 #endif
             promise->reject(runtime, "Unknown non-std exception: " + name);
           }
-          
+
           // This lambda owns the promise shared pointer, and we need to call its
           // destructor on the correct thread here - otherwise it might be called
           // from the waiterThread.
@@ -209,9 +209,9 @@ template <typename ReturnType, typename... Args> struct JSIConverter<std::functi
   static std::function<ReturnType(Args...)> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
     // Make function global - it'll be managed by the Runtime's memory, and we only have a weak_ref to it.
     auto cache = FunctionCache::getOrCreateCache(runtime).lock();
-    jsi::Function function = arg.getObject(runtime).getFunction(runtime);
+    jsi::Function function = arg.asObject(runtime).asFunction(runtime);
     OwningReference<jsi::Function> sharedFunction = cache->makeGlobal(std::move(function));
-    
+
     // Create a C++ function that can be called by the consumer.
     // This will call the jsi::Function if it is still alive.
     return [&runtime, sharedFunction](Args... args) -> ReturnType {
@@ -265,7 +265,7 @@ template <typename ReturnType, typename... Args> struct JSIConverter<std::functi
 // std::vector<T> <> T[]
 template <typename ElementType> struct JSIConverter<std::vector<ElementType>> {
   static std::vector<ElementType> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
-    jsi::Array array = arg.getObject(runtime).getArray(runtime);
+    jsi::Array array = arg.asObject(runtime).asArray(runtime);
     size_t length = array.size(runtime);
 
     std::vector<ElementType> vector;
@@ -289,14 +289,14 @@ template <typename ElementType> struct JSIConverter<std::vector<ElementType>> {
 // std::unordered_map<std::string, T> <> Record<string, T>
 template <typename ValueType> struct JSIConverter<std::unordered_map<std::string, ValueType>> {
   static std::unordered_map<std::string, ValueType> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
-    jsi::Object object = arg.getObject(runtime);
+    jsi::Object object = arg.asObject(runtime);
     jsi::Array propertyNames = object.getPropertyNames(runtime);
     size_t length = propertyNames.size(runtime);
 
     std::unordered_map<std::string, ValueType> map;
     map.reserve(length);
     for (size_t i = 0; i < length; ++i) {
-      std::string key = propertyNames.getValueAtIndex(runtime, i).getString(runtime).utf8(runtime);
+      std::string key = propertyNames.getValueAtIndex(runtime, i).asString(runtime).utf8(runtime);
       jsi::Value value = object.getProperty(runtime, key.c_str());
       map.emplace(key, JSIConverter<ValueType>::fromJSI(runtime, value));
     }
@@ -350,7 +350,7 @@ template <typename T> struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_h
       throw jsi::JSError(runtime, invalidTypeErrorMessage(stringRepresentation, "It is not an object!"));
     }
 #endif
-    jsi::Object object = arg.getObject(runtime);
+    jsi::Object object = arg.asObject(runtime);
 #if DEBUG
     if (!object.isHostObject<TPointee>(runtime)) {
       [[unlikely]];
@@ -358,7 +358,7 @@ template <typename T> struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_h
       throw jsi::JSError(runtime, invalidTypeErrorMessage(stringRepresentation, "It is a different HostObject<T>!"));
     }
 #endif
-    return object.getHostObject<TPointee>(runtime);
+    return object.asHostObject<TPointee>(runtime);
   }
   static jsi::Value toJSI(jsi::Runtime& runtime, const T& arg) {
 #if DEBUG
@@ -408,7 +408,7 @@ template <typename T> struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_n
       throw jsi::JSError(runtime, invalidTypeErrorMessage(stringRepresentation, "It is not an object!"));
     }
 #endif
-    jsi::Object object = arg.getObject(runtime);
+    jsi::Object object = arg.asObject(runtime);
 #if DEBUG
     if (!object.hasNativeState<TPointee>(runtime)) {
       [[unlikely]];
