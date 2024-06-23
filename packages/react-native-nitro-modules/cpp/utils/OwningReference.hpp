@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include <memory>
+#include <cstddef>
 #include "BorrowingReference.hpp"
 
 namespace margelo {
@@ -17,7 +17,7 @@ class OwningReference {
 public:
   OwningReference(): _value(nullptr), _isDeleted(nullptr), _strongRefCount(nullptr), _weakRefCount(nullptr) { }
 
-  explicit OwningReference(T* value): _value(value), _isDeleted(new bool(false)), _strongRefCount(new int(1)), _weakRefCount(new int(0)) {}
+  explicit OwningReference(T* value): _value(value), _isDeleted(new bool(false)), _strongRefCount(new size_t(1)), _weakRefCount(new size_t(0)) {}
 
   OwningReference(const OwningReference& ref):
     _value(ref._value),
@@ -55,6 +55,8 @@ public:
     if (_strongRefCount != nullptr) {
       (*_strongRefCount)++;
     }
+    
+    return *this;
   }
   
 private:
@@ -132,8 +134,8 @@ public:
 private:
   T* _value;
   bool* _isDeleted;
-  int* _strongRefCount;
-  int* _weakRefCount;
+  size_t* _strongRefCount;
+  size_t* _weakRefCount;
 };
 
 }

@@ -7,6 +7,8 @@
 
 #pragma once
 
+#include <cstddef>
+
 namespace margelo {
 
 // forward-declaration to avoid duplicate symbols
@@ -27,7 +29,7 @@ public:
     _strongRefCount(ref._strongRefCount),
     _weakRefCount(ref._weakRefCount) {
       // increment ref count after copy
-      (*_strongRefCount)++;
+      (*_weakRefCount)++;
   }
 
   BorrowingReference(BorrowingReference&& ref):
@@ -57,6 +59,8 @@ public:
     if (_weakRefCount != nullptr) {
       (*_weakRefCount)++;
     }
+    
+    return *this;
   }
 
   ~BorrowingReference() {
@@ -74,6 +78,9 @@ public:
    */
   OwningReference<T> lock();
   
+public:
+  friend class OwningReference<T>;
+  
 private:
   void maybeDestroy() {
     if (*_strongRefCount < 0 && *_weakRefCount < 0) {
@@ -90,8 +97,8 @@ private:
 private:
   T* _value;
   bool* _isDeleted;
-  int* _strongRefCount;
-  int* _weakRefCount;
+  size_t* _strongRefCount;
+  size_t* _weakRefCount;
 };
 
 } // namespace margelo
