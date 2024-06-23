@@ -3,7 +3,7 @@ import * as React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { createTestHybridObject } from 'react-native-nitro-modules';
 
-const FIBONACCI_N = 5
+const FIBONACCI_N = 80
 const FIBONACCI_COUNT = 5
 
 async function runTests() {
@@ -49,7 +49,7 @@ async function runTests() {
       const all = await Promise.all(promises)
       const sum = all.reduce((prev, curr) => prev + curr, 0n)
       const end = performance.now()
-      console.log(`calculate fibonacci(${FIBONACCI_N}) ${FIBONACCI_COUNT}x sync took ${(end - start).toFixed(2)}ms (result: ${sum})`)
+      console.log(`calculate fibonacci(${FIBONACCI_N}) ${FIBONACCI_COUNT}x async took ${(end - start).toFixed(2)}ms (result: ${sum})`)
     }
 
     // Create another TestHybridObject
