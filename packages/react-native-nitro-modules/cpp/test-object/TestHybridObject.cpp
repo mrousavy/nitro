@@ -26,6 +26,8 @@ void TestHybridObject::loadHybridMethods() {
   // Promises
   registerHybridMethod("calculateFibonacci", &TestHybridObject::calculateFibonacci, this);
   registerHybridMethod("calculateFibonacciAsync", &TestHybridObject::calculateFibonacciAsync, this);
+  registerHybridMethod("asyncVoidFunc", &TestHybridObject::asyncVoidFunc, this);
+  registerHybridMethod("syncVoidFunc", &TestHybridObject::syncVoidFunc, this);
   // Error
   registerHybridMethod("throwError", &TestHybridObject::throwError, this);
 }

@@ -65,6 +65,16 @@ public:
   std::future<uint64_t> calculateFibonacciAsync(int count) {
     return std::async(std::launch::async, [count, this]() { return this->calculateFibonacci(count); });
   }
+  
+  void syncVoidFunc() {
+    // this function does nothing
+  }
+  
+  std::future<void> asyncVoidFunc() {
+    return std::async(std::launch::async, []() {
+      // this function does nothing
+    });
+  }
 
 private:
   int _int;

@@ -37,7 +37,7 @@ async function runTests() {
         sum += testObject.calculateFibonacci(FIBONACCI_N)
       }
       const end = performance.now()
-      console.log(`calculate fibonacci(${FIBONACCI_N}) ${FIBONACCI_COUNT}x sync took ${(end - start).toFixed(2)}ms (result: ${sum})`)
+      console.log(`calculate fibonacci(${FIBONACCI_N}) ${FIBONACCI_COUNT}x sync/serially took ${(end - start).toFixed(2)}ms (result: ${sum})`)
     }
     {
       const start = performance.now()
@@ -49,7 +49,23 @@ async function runTests() {
       const all = await Promise.all(promises)
       const sum = all.reduce((prev, curr) => prev + curr, 0n)
       const end = performance.now()
-      console.log(`calculate fibonacci(${FIBONACCI_N}) ${FIBONACCI_COUNT}x async took ${(end - start).toFixed(2)}ms (result: ${sum})`)
+      console.log(`calculate fibonacci(${FIBONACCI_N}) ${FIBONACCI_COUNT}x async/parallel took ${(end - start).toFixed(2)}ms (result: ${sum})`)
+    }
+    {
+      const start = performance.now()
+      for (let i = 0; i < 100; i++) {
+        testObject.syncVoidFunc()
+      }
+      const end = performance.now()
+      console.log(`Calling sync func 100 times took ${(end - start).toFixed(2)}ms`)
+    }
+    {
+      const start = performance.now()
+      for (let i = 0; i < 100; i++) {
+        await testObject.asyncVoidFunc()
+      }
+      const end = performance.now()
+      console.log(`Calling async func 100 times took ${(end - start).toFixed(2)}ms`)
     }
 
     // Create another TestHybridObject
@@ -70,10 +86,15 @@ async function runTests() {
   }
 }
 
-runTests()
-
 export default function App() {
-
+  React.useEffect(() => {
+    const timeout = setTimeout(() => {
+      runTests()
+    }, 1000)
+    return () => {
+      clearTimeout(timeout)
+    }
+  }, [])
 
   return (
     <View style={styles.container}>

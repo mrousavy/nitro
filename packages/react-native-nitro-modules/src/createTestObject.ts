@@ -17,6 +17,8 @@ interface TestHybridObject {
   // C++ Threading
   calculateFibonacci(count: number): bigint;
   calculateFibonacciAsync(count: number): Promise<bigint>;
+  asyncVoidFunc(): Promise<void>;
+  syncVoidFunc(): void;
   // Errors
   throwError(): void;
 }
