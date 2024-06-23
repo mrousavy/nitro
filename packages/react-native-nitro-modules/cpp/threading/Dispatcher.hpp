@@ -70,6 +70,9 @@ public:
     // 3. Return an open future that gets resolved later by the dispatcher Thread
     return future;
   }
+  
+private:
+  static std::unordered_map<jsi::Runtime*, std::weak_ptr<Dispatcher>> _globalCache;
 
 private:
   static constexpr auto TAG = "Dispatcher";
