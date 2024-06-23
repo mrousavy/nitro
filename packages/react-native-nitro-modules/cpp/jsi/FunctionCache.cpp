@@ -13,6 +13,8 @@ namespace margelo {
 
 static constexpr auto CACHE_PROP_NAME = "__nitroModulesFunctionCache";
 
+std::unordered_map<jsi::Runtime*, std::weak_ptr<FunctionCache>> FunctionCache::_globalCache;
+
 FunctionCache::FunctionCache(jsi::Runtime* runtime): _runtime(runtime) {}
 
 FunctionCache::~FunctionCache() {

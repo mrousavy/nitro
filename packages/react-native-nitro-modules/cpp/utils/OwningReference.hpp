@@ -139,3 +139,5 @@ private:
 };
 
 }
+
+#include "BorrowingReference+Owning.hpp"

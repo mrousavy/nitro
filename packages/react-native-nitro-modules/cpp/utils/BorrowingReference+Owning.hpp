@@ -1,11 +1,12 @@
 //
-//  BorrowingReference.cpp
-//  NitroModules
+//  BorrowingReference+Owning.hpp
+//  Pods
 //
-//  Created by Marc Rousavy on 21.06.24.
+//  Created by Marc Rousavy on 23.06.24.
 //
 
-#include "BorrowingReference.hpp"
+#pragma once
+
 #include "OwningReference.hpp"
 
 namespace margelo {
@@ -28,7 +29,5 @@ OwningReference<T> BorrowingReference<T>::lock() {
   
   return OwningReference(*this);
 }
-
-template class BorrowingReference<int>;
 
 }

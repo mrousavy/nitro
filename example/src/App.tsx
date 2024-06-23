@@ -1,14 +1,18 @@
 import * as React from 'react';
 
 import { StyleSheet, View, Text } from 'react-native';
-import { NitroModules } from 'react-native-nitro-modules';
+import { createTestHybridObject } from 'react-native-nitro-modules';
 
-const testObject = NitroModules.createTestHybridObject()
+const testObject = createTestHybridObject()
+
+console.log(Object.keys(testObject))
 
 export default function App() {
+
+
   return (
     <View style={styles.container}>
-      <Text>Result: {testObject}</Text>
+      <Text>Hello world!</Text>
     </View>
   );
 }

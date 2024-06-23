@@ -6,6 +6,7 @@
 //
 
 #include "NativeNitroModules.hpp"
+#include "TestHybridObject.hpp"
 
 namespace facebook::react {
 
@@ -14,7 +15,8 @@ NativeNitroModules::NativeNitroModules(std::shared_ptr<CallInvoker> jsInvoker) :
 NativeNitroModules::~NativeNitroModules() { }
 
 jsi::Object NativeNitroModules::createTestHybridObject(jsi::Runtime &runtime) {
-  return jsi::Object(runtime);
+  auto hybrid = std::make_shared<margelo::TestHybridObject>();
+  return jsi::Object::createFromHostObject(runtime, hybrid);
 }
 
 }
