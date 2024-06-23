@@ -3,7 +3,7 @@ import * as React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { createTestHybridObject } from 'react-native-nitro-modules';
 
-const FIBONACCI_N = 80
+const FIBONACCI_N = 33
 const FIBONACCI_COUNT = 5
 
 async function runTests() {
@@ -55,6 +55,14 @@ async function runTests() {
     // Create another TestHybridObject
     const newTest = testObject.createNewHybridObject()
     console.log('create new hybrid object:', newTest != testObject)
+
+    // Error throwing
+    try {
+      testObject.throwError()
+      console.error(`throw error didn't throw!!`)
+    } catch (e: any) {
+      console.log(`throw error: ${e.message}`)
+    }
 
     console.log('---------- Finished TestHybridObject Test!')
   } catch (e) {

@@ -26,6 +26,8 @@ void TestHybridObject::loadHybridMethods() {
   // Promises
   registerHybridMethod("calculateFibonacci", &TestHybridObject::calculateFibonacci, this);
   registerHybridMethod("calculateFibonacciAsync", &TestHybridObject::calculateFibonacciAsync, this);
+  // Error
+  registerHybridMethod("throwError", &TestHybridObject::throwError, this);
 }
 
 } // namespace margelo
