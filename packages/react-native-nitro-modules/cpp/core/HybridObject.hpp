@@ -92,9 +92,14 @@ private:
   }
 
   template <typename Derived, typename ReturnType, typename... Args>
-  static jsi::HostFunctionType createHybridMethod(ReturnType (Derived::*method)(Args...), Derived* derivedInstance) {
+  static jsi::HostFunctionType createHybridMethod(std::string name, ReturnType (Derived::*method)(Args...), Derived* derivedInstance) {
 
-    return [derivedInstance, method](jsi::Runtime& runtime, const jsi::Value& thisVal, const jsi::Value* args, size_t count) -> jsi::Value {
+    return [name, derivedInstance, method](jsi::Runtime& runtime, const jsi::Value& thisVal, const jsi::Value* args, size_t count) -> jsi::Value {
+      if (count != sizeof...(Args)) {
+        // invalid amount of arguments passed!
+        throw jsi::JSError(runtime, "Function " + name + "(...) expected " + std::to_string(sizeof...(Args)) + " arguments, but received " + std::to_string(count) + "!");
+      }
+      
       if constexpr (std::is_same_v<ReturnType, jsi::Value>) {
         // If the return type is a jsi::Value, we assume the user wants full JSI code control.
         // The signature must be identical to jsi::HostFunction (jsi::Runtime&, jsi::Value& this, ...)
@@ -118,7 +123,7 @@ protected:
       throw std::runtime_error("Cannot add Hybrid Method \"" + name + "\" - a method with that name already exists!");
     }
 
-    _methods[name] = HybridFunction{.function = createHybridMethod(method, derivedInstance), .parameterCount = sizeof...(Args)};
+    _methods[name] = HybridFunction{.function = createHybridMethod(name, method, derivedInstance), .parameterCount = sizeof...(Args)};
   }
 
   template <typename Derived, typename ReturnType>
@@ -132,7 +137,7 @@ protected:
       throw std::runtime_error("Cannot add Hybrid Property Getter \"" + name + "\" - a method with that name already exists!");
     }
 
-    _getters[name] = createHybridMethod(method, derivedInstance);
+    _getters[name] = createHybridMethod(name, method, derivedInstance);
   }
 
   template <typename Derived, typename ValueType>
@@ -146,7 +151,7 @@ protected:
       throw std::runtime_error("Cannot add Hybrid Property Setter \"" + name + "\" - a method with that name already exists!");
     }
 
-    _setters[name] = createHybridMethod(method, derivedInstance);
+    _setters[name] = createHybridMethod(name, method, derivedInstance);
   }
 };
 
