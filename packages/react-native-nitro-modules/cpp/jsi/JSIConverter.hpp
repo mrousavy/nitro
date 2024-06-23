@@ -210,28 +210,26 @@ template <typename ReturnType, typename... Args> struct JSIConverter<std::functi
     // Make function global - it'll be managed by the Runtime's memory, and we only have a weak_ref to it.
     auto cache = FunctionCache::getOrCreateCache(runtime).lock();
     jsi::Function function = arg.getObject(runtime).getFunction(runtime);
-    auto sharedFunction = cache->makeGlobal(std::move(function));
+    OwningReference<jsi::Function> sharedFunction = cache->makeGlobal(std::move(function));
     
     // Create a C++ function that can be called by the consumer.
     // This will call the jsi::Function if it is still alive.
     return [&runtime, sharedFunction](Args... args) -> ReturnType {
       if constexpr (std::is_same_v<ReturnType, void>) {
         // it is a void function (returns undefined)
-        auto function = sharedFunction.lock();
-        if (!function) {
+        if (!sharedFunction) {
           // runtime has already been deleted. since this returns void, we can just ignore it being deleted.
           return;
         }
-        function->call(runtime, JSIConverter<std::decay_t<Args>>::toJSI(runtime, args)...);
+        sharedFunction->call(runtime, JSIConverter<std::decay_t<Args>>::toJSI(runtime, args)...);
         return;
       } else {
         // it returns a custom type, parse it from the JSI value.
-        auto function = sharedFunction.lock();
-        if (!function) {
+        if (!sharedFunction) {
           // runtime has already been deleted. since we expect a return value here, we need to throw.
           throw std::runtime_error("Cannot call the given Function - the Runtime has already been destroyed!");
         }
-        jsi::Value result = function->call(runtime, JSIConverter<std::decay_t<Args>>::toJSI(runtime, args)...);
+        jsi::Value result = sharedFunction->call(runtime, JSIConverter<std::decay_t<Args>>::toJSI(runtime, args)...);
         return JSIConverter<ReturnType>::fromJSI(runtime, std::move(result));
       }
     };

@@ -11,6 +11,8 @@
 #include <memory>
 #include <vector>
 #include <unordered_map>
+#include "OwningReference.hpp"
+#include "BorrowingReference.hpp"
 
 namespace margelo {
 
@@ -22,6 +24,7 @@ using namespace facebook;
 class FunctionCache final: public jsi::NativeState {
 public:
   explicit FunctionCache(jsi::Runtime* runtime);
+  ~FunctionCache();
 
 public:
   /**
@@ -43,11 +46,11 @@ public:
    Do not hold the returned `shared_ptr` in memory, only use it in the calling function's scope.
    Note: By design, this is not thread-safe, the returned `weak_ptr` must only be locked on the same thread as it was created on.
    */
-  std::weak_ptr<jsi::Function> makeGlobal(jsi::Function&& function);
+  OwningReference<jsi::Function> makeGlobal(jsi::Function&& function);
 
 private:
   jsi::Runtime* _runtime;
-  std::vector<std::shared_ptr<jsi::Function>> _cache;
+  std::vector<BorrowingReference<jsi::Function>> _cache;
   
 private:
   static std::unordered_map<jsi::Runtime*, std::weak_ptr<FunctionCache>> _globalCache;

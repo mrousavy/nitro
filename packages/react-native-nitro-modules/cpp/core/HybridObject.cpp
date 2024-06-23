@@ -76,8 +76,8 @@ jsi::Value HybridObject::get(facebook::jsi::Runtime& runtime, const facebook::js
   
   if (functionCache.contains(name)) [[likely]] {
     // cache hit - let's see if the function is still alive..
-    std::shared_ptr<jsi::Function> function = functionCache[name].lock();
-    if (function != nullptr) [[likely]] {
+    OwningReference<jsi::Function> function = functionCache[name];
+    if (function) [[likely]] {
       // function is still alive, we can use it.
       return jsi::Value(runtime, *function);
     }
@@ -97,10 +97,10 @@ jsi::Value HybridObject::get(facebook::jsi::Runtime& runtime, const facebook::js
     jsi::Function function = jsi::Function::createFromHostFunction(runtime, jsi::PropNameID::forUtf8(runtime, name),
                                                                    hybridFunction.parameterCount, hybridFunction.function);
     // throw it into the cache
-    auto globalFunction = runtimeCache->makeGlobal(std::move(function));
+    OwningReference<jsi::Function> globalFunction = runtimeCache->makeGlobal(std::move(function));
     functionCache[name] = globalFunction;
     // copy the reference & return it to JS
-    return jsi::Value(runtime, *globalFunction.lock());
+    return jsi::Value(runtime, *globalFunction);
   }
 
   if (name == "toString") {

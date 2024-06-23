@@ -41,8 +41,8 @@ public:
 
 private:
   std::weak_ptr<FunctionCache> _functionCache;
-  std::weak_ptr<jsi::Function> _resolver;
-  std::weak_ptr<jsi::Function> _rejecter;
+  OwningReference<jsi::Function> _resolver;
+  OwningReference<jsi::Function> _rejecter;
   static constexpr auto TAG = "Promise";
 
 public:

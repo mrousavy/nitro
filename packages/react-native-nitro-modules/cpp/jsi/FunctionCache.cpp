@@ -15,6 +15,17 @@ static constexpr auto CACHE_PROP_NAME = "__nitroModulesFunctionCache";
 
 FunctionCache::FunctionCache(jsi::Runtime* runtime): _runtime(runtime) {}
 
+FunctionCache::~FunctionCache() {
+  // TODO: Do we need to throw Mutexes on OwningReference so there are no race conditions with nullchecks and then pointer accessses while we delete the pointer?
+  for (auto& func : _cache) {
+    OwningReference<jsi::Function> owning = func.lock();
+    if (owning) {
+      // Destroy all functions that we might still have in cache, some callbacks and Promises may now become invalid.
+      owning.destroy();
+    }
+  }
+}
+
 std::weak_ptr<FunctionCache> FunctionCache::getOrCreateCache(jsi::Runtime &runtime) {
   if (_globalCache.contains(&runtime)) {
     // Fast path: get weak_ptr to FunctionCache from our global list.
@@ -36,10 +47,10 @@ std::weak_ptr<FunctionCache> FunctionCache::getOrCreateCache(jsi::Runtime &runti
   return nativeState;
 }
 
-std::weak_ptr<jsi::Function> FunctionCache::makeGlobal(jsi::Function&& function) {
-  auto shared = std::make_shared<jsi::Function>(std::move(function));
-  _cache.push_back(shared);
-  return std::weak_ptr(shared);
+OwningReference<jsi::Function> FunctionCache::makeGlobal(jsi::Function&& function) {
+  auto owning = OwningReference<jsi::Function>(new jsi::Function(std::move(function)));
+  _cache.push_back(owning.weak());
+  return owning;
 }
 
 }

@@ -37,22 +37,20 @@ jsi::Value Promise::createPromise(jsi::Runtime& runtime, RunPromise run) {
 }
 
 void Promise::resolve(jsi::Runtime& runtime, jsi::Value&& result) {
-  auto resolver = _resolver.lock();
-  if (resolver == nullptr) {
+  if (!_resolver) {
     Logger::log(TAG, "Promise resolver function has already been deleted! Ignoring call..");
     return;
   }
-  resolver->call(runtime, std::move(result));
+  _resolver->call(runtime, std::move(result));
 }
 
 void Promise::reject(jsi::Runtime& runtime, std::string message) {
-  auto rejecter = _rejecter.lock();
-  if (rejecter == nullptr) {
+  if (!_rejecter) {
     Logger::log(TAG, "Promise rejecter function has already been deleted! Ignoring call..");
     return;
   }
   jsi::JSError error(runtime, message);
-  rejecter->call(runtime, error.value());
+  _rejecter->call(runtime, error.value());
 }
 
 } // namespace margelo
