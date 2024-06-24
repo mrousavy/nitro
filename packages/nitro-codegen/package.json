@@ -6,10 +6,12 @@
   "module": "lib/module/index",
   "types": "lib/typescript/src/index.d.ts",
   "source": "src/index",
+  "type": "module",
   "files": [
     "src"
   ],
   "scripts": {
+    "start": "tsc && node lib/index.js",
     "postinstall": "tsc",
     "typecheck": "tsc --noEmit"
   },
@@ -25,5 +27,8 @@
   "homepage": "https://github.com/mrousavy/react-native-nitro#readme",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
+  },
+  "devDependencies": {
+    "ts-morph": "^23.0.0"
   }
 }
