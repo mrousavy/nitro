@@ -1,0 +1,29 @@
+{
+  "name": "nitro-codegen",
+  "version": "0.0.3",
+  "description": "Code Generator for Nitro Modules",
+  "main": "lib/commonjs/index",
+  "module": "lib/module/index",
+  "types": "lib/typescript/src/index.d.ts",
+  "source": "src/index",
+  "files": [
+    "src"
+  ],
+  "scripts": {
+    "postinstall": "tsc",
+    "typecheck": "tsc --noEmit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mrousavy/react-native-nitro.git"
+  },
+  "author": "Marc Rousavy <me@mrousavy.com> (https://github.com/mrousavy)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mrousavy/react-native-nitro/issues"
+  },
+  "homepage": "https://github.com/mrousavy/react-native-nitro#readme",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  }
+}
