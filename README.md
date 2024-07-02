@@ -94,7 +94,7 @@ JS <-> C++ type converters are statically generated ahead of time - no more dyna
 ### iOS
 
 iOS native modules and view components can be written either in pure C++, or pure Swift.
-Thanks to Swift 5.9, Swift Nitro Modules [bridge directly to C++](https://www.swift.org/documentation/cxx-interop/) instead of going through Objective-C message sends. Woohoo, no more Objective-C! 🥳
+Thanks to Swift 5.9, Swift Nitro Modules [bridge directly to C++](https://www.swift.org/documentation/cxx-interop/) instead of going through Objective-C message sends. Woohoo, no more Objective-C, and **zero overhead** C++ -> Swift calls! 🥳
 
 ### Android
 
