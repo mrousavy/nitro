@@ -83,7 +83,7 @@ public:
   
 private:
   void maybeDestroy() {
-    if (*_strongRefCount < 0 && *_weakRefCount < 0) {
+    if (*_strongRefCount == 0 && *_weakRefCount == 0) {
       // free the full memory if there are no more references at all
       if (!(*_isDeleted)) {
         delete _value;
