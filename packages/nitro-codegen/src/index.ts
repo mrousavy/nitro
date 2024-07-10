@@ -25,8 +25,7 @@ for (const module of interfaces) {
   const name = identifier.getText()
 
   // Prepare the languages we are going to generate
-  // @ts-expect-error
-  const _specs: Spec[] = []
+  const specs: Spec[] = []
 
   // Find out if it extends HybridObject
   const heritageClauses = module.getHeritageClauses()
@@ -54,6 +53,9 @@ for (const module of interfaces) {
   if (!extendsHybridObject) {
     // Skip this interface if it doesn't extend HybridObject
     continue
+  }
+  if (specs.length === 0) {
+    console.warn(`${name} does not properly extend HybridObject<T> - no platforms/languages were declared so nothing can be generated!`)
   }
 
   function getTypeOfChild(child: Node<ts.Node>): ts.SyntaxKind {
