@@ -1,6 +1,6 @@
 import { Node, Project, ts } from "ts-morph"
 
-const project = new Project({ })
+const project = new Project({})
 const file = project.addSourceFileAtPath('./src/Person.nitro.ts')
 
 const typeMap = {
@@ -11,12 +11,32 @@ const typeMap = {
   [ts.SyntaxKind.BigIntKeyword]: "int64_t",
 } as const
 
+// 1. Find all interfaces in the given file
 const interfaces = file.getChildrenOfKind(ts.SyntaxKind.InterfaceDeclaration)
 for (const module of interfaces) {
+  // 2. Find out if it extends HybridObject
+  const heritageClauses = module.getHeritageClauses()
+  const extendsHybridObject = heritageClauses.some((clause) => {
+    const types = clause.getTypeNodes()
+    for (const type of types) {
+      const typeName = type.getText()
+      console.log(typeName)
+      if (typeName.startsWith('HybridObject')) {
+        return true
+      }
+    }
+    return false
+  })
+  if (!extendsHybridObject) {
+    // Skip this interface if it doesn't extend HybridObject
+    continue
+  }
+
+
+  // 3. Get name of interface (= our module name)
   const identifier = module.getFirstChildByKind(ts.SyntaxKind.Identifier)
   if (identifier == null) throw new Error("Interface name cannot be null!")
   const name = identifier.getText()
-
 
   function getTypeOfChild(child: Node<ts.Node>): ts.SyntaxKind {
     return child.getLastChildOrThrow().getKind()
