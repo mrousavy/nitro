@@ -1,3 +1,4 @@
+import type { PlatformSpec } from "react-native-nitro-modules"
 import { Node, Project, ts } from "ts-morph"
 
 const project = new Project({})
@@ -11,15 +12,38 @@ const typeMap = {
   [ts.SyntaxKind.BigIntKeyword]: "int64_t",
 } as const
 
-// 1. Find all interfaces in the given file
+type SpecApple = PlatformSpec["ios"]
+type SpecAndroid = PlatformSpec["android"]
+type Spec = SpecApple | SpecAndroid
+
+// Find all interfaces in the given file
 const interfaces = file.getChildrenOfKind(ts.SyntaxKind.InterfaceDeclaration)
 for (const module of interfaces) {
-  // 2. Find out if it extends HybridObject
+  // Get name of interface (= our module name)
+  const identifier = module.getFirstChildByKind(ts.SyntaxKind.Identifier)
+  if (identifier == null) throw new Error("Interface name cannot be null!")
+  const name = identifier.getText()
+
+  // Prepare the languages we are going to generate
+  // @ts-expect-error
+  const _specs: Spec[] = []
+
+  // Find out if it extends HybridObject
   const heritageClauses = module.getHeritageClauses()
   const extendsHybridObject = heritageClauses.some((clause) => {
     const types = clause.getTypeNodes()
     for (const type of types) {
       const typeName = type.getText()
+      const genericArguments = type.getTypeArguments()
+      const platformSpecs = genericArguments[0]
+      if (genericArguments.length !== 1 || platformSpecs == null) {
+        throw new Error(`${name} does not properly extend HybridObject<T> - ${typeName} does not have a single generic type argument for platform spec languages.`)
+      }
+      const platformSpec = platformSpecs.getChildrenOfKind(ts.SyntaxKind.SyntaxList)
+      for (const spec of platformSpec) {
+        console.log(spec.getText())
+      }
+
       console.log(typeName)
       if (typeName.startsWith('HybridObject')) {
         return true
@@ -31,12 +55,6 @@ for (const module of interfaces) {
     // Skip this interface if it doesn't extend HybridObject
     continue
   }
-
-
-  // 3. Get name of interface (= our module name)
-  const identifier = module.getFirstChildByKind(ts.SyntaxKind.Identifier)
-  if (identifier == null) throw new Error("Interface name cannot be null!")
-  const name = identifier.getText()
 
   function getTypeOfChild(child: Node<ts.Node>): ts.SyntaxKind {
     return child.getLastChildOrThrow().getKind()
