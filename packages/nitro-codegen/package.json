@@ -29,6 +29,10 @@
     "registry": "https://registry.npmjs.org/"
   },
   "devDependencies": {
-    "ts-morph": "^23.0.0"
+    "ts-morph": "^23.0.0",
+    "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "react-native-nitro-modules": "workspace:^"
   }
 }

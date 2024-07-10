@@ -19,12 +19,13 @@
     "@babel/core": "^7.20.0",
     "@babel/preset-env": "^7.20.0",
     "@babel/runtime": "^7.20.0",
-    "del-cli": "^5.1.0",
     "@react-native/babel-preset": "0.74.84",
     "@react-native/metro-config": "0.74.84",
     "@react-native/typescript-config": "0.74.84",
     "babel-plugin-module-resolver": "^5.0.0",
-    "react-native-nitro-modules": "*"
+    "del-cli": "^5.1.0",
+    "react-native-nitro-modules": "workspace:^",
+    "typescript": "^5.2.2"
   },
   "engines": {
     "node": ">=18"
