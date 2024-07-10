@@ -25,7 +25,7 @@
     "README.md"
   ],
   "scripts": {
-    "postinstall": "tsc",
+    "postinstall": "tsc || exit 0;",
     "test": "jest",
     "typecheck": "tsc --noEmit",
     "clean": "del-cli android/build node_modules/**/android/build lib",

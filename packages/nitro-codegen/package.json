@@ -12,7 +12,7 @@
   ],
   "scripts": {
     "start": "tsc && node lib/index.js",
-    "postinstall": "tsc",
+    "postinstall": "tsc || exit 0;",
     "typecheck": "tsc --noEmit"
   },
   "repository": {
