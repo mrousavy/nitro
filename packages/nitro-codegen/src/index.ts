@@ -1,5 +1,5 @@
 import { Node, Project, ts } from 'ts-morph';
-import { getPlatformSpec } from './getPlatformSpecs';
+import { getPlatformSpec } from './getPlatformSpecs.js';
 
 const project = new Project({});
 const file = project.addSourceFileAtPath('./src/Person.nitro.ts');
