@@ -33,6 +33,10 @@ function capitalizeName(name: string): string {
   return name.charAt(0).toUpperCase() + name.slice(1);
 }
 
+function joinToIndented(array: string[], indentation: string = '    '): string {
+  return array.join('\n').replaceAll('\n', `\n${indentation}`);
+}
+
 interface CppValueSignature {
   type: string;
   name: string;
@@ -40,6 +44,7 @@ interface CppValueSignature {
 
 interface CppMethodSignature {
   returnType: string;
+  rawName: string;
   name: string;
   parameters: CppValueSignature[];
   type: 'getter' | 'setter' | 'method';
@@ -63,6 +68,7 @@ class Property implements CodeNode {
     // getter
     signatures.push({
       returnType: type,
+      rawName: this.name,
       name: `get${capitalizedName}`,
       parameters: [],
       type: 'getter',
@@ -71,6 +77,7 @@ class Property implements CodeNode {
       // setter
       signatures.push({
         returnType: 'void',
+        rawName: this.name,
         name: `set${capitalizedName}`,
         parameters: [{ type: type, name: this.name }],
         type: 'setter',
@@ -140,6 +147,7 @@ class Method implements CodeNode {
   get cppSignature(): CppMethodSignature {
     const cppType = getCppType(this.returnType.getKind());
     return {
+      rawName: this.name,
       name: this.name,
       returnType: cppType,
       parameters: this.parameters.map((p) => p.cppSignature),
@@ -226,11 +234,11 @@ class ${moduleName}: public HybridObject {
 
   public:
     // Properties
-    ${cppProperties.map((p) => p.getCode('c++')).join('\n    ')}
+    ${joinToIndented(cppProperties.map((p) => p.getCode('c++')))}
 
   public:
     // Methods
-    ${cppMethods.map((m) => m.getCode('c++')).join('\n    ')}
+    ${joinToIndented(cppMethods.map((m) => m.getCode('c++')))}
 
   private:
     // Hybrid Setup
@@ -238,6 +246,7 @@ class ${moduleName}: public HybridObject {
 };
     `;
 
+  // Each C++ method needs to be registered in the HybridObject - that's getters, setters and normal methods.
   const registrations: string[] = [];
   const signatures = [
     ...cppProperties.flatMap((p) => p.cppSignatures),
@@ -259,7 +268,7 @@ class ${moduleName}: public HybridObject {
         throw new Error(`Invalid C++ Signature Type: ${signature.type}!`);
     }
     registrations.push(
-      `${registerMethod}("${signature.returnType}", &${moduleName}::${signature.name}, this);`
+      `${registerMethod}("${signature.rawName}", &${moduleName}::${signature.name}, this);`
     );
   }
 
@@ -267,7 +276,7 @@ class ${moduleName}: public HybridObject {
 #include "${moduleName}.hpp"
 
 void Person::loadHybridMethods() {
-  ${registrations.join('\n  ')}
+  ${joinToIndented(registrations, '  ')}
 }
     `;
 
