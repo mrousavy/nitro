@@ -12,24 +12,48 @@ const typeMap = {
   [ts.SyntaxKind.BigIntKeyword]: 'int64_t',
 } as const;
 
-type SpecApple = PlatformSpec['ios'];
-type SpecAndroid = PlatformSpec['android'];
-type Spec = SpecApple | SpecAndroid;
+type LanguageApple = PlatformSpec['ios'];
+type LanguageAndroid = PlatformSpec['android'];
+type Language = Exclude<LanguageApple | LanguageAndroid, undefined>;
+
+function isValidLanguage(language: string): language is Language {
+  switch (language as Language) {
+    case 'c++':
+    case 'kotlin':
+    case 'swift':
+      return true;
+    default:
+      return false;
+  }
+}
+
+type Platform = keyof PlatformSpec;
+
+function isValidPlatform(platform: string): platform is Platform {
+  switch (platform as Platform) {
+    case 'android':
+    case 'ios':
+      return true;
+    default:
+      return false;
+  }
+}
 
 // Find all interfaces in the given file
 const interfaces = file.getChildrenOfKind(ts.SyntaxKind.InterfaceDeclaration);
 for (const module of interfaces) {
   // Get name of interface (= our module name)
-  const identifier = module.getFirstChildByKind(ts.SyntaxKind.Identifier);
-  if (identifier == null) throw new Error('Interface name cannot be null!');
-  const name = identifier.getText();
+  const moduleName = module
+    .getFirstChildByKindOrThrow(ts.SyntaxKind.Identifier)
+    .getText();
 
   // Prepare the languages we are going to generate
-  const specs: Spec[] = [];
+  const languages: Language[] = [];
 
   // Find out if it extends HybridObject
   const heritageClauses = module.getHeritageClauses();
-  const extendsHybridObject = heritageClauses.some((clause) => {
+  let extendsHybridObject = false;
+  for (const clause of heritageClauses) {
     const types = clause.getTypeNodes();
     for (const type of types) {
       const typeName = type.getText();
@@ -37,30 +61,53 @@ for (const module of interfaces) {
       const platformSpecs = genericArguments[0];
       if (genericArguments.length !== 1 || platformSpecs == null) {
         throw new Error(
-          `${name} does not properly extend HybridObject<T> - ${typeName} does not have a single generic type argument for platform spec languages.`
+          `${moduleName} does not properly extend HybridObject<T> - ${typeName} does not have a single generic type argument for platform spec languages.`
         );
       }
       const platformSpec = platformSpecs.getChildrenOfKind(
         ts.SyntaxKind.SyntaxList
       );
       for (const spec of platformSpec) {
+        const property = spec.getFirstChildByKindOrThrow(
+          ts.SyntaxKind.PropertySignature
+        );
+        const platform = property.getText();
+        if (!isValidPlatform(platform)) {
+          console.warn(
+            `⚠️  ${moduleName} does not properly extend HybridObject<T> - "${platform}" is not a valid Platform!`
+          );
+          continue;
+        }
+        const literal = property.getFirstChildByKindOrThrow(
+          ts.SyntaxKind.LiteralType
+        );
+        const languageLiteral = literal.getFirstChildByKindOrThrow(
+          ts.SyntaxKind.StringLiteral
+        );
+        const language = languageLiteral.getText();
+        if (!isValidLanguage(language)) {
+          console.warn(
+            `⚠️  ${moduleName}: Language ${language} is not a valid language for ${platform}!`
+          );
+          continue;
+        }
+        console.log(languageLiteral.getLiteralText());
         console.log(spec.getText());
       }
 
       console.log(typeName);
       if (typeName.startsWith('HybridObject')) {
-        return true;
+        extendsHybridObject = true;
       }
     }
-    return false;
-  });
+  }
   if (!extendsHybridObject) {
     // Skip this interface if it doesn't extend HybridObject
     continue;
   }
-  if (specs.length === 0) {
+  if (languages.length === 0) {
     console.warn(
-      `${name} does not properly extend HybridObject<T> - no platforms/languages were declared so nothing can be generated!`
+      `⚠️  ${moduleName} does not properly extend HybridObject<T> - no platforms/languages were declared so nothing can be generated!`
     );
     continue;
   }
@@ -122,7 +169,7 @@ for (const module of interfaces) {
   }
 
   let cppCode = `
-class ${name}: public HybridObject {
+class ${moduleName}: public HybridObject {
   public:
     // Properties
     ${cppProperties.join('\n    ')}
@@ -133,7 +180,7 @@ class ${name}: public HybridObject {
 };
     `;
 
-  console.log(`--------------------- ${name}.hpp --------------------- `);
+  console.log(`--------------------- ${moduleName}.hpp --------------------- `);
   console.log(cppCode);
-  console.log(`--------------------- ${name}.hpp --------------------- `);
+  console.log(`--------------------- ${moduleName}.hpp --------------------- `);
 }
