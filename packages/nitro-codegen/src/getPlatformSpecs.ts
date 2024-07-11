@@ -1,6 +1,7 @@
 import type { PlatformSpec } from 'react-native-nitro-modules';
 import type { TypeNode } from 'ts-morph';
 import { ts } from 'ts-morph';
+import { getNodeName } from './getNodeName.js';
 
 export type Platform = keyof Required<PlatformSpec>;
 export type Language = Required<PlatformSpec>[keyof PlatformSpec];
@@ -43,10 +44,7 @@ export function getPlatformSpec(
   );
   for (const property of properties) {
     // Property name (ios, android)
-    const identifier = property.getFirstChildByKindOrThrow(
-      ts.SyntaxKind.Identifier
-    );
-    const platform = identifier.getText();
+    const platform = getNodeName(property);
     if (!isValidPlatform(platform)) {
       console.warn(
         `⚠️  ${moduleName} does not properly extend HybridObject<T> - "${platform}" is not a valid Platform! ` +

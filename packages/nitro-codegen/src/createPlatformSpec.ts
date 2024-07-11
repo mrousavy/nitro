@@ -1,8 +1,8 @@
 import type { PlatformSpec } from 'react-native-nitro-modules';
 import type { Language, Platform } from './getPlatformSpecs.js';
-import type { InterfaceDeclaration, Node } from 'ts-morph';
+import type { InterfaceDeclaration } from 'ts-morph';
 import { ts } from 'ts-morph';
-import { getInterfaceName } from './getInterfaceName.js';
+import { getNodeName } from './getNodeName.js';
 
 interface File {
   name: string;
@@ -62,26 +62,19 @@ export function createPlatformSpec<
   }
 }
 
-function getTypeOfChild(child: Node<ts.Node>): ts.SyntaxKind {
-  return child.getLastChildOrThrow().getKind();
-}
-
 function createSharedCppSpec(module: InterfaceDeclaration): File[] {
-  const moduleName = getInterfaceName(module);
+  const moduleName = getNodeName(module);
 
+  // Properties (getters + setters)
   const cppProperties: string[] = [];
-
   const properties = module
     .getChildrenOfKind(ts.SyntaxKind.PropertySignature)
     .filter((p) => p.getFirstChildByKind(ts.SyntaxKind.FunctionType) == null);
   for (const prop of properties) {
-    const name = prop
-      .getLastChildByKindOrThrow(ts.SyntaxKind.Identifier)
-      .getText();
-    const isReadonly =
-      prop.getFirstChildByKind(ts.SyntaxKind.ReadonlyKeyword) != null;
-    const type = getTypeOfChild(prop);
-    const cppType = getCppType(type);
+    const name = getNodeName(prop);
+    const isReadonly = prop.hasModifier(ts.SyntaxKind.ReadonlyKeyword);
+    const type = prop.getTypeNodeOrThrow();
+    const cppType = getCppType(type.getKind());
 
     const capitalizedName = name.charAt(0).toUpperCase() + name.slice(1);
     cppProperties.push(`virtual ${cppType} get${capitalizedName}() = 0;`);
@@ -93,31 +86,27 @@ function createSharedCppSpec(module: InterfaceDeclaration): File[] {
     }
   }
 
+  // Functions
   const cppMethods: string[] = [];
-
   const functions = module.getChildrenOfKind(ts.SyntaxKind.MethodSignature);
   for (const func of functions) {
-    const name = func
-      .getLastChildByKindOrThrow(ts.SyntaxKind.Identifier)
-      .getText();
-    const returnType = getTypeOfChild(func);
-    const returnTypeCpp = getCppType(returnType);
-    const parameters = func
-      .getChildrenOfKind(ts.SyntaxKind.Parameter)
-      .map((p) => {
-        const parameterName = p
-          .getFirstChildByKindOrThrow(ts.SyntaxKind.Identifier)
-          .getText();
-        const type = getTypeOfChild(p);
-        const cppType = getCppType(type);
-        return `${cppType} ${parameterName}`;
-      });
+    const name = getNodeName(func);
+
+    const returnType = func.getReturnTypeNodeOrThrow();
+    const returnTypeCpp = getCppType(returnType.getKind());
+    const parameters = func.getParameters().map((p) => {
+      const parameterName = getNodeName(p);
+      const paramType = p.getTypeNodeOrThrow();
+      const cppType = getCppType(paramType.getKind());
+      return `${cppType} ${parameterName}`;
+    });
 
     cppMethods.push(
       `virtual ${returnTypeCpp} ${name}(${parameters.join(', ')}) = 0;`
     );
   }
 
+  // Generate the full header / code
   let cppCode = `
 class ${moduleName}: public HybridObject {
   public:

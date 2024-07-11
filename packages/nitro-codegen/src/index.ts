@@ -1,6 +1,7 @@
 import { Project, ts } from 'ts-morph';
 import { getPlatformSpec, type Platform } from './getPlatformSpecs.js';
 import { createPlatformSpec } from './createPlatformSpec.js';
+import { getNodeName } from './getNodeName.js';
 
 const project = new Project({});
 const sourceFile = project.addSourceFileAtPath('./src/Person.nitro.ts');
@@ -11,19 +12,14 @@ const interfaces = sourceFile.getChildrenOfKind(
 );
 for (const module of interfaces) {
   // Get name of interface (= our module name)
-  const moduleName = module
-    .getFirstChildByKindOrThrow(ts.SyntaxKind.Identifier)
-    .getText();
+  const moduleName = getNodeName(module);
 
   // Find out if it extends HybridObject
   const heritageClauses = module.getHeritageClauses();
   const platformSpecs = heritageClauses.map((clause) => {
     const types = clause.getTypeNodes();
     for (const type of types) {
-      const identifier = type.getFirstChildByKindOrThrow(
-        ts.SyntaxKind.Identifier
-      );
-      const typeName = identifier.getText();
+      const typeName = getNodeName(type);
       if (!typeName.startsWith('HybridObject')) {
         continue;
       }
