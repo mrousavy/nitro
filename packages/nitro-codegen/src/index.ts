@@ -1,5 +1,5 @@
-import type { PlatformSpec } from 'react-native-nitro-modules';
 import { Node, Project, ts } from 'ts-morph';
+import { getPlatformSpec } from './getPlatformSpecs';
 
 const project = new Project({});
 const file = project.addSourceFileAtPath('./src/Person.nitro.ts');
@@ -12,33 +12,6 @@ const typeMap = {
   [ts.SyntaxKind.BigIntKeyword]: 'int64_t',
 } as const;
 
-type LanguageApple = PlatformSpec['ios'];
-type LanguageAndroid = PlatformSpec['android'];
-type Language = Exclude<LanguageApple | LanguageAndroid, undefined>;
-
-function isValidLanguage(language: string): language is Language {
-  switch (language as Language) {
-    case 'c++':
-    case 'kotlin':
-    case 'swift':
-      return true;
-    default:
-      return false;
-  }
-}
-
-type Platform = keyof PlatformSpec;
-
-function isValidPlatform(platform: string): platform is Platform {
-  switch (platform as Platform) {
-    case 'android':
-    case 'ios':
-      return true;
-    default:
-      return false;
-  }
-}
-
 // Find all interfaces in the given file
 const interfaces = file.getChildrenOfKind(ts.SyntaxKind.InterfaceDeclaration);
 for (const module of interfaces) {
@@ -47,70 +20,36 @@ for (const module of interfaces) {
     .getFirstChildByKindOrThrow(ts.SyntaxKind.Identifier)
     .getText();
 
-  // Prepare the languages we are going to generate
-  const languages: Language[] = [];
-
   // Find out if it extends HybridObject
   const heritageClauses = module.getHeritageClauses();
-  let extendsHybridObject = false;
-  for (const clause of heritageClauses) {
+
+  const platformSpecs = heritageClauses.map((clause) => {
     const types = clause.getTypeNodes();
     for (const type of types) {
-      const typeName = type.getText();
+      const identifier = type.getFirstChildByKindOrThrow(
+        ts.SyntaxKind.Identifier
+      );
+      const typeName = identifier.getText();
+      if (!typeName.startsWith('HybridObject')) {
+        continue;
+      }
       const genericArguments = type.getTypeArguments();
-      const platformSpecs = genericArguments[0];
-      if (genericArguments.length !== 1 || platformSpecs == null) {
+      const platformSpecsArgument = genericArguments[0];
+      if (genericArguments.length !== 1 || platformSpecsArgument == null) {
         throw new Error(
           `${moduleName} does not properly extend HybridObject<T> - ${typeName} does not have a single generic type argument for platform spec languages.`
         );
       }
-      const platformSpec = platformSpecs.getChildrenOfKind(
-        ts.SyntaxKind.SyntaxList
-      );
-      for (const spec of platformSpec) {
-        const property = spec.getFirstChildByKindOrThrow(
-          ts.SyntaxKind.PropertySignature
-        );
-        const platform = property.getText();
-        if (!isValidPlatform(platform)) {
-          console.warn(
-            `⚠️  ${moduleName} does not properly extend HybridObject<T> - "${platform}" is not a valid Platform!`
-          );
-          continue;
-        }
-        const literal = property.getFirstChildByKindOrThrow(
-          ts.SyntaxKind.LiteralType
-        );
-        const languageLiteral = literal.getFirstChildByKindOrThrow(
-          ts.SyntaxKind.StringLiteral
-        );
-        const language = languageLiteral.getText();
-        if (!isValidLanguage(language)) {
-          console.warn(
-            `⚠️  ${moduleName}: Language ${language} is not a valid language for ${platform}!`
-          );
-          continue;
-        }
-        console.log(languageLiteral.getLiteralText());
-        console.log(spec.getText());
-      }
-
-      console.log(typeName);
-      if (typeName.startsWith('HybridObject')) {
-        extendsHybridObject = true;
-      }
+      return getPlatformSpec(moduleName, platformSpecsArgument);
     }
-  }
-  if (!extendsHybridObject) {
+    return undefined;
+  });
+  const platformSpec = platformSpecs.find((s) => s != null);
+  if (platformSpec == null) {
     // Skip this interface if it doesn't extend HybridObject
     continue;
   }
-  if (languages.length === 0) {
-    console.warn(
-      `⚠️  ${moduleName} does not properly extend HybridObject<T> - no platforms/languages were declared so nothing can be generated!`
-    );
-    continue;
-  }
+  console.log(`-> Generating ${platformSpec}`);
 
   function getTypeOfChild(child: Node<ts.Node>): ts.SyntaxKind {
     return child.getLastChildOrThrow().getKind();
