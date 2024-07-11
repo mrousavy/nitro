@@ -9,11 +9,11 @@ const platformLanguages: { [K in Platform]: Language[] } = {
   ios: ['swift', 'c++'],
   android: ['kotlin', 'c++'],
 };
-const platforms = Object.keys(platformLanguages) as Platform[];
-const languages = Object.values(platformLanguages).flatMap((l) => l);
+const allPlatforms = Object.keys(platformLanguages) as Platform[];
+const allLanguages = Object.values(platformLanguages).flatMap((l) => l);
 
 function isValidLanguage(language: string): language is Language {
-  return languages.includes(language as Language);
+  return allLanguages.includes(language as Language);
 }
 
 function isValidPlatform(platform: string): platform is Platform {
@@ -32,19 +32,17 @@ export function getPlatformSpec(
   moduleName: string,
   platformSpecs: TypeNode<ts.TypeNode>
 ): PlatformSpec {
-  const platformSpec = platformSpecs.getChildrenOfKind(
-    ts.SyntaxKind.SyntaxList
-  );
-
   const result: PlatformSpec = {};
 
-  for (const spec of platformSpec) {
-    // Property
-    const property = spec.getFirstChildByKindOrThrow(
-      ts.SyntaxKind.PropertySignature
-    );
-
-    // Identifier (ios, android)
+  // Properties (ios, android)
+  const platformSpec = platformSpecs.getFirstChildByKindOrThrow(
+    ts.SyntaxKind.SyntaxList
+  );
+  const properties = platformSpec.getChildrenOfKind(
+    ts.SyntaxKind.PropertySignature
+  );
+  for (const property of properties) {
+    // Property name (ios, android)
     const identifier = property.getFirstChildByKindOrThrow(
       ts.SyntaxKind.Identifier
     );
@@ -52,7 +50,7 @@ export function getPlatformSpec(
     if (!isValidPlatform(platform)) {
       console.warn(
         `⚠️  ${moduleName} does not properly extend HybridObject<T> - "${platform}" is not a valid Platform! ` +
-          `Valid platforms are: [${platforms.join(', ')}]`
+          `Valid platforms are: [${allPlatforms.join(', ')}]`
       );
       continue;
     }
@@ -73,6 +71,7 @@ export function getPlatformSpec(
       continue;
     }
 
+    // Double-check that language works on this platform (android: kotlin/c++, ios: swift/c++)
     if (!isValidLanguageForPlatform(language, platform)) {
       console.warn(
         `⚠️  ${moduleName}: Language ${language} is not a valid language for ${platform}! ` +
@@ -86,4 +85,10 @@ export function getPlatformSpec(
   }
 
   return result;
+}
+
+export function stringifyPlatformSpec(spec: PlatformSpec): string {
+  const platforms = Object.keys(spec) as Platform[];
+  const array = platforms.map((p) => `${spec[p]} (${p})`);
+  return `${array.join(', ')}`;
 }

@@ -1,5 +1,5 @@
 import { Node, Project, ts } from 'ts-morph';
-import { getPlatformSpec } from './getPlatformSpecs.js';
+import { getPlatformSpec, stringifyPlatformSpec } from './getPlatformSpecs.js';
 
 const project = new Project({});
 const file = project.addSourceFileAtPath('./src/Person.nitro.ts');
@@ -22,7 +22,6 @@ for (const module of interfaces) {
 
   // Find out if it extends HybridObject
   const heritageClauses = module.getHeritageClauses();
-
   const platformSpecs = heritageClauses.map((clause) => {
     const types = clause.getTypeNodes();
     for (const type of types) {
@@ -49,7 +48,7 @@ for (const module of interfaces) {
     // Skip this interface if it doesn't extend HybridObject
     continue;
   }
-  console.log(`-> Generating ${platformSpec}`);
+  console.log(`-> Generating ${stringifyPlatformSpec(platformSpec)}`);
 
   function getTypeOfChild(child: Node<ts.Node>): ts.SyntaxKind {
     return child.getLastChildOrThrow().getKind();
@@ -93,13 +92,13 @@ for (const module of interfaces) {
     const parameters = func
       .getChildrenOfKind(ts.SyntaxKind.Parameter)
       .map((p) => {
-        const name = p
+        const parameterName = p
           .getFirstChildByKindOrThrow(ts.SyntaxKind.Identifier)
           .getText();
         const type = getTypeOfChild(p);
         // @ts-expect-error
         const cppType = typeMap[type];
-        return `${cppType} ${name}`;
+        return `${cppType} ${parameterName}`;
       });
 
     cppMethods.push(
