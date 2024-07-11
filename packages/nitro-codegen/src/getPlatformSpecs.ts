@@ -2,8 +2,8 @@ import type { PlatformSpec } from 'react-native-nitro-modules';
 import type { TypeNode } from 'ts-morph';
 import { ts } from 'ts-morph';
 
-type Platform = keyof Required<PlatformSpec>;
-type Language = Required<PlatformSpec>[keyof PlatformSpec];
+export type Platform = keyof Required<PlatformSpec>;
+export type Language = Required<PlatformSpec>[keyof PlatformSpec];
 
 const platformLanguages: { [K in Platform]: Language[] } = {
   ios: ['swift', 'c++'],
@@ -85,10 +85,4 @@ export function getPlatformSpec(
   }
 
   return result;
-}
-
-export function stringifyPlatformSpec(spec: PlatformSpec): string {
-  const platforms = Object.keys(spec) as Platform[];
-  const array = platforms.map((p) => `${spec[p]} (${p})`);
-  return `${array.join(', ')}`;
 }

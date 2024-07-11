@@ -1,7 +1,8 @@
 {
   "scripts": {
     "example": "yarn workspace react-native-nitro-example",
-    "nitrogen": "yarn workspace nitro-codegen start"
+    "nitrogen": "yarn workspace nitro-codegen start",
+    "tsc": "yarn workspace react-native-nitro-modules tsc && yarn workspace nitro-codegen tsc"
   },
   "workspaces": [
     "packages/*",
