@@ -56,6 +56,7 @@ for (const module of interfaces) {
   }
   if (specs.length === 0) {
     console.warn(`${name} does not properly extend HybridObject<T> - no platforms/languages were declared so nothing can be generated!`)
+    continue
   }
 
   function getTypeOfChild(child: Node<ts.Node>): ts.SyntaxKind {
@@ -112,7 +113,9 @@ class ${name}: public HybridObject {
 };
     `
 
+  console.log(`--------------------- ${name}.hpp --------------------- `)
   console.log(cppCode)
+  console.log(`--------------------- ${name}.hpp --------------------- `)
 }
 
 
