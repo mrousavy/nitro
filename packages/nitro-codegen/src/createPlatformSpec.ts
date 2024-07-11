@@ -1,6 +1,12 @@
 import type { PlatformSpec } from 'react-native-nitro-modules';
 import type { Language, Platform } from './getPlatformSpecs.js';
-import type { InterfaceDeclaration } from 'ts-morph';
+import type {
+  InterfaceDeclaration,
+  MethodSignature,
+  ParameterDeclaration,
+  PropertySignature,
+  TypeNode,
+} from 'ts-morph';
 import { ts } from 'ts-morph';
 import { getNodeName } from './getNodeName.js';
 
@@ -18,6 +24,142 @@ const typeMap: Partial<TypeMap> = {
   [ts.SyntaxKind.StringKeyword]: 'std::string',
   [ts.SyntaxKind.BigIntKeyword]: 'int64_t',
 };
+
+interface CodeNode {
+  getCode(language: Language): string;
+}
+
+function capitalizeName(name: string): string {
+  return name.charAt(0).toUpperCase() + name.slice(1);
+}
+
+interface CppValueSignature {
+  type: string;
+  name: string;
+}
+
+interface CppMethodSignature {
+  returnType: string;
+  name: string;
+  parameters: CppValueSignature[];
+  type: 'getter' | 'setter' | 'method';
+}
+
+class Property implements CodeNode {
+  readonly name: string;
+  readonly type: TypeNode;
+  readonly isReadonly: boolean;
+
+  constructor(prop: PropertySignature) {
+    this.name = getNodeName(prop);
+    this.isReadonly = prop.hasModifier(ts.SyntaxKind.ReadonlyKeyword);
+    this.type = prop.getTypeNodeOrThrow();
+  }
+
+  get cppSignatures(): CppMethodSignature[] {
+    const signatures: CppMethodSignature[] = [];
+    const type = getCppType(this.type.getKind());
+    const capitalizedName = capitalizeName(this.name);
+    // getter
+    signatures.push({
+      returnType: type,
+      name: `get${capitalizedName}`,
+      parameters: [],
+      type: 'getter',
+    });
+    if (!this.isReadonly) {
+      // setter
+      signatures.push({
+        returnType: 'void',
+        name: `set${capitalizedName}`,
+        parameters: [{ type: type, name: this.name }],
+        type: 'setter',
+      });
+    }
+    return signatures;
+  }
+
+  getCode(language: Language): string {
+    switch (language) {
+      case 'c++':
+        const signatures = this.cppSignatures;
+        const codeLines = signatures.map((s) => {
+          const params = s.parameters.map((p) => `${p.type} ${p.name}`);
+          return `virtual ${s.returnType} ${s.name}(${params.join(', ')})`;
+        });
+        return codeLines.join('\n');
+      default:
+        throw new Error(
+          `Language ${language} is not yet supported for properties!`
+        );
+    }
+  }
+}
+
+class Parameter implements CodeNode {
+  readonly name: string;
+  readonly type: TypeNode;
+
+  constructor(param: ParameterDeclaration) {
+    this.name = getNodeName(param);
+    this.type = param.getTypeNodeOrThrow();
+  }
+
+  get cppSignature(): CppValueSignature {
+    const cppType = getCppType(this.type.getKind());
+    return {
+      name: this.name,
+      type: cppType,
+    };
+  }
+
+  getCode(language: Language): string {
+    switch (language) {
+      case 'c++':
+        const cppSignature = this.cppSignature;
+        return `${cppSignature.type} ${cppSignature.name}`;
+      default:
+        throw new Error(
+          `Language ${language} is not yet supported for parameters!`
+        );
+    }
+  }
+}
+
+class Method implements CodeNode {
+  readonly name: string;
+  readonly returnType: TypeNode;
+  readonly parameters: Parameter[];
+
+  constructor(prop: MethodSignature) {
+    this.name = getNodeName(prop);
+    this.returnType = prop.getReturnTypeNodeOrThrow();
+    this.parameters = prop.getParameters().map((p) => new Parameter(p));
+  }
+
+  get cppSignature(): CppMethodSignature {
+    const cppType = getCppType(this.returnType.getKind());
+    return {
+      name: this.name,
+      returnType: cppType,
+      parameters: this.parameters.map((p) => p.cppSignature),
+      type: 'method',
+    };
+  }
+
+  getCode(language: Language): string {
+    switch (language) {
+      case 'c++':
+        const signature = this.cppSignature;
+        const params = signature.parameters.map((p) => `${p.type} ${p.name}`);
+        return `virtual ${signature.returnType} ${signature.name}(${params.join(', ')}) = 0;`;
+      default:
+        throw new Error(
+          `Language ${language} is not yet supported for property getters!`
+        );
+    }
+  }
+}
 
 function getCppType(syntax: ts.SyntaxKind): string {
   const cppType = typeMap[syntax];
@@ -66,64 +208,79 @@ function createSharedCppSpec(module: InterfaceDeclaration): File[] {
   const moduleName = getNodeName(module);
 
   // Properties (getters + setters)
-  const cppProperties: string[] = [];
   const properties = module
     .getChildrenOfKind(ts.SyntaxKind.PropertySignature)
     .filter((p) => p.getFirstChildByKind(ts.SyntaxKind.FunctionType) == null);
-  for (const prop of properties) {
-    const name = getNodeName(prop);
-    const isReadonly = prop.hasModifier(ts.SyntaxKind.ReadonlyKeyword);
-    const type = prop.getTypeNodeOrThrow();
-    const cppType = getCppType(type.getKind());
-
-    const capitalizedName = name.charAt(0).toUpperCase() + name.slice(1);
-    cppProperties.push(`virtual ${cppType} get${capitalizedName}() = 0;`);
-
-    if (!isReadonly) {
-      cppProperties.push(
-        `virtual void set${capitalizedName}(${cppType} value) = 0;`
-      );
-    }
-  }
+  const cppProperties = properties.map((p) => new Property(p));
 
   // Functions
-  const cppMethods: string[] = [];
   const functions = module.getChildrenOfKind(ts.SyntaxKind.MethodSignature);
-  for (const func of functions) {
-    const name = getNodeName(func);
-
-    const returnType = func.getReturnTypeNodeOrThrow();
-    const returnTypeCpp = getCppType(returnType.getKind());
-    const parameters = func.getParameters().map((p) => {
-      const parameterName = getNodeName(p);
-      const paramType = p.getTypeNodeOrThrow();
-      const cppType = getCppType(paramType.getKind());
-      return `${cppType} ${parameterName}`;
-    });
-
-    cppMethods.push(
-      `virtual ${returnTypeCpp} ${name}(${parameters.join(', ')}) = 0;`
-    );
-  }
+  const cppMethods = functions.map((f) => new Method(f));
 
   // Generate the full header / code
-  let cppCode = `
+  const cppHeaderCode = `
 class ${moduleName}: public HybridObject {
   public:
+    // Constructor
+    explicit Person(): HybridObject("Person") { }
+
+  public:
     // Properties
-    ${cppProperties.join('\n    ')}
+    ${cppProperties.map((p) => p.getCode('c++')).join('\n    ')}
 
   public:
     // Methods
-    ${cppMethods.join('\n    ')}
+    ${cppMethods.map((m) => m.getCode('c++')).join('\n    ')}
+
+  private:
+    // Hybrid Setup
+    void loadHybridMethods() override;
 };
+    `;
+
+  const registrations: string[] = [];
+  const signatures = [
+    ...cppProperties.flatMap((p) => p.cppSignatures),
+    ...cppMethods.map((m) => m.cppSignature),
+  ];
+  for (const signature of signatures) {
+    let registerMethod: string;
+    switch (signature.type) {
+      case 'getter':
+        registerMethod = 'registerHybridGetter';
+        break;
+      case 'setter':
+        registerMethod = 'registerHybridSetter';
+        break;
+      case 'method':
+        registerMethod = 'registerHybridMethod';
+        break;
+      default:
+        throw new Error(`Invalid C++ Signature Type: ${signature.type}!`);
+    }
+    registrations.push(
+      `${registerMethod}("${signature.returnType}", &${moduleName}::${signature.name}, this);`
+    );
+  }
+
+  const cppBodyCode = `
+#include "${moduleName}.hpp"
+
+void Person::loadHybridMethods() {
+  ${registrations.join('\n  ')}
+}
     `;
 
   const files: File[] = [];
   files.push({
-    content: cppCode,
+    content: cppHeaderCode,
     language: 'c++',
     name: `${moduleName}.hpp`,
+  });
+  files.push({
+    content: cppBodyCode,
+    language: 'c++',
+    name: `${moduleName}.cpp`,
   });
   return files;
 }
