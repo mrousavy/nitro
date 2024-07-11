@@ -214,6 +214,7 @@ export function createPlatformSpec<
 
 function createSharedCppSpec(module: InterfaceDeclaration): File[] {
   const moduleName = getNodeName(module);
+  const cppClassName = `${moduleName}Spec`;
 
   // Properties (getters + setters)
   const properties = module
@@ -227,10 +228,12 @@ function createSharedCppSpec(module: InterfaceDeclaration): File[] {
 
   // Generate the full header / code
   const cppHeaderCode = `
-class ${moduleName}: public HybridObject {
+#include <NitroModules/HybridObject.hpp>
+
+class ${cppClassName}: public HybridObject {
   public:
     // Constructor
-    explicit Person(): HybridObject("Person") { }
+    explicit ${cppClassName}(): HybridObject(TAG) { }
 
   public:
     // Properties
@@ -239,6 +242,10 @@ class ${moduleName}: public HybridObject {
   public:
     // Methods
     ${joinToIndented(cppMethods.map((m) => m.getCode('c++')))}
+
+  protected:
+    // Tag for logging
+    static constexpr auto TAG = "${moduleName}";
 
   private:
     // Hybrid Setup
@@ -268,14 +275,14 @@ class ${moduleName}: public HybridObject {
         throw new Error(`Invalid C++ Signature Type: ${signature.type}!`);
     }
     registrations.push(
-      `${registerMethod}("${signature.rawName}", &${moduleName}::${signature.name}, this);`
+      `${registerMethod}("${signature.rawName}", &${cppClassName}::${signature.name}, this);`
     );
   }
 
   const cppBodyCode = `
-#include "${moduleName}.hpp"
+#include "${cppClassName}.hpp"
 
-void Person::loadHybridMethods() {
+void ${cppClassName}::loadHybridMethods() {
   ${joinToIndented(registrations, '  ')}
 }
     `;
@@ -284,12 +291,12 @@ void Person::loadHybridMethods() {
   files.push({
     content: cppHeaderCode,
     language: 'c++',
-    name: `${moduleName}.hpp`,
+    name: `${cppClassName}.hpp`,
   });
   files.push({
     content: cppBodyCode,
     language: 'c++',
-    name: `${moduleName}.cpp`,
+    name: `${cppClassName}.cpp`,
   });
   return files;
 }
