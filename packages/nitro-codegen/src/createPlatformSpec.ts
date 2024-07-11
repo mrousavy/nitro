@@ -18,11 +18,13 @@ interface File {
 
 type TypeMap = { [K in ts.SyntaxKind]: string };
 const typeMap: Partial<TypeMap> = {
-  [ts.SyntaxKind.VoidKeyword]: 'void',
-  [ts.SyntaxKind.NumberKeyword]: 'double',
-  [ts.SyntaxKind.BooleanKeyword]: 'bool',
   [ts.SyntaxKind.StringKeyword]: 'std::string',
+  [ts.SyntaxKind.NumberKeyword]: 'double',
   [ts.SyntaxKind.BigIntKeyword]: 'int64_t',
+  [ts.SyntaxKind.BooleanKeyword]: 'bool',
+  [ts.SyntaxKind.VoidKeyword]: 'void',
+  [ts.SyntaxKind.UndefinedKeyword]: 'std::nullptr_t',
+  [ts.SyntaxKind.NullKeyword]: 'std::nullptr_t',
 };
 
 interface CodeNode {
@@ -170,6 +172,9 @@ class Method implements CodeNode {
 }
 
 function getCppType(syntax: ts.SyntaxKind): string {
+  // TODO: Support referencing other types (via import statements or extra interface decls)
+  // TODO: Support functions (std::function)
+  // TODO: Support objects (custom structs)
   const cppType = typeMap[syntax];
   if (cppType == null) {
     console.warn(
@@ -228,6 +233,8 @@ function createSharedCppSpec(module: InterfaceDeclaration): File[] {
 
   // Generate the full header / code
   const cppHeaderCode = `
+#include <stddef.h>
+#include <string.h>
 #include <NitroModules/HybridObject.hpp>
 
 class ${cppClassName}: public HybridObject {
