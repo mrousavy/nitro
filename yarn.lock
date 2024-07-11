@@ -9374,6 +9374,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "nitro-codegen@workspace:packages/nitro-codegen"
   dependencies:
+    eslint: ^8.51.0
+    eslint-config-prettier: ^9.0.0
+    eslint-plugin-prettier: ^5.0.1
+    prettier: ^3.0.3
     react-native-nitro-modules: "workspace:^"
     ts-morph: ^23.0.0
     typescript: ^5.2.2
