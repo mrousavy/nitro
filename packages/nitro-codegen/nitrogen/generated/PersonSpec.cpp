@@ -1,5 +1,3 @@
-
-
 ///
 /// PersonSpec.cpp
 /// Sat Jul 13 2024
@@ -19,4 +17,3 @@ void PersonSpec::loadHybridMethods() {
   registerHybridSetter("car", &PersonSpec::setCar, this);
   registerHybridMethod("sayHi", &PersonSpec::sayHi, this);
 }
-    

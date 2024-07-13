@@ -1,5 +1,3 @@
-
-
 ///
 /// Car.hpp
 /// Sat Jul 13 2024
@@ -47,4 +45,3 @@ template <> struct JSIConverter<Car> {
 };
 
 } // namespace margelo
-        

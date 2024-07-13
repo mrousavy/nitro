@@ -1,5 +1,3 @@
-
-
 ///
 /// PersonSpec.hpp
 /// Sat Jul 13 2024
@@ -40,4 +38,3 @@ class PersonSpec: public HybridObject {
     // Hybrid Setup
     void loadHybridMethods() override;
 };
-    

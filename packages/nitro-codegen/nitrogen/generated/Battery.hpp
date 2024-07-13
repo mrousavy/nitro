@@ -1,5 +1,3 @@
-
-
 ///
 /// Battery.hpp
 /// Sat Jul 13 2024
@@ -38,4 +36,3 @@ template <> struct JSIConverter<Battery> {
 };
 
 } // namespace margelo
-        

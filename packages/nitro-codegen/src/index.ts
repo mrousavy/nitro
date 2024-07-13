@@ -65,7 +65,7 @@ for (const module of interfaces) {
       }
 
       // Write file
-      fs.writeFileSync(filepath, file.content, 'utf8')
+      fs.writeFileSync(filepath, file.content.trim(), 'utf8')
     }
   }
 
