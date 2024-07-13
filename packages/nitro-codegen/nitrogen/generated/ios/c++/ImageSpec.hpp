@@ -28,7 +28,7 @@
  * Inherit this class to create instances of `ImageSpec` in C++.
  * @example
  * ```cpp
- * public class Image: public ImageSpec {
+ * class Image: public ImageSpec {
  *   // ...
  * };
  * ```

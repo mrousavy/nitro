@@ -27,7 +27,7 @@ const outFolder = path.join('nitrogen', 'generated')
 await fs.rm(outFolder, { force: true, recursive: true })
 
 for (const sourceFile of project.getSourceFiles()) {
-  console.log(`📚  Parsing ${sourceFile.getBaseName()}...`)
+  console.log(`⏳  Parsing ${sourceFile.getBaseName()}...`)
 
   // Find all interfaces in the given file
   const interfaces = sourceFile.getChildrenOfKind(
@@ -76,7 +76,7 @@ for (const sourceFile of project.getSourceFiles()) {
       targetSpecs++
 
       console.log(
-        `    ⏳  Generating specs for HybridObject "${moduleName}"...`
+        `    ⚙️  Generating specs for HybridObject "${moduleName}"...`
       )
       for (const platform of platforms) {
         const language = platformSpec[platform]!

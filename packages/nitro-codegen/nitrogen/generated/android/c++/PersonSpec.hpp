@@ -32,7 +32,7 @@
  * Inherit this class to create instances of `PersonSpec` in C++.
  * @example
  * ```cpp
- * public class Person: public PersonSpec {
+ * class Person: public PersonSpec {
  *   // ...
  * };
  * ```
