@@ -142,6 +142,12 @@ class TSType implements CodeNode {
           (p) =>
             `obj.setProperty(runtime, "${p.name}", JSIConverter<${p.getCode()}>::toJSI(runtime, arg.${p.name}));`
         )
+
+        const extraFiles = this.referencedTypes.flatMap((r) =>
+          r.getDefinitionFiles()
+        )
+        const cppExtraIncludes = extraFiles.map((f) => `#include "${f.name}"`)
+
         const cppCode = `
 ${createFileMetadataString(`${typename}.hpp`)}
 
@@ -151,6 +157,8 @@ ${createFileMetadataString(`${typename}.hpp`)}
 #include <string.h>
 #include <optional>
 #include <NitroModules/JSIConverter.hpp>
+
+${cppExtraIncludes.join('\n')}
 
 struct ${typename} {
 public:
@@ -413,6 +421,13 @@ function createSharedCppSpec(module: InterfaceDeclaration): File[] {
   const functions = module.getChildrenOfKind(ts.SyntaxKind.MethodSignature)
   const cppMethods = functions.map((f) => new Method(f))
 
+  // Extra includes
+  const extraDefinitions = [
+    ...cppProperties.flatMap((p) => p.getDefinitionFiles()),
+    ...cppMethods.flatMap((m) => m.getDefinitionFiles()),
+  ]
+  const cppExtraIncludes = extraDefinitions.map((d) => `#include "${d.name}"`)
+
   // Generate the full header / code
   const cppHeaderCode = `
 ${createFileMetadataString(`${cppClassName}.hpp`)}
@@ -422,6 +437,8 @@ ${createFileMetadataString(`${cppClassName}.hpp`)}
 #include <stddef.h>
 #include <string.h>
 #include <NitroModules/HybridObject.hpp>
+
+${cppExtraIncludes.join('\n')}
 
 class ${cppClassName}: public HybridObject {
   public:
@@ -493,18 +510,7 @@ void ${cppClassName}::loadHybridMethods() {
     language: 'c++',
     name: `${cppClassName}.cpp`,
   })
-  for (const prop of cppProperties) {
-    // Add all files that the properties referenced
-    for (const file of prop.getDefinitionFiles()) {
-      files.push(file)
-    }
-  }
-  for (const method of cppMethods) {
-    // Add all files that the methods referenced
-    for (const file of method.getDefinitionFiles()) {
-      files.push(file)
-    }
-  }
+  files.push(...extraDefinitions)
   return files
 }
 

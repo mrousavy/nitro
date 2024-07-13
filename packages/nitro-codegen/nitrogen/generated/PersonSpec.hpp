@@ -13,6 +13,9 @@
 #include <string.h>
 #include <NitroModules/HybridObject.hpp>
 
+#include "Car.hpp"
+#include "Battery.hpp"
+
 class PersonSpec: public HybridObject {
   public:
     // Constructor

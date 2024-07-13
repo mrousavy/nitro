@@ -14,6 +14,8 @@
 #include <optional>
 #include <NitroModules/JSIConverter.hpp>
 
+#include "Battery.hpp"
+
 struct Car {
 public:
   std::string make;
@@ -24,7 +26,7 @@ public:
 
 namespace margelo {
 
-  // Car <> Car
+  // C++ Car <> JS Car
   template <> struct JSIConverter<Car> {
     static Car fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       jsi::Object obj = arg.asObject(runtime);

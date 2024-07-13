@@ -14,6 +14,8 @@
 #include <optional>
 #include <NitroModules/JSIConverter.hpp>
 
+
+
 struct Battery {
 public:
   double capacity;
@@ -21,7 +23,7 @@ public:
 
 namespace margelo {
 
-  // Battery <> Battery
+  // C++ Battery <> JS Battery
   template <> struct JSIConverter<Battery> {
     static Battery fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       jsi::Object obj = arg.asObject(runtime);
