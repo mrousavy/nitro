@@ -32,6 +32,7 @@ class ImageSpec: public HybridObject {
     // Properties
     virtual double getWidth() = 0;
     virtual double getHeight() = 0;
+    virtual std::shared_ptr<ArrayBuffer> getData() = 0;
 
   public:
     // Methods
