@@ -135,21 +135,6 @@ template <typename TInner> struct JSIConverter<std::optional<TInner>> {
   }
 };
 
-// Enum <> Union
-template <typename TEnum> struct JSIConverter<TEnum, std::enable_if_t<std::is_enum<TEnum>::value>> {
-  static TEnum fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
-    std::string string = arg.asString(runtime).utf8(runtime);
-    TEnum outEnum;
-    EnumMapper::convertJSUnionToEnum(string, &outEnum);
-    return outEnum;
-  }
-  static jsi::Value toJSI(jsi::Runtime& runtime, const TEnum& arg) {
-    std::string outUnion;
-    EnumMapper::convertEnumToJSUnion(arg, &outUnion);
-    return jsi::String::createFromUtf8(runtime, outUnion);
-  }
-};
-
 // std::future<T> <> Promise<T>
 template <typename TResult> struct JSIConverter<std::future<TResult>> {
   static std::future<TResult> fromJSI(jsi::Runtime&, const jsi::Value&) {
