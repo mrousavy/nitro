@@ -11,6 +11,9 @@
 
 #include <stddef.h>
 #include <string.h>
+#include <optional>
+#include <future>
+#include <functional>
 #include <NitroModules/HybridObject.hpp>
 
 #include "Meal.hpp"

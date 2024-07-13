@@ -57,6 +57,18 @@ function joinToIndented(array: string[], indentation: string = '    '): string {
   return array.join('\n').replaceAll('\n', `\n${indentation}`)
 }
 
+function removeDuplicates<T>(array: T[], equals: (a: T, b: T) => boolean): T[] {
+  const result: T[] = []
+  for (const item of array) {
+    if (result.some((r) => equals(r, item))) {
+      // skip it, it's a duplicate
+    } else {
+      result.push(item)
+    }
+  }
+  return result
+}
+
 function isPromise(type: Type): boolean {
   const symbol = type.getSymbol()
   if (symbol != null) {
@@ -133,6 +145,54 @@ class TSType implements CodeNode {
     } else if (type.isVoid()) {
       this.cppName = 'void'
       this.passByConvention = 'by-value'
+    } else if (type.isArray() || type.isTuple()) {
+      const arrayElementType = type.getArrayElementTypeOrThrow()
+      const elementType = new TSType(
+        arrayElementType,
+        arrayElementType.isNullable()
+      )
+      this.cppName = `std::vector<${elementType.cppName}>`
+      this.passByConvention = 'by-reference'
+      this.referencedTypes.push(elementType)
+    } else if (type.getCallSignatures().length > 0) {
+      // It's a function!
+      const callSignatures = type.getCallSignatures()
+      const callSignature = callSignatures[0]
+      if (callSignatures.length !== 1 || callSignature == null) {
+        throw new Error(
+          `Function overloads are not supported in Nitrogen! (in ${type.getText()})`
+        )
+      }
+
+      const funcReturnType = callSignature.getReturnType()
+      const returnType = new TSType(funcReturnType, funcReturnType.isNullable())
+      const parameters = callSignature.getParameters().map((p) => {
+        const declaration = p.getValueDeclarationOrThrow()
+        const t = p.getTypeAtLocation(declaration)
+        return new TSType(t, p.isOptional() || t.isNullable())
+      })
+      const cppParamsArgs = parameters.map((p) => p.cppName).join(', ')
+
+      this.cppName = `std::function<${returnType.cppName}(${cppParamsArgs})>`
+      this.passByConvention = 'by-reference'
+      this.referencedTypes.push(returnType, ...parameters)
+    } else if (isPromise(type)) {
+      // It's a Promise!
+      const typename = type.getSymbolOrThrow().getName()
+      const typeArguments = type.getTypeArguments()
+      const promiseResolvingType = typeArguments[0]
+      if (typeArguments.length !== 1 || promiseResolvingType == null) {
+        throw new Error(
+          `Type ${typename} looks like a Promise, but has ${typeArguments.length} type arguments instead of 1 (<T>)!`
+        )
+      }
+      const resolvingType = new TSType(
+        promiseResolvingType,
+        promiseResolvingType.isNullable()
+      )
+      this.cppName = `std::future<${resolvingType.cppName}>`
+      this.passByConvention = 'by-reference'
+      this.referencedTypes.push(resolvingType)
     } else if (type.isEnum()) {
       // It is an enum. We need to generate enum interface
       this.passByConvention = 'by-value'
@@ -287,53 +347,6 @@ namespace margelo {
         name: `${typename}.hpp`,
         content: cppCode,
       })
-    } else if (type.isArray() || type.isTuple()) {
-      const arrayElementType = type.getArrayElementTypeOrThrow()
-      const elementType = new TSType(
-        arrayElementType,
-        arrayElementType.isNullable()
-      )
-      this.cppName = `std::vector<${elementType.cppName}>`
-      this.passByConvention = 'by-reference'
-      this.extraFiles.push(...elementType.getDefinitionFiles())
-    } else if (type.getCallSignatures().length > 0) {
-      // It's a function!
-      const callSignatures = type.getCallSignatures()
-      const callSignature = callSignatures[0]
-      if (callSignatures.length !== 1 || callSignature == null) {
-        throw new Error(
-          `Function overloads are not supported in Nitrogen! (in ${type.getText()})`
-        )
-      }
-
-      const funcReturnType = callSignature.getReturnType()
-      const returnType = new TSType(funcReturnType, funcReturnType.isNullable())
-      const parameters = callSignature.getParameters().map((p) => {
-        const declaration = p.getValueDeclarationOrThrow()
-        const t = p.getTypeAtLocation(declaration)
-        return new TSType(t, p.isOptional() || t.isNullable())
-      })
-      const cppParamsArgs = parameters.map((p) => p.cppName).join(', ')
-
-      this.cppName = `std::function<${returnType.cppName}(${cppParamsArgs})>`
-      this.passByConvention = 'by-reference'
-    } else if (isPromise(type)) {
-      // It's a Promise!
-      const typename = type.getSymbolOrThrow().getName()
-      const typeArguments = type.getTypeArguments()
-      const promiseResolvingType = typeArguments[0]
-      if (typeArguments.length !== 1 || promiseResolvingType == null) {
-        throw new Error(
-          `Type ${typename} looks like a Promise, but has ${typeArguments.length} type arguments instead of 1 (<T>)!`
-        )
-      }
-      const resolvingType = new TSType(
-        promiseResolvingType,
-        promiseResolvingType.isNullable()
-      )
-      this.cppName = `std::future<${resolvingType.cppName}>`
-      this.passByConvention = 'by-reference'
-      this.extraFiles.push(...resolvingType.getDefinitionFiles())
     } else if (type.isObject() || type.isInterface()) {
       // It references another interface/type, either a simple struct, or another HybridObject
       const typename = type.getSymbolOrThrow().getName()
@@ -445,7 +458,12 @@ namespace margelo {
     const referencedDefinitionFiles = this.referencedTypes.flatMap((r) =>
       r.getDefinitionFiles()
     )
-    return [...extra, ...inheritedDefinitionFiles, ...referencedDefinitionFiles]
+    const allFiles = [
+      ...extra,
+      ...inheritedDefinitionFiles,
+      ...referencedDefinitionFiles,
+    ]
+    return removeDuplicates(allFiles, (a, b) => a.name === b.name)
   }
 }
 
@@ -496,7 +514,10 @@ class Property implements CodeNode {
   }
 
   getDefinitionFiles(): File[] {
-    return this.type.getDefinitionFiles()
+    return removeDuplicates(
+      this.type.getDefinitionFiles(),
+      (a, b) => a.name === b.name
+    )
   }
 
   getCode(language: Language): string {
@@ -546,7 +567,10 @@ class Parameter implements CodeNode {
   }
 
   getDefinitionFiles(): File[] {
-    return this.type.getDefinitionFiles()
+    return removeDuplicates(
+      this.type.getDefinitionFiles(),
+      (a, b) => a.name === b.name
+    )
   }
 }
 
@@ -598,7 +622,11 @@ class Method implements CodeNode {
       p.getDefinitionFiles()
     )
     const returnTypeDefinitionFiles = this.returnType.getDefinitionFiles()
-    return [...returnTypeDefinitionFiles, ...parametersDefinitionFiles]
+    const allFiles = [
+      ...returnTypeDefinitionFiles,
+      ...parametersDefinitionFiles,
+    ]
+    return removeDuplicates(allFiles, (a, b) => a.name === b.name)
   }
 }
 
@@ -653,7 +681,10 @@ function createSharedCppSpec(module: InterfaceDeclaration): File[] {
     ...cppProperties.flatMap((p) => p.getDefinitionFiles()),
     ...cppMethods.flatMap((m) => m.getDefinitionFiles()),
   ]
-  const cppExtraIncludes = extraDefinitions.map((d) => `#include "${d.name}"`)
+  const cppExtraIncludesAll = extraDefinitions.map(
+    (d) => `#include "${d.name}"`
+  )
+  const cppExtraIncludes = [...new Set(cppExtraIncludesAll)]
 
   // Generate the full header / code
   const cppHeaderCode = `
@@ -663,6 +694,9 @@ ${createFileMetadataString(`${cppClassName}.hpp`)}
 
 #include <stddef.h>
 #include <string.h>
+#include <optional>
+#include <future>
+#include <functional>
 #include <NitroModules/HybridObject.hpp>
 
 ${cppExtraIncludes.join('\n')}
