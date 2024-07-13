@@ -2,8 +2,8 @@
  * Describes the languages this component will be implemented in.
  */
 export interface PlatformSpec {
-  ios?: 'swift' | 'c++';
-  android?: 'kotlin' | 'c++';
+  ios?: 'swift' | 'c++'
+  android?: 'kotlin' | 'c++'
 }
 
 /**

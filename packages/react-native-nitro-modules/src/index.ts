@@ -1,4 +1,4 @@
-export { NitroModules } from './NativeNitro';
+export { NitroModules } from './NativeNitro'
 
-export * from './createTestObject';
-export * from './HybridObject';
+export * from './createTestObject'
+export * from './HybridObject'
