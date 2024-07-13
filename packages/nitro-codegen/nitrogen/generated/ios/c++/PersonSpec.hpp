@@ -13,6 +13,7 @@
 #include <string.h>
 #include <NitroModules/HybridObject.hpp>
 
+#include "Meal.hpp"
 #include "Gender.hpp"
 #include "Car.hpp"
 #include "Battery.hpp"
@@ -29,6 +30,10 @@ class PersonSpec: public HybridObject {
     virtual double getAge() = 0;
     virtual bool getIsHappy() = 0;
     virtual void setIsHappy(bool isHappy) = 0;
+    virtual std::vector<double> getFavouriteNumbers() = 0;
+    virtual void setFavouriteNumbers(const std::vector<double>& favouriteNumbers) = 0;
+    virtual std::vector<Meal> getFavouriteMeals() = 0;
+    virtual void setFavouriteMeals(const std::vector<Meal>& favouriteMeals) = 0;
     virtual Gender getGender() = 0;
     virtual std::optional<Car> getCar() = 0;
     virtual void setCar(const std::optional<Car>& car) = 0;

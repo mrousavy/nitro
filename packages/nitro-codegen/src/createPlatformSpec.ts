@@ -41,6 +41,10 @@ function createFileMetadataString(filename: string): string {
 `
 }
 
+function toReferenceType(type: string): `const ${typeof type}&` {
+  return `const ${type}&`
+}
+
 function capitalizeName(name: string): string {
   return name.charAt(0).toUpperCase() + name.slice(1)
 }
@@ -81,7 +85,7 @@ class VoidType implements CodeNode {
 class TSType implements CodeNode {
   readonly type: Type
   readonly isOptional: boolean
-  readonly kind: 'primitive' | 'complex'
+  readonly passByConvention: 'by-reference' | 'by-value'
   private readonly cppName: string
   private readonly extraFiles: File[]
 
@@ -95,27 +99,29 @@ class TSType implements CodeNode {
     this.referencedTypes = []
     this.extraFiles = []
 
-    if (type.isBigInt()) {
-      this.cppName = 'int64_t'
-      this.kind = 'primitive'
-    } else if (type.isBoolean()) {
-      this.cppName = 'bool'
-      this.kind = 'primitive'
-    } else if (type.isNull() || type.isUndefined()) {
+    console.log(`   -> Getting ${type.getText()}...`)
+
+    if (type.isNull() || type.isUndefined()) {
       this.cppName = 'std::nullptr_t'
-      this.kind = 'primitive'
-    } else if (type.isNumber()) {
+      this.passByConvention = 'by-value'
+    } else if (type.isBoolean() || type.isBooleanLiteral()) {
+      this.cppName = 'bool'
+      this.passByConvention = 'by-value'
+    } else if (type.isNumber() || type.isNumberLiteral()) {
       this.cppName = 'double'
-      this.kind = 'primitive'
-    } else if (type.isString()) {
+      this.passByConvention = 'by-value'
+    } else if (type.isString() || type.isStringLiteral()) {
       this.cppName = 'std::string'
-      this.kind = 'complex'
+      this.passByConvention = 'by-reference'
+    } else if (type.isBigInt() || type.isBigIntLiteral()) {
+      this.cppName = 'int64_t'
+      this.passByConvention = 'by-value'
     } else if (type.isVoid()) {
       this.cppName = 'void'
-      this.kind = 'primitive'
+      this.passByConvention = 'by-value'
     } else if (type.isEnum()) {
       // It is an enum. We need to generate enum interface
-      this.kind = 'primitive'
+      this.passByConvention = 'by-value'
       const typename = type.getSymbolOrThrow().getName()
       this.cppName = typename
       const enumValues: EnumMember[] = []
@@ -197,7 +203,7 @@ namespace margelo {
           )
         }
       })
-      this.kind = 'primitive'
+      this.passByConvention = 'by-value'
       this.cppName = typename
       const cppEnumMembers = enumValues.map((m) => `${m},`)
       const cppFromJsiHashCases = enumValues
@@ -267,9 +273,15 @@ namespace margelo {
         name: `${typename}.hpp`,
         content: cppCode,
       })
+    } else if (type.isArray() || type.isTuple()) {
+      const arrayElementType = type.getArrayElementTypeOrThrow()
+      console.log(`-> ARRAY element type: ${arrayElementType.getText()}!`)
+      const elementType = new TSType(arrayElementType, false)
+      this.cppName = `std::vector<${elementType.cppName}>`
+      this.passByConvention = 'by-reference'
+      this.extraFiles.push(...elementType.extraFiles)
     } else if (type.isObject() || type.isInterface()) {
       // It references another interface/type, either a simple struct, or another HybridObject
-      this.kind = 'complex'
       const typename = type.getSymbolOrThrow().getName()
 
       const isHybridObject = type
@@ -279,8 +291,11 @@ namespace margelo {
       if (isHybridObject) {
         // It is another HybridObject being referenced!
         this.cppName = `std::shared_ptr<${typename}>`
+        this.passByConvention = 'by-value' // shared_ptr should be passed by value
       } else {
         // It is a simple struct being referenced.
+        this.cppName = typename
+        this.passByConvention = 'by-reference'
         const cppProperties: NamedTSType[] = []
         for (const prop of type.getProperties()) {
           // recursively resolve types for each property of the referenced type
@@ -352,7 +367,6 @@ namespace margelo {
           name: `${typename}.hpp`,
           content: cppCode,
         })
-        this.cppName = typename
       }
     } else {
       throw new Error(
@@ -437,13 +451,11 @@ class Property implements CodeNode {
         const signatures = this.cppSignatures
         const codeLines = signatures.map((s) => {
           const params = s.parameters.map((p) => {
-            if (p.kind === 'complex') {
-              // Complex types can be const& passed
-              return `const ${p.getCode()}& ${p.name}`
-            } else {
-              // Primitive types are just passed by value
-              return `${p.getCode()} ${p.name}`
-            }
+            const paramType =
+              p.passByConvention === 'by-reference'
+                ? toReferenceType(p.getCode())
+                : p.getCode()
+            return `${paramType} ${p.name}`
           })
           return `virtual ${s.returnType.getCode()} ${s.name}(${params.join(', ')}) = 0;`
         })
@@ -513,13 +525,11 @@ class Method implements CodeNode {
       case 'c++':
         const signature = this.cppSignature
         const params = signature.parameters.map((p) => {
-          if (p.kind === 'complex') {
-            // Complex types can be const& passed
-            return `const ${p.getCode()}& ${p.name}`
-          } else {
-            // Primitive types are just passed by value
-            return `${p.getCode()} ${p.name}`
-          }
+          const paramType =
+            p.passByConvention === 'by-reference'
+              ? toReferenceType(p.getCode())
+              : p.getCode()
+          return `${paramType} ${p.name}`
         })
         return `virtual ${signature.returnType.getCode()} ${signature.name}(${params.join(', ')}) = 0;`
       default:
