@@ -13,8 +13,21 @@ const project = new Project({})
 
 project.addSourceFilesAtPaths('**/*.nitro.ts')
 
+if (project.getSourceFiles().length === 0) {
+  console.log(
+    "❌  Nitrogen didn'nt find any spec files! " +
+      'To create a Nitrous Module, create a file with the ".nitro.ts" suffix ' +
+      'and export an interface that extends HybridObject<T>.'
+  )
+  process.exit()
+}
+
+const outFolder = path.join('nitrogen', 'generated')
+// Clean output folder before writing to it
+await fs.rm(outFolder, { force: true, recursive: true })
+
 for (const sourceFile of project.getSourceFiles()) {
-  console.log(`📚  Parsing ${sourceFile.getFilePath()}...`)
+  console.log(`📚  Parsing ${sourceFile.getBaseName()}...`)
 
   // Find all interfaces in the given file
   const interfaces = sourceFile.getChildrenOfKind(
@@ -61,10 +74,6 @@ for (const sourceFile of project.getSourceFiles()) {
       }
 
       targetSpecs++
-
-      const outFolder = path.join('nitrogen', 'generated')
-      // Clean output folder before writing to it
-      await fs.rm(outFolder, { force: true, recursive: true })
 
       console.log(
         `    ⏳  Generating specs for HybridObject "${moduleName}"...`
