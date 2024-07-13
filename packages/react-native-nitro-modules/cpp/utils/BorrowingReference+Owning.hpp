@@ -1,6 +1,6 @@
 //
 //  BorrowingReference+Owning.hpp
-//  Pods
+//  react-native-nitro
 //
 //  Created by Marc Rousavy on 23.06.24.
 //
@@ -26,7 +26,7 @@ OwningReference<T> BorrowingReference<T>::lock() {
     // return nullptr
     return OwningReference<T>();
   }
-  
+
   return OwningReference(*this);
 }
 

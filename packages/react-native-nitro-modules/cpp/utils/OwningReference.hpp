@@ -1,6 +1,6 @@
 //
 //  OwningReference.hpp
-//  Pods
+//  react-native-nitro
 //
 //  Created by Marc Rousavy on 23.06.24.
 //
@@ -17,7 +17,7 @@ namespace margelo {
  You can have multiple `OwningReference<T>` instances point to the same pointer, as they internally keep a ref-count.
  As opposed to a `shared_ptr<T>`, an `OwningReference<T>` can also be imperatively manually deleted, even if there
  are multiple strong references still holding onto the pointer.
- 
+
  An `OwningReference<T>` can be weakified, which gives the user a `BorrowingReference<T>`.
  A `BorrowingReference<T>` can be locked to get an `OwningReference<T>` again, assuming it has not been deleted yet.
  */
@@ -36,7 +36,7 @@ public:
       // increment ref count after copy
       (*_strongRefCount)++;
   }
-  
+
   OwningReference(OwningReference&& ref):
     _value(ref._value),
     _isDeleted(ref._isDeleted),
@@ -47,16 +47,16 @@ public:
       ref._strongRefCount = nullptr;
       ref._weakRefCount = nullptr;
   }
-  
+
   OwningReference& operator=(const OwningReference& ref) {
     if (this == &ref) return *this;
-    
+
     if (_strongRefCount != nullptr) {
       // destroy previous pointer
       (*_strongRefCount)--;
       maybeDestroy();
     }
-    
+
     _value = ref._value;
     _isDeleted = ref._isDeleted;
     _strongRefCount = ref._strongRefCount;
@@ -64,10 +64,10 @@ public:
     if (_strongRefCount != nullptr) {
       (*_strongRefCount)++;
     }
-    
+
     return *this;
   }
-  
+
 private:
   OwningReference(const BorrowingReference<T>& ref):
     _value(ref._value),
@@ -76,24 +76,24 @@ private:
     _weakRefCount(ref._weakRefCount) {
       (*_strongRefCount)++;
   }
-  
+
 public:
-  
+
   ~OwningReference() {
     if (_strongRefCount == nullptr) {
       // we are just a dangling nullptr.
       return;
     }
-    
+
     // decrement strong ref count on destroy
     --(*_strongRefCount);
     maybeDestroy();
   }
-  
+
   explicit operator bool() const {
     return _value != nullptr && !(*_isDeleted);
   }
-  
+
   T& operator*() const {
       return *_value;
   }
@@ -101,14 +101,14 @@ public:
   T* operator->() const {
       return _value;
   }
-  
+
   /**
    Get a weak ("borrowing") reference to this owning reference
    */
   BorrowingReference<T> weak() {
     return BorrowingReference(*this);
   }
-  
+
   /**
    Delete and destroy the value this OwningReference is pointing to.
    This can even be called if there are still multiple strong references to the value.
@@ -121,14 +121,14 @@ public:
     delete _value;
     *_isDeleted = true;
   }
-  
+
 private:
   void maybeDestroy() {
     if (*_strongRefCount == 0) {
       // after no strong references exist anymore
       destroy();
     }
-    
+
     if (*_strongRefCount == 0 && *_weakRefCount == 0) {
       // free the full memory if there are no more references at all
       delete _isDeleted;
@@ -136,10 +136,10 @@ private:
       delete _weakRefCount;
     }
   }
-  
+
 public:
   friend class BorrowingReference<T>;
-  
+
 private:
   T* _value;
   bool* _isDeleted;

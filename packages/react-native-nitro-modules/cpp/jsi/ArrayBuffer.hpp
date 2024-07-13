@@ -1,6 +1,6 @@
 //
 //  ArrayBuffer.hpp
-//  Pods
+//  react-native-nitro
 //
 //  Created by Marc Rousavy on 14.07.24.
 //
