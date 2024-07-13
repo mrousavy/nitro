@@ -73,7 +73,7 @@ jsi::Value HybridObject::get(facebook::jsi::Runtime& runtime, const facebook::js
 
   std::string name = propName.utf8(runtime);
   auto& functionCache = _functionCache[&runtime];
-  
+
   if (functionCache.contains(name)) [[likely]] {
     // cache hit - let's see if the function is still alive..
     OwningReference<jsi::Function> function = functionCache[name];
@@ -122,7 +122,7 @@ void HybridObject::set(facebook::jsi::Runtime& runtime, const facebook::jsi::Pro
 
   std::string name = propName.utf8(runtime);
 
-  if (_setters.contains(name) > 0) {
+  if (_setters.contains(name)) {
     // Call setter
     _setters[name](runtime, jsi::Value::undefined(), &value, 1);
     return;
