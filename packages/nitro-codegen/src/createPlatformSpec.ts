@@ -89,6 +89,10 @@ function isRecord(type: Type): boolean {
   return isSymbol(type, 'Record')
 }
 
+function isArrayBuffer(type: Type): boolean {
+  return isSymbol(type, 'ArrayBuffer')
+}
+
 interface CppMethodSignature {
   returnType: TSType | VoidType
   parameters: NamedTSType[]
@@ -212,6 +216,10 @@ class TSType implements CodeNode {
       this.cppName = `std::unordered_map<${keyType.cppName}, ${valueType.cppName}>`
       this.passByConvention = 'by-reference'
       this.referencedTypes.push(keyType, valueType)
+    } else if (isArrayBuffer(type)) {
+      // ArrayBuffer
+      this.cppName = 'std::shared_ptr<ArrayBuffer>'
+      this.passByConvention = 'by-value'
     } else if (type.isEnum()) {
       // It is an enum. We need to generate enum interface
       this.passByConvention = 'by-value'

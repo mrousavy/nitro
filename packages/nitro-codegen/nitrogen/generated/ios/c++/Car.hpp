@@ -24,6 +24,7 @@ public:
   std::optional<Battery> battery;
   Powertrain powertrain;
   double price;
+  std::shared_ptr<ArrayBuffer> barcode;
 };
 
 namespace margelo {
@@ -38,6 +39,7 @@ namespace margelo {
         .battery = JSIConverter<std::optional<Battery>>::fromJSI(runtime, obj.getProperty(runtime, "battery")),
         .powertrain = JSIConverter<Powertrain>::fromJSI(runtime, obj.getProperty(runtime, "powertrain")),
         .price = JSIConverter<double>::fromJSI(runtime, obj.getProperty(runtime, "price")),
+        .barcode = JSIConverter<std::shared_ptr<ArrayBuffer>>::fromJSI(runtime, obj.getProperty(runtime, "barcode")),
       };
     }
     static jsi::Value toJSI(jsi::Runtime& runtime, const Car& arg) {
@@ -47,6 +49,7 @@ namespace margelo {
       obj.setProperty(runtime, "battery", JSIConverter<std::optional<Battery>>::toJSI(runtime, arg.battery));
       obj.setProperty(runtime, "powertrain", JSIConverter<Powertrain>::toJSI(runtime, arg.powertrain));
       obj.setProperty(runtime, "price", JSIConverter<double>::toJSI(runtime, arg.price));
+      obj.setProperty(runtime, "barcode", JSIConverter<std::shared_ptr<ArrayBuffer>>::toJSI(runtime, arg.barcode));
       return obj;
     }
   };

@@ -2,6 +2,7 @@ import type { HybridObject } from 'react-native-nitro-modules'
 
 interface Item {
   price: number
+  barcode: ArrayBuffer
 }
 
 interface Battery {
