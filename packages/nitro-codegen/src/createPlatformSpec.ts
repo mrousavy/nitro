@@ -75,7 +75,19 @@ class TSType implements CodeNode {
     this.referencedTypes = []
     this.extraFiles = []
 
-    if (type.isObject() || type.isInterface()) {
+    if (type.isBigInt()) {
+      this.cppName = 'int64_t'
+    } else if (type.isBoolean()) {
+      this.cppName = 'bool'
+    } else if (type.isNull() || type.isUndefined()) {
+      this.cppName = 'std::nullptr_t'
+    } else if (type.isNumber()) {
+      this.cppName = 'double'
+    } else if (type.isString()) {
+      this.cppName = 'std::string'
+    } else if (type.isVoid()) {
+      this.cppName = 'void'
+    } else if (type.isObject() || type.isInterface()) {
       // It references another interface/type, either a simple struct, or another HybridObject
       const typename = type.getText()
       console.log(`ref: ${typename}`)
@@ -96,7 +108,7 @@ class TSType implements CodeNode {
           const declaration = prop.getValueDeclarationOrThrow()
           const propType = prop.getTypeAtLocation(declaration)
           const refType = new TSType(propType)
-          cppProperties.push({ type: refType.cppName, name: prop.getName() })
+          cppProperties.push({ type: refType.getCode(), name: prop.getName() })
           this.referencedTypes.push(refType)
         }
         const cppStructProps = cppProperties.map((p) => `${p.type} ${p.name};`)
@@ -147,29 +159,18 @@ template <> struct JSIConverter<${typename}> {
         this.cppName = typename
       }
     } else {
-      // It is _probably_ a primitive type
-      if (type.isBigInt()) {
-        this.cppName = 'int64_t'
-      } else if (type.isBoolean()) {
-        this.cppName = 'bool'
-      } else if (type.isNull() || type.isUndefined()) {
-        this.cppName = 'std::nullptr_t'
-      } else if (type.isNumber()) {
-        this.cppName = 'double'
-      } else if (type.isString()) {
-        this.cppName = 'std::string'
-      } else if (type.isVoid()) {
-        this.cppName = 'void'
-      } else {
-        throw new Error(
-          `The TypeScript type "${type.getText()}" cannot be represented in C++!`
-        )
-      }
+      throw new Error(
+        `The TypeScript type "${type.getText()}" cannot be represented in C++!`
+      )
     }
   }
 
   getCode(): string {
-    return this.cppName
+    if (this.type.isNullable()) {
+      return `std::optional<${this.cppName}>`
+    } else {
+      return this.cppName
+    }
   }
 
   getDefinitionFiles(): File[] {
