@@ -9,6 +9,7 @@
 #include "Dispatcher.hpp"
 #include "FunctionCache.hpp"
 #include "ArrayBuffer.hpp"
+#include "Hash.hpp"
 #include <array>
 #include <future>
 #include <jsi/jsi.h>
