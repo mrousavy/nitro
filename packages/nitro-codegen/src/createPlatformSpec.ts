@@ -28,7 +28,15 @@ const typeMap: Partial<TypeMap> = {
 }
 
 interface CodeNode {
+  /**
+   * Get the code of this code node (e.g. property, method) in the given language.
+   */
   getCode(language: Language): string
+  /**
+   * Get all extra definition files this code node needs (e.g. extra type/struct declarations
+   * for complex types), or `[]` if none are required (e.g. if this uses primitive types only)
+   */
+  getDefinitionFiles(language: Language): File[]
 }
 
 function createFileMetadataString(filename: string): string {
@@ -64,24 +72,53 @@ interface CppMethodSignature {
   type: 'getter' | 'setter' | 'method'
 }
 
+class Type implements CodeNode {
+  readonly type: TypeNode
+  readonly kind: ts.SyntaxKind
+  private readonly cppName: string
+  private readonly extraFiles: File[]
+
+  constructor(type: TypeNode) {
+    this.type = type
+    this.kind = type.getKind()
+
+    if (this.kind === ts.SyntaxKind.TypeReference) {
+      // It references another interface/type, either a simple struct, or another HybridObject
+      this.cppName = getNodeName(type)
+      this.extraFiles = []
+    } else {
+      // It is _probably_ a primitive type
+      this.cppName = getCppType(this.kind)
+      this.extraFiles = []
+    }
+  }
+
+  getCode(): string {
+    return this.cppName
+  }
+
+  getDefinitionFiles(): File[] {
+    return this.extraFiles
+  }
+}
+
 class Property implements CodeNode {
   readonly name: string
-  readonly type: TypeNode
+  readonly type: Type
   readonly isReadonly: boolean
 
   constructor(prop: PropertySignature) {
     this.name = getNodeName(prop)
     this.isReadonly = prop.hasModifier(ts.SyntaxKind.ReadonlyKeyword)
-    this.type = prop.getTypeNodeOrThrow()
+    this.type = new Type(prop.getTypeNodeOrThrow())
   }
 
   get cppSignatures(): CppMethodSignature[] {
     const signatures: CppMethodSignature[] = []
-    const type = getCppType(this.type.getKind())
     const capitalizedName = capitalizeName(this.name)
     // getter
     signatures.push({
-      returnType: type,
+      returnType: this.type.getCode(),
       rawName: this.name,
       name: `get${capitalizedName}`,
       parameters: [],
@@ -93,11 +130,15 @@ class Property implements CodeNode {
         returnType: 'void',
         rawName: this.name,
         name: `set${capitalizedName}`,
-        parameters: [{ type: type, name: this.name }],
+        parameters: [{ type: this.type.getCode(), name: this.name }],
         type: 'setter',
       })
     }
     return signatures
+  }
+
+  getDefinitionFiles(): File[] {
+    return this.type.getDefinitionFiles()
   }
 
   getCode(language: Language): string {
@@ -119,18 +160,17 @@ class Property implements CodeNode {
 
 class Parameter implements CodeNode {
   readonly name: string
-  readonly type: TypeNode
+  readonly type: Type
 
   constructor(param: ParameterDeclaration) {
     this.name = getNodeName(param)
-    this.type = param.getTypeNodeOrThrow()
+    this.type = new Type(param.getTypeNodeOrThrow())
   }
 
   get cppSignature(): CppValueSignature {
-    const cppType = getCppType(this.type.getKind())
     return {
       name: this.name,
-      type: cppType,
+      type: this.type.getCode(),
     }
   }
 
@@ -145,25 +185,28 @@ class Parameter implements CodeNode {
         )
     }
   }
+
+  getDefinitionFiles(): File[] {
+    return this.type.getDefinitionFiles()
+  }
 }
 
 class Method implements CodeNode {
   readonly name: string
-  readonly returnType: TypeNode
+  readonly returnType: Type
   readonly parameters: Parameter[]
 
   constructor(prop: MethodSignature) {
     this.name = getNodeName(prop)
-    this.returnType = prop.getReturnTypeNodeOrThrow()
+    this.returnType = new Type(prop.getReturnTypeNodeOrThrow())
     this.parameters = prop.getParameters().map((p) => new Parameter(p))
   }
 
   get cppSignature(): CppMethodSignature {
-    const cppType = getCppType(this.returnType.getKind())
     return {
       rawName: this.name,
       name: this.name,
-      returnType: cppType,
+      returnType: this.returnType.getCode(),
       parameters: this.parameters.map((p) => p.cppSignature),
       type: 'method',
     }
@@ -180,6 +223,14 @@ class Method implements CodeNode {
           `Language ${language} is not yet supported for property getters!`
         )
     }
+  }
+
+  getDefinitionFiles(): File[] {
+    const parametersDefinitionFiles = this.parameters.flatMap((p) =>
+      p.getDefinitionFiles()
+    )
+    const returnTypeDefinitionFiles = this.returnType.getDefinitionFiles()
+    return [...returnTypeDefinitionFiles, ...parametersDefinitionFiles]
   }
 }
 
