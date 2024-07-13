@@ -15,12 +15,14 @@
 #include <NitroModules/JSIConverter.hpp>
 
 #include "Battery.hpp"
+#include "Powertrain.hpp"
 
 struct Car {
 public:
   std::string make;
   std::string model;
   std::optional<Battery> battery;
+  Powertrain powertrain;
   double price;
 };
 
@@ -34,6 +36,7 @@ namespace margelo {
         .make = JSIConverter<std::string>::fromJSI(runtime, obj.getProperty(runtime, "make")),
         .model = JSIConverter<std::string>::fromJSI(runtime, obj.getProperty(runtime, "model")),
         .battery = JSIConverter<std::optional<Battery>>::fromJSI(runtime, obj.getProperty(runtime, "battery")),
+        .powertrain = JSIConverter<Powertrain>::fromJSI(runtime, obj.getProperty(runtime, "powertrain")),
         .price = JSIConverter<double>::fromJSI(runtime, obj.getProperty(runtime, "price")),
       };
     }
@@ -42,6 +45,7 @@ namespace margelo {
       obj.setProperty(runtime, "make", JSIConverter<std::string>::toJSI(runtime, arg.make));
       obj.setProperty(runtime, "model", JSIConverter<std::string>::toJSI(runtime, arg.model));
       obj.setProperty(runtime, "battery", JSIConverter<std::optional<Battery>>::toJSI(runtime, arg.battery));
+      obj.setProperty(runtime, "powertrain", JSIConverter<Powertrain>::toJSI(runtime, arg.powertrain));
       obj.setProperty(runtime, "price", JSIConverter<double>::toJSI(runtime, arg.price));
       return obj;
     }

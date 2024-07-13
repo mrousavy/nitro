@@ -57,6 +57,11 @@ interface CppMethodSignature {
   type: 'getter' | 'setter' | 'method'
 }
 
+interface EnumMember {
+  name: string
+  value: number
+}
+
 class VoidType implements CodeNode {
   constructor() {}
 
@@ -104,6 +109,65 @@ class TSType implements CodeNode {
     } else if (type.isVoid()) {
       this.cppName = 'void'
       this.kind = 'primitive'
+    } else if (type.isEnum()) {
+      // It is an enum. We need to generate enum interface
+      this.kind = 'primitive'
+      const typename = type.getSymbolOrThrow().getName()
+      this.cppName = typename
+      const enumValues: EnumMember[] = []
+      const declaration = type.getSymbolOrThrow().getValueDeclarationOrThrow()
+      const enumDeclaration = declaration.asKindOrThrow(
+        ts.SyntaxKind.EnumDeclaration
+      )
+      for (const enumMember of enumDeclaration.getMembers()) {
+        const name = enumMember.getName()
+        const value = enumMember.getValue()
+        if (typeof value !== 'number') {
+          throw new Error(
+            `Enum member ${typename}.${name} is ${value} (${typeof value}), which cannot be represented in C++ enums.\n` +
+              `Each enum member must be a number! If you want to use strings, use TypeScript unions ("a" | "b") instead!`
+          )
+        }
+        enumValues.push({
+          name: enumMember.getName(),
+          value: value,
+        })
+      }
+      const cppEnumMembers = enumValues.map((m) => `${m.name} = ${m.value},`)
+
+      const cppCode = `
+${createFileMetadataString(`${typename}.hpp`)}
+
+#pragma once
+
+#include <stddef.h>
+#include <NitroModules/JSIConverter.hpp>
+
+enum class ${typename} {
+  ${joinToIndented(cppEnumMembers, '  ')}
+};
+
+namespace margelo {
+
+  // C++ ${typename} <> JS ${typename}
+  template <> struct JSIConverter<${typename}> {
+    static ${typename} fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+      int enumValue = JSIConverter<int>::fromJSI(arg);
+      return static_cast<${typename}>(enumValue);
+    }
+    static jsi::Value toJSI(jsi::Runtime& runtime, ${typename} arg) {
+      int enumValue = static_cast<int>(arg);
+      return JSIConverter<int>::toJSI(enumValue);
+    }
+  };
+
+} // namespace margelo
+              `
+      this.extraFiles.push({
+        language: 'c++',
+        name: `${typename}.hpp`,
+        content: cppCode,
+      })
     } else if (type.isObject() || type.isInterface()) {
       // It references another interface/type, either a simple struct, or another HybridObject
       this.kind = 'complex'

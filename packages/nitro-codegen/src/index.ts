@@ -6,6 +6,7 @@ import fs from 'fs'
 import path from 'path'
 
 const start = performance.now()
+let targetSpecs = 0
 let generatedSpecs = 0
 
 const project = new Project({})
@@ -55,6 +56,8 @@ for (const module of interfaces) {
       continue
     }
 
+    targetSpecs++
+
     console.log(`⏳  Generating specs for HybridObject "${moduleName}"...`)
     for (const platform of platforms) {
       const language = platformSpec[platform]!
@@ -83,6 +86,6 @@ for (const module of interfaces) {
 
 const end = performance.now()
 console.log(
-  `Generated ${generatedSpecs} HybridObject${generatedSpecs === 1 ? '' : 's'} in ${(end - start).toFixed(0)}ms! 🎉`
+  `Generated ${generatedSpecs}/${targetSpecs} HybridObject${generatedSpecs === 1 ? '' : 's'} in ${(end - start).toFixed(0)}ms! 🎉`
 )
 console.log('(Your code is in ./nitrogen/generated)')

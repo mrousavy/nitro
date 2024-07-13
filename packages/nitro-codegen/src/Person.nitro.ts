@@ -8,10 +8,16 @@ interface Battery {
   capacity: number
 }
 
+enum Powertrain {
+  ELECTRIC,
+  GAS,
+}
+
 interface Car extends Item {
   make: string
   model: string
   battery?: Battery
+  powertrain: Powertrain
 }
 
 export interface Person extends HybridObject<{ ios: 'c++'; android: 'c++' }> {

@@ -15,6 +15,7 @@
 
 #include "Car.hpp"
 #include "Battery.hpp"
+#include "Powertrain.hpp"
 
 class PersonSpec: public HybridObject {
   public:
