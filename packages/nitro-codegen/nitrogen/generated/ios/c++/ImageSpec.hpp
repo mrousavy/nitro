@@ -21,7 +21,7 @@
 #error NitroModules cannot be found! Are you sure you installed react-native-nitro properly?
 #endif
 
-
+#include "PixelFormat.hpp"
 
 /**
  * An abstract base class for `Image` (Image.nitro.ts)
@@ -43,6 +43,7 @@ class ImageSpec: public HybridObject {
     virtual double getWidth() = 0;
     virtual double getHeight() = 0;
     virtual std::shared_ptr<ArrayBuffer> getData() = 0;
+    virtual PixelFormat getPixelFormat() = 0;
 
   public:
     // Methods

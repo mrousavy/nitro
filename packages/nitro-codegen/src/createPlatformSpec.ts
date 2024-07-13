@@ -144,7 +144,7 @@ class TSType implements CodeNode {
     } else if (type.isNumber() || type.isNumberLiteral()) {
       this.cppName = 'double'
       this.passByConvention = 'by-value'
-    } else if (type.isString() || type.isStringLiteral()) {
+    } else if (type.isString()) {
       this.cppName = 'std::string'
       this.passByConvention = 'by-reference'
     } else if (type.isBigInt() || type.isBigIntLiteral()) {
@@ -462,6 +462,10 @@ namespace margelo {
           content: cppCode,
         })
       }
+    } else if (type.isStringLiteral()) {
+      throw new Error(
+        `String literal ${type.getText()} cannot be represented in C++ because it is ambiguous between a string and a discriminating union enum.`
+      )
     } else {
       throw new Error(
         `The TypeScript type "${type.getText()}" cannot be represented in C++!`

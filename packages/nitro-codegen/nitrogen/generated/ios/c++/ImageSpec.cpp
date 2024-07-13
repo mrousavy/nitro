@@ -13,4 +13,5 @@ void ImageSpec::loadHybridMethods() {
   registerHybridGetter("width", &ImageSpec::getWidth, this);
   registerHybridGetter("height", &ImageSpec::getHeight, this);
   registerHybridGetter("data", &ImageSpec::getData, this);
+  registerHybridGetter("pixelFormat", &ImageSpec::getPixelFormat, this);
 }
