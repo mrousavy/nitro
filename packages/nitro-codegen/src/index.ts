@@ -1,9 +1,9 @@
 import { Project, ts } from 'ts-morph'
 import { getPlatformSpec, type Platform } from './getPlatformSpecs.js'
 import { createPlatformSpec } from './createPlatformSpec.js'
-import { getNodeName } from './getNodeName.js'
 import { promises as fs } from 'fs'
 import path from 'path'
+import { getNodeName } from './getNodeName.js'
 
 const start = performance.now()
 let targetSpecs = 0
@@ -37,7 +37,7 @@ for (const sourceFile of project.getSourceFiles()) {
     let moduleName = '[Unknown Module]'
     try {
       // Get name of interface (= our module name)
-      moduleName = getNodeName(module)
+      moduleName = module.getName()
 
       // Find out if it extends HybridObject
       const heritageClauses = module.getHeritageClauses()
