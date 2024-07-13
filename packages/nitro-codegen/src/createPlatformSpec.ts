@@ -5,7 +5,7 @@ import type {
   MethodSignature,
   ParameterDeclaration,
   PropertySignature,
-  TypeNode,
+  Type,
 } from 'ts-morph'
 import { ts } from 'ts-morph'
 import { getNodeName } from './getNodeName.js'
@@ -14,17 +14,6 @@ interface File {
   name: string
   content: string
   language: Language
-}
-
-type TypeMap = { [K in ts.SyntaxKind]: string }
-const typeMap: Partial<TypeMap> = {
-  [ts.SyntaxKind.StringKeyword]: 'std::string',
-  [ts.SyntaxKind.NumberKeyword]: 'double',
-  [ts.SyntaxKind.BigIntKeyword]: 'int64_t',
-  [ts.SyntaxKind.BooleanKeyword]: 'bool',
-  [ts.SyntaxKind.VoidKeyword]: 'void',
-  [ts.SyntaxKind.UndefinedKeyword]: 'std::nullptr_t',
-  [ts.SyntaxKind.NullKeyword]: 'std::nullptr_t',
 }
 
 interface CodeNode {
@@ -72,23 +61,70 @@ interface CppMethodSignature {
   type: 'getter' | 'setter' | 'method'
 }
 
-class Type implements CodeNode {
-  readonly type: TypeNode
-  readonly kind: ts.SyntaxKind
+class TSType implements CodeNode {
+  readonly type: Type
   private readonly cppName: string
   private readonly extraFiles: File[]
 
-  constructor(type: TypeNode) {
-    this.type = type
-    this.kind = type.getKind()
+  private readonly baseTypes: TSType[]
+  private readonly referencedTypes: TSType[]
 
-    if (this.kind === ts.SyntaxKind.TypeReference) {
+  constructor(type: Type) {
+    this.type = type
+    this.baseTypes = []
+    this.referencedTypes = []
+
+    if (type.isObject() || type.isInterface()) {
       // It references another interface/type, either a simple struct, or another HybridObject
-      this.cppName = getNodeName(type)
-      this.extraFiles = []
+      const typename = type.getText()
+      console.log(`ref: ${typename}`)
+
+      const isHybridObject = type
+        .getBaseTypes()
+        .some((t) => t.getText() === 'HybridObject')
+
+      if (isHybridObject) {
+        // It is another HybridObject being referenced!
+        console.log(`It's a hybrid object!`)
+        this.cppName = `std::shared_ptr<${typename}>`
+        this.extraFiles = []
+      } else {
+        // It is a simple struct being referenced.
+
+        for (const prop of type.getProperties()) {
+          // recursively resolve types for each property of the referenced type
+          const propTypes = prop
+            .getDeclarations()
+            .map((d) => prop.getTypeAtLocation(d))
+          for (const t of propTypes) {
+            // recursively add each type of the properties
+            console.log(t.getText())
+            this.referencedTypes.push(new TSType(t))
+          }
+        }
+
+        this.cppName = `std::shared_ptr<${typename}>`
+        this.extraFiles = []
+      }
     } else {
       // It is _probably_ a primitive type
-      this.cppName = getCppType(this.kind)
+      if (type.isBigInt()) {
+        this.cppName = 'int64_t'
+      } else if (type.isBoolean()) {
+        this.cppName = 'bool'
+      } else if (type.isNull() || type.isUndefined()) {
+        this.cppName = 'std::nullptr_t'
+      } else if (type.isNumber()) {
+        this.cppName = 'double'
+      } else if (type.isString()) {
+        this.cppName = 'std::string'
+      } else if (type.isVoid()) {
+        this.cppName = 'void'
+      } else {
+        throw new Error(
+          `The TypeScript type "${type.getText()}" cannot be represented in C++!`
+        )
+      }
       this.extraFiles = []
     }
   }
@@ -98,19 +134,26 @@ class Type implements CodeNode {
   }
 
   getDefinitionFiles(): File[] {
-    return this.extraFiles
+    const extra = this.extraFiles
+    const inheritedDefinitionFiles = this.baseTypes.flatMap((b) =>
+      b.getDefinitionFiles()
+    )
+    const referencedDefinitionFiles = this.referencedTypes.flatMap((r) =>
+      r.getDefinitionFiles()
+    )
+    return [...extra, ...inheritedDefinitionFiles, ...referencedDefinitionFiles]
   }
 }
 
 class Property implements CodeNode {
   readonly name: string
-  readonly type: Type
+  readonly type: TSType
   readonly isReadonly: boolean
 
   constructor(prop: PropertySignature) {
     this.name = getNodeName(prop)
     this.isReadonly = prop.hasModifier(ts.SyntaxKind.ReadonlyKeyword)
-    this.type = new Type(prop.getTypeNodeOrThrow())
+    this.type = new TSType(prop.getTypeNodeOrThrow().getType())
   }
 
   get cppSignatures(): CppMethodSignature[] {
@@ -160,11 +203,11 @@ class Property implements CodeNode {
 
 class Parameter implements CodeNode {
   readonly name: string
-  readonly type: Type
+  readonly type: TSType
 
   constructor(param: ParameterDeclaration) {
     this.name = getNodeName(param)
-    this.type = new Type(param.getTypeNodeOrThrow())
+    this.type = new TSType(param.getTypeNodeOrThrow().getType())
   }
 
   get cppSignature(): CppValueSignature {
@@ -193,12 +236,12 @@ class Parameter implements CodeNode {
 
 class Method implements CodeNode {
   readonly name: string
-  readonly returnType: Type
+  readonly returnType: TSType
   readonly parameters: Parameter[]
 
   constructor(prop: MethodSignature) {
     this.name = getNodeName(prop)
-    this.returnType = new Type(prop.getReturnTypeNodeOrThrow())
+    this.returnType = new TSType(prop.getReturnTypeNodeOrThrow().getType())
     this.parameters = prop.getParameters().map((p) => new Parameter(p))
   }
 
@@ -232,20 +275,6 @@ class Method implements CodeNode {
     const returnTypeDefinitionFiles = this.returnType.getDefinitionFiles()
     return [...returnTypeDefinitionFiles, ...parametersDefinitionFiles]
   }
-}
-
-function getCppType(syntax: ts.SyntaxKind): string {
-  // TODO: Support referencing other types (via import statements or extra interface decls)
-  // TODO: Support functions (std::function)
-  // TODO: Support objects (custom structs)
-  const cppType = typeMap[syntax]
-  if (cppType == null) {
-    console.warn(
-      `⚠️  Type ${syntax} cannot be represented in C++! It is now just a "???".`
-    )
-    return '???'
-  }
-  return cppType
 }
 
 export function createPlatformSpec<

@@ -1,6 +1,10 @@
 import type { HybridObject } from 'react-native-nitro-modules'
 
-interface Car {
+interface Item {
+  price: number
+}
+
+interface Car extends Item {
   make: string
   model: string
   price: number
