@@ -3,6 +3,7 @@ import { getPlatformSpec, type Platform } from './getPlatformSpecs.js'
 import { createPlatformSpec } from './createPlatformSpec.js'
 import { promises as fs } from 'fs'
 import path from 'path'
+import os from 'os'
 import { getNodeName } from './getNodeName.js'
 
 const start = performance.now()
@@ -12,6 +13,24 @@ let generatedSpecs = 0
 const project = new Project({})
 
 project.addSourceFilesAtPaths('**/*.nitro.ts')
+
+function getCurrentDir(): string {
+  const dir = process.cwd()
+  const home = os.homedir()
+  const homeShorthand = os.platform() === 'win32' ? '$HOME' : '~'
+  return dir.startsWith(home)
+    ? `${homeShorthand}${dir.slice(home.length)}`
+    : dir
+}
+
+console.log(`🚀  Nitrogen runs at ${getCurrentDir()}`)
+for (const dir of project.getDirectories()) {
+  const specs = dir.getSourceFiles().length
+  const relativePath = path.relative(process.cwd(), dir.getPath())
+  console.log(
+    `    🔍  Nitrogen found ${specs} spec${specs === 1 ? '' : 's'} in ${relativePath}`
+  )
+}
 
 if (project.getSourceFiles().length === 0) {
   console.log(
@@ -28,6 +47,8 @@ await fs.rm(outFolder, { force: true, recursive: true })
 
 for (const sourceFile of project.getSourceFiles()) {
   console.log(`⏳  Parsing ${sourceFile.getBaseName()}...`)
+
+  const startedWithSpecs = generatedSpecs
 
   // Find all interfaces in the given file
   const interfaces = sourceFile.getChildrenOfKind(
@@ -76,12 +97,12 @@ for (const sourceFile of project.getSourceFiles()) {
       targetSpecs++
 
       console.log(
-        `    ⚙️  Generating specs for HybridObject "${moduleName}"...`
+        `    ⚙️   Generating specs for HybridObject "${moduleName}"...`
       )
       for (const platform of platforms) {
         const language = platformSpec[platform]!
         const files = createPlatformSpec(module, platform, language)
-        console.log(`        ${platform}: Generating ${language} code...`)
+        console.log(`          ${platform}: Generating ${language} code...`)
 
         for (const file of files) {
           const filepath = path.join(
@@ -90,7 +111,7 @@ for (const sourceFile of project.getSourceFiles()) {
             file.language,
             file.name
           )
-          console.log(`          Creating ${file.name}...`)
+          console.log(`            Creating ${file.name}...`)
 
           const dir = path.dirname(filepath)
           // Create directory if it doesn't exist yet
@@ -104,6 +125,10 @@ for (const sourceFile of project.getSourceFiles()) {
     } catch (error) {
       console.error(`    ❌  Failed to generate spec for ${moduleName}!`, error)
     }
+  }
+
+  if (generatedSpecs === startedWithSpecs) {
+    console.log(`    ❌  No specs found in ${sourceFile.getBaseName()}!`)
   }
 }
 
