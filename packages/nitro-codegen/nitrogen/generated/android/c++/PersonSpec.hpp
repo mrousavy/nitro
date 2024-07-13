@@ -52,6 +52,7 @@ class PersonSpec: public HybridObject {
     virtual std::future<double> goToWork() = 0;
     virtual void addWakeUpListener(const std::function<void(double)>& onWokeUp) = 0;
     virtual std::function<Battery(double, std::string, Car)> someFunc() = 0;
+    virtual std::unordered_map<std::string, double> getSomeArbitraryJsonData() = 0;
 
   protected:
     // Tag for logging

@@ -25,4 +25,5 @@ void PersonSpec::loadHybridMethods() {
   registerHybridMethod("goToWork", &PersonSpec::goToWork, this);
   registerHybridMethod("addWakeUpListener", &PersonSpec::addWakeUpListener, this);
   registerHybridMethod("someFunc", &PersonSpec::someFunc, this);
+  registerHybridMethod("getSomeArbitraryJsonData", &PersonSpec::getSomeArbitraryJsonData, this);
 }

@@ -69,20 +69,24 @@ function removeDuplicates<T>(array: T[], equals: (a: T, b: T) => boolean): T[] {
   return result
 }
 
-function isPromise(type: Type): boolean {
+function isSymbol(type: Type, symbolName: string): boolean {
   const symbol = type.getSymbol()
-  if (symbol != null) {
-    if (symbol.getName() === 'Promise') {
-      return true
-    }
+  if (symbol?.getName() === symbolName) {
+    return true
   }
   const aliasSymbol = type.getAliasSymbol()
-  if (aliasSymbol != null) {
-    if (aliasSymbol.getName() === 'Promise') {
-      return true
-    }
+  if (aliasSymbol?.getName() === symbolName) {
+    return true
   }
   return false
+}
+
+function isPromise(type: Type): boolean {
+  return isSymbol(type, 'Promise')
+}
+
+function isRecord(type: Type): boolean {
+  return isSymbol(type, 'Record')
 }
 
 interface CppMethodSignature {
@@ -193,6 +197,21 @@ class TSType implements CodeNode {
       this.cppName = `std::future<${resolvingType.cppName}>`
       this.passByConvention = 'by-reference'
       this.referencedTypes.push(resolvingType)
+    } else if (isRecord(type)) {
+      // Record<K, V> -> unordered_map<K, V>
+      const typename = type.getAliasSymbolOrThrow().getName()
+      const typeArgs = type.getAliasTypeArguments()
+      const [keyTypeT, valueTypeT] = typeArgs
+      if (typeArgs.length !== 2 || keyTypeT == null || valueTypeT == null) {
+        throw new Error(
+          `Type ${typename} looks like a Record, but has ${typeArgs.length} type arguments instead of 2 (<K, V>)!`
+        )
+      }
+      const keyType = new TSType(keyTypeT, false)
+      const valueType = new TSType(valueTypeT, false)
+      this.cppName = `std::unordered_map<${keyType.cppName}, ${valueType.cppName}>`
+      this.passByConvention = 'by-reference'
+      this.referencedTypes.push(keyType, valueType)
     } else if (type.isEnum()) {
       // It is an enum. We need to generate enum interface
       this.passByConvention = 'by-value'
@@ -347,7 +366,7 @@ namespace margelo {
         name: `${typename}.hpp`,
         content: cppCode,
       })
-    } else if (type.isObject() || type.isInterface()) {
+    } else if (type.isInterface()) {
       // It references another interface/type, either a simple struct, or another HybridObject
       const typename = type.getSymbolOrThrow().getName()
 
