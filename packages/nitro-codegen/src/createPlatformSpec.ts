@@ -94,7 +94,7 @@ class Property implements CodeNode {
         const signatures = this.cppSignatures
         const codeLines = signatures.map((s) => {
           const params = s.parameters.map((p) => `${p.type} ${p.name}`)
-          return `virtual ${s.returnType} ${s.name}(${params.join(', ')})`
+          return `virtual ${s.returnType} ${s.name}(${params.join(', ')}) = 0;`
         })
         return codeLines.join('\n')
       default:
