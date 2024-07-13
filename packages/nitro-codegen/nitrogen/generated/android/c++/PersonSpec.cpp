@@ -23,4 +23,6 @@ void PersonSpec::loadHybridMethods() {
   registerHybridSetter("car", &PersonSpec::setCar, this);
   registerHybridMethod("sayHi", &PersonSpec::sayHi, this);
   registerHybridMethod("goToWork", &PersonSpec::goToWork, this);
+  registerHybridMethod("addWakeUpListener", &PersonSpec::addWakeUpListener, this);
+  registerHybridMethod("someFunc", &PersonSpec::someFunc, this);
 }

@@ -40,4 +40,6 @@ export interface Person extends HybridObject<{ ios: 'c++'; android: 'c++' }> {
   car?: Car
 
   goToWork(): Promise<number>
+  addWakeUpListener(onWokeUp: (hoursOfSleep: number) => void): void
+  someFunc(): (value: number, string: string, car: Car) => Battery
 }

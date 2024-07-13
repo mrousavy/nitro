@@ -42,6 +42,8 @@ class PersonSpec: public HybridObject {
     // Methods
     virtual void sayHi(const std::string& name) = 0;
     virtual std::future<double> goToWork() = 0;
+    virtual void addWakeUpListener(const std::function<void(double)>& onWokeUp) = 0;
+    virtual std::function<Battery(double, std::string, Car)> someFunc() = 0;
 
   protected:
     // Tag for logging

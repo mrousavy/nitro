@@ -289,15 +289,34 @@ namespace margelo {
       })
     } else if (type.isArray() || type.isTuple()) {
       const arrayElementType = type.getArrayElementTypeOrThrow()
-      const elementType = new TSType(arrayElementType, false)
+      const elementType = new TSType(
+        arrayElementType,
+        arrayElementType.isNullable()
+      )
       this.cppName = `std::vector<${elementType.cppName}>`
       this.passByConvention = 'by-reference'
       this.extraFiles.push(...elementType.getDefinitionFiles())
     } else if (type.getCallSignatures().length > 0) {
       // It's a function!
-      throw new Error(
-        `Functions are not yet supported! (from ${type.getText()})`
-      )
+      const callSignatures = type.getCallSignatures()
+      const callSignature = callSignatures[0]
+      if (callSignatures.length !== 1 || callSignature == null) {
+        throw new Error(
+          `Function overloads are not supported in Nitrogen! (in ${type.getText()})`
+        )
+      }
+
+      const funcReturnType = callSignature.getReturnType()
+      const returnType = new TSType(funcReturnType, funcReturnType.isNullable())
+      const parameters = callSignature.getParameters().map((p) => {
+        const declaration = p.getValueDeclarationOrThrow()
+        const t = p.getTypeAtLocation(declaration)
+        return new TSType(t, p.isOptional() || t.isNullable())
+      })
+      const cppParamsArgs = parameters.map((p) => p.cppName).join(', ')
+
+      this.cppName = `std::function<${returnType.cppName}(${cppParamsArgs})>`
+      this.passByConvention = 'by-reference'
     } else if (isPromise(type)) {
       // It's a Promise!
       const typename = type.getSymbolOrThrow().getName()
@@ -308,7 +327,10 @@ namespace margelo {
           `Type ${typename} looks like a Promise, but has ${typeArguments.length} type arguments instead of 1 (<T>)!`
         )
       }
-      const resolvingType = new TSType(promiseResolvingType, false)
+      const resolvingType = new TSType(
+        promiseResolvingType,
+        promiseResolvingType.isNullable()
+      )
       this.cppName = `std::future<${resolvingType.cppName}>`
       this.passByConvention = 'by-reference'
       this.extraFiles.push(...resolvingType.getDefinitionFiles())
