@@ -738,7 +738,7 @@ ${cppExtraIncludes.join('\n')}
  * Inherit this class to create instances of \`${cppClassName}\` in C++.
  * @example
  * \`\`\`cpp
- * public class ${moduleName}: public ${cppClassName} {
+ * class ${moduleName}: public ${cppClassName} {
  *   // ...
  * };
  * \`\`\`
