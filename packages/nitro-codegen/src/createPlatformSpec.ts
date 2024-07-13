@@ -63,14 +63,16 @@ interface CppMethodSignature {
 
 class TSType implements CodeNode {
   readonly type: Type
+  readonly isOptional: boolean
   private readonly cppName: string
   private readonly extraFiles: File[]
 
   private readonly baseTypes: TSType[]
   private readonly referencedTypes: TSType[]
 
-  constructor(type: Type) {
+  constructor(type: Type, isOptional: boolean) {
     this.type = type
+    this.isOptional = isOptional
     this.baseTypes = []
     this.referencedTypes = []
     this.extraFiles = []
@@ -94,11 +96,10 @@ class TSType implements CodeNode {
 
       const isHybridObject = type
         .getBaseTypes()
-        .some((t) => t.getText() === 'HybridObject')
+        .some((t) => t.getText().includes('HybridObject'))
 
       if (isHybridObject) {
         // It is another HybridObject being referenced!
-        console.log(`It's a hybrid object!`)
         this.cppName = `std::shared_ptr<${typename}>`
       } else {
         // It is a simple struct being referenced.
@@ -107,7 +108,7 @@ class TSType implements CodeNode {
           // recursively resolve types for each property of the referenced type
           const declaration = prop.getValueDeclarationOrThrow()
           const propType = prop.getTypeAtLocation(declaration)
-          const refType = new TSType(propType)
+          const refType = new TSType(propType, prop.isOptional())
           cppProperties.push({ type: refType.getCode(), name: prop.getName() })
           this.referencedTypes.push(refType)
         }
@@ -166,7 +167,7 @@ template <> struct JSIConverter<${typename}> {
   }
 
   getCode(): string {
-    if (this.type.isNullable()) {
+    if (this.isOptional) {
       return `std::optional<${this.cppName}>`
     } else {
       return this.cppName
@@ -193,7 +194,9 @@ class Property implements CodeNode {
   constructor(prop: PropertySignature) {
     this.name = getNodeName(prop)
     this.isReadonly = prop.hasModifier(ts.SyntaxKind.ReadonlyKeyword)
-    this.type = new TSType(prop.getTypeNodeOrThrow().getType())
+    const type = prop.getTypeNodeOrThrow().getType()
+    const isOptional = prop.hasQuestionToken() || type.isNullable()
+    this.type = new TSType(type, isOptional)
   }
 
   get cppSignatures(): CppMethodSignature[] {
@@ -247,7 +250,10 @@ class Parameter implements CodeNode {
 
   constructor(param: ParameterDeclaration) {
     this.name = getNodeName(param)
-    this.type = new TSType(param.getTypeNodeOrThrow().getType())
+    const type = param.getTypeNodeOrThrow().getType()
+    const isOptional =
+      param.hasQuestionToken() || param.isOptional() || type.isNullable()
+    this.type = new TSType(type, isOptional)
   }
 
   get cppSignature(): CppValueSignature {
@@ -281,7 +287,10 @@ class Method implements CodeNode {
 
   constructor(prop: MethodSignature) {
     this.name = getNodeName(prop)
-    this.returnType = new TSType(prop.getReturnTypeNodeOrThrow().getType())
+    const returnType = prop.getReturnTypeNodeOrThrow()
+    const type = returnType.getType()
+    const isOptional = type.isNullable()
+    this.returnType = new TSType(type, isOptional)
     this.parameters = prop.getParameters().map((p) => new Parameter(p))
   }
 

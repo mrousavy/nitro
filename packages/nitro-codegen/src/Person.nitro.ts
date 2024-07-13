@@ -15,5 +15,5 @@ export interface Person extends HybridObject<{ ios: 'c++' }> {
   isHappy: boolean
   sayHi(name: string): void
 
-  readonly car: Car
+  car?: Car
 }
