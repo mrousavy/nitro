@@ -73,6 +73,7 @@ class TSType implements CodeNode {
     this.type = type
     this.baseTypes = []
     this.referencedTypes = []
+    this.extraFiles = []
 
     if (type.isObject() || type.isInterface()) {
       // It references another interface/type, either a simple struct, or another HybridObject
@@ -87,24 +88,45 @@ class TSType implements CodeNode {
         // It is another HybridObject being referenced!
         console.log(`It's a hybrid object!`)
         this.cppName = `std::shared_ptr<${typename}>`
-        this.extraFiles = []
       } else {
         // It is a simple struct being referenced.
-
+        const cppProperties: string[] = []
         for (const prop of type.getProperties()) {
           // recursively resolve types for each property of the referenced type
-          const propTypes = prop
-            .getDeclarations()
-            .map((d) => prop.getTypeAtLocation(d))
-          for (const t of propTypes) {
-            // recursively add each type of the properties
-            console.log(t.getText())
-            this.referencedTypes.push(new TSType(t))
-          }
+          const declaration = prop.getValueDeclarationOrThrow()
+          const propType = prop.getTypeAtLocation(declaration)
+          const refType = new TSType(propType)
+          cppProperties.push(`${refType.cppName} ${prop.getName()}`)
+          this.referencedTypes.push(refType)
         }
+        const cppCode = `
+#include <NitroModules/JSIConverter.hpp>
 
-        this.cppName = `std::shared_ptr<${typename}>`
-        this.extraFiles = []
+struct ${typename} {
+public:
+  ${joinToIndented(cppProperties, '  ')};
+};
+
+namespace margelo {
+
+// ${typename} <> ${typename}
+template <> struct JSIConverter<${typename}> {
+  static ${typename} fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+    throw std::runtime_error("${typename} cannot be converted yet!");
+  }
+  static jsi::Value toJSI(jsi::Runtime& runtime, const ${typename}& arg) {
+    throw std::runtime_error("${typename} cannot be converted yet!");
+  }
+};
+
+} // namespace margelo
+        `
+        this.extraFiles.push({
+          language: 'c++',
+          name: `${typename}.hpp`,
+          content: cppCode,
+        })
+        this.cppName = typename
       }
     } else {
       // It is _probably_ a primitive type
@@ -125,7 +147,6 @@ class TSType implements CodeNode {
           `The TypeScript type "${type.getText()}" cannot be represented in C++!`
         )
       }
-      this.extraFiles = []
     }
   }
 
@@ -403,6 +424,18 @@ void ${cppClassName}::loadHybridMethods() {
     language: 'c++',
     name: `${cppClassName}.cpp`,
   })
+  for (const prop of cppProperties) {
+    // Add all files that the properties referenced
+    for (const file of prop.getDefinitionFiles()) {
+      files.push(file)
+    }
+  }
+  for (const method of cppMethods) {
+    // Add all files that the methods referenced
+    for (const file of method.getDefinitionFiles()) {
+      files.push(file)
+    }
+  }
   return files
 }
 
