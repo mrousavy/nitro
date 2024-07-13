@@ -23,7 +23,7 @@ public:
 
 namespace margelo {
 
-  // C++ Battery <> JS Battery
+  // C++ Battery <> JS Battery (object)
   template <> struct JSIConverter<Battery> {
     static Battery fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       jsi::Object obj = arg.asObject(runtime);

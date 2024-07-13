@@ -28,7 +28,7 @@ public:
 
 namespace margelo {
 
-  // C++ Car <> JS Car
+  // C++ Car <> JS Car (object)
   template <> struct JSIConverter<Car> {
     static Car fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       jsi::Object obj = arg.asObject(runtime);

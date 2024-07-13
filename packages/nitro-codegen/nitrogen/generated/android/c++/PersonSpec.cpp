@@ -14,6 +14,7 @@ void PersonSpec::loadHybridMethods() {
   registerHybridGetter("age", &PersonSpec::getAge, this);
   registerHybridGetter("isHappy", &PersonSpec::getIsHappy, this);
   registerHybridSetter("isHappy", &PersonSpec::setIsHappy, this);
+  registerHybridGetter("gender", &PersonSpec::getGender, this);
   registerHybridGetter("car", &PersonSpec::getCar, this);
   registerHybridSetter("car", &PersonSpec::setCar, this);
   registerHybridMethod("sayHi", &PersonSpec::sayHi, this);

@@ -1,13 +1,13 @@
 import type { PlatformSpec } from 'react-native-nitro-modules'
 import type { Language, Platform } from './getPlatformSpecs.js'
 import {
+  ts,
   Type,
   type InterfaceDeclaration,
   type MethodSignature,
   type ParameterDeclaration,
   type PropertySignature,
 } from 'ts-morph'
-import { ts } from 'ts-morph'
 import { getNodeName } from './getNodeName.js'
 
 interface File {
@@ -43,6 +43,10 @@ function createFileMetadataString(filename: string): string {
 
 function capitalizeName(name: string): string {
   return name.charAt(0).toUpperCase() + name.slice(1)
+}
+
+function indent(string: string, indentation: string): string {
+  return string.replaceAll('\n', `\n${indentation}`)
 }
 
 function joinToIndented(array: string[], indentation: string = '    '): string {
@@ -149,10 +153,10 @@ enum class ${typename} {
 
 namespace margelo {
 
-  // C++ ${typename} <> JS ${typename}
+  // C++ ${typename} <> JS ${typename} (enum)
   template <> struct JSIConverter<${typename}> {
     static ${typename} fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
-      int enumValue = JSIConverter<int>::fromJSI(arg);
+      int enumValue = JSIConverter<int>::fromJSI(runtime, arg);
       return static_cast<${typename}>(enumValue);
     }
     static jsi::Value toJSI(jsi::Runtime& runtime, ${typename} arg) {
@@ -168,10 +172,83 @@ namespace margelo {
         name: `${typename}.hpp`,
         content: cppCode,
       })
+    } else if (type.isUnion()) {
+      const symbol = type.getAliasSymbol()
+      if (symbol == null) {
+        // It is an inline union instead of a separate type declaration!
+        throw new Error(
+          `Inline union types ("${type.getText()}") are not supported by Nitrogen!\n` +
+            `Extract the union to a separate type, and re-run nitrogen!`
+        )
+      }
+
+      const typename = symbol.getName()
+      const enumValues = type.getUnionTypes().map((t) => {
+        if (t.isStringLiteral()) {
+          return t.getLiteralValueOrThrow()
+        } else {
+          throw new Error(
+            `${typename}: Value "${t.getText()}" is not a string literal - it cannot be represented in a C++ enum!`
+          )
+        }
+      })
+      this.kind = 'primitive'
+      this.cppName = typename
+      const cppEnumMembers = enumValues.map((m) => `${m},`)
+      const cppFromJsiIfs = enumValues
+        .map((v) =>
+          `
+if (unionValue == "${v}") {
+  return ${typename}::${v};
+}
+`.trim()
+        )
+        .join(' else ')
+      const cppToJsiCases = enumValues
+        .map(
+          (v) =>
+            `case ${typename}::${v}: return JSIConverter<std::string>(runtime, "${v}");`
+        )
+        .join('\n')
+
+      const cppCode = `
+${createFileMetadataString(`${typename}.hpp`)}
+
+#pragma once
+
+#include <stddef.h>
+#include <NitroModules/JSIConverter.hpp>
+
+enum class ${typename} {
+  ${joinToIndented(cppEnumMembers, '  ')}
+};
+
+namespace margelo {
+
+  // C++ ${typename} <> JS ${typename} (union)
+  template <> struct JSIConverter<${typename}> {
+    static ${typename} fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+      std::string unionValue = JSIConverter<std::string>::fromJSI(arg);
+      ${indent(cppFromJsiIfs, '      ')}
+    }
+    static jsi::Value toJSI(jsi::Runtime& runtime, ${typename} arg) {
+      switch (arg) {
+        ${indent(cppToJsiCases, '        ')}
+      }
+    }
+  };
+
+} // namespace margelo
+              `
+      this.extraFiles.push({
+        language: 'c++',
+        name: `${typename}.hpp`,
+        content: cppCode,
+      })
     } else if (type.isObject() || type.isInterface()) {
       // It references another interface/type, either a simple struct, or another HybridObject
       this.kind = 'complex'
-      const typename = type.getText()
+      const typename = type.getSymbolOrThrow().getName()
 
       const isHybridObject = type
         .getBaseTypes()
@@ -231,7 +308,7 @@ public:
 
 namespace margelo {
 
-  // C++ ${typename} <> JS ${typename}
+  // C++ ${typename} <> JS ${typename} (object)
   template <> struct JSIConverter<${typename}> {
     static ${typename} fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       jsi::Object obj = arg.asObject(runtime);

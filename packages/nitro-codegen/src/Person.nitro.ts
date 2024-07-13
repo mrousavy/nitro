@@ -20,11 +20,15 @@ interface Car extends Item {
   powertrain: Powertrain
 }
 
+type Gender = 'male' | 'female'
+
 export interface Person extends HybridObject<{ ios: 'c++'; android: 'c++' }> {
   readonly name: string
   readonly age: number
   isHappy: boolean
   sayHi(name: string): void
+
+  readonly gender: Gender
 
   car?: Car
 }
