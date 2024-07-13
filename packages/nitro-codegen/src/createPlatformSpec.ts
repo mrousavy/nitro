@@ -99,7 +99,7 @@ class TSType implements CodeNode {
       this.kind = 'primitive'
     } else if (type.isString()) {
       this.cppName = 'std::string'
-      this.kind = 'primitive'
+      this.kind = 'complex'
     } else if (type.isVoid()) {
       this.cppName = 'void'
       this.kind = 'primitive'
@@ -265,7 +265,15 @@ class Property implements CodeNode {
       case 'c++':
         const signatures = this.cppSignatures
         const codeLines = signatures.map((s) => {
-          const params = s.parameters.map((p) => `${p.getCode()} ${p.name}`)
+          const params = s.parameters.map((p) => {
+            if (p.kind === 'complex') {
+              // Complex types can be const& passed
+              return `const ${p.getCode()}& ${p.name}`
+            } else {
+              // Primitive types are just passed by value
+              return `${p.getCode()} ${p.name}`
+            }
+          })
           return `virtual ${s.returnType.getCode()} ${s.name}(${params.join(', ')}) = 0;`
         })
         return codeLines.join('\n')
@@ -333,9 +341,15 @@ class Method implements CodeNode {
     switch (language) {
       case 'c++':
         const signature = this.cppSignature
-        const params = signature.parameters.map(
-          (p) => `${p.getCode()} ${p.name}`
-        )
+        const params = signature.parameters.map((p) => {
+          if (p.kind === 'complex') {
+            // Complex types can be const& passed
+            return `const ${p.getCode()}& ${p.name}`
+          } else {
+            // Primitive types are just passed by value
+            return `${p.getCode()} ${p.name}`
+          }
+        })
         return `virtual ${signature.returnType.getCode()} ${signature.name}(${params.join(', ')}) = 0;`
       default:
         throw new Error(

@@ -4,9 +4,14 @@ interface Item {
   price: number
 }
 
+interface Battery {
+  capacity: number
+}
+
 interface Car extends Item {
   make: string
   model: string
+  battery?: Battery
 }
 
 export interface Person extends HybridObject<{ ios: 'c++' }> {
