@@ -22,7 +22,7 @@ namespace margelo {
   // C++ Powertrain <> JS Powertrain (enum)
   template <> struct JSIConverter<Powertrain> {
     static Powertrain fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
-      int enumValue = JSIConverter<int>::fromJSI(arg);
+      int enumValue = JSIConverter<int>::fromJSI(runtime, arg);
       return static_cast<Powertrain>(enumValue);
     }
     static jsi::Value toJSI(jsi::Runtime& runtime, Powertrain arg) {
