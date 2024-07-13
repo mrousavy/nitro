@@ -14,7 +14,7 @@ interface Car extends Item {
   battery?: Battery
 }
 
-export interface Person extends HybridObject<{ ios: 'c++' }> {
+export interface Person extends HybridObject<{ ios: 'c++'; android: 'c++' }> {
   readonly name: string
   readonly age: number
   isHappy: boolean

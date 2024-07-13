@@ -54,8 +54,9 @@ for (const module of interfaces) {
     const language = platformSpec[platform]!
     console.log(`${moduleName}: Generating ${platform} code in ${language}...`)
     const files = createPlatformSpec(module, platform, language)
+
     for (const file of files) {
-      const filepath = `./nitrogen/generated/${file.name}`
+      const filepath = `./nitrogen/generated/${platform}/${file.language}/${file.name}`
       console.log(`Writing ${file.name}...`)
 
       const dir = path.dirname(filepath)
