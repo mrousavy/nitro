@@ -1,11 +1,11 @@
 import type { PlatformSpec } from 'react-native-nitro-modules'
 import type { Language, Platform } from './getPlatformSpecs.js'
-import type {
-  InterfaceDeclaration,
-  MethodSignature,
-  ParameterDeclaration,
-  PropertySignature,
+import {
   Type,
+  type InterfaceDeclaration,
+  type MethodSignature,
+  type ParameterDeclaration,
+  type PropertySignature,
 } from 'ts-morph'
 import { ts } from 'ts-morph'
 import { getNodeName } from './getNodeName.js'
@@ -48,22 +48,30 @@ function joinToIndented(array: string[], indentation: string = '    '): string {
   return array.join('\n').replaceAll('\n', `\n${indentation}`)
 }
 
-interface CppValueSignature {
-  type: string
-  name: string
-}
-
 interface CppMethodSignature {
-  returnType: string
+  returnType: TSType | VoidType
+  parameters: NamedTSType[]
   rawName: string
   name: string
-  parameters: CppValueSignature[]
   type: 'getter' | 'setter' | 'method'
+}
+
+class VoidType implements CodeNode {
+  constructor() {}
+
+  getCode(): string {
+    return 'void'
+  }
+
+  getDefinitionFiles(): File[] {
+    return []
+  }
 }
 
 class TSType implements CodeNode {
   readonly type: Type
   readonly isOptional: boolean
+  readonly kind: 'primitive' | 'complex'
   private readonly cppName: string
   private readonly extraFiles: File[]
 
@@ -79,18 +87,25 @@ class TSType implements CodeNode {
 
     if (type.isBigInt()) {
       this.cppName = 'int64_t'
+      this.kind = 'primitive'
     } else if (type.isBoolean()) {
       this.cppName = 'bool'
+      this.kind = 'primitive'
     } else if (type.isNull() || type.isUndefined()) {
       this.cppName = 'std::nullptr_t'
+      this.kind = 'primitive'
     } else if (type.isNumber()) {
       this.cppName = 'double'
+      this.kind = 'primitive'
     } else if (type.isString()) {
       this.cppName = 'std::string'
+      this.kind = 'primitive'
     } else if (type.isVoid()) {
       this.cppName = 'void'
+      this.kind = 'primitive'
     } else if (type.isObject() || type.isInterface()) {
       // It references another interface/type, either a simple struct, or another HybridObject
+      this.kind = 'complex'
       const typename = type.getText()
       console.log(`ref: ${typename}`)
 
@@ -103,29 +118,38 @@ class TSType implements CodeNode {
         this.cppName = `std::shared_ptr<${typename}>`
       } else {
         // It is a simple struct being referenced.
-        const cppProperties: CppValueSignature[] = []
+        const cppProperties: NamedTSType[] = []
         for (const prop of type.getProperties()) {
           // recursively resolve types for each property of the referenced type
           const declaration = prop.getValueDeclarationOrThrow()
           const propType = prop.getTypeAtLocation(declaration)
-          const refType = new TSType(propType, prop.isOptional())
-          cppProperties.push({ type: refType.getCode(), name: prop.getName() })
+          const refType = new NamedTSType(
+            propType,
+            prop.isOptional(),
+            prop.getName()
+          )
+          cppProperties.push(refType)
           this.referencedTypes.push(refType)
         }
-        const cppStructProps = cppProperties.map((p) => `${p.type} ${p.name};`)
+        const cppStructProps = cppProperties.map(
+          (p) => `${p.getCode()} ${p.name};`
+        )
         const cppFromJsiProps = cppProperties.map(
           (p) =>
-            `.${p.name} = JSIConverter<${p.type}>::fromJSI(runtime, obj.getProperty(runtime, "${p.name}")),`
+            `.${p.name} = JSIConverter<${p.getCode()}>::fromJSI(runtime, obj.getProperty(runtime, "${p.name}")),`
         )
         const cppToJsiCalls = cppProperties.map(
           (p) =>
-            `obj.setProperty(runtime, "${p.name}", JSIConverter<${p.type}>::toJSI(runtime, arg.${p.name}));`
+            `obj.setProperty(runtime, "${p.name}", JSIConverter<${p.getCode()}>::toJSI(runtime, arg.${p.name}));`
         )
         const cppCode = `
 ${createFileMetadataString(`${typename}.hpp`)}
 
 #pragma once
 
+#include <stddef.h>
+#include <string.h>
+#include <optional>
 #include <NitroModules/JSIConverter.hpp>
 
 struct ${typename} {
@@ -186,17 +210,26 @@ template <> struct JSIConverter<${typename}> {
   }
 }
 
+class NamedTSType extends TSType {
+  readonly name: string
+
+  constructor(type: Type, isOptional: boolean, name: string) {
+    super(type, isOptional)
+    this.name = name
+  }
+}
+
 class Property implements CodeNode {
   readonly name: string
-  readonly type: TSType
+  readonly type: NamedTSType
   readonly isReadonly: boolean
 
   constructor(prop: PropertySignature) {
-    this.name = getNodeName(prop)
+    this.name = prop.getName()
     this.isReadonly = prop.hasModifier(ts.SyntaxKind.ReadonlyKeyword)
     const type = prop.getTypeNodeOrThrow().getType()
     const isOptional = prop.hasQuestionToken() || type.isNullable()
-    this.type = new TSType(type, isOptional)
+    this.type = new NamedTSType(type, isOptional, this.name)
   }
 
   get cppSignatures(): CppMethodSignature[] {
@@ -204,7 +237,7 @@ class Property implements CodeNode {
     const capitalizedName = capitalizeName(this.name)
     // getter
     signatures.push({
-      returnType: this.type.getCode(),
+      returnType: this.type,
       rawName: this.name,
       name: `get${capitalizedName}`,
       parameters: [],
@@ -213,10 +246,10 @@ class Property implements CodeNode {
     if (!this.isReadonly) {
       // setter
       signatures.push({
-        returnType: 'void',
+        returnType: new VoidType(),
         rawName: this.name,
         name: `set${capitalizedName}`,
-        parameters: [{ type: this.type.getCode(), name: this.name }],
+        parameters: [this.type],
         type: 'setter',
       })
     }
@@ -232,8 +265,8 @@ class Property implements CodeNode {
       case 'c++':
         const signatures = this.cppSignatures
         const codeLines = signatures.map((s) => {
-          const params = s.parameters.map((p) => `${p.type} ${p.name}`)
-          return `virtual ${s.returnType} ${s.name}(${params.join(', ')}) = 0;`
+          const params = s.parameters.map((p) => `${p.getCode()} ${p.name}`)
+          return `virtual ${s.returnType.getCode()} ${s.name}(${params.join(', ')}) = 0;`
         })
         return codeLines.join('\n')
       default:
@@ -246,28 +279,20 @@ class Property implements CodeNode {
 
 class Parameter implements CodeNode {
   readonly name: string
-  readonly type: TSType
+  readonly type: NamedTSType
 
   constructor(param: ParameterDeclaration) {
-    this.name = getNodeName(param)
+    this.name = param.getName()
     const type = param.getTypeNodeOrThrow().getType()
     const isOptional =
       param.hasQuestionToken() || param.isOptional() || type.isNullable()
-    this.type = new TSType(type, isOptional)
-  }
-
-  get cppSignature(): CppValueSignature {
-    return {
-      name: this.name,
-      type: this.type.getCode(),
-    }
+    this.type = new NamedTSType(type, isOptional, this.name)
   }
 
   getCode(language: Language): string {
     switch (language) {
       case 'c++':
-        const cppSignature = this.cppSignature
-        return `${cppSignature.type} ${cppSignature.name}`
+        return `${this.type.getCode()} ${this.name}`
       default:
         throw new Error(
           `Language ${language} is not yet supported for parameters!`
@@ -298,8 +323,8 @@ class Method implements CodeNode {
     return {
       rawName: this.name,
       name: this.name,
-      returnType: this.returnType.getCode(),
-      parameters: this.parameters.map((p) => p.cppSignature),
+      returnType: this.returnType,
+      parameters: this.parameters.map((p) => p.type),
       type: 'method',
     }
   }
@@ -308,8 +333,10 @@ class Method implements CodeNode {
     switch (language) {
       case 'c++':
         const signature = this.cppSignature
-        const params = signature.parameters.map((p) => `${p.type} ${p.name}`)
-        return `virtual ${signature.returnType} ${signature.name}(${params.join(', ')}) = 0;`
+        const params = signature.parameters.map(
+          (p) => `${p.getCode()} ${p.name}`
+        )
+        return `virtual ${signature.returnType.getCode()} ${signature.name}(${params.join(', ')}) = 0;`
       default:
         throw new Error(
           `Language ${language} is not yet supported for property getters!`
