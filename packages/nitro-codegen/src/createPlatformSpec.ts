@@ -243,7 +243,7 @@ namespace margelo {
     }
 
     static ${typename} fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
-      std::string unionValue = JSIConverter<std::string>::fromJSI(arg);
+      std::string unionValue = JSIConverter<std::string>::fromJSI(runtime, arg);
       switch (hashString(unionValue.c_str(), unionValue.size())) {
         ${indent(cppFromJsiHashCases, '        ')}
         default:

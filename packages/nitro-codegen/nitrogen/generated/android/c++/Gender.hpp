@@ -36,7 +36,7 @@ namespace margelo {
     }
 
     static Gender fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
-      std::string unionValue = JSIConverter<std::string>::fromJSI(arg);
+      std::string unionValue = JSIConverter<std::string>::fromJSI(runtime, arg);
       switch (hashString(unionValue.c_str(), unionValue.size())) {
         case hashString("male", 4): return Gender::male;
         case hashString("female", 6): return Gender::female;
