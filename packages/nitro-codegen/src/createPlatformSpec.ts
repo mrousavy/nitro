@@ -697,7 +697,12 @@ ${createFileMetadataString(`${cppClassName}.hpp`)}
 #include <optional>
 #include <future>
 #include <functional>
+
+#if __has_include(<NitroModules/HybridObject.hpp>)
 #include <NitroModules/HybridObject.hpp>
+#else
+#error NitroModules cannot be found! Are you sure you installed react-native-nitro properly?
+#endif
 
 ${cppExtraIncludes.join('\n')}
 
