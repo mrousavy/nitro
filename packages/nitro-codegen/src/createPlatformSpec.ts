@@ -107,7 +107,6 @@ class TSType implements CodeNode {
       // It references another interface/type, either a simple struct, or another HybridObject
       this.kind = 'complex'
       const typename = type.getText()
-      console.log(`ref: ${typename}`)
 
       const isHybridObject = type
         .getBaseTypes()

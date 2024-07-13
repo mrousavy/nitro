@@ -2,6 +2,8 @@ import { Project, ts } from 'ts-morph'
 import { getPlatformSpec, type Platform } from './getPlatformSpecs.js'
 import { createPlatformSpec } from './createPlatformSpec.js'
 import { getNodeName } from './getNodeName.js'
+import fs from 'fs'
+import path from 'path'
 
 const project = new Project({})
 const sourceFile = project.addSourceFileAtPath('./src/Person.nitro.ts')
@@ -53,9 +55,19 @@ for (const module of interfaces) {
     console.log(`${moduleName}: Generating ${platform} code in ${language}...`)
     const files = createPlatformSpec(module, platform, language)
     for (const file of files) {
-      console.log(`vvvvvvvvvvvvvvvvvvvvv ${file.name} vvvvvvvvvvvvvvvvvvvvv`)
-      console.log(file.content)
-      console.log(`^^^^^^^^^^^^^^^^^^^^^ ${file.name} ^^^^^^^^^^^^^^^^^^^^^`)
+      const filepath = `./nitrogen/generated/${file.name}`
+      console.log(`Writing ${file.name}...`)
+
+      const dir = path.dirname(filepath)
+      if (!fs.existsSync(dir)) {
+        // Create directory if it doesn't exist yet
+        fs.mkdirSync(dir, { recursive: true })
+      }
+
+      // Write file
+      fs.writeFileSync(filepath, file.content, 'utf8')
     }
   }
+
+  console.log(`Done! 🎉`)
 }
