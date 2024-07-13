@@ -47,7 +47,7 @@ export function getPlatformSpec(
     const platform = getNodeName(property)
     if (!isValidPlatform(platform)) {
       console.warn(
-        `⚠️  ${moduleName} does not properly extend HybridObject<T> - "${platform}" is not a valid Platform! ` +
+        `⚠️   ${moduleName} does not properly extend HybridObject<T> - "${platform}" is not a valid Platform! ` +
           `Valid platforms are: [${allPlatforms.join(', ')}]`
       )
       continue
@@ -63,7 +63,7 @@ export function getPlatformSpec(
     const language = languageLiteral.getLiteralText()
     if (!isValidLanguage(language)) {
       console.warn(
-        `⚠️  ${moduleName}: Language ${language} is not a valid language for ${platform}! ` +
+        `⚠️   ${moduleName}: Language ${language} is not a valid language for ${platform}! ` +
           `Valid languages are: [${platformLanguages[platform].join(', ')}]`
       )
       continue
@@ -72,7 +72,7 @@ export function getPlatformSpec(
     // Double-check that language works on this platform (android: kotlin/c++, ios: swift/c++)
     if (!isValidLanguageForPlatform(language, platform)) {
       console.warn(
-        `⚠️  ${moduleName}: Language ${language} is not a valid language for ${platform}! ` +
+        `⚠️   ${moduleName}: Language ${language} is not a valid language for ${platform}! ` +
           `Valid languages are: [${platformLanguages[platform].join(', ')}]`
       )
       continue

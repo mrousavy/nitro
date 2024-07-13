@@ -55,7 +55,7 @@ for (const sourceFile of project.getSourceFiles()) {
       const platforms = Object.keys(platformSpec) as Platform[]
       if (platforms.length === 0) {
         console.warn(
-          `⚠️  ${moduleName} does not declare any platforms in HybridObject<T> - nothing can be generated.`
+          `⚠️   ${moduleName} does not declare any platforms in HybridObject<T> - nothing can be generated.`
         )
         continue
       }
