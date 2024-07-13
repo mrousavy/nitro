@@ -58,6 +58,12 @@ for (const module of interfaces) {
 
     targetSpecs++
 
+    const outFolder = path.join('nitrogen', 'generated')
+    if (fs.existsSync(outFolder)) {
+      // Clean output folder before writing to it
+      fs.rmSync(outFolder, { force: true, recursive: true })
+    }
+
     console.log(`⏳  Generating specs for HybridObject "${moduleName}"...`)
     for (const platform of platforms) {
       const language = platformSpec[platform]!
@@ -65,7 +71,12 @@ for (const module of interfaces) {
       console.log(`    ${platform}: Generating ${language} code...`)
 
       for (const file of files) {
-        const filepath = `./nitrogen/generated/${platform}/${file.language}/${file.name}`
+        const filepath = path.join(
+          outFolder,
+          platform,
+          file.language,
+          file.name
+        )
         console.log(`      Creating ${file.name}...`)
 
         const dir = path.dirname(filepath)

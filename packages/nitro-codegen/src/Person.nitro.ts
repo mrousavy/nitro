@@ -38,4 +38,6 @@ export interface Person extends HybridObject<{ ios: 'c++'; android: 'c++' }> {
   readonly gender: Gender
 
   car?: Car
+
+  goToWork(): Promise<number>
 }

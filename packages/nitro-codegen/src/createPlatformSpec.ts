@@ -57,6 +57,22 @@ function joinToIndented(array: string[], indentation: string = '    '): string {
   return array.join('\n').replaceAll('\n', `\n${indentation}`)
 }
 
+function isPromise(type: Type): boolean {
+  const symbol = type.getSymbol()
+  if (symbol != null) {
+    if (symbol.getName() === 'Promise') {
+      return true
+    }
+  }
+  const aliasSymbol = type.getAliasSymbol()
+  if (aliasSymbol != null) {
+    if (aliasSymbol.getName() === 'Promise') {
+      return true
+    }
+  }
+  return false
+}
+
 interface CppMethodSignature {
   returnType: TSType | VoidType
   parameters: NamedTSType[]
@@ -98,8 +114,6 @@ class TSType implements CodeNode {
     this.baseTypes = []
     this.referencedTypes = []
     this.extraFiles = []
-
-    console.log(`   -> Getting ${type.getText()}...`)
 
     if (type.isNull() || type.isUndefined()) {
       this.cppName = 'std::nullptr_t'
@@ -275,11 +289,29 @@ namespace margelo {
       })
     } else if (type.isArray() || type.isTuple()) {
       const arrayElementType = type.getArrayElementTypeOrThrow()
-      console.log(`-> ARRAY element type: ${arrayElementType.getText()}!`)
       const elementType = new TSType(arrayElementType, false)
       this.cppName = `std::vector<${elementType.cppName}>`
       this.passByConvention = 'by-reference'
-      this.extraFiles.push(...elementType.extraFiles)
+      this.extraFiles.push(...elementType.getDefinitionFiles())
+    } else if (type.getCallSignatures().length > 0) {
+      // It's a function!
+      throw new Error(
+        `Functions are not yet supported! (from ${type.getText()})`
+      )
+    } else if (isPromise(type)) {
+      // It's a Promise!
+      const typename = type.getSymbolOrThrow().getName()
+      const typeArguments = type.getTypeArguments()
+      const promiseResolvingType = typeArguments[0]
+      if (typeArguments.length !== 1 || promiseResolvingType == null) {
+        throw new Error(
+          `Type ${typename} looks like a Promise, but has ${typeArguments.length} type arguments instead of 1 (<T>)!`
+        )
+      }
+      const resolvingType = new TSType(promiseResolvingType, false)
+      this.cppName = `std::future<${resolvingType.cppName}>`
+      this.passByConvention = 'by-reference'
+      this.extraFiles.push(...resolvingType.getDefinitionFiles())
     } else if (type.isObject() || type.isInterface()) {
       // It references another interface/type, either a simple struct, or another HybridObject
       const typename = type.getSymbolOrThrow().getName()
