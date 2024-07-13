@@ -13,7 +13,8 @@
   "scripts": {
     "start": "tsc && node lib/index.js",
     "postinstall": "tsc || exit 0;",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint \"**/*.{js,ts,tsx}\" --fix"
   },
   "repository": {
     "type": "git",
@@ -67,6 +68,7 @@
     "singleQuote": true,
     "tabWidth": 2,
     "trailingComma": "es5",
-    "useTabs": false
+    "useTabs": false,
+    "semi": false
   }
 }
