@@ -11,33 +11,11 @@ let generatedSpecs = 0
 
 const project = new Project({})
 
-// async function findFiles(
-//   directory: string,
-//   extension: string
-// ): Promise<string[]> {
-//   const files = await fs.readdir(directory)
-//   const fileList: string[] = []
-
-//   for (const file of files) {
-//     const filePath = path.join(dir, file)
-//     const stat = await fs.stat(filePath)
-
-//     if (stat.isDirectory()) {
-//       // go into directory and add files in there as well
-//       const filesInSubdirectory = await findFiles(filePath, extension)
-//       fileList.push(...filesInSubdirectory)
-//     } else if (filePath.endsWith(extension)) {
-//       // add single file
-//       fileList.push(filePath)
-//     }
-//   }
-
-//   return fileList
-// }
-
 project.addSourceFilesAtPaths('**/*.nitro.ts')
 
 for (const sourceFile of project.getSourceFiles()) {
+  console.log(`📚  Parsing ${sourceFile.getFilePath()}...`)
+
   // Find all interfaces in the given file
   const interfaces = sourceFile.getChildrenOfKind(
     ts.SyntaxKind.InterfaceDeclaration
@@ -88,11 +66,13 @@ for (const sourceFile of project.getSourceFiles()) {
       // Clean output folder before writing to it
       await fs.rm(outFolder, { force: true, recursive: true })
 
-      console.log(`⏳  Generating specs for HybridObject "${moduleName}"...`)
+      console.log(
+        `    ⏳  Generating specs for HybridObject "${moduleName}"...`
+      )
       for (const platform of platforms) {
         const language = platformSpec[platform]!
         const files = createPlatformSpec(module, platform, language)
-        console.log(`    ${platform}: Generating ${language} code...`)
+        console.log(`        ${platform}: Generating ${language} code...`)
 
         for (const file of files) {
           const filepath = path.join(
@@ -101,7 +81,7 @@ for (const sourceFile of project.getSourceFiles()) {
             file.language,
             file.name
           )
-          console.log(`      Creating ${file.name}...`)
+          console.log(`          Creating ${file.name}...`)
 
           const dir = path.dirname(filepath)
           // Create directory if it doesn't exist yet
@@ -113,7 +93,7 @@ for (const sourceFile of project.getSourceFiles()) {
       }
       generatedSpecs++
     } catch (error) {
-      console.error(`❌  Failed to generate spec for ${moduleName}!`, error)
+      console.error(`    ❌  Failed to generate spec for ${moduleName}!`, error)
     }
   }
 }
