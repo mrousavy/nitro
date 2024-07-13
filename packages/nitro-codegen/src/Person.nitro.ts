@@ -7,7 +7,6 @@ interface Item {
 interface Car extends Item {
   make: string
   model: string
-  price: number
 }
 
 export interface Person extends HybridObject<{ ios: 'c++' }> {

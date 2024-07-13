@@ -117,7 +117,7 @@ ${createFileMetadataString(`${typename}.hpp`)}
 
 struct ${typename} {
 public:
-  ${joinToIndented(cppStructProps, '  ')};
+  ${joinToIndented(cppStructProps, '  ')}
 };
 
 namespace margelo {
