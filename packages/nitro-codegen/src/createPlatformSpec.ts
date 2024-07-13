@@ -90,21 +90,34 @@ class TSType implements CodeNode {
         this.cppName = `std::shared_ptr<${typename}>`
       } else {
         // It is a simple struct being referenced.
-        const cppProperties: string[] = []
+        const cppProperties: CppValueSignature[] = []
         for (const prop of type.getProperties()) {
           // recursively resolve types for each property of the referenced type
           const declaration = prop.getValueDeclarationOrThrow()
           const propType = prop.getTypeAtLocation(declaration)
           const refType = new TSType(propType)
-          cppProperties.push(`${refType.cppName} ${prop.getName()}`)
+          cppProperties.push({ type: refType.cppName, name: prop.getName() })
           this.referencedTypes.push(refType)
         }
+        const cppStructProps = cppProperties.map((p) => `${p.type} ${p.name};`)
+        const cppFromJsiProps = cppProperties.map(
+          (p) =>
+            `.${p.name} = JSIConverter<${p.type}>::fromJSI(runtime, obj.getProperty(runtime, "${p.name}")),`
+        )
+        const cppToJsiCalls = cppProperties.map(
+          (p) =>
+            `obj.setProperty(runtime, "${p.name}", JSIConverter<${p.type}>::toJSI(runtime, arg.${p.name}));`
+        )
         const cppCode = `
+${createFileMetadataString(`${typename}.hpp`)}
+
+#pragma once
+
 #include <NitroModules/JSIConverter.hpp>
 
 struct ${typename} {
 public:
-  ${joinToIndented(cppProperties, '  ')};
+  ${joinToIndented(cppStructProps, '  ')};
 };
 
 namespace margelo {
@@ -112,10 +125,15 @@ namespace margelo {
 // ${typename} <> ${typename}
 template <> struct JSIConverter<${typename}> {
   static ${typename} fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
-    throw std::runtime_error("${typename} cannot be converted yet!");
+    jsi::Object obj = arg.asObject(runtime);
+    return ${typename} {
+      ${joinToIndented(cppFromJsiProps, '      ')}
+    };
   }
   static jsi::Value toJSI(jsi::Runtime& runtime, const ${typename}& arg) {
-    throw std::runtime_error("${typename} cannot be converted yet!");
+    jsi::Object obj(runtime);
+    ${joinToIndented(cppToJsiCalls, '    ')}
+    return obj;
   }
 };
 
