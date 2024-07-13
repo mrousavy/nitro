@@ -23,6 +23,16 @@
 
 
 
+/**
+ * An abstract base class for `Image` (Image.nitro.ts)
+ * Inherit this class to create instances of `ImageSpec` in C++.
+ * @example
+ * ```cpp
+ * public class Image: public ImageSpec {
+ *   // ...
+ * };
+ * ```
+ */
 class ImageSpec: public HybridObject {
   public:
     // Constructor

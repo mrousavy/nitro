@@ -27,6 +27,16 @@
 #include "Battery.hpp"
 #include "Powertrain.hpp"
 
+/**
+ * An abstract base class for `Person` (Person.nitro.ts)
+ * Inherit this class to create instances of `PersonSpec` in C++.
+ * @example
+ * ```cpp
+ * public class Person: public PersonSpec {
+ *   // ...
+ * };
+ * ```
+ */
 class PersonSpec: public HybridObject {
   public:
     // Constructor

@@ -733,6 +733,16 @@ ${createFileMetadataString(`${cppClassName}.hpp`)}
 
 ${cppExtraIncludes.join('\n')}
 
+/**
+ * An abstract base class for \`${moduleName}\` (${module.getSourceFile().getBaseName()})
+ * Inherit this class to create instances of \`${cppClassName}\` in C++.
+ * @example
+ * \`\`\`cpp
+ * public class ${moduleName}: public ${cppClassName} {
+ *   // ...
+ * };
+ * \`\`\`
+ */
 class ${cppClassName}: public HybridObject {
   public:
     // Constructor
