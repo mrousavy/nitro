@@ -109,7 +109,7 @@ jsi::Value HybridObject::get(facebook::jsi::Runtime& runtime, const facebook::js
         runtime, jsi::PropNameID::forUtf8(runtime, "toString"), 0,
         [=](jsi::Runtime& runtime, const jsi::Value& thisValue, const jsi::Value* args, size_t count) -> jsi::Value {
           std::string stringRepresentation = this->toString(runtime);
-          return jsi::String::createFromUtf8(runtime, stringRepresentation);
+          return JSIConverter<std::string>::toJSI(runtime, stringRepresentation);
         });
   }
 
