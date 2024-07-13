@@ -3,8 +3,8 @@ import { getPlatformSpec, type Platform } from './getPlatformSpecs.js'
 import { createPlatformSpec } from './createPlatformSpec.js'
 import { promises as fs } from 'fs'
 import path from 'path'
-import os from 'os'
 import { getNodeName } from './getNodeName.js'
+import { getCurrentDir } from './getCurrentDir.js'
 
 const start = performance.now()
 let targetSpecs = 0
@@ -14,16 +14,7 @@ const project = new Project({})
 
 project.addSourceFilesAtPaths('**/*.nitro.ts')
 
-function getCurrentDir(): string {
-  const dir = process.cwd()
-  const home = os.homedir()
-  const homeShorthand = os.platform() === 'win32' ? '$HOME' : '~'
-  return dir.startsWith(home)
-    ? `${homeShorthand}${dir.slice(home.length)}`
-    : dir
-}
-
-console.log(`🚀  Nitrogen runs at ${getCurrentDir()}`)
+console.log(`🚀  Nitrogen runs at ${getCurrentDir(true)}`)
 for (const dir of project.getDirectories()) {
   const specs = dir.getSourceFiles().length
   const relativePath = path.relative(process.cwd(), dir.getPath())
