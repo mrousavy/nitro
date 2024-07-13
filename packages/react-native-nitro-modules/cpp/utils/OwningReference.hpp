@@ -12,6 +12,15 @@
 
 namespace margelo {
 
+/**
+ An `OwningReference<T>` is a smart-pointer that holds a strong reference to a pointer.
+ You can have multiple `OwningReference<T>` instances point to the same pointer, as they internally keep a ref-count.
+ As opposed to a `shared_ptr<T>`, an `OwningReference<T>` can also be imperatively manually deleted, even if there
+ are multiple strong references still holding onto the pointer.
+ 
+ An `OwningReference<T>` can be weakified, which gives the user a `BorrowingReference<T>`.
+ A `BorrowingReference<T>` can be locked to get an `OwningReference<T>` again, assuming it has not been deleted yet.
+ */
 template<typename T>
 class OwningReference {
 public:

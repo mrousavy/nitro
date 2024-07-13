@@ -15,6 +15,10 @@ namespace margelo {
 template<typename T>
 class OwningReference;
 
+/**
+ A `BorrowingReference<T>` is a weak reference to a pointer created by `OwningReference<T>`.
+ It can be locked to gain a strong `OwningReference<T>` again if it has not been deleted yet.
+ */
 template<typename T>
 class BorrowingReference {
 private:
