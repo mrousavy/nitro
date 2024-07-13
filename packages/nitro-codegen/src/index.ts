@@ -55,16 +55,15 @@ for (const module of interfaces) {
       continue
     }
 
+    console.log(`⏳  Generating specs for HybridObject "${moduleName}"...`)
     for (const platform of platforms) {
       const language = platformSpec[platform]!
-      console.log(
-        `Generating HybridObject "${moduleName}"... (Platform: ${platform}, Language: ${language})`
-      )
       const files = createPlatformSpec(module, platform, language)
+      console.log(`    ${platform}: Generating ${language} code...`)
 
       for (const file of files) {
         const filepath = `./nitrogen/generated/${platform}/${file.language}/${file.name}`
-        console.log(`Writing ${file.name}...`)
+        console.log(`      Creating ${file.name}...`)
 
         const dir = path.dirname(filepath)
         if (!fs.existsSync(dir)) {
@@ -84,6 +83,6 @@ for (const module of interfaces) {
 
 const end = performance.now()
 console.log(
-  `Generated ${generatedSpecs} HybridObjects in ${(end - start).toFixed(0)}ms!`
+  `Generated ${generatedSpecs} HybridObject${generatedSpecs === 1 ? '' : 's'} in ${(end - start).toFixed(0)}ms! 🎉`
 )
-console.log(`Done! 🎉`)
+console.log('(Your code is in ./nitrogen/generated)')
