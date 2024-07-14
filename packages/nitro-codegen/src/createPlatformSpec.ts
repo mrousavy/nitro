@@ -251,7 +251,6 @@ ${createFileMetadataString(`${typename}.hpp`)}
 
 #pragma once
 
-#include <stddef.h>
 #include <NitroModules/JSIConverter.hpp>
 
 enum class ${typename} {
@@ -411,9 +410,6 @@ ${createFileMetadataString(`${typename}.hpp`)}
 
 #pragma once
 
-#include <stddef.h>
-#include <string.h>
-#include <optional>
 #include <NitroModules/JSIConverter.hpp>
 
 ${cppExtraIncludes.join('\n')}
@@ -708,12 +704,6 @@ function createSharedCppSpec(module: InterfaceDeclaration): File[] {
 ${createFileMetadataString(`${cppClassName}.hpp`)}
 
 #pragma once
-
-#include <stddef.h>
-#include <string.h>
-#include <optional>
-#include <future>
-#include <functional>
 
 #if __has_include(<NitroModules/HybridObject.hpp>)
 #include <NitroModules/HybridObject.hpp>
