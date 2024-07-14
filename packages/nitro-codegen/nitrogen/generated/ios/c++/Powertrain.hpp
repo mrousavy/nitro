@@ -9,7 +9,6 @@
 
 #pragma once
 
-#include <stddef.h>
 #include <NitroModules/JSIConverter.hpp>
 
 enum class Powertrain {
