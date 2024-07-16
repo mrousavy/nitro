@@ -8,9 +8,17 @@
 import Foundation
 
 extension SwiftTestHybridObjectSwift {
+  static var swiftToCppMap: [UnsafeMutableRawPointer: margelo.SwiftTestHybridObject] = [:]
+  
   var cppPart: margelo.SwiftTestHybridObject? {
     get {
-      return nil
+      let address = Unmanaged.passUnretained(self).toOpaque()
+      if let cppPart = SwiftTestHybridObjectSwift.swiftToCppMap[address] {
+        return cppPart
+      }
+      let cppPart = margelo.SwiftTestHybridObject(self)
+      SwiftTestHybridObjectSwift.swiftToCppMap[address] = cppPart
+      return cppPart
     }
   }
 }
