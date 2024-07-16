@@ -260,7 +260,8 @@ enum class ${typename} {
 namespace margelo {
 
   // C++ ${typename} <> JS ${typename} (enum)
-  template <> struct JSIConverter<${typename}> {
+  template <>
+  struct JSIConverter<${typename}> {
     static ${typename} fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       int enumValue = JSIConverter<int>::fromJSI(runtime, arg);
       return static_cast<${typename}>(enumValue);
@@ -333,7 +334,8 @@ enum class ${typename} {
 namespace margelo {
 
   // C++ ${typename} <> JS ${typename} (union)
-  template <> struct JSIConverter<${typename}> {
+  template <>
+  struct JSIConverter<${typename}> {
     static ${typename} fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       std::string unionValue = JSIConverter<std::string>::fromJSI(runtime, arg);
       switch (hashString(unionValue.c_str(), unionValue.size())) {
@@ -422,7 +424,8 @@ public:
 namespace margelo {
 
   // C++ ${typename} <> JS ${typename} (object)
-  template <> struct JSIConverter<${typename}> {
+  template <>
+  struct JSIConverter<${typename}> {
     static ${typename} fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       jsi::Object obj = arg.asObject(runtime);
       return ${typename} {
