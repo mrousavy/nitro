@@ -8,17 +8,21 @@
 #pragma once
 
 #include "HybridObject.hpp"
+#include "NitroModules-Swift.h"
 
 namespace margelo {
 
 class SwiftTestHybridObject: public HybridObject {
 public:
-  explicit SwiftTestHybridObject();
+  explicit SwiftTestHybridObject(NitroModules::SwiftTestHybridObjectSwift swiftPart);
   
   int getInt();
   void setInt(int value);
   
   void loadHybridMethods() override;
+  
+private:
+  NitroModules::SwiftTestHybridObjectSwift _swiftPart;
 };
 
 }

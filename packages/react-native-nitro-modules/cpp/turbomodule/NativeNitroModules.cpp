@@ -33,7 +33,8 @@ jsi::Object NativeNitroModules::createTestHybridObject(jsi::Runtime &runtime) {
 }
 
 jsi::Object NativeNitroModules::createSwiftTestHybridObject(jsi::Runtime &runtime) {
-  auto hybrid = std::make_shared<SwiftTestHybridObject>();
+  auto swiftPart = NitroModules::SwiftTestHybridObjectSwift::init();
+  auto hybrid = std::make_shared<SwiftTestHybridObject>(swiftPart);
   return jsi::Object::createFromHostObject(runtime, hybrid);
 }
 

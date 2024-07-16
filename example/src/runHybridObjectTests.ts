@@ -95,7 +95,9 @@ export async function runCppHybridObjectTests(): Promise<void> {
 export async function runSwiftHybridObjectTests(): Promise<void> {
   try {
     const swiftTestObject = createSwiftTestHybridObject()
-    await runHybridObjectTests(swiftTestObject)
+    console.log(`swift int: ` + swiftTestObject.int)
+    swiftTestObject.int = 15
+    console.log(`swift int = 15: ` + swiftTestObject.int)
   } catch (e) {
     console.error(`Failed to create Swift TestHybridObject!`, e)
   }

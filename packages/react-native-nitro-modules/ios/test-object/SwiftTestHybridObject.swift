@@ -11,9 +11,11 @@ public class SwiftTestHybridObjectSwift {
   private var _int: Int = 5
   public var int: Int {
     get {
+      print("getting \(_int)")
       return _int
     }
     set {
+      print("setting \(_int) to \(newValue)..")
       _int = newValue
     }
   }
