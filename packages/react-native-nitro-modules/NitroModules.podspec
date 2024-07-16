@@ -27,7 +27,12 @@ Pod::Spec.new do |s|
     "ios/**/*.modulemap",
   ]
   s.public_header_files = [
-    "cpp/**/*.{h,hpp}",
+    "cpp/core/**/*.{h,hpp}",
+    "cpp/jsi/**/*.{h,hpp}",
+    "cpp/test-object/**/*.{h,hpp}",
+    "cpp/threading/**/*.{h,hpp}",
+    "cpp/turbomodule/RegisterNativeNitroModules.hpp",
+    "cpp/utils/**/*.{h,hpp}",
   ]
 
   s.pod_target_xcconfig = {
