@@ -112,7 +112,8 @@ jsi::Value HybridObject::get(facebook::jsi::Runtime& runtime, const facebook::js
         });
   }
 
-  return jsi::HostObject::get(runtime, propName);
+  // this property does not exist. Return undefined
+  return jsi::Value::undefined();
 }
 
 void HybridObject::set(facebook::jsi::Runtime& runtime, const facebook::jsi::PropNameID& propName, const facebook::jsi::Value& value) {
@@ -126,8 +127,10 @@ void HybridObject::set(facebook::jsi::Runtime& runtime, const facebook::jsi::Pro
     _setters[name](runtime, jsi::Value::undefined(), &value, 1);
     return;
   }
-
-  HostObject::set(runtime, propName, value);
+  
+  // this property does not exist, and cannot be set. Throw and error!
+  throw std::runtime_error("Cannot set property \"" + name + "\" - " + std::string(_name) +
+                           " does not have a setter for \"" + name + "\"!");
 }
 
 void HybridObject::ensureInitialized(facebook::jsi::Runtime& runtime) {
