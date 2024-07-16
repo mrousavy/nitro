@@ -67,7 +67,7 @@ private:
   const char* _name = TAG;
   int _instanceId = 1;
   bool _didLoadMethods = false;
-  std::mutex _mutex;
+  std::unique_ptr<std::mutex> _mutex;
   std::unordered_map<std::string, HybridFunction> _methods;
   std::unordered_map<std::string, jsi::HostFunctionType> _getters;
   std::unordered_map<std::string, jsi::HostFunctionType> _setters;

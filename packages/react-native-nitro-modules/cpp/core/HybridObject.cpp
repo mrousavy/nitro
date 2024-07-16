@@ -9,10 +9,9 @@
 namespace margelo {
 
 #if DEBUG && _ENABLE_LOGS
-static std::unordered_map<const char*, int> _instanceIds;
-static std::mutex _mutex;
-
 static int getId(const char* name) {
+  static std::unordered_map<const char*, int> _instanceIds;
+  static std::mutex _mutex;
   std::unique_lock lock(_mutex);
   if (_instanceIds.find(name) == _instanceIds.end()) {
     _instanceIds.insert({name, 1});
@@ -22,7 +21,7 @@ static int getId(const char* name) {
 }
 #endif
 
-HybridObject::HybridObject(const char* name) : _name(name) {
+HybridObject::HybridObject(const char* name) : _name(name), _mutex(std::make_unique<std::mutex>()) {
 #if DEBUG && _ENABLE_LOGS
   _instanceId = getId(name);
   Logger::log(TAG, "(MEMORY) Creating %s (#%i)... ✅", _name, _instanceId);
@@ -47,7 +46,7 @@ std::string HybridObject::toString(jsi::Runtime& runtime) {
 }
 
 std::vector<jsi::PropNameID> HybridObject::getPropertyNames(facebook::jsi::Runtime& runtime) {
-  std::unique_lock lock(_mutex);
+  std::unique_lock lock(*_mutex);
   ensureInitialized(runtime);
 
   std::vector<jsi::PropNameID> result;
@@ -68,7 +67,7 @@ std::vector<jsi::PropNameID> HybridObject::getPropertyNames(facebook::jsi::Runti
 }
 
 jsi::Value HybridObject::get(facebook::jsi::Runtime& runtime, const facebook::jsi::PropNameID& propName) {
-  std::unique_lock lock(_mutex);
+  std::unique_lock lock(*_mutex);
   ensureInitialized(runtime);
 
   std::string name = propName.utf8(runtime);
@@ -117,7 +116,7 @@ jsi::Value HybridObject::get(facebook::jsi::Runtime& runtime, const facebook::js
 }
 
 void HybridObject::set(facebook::jsi::Runtime& runtime, const facebook::jsi::PropNameID& propName, const facebook::jsi::Value& value) {
-  std::unique_lock lock(_mutex);
+  std::unique_lock lock(*_mutex);
   ensureInitialized(runtime);
 
   std::string name = propName.utf8(runtime);

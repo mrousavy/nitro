@@ -19,6 +19,5 @@ public class SwiftTestHybridObjectSwift {
   }
   
   public init() {
-    
   }
 }
