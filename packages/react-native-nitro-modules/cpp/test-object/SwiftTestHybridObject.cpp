@@ -9,15 +9,14 @@
 
 namespace margelo {
 
-SwiftTestHybridObject::SwiftTestHybridObject(): HybridObject("SwiftTestHybridObject"), _swiftPart(NitroModules::SwiftTestHybridObjectSwift::init()) {
+SwiftTestHybridObject::SwiftTestHybridObject(): HybridObject("SwiftTestHybridObject") {
 }
 
 int SwiftTestHybridObject::getInt() {
-  return _swiftPart.getInt();
+  return 5;
 }
 
 void SwiftTestHybridObject::setInt(int value) {
-  _swiftPart.setInt(value);
 }
 
 void SwiftTestHybridObject::loadHybridMethods() {

@@ -8,7 +8,6 @@
 #pragma once
 
 #include "HybridObject.hpp"
-#include "NitroModules-Swift.h"
 
 namespace margelo {
 
@@ -20,9 +19,6 @@ public:
   void setInt(int value);
   
   void loadHybridMethods() override;
-  
-private:
-  NitroModules::SwiftTestHybridObjectSwift _swiftPart;
 };
 
 }
