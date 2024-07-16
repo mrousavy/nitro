@@ -10,7 +10,17 @@
 namespace margelo {
 
 SwiftTestHybridObject::SwiftTestHybridObject(NitroModules::SwiftTestHybridObjectSwift swiftPart):
-  HybridObject("SwiftTestHybridObject"), _swiftPart(swiftPart) { }
+  HybridObject("SwiftTestHybridObject"), _swiftPart(swiftPart) {
+    Logger::log("SwiftTestHybridObject", "Created a new SwiftTestHybridObject");
+  }
+
+SwiftTestHybridObject::SwiftTestHybridObject(const SwiftTestHybridObject& copy): HybridObject("SwiftTestHybridObject"), _swiftPart(copy._swiftPart) {
+  throw std::runtime_error("SwiftTestHybridObject should not be copied!");
+}
+
+SwiftTestHybridObject::SwiftTestHybridObject(SwiftTestHybridObject&& moved): HybridObject("SwiftTestHybridObject"), _swiftPart(moved._swiftPart) {
+  throw std::runtime_error("SwiftTestHybridObject should not be moved!");
+}
 
 int SwiftTestHybridObject::getInt() {
   return _swiftPart.getInt();

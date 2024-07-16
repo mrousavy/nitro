@@ -15,6 +15,8 @@ namespace margelo {
 class SwiftTestHybridObject: public HybridObject {
 public:
   explicit SwiftTestHybridObject(NitroModules::SwiftTestHybridObjectSwift swiftPart);
+  SwiftTestHybridObject(const SwiftTestHybridObject& copy);
+  SwiftTestHybridObject(SwiftTestHybridObject&& moved);
   
   int getInt();
   void setInt(int value);

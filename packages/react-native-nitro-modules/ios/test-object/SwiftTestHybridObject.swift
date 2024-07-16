@@ -21,5 +21,6 @@ public class SwiftTestHybridObjectSwift {
   }
   
   public init() {
+    print("Initialized a new SwiftTestHybridObjectSwift!")
   }
 }
