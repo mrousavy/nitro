@@ -8,17 +8,15 @@
 #pragma once
 
 #include <jsi/jsi.h>
+#include "ThreadUtils.hpp"
 
 namespace margelo::nitro {
 
 using namespace facebook;
 
 static inline std::string getRuntimeId(jsi::Runtime& runtime) {
-  return runtime.description();
-
-  // TODO: Do we wanna use address instead of description?
-  // uint64_t address = reinterpret_cast<uint64_t>(&runtime);
-  // return std::to_string(address);
+  std::string threadName = ThreadUtils::getThreadName();
+  return runtime.description() + std::string(" (") + threadName + std::string(")");
 }
 
 }

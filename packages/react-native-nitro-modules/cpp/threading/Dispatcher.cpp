@@ -1,5 +1,6 @@
 #include "Dispatcher.hpp"
 #include "NitroLogger.hpp"
+#include "JSIUtils.h"
 
 namespace margelo::nitro {
 
@@ -10,7 +11,7 @@ static constexpr auto GLOBAL_DISPATCHER_HOLDER_NAME = "__nitroDispatcher";
 std::unordered_map<jsi::Runtime*, std::weak_ptr<Dispatcher>> Dispatcher::_globalCache;
 
 void Dispatcher::installRuntimeGlobalDispatcher(jsi::Runtime& runtime, std::shared_ptr<Dispatcher> dispatcher) {
-  Logger::log(TAG, "Installing global Dispatcher Holder...");
+  Logger::log(TAG, "Installing global Dispatcher Holder into Runtime \"%s\"...", getRuntimeId(runtime));
 
   // Store a weak reference in global cache
   _globalCache[&runtime] = std::weak_ptr(dispatcher);
