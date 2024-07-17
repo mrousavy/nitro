@@ -17,7 +17,7 @@ project.addSourceFilesAtPaths('**/*.nitro.ts')
 console.log(`🚀  Nitrogen runs at ${getCurrentDir(true)}`)
 for (const dir of project.getDirectories()) {
   const specs = dir.getSourceFiles().length
-  const relativePath = path.relative(process.cwd(), dir.getPath())
+  const relativePath = path.relative(getCurrentDir(false), dir.getPath())
   console.log(
     `    🔍  Nitrogen found ${specs} spec${specs === 1 ? '' : 's'} in ${relativePath}`
   )
