@@ -9,7 +9,7 @@ import Foundation
 
 public class SwiftTestHybridObjectSwift {
   // Internal C++ state
-  public var hybridContext: margelo.HybridContext? = nil
+  public var hybridContext: margelo.HybridContext = margelo.HybridContext.init()
   
   private var _int: Int = 5
   public var int: Int {
