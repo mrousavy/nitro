@@ -7,9 +7,6 @@ export interface Image extends HybridObject<{ ios: 'c++' }> {
   readonly height: number
   readonly data: ArrayBuffer
   readonly pixelFormat: PixelFormat
-
-  constructor(): Image
-  constructor(pixels: number[]): Image
 }
 
 export const ImageFactory = NitroModules.get<Image>()

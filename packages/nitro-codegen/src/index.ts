@@ -7,7 +7,7 @@ import { promises as fs } from 'fs'
 import path from 'path'
 import { getNodeName } from './getNodeName.js'
 import { getBaseDirectory, prettifyDirectory } from './getCurrentDir.js'
-import { errorToString, indent } from './stringUtils.js'
+import { errorToString } from './stringUtils.js'
 
 const start = performance.now()
 let targetSpecs = 0
@@ -26,10 +26,7 @@ for (const dir of project.getDirectories()) {
   const specs = dir.getSourceFiles().length
   const relativePath = prettifyDirectory(dir.getPath())
   console.log(
-    indent(
-      `🔍  Nitrogen found ${specs} spec${specs === 1 ? '' : 's'} in ${relativePath}`,
-      '    '
-    )
+    `    🔍  Nitrogen found ${specs} spec${specs === 1 ? '' : 's'} in ${relativePath}`
   )
 }
 
@@ -99,17 +96,12 @@ for (const sourceFile of project.getSourceFiles()) {
       targetSpecs++
 
       console.log(
-        indent(
-          `⚙️   Generating specs for HybridObject "${moduleName}"...`,
-          '    '
-        )
+        `    ⚙️   Generating specs for HybridObject "${moduleName}"...`
       )
       for (const platform of platforms) {
         const language = platformSpec[platform]!
         const files = createPlatformSpec(module, platform, language)
-        console.log(
-          indent(`${platform}: Generating ${language} code...`, '          ')
-        )
+        console.log(`        ${platform}: Generating ${language} code...`)
 
         for (const file of files) {
           const filepath = path.join(
@@ -118,7 +110,7 @@ for (const sourceFile of project.getSourceFiles()) {
             file.language,
             file.name
           )
-          console.log(indent(`Creating ${file.name}...`, '            '))
+          console.log(`          Creating ${file.name}...`)
 
           const dir = path.dirname(filepath)
           // Create directory if it doesn't exist yet
@@ -132,18 +124,13 @@ for (const sourceFile of project.getSourceFiles()) {
     } catch (error) {
       const message = errorToString(error)
       console.error(
-        indent(
-          `❌  Failed to generate spec for ${moduleName}! ${message}`,
-          '    '
-        )
+        `    ❌  Failed to generate spec for ${moduleName}! ${message}`
       )
     }
   }
 
   if (generatedSpecs === startedWithSpecs) {
-    console.log(
-      indent(`❌  No specs found in ${sourceFile.getBaseName()}!`, '    ')
-    )
+    console.log(`    ❌  No specs found in ${sourceFile.getBaseName()}!`)
   }
 }
 
