@@ -7,6 +7,7 @@
 
 #include "SwiftTestHybridObject.hpp"
 #include "NitroLogger.hpp"
+#include "HybridContext.hpp"
 
 namespace margelo {
 

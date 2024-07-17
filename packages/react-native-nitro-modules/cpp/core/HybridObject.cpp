@@ -5,6 +5,7 @@
 #include "HybridObject.hpp"
 #include "JSIConverter.hpp"
 #include "NitroLogger.hpp"
+#include "HybridContext.hpp"
 
 namespace margelo {
 

@@ -33,7 +33,7 @@ public:
     jsi::HostFunctionType function;
     size_t parameterCount;
   };
-
+  
 public:
   /**
    * Create a new instance of a `HybridObject`.
@@ -53,7 +53,7 @@ public:
    * HybridObjects cannot be moved.
    */
   HybridObject(HybridObject&& move) = delete;
-
+  
 public:
   void set(jsi::Runtime&, const jsi::PropNameID& name, const jsi::Value& value) override;
   jsi::Value get(jsi::Runtime& runtime, const jsi::PropNameID& propName) override;
@@ -67,7 +67,7 @@ public:
   template <typename Derived> std::shared_ptr<Derived> shared() {
     return std::static_pointer_cast<Derived>(shared_from_this());
   }
-
+  
   /**
    * Loads all native methods of this `HybridObject` to be exposed to JavaScript.
    * Example:
@@ -83,12 +83,12 @@ public:
    * ```
    */
   virtual void loadHybridMethods() = 0;
-
+  
   /**
    * Get a string representation of this HostObject, useful for logging or debugging.
    */
   virtual std::string toString(jsi::Runtime& runtime);
-
+  
 private:
   static constexpr auto TAG = "HybridObject";
   const char* _name = TAG;
@@ -99,10 +99,10 @@ private:
   std::unordered_map<std::string, jsi::HostFunctionType> _getters;
   std::unordered_map<std::string, jsi::HostFunctionType> _setters;
   std::unordered_map<jsi::Runtime*, std::unordered_map<std::string, OwningReference<jsi::Function>>> _functionCache;
-
+  
 private:
   inline void ensureInitialized(facebook::jsi::Runtime& runtime);
-
+  
 private:
   template <typename Derived, typename ReturnType, typename... Args, size_t... Is>
   static inline jsi::Value callMethod(Derived* obj, ReturnType (Derived::*method)(Args...), jsi::Runtime& runtime, const jsi::Value* args,
@@ -117,10 +117,10 @@ private:
       return JSIConverter<std::decay_t<ReturnType>>::toJSI(runtime, std::move(result));
     }
   }
-
+  
   template <typename Derived, typename ReturnType, typename... Args>
   static jsi::HostFunctionType createHybridMethod(std::string name, ReturnType (Derived::*method)(Args...), Derived* derivedInstance) {
-
+    
     return [name, derivedInstance, method](jsi::Runtime& runtime, const jsi::Value& thisVal, const jsi::Value* args, size_t count) -> jsi::Value {
       if (count != sizeof...(Args)) {
         // invalid amount of arguments passed!
@@ -138,7 +138,7 @@ private:
       }
     };
   }
-
+  
 protected:
   template <typename Derived, typename ReturnType, typename... Args>
   void registerHybridMethod(std::string name, ReturnType (Derived::*method)(Args...), Derived* derivedInstance, bool override = false) {
@@ -149,10 +149,10 @@ protected:
     if (!override && (_methods.count(name) > 0)) {
       throw std::runtime_error("Cannot add Hybrid Method \"" + name + "\" - a method with that name already exists!");
     }
-
+    
     _methods[name] = HybridFunction{.function = createHybridMethod(name, method, derivedInstance), .parameterCount = sizeof...(Args)};
   }
-
+  
   template <typename Derived, typename ReturnType>
   void registerHybridGetter(std::string name, ReturnType (Derived::*method)(), Derived* derivedInstance) {
     if (_getters.count(name) > 0) {
@@ -163,10 +163,10 @@ protected:
       [[unlikely]];
       throw std::runtime_error("Cannot add Hybrid Property Getter \"" + name + "\" - a method with that name already exists!");
     }
-
+    
     _getters[name] = createHybridMethod(name, method, derivedInstance);
   }
-
+  
   template <typename Derived, typename ValueType>
   void registerHybridSetter(std::string name, void (Derived::*method)(ValueType), Derived* derivedInstance) {
     if (_setters.count(name) > 0) {
@@ -177,20 +177,9 @@ protected:
       [[unlikely]];
       throw std::runtime_error("Cannot add Hybrid Property Setter \"" + name + "\" - a method with that name already exists!");
     }
-
+    
     _setters[name] = createHybridMethod(name, method, derivedInstance);
   }
-};
-
-
-/**
- * Represents contextual state for a `HybridObject`.
- *
- * This can be used in remote implementations, e.g. in a Swift implementation
- * to properly (weak-)reference the `HybridObject` instead of re-creating it each time.
- */
-struct HybridContext {
-  std::weak_ptr<HybridObject> cppPart;
 };
 
 } // namespace margelo
