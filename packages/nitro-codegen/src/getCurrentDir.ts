@@ -1,7 +1,8 @@
 import os from 'os'
 import fs from 'fs'
+import path from 'path'
 
-function getCustomOrCurrentDir(): string {
+export function getBaseDirectory(): string {
   const customDirectory = process.argv[2]
   if (customDirectory != null && fs.existsSync(customDirectory)) {
     // custom passed in path exists!
@@ -10,15 +11,18 @@ function getCustomOrCurrentDir(): string {
   return process.cwd()
 }
 
-export function getCurrentDir(allowHomeShorthand = true): string {
-  const dir = getCustomOrCurrentDir()
-  if (!allowHomeShorthand) {
-    return dir
-  }
+export function prettifyDirectory(directory: string): string {
+  const relativePath = path.relative(getBaseDirectory(), directory)
 
   const home = os.homedir()
   const homeShorthand = os.platform() === 'win32' ? '$HOME' : '~'
-  return dir.startsWith(home)
-    ? `${homeShorthand}${dir.slice(home.length)}`
-    : dir
+  const prettifiedHomeShorthand = directory.startsWith(home)
+    ? `${homeShorthand}${directory.slice(home.length)}`
+    : directory
+
+  if (prettifiedHomeShorthand.length < relativePath.length) {
+    return prettifiedHomeShorthand
+  } else {
+    return relativePath
+  }
 }

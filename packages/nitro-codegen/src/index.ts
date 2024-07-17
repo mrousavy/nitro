@@ -4,25 +4,30 @@ import { createPlatformSpec } from './createPlatformSpec.js'
 import { promises as fs } from 'fs'
 import path from 'path'
 import { getNodeName } from './getNodeName.js'
-import { getCurrentDir } from './getCurrentDir.js'
+import { getBaseDirectory, prettifyDirectory } from './getCurrentDir.js'
 
 const start = performance.now()
 let targetSpecs = 0
 let generatedSpecs = 0
 
-const project = new Project({})
+// This is where nitrogen starts looking for files. Either cwd(), or user-passed path (arg[0])
+const baseDirectory = getBaseDirectory()
 
+// The TS project
+const project = new Project({})
 project.addSourceFilesAtPaths('**/*.nitro.ts')
 
-console.log(`🚀  Nitrogen runs at ${getCurrentDir(true)}`)
+// Loop through all source files to log them
+console.log(`🚀  Nitrogen runs at ${baseDirectory}`)
 for (const dir of project.getDirectories()) {
   const specs = dir.getSourceFiles().length
-  const relativePath = path.relative(getCurrentDir(false), dir.getPath())
+  const relativePath = prettifyDirectory(dir.getPath())
   console.log(
     `    🔍  Nitrogen found ${specs} spec${specs === 1 ? '' : 's'} in ${relativePath}`
   )
 }
 
+// If no source files are found, we can exit
 if (project.getSourceFiles().length === 0) {
   console.log(
     "❌  Nitrogen didn'nt find any spec files! " +
@@ -32,7 +37,7 @@ if (project.getSourceFiles().length === 0) {
   process.exit()
 }
 
-const outFolder = path.join('nitrogen', 'generated')
+const outFolder = path.join(baseDirectory, 'nitrogen', 'generated')
 // Clean output folder before writing to it
 await fs.rm(outFolder, { force: true, recursive: true })
 
