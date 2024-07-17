@@ -17,7 +17,7 @@
   // When this Objective-C class is loaded, it registers the CxxTurboModule in the react module system.
   // We need Objective-C here because these things do not get compiled out - meaning this will always be
   // called when the app starts.
-  margelo::RegisterNativeNitroModules::registerNativeNitroModules();
+  margelo::nitro::RegisterNativeNitroModules::registerNativeNitroModules();
 }
 
 @end

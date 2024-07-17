@@ -9,7 +9,7 @@ import Foundation
 
 // Implemented by the user
 public class SwiftTestHybridObject: SwiftTestHybridObjectSpec {
-  public var hybridContext = margelo.HybridContext()
+  public var hybridContext = margelo.nitro.HybridContext()
   
   public func asyncMethod() async -> Double {
     return 5.0

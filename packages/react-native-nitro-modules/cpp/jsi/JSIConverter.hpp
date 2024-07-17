@@ -300,7 +300,7 @@ template <typename ValueType> struct JSIConverter<std::unordered_map<std::string
 };
 
 // MutableBuffer <> ArrayBuffer
-template <> struct JSIConverter<ArrayBuffer> {
+template <> struct JSIConverter<std::shared_ptr<ArrayBuffer>> {
   static std::shared_ptr<ArrayBuffer> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
     jsi::Object object = arg.asObject(runtime);
     if (!object.isArrayBuffer(runtime)) [[unlikely]] {
