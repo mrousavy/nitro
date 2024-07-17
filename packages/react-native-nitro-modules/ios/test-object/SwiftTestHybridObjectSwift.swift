@@ -7,27 +7,29 @@
 
 import Foundation
 
-public class SwiftTestHybridObjectSwift {
-  // Internal C++ state
-  public var hybridContext: margelo.HybridContext = margelo.HybridContext.init()
+public class TestHybridObject {
+  var hybridContext = margelo.HybridContext()
   
-  private var _int: Int = 5
-  public var int: Int {
+  var int: Int {
     get {
-      print("getting \(_int)")
-      return _int
+      margelo.throwCppError("TestHybridObject.int (getter) needs to be overridden!")
+      fatalError("TestHybridObject.int (getter) needs to be overridden!")
     }
     set {
-      print("setting \(_int) to \(newValue)..")
-      _int = newValue
+      margelo.throwCppError("TestHybridObject.int (setter) needs to be overridden!")
+      fatalError("TestHybridObject.int (setter) needs to be overridden!")
     }
   }
+}
+
+public class SwiftTestHybridObjectSwift: TestHybridObject {
+  private var _int: Int = 5
   
   public var doooo: Double {
     return 4.0
   }
   
-  public init() {
+  public override init() {
     print("Initialized a new SwiftTestHybridObjectSwift!")
   }
 }
