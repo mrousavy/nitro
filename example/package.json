@@ -26,6 +26,7 @@
     "@react-native/typescript-config": "0.74.84",
     "babel-plugin-module-resolver": "^5.0.0",
     "del-cli": "^5.1.0",
+    "nitro-codegen": "workspace:^",
     "react-native-nitro-modules": "workspace:^",
     "typescript": "^5.2.2"
   },

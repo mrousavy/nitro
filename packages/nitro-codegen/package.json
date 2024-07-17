@@ -10,6 +10,9 @@
   "files": [
     "src"
   ],
+  "bin": {
+    "nitrogen": "./lib/index.js"
+  },
   "scripts": {
     "start": "tsc && node lib/index.js",
     "postinstall": "tsc || exit 0;",

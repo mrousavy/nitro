@@ -9370,7 +9370,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nitro-codegen@workspace:packages/nitro-codegen":
+"nitro-codegen@workspace:^, nitro-codegen@workspace:packages/nitro-codegen":
   version: 0.0.0-use.local
   resolution: "nitro-codegen@workspace:packages/nitro-codegen"
   dependencies:
@@ -9381,6 +9381,8 @@ __metadata:
     react-native-nitro-modules: "workspace:^"
     ts-morph: ^23.0.0
     typescript: ^5.2.2
+  bin:
+    nitrogen: ./lib/index.js
   languageName: unknown
   linkType: soft
 
@@ -10492,6 +10494,7 @@ __metadata:
     "@react-native/typescript-config": 0.74.84
     babel-plugin-module-resolver: ^5.0.0
     del-cli: ^5.1.0
+    nitro-codegen: "workspace:^"
     react: 18.2.0
     react-native: 0.74.2
     react-native-nitro-modules: "workspace:^"
@@ -11084,8 +11087,6 @@ __metadata:
 "root-workspace-0b6124@workspace:.":
   version: 0.0.0-use.local
   resolution: "root-workspace-0b6124@workspace:."
-  bin:
-    nitrogen: ./packages/nitro-codegen/lib/index.js
   languageName: unknown
   linkType: soft
 

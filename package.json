@@ -1,7 +1,4 @@
 {
-  "bin": {
-    "nitrogen": "./packages/nitro-codegen/lib/index.js"
-  },
   "scripts": {
     "example": "yarn workspace react-native-nitro-example",
     "tsc": "yarn workspace react-native-nitro-modules tsc && yarn workspace nitro-codegen tsc",
