@@ -16,8 +16,10 @@
 
 namespace margelo::nitro {
 
-struct TypeInfo {
+struct TypeInfo final {
 public:
+  TypeInfo() = delete;
+  
   /**
    * Get the name of the currently thrown exception
    */

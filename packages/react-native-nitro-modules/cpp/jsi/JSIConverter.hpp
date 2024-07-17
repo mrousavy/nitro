@@ -33,7 +33,9 @@ namespace margelo::nitro {
 using namespace facebook;
 
 // Unknown type (error)
-template <typename ArgType, typename Enable = void> struct JSIConverter {
+template <typename ArgType, typename Enable = void> struct JSIConverter final {
+  JSIConverter() = delete;
+  
   static inline ArgType fromJSI(jsi::Runtime&, const jsi::Value&) {
     static_assert(always_false<ArgType>::value, "This type is not supported by the JSIConverter!");
     return ArgType();

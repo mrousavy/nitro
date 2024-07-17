@@ -19,7 +19,7 @@ class HybridObject;
  * This can be used in remote implementations, e.g. in a Swift implementation
  * to properly (weak-)reference the `HybridObject` instead of re-creating it each time.
  */
-struct HybridContext {
+struct HybridContext final {
   std::weak_ptr<HybridObject> cppPart;
 };
 

@@ -22,7 +22,7 @@ namespace margelo::nitro {
  A `BorrowingReference<T>` can be locked to get an `OwningReference<T>` again, assuming it has not been deleted yet.
  */
 template<typename T>
-class OwningReference {
+class OwningReference final {
 public:
   OwningReference(): _value(nullptr), _isDeleted(nullptr), _strongRefCount(nullptr), _weakRefCount(nullptr) { }
 

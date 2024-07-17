@@ -14,7 +14,7 @@ using namespace facebook;
 /**
  * A Dispatcher that uses react::CallInvoker for it's implementation
  */
-class CallInvokerDispatcher : public Dispatcher {
+class CallInvokerDispatcher final : public Dispatcher {
 public:
   explicit CallInvokerDispatcher(std::shared_ptr<react::CallInvoker> callInvoker) : _callInvoker(callInvoker) {}
 

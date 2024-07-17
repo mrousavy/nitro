@@ -20,7 +20,7 @@ class OwningReference;
  It can be locked to gain a strong `OwningReference<T>` again if it has not been deleted yet.
  */
 template<typename T>
-class BorrowingReference {
+class BorrowingReference final {
 private:
   explicit BorrowingReference(const OwningReference<T>& ref);
 

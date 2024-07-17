@@ -12,7 +12,7 @@
 
 namespace margelo::nitro {
 
-class Logger {
+class Logger final {
 private:
   Logger() = delete;
 
