@@ -10,6 +10,7 @@
 #include "ImageSpec.hpp"
 
 void ImageSpec::loadHybridMethods() {
+  HybridObject::loadHybridMethods();
   registerHybridGetter("width", &ImageSpec::getWidth, this);
   registerHybridGetter("height", &ImageSpec::getHeight, this);
   registerHybridGetter("data", &ImageSpec::getData, this);

@@ -64,6 +64,7 @@ int SwiftTestHybridObject::throwError() {
 }
 
 void SwiftTestHybridObject::loadHybridMethods() {
+  HybridObject::loadHybridMethods();
   registerHybridGetter("int", &SwiftTestHybridObject::getInt, this);
   registerHybridSetter("int", &SwiftTestHybridObject::setInt, this);
   registerHybridMethod("throwError", &SwiftTestHybridObject::throwError, this);

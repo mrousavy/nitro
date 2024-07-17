@@ -781,6 +781,9 @@ ${createFileMetadataString(`${cppClassName}.cpp`)}
 #include "${cppClassName}.hpp"
 
 void ${cppClassName}::loadHybridMethods() {
+  // load base methods/properties
+  HybridObject::loadHybridMethods();
+  // load custom methods/properties
   ${joinToIndented(registrations, '  ')}
 }
     `

@@ -7,6 +7,7 @@
 namespace margelo::nitro {
 
 void TestHybridObject::loadHybridMethods() {
+  HybridObject::loadHybridMethods();
   // this.int get & set
   registerHybridGetter("int", &TestHybridObject::getInt, this);
   registerHybridSetter("int", &TestHybridObject::setInt, this);

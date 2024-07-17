@@ -41,8 +41,18 @@ std::string HybridObject::toString() {
   return "[HybridObject " + std::string(_name) + " ]";
 }
 
+std::string HybridObject::getName() {
+  return _name;
+}
+
+bool HybridObject::equals(std::shared_ptr<HybridObject> other) {
+  return this == other.get();
+}
+
 void HybridObject::loadHybridMethods() {
+  registerHybridGetter("name", &HybridObject::getName, this);
   registerHybridMethod("toString", &HybridObject::toString, this);
+  registerHybridMethod("equals", &HybridObject::equals, this);
 }
 
 std::vector<jsi::PropNameID> HybridObject::getPropertyNames(facebook::jsi::Runtime& runtime) {
@@ -62,7 +72,6 @@ std::vector<jsi::PropNameID> HybridObject::getPropertyNames(facebook::jsi::Runti
   for (const auto& item : _setters) {
     result.push_back(jsi::PropNameID::forUtf8(runtime, item.first));
   }
-  result.push_back(jsi::PropNameID::forUtf8(runtime, "toString"));
   return result;
 }
 
