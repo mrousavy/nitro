@@ -38,30 +38,13 @@ public class SwiftTestHybridObject: SwiftTestHybridObjectSpec {
   }
 }
 
-/*
-public class MaybeValue<T> {
-  public var value: T? = nil
-  public var error: String? = nil
-  
-  public init(value: T) {
-    self.value = value
-  }
-  
-  public init(error: String) {
-    self.error = error
-  }
-}
-
-public typealias MaybeInt = MaybeValue<Int>
- */
-
-public enum Maybe {
+public enum ValueOrError1 {
   case value(Int)
   case error(String)
 }
 
 public class SwiftTestHybridObjectSpecHelpers {
-  public static func throwErrorCxx(instance: SwiftTestHybridObject) -> Maybe {
+  public static func throwErrorCxx(instance: SwiftTestHybridObject) -> ValueOrError1 {
     do {
       let result = try instance.throwError()
       return .value(result)

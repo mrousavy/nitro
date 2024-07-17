@@ -51,16 +51,16 @@ void SwiftTestHybridObject::setInt(int value) {
   _swiftPart.setInt(value);
 }
 
-void SwiftTestHybridObject::throwError() {
-  NitroModules::Maybe maybe = NitroModules::SwiftTestHybridObjectSpecHelpers::throwErrorCxx(_swiftPart);
-  if (maybe.isError()) {
-    std::string message = maybe.getError();
+int SwiftTestHybridObject::throwError() {
+  auto valueOrError = NitroModules::SwiftTestHybridObjectSpecHelpers::throwErrorCxx(_swiftPart);
+  if (valueOrError.isError()) {
+    std::string message = valueOrError.getError();
     throw std::runtime_error(message);
   }
-  if (!maybe.isValue()) [[unlikely]] {
-    throw std::runtime_error("Swift Maybe<T> is neither value, nor result - this should never happen!");
+  if (!valueOrError.isValue()) [[unlikely]] {
+    throw std::runtime_error("Swift ValueOrError<T> is neither `value`, nor `error` - this should never happen!");
   }
-  maybe.getValue();
+  return valueOrError.getValue();
 }
 
 void SwiftTestHybridObject::loadHybridMethods() {

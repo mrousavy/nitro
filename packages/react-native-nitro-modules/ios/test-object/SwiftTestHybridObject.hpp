@@ -33,7 +33,7 @@ public:
   int getInt();
   void setInt(int value);
   
-  void throwError();
+  int throwError();
   
   void loadHybridMethods() override;
   

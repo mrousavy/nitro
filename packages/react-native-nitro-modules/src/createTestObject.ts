@@ -31,7 +31,7 @@ export interface SwiftTestHybridObject {
   // Swift getter & setter
   int: number
   // Swift methods
-  throwError(): void
+  throwError(): number
   asyncMethod(): Promise<number>
 }
 
