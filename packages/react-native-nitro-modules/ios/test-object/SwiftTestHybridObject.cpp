@@ -11,7 +11,7 @@
 
 namespace margelo {
 
-std::shared_ptr<SwiftTestHybridObject> SwiftTestHybridObject::getHybridPart(NitroModules::SwiftTestHybridObjectSwift swiftPart) {
+std::shared_ptr<SwiftTestHybridObject> SwiftTestHybridObject::getHybridPart(NitroModules::SwiftTestHybridObject swiftPart) {
   {
     // 1. Check if we have a C++ context already created and stored in Swift
     HybridContext hybridContext = swiftPart.getHybridContext();
@@ -38,7 +38,7 @@ std::shared_ptr<SwiftTestHybridObject> SwiftTestHybridObject::getHybridPart(Nitr
   return hybridObject;
 }
 
-SwiftTestHybridObject::SwiftTestHybridObject(NitroModules::SwiftTestHybridObjectSwift swiftPart):
+SwiftTestHybridObject::SwiftTestHybridObject(NitroModules::SwiftTestHybridObject swiftPart):
   HybridObject("SwiftTestHybridObject"), _swiftPart(swiftPart) {
   Logger::log("SwiftTestHybridObject", "Created a new SwiftTestHybridObject (C++)!");
 }

@@ -34,7 +34,7 @@ jsi::Object NativeNitroModules::createTestHybridObject(jsi::Runtime &runtime) {
 
 jsi::Object NativeNitroModules::createSwiftTestHybridObject(jsi::Runtime &runtime) {
   // 1. Create Swift instance
-  auto swiftPart = NitroModules::SwiftTestHybridObjectSwift::init();
+  auto swiftPart = NitroModules::SwiftTestHybridObject::init();
   // 2. Get or create C++ HybridObject instance wrapping Swift instance
   auto hybrid = SwiftTestHybridObject::getHybridPart(swiftPart);
   // 3. Return jsi::Object to JS

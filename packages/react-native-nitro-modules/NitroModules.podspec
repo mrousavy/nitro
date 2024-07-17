@@ -36,7 +36,7 @@ Pod::Spec.new do |s|
     "cpp/turbomodule/RegisterNativeNitroModules.hpp",
     "cpp/utils/**/*.{h,hpp}",
     # iOS C++ bindings
-    "ios/**/*.{h,hpp}",
+    "ios/core/**/*.{h,hpp}",
   ]
 
   s.pod_target_xcconfig = {
