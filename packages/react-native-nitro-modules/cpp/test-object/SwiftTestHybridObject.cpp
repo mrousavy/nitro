@@ -9,6 +9,7 @@
 
 namespace margelo {
 
+
 SwiftTestHybridObject::SwiftTestHybridObject(NitroModules::SwiftTestHybridObjectSwift swiftPart):
   HybridObject("SwiftTestHybridObject"), _swiftPart(swiftPart) {
     Logger::log("SwiftTestHybridObject", "Created a new SwiftTestHybridObject");

@@ -6,10 +6,3 @@
 //
 
 import Foundation
-
-public class HybridObject {
-  
-  public init(value: String) {
-    print("Hey \(value)!")
-  }
-}

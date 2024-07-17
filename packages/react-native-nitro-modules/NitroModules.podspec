@@ -22,17 +22,21 @@ Pod::Spec.new do |s|
     "cpp/**/*.{c,cpp}",
     # iOS codebase
     "ios/**/*.{h,hpp}",
+    "ios/**/*.{c,cpp}",
     "ios/**/*.{m,mm}",
     "ios/**/*.swift",
     "ios/**/*.modulemap",
   ]
   s.public_header_files = [
+    # Shared C++ headers
     "cpp/core/**/*.{h,hpp}",
     "cpp/jsi/**/*.{h,hpp}",
     "cpp/test-object/**/*.{h,hpp}",
     "cpp/threading/**/*.{h,hpp}",
     "cpp/turbomodule/RegisterNativeNitroModules.hpp",
     "cpp/utils/**/*.{h,hpp}",
+    # iOS C++ bindings
+    "ios/**/*.{h,hpp}",
   ]
 
   s.pod_target_xcconfig = {

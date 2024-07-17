@@ -1,5 +1,5 @@
 //
-//  SwiftTestHybridObject.swift
+//  SwiftTestHybridObjectSwift.swift
 //  NitroModules
 //
 //  Created by Marc Rousavy on 23.06.24.
@@ -18,6 +18,10 @@ public class SwiftTestHybridObjectSwift {
       print("setting \(_int) to \(newValue)..")
       _int = newValue
     }
+  }
+  
+  public var doooo: Double {
+    return 4.0
   }
   
   public init() {
