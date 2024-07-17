@@ -6,17 +6,28 @@
 #include "JSIConverter.hpp"
 #include "NitroLogger.hpp"
 #include "HybridContext.hpp"
-#include <chrono>
 
 #define LOG_MEMORY_ALLOCATIONS true
 
 namespace margelo::nitro {
 
 #if LOG_MEMORY_ALLOCATIONS
+static std::mutex _instanceCounterMutex;
+static std::unordered_map<const char*, uint32_t> _aliveInstances;
+static std::unordered_map<const char*, int> _instanceIds;
+
+static uint32_t incrementAliveInstancesAndGet(const char* name) {
+  std::unique_lock lock(_instanceCounterMutex);
+  return ++_aliveInstances[name];
+}
+
+static uint32_t decrementAliveInstancesAndGet(const char* name) {
+  std::unique_lock lock(_instanceCounterMutex);
+  return --_aliveInstances[name];
+}
+
 static int getId(const char* name) {
-  static std::unordered_map<const char*, int> _instanceIds;
-  static std::mutex _mutex;
-  std::unique_lock lock(_mutex);
+  std::unique_lock lock(_instanceCounterMutex);
   if (_instanceIds.find(name) == _instanceIds.end()) {
     _instanceIds.insert({name, 1});
   }
@@ -27,14 +38,16 @@ static int getId(const char* name) {
 
 HybridObject::HybridObject(const char* name) : _name(name), _mutex(std::make_unique<std::mutex>()) {
 #if LOG_MEMORY_ALLOCATIONS
+  uint32_t alive = incrementAliveInstancesAndGet(_name);
   _instanceId = getId(name);
-  Logger::log(TAG, "(MEMORY) Creating %s (#%i)... ✅", _name, _instanceId);
+  Logger::log(TAG, "(MEMORY) Creating %s (#%i)... (Alive %ss: %i) ✅", _name, _instanceId, _name, alive);
 #endif
 }
 
 HybridObject::~HybridObject() {
 #if LOG_MEMORY_ALLOCATIONS
-  Logger::log(TAG, "(MEMORY) Deleting %s (#%i)... ❌", _name, _instanceId);
+  uint32_t alive = decrementAliveInstancesAndGet(_name);
+  Logger::log(TAG, "(MEMORY) Deleting %s (#%i)... (Alive %ss: %i) ❌", _name, _instanceId, _name, alive);
 #endif
   _functionCache.clear();
 }
