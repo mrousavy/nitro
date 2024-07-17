@@ -10,6 +10,7 @@
 #include "JSICache.hpp"
 #include "ArrayBuffer.hpp"
 #include "Hash.hpp"
+#include "TypeInfo.hpp"
 #include <array>
 #include <future>
 #include <jsi/jsi.h>
@@ -17,9 +18,7 @@
 #include <type_traits>
 #include <unordered_map>
 
-#if __has_include(<cxxabi.h>)
-#include <cxxabi.h>
-#endif
+#define DO_NULL_CHECKS true
 
 namespace margelo::nitro {
 
@@ -171,11 +170,7 @@ template <typename TResult> struct JSIConverter<std::future<TResult>> {
             promise->reject(runtime, what);
           } catch (...) {
             // the async function threw a non-std error, try getting it
-#if __has_include(<cxxabi.h>)
-            std::string name = __cxxabiv1::__cxa_current_exception_type()->name();
-#else
-            std::string name = "<unknown>";
-#endif
+            std::string name = TypeInfo::getCurrentExceptionName();
             promise->reject(runtime, "Unknown non-std exception: " + name);
           }
 
@@ -223,7 +218,7 @@ template <typename ReturnType, typename... Args> struct JSIConverter<std::functi
 
   template <size_t... Is>
   static inline jsi::Value callHybridFunction(const std::function<ReturnType(Args...)>& function, jsi::Runtime& runtime, const jsi::Value* args,
-                                       std::index_sequence<Is...>) {
+                                              std::index_sequence<Is...>) {
     if constexpr (std::is_same_v<ReturnType, void>) {
       // it is a void function (will return undefined in JS)
       function(JSIConverter<std::decay_t<Args>>::fromJSI(runtime, args[Is])...);
@@ -237,8 +232,7 @@ template <typename ReturnType, typename... Args> struct JSIConverter<std::functi
   static inline jsi::Value toJSI(jsi::Runtime& runtime, const std::function<ReturnType(Args...)>& function) {
     jsi::HostFunctionType jsFunction = [function = std::move(function)](jsi::Runtime& runtime, const jsi::Value& thisValue,
                                                                         const jsi::Value* args, size_t count) -> jsi::Value {
-      if (count != sizeof...(Args)) {
-        [[unlikely]];
+      if (count != sizeof...(Args)) [[unlikely]] {
         throw jsi::JSError(runtime, "Function expected " + std::to_string(sizeof...(Args)) + " arguments, but received " +
                                         std::to_string(count) + "!");
       }
@@ -292,8 +286,7 @@ template <typename ValueType> struct JSIConverter<std::unordered_map<std::string
     jsi::Object object(runtime);
     for (const auto& pair : map) {
       jsi::Value value = JSIConverter<ValueType>::toJSI(runtime, pair.second);
-      jsi::String key = jsi::String::createFromUtf8(runtime, pair.first);
-      object.setProperty(runtime, key, std::move(value));
+      object.setProperty(runtime, pair.first.c_str(), std::move(value));
     }
     return object;
   }
@@ -304,7 +297,7 @@ template <> struct JSIConverter<std::shared_ptr<ArrayBuffer>> {
   static inline std::shared_ptr<ArrayBuffer> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
     jsi::Object object = arg.asObject(runtime);
     if (!object.isArrayBuffer(runtime)) [[unlikely]] {
-      throw std::runtime_error("Object " + arg.toString(runtime).utf8(runtime) + " is not an ArrayBuffer!");
+      throw std::runtime_error("Object \"" + arg.toString(runtime).utf8(runtime) + "\" is not an ArrayBuffer!");
     }
     jsi::ArrayBuffer arrayBuffer = object.getArrayBuffer(runtime);
     return std::make_shared<ArrayBuffer>(arrayBuffer.data(runtime), arrayBuffer.size(runtime));
@@ -319,42 +312,25 @@ template <typename T> struct is_shared_ptr_to_host_object : std::false_type {};
 template <typename T> struct is_shared_ptr_to_host_object<std::shared_ptr<T>> : std::is_base_of<jsi::HostObject, T> {};
 template <typename T> struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_host_object<T>::value>> {
   using TPointee = typename T::element_type;
-
-#if DEBUG
-  static inline inline std::string getFriendlyTypename() {
-    std::string name = std::string(typeid(TPointee).name());
-#if __has_include(<cxxabi.h>)
-    int status = 0;
-    char* demangled_name = abi::__cxa_demangle(name.c_str(), NULL, NULL, &status);
-    if (status == 0) {
-      name = demangled_name;
-      std::free(demangled_name);
-    }
-#endif
-    return name;
+  
+  static inline std::string invalidTypeErrorMessage(const std::string& typeDescription, const std::string& reason) {
+    std::string typeName = TypeInfo::getFriendlyTypename<TPointee>();
+    return "Cannot convert \"" + typeDescription + "\" to HostObject<" + typeName + ">! " + reason;
   }
-
-  static inline inline std::string invalidTypeErrorMessage(const std::string& typeDescription, const std::string& reason) {
-    return "Cannot convert \"" + typeDescription + "\" to HostObject<" + getFriendlyTypename() + ">! " + reason;
-  }
-#endif
 
   static inline T fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
-#if DEBUG
-    if (arg.isUndefined()) {
-      [[unlikely]];
+#if DO_NULL_CHECKS
+    if (arg.isUndefined()) [[unlikely]] {
       throw jsi::JSError(runtime, invalidTypeErrorMessage("undefined", "It is undefined!"));
     }
-    if (!arg.isObject()) {
-      [[unlikely]];
+    if (!arg.isObject()) [[unlikely]] {
       std::string stringRepresentation = arg.toString(runtime).utf8(runtime);
       throw jsi::JSError(runtime, invalidTypeErrorMessage(stringRepresentation, "It is not an object!"));
     }
 #endif
     jsi::Object object = arg.asObject(runtime);
-#if DEBUG
-    if (!object.isHostObject<TPointee>(runtime)) {
-      [[unlikely]];
+#if DO_NULL_CHECKS
+    if (!object.isHostObject<TPointee>(runtime)) [[unlikely]] {
       std::string stringRepresentation = arg.toString(runtime).utf8(runtime);
       throw jsi::JSError(runtime, invalidTypeErrorMessage(stringRepresentation, "It is a different HostObject<T>!"));
     }
@@ -362,10 +338,10 @@ template <typename T> struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_h
     return object.asHostObject<TPointee>(runtime);
   }
   static inline jsi::Value toJSI(jsi::Runtime& runtime, const T& arg) {
-#if DEBUG
-    if (arg == nullptr) {
-      [[unlikely]];
-      throw jsi::JSError(runtime, "Cannot convert nullptr to HostObject<" + getFriendlyTypename() + ">!");
+#if DO_NULL_CHECKS
+    if (arg == nullptr) [[unlikely]] {
+      std::string typeName = TypeInfo::getFriendlyTypename<TPointee>();
+      throw jsi::JSError(runtime, "Cannot convert nullptr to HostObject<" + typeName + ">!");
     }
 #endif
     return jsi::Object::createFromHostObject(runtime, arg);
@@ -378,41 +354,24 @@ template <typename T> struct is_shared_ptr_to_native_state<std::shared_ptr<T>> :
 template <typename T> struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_native_state<T>::value>> {
   using TPointee = typename T::element_type;
 
-#if DEBUG
-  static inline inline std::string getFriendlyTypename() {
-    std::string name = std::string(typeid(TPointee).name());
-#if __has_include(<cxxabi.h>)
-    int status = 0;
-    char* demangled_name = abi::__cxa_demangle(name.c_str(), NULL, NULL, &status);
-    if (status == 0) {
-      name = demangled_name;
-      std::free(demangled_name);
-    }
-#endif
-    return name;
+  static inline std::string invalidTypeErrorMessage(const std::string& typeDescription, const std::string& reason) {
+    std::string typeName = TypeInfo::getFriendlyTypename<TPointee>();
+    return "Cannot convert \"" + typeDescription + "\" to NativeState<" + typeName + ">! " + reason;
   }
-
-  static inline inline std::string invalidTypeErrorMessage(const std::string& typeDescription, const std::string& reason) {
-    return "Cannot convert \"" + typeDescription + "\" to NativeState<" + getFriendlyTypename() + ">! " + reason;
-  }
-#endif
 
   static inline T fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
-#if DEBUG
-    if (arg.isUndefined()) {
-      [[unlikely]];
+#if DO_NULL_CHECKS
+    if (arg.isUndefined()) [[unlikely]] {
       throw jsi::JSError(runtime, invalidTypeErrorMessage("undefined", "It is undefined!"));
     }
-    if (!arg.isObject()) {
-      [[unlikely]];
+    if (!arg.isObject()) [[unlikely]] {
       std::string stringRepresentation = arg.toString(runtime).utf8(runtime);
       throw jsi::JSError(runtime, invalidTypeErrorMessage(stringRepresentation, "It is not an object!"));
     }
 #endif
     jsi::Object object = arg.asObject(runtime);
-#if DEBUG
-    if (!object.hasNativeState<TPointee>(runtime)) {
-      [[unlikely]];
+#if DO_NULL_CHECKS
+    if (!object.hasNativeState<TPointee>(runtime)) [[unlikely]] {
       std::string stringRepresentation = arg.toString(runtime).utf8(runtime);
       throw jsi::JSError(runtime, invalidTypeErrorMessage(stringRepresentation, "It is a different NativeState<T>!"));
     }
@@ -420,10 +379,10 @@ template <typename T> struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_n
     return object.getNativeState<TPointee>(runtime);
   }
   static inline jsi::Value toJSI(jsi::Runtime& runtime, const T& arg) {
-#if DEBUG
-    if (arg == nullptr) {
-      [[unlikely]];
-      throw jsi::JSError(runtime, "Cannot convert nullptr to HostObject<" + getFriendlyTypename() + ">!");
+#if DO_NULL_CHECKS
+    if (arg == nullptr) [[unlikely]] {
+      std::string typeName = TypeInfo::getFriendlyTypename<TPointee>();
+      throw jsi::JSError(runtime, "Cannot convert nullptr to NativeState<" + typeName + ">!");
     }
 #endif
     jsi::Object object(runtime);
