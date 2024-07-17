@@ -2,10 +2,8 @@ require "json"
 
 package = JSON.parse(File.read(File.join(__dir__, "package.json")))
 
-Pod::UI.puts "[NitroModules] Your app is boosted by nitro modules! 🔥"
-
 Pod::Spec.new do |s|
-  s.name         = "NitroModules"
+  s.name         = "react-native-nitro-image"
   s.version      = package["version"]
   s.summary      = package["description"]
   s.homepage     = package["homepage"]
@@ -17,26 +15,10 @@ Pod::Spec.new do |s|
 
   # VisionCamera Core C++ bindings
   s.source_files = [
-    # Shared C++ codebase
-    "cpp/**/*.{h,hpp}",
-    "cpp/**/*.{c,cpp}",
-    # iOS codebase
-    "ios/**/*.{h,hpp}",
-    "ios/**/*.{c,cpp}",
-    "ios/**/*.{m,mm}",
-    "ios/**/*.swift",
-    "ios/**/*.modulemap",
-  ]
-  s.public_header_files = [
-    # Shared C++ headers
-    "cpp/core/**/*.{h,hpp}",
-    "cpp/jsi/**/*.{h,hpp}",
-    "cpp/test-object/**/*.{h,hpp}",
-    "cpp/threading/**/*.{h,hpp}",
-    "cpp/turbomodule/RegisterNativeNitroModules.hpp",
-    "cpp/utils/**/*.{h,hpp}",
-    # iOS C++ bindings
-    "ios/core/**/*.{h,hpp}",
+    # Generated specs
+    "nitrogen/generated/**/*.{h,hpp,c,cpp,swift}",
+    # Implementation (Swift)
+    "ios/**/*.{swift}",
   ]
 
   s.pod_target_xcconfig = {
