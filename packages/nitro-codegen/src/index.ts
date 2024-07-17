@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import { Project, ts } from 'ts-morph'
 import { getPlatformSpec, type Platform } from './getPlatformSpecs.js'
 import { createPlatformSpec } from './createPlatformSpec.js'

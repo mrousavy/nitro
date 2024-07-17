@@ -11084,6 +11084,8 @@ __metadata:
 "root-workspace-0b6124@workspace:.":
   version: 0.0.0-use.local
   resolution: "root-workspace-0b6124@workspace:."
+  bin:
+    nitrogen: ./packages/nitro-codegen/lib/index.js
   languageName: unknown
   linkType: soft
 
