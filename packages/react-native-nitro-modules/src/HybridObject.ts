@@ -23,4 +23,11 @@ export interface PlatformSpec {
  * ```
  */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export interface HybridObject<_ extends PlatformSpec> {}
+export interface HybridObject<_ extends PlatformSpec> {
+  /**
+   * Returns a string representation of the given `HybridObject`.
+   *
+   * Unless overridden by the `HybridObject`, this will return a list of all properties.
+   */
+  toString(): string
+}

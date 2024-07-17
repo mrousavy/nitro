@@ -6,6 +6,7 @@
 #include "JSIConverter.hpp"
 #include "NitroLogger.hpp"
 #include "HybridContext.hpp"
+#include <chrono>
 
 namespace margelo::nitro {
 
@@ -36,14 +37,12 @@ HybridObject::~HybridObject() {
   _functionCache.clear();
 }
 
-std::string HybridObject::toString(jsi::Runtime& runtime) {
-  std::string result = std::string(_name) + " { ";
-  std::vector<jsi::PropNameID> props = getPropertyNames(runtime);
-  for (size_t i = 0; i < props.size(); i++) {
-    auto suffix = i < props.size() - 1 ? ", " : " ";
-    result += "\"" + props[i].utf8(runtime) + "\"" + suffix;
-  }
-  return result + "}";
+std::string HybridObject::toString() {
+  return "[HybridObject " + std::string(_name) + " ]";
+}
+
+void HybridObject::loadHybridMethods() {
+  registerHybridMethod("toString", &HybridObject::toString, this);
 }
 
 std::vector<jsi::PropNameID> HybridObject::getPropertyNames(facebook::jsi::Runtime& runtime) {
@@ -92,25 +91,15 @@ jsi::Value HybridObject::get(facebook::jsi::Runtime& runtime, const facebook::js
     // it's a function. we now need to wrap it in a jsi::Function, store it in cache, then return it.
     HybridFunction& hybridFunction = _methods.at(name);
     // get (or create) a runtime-specific function cache
-    auto runtimeCache = FunctionCache::getOrCreateCache(runtime).lock();
+    auto runtimeCache = JSICache<jsi::Function>::getOrCreateCache(runtime).lock();
     // create the jsi::Function
     jsi::Function function = jsi::Function::createFromHostFunction(runtime, jsi::PropNameID::forUtf8(runtime, name),
                                                                    hybridFunction.parameterCount, hybridFunction.function);
-    // throw it into the cache
+    // throw it into the cache for next time
     OwningReference<jsi::Function> globalFunction = runtimeCache->makeGlobal(std::move(function));
     functionCache[name] = globalFunction;
     // copy the reference & return it to JS
     return jsi::Value(runtime, *globalFunction);
-  }
-
-  if (name == "toString") {
-    // we always have a toString function. Currently, this is not cached.
-    return jsi::Function::createFromHostFunction(
-        runtime, jsi::PropNameID::forUtf8(runtime, "toString"), 0,
-        [=](jsi::Runtime& runtime, const jsi::Value& thisValue, const jsi::Value* args, size_t count) -> jsi::Value {
-          std::string stringRepresentation = this->toString(runtime);
-          return JSIConverter<std::string>::toJSI(runtime, stringRepresentation);
-        });
   }
 
   // this property does not exist. Return undefined

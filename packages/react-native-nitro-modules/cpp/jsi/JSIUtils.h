@@ -11,6 +11,8 @@
 
 namespace margelo::nitro {
 
+using namespace facebook;
+
 static inline std::string getRuntimeId(jsi::Runtime& runtime) {
   return runtime.description();
 

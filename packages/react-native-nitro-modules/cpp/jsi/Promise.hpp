@@ -10,7 +10,7 @@
 #include <jsi/jsi.h>
 #include <functional>
 #include <memory>
-#include "FunctionCache.hpp"
+#include "JSICache.hpp"
 
 namespace margelo::nitro {
 
@@ -40,7 +40,7 @@ public:
   void reject(jsi::Runtime& runtime, std::string error);
 
 private:
-  std::weak_ptr<FunctionCache> _functionCache;
+  std::weak_ptr<JSICache<jsi::Function>> _functionCache;
   OwningReference<jsi::Function> _resolver;
   OwningReference<jsi::Function> _rejecter;
   static constexpr auto TAG = "Promise";

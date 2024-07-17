@@ -7,7 +7,7 @@
 #include "HybridObject.hpp"
 #include "Promise.hpp"
 #include "Dispatcher.hpp"
-#include "FunctionCache.hpp"
+#include "JSICache.hpp"
 #include "ArrayBuffer.hpp"
 #include "Hash.hpp"
 #include <array>
@@ -194,7 +194,7 @@ template <typename TResult> struct JSIConverter<std::future<TResult>> {
 template <typename ReturnType, typename... Args> struct JSIConverter<std::function<ReturnType(Args...)>> {
   static std::function<ReturnType(Args...)> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
     // Make function global - it'll be managed by the Runtime's memory, and we only have a weak_ref to it.
-    auto cache = FunctionCache::getOrCreateCache(runtime).lock();
+    auto cache = JSICache<jsi::Function>::getOrCreateCache(runtime).lock();
     jsi::Function function = arg.asObject(runtime).asFunction(runtime);
     OwningReference<jsi::Function> sharedFunction = cache->makeGlobal(std::move(function));
 

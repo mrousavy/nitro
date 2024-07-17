@@ -70,6 +70,8 @@ public:
 
   /**
    * Loads all native methods of this `HybridObject` to be exposed to JavaScript.
+   * The base implementation registers a `toString()` method and `name` property.
+   * 
    * Example:
    *
    * ```cpp
@@ -78,16 +80,17 @@ public:
    * }
    *
    * void User::loadHybridMethods() {
+   *   HybridObject::loadHybridMethods();
    *   registerHybridMethod("getAge", &User::getAge, this);
    * }
    * ```
    */
-  virtual void loadHybridMethods() = 0;
+  virtual void loadHybridMethods();
 
   /**
    * Get a string representation of this HostObject, useful for logging or debugging.
    */
-  virtual std::string toString(jsi::Runtime& runtime);
+  virtual std::string toString();
 
 private:
   static constexpr auto TAG = "HybridObject";
@@ -99,6 +102,7 @@ private:
   std::unordered_map<std::string, jsi::HostFunctionType> _getters;
   std::unordered_map<std::string, jsi::HostFunctionType> _setters;
   std::unordered_map<jsi::Runtime*, std::unordered_map<std::string, OwningReference<jsi::Function>>> _functionCache;
+  std::unordered_map<jsi::Runtime*, std::vector<OwningReference<jsi::PropNameID>>> _propNameCache;
 
 private:
   inline void ensureInitialized(facebook::jsi::Runtime& runtime);
