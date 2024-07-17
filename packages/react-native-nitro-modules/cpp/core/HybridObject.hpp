@@ -158,12 +158,11 @@ private:
 
 protected:
   template <typename Derived, typename ReturnType, typename... Args>
-    if (!override && (_getters.count(name) > 0 || _setters.count(name) > 0)) {
-      [[unlikely]];
   inline void registerHybridMethod(std::string name, ReturnType (Derived::*method)(Args...), Derived* derivedInstance) {
+    if (_getters.contains(name) || _setters.contains(name)) [[unlikely]] {
       throw std::runtime_error("Cannot add Hybrid Method \"" + name + "\" - a property with that name already exists!");
     }
-    if (!override && (_methods.count(name) > 0)) {
+    if (_methods.contains(name)) [[unlikely]] {
       throw std::runtime_error("Cannot add Hybrid Method \"" + name + "\" - a method with that name already exists!");
     }
 
@@ -171,13 +170,11 @@ protected:
   }
 
   template <typename Derived, typename ReturnType>
-    if (_getters.count(name) > 0) {
-      [[unlikely]];
   inline void registerHybridGetter(std::string name, ReturnType (Derived::*method)(), Derived* derivedInstance) {
+    if (_getters.contains(name)) [[unlikely]] {
       throw std::runtime_error("Cannot add Hybrid Property Getter \"" + name + "\" - a getter with that name already exists!");
     }
-    if (_methods.count(name) > 0) {
-      [[unlikely]];
+    if (_methods.contains(name)) [[unlikely]] {
       throw std::runtime_error("Cannot add Hybrid Property Getter \"" + name + "\" - a method with that name already exists!");
     }
 
@@ -185,13 +182,11 @@ protected:
   }
 
   template <typename Derived, typename ValueType>
-    if (_setters.count(name) > 0) {
-      [[unlikely]];
   inline void registerHybridSetter(std::string name, void (Derived::*method)(ValueType), Derived* derivedInstance) {
+    if (_setters.contains(name)) [[unlikely]] {
       throw std::runtime_error("Cannot add Hybrid Property Setter \"" + name + "\" - a setter with that name already exists!");
     }
-    if (_methods.count(name) > 0) {
-      [[unlikely]];
+    if (_methods.contains(name)) [[unlikely]] {
       throw std::runtime_error("Cannot add Hybrid Property Setter \"" + name + "\" - a method with that name already exists!");
     }
 
