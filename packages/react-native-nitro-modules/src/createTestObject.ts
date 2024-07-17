@@ -27,6 +27,14 @@ export function createCppTestHybridObject(): TestHybridObject {
   return NitroModules.createTestHybridObject() as TestHybridObject
 }
 
-export function createSwiftTestHybridObject(): TestHybridObject {
-  return NitroModules.createSwiftTestHybridObject() as TestHybridObject
+export interface SwiftTestHybridObject {
+  // Swift getter & setter
+  int: number
+  // Swift methods
+  throwError(): void
+  asyncMethod(): Promise<number>
+}
+
+export function createSwiftTestHybridObject(): SwiftTestHybridObject {
+  return NitroModules.createSwiftTestHybridObject() as SwiftTestHybridObject
 }

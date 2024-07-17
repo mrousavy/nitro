@@ -13,5 +13,7 @@ public protocol SwiftTestHybridObjectSpec {
   
   var int: Int { get set }
   
-  func throwError() throws
+  func throwError() throws -> Int
+  
+  func asyncMethod() async -> Double
 }

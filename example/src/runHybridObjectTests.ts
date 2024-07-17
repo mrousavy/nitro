@@ -99,6 +99,13 @@ export async function runSwiftHybridObjectTests(): Promise<void> {
     console.log(`swift int: ` + swiftTestObject.int)
     swiftTestObject.int = 15
     console.log(`swift int = 15: ` + swiftTestObject.int)
+    console.log('throwing swift error...')
+    try {
+      swiftTestObject.throwError()
+      console.error('no error was thrown!')
+    } catch (e) {
+      console.log('error thrown & caught!', e)
+    }
   } catch (e) {
     console.error(`Failed to create Swift TestHybridObject!`, e)
   }
