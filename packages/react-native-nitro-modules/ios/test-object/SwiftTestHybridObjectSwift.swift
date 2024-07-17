@@ -8,6 +8,9 @@
 import Foundation
 
 public class SwiftTestHybridObjectSwift {
+  // Internal C++ state
+  public var hybridContext: margelo.HybridContext? = nil
+  
   private var _int: Int = 5
   public var int: Int {
     get {
@@ -23,8 +26,6 @@ public class SwiftTestHybridObjectSwift {
   public var doooo: Double {
     return 4.0
   }
-  
-  public var jsContext: margelo.JSContext? = nil
   
   public init() {
     print("Initialized a new SwiftTestHybridObjectSwift!")

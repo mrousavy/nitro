@@ -38,10 +38,10 @@ jsi::Object NativeNitroModules::createSwiftTestHybridObject(jsi::Runtime &runtim
   // 2. Create C++ HybridObject instance wrapping Swift instance
   auto hybrid = std::make_shared<SwiftTestHybridObject>(swiftPart);
   // 3. Pass the Swift instance a weak_ptr to the C++ instance so we can cache it
-  JSContext context {
+  HybridContext context {
     .cppPart = hybrid
   };
-  swiftPart.setJsContext(swift::Optional<JSContext>::some(context));
+  swiftPart.setHybridContext(swift::Optional<HybridContext>::some(context));
   // 4. Return jsi::Object to JS
   return jsi::Object::createFromHostObject(runtime, hybrid);
 }

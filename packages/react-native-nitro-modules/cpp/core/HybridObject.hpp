@@ -18,6 +18,15 @@ namespace margelo {
 
 using namespace facebook;
 
+/**
+ * Represents a C++ object that is exposed to JS.
+ * `HybridObject`s can have native getters and setters, and normal methods.
+ *
+ * To implement a `HybridObject`, simply inherit from this class and override `loadHybridMethods`
+ * to register the given getters, setters or methods.
+ *
+ * The new class can then be passed to JS using the `JSIConverter<HybridObject>`.
+ */
 class HybridObject : public jsi::HostObject, public std::enable_shared_from_this<HybridObject> {
 public:
   struct HybridFunction {
@@ -156,7 +165,13 @@ protected:
 };
 
 
-struct JSContext {
+/**
+ * Represents contextual state for a `HybridObject`.
+ *
+ * This can be used in remote implementations, e.g. in a Swift implementation
+ * to properly (weak-)reference the `HybridObject` instead of re-creating it each time.
+ */
+struct HybridContext {
   std::weak_ptr<HybridObject> cppPart;
 };
 
