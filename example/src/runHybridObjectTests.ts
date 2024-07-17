@@ -1,4 +1,5 @@
-import { createCppTestHybridObject, createSwiftTestHybridObject, TestHybridObject } from 'react-native-nitro-modules';
+import { createCppTestHybridObject, createSwiftTestHybridObject } from 'react-native-nitro-modules';
+import type { TestHybridObject } from 'react-native-nitro-modules';
 
 const FIBONACCI_N = 33
 const FIBONACCI_COUNT = 5

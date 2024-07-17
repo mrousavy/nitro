@@ -1,6 +1,6 @@
 import { NitroModules } from './NativeNitro'
 
-interface TestHybridObject {
+export interface TestHybridObject {
   // C++ getter & setter
   int: number
   string: string
