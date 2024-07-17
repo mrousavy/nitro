@@ -8,9 +8,11 @@
 #include "HybridContext.hpp"
 #include <chrono>
 
+#define LOG_MEMORY_ALLOCATIONS true
+
 namespace margelo::nitro {
 
-#if DEBUG && _ENABLE_LOGS
+#if LOG_MEMORY_ALLOCATIONS
 static int getId(const char* name) {
   static std::unordered_map<const char*, int> _instanceIds;
   static std::mutex _mutex;
@@ -24,14 +26,14 @@ static int getId(const char* name) {
 #endif
 
 HybridObject::HybridObject(const char* name) : _name(name), _mutex(std::make_unique<std::mutex>()) {
-#if DEBUG && _ENABLE_LOGS
+#if LOG_MEMORY_ALLOCATIONS
   _instanceId = getId(name);
   Logger::log(TAG, "(MEMORY) Creating %s (#%i)... ✅", _name, _instanceId);
 #endif
 }
 
 HybridObject::~HybridObject() {
-#if DEBUG && _ENABLE_LOGS
+#if LOG_MEMORY_ALLOCATIONS
   Logger::log(TAG, "(MEMORY) Deleting %s (#%i)... ❌", _name, _instanceId);
 #endif
   _functionCache.clear();
