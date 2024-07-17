@@ -35,13 +35,31 @@ public:
   };
 
 public:
+  /**
+   * Create a new instance of a `HybridObject`.
+   * The given `name` will be used for logging and stringifying.
+   */
   explicit HybridObject(const char* name);
+  /**
+   * Called when no more references to the given `HybridObject` exist in both C++ and JS.
+   * JS might keep references for longer, as it is a garbage collected language.
+   */
   ~HybridObject();
+  /**
+   * HybridObjects cannot be copied.
+   */
+  HybridObject(const HybridObject& copy) = delete;
+  /**
+   * HybridObjects cannot be moved.
+   */
+  HybridObject(HybridObject&& move) = delete;
 
+public:
   void set(jsi::Runtime&, const jsi::PropNameID& name, const jsi::Value& value) override;
   jsi::Value get(jsi::Runtime& runtime, const jsi::PropNameID& propName) override;
   std::vector<jsi::PropNameID> getPropertyNames(jsi::Runtime& runtime) override;
-
+  
+public:
   /**
    * Get the `std::shared_ptr` instance of this HybridObject.
    * The HybridObject must be managed inside a `shared_ptr` already, otherwise this will fail.
