@@ -25,8 +25,8 @@ namespace margelo::nitro {
     static PixelFormat fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       std::string unionValue = JSIConverter<std::string>::fromJSI(runtime, arg);
       switch (hashString(unionValue.c_str(), unionValue.size())) {
-        case hashString("rgb", 3): return PixelFormat::rgb;
-        case hashString("yuv", 3): return PixelFormat::yuv;
+        case hashString("rgb"): return PixelFormat::rgb;
+        case hashString("yuv"): return PixelFormat::yuv;
         default:
           throw std::runtime_error("Cannot convert " + unionValue + " to PixelFormat - invalid value!");
       }

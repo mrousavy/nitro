@@ -30,4 +30,14 @@ constexpr uint64_t hashString(const char* str, size_t length) {
   return hash;
 }
 
+/**
+ * Hashes the given constant C-String using the FNV-1a hashing algorithm.
+ *
+ * String length is known at compile time.
+ */
+template <size_t N>
+constexpr uint64_t hashString(const char (&str)[N]) {
+    return hashString(str, N - 1); // N includes the null terminator, so subtract 1
+}
+
 }

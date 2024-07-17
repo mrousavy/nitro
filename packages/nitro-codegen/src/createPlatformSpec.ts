@@ -308,9 +308,7 @@ namespace margelo::nitro {
       this.cppName = typename
       const cppEnumMembers = enumValues.map((m) => `${m},`)
       const cppFromJsiHashCases = enumValues
-        .map((v) =>
-          `case hashString("${v}", ${v.length}): return ${typename}::${v};`.trim()
-        )
+        .map((v) => `case hashString("${v}"): return ${typename}::${v};`.trim())
         .join('\n')
       const cppToJsiCases = enumValues
         .map(
