@@ -10,10 +10,10 @@
 #include <string>
 #include <stdexcept>
 
-namespace margelo {
+namespace margelo::nitro {
 
 void throwCppError(std::string message) {
   throw std::runtime_error(message);
 }
 
-} // namespace margelo
+} // namespace margelo::nitro

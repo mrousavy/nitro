@@ -7,7 +7,7 @@
 #include "NitroLogger.hpp"
 #include "HybridContext.hpp"
 
-namespace margelo {
+namespace margelo::nitro {
 
 #if DEBUG && _ENABLE_LOGS
 static int getId(const char* name) {
@@ -128,7 +128,7 @@ void HybridObject::set(facebook::jsi::Runtime& runtime, const facebook::jsi::Pro
     _setters[name](runtime, jsi::Value::undefined(), &value, 1);
     return;
   }
-  
+
   // this property does not exist, and cannot be set. Throw and error!
   throw std::runtime_error("Cannot set property \"" + name + "\" - " + std::string(_name) +
                            " does not have a setter for \"" + name + "\"!");
@@ -142,4 +142,4 @@ void HybridObject::ensureInitialized(facebook::jsi::Runtime& runtime) {
   }
 }
 
-} // namespace margelo
+} // namespace margelo::nitro

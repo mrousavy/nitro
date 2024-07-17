@@ -9,7 +9,7 @@
 
 #include <memory>
 
-namespace margelo {
+namespace margelo::nitro {
 
 class HybridObject;
 
@@ -23,4 +23,4 @@ struct HybridContext {
   std::weak_ptr<HybridObject> cppPart;
 };
 
-} // namespace margelo
+} // namespace margelo::nitro

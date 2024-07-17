@@ -14,7 +14,7 @@
 #include "NitroModules-Swift.h"
 #include "DoesClassExist.hpp"
 
-namespace margelo {
+namespace margelo::nitro {
 
 static_assert(does_class_exist_v<NitroModules::SwiftTestHybridObject>,
               "Swift class \"SwiftTestHybridObject\" does not exist! Does the class exist in Swift, and is it marked as public?");
@@ -24,19 +24,19 @@ static_assert(does_class_exist_v<NitroModules::SwiftTestHybridObject>,
 class SwiftTestHybridObject: public HybridObject {
 private:
   explicit SwiftTestHybridObject(NitroModules::SwiftTestHybridObject swiftPart);
-  
+
 public:
   static std::shared_ptr<SwiftTestHybridObject> getHybridPart(NitroModules::SwiftTestHybridObject swiftPart);
-  
+
 public:
-  
+
   int getInt();
   void setInt(int value);
-  
+
   int throwError();
-  
+
   void loadHybridMethods() override;
-  
+
 private:
   NitroModules::SwiftTestHybridObject _swiftPart;
 };

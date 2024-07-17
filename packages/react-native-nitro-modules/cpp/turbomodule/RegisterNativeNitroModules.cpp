@@ -10,7 +10,7 @@
 #include <React-callinvoker/ReactCommon/CallInvoker.h>
 #include <ReactCommon/ReactCommon/CxxTurboModuleUtils.h>
 
-namespace margelo {
+namespace margelo::nitro {
 
 void RegisterNativeNitroModules::registerNativeNitroModules() {
   facebook::react::registerCxxModuleToGlobalModuleMap(

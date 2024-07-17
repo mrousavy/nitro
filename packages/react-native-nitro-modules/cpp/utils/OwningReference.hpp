@@ -10,7 +10,7 @@
 #include <cstddef>
 #include "BorrowingReference.hpp"
 
-namespace margelo {
+namespace margelo::nitro {
 
 /**
  An `OwningReference<T>` is a smart-pointer that holds a strong reference to a pointer.

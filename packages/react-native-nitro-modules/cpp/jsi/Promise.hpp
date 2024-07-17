@@ -12,13 +12,13 @@
 #include <memory>
 #include "FunctionCache.hpp"
 
-namespace margelo {
+namespace margelo::nitro {
 
 using namespace facebook;
 
 /**
  Represents a JS Promise.
- 
+
  `Promise` is not thread-safe: It has to be resolved/rejected
  on the same thread and Runtime as it was created on.
  */
@@ -54,4 +54,4 @@ public:
   static jsi::Value createPromise(jsi::Runtime& runtime, RunPromise run);
 };
 
-} // namespace margelo
+} // namespace margelo::nitro

@@ -10,7 +10,7 @@
 #include <cstddef>
 #include <cstdint>
 
-namespace margelo {
+namespace margelo::nitro {
 
 /**
  * Hashes the given C-String using the FNV-1a hashing algorithm.

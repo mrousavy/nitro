@@ -2,7 +2,7 @@
 #include "NitroLogger.hpp"
 #include <jsi/jsi.h>
 
-namespace margelo {
+namespace margelo::nitro {
 
 using namespace facebook;
 
@@ -53,4 +53,4 @@ void Promise::reject(jsi::Runtime& runtime, std::string message) {
   _rejecter->call(runtime, error.value());
 }
 
-} // namespace margelo
+} // namespace margelo::nitro

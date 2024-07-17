@@ -13,7 +13,7 @@
 
 namespace facebook::react {
 
-using namespace margelo;
+using namespace margelo::nitro;
 
 NativeNitroModules::NativeNitroModules(std::shared_ptr<CallInvoker> jsInvoker) : NativeNitroCxxSpec(jsInvoker), _callInvoker(jsInvoker) {
 }

@@ -21,7 +21,7 @@
 #include <cxxabi.h>
 #endif
 
-namespace margelo {
+namespace margelo::nitro {
 
 /**
  The JSIConverter<T> class can convert any type from and to a jsi::Value.
@@ -432,4 +432,4 @@ template <typename T> struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_n
   }
 };
 
-} // namespace margelo
+} // namespace margelo::nitro

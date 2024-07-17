@@ -1,7 +1,7 @@
 #include "Dispatcher.hpp"
 #include "NitroLogger.hpp"
 
-namespace margelo {
+namespace margelo::nitro {
 
 using namespace facebook;
 
@@ -11,7 +11,7 @@ std::unordered_map<jsi::Runtime*, std::weak_ptr<Dispatcher>> Dispatcher::_global
 
 void Dispatcher::installRuntimeGlobalDispatcher(jsi::Runtime& runtime, std::shared_ptr<Dispatcher> dispatcher) {
   Logger::log(TAG, "Installing global Dispatcher Holder...");
-  
+
   // Store a weak reference in global cache
   _globalCache[&runtime] = std::weak_ptr(dispatcher);
 
@@ -31,7 +31,7 @@ std::shared_ptr<Dispatcher> Dispatcher::getRuntimeGlobalDispatcher(jsi::Runtime&
       return strongDispatcher;
     }
   }
-  
+
   jsi::Value dispatcherHolderValue = getRuntimeGlobalDispatcherHolder(runtime);
   jsi::Object dispatcherHolder = dispatcherHolderValue.getObject(runtime);
   return dispatcherHolder.getNativeState<Dispatcher>(runtime);
@@ -51,4 +51,4 @@ jsi::Value Dispatcher::getRuntimeGlobalDispatcherHolder(jsi::Runtime& runtime) {
   return runtime.global().getProperty(runtime, GLOBAL_DISPATCHER_HOLDER_NAME);
 }
 
-} // namespace margelo
+} // namespace margelo::nitro

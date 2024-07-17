@@ -9,7 +9,7 @@
 #include <jsi/jsi.h>
 #include <queue>
 
-namespace margelo {
+namespace margelo::nitro {
 
 using namespace facebook;
 
@@ -24,7 +24,7 @@ public:
    Gets the global Dispatcher in the given Runtime, or throws an error if not found.
   */
   static std::shared_ptr<Dispatcher> getRuntimeGlobalDispatcher(jsi::Runtime& runtime);
-  
+
 private:
   static jsi::Value getRuntimeGlobalDispatcherHolder(jsi::Runtime& runtime);
 
@@ -70,7 +70,7 @@ public:
     // 3. Return an open future that gets resolved later by the dispatcher Thread
     return future;
   }
-  
+
 private:
   static std::unordered_map<jsi::Runtime*, std::weak_ptr<Dispatcher>> _globalCache;
 
@@ -78,4 +78,4 @@ private:
   static constexpr auto TAG = "Dispatcher";
 };
 
-} // namespace margelo
+} // namespace margelo::nitro

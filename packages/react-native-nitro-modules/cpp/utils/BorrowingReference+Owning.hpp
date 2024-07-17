@@ -9,7 +9,7 @@
 
 #include "OwningReference.hpp"
 
-namespace margelo {
+namespace margelo::nitro {
 
 template<typename T>
 BorrowingReference<T>::BorrowingReference(const OwningReference<T>& ref) {

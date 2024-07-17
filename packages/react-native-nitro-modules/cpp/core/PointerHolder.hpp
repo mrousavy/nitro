@@ -9,7 +9,7 @@
 #include <memory>
 #include <mutex>
 
-namespace margelo {
+namespace margelo::nitro {
 
 using namespace facebook;
 
@@ -90,4 +90,4 @@ private:
   static constexpr auto TAG = "PointerHolder";
 };
 
-} // namespace margelo
+} // namespace margelo::nitro

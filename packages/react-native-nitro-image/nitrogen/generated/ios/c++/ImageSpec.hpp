@@ -17,6 +17,8 @@
 
 #include "PixelFormat.hpp"
 
+using namespace margelo::nitro;
+
 /**
  * An abstract base class for `Image` (Image.nitro.ts)
  * Inherit this class to create instances of `ImageSpec` in C++.

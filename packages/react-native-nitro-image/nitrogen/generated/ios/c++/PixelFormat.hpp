@@ -17,7 +17,7 @@ enum class PixelFormat {
   yuv,
 };
 
-namespace margelo {
+namespace margelo::nitro {
 
   // C++ PixelFormat <> JS PixelFormat (union)
   template <>
@@ -33,13 +33,13 @@ namespace margelo {
     }
     static jsi::Value toJSI(jsi::Runtime& runtime, PixelFormat arg) {
       switch (arg) {
-        case PixelFormat::rgb: return JSIConverter<std::string>::toJsi(runtime, "rgb");
-        case PixelFormat::yuv: return JSIConverter<std::string>::toJsi(runtime, "yuv");
+        case PixelFormat::rgb: return JSIConverter<std::string>::toJSI(runtime, "rgb");
+        case PixelFormat::yuv: return JSIConverter<std::string>::toJSI(runtime, "yuv");
         default:
           throw std::runtime_error("Cannot convert PixelFormat to JS - invalid value: "
-                                     + std::to_string(arg) + "!");
+                                     + std::to_string(static_cast<int>(arg)) + "!");
       }
     }
   };
 
-} // namespace margelo
+} // namespace margelo::nitro

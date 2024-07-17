@@ -9,7 +9,7 @@
 #include "NitroLogger.hpp"
 #include "JSIUtils.h"
 
-namespace margelo {
+namespace margelo::nitro {
 
 static constexpr auto CACHE_PROP_NAME = "__nitroModulesFunctionCache";
 

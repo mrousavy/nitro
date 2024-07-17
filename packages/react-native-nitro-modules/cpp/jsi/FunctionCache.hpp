@@ -14,7 +14,7 @@
 #include "OwningReference.hpp"
 #include "BorrowingReference.hpp"
 
-namespace margelo {
+namespace margelo::nitro {
 
 using namespace facebook;
 
@@ -40,7 +40,7 @@ public:
    Creates a reference to a `jsi::Function` that can be stored in memory and accessed later.
    The `jsi::Function` will be managed by the `jsi::Runtime`, if the `jsi::Runtime` gets the destroyed,
    so will the `jsi::Function`.
-   
+
    To access the `jsi::Function`, try to `.lock()` the `weak_ptr`.
    If it can be locked, it is still valid, otherwise the Runtime has already been deleted.
    Do not hold the returned `shared_ptr` in memory, only use it in the calling function's scope.
@@ -51,13 +51,13 @@ public:
 private:
   jsi::Runtime* _runtime;
   std::vector<BorrowingReference<jsi::Function>> _cache;
-  
+
 private:
   static std::unordered_map<jsi::Runtime*, std::weak_ptr<FunctionCache>> _globalCache;
-  
+
 private:
   static constexpr auto TAG = "FunctionCache";
 };
 
 
-} // namespace margelo
+} // namespace margelo::nitro

@@ -4,7 +4,7 @@
 
 #include "TestHybridObject.hpp"
 
-namespace margelo {
+namespace margelo::nitro {
 
 void TestHybridObject::loadHybridMethods() {
   // this.int get & set
@@ -32,4 +32,4 @@ void TestHybridObject::loadHybridMethods() {
   registerHybridMethod("throwError", &TestHybridObject::throwError, this);
 }
 
-} // namespace margelo
+} // namespace margelo::nitro

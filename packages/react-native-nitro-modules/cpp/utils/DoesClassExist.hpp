@@ -9,7 +9,7 @@
 
 #include <type_traits>
 
-namespace margelo {
+namespace margelo::nitro {
 
 // By default, it is false (class does not exist)
 template<typename T, typename = std::void_t<>>
@@ -23,4 +23,4 @@ struct does_class_exist<T, std::void_t<decltype(sizeof(T))>> : std::true_type {}
 template<typename T>
 inline constexpr bool does_class_exist_v = does_class_exist<T>::value;
 
-} // namespace margelo
+} // namespace margelo::nitro

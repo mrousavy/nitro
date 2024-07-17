@@ -9,7 +9,7 @@
 #include "NitroLogger.hpp"
 #include "HybridContext.hpp"
 
-namespace margelo {
+namespace margelo::nitro {
 
 std::shared_ptr<SwiftTestHybridObject> SwiftTestHybridObject::getHybridPart(NitroModules::SwiftTestHybridObject swiftPart) {
   {
@@ -25,7 +25,7 @@ std::shared_ptr<SwiftTestHybridObject> SwiftTestHybridObject::getHybridPart(Nitr
       Logger::log("getHybridPart", "SwiftTestHybridObjectSwift's C++ hybrid context was invalidated by JS/GC - recreating it...");
     }
   }
-  
+
   // 2. If we don't have a valid C++ context anymore, let's create a new one.
   auto hybridObject = std::shared_ptr<SwiftTestHybridObject>(new SwiftTestHybridObject(swiftPart));
   // 3. Wrap the HybridObject in a HybridContext (weak_ptr)

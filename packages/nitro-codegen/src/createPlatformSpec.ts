@@ -257,7 +257,7 @@ enum class ${typename} {
   ${joinToIndented(cppEnumMembers, '  ')}
 };
 
-namespace margelo {
+namespace margelo::nitro {
 
   // C++ ${typename} <> JS ${typename} (enum)
   template <>
@@ -272,7 +272,7 @@ namespace margelo {
     }
   };
 
-} // namespace margelo
+} // namespace margelo::nitro
               `
       this.extraFiles.push({
         language: 'c++',
@@ -315,7 +315,7 @@ namespace margelo {
       const cppToJsiCases = enumValues
         .map(
           (v) =>
-            `case ${typename}::${v}: return JSIConverter<std::string>::toJsi(runtime, "${v}");`
+            `case ${typename}::${v}: return JSIConverter<std::string>::toJSI(runtime, "${v}");`
         )
         .join('\n')
 
@@ -331,7 +331,7 @@ enum class ${typename} {
   ${joinToIndented(cppEnumMembers, '  ')}
 };
 
-namespace margelo {
+namespace margelo::nitro {
 
   // C++ ${typename} <> JS ${typename} (union)
   template <>
@@ -349,12 +349,12 @@ namespace margelo {
         ${indent(cppToJsiCases, '        ')}
         default:
           throw std::runtime_error("Cannot convert ${typename} to JS - invalid value: "
-                                     + std::to_string(arg) + "!");
+                                     + std::to_string(static_cast<int>(arg)) + "!");
       }
     }
   };
 
-} // namespace margelo
+} // namespace margelo::nitro
               `
       this.extraFiles.push({
         language: 'c++',
@@ -421,7 +421,7 @@ public:
   ${joinToIndented(cppStructProps, '  ')}
 };
 
-namespace margelo {
+namespace margelo::nitro {
 
   // C++ ${typename} <> JS ${typename} (object)
   template <>
@@ -439,7 +439,7 @@ namespace margelo {
     }
   };
 
-} // namespace margelo
+} // namespace margelo::nitro
         `
         this.extraFiles.push({
           language: 'c++',
@@ -715,6 +715,8 @@ ${createFileMetadataString(`${cppClassName}.hpp`)}
 #endif
 
 ${cppExtraIncludes.join('\n')}
+
+using namespace margelo::nitro;
 
 /**
  * An abstract base class for \`${moduleName}\` (${module.getSourceFile().getBaseName()})

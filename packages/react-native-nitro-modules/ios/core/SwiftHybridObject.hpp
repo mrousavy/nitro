@@ -9,8 +9,8 @@
 
 #include "HybridObject.hpp"
 
-namespace margelo {
+namespace margelo::nitro {
 
 
 
-} // namespace margelo
+} // namespace margelo::nitro

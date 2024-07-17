@@ -7,7 +7,7 @@
 #include <iostream>
 #include <string>
 
-namespace margelo {
+namespace margelo::nitro {
 
 class Logger {
 private:
@@ -20,4 +20,4 @@ public:
   }
 };
 
-} // namespace margelo
+} // namespace margelo::nitro

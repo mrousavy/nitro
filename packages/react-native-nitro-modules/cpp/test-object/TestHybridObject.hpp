@@ -9,7 +9,7 @@
 #include <string>
 #include <vector>
 
-namespace margelo {
+namespace margelo::nitro {
 
 class TestHybridObject : public HybridObject {
 public:
@@ -48,7 +48,7 @@ public:
   std::shared_ptr<TestHybridObject> createNewHybridObject() {
     return std::make_shared<TestHybridObject>();
   }
-  
+
   void throwError() {
     throw std::runtime_error("This is an error!");
   }
@@ -58,18 +58,18 @@ public:
       return 0;
     if (count == 1)
       return 1;
-    
+
     return calculateFibonacci(count - 1) + calculateFibonacci(count - 2);
   }
 
   std::future<uint64_t> calculateFibonacciAsync(int count) {
     return std::async(std::launch::async, [count, this]() { return this->calculateFibonacci(count); });
   }
-  
+
   void syncVoidFunc() {
     // this function does nothing
   }
-  
+
   std::future<void> asyncVoidFunc() {
     return std::async(std::launch::async, []() {
       // this function does nothing
@@ -84,4 +84,4 @@ private:
   void loadHybridMethods() override;
 };
 
-} // namespace margelo
+} // namespace margelo::nitro

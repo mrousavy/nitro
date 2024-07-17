@@ -7,7 +7,7 @@
 
 #pragma once
 
-namespace margelo {
+namespace margelo::nitro {
 
 class RegisterNativeNitroModules {
 public:
@@ -18,4 +18,4 @@ public:
   static void registerNativeNitroModules();
 };
 
-} // namespace margelo
+} // namespace margelo::nitro

@@ -9,7 +9,7 @@
 
 #include <cstddef>
 
-namespace margelo {
+namespace margelo::nitro {
 
 // forward-declaration to avoid duplicate symbols
 template<typename T>
@@ -23,10 +23,10 @@ template<typename T>
 class BorrowingReference {
 private:
   explicit BorrowingReference(const OwningReference<T>& ref);
-  
+
 public:
   BorrowingReference(): _value(nullptr), _isDeleted(nullptr), _strongRefCount(nullptr), _weakRefCount(nullptr) { }
-  
+
   BorrowingReference(const BorrowingReference& ref):
     _value(ref._value),
     _isDeleted(ref._isDeleted),
@@ -46,16 +46,16 @@ public:
       ref._strongRefCount = nullptr;
       ref._weakRefCount = nullptr;
   }
-  
+
   BorrowingReference& operator=(const BorrowingReference& ref) {
     if (this == &ref) return *this;
-    
+
     if (_weakRefCount != nullptr) {
       // destroy previous pointer
       (*_weakRefCount)--;
       maybeDestroy();
     }
-    
+
     _value = ref._value;
     _isDeleted = ref._isDeleted;
     _strongRefCount = ref._strongRefCount;
@@ -63,7 +63,7 @@ public:
     if (_weakRefCount != nullptr) {
       (*_weakRefCount)++;
     }
-    
+
     return *this;
   }
 
@@ -72,19 +72,19 @@ public:
       // we are just a dangling nullptr.
       return;
     }
-    
+
     (*_weakRefCount)--;
     maybeDestroy();
   }
-  
+
   /**
    Try to lock the borrowing reference to an owning reference, or `nullptr` if it has already been deleted.
    */
   OwningReference<T> lock();
-  
+
 public:
   friend class OwningReference<T>;
-  
+
 private:
   void maybeDestroy() {
     if (*_strongRefCount == 0 && *_weakRefCount == 0) {
@@ -97,7 +97,7 @@ private:
       delete _weakRefCount;
     }
   }
-  
+
 private:
   T* _value;
   bool* _isDeleted;
@@ -105,4 +105,4 @@ private:
   size_t* _weakRefCount;
 };
 
-} // namespace margelo
+} // namespace margelo::nitro

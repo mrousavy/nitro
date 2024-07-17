@@ -9,7 +9,7 @@
 
 #include <jsi/jsi.h>
 
-namespace margelo {
+namespace margelo::nitro {
 
 using namespace facebook;
 
