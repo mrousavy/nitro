@@ -12,7 +12,11 @@ export function getBaseDirectory(): string {
 }
 
 export function prettifyDirectory(directory: string): string {
-  const relativePath = path.relative(getBaseDirectory(), directory)
+  let relativePath = path.relative(getBaseDirectory(), directory)
+  if (!relativePath.startsWith('.')) {
+    // Make sure all relative paths start with "./something", not just "something"
+    relativePath = `./${relativePath}`
+  }
 
   const home = os.homedir()
   const homeShorthand = os.platform() === 'win32' ? '$HOME' : '~'
@@ -21,15 +25,18 @@ export function prettifyDirectory(directory: string): string {
     : directory
 
   if (relativePath.length < 1) {
+    // If relativePath is ".", we don't want to return it
     return prettifiedHomeShorthand
-  }
-  if (prettifiedHomeShorthand.length < 1) {
-    return relativePath
   }
 
-  if (prettifiedHomeShorthand.length < relativePath.length) {
-    return prettifiedHomeShorthand
-  } else {
+  if (
+    relativePath.length > 0 &&
+    relativePath.length < prettifiedHomeShorthand.length
+  ) {
+    // If relativePath is shroter than the ~/... home path, we use the relative one.
     return relativePath
+  } else {
+    // ..otherwise just use the ~/... home relative path.
+    return prettifiedHomeShorthand
   }
 }

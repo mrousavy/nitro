@@ -132,4 +132,4 @@ const end = performance.now()
 console.log(
   `🎉  Generated ${generatedSpecs}/${targetSpecs} HybridObject${generatedSpecs === 1 ? '' : 's'} in ${(end - start).toFixed(0)}ms!`
 )
-console.log('💡  Your code is in ./nitrogen/generated')
+console.log(`💡  Your code is in ${prettifyDirectory(outFolder)}`)
