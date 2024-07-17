@@ -262,11 +262,11 @@ namespace margelo::nitro {
   // C++ ${typename} <> JS ${typename} (enum)
   template <>
   struct JSIConverter<${typename}> {
-    static ${typename} fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+    static inline ${typename} fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       int enumValue = JSIConverter<int>::fromJSI(runtime, arg);
       return static_cast<${typename}>(enumValue);
     }
-    static jsi::Value toJSI(jsi::Runtime& runtime, ${typename} arg) {
+    static inline jsi::Value toJSI(jsi::Runtime& runtime, ${typename} arg) {
       int enumValue = static_cast<int>(arg);
       return JSIConverter<int>::toJSI(enumValue);
     }
@@ -334,18 +334,18 @@ namespace margelo::nitro {
   // C++ ${typename} <> JS ${typename} (union)
   template <>
   struct JSIConverter<${typename}> {
-    static ${typename} fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+    static inline ${typename} fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       std::string unionValue = JSIConverter<std::string>::fromJSI(runtime, arg);
       switch (hashString(unionValue.c_str(), unionValue.size())) {
         ${indent(cppFromJsiHashCases, '        ')}
-        default:
+        default: [[unlikely]]
           throw std::runtime_error("Cannot convert " + unionValue + " to ${typename} - invalid value!");
       }
     }
-    static jsi::Value toJSI(jsi::Runtime& runtime, ${typename} arg) {
+    static inline jsi::Value toJSI(jsi::Runtime& runtime, ${typename} arg) {
       switch (arg) {
         ${indent(cppToJsiCases, '        ')}
-        default:
+        default: [[unlikely]]
           throw std::runtime_error("Cannot convert ${typename} to JS - invalid value: "
                                      + std::to_string(static_cast<int>(arg)) + "!");
       }
@@ -424,13 +424,13 @@ namespace margelo::nitro {
   // C++ ${typename} <> JS ${typename} (object)
   template <>
   struct JSIConverter<${typename}> {
-    static ${typename} fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+    static inline ${typename} fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       jsi::Object obj = arg.asObject(runtime);
       return ${typename} {
         ${joinToIndented(cppFromJsiProps, '        ')}
       };
     }
-    static jsi::Value toJSI(jsi::Runtime& runtime, const ${typename}& arg) {
+    static inline jsi::Value toJSI(jsi::Runtime& runtime, const ${typename}& arg) {
       jsi::Object obj(runtime);
       ${joinToIndented(cppToJsiCalls, '      ')}
       return obj;

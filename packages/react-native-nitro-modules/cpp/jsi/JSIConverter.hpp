@@ -35,11 +35,11 @@ using namespace facebook;
 
 // Unknown type (error)
 template <typename ArgType, typename Enable = void> struct JSIConverter {
-  static ArgType fromJSI(jsi::Runtime&, const jsi::Value&) {
+  static inline ArgType fromJSI(jsi::Runtime&, const jsi::Value&) {
     static_assert(always_false<ArgType>::value, "This type is not supported by the JSIConverter!");
     return ArgType();
   }
-  static jsi::Value toJSI(jsi::Runtime&, ArgType) {
+  static inline jsi::Value toJSI(jsi::Runtime&, ArgType) {
     static_assert(always_false<ArgType>::value, "This type is not supported by the JSIConverter!");
     return jsi::Value::undefined();
   }
@@ -50,84 +50,84 @@ private:
 
 // int <> number
 template <> struct JSIConverter<int> {
-  static int fromJSI(jsi::Runtime&, const jsi::Value& arg) {
+  static inline int fromJSI(jsi::Runtime&, const jsi::Value& arg) {
     return static_cast<int>(arg.asNumber());
   }
-  static jsi::Value toJSI(jsi::Runtime&, int arg) {
+  static inline jsi::Value toJSI(jsi::Runtime&, int arg) {
     return jsi::Value(arg);
   }
 };
 
 // double <> number
 template <> struct JSIConverter<double> {
-  static double fromJSI(jsi::Runtime&, const jsi::Value& arg) {
+  static inline double fromJSI(jsi::Runtime&, const jsi::Value& arg) {
     return arg.asNumber();
   }
-  static jsi::Value toJSI(jsi::Runtime&, double arg) {
+  static inline jsi::Value toJSI(jsi::Runtime&, double arg) {
     return jsi::Value(arg);
   }
 };
 
 // float <> number
 template <> struct JSIConverter<float> {
-  static float fromJSI(jsi::Runtime&, const jsi::Value& arg) {
+  static inline float fromJSI(jsi::Runtime&, const jsi::Value& arg) {
     return static_cast<float>(arg.asNumber());
   }
-  static jsi::Value toJSI(jsi::Runtime&, float arg) {
+  static inline jsi::Value toJSI(jsi::Runtime&, float arg) {
     return jsi::Value(static_cast<double>(arg));
   }
 };
 
 // int64_t <> BigInt
 template <> struct JSIConverter<int64_t> {
-  static double fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+  static inline double fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
     return arg.asBigInt(runtime).asInt64(runtime);
   }
-  static jsi::Value toJSI(jsi::Runtime& runtime, int64_t arg) {
+  static inline jsi::Value toJSI(jsi::Runtime& runtime, int64_t arg) {
     return jsi::BigInt::fromInt64(runtime, arg);
   }
 };
 
 // uint64_t <> BigInt
 template <> struct JSIConverter<uint64_t> {
-  static double fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+  static inline double fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
     return arg.asBigInt(runtime).asUint64(runtime);
   }
-  static jsi::Value toJSI(jsi::Runtime& runtime, uint64_t arg) {
+  static inline jsi::Value toJSI(jsi::Runtime& runtime, uint64_t arg) {
     return jsi::BigInt::fromUint64(runtime, arg);
   }
 };
 
 // bool <> boolean
 template <> struct JSIConverter<bool> {
-  static bool fromJSI(jsi::Runtime&, const jsi::Value& arg) {
+  static inline bool fromJSI(jsi::Runtime&, const jsi::Value& arg) {
     return arg.asBool();
   }
-  static jsi::Value toJSI(jsi::Runtime&, bool arg) {
+  static inline jsi::Value toJSI(jsi::Runtime&, bool arg) {
     return jsi::Value(arg);
   }
 };
 
 // std::string <> string
 template <> struct JSIConverter<std::string> {
-  static std::string fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+  static inline std::string fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
     return arg.asString(runtime).utf8(runtime);
   }
-  static jsi::Value toJSI(jsi::Runtime& runtime, const std::string& arg) {
+  static inline jsi::Value toJSI(jsi::Runtime& runtime, const std::string& arg) {
     return jsi::String::createFromUtf8(runtime, arg);
   }
 };
 
 // std::optional<T> <> T | undefined
 template <typename TInner> struct JSIConverter<std::optional<TInner>> {
-  static std::optional<TInner> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+  static inline std::optional<TInner> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
     if (arg.isUndefined() || arg.isNull()) {
       return std::nullopt;
     } else {
       return JSIConverter<TInner>::fromJSI(runtime, std::move(arg));
     }
   }
-  static jsi::Value toJSI(jsi::Runtime& runtime, const std::optional<TInner>& arg) {
+  static inline jsi::Value toJSI(jsi::Runtime& runtime, const std::optional<TInner>& arg) {
     if (arg == std::nullopt) {
       return jsi::Value::undefined();
     } else {
@@ -138,10 +138,10 @@ template <typename TInner> struct JSIConverter<std::optional<TInner>> {
 
 // std::future<T> <> Promise<T>
 template <typename TResult> struct JSIConverter<std::future<TResult>> {
-  static std::future<TResult> fromJSI(jsi::Runtime&, const jsi::Value&) {
+  static inline std::future<TResult> fromJSI(jsi::Runtime&, const jsi::Value&) {
     throw std::runtime_error("Promise cannot be converted to a native type - it needs to be awaited first!");
   }
-  static jsi::Value toJSI(jsi::Runtime& runtime, std::future<TResult>&& arg) {
+  static inline jsi::Value toJSI(jsi::Runtime& runtime, std::future<TResult>&& arg) {
     auto sharedFuture = std::make_shared<std::future<TResult>>(std::move(arg));
     auto dispatcher = Dispatcher::getRuntimeGlobalDispatcher(runtime);
 
@@ -192,7 +192,7 @@ template <typename TResult> struct JSIConverter<std::future<TResult>> {
 
 // [](Args...) -> T {} <> (Args...) => T
 template <typename ReturnType, typename... Args> struct JSIConverter<std::function<ReturnType(Args...)>> {
-  static std::function<ReturnType(Args...)> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+  static inline std::function<ReturnType(Args...)> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
     // Make function global - it'll be managed by the Runtime's memory, and we only have a weak_ref to it.
     auto cache = JSICache<jsi::Function>::getOrCreateCache(runtime).lock();
     jsi::Function function = arg.asObject(runtime).asFunction(runtime);
@@ -222,7 +222,7 @@ template <typename ReturnType, typename... Args> struct JSIConverter<std::functi
   }
 
   template <size_t... Is>
-  static jsi::Value callHybridFunction(const std::function<ReturnType(Args...)>& function, jsi::Runtime& runtime, const jsi::Value* args,
+  static inline jsi::Value callHybridFunction(const std::function<ReturnType(Args...)>& function, jsi::Runtime& runtime, const jsi::Value* args,
                                        std::index_sequence<Is...>) {
     if constexpr (std::is_same_v<ReturnType, void>) {
       // it is a void function (will return undefined in JS)
@@ -234,7 +234,7 @@ template <typename ReturnType, typename... Args> struct JSIConverter<std::functi
       return JSIConverter<ReturnType>::toJSI(runtime, result);
     }
   }
-  static jsi::Value toJSI(jsi::Runtime& runtime, const std::function<ReturnType(Args...)>& function) {
+  static inline jsi::Value toJSI(jsi::Runtime& runtime, const std::function<ReturnType(Args...)>& function) {
     jsi::HostFunctionType jsFunction = [function = std::move(function)](jsi::Runtime& runtime, const jsi::Value& thisValue,
                                                                         const jsi::Value* args, size_t count) -> jsi::Value {
       if (count != sizeof...(Args)) {
@@ -250,7 +250,7 @@ template <typename ReturnType, typename... Args> struct JSIConverter<std::functi
 
 // std::vector<T> <> T[]
 template <typename ElementType> struct JSIConverter<std::vector<ElementType>> {
-  static std::vector<ElementType> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+  static inline std::vector<ElementType> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
     jsi::Array array = arg.asObject(runtime).asArray(runtime);
     size_t length = array.size(runtime);
 
@@ -262,7 +262,7 @@ template <typename ElementType> struct JSIConverter<std::vector<ElementType>> {
     }
     return vector;
   }
-  static jsi::Value toJSI(jsi::Runtime& runtime, const std::vector<ElementType>& vector) {
+  static inline jsi::Value toJSI(jsi::Runtime& runtime, const std::vector<ElementType>& vector) {
     jsi::Array array(runtime, vector.size());
     for (size_t i = 0; i < vector.size(); i++) {
       jsi::Value value = JSIConverter<ElementType>::toJSI(runtime, vector[i]);
@@ -274,7 +274,7 @@ template <typename ElementType> struct JSIConverter<std::vector<ElementType>> {
 
 // std::unordered_map<std::string, T> <> Record<string, T>
 template <typename ValueType> struct JSIConverter<std::unordered_map<std::string, ValueType>> {
-  static std::unordered_map<std::string, ValueType> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+  static inline std::unordered_map<std::string, ValueType> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
     jsi::Object object = arg.asObject(runtime);
     jsi::Array propertyNames = object.getPropertyNames(runtime);
     size_t length = propertyNames.size(runtime);
@@ -288,7 +288,7 @@ template <typename ValueType> struct JSIConverter<std::unordered_map<std::string
     }
     return map;
   }
-  static jsi::Value toJSI(jsi::Runtime& runtime, const std::unordered_map<std::string, ValueType>& map) {
+  static inline jsi::Value toJSI(jsi::Runtime& runtime, const std::unordered_map<std::string, ValueType>& map) {
     jsi::Object object(runtime);
     for (const auto& pair : map) {
       jsi::Value value = JSIConverter<ValueType>::toJSI(runtime, pair.second);
@@ -301,7 +301,7 @@ template <typename ValueType> struct JSIConverter<std::unordered_map<std::string
 
 // MutableBuffer <> ArrayBuffer
 template <> struct JSIConverter<std::shared_ptr<ArrayBuffer>> {
-  static std::shared_ptr<ArrayBuffer> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+  static inline std::shared_ptr<ArrayBuffer> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
     jsi::Object object = arg.asObject(runtime);
     if (!object.isArrayBuffer(runtime)) [[unlikely]] {
       throw std::runtime_error("Object " + arg.toString(runtime).utf8(runtime) + " is not an ArrayBuffer!");
@@ -309,7 +309,7 @@ template <> struct JSIConverter<std::shared_ptr<ArrayBuffer>> {
     jsi::ArrayBuffer arrayBuffer = object.getArrayBuffer(runtime);
     return std::make_shared<ArrayBuffer>(arrayBuffer.data(runtime), arrayBuffer.size(runtime));
   }
-  static jsi::Value toJSI(jsi::Runtime& runtime, std::shared_ptr<ArrayBuffer> buffer) {
+  static inline jsi::Value toJSI(jsi::Runtime& runtime, std::shared_ptr<ArrayBuffer> buffer) {
     return jsi::ArrayBuffer(runtime, buffer);
   }
 };
@@ -321,7 +321,7 @@ template <typename T> struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_h
   using TPointee = typename T::element_type;
 
 #if DEBUG
-  inline static std::string getFriendlyTypename() {
+  static inline inline std::string getFriendlyTypename() {
     std::string name = std::string(typeid(TPointee).name());
 #if __has_include(<cxxabi.h>)
     int status = 0;
@@ -334,12 +334,12 @@ template <typename T> struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_h
     return name;
   }
 
-  inline static std::string invalidTypeErrorMessage(const std::string& typeDescription, const std::string& reason) {
+  static inline inline std::string invalidTypeErrorMessage(const std::string& typeDescription, const std::string& reason) {
     return "Cannot convert \"" + typeDescription + "\" to HostObject<" + getFriendlyTypename() + ">! " + reason;
   }
 #endif
 
-  static T fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+  static inline T fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
 #if DEBUG
     if (arg.isUndefined()) {
       [[unlikely]];
@@ -361,7 +361,7 @@ template <typename T> struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_h
 #endif
     return object.asHostObject<TPointee>(runtime);
   }
-  static jsi::Value toJSI(jsi::Runtime& runtime, const T& arg) {
+  static inline jsi::Value toJSI(jsi::Runtime& runtime, const T& arg) {
 #if DEBUG
     if (arg == nullptr) {
       [[unlikely]];
@@ -379,7 +379,7 @@ template <typename T> struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_n
   using TPointee = typename T::element_type;
 
 #if DEBUG
-  inline static std::string getFriendlyTypename() {
+  static inline inline std::string getFriendlyTypename() {
     std::string name = std::string(typeid(TPointee).name());
 #if __has_include(<cxxabi.h>)
     int status = 0;
@@ -392,12 +392,12 @@ template <typename T> struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_n
     return name;
   }
 
-  inline static std::string invalidTypeErrorMessage(const std::string& typeDescription, const std::string& reason) {
+  static inline inline std::string invalidTypeErrorMessage(const std::string& typeDescription, const std::string& reason) {
     return "Cannot convert \"" + typeDescription + "\" to NativeState<" + getFriendlyTypename() + ">! " + reason;
   }
 #endif
 
-  static T fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+  static inline T fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
 #if DEBUG
     if (arg.isUndefined()) {
       [[unlikely]];
@@ -419,7 +419,7 @@ template <typename T> struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_n
 #endif
     return object.getNativeState<TPointee>(runtime);
   }
-  static jsi::Value toJSI(jsi::Runtime& runtime, const T& arg) {
+  static inline jsi::Value toJSI(jsi::Runtime& runtime, const T& arg) {
 #if DEBUG
     if (arg == nullptr) {
       [[unlikely]];

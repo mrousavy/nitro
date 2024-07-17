@@ -67,13 +67,13 @@ public:
   template <typename Derived> std::shared_ptr<Derived> shared() {
     return std::static_pointer_cast<Derived>(shared_from_this());
   }
-  
+
 protected:
 
   /**
    * Loads all native methods of this `HybridObject` to be exposed to JavaScript.
    * The base implementation registers a `toString()` method and `name` property.
-   * 
+   *
    * Example:
    *
    * ```cpp
@@ -93,12 +93,12 @@ protected:
    * Get a string representation of this HostObject, useful for logging or debugging.
    */
   virtual std::string toString();
-  
+
   /**
    * Get the HybridObject's name
    */
   std::string getName();
-  
+
   /**
    * Compare this HybridObject for reference equality to the other HybridObject.
    *
@@ -137,8 +137,7 @@ private:
   }
 
   template <typename Derived, typename ReturnType, typename... Args>
-  static jsi::HostFunctionType createHybridMethod(std::string name, ReturnType (Derived::*method)(Args...), Derived* derivedInstance) {
-
+  static inline jsi::HostFunctionType createHybridMethod(std::string name, ReturnType (Derived::*method)(Args...), Derived* derivedInstance) {
     return [name, derivedInstance, method](jsi::Runtime& runtime, const jsi::Value& thisVal, const jsi::Value* args, size_t count) -> jsi::Value {
       if (count != sizeof...(Args)) {
         // invalid amount of arguments passed!
@@ -159,9 +158,9 @@ private:
 
 protected:
   template <typename Derived, typename ReturnType, typename... Args>
-  void registerHybridMethod(std::string name, ReturnType (Derived::*method)(Args...), Derived* derivedInstance, bool override = false) {
     if (!override && (_getters.count(name) > 0 || _setters.count(name) > 0)) {
       [[unlikely]];
+  inline void registerHybridMethod(std::string name, ReturnType (Derived::*method)(Args...), Derived* derivedInstance) {
       throw std::runtime_error("Cannot add Hybrid Method \"" + name + "\" - a property with that name already exists!");
     }
     if (!override && (_methods.count(name) > 0)) {
@@ -172,9 +171,9 @@ protected:
   }
 
   template <typename Derived, typename ReturnType>
-  void registerHybridGetter(std::string name, ReturnType (Derived::*method)(), Derived* derivedInstance) {
     if (_getters.count(name) > 0) {
       [[unlikely]];
+  inline void registerHybridGetter(std::string name, ReturnType (Derived::*method)(), Derived* derivedInstance) {
       throw std::runtime_error("Cannot add Hybrid Property Getter \"" + name + "\" - a getter with that name already exists!");
     }
     if (_methods.count(name) > 0) {
@@ -186,9 +185,9 @@ protected:
   }
 
   template <typename Derived, typename ValueType>
-  void registerHybridSetter(std::string name, void (Derived::*method)(ValueType), Derived* derivedInstance) {
     if (_setters.count(name) > 0) {
       [[unlikely]];
+  inline void registerHybridSetter(std::string name, void (Derived::*method)(ValueType), Derived* derivedInstance) {
       throw std::runtime_error("Cannot add Hybrid Property Setter \"" + name + "\" - a setter with that name already exists!");
     }
     if (_methods.count(name) > 0) {
