@@ -7,10 +7,11 @@
 
 #pragma once
 
-#include "HybridObject.hpp"
 #include <memory>
 
 namespace margelo {
+
+class HybridObject;
 
 /**
  * Represents contextual state for a `HybridObject`.

@@ -8,6 +8,7 @@
 #pragma once
 
 #include "HybridObject.hpp"
+#include "HybridContext.hpp"
 
 #if __has_include("NitroModules-Swift.h")
 #include "NitroModules-Swift.h"
