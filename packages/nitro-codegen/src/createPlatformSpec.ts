@@ -315,7 +315,7 @@ namespace margelo {
       const cppToJsiCases = enumValues
         .map(
           (v) =>
-            `case ${typename}::${v}: return JSIConverter<std::string>(runtime, "${v}");`
+            `case ${typename}::${v}: return JSIConverter<std::string>::toJsi(runtime, "${v}");`
         )
         .join('\n')
 

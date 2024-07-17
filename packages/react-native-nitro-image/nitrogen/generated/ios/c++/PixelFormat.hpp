@@ -33,8 +33,8 @@ namespace margelo {
     }
     static jsi::Value toJSI(jsi::Runtime& runtime, PixelFormat arg) {
       switch (arg) {
-        case PixelFormat::rgb: return JSIConverter<std::string>(runtime, "rgb");
-        case PixelFormat::yuv: return JSIConverter<std::string>(runtime, "yuv");
+        case PixelFormat::rgb: return JSIConverter<std::string>::toJsi(runtime, "rgb");
+        case PixelFormat::yuv: return JSIConverter<std::string>::toJsi(runtime, "yuv");
         default:
           throw std::runtime_error("Cannot convert PixelFormat to JS - invalid value: "
                                      + std::to_string(arg) + "!");

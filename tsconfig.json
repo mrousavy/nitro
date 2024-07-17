@@ -4,7 +4,7 @@
       "path": "packages/react-native-nitro-modules"
     },
     {
-      "path": "example"
-    }
+      "path": "packages/react-native-nitro-image"
+    },
   ]
 }
