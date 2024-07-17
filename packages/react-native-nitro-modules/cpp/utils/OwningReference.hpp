@@ -78,7 +78,6 @@ private:
   }
 
 public:
-
   ~OwningReference() {
     if (_strongRefCount == nullptr) {
       // we are just a dangling nullptr.
@@ -90,10 +89,34 @@ public:
     maybeDestroy();
   }
   
+  /**
+   Get whether the `OwningReference<T>` is still pointing to a valid value, or not.
+   */
   inline bool hasValue() const {
     return _value != nullptr && !(*_isDeleted);
   }
+  
+  /**
+   Get a weak ("borrowing") reference to this owning reference
+   */
+  BorrowingReference<T> weak() {
+    return BorrowingReference(*this);
+  }
 
+  /**
+   Delete and destroy the value this OwningReference is pointing to.
+   This can even be called if there are still multiple strong references to the value.
+   */
+  void destroy() {
+    if (*_isDeleted) {
+      // it has already been destroyed.
+      return;
+    }
+    delete _value;
+    *_isDeleted = true;
+  }
+
+public:
   explicit inline operator bool() const {
     return hasValue();
   }
@@ -117,25 +140,13 @@ public:
   inline bool operator!=(T* other) const {
     return !(this == other);
   }
-
-  /**
-   Get a weak ("borrowing") reference to this owning reference
-   */
-  BorrowingReference<T> weak() {
-    return BorrowingReference(*this);
+  
+  inline bool operator==(const OwningReference<T>& other) const {
+    return _value == other._value;
   }
-
-  /**
-   Delete and destroy the value this OwningReference is pointing to.
-   This can even be called if there are still multiple strong references to the value.
-   */
-  void destroy() {
-    if (*_isDeleted) {
-      // it has already been destroyed.
-      return;
-    }
-    delete _value;
-    *_isDeleted = true;
+  
+  inline bool operator!=(const OwningReference<T>& other) const {
+    return !(this == other);
   }
 
 private:
