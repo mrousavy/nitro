@@ -46,47 +46,24 @@ void HybridObject::loadHybridMethods() {
 }
 
 std::vector<jsi::PropNameID> HybridObject::getPropertyNames(facebook::jsi::Runtime& runtime) {
-  auto start = std::chrono::steady_clock::now();
-  
   std::unique_lock lock(*_mutex);
   ensureInitialized(runtime);
-  
-  auto propNameCache = _propNameCache[&runtime];
-  
 
-  if (propNameCache.empty()) {
-    size_t totalSize = _methods.size() + _getters.size() + _setters.size() + 1;
-    propNameCache.reserve(totalSize);
+  std::vector<jsi::PropNameID> result;
+  size_t totalSize = _methods.size() + _getters.size() + _setters.size() + 1;
+  result.reserve(totalSize);
 
-    for (const auto& item : _methods) {
-      auto propName = jsi::PropNameID::forUtf8(runtime, item.first);
-      auto reference = OwningReference<jsi::PropNameID>(new jsi::PropNameID(std::move(propName)));
-      propNameCache.push_back(reference);
-    }
-    for (const auto& item : _getters) {
-      auto propName = jsi::PropNameID::forUtf8(runtime, item.first);
-      auto reference = OwningReference<jsi::PropNameID>(new jsi::PropNameID(std::move(propName)));
-      propNameCache.push_back(reference);
-    }
-    for (const auto& item : _setters) {
-      auto propName = jsi::PropNameID::forUtf8(runtime, item.first);
-      auto reference = OwningReference<jsi::PropNameID>(new jsi::PropNameID(std::move(propName)));
-      propNameCache.push_back(reference);
-    }
+  for (const auto& item : _methods) {
+    result.push_back(jsi::PropNameID::forUtf8(runtime, item.first));
   }
-  
-  // Get props from cache
-  std::vector<jsi::PropNameID> props;
-  props.reserve(propNameCache.size());
-  for (auto& reference : propNameCache) {
-    props.push_back(jsi::PropNameID(runtime, *reference));
+  for (const auto& item : _getters) {
+    result.push_back(jsi::PropNameID::forUtf8(runtime, item.first));
   }
-  
-  auto end = std::chrono::steady_clock::now();
-  auto elapsed = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
-  Logger::log(TAG, "getPropertyNames took " + std::to_string(elapsed) + "ms for " + std::to_string(props.size()) + " props.");
-  
-  return props;
+  for (const auto& item : _setters) {
+    result.push_back(jsi::PropNameID::forUtf8(runtime, item.first));
+  }
+  result.push_back(jsi::PropNameID::forUtf8(runtime, "toString"));
+  return result;
 }
 
 jsi::Value HybridObject::get(facebook::jsi::Runtime& runtime, const facebook::jsi::PropNameID& propName) {
