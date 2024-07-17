@@ -14,6 +14,7 @@
     "start": "tsc && node lib/index.js",
     "postinstall": "tsc || exit 0;",
     "typecheck": "tsc --noEmit",
+    "nitrogen": "yarn run -T nitrogen",
     "lint": "eslint \"**/*.{js,ts,tsx}\" --fix"
   },
   "repository": {
