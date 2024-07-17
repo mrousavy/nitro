@@ -155,4 +155,9 @@ protected:
   }
 };
 
+
+struct JSContext {
+  std::weak_ptr<HybridObject> cppPart;
+};
+
 } // namespace margelo

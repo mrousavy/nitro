@@ -24,6 +24,12 @@ public class SwiftTestHybridObjectSwift {
     return 4.0
   }
   
+  private var _jsContext: margelo.JSContext? = nil
+  public var jsContext: margelo.JSContext? {
+    get { return _jsContext }
+    set { _jsContext = newValue }
+  }
+  
   public init() {
     print("Initialized a new SwiftTestHybridObjectSwift!")
   }

@@ -11,9 +11,4 @@
 
 namespace margelo {
 
-template <typename T>
-struct JSContext {
-  std::weak_ptr<T> cppPart;
-};
-
 }
