@@ -7,10 +7,6 @@
 
 import Foundation
 
-public enum SomeError: Error {
-  case error
-}
-
 // Implemented by the user
 public class SwiftTestHybridObject: SwiftTestHybridObjectSpec {
   public var hybridContext = margelo.HybridContext()
@@ -20,7 +16,7 @@ public class SwiftTestHybridObject: SwiftTestHybridObjectSpec {
   }
   
   public func throwError() throws -> Int {
-    throw SomeError.error
+    throw RuntimeError.error(withMessage: "This is a Swift error!")
   }
   
   private var _int: Int = 5
@@ -38,6 +34,7 @@ public class SwiftTestHybridObject: SwiftTestHybridObjectSpec {
   }
 }
 
+// TODO: Avoid generating associated enums for each type once Swift fixes generic enums!
 public enum ValueOrError1 {
   case value(Int)
   case error(String)
@@ -48,7 +45,9 @@ public class SwiftTestHybridObjectSpecHelpers {
     do {
       let result = try instance.throwError()
       return .value(result)
-    } catch (let error) {
+    } catch RuntimeError.error(let message) {
+      return .error(message)
+    } catch {
       // TODO: Swift bug - `localizedDescription` is memory owned by `Error` - this will freeze the app. So we create a copy using string interoplation.
       let message = "\(error.localizedDescription)"
       return .error(message)
