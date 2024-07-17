@@ -30,7 +30,6 @@
     "typecheck": "tsc --noEmit",
     "clean": "del-cli android/build node_modules/**/android/build lib",
     "lint": "eslint \"**/*.{js,ts,tsx}\" --fix",
-    "nitrogen": "yarn run -T nitrogen",
     "release": "bob build && release-it"
   },
   "keywords": [
