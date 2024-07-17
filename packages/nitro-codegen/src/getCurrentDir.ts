@@ -13,7 +13,7 @@ export function getBaseDirectory(): string {
 
 export function prettifyDirectory(directory: string): string {
   let relativePath = path.relative(getBaseDirectory(), directory)
-  if (!relativePath.startsWith('.')) {
+  if (!relativePath.startsWith('.') && relativePath.length > 0) {
     // Make sure all relative paths start with "./something", not just "something"
     relativePath = `./${relativePath}`
   }
