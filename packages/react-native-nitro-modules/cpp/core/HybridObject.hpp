@@ -102,7 +102,6 @@ private:
   std::unordered_map<std::string, jsi::HostFunctionType> _getters;
   std::unordered_map<std::string, jsi::HostFunctionType> _setters;
   std::unordered_map<jsi::Runtime*, std::unordered_map<std::string, OwningReference<jsi::Function>>> _functionCache;
-  std::unordered_map<jsi::Runtime*, std::vector<OwningReference<jsi::PropNameID>>> _propNameCache;
 
 private:
   inline void ensureInitialized(facebook::jsi::Runtime& runtime);
