@@ -26,6 +26,15 @@ static uint32_t decrementAliveInstancesAndGet(const char* name) {
   return --_aliveInstances[name];
 }
 
+static uint32_t getTotalAliveInstances() {
+  std::unique_lock lock(_instanceCounterMutex);
+  uint32_t total = 0;
+  for (const auto& iter : _aliveInstances) {
+    total += iter.second;
+  }
+  return total;
+}
+
 static int getId(const char* name) {
   std::unique_lock lock(_instanceCounterMutex);
   if (_instanceIds.find(name) == _instanceIds.end()) {
@@ -38,16 +47,18 @@ static int getId(const char* name) {
 
 HybridObject::HybridObject(const char* name) : _name(name), _mutex(std::make_unique<std::mutex>()) {
 #if LOG_MEMORY_ALLOCATIONS
-  uint32_t alive = incrementAliveInstancesAndGet(_name);
   _instanceId = getId(name);
-  Logger::log(TAG, "(MEMORY) Creating %s (#%i)... (Alive %ss: %i) ✅", _name, _instanceId, _name, alive);
+  uint32_t alive = incrementAliveInstancesAndGet(_name);
+  uint32_t totalObjects = getTotalAliveInstances();
+  Logger::log(TAG, "(MEMORY) Creating %s (#%i)... (Total %ss: %i / %i) ✅", _name, _instanceId, _name, alive, totalObjects);
 #endif
 }
 
 HybridObject::~HybridObject() {
 #if LOG_MEMORY_ALLOCATIONS
   uint32_t alive = decrementAliveInstancesAndGet(_name);
-  Logger::log(TAG, "(MEMORY) Deleting %s (#%i)... (Alive %ss: %i) ❌", _name, _instanceId, _name, alive);
+  uint32_t totalObjects = getTotalAliveInstances();
+  Logger::log(TAG, "(MEMORY) Deleting %s (#%i)... (Total %ss: %i / %i) ❌", _name, _instanceId, _name, alive, totalObjects);
 #endif
   _functionCache.clear();
 }
