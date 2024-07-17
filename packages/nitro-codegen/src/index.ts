@@ -131,7 +131,8 @@ for (const sourceFile of project.getSourceFiles()) {
 }
 
 const end = performance.now()
+const timeS = ((end - start) / 1000).toFixed(1)
 console.log(
-  `🎉  Generated ${generatedSpecs}/${targetSpecs} HybridObject${generatedSpecs === 1 ? '' : 's'} in ${(end - start).toFixed(0)}ms!`
+  `🎉  Generated ${generatedSpecs}/${targetSpecs} HybridObject${generatedSpecs === 1 ? '' : 's'} in ${timeS}s!`
 )
 console.log(`💡  Your code is in ${prettifyDirectory(outFolder)}`)
