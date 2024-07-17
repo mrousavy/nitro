@@ -6,7 +6,7 @@
   ],
   "include": [
     "src"
-  ],
+, "../packages/react-native-nitro-modules/src/specs"  ],
   "compilerOptions": {
     "composite": true,
     "noEmit": true,
