@@ -9,6 +9,7 @@ import {
   type PropertySignature,
 } from 'ts-morph'
 import { getNodeName } from './getNodeName.js'
+import { capitalizeName, indent } from './stringUtils.js'
 
 interface File {
   name: string
@@ -43,18 +44,6 @@ function createFileMetadataString(filename: string): string {
 
 function toReferenceType(type: string): `const ${typeof type}&` {
   return `const ${type}&`
-}
-
-function capitalizeName(name: string): string {
-  return name.charAt(0).toUpperCase() + name.slice(1)
-}
-
-function indent(string: string, indentation: string): string {
-  return string.replaceAll('\n', `\n${indentation}`)
-}
-
-function joinToIndented(array: string[], indentation: string = '    '): string {
-  return array.join('\n').replaceAll('\n', `\n${indentation}`)
 }
 
 function removeDuplicates<T>(array: T[], equals: (a: T, b: T) => boolean): T[] {
@@ -244,7 +233,9 @@ class TSType implements CodeNode {
           value: value,
         })
       }
-      const cppEnumMembers = enumValues.map((m) => `${m.name} = ${m.value},`)
+      const cppEnumMembers = enumValues
+        .map((m) => `${m.name} = ${m.value},`)
+        .join('\n')
 
       const cppCode = `
 ${createFileMetadataString(`${typename}.hpp`)}
@@ -254,7 +245,7 @@ ${createFileMetadataString(`${typename}.hpp`)}
 #include <NitroModules/JSIConverter.hpp>
 
 enum class ${typename} {
-  ${joinToIndented(cppEnumMembers, '  ')}
+  ${indent(cppEnumMembers, '  ')}
 };
 
 namespace margelo::nitro {
@@ -306,7 +297,7 @@ namespace margelo::nitro {
       })
       this.passByConvention = 'by-value'
       this.cppName = typename
-      const cppEnumMembers = enumValues.map((m) => `${m},`)
+      const cppEnumMembers = enumValues.map((m) => `${m},`).join('\n')
       const cppFromJsiHashCases = enumValues
         .map((v) => `case hashString("${v}"): return ${typename}::${v};`.trim())
         .join('\n')
@@ -326,7 +317,7 @@ ${createFileMetadataString(`${typename}.hpp`)}
 #include <NitroModules/JSIConverter.hpp>
 
 enum class ${typename} {
-  ${joinToIndented(cppEnumMembers, '  ')}
+  ${indent(cppEnumMembers, '  ')}
 };
 
 namespace margelo::nitro {
@@ -368,8 +359,8 @@ namespace margelo::nitro {
         .some((t) => t.getText().includes('HybridObject'))
 
       if (isHybridObject) {
-        // It is another HybridObject being referenced!
-        this.cppName = `std::shared_ptr<${typename}>`
+        // It is another HybridObject being referenced! We can use the generated *Spec
+        this.cppName = `std::shared_ptr<${typename}Spec>`
         this.passByConvention = 'by-value' // shared_ptr should be passed by value
       } else {
         // It is a simple struct being referenced.
@@ -388,17 +379,21 @@ namespace margelo::nitro {
           cppProperties.push(refType)
           this.referencedTypes.push(refType)
         }
-        const cppStructProps = cppProperties.map(
-          (p) => `${p.getCode()} ${p.name};`
-        )
-        const cppFromJsiProps = cppProperties.map(
-          (p) =>
-            `.${p.name} = JSIConverter<${p.getCode()}>::fromJSI(runtime, obj.getProperty(runtime, "${p.name}")),`
-        )
-        const cppToJsiCalls = cppProperties.map(
-          (p) =>
-            `obj.setProperty(runtime, "${p.name}", JSIConverter<${p.getCode()}>::toJSI(runtime, arg.${p.name}));`
-        )
+        const cppStructProps = cppProperties
+          .map((p) => `${p.getCode()} ${p.name};`)
+          .join('\n')
+        const cppFromJsiProps = cppProperties
+          .map(
+            (p) =>
+              `.${p.name} = JSIConverter<${p.getCode()}>::fromJSI(runtime, obj.getProperty(runtime, "${p.name}")),`
+          )
+          .join('\n')
+        const cppToJsiCalls = cppProperties
+          .map(
+            (p) =>
+              `obj.setProperty(runtime, "${p.name}", JSIConverter<${p.getCode()}>::toJSI(runtime, arg.${p.name}));`
+          )
+          .join('\n')
 
         const extraFiles = this.referencedTypes.flatMap((r) =>
           r.getDefinitionFiles()
@@ -416,7 +411,7 @@ ${cppExtraIncludes.join('\n')}
 
 struct ${typename} {
 public:
-  ${joinToIndented(cppStructProps, '  ')}
+  ${indent(cppStructProps, '  ')}
 };
 
 namespace margelo::nitro {
@@ -427,12 +422,12 @@ namespace margelo::nitro {
     static inline ${typename} fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       jsi::Object obj = arg.asObject(runtime);
       return ${typename} {
-        ${joinToIndented(cppFromJsiProps, '        ')}
+        ${indent(cppFromJsiProps, '        ')}
       };
     }
     static inline jsi::Value toJSI(jsi::Runtime& runtime, const ${typename}& arg) {
       jsi::Object obj(runtime);
-      ${joinToIndented(cppToJsiCalls, '      ')}
+      ${indent(cppToJsiCalls, '      ')}
       return obj;
     }
   };
@@ -676,6 +671,17 @@ export function createPlatformSpec<
   }
 }
 
+function getDuplicates<T>(array: T[]): T[] {
+  const duplicates = new Set<T>()
+  for (let i = 0; i < array.length; i++) {
+    const item = array[i]!
+    if (array.lastIndexOf(item, i) !== 1) {
+      duplicates.add(item)
+    }
+  }
+  return [...duplicates]
+}
+
 function createSharedCppSpec(module: InterfaceDeclaration): File[] {
   const moduleName = getNodeName(module)
   const cppClassName = `${moduleName}Spec`
@@ -688,6 +694,15 @@ function createSharedCppSpec(module: InterfaceDeclaration): File[] {
 
   // Functions
   const functions = module.getChildrenOfKind(ts.SyntaxKind.MethodSignature)
+  const duplicates = getDuplicates(functions.map((f) => f.getName()))
+  for (const duplicate of duplicates) {
+    const duplicateSignatures = functions
+      .filter((f) => f.getName() === duplicate)
+      .map((f) => `\`${f.getText()}\``)
+    throw new Error(
+      `Function overloading is not supported! (In ${duplicateSignatures.join(' vs ')})`
+    )
+  }
   const cppMethods = functions.map((f) => new Method(f))
 
   // Extra includes
@@ -733,11 +748,11 @@ class ${cppClassName}: public HybridObject {
 
   public:
     // Properties
-    ${joinToIndented(cppProperties.map((p) => p.getCode('c++')))}
+    ${indent(cppProperties.map((p) => p.getCode('c++')).join('\n'), '    ')}
 
   public:
     // Methods
-    ${joinToIndented(cppMethods.map((m) => m.getCode('c++')))}
+    ${indent(cppMethods.map((m) => m.getCode('c++')).join('\n'), '    ')}
 
   protected:
     // Tag for logging
@@ -784,7 +799,7 @@ void ${cppClassName}::loadHybridMethods() {
   // load base methods/properties
   HybridObject::loadHybridMethods();
   // load custom methods/properties
-  ${joinToIndented(registrations, '  ')}
+  ${indent(registrations.join('\n'), '  ')}
 }
     `
 
