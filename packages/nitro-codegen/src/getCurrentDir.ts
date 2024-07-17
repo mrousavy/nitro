@@ -20,6 +20,13 @@ export function prettifyDirectory(directory: string): string {
     ? `${homeShorthand}${directory.slice(home.length)}`
     : directory
 
+  if (relativePath.length < 1) {
+    return prettifiedHomeShorthand
+  }
+  if (prettifiedHomeShorthand.length < 1) {
+    return relativePath
+  }
+
   if (prettifiedHomeShorthand.length < relativePath.length) {
     return prettifiedHomeShorthand
   } else {

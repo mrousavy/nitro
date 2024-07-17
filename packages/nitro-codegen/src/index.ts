@@ -18,7 +18,7 @@ const project = new Project({})
 project.addSourceFilesAtPaths('**/*.nitro.ts')
 
 // Loop through all source files to log them
-console.log(`🚀  Nitrogen runs at ${baseDirectory}`)
+console.log(`🚀  Nitrogen runs at ${prettifyDirectory(baseDirectory)}`)
 for (const dir of project.getDirectories()) {
   const specs = dir.getSourceFiles().length
   const relativePath = prettifyDirectory(dir.getPath())
