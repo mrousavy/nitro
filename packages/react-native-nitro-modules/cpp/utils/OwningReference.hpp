@@ -89,17 +89,33 @@ public:
     --(*_strongRefCount);
     maybeDestroy();
   }
-
-  explicit operator bool() const {
+  
+  inline bool hasValue() const {
     return _value != nullptr && !(*_isDeleted);
   }
 
-  T& operator*() const {
+  explicit inline operator bool() const {
+    return hasValue();
+  }
+
+  inline T& operator*() const {
       return *_value;
   }
 
-  T* operator->() const {
+  inline T* operator->() const {
       return _value;
+  }
+  
+  inline bool operator==(T* other) const {
+    if (*_isDeleted) {
+      return other == nullptr;
+    } else {
+      return other == _value;
+    }
+  }
+  
+  inline bool operator!=(T* other) const {
+    return !(this == other);
   }
 
   /**

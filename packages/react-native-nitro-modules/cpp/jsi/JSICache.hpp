@@ -23,7 +23,11 @@ using namespace facebook;
 static constexpr auto CACHE_PROP_NAME = "__nitroModulesJSICache";
 
 /**
- Safely holds `jsi::Pointer` instances (e.g. `jsi::Object` or `jsi::Function`), managed by a `jsi::Runtime`.
+ * A `JSICache` can safely store `jsi::Pointer` instances (e.g. `jsi::Object` or
+ * `jsi::Function`) inside `OwningReference<T>`.
+ *
+ * `jsi::Pointer`s are managed by a `jsi::Runtime`, and will be deleted if the `jsi::Runtime`
+ * is deleted - even if there are still strong references to the `jsi::Pointer`.
  */
 template<typename T = jsi::Pointer>
 class JSICache final: public jsi::NativeState {
