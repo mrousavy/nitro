@@ -175,7 +175,7 @@ class TSType implements CodeNode {
       this.referencedTypes.push(returnType, ...parameters)
     } else if (isPromise(type)) {
       // It's a Promise!
-      const typename = type.getSymbolOrThrow().getName()
+      const typename = type.getSymbolOrThrow().getEscapedName()
       const typeArguments = type.getTypeArguments()
       const promiseResolvingType = typeArguments[0]
       if (typeArguments.length !== 1 || promiseResolvingType == null) {
@@ -192,7 +192,7 @@ class TSType implements CodeNode {
       this.referencedTypes.push(resolvingType)
     } else if (isRecord(type)) {
       // Record<K, V> -> unordered_map<K, V>
-      const typename = type.getAliasSymbolOrThrow().getName()
+      const typename = type.getAliasSymbolOrThrow().getEscapedName()
       const typeArgs = type.getAliasTypeArguments()
       const [keyTypeT, valueTypeT] = typeArgs
       if (typeArgs.length !== 2 || keyTypeT == null || valueTypeT == null) {
@@ -212,7 +212,7 @@ class TSType implements CodeNode {
     } else if (type.isEnum()) {
       // It is an enum. We need to generate enum interface
       this.passByConvention = 'by-value'
-      const typename = type.getSymbolOrThrow().getName()
+      const typename = type.getSymbolOrThrow().getEscapedName()
       this.cppName = typename
       const enumValues: EnumMember[] = []
       const declaration = type.getSymbolOrThrow().getValueDeclarationOrThrow()
@@ -220,7 +220,7 @@ class TSType implements CodeNode {
         ts.SyntaxKind.EnumDeclaration
       )
       for (const enumMember of enumDeclaration.getMembers()) {
-        const name = enumMember.getName()
+        const name = enumMember.getSymbolOrThrow().getEscapedName()
         const value = enumMember.getValue()
         if (typeof value !== 'number') {
           throw new Error(
@@ -229,7 +229,7 @@ class TSType implements CodeNode {
           )
         }
         enumValues.push({
-          name: enumMember.getName(),
+          name: name,
           value: value,
         })
       }
@@ -280,7 +280,7 @@ namespace margelo::nitro {
         )
       }
 
-      const typename = symbol.getName()
+      const typename = symbol.getEscapedName()
       const enumValues = type.getUnionTypes().map((t) => {
         if (t.isStringLiteral()) {
           const literalValue = t.getLiteralValueOrThrow()
@@ -359,7 +359,7 @@ namespace margelo::nitro {
       })
     } else if (type.isInterface()) {
       // It references another interface/type, either a simple struct, or another HybridObject
-      const typename = type.getSymbolOrThrow().getName()
+      const typename = type.getSymbolOrThrow().getEscapedName()
 
       const isHybridObject = type
         .getBaseTypes()
@@ -381,7 +381,7 @@ namespace margelo::nitro {
           const refType = new NamedTSType(
             propType,
             prop.isOptional(),
-            prop.getName()
+            prop.getEscapedName()
           )
           cppProperties.push(refType)
           this.referencedTypes.push(refType)
@@ -501,7 +501,7 @@ class Property implements CodeNode {
   readonly isReadonly: boolean
 
   constructor(prop: PropertySignature) {
-    this.name = prop.getName()
+    this.name = prop.getSymbolOrThrow().getEscapedName()
     this.isReadonly = prop.hasModifier(ts.SyntaxKind.ReadonlyKeyword)
     const type = prop.getTypeNodeOrThrow().getType()
     const isOptional = prop.hasQuestionToken() || type.isNullable()
@@ -510,7 +510,7 @@ class Property implements CodeNode {
 
   get cppSignatures(): CppMethodSignature[] {
     const signatures: CppMethodSignature[] = []
-    const capitalizedName = capitalizeName(this.name)
+    const capitalizedName = capitalizeName(escapeCppName(this.name))
     // getter
     signatures.push({
       returnType: this.type,
@@ -567,7 +567,7 @@ class Parameter implements CodeNode {
   readonly type: NamedTSType
 
   constructor(param: ParameterDeclaration) {
-    this.name = param.getName()
+    this.name = param.getSymbolOrThrow().getEscapedName()
     const type = param.getTypeNodeOrThrow().getType()
     const isOptional =
       param.hasQuestionToken() || param.isOptional() || type.isNullable()
@@ -575,9 +575,10 @@ class Parameter implements CodeNode {
   }
 
   getCode(language: Language): string {
+    const cppName = escapeCppName(this.name)
     switch (language) {
       case 'c++':
-        return `${this.type.getCode()} ${this.name}`
+        return `${this.type.getCode()} ${cppName}`
       default:
         throw new Error(
           `Language ${language} is not yet supported for parameters!`
@@ -599,7 +600,7 @@ class Method implements CodeNode {
   readonly parameters: Parameter[]
 
   constructor(prop: MethodSignature) {
-    this.name = prop.getName()
+    this.name = prop.getSymbolOrThrow().getEscapedName()
     const returnType = prop.getReturnTypeNodeOrThrow()
     const type = returnType.getType()
     const isOptional = type.isNullable()
@@ -608,9 +609,10 @@ class Method implements CodeNode {
   }
 
   get cppSignature(): CppMethodSignature {
+    const cppName = escapeCppName(this.name)
     return {
       rawName: this.name,
-      name: this.name,
+      name: cppName,
       returnType: this.returnType,
       parameters: this.parameters.map((p) => p.type),
       type: 'method',
@@ -685,23 +687,14 @@ function getDuplicates<T>(array: T[]): T[] {
   const duplicates = new Set<T>()
   for (let i = 0; i < array.length; i++) {
     const item = array[i]!
-    if (array.lastIndexOf(item, i) !== 1) {
+    if (array.indexOf(item, i + 1) !== -1) {
       duplicates.add(item)
     }
   }
   return [...duplicates]
 }
 
-function createSharedCppSpec(module: InterfaceDeclaration): File[] {
-  const moduleName = module.getName()
-  const cppClassName = `${moduleName}Spec`
-
-  // Properties (getters + setters)
-  const properties = module.getProperties()
-  const cppProperties = properties.map((p) => new Property(p))
-
-  // Functions
-  const functions = module.getMethods()
+function assertNoDuplicateFunctions(functions: MethodSignature[]): void {
   const duplicates = getDuplicates(functions.map((f) => f.getName()))
   for (const duplicate of duplicates) {
     const duplicateSignatures = functions
@@ -711,6 +704,19 @@ function createSharedCppSpec(module: InterfaceDeclaration): File[] {
       `Function overloading is not supported! (In ${duplicateSignatures.join(' vs ')})`
     )
   }
+}
+
+function createSharedCppSpec(module: InterfaceDeclaration): File[] {
+  const moduleName = module.getSymbolOrThrow().getEscapedName()
+  const cppClassName = `${moduleName}Spec`
+
+  // Properties (getters + setters)
+  const properties = module.getProperties()
+  const cppProperties = properties.map((p) => new Property(p))
+
+  // Functions
+  const functions = module.getMethods()
+  assertNoDuplicateFunctions(functions)
   const cppMethods = functions.map((f) => new Method(f))
 
   // Extra includes
