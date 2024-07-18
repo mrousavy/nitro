@@ -8,7 +8,6 @@ import {
   type ParameterDeclaration,
   type PropertySignature,
 } from 'ts-morph'
-import { getNodeName } from './getNodeName.js'
 import { capitalizeName, indent } from './stringUtils.js'
 
 interface File {
@@ -589,7 +588,7 @@ class Method implements CodeNode {
   readonly parameters: Parameter[]
 
   constructor(prop: MethodSignature) {
-    this.name = getNodeName(prop)
+    this.name = prop.getName()
     const returnType = prop.getReturnTypeNodeOrThrow()
     const type = returnType.getType()
     const isOptional = type.isNullable()
@@ -683,17 +682,15 @@ function getDuplicates<T>(array: T[]): T[] {
 }
 
 function createSharedCppSpec(module: InterfaceDeclaration): File[] {
-  const moduleName = getNodeName(module)
+  const moduleName = module.getName()
   const cppClassName = `${moduleName}Spec`
 
   // Properties (getters + setters)
-  const properties = module
-    .getChildrenOfKind(ts.SyntaxKind.PropertySignature)
-    .filter((p) => p.getFirstChildByKind(ts.SyntaxKind.FunctionType) == null)
+  const properties = module.getProperties()
   const cppProperties = properties.map((p) => new Property(p))
 
   // Functions
-  const functions = module.getChildrenOfKind(ts.SyntaxKind.MethodSignature)
+  const functions = module.getMethods()
   const duplicates = getDuplicates(functions.map((f) => f.getName()))
   for (const duplicate of duplicates) {
     const duplicateSignatures = functions

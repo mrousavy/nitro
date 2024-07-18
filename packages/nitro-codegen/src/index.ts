@@ -1,13 +1,12 @@
 #!/usr/bin/env node
 
-import { Project, ts } from 'ts-morph'
+import { Project } from 'ts-morph'
 import { getPlatformSpec, type Platform } from './getPlatformSpecs.js'
 import { createPlatformSpec } from './createPlatformSpec.js'
 import { promises as fs } from 'fs'
 import path from 'path'
-import { getNodeName } from './getNodeName.js'
 import { getBaseDirectory, prettifyDirectory } from './getCurrentDir.js'
-import { errorToString } from './stringUtils.js'
+import { errorToString, indent } from './stringUtils.js'
 
 const start = performance.now()
 let targetSpecs = 0
@@ -50,9 +49,7 @@ for (const sourceFile of project.getSourceFiles()) {
   const startedWithSpecs = generatedSpecs
 
   // Find all interfaces in the given file
-  const interfaces = sourceFile.getChildrenOfKind(
-    ts.SyntaxKind.InterfaceDeclaration
-  )
+  const interfaces = sourceFile.getInterfaces()
   for (const module of interfaces) {
     let moduleName = '[Unknown Module]'
     try {
@@ -64,7 +61,7 @@ for (const sourceFile of project.getSourceFiles()) {
       const platformSpecs = heritageClauses.map((clause) => {
         const types = clause.getTypeNodes()
         for (const type of types) {
-          const typeName = getNodeName(type)
+          const typeName = type.getText()
           if (!typeName.startsWith('HybridObject')) {
             continue
           }
@@ -122,7 +119,7 @@ for (const sourceFile of project.getSourceFiles()) {
       }
       generatedSpecs++
     } catch (error) {
-      const message = errorToString(error)
+      const message = indent(errorToString(error), '    ')
       console.error(
         `    ❌  Failed to generate spec for ${moduleName}! ${message}`
       )

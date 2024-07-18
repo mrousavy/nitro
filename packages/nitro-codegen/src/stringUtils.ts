@@ -9,7 +9,7 @@ export function indent(string: string, indentation: string): string {
 function getStack(error: Error): string | undefined {
   if (error.stack == null) return undefined
 
-  const stack = error.stack.split('\n').map((s) => s.replace(/^ {4}/, '  '))
+  const stack = error.stack.split('\n')
   if (
     stack[0] === `${error.name}: ${error.message}` ||
     stack[0] === error.message

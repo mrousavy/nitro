@@ -1,7 +1,6 @@
 import type { PlatformSpec } from 'react-native-nitro-modules'
 import type { TypeNode } from 'ts-morph'
-import { ts } from 'ts-morph'
-import { getNodeName } from './getNodeName.js'
+import { ts, Symbol } from 'ts-morph'
 
 export type Platform = keyof Required<PlatformSpec>
 export type Language = Required<PlatformSpec>[keyof PlatformSpec]
@@ -13,12 +12,28 @@ const platformLanguages: { [K in Platform]: Language[] } = {
 const allPlatforms = Object.keys(platformLanguages) as Platform[]
 const allLanguages = Object.values(platformLanguages).flatMap((l) => l)
 
-function isValidLanguage(language: string): language is Language {
+function isValidLanguage(language: string | undefined): language is Language {
+  if (language == null) {
+    return false
+  }
   return allLanguages.includes(language as Language)
 }
 
 function isValidPlatform(platform: string): platform is Platform {
-  return platform.includes(platform as Platform)
+  return allPlatforms.includes(platform as Platform)
+}
+
+function getLiteralValue(symbol: Symbol): string | undefined {
+  const value = symbol.getValueDeclaration()
+  if (value == null) {
+    return undefined
+  }
+  const type = value.getType()
+  const literal = type.getLiteralValue()
+  if (typeof literal === 'string') {
+    return literal
+  }
+  return undefined
 }
 
 // TODO: The type casting result here doesn't really work in TS.
@@ -36,34 +51,23 @@ export function getPlatformSpec(
   const result: PlatformSpec = {}
 
   // Properties (ios, android)
-  const platformSpec = platformSpecs.getFirstChildByKindOrThrow(
-    ts.SyntaxKind.SyntaxList
-  )
-  const properties = platformSpec.getChildrenOfKind(
-    ts.SyntaxKind.PropertySignature
-  )
+  const properties = platformSpecs.getType().getProperties()
   for (const property of properties) {
     // Property name (ios, android)
-    const platform = getNodeName(property)
+    const platform = property.getName()
     if (!isValidPlatform(platform)) {
       console.warn(
-        `⚠️   ${moduleName} does not properly extend HybridObject<T> - "${platform}" is not a valid Platform! ` +
+        `    ⚠️   ${moduleName} does not properly extend HybridObject<T> - "${platform}" is not a valid Platform! ` +
           `Valid platforms are: [${allPlatforms.join(', ')}]`
       )
       continue
     }
 
     // Value (swift, kotlin, c++)
-    const literal = property.getFirstChildByKindOrThrow(
-      ts.SyntaxKind.LiteralType
-    )
-    const languageLiteral = literal.getFirstChildByKindOrThrow(
-      ts.SyntaxKind.StringLiteral
-    )
-    const language = languageLiteral.getLiteralText()
+    const language = getLiteralValue(property)
     if (!isValidLanguage(language)) {
       console.warn(
-        `⚠️   ${moduleName}: Language ${language} is not a valid language for ${platform}! ` +
+        `    ⚠️   ${moduleName}: Language ${language} is not a valid language for ${platform}! ` +
           `Valid languages are: [${platformLanguages[platform].join(', ')}]`
       )
       continue
@@ -72,7 +76,7 @@ export function getPlatformSpec(
     // Double-check that language works on this platform (android: kotlin/c++, ios: swift/c++)
     if (!isValidLanguageForPlatform(language, platform)) {
       console.warn(
-        `⚠️   ${moduleName}: Language ${language} is not a valid language for ${platform}! ` +
+        `    ⚠️   ${moduleName}: Language ${language} is not a valid language for ${platform}! ` +
           `Valid languages are: [${platformLanguages[platform].join(', ')}]`
       )
       continue
