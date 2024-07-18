@@ -26,6 +26,8 @@ public:
 private:
   template <typename... Args>
   static inline std::string format(const char* formatString, Args&&... args) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wformat-security"
     int size_s = std::snprintf(nullptr, 0, formatString, toCString(args)...) + 1; // Extra space for '\0'
     if (size_s <= 0) [[unlikely]] {
         throw std::runtime_error("Failed to format log message \"" + std::string(formatString) + "\"!");
@@ -34,6 +36,7 @@ private:
     std::vector<char> buf(size);
     std::snprintf(buf.data(), size, formatString, toCString(args)...);
     return std::string(buf.data(), buf.data() + size - 1); // We don't want the '\0' inside
+#pragma clang diagnostic pop
   }
 
 private:
