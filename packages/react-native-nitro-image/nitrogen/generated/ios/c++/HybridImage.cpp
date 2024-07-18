@@ -15,6 +15,6 @@ void HybridImage::loadHybridMethods() {
   // load custom methods/properties
   registerHybridGetter("width", &HybridImage::getWidth, this);
   registerHybridGetter("height", &HybridImage::getHeight, this);
-  registerHybridGetter("data", &HybridImage::getData, this);
   registerHybridGetter("pixelFormat", &HybridImage::getPixelFormat, this);
+  registerHybridMethod("toArrayBuffer", &HybridImage::toArrayBuffer, this);
 }

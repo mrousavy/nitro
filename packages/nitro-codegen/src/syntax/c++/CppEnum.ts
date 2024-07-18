@@ -35,7 +35,7 @@ ${createFileMetadataString(`${typename}.hpp`)}
 
 enum class ${typename} {
   ${indent(cppEnumMembers, '  ')}
-};
+} __attribute__((enum_extensibility(closed)));
 
 namespace margelo::nitro {
 

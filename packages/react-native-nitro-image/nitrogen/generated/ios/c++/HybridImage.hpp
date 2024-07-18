@@ -16,6 +16,7 @@
 #endif
 
 #include "PixelFormat.hpp"
+#include "ImageFormat.hpp"
 
 using namespace margelo::nitro;
 
@@ -38,12 +39,11 @@ class HybridImage: public HybridObject {
     // Properties
     virtual double getWidth() = 0;
     virtual double getHeight() = 0;
-    virtual std::shared_ptr<ArrayBuffer> getData() = 0;
     virtual PixelFormat getPixelFormat() = 0;
 
   public:
     // Methods
-    
+    virtual std::shared_ptr<ArrayBuffer> toArrayBuffer(ImageFormat format) = 0;
 
   protected:
     // Tag for logging
