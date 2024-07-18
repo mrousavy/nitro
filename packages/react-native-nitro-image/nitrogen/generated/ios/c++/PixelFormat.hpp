@@ -16,7 +16,7 @@ enum class PixelFormat {
   rgb,
   yuv_8bit,
   yuv_10bit,
-};
+} __attribute__((enum_extensibility(closed)));
 
 namespace margelo::nitro {
 
