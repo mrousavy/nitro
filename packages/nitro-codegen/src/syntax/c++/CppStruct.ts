@@ -1,8 +1,8 @@
 import type { Symbol } from 'ts-morph'
-import type { File } from './File.js'
-import { indent } from '../stringUtils.js'
-import { createFileMetadataString } from './helpers.js'
-import { NamedTSType } from './TSType.js'
+import type { File } from '../File.js'
+import { indent } from '../../stringUtils.js'
+import { createFileMetadataString } from '../helpers.js'
+import { NamedTSType } from '../TSType.js'
 
 interface FileWithReferencedTypes extends File {
   referencedTypes: NamedTSType[]

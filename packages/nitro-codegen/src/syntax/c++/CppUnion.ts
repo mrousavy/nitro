@@ -1,7 +1,7 @@
 import type { Type } from 'ts-morph'
-import type { File } from './File.js'
-import { createFileMetadataString, escapeCppName } from './helpers.js'
-import { indent } from '../stringUtils.js'
+import type { File } from '../File.js'
+import { createFileMetadataString, escapeCppName } from './../helpers.js'
+import { indent } from '../../stringUtils.js'
 
 export function createCppUnion(typename: string, unionTypes: Type[]): File {
   const enumValues = unionTypes.map((t) => {

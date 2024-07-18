@@ -2,9 +2,9 @@ import { ts, type Type } from 'ts-morph'
 import type { CodeNode } from './CodeNode.js'
 import { escapeCppName, removeDuplicates } from './helpers.js'
 import type { File } from './File.js'
-import { createCppEnum } from './CppEnum.js'
-import { createCppUnion } from './CppUnion.js'
-import { createCppStruct } from './CppStruct.js'
+import { createCppEnum } from './c++/CppEnum.js'
+import { createCppUnion } from './c++/CppUnion.js'
+import { createCppStruct } from './c++/CppStruct.js'
 
 function isSymbol(type: Type, symbolName: string): boolean {
   const symbol = type.getSymbol()

@@ -1,7 +1,7 @@
 import type { EnumMember } from 'ts-morph'
-import { indent } from '../stringUtils.js'
-import type { File } from './File.js'
-import { createFileMetadataString, escapeCppName } from './helpers.js'
+import { indent } from '../../stringUtils.js'
+import type { File } from '../File.js'
+import { createFileMetadataString, escapeCppName } from '../helpers.js'
 
 export function createCppEnum(
   typename: string,

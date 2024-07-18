@@ -2,7 +2,7 @@ import type { PlatformSpec } from 'react-native-nitro-modules'
 import type { Platform } from './getPlatformSpecs.js'
 import { type InterfaceDeclaration, type MethodSignature } from 'ts-morph'
 import type { File } from './syntax/File.js'
-import { createCppHybridObject } from './syntax/CppHybridObject.js'
+import { createCppHybridObject } from './syntax/c++/CppHybridObject.js'
 
 export function createPlatformSpec<
   TPlatform extends Platform,

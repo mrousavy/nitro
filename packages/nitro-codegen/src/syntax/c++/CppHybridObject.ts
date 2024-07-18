@@ -1,9 +1,9 @@
 import type { MethodSignature, PropertySignature } from 'ts-morph'
-import type { File } from './File.js'
-import { Property } from './Property.js'
-import { Method } from './Method.js'
-import { createFileMetadataString } from './helpers.js'
-import { indent } from '../stringUtils.js'
+import type { File } from '../File.js'
+import { Property } from '../Property.js'
+import { Method } from '../Method.js'
+import { createFileMetadataString } from '../helpers.js'
+import { indent } from '../../stringUtils.js'
 
 export function createCppHybridObject(
   interfaceName: string,
