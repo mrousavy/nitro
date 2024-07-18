@@ -40,7 +40,7 @@ namespace margelo::nitro {
         case PixelFormat::yuv_10bit: return JSIConverter<std::string>::toJSI(runtime, "yuv-10bit");
         default: [[unlikely]]
           throw std::runtime_error("Cannot convert PixelFormat to JS - invalid value: "
-                                     + std::to_string(static_cast<int>(arg)) + "!");
+                                    + std::to_string(static_cast<int>(arg)) + "!");
       }
     }
   };
