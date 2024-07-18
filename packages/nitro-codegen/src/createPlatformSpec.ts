@@ -1,7 +1,7 @@
 import type { PlatformSpec } from 'react-native-nitro-modules'
 import type { Platform } from './getPlatformSpecs.js'
 import { type InterfaceDeclaration, type MethodSignature } from 'ts-morph'
-import type { File } from './syntax/File.js'
+import type { SourceFile } from './syntax/SourceFile.js'
 import { createCppHybridObject } from './syntax/c++/CppHybridObject.js'
 
 export function createPlatformSpec<
@@ -11,7 +11,7 @@ export function createPlatformSpec<
   module: InterfaceDeclaration,
   platform: TPlatform,
   language: TLanguage
-): File[] {
+): SourceFile[] {
   switch (platform) {
     case 'ios':
       switch (language) {
@@ -59,7 +59,7 @@ function assertNoDuplicateFunctions(functions: MethodSignature[]): void {
   }
 }
 
-function createSharedCppSpec(module: InterfaceDeclaration): File[] {
+function createSharedCppSpec(module: InterfaceDeclaration): SourceFile[] {
   const interfaceName = module.getSymbolOrThrow().getEscapedName()
 
   const properties = module.getProperties()
@@ -75,10 +75,10 @@ function createSharedCppSpec(module: InterfaceDeclaration): File[] {
   return cppFiles
 }
 
-function createAppleSwiftSpec(_module: InterfaceDeclaration): File[] {
+function createAppleSwiftSpec(_module: InterfaceDeclaration): SourceFile[] {
   throw new Error(`Swift for Apple/iOS is not yet implemented!`)
 }
 
-function createAndroidKotlinSpec(_module: InterfaceDeclaration): File[] {
+function createAndroidKotlinSpec(_module: InterfaceDeclaration): SourceFile[] {
   throw new Error(`Kotlin for Android is not yet implemented!`)
 }

@@ -1,5 +1,5 @@
 import type { Language } from '../getPlatformSpecs.js'
-import type { File } from './File.js'
+import type { SourceFile } from './SourceFile.js'
 import type { NamedTSType, TSType, VoidType } from './TSType.js'
 
 export interface CodeNode {
@@ -11,7 +11,7 @@ export interface CodeNode {
    * Get all extra definition files this code node needs (e.g. extra type/struct declarations
    * for complex types), or `[]` if none are required (e.g. if this uses primitive types only)
    */
-  getDefinitionFiles(language: Language): File[]
+  getDefinitionFiles(language: Language): SourceFile[]
 }
 
 export interface CppMethodSignature {

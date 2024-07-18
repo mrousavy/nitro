@@ -1,5 +1,5 @@
 import type { MethodSignature, PropertySignature } from 'ts-morph'
-import type { File } from '../File.js'
+import type { SourceFile } from '../SourceFile.js'
 import { Property } from '../Property.js'
 import { Method } from '../Method.js'
 import { createFileMetadataString } from '../helpers.js'
@@ -10,7 +10,7 @@ export function createCppHybridObject(
   sourceFile: string,
   properties: PropertySignature[],
   methods: MethodSignature[]
-): File[] {
+): SourceFile[] {
   const cppClassName = `Hybrid${interfaceName}`
 
   // Properties (getters + setters)
@@ -117,7 +117,7 @@ void ${cppClassName}::loadHybridMethods() {
 }
     `
 
-  const files: File[] = []
+  const files: SourceFile[] = []
   files.push({
     content: cppHeaderCode,
     name: `${cppClassName}.hpp`,

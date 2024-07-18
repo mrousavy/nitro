@@ -1,12 +1,12 @@
 import type { EnumMember } from 'ts-morph'
 import { indent } from '../../stringUtils.js'
-import type { File } from '../File.js'
+import type { SourceFile } from '../SourceFile.js'
 import { createFileMetadataString, escapeCppName } from '../helpers.js'
 
 export function createCppEnum(
   typename: string,
   enumMembers: EnumMember[]
-): File {
+): SourceFile {
   // Map Enum to { name, value }
   const enumValues = enumMembers.map((m) => {
     const name = m.getSymbolOrThrow().getEscapedName()

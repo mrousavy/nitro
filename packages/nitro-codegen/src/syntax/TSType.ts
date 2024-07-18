@@ -1,7 +1,7 @@
 import { ts, type Type } from 'ts-morph'
 import type { CodeNode } from './CodeNode.js'
 import { escapeCppName, removeDuplicates } from './helpers.js'
-import type { File } from './File.js'
+import type { SourceFile } from './SourceFile.js'
 import { createCppEnum } from './c++/CppEnum.js'
 import { createCppUnion } from './c++/CppUnion.js'
 import { createCppStruct } from './c++/CppStruct.js'
@@ -35,7 +35,7 @@ export class TSType implements CodeNode {
   readonly isOptional: boolean
   readonly passByConvention: 'by-reference' | 'by-value'
   private readonly cppName: string
-  private readonly extraFiles: File[]
+  private readonly extraFiles: SourceFile[]
 
   private readonly baseTypes: TSType[]
   private readonly referencedTypes: TSType[]
@@ -198,7 +198,7 @@ export class TSType implements CodeNode {
     }
   }
 
-  getDefinitionFiles(): File[] {
+  getDefinitionFiles(): SourceFile[] {
     const extra = this.extraFiles
     const inheritedDefinitionFiles = this.baseTypes.flatMap((b) =>
       b.getDefinitionFiles()
@@ -234,7 +234,7 @@ export class VoidType implements CodeNode {
     return 'void'
   }
 
-  getDefinitionFiles(): File[] {
+  getDefinitionFiles(): SourceFile[] {
     return []
   }
 }

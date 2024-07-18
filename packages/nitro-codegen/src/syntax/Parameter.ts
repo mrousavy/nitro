@@ -3,7 +3,7 @@ import type { CodeNode } from './CodeNode.js'
 import { NamedTSType } from './TSType.js'
 import { escapeCppName, removeDuplicates } from './helpers.js'
 import type { Language } from '../getPlatformSpecs.js'
-import type { File } from './File.js'
+import type { SourceFile } from './SourceFile.js'
 
 export class Parameter implements CodeNode {
   readonly name: string
@@ -29,7 +29,7 @@ export class Parameter implements CodeNode {
     }
   }
 
-  getDefinitionFiles(): File[] {
+  getDefinitionFiles(): SourceFile[] {
     return removeDuplicates(
       this.type.getDefinitionFiles(),
       (a, b) => a.name === b.name

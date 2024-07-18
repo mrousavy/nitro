@@ -3,7 +3,7 @@ import type { CodeNode, CppMethodSignature } from './CodeNode.js'
 import { NamedTSType, VoidType } from './TSType.js'
 import { capitalizeName } from '../stringUtils.js'
 import { escapeCppName, removeDuplicates, toReferenceType } from './helpers.js'
-import type { File } from './File.js'
+import type { SourceFile } from './SourceFile.js'
 import type { Language } from '../getPlatformSpecs.js'
 
 export class Property implements CodeNode {
@@ -43,7 +43,7 @@ export class Property implements CodeNode {
     return signatures
   }
 
-  getDefinitionFiles(): File[] {
+  getDefinitionFiles(): SourceFile[] {
     return removeDuplicates(
       this.type.getDefinitionFiles(),
       (a, b) => a.name === b.name

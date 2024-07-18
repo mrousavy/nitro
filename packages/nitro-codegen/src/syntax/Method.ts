@@ -1,7 +1,7 @@
 import type { CodeNode, CppMethodSignature } from './CodeNode.js'
 import { escapeCppName, removeDuplicates, toReferenceType } from './helpers.js'
 import type { Language } from '../getPlatformSpecs.js'
-import type { File } from './File.js'
+import type { SourceFile } from './SourceFile.js'
 import { Parameter } from './Parameter.js'
 import { TSType } from './TSType.js'
 import type { MethodSignature } from 'ts-morph'
@@ -50,7 +50,7 @@ export class Method implements CodeNode {
     }
   }
 
-  getDefinitionFiles(): File[] {
+  getDefinitionFiles(): SourceFile[] {
     const parametersDefinitionFiles = this.parameters.flatMap((p) =>
       p.getDefinitionFiles()
     )

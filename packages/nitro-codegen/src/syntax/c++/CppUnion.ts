@@ -1,9 +1,12 @@
 import type { Type } from 'ts-morph'
-import type { File } from '../File.js'
+import type { SourceFile } from '../SourceFile.js'
 import { createFileMetadataString, escapeCppName } from './../helpers.js'
 import { indent } from '../../stringUtils.js'
 
-export function createCppUnion(typename: string, unionTypes: Type[]): File {
+export function createCppUnion(
+  typename: string,
+  unionTypes: Type[]
+): SourceFile {
   const enumValues = unionTypes.map((t) => {
     if (t.isStringLiteral()) {
       const literalValue = t.getLiteralValueOrThrow()
