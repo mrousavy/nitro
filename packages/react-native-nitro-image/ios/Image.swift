@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import NitroModules
 
 public class Image : ImageSpec {
   private let uiImage: UIImage
@@ -27,12 +28,18 @@ public class Image : ImageSpec {
     return .rgb
   }
   
-  public func toArrayBuffer(format: ImageFormat) -> Data {
+  public func toArrayBuffer(format: ImageFormat) throws -> Data {
     switch format {
     case .jpg:
-      return uiImage.jpegData(compressionQuality: 1.0)
+      guard let data = uiImage.jpegData(compressionQuality: 1.0) else {
+        throw RuntimeError.error(withMessage: "JPG data is nil!")
+      }
+      return data
     case .png:
-      return uiImage.pngData()
+      guard let data = uiImage.pngData() else {
+        throw RuntimeError.error(withMessage: "PNG data is nil!")
+      }
+      return data
     }
   }
 }

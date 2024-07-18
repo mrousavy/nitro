@@ -12,6 +12,6 @@ import Foundation
  *
  * Throw this error in Nitro Modules to provide clear and concise error messages to JS.
  */
-enum RuntimeError: Error {
+public enum RuntimeError: Error {
   case error(withMessage: String)
 }

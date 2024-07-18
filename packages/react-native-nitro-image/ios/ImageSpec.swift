@@ -10,5 +10,5 @@ public protocol ImageSpec {
   var height: Int { get }
   var pixelFormat: PixelFormat { get }
   
-  func toArrayBuffer(format: ImageFormat) -> Data
+  func toArrayBuffer(format: ImageFormat) throws -> Data
 }
