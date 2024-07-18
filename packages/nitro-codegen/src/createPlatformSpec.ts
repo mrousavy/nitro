@@ -9,6 +9,7 @@ import {
   type PropertySignature,
 } from 'ts-morph'
 import { capitalizeName, indent } from './stringUtils.js'
+import { escapeCppName } from './escapeCppName.js'
 
 interface File {
   name: string
@@ -233,7 +234,7 @@ class TSType implements CodeNode {
         })
       }
       const cppEnumMembers = enumValues
-        .map((m) => `${m.name} = ${m.value},`)
+        .map((m) => `${escapeCppName(m.name)} = ${m.value},`)
         .join('\n')
 
       const cppCode = `
@@ -287,7 +288,10 @@ namespace margelo::nitro {
             throw new Error(
               `${typename}: Value "${literalValue}" is not a string - it is ${typeof literalValue}!`
             )
-          return literalValue
+          return {
+            name: literalValue,
+            escapedName: escapeCppName(literalValue),
+          }
         } else {
           throw new Error(
             `${typename}: Value "${t.getText()}" is not a string literal - it cannot be represented in a C++ enum!`
@@ -296,14 +300,18 @@ namespace margelo::nitro {
       })
       this.passByConvention = 'by-value'
       this.cppName = typename
-      const cppEnumMembers = enumValues.map((m) => `${m},`).join('\n')
+      const cppEnumMembers = enumValues
+        .map((m) => `${m.escapedName},`)
+        .join('\n')
       const cppFromJsiHashCases = enumValues
-        .map((v) => `case hashString("${v}"): return ${typename}::${v};`.trim())
+        .map((v) =>
+          `case hashString("${v.name}"): return ${typename}::${v.escapedName};`.trim()
+        )
         .join('\n')
       const cppToJsiCases = enumValues
         .map(
           (v) =>
-            `case ${typename}::${v}: return JSIConverter<std::string>::toJSI(runtime, "${v}");`
+            `case ${typename}::${v.escapedName}: return JSIConverter<std::string>::toJSI(runtime, "${v.name}");`
         )
         .join('\n')
 
@@ -379,18 +387,18 @@ namespace margelo::nitro {
           this.referencedTypes.push(refType)
         }
         const cppStructProps = cppProperties
-          .map((p) => `${p.getCode()} ${p.name};`)
+          .map((p) => `${p.getCode()} ${p.escapedName};`)
           .join('\n')
         const cppFromJsiProps = cppProperties
           .map(
             (p) =>
-              `.${p.name} = JSIConverter<${p.getCode()}>::fromJSI(runtime, obj.getProperty(runtime, "${p.name}")),`
+              `.${p.escapedName} = JSIConverter<${p.getCode()}>::fromJSI(runtime, obj.getProperty(runtime, "${p.name}")),`
           )
           .join('\n')
         const cppToJsiCalls = cppProperties
           .map(
             (p) =>
-              `obj.setProperty(runtime, "${p.name}", JSIConverter<${p.getCode()}>::toJSI(runtime, arg.${p.name}));`
+              `obj.setProperty(runtime, "${p.name}", JSIConverter<${p.getCode()}>::toJSI(runtime, arg.${p.escapedName}));`
           )
           .join('\n')
 
@@ -477,6 +485,9 @@ namespace margelo::nitro {
 
 class NamedTSType extends TSType {
   readonly name: string
+  get escapedName(): string {
+    return escapeCppName(this.name)
+  }
 
   constructor(type: Type, isOptional: boolean, name: string) {
     super(type, isOptional)

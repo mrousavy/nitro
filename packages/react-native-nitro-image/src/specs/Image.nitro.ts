@@ -1,6 +1,6 @@
 import { NitroModules, type HybridObject } from 'react-native-nitro-modules'
 
-type PixelFormat = 'rgb' | 'yuv'
+type PixelFormat = 'rgb' | 'yuv-8bit' | 'yuv-10bit'
 
 export interface Image extends HybridObject<{ ios: 'c++' }> {
   readonly width: number

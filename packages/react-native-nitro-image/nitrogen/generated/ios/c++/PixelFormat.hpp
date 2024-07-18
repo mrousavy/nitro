@@ -14,7 +14,8 @@
 
 enum class PixelFormat {
   rgb,
-  yuv,
+  yuv_8bit,
+  yuv_10bit,
 };
 
 namespace margelo::nitro {
@@ -26,7 +27,8 @@ namespace margelo::nitro {
       std::string unionValue = JSIConverter<std::string>::fromJSI(runtime, arg);
       switch (hashString(unionValue.c_str(), unionValue.size())) {
         case hashString("rgb"): return PixelFormat::rgb;
-        case hashString("yuv"): return PixelFormat::yuv;
+        case hashString("yuv-8bit"): return PixelFormat::yuv_8bit;
+        case hashString("yuv-10bit"): return PixelFormat::yuv_10bit;
         default: [[unlikely]]
           throw std::runtime_error("Cannot convert " + unionValue + " to PixelFormat - invalid value!");
       }
@@ -34,7 +36,8 @@ namespace margelo::nitro {
     static inline jsi::Value toJSI(jsi::Runtime& runtime, PixelFormat arg) {
       switch (arg) {
         case PixelFormat::rgb: return JSIConverter<std::string>::toJSI(runtime, "rgb");
-        case PixelFormat::yuv: return JSIConverter<std::string>::toJSI(runtime, "yuv");
+        case PixelFormat::yuv_8bit: return JSIConverter<std::string>::toJSI(runtime, "yuv-8bit");
+        case PixelFormat::yuv_10bit: return JSIConverter<std::string>::toJSI(runtime, "yuv-10bit");
         default: [[unlikely]]
           throw std::runtime_error("Cannot convert PixelFormat to JS - invalid value: "
                                      + std::to_string(static_cast<int>(arg)) + "!");
