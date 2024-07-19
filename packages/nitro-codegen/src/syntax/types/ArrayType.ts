@@ -1,6 +1,6 @@
 import type { Language } from '../../getPlatformSpecs.js'
 import type { SourceFile } from '../SourceFile.js'
-import type { Type } from './Type.js'
+import type { Type, TypeKind } from './Type.js'
 
 export class ArrayType implements Type {
   readonly itemType: Type
@@ -11,6 +11,10 @@ export class ArrayType implements Type {
 
   get canBePassedByReference(): boolean {
     return true
+  }
+
+  get kind(): TypeKind {
+    return 'array'
   }
 
   getCode(language: Language): string {

@@ -4,17 +4,18 @@ import type { HybridObjectSpec } from '../HybridObjectSpec.js'
 import { Method } from '../Method.js'
 import type { Property } from '../Property.js'
 import type { SourceFile } from '../SourceFile.js'
+import { SwiftCxxBridgedType } from './SwiftCxxBridgedType.js'
 
 function getPropertyForwardImplementation(property: Property): string {
-  const type = property.type.getCode('swift')
+  const bridgedType = new SwiftCxxBridgedType(property.type)
   const getter = `
 get {
-  return self.implementation.${property.name}
+  return ${bridgedType.toCpp(`self.implementation.${property.name}`)}
 }
   `.trim()
   const setter = `
 set {
-  self.implementation.${property.name} = newValue
+  self.implementation.${property.name} = ${bridgedType.fromCpp('newValue')}
 }
   `.trim()
 
@@ -24,7 +25,7 @@ set {
   }
 
   const code = `
-public var ${property.name}: ${type} {
+public var ${property.name}: ${bridgedType.getCode()} {
   ${indent(body.join('\n'), '  ')}
 }
   `
@@ -32,14 +33,20 @@ public var ${property.name}: ${type} {
 }
 
 function getMethodForwardImplementation(method: Method): string {
-  const returnType = method.returnType.getCode('swift')
-  const params = method.parameters.map((p) => p.getCode('swift'))
-  const passParams = method.parameters.map((p) => `${p.name}: ${p.name}`)
+  const returnType = new SwiftCxxBridgedType(method.returnType)
+  const params = method.parameters.map((p) => {
+    const bridgedType = new SwiftCxxBridgedType(p.type)
+    return `${p.name}: ${bridgedType.getCode()}`
+  })
+  const passParams = method.parameters.map((p) => {
+    const bridgedType = new SwiftCxxBridgedType(p.type)
+    return `${p.name}: ${bridgedType.fromCpp(p.name)}`
+  })
   return `
-func ${method.name}(${params.join(', ')}) -> Result<${returnType}, Error> {
+func ${method.name}(${params.join(', ')}) -> Result<${returnType.getCode()}, Error> {
   do {
     let result = try self.implementation.${method.name}(${passParams.join(', ')})
-    return .success(result)
+    return .success(${returnType.toCpp('result')})
   } catch {
     return .failure(error)
   }

@@ -1,10 +1,13 @@
 import type { Language } from '../../getPlatformSpecs.js'
 import type { SourceFile } from '../SourceFile.js'
-import type { Type } from './Type.js'
+import type { Type, TypeKind } from './Type.js'
 
 export class VoidType implements Type {
   get canBePassedByReference(): boolean {
     return false
+  }
+  get kind(): TypeKind {
+    return 'void'
   }
 
   getCode(language: Language): string {

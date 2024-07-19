@@ -1,7 +1,7 @@
 import type { Language } from '../../getPlatformSpecs.js'
 import { escapeCppName } from '../helpers.js'
 import type { SourceFile } from '../SourceFile.js'
-import type { NamedType, Type } from './Type.js'
+import type { NamedType, Type, TypeKind } from './Type.js'
 
 export class NamedWrappingType implements NamedType {
   readonly type: Type
@@ -14,6 +14,9 @@ export class NamedWrappingType implements NamedType {
 
   get escapedName(): string {
     return escapeCppName(this.name)
+  }
+  get kind(): TypeKind {
+    return this.type.kind
   }
   get canBePassedByReference(): boolean {
     return this.type.canBePassedByReference

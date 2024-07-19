@@ -1,10 +1,14 @@
 import type { Language } from '../../getPlatformSpecs.js'
 import type { SourceFile } from '../SourceFile.js'
-import type { Type } from './Type.js'
+import type { Type, TypeKind } from './Type.js'
 
 export class BooleanType implements Type {
   get canBePassedByReference(): boolean {
     return false
+  }
+
+  get kind(): TypeKind {
+    return 'boolean'
   }
 
   getCode(language: Language): string {

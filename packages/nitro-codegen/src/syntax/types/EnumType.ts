@@ -1,6 +1,6 @@
 import type { Language } from '../../getPlatformSpecs.js'
 import type { SourceFile } from '../SourceFile.js'
-import type { Type } from './Type.js'
+import type { Type, TypeKind } from './Type.js'
 
 export class EnumType implements Type {
   readonly enumName: string
@@ -13,6 +13,10 @@ export class EnumType implements Type {
 
   get canBePassedByReference(): boolean {
     return false
+  }
+
+  get kind(): TypeKind {
+    return 'enum'
   }
 
   getCode(language: Language): string {

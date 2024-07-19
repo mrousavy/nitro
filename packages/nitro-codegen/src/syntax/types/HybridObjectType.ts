@@ -1,6 +1,6 @@
 import type { Language } from '../../getPlatformSpecs.js'
 import type { SourceFile } from '../SourceFile.js'
-import type { Type } from './Type.js'
+import type { Type, TypeKind } from './Type.js'
 
 export class HybridObjectType implements Type {
   readonly hybridObjectName: string
@@ -11,6 +11,10 @@ export class HybridObjectType implements Type {
 
   get canBePassedByReference(): boolean {
     return false
+  }
+
+  get kind(): TypeKind {
+    return 'hybrid-object'
   }
 
   getCode(language: Language): string {

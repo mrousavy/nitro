@@ -1,6 +1,23 @@
 import type { Language } from '../../getPlatformSpecs.js'
 import type { SourceFile } from '../SourceFile.js'
 
+export type TypeKind =
+  | 'array-buffer'
+  | 'array'
+  | 'bigint'
+  | 'boolean'
+  | 'enum'
+  | 'function'
+  | 'hybrid-object'
+  | 'null'
+  | 'number'
+  | 'optional'
+  | 'promise'
+  | 'record'
+  | 'string'
+  | 'struct'
+  | 'void'
+
 /**
  * Represents a TypeScript Type that can be represented in a native language (C++, Swift, Kotlin)
  */
@@ -9,6 +26,10 @@ export interface Type {
    * Get whether this type can be passed by reference in C++ (`const T&` vs `T`)
    */
   readonly canBePassedByReference: boolean
+  /**
+   * Get the kind of the type.
+   */
+  readonly kind: TypeKind
   /**
    * Get the native code required to represent this type for the given language (C++, Swift, Kotlin).
    *

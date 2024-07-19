@@ -1,6 +1,6 @@
 import type { Language } from '../../getPlatformSpecs.js'
 import type { SourceFile } from '../SourceFile.js'
-import type { Type } from './Type.js'
+import type { Type, TypeKind } from './Type.js'
 
 export class FunctionType implements Type {
   readonly returnType: Type
@@ -13,6 +13,10 @@ export class FunctionType implements Type {
 
   get canBePassedByReference(): boolean {
     return true
+  }
+
+  get kind(): TypeKind {
+    return 'function'
   }
 
   getCode(language: Language): string {

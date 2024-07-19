@@ -1,10 +1,13 @@
 import type { Language } from '../../getPlatformSpecs.js'
 import type { SourceFile } from '../SourceFile.js'
-import type { Type } from './Type.js'
+import type { Type, TypeKind } from './Type.js'
 
 export class StringType implements Type {
   get canBePassedByReference(): boolean {
     return true
+  }
+  get kind(): TypeKind {
+    return 'string'
   }
 
   getCode(language: Language): string {

@@ -1,6 +1,6 @@
 import type { Language } from '../../getPlatformSpecs.js'
 import type { SourceFile } from '../SourceFile.js'
-import type { Type } from './Type.js'
+import type { Type, TypeKind } from './Type.js'
 
 export class RecordType implements Type {
   readonly keyType: Type
@@ -13,6 +13,9 @@ export class RecordType implements Type {
 
   get canBePassedByReference(): boolean {
     return true
+  }
+  get kind(): TypeKind {
+    return 'record'
   }
 
   getCode(language: Language): string {

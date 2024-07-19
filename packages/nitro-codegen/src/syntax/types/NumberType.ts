@@ -1,10 +1,13 @@
 import type { Language } from '../../getPlatformSpecs.js'
 import type { SourceFile } from '../SourceFile.js'
-import type { Type } from './Type.js'
+import type { Type, TypeKind } from './Type.js'
 
 export class NumberType implements Type {
   get canBePassedByReference(): boolean {
     return false
+  }
+  get kind(): TypeKind {
+    return 'number'
   }
 
   getCode(language: Language): string {

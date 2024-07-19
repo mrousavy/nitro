@@ -1,6 +1,6 @@
 import type { Language } from '../../getPlatformSpecs.js'
 import type { SourceFile } from '../SourceFile.js'
-import type { Type } from './Type.js'
+import type { Type, TypeKind } from './Type.js'
 
 export class OptionalType implements Type {
   readonly wrappingType: Type
@@ -11,6 +11,9 @@ export class OptionalType implements Type {
 
   get canBePassedByReference(): boolean {
     return true
+  }
+  get kind(): TypeKind {
+    return 'optional'
   }
 
   getCode(language: Language): string {
