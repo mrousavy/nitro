@@ -22,3 +22,18 @@ export interface Type {
    */
   getExtraFiles(): SourceFile[]
 }
+
+export interface NamedType extends Type {
+  /**
+   * Get the name of the value if it is a member or parameter.
+   *
+   * E.g. for a class member `double _something`, this returns `'_something'`.
+   */
+  readonly name: string
+  /**
+   * Get the name of the value escaped as a valid C++ variable name.
+   *
+   * E.g. for a class member `double some-value`, this returns `'some_value'`.
+   */
+  readonly escapedName: string
+}

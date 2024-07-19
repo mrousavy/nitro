@@ -2,49 +2,46 @@ import type { Symbol } from 'ts-morph'
 import type { SourceFile } from '../SourceFile.js'
 import { indent } from '../../stringUtils.js'
 import { createFileMetadataString } from '../helpers.js'
-import { NamedTSType } from '../TSType.js'
+import type { NamedType } from '../types/Type.js'
+import { createNamedType } from '../createType.js'
 
 interface FileWithReferencedTypes extends SourceFile {
-  referencedTypes: NamedTSType[]
+  referencedTypes: NamedType[]
 }
 
 export function createCppStruct(
   typename: string,
   properties: Symbol[]
 ): FileWithReferencedTypes {
-  const cppProperties: NamedTSType[] = []
+  const cppProperties: NamedType[] = []
   for (const prop of properties) {
     // recursively resolve types for each property of the referenced type
     const declaration = prop.getValueDeclarationOrThrow()
     const propType = prop.getTypeAtLocation(declaration)
-    const refType = new NamedTSType(
-      propType,
-      prop.isOptional(),
-      prop.getEscapedName()
-    )
+    const refType = createNamedType(prop.getName(), propType, prop.isOptional())
     cppProperties.push(refType)
   }
   // Get C++ code for all struct members
   const cppStructProps = cppProperties
-    .map((p) => `${p.getCode()} ${p.escapedName};`)
+    .map((p) => `${p.getCode('c++')} ${p.escapedName};`)
     .join('\n')
   // Get C++ code for converting each member from a jsi::Value
   const cppFromJsiProps = cppProperties
     .map(
       (p) =>
-        `.${p.escapedName} = JSIConverter<${p.getCode()}>::fromJSI(runtime, obj.getProperty(runtime, "${p.name}")),`
+        `.${p.escapedName} = JSIConverter<${p.getCode('c++')}>::fromJSI(runtime, obj.getProperty(runtime, "${p.name}")),`
     )
     .join('\n')
   // Get C++ code for converting each member to a jsi::Value
   const cppToJsiCalls = cppProperties
     .map(
       (p) =>
-        `obj.setProperty(runtime, "${p.name}", JSIConverter<${p.getCode()}>::toJSI(runtime, arg.${p.escapedName}));`
+        `obj.setProperty(runtime, "${p.name}", JSIConverter<${p.getCode('c++')}>::toJSI(runtime, arg.${p.escapedName}));`
     )
     .join('\n')
 
   // Get C++ includes for each extra-file we need to include
-  const extraFiles = cppProperties.flatMap((r) => r.getDefinitionFiles())
+  const extraFiles = cppProperties.flatMap((r) => r.getExtraFiles())
   const cppExtraIncludes = extraFiles.map((f) => `#include "${f.name}"`)
 
   const cppCode = `

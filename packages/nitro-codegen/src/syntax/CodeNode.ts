@@ -1,6 +1,6 @@
 import type { Language } from '../getPlatformSpecs.js'
 import type { SourceFile } from './SourceFile.js'
-import type { NamedTSType, TSType, VoidType } from './TSType.js'
+import type { NamedType, Type } from './types/Type.js'
 
 export interface CodeNode {
   /**
@@ -15,8 +15,8 @@ export interface CodeNode {
 }
 
 export interface CppMethodSignature {
-  returnType: TSType | VoidType
-  parameters: NamedTSType[]
+  returnType: Type
+  parameters: NamedType[]
   rawName: string
   name: string
   type: 'getter' | 'setter' | 'method'
