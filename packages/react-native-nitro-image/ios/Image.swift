@@ -10,18 +10,20 @@ import UIKit
 import NitroModules
 
 public class Image : ImageSpec {
+  public var hybridContext = margelo.nitro.HybridContext()
+  
   private let uiImage: UIImage
 
   public init(uiImage: UIImage) {
     self.uiImage = uiImage
   }
 
-  public var width: Int {
-    return Int(uiImage.size.width)
+  public var width: Double {
+    return uiImage.size.width
   }
 
-  public var height: Int {
-    return Int(uiImage.size.height)
+  public var height: Double {
+    return uiImage.size.height
   }
 
   public var pixelFormat: PixelFormat {
