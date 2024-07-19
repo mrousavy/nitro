@@ -59,6 +59,9 @@ ${createFileMetadataString(`${typename}.hpp`)}
 
 ${cppExtraIncludes.join('\n')}
 
+/**
+ * A struct which can be represented as a JavaScript object (${typename}).
+ */
 struct ${typename} {
 public:
   ${indent(cppStructProps, '  ')}

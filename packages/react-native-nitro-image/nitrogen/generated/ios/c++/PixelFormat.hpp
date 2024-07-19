@@ -11,6 +11,9 @@
 #include <NitroModules/Hash.hpp>
 #include <NitroModules/JSIConverter.hpp>
 
+/**
+ * An enum which can be represented as a JavaScript union (PixelFormat).
+ */
 enum class PixelFormat {
   rgb,
   yuv_8bit,

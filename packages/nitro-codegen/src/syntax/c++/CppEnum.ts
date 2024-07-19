@@ -33,6 +33,9 @@ ${createFileMetadataString(`${typename}.hpp`)}
 
 #include <NitroModules/JSIConverter.hpp>
 
+/**
+ * An enum which can be represented as a JavaScript enum (${typename}).
+ */
 enum class ${typename} {
   ${indent(cppEnumMembers, '  ')}
 } __attribute__((enum_extensibility(closed)));
