@@ -9,6 +9,7 @@ export interface Image extends HybridObject<{ ios: 'c++' }> {
   readonly pixelFormat: PixelFormat
 
   toArrayBuffer(format: ImageFormat): ArrayBuffer
+  saveToFile(path: string): Promise<void>
 }
 
 export const ImageFactory = NitroModules.get<Image>()
