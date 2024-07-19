@@ -6,7 +6,7 @@ import { createPlatformSpec } from './createPlatformSpec.js'
 import { promises as fs } from 'fs'
 import path from 'path'
 import { getBaseDirectory, prettifyDirectory } from './getCurrentDir.js'
-import { errorToString, indent } from './stringUtils.js'
+import { capitalizeName, errorToString, indent } from './stringUtils.js'
 import type { SourceFile } from './syntax/SourceFile.js'
 
 const start = performance.now()
@@ -96,23 +96,9 @@ for (const sourceFile of project.getSourceFiles()) {
       console.log(
         `    ⚙️   Generating specs for HybridObject "${moduleName}"...`
       )
-      {
-        // Generate shared C++ code
-        const files = createPlatformSpec(module, 'c++')
-        console.log(`        cpp: Generating cross-platform C++ code...`)
-        for (const file of files) {
-          const basePath = path.join(outFolder, 'cpp')
-          await writeFile(basePath, file)
-        }
-      }
-      // Generate platform specific code (Swift/Kotlin/...)
+      // Generate platform specific code (C++/Swift/Kotlin/...)
       for (const platform of platforms) {
         const language = platformSpec[platform]!
-        if (language === 'c++') {
-          // We already generated shared C++ code.
-          continue
-        }
-
         const files = createPlatformSpec(module, language)
         console.log(`        ${platform}: Generating ${language} code...`)
 
@@ -146,7 +132,8 @@ console.log(`💡  Your code is in ${prettifyDirectory(outFolder)}`)
 
 async function writeFile(basePath: string, file: SourceFile): Promise<void> {
   const filepath = path.join(basePath, file.name)
-  console.log(`          Creating ${file.name}...`)
+  const language = capitalizeName(file.language)
+  console.log(`          ${language}: Creating ${file.name}...`)
 
   const dir = path.dirname(filepath)
   // Create directory if it doesn't exist yet
