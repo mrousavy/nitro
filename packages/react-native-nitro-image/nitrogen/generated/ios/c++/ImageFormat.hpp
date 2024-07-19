@@ -6,7 +6,6 @@
 /// Copyright © 2024 Marc Rousavy @ Margelo
 ///
 
-
 #pragma once
 
 #include <NitroModules/Hash.hpp>

@@ -6,7 +6,6 @@
 /// Copyright © 2024 Marc Rousavy @ Margelo
 ///
 
-
 #pragma once
 
 #if __has_include(<NitroModules/HybridObject.hpp>)

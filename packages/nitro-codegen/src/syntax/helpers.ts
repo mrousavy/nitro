@@ -8,7 +8,7 @@ export function createFileMetadataString(filename: string): string {
 /// https://github.com/mrousavy/react-native-nitro
 /// Copyright © ${now.getFullYear()} Marc Rousavy @ Margelo
 ///
-`
+`.trim()
 }
 
 export function toReferenceType(type: string): `const ${typeof type}&` {

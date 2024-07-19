@@ -6,7 +6,6 @@
 /// Copyright © 2024 Marc Rousavy @ Margelo
 ///
 
-
 #include "HybridImage.hpp"
 
 void HybridImage::loadHybridMethods() {

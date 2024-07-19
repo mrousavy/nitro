@@ -5,6 +5,7 @@ import type { Language } from './getPlatformSpecs.js'
 import type { HybridObjectSpec } from './syntax/HybridObjectSpec.js'
 import { Property } from './syntax/Property.js'
 import { Method } from './syntax/Method.js'
+import { createSwiftHybridObject } from './syntax/swift/SwiftHybridObject.js'
 
 export function generatePlatformFiles(
   declaration: InterfaceDeclaration,
@@ -49,8 +50,9 @@ function generateCppFiles(spec: HybridObjectSpec): SourceFile[] {
 function generateSwiftFiles(spec: HybridObjectSpec): SourceFile[] {
   // 1. Always generate a C++ spec for the shared layer and type declarations (enums, interfaces, ...)
   const cppFiles = generateCppFiles(spec)
-
-  return cppFiles
+  // 2. Generate Swift specific files and potentially a C++ binding layer
+  const swiftFiles = createSwiftHybridObject(spec)
+  return [...cppFiles, ...swiftFiles]
 }
 
 function generateKotlinFiles(_spec: HybridObjectSpec): SourceFile[] {
