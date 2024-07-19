@@ -1,39 +1,46 @@
-import type { PlatformSpec } from 'react-native-nitro-modules'
-import type { Platform } from './getPlatformSpecs.js'
 import { type InterfaceDeclaration, type MethodSignature } from 'ts-morph'
 import type { SourceFile } from './syntax/SourceFile.js'
 import { createCppHybridObject } from './syntax/c++/CppHybridObject.js'
+import type { Language } from './getPlatformSpecs.js'
 
-export function createPlatformSpec<
-  TPlatform extends Platform,
-  TLanguage extends PlatformSpec[TPlatform],
->(
+export function createPlatformSpec(
   module: InterfaceDeclaration,
-  platform: TPlatform,
-  language: TLanguage
+  language: Language
 ): SourceFile[] {
-  switch (platform) {
-    case 'ios':
-      switch (language) {
-        case 'swift':
-          return createAppleSwiftSpec(module)
-        case 'c++':
-          return createSharedCppSpec(module)
-        default:
-          throw new Error(`${language} is not supported on ${platform}!`)
-      }
-    case 'android':
-      switch (language) {
-        case 'kotlin':
-          return createAndroidKotlinSpec(module)
-        case 'c++':
-          return createSharedCppSpec(module)
-        default:
-          throw new Error(`${language} is not supported on ${platform}!`)
-      }
+  switch (language) {
+    case 'c++':
+      return createCppSpec(module)
+    case 'swift':
+      return createSwiftSpec(module)
+    case 'kotlin':
+      return createKotlinSpec(module)
     default:
-      throw new Error(`${platform} is not supported!`)
+      throw new Error(`Language "${language}" is not supported!`)
   }
+}
+
+function createCppSpec(module: InterfaceDeclaration): SourceFile[] {
+  const interfaceName = module.getSymbolOrThrow().getEscapedName()
+
+  const properties = module.getProperties()
+  const methods = module.getMethods()
+  assertNoDuplicateFunctions(methods)
+
+  const cppFiles = createCppHybridObject(
+    interfaceName,
+    module.getSourceFile().getBaseName(),
+    properties,
+    methods
+  )
+  return cppFiles
+}
+
+function createSwiftSpec(_module: InterfaceDeclaration): SourceFile[] {
+  throw new Error(`Swift Specs are not yet implemented!`)
+}
+
+function createKotlinSpec(_module: InterfaceDeclaration): SourceFile[] {
+  throw new Error(`Kotlin Specs are not yet implemented!`)
 }
 
 function getDuplicates<T>(array: T[]): T[] {
@@ -57,28 +64,4 @@ function assertNoDuplicateFunctions(functions: MethodSignature[]): void {
       `Function overloading is not supported! (In ${duplicateSignatures.join(' vs ')})`
     )
   }
-}
-
-function createSharedCppSpec(module: InterfaceDeclaration): SourceFile[] {
-  const interfaceName = module.getSymbolOrThrow().getEscapedName()
-
-  const properties = module.getProperties()
-  const methods = module.getMethods()
-  assertNoDuplicateFunctions(methods)
-
-  const cppFiles = createCppHybridObject(
-    interfaceName,
-    module.getSourceFile().getBaseName(),
-    properties,
-    methods
-  )
-  return cppFiles
-}
-
-function createAppleSwiftSpec(_module: InterfaceDeclaration): SourceFile[] {
-  throw new Error(`Swift for Apple/iOS is not yet implemented!`)
-}
-
-function createAndroidKotlinSpec(_module: InterfaceDeclaration): SourceFile[] {
-  throw new Error(`Kotlin for Android is not yet implemented!`)
 }

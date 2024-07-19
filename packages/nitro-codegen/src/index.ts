@@ -7,6 +7,7 @@ import { promises as fs } from 'fs'
 import path from 'path'
 import { getBaseDirectory, prettifyDirectory } from './getCurrentDir.js'
 import { errorToString, indent } from './stringUtils.js'
+import type { SourceFile } from './syntax/SourceFile.js'
 
 const start = performance.now()
 let targetSpecs = 0
@@ -95,26 +96,27 @@ for (const sourceFile of project.getSourceFiles()) {
       console.log(
         `    ⚙️   Generating specs for HybridObject "${moduleName}"...`
       )
+      {
+        const files = createPlatformSpec(module, 'c++')
+        console.log(`        cpp: Generating cross-platform C++ code...`)
+        for (const file of files) {
+          const basePath = path.join(outFolder, 'cpp')
+          await writeFile(basePath, file)
+        }
+      }
       for (const platform of platforms) {
         const language = platformSpec[platform]!
-        const files = createPlatformSpec(module, platform, language)
+        if (language === 'c++') {
+          // We already generated shared C++ code.
+          continue
+        }
+
+        const files = createPlatformSpec(module, language)
         console.log(`        ${platform}: Generating ${language} code...`)
 
         for (const file of files) {
-          const filepath = path.join(
-            outFolder,
-            platform,
-            file.language,
-            file.name
-          )
-          console.log(`          Creating ${file.name}...`)
-
-          const dir = path.dirname(filepath)
-          // Create directory if it doesn't exist yet
-          await fs.mkdir(dir, { recursive: true })
-
-          // Write file
-          await fs.writeFile(filepath, file.content.trim(), 'utf8')
+          const basePath = path.join(outFolder, platform, file.language)
+          await writeFile(basePath, file)
         }
       }
       generatedSpecs++
@@ -137,3 +139,15 @@ console.log(
   `🎉  Generated ${generatedSpecs}/${targetSpecs} HybridObject${generatedSpecs === 1 ? '' : 's'} in ${timeS}s!`
 )
 console.log(`💡  Your code is in ${prettifyDirectory(outFolder)}`)
+
+async function writeFile(basePath: string, file: SourceFile): Promise<void> {
+  const filepath = path.join(basePath, file.name)
+  console.log(`          Creating ${file.name}...`)
+
+  const dir = path.dirname(filepath)
+  // Create directory if it doesn't exist yet
+  await fs.mkdir(dir, { recursive: true })
+
+  // Write file
+  await fs.writeFile(filepath, file.content.trim(), 'utf8')
+}
