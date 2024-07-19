@@ -65,6 +65,10 @@ export class Property implements CodeNode {
           return `virtual ${s.returnType.getCode()} ${s.name}(${params.join(', ')}) = 0;`
         })
         return codeLines.join('\n')
+      case 'swift':
+        const type = this.type.getCode()
+        if (this.isReadonly) return `public var ${this.name}: ${type} { get }`
+        else return `public var ${this.name}: ${type} { get set }`
       default:
         throw new Error(
           `Language ${language} is not yet supported for properties!`

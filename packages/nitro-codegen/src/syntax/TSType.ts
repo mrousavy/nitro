@@ -190,6 +190,10 @@ export class TSType implements CodeNode {
     }
   }
 
+  get isNothing(): boolean {
+    return this.type.isUndefined() || this.type.isNull() || this.type.isVoid()
+  }
+
   getCode(): string {
     if (this.isOptional) {
       return `std::optional<${this.cppName}>`
@@ -229,6 +233,10 @@ export class NamedTSType extends TSType {
 
 export class VoidType implements CodeNode {
   constructor() {}
+
+  get isNothing(): boolean {
+    return true
+  }
 
   getCode(): string {
     return 'void'

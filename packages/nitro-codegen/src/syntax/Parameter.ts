@@ -22,6 +22,8 @@ export class Parameter implements CodeNode {
     switch (language) {
       case 'c++':
         return `${this.type.getCode()} ${cppName}`
+      case 'swift':
+        return `${cppName}: ${this.type.getCode()}`
       default:
         throw new Error(
           `Language ${language} is not yet supported for parameters!`

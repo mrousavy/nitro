@@ -8,6 +8,13 @@
 
 import Foundation
 
-protocol Image {
+public protocol Image {
+  // Properties
+  public var width: double { get }
+  public var height: double { get }
+  public var pixelFormat: PixelFormat { get }
 
+  // Methods
+  public func toArrayBuffer(format: ImageFormat) throws -> std::shared_ptr<ArrayBuffer>
+  public func saveToFile(path: std::string) throws -> std::future<void>
 }

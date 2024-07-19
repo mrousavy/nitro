@@ -33,7 +33,7 @@ export class Method implements CodeNode {
 
   getCode(language: Language): string {
     switch (language) {
-      case 'c++':
+      case 'c++': {
         const signature = this.cppSignature
         const params = signature.parameters.map((p) => {
           const paramType =
@@ -43,6 +43,14 @@ export class Method implements CodeNode {
           return `${paramType} ${p.name}`
         })
         return `virtual ${signature.returnType.getCode()} ${signature.name}(${params.join(', ')}) = 0;`
+      }
+      case 'swift': {
+        const params = this.parameters.map((p) => p.getCode('swift'))
+        const returnType = this.returnType.isNothing
+          ? ''
+          : `-> ${this.returnType.getCode()}`
+        return `public func ${this.name}(${params.join(', ')}) throws ${returnType}`
+      }
       default:
         throw new Error(
           `Language ${language} is not yet supported for property getters!`
