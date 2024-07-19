@@ -19,6 +19,9 @@ export class StructType implements Type {
     switch (language) {
       case 'c++':
         return this.structName
+      case 'swift':
+        // TODO: Namespace?
+        return this.structName
       default:
         throw new Error(
           `Language ${language} is not yet supported for StructType!`

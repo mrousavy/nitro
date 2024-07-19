@@ -18,6 +18,8 @@ export class OptionalType implements Type {
     switch (language) {
       case 'c++':
         return `std::optional<${wrapping}>`
+      case 'swift':
+        return `${wrapping}?`
       default:
         throw new Error(
           `Language ${language} is not yet supported for OptionalType!`

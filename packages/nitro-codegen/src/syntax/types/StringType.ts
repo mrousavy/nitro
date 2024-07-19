@@ -11,6 +11,8 @@ export class StringType implements Type {
     switch (language) {
       case 'c++':
         return 'std::string'
+      case 'swift':
+        return 'String'
       default:
         throw new Error(
           `Language ${language} is not yet supported for StringType!`

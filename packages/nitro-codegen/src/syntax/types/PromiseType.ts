@@ -18,6 +18,9 @@ export class PromiseType implements Type {
     switch (language) {
       case 'c++':
         return `std::future<${resultingCode}>`
+      case 'swift':
+        // TODO: Implement Promise in Swift!
+        return `Promise<${resultingCode}>`
       default:
         throw new Error(
           `Language ${language} is not yet supported for PromiseType!`

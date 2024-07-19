@@ -11,6 +11,8 @@ export class BooleanType implements Type {
     switch (language) {
       case 'c++':
         return 'bool'
+      case 'swift':
+        return 'Bool'
       default:
         throw new Error(
           `Language ${language} is not yet supported for BooleanType!`

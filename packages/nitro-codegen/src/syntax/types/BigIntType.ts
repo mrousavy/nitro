@@ -11,6 +11,8 @@ export class BigIntType implements Type {
     switch (language) {
       case 'c++':
         return 'int64_t'
+      case 'swift':
+        return 'Int64'
       default:
         throw new Error(
           `Language ${language} is not yet supported for BigIntType!`

@@ -11,6 +11,8 @@ export class NumberType implements Type {
     switch (language) {
       case 'c++':
         return 'double'
+      case 'swift':
+        return 'Double'
       default:
         throw new Error(
           `Language ${language} is not yet supported for NumberType!`

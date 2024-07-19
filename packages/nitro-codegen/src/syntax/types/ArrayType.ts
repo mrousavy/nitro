@@ -19,6 +19,8 @@ export class ArrayType implements Type {
     switch (language) {
       case 'c++':
         return `std::vector<${itemCode}>`
+      case 'swift':
+        return `[${itemCode}]`
       default:
         throw new Error(
           `Language ${language} is not yet supported for ArrayType!`

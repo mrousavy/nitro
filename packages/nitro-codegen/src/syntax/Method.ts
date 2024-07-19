@@ -46,7 +46,7 @@ export class Method implements CodeNode {
       case 'swift': {
         const params = this.parameters.map((p) => p.getCode('swift'))
         const returnType = this.returnType.getCode('swift')
-        return `public func ${this.name}(${params.join(', ')}) throws ${returnType}`
+        return `public func ${this.name}(${params.join(', ')}) throws -> ${returnType}`
       }
       default:
         throw new Error(

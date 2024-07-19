@@ -19,6 +19,9 @@ export class EnumType implements Type {
     switch (language) {
       case 'c++':
         return this.enumName
+      case 'swift':
+        // TODO: Namespace?
+        return this.enumName
       default:
         throw new Error(
           `Language ${language} is not yet supported for NumberType!`
