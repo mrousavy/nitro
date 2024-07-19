@@ -7,6 +7,7 @@
 ///
 
 import Foundation
+import NitroModules
 
 /**
  * A class implementation that bridges ImageSpec over to C++.
@@ -49,7 +50,7 @@ public class ImageSpecCxx {
       let result = try self.implementation.toArrayBuffer(format: format)
       return .success(result)
     } catch {
-      return .failure("TODO: Error message!")
+      return .failure(error)
     }
   }
   
@@ -58,7 +59,7 @@ public class ImageSpecCxx {
       let result = try self.implementation.saveToFile(path: path)
       return .success(result)
     } catch {
-      return .failure("TODO: Error message!")
+      return .failure(error)
     }
   }
 }

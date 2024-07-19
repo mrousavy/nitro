@@ -7,6 +7,7 @@
 ///
 
 import Foundation
+import NitroModules
 
 /**
  * A Swift protocol representing the Image HybridObject.

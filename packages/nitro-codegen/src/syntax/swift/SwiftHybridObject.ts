@@ -41,7 +41,7 @@ func ${method.name}(${params.join(', ')}) -> Result<${returnType}, Error> {
     let result = try self.implementation.${method.name}(${passParams.join(', ')})
     return .success(result)
   } catch {
-    return .failure("TODO: Error message!")
+    return .failure(error)
   }
 }
   `.trim()
@@ -56,6 +56,7 @@ export function createSwiftHybridObject(spec: HybridObjectSpec): SourceFile[] {
 ${createFileMetadataString(`${protocolName}.swift`)}
 
 import Foundation
+import NitroModules
 
 /**
  * A Swift protocol representing the ${spec.name} HybridObject.
@@ -94,6 +95,7 @@ public protocol ${protocolName} {
 ${createFileMetadataString(`${protocolName}Cxx.swift`)}
 
 import Foundation
+import NitroModules
 
 /**
  * A class implementation that bridges ${protocolName} over to C++.

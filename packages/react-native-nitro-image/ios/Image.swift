@@ -45,11 +45,14 @@ public class Image : ImageSpec {
     }
   }
 
-  public func saveToFile(path: String) throws {
+  public func saveToFile(path: String) throws -> Promise<Void> {
     let data = try toArrayBuffer(format: .jpg)
     guard let url = URL(string: path) else {
       throw RuntimeError.error(withMessage: "Path \"\(path)\" is not a valid URL!")
     }
     try data.write(to: url)
+    
+    // TODO: Actually implement Promises
+    return Promise<Void>.resolved()
   }
 }
