@@ -21,7 +21,7 @@
 using namespace margelo::nitro;
 
 /**
- * An abstract base class for `Image` (Image.nitro.ts)
+ * An abstract base class for `Image`
  * Inherit this class to create instances of `HybridImage` in C++.
  * @example
  * ```cpp

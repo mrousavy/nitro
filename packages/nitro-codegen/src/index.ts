@@ -2,7 +2,7 @@
 
 import { Project } from 'ts-morph'
 import { getPlatformSpec, type Platform } from './getPlatformSpecs.js'
-import { createPlatformSpec } from './createPlatformSpec.js'
+import { generatePlatformFiles } from './createPlatformSpec.js'
 import { promises as fs } from 'fs'
 import path from 'path'
 import { getBaseDirectory, prettifyDirectory } from './getCurrentDir.js'
@@ -99,7 +99,7 @@ for (const sourceFile of project.getSourceFiles()) {
       // Generate platform specific code (C++/Swift/Kotlin/...)
       for (const platform of platforms) {
         const language = platformSpec[platform]!
-        const files = createPlatformSpec(module, language)
+        const files = generatePlatformFiles(module, language)
         console.log(`        ${platform}: Generating ${language} code...`)
 
         for (const file of files) {

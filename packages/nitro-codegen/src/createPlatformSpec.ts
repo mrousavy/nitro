@@ -2,44 +2,58 @@ import { type InterfaceDeclaration, type MethodSignature } from 'ts-morph'
 import type { SourceFile } from './syntax/SourceFile.js'
 import { createCppHybridObject } from './syntax/c++/CppHybridObject.js'
 import type { Language } from './getPlatformSpecs.js'
+import type { HybridObjectSpec } from './syntax/HybridObjectSpec.js'
+import { Property } from './syntax/Property.js'
+import { Method } from './syntax/Method.js'
 
-export function createPlatformSpec(
-  module: InterfaceDeclaration,
+export function generatePlatformFiles(
+  declaration: InterfaceDeclaration,
   language: Language
 ): SourceFile[] {
+  const spec = getHybridObjectSpec(declaration)
+
   switch (language) {
     case 'c++':
-      return createCppSpec(module)
+      return generateCppFiles(spec)
     case 'swift':
-      return createSwiftSpec(module)
+      return generateSwiftFiles(spec)
     case 'kotlin':
-      return createKotlinSpec(module)
+      return generateKotlinFiles(spec)
     default:
       throw new Error(`Language "${language}" is not supported!`)
   }
 }
 
-function createCppSpec(module: InterfaceDeclaration): SourceFile[] {
-  const interfaceName = module.getSymbolOrThrow().getEscapedName()
+function getHybridObjectSpec(
+  declaration: InterfaceDeclaration
+): HybridObjectSpec {
+  const interfaceName = declaration.getSymbolOrThrow().getEscapedName()
+  const hybridObjectName = `Hybrid${interfaceName}`
 
-  const properties = module.getProperties()
-  const methods = module.getMethods()
+  const properties = declaration.getProperties()
+  const methods = declaration.getMethods()
   assertNoDuplicateFunctions(methods)
+  return {
+    name: interfaceName,
+    hybridObjectName: hybridObjectName,
+    properties: properties.map((p) => new Property(p)),
+    methods: methods.map((m) => new Method(m)),
+  }
+}
 
-  const cppFiles = createCppHybridObject(
-    interfaceName,
-    module.getSourceFile().getBaseName(),
-    properties,
-    methods
-  )
+function generateCppFiles(spec: HybridObjectSpec): SourceFile[] {
+  const cppFiles = createCppHybridObject(spec)
   return cppFiles
 }
 
-function createSwiftSpec(_module: InterfaceDeclaration): SourceFile[] {
-  throw new Error(`Swift Specs are not yet implemented!`)
+function generateSwiftFiles(spec: HybridObjectSpec): SourceFile[] {
+  // 1. Always generate a C++ spec for the shared layer and type declarations (enums, interfaces, ...)
+  const cppFiles = generateCppFiles(spec)
+
+  return cppFiles
 }
 
-function createKotlinSpec(_module: InterfaceDeclaration): SourceFile[] {
+function generateKotlinFiles(_spec: HybridObjectSpec): SourceFile[] {
   throw new Error(`Kotlin Specs are not yet implemented!`)
 }
 

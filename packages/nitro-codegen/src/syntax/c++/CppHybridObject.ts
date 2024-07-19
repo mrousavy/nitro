@@ -1,28 +1,13 @@
-import type { MethodSignature, PropertySignature } from 'ts-morph'
 import type { SourceFile } from '../SourceFile.js'
-import { Property } from '../Property.js'
-import { Method } from '../Method.js'
 import { createFileMetadataString } from '../helpers.js'
 import { indent } from '../../stringUtils.js'
+import type { HybridObjectSpec } from '../HybridObjectSpec.js'
 
-export function createCppHybridObject(
-  interfaceName: string,
-  sourceFile: string,
-  properties: PropertySignature[],
-  methods: MethodSignature[]
-): SourceFile[] {
-  const cppClassName = `Hybrid${interfaceName}`
-
-  // Properties (getters + setters)
-  const cppProperties = properties.map((p) => new Property(p))
-
-  // Functions
-  const cppMethods = methods.map((f) => new Method(f))
-
+export function createCppHybridObject(spec: HybridObjectSpec): SourceFile[] {
   // Extra includes
   const extraDefinitions = [
-    ...cppProperties.flatMap((p) => p.getDefinitionFiles()),
-    ...cppMethods.flatMap((m) => m.getDefinitionFiles()),
+    ...spec.properties.flatMap((p) => p.getDefinitionFiles()),
+    ...spec.methods.flatMap((m) => m.getDefinitionFiles()),
   ]
   const cppExtraIncludesAll = extraDefinitions.map(
     (d) => `#include "${d.name}"`
@@ -31,7 +16,7 @@ export function createCppHybridObject(
 
   // Generate the full header / code
   const cppHeaderCode = `
-${createFileMetadataString(`${cppClassName}.hpp`)}
+${createFileMetadataString(`${spec.hybridObjectName}.hpp`)}
 
 #pragma once
 
@@ -46,31 +31,31 @@ ${cppExtraIncludes.join('\n')}
 using namespace margelo::nitro;
 
 /**
- * An abstract base class for \`${interfaceName}\` (${sourceFile})
- * Inherit this class to create instances of \`${cppClassName}\` in C++.
+ * An abstract base class for \`${spec.name}\`
+ * Inherit this class to create instances of \`${spec.hybridObjectName}\` in C++.
  * @example
  * \`\`\`cpp
- * class ${interfaceName}: public ${cppClassName} {
+ * class ${spec.name}: public ${spec.hybridObjectName} {
  *   // ...
  * };
  * \`\`\`
  */
-class ${cppClassName}: public HybridObject {
+class ${spec.hybridObjectName}: public HybridObject {
   public:
     // Constructor
-    explicit ${cppClassName}(): HybridObject(TAG) { }
+    explicit ${spec.hybridObjectName}(): HybridObject(TAG) { }
 
   public:
     // Properties
-    ${indent(cppProperties.map((p) => p.getCode('c++')).join('\n'), '    ')}
+    ${indent(spec.properties.map((p) => p.getCode('c++')).join('\n'), '    ')}
 
   public:
     // Methods
-    ${indent(cppMethods.map((m) => m.getCode('c++')).join('\n'), '    ')}
+    ${indent(spec.methods.map((m) => m.getCode('c++')).join('\n'), '    ')}
 
   protected:
     // Tag for logging
-    static constexpr auto TAG = "${interfaceName}";
+    static constexpr auto TAG = "${spec.name}";
 
   private:
     // Hybrid Setup
@@ -81,8 +66,8 @@ class ${cppClassName}: public HybridObject {
   // Each C++ method needs to be registered in the HybridObject - that's getters, setters and normal methods.
   const registrations: string[] = []
   const signatures = [
-    ...cppProperties.flatMap((p) => p.cppSignatures),
-    ...cppMethods.map((m) => m.cppSignature),
+    ...spec.properties.flatMap((p) => p.cppSignatures),
+    ...spec.methods.map((m) => m.cppSignature),
   ]
   for (const signature of signatures) {
     let registerMethod: string
@@ -100,16 +85,16 @@ class ${cppClassName}: public HybridObject {
         throw new Error(`Invalid C++ Signature Type: ${signature.type}!`)
     }
     registrations.push(
-      `${registerMethod}("${signature.rawName}", &${cppClassName}::${signature.name}, this);`
+      `${registerMethod}("${signature.rawName}", &${spec.hybridObjectName}::${signature.name}, this);`
     )
   }
 
   const cppBodyCode = `
-${createFileMetadataString(`${cppClassName}.cpp`)}
+${createFileMetadataString(`${spec.hybridObjectName}.cpp`)}
 
-#include "${cppClassName}.hpp"
+#include "${spec.hybridObjectName}.hpp"
 
-void ${cppClassName}::loadHybridMethods() {
+void ${spec.hybridObjectName}::loadHybridMethods() {
   // load base methods/properties
   HybridObject::loadHybridMethods();
   // load custom methods/properties
@@ -120,12 +105,12 @@ void ${cppClassName}::loadHybridMethods() {
   const files: SourceFile[] = []
   files.push({
     content: cppHeaderCode,
-    name: `${cppClassName}.hpp`,
+    name: `${spec.hybridObjectName}.hpp`,
     language: 'c++',
   })
   files.push({
     content: cppBodyCode,
-    name: `${cppClassName}.cpp`,
+    name: `${spec.hybridObjectName}.cpp`,
     language: 'c++',
   })
   files.push(...extraDefinitions)
