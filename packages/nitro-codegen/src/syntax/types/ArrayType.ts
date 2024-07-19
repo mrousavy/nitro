@@ -1,0 +1,31 @@
+import type { Language } from '../../getPlatformSpecs.js'
+import type { SourceFile } from '../SourceFile.js'
+import type { Type } from './Type.js'
+
+export class ArrayType implements Type {
+  readonly itemType: Type
+
+  constructor(itemType: Type) {
+    this.itemType = itemType
+  }
+
+  get canBePassedByReference(): boolean {
+    return true
+  }
+
+  getCode(language: Language): string {
+    const itemCode = this.itemType.getCode(language)
+
+    switch (language) {
+      case 'c++':
+        return `std::vector<${itemCode}>`
+      default:
+        throw new Error(
+          `Language ${language} is not yet supported for ArrayType!`
+        )
+    }
+  }
+  getExtraFiles(): SourceFile[] {
+    return this.itemType.getExtraFiles()
+  }
+}
