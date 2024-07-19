@@ -17,13 +17,9 @@ public class Image : ImageSpec {
   public init(uiImage: UIImage) {
     self.uiImage = uiImage
   }
-
-  public var width: Double {
-    return uiImage.size.width
-  }
-
-  public var height: Double {
-    return uiImage.size.height
+  
+  public var size: ImageSize {
+    return ImageSize(uiImage.size.width, uiImage.size.height)
   }
 
   public var pixelFormat: PixelFormat {

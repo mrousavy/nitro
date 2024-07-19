@@ -25,13 +25,19 @@ export function createCppStruct(
   const cppStructProps = cppProperties
     .map((p) => `${p.getCode('c++')} ${p.escapedName};`)
     .join('\n')
+  const cppConstructorParams = cppProperties
+    .map((p) => `${p.getCode('c++')} ${p.escapedName}`)
+    .join(', ')
+  const cppInitializerParams = cppProperties
+    .map((p) => `${p.escapedName}(${p.escapedName})`)
+    .join(', ')
   // Get C++ code for converting each member from a jsi::Value
-  const cppFromJsiProps = cppProperties
+  const cppFromJsiParams = cppProperties
     .map(
       (p) =>
-        `.${p.escapedName} = JSIConverter<${p.getCode('c++')}>::fromJSI(runtime, obj.getProperty(runtime, "${p.name}")),`
+        `JSIConverter<${p.getCode('c++')}>::fromJSI(runtime, obj.getProperty(runtime, "${p.name}"))`
     )
-    .join('\n')
+    .join(',\n')
   // Get C++ code for converting each member to a jsi::Value
   const cppToJsiCalls = cppProperties
     .map(
@@ -56,6 +62,9 @@ ${cppExtraIncludes.join('\n')}
 struct ${typename} {
 public:
   ${indent(cppStructProps, '  ')}
+
+public:
+  explicit ${typename}(${cppConstructorParams}): ${cppInitializerParams} {}
 };
 
 namespace margelo::nitro {
@@ -65,9 +74,9 @@ namespace margelo::nitro {
   struct JSIConverter<${typename}> {
     static inline ${typename} fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       jsi::Object obj = arg.asObject(runtime);
-      return ${typename} {
-        ${indent(cppFromJsiProps, '        ')}
-      };
+      return ${typename}(
+        ${indent(cppFromJsiParams, '        ')}
+      );
     }
     static inline jsi::Value toJSI(jsi::Runtime& runtime, const ${typename}& arg) {
       jsi::Object obj(runtime);

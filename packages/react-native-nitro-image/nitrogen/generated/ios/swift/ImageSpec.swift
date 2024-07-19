@@ -28,8 +28,7 @@ public protocol ImageSpec {
   var hybridContext: margelo.nitro.HybridContext { get set }
 
   // Properties
-  var width: Double { get }
-  var height: Double { get }
+  var size: ImageSize { get }
   var pixelFormat: PixelFormat { get }
 
   // Methods

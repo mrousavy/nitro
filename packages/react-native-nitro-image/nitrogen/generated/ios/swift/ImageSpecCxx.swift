@@ -26,15 +26,9 @@ public class ImageSpecCxx {
   }
 
   // Properties
-  public var width: Double {
+  public var size: ImageSize {
     get {
-      return self.implementation.width
-    }
-  }
-  
-  public var height: Double {
-    get {
-      return self.implementation.height
+      return self.implementation.size
     }
   }
   

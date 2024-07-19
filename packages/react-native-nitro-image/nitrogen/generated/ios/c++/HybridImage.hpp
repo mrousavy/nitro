@@ -14,6 +14,7 @@
 #error NitroModules cannot be found! Are you sure you installed react-native-nitro properly?
 #endif
 
+#include "ImageSize.hpp"
 #include "PixelFormat.hpp"
 #include "ImageFormat.hpp"
 
@@ -36,8 +37,7 @@ class HybridImage: public HybridObject {
 
   public:
     // Properties
-    virtual double getWidth() = 0;
-    virtual double getHeight() = 0;
+    virtual ImageSize getSize() = 0;
     virtual PixelFormat getPixelFormat() = 0;
 
   public:
