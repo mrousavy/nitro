@@ -97,6 +97,7 @@ for (const sourceFile of project.getSourceFiles()) {
         `    ⚙️   Generating specs for HybridObject "${moduleName}"...`
       )
       {
+        // Generate shared C++ code
         const files = createPlatformSpec(module, 'c++')
         console.log(`        cpp: Generating cross-platform C++ code...`)
         for (const file of files) {
@@ -104,6 +105,7 @@ for (const sourceFile of project.getSourceFiles()) {
           await writeFile(basePath, file)
         }
       }
+      // Generate platform specific code (Swift/Kotlin/...)
       for (const platform of platforms) {
         const language = platformSpec[platform]!
         if (language === 'c++') {
@@ -119,6 +121,8 @@ for (const sourceFile of project.getSourceFiles()) {
           await writeFile(basePath, file)
         }
       }
+
+      // Done!
       generatedSpecs++
     } catch (error) {
       const message = indent(errorToString(error), '    ')
