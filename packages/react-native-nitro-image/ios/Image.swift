@@ -11,23 +11,23 @@ import NitroModules
 
 public class Image : ImageSpec {
   private let uiImage: UIImage
-  
+
   public init(uiImage: UIImage) {
     self.uiImage = uiImage
   }
-  
+
   public var width: Int {
     return Int(uiImage.size.width)
   }
-  
+
   public var height: Int {
     return Int(uiImage.size.height)
   }
-  
+
   public var pixelFormat: PixelFormat {
     return .rgb
   }
-  
+
   public func toArrayBuffer(format: ImageFormat) throws -> Data {
     switch format {
     case .jpg:
@@ -41,5 +41,13 @@ public class Image : ImageSpec {
       }
       return data
     }
+  }
+
+  public func saveToFile(path: String) throws {
+    let data = try toArrayBuffer(format: .jpg)
+    guard let url = URL(string: path) else {
+      throw RuntimeError.error(withMessage: "Path \"\(path)\" is not a valid URL!")
+    }
+    try data.write(to: url)
   }
 }

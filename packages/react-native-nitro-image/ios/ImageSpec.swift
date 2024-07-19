@@ -11,4 +11,5 @@ public protocol ImageSpec {
   var pixelFormat: PixelFormat { get }
   
   func toArrayBuffer(format: ImageFormat) throws -> Data
+  func saveToFile(path: String) throws
 }
