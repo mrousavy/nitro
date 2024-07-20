@@ -20,6 +20,13 @@ Pod::Spec.new do |s|
     # Implementation (Swift)
     "ios/**/*.{swift}",
   ]
+  s.public_header_files = [
+    # Generated specs
+    "nitrogen/generated/ios/c++/HybridImage.hpp",
+    "nitrogen/generated/ios/c++/ImageFormat.hpp",
+    "nitrogen/generated/ios/c++/ImageSize.hpp",
+    "nitrogen/generated/ios/c++/PixelFormat.hpp",
+  ]
 
   s.pod_target_xcconfig = {
     # Use C++ 20

@@ -39,7 +39,7 @@ public class ImageSpecCxx {
   }
 
   // Methods
-  func toArrayBuffer(format: Int32) -> Result<Data, Error> {
+  public func toArrayBuffer(format: Int32) -> Result<Data, Error> {
     do {
       let result = try self.implementation.toArrayBuffer(format: ImageFormat(rawValue: format)!)
       return .success(result)
@@ -48,7 +48,7 @@ public class ImageSpecCxx {
     }
   }
   
-  func saveToFile(path: String) -> Result<Promise<Void>, Error> {
+  public func saveToFile(path: String) -> Result<Promise<Void>, Error> {
     do {
       let result = try self.implementation.saveToFile(path: path)
       return .success(result)

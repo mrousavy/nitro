@@ -6,6 +6,9 @@ import type { Property } from '../Property.js'
 import type { SourceFile } from '../SourceFile.js'
 import { SwiftCxxBridgedType } from './SwiftCxxBridgedType.js'
 
+// TODO: dynamically get namespace
+const NAMESPACE = 'NitroImage'
+
 function getPropertyForwardImplementation(property: Property): string {
   const bridgedType = new SwiftCxxBridgedType(property.type)
   const getter = `
@@ -25,7 +28,7 @@ set {
   }
 
   const code = `
-public var ${property.name}: ${bridgedType.getCode()} {
+public var ${property.name}: ${bridgedType.getSwiftCode()} {
   ${indent(body.join('\n'), '  ')}
 }
   `
@@ -36,14 +39,14 @@ function getMethodForwardImplementation(method: Method): string {
   const returnType = new SwiftCxxBridgedType(method.returnType)
   const params = method.parameters.map((p) => {
     const bridgedType = new SwiftCxxBridgedType(p.type)
-    return `${p.name}: ${bridgedType.getCode()}`
+    return `${p.name}: ${bridgedType.getSwiftCode()}`
   })
   const passParams = method.parameters.map((p) => {
     const bridgedType = new SwiftCxxBridgedType(p.type)
     return `${p.name}: ${bridgedType.fromCpp(p.name)}`
   })
   return `
-func ${method.name}(${params.join(', ')}) -> Result<${returnType.getCode()}, Error> {
+public func ${method.name}(${params.join(', ')}) -> Result<${returnType.getSwiftCode()}, Error> {
   do {
     let result = try self.implementation.${method.name}(${passParams.join(', ')})
     return .success(${returnType.toCpp('result')})
@@ -129,6 +132,33 @@ public class ${protocolName}Cxx {
 
   `
 
+  const cppMethods = spec.methods
+    .map((m) => {
+      const params = m.parameters.map((p) => p.name).join(', ')
+      const body = `_swiftPart.${m.name}(${params});`
+      return m.getCode('c++', body)
+    })
+    .join('\n')
+  const cppHybridObjectCode = `
+${createFileMetadataString(`Hybrid${spec.name}Swift.hpp`)}
+
+#pragma once
+
+#include "Hybrid${spec.name}.hpp"
+#include "${NAMESPACE}-Swift.h"
+
+class Hybrid${spec.name}Swift: public Hybrid${spec.name} {
+public:
+  explicit Hybrid${spec.name}Swift(${NAMESPACE}::${protocolName}Cxx swiftPart): Hybrid${spec.name}(), _swiftPart(swiftPart) { }
+
+public:
+  ${indent(cppMethods, '  ')}
+
+private:
+${NAMESPACE}::${protocolName}Cxx _swiftPart;
+};
+  `
+
   const files: SourceFile[] = []
   files.push({
     content: protocolCode,
@@ -139,6 +169,16 @@ public class ${protocolName}Cxx {
     content: swiftBridgeCode,
     language: 'swift',
     name: `${protocolName}Cxx.swift`,
+  })
+  files.push({
+    content: cppHybridObjectCode,
+    language: 'c++',
+    name: `Hybrid${spec.name}Swift.hpp`,
+  })
+  files.push({
+    content: `#include "Hybrid${spec.name}Swift.hpp"`,
+    language: 'c++',
+    name: `Hybrid${spec.name}Swift.cpp`,
   })
   return files
 }

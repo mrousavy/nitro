@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 import NitroModules
 
-public class Image : ImageSpec {
+class Image : ImageSpec {
   public var hybridContext = margelo.nitro.HybridContext()
   
   private let uiImage: UIImage

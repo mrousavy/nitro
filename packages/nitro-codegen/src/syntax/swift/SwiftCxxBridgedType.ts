@@ -7,7 +7,7 @@ export class SwiftCxxBridgedType {
     this.type = type
   }
 
-  getCode(): string {
+  getSwiftCode(): string {
     switch (this.type.kind) {
       case 'enum':
         // Enums cannot be referenced from C++ <-> Swift bi-directionally,
@@ -16,6 +16,14 @@ export class SwiftCxxBridgedType {
       default:
         // No workaround - just return normal type
         return this.type.getCode('swift')
+    }
+  }
+  getCppCode(): string {
+    switch (this.type.kind) {
+      case 'enum':
+        return 'int'
+      default:
+        return this.type.getCode('c++')
     }
   }
 

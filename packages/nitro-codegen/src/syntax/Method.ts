@@ -31,22 +31,35 @@ export class Method implements CodeNode {
     }
   }
 
-  getCode(language: Language): string {
+  getCode(language: Language, body: string | undefined = undefined): string {
     switch (language) {
       case 'c++': {
         const signature = this.cppSignature
+        const returnType = signature.returnType.getCode('c++')
         const params = signature.parameters.map((p) => {
           const paramType = p.canBePassedByReference
             ? toReferenceType(p.getCode('c++'))
             : p.getCode('c++')
           return `${paramType} ${p.name}`
         })
-        return `virtual ${signature.returnType.getCode('c++')} ${signature.name}(${params.join(', ')}) = 0;`
+        if (body == null) {
+          return `virtual ${returnType} ${signature.name}(${params.join(', ')}) = 0;`
+        } else {
+          return `${returnType} ${signature.name}(${params.join(', ')}) {
+            ${body}
+          }`
+        }
       }
       case 'swift': {
         const params = this.parameters.map((p) => p.getCode('swift'))
         const returnType = this.returnType.getCode('swift')
-        return `func ${this.name}(${params.join(', ')}) throws -> ${returnType}`
+        if (body == null) {
+          return `func ${this.name}(${params.join(', ')}) throws -> ${returnType}`
+        } else {
+          return `func ${this.name}(${params.join(', ')}) throws -> ${returnType} {
+            ${body}
+          }`
+        }
       }
       default:
         throw new Error(
