@@ -75,7 +75,7 @@ return ${bridged.parseFromSwiftToCpp('result', 'c++')};
       } else {
         // just forward value directly
         getter = `return _swiftPart.${p.cppGetterName}();`
-        setter = `_swiftPart.${p.cppSetterName}(std::forward(${p.name}));`
+        setter = `_swiftPart.${p.cppSetterName}(std::forward<decltype(${p.name})>(${p.name}));`
       }
       return p.getCode('c++', {
         getter: getter.trim(),
