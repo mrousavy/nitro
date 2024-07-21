@@ -21,26 +21,26 @@ public:
 
 public:
   // Properties
-  ImageSize getSize() {
+  inline ImageSize getSize() {
     return _swiftPart.getSize();
   }
-  PixelFormat getPixelFormat() {
+  inline PixelFormat getPixelFormat() {
     auto result = _swiftPart.getPixelFormat();
     return static_cast<PixelFormat>(result);
   }
-  double getSomeSettableProp() {
+  inline double getSomeSettableProp() {
     return _swiftPart.getSomeSettableProp();
   }
   void setSomeSettableProp(double someSettableProp) {
-    _swiftPart.setSomeSettableProp(std::forward(someSettableProp));
+    _swiftPart.setSomeSettableProp(std::forward<decltype(someSettableProp)>(someSettableProp));
   }
 
 public:
   // Methods
-  void toArrayBuffer(ImageFormat format) {
+  inline void toArrayBuffer(ImageFormat format) {
     return _swiftPart.toArrayBuffer(static_cast<int>(format));
   }
-  void saveToFile(const std::string& path) {
+  inline void saveToFile(const std::string& path) {
     return _swiftPart.saveToFile(std::forward<decltype(path)>(path));
   }
 

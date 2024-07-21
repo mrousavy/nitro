@@ -77,10 +77,11 @@ return ${bridged.parseFromSwiftToCpp('result', 'c++')};
         getter = `return _swiftPart.${p.cppGetterName}();`
         setter = `_swiftPart.${p.cppSetterName}(std::forward<decltype(${p.name})>(${p.name}));`
       }
-      return p.getCode('c++', {
+      const code = p.getCode('c++', {
         getter: getter.trim(),
         setter: setter.trim(),
       })
+      return `inline ${code}`
     })
     .join('\n')
   const cppMethods = spec.methods
@@ -107,7 +108,8 @@ return ${bridgedReturnType.parseFromSwiftToCpp('result', 'c++')}
       } else {
         body = `return _swiftPart.${m.name}(${params});`
       }
-      return m.getCode('c++', body)
+      const code = m.getCode('c++', body)
+      return `inline ${code}`
     })
     .join('\n')
   const cppHybridObjectCode = `
@@ -169,11 +171,13 @@ ${createFileMetadataString(`Hybrid${spec.name}Swift.cpp`)}
 function getPropertyForwardImplementation(property: Property): string {
   const bridgedType = new SwiftCxxBridgedType(property.type)
   const getter = `
+@inline(__always)
 get {
   return ${bridgedType.parseFromSwiftToCpp(`self.implementation.${property.name}`, 'swift')}
 }
   `.trim()
   const setter = `
+@inline(__always)
 set {
   self.implementation.${property.name} = ${bridgedType.parseFromCppToSwift('newValue', 'swift')}
 }
@@ -202,7 +206,9 @@ function getMethodForwardImplementation(method: Method): string {
     const bridgedType = new SwiftCxxBridgedType(p.type)
     return `${p.name}: ${bridgedType.parseFromCppToSwift(p.name, 'swift')}`
   })
+  // TODO: Use @inlinable or @inline(__always)?
   return `
+@inline(__always)
 public func ${method.name}(${params.join(', ')}) -> Result<${returnType.getTypeCode('swift')}, Error> {
   do {
     let result = try self.implementation.${method.name}(${passParams.join(', ')})

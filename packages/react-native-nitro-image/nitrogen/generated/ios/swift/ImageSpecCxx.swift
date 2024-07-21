@@ -27,27 +27,32 @@ public class ImageSpecCxx {
 
   // Properties
   public var size: ImageSize {
+    @inline(__always)
     get {
       return self.implementation.size
     }
   }
   
   public var pixelFormat: Int32 {
+    @inline(__always)
     get {
       return self.implementation.pixelFormat.rawValue
     }
   }
   
   public var someSettableProp: Double {
+    @inline(__always)
     get {
       return self.implementation.someSettableProp
     }
+    @inline(__always)
     set {
       self.implementation.someSettableProp = newValue
     }
   }
 
   // Methods
+  @inline(__always)
   public func toArrayBuffer(format: Int32) -> Result<Void, Error> {
     do {
       let result = try self.implementation.toArrayBuffer(format: ImageFormat(rawValue: format)!)
@@ -57,6 +62,7 @@ public class ImageSpecCxx {
     }
   }
   
+  @inline(__always)
   public func saveToFile(path: String) -> Result<Void, Error> {
     do {
       let result = try self.implementation.saveToFile(path: path)
