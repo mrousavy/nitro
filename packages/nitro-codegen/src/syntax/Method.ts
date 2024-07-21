@@ -1,5 +1,5 @@
-import type { CodeNode, CppMethodSignature } from './CodeNode.js'
-import { escapeCppName, removeDuplicates, toReferenceType } from './helpers.js'
+import type { CodeNode } from './CodeNode.js'
+import { removeDuplicates } from './helpers.js'
 import type { Language } from '../getPlatformSpecs.js'
 import type { SourceFile } from './SourceFile.js'
 import { Parameter } from './Parameter.js'
@@ -7,47 +7,48 @@ import type { MethodSignature } from 'ts-morph'
 import type { Type } from './types/Type.js'
 import { createType } from './createType.js'
 
+export type MethodBody = string
+
 export class Method implements CodeNode {
   readonly name: string
   readonly returnType: Type
   readonly parameters: Parameter[]
 
-  constructor(prop: MethodSignature) {
-    this.name = prop.getSymbolOrThrow().getEscapedName()
-    const returnType = prop.getReturnType()
-    const isOptional = returnType.isNullable()
-    this.returnType = createType(returnType, isOptional)
-    this.parameters = prop.getParameters().map((p) => new Parameter(p))
-  }
-
-  get cppSignature(): CppMethodSignature {
-    const cppName = escapeCppName(this.name)
-    return {
-      rawName: this.name,
-      name: cppName,
-      returnType: this.returnType,
-      parameters: this.parameters.map((p) => p.type),
-      type: 'method',
+  constructor(name: string, returnType: Type, parameters: Parameter[])
+  constructor(prop: MethodSignature)
+  constructor(...args: [MethodSignature] | [string, Type, Parameter[]]) {
+    if (typeof args[0] === 'string') {
+      // constructor(...) #1
+      if (args.length !== 3)
+        throw new Error(`Missing arguments for new Method(...) overload #1!`)
+      const [name, returnType, parameters] = args
+      this.name = name
+      this.returnType = returnType
+      this.parameters = parameters
+    } else {
+      // constructor(...) #2
+      const [prop] = args
+      this.name = prop.getSymbolOrThrow().getEscapedName()
+      const returnType = prop.getReturnType()
+      const isOptional = returnType.isNullable()
+      this.returnType = createType(returnType, isOptional)
+      this.parameters = prop.getParameters().map((p) => new Parameter(p))
     }
   }
 
-  getCode(language: Language, body: string | undefined = undefined): string {
+  getCode(language: Language, body?: MethodBody): string {
     switch (language) {
       case 'c++': {
-        const signature = this.cppSignature
-        const returnType = signature.returnType.getCode('c++')
-        const params = signature.parameters.map((p) => {
-          const paramType = p.canBePassedByReference
-            ? toReferenceType(p.getCode('c++'))
-            : p.getCode('c++')
-          return `${paramType} ${p.name}`
-        })
+        const returnType = this.returnType.getCode('c++')
+        const params = this.parameters.map((p) => p.getCode('c++'))
         if (body == null) {
-          return `virtual ${returnType} ${signature.name}(${params.join(', ')}) = 0;`
+          return `virtual ${returnType} ${this.name}(${params.join(', ')}) = 0;`
         } else {
-          return `${returnType} ${signature.name}(${params.join(', ')}) {
-            ${body}
-          }`
+          return `
+${returnType} ${this.name}(${params.join(', ')}) {
+  ${body}
+}
+`.trim()
         }
       }
       case 'swift': {
@@ -56,9 +57,11 @@ export class Method implements CodeNode {
         if (body == null) {
           return `func ${this.name}(${params.join(', ')}) throws -> ${returnType}`
         } else {
-          return `func ${this.name}(${params.join(', ')}) throws -> ${returnType} {
-            ${body}
-          }`
+          return `
+func ${this.name}(${params.join(', ')}) throws -> ${returnType} {
+  ${body}
+}
+`.trim()
         }
       }
       default:

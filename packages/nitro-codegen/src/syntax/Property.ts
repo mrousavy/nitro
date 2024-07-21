@@ -1,11 +1,19 @@
 import { ts, type PropertySignature } from 'ts-morph'
-import type { CodeNode, CppMethodSignature } from './CodeNode.js'
+import type { CodeNode } from './CodeNode.js'
 import { capitalizeName } from '../stringUtils.js'
-import { escapeCppName, removeDuplicates, toReferenceType } from './helpers.js'
+import { removeDuplicates } from './helpers.js'
 import type { SourceFile } from './SourceFile.js'
 import type { Language } from '../getPlatformSpecs.js'
 import type { NamedType } from './types/Type.js'
-import { createNamedType, createVoidType } from './createType.js'
+import { createNamedType } from './createType.js'
+import { Method } from './Method.js'
+import { VoidType } from './types/VoidType.js'
+import { Parameter } from './Parameter.js'
+
+export interface PropertyBody {
+  getter: string
+  setter: string
+}
 
 export class Property implements CodeNode {
   readonly name: string
@@ -20,30 +28,6 @@ export class Property implements CodeNode {
     this.type = createNamedType(this.name, type, isOptional)
   }
 
-  get cppSignatures(): CppMethodSignature[] {
-    const signatures: CppMethodSignature[] = []
-    const capitalizedName = capitalizeName(escapeCppName(this.name))
-    // getter
-    signatures.push({
-      returnType: this.type,
-      rawName: this.name,
-      name: `get${capitalizedName}`,
-      parameters: [],
-      type: 'getter',
-    })
-    if (!this.isReadonly) {
-      // setter
-      signatures.push({
-        returnType: createVoidType(),
-        rawName: this.name,
-        name: `set${capitalizedName}`,
-        parameters: [this.type],
-        type: 'setter',
-      })
-    }
-    return signatures
-  }
-
   getDefinitionFiles(): SourceFile[] {
     return removeDuplicates(
       this.type.getExtraFiles(),
@@ -51,24 +35,58 @@ export class Property implements CodeNode {
     )
   }
 
-  getCode(language: Language): string {
+  get cppGetterName(): string {
+    return `get${capitalizeName(this.name)}`
+  }
+
+  get cppSetterName(): string {
+    return `set${capitalizeName(this.name)}`
+  }
+
+  get cppMethods(): [getter: Method] | [getter: Method, setter: Method] {
+    const getter = new Method(this.cppGetterName, this.type, [])
+    if (this.isReadonly) return [getter]
+    const parameter = new Parameter(this.name, this.type)
+    const setter = new Method(this.cppSetterName, new VoidType(), [parameter])
+    return [getter, setter]
+  }
+
+  getCode(language: Language, body?: PropertyBody): string {
     switch (language) {
-      case 'c++':
-        const signatures = this.cppSignatures
-        const codeLines = signatures.map((s) => {
-          const params = s.parameters.map((p) => {
-            const paramType = p.canBePassedByReference
-              ? toReferenceType(p.getCode('c++'))
-              : p.getCode('c++')
-            return `${paramType} ${p.name}`
-          })
-          return `virtual ${s.returnType.getCode('c++')} ${s.name}(${params.join(', ')}) = 0;`
-        })
-        return codeLines.join('\n')
-      case 'swift':
+      case 'c++': {
+        const methods = this.cppMethods
+        const [getter, setter] = methods
+        const lines: string[] = []
+        lines.push(getter.getCode('c++', body?.getter))
+        if (setter != null) {
+          lines.push(setter.getCode('c++', body?.setter))
+        }
+
+        return lines.join('\n')
+      }
+      case 'swift': {
         const type = this.type.getCode('swift')
-        if (this.isReadonly) return `var ${this.name}: ${type} { get }`
-        else return `var ${this.name}: ${type} { get set }`
+        let accessors: string
+        if (body == null) {
+          accessors = this.isReadonly ? `get` : `get set`
+        } else {
+          const lines: string[] = []
+          lines.push(`
+get {
+  ${body.getter}
+}
+          `)
+          if (!this.isReadonly) {
+            lines.push(`
+set {
+  ${body.setter}
+}
+            `)
+          }
+          accessors = '\n' + lines.join('\n') + '\n'
+        }
+        return `var ${this.name}: ${type} { ${accessors} }`
+      }
       default:
         throw new Error(
           `Language ${language} is not yet supported for properties!`

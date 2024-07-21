@@ -1,6 +1,5 @@
 import type { Language } from '../getPlatformSpecs.js'
 import type { SourceFile } from './SourceFile.js'
-import type { NamedType, Type } from './types/Type.js'
 
 export interface CodeNode {
   /**
@@ -12,12 +11,4 @@ export interface CodeNode {
    * for complex types), or `[]` if none are required (e.g. if this uses primitive types only)
    */
   getDefinitionFiles(language: Language): SourceFile[]
-}
-
-export interface CppMethodSignature {
-  returnType: Type
-  parameters: NamedType[]
-  rawName: string
-  name: string
-  type: 'getter' | 'setter' | 'method'
 }

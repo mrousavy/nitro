@@ -103,7 +103,7 @@ for (const sourceFile of project.getSourceFiles()) {
         console.log(`        ${platform}: Generating ${language} code...`)
 
         for (const file of files) {
-          const basePath = path.join(outFolder, platform, file.language)
+          const basePath = path.join(outFolder, file.platform, file.language)
           await writeFile(basePath, file)
         }
       }

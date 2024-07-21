@@ -95,5 +95,6 @@ namespace margelo::nitro {
     name: `${typename}.hpp`,
     language: 'c++',
     referencedTypes: cppProperties,
+    platform: 'shared',
   }
 }

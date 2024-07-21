@@ -132,10 +132,20 @@ public class ${protocolName}Cxx {
 
   `
 
+  const cppProperties = spec.properties
+    .map((p) => {
+      return p.getCode('c++', {
+        getter: `return _swiftPart.${p.cppGetterName}();`,
+        setter: `_swiftPart.${p.cppSetterName}(std::forward(${p.name}));`,
+      })
+    })
+    .join('\n')
   const cppMethods = spec.methods
     .map((m) => {
-      const params = m.parameters.map((p) => p.name).join(', ')
-      const body = `_swiftPart.${m.name}(${params});`
+      const params = m.parameters
+        .map((p) => `std::forward(${p.name}`)
+        .join(', ')
+      const body = `return _swiftPart.${m.name}(${params});`
       return m.getCode('c++', body)
     })
     .join('\n')
@@ -149,14 +159,25 @@ ${createFileMetadataString(`Hybrid${spec.name}Swift.hpp`)}
 
 class Hybrid${spec.name}Swift: public Hybrid${spec.name} {
 public:
+  // Constructor from a Swift instance
   explicit Hybrid${spec.name}Swift(${NAMESPACE}::${protocolName}Cxx swiftPart): Hybrid${spec.name}(), _swiftPart(swiftPart) { }
 
 public:
+  // Properties
+  ${indent(cppProperties, '  ')}
+
+public:
+  // Methods
   ${indent(cppMethods, '  ')}
 
 private:
-${NAMESPACE}::${protocolName}Cxx _swiftPart;
+  ${NAMESPACE}::${protocolName}Cxx _swiftPart;
 };
+  `
+  const cppHybridObjectCodeCpp = `
+${createFileMetadataString(`Hybrid${spec.name}Swift.cpp`)}
+
+#include "Hybrid${spec.name}Swift.hpp"
   `
 
   const files: SourceFile[] = []
@@ -164,21 +185,25 @@ ${NAMESPACE}::${protocolName}Cxx _swiftPart;
     content: protocolCode,
     language: 'swift',
     name: `${protocolName}.swift`,
+    platform: 'ios',
   })
   files.push({
     content: swiftBridgeCode,
     language: 'swift',
     name: `${protocolName}Cxx.swift`,
+    platform: 'ios',
   })
   files.push({
     content: cppHybridObjectCode,
     language: 'c++',
     name: `Hybrid${spec.name}Swift.hpp`,
+    platform: 'ios',
   })
   files.push({
-    content: `#include "Hybrid${spec.name}Swift.hpp"`,
+    content: cppHybridObjectCodeCpp,
     language: 'c++',
     name: `Hybrid${spec.name}Swift.cpp`,
+    platform: 'ios',
   })
   return files
 }

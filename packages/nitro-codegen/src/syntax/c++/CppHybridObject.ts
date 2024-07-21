@@ -65,27 +65,22 @@ class ${spec.hybridObjectName}: public HybridObject {
 
   // Each C++ method needs to be registered in the HybridObject - that's getters, setters and normal methods.
   const registrations: string[] = []
-  const signatures = [
-    ...spec.properties.flatMap((p) => p.cppSignatures),
-    ...spec.methods.map((m) => m.cppSignature),
-  ]
-  for (const signature of signatures) {
-    let registerMethod: string
-    switch (signature.type) {
-      case 'getter':
-        registerMethod = 'registerHybridGetter'
-        break
-      case 'setter':
-        registerMethod = 'registerHybridSetter'
-        break
-      case 'method':
-        registerMethod = 'registerHybridMethod'
-        break
-      default:
-        throw new Error(`Invalid C++ Signature Type: ${signature.type}!`)
-    }
+  for (const property of spec.properties) {
+    // getter
     registrations.push(
-      `${registerMethod}("${signature.rawName}", &${spec.hybridObjectName}::${signature.name}, this);`
+      `registerHybridGetter("${property.name}", &${spec.hybridObjectName}::${property.cppGetterName}, this);`
+    )
+    if (!property.isReadonly) {
+      // setter
+      registrations.push(
+        `registerHybridSetter("${property.name}", &${spec.hybridObjectName}::${property.cppSetterName}, this);`
+      )
+    }
+  }
+  for (const method of spec.methods) {
+    // method
+    registrations.push(
+      `registerHybridMethod("${method.name}", &${spec.hybridObjectName}::${method.name}, this);`
     )
   }
 
@@ -107,11 +102,13 @@ void ${spec.hybridObjectName}::loadHybridMethods() {
     content: cppHeaderCode,
     name: `${spec.hybridObjectName}.hpp`,
     language: 'c++',
+    platform: 'shared',
   })
   files.push({
     content: cppBodyCode,
     name: `${spec.hybridObjectName}.cpp`,
     language: 'c++',
+    platform: 'shared',
   })
   files.push(...extraDefinitions)
   return files
