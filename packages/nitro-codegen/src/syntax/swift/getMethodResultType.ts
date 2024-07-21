@@ -23,6 +23,12 @@ export function getMethodResultType(
     swiftEnumCode: `
 ${createFileMetadataString(`${name}.swift`)}
 
+/**
+ * C++ does not support catching Swift errors yet, so we have to wrap
+ * them in a Result type.
+ * - .value means the function returned successfully (either a value, or void)
+ * - .error means the function threw any Error. Only the message can be propagated
+ */
 public enum ${name} {
   case ${hasType ? `value(${returnType.getTypeCode('swift')})` : 'value'}
   case error(message: String)

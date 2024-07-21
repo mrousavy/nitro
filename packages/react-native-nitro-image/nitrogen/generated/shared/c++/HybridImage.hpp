@@ -44,7 +44,7 @@ class HybridImage: public HybridObject {
 
   public:
     // Methods
-    virtual std::vector<double> toArrayBuffer(ImageFormat format) = 0;
+    virtual double toArrayBuffer(ImageFormat format) = 0;
     virtual void saveToFile(const std::string& path) = 0;
 
   protected:

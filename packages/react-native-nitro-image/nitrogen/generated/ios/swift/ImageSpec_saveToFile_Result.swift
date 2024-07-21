@@ -6,6 +6,12 @@
 /// Copyright © 2024 Marc Rousavy @ Margelo
 ///
 
+/**
+ * C++ does not support catching Swift errors yet, so we have to wrap
+ * them in a Result type.
+ * - .value means the function returned successfully (either a value, or void)
+ * - .error means the function threw any Error. Only the message can be propagated
+ */
 public enum ImageSpec_saveToFile_Result {
   case value
   case error(message: String)

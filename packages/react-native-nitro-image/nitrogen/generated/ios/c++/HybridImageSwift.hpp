@@ -37,7 +37,7 @@ public:
 
 public:
   // Methods
-  inline std::vector<double> toArrayBuffer(ImageFormat format) override {
+  inline double toArrayBuffer(ImageFormat format) override {
     auto result = _swiftPart.toArrayBuffer(static_cast<int>(format));
     if (result.isError()) [[unlikely]] {
       throw std::runtime_error(result.getError());
