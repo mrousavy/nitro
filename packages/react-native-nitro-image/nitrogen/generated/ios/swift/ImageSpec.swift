@@ -30,8 +30,9 @@ public protocol ImageSpec {
   // Properties
   var size: ImageSize { get }
   var pixelFormat: PixelFormat { get }
+  var someSettableProp: Double { get set }
 
   // Methods
-  func toArrayBuffer(format: ImageFormat) throws -> Data
-  func saveToFile(path: String) throws -> Promise<Void>
+  func toArrayBuffer(format: ImageFormat) throws -> Void
+  func saveToFile(path: String) throws -> Void
 }

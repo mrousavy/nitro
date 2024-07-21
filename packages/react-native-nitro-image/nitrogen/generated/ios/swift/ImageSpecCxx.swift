@@ -19,7 +19,7 @@ import NitroModules
  * - Throwing methods need to be wrapped with a Result<T, Error> type, as exceptions cannot be propagated to C++
  */
 public class ImageSpecCxx {
-  private let implementation: ImageSpec
+  private var implementation: ImageSpec
 
   public init(_ implementation: ImageSpec) {
     self.implementation = implementation
@@ -37,9 +37,18 @@ public class ImageSpecCxx {
       return self.implementation.pixelFormat.rawValue
     }
   }
+  
+  public var someSettableProp: Double {
+    get {
+      return self.implementation.someSettableProp
+    }
+    set {
+      self.implementation.someSettableProp = newValue
+    }
+  }
 
   // Methods
-  public func toArrayBuffer(format: Int32) -> Result<Data, Error> {
+  public func toArrayBuffer(format: Int32) -> Result<Void, Error> {
     do {
       let result = try self.implementation.toArrayBuffer(format: ImageFormat(rawValue: format)!)
       return .success(result)
@@ -48,7 +57,7 @@ public class ImageSpecCxx {
     }
   }
   
-  public func saveToFile(path: String) -> Result<Promise<Void>, Error> {
+  public func saveToFile(path: String) -> Result<Void, Error> {
     do {
       let result = try self.implementation.saveToFile(path: path)
       return .success(result)

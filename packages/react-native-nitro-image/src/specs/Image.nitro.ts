@@ -12,8 +12,10 @@ export interface Image extends HybridObject<{ ios: 'swift' }> {
   readonly size: ImageSize
   readonly pixelFormat: PixelFormat
 
-  toArrayBuffer(format: ImageFormat): ArrayBuffer
-  saveToFile(path: string): Promise<void>
+  someSettableProp: number
+
+  toArrayBuffer(format: ImageFormat): void
+  saveToFile(path: string): void
 }
 
 export const ImageFactory = NitroModules.get<Image>()

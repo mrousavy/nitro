@@ -39,11 +39,13 @@ class HybridImage: public HybridObject {
     // Properties
     virtual ImageSize getSize() = 0;
     virtual PixelFormat getPixelFormat() = 0;
+    virtual double getSomeSettableProp() = 0;
+    virtual void setSomeSettableProp(double someSettableProp) = 0;
 
   public:
     // Methods
-    virtual std::shared_ptr<ArrayBuffer> toArrayBuffer(ImageFormat format) = 0;
-    virtual std::future<void> saveToFile(const std::string& path) = 0;
+    virtual void toArrayBuffer(ImageFormat format) = 0;
+    virtual void saveToFile(const std::string& path) = 0;
 
   protected:
     // Tag for logging

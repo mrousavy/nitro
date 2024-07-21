@@ -44,7 +44,7 @@ import NitroModules
  * - Throwing methods need to be wrapped with a Result<T, Error> type, as exceptions cannot be propagated to C++
  */
 public class ${protocolName}Cxx {
-  private let implementation: ${protocolName}
+  private var implementation: ${protocolName}
 
   public init(_ implementation: ${protocolName}) {
     self.implementation = implementation

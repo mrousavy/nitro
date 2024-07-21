@@ -10,6 +10,16 @@ import UIKit
 import NitroModules
 
 class Image : ImageSpec {
+  var someSettableProp: Double = 1.0
+  
+  func toArrayBuffer(format: ImageFormat) throws {
+    throw RuntimeError.error(withMessage: "toArrayBuffer() is not yet implemented!")
+  }
+  
+  func saveToFile(path: String) throws {
+    throw RuntimeError.error(withMessage: "saveToFile() is not yet implemented!")
+  }
+  
   public var hybridContext = margelo.nitro.HybridContext()
   
   private let uiImage: UIImage

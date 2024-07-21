@@ -28,13 +28,19 @@ public:
     auto result = _swiftPart.getPixelFormat();
     return static_cast<PixelFormat>(result);
   }
+  double getSomeSettableProp() {
+    return _swiftPart.getSomeSettableProp();
+  }
+  void setSomeSettableProp(double someSettableProp) {
+    _swiftPart.setSomeSettableProp(std::forward(someSettableProp));
+  }
 
 public:
   // Methods
-  std::shared_ptr<ArrayBuffer> toArrayBuffer(ImageFormat format) {
+  void toArrayBuffer(ImageFormat format) {
     return _swiftPart.toArrayBuffer(static_cast<int>(format));
   }
-  std::future<void> saveToFile(const std::string& path) {
+  void saveToFile(const std::string& path) {
     return _swiftPart.saveToFile(std::forward<decltype(path)>(path));
   }
 
