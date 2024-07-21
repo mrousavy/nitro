@@ -15,6 +15,21 @@ export interface PropertyBody {
   setter: string
 }
 
+export interface PropertyModifiers {
+  /**
+   * Whether the property should be marked as inlineable.
+   */
+  inline?: boolean
+  /*+
+   * Whether the property is a pure virtual C++ property (getter + setter).
+   */
+  virtual?: boolean
+  /**
+   * Whether this property overrides a base/super property.
+   */
+  override?: boolean
+}
+
 export class Property implements CodeNode {
   readonly name: string
   readonly type: NamedType
@@ -51,15 +66,19 @@ export class Property implements CodeNode {
     return [getter, setter]
   }
 
-  getCode(language: Language, body?: PropertyBody): string {
+  getCode(
+    language: Language,
+    modifiers?: PropertyModifiers,
+    body?: PropertyBody
+  ): string {
     switch (language) {
       case 'c++': {
         const methods = this.cppMethods
         const [getter, setter] = methods
         const lines: string[] = []
-        lines.push(getter.getCode('c++', body?.getter))
+        lines.push(getter.getCode('c++', modifiers, body?.getter))
         if (setter != null) {
-          lines.push(setter.getCode('c++', body?.setter))
+          lines.push(setter.getCode('c++', modifiers, body?.setter))
         }
 
         return lines.join('\n')

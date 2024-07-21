@@ -10,6 +10,21 @@ import { indent } from '../stringUtils.js'
 
 export type MethodBody = string
 
+export interface MethodModifiers {
+  /**
+   * Whether the function should be marked as inlineable.
+   */
+  inline?: boolean
+  /*+
+   * Whether the func is a pure virtual C++ function.
+   */
+  virtual?: boolean
+  /**
+   * Whether this function overrides a base/super function.
+   */
+  override?: boolean
+}
+
 export class Method implements CodeNode {
   readonly name: string
   readonly returnType: Type
@@ -37,32 +52,50 @@ export class Method implements CodeNode {
     }
   }
 
-  getCode(language: Language, body?: MethodBody): string {
+  getCode(
+    language: Language,
+    modifiers?: MethodModifiers,
+    body?: MethodBody
+  ): string {
     switch (language) {
       case 'c++': {
         const returnType = this.returnType.getCode('c++')
         const params = this.parameters.map((p) => p.getCode('c++'))
+
+        // C++ modifiers start in the beginning
+        let signature = `${returnType} ${this.name}(${params.join(', ')})`
+        if (modifiers?.inline) signature = `inline ${signature}`
+        if (modifiers?.virtual) signature = `virtual ${signature}`
+        if (modifiers?.override) signature = `${signature} override`
+
         if (body == null) {
-          return `virtual ${returnType} ${this.name}(${params.join(', ')}) = 0;`
+          // It's a function declaration (no body)
+          if (modifiers?.virtual) {
+            // if it is a virtual function, we have no implementation (= 0)
+            signature = `${signature} = 0`
+          }
+          return `${signature};`
         } else {
           return `
-${returnType} ${this.name}(${params.join(', ')}) {
+${signature} {
   ${indent(body, '  ')}
-}
-`.trim()
+}`.trim()
         }
       }
       case 'swift': {
         const params = this.parameters.map((p) => p.getCode('swift'))
         const returnType = this.returnType.getCode('swift')
+        let signature = `func ${this.name}(${params.join(', ')}) throws -> ${returnType}`
+
+        if (modifiers?.inline) signature = `@inline(__always)\n${signature}`
+
         if (body == null) {
-          return `func ${this.name}(${params.join(', ')}) throws -> ${returnType}`
+          return signature
         } else {
           return `
-func ${this.name}(${params.join(', ')}) throws -> ${returnType} {
+${signature} {
   ${indent(body, '  ')}
-}
-`.trim()
+}`.trim()
         }
       }
       default:

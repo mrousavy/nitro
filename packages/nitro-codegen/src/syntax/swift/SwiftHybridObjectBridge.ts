@@ -77,11 +77,14 @@ return ${bridged.parseFromSwiftToCpp('result', 'c++')};
         getter = `return _swiftPart.${p.cppGetterName}();`
         setter = `_swiftPart.${p.cppSetterName}(std::forward<decltype(${p.name})>(${p.name}));`
       }
-      const code = p.getCode('c++', {
-        getter: getter.trim(),
-        setter: setter.trim(),
-      })
-      return `inline ${code}`
+      return p.getCode(
+        'c++',
+        { inline: true, override: true },
+        {
+          getter: getter.trim(),
+          setter: setter.trim(),
+        }
+      )
     })
     .join('\n')
   const cppMethods = spec.methods
@@ -108,8 +111,7 @@ return ${bridgedReturnType.parseFromSwiftToCpp('result', 'c++')}
       } else {
         body = `return _swiftPart.${m.name}(${params});`
       }
-      const code = m.getCode('c++', body)
-      return `inline ${code}`
+      return m.getCode('c++', { inline: true, override: true }, body)
     })
     .join('\n')
   const cppHybridObjectCode = `

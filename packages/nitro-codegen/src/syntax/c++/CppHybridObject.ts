@@ -47,11 +47,11 @@ class ${spec.hybridObjectName}: public HybridObject {
 
   public:
     // Properties
-    ${indent(spec.properties.map((p) => p.getCode('c++')).join('\n'), '    ')}
+    ${indent(spec.properties.map((p) => p.getCode('c++', { virtual: true })).join('\n'), '    ')}
 
   public:
     // Methods
-    ${indent(spec.methods.map((m) => m.getCode('c++')).join('\n'), '    ')}
+    ${indent(spec.methods.map((m) => m.getCode('c++', { virtual: true })).join('\n'), '    ')}
 
   protected:
     // Tag for logging
