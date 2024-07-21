@@ -22,10 +22,11 @@ Pod::Spec.new do |s|
   ]
   s.public_header_files = [
     # Generated specs
-    "nitrogen/generated/ios/c++/HybridImage.hpp",
-    "nitrogen/generated/ios/c++/ImageFormat.hpp",
-    "nitrogen/generated/ios/c++/ImageSize.hpp",
-    "nitrogen/generated/ios/c++/PixelFormat.hpp",
+    "nitrogen/generated/shared/**/*.{h,hpp}",
+  ]
+  s.private_header_files = [
+    # iOS specific specs
+    "nitrogen/generated/ios/c++/**/*.{h,hpp}",
   ]
 
   s.pod_target_xcconfig = {
