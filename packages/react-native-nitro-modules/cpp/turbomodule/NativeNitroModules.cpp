@@ -7,7 +7,6 @@
 
 #include "NativeNitroModules.hpp"
 #include "TestHybridObject.hpp"
-#include "SwiftTestHybridObject.hpp"
 #include "Dispatcher.hpp"
 #include "CallInvokerDispatcher.hpp"
 
@@ -33,12 +32,7 @@ jsi::Object NativeNitroModules::createTestHybridObject(jsi::Runtime &runtime) {
 }
 
 jsi::Object NativeNitroModules::createSwiftTestHybridObject(jsi::Runtime &runtime) {
-  // 1. Create Swift instance
-  auto swiftPart = NitroModules::SwiftTestHybridObject::init();
-  // 2. Get or create C++ HybridObject instance wrapping Swift instance
-  auto hybrid = SwiftTestHybridObject::getHybridPart(swiftPart);
-  // 3. Return jsi::Object to JS
-  return jsi::Object::createFromHostObject(runtime, hybrid);
+  throw std::runtime_error("Swift test obj is gone!");
 }
 
 }

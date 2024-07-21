@@ -10,6 +10,7 @@
 
 #include "HybridImage.hpp"
 #include "NitroImage-Swift.h"
+#include <NitroModules/SwiftTypes.hpp>
 
 /**
  * The C++ part of ImageSpecCxx.swift.
@@ -38,10 +39,12 @@ public:
 public:
   // Methods
   inline void toArrayBuffer(ImageFormat format) override {
-    return _swiftPart.toArrayBuffer(static_cast<int>(format));
+    /*NitroModules::ValueOrError<double> r = _swiftPart.toArrayBuffer(5);
+    double v = r.getValue();
+    return _swiftPart.toArrayBuffer(static_cast<int>(format));*/
   }
   inline void saveToFile(const std::string& path) override {
-    return _swiftPart.saveToFile(std::forward<decltype(path)>(path));
+    //return _swiftPart.saveToFile(std::forward<decltype(path)>(path));
   }
 
 private:

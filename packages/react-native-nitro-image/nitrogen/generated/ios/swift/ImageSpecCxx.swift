@@ -9,6 +9,7 @@
 import Foundation
 import NitroModules
 
+
 /**
  * A class implementation that bridges ImageSpec over to C++.
  * In C++, we cannot use Swift protocols - so we need to wrap it in a class to make it strongly defined.
@@ -53,22 +54,22 @@ public class ImageSpecCxx {
 
   // Methods
   @inline(__always)
-  public func toArrayBuffer(format: Int32) -> Result<Void, Error> {
+  public func toArrayBuffer(format: Int32) -> ValueOrError<Double> {
     do {
       let result = try self.implementation.toArrayBuffer(format: ImageFormat(rawValue: format)!)
-      return .success(result)
+      return .value(5)
     } catch {
-      return .failure(error)
+      return .error(message: error.localizedDescription)
     }
   }
   
   @inline(__always)
-  public func saveToFile(path: String) -> Result<Void, Error> {
+  public func saveToFile(path: String) -> ValueOrError<Double> {
     do {
       let result = try self.implementation.saveToFile(path: path)
-      return .success(result)
+      return .value(5)
     } catch {
-      return .failure(error)
+      return .error(message: error.localizedDescription)
     }
   }
 }

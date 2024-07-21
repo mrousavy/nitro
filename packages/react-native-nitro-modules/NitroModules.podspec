@@ -25,18 +25,10 @@ Pod::Spec.new do |s|
     "ios/**/*.{c,cpp}",
     "ios/**/*.{m,mm}",
     "ios/**/*.swift",
-    "ios/**/*.modulemap",
   ]
   s.public_header_files = [
-    # Shared C++ headers
-    "cpp/core/**/*.{h,hpp}",
-    "cpp/jsi/**/*.{h,hpp}",
-    "cpp/test-object/**/*.{h,hpp}",
-    "cpp/threading/**/*.{h,hpp}",
-    "cpp/turbomodule/RegisterNativeNitroModules.hpp",
-    "cpp/utils/**/*.{h,hpp}",
-    # iOS C++ bindings
-    "ios/core/**/*.{h,hpp}",
+    # Public C++ headers will be exposed in modulemap (for Swift)
+    "cpp/core/HybridContext.hpp",
   ]
 
   s.pod_target_xcconfig = {
