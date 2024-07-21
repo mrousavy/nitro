@@ -57,6 +57,8 @@ export class Method implements CodeNode {
     modifiers?: MethodModifiers,
     body?: MethodBody
   ): string {
+    body = body?.trim()
+
     switch (language) {
       case 'c++': {
         const returnType = this.returnType.getCode('c++')

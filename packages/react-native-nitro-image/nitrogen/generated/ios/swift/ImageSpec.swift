@@ -33,6 +33,6 @@ public protocol ImageSpec {
   var someSettableProp: Double { get set }
 
   // Methods
-  func toArrayBuffer(format: ImageFormat) throws -> Void
+  func toArrayBuffer(format: ImageFormat) throws -> [Double]
   func saveToFile(path: String) throws -> Void
 }

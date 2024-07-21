@@ -49,6 +49,9 @@ export class SwiftCxxBridgedType {
           default:
             throw new Error(`Invalid language! ${language}`)
         }
+      case 'void':
+        // When type is void, don't return anything
+        return ''
       default:
         // No workaround - we can just use the value we get from C++
         return cppParameterName
@@ -69,6 +72,9 @@ export class SwiftCxxBridgedType {
           default:
             throw new Error(`Invalid language! ${language}`)
         }
+      case 'void':
+        // When type is void, don't return anything
+        return ''
       default:
         // No workaround - we can just use the value we get from C++
         return swiftParameterName

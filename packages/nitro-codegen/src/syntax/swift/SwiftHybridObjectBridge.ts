@@ -5,6 +5,7 @@ import { indent } from '../../stringUtils.js'
 import type { Method } from '../Method.js'
 import { createFileMetadataString } from '../helpers.js'
 import type { SourceFile } from '../SourceFile.js'
+import { getMethodResultType } from './getMethodResultType.js'
 
 // TODO: dynamically get namespace
 const NAMESPACE = 'NitroImage'
@@ -21,11 +22,15 @@ export function createSwiftHybridObjectCxxBridge(
   protocolName: string,
   spec: HybridObjectSpec
 ): SourceFile[] {
+  const bridgedResultTypes = spec.methods.map((m) =>
+    getMethodResultType(protocolName, m)
+  )
+
   const propertiesBridge = spec.properties
     .map((p) => getPropertyForwardImplementation(p))
     .join('\n\n')
   const methodsBridge = spec.methods
-    .map((m) => getMethodForwardImplementation(m))
+    .map((m) => getMethodForwardImplementation(protocolName, m))
     .join('\n\n')
 
   const swiftBridgeCode = `
@@ -87,6 +92,7 @@ return ${bridged.parseFromSwiftToCpp('result', 'c++')};
       )
     })
     .join('\n')
+
   const cppMethods = spec.methods
     .map((m) => {
       const params = m.parameters
@@ -103,17 +109,23 @@ return ${bridged.parseFromSwiftToCpp('result', 'c++')};
         .join(', ')
       let body: string
       const bridgedReturnType = new SwiftCxxBridgedType(m.returnType)
+      const resultType = getMethodResultType(protocolName, m)
       if (bridgedReturnType.needsSpecialHandling) {
         body = `
 auto result = _swiftPart.${m.name}(${params});
-return ${bridgedReturnType.parseFromSwiftToCpp('result', 'c++')}
+auto resultConverted = ${bridgedReturnType.parseFromSwiftToCpp('result', 'c++')};
+${resultType.parseFromSwiftToCpp('resultConverted')}
         `
       } else {
-        body = `return _swiftPart.${m.name}(${params});`
+        body = `
+auto result = _swiftPart.${m.name}(${params});
+${resultType.parseFromSwiftToCpp('result')}
+`
       }
       return m.getCode('c++', { inline: true, override: true }, body)
     })
     .join('\n')
+
   const cppHybridObjectCode = `
 ${createFileMetadataString(`Hybrid${spec.name}Swift.hpp`)}
 
@@ -155,6 +167,14 @@ ${createFileMetadataString(`Hybrid${spec.name}Swift.cpp`)}
     name: `${protocolName}Cxx.swift`,
     platform: 'ios',
   })
+  for (const resultType of bridgedResultTypes) {
+    files.push({
+      content: resultType.swiftEnumCode,
+      language: 'swift',
+      name: `${resultType.typename}.swift`,
+      platform: 'ios',
+    })
+  }
   files.push({
     content: cppHybridObjectCode,
     language: 'c++',
@@ -198,7 +218,10 @@ public var ${property.name}: ${bridgedType.getTypeCode('swift')} {
   return code.trim()
 }
 
-function getMethodForwardImplementation(method: Method): string {
+function getMethodForwardImplementation(
+  moduleName: string,
+  method: Method
+): string {
   const returnType = new SwiftCxxBridgedType(method.returnType)
   const params = method.parameters.map((p) => {
     const bridgedType = new SwiftCxxBridgedType(p.type)
@@ -208,15 +231,21 @@ function getMethodForwardImplementation(method: Method): string {
     const bridgedType = new SwiftCxxBridgedType(p.type)
     return `${p.name}: ${bridgedType.parseFromCppToSwift(p.name, 'swift')}`
   })
+  const resultType = getMethodResultType(moduleName, method)
+  const returnValue = resultType.hasType
+    ? `.value(${returnType.parseFromSwiftToCpp('result', 'swift')})`
+    : '.value'
   // TODO: Use @inlinable or @inline(__always)?
   return `
 @inline(__always)
-public func ${method.name}(${params.join(', ')}) -> Result<${returnType.getTypeCode('swift')}, Error> {
+public func ${method.name}(${params.join(', ')}) -> ${resultType.typename} {
   do {
     let result = try self.implementation.${method.name}(${passParams.join(', ')})
-    return .success(${returnType.parseFromSwiftToCpp('result', 'swift')})
+    return ${returnValue}
   } catch {
-    return .failure(error)
+    // Due to a Swift bug, we have to copy the string here.
+    let message = "\\(error.localizedDescription)"
+    return .error(message: message)
   }
 }
   `.trim()

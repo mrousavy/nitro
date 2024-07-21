@@ -71,6 +71,11 @@ export class Property implements CodeNode {
     modifiers?: PropertyModifiers,
     body?: PropertyBody
   ): string {
+    if (body != null) {
+      body.getter = body.getter.trim()
+      body.setter = body.setter.trim()
+    }
+
     switch (language) {
       case 'c++': {
         const methods = this.cppMethods

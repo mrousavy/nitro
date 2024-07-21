@@ -14,7 +14,7 @@ export interface Image extends HybridObject<{ ios: 'swift' }> {
 
   someSettableProp: number
 
-  toArrayBuffer(format: ImageFormat): void
+  toArrayBuffer(format: ImageFormat): number[]
   saveToFile(path: string): void
 }
 
