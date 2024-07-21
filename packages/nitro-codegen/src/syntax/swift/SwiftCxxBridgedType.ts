@@ -7,42 +7,68 @@ export class SwiftCxxBridgedType {
     this.type = type
   }
 
-  getSwiftCode(): string {
+  get needsSpecialHandling(): boolean {
     switch (this.type.kind) {
       case 'enum':
         // Enums cannot be referenced from C++ <-> Swift bi-directionally,
-        // so we just pass the underlying raw value (int32).
-        return 'Int32'
+        // so we just pass the underlying raw value (int32), and cast from Int <-> Enum.
+        return true
       default:
-        // No workaround - just return normal type
-        return this.type.getCode('swift')
-    }
-  }
-  getCppCode(): string {
-    switch (this.type.kind) {
-      case 'enum':
-        return 'int'
-      default:
-        return this.type.getCode('c++')
+        return false
     }
   }
 
-  fromCpp(cppParameterName: string): string {
+  getTypeCode(language: 'swift' | 'c++'): string {
     switch (this.type.kind) {
       case 'enum':
-        // Parse a C++ int32 to an Enum because enums cannot be used in C++ <-> Swift.
-        return `${this.type.getCode('swift')}(rawValue: ${cppParameterName})!`
+        switch (language) {
+          case 'c++':
+            return 'int'
+          case 'swift':
+            return 'Int32'
+          default:
+            throw new Error(`Invalid language! ${language}`)
+        }
+      default:
+        // No workaround - just return normal type
+        return this.type.getCode(language)
+    }
+  }
+
+  parseFromCppToSwift(
+    cppParameterName: string,
+    language: 'swift' | 'c++'
+  ): string {
+    switch (this.type.kind) {
+      case 'enum':
+        switch (language) {
+          case 'c++':
+            return `static_cast<int>(${cppParameterName})`
+          case 'swift':
+            return `${this.type.getCode('swift')}(rawValue: ${cppParameterName})!`
+          default:
+            throw new Error(`Invalid language! ${language}`)
+        }
       default:
         // No workaround - we can just use the value we get from C++
         return cppParameterName
     }
   }
 
-  toCpp(swiftParameterName: string): string {
+  parseFromSwiftToCpp(
+    swiftParameterName: string,
+    language: 'swift' | 'c++'
+  ): string {
     switch (this.type.kind) {
       case 'enum':
-        // Return an enum's rawValue (int32) to C++ because enums cannot be used in C++ <-> Swift.
-        return `${swiftParameterName}.rawValue`
+        switch (language) {
+          case 'c++':
+            return `static_cast<${this.type.getCode('swift')}>(${swiftParameterName})`
+          case 'swift':
+            return `${swiftParameterName}.rawValue`
+          default:
+            throw new Error(`Invalid language! ${language}`)
+        }
       default:
         // No workaround - we can just use the value we get from C++
         return swiftParameterName

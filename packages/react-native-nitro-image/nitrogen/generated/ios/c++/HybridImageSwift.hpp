@@ -11,6 +11,9 @@
 #include "HybridImage.hpp"
 #include "NitroImage-Swift.h"
 
+/**
+ * The C++ part of ImageSpecCxx.swift.
+ */
 class HybridImageSwift: public HybridImage {
 public:
   // Constructor from a Swift instance
@@ -22,16 +25,17 @@ public:
     return _swiftPart.getSize();
   }
   PixelFormat getPixelFormat() {
-    return _swiftPart.getPixelFormat();
+    auto result = _swiftPart.getPixelFormat();
+    return static_cast<PixelFormat>(result);
   }
 
 public:
   // Methods
   std::shared_ptr<ArrayBuffer> toArrayBuffer(ImageFormat format) {
-    return _swiftPart.toArrayBuffer(std::forward(format);
+    return _swiftPart.toArrayBuffer(static_cast<int>(format));
   }
   std::future<void> saveToFile(const std::string& path) {
-    return _swiftPart.saveToFile(std::forward(path);
+    return _swiftPart.saveToFile(std::forward<decltype(path)>(path));
   }
 
 private:

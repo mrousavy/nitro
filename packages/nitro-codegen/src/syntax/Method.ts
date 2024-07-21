@@ -6,6 +6,7 @@ import { Parameter } from './Parameter.js'
 import type { MethodSignature } from 'ts-morph'
 import type { Type } from './types/Type.js'
 import { createType } from './createType.js'
+import { indent } from '../stringUtils.js'
 
 export type MethodBody = string
 
@@ -46,7 +47,7 @@ export class Method implements CodeNode {
         } else {
           return `
 ${returnType} ${this.name}(${params.join(', ')}) {
-  ${body}
+  ${indent(body, '  ')}
 }
 `.trim()
         }
@@ -59,7 +60,7 @@ ${returnType} ${this.name}(${params.join(', ')}) {
         } else {
           return `
 func ${this.name}(${params.join(', ')}) throws -> ${returnType} {
-  ${body}
+  ${indent(body, '  ')}
 }
 `.trim()
         }
