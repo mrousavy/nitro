@@ -39,7 +39,7 @@ using namespace facebook;
 // Unknown type (error)
 template <typename ArgType, typename Enable = void> struct JSIConverter final {
   JSIConverter() = delete;
-  
+
   static inline ArgType fromJSI(jsi::Runtime&, const jsi::Value&) {
     static_assert(always_false<ArgType>::value, "This type is not supported by the JSIConverter!");
     return ArgType();
@@ -318,7 +318,7 @@ template <typename T> struct is_shared_ptr_to_host_object : std::false_type {};
 template <typename T> struct is_shared_ptr_to_host_object<std::shared_ptr<T>> : std::is_base_of<jsi::HostObject, T> {};
 template <typename T> struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_host_object<T>::value>> {
   using TPointee = typename T::element_type;
-  
+
   static inline std::string invalidTypeErrorMessage(const std::string& typeDescription, const std::string& reason) {
     std::string typeName = TypeInfo::getFriendlyTypename<TPointee>();
     return "Cannot convert \"" + typeDescription + "\" to HostObject<" + typeName + ">! " + reason;
@@ -352,8 +352,8 @@ template <typename T> struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_h
 #endif
     jsi::Object object = jsi::Object::createFromHostObject(runtime, arg);
     if constexpr (std::is_base_of_v<HybridObject, TPointee>) {
-      // HybridObjects expose their memory size (+ heap allocations), so inform JS GC about it!
-      size_t memorySize = arg->getMemorySize();
+      // HybridObjects expose their external memory size, so inform JS GC about it!
+      size_t memorySize = arg->getExternalMemorySize();
       object.setExternalMemoryPressure(runtime, memorySize);
     }
     return object;

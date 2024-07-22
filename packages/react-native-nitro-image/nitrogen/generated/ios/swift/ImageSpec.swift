@@ -21,7 +21,7 @@ import NitroModules
  *
  *   // Return size of the instance to inform JS GC about memory pressure
  *   var memorySize: Int {
- *     return getSizeOf(self) + extraHeapAllocationSizeIfAny
+ *     return getSizeOf(self)
  *   }
  *
  *   // ...

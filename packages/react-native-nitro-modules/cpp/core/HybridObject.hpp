@@ -68,13 +68,13 @@ public:
   template <typename Derived> std::shared_ptr<Derived> shared() {
     return std::static_pointer_cast<Derived>(shared_from_this());
   }
-  
+
 public:
   /**
-   * Get the size of the current HybridObject in bytes.
+   * Get the size of any external (heap) allocations this `HybridObject` has made, in bytes.
    * This will be used to notify the JS GC about memory pressure.
    */
-  constexpr virtual size_t getMemorySize() noexcept {
+  constexpr virtual size_t getExternalMemorySize() noexcept {
     return sizeof(HybridObject);
   }
 
