@@ -50,6 +50,10 @@ public:
    * `ArrayBuffer` cannot be moved.
    */
   ArrayBuffer(ArrayBuffer&&) = delete;
+  /**
+   * Default constructor that creates an invalid/empty ArrayBuffer.
+   */
+  ArrayBuffer(): _data(nullptr), _size(0), _deleter(nullptr) { }
   
   ~ArrayBuffer() {
     if (_deleter != nullptr) {
