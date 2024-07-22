@@ -20,7 +20,7 @@
 namespace facebook::react {
 
 // The base C++-based TurboModule. This is the entry point where all nitro modules get initialized.
-class NativeNitroModules : public NativeNitroCxxSpec<NativeNitroModules> {
+class NativeNitroModules : public NativeNitroModulesCxxSpec<NativeNitroModules> {
 public:
   NativeNitroModules(std::shared_ptr<CallInvoker> jsInvoker);
   ~NativeNitroModules();
