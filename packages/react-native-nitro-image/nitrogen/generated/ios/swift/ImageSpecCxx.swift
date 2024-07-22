@@ -18,7 +18,7 @@ import NitroModules
  * - Other HostObjects need to be wrapped/unwrapped from the Swift TCxx wrapper
  * - Throwing methods need to be wrapped with a Result<T, Error> type, as exceptions cannot be propagated to C++
  */
-public class ImageSpecCxx {
+public final class ImageSpecCxx {
   private var implementation: ImageSpec
 
   public init(_ implementation: ImageSpec) {
@@ -67,7 +67,7 @@ public class ImageSpecCxx {
   @inline(__always)
   public func saveToFile(path: String) -> ImageSpec_saveToFile_Result {
     do {
-      let result = try self.implementation.saveToFile(path: path)
+      try self.implementation.saveToFile(path: path)
       return .value
     } catch {
       // Due to a Swift bug, we have to copy the string here.

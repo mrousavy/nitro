@@ -14,7 +14,7 @@
 /**
  * The C++ part of ImageSpecCxx.swift.
  */
-class HybridImageSwift: public HybridImage {
+class HybridImageSwift final: public HybridImage {
 public:
   // Constructor from a Swift instance
   explicit HybridImageSwift(NitroImage::ImageSpecCxx swiftPart): HybridImage(), _swiftPart(swiftPart) { }

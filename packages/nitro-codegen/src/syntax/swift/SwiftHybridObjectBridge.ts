@@ -48,7 +48,7 @@ import NitroModules
  * - Other HostObjects need to be wrapped/unwrapped from the Swift TCxx wrapper
  * - Throwing methods need to be wrapped with a Result<T, Error> type, as exceptions cannot be propagated to C++
  */
-public class ${protocolName}Cxx {
+public final class ${protocolName}Cxx {
   private var implementation: ${protocolName}
 
   public init(_ implementation: ${protocolName}) {
@@ -137,7 +137,7 @@ ${createFileMetadataString(`Hybrid${spec.name}Swift.hpp`)}
 /**
  * The C++ part of ${protocolName}Cxx.swift.
  */
-class Hybrid${spec.name}Swift: public Hybrid${spec.name} {
+class Hybrid${spec.name}Swift final: public Hybrid${spec.name} {
 public:
   // Constructor from a Swift instance
   explicit Hybrid${spec.name}Swift(${NAMESPACE}::${protocolName}Cxx swiftPart): Hybrid${spec.name}(), _swiftPart(swiftPart) { }
@@ -232,6 +232,7 @@ function getMethodForwardImplementation(
     return `${p.name}: ${bridgedType.parseFromCppToSwift(p.name, 'swift')}`
   })
   const resultType = getMethodResultType(moduleName, method)
+  const resultValue = resultType.hasType ? `let result =` : ''
   const returnValue = resultType.hasType
     ? `.value(${returnType.parseFromSwiftToCpp('result', 'swift')})`
     : '.value'
@@ -240,7 +241,7 @@ function getMethodForwardImplementation(
 @inline(__always)
 public func ${method.name}(${params.join(', ')}) -> ${resultType.typename} {
   do {
-    let result = try self.implementation.${method.name}(${passParams.join(', ')})
+    ${resultValue} try self.implementation.${method.name}(${passParams.join(', ')})
     return ${returnValue}
   } catch {
     // Due to a Swift bug, we have to copy the string here.

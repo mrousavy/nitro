@@ -12,6 +12,7 @@
  * - .value means the function returned successfully (either a value, or void)
  * - .error means the function threw any Error. Only the message can be propagated
  */
+@frozen
 public enum ImageSpec_saveToFile_Result {
   case value
   case error(message: String)
