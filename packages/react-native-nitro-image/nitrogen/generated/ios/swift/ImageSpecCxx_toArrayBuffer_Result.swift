@@ -16,6 +16,6 @@ import NitroModules
  */
 @frozen
 public enum ImageSpecCxx_toArrayBuffer_Result {
-  case value(margelo.nitro.ArrayBuffer)
+  case value(Double)
   case error(message: String)
 }
