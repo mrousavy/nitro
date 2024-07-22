@@ -4,7 +4,6 @@ import {
   type HybridObjectName,
 } from '../getHybridObjectName.js'
 import type { SourceImport } from '../SourceFile.js'
-import { ArrayBufferType } from '../types/ArrayBufferType.js'
 import { FunctionType } from '../types/FunctionType.js'
 import { HybridObjectType } from '../types/HybridObjectType.js'
 import { NamedWrappingType } from '../types/NamedWrappingType.js'
