@@ -8,6 +8,7 @@ export default function App() {
   const image = React.useMemo(() => {
     console.log('Loading image...')
     const i = ImageConstructors.loadImageFromSystemName('heart.fill')
+    ImageConstructors.bounceBack(i)
     console.log('Image loaded!')
     console.log(`Image is ${i.size.width}x${i.size.height}`)
     return i

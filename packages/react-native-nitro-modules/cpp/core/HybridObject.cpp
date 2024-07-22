@@ -81,6 +81,26 @@ void HybridObject::loadHybridMethods() {
   registerHybridMethod("equals", &HybridObject::equals, this);
 }
 
+size_t HybridObject::getTotalExternalMemorySize() noexcept {
+  static constexpr int STRING_KEY_AVERAGE_SIZE = 32; // good average for string keys
+  static constexpr int CACHED_SIZE = STRING_KEY_AVERAGE_SIZE + sizeof(jsi::Function);
+  static constexpr int METHOD_SIZE = STRING_KEY_AVERAGE_SIZE + sizeof(HybridFunction);
+  static constexpr int GETTER_SIZE = STRING_KEY_AVERAGE_SIZE + sizeof(jsi::HostFunctionType);
+  static constexpr int SETTER_SIZE = STRING_KEY_AVERAGE_SIZE + sizeof(jsi::HostFunctionType);
+  
+  size_t cachedFunctions = 0;
+  for (const auto& cache: _functionCache) {
+    cachedFunctions += cache.second.size();
+  }
+  
+  size_t externalSize = getExternalMemorySize();
+  return (_getters.size() * GETTER_SIZE)
+          + (_setters.size() * SETTER_SIZE)
+          + (_methods.size() * METHOD_SIZE)
+          + (cachedFunctions * CACHED_SIZE)
+          + externalSize;
+}
+
 std::vector<jsi::PropNameID> HybridObject::getPropertyNames(facebook::jsi::Runtime& runtime) {
   std::unique_lock lock(*_mutex);
   ensureInitialized(runtime);

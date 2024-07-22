@@ -71,12 +71,12 @@ public:
 
 public:
   /**
-   * Get the size of any external (heap) allocations this `HybridObject` has made, in bytes.
-   * This will be used to notify the JS GC about memory pressure.
+   * Get the total size of any external (heap) allocations this `HybridObject` (or
+   * a subclass of it) has made.
+   * This includes any base allocations (such as function cache), as well as
+   * overridden extra memory size.
    */
-  constexpr virtual size_t getExternalMemorySize() noexcept {
-    return sizeof(HybridObject);
-  }
+  size_t getTotalExternalMemorySize() noexcept;
 
 public:
   /**
@@ -95,6 +95,13 @@ public:
    */
   bool equals(std::shared_ptr<HybridObject> other);
 
+protected:
+  /**
+   * Get the size of any external (heap) allocations this `HybridObject` has made, in bytes.
+   * This will be used to notify the JS GC about memory pressure.
+   */
+  virtual inline size_t getExternalMemorySize() noexcept { return 0; }
+  
 protected:
   /**
    * Loads all native methods of this `HybridObject` to be exposed to JavaScript.

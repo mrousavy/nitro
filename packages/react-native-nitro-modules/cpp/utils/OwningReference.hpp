@@ -24,6 +24,9 @@ namespace margelo::nitro {
 template<typename T>
 class OwningReference final {
 public:
+  using Pointee = T;
+  
+public:
   OwningReference(): _value(nullptr), _isDeleted(nullptr), _strongRefCount(nullptr), _weakRefCount(nullptr) { }
 
   explicit OwningReference(T* value): _value(value), _isDeleted(new bool(false)), _strongRefCount(new size_t(1)), _weakRefCount(new size_t(0)) {}

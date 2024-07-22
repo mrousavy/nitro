@@ -36,10 +36,6 @@ public:
   inline NitroImage::ImageFactorySpecCxx getSwiftPart() noexcept { return _swiftPart; }
 
 public:
-  // Get memory pressure
-  virtual inline size_t getExternalMemorySize() noexcept override {
-    return _swiftPart.getMemorySize();
-  }
 
 public:
   // Properties

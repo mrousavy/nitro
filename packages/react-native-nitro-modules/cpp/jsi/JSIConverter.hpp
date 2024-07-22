@@ -353,8 +353,9 @@ template <typename T> struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_h
     jsi::Object object = jsi::Object::createFromHostObject(runtime, arg);
     if constexpr (std::is_base_of_v<HybridObject, TPointee>) {
       // HybridObjects expose their external memory size, so inform JS GC about it!
-      size_t memorySize = arg->getExternalMemorySize();
+      size_t memorySize = arg->getTotalExternalMemorySize();
       object.setExternalMemoryPressure(runtime, memorySize);
+      Logger::log("SIZE", "Memory size is %i!!!", memorySize);
     }
     return object;
   }
