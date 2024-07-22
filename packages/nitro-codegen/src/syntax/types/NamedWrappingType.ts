@@ -1,6 +1,6 @@
 import type { Language } from '../../getPlatformSpecs.js'
 import { escapeCppName } from '../helpers.js'
-import type { SourceFile } from '../SourceFile.js'
+import type { SourceFile, SourceImport } from '../SourceFile.js'
 import type { NamedType, Type, TypeKind } from './Type.js'
 
 export class NamedWrappingType implements NamedType {
@@ -26,5 +26,8 @@ export class NamedWrappingType implements NamedType {
   }
   getExtraFiles(): SourceFile[] {
     return this.type.getExtraFiles()
+  }
+  getRequiredImports(): SourceImport[] {
+    return this.type.getRequiredImports()
   }
 }

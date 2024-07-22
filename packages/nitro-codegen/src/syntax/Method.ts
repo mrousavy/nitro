@@ -1,7 +1,6 @@
 import type { CodeNode } from './CodeNode.js'
-import { removeDuplicates } from './helpers.js'
 import type { Language } from '../getPlatformSpecs.js'
-import type { SourceFile } from './SourceFile.js'
+import type { SourceFile, SourceImport } from './SourceFile.js'
 import { Parameter } from './Parameter.js'
 import type { MethodSignature } from 'ts-morph'
 import type { Type } from './types/Type.js'
@@ -107,15 +106,15 @@ ${signature} {
     }
   }
 
-  getDefinitionFiles(): SourceFile[] {
-    const parametersDefinitionFiles = this.parameters.flatMap((p) =>
-      p.getDefinitionFiles()
-    )
-    const returnTypeDefinitionFiles = this.returnType.getExtraFiles()
-    const allFiles = [
-      ...returnTypeDefinitionFiles,
-      ...parametersDefinitionFiles,
-    ]
-    return removeDuplicates(allFiles, (a, b) => a.name === b.name)
+  getExtraFiles(): SourceFile[] {
+    const returnTypeExtraFiles = this.returnType.getExtraFiles()
+    const paramsExtraFiles = this.parameters.flatMap((p) => p.getExtraFiles())
+    return [...returnTypeExtraFiles, ...paramsExtraFiles]
+  }
+
+  getExtraImports(): SourceImport[] {
+    const returnTypeFiles = this.returnType.getRequiredImports()
+    const paramsImports = this.parameters.flatMap((p) => p.getExtraImports())
+    return [...returnTypeFiles, ...paramsImports]
   }
 }

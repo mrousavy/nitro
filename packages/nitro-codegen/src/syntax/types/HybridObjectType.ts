@@ -1,6 +1,7 @@
 import type { Language } from '../../getPlatformSpecs.js'
+import { getForwardDeclaration } from '../c++/getForwardDeclaration.js'
 import { getHybridObjectName } from '../c++/getHybridObjectName.js'
-import type { SourceFile } from '../SourceFile.js'
+import type { SourceFile, SourceImport } from '../SourceFile.js'
 import { getHybridObjectProtocolName } from '../swift/getHybridObjectProtocolName.js'
 import type { Type, TypeKind } from './Type.js'
 
@@ -33,7 +34,16 @@ export class HybridObjectType implements Type {
     }
   }
   getExtraFiles(): SourceFile[] {
-    // TODO: We need to include the HybridObject...
     return []
+  }
+  getRequiredImports(): SourceImport[] {
+    const cxxName = getHybridObjectName(this.hybridObjectName)
+    return [
+      {
+        name: `${cxxName}.hpp`,
+        forwardDeclaration: getForwardDeclaration('class', cxxName),
+        language: 'c++',
+      },
+    ]
   }
 }

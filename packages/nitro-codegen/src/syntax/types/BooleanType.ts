@@ -1,5 +1,5 @@
 import type { Language } from '../../getPlatformSpecs.js'
-import type { SourceFile } from '../SourceFile.js'
+import type { SourceFile, SourceImport } from '../SourceFile.js'
 import type { Type, TypeKind } from './Type.js'
 
 export class BooleanType implements Type {
@@ -24,6 +24,9 @@ export class BooleanType implements Type {
     }
   }
   getExtraFiles(): SourceFile[] {
+    return []
+  }
+  getRequiredImports(): SourceImport[] {
     return []
   }
 }

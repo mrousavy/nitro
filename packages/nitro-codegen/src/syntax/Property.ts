@@ -2,7 +2,7 @@ import { ts, type PropertySignature } from 'ts-morph'
 import type { CodeNode } from './CodeNode.js'
 import { capitalizeName } from '../stringUtils.js'
 import { removeDuplicates } from './helpers.js'
-import type { SourceFile } from './SourceFile.js'
+import { type SourceFile, type SourceImport } from './SourceFile.js'
 import type { Language } from '../getPlatformSpecs.js'
 import type { NamedType } from './types/Type.js'
 import { createNamedType } from './createType.js'
@@ -43,11 +43,15 @@ export class Property implements CodeNode {
     this.type = createNamedType(this.name, type, isOptional)
   }
 
-  getDefinitionFiles(): SourceFile[] {
+  getExtraFiles(): SourceFile[] {
     return removeDuplicates(
       this.type.getExtraFiles(),
       (a, b) => a.name === b.name
     )
+  }
+
+  getExtraImports(): SourceImport[] {
+    return this.type.getRequiredImports()
   }
 
   get cppGetterName(): string {

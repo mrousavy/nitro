@@ -8,15 +8,8 @@
 
 #pragma once
 
-namespace NitroImage {
-class ImageSpecCxx;
-}
-
 #include "HybridImageFactory.hpp"
 #include "NitroImage-Swift.h"
-
-
-#include "HybridImageSwift.hpp"
 
 /**
  * The C++ part of ImageFactorySpecCxx.swift.

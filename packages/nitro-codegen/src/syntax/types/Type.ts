@@ -1,5 +1,5 @@
 import type { Language } from '../../getPlatformSpecs.js'
-import type { SourceFile } from '../SourceFile.js'
+import type { SourceFile, SourceImport } from '../SourceFile.js'
 
 export type TypeKind =
   | 'array-buffer'
@@ -37,11 +37,15 @@ export interface Type {
    */
   getCode(language: Language): string
   /**
-   * Get all required extra files that need to be available/imported for this type to properly work.
+   * Get all required extra files that need to be **created** for this type to properly work.
    *
-   * E.g. for `Promise<T>`, `T` needs to be imported so it will be returned in `getExtraFiles()`.
+   * E.g. for `type Gender = 'male' | 'female'`, the enum `Gender` needs to be created first (as a separate file).
    */
   getExtraFiles(): SourceFile[]
+  /**
+   * Get all required extra imports that need to be **imported** for this type to properly work.
+   */
+  getRequiredImports(): SourceImport[]
 }
 
 export interface NamedType extends Type {

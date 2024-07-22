@@ -35,8 +35,10 @@ public class ImageFactorySpecCxx {
       let result = try self.implementation.loadImageFromFile(path: path)
       return .value(ImageSpecCxx(result))
     } catch RuntimeError.error(withMessage: let message) {
+      // A  `RuntimeError` was thrown.
       return .error(message: message)
     } catch {
+      // Any other kind of error was thrown.
       // Due to a Swift bug, we have to copy the string here.
       let message = "\(error.localizedDescription)"
       return .error(message: message)
@@ -49,8 +51,10 @@ public class ImageFactorySpecCxx {
       let result = try self.implementation.loadImageFromURL(path: path)
       return .value(ImageSpecCxx(result))
     } catch RuntimeError.error(withMessage: let message) {
+      // A  `RuntimeError` was thrown.
       return .error(message: message)
     } catch {
+      // Any other kind of error was thrown.
       // Due to a Swift bug, we have to copy the string here.
       let message = "\(error.localizedDescription)"
       return .error(message: message)
@@ -63,8 +67,10 @@ public class ImageFactorySpecCxx {
       let result = try self.implementation.loadImageFromSystemName(path: path)
       return .value(ImageSpecCxx(result))
     } catch RuntimeError.error(withMessage: let message) {
+      // A  `RuntimeError` was thrown.
       return .error(message: message)
     } catch {
+      // Any other kind of error was thrown.
       // Due to a Swift bug, we have to copy the string here.
       let message = "\(error.localizedDescription)"
       return .error(message: message)

@@ -1,18 +1,22 @@
 import type { SourceFile } from '../SourceFile.js'
-import { createFileMetadataString } from '../helpers.js'
+import { createFileMetadataString, removeDuplicates } from '../helpers.js'
 import { indent } from '../../stringUtils.js'
 import type { HybridObjectSpec } from '../HybridObjectSpec.js'
 
 export function createCppHybridObject(spec: HybridObjectSpec): SourceFile[] {
   // Extra includes
-  const extraDefinitions = [
-    ...spec.properties.flatMap((p) => p.getDefinitionFiles()),
-    ...spec.methods.flatMap((m) => m.getDefinitionFiles()),
+  const extraFiles = [
+    ...spec.properties.flatMap((p) => p.getExtraFiles()),
+    ...spec.methods.flatMap((m) => m.getExtraFiles()),
   ]
-  const cppExtraIncludesAll = extraDefinitions.map(
-    (d) => `#include "${d.name}"`
+  const extraIncludes = [
+    ...spec.properties.flatMap((p) => p.getExtraImports()),
+    ...spec.methods.flatMap((m) => m.getExtraImports()),
+  ]
+  const cppExtraIncludes = removeDuplicates(
+    extraIncludes.map((i) => `#include "${i.name}"`),
+    (a, b) => a === b
   )
-  const cppExtraIncludes = [...new Set(cppExtraIncludesAll)]
 
   // Generate the full header / code
   const cppHeaderCode = `
@@ -110,6 +114,6 @@ void ${spec.hybridObjectName}::loadHybridMethods() {
     language: 'c++',
     platform: 'shared',
   })
-  files.push(...extraDefinitions)
+  files.push(...extraFiles)
   return files
 }

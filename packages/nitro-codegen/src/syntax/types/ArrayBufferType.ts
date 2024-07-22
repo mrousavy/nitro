@@ -1,5 +1,6 @@
 import type { Language } from '../../getPlatformSpecs.js'
-import type { SourceFile } from '../SourceFile.js'
+import { getForwardDeclaration } from '../c++/getForwardDeclaration.js'
+import type { SourceFile, SourceImport } from '../SourceFile.js'
 import type { Type, TypeKind } from './Type.js'
 
 export class ArrayBufferType implements Type {
@@ -25,5 +26,18 @@ export class ArrayBufferType implements Type {
   }
   getExtraFiles(): SourceFile[] {
     return []
+  }
+  getRequiredImports(): SourceImport[] {
+    return [
+      {
+        name: 'ArrayBuffer.hpp',
+        forwardDeclaration: getForwardDeclaration(
+          'class',
+          'ArrayBuffer',
+          'NitroModules'
+        ),
+        language: 'c++',
+      },
+    ]
   }
 }

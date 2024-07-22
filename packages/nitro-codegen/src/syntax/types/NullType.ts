@@ -1,5 +1,5 @@
 import type { Language } from '../../getPlatformSpecs.js'
-import type { SourceFile } from '../SourceFile.js'
+import type { SourceFile, SourceImport } from '../SourceFile.js'
 import type { Type, TypeKind } from './Type.js'
 
 export class NullType implements Type {
@@ -21,6 +21,9 @@ export class NullType implements Type {
     }
   }
   getExtraFiles(): SourceFile[] {
+    return []
+  }
+  getRequiredImports(): SourceImport[] {
     return []
   }
 }

@@ -1,8 +1,8 @@
 import type { ParameterDeclaration } from 'ts-morph'
 import type { CodeNode } from './CodeNode.js'
-import { escapeCppName, removeDuplicates, toReferenceType } from './helpers.js'
+import { escapeCppName, toReferenceType } from './helpers.js'
 import type { Language } from '../getPlatformSpecs.js'
-import type { SourceFile } from './SourceFile.js'
+import type { SourceFile, SourceImport } from './SourceFile.js'
 import type { NamedType, Type } from './types/Type.js'
 import { createNamedType } from './createType.js'
 import { NamedWrappingType } from './types/NamedWrappingType.js'
@@ -53,10 +53,11 @@ export class Parameter implements CodeNode {
     }
   }
 
-  getDefinitionFiles(): SourceFile[] {
-    return removeDuplicates(
-      this.type.getExtraFiles(),
-      (a, b) => a.name === b.name
-    )
+  getExtraFiles(): SourceFile[] {
+    return this.type.getExtraFiles()
+  }
+
+  getExtraImports(): SourceImport[] {
+    return this.type.getRequiredImports()
   }
 }

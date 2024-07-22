@@ -47,8 +47,8 @@ export function createCppStruct(
     .join('\n')
 
   // Get C++ includes for each extra-file we need to include
-  const extraFiles = cppProperties.flatMap((r) => r.getExtraFiles())
-  const cppExtraIncludes = extraFiles.map((f) => `#include "${f.name}"`)
+  const includedTypes = cppProperties.flatMap((r) => r.getRequiredImports())
+  const cppExtraIncludes = includedTypes.map((f) => `#include "${f.name}"`)
 
   const cppCode = `
 ${createFileMetadataString(`${typename}.hpp`)}
