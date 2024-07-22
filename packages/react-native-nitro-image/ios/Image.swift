@@ -10,6 +10,24 @@ import UIKit
 import NitroModules
 
 class Image : ImageSpec {
+  private let uiImage: UIImage
+  public var hybridContext = margelo.nitro.HybridContext()
+  public var memorySize: Int {
+    return getSizeOf(self) + uiImage.memorySize
+  }
+
+  public init(uiImage: UIImage) {
+    self.uiImage = uiImage
+  }
+  
+  public var size: ImageSize {
+    return ImageSize(uiImage.size.width, uiImage.size.height)
+  }
+
+  public var pixelFormat: PixelFormat {
+    return .rgb
+  }
+  
   var someSettableProp: Double = 1.0
   
   func toArrayBuffer(format: ImageFormat) throws -> Double {
@@ -24,20 +42,14 @@ class Image : ImageSpec {
       print("Callback executed!")
     })
   }
-  
-  public var hybridContext = margelo.nitro.HybridContext()
-  
-  private let uiImage: UIImage
+}
 
-  public init(uiImage: UIImage) {
-    self.uiImage = uiImage
-  }
-  
-  public var size: ImageSize {
-    return ImageSize(uiImage.size.width, uiImage.size.height)
-  }
 
-  public var pixelFormat: PixelFormat {
-    return .rgb
+extension UIImage {
+  var memorySize: Int {
+    guard let cgImage else {
+      return 0
+    }
+    return cgImage.bytesPerRow * cgImage.height
   }
 }

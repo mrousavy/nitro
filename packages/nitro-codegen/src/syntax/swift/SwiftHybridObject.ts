@@ -27,14 +27,16 @@ import NitroModules
  *   // Initialize HybridContext
  *   var hybridContext = margelo.nitro.HybridContext()
  *
+ *   // Return size of the instance to inform JS GC about memory pressure
+ *   var memorySize: Int {
+ *     return getSizeOf(self)
+ *   }
+ *
  *   // ...
  * }
  * \`\`\`
  */
-public protocol ${protocolName} {
-  // Nitro Modules Hybrid Context
-  var hybridContext: margelo.nitro.HybridContext { get set }
-
+public protocol ${protocolName}: HybridObjectSpec {
   // Properties
   ${indent(properties, '  ')}
 

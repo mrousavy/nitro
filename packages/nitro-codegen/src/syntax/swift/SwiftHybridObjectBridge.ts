@@ -68,6 +68,11 @@ public class ${name.TSpecCxx} {
     }
   }
 
+  // Memory size of the Swift class (plus size of any other allocations)
+  public var memorySize: Int {
+    return self.implementation.memorySize
+  }
+
   // Properties
   ${indent(propertiesBridge, '  ')}
 
@@ -193,6 +198,12 @@ public:
 public:
   // Get the Swift part
   inline ${NAMESPACE}::${name.TSpecCxx} getSwiftPart() noexcept { return _swiftPart; }
+
+public:
+  // Get memory pressure
+  constexpr virtual size_t getMemorySize() noexcept override {
+    return sizeof(${name.HybridTSwift}) + _swiftPart.getMemorySize();
+  }
 
 public:
   // Properties

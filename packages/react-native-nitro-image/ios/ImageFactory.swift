@@ -11,6 +11,10 @@ import NitroModules
 class ImageFactory : ImageFactorySpec {
   var hybridContext = margelo.nitro.HybridContext()
   
+  var memorySize: Int {
+    return getSizeOf(self)
+  }
+  
   func loadImageFromFile(path: String) throws -> any ImageSpec {
     guard let uiImage = UIImage(contentsOfFile: path) else {
       throw RuntimeError.error(withMessage: "Failed to load UIImage from \(path)!")
