@@ -16,9 +16,13 @@ class Image : ImageSpec {
     throw RuntimeError.error(withMessage: "toArrayBuffer() is not yet implemented!")
   }
   
-  func saveToFile(path: String, onFinished: Func_void) throws {
-    onFinished()
-    throw RuntimeError.error(withMessage: "saveToFile() is not yet implemented!")
+  func saveToFile(path: String, onFinished: Func_void_std__string) throws {
+    print("Save To File called \(path)...")
+    DispatchQueue.main.asyncAfter(deadline: .now() + 5, execute: {
+      print("Executing callback now...")
+      onFinished(std.string(path))
+      print("Callback executed!")
+    })
   }
   
   public var hybridContext = margelo.nitro.HybridContext()

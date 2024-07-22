@@ -11,20 +11,10 @@ export default function App() {
     console.log('Image loaded!')
     console.log(`Image is ${image.size.width}x${image.size.height}`)
 
+    image.saveToFile('some path', (path) => {
+      console.log('saved to ' + path + '!')
+    })
 
-    for (let i = 0; i < 10; i++) {
-      console.log('bouncing back...')
-      const another = ImageConstructors.bounceBack(image)
-      console.log('bounced back!', another.name)
-    }
-
-
-    const start = performance.now()
-    for (let i = 0; i < 10_000; i++) {
-      image = ImageConstructors.bounceBack(image)
-    }
-    const end = performance.now()
-    console.log(`Passed HybridObject Image to native and back 10.000 times in ${(end - start).toFixed(2)}ms! :)`)
   }, [])
   // React.useEffect(() => {
   //   const timeout = setTimeout(async () => {

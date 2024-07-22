@@ -79,7 +79,7 @@ public class ImageSpecCxx {
   }
   
   @inline(__always)
-  public func saveToFile(path: String, onFinished: Func_void) -> ImageSpecCxx_saveToFile_Result {
+  public func saveToFile(path: String, onFinished: Func_void_std__string) -> ImageSpecCxx_saveToFile_Result {
     do {
       try self.implementation.saveToFile(path: path, onFinished: onFinished)
       return .value
