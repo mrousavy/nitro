@@ -201,7 +201,7 @@ public:
 
 public:
   // Get memory pressure
-  constexpr virtual size_t getMemorySize() noexcept override {
+  virtual size_t getMemorySize() noexcept override {
     return sizeof(${name.HybridTSwift}) + _swiftPart.getMemorySize();
   }
 
