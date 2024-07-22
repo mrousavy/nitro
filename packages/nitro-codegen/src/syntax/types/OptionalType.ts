@@ -1,9 +1,5 @@
 import type { Language } from '../../getPlatformSpecs.js'
-import {
-  getSourceFileImport,
-  type SourceFile,
-  type SourceImport,
-} from '../SourceFile.js'
+import { type SourceFile, type SourceImport } from '../SourceFile.js'
 import type { Type, TypeKind } from './Type.js'
 
 export class OptionalType implements Type {
@@ -37,6 +33,6 @@ export class OptionalType implements Type {
     return this.wrappingType.getExtraFiles()
   }
   getRequiredImports(): SourceImport[] {
-    return this.getExtraFiles().map((f) => getSourceFileImport(f))
+    return this.wrappingType.getRequiredImports()
   }
 }

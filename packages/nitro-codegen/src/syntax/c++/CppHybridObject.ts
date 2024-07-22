@@ -10,9 +10,13 @@ export function createCppHybridObject(spec: HybridObjectSpec): SourceFile[] {
     ...spec.methods.flatMap((m) => m.getExtraFiles()),
   ]
   const extraIncludes = [
-    ...spec.properties.flatMap((p) => p.getExtraImports()),
-    ...spec.methods.flatMap((m) => m.getExtraImports()),
+    ...spec.properties.flatMap((p) => p.getRequiredImports()),
+    ...spec.methods.flatMap((m) => m.getRequiredImports()),
   ]
+  const cppForwardDeclarations = extraIncludes
+    .map((i) => i.forwardDeclaration)
+    .filter((v) => v != null)
+    .filter(isNotDuplicate)
   const cppExtraIncludes = extraIncludes
     .map((i) => `#include "${i.name}"`)
     .filter(isNotDuplicate)
@@ -28,6 +32,8 @@ ${createFileMetadataString(`${spec.hybridObjectName}.hpp`)}
 #else
 #error NitroModules cannot be found! Are you sure you installed react-native-nitro properly?
 #endif
+
+${cppForwardDeclarations.join('\n')}
 
 ${cppExtraIncludes.join('\n')}
 

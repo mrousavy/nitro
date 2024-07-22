@@ -136,21 +136,26 @@ return ${bridgedReturnType.parseFromSwiftToCpp('value', 'c++')};
     })
     .join('\n')
 
-  const propertiesExtraIncludes = spec.properties.flatMap((p) => {
+  const propertiesExtraImports = spec.properties.flatMap((p) => {
     const bridged = new SwiftCxxBridgedType(p.type)
-    return bridged.getExtraImports()
+    return bridged.getRequiredImports()
   })
-  const methodsExtraIncludes = spec.methods.flatMap((m) => {
+  const methodsExtraImports = spec.methods.flatMap((m) => {
     const bridgedReturn = new SwiftCxxBridgedType(m.returnType)
     const bridgedParams = m.parameters.map(
       (p) => new SwiftCxxBridgedType(p.type)
     )
     return [
-      ...bridgedReturn.getExtraImports(),
-      ...bridgedParams.flatMap((b) => b.getExtraImports()),
+      ...bridgedReturn.getRequiredImports(),
+      ...bridgedParams.flatMap((b) => b.getRequiredImports()),
     ]
   })
-  const extraIncludes = [...propertiesExtraIncludes, ...methodsExtraIncludes]
+  const extraImports = [...propertiesExtraImports, ...methodsExtraImports]
+  const extraForwardDeclarations = extraImports
+    .map((i) => i.forwardDeclaration)
+    .filter((v) => v != null)
+    .filter(isNotDuplicate)
+  const extraIncludes = extraImports
     .map((i) => `#include "${i.name}"`)
     .filter(isNotDuplicate)
 
@@ -166,6 +171,8 @@ namespace ${NAMESPACE} {
   // Forward-declare ${name.TSpecCxx}, because the ${NAMESPACE}-Swift.h header might not do that automatically.
   class ${name.TSpecCxx};
 } // namespace ${NAMESPACE}
+
+${extraForwardDeclarations.join('\n')}
 
 ${extraIncludes.join('\n')}
 

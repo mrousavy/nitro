@@ -1,6 +1,10 @@
 import type { CodeNode } from './CodeNode.js'
 import type { Language } from '../getPlatformSpecs.js'
-import type { SourceFile, SourceImport } from './SourceFile.js'
+import {
+  getSourceFileImport,
+  type SourceFile,
+  type SourceImport,
+} from './SourceFile.js'
 import { Parameter } from './Parameter.js'
 import type { MethodSignature } from 'ts-morph'
 import type { Type } from './types/Type.js'
@@ -112,9 +116,10 @@ ${signature} {
     return [...returnTypeExtraFiles, ...paramsExtraFiles]
   }
 
-  getExtraImports(): SourceImport[] {
+  getRequiredImports(): SourceImport[] {
     const returnTypeFiles = this.returnType.getRequiredImports()
-    const paramsImports = this.parameters.flatMap((p) => p.getExtraImports())
-    return [...returnTypeFiles, ...paramsImports]
+    const paramsImports = this.parameters.flatMap((p) => p.getRequiredImports())
+    const extraImports = this.getExtraFiles().map((f) => getSourceFileImport(f))
+    return [...returnTypeFiles, ...paramsImports, ...extraImports]
   }
 }

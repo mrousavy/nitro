@@ -1,9 +1,5 @@
 import type { Language } from '../../getPlatformSpecs.js'
-import {
-  getSourceFileImport,
-  type SourceFile,
-  type SourceImport,
-} from '../SourceFile.js'
+import { type SourceFile, type SourceImport } from '../SourceFile.js'
 import type { Type, TypeKind } from './Type.js'
 
 export class FunctionType implements Type {
@@ -43,6 +39,9 @@ export class FunctionType implements Type {
     ]
   }
   getRequiredImports(): SourceImport[] {
-    return this.getExtraFiles().map((f) => getSourceFileImport(f))
+    return [
+      ...this.returnType.getRequiredImports(),
+      ...this.parameters.flatMap((p) => p.getRequiredImports()),
+    ]
   }
 }

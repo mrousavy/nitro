@@ -1,9 +1,5 @@
 import type { Language } from '../../getPlatformSpecs.js'
-import {
-  getSourceFileImport,
-  type SourceFile,
-  type SourceImport,
-} from '../SourceFile.js'
+import { type SourceFile, type SourceImport } from '../SourceFile.js'
 import type { Type, TypeKind } from './Type.js'
 
 export class EnumType implements Type {
@@ -40,6 +36,6 @@ export class EnumType implements Type {
     return [this.declarationFile]
   }
   getRequiredImports(): SourceImport[] {
-    return this.getExtraFiles().map((f) => getSourceFileImport(f))
+    return []
   }
 }

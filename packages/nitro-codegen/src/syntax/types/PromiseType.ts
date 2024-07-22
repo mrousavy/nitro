@@ -1,9 +1,5 @@
 import type { Language } from '../../getPlatformSpecs.js'
-import {
-  getSourceFileImport,
-  type SourceFile,
-  type SourceImport,
-} from '../SourceFile.js'
+import { type SourceFile, type SourceImport } from '../SourceFile.js'
 import type { Type, TypeKind } from './Type.js'
 
 export class PromiseType implements Type {
@@ -38,6 +34,6 @@ export class PromiseType implements Type {
     return this.resultingType.getExtraFiles()
   }
   getRequiredImports(): SourceImport[] {
-    return this.getExtraFiles().map((f) => getSourceFileImport(f))
+    return this.resultingType.getRequiredImports()
   }
 }

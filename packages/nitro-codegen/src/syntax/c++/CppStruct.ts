@@ -1,13 +1,9 @@
 import type { Symbol } from 'ts-morph'
-import type { SourceFile } from '../SourceFile.js'
+import type { FileWithReferencedTypes } from '../SourceFile.js'
 import { indent } from '../../stringUtils.js'
-import { createFileMetadataString } from '../helpers.js'
+import { createFileMetadataString, isNotDuplicate } from '../helpers.js'
 import type { NamedType } from '../types/Type.js'
 import { createNamedType } from '../createType.js'
-
-interface FileWithReferencedTypes extends SourceFile {
-  referencedTypes: NamedType[]
-}
 
 export function createCppStruct(
   typename: string,
@@ -48,7 +44,13 @@ export function createCppStruct(
 
   // Get C++ includes for each extra-file we need to include
   const includedTypes = cppProperties.flatMap((r) => r.getRequiredImports())
-  const cppExtraIncludes = includedTypes.map((f) => `#include "${f.name}"`)
+  const cppForwardDeclarations = includedTypes
+    .map((i) => i.forwardDeclaration)
+    .filter((v) => v != null)
+    .filter(isNotDuplicate)
+  const cppExtraIncludes = includedTypes
+    .map((f) => `#include "${f.name}"`)
+    .filter(isNotDuplicate)
 
   const cppCode = `
 ${createFileMetadataString(`${typename}.hpp`)}
@@ -56,6 +58,8 @@ ${createFileMetadataString(`${typename}.hpp`)}
 #pragma once
 
 #include <NitroModules/JSIConverter.hpp>
+
+${cppForwardDeclarations.join('\n')}
 
 ${cppExtraIncludes.join('\n')}
 

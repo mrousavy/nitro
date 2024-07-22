@@ -12,6 +12,8 @@
 
 
 
+
+
 /**
  * A struct which can be represented as a JavaScript object (ImageSize).
  */

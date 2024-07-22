@@ -1,5 +1,5 @@
 import type { Language, Platform } from '../getPlatformSpecs.js'
-import { getForwardDeclaration } from './c++/getForwardDeclaration.js'
+import type { NamedType } from './types/Type.js'
 
 /**
  * Represents a file with source code, in a specific programming language.
@@ -21,6 +21,17 @@ export interface SourceFile {
    * The platform this file can be used on or is created for. (e.g. `ios`)
    */
   platform: Platform | 'shared'
+}
+
+/**
+ * Represents a {@linkcode SourceFile} that also references other types.
+ */
+export interface FileWithReferencedTypes extends SourceFile {
+  /**
+   * All external types this {@linkcode SourceFile} references,
+   * either as return types, parameter types, or member types.
+   */
+  referencedTypes: NamedType[]
 }
 
 /**
@@ -50,14 +61,8 @@ export interface SourceImport {
 }
 
 export function getSourceFileImport(file: SourceFile): SourceImport {
-  const className = file.name.substring(0, file.name.indexOf('.'))
-  const forwardDeclaration =
-    file.language === 'c++'
-      ? getForwardDeclaration('class', className)
-      : undefined
   return {
     name: file.name,
     language: file.language,
-    forwardDeclaration: forwardDeclaration,
   }
 }

@@ -14,6 +14,9 @@
 #error NitroModules cannot be found! Are you sure you installed react-native-nitro properly?
 #endif
 
+// Forward declaration of `HybridImage` to properly resolve imports.
+class HybridImage;
+
 #include "HybridImage.hpp"
 
 using namespace margelo::nitro;

@@ -14,6 +14,8 @@
 #error NitroModules cannot be found! Are you sure you installed react-native-nitro properly?
 #endif
 
+
+
 #include "ImageSize.hpp"
 #include "PixelFormat.hpp"
 #include "ImageFormat.hpp"

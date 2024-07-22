@@ -1,3 +1,4 @@
+import { getForwardDeclaration } from '../c++/getForwardDeclaration.js'
 import { getHybridObjectName } from '../getHybridObjectName.js'
 import type { SourceImport } from '../SourceFile.js'
 import { HybridObjectType } from '../types/HybridObjectType.js'
@@ -25,7 +26,7 @@ export class SwiftCxxBridgedType {
     }
   }
 
-  getExtraImports(): SourceImport[] {
+  getRequiredImports(): SourceImport[] {
     switch (this.type.kind) {
       case 'hybrid-object':
         if (!(this.type instanceof HybridObjectType))
@@ -34,6 +35,10 @@ export class SwiftCxxBridgedType {
         return [
           {
             name: `${name.HybridTSwift}.hpp`,
+            forwardDeclaration: getForwardDeclaration(
+              'class',
+              name.HybridTSwift
+            ),
             language: 'c++',
           },
         ]

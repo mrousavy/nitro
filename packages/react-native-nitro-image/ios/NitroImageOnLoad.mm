@@ -10,6 +10,10 @@
 #import <NitroModules/HybridObjectRegistry.hpp>
 #import "HybridImageFactorySwift.hpp"
 
+namespace NitroImage {
+  class NitroImageRegistry;
+} // namespace NitroImage
+
 #import "NitroImage-Swift.h"
 
 @interface NitroImageOnLoad : NSObject

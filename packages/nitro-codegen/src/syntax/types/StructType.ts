@@ -1,6 +1,6 @@
 import type { Language } from '../../getPlatformSpecs.js'
 import {
-  getSourceFileImport,
+  type FileWithReferencedTypes,
   type SourceFile,
   type SourceImport,
 } from '../SourceFile.js'
@@ -8,9 +8,9 @@ import type { Type, TypeKind } from './Type.js'
 
 export class StructType implements Type {
   readonly structName: string
-  readonly declarationFile: SourceFile
+  readonly declarationFile: FileWithReferencedTypes
 
-  constructor(structName: string, declarationFile: SourceFile) {
+  constructor(structName: string, declarationFile: FileWithReferencedTypes) {
     this.structName = structName
     this.declarationFile = declarationFile
   }
@@ -39,6 +39,8 @@ export class StructType implements Type {
     return [this.declarationFile]
   }
   getRequiredImports(): SourceImport[] {
-    return this.getExtraFiles().map((f) => getSourceFileImport(f))
+    return this.declarationFile.referencedTypes.flatMap((t) =>
+      t.getRequiredImports()
+    )
   }
 }

@@ -1,9 +1,5 @@
 import type { Language } from '../../getPlatformSpecs.js'
-import {
-  getSourceFileImport,
-  type SourceFile,
-  type SourceImport,
-} from '../SourceFile.js'
+import { type SourceFile, type SourceImport } from '../SourceFile.js'
 import type { Type, TypeKind } from './Type.js'
 
 export class RecordType implements Type {
@@ -39,6 +35,9 @@ export class RecordType implements Type {
     return [...this.keyType.getExtraFiles(), ...this.valueType.getExtraFiles()]
   }
   getRequiredImports(): SourceImport[] {
-    return this.getExtraFiles().map((f) => getSourceFileImport(f))
+    return [
+      ...this.keyType.getRequiredImports(),
+      ...this.valueType.getRequiredImports(),
+    ]
   }
 }

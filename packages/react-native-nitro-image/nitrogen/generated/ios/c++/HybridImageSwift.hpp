@@ -17,6 +17,8 @@ namespace NitroImage {
 
 
 
+
+
 #include "NitroImage-Swift.h"
 
 /**
