@@ -29,7 +29,7 @@ class HybridImageSwift;
 class HybridImageFactorySwift final: public HybridImageFactory {
 public:
   // Constructor from a Swift instance
-  explicit HybridImageFactorySwift(NitroImage::ImageFactorySpecCxx swiftPart): HybridImageFactory(), _swiftPart(swiftPart) { }
+  explicit HybridImageFactorySwift(const NitroImage::ImageFactorySpecCxx& swiftPart): HybridImageFactory(), _swiftPart(swiftPart) { }
 
 public:
   // Get the Swift part

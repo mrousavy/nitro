@@ -192,7 +192,7 @@ ${extraIncludes.join('\n')}
 class ${name.HybridTSwift} final: public ${name.HybridT} {
 public:
   // Constructor from a Swift instance
-  explicit ${name.HybridTSwift}(${NAMESPACE}::${name.TSpecCxx} swiftPart): ${name.HybridT}(), _swiftPart(swiftPart) { }
+  explicit ${name.HybridTSwift}(const ${NAMESPACE}::${name.TSpecCxx}& swiftPart): ${name.HybridT}(), _swiftPart(swiftPart) { }
 
 public:
   // Get the Swift part

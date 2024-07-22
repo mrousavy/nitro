@@ -32,7 +32,7 @@ enum class ImageFormat;
 class HybridImageSwift final: public HybridImage {
 public:
   // Constructor from a Swift instance
-  explicit HybridImageSwift(NitroImage::ImageSpecCxx swiftPart): HybridImage(), _swiftPart(swiftPart) { }
+  explicit HybridImageSwift(const NitroImage::ImageSpecCxx& swiftPart): HybridImage(), _swiftPart(swiftPart) { }
 
 public:
   // Get the Swift part
