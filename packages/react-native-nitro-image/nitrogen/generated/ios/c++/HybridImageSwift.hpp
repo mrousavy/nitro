@@ -8,6 +8,10 @@
 
 #pragma once
 
+namespace NitroImage {
+class ImageSpecCxx;
+}
+
 #include "HybridImage.hpp"
 #include "NitroImage-Swift.h"
 
@@ -47,6 +51,7 @@ public:
       throw std::runtime_error(valueOrError.getError());
     }
     auto value = valueOrError.getValue();
+    return value;
   }
   inline void saveToFile(const std::string& path) override {
     auto valueOrError = _swiftPart.saveToFile(std::forward<decltype(path)>(path));

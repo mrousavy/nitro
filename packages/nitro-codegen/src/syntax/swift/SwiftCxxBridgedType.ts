@@ -110,7 +110,7 @@ export class SwiftCxxBridgedType {
           throw new Error(`this.type was not a HybridObjectType!`)
         switch (language) {
           case 'c++':
-            return `${this.type.hybridObjectName}Swift(${swiftParameterName})`
+            return `std::make_shared<Hybrid${this.type.hybridObjectName}Swift>(${swiftParameterName})`
           case 'swift':
             // We just pass it to C++ directly from swift
             return `${this.type.hybridObjectName}SpecCxx(${swiftParameterName})`

@@ -54,7 +54,7 @@ import NitroModules
  * - Other HostObjects need to be wrapped/unwrapped from the Swift TCxx wrapper
  * - Throwing methods need to be wrapped with a Result<T, Error> type, as exceptions cannot be propagated to C++
  */
-public final class ${swiftCxxWrapperName} {
+public class ${swiftCxxWrapperName} {
   private(set) var implementation: ${swiftProtocolName}
 
   public init(_ implementation: ${swiftProtocolName}) {
@@ -128,7 +128,12 @@ auto value = valueOrError.getValue();
 `.trim()
         if (bridgedReturnType.needsSpecialHandling) {
           body += '\n'
-          body += bridgedReturnType.parseFromSwiftToCpp('value', 'c++')
+          body += `
+return ${bridgedReturnType.parseFromSwiftToCpp('value', 'c++')};
+`.trim()
+        } else {
+          body += '\n'
+          body += 'return value;'
         }
       }
       return m.getCode('c++', { inline: true, override: true }, body)

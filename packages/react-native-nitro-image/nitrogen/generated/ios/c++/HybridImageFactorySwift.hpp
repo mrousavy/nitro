@@ -8,8 +8,15 @@
 
 #pragma once
 
+namespace NitroImage {
+class ImageSpecCxx;
+}
+
 #include "HybridImageFactory.hpp"
 #include "NitroImage-Swift.h"
+
+
+#include "HybridImageSwift.hpp"
 
 /**
  * The C++ part of ImageFactorySpecCxx.swift.
@@ -35,7 +42,7 @@ public:
       throw std::runtime_error(valueOrError.getError());
     }
     auto value = valueOrError.getValue();
-    ImageSwift(value)
+    return std::make_shared<HybridImageSwift>(value);
   }
   inline std::shared_ptr<HybridImage> loadImageFromURL(const std::string& path) override {
     auto valueOrError = _swiftPart.loadImageFromURL(std::forward<decltype(path)>(path));
@@ -43,7 +50,7 @@ public:
       throw std::runtime_error(valueOrError.getError());
     }
     auto value = valueOrError.getValue();
-    ImageSwift(value)
+    return std::make_shared<HybridImageSwift>(value);
   }
   inline std::shared_ptr<HybridImage> loadImageFromSystemName(const std::string& path) override {
     auto valueOrError = _swiftPart.loadImageFromSystemName(std::forward<decltype(path)>(path));
@@ -51,7 +58,7 @@ public:
       throw std::runtime_error(valueOrError.getError());
     }
     auto value = valueOrError.getValue();
-    ImageSwift(value)
+    return std::make_shared<HybridImageSwift>(value);
   }
 
 private:
