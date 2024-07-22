@@ -11,6 +11,8 @@
 #include "HybridImage.hpp"
 #include "NitroImage-Swift.h"
 
+
+
 /**
  * The C++ part of ImageSpecCxx.swift.
  */

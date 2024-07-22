@@ -1,5 +1,5 @@
 import type { SourceFile } from '../SourceFile.js'
-import { createFileMetadataString, removeDuplicates } from '../helpers.js'
+import { createFileMetadataString, isNotDuplicate } from '../helpers.js'
 import { indent } from '../../stringUtils.js'
 import type { HybridObjectSpec } from '../HybridObjectSpec.js'
 
@@ -13,10 +13,9 @@ export function createCppHybridObject(spec: HybridObjectSpec): SourceFile[] {
     ...spec.properties.flatMap((p) => p.getExtraImports()),
     ...spec.methods.flatMap((m) => m.getExtraImports()),
   ]
-  const cppExtraIncludes = removeDuplicates(
-    extraIncludes.map((i) => `#include "${i.name}"`),
-    (a, b) => a === b
-  )
+  const cppExtraIncludes = extraIncludes
+    .map((i) => `#include "${i.name}"`)
+    .filter(isNotDuplicate)
 
   // Generate the full header / code
   const cppHeaderCode = `

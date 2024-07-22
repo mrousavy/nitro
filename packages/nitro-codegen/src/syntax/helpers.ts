@@ -27,17 +27,6 @@ export function escapeCppName(string: string): string {
   return escapedStr
 }
 
-export function removeDuplicates<T>(
-  array: T[],
-  equals: (a: T, b: T) => boolean
-): T[] {
-  const result: T[] = []
-  for (const item of array) {
-    if (result.some((r) => equals(r, item))) {
-      // skip it, it's a duplicate
-    } else {
-      result.push(item)
-    }
-  }
-  return result
+export function isNotDuplicate<T>(item: T, index: number, array: T[]): boolean {
+  return array.indexOf(item) === index
 }

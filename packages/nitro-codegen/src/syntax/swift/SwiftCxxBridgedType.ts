@@ -33,7 +33,7 @@ export class SwiftCxxBridgedType {
         const name = getHybridObjectName(this.type.hybridObjectName)
         return [
           {
-            name: `${name.TSpecCxx}.hpp`,
+            name: `${name.HybridTSwift}.hpp`,
             language: 'c++',
           },
         ]

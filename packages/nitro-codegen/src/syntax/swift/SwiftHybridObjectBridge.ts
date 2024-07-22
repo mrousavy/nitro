@@ -3,7 +3,7 @@ import { SwiftCxxBridgedType } from './SwiftCxxBridgedType.js'
 import type { Property } from '../Property.js'
 import { indent } from '../../stringUtils.js'
 import type { Method } from '../Method.js'
-import { createFileMetadataString } from '../helpers.js'
+import { createFileMetadataString, isNotDuplicate } from '../helpers.js'
 import type { SourceFile } from '../SourceFile.js'
 import { getMethodResultType } from './getMethodResultType.js'
 import { getHybridObjectName } from '../getHybridObjectName.js'
@@ -136,6 +136,24 @@ return ${bridgedReturnType.parseFromSwiftToCpp('value', 'c++')};
     })
     .join('\n')
 
+  const propertiesExtraIncludes = spec.properties.flatMap((p) => {
+    const bridged = new SwiftCxxBridgedType(p.type)
+    return bridged.getExtraImports()
+  })
+  const methodsExtraIncludes = spec.methods.flatMap((m) => {
+    const bridgedReturn = new SwiftCxxBridgedType(m.returnType)
+    const bridgedParams = m.parameters.map(
+      (p) => new SwiftCxxBridgedType(p.type)
+    )
+    return [
+      ...bridgedReturn.getExtraImports(),
+      ...bridgedParams.flatMap((b) => b.getExtraImports()),
+    ]
+  })
+  const extraIncludes = [...propertiesExtraIncludes, ...methodsExtraIncludes]
+    .map((i) => `#include "${i.name}"`)
+    .filter(isNotDuplicate)
+
   const cppHybridObjectCode = `
 ${createFileMetadataString(`${name.HybridTSwift}.hpp`)}
 
@@ -143,6 +161,8 @@ ${createFileMetadataString(`${name.HybridTSwift}.hpp`)}
 
 #include "${name.HybridT}.hpp"
 #include "${NAMESPACE}-Swift.h"
+
+${extraIncludes.join('\n')}
 
 /**
  * The C++ part of ${name.TSpecCxx}.swift.
