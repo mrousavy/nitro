@@ -37,7 +37,7 @@ public:
 
 public:
   // Get memory pressure
-  constexpr virtual size_t getMemorySize() noexcept override {
+  virtual size_t getMemorySize() noexcept override {
     return sizeof(HybridImageFactorySwift) + _swiftPart.getMemorySize();
   }
 
