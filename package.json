@@ -1,6 +1,7 @@
 {
   "scripts": {
     "example": "yarn workspace react-native-nitro-example",
+    "bootstrap": "yarn workspace react-native-nitro-modules install && yarn workspace nitro-codegen install && yarn workspace react-native-nitro-image install && yarn workspace react-native-nitro-example install && yarn workspace react-native-nitro-example pods",
     "tsc": "yarn workspace react-native-nitro-modules tsc && yarn workspace nitro-codegen tsc && yarn workspace react-native-nitro-image tsc",
     "lint": "yarn workspace react-native-nitro-modules lint && yarn workspace nitro-codegen lint && yarn workspace react-native-nitro-image lint",
     "postinstall": "yarn tsc"
