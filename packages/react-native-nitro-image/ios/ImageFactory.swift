@@ -23,7 +23,11 @@ class ImageFactory : ImageFactorySpec {
   }
   
   func loadImageFromURL(path: String) throws -> any ImageSpec {
-    guard let uiImage = UIImage(contentsOfFile: path) else {
+    guard let url = URL(string: path) else {
+      throw RuntimeError.error(withMessage: "Invalid URL! \(path)")
+    }
+    let data = try Data(contentsOf: url)
+    guard let uiImage = UIImage(data: data) else {
       throw RuntimeError.error(withMessage: "Failed to load UIImage from \(path)!")
     }
     return Image(uiImage: uiImage)
