@@ -36,21 +36,21 @@ public:
 
 public:
   // Get the Swift part
-  inline NitroImage::ImageSpecCxx getSwiftPart() { return _swiftPart; }
+  inline NitroImage::ImageSpecCxx getSwiftPart() noexcept { return _swiftPart; }
 
 public:
   // Properties
-  inline ImageSize getSize() override {
+  inline ImageSize getSize() noexcept override {
     return _swiftPart.getSize();
   }
-  inline PixelFormat getPixelFormat() override {
+  inline PixelFormat getPixelFormat() noexcept override {
     auto result = _swiftPart.getPixelFormat();
     return static_cast<PixelFormat>(result);
   }
-  inline double getSomeSettableProp() override {
+  inline double getSomeSettableProp() noexcept override {
     return _swiftPart.getSomeSettableProp();
   }
-  inline void setSomeSettableProp(double someSettableProp) override {
+  inline void setSomeSettableProp(double someSettableProp) noexcept override {
     _swiftPart.setSomeSettableProp(std::forward<decltype(someSettableProp)>(someSettableProp));
   }
 

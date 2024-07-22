@@ -19,6 +19,10 @@ export interface MethodModifiers {
    */
   virtual?: boolean
   /**
+   * Whether the function is marked as `noexcept` (doesn't throw) or not.
+   */
+  noexcept?: boolean
+  /**
    * Whether this function overrides a base/super function.
    */
   override?: boolean
@@ -67,6 +71,7 @@ export class Method implements CodeNode {
         let signature = `${returnType} ${this.name}(${params.join(', ')})`
         if (modifiers?.inline) signature = `inline ${signature}`
         if (modifiers?.virtual) signature = `virtual ${signature}`
+        if (modifiers?.noexcept) signature = `${signature} noexcept`
         if (modifiers?.override) signature = `${signature} override`
 
         if (body == null) {

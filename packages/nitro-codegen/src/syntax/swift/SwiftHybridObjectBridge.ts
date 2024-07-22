@@ -97,7 +97,7 @@ return ${bridged.parseFromSwiftToCpp('result', 'c++')};
       }
       return p.getCode(
         'c++',
-        { inline: true, override: true },
+        { inline: true, override: true, noexcept: true },
         {
           getter: getter.trim(),
           setter: setter.trim(),
@@ -196,7 +196,7 @@ public:
 
 public:
   // Get the Swift part
-  inline ${NAMESPACE}::${name.TSpecCxx} getSwiftPart() { return _swiftPart; }
+  inline ${NAMESPACE}::${name.TSpecCxx} getSwiftPart() noexcept { return _swiftPart; }
 
 public:
   // Properties

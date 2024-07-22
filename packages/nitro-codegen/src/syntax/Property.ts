@@ -24,6 +24,10 @@ export interface PropertyModifiers {
    */
   virtual?: boolean
   /**
+   * Whether the property is marked as `noexcept` (doesn't throw) or not.
+   */
+  noexcept?: boolean
+  /**
    * Whether this property overrides a base/super property.
    */
   override?: boolean

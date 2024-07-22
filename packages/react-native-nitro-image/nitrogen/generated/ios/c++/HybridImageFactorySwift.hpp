@@ -33,7 +33,7 @@ public:
 
 public:
   // Get the Swift part
-  inline NitroImage::ImageFactorySpecCxx getSwiftPart() { return _swiftPart; }
+  inline NitroImage::ImageFactorySpecCxx getSwiftPart() noexcept { return _swiftPart; }
 
 public:
   // Properties
