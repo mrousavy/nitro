@@ -24,7 +24,7 @@ export interface TestHybridObject {
 }
 
 export function createCppTestHybridObject(): TestHybridObject {
-  return NitroModules.createTestHybridObject() as TestHybridObject
+  return NitroModules.createHybridObject('TestHybridObject') as TestHybridObject
 }
 
 export interface SwiftTestHybridObject {
@@ -36,5 +36,7 @@ export interface SwiftTestHybridObject {
 }
 
 export function createSwiftTestHybridObject(): SwiftTestHybridObject {
-  return NitroModules.createSwiftTestHybridObject() as SwiftTestHybridObject
+  return NitroModules.createHybridObject(
+    'SwiftTestObject'
+  ) as SwiftTestHybridObject
 }

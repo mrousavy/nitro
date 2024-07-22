@@ -9,6 +9,7 @@
 #include "TestHybridObject.hpp"
 #include "Dispatcher.hpp"
 #include "CallInvokerDispatcher.hpp"
+#include "HybridObjectRegistry.hpp"
 
 namespace facebook::react {
 
@@ -26,13 +27,13 @@ void NativeNitroModules::install(jsi::Runtime& runtime) {
   Dispatcher::installRuntimeGlobalDispatcher(runtime, dispatcher);
 }
 
-jsi::Object NativeNitroModules::createTestHybridObject(jsi::Runtime &runtime) {
-  auto hybrid = std::make_shared<TestHybridObject>();
-  return jsi::Object::createFromHostObject(runtime, hybrid);
-}
-
-jsi::Object NativeNitroModules::createSwiftTestHybridObject(jsi::Runtime &runtime) {
-  throw std::runtime_error("Swift test obj is gone!");
+jsi::Object NativeNitroModules::createHybridObject(jsi::Runtime& runtime,
+                                                   jsi::String hybridObjectName,
+                                                   std::optional<jsi::Object> args) {
+  auto name = hybridObjectName.utf8(runtime);
+  // TODO: Pass args? Do we need that?
+  auto hybridObject = HybridObjectRegistry::createHybridObject(name.c_str());
+  return jsi::Object::createFromHostObject(runtime, hybridObject);
 }
 
 }

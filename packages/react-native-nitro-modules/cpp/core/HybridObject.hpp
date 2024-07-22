@@ -67,9 +67,25 @@ public:
   template <typename Derived> std::shared_ptr<Derived> shared() {
     return std::static_pointer_cast<Derived>(shared_from_this());
   }
+  
+public:
+  /**
+   * Get the HybridObject's name
+   */
+  std::string getName();
+  /**
+   * Get a string representation of this HostObject, useful for logging or debugging.
+   */
+  virtual std::string toString();
+  /**
+   * Compare this HybridObject for reference equality to the other HybridObject.
+   *
+   * While two `jsi::Object`s of the same `HybridObject` might not be equal when compared with `==`,
+   * they might still be the same `HybridObject` - in this case `equals(other)` will return true.
+   */
+  bool equals(std::shared_ptr<HybridObject> other);
 
 protected:
-
   /**
    * Loads all native methods of this `HybridObject` to be exposed to JavaScript.
    * The base implementation registers a `toString()` method and `name` property.
@@ -88,24 +104,6 @@ protected:
    * ```
    */
   virtual void loadHybridMethods();
-
-  /**
-   * Get a string representation of this HostObject, useful for logging or debugging.
-   */
-  virtual std::string toString();
-
-  /**
-   * Get the HybridObject's name
-   */
-  std::string getName();
-
-  /**
-   * Compare this HybridObject for reference equality to the other HybridObject.
-   *
-   * While two `jsi::Object`s of the same `HybridObject` might not be equal when compared with `==`,
-   * they might still be the same `HybridObject` - in this case `equals(other)` will return true.
-   */
-  bool equals(std::shared_ptr<HybridObject> other);
 
 private:
   static constexpr auto TAG = "HybridObject";

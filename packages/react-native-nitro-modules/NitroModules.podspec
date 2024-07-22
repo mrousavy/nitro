@@ -29,6 +29,7 @@ Pod::Spec.new do |s|
   s.public_header_files = [
     # Public C++ headers will be exposed in modulemap (for Swift)
     "cpp/core/HybridContext.hpp",
+    "cpp/registry/HybridObjectRegistry.hpp",
   ]
 
   s.pod_target_xcconfig = {
