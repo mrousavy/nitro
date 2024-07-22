@@ -68,7 +68,7 @@ public:
   template <typename Derived> std::shared_ptr<Derived> shared() {
     return std::static_pointer_cast<Derived>(shared_from_this());
   }
-  
+
 public:
   /**
    * Get the HybridObject's name

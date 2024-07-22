@@ -35,12 +35,12 @@ public:
    * Get a friendly name of the type `T` (if possible, demangled)
    */
   template <typename T>
-  static inline const char* getFriendlyTypename() {
-    const char* name = typeid(T).name();
+  static inline std::string getFriendlyTypename() {
+    std::string name = typeid(T).name();
 #if __has_include(<cxxabi.h>)
     int status = 0;
-    char* demangled_name = abi::__cxa_demangle(name, NULL, NULL, &status);
-    if (status == 0) {
+    char* demangled_name = abi::__cxa_demangle(name.c_str(), NULL, NULL, &status);
+    if (demangled_name != nullptr) {
       name = demangled_name;
       std::free(demangled_name);
     }

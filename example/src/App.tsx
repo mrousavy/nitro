@@ -7,7 +7,7 @@ import { ImageConstructors } from 'react-native-nitro-image'
 export default function App() {
   React.useEffect(() => {
     console.log('Loading image...')
-    const image = ImageConstructors.loadImageFromSystemName('heart.fill')
+    let image = ImageConstructors.loadImageFromSystemName('heart.fill')
     console.log('Image loaded!')
     console.log(`Image is ${image.size.width}x${image.size.height}`)
 
@@ -17,6 +17,14 @@ export default function App() {
       const another = ImageConstructors.bounceBack(image)
       console.log('bounced back!', another.name)
     }
+
+
+    const start = performance.now()
+    for (let i = 0; i < 10_000; i++) {
+      image = ImageConstructors.bounceBack(image)
+    }
+    const end = performance.now()
+    console.log(`Passed HybridObject Image to native and back 10.000 times in ${(end - start).toFixed(2)}ms! :)`)
   }, [])
   // React.useEffect(() => {
   //   const timeout = setTimeout(async () => {

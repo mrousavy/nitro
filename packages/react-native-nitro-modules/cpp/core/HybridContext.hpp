@@ -9,6 +9,7 @@
 
 #include <memory>
 #include "NitroLogger.hpp"
+#include "TypeInfo.hpp"
 
 namespace margelo::nitro {
 
@@ -26,17 +27,21 @@ public:
   
 public:
   template<typename THybridObject, typename TSwiftPart>
-  static std::shared_ptr<THybridObject> getOrCreate(TSwiftPart swiftPart) {
+  static inline std::shared_ptr<THybridObject> getOrCreate(TSwiftPart swiftPart) {
     auto hybridContext = swiftPart.getHybridContext();
     auto hybridObject = std::static_pointer_cast<THybridObject>(hybridContext.cppPart.lock());
-    if (hybridObject == nullptr) {
-      Logger::log(TAG, "Creating new HybridContext...");
-      hybridObject = std::make_shared<THybridObject>(swiftPart);
-      hybridContext.cppPart = hybridObject;
-      swiftPart.setHybridContext(hybridContext);
-    } else {
-      Logger::log(TAG, "Re-using existing HybridContext from cache.");
+    if (hybridObject != nullptr) [[likely]] {
+      // Fast path - an existing HybridObject is still in cache! (HybridContext)
+      return hybridObject;
     }
+    
+    // Slow path - we need to create a new HybridObject that wraps our Swift implementation.
+    Logger::log(TAG, "Creating new HybridObject<%s> for %s...",
+                TypeInfo::getFriendlyTypename<THybridObject>(),
+                TypeInfo::getFriendlyTypename<TSwiftPart>());
+    hybridObject = std::make_shared<THybridObject>(std::forward<decltype(swiftPart)>(swiftPart));
+    hybridContext.cppPart = hybridObject;
+    swiftPart.setHybridContext(hybridContext);
     return hybridObject;
   }
   
