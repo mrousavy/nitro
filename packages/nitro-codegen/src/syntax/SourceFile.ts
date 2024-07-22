@@ -59,10 +59,3 @@ export interface SourceImport {
    */
   language: Language
 }
-
-export function getSourceFileImport(file: SourceFile): SourceImport {
-  return {
-    name: file.name,
-    language: file.language,
-  }
-}

@@ -2,11 +2,7 @@ import type { ParameterDeclaration } from 'ts-morph'
 import type { CodeNode } from './CodeNode.js'
 import { escapeCppName, toReferenceType } from './helpers.js'
 import type { Language } from '../getPlatformSpecs.js'
-import {
-  getSourceFileImport,
-  type SourceFile,
-  type SourceImport,
-} from './SourceFile.js'
+import { type SourceFile, type SourceImport } from './SourceFile.js'
 import type { NamedType, Type } from './types/Type.js'
 import { createNamedType } from './createType.js'
 import { NamedWrappingType } from './types/NamedWrappingType.js'
@@ -62,7 +58,6 @@ export class Parameter implements CodeNode {
   }
 
   getRequiredImports(): SourceImport[] {
-    const extraImports = this.getExtraFiles().map((f) => getSourceFileImport(f))
-    return [...this.type.getRequiredImports(), ...extraImports]
+    return this.type.getRequiredImports()
   }
 }

@@ -1,4 +1,5 @@
 import type { Language } from '../../getPlatformSpecs.js'
+import { getForwardDeclaration } from '../c++/getForwardDeclaration.js'
 import { type SourceFile, type SourceImport } from '../SourceFile.js'
 import type { Type, TypeKind } from './Type.js'
 
@@ -36,6 +37,11 @@ export class EnumType implements Type {
     return [this.declarationFile]
   }
   getRequiredImports(): SourceImport[] {
-    return []
+    const extraImport: SourceImport = {
+      name: this.declarationFile.name,
+      language: this.declarationFile.language,
+      forwardDeclaration: getForwardDeclaration('enum class', this.enumName),
+    }
+    return [extraImport]
   }
 }

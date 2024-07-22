@@ -15,9 +15,12 @@ namespace NitroImage {
   class ImageFactorySpecCxx;
 } // namespace NitroImage
 
+// Forward declaration of `HybridImage` to properly resolve imports.
+class HybridImage;
 // Forward declaration of `HybridImageSwift` to properly resolve imports.
 class HybridImageSwift;
 
+#include "HybridImage.hpp"
 #include "HybridImageSwift.hpp"
 
 #include "NitroImage-Swift.h"

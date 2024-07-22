@@ -1,4 +1,5 @@
 import type { Language } from '../../getPlatformSpecs.js'
+import { getForwardDeclaration } from '../c++/getForwardDeclaration.js'
 import {
   type FileWithReferencedTypes,
   type SourceFile,
@@ -39,8 +40,11 @@ export class StructType implements Type {
     return [this.declarationFile]
   }
   getRequiredImports(): SourceImport[] {
-    return this.declarationFile.referencedTypes.flatMap((t) =>
-      t.getRequiredImports()
-    )
+    const extraImport: SourceImport = {
+      name: this.declarationFile.name,
+      language: this.declarationFile.language,
+      forwardDeclaration: getForwardDeclaration('struct', this.structName),
+    }
+    return [extraImport]
   }
 }

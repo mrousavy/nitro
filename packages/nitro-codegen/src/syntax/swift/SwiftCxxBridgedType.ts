@@ -27,24 +27,19 @@ export class SwiftCxxBridgedType {
   }
 
   getRequiredImports(): SourceImport[] {
-    switch (this.type.kind) {
-      case 'hybrid-object':
-        if (!(this.type instanceof HybridObjectType))
-          throw new Error(`this.type was not a HybridObjectType!`)
-        const name = getHybridObjectName(this.type.hybridObjectName)
-        return [
-          {
-            name: `${name.HybridTSwift}.hpp`,
-            forwardDeclaration: getForwardDeclaration(
-              'class',
-              name.HybridTSwift
-            ),
-            language: 'c++',
-          },
-        ]
-      default:
-        return []
+    const imports = this.type.getRequiredImports()
+
+    if (this.type instanceof HybridObjectType) {
+      // Use SwiftCxx wrapper of the HybridObject type
+      const name = getHybridObjectName(this.type.hybridObjectName)
+      imports.push({
+        name: `${name.HybridTSwift}.hpp`,
+        forwardDeclaration: getForwardDeclaration('class', name.HybridTSwift),
+        language: 'c++',
+      })
     }
+
+    return imports
   }
 
   getTypeCode(language: 'swift' | 'c++'): string {

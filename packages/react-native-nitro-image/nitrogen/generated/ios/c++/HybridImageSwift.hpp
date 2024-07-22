@@ -15,9 +15,16 @@ namespace NitroImage {
   class ImageSpecCxx;
 } // namespace NitroImage
 
+// Forward declaration of `ImageSize` to properly resolve imports.
+struct ImageSize;
+// Forward declaration of `PixelFormat` to properly resolve imports.
+enum class PixelFormat;
+// Forward declaration of `ImageFormat` to properly resolve imports.
+enum class ImageFormat;
 
-
-
+#include "ImageSize.hpp"
+#include "PixelFormat.hpp"
+#include "ImageFormat.hpp"
 
 #include "NitroImage-Swift.h"
 
