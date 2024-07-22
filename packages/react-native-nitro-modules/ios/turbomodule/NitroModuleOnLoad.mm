@@ -9,7 +9,6 @@
 #import "RegisterNativeNitroModules.hpp"
 #import "TestHybridObject.hpp"
 #import "HybridObjectRegistry.hpp"
-#import "Callback.hpp"
 
 @interface NitroModulesOnLoad : NSObject
 @end
