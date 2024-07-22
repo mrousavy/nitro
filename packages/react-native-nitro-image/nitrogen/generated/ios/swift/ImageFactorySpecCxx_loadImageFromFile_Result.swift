@@ -6,6 +6,8 @@
 /// Copyright © 2024 Marc Rousavy @ Margelo
 ///
 
+import NitroModules
+
 /**
  * C++ does not support catching Swift errors yet, so we have to wrap
  * them in a Result type.

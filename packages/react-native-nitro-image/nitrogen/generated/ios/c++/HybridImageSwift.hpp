@@ -17,6 +17,8 @@ namespace NitroImage { class ImageSpecCxx; }
 struct ImageSize;
 // Forward declaration of `PixelFormat` to properly resolve imports.
 enum class PixelFormat;
+// Forward declaration of `ArrayBuffer` to properly resolve imports.
+namespace NitroModules { class ArrayBuffer; }
 // Forward declaration of `ImageFormat` to properly resolve imports.
 enum class ImageFormat;
 
@@ -57,13 +59,13 @@ public:
 
 public:
   // Methods
-  inline double toArrayBuffer(ImageFormat format) override {
+  inline std::shared_ptr<ArrayBuffer> toArrayBuffer(ImageFormat format) override {
     auto valueOrError = _swiftPart.toArrayBuffer(static_cast<int>(format));
     if (valueOrError.isError()) [[unlikely]] {
       throw std::runtime_error(valueOrError.getError());
     }
     auto value = valueOrError.getValue();
-    return value;
+    return nullptr;
   }
   inline void saveToFile(const std::string& path, const Func_void_std__string& onFinished) override {
     auto valueOrError = _swiftPart.saveToFile(std::forward<decltype(path)>(path), std::forward<decltype(onFinished)>(onFinished));

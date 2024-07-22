@@ -18,11 +18,14 @@
 struct ImageSize;
 // Forward declaration of `PixelFormat` to properly resolve imports.
 enum class PixelFormat;
+// Forward declaration of `ArrayBuffer` to properly resolve imports.
+namespace NitroModules { class ArrayBuffer; }
 // Forward declaration of `ImageFormat` to properly resolve imports.
 enum class ImageFormat;
 
 #include "ImageSize.hpp"
 #include "PixelFormat.hpp"
+#include "ArrayBuffer.hpp"
 #include "ImageFormat.hpp"
 #include "Func_void_std__string.hpp"
 
@@ -52,7 +55,7 @@ class HybridImage: public HybridObject {
 
   public:
     // Methods
-    virtual double toArrayBuffer(ImageFormat format) = 0;
+    virtual std::shared_ptr<ArrayBuffer> toArrayBuffer(ImageFormat format) = 0;
     virtual void saveToFile(const std::string& path, const Func_void_std__string& onFinished) = 0;
 
   protected:

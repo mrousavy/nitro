@@ -30,6 +30,7 @@ Pod::Spec.new do |s|
     # Public C++ headers will be exposed in modulemap (for Swift)
     "cpp/core/HybridContext.hpp",
     "cpp/registry/HybridObjectRegistry.hpp",
+    "cpp/jsi/ArrayBuffer.hpp",
   ]
 
   s.pod_target_xcconfig = {

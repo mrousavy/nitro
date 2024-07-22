@@ -33,6 +33,6 @@ public protocol ImageSpec {
   var someSettableProp: Double { get set }
 
   // Methods
-  func toArrayBuffer(format: ImageFormat) throws -> Double
+  func toArrayBuffer(format: ImageFormat) throws -> margelo.nitro.ArrayBuffer
   func saveToFile(path: String, onFinished: Func_void_std__string) throws -> Void
 }

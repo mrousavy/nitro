@@ -26,9 +26,6 @@ export class SwiftCxxBridgedType {
         // Swift HybridObjects need to be wrapped in our own *Cxx Swift classes.
         // We wrap/unwrap them if needed.
         return true
-      case 'array-buffer':
-        // Swift ArrayBuffers need to be wrapped in our own ArrayBufferSwift C++ class.
-        return true
       default:
         return false
     }
@@ -43,16 +40,6 @@ export class SwiftCxxBridgedType {
       imports.push({
         name: `${name.HybridTSwift}.hpp`,
         forwardDeclaration: getForwardDeclaration('class', name.HybridTSwift),
-        language: 'c++',
-      })
-    } else if (this.type.kind === 'array-buffer') {
-      imports.push({
-        name: `NitroModules/ArrayBufferSwift.hpp`,
-        forwardDeclaration: getForwardDeclaration(
-          'class',
-          'ArrayBufferSwift',
-          'NitroModules'
-        ),
         language: 'c++',
       })
     }
@@ -123,15 +110,6 @@ export class SwiftCxxBridgedType {
           default:
             throw new Error(`Invalid language! ${language}`)
         }
-      case 'array-buffer':
-        switch (language) {
-          case 'c++':
-            return `${cppParameterName}.getSwiftPart()`
-          case 'swift':
-            return cppParameterName
-          default:
-            throw new Error(`Invalid language! ${language}`)
-        }
       case 'void':
         // When type is void, don't return anything
         return ''
@@ -162,15 +140,6 @@ export class SwiftCxxBridgedType {
             return `HybridContext::getOrCreate<${name.HybridTSwift}>(${swiftParameterName})`
           case 'swift':
             return `${name.TSpecCxx}(${swiftParameterName})`
-          default:
-            throw new Error(`Invalid language! ${language}`)
-        }
-      case 'array-buffer':
-        switch (language) {
-          case 'c++':
-            return `std::make_shared<ArrayBufferSwift>(${swiftParameterName})`
-          case 'swift':
-            return swiftParameterName
           default:
             throw new Error(`Invalid language! ${language}`)
         }
