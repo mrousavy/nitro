@@ -17,7 +17,12 @@ class Image : ImageSpec {
   }
 
   public init(uiImage: UIImage) {
+    print("✅ Initializing Image...")
     self.uiImage = uiImage
+  }
+  
+  deinit {
+    print("❌ Destroying Image...")
   }
   
   public var size: ImageSize {

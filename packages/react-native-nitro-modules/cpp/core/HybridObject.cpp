@@ -50,7 +50,7 @@ HybridObject::HybridObject(const char* name) : _name(name), _mutex(std::make_uni
   _instanceId = getId(name);
   uint32_t alive = incrementAliveInstancesAndGet(_name);
   uint32_t totalObjects = getTotalAliveInstances();
-  Logger::log(TAG, "(MEMORY) Creating %s (#%i)... (Total %ss: %i / %i) ✅", _name, _instanceId, _name, alive, totalObjects);
+  Logger::log(TAG, "(MEMORY) ✅ Creating %s (#%i)... (Total %s(s): %i | Total HybridObjects: %i)", _name, _instanceId, _name, alive, totalObjects);
 #endif
 }
 
@@ -58,7 +58,7 @@ HybridObject::~HybridObject() {
 #if LOG_MEMORY_ALLOCATIONS
   uint32_t alive = decrementAliveInstancesAndGet(_name);
   uint32_t totalObjects = getTotalAliveInstances();
-  Logger::log(TAG, "(MEMORY) Deleting %s (#%i)... (Total %ss: %i / %i) ❌", _name, _instanceId, _name, alive, totalObjects);
+  Logger::log(TAG, "(MEMORY) ❌ Deleting %s (#%i)... (Total %s(s): %i | Total HybridObjects: %i) ", _name, _instanceId, _name, alive, totalObjects);
 #endif
   _functionCache.clear();
 }
