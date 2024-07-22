@@ -4,6 +4,7 @@ import {
   type HybridObjectName,
 } from '../getHybridObjectName.js'
 import type { SourceImport } from '../SourceFile.js'
+import { ArrayBufferType } from '../types/ArrayBufferType.js'
 import { FunctionType } from '../types/FunctionType.js'
 import { HybridObjectType } from '../types/HybridObjectType.js'
 import { NamedWrappingType } from '../types/NamedWrappingType.js'
@@ -26,6 +27,9 @@ export class SwiftCxxBridgedType {
         // Swift HybridObjects need to be wrapped in our own *Cxx Swift classes.
         // We wrap/unwrap them if needed.
         return true
+      case 'array-buffer':
+        // Swift ArrayBuffers need to be wrapped in our own ArrayBufferSwift C++ class.
+        return true
       default:
         return false
     }
@@ -40,6 +44,16 @@ export class SwiftCxxBridgedType {
       imports.push({
         name: `${name.HybridTSwift}.hpp`,
         forwardDeclaration: getForwardDeclaration('class', name.HybridTSwift),
+        language: 'c++',
+      })
+    } else if (this.type.kind === 'array-buffer') {
+      imports.push({
+        name: `<NitroModules/ArrayBuffer.hpp>`,
+        forwardDeclaration: getForwardDeclaration(
+          'class',
+          'ArrayBuffer',
+          'NitroModules'
+        ),
         language: 'c++',
       })
     }
@@ -107,6 +121,15 @@ export class SwiftCxxBridgedType {
             return `std::static_pointer_cast<${name.HybridTSwift}>(${cppParameterName})->getSwiftPart()`
           case 'swift':
             return `${cppParameterName}.implementation`
+          default:
+            throw new Error(`Invalid language! ${language}`)
+        }
+      case 'array-buffer':
+        switch (language) {
+          case 'c++':
+            return `${cppParameterName}.getSwiftPart()`
+          case 'swift':
+            return cppParameterName
           default:
             throw new Error(`Invalid language! ${language}`)
         }

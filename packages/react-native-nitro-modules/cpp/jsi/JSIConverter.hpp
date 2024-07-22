@@ -297,7 +297,7 @@ template <typename ValueType> struct JSIConverter<std::unordered_map<std::string
 };
 
 // MutableBuffer <> ArrayBuffer
-template <> struct JSIConverter<std::shared_ptr<ArrayBuffer>> {
+template <> struct JSIConverter<std::shared_ptr<jsi::MutableBuffer>> {
   static inline std::shared_ptr<ArrayBuffer> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
     jsi::Object object = arg.asObject(runtime);
     if (!object.isArrayBuffer(runtime)) [[unlikely]] {
@@ -306,7 +306,7 @@ template <> struct JSIConverter<std::shared_ptr<ArrayBuffer>> {
     jsi::ArrayBuffer arrayBuffer = object.getArrayBuffer(runtime);
     return std::make_shared<ArrayBuffer>(arrayBuffer.data(runtime), arrayBuffer.size(runtime));
   }
-  static inline jsi::Value toJSI(jsi::Runtime& runtime, std::shared_ptr<ArrayBuffer> buffer) {
+  static inline jsi::Value toJSI(jsi::Runtime& runtime, std::shared_ptr<jsi::MutableBuffer> buffer) {
     return jsi::ArrayBuffer(runtime, buffer);
   }
 };
