@@ -8,8 +8,6 @@
 
 #pragma once
 
-#include <NitroModules/JSIConverter.hpp>
-
 
 
 /**
@@ -24,6 +22,7 @@ public:
   explicit ImageSize(double width, double height): width(width), height(height) {}
 };
 
+#ifdef JSI_CONVERTER_AVAILABLE
 namespace margelo::nitro {
 
   // C++ ImageSize <> JS ImageSize (object)
@@ -45,3 +44,5 @@ namespace margelo::nitro {
   };
 
 } // namespace margelo::nitro
+
+#endif
