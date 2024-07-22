@@ -9,9 +9,15 @@
 #pragma once
 
 #include "HybridImage.hpp"
+
+namespace NitroImage {
+  // Forward-declare ImageSpecCxx, because the NitroImage-Swift.h header might not do that automatically.
+  class ImageSpecCxx;
+} // namespace NitroImage
+
+
+
 #include "NitroImage-Swift.h"
-
-
 
 /**
  * The C++ part of ImageSpecCxx.swift.

@@ -6,17 +6,11 @@
 //
 
 
-namespace NitroImage {
-class ImageSpecCxx;
-class ImageFactorySpecCxx;
-}
-
-#import "ImageSize.hpp"
-
 #import <Foundation/Foundation.h>
 #import <NitroModules/HybridObjectRegistry.hpp>
-#import "NitroImage-Swift.h"
 #import "HybridImageFactorySwift.hpp"
+
+#import "NitroImage-Swift.h"
 
 @interface NitroImageOnLoad : NSObject
 @end

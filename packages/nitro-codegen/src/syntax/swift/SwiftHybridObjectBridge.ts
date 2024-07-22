@@ -160,9 +160,15 @@ ${createFileMetadataString(`${name.HybridTSwift}.hpp`)}
 #pragma once
 
 #include "${name.HybridT}.hpp"
-#include "${NAMESPACE}-Swift.h"
+
+namespace ${NAMESPACE} {
+  // Forward-declare ${name.TSpecCxx}, because the ${NAMESPACE}-Swift.h header might not do that automatically.
+  class ${name.TSpecCxx};
+} // namespace ${NAMESPACE}
 
 ${extraIncludes.join('\n')}
+
+#include "${NAMESPACE}-Swift.h"
 
 /**
  * The C++ part of ${name.TSpecCxx}.swift.
