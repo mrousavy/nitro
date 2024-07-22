@@ -6,6 +6,7 @@ import type { HybridObjectSpec } from './syntax/HybridObjectSpec.js'
 import { Property } from './syntax/Property.js'
 import { Method } from './syntax/Method.js'
 import { createSwiftHybridObject } from './syntax/swift/SwiftHybridObject.js'
+import { getHybridObjectName } from './syntax/c++/getHybridObjectName.js'
 
 export function generatePlatformFiles(
   declaration: InterfaceDeclaration,
@@ -29,7 +30,7 @@ function getHybridObjectSpec(
   declaration: InterfaceDeclaration
 ): HybridObjectSpec {
   const interfaceName = declaration.getSymbolOrThrow().getEscapedName()
-  const hybridObjectName = `Hybrid${interfaceName}`
+  const hybridObjectName = getHybridObjectName(interfaceName)
 
   const properties = declaration.getProperties()
   const methods = declaration.getMethods()

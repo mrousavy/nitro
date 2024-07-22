@@ -1,5 +1,7 @@
 import type { Language } from '../../getPlatformSpecs.js'
+import { getHybridObjectName } from '../c++/getHybridObjectName.js'
 import type { SourceFile } from '../SourceFile.js'
+import { getHybridObjectProtocolName } from '../swift/getHybridObjectProtocolName.js'
 import type { Type, TypeKind } from './Type.js'
 
 export class HybridObjectType implements Type {
@@ -20,7 +22,10 @@ export class HybridObjectType implements Type {
   getCode(language: Language): string {
     switch (language) {
       case 'c++':
-        return `std::shared_ptr<${this.hybridObjectName}>`
+        const cxxName = getHybridObjectName(this.hybridObjectName)
+        return `std::shared_ptr<${cxxName}>`
+      case 'swift':
+        return getHybridObjectProtocolName(this.hybridObjectName)
       default:
         throw new Error(
           `Language ${language} is not yet supported for HybridObjectType!`
@@ -28,6 +33,7 @@ export class HybridObjectType implements Type {
     }
   }
   getExtraFiles(): SourceFile[] {
+    // TODO: We need to include the HybridObject...
     return []
   }
 }

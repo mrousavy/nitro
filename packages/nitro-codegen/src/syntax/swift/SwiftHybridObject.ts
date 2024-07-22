@@ -2,10 +2,11 @@ import { indent } from '../../stringUtils.js'
 import { createFileMetadataString } from '../helpers.js'
 import type { HybridObjectSpec } from '../HybridObjectSpec.js'
 import type { SourceFile } from '../SourceFile.js'
+import { getHybridObjectProtocolName } from './getHybridObjectProtocolName.js'
 import { createSwiftHybridObjectCxxBridge } from './SwiftHybridObjectBridge.js'
 
 export function createSwiftHybridObject(spec: HybridObjectSpec): SourceFile[] {
-  const protocolName = `${spec.name}Spec`
+  const protocolName = getHybridObjectProtocolName(spec.name)
   const properties = spec.properties.map((p) => p.getCode('swift')).join('\n')
   const methods = spec.methods.map((p) => p.getCode('swift')).join('\n')
 
@@ -41,7 +42,7 @@ public protocol ${protocolName} {
 }
   `
 
-  const swiftBridge = createSwiftHybridObjectCxxBridge(protocolName, spec)
+  const swiftBridge = createSwiftHybridObjectCxxBridge(spec)
 
   const files: SourceFile[] = []
   files.push({

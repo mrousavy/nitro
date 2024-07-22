@@ -6,6 +6,8 @@ import type { Method } from '../Method.js'
 import { createFileMetadataString } from '../helpers.js'
 import type { SourceFile } from '../SourceFile.js'
 import { getMethodResultType } from './getMethodResultType.js'
+import { getHybridObjectProtocolName } from './getHybridObjectProtocolName.js'
+import { getHybridObjectName } from '../c++/getHybridObjectName.js'
 
 // TODO: dynamically get namespace
 const NAMESPACE = 'NitroImage'
@@ -19,28 +21,32 @@ const NAMESPACE = 'NitroImage'
  * via custom Result types, etc..
  */
 export function createSwiftHybridObjectCxxBridge(
-  protocolName: string,
   spec: HybridObjectSpec
 ): SourceFile[] {
+  const swiftProtocolName = getHybridObjectProtocolName(spec.name)
+  const swiftCxxWrapperName = `${swiftProtocolName}Cxx`
+  const cxxName = getHybridObjectName(spec.name)
+  const cxxSwiftWrapperName = `${cxxName}Swift`
+
   const bridgedResultTypes = spec.methods.map((m) =>
-    getMethodResultType(protocolName, m)
+    getMethodResultType(swiftProtocolName, m)
   )
 
   const propertiesBridge = spec.properties
     .map((p) => getPropertyForwardImplementation(p))
     .join('\n\n')
   const methodsBridge = spec.methods
-    .map((m) => getMethodForwardImplementation(protocolName, m))
+    .map((m) => getMethodForwardImplementation(swiftProtocolName, m))
     .join('\n\n')
 
-  const swiftBridgeCode = `
-${createFileMetadataString(`${protocolName}Cxx.swift`)}
+  const swiftCxxWrapperCode = `
+${createFileMetadataString(`${swiftCxxWrapperName}.swift`)}
 
 import Foundation
 import NitroModules
 
 /**
- * A class implementation that bridges ${protocolName} over to C++.
+ * A class implementation that bridges ${swiftProtocolName} over to C++.
  * In C++, we cannot use Swift protocols - so we need to wrap it in a class to make it strongly defined.
  *
  * Also, some Swift types need to be bridged with special handling:
@@ -48,10 +54,10 @@ import NitroModules
  * - Other HostObjects need to be wrapped/unwrapped from the Swift TCxx wrapper
  * - Throwing methods need to be wrapped with a Result<T, Error> type, as exceptions cannot be propagated to C++
  */
-public final class ${protocolName}Cxx {
-  private var implementation: ${protocolName}
+public final class ${swiftCxxWrapperName} {
+  private(set) var implementation: ${swiftProtocolName}
 
-  public init(_ implementation: ${protocolName}) {
+  public init(_ implementation: ${swiftProtocolName}) {
     self.implementation = implementation
   }
 
@@ -107,40 +113,47 @@ return ${bridged.parseFromSwiftToCpp('result', 'c++')};
           }
         })
         .join(', ')
-      let body: string
       const bridgedReturnType = new SwiftCxxBridgedType(m.returnType)
-      const resultType = getMethodResultType(protocolName, m)
-      if (bridgedReturnType.needsSpecialHandling) {
-        body = `
-auto result = _swiftPart.${m.name}(${params});
-auto resultConverted = ${bridgedReturnType.parseFromSwiftToCpp('result', 'c++')};
-${resultType.parseFromSwiftToCpp('resultConverted')}
-        `
-      } else {
-        body = `
-auto result = _swiftPart.${m.name}(${params});
-${resultType.parseFromSwiftToCpp('result')}
-`
+      const hasResult = m.returnType.kind !== 'void'
+      let body = `
+auto valueOrError = _swiftPart.${m.name}(${params});
+if (valueOrError.isError()) [[unlikely]] {
+  throw std::runtime_error(valueOrError.getError());
+}
+`.trim()
+      if (hasResult) {
+        body += '\n'
+        body += `
+auto value = valueOrError.getValue();
+`.trim()
+        if (bridgedReturnType.needsSpecialHandling) {
+          body += '\n'
+          body += bridgedReturnType.parseFromSwiftToCpp('value', 'c++')
+        }
       }
       return m.getCode('c++', { inline: true, override: true }, body)
     })
     .join('\n')
 
   const cppHybridObjectCode = `
-${createFileMetadataString(`Hybrid${spec.name}Swift.hpp`)}
+${createFileMetadataString(`${cxxSwiftWrapperName}.hpp`)}
 
 #pragma once
 
-#include "Hybrid${spec.name}.hpp"
+#include "${cxxName}.hpp"
 #include "${NAMESPACE}-Swift.h"
 
 /**
- * The C++ part of ${protocolName}Cxx.swift.
+ * The C++ part of ${swiftCxxWrapperName}.swift.
  */
-class Hybrid${spec.name}Swift final: public Hybrid${spec.name} {
+class ${cxxSwiftWrapperName} final: public ${cxxName} {
 public:
   // Constructor from a Swift instance
-  explicit Hybrid${spec.name}Swift(${NAMESPACE}::${protocolName}Cxx swiftPart): Hybrid${spec.name}(), _swiftPart(swiftPart) { }
+  explicit ${cxxSwiftWrapperName}(${NAMESPACE}::${swiftCxxWrapperName} swiftPart): ${cxxName}(), _swiftPart(swiftPart) { }
+
+public:
+  // Get the Swift part
+  inline ${NAMESPACE}::${swiftCxxWrapperName} getSwiftPart() { return _swiftPart; }
 
 public:
   // Properties
@@ -151,20 +164,20 @@ public:
   ${indent(cppMethods, '  ')}
 
 private:
-  ${NAMESPACE}::${protocolName}Cxx _swiftPart;
+  ${NAMESPACE}::${swiftCxxWrapperName} _swiftPart;
 };
   `
   const cppHybridObjectCodeCpp = `
-${createFileMetadataString(`Hybrid${spec.name}Swift.cpp`)}
+${createFileMetadataString(`${cxxSwiftWrapperName}.cpp`)}
 
-#include "Hybrid${spec.name}Swift.hpp"
+#include "${cxxSwiftWrapperName}.hpp"
   `
 
   const files: SourceFile[] = []
   files.push({
-    content: swiftBridgeCode,
+    content: swiftCxxWrapperCode,
     language: 'swift',
-    name: `${protocolName}Cxx.swift`,
+    name: `${swiftCxxWrapperName}.swift`,
     platform: 'ios',
   })
   for (const resultType of bridgedResultTypes) {
@@ -178,13 +191,13 @@ ${createFileMetadataString(`Hybrid${spec.name}Swift.cpp`)}
   files.push({
     content: cppHybridObjectCode,
     language: 'c++',
-    name: `Hybrid${spec.name}Swift.hpp`,
+    name: `${cxxSwiftWrapperName}.hpp`,
     platform: 'ios',
   })
   files.push({
     content: cppHybridObjectCodeCpp,
     language: 'c++',
-    name: `Hybrid${spec.name}Swift.cpp`,
+    name: `${cxxSwiftWrapperName}.cpp`,
     platform: 'ios',
   })
   return files

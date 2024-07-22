@@ -20,6 +20,10 @@ public:
   explicit HybridImageSwift(NitroImage::ImageSpecCxx swiftPart): HybridImage(), _swiftPart(swiftPart) { }
 
 public:
+  // Get the Swift part
+  inline NitroImage::ImageSpecCxx getSwiftPart() { return _swiftPart; }
+
+public:
   // Properties
   inline ImageSize getSize() override {
     return _swiftPart.getSize();
@@ -38,18 +42,17 @@ public:
 public:
   // Methods
   inline double toArrayBuffer(ImageFormat format) override {
-    auto result = _swiftPart.toArrayBuffer(static_cast<int>(format));
-    if (result.isError()) [[unlikely]] {
-      throw std::runtime_error(result.getError());
+    auto valueOrError = _swiftPart.toArrayBuffer(static_cast<int>(format));
+    if (valueOrError.isError()) [[unlikely]] {
+      throw std::runtime_error(valueOrError.getError());
     }
-    return result.getValue();
+    auto value = valueOrError.getValue();
   }
   inline void saveToFile(const std::string& path) override {
-    auto result = _swiftPart.saveToFile(std::forward<decltype(path)>(path));
-    if (result.isError()) [[unlikely]] {
-      throw std::runtime_error(result.getError());
+    auto valueOrError = _swiftPart.saveToFile(std::forward<decltype(path)>(path));
+    if (valueOrError.isError()) [[unlikely]] {
+      throw std::runtime_error(valueOrError.getError());
     }
-    return;
   }
 
 private:
