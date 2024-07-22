@@ -65,6 +65,14 @@ public:
     auto value = valueOrError.getValue();
     return HybridContext::getOrCreate<HybridImageSwift>(value);
   }
+  inline std::shared_ptr<HybridImage> bounceBack(std::shared_ptr<HybridImage> image) override {
+    auto valueOrError = _swiftPart.bounceBack(std::static_pointer_cast<HybridImageSwift>(image)->getSwiftPart());
+    if (valueOrError.isError()) [[unlikely]] {
+      throw std::runtime_error(valueOrError.getError());
+    }
+    auto value = valueOrError.getValue();
+    return HybridContext::getOrCreate<HybridImageSwift>(value);
+  }
 
 private:
   NitroImage::ImageFactorySpecCxx _swiftPart;

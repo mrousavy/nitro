@@ -22,6 +22,7 @@ interface ImageFactory extends HybridObject<{ ios: 'swift' }> {
   loadImageFromFile(path: string): Image
   loadImageFromURL(path: string): Image
   loadImageFromSystemName(path: string): Image
+  bounceBack(image: Image): Image
 }
 
 export const ImageConstructors = NitroModules.get<ImageFactory>('ImageFactory')

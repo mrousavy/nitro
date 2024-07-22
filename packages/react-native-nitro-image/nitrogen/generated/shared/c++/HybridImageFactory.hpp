@@ -45,6 +45,7 @@ class HybridImageFactory: public HybridObject {
     virtual std::shared_ptr<HybridImage> loadImageFromFile(const std::string& path) = 0;
     virtual std::shared_ptr<HybridImage> loadImageFromURL(const std::string& path) = 0;
     virtual std::shared_ptr<HybridImage> loadImageFromSystemName(const std::string& path) = 0;
+    virtual std::shared_ptr<HybridImage> bounceBack(std::shared_ptr<HybridImage> image) = 0;
 
   protected:
     // Tag for logging

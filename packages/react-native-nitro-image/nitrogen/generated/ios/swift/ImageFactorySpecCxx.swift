@@ -86,4 +86,20 @@ public class ImageFactorySpecCxx {
       return .error(message: message)
     }
   }
+  
+  @inline(__always)
+  public func bounceBack(image: ImageSpecCxx) -> ImageFactorySpec_bounceBack_Result {
+    do {
+      let result = try self.implementation.bounceBack(image: image.implementation)
+      return .value(ImageSpecCxx(result))
+    } catch RuntimeError.error(withMessage: let message) {
+      // A  `RuntimeError` was thrown.
+      return .error(message: message)
+    } catch {
+      // Any other kind of error was thrown.
+      // Due to a Swift bug, we have to copy the string here.
+      let message = "\(error.localizedDescription)"
+      return .error(message: message)
+    }
+  }
 }

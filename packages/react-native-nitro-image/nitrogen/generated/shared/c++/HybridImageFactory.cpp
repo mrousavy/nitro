@@ -15,4 +15,5 @@ void HybridImageFactory::loadHybridMethods() {
   registerHybridMethod("loadImageFromFile", &HybridImageFactory::loadImageFromFile, this);
   registerHybridMethod("loadImageFromURL", &HybridImageFactory::loadImageFromURL, this);
   registerHybridMethod("loadImageFromSystemName", &HybridImageFactory::loadImageFromSystemName, this);
+  registerHybridMethod("bounceBack", &HybridImageFactory::bounceBack, this);
 }

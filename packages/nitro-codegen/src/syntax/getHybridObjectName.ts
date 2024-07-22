@@ -1,4 +1,4 @@
-interface HybridObjectName {
+export interface HybridObjectName {
   /**
    * The raw name of the Hybrid Object.
    * @example "Image"

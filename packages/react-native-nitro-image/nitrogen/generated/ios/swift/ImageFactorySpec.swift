@@ -34,4 +34,5 @@ public protocol ImageFactorySpec {
   func loadImageFromFile(path: String) throws -> ImageSpec
   func loadImageFromURL(path: String) throws -> ImageSpec
   func loadImageFromSystemName(path: String) throws -> ImageSpec
+  func bounceBack(image: ImageSpec) throws -> ImageSpec
 }

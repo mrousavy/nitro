@@ -31,4 +31,9 @@ class ImageFactory : ImageFactorySpec {
     }
     return Image(uiImage: uiImage)
   }
+  
+  func bounceBack(image: any ImageSpec) throws -> any ImageSpec {
+    print("bouncing back...")
+    return image
+  }
 }

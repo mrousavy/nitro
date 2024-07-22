@@ -1,7 +1,11 @@
 import { getForwardDeclaration } from '../c++/getForwardDeclaration.js'
-import { getHybridObjectName } from '../getHybridObjectName.js'
+import {
+  getHybridObjectName,
+  type HybridObjectName,
+} from '../getHybridObjectName.js'
 import type { SourceImport } from '../SourceFile.js'
 import { HybridObjectType } from '../types/HybridObjectType.js'
+import { NamedWrappingType } from '../types/NamedWrappingType.js'
 import type { Type } from '../types/Type.js'
 
 export class SwiftCxxBridgedType {
@@ -29,9 +33,9 @@ export class SwiftCxxBridgedType {
   getRequiredImports(): SourceImport[] {
     const imports = this.type.getRequiredImports()
 
-    if (this.type instanceof HybridObjectType) {
+    if (this.type.kind === 'hybrid-object') {
       // Use SwiftCxx wrapper of the HybridObject type
-      const name = getHybridObjectName(this.type.hybridObjectName)
+      const name = getTypeHybridObjectName(this.type)
       imports.push({
         name: `${name.HybridTSwift}.hpp`,
         forwardDeclaration: getForwardDeclaration('class', name.HybridTSwift),
@@ -54,15 +58,15 @@ export class SwiftCxxBridgedType {
             throw new Error(`Invalid language! ${language}`)
         }
       case 'hybrid-object':
-        if (!(this.type instanceof HybridObjectType))
-          throw new Error(`this.type was not a HybridObjectType!`)
-
         switch (language) {
-          case 'c++':
-            return this.type.getCode('c++')
-          case 'swift':
-            const name = getHybridObjectName(this.type.hybridObjectName)
+          case 'c++': {
+            const name = getTypeHybridObjectName(this.type)
+            return `std::shared_ptr<${name.HybridTSwift}>`
+          }
+          case 'swift': {
+            const name = getTypeHybridObjectName(this.type)
             return name.TSpecCxx
+          }
           default:
             throw new Error(`Invalid language! ${language}`)
         }
@@ -87,11 +91,10 @@ export class SwiftCxxBridgedType {
             throw new Error(`Invalid language! ${language}`)
         }
       case 'hybrid-object':
-        if (!(this.type instanceof HybridObjectType))
-          throw new Error(`this.type was not a HybridObjectType!`)
         switch (language) {
           case 'c++':
-            return `${cppParameterName}.getSwiftPart()`
+            const name = getTypeHybridObjectName(this.type)
+            return `std::static_pointer_cast<${name.HybridTSwift}>(${cppParameterName})->getSwiftPart()`
           case 'swift':
             return `${cppParameterName}.implementation`
           default:
@@ -121,10 +124,7 @@ export class SwiftCxxBridgedType {
             throw new Error(`Invalid language! ${language}`)
         }
       case 'hybrid-object':
-        if (!(this.type instanceof HybridObjectType))
-          throw new Error(`this.type was not a HybridObjectType!`)
-
-        const name = getHybridObjectName(this.type.hybridObjectName)
+        const name = getTypeHybridObjectName(this.type)
         switch (language) {
           case 'c++':
             return `HybridContext::getOrCreate<${name.HybridTSwift}>(${swiftParameterName})`
@@ -141,5 +141,18 @@ export class SwiftCxxBridgedType {
         // No workaround - we can just use the value we get from C++
         return swiftParameterName
     }
+  }
+}
+
+function getTypeHybridObjectName(type: Type): HybridObjectName {
+  if (type instanceof HybridObjectType) {
+    return getHybridObjectName(type.hybridObjectName)
+  } else if (type instanceof NamedWrappingType) {
+    // get underlying type recursively
+    return getTypeHybridObjectName(type.type)
+  } else {
+    throw new Error(
+      "Tried to get HybridObject's name, but this.type is not a HybridObject!"
+    )
   }
 }

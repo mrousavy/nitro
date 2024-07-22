@@ -10,6 +10,13 @@ export default function App() {
     const image = ImageConstructors.loadImageFromSystemName('heart.fill')
     console.log('Image loaded!')
     console.log(`Image is ${image.size.width}x${image.size.height}`)
+
+
+    for (let i = 0; i < 10; i++) {
+      console.log('bouncing back...')
+      const another = ImageConstructors.bounceBack(image)
+      console.log('bounced back!', another.name)
+    }
   }, [])
   // React.useEffect(() => {
   //   const timeout = setTimeout(async () => {
