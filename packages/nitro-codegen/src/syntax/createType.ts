@@ -116,7 +116,7 @@ export function createType(type: TSMorphType, isOptional: boolean): Type {
     const parameters = callSignature.getParameters().map((p) => {
       const declaration = p.getValueDeclarationOrThrow()
       const parameterType = p.getTypeAtLocation(declaration)
-      return createType(parameterType, false)
+      return createNamedType(p.getName(), parameterType, p.isOptional())
     })
     return new FunctionType(returnType, parameters)
   } else if (isPromise(type)) {

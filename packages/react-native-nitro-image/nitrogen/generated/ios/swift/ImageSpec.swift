@@ -34,5 +34,5 @@ public protocol ImageSpec {
 
   // Methods
   func toArrayBuffer(format: ImageFormat) throws -> Double
-  func saveToFile(path: String) throws -> Void
+  func saveToFile(path: String, onFinished: Func_void) throws -> Void
 }

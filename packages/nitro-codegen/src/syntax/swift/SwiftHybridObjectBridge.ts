@@ -147,21 +147,17 @@ return ${bridgedReturnType.parseFromSwiftToCpp('value', 'c++')};
     })
     .join('\n')
 
-  const propertiesExtraImports = spec.properties.flatMap((p) => {
-    const bridged = new SwiftCxxBridgedType(p.type)
-    return bridged.getRequiredImports()
-  })
-  const methodsExtraImports = spec.methods.flatMap((m) => {
-    const bridgedReturn = new SwiftCxxBridgedType(m.returnType)
-    const bridgedParams = m.parameters.map(
-      (p) => new SwiftCxxBridgedType(p.type)
-    )
-    return [
-      ...bridgedReturn.getRequiredImports(),
-      ...bridgedParams.flatMap((b) => b.getRequiredImports()),
-    ]
-  })
-  const extraImports = [...propertiesExtraImports, ...methodsExtraImports]
+  const allBridgedTypes = [
+    ...spec.properties.flatMap((p) => new SwiftCxxBridgedType(p.type)),
+    ...spec.methods.flatMap((m) => {
+      const bridgedReturn = new SwiftCxxBridgedType(m.returnType)
+      const bridgedParams = m.parameters.map(
+        (p) => new SwiftCxxBridgedType(p.type)
+      )
+      return [bridgedReturn, ...bridgedParams]
+    }),
+  ]
+  const extraImports = allBridgedTypes.flatMap((b) => b.getRequiredImports())
   const extraForwardDeclarations = extraImports
     .map((i) => i.forwardDeclaration)
     .filter((v) => v != null)
@@ -288,7 +284,7 @@ function getMethodForwardImplementation(
     return `${p.name}: ${bridgedType.parseFromCppToSwift(p.name, 'swift')}`
   })
   const resultType = getMethodResultType(bridgeClassName, method)
-  const resultValue = resultType.hasType ? `let result =` : ''
+  const resultValue = resultType.hasType ? `let result = ` : ''
   const returnValue = resultType.hasType
     ? `.value(${returnType.parseFromSwiftToCpp('result', 'swift')})`
     : '.value'
@@ -297,7 +293,7 @@ function getMethodForwardImplementation(
 @inline(__always)
 public func ${method.name}(${params.join(', ')}) -> ${resultType.typename} {
   do {
-    ${resultValue} try self.implementation.${method.name}(${passParams.join(', ')})
+    ${resultValue}try self.implementation.${method.name}(${passParams.join(', ')})
     return ${returnValue}
   } catch RuntimeError.error(withMessage: let message) {
     // A  \`RuntimeError\` was thrown.

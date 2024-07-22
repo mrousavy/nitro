@@ -23,6 +23,7 @@ enum class ImageFormat;
 #include "ImageSize.hpp"
 #include "PixelFormat.hpp"
 #include "ImageFormat.hpp"
+#include "Func_void.hpp"
 
 #include "NitroImage-Swift.h"
 
@@ -64,8 +65,8 @@ public:
     auto value = valueOrError.getValue();
     return value;
   }
-  inline void saveToFile(const std::string& path) override {
-    auto valueOrError = _swiftPart.saveToFile(std::forward<decltype(path)>(path));
+  inline void saveToFile(const std::string& path, const Func_void& onFinished) override {
+    auto valueOrError = _swiftPart.saveToFile(std::forward<decltype(path)>(path), std::forward<decltype(onFinished)>(onFinished));
     if (valueOrError.isError()) [[unlikely]] {
       throw std::runtime_error(valueOrError.getError());
     }

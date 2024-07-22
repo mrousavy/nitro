@@ -4,6 +4,7 @@ import {
   type HybridObjectName,
 } from '../getHybridObjectName.js'
 import type { SourceImport } from '../SourceFile.js'
+import { FunctionType } from '../types/FunctionType.js'
 import { HybridObjectType } from '../types/HybridObjectType.js'
 import { NamedWrappingType } from '../types/NamedWrappingType.js'
 import type { Type } from '../types/Type.js'
@@ -57,19 +58,28 @@ export class SwiftCxxBridgedType {
           default:
             throw new Error(`Invalid language! ${language}`)
         }
-      case 'hybrid-object':
+      case 'hybrid-object': {
+        const name = getTypeHybridObjectName(this.type)
         switch (language) {
-          case 'c++': {
-            const name = getTypeHybridObjectName(this.type)
+          case 'c++':
             return `std::shared_ptr<${name.HybridTSwift}>`
-          }
-          case 'swift': {
-            const name = getTypeHybridObjectName(this.type)
+          case 'swift':
             return name.TSpecCxx
-          }
           default:
             throw new Error(`Invalid language! ${language}`)
         }
+      }
+      case 'function': {
+        const func = getTypeAs(this.type, FunctionType)
+        switch (language) {
+          case 'c++':
+            return func.specialization.typename
+          case 'swift':
+            return func.specialization.typename
+          default:
+            throw new Error(`Invalid language! ${language}`)
+        }
+      }
       default:
         // No workaround - just return normal type
         return this.type.getCode(language)
@@ -145,14 +155,19 @@ export class SwiftCxxBridgedType {
 }
 
 function getTypeHybridObjectName(type: Type): HybridObjectName {
-  if (type instanceof HybridObjectType) {
-    return getHybridObjectName(type.hybridObjectName)
+  const hybridObject = getTypeAs(type, HybridObjectType)
+  return getHybridObjectName(hybridObject.hybridObjectName)
+}
+
+function getTypeAs<T>(
+  type: Type,
+  classReference: new (...args: any[]) => T
+): T {
+  if (type instanceof classReference) {
+    return type as unknown as T
   } else if (type instanceof NamedWrappingType) {
-    // get underlying type recursively
-    return getTypeHybridObjectName(type.type)
+    return getTypeAs(type.type, classReference)
   } else {
-    throw new Error(
-      "Tried to get HybridObject's name, but this.type is not a HybridObject!"
-    )
+    throw new Error(`Type of kind "${type.kind}" is not a ${classReference}!`)
   }
 }

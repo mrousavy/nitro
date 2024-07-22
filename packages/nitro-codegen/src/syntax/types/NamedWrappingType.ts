@@ -3,11 +3,11 @@ import { escapeCppName } from '../helpers.js'
 import type { SourceFile, SourceImport } from '../SourceFile.js'
 import type { NamedType, Type, TypeKind } from './Type.js'
 
-export class NamedWrappingType implements NamedType {
-  readonly type: Type
+export class NamedWrappingType<T extends Type> implements NamedType {
+  readonly type: T
   readonly name: string
 
-  constructor(name: string, type: Type) {
+  constructor(name: string, type: T) {
     this.name = name
     this.type = type
   }

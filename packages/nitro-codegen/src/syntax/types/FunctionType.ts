@@ -1,12 +1,16 @@
 import type { Language } from '../../getPlatformSpecs.js'
+import {
+  createCppFunctionSpecialization,
+  type FunctionSpecialization,
+} from '../c++/CppFunctionSpecialization.js'
 import { type SourceFile, type SourceImport } from '../SourceFile.js'
-import type { Type, TypeKind } from './Type.js'
+import type { NamedType, Type, TypeKind } from './Type.js'
 
 export class FunctionType implements Type {
   readonly returnType: Type
-  readonly parameters: Type[]
+  readonly parameters: NamedType[]
 
-  constructor(returnType: Type, parameters: Type[]) {
+  constructor(returnType: Type, parameters: NamedType[]) {
     this.returnType = returnType
     this.parameters = parameters
   }
@@ -19,13 +23,18 @@ export class FunctionType implements Type {
     return 'function'
   }
 
+  get specialization(): FunctionSpecialization {
+    return createCppFunctionSpecialization(this)
+  }
+
   getCode(language: Language): string {
-    const returnCode = this.returnType.getCode(language)
-    const parametersCode = this.parameters.map((p) => p.getCode(language))
+    const specialization = this.specialization
 
     switch (language) {
       case 'c++':
-        return `std::function<${returnCode}(${parametersCode.join(', ')})>`
+        return specialization.typename
+      case 'swift':
+        return specialization.typename
       default:
         throw new Error(
           `Language ${language} is not yet supported for FunctionType!`
@@ -33,13 +42,16 @@ export class FunctionType implements Type {
     }
   }
   getExtraFiles(): SourceFile[] {
+    const specialization = this.specialization
     return [
+      specialization.declarationFile,
       ...this.returnType.getExtraFiles(),
       ...this.parameters.flatMap((p) => p.getExtraFiles()),
     ]
   }
   getRequiredImports(): SourceImport[] {
     return [
+      this.specialization.declarationFile,
       ...this.returnType.getRequiredImports(),
       ...this.parameters.flatMap((p) => p.getRequiredImports()),
     ]
