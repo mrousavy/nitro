@@ -98,6 +98,7 @@ size_t HybridObject::getTotalExternalMemorySize() noexcept {
           + (_setters.size() * SETTER_SIZE)
           + (_methods.size() * METHOD_SIZE)
           + (cachedFunctions * CACHED_SIZE)
+          + sizeof(std::mutex)
           + externalSize;
 }
 
