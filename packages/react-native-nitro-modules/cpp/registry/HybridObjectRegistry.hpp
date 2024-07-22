@@ -10,7 +10,6 @@
 #include "HybridObject.hpp"
 #include <functional>
 #include <string>
-#include <jsi/jsi.h>
 
 namespace margelo::nitro {
 

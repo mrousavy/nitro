@@ -1,19 +1,25 @@
 import * as React from 'react';
 
 import { StyleSheet, View, Text } from 'react-native';
-import { runCppHybridObjectTests, runSwiftHybridObjectTests } from './runHybridObjectTests';
+import { ImageConstructors } from 'react-native-nitro-image'
 
 
 export default function App() {
   React.useEffect(() => {
-    const timeout = setTimeout(async () => {
-      await runCppHybridObjectTests()
-      await runSwiftHybridObjectTests()
-    }, 1000)
-    return () => {
-      clearTimeout(timeout)
-    }
+    console.log('Loading image...')
+    const image = ImageConstructors.loadImageFromSystemName('help')
+    console.log('Image loaded!')
+    console.log(`Image is ${image.size.width}x${image.size.height}`)
   }, [])
+  // React.useEffect(() => {
+  //   const timeout = setTimeout(async () => {
+  //     await runCppHybridObjectTests()
+  //     await runSwiftHybridObjectTests()
+  //   }, 1000)
+  //   return () => {
+  //     clearTimeout(timeout)
+  //   }
+  // }, [])
 
   return (
     <View style={styles.container}>

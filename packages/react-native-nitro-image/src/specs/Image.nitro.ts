@@ -18,4 +18,10 @@ export interface Image extends HybridObject<{ ios: 'swift' }> {
   saveToFile(path: string): void
 }
 
-export const ImageFactory = NitroModules.get<Image>()
+interface ImageFactory extends HybridObject<{ ios: 'swift' }> {
+  loadImageFromFile(path: string): Image
+  loadImageFromURL(path: string): Image
+  loadImageFromSystemName(path: string): Image
+}
+
+export const ImageConstructors = NitroModules.get<ImageFactory>('ImageFactory')
