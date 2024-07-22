@@ -154,6 +154,7 @@ return ${bridgedReturnType.parseFromSwiftToCpp('value', 'c++')};
     .map((i) => `#include "${i.name}"`)
     .filter(isNotDuplicate)
 
+  // TODO: Remove forward declaration once Swift fixes the wrong order in generated -Swift.h headers!
   const cppHybridObjectCode = `
 ${createFileMetadataString(`${name.HybridTSwift}.hpp`)}
 
