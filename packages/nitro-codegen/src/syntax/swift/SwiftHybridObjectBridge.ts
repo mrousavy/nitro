@@ -61,16 +61,6 @@ public final class ${swiftCxxWrapperName} {
     self.implementation = implementation
   }
 
-  // C++ HybridObject state
-  public var hybridContext: margelo.nitro.HybridContext {
-    get {
-      return self.implementation.hybridContext
-    }
-    set {
-      self.implementation.hybridContext = newValue
-    }
-  }
-
   // Properties
   ${indent(propertiesBridge, '  ')}
 
