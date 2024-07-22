@@ -4,6 +4,8 @@
 
 #pragma once
 
+namespace margelo::nitro { class HybridObject; }
+
 #include "HybridObject.hpp"
 #include "Promise.hpp"
 #include "Dispatcher.hpp"
