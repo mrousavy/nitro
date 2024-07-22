@@ -59,7 +59,7 @@ public:
     }
 
     // Cache doesn't exist yet.
-    Logger::log(TAG, "Creating new JSICache<T> for runtime %i..", getRuntimeId(runtime));
+    Logger::log(TAG, "Creating new JSICache<T> for runtime %s..", getRuntimeId(runtime));
     // Create new cache
     auto nativeState = std::make_shared<JSICache<T>>(&runtime);
     // Wrap it in a jsi::Value using NativeState
