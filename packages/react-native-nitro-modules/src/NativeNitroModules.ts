@@ -7,6 +7,9 @@ export interface Spec extends TurboModule {
   createHybridObject(name: string, args?: UnsafeObject): UnsafeObject
 }
 
-export const NitroModules =
+// 1. Get (and initialize) the C++ TurboModule
+export const NativeNitroModules =
   TurboModuleRegistry.getEnforcing<Spec>('NitroModulesCxx')
-NitroModules.install()
+
+// 2. Install Dispatcher and required bindings into the Runtime
+NativeNitroModules.install()

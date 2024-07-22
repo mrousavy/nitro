@@ -1,6 +1,6 @@
-import { NitroModules } from './NativeNitro'
+import { NitroModules, type HybridObject } from '.'
 
-export interface TestHybridObject {
+export interface TestHybridObject extends HybridObject<{}> {
   // C++ getter & setter
   int: number
   string: string
@@ -24,10 +24,10 @@ export interface TestHybridObject {
 }
 
 export function createCppTestHybridObject(): TestHybridObject {
-  return NitroModules.createHybridObject('TestHybridObject') as TestHybridObject
+  return NitroModules.get<TestHybridObject>('TestHybridObject')
 }
 
-export interface SwiftTestHybridObject {
+export interface SwiftTestHybridObject extends HybridObject<{}> {
   // Swift getter & setter
   int: number
   // Swift methods
@@ -36,7 +36,5 @@ export interface SwiftTestHybridObject {
 }
 
 export function createSwiftTestHybridObject(): SwiftTestHybridObject {
-  return NitroModules.createHybridObject(
-    'SwiftTestObject'
-  ) as SwiftTestHybridObject
+  return NitroModules.get<SwiftTestHybridObject>('SwiftTestObject')
 }
