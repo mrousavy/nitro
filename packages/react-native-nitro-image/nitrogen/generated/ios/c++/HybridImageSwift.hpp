@@ -10,10 +10,8 @@
 
 #include "HybridImage.hpp"
 
-namespace NitroImage {
-  // Forward-declare ImageSpecCxx, because the NitroImage-Swift.h header might not do that automatically.
-  class ImageSpecCxx;
-} // namespace NitroImage
+// Forward declaration of `ImageSpecCxx` to properly resolve imports.
+namespace NitroImage { class ImageSpecCxx; }
 
 // Forward declaration of `ImageSize` to properly resolve imports.
 struct ImageSize;

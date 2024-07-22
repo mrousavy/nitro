@@ -7,6 +7,7 @@ import { createFileMetadataString, isNotDuplicate } from '../helpers.js'
 import type { SourceFile } from '../SourceFile.js'
 import { getMethodResultType } from './getMethodResultType.js'
 import { getHybridObjectName } from '../getHybridObjectName.js'
+import { getForwardDeclaration } from '../c++/getForwardDeclaration.js'
 
 // TODO: dynamically get namespace
 const NAMESPACE = 'NitroImage'
@@ -167,10 +168,7 @@ ${createFileMetadataString(`${name.HybridTSwift}.hpp`)}
 
 #include "${name.HybridT}.hpp"
 
-namespace ${NAMESPACE} {
-  // Forward-declare ${name.TSpecCxx}, because the ${NAMESPACE}-Swift.h header might not do that automatically.
-  class ${name.TSpecCxx};
-} // namespace ${NAMESPACE}
+${getForwardDeclaration('class', name.TSpecCxx, NAMESPACE)}
 
 ${extraForwardDeclarations.join('\n')}
 

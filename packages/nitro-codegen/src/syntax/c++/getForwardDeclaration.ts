@@ -7,10 +7,8 @@ export function getForwardDeclaration(
 ): string {
   if (namespace != null) {
     return `
-namespace ${namespace} {
-  // Forward declaration of \`${className}\` to properly resolve imports.
-  ${kind} ${className};
-  } // namespace ${namespace}
+// Forward declaration of \`${className}\` to properly resolve imports.
+namespace ${namespace} { ${kind} ${className}; }
   `.trim()
   } else {
     return `

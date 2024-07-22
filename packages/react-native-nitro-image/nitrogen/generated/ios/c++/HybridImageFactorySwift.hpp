@@ -10,10 +10,8 @@
 
 #include "HybridImageFactory.hpp"
 
-namespace NitroImage {
-  // Forward-declare ImageFactorySpecCxx, because the NitroImage-Swift.h header might not do that automatically.
-  class ImageFactorySpecCxx;
-} // namespace NitroImage
+// Forward declaration of `ImageFactorySpecCxx` to properly resolve imports.
+namespace NitroImage { class ImageFactorySpecCxx; }
 
 // Forward declaration of `HybridImage` to properly resolve imports.
 class HybridImage;
