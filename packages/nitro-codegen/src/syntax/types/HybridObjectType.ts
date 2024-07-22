@@ -1,8 +1,7 @@
 import type { Language } from '../../getPlatformSpecs.js'
 import { getForwardDeclaration } from '../c++/getForwardDeclaration.js'
-import { getHybridObjectName } from '../c++/getHybridObjectName.js'
+import { getHybridObjectName } from '../getHybridObjectName.js'
 import type { SourceFile, SourceImport } from '../SourceFile.js'
-import { getHybridObjectProtocolName } from '../swift/getHybridObjectProtocolName.js'
 import type { Type, TypeKind } from './Type.js'
 
 export class HybridObjectType implements Type {
@@ -21,12 +20,13 @@ export class HybridObjectType implements Type {
   }
 
   getCode(language: Language): string {
+    const name = getHybridObjectName(this.hybridObjectName)
+
     switch (language) {
       case 'c++':
-        const cxxName = getHybridObjectName(this.hybridObjectName)
-        return `std::shared_ptr<${cxxName}>`
+        return `std::shared_ptr<${name.HybridT}>`
       case 'swift':
-        return getHybridObjectProtocolName(this.hybridObjectName)
+        return name.TSpec
       default:
         throw new Error(
           `Language ${language} is not yet supported for HybridObjectType!`
@@ -37,11 +37,11 @@ export class HybridObjectType implements Type {
     return []
   }
   getRequiredImports(): SourceImport[] {
-    const cxxName = getHybridObjectName(this.hybridObjectName)
+    const name = getHybridObjectName(this.hybridObjectName)
     return [
       {
-        name: `${cxxName}.hpp`,
-        forwardDeclaration: getForwardDeclaration('class', cxxName),
+        name: `${name.HybridT}.hpp`,
+        forwardDeclaration: getForwardDeclaration('class', name.HybridT),
         language: 'c++',
       },
     ]

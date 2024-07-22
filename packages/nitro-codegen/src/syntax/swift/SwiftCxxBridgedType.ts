@@ -1,6 +1,7 @@
+import { getHybridObjectName } from '../getHybridObjectName.js'
+import type { SourceImport } from '../SourceFile.js'
 import { HybridObjectType } from '../types/HybridObjectType.js'
 import type { Type } from '../types/Type.js'
-import { getHybridObjectProtocolName } from './getHybridObjectProtocolName.js'
 
 export class SwiftCxxBridgedType {
   private readonly type: Type
@@ -24,6 +25,23 @@ export class SwiftCxxBridgedType {
     }
   }
 
+  getExtraImports(): SourceImport[] {
+    switch (this.type.kind) {
+      case 'hybrid-object':
+        if (!(this.type instanceof HybridObjectType))
+          throw new Error(`this.type was not a HybridObjectType!`)
+        const name = getHybridObjectName(this.type.hybridObjectName)
+        return [
+          {
+            name: `${name.TSpecCxx}.hpp`,
+            language: 'c++',
+          },
+        ]
+      default:
+        return []
+    }
+  }
+
   getTypeCode(language: 'swift' | 'c++'): string {
     switch (this.type.kind) {
       case 'enum':
@@ -41,13 +59,10 @@ export class SwiftCxxBridgedType {
 
         switch (language) {
           case 'c++':
-            console.log(`----> IN C++: ${this.type.getCode('c++')}`)
             return this.type.getCode('c++')
           case 'swift':
-            const specName = getHybridObjectProtocolName(
-              this.type.hybridObjectName
-            )
-            return `${specName}Cxx`
+            const name = getHybridObjectName(this.type.hybridObjectName)
+            return name.TSpecCxx
           default:
             throw new Error(`Invalid language! ${language}`)
         }
@@ -108,12 +123,14 @@ export class SwiftCxxBridgedType {
       case 'hybrid-object':
         if (!(this.type instanceof HybridObjectType))
           throw new Error(`this.type was not a HybridObjectType!`)
+
+        const name = getHybridObjectName(this.type.hybridObjectName)
         switch (language) {
           case 'c++':
-            return `std::make_shared<Hybrid${this.type.hybridObjectName}Swift>(${swiftParameterName})`
+            return `std::make_shared<${name.HybridTSwift}>(${swiftParameterName})`
           case 'swift':
             // We just pass it to C++ directly from swift
-            return `${this.type.hybridObjectName}SpecCxx(${swiftParameterName})`
+            return `${name.TSpecCxx}(${swiftParameterName})`
           default:
             throw new Error(`Invalid language! ${language}`)
         }

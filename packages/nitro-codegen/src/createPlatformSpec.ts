@@ -6,7 +6,7 @@ import type { HybridObjectSpec } from './syntax/HybridObjectSpec.js'
 import { Property } from './syntax/Property.js'
 import { Method } from './syntax/Method.js'
 import { createSwiftHybridObject } from './syntax/swift/SwiftHybridObject.js'
-import { getHybridObjectName } from './syntax/c++/getHybridObjectName.js'
+import { getHybridObjectName } from './syntax/getHybridObjectName.js'
 
 export function generatePlatformFiles(
   declaration: InterfaceDeclaration,
@@ -37,7 +37,7 @@ function getHybridObjectSpec(
   assertNoDuplicateFunctions(methods)
   return {
     name: interfaceName,
-    hybridObjectName: hybridObjectName,
+    hybridObjectName: hybridObjectName.HybridT,
     properties: properties.map((p) => new Property(p)),
     methods: methods.map((m) => new Method(m)),
   }
