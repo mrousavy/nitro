@@ -26,14 +26,14 @@ export function createSwiftHybridObjectCxxBridge(
   const name = getHybridObjectName(spec.name)
 
   const bridgedResultTypes = spec.methods.map((m) =>
-    getMethodResultType(name.TSpec, m)
+    getMethodResultType(name.TSpecCxx, m)
   )
 
   const propertiesBridge = spec.properties
     .map((p) => getPropertyForwardImplementation(p))
     .join('\n\n')
   const methodsBridge = spec.methods
-    .map((m) => getMethodForwardImplementation(name.TSpec, m))
+    .map((m) => getMethodForwardImplementation(name.TSpecCxx, m))
     .join('\n\n')
 
   const swiftCxxWrapperCode = `
@@ -275,7 +275,7 @@ public var ${property.name}: ${bridgedType.getTypeCode('swift')} {
 }
 
 function getMethodForwardImplementation(
-  moduleName: string,
+  bridgeClassName: string,
   method: Method
 ): string {
   const returnType = new SwiftCxxBridgedType(method.returnType)
@@ -287,7 +287,7 @@ function getMethodForwardImplementation(
     const bridgedType = new SwiftCxxBridgedType(p.type)
     return `${p.name}: ${bridgedType.parseFromCppToSwift(p.name, 'swift')}`
   })
-  const resultType = getMethodResultType(moduleName, method)
+  const resultType = getMethodResultType(bridgeClassName, method)
   const resultValue = resultType.hasType ? `let result =` : ''
   const returnValue = resultType.hasType
     ? `.value(${returnType.parseFromSwiftToCpp('result', 'swift')})`

@@ -10,11 +10,11 @@ export interface MethodResult {
 }
 
 export function getMethodResultType(
-  moduleName: string,
+  bridgeClassName: string,
   method: Method
 ): MethodResult {
   const returnType = new SwiftCxxBridgedType(method.returnType)
-  const name = `${moduleName}_${method.name}_Result`
+  const name = `${bridgeClassName}_${method.name}_Result`
   const hasType = method.returnType.kind !== 'void'
 
   return {

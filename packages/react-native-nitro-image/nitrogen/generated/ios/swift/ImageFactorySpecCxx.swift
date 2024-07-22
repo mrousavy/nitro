@@ -40,7 +40,7 @@ public class ImageFactorySpecCxx {
 
   // Methods
   @inline(__always)
-  public func loadImageFromFile(path: String) -> ImageFactorySpec_loadImageFromFile_Result {
+  public func loadImageFromFile(path: String) -> ImageFactorySpecCxx_loadImageFromFile_Result {
     do {
       let result = try self.implementation.loadImageFromFile(path: path)
       return .value(ImageSpecCxx(result))
@@ -56,7 +56,7 @@ public class ImageFactorySpecCxx {
   }
   
   @inline(__always)
-  public func loadImageFromURL(path: String) -> ImageFactorySpec_loadImageFromURL_Result {
+  public func loadImageFromURL(path: String) -> ImageFactorySpecCxx_loadImageFromURL_Result {
     do {
       let result = try self.implementation.loadImageFromURL(path: path)
       return .value(ImageSpecCxx(result))
@@ -72,7 +72,7 @@ public class ImageFactorySpecCxx {
   }
   
   @inline(__always)
-  public func loadImageFromSystemName(path: String) -> ImageFactorySpec_loadImageFromSystemName_Result {
+  public func loadImageFromSystemName(path: String) -> ImageFactorySpecCxx_loadImageFromSystemName_Result {
     do {
       let result = try self.implementation.loadImageFromSystemName(path: path)
       return .value(ImageSpecCxx(result))
@@ -88,7 +88,7 @@ public class ImageFactorySpecCxx {
   }
   
   @inline(__always)
-  public func bounceBack(image: ImageSpecCxx) -> ImageFactorySpec_bounceBack_Result {
+  public func bounceBack(image: ImageSpecCxx) -> ImageFactorySpecCxx_bounceBack_Result {
     do {
       let result = try self.implementation.bounceBack(image: image.implementation)
       return .value(ImageSpecCxx(result))

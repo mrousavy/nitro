@@ -63,7 +63,7 @@ public class ImageSpecCxx {
 
   // Methods
   @inline(__always)
-  public func toArrayBuffer(format: Int32) -> ImageSpec_toArrayBuffer_Result {
+  public func toArrayBuffer(format: Int32) -> ImageSpecCxx_toArrayBuffer_Result {
     do {
       let result = try self.implementation.toArrayBuffer(format: ImageFormat(rawValue: format)!)
       return .value(result)
@@ -79,7 +79,7 @@ public class ImageSpecCxx {
   }
   
   @inline(__always)
-  public func saveToFile(path: String) -> ImageSpec_saveToFile_Result {
+  public func saveToFile(path: String) -> ImageSpecCxx_saveToFile_Result {
     do {
        try self.implementation.saveToFile(path: path)
       return .value
