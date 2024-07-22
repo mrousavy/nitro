@@ -27,7 +27,7 @@ public:
   
 public:
   template<typename THybridObject, typename TSwiftPart>
-  static inline std::shared_ptr<THybridObject> getOrCreate(TSwiftPart swiftPart) {
+  static inline std::shared_ptr<THybridObject> getOrCreate(TSwiftPart swiftPart) noexcept {
     auto hybridContext = swiftPart.getHybridContext();
     auto hybridObject = std::static_pointer_cast<THybridObject>(hybridContext.cppPart.lock());
     if (hybridObject != nullptr) [[likely]] {
