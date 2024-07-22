@@ -48,10 +48,10 @@ export class SwiftCxxBridgedType {
       })
     } else if (this.type.kind === 'array-buffer') {
       imports.push({
-        name: `<NitroModules/ArrayBuffer.hpp>`,
+        name: `NitroModules/ArrayBufferSwift.hpp`,
         forwardDeclaration: getForwardDeclaration(
           'class',
-          'ArrayBuffer',
+          'ArrayBufferSwift',
           'NitroModules'
         ),
         language: 'c++',
@@ -162,8 +162,16 @@ export class SwiftCxxBridgedType {
           case 'c++':
             return `HybridContext::getOrCreate<${name.HybridTSwift}>(${swiftParameterName})`
           case 'swift':
-            // We just pass it to C++ directly from swift
             return `${name.TSpecCxx}(${swiftParameterName})`
+          default:
+            throw new Error(`Invalid language! ${language}`)
+        }
+      case 'array-buffer':
+        switch (language) {
+          case 'c++':
+            return `std::make_shared<ArrayBufferSwift>(${swiftParameterName})`
+          case 'swift':
+            return swiftParameterName
           default:
             throw new Error(`Invalid language! ${language}`)
         }

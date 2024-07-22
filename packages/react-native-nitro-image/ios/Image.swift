@@ -12,7 +12,7 @@ import NitroModules
 class Image : ImageSpec {
   var someSettableProp: Double = 1.0
   
-  func toArrayBuffer(format: ImageFormat) throws -> Double {
+  func toArrayBuffer(format: ImageFormat) throws -> ArrayBuffer {
     throw RuntimeError.error(withMessage: "toArrayBuffer() is not yet implemented!")
   }
   

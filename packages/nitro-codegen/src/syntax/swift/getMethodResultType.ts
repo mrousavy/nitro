@@ -23,6 +23,8 @@ export function getMethodResultType(
     swiftEnumCode: `
 ${createFileMetadataString(`${name}.swift`)}
 
+import NitroModules
+
 /**
  * C++ does not support catching Swift errors yet, so we have to wrap
  * them in a Result type.
