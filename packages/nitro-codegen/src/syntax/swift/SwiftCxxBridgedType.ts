@@ -127,7 +127,7 @@ export class SwiftCxxBridgedType {
         const name = getHybridObjectName(this.type.hybridObjectName)
         switch (language) {
           case 'c++':
-            return `std::make_shared<${name.HybridTSwift}>(${swiftParameterName})`
+            return `HybridContext::getOrCreate<${name.HybridTSwift}>(${swiftParameterName})`
           case 'swift':
             // We just pass it to C++ directly from swift
             return `${name.TSpecCxx}(${swiftParameterName})`

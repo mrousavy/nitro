@@ -58,6 +58,16 @@ public class ${name.TSpecCxx} {
     self.implementation = implementation
   }
 
+  // HybridObject C++ part
+  public var hybridContext: margelo.nitro.HybridContext {
+    get {
+      return self.implementation.hybridContext
+    }
+    set {
+      self.implementation.hybridContext = newValue
+    }
+  }
+
   // Properties
   ${indent(propertiesBridge, '  ')}
 

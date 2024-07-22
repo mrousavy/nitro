@@ -25,6 +25,16 @@ public class ImageSpecCxx {
     self.implementation = implementation
   }
 
+  // HybridObject C++ part
+  public var hybridContext: margelo.nitro.HybridContext {
+    get {
+      return self.implementation.hybridContext
+    }
+    set {
+      self.implementation.hybridContext = newValue
+    }
+  }
+
   // Properties
   public var size: ImageSize {
     @inline(__always)

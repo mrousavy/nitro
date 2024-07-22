@@ -7,6 +7,7 @@
 #include "JSIConverter.hpp"
 #include "OwningReference.hpp"
 #include "NitroLogger.hpp"
+#include "HybridContext.hpp"
 #include <functional>
 #include <jsi/jsi.h>
 #include <memory>
