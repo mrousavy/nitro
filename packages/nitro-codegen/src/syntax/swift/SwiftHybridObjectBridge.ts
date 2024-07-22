@@ -261,7 +261,11 @@ public func ${method.name}(${params.join(', ')}) -> ${resultType.typename} {
   do {
     ${resultValue} try self.implementation.${method.name}(${passParams.join(', ')})
     return ${returnValue}
+  } catch RuntimeError.error(withMessage: let message) {
+    // A  \`RuntimeError\` was thrown.
+    return .error(message: message)
   } catch {
+    // Any other kind of error was thrown.
     // Due to a Swift bug, we have to copy the string here.
     let message = "\\(error.localizedDescription)"
     return .error(message: message)

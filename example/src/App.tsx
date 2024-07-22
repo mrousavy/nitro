@@ -7,7 +7,7 @@ import { ImageConstructors } from 'react-native-nitro-image'
 export default function App() {
   React.useEffect(() => {
     console.log('Loading image...')
-    const image = ImageConstructors.loadImageFromSystemName('help')
+    const image = ImageConstructors.loadImageFromSystemName('heart.fill')
     console.log('Image loaded!')
     console.log(`Image is ${image.size.width}x${image.size.height}`)
   }, [])

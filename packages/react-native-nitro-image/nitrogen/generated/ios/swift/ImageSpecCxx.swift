@@ -57,6 +57,8 @@ public class ImageSpecCxx {
     do {
       let result = try self.implementation.toArrayBuffer(format: ImageFormat(rawValue: format)!)
       return .value(result)
+    } catch RuntimeError.error(withMessage: let message) {
+      return .error(message: message)
     } catch {
       // Due to a Swift bug, we have to copy the string here.
       let message = "\(error.localizedDescription)"
@@ -69,6 +71,8 @@ public class ImageSpecCxx {
     do {
        try self.implementation.saveToFile(path: path)
       return .value
+    } catch RuntimeError.error(withMessage: let message) {
+      return .error(message: message)
     } catch {
       // Due to a Swift bug, we have to copy the string here.
       let message = "\(error.localizedDescription)"
