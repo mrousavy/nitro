@@ -2,7 +2,7 @@ import type { Language } from '../../getPlatformSpecs.js'
 import { getForwardDeclaration } from '../c++/getForwardDeclaration.js'
 import { getHybridObjectName } from '../getHybridObjectName.js'
 import type { SourceFile, SourceImport } from '../SourceFile.js'
-import type { ReferenceConvention, Type, TypeKind } from './Type.js'
+import type { Type, TypeKind } from './Type.js'
 
 export class HybridObjectType implements Type {
   readonly hybridObjectName: string
@@ -11,9 +11,8 @@ export class HybridObjectType implements Type {
     this.hybridObjectName = hybridObjectName
   }
 
-  get convention(): ReferenceConvention {
-    // It's a shared_ptr.
-    return 'by-value'
+  get canBePassedByReference(): boolean {
+    return false
   }
 
   get kind(): TypeKind {

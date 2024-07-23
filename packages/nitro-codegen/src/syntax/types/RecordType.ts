@@ -1,6 +1,6 @@
 import type { Language } from '../../getPlatformSpecs.js'
 import { type SourceFile, type SourceImport } from '../SourceFile.js'
-import type { ReferenceConvention, Type, TypeKind } from './Type.js'
+import type { Type, TypeKind } from './Type.js'
 
 export class RecordType implements Type {
   readonly keyType: Type
@@ -11,9 +11,8 @@ export class RecordType implements Type {
     this.valueType = valueType
   }
 
-  get convention(): ReferenceConvention {
-    // It's a std::unordered_map
-    return 'move'
+  get canBePassedByReference(): boolean {
+    return true
   }
   get kind(): TypeKind {
     return 'record'

@@ -5,7 +5,7 @@ import {
   type SourceFile,
   type SourceImport,
 } from '../SourceFile.js'
-import type { ReferenceConvention, Type, TypeKind } from './Type.js'
+import type { Type, TypeKind } from './Type.js'
 
 export class StructType implements Type {
   readonly structName: string
@@ -16,9 +16,8 @@ export class StructType implements Type {
     this.declarationFile = declarationFile
   }
 
-  get convention(): ReferenceConvention {
-    // It's a custom struct
-    return 'by-reference'
+  get canBePassedByReference(): boolean {
+    return true
   }
   get kind(): TypeKind {
     return 'struct'

@@ -1,6 +1,6 @@
 import type { Language } from '../../getPlatformSpecs.js'
 import { type SourceFile, type SourceImport } from '../SourceFile.js'
-import type { ReferenceConvention, Type, TypeKind } from './Type.js'
+import type { Type, TypeKind } from './Type.js'
 
 export class OptionalType implements Type {
   readonly wrappingType: Type
@@ -9,9 +9,8 @@ export class OptionalType implements Type {
     this.wrappingType = wrappingType
   }
 
-  get convention(): ReferenceConvention {
-    // It's an std::optional.
-    return 'by-reference'
+  get canBePassedByReference(): boolean {
+    return true
   }
   get kind(): TypeKind {
     return 'optional'

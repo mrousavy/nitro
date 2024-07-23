@@ -1,11 +1,10 @@
 import type { Language } from '../../getPlatformSpecs.js'
 import type { SourceFile, SourceImport } from '../SourceFile.js'
-import type { ReferenceConvention, Type, TypeKind } from './Type.js'
+import type { Type, TypeKind } from './Type.js'
 
 export class StringType implements Type {
-  get convention(): ReferenceConvention {
-    // It's a std::string
-    return 'by-reference'
+  get canBePassedByReference(): boolean {
+    return true
   }
   get kind(): TypeKind {
     return 'string'

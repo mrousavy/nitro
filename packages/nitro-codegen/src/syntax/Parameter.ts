@@ -1,6 +1,6 @@
 import type { ParameterDeclaration } from 'ts-morph'
 import type { CodeNode } from './CodeNode.js'
-import { escapeCppName, withReferenceConvention } from './helpers.js'
+import { escapeCppName, toReferenceType } from './helpers.js'
 import type { Language } from '../getPlatformSpecs.js'
 import { type SourceFile, type SourceImport } from './SourceFile.js'
 import type { NamedType, Type } from './types/Type.js'
@@ -39,8 +39,10 @@ export class Parameter implements CodeNode {
     switch (language) {
       case 'c++':
         let cppType = this.type.getCode('c++')
-        // T -> T or const T& or T&&
-        cppType = withReferenceConvention(cppType, this.type.convention)
+        if (this.type.canBePassedByReference) {
+          // T -> const T&
+          cppType = toReferenceType(cppType)
+        }
         return `${cppType} ${cppName}`
       case 'swift':
         return `${cppName}: ${this.type.getCode('swift')}`

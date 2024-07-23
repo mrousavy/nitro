@@ -1,6 +1,6 @@
 import type { Language } from '../../getPlatformSpecs.js'
 import { type SourceFile, type SourceImport } from '../SourceFile.js'
-import type { ReferenceConvention, Type, TypeKind } from './Type.js'
+import type { Type, TypeKind } from './Type.js'
 
 export class ArrayType implements Type {
   readonly itemType: Type
@@ -9,9 +9,8 @@ export class ArrayType implements Type {
     this.itemType = itemType
   }
 
-  get convention(): ReferenceConvention {
-    // It's a vector.
-    return 'by-reference'
+  get canBePassedByReference(): boolean {
+    return true
   }
 
   get kind(): TypeKind {
