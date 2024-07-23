@@ -1,3 +1,5 @@
+import type { ReferenceConvention } from './types/Type.js'
+
 export function createFileMetadataString(filename: string): string {
   const now = new Date()
   return `
@@ -11,8 +13,18 @@ export function createFileMetadataString(filename: string): string {
 `.trim()
 }
 
-export function toReferenceType(type: string): `const ${typeof type}&` {
-  return `const ${type}&`
+export function withReferenceConvention(
+  type: string,
+  convention: ReferenceConvention
+): string {
+  switch (convention) {
+    case 'by-value':
+      return type
+    case 'by-reference':
+      return `const ${type}&`
+    case 'move':
+      return `${type}&&`
+  }
 }
 
 export function escapeCppName(string: string): string {

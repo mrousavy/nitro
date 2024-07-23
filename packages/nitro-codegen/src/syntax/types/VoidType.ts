@@ -1,10 +1,11 @@
 import type { Language } from '../../getPlatformSpecs.js'
 import type { SourceFile, SourceImport } from '../SourceFile.js'
-import type { Type, TypeKind } from './Type.js'
+import type { ReferenceConvention, Type, TypeKind } from './Type.js'
 
 export class VoidType implements Type {
-  get canBePassedByReference(): boolean {
-    return false
+  get convention(): ReferenceConvention {
+    // It's a primitive
+    return 'by-value'
   }
   get kind(): TypeKind {
     return 'void'

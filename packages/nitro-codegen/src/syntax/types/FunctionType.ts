@@ -5,7 +5,7 @@ import {
 } from '../c++/CppFunctionSpecialization.js'
 import { Parameter } from '../Parameter.js'
 import { type SourceFile, type SourceImport } from '../SourceFile.js'
-import type { NamedType, Type, TypeKind } from './Type.js'
+import type { NamedType, ReferenceConvention, Type, TypeKind } from './Type.js'
 
 export class FunctionType implements Type {
   readonly returnType: Type
@@ -16,8 +16,9 @@ export class FunctionType implements Type {
     this.parameters = parameters
   }
 
-  get canBePassedByReference(): boolean {
-    return true
+  get convention(): ReferenceConvention {
+    // It's a std::function.
+    return 'move'
   }
 
   get kind(): TypeKind {

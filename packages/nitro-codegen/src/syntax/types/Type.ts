@@ -18,14 +18,16 @@ export type TypeKind =
   | 'struct'
   | 'void'
 
+export type ReferenceConvention = 'by-value' | 'by-reference' | 'move'
+
 /**
  * Represents a TypeScript Type that can be represented in a native language (C++, Swift, Kotlin)
  */
 export interface Type {
   /**
-   * Get whether this type can be passed by reference in C++ (`const T&` vs `T`)
+   * Get the reference convention for passing this type around C++ (`T` vs `const T&` vs `T&&`)
    */
-  readonly canBePassedByReference: boolean
+  readonly convention: ReferenceConvention
   /**
    * Get the kind of the type.
    */

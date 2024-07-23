@@ -1,6 +1,6 @@
 import type { Language } from '../../getPlatformSpecs.js'
 import { type SourceFile, type SourceImport } from '../SourceFile.js'
-import type { Type, TypeKind } from './Type.js'
+import type { ReferenceConvention, Type, TypeKind } from './Type.js'
 
 export class PromiseType implements Type {
   readonly resultingType: Type
@@ -9,8 +9,9 @@ export class PromiseType implements Type {
     this.resultingType = resultingType
   }
 
-  get canBePassedByReference(): boolean {
-    return false
+  get convention(): ReferenceConvention {
+    // It's a std::future - holding onto it might block deletion.
+    return 'move'
   }
   get kind(): TypeKind {
     return 'promise'

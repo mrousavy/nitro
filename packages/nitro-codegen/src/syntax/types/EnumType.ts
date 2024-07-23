@@ -1,7 +1,7 @@
 import type { Language } from '../../getPlatformSpecs.js'
 import { getForwardDeclaration } from '../c++/getForwardDeclaration.js'
 import { type SourceFile, type SourceImport } from '../SourceFile.js'
-import type { Type, TypeKind } from './Type.js'
+import type { ReferenceConvention, Type, TypeKind } from './Type.js'
 
 export class EnumType implements Type {
   readonly enumName: string
@@ -12,8 +12,9 @@ export class EnumType implements Type {
     this.declarationFile = declarationFile
   }
 
-  get canBePassedByReference(): boolean {
-    return false
+  get convention(): ReferenceConvention {
+    // It's an enum (int).
+    return 'by-value'
   }
 
   get kind(): TypeKind {
