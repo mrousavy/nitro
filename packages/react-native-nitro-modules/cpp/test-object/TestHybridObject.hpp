@@ -42,7 +42,7 @@ public:
   std::function<int()> getIntGetter() {
     return [this]() -> int { return this->_int; };
   }
-  void sayHelloCallback(std::function<void(std::string)> callback) {
+  void sayHelloCallback(std::function<void(std::string)>&& callback) {
     callback("Test Hybrid");
   }
   std::shared_ptr<TestHybridObject> createNewHybridObject() {
