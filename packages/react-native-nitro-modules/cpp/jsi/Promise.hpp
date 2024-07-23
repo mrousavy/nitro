@@ -51,7 +51,7 @@ public:
    Create a new Promise using the JS `Promise` constructor and runs the given `run` function.
    The resulting Promise should be returned to JS so it can be awaited.
    */
-  static jsi::Value createPromise(jsi::Runtime& runtime, RunPromise run);
+  static jsi::Value createPromise(jsi::Runtime& runtime, RunPromise&& run);
 };
 
 } // namespace margelo::nitro

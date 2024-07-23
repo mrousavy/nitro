@@ -206,6 +206,7 @@ template <typename ReturnType, typename... Args> struct JSIConverter<std::functi
         // it is a void function (returns undefined)
         if (!sharedFunction) {
           // runtime has already been deleted. since this returns void, we can just ignore it being deleted.
+          Logger::log("JSIConverter", "Tried calling void(..) function, but it has already been deleted by JS!");
           return;
         }
         sharedFunction->call(runtime, JSIConverter<std::decay_t<Args>>::toJSI(runtime, args)...);
@@ -235,7 +236,7 @@ template <typename ReturnType, typename... Args> struct JSIConverter<std::functi
       return JSIConverter<ReturnType>::toJSI(runtime, result);
     }
   }
-  static inline jsi::Value toJSI(jsi::Runtime& runtime, const std::function<ReturnType(Args...)>& function) {
+  static inline jsi::Value toJSI(jsi::Runtime& runtime, std::function<ReturnType(Args...)>&& function) {
     jsi::HostFunctionType jsFunction = [function = std::move(function)](jsi::Runtime& runtime, const jsi::Value& thisValue,
                                                                         const jsi::Value* args, size_t count) -> jsi::Value {
       if (count != sizeof...(Args)) [[unlikely]] {

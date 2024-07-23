@@ -15,13 +15,13 @@ Promise::Promise(jsi::Runtime& runtime,
   _functionCache = functionCache;
 }
 
-jsi::Value Promise::createPromise(jsi::Runtime& runtime, RunPromise run) {
+jsi::Value Promise::createPromise(jsi::Runtime& runtime, RunPromise&& run) {
   // Get Promise ctor from global
   auto promiseCtor = runtime.global().getPropertyAsFunction(runtime, "Promise");
 
   auto promiseCallback = jsi::Function::createFromHostFunction(
       runtime, jsi::PropNameID::forUtf8(runtime, "PromiseCallback"), 2,
-      [=](jsi::Runtime& runtime, const jsi::Value& thisValue, const jsi::Value* arguments, size_t count) -> jsi::Value {
+      [run = std::move(run)](jsi::Runtime& runtime, const jsi::Value& thisValue, const jsi::Value* arguments, size_t count) -> jsi::Value {
         // Get resolver and rejecter
         auto resolver = arguments[0].getObject(runtime).getFunction(runtime);
         auto rejecter = arguments[1].getObject(runtime).getFunction(runtime);
