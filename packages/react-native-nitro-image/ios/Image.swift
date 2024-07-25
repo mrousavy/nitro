@@ -36,9 +36,6 @@ class Image : ImageSpec {
   var someSettableProp: Double = 1.0
   
   func toArrayBuffer(format: ImageFormat) throws -> Double {
-    guard let data = uiImage.jpegData(compressionQuality: 1.0) else {
-      throw RuntimeError.error(withMessage: "Failed to get JPG data!")
-    }
     throw RuntimeError.error(withMessage: "toArrayBuffer() is not yet implemented!")
   }
   
