@@ -14,6 +14,8 @@ namespace margelo::nitro {
 
 using namespace facebook;
 
+using DeleteFn = std::function<void(uint8_t*)>;
+
 /**
  * Represents a raw byte buffer that can be read from-, and
  * written to- from both JavaScript and C++.
@@ -33,9 +35,33 @@ public:
    * The `ArrayBuffer` cannot be kept in memory, as JS owns the data
    * and it can be deleted at any point in time.
    */
-  ArrayBuffer(uint8_t* data, size_t size): _data(data), _size(size) { }
+  ArrayBuffer(uint8_t* data, size_t size): _data(data), _size(size), _deleteFunc(nullptr) { }
+  /**
+   * Create a new **owning** `ArrayBuffer`.
+   * The `ArrayBuffer` can be kept in memory, as C++ owns the data
+   * and will only delete it once this `ArrayBuffer` gets deleted
+   */
+  ArrayBuffer(uint8_t* data, size_t size, DeleteFn&& deleteFunc): _data(data), _size(size), _deleteFunc(std::move(deleteFunc)) { }
+  /**
+   * Create a new **owning** `ArrayBuffer`.
+   * The `ArrayBuffer` can be kept in memory, as C++ owns the data
+   * and will only delete it once this `ArrayBuffer` gets deleted
+   */
+  ArrayBuffer(uint8_t* data, size_t size, bool destroyOnDeletion = true): _data(data), _size(size) {
+    _deleteFunc = [](uint8_t* buffer) {
+      delete[] buffer;
+    };
+  }
+  
+  // ArrayBuffer cannot be copied
+  ArrayBuffer(const ArrayBuffer&) = delete;
+  // ArrayBuffer cannot be moved
+  ArrayBuffer(ArrayBuffer&&) = delete;
   
   ~ArrayBuffer() {
+    if (_deleteFunc != nullptr) {
+      _deleteFunc(_data);
+    }
   }
   
   uint8_t* data() override {
@@ -49,6 +75,7 @@ public:
 private:
   uint8_t* _data;
   size_t _size;
+  DeleteFn _deleteFunc;
 };
 
 } // namespace margelo::nitro
