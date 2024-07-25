@@ -16,8 +16,6 @@ export class ArrayBufferType implements Type {
     switch (language) {
       case 'c++':
         return 'std::shared_ptr<ArrayBuffer>'
-      case 'swift':
-        return 'margelo.nitro.ArrayBuffer'
       default:
         throw new Error(
           `Language ${language} is not yet supported for ArrayBufferType!`
