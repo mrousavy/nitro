@@ -37,9 +37,9 @@ public:
    * The `ArrayBuffer` cannot be kept in memory, as JS owns the data
    * and it can be deleted at any point in time.
    */
-  ForeignArrayBuffer(GetDataFn getData,
-                     GetSizeFn getSize,
-                     OnDestroyFn onDestroy): _getData(getData), _getSize(getSize), _onDestroy(onDestroy) { }
+  ForeignArrayBuffer(const GetDataFn& getData,
+                     const GetSizeFn& getSize,
+                     const OnDestroyFn& onDestroy): _getData(getData), _getSize(getSize), _onDestroy(onDestroy) { }
   
   ~ForeignArrayBuffer() {
     _onDestroy();

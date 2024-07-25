@@ -31,6 +31,7 @@ Pod::Spec.new do |s|
     "cpp/core/HybridContext.hpp",
     "cpp/registry/HybridObjectRegistry.hpp",
     "cpp/jsi/ArrayBuffer.hpp",
+    "cpp/jsi/ForeignArrayBuffer.hpp",
   ]
 
   s.pod_target_xcconfig = {
