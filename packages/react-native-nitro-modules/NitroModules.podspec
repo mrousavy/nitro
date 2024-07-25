@@ -31,6 +31,8 @@ Pod::Spec.new do |s|
     "cpp/core/HybridContext.hpp",
     "cpp/registry/HybridObjectRegistry.hpp",
     "cpp/jsi/ArrayBuffer.hpp",
+    # Public iOS only headers in modulemap
+    "ios/core/DataArrayBuffer.hpp"
   ]
 
   s.pod_target_xcconfig = {
