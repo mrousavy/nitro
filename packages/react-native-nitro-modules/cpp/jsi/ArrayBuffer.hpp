@@ -29,7 +29,7 @@ using namespace facebook;
 class ArrayBuffer: public jsi::MutableBuffer {
 public:
   /**
-   * Create a new **non-owning** `ArrayBuffer`.
+   * Create a new **non-owning**, constant `ArrayBuffer`.
    * The `ArrayBuffer` cannot be kept in memory, as JS owns the data
    * and it can be deleted at any point in time.
    */
