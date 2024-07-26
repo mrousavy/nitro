@@ -332,8 +332,6 @@ function getResultTypesFile(
     content: `
 ${createFileMetadataString(name)}
 
-import NitroModules
-
 /**
  * C++ does not support catching Swift errors yet, so we have to wrap
  * them in a Result type.
@@ -343,6 +341,8 @@ import NitroModules
  * ${hybridObjectName.TSpecCxx} will then wrap all calls to ${hybridObjectName.TSpec}
  * to properly catch Swift errors and return either .value or .error to C++.
  */
+
+import NitroModules
 
 ${allEnumsCode.join('\n\n')}
     `.trim(),

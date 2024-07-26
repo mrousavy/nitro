@@ -18,7 +18,7 @@ import NitroModules
  * - Other HostObjects need to be wrapped/unwrapped from the Swift TCxx wrapper
  * - Throwing methods need to be wrapped with a Result<T, Error> type, as exceptions cannot be propagated to C++
  */
-public class ImageFactorySpecCxx {
+public final class ImageFactorySpecCxx {
   private(set) var implementation: ImageFactorySpec
 
   public init(_ implementation: ImageFactorySpec) {
