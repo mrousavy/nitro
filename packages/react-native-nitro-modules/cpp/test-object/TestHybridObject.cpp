@@ -4,8 +4,6 @@
 
 #include "TestHybridObject.hpp"
 
-#include "NitroModules-Swift.h"
-
 namespace margelo::nitro {
 
 void TestHybridObject::loadHybridMethods() {
