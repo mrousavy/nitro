@@ -6,8 +6,9 @@ import { generatePlatformFiles } from './createPlatformSpec.js'
 import { promises as fs } from 'fs'
 import path from 'path'
 import { getBaseDirectory, prettifyDirectory } from './getCurrentDir.js'
-import { errorToString, indent } from './stringUtils.js'
+import { capitalizeName, errorToString, indent } from './stringUtils.js'
 import { writeFile } from './writeFile.js'
+import chalk from 'chalk'
 
 const start = performance.now()
 let targetSpecs = 0
@@ -21,7 +22,9 @@ const project = new Project({})
 project.addSourceFilesAtPaths('**/*.nitro.ts')
 
 // Loop through all source files to log them
-console.log(`🚀  Nitrogen runs at ${prettifyDirectory(baseDirectory)}`)
+console.log(
+  chalk.reset(`🚀  Nitrogen runs at ${prettifyDirectory(baseDirectory)}`)
+)
 for (const dir of project.getDirectories()) {
   const specs = dir.getSourceFiles().length
   const relativePath = prettifyDirectory(dir.getPath())
@@ -97,13 +100,15 @@ for (const sourceFile of project.getSourceFiles()) {
       targetSpecs++
 
       console.log(
-        `    ⚙️   Generating specs for HybridObject "${moduleName}"...`
+        `    ⚙️   Generating specs for HybridObject "${chalk.bold(moduleName)}"...`
       )
       // Generate platform specific code (C++/Swift/Kotlin/...)
       for (const platform of platforms) {
         const language = platformSpec[platform]!
         const files = generatePlatformFiles(module, language)
-        console.log(`        ${platform}: Generating ${language} code...`)
+        console.log(
+          `        ${chalk.dim(platform)}: Generating ${capitalizeName(language)} code...`
+        )
 
         for (const file of files) {
           const basePath = path.join(outFolder, file.platform, file.language)
@@ -137,8 +142,17 @@ console.log(`💡  Your code is in ${prettifyDirectory(outFolder)}`)
 const addedFiles = filesAfter.filter((f) => !filesBefore.includes(f))
 const removedFiles = filesBefore.filter((f) => !filesAfter.includes(f))
 if (addedFiles.length > 0 || removedFiles.length > 0) {
+  let text = ''
+  if (addedFiles.length > 0 && removedFiles.length === 0) {
+    text = `Added ${addedFiles.length} files`
+  } else if (addedFiles.length === 0 && removedFiles.length > 0) {
+    text = `Removed ${removedFiles.length} files`
+  } else {
+    text = `Added ${addedFiles.length} files and removed ${removedFiles.length} files`
+  }
+
   console.log(
-    `🔄  Added ${addedFiles.length} files and removed ${removedFiles.length} files - you need to run 'pod install'/sync gradle to update files.`
+    `‼️   ${text} - ${chalk.bold('you need to run `pod install`/sync gradle to update files!')}`
   )
 }
 const promises = removedFiles.map(async (file) => {

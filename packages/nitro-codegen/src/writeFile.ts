@@ -2,6 +2,7 @@ import path from 'path'
 import { promises as fs } from 'fs'
 import { capitalizeName } from './stringUtils.js'
 import type { SourceFile } from './syntax/SourceFile.js'
+import chalk from 'chalk'
 
 export async function writeFile(
   basePath: string,
@@ -9,7 +10,7 @@ export async function writeFile(
 ): Promise<void> {
   const filepath = path.join(basePath, file.name)
   const language = capitalizeName(file.language)
-  console.log(`          ${language}: Creating ${file.name}...`)
+  console.log(`          ${chalk.dim(language)}: Creating ${file.name}...`)
 
   const dir = path.dirname(filepath)
   // Create directory if it doesn't exist yet

@@ -7,6 +7,7 @@ import { Property } from './syntax/Property.js'
 import { Method } from './syntax/Method.js'
 import { createSwiftHybridObject } from './syntax/swift/SwiftHybridObject.js'
 import { getHybridObjectName } from './syntax/getHybridObjectName.js'
+import { createKotlinHybridObject } from './syntax/kotlin/KotlinHybridObject.js'
 
 export function generatePlatformFiles(
   declaration: InterfaceDeclaration,
@@ -56,8 +57,12 @@ function generateSwiftFiles(spec: HybridObjectSpec): SourceFile[] {
   return [...cppFiles, ...swiftFiles]
 }
 
-function generateKotlinFiles(_spec: HybridObjectSpec): SourceFile[] {
-  throw new Error(`Kotlin Specs are not yet implemented!`)
+function generateKotlinFiles(spec: HybridObjectSpec): SourceFile[] {
+  // 1. Always generate a C++ spec for the shared layer and type declarations (enums, interfaces, ...)
+  const cppFiles = generateCppFiles(spec)
+  // 2. Generate Kotlin specific files and potentially a C++ binding layer
+  const kotlinFiles = createKotlinHybridObject(spec)
+  return [...cppFiles, ...kotlinFiles]
 }
 
 function getDuplicates<T>(array: T[]): T[] {
