@@ -5,7 +5,6 @@ set (CMAKE_VERBOSE_MAKEFILE ON)
 set (CMAKE_CXX_STANDARD 14)
 
 add_library(react-native-nitro-image            SHARED
-            ../cpp/react-native-nitro-image.cpp
             cpp-adapter.cpp
 )
 
