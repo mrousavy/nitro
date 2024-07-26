@@ -1,4 +1,4 @@
-package com.nitroexample
+package com.margelo.nitroexample
 
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate
