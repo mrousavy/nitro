@@ -6,8 +6,6 @@
 /// Copyright © 2024 Marc Rousavy @ Margelo
 ///
 
-import NitroModules
-
 /**
  * C++ does not support catching Swift errors yet, so we have to wrap
  * them in a Result type.
@@ -17,6 +15,8 @@ import NitroModules
  * ImageFactorySpecCxx will then wrap all calls to ImageFactorySpec
  * to properly catch Swift errors and return either .value or .error to C++.
  */
+
+import NitroModules
 
 /**
  * The exception-free result type for ImageFactorySpec.loadImageFromFile(...).
