@@ -8,6 +8,8 @@
 
 package com.margelo.nitro.image
 
+import com.margelo.nitro.HybridObjectSpec
+
 /**
  * A Kotlin interface representing the Image HybridObject.
  * Implement this interface to create Kotlin-based instances of Image.

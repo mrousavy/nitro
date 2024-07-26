@@ -18,6 +18,8 @@ ${createFileMetadataString(`${interfaceName}.kt`)}
 
 package ${PACKAGE}
 
+import com.margelo.nitro.HybridObjectSpec
+
 /**
  * A Kotlin interface representing the ${spec.name} HybridObject.
  * Implement this interface to create Kotlin-based instances of ${spec.name}.
