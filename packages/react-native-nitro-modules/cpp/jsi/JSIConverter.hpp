@@ -130,7 +130,7 @@ template <typename TInner> struct JSIConverter<std::optional<TInner>> {
     if (arg.isUndefined() || arg.isNull()) {
       return std::nullopt;
     } else {
-      return JSIConverter<TInner>::fromJSI(runtime, std::move(arg));
+      return JSIConverter<TInner>::fromJSI(runtime, arg);
     }
   }
   static inline jsi::Value toJSI(jsi::Runtime& runtime, const std::optional<TInner>& arg) {
