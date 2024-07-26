@@ -115,6 +115,27 @@ set {
         }
         return `var ${this.name}: ${type} { ${accessors} }`
       }
+      case 'kotlin': {
+        const type = this.type.getCode('swift')
+        const keyword = this.isReadonly ? 'val' : 'var'
+        const lines: string[] = []
+        lines.push(`${keyword} ${this.name}: ${type}`)
+        if (body != null) {
+          lines.push(`
+  get() {
+    ${body.getter}
+  }
+          `)
+          if (!this.isReadonly) {
+            lines.push(`
+  set(value) {
+    ${body.setter}
+  }
+            `)
+          }
+        }
+        return lines.join('\n')
+      }
       default:
         throw new Error(
           `Language ${language} is not yet supported for properties!`

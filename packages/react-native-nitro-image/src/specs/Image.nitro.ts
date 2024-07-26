@@ -8,7 +8,8 @@ interface ImageSize {
   readonly height: number
 }
 
-export interface Image extends HybridObject<{ ios: 'swift' }> {
+export interface Image
+  extends HybridObject<{ ios: 'swift'; android: 'kotlin' }> {
   readonly size: ImageSize
   readonly pixelFormat: PixelFormat
 

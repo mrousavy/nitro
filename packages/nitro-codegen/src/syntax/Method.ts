@@ -104,6 +104,24 @@ ${signature} {
 }`.trim()
         }
       }
+      case 'kotlin': {
+        const params = this.parameters.map((p) => p.getCode('kotlin'))
+        const returnType = this.returnType.getCode('kotlin')
+        let signature = `fun ${this.name}(${params.join(', ')}): ${returnType}`
+
+        if (modifiers?.inline) signature = `inline ${signature}`
+        if (modifiers?.override) signature = `override ${signature}`
+
+        if (body == null) {
+          return signature
+        } else {
+          return `
+${signature} {
+  ${indent(body, '  ')}
+}
+          `.trim()
+        }
+      }
       default:
         throw new Error(
           `Language ${language} is not yet supported for property getters!`

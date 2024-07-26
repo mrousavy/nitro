@@ -35,7 +35,7 @@ export class Parameter implements CodeNode {
   }
 
   getCode(language: Language): string {
-    const cppName = escapeCppName(this.name)
+    const name = escapeCppName(this.name)
     switch (language) {
       case 'c++':
         let cppType = this.type.getCode('c++')
@@ -43,9 +43,11 @@ export class Parameter implements CodeNode {
           // T -> const T&
           cppType = toReferenceType(cppType)
         }
-        return `${cppType} ${cppName}`
+        return `${cppType} ${name}`
       case 'swift':
-        return `${cppName}: ${this.type.getCode('swift')}`
+        return `${name}: ${this.type.getCode('swift')}`
+      case 'kotlin':
+        return `${name}: ${this.type.getCode('kotlin')}`
       default:
         throw new Error(
           `Language ${language} is not yet supported for parameters!`
