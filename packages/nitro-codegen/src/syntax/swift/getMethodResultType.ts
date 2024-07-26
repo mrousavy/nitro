@@ -1,4 +1,4 @@
-import { createFileMetadataString } from '../helpers.js'
+import type { HybridObjectName } from '../getHybridObjectName.js'
 import type { Method } from '../Method.js'
 import { SwiftCxxBridgedType } from './SwiftCxxBridgedType.js'
 
@@ -10,26 +10,26 @@ export interface MethodResult {
 }
 
 export function getMethodResultType(
-  bridgeClassName: string,
+  hybridObjectName: HybridObjectName,
   method: Method
 ): MethodResult {
   const returnType = new SwiftCxxBridgedType(method.returnType)
-  const name = `${bridgeClassName}_${method.name}_Result`
+  const name = `${hybridObjectName.TSpecCxx}_${method.name}_Result`
   const hasType = method.returnType.kind !== 'void'
+
+  const swiftMethodSignature = `${hybridObjectName.TSpec}.${method.name}(${method.parameters.map((p) => `${p.name}:`).join(', ')})`
 
   return {
     typename: name,
     hasType: hasType,
     swiftEnumCode: `
-${createFileMetadataString(`${name}.swift`)}
-
-import NitroModules
-
 /**
- * C++ does not support catching Swift errors yet, so we have to wrap
- * them in a Result type.
- * - .value means the function returned successfully (either a value, or void)
- * - .error means the function threw any Error. Only the message can be propagated
+ * The exception-free result type for ${hybridObjectName.TSpec}.${method.name}(...).
+ * Original func:
+ * \`\`\`swift
+ * ${method.getCode('swift')}
+ * \`\`\`
+ * - seealso: \`${swiftMethodSignature}\`
  */
 @frozen
 public enum ${name} {
