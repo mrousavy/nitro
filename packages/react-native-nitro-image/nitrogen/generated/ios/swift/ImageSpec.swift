@@ -30,7 +30,6 @@ import NitroModules
  */
 public protocol ImageSpec: HybridObjectSpec {
   // Properties
-  var size: ImageSize { get }
   var pixelFormat: PixelFormat { get }
   var someSettableProp: Double { get set }
 

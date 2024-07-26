@@ -41,7 +41,11 @@ if (project.getSourceFiles().length === 0) {
 }
 
 const outFolder = path.join(baseDirectory, 'nitrogen', 'generated')
-const filesBefore = await fs.readdir(outFolder, { recursive: true })
+const currentFiles = await fs.readdir(outFolder, {
+  recursive: true,
+})
+const filesBefore = currentFiles.map((f) => path.join(outFolder, f))
+const filesAfter: string[] = []
 
 for (const sourceFile of project.getSourceFiles()) {
   console.log(`⏳  Parsing ${sourceFile.getBaseName()}...`)
@@ -104,6 +108,7 @@ for (const sourceFile of project.getSourceFiles()) {
         for (const file of files) {
           const basePath = path.join(outFolder, file.platform, file.language)
           await writeFile(basePath, file)
+          filesAfter.push(path.join(basePath, file.name))
         }
       }
 
@@ -129,12 +134,17 @@ console.log(
 )
 console.log(`💡  Your code is in ${prettifyDirectory(outFolder)}`)
 
-const filesAfter = await fs.readdir(outFolder, { recursive: true })
-
 const addedFiles = filesAfter.filter((f) => !filesBefore.includes(f))
 const removedFiles = filesBefore.filter((f) => !filesAfter.includes(f))
 if (addedFiles.length > 0 || removedFiles.length > 0) {
   console.log(
-    `🔄  Removed ${removedFiles.length} files, Added ${addedFiles.length} - you need to run 'pod install'/sync gradle to update files.`
+    `🔄  Added ${addedFiles.length} files and removed ${removedFiles.length} files - you need to run 'pod install'/sync gradle to update files.`
   )
 }
+const promises = removedFiles.map(async (file) => {
+  const stat = await fs.stat(file)
+  if (stat.isFile()) {
+    await fs.rm(file)
+  }
+})
+await Promise.all(promises)

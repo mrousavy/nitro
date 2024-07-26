@@ -14,14 +14,11 @@
 #error NitroModules cannot be found! Are you sure you installed react-native-nitro properly?
 #endif
 
-// Forward declaration of `ImageSize` to properly resolve imports.
-struct ImageSize;
 // Forward declaration of `PixelFormat` to properly resolve imports.
 enum class PixelFormat;
 // Forward declaration of `ImageFormat` to properly resolve imports.
 enum class ImageFormat;
 
-#include "ImageSize.hpp"
 #include "PixelFormat.hpp"
 #include "ImageFormat.hpp"
 #include "Func_void_std__string.hpp"
@@ -45,7 +42,6 @@ class HybridImage: public HybridObject {
 
   public:
     // Properties
-    virtual ImageSize getSize() = 0;
     virtual PixelFormat getPixelFormat() = 0;
     virtual double getSomeSettableProp() = 0;
     virtual void setSomeSettableProp(double someSettableProp) = 0;

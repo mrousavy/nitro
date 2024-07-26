@@ -13,14 +13,11 @@
 // Forward declaration of `ImageSpecCxx` to properly resolve imports.
 namespace NitroImage { class ImageSpecCxx; }
 
-// Forward declaration of `ImageSize` to properly resolve imports.
-struct ImageSize;
 // Forward declaration of `PixelFormat` to properly resolve imports.
 enum class PixelFormat;
 // Forward declaration of `ImageFormat` to properly resolve imports.
 enum class ImageFormat;
 
-#include "ImageSize.hpp"
 #include "PixelFormat.hpp"
 #include "ImageFormat.hpp"
 #include "Func_void_std__string.hpp"
@@ -47,9 +44,6 @@ public:
 
 public:
   // Properties
-  inline ImageSize getSize() noexcept override {
-    return _swiftPart.getSize();
-  }
   inline PixelFormat getPixelFormat() noexcept override {
     auto result = _swiftPart.getPixelFormat();
     return static_cast<PixelFormat>(result);
