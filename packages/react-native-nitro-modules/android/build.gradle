@@ -19,6 +19,7 @@ def isNewArchitectureEnabled() {
 }
 
 apply plugin: "com.android.library"
+apply plugin: 'org.jetbrains.kotlin.android'
 
 if (isNewArchitectureEnabled()) {
   apply plugin: "com.facebook.react"
