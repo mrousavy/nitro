@@ -307,7 +307,7 @@ template <> struct JSIConverter<std::shared_ptr<jsi::MutableBuffer>> {
       throw std::runtime_error("Object \"" + arg.toString(runtime).utf8(runtime) + "\" is not an ArrayBuffer!");
     }
     jsi::ArrayBuffer arrayBuffer = object.getArrayBuffer(runtime);
-    return std::make_shared<ArrayBuffer>(arrayBuffer.data(runtime), arrayBuffer.size(runtime));
+    return std::make_shared<ArrayBuffer>(arrayBuffer.data(runtime), arrayBuffer.size(runtime), false);
   }
   static inline jsi::Value toJSI(jsi::Runtime& runtime, std::shared_ptr<jsi::MutableBuffer> buffer) {
     return jsi::ArrayBuffer(runtime, buffer);

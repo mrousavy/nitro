@@ -16,6 +16,11 @@ using namespace facebook;
 
 using DeleteFn = std::function<void(uint8_t*)>;
 
+static DeleteFn defaultDeleteFn = [](uint8_t* buffer) {
+  delete[] buffer;
+};
+
+
 /**
  * Represents a raw byte buffer that can be read from-, and
  * written to- from both JavaScript and C++.
@@ -31,26 +36,18 @@ using DeleteFn = std::function<void(uint8_t*)>;
 class ArrayBuffer: public jsi::MutableBuffer {
 public:
   /**
-   * Create a new **non-owning**, constant `ArrayBuffer`.
-   * The `ArrayBuffer` cannot be kept in memory, as JS owns the data
-   * and it can be deleted at any point in time.
-   */
-  ArrayBuffer(uint8_t* data, size_t size): _data(data), _size(size), _deleteFunc(nullptr) { }
-  /**
    * Create a new **owning** `ArrayBuffer`.
    * The `ArrayBuffer` can be kept in memory, as C++ owns the data
    * and will only delete it once this `ArrayBuffer` gets deleted
    */
   ArrayBuffer(uint8_t* data, size_t size, DeleteFn&& deleteFunc): _data(data), _size(size), _deleteFunc(std::move(deleteFunc)) { }
   /**
-   * Create a new **owning** `ArrayBuffer`.
-   * The `ArrayBuffer` can be kept in memory, as C++ owns the data
-   * and will only delete it once this `ArrayBuffer` gets deleted
+   * Create a new `ArrayBuffer`.
+   * If `destroyOnDeletion` is `true`, the `ArrayBuffer` is **owning**, otherwise it is **non-owning**.
+   * The `ArrayBuffer` can only be safely kept in memory if it is owning (`isOwning()`).
    */
-  ArrayBuffer(uint8_t* data, size_t size, bool destroyOnDeletion = true): _data(data), _size(size) {
-    _deleteFunc = [](uint8_t* buffer) {
-      delete[] buffer;
-    };
+  ArrayBuffer(uint8_t* data, size_t size, bool destroyOnDeletion): _data(data), _size(size) {
+    _deleteFunc = destroyOnDeletion ? defaultDeleteFn : nullptr;
   }
   
   // ArrayBuffer cannot be copied
@@ -64,12 +61,16 @@ public:
     }
   }
   
-  uint8_t* data() override {
+  uint8_t* data() noexcept override {
     return _data;
   }
   
-  size_t size() const override {
+  size_t size() const noexcept override {
     return _size;
+  }
+  
+  bool isOwner() const noexcept {
+    return _deleteFunc != nullptr;
   }
   
 private:

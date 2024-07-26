@@ -57,7 +57,7 @@ import NitroModules
  * - Other HostObjects need to be wrapped/unwrapped from the Swift TCxx wrapper
  * - Throwing methods need to be wrapped with a Result<T, Error> type, as exceptions cannot be propagated to C++
  */
-public class ${name.TSpecCxx} {
+public final class ${name.TSpecCxx} {
   private(set) var implementation: ${name.TSpec}
 
   public init(_ implementation: ${name.TSpec}) {
