@@ -16,6 +16,8 @@ export class NumberType implements Type {
         return 'double'
       case 'swift':
         return 'Double'
+      case 'kotlin':
+        return 'Double'
       default:
         throw new Error(
           `Language ${language} is not yet supported for NumberType!`

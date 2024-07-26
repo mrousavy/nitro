@@ -23,6 +23,8 @@ export class OptionalType implements Type {
         return `std::optional<${wrapping}>`
       case 'swift':
         return `${wrapping}?`
+      case 'kotlin':
+        return `${wrapping}?`
       default:
         throw new Error(
           `Language ${language} is not yet supported for OptionalType!`

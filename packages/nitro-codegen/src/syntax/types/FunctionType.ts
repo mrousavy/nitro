@@ -67,6 +67,8 @@ export class FunctionType implements Type {
         return specialization.typename
       case 'swift':
         return specialization.typename
+      case 'kotlin':
+        return specialization.typename
       default:
         throw new Error(
           `Language ${language} is not yet supported for FunctionType!`

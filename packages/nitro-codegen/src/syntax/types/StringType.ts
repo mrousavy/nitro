@@ -16,6 +16,8 @@ export class StringType implements Type {
         return 'std::string'
       case 'swift':
         return 'String'
+      case 'kotlin':
+        return 'String'
       default:
         throw new Error(
           `Language ${language} is not yet supported for StringType!`

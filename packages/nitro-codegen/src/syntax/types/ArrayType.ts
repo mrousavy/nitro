@@ -25,6 +25,8 @@ export class ArrayType implements Type {
         return `std::vector<${itemCode}>`
       case 'swift':
         return `[${itemCode}]`
+      case 'kotlin':
+        return `Collection<${itemCode}>`
       default:
         throw new Error(
           `Language ${language} is not yet supported for ArrayType!`

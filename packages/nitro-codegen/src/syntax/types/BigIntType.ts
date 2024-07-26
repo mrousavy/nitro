@@ -17,6 +17,8 @@ export class BigIntType implements Type {
         return 'int64_t'
       case 'swift':
         return 'Int64'
+      case 'kotlin':
+        return 'Long'
       default:
         throw new Error(
           `Language ${language} is not yet supported for BigIntType!`

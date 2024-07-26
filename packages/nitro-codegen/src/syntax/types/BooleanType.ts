@@ -17,6 +17,8 @@ export class BooleanType implements Type {
         return 'bool'
       case 'swift':
         return 'Bool'
+      case 'kotlin':
+        return 'Boolean'
       default:
         throw new Error(
           `Language ${language} is not yet supported for BooleanType!`

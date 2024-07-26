@@ -27,6 +27,9 @@ export class EnumType implements Type {
       case 'swift':
         // TODO: Namespace?
         return this.enumName
+      case 'kotlin':
+        // TODO: Namespace?
+        return this.enumName
       default:
         throw new Error(
           `Language ${language} is not yet supported for NumberType!`

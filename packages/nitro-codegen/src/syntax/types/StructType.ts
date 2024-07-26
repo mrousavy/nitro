@@ -30,6 +30,9 @@ export class StructType implements Type {
       case 'swift':
         // TODO: Namespace?
         return this.structName
+      case 'kotlin':
+        // TODO: Namespace?
+        return this.structName
       default:
         throw new Error(
           `Language ${language} is not yet supported for StructType!`

@@ -27,6 +27,8 @@ export class HybridObjectType implements Type {
         return `std::shared_ptr<${name.HybridT}>`
       case 'swift':
         return name.TSpec
+      case 'kotlin':
+        return name.TSpec
       default:
         throw new Error(
           `Language ${language} is not yet supported for HybridObjectType!`
