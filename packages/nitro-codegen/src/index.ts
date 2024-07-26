@@ -140,15 +140,19 @@ console.log(
 console.log(`💡  Your code is in ${prettifyDirectory(outFolder)}`)
 
 const addedFiles = filesAfter.filter((f) => !filesBefore.includes(f))
-const removedFiles = filesBefore.filter((f) => !filesAfter.includes(f))
+const removedFiles = filesBefore.filter(
+  (fb) => !filesAfter.some((f) => f.includes(fb))
+)
 if (addedFiles.length > 0 || removedFiles.length > 0) {
   let text = ''
+  const as = addedFiles.length > 1 ? 's' : ''
+  const rs = removedFiles.length > 1 ? 's' : ''
   if (addedFiles.length > 0 && removedFiles.length === 0) {
-    text = `Added ${addedFiles.length} files`
+    text = `Added ${addedFiles.length} file${as}`
   } else if (addedFiles.length === 0 && removedFiles.length > 0) {
-    text = `Removed ${removedFiles.length} files`
+    text = `Removed ${removedFiles.length} file${rs}`
   } else {
-    text = `Added ${addedFiles.length} files and removed ${removedFiles.length} files`
+    text = `Added ${addedFiles.length} file${as} and removed ${removedFiles.length} file${rs}`
   }
 
   console.log(
