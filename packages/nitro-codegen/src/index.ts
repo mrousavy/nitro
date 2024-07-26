@@ -6,8 +6,8 @@ import { generatePlatformFiles } from './createPlatformSpec.js'
 import { promises as fs } from 'fs'
 import path from 'path'
 import { getBaseDirectory, prettifyDirectory } from './getCurrentDir.js'
-import { capitalizeName, errorToString, indent } from './stringUtils.js'
-import type { SourceFile } from './syntax/SourceFile.js'
+import { errorToString, indent } from './stringUtils.js'
+import { writeFile } from './writeFile.js'
 
 const start = performance.now()
 let targetSpecs = 0
@@ -41,8 +41,7 @@ if (project.getSourceFiles().length === 0) {
 }
 
 const outFolder = path.join(baseDirectory, 'nitrogen', 'generated')
-// Clean output folder before writing to it
-await fs.rm(outFolder, { force: true, recursive: true })
+const filesBefore = await fs.readdir(outFolder, { recursive: true })
 
 for (const sourceFile of project.getSourceFiles()) {
   console.log(`⏳  Parsing ${sourceFile.getBaseName()}...`)
@@ -130,15 +129,12 @@ console.log(
 )
 console.log(`💡  Your code is in ${prettifyDirectory(outFolder)}`)
 
-async function writeFile(basePath: string, file: SourceFile): Promise<void> {
-  const filepath = path.join(basePath, file.name)
-  const language = capitalizeName(file.language)
-  console.log(`          ${language}: Creating ${file.name}...`)
+const filesAfter = await fs.readdir(outFolder, { recursive: true })
 
-  const dir = path.dirname(filepath)
-  // Create directory if it doesn't exist yet
-  await fs.mkdir(dir, { recursive: true })
-
-  // Write file
-  await fs.writeFile(filepath, file.content.trim(), 'utf8')
+const addedFiles = filesAfter.filter((f) => !filesBefore.includes(f))
+const removedFiles = filesBefore.filter((f) => !filesAfter.includes(f))
+if (addedFiles.length > 0 || removedFiles.length > 0) {
+  console.log(
+    `🔄  Removed ${removedFiles.length} files, Added ${addedFiles.length} - you need to run 'pod install'/sync gradle to update files.`
+  )
 }
