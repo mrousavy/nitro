@@ -41,6 +41,13 @@ public final class ImageSpecCxx {
   }
 
   // Properties
+  public var size: ImageSize {
+    @inline(__always)
+    get {
+      return self.implementation.size
+    }
+  }
+  
   public var pixelFormat: Int32 {
     @inline(__always)
     get {
