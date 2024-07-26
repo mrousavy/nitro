@@ -10,10 +10,12 @@
 #include <string>
 #include <memory>
 
-#if ANDROID
-#include <ReactCommon/CallInvokerHolder.h>
+#if __has_include(<ReactCommon/CallInvoker.h>)
+// Android style imports
+#include <ReactCommon/CallInvoker.h>
 #include <ReactCommon/CxxTurboModuleUtils.h>
 #else
+// iOS style imports
 #include <React-callinvoker/ReactCommon/CallInvoker.h>
 #include <ReactCommon/ReactCommon/CxxTurboModuleUtils.h>
 #endif
