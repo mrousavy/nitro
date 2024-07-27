@@ -11,9 +11,7 @@ import { FunctionType } from './types/FunctionType.js'
 import { PromiseType } from './types/PromiseType.js'
 import { RecordType } from './types/RecordType.js'
 import { ArrayBufferType } from './types/ArrayBufferType.js'
-import { createCppEnum } from './c++/CppEnum.js'
 import { EnumType } from './types/EnumType.js'
-import { createCppUnion } from './c++/CppUnion.js'
 import { HybridObjectType } from './types/HybridObjectType.js'
 import { createCppStruct } from './c++/CppStruct.js'
 import { StructType } from './types/StructType.js'
@@ -140,8 +138,7 @@ export function createType(type: TSMorphType, isOptional: boolean): Type {
     const enumDeclaration = declaration.asKindOrThrow(
       ts.SyntaxKind.EnumDeclaration
     )
-    const enumFile = createCppEnum(typename, enumDeclaration.getMembers())
-    return new EnumType(typename, enumFile)
+    return new EnumType(typename, enumDeclaration)
   } else if (type.isUnion()) {
     const symbol = type.getAliasSymbol()
     if (symbol == null) {
@@ -152,8 +149,7 @@ export function createType(type: TSMorphType, isOptional: boolean): Type {
       )
     }
     const typename = symbol.getEscapedName()
-    const enumFile = createCppUnion(typename, type.getUnionTypes())
-    return new EnumType(typename, enumFile)
+    return new EnumType(typename, type)
   } else if (type.isInterface()) {
     // It references another interface/type, either a simple struct, or another HybridObject
     const typename = type.getSymbolOrThrow().getEscapedName()

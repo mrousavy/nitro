@@ -1,39 +1,27 @@
-import type { Type } from 'ts-morph'
 import type { SourceFile } from '../SourceFile.js'
-import { createFileMetadataString, escapeCppName } from './../helpers.js'
+import { createFileMetadataString } from './../helpers.js'
 import { indent } from '../../stringUtils.js'
+import type { EnumMember } from '../types/EnumType.js'
 
+/**
+ * Creates a C++ enum that converts to a TypeScript union (aka just strings).
+ */
 export function createCppUnion(
   typename: string,
-  unionTypes: Type[]
+  enumMembers: EnumMember[]
 ): SourceFile {
-  const enumValues = unionTypes.map((t) => {
-    if (t.isStringLiteral()) {
-      const literalValue = t.getLiteralValueOrThrow()
-      if (typeof literalValue !== 'string')
-        throw new Error(
-          `${typename}: Value "${literalValue}" is not a string - it is ${typeof literalValue}!`
-        )
-      return {
-        name: literalValue,
-        escapedName: escapeCppName(literalValue),
-      }
-    } else {
-      throw new Error(
-        `${typename}: Value "${t.getText()}" is not a string literal - it cannot be represented in a C++ enum!`
-      )
-    }
-  })
-  const cppEnumMembers = enumValues.map((m) => `${m.escapedName},`).join('\n')
-  const cppFromJsiHashCases = enumValues
+  const cppEnumMembers = enumMembers
+    .map((m, i) => `${m.name} = ${i},`)
+    .join('\n')
+  const cppFromJsiHashCases = enumMembers
     .map((v) =>
-      `case hashString("${v.name}"): return ${typename}::${v.escapedName};`.trim()
+      `case hashString("${v.stringValue}"): return ${typename}::${v.name};`.trim()
     )
     .join('\n')
-  const cppToJsiCases = enumValues
+  const cppToJsiCases = enumMembers
     .map(
       (v) =>
-        `case ${typename}::${v.escapedName}: return JSIConverter<std::string>::toJSI(runtime, "${v.name}");`
+        `case ${typename}::${v.name}: return JSIConverter<std::string>::toJSI(runtime, "${v.stringValue}");`
     )
     .join('\n')
 

@@ -15,9 +15,9 @@
  * An enum which can be represented as a JavaScript union (PixelFormat).
  */
 enum class PixelFormat {
-  rgb,
-  yuv_8bit,
-  yuv_10bit,
+  rgb = 0,
+  yuv_8bit = 1,
+  yuv_10bit = 2,
 } __attribute__((enum_extensibility(closed)));
 
 namespace margelo::nitro {

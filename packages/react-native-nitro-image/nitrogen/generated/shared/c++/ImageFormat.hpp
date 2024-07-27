@@ -15,8 +15,8 @@
  * An enum which can be represented as a JavaScript union (ImageFormat).
  */
 enum class ImageFormat {
-  jpg,
-  png,
+  jpg = 0,
+  png = 1,
 } __attribute__((enum_extensibility(closed)));
 
 namespace margelo::nitro {

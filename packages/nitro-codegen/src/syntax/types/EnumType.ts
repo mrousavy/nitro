@@ -1,15 +1,70 @@
+import { EnumDeclaration } from 'ts-morph'
+import { Type as TSMorphType, type ts } from 'ts-morph'
 import type { Language } from '../../getPlatformSpecs.js'
 import { getForwardDeclaration } from '../c++/getForwardDeclaration.js'
 import { type SourceFile, type SourceImport } from '../SourceFile.js'
 import type { Type, TypeKind } from './Type.js'
+import { createCppEnum } from '../c++/CppEnum.js'
+import { escapeCppName } from '../helpers.js'
+import { createCppUnion } from '../c++/CppUnion.js'
+
+export interface EnumMember {
+  name: string
+  value: number
+  stringValue: string
+}
 
 export class EnumType implements Type {
   readonly enumName: string
+  readonly enumMembers: EnumMember[]
+  readonly jsType: 'enum' | 'union'
   readonly declarationFile: SourceFile
 
-  constructor(enumName: string, declarationFile: SourceFile) {
+  constructor(enumName: string, enumDeclaration: EnumDeclaration)
+  constructor(enumName: string, union: TSMorphType<ts.UnionType>)
+  constructor(
+    enumName: string,
+    declaration: EnumDeclaration | TSMorphType<ts.UnionType>
+  ) {
     this.enumName = enumName
-    this.declarationFile = declarationFile
+    if (declaration instanceof EnumDeclaration) {
+      // It's a JS enum { ... }
+      this.jsType = 'enum'
+      this.enumMembers = declaration.getMembers().map<EnumMember>((m) => {
+        const name = m.getSymbolOrThrow().getEscapedName()
+        const value = m.getValue()
+        if (typeof value !== 'number') {
+          throw new Error(
+            `Enum member ${enumName}.${name} is ${value} (${typeof value}), which cannot be represented in C++ enums.\n` +
+              `Each enum member must be a number! If you want to use strings, use TypeScript unions ("a" | "b") instead!`
+          )
+        }
+        return { name: name, value: value, stringValue: name }
+      })
+      this.declarationFile = createCppEnum(enumName, this.enumMembers)
+    } else {
+      // It's a TS union '..' | '..'
+      this.jsType = 'union'
+      this.enumMembers = declaration.getUnionTypes().map((t, i) => {
+        if (t.isStringLiteral()) {
+          const literalValue = t.getLiteralValueOrThrow()
+          if (typeof literalValue !== 'string')
+            throw new Error(
+              `${enumName}: Value "${literalValue}" is not a string - it is ${typeof literalValue}!`
+            )
+          return {
+            name: escapeCppName(literalValue),
+            value: i,
+            stringValue: literalValue,
+          }
+        } else {
+          throw new Error(
+            `${enumName}: Value "${t.getText()}" is not a string literal - it cannot be represented in a C++ enum!`
+          )
+        }
+      })
+      this.declarationFile = createCppUnion(enumName, this.enumMembers)
+    }
   }
 
   get canBePassedByReference(): boolean {

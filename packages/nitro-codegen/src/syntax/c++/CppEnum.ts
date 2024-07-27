@@ -1,27 +1,17 @@
-import type { EnumMember } from 'ts-morph'
 import { indent } from '../../stringUtils.js'
 import type { SourceFile } from '../SourceFile.js'
 import { createFileMetadataString, escapeCppName } from '../helpers.js'
+import type { EnumMember } from '../types/EnumType.js'
 
+/**
+ * Creates a C++ enum that converts to a JS enum (aka just int)
+ */
 export function createCppEnum(
   typename: string,
   enumMembers: EnumMember[]
 ): SourceFile {
-  // Map Enum to { name, value }
-  const enumValues = enumMembers.map((m) => {
-    const name = m.getSymbolOrThrow().getEscapedName()
-    const value = m.getValue()
-    if (typeof value !== 'number') {
-      throw new Error(
-        `Enum member ${typename}.${name} is ${value} (${typeof value}), which cannot be represented in C++ enums.\n` +
-          `Each enum member must be a number! If you want to use strings, use TypeScript unions ("a" | "b") instead!`
-      )
-    }
-    return { name: name, value: value }
-  })
-
   // Map enum to C++ code
-  const cppEnumMembers = enumValues
+  const cppEnumMembers = enumMembers
     .map((m) => `${escapeCppName(m.name)} = ${m.value},`)
     .join('\n')
 

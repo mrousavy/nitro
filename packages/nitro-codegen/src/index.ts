@@ -9,6 +9,7 @@ import { getBaseDirectory, prettifyDirectory } from './getCurrentDir.js'
 import { capitalizeName, errorToString, indent } from './stringUtils.js'
 import { writeFile } from './writeFile.js'
 import chalk from 'chalk'
+import { getFiles } from './getFiles.js'
 
 const start = performance.now()
 let targetSpecs = 0
@@ -44,10 +45,7 @@ if (project.getSourceFiles().length === 0) {
 }
 
 const outFolder = path.join(baseDirectory, 'nitrogen', 'generated')
-const currentFiles = await fs.readdir(outFolder, {
-  recursive: true,
-})
-const filesBefore = currentFiles.map((f) => path.join(outFolder, f))
+const filesBefore = await getFiles(outFolder)
 const filesAfter: string[] = []
 
 for (const sourceFile of project.getSourceFiles()) {
@@ -140,9 +138,7 @@ console.log(
 console.log(`💡  Your code is in ${prettifyDirectory(outFolder)}`)
 
 const addedFiles = filesAfter.filter((f) => !filesBefore.includes(f))
-const removedFiles = filesBefore.filter(
-  (fb) => !filesAfter.some((f) => f.includes(fb))
-)
+const removedFiles = filesBefore.filter((f) => !filesAfter.includes(f))
 if (addedFiles.length > 0 || removedFiles.length > 0) {
   let text = ''
   const as = addedFiles.length > 1 ? 's' : ''
