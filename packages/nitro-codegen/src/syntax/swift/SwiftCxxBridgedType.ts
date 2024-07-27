@@ -5,8 +5,8 @@ import {
 } from '../getHybridObjectName.js'
 import type { SourceImport } from '../SourceFile.js'
 import { FunctionType } from '../types/FunctionType.js'
+import { getTypeAs } from '../types/getTypeAs.js'
 import { HybridObjectType } from '../types/HybridObjectType.js'
-import { NamedWrappingType } from '../types/NamedWrappingType.js'
 import type { Type } from '../types/Type.js'
 
 export class SwiftCxxBridgedType {
@@ -156,17 +156,4 @@ export class SwiftCxxBridgedType {
 function getTypeHybridObjectName(type: Type): HybridObjectName {
   const hybridObject = getTypeAs(type, HybridObjectType)
   return getHybridObjectName(hybridObject.hybridObjectName)
-}
-
-function getTypeAs<T>(
-  type: Type,
-  classReference: new (...args: any[]) => T
-): T {
-  if (type instanceof classReference) {
-    return type as unknown as T
-  } else if (type instanceof NamedWrappingType) {
-    return getTypeAs(type.type, classReference)
-  } else {
-    throw new Error(`Type of kind "${type.kind}" is not a ${classReference}!`)
-  }
 }

@@ -13,6 +13,9 @@ ${createFileMetadataString(`${enumType.enumName}.kt`)}
 
 package ${packageName}
 
+/**
+ * Represents the JavaScript enum/union "${enumType.enumName}".
+ */
 enum class ${enumType.enumName} {
   ${indent(members.join(',\n'), '  ')}
 }

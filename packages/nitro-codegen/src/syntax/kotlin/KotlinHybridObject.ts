@@ -1,9 +1,13 @@
 import { indent } from '../../stringUtils.js'
+import { getAllTypes } from '../getAllTypes.js'
 import { getHybridObjectName } from '../getHybridObjectName.js'
 import { createFileMetadataString } from '../helpers.js'
 import type { HybridObjectSpec } from '../HybridObjectSpec.js'
 import type { SourceFile } from '../SourceFile.js'
+import { EnumType } from '../types/EnumType.js'
+import { getTypeAs } from '../types/getTypeAs.js'
 import { createFbjniHybridObject } from './FbjniHybridObject.js'
+import { createKotlinEnum } from './KotlinEnum.js'
 
 // TODO: Make this customizable
 const PACKAGE = 'com.margelo.nitro.image'
@@ -19,6 +23,7 @@ export function createKotlinHybridObject(spec: HybridObjectSpec): SourceFile[] {
     .map((p) => p.getCode('kotlin', { doNotStrip: true, virtual: true }))
     .join('\n\n')
 
+  // 1. Create Kotlin abstract class definition
   const abstractClassCode = `
 ${createFileMetadataString(`${name.HybridT}.kt`)}
 
@@ -71,7 +76,20 @@ abstract class ${name.HybridT}: HybridObject {
 }
   `.trim()
 
+  // 2. Create C++ (fbjni) bindings
   const cppFiles = createFbjniHybridObject(spec)
+
+  // 3. Create enums or structs in Kotlin
+  const allTypes = getAllTypes(spec)
+  const enums: SourceFile[] = []
+  for (const type of allTypes) {
+    switch (type.kind) {
+      case 'enum':
+        const enumType = getTypeAs(type, EnumType)
+        const enumFile = createKotlinEnum(PACKAGE, enumType)
+        enums.push(...enumFile)
+    }
+  }
 
   const files: SourceFile[] = []
   files.push({
@@ -81,5 +99,6 @@ abstract class ${name.HybridT}: HybridObject {
     platform: 'android',
   })
   files.push(...cppFiles)
+  files.push(...enums)
   return files
 }
