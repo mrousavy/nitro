@@ -3,6 +3,7 @@ import { getHybridObjectName } from '../getHybridObjectName.js'
 import { createFileMetadataString } from '../helpers.js'
 import type { HybridObjectSpec } from '../HybridObjectSpec.js'
 import type { SourceFile } from '../SourceFile.js'
+import { createFbjniHybridObject } from './FbjniHybridObject.js'
 
 // TODO: Make this customizable
 const PACKAGE = 'com.margelo.nitro.image'
@@ -33,6 +34,8 @@ interface ${interfaceName}: HybridObjectSpec {
 }
   `
 
+  const cppFiles = createFbjniHybridObject(spec)
+
   const files: SourceFile[] = []
   files.push({
     content: interfaceCode,
@@ -40,5 +43,6 @@ interface ${interfaceName}: HybridObjectSpec {
     name: `${interfaceName}.kt`,
     platform: 'android',
   })
+  files.push(...cppFiles)
   return files
 }

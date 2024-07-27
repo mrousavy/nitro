@@ -15,6 +15,11 @@ export interface HybridObjectName {
    */
   TSpecCxx: string
   /**
+   * The name of the Java/C++ (FB-JNI) HybridClass that bridges C++ to Java.
+   * @example "JImageSpec"
+   */
+  JTSpec: string
+  /**
    * The name of the C++ class that actually represents the Hybrid Object.
    * @example "HybridImage"
    */
@@ -33,6 +38,7 @@ export function getHybridObjectName(
     T: hybridObjectName,
     TSpec: `${hybridObjectName}Spec`,
     TSpecCxx: `${hybridObjectName}SpecCxx`,
+    JTSpec: `J${hybridObjectName}Spec`,
     HybridT: `Hybrid${hybridObjectName}`,
     HybridTSwift: `Hybrid${hybridObjectName}Swift`,
   }
