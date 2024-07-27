@@ -8,6 +8,8 @@
 
 package com.margelo.nitro.image
 
+import androidx.annotation.Keep
+import com.facebook.proguard.annotations.DoNotStrip
 import com.margelo.nitro.HybridObjectSpec
 
 /**
@@ -16,11 +18,21 @@ import com.margelo.nitro.HybridObjectSpec
  */
 interface ImageSpec: HybridObjectSpec {
   // Properties
+  @DoNotStrip
+  @Keep
   val size: ImageSize
+  @DoNotStrip
+  @Keep
   val pixelFormat: PixelFormat
+  @DoNotStrip
+  @Keep
   var someSettableProp: Double
 
   // Methods
+  @DoNotStrip
+  @Keep
   fun toArrayBuffer(format: ImageFormat): Double
+  @DoNotStrip
+  @Keep
   fun saveToFile(path: String, onFinished: Func_void_std__string): Unit
 }

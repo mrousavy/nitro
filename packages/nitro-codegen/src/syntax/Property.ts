@@ -36,6 +36,11 @@ export interface PropertyModifiers {
    * Whether this property overrides a base/super property.
    */
   override?: boolean
+  /**
+   * Whether this property has a `@DoNotStrip` and `@Keep` attribute to avoid
+   * it from being stripped from the binary by the Java compiler or ProGuard.
+   */
+  doNotStrip?: boolean
 }
 
 export class Property implements CodeNode {
@@ -124,6 +129,9 @@ set {
         const type = this.type.getCode('swift')
         const keyword = this.isReadonly ? 'val' : 'var'
         const lines: string[] = []
+        if (modifiers?.doNotStrip) {
+          lines.push('@DoNotStrip', '@Keep')
+        }
         lines.push(`${keyword} ${this.name}: ${type}`)
         if (body != null) {
           lines.push(`

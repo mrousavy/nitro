@@ -31,6 +31,11 @@ export interface MethodModifiers {
    * Whether this function overrides a base/super function.
    */
   override?: boolean
+  /**
+   * Whether this method has a `@DoNotStrip` and `@Keep` attribute to avoid
+   * it from being stripped from the binary by the Java compiler or ProGuard.
+   */
+  doNotStrip?: boolean
 }
 
 export class Method implements CodeNode {
@@ -119,6 +124,8 @@ ${signature} {
 
         if (modifiers?.inline) signature = `inline ${signature}`
         if (modifiers?.override) signature = `override ${signature}`
+        if (modifiers?.doNotStrip)
+          signature = `@DoNotStrip\n@Keep\n${signature}`
 
         if (body == null) {
           return signature

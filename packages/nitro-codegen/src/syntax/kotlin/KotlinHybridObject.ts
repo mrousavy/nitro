@@ -11,14 +11,20 @@ const PACKAGE = 'com.margelo.nitro.image'
 export function createKotlinHybridObject(spec: HybridObjectSpec): SourceFile[] {
   const name = getHybridObjectName(spec.name)
   const interfaceName = name.TSpec
-  const properties = spec.properties.map((p) => p.getCode('kotlin')).join('\n')
-  const methods = spec.methods.map((p) => p.getCode('kotlin')).join('\n')
+  const properties = spec.properties
+    .map((p) => p.getCode('kotlin', { doNotStrip: true }))
+    .join('\n')
+  const methods = spec.methods
+    .map((p) => p.getCode('kotlin', { doNotStrip: true }))
+    .join('\n')
 
   const interfaceCode = `
 ${createFileMetadataString(`${interfaceName}.kt`)}
 
 package ${PACKAGE}
 
+import androidx.annotation.Keep
+import com.facebook.proguard.annotations.DoNotStrip
 import com.margelo.nitro.HybridObjectSpec
 
 /**
