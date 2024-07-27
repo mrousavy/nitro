@@ -1,7 +1,7 @@
 {
   "name": "react-native-nitro-modules",
   "version": "0.0.3",
-  "description": "Nitro Modules",
+  "description": "Fast and flexible object-oriented native modules for React Native.",
   "main": "lib/index",
   "module": "lib/index",
   "types": "lib/index.d.ts",

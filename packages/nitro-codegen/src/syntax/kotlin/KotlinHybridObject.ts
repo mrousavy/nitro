@@ -7,6 +7,8 @@ import { createFbjniHybridObject } from './FbjniHybridObject.js'
 
 // TODO: Make this customizable
 const PACKAGE = 'com.margelo.nitro.image'
+// TODO: Make this customizable
+const CPP_LIB_NAME = 'NitroImage'
 
 export function createKotlinHybridObject(spec: HybridObjectSpec): SourceFile[] {
   const name = getHybridObjectName(spec.name)
@@ -49,6 +51,21 @@ abstract class ${name.HybridT}: HybridObject {
 
   // Methods
   ${indent(methods, '  ')}
+
+  companion object {
+    private const val TAG = "${name.HybridT}"
+    init {
+      try {
+        Log.i(TAG, "Loading ${CPP_LIB_NAME} C++ library...")
+        System.loadLibrary("${CPP_LIB_NAME}")
+        Log.i(TAG, "Successfully loaded ${CPP_LIB_NAME} C++ library!")
+      } catch (e: Error) {
+        Log.e(TAG, "Failed to load ${CPP_LIB_NAME} C++ library! Is it properly installed and linked? " +
+                    "Is the name correct? (see \`CMakeLists.txt\`, at \`add_library(...)\`)", e)
+        throw e
+      }
+    }
+  }
 }
   `.trim()
 

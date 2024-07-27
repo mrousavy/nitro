@@ -109,7 +109,7 @@ dependencies {
 if (isNewArchitectureEnabled()) {
   react {
     jsRootDir = file("../src/")
-    libraryName = "Nitro"
+    libraryName = "NitroModules"
     codegenJavaPackageName = "com.margelo.nitro"
   }
 }

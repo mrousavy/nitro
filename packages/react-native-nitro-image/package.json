@@ -1,7 +1,7 @@
 {
   "name": "react-native-nitro-image",
   "version": "0.0.3",
-  "description": "Nitro Modules",
+  "description": "A fast in-memory Image object built with Nitro Modules.",
   "main": "lib/index",
   "module": "lib/index",
   "types": "lib/index.d.ts",
