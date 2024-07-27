@@ -17,3 +17,31 @@ void JImageSpec::registerNatives() {
     makeNativeMethod("initHybrid", JImageSpec::initHybrid),
   });
 }
+
+// Properties
+ImageSize JImageSpec::getSize() override {
+  static const auto method = _javaPart->getClass()->getMethod<ImageSize()>("getSize");
+  return method(_javaPart.get());
+}
+PixelFormat JImageSpec::getPixelFormat() override {
+  static const auto method = _javaPart->getClass()->getMethod<PixelFormat()>("getPixelFormat");
+  return method(_javaPart.get());
+}
+double JImageSpec::getSomeSettableProp() override {
+  static const auto method = _javaPart->getClass()->getMethod<double()>("getSomeSettableProp");
+  return method(_javaPart.get());
+}
+void JImageSpec::setSomeSettableProp(double someSettableProp) override {
+  static const auto method = _javaPart->getClass()->getMethod<void(double)>("setSomeSettableProp");
+  return method(_javaPart.get(), someSettableProp);
+}
+
+// Methods
+double JImageSpec::toArrayBuffer(ImageFormat format) override {
+  static const auto method = _javaPart->getClass()->getMethod<double(ImageFormat)>("toArrayBuffer");
+  return method(_javaPart.get(), format);
+}
+void JImageSpec::saveToFile(const std::string& path, const Func_void_std__string& onFinished) override {
+  static const auto method = _javaPart->getClass()->getMethod<void(std::string, Func_void_std__string)>("saveToFile");
+  return method(_javaPart.get(), path, onFinished);
+}

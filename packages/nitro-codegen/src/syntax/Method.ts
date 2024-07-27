@@ -11,6 +11,11 @@ export type MethodBody = string
 
 export interface MethodModifiers {
   /**
+   * The name of the class that defines this C++ method.
+   * Example: `Person` -> `void Person::sayHi()`
+   */
+  classDefinitionName?: string
+  /**
    * Whether the function should be marked as inlineable.
    */
   inline?: boolean
@@ -68,7 +73,10 @@ export class Method implements CodeNode {
         const params = this.parameters.map((p) => p.getCode('c++'))
 
         // C++ modifiers start in the beginning
-        let signature = `${returnType} ${this.name}(${params.join(', ')})`
+        const name = modifiers?.classDefinitionName
+          ? `${modifiers.classDefinitionName}::${this.name}`
+          : this.name
+        let signature = `${returnType} ${name}(${params.join(', ')})`
         if (modifiers?.inline) signature = `inline ${signature}`
         if (modifiers?.virtual) signature = `virtual ${signature}`
         if (modifiers?.noexcept) signature = `${signature} noexcept`

@@ -17,6 +17,10 @@ public:
   static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis);
   static void registerNatives();
 
+private:
+  // C++ constructor (called from Java via `initHybrid()`)
+  explicit JImageSpec(jni::alias_ref<jhybridobject> jThis) : _javaPart(jni::make_global(jThis)) {}
+
 public:
   // Properties
   ImageSize getSize() override;
@@ -28,9 +32,6 @@ public:
   // Methods
   double toArrayBuffer(ImageFormat format) override;
   void saveToFile(const std::string& path, const Func_void_std__string& onFinished) override;
-
-private:
-  explicit JImageSpec(jni::alias_ref<jhybridobject> jThis) : _javaPart(jni::make_global(jThis)) {}
 
 private:
   friend HybridBase;

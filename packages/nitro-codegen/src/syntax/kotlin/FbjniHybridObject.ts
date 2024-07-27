@@ -2,6 +2,8 @@ import { indent } from '../../stringUtils.js'
 import { getHybridObjectName } from '../getHybridObjectName.js'
 import { createFileMetadataString } from '../helpers.js'
 import type { HybridObjectSpec } from '../HybridObjectSpec.js'
+import type { Method } from '../Method.js'
+import type { Property } from '../Property.js'
 import type { SourceFile } from '../SourceFile.js'
 
 export function createFbjniHybridObject(spec: HybridObjectSpec): SourceFile[] {
@@ -45,6 +47,14 @@ private:
 };
 
   `.trim()
+
+  const propertiesImpl = spec.properties
+    .map((m) => getFbjniPropertyForwardImplementation(spec, m))
+    .join('\n')
+  const methodsImpl = spec.methods
+    .map((m) => getFbjniMethodForwardImplementation(spec, m))
+    .join('\n')
+
   const cppImplCode = `
 ${createFileMetadataString(`${name.JTSpec}.cpp`)}
 
@@ -60,6 +70,11 @@ void ${name.JTSpec}::registerNatives() {
   });
 }
 
+// Properties
+${propertiesImpl}
+
+// Methods
+${methodsImpl}
   `.trim()
 
   const files: SourceFile[] = []
@@ -76,4 +91,45 @@ void ${name.JTSpec}::registerNatives() {
     platform: 'android',
   })
   return files
+}
+
+function getFbjniMethodForwardImplementation(
+  spec: HybridObjectSpec,
+  method: Method
+): string {
+  const name = getHybridObjectName(spec.name)
+
+  const returnType = method.returnType.getCode('c++')
+  const paramsTypes = method.parameters
+    .map((p) => p.type.getCode('c++'))
+    .join(', ')
+  const cxxSignature = `${returnType}(${paramsTypes})`
+
+  const hasParams = method.parameters.length > 0
+  const paramsForward = method.parameters.map((p) => p.name).join(', ')
+
+  const body = `
+static const auto method = _javaPart->getClass()->getMethod<${cxxSignature}>("${method.name}");
+return method(${hasParams ? `_javaPart.get(), ${paramsForward}` : '_javaPart.get()'});
+  `.trim()
+  const code = method.getCode(
+    'c++',
+    {
+      override: true,
+      classDefinitionName: name.JTSpec,
+    },
+    body
+  )
+  return code
+}
+
+function getFbjniPropertyForwardImplementation(
+  spec: HybridObjectSpec,
+  property: Property
+): string {
+  const methods = property.cppMethods.map((m) =>
+    getFbjniMethodForwardImplementation(spec, m)
+  )
+
+  return methods.join('\n')
 }

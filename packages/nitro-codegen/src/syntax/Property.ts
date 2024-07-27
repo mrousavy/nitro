@@ -16,6 +16,11 @@ export interface PropertyBody {
 
 export interface PropertyModifiers {
   /**
+   * The name of the class that defines this C++ property getter/setter method.
+   * Example: `Person` -> `int Person::getAge()`
+   */
+  classDefinitionName?: string
+  /**
    * Whether the property should be marked as inlineable.
    */
   inline?: boolean
