@@ -24,9 +24,11 @@ ${createFileMetadataString(`${name.HybridT}.kt`)}
 
 package ${PACKAGE}
 
+import android.util.Log
 import androidx.annotation.Keep
 import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
+import com.margelo.nitro.HybridObject
 
 /**
  * A Kotlin class representing the ${spec.name} HybridObject.

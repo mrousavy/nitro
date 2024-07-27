@@ -8,9 +8,11 @@
 
 package com.margelo.nitro.image
 
+import android.util.Log
 import androidx.annotation.Keep
 import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
+import com.margelo.nitro.HybridObject
 
 /**
  * A Kotlin class representing the Image HybridObject.
