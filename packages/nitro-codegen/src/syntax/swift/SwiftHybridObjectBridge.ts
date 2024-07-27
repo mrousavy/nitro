@@ -75,7 +75,7 @@ public final class ${name.TSpecCxx} {
   }
 
   // Memory size of the Swift class (plus size of any other allocations)
-  public var memorySize: Int {
+  public var memorySize: UInt {
     return self.implementation.memorySize
   }
 
@@ -207,7 +207,7 @@ public:
 
 public:
   // Get memory pressure
-  virtual inline size_t getExternalMemorySize() noexcept override {
+  inline size_t getExternalMemorySize() noexcept override {
     return _swiftPart.getMemorySize();
   }
 

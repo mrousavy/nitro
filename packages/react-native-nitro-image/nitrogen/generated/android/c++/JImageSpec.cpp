@@ -18,6 +18,11 @@ void JImageSpec::registerNatives() {
   });
 }
 
+size_t JImageSpec::getExternalMemorySize() {
+  static const auto method = _javaPart->getClass()->getMethod<long()>("getMemorySize");
+  return method(_javaPart.get());
+}
+
 // Properties
 ImageSize JImageSpec::getSize() override {
   static const auto method = _javaPart->getClass()->getMethod<ImageSize()>("getSize");

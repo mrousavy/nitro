@@ -41,7 +41,7 @@ public:
 
 public:
   // Get memory pressure
-  virtual inline size_t getExternalMemorySize() noexcept override {
+  inline size_t getExternalMemorySize() noexcept override {
     return _swiftPart.getMemorySize();
   }
 

@@ -21,7 +21,7 @@ public protocol HybridObjectSpec {
    * ```
    */
   var hybridContext: margelo.nitro.HybridContext { get set }
-  
+
   /**
    * Get the memory size of the Swift instance (plus any external heap allocations),
    * in bytes.
@@ -31,13 +31,13 @@ public protocol HybridObjectSpec {
    *
    * @example
    * ```swift
-   * var memorySize: Int {
+   * var memorySize: UInt {
    *   let imageSize = self.uiImage.bytesPerRow * self.uiImage.height
    *   return getSizeOf(self) + imageSize
    * }
    * ```
    */
-  var memorySize: Int { get }
+  var memorySize: UInt { get }
 }
 
 public extension HybridObjectSpec {

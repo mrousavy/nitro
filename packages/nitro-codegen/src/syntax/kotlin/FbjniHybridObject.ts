@@ -2,7 +2,7 @@ import { indent } from '../../stringUtils.js'
 import { getHybridObjectName } from '../getHybridObjectName.js'
 import { createFileMetadataString } from '../helpers.js'
 import type { HybridObjectSpec } from '../HybridObjectSpec.js'
-import type { Method } from '../Method.js'
+import { Method } from '../Method.js'
 import type { Property } from '../Property.js'
 import type { SourceFile } from '../SourceFile.js'
 
@@ -32,6 +32,9 @@ public:
 private:
   // C++ constructor (called from Java via \`initHybrid()\`)
   explicit ${name.JTSpec}(jni::alias_ref<jhybridobject> jThis) : _javaPart(jni::make_global(jThis)) {}
+
+public:
+  size_t getExternalMemorySize() noexcept override;
 
 public:
   // Properties
@@ -68,6 +71,11 @@ void ${name.JTSpec}::registerNatives() {
   registerHybrid({
     makeNativeMethod("initHybrid", ${name.JTSpec}::initHybrid),
   });
+}
+
+size_t ${name.JTSpec}::getExternalMemorySize() {
+  static const auto method = _javaPart->getClass()->getMethod<long()>("getMemorySize");
+  return method(_javaPart.get());
 }
 
 // Properties

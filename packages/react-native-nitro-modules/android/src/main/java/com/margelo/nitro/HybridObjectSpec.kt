@@ -13,12 +13,12 @@ interface HybridObjectSpec {
      *
      * @example
      * ```kotlin
-     * val memorySize: Int
+     * val memorySize: ULong
      *   get() {
      *     val imageSize = this.bitmap.bytesPerRow * this.bitmap.height
      *     return getSizeOf(this) + imageSize
      *   }
      * ```
      */
-    val memorySize: Int
+    val memorySize: ULong
 }

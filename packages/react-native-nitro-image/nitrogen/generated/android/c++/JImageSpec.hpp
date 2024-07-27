@@ -22,6 +22,9 @@ private:
   explicit JImageSpec(jni::alias_ref<jhybridobject> jThis) : _javaPart(jni::make_global(jThis)) {}
 
 public:
+  size_t getExternalMemorySize() noexcept override;
+
+public:
   // Properties
   ImageSize getSize() override;
   PixelFormat getPixelFormat() override;

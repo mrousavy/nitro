@@ -12,7 +12,7 @@ import NitroModules
 class Image : ImageSpec {
   private let uiImage: UIImage
   public var hybridContext = margelo.nitro.HybridContext()
-  public var memorySize: Int {
+  public var memorySize: UInt {
     return getSizeOf(self) + uiImage.memorySize
   }
 
@@ -20,11 +20,11 @@ class Image : ImageSpec {
     print("✅ Initializing Image...")
     self.uiImage = uiImage
   }
-  
+
   deinit {
     print("❌ Destroying Image...")
   }
-  
+
   public var size: ImageSize {
     return ImageSize(uiImage.size.width, uiImage.size.height)
   }
@@ -32,13 +32,13 @@ class Image : ImageSpec {
   public var pixelFormat: PixelFormat {
     return .rgb
   }
-  
+
   var someSettableProp: Double = 1.0
-  
+
   func toArrayBuffer(format: ImageFormat) throws -> Double {
     throw RuntimeError.error(withMessage: "toArrayBuffer() is not yet implemented!")
   }
-  
+
   func saveToFile(path: String, onFinished: Func_void_std__string) throws {
     print("Save To File called \(path)...")
     DispatchQueue.main.asyncAfter(deadline: .now() + 5, execute: {
@@ -51,7 +51,7 @@ class Image : ImageSpec {
 
 
 extension UIImage {
-  var memorySize: Int {
+  var memorySize: UInt {
     guard let cgImage else {
       return 0
     }

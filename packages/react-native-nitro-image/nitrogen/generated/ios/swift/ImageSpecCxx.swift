@@ -36,7 +36,7 @@ public final class ImageSpecCxx {
   }
 
   // Memory size of the Swift class (plus size of any other allocations)
-  public var memorySize: Int {
+  public var memorySize: UInt {
     return self.implementation.memorySize
   }
 
