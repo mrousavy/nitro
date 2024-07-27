@@ -130,7 +130,10 @@ set {
         const keyword = this.isReadonly ? 'val' : 'var'
         const lines: string[] = []
         if (modifiers?.doNotStrip) {
-          lines.push('@DoNotStrip', '@Keep')
+          lines.push('@get:DoNotStrip', '@get:Keep')
+          if (!this.isReadonly) {
+            lines.push('@set:DoNotStrip', '@set:Keep')
+          }
         }
         lines.push(`${keyword} ${this.name}: ${type}`)
         if (body != null) {

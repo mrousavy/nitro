@@ -18,14 +18,16 @@ import com.margelo.nitro.HybridObjectSpec
  */
 interface ImageSpec: HybridObjectSpec {
   // Properties
-  @DoNotStrip
-  @Keep
+  @get:DoNotStrip
+  @get:Keep
   val size: ImageSize
-  @DoNotStrip
-  @Keep
+  @get:DoNotStrip
+  @get:Keep
   val pixelFormat: PixelFormat
-  @DoNotStrip
-  @Keep
+  @get:DoNotStrip
+  @get:Keep
+  @set:DoNotStrip
+  @set:Keep
   var someSettableProp: Double
 
   // Methods
