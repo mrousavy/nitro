@@ -10,43 +10,55 @@ const PACKAGE = 'com.margelo.nitro.image'
 
 export function createKotlinHybridObject(spec: HybridObjectSpec): SourceFile[] {
   const name = getHybridObjectName(spec.name)
-  const interfaceName = name.TSpec
   const properties = spec.properties
-    .map((p) => p.getCode('kotlin', { doNotStrip: true }))
-    .join('\n')
+    .map((p) => p.getCode('kotlin', { doNotStrip: true, virtual: true }))
+    .join('\n\n')
   const methods = spec.methods
-    .map((p) => p.getCode('kotlin', { doNotStrip: true }))
-    .join('\n')
+    .map((p) => p.getCode('kotlin', { doNotStrip: true, virtual: true }))
+    .join('\n\n')
 
-  const interfaceCode = `
-${createFileMetadataString(`${interfaceName}.kt`)}
+  const abstractClassCode = `
+${createFileMetadataString(`${name.HybridT}.kt`)}
 
 package ${PACKAGE}
 
 import androidx.annotation.Keep
+import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
-import com.margelo.nitro.HybridObjectSpec
 
 /**
- * A Kotlin interface representing the ${spec.name} HybridObject.
- * Implement this interface to create Kotlin-based instances of ${spec.name}.
+ * A Kotlin class representing the ${spec.name} HybridObject.
+ * Implement this abstract class to create Kotlin-based instances of ${spec.name}.
  */
-interface ${interfaceName}: HybridObjectSpec {
+@DoNotStrip
+@Keep
+@Suppress("KotlinJniMissingFunction")
+abstract class ${name.HybridT}: HybridObject {
+  @DoNotStrip
+  @Keep
+  private val mHybridData: HybridData
+
+  init {
+    mHybridData = initHybrid()
+  }
+
+  private external fun initHybrid(): HybridData
+
   // Properties
   ${indent(properties, '  ')}
 
   // Methods
   ${indent(methods, '  ')}
 }
-  `
+  `.trim()
 
   const cppFiles = createFbjniHybridObject(spec)
 
   const files: SourceFile[] = []
   files.push({
-    content: interfaceCode,
+    content: abstractClassCode,
     language: 'kotlin',
-    name: `${interfaceName}.kt`,
+    name: `${name.HybridT}.kt`,
     platform: 'android',
   })
   files.push(...cppFiles)

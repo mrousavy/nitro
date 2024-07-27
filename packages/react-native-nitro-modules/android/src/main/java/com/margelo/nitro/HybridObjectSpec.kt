@@ -27,18 +27,4 @@ interface HybridObjectSpec {
     @get:DoNotStrip
     @get:Keep
     val memorySize: ULong
-
-    /**
-     * The C++-based state of the HybridObject.
-     * This must be initialized in the Kotlin constructor via `initHybrid()`.
-     */
-    @get:DoNotStrip
-    @get:Keep
-    val mHybridData: HybridData
-
-    /**
-     * Initialize the C++ part of the HybridObject.
-     * This must be called in the constructor, and the result must be assigned to `mHybridData`.
-     */
-    external fun initHybrid(): HybridData
 }

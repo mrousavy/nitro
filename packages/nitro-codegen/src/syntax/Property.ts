@@ -127,7 +127,8 @@ set {
       }
       case 'kotlin': {
         const type = this.type.getCode('swift')
-        const keyword = this.isReadonly ? 'val' : 'var'
+        let keyword = this.isReadonly ? 'val' : 'var'
+        if (modifiers?.virtual) keyword = `abstract ${keyword}`
         const lines: string[] = []
         if (modifiers?.doNotStrip) {
           lines.push('@get:DoNotStrip', '@get:Keep')

@@ -124,6 +124,7 @@ ${signature} {
 
         if (modifiers?.inline) signature = `inline ${signature}`
         if (modifiers?.override) signature = `override ${signature}`
+        if (modifiers?.virtual) signature = `abstract ${signature}`
         if (modifiers?.doNotStrip)
           signature = `@DoNotStrip\n@Keep\n${signature}`
 
