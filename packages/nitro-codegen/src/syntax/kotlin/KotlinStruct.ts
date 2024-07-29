@@ -8,7 +8,7 @@ export function createKotlinStruct(
   structType: StructType
 ): SourceFile[] {
   const values = structType.properties.map(
-    (p) => `${p.escapedName}: ${p.getCode('kotlin')}`
+    (p) => `val ${p.escapedName}: ${p.getCode('kotlin')}`
   )
   const code = `
 ${createFileMetadataString(`${structType.structName}.kt`)}

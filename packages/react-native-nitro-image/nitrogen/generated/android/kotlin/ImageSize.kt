@@ -17,6 +17,6 @@ import com.facebook.proguard.annotations.DoNotStrip
 @DoNotStrip
 @Keep
 data class ImageSize(
-  width: Double,
-  height: Double
+  val width: Double,
+  val height: Double
 )
