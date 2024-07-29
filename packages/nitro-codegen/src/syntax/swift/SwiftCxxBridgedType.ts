@@ -6,10 +6,8 @@ import {
 } from '../getHybridObjectName.js'
 import type { SourceImport } from '../SourceFile.js'
 import { EnumType } from '../types/EnumType.js'
-import { FunctionType } from '../types/FunctionType.js'
 import { getTypeAs } from '../types/getTypeAs.js'
 import { HybridObjectType } from '../types/HybridObjectType.js'
-import { StructType } from '../types/StructType.js'
 import type { Type } from '../types/Type.js'
 
 export class SwiftCxxBridgedType {
@@ -73,18 +71,6 @@ export class SwiftCxxBridgedType {
             return `std::shared_ptr<${name.HybridTSwift}>`
           case 'swift':
             return name.TSpecCxx
-          default:
-            throw new Error(`Invalid language! ${language}`)
-        }
-      }
-      case 'struct': {
-        const struct = getTypeAs(this.type, StructType)
-        switch (language) {
-          case 'c++':
-            return struct.structName
-          case 'swift':
-            const fullName = getCxxNamespace('swift', struct.structName)
-            return fullName
           default:
             throw new Error(`Invalid language! ${language}`)
         }
