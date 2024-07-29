@@ -3,7 +3,7 @@ import {
   getAndroidPackageDirectory,
   getCxxNamespace,
 } from '../../options.js'
-import { indent } from '../../stringUtils.js'
+import { capitalizeName, indent } from '../../stringUtils.js'
 import { createFileMetadataString } from '../helpers.js'
 import type { SourceFile } from '../SourceFile.js'
 import { EnumType } from '../types/EnumType.js'
@@ -33,6 +33,8 @@ enum class ${enumType.enumName} {
 
   const cxxNamespace = getCxxNamespace('c++')
   const jniClassDescriptor = getAndroidPackage('c++/jni', enumType.enumName)
+  const cppToJniConverterCode = getCppToJniConverterCode('value', enumType)
+
   const fbjniCode = `
 ${createFileMetadataString(`J${enumType.enumName}.hpp`)}
 
@@ -56,13 +58,20 @@ namespace ${cxxNamespace} {
     /**
      * Convert this Java/Kotlin-based enum to the C++ enum ${enumType.enumName}.
      */
-    ${enumType.enumName} to${enumType.enumName}();
+    ${enumType.enumName} to${enumType.enumName}() {
+      static const auto clazz = javaClassStatic();
+      static const auto fieldOrdinal = clazz->getField<int>("ordinal");
+      int ordinal = this->getFieldValue(fieldOrdinal);
+      return static_cast<${enumType.enumName}>(ordinal);
+    }
 
   public:
     /**
      * Create a Java/Kotlin-based enum with the given C++ enum's value.
      */
-    static jni::local_ref<J${enumType.enumName}::javaobject> create(${enumType.enumName} value);
+    static jni::local_ref<J${enumType.enumName}::javaobject> create(${enumType.enumName} value) {
+      ${indent(cppToJniConverterCode, '      ')}
+    }
   };
 
 } // namespace ${cxxNamespace}
@@ -84,4 +93,36 @@ namespace ${cxxNamespace} {
     platform: 'android',
   })
   return files
+}
+
+function getCppToJniConverterCode(
+  cppValueName: string,
+  enumType: EnumType
+): string {
+  const jniEnumName = `J${enumType.enumName}`
+
+  const fields = enumType.enumMembers.map((m) => {
+    const fieldName = `field${capitalizeName(m.name)}`
+    return `static const auto ${fieldName} = clazz->getStaticField<${jniEnumName}>("${m.name}");`
+  })
+
+  const cases = enumType.enumMembers.map((m) => {
+    const fieldName = `field${capitalizeName(m.name)}`
+    return `
+case ${enumType.enumName}::${m.name}:
+  return clazz->getStaticFieldValue(${fieldName});
+`.trim()
+  })
+
+  return `
+static const auto clazz = javaClassStatic();
+${fields.join('\n')}
+
+switch (${cppValueName}) {
+  ${indent(cases.join('\n'), '  ')}
+  default:
+    std::string stringValue = std::to_string(static_cast<int>(${cppValueName}));
+    throw std::runtime_error("Invalid enum value (" + stringValue + "!");
+}
+  `.trim()
 }

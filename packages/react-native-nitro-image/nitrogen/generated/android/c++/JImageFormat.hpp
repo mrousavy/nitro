@@ -26,13 +26,32 @@ namespace margelo::nitro::image {
     /**
      * Convert this Java/Kotlin-based enum to the C++ enum ImageFormat.
      */
-    ImageFormat toImageFormat();
+    ImageFormat toImageFormat() {
+      static const auto clazz = javaClassStatic();
+      static const auto fieldOrdinal = clazz->getField<int>("ordinal");
+      int ordinal = this->getFieldValue(fieldOrdinal);
+      return static_cast<ImageFormat>(ordinal);
+    }
 
   public:
     /**
      * Create a Java/Kotlin-based enum with the given C++ enum's value.
      */
-    static jni::local_ref<JImageFormat::javaobject> create(ImageFormat value);
+    static jni::local_ref<JImageFormat::javaobject> create(ImageFormat value) {
+      static const auto clazz = javaClassStatic();
+      static const auto fieldJPG = clazz->getStaticField<JImageFormat>("JPG");
+      static const auto fieldPNG = clazz->getStaticField<JImageFormat>("PNG");
+      
+      switch (value) {
+        case ImageFormat::JPG:
+          return clazz->getStaticFieldValue(fieldJPG);
+        case ImageFormat::PNG:
+          return clazz->getStaticFieldValue(fieldPNG);
+        default:
+          std::string stringValue = std::to_string(static_cast<int>(value));
+          throw std::runtime_error("Invalid enum value (" + stringValue + "!");
+      }
+    }
   };
 
 } // namespace margelo::nitro::image
