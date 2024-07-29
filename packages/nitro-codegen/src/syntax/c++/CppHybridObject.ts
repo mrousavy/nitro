@@ -120,12 +120,14 @@ namespace ${cxxNamespace} {
   files.push({
     content: cppHeaderCode,
     name: `${spec.hybridObjectName}.hpp`,
+    subdirectory: [],
     language: 'c++',
     platform: 'shared',
   })
   files.push({
     content: cppBodyCode,
     name: `${spec.hybridObjectName}.cpp`,
+    subdirectory: [],
     language: 'c++',
     platform: 'shared',
   })

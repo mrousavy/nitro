@@ -77,6 +77,7 @@ namespace margelo::nitro {
   return {
     content: cppCode,
     name: `${typename}.hpp`,
+    subdirectory: [],
     language: 'c++',
     platform: 'shared',
   }

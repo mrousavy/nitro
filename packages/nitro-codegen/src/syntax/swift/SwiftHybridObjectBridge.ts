@@ -240,6 +240,7 @@ namespace ${cxxNamespace} {
     content: swiftCxxWrapperCode,
     language: 'swift',
     name: `${name.TSpecCxx}.swift`,
+    subdirectory: [],
     platform: 'ios',
   })
   const resultTypesFile = getResultTypesFile(name, bridgedResultTypes)
@@ -248,12 +249,14 @@ namespace ${cxxNamespace} {
     content: cppHybridObjectCode,
     language: 'c++',
     name: `${name.HybridTSwift}.hpp`,
+    subdirectory: [],
     platform: 'ios',
   })
   files.push({
     content: cppHybridObjectCodeCpp,
     language: 'c++',
     name: `${name.HybridTSwift}.cpp`,
+    subdirectory: [],
     platform: 'ios',
   })
   return files
@@ -334,8 +337,8 @@ function getResultTypesFile(
 ): SourceFile {
   const name = `${hybridObjectName.TSpecCxx}Results.swift`
   const allEnumsCode = resultTypes.map((r) => r.swiftEnumCode)
-  return {
-    content: `
+
+  const code = `
 ${createFileMetadataString(name)}
 
 /**
@@ -351,8 +354,12 @@ ${createFileMetadataString(name)}
 import NitroModules
 
 ${allEnumsCode.join('\n\n')}
-    `.trim(),
+    `.trim()
+
+  return {
+    content: code,
     language: 'swift',
+    subdirectory: [],
     name: name,
     platform: 'ios',
   }

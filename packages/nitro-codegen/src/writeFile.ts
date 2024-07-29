@@ -4,11 +4,14 @@ import { capitalizeName } from './stringUtils.js'
 import type { SourceFile } from './syntax/SourceFile.js'
 import chalk from 'chalk'
 
+/**
+ * Writes the given file to disk and returns it's actual path.
+ */
 export async function writeFile(
   basePath: string,
   file: SourceFile
-): Promise<void> {
-  const filepath = path.join(basePath, file.name)
+): Promise<string> {
+  const filepath = path.join(basePath, ...file.subdirectory, file.name)
   const language = capitalizeName(file.language)
   console.log(`          ${chalk.dim(language)}: Creating ${file.name}...`)
 
@@ -18,4 +21,6 @@ export async function writeFile(
 
   // Write file
   await fs.writeFile(filepath, file.content.trim(), 'utf8')
+
+  return filepath
 }

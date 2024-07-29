@@ -92,12 +92,14 @@ ${methodsImpl}
     content: cppHeaderCode,
     language: 'c++',
     name: `${name.JTSpec}.hpp`,
+    subdirectory: [],
     platform: 'android',
   })
   files.push({
     content: cppImplCode,
     language: 'c++',
     name: `${name.JTSpec}.cpp`,
+    subdirectory: [],
     platform: 'android',
   })
   return files

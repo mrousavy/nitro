@@ -1,4 +1,4 @@
-import { getAndroidPackage } from '../../options.js'
+import { getAndroidPackage, getAndroidPackageDirectory } from '../../options.js'
 import { createFileMetadataString, toReferenceType } from '../helpers.js'
 import type { SourceFile } from '../SourceFile.js'
 import type { FunctionType } from '../types/FunctionType.js'
@@ -104,12 +104,14 @@ private:
     content: kotlinCode,
     language: 'kotlin',
     name: `${specializationName}.kt`,
+    subdirectory: getAndroidPackageDirectory(),
     platform: 'android',
   })
   files.push({
     content: fbjniCode,
     language: 'c++',
     name: `J${specializationName}.hpp`,
+    subdirectory: [],
     platform: 'android',
   })
   return files

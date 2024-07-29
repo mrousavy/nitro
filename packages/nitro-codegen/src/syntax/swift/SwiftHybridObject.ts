@@ -52,6 +52,7 @@ public protocol ${protocolName}: HybridObjectSpec {
     content: protocolCode,
     language: 'swift',
     name: `${protocolName}.swift`,
+    subdirectory: [],
     platform: 'ios',
   })
   files.push(...swiftBridge)

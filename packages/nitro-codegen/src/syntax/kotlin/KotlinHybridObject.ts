@@ -1,4 +1,8 @@
-import { getAndroidCxxLibName, getAndroidPackage } from '../../options.js'
+import {
+  getAndroidCxxLibName,
+  getAndroidPackage,
+  getAndroidPackageDirectory,
+} from '../../options.js'
 import { indent } from '../../stringUtils.js'
 import { getAllTypes } from '../getAllTypes.js'
 import { getHybridObjectName } from '../getHybridObjectName.js'
@@ -110,6 +114,7 @@ abstract class ${name.HybridT}: HybridObject {
     content: abstractClassCode,
     language: 'kotlin',
     name: `${name.HybridT}.kt`,
+    subdirectory: getAndroidPackageDirectory(),
     platform: 'android',
   })
   files.push(...cppFiles)

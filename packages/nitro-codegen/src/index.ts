@@ -110,8 +110,8 @@ for (const sourceFile of project.getSourceFiles()) {
 
         for (const file of files) {
           const basePath = path.join(outFolder, file.platform, file.language)
-          await writeFile(basePath, file)
-          filesAfter.push(path.join(basePath, file.name))
+          const actualPath = await writeFile(basePath, file)
+          filesAfter.push(actualPath)
         }
       }
 

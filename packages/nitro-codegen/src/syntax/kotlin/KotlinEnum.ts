@@ -1,3 +1,4 @@
+import { getAndroidPackageDirectory } from '../../options.js'
 import { indent } from '../../stringUtils.js'
 import { createFileMetadataString } from '../helpers.js'
 import type { SourceFile } from '../SourceFile.js'
@@ -31,6 +32,7 @@ enum class ${enumType.enumName} {
     content: code,
     language: 'kotlin',
     name: `${enumType.enumName}.kt`,
+    subdirectory: getAndroidPackageDirectory(),
     platform: 'android',
   })
   return files

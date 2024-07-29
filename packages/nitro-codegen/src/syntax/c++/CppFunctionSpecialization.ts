@@ -77,6 +77,7 @@ namespace ${cxxNamespace} {
     declarationFile: {
       content: code.trim(),
       language: 'c++',
+      subdirectory: [],
       name: `${typename}.hpp`,
       platform: 'shared',
     },

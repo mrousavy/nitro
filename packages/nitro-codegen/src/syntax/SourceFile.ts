@@ -10,6 +10,10 @@ export interface SourceFile {
    */
   name: string
   /**
+   * The subdirectory/subdirectories of the file, or empty (`[]`) if none.
+   */
+  subdirectory: string[]
+  /**
    * The full content of the file.
    */
   content: string

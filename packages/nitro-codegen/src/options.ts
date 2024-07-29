@@ -71,3 +71,7 @@ export function getAndroidPackage(
       throw new Error(`Invalid language for getAndroidPackage: ${language}`)
   }
 }
+
+export function getAndroidPackageDirectory(...subPackage: string[]): string[] {
+  return [...ANDROID_BASE_NAMESPACE, ...ANDROID_NAMESPACE, ...subPackage]
+}
