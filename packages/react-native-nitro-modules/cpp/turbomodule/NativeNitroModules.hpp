@@ -11,7 +11,7 @@
 // CocoaPods include (iOS)
 #include <React-Codegen/NitroModulesSpecJSI.h>
 #elif __has_include(<NitroModulesSpecJSI.h>)
-// CMake include on Android
+// CMake include (Android)
 #include <NitroModulesSpecJSI.h>
 #else
 #error Cannot find react-native-nitro-modules spec! Try cleaning your cache and re-running CodeGen!
@@ -29,7 +29,7 @@ public:
   jsi::Object createHybridObject(jsi::Runtime& runtime,
                                  jsi::String hybridObjectName,
                                  std::optional<jsi::Object> args);
-  
+
 private:
   std::shared_ptr<CallInvoker> _callInvoker;
 };

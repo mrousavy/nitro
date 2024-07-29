@@ -1,8 +1,8 @@
 #include <jni.h>
-#include "react-native-nitro.hpp"
+#include "JHybridObjectRegistry.hpp"
 
-extern "C"
-JNIEXPORT jdouble JNICALL
-Java_com_nitro_NitroModule_nativeMultiply(JNIEnv *env, jclass type, jdouble a, jdouble b) {
-    return nitro::multiply(a, b);
+using namespace margelo::nitro;
+
+JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void*) {
+  JHybridObjectRegistry::registerNatives();
 }
