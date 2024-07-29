@@ -5,10 +5,12 @@ import { createFileMetadataString } from '../helpers.js'
 import type { HybridObjectSpec } from '../HybridObjectSpec.js'
 import type { SourceFile } from '../SourceFile.js'
 import { EnumType } from '../types/EnumType.js'
+import { FunctionType } from '../types/FunctionType.js'
 import { getTypeAs } from '../types/getTypeAs.js'
 import { StructType } from '../types/StructType.js'
 import { createFbjniHybridObject } from './FbjniHybridObject.js'
 import { createKotlinEnum } from './KotlinEnum.js'
+import { createKotlinFunction } from './KotlinFunction.js'
 import { createKotlinStruct } from './KotlinStruct.js'
 
 // TODO: Make this customizable
@@ -83,19 +85,23 @@ abstract class ${name.HybridT}: HybridObject {
 
   // 3. Create enums or structs in Kotlin
   const allTypes = getAllTypes(spec)
-  const enums: SourceFile[] = []
-  const structs: SourceFile[] = []
+  const extraFiles: SourceFile[] = []
   for (const type of allTypes) {
     switch (type.kind) {
       case 'enum':
         const enumType = getTypeAs(type, EnumType)
         const enumFiles = createKotlinEnum(PACKAGE, enumType)
-        enums.push(...enumFiles)
+        extraFiles.push(...enumFiles)
         break
       case 'struct':
         const structType = getTypeAs(type, StructType)
         const structFiles = createKotlinStruct(PACKAGE, structType)
-        structs.push(...structFiles)
+        extraFiles.push(...structFiles)
+        break
+      case 'function':
+        const functionType = getTypeAs(type, FunctionType)
+        const funcFiles = createKotlinFunction(PACKAGE, functionType)
+        extraFiles.push(...funcFiles)
         break
     }
   }
@@ -108,7 +114,6 @@ abstract class ${name.HybridT}: HybridObject {
     platform: 'android',
   })
   files.push(...cppFiles)
-  files.push(...enums)
-  files.push(...structs)
+  files.push(...extraFiles)
   return files
 }
