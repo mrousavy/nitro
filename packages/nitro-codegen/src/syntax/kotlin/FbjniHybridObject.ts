@@ -44,7 +44,7 @@ namespace ${cxxNamespace} {
     size_t getExternalMemorySize() noexcept override;
 
   public:
-    jni::global_ref<${name.JHybridT}::javaobject>& getJavaPart() const { return _javaPart; }
+    inline jni::global_ref<${name.JHybridT}::javaobject>& getJavaPart() noexcept { return _javaPart; }
 
   public:
     // Properties
