@@ -24,15 +24,15 @@ namespace margelo::nitro::image {
 
   public:
     /**
-     * Create a Java/Kotlin-based enum with the given C++ enum's value.
-     */
-    static JPixelFormat create(PixelFormat value);
-
-  public:
-    /**
      * Convert this Java/Kotlin-based enum to the C++ enum PixelFormat.
      */
     PixelFormat toPixelFormat();
+
+  public:
+    /**
+     * Create a Java/Kotlin-based enum with the given C++ enum's value.
+     */
+    static jni::local_ref<JPixelFormat::javaobject> create(PixelFormat value);
   };
 
 } // namespace margelo::nitro::image

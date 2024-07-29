@@ -54,15 +54,15 @@ namespace ${cxxNamespace} {
 
   public:
     /**
-     * Create a Java/Kotlin-based enum with the given C++ enum's value.
-     */
-    static J${enumType.enumName} create(${enumType.enumName} value);
-
-  public:
-    /**
      * Convert this Java/Kotlin-based enum to the C++ enum ${enumType.enumName}.
      */
     ${enumType.enumName} to${enumType.enumName}();
+
+  public:
+    /**
+     * Create a Java/Kotlin-based enum with the given C++ enum's value.
+     */
+    static jni::local_ref<J${enumType.enumName}::javaobject> create(${enumType.enumName} value);
   };
 
 } // namespace ${cxxNamespace}

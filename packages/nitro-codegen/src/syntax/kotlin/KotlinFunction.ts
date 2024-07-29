@@ -82,7 +82,7 @@ namespace ${cxxNamespace} {
    */
   struct J${specializationName}: public jni::HybridClass<J${specializationName}> {
   public:
-    static jni::local_ref<J${specializationName}> create(${specializationName}&& func) {
+    static jni::local_ref<J${specializationName}::javaobject> create(${specializationName}&& func) {
       return J${specializationName}::newObjectCxxArgs(std::move(func));
     }
 

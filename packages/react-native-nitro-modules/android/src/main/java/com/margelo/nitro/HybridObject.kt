@@ -7,7 +7,9 @@ import com.facebook.proguard.annotations.DoNotStrip
 /**
  * A base class for all Kotlin-based HybridObjects.
  */
-interface HybridObject {
+@Keep
+@DoNotStrip
+public interface HybridObject {
     /**
      * Get the memory size of the Kotlin instance (plus any external heap allocations),
      * in bytes.

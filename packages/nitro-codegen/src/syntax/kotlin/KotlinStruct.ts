@@ -56,15 +56,15 @@ namespace ${cxxNamespace} {
 
   public:
     /**
-     * Create a Java/Kotlin-based struct by copying all values from the given C++ struct to Java.
-     */
-    static J${structType.structName} create(const ${structType.structName}& value);
-
-  public:
-    /**
      * Convert this Java/Kotlin-based struct to the C++ struct ${structType.structName} by copying all values to C++.
      */
     ${structType.structName} to${structType.structName}();
+
+  public:
+    /**
+     * Create a Java/Kotlin-based struct by copying all values from the given C++ struct to Java.
+     */
+    static jni::local_ref<J${structType.structName}::javaobject> create(const ${structType.structName}& value);
   };
 
 } // namespace ${cxxNamespace}

@@ -25,3 +25,10 @@ include_directories(
         "../nitrogen/generated/shared/c++"
         "../nitrogen/generated/android/c++"
 )
+
+# Link all libraries together
+target_link_libraries(
+        ${PACKAGE_NAME}
+        android                         # <-- Android JNI core
+        react_codegen_NitroModulesSpec  # <-- Generated Specs from CodeGen
+)

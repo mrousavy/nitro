@@ -24,15 +24,15 @@ namespace margelo::nitro::image {
 
   public:
     /**
-     * Create a Java/Kotlin-based struct by copying all values from the given C++ struct to Java.
-     */
-    static JImageSize create(const ImageSize& value);
-
-  public:
-    /**
      * Convert this Java/Kotlin-based struct to the C++ struct ImageSize by copying all values to C++.
      */
     ImageSize toImageSize();
+
+  public:
+    /**
+     * Create a Java/Kotlin-based struct by copying all values from the given C++ struct to Java.
+     */
+    static jni::local_ref<JImageSize::javaobject> create(const ImageSize& value);
   };
 
 } // namespace margelo::nitro::image
