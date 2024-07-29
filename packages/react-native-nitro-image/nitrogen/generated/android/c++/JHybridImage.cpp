@@ -7,6 +7,9 @@
 ///
 
 #include "JHybridImage.hpp"
+
+
+
 #include "JImageSize.hpp"
 #include "JPixelFormat.hpp"
 #include "JImageFormat.hpp"
@@ -32,29 +35,29 @@ namespace margelo::nitro::image {
   // Properties
   ImageSize JHybridImage::getSize() {
     static const auto method = _javaPart->getClass()->getMethod<JImageSize()>("getSize");
-    return method(_javaPart.get())->toImageSize();
+    return method(_javaPart.get());
   }
   PixelFormat JHybridImage::getPixelFormat() {
     static const auto method = _javaPart->getClass()->getMethod<JPixelFormat()>("getPixelFormat");
-    return method(_javaPart.get())->toPixelFormat();
+    return method(_javaPart.get());
   }
   double JHybridImage::getSomeSettableProp() {
-    static const auto method = _javaPart->getClass()->getMethod<jdouble()>("getSomeSettableProp");
+    static const auto method = _javaPart->getClass()->getMethod<double()>("getSomeSettableProp");
     return method(_javaPart.get());
   }
   void JHybridImage::setSomeSettableProp(double someSettableProp) {
-    static const auto method = _javaPart->getClass()->getMethod<void(jdouble)>("setSomeSettableProp");
+    static const auto method = _javaPart->getClass()->getMethod<void(double)>("setSomeSettableProp");
     return method(_javaPart.get(), someSettableProp);
   }
 
   // Methods
   double JHybridImage::toArrayBuffer(ImageFormat format) {
     static const auto method = _javaPart->getClass()->getMethod<double(JImageFormat)>("toArrayBuffer");
-    throw std::runtime_error("I couldn't figure out enums yet.");
+    return method(_javaPart.get(), format);
   }
   void JHybridImage::saveToFile(const std::string& path, const Func_void_std__string& onFinished) {
-    static const auto method = _javaPart->getClass()->getMethod<void(jstring, jni::alias_ref<JFunc_void_std__string::javaobject>)>("saveToFile");
-    throw std::runtime_error("I couldn't figure out funcs yet.");
+    static const auto method = _javaPart->getClass()->getMethod<void(std::string, jni::alias_ref<JFunc_void_std__string::javaobject>)>("saveToFile");
+    return method(_javaPart.get(), path, onFinished);
   }
 
 } // namespace margelo::nitro::image

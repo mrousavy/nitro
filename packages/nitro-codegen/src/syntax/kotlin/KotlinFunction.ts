@@ -82,8 +82,8 @@ namespace ${cxxNamespace} {
    */
   struct J${specializationName}: public jni::HybridClass<J${specializationName}> {
   public:
-    static jni::local_ref<J${specializationName}::javaobject> create(${specializationName}&& func) {
-      return J${specializationName}::newObjectCxxArgs(std::move(func));
+    static jni::local_ref<J${specializationName}::javaobject> create(const ${specializationName}& func) {
+      return J${specializationName}::newObjectCxxArgs(func);
     }
 
   public:
@@ -98,7 +98,7 @@ namespace ${cxxNamespace} {
     }
 
   private:
-    explicit J${specializationName}(${specializationName}&& func): _func(std::move(func)) { }
+    explicit J${specializationName}(const ${specializationName}& func): _func(func) { }
 
   private:
     friend HybridBase;

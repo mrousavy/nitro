@@ -7,6 +7,9 @@
 ///
 
 #include "JHybridImageFactory.hpp"
+
+
+
 #include "JHybridImage.hpp"
 
 namespace margelo::nitro::image {
@@ -32,24 +35,19 @@ namespace margelo::nitro::image {
   // Methods
   std::shared_ptr<HybridImage> JHybridImageFactory::loadImageFromFile(const std::string& path) {
     static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<JHybridImage::javaobject>(std::string)>("loadImageFromFile");
-    jni::local_ref<JHybridImage::javaobject> jimage = method(_javaPart.get(), path);
-    return std::shared_ptr<HybridImage>(jimage->cthis());
+    return method(_javaPart.get(), path);
   }
   std::shared_ptr<HybridImage> JHybridImageFactory::loadImageFromURL(const std::string& path) {
     static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<JHybridImage::javaobject>(std::string)>("loadImageFromURL");
-    jni::local_ref<JHybridImage::javaobject> jimage = method(_javaPart.get(), path);
-    return std::shared_ptr<HybridImage>(jimage->cthis());
+    return method(_javaPart.get(), path);
   }
   std::shared_ptr<HybridImage> JHybridImageFactory::loadImageFromSystemName(const std::string& path) {
     static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<JHybridImage::javaobject>(std::string)>("loadImageFromSystemName");
-    jni::local_ref<JHybridImage::javaobject> jimage = method(_javaPart.get(), path);
-    return std::shared_ptr<HybridImage>(jimage->cthis());
+    return method(_javaPart.get(), path);
   }
   std::shared_ptr<HybridImage> JHybridImageFactory::bounceBack(std::shared_ptr<HybridImage> image) {
     static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<JHybridImage::javaobject>(jni::alias_ref<JHybridImage::javaobject>)>("bounceBack");
-    auto inJImage = std::dynamic_pointer_cast<JHybridImage>(image);
-    jni::local_ref<JHybridImage::javaobject> jimage = method(_javaPart.get(), inJImage->_javaPart);
-    return std::shared_ptr<HybridImage>(jimage->cthis());
+    return method(_javaPart.get(), image);
   }
 
 } // namespace margelo::nitro::image

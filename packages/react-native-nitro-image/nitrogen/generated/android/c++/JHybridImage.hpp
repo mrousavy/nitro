@@ -27,6 +27,9 @@ namespace margelo::nitro::image {
     size_t getExternalMemorySize() noexcept override;
 
   public:
+    jni::global_ref<JHybridImage::javaobject>& getJavaPart() const { return _javaPart; }
+
+  public:
     // Properties
     ImageSize getSize() override;
     PixelFormat getPixelFormat() override;
@@ -40,8 +43,6 @@ namespace margelo::nitro::image {
 
   private:
     friend HybridBase;
-
-   public:
     jni::global_ref<JHybridImage::javaobject> _javaPart;
   };
 

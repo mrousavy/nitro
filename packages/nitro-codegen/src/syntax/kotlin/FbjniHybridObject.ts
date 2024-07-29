@@ -1,12 +1,13 @@
 import { getAndroidPackage, getCxxNamespace } from '../../options.js'
 import { indent } from '../../stringUtils.js'
+import { getAllTypes } from '../getAllTypes.js'
 import { getHybridObjectName } from '../getHybridObjectName.js'
-import { createFileMetadataString } from '../helpers.js'
+import { createFileMetadataString, isNotDuplicate } from '../helpers.js'
 import type { HybridObjectSpec } from '../HybridObjectSpec.js'
 import { Method } from '../Method.js'
 import type { Property } from '../Property.js'
 import type { SourceFile } from '../SourceFile.js'
-import { getJniType } from './getJniType.js'
+import { JNIWrappedType } from '../types/JNIWrappedType.js'
 
 export function createFbjniHybridObject(spec: HybridObjectSpec): SourceFile[] {
   const name = getHybridObjectName(spec.name)
@@ -43,6 +44,9 @@ namespace ${cxxNamespace} {
     size_t getExternalMemorySize() noexcept override;
 
   public:
+    jni::global_ref<${name.JHybridT}::javaobject>& getJavaPart() const { return _javaPart; }
+
+  public:
     // Properties
     ${indent(propertiesDecl, '    ')}
 
@@ -64,11 +68,27 @@ namespace ${cxxNamespace} {
   const methodsImpl = spec.methods
     .map((m) => getFbjniMethodForwardImplementation(spec, m))
     .join('\n')
+  const allTypes = getAllTypes(spec)
+  const jniImports = allTypes
+    .map((t) => new JNIWrappedType(t))
+    .map((t) => t.requiredJNIImport)
+    .filter((i) => i != null)
+  const cppIncludes = jniImports
+    .map((i) => `#include "${i.name}"`)
+    .filter(isNotDuplicate)
+  const cppForwardDeclarations = jniImports
+    .map((i) => i.forwardDeclaration)
+    .filter((d) => d != null)
+    .filter(isNotDuplicate)
 
   const cppImplCode = `
 ${createFileMetadataString(`${name.JHybridT}.cpp`)}
 
 #include "${name.JHybridT}.hpp"
+
+${cppForwardDeclarations.join('\n')}
+
+${cppIncludes.join('\n')}
 
 namespace ${cxxNamespace} {
 
@@ -120,10 +140,11 @@ function getFbjniMethodForwardImplementation(
 ): string {
   const name = getHybridObjectName(spec.name)
 
-  const returnType = getJniType(method.returnType)
-  const paramsTypes = method.parameters
-    .map((p) => getJniType(p.type))
-    .join(', ')
+  const returnJNI = new JNIWrappedType(method.returnType)
+  const paramsJNI = method.parameters.map((p) => new JNIWrappedType(p.type))
+
+  const returnType = returnJNI.getCode('c++')
+  const paramsTypes = paramsJNI.map((p) => p.getCode('c++')).join(', ')
   const cxxSignature = `${returnType}(${paramsTypes})`
 
   const hasParams = method.parameters.length > 0
