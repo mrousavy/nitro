@@ -16,9 +16,7 @@ namespace margelo::nitro {
                                                               jni::alias_ref<JSupplier> constructorFn) {
     auto sharedInitializer = jni::make_global(constructorFn);
     HybridObjectRegistry::registerHybridObjectConstructor(hybridObjectName, [=]() -> std::shared_ptr<HybridObject> {
-      auto object = sharedInitializer->call();
-      HybridObject* hybridObject = object->cthis();
-      return std::shared_ptr<HybridObject>(hybridObject);
+      throw std::runtime_error("Java type \"" + hybridObjectName + "\" cannot be constructed from C++ yet!");
     });
   }
 
