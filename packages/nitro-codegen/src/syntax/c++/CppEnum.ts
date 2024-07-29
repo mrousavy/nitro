@@ -1,6 +1,6 @@
 import { indent } from '../../stringUtils.js'
 import type { SourceFile } from '../SourceFile.js'
-import { createFileMetadataString, escapeCppName } from '../helpers.js'
+import { createFileMetadataString } from '../helpers.js'
 import type { EnumMember } from '../types/EnumType.js'
 
 /**
@@ -12,7 +12,7 @@ export function createCppEnum(
 ): SourceFile {
   // Map enum to C++ code
   const cppEnumMembers = enumMembers
-    .map((m) => `${escapeCppName(m.name)} = ${m.value},`)
+    .map((m) => `${m.name} SWIFT_NAME(${m.name.toLowerCase()}) = ${m.value},`)
     .join('\n')
 
   // Create entire C++ file
@@ -22,6 +22,13 @@ ${createFileMetadataString(`${typename}.hpp`)}
 #pragma once
 
 #include <NitroModules/JSIConverter.hpp>
+
+#if __has_include(<swift/bridging>)
+#include <swift/bridging>
+#else
+// Empty defines if Swift is not available (e.g. on Android)
+#define SWIFT_NAME(_name)
+#endif
 
 /**
  * An enum which can be represented as a JavaScript enum (${typename}).

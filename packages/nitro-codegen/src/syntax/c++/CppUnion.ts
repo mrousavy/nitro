@@ -11,7 +11,7 @@ export function createCppUnion(
   enumMembers: EnumMember[]
 ): SourceFile {
   const cppEnumMembers = enumMembers
-    .map((m, i) => `${m.name} = ${i},`)
+    .map((m, i) => `${m.name} SWIFT_NAME(${m.name.toLowerCase()}) = ${i},`)
     .join('\n')
   const cppFromJsiHashCases = enumMembers
     .map((v) =>
@@ -32,6 +32,13 @@ ${createFileMetadataString(`${typename}.hpp`)}
 
 #include <NitroModules/Hash.hpp>
 #include <NitroModules/JSIConverter.hpp>
+
+#if __has_include(<swift/bridging>)
+#include <swift/bridging>
+#else
+// Empty defines if Swift is not available (e.g. on Android)
+#define SWIFT_NAME(_name)
+#endif
 
 /**
  * An enum which can be represented as a JavaScript union (${typename}).

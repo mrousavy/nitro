@@ -12,7 +12,7 @@ package com.margelo.nitro.image
  * Represents the JavaScript enum/union "PixelFormat".
  */
 enum class PixelFormat {
-  rgb,
-  yuv_8bit,
-  yuv_10bit
+  RGB,
+  YUV_8BIT,
+  YUV_10BIT
 }

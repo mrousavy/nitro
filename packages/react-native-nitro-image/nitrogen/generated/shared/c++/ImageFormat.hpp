@@ -11,12 +11,19 @@
 #include <NitroModules/Hash.hpp>
 #include <NitroModules/JSIConverter.hpp>
 
+#if __has_include(<swift/bridging>)
+#include <swift/bridging>
+#else
+// Empty defines if Swift is not available (e.g. on Android)
+#define SWIFT_NAME(_name)
+#endif
+
 /**
  * An enum which can be represented as a JavaScript union (ImageFormat).
  */
 enum class ImageFormat {
-  jpg = 0,
-  png = 1,
+  JPG SWIFT_NAME(jpg) = 0,
+  PNG SWIFT_NAME(png) = 1,
 } __attribute__((enum_extensibility(closed)));
 
 namespace margelo::nitro {
@@ -27,16 +34,16 @@ namespace margelo::nitro {
     static inline ImageFormat fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       std::string unionValue = JSIConverter<std::string>::fromJSI(runtime, arg);
       switch (hashString(unionValue.c_str(), unionValue.size())) {
-        case hashString("jpg"): return ImageFormat::jpg;
-        case hashString("png"): return ImageFormat::png;
+        case hashString("jpg"): return ImageFormat::JPG;
+        case hashString("png"): return ImageFormat::PNG;
         default: [[unlikely]]
           throw std::runtime_error("Cannot convert " + unionValue + " to ImageFormat - invalid value!");
       }
     }
     static inline jsi::Value toJSI(jsi::Runtime& runtime, ImageFormat arg) {
       switch (arg) {
-        case ImageFormat::jpg: return JSIConverter<std::string>::toJSI(runtime, "jpg");
-        case ImageFormat::png: return JSIConverter<std::string>::toJSI(runtime, "png");
+        case ImageFormat::JPG: return JSIConverter<std::string>::toJSI(runtime, "jpg");
+        case ImageFormat::PNG: return JSIConverter<std::string>::toJSI(runtime, "png");
         default: [[unlikely]]
           throw std::runtime_error("Cannot convert ImageFormat to JS - invalid value: "
                                     + std::to_string(static_cast<int>(arg)) + "!");

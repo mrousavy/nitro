@@ -39,7 +39,11 @@ export class EnumType implements Type {
               `Each enum member must be a number! If you want to use strings, use TypeScript unions ("a" | "b") instead!`
           )
         }
-        return { name: name, value: value, stringValue: name }
+        return {
+          name: escapeCppName(name).toUpperCase(),
+          value: value,
+          stringValue: name,
+        }
       })
       this.declarationFile = createCppEnum(enumName, this.enumMembers)
     } else {
@@ -53,7 +57,7 @@ export class EnumType implements Type {
               `${enumName}: Value "${literalValue}" is not a string - it is ${typeof literalValue}!`
             )
           return {
-            name: escapeCppName(literalValue),
+            name: escapeCppName(literalValue).toUpperCase(),
             value: i,
             stringValue: literalValue,
           }

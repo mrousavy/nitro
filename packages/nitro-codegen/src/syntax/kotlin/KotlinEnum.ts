@@ -7,7 +7,7 @@ export function createKotlinEnum(
   packageName: string,
   enumType: EnumType
 ): SourceFile[] {
-  const members = enumType.enumMembers.map((m) => m.name)
+  const members = enumType.enumMembers.map((m) => m.name.toUpperCase())
   const code = `
 ${createFileMetadataString(`${enumType.enumName}.kt`)}
 
@@ -19,7 +19,6 @@ package ${packageName}
 enum class ${enumType.enumName} {
   ${indent(members.join(',\n'), '  ')}
 }
-
   `.trim()
 
   const files: SourceFile[] = []

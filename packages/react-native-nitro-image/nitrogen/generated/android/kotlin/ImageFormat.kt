@@ -12,6 +12,6 @@ package com.margelo.nitro.image
  * Represents the JavaScript enum/union "ImageFormat".
  */
 enum class ImageFormat {
-  jpg,
-  png
+  JPG,
+  PNG
 }
