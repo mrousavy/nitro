@@ -7,7 +7,6 @@
 
 #pragma once
 
-#include "HybridObjectRegistry.hpp"
 #include <fbjni/fbjni.h>
 #include "JSupplier.hpp"
 
@@ -16,6 +15,9 @@ namespace margelo::nitro {
   using namespace facebook;
 
   struct JHybridObjectRegistry: public jni::JavaClass<JHybridObjectRegistry> {
+   public:
+    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/HybridObjectRegistry;";
+
    public:
     static void registerHybridObjectConstructor(jni::alias_ref<jni::JClass> clazz,
                                                 std::string hybridObjectName,

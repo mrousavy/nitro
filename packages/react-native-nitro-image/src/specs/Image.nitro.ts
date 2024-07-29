@@ -19,7 +19,8 @@ export interface Image
   saveToFile(path: string, onFinished: (path: string) => void): void
 }
 
-interface ImageFactory extends HybridObject<{ ios: 'swift' }> {
+interface ImageFactory
+  extends HybridObject<{ ios: 'swift'; android: 'kotlin' }> {
   loadImageFromFile(path: string): Image
   loadImageFromURL(path: string): Image
   loadImageFromSystemName(path: string): Image

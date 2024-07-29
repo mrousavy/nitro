@@ -16,6 +16,7 @@ file(GLOB android_files
 add_library(NitroModules SHARED
             ${shared_files}
             ${android_files}
+            JNIOnLoad.cpp
 )
 
 # Specifies a path to native header files.
@@ -29,6 +30,9 @@ include_directories(
   ../cpp/threading
   ../cpp/turbomodule
   ../cpp/utils
+  # Android-specific C++ includes
+  src/main/cpp/registry
+  src/main/cpp/platform
 )
 
 # Allow importing Nitro TurboModule from elsewhere (e.g. the CLI)

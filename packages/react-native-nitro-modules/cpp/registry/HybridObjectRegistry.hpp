@@ -37,6 +37,9 @@ public:
 
 private:
   static std::unordered_map<std::string, HybridObjectConstructorFn>& getRegistry();
+
+ private:
+  static constexpr auto TAG = "HybridObjectRegistry";
 };
 
 } // namespace margelo::nitro

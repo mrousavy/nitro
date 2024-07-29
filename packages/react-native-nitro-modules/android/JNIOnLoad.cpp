@@ -1,3 +1,5 @@
+/// Entry point for JNI.
+
 #include <jni.h>
 #include "JHybridObjectRegistry.hpp"
 

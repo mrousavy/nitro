@@ -60,6 +60,8 @@ abstract class ${name.HybridT}: HybridObject {
 
   private external fun initHybrid(): HybridData
 
+  protected val TAG = "${name.HybridT}"
+
   // Properties
   ${indent(properties, '  ')}
 

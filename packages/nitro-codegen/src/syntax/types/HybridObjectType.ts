@@ -28,7 +28,7 @@ export class HybridObjectType implements Type {
       case 'swift':
         return name.TSpec
       case 'kotlin':
-        return name.TSpec
+        return name.HybridT
       default:
         throw new Error(
           `Language ${language} is not yet supported for HybridObjectType!`

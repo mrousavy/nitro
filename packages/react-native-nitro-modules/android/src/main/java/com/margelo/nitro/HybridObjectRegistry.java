@@ -13,5 +13,9 @@ public class HybridObjectRegistry {
      * It will be uniquely identified via it's `hybridObjectName`, and can be initialized from
      * JS using `NitroModules.get<T>(name)` - which will call the `constructorFn` here.
      */
-    static native void registerHybridObjectConstructor(String hybridObjectName, Supplier<HybridObject> constructorFn);
+    public static native void registerHybridObjectConstructor(String hybridObjectName, Supplier<HybridObject> constructorFn);
+
+    static {
+        System.loadLibrary("NitroModules");
+    }
 }

@@ -6,6 +6,7 @@
 //
 
 #include "JHybridObjectRegistry.hpp"
+#include "HybridObjectRegistry.hpp"
 
 namespace margelo::nitro {
 

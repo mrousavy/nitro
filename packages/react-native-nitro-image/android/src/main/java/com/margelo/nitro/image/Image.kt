@@ -1,13 +1,20 @@
 package com.margelo.nitro.image
 
-class Image: HybridImage() {
+import android.graphics.Bitmap
+import android.util.Log
+
+class Image(val bitmap: Bitmap): HybridImage() {
     override val size: ImageSize
-        get() = TODO("Not yet implemented")
+        get() {
+            return ImageSize(bitmap.width.toDouble(), bitmap.height.toDouble())
+        }
     override val pixelFormat: PixelFormat
-        get() = TODO("Not yet implemented")
+        get() = PixelFormat.RGB
     override var someSettableProp: Double
-        get() = TODO("Not yet implemented")
-        set(value) {}
+        get() = Math.random()
+        set(value) {
+            Log.i(TAG, "Set value to $value")
+        }
 
     override fun toArrayBuffer(format: ImageFormat): Double {
         TODO("Not yet implemented")
@@ -18,5 +25,5 @@ class Image: HybridImage() {
     }
 
     override val memorySize: ULong
-        get() = TODO("Not yet implemented")
+        get() = bitmap.allocationByteCount.toULong()
 }

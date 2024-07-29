@@ -6,6 +6,7 @@
 //
 
 #include "HybridObjectRegistry.hpp"
+#include "NitroLogger.hpp"
 
 namespace margelo::nitro {
 
@@ -16,6 +17,7 @@ std::unordered_map<std::string, HybridObjectRegistry::HybridObjectConstructorFn>
 
 void HybridObjectRegistry::registerHybridObjectConstructor(std::string hybridObjectName,
                                                            HybridObjectConstructorFn&& constructorFn) {
+  Logger::log(TAG, "Registering HybridObject \"%s\"...", hybridObjectName);
   auto& map = HybridObjectRegistry::getRegistry();
   if (map.contains(hybridObjectName)) [[unlikely]] {
     auto message = "HybridObject \"" + std::string(hybridObjectName) + "\" has already been "
@@ -25,6 +27,7 @@ void HybridObjectRegistry::registerHybridObjectConstructor(std::string hybridObj
     throw std::runtime_error(message);
   }
   map.insert({ hybridObjectName, std::move(constructorFn) });
+  Logger::log(TAG, "Successfully registered HybridObject \"%s\"!", hybridObjectName);
 }
 
 std::shared_ptr<HybridObject> HybridObjectRegistry::createHybridObject(std::string hybridObjectName) {
