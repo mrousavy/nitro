@@ -16,7 +16,8 @@ Pod::Spec.new do |s|
   # VisionCamera Core C++ bindings
   s.source_files = [
     # Generated specs
-    "nitrogen/generated/**/*.{h,hpp,c,cpp,swift}",
+    "nitrogen/generated/shared/**/*.{h,hpp,c,cpp,swift}",
+    "nitrogen/generated/ios/**/*.{h,hpp,c,cpp,swift}",
     # Implementation (Swift)
     "ios/**/*.{swift}",
     # Autolinking/Registration (Objective-C++)

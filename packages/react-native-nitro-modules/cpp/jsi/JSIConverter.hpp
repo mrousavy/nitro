@@ -20,8 +20,6 @@ namespace margelo::nitro { class HybridObject; }
 #include <type_traits>
 #include <unordered_map>
 
-#define JSI_CONVERTER_AVAILABLE
-
 #define DO_NULL_CHECKS true
 
 namespace margelo::nitro {

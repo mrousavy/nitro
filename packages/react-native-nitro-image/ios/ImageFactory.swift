@@ -11,7 +11,7 @@ import NitroModules
 class ImageFactory : ImageFactorySpec {
   var hybridContext = margelo.nitro.HybridContext()
 
-  var memorySize: UInt {
+  var memorySize: Int {
     return getSizeOf(self)
   }
 
