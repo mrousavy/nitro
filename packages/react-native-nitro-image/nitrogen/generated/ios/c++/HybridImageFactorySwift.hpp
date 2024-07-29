@@ -28,11 +28,12 @@ namespace margelo::nitro::image {
   /**
    * The C++ part of ImageFactorySpecCxx.swift.
    *
-   * Instances of ImageFactorySpecCxx can be accessed from C++, and contain
-   * additional required bridging code for C++ <> Swift interop.
+   * HybridImageFactorySwift (C++) accesses ImageFactorySpecCxx (Swift), and might
+   * contain some additional bridging code for C++ <> Swift interop.
    *
-   * Since this obviously introduces an overhead, I hope we can directly inherit from C++
-   * classes in Swift at some point in the future.
+   * Since this obviously introduces an overhead, I hope at some point in
+   * the future, ImageFactorySpecCxx can directly inherit from the C++ class HybridImageFactory
+   * to simplify the whole structure and memory management.
    */
   class HybridImageFactorySwift final: public HybridImageFactory {
   public:

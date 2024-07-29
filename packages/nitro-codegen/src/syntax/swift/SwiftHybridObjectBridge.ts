@@ -197,11 +197,12 @@ namespace ${cxxNamespace} {
   /**
    * The C++ part of ${name.TSpecCxx}.swift.
    *
-   * Instances of ${name.TSpecCxx} can be accessed from C++, and contain
-   * additional required bridging code for C++ <> Swift interop.
+   * ${name.HybridTSwift} (C++) accesses ${name.TSpecCxx} (Swift), and might
+   * contain some additional bridging code for C++ <> Swift interop.
    *
-   * Since this obviously introduces an overhead, I hope we can directly inherit from C++
-   * classes in Swift at some point in the future.
+   * Since this obviously introduces an overhead, I hope at some point in
+   * the future, ${name.TSpecCxx} can directly inherit from the C++ class ${name.HybridT}
+   * to simplify the whole structure and memory management.
    */
   class ${name.HybridTSwift} final: public ${name.HybridT} {
   public:
