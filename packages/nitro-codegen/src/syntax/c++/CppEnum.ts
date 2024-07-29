@@ -22,20 +22,14 @@ ${createFileMetadataString(`${typename}.hpp`)}
 #pragma once
 
 #include <NitroModules/JSIConverter.hpp>
-
-#if __has_include(<swift/bridging>)
-#include <swift/bridging>
-#else
-// Empty defines if Swift is not available (e.g. on Android)
-#define SWIFT_NAME(_name)
-#endif
+#include <NitroModules/NitroDefines.hpp>
 
 /**
  * An enum which can be represented as a JavaScript enum (${typename}).
  */
 enum class ${typename} {
   ${indent(cppEnumMembers, '  ')}
-} __attribute__((enum_extensibility(closed)));
+} CLOSED_ENUM;
 
 namespace margelo::nitro {
 

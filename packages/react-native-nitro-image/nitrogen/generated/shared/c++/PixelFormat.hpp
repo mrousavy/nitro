@@ -10,13 +10,7 @@
 
 #include <NitroModules/Hash.hpp>
 #include <NitroModules/JSIConverter.hpp>
-
-#if __has_include(<swift/bridging>)
-#include <swift/bridging>
-#else
-// Empty defines if Swift is not available (e.g. on Android)
-#define SWIFT_NAME(_name)
-#endif
+#include <NitroModules/NitroDefines.hpp>
 
 /**
  * An enum which can be represented as a JavaScript union (PixelFormat).
@@ -25,7 +19,7 @@ enum class PixelFormat {
   RGB SWIFT_NAME(rgb) = 0,
   YUV_8BIT SWIFT_NAME(yuv_8bit) = 1,
   YUV_10BIT SWIFT_NAME(yuv_10bit) = 2,
-} __attribute__((enum_extensibility(closed)));
+} CLOSED_ENUM;
 
 namespace margelo::nitro {
 
