@@ -1,14 +1,27 @@
 cmake_minimum_required(VERSION 3.4.1)
 project(NitroImage)
 
+set (PACKAGE_NAME NitroImage)
 set (CMAKE_VERBOSE_MAKEFILE ON)
-set (CMAKE_CXX_STANDARD 14)
+set (CMAKE_CXX_STANDARD 20)
 
-add_library(react-native-nitro-image            SHARED
-            cpp-adapter.cpp
+# Find all C++ files (shared and platform specifics)
+file(GLOB shared_files
+        "../nitrogen/generated/android/c++/**/*.cpp"
+)
+file(GLOB android_files
+        "../nitrogen/generated/shared/c++/**/*.cpp"
 )
 
-# Specifies a path to native header files.
+# Define C++ library and add all sources
+add_library(${PACKAGE_NAME} SHARED
+        cpp-adapter.cpp
+        ${shared_files}
+        ${android_files}
+)
+
+# Includes all generated specs from Nitrogen
 include_directories(
-            ../cpp
+        "../nitrogen/generated/shared/c++"
+        "../nitrogen/generated/android/c++"
 )
