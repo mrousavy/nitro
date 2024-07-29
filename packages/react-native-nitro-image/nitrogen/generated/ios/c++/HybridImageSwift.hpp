@@ -27,32 +27,34 @@ enum class ImageFormat;
 
 #include "NitroImage-Swift.h"
 
-/**
- * The C++ part of ImageSpecCxx.swift.
- */
-class HybridImageSwift final: public HybridImage {
-public:
-  // Constructor from a Swift instance
-  explicit HybridImageSwift(const NitroImage::ImageSpecCxx& swiftPart): HybridImage(), _swiftPart(swiftPart) { }
+namespace margelo::nitro::image {
 
-public:
-  // Get the Swift part
-  inline NitroImage::ImageSpecCxx getSwiftPart() noexcept { return _swiftPart; }
+  /**
+   * The C++ part of ImageSpecCxx.swift.
+   */
+  class HybridImageSwift final: public HybridImage {
+  public:
+    // Constructor from a Swift instance
+    explicit HybridImageSwift(const NitroImage::ImageSpecCxx& swiftPart): HybridImage(), _swiftPart(swiftPart) { }
 
-public:
-  // Get memory pressure
-  inline size_t getExternalMemorySize() noexcept override {
-    return _swiftPart.getMemorySize();
-  }
+  public:
+    // Get the Swift part
+    inline NitroImage::ImageSpecCxx getSwiftPart() noexcept { return _swiftPart; }
 
-public:
-  // Properties
-  inline ImageSize getSize() noexcept override {
+  public:
+    // Get memory pressure
+    inline size_t getExternalMemorySize() noexcept override {
+      return _swiftPart.getMemorySize();
+    }
+
+  public:
+    // Properties
+    inline ImageSize getSize() noexcept override {
     return _swiftPart.getSize();
   }
   inline PixelFormat getPixelFormat() noexcept override {
     auto result = _swiftPart.getPixelFormat();
-    return static_cast<PixelFormat>(result);
+    return static_cast<margelo.nitro.image.PixelFormat>(result);
   }
   inline double getSomeSettableProp() noexcept override {
     return _swiftPart.getSomeSettableProp();
@@ -61,9 +63,9 @@ public:
     _swiftPart.setSomeSettableProp(std::forward<decltype(someSettableProp)>(someSettableProp));
   }
 
-public:
-  // Methods
-  inline double toArrayBuffer(ImageFormat format) override {
+  public:
+    // Methods
+    inline double toArrayBuffer(ImageFormat format) override {
     auto valueOrError = _swiftPart.toArrayBuffer(static_cast<int>(format));
     if (valueOrError.isError()) [[unlikely]] {
       throw std::runtime_error(valueOrError.getError());
@@ -78,6 +80,8 @@ public:
     }
   }
 
-private:
-  NitroImage::ImageSpecCxx _swiftPart;
-};
+  private:
+    NitroImage::ImageSpecCxx _swiftPart;
+  };
+
+} // namespace margelo::nitro::image

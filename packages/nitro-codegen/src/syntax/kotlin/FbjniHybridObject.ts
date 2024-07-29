@@ -1,3 +1,4 @@
+import { getAndroidPackage } from '../../options.js'
 import { indent } from '../../stringUtils.js'
 import { getHybridObjectName } from '../getHybridObjectName.js'
 import { createFileMetadataString } from '../helpers.js'
@@ -14,6 +15,7 @@ export function createFbjniHybridObject(spec: HybridObjectSpec): SourceFile[] {
   const methodsDecl = spec.methods
     .map((p) => p.getCode('c++', { override: true }))
     .join('\n')
+  const jniClassDescriptor = getAndroidPackage('c++/jni', name.TSpec)
 
   const cppHeaderCode = `
 ${createFileMetadataString(`${name.JTSpec}.hpp`)}
@@ -25,7 +27,7 @@ using namespace facebook;
 
 class ${name.JTSpec}: public jni::HybridClass<${name.JTSpec}>, public ${name.HybridT} {
 public:
-  static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/${name.TSpec};";
+  static auto constexpr kJavaDescriptor = "${jniClassDescriptor}";
   static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis);
   static void registerNatives();
 

@@ -8,12 +8,16 @@
 
 #include "HybridImageFactory.hpp"
 
-void HybridImageFactory::loadHybridMethods() {
-  // load base methods/properties
-  HybridObject::loadHybridMethods();
-  // load custom methods/properties
-  registerHybridMethod("loadImageFromFile", &HybridImageFactory::loadImageFromFile, this);
+namespace margelo::nitro::image {
+
+  void HybridImageFactory::loadHybridMethods() {
+    // load base methods/properties
+    HybridObject::loadHybridMethods();
+    // load custom methods/properties
+    registerHybridMethod("loadImageFromFile", &HybridImageFactory::loadImageFromFile, this);
   registerHybridMethod("loadImageFromURL", &HybridImageFactory::loadImageFromURL, this);
   registerHybridMethod("loadImageFromSystemName", &HybridImageFactory::loadImageFromSystemName, this);
   registerHybridMethod("bounceBack", &HybridImageFactory::bounceBack, this);
-}
+  }
+
+} // namespace margelo::nitro::image

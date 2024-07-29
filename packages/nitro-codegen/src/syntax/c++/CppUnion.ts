@@ -2,6 +2,7 @@ import type { SourceFile } from '../SourceFile.js'
 import { createFileMetadataString } from './../helpers.js'
 import { indent } from '../../stringUtils.js'
 import type { EnumMember } from '../types/EnumType.js'
+import { getCxxNamespace } from '../../options.js'
 
 /**
  * Creates a C++ enum that converts to a TypeScript union (aka just strings).
@@ -24,6 +25,7 @@ export function createCppUnion(
         `case ${typename}::${v.name}: return JSIConverter<std::string>::toJSI(runtime, "${v.stringValue}");`
     )
     .join('\n')
+  const cxxNamespace = getCxxNamespace('c++')
 
   const cppCode = `
 ${createFileMetadataString(`${typename}.hpp`)}
@@ -34,14 +36,20 @@ ${createFileMetadataString(`${typename}.hpp`)}
 #include <NitroModules/JSIConverter.hpp>
 #include <NitroModules/NitroDefines.hpp>
 
-/**
- * An enum which can be represented as a JavaScript union (${typename}).
- */
-enum class ${typename} {
-  ${indent(cppEnumMembers, '  ')}
-} CLOSED_ENUM;
+namespace ${cxxNamespace} {
+
+  /**
+   * An enum which can be represented as a JavaScript union (${typename}).
+   */
+  enum class ${typename} {
+    ${indent(cppEnumMembers, '  ')}
+  } CLOSED_ENUM;
+
+} // namespace ${cxxNamespace}
 
 namespace margelo::nitro {
+
+  using namespace ${cxxNamespace};
 
   // C++ ${typename} <> JS ${typename} (union)
   template <>

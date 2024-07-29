@@ -13,7 +13,11 @@
 
 
 
-/**
- * A `(path: std::string) => void` function.
- */
-using Func_void_std__string = std::function<void(const std::string& /* path */)>;
+namespace margelo::nitro::image {
+
+  /**
+   * A `(path: std::string) => void` function.
+   */
+  using Func_void_std__string = std::function<void(const std::string& /* path */)>;
+
+} // namespace margelo::nitro::image

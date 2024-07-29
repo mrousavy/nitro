@@ -1,3 +1,4 @@
+import { getAndroidPackage } from '../../options.js'
 import { createFileMetadataString, toReferenceType } from '../helpers.js'
 import type { SourceFile } from '../SourceFile.js'
 import type { FunctionType } from '../types/FunctionType.js'
@@ -57,6 +58,7 @@ class ${specializationName} @DoNotStrip @Keep private constructor(hybridData: Hy
     return `${type} ${p.escapedName}`
   })
   const paramsForward = functionType.parameters.map((p) => p.name)
+  const jniClassDescriptor = getAndroidPackage('c++/jni', specializationName)
   const fbjniCode = `
 ${createFileMetadataString(`J${specializationName}.hpp`)}
 
@@ -83,7 +85,7 @@ public:
   }
 
 public:
-  static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/${specializationName};";
+  static auto constexpr kJavaDescriptor = "${jniClassDescriptor}";
   static void registerNatives() {
     registerHybrid({makeNativeMethod("call", J${specializationName}::call)});
   }

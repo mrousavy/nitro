@@ -16,38 +16,40 @@ namespace NitroImage { class ImageFactorySpecCxx; }
 // Forward declaration of `HybridImage` to properly resolve imports.
 class HybridImage;
 // Forward declaration of `HybridImageSwift` to properly resolve imports.
-class HybridImageSwift;
+namespace margelo::nitro::image { class HybridImageSwift; }
 
 #include "HybridImage.hpp"
 #include "HybridImageSwift.hpp"
 
 #include "NitroImage-Swift.h"
 
-/**
- * The C++ part of ImageFactorySpecCxx.swift.
- */
-class HybridImageFactorySwift final: public HybridImageFactory {
-public:
-  // Constructor from a Swift instance
-  explicit HybridImageFactorySwift(const NitroImage::ImageFactorySpecCxx& swiftPart): HybridImageFactory(), _swiftPart(swiftPart) { }
+namespace margelo::nitro::image {
 
-public:
-  // Get the Swift part
-  inline NitroImage::ImageFactorySpecCxx getSwiftPart() noexcept { return _swiftPart; }
+  /**
+   * The C++ part of ImageFactorySpecCxx.swift.
+   */
+  class HybridImageFactorySwift final: public HybridImageFactory {
+  public:
+    // Constructor from a Swift instance
+    explicit HybridImageFactorySwift(const NitroImage::ImageFactorySpecCxx& swiftPart): HybridImageFactory(), _swiftPart(swiftPart) { }
 
-public:
-  // Get memory pressure
-  inline size_t getExternalMemorySize() noexcept override {
-    return _swiftPart.getMemorySize();
-  }
+  public:
+    // Get the Swift part
+    inline NitroImage::ImageFactorySpecCxx getSwiftPart() noexcept { return _swiftPart; }
 
-public:
-  // Properties
-  
+  public:
+    // Get memory pressure
+    inline size_t getExternalMemorySize() noexcept override {
+      return _swiftPart.getMemorySize();
+    }
 
-public:
-  // Methods
-  inline std::shared_ptr<HybridImage> loadImageFromFile(const std::string& path) override {
+  public:
+    // Properties
+    
+
+  public:
+    // Methods
+    inline std::shared_ptr<HybridImage> loadImageFromFile(const std::string& path) override {
     auto valueOrError = _swiftPart.loadImageFromFile(std::forward<decltype(path)>(path));
     if (valueOrError.isError()) [[unlikely]] {
       throw std::runtime_error(valueOrError.getError());
@@ -80,6 +82,8 @@ public:
     return HybridContext::getOrCreate<HybridImageSwift>(value);
   }
 
-private:
-  NitroImage::ImageFactorySpecCxx _swiftPart;
-};
+  private:
+    NitroImage::ImageFactorySpecCxx _swiftPart;
+  };
+
+} // namespace margelo::nitro::image

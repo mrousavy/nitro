@@ -12,15 +12,21 @@
 #include <NitroModules/JSIConverter.hpp>
 #include <NitroModules/NitroDefines.hpp>
 
-/**
- * An enum which can be represented as a JavaScript union (ImageFormat).
- */
-enum class ImageFormat {
-  JPG SWIFT_NAME(jpg) = 0,
+namespace margelo::nitro::image {
+
+  /**
+   * An enum which can be represented as a JavaScript union (ImageFormat).
+   */
+  enum class ImageFormat {
+    JPG SWIFT_NAME(jpg) = 0,
   PNG SWIFT_NAME(png) = 1,
-} CLOSED_ENUM;
+  } CLOSED_ENUM;
+
+} // namespace margelo::nitro::image
 
 namespace margelo::nitro {
+
+  using namespace margelo::nitro::image;
 
   // C++ ImageFormat <> JS ImageFormat (union)
   template <>

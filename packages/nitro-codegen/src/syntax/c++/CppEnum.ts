@@ -1,3 +1,4 @@
+import { getCxxNamespace } from '../../options.js'
 import { indent } from '../../stringUtils.js'
 import type { SourceFile } from '../SourceFile.js'
 import { createFileMetadataString } from '../helpers.js'
@@ -14,6 +15,7 @@ export function createCppEnum(
   const cppEnumMembers = enumMembers
     .map((m) => `${m.name} SWIFT_NAME(${m.name.toLowerCase()}) = ${m.value},`)
     .join('\n')
+  const cxxNamespace = getCxxNamespace('c++')
 
   // Create entire C++ file
   const cppCode = `
@@ -24,14 +26,20 @@ ${createFileMetadataString(`${typename}.hpp`)}
 #include <NitroModules/JSIConverter.hpp>
 #include <NitroModules/NitroDefines.hpp>
 
-/**
- * An enum which can be represented as a JavaScript enum (${typename}).
- */
-enum class ${typename} {
-  ${indent(cppEnumMembers, '  ')}
-} CLOSED_ENUM;
+namespace ${cxxNamespace} {
+
+  /**
+   * An enum which can be represented as a JavaScript enum (${typename}).
+   */
+  enum class ${typename} {
+    ${indent(cppEnumMembers, '  ')}
+  } CLOSED_ENUM;
+
+} // namespace ${cxxNamespace}
 
 namespace margelo::nitro {
+
+  using namespace ${cxxNamespace};
 
   // C++ ${typename} <> JS ${typename} (enum)
   template <>

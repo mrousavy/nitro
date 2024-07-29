@@ -1,3 +1,4 @@
+import { getAndroidCxxLibName, getAndroidPackage } from '../../options.js'
 import { indent } from '../../stringUtils.js'
 import { getAllTypes } from '../getAllTypes.js'
 import { getHybridObjectName } from '../getHybridObjectName.js'
@@ -13,11 +14,6 @@ import { createKotlinEnum } from './KotlinEnum.js'
 import { createKotlinFunction } from './KotlinFunction.js'
 import { createKotlinStruct } from './KotlinStruct.js'
 
-// TODO: Make this customizable
-const PACKAGE = 'com.margelo.nitro.image'
-// TODO: Make this customizable
-const CPP_LIB_NAME = 'NitroImage'
-
 export function createKotlinHybridObject(spec: HybridObjectSpec): SourceFile[] {
   const name = getHybridObjectName(spec.name)
   const properties = spec.properties
@@ -27,11 +23,14 @@ export function createKotlinHybridObject(spec: HybridObjectSpec): SourceFile[] {
     .map((p) => p.getCode('kotlin', { doNotStrip: true, virtual: true }))
     .join('\n\n')
 
+  const javaPackage = getAndroidPackage('java/kotlin')
+  const cppLibName = getAndroidCxxLibName()
+
   // 1. Create Kotlin abstract class definition
   const abstractClassCode = `
 ${createFileMetadataString(`${name.HybridT}.kt`)}
 
-package ${PACKAGE}
+package ${javaPackage}
 
 import android.util.Log
 import androidx.annotation.Keep
@@ -67,11 +66,11 @@ abstract class ${name.HybridT}: HybridObject {
     private const val TAG = "${name.HybridT}"
     init {
       try {
-        Log.i(TAG, "Loading ${CPP_LIB_NAME} C++ library...")
-        System.loadLibrary("${CPP_LIB_NAME}")
-        Log.i(TAG, "Successfully loaded ${CPP_LIB_NAME} C++ library!")
+        Log.i(TAG, "Loading ${cppLibName} C++ library...")
+        System.loadLibrary("${cppLibName}")
+        Log.i(TAG, "Successfully loaded ${cppLibName} C++ library!")
       } catch (e: Error) {
-        Log.e(TAG, "Failed to load ${CPP_LIB_NAME} C++ library! Is it properly installed and linked? " +
+        Log.e(TAG, "Failed to load ${cppLibName} C++ library! Is it properly installed and linked? " +
                     "Is the name correct? (see \`CMakeLists.txt\`, at \`add_library(...)\`)", e)
         throw e
       }
@@ -90,17 +89,17 @@ abstract class ${name.HybridT}: HybridObject {
     switch (type.kind) {
       case 'enum':
         const enumType = getTypeAs(type, EnumType)
-        const enumFiles = createKotlinEnum(PACKAGE, enumType)
+        const enumFiles = createKotlinEnum(javaPackage, enumType)
         extraFiles.push(...enumFiles)
         break
       case 'struct':
         const structType = getTypeAs(type, StructType)
-        const structFiles = createKotlinStruct(PACKAGE, structType)
+        const structFiles = createKotlinStruct(javaPackage, structType)
         extraFiles.push(...structFiles)
         break
       case 'function':
         const functionType = getTypeAs(type, FunctionType)
-        const funcFiles = createKotlinFunction(PACKAGE, functionType)
+        const funcFiles = createKotlinFunction(javaPackage, functionType)
         extraFiles.push(...funcFiles)
         break
     }

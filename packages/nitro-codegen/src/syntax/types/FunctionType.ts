@@ -1,4 +1,5 @@
 import type { Language } from '../../getPlatformSpecs.js'
+import { getAndroidPackage, getCxxNamespace } from '../../options.js'
 import {
   createCppFunctionSpecialization,
   type FunctionSpecialization,
@@ -66,9 +67,9 @@ export class FunctionType implements Type {
       case 'c++':
         return specialization.typename
       case 'swift':
-        return specialization.typename
+        return getCxxNamespace('swift', specialization.typename)
       case 'kotlin':
-        return specialization.typename
+        return getAndroidPackage('java/kotlin', specialization.typename)
       default:
         throw new Error(
           `Language ${language} is not yet supported for FunctionType!`

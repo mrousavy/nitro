@@ -1,12 +1,15 @@
+import { getCxxNamespace } from '../../options.js'
 import { getForwardDeclaration } from '../c++/getForwardDeclaration.js'
 import {
   getHybridObjectName,
   type HybridObjectName,
 } from '../getHybridObjectName.js'
 import type { SourceImport } from '../SourceFile.js'
+import { EnumType } from '../types/EnumType.js'
 import { FunctionType } from '../types/FunctionType.js'
 import { getTypeAs } from '../types/getTypeAs.js'
 import { HybridObjectType } from '../types/HybridObjectType.js'
+import { StructType } from '../types/StructType.js'
 import type { Type } from '../types/Type.js'
 
 export class SwiftCxxBridgedType {
@@ -37,9 +40,14 @@ export class SwiftCxxBridgedType {
     if (this.type.kind === 'hybrid-object') {
       // Use SwiftCxx wrapper of the HybridObject type
       const name = getTypeHybridObjectName(this.type)
+      const namespace = getCxxNamespace('c++')
       imports.push({
         name: `${name.HybridTSwift}.hpp`,
-        forwardDeclaration: getForwardDeclaration('class', name.HybridTSwift),
+        forwardDeclaration: getForwardDeclaration(
+          'class',
+          name.HybridTSwift,
+          namespace
+        ),
         language: 'c++',
       })
     }
@@ -69,13 +77,14 @@ export class SwiftCxxBridgedType {
             throw new Error(`Invalid language! ${language}`)
         }
       }
-      case 'function': {
-        const func = getTypeAs(this.type, FunctionType)
+      case 'struct': {
+        const struct = getTypeAs(this.type, StructType)
         switch (language) {
           case 'c++':
-            return func.specialization.typename
+            return struct.structName
           case 'swift':
-            return func.specialization.typename
+            const fullName = getCxxNamespace('swift', struct.structName)
+            return fullName
           default:
             throw new Error(`Invalid language! ${language}`)
         }
@@ -92,11 +101,13 @@ export class SwiftCxxBridgedType {
   ): string {
     switch (this.type.kind) {
       case 'enum':
+        const enumType = getTypeAs(this.type, EnumType)
         switch (language) {
           case 'c++':
             return `static_cast<int>(${cppParameterName})`
           case 'swift':
-            return `${this.type.getCode('swift')}(rawValue: ${cppParameterName})!`
+            const fullName = getCxxNamespace('swift', enumType.enumName)
+            return `${fullName}(rawValue: ${cppParameterName})!`
           default:
             throw new Error(`Invalid language! ${language}`)
         }

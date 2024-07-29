@@ -7,6 +7,7 @@ import type { Type, TypeKind } from './Type.js'
 import { createCppEnum } from '../c++/CppEnum.js'
 import { escapeCppName } from '../helpers.js'
 import { createCppUnion } from '../c++/CppUnion.js'
+import { getAndroidPackage, getCxxNamespace } from '../../options.js'
 
 export interface EnumMember {
   name: string
@@ -84,11 +85,9 @@ export class EnumType implements Type {
       case 'c++':
         return this.enumName
       case 'swift':
-        // TODO: Namespace?
-        return this.enumName
+        return getCxxNamespace('swift', this.enumName)
       case 'kotlin':
-        // TODO: Namespace?
-        return this.enumName
+        return getAndroidPackage('java/kotlin', this.enumName)
       default:
         throw new Error(
           `Language ${language} is not yet supported for NumberType!`

@@ -2,6 +2,7 @@ import type { FileWithReferencedTypes } from '../SourceFile.js'
 import { indent } from '../../stringUtils.js'
 import { createFileMetadataString, isNotDuplicate } from '../helpers.js'
 import type { NamedType } from '../types/Type.js'
+import { getCxxNamespace } from '../../options.js'
 
 export function createCppStruct(
   typename: string,
@@ -41,6 +42,7 @@ export function createCppStruct(
   const cppExtraIncludes = includedTypes
     .map((f) => `#include "${f.name}"`)
     .filter(isNotDuplicate)
+  const cxxNamespace = getCxxNamespace('c++')
 
   const cppCode = `
 ${createFileMetadataString(`${typename}.hpp`)}
@@ -53,18 +55,24 @@ ${cppForwardDeclarations.join('\n')}
 
 ${cppExtraIncludes.join('\n')}
 
-/**
- * A struct which can be represented as a JavaScript object (${typename}).
- */
-struct ${typename} {
-public:
-  ${indent(cppStructProps, '  ')}
+namespace ${cxxNamespace} {
 
-public:
-  explicit ${typename}(${cppConstructorParams}): ${cppInitializerParams} {}
-};
+  /**
+   * A struct which can be represented as a JavaScript object (${typename}).
+   */
+  struct ${typename} {
+  public:
+    ${indent(cppStructProps, '  ')}
+
+  public:
+    explicit ${typename}(${cppConstructorParams}): ${cppInitializerParams} {}
+  };
+
+} // namespace ${cxxNamespace}
 
 namespace margelo::nitro {
+
+  using namespace ${cxxNamespace};
 
   // C++ ${typename} <> JS ${typename} (object)
   template <>

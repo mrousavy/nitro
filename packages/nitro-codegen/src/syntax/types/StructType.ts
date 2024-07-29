@@ -1,4 +1,5 @@
 import type { Language } from '../../getPlatformSpecs.js'
+import { getAndroidPackage, getCxxNamespace } from '../../options.js'
 import { createCppStruct } from '../c++/CppStruct.js'
 import { getForwardDeclaration } from '../c++/getForwardDeclaration.js'
 import {
@@ -31,11 +32,9 @@ export class StructType implements Type {
       case 'c++':
         return this.structName
       case 'swift':
-        // TODO: Namespace?
-        return this.structName
+        return getCxxNamespace('swift', this.structName)
       case 'kotlin':
-        // TODO: Namespace?
-        return this.structName
+        return getAndroidPackage('java/kotlin', this.structName)
       default:
         throw new Error(
           `Language ${language} is not yet supported for StructType!`

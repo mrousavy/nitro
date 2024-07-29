@@ -35,11 +35,11 @@ abstract class HybridImage: HybridObject {
   // Properties
   @get:DoNotStrip
   @get:Keep
-  abstract val size: ImageSize
+  abstract val size: margelo.nitro.image.ImageSize
   
   @get:DoNotStrip
   @get:Keep
-  abstract val pixelFormat: PixelFormat
+  abstract val pixelFormat: margelo.nitro.image.PixelFormat
   
   @get:DoNotStrip
   @get:Keep
@@ -50,11 +50,11 @@ abstract class HybridImage: HybridObject {
   // Methods
   @DoNotStrip
   @Keep
-  abstract fun toArrayBuffer(format: ImageFormat): Double
+  abstract fun toArrayBuffer(format: com.margelo.nitro.image.ImageFormat): Double
   
   @DoNotStrip
   @Keep
-  abstract fun saveToFile(path: String, onFinished: Func_void_std__string): Unit
+  abstract fun saveToFile(path: String, onFinished: com.margelo.nitro.image.Func_void_std__string): Unit
 
   companion object {
     private const val TAG = "HybridImage"

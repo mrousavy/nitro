@@ -14,9 +14,7 @@ import {
   type HybridObjectName,
 } from '../getHybridObjectName.js'
 import { getForwardDeclaration } from '../c++/getForwardDeclaration.js'
-
-// TODO: dynamically get namespace
-const NAMESPACE = 'NitroImage'
+import { getCxxNamespace, getIosModuleName } from '../../options.js'
 
 /**
  * Creates a Swift class that bridges Swift over to C++.
@@ -85,7 +83,6 @@ public final class ${name.TSpecCxx} {
   // Methods
   ${indent(methodsBridge, '  ')}
 }
-
   `
 
   const cppProperties = spec.properties
@@ -176,6 +173,8 @@ return ${bridgedReturnType.parseFromSwiftToCpp('value', 'c++')};
   const extraIncludes = extraImports
     .map((i) => `#include "${i.name}"`)
     .filter(isNotDuplicate)
+  const cxxNamespace = getCxxNamespace('c++')
+  const iosModuleName = getIosModuleName()
 
   // TODO: Remove forward declaration once Swift fixes the wrong order in generated -Swift.h headers!
   const cppHybridObjectCode = `
@@ -185,48 +184,55 @@ ${createFileMetadataString(`${name.HybridTSwift}.hpp`)}
 
 #include "${name.HybridT}.hpp"
 
-${getForwardDeclaration('class', name.TSpecCxx, NAMESPACE)}
+${getForwardDeclaration('class', name.TSpecCxx, iosModuleName)}
 
 ${extraForwardDeclarations.join('\n')}
 
 ${extraIncludes.join('\n')}
 
-#include "${NAMESPACE}-Swift.h"
+#include "${iosModuleName}-Swift.h"
 
-/**
- * The C++ part of ${name.TSpecCxx}.swift.
- */
-class ${name.HybridTSwift} final: public ${name.HybridT} {
-public:
-  // Constructor from a Swift instance
-  explicit ${name.HybridTSwift}(const ${NAMESPACE}::${name.TSpecCxx}& swiftPart): ${name.HybridT}(), _swiftPart(swiftPart) { }
+namespace ${cxxNamespace} {
 
-public:
-  // Get the Swift part
-  inline ${NAMESPACE}::${name.TSpecCxx} getSwiftPart() noexcept { return _swiftPart; }
+  /**
+   * The C++ part of ${name.TSpecCxx}.swift.
+   */
+  class ${name.HybridTSwift} final: public ${name.HybridT} {
+  public:
+    // Constructor from a Swift instance
+    explicit ${name.HybridTSwift}(const ${iosModuleName}::${name.TSpecCxx}& swiftPart): ${name.HybridT}(), _swiftPart(swiftPart) { }
 
-public:
-  // Get memory pressure
-  inline size_t getExternalMemorySize() noexcept override {
-    return _swiftPart.getMemorySize();
-  }
+  public:
+    // Get the Swift part
+    inline ${iosModuleName}::${name.TSpecCxx} getSwiftPart() noexcept { return _swiftPart; }
 
-public:
-  // Properties
-  ${indent(cppProperties, '  ')}
+  public:
+    // Get memory pressure
+    inline size_t getExternalMemorySize() noexcept override {
+      return _swiftPart.getMemorySize();
+    }
 
-public:
-  // Methods
-  ${indent(cppMethods, '  ')}
+  public:
+    // Properties
+    ${indent(cppProperties, '  ')}
 
-private:
-  ${NAMESPACE}::${name.TSpecCxx} _swiftPart;
-};
+  public:
+    // Methods
+    ${indent(cppMethods, '  ')}
+
+  private:
+    ${iosModuleName}::${name.TSpecCxx} _swiftPart;
+  };
+
+} // namespace ${cxxNamespace}
   `
   const cppHybridObjectCodeCpp = `
 ${createFileMetadataString(`${name.HybridTSwift}.cpp`)}
 
 #include "${name.HybridTSwift}.hpp"
+
+namespace ${cxxNamespace} {
+} // namespace ${cxxNamespace}
   `
 
   const files: SourceFile[] = []

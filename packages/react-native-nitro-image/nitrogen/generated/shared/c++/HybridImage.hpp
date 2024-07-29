@@ -26,40 +26,44 @@ enum class ImageFormat;
 #include "ImageFormat.hpp"
 #include "Func_void_std__string.hpp"
 
-using namespace margelo::nitro;
+namespace margelo::nitro::image {
 
-/**
- * An abstract base class for `Image`
- * Inherit this class to create instances of `HybridImage` in C++.
- * @example
- * ```cpp
- * class Image: public HybridImage {
- *   // ...
- * };
- * ```
- */
-class HybridImage: public HybridObject {
-  public:
-    // Constructor
-    explicit HybridImage(): HybridObject(TAG) { }
+  using namespace margelo::nitro;
 
-  public:
-    // Properties
-    virtual ImageSize getSize() = 0;
+  /**
+   * An abstract base class for `Image`
+   * Inherit this class to create instances of `HybridImage` in C++.
+   * @example
+   * ```cpp
+   * class Image: public HybridImage {
+   *   // ...
+   * };
+   * ```
+   */
+  class HybridImage: public HybridObject {
+    public:
+      // Constructor
+      explicit HybridImage(): HybridObject(TAG) { }
+
+    public:
+      // Properties
+      virtual ImageSize getSize() = 0;
     virtual PixelFormat getPixelFormat() = 0;
     virtual double getSomeSettableProp() = 0;
     virtual void setSomeSettableProp(double someSettableProp) = 0;
 
-  public:
-    // Methods
-    virtual double toArrayBuffer(ImageFormat format) = 0;
+    public:
+      // Methods
+      virtual double toArrayBuffer(ImageFormat format) = 0;
     virtual void saveToFile(const std::string& path, const Func_void_std__string& onFinished) = 0;
 
-  protected:
-    // Tag for logging
-    static constexpr auto TAG = "Image";
+    protected:
+      // Tag for logging
+      static constexpr auto TAG = "Image";
 
-  private:
-    // Hybrid Setup
-    void loadHybridMethods() override;
-};
+    private:
+      // Hybrid Setup
+      void loadHybridMethods() override;
+  };
+
+} // namespace margelo::nitro::image

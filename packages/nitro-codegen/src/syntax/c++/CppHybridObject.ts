@@ -2,6 +2,7 @@ import type { SourceFile } from '../SourceFile.js'
 import { createFileMetadataString, isNotDuplicate } from '../helpers.js'
 import { indent } from '../../stringUtils.js'
 import type { HybridObjectSpec } from '../HybridObjectSpec.js'
+import { getCxxNamespace } from '../../options.js'
 
 export function createCppHybridObject(spec: HybridObjectSpec): SourceFile[] {
   // Extra includes
@@ -20,6 +21,7 @@ export function createCppHybridObject(spec: HybridObjectSpec): SourceFile[] {
   const cppExtraIncludes = extraIncludes
     .map((i) => `#include "${i.name}"`)
     .filter(isNotDuplicate)
+  const cxxNamespace = getCxxNamespace('c++')
 
   // Generate the full header / code
   const cppHeaderCode = `
@@ -37,39 +39,43 @@ ${cppForwardDeclarations.join('\n')}
 
 ${cppExtraIncludes.join('\n')}
 
-using namespace margelo::nitro;
+namespace ${cxxNamespace} {
 
-/**
- * An abstract base class for \`${spec.name}\`
- * Inherit this class to create instances of \`${spec.hybridObjectName}\` in C++.
- * @example
- * \`\`\`cpp
- * class ${spec.name}: public ${spec.hybridObjectName} {
- *   // ...
- * };
- * \`\`\`
- */
-class ${spec.hybridObjectName}: public HybridObject {
-  public:
-    // Constructor
-    explicit ${spec.hybridObjectName}(): HybridObject(TAG) { }
+  using namespace margelo::nitro;
 
-  public:
-    // Properties
-    ${indent(spec.properties.map((p) => p.getCode('c++', { virtual: true })).join('\n'), '    ')}
+  /**
+   * An abstract base class for \`${spec.name}\`
+   * Inherit this class to create instances of \`${spec.hybridObjectName}\` in C++.
+   * @example
+   * \`\`\`cpp
+   * class ${spec.name}: public ${spec.hybridObjectName} {
+   *   // ...
+   * };
+   * \`\`\`
+   */
+  class ${spec.hybridObjectName}: public HybridObject {
+    public:
+      // Constructor
+      explicit ${spec.hybridObjectName}(): HybridObject(TAG) { }
 
-  public:
-    // Methods
-    ${indent(spec.methods.map((m) => m.getCode('c++', { virtual: true })).join('\n'), '    ')}
+    public:
+      // Properties
+      ${indent(spec.properties.map((p) => p.getCode('c++', { virtual: true })).join('\n'), '    ')}
 
-  protected:
-    // Tag for logging
-    static constexpr auto TAG = "${spec.name}";
+    public:
+      // Methods
+      ${indent(spec.methods.map((m) => m.getCode('c++', { virtual: true })).join('\n'), '    ')}
 
-  private:
-    // Hybrid Setup
-    void loadHybridMethods() override;
-};
+    protected:
+      // Tag for logging
+      static constexpr auto TAG = "${spec.name}";
+
+    private:
+      // Hybrid Setup
+      void loadHybridMethods() override;
+  };
+
+} // namespace ${cxxNamespace}
     `
 
   // Each C++ method needs to be registered in the HybridObject - that's getters, setters and normal methods.
@@ -98,12 +104,16 @@ ${createFileMetadataString(`${spec.hybridObjectName}.cpp`)}
 
 #include "${spec.hybridObjectName}.hpp"
 
-void ${spec.hybridObjectName}::loadHybridMethods() {
-  // load base methods/properties
-  HybridObject::loadHybridMethods();
-  // load custom methods/properties
-  ${indent(registrations.join('\n'), '  ')}
-}
+namespace ${cxxNamespace} {
+
+  void ${spec.hybridObjectName}::loadHybridMethods() {
+    // load base methods/properties
+    HybridObject::loadHybridMethods();
+    // load custom methods/properties
+    ${indent(registrations.join('\n'), '  ')}
+  }
+
+} // namespace ${cxxNamespace}
     `
 
   const files: SourceFile[] = []

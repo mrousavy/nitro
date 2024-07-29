@@ -41,7 +41,7 @@ public final class ImageSpecCxx {
   }
 
   // Properties
-  public var size: ImageSize {
+  public var size: margelo.nitro.image.ImageSize {
     @inline(__always)
     get {
       return self.implementation.size
@@ -70,7 +70,7 @@ public final class ImageSpecCxx {
   @inline(__always)
   public func toArrayBuffer(format: Int32) -> ImageSpecCxx_toArrayBuffer_Result {
     do {
-      let result = try self.implementation.toArrayBuffer(format: ImageFormat(rawValue: format)!)
+      let result = try self.implementation.toArrayBuffer(format: margelo.nitro.image.ImageFormat(rawValue: format)!)
       return .value(result)
     } catch RuntimeError.error(withMessage: let message) {
       // A  `RuntimeError` was thrown.
@@ -84,7 +84,7 @@ public final class ImageSpecCxx {
   }
   
   @inline(__always)
-  public func saveToFile(path: String, onFinished: Func_void_std__string) -> ImageSpecCxx_saveToFile_Result {
+  public func saveToFile(path: String, onFinished: margelo.nitro.image.Func_void_std__string) -> ImageSpecCxx_saveToFile_Result {
     do {
       try self.implementation.saveToFile(path: path, onFinished: onFinished)
       return .value

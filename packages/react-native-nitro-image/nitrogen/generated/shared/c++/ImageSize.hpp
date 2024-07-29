@@ -14,19 +14,25 @@
 
 
 
-/**
- * A struct which can be represented as a JavaScript object (ImageSize).
- */
-struct ImageSize {
-public:
-  double width;
+namespace margelo::nitro::image {
+
+  /**
+   * A struct which can be represented as a JavaScript object (ImageSize).
+   */
+  struct ImageSize {
+  public:
+    double width;
   double height;
 
-public:
-  explicit ImageSize(double width, double height): width(width), height(height) {}
-};
+  public:
+    explicit ImageSize(double width, double height): width(width), height(height) {}
+  };
+
+} // namespace margelo::nitro::image
 
 namespace margelo::nitro {
+
+  using namespace margelo::nitro::image;
 
   // C++ ImageSize <> JS ImageSize (object)
   template <>

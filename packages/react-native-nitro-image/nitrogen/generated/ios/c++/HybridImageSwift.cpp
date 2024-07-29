@@ -7,3 +7,6 @@
 ///
 
 #include "HybridImageSwift.hpp"
+
+namespace margelo::nitro::image {
+} // namespace margelo::nitro::image

@@ -1,3 +1,4 @@
+import { getCxxNamespace } from '../../options.js'
 import {
   createFileMetadataString,
   escapeCppName,
@@ -49,6 +50,7 @@ export function createCppFunctionSpecialization(
       return `${type} /* ${p.name} */`
     })
     .join(', ')
+  const cxxNamespace = getCxxNamespace('c++')
 
   const code = `
 ${createFileMetadataString(typename)}
@@ -60,10 +62,14 @@ ${extraForwardDeclarations}
 
 ${extraIncludes}
 
-/**
- * A \`(${paramsJs}) => ${returnType}\` function.
- */
-using ${typename} = std::function<${returnType}(${paramsCpp})>;
+namespace ${cxxNamespace} {
+
+  /**
+   * A \`(${paramsJs}) => ${returnType}\` function.
+   */
+  using ${typename} = std::function<${returnType}(${paramsCpp})>;
+
+} // namespace ${cxxNamespace}
   `
 
   return {

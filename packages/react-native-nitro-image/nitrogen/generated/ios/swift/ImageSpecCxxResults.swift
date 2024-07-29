@@ -22,7 +22,7 @@ import NitroModules
  * The exception-free result type for ImageSpec.toArrayBuffer(...).
  * Original func:
  * ```swift
- * func toArrayBuffer(format: ImageFormat) throws -> Double
+ * func toArrayBuffer(format: margelo.nitro.image.ImageFormat) throws -> Double
  * ```
  * - seealso: `ImageSpec.toArrayBuffer(format:)`
  */
@@ -36,7 +36,7 @@ public enum ImageSpecCxx_toArrayBuffer_Result {
  * The exception-free result type for ImageSpec.saveToFile(...).
  * Original func:
  * ```swift
- * func saveToFile(path: String, onFinished: Func_void_std__string) throws -> Void
+ * func saveToFile(path: String, onFinished: margelo.nitro.image.Func_void_std__string) throws -> Void
  * ```
  * - seealso: `ImageSpec.saveToFile(path:, onFinished:)`
  */
