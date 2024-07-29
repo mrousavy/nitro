@@ -37,7 +37,7 @@ namespace margelo::nitro::image {
     /**
      * Create a Java/Kotlin-based enum with the given C++ enum's value.
      */
-    static jni::local_ref<JImageFormat::javaobject> create(ImageFormat value) {
+    static jni::alias_ref<JImageFormat> create(ImageFormat value) {
       static const auto clazz = javaClassStatic();
       static const auto fieldJPG = clazz->getStaticField<JImageFormat>("JPG");
       static const auto fieldPNG = clazz->getStaticField<JImageFormat>("PNG");
