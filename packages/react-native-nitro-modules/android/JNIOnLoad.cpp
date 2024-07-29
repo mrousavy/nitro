@@ -7,4 +7,5 @@ using namespace margelo::nitro;
 
 JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void*) {
   JHybridObjectRegistry::registerNatives();
+  return JNI_VERSION_1_2;
 }

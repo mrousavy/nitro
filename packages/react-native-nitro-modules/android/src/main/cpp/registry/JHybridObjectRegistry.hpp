@@ -9,6 +9,7 @@
 
 #include <fbjni/fbjni.h>
 #include "JSupplier.hpp"
+#include "HybridObject.hpp"
 
 namespace margelo::nitro {
 

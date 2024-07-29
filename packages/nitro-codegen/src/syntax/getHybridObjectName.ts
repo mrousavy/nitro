@@ -25,6 +25,11 @@ export interface HybridObjectName {
    */
   HybridT: string
   /**
+   * The name of the C++ class that actually bridges to the Java Hybrid Object.
+   * @example "JHybridImage"
+   */
+  JHybridT: string
+  /**
    * The name of the C++ class that extends the Hybrid Object and bridges over to the Swift C++ wrapper class.
    * @example "HybridImageSwift"
    */
@@ -39,6 +44,7 @@ export function getHybridObjectName(
     TSpec: `${hybridObjectName}Spec`,
     TSpecCxx: `${hybridObjectName}SpecCxx`,
     JTSpec: `J${hybridObjectName}Spec`,
+    JHybridT: `JHybrid${hybridObjectName}`,
     HybridT: `Hybrid${hybridObjectName}`,
     HybridTSwift: `Hybrid${hybridObjectName}Swift`,
   }
