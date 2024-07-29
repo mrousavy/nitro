@@ -48,7 +48,7 @@ public final class ImageFactorySpecCxx {
   public func loadImageFromFile(path: String) -> ImageFactorySpecCxx_loadImageFromFile_Result {
     do {
       let result = try self.implementation.loadImageFromFile(path: path)
-      return .value(ImageSpecCxx(result))
+      return .value(result.createCxxBridge())
     } catch RuntimeError.error(withMessage: let message) {
       // A  `RuntimeError` was thrown.
       return .error(message: message)
@@ -64,7 +64,7 @@ public final class ImageFactorySpecCxx {
   public func loadImageFromURL(path: String) -> ImageFactorySpecCxx_loadImageFromURL_Result {
     do {
       let result = try self.implementation.loadImageFromURL(path: path)
-      return .value(ImageSpecCxx(result))
+      return .value(result.createCxxBridge())
     } catch RuntimeError.error(withMessage: let message) {
       // A  `RuntimeError` was thrown.
       return .error(message: message)
@@ -80,7 +80,7 @@ public final class ImageFactorySpecCxx {
   public func loadImageFromSystemName(path: String) -> ImageFactorySpecCxx_loadImageFromSystemName_Result {
     do {
       let result = try self.implementation.loadImageFromSystemName(path: path)
-      return .value(ImageSpecCxx(result))
+      return .value(result.createCxxBridge())
     } catch RuntimeError.error(withMessage: let message) {
       // A  `RuntimeError` was thrown.
       return .error(message: message)
@@ -96,7 +96,7 @@ public final class ImageFactorySpecCxx {
   public func bounceBack(image: ImageSpecCxx) -> ImageFactorySpecCxx_bounceBack_Result {
     do {
       let result = try self.implementation.bounceBack(image: image.implementation)
-      return .value(ImageSpecCxx(result))
+      return .value(result.createCxxBridge())
     } catch RuntimeError.error(withMessage: let message) {
       // A  `RuntimeError` was thrown.
       return .error(message: message)

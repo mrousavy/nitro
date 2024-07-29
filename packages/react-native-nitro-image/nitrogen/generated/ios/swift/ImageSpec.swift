@@ -38,3 +38,18 @@ public protocol ImageSpec: HybridObjectSpec {
   func toArrayBuffer(format: margelo.nitro.image.ImageFormat) throws -> Double
   func saveToFile(path: String, onFinished: margelo.nitro.image.Func_void_std__string) throws -> Void
 }
+
+public extension ImageSpec {
+  /**
+   * Create a new instance of ImageSpecCxx for the given ImageSpec.
+   *
+   * Instances of ImageSpecCxx can be accessed from C++, and contain
+   * additional required bridging code for C++ <> Swift interop.
+   *
+   * Since this obviously introduces an overhead, I hope we can directly inherit from C++
+   * classes in Swift at some point in the future.
+   */
+  func createCxxBridge() -> ImageSpecCxx {
+    return ImageSpecCxx(self)
+  }
+}

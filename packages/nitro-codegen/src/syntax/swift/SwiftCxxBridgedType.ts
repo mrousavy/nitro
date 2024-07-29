@@ -136,7 +136,7 @@ export class SwiftCxxBridgedType {
           case 'c++':
             return `HybridContext::getOrCreate<${name.HybridTSwift}>(${swiftParameterName})`
           case 'swift':
-            return `${name.TSpecCxx}(${swiftParameterName})`
+            return `${swiftParameterName}.createCxxBridge()`
           default:
             throw new Error(`Invalid language! ${language}`)
         }

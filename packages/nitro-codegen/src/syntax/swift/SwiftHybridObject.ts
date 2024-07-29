@@ -43,6 +43,21 @@ public protocol ${protocolName}: HybridObjectSpec {
   // Methods
   ${indent(methods, '  ')}
 }
+
+public extension ${protocolName} {
+  /**
+   * Create a new instance of ${name.TSpecCxx} for the given ${protocolName}.
+   *
+   * Instances of ${name.TSpecCxx} can be accessed from C++, and contain
+   * additional required bridging code for C++ <> Swift interop.
+   *
+   * Since this obviously introduces an overhead, I hope we can directly inherit from C++
+   * classes in Swift at some point in the future.
+   */
+  func createCxxBridge() -> ${name.TSpecCxx} {
+    return ${name.TSpecCxx}(self)
+  }
+}
   `
 
   const swiftBridge = createSwiftHybridObjectCxxBridge(spec)
