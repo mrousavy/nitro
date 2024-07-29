@@ -69,7 +69,7 @@ namespace ${cxxNamespace} {
     /**
      * Create a Java/Kotlin-based enum with the given C++ enum's value.
      */
-    static jni::local_ref<J${enumType.enumName}::javaobject> create(${enumType.enumName} value) {
+    static jni::alias_ref<J${enumType.enumName}> create(${enumType.enumName} value) {
       ${indent(cppToJniConverterCode, '      ')}
     }
   };
