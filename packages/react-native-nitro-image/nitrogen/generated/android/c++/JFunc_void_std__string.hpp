@@ -11,9 +11,9 @@
 #include <fbjni/fbjni.h>
 #include "Func_void_std__string.hpp"
 
-using namespace facebook;
-
 namespace margelo::nitro::image {
+
+  using namespace facebook;
 
   /**
    * C++ representation of the callback Func_void_std__string.

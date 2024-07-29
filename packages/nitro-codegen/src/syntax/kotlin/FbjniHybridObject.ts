@@ -1,4 +1,4 @@
-import { getAndroidPackage } from '../../options.js'
+import { getAndroidPackage, getCxxNamespace } from '../../options.js'
 import { indent } from '../../stringUtils.js'
 import { getHybridObjectName } from '../getHybridObjectName.js'
 import { createFileMetadataString } from '../helpers.js'
@@ -16,6 +16,7 @@ export function createFbjniHybridObject(spec: HybridObjectSpec): SourceFile[] {
     .map((p) => p.getCode('c++', { override: true }))
     .join('\n')
   const jniClassDescriptor = getAndroidPackage('c++/jni', name.TSpec)
+  const cxxNamespace = getCxxNamespace('c++')
 
   const cppHeaderCode = `
 ${createFileMetadataString(`${name.JTSpec}.hpp`)}
@@ -23,34 +24,37 @@ ${createFileMetadataString(`${name.JTSpec}.hpp`)}
 #include "${name.HybridT}.hpp"
 #include <fbjni/fbjni.h>
 
-using namespace facebook;
+namespace ${cxxNamespace} {
 
-class ${name.JTSpec}: public jni::HybridClass<${name.JTSpec}>, public ${name.HybridT} {
-public:
-  static auto constexpr kJavaDescriptor = "${jniClassDescriptor}";
-  static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis);
-  static void registerNatives();
+  using namespace facebook;
 
-private:
-  // C++ constructor (called from Java via \`initHybrid()\`)
-  explicit ${name.JTSpec}(jni::alias_ref<jhybridobject> jThis) : _javaPart(jni::make_global(jThis)) {}
+  class ${name.JTSpec}: public jni::HybridClass<${name.JTSpec}>, public ${name.HybridT} {
+  public:
+    static auto constexpr kJavaDescriptor = "${jniClassDescriptor}";
+    static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis);
+    static void registerNatives();
 
-public:
-  size_t getExternalMemorySize() noexcept override;
+  private:
+    // C++ constructor (called from Java via \`initHybrid()\`)
+    explicit ${name.JTSpec}(jni::alias_ref<jhybridobject> jThis) : _javaPart(jni::make_global(jThis)) {}
 
-public:
-  // Properties
-  ${indent(propertiesDecl, '  ')}
+  public:
+    size_t getExternalMemorySize() noexcept override;
 
-public:
-  // Methods
-  ${indent(methodsDecl, '  ')}
+  public:
+    // Properties
+    ${indent(propertiesDecl, '  ')}
 
-private:
-  friend HybridBase;
-  jni::global_ref<${name.JTSpec}::javaobject> _javaPart;
-};
+  public:
+    // Methods
+    ${indent(methodsDecl, '  ')}
 
+  private:
+    friend HybridBase;
+    jni::global_ref<${name.JTSpec}::javaobject> _javaPart;
+  };
+
+} // namespace ${cxxNamespace}
   `.trim()
 
   const propertiesImpl = spec.properties

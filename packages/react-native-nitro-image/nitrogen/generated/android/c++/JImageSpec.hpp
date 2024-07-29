@@ -9,34 +9,38 @@
 #include "HybridImage.hpp"
 #include <fbjni/fbjni.h>
 
-using namespace facebook;
+namespace margelo::nitro::image {
 
-class JImageSpec: public jni::HybridClass<JImageSpec>, public HybridImage {
-public:
-  static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/ImageSpec;";
-  static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis);
-  static void registerNatives();
+  using namespace facebook;
 
-private:
-  // C++ constructor (called from Java via `initHybrid()`)
-  explicit JImageSpec(jni::alias_ref<jhybridobject> jThis) : _javaPart(jni::make_global(jThis)) {}
+  class JImageSpec: public jni::HybridClass<JImageSpec>, public HybridImage {
+  public:
+    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/ImageSpec;";
+    static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis);
+    static void registerNatives();
 
-public:
-  size_t getExternalMemorySize() noexcept override;
+  private:
+    // C++ constructor (called from Java via `initHybrid()`)
+    explicit JImageSpec(jni::alias_ref<jhybridobject> jThis) : _javaPart(jni::make_global(jThis)) {}
 
-public:
-  // Properties
-  ImageSize getSize() override;
+  public:
+    size_t getExternalMemorySize() noexcept override;
+
+  public:
+    // Properties
+    ImageSize getSize() override;
   PixelFormat getPixelFormat() override;
   double getSomeSettableProp() override;
   void setSomeSettableProp(double someSettableProp) override;
 
-public:
-  // Methods
-  double toArrayBuffer(ImageFormat format) override;
+  public:
+    // Methods
+    double toArrayBuffer(ImageFormat format) override;
   void saveToFile(const std::string& path, const Func_void_std__string& onFinished) override;
 
-private:
-  friend HybridBase;
-  jni::global_ref<JImageSpec::javaobject> _javaPart;
-};
+  private:
+    friend HybridBase;
+    jni::global_ref<JImageSpec::javaobject> _javaPart;
+  };
+
+} // namespace margelo::nitro::image

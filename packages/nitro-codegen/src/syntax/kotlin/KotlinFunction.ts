@@ -72,9 +72,9 @@ ${createFileMetadataString(`J${specializationName}.hpp`)}
 #include <fbjni/fbjni.h>
 #include "${specialization.declarationFile.name}"
 
-using namespace facebook;
-
 namespace ${cxxNamespace} {
+
+  using namespace facebook;
 
   /**
    * C++ representation of the callback ${specializationName}.
