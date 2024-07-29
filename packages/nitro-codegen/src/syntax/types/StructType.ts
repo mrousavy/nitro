@@ -45,10 +45,15 @@ export class StructType implements Type {
     return [this.declarationFile]
   }
   getRequiredImports(): SourceImport[] {
+    const cxxNamespace = getCxxNamespace('c++')
     const extraImport: SourceImport = {
       name: this.declarationFile.name,
       language: this.declarationFile.language,
-      forwardDeclaration: getForwardDeclaration('struct', this.structName),
+      forwardDeclaration: getForwardDeclaration(
+        'struct',
+        this.structName,
+        cxxNamespace
+      ),
     }
     return [extraImport]
   }

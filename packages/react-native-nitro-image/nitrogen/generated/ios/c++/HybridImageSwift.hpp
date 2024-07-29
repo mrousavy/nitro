@@ -14,11 +14,11 @@
 namespace NitroImage { class ImageSpecCxx; }
 
 // Forward declaration of `ImageSize` to properly resolve imports.
-struct ImageSize;
+namespace margelo::nitro::image { struct ImageSize; }
 // Forward declaration of `PixelFormat` to properly resolve imports.
-enum class PixelFormat;
+namespace margelo::nitro::image { enum class PixelFormat; }
 // Forward declaration of `ImageFormat` to properly resolve imports.
-enum class ImageFormat;
+namespace margelo::nitro::image { enum class ImageFormat; }
 
 #include "ImageSize.hpp"
 #include "PixelFormat.hpp"

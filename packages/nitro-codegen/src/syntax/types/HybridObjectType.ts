@@ -1,4 +1,5 @@
 import type { Language } from '../../getPlatformSpecs.js'
+import { getCxxNamespace } from '../../options.js'
 import { getForwardDeclaration } from '../c++/getForwardDeclaration.js'
 import { getHybridObjectName } from '../getHybridObjectName.js'
 import type { SourceFile, SourceImport } from '../SourceFile.js'
@@ -40,10 +41,15 @@ export class HybridObjectType implements Type {
   }
   getRequiredImports(): SourceImport[] {
     const name = getHybridObjectName(this.hybridObjectName)
+    const cxxNamespace = getCxxNamespace('c++')
     return [
       {
         name: `${name.HybridT}.hpp`,
-        forwardDeclaration: getForwardDeclaration('class', name.HybridT),
+        forwardDeclaration: getForwardDeclaration(
+          'class',
+          name.HybridT,
+          cxxNamespace
+        ),
         language: 'c++',
       },
     ]

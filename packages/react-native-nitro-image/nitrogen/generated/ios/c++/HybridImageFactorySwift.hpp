@@ -14,7 +14,7 @@
 namespace NitroImage { class ImageFactorySpecCxx; }
 
 // Forward declaration of `HybridImage` to properly resolve imports.
-class HybridImage;
+namespace margelo::nitro::image { class HybridImage; }
 // Forward declaration of `HybridImageSwift` to properly resolve imports.
 namespace margelo::nitro::image { class HybridImageSwift; }
 

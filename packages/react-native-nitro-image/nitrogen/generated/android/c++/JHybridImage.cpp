@@ -35,29 +35,29 @@ namespace margelo::nitro::image {
   // Properties
   ImageSize JHybridImage::getSize() {
     static const auto method = _javaPart->getClass()->getMethod<JImageSize()>("getSize");
-    throw std::runtime_error("getSize() is not yet implemented!");
+    throw std::runtime_error("getSize(...) is not yet implemented!");
   }
   PixelFormat JHybridImage::getPixelFormat() {
     static const auto method = _javaPart->getClass()->getMethod<JPixelFormat()>("getPixelFormat");
-    throw std::runtime_error("getPixelFormat() is not yet implemented!");
+    throw std::runtime_error("getPixelFormat(...) is not yet implemented!");
   }
   double JHybridImage::getSomeSettableProp() {
     static const auto method = _javaPart->getClass()->getMethod<double()>("getSomeSettableProp");
-    return method(_javaPart.get());
+    throw std::runtime_error("getSomeSettableProp(...) is not yet implemented!");
   }
   void JHybridImage::setSomeSettableProp(double someSettableProp) {
     static const auto method = _javaPart->getClass()->getMethod<void(double)>("setSomeSettableProp");
-    return method(_javaPart.get(), someSettableProp);
+    throw std::runtime_error("setSomeSettableProp(...) is not yet implemented!");
   }
 
   // Methods
   double JHybridImage::toArrayBuffer(ImageFormat format) {
     static const auto method = _javaPart->getClass()->getMethod<double(JImageFormat)>("toArrayBuffer");
-    throw std::runtime_error("toArrayBuffer() is not yet implemented!");
+    throw std::runtime_error("toArrayBuffer(...) is not yet implemented!");
   }
   void JHybridImage::saveToFile(const std::string& path, const Func_void_std__string& onFinished) {
     static const auto method = _javaPart->getClass()->getMethod<void(std::string, jni::alias_ref<JFunc_void_std__string::javaobject>)>("saveToFile");
-    throw std::runtime_error("saveToFile() is not yet implemented!");
+    throw std::runtime_error("saveToFile(...) is not yet implemented!");
   }
 
 } // namespace margelo::nitro::image

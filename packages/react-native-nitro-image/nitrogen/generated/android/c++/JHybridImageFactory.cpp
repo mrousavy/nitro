@@ -35,19 +35,19 @@ namespace margelo::nitro::image {
   // Methods
   std::shared_ptr<HybridImage> JHybridImageFactory::loadImageFromFile(const std::string& path) {
     static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<JHybridImage::javaobject>(std::string)>("loadImageFromFile");
-    throw std::runtime_error("Hybrid Objects are not yet implemented");
+    throw std::runtime_error("loadImageFromFile(...) is not yet implemented!");
   }
   std::shared_ptr<HybridImage> JHybridImageFactory::loadImageFromURL(const std::string& path) {
     static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<JHybridImage::javaobject>(std::string)>("loadImageFromURL");
-    throw std::runtime_error("Hybrid Objects are not yet implemented");
+    throw std::runtime_error("loadImageFromURL(...) is not yet implemented!");
   }
   std::shared_ptr<HybridImage> JHybridImageFactory::loadImageFromSystemName(const std::string& path) {
     static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<JHybridImage::javaobject>(std::string)>("loadImageFromSystemName");
-    throw std::runtime_error("Hybrid Objects are not yet implemented");
+    throw std::runtime_error("loadImageFromSystemName(...) is not yet implemented!");
   }
   std::shared_ptr<HybridImage> JHybridImageFactory::bounceBack(std::shared_ptr<HybridImage> image) {
     static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<JHybridImage::javaobject>(jni::alias_ref<JHybridImage::javaobject>)>("bounceBack");
-    throw std::runtime_error("Hybrid Objects are not yet implemented");
+    throw std::runtime_error("bounceBack(...) is not yet implemented!");
   }
 
 } // namespace margelo::nitro::image

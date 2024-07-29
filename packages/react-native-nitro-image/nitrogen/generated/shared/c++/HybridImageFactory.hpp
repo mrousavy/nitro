@@ -17,7 +17,7 @@
 #endif
 
 // Forward declaration of `HybridImage` to properly resolve imports.
-class HybridImage;
+namespace margelo::nitro::image { class HybridImage; }
 
 #include "HybridImage.hpp"
 

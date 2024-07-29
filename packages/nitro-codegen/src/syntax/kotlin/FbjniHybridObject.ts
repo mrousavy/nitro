@@ -147,12 +147,9 @@ function getFbjniMethodForwardImplementation(
   const paramsTypes = paramsJNI.map((p) => p.getCode('c++')).join(', ')
   const cxxSignature = `${returnType}(${paramsTypes})`
 
-  const hasParams = method.parameters.length > 0
-  const paramsForward = method.parameters.map((p) => p.name).join(', ')
-
   const body = `
 static const auto method = _javaPart->getClass()->getMethod<${cxxSignature}>("${method.name}");
-return method(${hasParams ? `_javaPart.get(), ${paramsForward}` : '_javaPart.get()'});
+throw std::runtime_error("${method.name}(...) is not yet implemented!");
   `.trim()
   const code = method.getCode(
     'c++',
