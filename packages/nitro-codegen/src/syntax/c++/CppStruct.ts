@@ -1,41 +1,31 @@
-import type { Symbol } from 'ts-morph'
 import type { FileWithReferencedTypes } from '../SourceFile.js'
 import { indent } from '../../stringUtils.js'
 import { createFileMetadataString, isNotDuplicate } from '../helpers.js'
 import type { NamedType } from '../types/Type.js'
-import { createNamedType } from '../createType.js'
 
 export function createCppStruct(
   typename: string,
-  properties: Symbol[]
+  properties: NamedType[]
 ): FileWithReferencedTypes {
-  const cppProperties: NamedType[] = []
-  for (const prop of properties) {
-    // recursively resolve types for each property of the referenced type
-    const declaration = prop.getValueDeclarationOrThrow()
-    const propType = prop.getTypeAtLocation(declaration)
-    const refType = createNamedType(prop.getName(), propType, prop.isOptional())
-    cppProperties.push(refType)
-  }
   // Get C++ code for all struct members
-  const cppStructProps = cppProperties
+  const cppStructProps = properties
     .map((p) => `${p.getCode('c++')} ${p.escapedName};`)
     .join('\n')
-  const cppConstructorParams = cppProperties
+  const cppConstructorParams = properties
     .map((p) => `${p.getCode('c++')} ${p.escapedName}`)
     .join(', ')
-  const cppInitializerParams = cppProperties
+  const cppInitializerParams = properties
     .map((p) => `${p.escapedName}(${p.escapedName})`)
     .join(', ')
   // Get C++ code for converting each member from a jsi::Value
-  const cppFromJsiParams = cppProperties
+  const cppFromJsiParams = properties
     .map(
       (p) =>
         `JSIConverter<${p.getCode('c++')}>::fromJSI(runtime, obj.getProperty(runtime, "${p.name}"))`
     )
     .join(',\n')
   // Get C++ code for converting each member to a jsi::Value
-  const cppToJsiCalls = cppProperties
+  const cppToJsiCalls = properties
     .map(
       (p) =>
         `obj.setProperty(runtime, "${p.name}", JSIConverter<${p.getCode('c++')}>::toJSI(runtime, arg.${p.escapedName}));`
@@ -43,7 +33,7 @@ export function createCppStruct(
     .join('\n')
 
   // Get C++ includes for each extra-file we need to include
-  const includedTypes = cppProperties.flatMap((r) => r.getRequiredImports())
+  const includedTypes = properties.flatMap((r) => r.getRequiredImports())
   const cppForwardDeclarations = includedTypes
     .map((i) => i.forwardDeclaration)
     .filter((v) => v != null)
@@ -98,7 +88,7 @@ namespace margelo::nitro {
     content: cppCode,
     name: `${typename}.hpp`,
     language: 'c++',
-    referencedTypes: cppProperties,
+    referencedTypes: properties,
     platform: 'shared',
   }
 }

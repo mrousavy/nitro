@@ -13,10 +13,10 @@ import { RecordType } from './types/RecordType.js'
 import { ArrayBufferType } from './types/ArrayBufferType.js'
 import { EnumType } from './types/EnumType.js'
 import { HybridObjectType } from './types/HybridObjectType.js'
-import { createCppStruct } from './c++/CppStruct.js'
 import { StructType } from './types/StructType.js'
 import { OptionalType } from './types/OptionalType.js'
 import { NamedWrappingType } from './types/NamedWrappingType.js'
+import { getInterfaceProperties } from './getInterfaceProperties.js'
 
 function isSymbol(type: TSMorphType, symbolName: string): boolean {
   const symbol = type.getSymbol()
@@ -162,8 +162,8 @@ export function createType(type: TSMorphType, isOptional: boolean): Type {
       return new HybridObjectType(typename)
     } else {
       // It is a simple struct being referenced.
-      const extraFile = createCppStruct(typename, type.getProperties())
-      return new StructType(typename, extraFile)
+      const properties = getInterfaceProperties(type)
+      return new StructType(typename, properties)
     }
   } else if (type.isStringLiteral()) {
     throw new Error(

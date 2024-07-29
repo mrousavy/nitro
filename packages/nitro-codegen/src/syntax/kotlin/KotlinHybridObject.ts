@@ -6,8 +6,10 @@ import type { HybridObjectSpec } from '../HybridObjectSpec.js'
 import type { SourceFile } from '../SourceFile.js'
 import { EnumType } from '../types/EnumType.js'
 import { getTypeAs } from '../types/getTypeAs.js'
+import { StructType } from '../types/StructType.js'
 import { createFbjniHybridObject } from './FbjniHybridObject.js'
 import { createKotlinEnum } from './KotlinEnum.js'
+import { createKotlinStruct } from './KotlinStruct.js'
 
 // TODO: Make this customizable
 const PACKAGE = 'com.margelo.nitro.image'
@@ -82,12 +84,19 @@ abstract class ${name.HybridT}: HybridObject {
   // 3. Create enums or structs in Kotlin
   const allTypes = getAllTypes(spec)
   const enums: SourceFile[] = []
+  const structs: SourceFile[] = []
   for (const type of allTypes) {
     switch (type.kind) {
       case 'enum':
         const enumType = getTypeAs(type, EnumType)
-        const enumFile = createKotlinEnum(PACKAGE, enumType)
-        enums.push(...enumFile)
+        const enumFiles = createKotlinEnum(PACKAGE, enumType)
+        enums.push(...enumFiles)
+        break
+      case 'struct':
+        const structType = getTypeAs(type, StructType)
+        const structFiles = createKotlinStruct(PACKAGE, structType)
+        structs.push(...structFiles)
+        break
     }
   }
 
@@ -100,5 +109,6 @@ abstract class ${name.HybridT}: HybridObject {
   })
   files.push(...cppFiles)
   files.push(...enums)
+  files.push(...structs)
   return files
 }

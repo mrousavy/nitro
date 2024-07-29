@@ -1,19 +1,22 @@
 import type { Language } from '../../getPlatformSpecs.js'
+import { createCppStruct } from '../c++/CppStruct.js'
 import { getForwardDeclaration } from '../c++/getForwardDeclaration.js'
 import {
   type FileWithReferencedTypes,
   type SourceFile,
   type SourceImport,
 } from '../SourceFile.js'
-import type { Type, TypeKind } from './Type.js'
+import type { NamedType, Type, TypeKind } from './Type.js'
 
 export class StructType implements Type {
   readonly structName: string
+  readonly properties: NamedType[]
   readonly declarationFile: FileWithReferencedTypes
 
-  constructor(structName: string, declarationFile: FileWithReferencedTypes) {
+  constructor(structName: string, properties: NamedType[]) {
     this.structName = structName
-    this.declarationFile = declarationFile
+    this.properties = properties
+    this.declarationFile = createCppStruct(structName, properties)
   }
 
   get canBePassedByReference(): boolean {
