@@ -54,7 +54,7 @@ namespace margelo::nitro::image {
   }
   inline PixelFormat getPixelFormat() noexcept override {
     auto result = _swiftPart.getPixelFormat();
-    return static_cast<margelo.nitro.image.PixelFormat>(result);
+    return static_cast<PixelFormat>(result);
   }
   inline double getSomeSettableProp() noexcept override {
     return _swiftPart.getSomeSettableProp();

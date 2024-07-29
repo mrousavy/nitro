@@ -25,21 +25,21 @@ class Image : ImageSpec {
     print("❌ Destroying Image...")
   }
 
-  public var size: ImageSize {
-    return ImageSize(uiImage.size.width, uiImage.size.height)
+  public var size: margelo.nitro.image.ImageSize {
+    return .init(uiImage.size.width, uiImage.size.height)
   }
 
-  public var pixelFormat: PixelFormat {
+  public var pixelFormat: margelo.nitro.image.PixelFormat {
     return .rgb
   }
 
   var someSettableProp: Double = 1.0
 
-  func toArrayBuffer(format: ImageFormat) throws -> Double {
+  func toArrayBuffer(format: margelo.nitro.image.ImageFormat) throws -> Double {
     throw RuntimeError.error(withMessage: "toArrayBuffer() is not yet implemented!")
   }
 
-  func saveToFile(path: String, onFinished: Func_void_std__string) throws {
+  func saveToFile(path: String, onFinished: margelo.nitro.image.Func_void_std__string) throws {
     print("Save To File called \(path)...")
     DispatchQueue.main.asyncAfter(deadline: .now() + 5, execute: {
       print("Executing callback now...")

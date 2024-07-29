@@ -124,7 +124,7 @@ export class SwiftCxxBridgedType {
       case 'enum':
         switch (language) {
           case 'c++':
-            return `static_cast<${this.type.getCode('swift')}>(${swiftParameterName})`
+            return `static_cast<${this.type.getCode('c++')}>(${swiftParameterName})`
           case 'swift':
             return `${swiftParameterName}.rawValue`
           default:
