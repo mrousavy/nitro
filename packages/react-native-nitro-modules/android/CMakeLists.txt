@@ -38,13 +38,15 @@ include_directories(
 # Allow importing Nitro TurboModule from elsewhere (e.g. the CLI)
 target_include_directories(NitroModules PUBLIC ../cpp/turbomodule)
 
-# Add android/log dependency
+# Find required libraries
 find_library(log-lib log)
+find_package(fbjni REQUIRED CONFIG)
 
 # Link all libraries together
 target_link_libraries(
         NitroModules
         ${log-lib}                      # <-- Logcat logger
         android                         # <-- Android JNI core
+        fbjni::fbjni                    # <-- Facebook C++ JNI helpers
         react_codegen_NitroModulesSpec  # <-- Generated Specs from CodeGen
 )

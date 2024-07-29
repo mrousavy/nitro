@@ -8,38 +8,42 @@
 
 #include "JHybridImageFactory.hpp"
 
-jni::local_ref<JHybridImageFactory::jhybriddata> JHybridImageFactory::initHybrid(jni::alias_ref<jhybridobject> jThis) {
-  return makeCxxInstance(jThis);
-}
+namespace margelo::nitro::image {
 
-void JHybridImageFactory::registerNatives() {
-  registerHybrid({
-    makeNativeMethod("initHybrid", JHybridImageFactory::initHybrid),
-  });
-}
+  jni::local_ref<JHybridImageFactory::jhybriddata> JHybridImageFactory::initHybrid(jni::alias_ref<jhybridobject> jThis) {
+    return makeCxxInstance(jThis);
+  }
 
-size_t JHybridImageFactory::getExternalMemorySize() {
-  static const auto method = _javaPart->getClass()->getMethod<long()>("getMemorySize");
-  return method(_javaPart.get());
-}
+  void JHybridImageFactory::registerNatives() {
+    registerHybrid({
+      makeNativeMethod("initHybrid", JHybridImageFactory::initHybrid),
+    });
+  }
 
-// Properties
+  size_t JHybridImageFactory::getExternalMemorySize() noexcept {
+    static const auto method = _javaPart->getClass()->getMethod<jlong()>("getMemorySize");
+    return method(_javaPart.get());
+  }
 
+  // Properties
+  
 
-// Methods
-std::shared_ptr<HybridImage> JHybridImageFactory::loadImageFromFile(const std::string& path) override {
-  static const auto method = _javaPart->getClass()->getMethod<std::shared_ptr<HybridImage>(std::string)>("loadImageFromFile");
-  return method(_javaPart.get(), path);
-}
-std::shared_ptr<HybridImage> JHybridImageFactory::loadImageFromURL(const std::string& path) override {
-  static const auto method = _javaPart->getClass()->getMethod<std::shared_ptr<HybridImage>(std::string)>("loadImageFromURL");
-  return method(_javaPart.get(), path);
-}
-std::shared_ptr<HybridImage> JHybridImageFactory::loadImageFromSystemName(const std::string& path) override {
-  static const auto method = _javaPart->getClass()->getMethod<std::shared_ptr<HybridImage>(std::string)>("loadImageFromSystemName");
-  return method(_javaPart.get(), path);
-}
-std::shared_ptr<HybridImage> JHybridImageFactory::bounceBack(std::shared_ptr<HybridImage> image) override {
-  static const auto method = _javaPart->getClass()->getMethod<std::shared_ptr<HybridImage>(std::shared_ptr<HybridImage>)>("bounceBack");
-  return method(_javaPart.get(), image);
-}
+  // Methods
+  std::shared_ptr<HybridImage> JHybridImageFactory::loadImageFromFile(const std::string& path) {
+    static const auto method = _javaPart->getClass()->getMethod<std::shared_ptr<HybridImage>(std::string)>("loadImageFromFile");
+    return method(_javaPart.get(), path);
+  }
+  std::shared_ptr<HybridImage> JHybridImageFactory::loadImageFromURL(const std::string& path) {
+    static const auto method = _javaPart->getClass()->getMethod<std::shared_ptr<HybridImage>(std::string)>("loadImageFromURL");
+    return method(_javaPart.get(), path);
+  }
+  std::shared_ptr<HybridImage> JHybridImageFactory::loadImageFromSystemName(const std::string& path) {
+    static const auto method = _javaPart->getClass()->getMethod<std::shared_ptr<HybridImage>(std::string)>("loadImageFromSystemName");
+    return method(_javaPart.get(), path);
+  }
+  std::shared_ptr<HybridImage> JHybridImageFactory::bounceBack(std::shared_ptr<HybridImage> image) {
+    static const auto method = _javaPart->getClass()->getMethod<std::shared_ptr<HybridImage>(std::shared_ptr<HybridImage>)>("bounceBack");
+    return method(_javaPart.get(), image);
+  }
+
+} // namespace margelo::nitro::image

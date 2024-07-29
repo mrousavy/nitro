@@ -69,26 +69,30 @@ ${createFileMetadataString(`${name.JHybridT}.cpp`)}
 
 #include "${name.JHybridT}.hpp"
 
-jni::local_ref<${name.JHybridT}::jhybriddata> ${name.JHybridT}::initHybrid(jni::alias_ref<jhybridobject> jThis) {
-  return makeCxxInstance(jThis);
-}
+namespace ${cxxNamespace} {
 
-void ${name.JHybridT}::registerNatives() {
-  registerHybrid({
-    makeNativeMethod("initHybrid", ${name.JHybridT}::initHybrid),
-  });
-}
+  jni::local_ref<${name.JHybridT}::jhybriddata> ${name.JHybridT}::initHybrid(jni::alias_ref<jhybridobject> jThis) {
+    return makeCxxInstance(jThis);
+  }
 
-size_t ${name.JHybridT}::getExternalMemorySize() {
-  static const auto method = _javaPart->getClass()->getMethod<long()>("getMemorySize");
-  return method(_javaPart.get());
-}
+  void ${name.JHybridT}::registerNatives() {
+    registerHybrid({
+      makeNativeMethod("initHybrid", ${name.JHybridT}::initHybrid),
+    });
+  }
 
-// Properties
-${propertiesImpl}
+  size_t ${name.JHybridT}::getExternalMemorySize() noexcept {
+    static const auto method = _javaPart->getClass()->getMethod<jlong()>("getMemorySize");
+    return method(_javaPart.get());
+  }
 
-// Methods
-${methodsImpl}
+  // Properties
+  ${indent(propertiesImpl, '  ')}
+
+  // Methods
+  ${indent(methodsImpl, '  ')}
+
+} // namespace ${cxxNamespace}
   `.trim()
 
   const files: SourceFile[] = []
@@ -131,7 +135,6 @@ return method(${hasParams ? `_javaPart.get(), ${paramsForward}` : '_javaPart.get
   const code = method.getCode(
     'c++',
     {
-      override: true,
       classDefinitionName: name.JHybridT,
     },
     body
