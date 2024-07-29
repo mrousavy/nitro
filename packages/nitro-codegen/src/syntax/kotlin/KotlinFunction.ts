@@ -56,6 +56,7 @@ class ${specializationName}(hybridData: HybridData) {
     }
     return `${type} ${p.escapedName}`
   })
+  const paramsForward = functionType.parameters.map((p) => p.name)
   const fbjniCode = `
 ${createFileMetadataString(`J${specializationName}.hpp`)}
 
@@ -77,7 +78,9 @@ public:
   }
 
 public:
-  ${cppReturnType} call(${cppParams.join(', ')});
+  ${cppReturnType} call(${cppParams.join(', ')}) {
+    return _func(${paramsForward.join(', ')});
+  }
 
 public:
   static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/${specializationName};";

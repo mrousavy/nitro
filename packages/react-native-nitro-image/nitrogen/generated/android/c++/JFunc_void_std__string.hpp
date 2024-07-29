@@ -24,7 +24,9 @@ public:
   }
 
 public:
-  void call(const std::string& path);
+  void call(const std::string& path) {
+    return _func(path);
+  }
 
 public:
   static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Func_void_std__string;";

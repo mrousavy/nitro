@@ -2,6 +2,7 @@ import {
   createFileMetadataString,
   escapeCppName,
   isNotDuplicate,
+  toReferenceType,
 } from '../helpers.js'
 import type { SourceFile } from '../SourceFile.js'
 import type { FunctionType } from '../types/FunctionType.js'
@@ -40,7 +41,13 @@ export function createCppFunctionSpecialization(
     .map((p) => `${p.name}: ${p.getCode('c++')}`)
     .join(', ')
   const paramsCpp = func.parameters
-    .map((p) => `${p.getCode('c++')} /* ${p.name} */`)
+    .map((p) => {
+      let type = p.getCode('c++')
+      if (p.canBePassedByReference) {
+        type = toReferenceType(type)
+      }
+      return `${type} /* ${p.name} */`
+    })
     .join(', ')
 
   const code = `
