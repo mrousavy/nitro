@@ -47,6 +47,9 @@ namespace margelo::nitro::image {
       // Constructor
       explicit HybridImage(): HybridObject(TAG) { }
 
+      // Destructor
+      ~HybridImage() { }
+
     public:
       // Properties
       virtual ImageSize getSize() = 0;

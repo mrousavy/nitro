@@ -40,6 +40,9 @@ namespace margelo::nitro::image {
       // Constructor
       explicit HybridImageFactory(): HybridObject(TAG) { }
 
+      // Destructor
+      ~HybridImageFactory() { }
+
     public:
       // Properties
       
