@@ -1,4 +1,8 @@
-import { getAndroidPackage, getAndroidPackageDirectory } from '../../options.js'
+import {
+  getAndroidPackage,
+  getAndroidPackageDirectory,
+  getCxxNamespace,
+} from '../../options.js'
 import { createFileMetadataString, toReferenceType } from '../helpers.js'
 import type { SourceFile } from '../SourceFile.js'
 import type { FunctionType } from '../types/FunctionType.js'
@@ -59,6 +63,7 @@ class ${specializationName} @DoNotStrip @Keep private constructor(hybridData: Hy
   })
   const paramsForward = functionType.parameters.map((p) => p.name)
   const jniClassDescriptor = getAndroidPackage('c++/jni', specializationName)
+  const cxxNamespace = getCxxNamespace('c++')
   const fbjniCode = `
 ${createFileMetadataString(`J${specializationName}.hpp`)}
 
@@ -69,34 +74,38 @@ ${createFileMetadataString(`J${specializationName}.hpp`)}
 
 using namespace facebook;
 
-/**
- * C++ representation of the callback ${specializationName}.
- * This is a Kotlin \`${lambdaTypename}\`, backed by a \`std::function<...>\`.
- */
-struct J${specializationName}: public jni::HybridClass<J${specializationName}> {
-public:
-  static jni::local_ref<J${specializationName}> create(${specializationName}&& func) {
-    return J${specializationName}::newObjectCxxArgs(std::move(func));
-  }
+namespace ${cxxNamespace} {
 
-public:
-  ${cppReturnType} call(${cppParams.join(', ')}) {
-    return _func(${paramsForward.join(', ')});
-  }
+  /**
+   * C++ representation of the callback ${specializationName}.
+   * This is a Kotlin \`${lambdaTypename}\`, backed by a \`std::function<...>\`.
+   */
+  struct J${specializationName}: public jni::HybridClass<J${specializationName}> {
+  public:
+    static jni::local_ref<J${specializationName}> create(${specializationName}&& func) {
+      return J${specializationName}::newObjectCxxArgs(std::move(func));
+    }
 
-public:
-  static auto constexpr kJavaDescriptor = "${jniClassDescriptor}";
-  static void registerNatives() {
-    registerHybrid({makeNativeMethod("call", J${specializationName}::call)});
-  }
+  public:
+    ${cppReturnType} call(${cppParams.join(', ')}) {
+      return _func(${paramsForward.join(', ')});
+    }
 
-private:
-  explicit J${specializationName}(${specializationName}&& func): _func(std::move(func)) { }
+  public:
+    static auto constexpr kJavaDescriptor = "${jniClassDescriptor}";
+    static void registerNatives() {
+      registerHybrid({makeNativeMethod("call", J${specializationName}::call)});
+    }
 
-private:
-  friend HybridBase;
-  ${specializationName} _func;
-};
+  private:
+    explicit J${specializationName}(${specializationName}&& func): _func(std::move(func)) { }
+
+  private:
+    friend HybridBase;
+    ${specializationName} _func;
+  };
+
+} // namespace ${cxxNamespace}
   `.trim()
 
   const files: SourceFile[] = []

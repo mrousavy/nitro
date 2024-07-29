@@ -13,31 +13,35 @@
 
 using namespace facebook;
 
-/**
- * C++ representation of the callback Func_void_std__string.
- * This is a Kotlin `(path: String) -> Unit`, backed by a `std::function<...>`.
- */
-struct JFunc_void_std__string: public jni::HybridClass<JFunc_void_std__string> {
-public:
-  static jni::local_ref<JFunc_void_std__string> create(Func_void_std__string&& func) {
-    return JFunc_void_std__string::newObjectCxxArgs(std::move(func));
-  }
+namespace margelo::nitro::image {
 
-public:
-  void call(const std::string& path) {
-    return _func(path);
-  }
+  /**
+   * C++ representation of the callback Func_void_std__string.
+   * This is a Kotlin `(path: String) -> Unit`, backed by a `std::function<...>`.
+   */
+  struct JFunc_void_std__string: public jni::HybridClass<JFunc_void_std__string> {
+  public:
+    static jni::local_ref<JFunc_void_std__string> create(Func_void_std__string&& func) {
+      return JFunc_void_std__string::newObjectCxxArgs(std::move(func));
+    }
 
-public:
-  static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Func_void_std__string;";
-  static void registerNatives() {
-    registerHybrid({makeNativeMethod("call", JFunc_void_std__string::call)});
-  }
+  public:
+    void call(const std::string& path) {
+      return _func(path);
+    }
 
-private:
-  explicit JFunc_void_std__string(Func_void_std__string&& func): _func(std::move(func)) { }
+  public:
+    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Func_void_std__string;";
+    static void registerNatives() {
+      registerHybrid({makeNativeMethod("call", JFunc_void_std__string::call)});
+    }
 
-private:
-  friend HybridBase;
-  Func_void_std__string _func;
-};
+  private:
+    explicit JFunc_void_std__string(Func_void_std__string&& func): _func(std::move(func)) { }
+
+  private:
+    friend HybridBase;
+    Func_void_std__string _func;
+  };
+
+} // namespace margelo::nitro::image
