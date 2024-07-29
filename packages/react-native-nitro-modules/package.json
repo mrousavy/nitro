@@ -20,6 +20,7 @@
     "ios/**/*.mm",
     "ios/**/*.cpp",
     "ios/**/*.swift",
+    "cpp",
     "app.plugin.js",
     "*.podspec",
     "README.md"
