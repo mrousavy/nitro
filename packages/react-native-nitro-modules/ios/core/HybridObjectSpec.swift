@@ -31,13 +31,13 @@ public protocol HybridObjectSpec {
    *
    * @example
    * ```swift
-   * var memorySize: UInt {
+   * var memorySize: Int {
    *   let imageSize = self.uiImage.bytesPerRow * self.uiImage.height
    *   return getSizeOf(self) + imageSize
    * }
    * ```
    */
-  var memorySize: UInt { get }
+  var memorySize: Int { get }
 }
 
 public extension HybridObjectSpec {

@@ -12,7 +12,7 @@ import NitroModules
 class Image : ImageSpec {
   private let uiImage: UIImage
   public var hybridContext = margelo.nitro.HybridContext()
-  public var memorySize: UInt {
+  public var memorySize: Int {
     return getSizeOf(self) + uiImage.memorySize
   }
 
@@ -51,7 +51,7 @@ class Image : ImageSpec {
 
 
 extension UIImage {
-  var memorySize: UInt {
+  var memorySize: Int {
     guard let cgImage else {
       return 0
     }
