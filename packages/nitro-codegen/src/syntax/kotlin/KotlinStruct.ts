@@ -3,9 +3,10 @@ import {
   getAndroidPackageDirectory,
   getCxxNamespace,
 } from '../../options.js'
-import { indent } from '../../stringUtils.js'
+import { capitalizeName, indent } from '../../stringUtils.js'
 import { createFileMetadataString } from '../helpers.js'
 import type { SourceFile } from '../SourceFile.js'
+import { JNIWrappedType } from '../types/JNIWrappedType.js'
 import type { StructType } from '../types/StructType.js'
 
 export function createKotlinStruct(
@@ -35,6 +36,11 @@ data class ${structType.structName}(
 
   const cxxNamespace = getCxxNamespace('c++')
   const jniClassDescriptor = getAndroidPackage('c++/jni', structType.structName)
+  const jniStructInitializerBody = createJNIStructInitializer(structType)
+  const cppStructInitializerBody = createCppStructInitializer(
+    'value',
+    structType
+  )
   const fbjniCode = `
 ${createFileMetadataString(`J${structType.structName}.hpp`)}
 
@@ -58,13 +64,17 @@ namespace ${cxxNamespace} {
     /**
      * Convert this Java/Kotlin-based struct to the C++ struct ${structType.structName} by copying all values to C++.
      */
-    ${structType.structName} to${structType.structName}();
+    ${structType.structName} to${structType.structName}() {
+      ${indent(jniStructInitializerBody, '      ')}
+    }
 
   public:
     /**
      * Create a Java/Kotlin-based struct by copying all values from the given C++ struct to Java.
      */
-    static jni::local_ref<J${structType.structName}::javaobject> create(const ${structType.structName}& value);
+    static jni::local_ref<J${structType.structName}::javaobject> create(const ${structType.structName}& value) {
+      ${indent(cppStructInitializerBody, '      ')}
+    }
   };
 
 } // namespace ${cxxNamespace}
@@ -86,4 +96,40 @@ namespace ${cxxNamespace} {
     platform: 'android',
   })
   return files
+}
+
+function createJNIStructInitializer(structType: StructType): string {
+  const lines: string[] = ['static const auto clazz = javaClassStatic();']
+  for (const prop of structType.properties) {
+    const fieldName = `field${capitalizeName(prop.escapedName)}`
+    const jniType = new JNIWrappedType(prop)
+    const type = jniType.getCode('c++')
+    lines.push(
+      `static const auto ${fieldName} = clazz->getField<${type}>("${prop.escapedName}");`
+    )
+    lines.push(
+      `${type} ${prop.escapedName} = this->getFieldValue(${fieldName});`
+    )
+  }
+
+  const propsForward = structType.properties.map((p) => p.escapedName)
+  // TODO: Properly convert C++ -> JNI (::javaobject)
+  lines.push(`return ${structType.structName}(`)
+  lines.push(`  ${indent(propsForward.join(',\n'), '  ')}`)
+  lines.push(`);`)
+  return lines.join('\n')
+}
+
+function createCppStructInitializer(
+  cppValueName: string,
+  structType: StructType
+): string {
+  const lines: string[] = []
+  lines.push(`return newInstance(`)
+  const names = structType.properties.map(
+    (p) => `${cppValueName}.${p.escapedName}`
+  )
+  lines.push(`  ${indent(names.join(',\n'), '  ')}`)
+  lines.push(');')
+  return lines.join('\n')
 }
