@@ -55,6 +55,9 @@ namespace ${cxxNamespace} {
       // Constructor
       explicit ${spec.hybridObjectName}(): HybridObject(TAG) { }
 
+      // Destructor
+      ~${spec.hybridObjectName}() { }
+
     public:
       // Properties
       ${indent(spec.properties.map((p) => p.getCode('c++', { virtual: true })).join('\n'), '      ')}
