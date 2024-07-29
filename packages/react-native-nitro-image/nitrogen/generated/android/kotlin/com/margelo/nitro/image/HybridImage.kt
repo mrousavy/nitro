@@ -35,11 +35,11 @@ abstract class HybridImage: HybridObject {
   // Properties
   @get:DoNotStrip
   @get:Keep
-  abstract val size: margelo.nitro.image.ImageSize
+  abstract val size: com.margelo.nitro.image.ImageSize
   
   @get:DoNotStrip
   @get:Keep
-  abstract val pixelFormat: margelo.nitro.image.PixelFormat
+  abstract val pixelFormat: com.margelo.nitro.image.PixelFormat
   
   @get:DoNotStrip
   @get:Keep

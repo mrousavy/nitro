@@ -126,7 +126,7 @@ set {
         return `var ${this.name}: ${type} { ${accessors} }`
       }
       case 'kotlin': {
-        const type = this.type.getCode('swift')
+        const type = this.type.getCode('kotlin')
         let keyword = this.isReadonly ? 'val' : 'var'
         if (modifiers?.virtual) keyword = `abstract ${keyword}`
         const lines: string[] = []
