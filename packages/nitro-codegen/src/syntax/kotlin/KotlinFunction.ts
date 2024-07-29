@@ -30,7 +30,7 @@ import com.facebook.proguard.annotations.DoNotStrip
 @DoNotStrip
 @Keep
 @Suppress("KotlinJniMissingFunction")
-class ${specializationName}(hybridData: HybridData) {
+class ${specializationName} private constructor(hybridData: HybridData) {
   @DoNotStrip
   @Keep
   private val mHybridData: HybridData
