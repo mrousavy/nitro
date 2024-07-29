@@ -11,7 +11,7 @@ namespace margelo::nitro { class HybridObject; }
 #include "Dispatcher.hpp"
 #include "JSICache.hpp"
 #include "ArrayBuffer.hpp"
-#include "Hash.hpp"
+#include "NitroHash.hpp"
 #include "TypeInfo.hpp"
 #include <array>
 #include <future>

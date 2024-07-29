@@ -30,7 +30,7 @@ ${createFileMetadataString(`${typename}.hpp`)}
 
 #pragma once
 
-#include <NitroModules/Hash.hpp>
+#include <NitroModules/NitroHash.hpp>
 #include <NitroModules/JSIConverter.hpp>
 #include <NitroModules/NitroDefines.hpp>
 
