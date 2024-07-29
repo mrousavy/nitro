@@ -8,7 +8,13 @@
 
 #pragma once
 
+#if __has_include(<NitroModules/JSIConverter.hpp>)
 #include <NitroModules/JSIConverter.hpp>
+#elif __has_include("JSIConverter.hpp")
+#include "JSIConverter.hpp"
+#else
+#error NitroModules cannot be found! Are you sure you installed NitroModules properly?
+#endif
 
 
 
@@ -22,7 +28,7 @@ namespace margelo::nitro::image {
   struct ImageSize {
   public:
     double width;
-  double height;
+    double height;
 
   public:
     explicit ImageSize(double width, double height): width(width), height(height) {}

@@ -81,7 +81,7 @@ namespace ${cxxNamespace} {
   files.push({
     content: fbjniCode,
     language: 'c++',
-    name: `${structType.structName}.hpp`,
+    name: `J${structType.structName}.hpp`,
     subdirectory: [],
     platform: 'android',
   })

@@ -10,8 +10,10 @@
 
 #if __has_include(<NitroModules/HybridObject.hpp>)
 #include <NitroModules/HybridObject.hpp>
+#elif __has_include("HybridObject.hpp")
+#include "HybridObject.hpp"
 #else
-#error NitroModules cannot be found! Are you sure you installed react-native-nitro properly?
+#error NitroModules cannot be found! Are you sure you installed NitroModules properly?
 #endif
 
 // Forward declaration of `HybridImage` to properly resolve imports.
@@ -45,9 +47,9 @@ namespace margelo::nitro::image {
     public:
       // Methods
       virtual std::shared_ptr<HybridImage> loadImageFromFile(const std::string& path) = 0;
-    virtual std::shared_ptr<HybridImage> loadImageFromURL(const std::string& path) = 0;
-    virtual std::shared_ptr<HybridImage> loadImageFromSystemName(const std::string& path) = 0;
-    virtual std::shared_ptr<HybridImage> bounceBack(std::shared_ptr<HybridImage> image) = 0;
+      virtual std::shared_ptr<HybridImage> loadImageFromURL(const std::string& path) = 0;
+      virtual std::shared_ptr<HybridImage> loadImageFromSystemName(const std::string& path) = 0;
+      virtual std::shared_ptr<HybridImage> bounceBack(std::shared_ptr<HybridImage> image) = 0;
 
     protected:
       // Tag for logging

@@ -3,6 +3,7 @@ import { indent } from '../../stringUtils.js'
 import { createFileMetadataString, isNotDuplicate } from '../helpers.js'
 import type { NamedType } from '../types/Type.js'
 import { getCxxNamespace } from '../../options.js'
+import { includeNitroHeader } from './includeNitroHeader.js'
 
 export function createCppStruct(
   typename: string,
@@ -49,7 +50,7 @@ ${createFileMetadataString(`${typename}.hpp`)}
 
 #pragma once
 
-#include <NitroModules/JSIConverter.hpp>
+${includeNitroHeader('JSIConverter.hpp')}
 
 ${cppForwardDeclarations.join('\n')}
 
@@ -62,7 +63,7 @@ namespace ${cxxNamespace} {
    */
   struct ${typename} {
   public:
-    ${indent(cppStructProps, '  ')}
+    ${indent(cppStructProps, '    ')}
 
   public:
     explicit ${typename}(${cppConstructorParams}): ${cppInitializerParams} {}

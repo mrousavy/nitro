@@ -10,8 +10,10 @@
 
 #if __has_include(<NitroModules/HybridObject.hpp>)
 #include <NitroModules/HybridObject.hpp>
+#elif __has_include("HybridObject.hpp")
+#include "HybridObject.hpp"
 #else
-#error NitroModules cannot be found! Are you sure you installed react-native-nitro properly?
+#error NitroModules cannot be found! Are you sure you installed NitroModules properly?
 #endif
 
 // Forward declaration of `ImageSize` to properly resolve imports.
@@ -48,14 +50,14 @@ namespace margelo::nitro::image {
     public:
       // Properties
       virtual ImageSize getSize() = 0;
-    virtual PixelFormat getPixelFormat() = 0;
-    virtual double getSomeSettableProp() = 0;
-    virtual void setSomeSettableProp(double someSettableProp) = 0;
+      virtual PixelFormat getPixelFormat() = 0;
+      virtual double getSomeSettableProp() = 0;
+      virtual void setSomeSettableProp(double someSettableProp) = 0;
 
     public:
       // Methods
       virtual double toArrayBuffer(ImageFormat format) = 0;
-    virtual void saveToFile(const std::string& path, const Func_void_std__string& onFinished) = 0;
+      virtual void saveToFile(const std::string& path, const Func_void_std__string& onFinished) = 0;
 
     protected:
       // Tag for logging

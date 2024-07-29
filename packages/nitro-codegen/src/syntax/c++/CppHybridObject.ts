@@ -3,6 +3,7 @@ import { createFileMetadataString, isNotDuplicate } from '../helpers.js'
 import { indent } from '../../stringUtils.js'
 import type { HybridObjectSpec } from '../HybridObjectSpec.js'
 import { getCxxNamespace } from '../../options.js'
+import { includeNitroHeader } from './includeNitroHeader.js'
 
 export function createCppHybridObject(spec: HybridObjectSpec): SourceFile[] {
   // Extra includes
@@ -29,11 +30,7 @@ ${createFileMetadataString(`${spec.hybridObjectName}.hpp`)}
 
 #pragma once
 
-#if __has_include(<NitroModules/HybridObject.hpp>)
-#include <NitroModules/HybridObject.hpp>
-#else
-#error NitroModules cannot be found! Are you sure you installed react-native-nitro properly?
-#endif
+${includeNitroHeader('HybridObject.hpp')}
 
 ${cppForwardDeclarations.join('\n')}
 
@@ -60,11 +57,11 @@ namespace ${cxxNamespace} {
 
     public:
       // Properties
-      ${indent(spec.properties.map((p) => p.getCode('c++', { virtual: true })).join('\n'), '    ')}
+      ${indent(spec.properties.map((p) => p.getCode('c++', { virtual: true })).join('\n'), '      ')}
 
     public:
       // Methods
-      ${indent(spec.methods.map((m) => m.getCode('c++', { virtual: true })).join('\n'), '    ')}
+      ${indent(spec.methods.map((m) => m.getCode('c++', { virtual: true })).join('\n'), '      ')}
 
     protected:
       // Tag for logging
@@ -110,7 +107,7 @@ namespace ${cxxNamespace} {
     // load base methods/properties
     HybridObject::loadHybridMethods();
     // load custom methods/properties
-    ${indent(registrations.join('\n'), '  ')}
+    ${indent(registrations.join('\n'), '    ')}
   }
 
 } // namespace ${cxxNamespace}

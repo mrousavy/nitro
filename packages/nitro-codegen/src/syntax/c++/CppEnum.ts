@@ -3,6 +3,7 @@ import { indent } from '../../stringUtils.js'
 import type { SourceFile } from '../SourceFile.js'
 import { createFileMetadataString } from '../helpers.js'
 import type { EnumMember } from '../types/EnumType.js'
+import { includeNitroHeader } from './includeNitroHeader.js'
 
 /**
  * Creates a C++ enum that converts to a JS enum (aka just int)
@@ -23,8 +24,8 @@ ${createFileMetadataString(`${typename}.hpp`)}
 
 #pragma once
 
-#include <NitroModules/JSIConverter.hpp>
-#include <NitroModules/NitroDefines.hpp>
+${includeNitroHeader('JSIConverter.hpp')}
+${includeNitroHeader('NitroDefines.hpp')}
 
 namespace ${cxxNamespace} {
 
@@ -32,7 +33,7 @@ namespace ${cxxNamespace} {
    * An enum which can be represented as a JavaScript enum (${typename}).
    */
   enum class ${typename} {
-    ${indent(cppEnumMembers, '  ')}
+    ${indent(cppEnumMembers, '    ')}
   } CLOSED_ENUM;
 
 } // namespace ${cxxNamespace}

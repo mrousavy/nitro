@@ -79,7 +79,7 @@ namespace ${cxxNamespace} {
   files.push({
     content: fbjniCode,
     language: 'c++',
-    name: `${enumType.enumName}.hpp`,
+    name: `J${enumType.enumName}.hpp`,
     subdirectory: [],
     platform: 'android',
   })

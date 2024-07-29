@@ -29,14 +29,14 @@ namespace margelo::nitro::image {
   public:
     // Properties
     ImageSize getSize() override;
-  PixelFormat getPixelFormat() override;
-  double getSomeSettableProp() override;
-  void setSomeSettableProp(double someSettableProp) override;
+    PixelFormat getPixelFormat() override;
+    double getSomeSettableProp() override;
+    void setSomeSettableProp(double someSettableProp) override;
 
   public:
     // Methods
     double toArrayBuffer(ImageFormat format) override;
-  void saveToFile(const std::string& path, const Func_void_std__string& onFinished) override;
+    void saveToFile(const std::string& path, const Func_void_std__string& onFinished) override;
 
   private:
     friend HybridBase;

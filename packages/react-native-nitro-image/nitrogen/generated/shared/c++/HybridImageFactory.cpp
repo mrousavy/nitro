@@ -15,9 +15,9 @@ namespace margelo::nitro::image {
     HybridObject::loadHybridMethods();
     // load custom methods/properties
     registerHybridMethod("loadImageFromFile", &HybridImageFactory::loadImageFromFile, this);
-  registerHybridMethod("loadImageFromURL", &HybridImageFactory::loadImageFromURL, this);
-  registerHybridMethod("loadImageFromSystemName", &HybridImageFactory::loadImageFromSystemName, this);
-  registerHybridMethod("bounceBack", &HybridImageFactory::bounceBack, this);
+    registerHybridMethod("loadImageFromURL", &HybridImageFactory::loadImageFromURL, this);
+    registerHybridMethod("loadImageFromSystemName", &HybridImageFactory::loadImageFromSystemName, this);
+    registerHybridMethod("bounceBack", &HybridImageFactory::bounceBack, this);
   }
 
 } // namespace margelo::nitro::image

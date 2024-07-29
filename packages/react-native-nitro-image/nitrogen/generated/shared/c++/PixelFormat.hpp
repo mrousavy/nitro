@@ -8,9 +8,27 @@
 
 #pragma once
 
+#if __has_include(<NitroModules/NitroHash.hpp>)
 #include <NitroModules/NitroHash.hpp>
+#elif __has_include("NitroHash.hpp")
+#include "NitroHash.hpp"
+#else
+#error NitroModules cannot be found! Are you sure you installed NitroModules properly?
+#endif
+#if __has_include(<NitroModules/JSIConverter.hpp>)
 #include <NitroModules/JSIConverter.hpp>
+#elif __has_include("JSIConverter.hpp")
+#include "JSIConverter.hpp"
+#else
+#error NitroModules cannot be found! Are you sure you installed NitroModules properly?
+#endif
+#if __has_include(<NitroModules/NitroDefines.hpp>)
 #include <NitroModules/NitroDefines.hpp>
+#elif __has_include("NitroDefines.hpp")
+#include "NitroDefines.hpp"
+#else
+#error NitroModules cannot be found! Are you sure you installed NitroModules properly?
+#endif
 
 namespace margelo::nitro::image {
 
@@ -19,8 +37,8 @@ namespace margelo::nitro::image {
    */
   enum class PixelFormat {
     RGB SWIFT_NAME(rgb) = 0,
-  YUV_8BIT SWIFT_NAME(yuv_8bit) = 1,
-  YUV_10BIT SWIFT_NAME(yuv_10bit) = 2,
+    YUV_8BIT SWIFT_NAME(yuv_8bit) = 1,
+    YUV_10BIT SWIFT_NAME(yuv_10bit) = 2,
   } CLOSED_ENUM;
 
 } // namespace margelo::nitro::image

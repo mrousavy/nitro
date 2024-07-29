@@ -3,6 +3,7 @@ import { createFileMetadataString } from './../helpers.js'
 import { indent } from '../../stringUtils.js'
 import type { EnumMember } from '../types/EnumType.js'
 import { getCxxNamespace } from '../../options.js'
+import { includeNitroHeader } from './includeNitroHeader.js'
 
 /**
  * Creates a C++ enum that converts to a TypeScript union (aka just strings).
@@ -32,9 +33,9 @@ ${createFileMetadataString(`${typename}.hpp`)}
 
 #pragma once
 
-#include <NitroModules/NitroHash.hpp>
-#include <NitroModules/JSIConverter.hpp>
-#include <NitroModules/NitroDefines.hpp>
+${includeNitroHeader('NitroHash.hpp')}
+${includeNitroHeader('JSIConverter.hpp')}
+${includeNitroHeader('NitroDefines.hpp')}
 
 namespace ${cxxNamespace} {
 
@@ -42,7 +43,7 @@ namespace ${cxxNamespace} {
    * An enum which can be represented as a JavaScript union (${typename}).
    */
   enum class ${typename} {
-    ${indent(cppEnumMembers, '  ')}
+    ${indent(cppEnumMembers, '    ')}
   } CLOSED_ENUM;
 
 } // namespace ${cxxNamespace}

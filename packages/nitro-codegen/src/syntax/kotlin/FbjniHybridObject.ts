@@ -43,11 +43,11 @@ namespace ${cxxNamespace} {
 
   public:
     // Properties
-    ${indent(propertiesDecl, '  ')}
+    ${indent(propertiesDecl, '    ')}
 
   public:
     // Methods
-    ${indent(methodsDecl, '  ')}
+    ${indent(methodsDecl, '    ')}
 
   private:
     friend HybridBase;
