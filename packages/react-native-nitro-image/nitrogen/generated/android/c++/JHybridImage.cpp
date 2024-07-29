@@ -7,6 +7,10 @@
 ///
 
 #include "JHybridImage.hpp"
+#include "JImageSize.hpp"
+#include "JPixelFormat.hpp"
+#include "JImageFormat.hpp"
+#include "JFunc_void_std__string.hpp"
 
 namespace margelo::nitro::image {
 
@@ -27,30 +31,30 @@ namespace margelo::nitro::image {
 
   // Properties
   ImageSize JHybridImage::getSize() {
-    static const auto method = _javaPart->getClass()->getMethod<ImageSize()>("getSize");
-    return method(_javaPart.get());
+    static const auto method = _javaPart->getClass()->getMethod<JImageSize()>("getSize");
+    return method(_javaPart.get())->toImageSize();
   }
   PixelFormat JHybridImage::getPixelFormat() {
-    static const auto method = _javaPart->getClass()->getMethod<PixelFormat()>("getPixelFormat");
-    return method(_javaPart.get());
+    static const auto method = _javaPart->getClass()->getMethod<JPixelFormat()>("getPixelFormat");
+    return method(_javaPart.get())->toPixelFormat();
   }
   double JHybridImage::getSomeSettableProp() {
-    static const auto method = _javaPart->getClass()->getMethod<double()>("getSomeSettableProp");
+    static const auto method = _javaPart->getClass()->getMethod<jdouble()>("getSomeSettableProp");
     return method(_javaPart.get());
   }
   void JHybridImage::setSomeSettableProp(double someSettableProp) {
-    static const auto method = _javaPart->getClass()->getMethod<void(double)>("setSomeSettableProp");
+    static const auto method = _javaPart->getClass()->getMethod<void(jdouble)>("setSomeSettableProp");
     return method(_javaPart.get(), someSettableProp);
   }
 
   // Methods
   double JHybridImage::toArrayBuffer(ImageFormat format) {
-    static const auto method = _javaPart->getClass()->getMethod<double(ImageFormat)>("toArrayBuffer");
-    return method(_javaPart.get(), format);
+    static const auto method = _javaPart->getClass()->getMethod<double(JImageFormat)>("toArrayBuffer");
+    throw std::runtime_error("I couldn't figure out enums yet.");
   }
   void JHybridImage::saveToFile(const std::string& path, const Func_void_std__string& onFinished) {
-    static const auto method = _javaPart->getClass()->getMethod<void(std::string, Func_void_std__string)>("saveToFile");
-    return method(_javaPart.get(), path, onFinished);
+    static const auto method = _javaPart->getClass()->getMethod<void(jstring, jni::alias_ref<JFunc_void_std__string::javaobject>)>("saveToFile");
+    throw std::runtime_error("I couldn't figure out funcs yet.");
   }
 
 } // namespace margelo::nitro::image

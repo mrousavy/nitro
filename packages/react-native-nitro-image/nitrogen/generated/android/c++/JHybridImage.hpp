@@ -40,6 +40,8 @@ namespace margelo::nitro::image {
 
   private:
     friend HybridBase;
+
+   public:
     jni::global_ref<JHybridImage::javaobject> _javaPart;
   };
 

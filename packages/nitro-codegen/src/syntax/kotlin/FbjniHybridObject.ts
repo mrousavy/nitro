@@ -6,6 +6,7 @@ import type { HybridObjectSpec } from '../HybridObjectSpec.js'
 import { Method } from '../Method.js'
 import type { Property } from '../Property.js'
 import type { SourceFile } from '../SourceFile.js'
+import { getJniType } from './getJniType.js'
 
 export function createFbjniHybridObject(spec: HybridObjectSpec): SourceFile[] {
   const name = getHybridObjectName(spec.name)
@@ -119,9 +120,9 @@ function getFbjniMethodForwardImplementation(
 ): string {
   const name = getHybridObjectName(spec.name)
 
-  const returnType = method.returnType.getCode('c++')
+  const returnType = getJniType(method.returnType)
   const paramsTypes = method.parameters
-    .map((p) => p.type.getCode('c++'))
+    .map((p) => getJniType(p.type))
     .join(', ')
   const cxxSignature = `${returnType}(${paramsTypes})`
 
