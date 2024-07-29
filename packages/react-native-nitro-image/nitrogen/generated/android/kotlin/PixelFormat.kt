@@ -8,9 +8,14 @@
 
 package com.margelo.nitro.image
 
+import androidx.annotation.Keep
+import com.facebook.proguard.annotations.DoNotStrip
+
 /**
  * Represents the JavaScript enum/union "PixelFormat".
  */
+@DoNotStrip
+@Keep
 enum class PixelFormat {
   RGB,
   YUV_8BIT,

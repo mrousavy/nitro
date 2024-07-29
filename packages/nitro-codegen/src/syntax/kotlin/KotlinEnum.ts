@@ -13,9 +13,14 @@ ${createFileMetadataString(`${enumType.enumName}.kt`)}
 
 package ${packageName}
 
+import androidx.annotation.Keep
+import com.facebook.proguard.annotations.DoNotStrip
+
 /**
  * Represents the JavaScript enum/union "${enumType.enumName}".
  */
+@DoNotStrip
+@Keep
 enum class ${enumType.enumName} {
   ${indent(members.join(',\n'), '  ')}
 }

@@ -8,9 +8,14 @@
 
 package com.margelo.nitro.image
 
+import androidx.annotation.Keep
+import com.facebook.proguard.annotations.DoNotStrip
+
 /**
  * Represents the JavaScript enum/union "ImageFormat".
  */
+@DoNotStrip
+@Keep
 enum class ImageFormat {
   JPG,
   PNG

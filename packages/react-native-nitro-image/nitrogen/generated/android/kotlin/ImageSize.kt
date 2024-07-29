@@ -8,9 +8,14 @@
 
 package com.margelo.nitro.image
 
+import androidx.annotation.Keep
+import com.facebook.proguard.annotations.DoNotStrip
+
 /**
  * Represents the JavaScript object/struct "ImageSize".
  */
+@DoNotStrip
+@Keep
 data class ImageSize(
   width: Double,
   height: Double

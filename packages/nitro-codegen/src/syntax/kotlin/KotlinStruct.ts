@@ -15,9 +15,14 @@ ${createFileMetadataString(`${structType.structName}.kt`)}
 
 package ${packageName}
 
+import androidx.annotation.Keep
+import com.facebook.proguard.annotations.DoNotStrip
+
 /**
  * Represents the JavaScript object/struct "${structType.structName}".
  */
+@DoNotStrip
+@Keep
 data class ${structType.structName}(
   ${indent(values.join(',\n'), '  ')}
 )
