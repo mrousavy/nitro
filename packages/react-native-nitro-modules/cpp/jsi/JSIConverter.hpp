@@ -220,11 +220,11 @@ using future_traits_t = typename future_traits<std::remove_reference_t<T>>::type
 template <typename ReturnType, typename... Args> struct JSIConverter<std::function<ReturnType(Args...)>> {
   // std::future<T> -> T
   using ResultingType = future_traits_t<ReturnType>;
-  
+
   static inline ResultingType callJSFunction(jsi::Runtime& runtime, const OwningReference<jsi::Function>& function, const Args&... args) {
     // Throw a lock on the OwningReference<T> so we can guarantee safe access (Hermes GC cannot delete it while `lock` is alive)
     OwningLock<jsi::Function> lock = function.lock();
-    
+
     if (!function) {
       if constexpr (std::is_same_v<ResultingType, void>) {
         // runtime has already been deleted. since this returns void, we can just ignore it being deleted.
@@ -235,23 +235,23 @@ template <typename ReturnType, typename... Args> struct JSIConverter<std::functi
         throw std::runtime_error("Cannot call the given Function - the JS Dispatcher has already been destroyed by the JS Runtime!");
       }
     }
-    
+
     if constexpr (std::is_same_v<ResultingType, void>) {
       // It returns void. Just call the function
       function->call(runtime, JSIConverter<std::decay_t<Args>>::toJSI(runtime, args)...);
     } else {
       // It returns some kind of value - call the function, and convert the return value.
       jsi::Value result = function->call(runtime, JSIConverter<std::decay_t<Args>>::toJSI(runtime, args)...);
-      return JSIConverter<future_traits_t<ResultingType>>::fromJSI(runtime, std::move(result));
+      return JSIConverter<ResultingType>::fromJSI(runtime, std::move(result));
     }
   }
-  
+
   static inline std::function<ReturnType(Args...)> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
     // Make function global - it'll be managed by the Runtime's memory, and we only have a weak_ref to it.
     auto cache = JSICache<jsi::Function>::getOrCreateCache(runtime);
     jsi::Function function = arg.asObject(runtime).asFunction(runtime);
     OwningReference<jsi::Function> sharedFunction = cache.makeGlobal(std::move(function));
-    
+
     std::shared_ptr<Dispatcher> strongDispatcher = Dispatcher::getRuntimeGlobalDispatcher(runtime);
     std::weak_ptr<Dispatcher> weakDispatcher = strongDispatcher;
 
@@ -268,7 +268,7 @@ template <typename ReturnType, typename... Args> struct JSIConverter<std::functi
           throw std::runtime_error("Cannot call the given Function - the JS Dispatcher has already been destroyed by the JS Runtime!");
         }
       }
-      
+
       if constexpr (std::is_same_v<ResultingType, void>) {
         dispatcher->runAsync([&runtime, sharedFunction = std::move(sharedFunction), ...args = std::move(args)]() {
           callJSFunction(runtime, sharedFunction, args...);
