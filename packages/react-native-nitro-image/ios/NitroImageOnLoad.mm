@@ -29,7 +29,7 @@ using namespace margelo::nitro;
     auto imageFactory = NitroImage::NitroImageRegistry::createImageFactory();
     return std::make_shared<HybridImageFactorySwift>(imageFactory);
   });
-  HybridObjectRegistry::registerHybridObjectConstructor("HybridTest", []() -> std::shared_ptr<HybridObject> {
+  HybridObjectRegistry::registerHybridObjectConstructor("TestObject", []() -> std::shared_ptr<HybridObject> {
     return std::make_shared<HybridTestObjectImpl>();
   });
 }
