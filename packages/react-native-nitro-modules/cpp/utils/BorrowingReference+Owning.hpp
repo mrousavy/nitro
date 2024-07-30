@@ -17,6 +17,7 @@ BorrowingReference<T>::BorrowingReference(const OwningReference<T>& ref) {
   _isDeleted = ref._isDeleted;
   _strongRefCount = ref._strongRefCount;
   _weakRefCount = ref._weakRefCount;
+  _mutex = ref._mutex;
   (*_weakRefCount)++;
 }
 

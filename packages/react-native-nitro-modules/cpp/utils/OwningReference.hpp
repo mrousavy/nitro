@@ -8,6 +8,7 @@
 #pragma once
 
 #include <cstddef>
+#include <mutex>
 #include "BorrowingReference.hpp"
 
 namespace margelo::nitro {
@@ -27,16 +28,18 @@ public:
   using Pointee = T;
   
 public:
-  OwningReference(): _value(nullptr), _isDeleted(nullptr), _strongRefCount(nullptr), _weakRefCount(nullptr) { }
+  OwningReference(): _value(nullptr), _isDeleted(nullptr), _strongRefCount(nullptr), _weakRefCount(nullptr), _mutex(nullptr) { }
 
-  explicit OwningReference(T* value): _value(value), _isDeleted(new bool(false)), _strongRefCount(new size_t(1)), _weakRefCount(new size_t(0)) {}
+  explicit OwningReference(T* value): _value(value), _isDeleted(new bool(false)), _strongRefCount(new size_t(1)), _weakRefCount(new size_t(0)), _mutex(new std::mutex()) {}
 
   OwningReference(const OwningReference& ref):
     _value(ref._value),
     _isDeleted(ref._isDeleted),
     _strongRefCount(ref._strongRefCount),
-    _weakRefCount(ref._weakRefCount) {
+    _weakRefCount(ref._weakRefCount),
+    _mutex(ref._mutex) {
       // increment ref count after copy
+      std::unique_lock lock(*_mutex);
       (*_strongRefCount)++;
   }
 
@@ -44,7 +47,8 @@ public:
     _value(ref._value),
     _isDeleted(ref._isDeleted),
     _strongRefCount(ref._strongRefCount),
-    _weakRefCount(ref._weakRefCount) {
+    _weakRefCount(ref._weakRefCount),
+    _mutex(ref._mutex) {
       ref._value = nullptr;
       ref._isDeleted = nullptr;
       ref._strongRefCount = nullptr;
@@ -56,6 +60,7 @@ public:
 
     if (_strongRefCount != nullptr) {
       // destroy previous pointer
+      std::unique_lock lock(*_mutex);
       (*_strongRefCount)--;
       maybeDestroy();
     }
@@ -64,7 +69,9 @@ public:
     _isDeleted = ref._isDeleted;
     _strongRefCount = ref._strongRefCount;
     _weakRefCount = ref._weakRefCount;
+    _mutex = ref._mutex;
     if (_strongRefCount != nullptr) {
+      std::unique_lock lock(*_mutex);
       (*_strongRefCount)++;
     }
 
@@ -76,7 +83,9 @@ private:
     _value(ref._value),
     _isDeleted(ref._isDeleted),
     _strongRefCount(ref._strongRefCount),
-    _weakRefCount(ref._weakRefCount) {
+    _weakRefCount(ref._weakRefCount),
+    _mutex(ref._mutex) {
+      std::unique_lock lock(*_mutex);
       (*_strongRefCount)++;
   }
 
@@ -86,7 +95,9 @@ public:
       // we are just a dangling nullptr.
       return;
     }
-
+    
+    std::unique_lock lock(*_mutex);
+    
     // decrement strong ref count on destroy
     --(*_strongRefCount);
     maybeDestroy();
@@ -102,7 +113,7 @@ public:
   /**
    Get a weak ("borrowing") reference to this owning reference
    */
-  BorrowingReference<T> weak() {
+  BorrowingReference<T> weak() const {
     return BorrowingReference(*this);
   }
 
@@ -111,12 +122,9 @@ public:
    This can even be called if there are still multiple strong references to the value.
    */
   void destroy() {
-    if (*_isDeleted) {
-      // it has already been destroyed.
-      return;
-    }
-    delete _value;
-    *_isDeleted = true;
+    std::unique_lock lock(*_mutex);
+    
+    forceDestroy();
   }
 
 public:
@@ -156,15 +164,25 @@ private:
   void maybeDestroy() {
     if (*_strongRefCount == 0) {
       // after no strong references exist anymore
-      destroy();
+      forceDestroy();
     }
-
+    
     if (*_strongRefCount == 0 && *_weakRefCount == 0) {
       // free the full memory if there are no more references at all
+      delete _mutex;
       delete _isDeleted;
       delete _strongRefCount;
       delete _weakRefCount;
     }
+  }
+  
+  void forceDestroy() {
+    if (*_isDeleted) {
+      // it has already been destroyed.
+      return;
+    }
+    delete _value;
+    *_isDeleted = true;
   }
 
 public:
@@ -175,6 +193,7 @@ private:
   bool* _isDeleted;
   size_t* _strongRefCount;
   size_t* _weakRefCount;
+  std::mutex* _mutex;
 };
 
 }

@@ -25,14 +25,16 @@ private:
   explicit BorrowingReference(const OwningReference<T>& ref);
 
 public:
-  BorrowingReference(): _value(nullptr), _isDeleted(nullptr), _strongRefCount(nullptr), _weakRefCount(nullptr) { }
+  BorrowingReference(): _value(nullptr), _isDeleted(nullptr), _strongRefCount(nullptr), _weakRefCount(nullptr), _mutex(nullptr) { }
 
   BorrowingReference(const BorrowingReference& ref):
     _value(ref._value),
     _isDeleted(ref._isDeleted),
     _strongRefCount(ref._strongRefCount),
-    _weakRefCount(ref._weakRefCount) {
+    _weakRefCount(ref._weakRefCount),
+    _mutex(ref._mutex) {
       // increment ref count after copy
+      std::unique_lock lock(*_mutex);
       (*_weakRefCount)++;
   }
 
@@ -40,7 +42,8 @@ public:
     _value(ref._value),
     _isDeleted(ref._isDeleted),
     _strongRefCount(ref._strongRefCount),
-    _weakRefCount(ref._weakRefCount) {
+    _weakRefCount(ref._weakRefCount),
+    _mutex(ref._mutex) {
       ref._value = nullptr;
       ref._isDeleted = nullptr;
       ref._strongRefCount = nullptr;
@@ -51,6 +54,7 @@ public:
     if (this == &ref) return *this;
 
     if (_weakRefCount != nullptr) {
+      std::unique_lock lock(*_mutex);
       // destroy previous pointer
       (*_weakRefCount)--;
       maybeDestroy();
@@ -60,7 +64,9 @@ public:
     _isDeleted = ref._isDeleted;
     _strongRefCount = ref._strongRefCount;
     _weakRefCount = ref._weakRefCount;
+    _mutex = ref._mutex;
     if (_weakRefCount != nullptr) {
+      std::unique_lock lock(*_mutex);
       (*_weakRefCount)++;
     }
 
@@ -72,6 +78,8 @@ public:
       // we are just a dangling nullptr.
       return;
     }
+    
+    std::unique_lock lock(*_mutex);
 
     (*_weakRefCount)--;
     maybeDestroy();
@@ -89,6 +97,7 @@ private:
   void maybeDestroy() {
     if (*_strongRefCount == 0 && *_weakRefCount == 0) {
       // free the full memory if there are no more references at all
+      delete _mutex;
       if (!(*_isDeleted)) {
         delete _value;
       }
@@ -103,6 +112,7 @@ private:
   bool* _isDeleted;
   size_t* _strongRefCount;
   size_t* _weakRefCount;
+  std::mutex* _mutex;
 };
 
 } // namespace margelo::nitro
