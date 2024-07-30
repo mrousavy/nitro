@@ -47,6 +47,7 @@ namespace margelo::nitro::image {
 
     public:
       // Methods
+      virtual std::optional<std::variant<std::string, double>> getMap() = 0;
       virtual std::future<void> getValueFromJsCallback(const Func_std__future_std__string_& callback, const Func_void_std__string& andThenCall) = 0;
 
     protected:

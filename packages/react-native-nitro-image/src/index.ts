@@ -1,6 +1,6 @@
 import { NitroModules } from 'react-native-nitro-modules'
 import type { ImageFactory } from './specs/ImageFactory.nitro'
-import type { TestObject } from './specs/HybridTest.nitro'
+import type { TestObject } from './specs/TestObject.nitro'
 
 export * from './specs/Image.nitro'
 export * from './specs/ImageFactory.nitro'

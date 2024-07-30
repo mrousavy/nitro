@@ -20,7 +20,6 @@ import com.margelo.nitro.HybridObject
  */
 @DoNotStrip
 @Keep
-@Suppress("KotlinJniMissingFunction")
 abstract class HybridImageFactory: HybridObject() {
   protected val TAG = "HybridImageFactory"
 

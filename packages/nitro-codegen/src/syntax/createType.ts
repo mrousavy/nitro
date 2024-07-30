@@ -17,6 +17,7 @@ import { StructType } from './types/StructType.js'
 import { OptionalType } from './types/OptionalType.js'
 import { NamedWrappingType } from './types/NamedWrappingType.js'
 import { getInterfaceProperties } from './getInterfaceProperties.js'
+import { VariantType } from './types/VariantType.js'
 
 function isSymbol(type: TSMorphType, symbolName: string): boolean {
   const symbol = type.getSymbol()
@@ -140,16 +141,31 @@ export function createType(type: TSMorphType, isOptional: boolean): Type {
     )
     return new EnumType(typename, enumDeclaration)
   } else if (type.isUnion()) {
-    const symbol = type.getAliasSymbol()
-    if (symbol == null) {
-      // If there is no alias, it is an inline union instead of a separate type declaration!
-      throw new Error(
-        `Inline union types ("${type.getText()}") are not supported by Nitrogen!\n` +
-          `Extract the union to a separate type, and re-run nitrogen!`
-      )
+    // It is some kind of union - either full of strings (then it's an enum, or different types, then it's a Variant)
+    const isEnumUnion = type.getUnionTypes().every((t) => t.isStringLiteral())
+    if (isEnumUnion) {
+      // It consists only of string literaly - that means it's describing an enum!
+      const symbol = type.getAliasSymbol()
+      if (symbol == null) {
+        // If there is no alias, it is an inline union instead of a separate type declaration!
+        throw new Error(
+          `Inline union types ("${type.getText()}") are not supported by Nitrogen!\n` +
+            `Extract the union to a separate type, and re-run nitrogen!`
+        )
+      }
+      const typename = symbol.getEscapedName()
+      return new EnumType(typename, type)
+    } else {
+      // It consists of different types - that means it's a variant!
+      const variants = type.getUnionTypes().map((t) => createType(t, false))
+      const isOptionalVariant = variants.map((t) => t.kind === 'null')
+      const variant = new VariantType(variants.filter((v) => v.kind !== 'null'))
+      if (isOptionalVariant) {
+        return new OptionalType(variant)
+      } else {
+        return variant
+      }
     }
-    const typename = symbol.getEscapedName()
-    return new EnumType(typename, type)
   } else if (type.isInterface()) {
     // It references another interface/type, either a simple struct, or another HybridObject
     const typename = type.getSymbolOrThrow().getEscapedName()
