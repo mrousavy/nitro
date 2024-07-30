@@ -196,22 +196,57 @@ template <typename TResult> struct JSIConverter<std::future<TResult>> {
   }
 };
 
-// A return type of a function that returns something = std::future<T> (called asynchronously via JS Dispatcher)
 template <typename T, typename = void>
 struct AsyncResult {
     using type = std::future<T>;
 };
-// A return type of a function that returns nothing = void (called asynchronously via JS Dispatcher)
 template <typename T>
 struct AsyncResult<T, std::enable_if_t<std::is_void_v<T>>> {
     using type = void;
 };
 
+template <typename T>
+struct future_traits {
+  using type = void;
+};
+template <typename T>
+struct future_traits<std::future<T>> {
+    using type = T;
+};
+template <typename T>
+using future_traits_t = typename future_traits<std::remove_reference_t<T>>::type;
+
 // [](Args...) -> T {} <> (Args...) => T
 template <typename ReturnType, typename... Args> struct JSIConverter<std::function<ReturnType(Args...)>> {
-  using Result = AsyncResult<ReturnType>::type;
+  // std::future<T> -> T
+  using ResultingType = future_traits_t<ReturnType>;
   
-  static inline std::function<Result(Args...)> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+  static inline ResultingType callJSFunction(jsi::Runtime& runtime, const OwningReference<jsi::Function>& function, const Args&... args) {
+    // Throw a lock on the OwningReference<T> so we can guarantee safe access (Hermes GC cannot delete it while `lock` is alive)
+    OwningLock<jsi::Function> lock = function.lock();
+    
+    if (!function) {
+      if constexpr (std::is_same_v<ResultingType, void>) {
+        // runtime has already been deleted. since this returns void, we can just ignore it being deleted.
+        Logger::log("JSIConverter", "Tried calling void(..) function, but it has already been deleted by JS!");
+        return;
+      } else {
+        // runtime has already been deleted, but we are expecting a return value - throw an error in this case.
+        throw std::runtime_error("Cannot call the given Function - the JS Dispatcher has already been destroyed by the JS Runtime!");
+      }
+    }
+    
+    if constexpr (std::is_same_v<ResultingType, void>) {
+      // It returns void. Just call the function
+      function->call(runtime, JSIConverter<std::decay_t<Args>>::toJSI(runtime, args)...);
+    } else {
+      // It returns some kind of value - call the function, and convert the return value.
+      jsi::Value result = function->call(runtime, JSIConverter<std::decay_t<Args>>::toJSI(runtime, args)...);
+      return JSIConverter<future_traits_t<ResultingType>>::fromJSI(runtime, std::move(result));
+    }
+  }
+  
+  static inline std::function<ReturnType(Args...)> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
     // Make function global - it'll be managed by the Runtime's memory, and we only have a weak_ref to it.
     auto cache = JSICache<jsi::Function>::getOrCreateCache(runtime);
     jsi::Function function = arg.asObject(runtime).asFunction(runtime);
@@ -222,11 +257,11 @@ template <typename ReturnType, typename... Args> struct JSIConverter<std::functi
 
     // Create a C++ function that can be called by the consumer.
     // This will call the jsi::Function if it is still alive.
-    return [&runtime, weakDispatcher, sharedFunction = std::move(sharedFunction)](Args... args) -> Result {
+    return [&runtime, weakDispatcher, sharedFunction = std::move(sharedFunction)](Args... args) -> ReturnType {
       // Try to get the JS Dispatcher if the Runtime is still alive
       std::shared_ptr<Dispatcher> dispatcher = weakDispatcher.lock();
       if (!dispatcher) {
-        if constexpr (std::is_same_v<ReturnType, void>) {
+        if constexpr (std::is_same_v<ResultingType, void>) {
           Logger::log("JSIConverter", "Tried calling void(..) function, but the JS Dispatcher has already been deleted by JS!");
           return;
         } else {
@@ -234,33 +269,13 @@ template <typename ReturnType, typename... Args> struct JSIConverter<std::functi
         }
       }
       
-      if constexpr (std::is_same_v<ReturnType, void>) {
-        // Schedule this call on JS, no await
-        dispatcher->runAsync([&runtime, sharedFunction = std::move(sharedFunction), ... args = std::move(args)]() {
-          // Throw a lock on the OwningReference<T> so we can guarantee safe access (Hermes GC cannot delete it while `lock` is alive)
-          OwningLock<jsi::Function> lock = sharedFunction.lock();
-          
-          // it is a void function (returns undefined)
-          if (!sharedFunction) {
-            // runtime has already been deleted. since this returns void, we can just ignore it being deleted.
-            Logger::log("JSIConverter", "Tried calling void(..) function, but it has already been deleted by JS!");
-            return;
-          }
-          sharedFunction->call(runtime, JSIConverter<std::decay_t<Args>>::toJSI(runtime, args)...);
+      if constexpr (std::is_same_v<ResultingType, void>) {
+        dispatcher->runAsync([&runtime, sharedFunction = std::move(sharedFunction), ...args = std::move(args)]() {
+          callJSFunction(runtime, sharedFunction, args...);
         });
       } else {
-        // Schedule this call on JS, and return a std::future that can hold the result
-        return dispatcher->runAsyncAwaitable([&runtime, sharedFunction = std::move(sharedFunction), ... args = std::move(args)]() -> Result {
-          // Throw a lock on the OwningReference<T> so we can guarantee safe access (Hermes GC cannot delete it while `lock` is alive)
-          OwningLock<jsi::Function> lock = sharedFunction.lock();
-          
-          // it is a void function (returns undefined)
-          if (!sharedFunction) {
-            // runtime has already been deleted. since we expect a return value here, we need to throw.
-            throw std::runtime_error("Cannot call the given Function - the Runtime has already been destroyed!");
-          }
-          jsi::Value result = sharedFunction->call(runtime, JSIConverter<std::decay_t<Args>>::toJSI(runtime, args)...);
-          return JSIConverter<ReturnType>::fromJSI(runtime, std::move(result));
+        return dispatcher->runAsyncAwaitable([&runtime, sharedFunction = std::move(sharedFunction), ...args = std::move(args)]() -> ResultingType {
+          return callJSFunction(runtime, sharedFunction, args...);
         });
       }
     };
