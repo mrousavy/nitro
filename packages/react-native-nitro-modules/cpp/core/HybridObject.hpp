@@ -77,6 +77,13 @@ public:
    * overridden extra memory size.
    */
   size_t getTotalExternalMemorySize() noexcept;
+  
+  /**
+   * Return the `jsi::Object` that holds this `HybridObject` (boxed in a `jsi::Value`)
+   * Compared to other `jsi::HostObject`s, the `HybridObject` actually
+   * caches the created `jsi::Object` instances for safer memory management.
+   */
+  jsi::Value toObject(jsi::Runtime& runtime);
 
 public:
   /**
@@ -132,9 +139,10 @@ private:
   std::unordered_map<std::string, jsi::HostFunctionType> _getters;
   std::unordered_map<std::string, jsi::HostFunctionType> _setters;
   std::unordered_map<jsi::Runtime*, std::unordered_map<std::string, OwningReference<jsi::Function>>> _functionCache;
+  std::unordered_map<jsi::Runtime*, BorrowingReference<jsi::Object>> _jsObjects;
 
 private:
-  inline void ensureInitialized(facebook::jsi::Runtime& runtime);
+  inline void ensureInitialized(jsi::Runtime& runtime);
 
 private:
   template <typename Derived, typename ReturnType, typename... Args, size_t... Is>

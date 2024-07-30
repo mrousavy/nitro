@@ -63,24 +63,6 @@ HybridObject::~HybridObject() {
   _functionCache.clear();
 }
 
-std::string HybridObject::toString() {
-  return "[HybridObject " + std::string(_name) + "]";
-}
-
-std::string HybridObject::getName() {
-  return _name;
-}
-
-bool HybridObject::equals(std::shared_ptr<HybridObject> other) {
-  return this == other.get();
-}
-
-void HybridObject::loadHybridMethods() {
-  registerHybridGetter("name", &HybridObject::getName, this);
-  registerHybridMethod("toString", &HybridObject::toString, this);
-  registerHybridMethod("equals", &HybridObject::equals, this);
-}
-
 size_t HybridObject::getTotalExternalMemorySize() noexcept {
   static constexpr int STRING_KEY_AVERAGE_SIZE = 32; // good average for string keys
   static constexpr int CACHED_SIZE = STRING_KEY_AVERAGE_SIZE + sizeof(jsi::Function);
@@ -100,6 +82,55 @@ size_t HybridObject::getTotalExternalMemorySize() noexcept {
           + (cachedFunctions * CACHED_SIZE)
           + sizeof(std::mutex)
           + externalSize;
+}
+
+jsi::Value HybridObject::toObject(jsi::Runtime& runtime) {
+  // 1. Try to find existing jsi::Object from cache
+  auto found = _jsObjects.find(&runtime);
+  if (found != _jsObjects.end()) {
+    // 1.1 We found an object in cache, let's see if it's still alive..
+    BorrowingReference<jsi::Object> weak = found->second;
+    OwningReference<jsi::Object> strong = weak.lock();
+    if (strong) {
+      // 1.2. It is alive (strong) - update memory size and return to JS!
+      size_t memorySize = getTotalExternalMemorySize();
+      strong->setExternalMemoryPressure(runtime, memorySize);
+      // 1.3. It is alive (strong) - copy the JSI Pointer into a new jsi::Value, and return to JS
+      return jsi::Value(runtime, *strong);
+    }
+  }
+  
+  // 2. There is either no value in cache, or it's already dead. Create a new one
+  auto cache = JSICache<jsi::Object>::getOrCreateCache(runtime).lock();
+  // 3. Create a new jsi::Object from this HybridObject/jsi::HostObject
+  std::shared_ptr<HybridObject> shared = shared_from_this();
+  jsi::Object object = jsi::Object::createFromHostObject(runtime, shared);
+  // 4. HybridObjects expose their external memory size, so inform JS GC about it!
+  size_t memorySize = getTotalExternalMemorySize();
+  object.setExternalMemoryPressure(runtime, memorySize);
+  // 5. Make it a global (weak) reference
+  auto global = cache->makeGlobal(std::move(object));
+  _jsObjects[&runtime] = global.weak();
+  // 6. Return a jsi::Value copy again to the caller.
+  return jsi::Value(runtime, *global);
+}
+
+std::string HybridObject::toString() {
+  return "[HybridObject " + std::string(_name) + "]";
+}
+
+std::string HybridObject::getName() {
+  return _name;
+}
+
+bool HybridObject::equals(std::shared_ptr<HybridObject> other) {
+  return this == other.get();
+}
+
+void HybridObject::loadHybridMethods() {
+  registerHybridGetter("name", &HybridObject::getName, this);
+  registerHybridMethod("toString", &HybridObject::toString, this);
+  registerHybridMethod("equals", &HybridObject::equals, this);
 }
 
 std::vector<jsi::PropNameID> HybridObject::getPropertyNames(facebook::jsi::Runtime& runtime) {

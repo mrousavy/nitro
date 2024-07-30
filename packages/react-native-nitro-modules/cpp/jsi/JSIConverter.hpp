@@ -349,13 +349,13 @@ template <typename T> struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_h
       throw jsi::JSError(runtime, "Cannot convert nullptr to HostObject<" + typeName + ">!");
     }
 #endif
-    jsi::Object object = jsi::Object::createFromHostObject(runtime, arg);
     if constexpr (std::is_base_of_v<HybridObject, TPointee>) {
-      // HybridObjects expose their external memory size, so inform JS GC about it!
-      size_t memorySize = arg->getTotalExternalMemorySize();
-      object.setExternalMemoryPressure(runtime, memorySize);
+      // It's a HybridObject - use it's internal constructor which caches jsi::Objects for proper memory management!
+      return arg->toObject(runtime);
+    } else {
+      // It's any other kind of jsi::HostObject - just create it as normal.
+      return jsi::Object::createFromHostObject(runtime, arg);
     }
-    return object;
   }
 };
 
