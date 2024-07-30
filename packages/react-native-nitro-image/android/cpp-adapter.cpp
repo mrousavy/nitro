@@ -7,7 +7,9 @@
 using namespace margelo::nitro::image;
 
 JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void*) {
-  JFunc_void_std__string::registerNatives();
-  JHybridImage::registerNatives();
-  JHybridImageFactory::registerNatives();
+    JFunc_void_std__string::registerNatives();
+    JHybridImage::registerNatives();
+    JHybridImageFactory::registerNatives();
+
+    return JNI_VERSION_1_2;
 }
