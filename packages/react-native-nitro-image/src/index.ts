@@ -9,3 +9,8 @@ export * from './specs/ImageFactory.nitro'
  * Constructors for creating instances of `Image`.
  */
 export const ImageConstructors = NitroModules.get<ImageFactory>('ImageFactory')
+
+/**
+ * The Hybrid Test Object
+ */
+export const HybridTestObject = NitroModules.get<TestObject>('TestObject')

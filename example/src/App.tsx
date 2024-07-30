@@ -6,30 +6,34 @@ import { ImageConstructors, HybridTestObject } from 'react-native-nitro-image'
 export default function App() {
 
 
-  const image = React.useMemo(() => {
-    console.log('Loading image...')
-    const i = ImageConstructors.loadImageFromSystemName('heart.fill')
-    ImageConstructors.bounceBack(i)
-    ImageConstructors.bounceBack(i)
-    ImageConstructors.bounceBack(i)
-    console.log('Image loaded!')
-    console.log(`Image is ${i.size.width}x${i.size.height}`)
-    return i
-  }, [])
+  // const image = React.useMemo(() => {
+  //   console.log('Loading image...')
+  //   const i = ImageConstructors.loadImageFromSystemName('heart.fill')
+  //   ImageConstructors.bounceBack(i)
+  //   ImageConstructors.bounceBack(i)
+  //   ImageConstructors.bounceBack(i)
+  //   console.log('Image loaded!')
+  //   console.log(`Image is ${i.size.width}x${i.size.height}`)
+  //   return i
+  // }, [])
 
-  React.useEffect(() => {
-    image.saveToFile('some path', (path) => {
-      console.log('saved to ' + path + '!')
-    })
-  }, [])
+  // React.useEffect(() => {
+  //   image.saveToFile('some path', (path) => {
+  //     console.log('saved to ' + path + '!')
+  //   })
+  // }, [])
 
   React.useEffect(() => {
     const run = async () => {
       console.log('Passing "Hi from JS!" to C++...')
-      await HybridTestObject.getValueFromJsCallback(() => "Hi from JS!", (nativestring) => {
-        console.log(`Received callback from C++: "${nativestring}"`)
-      })
-      console.log('JS callback test completed!')
+      try {
+        await HybridTestObject.getValueFromJsCallback(() => "Hi from JS!", (nativestring) => {
+          console.log(`Received callback from C++: "${nativestring}"`)
+        })
+        console.log('JS callback test completed!')
+      } catch (e) {
+        console.error(`Failed to pass string from JS -> C++ -> JS:`, e)
+      }
 
     }
     run()
@@ -37,7 +41,7 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <Text>Image is {image.size.width.toFixed(0)}x{image.size.height.toFixed(0)}!</Text>
+      {/* <Text>Image is {image.size.width.toFixed(0)}x{image.size.height.toFixed(0)}!</Text> */}
     </View>
   );
 }

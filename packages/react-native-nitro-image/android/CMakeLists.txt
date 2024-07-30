@@ -18,6 +18,7 @@ add_library(${PACKAGE_NAME} SHARED
         cpp-adapter.cpp
         ${shared_files}
         ${android_files}
+        ../cpp/HybridTestImpl.cpp
         ../nitrogen/generated/shared/c++/HybridImage.cpp
         ../nitrogen/generated/shared/c++/HybridImageFactory.cpp
         ../nitrogen/generated/shared/c++/HybridTestObject.cpp
@@ -35,6 +36,7 @@ include_directories(
         # Nitrogen generated specs
         "../nitrogen/generated/shared/c++"
         "../nitrogen/generated/android/c++"
+        "../cpp"
 
 )
 

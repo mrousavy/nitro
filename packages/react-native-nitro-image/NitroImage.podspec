@@ -20,10 +20,10 @@ Pod::Spec.new do |s|
     "nitrogen/generated/ios/**/*.{h,hpp,c,cpp,swift}",
     # Implementation (Swift)
     "ios/**/*.{swift}",
-    # Implementation (C++ objects)
-    "ios/**/*.{hpp,cpp}",
     # Autolinking/Registration (Objective-C++)
     "ios/**/*.{m,mm}",
+    # Implementation (C++ objects)
+    "cpp/**/*.{hpp,cpp}",
   ]
   s.public_header_files = [
     # Generated specs
