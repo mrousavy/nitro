@@ -20,18 +20,7 @@ import com.margelo.nitro.HybridObject
  */
 @DoNotStrip
 @Keep
-@Suppress("KotlinJniMissingFunction")
-abstract class HybridImage: HybridObject {
-  @DoNotStrip
-  @Keep
-  private val mHybridData: HybridData
-
-  init {
-    mHybridData = initHybrid()
-  }
-
-  private external fun initHybrid(): HybridData
-
+abstract class HybridImage: HybridObject() {
   protected val TAG = "HybridImage"
 
   // Properties

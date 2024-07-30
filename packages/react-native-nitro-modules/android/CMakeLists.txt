@@ -31,8 +31,10 @@ include_directories(
   ../cpp/turbomodule
   ../cpp/utils
   # Android-specific C++ includes
+  src/main/cpp/core
   src/main/cpp/registry
   src/main/cpp/platform
+  src/main/cpp/utils
 )
 
 # Find required libraries

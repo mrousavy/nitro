@@ -2,6 +2,7 @@ package com.margelo.nitro
 
 import android.util.Log
 import androidx.annotation.Keep
+import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
 
 /**
@@ -9,7 +10,8 @@ import com.facebook.proguard.annotations.DoNotStrip
  */
 @Keep
 @DoNotStrip
-public interface HybridObject {
+@Suppress("KotlinJniMissingFunction")
+abstract class HybridObject {
     /**
      * Get the memory size of the Kotlin instance (plus any external heap allocations),
      * in bytes.
@@ -28,7 +30,20 @@ public interface HybridObject {
      */
     @get:DoNotStrip
     @get:Keep
-    val memorySize: ULong
+    abstract val memorySize: ULong
+
+    /**
+     * Contains the C++ context (Hybrid Data) for the fbjni C++ part.
+     */
+    @DoNotStrip
+    @Keep
+    val mHybridData: HybridData
+
+    init {
+        mHybridData = initHybrid()
+    }
+
+    private external fun initHybrid(): HybridData
 
     companion object {
         private const val TAG = "HybridObject"

@@ -8,7 +8,7 @@
 #pragma once
 
 #include <fbjni/fbjni.h>
-#include "JSupplier.hpp"
+#include "JHybridObjectInitializer.hpp"
 #include "HybridObject.hpp"
 
 namespace margelo::nitro {
@@ -22,7 +22,7 @@ namespace margelo::nitro {
    public:
     static void registerHybridObjectConstructor(jni::alias_ref<jni::JClass> clazz,
                                                 std::string hybridObjectName,
-                                                jni::alias_ref<JSupplier> constructorFn);
+                                                jni::alias_ref<JHybridObjectInitializer> constructorFn);
 
    public:
     static void registerNatives();
