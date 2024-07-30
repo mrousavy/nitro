@@ -15,7 +15,7 @@ namespace margelo::nitro::image {
 
   class JHybridImageFactory: public jni::HybridClass<JHybridImageFactory>, public HybridImageFactory {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/JHybridImageFactory;";
+    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/HybridImageFactory;";
     static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis);
     static void registerNatives();
 

@@ -10,8 +10,6 @@
 
 #if __has_include(<NitroModules/HybridObject.hpp>)
 #include <NitroModules/HybridObject.hpp>
-#elif __has_include("HybridObject.hpp")
-#include "HybridObject.hpp"
 #else
 #error NitroModules cannot be found! Are you sure you installed NitroModules properly?
 #endif

@@ -17,7 +17,7 @@ export function createFbjniHybridObject(spec: HybridObjectSpec): SourceFile[] {
   const methodsDecl = spec.methods
     .map((p) => p.getCode('c++', { override: true }))
     .join('\n')
-  const jniClassDescriptor = getAndroidPackage('c++/jni', name.JHybridT)
+  const jniClassDescriptor = getAndroidPackage('c++/jni', name.HybridT)
   const cxxNamespace = getCxxNamespace('c++')
 
   const cppHeaderCode = `

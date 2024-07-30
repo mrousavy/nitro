@@ -10,8 +10,6 @@
 
 #if __has_include(<NitroModules/JSIConverter.hpp>)
 #include <NitroModules/JSIConverter.hpp>
-#elif __has_include("JSIConverter.hpp")
-#include "JSIConverter.hpp"
 #else
 #error NitroModules cannot be found! Are you sure you installed NitroModules properly?
 #endif
