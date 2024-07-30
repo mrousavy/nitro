@@ -10,11 +10,7 @@ module.exports = {
       /**
        * @type {import('@react-native-community/cli-types').AndroidDependencyParams}
        */
-      android: {
-        cxxModuleCMakeListsModuleName: 'NitroModules',
-        cxxModuleCMakeListsPath: 'CMakeLists.txt',
-        cxxModuleHeaderName: 'NativeNitroModules',
-      },
+      android: {},
     },
   },
 }

@@ -43,10 +43,31 @@ android {
     minSdkVersion getExtOrIntegerDefault("minSdkVersion")
     targetSdkVersion getExtOrIntegerDefault("targetSdkVersion")
     buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
+
+    externalNativeBuild {
+      cmake {
+        cppFlags "-O2 -frtti -fexceptions -Wall -fstack-protector-all"
+        abiFilters (*reactNativeArchitectures())
+      }
+    }
+  }
+
+  externalNativeBuild {
+    cmake {
+      path "CMakeLists.txt"
+    }
   }
 
   buildFeatures {
     buildConfig true
+    prefab true
+    prefabPublishing true
+  }
+
+  prefab {
+    NitroModules {
+      headers "${project.buildDir}/headers/nitromodules/"
+    }
   }
 
   buildTypes {
@@ -96,3 +117,14 @@ if (isNewArchitectureEnabled()) {
     codegenJavaPackageName = "com.margelo.nitro"
   }
 }
+
+
+task prepareHeaders(type: Copy) {
+  from fileTree('./src/main/cpp').filter { it.isFile() }
+  from fileTree('../cpp/').filter { it.isFile() }
+  include "*.hpp"
+  into "${project.buildDir}/headers/nitromodules/NitroModules/"
+  includeEmptyDirs = false
+}
+
+preBuild.dependsOn(prepareHeaders)
