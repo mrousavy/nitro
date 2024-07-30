@@ -18,6 +18,11 @@ add_library(${PACKAGE_NAME} SHARED
         cpp-adapter.cpp
         ${shared_files}
         ${android_files}
+        ../nitrogen/generated/shared/c++/HybridImage.cpp
+        ../nitrogen/generated/shared/c++/HybridImageFactory.cpp
+        ../nitrogen/generated/shared/c++/HybridTestObject.cpp
+        ../nitrogen/generated/android/c++/JHybridImage.cpp
+        ../nitrogen/generated/android/c++/JHybridImageFactory.cpp
 )
 
 # Required libs
