@@ -401,7 +401,7 @@ template<> struct JSIConverter<AnyValue> {
         throw std::runtime_error("Cannot convert JS object to AnyMap yet!");
     }
     static inline jsi::Value toJSI(jsi::Runtime& runtime, const AnyValue& value) {
-        return JSIConverter<std::variant<std::monostate, bool, double, int64_t, std::string, AnyArray, AnyObject>>::toJSI(runtime, value);
+        return JSIConverter<std::variant<AnyValue::variant>>::toJSI(runtime, value);
     }
 };
 
@@ -414,7 +414,7 @@ template<> struct JSIConverter<std::shared_ptr<AnyMap>> {
         jsi::Object object(runtime);
         for (const auto& item : map->getMap()) {
             jsi::String key = jsi::String::createFromUtf8(runtime, item.first);
-            jsi::Value value = JSIConverter<std::variant<std::monostate, bool, double, int64_t, std::string, AnyArray, AnyObject>>::toJSI(runtime, item.second);
+            jsi::Value value = JSIConverter<AnyValue>::toJSI(runtime, item.second);
             object.setProperty(runtime, std::move(key), std::move(value));
         }
         return object;
