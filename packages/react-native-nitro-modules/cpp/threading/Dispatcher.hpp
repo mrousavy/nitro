@@ -49,7 +49,7 @@ public:
     std::promise<T> promise;
     std::future<T> future = promise.get_future();
 
-    runAsync([function = std::move(function), promise = std::move(promise)]() {
+    runAsync([function = std::move(function), promise = std::move(promise)]() mutable {
       try {
         if constexpr (std::is_void<T>()) {
           // 4. Call the actual function on the new Thread
