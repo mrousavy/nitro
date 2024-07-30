@@ -18,6 +18,7 @@ import { OptionalType } from './types/OptionalType.js'
 import { NamedWrappingType } from './types/NamedWrappingType.js'
 import { getInterfaceProperties } from './getInterfaceProperties.js'
 import { VariantType } from './types/VariantType.js'
+import { MapType } from './types/MapType.js'
 
 function isSymbol(type: TSMorphType, symbolName: string): boolean {
   const symbol = type.getSymbol()
@@ -142,7 +143,8 @@ export function createType(type: TSMorphType, isOptional: boolean): Type {
     // ArrayBuffer
     return new ArrayBufferType()
   } else if (isMap(type)) {
-    return new ArrayBufferType()
+    // Map
+    return new MapType()
   } else if (type.isEnum()) {
     // It is an enum. We need to generate a C++ declaration for the enum
     const typename = type.getSymbolOrThrow().getEscapedName()

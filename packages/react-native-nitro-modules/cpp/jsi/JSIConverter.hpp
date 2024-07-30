@@ -13,6 +13,7 @@ namespace margelo::nitro { class HybridObject; }
 #include "ArrayBuffer.hpp"
 #include "NitroHash.hpp"
 #include "TypeInfo.hpp"
+#include "AnyMap.hpp"
 #include <array>
 #include <future>
 #include <jsi/jsi.h>
@@ -60,6 +61,16 @@ template <> struct JSIConverter<int> {
   static inline jsi::Value toJSI(jsi::Runtime&, int arg) {
     return jsi::Value(arg);
   }
+};
+
+// std::monostate <> null
+template <> struct JSIConverter<std::monostate> {
+    static inline std::monostate fromJSI(jsi::Runtime&, const jsi::Value& arg) {
+        return std::monostate();
+    }
+    static inline jsi::Value toJSI(jsi::Runtime&, std::monostate arg) {
+        return jsi::Value::null();
+    }
 };
 
 // double <> number
@@ -381,6 +392,32 @@ private:
         } catch (...) {
             return false;
         }
+    }
+};
+
+// AnyValue <> Record<K, V>
+template<> struct JSIConverter<AnyValue> {
+    static inline std::shared_ptr<AnyMap> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+        throw std::runtime_error("Cannot convert JS object to AnyMap yet!");
+    }
+    static inline jsi::Value toJSI(jsi::Runtime& runtime, const AnyValue& value) {
+        return JSIConverter<std::variant<std::monostate, bool, double, int64_t, std::string, AnyArray, AnyObject>>::toJSI(runtime, value);
+    }
+};
+
+// AnyMap <> Record<K, V>
+template<> struct JSIConverter<std::shared_ptr<AnyMap>> {
+    static inline std::shared_ptr<AnyMap> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+        throw std::runtime_error("Cannot convert JS object to AnyMap yet!");
+    }
+    static inline jsi::Value toJSI(jsi::Runtime& runtime, std::shared_ptr<AnyMap> map) {
+        jsi::Object object(runtime);
+        for (const auto& item : map->getMap()) {
+            jsi::String key = jsi::String::createFromUtf8(runtime, item.first);
+            jsi::Value value = JSIConverter<std::variant<std::monostate, bool, double, int64_t, std::string, AnyArray, AnyObject>>::toJSI(runtime, item.second);
+            object.setProperty(runtime, std::move(key), std::move(value));
+        }
+        return object;
     }
 };
 

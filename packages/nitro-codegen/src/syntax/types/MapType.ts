@@ -28,7 +28,7 @@ export class MapType implements Type {
   getRequiredImports(): SourceImport[] {
     return [
       {
-        name: 'AnyMap.hpp',
+        name: 'NitroModules/AnyMap.hpp',
         forwardDeclaration: getForwardDeclaration(
           'class',
           'AnyMap',

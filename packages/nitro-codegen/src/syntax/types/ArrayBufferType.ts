@@ -28,7 +28,7 @@ export class ArrayBufferType implements Type {
   getRequiredImports(): SourceImport[] {
     return [
       {
-        name: 'ArrayBuffer.hpp',
+        name: 'NitroModules/ArrayBuffer.hpp',
         forwardDeclaration: getForwardDeclaration(
           'class',
           'ArrayBuffer',

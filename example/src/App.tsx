@@ -20,6 +20,12 @@ export default function App() {
       console.log('saved to ' + path + '!')
     })
   }, [])
+  console.log('before')
+  const res = HybridTestObject.getVariant()
+  console.log(`variant result: ${res} (${typeof res})`)
+
+  const map = HybridTestObject.getMap()
+  console.log(`map result:`, map)
 
   React.useEffect(() => {
     const run = async () => {

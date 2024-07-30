@@ -7,6 +7,7 @@
 
 #include "HybridTestImpl.hpp"
 #include <NitroModules/NitroLogger.hpp>
+#include <NitroModules/AnyMap.hpp>
 #include <thread>
 
 namespace margelo::nitro::image {
@@ -29,4 +30,15 @@ namespace margelo::nitro::image {
       return std::variant<std::string, double>(13.7);
   }
 
+    std::shared_ptr<AnyMap> HybridTestObjectImpl::getMap() {
+        auto map = std::make_shared<AnyMap>();
+        map->setNull("null");
+        map->setDouble("double", 55.5);
+        map->setBoolean("bool", true);
+        map->setBigInt("bigint", 225452346346);
+        map->setString("string", "Hello!");
+        map->setObject("object", { {"string", "hello"}, { "double", 55.0 }, { "bool", false } });
+        map->setArray("some-array", { 55.0, "string", false });
+        return map;
+  }
 }

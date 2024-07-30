@@ -17,6 +17,8 @@ public:
                                            const Func_void_std__string& andThenCall) override;
 
   std::variant<std::string, double> getVariant() override;
+
+  std::shared_ptr<AnyMap> getMap() override;
 };
 
 };
