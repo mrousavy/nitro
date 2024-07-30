@@ -78,6 +78,8 @@ public:
   explicit JSICache(jsi::Runtime* runtime) : _runtime(runtime) {}
 
   ~JSICache() {
+    std::unique_lock lock(_mutex);
+    
     for (auto& func : _cache) {
       OwningReference<T> owning = func.lock();
       if (owning) {
@@ -86,6 +88,11 @@ public:
       }
     }
   }
+  
+public:
+  JSICache() = delete;
+  JSICache(const JSICache&) = delete;
+  JSICache(JSICache&&) = delete;
 
 public:
   /**
