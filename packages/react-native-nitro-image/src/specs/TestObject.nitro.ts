@@ -1,7 +1,8 @@
-import { type HybridObject } from 'react-native-nitro-modules'
+import { type HybridObject, type AnyMap } from 'react-native-nitro-modules'
 
 export interface TestObject extends HybridObject<{ ios: 'c++' }> {
-  getMap(): Record<string, number | boolean>
+  getMap(): AnyMap
+  getVariant(): number | string
 
   getValueFromJsCallback(
     callback: () => string,

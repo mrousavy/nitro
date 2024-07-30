@@ -15,6 +15,8 @@ class HybridTestObjectImpl: public HybridTestObject {
 public:
   std::future<void> getValueFromJsCallback(const Func_std__future_std__string_& callback,
                                            const Func_void_std__string& andThenCall) override;
+
+  std::variant<std::string, double> getVariant() override;
 };
 
 };

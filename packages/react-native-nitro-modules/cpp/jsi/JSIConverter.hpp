@@ -197,15 +197,6 @@ template <typename TResult> struct JSIConverter<std::future<TResult>> {
   }
 };
 
-template <typename T, typename = void>
-struct AsyncResult {
-    using type = std::future<T>;
-};
-template <typename T>
-struct AsyncResult<T, std::enable_if_t<std::is_void_v<T>>> {
-    using type = void;
-};
-
 template <typename T>
 struct future_traits {
   using type = void;

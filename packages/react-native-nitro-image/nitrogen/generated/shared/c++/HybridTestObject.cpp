@@ -15,6 +15,7 @@ namespace margelo::nitro::image {
     HybridObject::loadHybridMethods();
     // load custom methods/properties
     registerHybridMethod("getMap", &HybridTestObject::getMap, this);
+    registerHybridMethod("getVariant", &HybridTestObject::getVariant, this);
     registerHybridMethod("getValueFromJsCallback", &HybridTestObject::getValueFromJsCallback, this);
   }
 

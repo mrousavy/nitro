@@ -9,6 +9,7 @@ export type TypeKind =
   | 'enum'
   | 'function'
   | 'hybrid-object'
+  | 'map'
   | 'null'
   | 'number'
   | 'optional'

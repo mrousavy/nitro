@@ -20,16 +20,11 @@ import { getInterfaceProperties } from './getInterfaceProperties.js'
 import { VariantType } from './types/VariantType.js'
 
 function isSymbol(type: TSMorphType, symbolName: string): boolean {
-  const target = type.getTargetType()
-  if (target == null) {
-    return false
-  }
-
-  const symbol = target.getSymbol()
+  const symbol = type.getSymbol()
   if (symbol?.getName() === symbolName) {
     return true
   }
-  const aliasSymbol = target.getAliasSymbol()
+  const aliasSymbol = type.getAliasSymbol()
   if (aliasSymbol?.getName() === symbolName) {
     return true
   }
@@ -46,6 +41,10 @@ function isRecord(type: TSMorphType): boolean {
 
 function isArrayBuffer(type: TSMorphType): boolean {
   return isSymbol(type, 'ArrayBuffer')
+}
+
+function isMap(type: TSMorphType): boolean {
+  return isSymbol(type, 'AnyMap')
 }
 
 function getFunctionCallSignature(func: TSMorphType): Signature {
@@ -141,6 +140,8 @@ export function createType(type: TSMorphType, isOptional: boolean): Type {
     return new RecordType(keyType, valueType)
   } else if (isArrayBuffer(type)) {
     // ArrayBuffer
+    return new ArrayBufferType()
+  } else if (isMap(type)) {
     return new ArrayBufferType()
   } else if (type.isEnum()) {
     // It is an enum. We need to generate a C++ declaration for the enum

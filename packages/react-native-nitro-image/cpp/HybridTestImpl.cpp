@@ -25,4 +25,8 @@ namespace margelo::nitro::image {
     });
   }
 
+  std::variant<std::string, double> HybridTestObjectImpl::getVariant() {
+      return std::variant<std::string, double>(13.7);
+  }
+
 }

@@ -14,8 +14,10 @@
 #error NitroModules cannot be found! Are you sure you installed NitroModules properly?
 #endif
 
+// Forward declaration of `ArrayBuffer` to properly resolve imports.
+namespace NitroModules { class ArrayBuffer; }
 
-
+#include "ArrayBuffer.hpp"
 #include "Func_std__future_std__string_.hpp"
 #include "Func_void_std__string.hpp"
 
@@ -47,7 +49,8 @@ namespace margelo::nitro::image {
 
     public:
       // Methods
-      virtual std::unordered_map<std::string, std::variant<double, bool>> getMap() = 0;
+      virtual std::shared_ptr<ArrayBuffer> getMap() = 0;
+      virtual std::variant<std::string, double> getVariant() = 0;
       virtual std::future<void> getValueFromJsCallback(const Func_std__future_std__string_& callback, const Func_void_std__string& andThenCall) = 0;
 
     protected:

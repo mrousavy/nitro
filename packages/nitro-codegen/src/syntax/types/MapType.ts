@@ -1,0 +1,41 @@
+import type { Language } from '../../getPlatformSpecs.js'
+import { getForwardDeclaration } from '../c++/getForwardDeclaration.js'
+import type { SourceFile, SourceImport } from '../SourceFile.js'
+import type { Type, TypeKind } from './Type.js'
+
+export class MapType implements Type {
+  get canBePassedByReference(): boolean {
+    return true
+  }
+
+  get kind(): TypeKind {
+    return 'map'
+  }
+
+  getCode(language: Language): string {
+    switch (language) {
+      case 'c++':
+        return 'std::shared_ptr<AnyMap>'
+      default:
+        throw new Error(
+          `Language ${language} is not yet supported for MapType!`
+        )
+    }
+  }
+  getExtraFiles(): SourceFile[] {
+    return []
+  }
+  getRequiredImports(): SourceImport[] {
+    return [
+      {
+        name: 'AnyMap.hpp',
+        forwardDeclaration: getForwardDeclaration(
+          'class',
+          'AnyMap',
+          'NitroModules'
+        ),
+        language: 'c++',
+      },
+    ]
+  }
+}
