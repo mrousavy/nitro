@@ -20,6 +20,8 @@ Pod::Spec.new do |s|
     "nitrogen/generated/ios/**/*.{h,hpp,c,cpp,swift}",
     # Implementation (Swift)
     "ios/**/*.{swift}",
+    # Implementation (C++ objects)
+    "ios/**/*.{hpp,cpp}",
     # Autolinking/Registration (Objective-C++)
     "ios/**/*.{m,mm}",
   ]
