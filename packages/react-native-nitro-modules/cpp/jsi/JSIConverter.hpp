@@ -200,6 +200,7 @@ template <typename ReturnType, typename... Args> struct JSIConverter<std::functi
     // Create a C++ function that can be called by the consumer.
     // This will call the jsi::Function if it is still alive.
     return [&runtime, sharedFunction = std::move(sharedFunction)](Args... args) -> ReturnType {
+      OwningLock<jsi::Function> lock = sharedFunction.lock();
       if constexpr (std::is_same_v<ReturnType, void>) {
         // it is a void function (returns undefined)
         if (!sharedFunction) {

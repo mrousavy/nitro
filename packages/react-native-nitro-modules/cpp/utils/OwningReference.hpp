@@ -29,9 +29,19 @@ public:
   using Pointee = T;
   
 public:
-  OwningReference(): _value(nullptr), _isDeleted(nullptr), _strongRefCount(nullptr), _weakRefCount(nullptr), _mutex(nullptr) { }
+  OwningReference():
+    _value(nullptr),
+    _isDeleted(nullptr),
+    _strongRefCount(nullptr),
+    _weakRefCount(nullptr),
+    _mutex(nullptr) { }
 
-  explicit OwningReference(T* value): _value(value), _isDeleted(new bool(false)), _strongRefCount(new size_t(1)), _weakRefCount(new size_t(0)), _mutex(new std::mutex()) {}
+  explicit OwningReference(T* value):
+    _value(value),
+    _isDeleted(new bool(false)),
+    _strongRefCount(new size_t(1)),
+    _weakRefCount(new size_t(0)),
+    _mutex(new std::mutex()) {}
 
   OwningReference(const OwningReference& ref):
     _value(ref._value),
@@ -40,7 +50,6 @@ public:
     _weakRefCount(ref._weakRefCount),
     _mutex(ref._mutex) {
       // increment ref count after copy
-      std::unique_lock lock(*_mutex);
       (*_strongRefCount)++;
   }
 
@@ -61,7 +70,6 @@ public:
 
     if (_strongRefCount != nullptr) {
       // destroy previous pointer
-      std::unique_lock lock(*_mutex);
       (*_strongRefCount)--;
       maybeDestroy();
     }
@@ -72,7 +80,7 @@ public:
     _weakRefCount = ref._weakRefCount;
     _mutex = ref._mutex;
     if (_strongRefCount != nullptr) {
-      std::unique_lock lock(*_mutex);
+      // increment new pointer
       (*_strongRefCount)++;
     }
 
@@ -86,7 +94,6 @@ private:
     _strongRefCount(ref._strongRefCount),
     _weakRefCount(ref._weakRefCount),
     _mutex(ref._mutex) {
-      std::unique_lock lock(*_mutex);
       (*_strongRefCount)++;
   }
 
@@ -97,8 +104,6 @@ public:
       return;
     }
     
-    std::unique_lock lock(*_mutex);
-    
     // decrement strong ref count on destroy
     --(*_strongRefCount);
     maybeDestroy();
@@ -106,7 +111,7 @@ public:
   
 public:
   OwningLock<T> lock() const {
-    return OwningLock<T>(weak());
+    return OwningLock<T>(*this);
   }
   
   /**
@@ -168,6 +173,8 @@ public:
 
 private:
   void maybeDestroy() {
+    _mutex->lock();
+    
     if (*_strongRefCount == 0) {
       // after no strong references exist anymore
       forceDestroy();
@@ -175,11 +182,14 @@ private:
     
     if (*_strongRefCount == 0 && *_weakRefCount == 0) {
       // free the full memory if there are no more references at all
-      delete _mutex;
       delete _isDeleted;
       delete _strongRefCount;
       delete _weakRefCount;
+      _mutex->unlock();
+      return;
     }
+    
+    _mutex->unlock();
   }
   
   void forceDestroy() {
