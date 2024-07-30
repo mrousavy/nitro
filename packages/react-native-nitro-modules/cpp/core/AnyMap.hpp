@@ -14,8 +14,13 @@ namespace margelo::nitro {
 struct AnyValue;
 using AnyArray = std::vector<AnyValue>;
 using AnyObject = std::unordered_map<std::string, AnyValue>;
-struct AnyValue : std::variant<std::monostate, bool, double, int64_t, std::string, AnyArray, AnyObject> {
-    using std::variant<std::monostate, bool, double, int64_t, std::string, AnyArray, AnyObject>::variant;
+
+using VariantType = std::variant<std::monostate, bool, double, int64_t, std::string, AnyArray, AnyObject>;
+struct AnyValue : VariantType {
+    using VariantType::variant;
+
+    AnyValue(const VariantType& variant): VariantType(variant) {}
+    AnyValue(VariantType&& variant): VariantType(std::move(variant)) {}
 };
 
 /**
@@ -164,6 +169,11 @@ public:
      * If the key already exists, this will overwrite the value at that `key`.
      */
     void setObject(const std::string& key, const AnyObject& value);
+    /**
+     * Set the value at the given key to the given `AnyValue`.
+     * If the key already exists, this will overwrite the value at that `key`.
+     */
+    void setAny(const std::string& key, const AnyValue& value);
 
 public:
     /**

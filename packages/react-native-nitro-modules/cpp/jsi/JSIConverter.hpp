@@ -364,7 +364,27 @@ template <typename ValueType> struct JSIConverter<std::unordered_map<std::string
 template <typename... Types>
 struct JSIConverter<std::variant<Types...>> {
     static inline std::variant<Types...> fromJSI(jsi::Runtime& runtime, const jsi::Value& value) {
-        return fromJSIImpl(runtime, value, std::make_index_sequence<sizeof...(Types)>{});
+        if (value.isNull()) {
+            return std::monostate();
+        } else if (value.isBool()) {
+            return JSIConverter<bool>::fromJSI(runtime, value);
+        } else if (value.isNumber()) {
+            return JSIConverter<double>::fromJSI(runtime, value);
+        } else if (value.isString()) {
+            return JSIConverter<std::string>::fromJSI(runtime, value);
+        } else if (value.isBigInt()) {
+            return JSIConverter<int64_t>::fromJSI(runtime, value);
+        } else if (value.isObject()) {
+            jsi::Object valueObj = value.getObject(runtime);
+            if (valueObj.isArray(runtime)) {
+                return JSIConverter<std::vector<AnyValue>>::fromJSI(runtime, value);
+            } else {
+                return JSIConverter<std::unordered_map<std::string, AnyValue>>::fromJSI(runtime, value);
+            }
+        } else {
+            std::string stringRepresentation = value.toString(runtime).utf8(runtime);
+            throw std::runtime_error("Cannot convert \"" + stringRepresentation + "\" to std::variant<...>!");
+        }
     }
 
     static inline jsi::Value toJSI(jsi::Runtime& runtime, const std::variant<Types...>& variant) {
@@ -372,33 +392,12 @@ struct JSIConverter<std::variant<Types...>> {
             return JSIConverter<std::decay_t<decltype(val)>>::toJSI(runtime, val);
         }, variant);
     }
-
-private:
-    template <std::size_t... Indices>
-    static inline std::variant<Types...> fromJSIImpl(jsi::Runtime& runtime, const jsi::Value& value, std::index_sequence<Indices...>) {
-        std::variant<Types...> result;
-        bool matched = ((tryConvert<Types>(runtime, value, result) || ...));
-        if (!matched) {
-            throw jsi::JSError(runtime, "Unable to convert jsi::Value to std::variant");
-        }
-        return result;
-    }
-
-    template <typename T>
-    static inline bool tryConvert(jsi::Runtime& runtime, const jsi::Value& value, std::variant<Types...>& variant) {
-        try {
-            variant = JSIConverter<T>::fromJSI(runtime, value);
-            return true;
-        } catch (...) {
-            return false;
-        }
-    }
 };
 
 // AnyValue <> Record<K, V>
 template<> struct JSIConverter<AnyValue> {
-    static inline std::shared_ptr<AnyMap> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
-        throw std::runtime_error("Cannot convert JS object to AnyMap yet!");
+    static inline AnyValue fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+        return JSIConverter<AnyValue::variant>::fromJSI(runtime, arg);
     }
     static inline jsi::Value toJSI(jsi::Runtime& runtime, const AnyValue& value) {
         return JSIConverter<std::variant<AnyValue::variant>>::toJSI(runtime, value);
@@ -413,31 +412,9 @@ template<> struct JSIConverter<std::shared_ptr<AnyMap>> {
         size_t size = propNames.size(runtime);
         std::shared_ptr<AnyMap> map = AnyMap::make();
         for (size_t i = 0; i < size; i++) {
-            jsi::String propName = propNames.getValueAtIndex(runtime, i).getString(runtime);
-            std::string key = propName.utf8(runtime);
-            jsi::Value value = object.getProperty(runtime, propName);
-            if (value.isNull()) {
-                map->setNull(key);
-            } else if (value.isBool()) {
-                map->setBoolean(key, value.getBool());
-            } else if (value.isNumber()) {
-                map->setDouble(key, value.getNumber());
-            } else if (value.isString()) {
-                map->setString(key, value.getString(runtime).utf8(runtime));
-            } else if (value.isBigInt()) {
-                map->setBigInt(key, value.getBigInt(runtime).asInt64(runtime));
-            } else if (value.isObject()) {
-                jsi::Object valueObj = value.getObject(runtime);
-                if (valueObj.isArray(runtime)) {
-                    // TODO: Convert Array
-                } else {
-                    // TODO: Convert object
-                }
-            } else {
-                std::string stringified = arg.toString(runtime).utf8(runtime);
-                throw std::runtime_error("Cannot convert \"" + key + "\" (\"" + stringified +
-                                         "\") to AnyMap value type!");
-            }
+            jsi::String jsKey = propNames.getValueAtIndex(runtime, i).getString(runtime);
+            jsi::Value jsValue = object.getProperty(runtime, jsKey);
+            map->setAny(jsKey.utf8(runtime), JSIConverter<AnyValue>::fromJSI(runtime, jsValue));
         }
         return map;
     }

@@ -169,6 +169,9 @@ void AnyMap::setArray(const std::string& key, const AnyArray& value) {
 void AnyMap::setObject(const std::string& key, const AnyObject& value) {
     _map.emplace(key, value);
 }
+void AnyMap::setAny(const std::string& key, const AnyValue& value) {
+    _map.emplace(key, value);
+}
 
 // C++ getter
 const std::unordered_map<std::string, AnyValue>& AnyMap::getMap() const {
