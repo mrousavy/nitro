@@ -408,7 +408,38 @@ template<> struct JSIConverter<AnyValue> {
 // AnyMap <> Record<K, V>
 template<> struct JSIConverter<std::shared_ptr<AnyMap>> {
     static inline std::shared_ptr<AnyMap> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
-        throw std::runtime_error("Cannot convert JS object to AnyMap yet!");
+        jsi::Object object = arg.asObject(runtime);
+        jsi::Array propNames = object.getPropertyNames(runtime);
+        size_t size = propNames.size(runtime);
+        std::shared_ptr<AnyMap> map = AnyMap::make();
+        for (size_t i = 0; i < size; i++) {
+            jsi::String propName = propNames.getValueAtIndex(runtime, i).getString(runtime);
+            std::string key = propName.utf8(runtime);
+            jsi::Value value = object.getProperty(runtime, propName);
+            if (value.isNull()) {
+                map->setNull(key);
+            } else if (value.isBool()) {
+                map->setBoolean(key, value.getBool());
+            } else if (value.isNumber()) {
+                map->setDouble(key, value.getNumber());
+            } else if (value.isString()) {
+                map->setString(key, value.getString(runtime).utf8(runtime));
+            } else if (value.isBigInt()) {
+                map->setBigInt(key, value.getBigInt(runtime).asInt64(runtime));
+            } else if (value.isObject()) {
+                jsi::Object valueObj = value.getObject(runtime);
+                if (valueObj.isArray(runtime)) {
+                    // TODO: Convert Array
+                } else {
+                    // TODO: Convert object
+                }
+            } else {
+                std::string stringified = arg.toString(runtime).utf8(runtime);
+                throw std::runtime_error("Cannot convert \"" + key + "\" (\"" + stringified +
+                                         "\") to AnyMap value type!");
+            }
+        }
+        return map;
     }
     static inline jsi::Value toJSI(jsi::Runtime& runtime, std::shared_ptr<AnyMap> map) {
         jsi::Object object(runtime);

@@ -29,7 +29,16 @@ struct AnyValue : std::variant<std::monostate, bool, double, int64_t, std::strin
  */
 class AnyMap {
 public:
+    /**
+     * Create a new instance of AnyMap.
+     */
     explicit AnyMap() {}
+
+public:
+    /**
+     * Create a new shared_ptr instance of AnyMap.
+     */
+    static std::shared_ptr<AnyMap> make() { return std::make_shared<AnyMap>(); }
 
 public:
     /**

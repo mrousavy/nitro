@@ -18,7 +18,8 @@ public:
 
   std::variant<std::string, double> getVariant() override;
 
-  std::shared_ptr<AnyMap> getMap() override;
+    std::shared_ptr<AnyMap> mapRoundtrip(const std::shared_ptr<AnyMap>& map) override;
+    std::shared_ptr<AnyMap> createMap() override;
 };
 
 };

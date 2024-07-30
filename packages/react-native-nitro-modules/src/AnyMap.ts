@@ -6,13 +6,14 @@ export type ValueType =
   | number
   | boolean
   | bigint
+  | null
   | ValueType[]
   | { [k: string]: ValueType }
 
 /**
  * Represents an untyped map, similar to a JSON structure.
  * Supported types:
- * - Primitives (`string`, `number`, `boolean`, `bigint`)
+ * - Primitives (`string`, `number`, `boolean`, `bigint`, `null`)
  * - Arrays of primitives (`ValueType[]`)
  * - Objects of primitives (`Record<string, ValueType>`)
  * - Arrays of arrays or objects

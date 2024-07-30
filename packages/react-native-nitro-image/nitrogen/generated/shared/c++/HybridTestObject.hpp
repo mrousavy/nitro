@@ -49,7 +49,8 @@ namespace margelo::nitro::image {
 
     public:
       // Methods
-      virtual std::shared_ptr<AnyMap> getMap() = 0;
+      virtual std::shared_ptr<AnyMap> createMap() = 0;
+      virtual std::shared_ptr<AnyMap> mapRoundtrip(const std::shared_ptr<AnyMap>& map) = 0;
       virtual std::variant<std::string, double> getVariant() = 0;
       virtual std::future<void> getValueFromJsCallback(const Func_std__future_std__string_& callback, const Func_void_std__string& andThenCall) = 0;
 

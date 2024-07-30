@@ -29,16 +29,19 @@ namespace margelo::nitro::image {
   std::variant<std::string, double> HybridTestObjectImpl::getVariant() {
       return std::variant<std::string, double>(13.7);
   }
+    std::shared_ptr<AnyMap> HybridTestObjectImpl::mapRoundtrip(const std::shared_ptr<AnyMap>& map) {
+      return map;
+    }
 
-    std::shared_ptr<AnyMap> HybridTestObjectImpl::getMap() {
-        auto map = std::make_shared<AnyMap>();
-        map->setNull("null");
-        map->setDouble("double", 55.5);
-        map->setBoolean("bool", true);
-        map->setBigInt("bigint", 225452346346);
-        map->setString("string", "Hello!");
-        map->setObject("object", { {"string", "hello"}, { "double", 55.0 }, { "bool", false } });
-        map->setArray("some-array", { 55.0, "string", false });
-        return map;
+    std::shared_ptr<AnyMap> HybridTestObjectImpl::createMap() {
+        auto result = std::make_shared<AnyMap>();
+        result->setNull("null");
+        result->setDouble("double", 55.5);
+        result->setBoolean("bool", true);
+        result->setBigInt("bigint", 225452346346);
+        result->setString("string", "Hello!");
+        result->setObject("object", { {"string", "hello"}, { "double", 55.0 }, { "bool", false } });
+        result->setArray("some-array", { 55.0, "string", false });
+        return result;
   }
 }
