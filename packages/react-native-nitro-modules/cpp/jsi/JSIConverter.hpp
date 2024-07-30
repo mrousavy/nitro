@@ -274,7 +274,7 @@ template <typename ReturnType, typename... Args> struct JSIConverter<std::functi
           callJSFunction(runtime, sharedFunction, args...);
         });
       } else {
-        return dispatcher->runAsyncAwaitable([&runtime, sharedFunction = std::move(sharedFunction), ...args = std::move(args)]() -> ResultingType {
+        return dispatcher->runAsyncAwaitable<ResultingType>([&runtime, sharedFunction = std::move(sharedFunction), ...args = std::move(args)]() -> ResultingType {
           return callJSFunction(runtime, sharedFunction, args...);
         });
       }

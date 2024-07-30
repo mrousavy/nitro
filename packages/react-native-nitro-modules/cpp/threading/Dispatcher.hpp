@@ -51,7 +51,7 @@ public:
 
     runAsync([function = std::move(function), promise]() {
       try {
-        if constexpr (std::is_void<T>()) {
+        if constexpr (std::is_same_v<T, void>) {
           // 4. Call the actual function on the new Thread
           function();
           // 5.a. Resolve the Promise if we succeeded
