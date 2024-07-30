@@ -165,7 +165,7 @@ template <typename TResult> struct JSIConverter<std::future<TResult>> {
 
         dispatcher->runAsync([&runtime, promise, sharedFuture]() mutable {
           try {
-            if constexpr (std::is_same_v<TResult, void>) {
+            if constexpr (std::is_void_v<TResult>) {
               // it's returning void, just return undefined to JS
               sharedFuture->get();
               promise->resolve(runtime, jsi::Value::undefined());
@@ -226,7 +226,7 @@ template <typename ReturnType, typename... Args> struct JSIConverter<std::functi
     OwningLock<jsi::Function> lock = function.lock();
 
     if (!function) {
-      if constexpr (std::is_same_v<ResultingType, void>) {
+      if constexpr (std::is_void_v<ResultingType>) {
         // runtime has already been deleted. since this returns void, we can just ignore it being deleted.
         Logger::log("JSIConverter", "Tried calling void(..) function, but it has already been deleted by JS!");
         return;
@@ -236,7 +236,7 @@ template <typename ReturnType, typename... Args> struct JSIConverter<std::functi
       }
     }
 
-    if constexpr (std::is_same_v<ResultingType, void>) {
+    if constexpr (std::is_void_v<ResultingType>) {
       // It returns void. Just call the function
       function->call(runtime, JSIConverter<std::decay_t<Args>>::toJSI(runtime, args)...);
     } else {
@@ -261,7 +261,7 @@ template <typename ReturnType, typename... Args> struct JSIConverter<std::functi
       // Try to get the JS Dispatcher if the Runtime is still alive
       std::shared_ptr<Dispatcher> dispatcher = weakDispatcher.lock();
       if (!dispatcher) {
-        if constexpr (std::is_same_v<ResultingType, void>) {
+        if constexpr (std::is_void_v<ResultingType>) {
           Logger::log("JSIConverter", "Tried calling void(..) function, but the JS Dispatcher has already been deleted by JS!");
           return;
         } else {
@@ -269,7 +269,7 @@ template <typename ReturnType, typename... Args> struct JSIConverter<std::functi
         }
       }
 
-      if constexpr (std::is_same_v<ResultingType, void>) {
+      if constexpr (std::is_void_v<ResultingType>) {
         dispatcher->runAsync([&runtime, sharedFunction = std::move(sharedFunction), ...args = std::move(args)]() {
           callJSFunction(runtime, sharedFunction, args...);
         });
@@ -284,7 +284,7 @@ template <typename ReturnType, typename... Args> struct JSIConverter<std::functi
   template <size_t... Is>
   static inline jsi::Value callHybridFunction(const std::function<ReturnType(Args...)>& function, jsi::Runtime& runtime, const jsi::Value* args,
                                               std::index_sequence<Is...>) {
-    if constexpr (std::is_same_v<ReturnType, void>) {
+    if constexpr (std::is_void_v<ReturnType>) {
       // it is a void function (will return undefined in JS)
       function(JSIConverter<std::decay_t<Args>>::fromJSI(runtime, args[Is])...);
       return jsi::Value::undefined();

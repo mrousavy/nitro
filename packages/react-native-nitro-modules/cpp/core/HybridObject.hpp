@@ -77,7 +77,7 @@ public:
    * overridden extra memory size.
    */
   size_t getTotalExternalMemorySize() noexcept;
-  
+
   /**
    * Return the `jsi::Object` that holds this `HybridObject` (boxed in a `jsi::Value`)
    * Compared to other `jsi::HostObject`s, the `HybridObject` actually
@@ -108,7 +108,7 @@ protected:
    * This will be used to notify the JS GC about memory pressure.
    */
   virtual inline size_t getExternalMemorySize() noexcept { return 0; }
-  
+
 protected:
   /**
    * Loads all native methods of this `HybridObject` to be exposed to JavaScript.
@@ -148,7 +148,7 @@ private:
   template <typename Derived, typename ReturnType, typename... Args, size_t... Is>
   static inline jsi::Value callMethod(Derived* obj, ReturnType (Derived::*method)(Args...), jsi::Runtime& runtime, const jsi::Value* args,
                                       std::index_sequence<Is...>) {
-    if constexpr (std::is_same_v<ReturnType, void>) {
+    if constexpr (std::is_void_v<ReturnType>) {
       // It's a void method.
       (obj->*method)(JSIConverter<std::decay_t<Args>>::fromJSI(runtime, args[Is])...);
       return jsi::Value::undefined();
