@@ -110,6 +110,13 @@ public:
   }
   
 public:
+  /**
+   Creates an `OwningLock<T>` for the given `OwningReference<T>` to guarantee safe
+   safe access to `OwningReference<T>`.
+   Other threads (e.g. the Hermes garbage collector) cannot delete the `OwningReference<T>`
+   as long as the `OwningLock<T>` is still alive.
+   */
+  [[nodiscard]]
   OwningLock<T> lock() const {
     return OwningLock<T>(*this);
   }
@@ -122,8 +129,9 @@ public:
   }
   
   /**
-   Get a weak ("borrowing") reference to this owning reference
+   Get a borrowing (or "weak") reference to this owning reference
    */
+  [[nodiscard]]
   BorrowingReference<T> weak() const {
     return BorrowingReference(*this);
   }
@@ -131,6 +139,8 @@ public:
   /**
    Delete and destroy the value this OwningReference is pointing to.
    This can even be called if there are still multiple strong references to the value.
+   
+   This will block as long as one or more `OwningLock<T>`s of this `OwningReference<T>` are still alive.
    */
   void destroy() {
     std::unique_lock lock(*_mutex);

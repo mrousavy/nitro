@@ -193,9 +193,9 @@ template <typename TResult> struct JSIConverter<std::future<TResult>> {
 template <typename ReturnType, typename... Args> struct JSIConverter<std::function<ReturnType(Args...)>> {
   static inline std::function<ReturnType(Args...)> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
     // Make function global - it'll be managed by the Runtime's memory, and we only have a weak_ref to it.
-    auto cache = JSICache<jsi::Function>::getOrCreateCache(runtime).lock();
+    auto cache = JSICache<jsi::Function>::getOrCreateCache(runtime);
     jsi::Function function = arg.asObject(runtime).asFunction(runtime);
-    OwningReference<jsi::Function> sharedFunction = cache->makeGlobal(std::move(function));
+    OwningReference<jsi::Function> sharedFunction = cache.makeGlobal(std::move(function));
 
     // Create a C++ function that can be called by the consumer.
     // This will call the jsi::Function if it is still alive.

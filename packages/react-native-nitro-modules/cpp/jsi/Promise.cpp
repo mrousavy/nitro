@@ -1,5 +1,6 @@
 #include "Promise.hpp"
 #include "NitroLogger.hpp"
+#include "JSICache.hpp"
 #include <jsi/jsi.h>
 
 namespace margelo::nitro {
@@ -9,10 +10,9 @@ using namespace facebook;
 Promise::Promise(jsi::Runtime& runtime,
                  jsi::Function&& resolver,
                  jsi::Function&& rejecter) {
-  auto functionCache = JSICache<jsi::Function>::getOrCreateCache(runtime).lock();
-  _resolver = functionCache->makeGlobal(std::move(resolver));
-  _rejecter = functionCache->makeGlobal(std::move(rejecter));
-  _functionCache = functionCache;
+  auto functionCache = JSICache<jsi::Function>::getOrCreateCache(runtime);
+  _resolver = functionCache.makeGlobal(std::move(resolver));
+  _rejecter = functionCache.makeGlobal(std::move(rejecter));
 }
 
 jsi::Value Promise::createPromise(jsi::Runtime& runtime, RunPromise&& run) {

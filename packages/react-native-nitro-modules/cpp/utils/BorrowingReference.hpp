@@ -90,6 +90,7 @@ public:
   /**
    Try to lock the borrowing reference to an owning reference, or `nullptr` if it has already been deleted.
    */
+  [[nodiscard]]
   OwningReference<T> lock();
 
 public:

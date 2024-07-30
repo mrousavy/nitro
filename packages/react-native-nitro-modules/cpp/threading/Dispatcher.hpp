@@ -8,6 +8,7 @@
 #include <future>
 #include <jsi/jsi.h>
 #include <queue>
+#include <unordered_map>
 
 namespace margelo::nitro {
 
