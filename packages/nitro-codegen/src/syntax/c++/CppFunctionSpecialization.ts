@@ -57,6 +57,7 @@ ${createFileMetadataString(typename)}
 
 #include <functional>
 #include <string>
+#include <future>
 
 ${extraForwardDeclarations}
 

@@ -6,6 +6,7 @@ import {
 } from '../c++/CppFunctionSpecialization.js'
 import { Parameter } from '../Parameter.js'
 import { type SourceFile, type SourceImport } from '../SourceFile.js'
+import { PromiseType } from './PromiseType.js'
 import type { NamedType, Type, TypeKind } from './Type.js'
 
 export class FunctionType implements Type {
@@ -13,7 +14,13 @@ export class FunctionType implements Type {
   readonly parameters: NamedType[]
 
   constructor(returnType: Type, parameters: NamedType[]) {
-    this.returnType = returnType
+    if (returnType.kind === 'void') {
+      // void callbacks are async, but we don't care about the result.
+      this.returnType = returnType
+    } else {
+      // non-void callbacks are async and need to be awaited to get the result from JS.
+      this.returnType = new PromiseType(returnType)
+    }
     this.parameters = parameters
   }
 
