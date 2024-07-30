@@ -1,6 +1,6 @@
 #include "Dispatcher.hpp"
 #include "NitroLogger.hpp"
-#include "GetRuntimeID.h"
+#include "GetRuntimeID.hpp"
 
 namespace margelo::nitro {
 

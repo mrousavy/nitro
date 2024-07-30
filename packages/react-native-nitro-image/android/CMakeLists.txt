@@ -1,5 +1,5 @@
-cmake_minimum_required(VERSION 3.4.1)
 project(NitroImage)
+cmake_minimum_required(VERSION 3.9.0)
 
 set (PACKAGE_NAME NitroImage)
 set (CMAKE_VERBOSE_MAKEFILE ON)
@@ -20,9 +20,10 @@ add_library(${PACKAGE_NAME} SHARED
         ${android_files}
 )
 
-# TODO: Remove this as NitroModules already depends on fbjni
 # Required libs
 find_package(fbjni REQUIRED CONFIG)
+find_package(react-native-nitro-modules REQUIRED CONFIG)
+find_package(ReactAndroid REQUIRED CONFIG)
 
 # Includes all generated specs from Nitrogen
 include_directories(
@@ -35,6 +36,9 @@ include_directories(
 # Link all libraries together
 target_link_libraries(
         ${PACKAGE_NAME}
-        android                         # <-- Android JNI core
-        fbjni::fbjni                    # <-- Facebook C++ JNI helpers
+        android                                   # <-- Android JNI core
+        fbjni::fbjni                              # <-- Facebook C++ JNI helpers
+        ReactAndroid::jsi                         # <-- RN: JSI
+        ReactAndroid::react_nativemodule_core     # <-- RN: TurboModules Core
+        react-native-nitro-modules::NitroModules  # <-- NitroModules Core :)
 )

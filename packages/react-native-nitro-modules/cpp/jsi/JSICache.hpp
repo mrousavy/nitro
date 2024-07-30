@@ -15,7 +15,7 @@
 #include "OwningReference.hpp"
 #include "BorrowingReference.hpp"
 #include "NitroLogger.hpp"
-#include "GetRuntimeID.h"
+#include "GetRuntimeID.hpp"
 
 namespace margelo::nitro {
 
@@ -79,7 +79,7 @@ public:
 
   ~JSICache() {
     std::unique_lock lock(_mutex);
-    
+
     for (auto& func : _cache) {
       OwningReference<T> owning = func.lock();
       if (owning) {
@@ -88,7 +88,7 @@ public:
       }
     }
   }
-  
+
 public:
   JSICache() = delete;
   JSICache(const JSICache&) = delete;
