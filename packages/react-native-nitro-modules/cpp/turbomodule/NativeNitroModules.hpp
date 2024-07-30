@@ -7,29 +7,29 @@
 
 #pragma once
 
-#if __has_include(<React-Codegen/NitroModulesSpecJSI.h>)
-// CocoaPods include (iOS)
-#include <React-Codegen/NitroModulesSpecJSI.h>
-#elif __has_include(<NitroModulesSpecJSI.h>)
-// CMake include (Android)
-#include <NitroModulesSpecJSI.h>
-#else
-#error Cannot find react-native-nitro-modules spec! Try cleaning your cache and re-running CodeGen!
-#endif
+#include <ReactCommon/TurboModule.h>
 
 namespace facebook::react {
 
+using namespace facebook;
+
 // The base C++-based TurboModule. This is the entry point where all nitro modules get initialized.
-class NativeNitroModules : public NativeNitroModulesCxxSpec<NativeNitroModules> {
+class NativeNitroModules : public TurboModule {
 public:
   NativeNitroModules(std::shared_ptr<CallInvoker> jsInvoker);
   ~NativeNitroModules();
+  
+public:
+  jsi::Value get(jsi::Runtime &runtime, const jsi::PropNameID &propName) override;
 
   void install(jsi::Runtime& runtime);
   jsi::Object createHybridObject(jsi::Runtime& runtime,
-                                 jsi::String hybridObjectName,
-                                 std::optional<jsi::Object> args);
+                                 const jsi::String& hybridObjectName,
+                                 const std::optional<jsi::Object>& args);
 
+public:
+  constexpr static auto kModuleName = "NitroModulesCxx";
+  
 private:
   std::shared_ptr<CallInvoker> _callInvoker;
 };

@@ -1,5 +1,5 @@
-cmake_minimum_required(VERSION 3.4.1)
 project(NitroModules)
+cmake_minimum_required(VERSION 3.9.0)
 
 set (CMAKE_VERBOSE_MAKEFILE ON)
 set (CMAKE_CXX_STANDARD 20)
@@ -35,19 +35,17 @@ include_directories(
   src/main/cpp/platform
 )
 
-# Allow importing Nitro TurboModule from elsewhere (e.g. the CLI)
-target_include_directories(NitroModules PUBLIC ../cpp/turbomodule)
-
 # Find required libraries
-find_library(log-lib log)
+find_library(LOG_LIB log)
 find_package(fbjni REQUIRED CONFIG)
 find_package(ReactAndroid REQUIRED CONFIG)
 
 # Link all libraries together
 target_link_libraries(
         NitroModules
-        ${log-lib}                      # <-- Logcat logger
-        android                         # <-- Android JNI core
-        fbjni::fbjni                    # <-- Facebook C++ JNI helpers
-        ReactAndroid::jsi               # <-- RN: JSI
+        ${LOG_LIB}                                # <-- Logcat logger
+        android                                   # <-- Android JNI core
+        fbjni::fbjni                              # <-- Facebook C++ JNI helpers
+        ReactAndroid::jsi                         # <-- RN: JSI
+        ReactAndroid::react_nativemodule_core     # <-- RN: TurboModules Core
 )
