@@ -20,11 +20,16 @@ import { getInterfaceProperties } from './getInterfaceProperties.js'
 import { VariantType } from './types/VariantType.js'
 
 function isSymbol(type: TSMorphType, symbolName: string): boolean {
-  const symbol = type.getSymbol()
+  const target = type.getTargetType()
+  if (target == null) {
+    return false
+  }
+
+  const symbol = target.getSymbol()
   if (symbol?.getName() === symbolName) {
     return true
   }
-  const aliasSymbol = type.getAliasSymbol()
+  const aliasSymbol = target.getAliasSymbol()
   if (aliasSymbol?.getName() === symbolName) {
     return true
   }
@@ -65,12 +70,17 @@ function getArguments<N extends number>(
   count: N
 ): Tuple<TSMorphType<ts.Type>, N> {
   const typeArguments = type.getTypeArguments()
-  if (typeArguments.length !== count) {
-    throw new Error(
-      `Type ${type} looks like a ${typename}, but has ${typeArguments.length} type arguments instead of ${count}!`
-    )
+  const aliasTypeArguments = type.getAliasTypeArguments()
+
+  if (typeArguments.length === count) {
+    return typeArguments as Tuple<TSMorphType<ts.Type>, N>
   }
-  return typeArguments as Tuple<TSMorphType<ts.Type>, N>
+  if (aliasTypeArguments.length === count) {
+    return aliasTypeArguments as Tuple<TSMorphType<ts.Type>, N>
+  }
+  throw new Error(
+    `Type ${type.getText()} looks like a ${typename}, but has ${typeArguments.length} type arguments instead of ${count}!`
+  )
 }
 
 export function createNamedType(
@@ -158,7 +168,7 @@ export function createType(type: TSMorphType, isOptional: boolean): Type {
     } else {
       // It consists of different types - that means it's a variant!
       const variants = type.getUnionTypes().map((t) => createType(t, false))
-      const isOptionalVariant = variants.map((t) => t.kind === 'null')
+      const isOptionalVariant = variants.some((t) => t.kind === 'null')
       const variant = new VariantType(variants.filter((v) => v.kind !== 'null'))
       if (isOptionalVariant) {
         return new OptionalType(variant)

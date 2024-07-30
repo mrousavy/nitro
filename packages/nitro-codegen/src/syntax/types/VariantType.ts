@@ -1,4 +1,5 @@
 import type { Language } from '../../getPlatformSpecs.js'
+import { isNotDuplicate } from '../helpers.js'
 import { type SourceFile, type SourceImport } from '../SourceFile.js'
 import type { Type, TypeKind } from './Type.js'
 
@@ -18,7 +19,9 @@ export class VariantType implements Type {
   }
 
   getCode(language: Language): string {
-    const types = this.variants.map((v) => v.getCode(language))
+    const types = this.variants
+      .map((v) => v.getCode(language))
+      .filter(isNotDuplicate)
 
     switch (language) {
       case 'c++':
