@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <NitroModules/HybridObjectRegistry.hpp>
 #import "HybridImageFactorySwift.hpp"
+#import "HybridTestImpl.hpp"
 
 namespace NitroImage {
   class NitroImageRegistry;
@@ -24,10 +25,12 @@ namespace NitroImage {
 using namespace margelo::nitro;
 
 + (void)load {
-  // Register Test HybridObject so it can be created from JS.
   HybridObjectRegistry::registerHybridObjectConstructor("ImageFactory", []() -> std::shared_ptr<HybridObject> {
     auto imageFactory = NitroImage::NitroImageRegistry::createImageFactory();
     return std::make_shared<HybridImageFactorySwift>(imageFactory);
+  });
+  HybridObjectRegistry::registerHybridObjectConstructor("HybridTest", []() -> std::shared_ptr<HybridObject> {
+    return std::make_shared<HybridTestObjectImpl>();
   });
 }
 
