@@ -19,6 +19,7 @@ namespace margelo::nitro { class HybridObject; }
 #include <memory>
 #include <type_traits>
 #include <unordered_map>
+#include <variant>
 
 #define DO_NULL_CHECKS true
 
@@ -355,6 +356,41 @@ template <typename ValueType> struct JSIConverter<std::unordered_map<std::string
     }
     return object;
   }
+};
+
+// std::variant<A, B, C> <> A | B | C
+template <typename... Types>
+struct JSIConverter<std::variant<Types...>> {
+    static inline std::variant<Types...> fromJSI(jsi::Runtime& runtime, const jsi::Value& value) {
+        return fromJSIImpl(runtime, value, std::make_index_sequence<sizeof...(Types)>{});
+    }
+
+    static inline jsi::Value toJSI(jsi::Runtime& runtime, const std::variant<Types...>& variant) {
+        return std::visit([&runtime](const auto& val) {
+            return JSIConverter<std::decay_t<decltype(val)>>::toJSI(runtime, val);
+        }, variant);
+    }
+
+private:
+    template <std::size_t... Indices>
+    static inline std::variant<Types...> fromJSIImpl(jsi::Runtime& runtime, const jsi::Value& value, std::index_sequence<Indices...>) {
+        std::variant<Types...> result;
+        bool matched = ((tryConvert<Types>(runtime, value, result) || ...));
+        if (!matched) {
+            throw jsi::JSError(runtime, "Unable to convert jsi::Value to std::variant");
+        }
+        return result;
+    }
+
+    template <typename T>
+    static inline bool tryConvert(jsi::Runtime& runtime, const jsi::Value& value, std::variant<Types...>& variant) {
+        try {
+            variant = JSIConverter<T>::fromJSI(runtime, value);
+            return true;
+        } catch (...) {
+            return false;
+        }
+    }
 };
 
 // MutableBuffer <> ArrayBuffer
