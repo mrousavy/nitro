@@ -1,4 +1,4 @@
-import { NativeNitroModules } from './NativeNitroModules'
+import { getNativeNitroModules } from './NativeNitroModules'
 import type { HybridObject } from './HybridObject'
 
 // TODO: Do we wanna support such constructors?
@@ -23,7 +23,8 @@ export const NitroModules = {
    * @throws an Error if {@linkcode T} has not been registered under the name {@linkcode name}.
    */
   get<T extends HybridObject<any>>(name: string): T {
-    const instance = NativeNitroModules.createHybridObject(name)
+    const nitro = getNativeNitroModules()
+    const instance = nitro.createHybridObject(name)
     return instance as T
   },
 }
