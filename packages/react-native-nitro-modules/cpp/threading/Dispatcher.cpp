@@ -33,6 +33,7 @@ std::shared_ptr<Dispatcher> Dispatcher::getRuntimeGlobalDispatcher(jsi::Runtime&
     }
   }
 
+  Logger::log(TAG, "Unknown Runtime (%s), looking for Dispatcher through JSI global lookup...", getRuntimeId(runtime));
   jsi::Value dispatcherHolderValue = getRuntimeGlobalDispatcherHolder(runtime);
   jsi::Object dispatcherHolder = dispatcherHolderValue.getObject(runtime);
   return dispatcherHolder.getNativeState<Dispatcher>(runtime);

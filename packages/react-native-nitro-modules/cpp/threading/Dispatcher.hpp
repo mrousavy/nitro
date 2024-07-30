@@ -46,25 +46,25 @@ public:
    */
   template <typename T> std::future<T> runAsyncAwaitable(std::function<T()>&& function) {
     // 1. Create Promise that can be shared between this and dispatcher thread
-    auto promise = std::make_shared<std::promise<T>>();
-    std::future<T> future = promise->get_future();
+    std::promise<T> promise;
+    std::future<T> future = promise.get_future();
 
-    runAsync([function = std::move(function), promise]() {
+    runAsync([function = std::move(function), promise = std::move(promise)]() {
       try {
         if constexpr (std::is_void<T>()) {
           // 4. Call the actual function on the new Thread
           function();
           // 5.a. Resolve the Promise if we succeeded
-          promise->set_value();
+          promise.set_value();
         } else {
           // 4. Call the actual function on the new Thread
           T result = function();
           // 5.a. Resolve the Promise if we succeeded
-          promise->set_value(std::move(result));
+          promise.set_value(std::move(result));
         }
       } catch (...) {
         // 5.b. Reject the Promise if the call failed
-        promise->set_exception(std::current_exception());
+        promise.set_exception(std::current_exception());
       }
     });
 
