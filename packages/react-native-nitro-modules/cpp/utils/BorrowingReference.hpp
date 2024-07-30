@@ -7,6 +7,8 @@
 
 #pragma once
 
+namespace margelo::nitro { template<typename T> class OwningLock; }
+
 #include <cstddef>
 
 namespace margelo::nitro {
@@ -92,6 +94,7 @@ public:
 
 public:
   friend class OwningReference<T>;
+  friend class OwningLock<T>;
 
 private:
   void maybeDestroy() {

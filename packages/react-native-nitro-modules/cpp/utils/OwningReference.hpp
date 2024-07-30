@@ -10,6 +10,7 @@
 #include <cstddef>
 #include <mutex>
 #include "BorrowingReference.hpp"
+#include "OwningLock.hpp"
 
 namespace margelo::nitro {
 
@@ -103,6 +104,11 @@ public:
     maybeDestroy();
   }
   
+public:
+  OwningLock<T> lock() const {
+    return OwningLock<T>(weak());
+  }
+  
   /**
    Get whether the `OwningReference<T>` is still pointing to a valid value, or not.
    */
@@ -187,6 +193,7 @@ private:
 
 public:
   friend class BorrowingReference<T>;
+  friend class OwningLock<T>;
 
 private:
   T* _value;
