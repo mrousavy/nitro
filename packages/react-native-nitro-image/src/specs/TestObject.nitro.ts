@@ -7,6 +7,9 @@ export interface TestObject extends HybridObject<{ ios: 'c++' }> {
   createMap(): AnyMap
   mapRoundtrip(map: AnyMap): AnyMap
 
+  valueThatWillThrowOnAccess: number
+  funcThatThrows(): number
+
   passVariant(
     either: number | string | number[] | string[] | boolean
   ): number | string

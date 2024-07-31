@@ -14,8 +14,11 @@ namespace margelo::nitro::image {
     // load base methods/properties
     HybridObject::loadHybridMethods();
     // load custom methods/properties
+    registerHybridGetter("valueThatWillThrowOnAccess", &HybridTestObject::getValueThatWillThrowOnAccess, this);
+    registerHybridSetter("valueThatWillThrowOnAccess", &HybridTestObject::setValueThatWillThrowOnAccess, this);
     registerHybridMethod("createMap", &HybridTestObject::createMap, this);
     registerHybridMethod("mapRoundtrip", &HybridTestObject::mapRoundtrip, this);
+    registerHybridMethod("funcThatThrows", &HybridTestObject::funcThatThrows, this);
     registerHybridMethod("passVariant", &HybridTestObject::passVariant, this);
     registerHybridMethod("flip", &HybridTestObject::flip, this);
     registerHybridMethod("passTuple", &HybridTestObject::passTuple, this);

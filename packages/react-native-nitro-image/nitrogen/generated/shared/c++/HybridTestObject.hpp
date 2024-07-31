@@ -45,12 +45,14 @@ namespace margelo::nitro::image {
 
     public:
       // Properties
-      
+      virtual double getValueThatWillThrowOnAccess() = 0;
+      virtual void setValueThatWillThrowOnAccess(double valueThatWillThrowOnAccess) = 0;
 
     public:
       // Methods
       virtual std::shared_ptr<AnyMap> createMap() = 0;
       virtual std::shared_ptr<AnyMap> mapRoundtrip(const std::shared_ptr<AnyMap>& map) = 0;
+      virtual double funcThatThrows() = 0;
       virtual std::variant<std::string, double> passVariant(const std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>>& either) = 0;
       virtual std::tuple<double, double, double> flip(const std::tuple<double, double, double>& vector) = 0;
       virtual std::tuple<double, std::string, bool> passTuple(const std::tuple<double, std::string, bool>& tuple) = 0;

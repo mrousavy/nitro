@@ -168,18 +168,29 @@ private:
                                            size_t count) -> jsi::Value {
       if (count != sizeof...(Args)) {
         // invalid amount of arguments passed!
-        throw jsi::JSError(runtime, "Function " + name + "(...) expected " + std::to_string(sizeof...(Args)) + " arguments, but received " +
+        std::string hybridObjectName = derivedInstance->_name;
+        throw jsi::JSError(runtime, "Function " + hybridObjectName + "." + name + "(...) expected " + std::to_string(sizeof...(Args)) + " arguments, but received " +
                                         std::to_string(count) + "!");
       }
 
-      if constexpr (std::is_same_v<ReturnType, jsi::Value>) {
-        // If the return type is a jsi::Value, we assume the user wants full JSI code control.
-        // The signature must be identical to jsi::HostFunction (jsi::Runtime&, jsi::Value& this, ...)
-        return (derivedInstance->*method)(runtime, thisVal, args, count);
-      } else {
-        // Call the actual method with JSI values as arguments and return a JSI value again.
-        // Internally, this method converts the JSI values to C++ values.
-        return callMethod(derivedInstance, method, runtime, args, std::index_sequence_for<Args...>{});
+      try {
+        if constexpr (std::is_same_v<ReturnType, jsi::Value>) {
+          // If the return type is a jsi::Value, we assume the user wants full JSI code control.
+          // The signature must be identical to jsi::HostFunction (jsi::Runtime&, jsi::Value& this, ...)
+          return (derivedInstance->*method)(runtime, thisVal, args, count);
+        } else {
+          // Call the actual method with JSI values as arguments and return a JSI value again.
+          // Internally, this method converts the JSI values to C++ values.
+          return callMethod(derivedInstance, method, runtime, args, std::index_sequence_for<Args...>{});
+        }
+      } catch (const std::exception& exception) {
+        std::string hybridObjectName = derivedInstance->_name;
+        std::string message = exception.what();
+        throw std::runtime_error(hybridObjectName + "." + name + "(...) threw an error: " + message);
+      } catch (...) {
+        std::string hybridObjectName = derivedInstance->_name;
+        std::string errorName = TypeInfo::getCurrentExceptionName();
+        throw std::runtime_error(hybridObjectName + "." + name + "(...) threw an unknown " + errorName + " error.");
       }
     };
   }

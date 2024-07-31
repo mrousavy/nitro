@@ -33,6 +33,25 @@ export default function App() {
   const test = HybridTestObject.passTuple([53, 'helo', false])
   console.log('tuple result:', test)
 
+  try {
+    HybridTestObject.funcThatThrows()
+    console.error(`Function should've thrown by now!`)
+  } catch (e) {
+    console.log("Throw worked!", e)
+  }
+  try {
+    HybridTestObject.valueThatWillThrowOnAccess
+    console.error(`Value should've thrown by now!`)
+  } catch (e) {
+    console.log("Throw worked!", e)
+  }
+  try {
+    HybridTestObject.valueThatWillThrowOnAccess = 55
+    console.error(`Value should've thrown by now!`)
+  } catch (e) {
+    console.log("Throw worked!", e)
+  }
+
   React.useEffect(() => {
     const run = async () => {
       console.log('Passing "Hi from JS!" to C++...')

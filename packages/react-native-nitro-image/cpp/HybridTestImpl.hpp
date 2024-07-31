@@ -27,6 +27,12 @@ public:
   // Tuple tests
   std::tuple<double, double, double> flip(const std::tuple<double, double, double>& vector) override;
   std::tuple<double, std::string, bool> passTuple(const std::tuple<double, std::string, bool>& tuple) override;
+  
+  // Error tests
+  double getValueThatWillThrowOnAccess() override;
+  void setValueThatWillThrowOnAccess(double valueThatWillThrowOnAccess) override;
+  double funcThatThrows() override;
+
 
 };
 

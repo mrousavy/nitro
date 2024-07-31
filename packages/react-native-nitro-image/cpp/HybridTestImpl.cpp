@@ -57,4 +57,16 @@ std::tuple<double, std::string, bool> HybridTestObjectImpl::passTuple(const std:
   return tuple;
 }
 
+double HybridTestObjectImpl::getValueThatWillThrowOnAccess() {
+  throw std::runtime_error("The stars are not aligned for this to work right now!");
+}
+
+void HybridTestObjectImpl::setValueThatWillThrowOnAccess(double valueThatWillThrowOnAccess) {
+  throw std::runtime_error("This value can only be set in 100000 years!");
+}
+
+double HybridTestObjectImpl::funcThatThrows() {
+  throw std::runtime_error("This function will only work after sacrificing seven lambs!");
+}
+
 } // namespace margelo::nitro::image
