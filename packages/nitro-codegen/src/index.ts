@@ -21,7 +21,7 @@ const baseDirectory = getBaseDirectory()
 
 // The TS project
 const project = new Project({})
-project.addSourceFilesAtPaths('**/*.nitro.ts')
+project.addSourceFilesAtPaths(path.join(baseDirectory, '/**/*.nitro.ts'))
 
 // Loop through all source files to log them
 console.log(
