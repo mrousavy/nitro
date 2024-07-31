@@ -17,6 +17,8 @@ namespace margelo::nitro::image {
     registerHybridMethod("createMap", &HybridTestObject::createMap, this);
     registerHybridMethod("mapRoundtrip", &HybridTestObject::mapRoundtrip, this);
     registerHybridMethod("passVariant", &HybridTestObject::passVariant, this);
+    registerHybridMethod("flip", &HybridTestObject::flip, this);
+    registerHybridMethod("passTuple", &HybridTestObject::passTuple, this);
     registerHybridMethod("getValueFromJsCallback", &HybridTestObject::getValueFromJsCallback, this);
   }
 

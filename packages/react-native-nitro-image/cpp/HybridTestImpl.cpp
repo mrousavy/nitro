@@ -46,4 +46,15 @@ std::shared_ptr<AnyMap> HybridTestObjectImpl::createMap() {
   result->setArray("some-array", {55.0, "string", false});
   return result;
 }
+
+
+std::tuple<double, double, double> HybridTestObjectImpl::flip(const std::tuple<double, double, double>& vector) {
+  return { std::get<2>(vector), std::get<1>(vector), std::get<0>(vector) };
+}
+
+
+std::tuple<double, std::string, bool> HybridTestObjectImpl::passTuple(const std::tuple<double, std::string, bool>& tuple) {
+  return tuple;
+}
+
 } // namespace margelo::nitro::image

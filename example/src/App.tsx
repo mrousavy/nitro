@@ -27,6 +27,12 @@ export default function App() {
   const map = HybridTestObject.createMap()
   console.log(`map result:`, map)
 
+  const flipped = HybridTestObject.flip([10, 5, 0])
+  console.log(`[10, 5, 0] -> [${flipped.join(', ')}]`)
+
+  const test = HybridTestObject.passTuple([53, 'helo', false])
+  console.log('tuple result:', test)
+
   React.useEffect(() => {
     const run = async () => {
       console.log('Passing "Hi from JS!" to C++...')

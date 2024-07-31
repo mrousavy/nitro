@@ -23,6 +23,7 @@ class HybridObject;
 #include <type_traits>
 #include <unordered_map>
 #include <variant>
+#include <tuple>
 
 #define DO_NULL_CHECKS true
 
@@ -359,6 +360,38 @@ template <typename ValueType> struct JSIConverter<std::unordered_map<std::string
   }
 };
 
+template <typename... Types> struct JSIConverter<std::tuple<Types...>> {
+  static inline std::tuple<Types...> fromJSI(jsi::Runtime& runtime, const jsi::Value& value) {
+    jsi::Object object = value.asObject(runtime);
+    jsi::Array array = object.asArray(runtime);
+    if (array.size(runtime) != sizeof...(Types)) [[unlikely]] {
+      std::string types = TypeInfo::getFriendlyTypenames<Types...>();
+      throw std::runtime_error("The given JS Array has " + std::to_string(array.size(runtime))
+                               + " items, but std::tuple<" + types + "> expects "
+                               + std::to_string(sizeof...(Types)) + " items.");
+    }
+    
+    return copyArrayItemsToTuple(runtime, array, std::index_sequence_for<Types...>{});
+  }
+
+  static inline jsi::Value toJSI(jsi::Runtime& runtime, const std::tuple<Types...>& tuple) {
+    jsi::Array array(runtime, sizeof...(Types));
+    copyTupleItemsToArray(runtime, array, tuple, std::index_sequence_for<Types...>{});
+    return array;
+  }
+  
+private:
+  template <std::size_t... Is>
+  static inline std::tuple<Types...> copyArrayItemsToTuple(jsi::Runtime& runtime, const jsi::Array& array, std::index_sequence<Is...>) {
+    return std::make_tuple(JSIConverter<Types>::fromJSI(runtime, array.getValueAtIndex(runtime, Is))...);
+  }
+
+  template <std::size_t... Is>
+  static inline void copyTupleItemsToArray(jsi::Runtime& runtime, jsi::Array& array, const std::tuple<Types...>& tuple, std::index_sequence<Is...>) {
+    ((array.setValueAtIndex(runtime, Is, JSIConverter<std::tuple_element_t<Is, std::tuple<Types...>>>::toJSI(runtime, std::get<Is>(tuple)))), ...);
+  }
+};
+
 // Helper struct to check if a type is present in a parameter pack
 template <typename T, typename... Types> struct is_in_pack : std::disjunction<std::is_same<T, Types>...> {};
 template <typename T, typename... Types> inline constexpr bool is_in_pack_v = is_in_pack<T, Types...>::value;
@@ -417,13 +450,14 @@ template <typename... Types> struct JSIConverter<std::variant<Types...>> {
     }
   }
 
+  static inline jsi::Value toJSI(jsi::Runtime& runtime, const std::variant<Types...>& variant) {
+    return std::visit([&runtime](const auto& val) { return JSIConverter<std::decay_t<decltype(val)>>::toJSI(runtime, val); }, variant);
+  }
+  
+private:
   static inline std::runtime_error typeNotSupportedError(const std::string& type) {
     std::string types = TypeInfo::getFriendlyTypenames<Types...>();
     return std::runtime_error(type + " is not supported in variant<" + types + ">!");
-  }
-
-  static inline jsi::Value toJSI(jsi::Runtime& runtime, const std::variant<Types...>& variant) {
-    return std::visit([&runtime](const auto& val) { return JSIConverter<std::decay_t<decltype(val)>>::toJSI(runtime, val); }, variant);
   }
 };
 
@@ -483,11 +517,6 @@ template <typename T> struct is_shared_ptr_to_host_object<std::shared_ptr<T>> : 
 template <typename T> struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_host_object<T>::value>> {
   using TPointee = typename T::element_type;
 
-  static inline std::string invalidTypeErrorMessage(const std::string& typeDescription, const std::string& reason) {
-    std::string typeName = TypeInfo::getFriendlyTypename<TPointee>();
-    return "Cannot convert \"" + typeDescription + "\" to HostObject<" + typeName + ">! " + reason;
-  }
-
   static inline T fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
 #if DO_NULL_CHECKS
     if (arg.isUndefined()) [[unlikely]] {
@@ -507,6 +536,7 @@ template <typename T> struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_h
 #endif
     return object.asHostObject<TPointee>(runtime);
   }
+  
   static inline jsi::Value toJSI(jsi::Runtime& runtime, const T& arg) {
 #if DO_NULL_CHECKS
     if (arg == nullptr) [[unlikely]] {
@@ -522,6 +552,12 @@ template <typename T> struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_h
       return jsi::Object::createFromHostObject(runtime, arg);
     }
   }
+  
+private:
+  static inline std::string invalidTypeErrorMessage(const std::string& typeDescription, const std::string& reason) {
+    std::string typeName = TypeInfo::getFriendlyTypename<TPointee>();
+    return "Cannot convert \"" + typeDescription + "\" to HostObject<" + typeName + ">! " + reason;
+  }
 };
 
 // NativeState <> {}
@@ -529,11 +565,6 @@ template <typename T> struct is_shared_ptr_to_native_state : std::false_type {};
 template <typename T> struct is_shared_ptr_to_native_state<std::shared_ptr<T>> : std::is_base_of<jsi::NativeState, T> {};
 template <typename T> struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_native_state<T>::value>> {
   using TPointee = typename T::element_type;
-
-  static inline std::string invalidTypeErrorMessage(const std::string& typeDescription, const std::string& reason) {
-    std::string typeName = TypeInfo::getFriendlyTypename<TPointee>();
-    return "Cannot convert \"" + typeDescription + "\" to NativeState<" + typeName + ">! " + reason;
-  }
 
   static inline T fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
 #if DO_NULL_CHECKS
@@ -554,6 +585,7 @@ template <typename T> struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_n
 #endif
     return object.getNativeState<TPointee>(runtime);
   }
+  
   static inline jsi::Value toJSI(jsi::Runtime& runtime, const T& arg) {
 #if DO_NULL_CHECKS
     if (arg == nullptr) [[unlikely]] {
@@ -564,6 +596,12 @@ template <typename T> struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_n
     jsi::Object object(runtime);
     object.setNativeState(runtime, arg);
     return object;
+  }
+  
+private:
+  static inline std::string invalidTypeErrorMessage(const std::string& typeDescription, const std::string& reason) {
+    std::string typeName = TypeInfo::getFriendlyTypename<TPointee>();
+    return "Cannot convert \"" + typeDescription + "\" to NativeState<" + typeName + ">! " + reason;
   }
 };
 
