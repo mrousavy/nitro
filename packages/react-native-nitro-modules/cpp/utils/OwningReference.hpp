@@ -7,10 +7,10 @@
 
 #pragma once
 
-#include <cstddef>
-#include <mutex>
 #include "BorrowingReference.hpp"
 #include "OwningLock.hpp"
+#include <cstddef>
+#include <mutex>
 
 namespace margelo::nitro {
 
@@ -23,50 +23,36 @@ namespace margelo::nitro {
  An `OwningReference<T>` can be weakified, which gives the user a `BorrowingReference<T>`.
  A `BorrowingReference<T>` can be locked to get an `OwningReference<T>` again, assuming it has not been deleted yet.
  */
-template<typename T>
-class OwningReference final {
+template <typename T> class OwningReference final {
 public:
   using Pointee = T;
-  
+
 public:
-  OwningReference():
-    _value(nullptr),
-    _isDeleted(nullptr),
-    _strongRefCount(nullptr),
-    _weakRefCount(nullptr),
-    _mutex(nullptr) { }
+  OwningReference() : _value(nullptr), _isDeleted(nullptr), _strongRefCount(nullptr), _weakRefCount(nullptr), _mutex(nullptr) {}
 
-  explicit OwningReference(T* value):
-    _value(value),
-    _isDeleted(new bool(false)),
-    _strongRefCount(new size_t(1)),
-    _weakRefCount(new size_t(0)),
-    _mutex(new std::mutex()) {}
-
-  OwningReference(const OwningReference& ref):
-    _value(ref._value),
-    _isDeleted(ref._isDeleted),
-    _strongRefCount(ref._strongRefCount),
-    _weakRefCount(ref._weakRefCount),
-    _mutex(ref._mutex) {
-      // increment ref count after copy
-      (*_strongRefCount)++;
+  explicit OwningReference(T* value)
+      : _value(value), _isDeleted(new bool(false)), _strongRefCount(new size_t(1)), _weakRefCount(new size_t(0)), _mutex(new std::mutex()) {
   }
 
-  OwningReference(OwningReference&& ref):
-    _value(ref._value),
-    _isDeleted(ref._isDeleted),
-    _strongRefCount(ref._strongRefCount),
-    _weakRefCount(ref._weakRefCount),
-    _mutex(ref._mutex) {
-      ref._value = nullptr;
-      ref._isDeleted = nullptr;
-      ref._strongRefCount = nullptr;
-      ref._weakRefCount = nullptr;
+  OwningReference(const OwningReference& ref)
+      : _value(ref._value), _isDeleted(ref._isDeleted), _strongRefCount(ref._strongRefCount), _weakRefCount(ref._weakRefCount),
+        _mutex(ref._mutex) {
+    // increment ref count after copy
+    (*_strongRefCount)++;
+  }
+
+  OwningReference(OwningReference&& ref)
+      : _value(ref._value), _isDeleted(ref._isDeleted), _strongRefCount(ref._strongRefCount), _weakRefCount(ref._weakRefCount),
+        _mutex(ref._mutex) {
+    ref._value = nullptr;
+    ref._isDeleted = nullptr;
+    ref._strongRefCount = nullptr;
+    ref._weakRefCount = nullptr;
   }
 
   OwningReference& operator=(const OwningReference& ref) {
-    if (this == &ref) return *this;
+    if (this == &ref)
+      return *this;
 
     if (_strongRefCount != nullptr) {
       // destroy previous pointer
@@ -88,13 +74,10 @@ public:
   }
 
 private:
-  OwningReference(const BorrowingReference<T>& ref):
-    _value(ref._value),
-    _isDeleted(ref._isDeleted),
-    _strongRefCount(ref._strongRefCount),
-    _weakRefCount(ref._weakRefCount),
-    _mutex(ref._mutex) {
-      (*_strongRefCount)++;
+  OwningReference(const BorrowingReference<T>& ref)
+      : _value(ref._value), _isDeleted(ref._isDeleted), _strongRefCount(ref._strongRefCount), _weakRefCount(ref._weakRefCount),
+        _mutex(ref._mutex) {
+    (*_strongRefCount)++;
   }
 
 public:
@@ -103,12 +86,12 @@ public:
       // we are just a dangling nullptr.
       return;
     }
-    
+
     // decrement strong ref count on destroy
     --(*_strongRefCount);
     maybeDestroy();
   }
-  
+
 public:
   /**
    Creates an `OwningLock<T>` for the given `OwningReference<T>` to guarantee safe
@@ -120,14 +103,14 @@ public:
   OwningLock<T> lock() const {
     return OwningLock<T>(*this);
   }
-  
+
   /**
    Get whether the `OwningReference<T>` is still pointing to a valid value, or not.
    */
   inline bool hasValue() const {
     return _value != nullptr && !(*_isDeleted);
   }
-  
+
   /**
    Get a borrowing (or "weak") reference to this owning reference
    */
@@ -139,12 +122,12 @@ public:
   /**
    Delete and destroy the value this OwningReference is pointing to.
    This can even be called if there are still multiple strong references to the value.
-   
+
    This will block as long as one or more `OwningLock<T>`s of this `OwningReference<T>` are still alive.
    */
   void destroy() {
     std::unique_lock lock(*_mutex);
-    
+
     forceDestroy();
   }
 
@@ -154,13 +137,13 @@ public:
   }
 
   inline T& operator*() const {
-      return *_value;
+    return *_value;
   }
 
   inline T* operator->() const {
-      return _value;
+    return _value;
   }
-  
+
   inline bool operator==(T* other) const {
     if (*_isDeleted) {
       return other == nullptr;
@@ -168,15 +151,15 @@ public:
       return other == _value;
     }
   }
-  
+
   inline bool operator!=(T* other) const {
     return !(this == other);
   }
-  
+
   inline bool operator==(const OwningReference<T>& other) const {
     return _value == other._value;
   }
-  
+
   inline bool operator!=(const OwningReference<T>& other) const {
     return !(this == other);
   }
@@ -184,12 +167,12 @@ public:
 private:
   void maybeDestroy() {
     _mutex->lock();
-    
+
     if (*_strongRefCount == 0) {
       // after no strong references exist anymore
       forceDestroy();
     }
-    
+
     if (*_strongRefCount == 0 && *_weakRefCount == 0) {
       // free the full memory if there are no more references at all
       delete _isDeleted;
@@ -198,10 +181,10 @@ private:
       _mutex->unlock();
       return;
     }
-    
+
     _mutex->unlock();
   }
-  
+
   void forceDestroy() {
     if (*_isDeleted) {
       // it has already been destroyed.
@@ -223,6 +206,6 @@ private:
   std::mutex* _mutex;
 };
 
-}
+} // namespace margelo::nitro
 
 #include "BorrowingReference+Owning.hpp"

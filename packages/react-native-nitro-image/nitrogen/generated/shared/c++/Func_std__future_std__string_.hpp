@@ -7,18 +7,14 @@
 ///
 
 #include <functional>
-#include <string>
 #include <future>
-
-
-
-
+#include <string>
 
 namespace margelo::nitro::image {
 
-  /**
-   * A `() => std::future<std::string>` function.
-   */
-  using Func_std__future_std__string_ = std::function<std::future<std::string>()>;
+/**
+ * A `() => std::future<std::string>` function.
+ */
+using Func_std__future_std__string_ = std::function<std::future<std::string>()>;
 
 } // namespace margelo::nitro::image

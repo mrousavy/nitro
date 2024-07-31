@@ -7,8 +7,8 @@
 
 #pragma once
 
-#include <jsi/jsi.h>
 #include "ThreadUtils.hpp"
+#include <jsi/jsi.h>
 
 namespace margelo::nitro {
 
@@ -25,4 +25,4 @@ static inline std::string getRuntimeId(jsi::Runtime& runtime) {
   return runtime.description() + std::string(" (") + threadName + std::string(")");
 }
 
-}
+} // namespace margelo::nitro

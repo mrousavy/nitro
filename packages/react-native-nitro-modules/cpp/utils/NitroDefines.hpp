@@ -15,7 +15,6 @@
 #define _CXX_INTEROP_HAS_ATTRIBUTE(x) 0
 #endif
 
-
 #if _CXX_INTEROP_HAS_ATTRIBUTE(swift_attr)
 // Rename Type for Swift
 #define SWIFT_NAME(_name) __attribute__((swift_name(#_name)))

@@ -12,7 +12,7 @@ namespace margelo::nitro {
 class ThreadUtils final {
 public:
   ThreadUtils() = delete;
-  
+
   /**
    * Get the current Thread's name.
    * This is implemented differently on iOS and Android.

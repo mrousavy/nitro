@@ -7,18 +7,14 @@
 ///
 
 #include <functional>
-#include <string>
 #include <future>
-
-
-
-
+#include <string>
 
 namespace margelo::nitro::image {
 
-  /**
-   * A `(valueFromJs: std::string) => void` function.
-   */
-  using Func_void_std__string = std::function<void(const std::string& /* valueFromJs */)>;
+/**
+ * A `(valueFromJs: std::string) => void` function.
+ */
+using Func_void_std__string = std::function<void(const std::string& /* valueFromJs */)>;
 
 } // namespace margelo::nitro::image

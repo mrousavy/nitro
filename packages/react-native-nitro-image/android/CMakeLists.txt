@@ -15,7 +15,7 @@ file(GLOB android_files
 
 # Define C++ library and add all sources
 add_library(${PACKAGE_NAME} SHARED
-        cpp-adapter.cpp
+        src/main/cpp/cpp-adapter.cpp
         ${shared_files}
         ${android_files}
         ../cpp/HybridTestImpl.cpp

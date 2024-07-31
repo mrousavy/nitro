@@ -7,11 +7,13 @@
 
 #pragma once
 
-namespace margelo::nitro { template<typename T> class OwningReference; }
+namespace margelo::nitro {
+template <typename T> class OwningReference;
+}
 
+#include "OwningReference.hpp"
 #include <cstddef>
 #include <mutex>
-#include "OwningReference.hpp"
 
 namespace margelo::nitro {
 
@@ -27,25 +29,24 @@ namespace margelo::nitro {
  *
  * To create an `OwningLock<T>`, simply call `lock()` on an `OwningReference<T>`.
  */
-template<typename T>
-class OwningLock final {
+template <typename T> class OwningLock final {
 public:
   ~OwningLock() {
     _reference._mutex->unlock();
   }
-  
+
   OwningLock() = delete;
   OwningLock(const OwningLock&) = delete;
   OwningLock(OwningLock&&) = delete;
-  
+
 private:
-  explicit OwningLock(const OwningReference<T>& reference): _reference(reference) {
+  explicit OwningLock(const OwningReference<T>& reference) : _reference(reference) {
     _reference._mutex->lock();
   }
-  
+
 private:
   OwningReference<T> _reference;
-  
+
 private:
   friend class OwningReference<T>;
 };

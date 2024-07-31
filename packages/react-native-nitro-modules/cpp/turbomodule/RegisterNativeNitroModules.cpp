@@ -7,8 +7,8 @@
 
 #include "RegisterNativeNitroModules.hpp"
 #include "NativeNitroModules.hpp"
-#include <string>
 #include <memory>
+#include <string>
 
 #if __has_include(<ReactCommon/CallInvoker.h>)
 // Android style imports
@@ -27,9 +27,7 @@ using namespace facebook;
 void RegisterNativeNitroModules::registerNativeNitroModules() {
   react::registerCxxModuleToGlobalModuleMap(
       std::string(react::NativeNitroModules::kModuleName),
-      [&](std::shared_ptr<react::CallInvoker> jsInvoker) {
-        return std::make_shared<react::NativeNitroModules>(jsInvoker);
-      });
+      [&](std::shared_ptr<react::CallInvoker> jsInvoker) { return std::make_shared<react::NativeNitroModules>(jsInvoker); });
 }
 
-}
+} // namespace margelo::nitro

@@ -13,50 +13,38 @@
 namespace margelo::nitro {
 
 // forward-declaration to avoid duplicate symbols
-template<typename T>
-class OwningReference;
+template <typename T> class OwningReference;
 
 /**
  A `BorrowingReference<T>` is a weak reference to a pointer created by `OwningReference<T>`.
  It can be locked to gain a strong `OwningReference<T>` again if it has not been deleted yet.
  */
-template<typename T>
-class BorrowingReference final {
+template <typename T> class BorrowingReference final {
 private:
   explicit BorrowingReference(const OwningReference<T>& ref);
 
 public:
-  BorrowingReference():
-    _value(nullptr),
-    _isDeleted(nullptr),
-    _strongRefCount(nullptr),
-    _weakRefCount(nullptr),
-    _mutex(nullptr) { }
+  BorrowingReference() : _value(nullptr), _isDeleted(nullptr), _strongRefCount(nullptr), _weakRefCount(nullptr), _mutex(nullptr) {}
 
-  BorrowingReference(const BorrowingReference& ref):
-    _value(ref._value),
-    _isDeleted(ref._isDeleted),
-    _strongRefCount(ref._strongRefCount),
-    _weakRefCount(ref._weakRefCount),
-    _mutex(ref._mutex) {
-      // increment ref count after copy
-      (*_weakRefCount)++;
+  BorrowingReference(const BorrowingReference& ref)
+      : _value(ref._value), _isDeleted(ref._isDeleted), _strongRefCount(ref._strongRefCount), _weakRefCount(ref._weakRefCount),
+        _mutex(ref._mutex) {
+    // increment ref count after copy
+    (*_weakRefCount)++;
   }
 
-  BorrowingReference(BorrowingReference&& ref):
-    _value(ref._value),
-    _isDeleted(ref._isDeleted),
-    _strongRefCount(ref._strongRefCount),
-    _weakRefCount(ref._weakRefCount),
-    _mutex(ref._mutex) {
-      ref._value = nullptr;
-      ref._isDeleted = nullptr;
-      ref._strongRefCount = nullptr;
-      ref._weakRefCount = nullptr;
+  BorrowingReference(BorrowingReference&& ref)
+      : _value(ref._value), _isDeleted(ref._isDeleted), _strongRefCount(ref._strongRefCount), _weakRefCount(ref._weakRefCount),
+        _mutex(ref._mutex) {
+    ref._value = nullptr;
+    ref._isDeleted = nullptr;
+    ref._strongRefCount = nullptr;
+    ref._weakRefCount = nullptr;
   }
 
   BorrowingReference& operator=(const BorrowingReference& ref) {
-    if (this == &ref) return *this;
+    if (this == &ref)
+      return *this;
 
     if (_weakRefCount != nullptr) {
       // destroy previous pointer
@@ -99,7 +87,7 @@ public:
 private:
   void maybeDestroy() {
     _mutex->lock();
-    
+
     if (*_strongRefCount == 0 && *_weakRefCount == 0) {
       // free the full memory if there are no more references at all
       if (!(*_isDeleted)) {
@@ -111,7 +99,7 @@ private:
       _mutex->unlock();
       return;
     }
-    
+
     _mutex->unlock();
   }
 

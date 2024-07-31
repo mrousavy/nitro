@@ -3,9 +3,9 @@
 //
 
 #include "HybridObject.hpp"
+#include "HybridContext.hpp"
 #include "JSIConverter.hpp"
 #include "NitroLogger.hpp"
-#include "HybridContext.hpp"
 
 #define LOG_MEMORY_ALLOCATIONS true
 
@@ -50,7 +50,8 @@ HybridObject::HybridObject(const char* name) : _name(name), _mutex(std::make_uni
   _instanceId = getId(name);
   uint32_t alive = incrementAliveInstancesAndGet(_name);
   uint32_t totalObjects = getTotalAliveInstances();
-  Logger::log(TAG, "(MEMORY) ✅ Creating %s (#%i)... (Total %s(s): %i | Total HybridObjects: %i)", _name, _instanceId, _name, alive, totalObjects);
+  Logger::log(TAG, "(MEMORY) ✅ Creating %s (#%i)... (Total %s(s): %i | Total HybridObjects: %i)", _name, _instanceId, _name, alive,
+              totalObjects);
 #endif
 }
 
@@ -58,7 +59,8 @@ HybridObject::~HybridObject() {
 #if LOG_MEMORY_ALLOCATIONS
   uint32_t alive = decrementAliveInstancesAndGet(_name);
   uint32_t totalObjects = getTotalAliveInstances();
-  Logger::log(TAG, "(MEMORY) ❌ Deleting %s (#%i)... (Total %s(s): %i | Total HybridObjects: %i) ", _name, _instanceId, _name, alive, totalObjects);
+  Logger::log(TAG, "(MEMORY) ❌ Deleting %s (#%i)... (Total %s(s): %i | Total HybridObjects: %i) ", _name, _instanceId, _name, alive,
+              totalObjects);
 #endif
   _functionCache.clear();
 }
@@ -71,17 +73,13 @@ size_t HybridObject::getTotalExternalMemorySize() noexcept {
   static constexpr int SETTER_SIZE = STRING_KEY_AVERAGE_SIZE + sizeof(jsi::HostFunctionType);
 
   size_t cachedFunctions = 0;
-  for (const auto& cache: _functionCache) {
+  for (const auto& cache : _functionCache) {
     cachedFunctions += cache.second.size();
   }
 
   size_t externalSize = getExternalMemorySize();
-  return (_getters.size() * GETTER_SIZE)
-          + (_setters.size() * SETTER_SIZE)
-          + (_methods.size() * METHOD_SIZE)
-          + (cachedFunctions * CACHED_SIZE)
-          + sizeof(std::mutex)
-          + externalSize;
+  return (_getters.size() * GETTER_SIZE) + (_setters.size() * SETTER_SIZE) + (_methods.size() * METHOD_SIZE) +
+         (cachedFunctions * CACHED_SIZE) + sizeof(std::mutex) + externalSize;
 }
 
 jsi::Value HybridObject::toObject(jsi::Runtime& runtime) {
@@ -206,8 +204,8 @@ void HybridObject::set(facebook::jsi::Runtime& runtime, const facebook::jsi::Pro
   }
 
   // this property does not exist, and cannot be set. Throw and error!
-  throw std::runtime_error("Cannot set property \"" + name + "\" - " + std::string(_name) +
-                           " does not have a setter for \"" + name + "\"!");
+  throw std::runtime_error("Cannot set property \"" + name + "\" - " + std::string(_name) + " does not have a setter for \"" + name +
+                           "\"!");
 }
 
 void HybridObject::ensureInitialized(facebook::jsi::Runtime& runtime) {

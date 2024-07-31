@@ -23,8 +23,8 @@ constexpr uint64_t hashString(const char* str, size_t length) {
   const uint64_t fnv_prime = 1099511628211ull;
 
   for (size_t i = 0; i < length; ++i) {
-      hash ^= static_cast<uint64_t>(str[i]);
-      hash *= fnv_prime;
+    hash ^= static_cast<uint64_t>(str[i]);
+    hash *= fnv_prime;
   }
 
   return hash;
@@ -35,9 +35,8 @@ constexpr uint64_t hashString(const char* str, size_t length) {
  *
  * String length is known at compile time.
  */
-template <size_t N>
-constexpr uint64_t hashString(const char (&str)[N]) {
-    return hashString(str, N - 1); // N includes the null terminator, so subtract 1
+template <size_t N> constexpr uint64_t hashString(const char (&str)[N]) {
+  return hashString(str, N - 1); // N includes the null terminator, so subtract 1
 }
 
-}
+} // namespace margelo::nitro

@@ -1,15 +1,13 @@
 #include "Promise.hpp"
-#include "NitroLogger.hpp"
 #include "JSICache.hpp"
+#include "NitroLogger.hpp"
 #include <jsi/jsi.h>
 
 namespace margelo::nitro {
 
 using namespace facebook;
 
-Promise::Promise(jsi::Runtime& runtime,
-                 jsi::Function&& resolver,
-                 jsi::Function&& rejecter) {
+Promise::Promise(jsi::Runtime& runtime, jsi::Function&& resolver, jsi::Function&& rejecter) {
   auto functionCache = JSICache<jsi::Function>::getOrCreateCache(runtime);
   _resolver = functionCache.makeGlobal(std::move(resolver));
   _rejecter = functionCache.makeGlobal(std::move(rejecter));

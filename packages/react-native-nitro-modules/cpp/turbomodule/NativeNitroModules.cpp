@@ -6,56 +6,49 @@
 //
 
 #include "NativeNitroModules.hpp"
-#include "TestHybridObject.hpp"
-#include "Dispatcher.hpp"
 #include "CallInvokerDispatcher.hpp"
+#include "Dispatcher.hpp"
 #include "HybridObjectRegistry.hpp"
+#include "TestHybridObject.hpp"
 
 namespace facebook::react {
 
 using namespace margelo::nitro;
 
-NativeNitroModules::NativeNitroModules(std::shared_ptr<CallInvoker> jsInvoker):
-  TurboModule(kModuleName, jsInvoker), _callInvoker(jsInvoker) { }
+NativeNitroModules::NativeNitroModules(std::shared_ptr<CallInvoker> jsInvoker)
+    : TurboModule(kModuleName, jsInvoker), _callInvoker(jsInvoker) {}
 
-NativeNitroModules::~NativeNitroModules() { }
+NativeNitroModules::~NativeNitroModules() {}
 
 jsi::Value NativeNitroModules::get(jsi::Runtime& runtime, const jsi::PropNameID& propName) {
   std::string name = propName.utf8(runtime);
-  
+
   if (name == "install") {
-    return jsi::Function::createFromHostFunction(runtime,
-                                                 jsi::PropNameID::forUtf8(runtime, "install"),
-                                                 0,
-                                                 [=](jsi::Runtime& runtime,
-                                                     const jsi::Value& thisArg,
-                                                     const jsi::Value* args,
-                                                     size_t count) -> jsi::Value {
-      install(runtime);
-      return jsi::Value::undefined();
-    });
+    return jsi::Function::createFromHostFunction(
+        runtime, jsi::PropNameID::forUtf8(runtime, "install"), 0,
+        [=](jsi::Runtime& runtime, const jsi::Value& thisArg, const jsi::Value* args, size_t count) -> jsi::Value {
+          install(runtime);
+          return jsi::Value::undefined();
+        });
   }
   if (name == "createHybridObject") {
-    return jsi::Function::createFromHostFunction(runtime,
-                                                 jsi::PropNameID::forUtf8(runtime, "install"),
-                                                 2,
-                                                 [=](jsi::Runtime& runtime,
-                                                     const jsi::Value& thisArg,
-                                                     const jsi::Value* args,
-                                                     size_t count) -> jsi::Value {
-      if (count != 1 && count != 2) {
-        throw jsi::JSError(runtime, "NitroModules.createHybridObject(..) expects 1 or 2 arguments, but " + std::to_string(count) + " were supplied!");
-      }
-      jsi::String objectName = args[0].asString(runtime);
-      std::optional<jsi::Object> optionalArgs = std::nullopt;
-      if (count > 1) {
-        optionalArgs = args[1].asObject(runtime);
-      }
-      
-      return createHybridObject(runtime, objectName, optionalArgs);
-    });
+    return jsi::Function::createFromHostFunction(
+        runtime, jsi::PropNameID::forUtf8(runtime, "install"), 2,
+        [=](jsi::Runtime& runtime, const jsi::Value& thisArg, const jsi::Value* args, size_t count) -> jsi::Value {
+          if (count != 1 && count != 2) {
+            throw jsi::JSError(runtime, "NitroModules.createHybridObject(..) expects 1 or 2 arguments, but " + std::to_string(count) +
+                                            " were supplied!");
+          }
+          jsi::String objectName = args[0].asString(runtime);
+          std::optional<jsi::Object> optionalArgs = std::nullopt;
+          if (count > 1) {
+            optionalArgs = args[1].asObject(runtime);
+          }
+
+          return createHybridObject(runtime, objectName, optionalArgs);
+        });
   }
-  
+
   return jsi::Value::undefined();
 }
 
@@ -66,8 +59,7 @@ void NativeNitroModules::install(jsi::Runtime& runtime) {
   Dispatcher::installRuntimeGlobalDispatcher(runtime, dispatcher);
 }
 
-jsi::Object NativeNitroModules::createHybridObject(jsi::Runtime& runtime,
-                                                   const jsi::String& hybridObjectName,
+jsi::Object NativeNitroModules::createHybridObject(jsi::Runtime& runtime, const jsi::String& hybridObjectName,
                                                    const std::optional<jsi::Object>& args) {
   auto name = hybridObjectName.utf8(runtime);
   // TODO: Pass args? Do we need that?
@@ -75,4 +67,4 @@ jsi::Object NativeNitroModules::createHybridObject(jsi::Runtime& runtime,
   return jsi::Object::createFromHostObject(runtime, hybridObject);
 }
 
-}
+} // namespace facebook::react

@@ -16,7 +16,6 @@ file(GLOB android_files
 add_library(NitroModules SHARED
             ${shared_files}
             ${android_files}
-            JNIOnLoad.cpp
 )
 
 # Specifies a path to native header files.

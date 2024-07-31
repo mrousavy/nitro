@@ -11,52 +11,62 @@
 #include "HybridImage.hpp"
 
 // Forward declaration of `ImageSpecCxx` to properly resolve imports.
-namespace NitroImage { class ImageSpecCxx; }
+namespace NitroImage {
+class ImageSpecCxx;
+}
 
 // Forward declaration of `ImageSize` to properly resolve imports.
-namespace margelo::nitro::image { struct ImageSize; }
+namespace margelo::nitro::image {
+struct ImageSize;
+}
 // Forward declaration of `PixelFormat` to properly resolve imports.
-namespace margelo::nitro::image { enum class PixelFormat; }
+namespace margelo::nitro::image {
+enum class PixelFormat;
+}
 // Forward declaration of `ImageFormat` to properly resolve imports.
-namespace margelo::nitro::image { enum class ImageFormat; }
+namespace margelo::nitro::image {
+enum class ImageFormat;
+}
 
+#include "Func_void_std__string.hpp"
+#include "ImageFormat.hpp"
 #include "ImageSize.hpp"
 #include "PixelFormat.hpp"
-#include "ImageFormat.hpp"
-#include "Func_void_std__string.hpp"
 
 #include "NitroImage-Swift.h"
 
 namespace margelo::nitro::image {
 
-  /**
-   * The C++ part of ImageSpecCxx.swift.
-   *
-   * HybridImageSwift (C++) accesses ImageSpecCxx (Swift), and might
-   * contain some additional bridging code for C++ <> Swift interop.
-   *
-   * Since this obviously introduces an overhead, I hope at some point in
-   * the future, ImageSpecCxx can directly inherit from the C++ class HybridImage
-   * to simplify the whole structure and memory management.
-   */
-  class HybridImageSwift final: public HybridImage {
-  public:
-    // Constructor from a Swift instance
-    explicit HybridImageSwift(const NitroImage::ImageSpecCxx& swiftPart): HybridImage(), _swiftPart(swiftPart) { }
+/**
+ * The C++ part of ImageSpecCxx.swift.
+ *
+ * HybridImageSwift (C++) accesses ImageSpecCxx (Swift), and might
+ * contain some additional bridging code for C++ <> Swift interop.
+ *
+ * Since this obviously introduces an overhead, I hope at some point in
+ * the future, ImageSpecCxx can directly inherit from the C++ class HybridImage
+ * to simplify the whole structure and memory management.
+ */
+class HybridImageSwift final : public HybridImage {
+public:
+  // Constructor from a Swift instance
+  explicit HybridImageSwift(const NitroImage::ImageSpecCxx& swiftPart) : HybridImage(), _swiftPart(swiftPart) {}
 
-  public:
-    // Get the Swift part
-    inline NitroImage::ImageSpecCxx getSwiftPart() noexcept { return _swiftPart; }
+public:
+  // Get the Swift part
+  inline NitroImage::ImageSpecCxx getSwiftPart() noexcept {
+    return _swiftPart;
+  }
 
-  public:
-    // Get memory pressure
-    inline size_t getExternalMemorySize() noexcept override {
-      return _swiftPart.getMemorySize();
-    }
+public:
+  // Get memory pressure
+  inline size_t getExternalMemorySize() noexcept override {
+    return _swiftPart.getMemorySize();
+  }
 
-  public:
-    // Properties
-    inline ImageSize getSize() noexcept override {
+public:
+  // Properties
+  inline ImageSize getSize() noexcept override {
     return _swiftPart.getSize();
   }
   inline PixelFormat getPixelFormat() noexcept override {
@@ -70,9 +80,9 @@ namespace margelo::nitro::image {
     _swiftPart.setSomeSettableProp(std::forward<decltype(someSettableProp)>(someSettableProp));
   }
 
-  public:
-    // Methods
-    inline double toArrayBuffer(ImageFormat format) override {
+public:
+  // Methods
+  inline double toArrayBuffer(ImageFormat format) override {
     auto valueOrError = _swiftPart.toArrayBuffer(static_cast<int>(format));
     if (valueOrError.isError()) [[unlikely]] {
       throw std::runtime_error(valueOrError.getError());
@@ -87,8 +97,8 @@ namespace margelo::nitro::image {
     }
   }
 
-  private:
-    NitroImage::ImageSpecCxx _swiftPart;
-  };
+private:
+  NitroImage::ImageSpecCxx _swiftPart;
+};
 
 } // namespace margelo::nitro::image

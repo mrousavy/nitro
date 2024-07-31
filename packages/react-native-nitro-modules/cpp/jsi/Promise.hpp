@@ -7,10 +7,10 @@
 
 #pragma once
 
-#include <jsi/jsi.h>
-#include <functional>
-#include <memory>
 #include "OwningReference.hpp"
+#include <functional>
+#include <jsi/jsi.h>
+#include <memory>
 
 namespace margelo::nitro {
 
@@ -24,9 +24,7 @@ using namespace facebook;
  */
 class Promise final {
 public:
-  Promise(jsi::Runtime& runtime,
-          jsi::Function&& resolver,
-          jsi::Function&& rejecter);
+  Promise(jsi::Runtime& runtime, jsi::Function&& resolver, jsi::Function&& rejecter);
 
   /**
    Resolve the Promise with the given `jsi::Value`.

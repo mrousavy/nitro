@@ -18,18 +18,16 @@ class NativeNitroModules : public TurboModule {
 public:
   NativeNitroModules(std::shared_ptr<CallInvoker> jsInvoker);
   ~NativeNitroModules();
-  
+
 public:
-  jsi::Value get(jsi::Runtime &runtime, const jsi::PropNameID &propName) override;
+  jsi::Value get(jsi::Runtime& runtime, const jsi::PropNameID& propName) override;
 
   void install(jsi::Runtime& runtime);
-  jsi::Object createHybridObject(jsi::Runtime& runtime,
-                                 const jsi::String& hybridObjectName,
-                                 const std::optional<jsi::Object>& args);
+  jsi::Object createHybridObject(jsi::Runtime& runtime, const jsi::String& hybridObjectName, const std::optional<jsi::Object>& args);
 
 public:
   constexpr static auto kModuleName = "NitroModulesCxx";
-  
+
 private:
   std::shared_ptr<CallInvoker> _callInvoker;
 };

@@ -4,7 +4,9 @@ export interface TestObject extends HybridObject<{ ios: 'c++' }> {
   createMap(): AnyMap
   mapRoundtrip(map: AnyMap): AnyMap
 
-  passVariant(either: number | string): number | string
+  passVariant(
+    either: number | string | number[] | string[] | boolean
+  ): number | string
 
   getValueFromJsCallback(
     callback: () => string,

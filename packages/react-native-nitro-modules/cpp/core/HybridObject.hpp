@@ -4,10 +4,10 @@
 
 #pragma once
 
-#include "JSIConverter.hpp"
-#include "OwningReference.hpp"
-#include "NitroLogger.hpp"
 #include "HybridContext.hpp"
+#include "JSIConverter.hpp"
+#include "NitroLogger.hpp"
+#include "OwningReference.hpp"
 #include <functional>
 #include <jsi/jsi.h>
 #include <memory>
@@ -107,7 +107,9 @@ protected:
    * Get the size of any external (heap) allocations this `HybridObject` has made, in bytes.
    * This will be used to notify the JS GC about memory pressure.
    */
-  virtual inline size_t getExternalMemorySize() noexcept { return 0; }
+  virtual inline size_t getExternalMemorySize() noexcept {
+    return 0;
+  }
 
 protected:
   /**
@@ -160,11 +162,14 @@ private:
   }
 
   template <typename Derived, typename ReturnType, typename... Args>
-  static inline jsi::HostFunctionType createHybridMethod(std::string name, ReturnType (Derived::*method)(Args...), Derived* derivedInstance) {
-    return [name, derivedInstance, method](jsi::Runtime& runtime, const jsi::Value& thisVal, const jsi::Value* args, size_t count) -> jsi::Value {
+  static inline jsi::HostFunctionType createHybridMethod(std::string name, ReturnType (Derived::*method)(Args...),
+                                                         Derived* derivedInstance) {
+    return [name, derivedInstance, method](jsi::Runtime& runtime, const jsi::Value& thisVal, const jsi::Value* args,
+                                           size_t count) -> jsi::Value {
       if (count != sizeof...(Args)) {
         // invalid amount of arguments passed!
-        throw jsi::JSError(runtime, "Function " + name + "(...) expected " + std::to_string(sizeof...(Args)) + " arguments, but received " + std::to_string(count) + "!");
+        throw jsi::JSError(runtime, "Function " + name + "(...) expected " + std::to_string(sizeof...(Args)) + " arguments, but received " +
+                                        std::to_string(count) + "!");
       }
 
       if constexpr (std::is_same_v<ReturnType, jsi::Value>) {

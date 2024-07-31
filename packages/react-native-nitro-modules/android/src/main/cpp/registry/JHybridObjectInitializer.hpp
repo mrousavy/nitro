@@ -7,23 +7,23 @@
 
 #pragma once
 
-#include <fbjni/fbjni.h>
 #include "HybridObject.hpp"
 #include "JHybridObject.hpp"
+#include <fbjni/fbjni.h>
 
 namespace margelo::nitro {
 
-  using namespace facebook;
+using namespace facebook;
 
-  struct JHybridObjectInitializer: public jni::JavaClass<JHybridObjectInitializer> {
-  public:
-    jni::local_ref<JHybridObject::javaobject> call() const {
-      const auto method = this->getClass()->getMethod<JHybridObject::javaobject()>("initialize");
-      return method(self());
-    }
+struct JHybridObjectInitializer : public jni::JavaClass<JHybridObjectInitializer> {
+public:
+  jni::local_ref<JHybridObject::javaobject> call() const {
+    const auto method = this->getClass()->getMethod<JHybridObject::javaobject()>("initialize");
+    return method(self());
+  }
 
-  public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/HybridObjectInitializer;";
-  };
+public:
+  static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/HybridObjectInitializer;";
+};
 
 } // namespace margelo::nitro

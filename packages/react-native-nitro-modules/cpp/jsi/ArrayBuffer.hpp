@@ -7,8 +7,8 @@
 
 #pragma once
 
-#include <jsi/jsi.h>
 #include <functional>
+#include <jsi/jsi.h>
 
 namespace margelo::nitro {
 
@@ -16,10 +16,7 @@ using namespace facebook;
 
 using DeleteFn = std::function<void(uint8_t*)>;
 
-static DeleteFn defaultDeleteFn = [](uint8_t* buffer) {
-  delete[] buffer;
-};
-
+static DeleteFn defaultDeleteFn = [](uint8_t* buffer) { delete[] buffer; };
 
 /**
  * Represents a raw byte buffer that can be read from-, and
@@ -33,46 +30,46 @@ static DeleteFn defaultDeleteFn = [](uint8_t* buffer) {
  * Only if C++ creates the `ArrayBuffer` a reference to it can be safely
  * kept in memory, as C++ is then the owner of `ArrayBuffer` (`isOwner() == true`).
  */
-class ArrayBuffer: public jsi::MutableBuffer {
+class ArrayBuffer : public jsi::MutableBuffer {
 public:
   /**
    * Create a new **owning** `ArrayBuffer`.
    * The `ArrayBuffer` can be kept in memory, as C++ owns the data
    * and will only delete it once this `ArrayBuffer` gets deleted
    */
-  ArrayBuffer(uint8_t* data, size_t size, DeleteFn&& deleteFunc): _data(data), _size(size), _deleteFunc(std::move(deleteFunc)) { }
+  ArrayBuffer(uint8_t* data, size_t size, DeleteFn&& deleteFunc) : _data(data), _size(size), _deleteFunc(std::move(deleteFunc)) {}
   /**
    * Create a new `ArrayBuffer`.
    * If `destroyOnDeletion` is `true`, the `ArrayBuffer` is **owning**, otherwise it is **non-owning**.
    * The `ArrayBuffer` can only be safely kept in memory if it is owning (`isOwning()`).
    */
-  ArrayBuffer(uint8_t* data, size_t size, bool destroyOnDeletion): _data(data), _size(size) {
+  ArrayBuffer(uint8_t* data, size_t size, bool destroyOnDeletion) : _data(data), _size(size) {
     _deleteFunc = destroyOnDeletion ? defaultDeleteFn : nullptr;
   }
-  
+
   // ArrayBuffer cannot be copied
   ArrayBuffer(const ArrayBuffer&) = delete;
   // ArrayBuffer cannot be moved
   ArrayBuffer(ArrayBuffer&&) = delete;
-  
+
   ~ArrayBuffer() {
     if (_deleteFunc != nullptr) {
       _deleteFunc(_data);
     }
   }
-  
+
   uint8_t* data() noexcept override {
     return _data;
   }
-  
+
   size_t size() const noexcept override {
     return _size;
   }
-  
+
   bool isOwner() const noexcept {
     return _deleteFunc != nullptr;
   }
-  
+
 private:
   uint8_t* _data;
   size_t _size;

@@ -15,9 +15,9 @@ std::string ThreadUtils::getThreadName() {
   // Try using pthread APIs
   char name[256];
   if (pthread_getname_np(pthread_self(), name, sizeof(name)) == 0) {
-      return std::string(name);
+    return std::string(name);
   }
-  
+
   // Fall back to this_thread ID
   std::stringstream stream;
   stream << std::this_thread::get_id();

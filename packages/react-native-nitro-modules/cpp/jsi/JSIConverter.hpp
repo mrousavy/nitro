@@ -4,16 +4,18 @@
 
 #pragma once
 
-namespace margelo::nitro { class HybridObject; }
+namespace margelo::nitro {
+class HybridObject;
+}
 
-#include "HybridObject.hpp"
-#include "Promise.hpp"
-#include "Dispatcher.hpp"
-#include "JSICache.hpp"
-#include "ArrayBuffer.hpp"
-#include "NitroHash.hpp"
-#include "TypeInfo.hpp"
 #include "AnyMap.hpp"
+#include "ArrayBuffer.hpp"
+#include "Dispatcher.hpp"
+#include "HybridObject.hpp"
+#include "JSICache.hpp"
+#include "NitroHash.hpp"
+#include "Promise.hpp"
+#include "TypeInfo.hpp"
 #include <array>
 #include <future>
 #include <jsi/jsi.h>
@@ -65,12 +67,12 @@ template <> struct JSIConverter<int> {
 
 // std::monostate <> null
 template <> struct JSIConverter<std::monostate> {
-    static inline std::monostate fromJSI(jsi::Runtime&, const jsi::Value& arg) {
-        return std::monostate();
-    }
-    static inline jsi::Value toJSI(jsi::Runtime&, std::monostate arg) {
-        return jsi::Value::null();
-    }
+  static inline std::monostate fromJSI(jsi::Runtime&, const jsi::Value& arg) {
+    return std::monostate();
+  }
+  static inline jsi::Value toJSI(jsi::Runtime&, std::monostate arg) {
+    return jsi::Value::null();
+  }
 };
 
 // double <> number
@@ -161,8 +163,7 @@ template <typename TResult> struct JSIConverter<std::future<TResult>> {
     std::shared_ptr<Dispatcher> strongDispatcher = Dispatcher::getRuntimeGlobalDispatcher(runtime);
     std::weak_ptr<Dispatcher> weakDispatcher = strongDispatcher;
 
-    return Promise::createPromise(runtime, [sharedFuture, weakDispatcher](jsi::Runtime& runtime,
-                                                                          std::shared_ptr<Promise> promise) {
+    return Promise::createPromise(runtime, [sharedFuture, weakDispatcher](jsi::Runtime& runtime, std::shared_ptr<Promise> promise) {
       // Spawn new async thread to synchronously wait for the `future<T>` to complete
       std::thread waiterThread([promise, &runtime, weakDispatcher, sharedFuture]() {
         // synchronously wait until the `future<T>` completes. we are running on a background task here.
@@ -208,16 +209,13 @@ template <typename TResult> struct JSIConverter<std::future<TResult>> {
   }
 };
 
-template <typename T>
-struct future_traits {
+template <typename T> struct future_traits {
   using type = void;
 };
-template <typename T>
-struct future_traits<std::future<T>> {
-    using type = T;
+template <typename T> struct future_traits<std::future<T>> {
+  using type = T;
 };
-template <typename T>
-using future_traits_t = typename future_traits<std::remove_reference_t<T>>::type;
+template <typename T> using future_traits_t = typename future_traits<std::remove_reference_t<T>>::type;
 
 // [](Args...) -> T {} <> (Args...) => T
 template <typename ReturnType, typename... Args> struct JSIConverter<std::function<ReturnType(Args...)>> {
@@ -273,20 +271,21 @@ template <typename ReturnType, typename... Args> struct JSIConverter<std::functi
       }
 
       if constexpr (std::is_void_v<ResultingType>) {
-        dispatcher->runAsync([&runtime, sharedFunction = std::move(sharedFunction), ...args = std::move(args)]() {
+        dispatcher->runAsync([&runtime, sharedFunction = std::move(sharedFunction), ... args = std::move(args)]() {
           callJSFunction(runtime, sharedFunction, args...);
         });
       } else {
-        return dispatcher->runAsyncAwaitable<ResultingType>([&runtime, sharedFunction = std::move(sharedFunction), ...args = std::move(args)]() -> ResultingType {
-          return callJSFunction(runtime, sharedFunction, args...);
-        });
+        return dispatcher->runAsyncAwaitable<ResultingType>(
+            [&runtime, sharedFunction = std::move(sharedFunction), ... args = std::move(args)]() -> ResultingType {
+              return callJSFunction(runtime, sharedFunction, args...);
+            });
       }
     };
   }
 
   template <size_t... Is>
-  static inline jsi::Value callHybridFunction(const std::function<ReturnType(Args...)>& function, jsi::Runtime& runtime, const jsi::Value* args,
-                                              std::index_sequence<Is...>) {
+  static inline jsi::Value callHybridFunction(const std::function<ReturnType(Args...)>& function, jsi::Runtime& runtime,
+                                              const jsi::Value* args, std::index_sequence<Is...>) {
     if constexpr (std::is_void_v<ReturnType>) {
       // it is a void function (will return undefined in JS)
       function(JSIConverter<std::decay_t<Args>>::fromJSI(runtime, args[Is])...);
@@ -361,111 +360,106 @@ template <typename ValueType> struct JSIConverter<std::unordered_map<std::string
 };
 
 // Helper struct to check if a type is present in a parameter pack
-template<typename T, typename... Types>
-struct is_in_pack : std::disjunction<std::is_same<T, Types>...> {};
-template<typename T, typename... Types>
-inline constexpr bool is_in_pack_v = is_in_pack<T, Types...>::value;
+template <typename T, typename... Types> struct is_in_pack : std::disjunction<std::is_same<T, Types>...> {};
+template <typename T, typename... Types> inline constexpr bool is_in_pack_v = is_in_pack<T, Types...>::value;
 
 // std::variant<A, B, C> <> A | B | C
-template <typename... Types>
-struct JSIConverter<std::variant<Types...>> {
-    static inline std::variant<Types...> fromJSI(jsi::Runtime& runtime, const jsi::Value& value) {
-        if (value.isNull()) {
-            if constexpr (is_in_pack_v<std::monostate, Types...>) {
-                return std::monostate();
-            } else {
-              throw typeNotSupportedError("null");
-            }
-        } else if (value.isBool()) {
-          if constexpr (is_in_pack_v<bool, Types...>) {
-            return JSIConverter<bool>::fromJSI(runtime, value);
-          } else {
-            throw typeNotSupportedError("boolean");
-          }
-        } else if (value.isNumber()) {
-          if constexpr (is_in_pack_v<double, Types...>) {
-            return JSIConverter<double>::fromJSI(runtime, value);
-          } else {
-            throw typeNotSupportedError("number");
-          }
-        } else if (value.isString()) {
-          if constexpr (is_in_pack_v<std::string, Types...>) {
-            return JSIConverter<std::string>::fromJSI(runtime, value);
-          } else {
-            throw typeNotSupportedError("string");
-          }
-        } else if (value.isBigInt()) {
-          if constexpr (is_in_pack_v<int64_t, Types...>) {
-            return JSIConverter<int64_t>::fromJSI(runtime, value);
-          } else {
-            throw typeNotSupportedError("bigint");
-          }
-        } else if (value.isObject()) {
-            jsi::Object valueObj = value.getObject(runtime);
-            if (valueObj.isArray(runtime)) {
-              if constexpr (is_in_pack_v<std::vector<AnyValue>, Types...>) {
-                return JSIConverter<std::vector<AnyValue>>::fromJSI(runtime, value);
-              } else {
-                throw typeNotSupportedError("array[]");
-              }
-            } else {
-              if constexpr (is_in_pack_v<std::unordered_map<std::string, AnyValue>, Types...>) {
-                return JSIConverter<std::unordered_map<std::string, AnyValue>>::fromJSI(runtime, value);
-              } else {
-                throw typeNotSupportedError("object{}");
-              }
-            }
+template <typename... Types> struct JSIConverter<std::variant<Types...>> {
+  static inline std::variant<Types...> fromJSI(jsi::Runtime& runtime, const jsi::Value& value) {
+    if (value.isNull()) {
+      if constexpr (is_in_pack_v<std::monostate, Types...>) {
+        return std::monostate();
+      } else {
+        throw typeNotSupportedError("null");
+      }
+    } else if (value.isBool()) {
+      if constexpr (is_in_pack_v<bool, Types...>) {
+        return JSIConverter<bool>::fromJSI(runtime, value);
+      } else {
+        throw typeNotSupportedError("boolean");
+      }
+    } else if (value.isNumber()) {
+      if constexpr (is_in_pack_v<double, Types...>) {
+        return JSIConverter<double>::fromJSI(runtime, value);
+      } else {
+        throw typeNotSupportedError("number");
+      }
+    } else if (value.isString()) {
+      if constexpr (is_in_pack_v<std::string, Types...>) {
+        return JSIConverter<std::string>::fromJSI(runtime, value);
+      } else {
+        throw typeNotSupportedError("string");
+      }
+    } else if (value.isBigInt()) {
+      if constexpr (is_in_pack_v<int64_t, Types...>) {
+        return JSIConverter<int64_t>::fromJSI(runtime, value);
+      } else {
+        throw typeNotSupportedError("bigint");
+      }
+    } else if (value.isObject()) {
+      jsi::Object valueObj = value.getObject(runtime);
+      if (valueObj.isArray(runtime)) {
+        if constexpr (is_in_pack_v<std::vector<AnyValue>, Types...>) {
+          return JSIConverter<std::vector<AnyValue>>::fromJSI(runtime, value);
         } else {
-            std::string stringRepresentation = value.toString(runtime).utf8(runtime);
-            throw std::runtime_error("Cannot convert \"" + stringRepresentation + "\" to std::variant<...>!");
+          throw typeNotSupportedError("array[]");
         }
+      } else {
+        if constexpr (is_in_pack_v<std::unordered_map<std::string, AnyValue>, Types...>) {
+          return JSIConverter<std::unordered_map<std::string, AnyValue>>::fromJSI(runtime, value);
+        } else {
+          throw typeNotSupportedError("object{}");
+        }
+      }
+    } else {
+      std::string stringRepresentation = value.toString(runtime).utf8(runtime);
+      throw std::runtime_error("Cannot convert \"" + stringRepresentation + "\" to std::variant<...>!");
     }
-  
+  }
+
   static inline std::runtime_error typeNotSupportedError(const std::string& type) {
     std::string types = TypeInfo::getFriendlyTypenames<Types...>();
     return std::runtime_error(type + " is not supported in variant<" + types + ">!");
   }
 
-    static inline jsi::Value toJSI(jsi::Runtime& runtime, const std::variant<Types...>& variant) {
-        return std::visit([&runtime](const auto& val) {
-            return JSIConverter<std::decay_t<decltype(val)>>::toJSI(runtime, val);
-        }, variant);
-    }
+  static inline jsi::Value toJSI(jsi::Runtime& runtime, const std::variant<Types...>& variant) {
+    return std::visit([&runtime](const auto& val) { return JSIConverter<std::decay_t<decltype(val)>>::toJSI(runtime, val); }, variant);
+  }
 };
 
 // AnyValue <> Record<K, V>
-template<> struct JSIConverter<AnyValue> {
-    static inline AnyValue fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
-        return JSIConverter<AnyValue::variant>::fromJSI(runtime, arg);
-    }
-    static inline jsi::Value toJSI(jsi::Runtime& runtime, const AnyValue& value) {
-        return JSIConverter<std::variant<AnyValue::variant>>::toJSI(runtime, value);
-    }
+template <> struct JSIConverter<AnyValue> {
+  static inline AnyValue fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+    return JSIConverter<AnyValue::variant>::fromJSI(runtime, arg);
+  }
+  static inline jsi::Value toJSI(jsi::Runtime& runtime, const AnyValue& value) {
+    return JSIConverter<std::variant<AnyValue::variant>>::toJSI(runtime, value);
+  }
 };
 
 // AnyMap <> Record<K, V>
-template<> struct JSIConverter<std::shared_ptr<AnyMap>> {
-    static inline std::shared_ptr<AnyMap> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
-        jsi::Object object = arg.asObject(runtime);
-        jsi::Array propNames = object.getPropertyNames(runtime);
-        size_t size = propNames.size(runtime);
-        std::shared_ptr<AnyMap> map = AnyMap::make();
-        for (size_t i = 0; i < size; i++) {
-            jsi::String jsKey = propNames.getValueAtIndex(runtime, i).getString(runtime);
-            jsi::Value jsValue = object.getProperty(runtime, jsKey);
-            map->setAny(jsKey.utf8(runtime), JSIConverter<AnyValue>::fromJSI(runtime, jsValue));
-        }
-        return map;
+template <> struct JSIConverter<std::shared_ptr<AnyMap>> {
+  static inline std::shared_ptr<AnyMap> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+    jsi::Object object = arg.asObject(runtime);
+    jsi::Array propNames = object.getPropertyNames(runtime);
+    size_t size = propNames.size(runtime);
+    std::shared_ptr<AnyMap> map = AnyMap::make();
+    for (size_t i = 0; i < size; i++) {
+      jsi::String jsKey = propNames.getValueAtIndex(runtime, i).getString(runtime);
+      jsi::Value jsValue = object.getProperty(runtime, jsKey);
+      map->setAny(jsKey.utf8(runtime), JSIConverter<AnyValue>::fromJSI(runtime, jsValue));
     }
-    static inline jsi::Value toJSI(jsi::Runtime& runtime, std::shared_ptr<AnyMap> map) {
-        jsi::Object object(runtime);
-        for (const auto& item : map->getMap()) {
-            jsi::String key = jsi::String::createFromUtf8(runtime, item.first);
-            jsi::Value value = JSIConverter<AnyValue>::toJSI(runtime, item.second);
-            object.setProperty(runtime, std::move(key), std::move(value));
-        }
-        return object;
+    return map;
+  }
+  static inline jsi::Value toJSI(jsi::Runtime& runtime, std::shared_ptr<AnyMap> map) {
+    jsi::Object object(runtime);
+    for (const auto& item : map->getMap()) {
+      jsi::String key = jsi::String::createFromUtf8(runtime, item.first);
+      jsi::Value value = JSIConverter<AnyValue>::toJSI(runtime, item.second);
+      object.setProperty(runtime, std::move(key), std::move(value));
     }
+    return object;
+  }
 };
 
 // MutableBuffer <> ArrayBuffer

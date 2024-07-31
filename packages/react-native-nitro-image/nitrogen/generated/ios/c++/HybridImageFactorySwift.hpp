@@ -11,12 +11,18 @@
 #include "HybridImageFactory.hpp"
 
 // Forward declaration of `ImageFactorySpecCxx` to properly resolve imports.
-namespace NitroImage { class ImageFactorySpecCxx; }
+namespace NitroImage {
+class ImageFactorySpecCxx;
+}
 
 // Forward declaration of `HybridImage` to properly resolve imports.
-namespace margelo::nitro::image { class HybridImage; }
+namespace margelo::nitro::image {
+class HybridImage;
+}
 // Forward declaration of `HybridImageSwift` to properly resolve imports.
-namespace margelo::nitro::image { class HybridImageSwift; }
+namespace margelo::nitro::image {
+class HybridImageSwift;
+}
 
 #include "HybridImage.hpp"
 #include "HybridImageSwift.hpp"
@@ -25,38 +31,39 @@ namespace margelo::nitro::image { class HybridImageSwift; }
 
 namespace margelo::nitro::image {
 
-  /**
-   * The C++ part of ImageFactorySpecCxx.swift.
-   *
-   * HybridImageFactorySwift (C++) accesses ImageFactorySpecCxx (Swift), and might
-   * contain some additional bridging code for C++ <> Swift interop.
-   *
-   * Since this obviously introduces an overhead, I hope at some point in
-   * the future, ImageFactorySpecCxx can directly inherit from the C++ class HybridImageFactory
-   * to simplify the whole structure and memory management.
-   */
-  class HybridImageFactorySwift final: public HybridImageFactory {
-  public:
-    // Constructor from a Swift instance
-    explicit HybridImageFactorySwift(const NitroImage::ImageFactorySpecCxx& swiftPart): HybridImageFactory(), _swiftPart(swiftPart) { }
+/**
+ * The C++ part of ImageFactorySpecCxx.swift.
+ *
+ * HybridImageFactorySwift (C++) accesses ImageFactorySpecCxx (Swift), and might
+ * contain some additional bridging code for C++ <> Swift interop.
+ *
+ * Since this obviously introduces an overhead, I hope at some point in
+ * the future, ImageFactorySpecCxx can directly inherit from the C++ class HybridImageFactory
+ * to simplify the whole structure and memory management.
+ */
+class HybridImageFactorySwift final : public HybridImageFactory {
+public:
+  // Constructor from a Swift instance
+  explicit HybridImageFactorySwift(const NitroImage::ImageFactorySpecCxx& swiftPart) : HybridImageFactory(), _swiftPart(swiftPart) {}
 
-  public:
-    // Get the Swift part
-    inline NitroImage::ImageFactorySpecCxx getSwiftPart() noexcept { return _swiftPart; }
+public:
+  // Get the Swift part
+  inline NitroImage::ImageFactorySpecCxx getSwiftPart() noexcept {
+    return _swiftPart;
+  }
 
-  public:
-    // Get memory pressure
-    inline size_t getExternalMemorySize() noexcept override {
-      return _swiftPart.getMemorySize();
-    }
+public:
+  // Get memory pressure
+  inline size_t getExternalMemorySize() noexcept override {
+    return _swiftPart.getMemorySize();
+  }
 
-  public:
-    // Properties
-    
+public:
+  // Properties
 
-  public:
-    // Methods
-    inline std::shared_ptr<HybridImage> loadImageFromFile(const std::string& path) override {
+public:
+  // Methods
+  inline std::shared_ptr<HybridImage> loadImageFromFile(const std::string& path) override {
     auto valueOrError = _swiftPart.loadImageFromFile(std::forward<decltype(path)>(path));
     if (valueOrError.isError()) [[unlikely]] {
       throw std::runtime_error(valueOrError.getError());
@@ -89,8 +96,8 @@ namespace margelo::nitro::image {
     return HybridContext::getOrCreate<HybridImageSwift>(value);
   }
 
-  private:
-    NitroImage::ImageFactorySpecCxx _swiftPart;
-  };
+private:
+  NitroImage::ImageFactorySpecCxx _swiftPart;
+};
 
 } // namespace margelo::nitro::image

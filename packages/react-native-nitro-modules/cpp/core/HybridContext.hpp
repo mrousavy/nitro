@@ -7,9 +7,9 @@
 
 #pragma once
 
-#include <memory>
 #include "NitroLogger.hpp"
 #include "TypeInfo.hpp"
+#include <memory>
 
 namespace margelo::nitro {
 
@@ -24,9 +24,9 @@ class HybridObject;
 struct HybridContext final {
 public:
   std::weak_ptr<HybridObject> cppPart;
-  
+
 public:
-  template<typename THybridObject, typename TSwiftPart>
+  template <typename THybridObject, typename TSwiftPart>
   static inline std::shared_ptr<THybridObject> getOrCreate(TSwiftPart swiftPart) noexcept {
     auto hybridContext = swiftPart.getHybridContext();
     auto hybridObject = std::static_pointer_cast<THybridObject>(hybridContext.cppPart.lock());
@@ -34,17 +34,16 @@ public:
       // Fast path - an existing HybridObject is still in cache! (HybridContext)
       return hybridObject;
     }
-    
+
     // Slow path - we need to create a new HybridObject that wraps our Swift implementation.
-    Logger::log(TAG, "Creating new HybridObject<%s> for %s...",
-                TypeInfo::getFriendlyTypename<THybridObject>(),
+    Logger::log(TAG, "Creating new HybridObject<%s> for %s...", TypeInfo::getFriendlyTypename<THybridObject>(),
                 TypeInfo::getFriendlyTypename<TSwiftPart>());
     hybridObject = std::make_shared<THybridObject>(std::forward<decltype(swiftPart)>(swiftPart));
     hybridContext.cppPart = hybridObject;
     swiftPart.setHybridContext(hybridContext);
     return hybridObject;
   }
-  
+
 private:
   static constexpr auto TAG = "HybridContext";
 };

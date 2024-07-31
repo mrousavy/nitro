@@ -7,15 +7,15 @@
 
 #pragma once
 
+#include "BorrowingReference.hpp"
+#include "GetRuntimeID.hpp"
+#include "NitroLogger.hpp"
+#include "OwningReference.hpp"
 #include <jsi/jsi.h>
 #include <memory>
-#include <vector>
-#include <unordered_map>
 #include <mutex>
-#include "OwningReference.hpp"
-#include "BorrowingReference.hpp"
-#include "NitroLogger.hpp"
-#include "GetRuntimeID.hpp"
+#include <unordered_map>
+#include <vector>
 
 namespace margelo::nitro {
 
@@ -23,11 +23,9 @@ using namespace facebook;
 
 static constexpr auto CACHE_PROP_NAME = "__nitroModulesJSICache";
 
-template<typename T>
-class JSICache;
+template <typename T> class JSICache;
 
-template<typename T>
-class JSICacheReference final {
+template <typename T> class JSICacheReference final {
 public:
   JSICacheReference() = delete;
   JSICacheReference(const JSICacheReference&) = delete;
@@ -55,7 +53,7 @@ public:
   }
 
 private:
-  explicit JSICacheReference(const std::shared_ptr<JSICache<T>>& cache): _strongCache(cache) {
+  explicit JSICacheReference(const std::shared_ptr<JSICache<T>>& cache) : _strongCache(cache) {
     _strongCache->_mutex.lock();
   }
 
@@ -72,8 +70,7 @@ private:
  * `jsi::Pointer`s are managed by a `jsi::Runtime`, and will be deleted if the `jsi::Runtime`
  * is deleted - even if there are still strong references to the `jsi::Pointer`.
  */
-template<typename T = jsi::Pointer>
-class JSICache final: public jsi::NativeState {
+template <typename T = jsi::Pointer> class JSICache final : public jsi::NativeState {
 public:
   explicit JSICache(jsi::Runtime* runtime) : _runtime(runtime) {}
 
@@ -130,7 +127,6 @@ public:
   }
 
 public:
-
 private:
   friend class JSICacheReference<T>;
 
@@ -145,6 +141,5 @@ private:
 private:
   static constexpr auto TAG = "JSICache";
 };
-
 
 } // namespace margelo::nitro
