@@ -21,10 +21,10 @@ export default function App() {
     })
   }, [])
   console.log('before')
-  const res = HybridTestObject.getVariant()
+  const res = HybridTestObject.passVariant(5)
   console.log(`variant result: ${res} (${typeof res})`)
 
-  const map = HybridTestObject.getMap()
+  const map = HybridTestObject.createMap()
   console.log(`map result:`, map)
 
   React.useEffect(() => {

@@ -16,7 +16,7 @@ public:
   std::future<void> getValueFromJsCallback(const Func_std__future_std__string_& callback,
                                            const Func_void_std__string& andThenCall) override;
 
-  std::variant<std::string, double> getVariant() override;
+  std::variant<std::string, double> passVariant(const std::variant<std::string, double>& variant) override;
 
     std::shared_ptr<AnyMap> mapRoundtrip(const std::shared_ptr<AnyMap>& map) override;
     std::shared_ptr<AnyMap> createMap() override;

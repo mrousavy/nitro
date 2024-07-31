@@ -26,9 +26,10 @@ namespace margelo::nitro::image {
     });
   }
 
-  std::variant<std::string, double> HybridTestObjectImpl::getVariant() {
-      return std::variant<std::string, double>(13.7);
+  std::variant<std::string, double> HybridTestObjectImpl::passVariant(const std::variant<std::string, double>& variant) {
+    return variant;
   }
+
     std::shared_ptr<AnyMap> HybridTestObjectImpl::mapRoundtrip(const std::shared_ptr<AnyMap>& map) {
       return map;
     }

@@ -48,6 +48,13 @@ public:
     return name;
   }
   
+  template <typename... Types>
+  static inline std::string getFriendlyTypenames() {
+    std::ostringstream stream;
+    ((stream << TypeInfo::getFriendlyTypename<Types>() << ", "), ...);
+    std::string string = stream.str();
+    return string.substr(0, string.length() - 2);
+  }
 };
 
 
