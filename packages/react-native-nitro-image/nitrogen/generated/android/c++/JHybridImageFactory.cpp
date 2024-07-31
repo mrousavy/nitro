@@ -8,45 +8,46 @@
 
 #include "JHybridImageFactory.hpp"
 
+
+
 #include "JHybridImage.hpp"
 
 namespace margelo::nitro::image {
 
-jni::local_ref<JHybridImageFactory::jhybriddata> JHybridImageFactory::initHybrid(jni::alias_ref<jhybridobject> jThis) {
-  return makeCxxInstance(jThis);
-}
+  jni::local_ref<JHybridImageFactory::jhybriddata> JHybridImageFactory::initHybrid(jni::alias_ref<jhybridobject> jThis) {
+    return makeCxxInstance(jThis);
+  }
 
-void JHybridImageFactory::registerNatives() {
-  registerHybrid({
+  void JHybridImageFactory::registerNatives() {
+    registerHybrid({
       makeNativeMethod("initHybrid", JHybridImageFactory::initHybrid),
-  });
-}
+    });
+  }
 
-size_t JHybridImageFactory::getExternalMemorySize() noexcept {
-  static const auto method = _javaPart->getClass()->getMethod<jlong()>("getMemorySize");
-  return method(_javaPart.get());
-}
+  size_t JHybridImageFactory::getExternalMemorySize() noexcept {
+    static const auto method = _javaPart->getClass()->getMethod<jlong()>("getMemorySize");
+    return method(_javaPart.get());
+  }
 
-// Properties
+  // Properties
+  
 
-// Methods
-std::shared_ptr<HybridImage> JHybridImageFactory::loadImageFromFile(const std::string& path) {
-  static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<JHybridImage::javaobject>(std::string)>("loadImageFromFile");
-  throw std::runtime_error("loadImageFromFile(...) is not yet implemented!");
-}
-std::shared_ptr<HybridImage> JHybridImageFactory::loadImageFromURL(const std::string& path) {
-  static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<JHybridImage::javaobject>(std::string)>("loadImageFromURL");
-  throw std::runtime_error("loadImageFromURL(...) is not yet implemented!");
-}
-std::shared_ptr<HybridImage> JHybridImageFactory::loadImageFromSystemName(const std::string& path) {
-  static const auto method =
-      _javaPart->getClass()->getMethod<jni::alias_ref<JHybridImage::javaobject>(std::string)>("loadImageFromSystemName");
-  throw std::runtime_error("loadImageFromSystemName(...) is not yet implemented!");
-}
-std::shared_ptr<HybridImage> JHybridImageFactory::bounceBack(std::shared_ptr<HybridImage> image) {
-  static const auto method =
-      _javaPart->getClass()->getMethod<jni::alias_ref<JHybridImage::javaobject>(jni::alias_ref<JHybridImage::javaobject>)>("bounceBack");
-  throw std::runtime_error("bounceBack(...) is not yet implemented!");
-}
+  // Methods
+  std::shared_ptr<HybridImage> JHybridImageFactory::loadImageFromFile(const std::string& path) {
+    static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<JHybridImage::javaobject>(std::string)>("loadImageFromFile");
+    throw std::runtime_error("loadImageFromFile(...) is not yet implemented!");
+  }
+  std::shared_ptr<HybridImage> JHybridImageFactory::loadImageFromURL(const std::string& path) {
+    static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<JHybridImage::javaobject>(std::string)>("loadImageFromURL");
+    throw std::runtime_error("loadImageFromURL(...) is not yet implemented!");
+  }
+  std::shared_ptr<HybridImage> JHybridImageFactory::loadImageFromSystemName(const std::string& path) {
+    static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<JHybridImage::javaobject>(std::string)>("loadImageFromSystemName");
+    throw std::runtime_error("loadImageFromSystemName(...) is not yet implemented!");
+  }
+  std::shared_ptr<HybridImage> JHybridImageFactory::bounceBack(std::shared_ptr<HybridImage> image) {
+    static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<JHybridImage::javaobject>(jni::alias_ref<JHybridImage::javaobject>)>("bounceBack");
+    throw std::runtime_error("bounceBack(...) is not yet implemented!");
+  }
 
 } // namespace margelo::nitro::image

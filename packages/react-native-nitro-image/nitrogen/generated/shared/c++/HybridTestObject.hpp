@@ -15,55 +15,52 @@
 #endif
 
 // Forward declaration of `AnyMap` to properly resolve imports.
-namespace NitroModules {
-class AnyMap;
-}
+namespace NitroModules { class AnyMap; }
 
+#include "NitroModules/AnyMap.hpp"
 #include "Func_std__future_std__string_.hpp"
 #include "Func_void_std__string.hpp"
-#include "NitroModules/AnyMap.hpp"
 
 namespace margelo::nitro::image {
 
-using namespace margelo::nitro;
+  using namespace margelo::nitro;
 
-/**
- * An abstract base class for `TestObject`
- * Inherit this class to create instances of `HybridTestObject` in C++.
- * @example
- * ```cpp
- * class TestObject: public HybridTestObject {
- *   // ...
- * };
- * ```
- */
-class HybridTestObject : public HybridObject {
-public:
-  // Constructor
-  explicit HybridTestObject() : HybridObject(TAG) {}
+  /**
+   * An abstract base class for `TestObject`
+   * Inherit this class to create instances of `HybridTestObject` in C++.
+   * @example
+   * ```cpp
+   * class TestObject: public HybridTestObject {
+   *   // ...
+   * };
+   * ```
+   */
+  class HybridTestObject: public HybridObject {
+    public:
+      // Constructor
+      explicit HybridTestObject(): HybridObject(TAG) { }
 
-  // Destructor
-  ~HybridTestObject() {}
+      // Destructor
+      ~HybridTestObject() { }
 
-public:
-  // Properties
+    public:
+      // Properties
+      
 
-public:
-  // Methods
-  virtual std::shared_ptr<AnyMap> createMap() = 0;
-  virtual std::shared_ptr<AnyMap> mapRoundtrip(const std::shared_ptr<AnyMap>& map) = 0;
-  virtual std::variant<std::string, double>
-  passVariant(const std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>>& either) = 0;
-  virtual std::future<void> getValueFromJsCallback(const Func_std__future_std__string_& callback,
-                                                   const Func_void_std__string& andThenCall) = 0;
+    public:
+      // Methods
+      virtual std::shared_ptr<AnyMap> createMap() = 0;
+      virtual std::shared_ptr<AnyMap> mapRoundtrip(const std::shared_ptr<AnyMap>& map) = 0;
+      virtual std::variant<std::string, double> passVariant(const std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>>& either) = 0;
+      virtual std::future<void> getValueFromJsCallback(const Func_std__future_std__string_& callback, const Func_void_std__string& andThenCall) = 0;
 
-protected:
-  // Tag for logging
-  static constexpr auto TAG = "TestObject";
+    protected:
+      // Tag for logging
+      static constexpr auto TAG = "TestObject";
 
-private:
-  // Hybrid Setup
-  void loadHybridMethods() override;
-};
+    private:
+      // Hybrid Setup
+      void loadHybridMethods() override;
+  };
 
 } // namespace margelo::nitro::image

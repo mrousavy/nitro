@@ -8,4 +8,5 @@
 
 #include "HybridImageFactorySwift.hpp"
 
-namespace margelo::nitro::image {} // namespace margelo::nitro::image
+namespace margelo::nitro::image {
+} // namespace margelo::nitro::image
