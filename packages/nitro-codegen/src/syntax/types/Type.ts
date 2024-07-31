@@ -17,6 +17,7 @@ export type TypeKind =
   | 'record'
   | 'string'
   | 'struct'
+  | 'tuple'
   | 'variant'
   | 'void'
 

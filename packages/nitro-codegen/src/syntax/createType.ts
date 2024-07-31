@@ -19,6 +19,7 @@ import { NamedWrappingType } from './types/NamedWrappingType.js'
 import { getInterfaceProperties } from './getInterfaceProperties.js'
 import { VariantType } from './types/VariantType.js'
 import { MapType } from './types/MapType.js'
+import { TupleType } from './types/TupleType.js'
 
 function isSymbol(type: TSMorphType, symbolName: string): boolean {
   const symbol = type.getSymbol()
@@ -113,10 +114,15 @@ export function createType(type: TSMorphType, isOptional: boolean): Type {
     return new BigIntType()
   } else if (type.isVoid()) {
     return new VoidType()
-  } else if (type.isArray() || type.isTuple()) {
+  } else if (type.isArray()) {
     const arrayElementType = type.getArrayElementTypeOrThrow()
     const elementType = createType(arrayElementType, false)
     return new ArrayType(elementType)
+  } else if (type.isTuple()) {
+    const itemTypes = type
+      .getTupleElements()
+      .map((t) => createType(t, t.isNullable()))
+    return new TupleType(itemTypes)
   } else if (type.getCallSignatures().length > 0) {
     // It's a function!
     const callSignature = getFunctionCallSignature(type)
