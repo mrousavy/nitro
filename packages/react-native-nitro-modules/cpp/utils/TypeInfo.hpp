@@ -8,6 +8,7 @@
 #pragma once
 
 #include <regex>
+#include <sstream>
 #include <string>
 #include <type_traits>
 
