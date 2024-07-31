@@ -47,11 +47,9 @@ std::shared_ptr<AnyMap> HybridTestObjectImpl::createMap() {
   return result;
 }
 
-
 std::tuple<double, double, double> HybridTestObjectImpl::flip(const std::tuple<double, double, double>& vector) {
-  return { std::get<2>(vector), std::get<1>(vector), std::get<0>(vector) };
+  return {std::get<2>(vector), std::get<1>(vector), std::get<0>(vector)};
 }
-
 
 std::tuple<double, std::string, bool> HybridTestObjectImpl::passTuple(const std::tuple<double, std::string, bool>& tuple) {
   return tuple;

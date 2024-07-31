@@ -156,9 +156,9 @@ jsi::Value HybridObject::get(facebook::jsi::Runtime& runtime, const facebook::js
   try {
     std::unique_lock lock(*_mutex);
     ensureInitialized(runtime);
-    
+
     auto& functionCache = _functionCache[&runtime];
-    
+
     if (functionCache.contains(name)) [[likely]] {
       // cache hit - let's see if the function is still alive..
       OwningReference<jsi::Function> function = functionCache[name];
@@ -167,12 +167,12 @@ jsi::Value HybridObject::get(facebook::jsi::Runtime& runtime, const facebook::js
         return jsi::Value(runtime, *function);
       }
     }
-    
+
     if (_getters.contains(name)) {
       // it's a property getter. call it directly
       return _getters[name](runtime, jsi::Value::undefined(), nullptr, 0);
     }
-    
+
     if (_methods.contains(name)) {
       // it's a function. we now need to wrap it in a jsi::Function, store it in cache, then return it.
       HybridFunction& hybridFunction = _methods.at(name);
@@ -187,7 +187,7 @@ jsi::Value HybridObject::get(facebook::jsi::Runtime& runtime, const facebook::js
       // copy the reference & return it to JS
       return jsi::Value(runtime, *globalFunction);
     }
-    
+
     // this property does not exist. Return undefined
     return jsi::Value::undefined();
   } catch (const std::exception& exception) {
@@ -203,11 +203,11 @@ jsi::Value HybridObject::get(facebook::jsi::Runtime& runtime, const facebook::js
 
 void HybridObject::set(facebook::jsi::Runtime& runtime, const facebook::jsi::PropNameID& propName, const facebook::jsi::Value& value) {
   std::string name = propName.utf8(runtime);
-  
+
   try {
     std::unique_lock lock(*_mutex);
     ensureInitialized(runtime);
-    
+
     if (_setters.contains(name)) {
       // Call setter
       _setters[name](runtime, jsi::Value::undefined(), &value, 1);
@@ -222,7 +222,7 @@ void HybridObject::set(facebook::jsi::Runtime& runtime, const facebook::jsi::Pro
     std::string errorName = TypeInfo::getCurrentExceptionName();
     throw std::runtime_error(hybridObjectName + "." + name + " threw an unknown " + errorName + " error.");
   }
-    
+
   // this property does not exist, and cannot be set. Throw and error!
   throw std::runtime_error("Cannot set property \"" + name + "\" - " + std::string(_name) + " does not have a setter for \"" + name +
                            "\"!");

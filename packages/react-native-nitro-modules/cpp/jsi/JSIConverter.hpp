@@ -20,10 +20,10 @@ class HybridObject;
 #include <future>
 #include <jsi/jsi.h>
 #include <memory>
+#include <tuple>
 #include <type_traits>
 #include <unordered_map>
 #include <variant>
-#include <tuple>
 
 #define DO_NULL_CHECKS true
 
@@ -366,11 +366,10 @@ template <typename... Types> struct JSIConverter<std::tuple<Types...>> {
     jsi::Array array = object.asArray(runtime);
     if (array.size(runtime) != sizeof...(Types)) [[unlikely]] {
       std::string types = TypeInfo::getFriendlyTypenames<Types...>();
-      throw std::runtime_error("The given JS Array has " + std::to_string(array.size(runtime))
-                               + " items, but std::tuple<" + types + "> expects "
-                               + std::to_string(sizeof...(Types)) + " items.");
+      throw std::runtime_error("The given JS Array has " + std::to_string(array.size(runtime)) + " items, but std::tuple<" + types +
+                               "> expects " + std::to_string(sizeof...(Types)) + " items.");
     }
-    
+
     return copyArrayItemsToTuple(runtime, array, std::index_sequence_for<Types...>{});
   }
 
@@ -379,7 +378,7 @@ template <typename... Types> struct JSIConverter<std::tuple<Types...>> {
     copyTupleItemsToArray(runtime, array, tuple, std::index_sequence_for<Types...>{});
     return array;
   }
-  
+
 private:
   template <std::size_t... Is>
   static inline std::tuple<Types...> copyArrayItemsToTuple(jsi::Runtime& runtime, const jsi::Array& array, std::index_sequence<Is...>) {
@@ -387,8 +386,11 @@ private:
   }
 
   template <std::size_t... Is>
-  static inline void copyTupleItemsToArray(jsi::Runtime& runtime, jsi::Array& array, const std::tuple<Types...>& tuple, std::index_sequence<Is...>) {
-    ((array.setValueAtIndex(runtime, Is, JSIConverter<std::tuple_element_t<Is, std::tuple<Types...>>>::toJSI(runtime, std::get<Is>(tuple)))), ...);
+  static inline void copyTupleItemsToArray(jsi::Runtime& runtime, jsi::Array& array, const std::tuple<Types...>& tuple,
+                                           std::index_sequence<Is...>) {
+    ((array.setValueAtIndex(runtime, Is,
+                            JSIConverter<std::tuple_element_t<Is, std::tuple<Types...>>>::toJSI(runtime, std::get<Is>(tuple)))),
+     ...);
   }
 };
 
@@ -453,7 +455,7 @@ template <typename... Types> struct JSIConverter<std::variant<Types...>> {
   static inline jsi::Value toJSI(jsi::Runtime& runtime, const std::variant<Types...>& variant) {
     return std::visit([&runtime](const auto& val) { return JSIConverter<std::decay_t<decltype(val)>>::toJSI(runtime, val); }, variant);
   }
-  
+
 private:
   static inline std::runtime_error typeNotSupportedError(const std::string& type) {
     std::string types = TypeInfo::getFriendlyTypenames<Types...>();
@@ -536,7 +538,7 @@ template <typename T> struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_h
 #endif
     return object.asHostObject<TPointee>(runtime);
   }
-  
+
   static inline jsi::Value toJSI(jsi::Runtime& runtime, const T& arg) {
 #if DO_NULL_CHECKS
     if (arg == nullptr) [[unlikely]] {
@@ -552,7 +554,7 @@ template <typename T> struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_h
       return jsi::Object::createFromHostObject(runtime, arg);
     }
   }
-  
+
 private:
   static inline std::string invalidTypeErrorMessage(const std::string& typeDescription, const std::string& reason) {
     std::string typeName = TypeInfo::getFriendlyTypename<TPointee>();
@@ -585,7 +587,7 @@ template <typename T> struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_n
 #endif
     return object.getNativeState<TPointee>(runtime);
   }
-  
+
   static inline jsi::Value toJSI(jsi::Runtime& runtime, const T& arg) {
 #if DO_NULL_CHECKS
     if (arg == nullptr) [[unlikely]] {
@@ -597,7 +599,7 @@ template <typename T> struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_n
     object.setNativeState(runtime, arg);
     return object;
   }
-  
+
 private:
   static inline std::string invalidTypeErrorMessage(const std::string& typeDescription, const std::string& reason) {
     std::string typeName = TypeInfo::getFriendlyTypename<TPointee>();

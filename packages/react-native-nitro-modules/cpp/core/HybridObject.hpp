@@ -169,8 +169,8 @@ private:
       if (count != sizeof...(Args)) {
         // invalid amount of arguments passed!
         std::string hybridObjectName = derivedInstance->_name;
-        throw jsi::JSError(runtime, "Function " + hybridObjectName + "." + name + "(...) expected " + std::to_string(sizeof...(Args)) + " arguments, but received " +
-                                        std::to_string(count) + "!");
+        throw jsi::JSError(runtime, "Function " + hybridObjectName + "." + name + "(...) expected " + std::to_string(sizeof...(Args)) +
+                                        " arguments, but received " + std::to_string(count) + "!");
       }
 
       try {
