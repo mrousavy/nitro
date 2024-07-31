@@ -1,8 +1,4 @@
-import {
-  getAndroidPackage,
-  getAndroidPackageDirectory,
-  getCxxNamespace,
-} from '../../options.js'
+import { CONFIG } from '../../config/NitroConfig.js'
 import { capitalizeName, indent } from '../../stringUtils.js'
 import { createFileMetadataString } from '../helpers.js'
 import type { SourceFile } from '../SourceFile.js'
@@ -31,8 +27,11 @@ enum class ${enumType.enumName} {
 }
   `.trim()
 
-  const cxxNamespace = getCxxNamespace('c++')
-  const jniClassDescriptor = getAndroidPackage('c++/jni', enumType.enumName)
+  const cxxNamespace = CONFIG.getCxxNamespace('c++')
+  const jniClassDescriptor = CONFIG.getAndroidPackage(
+    'c++/jni',
+    enumType.enumName
+  )
   const cppToJniConverterCode = getCppToJniConverterCode('value', enumType)
 
   const fbjniCode = `
@@ -82,7 +81,7 @@ namespace ${cxxNamespace} {
     content: code,
     language: 'kotlin',
     name: `${enumType.enumName}.kt`,
-    subdirectory: getAndroidPackageDirectory(),
+    subdirectory: CONFIG.getAndroidPackageDirectory(),
     platform: 'android',
   })
   files.push({

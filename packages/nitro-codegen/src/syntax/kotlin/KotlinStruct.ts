@@ -1,8 +1,4 @@
-import {
-  getAndroidPackage,
-  getAndroidPackageDirectory,
-  getCxxNamespace,
-} from '../../options.js'
+import { CONFIG } from '../../config/NitroConfig.js'
 import { capitalizeName, indent } from '../../stringUtils.js'
 import { createFileMetadataString } from '../helpers.js'
 import type { SourceFile } from '../SourceFile.js'
@@ -34,8 +30,11 @@ data class ${structType.structName}(
 )
   `.trim()
 
-  const cxxNamespace = getCxxNamespace('c++')
-  const jniClassDescriptor = getAndroidPackage('c++/jni', structType.structName)
+  const cxxNamespace = CONFIG.getCxxNamespace('c++')
+  const jniClassDescriptor = CONFIG.getAndroidPackage(
+    'c++/jni',
+    structType.structName
+  )
   const jniStructInitializerBody = createJNIStructInitializer(structType)
   const cppStructInitializerBody = createCppStructInitializer(
     'value',
@@ -85,7 +84,7 @@ namespace ${cxxNamespace} {
     content: code,
     language: 'kotlin',
     name: `${structType.structName}.kt`,
-    subdirectory: getAndroidPackageDirectory(),
+    subdirectory: CONFIG.getAndroidPackageDirectory(),
     platform: 'android',
   })
   files.push({

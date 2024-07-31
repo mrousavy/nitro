@@ -1,3 +1,5 @@
+import { getBaseDirectory } from '../getCurrentDir.js'
+import { readCurrentConfig } from './getConfig.js'
 import type { NitroUserConfig } from './NitroUserConfig.js'
 
 const CXX_BASE_NAMESPACE = ['margelo', 'nitro']
@@ -83,3 +85,6 @@ export class NitroConfig {
     return [...ANDROID_BASE_NAMESPACE, ...userPackage, ...subPackage]
   }
 }
+
+const userConfig = await readCurrentConfig(getBaseDirectory())
+export const CONFIG = new NitroConfig(userConfig)

@@ -2,8 +2,8 @@ import type { FileWithReferencedTypes } from '../SourceFile.js'
 import { indent } from '../../stringUtils.js'
 import { createFileMetadataString, isNotDuplicate } from '../helpers.js'
 import type { NamedType } from '../types/Type.js'
-import { getCxxNamespace } from '../../options.js'
 import { includeNitroHeader } from './includeNitroHeader.js'
+import { CONFIG } from '../../config/NitroConfig.js'
 
 export function createCppStruct(
   typename: string,
@@ -43,7 +43,7 @@ export function createCppStruct(
   const cppExtraIncludes = includedTypes
     .map((f) => `#include "${f.name}"`)
     .filter(isNotDuplicate)
-  const cxxNamespace = getCxxNamespace('c++')
+  const cxxNamespace = CONFIG.getCxxNamespace('c++')
 
   const cppCode = `
 ${createFileMetadataString(`${typename}.hpp`)}

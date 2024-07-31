@@ -1,5 +1,5 @@
+import { CONFIG } from '../../config/NitroConfig.js'
 import type { Language } from '../../getPlatformSpecs.js'
-import { getCxxNamespace } from '../../options.js'
 import { getForwardDeclaration } from '../c++/getForwardDeclaration.js'
 import { getHybridObjectName } from '../getHybridObjectName.js'
 import type { SourceFile, SourceImport } from '../SourceFile.js'
@@ -41,7 +41,7 @@ export class HybridObjectType implements Type {
   }
   getRequiredImports(): SourceImport[] {
     const name = getHybridObjectName(this.hybridObjectName)
-    const cxxNamespace = getCxxNamespace('c++')
+    const cxxNamespace = CONFIG.getCxxNamespace('c++')
     return [
       {
         name: `${name.HybridT}.hpp`,

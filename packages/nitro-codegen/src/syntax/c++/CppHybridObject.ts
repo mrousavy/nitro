@@ -2,8 +2,8 @@ import type { SourceFile } from '../SourceFile.js'
 import { createFileMetadataString, isNotDuplicate } from '../helpers.js'
 import { indent } from '../../stringUtils.js'
 import type { HybridObjectSpec } from '../HybridObjectSpec.js'
-import { getCxxNamespace } from '../../options.js'
 import { includeNitroHeader } from './includeNitroHeader.js'
+import { CONFIG } from '../../config/NitroConfig.js'
 
 export function createCppHybridObject(spec: HybridObjectSpec): SourceFile[] {
   // Extra includes
@@ -22,7 +22,7 @@ export function createCppHybridObject(spec: HybridObjectSpec): SourceFile[] {
   const cppExtraIncludes = extraIncludes
     .map((i) => `#include "${i.name}"`)
     .filter(isNotDuplicate)
-  const cxxNamespace = getCxxNamespace('c++')
+  const cxxNamespace = CONFIG.getCxxNamespace('c++')
 
   // Generate the full header / code
   const cppHeaderCode = `

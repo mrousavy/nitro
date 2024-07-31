@@ -1,8 +1,4 @@
-import {
-  getAndroidPackage,
-  getAndroidPackageDirectory,
-  getCxxNamespace,
-} from '../../options.js'
+import { CONFIG } from '../../config/NitroConfig.js'
 import { createFileMetadataString, toReferenceType } from '../helpers.js'
 import type { SourceFile } from '../SourceFile.js'
 import type { FunctionType } from '../types/FunctionType.js'
@@ -62,8 +58,11 @@ class ${specializationName} @DoNotStrip @Keep private constructor(hybridData: Hy
     return `${type} ${p.escapedName}`
   })
   const paramsForward = functionType.parameters.map((p) => p.name)
-  const jniClassDescriptor = getAndroidPackage('c++/jni', specializationName)
-  const cxxNamespace = getCxxNamespace('c++')
+  const jniClassDescriptor = CONFIG.getAndroidPackage(
+    'c++/jni',
+    specializationName
+  )
+  const cxxNamespace = CONFIG.getCxxNamespace('c++')
   const fbjniCode = `
 ${createFileMetadataString(`J${specializationName}.hpp`)}
 
@@ -113,7 +112,7 @@ namespace ${cxxNamespace} {
     content: kotlinCode,
     language: 'kotlin',
     name: `${specializationName}.kt`,
-    subdirectory: getAndroidPackageDirectory(),
+    subdirectory: CONFIG.getAndroidPackageDirectory(),
     platform: 'android',
   })
   files.push({

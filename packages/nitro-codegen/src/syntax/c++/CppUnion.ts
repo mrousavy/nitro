@@ -2,8 +2,8 @@ import type { SourceFile } from '../SourceFile.js'
 import { createFileMetadataString } from './../helpers.js'
 import { indent } from '../../stringUtils.js'
 import type { EnumMember } from '../types/EnumType.js'
-import { getCxxNamespace } from '../../options.js'
 import { includeNitroHeader } from './includeNitroHeader.js'
+import { CONFIG } from '../../config/NitroConfig.js'
 
 /**
  * Creates a C++ enum that converts to a TypeScript union (aka just strings).
@@ -26,7 +26,7 @@ export function createCppUnion(
         `case ${typename}::${v.name}: return JSIConverter<std::string>::toJSI(runtime, "${v.stringValue}");`
     )
     .join('\n')
-  const cxxNamespace = getCxxNamespace('c++')
+  const cxxNamespace = CONFIG.getCxxNamespace('c++')
 
   const cppCode = `
 ${createFileMetadataString(`${typename}.hpp`)}

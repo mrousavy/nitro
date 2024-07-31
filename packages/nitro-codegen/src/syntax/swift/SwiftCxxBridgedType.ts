@@ -1,4 +1,4 @@
-import { getCxxNamespace } from '../../options.js'
+import { CONFIG } from '../../config/NitroConfig.js'
 import { getForwardDeclaration } from '../c++/getForwardDeclaration.js'
 import {
   getHybridObjectName,
@@ -38,7 +38,7 @@ export class SwiftCxxBridgedType {
     if (this.type.kind === 'hybrid-object') {
       // Use SwiftCxx wrapper of the HybridObject type
       const name = getTypeHybridObjectName(this.type)
-      const namespace = getCxxNamespace('c++')
+      const namespace = CONFIG.getCxxNamespace('c++')
       imports.push({
         name: `${name.HybridTSwift}.hpp`,
         forwardDeclaration: getForwardDeclaration(
@@ -92,7 +92,7 @@ export class SwiftCxxBridgedType {
           case 'c++':
             return `static_cast<int>(${cppParameterName})`
           case 'swift':
-            const fullName = getCxxNamespace('swift', enumType.enumName)
+            const fullName = CONFIG.getCxxNamespace('swift', enumType.enumName)
             return `${fullName}(rawValue: ${cppParameterName})!`
           default:
             throw new Error(`Invalid language! ${language}`)
