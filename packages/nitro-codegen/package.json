@@ -42,7 +42,8 @@
   },
   "dependencies": {
     "chalk": "^5.3.0",
-    "react-native-nitro-modules": "workspace:^"
+    "react-native-nitro-modules": "workspace:^",
+    "zod": "^3.23.8"
   },
   "eslintConfig": {
     "root": true,
