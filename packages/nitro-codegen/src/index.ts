@@ -10,6 +10,7 @@ import { capitalizeName, errorToString, indent } from './stringUtils.js'
 import { writeFile } from './writeFile.js'
 import chalk from 'chalk'
 import { getFiles } from './getFiles.js'
+import { groupByPlatform, type SourceFile } from './syntax/SourceFile.js'
 
 const start = performance.now()
 let targetSpecs = 0
@@ -100,14 +101,31 @@ for (const sourceFile of project.getSourceFiles()) {
       console.log(
         `    ⚙️   Generating specs for HybridObject "${chalk.bold(moduleName)}"...`
       )
-      // Generate platform specific code (C++/Swift/Kotlin/...)
-      for (const platform of platforms) {
-        const language = platformSpec[platform]!
-        const files = generatePlatformFiles(module, language)
+
+      // Create all files and throw it into a big lsit
+      const allFiles = platforms.flatMap((p) => {
+        const language = platformSpec[p]!
+        return generatePlatformFiles(module, language)
+      })
+      // Group the files by platform ({ ios: [], android: [], shared: [] })
+      const filesPerPlatform = groupByPlatform(allFiles)
+      // Loop through each platform one by one so that it has some kind of order (per-platform)
+      for (const [p, files] of Object.entries(filesPerPlatform)) {
+        const platform = p as SourceFile['platform']
+        const language = platform === 'shared' ? 'c++' : platformSpec[platform]
+        if (language == null) {
+          // if the language was never specified in the spec, skip it
+          continue
+        }
+        if (files.length === 0) {
+          // if no files exist on this platform, skip it
+          continue
+        }
+
         console.log(
           `        ${chalk.dim(platform)}: Generating ${capitalizeName(language)} code...`
         )
-
+        // Write the actual files for this specific platform.
         for (const file of files) {
           const basePath = path.join(outFolder, file.platform, file.language)
           const actualPath = await writeFile(basePath, file)
