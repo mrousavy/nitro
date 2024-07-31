@@ -168,10 +168,5 @@
         }
       ]
     ]
-  },
-  "codegenConfig": {
-    "name": "NitroImageSpec",
-    "type": "modules",
-    "jsSrcsDir": "src"
   }
 }

@@ -180,10 +180,5 @@
         }
       ]
     ]
-  },
-  "codegenConfig": {
-    "name": "NitroModulesSpec",
-    "type": "modules",
-    "jsSrcsDir": "src"
   }
 }
