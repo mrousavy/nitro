@@ -17,6 +17,8 @@
 
 namespace margelo::nitro {
 
+enum class MethodType { METHOD, GETTER, SETTER };
+
 using namespace facebook;
 
 /**
@@ -162,14 +164,14 @@ private:
   }
 
   template <typename Derived, typename ReturnType, typename... Args>
-  static inline jsi::HostFunctionType createHybridMethod(std::string name, ReturnType (Derived::*method)(Args...),
-                                                         Derived* derivedInstance) {
-    return [name, derivedInstance, method](jsi::Runtime& runtime, const jsi::Value& thisVal, const jsi::Value* args,
-                                           size_t count) -> jsi::Value {
+  static inline jsi::HostFunctionType createHybridMethod(std::string name, ReturnType (Derived::*method)(Args...), Derived* derivedInstance,
+                                                         MethodType type) {
+    return [name, derivedInstance, method, type](jsi::Runtime& runtime, const jsi::Value& thisVal, const jsi::Value* args,
+                                                 size_t count) -> jsi::Value {
       if (count != sizeof...(Args)) {
         // invalid amount of arguments passed!
         std::string hybridObjectName = derivedInstance->_name;
-        throw jsi::JSError(runtime, "Function " + hybridObjectName + "." + name + "(...) expected " + std::to_string(sizeof...(Args)) +
+        throw jsi::JSError(runtime, hybridObjectName + "." + name + "(...) expected " + std::to_string(sizeof...(Args)) +
                                         " arguments, but received " + std::to_string(count) + "!");
       }
 
@@ -186,11 +188,13 @@ private:
       } catch (const std::exception& exception) {
         std::string hybridObjectName = derivedInstance->_name;
         std::string message = exception.what();
-        throw std::runtime_error(hybridObjectName + "." + name + "(...) threw an error: " + message);
+        std::string suffix = type == MethodType::METHOD ? "(...)" : "";
+        throw jsi::JSError(runtime, hybridObjectName + "." + name + suffix + ": " + message);
       } catch (...) {
         std::string hybridObjectName = derivedInstance->_name;
         std::string errorName = TypeInfo::getCurrentExceptionName();
-        throw std::runtime_error(hybridObjectName + "." + name + "(...) threw an unknown " + errorName + " error.");
+        std::string suffix = type == MethodType::METHOD ? "(...)" : "";
+        throw jsi::JSError(runtime, hybridObjectName + "." + name + suffix + " threw an unknown " + errorName + " error.");
       }
     };
   }
@@ -205,7 +209,8 @@ protected:
       throw std::runtime_error("Cannot add Hybrid Method \"" + name + "\" - a method with that name already exists!");
     }
 
-    _methods[name] = HybridFunction{.function = createHybridMethod(name, method, derivedInstance), .parameterCount = sizeof...(Args)};
+    _methods[name] = HybridFunction{.function = createHybridMethod(name, method, derivedInstance, MethodType::METHOD),
+                                    .parameterCount = sizeof...(Args)};
   }
 
   template <typename Derived, typename ReturnType>
@@ -217,7 +222,7 @@ protected:
       throw std::runtime_error("Cannot add Hybrid Property Getter \"" + name + "\" - a method with that name already exists!");
     }
 
-    _getters[name] = createHybridMethod(name, method, derivedInstance);
+    _getters[name] = createHybridMethod(name, method, derivedInstance, MethodType::GETTER);
   }
 
   template <typename Derived, typename ValueType>
@@ -229,7 +234,7 @@ protected:
       throw std::runtime_error("Cannot add Hybrid Property Setter \"" + name + "\" - a method with that name already exists!");
     }
 
-    _setters[name] = createHybridMethod(name, method, derivedInstance);
+    _setters[name] = createHybridMethod(name, method, derivedInstance, MethodType::SETTER);
   }
 };
 

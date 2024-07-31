@@ -152,75 +152,56 @@ std::vector<jsi::PropNameID> HybridObject::getPropertyNames(facebook::jsi::Runti
 }
 
 jsi::Value HybridObject::get(facebook::jsi::Runtime& runtime, const facebook::jsi::PropNameID& propName) {
+  std::unique_lock lock(*_mutex);
+  ensureInitialized(runtime);
+
   std::string name = propName.utf8(runtime);
-  try {
-    std::unique_lock lock(*_mutex);
-    ensureInitialized(runtime);
 
-    auto& functionCache = _functionCache[&runtime];
+  auto& functionCache = _functionCache[&runtime];
 
-    if (functionCache.contains(name)) [[likely]] {
-      // cache hit - let's see if the function is still alive..
-      OwningReference<jsi::Function> function = functionCache[name];
-      if (function) [[likely]] {
-        // function is still alive, we can use it.
-        return jsi::Value(runtime, *function);
-      }
+  if (functionCache.contains(name)) [[likely]] {
+    // cache hit - let's see if the function is still alive..
+    OwningReference<jsi::Function> function = functionCache[name];
+    if (function) [[likely]] {
+      // function is still alive, we can use it.
+      return jsi::Value(runtime, *function);
     }
-
-    if (_getters.contains(name)) {
-      // it's a property getter. call it directly
-      return _getters[name](runtime, jsi::Value::undefined(), nullptr, 0);
-    }
-
-    if (_methods.contains(name)) {
-      // it's a function. we now need to wrap it in a jsi::Function, store it in cache, then return it.
-      HybridFunction& hybridFunction = _methods.at(name);
-      // get (or create) a runtime-specific function cache
-      auto runtimeCache = JSICache<jsi::Function>::getOrCreateCache(runtime);
-      // create the jsi::Function
-      jsi::Function function = jsi::Function::createFromHostFunction(runtime, jsi::PropNameID::forUtf8(runtime, name),
-                                                                     hybridFunction.parameterCount, hybridFunction.function);
-      // throw it into the cache for next time
-      OwningReference<jsi::Function> globalFunction = runtimeCache.makeGlobal(std::move(function));
-      functionCache[name] = globalFunction;
-      // copy the reference & return it to JS
-      return jsi::Value(runtime, *globalFunction);
-    }
-
-    // this property does not exist. Return undefined
-    return jsi::Value::undefined();
-  } catch (const std::exception& exception) {
-    std::string hybridObjectName = _name;
-    std::string message = exception.what();
-    throw std::runtime_error(hybridObjectName + "." + name + " threw an error: " + message);
-  } catch (...) {
-    std::string hybridObjectName = _name;
-    std::string errorName = TypeInfo::getCurrentExceptionName();
-    throw std::runtime_error(hybridObjectName + "." + name + " threw an unknown " + errorName + " error.");
   }
+
+  if (_getters.contains(name)) {
+    // it's a property getter. call it directly
+    return _getters[name](runtime, jsi::Value::undefined(), nullptr, 0);
+  }
+
+  if (_methods.contains(name)) {
+    // it's a function. we now need to wrap it in a jsi::Function, store it in cache, then return it.
+    HybridFunction& hybridFunction = _methods.at(name);
+    // get (or create) a runtime-specific function cache
+    auto runtimeCache = JSICache<jsi::Function>::getOrCreateCache(runtime);
+    // create the jsi::Function
+    jsi::Function function = jsi::Function::createFromHostFunction(runtime, jsi::PropNameID::forUtf8(runtime, name),
+                                                                   hybridFunction.parameterCount, hybridFunction.function);
+    // throw it into the cache for next time
+    OwningReference<jsi::Function> globalFunction = runtimeCache.makeGlobal(std::move(function));
+    functionCache[name] = globalFunction;
+    // copy the reference & return it to JS
+    return jsi::Value(runtime, *globalFunction);
+  }
+
+  // this property does not exist. Return undefined
+  return jsi::Value::undefined();
 }
 
 void HybridObject::set(facebook::jsi::Runtime& runtime, const facebook::jsi::PropNameID& propName, const facebook::jsi::Value& value) {
+  std::unique_lock lock(*_mutex);
+  ensureInitialized(runtime);
+
   std::string name = propName.utf8(runtime);
 
-  try {
-    std::unique_lock lock(*_mutex);
-    ensureInitialized(runtime);
-
-    if (_setters.contains(name)) {
-      // Call setter
-      _setters[name](runtime, jsi::Value::undefined(), &value, 1);
-      return;
-    }
-  } catch (const std::exception& exception) {
-    std::string hybridObjectName = _name;
-    std::string message = exception.what();
-    throw std::runtime_error(hybridObjectName + "." + name + " threw an error: " + message);
-  } catch (...) {
-    std::string hybridObjectName = _name;
-    std::string errorName = TypeInfo::getCurrentExceptionName();
-    throw std::runtime_error(hybridObjectName + "." + name + " threw an unknown " + errorName + " error.");
+  if (_setters.contains(name)) {
+    // Call setter
+    _setters[name](runtime, jsi::Value::undefined(), &value, 1);
+    return;
   }
 
   // this property does not exist, and cannot be set. Throw and error!
