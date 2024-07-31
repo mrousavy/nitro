@@ -1,6 +1,7 @@
 import { z, ZodError } from 'zod'
 import path from 'path'
 import { promises as fs } from 'fs'
+import { prettifyDirectory } from '../getCurrentDir.js'
 
 // const CXX_BASE_NAMESPACE = ['margelo', 'nitro']
 // const ANDROID_BASE_NAMESPACE = ['com', 'margelo', 'nitro']
@@ -53,19 +54,7 @@ const ConfigSchema = z.object({
  */
 export type NitroConfig = z.infer<typeof ConfigSchema>
 
-function isTopLevelDirectory(directory: string): boolean {
-  const up = path.resolve(path.join(directory, '..'))
-  return path.resolve(directory) === up
-}
-
-// Reads the config, looks up directories recursively
-async function readConfig(directory: string): Promise<string> {
-  if (isTopLevelDirectory(directory)) {
-    throw new Error(
-      `No nitro.json file found! Make sure to create a nitro.json file and try again.`
-    )
-  }
-
+async function readFile(directory: string): Promise<string> {
   try {
     return await fs.readFile(path.join(directory, 'nitro.json'), 'utf8')
   } catch (error) {
@@ -76,7 +65,9 @@ async function readConfig(directory: string): Promise<string> {
       error.code === 'ENOENT'
     ) {
       // this directory doesn't contain a nitro.json config - go up one directory and try again
-      return await readConfig(path.join(directory, '..'))
+      throw new Error(
+        `No nitro.json config exists at ${prettifyDirectory(directory)}! Create a nitro.json file and try again.`
+      )
     } else {
       // different kind of error, throw it.
       throw error
@@ -132,10 +123,8 @@ function parseConfig(json: string): NitroConfig {
   }
 }
 
-export async function readCurrentConfig(
-  directory: string
-): Promise<NitroConfig> {
-  const json = await readConfig(directory)
+export async function readUserConfig(directory: string): Promise<NitroConfig> {
+  const json = await readFile(directory)
   const config = parseConfig(json)
   return config
 }

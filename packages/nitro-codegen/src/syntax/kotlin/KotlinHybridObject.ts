@@ -1,4 +1,4 @@
-import { CONFIG } from '../../config/NitroConfig.js'
+import { NitroConfig } from '../../config/NitroConfig.js'
 import { indent } from '../../stringUtils.js'
 import { getAllTypes } from '../getAllTypes.js'
 import { getHybridObjectName } from '../getHybridObjectName.js'
@@ -23,8 +23,8 @@ export function createKotlinHybridObject(spec: HybridObjectSpec): SourceFile[] {
     .map((p) => p.getCode('kotlin', { doNotStrip: true, virtual: true }))
     .join('\n\n')
 
-  const javaPackage = CONFIG.getAndroidPackage('java/kotlin')
-  const cppLibName = CONFIG.androidCxxLibName
+  const javaPackage = NitroConfig.getAndroidPackage('java/kotlin')
+  const cppLibName = NitroConfig.getAndroidCxxLibName()
 
   // 1. Create Kotlin abstract class definition
   const abstractClassCode = `
@@ -101,7 +101,7 @@ abstract class ${name.HybridT}: HybridObject() {
     content: abstractClassCode,
     language: 'kotlin',
     name: `${name.HybridT}.kt`,
-    subdirectory: CONFIG.getAndroidPackageDirectory(),
+    subdirectory: NitroConfig.getAndroidPackageDirectory(),
     platform: 'android',
   })
   files.push(...cppFiles)

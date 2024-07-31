@@ -27,9 +27,9 @@ add_library(${PACKAGE_NAME} SHARED
 )
 
 # Required libs
-find_package(fbjni REQUIRED CONFIG)
-find_package(react-native-nitro-modules REQUIRED CONFIG)
-find_package(ReactAndroid REQUIRED CONFIG)
+find_package(fbjni REQUIRED NitroConfig)
+find_package(react-native-nitro-modules REQUIRED NitroConfig)
+find_package(ReactAndroid REQUIRED NitroConfig)
 
 # Includes all generated specs from Nitrogen
 include_directories(

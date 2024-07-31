@@ -1,4 +1,4 @@
-import { CONFIG } from '../../config/NitroConfig.js'
+import { NitroConfig } from '../../config/NitroConfig.js'
 import { indent } from '../../stringUtils.js'
 import { getAllTypes } from '../getAllTypes.js'
 import { getHybridObjectName } from '../getHybridObjectName.js'
@@ -17,8 +17,8 @@ export function createFbjniHybridObject(spec: HybridObjectSpec): SourceFile[] {
   const methodsDecl = spec.methods
     .map((p) => p.getCode('c++', { override: true }))
     .join('\n')
-  const jniClassDescriptor = CONFIG.getAndroidPackage('c++/jni', name.HybridT)
-  const cxxNamespace = CONFIG.getCxxNamespace('c++')
+  const jniClassDescriptor = NitroConfig.getAndroidPackage('c++/jni', name.HybridT)
+  const cxxNamespace = NitroConfig.getCxxNamespace('c++')
 
   const cppHeaderCode = `
 ${createFileMetadataString(`${name.JHybridT}.hpp`)}

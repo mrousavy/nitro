@@ -38,8 +38,8 @@ include_directories(
 
 # Find required libraries
 find_library(LOG_LIB log)
-find_package(fbjni REQUIRED CONFIG)
-find_package(ReactAndroid REQUIRED CONFIG)
+find_package(fbjni REQUIRED NitroConfig)
+find_package(ReactAndroid REQUIRED NitroConfig)
 
 # Link all libraries together
 target_link_libraries(

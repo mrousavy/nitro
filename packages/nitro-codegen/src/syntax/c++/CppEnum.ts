@@ -1,4 +1,4 @@
-import { CONFIG } from '../../config/NitroConfig.js'
+import { NitroConfig } from '../../config/NitroConfig.js'
 import { indent } from '../../stringUtils.js'
 import type { SourceFile } from '../SourceFile.js'
 import { createFileMetadataString } from '../helpers.js'
@@ -16,7 +16,7 @@ export function createCppEnum(
   const cppEnumMembers = enumMembers
     .map((m) => `${m.name} SWIFT_NAME(${m.name.toLowerCase()}) = ${m.value},`)
     .join('\n')
-  const cxxNamespace = CONFIG.getCxxNamespace('c++')
+  const cxxNamespace = NitroConfig.getCxxNamespace('c++')
 
   // Create entire C++ file
   const cppCode = `

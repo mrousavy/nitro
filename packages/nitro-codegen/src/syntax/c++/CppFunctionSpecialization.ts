@@ -1,4 +1,4 @@
-import { CONFIG } from '../../config/NitroConfig.js'
+import { NitroConfig } from '../../config/NitroConfig.js'
 import {
   createFileMetadataString,
   escapeCppName,
@@ -50,7 +50,7 @@ export function createCppFunctionSpecialization(
       return `${type} /* ${p.name} */`
     })
     .join(', ')
-  const cxxNamespace = CONFIG.getCxxNamespace('c++')
+  const cxxNamespace = NitroConfig.getCxxNamespace('c++')
 
   const code = `
 ${createFileMetadataString(typename)}

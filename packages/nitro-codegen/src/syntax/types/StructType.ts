@@ -1,4 +1,4 @@
-import { CONFIG } from '../../config/NitroConfig.js'
+import { NitroConfig } from '../../config/NitroConfig.js'
 import type { Language } from '../../getPlatformSpecs.js'
 import { createCppStruct } from '../c++/CppStruct.js'
 import { getForwardDeclaration } from '../c++/getForwardDeclaration.js'
@@ -32,9 +32,9 @@ export class StructType implements Type {
       case 'c++':
         return this.structName
       case 'swift':
-        return CONFIG.getCxxNamespace('swift', this.structName)
+        return NitroConfig.getCxxNamespace('swift', this.structName)
       case 'kotlin':
-        return CONFIG.getAndroidPackage('java/kotlin', this.structName)
+        return NitroConfig.getAndroidPackage('java/kotlin', this.structName)
       default:
         throw new Error(
           `Language ${language} is not yet supported for StructType!`
@@ -45,7 +45,7 @@ export class StructType implements Type {
     return [this.declarationFile]
   }
   getRequiredImports(): SourceImport[] {
-    const cxxNamespace = CONFIG.getCxxNamespace('c++')
+    const cxxNamespace = NitroConfig.getCxxNamespace('c++')
     const extraImport: SourceImport = {
       name: this.declarationFile.name,
       language: this.declarationFile.language,

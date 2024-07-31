@@ -1,4 +1,4 @@
-import { CONFIG } from '../../config/NitroConfig.js'
+import { NitroConfig } from '../../config/NitroConfig.js'
 import type { Language } from '../../getPlatformSpecs.js'
 import {
   createCppFunctionSpecialization,
@@ -74,9 +74,9 @@ export class FunctionType implements Type {
       case 'c++':
         return specialization.typename
       case 'swift':
-        return CONFIG.getCxxNamespace('swift', specialization.typename)
+        return NitroConfig.getCxxNamespace('swift', specialization.typename)
       case 'kotlin':
-        return CONFIG.getAndroidPackage('java/kotlin', specialization.typename)
+        return NitroConfig.getAndroidPackage('java/kotlin', specialization.typename)
       default:
         throw new Error(
           `Language ${language} is not yet supported for FunctionType!`

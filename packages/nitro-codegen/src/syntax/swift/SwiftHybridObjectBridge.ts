@@ -14,7 +14,7 @@ import {
   type HybridObjectName,
 } from '../getHybridObjectName.js'
 import { getForwardDeclaration } from '../c++/getForwardDeclaration.js'
-import { CONFIG } from '../../config/NitroConfig.js'
+import { NitroConfig } from '../../config/NitroConfig.js'
 
 /**
  * Creates a Swift class that bridges Swift over to C++.
@@ -173,8 +173,8 @@ return ${bridgedReturnType.parseFromSwiftToCpp('value', 'c++')};
   const extraIncludes = extraImports
     .map((i) => `#include "${i.name}"`)
     .filter(isNotDuplicate)
-  const cxxNamespace = CONFIG.getCxxNamespace('c++')
-  const iosModuleName = CONFIG.iosModuleName
+  const cxxNamespace = NitroConfig.getCxxNamespace('c++')
+  const iosModuleName = NitroConfig.getIosModuleName()
 
   // TODO: Remove forward declaration once Swift fixes the wrong order in generated -Swift.h headers!
   const cppHybridObjectCode = `

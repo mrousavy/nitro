@@ -1,33 +1,34 @@
+import chalk from 'chalk'
 import { getBaseDirectory } from '../getCurrentDir.js'
-import { readCurrentConfig } from './getConfig.js'
-import type { NitroUserConfig } from './NitroUserConfig.js'
+import { readUserConfig } from './getConfig.js'
 
 const CXX_BASE_NAMESPACE = ['margelo', 'nitro']
 const ANDROID_BASE_NAMESPACE = ['com', 'margelo', 'nitro']
 
-export class NitroConfig {
-  private userConfig: NitroUserConfig
+const baseDirectory = getBaseDirectory()
+console.log(chalk.reset(`🔧  Loading nitro.json config...`))
+const userConfig = await readUserConfig(baseDirectory)
 
-  constructor(userConfig: NitroUserConfig) {
-    this.userConfig = userConfig
-  }
-
+/**
+ * Represents the properly parsed `nitro.json` config of the current executing directory.
+ */
+export const NitroConfig = {
   /**
    * Returns the name of the Android C++ library (aka name in CMakeLists.txt `add_library(..)`).
    * This will be loaded via `System.loadLibrary(...)`.
    * @example `NitroImage`
    */
-  get androidCxxLibName(): string {
-    return this.userConfig.android.androidCxxLibName
-  }
+  getAndroidCxxLibName(): string {
+    return userConfig.android.androidCxxLibName
+  },
 
   /**
    * Returns the iOS module name (aka Pod name) of the module that will be generated.
    * @example `NitroImage`
    */
-  get iosModuleName(): string {
-    return this.userConfig.ios.iosModulename
-  }
+  getIosModuleName(): string {
+    return userConfig.ios.iosModulename
+  },
 
   /**
    * Represents the C++ namespace of the module that will be generated.
@@ -38,7 +39,7 @@ export class NitroConfig {
     language: 'c++' | 'swift',
     ...subDefinitionName: string[]
   ): string {
-    const userNamespace = this.userConfig.cxxNamespace
+    const userNamespace = userConfig.cxxNamespace
     const namespace = [
       ...CXX_BASE_NAMESPACE,
       ...userNamespace,
@@ -52,7 +53,7 @@ export class NitroConfig {
       default:
         throw new Error(`Invalid language for getCxxNamespace: ${language}`)
     }
-  }
+  },
 
   /**
    * Represents the Android namespace of the module that will be generated.
@@ -63,7 +64,7 @@ export class NitroConfig {
     language: 'java/kotlin' | 'c++/jni',
     ...subPackage: string[]
   ): string {
-    const userPackage = this.userConfig.android.androidNamespace
+    const userPackage = userConfig.android.androidNamespace
     const namespace = [...ANDROID_BASE_NAMESPACE, ...userPackage, ...subPackage]
 
     switch (language) {
@@ -74,17 +75,14 @@ export class NitroConfig {
       default:
         throw new Error(`Invalid language for getAndroidPackage: ${language}`)
     }
-  }
+  },
 
   /**
    * Return the directory of the android package, and a given sub-package.
    * This will be used on android to put files from a package in their respective package folder.
    */
   getAndroidPackageDirectory(...subPackage: string[]): string[] {
-    const userPackage = this.userConfig.android.androidNamespace
+    const userPackage = userConfig.android.androidNamespace
     return [...ANDROID_BASE_NAMESPACE, ...userPackage, ...subPackage]
-  }
+  },
 }
-
-const userConfig = await readCurrentConfig(getBaseDirectory())
-export const CONFIG = new NitroConfig(userConfig)

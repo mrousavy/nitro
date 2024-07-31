@@ -7,7 +7,7 @@ import type { Type, TypeKind } from './Type.js'
 import { createCppEnum } from '../c++/CppEnum.js'
 import { escapeCppName } from '../helpers.js'
 import { createCppUnion } from '../c++/CppUnion.js'
-import { CONFIG } from '../../config/NitroConfig.js'
+import { NitroConfig } from '../../config/NitroConfig.js'
 
 export interface EnumMember {
   name: string
@@ -85,9 +85,9 @@ export class EnumType implements Type {
       case 'c++':
         return this.enumName
       case 'swift':
-        return CONFIG.getCxxNamespace('swift', this.enumName)
+        return NitroConfig.getCxxNamespace('swift', this.enumName)
       case 'kotlin':
-        return CONFIG.getAndroidPackage('java/kotlin', this.enumName)
+        return NitroConfig.getAndroidPackage('java/kotlin', this.enumName)
       default:
         throw new Error(
           `Language ${language} is not yet supported for NumberType!`
@@ -98,7 +98,7 @@ export class EnumType implements Type {
     return [this.declarationFile]
   }
   getRequiredImports(): SourceImport[] {
-    const cxxNamespace = CONFIG.getCxxNamespace('c++')
+    const cxxNamespace = NitroConfig.getCxxNamespace('c++')
     const extraImport: SourceImport = {
       name: this.declarationFile.name,
       language: this.declarationFile.language,
