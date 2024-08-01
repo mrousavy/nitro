@@ -132,7 +132,7 @@ class HybridImage: HybridImageSpec {
 In Kotlin:
 
 ```kotlin
-class MathsModule: MathsModuleSpec {
+class HybridImage: HybridImageSpec {
   override val memorySize: ULong
     get() = 0
 
@@ -141,4 +141,41 @@ class MathsModule: MathsModuleSpec {
   override val height: Double
     get() = 27
 }
+```
+
+### 7. Register your Hybrid Object using the `HybridObjectRegistry`
+
+To expose `HybridImage` to JS, register it in the [`HybridObjectRegistry`](../react-native-nitro-modules/cpp/registry/HybridObjectRegistry.hpp) at app startup:
+
+In C++:
+
+```cpp
+#include <NitroModules/HybridObjectRegistry.hpp>
+
+// Call this at app startup to register the HybridObjects
+void load() {
+  HybridObjectRegistry::registerHybridObjectConstructor(
+    "Image",
+    []() -> std::shared_ptr<HybridObject> {
+      return std::make_shared<HybridImage>();
+    }
+  );
+}
+```
+
+In Objective-C++ (for Swift Hybrid Objects):
+
+```mm
+HybridObjectRegistry::registerHybridObjectConstructor("Image", []() -> std::shared_ptr<HybridObject> {
+  auto image = NitroImage::HybridImage::init();
+  return std::make_shared<HybridImageSpecSwift>(image);
+});
+```
+
+In Kotlin/Java:
+
+```java
+HybridObjectRegistry.registerHybridObjectConstructor("Image", () -> {
+  return new Image();
+});
 ```
