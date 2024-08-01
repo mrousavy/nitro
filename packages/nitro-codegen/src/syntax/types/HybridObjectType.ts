@@ -25,17 +25,17 @@ export class HybridObjectType implements Type {
 
     switch (language) {
       case 'c++': {
-        const fullName = NitroConfig.getCxxNamespace('c++', name.HybridT)
+        const fullName = NitroConfig.getCxxNamespace('c++', name.HybridTSpec)
         return `std::shared_ptr<${fullName}>`
       }
       case 'swift': {
-        const fullName = NitroConfig.getCxxNamespace('swift', name.TSpec)
+        const fullName = NitroConfig.getCxxNamespace('swift', name.HybridTSpec)
         return fullName
       }
       case 'kotlin': {
         const fullName = NitroConfig.getAndroidPackage(
           'java/kotlin',
-          name.TSpec
+          name.HybridTSpec
         )
         return fullName
       }
@@ -53,10 +53,10 @@ export class HybridObjectType implements Type {
     const cxxNamespace = NitroConfig.getCxxNamespace('c++')
     return [
       {
-        name: `${name.HybridT}.hpp`,
+        name: `${name.HybridTSpec}.hpp`,
         forwardDeclaration: getForwardDeclaration(
           'class',
-          name.HybridT,
+          name.HybridTSpec,
           cxxNamespace
         ),
         language: 'c++',

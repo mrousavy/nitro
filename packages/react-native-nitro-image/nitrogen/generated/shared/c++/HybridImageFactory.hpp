@@ -14,10 +14,10 @@
 #error NitroModules cannot be found! Are you sure you installed NitroModules properly?
 #endif
 
-// Forward declaration of `HybridImage` to properly resolve imports.
-namespace margelo::nitro::image { class HybridImage; }
+// Forward declaration of `HybridImageSpec` to properly resolve imports.
+namespace margelo::nitro::image { class HybridImageSpec; }
 
-#include "HybridImage.hpp"
+#include "HybridImageSpec.hpp"
 
 namespace margelo::nitro::image {
 
@@ -47,10 +47,10 @@ namespace margelo::nitro::image {
 
     public:
       // Methods
-      virtual std::shared_ptr<HybridImage> loadImageFromFile(const std::string& path) = 0;
-      virtual std::shared_ptr<HybridImage> loadImageFromURL(const std::string& path) = 0;
-      virtual std::shared_ptr<HybridImage> loadImageFromSystemName(const std::string& path) = 0;
-      virtual std::shared_ptr<HybridImage> bounceBack(std::shared_ptr<HybridImage> image) = 0;
+      virtual std::shared_ptr<margelo::nitro::image::HybridImageSpec> loadImageFromFile(const std::string& path) = 0;
+      virtual std::shared_ptr<margelo::nitro::image::HybridImageSpec> loadImageFromURL(const std::string& path) = 0;
+      virtual std::shared_ptr<margelo::nitro::image::HybridImageSpec> loadImageFromSystemName(const std::string& path) = 0;
+      virtual std::shared_ptr<margelo::nitro::image::HybridImageSpec> bounceBack(std::shared_ptr<margelo::nitro::image::HybridImageSpec> image) = 0;
 
     protected:
       // Tag for logging

@@ -41,7 +41,7 @@ export class JNIWrappedType<T extends Type> implements Type {
         const name = getHybridObjectName(hybridObjectType.hybridObjectName)
         return {
           language: 'c++',
-          name: `${name.JHybridT}.hpp`,
+          name: `${name.JHybridTSpec}.hpp`,
         }
       case 'function':
         const functionType = getTypeAs(this.type, FunctionType)
@@ -73,7 +73,7 @@ export class JNIWrappedType<T extends Type> implements Type {
       case 'hybrid-object':
         const hybridObjectType = getTypeAs(this.type, HybridObjectType)
         const name = getHybridObjectName(hybridObjectType.hybridObjectName)
-        return `jni::alias_ref<${name.JHybridT}::javaobject>`
+        return `jni::alias_ref<${name.JHybridTSpec}::javaobject>`
       case 'function':
         const functionType = getTypeAs(this.type, FunctionType)
         return `jni::alias_ref<J${functionType.specialization.typename}::javaobject>`

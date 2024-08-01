@@ -14,17 +14,17 @@ export function getMethodResultType(
   method: Method
 ): MethodResult {
   const returnType = new SwiftCxxBridgedType(method.returnType)
-  const name = `${hybridObjectName.TSpecCxx}_${method.name}_Result`
+  const name = `${hybridObjectName.HybridTSpecCxx}_${method.name}_Result`
   const hasType = method.returnType.kind !== 'void'
 
-  const swiftMethodSignature = `${hybridObjectName.TSpec}.${method.name}(${method.parameters.map((p) => `${p.name}:`).join(', ')})`
+  const swiftMethodSignature = `${hybridObjectName.HybridTSpec}.${method.name}(${method.parameters.map((p) => `${p.name}:`).join(', ')})`
 
   return {
     typename: name,
     hasType: hasType,
     swiftEnumCode: `
 /**
- * The exception-free result type for ${hybridObjectName.TSpec}.${method.name}(...).
+ * The exception-free result type for ${hybridObjectName.HybridTSpec}.${method.name}(...).
  * Original func:
  * \`\`\`swift
  * ${method.getCode('swift')}

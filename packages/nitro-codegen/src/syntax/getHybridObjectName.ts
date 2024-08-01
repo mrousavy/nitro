@@ -1,39 +1,37 @@
 export interface HybridObjectName {
   /**
-   * The raw name of the Hybrid Object.
+   * The raw name of the Hybrid Object (same as the TS interface name).
    * @example "Image"
    */
   T: string
   /**
-   * The name of the Swift protocol/Kotlin interface.
-   * @example "ImageSpec"
-   */
-  TSpec: string
-  /**
-   * The name of the Swift protocol wrapper class that bridges to C++.
-   * @example "ImageSpecCxx"
-   */
-  TSpecCxx: string
-  /**
-   * The name of the Java/C++ (FB-JNI) HybridClass that bridges C++ to Java.
-   * @example "JImageSpec"
-   */
-  JTSpec: string
-  /**
-   * The name of the C++ class that actually represents the Hybrid Object.
+   * The debug-only description name of the Hybrid Object as it can be described in natively.
    * @example "HybridImage"
    */
   HybridT: string
   /**
+   * The name of the C++ class, Kotlin interface or Swift protocol that represents the
+   * specification (all of it's virtual properties and methods) of the Hybrid Object.
+   * @example "HybridImageSpec"
+   */
+  HybridTSpec: string
+  /**
+   * The name of the Swift class that bridges any types from
+   * {@linkcode HybridTSpec} over to C++.
+   * This includes a few type conversions or result/exception wrapping.
+   * @example "HybridImageCxx"
+   */
+  HybridTSpecCxx: string
+  /**
    * The name of the C++ class that actually bridges to the Java Hybrid Object.
    * @example "JHybridImage"
    */
-  JHybridT: string
+  JHybridTSpec: string
   /**
    * The name of the C++ class that extends the Hybrid Object and bridges over to the Swift C++ wrapper class.
    * @example "HybridImageSwift"
    */
-  HybridTSwift: string
+  HybridTSpecSwift: string
 }
 
 export function getHybridObjectName(
@@ -41,11 +39,10 @@ export function getHybridObjectName(
 ): HybridObjectName {
   return {
     T: hybridObjectName,
-    TSpec: `${hybridObjectName}Spec`,
-    TSpecCxx: `${hybridObjectName}SpecCxx`,
-    JTSpec: `J${hybridObjectName}Spec`,
-    JHybridT: `JHybrid${hybridObjectName}`,
     HybridT: `Hybrid${hybridObjectName}`,
-    HybridTSwift: `Hybrid${hybridObjectName}Swift`,
+    HybridTSpec: `Hybrid${hybridObjectName}Spec`,
+    HybridTSpecCxx: `Hybrid${hybridObjectName}SpecCxx`,
+    JHybridTSpec: `JHybrid${hybridObjectName}Spec`,
+    HybridTSpecSwift: `Hybrid${hybridObjectName}SpecSwift`,
   }
 }

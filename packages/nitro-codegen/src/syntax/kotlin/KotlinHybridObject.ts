@@ -28,7 +28,7 @@ export function createKotlinHybridObject(spec: HybridObjectSpec): SourceFile[] {
 
   // 1. Create Kotlin abstract class definition
   const abstractClassCode = `
-${createFileMetadataString(`${name.HybridT}.kt`)}
+${createFileMetadataString(`${name.HybridTSpec}.kt`)}
 
 package ${javaPackage}
 
@@ -44,8 +44,8 @@ import com.margelo.nitro.HybridObject
  */
 @DoNotStrip
 @Keep
-abstract class ${name.HybridT}: HybridObject() {
-  protected val TAG = "${name.HybridT}"
+abstract class ${name.HybridTSpec}: HybridObject() {
+  protected val TAG = "${name.HybridTSpec}"
 
   // Properties
   ${indent(properties, '  ')}
@@ -54,7 +54,7 @@ abstract class ${name.HybridT}: HybridObject() {
   ${indent(methods, '  ')}
 
   companion object {
-    private const val TAG = "${name.HybridT}"
+    private const val TAG = "${name.HybridTSpec}"
     init {
       try {
         Log.i(TAG, "Loading ${cppLibName} C++ library...")
@@ -100,7 +100,7 @@ abstract class ${name.HybridT}: HybridObject() {
   files.push({
     content: abstractClassCode,
     language: 'kotlin',
-    name: `${name.HybridT}.kt`,
+    name: `${name.HybridTSpec}.kt`,
     subdirectory: NitroConfig.getAndroidPackageDirectory(),
     platform: 'android',
   })

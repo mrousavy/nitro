@@ -40,10 +40,10 @@ export class SwiftCxxBridgedType {
       const name = getTypeHybridObjectName(this.type)
       const namespace = NitroConfig.getCxxNamespace('c++')
       imports.push({
-        name: `${name.HybridTSwift}.hpp`,
+        name: `${name.HybridTSpecSwift}.hpp`,
         forwardDeclaration: getForwardDeclaration(
           'class',
-          name.HybridTSwift,
+          name.HybridTSpecSwift,
           namespace
         ),
         language: 'c++',
@@ -68,9 +68,9 @@ export class SwiftCxxBridgedType {
         const name = getTypeHybridObjectName(this.type)
         switch (language) {
           case 'c++':
-            return `std::shared_ptr<${name.HybridTSwift}>`
+            return `std::shared_ptr<${name.HybridTSpecSwift}>`
           case 'swift':
-            return name.TSpecCxx
+            return name.HybridTSpecCxx
           default:
             throw new Error(`Invalid language! ${language}`)
         }
@@ -104,7 +104,7 @@ export class SwiftCxxBridgedType {
         switch (language) {
           case 'c++':
             const name = getTypeHybridObjectName(this.type)
-            return `std::static_pointer_cast<${name.HybridTSwift}>(${cppParameterName})->getSwiftPart()`
+            return `std::static_pointer_cast<${name.HybridTSpecSwift}>(${cppParameterName})->getSwiftPart()`
           case 'swift':
             return `${cppParameterName}.implementation`
           default:
@@ -137,7 +137,7 @@ export class SwiftCxxBridgedType {
         const name = getTypeHybridObjectName(this.type)
         switch (language) {
           case 'c++':
-            return `HybridContext::getOrCreate<${name.HybridTSwift}>(${swiftParameterName})`
+            return `HybridContext::getOrCreate<${name.HybridTSpecSwift}>(${swiftParameterName})`
           case 'swift':
             return `${swiftParameterName}.createCxxBridge()`
           default:

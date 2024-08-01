@@ -7,7 +7,7 @@ import { createSwiftHybridObjectCxxBridge } from './SwiftHybridObjectBridge.js'
 
 export function createSwiftHybridObject(spec: HybridObjectSpec): SourceFile[] {
   const name = getHybridObjectName(spec.name)
-  const protocolName = name.TSpec
+  const protocolName = name.HybridTSpec
   const properties = spec.properties.map((p) => p.getCode('swift')).join('\n')
   const methods = spec.methods.map((p) => p.getCode('swift')).join('\n')
 
@@ -46,13 +46,13 @@ public protocol ${protocolName}: HybridObjectSpec {
 
 public extension ${protocolName} {
   /**
-   * Create a new instance of ${name.TSpecCxx} for the given ${protocolName}.
+   * Create a new instance of ${name.HybridTSpecCxx} for the given ${protocolName}.
    *
-   * Instances of ${name.TSpecCxx} can be accessed from C++, and contain
+   * Instances of ${name.HybridTSpecCxx} can be accessed from C++, and contain
    * additional required bridging code for C++ <> Swift interop.
    */
-  func createCxxBridge() -> ${name.TSpecCxx} {
-    return ${name.TSpecCxx}(self)
+  func createCxxBridge() -> ${name.HybridTSpecCxx} {
+    return ${name.HybridTSpecCxx}(self)
   }
 }
   `

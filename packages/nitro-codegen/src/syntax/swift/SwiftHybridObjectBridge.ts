@@ -41,13 +41,13 @@ export function createSwiftHybridObjectCxxBridge(
     .join('\n\n')
 
   const swiftCxxWrapperCode = `
-${createFileMetadataString(`${name.TSpecCxx}.swift`)}
+${createFileMetadataString(`${name.HybridTSpecCxx}.swift`)}
 
 import Foundation
 import NitroModules
 
 /**
- * A class implementation that bridges ${name.TSpec} over to C++.
+ * A class implementation that bridges ${name.HybridTSpec} over to C++.
  * In C++, we cannot use Swift protocols - so we need to wrap it in a class to make it strongly defined.
  *
  * Also, some Swift types need to be bridged with special handling:
@@ -55,10 +55,10 @@ import NitroModules
  * - Other HostObjects need to be wrapped/unwrapped from the Swift TCxx wrapper
  * - Throwing methods need to be wrapped with a Result<T, Error> type, as exceptions cannot be propagated to C++
  */
-public final class ${name.TSpecCxx} {
-  private(set) var implementation: ${name.TSpec}
+public final class ${name.HybridTSpecCxx} {
+  private(set) var implementation: ${name.HybridTSpec}
 
-  public init(_ implementation: ${name.TSpec}) {
+  public init(_ implementation: ${name.HybridTSpec}) {
     self.implementation = implementation
   }
 
@@ -178,13 +178,13 @@ return ${bridgedReturnType.parseFromSwiftToCpp('value', 'c++')};
 
   // TODO: Remove forward declaration once Swift fixes the wrong order in generated -Swift.h headers!
   const cppHybridObjectCode = `
-${createFileMetadataString(`${name.HybridTSwift}.hpp`)}
+${createFileMetadataString(`${name.HybridTSpecSwift}.hpp`)}
 
 #pragma once
 
-#include "${name.HybridT}.hpp"
+#include "${name.HybridTSpec}.hpp"
 
-${getForwardDeclaration('class', name.TSpecCxx, iosModuleName)}
+${getForwardDeclaration('class', name.HybridTSpecCxx, iosModuleName)}
 
 ${extraForwardDeclarations.join('\n')}
 
@@ -195,23 +195,23 @@ ${extraIncludes.join('\n')}
 namespace ${cxxNamespace} {
 
   /**
-   * The C++ part of ${name.TSpecCxx}.swift.
+   * The C++ part of ${name.HybridTSpecCxx}.swift.
    *
-   * ${name.HybridTSwift} (C++) accesses ${name.TSpecCxx} (Swift), and might
+   * ${name.HybridTSpecSwift} (C++) accesses ${name.HybridTSpecCxx} (Swift), and might
    * contain some additional bridging code for C++ <> Swift interop.
    *
    * Since this obviously introduces an overhead, I hope at some point in
-   * the future, ${name.TSpecCxx} can directly inherit from the C++ class ${name.HybridT}
+   * the future, ${name.HybridTSpecCxx} can directly inherit from the C++ class ${name.HybridTSpec}
    * to simplify the whole structure and memory management.
    */
-  class ${name.HybridTSwift} final: public ${name.HybridT} {
+  class ${name.HybridTSpecSwift} final: public ${name.HybridTSpec} {
   public:
     // Constructor from a Swift instance
-    explicit ${name.HybridTSwift}(const ${iosModuleName}::${name.TSpecCxx}& swiftPart): ${name.HybridT}(), _swiftPart(swiftPart) { }
+    explicit ${name.HybridTSpecSwift}(const ${iosModuleName}::${name.HybridTSpecCxx}& swiftPart): ${name.HybridTSpec}(), _swiftPart(swiftPart) { }
 
   public:
     // Get the Swift part
-    inline ${iosModuleName}::${name.TSpecCxx} getSwiftPart() noexcept { return _swiftPart; }
+    inline ${iosModuleName}::${name.HybridTSpecCxx} getSwiftPart() noexcept { return _swiftPart; }
 
   public:
     // Get memory pressure
@@ -228,15 +228,15 @@ namespace ${cxxNamespace} {
     ${indent(cppMethods, '  ')}
 
   private:
-    ${iosModuleName}::${name.TSpecCxx} _swiftPart;
+    ${iosModuleName}::${name.HybridTSpecCxx} _swiftPart;
   };
 
 } // namespace ${cxxNamespace}
   `
   const cppHybridObjectCodeCpp = `
-${createFileMetadataString(`${name.HybridTSwift}.cpp`)}
+${createFileMetadataString(`${name.HybridTSpecSwift}.cpp`)}
 
-#include "${name.HybridTSwift}.hpp"
+#include "${name.HybridTSpecSwift}.hpp"
 
 namespace ${cxxNamespace} {
 } // namespace ${cxxNamespace}
@@ -246,7 +246,7 @@ namespace ${cxxNamespace} {
   files.push({
     content: swiftCxxWrapperCode,
     language: 'swift',
-    name: `${name.TSpecCxx}.swift`,
+    name: `${name.HybridTSpecCxx}.swift`,
     subdirectory: [],
     platform: 'ios',
   })
@@ -255,14 +255,14 @@ namespace ${cxxNamespace} {
   files.push({
     content: cppHybridObjectCode,
     language: 'c++',
-    name: `${name.HybridTSwift}.hpp`,
+    name: `${name.HybridTSpecSwift}.hpp`,
     subdirectory: [],
     platform: 'ios',
   })
   files.push({
     content: cppHybridObjectCodeCpp,
     language: 'c++',
-    name: `${name.HybridTSwift}.cpp`,
+    name: `${name.HybridTSpecSwift}.cpp`,
     subdirectory: [],
     platform: 'ios',
   })
@@ -342,7 +342,7 @@ function getResultTypesFile(
   hybridObjectName: HybridObjectName,
   resultTypes: MethodResult[]
 ): SourceFile {
-  const name = `${hybridObjectName.TSpecCxx}Results.swift`
+  const name = `${hybridObjectName.HybridTSpecCxx}Results.swift`
   const allEnumsCode = resultTypes.map((r) => r.swiftEnumCode)
 
   const code = `
@@ -354,7 +354,7 @@ ${createFileMetadataString(name)}
  * - .value means the function returned successfully (either a value, or void)
  * - .error means the function threw any Error. Only the message can be propagated
  *
- * ${hybridObjectName.TSpecCxx} will then wrap all calls to ${hybridObjectName.TSpec}
+ * ${hybridObjectName.HybridTSpecCxx} will then wrap all calls to ${hybridObjectName.HybridTSpec}
  * to properly catch Swift errors and return either .value or .error to C++.
  */
 

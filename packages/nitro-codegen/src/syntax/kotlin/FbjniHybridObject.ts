@@ -19,21 +19,21 @@ export function createFbjniHybridObject(spec: HybridObjectSpec): SourceFile[] {
     .join('\n')
   const jniClassDescriptor = NitroConfig.getAndroidPackage(
     'c++/jni',
-    name.HybridT
+    name.HybridTSpec
   )
   const cxxNamespace = NitroConfig.getCxxNamespace('c++')
 
   const cppHeaderCode = `
-${createFileMetadataString(`${name.JHybridT}.hpp`)}
+${createFileMetadataString(`${name.HybridTSpec}.hpp`)}
 
-#include "${name.HybridT}.hpp"
+#include "${name.HybridTSpec}.hpp"
 #include <fbjni/fbjni.h>
 
 namespace ${cxxNamespace} {
 
   using namespace facebook;
 
-  class ${name.JHybridT}: public jni::HybridClass<${name.JHybridT}>, public ${name.HybridT} {
+  class ${name.JHybridTSpec}: public jni::HybridClass<${name.JHybridTSpec}>, public ${name.HybridTSpec} {
   public:
     static auto constexpr kJavaDescriptor = "${jniClassDescriptor}";
     static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis);
@@ -41,13 +41,13 @@ namespace ${cxxNamespace} {
 
   private:
     // C++ constructor (called from Java via \`initHybrid()\`)
-    explicit ${name.JHybridT}(jni::alias_ref<jhybridobject> jThis) : _javaPart(jni::make_global(jThis)) {}
+    explicit ${name.JHybridTSpec}(jni::alias_ref<jhybridobject> jThis) : _javaPart(jni::make_global(jThis)) {}
 
   public:
     size_t getExternalMemorySize() noexcept override;
 
   public:
-    inline jni::global_ref<${name.JHybridT}::javaobject>& getJavaPart() noexcept { return _javaPart; }
+    inline jni::global_ref<${name.JHybridTSpec}::javaobject>& getJavaPart() noexcept { return _javaPart; }
 
   public:
     // Properties
@@ -59,7 +59,7 @@ namespace ${cxxNamespace} {
 
   private:
     friend HybridBase;
-    jni::global_ref<${name.JHybridT}::javaobject> _javaPart;
+    jni::global_ref<${name.JHybridTSpec}::javaobject> _javaPart;
   };
 
 } // namespace ${cxxNamespace}
@@ -85,9 +85,9 @@ namespace ${cxxNamespace} {
     .filter(isNotDuplicate)
 
   const cppImplCode = `
-${createFileMetadataString(`${name.JHybridT}.cpp`)}
+${createFileMetadataString(`${name.JHybridTSpec}.cpp`)}
 
-#include "${name.JHybridT}.hpp"
+#include "${name.JHybridTSpec}.hpp"
 
 ${cppForwardDeclarations.join('\n')}
 
@@ -95,17 +95,17 @@ ${cppIncludes.join('\n')}
 
 namespace ${cxxNamespace} {
 
-  jni::local_ref<${name.JHybridT}::jhybriddata> ${name.JHybridT}::initHybrid(jni::alias_ref<jhybridobject> jThis) {
+  jni::local_ref<${name.JHybridTSpec}::jhybriddata> ${name.JHybridTSpec}::initHybrid(jni::alias_ref<jhybridobject> jThis) {
     return makeCxxInstance(jThis);
   }
 
-  void ${name.JHybridT}::registerNatives() {
+  void ${name.JHybridTSpec}::registerNatives() {
     registerHybrid({
-      makeNativeMethod("initHybrid", ${name.JHybridT}::initHybrid),
+      makeNativeMethod("initHybrid", ${name.JHybridTSpec}::initHybrid),
     });
   }
 
-  size_t ${name.JHybridT}::getExternalMemorySize() noexcept {
+  size_t ${name.JHybridTSpec}::getExternalMemorySize() noexcept {
     static const auto method = _javaPart->getClass()->getMethod<jlong()>("getMemorySize");
     return method(_javaPart.get());
   }
@@ -123,14 +123,14 @@ namespace ${cxxNamespace} {
   files.push({
     content: cppHeaderCode,
     language: 'c++',
-    name: `${name.JHybridT}.hpp`,
+    name: `${name.JHybridTSpec}.hpp`,
     subdirectory: [],
     platform: 'android',
   })
   files.push({
     content: cppImplCode,
     language: 'c++',
-    name: `${name.JHybridT}.cpp`,
+    name: `${name.JHybridTSpec}.cpp`,
     subdirectory: [],
     platform: 'android',
   })
@@ -157,7 +157,7 @@ throw std::runtime_error("${method.name}(...) is not yet implemented!");
   const code = method.getCode(
     'c++',
     {
-      classDefinitionName: name.JHybridT,
+      classDefinitionName: name.JHybridTSpec,
     },
     body
   )
