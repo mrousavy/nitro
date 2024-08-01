@@ -56,6 +56,10 @@ npm-debug.log
 yarn-debug.log
 yarn-error.log
 
+# Bun
+package-lock.json
+**/*.bun
+
 # BUCK
 buck-out/
 \.buckd/
