@@ -2,11 +2,12 @@
   "repository": "https://github.com/mrousavy/react-native-nitro.git",
   "author": "Marc Rousavy <me@mrousavy.com> (https://github.com/mrousavy)",
   "scripts": {
+    "release": "bun release --workspaces && release-it"
   },
   "workspaces": [
     "packages/*",
     "example"
   ],
-  "packageManager": "bun@1.1.21",
-  "private": true
+  "private": true,
+  "packageManager": "yarn@1.22.19+sha1.4ba7fc5c6e704fce2066ecbfb0b0d8976fe62447"
 }

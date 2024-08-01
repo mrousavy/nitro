@@ -17,7 +17,7 @@
     "postinstall": "tsc || exit 0;",
     "typecheck": "tsc --noEmit",
     "lint": "eslint \"**/*.{js,ts,tsx}\" --fix",
-    "release": "tsc && npm run release --workspaces && release-it"
+    "release": "tsc && release-it"
   },
   "repository": {
     "type": "git",
