@@ -7,7 +7,7 @@
     "bootstrap": "yarn workspace react-native-nitro-modules install && yarn workspace nitro-codegen install && yarn workspace react-native-nitro-image install && yarn workspace react-native-nitro-example install && yarn workspace react-native-nitro-example pods && yarn tsc",
     "tsc": "yarn workspace react-native-nitro-modules tsc && yarn workspace nitro-codegen tsc && yarn workspace react-native-nitro-image tsc",
     "lint": "yarn workspace react-native-nitro-modules lint && yarn workspace nitro-codegen lint && yarn workspace react-native-nitro-image lint",
-    "release": "yarn workspace nitro-codegen release && yarn workspace react-native-nitro-modules release",
+    "release": "yarn workspace react-native-nitro-modules release && yarn workspace nitro-codegen release",
     "postinstall": "yarn tsc"
   },
   "workspaces": [
@@ -15,55 +15,5 @@
     "example"
   ],
   "packageManager": "yarn@3.6.4",
-  "private": true,
-  "devDependencies": {
-    "@release-it-plugins/workspaces": "^4.2.0",
-    "@release-it/conventional-changelog": "^5.1.1",
-    "release-it": "^17.6.0"
-  },
-  "release-it": {
-    "git": {
-      "commitMessage": "chore: release ${version}",
-      "tagName": "v${version}"
-    },
-    "npm": false,
-    "github": {
-      "release": true
-    },
-    "plugins": {
-      "@release-it-plugins/workspaces": {
-        "workspaces": [
-          "nitro-codegen",
-          "react-native-nitro-modules"
-        ]
-      },
-      "@release-it/conventional-changelog": {
-        "preset": {
-          "name": "conventionalcommits",
-          "types": [
-            {
-              "type": "feat",
-              "section": "✨ Features"
-            },
-            {
-              "type": "perf",
-              "section": "💨 Performance Improvements"
-            },
-            {
-              "type": "fix",
-              "section": "🐛 Bug Fixes"
-            },
-            {
-              "type": "chore(deps)",
-              "section": "🛠️ Dependency Upgrades"
-            },
-            {
-              "type": "docs",
-              "section": "📚 Documentation"
-            }
-          ]
-        }
-      }
-    }
-  }
+  "private": true
 }
