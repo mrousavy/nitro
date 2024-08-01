@@ -25,7 +25,7 @@
     "@react-native/typescript-config": "0.74.85",
     "babel-plugin-module-resolver": "^5.0.2",
     "del-cli": "^5.1.0",
-    "nitrogen": "workspace:^",
+    "nitro-codegen": "workspace:^",
     "react-native-nitro-image": "workspace:^",
     "react-native-nitro-modules": "workspace:^",
     "typescript": "^5.5.4"
