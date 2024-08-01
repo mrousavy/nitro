@@ -13,6 +13,7 @@ import { getFiles } from './getFiles.js'
 import { groupByPlatform, type SourceFile } from './syntax/SourceFile.js'
 import { Logger } from './Logger.js'
 import { createPodspecRubyExtension } from './autolinking/createPodspecRubyExtension.js'
+import { createCMakeExtension } from './autolinking/createCMakeExtension.js'
 
 const start = performance.now()
 let targetSpecs = 0
@@ -50,6 +51,7 @@ if (project.getSourceFiles().length === 0) {
 const outFolder = path.join(baseDirectory, 'nitrogen', 'generated')
 const filesBefore = await getFiles(outFolder)
 const filesAfter: string[] = []
+const writtenFiles: SourceFile[] = []
 
 for (const sourceFile of project.getSourceFiles()) {
   console.log(`⏳  Parsing ${sourceFile.getBaseName()}...`)
@@ -132,20 +134,9 @@ for (const sourceFile of project.getSourceFiles()) {
           const basePath = path.join(outFolder, file.platform, file.language)
           const actualPath = await writeFile(basePath, file)
           filesAfter.push(actualPath)
+          writtenFiles.push(file)
         }
       }
-
-      Logger.info(`⛓️   Setting up build configs for autolinking...`)
-
-      // iOS Podspec (Autolinking)
-      Logger.info(`    ${chalk.dim('ios')}: Creating Podspec extension...`)
-      const rubyFile = createPodspecRubyExtension()
-      const basePath = path.join(outFolder, rubyFile.platform)
-      const actualPath = await writeFile(
-        basePath,
-        rubyFile as unknown as SourceFile
-      )
-      filesAfter.push(actualPath)
 
       // Done!
       generatedSpecs++
@@ -159,6 +150,22 @@ for (const sourceFile of project.getSourceFiles()) {
 
   if (generatedSpecs === startedWithSpecs) {
     console.log(`    ❌  No specs found in ${sourceFile.getBaseName()}!`)
+  }
+
+  Logger.info(`⛓️   Setting up build configs for autolinking...`)
+
+  // iOS Podspec (Autolinking)
+  const buildSetupFiles = [
+    createPodspecRubyExtension(),
+    createCMakeExtension(writtenFiles),
+  ]
+  for (const file of buildSetupFiles) {
+    Logger.info(
+      `    ${chalk.dim(file.platform)}: Creating ${file.platform} autolinking build setup...`
+    )
+    const basePath = path.join(outFolder, file.platform)
+    const actualPath = await writeFile(basePath, file as unknown as SourceFile)
+    filesAfter.push(actualPath)
   }
 }
 
