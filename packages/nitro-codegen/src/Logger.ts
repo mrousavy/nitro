@@ -14,25 +14,44 @@ function isAtLeast(level: NitroUserConfig['logLevel']): boolean {
   return levelMap[level] >= levelMap[current]
 }
 
+let indentation = 0
+
+function getIndentation(): string {
+  let string = ''
+  for (let i = 0; i < indentation; i++) {
+    string += '  '
+  }
+  return string
+}
+
 export const Logger = {
-  debug(message: unknown, ...extra: unknown[]) {
+  withIndented(callback: () => void) {
+    try {
+      indentation++
+      callback()
+    } finally {
+      indentation--
+    }
+  },
+
+  debug(message: string, ...extra: unknown[]) {
     if (isAtLeast('debug')) {
-      console.debug(message, ...extra)
+      console.debug(getIndentation() + message, ...extra)
     }
   },
-  info(message: unknown, ...extra: unknown[]) {
+  info(message: string, ...extra: unknown[]) {
     if (isAtLeast('info')) {
-      console.info(message, ...extra)
+      console.info(getIndentation() + message, ...extra)
     }
   },
-  warn(message: unknown, ...extra: unknown[]) {
+  warn(message: string, ...extra: unknown[]) {
     if (isAtLeast('warning')) {
-      console.warn(message, ...extra)
+      console.warn(getIndentation() + message, ...extra)
     }
   },
-  error(message: unknown, ...extra: unknown[]) {
+  error(message: string, ...extra: unknown[]) {
     if (isAtLeast('error')) {
-      console.error(message, ...extra)
+      console.error(getIndentation() + message, ...extra)
     }
   },
 }
