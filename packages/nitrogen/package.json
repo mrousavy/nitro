@@ -16,7 +16,8 @@
     "start": "tsc && node lib/index.js",
     "postinstall": "tsc || exit 0;",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint \"**/*.{js,ts,tsx}\" --fix"
+    "lint": "eslint \"**/*.{js,ts,tsx}\" --fix",
+    "release": "tsc && release-it"
   },
   "repository": {
     "type": "git",
@@ -36,6 +37,7 @@
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",
     "prettier": "^3.3.3",
+    "release-it": "^17.6.0",
     "typescript": "^5.5.4"
   },
   "dependencies": {
@@ -43,6 +45,47 @@
     "react-native-nitro-modules": "workspace:^",
     "ts-morph": "^23.0.0",
     "zod": "^3.23.8"
+  },
+  "release-it": {
+    "git": {
+      "commitMessage": "chore: release ${version}",
+      "tagName": "v${version}"
+    },
+    "npm": {
+      "publish": true
+    },
+    "github": {
+      "release": true
+    },
+    "plugins": {
+      "@release-it/conventional-changelog": {
+        "preset": {
+          "name": "conventionalcommits",
+          "types": [
+            {
+              "type": "feat",
+              "section": "✨ Features"
+            },
+            {
+              "type": "perf",
+              "section": "💨 Performance Improvements"
+            },
+            {
+              "type": "fix",
+              "section": "🐛 Bug Fixes"
+            },
+            {
+              "type": "chore(deps)",
+              "section": "🛠️ Dependency Upgrades"
+            },
+            {
+              "type": "docs",
+              "section": "📚 Documentation"
+            }
+          ]
+        }
+      }
+    }
   },
   "eslintConfig": {
     "root": true,
