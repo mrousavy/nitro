@@ -8,7 +8,7 @@
 
 <br />
 
-**Nitro Modules** are highly efficient native modules exposed with a statically compiled binding layer to JSI, and typesafe JS bindings.
+**Nitro Modules** are highly efficient native modules with a statically compiled binding layer to JSI, and typesafe JS bindings.
 It consists of two parts:
 
 - [**react-native-nitro-modules**](packages/react-native-nitro-modules): The core C++ library powering all nitro modules
