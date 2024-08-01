@@ -2,7 +2,7 @@
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="./docs/img/banner-nitro-modules-dark.png" />
     <source media="(prefers-color-scheme: light)" srcset="./docs/img/banner-nitro-modules-light.png" />
-    <img alt="VisionCamera" src="./docs/img/banner-nitro-modules-light.png" />
+    <img alt="Nitro Modules" src="./docs/img/banner-nitro-modules-light.png" />
   </picture>
 </a>
 
