@@ -11,7 +11,7 @@ import { writeFile } from './writeFile.js'
 import chalk from 'chalk'
 import { getFiles } from './getFiles.js'
 import { groupByPlatform, type SourceFile } from './syntax/SourceFile.js'
-import { NitroConfig } from './config/NitroConfig.js'
+import { Logger } from './Logger.js'
 
 const start = performance.now()
 let targetSpecs = 0
@@ -123,11 +123,9 @@ for (const sourceFile of project.getSourceFiles()) {
           continue
         }
 
-        if (NitroConfig.getLogLevel() === 'info') {
-          console.log(
-            `        ${chalk.dim(platform)}: Generating ${capitalizeName(language)} code...`
-          )
-        }
+        Logger.info(
+          `        ${chalk.dim(platform)}: Generating ${capitalizeName(language)} code...`
+        )
         // Write the actual files for this specific platform.
         for (const file of files) {
           const basePath = path.join(outFolder, file.platform, file.language)
