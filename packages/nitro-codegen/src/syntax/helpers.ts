@@ -1,3 +1,6 @@
+import path from 'path'
+import type { SourceFile } from './SourceFile.js'
+
 type Comment = '///' | '#'
 
 export function createFileMetadataString(
@@ -34,4 +37,19 @@ export function escapeCppName(string: string): string {
 
 export function isNotDuplicate<T>(item: T, index: number, array: T[]): boolean {
   return array.indexOf(item) === index
+}
+
+export function isCppFile(file: SourceFile): boolean {
+  return file.name.endsWith('cpp') || file.name.endsWith('c')
+}
+
+export function getRelativeDirectory(file: SourceFile): string {
+  return path.join(
+    '..',
+    'nitrogen',
+    'generated',
+    file.platform,
+    ...file.subdirectory,
+    file.name
+  )
 }

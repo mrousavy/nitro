@@ -1,29 +1,17 @@
 import { NitroConfig } from '../config/NitroConfig.js'
 import { indent } from '../stringUtils.js'
-import { createFileMetadataString } from '../syntax/helpers.js'
+import {
+  createFileMetadataString,
+  getRelativeDirectory,
+  isCppFile,
+} from '../syntax/helpers.js'
 import type { SourceFile } from '../syntax/SourceFile.js'
-import path from 'path'
 
-interface RubyFile extends Omit<SourceFile, 'language'> {
+interface CMakeFile extends Omit<SourceFile, 'language'> {
   language: 'cmake'
 }
 
-function isCppFile(file: SourceFile): boolean {
-  return file.name.endsWith('cpp') || file.name.endsWith('c')
-}
-
-function getRelativeDirectory(file: SourceFile): string {
-  return path.join(
-    '..',
-    'nitrogen',
-    'generated',
-    file.platform,
-    ...file.subdirectory,
-    file.name
-  )
-}
-
-export function createCMakeExtension(files: SourceFile[]): RubyFile {
+export function createCMakeExtension(files: SourceFile[]): CMakeFile {
   const name = NitroConfig.getAndroidCxxLibName()
   const sharedFiles = files
     .filter((f) => f.platform === 'shared' && isCppFile(f))

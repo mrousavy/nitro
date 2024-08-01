@@ -14,6 +14,7 @@ import { groupByPlatform, type SourceFile } from './syntax/SourceFile.js'
 import { Logger } from './Logger.js'
 import { createPodspecRubyExtension } from './autolinking/createPodspecRubyExtension.js'
 import { createCMakeExtension } from './autolinking/createCMakeExtension.js'
+import { createGradleExtension } from './autolinking/createGradleExtension.js'
 
 const start = performance.now()
 let targetSpecs = 0
@@ -158,6 +159,7 @@ for (const sourceFile of project.getSourceFiles()) {
   const buildSetupFiles = [
     createPodspecRubyExtension(),
     createCMakeExtension(writtenFiles),
+    createGradleExtension(),
   ]
   for (const file of buildSetupFiles) {
     Logger.info(

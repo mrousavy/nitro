@@ -20,6 +20,7 @@ def isNewArchitectureEnabled() {
 
 apply plugin: "com.android.library"
 apply plugin: 'org.jetbrains.kotlin.android'
+apply from: '../nitrogen/generated/android/NitroImage+autolinking.gradle'
 
 if (isNewArchitectureEnabled()) {
   apply plugin: "com.facebook.react"
@@ -87,10 +88,6 @@ android {
           "${project.buildDir}/generated/source/codegen/java"
         ]
       }
-      java.srcDirs += [
-        // Nitrogen files
-        "${project.projectDir}/../nitrogen/generated/android/kotlin"
-      ]
     }
   }
 }
