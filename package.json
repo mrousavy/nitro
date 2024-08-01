@@ -7,5 +7,6 @@
     "packages/*",
     "example"
   ],
+  "packageManager": "bun@1.1.21",
   "private": true
 }
