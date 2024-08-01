@@ -56,6 +56,20 @@ target_sources(
   # Android-specific Nitrogen C++ sources
   ${indent(androidFiles.join('\n'), '  ')}
 )
+
+# Add all libraries required by the generated specs
+find_package(fbjni REQUIRED NitroConfig) # <-- Used for communication between Java <-> C++
+find_package(ReactAndroid REQUIRED NitroConfig) # <-- Used to set up React Native bindings (e.g. CallInvoker/TurboModule)
+find_package(react-native-nitro-modules REQUIRED NitroConfig) # <-- Used to create all HybridObjects and use the Nitro core library
+
+# Link all libraries together
+target_link_libraries(
+        ${name}
+        fbjni::fbjni                              # <-- Facebook C++ JNI helpers
+        ReactAndroid::jsi                         # <-- RN: JSI
+        ReactAndroid::react_nativemodule_core     # <-- RN: TurboModules Core
+        react-native-nitro-modules::NitroModules  # <-- NitroModules Core :)
+)
   `.trim()
   return {
     content: code,
