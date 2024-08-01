@@ -19,7 +19,15 @@ yarn add nitrogen -D
 
 ## Usage
 
-### 1. Create a `nitro.json` config file
+### 1. Create a react-native library
+
+Use tools like [react-native-builder-bob](https://github.com/callstack/react-native-builder-bob) to create a react-native library.
+
+The library must have C++ set up (on Android, a `build.gradle` with `externalNativeBuild`), TypeScript installed, and [**react-native-nitro-modules**](../react-native-nitro-modules/) installed as a dependency.
+
+See [**react-native-nitro-image**](../react-native-nitro-image/) for an example.
+
+### 2. Create a `nitro.json` config file
 
 The `nitro.json` config file specifies native namespaces, library name, and other information that will be used for generating the code.
 
@@ -38,7 +46,7 @@ Every nitro module must have a `nitro.json` file at it's root level (i.e. the fo
 }
 ```
 
-### 2. Create a TypeScript spec
+### 3. Create a TypeScript spec
 
 The TypeScript spec is the single source of truth. It's interfaces, enums or other type declarations will be converted to C++ (or Swift/Kotlin) types using a code generator.
 
@@ -49,7 +57,7 @@ export interface Image extends HybridObject<{ ios: 'c++', android: 'c++' }> {
 }
 ```
 
-### 3. Run `nitrogen`
+### 4. Run `nitrogen`
 
 Inside your library's root folder (i.e. the folder where `nitro.json` is), run nitrogen:
 
@@ -59,7 +67,7 @@ yarn nitrogen
 
 This will generate all native files inside `./nitrogen/generated`.
 
-### 4. Add build setup
+### 5. Add build setup
 
 In addition to all the C++, Swift and Kotlin files, Nitrogen also generates build setup files that you can import in your `.podspec`/`CMakeLists.txt`/`build.gradle` to automatically add all nitro-generated files to the project.
 
@@ -91,7 +99,7 @@ And in your `CMakeLists.txt` file, add this:
 include(${CMAKE_SOURCE_DIR}/../nitrogen/generated/android/NitroImage+autolinking.cmake)
 ```
 
-### 5. Implement the specs
+### 6. Implement the specs
 
 In C++:
 
