@@ -5,7 +5,8 @@ import type { Type, TypeKind } from './Type.js'
 
 export class MapType implements Type {
   get canBePassedByReference(): boolean {
-    return true
+    // It's a shared_ptr<..>, no ref.
+    return false
   }
 
   get kind(): TypeKind {

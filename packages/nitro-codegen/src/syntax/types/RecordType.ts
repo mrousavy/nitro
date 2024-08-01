@@ -12,6 +12,7 @@ export class RecordType implements Type {
   }
 
   get canBePassedByReference(): boolean {
+    // It's a unordered_map<..>, heavy to copy.
     return true
   }
   get kind(): TypeKind {

@@ -11,6 +11,7 @@ export class VariantType implements Type {
   }
 
   get canBePassedByReference(): boolean {
+    // It's a variant<..>, heavy to copy.
     return true
   }
 

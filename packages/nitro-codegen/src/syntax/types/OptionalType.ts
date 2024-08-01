@@ -10,7 +10,8 @@ export class OptionalType implements Type {
   }
 
   get canBePassedByReference(): boolean {
-    return true
+    // depends whether the wrapping type is heavy to copy or not.
+    return this.wrappingType.canBePassedByReference
   }
   get kind(): TypeKind {
     return 'optional'

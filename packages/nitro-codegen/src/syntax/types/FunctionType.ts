@@ -25,6 +25,7 @@ export class FunctionType implements Type {
   }
 
   get canBePassedByReference(): boolean {
+    // It's a function<..>, heavy to copy.
     return true
   }
 
@@ -76,7 +77,10 @@ export class FunctionType implements Type {
       case 'swift':
         return NitroConfig.getCxxNamespace('swift', specialization.typename)
       case 'kotlin':
-        return NitroConfig.getAndroidPackage('java/kotlin', specialization.typename)
+        return NitroConfig.getAndroidPackage(
+          'java/kotlin',
+          specialization.typename
+        )
       default:
         throw new Error(
           `Language ${language} is not yet supported for FunctionType!`

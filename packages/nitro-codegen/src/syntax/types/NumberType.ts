@@ -4,6 +4,7 @@ import type { Type, TypeKind } from './Type.js'
 
 export class NumberType implements Type {
   get canBePassedByReference(): boolean {
+    // It's a primitive
     return false
   }
   get kind(): TypeKind {

@@ -4,6 +4,7 @@ import type { Type, TypeKind } from './Type.js'
 
 export class VoidType implements Type {
   get canBePassedByReference(): boolean {
+    // It's void.
     return false
   }
   get kind(): TypeKind {

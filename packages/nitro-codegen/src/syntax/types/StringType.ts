@@ -4,6 +4,7 @@ import type { Type, TypeKind } from './Type.js'
 
 export class StringType implements Type {
   get canBePassedByReference(): boolean {
+    // It's a string<..>, heavy to copy.
     return true
   }
   get kind(): TypeKind {

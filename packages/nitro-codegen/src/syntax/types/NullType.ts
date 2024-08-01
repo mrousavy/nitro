@@ -4,6 +4,7 @@ import type { Type, TypeKind } from './Type.js'
 
 export class NullType implements Type {
   get canBePassedByReference(): boolean {
+    // It's a primitive.
     return false
   }
   get kind(): TypeKind {

@@ -73,6 +73,7 @@ export class EnumType implements Type {
   }
 
   get canBePassedByReference(): boolean {
+    // It's a primitive.
     return false
   }
 

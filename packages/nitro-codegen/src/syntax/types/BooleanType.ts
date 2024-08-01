@@ -4,6 +4,7 @@ import type { Type, TypeKind } from './Type.js'
 
 export class BooleanType implements Type {
   get canBePassedByReference(): boolean {
+    // It's a primitive.
     return false
   }
 

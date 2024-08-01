@@ -10,7 +10,8 @@ export class PromiseType implements Type {
   }
 
   get canBePassedByReference(): boolean {
-    return false
+    // It's a future<..>, it cannot be copied.
+    return true
   }
   get kind(): TypeKind {
     return 'promise'

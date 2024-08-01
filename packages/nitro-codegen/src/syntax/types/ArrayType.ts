@@ -10,6 +10,7 @@ export class ArrayType implements Type {
   }
 
   get canBePassedByReference(): boolean {
+    // It's a vector<..>, heavy to copy
     return true
   }
 

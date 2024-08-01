@@ -21,6 +21,7 @@ export class StructType implements Type {
   }
 
   get canBePassedByReference(): boolean {
+    // It's a struct, heavy to copy.
     return true
   }
   get kind(): TypeKind {

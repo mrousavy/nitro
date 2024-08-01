@@ -51,7 +51,7 @@ namespace margelo::nitro::image {
     public:
       // Methods
       virtual std::shared_ptr<AnyMap> createMap() = 0;
-      virtual std::shared_ptr<AnyMap> mapRoundtrip(const std::shared_ptr<AnyMap>& map) = 0;
+      virtual std::shared_ptr<AnyMap> mapRoundtrip(std::shared_ptr<AnyMap> map) = 0;
       virtual double funcThatThrows() = 0;
       virtual std::variant<std::string, double> passVariant(const std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>>& either) = 0;
       virtual std::tuple<double, double, double> flip(const std::tuple<double, double, double>& vector) = 0;

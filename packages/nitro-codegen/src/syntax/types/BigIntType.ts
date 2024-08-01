@@ -4,6 +4,7 @@ import type { Type, TypeKind } from './Type.js'
 
 export class BigIntType implements Type {
   get canBePassedByReference(): boolean {
+    // It's a primitive.
     return false
   }
 
