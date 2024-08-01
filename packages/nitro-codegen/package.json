@@ -38,12 +38,12 @@
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",
     "prettier": "^3.3.3",
-    "ts-morph": "^23.0.0",
     "typescript": "^5.5.4"
   },
   "dependencies": {
     "chalk": "^5.3.0",
     "react-native-nitro-modules": "workspace:^",
+    "ts-morph": "^23.0.0",
     "zod": "^3.23.8"
   },
   "eslintConfig": {
