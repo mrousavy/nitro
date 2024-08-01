@@ -83,7 +83,25 @@ private:
 };
 ```
 
-The Nitro Modules core library can convert the following C++ types out of the box using the `JSIConverter<T>` interface:
+The `MyHybridObject` can then be registered in the [`HybridObjectRegistry`](./cpp/registry/HybridObjectRegistry.hpp) at app startup:
+
+```cpp
+#include <NitroModules/HybridObjectRegistry.hpp>
+
+// Call this at app startup to register the HybridObjects
+void load() {
+  HybridObjectRegistry::registerHybridObjectConstructor(
+    "MyHybrid",
+    []() -> std::shared_ptr<HybridObject> {
+      return std::make_shared<MyHybridObject>();
+    }
+  );
+}
+```
+
+Inside your `MyHybridObject`, you can use standard C++ types which will automatically be converted to JS using Nitro's [`JSIConverter<T>`](./cpp/jsi/JSIConverter.hpp) interface.
+
+The following C++ / JS types are supported out of the box:
 
 <table>
   <tr>
@@ -124,10 +142,6 @@ The Nitro Modules core library can convert the following C++ types out of the bo
     <td><code>std::unordered_map&lt;std::string, T&gt;</code></td>
   </tr>
   <tr>
-    <td><code>{ ... }</code></td>
-    <td><code>std::shared_ptr&lt;<a href="./cpp/core/AnyMap.hpp">AnyMap</a>&gt;</code></td>
-  </tr>
-  <tr>
     <td><code>T?</code></td>
     <td><code>std::optional&lt;T&gt;</code></td>
   </tr>
@@ -138,6 +152,10 @@ The Nitro Modules core library can convert the following C++ types out of the bo
   <tr>
     <td><code>(TArgs...) =&gt; TReturn</code></td>
     <td><code>std::function&lt;std::future&lt;TReturn&gt; (TArgs...)&gt;</code></td>
+  </tr>
+  <tr>
+    <td><code>{ ... }</code></td>
+    <td><code>std::shared_ptr&lt;<a href="./cpp/core/AnyMap.hpp">AnyMap</a>&gt;</code></td>
   </tr>
   <tr>
     <td><code>ArrayBuffer</code></td>
@@ -157,20 +175,19 @@ For example, to add support for an enum, overload `JSIConverter<YourEnum>`:
 ```cpp
 #include <NitroModules/JSIConverter.hpp>
 
-enum class YourEnum {
+enum class MyEnum {
   FIRST = 0,
   SECOND = 1
 };
 
 namespace margelo::nitro {
-
   template <>
-  struct JSIConverter<YourEnum> {
-    static inline YourEnum fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+  struct JSIConverter<MyEnum> {
+    static inline MyEnum fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       int intValue = JSIConverter<int>::fromJSI(runtime, arg);
-      return static_cast<YourEnum>(intValue);
+      return static_cast<MyEnum>(intValue);
     }
-    static inline jsi::Value toJSI(jsi::Runtime& runtime, YourEnum arg) {
+    static inline jsi::Value toJSI(jsi::Runtime& runtime, MyEnum arg) {
       int intValue = static_cast<int>(arg);
       return JSIConverter<int>::toJSI(runtime, intValue);
     }
@@ -178,4 +195,16 @@ namespace margelo::nitro {
 }
 ```
 
-[**Nitrogen**](../nitrogen/) can automatically generate such `JSIConverter<T>` extensions for enums, TypeScript unions, and even structs/objects.
+..and on the JS side, you can implicitly cast the `number` to an enum as well:
+
+```js
+enum MyEnum {
+  FIRST = 0,
+  SECOND = 1
+}
+const value = myHybridObject.getEnumValue() // <-- typed as `MyEnum` instead of `number`
+```
+
+Make sure to always include the header that defines the `JSIConverter<MyEnum>` overload inside the `MyHybridObject` file, as this is where the `JSIConverter<T>` overloads are accessed from.
+
+[**Nitrogen**](../nitrogen/) can automatically generate such `JSIConverter<T>` extensions for enums, TypeScript unions, and even structs/objects - so it is generally recommended to use nitrogen.
