@@ -22,7 +22,7 @@ import NitroModules
  * The exception-free result type for HybridImageFactorySpec.loadImageFromFile(...).
  * Original func:
  * ```swift
- * func loadImageFromFile(path: String) throws -> margelo.nitro.image.HybridImageSpec
+ * func loadImageFromFile(path: String) throws -> HybridImageSpec
  * ```
  * - seealso: `HybridImageFactorySpec.loadImageFromFile(path:)`
  */
@@ -36,7 +36,7 @@ public enum HybridImageFactorySpecCxx_loadImageFromFile_Result {
  * The exception-free result type for HybridImageFactorySpec.loadImageFromURL(...).
  * Original func:
  * ```swift
- * func loadImageFromURL(path: String) throws -> margelo.nitro.image.HybridImageSpec
+ * func loadImageFromURL(path: String) throws -> HybridImageSpec
  * ```
  * - seealso: `HybridImageFactorySpec.loadImageFromURL(path:)`
  */
@@ -50,7 +50,7 @@ public enum HybridImageFactorySpecCxx_loadImageFromURL_Result {
  * The exception-free result type for HybridImageFactorySpec.loadImageFromSystemName(...).
  * Original func:
  * ```swift
- * func loadImageFromSystemName(path: String) throws -> margelo.nitro.image.HybridImageSpec
+ * func loadImageFromSystemName(path: String) throws -> HybridImageSpec
  * ```
  * - seealso: `HybridImageFactorySpec.loadImageFromSystemName(path:)`
  */
@@ -64,7 +64,7 @@ public enum HybridImageFactorySpecCxx_loadImageFromSystemName_Result {
  * The exception-free result type for HybridImageFactorySpec.bounceBack(...).
  * Original func:
  * ```swift
- * func bounceBack(image: margelo.nitro.image.HybridImageSpec) throws -> margelo.nitro.image.HybridImageSpec
+ * func bounceBack(image: HybridImageSpec) throws -> HybridImageSpec
  * ```
  * - seealso: `HybridImageFactorySpec.bounceBack(image:)`
  */
