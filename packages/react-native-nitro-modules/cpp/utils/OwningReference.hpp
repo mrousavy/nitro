@@ -145,6 +145,8 @@ public:
   }
 
   inline bool operator==(T* other) const {
+    std::unique_lock lock(*_mutex);
+
     if (*_isDeleted) {
       return other == nullptr;
     } else {
