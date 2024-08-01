@@ -1,58 +1,11 @@
-import { z, ZodError } from 'zod'
+import { ZodError } from 'zod'
 import path from 'path'
 import { promises as fs } from 'fs'
 import { prettifyDirectory } from '../getCurrentDir.js'
-
-// const CXX_BASE_NAMESPACE = ['margelo', 'nitro']
-// const ANDROID_BASE_NAMESPACE = ['com', 'margelo', 'nitro']
-
-const ConfigSchema = z.object({
-  /**
-   * Represents the C++ namespace of the module that will be generated.
-   *
-   * This can have multiple sub-namespaces, and is always relative to `margelo::nitro`.
-   * @example `['image']` -> `margelo::nitro::image`
-   */
-  cxxNamespace: z.array(z.string()),
-  /**
-   * iOS specific options.
-   */
-  ios: z.object({
-    /**
-     * Represents the iOS module name of the module that will be generated.
-     *
-     * This will be used to generate Swift bridges, as those are always namespaced within the clang module.
-     *
-     * If you are using CocoaPods, this should be the Pod name defined in the `.podspec`.
-     * @example `NitroImage`
-     */
-    iosModulename: z.string(),
-  }),
-  /**
-   * Android specific options.
-   */
-  android: z.object({
-    /**
-     * Represents the Android namespace ("package") of the module that will be generated.
-     *
-     * This can have multiple sub-namespaces, and is always relative to `com.margelo.nitro`.
-     * @example `['image']` -> `com.margelo.nitro.image`
-     */
-    androidNamespace: z.array(z.string()),
-
-    /**
-     * Returns the name of the Android C++ library (aka name in CMakeLists.txt `add_library(..)`).
-     * This will be loaded via `System.loadLibrary(...)`.
-     * @example `NitroImage`
-     */
-    androidCxxLibName: z.string(),
-  }),
-})
-
-/**
- * Represents the structure of a `nitro.json` config file.
- */
-export type NitroConfig = z.infer<typeof ConfigSchema>
+import {
+  NitroUserConfigSchema,
+  type NitroUserConfig,
+} from './NitroUserConfig.js'
 
 async function readFile(directory: string): Promise<string> {
   try {
@@ -89,7 +42,7 @@ function propPathToString(propPath: (string | number)[]): string {
   return prop.slice(1)
 }
 
-function parseConfig(json: string): NitroConfig {
+function parseConfig(json: string): NitroUserConfig {
   let object: unknown
   try {
     object = JSON.parse(json)
@@ -103,15 +56,18 @@ function parseConfig(json: string): NitroConfig {
   }
 
   try {
-    return ConfigSchema.parse(object)
+    return NitroUserConfigSchema.parse(object)
   } catch (error) {
     if (error instanceof ZodError) {
       const issues = error.issues.map((i) => {
         const prop = propPathToString(i.path)
-        if (i.code === 'invalid_type') {
-          return `\`${prop}\` must be ${i.expected}, but is ${i.received}.`
-        } else {
-          return `\`${prop}\`: ${i.message}.`
+        switch (i.code) {
+          case 'invalid_type':
+            return `\`${prop}\` must be ${i.expected}, but is ${i.received}.`
+          case 'invalid_string':
+            return `\`${prop}\` is not a valid & safe string. It must only contain alphanumeric characters and must not start with a number.`
+          default:
+            return `\`${prop}\`: ${i.message} (${i.code})`
         }
       })
       throw new Error(
@@ -123,7 +79,9 @@ function parseConfig(json: string): NitroConfig {
   }
 }
 
-export async function readUserConfig(directory: string): Promise<NitroConfig> {
+export async function readUserConfig(
+  directory: string
+): Promise<NitroUserConfig> {
   const json = await readFile(directory)
   const config = parseConfig(json)
   return config

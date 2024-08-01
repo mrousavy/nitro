@@ -1,6 +1,7 @@
 import chalk from 'chalk'
 import { getBaseDirectory } from '../getCurrentDir.js'
 import { readUserConfig } from './getConfig.js'
+import type { NitroUserConfig } from './NitroUserConfig.js'
 
 const CXX_BASE_NAMESPACE = ['margelo', 'nitro']
 const ANDROID_BASE_NAMESPACE = ['com', 'margelo', 'nitro']
@@ -13,6 +14,13 @@ const userConfig = await readUserConfig(baseDirectory)
  * Represents the properly parsed `nitro.json` config of the current executing directory.
  */
 export const NitroConfig = {
+  /**
+   * Get the minimum log level for Nitrogen output.
+   */
+  getLogLevel(): NitroUserConfig['logLevel'] {
+    return userConfig.logLevel
+  },
+
   /**
    * Returns the name of the Android C++ library (aka name in CMakeLists.txt `add_library(..)`).
    * This will be loaded via `System.loadLibrary(...)`.
