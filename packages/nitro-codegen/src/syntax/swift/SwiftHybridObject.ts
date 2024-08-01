@@ -23,7 +23,7 @@ import NitroModules
  *
  * When implementing this protocol, make sure to initialize \`hybridContext\` - example:
  * \`\`\`
- * public class ${spec.name} : ${protocolName} {
+ * public class ${name.HybridT} : ${protocolName} {
  *   // Initialize HybridContext
  *   var hybridContext = margelo.nitro.HybridContext()
  *

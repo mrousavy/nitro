@@ -15,7 +15,7 @@ import NitroModules
  *
  * When implementing this protocol, make sure to initialize `hybridContext` - example:
  * ```
- * public class ImageFactory : HybridImageFactorySpec {
+ * public class HybridImageFactory : HybridImageFactorySpec {
  *   // Initialize HybridContext
  *   var hybridContext = margelo.nitro.HybridContext()
  *
