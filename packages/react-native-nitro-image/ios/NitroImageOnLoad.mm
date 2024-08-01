@@ -5,8 +5,8 @@
 //  Created by Marc Rousavy on 22.07.24.
 //
 
-#import "HybridImageFactorySwift.hpp"
-#import "HybridTestImpl.hpp"
+#import "HybridImageFactorySpecSwift.hpp"
+#import "HybridTestObject.hpp"
 #import <Foundation/Foundation.h>
 #import <NitroModules/HybridObjectRegistry.hpp>
 
@@ -26,10 +26,10 @@ using namespace margelo::nitro;
 + (void)load {
   HybridObjectRegistry::registerHybridObjectConstructor("ImageFactory", []() -> std::shared_ptr<HybridObject> {
     auto imageFactory = NitroImage::NitroImageRegistry::createImageFactory();
-    return std::make_shared<HybridImageFactorySwift>(imageFactory);
+    return std::make_shared<HybridImageFactorySpecSwift>(imageFactory);
   });
   HybridObjectRegistry::registerHybridObjectConstructor(
-      "TestObject", []() -> std::shared_ptr<HybridObject> { return std::make_shared<HybridTestObjectImpl>(); });
+      "TestObject", []() -> std::shared_ptr<HybridObject> { return std::make_shared<HybridTestObject>(); });
 }
 
 @end

@@ -29,8 +29,7 @@ export class HybridObjectType implements Type {
         return `std::shared_ptr<${fullName}>`
       }
       case 'swift': {
-        const fullName = NitroConfig.getCxxNamespace('swift', name.HybridTSpec)
-        return fullName
+        return name.HybridTSpec
       }
       case 'kotlin': {
         const fullName = NitroConfig.getAndroidPackage(

@@ -7,11 +7,11 @@
 
 #pragma once
 
-#include "HybridTestObject.hpp"
+#include "HybridTestObjectSpec.hpp"
 
 namespace margelo::nitro::image {
 
-class HybridTestObjectImpl : public HybridTestObject {
+class HybridTestObject : public HybridTestObjectSpec {
 public:
   std::future<void> getValueFromJsCallback(const Func_std__future_std__string_& callback,
                                            const Func_void_std__string& andThenCall) override;

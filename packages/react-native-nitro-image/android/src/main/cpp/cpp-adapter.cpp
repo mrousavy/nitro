@@ -15,7 +15,7 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void*) {
   JHybridImageFactory::registerNatives();
 
   HybridObjectRegistry::registerHybridObjectConstructor(
-      "TestObject", []() -> std::shared_ptr<HybridObject> { return std::make_shared<HybridTestObjectImpl>(); });
+      "TestObject", []() -> std::shared_ptr<HybridObject> { return std::make_shared<HybridTestObject>(); });
 
   return JNI_VERSION_1_2;
 }

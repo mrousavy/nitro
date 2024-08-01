@@ -1,5 +1,5 @@
 //
-//  Image.swift
+//  HybridImage.swift
 //  react-native-nitro-image
 //
 //  Created by Marc Rousavy on 18.07.24.
@@ -10,9 +10,9 @@ import UIKit
 import NitroModules
 
 /**
- * Implement `ImageSpec` so we can expose this Swift class to JS.
+ * Implement `HybridImageSpec` so we can expose this Swift class to JS.
  */
-class Image : ImageSpec {
+class HybridImage : HybridImageSpec {
   /**
    * Alias the namespace so we don't have to write it out each time.
    */

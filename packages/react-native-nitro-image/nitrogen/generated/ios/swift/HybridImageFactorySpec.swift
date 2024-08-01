@@ -33,10 +33,10 @@ public protocol HybridImageFactorySpec: HybridObjectSpec {
   
 
   // Methods
-  func loadImageFromFile(path: String) throws -> margelo.nitro.image.HybridImageSpec
-  func loadImageFromURL(path: String) throws -> margelo.nitro.image.HybridImageSpec
-  func loadImageFromSystemName(path: String) throws -> margelo.nitro.image.HybridImageSpec
-  func bounceBack(image: margelo.nitro.image.HybridImageSpec) throws -> margelo.nitro.image.HybridImageSpec
+  func loadImageFromFile(path: String) throws -> HybridImageSpec
+  func loadImageFromURL(path: String) throws -> HybridImageSpec
+  func loadImageFromSystemName(path: String) throws -> HybridImageSpec
+  func bounceBack(image: HybridImageSpec) throws -> HybridImageSpec
 }
 
 public extension HybridImageFactorySpec {

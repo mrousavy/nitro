@@ -8,8 +8,8 @@
 import Foundation
 
 public class NitroImageRegistry {
-  public static func createImageFactory() -> ImageFactorySpecCxx {
-    let imageFactory = ImageFactory()
-    return ImageFactorySpecCxx(imageFactory)
+  public static func createImageFactory() -> HybridImageFactorySpecCxx {
+    let imageFactory = HybridImageFactory()
+    return HybridImageFactorySpecCxx(imageFactory)
   }
 }

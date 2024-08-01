@@ -4,6 +4,7 @@ import { indent } from '../../stringUtils.js'
 import type { HybridObjectSpec } from '../HybridObjectSpec.js'
 import { includeNitroHeader } from './includeNitroHeader.js'
 import { NitroConfig } from '../../config/NitroConfig.js'
+import { getHybridObjectName } from '../getHybridObjectName.js'
 
 export function createCppHybridObject(spec: HybridObjectSpec): SourceFile[] {
   // Extra includes
@@ -23,10 +24,11 @@ export function createCppHybridObject(spec: HybridObjectSpec): SourceFile[] {
     .map((i) => `#include "${i.name}"`)
     .filter(isNotDuplicate)
   const cxxNamespace = NitroConfig.getCxxNamespace('c++')
+  const name = getHybridObjectName(spec.name)
 
   // Generate the full header / code
   const cppHeaderCode = `
-${createFileMetadataString(`${spec.hybridObjectName}.hpp`)}
+${createFileMetadataString(`${name.HybridTSpec}.hpp`)}
 
 #pragma once
 
@@ -42,21 +44,21 @@ namespace ${cxxNamespace} {
 
   /**
    * An abstract base class for \`${spec.name}\`
-   * Inherit this class to create instances of \`${spec.hybridObjectName}\` in C++.
+   * Inherit this class to create instances of \`${name.HybridTSpec}\` in C++.
    * @example
    * \`\`\`cpp
-   * class ${spec.name}: public ${spec.hybridObjectName} {
+   * class ${name.HybridT}: public ${name.HybridTSpec} {
    *   // ...
    * };
    * \`\`\`
    */
-  class ${spec.hybridObjectName}: public HybridObject {
+  class ${name.HybridTSpec}: public HybridObject {
     public:
       // Constructor
-      explicit ${spec.hybridObjectName}(): HybridObject(TAG) { }
+      explicit ${name.HybridTSpec}(): HybridObject(TAG) { }
 
       // Destructor
-      ~${spec.hybridObjectName}() { }
+      ~${name.HybridTSpec}() { }
 
     public:
       // Properties
@@ -83,30 +85,30 @@ namespace ${cxxNamespace} {
   for (const property of spec.properties) {
     // getter
     registrations.push(
-      `registerHybridGetter("${property.name}", &${spec.hybridObjectName}::${property.cppGetterName}, this);`
+      `registerHybridGetter("${property.name}", &${name.HybridTSpec}::${property.cppGetterName}, this);`
     )
     if (!property.isReadonly) {
       // setter
       registrations.push(
-        `registerHybridSetter("${property.name}", &${spec.hybridObjectName}::${property.cppSetterName}, this);`
+        `registerHybridSetter("${property.name}", &${name.HybridTSpec}::${property.cppSetterName}, this);`
       )
     }
   }
   for (const method of spec.methods) {
     // method
     registrations.push(
-      `registerHybridMethod("${method.name}", &${spec.hybridObjectName}::${method.name}, this);`
+      `registerHybridMethod("${method.name}", &${name.HybridTSpec}::${method.name}, this);`
     )
   }
 
   const cppBodyCode = `
-${createFileMetadataString(`${spec.hybridObjectName}.cpp`)}
+${createFileMetadataString(`${name.HybridTSpec}.cpp`)}
 
-#include "${spec.hybridObjectName}.hpp"
+#include "${name.HybridTSpec}.hpp"
 
 namespace ${cxxNamespace} {
 
-  void ${spec.hybridObjectName}::loadHybridMethods() {
+  void ${name.HybridTSpec}::loadHybridMethods() {
     // load base methods/properties
     HybridObject::loadHybridMethods();
     // load custom methods/properties
@@ -119,14 +121,14 @@ namespace ${cxxNamespace} {
   const files: SourceFile[] = []
   files.push({
     content: cppHeaderCode,
-    name: `${spec.hybridObjectName}.hpp`,
+    name: `${name.HybridTSpec}.hpp`,
     subdirectory: [],
     language: 'c++',
     platform: 'shared',
   })
   files.push({
     content: cppBodyCode,
-    name: `${spec.hybridObjectName}.cpp`,
+    name: `${name.HybridTSpec}.cpp`,
     subdirectory: [],
     language: 'c++',
     platform: 'shared',
