@@ -12293,6 +12293,7 @@ __metadata:
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
     "@release-it-plugins/workspaces": ^4.2.0
+    "@release-it/conventional-changelog": ^5.1.1
     release-it: ^17.6.0
   languageName: unknown
   linkType: soft
