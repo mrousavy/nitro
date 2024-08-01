@@ -27,64 +27,7 @@ It consists of two parts:
     3. **New File** > **Swift File** > Call it **EmptyFile.swift** > **Create**
     4. When promted to create a Bridging Header, press **Create Bridging Header**
 
-## Usage
-
-### 1. Create a TypeScript spec
-
-The TypeScript spec is the single source of truth. It's interfaces, enums or other type declarations will be converted to C++ (or Swift/Kotlin) types using a code generator.
-
-```ts
-export interface MathsModule {
-  readonly pi: number
-  multiply: (a: number, b: number) => number
-  subtract: (a: number, b: number) => number
-  add: (a: number, b: number) => number
-}
-```
-
-### 2. Implement the native interface
-
-In C++:
-
-```cpp
-class MathsModule: public MathsModuleSpec {
-public:
-  double getPi() override { return PI; }
-
-  double multiply(double a, double b) override { return a * b; }
-  double subtract(double a, double b) override { return a - b; }
-  double add(double a, double b) override { return a + b; }
-};
-```
-
-In Swift:
-
-```swift
-class MathsModule: MathsModuleSpec {
-  var Pi: Double {
-    return .pi
-  }
-
-  func multiply(a: Double, b: Double) -> Double { return a * b }
-  func subtract(a: Double, b: Double) -> Double { return a - b }
-  func add(a: Double, b: Double) -> Double { return a + b }
-}
-```
-
-In Kotlin:
-
-```kotlin
-class MathsModule: MathsModuleSpec {
-  val Pi: Double
-    get() = PI
-
-  fun multiply(a: Double, b: Double): Double { return a * b }
-  fun subtract(a: Double, b: Double): Double { return a - b }
-  fun add(a: Double, b: Double): Double { return a + b }
-}
-```
-
-## Platforms
+## Supported Platforms
 
 ### Cross-platform
 
