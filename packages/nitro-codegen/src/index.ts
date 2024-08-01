@@ -12,6 +12,7 @@ import chalk from 'chalk'
 import { getFiles } from './getFiles.js'
 import { groupByPlatform, type SourceFile } from './syntax/SourceFile.js'
 import { Logger } from './Logger.js'
+import { createPodspecRubyExtension } from './autolinking/createPodspecRubyExtension.js'
 
 const start = performance.now()
 let targetSpecs = 0
@@ -133,6 +134,18 @@ for (const sourceFile of project.getSourceFiles()) {
           filesAfter.push(actualPath)
         }
       }
+
+      Logger.info(`⛓️   Setting up build configs for autolinking...`)
+
+      // iOS Podspec (Autolinking)
+      Logger.info(`    ${chalk.dim('ios')}: Creating Podspec extension...`)
+      const rubyFile = createPodspecRubyExtension()
+      const basePath = path.join(outFolder, rubyFile.platform)
+      const actualPath = await writeFile(
+        basePath,
+        rubyFile as unknown as SourceFile
+      )
+      filesAfter.push(actualPath)
 
       // Done!
       generatedSpecs++

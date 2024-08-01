@@ -13,11 +13,7 @@ Pod::Spec.new do |s|
   s.platforms    = { :ios => min_ios_version_supported }
   s.source       = { :git => "https://github.com/mrousavy/react-native-nitro.git", :tag => "#{s.version}" }
 
-  # VisionCamera Core C++ bindings
   s.source_files = [
-    # Generated specs
-    "nitrogen/generated/shared/**/*.{h,hpp,c,cpp,swift}",
-    "nitrogen/generated/ios/**/*.{h,hpp,c,cpp,swift}",
     # Implementation (Swift)
     "ios/**/*.{swift}",
     # Autolinking/Registration (Objective-C++)
@@ -25,22 +21,9 @@ Pod::Spec.new do |s|
     # Implementation (C++ objects)
     "cpp/**/*.{hpp,cpp}",
   ]
-  s.public_header_files = [
-    # Generated specs
-    "nitrogen/generated/shared/**/*.{h,hpp}",
-  ]
-  s.private_header_files = [
-    # iOS specific specs
-    "nitrogen/generated/ios/c++/**/*.{h,hpp}",
-  ]
 
-  s.pod_target_xcconfig = {
-    # Use C++ 20
-    "CLANG_CXX_LANGUAGE_STANDARD" => "c++20",
-    # Enables C++ <-> Swift interop (by default it's only C)
-    "SWIFT_OBJC_INTEROP_MODE" => "objcxx",
-  }
+  load 'nitrogen/generated/ios/NitroImage+autolinking.rb'
+  add_nitrogen_files(s)
 
   install_modules_dependencies(s)
-  s.dependency "NitroModules"
 end
