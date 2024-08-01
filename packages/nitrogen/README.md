@@ -14,7 +14,7 @@
 
 Install [nitrogen](https://npmjs.org/nitrogen) as a `devDependency` in your react-native library:
 ```sh
-yarn add nitrogen -D
+npm i nitrogen -D
 ```
 
 ## Usage
@@ -62,7 +62,7 @@ export interface Image extends HybridObject<{ ios: 'c++', android: 'c++' }> {
 Inside your library's root folder (i.e. the folder where `nitro.json` is), run nitrogen:
 
 ```sh
-yarn nitrogen
+npm run nitrogen
 ```
 
 This will generate all native files inside `./nitrogen/generated`.
