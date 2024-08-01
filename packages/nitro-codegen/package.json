@@ -2,13 +2,13 @@
   "name": "nitro-codegen",
   "version": "0.0.5",
   "description": "Code Generator for Nitro Modules",
-  "main": "lib/commonjs/index",
-  "module": "lib/module/index",
-  "types": "lib/typescript/src/index.d.ts",
+  "main": "lib/index",
+  "types": "lib/index.d.ts",
   "source": "src/index",
   "type": "module",
   "files": [
     "lib",
+    "src",
     "README.md"
   ],
   "bin": {
