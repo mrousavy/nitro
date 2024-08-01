@@ -4,7 +4,7 @@
 #include "JHybridImage.hpp"
 #include "JHybridImageFactory.hpp"
 
-#include "HybridTestImpl.hpp"
+#include "HybridTestObject.hpp"
 #include <NitroModules/HybridObjectRegistry.hpp>
 
 using namespace margelo::nitro::image;

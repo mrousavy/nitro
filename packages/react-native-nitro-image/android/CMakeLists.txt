@@ -11,7 +11,7 @@ include(${CMAKE_SOURCE_DIR}/../nitrogen/generated/android/NitroImage+autolinking
 # Define C++ library and add all sources
 add_library(${PACKAGE_NAME} SHARED
         src/main/cpp/cpp-adapter.cpp
-        ../cpp/HybridTestImpl.cpp
+        ../cpp/HybridTestObject.cpp
 )
 
 # Set up local includes
