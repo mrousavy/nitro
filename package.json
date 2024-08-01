@@ -2,12 +2,18 @@
   "repository": "https://github.com/mrousavy/react-native-nitro.git",
   "author": "Marc Rousavy <me@mrousavy.com> (https://github.com/mrousavy)",
   "scripts": {
-    "release": "bun release --workspaces && release-it"
+    "example": "yarn workspace react-native-nitro-example",
+    "check-all": "./scripts/clang-format.sh",
+    "bootstrap": "yarn workspace react-native-nitro-modules install && yarn workspace nitro-codegen install && yarn workspace react-native-nitro-image install && yarn workspace react-native-nitro-example install && yarn workspace react-native-nitro-example pods && yarn tsc",
+    "tsc": "yarn workspace react-native-nitro-modules tsc && yarn workspace nitro-codegen tsc && yarn workspace react-native-nitro-image tsc",
+    "lint": "yarn workspace react-native-nitro-modules lint && yarn workspace nitro-codegen lint && yarn workspace react-native-nitro-image lint",
+    "release": "yarn workspace react-native-nitro-modules release && yarn workspace nitro-codegen release",
+    "postinstall": "yarn tsc"
   },
   "workspaces": [
     "packages/*",
     "example"
   ],
   "private": true,
-  "packageManager": "yarn@1.22.19+sha1.4ba7fc5c6e704fce2066ecbfb0b0d8976fe62447"
+  "packageManager": "yarn@3.6.4"
 }
