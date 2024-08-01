@@ -1,4 +1,6 @@
 {
+  "repository": "https://github.com/mrousavy/react-native-nitro.git",
+  "author": "Marc Rousavy <me@mrousavy.com> (https://github.com/mrousavy)",
   "scripts": {
     "example": "yarn workspace react-native-nitro-example",
     "check-all": "./scripts/clang-format.sh",
