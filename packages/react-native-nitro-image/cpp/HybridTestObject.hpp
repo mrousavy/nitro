@@ -21,7 +21,7 @@ public:
   passVariant(const std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>>& either) override;
 
   // Map tests
-  std::shared_ptr<AnyMap> mapRoundtrip(const std::shared_ptr<AnyMap>& map) override;
+  std::shared_ptr<AnyMap> mapRoundtrip(std::shared_ptr<AnyMap> map) override;
   std::shared_ptr<AnyMap> createMap() override;
 
   // Tuple tests

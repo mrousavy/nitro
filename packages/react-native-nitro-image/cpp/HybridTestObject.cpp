@@ -30,7 +30,7 @@ std::variant<std::string, double> HybridTestObject::passVariant(const std::varia
   return {55.0};
 }
 
-std::shared_ptr<AnyMap> HybridTestObject::mapRoundtrip(const std::shared_ptr<AnyMap>& map) {
+std::shared_ptr<AnyMap> HybridTestObject::mapRoundtrip(std::shared_ptr<AnyMap> map) {
   return map;
 }
 
