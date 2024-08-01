@@ -1,4 +1,7 @@
 {
+  "compilerOptions": {
+    "noEmit": true
+  },
   "references": [
     {
       "path": "packages/react-native-nitro-modules"
