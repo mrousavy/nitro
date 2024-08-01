@@ -29,8 +29,7 @@
     "test": "jest",
     "typecheck": "tsc --noEmit",
     "clean": "del-cli android/build node_modules/**/android/build lib",
-    "lint": "eslint \"**/*.{js,ts,tsx}\" --fix",
-    "release": "bob build && release-it"
+    "lint": "eslint \"**/*.{js,ts,tsx}\" --fix"
   },
   "keywords": [
     "react-native",
@@ -52,7 +51,6 @@
   },
   "devDependencies": {
     "@react-native/eslint-config": "^0.74.85",
-    "@release-it/conventional-changelog": "^5.1.1",
     "@types/jest": "^29.5.12",
     "@types/react": "^18.3.3",
     "del-cli": "^5.1.0",
@@ -64,9 +62,7 @@
     "prettier": "^3.3.3",
     "react": "18.3.1",
     "react-native": "0.74.3",
-    "react-native-builder-bob": "^0.23.2",
     "react-native-nitro-modules": "workspace:^",
-    "release-it": "^15.11.0",
     "typescript": "^5.5.4"
   },
   "resolutions": {
@@ -82,47 +78,6 @@
       "<rootDir>/example/node_modules",
       "<rootDir>/lib/"
     ]
-  },
-  "release-it": {
-    "git": {
-      "commitMessage": "chore: release ${version}",
-      "tagName": "v${version}"
-    },
-    "npm": {
-      "publish": true
-    },
-    "github": {
-      "release": true
-    },
-    "plugins": {
-      "@release-it/conventional-changelog": {
-        "preset": {
-          "name": "conventionalcommits",
-          "types": [
-            {
-              "type": "feat",
-              "section": "✨ Features"
-            },
-            {
-              "type": "perf",
-              "section": "💨 Performance Improvements"
-            },
-            {
-              "type": "fix",
-              "section": "🐛 Bug Fixes"
-            },
-            {
-              "type": "chore(deps)",
-              "section": "🛠️ Dependency Upgrades"
-            },
-            {
-              "type": "docs",
-              "section": "📚 Documentation"
-            }
-          ]
-        }
-      }
-    }
   },
   "eslintConfig": {
     "root": true,
@@ -154,19 +109,5 @@
     "trailingComma": "es5",
     "useTabs": false,
     "semi": false
-  },
-  "react-native-builder-bob": {
-    "source": "src",
-    "output": "lib",
-    "targets": [
-      "commonjs",
-      "module",
-      [
-        "typescript",
-        {
-          "project": "tsconfig.build.json"
-        }
-      ]
-    ]
   }
 }
