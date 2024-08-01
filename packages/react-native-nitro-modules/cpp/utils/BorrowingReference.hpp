@@ -9,6 +9,7 @@
 
 #include <cstddef>
 #include <mutex>
+#include <atomic>
 
 namespace margelo::nitro {
 
@@ -106,8 +107,8 @@ private:
 private:
   T* _value;
   bool* _isDeleted;
-  size_t* _strongRefCount;
-  size_t* _weakRefCount;
+  std::atomic_size_t* _strongRefCount;
+  std::atomic_size_t* _weakRefCount;
   std::mutex* _mutex;
 };
 

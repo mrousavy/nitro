@@ -11,6 +11,7 @@
 #include "OwningLock.hpp"
 #include <cstddef>
 #include <mutex>
+#include <atomic>
 
 namespace margelo::nitro {
 
@@ -31,7 +32,7 @@ public:
   OwningReference() : _value(nullptr), _isDeleted(nullptr), _strongRefCount(nullptr), _weakRefCount(nullptr), _mutex(nullptr) {}
 
   explicit OwningReference(T* value)
-      : _value(value), _isDeleted(new bool(false)), _strongRefCount(new size_t(1)), _weakRefCount(new size_t(0)), _mutex(new std::mutex()) {
+      : _value(value), _isDeleted(new bool(false)), _strongRefCount(new std::atomic_size_t(1)), _weakRefCount(new std::atomic_size_t(0)), _mutex(new std::mutex()) {
   }
 
   OwningReference(const OwningReference& ref)
@@ -203,8 +204,8 @@ public:
 private:
   T* _value;
   bool* _isDeleted;
-  size_t* _strongRefCount;
-  size_t* _weakRefCount;
+  std::atomic_size_t* _strongRefCount;
+  std::atomic_size_t* _weakRefCount;
   std::mutex* _mutex;
 };
 
