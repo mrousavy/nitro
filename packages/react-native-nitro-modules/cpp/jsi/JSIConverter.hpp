@@ -360,6 +360,7 @@ template <typename ValueType> struct JSIConverter<std::unordered_map<std::string
   }
 };
 
+// std::tuple<A, B, C> <> [A, B, C]
 template <typename... Types> struct JSIConverter<std::tuple<Types...>> {
   static inline std::tuple<Types...> fromJSI(jsi::Runtime& runtime, const jsi::Value& value) {
     jsi::Object object = value.asObject(runtime);

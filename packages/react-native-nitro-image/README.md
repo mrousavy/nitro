@@ -36,7 +36,7 @@ yarn nitrogen
     2. Adds all Nitrogen files (`include(.../NitroImage+autolinking.cmake)`)
     3. Adds all custom C++ files (only `HybridTestObject.cpp`)
     4. Adds a `cpp-adapter.cpp` file, which autolinks all C++ HybridObjects (only `HybridTestObject`)
-  - [`src/main/java/com/margelo/nitro/image/`](android/src/main/java/com/margelo/nitro/image/)
+  - [`src/main/java/com/margelo/nitro/image/`](android/src/main/java/com/margelo/nitro/image/): All Kotlin implementations.
     - [`NitroImagePackage.java`](android/src/main/java/com/margelo/nitro/image/NitroImagePackage.java): The react-native package. You need this because the react-native CLI only adds libraries if they have a `*Package.java` file. In here, you can autolink all Kotlin HybridObjects (`ImageFactory`)
 - [`cpp/`](cpp): All your cross-platform implementations. (only `HybridTestObject.cpp`)
 - [`ios/`](ios): All your iOS-specific implementations. (`HybridImage.swift` and `HybridImageFactory.swift`)
