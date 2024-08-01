@@ -42,7 +42,7 @@
   },
   "dependencies": {
     "chalk": "^5.3.0",
-    "react-native-nitro-modules": "workspace:*",
+    "react-native-nitro-modules": "*",
     "ts-morph": "^23.0.0",
     "zod": "^3.23.8"
   },
