@@ -1,6 +1,6 @@
 {
   "name": "nitro-codegen",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Code Generator for Nitro Modules",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
