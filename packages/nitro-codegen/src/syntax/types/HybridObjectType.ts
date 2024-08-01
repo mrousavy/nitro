@@ -24,12 +24,21 @@ export class HybridObjectType implements Type {
     const name = getHybridObjectName(this.hybridObjectName)
 
     switch (language) {
-      case 'c++':
-        return `std::shared_ptr<${name.HybridT}>`
-      case 'swift':
-        return name.TSpec
-      case 'kotlin':
-        return name.HybridT
+      case 'c++': {
+        const fullName = NitroConfig.getCxxNamespace('c++', name.HybridT)
+        return `std::shared_ptr<${fullName}>`
+      }
+      case 'swift': {
+        const fullName = NitroConfig.getCxxNamespace('swift', name.TSpec)
+        return fullName
+      }
+      case 'kotlin': {
+        const fullName = NitroConfig.getAndroidPackage(
+          'java/kotlin',
+          name.TSpec
+        )
+        return fullName
+      }
       default:
         throw new Error(
           `Language ${language} is not yet supported for HybridObjectType!`
