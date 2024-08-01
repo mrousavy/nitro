@@ -18,7 +18,7 @@ It consists of two parts:
 
 1. Install [react-native-nitro-modules](https://npmjs.org/react-native-nitro-modules) from npm:
     ```sh
-    yarn add react-native-nitro-modules
+    npm i react-native-nitro-modules
     cd ios && pod install
     ```
 2. If you don't already have one, add an empty Swift file to your iOS project (including a generated bridging header).

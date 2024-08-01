@@ -20,7 +20,7 @@ Nitro Image also contains a `HybridTestObject`, which can be used for playing ar
 When any of the HybridObjects specs (`*.nitro.ts`) change, you must re-run nitrogen:
 
 ```ts
-yarn nitrogen
+npm run nitrogen
 ```
 
 ## Structure

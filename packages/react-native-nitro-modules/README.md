@@ -18,7 +18,7 @@ It uses JSI to generate C++ templates that can bridge virtually any JS type to a
 
 Install [react-native-nitro-modules](https://npmjs.org/react-native-nitro-modules) as a `dependency` in your react-native app:
 ```sh
-yarn add react-native-nitro-modules
+npm i react-native-nitro-modules
 cd ios && pod install
 ```
 
