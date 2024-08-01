@@ -1,6 +1,6 @@
 {
   "name": "nitro-codegen",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "The code-generator for react-native-nitro-modules.",
   "main": "lib/index",
   "types": "lib/index.d.ts",
