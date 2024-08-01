@@ -12,7 +12,7 @@
 It consists of two parts:
 
 - [**react-native-nitro-modules**](packages/react-native-nitro-modules): The core C++ library powering all nitro modules
-- [**nitrogen**](packages/nitro-codegen): A code-generator for nitro module library authors
+- [**nitrogen**](packages/nitrogen): A code-generator for nitro module library authors
 
 ## Installation
 

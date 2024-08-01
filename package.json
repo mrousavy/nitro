@@ -2,9 +2,9 @@
   "scripts": {
     "example": "yarn workspace react-native-nitro-example",
     "check-all": "./scripts/clang-format.sh",
-    "bootstrap": "yarn workspace react-native-nitro-modules install && yarn workspace nitro-codegen install && yarn workspace react-native-nitro-image install && yarn workspace react-native-nitro-example install && yarn workspace react-native-nitro-example pods && yarn tsc",
-    "tsc": "yarn workspace react-native-nitro-modules tsc && yarn workspace nitro-codegen tsc && yarn workspace react-native-nitro-image tsc",
-    "lint": "yarn workspace react-native-nitro-modules lint && yarn workspace nitro-codegen lint && yarn workspace react-native-nitro-image lint",
+    "bootstrap": "yarn workspace react-native-nitro-modules install && yarn workspace nitrogen install && yarn workspace react-native-nitro-image install && yarn workspace react-native-nitro-example install && yarn workspace react-native-nitro-example pods && yarn tsc",
+    "tsc": "yarn workspace react-native-nitro-modules tsc && yarn workspace nitrogen tsc && yarn workspace react-native-nitro-image tsc",
+    "lint": "yarn workspace react-native-nitro-modules lint && yarn workspace nitrogen lint && yarn workspace react-native-nitro-image lint",
     "postinstall": "yarn tsc"
   },
   "workspaces": [

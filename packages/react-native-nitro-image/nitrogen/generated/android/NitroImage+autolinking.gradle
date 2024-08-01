@@ -14,8 +14,6 @@
 /// apply from: '../nitrogen/generated/android/NitroImage+autolinking.gradle'
 /// ```
 
-apply plugin: 'org.jetbrains.kotlin.android'
-
 android {
   sourceSets {
     main {

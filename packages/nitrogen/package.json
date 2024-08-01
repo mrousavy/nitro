@@ -1,5 +1,5 @@
 {
-  "name": "nitro-codegen",
+  "name": "nitrogen",
   "version": "0.0.6",
   "description": "Code Generator for Nitro Modules",
   "main": "lib/index",
@@ -11,9 +11,7 @@
     "src",
     "README.md"
   ],
-  "bin": {
-    "nitrogen": "./lib/index.js"
-  },
+  "bin": "./lib/index.js",
   "scripts": {
     "start": "tsc && node lib/index.js",
     "postinstall": "tsc || exit 0;",
