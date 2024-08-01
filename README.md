@@ -27,6 +27,12 @@ It consists of two parts:
     3. **New File** > **Swift File** > Call it **EmptyFile.swift** > **Create**
     4. When promted to create a Bridging Header, press **Create Bridging Header**
 
+## Documentation
+
+- [**Nitrogen** docs](./packages/nitrogen/README.md)
+- [**react-native-nitro-modules** docs](./packages/react-native-nitro-modules/README.md)
+- [**react-native-nitro-image** example module](./packages/react-native-nitro-image/README.md)
+
 ## Supported Platforms
 
 ### Cross-platform
