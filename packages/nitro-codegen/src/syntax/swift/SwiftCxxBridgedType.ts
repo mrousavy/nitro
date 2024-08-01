@@ -92,7 +92,10 @@ export class SwiftCxxBridgedType {
           case 'c++':
             return `static_cast<int>(${cppParameterName})`
           case 'swift':
-            const fullName = NitroConfig.getCxxNamespace('swift', enumType.enumName)
+            const fullName = NitroConfig.getCxxNamespace(
+              'swift',
+              enumType.enumName
+            )
             return `${fullName}(rawValue: ${cppParameterName})!`
           default:
             throw new Error(`Invalid language! ${language}`)
