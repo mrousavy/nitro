@@ -9,9 +9,9 @@
 
 #include "BorrowingReference.hpp"
 #include "OwningLock.hpp"
+#include <atomic>
 #include <cstddef>
 #include <mutex>
-#include <atomic>
 
 namespace margelo::nitro {
 
@@ -32,8 +32,8 @@ public:
   OwningReference() : _value(nullptr), _isDeleted(nullptr), _strongRefCount(nullptr), _weakRefCount(nullptr), _mutex(nullptr) {}
 
   explicit OwningReference(T* value)
-      : _value(value), _isDeleted(new bool(false)), _strongRefCount(new std::atomic_size_t(1)), _weakRefCount(new std::atomic_size_t(0)), _mutex(new std::mutex()) {
-  }
+      : _value(value), _isDeleted(new bool(false)), _strongRefCount(new std::atomic_size_t(1)), _weakRefCount(new std::atomic_size_t(0)),
+        _mutex(new std::mutex()) {}
 
   OwningReference(const OwningReference& ref)
       : _value(ref._value), _isDeleted(ref._isDeleted), _strongRefCount(ref._strongRefCount), _weakRefCount(ref._weakRefCount),

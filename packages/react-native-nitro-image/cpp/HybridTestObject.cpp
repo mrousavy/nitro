@@ -13,7 +13,7 @@
 namespace margelo::nitro::image {
 
 std::future<void> HybridTestObject::getValueFromJsCallback(const Func_std__future_std__string_& callback,
-                                                               const Func_void_std__string& andThenCall) {
+                                                           const Func_void_std__string& andThenCall) {
   Logger::log(TAG, "Starting async getValueFromJsCallback(..)..");
   return std::async(std::launch::async, [callback = std::move(callback), andThenCall = std::move(andThenCall)]() {
     Logger::log(TAG, "Getting value from JS...");
@@ -26,7 +26,8 @@ std::future<void> HybridTestObject::getValueFromJsCallback(const Func_std__futur
   });
 }
 
-std::variant<std::string, double> HybridTestObject::passVariant(const std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>>& either) {
+std::variant<std::string, double>
+HybridTestObject::passVariant(const std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>>& either) {
   return {55.0};
 }
 
