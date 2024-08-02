@@ -33,6 +33,9 @@ export default function App() {
   const test = HybridTestObject.passTuple([53, 'helo', false])
   console.log('tuple result:', test)
 
+  const optionalResult = HybridTestObject.tryOptionalParams(55, true)
+  console.log('optional result:', optionalResult)
+
   try {
     HybridTestObject.funcThatThrows()
     console.error(`Function should've thrown by now!`)
