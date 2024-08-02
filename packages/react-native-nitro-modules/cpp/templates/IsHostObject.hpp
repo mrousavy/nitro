@@ -22,6 +22,6 @@ template <typename T>
 struct is_shared_ptr_to_host_object<std::shared_ptr<T>> : std::is_base_of<jsi::HostObject, T> {};
 
 template <typename T>
-using is_shared_ptr_to_host_object_v = typename is_shared_ptr_to_host_object<std::remove_reference_t<T>>::value;
+inline constexpr bool is_shared_ptr_to_host_object_v = is_shared_ptr_to_host_object<std::remove_reference_t<T>>::value;
 
 } // namespace margelo::nitro

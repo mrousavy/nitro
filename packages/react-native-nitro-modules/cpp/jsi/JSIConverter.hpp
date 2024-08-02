@@ -576,7 +576,7 @@ private:
 
 // NativeState <> {}
 template <typename T>
-struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_native_state<T>>> {
+struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_native_state_v<T>>> {
   using TPointee = typename T::element_type;
 
   static inline T fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
