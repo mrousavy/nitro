@@ -35,7 +35,8 @@ constexpr uint64_t hashString(const char* str, size_t length) {
  *
  * String length is known at compile time.
  */
-template <size_t N> constexpr uint64_t hashString(const char (&str)[N]) {
+template <size_t N>
+constexpr uint64_t hashString(const char (&str)[N]) {
   return hashString(str, N - 1); // N includes the null terminator, so subtract 1
 }
 

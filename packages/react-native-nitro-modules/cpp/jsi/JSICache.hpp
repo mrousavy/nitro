@@ -23,9 +23,11 @@ using namespace facebook;
 
 static constexpr auto CACHE_PROP_NAME = "__nitroModulesJSICache";
 
-template <typename T> class JSICache;
+template <typename T>
+class JSICache;
 
-template <typename T> class JSICacheReference final {
+template <typename T>
+class JSICacheReference final {
 public:
   JSICacheReference() = delete;
   JSICacheReference(const JSICacheReference&) = delete;
@@ -70,7 +72,8 @@ private:
  * `jsi::Pointer`s are managed by a `jsi::Runtime`, and will be deleted if the `jsi::Runtime`
  * is deleted - even if there are still strong references to the `jsi::Pointer`.
  */
-template <typename T = jsi::Pointer> class JSICache final : public jsi::NativeState {
+template <typename T = jsi::Pointer>
+class JSICache final : public jsi::NativeState {
 public:
   explicit JSICache(jsi::Runtime* runtime) : _runtime(runtime) {}
 

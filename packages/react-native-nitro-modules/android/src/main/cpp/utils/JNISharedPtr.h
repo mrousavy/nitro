@@ -11,7 +11,8 @@ namespace margelo::nitro {
 
 using namespace facebook;
 
-template <typename T> struct GlobalRefDeleter {
+template <typename T>
+struct GlobalRefDeleter {
   explicit GlobalRefDeleter(jni::global_ref<typename T::javaobject> ref) : _ref(ref) {}
 
   void operator()(T* ptr) {

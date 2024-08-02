@@ -20,6 +20,7 @@ ReflowComments: true
 # Line breaking options
 BreakBeforeBraces: Attach
 BreakConstructorInitializers: BeforeColon
+AlwaysBreakTemplateDeclarations: true
 AllowShortFunctionsOnASingleLine: Empty
 IndentCaseLabels: true
 NamespaceIndentation: Inner

@@ -11,7 +11,8 @@
 
 namespace margelo::nitro {
 
-template <typename T> BorrowingReference<T>::BorrowingReference(const OwningReference<T>& ref) {
+template <typename T>
+BorrowingReference<T>::BorrowingReference(const OwningReference<T>& ref) {
   _value = ref._value;
   _isDeleted = ref._isDeleted;
   _strongRefCount = ref._strongRefCount;
@@ -20,7 +21,8 @@ template <typename T> BorrowingReference<T>::BorrowingReference(const OwningRefe
   (*_weakRefCount)++;
 }
 
-template <typename T> OwningReference<T> BorrowingReference<T>::lock() {
+template <typename T>
+OwningReference<T> BorrowingReference<T>::lock() {
   std::unique_lock lock(*_mutex);
 
   if (*_isDeleted) {

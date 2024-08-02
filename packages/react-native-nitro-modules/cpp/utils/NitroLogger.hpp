@@ -17,13 +17,15 @@ private:
   Logger() = delete;
 
 public:
-  template <typename... Args> static void log(const char* tag, const char* message, Args&&... args) {
+  template <typename... Args>
+  static void log(const char* tag, const char* message, Args&&... args) {
     std::string formattedMessage = format(message, std::forward<Args>(args)...);
     std::cout << "[Nitro." << tag << "] " << formattedMessage << std::endl;
   }
 
 private:
-  template <typename... Args> static inline std::string format(const char* formatString, Args&&... args) {
+  template <typename... Args>
+  static inline std::string format(const char* formatString, Args&&... args) {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wformat-security"
     int size_s = std::snprintf(nullptr, 0, formatString, toCString(args)...) + 1; // Extra space for '\0'
@@ -47,7 +49,8 @@ private:
     return s;
   }
   // When the user passes any other type, just return that directly.
-  template <typename T> static inline T toCString(T value) {
+  template <typename T>
+  static inline T toCString(T value) {
     return value;
   }
 };

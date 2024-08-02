@@ -13,7 +13,8 @@ namespace margelo::nitro {
 
 using namespace facebook;
 
-template <typename T> class PointerHolder final : public HybridObject {
+template <typename T>
+class PointerHolder final : public HybridObject {
 protected:
   // no default constructor
   PointerHolder() = delete;

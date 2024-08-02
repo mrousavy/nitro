@@ -24,7 +24,8 @@ namespace margelo::nitro {
  An `OwningReference<T>` can be weakified, which gives the user a `BorrowingReference<T>`.
  A `BorrowingReference<T>` can be locked to get an `OwningReference<T>` again, assuming it has not been deleted yet.
  */
-template <typename T> class OwningReference final {
+template <typename T>
+class OwningReference final {
 public:
   using Pointee = T;
 

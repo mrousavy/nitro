@@ -41,7 +41,8 @@ public:
   /**
    * Get a friendly name of the type `T` (if possible, demangled)
    */
-  template <typename T> static inline std::string getFriendlyTypename() {
+  template <typename T>
+  static inline std::string getFriendlyTypename() {
     std::string name = typeid(T).name();
 #if __has_include(<cxxabi.h>)
     int status = 0;
@@ -70,7 +71,8 @@ public:
     return name;
   }
 
-  template <typename... Types> static inline std::string getFriendlyTypenames() {
+  template <typename... Types>
+  static inline std::string getFriendlyTypenames() {
     std::ostringstream stream;
     ((stream << TypeInfo::getFriendlyTypename<Types>() << ", "), ...);
     std::string string = stream.str();

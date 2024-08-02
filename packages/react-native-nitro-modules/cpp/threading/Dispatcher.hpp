@@ -44,7 +44,8 @@ public:
    * Run the given function asynchronously on the Thread this Dispatcher is managing,
    * and return a future that will hold the result of the function.
    */
-  template <typename T> std::future<T> runAsyncAwaitable(std::function<T()>&& function) {
+  template <typename T>
+  std::future<T> runAsyncAwaitable(std::function<T()>&& function) {
     // 1. Create Promise that can be shared between this and dispatcher thread
     auto promise = std::make_shared<std::promise<T>>();
     std::future<T> future = promise->get_future();
