@@ -69,12 +69,12 @@ namespace ${cxxNamespace} {
       ${indent(spec.methods.map((m) => m.getCode('c++', { virtual: true })).join('\n'), '      ')}
 
     protected:
-      // Tag for logging
-      static constexpr auto TAG = "${spec.name}";
-
-    private:
       // Hybrid Setup
       void loadHybridMethods() override;
+
+    protected:
+      // Tag for logging
+      static constexpr auto TAG = "${spec.name}";
   };
 
 } // namespace ${cxxNamespace}

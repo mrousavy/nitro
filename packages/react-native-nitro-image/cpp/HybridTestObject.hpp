@@ -32,6 +32,20 @@ public:
   double getValueThatWillThrowOnAccess() override;
   void setValueThatWillThrowOnAccess(double valueThatWillThrowOnAccess) override;
   double funcThatThrows() override;
+  
+  // Optional params
+  std::string tryOptionalParams(double first, bool second, std::optional<std::string> third = std::nullopt) {
+    if (third.has_value()) {
+      return *third;
+    } else {
+      return "omitted!";
+    }
+  }
+  
+  void loadHybridMethods() override {
+    HybridTestObjectSpec::loadHybridMethods();
+    registerHybridMethod("tryOptionalParams", &HybridTestObject::tryOptionalParams, this);
+  }
 };
 
 }; // namespace margelo::nitro::image

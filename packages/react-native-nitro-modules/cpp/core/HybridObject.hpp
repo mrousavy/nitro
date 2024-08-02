@@ -151,15 +151,21 @@ private:
 
 private:
   template <typename Derived, typename ReturnType, typename... Args, size_t... Is>
-  static inline jsi::Value callMethod(Derived* obj, ReturnType (Derived::*method)(Args...), jsi::Runtime& runtime, const jsi::Value* args,
+  static inline jsi::Value callMethod(Derived* obj,
+                                      ReturnType (Derived::*method)(Args...),
+                                      jsi::Runtime& runtime,
+                                      const jsi::Value* args,
+                                      size_t argsSize,
                                       std::index_sequence<Is...>) {
+    jsi::Value defaultValue;
+    
     if constexpr (std::is_void_v<ReturnType>) {
       // It's a void method.
-      (obj->*method)(JSIConverter<std::decay_t<Args>>::fromJSI(runtime, args[Is])...);
+      (obj->*method)(JSIConverter<std::decay_t<Args>>::fromJSI(runtime, Is < argsSize ? args[argsSize] : defaultValue)...);
       return jsi::Value::undefined();
     } else {
       // It's returning some C++ type, we need to convert that to a JSI value now.
-      ReturnType result = (obj->*method)(JSIConverter<std::decay_t<Args>>::fromJSI(runtime, args[Is])...);
+      ReturnType result = (obj->*method)(JSIConverter<std::decay_t<Args>>::fromJSI(runtime, Is < argsSize ? args[argsSize] : defaultValue)...);
       return JSIConverter<std::decay_t<ReturnType>>::toJSI(runtime, std::move(result));
     }
   }
@@ -169,12 +175,12 @@ private:
                                                          MethodType type) {
     return [name, derivedInstance, method, type](jsi::Runtime& runtime, const jsi::Value& thisVal, const jsi::Value* args,
                                                  size_t count) -> jsi::Value {
-      if (count != sizeof...(Args)) {
+      /*if (count != sizeof...(Args)) {
         // invalid amount of arguments passed!
         std::string hybridObjectName = derivedInstance->_name;
         throw jsi::JSError(runtime, hybridObjectName + "." + name + "(...) expected " + std::to_string(sizeof...(Args)) +
                                         " arguments, but received " + std::to_string(count) + "!");
-      }
+      }*/
 
       try {
         if constexpr (std::is_same_v<ReturnType, jsi::Value>) {
@@ -184,7 +190,7 @@ private:
         } else {
           // Call the actual method with JSI values as arguments and return a JSI value again.
           // Internally, this method converts the JSI values to C++ values.
-          return callMethod(derivedInstance, method, runtime, args, std::index_sequence_for<Args...>{});
+          return callMethod(derivedInstance, method, runtime, args, count, std::index_sequence_for<Args...>{});
         }
       } catch (const std::exception& exception) {
         std::string hybridObjectName = derivedInstance->_name;

@@ -62,7 +62,7 @@ namespace margelo::nitro::image {
       // Tag for logging
       static constexpr auto TAG = "TestObject";
 
-    private:
+    protected:
       // Hybrid Setup
       void loadHybridMethods() override;
   };
