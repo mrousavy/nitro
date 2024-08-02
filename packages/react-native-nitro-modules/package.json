@@ -28,7 +28,8 @@
     "typecheck": "tsc --noEmit",
     "clean": "del-cli android/build node_modules/**/android/build lib",
     "lint": "eslint \"**/*.{js,ts,tsx}\" --fix",
-    "release": "bob build && release-it"
+    "release": "bob build && release-it",
+    "typescript": "tsc"
   },
   "keywords": [
     "react-native",

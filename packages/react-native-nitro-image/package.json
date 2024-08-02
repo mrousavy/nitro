@@ -29,7 +29,8 @@
     "test": "jest",
     "typecheck": "tsc --noEmit",
     "clean": "del-cli android/build node_modules/**/android/build lib",
-    "lint": "eslint \"**/*.{js,ts,tsx}\" --fix"
+    "lint": "eslint \"**/*.{js,ts,tsx}\" --fix",
+    "typescript": "tsc"
   },
   "keywords": [
     "react-native",
