@@ -26,6 +26,7 @@ include_directories(
   ../cpp/platform
   ../cpp/registry
   ../cpp/test-object
+  ../cpp/templates
   ../cpp/threading
   ../cpp/turbomodule
   ../cpp/utils

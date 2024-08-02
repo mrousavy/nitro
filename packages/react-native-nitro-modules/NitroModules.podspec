@@ -28,11 +28,11 @@ Pod::Spec.new do |s|
   ]
   s.public_header_files = [
     # Public C++ headers will be exposed in modulemap (for Swift)
+    "cpp/core/ArrayBuffer.hpp",
     "cpp/core/HybridObject.hpp",
     "cpp/core/HybridContext.hpp",
     "cpp/registry/HybridObjectRegistry.hpp",
     "cpp/jsi/JSIConverter.hpp",
-    "cpp/jsi/ArrayBuffer.hpp",
     "cpp/threading/Dispatcher.hpp",
     "cpp/utils/NitroHash.hpp",
     "cpp/utils/NitroDefines.hpp",

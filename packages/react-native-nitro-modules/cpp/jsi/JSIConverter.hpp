@@ -16,6 +16,10 @@ class HybridObject;
 #include "NitroHash.hpp"
 #include "Promise.hpp"
 #include "TypeInfo.hpp"
+#include "FutureType.hpp"
+#include "IsInPack.hpp"
+#include "IsHostObject.hpp"
+#include "IsNativeState.hpp"
 #include <array>
 #include <future>
 #include <jsi/jsi.h>
@@ -222,22 +226,11 @@ struct JSIConverter<std::future<TResult>> {
   }
 };
 
-template <typename T>
-struct future_traits {
-  using type = void;
-};
-template <typename T>
-struct future_traits<std::future<T>> {
-  using type = T;
-};
-template <typename T>
-using future_traits_t = typename future_traits<std::remove_reference_t<T>>::type;
-
 // [](Args...) -> T {} <> (Args...) => T
 template <typename ReturnType, typename... Args>
 struct JSIConverter<std::function<ReturnType(Args...)>> {
   // std::future<T> -> T
-  using ResultingType = future_traits_t<ReturnType>;
+  using ResultingType = future_type_v<ReturnType>;
 
   static inline ResultingType callJSFunction(jsi::Runtime& runtime, const OwningReference<jsi::Function>& function, const Args&... args) {
     // Throw a lock on the OwningReference<T> so we can guarantee safe access (Hermes GC cannot delete it while `lock` is alive)
@@ -414,12 +407,6 @@ private:
   }
 };
 
-// Helper struct to check if a type is present in a parameter pack
-template <typename T, typename... Types>
-struct is_in_pack : std::disjunction<std::is_same<T, Types>...> {};
-template <typename T, typename... Types>
-inline constexpr bool is_in_pack_v = is_in_pack<T, Types...>::value;
-
 // std::variant<A, B, C> <> A | B | C
 template <typename... Types>
 struct JSIConverter<std::variant<Types...>> {
@@ -541,11 +528,7 @@ struct JSIConverter<std::shared_ptr<jsi::MutableBuffer>> {
 
 // HybridObject <> {}
 template <typename T>
-struct is_shared_ptr_to_host_object : std::false_type {};
-template <typename T>
-struct is_shared_ptr_to_host_object<std::shared_ptr<T>> : std::is_base_of<jsi::HostObject, T> {};
-template <typename T>
-struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_host_object<T>::value>> {
+struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_host_object_v<T>>> {
   using TPointee = typename T::element_type;
 
   static inline T fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
@@ -593,11 +576,7 @@ private:
 
 // NativeState <> {}
 template <typename T>
-struct is_shared_ptr_to_native_state : std::false_type {};
-template <typename T>
-struct is_shared_ptr_to_native_state<std::shared_ptr<T>> : std::is_base_of<jsi::NativeState, T> {};
-template <typename T>
-struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_native_state<T>::value>> {
+struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_native_state<T>>> {
   using TPointee = typename T::element_type;
 
   static inline T fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {

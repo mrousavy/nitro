@@ -159,7 +159,7 @@ The following C++ / JS types are supported out of the box:
   </tr>
   <tr>
     <td><code>ArrayBuffer</code></td>
-    <td><code>std::shared_ptr&lt;<a href="./cpp/jsi/ArrayBuffer.hpp">ArrayBuffer</a>&gt;</code></td>
+    <td><code>std::shared_ptr&lt;<a href="./cpp/core/ArrayBuffer.hpp">ArrayBuffer</a>&gt;</code></td>
   </tr>
   <tr>
     <td><code><a href="./src/HybridObject.ts">HybridObject</a></code></td>
