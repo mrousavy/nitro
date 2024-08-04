@@ -7,7 +7,7 @@
 #include "HybridContext.hpp"
 #include "JSIConverter.hpp"
 #include "NitroLogger.hpp"
-#include "NonDefaultArgsCount.hpp"
+#include "CountTrailingOptionals.hpp"
 #include "OwningReference.hpp"
 #include <functional>
 #include <jsi/jsi.h>
