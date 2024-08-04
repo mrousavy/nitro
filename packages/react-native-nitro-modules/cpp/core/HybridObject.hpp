@@ -7,6 +7,7 @@
 #include "HybridContext.hpp"
 #include "JSIConverter.hpp"
 #include "NitroLogger.hpp"
+#include "NonDefaultArgsCount.hpp"
 #include "OwningReference.hpp"
 #include <functional>
 #include <jsi/jsi.h>
@@ -151,14 +152,10 @@ private:
 
 private:
   template <typename Derived, typename ReturnType, typename... Args, size_t... Is>
-  static inline jsi::Value callMethod(Derived* obj,
-                                      ReturnType (Derived::*method)(Args...),
-                                      jsi::Runtime& runtime,
-                                      const jsi::Value* args,
-                                      size_t argsSize,
-                                      std::index_sequence<Is...>) {
+  static inline jsi::Value callMethod(Derived* obj, ReturnType (Derived::*method)(Args...), jsi::Runtime& runtime, const jsi::Value* args,
+                                      size_t argsSize, std::index_sequence<Is...>) {
     jsi::Value defaultValue;
-    
+
     if constexpr (std::is_void_v<ReturnType>) {
       // It's a void method.
       (obj->*method)(JSIConverter<std::decay_t<Args>>::fromJSI(runtime, Is < argsSize ? args[Is] : defaultValue)...);
@@ -175,12 +172,22 @@ private:
                                                          MethodType type) {
     return [name, derivedInstance, method, type](jsi::Runtime& runtime, const jsi::Value& thisVal, const jsi::Value* args,
                                                  size_t count) -> jsi::Value {
-      /*if (count != sizeof...(Args)) {
+      constexpr int minArgsCount = non_default_args_count_v<Args...>;
+      constexpr int maxArgsCount = sizeof...(Args);
+      bool isWithinArgsRange = (count >= minArgsCount && count <= maxArgsCount);
+      if (!isWithinArgsRange) {
         // invalid amount of arguments passed!
         std::string hybridObjectName = derivedInstance->_name;
-        throw jsi::JSError(runtime, hybridObjectName + "." + name + "(...) expected " + std::to_string(sizeof...(Args)) +
-                                        " arguments, but received " + std::to_string(count) + "!");
-      }*/
+        if (minArgsCount == maxArgsCount) {
+          // min and max args length is the same, so we don't have any optional parameters. fixed count
+          throw jsi::JSError(runtime, hybridObjectName + "." + name + "(...) expected " + std::to_string(maxArgsCount) +
+                                          " arguments, but received " + std::to_string(count) + "!");
+        } else {
+          // min and max args length are different, so we have optional parameters - variable length arguments.
+          throw jsi::JSError(runtime, hybridObjectName + "." + name + "(...) expected between " + std::to_string(minArgsCount) + " and " +
+                                          std::to_string(maxArgsCount) + " arguments, but received " + std::to_string(count) + "!");
+        }
+      }
 
       try {
         if constexpr (std::is_same_v<ReturnType, jsi::Value>) {

@@ -7,7 +7,6 @@
 
 #pragma once
 
-#include <future>
 #include <type_traits>
 
 namespace margelo::nitro {
