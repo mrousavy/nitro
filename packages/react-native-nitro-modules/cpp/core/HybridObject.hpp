@@ -172,8 +172,9 @@ private:
                                                          MethodType type) {
     return [name, derivedInstance, method, type](jsi::Runtime& runtime, const jsi::Value& thisVal, const jsi::Value* args,
                                                  size_t count) -> jsi::Value {
-      constexpr int minArgsCount = non_default_args_count_v<Args...>;
-      constexpr int maxArgsCount = sizeof...(Args);
+      constexpr size_t optionalArgsCount = count_trailing_optionals_v<Args...>;
+      constexpr size_t maxArgsCount = sizeof...(Args);
+      constexpr size_t minArgsCount = maxArgsCount - optionalArgsCount;
       bool isWithinArgsRange = (count >= minArgsCount && count <= maxArgsCount);
       if (!isWithinArgsRange) {
         // invalid amount of arguments passed!
