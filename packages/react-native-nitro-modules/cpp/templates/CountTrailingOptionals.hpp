@@ -12,34 +12,63 @@
 
 namespace margelo::nitro {
 
+// Helper template to check if a type is std::optional
 template <typename T>
 struct is_optional : std::false_type {};
 
 template <typename T>
 struct is_optional<std::optional<T>> : std::true_type {};
 
-// Base case: No arguments, so the count is 0
-template <typename... Args>
-struct count_trailing_optionals;
+// Helper template to get the index of std::optional
+template <int Index, typename... Args>
+struct optional_index_helper;
 
-// Specialization for empty parameter pack
+template <int Index>
+struct optional_index_helper<Index> {
+    static constexpr int value = -1;
+};
+
+template <int Index, typename First, typename... Rest>
+struct optional_index_helper<Index, First, Rest...> {
+    static constexpr int value = is_optional<First>::value ? Index : optional_index_helper<Index + 1, Rest...>::value;
+};
+
+// Main template to get the first index of std::optional
+template <typename... Args>
+struct optional_index {
+    static constexpr int value = optional_index_helper<0, Args...>::value;
+};
+
+// Helper template to count the number of std::optional types
+template <typename... Args>
+struct count_optionals;
+
 template <>
-struct count_trailing_optionals<> {
-  static constexpr size_t value = 0;
+struct count_optionals<> {
+    static constexpr int value = 0;
 };
 
-// Recursive case: Check the last type, then process the rest
 template <typename First, typename... Rest>
-struct count_trailing_optionals<First, Rest...> {
-private:
-  static constexpr size_t rest_value = count_trailing_optionals<Rest...>::value;
-
-public:
-  static constexpr size_t value = is_optional<First>::value ? rest_value + 1 : 0;
+struct count_optionals<First, Rest...> {
+    static constexpr int value = is_optional<First>::value + count_optionals<Rest...>::value;
 };
+
 
 template <typename... Args>
-constexpr size_t count_trailing_optionals_v = count_trailing_optionals<Args...>::value;
+struct trailing_optionals_count {
+private:
+  static constexpr int total_size = sizeof...(Args);
+  static constexpr int total_optionals_count = count_optionals<Args...>::value;
+  static constexpr int first_optional_index = optional_index<Args...>::value;
+  
+  // true if all of the optionals are at the end only (first index = start of optionals_count)
+  static constexpr bool isTrailingOnly = total_size - first_optional_index == total_optionals_count;
+  static constexpr bool hasOptionals = total_optionals_count > 0;
+public:
+  static constexpr int value = hasOptionals && isTrailingOnly ? total_optionals_count : 0;
+};
 
+template<typename... Args>
+constexpr int trailing_optionals_count_v = trailing_optionals_count<Args...>::value;
 
 } // namespace margelo::nitro

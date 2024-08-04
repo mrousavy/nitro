@@ -172,7 +172,7 @@ private:
                                                          MethodType type) {
     return [name, derivedInstance, method, type](jsi::Runtime& runtime, const jsi::Value& thisVal, const jsi::Value* args,
                                                  size_t count) -> jsi::Value {
-      constexpr size_t optionalArgsCount = count_trailing_optionals_v<Args...>;
+      constexpr size_t optionalArgsCount = trailing_optionals_count_v<Args...>;
       constexpr size_t maxArgsCount = sizeof...(Args);
       constexpr size_t minArgsCount = maxArgsCount - optionalArgsCount;
       bool isWithinArgsRange = (count >= minArgsCount && count <= maxArgsCount);
