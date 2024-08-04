@@ -10,6 +10,8 @@ export interface TestObject extends HybridObject<{ ios: 'c++' }> {
   valueThatWillThrowOnAccess: number
   funcThatThrows(): number
 
+  tryOptionalParams(num: number, boo: boolean, optionalString?: string): string
+
   passVariant(
     either: number | string | number[] | string[] | boolean
   ): number | string

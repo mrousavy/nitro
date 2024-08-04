@@ -34,17 +34,14 @@ public:
   double funcThatThrows() override;
 
   // Optional params
-  std::string tryOptionalParams(double first, bool second, std::optional<std::string> third = std::nullopt) {
-    if (third.has_value()) {
-      return *third;
+  std::string tryOptionalParams(double num,
+                                bool boo,
+                                const std::optional<std::string>& optionalString) override {
+    if (optionalString.has_value()) {
+      return optionalString.value();
     } else {
       return "omitted!";
     }
-  }
-
-  void loadHybridMethods() override {
-    HybridTestObjectSpec::loadHybridMethods();
-    registerHybridMethod("tryOptionalParams", &HybridTestObject::tryOptionalParams, this);
   }
 };
 
