@@ -4,24 +4,7 @@ import { StyleSheet, View, Text } from 'react-native'
 import { ImageConstructors, HybridTestObject } from 'react-native-nitro-image'
 import { it } from './Testers'
 
-export default function App() {
-  const image = React.useMemo(() => {
-    console.log('Loading image...')
-    const i = ImageConstructors.loadImageFromSystemName('heart.fill')
-    ImageConstructors.bounceBack(i)
-    ImageConstructors.bounceBack(i)
-    ImageConstructors.bounceBack(i)
-    console.log('Image loaded!')
-    console.log(`Image is ${i.size.width}x${i.size.height}`)
-    return i
-  }, [])
-
-  React.useEffect(() => {
-    image.saveToFile('some path', (path) => {
-      console.log('saved to ' + path + '!')
-    })
-  }, [image])
-
+async function runTests(): Promise<void> {
   it('passVariant(..)', () => HybridTestObject.passVariant(5)).equals(55)
   it('createMap()', () => HybridTestObject.createMap()).didReturn('object')
   it('flip(..)', () => HybridTestObject.flip([10, 5, 0])).equals([0, 5, 10])
@@ -46,23 +29,36 @@ export default function App() {
     HybridTestObject.valueThatWillThrowOnAccess).didThrow()
   it('valueThatWillThrowOnAccess', () =>
     (HybridTestObject.valueThatWillThrowOnAccess = 55)).didThrow()
+  // Callbacks
+  it('getValueFromJsCallback(..)', () =>
+    HybridTestObject.getValueFromJsCallback(
+      () => 'Hi from JS!',
+      (nativestring) => {
+        console.log(`Received callback from C++: "${nativestring}"`)
+      }
+    )).then((s) => s.didNotThrow())
+}
+
+export default function App() {
+  const image = React.useMemo(() => {
+    console.log('Loading image...')
+    const i = ImageConstructors.loadImageFromSystemName('heart.fill')
+    ImageConstructors.bounceBack(i)
+    ImageConstructors.bounceBack(i)
+    ImageConstructors.bounceBack(i)
+    console.log('Image loaded!')
+    console.log(`Image is ${i.size.width}x${i.size.height}`)
+    return i
+  }, [])
 
   React.useEffect(() => {
-    const run = async () => {
-      console.log('Passing "Hi from JS!" to C++...')
-      try {
-        await HybridTestObject.getValueFromJsCallback(
-          () => 'Hi from JS!',
-          (nativestring) => {
-            console.log(`Received callback from C++: "${nativestring}"`)
-          }
-        )
-        console.log('JS callback test completed!')
-      } catch (e) {
-        console.error(`Failed to pass string from JS -> C++ -> JS:`, e)
-      }
-    }
-    run()
+    image.saveToFile('some path', (path) => {
+      console.log('saved to ' + path + '!')
+    })
+  }, [image])
+
+  React.useEffect(() => {
+    runTests()
   }, [])
 
   return (

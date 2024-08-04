@@ -90,11 +90,11 @@ export class State<T> {
   }
 }
 
-export function it<T>(testName: string, action: () => T): State<T>
 export function it<T>(
   testName: string,
   action: () => Promise<T>
 ): Promise<State<T>>
+export function it<T>(testName: string, action: () => T): State<T>
 export function it<T>(
   testName: string,
   action: () => T | Promise<T>
