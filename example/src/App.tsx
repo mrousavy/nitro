@@ -22,7 +22,7 @@ export default function App() {
     })
   }, [image])
 
-  it('passVariant(..)', () => HybridTestObject.passVariant(5)).equals(5)
+  it('passVariant(..)', () => HybridTestObject.passVariant(5)).equals(55)
   it('createMap()', () => HybridTestObject.createMap()).didReturn('object')
   it('flip(..)', () => HybridTestObject.flip([10, 5, 0])).equals([0, 5, 10])
   it('passTuple(..)', () =>

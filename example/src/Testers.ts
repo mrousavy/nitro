@@ -54,7 +54,7 @@ export class State<T> {
   }
 
   equals(other: T): State<T> {
-    if (deepEqual(this.result, other)) {
+    if (!deepEqual(this.result, other)) {
       this.onFailed(
         `Expected ${this.result} (${typeof this.result}) to equal ${other} (${typeof other}), but they are not equal!`
       )
