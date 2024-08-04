@@ -69,6 +69,6 @@ public:
 };
 
 template<typename... Args>
-constexpr int trailing_optionals_count_v = trailing_optionals_count<Args...>::value;
+constexpr int trailing_optionals_count_v = trailing_optionals_count<std::remove_cvref_t<Args>...>::value;
 
 } // namespace margelo::nitro
