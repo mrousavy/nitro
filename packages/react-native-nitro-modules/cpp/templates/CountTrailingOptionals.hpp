@@ -19,56 +19,46 @@ struct is_optional : std::false_type {};
 template <typename T>
 struct is_optional<std::optional<T>> : std::true_type {};
 
-// Helper template to get the index of std::optional
-template <int Index, typename... Args>
-struct optional_index_helper;
-
-template <int Index>
-struct optional_index_helper<Index> {
-    static constexpr int value = -1;
-};
-
-template <int Index, typename First, typename... Rest>
-struct optional_index_helper<Index, First, Rest...> {
-    static constexpr int value = is_optional<First>::value ? Index : optional_index_helper<Index + 1, Rest...>::value;
-};
-
-// Main template to get the first index of std::optional
-template <typename... Args>
-struct optional_index {
-    static constexpr int value = optional_index_helper<0, Args...>::value;
-};
-
-// Helper template to count the number of std::optional types
-template <typename... Args>
-struct count_optionals;
+// Helper template to count trailing optionals
+template <int N = 0, typename... Args>
+struct count_trailing_optionals;
 
 template <>
-struct count_optionals<> {
-    static constexpr int value = 0;
+struct count_trailing_optionals<> {
+  static constexpr int value = 0;
 };
 
-template <typename First, typename... Rest>
-struct count_optionals<First, Rest...> {
-    static constexpr int value = is_optional<First>::value + count_optionals<Rest...>::value;
+template <int N, typename Current, typename... Rest>
+struct count_trailing_optionals<N, Current, Rest...> {
+  static constexpr int count_trailing_optionals_impl() {
+    constexpr bool isOptional = is_optional<std::remove_cvref_t<Current>>::value;
+    if constexpr (sizeof...(Rest) == 0) {
+      // end of parameter pack!
+      if constexpr (isOptional) {
+        // last item is an optional, finally return the final number incremented by one.
+        return N + 1;
+      } else {
+        // last item is not an optional, so there are 0 trailing optionals.
+        return 0;
+      }
+    } else {
+      // recursively look into next T, either bump N by one or reset it to 0 if it's not an optional.
+      constexpr int newValue = isOptional ? N + 1 : 0;
+      return count_trailing_optionals<newValue, Rest...>::count_trailing_optionals_impl();
+    }
+  }
+
+  static constexpr int value = count_trailing_optionals_impl();
 };
 
-
+// Main template to count trailing optionals in Args... pack
 template <typename... Args>
 struct trailing_optionals_count {
-private:
-  static constexpr int total_size = sizeof...(Args);
-  static constexpr int total_optionals_count = count_optionals<Args...>::value;
-  static constexpr int first_optional_index = optional_index<Args...>::value;
-  
-  // true if all of the optionals are at the end only (first index = start of optionals_count)
-  static constexpr bool isTrailingOnly = total_size - first_optional_index == total_optionals_count;
-  static constexpr bool hasOptionals = total_optionals_count > 0;
-public:
-  static constexpr int value = hasOptionals && isTrailingOnly ? total_optionals_count : 0;
+  static constexpr int value = count_trailing_optionals<0, Args...>::value;
 };
 
-template<typename... Args>
+// Helper alias
+template <typename... Args>
 constexpr int trailing_optionals_count_v = trailing_optionals_count<std::remove_cvref_t<Args>...>::value;
 
 } // namespace margelo::nitro
