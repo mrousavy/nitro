@@ -34,9 +34,7 @@ public:
   double funcThatThrows() override;
 
   // Optional params
-  std::string tryOptionalParams(double num,
-                                bool boo,
-                                const std::optional<std::string>& optionalString) override {
+  std::string tryOptionalParams(double num, bool boo, const std::optional<std::string>& optionalString) override {
     if (optionalString.has_value()) {
       return optionalString.value();
     } else {

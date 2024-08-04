@@ -1,7 +1,8 @@
-import * as React from 'react';
+import * as React from 'react'
 
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native'
 import { ImageConstructors, HybridTestObject } from 'react-native-nitro-image'
+import { it } from './Testers'
 
 export default function App() {
   const image = React.useMemo(() => {
@@ -19,63 +20,58 @@ export default function App() {
     image.saveToFile('some path', (path) => {
       console.log('saved to ' + path + '!')
     })
-  }, [])
-  console.log('before')
-  const res = HybridTestObject.passVariant(5)
-  console.log(`variant result: ${res} (${typeof res})`)
+  }, [image])
 
-  const map = HybridTestObject.createMap()
-  console.log(`map result:`, map)
+  it('passVariant(..)', () => HybridTestObject.passVariant(5)).equals(5)
+  it('createMap()', () => HybridTestObject.createMap()).didReturn('object')
+  it('flip(..)', () => HybridTestObject.flip([10, 5, 0])).equals([0, 5, 10])
+  it('passTuple(..)', () =>
+    HybridTestObject.passTuple([53, 'helo', false])).equals([53, 'helo', false])
 
-  const flipped = HybridTestObject.flip([10, 5, 0])
-  console.log(`[10, 5, 0] -> [${flipped.join(', ')}]`)
+  // Optional params test
+  it('tryOptionalParams(..)', () =>
+    HybridTestObject.tryOptionalParams(55, true)).didNotThrow()
+  it('tryOptionalParams(..)', () =>
+    HybridTestObject.tryOptionalParams(55, true, 'optional!')).didNotThrow()
+  it('tryOptionalParams(..)', () =>
+    // @ts-expect-error
+    HybridTestObject.tryOptionalParams(55, true, 'optional!', false)).didThrow()
+  it('tryOptionalParams(..)', () =>
+    // @ts-expect-error
+    HybridTestObject.tryOptionalParams(55)).didThrow()
 
-  const test = HybridTestObject.passTuple([53, 'helo', false])
-  console.log('tuple result:', test)
-
-  const optionalResult = HybridTestObject.tryOptionalParams(55, true)
-  console.log('optional result:', optionalResult)
-
-  try {
-    HybridTestObject.funcThatThrows()
-    console.error(`Function should've thrown by now!`)
-  } catch (e) {
-    console.log("Throw worked!", e)
-  }
-  try {
-    HybridTestObject.valueThatWillThrowOnAccess
-    console.error(`Value should've thrown by now!`)
-  } catch (e) {
-    console.log("Throw worked!", e)
-  }
-  try {
-    HybridTestObject.valueThatWillThrowOnAccess = 55
-    console.error(`Value should've thrown by now!`)
-  } catch (e) {
-    console.log("Throw worked!", e)
-  }
+  // Throw tests
+  it('funcThatThrows()', () => HybridTestObject.funcThatThrows()).didThrow()
+  it('valueThatWillThrowOnAccess', () =>
+    HybridTestObject.valueThatWillThrowOnAccess).didThrow()
+  it('valueThatWillThrowOnAccess', () =>
+    (HybridTestObject.valueThatWillThrowOnAccess = 55)).didThrow()
 
   React.useEffect(() => {
     const run = async () => {
       console.log('Passing "Hi from JS!" to C++...')
       try {
-        await HybridTestObject.getValueFromJsCallback(() => "Hi from JS!", (nativestring) => {
-          console.log(`Received callback from C++: "${nativestring}"`)
-        })
+        await HybridTestObject.getValueFromJsCallback(
+          () => 'Hi from JS!',
+          (nativestring) => {
+            console.log(`Received callback from C++: "${nativestring}"`)
+          }
+        )
         console.log('JS callback test completed!')
       } catch (e) {
         console.error(`Failed to pass string from JS -> C++ -> JS:`, e)
       }
-
     }
     run()
   }, [])
 
   return (
     <View style={styles.container}>
-      <Text>Image is {image.size.width.toFixed(0)}x{image.size.height.toFixed(0)}!</Text>
+      <Text>
+        Image is {image.size.width.toFixed(0)}x{image.size.height.toFixed(0)}!
+      </Text>
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -89,4 +85,4 @@ const styles = StyleSheet.create({
     height: 60,
     marginVertical: 20,
   },
-});
+})
