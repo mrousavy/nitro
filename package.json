@@ -5,7 +5,6 @@
   "repository": "https://github.com/mrousavy/react-native-nitro.git",
   "author": "Marc Rousavy <me@mrousavy.com> (https://github.com/mrousavy)",
   "scripts": {
-    "example": "bun --filter=\"react-native-nitro-example\"",
     "check-all": "./scripts/clang-format.sh",
     "bootstrap": "bun --filter=\"**\" install && bun tsc && bun --filter=\"react-native-nitro-example\" pods",
     "tsc": "bun --filter=\"**\" typescript",
