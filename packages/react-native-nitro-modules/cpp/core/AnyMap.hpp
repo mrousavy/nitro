@@ -34,7 +34,7 @@ struct AnyValue : VariantType {
  * 2. Arrays of primitives
  * 3. Objects of primitives
  */
-class AnyMap {
+class AnyMap final {
 public:
   /**
    * Create a new instance of AnyMap.

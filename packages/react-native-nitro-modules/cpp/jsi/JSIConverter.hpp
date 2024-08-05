@@ -12,6 +12,7 @@ struct JSIConverter;
 
 #include <jsi/jsi.h>
 #include <type_traits>
+#include <variant>
 
 namespace margelo::nitro {
 

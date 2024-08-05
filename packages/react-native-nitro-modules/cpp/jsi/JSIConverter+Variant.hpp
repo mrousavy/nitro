@@ -6,12 +6,18 @@
 
 // Forward declare a few of the common types that might have cyclic includes.
 namespace margelo::nitro {
+struct AnyValue;
+class AnyMap;
+
 template <typename T, typename Enable>
 struct JSIConverter;
 } // namespace margelo::nitro
 
 #include "JSIConverter.hpp"
+#include "JSIConverter+Vector.hpp"
+#include "JSIConverter+UnorderedMap.hpp"
 
+#include "AnyMap.hpp"
 #include "IsInPack.hpp"
 #include "TypeInfo.hpp"
 #include <jsi/jsi.h>
