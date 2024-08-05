@@ -9341,6 +9341,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "nitro-codegen@workspace:packages/nitrogen"
   dependencies:
+    "@release-it/conventional-changelog": ^5.1.1
     chalk: ^5.3.0
     eslint: ^8.57.0
     eslint-config-prettier: ^9.1.0
@@ -11058,6 +11059,9 @@ __metadata:
 "root-workspace-0b6124@workspace:.":
   version: 0.0.0-use.local
   resolution: "root-workspace-0b6124@workspace:."
+  dependencies:
+    "@release-it/conventional-changelog": ^5.1.1
+    release-it: ^17.6.0
   languageName: unknown
   linkType: soft
 

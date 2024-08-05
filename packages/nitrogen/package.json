@@ -1,6 +1,6 @@
 {
   "name": "nitro-codegen",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "The code-generator for react-native-nitro-modules.",
   "main": "lib/index",
   "types": "lib/index.d.ts",
@@ -33,6 +33,7 @@
     "registry": "https://registry.npmjs.org/"
   },
   "devDependencies": {
+    "@release-it/conventional-changelog": "^5.1.1",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",
