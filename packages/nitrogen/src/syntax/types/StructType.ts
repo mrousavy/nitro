@@ -43,7 +43,10 @@ export class StructType implements Type {
     }
   }
   getExtraFiles(): SourceFile[] {
-    return [this.declarationFile]
+    const referencedTypes = this.declarationFile.referencedTypes.flatMap((r) =>
+      r.getExtraFiles()
+    )
+    return [this.declarationFile, ...referencedTypes]
   }
   getRequiredImports(): SourceImport[] {
     const cxxNamespace = NitroConfig.getCxxNamespace('c++')
