@@ -7,13 +7,13 @@
 #include "CountTrailingOptionals.hpp"
 #include "JSIConverter.hpp"
 #include "OwningReference.hpp"
+#include "TypeInfo.hpp"
 #include <functional>
 #include <jsi/jsi.h>
 #include <memory>
 #include <mutex>
 #include <type_traits>
 #include <unordered_map>
-#include "TypeInfo.hpp"
 
 namespace margelo::nitro {
 

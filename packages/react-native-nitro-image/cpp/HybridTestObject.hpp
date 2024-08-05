@@ -20,7 +20,7 @@ private:
   std::optional<std::string> _optionalString;
   std::variant<std::string, double> _variant;
   std::tuple<double, std::string> _tuple;
-  
+
 private:
   static inline uint64_t calculateFibonacci(int count) noexcept {
     if (count <= 0) [[unlikely]]
@@ -63,7 +63,8 @@ public:
   double funcThatThrows() override;
   std::string tryOptionalParams(double num, bool boo, const std::optional<std::string>& str) override;
   std::string tryMiddleParam(double num, bool boo, const std::string& str) override;
-  std::variant<std::string, double> passVariant(const std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>>& either) override;
+  std::variant<std::string, double>
+  passVariant(const std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>>& either) override;
   std::tuple<double, double, double> flip(const std::tuple<double, double, double>& tuple) override;
   std::tuple<double, std::string, bool> passTuple(const std::tuple<double, std::string, bool>& tuple) override;
   int64_t calculateFibonacciSync(double value) override;
@@ -73,7 +74,8 @@ public:
   void getValueFromJSCallback(const Func_std__future_double_& getValue) override;
   std::future<double> getValueFromJSCallbackAndWait(const Func_std__future_double_& getValue) override;
   void callOneOf(const Func_void& first, const Func_void& second, const Func_void& third) override;
-  std::future<void> getValueFromJsCallback(const Func_std__future_std__string_& callback, const Func_void_std__string& andThenCall) override;
+  std::future<void> getValueFromJsCallback(const Func_std__future_std__string_& callback,
+                                           const Func_void_std__string& andThenCall) override;
   Car getCar() override;
   bool isCarElectric(const Car& car) override;
 };

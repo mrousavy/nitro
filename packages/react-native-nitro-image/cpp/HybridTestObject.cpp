@@ -8,8 +8,8 @@
 #include "HybridTestObject.hpp"
 #include <NitroModules/AnyMap.hpp>
 #include <NitroModules/NitroLogger.hpp>
-#include <thread>
 #include <chrono>
+#include <thread>
 
 namespace margelo::nitro::image {
 
@@ -94,7 +94,6 @@ void HybridTestObject::setSomeTuple(const std::tuple<double, std::string>& tuple
   _tuple = tuple;
 }
 
-
 // Methods
 void HybridTestObject::simpleFunc() {
   // do nothing
@@ -111,16 +110,14 @@ std::shared_ptr<AnyMap> HybridTestObject::createMap() {
   map->setString("string", getStringValue());
   map->setBigInt("bigint", getBigintValue());
   map->setNull("null");
-  std::vector<AnyValue> array { getNumberValue(), getBoolValue(), getStringValue(), getBigintValue() };
-  map->setArray("array", { getNumberValue(), getBoolValue(), getStringValue(), getBigintValue(), array });
-  map->setObject("object", {
-    {"number", getNumberValue()},
-    {"bool", getBoolValue()},
-    {"string", getStringValue()},
-    {"bigint", getBigintValue()},
-    {"null", std::monostate()},
-    {"array", array }
-  });
+  std::vector<AnyValue> array{getNumberValue(), getBoolValue(), getStringValue(), getBigintValue()};
+  map->setArray("array", {getNumberValue(), getBoolValue(), getStringValue(), getBigintValue(), array});
+  map->setObject("object", {{"number", getNumberValue()},
+                            {"bool", getBoolValue()},
+                            {"string", getStringValue()},
+                            {"bigint", getBigintValue()},
+                            {"null", std::monostate()},
+                            {"array", array}});
   return map;
 }
 
@@ -144,18 +141,19 @@ std::string HybridTestObject::tryMiddleParam(double num, bool boo, const std::st
   return str;
 }
 
-std::variant<std::string, double> HybridTestObject::passVariant(const std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>>& either) {
+std::variant<std::string, double>
+HybridTestObject::passVariant(const std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>>& either) {
   if (std::holds_alternative<std::string>(either)) {
     return std::get<std::string>(either);
   } else if (std::holds_alternative<double>(either)) {
     return std::get<double>(either);
   } else {
-    return { "holds something else!" };
+    return {"holds something else!"};
   }
 }
 
 std::tuple<double, double, double> HybridTestObject::flip(const std::tuple<double, double, double>& tuple) {
-  return { std::get<2>(tuple), std::get<1>(tuple), std::get<0>(tuple) };
+  return {std::get<2>(tuple), std::get<1>(tuple), std::get<0>(tuple)};
 }
 
 std::tuple<double, std::string, bool> HybridTestObject::passTuple(const std::tuple<double, std::string, bool>& tuple) {
@@ -167,9 +165,7 @@ int64_t HybridTestObject::calculateFibonacciSync(double value) {
 }
 
 std::future<int64_t> HybridTestObject::calculateFibonacciAsync(double value) {
-  return std::async(std::launch::async, [=]() -> int64_t {
-    return this->calculateFibonacci(value);
-  });
+  return std::async(std::launch::async, [=]() -> int64_t { return this->calculateFibonacci(value); });
 }
 
 std::future<void> HybridTestObject::wait(double seconds) {
@@ -203,7 +199,8 @@ void HybridTestObject::callOneOf(const Func_void& first, const Func_void& second
   second();
 }
 
-std::future<void> HybridTestObject::getValueFromJsCallback(const Func_std__future_std__string_& callback, const Func_void_std__string& andThenCall) {
+std::future<void> HybridTestObject::getValueFromJsCallback(const Func_std__future_std__string_& callback,
+                                                           const Func_void_std__string& andThenCall) {
   return std::async(std::launch::async, [=]() {
     std::future<std::string> future = callback();
     std::string jsValue = future.get();

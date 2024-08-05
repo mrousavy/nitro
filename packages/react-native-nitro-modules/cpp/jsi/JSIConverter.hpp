@@ -4,9 +4,19 @@
 
 #pragma once
 
+// Forward declare a few of the common types that might have cyclic includes.
 namespace margelo::nitro {
+class AnyMap;
+class ArrayBuffer;
+class Dispatcher;
 class HybridObject;
-}
+
+template <typename T>
+class JSICache;
+
+template <typename T, typename Enable>
+struct JSIConverter;
+} // namespace margelo::nitro
 
 #include "AnyMap.hpp"
 #include "ArrayBuffer.hpp"
