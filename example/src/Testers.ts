@@ -31,6 +31,7 @@ export class State<T> {
 
   private onFailed(reason: string): void {
     console.log(`❌ Test "${this.testName}" failed!`, reason)
+    throw new Error(reason)
   }
 
   didThrow(): State<T> {
