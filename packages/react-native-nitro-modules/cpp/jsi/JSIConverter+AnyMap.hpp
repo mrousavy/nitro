@@ -6,6 +6,7 @@
 
 // Forward declare a few of the common types that might have cyclic includes.
 namespace margelo::nitro {
+struct AnyValue;
 class AnyMap;
 
 template <typename T, typename Enable>
@@ -30,7 +31,7 @@ struct JSIConverter<AnyValue> {
     return JSIConverter<AnyValue::variant>::fromJSI(runtime, arg);
   }
   static inline jsi::Value toJSI(jsi::Runtime& runtime, const AnyValue& value) {
-    return JSIConverter<std::variant<AnyValue::variant>>::toJSI(runtime, value);
+    return JSIConverter<AnyValue::variant>::toJSI(runtime, value);
   }
 };
 
