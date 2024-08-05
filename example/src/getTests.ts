@@ -1,6 +1,5 @@
 import { HybridTestObject } from 'react-native-nitro-image'
 import type { State } from './Testers'
-import safeStringify from 'fast-safe-stringify'
 import { it } from './Testers'
 
 type TestResult =
@@ -34,6 +33,9 @@ function stringify(value: unknown): string {
     case 'function':
       return value.toString()
     case 'object':
+      if (value instanceof Error) {
+        return `${value.name}: ${value.message}`
+      }
       if ('toString' in value) {
         const string = value.toString()
         if (string !== '[object Object]') return string
@@ -52,15 +54,18 @@ function createTest<T>(
     name: name,
     run: async (): Promise<TestResult> => {
       try {
+        console.log(`⏳ Test "${name}" started...`)
         const state = await run()
+        console.log(`✅ Test "${name}" passed!`)
         return {
           status: 'successful',
           result: stringify(state.result ?? state.errorThrown ?? '(void)'),
         }
       } catch (e) {
+        console.log(`❌ Test "${name}" failed! ${e}`)
         return {
           status: 'failed',
-          message: safeStringify(e),
+          message: stringify(e),
         }
       }
     },
@@ -69,77 +74,222 @@ function createTest<T>(
 
 export function getTests(): TestRunner[] {
   return [
-    createTest('passVariant(..)', () =>
-      it('passVariant(..)', () => HybridTestObject.passVariant(5)).equals(5)
+    // Test Primitives (getters & setters)
+    createTest('set numberValue to 13', () =>
+      it(() => (HybridTestObject.numberValue = 13)).didNotThrow()
     ),
+    createTest('get numberValue (== 13)', () =>
+      it(() => HybridTestObject.numberValue)
+        .didNotThrow()
+        .equals(13)
+    ),
+    createTest('set boolValue to true', () =>
+      it(() => (HybridTestObject.boolValue = true)).didNotThrow()
+    ),
+    createTest('get boolValue (== true)', () =>
+      it(() => HybridTestObject.boolValue)
+        .didNotThrow()
+        .equals(true)
+    ),
+    createTest("set stringValue to 'hello!'", () =>
+      it(() => (HybridTestObject.stringValue = 'hello!')).didNotThrow()
+    ),
+    createTest("get stringValue (== 'hello!')", () =>
+      it(() => HybridTestObject.stringValue)
+        .didNotThrow()
+        .equals('hello!')
+    ),
+    createTest('set bigintValue to 7362572367826385n', () =>
+      it(() => (HybridTestObject.bigintValue = 7362572367826385n)).didNotThrow()
+    ),
+    createTest('get bigintValue (== 7362572367826385n)', () =>
+      it(() => HybridTestObject.bigintValue)
+        .didNotThrow()
+        .equals(7362572367826385n)
+    ),
+    createTest('set optionalString to string, then undefined', () =>
+      it(() => {
+        HybridTestObject.optionalString = 'hello'
+        HybridTestObject.optionalString = undefined
+      }).didNotThrow()
+    ),
+    createTest('get optionalString (== undefined)', () =>
+      it(() => HybridTestObject.optionalString)
+        .didNotThrow()
+        .equals(undefined)
+    ),
+
+    // Test basic functions
+    createTest('simpleFunc()', () =>
+      it(() => HybridTestObject.simpleFunc())
+        .didNotThrow()
+        .didReturn('undefined')
+    ),
+    createTest('multipleArguments(...)', () =>
+      it(() => HybridTestObject.multipleArguments(13, 'hello!', true))
+        .didNotThrow()
+        .didReturn('undefined')
+    ),
+
+    // Test Maps
     createTest('createMap()', () =>
-      it('createMap()', () => HybridTestObject.createMap()).didReturn('object')
+      it(() => HybridTestObject.createMap())
+        .didNotThrow()
+        .didReturn('object')
+        .toContain('object')
+        .toContain('array')
+        .toContain('null')
+        .toContain('bigint')
+        .toContain('string')
+        .toContain('bool')
+        .toContain('number')
     ),
-    createTest('flip(..)', () =>
-      it('flip(..)', () => HybridTestObject.flip([10, 5, 0])).equals([0, 5, 10])
+    createTest('createMap().array', () =>
+      it(() => HybridTestObject.createMap().array)
+        .didNotThrow()
+        .didReturn('object')
     ),
-    createTest('passTuple(..)', () =>
-      it('passTuple(..)', () =>
-        HybridTestObject.passTuple([53, 'helo', false])).equals([
-        53,
-        'helo',
-        false,
-      ])
+    createTest('createMap().object', () =>
+      it(() => HybridTestObject.createMap().object)
+        .didNotThrow()
+        .didReturn('object')
     ),
-
-    // Optional params test
-    createTest('tryOptionalParams(..)', () =>
-      it('tryOptionalParams(..)', () =>
-        HybridTestObject.tryOptionalParams(55, true)).didNotThrow()
-    ),
-    createTest('tryOptionalParams(..)', () =>
-      it('tryOptionalParams(..)', () =>
-        HybridTestObject.tryOptionalParams(55, true, 'optional!')).didNotThrow()
-    ),
-    createTest('tryOptionalParams(..)', () =>
-      it('tryOptionalParams(..)', () =>
-        HybridTestObject.tryOptionalParams(
-          55,
-          true,
-          'optional!',
-          // @ts-expect-error
-          false
-        )).didThrow()
-    ),
-    createTest('tryOptionalParams(..)', () =>
-      it('tryOptionalParams(..)', () =>
-        // @ts-expect-error
-        HybridTestObject.tryOptionalParams(55)).didThrow()
+    createTest('mapRoundtrip(...)', () =>
+      it(() => HybridTestObject.mapRoundtrip(HybridTestObject.createMap()))
+        .didNotThrow()
+        .equals(HybridTestObject.createMap())
     ),
 
-    // Throw tests
+    // Test errors
+    createTest('get valueThatWillThrowOnAccess', () =>
+      it(() => HybridTestObject.valueThatWillThrowOnAccess).didThrow()
+    ),
+    createTest('set valueThatWillThrowOnAccess', () =>
+      it(() => (HybridTestObject.valueThatWillThrowOnAccess = 55)).didThrow()
+    ),
     createTest('funcThatThrows()', () =>
-      it('funcThatThrows()', () => HybridTestObject.funcThatThrows()).didThrow()
+      it(() => HybridTestObject.funcThatThrows()).didThrow()
     ),
-    createTest('valueThatWillThrowOnAccess', () =>
-      it('valueThatWillThrowOnAccess', () =>
-        HybridTestObject.valueThatWillThrowOnAccess).didThrow()
+
+    // Optional parameters
+    createTest('tryOptionalParams(...) omitted', () =>
+      it(() => HybridTestObject.tryOptionalParams(13, true))
+        .didNotThrow()
+        .didReturn('string')
+        .equals('value omitted!')
     ),
-    createTest('valueThatWillThrowOnAccess', () =>
-      it('valueThatWillThrowOnAccess', () =>
-        (HybridTestObject.valueThatWillThrowOnAccess = 55)).didThrow()
+    createTest('tryOptionalParams(...) provided', () =>
+      it(() => HybridTestObject.tryOptionalParams(13, true, 'hello'))
+        .didNotThrow()
+        .didReturn('string')
+        .equals('hello')
     ),
-    // Callbacks
-    createTest('getValueFromJsCallback(..)', () =>
-      it('getValueFromJsCallback(..)', async () => {
-        let result: string | undefined
-        await HybridTestObject.getValueFromJsCallback(
-          () => {
-            // C++ calls this JS method to get that string
-            return 'Hi from JS!'
-          },
-          (nativestring) => {
-            // C++ calls this JS method, passing the string we got from JS before
-            result = nativestring
-          }
+    createTest('tryOptionalParams(...) one-too-many', () =>
+      it(() =>
+        HybridTestObject.tryOptionalParams(
+          13,
+          true,
+          'hello',
+          // @ts-expect-error
+          'too many args!'
         )
-        return result
-      }).then((s) => s.equals('Hi from JS!'))
+      ).didThrow()
+    ),
+    createTest('tryOptionalParams(...) one-too-few', () =>
+      it(() =>
+        // @ts-expect-error
+        HybridTestObject.tryOptionalParams(13)
+      ).didThrow()
+    ),
+    createTest('tryMiddleParam(...)', () =>
+      it(() => HybridTestObject.tryMiddleParam(13, undefined, 'hello!'))
+        .didNotThrow()
+        .equals('hello!')
+    ),
+    createTest('tryMiddleParam(...)', () =>
+      it(() => HybridTestObject.tryMiddleParam(13, true, 'passed'))
+        .didNotThrow()
+        .equals('passed')
+    ),
+
+    // Variants tests
+    createTest('set someVariant to 55', () =>
+      it(() => (HybridTestObject.someVariant = 55)).didNotThrow()
+    ),
+    createTest('get someVariant (== 55)', () =>
+      it(() => HybridTestObject.someVariant).equals(55)
+    ),
+    createTest("set someVariant to 'some-string'", () =>
+      it(() => (HybridTestObject.someVariant = 'some-string')).didNotThrow()
+    ),
+    createTest("get someVariant (== 'some-string')", () =>
+      it(() => HybridTestObject.someVariant).equals('some-string')
+    ),
+    createTest('set someVariant to false', () =>
+      it(
+        () =>
+          // @ts-expect-error
+          (HybridTestObject.someVariant = false)
+      ).didThrow()
+    ),
+    createTest('passVariant(...) [1,2,3]', () =>
+      it(() => HybridTestObject.passVariant([1, 2, 3]))
+        .didNotThrow()
+        .equals('omitted')
+    ),
+    createTest('passVariant(...) hello!', () =>
+      it(() => HybridTestObject.passVariant('hello!'))
+        .didNotThrow()
+        .equals('hello!')
+    ),
+    createTest('passVariant(...) wrong type ({})', () =>
+      it(() =>
+        HybridTestObject.passVariant(
+          // @ts-expect-error
+          {}
+        )
+      ).didThrow()
+    ),
+
+    // Tuples Tests
+    createTest("set someTuple to [55, 'hello']", () =>
+      it(() => (HybridTestObject.someTuple = [55, 'hello'])).didNotThrow()
+    ),
+    createTest("get someTuple (== [55, 'hello'])", () =>
+      it(() => HybridTestObject.someTuple).equals([55, 'hello'])
+    ),
+    createTest('flip([10, 20, 30])', () =>
+      it(() => HybridTestObject.flip([10, 20, 30]))
+        .didNotThrow()
+        .equals([30, 20, 10])
+    ),
+    createTest('flip([10, 20]) throws', () =>
+      it(() =>
+        HybridTestObject.flip(
+          // @ts-expect-error
+          [10, 20]
+        )
+      ).didThrow()
+    ),
+    createTest('passTuple(...)', () =>
+      it(() => HybridTestObject.passTuple([13, 'hello', true]))
+        .didNotThrow()
+        .equals([13, 'hello', true])
+    ),
+
+    // Promises
+    createTest('wait', async () =>
+      (await it(() => HybridTestObject.wait(0.5))).didThrow()
+    ),
+    createTest('calculateFibonacciSync(5)', async () =>
+      it(() => HybridTestObject.calculateFibonacciSync(10))
+        .didNotThrow()
+        .equals(55n)
+    ),
+    createTest('calculateFibonacciAsync(5)', async () =>
+      (await it(() => HybridTestObject.calculateFibonacciAsync(10)))
+        .didNotThrow()
+        .equals(55n)
     ),
   ]
 }

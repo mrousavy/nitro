@@ -24,7 +24,7 @@ function TestCase({ test, onRunPressed }: TestCaseProps): React.ReactElement {
       <View style={styles.testBox}>
         <Text style={styles.testName}>{test.runner.name}</Text>
         <View style={styles.smallVSpacer} />
-        <Text style={styles.testStatus} numberOfLines={4}>
+        <Text style={styles.testStatus} numberOfLines={6}>
           {test.state} ({test.extraMessage})
         </Text>
       </View>
@@ -42,6 +42,25 @@ export function HybridObjectTestsScreen() {
       extraMessage: '',
     }))
   )
+  const status = React.useMemo(() => {
+    const passed = tests.filter((t) => t.state === '✅ Passed').length
+    const failed = tests.filter((t) => t.state === '❌ Failed').length
+    const running = tests.filter((t) => t.state === '⏳ Running').length
+
+    if (running > 0) {
+      return `⏳ Running ${running}/${tests.length} tests...`
+    }
+    if (passed > 0 || failed > 0) {
+      if (passed > 0 && failed > 0) {
+        return `✅ Passed ${passed}/${tests.length} tests, ❌ failed ${failed}/${tests.length} tests.`
+      } else if (passed > 0) {
+        return `✅ Passed ${passed}/${tests.length} tests.`
+      } else if (failed > 0) {
+        return `❌ Failed ${failed}/${tests.length} tests.`
+      }
+    }
+    return `📱 Idle`
+  }, [tests])
 
   const updateTest = React.useCallback(
     (
@@ -117,7 +136,9 @@ export function HybridObjectTestsScreen() {
         ))}
       </ScrollView>
 
-      <View>
+      <View style={styles.bottomView}>
+        <Text>{status}</Text>
+        <View style={styles.smallVSpacer} />
         <Button title="Run all tests" onPress={runAllTests} />
       </View>
     </SafeAreaView>
@@ -166,4 +187,9 @@ const styles = StyleSheet.create({
     height: 5,
   },
   flex: { flex: 1 },
+  bottomView: {
+    paddingHorizontal: 15,
+    paddingTop: 15,
+    alignItems: 'center',
+  },
 })
