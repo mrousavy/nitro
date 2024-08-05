@@ -21,12 +21,50 @@ namespace margelo::nitro {
 
 using namespace facebook;
 
-static constexpr auto CACHE_PROP_NAME = "__nitroModulesJSICache";
+class JSICacheReference;
 
-template <typename T>
-class JSICache;
+/**
+ * A `JSICache` can safely store `jsi::Object` instances (e.g. `jsi::Object` or
+ * `jsi::Function`) inside `OwningReference<T>`.
+ *
+ * `jsi::Pointer`s are managed by a `jsi::Runtime`, and will be deleted if the `jsi::Runtime`
+ * is deleted - even if there are still strong references to the `jsi::Pointer`.
+ */
+class JSICache final : public jsi::NativeState {
+public:
+  explicit JSICache(jsi::Runtime* runtime) : _runtime(runtime) {}
+  ~JSICache();
 
-template <typename T>
+public:
+  JSICache() = delete;
+  JSICache(const JSICache&) = delete;
+  JSICache(JSICache&&) = delete;
+
+public:
+  /**
+   Gets or creates a `JSICache` for the given `jsi::Runtime`.
+   The returned `shared_ptr` should not be stored in
+   If it can be locked, you can access data in the cache. Otherwise the Runtime has already been deleted.
+   Do not hold the returned `shared_ptr` in memory, only use it in the calling function's scope.
+   */
+  [[nodiscard]]
+  static JSICacheReference getOrCreateCache(jsi::Runtime& runtime);
+
+private:
+  friend class JSICacheReference;
+
+private:
+  jsi::Runtime* _runtime;
+  std::mutex _mutex;
+  std::vector<BorrowingReference<jsi::Object>> _cache;
+
+private:
+  static inline std::unordered_map<jsi::Runtime*, std::weak_ptr<JSICache>> _globalCache;
+
+private:
+  static constexpr auto TAG = "JSICache";
+};
+
 class JSICacheReference final {
 public:
   JSICacheReference() = delete;
@@ -48,103 +86,22 @@ public:
    Do not hold the returned `shared_ptr` in memory, only use it in the calling function's scope.
    Note: By design, this is not thread-safe, the returned `weak_ptr` must only be locked on the same thread as it was created on.
    */
+  template <typename T>
   OwningReference<T> makeGlobal(T&& value) {
-    auto owning = OwningReference<T>(new T(std::move(value)));
+    OwningReference<jsi::Object> owning(new T(std::move(value)));
     _strongCache->_cache.push_back(owning.weak());
-    return owning;
+    return owning.as<T>();
   }
 
 private:
-  explicit JSICacheReference(const std::shared_ptr<JSICache<T>>& cache) : _strongCache(cache) {
+  explicit JSICacheReference(const std::shared_ptr<JSICache>& cache) : _strongCache(cache) {
     _strongCache->_mutex.lock();
   }
 
 private:
-  std::shared_ptr<JSICache<T>> _strongCache;
+  std::shared_ptr<JSICache> _strongCache;
 
-  friend class JSICache<T>;
-};
-
-/**
- * A `JSICache` can safely store `jsi::Pointer` instances (e.g. `jsi::Object` or
- * `jsi::Function`) inside `OwningReference<T>`.
- *
- * `jsi::Pointer`s are managed by a `jsi::Runtime`, and will be deleted if the `jsi::Runtime`
- * is deleted - even if there are still strong references to the `jsi::Pointer`.
- */
-template <typename T = jsi::Pointer>
-class JSICache final : public jsi::NativeState {
-public:
-  explicit JSICache(jsi::Runtime* runtime) : _runtime(runtime) {}
-
-  ~JSICache() {
-    Logger::log(TAG, "Destroying JSICache...");
-    std::unique_lock lock(_mutex);
-
-    for (auto& func : _cache) {
-      OwningReference<T> owning = func.lock();
-      if (owning) {
-        // Destroy all functions that we might still have in cache, some callbacks and Promises may now become invalid.
-        owning.destroy();
-      }
-    }
-  }
-
-public:
-  JSICache() = delete;
-  JSICache(const JSICache&) = delete;
-  JSICache(JSICache&&) = delete;
-
-public:
-  /**
-   Gets or creates a `JSICache` for the given `jsi::Runtime`.
-   The returned `shared_ptr` should not be stored in
-   If it can be locked, you can access data in the cache. Otherwise the Runtime has already been deleted.
-   Do not hold the returned `shared_ptr` in memory, only use it in the calling function's scope.
-   */
-  [[nodiscard]]
-  static JSICacheReference<T> getOrCreateCache(jsi::Runtime& runtime) {
-    auto found = _globalCache.find(&runtime);
-    if (found != _globalCache.end()) {
-      // Fast path: get weak_ptr to JSICache from our global list.
-      std::weak_ptr<JSICache<T>> weak = found->second;
-      std::shared_ptr<JSICache<T>> strong = weak.lock();
-      if (strong) {
-        // It's still alive! Return it
-        return JSICacheReference<T>(strong);
-      }
-      Logger::log(TAG, "JSICache was created, but it is no longer strong!");
-    }
-
-    // Cache doesn't exist yet.
-    Logger::log(TAG, "Creating new JSICache<T> for runtime %s..", getRuntimeId(runtime));
-    // Create new cache
-    auto nativeState = std::make_shared<JSICache<T>>(&runtime);
-    // Wrap it in a jsi::Value using NativeState
-    jsi::Object cache(runtime);
-    cache.setNativeState(runtime, nativeState);
-    // Inject it into the jsi::Runtime's global so it's memory is managed by it
-    runtime.global().setProperty(runtime, CACHE_PROP_NAME, std::move(cache));
-    // Add it to our map of caches
-    _globalCache[&runtime] = nativeState;
-    // Return it
-    return JSICacheReference<T>(nativeState);
-  }
-
-public:
-private:
-  friend class JSICacheReference<T>;
-
-private:
-  jsi::Runtime* _runtime;
-  std::mutex _mutex;
-  std::vector<BorrowingReference<T>> _cache;
-
-private:
-  static inline std::unordered_map<jsi::Runtime*, std::weak_ptr<JSICache<T>>> _globalCache;
-
-private:
-  static constexpr auto TAG = "JSICache";
+  friend class JSICache;
 };
 
 } // namespace margelo::nitro

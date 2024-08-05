@@ -7,9 +7,7 @@
 // Forward declare a few of the common types that might have cyclic includes.
 namespace margelo::nitro {
 class ArrayBuffer;
-
-template <typename T>
-struct JSICache;
+class JSICache;
 
 template <typename T, typename Enable>
 struct JSIConverter;
@@ -37,8 +35,8 @@ struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_v<T, jsi::MutableBuffer
       throw std::runtime_error("Object \"" + arg.toString(runtime).utf8(runtime) + "\" is not an ArrayBuffer!");
     }
 
-    JSICacheReference<jsi::ArrayBuffer> cache = JSICache<jsi::ArrayBuffer>::getOrCreateCache(runtime);
-    auto owningArrayBuffer = cache.makeGlobal(object.getArrayBuffer(runtime));
+    JSICacheReference cache = JSICache::getOrCreateCache(runtime);
+    auto owningArrayBuffer = cache.makeGlobal<jsi::ArrayBuffer>(object.getArrayBuffer(runtime));
 
     return std::make_shared<JSArrayBuffer>(&runtime, owningArrayBuffer);
   }

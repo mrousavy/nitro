@@ -76,11 +76,24 @@ public:
   }
 
 private:
+  // BorrowingReference<T> -> OwningReference<T> Lock-constructor
   OwningReference(const BorrowingReference<T>& ref)
       : _value(ref._value), _isDeleted(ref._isDeleted), _strongRefCount(ref._strongRefCount), _weakRefCount(ref._weakRefCount),
         _mutex(ref._mutex) {
     (*_strongRefCount)++;
   }
+
+private:
+  // OwningReference<C> -> OwningReference<T> Cast-constructor
+  template <typename OldT>
+  OwningReference(T* value, const OwningReference<OldT>& originalRef)
+      : _value(value), _isDeleted(originalRef._isDeleted), _strongRefCount(originalRef._strongRefCount),
+        _weakRefCount(originalRef._weakRefCount), _mutex(originalRef._mutex) {
+    (*_strongRefCount)++;
+  }
+
+  template <typename C>
+  friend class OwningReference;
 
 public:
   ~OwningReference() {
@@ -92,6 +105,15 @@ public:
     // decrement strong ref count on destroy
     --(*_strongRefCount);
     maybeDestroy();
+  }
+
+public:
+  /**
+   Casts this `OwningReference<T>` to a `OwningReference<C>`.
+   */
+  template <typename C>
+  OwningReference<C> as() {
+    return OwningReference<C>(static_cast<C*>(_value), *this);
   }
 
 public:

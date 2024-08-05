@@ -99,7 +99,7 @@ jsi::Value HybridObject::toObject(jsi::Runtime& runtime) {
   }
 
   // 2. There is either no value in cache, or it's already dead. Create a new one
-  auto cache = JSICache<jsi::Object>::getOrCreateCache(runtime);
+  auto cache = JSICache::getOrCreateCache(runtime);
   // 3. Create a new jsi::Object from this HybridObject/jsi::HostObject
   std::shared_ptr<HybridObject> shared = shared_from_this();
   jsi::Object object = jsi::Object::createFromHostObject(runtime, shared);
@@ -107,7 +107,7 @@ jsi::Value HybridObject::toObject(jsi::Runtime& runtime) {
   size_t memorySize = getTotalExternalMemorySize();
   object.setExternalMemoryPressure(runtime, memorySize);
   // 5. Make it a global (weak) reference
-  auto global = cache.makeGlobal(std::move(object));
+  auto global = cache.makeGlobal<jsi::Object>(std::move(object));
   _jsObjects[&runtime] = global.weak();
   // 6. Return a jsi::Value copy again to the caller.
   return jsi::Value(runtime, *global);
@@ -177,12 +177,12 @@ jsi::Value HybridObject::get(facebook::jsi::Runtime& runtime, const facebook::js
     // it's a function. we now need to wrap it in a jsi::Function, store it in cache, then return it.
     HybridFunction& hybridFunction = _methods.at(name);
     // get (or create) a runtime-specific function cache
-    auto runtimeCache = JSICache<jsi::Function>::getOrCreateCache(runtime);
+    auto runtimeCache = JSICache::getOrCreateCache(runtime);
     // create the jsi::Function
     jsi::Function function = jsi::Function::createFromHostFunction(runtime, jsi::PropNameID::forUtf8(runtime, name),
                                                                    hybridFunction.parameterCount, hybridFunction.function);
     // throw it into the cache for next time
-    OwningReference<jsi::Function> globalFunction = runtimeCache.makeGlobal(std::move(function));
+    OwningReference<jsi::Function> globalFunction = runtimeCache.makeGlobal<jsi::Function>(std::move(function));
     functionCache[name] = globalFunction;
     // copy the reference & return it to JS
     return jsi::Value(runtime, *globalFunction);

@@ -6,7 +6,6 @@
 
 // Forward declare a few of the common types that might have cyclic includes.
 namespace margelo::nitro {
-template <typename T>
 class JSICache;
 
 template <typename T, typename Enable>
@@ -34,9 +33,9 @@ struct JSIConverter<std::function<ReturnType(Args...)>> {
 
   static inline std::function<ReturnType(Args...)> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
     // Make function global - it'll be managed by the Runtime's memory, and we only have a weak_ref to it.
-    auto cache = JSICache<jsi::Function>::getOrCreateCache(runtime);
+    auto cache = JSICache::getOrCreateCache(runtime);
     jsi::Function function = arg.asObject(runtime).asFunction(runtime);
-    OwningReference<jsi::Function> sharedFunction = cache.makeGlobal(std::move(function));
+    OwningReference<jsi::Function> sharedFunction = cache.makeGlobal<jsi::Function>(std::move(function));
 
     std::shared_ptr<Dispatcher> strongDispatcher = Dispatcher::getRuntimeGlobalDispatcher(runtime);
     std::weak_ptr<Dispatcher> weakDispatcher = strongDispatcher;

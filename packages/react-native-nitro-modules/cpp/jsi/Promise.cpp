@@ -8,9 +8,9 @@ namespace margelo::nitro {
 using namespace facebook;
 
 Promise::Promise(jsi::Runtime& runtime, jsi::Function&& resolver, jsi::Function&& rejecter) {
-  auto functionCache = JSICache<jsi::Function>::getOrCreateCache(runtime);
-  _resolver = functionCache.makeGlobal(std::move(resolver));
-  _rejecter = functionCache.makeGlobal(std::move(rejecter));
+  auto functionCache = JSICache::getOrCreateCache(runtime);
+  _resolver = functionCache.makeGlobal<jsi::Function>(std::move(resolver));
+  _rejecter = functionCache.makeGlobal<jsi::Function>(std::move(rejecter));
 }
 
 jsi::Value Promise::createPromise(jsi::Runtime& runtime, RunPromise&& run) {
@@ -36,7 +36,7 @@ jsi::Value Promise::createPromise(jsi::Runtime& runtime, RunPromise&& run) {
 
 void Promise::resolve(jsi::Runtime& runtime, jsi::Value&& result) {
   OwningLock<jsi::Function> lock = _resolver.lock();
-  
+
   if (!_resolver) {
     Logger::log(TAG, "Promise resolver function has already been deleted! Ignoring call..");
     return;
@@ -46,7 +46,7 @@ void Promise::resolve(jsi::Runtime& runtime, jsi::Value&& result) {
 
 void Promise::reject(jsi::Runtime& runtime, std::string message) {
   OwningLock<jsi::Function> lock = _rejecter.lock();
-  
+
   if (!_rejecter) {
     Logger::log(TAG, "Promise rejecter function has already been deleted! Ignoring call..");
     return;
