@@ -33,21 +33,6 @@ export class State<T> {
     console.log(`❌ Test "${this.testName}" failed!`, reason)
   }
 
-  private getResult(): T {
-    if (this.result == null) {
-      if (this.errorThrown != null) {
-        throw new Error(
-          `Expected ${this.testName} to return a non-null result, but it returned an error: ${this.errorThrown}`
-        )
-      } else {
-        throw new Error(
-          `Expected ${this.testName} to return a non-null result, but it returned nothing and didn't throw an error either!`
-        )
-      }
-    }
-    return this.result
-  }
-
   didThrow(): State<T> {
     if (this.errorThrown == null) {
       this.onFailed(
@@ -69,10 +54,9 @@ export class State<T> {
   }
 
   equals(other: T): State<T> {
-    const result = this.getResult()
-    if (!deepEqual(result, other)) {
+    if (!deepEqual(this.result, other)) {
       this.onFailed(
-        `Expected ${result} (${typeof result}) to equal ${other} (${typeof other}), but they are not equal!`
+        `Expected ${this.result} (${typeof this.result}) to equal ${other} (${typeof other}), but they are not equal!`
       )
     }
     this.onPassed()
@@ -80,10 +64,9 @@ export class State<T> {
   }
 
   didReturn(type: JSType): State<T> {
-    const result = this.getResult()
-    if (result == null || typeof result !== type) {
+    if (this.result == null || typeof this.result !== type) {
       this.onFailed(
-        `Expected ${result}'s type (${typeof result}) to be ${type}!`
+        `Expected ${this.result}'s type (${typeof this.result}) to be ${type}!`
       )
     }
     this.onPassed()
@@ -91,11 +74,10 @@ export class State<T> {
   }
 
   toContain(key: keyof T): State<T> {
-    const result = this.getResult()
     // @ts-expect-error
-    if (!Object.keys(result).includes(key)) {
+    if (!Object.keys(this.result).includes(key)) {
       this.onFailed(
-        `Expected ${result} to contain ${String(key)}, but it didn't!`
+        `Expected ${this.result} to contain ${String(key)}, but it didn't!`
       )
     }
     this.onPassed()
