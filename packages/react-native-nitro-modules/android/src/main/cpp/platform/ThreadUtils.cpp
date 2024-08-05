@@ -9,6 +9,7 @@
 #include <pthread.h>
 #include <sstream>
 #include <string>
+#include <sys/prctl.h>
 #include <thread>
 
 namespace margelo::nitro {
@@ -30,6 +31,10 @@ std::string ThreadUtils::getThreadName() {
   stream << std::this_thread::get_id();
   std::string threadId = stream.str();
   return "Thread #" + threadId;
+}
+
+void ThreadUtils::setThreadName(const std::string& name) {
+  prctl(PR_SET_NAME, name.c_str(), 0, 0, 0);
 }
 
 } // namespace margelo::nitro
