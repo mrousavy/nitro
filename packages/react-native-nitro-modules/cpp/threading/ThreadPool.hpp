@@ -34,6 +34,7 @@ public:
 public:
   /**
    * Get a static singleton instance - a shared ThreadPool.
+   * The shared ThreadPool has 3 threads.
    */
   static std::shared_ptr<ThreadPool> getSharedPool();
 
