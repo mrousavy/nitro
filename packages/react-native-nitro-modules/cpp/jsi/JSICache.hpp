@@ -27,8 +27,12 @@ class JSICacheReference;
  * A `JSICache` can safely store `jsi::Object` instances (e.g. `jsi::Object` or
  * `jsi::Function`) inside `OwningReference<T>`.
  *
- * `jsi::Pointer`s are managed by a `jsi::Runtime`, and will be deleted if the `jsi::Runtime`
- * is deleted - even if there are still strong references to the `jsi::Pointer`.
+ * `jsi::Object`s are managed by a `jsi::Runtime`, and will be deleted if the `jsi::Runtime`
+ * is deleted - even if there are still strong references to the `jsi::Object`.
+ *
+ * To access a `OwningReference<jsi::Object>` safely, use `lock()` to get an `OwningLock<jsi::Object>`.
+ * This will allow you to access the `jsi::Object` as long as the `OwningLock` is alive,
+ * and `JSICache` will hold any garbage collection calls until the `OwningLock` is destroyed.
  */
 class JSICache final : public jsi::NativeState {
 public:
@@ -77,14 +81,15 @@ public:
 
 public:
   /**
-   Creates a reference to a `jsi::Value` that can be stored in memory and accessed later.
-   The `jsi::Value` will be managed by the `jsi::Runtime`, if the `jsi::Runtime` gets the destroyed,
-   so will the `jsi::Value`.
-
-   To access the `jsi::Value`, try to `.lock()` the `weak_ptr`.
-   If it can be locked, it is still valid, otherwise the Runtime has already been deleted.
-   Do not hold the returned `shared_ptr` in memory, only use it in the calling function's scope.
-   Note: By design, this is not thread-safe, the returned `weak_ptr` must only be locked on the same thread as it was created on.
+   * Creates a semi-strong reference to a `jsi::Object` that can be stored in memory and accessed later.
+   *
+   * The returned `OwningReference<T>` keeps the `T` semi-strong, and once it gets deleted, `T` will also be freed.
+   *
+   * Note: The JS Runtime can still delete `T` at any point (e.g. when it gets destroyed or reloaded),
+   * so any operations on `T` should be under an `OwningLock<T>`.
+   *
+   * To get an `OwningLock<T>` (which implies safe access to `T`), call `.locK()` on the `OwningReference<T>`.
+   * This will hold off any JS Runtime GC calls that will destroy `T` for as long as the `OwningLock<T>` is alive.
    */
   template <typename T>
   OwningReference<T> makeGlobal(T&& value) {
