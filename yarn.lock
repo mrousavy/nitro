@@ -9384,7 +9384,7 @@ __metadata:
     eslint-config-prettier: "npm:^9.1.0"
     eslint-plugin-prettier: "npm:^5.2.1"
     prettier: "npm:^3.3.3"
-    react-native-nitro-modules: "npm:^0.2.0"
+    react-native-nitro-modules: "npm:^0.2.3"
     release-it: "npm:^17.6.0"
     ts-morph: "npm:^23.0.0"
     typescript: "npm:^5.5.4"
@@ -10512,7 +10512,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"react-native-nitro-modules@npm:^0.2.0, react-native-nitro-modules@workspace:^, react-native-nitro-modules@workspace:packages/react-native-nitro-modules":
+"react-native-nitro-modules@npm:^0.2.3, react-native-nitro-modules@workspace:^, react-native-nitro-modules@workspace:packages/react-native-nitro-modules":
   version: 0.0.0-use.local
   resolution: "react-native-nitro-modules@workspace:packages/react-native-nitro-modules"
   dependencies:
