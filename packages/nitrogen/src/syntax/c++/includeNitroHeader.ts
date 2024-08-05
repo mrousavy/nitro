@@ -1,6 +1,6 @@
 /**
  * Generates C++ code for including a `NitroModules` header.
- * @example `'Hash.hpp'` -> `#include "Hash.hpp"`
+ * @example `Hash.hpp` -> `#include <NitroModules/Hash.hpp>`
  */
 export function includeNitroHeader(headerName: string): string {
   return `

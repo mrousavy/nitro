@@ -15,6 +15,7 @@ import {
 } from '../getHybridObjectName.js'
 import { getForwardDeclaration } from '../c++/getForwardDeclaration.js'
 import { NitroConfig } from '../../config/NitroConfig.js'
+import { includeNitroHeader } from '../c++/includeNitroHeader.js'
 
 /**
  * Creates a Swift class that bridges Swift over to C++.
@@ -189,6 +190,8 @@ ${getForwardDeclaration('class', name.HybridTSpecCxx, iosModuleName)}
 ${extraForwardDeclarations.join('\n')}
 
 ${extraIncludes.join('\n')}
+
+${includeNitroHeader('HybridContext.hpp')}
 
 #include "${iosModuleName}-Swift.h"
 

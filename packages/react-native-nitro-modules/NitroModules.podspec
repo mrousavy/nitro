@@ -31,12 +31,13 @@ Pod::Spec.new do |s|
     "cpp/core/AnyMap.hpp",
     "cpp/core/ArrayBuffer.hpp",
     "cpp/core/HybridObject.hpp",
-    "cpp/core/HybridContext.hpp",
     "cpp/registry/HybridObjectRegistry.hpp",
     "cpp/jsi/JSIConverter.hpp",
     "cpp/threading/Dispatcher.hpp",
     "cpp/utils/NitroHash.hpp",
     "cpp/utils/NitroDefines.hpp",
+    # Public iOS-specific headers that will be exposed in modulemap (for Swift)
+    "ios/core/HybridContext.hpp"
   ]
 
   s.pod_target_xcconfig = {

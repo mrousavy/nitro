@@ -25,6 +25,12 @@ namespace margelo::nitro::image { enum class ImageFormat; }
 #include "ImageFormat.hpp"
 #include "Func_void_std__string.hpp"
 
+#if __has_include(<NitroModules/HybridContext.hpp>)
+#include <NitroModules/HybridContext.hpp>
+#else
+#error NitroModules cannot be found! Are you sure you installed NitroModules properly?
+#endif
+
 #include "NitroImage-Swift.h"
 
 namespace margelo::nitro::image {

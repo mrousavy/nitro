@@ -1,19 +1,22 @@
 //
 //  HybridContext.hpp
-//  Pods
+//  NitroModules
 //
 //  Created by Marc Rousavy on 17.07.24.
 //
 
 #pragma once
 
+namespace margelo::nitro {
+class HybridObject;
+}
+
+#include "HybridObject.hpp"
 #include "NitroLogger.hpp"
 #include "TypeInfo.hpp"
 #include <memory>
 
 namespace margelo::nitro {
-
-class HybridObject;
 
 /**
  * Represents contextual state for a `HybridObject`.
