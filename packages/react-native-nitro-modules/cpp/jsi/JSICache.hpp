@@ -78,6 +78,7 @@ public:
   explicit JSICache(jsi::Runtime* runtime) : _runtime(runtime) {}
 
   ~JSICache() {
+    Logger::log(TAG, "Destroying JSICache...");
     std::unique_lock lock(_mutex);
 
     for (auto& func : _cache) {
