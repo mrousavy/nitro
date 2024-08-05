@@ -24,3 +24,14 @@ export function getNativeNitroModules(): Spec {
 
   return turboModule
 }
+
+declare global {
+  var __nitroModulesJSICache: {}
+  var __nitroDispatcher: {}
+}
+
+export function isRuntimeAlive() {
+  const cache = global.__nitroModulesJSICache
+  const dispatcher = global.__nitroDispatcher
+  return cache != null && dispatcher != null
+}
