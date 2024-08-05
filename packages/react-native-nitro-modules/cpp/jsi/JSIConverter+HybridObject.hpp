@@ -45,6 +45,10 @@ struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_host_object_v<T>>> {
 #endif
     jsi::Object object = arg.asObject(runtime);
 #if DO_NULL_CHECKS
+    if (!object.isHostObject(runtime)) [[unlikely]] {
+      std::string stringRepresentation = arg.toString(runtime).utf8(runtime);
+      throw jsi::JSError(runtime, invalidTypeErrorMessage(stringRepresentation, "It is not a HostObject!"));
+    }
     if (!object.isHostObject<TPointee>(runtime)) [[unlikely]] {
       std::string stringRepresentation = arg.toString(runtime).utf8(runtime);
       throw jsi::JSError(runtime, invalidTypeErrorMessage(stringRepresentation, "It is a different HostObject<T>!"));
@@ -93,6 +97,10 @@ struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_native_state_v<T>>> {
 #endif
     jsi::Object object = arg.asObject(runtime);
 #if DO_NULL_CHECKS
+    if (!object.hasNativeState(runtime)) [[unlikely]] {
+      std::string stringRepresentation = arg.toString(runtime).utf8(runtime);
+      throw jsi::JSError(runtime, invalidTypeErrorMessage(stringRepresentation, "It is not a NativeState!"));
+    }
     if (!object.hasNativeState<TPointee>(runtime)) [[unlikely]] {
       std::string stringRepresentation = arg.toString(runtime).utf8(runtime);
       throw jsi::JSError(runtime, invalidTypeErrorMessage(stringRepresentation, "It is a different NativeState<T>!"));
