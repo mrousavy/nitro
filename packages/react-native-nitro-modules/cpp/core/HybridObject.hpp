@@ -5,9 +5,7 @@
 #pragma once
 
 #include "CountTrailingOptionals.hpp"
-#include "HybridContext.hpp"
 #include "JSIConverter.hpp"
-#include "NitroLogger.hpp"
 #include "OwningReference.hpp"
 #include <functional>
 #include <jsi/jsi.h>
@@ -15,6 +13,7 @@
 #include <mutex>
 #include <type_traits>
 #include <unordered_map>
+#include "TypeInfo.hpp"
 
 namespace margelo::nitro {
 

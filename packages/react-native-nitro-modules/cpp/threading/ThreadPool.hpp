@@ -5,6 +5,8 @@
 //  Created by Marc Rousavy on 21.06.24.
 //
 
+#pragma once
+
 #include <atomic>
 #include <condition_variable>
 #include <functional>
