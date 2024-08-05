@@ -50,7 +50,7 @@ namespace margelo::nitro::image {
       virtual std::shared_ptr<margelo::nitro::image::HybridImageSpec> loadImageFromFile(const std::string& path) = 0;
       virtual std::shared_ptr<margelo::nitro::image::HybridImageSpec> loadImageFromURL(const std::string& path) = 0;
       virtual std::shared_ptr<margelo::nitro::image::HybridImageSpec> loadImageFromSystemName(const std::string& path) = 0;
-      virtual std::shared_ptr<margelo::nitro::image::HybridImageSpec> bounceBack(std::shared_ptr<margelo::nitro::image::HybridImageSpec> image) = 0;
+      virtual std::shared_ptr<margelo::nitro::image::HybridImageSpec> bounceBack(const std::shared_ptr<margelo::nitro::image::HybridImageSpec>& image) = 0;
 
     protected:
       // Hybrid Setup

@@ -38,7 +38,7 @@ namespace margelo::nitro::image {
     std::shared_ptr<margelo::nitro::image::HybridImageSpec> loadImageFromFile(const std::string& path) override;
     std::shared_ptr<margelo::nitro::image::HybridImageSpec> loadImageFromURL(const std::string& path) override;
     std::shared_ptr<margelo::nitro::image::HybridImageSpec> loadImageFromSystemName(const std::string& path) override;
-    std::shared_ptr<margelo::nitro::image::HybridImageSpec> bounceBack(std::shared_ptr<margelo::nitro::image::HybridImageSpec> image) override;
+    std::shared_ptr<margelo::nitro::image::HybridImageSpec> bounceBack(const std::shared_ptr<margelo::nitro::image::HybridImageSpec>& image) override;
 
   private:
     friend HybridBase;

@@ -60,7 +60,7 @@ public:
   void simpleFunc() override;
   void multipleArguments(double num, const std::string& str, bool boo) override;
   std::shared_ptr<AnyMap> createMap() override;
-  std::shared_ptr<AnyMap> mapRoundtrip(std::shared_ptr<AnyMap> map) override;
+  std::shared_ptr<AnyMap> mapRoundtrip(const std::shared_ptr<AnyMap>& map) override;
   double funcThatThrows() override;
   std::string tryOptionalParams(double num, bool boo, const std::optional<std::string>& str) override;
   std::string tryMiddleParam(double num, bool boo, const std::string& str) override;
@@ -81,8 +81,8 @@ public:
   bool isCarElectric(const Car& car) override;
   Person getDriver(const Car& car) override;
   std::shared_ptr<ArrayBuffer> createArrayBuffer() override;
-  double getBufferLastItem(std::shared_ptr<ArrayBuffer> buffer) override;
-  void setAllValuesTo(std::shared_ptr<ArrayBuffer> buffer, double value) override;
+  double getBufferLastItem(const std::shared_ptr<ArrayBuffer>& buffer) override;
+  void setAllValuesTo(const std::shared_ptr<ArrayBuffer>& buffer, double value) override;
   std::shared_ptr<HybridTestObjectSpec> newTestObject() override;
 };
 

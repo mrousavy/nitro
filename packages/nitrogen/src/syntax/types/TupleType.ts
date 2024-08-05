@@ -10,7 +10,7 @@ export class TupleType implements Type {
   }
 
   get canBePassedByReference(): boolean {
-    // It's a tuple<..>, heavy to copy.
+    // It's a tuple<..> - heavy to copy
     return true
   }
 

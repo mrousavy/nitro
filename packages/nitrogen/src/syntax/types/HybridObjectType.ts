@@ -14,7 +14,7 @@ export class HybridObjectType implements Type {
 
   get canBePassedByReference(): boolean {
     // It's a shared_ptr<..>, no copy.
-    return false
+    return true
   }
 
   get kind(): TypeKind {

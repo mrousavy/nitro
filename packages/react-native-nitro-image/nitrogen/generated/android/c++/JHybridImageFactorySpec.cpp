@@ -45,7 +45,7 @@ namespace margelo::nitro::image {
     static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<JHybridImageSpec::javaobject>(std::string)>("loadImageFromSystemName");
     throw std::runtime_error("loadImageFromSystemName(...) is not yet implemented!");
   }
-  std::shared_ptr<margelo::nitro::image::HybridImageSpec> JHybridImageFactorySpec::bounceBack(std::shared_ptr<margelo::nitro::image::HybridImageSpec> image) {
+  std::shared_ptr<margelo::nitro::image::HybridImageSpec> JHybridImageFactorySpec::bounceBack(const std::shared_ptr<margelo::nitro::image::HybridImageSpec>& image) {
     static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<JHybridImageSpec::javaobject>(jni::alias_ref<JHybridImageSpec::javaobject>)>("bounceBack");
     throw std::runtime_error("bounceBack(...) is not yet implemented!");
   }

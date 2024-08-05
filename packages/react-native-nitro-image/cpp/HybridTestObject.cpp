@@ -125,7 +125,7 @@ std::shared_ptr<AnyMap> HybridTestObject::createMap() {
   return map;
 }
 
-std::shared_ptr<AnyMap> HybridTestObject::mapRoundtrip(std::shared_ptr<AnyMap> map) {
+std::shared_ptr<AnyMap> HybridTestObject::mapRoundtrip(const std::shared_ptr<AnyMap>& map) {
   return map;
 }
 
@@ -235,7 +235,7 @@ std::shared_ptr<ArrayBuffer> HybridTestObject::createArrayBuffer() {
   return std::make_shared<NativeArrayBuffer>(buffer, size, true);
 }
 
-double HybridTestObject::getBufferLastItem(std::shared_ptr<ArrayBuffer> buffer) {
+double HybridTestObject::getBufferLastItem(const std::shared_ptr<ArrayBuffer>& buffer) {
   size_t size = buffer->size();
   if (size == 0) {
     throw std::runtime_error("ArrayBuffer's size is 0!");
@@ -248,7 +248,7 @@ double HybridTestObject::getBufferLastItem(std::shared_ptr<ArrayBuffer> buffer) 
   return static_cast<double>(lastItem);
 }
 
-void HybridTestObject::setAllValuesTo(std::shared_ptr<ArrayBuffer> buffer, double value) {
+void HybridTestObject::setAllValuesTo(const std::shared_ptr<ArrayBuffer>& buffer, double value) {
   size_t size = buffer->size();
   if (size == 0) {
     throw std::runtime_error("ArrayBuffer's size is 0!");

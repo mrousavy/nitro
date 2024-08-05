@@ -86,7 +86,7 @@ namespace margelo::nitro::image {
       virtual void simpleFunc() = 0;
       virtual void multipleArguments(double num, const std::string& str, bool boo) = 0;
       virtual std::shared_ptr<AnyMap> createMap() = 0;
-      virtual std::shared_ptr<AnyMap> mapRoundtrip(std::shared_ptr<AnyMap> map) = 0;
+      virtual std::shared_ptr<AnyMap> mapRoundtrip(const std::shared_ptr<AnyMap>& map) = 0;
       virtual double funcThatThrows() = 0;
       virtual std::string tryOptionalParams(double num, bool boo, const std::optional<std::string>& str) = 0;
       virtual std::string tryMiddleParam(double num, bool boo, const std::string& str) = 0;
@@ -105,8 +105,8 @@ namespace margelo::nitro::image {
       virtual bool isCarElectric(const Car& car) = 0;
       virtual Person getDriver(const Car& car) = 0;
       virtual std::shared_ptr<ArrayBuffer> createArrayBuffer() = 0;
-      virtual double getBufferLastItem(std::shared_ptr<ArrayBuffer> buffer) = 0;
-      virtual void setAllValuesTo(std::shared_ptr<ArrayBuffer> buffer, double value) = 0;
+      virtual double getBufferLastItem(const std::shared_ptr<ArrayBuffer>& buffer) = 0;
+      virtual void setAllValuesTo(const std::shared_ptr<ArrayBuffer>& buffer, double value) = 0;
       virtual std::shared_ptr<margelo::nitro::image::HybridTestObjectSpec> newTestObject() = 0;
 
     protected:

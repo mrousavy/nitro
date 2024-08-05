@@ -86,7 +86,7 @@ namespace margelo::nitro::image {
     auto value = valueOrError.getValue();
     return HybridContext::getOrCreate<HybridImageSpecSwift>(value);
   }
-  inline std::shared_ptr<margelo::nitro::image::HybridImageSpec> bounceBack(std::shared_ptr<margelo::nitro::image::HybridImageSpec> image) override {
+  inline std::shared_ptr<margelo::nitro::image::HybridImageSpec> bounceBack(const std::shared_ptr<margelo::nitro::image::HybridImageSpec>& image) override {
     auto valueOrError = _swiftPart.bounceBack(std::static_pointer_cast<HybridImageSpecSwift>(image)->getSwiftPart());
     if (valueOrError.isError()) [[unlikely]] {
       throw std::runtime_error(valueOrError.getError());

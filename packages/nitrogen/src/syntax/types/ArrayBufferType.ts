@@ -6,7 +6,7 @@ import type { Type, TypeKind } from './Type.js'
 export class ArrayBufferType implements Type {
   get canBePassedByReference(): boolean {
     // It's a shared_ptr.
-    return false
+    return true
   }
 
   get kind(): TypeKind {
