@@ -38,7 +38,7 @@
         "yarn install"
       ],
       "after:bump": "yarn workspaces foreach -A --no-private version ${version}",
-      "after:npm:release": "yarn workspaces foreach -A --no-private npm publish --access public",
+      "after:release": "yarn workspaces foreach -A --no-private npm publish --access public",
       "after:git:release": "git push --follow-tags"
     },
     "plugins": {
