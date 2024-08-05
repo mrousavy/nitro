@@ -96,7 +96,7 @@ namespace margelo::nitro::image {
       virtual void callCallback(const Func_void& callback) = 0;
       virtual void getValueFromJSCallback(const Func_std__future_double_& getValue) = 0;
       virtual std::future<double> getValueFromJSCallbackAndWait(const Func_std__future_double_& getValue) = 0;
-      virtual void callOneOf(const Func_void& first, const Func_void& second, const Func_void& third) = 0;
+      virtual void callAll(const Func_void& first, const Func_void& second, const Func_void& third) = 0;
       virtual std::future<void> getValueFromJsCallback(const Func_std__future_std__string_& callback, const Func_void_std__string& andThenCall) = 0;
       virtual Car getCar() = 0;
       virtual bool isCarElectric(const Car& car) = 0;

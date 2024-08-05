@@ -65,7 +65,7 @@ export interface TestObject extends HybridObject<{ ios: 'c++' }> {
   callCallback(callback: () => void): void
   getValueFromJSCallback(getValue: () => number): void
   getValueFromJSCallbackAndWait(getValue: () => number): Promise<number>
-  callOneOf(first: () => void, second: () => void, third: () => void): void
+  callAll(first: () => void, second: () => void, third: () => void): void
   getValueFromJsCallback(
     callback: () => string,
     andThenCall: (valueFromJs: string) => void

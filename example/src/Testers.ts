@@ -74,6 +74,17 @@ export class State<T> {
     }
     return this
   }
+
+  toBeArray(): State<T> {
+    if (!Array.isArray(this.result)) {
+      this.onFailed(
+        `Expected "${this.result}" (${typeof this.result}) to be an array, but it isn't!`
+      )
+    } else {
+      this.onPassed()
+    }
+    return this
+  }
 }
 
 export function it<T>(action: () => Promise<T>): Promise<State<T>>

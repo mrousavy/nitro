@@ -51,7 +51,7 @@ namespace margelo::nitro::image {
     registerHybridMethod("callCallback", &HybridTestObjectSpec::callCallback, this);
     registerHybridMethod("getValueFromJSCallback", &HybridTestObjectSpec::getValueFromJSCallback, this);
     registerHybridMethod("getValueFromJSCallbackAndWait", &HybridTestObjectSpec::getValueFromJSCallbackAndWait, this);
-    registerHybridMethod("callOneOf", &HybridTestObjectSpec::callOneOf, this);
+    registerHybridMethod("callAll", &HybridTestObjectSpec::callAll, this);
     registerHybridMethod("getValueFromJsCallback", &HybridTestObjectSpec::getValueFromJsCallback, this);
     registerHybridMethod("getCar", &HybridTestObjectSpec::getCar, this);
     registerHybridMethod("isCarElectric", &HybridTestObjectSpec::isCarElectric, this);

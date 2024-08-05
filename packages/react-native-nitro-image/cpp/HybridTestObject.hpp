@@ -74,7 +74,7 @@ public:
   void callCallback(const Func_void& callback) override;
   void getValueFromJSCallback(const Func_std__future_double_& getValue) override;
   std::future<double> getValueFromJSCallbackAndWait(const Func_std__future_double_& getValue) override;
-  void callOneOf(const Func_void& first, const Func_void& second, const Func_void& third) override;
+  void callAll(const Func_void& first, const Func_void& second, const Func_void& third) override;
   std::future<void> getValueFromJsCallback(const Func_std__future_std__string_& callback,
                                            const Func_void_std__string& andThenCall) override;
   Car getCar() override;

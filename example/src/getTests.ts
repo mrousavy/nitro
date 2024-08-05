@@ -279,7 +279,7 @@ export function getTests(): TestRunner[] {
 
     // Promises
     createTest('wait', async () =>
-      (await it(() => HybridTestObject.wait(0.5))).didThrow()
+      (await it(() => HybridTestObject.wait(0.5))).didNotThrow()
     ),
     createTest('calculateFibonacciSync(5)', async () =>
       it(() => HybridTestObject.calculateFibonacciSync(10))
@@ -290,6 +290,186 @@ export function getTests(): TestRunner[] {
       (await it(() => HybridTestObject.calculateFibonacciAsync(10)))
         .didNotThrow()
         .equals(55n)
+    ),
+
+    // Callbacks
+    createTest('callCallback(...)', async () =>
+      (
+        await it(async () => {
+          let wasCalled = false
+          HybridTestObject.callCallback(() => {
+            wasCalled = true
+          })
+          await HybridTestObject.wait(0.5) // <-- we need to sleep cuz callbacks are executed asynchronously!
+          return wasCalled
+        })
+      )
+        .didNotThrow()
+        .equals(true)
+    ),
+    createTest('getValueFromJSCallback(...)', async () =>
+      (
+        await it(async () => {
+          let wasCalled = false
+          HybridTestObject.getValueFromJSCallback(() => {
+            wasCalled = true
+            return 55
+          })
+          await HybridTestObject.wait(0.5) // <-- we need to sleep cuz callbacks are executed asynchronously!
+          return wasCalled
+        })
+      )
+        .didNotThrow()
+        .equals(true)
+    ),
+    createTest('getValueFromJSCallbackAndWait(...)', async () =>
+      (await it(() => HybridTestObject.getValueFromJSCallbackAndWait(() => 73)))
+        .didNotThrow()
+        .equals(73)
+    ),
+    createTest('callAll(...)', async () =>
+      (
+        await it(async () => {
+          let calledCount = 0
+          HybridTestObject.callAll(
+            () => {
+              calledCount++
+            },
+            () => {
+              calledCount++
+            },
+            () => {
+              calledCount++
+            }
+          )
+          await HybridTestObject.wait(0.5) // <-- we need to sleep cuz callbacks are executed asynchronously!
+          return calledCount
+        })
+      )
+        .didNotThrow()
+        .equals(3)
+    ),
+    createTest('getValueFromJsCallback(...)', async () =>
+      (
+        await it(async () => {
+          let value: string | undefined
+          await HybridTestObject.getValueFromJsCallback(
+            () => 'hello',
+            (val) => {
+              value = val
+            }
+          )
+          return value
+        })
+      )
+        .didNotThrow()
+        .equals('hello')
+    ),
+
+    // Objects
+    createTest('getCar()', () =>
+      it(() => HybridTestObject.getCar())
+        .didNotThrow()
+        .didReturn('object')
+        .toContain('year')
+        .toContain('make')
+        .toContain('model')
+        .toContain('power')
+        .toContain('powertrain')
+        .toContain('driver')
+    ),
+    createTest('isCarElectric(...)', () =>
+      it(() =>
+        HybridTestObject.isCarElectric({
+          make: 'Lamborghini',
+          year: 2018,
+          model: 'Huracan Performante',
+          power: 640,
+          powertrain: 'gas',
+        })
+      )
+        .didNotThrow()
+        .equals(false)
+    ),
+    createTest('getDriver(...) with no driver', () =>
+      it(() =>
+        HybridTestObject.getDriver({
+          make: 'Lamborghini',
+          year: 2018,
+          model: 'Huracan Performante',
+          power: 640,
+          powertrain: 'gas',
+        })
+      )
+        .didNotThrow()
+        .equals(undefined)
+    ),
+    createTest('getDriver(...) with driver', () =>
+      it(() =>
+        HybridTestObject.getDriver({
+          make: 'Lamborghini',
+          year: 2018,
+          model: 'Huracan Performante',
+          power: 640,
+          powertrain: 'gas',
+          driver: { age: 24, name: 'marc' },
+        })
+      )
+        .didNotThrow()
+        .equals({ age: 24, name: 'marc' })
+    ),
+
+    // Hybrid Object Tests
+    createTest('get self', () =>
+      it(() => HybridTestObject.self)
+        .didNotThrow()
+        .didReturn('object')
+        .toContain('bigintValue')
+        .toContain('boolValue')
+        .toContain('stringValue')
+    ),
+    createTest('newTestObject()', () =>
+      it(() => HybridTestObject.newTestObject())
+        .didNotThrow()
+        .didReturn('object')
+        .toContain('bigintValue')
+        .toContain('boolValue')
+        .toContain('stringValue')
+    ),
+
+    // Base HybridObject inherited methods
+    createTest('.toString()', () =>
+      it(() => HybridTestObject.toString())
+        .didNotThrow()
+        .didReturn('string')
+        .equals('[HybridObject TestObject]')
+    ),
+    createTest('.name', () =>
+      it(() => HybridTestObject.name)
+        .didNotThrow()
+        .didReturn('string')
+        .equals('TestObject')
+    ),
+    createTest('.equals(...) == true', () =>
+      it(() => HybridTestObject.equals(HybridTestObject))
+        .didNotThrow()
+        .equals(true)
+    ),
+    createTest('.equals(.self) == true', () =>
+      it(() => HybridTestObject.equals(HybridTestObject.self))
+        .didNotThrow()
+        .equals(true)
+    ),
+    createTest('.equals(newTestObject()) == false', () =>
+      it(() => HybridTestObject.equals(HybridTestObject.newTestObject()))
+        .didNotThrow()
+        .equals(false)
+    ),
+    createTest('Object.keys(...)', () =>
+      it(() => Object.keys(HybridTestObject))
+        .didNotThrow()
+        .didReturn('object')
+        .toBeArray()
     ),
   ]
 }

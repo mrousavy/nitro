@@ -199,8 +199,10 @@ std::future<double> HybridTestObject::getValueFromJSCallbackAndWait(const Func_s
   });
 }
 
-void HybridTestObject::callOneOf(const Func_void& first, const Func_void& second, const Func_void& third) {
+void HybridTestObject::callAll(const Func_void& first, const Func_void& second, const Func_void& third) {
+  first();
   second();
+  third();
 }
 
 std::future<void> HybridTestObject::getValueFromJsCallback(const Func_std__future_std__string_& callback,
