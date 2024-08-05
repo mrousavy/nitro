@@ -1,6 +1,6 @@
 {
   "name": "react-native-nitro-modules",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Insanely fast native C++, Swift or Kotlin modules with a statically compiled binding layer to JSI.",
   "main": "lib/index",
   "module": "lib/index",
@@ -100,7 +100,7 @@
     "github": {
       "release": false
     },
-    "plugins": { }
+    "plugins": {}
   },
   "eslintConfig": {
     "root": true,
