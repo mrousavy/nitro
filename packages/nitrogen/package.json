@@ -33,7 +33,7 @@
     "registry": "https://registry.npmjs.org/"
   },
   "devDependencies": {
-    "@release-it/conventional-changelog": "^5.1.1",
+    "@release-it/bumper": "^6.0.1",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",
@@ -43,50 +43,23 @@
   },
   "dependencies": {
     "chalk": "^5.3.0",
-    "react-native-nitro-modules": "workspace:^",
+    "react-native-nitro-modules": "0.2.0",
     "ts-morph": "^23.0.0",
     "zod": "^3.23.8"
   },
   "release-it": {
-    "git": {
-      "commitMessage": "chore: release ${version}",
-      "tagName": "v${version}"
-    },
+    "git": false,
     "npm": {
-      "publish": true,
-      "versionArgs": [
-        "--workspaces=true"
-      ]
+      "publish": true
     },
     "github": {
-      "release": true
+      "release": false
     },
     "plugins": {
-      "@release-it/conventional-changelog": {
-        "preset": {
-          "name": "conventionalcommits",
-          "types": [
-            {
-              "type": "feat",
-              "section": "✨ Features"
-            },
-            {
-              "type": "perf",
-              "section": "💨 Performance Improvements"
-            },
-            {
-              "type": "fix",
-              "section": "🐛 Bug Fixes"
-            },
-            {
-              "type": "chore(deps)",
-              "section": "🛠️ Dependency Upgrades"
-            },
-            {
-              "type": "docs",
-              "section": "📚 Documentation"
-            }
-          ]
+      "@release-it/bumper": {
+        "out": {
+          "file": "package.json",
+          "path": ["dependencies.react-native-nitro-modules"]
         }
       }
     }

@@ -11,23 +11,24 @@
     "postinstall": "yarn tsc"
   },
   "workspaces": [
-    "packages/*",
+    "packages/react-native-nitro-modules",
+    "packages/nitrogen",
+    "packages/react-native-nitro-image",
     "example"
   ],
   "devDependencies": {
+    "@release-it/bumper": "^6.0.1",
     "@release-it/conventional-changelog": "^5.1.1",
     "release-it": "^17.6.0"
   },
   "release-it": {
     "git": {
       "commitMessage": "chore: release ${version}",
-      "tagName": "v${version}"
+      "tagName": "v${version}",
+      "requireCleanWorkingDir": false
     },
     "npm": {
-      "publish": true,
-      "versionArgs": [
-        "--workspaces=true"
-      ]
+      "publish": false
     },
     "github": {
       "release": true
