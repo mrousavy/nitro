@@ -9384,7 +9384,7 @@ __metadata:
     eslint-config-prettier: "npm:^9.1.0"
     eslint-plugin-prettier: "npm:^5.2.1"
     prettier: "npm:^3.3.3"
-    react-native-nitro-modules: "npm:^0.2.4"
+    react-native-nitro-modules: "npm:^0.2.5"
     release-it: "npm:^17.6.0"
     ts-morph: "npm:^23.0.0"
     typescript: "npm:^5.5.4"
@@ -10512,7 +10512,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"react-native-nitro-modules@npm:^0.2.4, react-native-nitro-modules@workspace:^, react-native-nitro-modules@workspace:packages/react-native-nitro-modules":
+"react-native-nitro-modules@npm:^0.2.5, react-native-nitro-modules@workspace:^, react-native-nitro-modules@workspace:packages/react-native-nitro-modules":
   version: 0.0.0-use.local
   resolution: "react-native-nitro-modules@workspace:packages/react-native-nitro-modules"
   dependencies:
@@ -10533,6 +10533,16 @@ __metadata:
   peerDependencies:
     react: "*"
     react-native: "*"
+  languageName: unknown
+  linkType: soft
+
+"react-native-nitro@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "react-native-nitro@workspace:."
+  dependencies:
+    "@release-it/bumper": "npm:^6.0.1"
+    "@release-it/conventional-changelog": "npm:^5.1.1"
+    release-it: "npm:^17.6.0"
   languageName: unknown
   linkType: soft
 
@@ -11091,16 +11101,6 @@ __metadata:
   checksum: 10/756419f2fa99aa119c46a9fc03e09d84ecf5421a80a72d1944c5088c9e4671e77128527a900a313ed9d3fdbdd37e2ae05486cd7e9116d5812d8c31f2399d7c86
   languageName: node
   linkType: hard
-
-"root-workspace-0b6124@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "root-workspace-0b6124@workspace:."
-  dependencies:
-    "@release-it/bumper": "npm:^6.0.1"
-    "@release-it/conventional-changelog": "npm:^5.1.1"
-    release-it: "npm:^17.6.0"
-  languageName: unknown
-  linkType: soft
 
 "run-applescript@npm:^7.0.0":
   version: 7.0.0

@@ -1,4 +1,8 @@
 {
+  "name": "react-native-nitro",
+  "version": "0.2.5",
+  "private": true,
+  "packageManager": "yarn@4.4.0",
   "repository": "https://github.com/mrousavy/react-native-nitro.git",
   "author": "Marc Rousavy <me@mrousavy.com> (https://github.com/mrousavy)",
   "scripts": {
@@ -38,7 +42,7 @@
         "yarn install"
       ],
       "after:bump": "yarn workspaces foreach -A --no-private version ${version}",
-      "after:release": "yarn workspaces foreach -A --no-private npm publish --access public",
+      "before:release": "./scripts/publish.sh",
       "after:git:release": "git push --follow-tags"
     },
     "plugins": {
@@ -70,8 +74,5 @@
         }
       }
     }
-  },
-  "private": true,
-  "packageManager": "yarn@4.4.0",
-  "version": "0.2.4"
+  }
 }
