@@ -30,13 +30,20 @@ async function runTests(): Promise<void> {
   it('valueThatWillThrowOnAccess', () =>
     (HybridTestObject.valueThatWillThrowOnAccess = 55)).didThrow()
   // Callbacks
-  it('getValueFromJsCallback(..)', () =>
-    HybridTestObject.getValueFromJsCallback(
-      () => 'Hi from JS!',
+  it('getValueFromJsCallback(..)', async () => {
+    let result: string | undefined
+    await HybridTestObject.getValueFromJsCallback(
+      () => {
+        // C++ calls this JS method to get that string
+        return 'Hi from JS!'
+      },
       (nativestring) => {
-        console.log(`Received callback from C++: "${nativestring}"`)
+        // C++ calls this JS method, passing the string we got from JS before
+        result = nativestring
       }
-    )).then((s) => s.didNotThrow())
+    )
+    return result
+  }).then((s) => s.equals('Hi from JS!'))
 }
 
 export default function App() {

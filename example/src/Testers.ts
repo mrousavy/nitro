@@ -33,6 +33,21 @@ export class State<T> {
     console.log(`❌ Test "${this.testName}" failed!`, reason)
   }
 
+  private getResult(): T {
+    if (this.result == null) {
+      if (this.errorThrown != null) {
+        throw new Error(
+          `Expected ${this.testName} to return a non-null result, but it returned an error: ${this.errorThrown}`
+        )
+      } else {
+        throw new Error(
+          `Expected ${this.testName} to return a non-null result, but it returned nothing and didn't throw an error either!`
+        )
+      }
+    }
+    return this.result
+  }
+
   didThrow(): State<T> {
     if (this.errorThrown == null) {
       this.onFailed(
@@ -54,9 +69,10 @@ export class State<T> {
   }
 
   equals(other: T): State<T> {
-    if (!deepEqual(this.result, other)) {
+    const result = this.getResult()
+    if (!deepEqual(result, other)) {
       this.onFailed(
-        `Expected ${this.result} (${typeof this.result}) to equal ${other} (${typeof other}), but they are not equal!`
+        `Expected ${result} (${typeof result}) to equal ${other} (${typeof other}), but they are not equal!`
       )
     }
     this.onPassed()
@@ -64,9 +80,10 @@ export class State<T> {
   }
 
   didReturn(type: JSType): State<T> {
-    if (this.result == null || typeof this.result !== type) {
+    const result = this.getResult()
+    if (result == null || typeof result !== type) {
       this.onFailed(
-        `Expected ${this.result}'s type (${typeof this.result}) to be ${type}!`
+        `Expected ${result}'s type (${typeof result}) to be ${type}!`
       )
     }
     this.onPassed()
@@ -74,15 +91,11 @@ export class State<T> {
   }
 
   toContain(key: keyof T): State<T> {
-    if (this.result == null) {
-      this.onFailed(
-        `Expected ${this.testName} to return an object, but it returned ${this.result}.`
-      )
-    }
+    const result = this.getResult()
     // @ts-expect-error
-    if (!Object.keys(this.result).includes(key)) {
+    if (!Object.keys(result).includes(key)) {
       this.onFailed(
-        `Expected ${this.result} to contain ${String(key)}, but it didn't!`
+        `Expected ${result} to contain ${String(key)}, but it didn't!`
       )
     }
     this.onPassed()
@@ -100,7 +113,7 @@ export function it<T>(
   action: () => T | Promise<T>
 ): State<T> | Promise<State<T>> {
   try {
-    console.log(`⏳ Running test "${testName}"...`)
+    console.log(`⏳ Test "${testName}" started...`)
     const syncResult = action()
     if (syncResult instanceof Promise) {
       return syncResult
@@ -111,4 +124,8 @@ export function it<T>(
   } catch (e) {
     return new State<T>(testName, undefined, e)
   }
+}
+
+export function callback<T, R>(func: (...args: T[]) => R): (...args: T[]) => R {
+  return func
 }
