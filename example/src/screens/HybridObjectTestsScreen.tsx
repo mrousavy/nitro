@@ -7,45 +7,86 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 
 const allTests = getTests()
 
-type State = '📱 Click to run' | '⏳ Running' | '❌ Failed' | '✅ Passed'
+interface TestState {
+  runner: TestRunner
+  state: '📱 Click to run' | '⏳ Running' | '❌ Failed' | '✅ Passed'
+  extraMessage: string
+}
 
-function TestCase({ test }: { test: TestRunner }): React.ReactElement {
-  const [state, setState] = React.useState<State>('📱 Click to run')
-  const [extraMessage, setExtraMessage] = React.useState('')
+interface TestCaseProps {
+  test: TestState
+  onRunPressed: () => void
+}
 
-  const onPress = React.useCallback(() => {
-    setState('⏳ Running')
-    requestAnimationFrame(async () => {
-      const result = await test.run()
-      switch (result.status) {
-        case 'successful':
-          setState('✅ Passed')
-          setExtraMessage(`Result: ${result.result}`)
-          break
-        case 'failed':
-          setState('❌ Failed')
-          setExtraMessage(`Error: ${result.message}`)
-          break
-      }
-    })
-  }, [test])
-
+function TestCase({ test, onRunPressed }: TestCaseProps): React.ReactElement {
   return (
     <View style={styles.testCase}>
       <View style={styles.testBox}>
-        <Text style={styles.testName}>{test.name}</Text>
-        <View style={{ height: 5 }} />
+        <Text style={styles.testName}>{test.runner.name}</Text>
+        <View style={styles.smallVSpacer} />
         <Text style={styles.testStatus} numberOfLines={4}>
-          {state} ({extraMessage})
+          {test.state} ({test.extraMessage})
         </Text>
       </View>
-      <View style={{ flex: 1 }} />
-      <Button title="Run" onPress={onPress} />
+      <View style={styles.flex} />
+      <Button title="Run" onPress={onRunPressed} />
     </View>
   )
 }
 
 export function HybridObjectTestsScreen() {
+  const [tests, setTests] = React.useState<TestState[]>(() =>
+    allTests.map((t) => ({
+      runner: t,
+      state: '📱 Click to run',
+      extraMessage: '',
+    }))
+  )
+
+  const updateTest = React.useCallback(
+    (
+      runner: TestRunner,
+      newState: TestState['state'],
+      newMessage: TestState['extraMessage']
+    ) => {
+      setTests((t) => {
+        const indexOfTest = t.findIndex((v) => v.runner === runner)
+        if (indexOfTest === -1) {
+          throw new Error(
+            `Test ${runner} does not exist in all tests! What did you click? lol`
+          )
+        }
+        const copy = [...t]
+        copy[indexOfTest]!.state = newState
+        copy[indexOfTest]!.extraMessage = newMessage
+        return copy
+      })
+    },
+    []
+  )
+
+  const runTest = React.useCallback(
+    (test: TestState) => {
+      updateTest(test.runner, '⏳ Running', '')
+      requestAnimationFrame(async () => {
+        const result = await test.runner.run()
+        switch (result.status) {
+          case 'successful':
+            updateTest(test.runner, '✅ Passed', `Result: ${result.result}`)
+            break
+          case 'failed':
+            updateTest(test.runner, '❌ Failed', `Error: ${result.message}`)
+            break
+        }
+      })
+    },
+    [updateTest]
+  )
+
+  const runAllTests = React.useCallback(() => {
+    tests.forEach((t) => runTest(t))
+  }, [runTest, tests])
+
   const image = React.useMemo(() => {
     console.log('Loading image...')
     const i = ImageConstructors.loadImageFromSystemName('heart.fill')
@@ -66,11 +107,19 @@ export function HybridObjectTestsScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.header}>HybridObject Tests</Text>
-      <ScrollView style={{ flex: 1 }}>
-        {allTests.map((t, i) => (
-          <TestCase key={`test-${i}`} test={t} />
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        {tests.map((t, i) => (
+          <TestCase
+            key={`test-${i}`}
+            test={t}
+            onRunPressed={() => runTest(t)}
+          />
         ))}
       </ScrollView>
+
+      <View>
+        <Button title="Run all tests" onPress={runAllTests} />
+      </View>
     </SafeAreaView>
   )
 }
@@ -80,11 +129,14 @@ const styles = StyleSheet.create({
     fontSize: 26,
     fontWeight: 'bold',
     paddingBottom: 15,
+    marginHorizontal: 15,
   },
   container: {
     flex: 1,
-    paddingHorizontal: 15,
     paddingVertical: 10,
+  },
+  scrollContent: {
+    paddingHorizontal: 15,
   },
   box: {
     width: 60,
@@ -110,4 +162,8 @@ const styles = StyleSheet.create({
     fontSize: 14,
     flex: 1,
   },
+  smallVSpacer: {
+    height: 5,
+  },
+  flex: { flex: 1 },
 })
