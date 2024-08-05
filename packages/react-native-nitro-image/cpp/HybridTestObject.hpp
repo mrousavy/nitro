@@ -22,7 +22,7 @@ private:
   std::tuple<double, std::string> _tuple;
   
 private:
-  static inline uint64_t calculateFibonacci(int count) const noexcept {
+  static inline uint64_t calculateFibonacci(int count) noexcept {
     if (count <= 0) [[unlikely]]
       return 0;
     if (count == 1) [[unlikely]]
