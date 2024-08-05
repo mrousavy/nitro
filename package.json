@@ -7,7 +7,7 @@
     "bootstrap": "yarn workspace react-native-nitro-modules install && yarn workspace nitro-codegen install && yarn workspace react-native-nitro-image install && yarn workspace react-native-nitro-example install && yarn workspace react-native-nitro-example pods && yarn tsc",
     "tsc": "yarn workspace react-native-nitro-modules tsc && yarn workspace nitro-codegen tsc && yarn workspace react-native-nitro-image tsc",
     "lint": "yarn workspace react-native-nitro-modules lint && yarn workspace nitro-codegen lint && yarn workspace react-native-nitro-image lint",
-    "release": "release-it",
+    "release": "release-it && yarn workspace react-native-nitro-modules release && yarn workspace nitro-codegen release",
     "postinstall": "yarn tsc"
   },
   "workspaces": [
