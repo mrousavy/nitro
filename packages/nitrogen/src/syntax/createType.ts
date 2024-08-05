@@ -200,6 +200,10 @@ export function createType(type: TSMorphType, isOptional: boolean): Type {
       const properties = getInterfaceProperties(type)
       return new StructType(typename, properties)
     }
+  } else if (type.isObject()) {
+    throw new Error(
+      `Anonymous objects cannot be represented in C++! Extract "${type.getText()}" to a separate interface/type declaration.`
+    )
   } else if (type.isStringLiteral()) {
     throw new Error(
       `String literal ${type.getText()} cannot be represented in C++ because it is ambiguous between a string and a discriminating union enum.`
