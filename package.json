@@ -1,4 +1,7 @@
 {
+  "name": "react-native-nitro",
+  "packageManager": "bun@1.1.21",
+  "private": true,
   "repository": "https://github.com/mrousavy/react-native-nitro.git",
   "author": "Marc Rousavy <me@mrousavy.com> (https://github.com/mrousavy)",
   "scripts": {
@@ -7,13 +10,60 @@
     "bootstrap": "bun --filter=\"**\" install && bun tsc && bun --filter=\"react-native-nitro-example\" pods",
     "tsc": "bun --filter=\"**\" typescript",
     "lint": "bun --filter=\"**\" lint",
-    "release": "bun --filter=\"react-native-nitro-modules\" release && bun --filter=\"nitro-codegen\" release",
+    "release": "bun --filter=\"react-native-nitro-modules\" release && bun --filter=\"nitro-codegen\" release && release-it",
     "postinstall": "bun tsc"
   },
   "workspaces": [
-    "packages/*",
+    "packages/react-native-nitro-modules",
+    "packages/nitrogen",
+    "packages/react-native-nitro-image",
     "example"
   ],
-  "packageManager": "bun@1.1.21",
-  "private": true
+  "devDependencies": {
+    "@release-it/conventional-changelog": "^5.1.1",
+    "@release-it/bumper": "^6.0.1",
+    "release-it": "^17.6.0"
+  },
+  "release-it": {
+    "npm": {
+      "publish": false
+    },
+    "git": {
+      "commitMessage": "chore: release ${version}",
+      "tagName": "v${version}",
+      "requireCleanWorkingDir": false
+    },
+    "github": {
+      "release": true
+    },
+    "plugins": {
+      "@release-it/conventional-changelog": {
+        "preset": {
+          "name": "conventionalcommits",
+          "types": [
+            {
+              "type": "feat",
+              "section": "✨ Features"
+            },
+            {
+              "type": "perf",
+              "section": "💨 Performance Improvements"
+            },
+            {
+              "type": "fix",
+              "section": "🐛 Bug Fixes"
+            },
+            {
+              "type": "chore(deps)",
+              "section": "🛠️ Dependency Upgrades"
+            },
+            {
+              "type": "docs",
+              "section": "📚 Documentation"
+            }
+          ]
+        }
+      }
+    }
+  }
 }

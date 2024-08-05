@@ -64,7 +64,6 @@
   },
   "devDependencies": {
     "@react-native/eslint-config": "^0.74.85",
-    "@release-it/conventional-changelog": "^5.1.1",
     "@types/jest": "^29.5.12",
     "@types/react": "^18.3.3",
     "del-cli": "^5.1.0",
