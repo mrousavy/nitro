@@ -175,10 +175,10 @@ private:
       constexpr size_t maxArgsCount = sizeof...(Args);
       constexpr size_t minArgsCount = maxArgsCount - optionalArgsCount;
       bool isWithinArgsRange = (count >= minArgsCount && count <= maxArgsCount);
-      if (!isWithinArgsRange) {
+      if (!isWithinArgsRange) [[unlikely]] {
         // invalid amount of arguments passed!
         std::string hybridObjectName = derivedInstance->_name;
-        if (minArgsCount == maxArgsCount) {
+        if constexpr (minArgsCount == maxArgsCount) {
           // min and max args length is the same, so we don't have any optional parameters. fixed count
           throw jsi::JSError(runtime, hybridObjectName + "." + name + "(...) expected " + std::to_string(maxArgsCount) +
                                           " arguments, but received " + std::to_string(count) + "!");
