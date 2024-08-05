@@ -112,6 +112,7 @@ public:
         // It's still alive! Return it
         return JSICacheReference<T>(strong);
       }
+      Logger::log(TAG, "JSICache was created, but it is no longer strong!");
     }
 
     // Cache doesn't exist yet.
