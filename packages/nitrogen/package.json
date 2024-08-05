@@ -54,7 +54,7 @@
     "npm": {
       "publish": true,
       "versionArgs": [
-        "--workspaces-update=false"
+        "--workspaces-update=true"
       ]
     },
     "github": {
