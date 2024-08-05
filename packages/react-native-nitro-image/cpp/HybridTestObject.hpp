@@ -32,6 +32,15 @@ public:
   double getValueThatWillThrowOnAccess() override;
   void setValueThatWillThrowOnAccess(double valueThatWillThrowOnAccess) override;
   double funcThatThrows() override;
+
+  // Optional params
+  std::string tryOptionalParams(double num, bool boo, const std::optional<std::string>& optionalString) override {
+    if (optionalString.has_value()) {
+      return optionalString.value();
+    } else {
+      return "omitted!";
+    }
+  }
 };
 
 }; // namespace margelo::nitro::image

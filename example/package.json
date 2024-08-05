@@ -13,6 +13,7 @@
     "build:ios": "cd ios && xcodebuild -workspace NitroExample.xcworkspace -scheme NitroExample -configuration Debug -sdk iphonesimulator CC=clang CPLUSPLUS=clang++ LD=clang LDPLUSPLUS=clang++ GCC_OPTIMIZATION_LEVEL=0 GCC_PRECOMPILE_PREFIX_HEADER=YES ASSETCATALOG_COMPILER_OPTIMIZATION=time DEBUG_INFORMATION_FORMAT=dwarf COMPILER_INDEX_STORE_ENABLE=NO"
   },
   "dependencies": {
+    "deep-equal": "^2.2.3",
     "react": "18.3.1",
     "react-native": "0.74.3"
   },
@@ -23,14 +24,50 @@
     "@react-native/babel-preset": "0.74.85",
     "@react-native/metro-config": "0.74.85",
     "@react-native/typescript-config": "0.74.85",
+    "@types/deep-equal": "^1.0.4",
     "babel-plugin-module-resolver": "^5.0.2",
     "del-cli": "^5.1.0",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.2.1",
     "nitro-codegen": "workspace:^",
+    "prettier": "^3.3.3",
     "react-native-nitro-image": "workspace:^",
     "react-native-nitro-modules": "workspace:^",
     "typescript": "^5.5.4"
   },
   "engines": {
     "node": ">=18"
+  },
+  "eslintConfig": {
+    "root": true,
+    "extends": [
+      "@react-native",
+      "prettier"
+    ],
+    "rules": {
+      "prettier/prettier": [
+        "warn",
+        {
+          "quoteProps": "consistent",
+          "singleQuote": true,
+          "tabWidth": 2,
+          "trailingComma": "es5",
+          "useTabs": false
+        }
+      ]
+    }
+  },
+  "eslintIgnore": [
+    "node_modules/",
+    "lib/"
+  ],
+  "prettier": {
+    "quoteProps": "consistent",
+    "singleQuote": true,
+    "tabWidth": 2,
+    "trailingComma": "es5",
+    "useTabs": false,
+    "semi": false
   }
 }
