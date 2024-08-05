@@ -30,10 +30,10 @@
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",
-    "nitro-codegen": "workspace:^",
+    "nitro-codegen": "*",
     "prettier": "^3.3.3",
-    "react-native-nitro-image": "workspace:^",
-    "react-native-nitro-modules": "workspace:^",
+    "react-native-nitro-image": "*",
+    "react-native-nitro-modules": "*",
     "typescript": "^5.5.4"
   },
   "engines": {

@@ -1,19 +1,69 @@
 {
+  "name": "react-native-nitro",
+  "packageManager": "bun@1.1.21",
+  "private": true,
   "repository": "https://github.com/mrousavy/react-native-nitro.git",
   "author": "Marc Rousavy <me@mrousavy.com> (https://github.com/mrousavy)",
   "scripts": {
-    "example": "yarn workspace react-native-nitro-example",
+    "example": "bun --filter=\"react-native-nitro-example\"",
     "check-all": "./scripts/clang-format.sh",
-    "bootstrap": "yarn workspace react-native-nitro-modules install && yarn workspace nitro-codegen install && yarn workspace react-native-nitro-image install && yarn workspace react-native-nitro-example install && yarn workspace react-native-nitro-example pods && yarn tsc",
-    "tsc": "yarn workspace react-native-nitro-modules tsc && yarn workspace nitro-codegen tsc && yarn workspace react-native-nitro-image tsc",
-    "lint": "yarn workspace react-native-nitro-modules lint && yarn workspace nitro-codegen lint && yarn workspace react-native-nitro-image lint",
-    "release": "yarn workspace react-native-nitro-modules release && yarn workspace nitro-codegen release",
-    "postinstall": "yarn tsc"
+    "bootstrap": "bun --filter=\"**\" install && bun tsc && bun --filter=\"react-native-nitro-example\" pods",
+    "tsc": "bun --filter=\"**\" typescript",
+    "lint": "bun --filter=\"**\" lint",
+    "release": "bun --filter=\"react-native-nitro-modules\" release && bun --filter=\"nitro-codegen\" release && release-it",
+    "postinstall": "bun tsc"
   },
   "workspaces": [
-    "packages/*",
+    "packages/react-native-nitro-modules",
+    "packages/nitrogen",
+    "packages/react-native-nitro-image",
     "example"
   ],
-  "private": true,
-  "packageManager": "yarn@3.6.4"
+  "devDependencies": {
+    "@release-it/conventional-changelog": "^8.0.1",
+    "@release-it/bumper": "^6.0.1",
+    "release-it": "^17.6.0"
+  },
+  "release-it": {
+    "npm": {
+      "publish": false
+    },
+    "git": {
+      "commitMessage": "chore: release ${version}",
+      "tagName": "v${version}",
+      "requireCleanWorkingDir": false
+    },
+    "github": {
+      "release": true
+    },
+    "plugins": {
+      "@release-it/conventional-changelog": {
+        "preset": {
+          "name": "conventionalcommits",
+          "types": [
+            {
+              "type": "feat",
+              "section": "✨ Features"
+            },
+            {
+              "type": "perf",
+              "section": "💨 Performance Improvements"
+            },
+            {
+              "type": "fix",
+              "section": "🐛 Bug Fixes"
+            },
+            {
+              "type": "chore(deps)",
+              "section": "🛠️ Dependency Upgrades"
+            },
+            {
+              "type": "docs",
+              "section": "📚 Documentation"
+            }
+          ]
+        }
+      }
+    }
+  }
 }
