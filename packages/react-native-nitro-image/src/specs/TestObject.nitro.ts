@@ -11,6 +11,12 @@ interface Car {
   model: string
   power: number
   powertrain: Powertrain
+  driver?: Person
+}
+
+interface Person {
+  name: string
+  age: number
 }
 
 export interface TestObject extends HybridObject<{ ios: 'c++' }> {
@@ -68,4 +74,9 @@ export interface TestObject extends HybridObject<{ ios: 'c++' }> {
   // Objects
   getCar(): Car
   isCarElectric(car: Car): boolean
+  getDriver(car: Car): Person | undefined
+
+  // Other HybridObjects
+  readonly self: TestObject
+  newTestObject(): TestObject
 }

@@ -53,6 +53,7 @@ public:
   void setSomeVariant(const std::variant<std::string, double>& variant) override;
   std::tuple<double, std::string> getSomeTuple() override;
   void setSomeTuple(const std::tuple<double, std::string>& tuple) override;
+  std::shared_ptr<HybridTestObjectSpec> getSelf() override;
 
 public:
   // Methods
@@ -78,6 +79,8 @@ public:
                                            const Func_void_std__string& andThenCall) override;
   Car getCar() override;
   bool isCarElectric(const Car& car) override;
+  Person getDriver(const Car& car) override;
+  std::shared_ptr<HybridTestObjectSpec> newTestObject() override;
 };
 
 }; // namespace margelo::nitro::image

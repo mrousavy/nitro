@@ -16,8 +16,11 @@
 
 // Forward declaration of `Powertrain` to properly resolve imports.
 namespace margelo::nitro::image { enum class Powertrain; }
+// Forward declaration of `Person` to properly resolve imports.
+namespace margelo::nitro::image { struct Person; }
 
 #include "Powertrain.hpp"
+#include "Person.hpp"
 
 namespace margelo::nitro::image {
 
@@ -31,9 +34,10 @@ namespace margelo::nitro::image {
     std::string model;
     double power;
     Powertrain powertrain;
+    std::optional<Person> driver;
 
   public:
-    explicit Car(double year, std::string make, std::string model, double power, Powertrain powertrain): year(year), make(make), model(model), power(power), powertrain(powertrain) {}
+    explicit Car(double year, std::string make, std::string model, double power, Powertrain powertrain, std::optional<Person> driver): year(year), make(make), model(model), power(power), powertrain(powertrain), driver(driver) {}
   };
 
 } // namespace margelo::nitro::image
@@ -52,7 +56,8 @@ namespace margelo::nitro {
         JSIConverter<std::string>::fromJSI(runtime, obj.getProperty(runtime, "make")),
         JSIConverter<std::string>::fromJSI(runtime, obj.getProperty(runtime, "model")),
         JSIConverter<double>::fromJSI(runtime, obj.getProperty(runtime, "power")),
-        JSIConverter<Powertrain>::fromJSI(runtime, obj.getProperty(runtime, "powertrain"))
+        JSIConverter<Powertrain>::fromJSI(runtime, obj.getProperty(runtime, "powertrain")),
+        JSIConverter<std::optional<Person>>::fromJSI(runtime, obj.getProperty(runtime, "driver"))
       );
     }
     static inline jsi::Value toJSI(jsi::Runtime& runtime, const Car& arg) {
@@ -62,6 +67,7 @@ namespace margelo::nitro {
       obj.setProperty(runtime, "model", JSIConverter<std::string>::toJSI(runtime, arg.model));
       obj.setProperty(runtime, "power", JSIConverter<double>::toJSI(runtime, arg.power));
       obj.setProperty(runtime, "powertrain", JSIConverter<Powertrain>::toJSI(runtime, arg.powertrain));
+      obj.setProperty(runtime, "driver", JSIConverter<std::optional<Person>>::toJSI(runtime, arg.driver));
       return obj;
     }
   };

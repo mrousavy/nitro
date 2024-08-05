@@ -94,6 +94,10 @@ void HybridTestObject::setSomeTuple(const std::tuple<double, std::string>& tuple
   _tuple = tuple;
 }
 
+std::shared_ptr<HybridTestObjectSpec> HybridTestObject::getSelf() {
+  return shared<HybridTestObject>();
+}
+
 // Methods
 void HybridTestObject::simpleFunc() {
   // do nothing
@@ -209,11 +213,22 @@ std::future<void> HybridTestObject::getValueFromJsCallback(const Func_std__futur
 }
 
 Car HybridTestObject::getCar() {
-  return Car(2018, "Lamborghini", "Huracan Performante", 640, Powertrain::GAS);
+  return Car(2018, "Lamborghini", "Huracan Performante", 640, Powertrain::GAS, std::nullopt);
 }
 
 bool HybridTestObject::isCarElectric(const Car& car) {
   return car.powertrain == Powertrain::ELECTRIC;
+}
+
+Person HybridTestObject::getDriver(const Car& car) {
+  if (!car.driver.has_value()) {
+    throw std::runtime_error("Car doesn't have a driver!");
+  }
+  return car.driver.value();
+}
+
+std::shared_ptr<HybridTestObjectSpec> HybridTestObject::newTestObject() {
+  return std::make_shared<HybridTestObject>();
 }
 
 } // namespace margelo::nitro::image

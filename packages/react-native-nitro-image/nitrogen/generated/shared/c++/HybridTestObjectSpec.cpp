@@ -34,6 +34,7 @@ namespace margelo::nitro::image {
     registerHybridSetter("someVariant", &HybridTestObjectSpec::setSomeVariant, this);
     registerHybridGetter("someTuple", &HybridTestObjectSpec::getSomeTuple, this);
     registerHybridSetter("someTuple", &HybridTestObjectSpec::setSomeTuple, this);
+    registerHybridGetter("self", &HybridTestObjectSpec::getSelf, this);
     registerHybridMethod("simpleFunc", &HybridTestObjectSpec::simpleFunc, this);
     registerHybridMethod("multipleArguments", &HybridTestObjectSpec::multipleArguments, this);
     registerHybridMethod("createMap", &HybridTestObjectSpec::createMap, this);
@@ -54,6 +55,8 @@ namespace margelo::nitro::image {
     registerHybridMethod("getValueFromJsCallback", &HybridTestObjectSpec::getValueFromJsCallback, this);
     registerHybridMethod("getCar", &HybridTestObjectSpec::getCar, this);
     registerHybridMethod("isCarElectric", &HybridTestObjectSpec::isCarElectric, this);
+    registerHybridMethod("getDriver", &HybridTestObjectSpec::getDriver, this);
+    registerHybridMethod("newTestObject", &HybridTestObjectSpec::newTestObject, this);
   }
 
 } // namespace margelo::nitro::image
