@@ -13,6 +13,7 @@ struct JSIConverter;
 #include "JSIConverter.hpp"
 
 #include "TypeInfo.hpp"
+#include <jsi/jsi.h>
 #include <memory>
 #include <tuple>
 

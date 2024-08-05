@@ -20,6 +20,7 @@ struct JSIConverter;
 #include "JSICache.hpp"
 #include <functional>
 #include <future>
+#include <jsi/jsi.h>
 
 namespace margelo::nitro {
 

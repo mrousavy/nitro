@@ -20,6 +20,7 @@ struct JSIConverter;
 #include "ThreadPool.hpp"
 #include "TypeInfo.hpp"
 #include <future>
+#include <jsi/jsi.h>
 #include <memory>
 
 namespace margelo::nitro {

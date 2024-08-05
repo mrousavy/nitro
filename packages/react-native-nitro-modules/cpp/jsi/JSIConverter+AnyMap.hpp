@@ -15,6 +15,7 @@ struct JSIConverter;
 #include "JSIConverter.hpp"
 
 #include "AnyMap.hpp"
+#include <jsi/jsi.h>
 #include <memory>
 
 namespace margelo::nitro {

@@ -15,6 +15,7 @@ struct JSIConverter;
 #include "JSIConverter.hpp"
 
 #include "ArrayBuffer.hpp"
+#include <jsi/jsi.h>
 #include <memory>
 
 namespace margelo::nitro {

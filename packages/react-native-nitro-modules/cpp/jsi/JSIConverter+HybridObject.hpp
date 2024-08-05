@@ -18,6 +18,7 @@ struct JSIConverter;
 #include "IsHostObject.hpp"
 #include "IsNativeState.hpp"
 #include "TypeInfo.hpp"
+#include <jsi/jsi.h>
 #include <memory>
 #include <type_traits>
 

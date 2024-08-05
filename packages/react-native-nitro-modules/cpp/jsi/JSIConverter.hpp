@@ -11,10 +11,7 @@ struct JSIConverter;
 } // namespace margelo::nitro
 
 #include <jsi/jsi.h>
-#include <memory>
 #include <type_traits>
-#include <unordered_map>
-#include <vector>
 
 namespace margelo::nitro {
 
@@ -133,83 +130,15 @@ struct JSIConverter<std::string> {
   }
 };
 
-// std::optional<T> <> T | undefined
-template <typename TInner>
-struct JSIConverter<std::optional<TInner>> {
-  static inline std::optional<TInner> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
-    if (arg.isUndefined() || arg.isNull()) {
-      return std::nullopt;
-    } else {
-      return JSIConverter<TInner>::fromJSI(runtime, arg);
-    }
-  }
-  static inline jsi::Value toJSI(jsi::Runtime& runtime, const std::optional<TInner>& arg) {
-    if (arg == std::nullopt) {
-      return jsi::Value::undefined();
-    } else {
-      return JSIConverter<TInner>::toJSI(runtime, arg.value());
-    }
-  }
-};
-
-// std::vector<T> <> T[]
-template <typename ElementType>
-struct JSIConverter<std::vector<ElementType>> {
-  static inline std::vector<ElementType> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
-    jsi::Array array = arg.asObject(runtime).asArray(runtime);
-    size_t length = array.size(runtime);
-
-    std::vector<ElementType> vector;
-    vector.reserve(length);
-    for (size_t i = 0; i < length; ++i) {
-      jsi::Value elementValue = array.getValueAtIndex(runtime, i);
-      vector.emplace_back(JSIConverter<ElementType>::fromJSI(runtime, elementValue));
-    }
-    return vector;
-  }
-  static inline jsi::Value toJSI(jsi::Runtime& runtime, const std::vector<ElementType>& vector) {
-    jsi::Array array(runtime, vector.size());
-    for (size_t i = 0; i < vector.size(); i++) {
-      jsi::Value value = JSIConverter<ElementType>::toJSI(runtime, vector[i]);
-      array.setValueAtIndex(runtime, i, std::move(value));
-    }
-    return array;
-  }
-};
-
-// std::unordered_map<std::string, T> <> Record<string, T>
-template <typename ValueType>
-struct JSIConverter<std::unordered_map<std::string, ValueType>> {
-  static inline std::unordered_map<std::string, ValueType> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
-    jsi::Object object = arg.asObject(runtime);
-    jsi::Array propertyNames = object.getPropertyNames(runtime);
-    size_t length = propertyNames.size(runtime);
-
-    std::unordered_map<std::string, ValueType> map;
-    map.reserve(length);
-    for (size_t i = 0; i < length; ++i) {
-      std::string key = propertyNames.getValueAtIndex(runtime, i).asString(runtime).utf8(runtime);
-      jsi::Value value = object.getProperty(runtime, key.c_str());
-      map.emplace(key, JSIConverter<ValueType>::fromJSI(runtime, value));
-    }
-    return map;
-  }
-  static inline jsi::Value toJSI(jsi::Runtime& runtime, const std::unordered_map<std::string, ValueType>& map) {
-    jsi::Object object(runtime);
-    for (const auto& pair : map) {
-      jsi::Value value = JSIConverter<ValueType>::toJSI(runtime, pair.second);
-      object.setProperty(runtime, pair.first.c_str(), std::move(value));
-    }
-    return object;
-  }
-};
-
 } // namespace margelo::nitro
 
 #include "JSIConverter+AnyMap.hpp"
 #include "JSIConverter+ArrayBuffer.hpp"
 #include "JSIConverter+Function.hpp"
 #include "JSIConverter+HybridObject.hpp"
+#include "JSIConverter+Optional.hpp"
 #include "JSIConverter+Promise.hpp"
 #include "JSIConverter+Tuple.hpp"
+#include "JSIConverter+UnorderedMap.hpp"
 #include "JSIConverter+Variant.hpp"
+#include "JSIConverter+Vector.hpp"

@@ -14,6 +14,7 @@ struct JSIConverter;
 
 #include "IsInPack.hpp"
 #include "TypeInfo.hpp"
+#include <jsi/jsi.h>
 #include <memory>
 #include <variant>
 
