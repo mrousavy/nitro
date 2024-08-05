@@ -76,6 +76,11 @@ export interface TestObject extends HybridObject<{ ios: 'c++' }> {
   isCarElectric(car: Car): boolean
   getDriver(car: Car): Person | undefined
 
+  // ArrayBuffers
+  createArrayBuffer(): ArrayBuffer
+  getBufferLastItem(buffer: ArrayBuffer): number
+  setAllValuesTo(buffer: ArrayBuffer, value: number): void
+
   // Other HybridObjects
   readonly self: TestObject
   newTestObject(): TestObject

@@ -229,6 +229,40 @@ Person HybridTestObject::getDriver(const Car& car) {
   return car.driver.value();
 }
 
+std::shared_ptr<ArrayBuffer> HybridTestObject::createArrayBuffer() {
+  size_t size = 1024 * 1024 * 10; // 10MB
+  uint8_t* buffer = new uint8_t[size];
+  return std::make_shared<NativeArrayBuffer>(buffer, size, true);
+}
+
+double HybridTestObject::getBufferLastItem(std::shared_ptr<ArrayBuffer> buffer) {
+  size_t size = buffer->size();
+  if (size == 0) {
+    throw std::runtime_error("ArrayBuffer's size is 0!");
+  }
+  uint8_t* data = buffer->data();
+  if (data == nullptr) {
+    throw std::runtime_error("ArrayBuffer's data is nullptr!");
+  }
+  uint8_t lastItem = data[size - 1];
+  return static_cast<double>(lastItem);
+}
+
+void HybridTestObject::setAllValuesTo(std::shared_ptr<ArrayBuffer> buffer, double value) {
+  size_t size = buffer->size();
+  if (size == 0) {
+    throw std::runtime_error("ArrayBuffer's size is 0!");
+  }
+  uint8_t* data = buffer->data();
+  if (data == nullptr) {
+    throw std::runtime_error("ArrayBuffer's data is nullptr!");
+  }
+
+  for (size_t i = 0; i < size; i++) {
+    data[i] = static_cast<uint8_t>(value);
+  }
+}
+
 std::shared_ptr<HybridTestObjectSpec> HybridTestObject::newTestObject() {
   return std::make_shared<HybridTestObject>();
 }

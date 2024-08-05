@@ -437,6 +437,30 @@ export function getTests(): TestRunner[] {
         .toContain('stringValue')
     ),
 
+    // ArrayBuffers
+    createTest('createArrayBuffer()', () =>
+      it(() => HybridTestObject.createArrayBuffer())
+        .didNotThrow()
+        .didReturn('object')
+    ),
+    createTest('getBufferLastItem(...) == 5', () =>
+      it(() => {
+        const buffer = new Uint8Array([13, 20, 55])
+        return HybridTestObject.getBufferLastItem(buffer.buffer)
+      })
+        .didNotThrow()
+        .equals(55)
+    ),
+    createTest('setAllValuesTo(...)', () =>
+      it(() => {
+        const buffer = new Uint8Array(30)
+        HybridTestObject.setAllValuesTo(buffer.buffer, 55)
+        return buffer.every((v) => v === 55)
+      })
+        .didNotThrow()
+        .equals(true)
+    ),
+
     // Base HybridObject inherited methods
     createTest('.toString()', () =>
       it(() => HybridTestObject.toString())

@@ -80,6 +80,9 @@ public:
   Car getCar() override;
   bool isCarElectric(const Car& car) override;
   Person getDriver(const Car& car) override;
+  std::shared_ptr<ArrayBuffer> createArrayBuffer() override;
+  double getBufferLastItem(std::shared_ptr<ArrayBuffer> buffer) override;
+  void setAllValuesTo(std::shared_ptr<ArrayBuffer> buffer, double value) override;
   std::shared_ptr<HybridTestObjectSpec> newTestObject() override;
 };
 

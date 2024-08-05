@@ -17,9 +17,9 @@ struct JSIConverter;
 
 #include "JSIConverter.hpp"
 
-#include "JSICache.hpp"
 #include "ArrayBuffer.hpp"
 #include "IsSharedPtrTo.hpp"
+#include "JSICache.hpp"
 #include <jsi/jsi.h>
 #include <memory>
 #include <type_traits>
@@ -36,10 +36,10 @@ struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_v<T, jsi::MutableBuffer
     if (!object.isArrayBuffer(runtime)) [[unlikely]] {
       throw std::runtime_error("Object \"" + arg.toString(runtime).utf8(runtime) + "\" is not an ArrayBuffer!");
     }
-    
+
     JSICacheReference<jsi::ArrayBuffer> cache = JSICache<jsi::ArrayBuffer>::getOrCreateCache(runtime);
     auto owningArrayBuffer = cache.makeGlobal(object.getArrayBuffer(runtime));
-    
+
     return std::make_shared<JSArrayBuffer>(&runtime, owningArrayBuffer);
   }
   static inline jsi::Value toJSI(jsi::Runtime& runtime, std::shared_ptr<jsi::MutableBuffer> buffer) {

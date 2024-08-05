@@ -13,8 +13,8 @@ template <typename T, typename Enable>
 struct JSIConverter;
 } // namespace margelo::nitro
 
-#include "JSIConverter.hpp"
 #include "JSIConverter+Variant.hpp"
+#include "JSIConverter.hpp"
 
 #include "AnyMap.hpp"
 #include <jsi/jsi.h>

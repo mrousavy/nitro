@@ -7,10 +7,10 @@
 
 #pragma once
 
+#include "OwningReference.hpp"
 #include <functional>
 #include <jsi/jsi.h>
 #include <thread>
-#include "OwningReference.hpp"
 
 namespace margelo::nitro {
 
@@ -40,8 +40,8 @@ public:
   ArrayBuffer() = default;
   ArrayBuffer(const ArrayBuffer&) = delete;
   ArrayBuffer(ArrayBuffer&&) = delete;
-  virtual ~ArrayBuffer();
-  
+  virtual ~ArrayBuffer() = default;
+
 public:
   /**
    * Returns whether this `ArrayBuffer` is actually owning the data,
@@ -62,14 +62,15 @@ public:
  *
  * It is safe to access `data()` and `size()` from any Thread, but there are no synchronization/mutexes implemented by default.
  */
-class NativeArrayBuffer: public ArrayBuffer {
+class NativeArrayBuffer : public ArrayBuffer {
 public:
   /**
    * Create a new **owning** `ArrayBuffer`.
    * The `ArrayBuffer` can be kept in memory, as C++ owns the data
    * and will only delete it once this `ArrayBuffer` gets deleted
    */
-  NativeArrayBuffer(uint8_t* data, size_t size, DeleteFn&& deleteFunc) : ArrayBuffer(), _data(data), _size(size), _deleteFunc(std::move(deleteFunc)) {}
+  NativeArrayBuffer(uint8_t* data, size_t size, DeleteFn&& deleteFunc)
+      : ArrayBuffer(), _data(data), _size(size), _deleteFunc(std::move(deleteFunc)) {}
   /**
    * Create a new `ArrayBuffer`.
    * If `destroyOnDeletion` is `true`, the `ArrayBuffer` is **owning**, otherwise it is **non-owning**.
@@ -114,16 +115,12 @@ private:
  *
  * If the JS ArrayBuffer (or it's JS Runtime) have already been deleted, `data()` returns `nullptr`.
  */
-class JSArrayBuffer: public ArrayBuffer {
+class JSArrayBuffer : public ArrayBuffer {
 public:
-  explicit JSArrayBuffer(jsi::Runtime* runtime,
-                         OwningReference<jsi::ArrayBuffer> jsReference):
-  ArrayBuffer(),
-  _runtime(runtime),
-  _jsReference(jsReference),
-  _initialThreadId(std::this_thread::get_id())
-  {}
-  
+  explicit JSArrayBuffer(jsi::Runtime* runtime, OwningReference<jsi::ArrayBuffer> jsReference)
+      : ArrayBuffer(), _runtime(runtime), _jsReference(jsReference), _initialThreadId(std::this_thread::get_id()) {}
+  ~JSArrayBuffer() {}
+
 public:
   /**
    * Gets the data this `ArrayBuffer` points to, or `nullptr` if it has already been deleted.
@@ -133,7 +130,7 @@ public:
       throw std::runtime_error("`data()` can only be accessed synchronously on the JS Thread! "
                                "If you want to access it elsewhere, copy it first.");
     }
-    
+
     OwningLock<jsi::ArrayBuffer> lock = _jsReference.lock();
     if (!_jsReference) [[unlikely]] {
       // JS Part has been deleted - data is now nullptr.
@@ -142,7 +139,7 @@ public:
     // JS Part is still alive - we can assume that the jsi::Runtime is safe to access here too.
     return _jsReference->data(*_runtime);
   }
-  
+
   /**
    * Gets the size of the data this `ArrayBuffer` points to, or `0` if it has already been deleted.
    */
@@ -151,7 +148,7 @@ public:
       throw std::runtime_error("`size()` can only be accessed synchronously on the JS Thread! "
                                "If you want to access it elsewhere, copy it first.");
     }
-    
+
     OwningLock<jsi::ArrayBuffer> lock = _jsReference.lock();
     if (!_jsReference) [[unlikely]] {
       // JS Part has been deleted - size is now 0.
@@ -160,11 +157,11 @@ public:
     // JS Part is still alive - we can assume that the jsi::Runtime is safe to access here too.
     return _jsReference->size(*_runtime);
   }
-  
+
   bool isOwner() const noexcept override {
     return false;
   }
-  
+
 private:
   jsi::Runtime* _runtime;
   OwningReference<jsi::ArrayBuffer> _jsReference;
