@@ -5,7 +5,7 @@ import { ImageConstructors, HybridTestObject } from 'react-native-nitro-image'
 import { it } from './Testers'
 
 async function runTests(): Promise<void> {
-  it('passVariant(..)', () => HybridTestObject.passVariant(5)).equals(55)
+  it('passVariant(..)', () => HybridTestObject.passVariant(5)).equals(5)
   it('createMap()', () => HybridTestObject.createMap()).didReturn('object')
   it('flip(..)', () => HybridTestObject.flip([10, 5, 0])).equals([0, 5, 10])
   it('passTuple(..)', () =>
