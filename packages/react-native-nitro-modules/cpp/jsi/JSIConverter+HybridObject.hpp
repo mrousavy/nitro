@@ -15,8 +15,7 @@ struct JSIConverter;
 #include "JSIConverter.hpp"
 
 #include "HybridObject.hpp"
-#include "IsHostObject.hpp"
-#include "IsNativeState.hpp"
+#include "IsSharedPtrTo.hpp"
 #include "TypeInfo.hpp"
 #include <jsi/jsi.h>
 #include <memory>
@@ -30,7 +29,7 @@ using namespace facebook;
 
 // HybridObject <> {}
 template <typename T>
-struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_host_object_v<T>>> {
+struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_v<T, jsi::HostObject>>> {
   using TPointee = typename T::element_type;
 
   static inline T fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
@@ -82,7 +81,7 @@ private:
 
 // NativeState <> {}
 template <typename T>
-struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_native_state_v<T>>> {
+struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_v<T, jsi::NativeState>>> {
   using TPointee = typename T::element_type;
 
   static inline T fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {

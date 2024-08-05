@@ -8,30 +8,39 @@
 namespace margelo::nitro {
 class ArrayBuffer;
 
+template <typename T>
+struct JSICache;
+
 template <typename T, typename Enable>
 struct JSIConverter;
 } // namespace margelo::nitro
 
 #include "JSIConverter.hpp"
 
+#include "JSICache.hpp"
 #include "ArrayBuffer.hpp"
+#include "IsSharedPtrTo.hpp"
 #include <jsi/jsi.h>
 #include <memory>
+#include <type_traits>
 
 namespace margelo::nitro {
 
 using namespace facebook;
 
 // MutableBuffer <> ArrayBuffer
-template <>
-struct JSIConverter<std::shared_ptr<jsi::MutableBuffer>> {
+template <typename T>
+struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_v<T, jsi::MutableBuffer>>> {
   static inline std::shared_ptr<ArrayBuffer> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
     jsi::Object object = arg.asObject(runtime);
     if (!object.isArrayBuffer(runtime)) [[unlikely]] {
       throw std::runtime_error("Object \"" + arg.toString(runtime).utf8(runtime) + "\" is not an ArrayBuffer!");
     }
-    jsi::ArrayBuffer arrayBuffer = object.getArrayBuffer(runtime);
-    return std::make_shared<ArrayBuffer>(arrayBuffer.data(runtime), arrayBuffer.size(runtime), false);
+    
+    JSICacheReference<jsi::ArrayBuffer> cache = JSICache<jsi::ArrayBuffer>::getOrCreateCache(runtime);
+    auto owningArrayBuffer = cache.makeGlobal(object.getArrayBuffer(runtime));
+    
+    return std::make_shared<JSArrayBuffer>(&runtime, owningArrayBuffer);
   }
   static inline jsi::Value toJSI(jsi::Runtime& runtime, std::shared_ptr<jsi::MutableBuffer> buffer) {
     return jsi::ArrayBuffer(runtime, buffer);
