@@ -93,15 +93,12 @@
     ]
   },
   "release-it": {
-    "git": {
-      "commitMessage": "chore: release ${version}",
-      "tagName": "v${version}"
-    },
     "npm": {
       "publish": true
     },
+    "git": false,
     "github": {
-      "release": true
+      "release": false
     },
     "plugins": { }
   },
