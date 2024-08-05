@@ -37,7 +37,7 @@
       "before:init": [
         "yarn install"
       ],
-      "after:bump": "yarn workspaces foreach -A --no-private version --new-version ${version}",
+      "after:bump": "yarn workspaces foreach -A --no-private version ${version}",
       "after:npm:release": "yarn workspaces foreach -A --no-private npm publish --access public",
       "after:git:release": "git push --follow-tags"
     },
@@ -73,5 +73,5 @@
   },
   "private": true,
   "packageManager": "yarn@4.4.0",
-  "version": "0.2.1"
+  "version": "0.2.2"
 }
