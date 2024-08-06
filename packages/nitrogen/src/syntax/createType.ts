@@ -127,7 +127,7 @@ export function createType(type: TSMorphType, isOptional: boolean): Type {
     // It's a function!
     const callSignature = getFunctionCallSignature(type)
     const funcReturnType = callSignature.getReturnType()
-    const returnType = createType(funcReturnType, false)
+    const returnType = createType(funcReturnType, funcReturnType.isNullable())
     const parameters = callSignature.getParameters().map((p) => {
       const declaration = p.getValueDeclarationOrThrow()
       const parameterType = p.getTypeAtLocation(declaration)

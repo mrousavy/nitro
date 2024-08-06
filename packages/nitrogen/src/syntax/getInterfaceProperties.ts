@@ -8,7 +8,11 @@ export function getInterfaceProperties(
   return interfaceType.getProperties().map((prop) => {
     const declaration = prop.getValueDeclarationOrThrow()
     const propType = prop.getTypeAtLocation(declaration)
-    const refType = createNamedType(prop.getName(), propType, prop.isOptional())
+    const refType = createNamedType(
+      prop.getName(),
+      propType,
+      prop.isOptional() || propType.isNullable()
+    )
     return refType
   })
 }
