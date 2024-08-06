@@ -56,12 +56,12 @@ export class Method implements CodeNode {
       this.parameters = parameters
     } else {
       // constructor(...) #2
-      const [prop] = args
-      this.name = prop.getSymbolOrThrow().getEscapedName()
-      const returnType = prop.getReturnType()
+      const [method] = args
+      this.name = method.getSymbolOrThrow().getEscapedName()
+      const returnType = method.getReturnType()
       const isOptional = returnType.isNullable()
       this.returnType = createType(returnType, isOptional)
-      this.parameters = prop.getParameters().map((p) => new Parameter(p))
+      this.parameters = method.getParameters().map((p) => new Parameter(p))
     }
   }
 
