@@ -67,10 +67,10 @@ namespace margelo::nitro::image {
       virtual void setStringValue(const std::string& stringValue) = 0;
       virtual int64_t getBigintValue() = 0;
       virtual void setBigintValue(int64_t bigintValue) = 0;
-      virtual std::string getStringOrUndefined() = 0;
-      virtual void setStringOrUndefined(const std::string& stringOrUndefined) = 0;
-      virtual std::string getStringOrNull() = 0;
-      virtual void setStringOrNull(const std::string& stringOrNull) = 0;
+      virtual std::optional<std::string> getStringOrUndefined() = 0;
+      virtual void setStringOrUndefined(const std::optional<std::string>& stringOrUndefined) = 0;
+      virtual std::optional<std::string> getStringOrNull() = 0;
+      virtual void setStringOrNull(const std::optional<std::string>& stringOrNull) = 0;
       virtual std::optional<std::string> getOptionalString() = 0;
       virtual void setOptionalString(const std::optional<std::string>& optionalString) = 0;
       virtual double getValueThatWillThrowOnAccess() = 0;
@@ -89,7 +89,7 @@ namespace margelo::nitro::image {
       virtual std::shared_ptr<AnyMap> mapRoundtrip(const std::shared_ptr<AnyMap>& map) = 0;
       virtual double funcThatThrows() = 0;
       virtual std::string tryOptionalParams(double num, bool boo, const std::optional<std::string>& str) = 0;
-      virtual std::string tryMiddleParam(double num, bool boo, const std::string& str) = 0;
+      virtual std::string tryMiddleParam(double num, const std::optional<std::variant<bool>>& boo, const std::string& str) = 0;
       virtual std::variant<std::string, double> passVariant(const std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>>& either) = 0;
       virtual std::tuple<double, double, double> flip(const std::tuple<double, double, double>& tuple) = 0;
       virtual std::tuple<double, std::string, bool> passTuple(const std::tuple<double, std::string, bool>& tuple) = 0;
@@ -103,7 +103,7 @@ namespace margelo::nitro::image {
       virtual std::future<void> getValueFromJsCallback(const Func_std__future_std__string_& callback, const Func_void_std__string& andThenCall) = 0;
       virtual Car getCar() = 0;
       virtual bool isCarElectric(const Car& car) = 0;
-      virtual Person getDriver(const Car& car) = 0;
+      virtual std::optional<Person> getDriver(const Car& car) = 0;
       virtual std::shared_ptr<ArrayBuffer> createArrayBuffer() = 0;
       virtual double getBufferLastItem(const std::shared_ptr<ArrayBuffer>& buffer) = 0;
       virtual void setAllValuesTo(const std::shared_ptr<ArrayBuffer>& buffer, double value) = 0;

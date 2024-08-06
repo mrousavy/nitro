@@ -59,8 +59,7 @@ export class Method implements CodeNode {
       const [method] = args
       this.name = method.getSymbolOrThrow().getEscapedName()
       const returnType = method.getReturnType()
-      const isOptional = returnType.isNullable()
-      this.returnType = createType(returnType, isOptional)
+      this.returnType = createType(returnType, returnType.isNullable())
       this.parameters = method.getParameters().map((p) => new Parameter(p))
     }
   }

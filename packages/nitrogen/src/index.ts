@@ -24,7 +24,13 @@ let generatedSpecs = 0
 const baseDirectory = getBaseDirectory()
 
 // The TS project
-const project = new Project({})
+const project = new Project({
+  compilerOptions: {
+    strict: true,
+    strictNullChecks: true,
+    noUncheckedIndexedAccess: true,
+  },
+})
 project.addSourceFilesAtPaths(path.join(baseDirectory, '/**/*.nitro.ts'))
 
 // Loop through all source files to log them

@@ -176,14 +176,17 @@ export function createType(type: TSMorphType, isOptional: boolean): Type {
       return new EnumType(typename, type)
     } else {
       // It consists of different types - that means it's a variant!
-      const variants = type.getUnionTypes().map((t) => createType(t, false))
-      const isOptionalVariant = variants.some((t) => t.kind === 'null')
-      const variant = new VariantType(variants.filter((v) => v.kind !== 'null'))
-      if (isOptionalVariant) {
-        return new OptionalType(variant)
-      } else {
-        return variant
+      const variants = type
+        .getUnionTypes()
+        // Filter out any nulls or undefineds, as those are already treated as `isOptional`.
+        .filter((t) => !t.isNull() && !t.isUndefined() && !t.isVoid())
+        .map((t) => createType(t, false))
+      if (variants.length === 1) {
+        // It's just one type with undefined/null varians - so we treat it like a simple optional.
+        return variants[0]!
       }
+
+      return new VariantType(variants)
     }
   } else if (type.isInterface()) {
     // It references another interface/type, either a simple struct, or another HybridObject
