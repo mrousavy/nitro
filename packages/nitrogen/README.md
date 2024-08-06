@@ -73,7 +73,7 @@ In addition to all the C++, Swift and Kotlin files, Nitrogen also generates buil
 
 #### iOS
 
-In your `.podspec` file, add this:
+In your `.podspec` file, add this **to the end** of your spec:
 
 ```ruby
 Pod::Spec.new do |spec|
