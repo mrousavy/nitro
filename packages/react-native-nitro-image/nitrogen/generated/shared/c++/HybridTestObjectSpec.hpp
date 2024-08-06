@@ -89,7 +89,7 @@ namespace margelo::nitro::image {
       virtual std::shared_ptr<AnyMap> mapRoundtrip(const std::shared_ptr<AnyMap>& map) = 0;
       virtual double funcThatThrows() = 0;
       virtual std::string tryOptionalParams(double num, bool boo, const std::optional<std::string>& str) = 0;
-      virtual std::string tryMiddleParam(double num, const std::optional<std::variant<bool>>& boo, const std::string& str) = 0;
+      virtual std::string tryMiddleParam(double num, std::optional<bool> boo, const std::string& str) = 0;
       virtual std::variant<std::string, double> passVariant(const std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>>& either) = 0;
       virtual std::tuple<double, double, double> flip(const std::tuple<double, double, double>& tuple) = 0;
       virtual std::tuple<double, std::string, bool> passTuple(const std::tuple<double, std::string, bool>& tuple) = 0;

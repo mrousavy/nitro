@@ -60,6 +60,15 @@ function getFunctionCallSignature(func: TSMorphType): Signature {
   return callSignature
 }
 
+function removeDuplicates(types: Type[]): Type[] {
+  return types.filter((t1, index, array) => {
+    const firstIndexOfType = array.findIndex(
+      (t2) => t1.getCode('c++') === t2.getCode('c++')
+    )
+    return firstIndexOfType === index
+  })
+}
+
 type Tuple<
   T,
   N extends number,
@@ -176,11 +185,13 @@ export function createType(type: TSMorphType, isOptional: boolean): Type {
       return new EnumType(typename, type)
     } else {
       // It consists of different types - that means it's a variant!
-      const variants = type
+      let variants = type
         .getUnionTypes()
         // Filter out any nulls or undefineds, as those are already treated as `isOptional`.
         .filter((t) => !t.isNull() && !t.isUndefined() && !t.isVoid())
         .map((t) => createType(t, false))
+      variants = removeDuplicates(variants)
+
       if (variants.length === 1) {
         // It's just one type with undefined/null varians - so we treat it like a simple optional.
         return variants[0]!

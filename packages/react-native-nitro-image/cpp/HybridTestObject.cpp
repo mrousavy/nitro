@@ -46,19 +46,19 @@ void HybridTestObject::setBigintValue(int64_t bigintValue) {
   _bigint = bigintValue;
 }
 
-std::string HybridTestObject::getStringOrUndefined() {
+std::optional<std::string> HybridTestObject::getStringOrUndefined() {
   return _optionalString.value();
 }
 
-void HybridTestObject::setStringOrUndefined(const std::string& stringOrUndefined) {
+void HybridTestObject::setStringOrUndefined(const std::optional<std::string>& stringOrUndefined) {
   _optionalString = stringOrUndefined;
 }
 
-std::string HybridTestObject::getStringOrNull() {
+std::optional<std::string> HybridTestObject::getStringOrNull() {
   return _optionalString.value();
 }
 
-void HybridTestObject::setStringOrNull(const std::string& stringOrNull) {
+void HybridTestObject::setStringOrNull(const std::optional<std::string>& stringOrNull) {
   _optionalString = stringOrNull;
 }
 
@@ -141,7 +141,7 @@ std::string HybridTestObject::tryOptionalParams(double num, bool boo, const std:
   }
 }
 
-std::string HybridTestObject::tryMiddleParam(double num, bool boo, const std::string& str) {
+std::string HybridTestObject::tryMiddleParam(double num, std::optional<bool> boo, const std::string& str) {
   return str;
 }
 
@@ -222,11 +222,12 @@ bool HybridTestObject::isCarElectric(const Car& car) {
   return car.powertrain == Powertrain::ELECTRIC;
 }
 
-Person HybridTestObject::getDriver(const Car& car) {
-  if (!car.driver.has_value()) {
-    throw std::runtime_error("Car doesn't have a driver!");
+std::optional<Person> HybridTestObject::getDriver(const Car& car) {
+  if (car.driver.has_value()) {
+    return car.driver.value();
+  } else {
+    return std::nullopt;
   }
-  return car.driver.value();
 }
 
 std::shared_ptr<ArrayBuffer> HybridTestObject::createArrayBuffer() {

@@ -41,10 +41,10 @@ public:
   void setStringValue(const std::string& stringValue) override;
   int64_t getBigintValue() override;
   void setBigintValue(int64_t bigintValue) override;
-  std::string getStringOrUndefined() override;
-  void setStringOrUndefined(const std::string& stringOrUndefined) override;
-  std::string getStringOrNull() override;
-  void setStringOrNull(const std::string& stringOrNull) override;
+  std::optional<std::string> getStringOrUndefined() override;
+  void setStringOrUndefined(const std::optional<std::string>& stringOrUndefined) override;
+  std::optional<std::string> getStringOrNull() override;
+  void setStringOrNull(const std::optional<std::string>& stringOrNull) override;
   std::optional<std::string> getOptionalString() override;
   void setOptionalString(const std::optional<std::string>& optionalString) override;
   double getValueThatWillThrowOnAccess() override;
@@ -63,7 +63,7 @@ public:
   std::shared_ptr<AnyMap> mapRoundtrip(const std::shared_ptr<AnyMap>& map) override;
   double funcThatThrows() override;
   std::string tryOptionalParams(double num, bool boo, const std::optional<std::string>& str) override;
-  std::string tryMiddleParam(double num, bool boo, const std::string& str) override;
+  std::string tryMiddleParam(double num, std::optional<bool> boo, const std::string& str) override;
   std::variant<std::string, double>
   passVariant(const std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>>& either) override;
   std::tuple<double, double, double> flip(const std::tuple<double, double, double>& tuple) override;
@@ -79,7 +79,7 @@ public:
                                            const Func_void_std__string& andThenCall) override;
   Car getCar() override;
   bool isCarElectric(const Car& car) override;
-  Person getDriver(const Car& car) override;
+  std::optional<Person> getDriver(const Car& car) override;
   std::shared_ptr<ArrayBuffer> createArrayBuffer() override;
   double getBufferLastItem(const std::shared_ptr<ArrayBuffer>& buffer) override;
   void setAllValuesTo(const std::shared_ptr<ArrayBuffer>& buffer, double value) override;
