@@ -47,7 +47,7 @@ void HybridTestObject::setBigintValue(int64_t bigintValue) {
 }
 
 std::optional<std::string> HybridTestObject::getStringOrUndefined() {
-  return _optionalString.value();
+  return _optionalString;
 }
 
 void HybridTestObject::setStringOrUndefined(const std::optional<std::string>& stringOrUndefined) {
@@ -55,7 +55,7 @@ void HybridTestObject::setStringOrUndefined(const std::optional<std::string>& st
 }
 
 std::optional<std::string> HybridTestObject::getStringOrNull() {
-  return _optionalString.value();
+  return _optionalString;
 }
 
 void HybridTestObject::setStringOrNull(const std::optional<std::string>& stringOrNull) {

@@ -107,6 +107,28 @@ export function getTests(): TestRunner[] {
         .didNotThrow()
         .equals(7362572367826385n)
     ),
+    createTest('set stringOrUndefined to string, then undefined', () =>
+      it(() => {
+        HybridTestObject.stringOrUndefined = 'hello'
+        HybridTestObject.stringOrUndefined = undefined
+      }).didNotThrow()
+    ),
+    createTest('get stringOrUndefined (== undefined)', () =>
+      it(() => HybridTestObject.stringOrUndefined)
+        .didNotThrow()
+        .equals(undefined)
+    ),
+    createTest('set stringOrNull to string, then undefined', () =>
+      it(() => {
+        HybridTestObject.stringOrNull = 'hello'
+        HybridTestObject.stringOrNull = null
+      }).didNotThrow()
+    ),
+    createTest('get stringOrNull (== undefined)', () =>
+      it(() => HybridTestObject.stringOrNull)
+        .didNotThrow()
+        .equals(null)
+    ),
     createTest('set optionalString to string, then undefined', () =>
       it(() => {
         HybridTestObject.optionalString = 'hello'
