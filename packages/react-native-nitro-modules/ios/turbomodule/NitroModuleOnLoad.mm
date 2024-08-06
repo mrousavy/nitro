@@ -7,7 +7,6 @@
 
 #import "HybridObjectRegistry.hpp"
 #import "RegisterNativeNitroModules.hpp"
-#import "TestHybridObject.hpp"
 #import <Foundation/Foundation.h>
 
 @interface NitroModulesOnLoad : NSObject
@@ -22,10 +21,6 @@ using namespace margelo::nitro;
   // We need Objective-C here because these things do not get compiled out - meaning this will always be
   // called when the app starts.
   RegisterNativeNitroModules::registerNativeNitroModules();
-
-  // Register Test HybridObject so it can be created from JS.
-  HybridObjectRegistry::registerHybridObjectConstructor(
-      "TestHybridObject", []() -> std::shared_ptr<TestHybridObject> { return std::make_shared<TestHybridObject>(); });
 }
 
 @end

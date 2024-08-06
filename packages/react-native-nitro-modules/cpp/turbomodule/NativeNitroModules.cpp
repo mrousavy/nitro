@@ -9,7 +9,6 @@
 #include "CallInvokerDispatcher.hpp"
 #include "Dispatcher.hpp"
 #include "HybridObjectRegistry.hpp"
-#include "TestHybridObject.hpp"
 
 namespace facebook::react {
 
