@@ -181,7 +181,7 @@ private:
         throw std::runtime_error("Cannot call hybrid function " + name + "(...) - `this` is not bound!");
       }
       jsi::Object thisObject = thisValue.getObject(runtime);
-      if (!thisObject.hasNativeState<Derived>()) [[unlikely]] {
+      if (!thisObject.hasNativeState<Derived>(runtime)) [[unlikely]] {
         if (thisObject.hasNativeState(runtime)) {
           throw std::runtime_error("Cannot call hybrid function " + name + "(...) - `this` has a NativeState, but it's the wrong type!");
         } else {
