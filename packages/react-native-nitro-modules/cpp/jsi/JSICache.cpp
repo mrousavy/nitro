@@ -6,6 +6,7 @@
 //
 
 #include "JSICache.hpp"
+#include "JSIHelpers.hpp"
 
 namespace margelo::nitro {
 

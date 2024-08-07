@@ -8,7 +8,6 @@
 #pragma once
 
 #include "BorrowingReference.hpp"
-#include "GetRuntimeID.hpp"
 #include "NitroLogger.hpp"
 #include "OwningReference.hpp"
 #include <jsi/jsi.h>

@@ -13,6 +13,7 @@ struct JSIConverter;
 #include "JSIConverter.hpp"
 
 #include "AnyMap.hpp"
+#include "JSIHelpers.hpp"
 #include <jsi/jsi.h>
 #include <unordered_map>
 
@@ -47,7 +48,22 @@ struct JSIConverter<std::unordered_map<std::string, ValueType>> {
   }
 
   static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
-    throw std::runtime_error("Don't know if I can convert jsi::Value to AnyMap!");
+    if (!value.isObject()) {
+      return false;
+    }
+    jsi::Object object = value.getObject(runtime);
+    if (!isPlainObject(runtime, object)) {
+      return false;
+    }
+    jsi::Array properties = object.getPropertyNames(runtime);
+    size_t size = properties.size(runtime);
+    for (size_t i = 0; i < size; i++) {
+      bool canConvertProp = JSIConverter<ValueType>::canConvert(runtime, properties.getValueAtIndex(runtime, i));
+      if (!canConvertProp) {
+        return false;
+      }
+    }
+    return true;
   }
 };
 

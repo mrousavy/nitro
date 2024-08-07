@@ -17,6 +17,7 @@ struct JSIConverter;
 #include "JSIConverter.hpp"
 
 #include "AnyMap.hpp"
+#include "JSIHelpers.hpp"
 #include <jsi/jsi.h>
 #include <memory>
 
@@ -33,8 +34,8 @@ struct JSIConverter<AnyValue> {
   static inline jsi::Value toJSI(jsi::Runtime& runtime, const AnyValue& value) {
     return JSIConverter<AnyValue::variant>::toJSI(runtime, value);
   }
-  static inline bool canConvert(jsi::Runtime&, const jsi::Value& value) {
-    throw std::runtime_error("idk if jsi::Value can be converted to AnyValue!");
+  static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
+    return JSIConverter<AnyValue::variant>::canConvert(runtime, value);
   }
 };
 
@@ -62,8 +63,23 @@ struct JSIConverter<std::shared_ptr<AnyMap>> {
     }
     return object;
   }
-  static inline bool canConvert(jsi::Runtime&, const jsi::Value& value) {
-    throw std::runtime_error("idk if jsi::Value can be converted to AnyMap!");
+  static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
+    if (!value.isObject()) {
+      return false;
+    }
+    jsi::Object object = value.getObject(runtime);
+    if (!isPlainObject(runtime, object)) {
+      return false;
+    }
+    jsi::Array properties = object.getPropertyNames(runtime);
+    size_t size = properties.size(runtime);
+    for (size_t i = 0; i < size; i++) {
+      bool canConvertProp = JSIConverter<AnyValue>::canConvert(runtime, properties.getValueAtIndex(runtime, i));
+      if (!canConvertProp) {
+        return false;
+      }
+    }
+    return true;
   }
 };
 
