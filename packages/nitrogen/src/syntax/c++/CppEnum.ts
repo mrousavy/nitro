@@ -16,6 +16,8 @@ export function createCppEnum(
   const cppEnumMembers = enumMembers
     .map((m) => `${m.name} SWIFT_NAME(${m.name.toLowerCase()}) = ${m.value},`)
     .join('\n')
+    const minValue = 0
+    const maxValue = cppEnumMembers.length - 1
   const cxxNamespace = NitroConfig.getCxxNamespace('c++')
 
   // Create entire C++ file
@@ -24,6 +26,7 @@ ${createFileMetadataString(`${typename}.hpp`)}
 
 #pragma once
 
+#include <cmath>
 ${includeNitroHeader('JSIConverter.hpp')}
 ${includeNitroHeader('NitroDefines.hpp')}
 
@@ -52,6 +55,19 @@ namespace margelo::nitro {
     static inline jsi::Value toJSI(jsi::Runtime& runtime, ${typename} arg) {
       int enumValue = static_cast<int>(arg);
       return JSIConverter<int>::toJSI(enumValue);
+    }
+    static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
+      if (!value.isNumber()) {
+        return false;
+      }
+      double integer;
+      double fraction = modf(value.getNumber(), &integer);
+      if (fraction != 0.0) {
+        // It is some kind of floating point number - our enums are ints.
+        return false;
+      }
+      // Check if we are within the bounds of the enum.
+      return integer >= ${minValue} && integer <= ${maxValue};
     }
   };
 

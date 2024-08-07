@@ -71,6 +71,9 @@ namespace margelo::nitro {
                                     + std::to_string(static_cast<int>(arg)) + "!");
       }
     }
+    static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
+      throw std::runtime_error("Don't know if jsi::Value can be dynamically converted to enum \"${typename}\" yet!");
+    }
   };
 
 } // namespace margelo::nitro

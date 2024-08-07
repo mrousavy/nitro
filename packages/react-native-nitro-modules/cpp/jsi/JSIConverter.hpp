@@ -25,17 +25,33 @@ using namespace facebook;
  * Value types, custom types (HostObjects), and even functions with any number of arguments/types are supported.
  * This type can be extended by just creating a new template for JSIConverter in a header.
  */
-template <typename ArgType, typename Enable = void>
+template <typename T, typename Enable = void>
 struct JSIConverter final {
   JSIConverter() = delete;
 
-  static inline ArgType fromJSI(jsi::Runtime&, const jsi::Value&) {
-    static_assert(always_false<ArgType>::value, "This type is not supported by the JSIConverter!");
-    return ArgType();
+  /**
+   * Converts the given `jsi::Value` to type `T`.
+   * By default, this static-asserts.
+   */
+  static inline T fromJSI(jsi::Runtime&, const jsi::Value&) {
+    static_assert(always_false<T>::value, "This type is not supported by the JSIConverter!");
+    return T();
   }
-  static inline jsi::Value toJSI(jsi::Runtime&, ArgType) {
-    static_assert(always_false<ArgType>::value, "This type is not supported by the JSIConverter!");
+  /**
+   * Converts `T` to a `jsi::Value`.
+   * By default, this static-asserts.
+   */
+  static inline jsi::Value toJSI(jsi::Runtime&, T) {
+    static_assert(always_false<T>::value, "This type is not supported by the JSIConverter!");
     return jsi::Value::undefined();
+  }
+  /**
+   * Returns whether the given `jsi::Value` can be converted to `T`.
+   * This involves runtime type-checks.
+   * By default, this returns `false`.
+   */
+  static inline bool canConvert(jsi::Runtime&, const jsi::Value&) {
+    return false;
   }
 
 private:
@@ -52,6 +68,9 @@ struct JSIConverter<int> {
   static inline jsi::Value toJSI(jsi::Runtime&, int arg) {
     return jsi::Value(arg);
   }
+  static inline bool canConvert(jsi::Runtime&, const jsi::Value& value) {
+    return value.isNumber();
+  }
 };
 
 // std::monostate <> null
@@ -62,6 +81,9 @@ struct JSIConverter<std::monostate> {
   }
   static inline jsi::Value toJSI(jsi::Runtime&, std::monostate arg) {
     return jsi::Value::null();
+  }
+  static inline bool canConvert(jsi::Runtime&, const jsi::Value& value) {
+    return value.isNull() || value.isUndefined();
   }
 };
 
@@ -74,6 +96,9 @@ struct JSIConverter<double> {
   static inline jsi::Value toJSI(jsi::Runtime&, double arg) {
     return jsi::Value(arg);
   }
+  static inline bool canConvert(jsi::Runtime&, const jsi::Value& value) {
+    return value.isNumber();
+  }
 };
 
 // float <> number
@@ -84,6 +109,9 @@ struct JSIConverter<float> {
   }
   static inline jsi::Value toJSI(jsi::Runtime&, float arg) {
     return jsi::Value(static_cast<double>(arg));
+  }
+  static inline bool canConvert(jsi::Runtime&, const jsi::Value& value) {
+    return value.isNumber();
   }
 };
 
@@ -96,6 +124,13 @@ struct JSIConverter<int64_t> {
   static inline jsi::Value toJSI(jsi::Runtime& runtime, int64_t arg) {
     return jsi::BigInt::fromInt64(runtime, arg);
   }
+  static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
+    if (value.isBigInt()) {
+      jsi::BigInt bigint = value.getBigInt(runtime);
+      return bigint.isInt64(runtime);
+    }
+    return false;
+  }
 };
 
 // uint64_t <> BigInt
@@ -106,6 +141,13 @@ struct JSIConverter<uint64_t> {
   }
   static inline jsi::Value toJSI(jsi::Runtime& runtime, uint64_t arg) {
     return jsi::BigInt::fromUint64(runtime, arg);
+  }
+  static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
+    if (value.isBigInt()) {
+      jsi::BigInt bigint = value.getBigInt(runtime);
+      return bigint.isUint64(runtime);
+    }
+    return false;
   }
 };
 
@@ -118,6 +160,9 @@ struct JSIConverter<bool> {
   static inline jsi::Value toJSI(jsi::Runtime&, bool arg) {
     return jsi::Value(arg);
   }
+  static inline bool canConvert(jsi::Runtime&, const jsi::Value& value) {
+    return value.isBool();
+  }
 };
 
 // std::string <> string
@@ -128,6 +173,9 @@ struct JSIConverter<std::string> {
   }
   static inline jsi::Value toJSI(jsi::Runtime& runtime, const std::string& arg) {
     return jsi::String::createFromUtf8(runtime, arg);
+  }
+  static inline bool canConvert(jsi::Runtime&, const jsi::Value& value) {
+    return value.isString();
   }
 };
 

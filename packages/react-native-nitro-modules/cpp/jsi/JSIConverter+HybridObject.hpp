@@ -71,6 +71,14 @@ struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_v<T, jsi::HostObject>>>
       return jsi::Object::createFromHostObject(runtime, arg);
     }
   }
+  
+  static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
+    if (value.isObject()) {
+      jsi::Object object = value.getObject(runtime);
+      return object.isHostObject<TPointee>(runtime);
+    }
+    return false;
+  }
 
 private:
   static inline std::string invalidTypeErrorMessage(const std::string& typeDescription, const std::string& reason) {
@@ -118,6 +126,14 @@ struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_v<T, jsi::NativeState>>
     jsi::Object object(runtime);
     object.setNativeState(runtime, arg);
     return object;
+  }
+  
+  static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
+    if (value.isObject()) {
+      jsi::Object object = value.getObject(runtime);
+      return object.hasNativeState<TPointee>(runtime);
+    }
+    return false;
   }
 
 private:

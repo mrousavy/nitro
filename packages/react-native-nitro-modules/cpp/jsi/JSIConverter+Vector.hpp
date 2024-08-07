@@ -43,6 +43,27 @@ struct JSIConverter<std::vector<ElementType>> {
     }
     return array;
   }
+  
+  static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
+    if (!value.isObject()) {
+      return false;
+    }
+    jsi::Object object = value.getObject(runtime);
+    if (!object.isArray(runtime)) {
+      return false;
+    }
+    jsi::Array array = object.getArray(runtime);
+    if (array.size(runtime) == 0) {
+      // we cannot get the element, so we don't know for sure if we can convert this array.
+      return false;
+    }
+    // Check the type of the first element in the array.
+    // Technically the array can also have different types for each item,
+    // and to be absolutely sure that we can convert the entire array, we have to check each item in the array.
+    // But we don't want to do that for performance reasons - let's just assume the user doesn't make this mistake.
+    jsi::Value firstElement = array.getValueAtIndex(runtime, 0);
+    return JSIConverter<ElementType>::canConvert(runtime, firstElement);
+  }
 };
 
 } // namespace margelo::nitro

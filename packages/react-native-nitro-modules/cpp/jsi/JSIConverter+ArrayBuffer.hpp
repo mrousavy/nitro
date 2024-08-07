@@ -43,6 +43,13 @@ struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_v<T, jsi::MutableBuffer
   static inline jsi::Value toJSI(jsi::Runtime& runtime, const std::shared_ptr<jsi::MutableBuffer>& buffer) {
     return jsi::ArrayBuffer(runtime, buffer);
   }
+  static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
+    if (value.isObject()) {
+      jsi::Object object = value.getObject(runtime);
+      return object.isArrayBuffer(runtime);
+    }
+    return false;
+  }
 };
 
 } // namespace margelo::nitro

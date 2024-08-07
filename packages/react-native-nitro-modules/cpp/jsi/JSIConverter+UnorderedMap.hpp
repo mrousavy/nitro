@@ -45,6 +45,10 @@ struct JSIConverter<std::unordered_map<std::string, ValueType>> {
     }
     return object;
   }
+  
+  static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
+    throw std::runtime_error("Don't know if I can convert jsi::Value to AnyMap!");
+  }
 };
 
 } // namespace margelo::nitro

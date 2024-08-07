@@ -78,6 +78,14 @@ struct JSIConverter<std::function<ReturnType(Args...)>> {
     };
     return jsi::Function::createFromHostFunction(runtime, jsi::PropNameID::forUtf8(runtime, "hostFunction"), sizeof...(Args), jsFunction);
   }
+  
+  static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
+    if (value.isObject()) {
+      jsi::Object object = value.getObject(runtime);
+      return object.isFunction(runtime);
+    }
+    return false;
+  }
 
 private:
   static inline ResultingType callJSFunction(jsi::Runtime& runtime, const OwningReference<jsi::Function>& function, const Args&... args) {

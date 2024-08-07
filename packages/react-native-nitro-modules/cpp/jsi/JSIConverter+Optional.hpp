@@ -36,6 +36,15 @@ struct JSIConverter<std::optional<TInner>> {
       return JSIConverter<TInner>::toJSI(runtime, arg.value());
     }
   }
+  static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
+    if (JSIConverter<std::monostate>::canConvert(runtime, value)) {
+      return true;
+    }
+    if (JSIConverter<TInner>::canConvert(runtime, value)) {
+      return true;
+    }
+    return false;
+  }
 };
 
 } // namespace margelo::nitro

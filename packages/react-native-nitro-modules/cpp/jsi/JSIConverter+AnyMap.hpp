@@ -33,6 +33,9 @@ struct JSIConverter<AnyValue> {
   static inline jsi::Value toJSI(jsi::Runtime& runtime, const AnyValue& value) {
     return JSIConverter<AnyValue::variant>::toJSI(runtime, value);
   }
+  static inline bool canConvert(jsi::Runtime&, const jsi::Value& value) {
+    throw std::runtime_error("idk if jsi::Value can be converted to AnyValue!");
+  }
 };
 
 // AnyMap <> Record<K, V>
@@ -58,6 +61,9 @@ struct JSIConverter<std::shared_ptr<AnyMap>> {
       object.setProperty(runtime, std::move(key), std::move(value));
     }
     return object;
+  }
+  static inline bool canConvert(jsi::Runtime&, const jsi::Value& value) {
+    throw std::runtime_error("idk if jsi::Value can be converted to AnyMap!");
   }
 };
 

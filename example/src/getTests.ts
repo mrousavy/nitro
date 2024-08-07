@@ -254,15 +254,20 @@ export function getTests(): TestRunner[] {
           (HybridTestObject.someVariant = false)
       ).didThrow()
     ),
-    createTest('passVariant(...) [1,2,3]', () =>
+    createTest('passVariant(...) holds something else ([1,2,3])', () =>
       it(() => HybridTestObject.passVariant([1, 2, 3]))
         .didNotThrow()
-        .equals('omitted')
+        .equals('holds something else!')
     ),
-    createTest('passVariant(...) hello!', () =>
+    createTest('passVariant(...) holds string(hello!)', () =>
       it(() => HybridTestObject.passVariant('hello!'))
         .didNotThrow()
         .equals('hello!')
+    ),
+    createTest('passVariant(...) holds number (5)', () =>
+      it(() => HybridTestObject.passVariant(5))
+        .didNotThrow()
+        .equals(5)
     ),
     createTest('passVariant(...) wrong type ({})', () =>
       it(() =>

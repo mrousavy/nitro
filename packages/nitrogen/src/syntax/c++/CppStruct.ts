@@ -89,6 +89,9 @@ namespace margelo::nitro {
       ${indent(cppToJsiCalls, '      ')}
       return obj;
     }
+    static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
+      throw std::runtime_error("Don't know if jsi::Value can be dynamically converted to struct \"${typename}\" yet!");
+    }
   };
 
 } // namespace margelo::nitro
