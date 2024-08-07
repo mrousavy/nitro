@@ -146,11 +146,10 @@ jsi::Object HybridObject::getPrototype(jsi::Runtime& runtime) {
 jsi::Value HybridObject::toObject(jsi::Runtime& runtime) {
   jsi::Object prototype = getPrototype(runtime);
   
-  jsi::Object object(runtime);
-  
   jsi::Object objectConstructor = runtime.global().getPropertyAsObject(runtime, "Object");
-  jsi::Function setPrototype = objectConstructor.getPropertyAsFunction(runtime, "setPrototypeOf");
-  setPrototype.call(runtime, object, prototype);
+  jsi::Function create = objectConstructor.getPropertyAsFunction(runtime, "create");
+  
+  jsi::Object object = create.call(runtime, prototype).asObject(runtime);
   
   object.setNativeState(runtime, shared_from_this());
   

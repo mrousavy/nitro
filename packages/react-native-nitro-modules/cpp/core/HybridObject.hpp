@@ -87,9 +87,10 @@ public:
   size_t getTotalExternalMemorySize() noexcept;
 
   /**
-   * Return the `jsi::Object` that holds this `HybridObject` (boxed in a `jsi::Value`)
-   * Compared to other `jsi::HostObject`s, the `HybridObject` actually
-   * caches the created `jsi::Object` instances for safer memory management.
+   * Return the `jsi::Object` that holds this `HybridObject`. (boxed in a `jsi::Value`)
+   * This properly assigns (or creates) the base prototype for this type,
+   * and assigns it's NativeState.
+   * Additionally, this sets the external memory pressure for proper GC memory management.
    */
   jsi::Value toObject(jsi::Runtime& runtime);
 
