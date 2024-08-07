@@ -10,6 +10,8 @@
 
 namespace margelo::nitro {
 
+std::unordered_map<jsi::Runtime*, HybridObjectPrototype::PrototypeCache> HybridObjectPrototype::_prototypeCache;
+
 void HybridObjectPrototype::ensureInitialized() {
   std::unique_lock lock(_mutex);
   
@@ -25,6 +27,15 @@ jsi::Object HybridObjectPrototype::createPrototype(jsi::Runtime& runtime, Protot
     // There is no prototype - we just have an empty base.
     return jsi::Object(runtime);
   }
+  auto& prototypeCache = _prototypeCache[&runtime];
+  auto cachedPrototype = prototypeCache.find(prototype->instanceTypeId);
+  if (cachedPrototype != prototypeCache.end()) {
+    Logger::log(TAG, "Re-using prototype \"%s\" from cache...", prototype->instanceTypeId.name());
+    OwningReference<jsi::Object>& cachedObject = cachedPrototype->second;
+    return jsi::Value(runtime, *cachedObject).getObject(runtime);
+  }
+  
+  Logger::log(TAG, "Creating new prototype for C++ instance type \"%s\"...", prototype->instanceTypeId.name());
   
   // 0. Get some helper JS methods from global
   jsi::Object objectConstructor = runtime.global().getPropertyAsObject(runtime, "Object");
@@ -61,18 +72,17 @@ jsi::Object HybridObjectPrototype::createPrototype(jsi::Runtime& runtime, Protot
                               /* descriptorObj */ property);
   }
   
-  // 4. Return it
-  return object;
+  // 4. Throw it into our cache
+  JSICacheReference jsiCache = JSICache::getOrCreateCache(runtime);
+  OwningReference<jsi::Object> cachedObject = jsiCache.makeShared(std::move(object));
+  prototypeCache.emplace(prototype->instanceTypeId, cachedObject);
+  
+  // 5. Return it!
+  return jsi::Value(runtime, *cachedObject).getObject(runtime);
 }
 
 jsi::Object HybridObjectPrototype::getPrototype(jsi::Runtime& runtime) {
   ensureInitialized();
-  
-  Prototype* type = _prototype;
-  while (type != nullptr) {
-    Logger::log("HybridObjectPrototype", "Prototype of %s has %i + %i + %i methods!", type->instanceTypeId.name(), type->methods.size(), type->getters.size(), type->setters.size());
-    type = type->child;
-  }
   
   return createPrototype(runtime, _prototype);
 }

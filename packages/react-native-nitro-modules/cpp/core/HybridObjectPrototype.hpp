@@ -73,6 +73,7 @@ private:
   std::mutex _mutex;
   Prototype* _prototype;
   bool _didLoadMethods = false;
+  static constexpr auto TAG = "HybridObjectPrototype";
   
 public:
   HybridObjectPrototype(): _prototype(Prototype::create(typeid(this))) { }
@@ -87,7 +88,10 @@ public:
    */
   jsi::Object getPrototype(jsi::Runtime& runtime);
   
+private:
   static jsi::Object createPrototype(jsi::Runtime& runtime, Prototype* prototype);
+  using PrototypeCache = std::unordered_map<NativeInstanceId, OwningReference<jsi::Object>>;
+  static std::unordered_map<jsi::Runtime*, PrototypeCache> _prototypeCache;
   
 protected:
   /**

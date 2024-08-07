@@ -6,14 +6,12 @@ import { getTests, type TestRunner } from '../getTests'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 console.log('----BEGIN')
-console.log('Has hybrid:', HybridTestObject != null)
-console.log('hybrid values:', Object.keys(HybridTestObject))
-console.log('hybrid stringify:', HybridTestObject)
-console.log(
-  'hybrid prototype keys:',
-  Object.keys(Object.getPrototypeOf(HybridTestObject))
-)
-console.log('hybrid prototype:', Object.getPrototypeOf(HybridTestObject))
+let type = HybridTestObject
+console.log(type.toString())
+while (type != null) {
+  console.log(`Type has ${Object.keys(type).length} keys: `, Object.keys(type))
+  type = Object.getPrototypeOf(type)
+}
 console.log('----END')
 
 const allTests = getTests()
