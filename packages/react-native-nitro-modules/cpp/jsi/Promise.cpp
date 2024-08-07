@@ -9,8 +9,8 @@ using namespace facebook;
 
 Promise::Promise(jsi::Runtime& runtime, jsi::Function&& resolver, jsi::Function&& rejecter) {
   auto functionCache = JSICache::getOrCreateCache(runtime);
-  _resolver = functionCache.makeGlobal<jsi::Function>(std::move(resolver));
-  _rejecter = functionCache.makeGlobal<jsi::Function>(std::move(rejecter));
+  _resolver = functionCache.makeShared<jsi::Function>(std::move(resolver));
+  _rejecter = functionCache.makeShared<jsi::Function>(std::move(rejecter));
 }
 
 jsi::Value Promise::createPromise(jsi::Runtime& runtime, RunPromise&& run) {

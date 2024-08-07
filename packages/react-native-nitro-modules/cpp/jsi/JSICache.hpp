@@ -93,7 +93,7 @@ public:
    * This will hold off any JS Runtime GC calls that will destroy `T` for as long as the `OwningLock<T>` is alive.
    */
   template <typename T>
-  OwningReference<T> makeGlobal(T&& value) {
+  OwningReference<T> makeShared(T&& value) {
     OwningReference<jsi::Object> owning(new T(std::move(value)));
     _strongCache->_cache.push_back(owning.weak());
     return owning.as<T>();

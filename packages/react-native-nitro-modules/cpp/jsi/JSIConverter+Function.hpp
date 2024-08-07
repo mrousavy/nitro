@@ -35,7 +35,7 @@ struct JSIConverter<std::function<ReturnType(Args...)>> {
     // Make function global - it'll be managed by the Runtime's memory, and we only have a weak_ref to it.
     auto cache = JSICache::getOrCreateCache(runtime);
     jsi::Function function = arg.asObject(runtime).asFunction(runtime);
-    OwningReference<jsi::Function> sharedFunction = cache.makeGlobal<jsi::Function>(std::move(function));
+    OwningReference<jsi::Function> sharedFunction = cache.makeShared<jsi::Function>(std::move(function));
 
     std::shared_ptr<Dispatcher> strongDispatcher = Dispatcher::getRuntimeGlobalDispatcher(runtime);
     std::weak_ptr<Dispatcher> weakDispatcher = strongDispatcher;

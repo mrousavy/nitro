@@ -38,7 +38,7 @@ struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_v<T, jsi::MutableBuffer
     }
 
     JSICacheReference cache = JSICache::getOrCreateCache(runtime);
-    auto owningArrayBuffer = cache.makeGlobal<jsi::ArrayBuffer>(object.getArrayBuffer(runtime));
+    auto owningArrayBuffer = cache.makeShared<jsi::ArrayBuffer>(object.getArrayBuffer(runtime));
 
     return std::make_shared<JSArrayBuffer>(&runtime, owningArrayBuffer);
   }
