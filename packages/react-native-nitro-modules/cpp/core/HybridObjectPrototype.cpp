@@ -43,7 +43,7 @@ jsi::Object HybridObjectPrototype::createPrototype(jsi::Runtime& runtime, Protot
   jsi::Function objectDefineProperty = objectConstructor.getPropertyAsFunction(runtime, "defineProperty");
   
   // 1. Create an empty JS Object, inheriting from the base prototype
-  jsi::Object object = objectCreate.call(runtime, createPrototype(runtime, prototype->child)).getObject(runtime);
+  jsi::Object object = objectCreate.call(runtime, createPrototype(runtime, prototype->base)).getObject(runtime);
   
   // 2. Add all Hybrid Methods to it
   for (const auto& method : prototype->methods) {

@@ -53,7 +53,7 @@ private:
   
   using NativeInstanceId = std::type_index;
   struct Prototype {
-    Prototype* child = nullptr;
+    Prototype* base = nullptr;
     NativeInstanceId instanceTypeId;
     std::unordered_map<std::string, HybridFunction> methods;
     std::unordered_map<std::string, HybridFunction> getters;
@@ -65,7 +65,7 @@ private:
       };
     }
     ~Prototype() {
-      delete child;
+      delete base;
     }
   };
   
@@ -114,13 +114,15 @@ protected:
     if (base->instanceTypeId == std::type_index(typeid(Derived))) {
       return *base;
     } else {
-      if (base->child != nullptr) {
+      if (base->base != nullptr) {
         // Otherwise let's try it's child!
-        return getCppPrototypeChain<Derived>(base->child);
+        return getCppPrototypeChain<Derived>(base->base);
       } else {
         // Otherwise we need to create a new child prototype in that chain
-        base->child = Prototype::create(typeid(Derived));
-        return getCppPrototypeChain<Derived>(base->child);
+        Prototype* newBase = _prototype;
+        _prototype = Prototype::create(typeid(Derived));
+        _prototype->base = newBase;
+        return *_prototype;
       }
     }
   }
