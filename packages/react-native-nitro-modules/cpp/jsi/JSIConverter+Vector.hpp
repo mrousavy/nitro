@@ -54,8 +54,8 @@ struct JSIConverter<std::vector<ElementType>> {
     }
     jsi::Array array = object.getArray(runtime);
     if (array.size(runtime) == 0) {
-      // we cannot get the element, so we don't know for sure if we can convert this array.
-      return false;
+      // it is an empty array, so it _theoretically_ doesn't matter what type it holds. Just say true.
+      return true;
     }
     // Check the type of the first element in the array.
     // Technically the array can also have different types for each item,
