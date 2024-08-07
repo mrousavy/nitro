@@ -1,5 +1,6 @@
 import { type HybridObject, type AnyMap } from 'react-native-nitro-modules'
 
+export type Float2 = [number, number]
 export type Float3 = [number, number, number]
 export type TestTuple = [number, string, boolean]
 
@@ -61,9 +62,7 @@ export interface TestObject extends HybridObject<{ ios: 'c++' }> {
   getVariantEnum(variant: OldEnum | boolean): OldEnum | boolean
   getVariantObjects(variant: Person | Car): Person | Car
   getVariantHybrid(variant: TestObject | Person): TestObject | Person
-  getVariantTuple(
-    variant: TestTuple | Float3 | number[]
-  ): TestTuple | Float3 | number[]
+  getVariantTuple(variant: Float2 | Float3): Float2 | Float3
 
   // Tuples
   someTuple: [number, string]

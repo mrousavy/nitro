@@ -169,9 +169,9 @@ HybridTestObject::getVariantHybrid(const std::variant<std::shared_ptr<margelo::n
   return variant;
 }
 
-std::variant<std::vector<double>, std::tuple<double, std::string, bool>, std::tuple<double, double, double>>
+std::variant<std::tuple<double, double>, std::tuple<double, double, double>>
 HybridTestObject::getVariantTuple(
-    const std::variant<std::vector<double>, std::tuple<double, std::string, bool>, std::tuple<double, double, double>>& variant) {
+    const std::variant<std::tuple<double, double>, std::tuple<double, double, double>>& variant) {
   return variant;
 }
 

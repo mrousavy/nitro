@@ -335,20 +335,21 @@ export function getTests(): TestRunner[] {
           HybridTestObject.getVariantHybrid({ someValue: 55 })
         ).didThrow()
     ),
-    createTest('getVariantTuple(...) converts TestTuple', () =>
-      it(() => HybridTestObject.getVariantTuple([532, 'hello', false]))
+    createTest('getVariantTuple(...) converts Float2', () =>
+      it(() => HybridTestObject.getVariantTuple([10, 20]))
         .didNotThrow()
-        .equals([532, 'hello', false])
+        .equals([10, 20])
     ),
     createTest('getVariantTuple(...) converts Float3', () =>
       it(() => HybridTestObject.getVariantTuple([10, 20, 30]))
         .didNotThrow()
         .equals([10, 20, 30])
     ),
-    createTest('getVariantTuple(...) converts number[]', () =>
-      it(() => HybridTestObject.getVariantTuple([10, 20, 30, 40, 50]))
-        .didNotThrow()
-        .equals([10, 20, 30, 40, 50])
+    createTest('getVariantTuple(...) throws at wrong size (4 items)', () =>
+      it(() =>
+        // @ts-expect-error
+        HybridTestObject.getVariantTuple([10, 20, 30, 40, 50])
+      ).didThrow()
     ),
     createTest('getVariantTuple(...) throws at wrong type (string)', () =>
       // @ts-expect-error

@@ -97,7 +97,7 @@ namespace margelo::nitro::image {
       virtual std::variant<bool, OldEnum> getVariantEnum(const std::variant<bool, OldEnum>& variant) = 0;
       virtual std::variant<Person, Car> getVariantObjects(const std::variant<Person, Car>& variant) = 0;
       virtual std::variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectSpec>, Person> getVariantHybrid(const std::variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectSpec>, Person>& variant) = 0;
-      virtual std::variant<std::vector<double>, std::tuple<double, std::string, bool>, std::tuple<double, double, double>> getVariantTuple(const std::variant<std::vector<double>, std::tuple<double, std::string, bool>, std::tuple<double, double, double>>& variant) = 0;
+      virtual std::variant<std::tuple<double, double>, std::tuple<double, double, double>> getVariantTuple(const std::variant<std::tuple<double, double>, std::tuple<double, double, double>>& variant) = 0;
       virtual std::tuple<double, double, double> flip(const std::tuple<double, double, double>& tuple) = 0;
       virtual std::tuple<double, std::string, bool> passTuple(const std::tuple<double, std::string, bool>& tuple) = 0;
       virtual int64_t calculateFibonacciSync(double value) = 0;
