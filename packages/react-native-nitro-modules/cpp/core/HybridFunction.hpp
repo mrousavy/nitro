@@ -82,7 +82,7 @@ public:
           throw std::runtime_error("Cannot call hybrid function " + name + "(...) - `this` does not have a NativeState!");
         }
       }
-      auto hybridInstance = thisObject.getNativeState<Derived>(runtime);
+      std::shared_ptr<Derived> hybridInstance = thisObject.getNativeState<Derived>(runtime);
 
       // 2. Make sure the given arguments match, either with a static size, or with potentially optional arguments size.
       constexpr size_t optionalArgsCount = trailing_optionals_count_v<Args...>;
