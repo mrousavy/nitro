@@ -41,7 +41,7 @@ public:
   JSICache() = delete;
   JSICache(const JSICache&) = delete;
   JSICache(JSICache&&) = delete;
-  
+
 private:
   explicit JSICache(jsi::Runtime* runtime) : _runtime(runtime) {}
 

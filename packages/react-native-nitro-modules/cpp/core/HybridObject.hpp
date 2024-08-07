@@ -172,12 +172,8 @@ private:
   }
 
   template <typename Derived, typename ReturnType, typename... Args>
-  static inline jsi::HostFunctionType createHybridMethod(std::string name, ReturnType (Derived::*method)(Args...),
-                                                         MethodType type) {
-    return [name, method, type](jsi::Runtime& runtime,
-                                const jsi::Value& thisValue,
-                                const jsi::Value* args,
-                                size_t count) -> jsi::Value {
+  static inline jsi::HostFunctionType createHybridMethod(std::string name, ReturnType (Derived::*method)(Args...), MethodType type) {
+    return [name, method, type](jsi::Runtime& runtime, const jsi::Value& thisValue, const jsi::Value* args, size_t count) -> jsi::Value {
       if (!thisValue.isObject()) [[unlikely]] {
         throw std::runtime_error("Cannot call hybrid function " + name + "(...) - `this` is not bound!");
       }
@@ -243,8 +239,7 @@ protected:
       throw std::runtime_error("Cannot add Hybrid Method \"" + name + "\" - a method with that name already exists!");
     }
 
-    _methods[name] = HybridFunction{.function = createHybridMethod(name, method, MethodType::METHOD),
-                                    .parameterCount = sizeof...(Args)};
+    _methods[name] = HybridFunction{.function = createHybridMethod(name, method, MethodType::METHOD), .parameterCount = sizeof...(Args)};
   }
 
   template <typename Derived, typename ReturnType>

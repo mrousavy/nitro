@@ -71,8 +71,8 @@ public:
   std::variant<Person, Car> getVariantObjects(const std::variant<Person, Car>& variant) override;
   std::variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectSpec>, Person>
   getVariantHybrid(const std::variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectSpec>, Person>& variant) override;
-  std::variant<std::tuple<double, double>, std::tuple<double, double, double>> getVariantTuple(
-      const std::variant<std::tuple<double, double>, std::tuple<double, double, double>>& variant) override;
+  std::variant<std::tuple<double, double>, std::tuple<double, double, double>>
+  getVariantTuple(const std::variant<std::tuple<double, double>, std::tuple<double, double, double>>& variant) override;
 
   std::tuple<double, double, double> flip(const std::tuple<double, double, double>& tuple) override;
   std::tuple<double, std::string, bool> passTuple(const std::tuple<double, std::string, bool>& tuple) override;
