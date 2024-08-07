@@ -14,7 +14,7 @@ std::unordered_map<jsi::Runtime*, HybridObjectPrototype::PrototypeCache> HybridO
 
 void HybridObjectPrototype::ensureInitialized() {
   std::unique_lock lock(_mutex);
-  
+
   if (!_didLoadMethods) [[unlikely]] {
     // lazy-load all exposed methods
     loadHybridMethods();
@@ -34,22 +34,22 @@ jsi::Object HybridObjectPrototype::createPrototype(jsi::Runtime& runtime, Protot
     OwningReference<jsi::Object>& cachedObject = cachedPrototype->second;
     return jsi::Value(runtime, *cachedObject).getObject(runtime);
   }
-  
+
   Logger::log(TAG, "Creating new prototype for C++ instance type \"%s\"...", prototype->instanceTypeId.name());
-  
+
   // 0. Get some helper JS methods from global
   jsi::Object objectConstructor = runtime.global().getPropertyAsObject(runtime, "Object");
   jsi::Function objectCreate = objectConstructor.getPropertyAsFunction(runtime, "create");
   jsi::Function objectDefineProperty = objectConstructor.getPropertyAsFunction(runtime, "defineProperty");
-  
+
   // 1. Create an empty JS Object, inheriting from the base prototype
   jsi::Object object = objectCreate.call(runtime, createPrototype(runtime, prototype->base)).getObject(runtime);
-  
+
   // 2. Add all Hybrid Methods to it
   for (const auto& method : prototype->methods) {
     object.setProperty(runtime, method.first.c_str(),
-                          jsi::Function::createFromHostFunction(runtime, jsi::PropNameID::forUtf8(runtime, method.first),
-                                                                method.second.parameterCount, method.second.function));
+                       jsi::Function::createFromHostFunction(runtime, jsi::PropNameID::forUtf8(runtime, method.first),
+                                                             method.second.parameterCount, method.second.function));
   }
 
   // 3. Add all properties (getter + setter) to it using defineProperty
@@ -71,20 +71,20 @@ jsi::Object HybridObjectPrototype::createPrototype(jsi::Runtime& runtime, Protot
                               /* propName */ jsi::String::createFromUtf8(runtime, getter.first.c_str()),
                               /* descriptorObj */ property);
   }
-  
+
   // 4. Throw it into our cache
   JSICacheReference jsiCache = JSICache::getOrCreateCache(runtime);
   OwningReference<jsi::Object> cachedObject = jsiCache.makeShared(std::move(object));
   prototypeCache.emplace(prototype->instanceTypeId, cachedObject);
-  
+
   // 5. Return it!
   return jsi::Value(runtime, *cachedObject).getObject(runtime);
 }
 
 jsi::Object HybridObjectPrototype::getPrototype(jsi::Runtime& runtime) {
   ensureInitialized();
-  
+
   return createPrototype(runtime, &_prototypeChain.getPrototype());
 }
 
-}
+} // namespace margelo::nitro

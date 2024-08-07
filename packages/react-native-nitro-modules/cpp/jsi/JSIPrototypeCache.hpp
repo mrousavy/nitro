@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include "HybridObject.hpp"
 #include "JSICache.hpp"
 #include "OwningReference.hpp"
 #include <jsi/jsi.h>
@@ -14,7 +15,6 @@
 #include <mutex>
 #include <unordered_map>
 #include <vector>
-#include "HybridObject.hpp"
 
 namespace margelo::nitro {
 
@@ -22,14 +22,12 @@ using namespace facebook;
 
 class JSIPrototypeCache {
 public:
-  
   static jsi::Object getOrCreatePrototype(const HybridObject& hybridObject);
-  
+
   static jsi::Object createObject(const jsi::Object& prototype);
-  
+
 private:
-  JSIPrototypeCache() { }
-  
+  JSIPrototypeCache() {}
 };
 
 } // namespace margelo::nitro

@@ -7,11 +7,11 @@
 
 #pragma once
 
+#include "HybridFunction.hpp"
 #include <jsi/jsi.h>
-#include <unordered_map>
 #include <string>
 #include <typeindex>
-#include "HybridFunction.hpp"
+#include <unordered_map>
 
 namespace margelo::nitro {
 
@@ -36,9 +36,7 @@ struct Prototype {
   std::unordered_map<std::string, HybridFunction> setters;
 
   static Prototype* create(const std::type_info& typeId) {
-    return new Prototype {
-      .instanceTypeId = std::type_index(typeId)
-    };
+    return new Prototype{.instanceTypeId = std::type_index(typeId)};
   }
   ~Prototype() {
     delete base;
@@ -56,13 +54,13 @@ struct Prototype {
 class PrototypeChain {
 private:
   Prototype* _prototype;
-  
+
 public:
-  PrototypeChain() { }
+  PrototypeChain() {}
   ~PrototypeChain() {
     delete _prototype;
   }
-  
+
 public:
   /**
    * Gets the current `Prototype` as a whole.
@@ -71,7 +69,7 @@ public:
   inline Prototype& getPrototype() const {
     return *_prototype;
   }
-  
+
 public:
   /**
    * Extends the Prototype with the given type `Derived`.
@@ -82,10 +80,10 @@ public:
     if (_prototype == nullptr) {
       _prototype = Prototype::create(typeid(Derived));
     }
-    
+
     return getOrExtendPrototype<Derived>(_prototype);
   }
-  
+
 private:
   /**
    * Perform a bottom-down search of the given `Derived` C++ type info.

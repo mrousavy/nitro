@@ -7,7 +7,4 @@
 
 #include <unordered_map>
 
-namespace margelo::nitro {
-
-
-}
+namespace margelo::nitro {}

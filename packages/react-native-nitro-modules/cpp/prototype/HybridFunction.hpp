@@ -23,10 +23,7 @@ public:
 
 public:
   jsi::Function toJS(jsi::Runtime& runtime, const char* name) const {
-    return jsi::Function::createFromHostFunction(runtime,
-                                                 jsi::PropNameID::forUtf8(runtime, name),
-                                                 parameterCount,
-                                                 function);
+    return jsi::Function::createFromHostFunction(runtime, jsi::PropNameID::forUtf8(runtime, name), parameterCount, function);
   }
 };
 

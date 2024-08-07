@@ -8,17 +8,17 @@
 #pragma once
 
 #include "CountTrailingOptionals.hpp"
+#include "HybridFunction.hpp"
 #include "JSIConverter.hpp"
 #include "OwningReference.hpp"
-#include "TypeInfo.hpp"
-#include "HybridFunction.hpp"
 #include "PrototypeChain.hpp"
+#include "TypeInfo.hpp"
 #include <functional>
 #include <jsi/jsi.h>
 #include <memory>
-#include <type_traits>
-#include <string>
 #include <mutex>
+#include <string>
+#include <type_traits>
 #include <vector>
 
 namespace margelo::nitro {
@@ -39,22 +39,22 @@ private:
   PrototypeChain _prototypeChain;
   bool _didLoadMethods = false;
   static constexpr auto TAG = "HybridObjectPrototype";
-  
+
 public:
-  HybridObjectPrototype() { }
-  
+  HybridObjectPrototype() {}
+
 public:
   /**
    * Get a fully initialized jsi::Object that represents this prototype to JS.
    * The result of this value will be cached per Runtime, so it's safe to call this often.
    */
   jsi::Object getPrototype(jsi::Runtime& runtime);
-  
+
 private:
   static jsi::Object createPrototype(jsi::Runtime& runtime, Prototype* prototype);
   using PrototypeCache = std::unordered_map<NativeInstanceId, OwningReference<jsi::Object>>;
   static std::unordered_map<jsi::Runtime*, PrototypeCache> _prototypeCache;
-  
+
 protected:
   /**
    * Loads all Hybrid Methods that will be initialized in this Prototype.
@@ -62,13 +62,13 @@ protected:
    * so don't conditionally register methods.
    */
   virtual void loadHybridMethods() = 0;
-  
+
 private:
   /**
    * Ensures that all Hybrid Methods, Getters and Setters are initialized by calling loadHybridMethods().
    */
   void ensureInitialized();
-  
+
 protected:
   /**
    * Registers the given C++ method as a Hybrid Method that can be called from JS, through the object's Prototype.
@@ -80,7 +80,7 @@ protected:
   template <typename Derived, typename ReturnType, typename... Args>
   inline void registerHybridMethod(std::string name, ReturnType (Derived::*method)(Args...)) {
     Prototype& prototype = _prototypeChain.extendPrototype<Derived>();
-    
+
     if (prototype.getters.contains(name) || prototype.setters.contains(name)) [[unlikely]] {
       throw std::runtime_error("Cannot add Hybrid Method \"" + name + "\" - a property with that name already exists!");
     }
@@ -88,10 +88,8 @@ protected:
       throw std::runtime_error("Cannot add Hybrid Method \"" + name + "\" - a method with that name already exists!");
     }
 
-    prototype.methods[name] = HybridFunction{
-      .function = createHybridMethod(name, method, MethodType::METHOD),
-      .parameterCount = sizeof...(Args)
-    };
+    prototype.methods[name] =
+        HybridFunction{.function = createHybridMethod(name, method, MethodType::METHOD), .parameterCount = sizeof...(Args)};
   }
 
   /**
@@ -104,7 +102,7 @@ protected:
   template <typename Derived, typename ReturnType>
   inline void registerHybridGetter(std::string name, ReturnType (Derived::*method)()) {
     Prototype& prototype = _prototypeChain.extendPrototype<Derived>();
-    
+
     if (prototype.getters.contains(name)) [[unlikely]] {
       throw std::runtime_error("Cannot add Hybrid Property Getter \"" + name + "\" - a getter with that name already exists!");
     }
@@ -112,10 +110,7 @@ protected:
       throw std::runtime_error("Cannot add Hybrid Property Getter \"" + name + "\" - a method with that name already exists!");
     }
 
-    prototype.getters[name] = HybridFunction {
-      .function = createHybridMethod(name, method, MethodType::GETTER),
-      .parameterCount = 0
-    };
+    prototype.getters[name] = HybridFunction{.function = createHybridMethod(name, method, MethodType::GETTER), .parameterCount = 0};
   }
 
   /**
@@ -128,7 +123,7 @@ protected:
   template <typename Derived, typename ValueType>
   inline void registerHybridSetter(std::string name, void (Derived::*method)(ValueType)) {
     Prototype& prototype = _prototypeChain.extendPrototype<Derived>();
-    
+
     if (prototype.setters.contains(name)) [[unlikely]] {
       throw std::runtime_error("Cannot add Hybrid Property Setter \"" + name + "\" - a setter with that name already exists!");
     }
@@ -136,12 +131,9 @@ protected:
       throw std::runtime_error("Cannot add Hybrid Property Setter \"" + name + "\" - a method with that name already exists!");
     }
 
-    prototype.setters[name] = HybridFunction {
-      .function = createHybridMethod(name, method, MethodType::SETTER),
-      .parameterCount = 1
-    };
+    prototype.setters[name] = HybridFunction{.function = createHybridMethod(name, method, MethodType::SETTER), .parameterCount = 1};
   }
-  
+
 private:
   /**
    * Create a new JSI method that can be called from JS.
@@ -206,8 +198,7 @@ private:
       }
     };
   }
-  
-  
+
   template <typename Derived, typename ReturnType, typename... Args, size_t... Is>
   static inline jsi::Value callMethod(Derived* obj, ReturnType (Derived::*method)(Args...), jsi::Runtime& runtime, const jsi::Value* args,
                                       size_t argsSize, std::index_sequence<Is...>) {

@@ -11,7 +11,6 @@ class HybridObjectPrototype;
 
 } // namespace margelo::nitro
 
-
 namespace margelo::nitro {
 
 using namespace facebook;
