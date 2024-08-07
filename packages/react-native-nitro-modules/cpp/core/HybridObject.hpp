@@ -4,20 +4,25 @@
 
 #pragma once
 
-#include "CountTrailingOptionals.hpp"
-#include "JSIConverter.hpp"
-#include "OwningReference.hpp"
+namespace margelo::nitro {
+class HybridObject;
+class HybridObjectPrototype;
+
+template <typename T, typename Enable>
+struct JSIConverter;
+} // namespace margelo::nitro
+
+#include "HybridObjectPrototype.hpp"
+#include "IsSharedPtrTo.hpp"
 #include "TypeInfo.hpp"
-#include <functional>
+
 #include <jsi/jsi.h>
 #include <memory>
-#include <mutex>
 #include <type_traits>
-#include <unordered_map>
+
+#define DO_NULL_CHECKS true
 
 namespace margelo::nitro {
-
-enum class MethodType { METHOD, GETTER, SETTER };
 
 using namespace facebook;
 
@@ -30,13 +35,7 @@ using namespace facebook;
  *
  * The new class can then be passed to JS using the `JSIConverter<HybridObject>`.
  */
-class HybridObject : public jsi::NativeState, public std::enable_shared_from_this<HybridObject> {
-public:
-  struct HybridFunction {
-    jsi::HostFunctionType function;
-    size_t parameterCount;
-  };
-
+class HybridObject : public jsi::NativeState, public HybridObjectPrototype, public std::enable_shared_from_this<HybridObject> {
 public:
   /**
    * Create a new instance of a `HybridObject`.
@@ -58,34 +57,6 @@ public:
   HybridObject(HybridObject&& move) = delete;
 
 public:
-  /**
-   * Get (or create) this HybridObject's prototype.
-   * A HybridObject's prototype (`__proto__`) is cached globally per Runtime,
-   * and contains all hybrid functions that can be accessed from JS.
-   * Assign the `__proto__` to a `jsi::Object` that contains this HybridObject as a NativeState
-   * to support calling methods from JS.
-   */
-  jsi::Object getPrototype(jsi::Runtime& runtime);
-
-public:
-  /**
-   * Get the `std::shared_ptr` instance of this HybridObject.
-   * The HybridObject must be managed inside a `shared_ptr` already, otherwise this will fail.
-   */
-  template <typename Derived>
-  std::shared_ptr<Derived> shared() {
-    return std::static_pointer_cast<Derived>(shared_from_this());
-  }
-
-public:
-  /**
-   * Get the total size of any external (heap) allocations this `HybridObject` (or
-   * a subclass of it) has made.
-   * This includes any base allocations (such as function cache), as well as
-   * overridden extra memory size.
-   */
-  size_t getTotalExternalMemorySize() noexcept;
-
   /**
    * Return the `jsi::Object` that holds this `HybridObject`. (boxed in a `jsi::Value`)
    * This properly assigns (or creates) the base prototype for this type,
@@ -138,132 +109,81 @@ protected:
    * }
    * ```
    */
-  virtual void loadHybridMethods();
+  virtual void loadHybridMethods() override;
 
 private:
   static constexpr auto TAG = "HybridObject";
   const char* _name = TAG;
   int _instanceId = 1;
-  bool _didLoadMethods = false;
-  std::unique_ptr<std::mutex> _mutex;
-  std::unordered_map<std::string, HybridFunction> _methods;
-  std::unordered_map<std::string, jsi::HostFunctionType> _getters;
-  std::unordered_map<std::string, jsi::HostFunctionType> _setters;
-  std::unordered_map<jsi::Runtime*, std::unordered_map<std::string, OwningReference<jsi::Function>>> _functionCache;
+};
 
-private:
-  inline void ensureInitialized();
+} // namespace margelo::nitro
 
-private:
-  template <typename Derived, typename ReturnType, typename... Args, size_t... Is>
-  static inline jsi::Value callMethod(Derived* obj, ReturnType (Derived::*method)(Args...), jsi::Runtime& runtime, const jsi::Value* args,
-                                      size_t argsSize, std::index_sequence<Is...>) {
-    jsi::Value defaultValue;
 
-    if constexpr (std::is_void_v<ReturnType>) {
-      // It's a void method.
-      (obj->*method)(JSIConverter<std::decay_t<Args>>::fromJSI(runtime, Is < argsSize ? args[Is] : defaultValue)...);
-      return jsi::Value::undefined();
+
+namespace margelo::nitro {
+
+using namespace facebook;
+
+// HybridObject(NativeState) <> {}
+template <typename T>
+struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_v<T, jsi::NativeState>>> {
+  using TPointee = typename T::element_type;
+
+  static inline T fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+#if DO_NULL_CHECKS
+    if (arg.isUndefined()) [[unlikely]] {
+      throw jsi::JSError(runtime, invalidTypeErrorMessage("undefined", "It is undefined!"));
+    }
+    if (!arg.isObject()) [[unlikely]] {
+      std::string stringRepresentation = arg.toString(runtime).utf8(runtime);
+      throw jsi::JSError(runtime, invalidTypeErrorMessage(stringRepresentation, "It is not an object!"));
+    }
+#endif
+    jsi::Object object = arg.asObject(runtime);
+#if DO_NULL_CHECKS
+    if (!object.hasNativeState(runtime)) [[unlikely]] {
+      std::string stringRepresentation = arg.toString(runtime).utf8(runtime);
+      throw jsi::JSError(runtime, invalidTypeErrorMessage(stringRepresentation, "It is not a NativeState!"));
+    }
+    if (!object.hasNativeState<TPointee>(runtime)) [[unlikely]] {
+      std::string stringRepresentation = arg.toString(runtime).utf8(runtime);
+      throw jsi::JSError(runtime, invalidTypeErrorMessage(stringRepresentation, "It is a different NativeState<T>!"));
+    }
+#endif
+    return object.getNativeState<TPointee>(runtime);
+  }
+
+  static inline jsi::Value toJSI(jsi::Runtime& runtime, const T& arg) {
+#if DO_NULL_CHECKS
+    if (arg == nullptr) [[unlikely]] {
+      std::string typeName = TypeInfo::getFriendlyTypename<TPointee>();
+      throw jsi::JSError(runtime, "Cannot convert nullptr to NativeState<" + typeName + ">!");
+    }
+#endif
+    if constexpr (std::is_base_of_v<HybridObject, TPointee>) {
+      // It's a HybridObject - use it's internal constructor which caches jsi::Objects for proper memory management!
+      return arg->toObject(runtime);
     } else {
-      // It's returning some C++ type, we need to convert that to a JSI value now.
-      ReturnType result = (obj->*method)(JSIConverter<std::decay_t<Args>>::fromJSI(runtime, Is < argsSize ? args[Is] : defaultValue)...);
-      return JSIConverter<std::decay_t<ReturnType>>::toJSI(runtime, std::move(result));
+      // It's any other kind of jsi::HostObject - just create it as normal. This will not have a prototype then!
+      jsi::Object object(runtime);
+      object.setNativeState(runtime, arg);
+      return object;
     }
   }
 
-  template <typename Derived, typename ReturnType, typename... Args>
-  static inline jsi::HostFunctionType createHybridMethod(std::string name, ReturnType (Derived::*method)(Args...), MethodType type) {
-    return [name, method, type](jsi::Runtime& runtime, const jsi::Value& thisValue, const jsi::Value* args, size_t count) -> jsi::Value {
-      if (!thisValue.isObject()) [[unlikely]] {
-        throw std::runtime_error("Cannot call hybrid function " + name + "(...) - `this` is not bound!");
-      }
-      jsi::Object thisObject = thisValue.getObject(runtime);
-      if (!thisObject.hasNativeState<Derived>(runtime)) [[unlikely]] {
-        if (thisObject.hasNativeState(runtime)) {
-          throw std::runtime_error("Cannot call hybrid function " + name + "(...) - `this` has a NativeState, but it's the wrong type!");
-        } else {
-          throw std::runtime_error("Cannot call hybrid function " + name + "(...) - `this` does not have a NativeState!");
-        }
-      }
-      auto hybridInstance = thisObject.getNativeState<Derived>(runtime);
-
-      constexpr size_t optionalArgsCount = trailing_optionals_count_v<Args...>;
-      constexpr size_t maxArgsCount = sizeof...(Args);
-      constexpr size_t minArgsCount = maxArgsCount - optionalArgsCount;
-      bool isWithinArgsRange = (count >= minArgsCount && count <= maxArgsCount);
-      if (!isWithinArgsRange) [[unlikely]] {
-        // invalid amount of arguments passed!
-        std::string hybridObjectName = hybridInstance->_name;
-        if constexpr (minArgsCount == maxArgsCount) {
-          // min and max args length is the same, so we don't have any optional parameters. fixed count
-          throw jsi::JSError(runtime, hybridObjectName + "." + name + "(...) expected " + std::to_string(maxArgsCount) +
-                                          " arguments, but received " + std::to_string(count) + "!");
-        } else {
-          // min and max args length are different, so we have optional parameters - variable length arguments.
-          throw jsi::JSError(runtime, hybridObjectName + "." + name + "(...) expected between " + std::to_string(minArgsCount) + " and " +
-                                          std::to_string(maxArgsCount) + " arguments, but received " + std::to_string(count) + "!");
-        }
-      }
-
-      try {
-        if constexpr (std::is_same_v<ReturnType, jsi::Value>) {
-          // If the return type is a jsi::Value, we assume the user wants full JSI code control.
-          // The signature must be identical to jsi::HostFunction (jsi::Runtime&, jsi::Value& this, ...)
-          return (hybridInstance->*method)(runtime, thisValue, args, count);
-        } else {
-          // Call the actual method with JSI values as arguments and return a JSI value again.
-          // Internally, this method converts the JSI values to C++ values.
-          return callMethod(hybridInstance.get(), method, runtime, args, count, std::index_sequence_for<Args...>{});
-        }
-      } catch (const std::exception& exception) {
-        std::string hybridObjectName = hybridInstance->_name;
-        std::string message = exception.what();
-        std::string suffix = type == MethodType::METHOD ? "(...)" : "";
-        throw jsi::JSError(runtime, hybridObjectName + "." + name + suffix + ": " + message);
-      } catch (...) {
-        std::string hybridObjectName = hybridInstance->_name;
-        std::string errorName = TypeInfo::getCurrentExceptionName();
-        std::string suffix = type == MethodType::METHOD ? "(...)" : "";
-        throw jsi::JSError(runtime, hybridObjectName + "." + name + suffix + " threw an unknown " + errorName + " error.");
-      }
-    };
+  static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
+    if (value.isObject()) {
+      jsi::Object object = value.getObject(runtime);
+      return object.hasNativeState<TPointee>(runtime);
+    }
+    return false;
   }
 
-protected:
-  template <typename Derived, typename ReturnType, typename... Args>
-  inline void registerHybridMethod(std::string name, ReturnType (Derived::*method)(Args...)) {
-    if (_getters.contains(name) || _setters.contains(name)) [[unlikely]] {
-      throw std::runtime_error("Cannot add Hybrid Method \"" + name + "\" - a property with that name already exists!");
-    }
-    if (_methods.contains(name)) [[unlikely]] {
-      throw std::runtime_error("Cannot add Hybrid Method \"" + name + "\" - a method with that name already exists!");
-    }
-
-    _methods[name] = HybridFunction{.function = createHybridMethod(name, method, MethodType::METHOD), .parameterCount = sizeof...(Args)};
-  }
-
-  template <typename Derived, typename ReturnType>
-  inline void registerHybridGetter(std::string name, ReturnType (Derived::*method)()) {
-    if (_getters.contains(name)) [[unlikely]] {
-      throw std::runtime_error("Cannot add Hybrid Property Getter \"" + name + "\" - a getter with that name already exists!");
-    }
-    if (_methods.contains(name)) [[unlikely]] {
-      throw std::runtime_error("Cannot add Hybrid Property Getter \"" + name + "\" - a method with that name already exists!");
-    }
-
-    _getters[name] = createHybridMethod(name, method, MethodType::GETTER);
-  }
-
-  template <typename Derived, typename ValueType>
-  inline void registerHybridSetter(std::string name, void (Derived::*method)(ValueType)) {
-    if (_setters.contains(name)) [[unlikely]] {
-      throw std::runtime_error("Cannot add Hybrid Property Setter \"" + name + "\" - a setter with that name already exists!");
-    }
-    if (_methods.contains(name)) [[unlikely]] {
-      throw std::runtime_error("Cannot add Hybrid Property Setter \"" + name + "\" - a method with that name already exists!");
-    }
-
-    _setters[name] = createHybridMethod(name, method, MethodType::SETTER);
+private:
+  static inline std::string invalidTypeErrorMessage(const std::string& typeDescription, const std::string& reason) {
+    std::string typeName = TypeInfo::getFriendlyTypename<TPointee>();
+    return "Cannot convert \"" + typeDescription + "\" to NativeState<" + typeName + ">! " + reason;
   }
 };
 
