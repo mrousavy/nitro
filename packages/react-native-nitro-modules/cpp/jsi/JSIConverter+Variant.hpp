@@ -51,11 +51,6 @@ struct JSIConverter<std::variant<Types...>> {
   }
 
 private:
-  static inline std::runtime_error typeNotSupportedError(const std::string& type) {
-    std::string types = TypeInfo::getFriendlyTypenames<Types...>();
-    return std::runtime_error(type + " is not supported in variant<" + types + ">!");
-  }
-
   template <typename First, typename... Rest>
   static inline std::variant<Types...> fromJSIRecursive(jsi::Runtime& runtime, const jsi::Value& value) {
     if (JSIConverter<First>::canConvert(runtime, value)) {
