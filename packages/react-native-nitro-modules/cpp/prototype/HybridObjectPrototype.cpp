@@ -45,7 +45,6 @@ jsi::Object HybridObjectPrototype::createPrototype(jsi::Runtime& runtime, Protot
   jsi::Object objectConstructor = runtime.global().getPropertyAsObject(runtime, "Object");
   jsi::Function objectCreate = objectConstructor.getPropertyAsFunction(runtime, "create");
   jsi::Function objectDefineProperty = objectConstructor.getPropertyAsFunction(runtime, "defineProperty");
-  jsi::Function objectFreeze = objectConstructor.getPropertyAsFunction(runtime, "freeze");
 
   // 3. Create an empty JS Object, inheriting from the base prototype (recursively!)
   jsi::Object object = objectCreate.call(runtime, createPrototype(runtime, prototype->base)).getObject(runtime);
@@ -76,16 +75,13 @@ jsi::Object HybridObjectPrototype::createPrototype(jsi::Runtime& runtime, Protot
                               /* propName */ jsi::String::createFromUtf8(runtime, getter.first.c_str()),
                               /* descriptorObj */ property);
   }
-  
-  // 6. Freeze the object now so no one accidentally modifies it in JS
-  objectFreeze.call(runtime, object);
 
-  // 7. Throw it into our cache so the next lookup can be cached and therefore faster
+  // 6. Throw it into our cache so the next lookup can be cached and therefore faster
   JSICacheReference jsiCache = JSICache::getOrCreateCache(runtime);
   OwningReference<jsi::Object> cachedObject = jsiCache.makeShared(std::move(object));
   prototypeCache.emplace(prototype->instanceTypeId, cachedObject);
 
-  // 8. Return it!
+  // 7. Return it!
   return jsi::Value(runtime, *cachedObject).getObject(runtime);
 }
 
