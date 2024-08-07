@@ -7,7 +7,7 @@
 #include "JSIConverter.hpp"
 #include "NitroLogger.hpp"
 
-#define LOG_MEMORY_ALLOCATIONS true
+#define LOG_MEMORY_ALLOCATIONS false
 
 namespace margelo::nitro {
 
