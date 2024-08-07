@@ -60,11 +60,9 @@ public:
     const auto& found = _prototypesCache.find(typeId);
     if (found != _prototypesCache.end()) {
       // We know this C++ type ID / Prototype - return it!
-      Logger::log("Prototype", "Found %s in Prototype cache - re-using it!", typeId.name());
       return found->second;
     } else {
       // This is the first time we see this C++ type ID - create a new base Prototype for this.
-      Logger::log("Prototype", "Creating Prototype for %s...", typeId.name());
       auto prototype = std::shared_ptr<Prototype>(new Prototype(typeId, base));
       _prototypesCache.emplace(typeId, prototype);
       return prototype;
