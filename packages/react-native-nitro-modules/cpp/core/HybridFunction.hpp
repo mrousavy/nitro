@@ -29,7 +29,7 @@ enum class FunctionType { METHOD, GETTER, SETTER };
 /**
  * Represents a Hybrid Function.
  */
-class HybridFunction {
+class HybridFunction final {
 private:
   std::string _name;
   size_t _paramCount;

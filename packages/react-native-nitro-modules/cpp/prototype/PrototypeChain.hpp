@@ -28,7 +28,7 @@ using NativeInstanceId = std::type_index;
  * Prototypes can be sub-classes, in which case they have a `base` prototype.
  * Each prototype has a list of methods, and properties (getters + setters).
  */
-struct Prototype {
+struct Prototype final {
   Prototype* base = nullptr;
   NativeInstanceId instanceTypeId;
   std::unordered_map<std::string, HybridFunction> methods;
@@ -51,7 +51,7 @@ struct Prototype {
  * The template methods can be used to find a specific C++ instance in the prototype tree,
  * or create a new sub-class if it cannot be found.
  */
-class PrototypeChain {
+class PrototypeChain final {
 private:
   Prototype* _prototype;
 
