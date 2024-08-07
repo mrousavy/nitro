@@ -7,25 +7,19 @@
 
 #pragma once
 
-#include "CountTrailingOptionals.hpp"
 #include "HybridFunction.hpp"
-#include "JSIConverter.hpp"
 #include "OwningReference.hpp"
 #include "PrototypeChain.hpp"
-#include "TypeInfo.hpp"
 #include <functional>
 #include <jsi/jsi.h>
 #include <memory>
 #include <mutex>
 #include <string>
 #include <type_traits>
-#include <vector>
 
 namespace margelo::nitro {
 
 using namespace facebook;
-
-enum class MethodType { METHOD, GETTER, SETTER };
 
 /**
  * Represents a Hybrid Object's prototype.
@@ -88,8 +82,7 @@ protected:
       throw std::runtime_error("Cannot add Hybrid Method \"" + name + "\" - a method with that name already exists!");
     }
 
-    prototype.methods[name] =
-        HybridFunction{.function = createHybridMethod(name, method, MethodType::METHOD), .parameterCount = sizeof...(Args)};
+    prototype.methods.emplace(name, HybridFunction::createHybridFunction(name, method, FunctionType::METHOD));
   }
 
   /**
@@ -110,7 +103,7 @@ protected:
       throw std::runtime_error("Cannot add Hybrid Property Getter \"" + name + "\" - a method with that name already exists!");
     }
 
-    prototype.getters[name] = HybridFunction{.function = createHybridMethod(name, method, MethodType::GETTER), .parameterCount = 0};
+    prototype.getters.emplace(name, HybridFunction::createHybridFunction(name, method, FunctionType::GETTER));
   }
 
   /**
@@ -131,88 +124,7 @@ protected:
       throw std::runtime_error("Cannot add Hybrid Property Setter \"" + name + "\" - a method with that name already exists!");
     }
 
-    prototype.setters[name] = HybridFunction{.function = createHybridMethod(name, method, MethodType::SETTER), .parameterCount = 1};
-  }
-
-private:
-  /**
-   * Create a new JSI method that can be called from JS.
-   * This performs proper JSI -> C++ conversion using `JSIConverter<T>`,
-   * and assumes that the object this is called on has a proper `this` configured.
-   * The object's `this` needs to be a `NativeState`.
-   */
-  template <typename Derived, typename ReturnType, typename... Args>
-  static inline jsi::HostFunctionType createHybridMethod(std::string name, ReturnType (Derived::*method)(Args...), MethodType type) {
-    return [name, method, type](jsi::Runtime& runtime, const jsi::Value& thisValue, const jsi::Value* args, size_t count) -> jsi::Value {
-      if (!thisValue.isObject()) [[unlikely]] {
-        throw std::runtime_error("Cannot call hybrid function " + name + "(...) - `this` is not bound!");
-      }
-      jsi::Object thisObject = thisValue.getObject(runtime);
-      if (!thisObject.hasNativeState<Derived>(runtime)) [[unlikely]] {
-        if (thisObject.hasNativeState(runtime)) {
-          throw std::runtime_error("Cannot call hybrid function " + name + "(...) - `this` has a NativeState, but it's the wrong type!");
-        } else {
-          throw std::runtime_error("Cannot call hybrid function " + name + "(...) - `this` does not have a NativeState!");
-        }
-      }
-      auto hybridInstance = thisObject.getNativeState<Derived>(runtime);
-
-      constexpr size_t optionalArgsCount = trailing_optionals_count_v<Args...>;
-      constexpr size_t maxArgsCount = sizeof...(Args);
-      constexpr size_t minArgsCount = maxArgsCount - optionalArgsCount;
-      bool isWithinArgsRange = (count >= minArgsCount && count <= maxArgsCount);
-      if (!isWithinArgsRange) [[unlikely]] {
-        // invalid amount of arguments passed!
-        std::string hybridObjectName = hybridInstance->getName();
-        if constexpr (minArgsCount == maxArgsCount) {
-          // min and max args length is the same, so we don't have any optional parameters. fixed count
-          throw jsi::JSError(runtime, hybridObjectName + "." + name + "(...) expected " + std::to_string(maxArgsCount) +
-                                          " arguments, but received " + std::to_string(count) + "!");
-        } else {
-          // min and max args length are different, so we have optional parameters - variable length arguments.
-          throw jsi::JSError(runtime, hybridObjectName + "." + name + "(...) expected between " + std::to_string(minArgsCount) + " and " +
-                                          std::to_string(maxArgsCount) + " arguments, but received " + std::to_string(count) + "!");
-        }
-      }
-
-      try {
-        if constexpr (std::is_same_v<ReturnType, jsi::Value>) {
-          // If the return type is a jsi::Value, we assume the user wants full JSI code control.
-          // The signature must be identical to jsi::HostFunction (jsi::Runtime&, jsi::Value& this, ...)
-          return (hybridInstance->*method)(runtime, thisValue, args, count);
-        } else {
-          // Call the actual method with JSI values as arguments and return a JSI value again.
-          // Internally, this method converts the JSI values to C++ values.
-          return callMethod(hybridInstance.get(), method, runtime, args, count, std::index_sequence_for<Args...>{});
-        }
-      } catch (const std::exception& exception) {
-        std::string hybridObjectName = hybridInstance->getName();
-        std::string message = exception.what();
-        std::string suffix = type == MethodType::METHOD ? "(...)" : "";
-        throw jsi::JSError(runtime, hybridObjectName + "." + name + suffix + ": " + message);
-      } catch (...) {
-        std::string hybridObjectName = hybridInstance->getName();
-        std::string errorName = TypeInfo::getCurrentExceptionName();
-        std::string suffix = type == MethodType::METHOD ? "(...)" : "";
-        throw jsi::JSError(runtime, hybridObjectName + "." + name + suffix + " threw an unknown " + errorName + " error.");
-      }
-    };
-  }
-
-  template <typename Derived, typename ReturnType, typename... Args, size_t... Is>
-  static inline jsi::Value callMethod(Derived* obj, ReturnType (Derived::*method)(Args...), jsi::Runtime& runtime, const jsi::Value* args,
-                                      size_t argsSize, std::index_sequence<Is...>) {
-    jsi::Value defaultValue;
-
-    if constexpr (std::is_void_v<ReturnType>) {
-      // It's a void method.
-      (obj->*method)(JSIConverter<std::decay_t<Args>>::fromJSI(runtime, Is < argsSize ? args[Is] : defaultValue)...);
-      return jsi::Value::undefined();
-    } else {
-      // It's returning some C++ type, we need to convert that to a JSI value now.
-      ReturnType result = (obj->*method)(JSIConverter<std::decay_t<Args>>::fromJSI(runtime, Is < argsSize ? args[Is] : defaultValue)...);
-      return JSIConverter<std::decay_t<ReturnType>>::toJSI(runtime, std::move(result));
-    }
+    prototype.setters.emplace(name, HybridFunction::createHybridFunction(name, method, FunctionType::SETTER));
   }
 };
 

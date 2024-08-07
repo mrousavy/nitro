@@ -28,7 +28,7 @@ jsi::Object HybridObjectPrototype::createPrototype(jsi::Runtime& runtime, Protot
     // There is no prototype - we just have an empty Object base - so `Object.create({})`
     return jsi::Object(runtime);
   }
-  
+
   // 1. Try looking for the given prototype in cache.
   //    If we find it in cache, we can create instances faster and skip creating the prototype from scratch!
   auto& prototypeCache = _prototypeCache[&runtime];
@@ -51,9 +51,7 @@ jsi::Object HybridObjectPrototype::createPrototype(jsi::Runtime& runtime, Protot
 
   // 4. Add all Hybrid Methods to it
   for (const auto& method : prototype->methods) {
-    object.setProperty(runtime, method.first.c_str(),
-                       jsi::Function::createFromHostFunction(runtime, jsi::PropNameID::forUtf8(runtime, method.first),
-                                                             method.second.parameterCount, method.second.function));
+    object.setProperty(runtime, method.first.c_str(), method.second.toJSFunction(runtime));
   }
 
   // 5. Add all properties (getter + setter) to it using defineProperty
@@ -61,12 +59,12 @@ jsi::Object HybridObjectPrototype::createPrototype(jsi::Runtime& runtime, Protot
     jsi::Object property(runtime);
     property.setProperty(runtime, "configurable", false);
     property.setProperty(runtime, "enumerable", true);
-    property.setProperty(runtime, "get", getter.second.toJS(runtime, "get"));
+    property.setProperty(runtime, "get", getter.second.toJSFunction(runtime));
 
     const auto& setter = prototype->setters.find(getter.first);
     if (setter != prototype->setters.end()) {
       // there also is a setter for this property!
-      property.setProperty(runtime, "set", setter->second.toJS(runtime, "set"));
+      property.setProperty(runtime, "set", setter->second.toJSFunction(runtime));
     }
 
     property.setProperty(runtime, "name", jsi::String::createFromUtf8(runtime, getter.first.c_str()));
