@@ -55,7 +55,13 @@ namespace margelo::nitro {
       return obj;
     }
     static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
-      throw std::runtime_error("Don't know if jsi::Value can be dynamically converted to struct \"ImageSize\" yet!");
+      if (!value.isObject()) {
+        return false;
+      }
+      jsi::Object obj = value.getObject(runtime);
+      if (!JSIConverter<double>::canConvert(runtime, obj.getProperty(runtime, "width"))) return false;
+      if (!JSIConverter<double>::canConvert(runtime, obj.getProperty(runtime, "height"))) return false;
+      return true;
     }
   };
 

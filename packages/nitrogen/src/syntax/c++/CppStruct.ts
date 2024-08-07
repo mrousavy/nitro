@@ -33,6 +33,13 @@ export function createCppStruct(
         `obj.setProperty(runtime, "${p.name}", JSIConverter<${p.getCode('c++')}>::toJSI(runtime, arg.${p.escapedName}));`
     )
     .join('\n')
+  // Get C++ code for verifying if jsi::Value can be converted to type
+  const cppCanConvertCalls = properties
+    .map(
+      (p) =>
+        `if (!JSIConverter<${p.getCode('c++')}>::canConvert(runtime, obj.getProperty(runtime, "${p.name}"))) return false;`
+    )
+    .join('\n')
 
   // Get C++ includes for each extra-file we need to include
   const includedTypes = properties.flatMap((r) => r.getRequiredImports())
@@ -90,7 +97,12 @@ namespace margelo::nitro {
       return obj;
     }
     static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
-      throw std::runtime_error("Don't know if jsi::Value can be dynamically converted to struct \\"${typename}\\" yet!");
+      if (!value.isObject()) {
+        return false;
+      }
+      jsi::Object obj = value.getObject(runtime);
+      ${indent(cppCanConvertCalls, '      ')}
+      return true;
     }
   };
 

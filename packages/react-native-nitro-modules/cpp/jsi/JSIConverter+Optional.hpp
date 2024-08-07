@@ -37,7 +37,7 @@ struct JSIConverter<std::optional<TInner>> {
     }
   }
   static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
-    if (JSIConverter<std::monostate>::canConvert(runtime, value)) {
+    if (value.isUndefined() || value.isNull()) {
       return true;
     }
     if (JSIConverter<TInner>::canConvert(runtime, value)) {

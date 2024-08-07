@@ -55,7 +55,13 @@ namespace margelo::nitro {
       return obj;
     }
     static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
-      throw std::runtime_error("Don't know if jsi::Value can be dynamically converted to struct \"Person\" yet!");
+      if (!value.isObject()) {
+        return false;
+      }
+      jsi::Object obj = value.getObject(runtime);
+      if (!JSIConverter<std::string>::canConvert(runtime, obj.getProperty(runtime, "name"))) return false;
+      if (!JSIConverter<double>::canConvert(runtime, obj.getProperty(runtime, "age"))) return false;
+      return true;
     }
   };
 
