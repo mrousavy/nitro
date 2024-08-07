@@ -65,7 +65,16 @@ namespace margelo::nitro {
       }
     }
     static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
-      throw std::runtime_error("Don't know if jsi::Value can be dynamically converted to enum \"Powertrain\" yet!");
+      if (!value.isString()) {
+        return false;
+      }
+      std::string unionValue = JSIConverter<std::string>::fromJSI(runtime, value);
+      switch (hashString(unionValue.c_str(), unionValue.size())) {
+        case hashString("ELECTRIC"): return true;
+        case hashString("GAS"): return true;
+        case hashString("HYBRID"): return true;
+        default: return false;
+      }
     }
   };
 

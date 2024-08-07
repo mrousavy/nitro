@@ -26,6 +26,9 @@ export function createCppUnion(
         `case ${typename}::${v.name}: return JSIConverter<std::string>::toJSI(runtime, "${v.stringValue}");`
     )
     .join('\n')
+  const cppCanConvertCases = enumMembers
+    .map((m) => `case hashString("${m.name}"): return true;`)
+    .join('\n')
   const cxxNamespace = NitroConfig.getCxxNamespace('c++')
 
   const cppCode = `
@@ -72,7 +75,14 @@ namespace margelo::nitro {
       }
     }
     static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
-      throw std::runtime_error("Don't know if jsi::Value can be dynamically converted to enum \\"${typename}\\" yet!");
+      if (!value.isString()) {
+        return false;
+      }
+      std::string unionValue = JSIConverter<std::string>::fromJSI(runtime, value);
+      switch (hashString(unionValue.c_str(), unionValue.size())) {
+        ${indent(cppCanConvertCases, '        ')}
+        default: return false;
+      }
     }
   };
 

@@ -50,4 +50,3 @@ static inline std::string getRuntimeId(jsi::Runtime& runtime) {
 }
 
 } // namespace margelo::nitro
-

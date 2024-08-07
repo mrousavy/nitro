@@ -65,7 +65,16 @@ namespace margelo::nitro {
       }
     }
     static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
-      throw std::runtime_error("Don't know if jsi::Value can be dynamically converted to enum \"PixelFormat\" yet!");
+      if (!value.isString()) {
+        return false;
+      }
+      std::string unionValue = JSIConverter<std::string>::fromJSI(runtime, value);
+      switch (hashString(unionValue.c_str(), unionValue.size())) {
+        case hashString("RGB"): return true;
+        case hashString("YUV_8BIT"): return true;
+        case hashString("YUV_10BIT"): return true;
+        default: return false;
+      }
     }
   };
 
