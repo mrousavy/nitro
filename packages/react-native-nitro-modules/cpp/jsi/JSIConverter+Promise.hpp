@@ -82,7 +82,7 @@ struct JSIConverter<std::future<TResult>> {
       });
     });
   }
-  
+
   static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
     throw std::runtime_error("jsi::Value of type Promise cannot be converted to std::future yet!");
   }

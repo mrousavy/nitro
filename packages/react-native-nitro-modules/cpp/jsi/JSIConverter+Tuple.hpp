@@ -41,7 +41,7 @@ struct JSIConverter<std::tuple<Types...>> {
     copyTupleItemsToArray(runtime, array, tuple, std::index_sequence_for<Types...>{});
     return array;
   }
-  
+
   static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
     if (!value.isObject()) {
       return false;
@@ -55,7 +55,7 @@ struct JSIConverter<std::tuple<Types...>> {
     if (size != sizeof...(Types)) {
       return false;
     }
-    
+
     return canConvertRecursive<Types...>(runtime, array, 0);
   }
 
@@ -72,7 +72,7 @@ private:
                             JSIConverter<std::tuple_element_t<Is, std::tuple<Types...>>>::toJSI(runtime, std::get<Is>(tuple)))),
      ...);
   }
-  
+
   template <typename T>
   static bool canConvertElement(jsi::Runtime& runtime, const jsi::Array& array, size_t index) {
     return JSIConverter<T>::canConvert(runtime, array.getValueAtIndex(runtime, index));

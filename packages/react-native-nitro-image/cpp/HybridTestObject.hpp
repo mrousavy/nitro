@@ -66,11 +66,13 @@ public:
   std::string tryMiddleParam(double num, std::optional<bool> boo, const std::string& str) override;
   std::variant<std::string, double>
   passVariant(const std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>>& either) override;
-  
+
   std::variant<bool, OldEnum> getVariantEnum(const std::variant<bool, OldEnum>& variant) override;
   std::variant<Person, Car> getVariantObjects(const std::variant<Person, Car>& variant) override;
-  std::variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectSpec>, Person> getVariantHybrid(const std::variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectSpec>, Person>& variant) override;
-  std::variant<std::vector<double>, std::tuple<double, std::string, bool>, std::tuple<double, double, double>> getVariantTuple(const std::variant<std::vector<double>, std::tuple<double, std::string, bool>, std::tuple<double, double, double>>& variant) override;
+  std::variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectSpec>, Person>
+  getVariantHybrid(const std::variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectSpec>, Person>& variant) override;
+  std::variant<std::vector<double>, std::tuple<double, std::string, bool>, std::tuple<double, double, double>> getVariantTuple(
+      const std::variant<std::vector<double>, std::tuple<double, std::string, bool>, std::tuple<double, double, double>>& variant) override;
 
   std::tuple<double, double, double> flip(const std::tuple<double, double, double>& tuple) override;
   std::tuple<double, std::string, bool> passTuple(const std::tuple<double, std::string, bool>& tuple) override;

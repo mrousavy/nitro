@@ -71,7 +71,7 @@ struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_v<T, jsi::HostObject>>>
       return jsi::Object::createFromHostObject(runtime, arg);
     }
   }
-  
+
   static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
     if (value.isObject()) {
       jsi::Object object = value.getObject(runtime);
@@ -127,7 +127,7 @@ struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_v<T, jsi::NativeState>>
     object.setNativeState(runtime, arg);
     return object;
   }
-  
+
   static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
     if (value.isObject()) {
       jsi::Object object = value.getObject(runtime);

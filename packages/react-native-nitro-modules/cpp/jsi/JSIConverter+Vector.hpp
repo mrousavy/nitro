@@ -43,7 +43,7 @@ struct JSIConverter<std::vector<ElementType>> {
     }
     return array;
   }
-  
+
   static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
     if (!value.isObject()) {
       return false;

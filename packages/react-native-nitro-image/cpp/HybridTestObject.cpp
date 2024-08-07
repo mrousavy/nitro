@@ -164,11 +164,14 @@ std::variant<Person, Car> HybridTestObject::getVariantObjects(const std::variant
   return variant;
 }
 
-std::variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectSpec>, Person> HybridTestObject::getVariantHybrid(const std::variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectSpec>, Person>& variant) {
+std::variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectSpec>, Person>
+HybridTestObject::getVariantHybrid(const std::variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectSpec>, Person>& variant) {
   return variant;
 }
 
-std::variant<std::vector<double>, std::tuple<double, std::string, bool>, std::tuple<double, double, double>> HybridTestObject::getVariantTuple(const std::variant<std::vector<double>, std::tuple<double, std::string, bool>, std::tuple<double, double, double>>& variant) {
+std::variant<std::vector<double>, std::tuple<double, std::string, bool>, std::tuple<double, double, double>>
+HybridTestObject::getVariantTuple(
+    const std::variant<std::vector<double>, std::tuple<double, std::string, bool>, std::tuple<double, double, double>>& variant) {
   return variant;
 }
 
