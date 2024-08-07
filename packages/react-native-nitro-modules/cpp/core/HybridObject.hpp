@@ -120,7 +120,7 @@ private:
 } // namespace margelo::nitro
 
 
-
+// TODO: Move this to JSIConverter+HybridObject again and fix cyclic includes
 namespace margelo::nitro {
 
 using namespace facebook;
