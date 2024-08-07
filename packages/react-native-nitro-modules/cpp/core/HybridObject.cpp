@@ -77,9 +77,11 @@ bool HybridObject::equals(std::shared_ptr<HybridObject> other) {
 }
 
 void HybridObject::loadHybridMethods() {
-  registerHybridGetter("name", &HybridObject::getName);
-  registerHybridMethod("toString", &HybridObject::toString);
-  registerHybridMethod("equals", &HybridObject::equals);
+  registerHybrids(this, [](Prototype& prototype) {
+    prototype.registerHybridGetter("name", &HybridObject::getName);
+    prototype.registerHybridMethod("toString", &HybridObject::toString);
+    prototype.registerHybridMethod("equals", &HybridObject::equals);
+  });
 }
 
 jsi::Value HybridObject::toObject(jsi::Runtime& runtime) {

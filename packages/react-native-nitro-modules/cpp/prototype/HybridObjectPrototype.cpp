@@ -12,17 +12,7 @@ namespace margelo::nitro {
 
 std::unordered_map<jsi::Runtime*, HybridObjectPrototype::PrototypeCache> HybridObjectPrototype::_prototypeCache;
 
-void HybridObjectPrototype::ensureInitialized() {
-  std::unique_lock lock(_mutex);
-
-  if (!_didLoadMethods) [[unlikely]] {
-    // lazy-load all exposed methods
-    loadHybridMethods();
-    _didLoadMethods = true;
-  }
-}
-
-jsi::Object HybridObjectPrototype::createPrototype(jsi::Runtime& runtime, Prototype* prototype) {
+jsi::Object HybridObjectPrototype::createPrototype(jsi::Runtime& runtime, const std::shared_ptr<Prototype>& prototype) {
   // 0. Check if we're at the highest level of our prototype chain
   if (prototype == nullptr) {
     // There is no prototype - we just have an empty Object base - so `Object.create({})`
@@ -32,37 +22,37 @@ jsi::Object HybridObjectPrototype::createPrototype(jsi::Runtime& runtime, Protot
   // 1. Try looking for the given prototype in cache.
   //    If we find it in cache, we can create instances faster and skip creating the prototype from scratch!
   auto& prototypeCache = _prototypeCache[&runtime];
-  auto cachedPrototype = prototypeCache.find(prototype->instanceTypeId);
+  auto cachedPrototype = prototypeCache.find(prototype->getNativeInstanceId());
   if (cachedPrototype != prototypeCache.end()) {
-    Logger::log(TAG, "Re-using prototype \"%s\" from cache...", prototype->instanceTypeId.name());
+    Logger::log(TAG, "Re-using prototype \"%s\" from cache...", prototype->getNativeInstanceId().name());
     OwningReference<jsi::Object>& cachedObject = cachedPrototype->second;
     return jsi::Value(runtime, *cachedObject).getObject(runtime);
   }
 
   // 2. We didn't find the given prototype in cache (either it's a new prototype, or a new runtime),
   //    so we need to create it. First, we need some helper methods from JS
-  Logger::log(TAG, "Creating new prototype for C++ instance type \"%s\"...", prototype->instanceTypeId.name());
+  Logger::log(TAG, "Creating new prototype for C++ instance type \"%s\"...", prototype->getNativeInstanceId().name());
   jsi::Object objectConstructor = runtime.global().getPropertyAsObject(runtime, "Object");
   jsi::Function objectCreate = objectConstructor.getPropertyAsFunction(runtime, "create");
   jsi::Function objectDefineProperty = objectConstructor.getPropertyAsFunction(runtime, "defineProperty");
 
   // 3. Create an empty JS Object, inheriting from the base prototype (recursively!)
-  jsi::Object object = objectCreate.call(runtime, createPrototype(runtime, prototype->base)).getObject(runtime);
+  jsi::Object object = objectCreate.call(runtime, createPrototype(runtime, prototype->getBase())).getObject(runtime);
 
   // 4. Add all Hybrid Methods to it
-  for (const auto& method : prototype->methods) {
+  for (const auto& method : prototype->getMethods()) {
     object.setProperty(runtime, method.first.c_str(), method.second.toJSFunction(runtime));
   }
 
   // 5. Add all properties (getter + setter) to it using defineProperty
-  for (const auto& getter : prototype->getters) {
+  for (const auto& getter : prototype->getGetters()) {
     jsi::Object property(runtime);
     property.setProperty(runtime, "configurable", false);
     property.setProperty(runtime, "enumerable", true);
     property.setProperty(runtime, "get", getter.second.toJSFunction(runtime));
 
-    const auto& setter = prototype->setters.find(getter.first);
-    if (setter != prototype->setters.end()) {
+    const auto& setter = prototype->getSetters().find(getter.first);
+    if (setter != prototype->getSetters().end()) {
       // there also is a setter for this property!
       property.setProperty(runtime, "set", setter->second.toJSFunction(runtime));
     }
@@ -77,7 +67,7 @@ jsi::Object HybridObjectPrototype::createPrototype(jsi::Runtime& runtime, Protot
   // 6. Throw it into our cache so the next lookup can be cached and therefore faster
   JSICacheReference jsiCache = JSICache::getOrCreateCache(runtime);
   OwningReference<jsi::Object> cachedObject = jsiCache.makeShared(std::move(object));
-  prototypeCache.emplace(prototype->instanceTypeId, cachedObject);
+  prototypeCache.emplace(prototype->getNativeInstanceId(), cachedObject);
 
   // 7. Return it!
   return jsi::Value(runtime, *cachedObject).getObject(runtime);
@@ -86,7 +76,7 @@ jsi::Object HybridObjectPrototype::createPrototype(jsi::Runtime& runtime, Protot
 jsi::Object HybridObjectPrototype::getPrototype(jsi::Runtime& runtime) {
   ensureInitialized();
 
-  return createPrototype(runtime, &_prototypeChain.getPrototype());
+  return createPrototype(runtime, _prototypeChain.getPrototype());
 }
 
 } // namespace margelo::nitro

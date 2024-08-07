@@ -10,6 +10,7 @@
 #include "HybridFunction.hpp"
 #include "OwningReference.hpp"
 #include "PrototypeChain.hpp"
+#include "Prototype.hpp"
 #include <functional>
 #include <jsi/jsi.h>
 #include <memory>
@@ -29,7 +30,6 @@ using namespace facebook;
  */
 class HybridObjectPrototype {
 private:
-  std::mutex _mutex;
   PrototypeChain _prototypeChain;
   bool _didLoadMethods = false;
   static constexpr auto TAG = "HybridObjectPrototype";
@@ -45,7 +45,7 @@ public:
   jsi::Object getPrototype(jsi::Runtime& runtime);
 
 private:
-  static jsi::Object createPrototype(jsi::Runtime& runtime, Prototype* prototype);
+  static jsi::Object createPrototype(jsi::Runtime& runtime, const std::shared_ptr<Prototype>& prototype);
   using PrototypeCache = std::unordered_map<NativeInstanceId, OwningReference<jsi::Object>>;
   static std::unordered_map<jsi::Runtime*, PrototypeCache> _prototypeCache;
 
@@ -61,70 +61,30 @@ private:
   /**
    * Ensures that all Hybrid Methods, Getters and Setters are initialized by calling loadHybridMethods().
    */
-  void ensureInitialized();
+  inline void ensureInitialized() {
+    if (!_didLoadMethods) [[unlikely]] {
+      // lazy-load all exposed methods
+      loadHybridMethods();
+      _didLoadMethods = true;
+    }
+  }
 
 protected:
   /**
-   * Registers the given C++ method as a Hybrid Method that can be called from JS, through the object's Prototype.
-   * Example:
-   * ```cpp
-   * registerHybridMethod("sayHello", &MyObject::sayHello);
-   * ```
+   * Registers the given methods inside the Hybrid Object's prototype.
+   *
+   * For subsequent HybridObjects of the same type, `registerFunc` will not be called again, as the
+   * prototype will already be known and cached.
+   * **Do not conditionally register hybrid methods, getters or setter!**
    */
-  template <typename Derived, typename ReturnType, typename... Args>
-  inline void registerHybridMethod(std::string name, ReturnType (Derived::*method)(Args...)) {
-    Prototype& prototype = _prototypeChain.extendPrototype<Derived>();
-
-    if (prototype.getters.contains(name) || prototype.setters.contains(name)) [[unlikely]] {
-      throw std::runtime_error("Cannot add Hybrid Method \"" + name + "\" - a property with that name already exists!");
+  template<typename Derived>
+  inline void registerHybrids(Derived* thisInstance, std::function<void(Prototype&)>&& registerFunc) {
+    const std::shared_ptr<Prototype>& prototype = _prototypeChain.extendPrototype<Derived>();
+    
+    if (!prototype->hasHybrids()) {
+      // The `Prototype` does not have any methods or properties registered yet - so do it now
+      registerFunc(*prototype);
     }
-    if (prototype.methods.contains(name)) [[unlikely]] {
-      throw std::runtime_error("Cannot add Hybrid Method \"" + name + "\" - a method with that name already exists!");
-    }
-
-    prototype.methods.emplace(name, HybridFunction::createHybridFunction(name, method, FunctionType::METHOD));
-  }
-
-  /**
-   * Registers the given C++ method as a property getter that can be called from JS, through the object's Prototype.
-   * Example:
-   * ```cpp
-   * registerHybridGetter("foo", &MyObject::getFoo);
-   * ```
-   */
-  template <typename Derived, typename ReturnType>
-  inline void registerHybridGetter(std::string name, ReturnType (Derived::*method)()) {
-    Prototype& prototype = _prototypeChain.extendPrototype<Derived>();
-
-    if (prototype.getters.contains(name)) [[unlikely]] {
-      throw std::runtime_error("Cannot add Hybrid Property Getter \"" + name + "\" - a getter with that name already exists!");
-    }
-    if (prototype.methods.contains(name)) [[unlikely]] {
-      throw std::runtime_error("Cannot add Hybrid Property Getter \"" + name + "\" - a method with that name already exists!");
-    }
-
-    prototype.getters.emplace(name, HybridFunction::createHybridFunction(name, method, FunctionType::GETTER));
-  }
-
-  /**
-   * Registers the given C++ method as a property setter that can be called from JS, through the object's Prototype.
-   * Example:
-   * ```cpp
-   * registerHybridSetter("foo", &MyObject::setFoo);
-   * ```
-   */
-  template <typename Derived, typename ValueType>
-  inline void registerHybridSetter(std::string name, void (Derived::*method)(ValueType)) {
-    Prototype& prototype = _prototypeChain.extendPrototype<Derived>();
-
-    if (prototype.setters.contains(name)) [[unlikely]] {
-      throw std::runtime_error("Cannot add Hybrid Property Setter \"" + name + "\" - a setter with that name already exists!");
-    }
-    if (prototype.methods.contains(name)) [[unlikely]] {
-      throw std::runtime_error("Cannot add Hybrid Property Setter \"" + name + "\" - a method with that name already exists!");
-    }
-
-    prototype.setters.emplace(name, HybridFunction::createHybridFunction(name, method, FunctionType::SETTER));
   }
 };
 
