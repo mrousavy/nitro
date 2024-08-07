@@ -153,6 +153,10 @@ jsi::Value HybridObject::toObject(jsi::Runtime& runtime) {
   
   object.setNativeState(runtime, shared_from_this());
   
+#if DEBUG
+  object.setProperty(runtime, "__type", jsi::String::createFromUtf8(runtime, "NativeState<" + std::string(_name) + ">"));
+#endif
+  
   return object;
 }
 
