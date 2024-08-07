@@ -116,6 +116,10 @@ export function createType(type: TSMorphType, isOptional: boolean): Type {
   } else if (type.isBoolean() || type.isBooleanLiteral()) {
     return new BooleanType()
   } else if (type.isNumber() || type.isNumberLiteral()) {
+    if (type.isEnumLiteral()) {
+      // enum literals are technically just numbers - but we treat them differently in C++.
+      return createType(type.getBaseTypeOfLiteralType(), isOptional)
+    }
     return new NumberType()
   } else if (type.isString()) {
     return new StringType()
