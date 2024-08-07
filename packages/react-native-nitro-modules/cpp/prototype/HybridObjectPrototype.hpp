@@ -7,15 +7,12 @@
 
 #pragma once
 
-namespace margelo::nitro {
-class HybridObject;
-class HybridObjectPrototype;
-}
-
 #include "CountTrailingOptionals.hpp"
 #include "JSIConverter.hpp"
 #include "OwningReference.hpp"
 #include "TypeInfo.hpp"
+#include "HybridFunction.hpp"
+#include "PrototypeChain.hpp"
 #include <functional>
 #include <jsi/jsi.h>
 #include <memory>
@@ -23,7 +20,6 @@ class HybridObjectPrototype;
 #include <string>
 #include <mutex>
 #include <vector>
-#include <typeindex>
 
 namespace margelo::nitro {
 
@@ -39,47 +35,13 @@ enum class MethodType { METHOD, GETTER, SETTER };
  */
 class HybridObjectPrototype {
 private:
-  struct HybridFunction {
-    jsi::HostFunctionType function;
-    size_t parameterCount;
-    
-    jsi::Function toJS(jsi::Runtime& runtime, const char* name) const {
-      return jsi::Function::createFromHostFunction(runtime,
-                                                   jsi::PropNameID::forUtf8(runtime, name),
-                                                   parameterCount,
-                                                   function);
-    }
-  };
-  
-  using NativeInstanceId = std::type_index;
-  struct Prototype {
-    Prototype* base = nullptr;
-    NativeInstanceId instanceTypeId;
-    std::unordered_map<std::string, HybridFunction> methods;
-    std::unordered_map<std::string, HybridFunction> getters;
-    std::unordered_map<std::string, HybridFunction> setters;
-    
-    static Prototype* create(const std::type_info& typeId) {
-      return new Prototype {
-        .instanceTypeId = std::type_index(typeId)
-      };
-    }
-    ~Prototype() {
-      delete base;
-    }
-  };
-  
-private:
   std::mutex _mutex;
-  Prototype* _prototype;
+  PrototypeChain _prototypeChain;
   bool _didLoadMethods = false;
   static constexpr auto TAG = "HybridObjectPrototype";
   
 public:
-  HybridObjectPrototype(): _prototype(Prototype::create(typeid(this))) { }
-  ~HybridObjectPrototype() {
-    delete _prototype;
-  }
+  HybridObjectPrototype() { }
   
 public:
   /**
@@ -108,25 +70,6 @@ private:
   void ensureInitialized();
   
 protected:
-  template <typename Derived>
-  inline Prototype& getCppPrototypeChain(Prototype* base) {
-    // If the Prototype represents the caller instance's ID (`Derived`), we work with this Prototype.
-    if (base->instanceTypeId == std::type_index(typeid(Derived))) {
-      return *base;
-    } else {
-      if (base->base != nullptr) {
-        // Otherwise let's try it's child!
-        return getCppPrototypeChain<Derived>(base->base);
-      } else {
-        // Otherwise we need to create a new child prototype in that chain
-        Prototype* newBase = _prototype;
-        _prototype = Prototype::create(typeid(Derived));
-        _prototype->base = newBase;
-        return *_prototype;
-      }
-    }
-  }
-  
   /**
    * Registers the given C++ method as a Hybrid Method that can be called from JS, through the object's Prototype.
    * Example:
@@ -136,7 +79,7 @@ protected:
    */
   template <typename Derived, typename ReturnType, typename... Args>
   inline void registerHybridMethod(std::string name, ReturnType (Derived::*method)(Args...)) {
-    Prototype& prototype = getCppPrototypeChain<Derived>(_prototype);
+    Prototype& prototype = _prototypeChain.getThisPrototype<Derived>();
     
     if (prototype.getters.contains(name) || prototype.setters.contains(name)) [[unlikely]] {
       throw std::runtime_error("Cannot add Hybrid Method \"" + name + "\" - a property with that name already exists!");
@@ -160,7 +103,7 @@ protected:
    */
   template <typename Derived, typename ReturnType>
   inline void registerHybridGetter(std::string name, ReturnType (Derived::*method)()) {
-    Prototype& prototype = getCppPrototypeChain<Derived>(_prototype);
+    Prototype& prototype = _prototypeChain.getThisPrototype<Derived>();
     
     if (prototype.getters.contains(name)) [[unlikely]] {
       throw std::runtime_error("Cannot add Hybrid Property Getter \"" + name + "\" - a getter with that name already exists!");
@@ -184,7 +127,7 @@ protected:
    */
   template <typename Derived, typename ValueType>
   inline void registerHybridSetter(std::string name, void (Derived::*method)(ValueType)) {
-    Prototype& prototype = getCppPrototypeChain<Derived>(_prototype);
+    Prototype& prototype = _prototypeChain.getThisPrototype<Derived>();
     
     if (prototype.setters.contains(name)) [[unlikely]] {
       throw std::runtime_error("Cannot add Hybrid Property Setter \"" + name + "\" - a setter with that name already exists!");

@@ -84,7 +84,7 @@ jsi::Object HybridObjectPrototype::createPrototype(jsi::Runtime& runtime, Protot
 jsi::Object HybridObjectPrototype::getPrototype(jsi::Runtime& runtime) {
   ensureInitialized();
   
-  return createPrototype(runtime, _prototype);
+  return createPrototype(runtime, &_prototypeChain.getPrototype());
 }
 
 }
