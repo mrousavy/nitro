@@ -35,13 +35,15 @@ class JSICacheReference;
  */
 class JSICache final : public jsi::NativeState {
 public:
-  explicit JSICache(jsi::Runtime* runtime) : _runtime(runtime) {}
   ~JSICache();
 
 public:
   JSICache() = delete;
   JSICache(const JSICache&) = delete;
   JSICache(JSICache&&) = delete;
+  
+private:
+  explicit JSICache(jsi::Runtime* runtime) : _runtime(runtime) {}
 
 public:
   /**

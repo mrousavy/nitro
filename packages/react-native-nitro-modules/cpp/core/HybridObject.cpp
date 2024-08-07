@@ -82,37 +82,6 @@ size_t HybridObject::getTotalExternalMemorySize() noexcept {
          (cachedFunctions * CACHED_SIZE) + sizeof(std::mutex) + externalSize;
 }
 
-jsi::Value HybridObject::toObject(jsi::Runtime& runtime) {
-  // 1. Try to find existing jsi::Object from cache
-  auto found = _jsObjects.find(&runtime);
-  if (found != _jsObjects.end()) {
-    // 1.1 We found an object in cache, let's see if it's still alive..
-    BorrowingReference<jsi::Object> weak = found->second;
-    OwningReference<jsi::Object> strong = weak.lock();
-    if (strong) {
-      // 1.2. It is alive (strong) - update memory size and return to JS!
-      size_t memorySize = getTotalExternalMemorySize();
-      strong->setExternalMemoryPressure(runtime, memorySize);
-      // 1.3. It is alive (strong) - copy the JSI Pointer into a new jsi::Value, and return to JS
-      return jsi::Value(runtime, *strong);
-    }
-  }
-
-  // 2. There is either no value in cache, or it's already dead. Create a new one
-  auto cache = JSICache::getOrCreateCache(runtime);
-  // 3. Create a new jsi::Object from this HybridObject/jsi::HostObject
-  std::shared_ptr<HybridObject> shared = shared_from_this();
-  jsi::Object object = jsi::Object::createFromHostObject(runtime, shared);
-  // 4. HybridObjects expose their external memory size, so inform JS GC about it!
-  size_t memorySize = getTotalExternalMemorySize();
-  object.setExternalMemoryPressure(runtime, memorySize);
-  // 5. Make it a global (weak) reference
-  auto global = cache.makeGlobal<jsi::Object>(std::move(object));
-  _jsObjects[&runtime] = global.weak();
-  // 6. Return a jsi::Value copy again to the caller.
-  return jsi::Value(runtime, *global);
-}
-
 std::string HybridObject::toString() {
   return "[HybridObject " + std::string(_name) + "]";
 }
@@ -131,82 +100,38 @@ void HybridObject::loadHybridMethods() {
   registerHybridMethod("equals", &HybridObject::equals, this);
 }
 
-std::vector<jsi::PropNameID> HybridObject::getPropertyNames(facebook::jsi::Runtime& runtime) {
-  std::unique_lock lock(*_mutex);
-  ensureInitialized(runtime);
-
-  std::vector<jsi::PropNameID> result;
-  size_t totalSize = _methods.size() + _getters.size() + _setters.size() + 1;
-  result.reserve(totalSize);
-
-  for (const auto& item : _methods) {
-    result.push_back(jsi::PropNameID::forUtf8(runtime, item.first));
+jsi::Object HybridObject::getPrototype(jsi::Runtime& runtime) {
+  jsi::Object prototype(runtime);
+  for (const auto& method : _methods) {
+    prototype.setProperty(runtime,
+                          method.first.c_str(),
+                          jsi::Function::createFromHostFunction(runtime,
+                                                                jsi::PropNameID::forUtf8(runtime, method.first),
+                                                                method.second.parameterCount,
+                                                                [](jsi::Runtime& runtime,
+                                                                   const jsi::Value& thisValue,
+                                                                   const jsi::Value* args,
+                                                                   size_t size) -> jsi::Value {
+      jsi::Object object = thisValue.asObject(runtime);
+      std::shared_ptr<HybridObject> self = object.getNativeState<HybridObject>(runtime);
+      throw std::runtime_error("We have NativeState, what now?");
+    }));
   }
-  for (const auto& item : _getters) {
-    result.push_back(jsi::PropNameID::forUtf8(runtime, item.first));
-  }
-  for (const auto& item : _setters) {
-    result.push_back(jsi::PropNameID::forUtf8(runtime, item.first));
-  }
-  return result;
+  return prototype;
 }
 
-jsi::Value HybridObject::get(facebook::jsi::Runtime& runtime, const facebook::jsi::PropNameID& propName) {
-  std::unique_lock lock(*_mutex);
-  ensureInitialized(runtime);
-
-  std::string name = propName.utf8(runtime);
-
-  auto& functionCache = _functionCache[&runtime];
-
-  if (functionCache.contains(name)) [[likely]] {
-    // cache hit - let's see if the function is still alive..
-    OwningReference<jsi::Function> function = functionCache[name];
-    if (function) [[likely]] {
-      // function is still alive, we can use it.
-      return jsi::Value(runtime, *function);
-    }
-  }
-
-  if (_getters.contains(name)) {
-    // it's a property getter. call it directly
-    return _getters[name](runtime, jsi::Value::undefined(), nullptr, 0);
-  }
-
-  if (_methods.contains(name)) {
-    // it's a function. we now need to wrap it in a jsi::Function, store it in cache, then return it.
-    HybridFunction& hybridFunction = _methods.at(name);
-    // get (or create) a runtime-specific function cache
-    auto runtimeCache = JSICache::getOrCreateCache(runtime);
-    // create the jsi::Function
-    jsi::Function function = jsi::Function::createFromHostFunction(runtime, jsi::PropNameID::forUtf8(runtime, name),
-                                                                   hybridFunction.parameterCount, hybridFunction.function);
-    // throw it into the cache for next time
-    OwningReference<jsi::Function> globalFunction = runtimeCache.makeGlobal<jsi::Function>(std::move(function));
-    functionCache[name] = globalFunction;
-    // copy the reference & return it to JS
-    return jsi::Value(runtime, *globalFunction);
-  }
-
-  // this property does not exist. Return undefined
-  return jsi::Value::undefined();
-}
-
-void HybridObject::set(facebook::jsi::Runtime& runtime, const facebook::jsi::PropNameID& propName, const facebook::jsi::Value& value) {
-  std::unique_lock lock(*_mutex);
-  ensureInitialized(runtime);
-
-  std::string name = propName.utf8(runtime);
-
-  if (_setters.contains(name)) {
-    // Call setter
-    _setters[name](runtime, jsi::Value::undefined(), &value, 1);
-    return;
-  }
-
-  // this property does not exist, and cannot be set. Throw and error!
-  throw std::runtime_error("Cannot set property \"" + name + "\" - " + std::string(_name) + " does not have a setter for \"" + name +
-                           "\"!");
+jsi::Value HybridObject::toObject(jsi::Runtime& runtime) {
+  jsi::Object prototype = getPrototype(runtime);
+  
+  jsi::Object object(runtime);
+  
+  jsi::Object objectConstructor = runtime.global().getPropertyAsObject(runtime, "Object");
+  jsi::Function setPrototype = objectConstructor.getPropertyAsFunction(runtime, "setPrototypeOf");
+  setPrototype.call(runtime, object, prototype);
+  
+  object.setNativeState(runtime, shared_from_this());
+  
+  return object;
 }
 
 void HybridObject::ensureInitialized(facebook::jsi::Runtime& runtime) {

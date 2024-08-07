@@ -30,7 +30,7 @@ using namespace facebook;
  *
  * The new class can then be passed to JS using the `JSIConverter<HybridObject>`.
  */
-class HybridObject : public jsi::HostObject, public std::enable_shared_from_this<HybridObject> {
+class HybridObject : public jsi::NativeState, public std::enable_shared_from_this<HybridObject> {
 public:
   struct HybridFunction {
     jsi::HostFunctionType function;
@@ -58,9 +58,14 @@ public:
   HybridObject(HybridObject&& move) = delete;
 
 public:
-  void set(jsi::Runtime&, const jsi::PropNameID& name, const jsi::Value& value) override;
-  jsi::Value get(jsi::Runtime& runtime, const jsi::PropNameID& propName) override;
-  std::vector<jsi::PropNameID> getPropertyNames(jsi::Runtime& runtime) override;
+  /**
+   * Get (or create) this HybridObject's prototype.
+   * A HybridObject's prototype (`__proto__`) is cached globally per Runtime,
+   * and contains all hybrid functions that can be accessed from JS.
+   * Assign the `__proto__` to a `jsi::Object` that contains this HybridObject as a NativeState
+   * to support calling methods from JS.
+   */
+  jsi::Object getPrototype(jsi::Runtime& runtime);
 
 public:
   /**
@@ -144,7 +149,6 @@ private:
   std::unordered_map<std::string, jsi::HostFunctionType> _getters;
   std::unordered_map<std::string, jsi::HostFunctionType> _setters;
   std::unordered_map<jsi::Runtime*, std::unordered_map<std::string, OwningReference<jsi::Function>>> _functionCache;
-  std::unordered_map<jsi::Runtime*, BorrowingReference<jsi::Object>> _jsObjects;
 
 private:
   inline void ensureInitialized(jsi::Runtime& runtime);

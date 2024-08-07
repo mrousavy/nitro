@@ -63,7 +63,8 @@ jsi::Object NativeNitroModules::createHybridObject(jsi::Runtime& runtime, const 
   auto name = hybridObjectName.utf8(runtime);
   // TODO: Pass args? Do we need that?
   auto hybridObject = HybridObjectRegistry::createHybridObject(name.c_str());
-  return jsi::Object::createFromHostObject(runtime, hybridObject);
+  // TODO: Either return jsi::Object in toObject directly, or have this method return jsi::Value?
+  return hybridObject->toObject(runtime).asObject(runtime);
 }
 
 } // namespace facebook::react
