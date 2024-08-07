@@ -27,7 +27,7 @@ export function createCppUnion(
     )
     .join('\n')
   const cppCanConvertCases = enumMembers
-    .map((m) => `case hashString("${m.name}"): return true;`)
+    .map((m) => `case hashString("${m.stringValue}"): return true;`)
     .join('\n')
   const cxxNamespace = NitroConfig.getCxxNamespace('c++')
 

@@ -70,9 +70,9 @@ namespace margelo::nitro {
       }
       std::string unionValue = JSIConverter<std::string>::fromJSI(runtime, value);
       switch (hashString(unionValue.c_str(), unionValue.size())) {
-        case hashString("ELECTRIC"): return true;
-        case hashString("GAS"): return true;
-        case hashString("HYBRID"): return true;
+        case hashString("electric"): return true;
+        case hashString("gas"): return true;
+        case hashString("hybrid"): return true;
         default: return false;
       }
     }
