@@ -1,17 +1,17 @@
 import { type HybridObject, type AnyMap } from 'react-native-nitro-modules'
 
-type Float3 = [number, number, number]
-type TestTuple = [number, string, boolean]
+export type Float3 = [number, number, number]
+export type TestTuple = [number, string, boolean]
 
-type Powertrain = 'electric' | 'gas' | 'hybrid'
+export type Powertrain = 'electric' | 'gas' | 'hybrid'
 
-enum OldEnum {
+export enum OldEnum {
   FIRST,
   SECOND,
   THIRD,
 }
 
-interface Car {
+export interface Car {
   year: number
   make: string
   model: string
@@ -20,7 +20,7 @@ interface Car {
   driver?: Person
 }
 
-interface Person {
+export interface Person {
   name: string
   age: number
 }

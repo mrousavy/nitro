@@ -1,6 +1,12 @@
-import { HybridTestObject } from 'react-native-nitro-image'
+import {
+  HybridTestObject,
+  OldEnum,
+  type Car,
+  type Person,
+} from 'react-native-nitro-image'
 import type { State } from './Testers'
 import { it } from './Testers'
+import { stringify } from './utils'
 
 type TestResult =
   | {
@@ -17,33 +23,17 @@ export interface TestRunner {
   run: () => Promise<TestResult>
 }
 
-function stringify(value: unknown): string {
-  if (value == null) {
-    return 'null'
-  }
-
-  switch (typeof value) {
-    case 'string':
-      return value
-    case 'bigint':
-    case 'boolean':
-    case 'number':
-    case 'symbol':
-      return String(value)
-    case 'function':
-      return value.toString()
-    case 'object':
-      if (value instanceof Error) {
-        return `${value.name}: ${value.message}`
-      }
-      if ('toString' in value) {
-        const string = value.toString()
-        if (string !== '[object Object]') return string
-      }
-      return `{ ${value} ${Object.keys(value).join(', ')} }`
-    default:
-      return `${value}`
-  }
+const TEST_PERSON: Person = {
+  age: 24,
+  name: 'Marc',
+}
+const TEST_CAR: Car = {
+  year: 2018,
+  make: 'Lamborghini',
+  model: 'Huracan Performante',
+  power: 640,
+  powertrain: 'gas',
+  driver: undefined, // <-- value needs to be explicitly set, to equal it with native's std::optional<..>
 }
 
 function createTest<T>(
@@ -276,6 +266,97 @@ export function getTests(): TestRunner[] {
           {}
         )
       ).didThrow()
+    ),
+
+    // Complex variants tests
+    createTest('getVariantEnum(...) converts enum', () =>
+      it(() => HybridTestObject.getVariantEnum(OldEnum.THIRD))
+        .didNotThrow()
+        .equals(OldEnum.THIRD)
+    ),
+    createTest('getVariantEnum(...) converts boolean', () =>
+      it(() => HybridTestObject.getVariantEnum(true))
+        .didNotThrow()
+        .equals(true)
+    ),
+    createTest('getVariantEnum(...) throws at wrong type (string)', () =>
+      // @ts-expect-error
+      it(() => HybridTestObject.getVariantEnum('string')).didThrow()
+    ),
+    createTest('getVariantObjects(...) converts Person', () =>
+      it(() => HybridTestObject.getVariantObjects(TEST_PERSON))
+        .didNotThrow()
+        .equals(TEST_PERSON)
+    ),
+    createTest('getVariantObjects(...) converts Car', () =>
+      it(() => HybridTestObject.getVariantObjects(TEST_CAR))
+        .didNotThrow()
+        .equals(TEST_CAR)
+    ),
+    createTest('getVariantObjects(...) converts Car (+ person)', () =>
+      it(() =>
+        HybridTestObject.getVariantObjects({ ...TEST_CAR, driver: TEST_PERSON })
+      )
+        .didNotThrow()
+        .equals({ ...TEST_CAR, driver: TEST_PERSON })
+    ),
+    createTest('getVariantObjects(...) throws at wrong type (string)', () =>
+      // @ts-expect-error
+      it(() => HybridTestObject.getVariantObjects('some-string')).didThrow()
+    ),
+    createTest(
+      'getVariantObjects(...) throws at wrong type (wrong object)',
+      () =>
+        it(() =>
+          // @ts-expect-error
+          HybridTestObject.getVariantObjects({ someValue: 55 })
+        ).didThrow()
+    ),
+    createTest('getVariantHybrid(...) converts Hybrid', () =>
+      it(() => HybridTestObject.getVariantHybrid(HybridTestObject))
+        .didNotThrow()
+        // @ts-expect-error
+        .toContain('getVariantHybrid')
+    ),
+    createTest('getVariantHybrid(...) converts Person', () =>
+      it(() => HybridTestObject.getVariantHybrid(TEST_PERSON))
+        .didNotThrow()
+        .equals(TEST_PERSON)
+    ),
+    createTest('getVariantHybrid(...) throws at wrong type (string)', () =>
+      // @ts-expect-error
+      it(() => HybridTestObject.getVariantHybrid('some-string')).didThrow()
+    ),
+    createTest(
+      'getVariantHybrid(...) throws at wrong type (wrong object)',
+      () =>
+        it(() =>
+          // @ts-expect-error
+          HybridTestObject.getVariantHybrid({ someValue: 55 })
+        ).didThrow()
+    ),
+    createTest('getVariantTuple(...) converts TestTuple', () =>
+      it(() => HybridTestObject.getVariantTuple([532, 'hello', false]))
+        .didNotThrow()
+        .equals([532, 'hello', false])
+    ),
+    createTest('getVariantTuple(...) converts Float3', () =>
+      it(() => HybridTestObject.getVariantTuple([10, 20, 30]))
+        .didNotThrow()
+        .equals([10, 20, 30])
+    ),
+    createTest('getVariantTuple(...) converts number[]', () =>
+      it(() => HybridTestObject.getVariantTuple([10, 20, 30, 40, 50]))
+        .didNotThrow()
+        .equals([10, 20, 30, 40, 50])
+    ),
+    createTest('getVariantTuple(...) throws at wrong type (string)', () =>
+      // @ts-expect-error
+      it(() => HybridTestObject.getVariantTuple('hello')).didThrow()
+    ),
+    createTest('getVariantTuple(...) throws at wrong type (string[])', () =>
+      // @ts-expect-error
+      it(() => HybridTestObject.getVariantTuple(['hello', 'world'])).didThrow()
     ),
 
     // Tuples Tests

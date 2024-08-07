@@ -1,4 +1,5 @@
 import deepEqual from 'deep-equal'
+import { stringify } from './utils'
 
 export type Must = 'equals' | 'throws'
 
@@ -23,7 +24,7 @@ export class State<T> {
   didThrow(): State<T> {
     if (this.errorThrown == null) {
       this.onFailed(
-        `Expected test to throw an error, but no error was thrown! Instead it returned a result: ${this.result}`
+        `Expected test to throw an error, but no error was thrown! Instead it returned a result: ${stringify(this.result)}`
       )
     } else {
       this.onPassed()
@@ -34,7 +35,7 @@ export class State<T> {
   didNotThrow(): State<T> {
     if (this.errorThrown != null) {
       this.onFailed(
-        `Expected test to not throw any errors, but an error was thrown! Error: ${this.errorThrown}`
+        `Expected test to not throw any errors, but an error was thrown! Error: ${stringify(this.errorThrown)}`
       )
     } else {
       this.onPassed()
@@ -45,7 +46,7 @@ export class State<T> {
   equals(other: T): State<T> {
     if (!deepEqual(this.result, other)) {
       this.onFailed(
-        `Expected "${this.result}" (${typeof this.result}) to equal "${other}" (${typeof other}), but they are not equal!`
+        `Expected "${stringify(this.result)}" (${typeof this.result}) to equal "${stringify(other)}" (${typeof other}), but they are not equal!`
       )
     } else {
       this.onPassed()
@@ -56,7 +57,7 @@ export class State<T> {
   didReturn(type: JSType): State<T> {
     if (typeof this.result !== type) {
       this.onFailed(
-        `Expected ${this.result}'s type (${typeof this.result}) to be ${type}!`
+        `Expected ${stringify(this.result)}'s type (${typeof this.result}) to be ${type}!`
       )
     } else {
       this.onPassed()
@@ -67,7 +68,7 @@ export class State<T> {
   toContain(key: keyof T): State<T> {
     if (!Object.keys(this.result as any).includes(key as any)) {
       this.onFailed(
-        `Expected "${this.result}" to contain ${String(key)}, but it didn't! Keys: ${Object.keys(this.result as any)}`
+        `Expected "${stringify(this.result)}" to contain ${String(key)}, but it didn't! Keys: ${Object.keys(this.result as any)}`
       )
     } else {
       this.onPassed()
@@ -78,7 +79,7 @@ export class State<T> {
   toBeArray(): State<T> {
     if (!Array.isArray(this.result)) {
       this.onFailed(
-        `Expected "${this.result}" (${typeof this.result}) to be an array, but it isn't!`
+        `Expected "${stringify(this.result)}" (${typeof this.result}) to be an array, but it isn't!`
       )
     } else {
       this.onPassed()
