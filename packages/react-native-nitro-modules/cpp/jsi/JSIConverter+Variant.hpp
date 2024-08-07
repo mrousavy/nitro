@@ -62,7 +62,9 @@ private:
       return JSIConverter<First>::fromJSI(runtime, value);
     }
     if constexpr (sizeof...(Rest) == 0) {
-      throw std::runtime_error("No values left!");
+      std::string string = value.toString(runtime).utf8(runtime);
+      std::string types = TypeInfo::getFriendlyTypenames<Types...>();
+      throw std::runtime_error("Cannot convert \"" + string + "\" to any type in variant<" + types + ">!");
     } else {
       return fromJSIRecursive<Rest...>(runtime, value);
     }
