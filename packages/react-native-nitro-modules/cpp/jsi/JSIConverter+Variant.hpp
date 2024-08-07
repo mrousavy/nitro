@@ -42,7 +42,10 @@ struct JSIConverter<std::variant<Types...>> {
   }
 
   static inline jsi::Value toJSI(jsi::Runtime& runtime, const std::variant<Types...>& variant) {
-    return std::visit([&runtime](const auto& val) { return JSIConverter<std::decay_t<decltype(val)>>::toJSI(runtime, val); }, variant);
+    return std::visit([&runtime](const auto& val) {
+      // Try to convert each type
+      return JSIConverter<std::decay_t<decltype(val)>>::toJSI(runtime, val);
+    }, variant);
   }
 
 private:
@@ -53,9 +56,9 @@ private:
   
   template <typename First, typename... Rest>
   static inline std::variant<Types...> fromJSIRecursive(jsi::Runtime& runtime, const jsi::Value& value) {
-      if (JSIConverter<First>::canConvert(runtime, value)) {
-          return JSIConverter<First>::fromJSI(runtime, value);
-      }
+    if (JSIConverter<First>::canConvert(runtime, value)) {
+      return JSIConverter<First>::fromJSI(runtime, value);
+    }
     if constexpr (sizeof...(Rest) == 0) {
       throw std::runtime_error("No values left!");
     } else {

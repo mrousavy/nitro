@@ -156,6 +156,22 @@ HybridTestObject::passVariant(const std::variant<std::string, double, bool, std:
   }
 }
 
+std::variant<bool, OldEnum> HybridTestObject::getVariantEnum(const std::variant<bool, OldEnum>& variant) {
+  return variant;
+}
+
+std::variant<Person, Car> HybridTestObject::getVariantObjects(const std::variant<Person, Car>& variant) {
+  return variant;
+}
+
+std::variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectSpec>, Person> HybridTestObject::getVariantHybrid(const std::variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectSpec>, Person>& variant) {
+  return variant;
+}
+
+std::variant<std::vector<double>, std::tuple<double, std::string, bool>, std::tuple<double, double, double>> HybridTestObject::getVariantTuple(const std::variant<std::vector<double>, std::tuple<double, std::string, bool>, std::tuple<double, double, double>>& variant) {
+  return variant;
+}
+
 std::tuple<double, double, double> HybridTestObject::flip(const std::tuple<double, double, double>& tuple) {
   return {std::get<2>(tuple), std::get<1>(tuple), std::get<0>(tuple)};
 }

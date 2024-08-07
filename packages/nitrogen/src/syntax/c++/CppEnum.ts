@@ -16,8 +16,8 @@ export function createCppEnum(
   const cppEnumMembers = enumMembers
     .map((m) => `${m.name} SWIFT_NAME(${m.name.toLowerCase()}) = ${m.value},`)
     .join('\n')
-    const minValue = 0
-    const maxValue = cppEnumMembers.length - 1
+  const minValue = 0
+  const maxValue = cppEnumMembers.length - 1
   const cxxNamespace = NitroConfig.getCxxNamespace('c++')
 
   // Create entire C++ file
@@ -54,7 +54,7 @@ namespace margelo::nitro {
     }
     static inline jsi::Value toJSI(jsi::Runtime& runtime, ${typename} arg) {
       int enumValue = static_cast<int>(arg);
-      return JSIConverter<int>::toJSI(enumValue);
+      return JSIConverter<int>::toJSI(runtime, enumValue);
     }
     static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
       if (!value.isNumber()) {

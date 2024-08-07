@@ -90,7 +90,7 @@ namespace margelo::nitro {
       return obj;
     }
     static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
-      throw std::runtime_error("Don't know if jsi::Value can be dynamically converted to struct \"${typename}\" yet!");
+      throw std::runtime_error("Don't know if jsi::Value can be dynamically converted to struct \\"${typename}\\" yet!");
     }
   };
 

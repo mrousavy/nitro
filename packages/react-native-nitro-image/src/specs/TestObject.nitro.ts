@@ -5,6 +5,12 @@ type TestTuple = [number, string, boolean]
 
 type Powertrain = 'electric' | 'gas' | 'hybrid'
 
+enum OldEnum {
+  FIRST,
+  SECOND,
+  THIRD,
+}
+
 interface Car {
   year: number
   make: string
@@ -50,6 +56,14 @@ export interface TestObject extends HybridObject<{ ios: 'c++' }> {
   passVariant(
     either: number | string | number[] | string[] | boolean
   ): number | string
+
+  // Complex variants
+  getVariantEnum(variant: OldEnum | boolean): OldEnum | boolean
+  getVariantObjects(variant: Person | Car): Person | Car
+  getVariantHybrid(variant: TestObject | Person): TestObject | Person
+  getVariantTuple(
+    variant: TestTuple | Float3 | number[]
+  ): TestTuple | Float3 | number[]
 
   // Tuples
   someTuple: [number, string]
