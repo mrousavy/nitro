@@ -85,19 +85,19 @@ namespace ${cxxNamespace} {
   for (const property of spec.properties) {
     // getter
     registrations.push(
-      `registerHybridGetter("${property.name}", &${name.HybridTSpec}::${property.cppGetterName}, this);`
+      `registerHybridGetter("${property.name}", &${name.HybridTSpec}::${property.cppGetterName});`
     )
     if (!property.isReadonly) {
       // setter
       registrations.push(
-        `registerHybridSetter("${property.name}", &${name.HybridTSpec}::${property.cppSetterName}, this);`
+        `registerHybridSetter("${property.name}", &${name.HybridTSpec}::${property.cppSetterName});`
       )
     }
   }
   for (const method of spec.methods) {
     // method
     registrations.push(
-      `registerHybridMethod("${method.name}", &${name.HybridTSpec}::${method.name}, this);`
+      `registerHybridMethod("${method.name}", &${name.HybridTSpec}::${method.name});`
     )
   }
 

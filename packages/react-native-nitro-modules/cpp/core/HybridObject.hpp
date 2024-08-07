@@ -133,7 +133,7 @@ protected:
    *
    * void User::loadHybridMethods() {
    *   HybridObject::loadHybridMethods();
-   *   registerHybridMethod("getAge", &User::getAge, this);
+   *   registerHybridMethod("getAge", &User::getAge);
    * }
    * ```
    */
@@ -151,7 +151,7 @@ private:
   std::unordered_map<jsi::Runtime*, std::unordered_map<std::string, OwningReference<jsi::Function>>> _functionCache;
 
 private:
-  inline void ensureInitialized(jsi::Runtime& runtime);
+  inline void ensureInitialized();
 
 private:
   template <typename Derived, typename ReturnType, typename... Args, size_t... Is>
@@ -171,17 +171,32 @@ private:
   }
 
   template <typename Derived, typename ReturnType, typename... Args>
-  static inline jsi::HostFunctionType createHybridMethod(std::string name, ReturnType (Derived::*method)(Args...), Derived* derivedInstance,
+  static inline jsi::HostFunctionType createHybridMethod(std::string name, ReturnType (Derived::*method)(Args...),
                                                          MethodType type) {
-    return [name, derivedInstance, method, type](jsi::Runtime& runtime, const jsi::Value& thisVal, const jsi::Value* args,
-                                                 size_t count) -> jsi::Value {
+    return [name, method, type](jsi::Runtime& runtime,
+                                const jsi::Value& thisValue,
+                                const jsi::Value* args,
+                                size_t count) -> jsi::Value {
+      if (!thisValue.isObject()) [[unlikely]] {
+        throw std::runtime_error("Cannot call hybrid function " + name + "(...) - `this` is not bound!");
+      }
+      jsi::Object thisObject = thisValue.getObject(runtime);
+      if (!thisObject.hasNativeState<Derived>()) [[unlikely]] {
+        if (thisObject.hasNativeState(runtime)) {
+          throw std::runtime_error("Cannot call hybrid function " + name + "(...) - `this` has a NativeState, but it's the wrong type!");
+        } else {
+          throw std::runtime_error("Cannot call hybrid function " + name + "(...) - `this` does not have a NativeState!");
+        }
+      }
+      auto hybridInstance = thisObject.getNativeState<Derived>(runtime);
+
       constexpr size_t optionalArgsCount = trailing_optionals_count_v<Args...>;
       constexpr size_t maxArgsCount = sizeof...(Args);
       constexpr size_t minArgsCount = maxArgsCount - optionalArgsCount;
       bool isWithinArgsRange = (count >= minArgsCount && count <= maxArgsCount);
       if (!isWithinArgsRange) [[unlikely]] {
         // invalid amount of arguments passed!
-        std::string hybridObjectName = derivedInstance->_name;
+        std::string hybridObjectName = hybridInstance->_name;
         if constexpr (minArgsCount == maxArgsCount) {
           // min and max args length is the same, so we don't have any optional parameters. fixed count
           throw jsi::JSError(runtime, hybridObjectName + "." + name + "(...) expected " + std::to_string(maxArgsCount) +
@@ -197,19 +212,19 @@ private:
         if constexpr (std::is_same_v<ReturnType, jsi::Value>) {
           // If the return type is a jsi::Value, we assume the user wants full JSI code control.
           // The signature must be identical to jsi::HostFunction (jsi::Runtime&, jsi::Value& this, ...)
-          return (derivedInstance->*method)(runtime, thisVal, args, count);
+          return (hybridInstance->*method)(runtime, thisValue, args, count);
         } else {
           // Call the actual method with JSI values as arguments and return a JSI value again.
           // Internally, this method converts the JSI values to C++ values.
-          return callMethod(derivedInstance, method, runtime, args, count, std::index_sequence_for<Args...>{});
+          return callMethod(hybridInstance.get(), method, runtime, args, count, std::index_sequence_for<Args...>{});
         }
       } catch (const std::exception& exception) {
-        std::string hybridObjectName = derivedInstance->_name;
+        std::string hybridObjectName = hybridInstance->_name;
         std::string message = exception.what();
         std::string suffix = type == MethodType::METHOD ? "(...)" : "";
         throw jsi::JSError(runtime, hybridObjectName + "." + name + suffix + ": " + message);
       } catch (...) {
-        std::string hybridObjectName = derivedInstance->_name;
+        std::string hybridObjectName = hybridInstance->_name;
         std::string errorName = TypeInfo::getCurrentExceptionName();
         std::string suffix = type == MethodType::METHOD ? "(...)" : "";
         throw jsi::JSError(runtime, hybridObjectName + "." + name + suffix + " threw an unknown " + errorName + " error.");
@@ -219,7 +234,7 @@ private:
 
 protected:
   template <typename Derived, typename ReturnType, typename... Args>
-  inline void registerHybridMethod(std::string name, ReturnType (Derived::*method)(Args...), Derived* derivedInstance) {
+  inline void registerHybridMethod(std::string name, ReturnType (Derived::*method)(Args...)) {
     if (_getters.contains(name) || _setters.contains(name)) [[unlikely]] {
       throw std::runtime_error("Cannot add Hybrid Method \"" + name + "\" - a property with that name already exists!");
     }
@@ -227,12 +242,12 @@ protected:
       throw std::runtime_error("Cannot add Hybrid Method \"" + name + "\" - a method with that name already exists!");
     }
 
-    _methods[name] = HybridFunction{.function = createHybridMethod(name, method, derivedInstance, MethodType::METHOD),
+    _methods[name] = HybridFunction{.function = createHybridMethod(name, method, MethodType::METHOD),
                                     .parameterCount = sizeof...(Args)};
   }
 
   template <typename Derived, typename ReturnType>
-  inline void registerHybridGetter(std::string name, ReturnType (Derived::*method)(), Derived* derivedInstance) {
+  inline void registerHybridGetter(std::string name, ReturnType (Derived::*method)()) {
     if (_getters.contains(name)) [[unlikely]] {
       throw std::runtime_error("Cannot add Hybrid Property Getter \"" + name + "\" - a getter with that name already exists!");
     }
@@ -240,11 +255,11 @@ protected:
       throw std::runtime_error("Cannot add Hybrid Property Getter \"" + name + "\" - a method with that name already exists!");
     }
 
-    _getters[name] = createHybridMethod(name, method, derivedInstance, MethodType::GETTER);
+    _getters[name] = createHybridMethod(name, method, MethodType::GETTER);
   }
 
   template <typename Derived, typename ValueType>
-  inline void registerHybridSetter(std::string name, void (Derived::*method)(ValueType), Derived* derivedInstance) {
+  inline void registerHybridSetter(std::string name, void (Derived::*method)(ValueType)) {
     if (_setters.contains(name)) [[unlikely]] {
       throw std::runtime_error("Cannot add Hybrid Property Setter \"" + name + "\" - a setter with that name already exists!");
     }
@@ -252,7 +267,7 @@ protected:
       throw std::runtime_error("Cannot add Hybrid Property Setter \"" + name + "\" - a method with that name already exists!");
     }
 
-    _setters[name] = createHybridMethod(name, method, derivedInstance, MethodType::SETTER);
+    _setters[name] = createHybridMethod(name, method, MethodType::SETTER);
   }
 };
 

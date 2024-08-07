@@ -95,12 +95,15 @@ bool HybridObject::equals(std::shared_ptr<HybridObject> other) {
 }
 
 void HybridObject::loadHybridMethods() {
-  registerHybridGetter("name", &HybridObject::getName, this);
-  registerHybridMethod("toString", &HybridObject::toString, this);
-  registerHybridMethod("equals", &HybridObject::equals, this);
+  registerHybridGetter("name", &HybridObject::getName);
+  registerHybridMethod("toString", &HybridObject::toString);
+  registerHybridMethod("equals", &HybridObject::equals);
 }
 
 jsi::Object HybridObject::getPrototype(jsi::Runtime& runtime) {
+  std::unique_lock lock(*_mutex);
+  ensureInitialized();
+  
   jsi::Object prototype(runtime);
   for (const auto& method : _methods) {
     prototype.setProperty(runtime,
@@ -108,14 +111,34 @@ jsi::Object HybridObject::getPrototype(jsi::Runtime& runtime) {
                           jsi::Function::createFromHostFunction(runtime,
                                                                 jsi::PropNameID::forUtf8(runtime, method.first),
                                                                 method.second.parameterCount,
-                                                                [](jsi::Runtime& runtime,
-                                                                   const jsi::Value& thisValue,
-                                                                   const jsi::Value* args,
-                                                                   size_t size) -> jsi::Value {
-      jsi::Object object = thisValue.asObject(runtime);
-      std::shared_ptr<HybridObject> self = object.getNativeState<HybridObject>(runtime);
-      throw std::runtime_error("We have NativeState, what now?");
-    }));
+                                                                method.second.function));
+  }
+  
+  jsi::Object objectConstructor = runtime.global().getPropertyAsObject(runtime, "Object");
+  jsi::Function defineProperty = objectConstructor.getPropertyAsFunction(runtime, "defineProperty");
+  for (const auto& getter : _getters) {
+    jsi::Object property(runtime);
+    property.setProperty(runtime, "configurable", false);
+    property.setProperty(runtime, "enumerable", true);
+    property.setProperty(runtime, "get", jsi::Function::createFromHostFunction(runtime,
+                                                                               jsi::PropNameID::forUtf8(runtime, "get"),
+                                                                               0,
+                                                                               getter.second));
+    
+    const auto& setter = _setters.find(getter.first);
+    if (setter != _setters.end()) {
+      // there also is a setter for this property!
+      property.setProperty(runtime, "set", jsi::Function::createFromHostFunction(runtime,
+                                                                                 jsi::PropNameID::forUtf8(runtime, "set"),
+                                                                                 1,
+                                                                                 setter->second));
+    }
+    
+    property.setProperty(runtime, "name", jsi::String::createFromUtf8(runtime, getter.first.c_str()));
+    defineProperty.call(runtime,
+                        /* obj */ prototype,
+                        /* propName */ jsi::String::createFromUtf8(runtime, getter.first.c_str()),
+                        /* descriptorObj */ property);
   }
   return prototype;
 }
@@ -134,7 +157,7 @@ jsi::Value HybridObject::toObject(jsi::Runtime& runtime) {
   return object;
 }
 
-void HybridObject::ensureInitialized(facebook::jsi::Runtime& runtime) {
+void HybridObject::ensureInitialized() {
   if (!_didLoadMethods) [[unlikely]] {
     // lazy-load all exposed methods
     loadHybridMethods();

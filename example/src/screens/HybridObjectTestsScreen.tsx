@@ -1,9 +1,20 @@
 import * as React from 'react'
 
 import { StyleSheet, View, Text, ScrollView, Button } from 'react-native'
-import { ImageConstructors } from 'react-native-nitro-image'
+import { HybridTestObject, ImageConstructors } from 'react-native-nitro-image'
 import { getTests, type TestRunner } from '../getTests'
 import { SafeAreaView } from 'react-native-safe-area-context'
+
+console.log('----BEGIN')
+console.log('Has hybrid:', HybridTestObject != null)
+console.log('hybrid values:', Object.keys(HybridTestObject))
+console.log('hybrid stringify:', HybridTestObject)
+console.log(
+  'hybrid prototype keys:',
+  Object.keys(Object.getPrototypeOf(HybridTestObject))
+)
+console.log('hybrid prototype:', Object.getPrototypeOf(HybridTestObject))
+console.log('----END')
 
 const allTests = getTests()
 
@@ -106,22 +117,22 @@ export function HybridObjectTestsScreen() {
     tests.forEach((t) => runTest(t))
   }, [runTest, tests])
 
-  const image = React.useMemo(() => {
-    console.log('Loading image...')
-    const i = ImageConstructors.loadImageFromSystemName('heart.fill')
-    ImageConstructors.bounceBack(i)
-    ImageConstructors.bounceBack(i)
-    ImageConstructors.bounceBack(i)
-    console.log('Image loaded!')
-    console.log(`Image is ${i.size.width}x${i.size.height}`)
-    return i
-  }, [])
+  // const image = React.useMemo(() => {
+  //   console.log('Loading image...')
+  //   const i = ImageConstructors.loadImageFromSystemName('heart.fill')
+  //   ImageConstructors.bounceBack(i)
+  //   ImageConstructors.bounceBack(i)
+  //   ImageConstructors.bounceBack(i)
+  //   console.log('Image loaded!')
+  //   console.log(`Image is ${i.size.width}x${i.size.height}`)
+  //   return i
+  // }, [])
 
-  React.useEffect(() => {
-    image.saveToFile('some path', (path) => {
-      console.log('saved to ' + path + '!')
-    })
-  }, [image])
+  // React.useEffect(() => {
+  //   image.saveToFile('some path', (path) => {
+  //     console.log('saved to ' + path + '!')
+  //   })
+  // }, [image])
 
   return (
     <SafeAreaView style={styles.container}>

@@ -73,9 +73,9 @@ public:
 public:
   void loadHybridMethods() override {
     // Register all methods that need to be exposed to JS
-    registerHybridGetter("number", &MyHybridObject::getNumber, this);
-    registerHybridSetter("number", &MyHybridObject::setNumber, this);
-    registerHybridMethod("add", &MyHybridObject::add, this);
+    registerHybridGetter("number", &MyHybridObject::getNumber);
+    registerHybridSetter("number", &MyHybridObject::setNumber);
+    registerHybridMethod("add", &MyHybridObject::add);
   }
 
 private:

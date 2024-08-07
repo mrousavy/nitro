@@ -26,8 +26,8 @@ protected:
    */
   PointerHolder(const char* name, std::shared_ptr<T> pointer) : HybridObject(name), _name(name), _pointer(pointer) {
     // eagerly initialize the release() method instead of putting it in `loadHybridMethods`
-    registerHybridMethod("release", &PointerHolder<T>::release, this);
-    registerHybridGetter("isValid", &PointerHolder<T>::getIsValid, this);
+    registerHybridMethod("release", &PointerHolder<T>::release);
+    registerHybridGetter("isValid", &PointerHolder<T>::getIsValid);
   }
 
   /**

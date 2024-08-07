@@ -14,12 +14,12 @@ namespace margelo::nitro::image {
     // load base methods/properties
     HybridObject::loadHybridMethods();
     // load custom methods/properties
-    registerHybridGetter("size", &HybridImageSpec::getSize, this);
-    registerHybridGetter("pixelFormat", &HybridImageSpec::getPixelFormat, this);
-    registerHybridGetter("someSettableProp", &HybridImageSpec::getSomeSettableProp, this);
-    registerHybridSetter("someSettableProp", &HybridImageSpec::setSomeSettableProp, this);
-    registerHybridMethod("toArrayBuffer", &HybridImageSpec::toArrayBuffer, this);
-    registerHybridMethod("saveToFile", &HybridImageSpec::saveToFile, this);
+    registerHybridGetter("size", &HybridImageSpec::getSize);
+    registerHybridGetter("pixelFormat", &HybridImageSpec::getPixelFormat);
+    registerHybridGetter("someSettableProp", &HybridImageSpec::getSomeSettableProp);
+    registerHybridSetter("someSettableProp", &HybridImageSpec::setSomeSettableProp);
+    registerHybridMethod("toArrayBuffer", &HybridImageSpec::toArrayBuffer);
+    registerHybridMethod("saveToFile", &HybridImageSpec::saveToFile);
   }
 
 } // namespace margelo::nitro::image
