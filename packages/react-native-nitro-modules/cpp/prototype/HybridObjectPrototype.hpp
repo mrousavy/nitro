@@ -79,7 +79,7 @@ protected:
    */
   template <typename Derived, typename ReturnType, typename... Args>
   inline void registerHybridMethod(std::string name, ReturnType (Derived::*method)(Args...)) {
-    Prototype& prototype = _prototypeChain.getThisPrototype<Derived>();
+    Prototype& prototype = _prototypeChain.extendPrototype<Derived>();
     
     if (prototype.getters.contains(name) || prototype.setters.contains(name)) [[unlikely]] {
       throw std::runtime_error("Cannot add Hybrid Method \"" + name + "\" - a property with that name already exists!");
@@ -103,7 +103,7 @@ protected:
    */
   template <typename Derived, typename ReturnType>
   inline void registerHybridGetter(std::string name, ReturnType (Derived::*method)()) {
-    Prototype& prototype = _prototypeChain.getThisPrototype<Derived>();
+    Prototype& prototype = _prototypeChain.extendPrototype<Derived>();
     
     if (prototype.getters.contains(name)) [[unlikely]] {
       throw std::runtime_error("Cannot add Hybrid Property Getter \"" + name + "\" - a getter with that name already exists!");
@@ -127,7 +127,7 @@ protected:
    */
   template <typename Derived, typename ValueType>
   inline void registerHybridSetter(std::string name, void (Derived::*method)(ValueType)) {
-    Prototype& prototype = _prototypeChain.getThisPrototype<Derived>();
+    Prototype& prototype = _prototypeChain.extendPrototype<Derived>();
     
     if (prototype.setters.contains(name)) [[unlikely]] {
       throw std::runtime_error("Cannot add Hybrid Property Setter \"" + name + "\" - a setter with that name already exists!");
