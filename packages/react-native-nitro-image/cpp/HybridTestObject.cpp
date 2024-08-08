@@ -95,7 +95,7 @@ void HybridTestObject::setSomeTuple(const std::tuple<double, std::string>& tuple
 }
 
 std::shared_ptr<HybridTestObjectSpec> HybridTestObject::getSelf() {
-  return std::static_pointer_cast<HybridTestObjectSpec>(shared_from_this());
+  return shared<HybridTestObjectSpec>();
 }
 
 // Methods

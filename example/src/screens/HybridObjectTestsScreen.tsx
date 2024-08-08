@@ -1,9 +1,15 @@
 import * as React from 'react'
 
 import { StyleSheet, View, Text, ScrollView, Button } from 'react-native'
-import { ImageConstructors } from 'react-native-nitro-image'
+import { HybridTestObject, ImageConstructors } from 'react-native-nitro-image'
 import { getTests, type TestRunner } from '../getTests'
 import { SafeAreaView } from 'react-native-safe-area-context'
+
+let obj = HybridTestObject
+while (obj != null) {
+  console.log('type:', obj.__type)
+  obj = Object.getPrototypeOf(obj)
+}
 
 const allTests = getTests()
 

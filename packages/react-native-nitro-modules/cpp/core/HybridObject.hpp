@@ -55,6 +55,16 @@ public:
 
 public:
   /**
+   * Get the `std::shared_ptr` instance of this HybridObject.
+   * The HybridObject must be managed inside a `shared_ptr` already, otherwise this will fail.
+   */
+  template <typename Derived>
+  std::shared_ptr<Derived> shared() {
+    return std::static_pointer_cast<Derived>(shared_from_this());
+  }
+
+public:
+  /**
    * Get the HybridObject's name
    */
   std::string getName();
