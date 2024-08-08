@@ -24,6 +24,17 @@ export interface PlatformSpec {
  */
 export interface HybridObject<Spec extends PlatformSpec> {
   /**
+   * Holds a type-name describing the native `HybridObject` instance.
+   *
+   * This is the only property actually present on the actual JavaScript object,
+   * because all other properties and methods are inherited from a shared Prototype.
+   *
+   * @internal
+   * @private
+   * @note This value is available in debug only.
+   */
+  readonly __type?: string
+  /**
    * The `HybridObject`'s name.
    */
   readonly name: string
