@@ -10,8 +10,6 @@
 #include <memory>
 #include <type_traits>
 
-#define DO_NULL_CHECKS true
-
 namespace margelo::nitro {
 
 using namespace facebook;
