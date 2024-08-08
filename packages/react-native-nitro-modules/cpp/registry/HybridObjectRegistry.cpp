@@ -15,9 +15,10 @@ std::unordered_map<std::string, HybridObjectRegistry::HybridObjectConstructorFn>
   return _constructorsMap;
 }
 
-void HybridObjectRegistry::registerHybridObjectConstructor(std::string hybridObjectName, HybridObjectConstructorFn&& constructorFn) {
+void HybridObjectRegistry::registerHybridObjectConstructor(const std::string& hybridObjectName, HybridObjectConstructorFn&& constructorFn) {
   Logger::log(TAG, "Registering HybridObject \"%s\"...", hybridObjectName);
   auto& map = HybridObjectRegistry::getRegistry();
+#if DEBUG
   if (map.contains(hybridObjectName)) [[unlikely]] {
     auto message =
         "HybridObject \"" + std::string(hybridObjectName) +
@@ -27,11 +28,12 @@ void HybridObjectRegistry::registerHybridObjectConstructor(std::string hybridObj
         "- If you just registered your own HybridObject, maybe you accidentally called `registerHybridObjectConstructor(...)` twice?";
     throw std::runtime_error(message);
   }
+#endif
   map.insert({hybridObjectName, std::move(constructorFn)});
   Logger::log(TAG, "Successfully registered HybridObject \"%s\"!", hybridObjectName);
 }
 
-std::shared_ptr<HybridObject> HybridObjectRegistry::createHybridObject(std::string hybridObjectName) {
+std::shared_ptr<HybridObject> HybridObjectRegistry::createHybridObject(const std::string& hybridObjectName) {
   auto& map = HybridObjectRegistry::getRegistry();
   auto fn = map.find(hybridObjectName);
   if (fn == map.end()) [[unlikely]] {
@@ -43,6 +45,11 @@ std::shared_ptr<HybridObject> HybridObjectRegistry::createHybridObject(std::stri
   std::shared_ptr<HybridObject> instance = fn->second();
 
 #if DEBUG
+  if (instance == nullptr) [[unlikely]] {
+    throw std::runtime_error("Failed to create HybridObject \"" + hybridObjectName +
+                             "\" - "
+                             "The constructor returned a nullptr!");
+  }
   if (instance->getName() != hybridObjectName) [[unlikely]] {
     throw std::runtime_error("HybridObject's name (\"" + instance->getName() +
                              "\") does not match"

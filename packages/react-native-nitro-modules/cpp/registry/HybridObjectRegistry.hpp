@@ -30,9 +30,9 @@ public:
    * It will be uniquely identified via it's `hybridObjectName`, and can be initialized from
    * JS using `NitroModules.get<T>(name)` - which will call the `constructorFn` here.
    */
-  static void registerHybridObjectConstructor(std::string hybridObjectName, HybridObjectConstructorFn&& constructorFn);
+  static void registerHybridObjectConstructor(const std::string& hybridObjectName, HybridObjectConstructorFn&& constructorFn);
 
-  static std::shared_ptr<HybridObject> createHybridObject(std::string hybridObjectName);
+  static std::shared_ptr<HybridObject> createHybridObject(const std::string& hybridObjectName);
 
 private:
   static std::unordered_map<std::string, HybridObjectConstructorFn>& getRegistry();
