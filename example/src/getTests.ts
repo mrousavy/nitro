@@ -64,6 +64,21 @@ function createTest<T>(
 
 export function getTests(): TestRunner[] {
   return [
+    // Basic prototype tests
+    createTest('HybridObject.prototype is valid', () =>
+      it(() => Object.getPrototypeOf(HybridTestObject))
+        .didNotThrow()
+        .didReturn('object')
+        .toContain('simpleFunc')
+    ),
+    createTest('HybridObject.prototype.prototype is valid', () =>
+      it(() => Object.getPrototypeOf(Object.getPrototypeOf(HybridTestObject)))
+        .didNotThrow()
+        .didReturn('object')
+        .toContain('toString')
+        .toContain('equals')
+    ),
+
     // Test Primitives (getters & setters)
     createTest('set numberValue to 13', () =>
       it(() => (HybridTestObject.numberValue = 13)).didNotThrow()

@@ -10,7 +10,10 @@ export interface PlatformSpec {
  * Represents a Nitro `HybridObject` which is implemented natively in either C++,
  * or Swift/Kotlin.
  *
- * Uses the Nitro Tunnel for efficient, low-overhead JS <-> Native communication.
+ * `HybridObject`s use the Nitro Tunnel for efficient, low-overhead JS <-> Native communication.
+ *
+ * All `HybridObject`s are implemented using `NativeState`, and inherit their properties
+ * and methods from their prototype, so the actual JS object is empty.
  *
  * @example
  * ```ts
@@ -23,6 +26,22 @@ export interface PlatformSpec {
  * ```
  */
 export interface HybridObject<Spec extends PlatformSpec> {
+  /**
+   * Holds a type-name describing the native `HybridObject` instance.
+   *
+   * This is the only property actually present on the actual JavaScript object,
+   * because all other properties and methods are inherited from a shared Prototype.
+   *
+   * Nitro prototypes also have a `__type`.
+   *
+   * For actual HybridObject instances, this is `NativeState<...>`, for
+   * prototypes this is `Prototype<...>`.
+   *
+   * @internal
+   * @private
+   * @note This value is available in debug only.
+   */
+  readonly __type?: string
   /**
    * The `HybridObject`'s name.
    */

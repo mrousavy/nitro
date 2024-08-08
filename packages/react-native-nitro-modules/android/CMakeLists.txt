@@ -25,6 +25,7 @@ include_directories(
   ../cpp/jsi
   ../cpp/platform
   ../cpp/registry
+  ../cpp/prototype
   ../cpp/test-object
   ../cpp/templates
   ../cpp/threading

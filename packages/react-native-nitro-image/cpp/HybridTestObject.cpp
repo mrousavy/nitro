@@ -95,7 +95,7 @@ void HybridTestObject::setSomeTuple(const std::tuple<double, std::string>& tuple
 }
 
 std::shared_ptr<HybridTestObjectSpec> HybridTestObject::getSelf() {
-  return shared<HybridTestObject>();
+  return shared<HybridTestObjectSpec>();
 }
 
 // Methods
@@ -170,8 +170,7 @@ HybridTestObject::getVariantHybrid(const std::variant<std::shared_ptr<margelo::n
 }
 
 std::variant<std::tuple<double, double>, std::tuple<double, double, double>>
-HybridTestObject::getVariantTuple(
-    const std::variant<std::tuple<double, double>, std::tuple<double, double, double>>& variant) {
+HybridTestObject::getVariantTuple(const std::variant<std::tuple<double, double>, std::tuple<double, double, double>>& variant) {
   return variant;
 }
 

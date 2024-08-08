@@ -32,12 +32,13 @@ struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_v<T, jsi::MutableBuffer
   static inline std::shared_ptr<ArrayBuffer> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
     jsi::Object object = arg.asObject(runtime);
     if (!object.isArrayBuffer(runtime)) [[unlikely]] {
-      throw std::runtime_error("Object \"" + arg.toString(runtime).utf8(runtime) + "\" is not an ArrayBuffer! "
+      throw std::runtime_error("Object \"" + arg.toString(runtime).utf8(runtime) +
+                               "\" is not an ArrayBuffer! "
                                "Are you maybe passing a TypedArray (e.g. Uint8Array)? Try to pass it's `.buffer` value.");
     }
 
     JSICacheReference cache = JSICache::getOrCreateCache(runtime);
-    auto owningArrayBuffer = cache.makeGlobal<jsi::ArrayBuffer>(object.getArrayBuffer(runtime));
+    auto owningArrayBuffer = cache.makeShared<jsi::ArrayBuffer>(object.getArrayBuffer(runtime));
 
     return std::make_shared<JSArrayBuffer>(&runtime, owningArrayBuffer);
   }

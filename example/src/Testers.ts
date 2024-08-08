@@ -66,12 +66,16 @@ export class State<T> {
   }
 
   toContain(key: keyof T): State<T> {
-    if (!Object.keys(this.result as any).includes(key as any)) {
-      this.onFailed(
-        `Expected "${stringify(this.result)}" to contain ${String(key)}, but it didn't! Keys: ${Object.keys(this.result as any)}`
-      )
-    } else {
+    if (
+      this.result != null &&
+      (this.result[key] != null ||
+        Object.keys(this.result).includes(key as string))
+    ) {
       this.onPassed()
+    } else {
+      this.onFailed(
+        `Expected "${stringify(this.result)}" (${typeof this.result}) to contain ${String(key)}, but it didn't! Keys: ${Object.keys(this.result as any)}`
+      )
     }
     return this
   }

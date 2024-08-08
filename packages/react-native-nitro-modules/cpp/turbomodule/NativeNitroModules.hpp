@@ -23,7 +23,7 @@ public:
   jsi::Value get(jsi::Runtime& runtime, const jsi::PropNameID& propName) override;
 
   void install(jsi::Runtime& runtime);
-  jsi::Object createHybridObject(jsi::Runtime& runtime, const jsi::String& hybridObjectName, const std::optional<jsi::Object>& args);
+  jsi::Value createHybridObject(jsi::Runtime& runtime, const jsi::String& hybridObjectName, const std::optional<jsi::Object>& args);
 
 public:
   constexpr static auto kModuleName = "NitroModulesCxx";

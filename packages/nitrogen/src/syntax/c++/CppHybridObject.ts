@@ -85,19 +85,19 @@ namespace ${cxxNamespace} {
   for (const property of spec.properties) {
     // getter
     registrations.push(
-      `registerHybridGetter("${property.name}", &${name.HybridTSpec}::${property.cppGetterName}, this);`
+      `prototype.registerHybridGetter("${property.name}", &${name.HybridTSpec}::${property.cppGetterName});`
     )
     if (!property.isReadonly) {
       // setter
       registrations.push(
-        `registerHybridSetter("${property.name}", &${name.HybridTSpec}::${property.cppSetterName}, this);`
+        `prototype.registerHybridSetter("${property.name}", &${name.HybridTSpec}::${property.cppSetterName});`
       )
     }
   }
   for (const method of spec.methods) {
     // method
     registrations.push(
-      `registerHybridMethod("${method.name}", &${name.HybridTSpec}::${method.name}, this);`
+      `prototype.registerHybridMethod("${method.name}", &${name.HybridTSpec}::${method.name});`
     )
   }
 
@@ -112,7 +112,9 @@ namespace ${cxxNamespace} {
     // load base methods/properties
     HybridObject::loadHybridMethods();
     // load custom methods/properties
-    ${indent(registrations.join('\n'), '    ')}
+    registerHybrids(this, [](Prototype& prototype) {
+      ${indent(registrations.join('\n'), '      ')}
+    });
   }
 
 } // namespace ${cxxNamespace}

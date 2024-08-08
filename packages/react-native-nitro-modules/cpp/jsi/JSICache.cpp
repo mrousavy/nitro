@@ -8,6 +8,8 @@
 #include "JSICache.hpp"
 #include "JSIHelpers.hpp"
 
+#define DOUBLE_CHECK_GLOBAL_CACHE 1
+
 namespace margelo::nitro {
 
 static constexpr auto CACHE_PROP_NAME = "__nitroModulesJSICache";
@@ -27,7 +29,7 @@ JSICache::~JSICache() {
 
 JSICacheReference JSICache::getOrCreateCache(jsi::Runtime& runtime) {
   auto found = _globalCache.find(&runtime);
-  if (found != _globalCache.end()) {
+  if (found != _globalCache.end()) [[likely]] {
     // Fast path: get weak_ptr to JSICache from our global list.
     std::weak_ptr<JSICache> weak = found->second;
     std::shared_ptr<JSICache> strong = weak.lock();
@@ -38,10 +40,16 @@ JSICacheReference JSICache::getOrCreateCache(jsi::Runtime& runtime) {
     Logger::log(TAG, "JSICache was created, but it is no longer strong!");
   }
 
+#if DOUBLE_CHECK_GLOBAL_CACHE
+  if (runtime.global().hasProperty(runtime, CACHE_PROP_NAME)) [[unlikely]] {
+    throw std::runtime_error("The Runtime \"" + getRuntimeId(runtime) + "\" already has a global cache! (\"" + CACHE_PROP_NAME + "\")");
+  }
+#endif
+
   // Cache doesn't exist yet.
   Logger::log(TAG, "Creating new JSICache<T> for runtime %s..", getRuntimeId(runtime));
   // Create new cache
-  auto nativeState = std::make_shared<JSICache>(&runtime);
+  auto nativeState = std::shared_ptr<JSICache>(new JSICache(&runtime));
   // Wrap it in a jsi::Value using NativeState
   jsi::Object cache(runtime);
   cache.setNativeState(runtime, nativeState);
