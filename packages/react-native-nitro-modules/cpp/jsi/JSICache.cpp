@@ -14,17 +14,25 @@ namespace margelo::nitro {
 
 static constexpr auto CACHE_PROP_NAME = "__nitroModulesJSICache";
 
-JSICache::~JSICache() {
-  Logger::log(TAG, "Destroying JSICache...");
-  std::unique_lock lock(_mutex);
-
-  for (auto& func : _cache) {
-    OwningReference<jsi::Object> owning = func.lock();
+template <typename T>
+inline void destroyReferences(const std::vector<BorrowingReference<T>>& references) {
+  for (auto& func : references) {
+    OwningReference<T> owning = func.lock();
     if (owning) {
       // Destroy all functions that we might still have in cache, some callbacks and Promises may now become invalid.
       owning.destroy();
     }
   }
+}
+
+JSICache::~JSICache() {
+  Logger::log(TAG, "Destroying JSICache...");
+  std::unique_lock lock(_mutex);
+
+  destroyReferences(_objectCache);
+  destroyReferences(_functionCache);
+  destroyReferences(_weakObjectCache);
+  destroyReferences(_arrayBufferCache);
 }
 
 JSICacheReference JSICache::getOrCreateCache(jsi::Runtime& runtime) {
