@@ -154,6 +154,10 @@ The following C++ / JS types are supported out of the box:
     <td><code>std::future&lt;T&gt;</code></td>
   </tr>
   <tr>
+    <td><code>(TArgs...) =&gt; void</code></td>
+    <td><code>std::function&lt;void (TArgs...)&gt;</code></td>
+  </tr>
+  <tr>
     <td><code>(TArgs...) =&gt; TReturn</code></td>
     <td><code>std::function&lt;std::future&lt;TReturn&gt; (TArgs...)&gt;</code></td>
   </tr>
