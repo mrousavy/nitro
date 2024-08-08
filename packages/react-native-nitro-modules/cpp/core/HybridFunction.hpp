@@ -77,14 +77,14 @@ public:
                                                               /* argument size */ size_t count) -> jsi::Value {
       // 1. Get actual `HybridObject` instance from `thisValue` (it's stored as `NativeState`)
       if (!thisValue.isObject()) [[unlikely]] {
-        throw std::runtime_error("Cannot call hybrid function " + name + "(...) - `this` is not bound!");
+        throw jsi::JSError(runtime, "Cannot call hybrid function " + name + "(...) - `this` is not bound!");
       }
       jsi::Object thisObject = thisValue.getObject(runtime);
       if (!thisObject.hasNativeState<Derived>(runtime)) [[unlikely]] {
         if (thisObject.hasNativeState(runtime)) {
-          throw std::runtime_error("Cannot call hybrid function " + name + "(...) - `this` has a NativeState, but it's the wrong type!");
+          throw jsi::JSError(runtime, "Cannot call hybrid function " + name + "(...) - `this` has a NativeState, but it's the wrong type!");
         } else {
-          throw std::runtime_error("Cannot call hybrid function " + name + "(...) - `this` does not have a NativeState!");
+          throw jsi::JSError(runtime, "Cannot call hybrid function " + name + "(...) - `this` does not have a NativeState!");
         }
       }
       std::shared_ptr<Derived> hybridInstance = thisObject.getNativeState<Derived>(runtime);

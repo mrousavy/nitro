@@ -74,7 +74,7 @@ export class State<T> {
       this.onPassed()
     } else {
       this.onFailed(
-        `Expected "${stringify(this.result)}" to contain ${String(key)}, but it didn't! Keys: ${Object.keys(this.result as any)}`
+        `Expected "${stringify(this.result)}" (${typeof this.result}) to contain ${String(key)}, but it didn't! Keys: ${Object.keys(this.result as any)}`
       )
     }
     return this
