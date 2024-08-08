@@ -178,7 +178,7 @@ The following C++ / JS types are supported out of the box:
 
 Since the `JSIConverter<T>` is just a template, you can extend it with any other custom types by overloading the interface.
 
-For example, to add support for an enum, overload `JSIConverter<YourEnum>`:
+For example, to add support for an enum, overload `JSIConverter<MyEnum>`:
 
 ```cpp
 #include <NitroModules/JSIConverter.hpp>
@@ -203,7 +203,9 @@ namespace margelo::nitro {
 }
 ```
 
-..and on the JS side, you can implicitly cast the `number` to an enum as well:
+Once the `JSIConverter<T>` for `MyEnum` is defined, you can use the type `MyEnum` in C++ methods, getters and setters of `HybridObject`s.
+
+And on the JS side, you can simply treat the returned `number` (int) as a `MyEnum`:
 
 ```js
 enum MyEnum {
