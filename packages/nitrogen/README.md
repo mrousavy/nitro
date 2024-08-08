@@ -48,7 +48,7 @@ Every nitro module must have a `nitro.json` file at it's root level (i.e. the fo
 
 ### 3. Create a TypeScript spec
 
-The TypeScript spec is the single source of truth. It's interfaces, enums or other type declarations will be converted to C++ (or Swift/Kotlin) types using a code generator. Nitrogen will run on all `*.nitro.ts` files relatively to your `nitro.json` config.
+The TypeScript spec is the single source of truth. It's interfaces, enums or other type declarations will be converted to C++ (or Swift/Kotlin) types using a code generator. Nitrogen will run on all `*.nitro.ts` files relative to your `nitro.json` config.
 
 ```ts
 // Image.nitro.ts
