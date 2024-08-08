@@ -58,13 +58,12 @@ void NativeNitroModules::install(jsi::Runtime& runtime) {
   Dispatcher::installRuntimeGlobalDispatcher(runtime, dispatcher);
 }
 
-jsi::Object NativeNitroModules::createHybridObject(jsi::Runtime& runtime, const jsi::String& hybridObjectName,
-                                                   const std::optional<jsi::Object>& args) {
+jsi::Value NativeNitroModules::createHybridObject(jsi::Runtime& runtime, const jsi::String& hybridObjectName,
+                                                  const std::optional<jsi::Object>& args) {
   auto name = hybridObjectName.utf8(runtime);
   // TODO: Pass args? Do we need that?
   auto hybridObject = HybridObjectRegistry::createHybridObject(name.c_str());
-  // TODO: Either return jsi::Object in toObject directly, or have this method return jsi::Value?
-  return hybridObject->toObject(runtime).asObject(runtime);
+  return hybridObject->toObject(runtime);
 }
 
 } // namespace facebook::react

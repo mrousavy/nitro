@@ -67,7 +67,7 @@ jsi::Value HybridObjectPrototype::createPrototype(jsi::Runtime& runtime, const s
   JSICacheReference jsiCache = JSICache::getOrCreateCache(runtime);
   OwningReference<jsi::Object> cachedObject = jsiCache.makeShared(std::move(object));
   prototypeCache.emplace(prototype->getNativeInstanceId(), cachedObject);
-  
+
   // 7. In DEBUG, add a __type info to the prototype object.
 #if DEBUG
   auto typeName = "Prototype<" + std::string(prototype->getNativeInstanceId().name()) + ">";
