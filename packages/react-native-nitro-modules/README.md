@@ -72,10 +72,14 @@ public:
 
 public:
   void loadHybridMethods() override {
+    // Call base method to make sure we properly inherit `toString()` and `equals()`
+    HybridObject::loadHybridMethods();
     // Register all methods that need to be exposed to JS
-    registerHybridGetter("number", &MyHybridObject::getNumber);
-    registerHybridSetter("number", &MyHybridObject::setNumber);
-    registerHybridMethod("add", &MyHybridObject::add);
+    registerHybrids(this, [](Prototype& prototype) {
+      prototype.registerHybridGetter("number", &MyHybridObject::getNumber);
+      prototype.registerHybridSetter("number", &MyHybridObject::setNumber);
+      prototype.registerHybridMethod("add", &MyHybridObject::add);
+    });
   }
 
 private:
