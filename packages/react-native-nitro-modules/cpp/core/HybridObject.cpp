@@ -85,7 +85,7 @@ void HybridObject::loadHybridMethods() {
 }
 
 jsi::Value HybridObject::toObject(jsi::Runtime& runtime) {
-  jsi::Object prototype = getPrototype(runtime);
+  jsi::Value prototype = getPrototype(runtime);
 
   jsi::Object objectConstructor = runtime.global().getPropertyAsObject(runtime, "Object");
   jsi::Function create = objectConstructor.getPropertyAsFunction(runtime, "create");

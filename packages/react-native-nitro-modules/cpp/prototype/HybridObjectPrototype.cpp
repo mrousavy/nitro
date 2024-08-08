@@ -12,7 +12,7 @@ namespace margelo::nitro {
 
 std::unordered_map<jsi::Runtime*, HybridObjectPrototype::PrototypeCache> HybridObjectPrototype::_prototypeCache;
 
-jsi::Object HybridObjectPrototype::createPrototype(jsi::Runtime& runtime, const std::shared_ptr<Prototype>& prototype) {
+jsi::Value HybridObjectPrototype::createPrototype(jsi::Runtime& runtime, const std::shared_ptr<Prototype>& prototype) {
   // 0. Check if we're at the highest level of our prototype chain
   if (prototype == nullptr) {
     // There is no prototype - we just have an empty Object base - so `Object.create({})`
@@ -69,10 +69,10 @@ jsi::Object HybridObjectPrototype::createPrototype(jsi::Runtime& runtime, const 
   prototypeCache.emplace(prototype->getNativeInstanceId(), cachedObject);
 
   // 7. Return it!
-  return jsi::Value(runtime, *cachedObject).getObject(runtime);
+  return jsi::Value(runtime, *cachedObject);
 }
 
-jsi::Object HybridObjectPrototype::getPrototype(jsi::Runtime& runtime) {
+jsi::Value HybridObjectPrototype::getPrototype(jsi::Runtime& runtime) {
   ensureInitialized();
 
   return createPrototype(runtime, _prototypeChain.getPrototype());

@@ -42,10 +42,10 @@ public:
    * Get a fully initialized jsi::Object that represents this prototype to JS.
    * The result of this value will be cached per Runtime, so it's safe to call this often.
    */
-  jsi::Object getPrototype(jsi::Runtime& runtime);
+  jsi::Value getPrototype(jsi::Runtime& runtime);
 
 private:
-  static jsi::Object createPrototype(jsi::Runtime& runtime, const std::shared_ptr<Prototype>& prototype);
+  static jsi::Value createPrototype(jsi::Runtime& runtime, const std::shared_ptr<Prototype>& prototype);
   using PrototypeCache = std::unordered_map<NativeInstanceId, OwningReference<jsi::Object>>;
   static std::unordered_map<jsi::Runtime*, PrototypeCache> _prototypeCache;
 
