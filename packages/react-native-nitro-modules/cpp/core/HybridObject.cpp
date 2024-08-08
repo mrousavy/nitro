@@ -85,19 +85,25 @@ void HybridObject::loadHybridMethods() {
 }
 
 jsi::Value HybridObject::toObject(jsi::Runtime& runtime) {
+  // 1. Get the object's base prototype (global & shared)
   jsi::Value prototype = getPrototype(runtime);
 
+  // 2. Get the global JS Object.create(...) constructor so we can create an object from the given prototype
   jsi::Object objectConstructor = runtime.global().getPropertyAsObject(runtime, "Object");
   jsi::Function create = objectConstructor.getPropertyAsFunction(runtime, "create");
 
+  // 3. Create the object using Object.create(...)
   jsi::Object object = create.call(runtime, prototype).asObject(runtime);
 
+  // 4. Assign NativeState to the object so the prototype can resolve the native methods
   object.setNativeState(runtime, shared_from_this());
 
 #if DEBUG
+  // 5. Assign a private __type property for debugging - this will be used so users know it's not just an empty object.
   object.setProperty(runtime, "__type", jsi::String::createFromUtf8(runtime, "NativeState<" + std::string(_name) + ">"));
 #endif
 
+  // 6. Return it!
   return object;
 }
 
