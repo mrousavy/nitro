@@ -4,17 +4,7 @@
 
 #pragma once
 
-namespace margelo::nitro {
-class HybridObject;
-class HybridObjectPrototype;
-
-template <typename T, typename Enable>
-struct JSIConverter;
-} // namespace margelo::nitro
-
 #include "HybridObjectPrototype.hpp"
-#include "IsSharedPtrTo.hpp"
-#include "TypeInfo.hpp"
 
 #include <jsi/jsi.h>
 #include <memory>
@@ -115,75 +105,6 @@ private:
   static constexpr auto TAG = "HybridObject";
   const char* _name = TAG;
   int _instanceId = 1;
-};
-
-} // namespace margelo::nitro
-
-// TODO: Move this to JSIConverter+HybridObject again and fix cyclic includes
-namespace margelo::nitro {
-
-using namespace facebook;
-
-// HybridObject(NativeState) <> {}
-template <typename T>
-struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_v<T, jsi::NativeState>>> {
-  using TPointee = typename T::element_type;
-
-  static inline T fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
-#if DO_NULL_CHECKS
-    if (arg.isUndefined()) [[unlikely]] {
-      throw jsi::JSError(runtime, invalidTypeErrorMessage("undefined", "It is undefined!"));
-    }
-    if (!arg.isObject()) [[unlikely]] {
-      std::string stringRepresentation = arg.toString(runtime).utf8(runtime);
-      throw jsi::JSError(runtime, invalidTypeErrorMessage(stringRepresentation, "It is not an object!"));
-    }
-#endif
-    jsi::Object object = arg.asObject(runtime);
-#if DO_NULL_CHECKS
-    if (!object.hasNativeState(runtime)) [[unlikely]] {
-      std::string stringRepresentation = arg.toString(runtime).utf8(runtime);
-      throw jsi::JSError(runtime, invalidTypeErrorMessage(stringRepresentation, "It is not a NativeState!"));
-    }
-    if (!object.hasNativeState<TPointee>(runtime)) [[unlikely]] {
-      std::string stringRepresentation = arg.toString(runtime).utf8(runtime);
-      throw jsi::JSError(runtime, invalidTypeErrorMessage(stringRepresentation, "It is a different NativeState<T>!"));
-    }
-#endif
-    return object.getNativeState<TPointee>(runtime);
-  }
-
-  static inline jsi::Value toJSI(jsi::Runtime& runtime, const T& arg) {
-#if DO_NULL_CHECKS
-    if (arg == nullptr) [[unlikely]] {
-      std::string typeName = TypeInfo::getFriendlyTypename<TPointee>();
-      throw jsi::JSError(runtime, "Cannot convert nullptr to NativeState<" + typeName + ">!");
-    }
-#endif
-    if constexpr (std::is_base_of_v<HybridObject, TPointee>) {
-      // It's a HybridObject - use it's internal constructor which caches jsi::Objects for proper memory management!
-      return arg->toObject(runtime);
-    } else {
-      // It's any other kind of jsi::HostObject - just create it as normal. This will not have a prototype then!
-      jsi::Object object(runtime);
-      object.setNativeState(runtime, arg);
-      return object;
-    }
-  }
-
-  static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
-    if (value.isObject()) {
-      jsi::Object object = value.getObject(runtime);
-      return object.hasNativeState<TPointee>(runtime);
-    }
-    return false;
-  }
-
-private:
-  static inline std::string invalidTypeErrorMessage(const std::string& typeDescription, const std::string& reason) {
-    std::string typeName = TypeInfo::getFriendlyTypename<TPointee>();
-    return "Cannot convert \"" + typeDescription + "\" to NativeState<" + typeName + ">! " + reason;
-  }
 };
 
 } // namespace margelo::nitro

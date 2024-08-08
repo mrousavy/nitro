@@ -7,6 +7,11 @@
 
 #pragma once
 
+namespace margelo::nitro {
+template <typename T, typename Enable>
+struct JSIConverter;
+} // namespace margelo::nitro
+
 #include "CountTrailingOptionals.hpp"
 #include "JSIConverter.hpp"
 #include "TypeInfo.hpp"
