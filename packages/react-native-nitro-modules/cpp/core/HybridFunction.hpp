@@ -75,11 +75,15 @@ public:
                                                               /* HybridObject */ const jsi::Value& thisValue,
                                                               /* JS arguments */ const jsi::Value* args,
                                                               /* argument size */ size_t count) -> jsi::Value {
-      // 1. Get actual `HybridObject` instance from `thisValue` (it's stored as `NativeState`)
+    // 1. Get actual `HybridObject` instance from `thisValue` (it's stored as `NativeState`)
+#if DEBUG
       if (!thisValue.isObject()) [[unlikely]] {
         throw jsi::JSError(runtime, "Cannot call hybrid function " + name + "(...) - `this` is not bound!");
       }
+#endif
       jsi::Object thisObject = thisValue.getObject(runtime);
+
+#if DEBUG
       if (!thisObject.hasNativeState<Derived>(runtime)) [[unlikely]] {
         if (thisObject.hasNativeState(runtime)) {
           throw jsi::JSError(runtime, "Cannot call hybrid function " + name + "(...) - `this` has a NativeState, but it's the wrong type!");
@@ -87,6 +91,7 @@ public:
           throw jsi::JSError(runtime, "Cannot call hybrid function " + name + "(...) - `this` does not have a NativeState!");
         }
       }
+#endif
       std::shared_ptr<Derived> hybridInstance = thisObject.getNativeState<Derived>(runtime);
 
       // 2. Make sure the given arguments match, either with a static size, or with potentially optional arguments size.
