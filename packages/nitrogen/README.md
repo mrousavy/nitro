@@ -35,6 +35,7 @@ Every nitro module must have a `nitro.json` file at it's root level (i.e. the fo
 
 ```json
 {
+  "logLevel": "debug",
   "cxxNamespace": ["image"],
   "ios": {
     "iosModulename": "NitroImage"
