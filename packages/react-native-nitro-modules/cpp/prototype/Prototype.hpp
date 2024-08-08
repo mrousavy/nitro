@@ -12,7 +12,6 @@
 #include <typeindex>
 #include <unordered_map>
 #include <memory>
-#include "NitroLogger.hpp"
 
 namespace margelo::nitro {
 
@@ -24,10 +23,18 @@ namespace margelo::nitro {
 using NativeInstanceId = std::type_index;
 
 /**
- * Represents a `Prototype`'s structure.
+ * Represents a JS `Prototype`'s structure.
  * Every prototype has a related C++ type ID (`instanceTypeId`).
  * Prototypes can be sub-classes, in which case they have a `base` prototype.
  * Each prototype has a list of methods, and properties (getters + setters).
+ *
+ * By using this `Prototype` structure, we can create JS objects that act
+ * as prototypes for `HybridObject`s.
+ *
+ * While a `Prototype` actually holds all the methods, a `HybridObject` only
+ * contains state and memory.
+ * This way the JS VM doesn't need to re-create methods for each `HybridObject`,
+ * they are only initialized once on the shared `Prototype`.
  */
 struct Prototype final {
 private:
@@ -36,8 +43,6 @@ private:
   std::unordered_map<std::string, HybridFunction> _methods;
   std::unordered_map<std::string, HybridFunction> _getters;
   std::unordered_map<std::string, HybridFunction> _setters;
-  
-private:
   
 private:
   Prototype(const NativeInstanceId& typeId, const std::shared_ptr<Prototype>& base) :
@@ -74,19 +79,13 @@ public:
   inline bool isNativeInstance() const noexcept {
     return _instanceTypeId == std::type_index(typeid(T));
   }
-
-  inline bool hasBase() const noexcept {
-    return _base != nullptr;
-  }
-  
-  inline const std::shared_ptr<Prototype>& getBase() const noexcept {
-    return _base;
-  }
   
   inline bool hasHybrids() const {
     return !_methods.empty() || !_getters.empty() || !_setters.empty();
   }
   
+  inline bool hasBase() const noexcept { return _base != nullptr; }
+  inline const std::shared_ptr<Prototype>& getBase() const noexcept { return _base; }
   inline const NativeInstanceId& getNativeInstanceId() const noexcept { return _instanceTypeId; }
   inline const std::unordered_map<std::string, HybridFunction>& getMethods() const noexcept { return _methods; }
   inline const std::unordered_map<std::string, HybridFunction>& getGetters() const noexcept { return _getters; }
