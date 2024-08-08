@@ -8,10 +8,10 @@
 #pragma once
 
 #include "HybridFunction.hpp"
+#include <memory>
 #include <string>
 #include <typeindex>
 #include <unordered_map>
-#include <memory>
 
 namespace margelo::nitro {
 
@@ -43,10 +43,9 @@ private:
   std::unordered_map<std::string, HybridFunction> _methods;
   std::unordered_map<std::string, HybridFunction> _getters;
   std::unordered_map<std::string, HybridFunction> _setters;
-  
+
 private:
-  Prototype(const NativeInstanceId& typeId, const std::shared_ptr<Prototype>& base) :
-    _instanceTypeId(typeId), _base(base) {}
+  Prototype(const NativeInstanceId& typeId, const std::shared_ptr<Prototype>& base) : _instanceTypeId(typeId), _base(base) {}
 
 public:
   /**
@@ -58,10 +57,9 @@ public:
    * If the given C++ type ID is already known in the static `Prototype` tree,
    * a shared reference to it is returned.
    */
-  static std::shared_ptr<Prototype> get(const NativeInstanceId& typeId,
-                                        const std::shared_ptr<Prototype>& base = nullptr) {
+  static std::shared_ptr<Prototype> get(const NativeInstanceId& typeId, const std::shared_ptr<Prototype>& base = nullptr) {
     static std::unordered_map<NativeInstanceId, std::shared_ptr<Prototype>> _prototypesCache;
-    
+
     const auto& found = _prototypesCache.find(typeId);
     if (found != _prototypesCache.end()) {
       // We know this C++ type ID / Prototype - return it!
@@ -79,18 +77,30 @@ public:
   inline bool isNativeInstance() const noexcept {
     return _instanceTypeId == std::type_index(typeid(T));
   }
-  
+
   inline bool hasHybrids() const {
     return !_methods.empty() || !_getters.empty() || !_setters.empty();
   }
-  
-  inline bool hasBase() const noexcept { return _base != nullptr; }
-  inline const std::shared_ptr<Prototype>& getBase() const noexcept { return _base; }
-  inline const NativeInstanceId& getNativeInstanceId() const noexcept { return _instanceTypeId; }
-  inline const std::unordered_map<std::string, HybridFunction>& getMethods() const noexcept { return _methods; }
-  inline const std::unordered_map<std::string, HybridFunction>& getGetters() const noexcept { return _getters; }
-  inline const std::unordered_map<std::string, HybridFunction>& getSetters() const noexcept { return _setters; }
-  
+
+  inline bool hasBase() const noexcept {
+    return _base != nullptr;
+  }
+  inline const std::shared_ptr<Prototype>& getBase() const noexcept {
+    return _base;
+  }
+  inline const NativeInstanceId& getNativeInstanceId() const noexcept {
+    return _instanceTypeId;
+  }
+  inline const std::unordered_map<std::string, HybridFunction>& getMethods() const noexcept {
+    return _methods;
+  }
+  inline const std::unordered_map<std::string, HybridFunction>& getGetters() const noexcept {
+    return _getters;
+  }
+  inline const std::unordered_map<std::string, HybridFunction>& getSetters() const noexcept {
+    return _setters;
+  }
+
 public:
   /**
    * Registers the given C++ method as a Hybrid Method that can be called from JS, through the object's Prototype.

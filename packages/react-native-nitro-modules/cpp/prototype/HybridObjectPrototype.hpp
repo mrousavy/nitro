@@ -9,8 +9,8 @@
 
 #include "HybridFunction.hpp"
 #include "OwningReference.hpp"
-#include "PrototypeChain.hpp"
 #include "Prototype.hpp"
+#include "PrototypeChain.hpp"
 #include <functional>
 #include <jsi/jsi.h>
 #include <memory>
@@ -70,7 +70,7 @@ private:
   }
 
 protected:
-  using RegisterFn = void (*) (Prototype&);
+  using RegisterFn = void (*)(Prototype&);
   /**
    * Registers the given methods inside the Hybrid Object's prototype.
    *
@@ -78,10 +78,10 @@ protected:
    * prototype will already be known and cached.
    * **Do not conditionally register hybrid methods, getters or setter!**
    */
-  template<typename Derived>
+  template <typename Derived>
   inline void registerHybrids(Derived* thisInstance, RegisterFn registerFunc) {
     const std::shared_ptr<Prototype>& prototype = _prototypeChain.extendPrototype<Derived>();
-    
+
     if (!prototype->hasHybrids()) {
       // The `Prototype` does not have any methods or properties registered yet - so do it now
       registerFunc(*prototype);
