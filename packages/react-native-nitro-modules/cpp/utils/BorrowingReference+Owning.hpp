@@ -22,7 +22,7 @@ BorrowingReference<T>::BorrowingReference(const OwningReference<T>& ref) {
 }
 
 template <typename T>
-OwningReference<T> BorrowingReference<T>::lock() {
+OwningReference<T> BorrowingReference<T>::lock() const {
   std::unique_lock lock(*_mutex);
 
   if (*_isDeleted) {

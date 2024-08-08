@@ -23,14 +23,14 @@ using namespace facebook;
 class JSICacheReference;
 
 /**
- * A `JSICache` can safely store `jsi::Object` instances (e.g. `jsi::Object` or
+ * A `JSICache` can safely store `jsi::Value` instances (e.g. `jsi::Object` or
  * `jsi::Function`) inside `OwningReference<T>`.
  *
- * `jsi::Object`s are managed by a `jsi::Runtime`, and will be deleted if the `jsi::Runtime`
- * is deleted - even if there are still strong references to the `jsi::Object`.
+ * `jsi::Value`s are managed by a `jsi::Runtime`, and will be deleted if the `jsi::Runtime`
+ * is deleted - even if there are still strong references to the `jsi::Value`.
  *
- * To access a `OwningReference<jsi::Object>` safely, use `lock()` to get an `OwningLock<jsi::Object>`.
- * This will allow you to access the `jsi::Object` as long as the `OwningLock` is alive,
+ * To access a `OwningReference<jsi::Value>` safely, use `lock()` to get an `OwningLock<jsi::Value>`.
+ * This will allow you to access the `jsi::Value` as long as the `OwningLock` is alive,
  * and `JSICache` will hold any garbage collection calls until the `OwningLock` is destroyed.
  */
 class JSICache final : public jsi::NativeState {
@@ -61,7 +61,10 @@ private:
 private:
   jsi::Runtime* _runtime;
   std::mutex _mutex;
-  std::vector<BorrowingReference<jsi::Object>> _cache;
+  std::vector<BorrowingReference<jsi::Object>> _objectCache;
+  std::vector<BorrowingReference<jsi::Function>> _functionCache;
+  std::vector<BorrowingReference<jsi::WeakObject>> _weakObjectCache;
+  std::vector<BorrowingReference<jsi::ArrayBuffer>> _arrayBufferCache;
 
 private:
   static inline std::unordered_map<jsi::Runtime*, std::weak_ptr<JSICache>> _globalCache;
@@ -81,22 +84,25 @@ public:
   }
 
 public:
-  /**
-   * Creates a semi-strong reference to a `jsi::Object` that can be stored in memory and accessed later.
-   *
-   * The returned `OwningReference<T>` keeps the `T` semi-strong, and once it gets deleted, `T` will also be freed.
-   *
-   * Note: The JS Runtime can still delete `T` at any point (e.g. when it gets destroyed or reloaded),
-   * so any operations on `T` should be under an `OwningLock<T>`.
-   *
-   * To get an `OwningLock<T>` (which implies safe access to `T`), call `.locK()` on the `OwningReference<T>`.
-   * This will hold off any JS Runtime GC calls that will destroy `T` for as long as the `OwningLock<T>` is alive.
-   */
-  template <typename T>
-  OwningReference<T> makeShared(T&& value) {
-    OwningReference<jsi::Object> owning(new T(std::move(value)));
-    _strongCache->_cache.push_back(owning.weak());
-    return owning.as<T>();
+  OwningReference<jsi::Object> makeShared(jsi::Object&& value) {
+    OwningReference<jsi::Object> owning(new jsi::Object(std::move(value)));
+    _strongCache->_objectCache.push_back(owning.weak());
+    return owning;
+  }
+  OwningReference<jsi::Function> makeShared(jsi::Function&& value) {
+    OwningReference<jsi::Function> owning(new jsi::Function(std::move(value)));
+    _strongCache->_functionCache.push_back(owning.weak());
+    return owning;
+  }
+  OwningReference<jsi::WeakObject> makeShared(jsi::WeakObject&& value) {
+    OwningReference<jsi::WeakObject> owning(new jsi::WeakObject(std::move(value)));
+    _strongCache->_weakObjectCache.push_back(owning.weak());
+    return owning;
+  }
+  OwningReference<jsi::ArrayBuffer> makeShared(jsi::ArrayBuffer&& value) {
+    OwningReference<jsi::ArrayBuffer> owning(new jsi::ArrayBuffer(std::move(value)));
+    _strongCache->_arrayBufferCache.push_back(owning.weak());
+    return owning;
   }
 
 private:

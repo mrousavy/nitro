@@ -43,7 +43,7 @@ public:
    * HybridObjects cannot be moved.
    */
   HybridObject(HybridObject&& move) = delete;
-  
+
 public:
   /**
    * Return the `jsi::Object` that holds this `HybridObject`. (boxed in a `jsi::Value`)
@@ -52,7 +52,7 @@ public:
    * Additionally, this sets the external memory pressure for proper GC memory management.
    */
   jsi::Value toObject(jsi::Runtime& runtime);
-  
+
 public:
   /**
    * Get the `std::shared_ptr` instance of this HybridObject.
@@ -62,7 +62,7 @@ public:
   std::shared_ptr<Derived> shared() {
     return std::static_pointer_cast<Derived>(shared_from_this());
   }
-  
+
 public:
   /**
    * Get the HybridObject's name
@@ -79,7 +79,7 @@ public:
    * they might still be the same `HybridObject` - in this case `equals(other)` will return true.
    */
   bool equals(std::shared_ptr<HybridObject> other);
-  
+
 protected:
   /**
    * Get the size of any external (heap) allocations this `HybridObject` has made, in bytes.
@@ -88,7 +88,7 @@ protected:
   virtual inline size_t getExternalMemorySize() noexcept {
     return 0;
   }
-  
+
 protected:
   /**
    * Loads all native methods of this `HybridObject` to be exposed to JavaScript.
@@ -108,7 +108,7 @@ protected:
    * ```
    */
   virtual void loadHybridMethods() override;
-  
+
 private:
   static constexpr auto TAG = "HybridObject";
   const char* _name = TAG;
