@@ -61,9 +61,12 @@ export async function runNitrogen({
 
   // If no source files are found, we can exit
   if (project.getSourceFiles().length === 0) {
+    const searchDir = prettifyDirectory(
+      path.join(path.resolve(baseDirectory), '**/*.nitro.ts')
+    )
     console.log(
-      "❌  Nitrogen didn't find any spec files! " +
-        'To create a Nitro Module, create a file with the ".nitro.ts" suffix ' +
+      `❌  Nitrogen didn't find any spec files in ${chalk.underline(searchDir)}! ` +
+        `To create a Nitro Module, create a TypeScript file with the "${chalk.underline('.nitro.ts')}" suffix ` +
         'and export an interface that extends HybridObject<T>.'
     )
     process.exit()

@@ -1,13 +1,29 @@
 import chalk from 'chalk'
-import { getBaseDirectory } from '../getCurrentDir.js'
 import { readUserConfig } from './getConfig.js'
+import type { NitroUserConfig } from './NitroUserConfig.js'
 
 const CXX_BASE_NAMESPACE = ['margelo', 'nitro']
 const ANDROID_BASE_NAMESPACE = ['com', 'margelo', 'nitro']
 
-const baseDirectory = getBaseDirectory()
-console.log(chalk.reset(`🔧  Loading nitro.json config...`))
-const userConfig = await readUserConfig(baseDirectory)
+const defaultConfigPath = './nitro.json'
+
+let userConfig: NitroUserConfig | undefined
+export function getUserConfig(): NitroUserConfig {
+  if (userConfig == null) {
+    console.log(
+      chalk.reset(`🔧  Loading ${chalk.underline('nitro.json')} config...`)
+    )
+    userConfig = readUserConfig(defaultConfigPath)
+  }
+  return userConfig
+}
+
+export function setUserConfigPath(path: string) {
+  console.log(
+    `🔧  Loading ${chalk.underline('nitro.json')} config from ${chalk.underline(path)}...`
+  )
+  userConfig = readUserConfig(path)
+}
 
 /**
  * Represents the properly parsed `nitro.json` config of the current executing directory.
@@ -19,7 +35,7 @@ export const NitroConfig = {
    * @example `NitroImage`
    */
   getAndroidCxxLibName(): string {
-    return userConfig.android.androidCxxLibName
+    return getUserConfig().android.androidCxxLibName
   },
 
   /**
@@ -27,7 +43,7 @@ export const NitroConfig = {
    * @example `NitroImage`
    */
   getIosModuleName(): string {
-    return userConfig.ios.iosModulename
+    return getUserConfig().ios.iosModulename
   },
 
   /**
@@ -39,7 +55,7 @@ export const NitroConfig = {
     language: 'c++' | 'swift',
     ...subDefinitionName: string[]
   ): string {
-    const userNamespace = userConfig.cxxNamespace
+    const userNamespace = getUserConfig().cxxNamespace
     const namespace = [
       ...CXX_BASE_NAMESPACE,
       ...userNamespace,
@@ -64,7 +80,7 @@ export const NitroConfig = {
     language: 'java/kotlin' | 'c++/jni',
     ...subPackage: string[]
   ): string {
-    const userPackage = userConfig.android.androidNamespace
+    const userPackage = getUserConfig().android.androidNamespace
     const namespace = [...ANDROID_BASE_NAMESPACE, ...userPackage, ...subPackage]
 
     switch (language) {
@@ -82,7 +98,7 @@ export const NitroConfig = {
    * This will be used on android to put files from a package in their respective package folder.
    */
   getAndroidPackageDirectory(...subPackage: string[]): string[] {
-    const userPackage = userConfig.android.androidNamespace
+    const userPackage = getUserConfig().android.androidNamespace
     return [...ANDROID_BASE_NAMESPACE, ...userPackage, ...subPackage]
   },
 }

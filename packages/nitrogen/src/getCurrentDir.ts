@@ -1,18 +1,8 @@
 import os from 'os'
-import fs from 'fs'
 import path from 'path'
 
-export function getBaseDirectory(): string {
-  const customDirectory = process.argv[2]
-  if (customDirectory != null && fs.existsSync(customDirectory)) {
-    // custom passed in path exists!
-    return customDirectory
-  }
-  return process.cwd()
-}
-
 export function prettifyDirectory(directory: string): string {
-  let relativePath = path.relative(getBaseDirectory(), directory)
+  let relativePath = path.relative(process.cwd(), path.resolve(directory))
   if (!relativePath.startsWith('.') && relativePath.length > 0) {
     // Make sure all relative paths start with "./something", not just "something"
     relativePath = `./${relativePath}`

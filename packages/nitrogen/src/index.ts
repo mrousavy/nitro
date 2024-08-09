@@ -3,14 +3,13 @@
 import yargs from 'yargs/yargs'
 import { hideBin } from 'yargs/helpers'
 import chalk from 'chalk'
-import { getBaseDirectory, prettifyDirectory } from './getCurrentDir.js'
+import { prettifyDirectory } from './getCurrentDir.js'
 import { writeUserConfigFile } from './config/NitroUserConfig.js'
 import { getFiles } from './getFiles.js'
 import { runNitrogen } from './nitrogen.js'
 import { promises as fs } from 'fs'
 import { isValidLogLevel, setLogLevel } from './Logger.js'
 
-const baseDirectory = getBaseDirectory()
 const commandName = 'nitro-codegen'
 
 // TODO: Actually set log-level depending on user command config
@@ -34,20 +33,32 @@ await yargs(hideBin(process.argv))
   })
   // 🔥 nitrogen [path]
   .command(
-    '$0',
-    `Usage: ${chalk.bold(`${commandName} [options]`)}\n` +
+    '$0 [basePath]',
+    `Usage: ${chalk.bold(`${commandName} <basePath> [options]`)}\n` +
       `Run the nitro code-generator on all ${chalk.underline('**/*.nitro.ts')} files found ` +
       `in the current directory and generate C++, Swift or Kotlin outputs in ${chalk.underline('./nitrogen/generated')}.`,
     (y) =>
-      y.option('out', {
-        type: 'string',
-        description:
-          'Configures the output path of the generated C++, Swift or Kotlin files.',
-        default: './nitrogen/generated',
-      }),
+      y
+        .positional('basePath', {
+          type: 'string',
+          description: `The base path of where Nitrogen will start looking for ${chalk.underline('**/*.nitro.ts')} specs.`,
+          default: process.cwd(),
+        })
+        .option('out', {
+          type: 'string',
+          description:
+            'Configures the output path of the generated C++, Swift or Kotlin files.',
+          default: './nitrogen/generated',
+        })
+        .option('config', {
+          type: 'string',
+          description: `A custom path to a ${chalk.underline('nitro.json')} config file.`,
+          default: './nitro.json',
+        }),
     async (argv) => {
+      const basePath = argv.basePath
       const outputDirectory = argv.out
-      await runNitrogenCommand(outputDirectory)
+      await runNitrogenCommand(basePath, outputDirectory)
     }
   )
   // 🔥 nitrogen init <moduleName>
@@ -65,7 +76,7 @@ await yargs(hideBin(process.argv))
       console.log(
         `⚙️ Creating ${chalk.underline('nitro.json')} for Nitro Module "${argv.moduleName}"...`
       )
-      await writeUserConfigFile(argv.moduleName, baseDirectory)
+      await writeUserConfigFile(argv.moduleName, process.cwd())
       console.log(`🎉 Created Nitro Module "${argv.moduleName}"!`)
     }
   )
@@ -79,7 +90,10 @@ await yargs(hideBin(process.argv))
   .strict()
   .wrap(cliWidth).argv
 
-async function runNitrogenCommand(outputDirectory: string): Promise<void> {
+async function runNitrogenCommand(
+  baseDirectory: string,
+  outputDirectory: string
+): Promise<void> {
   // 1. Prepare output folders
   const filesBefore = await getFiles(outputDirectory)
 

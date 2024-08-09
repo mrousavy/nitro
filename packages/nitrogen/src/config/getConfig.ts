@@ -1,26 +1,26 @@
 import { ZodError } from 'zod'
-import path from 'path'
-import { promises as fs } from 'fs'
-import { prettifyDirectory } from '../getCurrentDir.js'
+import fs from 'fs'
 import {
   NitroUserConfigSchema,
   type NitroUserConfig,
 } from './NitroUserConfig.js'
+import chalk from 'chalk'
 
-async function readFile(directory: string): Promise<string> {
+function readFile(configPath: string): string {
   try {
-    return await fs.readFile(path.join(directory, 'nitro.json'), 'utf8')
+    return fs.readFileSync(configPath, 'utf8')
   } catch (error) {
-    if (
-      typeof error === 'object' &&
-      error != null &&
-      'code' in error &&
-      error.code === 'ENOENT'
-    ) {
-      // this directory doesn't contain a nitro.json config - go up one directory and try again
-      throw new Error(
-        `No nitro.json config exists at ${prettifyDirectory(directory)}! Create a nitro.json file and try again.`
-      )
+    if (typeof error === 'object' && error != null && 'code' in error) {
+      switch (error.code) {
+        case 'ENOENT':
+        case 'ENOTDIR':
+          // this directory doesn't contain a nitro.json config - go up one directory and try again
+          throw new Error(
+            `The path ${chalk.underline(configPath)} does not exist! Create a ${chalk.underline('nitro.json')} file and try again.`
+          )
+        default:
+          throw error
+      }
     } else {
       // different kind of error, throw it.
       throw error
@@ -79,10 +79,8 @@ function parseConfig(json: string): NitroUserConfig {
   }
 }
 
-export async function readUserConfig(
-  directory: string
-): Promise<NitroUserConfig> {
-  const json = await readFile(directory)
+export function readUserConfig(configPath: string): NitroUserConfig {
+  const json = readFile(configPath)
   const config = parseConfig(json)
   return config
 }
