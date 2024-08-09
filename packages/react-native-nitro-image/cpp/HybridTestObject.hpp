@@ -57,6 +57,8 @@ public:
 
 public:
   // Methods
+  double addNumbers(double a, double b) override;
+  std::string addStrings(const std::string& a, const std::string& b) override;
   void simpleFunc() override;
   void multipleArguments(double num, const std::string& str, bool boo) override;
   std::shared_ptr<AnyMap> createMap() override;

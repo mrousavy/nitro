@@ -147,6 +147,16 @@ export function getTests(): TestRunner[] {
     ),
 
     // Test basic functions
+    createTest('addNumbers(5, 13) = 18', () =>
+      it(() => HybridTestObject.addNumbers(5, 13))
+        .didNotThrow()
+        .equals(18)
+    ),
+    createTest('addStrings("hello ", "world") = "hello world"', () =>
+      it(() => HybridTestObject.addStrings('hello ', 'world'))
+        .didNotThrow()
+        .equals('hello world')
+    ),
     createTest('simpleFunc()', () =>
       it(() => HybridTestObject.simpleFunc())
         .didNotThrow()

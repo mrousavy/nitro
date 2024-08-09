@@ -99,6 +99,14 @@ std::shared_ptr<HybridTestObjectSpec> HybridTestObject::getSelf() {
 }
 
 // Methods
+double HybridTestObject::addNumbers(double a, double b) {
+  return a + b;
+}
+
+std::string HybridTestObject::addStrings(const std::string& a, const std::string& b) {
+  return a + b;
+}
+
 void HybridTestObject::simpleFunc() {
   // do nothing
 }

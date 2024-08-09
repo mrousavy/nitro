@@ -38,6 +38,8 @@ export interface TestObject extends HybridObject<{ ios: 'c++' }> {
 
   // Basic function tests
   simpleFunc(): void
+  addNumbers(a: number, b: number): number
+  addStrings(a: string, b: string): string
   multipleArguments(num: number, str: string, boo: boolean): void
 
   // Maps
