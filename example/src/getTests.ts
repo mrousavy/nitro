@@ -96,6 +96,33 @@ export function getTests(): TestRunner[] {
         .toContain('toString')
         .toContain('equals')
     ),
+    createTest('Two HybridObjects are not equal (a == b)', () =>
+      it(
+        () =>
+          // eslint-disable-next-line no-self-compare
+          HybridTestObject.newTestObject() === HybridTestObject.newTestObject()
+      )
+        .didNotThrow()
+        .equals(false)
+    ),
+    createTest('Two HybridObjects are not equal (a.equals(b))', () =>
+      it(() =>
+        HybridTestObject.newTestObject().equals(
+          HybridTestObject.newTestObject()
+        )
+      )
+        .didNotThrow()
+        .equals(false)
+    ),
+    createTest("Two HybridObjects's prototypse are equal", () =>
+      it(() => {
+        const objA = HybridTestObject.newTestObject()
+        const objB = HybridTestObject.newTestObject()
+        return Object.getPrototypeOf(objA) === Object.getPrototypeOf(objB)
+      })
+        .didNotThrow()
+        .equals(true)
+    ),
 
     // Test Primitives (getters & setters)
     createTest('set numberValue to 13', () =>
