@@ -655,6 +655,11 @@ export function getTests(): TestRunner[] {
         .didNotThrow()
         .equals(true)
     ),
+    createTest('.self == .self', () =>
+      it(() => HybridTestObject.self === HybridTestObject.self)
+        .didNotThrow()
+        .equals(true)
+    ),
     createTest('.equals(newTestObject()) == false', () =>
       it(() => HybridTestObject.equals(HybridTestObject.newTestObject()))
         .didNotThrow()
