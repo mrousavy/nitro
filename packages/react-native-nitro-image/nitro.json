@@ -1,5 +1,4 @@
 {
-  "logLevel": "debug",
   "cxxNamespace": ["image"],
   "ios": {
     "iosModulename": "NitroImage"
