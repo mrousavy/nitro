@@ -49,6 +49,7 @@ export function getRelativeDirectory(file: SourceFile): string {
     'nitrogen',
     'generated',
     file.platform,
+    file.language,
     ...file.subdirectory,
     file.name
   )
