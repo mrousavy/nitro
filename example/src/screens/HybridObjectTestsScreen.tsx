@@ -4,12 +4,9 @@ import { StyleSheet, View, Text, ScrollView, Button } from 'react-native'
 import { HybridTestObject, ImageConstructors } from 'react-native-nitro-image'
 import { getTests, type TestRunner } from '../getTests'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import { logPrototypeChain } from '../logPrototypeChain'
 
-let obj = HybridTestObject
-while (obj != null) {
-  console.log('type:', obj.__type)
-  obj = Object.getPrototypeOf(obj)
-}
+logPrototypeChain(HybridTestObject)
 
 const allTests = getTests()
 
