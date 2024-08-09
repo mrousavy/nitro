@@ -1,4 +1,7 @@
 import { z } from 'zod'
+import { capitalizeName } from '../utils.js'
+import path from 'path'
+import { promises as fs } from 'fs'
 
 // Namespaces and package names in C++/Java will be matched with a regex.
 const safeNamePattern = /^[a-zA-Z_][a-zA-Z0-9_]*$/
@@ -50,3 +53,21 @@ export const NitroUserConfigSchema = z.object({
  * Represents the structure of a `nitro.json` config file.
  */
 export type NitroUserConfig = z.infer<typeof NitroUserConfigSchema>
+
+export function writeUserConfigFile(
+  moduleName: string,
+  directory: string
+): Promise<void> {
+  const config: NitroUserConfig = {
+    android: {
+      androidCxxLibName: capitalizeName(moduleName),
+      androidNamespace: [moduleName.toLowerCase()],
+    },
+    cxxNamespace: [moduleName.toLowerCase()],
+    ios: {
+      iosModulename: capitalizeName(moduleName),
+    },
+  }
+  const dir = path.join(directory, 'nitro.json')
+  return fs.writeFile(dir, JSON.stringify(config, null, 2))
+}

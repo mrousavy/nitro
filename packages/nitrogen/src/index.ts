@@ -1,58 +1,118 @@
 #!/usr/bin/env node
 
-import { promises as fs } from 'fs'
-import path from 'path'
-import { getBaseDirectory, prettifyDirectory } from './getCurrentDir.js'
+import yargs from 'yargs/yargs'
+import { hideBin } from 'yargs/helpers'
 import chalk from 'chalk'
-import { runNitrogen } from './nitrogen.js'
+import { getBaseDirectory, prettifyDirectory } from './getCurrentDir.js'
+import { writeUserConfigFile } from './config/NitroUserConfig.js'
 import { getFiles } from './getFiles.js'
+import { runNitrogen } from './nitrogen.js'
+import { promises as fs } from 'fs'
 
-// 1. Prepare output folders
 const baseDirectory = getBaseDirectory()
-const outputDirectory = path.join(baseDirectory, 'nitrogen', 'generated')
-const filesBefore = await getFiles(outputDirectory)
+const commandName = 'nitro-codegen'
 
-const start = performance.now()
+// TODO: Actually set log-level depending on user command config
 
-// 2. Run Nitrogen
-const { generatedFiles, generatedSpecsCount, targetSpecsCount } =
-  await runNitrogen({
-    baseDirectory: baseDirectory,
-    outputDirectory: outputDirectory,
+await yargs(hideBin(process.argv))
+  .option('log-level', {
+    type: 'string',
+    description: 'Configures the log-level of nitrogen.',
+    default: 'info',
+    choices: ['debug', 'info', 'warning', 'error'],
   })
-
-const end = performance.now()
-const timeS = ((end - start) / 1000).toFixed(1)
-console.log(
-  `🎉  Generated ${generatedSpecsCount}/${targetSpecsCount} HybridObject${generatedSpecsCount === 1 ? '' : 's'} in ${timeS}s!`
-)
-console.log(
-  `💡  Your code is in ${chalk.underline(prettifyDirectory(outputDirectory))}`
-)
-
-// 3. Delete all old dangling files
-const addedFiles = generatedFiles.filter((f) => !filesBefore.includes(f))
-const removedFiles = filesBefore.filter((f) => !generatedFiles.includes(f))
-if (addedFiles.length > 0 || removedFiles.length > 0) {
-  let text = ''
-  const as = addedFiles.length > 1 ? 's' : ''
-  const rs = removedFiles.length > 1 ? 's' : ''
-  if (addedFiles.length > 0 && removedFiles.length === 0) {
-    text = `Added ${addedFiles.length} file${as}`
-  } else if (addedFiles.length === 0 && removedFiles.length > 0) {
-    text = `Removed ${removedFiles.length} file${rs}`
-  } else {
-    text = `Added ${addedFiles.length} file${as} and removed ${removedFiles.length} file${rs}`
-  }
-
-  console.log(
-    `‼️   ${text} - ${chalk.bold('you need to run `pod install`/sync gradle to update files!')}`
+  // 🔥 nitrogen [path]
+  .command(
+    '$0',
+    `Usage: ${chalk.bold(`${commandName} [options]`)}\n` +
+      `Run the nitro code-generator on all ${chalk.underline('**/*.nitro.ts')} files found ` +
+      `in the current directory and generate C++, Swift or Kotlin outputs in ${chalk.underline('./nitrogen/generated')}.`,
+    (y) =>
+      y.option('out', {
+        type: 'string',
+        description:
+          'Configures the output path of the generated C++, Swift or Kotlin files.',
+        default: './nitrogen/generated',
+      }),
+    async (argv) => {
+      await runNitrogenCommand(argv.out)
+    }
   )
-}
-const promises = removedFiles.map(async (file) => {
-  const stat = await fs.stat(file)
-  if (stat.isFile()) {
-    await fs.rm(file)
+  // 🔥 nitrogen init <moduleName>
+  .command(
+    'init <moduleName>',
+    `Usage: ${chalk.bold(`${commandName} init <moduleName> [options]`)}\n` +
+      `Generate a ${chalk.underline('nitro.json')} config file in the current directory.`,
+    (y) =>
+      y.positional('moduleName', {
+        type: 'string',
+        description: 'The name of the Nitro module that will be created.',
+        demandOption: true,
+      }),
+    async (argv) => {
+      console.log(
+        `⚙️ Creating ${chalk.underline('nitro.json')} for Nitro Module "${argv.moduleName}"...`
+      )
+      await writeUserConfigFile(argv.moduleName, baseDirectory)
+      console.log(`🎉 Created Nitro Module "${argv.moduleName}"!`)
+    }
+  )
+  .usage(
+    `Usage: ${chalk.bold('$0 [options]')}\n` +
+      `$0 is a code-generater for Nitro Modules (${chalk.underline('https://github.com/mrousavy/react-native-nitro')})\n` +
+      `It converts all TypeScript specs found in ${chalk.underline('**/*.nitro.ts')} to C++, Swift or Kotlin specs.\n` +
+      `Each library/module must have a ${chalk.underline('nitro.json')} configuration file in it's root directory.`
+  )
+  .help()
+  .strict()
+  .wrap(process.stdout.columns).argv
+
+async function runNitrogenCommand(outputDirectory: string): Promise<void> {
+  // 1. Prepare output folders
+  const filesBefore = await getFiles(outputDirectory)
+
+  const start = performance.now()
+
+  // 2. Run Nitrogen
+  const { generatedFiles, generatedSpecsCount, targetSpecsCount } =
+    await runNitrogen({
+      baseDirectory: baseDirectory,
+      outputDirectory: outputDirectory,
+    })
+
+  const end = performance.now()
+  const timeS = ((end - start) / 1000).toFixed(1)
+  console.log(
+    `🎉  Generated ${generatedSpecsCount}/${targetSpecsCount} HybridObject${generatedSpecsCount === 1 ? '' : 's'} in ${timeS}s!`
+  )
+  console.log(
+    `💡  Your code is in ${chalk.underline(prettifyDirectory(outputDirectory))}`
+  )
+
+  // 3. Delete all old dangling files
+  const addedFiles = generatedFiles.filter((f) => !filesBefore.includes(f))
+  const removedFiles = filesBefore.filter((f) => !generatedFiles.includes(f))
+  if (addedFiles.length > 0 || removedFiles.length > 0) {
+    let text = ''
+    const as = addedFiles.length > 1 ? 's' : ''
+    const rs = removedFiles.length > 1 ? 's' : ''
+    if (addedFiles.length > 0 && removedFiles.length === 0) {
+      text = `Added ${addedFiles.length} file${as}`
+    } else if (addedFiles.length === 0 && removedFiles.length > 0) {
+      text = `Removed ${removedFiles.length} file${rs}`
+    } else {
+      text = `Added ${addedFiles.length} file${as} and removed ${removedFiles.length} file${rs}`
+    }
+
+    console.log(
+      `‼️   ${text} - ${chalk.bold('you need to run `pod install`/sync gradle to update files!')}`
+    )
   }
-})
-await Promise.all(promises)
+  const promises = removedFiles.map(async (file) => {
+    const stat = await fs.stat(file)
+    if (stat.isFile()) {
+      await fs.rm(file)
+    }
+  })
+  await Promise.all(promises)
+}
