@@ -5,11 +5,16 @@ export function logPrototypeChain(type: HybridObject): void {
   let object = type
   let indentation = '  '
   while (object != null) {
+    const keysCount = Object.keys(object).length
     if (object === type) {
-      console.log(`${indentation}${object.__type ?? type.name}`)
+      console.log(
+        `${indentation}${object.__type ?? type.name} (${keysCount} props)`
+      )
       indentation += ' '
     } else {
-      console.log(`${indentation}∟ ${object.__type ?? '{}'}`)
+      console.log(
+        `${indentation}∟ ${object.__type ?? '{}'} (${keysCount} props)`
+      )
       indentation += '   '
     }
     object = Object.getPrototypeOf(object)
