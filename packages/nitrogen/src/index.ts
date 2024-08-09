@@ -157,13 +157,17 @@ for (const sourceFile of project.getSourceFiles()) {
     } catch (error) {
       const message = indent(errorToString(error), '    ')
       console.error(
-        `        ❌  Failed to generate spec for ${moduleName}! ${message}`
+        chalk.redBright(
+          `        ❌  Failed to generate spec for ${moduleName}! ${message}`
+        )
       )
     }
   }
 
   if (generatedSpecs === startedWithSpecs) {
-    console.log(`    ❌  No specs found in ${sourceFile.getBaseName()}!`)
+    console.error(
+      chalk.redBright(`    ❌  No specs found in ${sourceFile.getBaseName()}!`)
+    )
   }
 }
 
