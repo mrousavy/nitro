@@ -57,5 +57,10 @@ export function filterDuplicateFiles(
   array: SourceFile[]
 ): boolean {
   const otherIndex = array.findIndex((f2) => getFullPath(f) === getFullPath(f2))
+  if (otherIndex !== i) {
+    if (array[i]?.content !== array[otherIndex]?.content) {
+      throw new Error(`File "${f.name}"'s content differs!`)
+    }
+  }
   return otherIndex === i
 }
