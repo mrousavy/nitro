@@ -89,6 +89,15 @@ end
 
 #### Android
 
+Add Nitro's core dependency to your `build.gradle` file:
+
+```gradle
+dependencies {
+  ...
+  implementation project(":react-native-nitro-modules")
+}
+```
+
 In your `build.gradle` file, add this:
 
 ```gradle
