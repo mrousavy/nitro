@@ -1,5 +1,8 @@
 /**
  * Describes the languages this component will be implemented in.
+ *
+ * By default, everything has a C++ base, and can optionally be bridged down
+ * to platform-specific languages like Swift or Kotlin
  */
 export interface PlatformSpec {
   ios?: 'swift' | 'c++'
@@ -7,13 +10,17 @@ export interface PlatformSpec {
 }
 
 /**
- * Represents a Nitro `HybridObject` which is implemented natively in either C++,
- * or Swift/Kotlin.
+ * Represents a Nitro `HybridObject` which is implemented in a native language like
+ * C++, Swift or Kotlin.
+ * Every Nitro `HybridObject` has a C++ base, and can optionally be bridged down to Swift or Kotlin.
  *
  * `HybridObject`s use the Nitro Tunnel for efficient, low-overhead JS <-> Native communication.
  *
  * All `HybridObject`s are implemented using `NativeState`, and inherit their properties
  * and methods from their prototype, so the actual JS object is empty.
+ *
+ * @type Platforms: The type of platforms this HybridObject will be implemented in. By default, it is
+ * a C++ `HybridObject`.
  *
  * @example
  * ```ts
@@ -25,7 +32,7 @@ export interface PlatformSpec {
  * }
  * ```
  */
-export interface HybridObject<Spec extends PlatformSpec> {
+export interface HybridObject<Platforms extends PlatformSpec = {}> {
   /**
    * Holds a type-name describing the native `HybridObject` instance.
    *
@@ -73,5 +80,5 @@ export interface HybridObject<Spec extends PlatformSpec> {
    * console.log(hybridA.equals(hybridB)) // true
    * ```
    */
-  equals(other: HybridObject<Spec>): boolean
+  equals(other: HybridObject<Platforms>): boolean
 }
