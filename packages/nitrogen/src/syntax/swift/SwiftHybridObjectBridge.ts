@@ -345,7 +345,7 @@ function getResultTypesFile(
   hybridObjectName: HybridObjectName,
   resultTypes: MethodResult[]
 ): SourceFile {
-  const name = `${hybridObjectName.HybridTSpecCxx}Results.swift`
+  const name = `${hybridObjectName.HybridTSpecCxx}+ResultTypes.swift`
   const allEnumsCode = resultTypes.map((r) => r.swiftEnumCode)
 
   const code = `
