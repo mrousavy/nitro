@@ -47,13 +47,15 @@ export async function runNitrogen({
 
   // Loop through all source files to log them
   console.log(
-    chalk.reset(`🚀  Nitrogen runs at ${prettifyDirectory(baseDirectory)}`)
+    chalk.reset(
+      `🚀  Nitrogen runs at ${chalk.underline(prettifyDirectory(baseDirectory))}`
+    )
   )
   for (const dir of project.getDirectories()) {
     const specs = dir.getSourceFiles().length
     const relativePath = prettifyDirectory(dir.getPath())
     console.log(
-      `    🔍  Nitrogen found ${specs} spec${specs === 1 ? '' : 's'} in ${relativePath}`
+      `    🔍  Nitrogen found ${specs} spec${specs === 1 ? '' : 's'} in ${chalk.underline(relativePath)}`
     )
   }
 

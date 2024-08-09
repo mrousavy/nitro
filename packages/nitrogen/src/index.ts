@@ -26,7 +26,9 @@ const timeS = ((end - start) / 1000).toFixed(1)
 console.log(
   `🎉  Generated ${generatedSpecsCount}/${targetSpecsCount} HybridObject${generatedSpecsCount === 1 ? '' : 's'} in ${timeS}s!`
 )
-console.log(`💡  Your code is in ${prettifyDirectory(outputDirectory)}`)
+console.log(
+  `💡  Your code is in ${chalk.underline(prettifyDirectory(outputDirectory))}`
+)
 
 // 3. Delete all old dangling files
 const addedFiles = generatedFiles.filter((f) => !filesBefore.includes(f))
