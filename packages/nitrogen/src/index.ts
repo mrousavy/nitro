@@ -166,7 +166,7 @@ for (const sourceFile of project.getSourceFiles()) {
     console.log(`    ❌  No specs found in ${sourceFile.getBaseName()}!`)
   }
 
-  Logger.info(`⛓️   Setting up build configs for autolinking...`)
+  Logger.info(`    ⛓️   Setting up build configs for autolinking...`)
 
   // iOS Podspec (Autolinking)
   const buildSetupFiles = [
@@ -176,7 +176,7 @@ for (const sourceFile of project.getSourceFiles()) {
   ]
   for (const file of buildSetupFiles) {
     Logger.info(
-      `    ${chalk.dim(file.platform)}: Creating ${file.platform} autolinking build setup...`
+      `        ${chalk.dim(file.platform)}: Creating ${file.platform} autolinking build setup...`
     )
     const basePath = path.join(outFolder, file.platform)
     const actualPath = await writeFile(basePath, file as unknown as SourceFile)
