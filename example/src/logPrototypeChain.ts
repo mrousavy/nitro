@@ -5,9 +5,13 @@ export function logPrototypeChain(type: HybridObject): void {
   let object = type
   let indentation = '  '
   while (object != null) {
-    const prefix = object === type ? indentation : `${indentation}∟ `
-    console.log(`${prefix}${object.__type ?? '{}'}`)
-    indentation += '   '
+    if (object === type) {
+      console.log(`${indentation}${object.__type ?? type.name}`)
+      indentation += ' '
+    } else {
+      console.log(`${indentation}∟ ${object.__type ?? '{}'}`)
+      indentation += '   '
+    }
     object = Object.getPrototypeOf(object)
   }
 }
