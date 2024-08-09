@@ -165,23 +165,23 @@ for (const sourceFile of project.getSourceFiles()) {
   if (generatedSpecs === startedWithSpecs) {
     console.log(`    ❌  No specs found in ${sourceFile.getBaseName()}!`)
   }
+}
 
-  Logger.info(`    ⛓️   Setting up build configs for autolinking...`)
+Logger.info(`⛓️   Setting up build configs for autolinking...`)
 
-  // iOS Podspec (Autolinking)
-  const buildSetupFiles = [
-    createPodspecRubyExtension(),
-    createCMakeExtension(writtenFiles),
-    createGradleExtension(),
-  ]
-  for (const file of buildSetupFiles) {
-    Logger.info(
-      `        ${chalk.dim(file.platform)}: Creating ${file.platform} autolinking build setup...`
-    )
-    const basePath = path.join(outFolder, file.platform)
-    const actualPath = await writeFile(basePath, file as unknown as SourceFile)
-    filesAfter.push(actualPath)
-  }
+// iOS Podspec (Autolinking)
+const buildSetupFiles = [
+  createPodspecRubyExtension(),
+  createCMakeExtension(writtenFiles),
+  createGradleExtension(),
+]
+for (const file of buildSetupFiles) {
+  Logger.info(
+    `    ${chalk.dim(file.platform)}: Creating ${file.platform} autolinking build setup...`
+  )
+  const basePath = path.join(outFolder, file.platform)
+  const actualPath = await writeFile(basePath, file as unknown as SourceFile)
+  filesAfter.push(actualPath)
 }
 
 const end = performance.now()
