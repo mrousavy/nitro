@@ -8,10 +8,10 @@
   "scripts": {
     "check-all": "./scripts/clang-format.sh",
     "bootstrap": "bun --filter=\"**\" install && bun tsc && bun --filter=\"react-native-nitro-example\" pods",
-    "tsc": "bun --filter=\"**\" typescript",
+    "typescript": "bun --filter=\"**\" typescript",
     "lint": "bun --filter=\"**\" lint",
     "release": "release-it",
-    "postinstall": "bun tsc"
+    "postinstall": "bun typescript"
   },
   "workspaces": [
     "packages/react-native-nitro-modules",
