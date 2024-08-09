@@ -25,12 +25,12 @@ target_sources(
   # CMake project name (Android C++ library name)
   NitroImage
   # Shared Nitrogen C++ sources
-  ../nitrogen/generated/shared/HybridImageSpec.cpp
-  ../nitrogen/generated/shared/HybridImageFactorySpec.cpp
-  ../nitrogen/generated/shared/HybridTestObjectSpec.cpp
+  ../nitrogen/generated/shared/c++/HybridImageSpec.cpp
+  ../nitrogen/generated/shared/c++/HybridImageFactorySpec.cpp
+  ../nitrogen/generated/shared/c++/HybridTestObjectSpec.cpp
   # Android-specific Nitrogen C++ sources
-  ../nitrogen/generated/android/JHybridImageSpec.cpp
-  ../nitrogen/generated/android/JHybridImageFactorySpec.cpp
+  ../nitrogen/generated/android/c++/JHybridImageSpec.cpp
+  ../nitrogen/generated/android/c++/JHybridImageFactorySpec.cpp
 )
 
 # Add all libraries required by the generated specs

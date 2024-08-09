@@ -8,6 +8,7 @@ import { writeUserConfigFile } from './config/NitroUserConfig.js'
 import { getFiles } from './getFiles.js'
 import { runNitrogen } from './nitrogen.js'
 import { promises as fs } from 'fs'
+import { isValidLogLevel, setLogLevel } from './Logger.js'
 
 const baseDirectory = getBaseDirectory()
 const commandName = 'nitro-codegen'
@@ -24,6 +25,12 @@ await yargs(hideBin(process.argv))
     description: 'Configures the log-level of nitrogen.',
     default: 'info',
     choices: ['debug', 'info', 'warning', 'error'],
+  })
+  .middleware((args) => {
+    if (!isValidLogLevel(args.logLevel)) {
+      throw new Error(`Invalid log-level ("${args.logLevel}")!`)
+    }
+    setLogLevel(args.logLevel)
   })
   // 🔥 nitrogen [path]
   .command(
