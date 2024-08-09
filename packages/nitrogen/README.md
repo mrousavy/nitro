@@ -89,7 +89,7 @@ end
 
 #### Android
 
-Add nitro modules project to your `build.gradle` file:
+Add Nitro's core dependency to your `build.gradle` file:
 
 ```gradle
 dependencies {
