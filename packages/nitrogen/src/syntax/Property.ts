@@ -1,6 +1,6 @@
 import { ts, type PropertySignature } from 'ts-morph'
 import type { CodeNode } from './CodeNode.js'
-import { capitalizeName } from '../stringUtils.js'
+import { capitalizeName } from '../utils.js'
 import { type SourceFile, type SourceImport } from './SourceFile.js'
 import type { Language } from '../getPlatformSpecs.js'
 import type { NamedType } from './types/Type.js'

@@ -6,7 +6,12 @@ import { generatePlatformFiles } from './createPlatformSpec.js'
 import { promises as fs } from 'fs'
 import path from 'path'
 import { getBaseDirectory, prettifyDirectory } from './getCurrentDir.js'
-import { capitalizeName, errorToString, indent } from './stringUtils.js'
+import {
+  capitalizeName,
+  errorToString,
+  filterDuplicateFiles,
+  indent,
+} from './utils.js'
 import { writeFile } from './writeFile.js'
 import chalk from 'chalk'
 import { getFiles } from './getFiles.js'
@@ -114,10 +119,12 @@ for (const sourceFile of project.getSourceFiles()) {
       )
 
       // Create all files and throw it into a big lsit
-      const allFiles = platforms.flatMap((p) => {
-        const language = platformSpec[p]!
-        return generatePlatformFiles(module, language)
-      })
+      const allFiles = platforms
+        .flatMap((p) => {
+          const language = platformSpec[p]!
+          return generatePlatformFiles(module, language)
+        })
+        .filter(filterDuplicateFiles)
       // Group the files by platform ({ ios: [], android: [], shared: [] })
       const filesPerPlatform = groupByPlatform(allFiles)
       // Loop through each platform one by one so that it has some kind of order (per-platform)

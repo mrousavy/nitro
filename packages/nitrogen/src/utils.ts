@@ -1,3 +1,6 @@
+import type { SourceFile } from './syntax/SourceFile.js'
+import path from 'path'
+
 export function capitalizeName(name: string): string {
   return name.charAt(0).toUpperCase() + name.slice(1)
 }
@@ -38,4 +41,21 @@ export function errorToString(error: unknown): string {
     return error.toString()
   }
   return JSON.stringify(error)
+}
+
+function getFullPath(file: SourceFile): string {
+  return path.join(
+    file.platform,
+    file.language,
+    ...file.subdirectory,
+    file.content
+  )
+}
+export function filterDuplicateFiles(
+  f: SourceFile,
+  i: number,
+  array: SourceFile[]
+): boolean {
+  const otherIndex = array.findIndex((f2) => getFullPath(f) === getFullPath(f2))
+  return otherIndex === i
 }

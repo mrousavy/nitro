@@ -26,8 +26,6 @@ target_sources(
   NitroImage
   # Shared Nitrogen C++ sources
   ../nitrogen/generated/shared/HybridImageSpec.cpp
-  ../nitrogen/generated/shared/HybridImageSpec.cpp
-  ../nitrogen/generated/shared/HybridImageFactorySpec.cpp
   ../nitrogen/generated/shared/HybridImageFactorySpec.cpp
   ../nitrogen/generated/shared/HybridTestObjectSpec.cpp
   # Android-specific Nitrogen C++ sources

@@ -5,7 +5,7 @@ import { Parameter } from './Parameter.js'
 import type { MethodSignature } from 'ts-morph'
 import type { Type } from './types/Type.js'
 import { createType } from './createType.js'
-import { indent } from '../stringUtils.js'
+import { indent } from '../utils.js'
 
 export type MethodBody = string
 

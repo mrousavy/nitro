@@ -1,7 +1,7 @@
 import type { HybridObjectSpec } from '../HybridObjectSpec.js'
 import { SwiftCxxBridgedType } from './SwiftCxxBridgedType.js'
 import type { Property } from '../Property.js'
-import { indent } from '../../stringUtils.js'
+import { indent } from '../../utils.js'
 import type { Method } from '../Method.js'
 import { createFileMetadataString, isNotDuplicate } from '../helpers.js'
 import type { SourceFile } from '../SourceFile.js'

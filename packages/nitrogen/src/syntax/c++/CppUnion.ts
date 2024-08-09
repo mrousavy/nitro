@@ -1,6 +1,6 @@
 import type { SourceFile } from '../SourceFile.js'
 import { createFileMetadataString } from './../helpers.js'
-import { indent } from '../../stringUtils.js'
+import { indent } from '../../utils.js'
 import type { EnumMember } from '../types/EnumType.js'
 import { includeNitroHeader } from './includeNitroHeader.js'
 import { NitroConfig } from '../../config/NitroConfig.js'

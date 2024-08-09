@@ -1,4 +1,4 @@
-import { indent } from '../../stringUtils.js'
+import { indent } from '../../utils.js'
 import { getHybridObjectName } from '../getHybridObjectName.js'
 import { createFileMetadataString } from '../helpers.js'
 import type { HybridObjectSpec } from '../HybridObjectSpec.js'

@@ -1,5 +1,5 @@
 import { NitroConfig } from '../../config/NitroConfig.js'
-import { capitalizeName, indent } from '../../stringUtils.js'
+import { capitalizeName, indent } from '../../utils.js'
 import { createFileMetadataString } from '../helpers.js'
 import type { SourceFile } from '../SourceFile.js'
 import { JNIWrappedType } from '../types/JNIWrappedType.js'

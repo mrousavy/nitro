@@ -1,5 +1,5 @@
 import type { FileWithReferencedTypes } from '../SourceFile.js'
-import { indent } from '../../stringUtils.js'
+import { indent } from '../../utils.js'
 import { createFileMetadataString, isNotDuplicate } from '../helpers.js'
 import type { NamedType } from '../types/Type.js'
 import { includeNitroHeader } from './includeNitroHeader.js'

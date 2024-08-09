@@ -1,6 +1,6 @@
 import path from 'path'
 import { promises as fs } from 'fs'
-import { capitalizeName } from './stringUtils.js'
+import { capitalizeName } from './utils.js'
 import type { SourceFile } from './syntax/SourceFile.js'
 import chalk from 'chalk'
 import { Logger } from './Logger.js'
