@@ -8,6 +8,7 @@ import path from 'path'
 import { getBaseDirectory, prettifyDirectory } from './getCurrentDir.js'
 import { capitalizeName, errorToString, indent } from './stringUtils.js'
 import { writeFile } from './writeFile.js'
+import { removeFolder } from './removeFolder.js'
 import chalk from 'chalk'
 import { getFiles } from './getFiles.js'
 import { groupByPlatform, type SourceFile } from './syntax/SourceFile.js'
@@ -45,6 +46,11 @@ for (const dir of project.getDirectories()) {
   )
 }
 
+// at this point we should try to clean generated folder to mimic the actual state
+const outFolder = path.join(baseDirectory, 'nitrogen', 'generated')
+
+await removeFolder(outFolder)
+
 // If no source files are found, we can exit
 if (project.getSourceFiles().length === 0) {
   console.log(
@@ -55,7 +61,6 @@ if (project.getSourceFiles().length === 0) {
   process.exit()
 }
 
-const outFolder = path.join(baseDirectory, 'nitrogen', 'generated')
 const filesBefore = await getFiles(outFolder)
 const filesAfter: string[] = []
 const writtenFiles: SourceFile[] = []
