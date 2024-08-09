@@ -62,6 +62,24 @@ function createTest<T>(
   }
 }
 
+function timeoutedPromise<T>(
+  run: (complete: (value: T) => void) => void | Promise<void>
+): Promise<T> {
+  return new Promise((resolve, reject) => {
+    let didResolve = false
+    setTimeout(() => {
+      if (!didResolve) reject(new Error(`Timeouted!`))
+    }, 500)
+    run((value) => {
+      if (didResolve) {
+        throw new Error(`Promise was already rejected!`)
+      }
+      didResolve = true
+      resolve(value)
+    })
+  })
+}
+
 export function getTests(): TestRunner[] {
   return [
     // Basic prototype tests
@@ -413,7 +431,7 @@ export function getTests(): TestRunner[] {
 
     // Promises
     createTest('wait', async () =>
-      (await it(() => HybridTestObject.wait(0.5))).didNotThrow()
+      (await it(() => HybridTestObject.wait(0.1))).didNotThrow()
     ),
     createTest('calculateFibonacciSync(5)', async () =>
       it(() => HybridTestObject.calculateFibonacciSync(10))
@@ -429,13 +447,12 @@ export function getTests(): TestRunner[] {
     // Callbacks
     createTest('callCallback(...)', async () =>
       (
-        await it(async () => {
-          let wasCalled = false
-          HybridTestObject.callCallback(() => {
-            wasCalled = true
+        await it<boolean>(async () => {
+          return timeoutedPromise((complete) => {
+            HybridTestObject.callCallback(() => {
+              complete(true)
+            })
           })
-          await HybridTestObject.wait(0.5) // <-- we need to sleep cuz callbacks are executed asynchronously!
-          return wasCalled
         })
       )
         .didNotThrow()
@@ -444,13 +461,12 @@ export function getTests(): TestRunner[] {
     createTest('getValueFromJSCallback(...)', async () =>
       (
         await it(async () => {
-          let wasCalled = false
-          HybridTestObject.getValueFromJSCallback(() => {
-            wasCalled = true
-            return 55
+          return timeoutedPromise((complete) => {
+            HybridTestObject.getValueFromJSCallback(() => {
+              complete(true)
+              return 55
+            })
           })
-          await HybridTestObject.wait(0.5) // <-- we need to sleep cuz callbacks are executed asynchronously!
-          return wasCalled
         })
       )
         .didNotThrow()
@@ -464,20 +480,14 @@ export function getTests(): TestRunner[] {
     createTest('callAll(...)', async () =>
       (
         await it(async () => {
-          let calledCount = 0
-          HybridTestObject.callAll(
-            () => {
+          return timeoutedPromise((complete) => {
+            let calledCount = 0
+            const func = () => {
               calledCount++
-            },
-            () => {
-              calledCount++
-            },
-            () => {
-              calledCount++
+              if (calledCount === 3) complete(calledCount)
             }
-          )
-          await HybridTestObject.wait(0.5) // <-- we need to sleep cuz callbacks are executed asynchronously!
-          return calledCount
+            HybridTestObject.callAll(func, func, func)
+          })
         })
       )
         .didNotThrow()
