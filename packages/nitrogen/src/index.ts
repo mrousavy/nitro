@@ -150,7 +150,7 @@ for (const sourceFile of project.getSourceFiles()) {
     } catch (error) {
       const message = indent(errorToString(error), '    ')
       console.error(
-        `    ❌  Failed to generate spec for ${moduleName}! ${message}`
+        `        ❌  Failed to generate spec for ${moduleName}! ${message}`
       )
     }
   }

@@ -6,19 +6,19 @@ export function indent(string: string, indentation: string): string {
   return string.replaceAll('\n', `\n${indentation}`)
 }
 
-function getStack(error: Error): string | undefined {
-  if (error.stack == null) return undefined
+// function getStack(error: Error): string | undefined {
+//   if (error.stack == null) return undefined
 
-  const stack = error.stack.split('\n')
-  if (
-    stack[0] === `${error.name}: ${error.message}` ||
-    stack[0] === error.message
-  ) {
-    // remove the first item if it's already
-    stack.shift()
-  }
-  return stack.join('\n')
-}
+//   const stack = error.stack.split('\n')
+//   if (
+//     stack[0] === `${error.name}: ${error.message}` ||
+//     stack[0] === error.message
+//   ) {
+//     // remove the first item if it's already
+//     stack.shift()
+//   }
+//   return stack.join('\n')
+// }
 
 export function errorToString(error: unknown): string {
   if (error == null) {
@@ -31,10 +31,6 @@ export function errorToString(error: unknown): string {
     let message = `${error.name}: ${error.message}`
     if (error.cause != null) {
       message += ` (cause: ${JSON.stringify(error.cause)})`
-    }
-    const stack = getStack(error)
-    if (stack != null) {
-      message += `\n${stack}`
     }
     return message
   }
