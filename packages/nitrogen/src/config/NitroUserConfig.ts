@@ -5,10 +5,6 @@ const safeNamePattern = /^[a-zA-Z_][a-zA-Z0-9_]*$/
 
 export const NitroUserConfigSchema = z.object({
   /**
-   * Get the minimum log level for Nitrogen output.
-   */
-  logLevel: z.enum(['debug', 'info', 'warning', 'error']),
-  /**
    * Represents the C++ namespace of the module that will be generated.
    *
    * This can have multiple sub-namespaces, and is always relative to `margelo::nitro`.

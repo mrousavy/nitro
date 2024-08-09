@@ -2,26 +2,13 @@ import type { SourceFile } from './syntax/SourceFile.js'
 import path from 'path'
 
 export function capitalizeName(name: string): string {
+  if (name.length === 0) return name
   return name.charAt(0).toUpperCase() + name.slice(1)
 }
 
 export function indent(string: string, indentation: string): string {
   return string.replaceAll('\n', `\n${indentation}`)
 }
-
-// function getStack(error: Error): string | undefined {
-//   if (error.stack == null) return undefined
-
-//   const stack = error.stack.split('\n')
-//   if (
-//     stack[0] === `${error.name}: ${error.message}` ||
-//     stack[0] === error.message
-//   ) {
-//     // remove the first item if it's already
-//     stack.shift()
-//   }
-//   return stack.join('\n')
-// }
 
 export function errorToString(error: unknown): string {
   if (error == null) {

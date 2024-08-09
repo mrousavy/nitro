@@ -1,17 +1,23 @@
-import { NitroConfig } from './config/NitroConfig.js'
-import type { NitroUserConfig } from './config/NitroUserConfig.js'
-
-type LogLevel = NitroUserConfig['logLevel']
-const levelMap: Record<LogLevel, number> = {
+export type LogLevel = 'debug' | 'info' | 'warning' | 'error'
+const levelMap = {
   debug: 0,
   info: 1,
   warning: 2,
   error: 3,
+} as const
+let currentLogLevel: LogLevel = 'info'
+
+export function isValidLogLevel(level: unknown): level is LogLevel {
+  // @ts-expect-error
+  return typeof levelMap[level] === 'number'
 }
 
-function isAtLeast(level: NitroUserConfig['logLevel']): boolean {
-  const current = NitroConfig.getLogLevel()
-  return levelMap[level] >= levelMap[current]
+export function setLogLevel(level: LogLevel) {
+  currentLogLevel = level
+}
+
+function isAtLeast(level: LogLevel): boolean {
+  return levelMap[level] >= levelMap[currentLogLevel]
 }
 
 let indentation = 0
