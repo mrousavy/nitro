@@ -14,6 +14,10 @@ const commandName = 'nitro-codegen'
 
 // TODO: Actually set log-level depending on user command config
 
+// Maximum of 100 col width
+const cliWidth = Math.min(process.stdout.columns * 0.9, 100)
+
+// Set up yargs CLI app
 await yargs(hideBin(process.argv))
   .option('log-level', {
     type: 'string',
@@ -65,7 +69,7 @@ await yargs(hideBin(process.argv))
   )
   .help()
   .strict()
-  .wrap(process.stdout.columns).argv
+  .wrap(cliWidth).argv
 
 async function runNitrogenCommand(outputDirectory: string): Promise<void> {
   // 1. Prepare output folders
