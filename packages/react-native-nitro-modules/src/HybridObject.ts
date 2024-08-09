@@ -21,7 +21,6 @@ export interface PlatformSpec {
  *
  * @type Platforms: The type of platforms this HybridObject will be implemented in. By default, it is
  * a C++ `HybridObject`.
- *
  * @example
  * ```ts
  * interface Photo extends HybridObject<{ ios: 'swift', android: 'kotlin' }> {
@@ -41,8 +40,8 @@ export interface HybridObject<Platforms extends PlatformSpec = {}> {
    *
    * Nitro prototypes also have a `__type`.
    *
-   * For actual HybridObject instances, this is `NativeState<...>`, for
-   * prototypes this is `Prototype<...>`.
+   * - For actual HybridObject instances, this is `NativeState<...>`
+   * - For prototypes this is `Prototype<...>`.
    *
    * @internal
    * @private
@@ -56,7 +55,7 @@ export interface HybridObject<Platforms extends PlatformSpec = {}> {
   /**
    * Returns a string representation of the given `HybridObject`.
    *
-   * Unless overridden by the `HybridObject`, this will return a list of all properties.
+   * Unless overridden by the `HybridObject`, this will return the name of the object.
    *
    * @example
    * ```ts
