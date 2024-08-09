@@ -656,6 +656,7 @@ export function getTests(): TestRunner[] {
         .equals(true)
     ),
     createTest('.self == .self', () =>
+      // eslint-disable-next-line no-self-compare
       it(() => HybridTestObject.self === HybridTestObject.self)
         .didNotThrow()
         .equals(true)
