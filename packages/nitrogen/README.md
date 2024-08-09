@@ -31,7 +31,15 @@ See [**react-native-nitro-image**](../react-native-nitro-image/) for an example.
 
 The `nitro.json` config file specifies native namespaces, library name, and other information that will be used for generating the code.
 
-Every nitro module must have a `nitro.json` file at it's root level (i.e. the folder where `package.json` is)
+Every nitro module must have a `nitro.json` file at it's root level (i.e. the folder where `package.json` is).
+
+You can automatically generate a `nitro.json` file by running:
+
+```bash
+npm run nitrogen init <moduleName> # e.g. "image"
+```
+
+Your `nitro.json` file should look like this:
 
 ```json
 {
@@ -67,6 +75,8 @@ npm run nitrogen
 ```
 
 This will generate all native files inside `./nitrogen/generated`.
+
+You can also specify a custom output directory via the `--out` parameter.
 
 ### 5. Add build setup
 

@@ -60,12 +60,12 @@ export function writeUserConfigFile(
 ): Promise<void> {
   const config: NitroUserConfig = {
     android: {
-      androidCxxLibName: capitalizeName(moduleName),
+      androidCxxLibName: `Nitro${capitalizeName(moduleName)}`,
       androidNamespace: [moduleName.toLowerCase()],
     },
     cxxNamespace: [moduleName.toLowerCase()],
     ios: {
-      iosModulename: capitalizeName(moduleName),
+      iosModulename: `Nitro${capitalizeName(moduleName)}`,
     },
   }
   const dir = path.join(directory, 'nitro.json')
