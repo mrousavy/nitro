@@ -11,7 +11,8 @@
     "typescript": "bun --filter=\"**\" typescript",
     "lint": "bun --filter=\"**\" lint",
     "release": "release-it",
-    "postinstall": "bun typescript"
+    "postinstall": "bun typescript",
+    "clean": "rm -rf packages/**/tsconfig.tsbuildinfo packages/**/node_modules packages/**/lib"
   },
   "workspaces": [
     "packages/react-native-nitro-modules",
