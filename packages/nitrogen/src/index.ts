@@ -39,7 +39,8 @@ await yargs(hideBin(process.argv))
         default: './nitrogen/generated',
       }),
     async (argv) => {
-      await runNitrogenCommand(argv.out)
+      const outputDirectory = argv.out
+      await runNitrogenCommand(outputDirectory)
     }
   )
   // 🔥 nitrogen init <moduleName>
