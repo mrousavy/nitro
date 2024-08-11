@@ -38,7 +38,7 @@ struct JSIConverter<std::future<TResult>> {
     std::shared_ptr<Dispatcher> strongDispatcher = Dispatcher::getRuntimeGlobalDispatcher(runtime);
     std::weak_ptr<Dispatcher> weakDispatcher = strongDispatcher;
 
-    return Promise::createPromise(runtime, [sharedFuture, weakDispatcher](jsi::Runtime& runtime, std::shared_ptr<Promise> promise) {
+    return JSPromise::createPromise(runtime, [sharedFuture, weakDispatcher](jsi::Runtime& runtime, std::shared_ptr<JSPromise> promise) {
       // Spawn new async thread to synchronously wait for the `future<T>` to complete
       std::shared_ptr<ThreadPool> pool = ThreadPool::getSharedPool();
       pool->run([promise, &runtime, weakDispatcher, sharedFuture]() {

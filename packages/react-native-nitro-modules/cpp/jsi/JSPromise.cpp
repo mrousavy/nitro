@@ -1,4 +1,4 @@
-#include "Promise.hpp"
+#include "JSPromise.hpp"
 #include "JSICache.hpp"
 #include "NitroLogger.hpp"
 #include <jsi/jsi.h>
@@ -7,13 +7,13 @@ namespace margelo::nitro {
 
 using namespace facebook;
 
-Promise::Promise(jsi::Runtime& runtime, jsi::Function&& resolver, jsi::Function&& rejecter) {
+JSPromise::JSPromise(jsi::Runtime& runtime, jsi::Function&& resolver, jsi::Function&& rejecter) {
   auto functionCache = JSICache::getOrCreateCache(runtime);
   _resolver = functionCache.makeShared(std::move(resolver));
   _rejecter = functionCache.makeShared(std::move(rejecter));
 }
 
-jsi::Value Promise::createPromise(jsi::Runtime& runtime, RunPromise&& run) {
+jsi::Value JSPromise::createPromise(jsi::Runtime& runtime, RunPromise&& run) {
   // Get Promise ctor from global
   auto promiseCtor = runtime.global().getPropertyAsFunction(runtime, "Promise");
 
@@ -24,7 +24,7 @@ jsi::Value Promise::createPromise(jsi::Runtime& runtime, RunPromise&& run) {
         auto resolver = arguments[0].getObject(runtime).getFunction(runtime);
         auto rejecter = arguments[1].getObject(runtime).getFunction(runtime);
         // Create `Promise` type that wraps the JSI callbacks
-        auto promise = std::make_shared<Promise>(runtime, std::move(resolver), std::move(rejecter));
+        auto promise = std::make_shared<JSPromise>(runtime, std::move(resolver), std::move(rejecter));
         // Call `run` callback
         run(runtime, promise);
 
@@ -34,7 +34,7 @@ jsi::Value Promise::createPromise(jsi::Runtime& runtime, RunPromise&& run) {
   return promiseCtor.callAsConstructor(runtime, promiseCallback);
 }
 
-void Promise::resolve(jsi::Runtime& runtime, jsi::Value&& result) {
+void JSPromise::resolve(jsi::Runtime& runtime, jsi::Value&& result) {
   OwningLock<jsi::Function> lock = _resolver.lock();
 
   if (!_resolver) {
@@ -44,7 +44,7 @@ void Promise::resolve(jsi::Runtime& runtime, jsi::Value&& result) {
   _resolver->call(runtime, std::move(result));
 }
 
-void Promise::reject(jsi::Runtime& runtime, std::string message) {
+void JSPromise::reject(jsi::Runtime& runtime, std::string message) {
   OwningLock<jsi::Function> lock = _rejecter.lock();
 
   if (!_rejecter) {
