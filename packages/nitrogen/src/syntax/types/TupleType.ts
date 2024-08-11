@@ -19,14 +19,16 @@ export class TupleType implements Type {
   }
 
   getCode(language: Language): string {
-    const items = this.itemTypes.map((t) => t.getCode(language))
+    const types = this.itemTypes.map((t) => t.getCode(language))
 
     switch (language) {
       case 'c++':
-        return `std::tuple<${items.join(', ')}>`
+        return `std::tuple<${types.join(', ')}>`
+      case 'swift':
+        return `(${types.join(', ')})`
       default:
         throw new Error(
-          `Language ${language} is not yet supported for ArrayType!`
+          `Language ${language} is not yet supported for TupleType!`
         )
     }
   }

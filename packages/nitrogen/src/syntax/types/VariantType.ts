@@ -29,7 +29,7 @@ export class VariantType implements Type {
         return `std::variant<${types.join(', ')}>`
       default:
         throw new Error(
-          `Language ${language} is not yet supported for ArrayType!`
+          `Language ${language} is not yet supported for VariantType!`
         )
     }
   }
