@@ -24,7 +24,7 @@ export class PromiseType implements Type {
         return `std::future<${resultingCode}>`
       case 'swift':
         // Swift just returns a normal value, but it's an `async` function.
-        return resultingCode
+        return `Promise<${resultingCode}>`
       default:
         throw new Error(
           `Language ${language} is not yet supported for PromiseType!`

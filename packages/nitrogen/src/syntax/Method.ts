@@ -103,8 +103,7 @@ ${signature} {
       case 'swift': {
         const params = this.parameters.map((p) => p.getCode('swift'))
         const returnType = this.returnType.getCode('swift')
-        const isAsync = this.returnType.kind === 'promise'
-        let signature = `func ${this.name}(${params.join(', ')}) ${isAsync ? 'async ' : ''}throws -> ${returnType}`
+        let signature = `func ${this.name}(${params.join(', ')}) throws -> ${returnType}`
 
         if (modifiers?.inline) signature = `@inline(__always)\n${signature}`
 
