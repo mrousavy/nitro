@@ -6,6 +6,7 @@
 //
 
 #import "HybridImageFactorySpecSwift.hpp"
+#import "HybridSwiftKotlinTestObjectSpecSwift.hpp"
 #import "HybridTestObject.hpp"
 #import <Foundation/Foundation.h>
 #import <NitroModules/HybridObjectRegistry.hpp>
@@ -29,8 +30,8 @@ using namespace margelo::nitro;
     return std::make_shared<HybridImageFactorySpecSwift>(imageFactory);
   });
   HybridObjectRegistry::registerHybridObjectConstructor("SwiftKotlinTestObject", []() -> std::shared_ptr<HybridObject> {
-    auto imageFactory = NitroImage::NitroImageRegistry::createImageFactory();
-    return std::make_shared<HybridSwiftKotlinTestObjectSpecSwift>(imageFactory);
+    auto testObject = NitroImage::NitroImageRegistry::createSwiftKotlinTestObject();
+    return std::make_shared<HybridSwiftKotlinTestObjectSpecSwift>(testObject);
   });
   HybridObjectRegistry::registerHybridObjectConstructor(
       "TestObject", []() -> std::shared_ptr<HybridObject> { return std::make_shared<HybridTestObject>(); });
