@@ -30,34 +30,10 @@ import NitroModules
  */
 public protocol HybridSwiftKotlinTestObjectSpec: HybridObjectSpec {
   // Properties
-  var numberValue: Double { get set }
-  var boolValue: Bool { get set }
-  var stringValue: String { get set }
-  var bigintValue: Int64 { get set }
-  var stringOrUndefined: String? { get set }
-  var stringOrNull: String? { get set }
-  var optionalString: String? { get set }
-  var valueThatWillThrowOnAccess: Double { get set }
-  var someTuple: (Double, String) { get set }
+  
 
   // Methods
-  func simpleFunc() throws -> Void
-  func addNumbers(a: Double, b: Double) throws -> Double
-  func addStrings(a: String, b: String) throws -> String
-  func multipleArguments(num: Double, str: String, boo: Bool) throws -> Void
-  func funcThatThrows() throws -> Double
-  func tryOptionalParams(num: Double, boo: Bool, str: String?) throws -> String
-  func tryMiddleParam(num: Double, boo: Bool?, str: String) throws -> String
-  func flip(tuple: (Double, Double, Double)) throws -> (Double, Double, Double)
-  func passTuple(tuple: (Double, String, Bool)) throws -> (Double, String, Bool)
-  func calculateFibonacciSync(value: Double) throws -> Int64
-  func calculateFibonacciAsync(value: Double) async throws -> Int64
-  func wait(seconds: Double) async throws -> Void
-  func callCallback(callback: margelo.nitro.image.Func_void) throws -> Void
-  func callAll(first: margelo.nitro.image.Func_void, second: margelo.nitro.image.Func_void, third: margelo.nitro.image.Func_void) throws -> Void
-  func getCar() throws -> margelo.nitro.image.Car
-  func isCarElectric(car: margelo.nitro.image.Car) throws -> Bool
-  func getDriver(car: margelo.nitro.image.Car) throws -> margelo.nitro.image.Person?
+  func hallo(value: Double?) throws -> Void
 }
 
 public extension HybridSwiftKotlinTestObjectSpec {

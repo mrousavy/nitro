@@ -103,44 +103,13 @@ export interface TestObject extends HybridObject<{ ios: 'c++' }> {
 
 export interface SwiftKotlinTestObject extends HybridObject<{ ios: 'swift' }> {
   // Test Primitives
-  numberValue: number
-  boolValue: boolean
-  stringValue: string
-  bigintValue: bigint
-  stringOrUndefined: string | undefined
-  stringOrNull: string | null
-  optionalString?: string
+  // numberValue: number
+  // boolValue: boolean
+  // stringValue: string
+  // bigintValue: bigint
+  // stringOrUndefined: string | undefined
+  // stringOrNull: string | null
+  // optionalString?: string
 
-  // Basic function tests
-  simpleFunc(): void
-  addNumbers(a: number, b: number): number
-  addStrings(a: string, b: string): string
-  multipleArguments(num: number, str: string, boo: boolean): void
-
-  // Errors
-  valueThatWillThrowOnAccess: number
-  funcThatThrows(): number
-
-  // Optional parameters
-  tryOptionalParams(num: number, boo: boolean, str?: string): string
-  tryMiddleParam(num: number, boo: boolean | undefined, str: string): string
-
-  // Tuples
-  someTuple: [number, string]
-  flip(tuple: Float3): Float3
-  passTuple(tuple: TestTuple): [number, string, boolean]
-
-  // Promises
-  calculateFibonacciSync(value: number): bigint
-  calculateFibonacciAsync(value: number): Promise<bigint>
-  wait(seconds: number): Promise<void>
-
-  // Callbacks
-  callCallback(callback: () => void): void
-  callAll(first: () => void, second: () => void, third: () => void): void
-
-  // Objects
-  getCar(): Car
-  isCarElectric(car: Car): boolean
-  getDriver(car: Car): Person | undefined
+  hallo(value: number | undefined): void
 }

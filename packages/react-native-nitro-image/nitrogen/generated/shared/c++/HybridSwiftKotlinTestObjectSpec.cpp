@@ -15,41 +15,7 @@ namespace margelo::nitro::image {
     HybridObject::loadHybridMethods();
     // load custom methods/properties
     registerHybrids(this, [](Prototype& prototype) {
-      prototype.registerHybridGetter("numberValue", &HybridSwiftKotlinTestObjectSpec::getNumberValue);
-      prototype.registerHybridSetter("numberValue", &HybridSwiftKotlinTestObjectSpec::setNumberValue);
-      prototype.registerHybridGetter("boolValue", &HybridSwiftKotlinTestObjectSpec::getBoolValue);
-      prototype.registerHybridSetter("boolValue", &HybridSwiftKotlinTestObjectSpec::setBoolValue);
-      prototype.registerHybridGetter("stringValue", &HybridSwiftKotlinTestObjectSpec::getStringValue);
-      prototype.registerHybridSetter("stringValue", &HybridSwiftKotlinTestObjectSpec::setStringValue);
-      prototype.registerHybridGetter("bigintValue", &HybridSwiftKotlinTestObjectSpec::getBigintValue);
-      prototype.registerHybridSetter("bigintValue", &HybridSwiftKotlinTestObjectSpec::setBigintValue);
-      prototype.registerHybridGetter("stringOrUndefined", &HybridSwiftKotlinTestObjectSpec::getStringOrUndefined);
-      prototype.registerHybridSetter("stringOrUndefined", &HybridSwiftKotlinTestObjectSpec::setStringOrUndefined);
-      prototype.registerHybridGetter("stringOrNull", &HybridSwiftKotlinTestObjectSpec::getStringOrNull);
-      prototype.registerHybridSetter("stringOrNull", &HybridSwiftKotlinTestObjectSpec::setStringOrNull);
-      prototype.registerHybridGetter("optionalString", &HybridSwiftKotlinTestObjectSpec::getOptionalString);
-      prototype.registerHybridSetter("optionalString", &HybridSwiftKotlinTestObjectSpec::setOptionalString);
-      prototype.registerHybridGetter("valueThatWillThrowOnAccess", &HybridSwiftKotlinTestObjectSpec::getValueThatWillThrowOnAccess);
-      prototype.registerHybridSetter("valueThatWillThrowOnAccess", &HybridSwiftKotlinTestObjectSpec::setValueThatWillThrowOnAccess);
-      prototype.registerHybridGetter("someTuple", &HybridSwiftKotlinTestObjectSpec::getSomeTuple);
-      prototype.registerHybridSetter("someTuple", &HybridSwiftKotlinTestObjectSpec::setSomeTuple);
-      prototype.registerHybridMethod("simpleFunc", &HybridSwiftKotlinTestObjectSpec::simpleFunc);
-      prototype.registerHybridMethod("addNumbers", &HybridSwiftKotlinTestObjectSpec::addNumbers);
-      prototype.registerHybridMethod("addStrings", &HybridSwiftKotlinTestObjectSpec::addStrings);
-      prototype.registerHybridMethod("multipleArguments", &HybridSwiftKotlinTestObjectSpec::multipleArguments);
-      prototype.registerHybridMethod("funcThatThrows", &HybridSwiftKotlinTestObjectSpec::funcThatThrows);
-      prototype.registerHybridMethod("tryOptionalParams", &HybridSwiftKotlinTestObjectSpec::tryOptionalParams);
-      prototype.registerHybridMethod("tryMiddleParam", &HybridSwiftKotlinTestObjectSpec::tryMiddleParam);
-      prototype.registerHybridMethod("flip", &HybridSwiftKotlinTestObjectSpec::flip);
-      prototype.registerHybridMethod("passTuple", &HybridSwiftKotlinTestObjectSpec::passTuple);
-      prototype.registerHybridMethod("calculateFibonacciSync", &HybridSwiftKotlinTestObjectSpec::calculateFibonacciSync);
-      prototype.registerHybridMethod("calculateFibonacciAsync", &HybridSwiftKotlinTestObjectSpec::calculateFibonacciAsync);
-      prototype.registerHybridMethod("wait", &HybridSwiftKotlinTestObjectSpec::wait);
-      prototype.registerHybridMethod("callCallback", &HybridSwiftKotlinTestObjectSpec::callCallback);
-      prototype.registerHybridMethod("callAll", &HybridSwiftKotlinTestObjectSpec::callAll);
-      prototype.registerHybridMethod("getCar", &HybridSwiftKotlinTestObjectSpec::getCar);
-      prototype.registerHybridMethod("isCarElectric", &HybridSwiftKotlinTestObjectSpec::isCarElectric);
-      prototype.registerHybridMethod("getDriver", &HybridSwiftKotlinTestObjectSpec::getDriver);
+      prototype.registerHybridMethod("hallo", &HybridSwiftKotlinTestObjectSpec::hallo);
     });
   }
 

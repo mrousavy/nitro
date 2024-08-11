@@ -13,14 +13,9 @@
 // Forward declaration of `HybridSwiftKotlinTestObjectSpecCxx` to properly resolve imports.
 namespace NitroImage { class HybridSwiftKotlinTestObjectSpecCxx; }
 
-// Forward declaration of `Car` to properly resolve imports.
-namespace margelo::nitro::image { struct Car; }
-// Forward declaration of `Person` to properly resolve imports.
-namespace margelo::nitro::image { struct Person; }
 
-#include "Func_void.hpp"
-#include "Car.hpp"
-#include "Person.hpp"
+
+
 
 #if __has_include(<NitroModules/HybridContext.hpp>)
 #include <NitroModules/HybridContext.hpp>
@@ -59,191 +54,16 @@ namespace margelo::nitro::image {
 
   public:
     // Properties
-    inline double getNumberValue() noexcept override {
-    return _swiftPart.getNumberValue();
-  }
-  inline void setNumberValue(double numberValue) noexcept override {
-    _swiftPart.setNumberValue(std::forward<decltype(numberValue)>(numberValue));
-  }
-  inline bool getBoolValue() noexcept override {
-    return _swiftPart.getBoolValue();
-  }
-  inline void setBoolValue(bool boolValue) noexcept override {
-    _swiftPart.setBoolValue(std::forward<decltype(boolValue)>(boolValue));
-  }
-  inline std::string getStringValue() noexcept override {
-    return _swiftPart.getStringValue();
-  }
-  inline void setStringValue(const std::string& stringValue) noexcept override {
-    _swiftPart.setStringValue(std::forward<decltype(stringValue)>(stringValue));
-  }
-  inline int64_t getBigintValue() noexcept override {
-    return _swiftPart.getBigintValue();
-  }
-  inline void setBigintValue(int64_t bigintValue) noexcept override {
-    _swiftPart.setBigintValue(std::forward<decltype(bigintValue)>(bigintValue));
-  }
-  inline std::optional<std::string> getStringOrUndefined() noexcept override {
-    return _swiftPart.getStringOrUndefined();
-  }
-  inline void setStringOrUndefined(const std::optional<std::string>& stringOrUndefined) noexcept override {
-    _swiftPart.setStringOrUndefined(std::forward<decltype(stringOrUndefined)>(stringOrUndefined));
-  }
-  inline std::optional<std::string> getStringOrNull() noexcept override {
-    return _swiftPart.getStringOrNull();
-  }
-  inline void setStringOrNull(const std::optional<std::string>& stringOrNull) noexcept override {
-    _swiftPart.setStringOrNull(std::forward<decltype(stringOrNull)>(stringOrNull));
-  }
-  inline std::optional<std::string> getOptionalString() noexcept override {
-    return _swiftPart.getOptionalString();
-  }
-  inline void setOptionalString(const std::optional<std::string>& optionalString) noexcept override {
-    _swiftPart.setOptionalString(std::forward<decltype(optionalString)>(optionalString));
-  }
-  inline double getValueThatWillThrowOnAccess() noexcept override {
-    return _swiftPart.getValueThatWillThrowOnAccess();
-  }
-  inline void setValueThatWillThrowOnAccess(double valueThatWillThrowOnAccess) noexcept override {
-    _swiftPart.setValueThatWillThrowOnAccess(std::forward<decltype(valueThatWillThrowOnAccess)>(valueThatWillThrowOnAccess));
-  }
-  inline std::tuple<double, std::string> getSomeTuple() noexcept override {
-    return _swiftPart.getSomeTuple();
-  }
-  inline void setSomeTuple(const std::tuple<double, std::string>& someTuple) noexcept override {
-    _swiftPart.setSomeTuple(std::forward<decltype(someTuple)>(someTuple));
-  }
+    
 
   public:
     // Methods
-    inline void simpleFunc() override {
-    auto valueOrError = _swiftPart.simpleFunc();
-    if (valueOrError.isError()) [[unlikely]] {
-      throw std::runtime_error(valueOrError.getError());
+    inline void hallo(std::optional<double> value) override {
+      auto valueOrError = _swiftPart.hallo(55.0);
+      if (valueOrError.isError()) [[unlikely]] {
+        throw std::runtime_error(valueOrError.getError());
+      }
     }
-  }
-  inline double addNumbers(double a, double b) override {
-    auto valueOrError = _swiftPart.addNumbers(std::forward<decltype(a)>(a), std::forward<decltype(b)>(b));
-    if (valueOrError.isError()) [[unlikely]] {
-      throw std::runtime_error(valueOrError.getError());
-    }
-    auto value = valueOrError.getValue();
-    return value;
-  }
-  inline std::string addStrings(const std::string& a, const std::string& b) override {
-    auto valueOrError = _swiftPart.addStrings(std::forward<decltype(a)>(a), std::forward<decltype(b)>(b));
-    if (valueOrError.isError()) [[unlikely]] {
-      throw std::runtime_error(valueOrError.getError());
-    }
-    auto value = valueOrError.getValue();
-    return value;
-  }
-  inline void multipleArguments(double num, const std::string& str, bool boo) override {
-    auto valueOrError = _swiftPart.multipleArguments(std::forward<decltype(num)>(num), std::forward<decltype(str)>(str), std::forward<decltype(boo)>(boo));
-    if (valueOrError.isError()) [[unlikely]] {
-      throw std::runtime_error(valueOrError.getError());
-    }
-  }
-  inline double funcThatThrows() override {
-    auto valueOrError = _swiftPart.funcThatThrows();
-    if (valueOrError.isError()) [[unlikely]] {
-      throw std::runtime_error(valueOrError.getError());
-    }
-    auto value = valueOrError.getValue();
-    return value;
-  }
-  inline std::string tryOptionalParams(double num, bool boo, const std::optional<std::string>& str) override {
-    auto valueOrError = _swiftPart.tryOptionalParams(std::forward<decltype(num)>(num), std::forward<decltype(boo)>(boo), std::forward<decltype(str)>(str));
-    if (valueOrError.isError()) [[unlikely]] {
-      throw std::runtime_error(valueOrError.getError());
-    }
-    auto value = valueOrError.getValue();
-    return value;
-  }
-  inline std::string tryMiddleParam(double num, std::optional<bool> boo, const std::string& str) override {
-    auto valueOrError = _swiftPart.tryMiddleParam(std::forward<decltype(num)>(num), std::forward<decltype(boo)>(boo), std::forward<decltype(str)>(str));
-    if (valueOrError.isError()) [[unlikely]] {
-      throw std::runtime_error(valueOrError.getError());
-    }
-    auto value = valueOrError.getValue();
-    return value;
-  }
-  inline std::tuple<double, double, double> flip(const std::tuple<double, double, double>& tuple) override {
-    auto valueOrError = _swiftPart.flip(std::forward<decltype(tuple)>(tuple));
-    if (valueOrError.isError()) [[unlikely]] {
-      throw std::runtime_error(valueOrError.getError());
-    }
-    auto value = valueOrError.getValue();
-    return value;
-  }
-  inline std::tuple<double, std::string, bool> passTuple(const std::tuple<double, std::string, bool>& tuple) override {
-    auto valueOrError = _swiftPart.passTuple(std::forward<decltype(tuple)>(tuple));
-    if (valueOrError.isError()) [[unlikely]] {
-      throw std::runtime_error(valueOrError.getError());
-    }
-    auto value = valueOrError.getValue();
-    return value;
-  }
-  inline int64_t calculateFibonacciSync(double value) override {
-    auto valueOrError = _swiftPart.calculateFibonacciSync(std::forward<decltype(value)>(value));
-    if (valueOrError.isError()) [[unlikely]] {
-      throw std::runtime_error(valueOrError.getError());
-    }
-    auto value = valueOrError.getValue();
-    return value;
-  }
-  inline std::future<int64_t> calculateFibonacciAsync(double value) override {
-    auto valueOrError = _swiftPart.calculateFibonacciAsync(std::forward<decltype(value)>(value));
-    if (valueOrError.isError()) [[unlikely]] {
-      throw std::runtime_error(valueOrError.getError());
-    }
-    auto value = valueOrError.getValue();
-    return value;
-  }
-  inline std::future<void> wait(double seconds) override {
-    auto valueOrError = _swiftPart.wait(std::forward<decltype(seconds)>(seconds));
-    if (valueOrError.isError()) [[unlikely]] {
-      throw std::runtime_error(valueOrError.getError());
-    }
-    auto value = valueOrError.getValue();
-    return value;
-  }
-  inline void callCallback(const Func_void& callback) override {
-    auto valueOrError = _swiftPart.callCallback(std::forward<decltype(callback)>(callback));
-    if (valueOrError.isError()) [[unlikely]] {
-      throw std::runtime_error(valueOrError.getError());
-    }
-  }
-  inline void callAll(const Func_void& first, const Func_void& second, const Func_void& third) override {
-    auto valueOrError = _swiftPart.callAll(std::forward<decltype(first)>(first), std::forward<decltype(second)>(second), std::forward<decltype(third)>(third));
-    if (valueOrError.isError()) [[unlikely]] {
-      throw std::runtime_error(valueOrError.getError());
-    }
-  }
-  inline Car getCar() override {
-    auto valueOrError = _swiftPart.getCar();
-    if (valueOrError.isError()) [[unlikely]] {
-      throw std::runtime_error(valueOrError.getError());
-    }
-    auto value = valueOrError.getValue();
-    return value;
-  }
-  inline bool isCarElectric(const Car& car) override {
-    auto valueOrError = _swiftPart.isCarElectric(std::forward<decltype(car)>(car));
-    if (valueOrError.isError()) [[unlikely]] {
-      throw std::runtime_error(valueOrError.getError());
-    }
-    auto value = valueOrError.getValue();
-    return value;
-  }
-  inline std::optional<Person> getDriver(const Car& car) override {
-    auto valueOrError = _swiftPart.getDriver(std::forward<decltype(car)>(car));
-    if (valueOrError.isError()) [[unlikely]] {
-      throw std::runtime_error(valueOrError.getError());
-    }
-    auto value = valueOrError.getValue();
-    return value;
-  }
 
   private:
     NitroImage::HybridSwiftKotlinTestObjectSpecCxx _swiftPart;
