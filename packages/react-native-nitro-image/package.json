@@ -30,7 +30,8 @@
     "typecheck": "tsc --noEmit",
     "clean": "del-cli android/build node_modules/**/android/build lib",
     "lint": "eslint \"**/*.{js,ts,tsx}\" --fix",
-    "typescript": "tsc --noEmit false"
+    "typescript": "tsc --noEmit false",
+    "specs": "bun run --filter=\"**\" typescript && bun nitro-codegen --logLevel=\"debug\""
   },
   "keywords": [
     "react-native",
