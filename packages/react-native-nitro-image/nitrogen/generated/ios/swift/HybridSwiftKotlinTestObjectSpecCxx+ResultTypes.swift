@@ -75,34 +75,6 @@ public enum HybridSwiftKotlinTestObjectSpecCxx_multipleArguments_Result {
 }
 
 /**
- * The exception-free result type for HybridSwiftKotlinTestObjectSpec.createMap(...).
- * Original func:
- * ```swift
- * func createMap() throws -> AnyMap
- * ```
- * - seealso: `HybridSwiftKotlinTestObjectSpec.createMap()`
- */
-@frozen
-public enum HybridSwiftKotlinTestObjectSpecCxx_createMap_Result {
-  case value(AnyMap)
-  case error(message: String)
-}
-
-/**
- * The exception-free result type for HybridSwiftKotlinTestObjectSpec.mapRoundtrip(...).
- * Original func:
- * ```swift
- * func mapRoundtrip(map: AnyMap) throws -> AnyMap
- * ```
- * - seealso: `HybridSwiftKotlinTestObjectSpec.mapRoundtrip(map:)`
- */
-@frozen
-public enum HybridSwiftKotlinTestObjectSpecCxx_mapRoundtrip_Result {
-  case value(AnyMap)
-  case error(message: String)
-}
-
-/**
  * The exception-free result type for HybridSwiftKotlinTestObjectSpec.funcThatThrows(...).
  * Original func:
  * ```swift
@@ -281,47 +253,5 @@ public enum HybridSwiftKotlinTestObjectSpecCxx_isCarElectric_Result {
 @frozen
 public enum HybridSwiftKotlinTestObjectSpecCxx_getDriver_Result {
   case value(margelo.nitro.image.Person?)
-  case error(message: String)
-}
-
-/**
- * The exception-free result type for HybridSwiftKotlinTestObjectSpec.createArrayBuffer(...).
- * Original func:
- * ```swift
- * func createArrayBuffer() throws -> ArrayBuffer
- * ```
- * - seealso: `HybridSwiftKotlinTestObjectSpec.createArrayBuffer()`
- */
-@frozen
-public enum HybridSwiftKotlinTestObjectSpecCxx_createArrayBuffer_Result {
-  case value(ArrayBuffer)
-  case error(message: String)
-}
-
-/**
- * The exception-free result type for HybridSwiftKotlinTestObjectSpec.getBufferLastItem(...).
- * Original func:
- * ```swift
- * func getBufferLastItem(buffer: ArrayBuffer) throws -> Double
- * ```
- * - seealso: `HybridSwiftKotlinTestObjectSpec.getBufferLastItem(buffer:)`
- */
-@frozen
-public enum HybridSwiftKotlinTestObjectSpecCxx_getBufferLastItem_Result {
-  case value(Double)
-  case error(message: String)
-}
-
-/**
- * The exception-free result type for HybridSwiftKotlinTestObjectSpec.setAllValuesTo(...).
- * Original func:
- * ```swift
- * func setAllValuesTo(buffer: ArrayBuffer, value: Double) throws -> Void
- * ```
- * - seealso: `HybridSwiftKotlinTestObjectSpec.setAllValuesTo(buffer:, value:)`
- */
-@frozen
-public enum HybridSwiftKotlinTestObjectSpecCxx_setAllValuesTo_Result {
-  case value
   case error(message: String)
 }

@@ -13,20 +13,14 @@
 // Forward declaration of `HybridSwiftKotlinTestObjectSpecCxx` to properly resolve imports.
 namespace NitroImage { class HybridSwiftKotlinTestObjectSpecCxx; }
 
-// Forward declaration of `AnyMap` to properly resolve imports.
-namespace NitroModules { class AnyMap; }
 // Forward declaration of `Car` to properly resolve imports.
 namespace margelo::nitro::image { struct Car; }
 // Forward declaration of `Person` to properly resolve imports.
 namespace margelo::nitro::image { struct Person; }
-// Forward declaration of `ArrayBuffer` to properly resolve imports.
-namespace NitroModules { class ArrayBuffer; }
 
-#include "NitroModules/AnyMap.hpp"
 #include "Func_void.hpp"
 #include "Car.hpp"
 #include "Person.hpp"
-#include "NitroModules/ArrayBuffer.hpp"
 
 #if __has_include(<NitroModules/HybridContext.hpp>)
 #include <NitroModules/HybridContext.hpp>
@@ -150,22 +144,6 @@ namespace margelo::nitro::image {
       throw std::runtime_error(valueOrError.getError());
     }
   }
-  inline std::shared_ptr<AnyMap> createMap() override {
-    auto valueOrError = _swiftPart.createMap();
-    if (valueOrError.isError()) [[unlikely]] {
-      throw std::runtime_error(valueOrError.getError());
-    }
-    auto value = valueOrError.getValue();
-    return value;
-  }
-  inline std::shared_ptr<AnyMap> mapRoundtrip(const std::shared_ptr<AnyMap>& map) override {
-    auto valueOrError = _swiftPart.mapRoundtrip(std::forward<decltype(map)>(map));
-    if (valueOrError.isError()) [[unlikely]] {
-      throw std::runtime_error(valueOrError.getError());
-    }
-    auto value = valueOrError.getValue();
-    return value;
-  }
   inline double funcThatThrows() override {
     auto valueOrError = _swiftPart.funcThatThrows();
     if (valueOrError.isError()) [[unlikely]] {
@@ -265,28 +243,6 @@ namespace margelo::nitro::image {
     }
     auto value = valueOrError.getValue();
     return value;
-  }
-  inline std::shared_ptr<ArrayBuffer> createArrayBuffer() override {
-    auto valueOrError = _swiftPart.createArrayBuffer();
-    if (valueOrError.isError()) [[unlikely]] {
-      throw std::runtime_error(valueOrError.getError());
-    }
-    auto value = valueOrError.getValue();
-    return value;
-  }
-  inline double getBufferLastItem(const std::shared_ptr<ArrayBuffer>& buffer) override {
-    auto valueOrError = _swiftPart.getBufferLastItem(std::forward<decltype(buffer)>(buffer));
-    if (valueOrError.isError()) [[unlikely]] {
-      throw std::runtime_error(valueOrError.getError());
-    }
-    auto value = valueOrError.getValue();
-    return value;
-  }
-  inline void setAllValuesTo(const std::shared_ptr<ArrayBuffer>& buffer, double value) override {
-    auto valueOrError = _swiftPart.setAllValuesTo(std::forward<decltype(buffer)>(buffer), std::forward<decltype(value)>(value));
-    if (valueOrError.isError()) [[unlikely]] {
-      throw std::runtime_error(valueOrError.getError());
-    }
   }
 
   private:

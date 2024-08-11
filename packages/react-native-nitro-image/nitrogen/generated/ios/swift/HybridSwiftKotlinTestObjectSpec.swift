@@ -45,8 +45,6 @@ public protocol HybridSwiftKotlinTestObjectSpec: HybridObjectSpec {
   func addNumbers(a: Double, b: Double) throws -> Double
   func addStrings(a: String, b: String) throws -> String
   func multipleArguments(num: Double, str: String, boo: Bool) throws -> Void
-  func createMap() throws -> AnyMap
-  func mapRoundtrip(map: AnyMap) throws -> AnyMap
   func funcThatThrows() throws -> Double
   func tryOptionalParams(num: Double, boo: Bool, str: String?) throws -> String
   func tryMiddleParam(num: Double, boo: Bool?, str: String) throws -> String
@@ -60,9 +58,6 @@ public protocol HybridSwiftKotlinTestObjectSpec: HybridObjectSpec {
   func getCar() throws -> margelo.nitro.image.Car
   func isCarElectric(car: margelo.nitro.image.Car) throws -> Bool
   func getDriver(car: margelo.nitro.image.Car) throws -> margelo.nitro.image.Person?
-  func createArrayBuffer() throws -> ArrayBuffer
-  func getBufferLastItem(buffer: ArrayBuffer) throws -> Double
-  func setAllValuesTo(buffer: ArrayBuffer, value: Double) throws -> Void
 }
 
 public extension HybridSwiftKotlinTestObjectSpec {

@@ -206,38 +206,6 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
   }
   
   @inline(__always)
-  public func createMap() -> HybridSwiftKotlinTestObjectSpecCxx_createMap_Result {
-    do {
-      let result = try self.implementation.createMap()
-      return .value(result)
-    } catch RuntimeError.error(withMessage: let message) {
-      // A  `RuntimeError` was thrown.
-      return .error(message: message)
-    } catch {
-      // Any other kind of error was thrown.
-      // Due to a Swift bug, we have to copy the string here.
-      let message = "\(error.localizedDescription)"
-      return .error(message: message)
-    }
-  }
-  
-  @inline(__always)
-  public func mapRoundtrip(map: AnyMap) -> HybridSwiftKotlinTestObjectSpecCxx_mapRoundtrip_Result {
-    do {
-      let result = try self.implementation.mapRoundtrip(map: map)
-      return .value(result)
-    } catch RuntimeError.error(withMessage: let message) {
-      // A  `RuntimeError` was thrown.
-      return .error(message: message)
-    } catch {
-      // Any other kind of error was thrown.
-      // Due to a Swift bug, we have to copy the string here.
-      let message = "\(error.localizedDescription)"
-      return .error(message: message)
-    }
-  }
-  
-  @inline(__always)
   public func funcThatThrows() -> HybridSwiftKotlinTestObjectSpecCxx_funcThatThrows_Result {
     do {
       let result = try self.implementation.funcThatThrows()
@@ -434,54 +402,6 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
     do {
       let result = try self.implementation.getDriver(car: car)
       return .value(result)
-    } catch RuntimeError.error(withMessage: let message) {
-      // A  `RuntimeError` was thrown.
-      return .error(message: message)
-    } catch {
-      // Any other kind of error was thrown.
-      // Due to a Swift bug, we have to copy the string here.
-      let message = "\(error.localizedDescription)"
-      return .error(message: message)
-    }
-  }
-  
-  @inline(__always)
-  public func createArrayBuffer() -> HybridSwiftKotlinTestObjectSpecCxx_createArrayBuffer_Result {
-    do {
-      let result = try self.implementation.createArrayBuffer()
-      return .value(result)
-    } catch RuntimeError.error(withMessage: let message) {
-      // A  `RuntimeError` was thrown.
-      return .error(message: message)
-    } catch {
-      // Any other kind of error was thrown.
-      // Due to a Swift bug, we have to copy the string here.
-      let message = "\(error.localizedDescription)"
-      return .error(message: message)
-    }
-  }
-  
-  @inline(__always)
-  public func getBufferLastItem(buffer: ArrayBuffer) -> HybridSwiftKotlinTestObjectSpecCxx_getBufferLastItem_Result {
-    do {
-      let result = try self.implementation.getBufferLastItem(buffer: buffer)
-      return .value(result)
-    } catch RuntimeError.error(withMessage: let message) {
-      // A  `RuntimeError` was thrown.
-      return .error(message: message)
-    } catch {
-      // Any other kind of error was thrown.
-      // Due to a Swift bug, we have to copy the string here.
-      let message = "\(error.localizedDescription)"
-      return .error(message: message)
-    }
-  }
-  
-  @inline(__always)
-  public func setAllValuesTo(buffer: ArrayBuffer, value: Double) -> HybridSwiftKotlinTestObjectSpecCxx_setAllValuesTo_Result {
-    do {
-      try self.implementation.setAllValuesTo(buffer: buffer, value: value)
-      return .value
     } catch RuntimeError.error(withMessage: let message) {
       // A  `RuntimeError` was thrown.
       return .error(message: message)

@@ -117,10 +117,6 @@ export interface SwiftKotlinTestObject extends HybridObject<{ ios: 'swift' }> {
   addStrings(a: string, b: string): string
   multipleArguments(num: number, str: string, boo: boolean): void
 
-  // Maps
-  createMap(): AnyMap
-  mapRoundtrip(map: AnyMap): AnyMap
-
   // Errors
   valueThatWillThrowOnAccess: number
   funcThatThrows(): number
@@ -147,9 +143,4 @@ export interface SwiftKotlinTestObject extends HybridObject<{ ios: 'swift' }> {
   getCar(): Car
   isCarElectric(car: Car): boolean
   getDriver(car: Car): Person | undefined
-
-  // ArrayBuffers
-  createArrayBuffer(): ArrayBuffer
-  getBufferLastItem(buffer: ArrayBuffer): number
-  setAllValuesTo(buffer: ArrayBuffer, value: number): void
 }

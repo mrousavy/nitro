@@ -37,8 +37,6 @@ namespace margelo::nitro::image {
       prototype.registerHybridMethod("addNumbers", &HybridSwiftKotlinTestObjectSpec::addNumbers);
       prototype.registerHybridMethod("addStrings", &HybridSwiftKotlinTestObjectSpec::addStrings);
       prototype.registerHybridMethod("multipleArguments", &HybridSwiftKotlinTestObjectSpec::multipleArguments);
-      prototype.registerHybridMethod("createMap", &HybridSwiftKotlinTestObjectSpec::createMap);
-      prototype.registerHybridMethod("mapRoundtrip", &HybridSwiftKotlinTestObjectSpec::mapRoundtrip);
       prototype.registerHybridMethod("funcThatThrows", &HybridSwiftKotlinTestObjectSpec::funcThatThrows);
       prototype.registerHybridMethod("tryOptionalParams", &HybridSwiftKotlinTestObjectSpec::tryOptionalParams);
       prototype.registerHybridMethod("tryMiddleParam", &HybridSwiftKotlinTestObjectSpec::tryMiddleParam);
@@ -52,9 +50,6 @@ namespace margelo::nitro::image {
       prototype.registerHybridMethod("getCar", &HybridSwiftKotlinTestObjectSpec::getCar);
       prototype.registerHybridMethod("isCarElectric", &HybridSwiftKotlinTestObjectSpec::isCarElectric);
       prototype.registerHybridMethod("getDriver", &HybridSwiftKotlinTestObjectSpec::getDriver);
-      prototype.registerHybridMethod("createArrayBuffer", &HybridSwiftKotlinTestObjectSpec::createArrayBuffer);
-      prototype.registerHybridMethod("getBufferLastItem", &HybridSwiftKotlinTestObjectSpec::getBufferLastItem);
-      prototype.registerHybridMethod("setAllValuesTo", &HybridSwiftKotlinTestObjectSpec::setAllValuesTo);
     });
   }
 

@@ -14,20 +14,14 @@
 #error NitroModules cannot be found! Are you sure you installed NitroModules properly?
 #endif
 
-// Forward declaration of `AnyMap` to properly resolve imports.
-namespace NitroModules { class AnyMap; }
 // Forward declaration of `Car` to properly resolve imports.
 namespace margelo::nitro::image { struct Car; }
 // Forward declaration of `Person` to properly resolve imports.
 namespace margelo::nitro::image { struct Person; }
-// Forward declaration of `ArrayBuffer` to properly resolve imports.
-namespace NitroModules { class ArrayBuffer; }
 
-#include "NitroModules/AnyMap.hpp"
 #include "Func_void.hpp"
 #include "Car.hpp"
 #include "Person.hpp"
-#include "NitroModules/ArrayBuffer.hpp"
 
 namespace margelo::nitro::image {
 
@@ -78,8 +72,6 @@ namespace margelo::nitro::image {
       virtual double addNumbers(double a, double b) = 0;
       virtual std::string addStrings(const std::string& a, const std::string& b) = 0;
       virtual void multipleArguments(double num, const std::string& str, bool boo) = 0;
-      virtual std::shared_ptr<AnyMap> createMap() = 0;
-      virtual std::shared_ptr<AnyMap> mapRoundtrip(const std::shared_ptr<AnyMap>& map) = 0;
       virtual double funcThatThrows() = 0;
       virtual std::string tryOptionalParams(double num, bool boo, const std::optional<std::string>& str) = 0;
       virtual std::string tryMiddleParam(double num, std::optional<bool> boo, const std::string& str) = 0;
@@ -93,9 +85,6 @@ namespace margelo::nitro::image {
       virtual Car getCar() = 0;
       virtual bool isCarElectric(const Car& car) = 0;
       virtual std::optional<Person> getDriver(const Car& car) = 0;
-      virtual std::shared_ptr<ArrayBuffer> createArrayBuffer() = 0;
-      virtual double getBufferLastItem(const std::shared_ptr<ArrayBuffer>& buffer) = 0;
-      virtual void setAllValuesTo(const std::shared_ptr<ArrayBuffer>& buffer, double value) = 0;
 
     protected:
       // Hybrid Setup
