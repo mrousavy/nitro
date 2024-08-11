@@ -53,8 +53,8 @@ public protocol HybridSwiftKotlinTestObjectSpec: HybridObjectSpec {
   func flip(tuple: (Double, Double, Double)) throws -> (Double, Double, Double)
   func passTuple(tuple: (Double, String, Bool)) throws -> (Double, String, Bool)
   func calculateFibonacciSync(value: Double) throws -> Int64
-  func calculateFibonacciAsync(value: Double) throws -> Promise
-  func wait(seconds: Double) throws -> Promise
+  func calculateFibonacciAsync(value: Double) async throws -> Int64
+  func wait(seconds: Double) async throws -> Void
   func callCallback(callback: margelo.nitro.image.Func_void) throws -> Void
   func callAll(first: margelo.nitro.image.Func_void, second: margelo.nitro.image.Func_void, third: margelo.nitro.image.Func_void) throws -> Void
   func getCar() throws -> margelo.nitro.image.Car

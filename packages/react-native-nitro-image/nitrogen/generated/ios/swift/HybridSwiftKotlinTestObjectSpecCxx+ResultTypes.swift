@@ -190,13 +190,13 @@ public enum HybridSwiftKotlinTestObjectSpecCxx_calculateFibonacciSync_Result {
  * The exception-free result type for HybridSwiftKotlinTestObjectSpec.calculateFibonacciAsync(...).
  * Original func:
  * ```swift
- * func calculateFibonacciAsync(value: Double) throws -> Promise
+ * func calculateFibonacciAsync(value: Double) async throws -> Int64
  * ```
  * - seealso: `HybridSwiftKotlinTestObjectSpec.calculateFibonacciAsync(value:)`
  */
 @frozen
 public enum HybridSwiftKotlinTestObjectSpecCxx_calculateFibonacciAsync_Result {
-  case value(Promise)
+  case value(Int64)
   case error(message: String)
 }
 
@@ -204,13 +204,13 @@ public enum HybridSwiftKotlinTestObjectSpecCxx_calculateFibonacciAsync_Result {
  * The exception-free result type for HybridSwiftKotlinTestObjectSpec.wait(...).
  * Original func:
  * ```swift
- * func wait(seconds: Double) throws -> Promise
+ * func wait(seconds: Double) async throws -> Void
  * ```
  * - seealso: `HybridSwiftKotlinTestObjectSpec.wait(seconds:)`
  */
 @frozen
 public enum HybridSwiftKotlinTestObjectSpecCxx_wait_Result {
-  case value(Promise)
+  case value(Void)
   case error(message: String)
 }
 

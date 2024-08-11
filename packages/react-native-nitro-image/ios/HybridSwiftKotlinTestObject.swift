@@ -72,6 +72,14 @@ class HybridSwiftKotlinTestObject : HybridSwiftKotlinTestObjectSpec {
     return calculateFibonacci(of: Int(value))
   }
   
+  func calculateFibonacciAsync(value: Double) async throws -> Int64 {
+    return calculateFibonacci(of: Int(value))
+  }
+  
+  func wait(seconds: Double) async throws {
+    try await Task.sleep(nanoseconds: 1_000_000_000)
+  }
+  
   func callCallback(callback: margelo.nitro.image.Func_void) throws {
     callback()
   }
