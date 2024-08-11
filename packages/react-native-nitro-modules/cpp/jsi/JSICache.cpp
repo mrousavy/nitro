@@ -8,8 +8,6 @@
 #include "JSICache.hpp"
 #include "JSIHelpers.hpp"
 
-#define DOUBLE_CHECK_GLOBAL_CACHE 1
-
 namespace margelo::nitro {
 
 static constexpr auto CACHE_PROP_NAME = "__nitroModulesJSICache";
@@ -48,7 +46,7 @@ JSICacheReference JSICache::getOrCreateCache(jsi::Runtime& runtime) {
     Logger::log(TAG, "JSICache was created, but it is no longer strong!");
   }
 
-#if DOUBLE_CHECK_GLOBAL_CACHE
+#if DEBUG
   if (runtime.global().hasProperty(runtime, CACHE_PROP_NAME)) [[unlikely]] {
     throw std::runtime_error("The Runtime \"" + getRuntimeId(runtime) + "\" already has a global cache! (\"" + CACHE_PROP_NAME + "\")");
   }
