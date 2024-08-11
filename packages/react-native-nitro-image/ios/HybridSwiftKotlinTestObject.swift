@@ -14,15 +14,15 @@ class HybridSwiftKotlinTestObject : HybridSwiftKotlinTestObjectSpec {
     return getSizeOf(self)
   }
   
-  var numberValue: Double
-  var boolValue: Bool
-  var stringValue: String
-  var bigintValue: Int64
-  var stringOrUndefined: String?
-  var stringOrNull: String?
-  var optionalString: String?
-  var valueThatWillThrowOnAccess: Double
-  var someTuple: (Double, String)
+  var numberValue: Double = 0.0
+  var boolValue: Bool = false
+  var stringValue: String = ""
+  var bigintValue: Int64 = 0
+  var stringOrUndefined: String? = nil
+  var stringOrNull: String? = nil
+  var optionalString: String? = nil
+  var valueThatWillThrowOnAccess: Double = 0.0
+  var someTuple: (Double, String) = (0.0, "")
   
   init() {
     
