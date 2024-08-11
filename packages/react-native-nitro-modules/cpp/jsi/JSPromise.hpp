@@ -43,7 +43,7 @@ private:
   static constexpr auto TAG = "Promise";
 
 public:
-  using RunPromise = std::function<void(jsi::Runtime& runtime, std::shared_ptr<Promise> promise)>;
+  using RunPromise = std::function<void(jsi::Runtime& runtime, std::shared_ptr<JSPromise> promise)>;
   /**
    * Create a new Promise using the JS `Promise` constructor and runs the given `run` function.
    * The resulting Promise should be returned to JS so it can be awaited.
