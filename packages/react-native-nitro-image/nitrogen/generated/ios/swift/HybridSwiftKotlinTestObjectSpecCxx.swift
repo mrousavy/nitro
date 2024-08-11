@@ -139,13 +139,6 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
       self.implementation.someTuple = newValue
     }
   }
-  
-  public var self: HybridTestObjectSpecCxx {
-    @inline(__always)
-    get {
-      return self.implementation.self.createCxxBridge()
-    }
-  }
 
   // Methods
   @inline(__always)
@@ -389,58 +382,10 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
   }
   
   @inline(__always)
-  public func getValueFromJSCallback(getValue: margelo.nitro.image.Func_std__future_double_) -> HybridSwiftKotlinTestObjectSpecCxx_getValueFromJSCallback_Result {
-    do {
-      try self.implementation.getValueFromJSCallback(getValue: getValue)
-      return .value
-    } catch RuntimeError.error(withMessage: let message) {
-      // A  `RuntimeError` was thrown.
-      return .error(message: message)
-    } catch {
-      // Any other kind of error was thrown.
-      // Due to a Swift bug, we have to copy the string here.
-      let message = "\(error.localizedDescription)"
-      return .error(message: message)
-    }
-  }
-  
-  @inline(__always)
-  public func getValueFromJSCallbackAndWait(getValue: margelo.nitro.image.Func_std__future_double_) -> HybridSwiftKotlinTestObjectSpecCxx_getValueFromJSCallbackAndWait_Result {
-    do {
-      let result = try self.implementation.getValueFromJSCallbackAndWait(getValue: getValue)
-      return .value(result)
-    } catch RuntimeError.error(withMessage: let message) {
-      // A  `RuntimeError` was thrown.
-      return .error(message: message)
-    } catch {
-      // Any other kind of error was thrown.
-      // Due to a Swift bug, we have to copy the string here.
-      let message = "\(error.localizedDescription)"
-      return .error(message: message)
-    }
-  }
-  
-  @inline(__always)
   public func callAll(first: margelo.nitro.image.Func_void, second: margelo.nitro.image.Func_void, third: margelo.nitro.image.Func_void) -> HybridSwiftKotlinTestObjectSpecCxx_callAll_Result {
     do {
       try self.implementation.callAll(first: first, second: second, third: third)
       return .value
-    } catch RuntimeError.error(withMessage: let message) {
-      // A  `RuntimeError` was thrown.
-      return .error(message: message)
-    } catch {
-      // Any other kind of error was thrown.
-      // Due to a Swift bug, we have to copy the string here.
-      let message = "\(error.localizedDescription)"
-      return .error(message: message)
-    }
-  }
-  
-  @inline(__always)
-  public func getValueFromJsCallback(callback: margelo.nitro.image.Func_std__future_std__string_, andThenCall: margelo.nitro.image.Func_void_std__string) -> HybridSwiftKotlinTestObjectSpecCxx_getValueFromJsCallback_Result {
-    do {
-      let result = try self.implementation.getValueFromJsCallback(callback: callback, andThenCall: andThenCall)
-      return .value(result)
     } catch RuntimeError.error(withMessage: let message) {
       // A  `RuntimeError` was thrown.
       return .error(message: message)
@@ -537,22 +482,6 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
     do {
       try self.implementation.setAllValuesTo(buffer: buffer, value: value)
       return .value
-    } catch RuntimeError.error(withMessage: let message) {
-      // A  `RuntimeError` was thrown.
-      return .error(message: message)
-    } catch {
-      // Any other kind of error was thrown.
-      // Due to a Swift bug, we have to copy the string here.
-      let message = "\(error.localizedDescription)"
-      return .error(message: message)
-    }
-  }
-  
-  @inline(__always)
-  public func newTestObject() -> HybridSwiftKotlinTestObjectSpecCxx_newTestObject_Result {
-    do {
-      let result = try self.implementation.newTestObject()
-      return .value(result.createCxxBridge())
     } catch RuntimeError.error(withMessage: let message) {
       // A  `RuntimeError` was thrown.
       return .error(message: message)

@@ -12,4 +12,8 @@ public class NitroImageRegistry {
     let imageFactory = HybridImageFactory()
     return HybridImageFactorySpecCxx(imageFactory)
   }
+  public static func createSwiftKotlinTestObject() -> HybridSwiftKotlinTestObjectSpecCxx {
+    let testObject = HybridSwiftKotlinTestObject()
+    return HybridSwiftKotlinTestObjectSpecCxx(testObject)
+  }
 }

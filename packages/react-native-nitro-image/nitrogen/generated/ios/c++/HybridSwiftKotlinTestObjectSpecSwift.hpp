@@ -13,10 +13,6 @@
 // Forward declaration of `HybridSwiftKotlinTestObjectSpecCxx` to properly resolve imports.
 namespace NitroImage { class HybridSwiftKotlinTestObjectSpecCxx; }
 
-// Forward declaration of `HybridTestObjectSpec` to properly resolve imports.
-namespace margelo::nitro::image { class HybridTestObjectSpec; }
-// Forward declaration of `HybridTestObjectSpecSwift` to properly resolve imports.
-namespace margelo::nitro::image { class HybridTestObjectSpecSwift; }
 // Forward declaration of `AnyMap` to properly resolve imports.
 namespace NitroModules { class AnyMap; }
 // Forward declaration of `Car` to properly resolve imports.
@@ -26,13 +22,8 @@ namespace margelo::nitro::image { struct Person; }
 // Forward declaration of `ArrayBuffer` to properly resolve imports.
 namespace NitroModules { class ArrayBuffer; }
 
-#include "HybridTestObjectSpec.hpp"
-#include "HybridTestObjectSpecSwift.hpp"
 #include "NitroModules/AnyMap.hpp"
 #include "Func_void.hpp"
-#include "Func_std__future_double_.hpp"
-#include "Func_std__future_std__string_.hpp"
-#include "Func_void_std__string.hpp"
 #include "Car.hpp"
 #include "Person.hpp"
 #include "NitroModules/ArrayBuffer.hpp"
@@ -127,10 +118,6 @@ namespace margelo::nitro::image {
   }
   inline void setSomeTuple(const std::tuple<double, std::string>& someTuple) noexcept override {
     _swiftPart.setSomeTuple(std::forward<decltype(someTuple)>(someTuple));
-  }
-  inline std::shared_ptr<margelo::nitro::image::HybridTestObjectSpec> getSelf() noexcept override {
-    auto result = _swiftPart.getSelf();
-    return HybridContext::getOrCreate<HybridTestObjectSpecSwift>(result);
   }
 
   public:
@@ -249,33 +236,11 @@ namespace margelo::nitro::image {
       throw std::runtime_error(valueOrError.getError());
     }
   }
-  inline void getValueFromJSCallback(const Func_std__future_double_& getValue) override {
-    auto valueOrError = _swiftPart.getValueFromJSCallback(std::forward<decltype(getValue)>(getValue));
-    if (valueOrError.isError()) [[unlikely]] {
-      throw std::runtime_error(valueOrError.getError());
-    }
-  }
-  inline std::future<double> getValueFromJSCallbackAndWait(const Func_std__future_double_& getValue) override {
-    auto valueOrError = _swiftPart.getValueFromJSCallbackAndWait(std::forward<decltype(getValue)>(getValue));
-    if (valueOrError.isError()) [[unlikely]] {
-      throw std::runtime_error(valueOrError.getError());
-    }
-    auto value = valueOrError.getValue();
-    return value;
-  }
   inline void callAll(const Func_void& first, const Func_void& second, const Func_void& third) override {
     auto valueOrError = _swiftPart.callAll(std::forward<decltype(first)>(first), std::forward<decltype(second)>(second), std::forward<decltype(third)>(third));
     if (valueOrError.isError()) [[unlikely]] {
       throw std::runtime_error(valueOrError.getError());
     }
-  }
-  inline std::future<void> getValueFromJsCallback(const Func_std__future_std__string_& callback, const Func_void_std__string& andThenCall) override {
-    auto valueOrError = _swiftPart.getValueFromJsCallback(std::forward<decltype(callback)>(callback), std::forward<decltype(andThenCall)>(andThenCall));
-    if (valueOrError.isError()) [[unlikely]] {
-      throw std::runtime_error(valueOrError.getError());
-    }
-    auto value = valueOrError.getValue();
-    return value;
   }
   inline Car getCar() override {
     auto valueOrError = _swiftPart.getCar();
@@ -322,14 +287,6 @@ namespace margelo::nitro::image {
     if (valueOrError.isError()) [[unlikely]] {
       throw std::runtime_error(valueOrError.getError());
     }
-  }
-  inline std::shared_ptr<margelo::nitro::image::HybridTestObjectSpec> newTestObject() override {
-    auto valueOrError = _swiftPart.newTestObject();
-    if (valueOrError.isError()) [[unlikely]] {
-      throw std::runtime_error(valueOrError.getError());
-    }
-    auto value = valueOrError.getValue();
-    return HybridContext::getOrCreate<HybridTestObjectSpecSwift>(value);
   }
 
   private:

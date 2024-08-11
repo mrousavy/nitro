@@ -141,13 +141,7 @@ export interface SwiftKotlinTestObject extends HybridObject<{ ios: 'swift' }> {
 
   // Callbacks
   callCallback(callback: () => void): void
-  getValueFromJSCallback(getValue: () => number): void
-  getValueFromJSCallbackAndWait(getValue: () => number): Promise<number>
   callAll(first: () => void, second: () => void, third: () => void): void
-  getValueFromJsCallback(
-    callback: () => string,
-    andThenCall: (valueFromJs: string) => void
-  ): Promise<void>
 
   // Objects
   getCar(): Car
@@ -158,8 +152,4 @@ export interface SwiftKotlinTestObject extends HybridObject<{ ios: 'swift' }> {
   createArrayBuffer(): ArrayBuffer
   getBufferLastItem(buffer: ArrayBuffer): number
   setAllValuesTo(buffer: ArrayBuffer, value: number): void
-
-  // Other HybridObjects
-  readonly self: TestObject
-  newTestObject(): TestObject
 }

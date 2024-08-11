@@ -39,7 +39,6 @@ public protocol HybridSwiftKotlinTestObjectSpec: HybridObjectSpec {
   var optionalString: String? { get set }
   var valueThatWillThrowOnAccess: Double { get set }
   var someTuple: (Double, String) { get set }
-  var self: HybridTestObjectSpec { get }
 
   // Methods
   func simpleFunc() throws -> Void
@@ -57,17 +56,13 @@ public protocol HybridSwiftKotlinTestObjectSpec: HybridObjectSpec {
   func calculateFibonacciAsync(value: Double) throws -> Promise
   func wait(seconds: Double) throws -> Promise
   func callCallback(callback: margelo.nitro.image.Func_void) throws -> Void
-  func getValueFromJSCallback(getValue: margelo.nitro.image.Func_std__future_double_) throws -> Void
-  func getValueFromJSCallbackAndWait(getValue: margelo.nitro.image.Func_std__future_double_) throws -> Promise
   func callAll(first: margelo.nitro.image.Func_void, second: margelo.nitro.image.Func_void, third: margelo.nitro.image.Func_void) throws -> Void
-  func getValueFromJsCallback(callback: margelo.nitro.image.Func_std__future_std__string_, andThenCall: margelo.nitro.image.Func_void_std__string) throws -> Promise
   func getCar() throws -> margelo.nitro.image.Car
   func isCarElectric(car: margelo.nitro.image.Car) throws -> Bool
   func getDriver(car: margelo.nitro.image.Car) throws -> margelo.nitro.image.Person?
   func createArrayBuffer() throws -> ArrayBuffer
   func getBufferLastItem(buffer: ArrayBuffer) throws -> Double
   func setAllValuesTo(buffer: ArrayBuffer, value: Double) throws -> Void
-  func newTestObject() throws -> HybridTestObjectSpec
 }
 
 public extension HybridSwiftKotlinTestObjectSpec {

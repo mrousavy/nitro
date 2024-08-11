@@ -28,6 +28,10 @@ using namespace margelo::nitro;
     auto imageFactory = NitroImage::NitroImageRegistry::createImageFactory();
     return std::make_shared<HybridImageFactorySpecSwift>(imageFactory);
   });
+  HybridObjectRegistry::registerHybridObjectConstructor("SwiftKotlinTestObject", []() -> std::shared_ptr<HybridObject> {
+    auto imageFactory = NitroImage::NitroImageRegistry::createImageFactory();
+    return std::make_shared<HybridSwiftKotlinTestObjectSpecSwift>(imageFactory);
+  });
   HybridObjectRegistry::registerHybridObjectConstructor(
       "TestObject", []() -> std::shared_ptr<HybridObject> { return std::make_shared<HybridTestObject>(); });
 }

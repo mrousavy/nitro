@@ -14,8 +14,6 @@
 #error NitroModules cannot be found! Are you sure you installed NitroModules properly?
 #endif
 
-// Forward declaration of `HybridTestObjectSpec` to properly resolve imports.
-namespace margelo::nitro::image { class HybridTestObjectSpec; }
 // Forward declaration of `AnyMap` to properly resolve imports.
 namespace NitroModules { class AnyMap; }
 // Forward declaration of `Car` to properly resolve imports.
@@ -25,12 +23,8 @@ namespace margelo::nitro::image { struct Person; }
 // Forward declaration of `ArrayBuffer` to properly resolve imports.
 namespace NitroModules { class ArrayBuffer; }
 
-#include "HybridTestObjectSpec.hpp"
 #include "NitroModules/AnyMap.hpp"
 #include "Func_void.hpp"
-#include "Func_std__future_double_.hpp"
-#include "Func_std__future_std__string_.hpp"
-#include "Func_void_std__string.hpp"
 #include "Car.hpp"
 #include "Person.hpp"
 #include "NitroModules/ArrayBuffer.hpp"
@@ -77,7 +71,6 @@ namespace margelo::nitro::image {
       virtual void setValueThatWillThrowOnAccess(double valueThatWillThrowOnAccess) = 0;
       virtual std::tuple<double, std::string> getSomeTuple() = 0;
       virtual void setSomeTuple(const std::tuple<double, std::string>& someTuple) = 0;
-      virtual std::shared_ptr<margelo::nitro::image::HybridTestObjectSpec> getSelf() = 0;
 
     public:
       // Methods
@@ -96,17 +89,13 @@ namespace margelo::nitro::image {
       virtual std::future<int64_t> calculateFibonacciAsync(double value) = 0;
       virtual std::future<void> wait(double seconds) = 0;
       virtual void callCallback(const Func_void& callback) = 0;
-      virtual void getValueFromJSCallback(const Func_std__future_double_& getValue) = 0;
-      virtual std::future<double> getValueFromJSCallbackAndWait(const Func_std__future_double_& getValue) = 0;
       virtual void callAll(const Func_void& first, const Func_void& second, const Func_void& third) = 0;
-      virtual std::future<void> getValueFromJsCallback(const Func_std__future_std__string_& callback, const Func_void_std__string& andThenCall) = 0;
       virtual Car getCar() = 0;
       virtual bool isCarElectric(const Car& car) = 0;
       virtual std::optional<Person> getDriver(const Car& car) = 0;
       virtual std::shared_ptr<ArrayBuffer> createArrayBuffer() = 0;
       virtual double getBufferLastItem(const std::shared_ptr<ArrayBuffer>& buffer) = 0;
       virtual void setAllValuesTo(const std::shared_ptr<ArrayBuffer>& buffer, double value) = 0;
-      virtual std::shared_ptr<margelo::nitro::image::HybridTestObjectSpec> newTestObject() = 0;
 
     protected:
       // Hybrid Setup

@@ -33,7 +33,6 @@ namespace margelo::nitro::image {
       prototype.registerHybridSetter("valueThatWillThrowOnAccess", &HybridSwiftKotlinTestObjectSpec::setValueThatWillThrowOnAccess);
       prototype.registerHybridGetter("someTuple", &HybridSwiftKotlinTestObjectSpec::getSomeTuple);
       prototype.registerHybridSetter("someTuple", &HybridSwiftKotlinTestObjectSpec::setSomeTuple);
-      prototype.registerHybridGetter("self", &HybridSwiftKotlinTestObjectSpec::getSelf);
       prototype.registerHybridMethod("simpleFunc", &HybridSwiftKotlinTestObjectSpec::simpleFunc);
       prototype.registerHybridMethod("addNumbers", &HybridSwiftKotlinTestObjectSpec::addNumbers);
       prototype.registerHybridMethod("addStrings", &HybridSwiftKotlinTestObjectSpec::addStrings);
@@ -49,17 +48,13 @@ namespace margelo::nitro::image {
       prototype.registerHybridMethod("calculateFibonacciAsync", &HybridSwiftKotlinTestObjectSpec::calculateFibonacciAsync);
       prototype.registerHybridMethod("wait", &HybridSwiftKotlinTestObjectSpec::wait);
       prototype.registerHybridMethod("callCallback", &HybridSwiftKotlinTestObjectSpec::callCallback);
-      prototype.registerHybridMethod("getValueFromJSCallback", &HybridSwiftKotlinTestObjectSpec::getValueFromJSCallback);
-      prototype.registerHybridMethod("getValueFromJSCallbackAndWait", &HybridSwiftKotlinTestObjectSpec::getValueFromJSCallbackAndWait);
       prototype.registerHybridMethod("callAll", &HybridSwiftKotlinTestObjectSpec::callAll);
-      prototype.registerHybridMethod("getValueFromJsCallback", &HybridSwiftKotlinTestObjectSpec::getValueFromJsCallback);
       prototype.registerHybridMethod("getCar", &HybridSwiftKotlinTestObjectSpec::getCar);
       prototype.registerHybridMethod("isCarElectric", &HybridSwiftKotlinTestObjectSpec::isCarElectric);
       prototype.registerHybridMethod("getDriver", &HybridSwiftKotlinTestObjectSpec::getDriver);
       prototype.registerHybridMethod("createArrayBuffer", &HybridSwiftKotlinTestObjectSpec::createArrayBuffer);
       prototype.registerHybridMethod("getBufferLastItem", &HybridSwiftKotlinTestObjectSpec::getBufferLastItem);
       prototype.registerHybridMethod("setAllValuesTo", &HybridSwiftKotlinTestObjectSpec::setAllValuesTo);
-      prototype.registerHybridMethod("newTestObject", &HybridSwiftKotlinTestObjectSpec::newTestObject);
     });
   }
 

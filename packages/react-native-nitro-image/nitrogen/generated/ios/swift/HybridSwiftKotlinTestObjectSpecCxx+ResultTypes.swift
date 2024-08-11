@@ -229,34 +229,6 @@ public enum HybridSwiftKotlinTestObjectSpecCxx_callCallback_Result {
 }
 
 /**
- * The exception-free result type for HybridSwiftKotlinTestObjectSpec.getValueFromJSCallback(...).
- * Original func:
- * ```swift
- * func getValueFromJSCallback(getValue: margelo.nitro.image.Func_std__future_double_) throws -> Void
- * ```
- * - seealso: `HybridSwiftKotlinTestObjectSpec.getValueFromJSCallback(getValue:)`
- */
-@frozen
-public enum HybridSwiftKotlinTestObjectSpecCxx_getValueFromJSCallback_Result {
-  case value
-  case error(message: String)
-}
-
-/**
- * The exception-free result type for HybridSwiftKotlinTestObjectSpec.getValueFromJSCallbackAndWait(...).
- * Original func:
- * ```swift
- * func getValueFromJSCallbackAndWait(getValue: margelo.nitro.image.Func_std__future_double_) throws -> Promise
- * ```
- * - seealso: `HybridSwiftKotlinTestObjectSpec.getValueFromJSCallbackAndWait(getValue:)`
- */
-@frozen
-public enum HybridSwiftKotlinTestObjectSpecCxx_getValueFromJSCallbackAndWait_Result {
-  case value(Promise)
-  case error(message: String)
-}
-
-/**
  * The exception-free result type for HybridSwiftKotlinTestObjectSpec.callAll(...).
  * Original func:
  * ```swift
@@ -267,20 +239,6 @@ public enum HybridSwiftKotlinTestObjectSpecCxx_getValueFromJSCallbackAndWait_Res
 @frozen
 public enum HybridSwiftKotlinTestObjectSpecCxx_callAll_Result {
   case value
-  case error(message: String)
-}
-
-/**
- * The exception-free result type for HybridSwiftKotlinTestObjectSpec.getValueFromJsCallback(...).
- * Original func:
- * ```swift
- * func getValueFromJsCallback(callback: margelo.nitro.image.Func_std__future_std__string_, andThenCall: margelo.nitro.image.Func_void_std__string) throws -> Promise
- * ```
- * - seealso: `HybridSwiftKotlinTestObjectSpec.getValueFromJsCallback(callback:, andThenCall:)`
- */
-@frozen
-public enum HybridSwiftKotlinTestObjectSpecCxx_getValueFromJsCallback_Result {
-  case value(Promise)
   case error(message: String)
 }
 
@@ -365,19 +323,5 @@ public enum HybridSwiftKotlinTestObjectSpecCxx_getBufferLastItem_Result {
 @frozen
 public enum HybridSwiftKotlinTestObjectSpecCxx_setAllValuesTo_Result {
   case value
-  case error(message: String)
-}
-
-/**
- * The exception-free result type for HybridSwiftKotlinTestObjectSpec.newTestObject(...).
- * Original func:
- * ```swift
- * func newTestObject() throws -> HybridTestObjectSpec
- * ```
- * - seealso: `HybridSwiftKotlinTestObjectSpec.newTestObject()`
- */
-@frozen
-public enum HybridSwiftKotlinTestObjectSpecCxx_newTestObject_Result {
-  case value(HybridTestObjectSpecCxx)
   case error(message: String)
 }
