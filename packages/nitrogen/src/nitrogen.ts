@@ -16,6 +16,7 @@ import { Logger } from './Logger.js'
 import { createPodspecRubyExtension } from './autolinking/createPodspecRubyExtension.js'
 import { createCMakeExtension } from './autolinking/createCMakeExtension.js'
 import { createGradleExtension } from './autolinking/createGradleExtension.js'
+import { createSwiftUmbrellaHeader } from './autolinking/createSwiftUmbrellaHeader.js'
 
 interface NitrogenOptions {
   baseDirectory: string
@@ -195,6 +196,7 @@ export async function runNitrogen({
 
   // iOS Podspec (Autolinking)
   const buildSetupFiles = [
+    createSwiftUmbrellaHeader(writtenFiles),
     createPodspecRubyExtension(),
     createCMakeExtension(writtenFiles),
     createGradleExtension(),

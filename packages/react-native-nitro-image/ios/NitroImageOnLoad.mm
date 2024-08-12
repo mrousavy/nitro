@@ -15,7 +15,7 @@ namespace NitroImage {
 class NitroImageRegistry;
 } // namespace NitroImage
 
-#import "NitroImage-Swift.h"
+#import "NitroImage-Swift-Cxx-Umbrella.hpp"
 
 @interface NitroImageOnLoad : NSObject
 @end

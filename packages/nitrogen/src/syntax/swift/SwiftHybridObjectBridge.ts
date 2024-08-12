@@ -193,7 +193,7 @@ ${extraIncludes.join('\n')}
 
 ${includeNitroHeader('HybridContext.hpp')}
 
-#include "${iosModuleName}-Swift.h"
+#include "${iosModuleName}-Swift-Cxx-Umbrella.hpp"
 
 namespace ${cxxNamespace} {
 
