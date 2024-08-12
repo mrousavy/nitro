@@ -23,6 +23,10 @@ export class SwiftCxxBridgedType {
     return this.type.kind !== 'void' && this.type.kind !== 'null'
   }
 
+  get canBePassedByReference(): boolean {
+    return this.type.canBePassedByReference
+  }
+
   get needsSpecialHandling(): boolean {
     switch (this.type.kind) {
       case 'enum':
@@ -181,6 +185,28 @@ export class SwiftCxxBridgedType {
             return cppParameterName
         }
       }
+      case 'array': {
+        const array = getTypeAs(this.type, ArrayType)
+        const wrapping = new SwiftCxxBridgedType(array.itemType)
+        switch (language) {
+          case 'c++':
+            const typeAssign = array.itemType.canBePassedByReference
+              ? 'const auto&'
+              : 'auto'
+            return `
+[&]() -> swift::Array<${wrapping.getTypeCode('c++')}> {
+  auto array = swift::Array<${wrapping.getTypeCode('c++')}>::init();
+  array.reserveCapacity(${cppParameterName}.size());
+  for (${typeAssign} i : ${cppParameterName}) {
+    array.append(${wrapping.parseFromCppToSwift('i', 'c++')});
+  }
+  return array;
+}()
+            `.trim()
+          default:
+            return cppParameterName
+        }
+      }
       case 'void':
         // When type is void, don't return anything
         return ''
@@ -230,6 +256,28 @@ export class SwiftCxxBridgedType {
       case 'string': {
         // swift::String has operator std::string(), so it can be implicitly converted
         return swiftParameterName
+      }
+      case 'array': {
+        const array = getTypeAs(this.type, ArrayType)
+        const wrapping = new SwiftCxxBridgedType(array.itemType)
+        switch (language) {
+          case 'c++':
+            const typeAssign = wrapping.canBePassedByReference
+              ? 'const auto&'
+              : 'auto'
+            return `
+[&]() -> ${array.getCode('c++')} {
+  ${array.getCode('c++')} vector;
+  vector.reserve(${swiftParameterName}.getCount());
+  for (${typeAssign} i : ${swiftParameterName}) {
+    vector.push_back(${wrapping.parseFromSwiftToCpp('i', 'c++')});
+  }
+  return vector;
+}()
+            `.trim()
+          default:
+            return swiftParameterName
+        }
       }
       case 'void':
         // When type is void, don't return anything

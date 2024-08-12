@@ -119,13 +119,25 @@ namespace margelo::nitro::image {
     }
     inline std::vector<double> createNumbers() override {
       auto result = _swiftPart.createNumbers();
-      // TODO: return result;
-      throw std::runtime_error("swift::Array -> std::vector not yet supported!");
+      return [&]() -> std::vector<double> {
+        std::vector<double> vector;
+        vector.reserve(result.getCount());
+        for (auto i : result) {
+          vector.push_back(i);
+        }
+        return vector;
+      }();
     }
     inline std::vector<std::string> createStrings() override {
       auto result = _swiftPart.createStrings();
-      // TODO: return result;
-      throw std::runtime_error("swift::Array -> std::vector not yet supported!");
+      return [&]() -> std::vector<std::string> {
+        std::vector<std::string> vector;
+        vector.reserve(result.getCount());
+        for (const auto& i : result) {
+          vector.push_back(i);
+        }
+        return vector;
+      }();
     }
 
   private:
