@@ -12,8 +12,6 @@ import { isValidLogLevel, setLogLevel } from './Logger.js'
 
 const commandName = 'nitro-codegen'
 
-// TODO: Actually set log-level depending on user command config
-
 // Maximum of 100 col width
 const cliWidth = Math.min(process.stdout.columns * 0.9, 100)
 

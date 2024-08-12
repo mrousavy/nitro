@@ -17,7 +17,7 @@ export function createCppEnum(
     .map((m) => `${m.name} SWIFT_NAME(${m.name.toLowerCase()}) = ${m.value},`)
     .join('\n')
   const minValue = 0
-  const maxValue = cppEnumMembers.length - 1
+  const maxValue = enumMembers.length - 1
   const cxxNamespace = NitroConfig.getCxxNamespace('c++')
 
   // Create entire C++ file

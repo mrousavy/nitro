@@ -62,6 +62,11 @@ export interface SourceImport {
    * The language this file is written in (e.g. `c++`)
    */
   language: Language
+  /**
+   * Whether the import is a user-defined header (something local, like `"MyObject.hpp"`)
+   * or a shared system header (like `<NitroModules/HybridObject.hpp>`)
+   */
+  space: 'user' | 'system'
 }
 
 type GroupedFiles = Record<SourceFile['platform'], SourceFile[]>

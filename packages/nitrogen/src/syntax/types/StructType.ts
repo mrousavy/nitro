@@ -58,6 +58,7 @@ export class StructType implements Type {
         this.structName,
         cxxNamespace
       ),
+      space: 'user',
     }
     return [extraImport]
   }

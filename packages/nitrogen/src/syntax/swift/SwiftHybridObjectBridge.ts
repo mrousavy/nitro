@@ -15,7 +15,7 @@ import {
 } from '../getHybridObjectName.js'
 import { getForwardDeclaration } from '../c++/getForwardDeclaration.js'
 import { NitroConfig } from '../../config/NitroConfig.js'
-import { includeNitroHeader } from '../c++/includeNitroHeader.js'
+import { includeHeader, includeNitroHeader } from '../c++/includeNitroHeader.js'
 
 /**
  * Creates a Swift class that bridges Swift over to C++.
@@ -172,7 +172,7 @@ return ${bridgedReturnType.parseFromSwiftToCpp('value', 'c++')};
     .filter((v) => v != null)
     .filter(isNotDuplicate)
   const extraIncludes = extraImports
-    .map((i) => `#include "${i.name}"`)
+    .map((i) => includeHeader(i))
     .filter(isNotDuplicate)
   const cxxNamespace = NitroConfig.getCxxNamespace('c++')
   const iosModuleName = NitroConfig.getIosModuleName()
@@ -193,7 +193,7 @@ ${extraIncludes.join('\n')}
 
 ${includeNitroHeader('HybridContext.hpp')}
 
-#include "${iosModuleName}-Swift.h"
+#include "${iosModuleName}-Swift-Cxx-Umbrella.hpp"
 
 namespace ${cxxNamespace} {
 
@@ -224,11 +224,11 @@ namespace ${cxxNamespace} {
 
   public:
     // Properties
-    ${indent(cppProperties, '  ')}
+    ${indent(cppProperties, '    ')}
 
   public:
     // Methods
-    ${indent(cppMethods, '  ')}
+    ${indent(cppMethods, '    ')}
 
   private:
     ${iosModuleName}::${name.HybridTSpecCxx} _swiftPart;

@@ -1,4 +1,4 @@
-import { ts, type Signature, type Type as TSMorphType } from 'ts-morph'
+import { ts, Type as TSMorphType, type Signature } from 'ts-morph'
 import type { Type } from './types/Type.js'
 import { NullType } from './types/NullType.js'
 import { BooleanType } from './types/BooleanType.js'
@@ -105,130 +105,161 @@ export function createVoidType(): Type {
   return new VoidType()
 }
 
+// Caches complex types (types that have a symbol)
+const knownTypes = new Map<ts.Type, Type>()
+
+/**
+ * Get a list of all currently known complex types.
+ */
+export function getAllKnownTypes(): Type[] {
+  return Array.from(knownTypes.values())
+}
+
+/**
+ * Create a new type (or return it from cache if it is already known)
+ */
 export function createType(type: TSMorphType, isOptional: boolean): Type {
-  if (isOptional) {
-    const wrapping = createType(type, false)
-    return new OptionalType(wrapping)
+  const key = type.compilerType
+  if (key != null && knownTypes.has(key)) {
+    const known = knownTypes.get(key)!
+    if (isOptional) {
+      return known instanceof OptionalType ? known : new OptionalType(known)
+    } else {
+      return known instanceof OptionalType ? known.wrappingType : known
+    }
   }
 
-  if (type.isNull() || type.isUndefined()) {
-    return new NullType()
-  } else if (type.isBoolean() || type.isBooleanLiteral()) {
-    return new BooleanType()
-  } else if (type.isNumber() || type.isNumberLiteral()) {
-    if (type.isEnumLiteral()) {
-      // enum literals are technically just numbers - but we treat them differently in C++.
-      return createType(type.getBaseTypeOfLiteralType(), isOptional)
+  const get = () => {
+    if (isOptional) {
+      const wrapping = createType(type, false)
+      return new OptionalType(wrapping)
     }
-    return new NumberType()
-  } else if (type.isString()) {
-    return new StringType()
-  } else if (type.isBigInt() || type.isBigIntLiteral()) {
-    return new BigIntType()
-  } else if (type.isVoid()) {
-    return new VoidType()
-  } else if (type.isArray()) {
-    const arrayElementType = type.getArrayElementTypeOrThrow()
-    const elementType = createType(arrayElementType, false)
-    return new ArrayType(elementType)
-  } else if (type.isTuple()) {
-    const itemTypes = type
-      .getTupleElements()
-      .map((t) => createType(t, t.isNullable()))
-    return new TupleType(itemTypes)
-  } else if (type.getCallSignatures().length > 0) {
-    // It's a function!
-    const callSignature = getFunctionCallSignature(type)
-    const funcReturnType = callSignature.getReturnType()
-    const returnType = createType(funcReturnType, funcReturnType.isNullable())
-    const parameters = callSignature.getParameters().map((p) => {
-      const declaration = p.getValueDeclarationOrThrow()
-      const parameterType = p.getTypeAtLocation(declaration)
-      return createNamedType(p.getName(), parameterType, p.isOptional())
-    })
-    return new FunctionType(returnType, parameters)
-  } else if (isPromise(type)) {
-    // It's a Promise!
-    const [promiseResolvingType] = getArguments(type, 'Promise', 1)
-    const resolvingType = createType(promiseResolvingType, false)
-    return new PromiseType(resolvingType)
-  } else if (isRecord(type)) {
-    // Record<K, V> -> unordered_map<K, V>
-    const [keyTypeT, valueTypeT] = getArguments(type, 'Record', 2)
-    const keyType = createType(keyTypeT, false)
-    const valueType = createType(valueTypeT, false)
-    return new RecordType(keyType, valueType)
-  } else if (isArrayBuffer(type)) {
-    // ArrayBuffer
-    return new ArrayBufferType()
-  } else if (isMap(type)) {
-    // Map
-    return new MapType()
-  } else if (type.isEnum()) {
-    // It is an enum. We need to generate a C++ declaration for the enum
-    const typename = type.getSymbolOrThrow().getEscapedName()
-    const declaration = type.getSymbolOrThrow().getValueDeclarationOrThrow()
-    const enumDeclaration = declaration.asKindOrThrow(
-      ts.SyntaxKind.EnumDeclaration
-    )
-    return new EnumType(typename, enumDeclaration)
-  } else if (type.isUnion()) {
-    // It is some kind of union - either full of strings (then it's an enum, or different types, then it's a Variant)
-    const isEnumUnion = type.getUnionTypes().every((t) => t.isStringLiteral())
-    if (isEnumUnion) {
-      // It consists only of string literaly - that means it's describing an enum!
-      const symbol = type.getAliasSymbol()
-      if (symbol == null) {
-        // If there is no alias, it is an inline union instead of a separate type declaration!
-        throw new Error(
-          `Inline union types ("${type.getText()}") are not supported by Nitrogen!\n` +
-            `Extract the union to a separate type, and re-run nitrogen!`
-        )
+
+    if (type.isNull() || type.isUndefined()) {
+      return new NullType()
+    } else if (type.isBoolean() || type.isBooleanLiteral()) {
+      return new BooleanType()
+    } else if (type.isNumber() || type.isNumberLiteral()) {
+      if (type.isEnumLiteral()) {
+        // enum literals are technically just numbers - but we treat them differently in C++.
+        return createType(type.getBaseTypeOfLiteralType(), isOptional)
       }
-      const typename = symbol.getEscapedName()
-      return new EnumType(typename, type)
-    } else {
-      // It consists of different types - that means it's a variant!
-      let variants = type
-        .getUnionTypes()
-        // Filter out any nulls or undefineds, as those are already treated as `isOptional`.
-        .filter((t) => !t.isNull() && !t.isUndefined() && !t.isVoid())
-        .map((t) => createType(t, false))
-      variants = removeDuplicates(variants)
+      return new NumberType()
+    } else if (type.isString()) {
+      return new StringType()
+    } else if (type.isBigInt() || type.isBigIntLiteral()) {
+      return new BigIntType()
+    } else if (type.isVoid()) {
+      return new VoidType()
+    } else if (type.isArray()) {
+      const arrayElementType = type.getArrayElementTypeOrThrow()
+      const elementType = createType(arrayElementType, false)
+      return new ArrayType(elementType)
+    } else if (type.isTuple()) {
+      const itemTypes = type
+        .getTupleElements()
+        .map((t) => createType(t, t.isNullable()))
+      return new TupleType(itemTypes)
+    } else if (type.getCallSignatures().length > 0) {
+      // It's a function!
+      const callSignature = getFunctionCallSignature(type)
+      const funcReturnType = callSignature.getReturnType()
+      const returnType = createType(funcReturnType, funcReturnType.isNullable())
+      const parameters = callSignature.getParameters().map((p) => {
+        const declaration = p.getValueDeclarationOrThrow()
+        const parameterType = p.getTypeAtLocation(declaration)
+        return createNamedType(p.getName(), parameterType, p.isOptional())
+      })
+      return new FunctionType(returnType, parameters)
+    } else if (isPromise(type)) {
+      // It's a Promise!
+      const [promiseResolvingType] = getArguments(type, 'Promise', 1)
+      const resolvingType = createType(promiseResolvingType, false)
+      return new PromiseType(resolvingType)
+    } else if (isRecord(type)) {
+      // Record<K, V> -> unordered_map<K, V>
+      const [keyTypeT, valueTypeT] = getArguments(type, 'Record', 2)
+      const keyType = createType(keyTypeT, false)
+      const valueType = createType(valueTypeT, false)
+      return new RecordType(keyType, valueType)
+    } else if (isArrayBuffer(type)) {
+      // ArrayBuffer
+      return new ArrayBufferType()
+    } else if (isMap(type)) {
+      // Map
+      return new MapType()
+    } else if (type.isEnum()) {
+      // It is an enum. We need to generate a C++ declaration for the enum
+      const typename = type.getSymbolOrThrow().getEscapedName()
+      const declaration = type.getSymbolOrThrow().getValueDeclarationOrThrow()
+      const enumDeclaration = declaration.asKindOrThrow(
+        ts.SyntaxKind.EnumDeclaration
+      )
+      return new EnumType(typename, enumDeclaration)
+    } else if (type.isUnion()) {
+      // It is some kind of union - either full of strings (then it's an enum, or different types, then it's a Variant)
+      const isEnumUnion = type.getUnionTypes().every((t) => t.isStringLiteral())
+      if (isEnumUnion) {
+        // It consists only of string literaly - that means it's describing an enum!
+        const symbol = type.getAliasSymbol()
+        if (symbol == null) {
+          // If there is no alias, it is an inline union instead of a separate type declaration!
+          throw new Error(
+            `Inline union types ("${type.getText()}") are not supported by Nitrogen!\n` +
+              `Extract the union to a separate type, and re-run nitrogen!`
+          )
+        }
+        const typename = symbol.getEscapedName()
+        return new EnumType(typename, type)
+      } else {
+        // It consists of different types - that means it's a variant!
+        let variants = type
+          .getUnionTypes()
+          // Filter out any nulls or undefineds, as those are already treated as `isOptional`.
+          .filter((t) => !t.isNull() && !t.isUndefined() && !t.isVoid())
+          .map((t) => createType(t, false))
+        variants = removeDuplicates(variants)
 
-      if (variants.length === 1) {
-        // It's just one type with undefined/null varians - so we treat it like a simple optional.
-        return variants[0]!
+        if (variants.length === 1) {
+          // It's just one type with undefined/null varians - so we treat it like a simple optional.
+          return variants[0]!
+        }
+
+        return new VariantType(variants)
       }
+    } else if (type.isInterface()) {
+      // It references another interface/type, either a simple struct, or another HybridObject
+      const typename = type.getSymbolOrThrow().getEscapedName()
 
-      return new VariantType(variants)
-    }
-  } else if (type.isInterface()) {
-    // It references another interface/type, either a simple struct, or another HybridObject
-    const typename = type.getSymbolOrThrow().getEscapedName()
-
-    const isHybridObject = type
-      .getBaseTypes()
-      .some((t) => t.getText().includes('HybridObject'))
-    if (isHybridObject) {
-      // It is another HybridObject being referenced!
-      return new HybridObjectType(typename)
+      const isHybridObject = type
+        .getBaseTypes()
+        .some((t) => t.getText().includes('HybridObject'))
+      if (isHybridObject) {
+        // It is another HybridObject being referenced!
+        return new HybridObjectType(typename)
+      } else {
+        // It is a simple struct being referenced.
+        const properties = getInterfaceProperties(type)
+        return new StructType(typename, properties)
+      }
+    } else if (type.isObject()) {
+      throw new Error(
+        `Anonymous objects cannot be represented in C++! Extract "${type.getText()}" to a separate interface/type declaration.`
+      )
+    } else if (type.isStringLiteral()) {
+      throw new Error(
+        `String literal ${type.getText()} cannot be represented in C++ because it is ambiguous between a string and a discriminating union enum.`
+      )
     } else {
-      // It is a simple struct being referenced.
-      const properties = getInterfaceProperties(type)
-      return new StructType(typename, properties)
+      throw new Error(
+        `The TypeScript type "${type.getText()}" cannot be represented in C++!`
+      )
     }
-  } else if (type.isObject()) {
-    throw new Error(
-      `Anonymous objects cannot be represented in C++! Extract "${type.getText()}" to a separate interface/type declaration.`
-    )
-  } else if (type.isStringLiteral()) {
-    throw new Error(
-      `String literal ${type.getText()} cannot be represented in C++ because it is ambiguous between a string and a discriminating union enum.`
-    )
-  } else {
-    throw new Error(
-      `The TypeScript type "${type.getText()}" cannot be represented in C++!`
-    )
   }
+
+  const result = get()
+  if (key != null) {
+    knownTypes.set(key, result)
+  }
+  return result
 }

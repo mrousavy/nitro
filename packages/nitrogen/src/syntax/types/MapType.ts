@@ -38,6 +38,7 @@ export class MapType implements Type {
           'NitroModules'
         ),
         language: 'c++',
+        space: 'system',
       },
     ]
   }

@@ -48,12 +48,23 @@ export class Property implements CodeNode {
   readonly type: NamedType
   readonly isReadonly: boolean
 
-  constructor(prop: PropertySignature) {
-    this.name = prop.getSymbolOrThrow().getEscapedName()
-    this.isReadonly = prop.hasModifier(ts.SyntaxKind.ReadonlyKeyword)
-    const type = prop.getTypeNodeOrThrow().getType()
-    const isOptional = prop.hasQuestionToken() || type.isNullable()
-    this.type = createNamedType(this.name, type, isOptional)
+  constructor(name: string, type: NamedType, isReadonly: boolean)
+  constructor(prop: PropertySignature)
+  constructor(...args: [PropertySignature] | [string, NamedType, boolean]) {
+    if (typeof args[0] === 'string') {
+      if (args.length !== 3) throw new Error('Missing argument for type!')
+      const [name, type, isReadonly] = args
+      this.name = name
+      this.type = type
+      this.isReadonly = isReadonly
+    } else {
+      const [prop] = args
+      this.name = prop.getSymbolOrThrow().getEscapedName()
+      this.isReadonly = prop.hasModifier(ts.SyntaxKind.ReadonlyKeyword)
+      const type = prop.getTypeNodeOrThrow().getType()
+      const isOptional = prop.hasQuestionToken() || type.isNullable()
+      this.type = createNamedType(this.name, type, isOptional)
+    }
   }
 
   getExtraFiles(): SourceFile[] {

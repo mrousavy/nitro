@@ -27,7 +27,7 @@ export function createCppUnion(
     )
     .join('\n')
   const cppCanConvertCases = enumMembers
-    .map((m) => `case hashString("${m.stringValue}"): return true;`)
+    .map((m) => `case hashString("${m.stringValue}"):`)
     .join('\n')
   const cxxNamespace = NitroConfig.getCxxNamespace('c++')
 
@@ -63,7 +63,7 @@ namespace margelo::nitro {
       switch (hashString(unionValue.c_str(), unionValue.size())) {
         ${indent(cppFromJsiHashCases, '        ')}
         default: [[unlikely]]
-          throw std::runtime_error("Cannot convert " + unionValue + " to ${typename} - invalid value!");
+          throw std::runtime_error("Cannot convert \\"" + unionValue + "\\" to enum ${typename} - invalid value!");
       }
     }
     static inline jsi::Value toJSI(jsi::Runtime& runtime, ${typename} arg) {
@@ -81,7 +81,9 @@ namespace margelo::nitro {
       std::string unionValue = JSIConverter<std::string>::fromJSI(runtime, value);
       switch (hashString(unionValue.c_str(), unionValue.size())) {
         ${indent(cppCanConvertCases, '        ')}
-        default: return false;
+          return true;
+        default:
+          return false;
       }
     }
   };

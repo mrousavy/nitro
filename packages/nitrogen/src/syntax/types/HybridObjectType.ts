@@ -60,6 +60,7 @@ export class HybridObjectType implements Type {
           cxxNamespace
         ),
         language: 'c++',
+        space: 'user',
       },
     ]
   }

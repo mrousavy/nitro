@@ -8,6 +8,7 @@ import type { SourceImport } from '../SourceFile.js'
 import { EnumType } from '../types/EnumType.js'
 import { getTypeAs } from '../types/getTypeAs.js'
 import { HybridObjectType } from '../types/HybridObjectType.js'
+import { OptionalType } from '../types/OptionalType.js'
 import type { Type } from '../types/Type.js'
 
 export class SwiftCxxBridgedType {
@@ -26,6 +27,9 @@ export class SwiftCxxBridgedType {
       case 'hybrid-object':
         // Swift HybridObjects need to be wrapped in our own *Cxx Swift classes.
         // We wrap/unwrap them if needed.
+        return true
+      case 'optional':
+        // swift::Optional<T> <> std::optional<T>
         return true
       default:
         return false
@@ -47,6 +51,7 @@ export class SwiftCxxBridgedType {
           namespace
         ),
         language: 'c++',
+        space: 'user',
       })
     }
 
@@ -110,6 +115,16 @@ export class SwiftCxxBridgedType {
           default:
             throw new Error(`Invalid language! ${language}`)
         }
+      case 'optional': {
+        const optionalType = getTypeAs(this.type, OptionalType)
+        const type = optionalType.wrappingType.getCode(language)
+        switch (language) {
+          case 'c++':
+            return `${cppParameterName}.has_value() ? swift::Optional<${type}>::some(${cppParameterName}.value()) : swift::Optional<${type}>::none()`
+          default:
+            return cppParameterName
+        }
+      }
       case 'void':
         // When type is void, don't return anything
         return ''
@@ -143,6 +158,14 @@ export class SwiftCxxBridgedType {
           default:
             throw new Error(`Invalid language! ${language}`)
         }
+      case 'optional': {
+        switch (language) {
+          case 'c++':
+            return `${swiftParameterName} ? ${swiftParameterName}.get() : nullptr`
+          default:
+            return swiftParameterName
+        }
+      }
       case 'void':
         // When type is void, don't return anything
         return ''

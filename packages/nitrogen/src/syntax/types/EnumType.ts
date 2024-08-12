@@ -108,6 +108,7 @@ export class EnumType implements Type {
         this.enumName,
         cxxNamespace
       ),
+      space: 'user',
     }
     return [extraImport]
   }

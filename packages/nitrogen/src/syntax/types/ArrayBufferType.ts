@@ -38,6 +38,7 @@ export class ArrayBufferType implements Type {
           'NitroModules'
         ),
         language: 'c++',
+        space: 'system',
       },
     ]
   }

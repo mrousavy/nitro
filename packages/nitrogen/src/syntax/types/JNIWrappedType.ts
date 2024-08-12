@@ -29,12 +29,14 @@ export class JNIWrappedType<T extends Type> implements Type {
         return {
           language: 'c++',
           name: `J${enumType.enumName}.hpp`,
+          space: 'user',
         }
       case 'struct':
         const structType = getTypeAs(this.type, StructType)
         return {
           language: 'c++',
           name: `J${structType.structName}.hpp`,
+          space: 'user',
         }
       case 'hybrid-object':
         const hybridObjectType = getTypeAs(this.type, HybridObjectType)
@@ -42,12 +44,14 @@ export class JNIWrappedType<T extends Type> implements Type {
         return {
           language: 'c++',
           name: `${name.JHybridTSpec}.hpp`,
+          space: 'user',
         }
       case 'function':
         const functionType = getTypeAs(this.type, FunctionType)
         return {
           language: 'c++',
           name: `J${functionType.specialization.typename}.hpp`,
+          space: 'user',
         }
       default:
         return undefined
