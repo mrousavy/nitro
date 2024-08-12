@@ -81,7 +81,7 @@ namespace margelo::nitro::image {
 
   public:
     // Methods using Swift types
-    inline double toArrayBuffer_swift(ImageFormat format) noexcept {
+    inline double toArrayBuffer_swift(ImageFormat format) {
       throw std::runtime_error("Enums dont work in Swift yet!");
     }
     inline void saveToFile_swift(swift::String path,Func_void_std__string onFinished) noexcept {
