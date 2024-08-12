@@ -61,6 +61,7 @@ export class StructType implements Type {
         cxxNamespace
       ),
       space: 'user',
+    })
     return extraImports
   }
 }
