@@ -228,12 +228,8 @@ export class SwiftCxxBridgedType {
         }
       }
       case 'string': {
-        switch (language) {
-          case 'c++':
-            return `std::string(${swiftParameterName})`
-          default:
-            return swiftParameterName
-        }
+        // swift::String has operator std::string(), so it can be implicitly converted
+        return swiftParameterName
       }
       case 'void':
         // When type is void, don't return anything

@@ -68,7 +68,7 @@ namespace margelo::nitro::image {
     }
     inline std::string getStringValue() noexcept override {
       auto result = _swiftPart.getStringValue();
-      return std::string(result);
+      return result;
     }
     inline void setStringValue(const std::string& stringValue) noexcept override {
       _swiftPart.setStringValue(swift::String(stringValue));
@@ -81,21 +81,21 @@ namespace margelo::nitro::image {
     }
     inline std::optional<std::string> getStringOrUndefined() noexcept override {
       auto result = _swiftPart.getStringOrUndefined();
-      return result ? std::optional<std::string>(std::string(result.get())) : std::nullopt;
+      return result ? std::optional<std::string>(result.get()) : std::nullopt;
     }
     inline void setStringOrUndefined(const std::optional<std::string>& stringOrUndefined) noexcept override {
       _swiftPart.setStringOrUndefined(stringOrUndefined.has_value() ? swift::Optional<swift::String>::some(stringOrUndefined.value()) : swift::Optional<swift::String>::none());
     }
     inline std::optional<std::string> getStringOrNull() noexcept override {
       auto result = _swiftPart.getStringOrNull();
-      return result ? std::optional<std::string>(std::string(result.get())) : std::nullopt;
+      return result ? std::optional<std::string>(result.get()) : std::nullopt;
     }
     inline void setStringOrNull(const std::optional<std::string>& stringOrNull) noexcept override {
       _swiftPart.setStringOrNull(stringOrNull.has_value() ? swift::Optional<swift::String>::some(stringOrNull.value()) : swift::Optional<swift::String>::none());
     }
     inline std::optional<std::string> getOptionalString() noexcept override {
       auto result = _swiftPart.getOptionalString();
-      return result ? std::optional<std::string>(std::string(result.get())) : std::nullopt;
+      return result ? std::optional<std::string>(result.get()) : std::nullopt;
     }
     inline void setOptionalString(const std::optional<std::string>& optionalString) noexcept override {
       _swiftPart.setOptionalString(optionalString.has_value() ? swift::Optional<swift::String>::some(optionalString.value()) : swift::Optional<swift::String>::none());
@@ -112,7 +112,7 @@ namespace margelo::nitro::image {
     }
     inline std::string addStrings(const std::string& a, const std::string& b) override {
       auto result = _swiftPart.addStrings(swift::String(a), swift::String(b));
-      return std::string(result);
+      return result;
     }
     inline void multipleArguments(double num, const std::string& str, bool boo) override {
       _swiftPart.multipleArguments(std::forward<decltype(num)>(num), swift::String(str), std::forward<decltype(boo)>(boo));
