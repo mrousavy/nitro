@@ -45,4 +45,15 @@ class HybridSwiftKotlinTestObject : HybridSwiftKotlinTestObjectSpec {
     return ["h", "e", "ll", "o"]
   }
   
+  func tryOptionalParams(num: Double, boo: Bool, str: String?) throws -> String {
+    if let str {
+      return str
+    } else {
+      return "value omitted!"
+    }
+  }
+  
+  func tryMiddleParam(num: Double, boo: Bool?, str: String) throws -> String {
+    return str
+  }
 }

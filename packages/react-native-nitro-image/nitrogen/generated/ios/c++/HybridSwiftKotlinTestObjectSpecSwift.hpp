@@ -139,6 +139,14 @@ namespace margelo::nitro::image {
         return vector;
       }();
     }
+    inline std::string tryOptionalParams(double num, bool boo, const std::optional<std::string>& str) override {
+      auto result = _swiftPart.tryOptionalParams(std::forward<decltype(num)>(num), std::forward<decltype(boo)>(boo), str.has_value() ? swift::Optional<swift::String>::some(str.value()) : swift::Optional<swift::String>::none());
+      return result;
+    }
+    inline std::string tryMiddleParam(double num, std::optional<bool> boo, const std::string& str) override {
+      auto result = _swiftPart.tryMiddleParam(std::forward<decltype(num)>(num), boo.has_value() ? swift::Optional<bool>::some(boo.value()) : swift::Optional<bool>::none(), swift::String(str));
+      return result;
+    }
 
   private:
     NitroImage::HybridSwiftKotlinTestObjectSpecCxx _swiftPart;

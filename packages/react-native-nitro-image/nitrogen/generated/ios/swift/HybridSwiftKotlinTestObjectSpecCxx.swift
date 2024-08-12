@@ -182,4 +182,26 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
       fatalError("Swift errors cannot be propagated to C++ yet! If you want to throw errors, consider using a Promise (async) or a variant type (sync) instead.")
     }
   }
+  
+  @inline(__always)
+  public func tryOptionalParams(num: Double, boo: Bool, str: String?) -> String {
+    do {
+      let result = try self.implementation.tryOptionalParams(num: num, boo: boo, str: str)
+      return result
+    } catch {
+      // TODO: Wait for https://github.com/swiftlang/swift/issues/75290
+      fatalError("Swift errors cannot be propagated to C++ yet! If you want to throw errors, consider using a Promise (async) or a variant type (sync) instead.")
+    }
+  }
+  
+  @inline(__always)
+  public func tryMiddleParam(num: Double, boo: Bool?, str: String) -> String {
+    do {
+      let result = try self.implementation.tryMiddleParam(num: num, boo: boo, str: str)
+      return result
+    } catch {
+      // TODO: Wait for https://github.com/swiftlang/swift/issues/75290
+      fatalError("Swift errors cannot be propagated to C++ yet! If you want to throw errors, consider using a Promise (async) or a variant type (sync) instead.")
+    }
+  }
 }

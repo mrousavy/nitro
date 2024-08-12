@@ -65,6 +65,8 @@ namespace margelo::nitro::image {
       virtual void multipleArguments(double num, const std::string& str, bool boo) = 0;
       virtual std::vector<double> createNumbers() = 0;
       virtual std::vector<std::string> createStrings() = 0;
+      virtual std::string tryOptionalParams(double num, bool boo, const std::optional<std::string>& str) = 0;
+      virtual std::string tryMiddleParam(double num, std::optional<bool> boo, const std::string& str) = 0;
 
     protected:
       // Hybrid Setup
