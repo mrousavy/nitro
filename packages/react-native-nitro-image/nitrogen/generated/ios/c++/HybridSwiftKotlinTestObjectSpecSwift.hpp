@@ -122,7 +122,7 @@ namespace margelo::nitro::image {
       return [&]() -> std::vector<double> {
         std::vector<double> vector;
         vector.reserve(result.getCount());
-        for (auto i : result) {
+        for (double i : result) {
           vector.push_back(i);
         }
         return vector;
@@ -133,7 +133,7 @@ namespace margelo::nitro::image {
       return [&]() -> std::vector<std::string> {
         std::vector<std::string> vector;
         vector.reserve(result.getCount());
-        for (const auto& i : result) {
+        for (const swift::String& i : result) {
           vector.push_back(i);
         }
         return vector;

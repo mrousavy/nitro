@@ -4,6 +4,7 @@ import {
   getHybridObjectName,
   type HybridObjectName,
 } from '../getHybridObjectName.js'
+import { toReferenceType } from '../helpers.js'
 import type { SourceImport } from '../SourceFile.js'
 import { ArrayType } from '../types/ArrayType.js'
 import { EnumType } from '../types/EnumType.js'
@@ -12,6 +13,8 @@ import { HybridObjectType } from '../types/HybridObjectType.js'
 import { OptionalType } from '../types/OptionalType.js'
 import type { Type } from '../types/Type.js'
 
+// TODO: Gradually add more Swift types as `JSIConverter<..>` overloads to avoid
+//       converting to C++ first. This could speed up swift::String, swift::Array, etc
 export class SwiftCxxBridgedType {
   private readonly type: Type
 
@@ -191,8 +194,8 @@ export class SwiftCxxBridgedType {
         switch (language) {
           case 'c++':
             const typeAssign = array.itemType.canBePassedByReference
-              ? 'const auto&'
-              : 'auto'
+              ? toReferenceType(array.itemType.getCode('c++'))
+              : array.itemType.getCode('c++')
             return `
 [&]() -> swift::Array<${wrapping.getTypeCode('c++')}> {
   auto array = swift::Array<${wrapping.getTypeCode('c++')}>::init();
@@ -263,8 +266,8 @@ export class SwiftCxxBridgedType {
         switch (language) {
           case 'c++':
             const typeAssign = wrapping.canBePassedByReference
-              ? 'const auto&'
-              : 'auto'
+              ? toReferenceType(wrapping.getTypeCode('c++'))
+              : wrapping.getTypeCode('c++')
             return `
 [&]() -> ${array.getCode('c++')} {
   ${array.getCode('c++')} vector;
