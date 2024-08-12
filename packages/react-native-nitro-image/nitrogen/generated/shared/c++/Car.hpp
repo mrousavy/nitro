@@ -14,6 +14,8 @@
 #error NitroModules cannot be found! Are you sure you installed NitroModules properly?
 #endif
 
+#include <NitroModules/NitroDefines.hpp>
+
 // Forward declaration of `Powertrain` to properly resolve imports.
 namespace margelo::nitro::image { enum class Powertrain; }
 // Forward declaration of `Person` to properly resolve imports.
@@ -39,6 +41,19 @@ namespace margelo::nitro::image {
   public:
     explicit Car(double year, std::string make, std::string model, double power, Powertrain powertrain, std::optional<Person> driver): year(year), make(make), model(model), power(power), powertrain(powertrain), driver(driver) {}
   };
+
+struct CarSwift {
+private:
+  Car _car;
+  
+public:
+  double getYear() const SWIFT_COMPUTED_PROPERTY {
+    return _car.year;
+  }
+  void setYear(double newValue) SWIFT_COMPUTED_PROPERTY {
+    _car.year = newValue;
+  }
+};
 
 } // namespace margelo::nitro::image
 
