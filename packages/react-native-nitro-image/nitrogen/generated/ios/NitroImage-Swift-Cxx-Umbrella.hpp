@@ -8,6 +8,7 @@
 
 #pragma once
 
+// Forward declarations of C++ defined types
 // Forward declaration of `AnyMap` to properly resolve imports.
 namespace NitroModules { class AnyMap; }
 // Forward declaration of `ArrayBuffer` to properly resolve imports.
@@ -31,11 +32,7 @@ namespace margelo::nitro::image { enum class PixelFormat; }
 // Forward declaration of `Powertrain` to properly resolve imports.
 namespace margelo::nitro::image { enum class Powertrain; }
 
-// Forward declaration of `HybridImageSpecCxx` to properly resolve imports.
-namespace NitroImage { class HybridImageSpecCxx; }
-// Forward declaration of `HybridTestObjectSpecCxx` to properly resolve imports.
-namespace NitroImage { class HybridTestObjectSpecCxx; }
-
+// Include C++ defined types
 #include "Car.hpp"
 #include "Func_std__future_double_.hpp"
 #include "Func_std__future_std__string_.hpp"
@@ -52,6 +49,13 @@ namespace NitroImage { class HybridTestObjectSpecCxx; }
 #include <NitroModules/AnyMap.hpp>
 #include <NitroModules/ArrayBuffer.hpp>
 
+// Forward declarations of Swift defined types
+// Forward declaration of `HybridImageSpecCxx` to properly resolve imports.
+namespace NitroImage { class HybridImageSpecCxx; }
+// Forward declaration of `HybridTestObjectSpecCxx` to properly resolve imports.
+namespace NitroImage { class HybridTestObjectSpecCxx; }
+
+// Include Swift defined types
 #if __has_include("NitroImage-Swift.h")
 #include "NitroImage-Swift.h"
 #else

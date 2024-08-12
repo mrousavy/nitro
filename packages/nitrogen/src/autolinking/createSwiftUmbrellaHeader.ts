@@ -35,12 +35,16 @@ ${createFileMetadataString(filename, '///')}
 
 #pragma once
 
+// Forward declarations of C++ defined types
 ${forwardDeclarations.sort().join('\n')}
 
-${swiftForwardDeclares.sort().join('\n')}
-
+// Include C++ defined types
 ${includes.sort().join('\n')}
 
+// Forward declarations of Swift defined types
+${swiftForwardDeclares.sort().join('\n')}
+
+// Include Swift defined types
 #if __has_include("${moduleName}-Swift.h")
 #include "${moduleName}-Swift.h"
 #else
