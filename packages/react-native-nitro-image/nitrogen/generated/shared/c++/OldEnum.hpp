@@ -59,7 +59,7 @@ namespace margelo::nitro {
         return false;
       }
       // Check if we are within the bounds of the enum.
-      return integer >= 0 && integer <= 87;
+      return integer >= 0 && integer <= 2;
     }
   };
 
