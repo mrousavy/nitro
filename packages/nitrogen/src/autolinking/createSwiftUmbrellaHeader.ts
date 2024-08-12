@@ -17,6 +17,12 @@ ${createFileMetadataString(filename, '///')}
 
 #pragma once
 
+namespace ${name} {
+class HybridImageSpecCxx;
+class HybridImageFactorySpecCxx;
+class HybridSwiftKotlinTestObjectSpecCxx;
+}
+
 ${includes.join('\n')}
 
 #if __has_include("${name}-Swift.h")

@@ -8,6 +8,12 @@
 
 #pragma once
 
+namespace NitroImage {
+class HybridImageSpecCxx;
+class HybridImageFactorySpecCxx;
+class HybridSwiftKotlinTestObjectSpecCxx;
+}
+
 #include "HybridImageSpec.hpp"
 #include "ImageSize.hpp"
 #include "PixelFormat.hpp"
