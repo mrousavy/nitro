@@ -5,14 +5,8 @@ import { indent } from '../../utils.js'
 import type { Method } from '../Method.js'
 import { createFileMetadataString, isNotDuplicate } from '../helpers.js'
 import type { SourceFile } from '../SourceFile.js'
-import {
-  getMethodResultType,
-  type MethodResult,
-} from './getMethodResultType.js'
-import {
-  getHybridObjectName,
-  type HybridObjectName,
-} from '../getHybridObjectName.js'
+
+import { getHybridObjectName } from '../getHybridObjectName.js'
 import { getForwardDeclaration } from '../c++/getForwardDeclaration.js'
 import { NitroConfig } from '../../config/NitroConfig.js'
 import { includeHeader, includeNitroHeader } from '../c++/includeNitroHeader.js'
@@ -30,15 +24,11 @@ export function createSwiftHybridObjectCxxBridge(
 ): SourceFile[] {
   const name = getHybridObjectName(spec.name)
 
-  const bridgedResultTypes = spec.methods.map((m) =>
-    getMethodResultType(name, m)
-  )
-
   const propertiesBridge = spec.properties
     .map((p) => getPropertyForwardImplementation(p))
     .join('\n\n')
   const methodsBridge = spec.methods
-    .map((m) => getMethodForwardImplementation(name, m))
+    .map((m) => getMethodForwardImplementation(m))
     .join('\n\n')
 
   const swiftCxxWrapperCode = `
@@ -130,29 +120,18 @@ return ${bridged.parseFromSwiftToCpp('result', 'c++')};
         })
         .join(', ')
       const bridgedReturnType = new SwiftCxxBridgedType(m.returnType)
-      const hasResult = m.returnType.kind !== 'void'
-      let body = `
-auto valueOrError = _swiftPart.${m.name}(${params});
-if (valueOrError.isError()) [[unlikely]] {
-  throw std::runtime_error(valueOrError.getError());
-}
-`.trim()
-      if (hasResult) {
-        body += '\n'
-        body += `
-auto value = valueOrError.getValue();
-`.trim()
-        if (bridgedReturnType.needsSpecialHandling) {
-          body += '\n'
-          body += `
-return ${bridgedReturnType.parseFromSwiftToCpp('value', 'c++')};
-`.trim()
-        } else {
-          body += '\n'
-          body += 'return value;'
-        }
+      let body: string
+      if (bridgedReturnType.hasType) {
+        // We have a return value, call func, and then convert the `result` from Swift
+        body = `
+auto result = _swiftPart.${m.name}(${params});
+return ${bridgedReturnType.parseFromSwiftToCpp('result', 'c++')};
+  `
+      } else {
+        // No return (void), just call func
+        body = `_swiftPart.${m.name}(${params});`
       }
-      return m.getCode('c++', { inline: true, override: true }, body)
+      return m.getCode('c++', { inline: true, override: true }, body.trim())
     })
     .join('\n')
 
@@ -253,8 +232,6 @@ namespace ${cxxNamespace} {
     subdirectory: [],
     platform: 'ios',
   })
-  const resultTypesFile = getResultTypesFile(name, bridgedResultTypes)
-  files.push(resultTypesFile)
   files.push({
     content: cppHybridObjectCode,
     language: 'c++',
@@ -300,10 +277,7 @@ public var ${property.name}: ${bridgedType.getTypeCode('swift')} {
   return code.trim()
 }
 
-function getMethodForwardImplementation(
-  hybridObjectName: HybridObjectName,
-  method: Method
-): string {
+function getMethodForwardImplementation(method: Method): string {
   const returnType = new SwiftCxxBridgedType(method.returnType)
   const params = method.parameters.map((p) => {
     const bridgedType = new SwiftCxxBridgedType(p.type)
@@ -313,64 +287,28 @@ function getMethodForwardImplementation(
     const bridgedType = new SwiftCxxBridgedType(p.type)
     return `${p.name}: ${bridgedType.parseFromCppToSwift(p.name, 'swift')}`
   })
-  const resultType = getMethodResultType(hybridObjectName, method)
-  const resultValue = resultType.hasType ? `let result = ` : ''
-  const returnValue = resultType.hasType
-    ? `.value(${returnType.parseFromSwiftToCpp('result', 'swift')})`
-    : '.value'
+  let body: string
+  if (returnType.hasType) {
+    // We have a return value, call func, and then convert the `result` to C++
+    body = `
+let result = try self.implementation.${method.name}(${passParams.join(', ')})
+return ${returnType.parseFromSwiftToCpp('result', 'swift')}
+    `
+  } else {
+    // No return (void), just call func
+    body = `try self.implementation.${method.name}(${passParams.join(', ')})`
+  }
+
   // TODO: Use @inlinable or @inline(__always)?
   return `
 @inline(__always)
-public func ${method.name}(${params.join(', ')}) -> ${resultType.typename} {
+public func ${method.name}(${params.join(', ')}) -> ${returnType.getTypeCode('swift')} {
   do {
-    ${resultValue}try self.implementation.${method.name}(${passParams.join(', ')})
-    return ${returnValue}
-  } catch RuntimeError.error(withMessage: let message) {
-    // A  \`RuntimeError\` was thrown.
-    return .error(message: message)
+    ${indent(body.trim(), '    ')}
   } catch {
-    // Any other kind of error was thrown.
-    // Due to a Swift bug, we have to copy the string here.
-    let message = "\\(error.localizedDescription)"
-    return .error(message: message)
+    // TODO: Wait for https://github.com/swiftlang/swift/issues/75290
+    fatalError("Swift errors cannot be propagated to C++ yet! If you want to throw errors, consider using a Promise (async) or a variant type (sync) instead.")
   }
 }
   `.trim()
-}
-
-/**
- * Get one file for all the result types of a specific module, combined.
- */
-function getResultTypesFile(
-  hybridObjectName: HybridObjectName,
-  resultTypes: MethodResult[]
-): SourceFile {
-  const name = `${hybridObjectName.HybridTSpecCxx}+ResultTypes.swift`
-  const allEnumsCode = resultTypes.map((r) => r.swiftEnumCode)
-
-  const code = `
-${createFileMetadataString(name)}
-
-/**
- * C++ does not support catching Swift errors yet, so we have to wrap
- * them in a Result type.
- * - .value means the function returned successfully (either a value, or void)
- * - .error means the function threw any Error. Only the message can be propagated
- *
- * ${hybridObjectName.HybridTSpecCxx} will then wrap all calls to ${hybridObjectName.HybridTSpec}
- * to properly catch Swift errors and return either .value or .error to C++.
- */
-
-import NitroModules
-
-${allEnumsCode.join('\n\n')}
-    `.trim()
-
-  return {
-    content: code,
-    language: 'swift',
-    subdirectory: [],
-    name: name,
-    platform: 'ios',
-  }
 }

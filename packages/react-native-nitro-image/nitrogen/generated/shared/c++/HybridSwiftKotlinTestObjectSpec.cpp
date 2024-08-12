@@ -33,6 +33,8 @@ namespace margelo::nitro::image {
       prototype.registerHybridMethod("addNumbers", &HybridSwiftKotlinTestObjectSpec::addNumbers);
       prototype.registerHybridMethod("addStrings", &HybridSwiftKotlinTestObjectSpec::addStrings);
       prototype.registerHybridMethod("multipleArguments", &HybridSwiftKotlinTestObjectSpec::multipleArguments);
+      prototype.registerHybridMethod("createNumbers", &HybridSwiftKotlinTestObjectSpec::createNumbers);
+      prototype.registerHybridMethod("createStrings", &HybridSwiftKotlinTestObjectSpec::createStrings);
     });
   }
 

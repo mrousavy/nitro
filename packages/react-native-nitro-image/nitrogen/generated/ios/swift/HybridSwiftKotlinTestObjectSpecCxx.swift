@@ -120,66 +120,66 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
 
   // Methods
   @inline(__always)
-  public func simpleFunc() -> HybridSwiftKotlinTestObjectSpecCxx_simpleFunc_Result {
+  public func simpleFunc() -> Void {
     do {
       try self.implementation.simpleFunc()
-      return .value
-    } catch RuntimeError.error(withMessage: let message) {
-      // A  `RuntimeError` was thrown.
-      return .error(message: message)
     } catch {
-      // Any other kind of error was thrown.
-      // Due to a Swift bug, we have to copy the string here.
-      let message = "\(error.localizedDescription)"
-      return .error(message: message)
+      // TODO: Wait for https://github.com/swiftlang/swift/issues/75290
+      fatalError("Swift errors cannot be propagated to C++ yet! If you want to throw errors, consider using a Promise (async) or a variant type (sync) instead.")
     }
   }
   
   @inline(__always)
-  public func addNumbers(a: Double, b: Double) -> HybridSwiftKotlinTestObjectSpecCxx_addNumbers_Result {
+  public func addNumbers(a: Double, b: Double) -> Double {
     do {
       let result = try self.implementation.addNumbers(a: a, b: b)
-      return .value(result)
-    } catch RuntimeError.error(withMessage: let message) {
-      // A  `RuntimeError` was thrown.
-      return .error(message: message)
+      return result
     } catch {
-      // Any other kind of error was thrown.
-      // Due to a Swift bug, we have to copy the string here.
-      let message = "\(error.localizedDescription)"
-      return .error(message: message)
+      // TODO: Wait for https://github.com/swiftlang/swift/issues/75290
+      fatalError("Swift errors cannot be propagated to C++ yet! If you want to throw errors, consider using a Promise (async) or a variant type (sync) instead.")
     }
   }
   
   @inline(__always)
-  public func addStrings(a: String, b: String) -> HybridSwiftKotlinTestObjectSpecCxx_addStrings_Result {
+  public func addStrings(a: String, b: String) -> String {
     do {
       let result = try self.implementation.addStrings(a: a, b: b)
-      return .value(result)
-    } catch RuntimeError.error(withMessage: let message) {
-      // A  `RuntimeError` was thrown.
-      return .error(message: message)
+      return result
     } catch {
-      // Any other kind of error was thrown.
-      // Due to a Swift bug, we have to copy the string here.
-      let message = "\(error.localizedDescription)"
-      return .error(message: message)
+      // TODO: Wait for https://github.com/swiftlang/swift/issues/75290
+      fatalError("Swift errors cannot be propagated to C++ yet! If you want to throw errors, consider using a Promise (async) or a variant type (sync) instead.")
     }
   }
   
   @inline(__always)
-  public func multipleArguments(num: Double, str: String, boo: Bool) -> HybridSwiftKotlinTestObjectSpecCxx_multipleArguments_Result {
+  public func multipleArguments(num: Double, str: String, boo: Bool) -> Void {
     do {
       try self.implementation.multipleArguments(num: num, str: str, boo: boo)
-      return .value
-    } catch RuntimeError.error(withMessage: let message) {
-      // A  `RuntimeError` was thrown.
-      return .error(message: message)
     } catch {
-      // Any other kind of error was thrown.
-      // Due to a Swift bug, we have to copy the string here.
-      let message = "\(error.localizedDescription)"
-      return .error(message: message)
+      // TODO: Wait for https://github.com/swiftlang/swift/issues/75290
+      fatalError("Swift errors cannot be propagated to C++ yet! If you want to throw errors, consider using a Promise (async) or a variant type (sync) instead.")
+    }
+  }
+  
+  @inline(__always)
+  public func createNumbers() -> [Double] {
+    do {
+      let result = try self.implementation.createNumbers()
+      return result
+    } catch {
+      // TODO: Wait for https://github.com/swiftlang/swift/issues/75290
+      fatalError("Swift errors cannot be propagated to C++ yet! If you want to throw errors, consider using a Promise (async) or a variant type (sync) instead.")
+    }
+  }
+  
+  @inline(__always)
+  public func createStrings() -> [String] {
+    do {
+      let result = try self.implementation.createStrings()
+      return result
+    } catch {
+      // TODO: Wait for https://github.com/swiftlang/swift/issues/75290
+      fatalError("Swift errors cannot be propagated to C++ yet! If you want to throw errors, consider using a Promise (async) or a variant type (sync) instead.")
     }
   }
 }

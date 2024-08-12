@@ -68,34 +68,23 @@ public final class HybridImageSpecCxx {
 
   // Methods
   @inline(__always)
-  public func toArrayBuffer(format: Int32) -> HybridImageSpecCxx_toArrayBuffer_Result {
+  public func toArrayBuffer(format: Int32) -> Double {
     do {
       let result = try self.implementation.toArrayBuffer(format: margelo.nitro.image.ImageFormat(rawValue: format)!)
-      return .value(result)
-    } catch RuntimeError.error(withMessage: let message) {
-      // A  `RuntimeError` was thrown.
-      return .error(message: message)
+      return result
     } catch {
-      // Any other kind of error was thrown.
-      // Due to a Swift bug, we have to copy the string here.
-      let message = "\(error.localizedDescription)"
-      return .error(message: message)
+      // TODO: Wait for https://github.com/swiftlang/swift/issues/75290
+      fatalError("Swift errors cannot be propagated to C++ yet! If you want to throw errors, consider using a Promise (async) or a variant type (sync) instead.")
     }
   }
   
   @inline(__always)
-  public func saveToFile(path: String, onFinished: margelo.nitro.image.Func_void_std__string) -> HybridImageSpecCxx_saveToFile_Result {
+  public func saveToFile(path: String, onFinished: margelo.nitro.image.Func_void_std__string) -> Void {
     do {
       try self.implementation.saveToFile(path: path, onFinished: onFinished)
-      return .value
-    } catch RuntimeError.error(withMessage: let message) {
-      // A  `RuntimeError` was thrown.
-      return .error(message: message)
     } catch {
-      // Any other kind of error was thrown.
-      // Due to a Swift bug, we have to copy the string here.
-      let message = "\(error.localizedDescription)"
-      return .error(message: message)
+      // TODO: Wait for https://github.com/swiftlang/swift/issues/75290
+      fatalError("Swift errors cannot be propagated to C++ yet! If you want to throw errors, consider using a Promise (async) or a variant type (sync) instead.")
     }
   }
 }

@@ -5,6 +5,7 @@ import {
   type HybridObjectName,
 } from '../getHybridObjectName.js'
 import type { SourceImport } from '../SourceFile.js'
+import { ArrayType } from '../types/ArrayType.js'
 import { EnumType } from '../types/EnumType.js'
 import { getTypeAs } from '../types/getTypeAs.js'
 import { HybridObjectType } from '../types/HybridObjectType.js'
@@ -16,6 +17,10 @@ export class SwiftCxxBridgedType {
 
   constructor(type: Type) {
     this.type = type
+  }
+
+  get hasType(): boolean {
+    return this.type.kind !== 'void' && this.type.kind !== 'null'
   }
 
   get needsSpecialHandling(): boolean {
@@ -33,6 +38,9 @@ export class SwiftCxxBridgedType {
         return true
       case 'string':
         // swift::String <> std::string
+        return true
+      case 'array':
+        // swift::Array<T> <> std::vector<T>
         return true
       default:
         return false
@@ -86,11 +94,12 @@ export class SwiftCxxBridgedType {
       case 'optional': {
         const optional = getTypeAs(this.type, OptionalType)
         const wrapping = new SwiftCxxBridgedType(optional.wrappingType)
+        const type = wrapping.getTypeCode(language)
         switch (language) {
           case 'c++':
-            return `std::optional<${wrapping.getTypeCode('c++')}>`
+            return `std::optional<${type}>`
           case 'swift':
-            return `${wrapping.getTypeCode('swift')}?`
+            return `${type}?`
           default:
             throw new Error(`Invalid language! ${language}`)
         }
@@ -101,6 +110,19 @@ export class SwiftCxxBridgedType {
             return `swift::String`
           case 'swift':
             return 'String'
+          default:
+            throw new Error(`Invalid language! ${language}`)
+        }
+      }
+      case 'array': {
+        const array = getTypeAs(this.type, ArrayType)
+        const wrapping = new SwiftCxxBridgedType(array.itemType)
+        const type = wrapping.getTypeCode(language)
+        switch (language) {
+          case 'c++':
+            return `swift::Array<${type}>`
+          case 'swift':
+            return `[${type}]`
           default:
             throw new Error(`Invalid language! ${language}`)
         }

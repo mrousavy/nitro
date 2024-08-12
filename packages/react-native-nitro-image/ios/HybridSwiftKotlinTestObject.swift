@@ -36,4 +36,13 @@ class HybridSwiftKotlinTestObject : HybridSwiftKotlinTestObjectSpec {
   func multipleArguments(num: Double, str: String, boo: Bool) throws {
     print("Arguments received! num: \(num) | str: \(str) | boo: \(boo)")
   }
+  
+  func createNumbers() throws -> [Double] {
+    return [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+  }
+  
+  func createStrings() throws -> [String] {
+    return ["h", "e", "ll", "o"]
+  }
+  
 }

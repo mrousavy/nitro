@@ -63,36 +63,20 @@ namespace margelo::nitro::image {
   public:
     // Methods
     inline std::shared_ptr<margelo::nitro::image::HybridImageSpec> loadImageFromFile(const std::string& path) override {
-      auto valueOrError = _swiftPart.loadImageFromFile(swift::String(path));
-      if (valueOrError.isError()) [[unlikely]] {
-        throw std::runtime_error(valueOrError.getError());
-      }
-      auto value = valueOrError.getValue();
-      return HybridContext::getOrCreate<HybridImageSpecSwift>(value);
+      auto result = _swiftPart.loadImageFromFile(swift::String(path));
+      return HybridContext::getOrCreate<HybridImageSpecSwift>(result);
     }
     inline std::shared_ptr<margelo::nitro::image::HybridImageSpec> loadImageFromURL(const std::string& path) override {
-      auto valueOrError = _swiftPart.loadImageFromURL(swift::String(path));
-      if (valueOrError.isError()) [[unlikely]] {
-        throw std::runtime_error(valueOrError.getError());
-      }
-      auto value = valueOrError.getValue();
-      return HybridContext::getOrCreate<HybridImageSpecSwift>(value);
+      auto result = _swiftPart.loadImageFromURL(swift::String(path));
+      return HybridContext::getOrCreate<HybridImageSpecSwift>(result);
     }
     inline std::shared_ptr<margelo::nitro::image::HybridImageSpec> loadImageFromSystemName(const std::string& path) override {
-      auto valueOrError = _swiftPart.loadImageFromSystemName(swift::String(path));
-      if (valueOrError.isError()) [[unlikely]] {
-        throw std::runtime_error(valueOrError.getError());
-      }
-      auto value = valueOrError.getValue();
-      return HybridContext::getOrCreate<HybridImageSpecSwift>(value);
+      auto result = _swiftPart.loadImageFromSystemName(swift::String(path));
+      return HybridContext::getOrCreate<HybridImageSpecSwift>(result);
     }
     inline std::shared_ptr<margelo::nitro::image::HybridImageSpec> bounceBack(const std::shared_ptr<margelo::nitro::image::HybridImageSpec>& image) override {
-      auto valueOrError = _swiftPart.bounceBack(std::static_pointer_cast<HybridImageSpecSwift>(image)->getSwiftPart());
-      if (valueOrError.isError()) [[unlikely]] {
-        throw std::runtime_error(valueOrError.getError());
-      }
-      auto value = valueOrError.getValue();
-      return HybridContext::getOrCreate<HybridImageSpecSwift>(value);
+      auto result = _swiftPart.bounceBack(std::static_pointer_cast<HybridImageSpecSwift>(image)->getSwiftPart());
+      return HybridContext::getOrCreate<HybridImageSpecSwift>(result);
     }
 
   private:

@@ -43,6 +43,8 @@ public protocol HybridSwiftKotlinTestObjectSpec: HybridObjectSpec {
   func addNumbers(a: Double, b: Double) throws -> Double
   func addStrings(a: String, b: String) throws -> String
   func multipleArguments(num: Double, str: String, boo: Bool) throws -> Void
+  func createNumbers() throws -> [Double]
+  func createStrings() throws -> [String]
 }
 
 public extension HybridSwiftKotlinTestObjectSpec {

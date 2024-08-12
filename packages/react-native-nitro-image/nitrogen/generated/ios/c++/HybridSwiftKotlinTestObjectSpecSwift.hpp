@@ -104,32 +104,28 @@ namespace margelo::nitro::image {
   public:
     // Methods
     inline void simpleFunc() override {
-      auto valueOrError = _swiftPart.simpleFunc();
-      if (valueOrError.isError()) [[unlikely]] {
-        throw std::runtime_error(valueOrError.getError());
-      }
+      _swiftPart.simpleFunc();
     }
     inline double addNumbers(double a, double b) override {
-      auto valueOrError = _swiftPart.addNumbers(std::forward<decltype(a)>(a), std::forward<decltype(b)>(b));
-      if (valueOrError.isError()) [[unlikely]] {
-        throw std::runtime_error(valueOrError.getError());
-      }
-      auto value = valueOrError.getValue();
-      return value;
+      auto result = _swiftPart.addNumbers(std::forward<decltype(a)>(a), std::forward<decltype(b)>(b));
+      return result;
     }
     inline std::string addStrings(const std::string& a, const std::string& b) override {
-      auto valueOrError = _swiftPart.addStrings(swift::String(a), swift::String(b));
-      if (valueOrError.isError()) [[unlikely]] {
-        throw std::runtime_error(valueOrError.getError());
-      }
-      auto value = valueOrError.getValue();
-      return std::string(value);
+      auto result = _swiftPart.addStrings(swift::String(a), swift::String(b));
+      return std::string(result);
     }
     inline void multipleArguments(double num, const std::string& str, bool boo) override {
-      auto valueOrError = _swiftPart.multipleArguments(std::forward<decltype(num)>(num), swift::String(str), std::forward<decltype(boo)>(boo));
-      if (valueOrError.isError()) [[unlikely]] {
-        throw std::runtime_error(valueOrError.getError());
-      }
+      _swiftPart.multipleArguments(std::forward<decltype(num)>(num), swift::String(str), std::forward<decltype(boo)>(boo));
+    }
+    inline std::vector<double> createNumbers() override {
+      auto result = _swiftPart.createNumbers();
+      // TODO: return result;
+      throw std::runtime_error("swift::Array -> std::vector not yet supported!");
+    }
+    inline std::vector<std::string> createStrings() override {
+      auto result = _swiftPart.createStrings();
+      // TODO: return result;
+      throw std::runtime_error("swift::Array -> std::vector not yet supported!");
     }
 
   private:
