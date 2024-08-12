@@ -32,7 +32,7 @@ namespace margelo::nitro::image {
   enum class ImageFormat {
     JPG SWIFT_NAME(jpg) = 0,
     PNG SWIFT_NAME(png) = 1,
-  };
+  } CLOSED_ENUM;
 
 } // namespace margelo::nitro::image
 

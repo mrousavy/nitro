@@ -9,24 +9,9 @@
 import Foundation
 import NitroModules
 
-public enum ImageFormat {
-  case jpg
-  case png
-}
-
-public enum PixelFormat {
-  case rgb
-  case yuv
-}
-
 /**
  * A class implementation that bridges HybridImageSpec over to C++.
  * In C++, we cannot use Swift protocols - so we need to wrap it in a class to make it strongly defined.
- *
- * Also, some Swift types need to be bridged with special handling:
- * - Enums need to be wrapped in Structs, otherwise they cannot be accessed bi-directionally (Swift bug: https://github.com/swiftlang/swift/issues/75330)
- * - Other HybridObjects need to be wrapped/unwrapped from the Swift TCxx wrapper
- * - Throwing methods need to be wrapped with a Result<T, Error> type, as exceptions cannot be propagated to C++
  */
 public final class HybridImageSpecCxx {
   private(set) var implementation: HybridImageSpec
@@ -58,10 +43,10 @@ public final class HybridImageSpecCxx {
     }
   }
   
-  public var pixelFormat: PixelFormat {
+  public var pixelFormat: margelo.nitro.image.PixelFormat {
     @inline(__always)
     get {
-      return .rgb
+      return self.implementation.pixelFormat
     }
   }
   
@@ -78,9 +63,9 @@ public final class HybridImageSpecCxx {
 
   // Methods
   @inline(__always)
-  public func toArrayBuffer(format: ImageFormat) -> Double {
+  public func toArrayBuffer(format: margelo.nitro.image.ImageFormat) -> Double {
     do {
-      return try self.implementation.toArrayBuffer(format: .jpg)
+      return try self.implementation.toArrayBuffer(format: format)
     } catch {
       // TODO: Wait for https://github.com/swiftlang/swift/issues/75290
       fatalError("Swift errors cannot be propagated to C++ yet! If you want to throw errors, consider using a Promise (async) or a variant type (sync) instead.")

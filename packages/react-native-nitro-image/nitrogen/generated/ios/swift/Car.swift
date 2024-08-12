@@ -59,7 +59,7 @@ public extension margelo.nitro.image.Car {
       return self.__driver.value
     }
     set {
-      // self.__driver = // TODO: newValue
+      // TODO: self.__driver = newValue
     }
   }
 }

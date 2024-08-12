@@ -13,7 +13,8 @@ import { logPrototypeChain } from '../logPrototypeChain'
 logPrototypeChain(HybridTestObject)
 
 const swiftObject = HybridSwiftKotlinTestObject
-console.log(swiftObject.getCar())
+swiftObject.stringValue = 'HOOO'
+console.log(swiftObject.stringValue)
 
 const allTests = getTests()
 

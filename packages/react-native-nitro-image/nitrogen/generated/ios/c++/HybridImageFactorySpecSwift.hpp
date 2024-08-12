@@ -29,17 +29,19 @@ namespace margelo::nitro::image { class HybridImageSpecSwift; }
 
 #include "NitroImage-Swift-Cxx-Umbrella.hpp"
 
+#if __has_include(<NitroModules/JSIConverter+Swift.hpp>)
+#include <NitroModules/JSIConverter+Swift.hpp>
+#else
+#error NitroModules cannot be found! Are you sure you installed NitroModules properly?
+#endif
+
 namespace margelo::nitro::image {
 
   /**
    * The C++ part of HybridImageFactorySpecCxx.swift.
    *
-   * HybridImageFactorySpecSwift (C++) accesses HybridImageFactorySpecCxx (Swift), and might
-   * contain some additional bridging code for C++ <> Swift interop.
-   *
-   * Since this obviously introduces an overhead, I hope at some point in
-   * the future, HybridImageFactorySpecCxx can directly inherit from the C++ class HybridImageFactorySpec
-   * to simplify the whole structure and memory management.
+   * HybridImageFactorySpecSwift (C++) accesses HybridImageFactorySpecCxx (Swift), and exposes
+   * Swift types directly to JSI using `JSIConverter<T>` overloads from "JSIConverter+Swift.hpp".
    */
   class HybridImageFactorySpecSwift final: public HybridImageFactorySpec {
   public:
@@ -56,28 +58,60 @@ namespace margelo::nitro::image {
       return _swiftPart.getMemorySize();
     }
 
+
   public:
-    // Properties
+    // Properties using Swift types
     
 
   public:
-    // Methods
-    inline std::shared_ptr<HybridImageSpec> loadImageFromFile(const std::string& path) override {
-      auto result = _swiftPart.loadImageFromFile(std::forward<decltype(path)>(path));
+    // Methods using Swift types
+    inline std::shared_ptr<margelo::nitro::image::HybridImageSpec> loadImageFromFile_swift(swift::String path) noexcept {
+      auto result = _swiftPart.loadImageFromFile(path);
       return HybridContext::getOrCreate<HybridImageSpecSwift>(result);
+    }
+    inline std::shared_ptr<margelo::nitro::image::HybridImageSpec> loadImageFromURL_swift(swift::String path) noexcept {
+      auto result = _swiftPart.loadImageFromURL(path);
+      return HybridContext::getOrCreate<HybridImageSpecSwift>(result);
+    }
+    inline std::shared_ptr<margelo::nitro::image::HybridImageSpec> loadImageFromSystemName_swift(swift::String path) noexcept {
+      auto result = _swiftPart.loadImageFromSystemName(path);
+      return HybridContext::getOrCreate<HybridImageSpecSwift>(result);
+    }
+    inline std::shared_ptr<margelo::nitro::image::HybridImageSpec> bounceBack_swift(std::shared_ptr<margelo::nitro::image::HybridImageSpec> image) noexcept {
+      auto result = _swiftPart.bounceBack(std::static_pointer_cast<HybridImageSpecSwift>(image)->getSwiftPart());
+      return HybridContext::getOrCreate<HybridImageSpecSwift>(result);
+    }
+
+  public:
+    void loadHybridMethods() override {
+      // load base methods/properties
+      HybridImageFactorySpec::loadHybridMethods();
+      // load custom methods/properties
+      registerHybrids(this, [](Prototype& prototype) {
+        prototype.registerHybridMethod("loadImageFromFile", &HybridImageFactorySpecSwift::loadImageFromFile_swift);
+        prototype.registerHybridMethod("loadImageFromURL", &HybridImageFactorySpecSwift::loadImageFromURL_swift);
+        prototype.registerHybridMethod("loadImageFromSystemName", &HybridImageFactorySpecSwift::loadImageFromSystemName_swift);
+        prototype.registerHybridMethod("bounceBack", &HybridImageFactorySpecSwift::bounceBack_swift);
+      });
+    }
+
+  public:
+    // Properties inherited from base, currently throwing
+    
+
+  public:
+    // Methods inherited from base, currently throwing
+    inline std::shared_ptr<margelo::nitro::image::HybridImageSpec> loadImageFromFile(const std::string& path) override {
+      throw std::runtime_error("\"loadImageFromFile(..)\" is implemented in Swift, and Nitro does currently not bridge between Swift and C++!");
     }
     inline std::shared_ptr<margelo::nitro::image::HybridImageSpec> loadImageFromURL(const std::string& path) override {
-      auto result = _swiftPart.loadImageFromURL(std::forward<decltype(path)>(path));
-      return HybridContext::getOrCreate<HybridImageSpecSwift>(result);
+      throw std::runtime_error("\"loadImageFromURL(..)\" is implemented in Swift, and Nitro does currently not bridge between Swift and C++!");
     }
     inline std::shared_ptr<margelo::nitro::image::HybridImageSpec> loadImageFromSystemName(const std::string& path) override {
-      auto result = _swiftPart.loadImageFromSystemName(std::forward<decltype(path)>(path));
-      return HybridContext::getOrCreate<HybridImageSpecSwift>(result);
+      throw std::runtime_error("\"loadImageFromSystemName(..)\" is implemented in Swift, and Nitro does currently not bridge between Swift and C++!");
     }
     inline std::shared_ptr<margelo::nitro::image::HybridImageSpec> bounceBack(const std::shared_ptr<margelo::nitro::image::HybridImageSpec>& image) override {
-      auto cast = std::static_pointer_cast<HybridImageSpecSwift>(image);
-      auto result = _swiftPart.bounceBack(cast->getSwiftPart());
-      return HybridContext::getOrCreate<HybridImageSpecSwift>(result);
+      throw std::runtime_error("\"bounceBack(..)\" is implemented in Swift, and Nitro does currently not bridge between Swift and C++!");
     }
 
   private:

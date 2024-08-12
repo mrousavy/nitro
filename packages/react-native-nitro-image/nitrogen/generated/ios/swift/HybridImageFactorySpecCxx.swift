@@ -12,11 +12,6 @@ import NitroModules
 /**
  * A class implementation that bridges HybridImageFactorySpec over to C++.
  * In C++, we cannot use Swift protocols - so we need to wrap it in a class to make it strongly defined.
- *
- * Also, some Swift types need to be bridged with special handling:
- * - Enums need to be wrapped in Structs, otherwise they cannot be accessed bi-directionally (Swift bug: https://github.com/swiftlang/swift/issues/75330)
- * - Other HybridObjects need to be wrapped/unwrapped from the Swift TCxx wrapper
- * - Throwing methods need to be wrapped with a Result<T, Error> type, as exceptions cannot be propagated to C++
  */
 public final class HybridImageFactorySpecCxx {
   private(set) var implementation: HybridImageFactorySpec

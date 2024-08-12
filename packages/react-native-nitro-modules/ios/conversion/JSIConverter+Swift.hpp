@@ -2,6 +2,15 @@
 // Created by Marc Rousavy on 12.08.24.
 //
 
+//
+//
+//
+// ⚠️ This header can only be included if a -Swift.h bridging ⚠️
+//         header has already included before this one!
+//
+//
+//
+
 #pragma once
 
 // Forward declare a few of the common types that might have cyclic includes.
@@ -16,13 +25,27 @@ struct JSIConverter;
 #include <vector>
 
 namespace swift {
+// swift::String
 class String;
+
+// swift::Optional<T>
 template<typename T>
+#ifdef __cpp_concepts
+requires swift::isUsableInGenericContext<T>
+#endif
+class Optional;
+
+// swift::Array<T>
+template<typename T>
+#ifdef __cpp_concepts
+requires swift::isUsableInGenericContext<T>
+#endif
 class Array;
-}
+} // namespace swift
 
 namespace margelo::nitro {
 
+// swift::String <> string
 template<>
 struct JSIConverter<swift::String> {
   static inline swift::String fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
@@ -36,7 +59,35 @@ struct JSIConverter<swift::String> {
   }
 };
 
-// std::vector<T> <> T[]
+// swift::Optional<T> <> T | undefined
+template <typename TInner>
+struct JSIConverter<swift::Optional<TInner>> {
+  static inline swift::Optional<TInner> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+    if (arg.isUndefined() || arg.isNull()) {
+      return swift::Optional<TInner>::none();
+    } else {
+      return swift::Optional<TInner>::some(JSIConverter<TInner>::fromJSI(runtime, arg));
+    }
+  }
+  static inline jsi::Value toJSI(jsi::Runtime& runtime, const swift::Optional<TInner>& arg) {
+    if (arg.isNone()) {
+      return jsi::Value::undefined();
+    } else {
+      return JSIConverter<TInner>::toJSI(runtime, arg.get());
+    }
+  }
+  static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
+    if (value.isUndefined() || value.isNull()) {
+      return true;
+    }
+    if (JSIConverter<TInner>::canConvert(runtime, value)) {
+      return true;
+    }
+    return false;
+  }
+};
+
+// swift::Array<T> <> T[]
 template <typename ElementType>
 struct JSIConverter<swift::Array<ElementType>> {
 

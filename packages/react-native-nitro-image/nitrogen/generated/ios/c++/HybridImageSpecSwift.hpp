@@ -33,17 +33,19 @@ namespace margelo::nitro::image { enum class ImageFormat; }
 
 #include "NitroImage-Swift-Cxx-Umbrella.hpp"
 
+#if __has_include(<NitroModules/JSIConverter+Swift.hpp>)
+#include <NitroModules/JSIConverter+Swift.hpp>
+#else
+#error NitroModules cannot be found! Are you sure you installed NitroModules properly?
+#endif
+
 namespace margelo::nitro::image {
 
   /**
    * The C++ part of HybridImageSpecCxx.swift.
    *
-   * HybridImageSpecSwift (C++) accesses HybridImageSpecCxx (Swift), and might
-   * contain some additional bridging code for C++ <> Swift interop.
-   *
-   * Since this obviously introduces an overhead, I hope at some point in
-   * the future, HybridImageSpecCxx can directly inherit from the C++ class HybridImageSpec
-   * to simplify the whole structure and memory management.
+   * HybridImageSpecSwift (C++) accesses HybridImageSpecCxx (Swift), and exposes
+   * Swift types directly to JSI using `JSIConverter<T>` overloads from "JSIConverter+Swift.hpp".
    */
   class HybridImageSpecSwift final: public HybridImageSpec {
   public:
@@ -60,33 +62,69 @@ namespace margelo::nitro::image {
       return _swiftPart.getMemorySize();
     }
 
+
   public:
-    // Properties
-    inline ImageSize getSize() noexcept override {
-      return _swiftPart.getSize();
+    // Properties using Swift types
+    inline ImageSize getSize_swift() {
+      throw std::runtime_error("Enums dont work in Swift yet!");
     }
-    inline PixelFormat getPixelFormat() noexcept override {
-      auto px = _swiftPart.getPixelFormat();
-      if (px.isRgb()) {
-        return PixelFormat::RGB;
-      } else {
-        return PixelFormat::YUV_8BIT;
-      }
+    inline PixelFormat getPixelFormat_swift() {
+      throw std::runtime_error("Enums dont work in Swift yet!");
     }
-    inline double getSomeSettableProp() noexcept override {
+    inline double getSomeSettableProp_swift() noexcept {
       return _swiftPart.getSomeSettableProp();
     }
-    inline void setSomeSettableProp(double someSettableProp) noexcept override {
-      _swiftPart.setSomeSettableProp(std::forward<decltype(someSettableProp)>(someSettableProp));
+    
+    inline void setSomeSettableProp_swift(double newValue) noexcept {
+      _swiftPart.setSomeSettableProp(newValue);
     }
 
   public:
-    // Methods
+    // Methods using Swift types
+    inline double toArrayBuffer_swift(ImageFormat format) noexcept {
+      throw std::runtime_error("Enums dont work in Swift yet!");
+    }
+    inline void saveToFile_swift(swift::String path,Func_void_std__string onFinished) noexcept {
+      return _swiftPart.saveToFile(path,onFinished);
+    }
+
+  public:
+    void loadHybridMethods() override {
+      // load base methods/properties
+      HybridImageSpec::loadHybridMethods();
+      // load custom methods/properties
+      registerHybrids(this, [](Prototype& prototype) {
+        prototype.registerHybridGetter("size", &HybridImageSpecSwift::getSize_swift);
+        prototype.registerHybridGetter("pixelFormat", &HybridImageSpecSwift::getPixelFormat_swift);
+        prototype.registerHybridGetter("someSettableProp", &HybridImageSpecSwift::getSomeSettableProp_swift);
+        prototype.registerHybridSetter("someSettableProp", &HybridImageSpecSwift::setSomeSettableProp_swift);
+        prototype.registerHybridMethod("toArrayBuffer", &HybridImageSpecSwift::toArrayBuffer_swift);
+        prototype.registerHybridMethod("saveToFile", &HybridImageSpecSwift::saveToFile_swift);
+      });
+    }
+
+  public:
+    // Properties inherited from base, currently throwing
+    inline ImageSize getSize() noexcept override {
+      throw std::runtime_error("\"size\" is implemented in Swift, and Nitro does currently not bridge between Swift and C++!");
+    }
+    inline PixelFormat getPixelFormat() noexcept override {
+      throw std::runtime_error("\"pixelFormat\" is implemented in Swift, and Nitro does currently not bridge between Swift and C++!");
+    }
+    inline double getSomeSettableProp() noexcept override {
+      throw std::runtime_error("\"someSettableProp\" is implemented in Swift, and Nitro does currently not bridge between Swift and C++!");
+    }
+    inline void setSomeSettableProp(double someSettableProp) noexcept override {
+      throw std::runtime_error("\"someSettableProp\" is implemented in Swift, and Nitro does currently not bridge between Swift and C++!");
+    }
+
+  public:
+    // Methods inherited from base, currently throwing
     inline double toArrayBuffer(ImageFormat format) override {
-      return _swiftPart.toArrayBuffer(NitroImage::ImageFormat::jpg());
+      throw std::runtime_error("\"toArrayBuffer(..)\" is implemented in Swift, and Nitro does currently not bridge between Swift and C++!");
     }
     inline void saveToFile(const std::string& path, const Func_void_std__string& onFinished) override {
-      _swiftPart.saveToFile(std::forward<decltype(path)>(path), std::forward<decltype(onFinished)>(onFinished));
+      throw std::runtime_error("\"saveToFile(..)\" is implemented in Swift, and Nitro does currently not bridge between Swift and C++!");
     }
 
   private:

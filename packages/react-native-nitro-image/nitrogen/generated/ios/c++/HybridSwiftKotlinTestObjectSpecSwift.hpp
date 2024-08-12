@@ -29,17 +29,19 @@ namespace margelo::nitro::image { struct Person; }
 
 #include "NitroImage-Swift-Cxx-Umbrella.hpp"
 
+#if __has_include(<NitroModules/JSIConverter+Swift.hpp>)
+#include <NitroModules/JSIConverter+Swift.hpp>
+#else
+#error NitroModules cannot be found! Are you sure you installed NitroModules properly?
+#endif
+
 namespace margelo::nitro::image {
 
   /**
    * The C++ part of HybridSwiftKotlinTestObjectSpecCxx.swift.
    *
-   * HybridSwiftKotlinTestObjectSpecSwift (C++) accesses HybridSwiftKotlinTestObjectSpecCxx (Swift), and might
-   * contain some additional bridging code for C++ <> Swift interop.
-   *
-   * Since this obviously introduces an overhead, I hope at some point in
-   * the future, HybridSwiftKotlinTestObjectSpecCxx can directly inherit from the C++ class HybridSwiftKotlinTestObjectSpec
-   * to simplify the whole structure and memory management.
+   * HybridSwiftKotlinTestObjectSpecSwift (C++) accesses HybridSwiftKotlinTestObjectSpecCxx (Swift), and exposes
+   * Swift types directly to JSI using `JSIConverter<T>` overloads from "JSIConverter+Swift.hpp".
    */
   class HybridSwiftKotlinTestObjectSpecSwift final: public HybridSwiftKotlinTestObjectSpec {
   public:
@@ -56,85 +58,208 @@ namespace margelo::nitro::image {
       return _swiftPart.getMemorySize();
     }
 
+
   public:
-    // Properties
-    inline double getNumberValue() noexcept override {
+    // Properties using Swift types
+    inline double getNumberValue_swift() noexcept {
       return _swiftPart.getNumberValue();
     }
-    inline void setNumberValue(double numberValue) noexcept override {
-      _swiftPart.setNumberValue(std::forward<decltype(numberValue)>(numberValue));
+    
+    inline void setNumberValue_swift(double newValue) noexcept {
+      _swiftPart.setNumberValue(newValue);
     }
-    inline bool getBoolValue() noexcept override {
+    inline bool getBoolValue_swift() noexcept {
       return _swiftPart.getBoolValue();
     }
-    inline void setBoolValue(bool boolValue) noexcept override {
-      _swiftPart.setBoolValue(std::forward<decltype(boolValue)>(boolValue));
+    
+    inline void setBoolValue_swift(bool newValue) noexcept {
+      _swiftPart.setBoolValue(newValue);
     }
-    inline std::string getStringValue() noexcept override {
+    inline swift::String getStringValue_swift() noexcept {
       return _swiftPart.getStringValue();
     }
-    inline void setStringValue(const std::string& stringValue) noexcept override {
-      _swiftPart.setStringValue(std::forward<decltype(stringValue)>(stringValue));
+    
+    inline void setStringValue_swift(swift::String newValue) noexcept {
+      _swiftPart.setStringValue(newValue);
     }
-    inline int64_t getBigintValue() noexcept override {
+    inline int64_t getBigintValue_swift() noexcept {
       return _swiftPart.getBigintValue();
     }
-    inline void setBigintValue(int64_t bigintValue) noexcept override {
-      _swiftPart.setBigintValue(std::forward<decltype(bigintValue)>(bigintValue));
+    
+    inline void setBigintValue_swift(int64_t newValue) noexcept {
+      _swiftPart.setBigintValue(newValue);
     }
-    inline std::optional<std::string> getStringOrUndefined() noexcept override {
-      return std::nullopt;
+    inline swift::Optional<swift::String> getStringOrUndefined_swift() noexcept {
+      return _swiftPart.getStringOrUndefined();
     }
-    inline void setStringOrUndefined(const std::optional<std::string>& stringOrUndefined) noexcept override {
-      
+    
+    inline void setStringOrUndefined_swift(swift::Optional<swift::String> newValue) noexcept {
+      _swiftPart.setStringOrUndefined(newValue);
     }
-    inline std::optional<std::string> getStringOrNull() noexcept override {
-      return std::nullopt;
+    inline swift::Optional<swift::String> getStringOrNull_swift() noexcept {
+      return _swiftPart.getStringOrNull();
     }
-    inline void setStringOrNull(const std::optional<std::string>& stringOrNull) noexcept override {
-      
+    
+    inline void setStringOrNull_swift(swift::Optional<swift::String> newValue) noexcept {
+      _swiftPart.setStringOrNull(newValue);
     }
-    inline std::optional<std::string> getOptionalString() noexcept override {
-      return std::nullopt;
+    inline swift::Optional<swift::String> getOptionalString_swift() noexcept {
+      return _swiftPart.getOptionalString();
     }
-    inline void setOptionalString(const std::optional<std::string>& optionalString) noexcept override {
+    
+    inline void setOptionalString_swift(swift::Optional<swift::String> newValue) noexcept {
+      _swiftPart.setOptionalString(newValue);
     }
 
   public:
-    // Methods
-    inline void simpleFunc() override {
-      _swiftPart.simpleFunc();
+    // Methods using Swift types
+    inline void simpleFunc_swift() noexcept {
+      return _swiftPart.simpleFunc();
     }
-    inline double addNumbers(double a, double b) override {
-      return _swiftPart.addNumbers(std::forward<decltype(a)>(a), std::forward<decltype(b)>(b));
+    inline double addNumbers_swift(double a,double b) noexcept {
+      return _swiftPart.addNumbers(a,b);
     }
-    inline std::string addStrings(const std::string& a, const std::string& b) override {
-      return _swiftPart.addStrings(std::forward<decltype(a)>(a), std::forward<decltype(b)>(b));
+    inline swift::String addStrings_swift(swift::String a,swift::String b) noexcept {
+      return _swiftPart.addStrings(a,b);
     }
-    inline void multipleArguments(double num, const std::string& str, bool boo) override {
-      _swiftPart.multipleArguments(std::forward<decltype(num)>(num), std::forward<decltype(str)>(str), std::forward<decltype(boo)>(boo));
+    inline void multipleArguments_swift(double num,swift::String str,bool boo) noexcept {
+      return _swiftPart.multipleArguments(num,str,boo);
     }
-    inline std::vector<double> createNumbers() override {
-      return {};
+    inline swift::Array<double> createNumbers_swift() noexcept {
+      return _swiftPart.createNumbers();
     }
-    inline std::vector<std::string> createStrings() override {
-      return {};
+    inline swift::Array<swift::String> createStrings_swift() noexcept {
+      return _swiftPart.createStrings();
     }
-    inline std::string tryOptionalParams(double num, bool boo, const std::optional<std::string>& str) override {
-      return "";
+    inline swift::String tryOptionalParams_swift(double num,bool boo,swift::Optional<swift::String> str) noexcept {
+      return _swiftPart.tryOptionalParams(num,boo,str);
     }
-    inline std::string tryMiddleParam(double num, std::optional<bool> boo, const std::string& str) override {
-      return "";
+    inline swift::String tryMiddleParam_swift(double num,swift::Optional<bool> boo,swift::String str) noexcept {
+      return _swiftPart.tryMiddleParam(num,boo,str);
     }
-    inline Car getCar() override {
+    inline Car getCar_swift() noexcept {
       return _swiftPart.getCar();
     }
+    inline bool isCarElectric_swift(Car car) noexcept {
+      return _swiftPart.isCarElectric(car);
+    }
+    inline swift::Optional<Person> getDriver_swift(Car car) noexcept {
+      return _swiftPart.getDriver(car);
+    }
+
+  public:
+    void loadHybridMethods() override {
+      // load base methods/properties
+      HybridSwiftKotlinTestObjectSpec::loadHybridMethods();
+      // load custom methods/properties
+      registerHybrids(this, [](Prototype& prototype) {
+        prototype.registerHybridGetter("numberValue", &HybridSwiftKotlinTestObjectSpecSwift::getNumberValue_swift);
+        prototype.registerHybridSetter("numberValue", &HybridSwiftKotlinTestObjectSpecSwift::setNumberValue_swift);
+        prototype.registerHybridGetter("boolValue", &HybridSwiftKotlinTestObjectSpecSwift::getBoolValue_swift);
+        prototype.registerHybridSetter("boolValue", &HybridSwiftKotlinTestObjectSpecSwift::setBoolValue_swift);
+        prototype.registerHybridGetter("stringValue", &HybridSwiftKotlinTestObjectSpecSwift::getStringValue_swift);
+        prototype.registerHybridSetter("stringValue", &HybridSwiftKotlinTestObjectSpecSwift::setStringValue_swift);
+        prototype.registerHybridGetter("bigintValue", &HybridSwiftKotlinTestObjectSpecSwift::getBigintValue_swift);
+        prototype.registerHybridSetter("bigintValue", &HybridSwiftKotlinTestObjectSpecSwift::setBigintValue_swift);
+        prototype.registerHybridGetter("stringOrUndefined", &HybridSwiftKotlinTestObjectSpecSwift::getStringOrUndefined_swift);
+        prototype.registerHybridSetter("stringOrUndefined", &HybridSwiftKotlinTestObjectSpecSwift::setStringOrUndefined_swift);
+        prototype.registerHybridGetter("stringOrNull", &HybridSwiftKotlinTestObjectSpecSwift::getStringOrNull_swift);
+        prototype.registerHybridSetter("stringOrNull", &HybridSwiftKotlinTestObjectSpecSwift::setStringOrNull_swift);
+        prototype.registerHybridGetter("optionalString", &HybridSwiftKotlinTestObjectSpecSwift::getOptionalString_swift);
+        prototype.registerHybridSetter("optionalString", &HybridSwiftKotlinTestObjectSpecSwift::setOptionalString_swift);
+        prototype.registerHybridMethod("simpleFunc", &HybridSwiftKotlinTestObjectSpecSwift::simpleFunc_swift);
+        prototype.registerHybridMethod("addNumbers", &HybridSwiftKotlinTestObjectSpecSwift::addNumbers_swift);
+        prototype.registerHybridMethod("addStrings", &HybridSwiftKotlinTestObjectSpecSwift::addStrings_swift);
+        prototype.registerHybridMethod("multipleArguments", &HybridSwiftKotlinTestObjectSpecSwift::multipleArguments_swift);
+        prototype.registerHybridMethod("createNumbers", &HybridSwiftKotlinTestObjectSpecSwift::createNumbers_swift);
+        prototype.registerHybridMethod("createStrings", &HybridSwiftKotlinTestObjectSpecSwift::createStrings_swift);
+        prototype.registerHybridMethod("tryOptionalParams", &HybridSwiftKotlinTestObjectSpecSwift::tryOptionalParams_swift);
+        prototype.registerHybridMethod("tryMiddleParam", &HybridSwiftKotlinTestObjectSpecSwift::tryMiddleParam_swift);
+        prototype.registerHybridMethod("getCar", &HybridSwiftKotlinTestObjectSpecSwift::getCar_swift);
+        prototype.registerHybridMethod("isCarElectric", &HybridSwiftKotlinTestObjectSpecSwift::isCarElectric_swift);
+        prototype.registerHybridMethod("getDriver", &HybridSwiftKotlinTestObjectSpecSwift::getDriver_swift);
+      });
+    }
+
+  public:
+    // Properties inherited from base, currently throwing
+    inline double getNumberValue() noexcept override {
+      throw std::runtime_error("\"numberValue\" is implemented in Swift, and Nitro does currently not bridge between Swift and C++!");
+    }
+    inline void setNumberValue(double numberValue) noexcept override {
+      throw std::runtime_error("\"numberValue\" is implemented in Swift, and Nitro does currently not bridge between Swift and C++!");
+    }
+    inline bool getBoolValue() noexcept override {
+      throw std::runtime_error("\"boolValue\" is implemented in Swift, and Nitro does currently not bridge between Swift and C++!");
+    }
+    inline void setBoolValue(bool boolValue) noexcept override {
+      throw std::runtime_error("\"boolValue\" is implemented in Swift, and Nitro does currently not bridge between Swift and C++!");
+    }
+    inline std::string getStringValue() noexcept override {
+      throw std::runtime_error("\"stringValue\" is implemented in Swift, and Nitro does currently not bridge between Swift and C++!");
+    }
+    inline void setStringValue(const std::string& stringValue) noexcept override {
+      throw std::runtime_error("\"stringValue\" is implemented in Swift, and Nitro does currently not bridge between Swift and C++!");
+    }
+    inline int64_t getBigintValue() noexcept override {
+      throw std::runtime_error("\"bigintValue\" is implemented in Swift, and Nitro does currently not bridge between Swift and C++!");
+    }
+    inline void setBigintValue(int64_t bigintValue) noexcept override {
+      throw std::runtime_error("\"bigintValue\" is implemented in Swift, and Nitro does currently not bridge between Swift and C++!");
+    }
+    inline std::optional<std::string> getStringOrUndefined() noexcept override {
+      throw std::runtime_error("\"stringOrUndefined\" is implemented in Swift, and Nitro does currently not bridge between Swift and C++!");
+    }
+    inline void setStringOrUndefined(const std::optional<std::string>& stringOrUndefined) noexcept override {
+      throw std::runtime_error("\"stringOrUndefined\" is implemented in Swift, and Nitro does currently not bridge between Swift and C++!");
+    }
+    inline std::optional<std::string> getStringOrNull() noexcept override {
+      throw std::runtime_error("\"stringOrNull\" is implemented in Swift, and Nitro does currently not bridge between Swift and C++!");
+    }
+    inline void setStringOrNull(const std::optional<std::string>& stringOrNull) noexcept override {
+      throw std::runtime_error("\"stringOrNull\" is implemented in Swift, and Nitro does currently not bridge between Swift and C++!");
+    }
+    inline std::optional<std::string> getOptionalString() noexcept override {
+      throw std::runtime_error("\"optionalString\" is implemented in Swift, and Nitro does currently not bridge between Swift and C++!");
+    }
+    inline void setOptionalString(const std::optional<std::string>& optionalString) noexcept override {
+      throw std::runtime_error("\"optionalString\" is implemented in Swift, and Nitro does currently not bridge between Swift and C++!");
+    }
+
+  public:
+    // Methods inherited from base, currently throwing
+    inline void simpleFunc() override {
+      throw std::runtime_error("\"simpleFunc(..)\" is implemented in Swift, and Nitro does currently not bridge between Swift and C++!");
+    }
+    inline double addNumbers(double a, double b) override {
+      throw std::runtime_error("\"addNumbers(..)\" is implemented in Swift, and Nitro does currently not bridge between Swift and C++!");
+    }
+    inline std::string addStrings(const std::string& a, const std::string& b) override {
+      throw std::runtime_error("\"addStrings(..)\" is implemented in Swift, and Nitro does currently not bridge between Swift and C++!");
+    }
+    inline void multipleArguments(double num, const std::string& str, bool boo) override {
+      throw std::runtime_error("\"multipleArguments(..)\" is implemented in Swift, and Nitro does currently not bridge between Swift and C++!");
+    }
+    inline std::vector<double> createNumbers() override {
+      throw std::runtime_error("\"createNumbers(..)\" is implemented in Swift, and Nitro does currently not bridge between Swift and C++!");
+    }
+    inline std::vector<std::string> createStrings() override {
+      throw std::runtime_error("\"createStrings(..)\" is implemented in Swift, and Nitro does currently not bridge between Swift and C++!");
+    }
+    inline std::string tryOptionalParams(double num, bool boo, const std::optional<std::string>& str) override {
+      throw std::runtime_error("\"tryOptionalParams(..)\" is implemented in Swift, and Nitro does currently not bridge between Swift and C++!");
+    }
+    inline std::string tryMiddleParam(double num, std::optional<bool> boo, const std::string& str) override {
+      throw std::runtime_error("\"tryMiddleParam(..)\" is implemented in Swift, and Nitro does currently not bridge between Swift and C++!");
+    }
+    inline Car getCar() override {
+      throw std::runtime_error("\"getCar(..)\" is implemented in Swift, and Nitro does currently not bridge between Swift and C++!");
+    }
     inline bool isCarElectric(const Car& car) override {
-      return _swiftPart.isCarElectric(std::forward<decltype(car)>(car));
+      throw std::runtime_error("\"isCarElectric(..)\" is implemented in Swift, and Nitro does currently not bridge between Swift and C++!");
     }
     inline std::optional<Person> getDriver(const Car& car) override {
-      return std::nullopt;
-      // return _swiftPart.getDriver(std::forward<decltype(car)>(car));
+      throw std::runtime_error("\"getDriver(..)\" is implemented in Swift, and Nitro does currently not bridge between Swift and C++!");
     }
 
   private:
