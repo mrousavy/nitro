@@ -42,11 +42,27 @@ namespace margelo::nitro::image {
 
     public:
       // Properties
-      
+      virtual double getNumberValue() = 0;
+      virtual void setNumberValue(double numberValue) = 0;
+      virtual bool getBoolValue() = 0;
+      virtual void setBoolValue(bool boolValue) = 0;
+      virtual std::string getStringValue() = 0;
+      virtual void setStringValue(const std::string& stringValue) = 0;
+      virtual int64_t getBigintValue() = 0;
+      virtual void setBigintValue(int64_t bigintValue) = 0;
+      virtual std::optional<std::string> getStringOrUndefined() = 0;
+      virtual void setStringOrUndefined(const std::optional<std::string>& stringOrUndefined) = 0;
+      virtual std::optional<std::string> getStringOrNull() = 0;
+      virtual void setStringOrNull(const std::optional<std::string>& stringOrNull) = 0;
+      virtual std::optional<std::string> getOptionalString() = 0;
+      virtual void setOptionalString(const std::optional<std::string>& optionalString) = 0;
 
     public:
       // Methods
-      virtual void hallo(std::optional<double> value) = 0;
+      virtual void simpleFunc() = 0;
+      virtual double addNumbers(double a, double b) = 0;
+      virtual std::string addStrings(const std::string& a, const std::string& b) = 0;
+      virtual void multipleArguments(double num, const std::string& str, bool boo) = 0;
 
     protected:
       // Hybrid Setup

@@ -19,15 +19,57 @@
 import NitroModules
 
 /**
- * The exception-free result type for HybridSwiftKotlinTestObjectSpec.hallo(...).
+ * The exception-free result type for HybridSwiftKotlinTestObjectSpec.simpleFunc(...).
  * Original func:
  * ```swift
- * func hallo(value: Double?) throws -> Void
+ * func simpleFunc() throws -> Void
  * ```
- * - seealso: `HybridSwiftKotlinTestObjectSpec.hallo(value:)`
+ * - seealso: `HybridSwiftKotlinTestObjectSpec.simpleFunc()`
  */
 @frozen
-public enum HybridSwiftKotlinTestObjectSpecCxx_hallo_Result {
+public enum HybridSwiftKotlinTestObjectSpecCxx_simpleFunc_Result {
+  case value
+  case error(message: String)
+}
+
+/**
+ * The exception-free result type for HybridSwiftKotlinTestObjectSpec.addNumbers(...).
+ * Original func:
+ * ```swift
+ * func addNumbers(a: Double, b: Double) throws -> Double
+ * ```
+ * - seealso: `HybridSwiftKotlinTestObjectSpec.addNumbers(a:, b:)`
+ */
+@frozen
+public enum HybridSwiftKotlinTestObjectSpecCxx_addNumbers_Result {
+  case value(Double)
+  case error(message: String)
+}
+
+/**
+ * The exception-free result type for HybridSwiftKotlinTestObjectSpec.addStrings(...).
+ * Original func:
+ * ```swift
+ * func addStrings(a: String, b: String) throws -> String
+ * ```
+ * - seealso: `HybridSwiftKotlinTestObjectSpec.addStrings(a:, b:)`
+ */
+@frozen
+public enum HybridSwiftKotlinTestObjectSpecCxx_addStrings_Result {
+  case value(String)
+  case error(message: String)
+}
+
+/**
+ * The exception-free result type for HybridSwiftKotlinTestObjectSpec.multipleArguments(...).
+ * Original func:
+ * ```swift
+ * func multipleArguments(num: Double, str: String, boo: Bool) throws -> Void
+ * ```
+ * - seealso: `HybridSwiftKotlinTestObjectSpec.multipleArguments(num:, str:, boo:)`
+ */
+@frozen
+public enum HybridSwiftKotlinTestObjectSpecCxx_multipleArguments_Result {
   case value
   case error(message: String)
 }

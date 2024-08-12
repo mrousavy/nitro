@@ -41,13 +41,136 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
   }
 
   // Properties
+  public var numberValue: Double {
+    @inline(__always)
+    get {
+      return self.implementation.numberValue
+    }
+    @inline(__always)
+    set {
+      self.implementation.numberValue = newValue
+    }
+  }
   
+  public var boolValue: Bool {
+    @inline(__always)
+    get {
+      return self.implementation.boolValue
+    }
+    @inline(__always)
+    set {
+      self.implementation.boolValue = newValue
+    }
+  }
+  
+  public var stringValue: String {
+    @inline(__always)
+    get {
+      return self.implementation.stringValue
+    }
+    @inline(__always)
+    set {
+      self.implementation.stringValue = newValue
+    }
+  }
+  
+  public var bigintValue: Int64 {
+    @inline(__always)
+    get {
+      return self.implementation.bigintValue
+    }
+    @inline(__always)
+    set {
+      self.implementation.bigintValue = newValue
+    }
+  }
+  
+  public var stringOrUndefined: String? {
+    @inline(__always)
+    get {
+      return self.implementation.stringOrUndefined
+    }
+    @inline(__always)
+    set {
+      self.implementation.stringOrUndefined = newValue
+    }
+  }
+  
+  public var stringOrNull: String? {
+    @inline(__always)
+    get {
+      return self.implementation.stringOrNull
+    }
+    @inline(__always)
+    set {
+      self.implementation.stringOrNull = newValue
+    }
+  }
+  
+  public var optionalString: String? {
+    @inline(__always)
+    get {
+      return self.implementation.optionalString
+    }
+    @inline(__always)
+    set {
+      self.implementation.optionalString = newValue
+    }
+  }
 
   // Methods
   @inline(__always)
-  public func hallo(value: Double?) -> HybridSwiftKotlinTestObjectSpecCxx_hallo_Result {
+  public func simpleFunc() -> HybridSwiftKotlinTestObjectSpecCxx_simpleFunc_Result {
     do {
-      try self.implementation.hallo(value: value)
+      try self.implementation.simpleFunc()
+      return .value
+    } catch RuntimeError.error(withMessage: let message) {
+      // A  `RuntimeError` was thrown.
+      return .error(message: message)
+    } catch {
+      // Any other kind of error was thrown.
+      // Due to a Swift bug, we have to copy the string here.
+      let message = "\(error.localizedDescription)"
+      return .error(message: message)
+    }
+  }
+  
+  @inline(__always)
+  public func addNumbers(a: Double, b: Double) -> HybridSwiftKotlinTestObjectSpecCxx_addNumbers_Result {
+    do {
+      let result = try self.implementation.addNumbers(a: a, b: b)
+      return .value(result)
+    } catch RuntimeError.error(withMessage: let message) {
+      // A  `RuntimeError` was thrown.
+      return .error(message: message)
+    } catch {
+      // Any other kind of error was thrown.
+      // Due to a Swift bug, we have to copy the string here.
+      let message = "\(error.localizedDescription)"
+      return .error(message: message)
+    }
+  }
+  
+  @inline(__always)
+  public func addStrings(a: String, b: String) -> HybridSwiftKotlinTestObjectSpecCxx_addStrings_Result {
+    do {
+      let result = try self.implementation.addStrings(a: a, b: b)
+      return .value(result)
+    } catch RuntimeError.error(withMessage: let message) {
+      // A  `RuntimeError` was thrown.
+      return .error(message: message)
+    } catch {
+      // Any other kind of error was thrown.
+      // Due to a Swift bug, we have to copy the string here.
+      let message = "\(error.localizedDescription)"
+      return .error(message: message)
+    }
+  }
+  
+  @inline(__always)
+  public func multipleArguments(num: Double, str: String, boo: Bool) -> HybridSwiftKotlinTestObjectSpecCxx_multipleArguments_Result {
+    do {
+      try self.implementation.multipleArguments(num: num, str: str, boo: boo)
       return .value
     } catch RuntimeError.error(withMessage: let message) {
       // A  `RuntimeError` was thrown.

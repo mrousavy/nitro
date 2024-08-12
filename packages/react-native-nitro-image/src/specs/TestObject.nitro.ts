@@ -103,13 +103,17 @@ export interface TestObject extends HybridObject<{ ios: 'c++' }> {
 
 export interface SwiftKotlinTestObject extends HybridObject<{ ios: 'swift' }> {
   // Test Primitives
-  // numberValue: number
-  // boolValue: boolean
-  // stringValue: string
-  // bigintValue: bigint
-  // stringOrUndefined: string | undefined
-  // stringOrNull: string | null
-  // optionalString?: string
+  numberValue: number
+  boolValue: boolean
+  stringValue: string
+  bigintValue: bigint
+  stringOrUndefined: string | undefined
+  stringOrNull: string | null
+  optionalString?: string
 
-  hallo(value: number | undefined): void
+  // Basic function tests
+  simpleFunc(): void
+  addNumbers(a: number, b: number): number
+  addStrings(a: string, b: string): string
+  multipleArguments(num: number, str: string, boo: boolean): void
 }

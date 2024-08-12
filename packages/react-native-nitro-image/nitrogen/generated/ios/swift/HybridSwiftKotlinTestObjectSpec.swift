@@ -30,10 +30,19 @@ import NitroModules
  */
 public protocol HybridSwiftKotlinTestObjectSpec: HybridObjectSpec {
   // Properties
-  
+  var numberValue: Double { get set }
+  var boolValue: Bool { get set }
+  var stringValue: String { get set }
+  var bigintValue: Int64 { get set }
+  var stringOrUndefined: String? { get set }
+  var stringOrNull: String? { get set }
+  var optionalString: String? { get set }
 
   // Methods
-  func hallo(value: Double?) throws -> Void
+  func simpleFunc() throws -> Void
+  func addNumbers(a: Double, b: Double) throws -> Double
+  func addStrings(a: String, b: String) throws -> String
+  func multipleArguments(num: Double, str: String, boo: Bool) throws -> Void
 }
 
 public extension HybridSwiftKotlinTestObjectSpec {

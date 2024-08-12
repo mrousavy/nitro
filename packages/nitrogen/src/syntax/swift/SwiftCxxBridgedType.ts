@@ -161,7 +161,7 @@ export class SwiftCxxBridgedType {
       case 'optional': {
         switch (language) {
           case 'c++':
-            return `${swiftParameterName} ? ${swiftParameterName}.get() : std::nullopt`
+            return `${swiftParameterName} ? ${swiftParameterName}.get() : nullptr`
           default:
             return swiftParameterName
         }

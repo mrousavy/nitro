@@ -54,12 +54,78 @@ namespace margelo::nitro::image {
 
   public:
     // Properties
-    
+    inline double getNumberValue() noexcept override {
+      return _swiftPart.getNumberValue();
+    }
+    inline void setNumberValue(double numberValue) noexcept override {
+      _swiftPart.setNumberValue(std::forward<decltype(numberValue)>(numberValue));
+    }
+    inline bool getBoolValue() noexcept override {
+      return _swiftPart.getBoolValue();
+    }
+    inline void setBoolValue(bool boolValue) noexcept override {
+      _swiftPart.setBoolValue(std::forward<decltype(boolValue)>(boolValue));
+    }
+    inline std::string getStringValue() noexcept override {
+      return _swiftPart.getStringValue();
+    }
+    inline void setStringValue(const std::string& stringValue) noexcept override {
+      _swiftPart.setStringValue(std::forward<decltype(stringValue)>(stringValue));
+    }
+    inline int64_t getBigintValue() noexcept override {
+      return _swiftPart.getBigintValue();
+    }
+    inline void setBigintValue(int64_t bigintValue) noexcept override {
+      _swiftPart.setBigintValue(std::forward<decltype(bigintValue)>(bigintValue));
+    }
+    inline std::optional<std::string> getStringOrUndefined() noexcept override {
+      auto result = _swiftPart.getStringOrUndefined();
+      return result.isSome() ? result.get() : nullptr;
+    }
+    inline void setStringOrUndefined(const std::optional<std::string>& stringOrUndefined) noexcept override {
+      _swiftPart.setStringOrUndefined(stringOrUndefined.has_value() ? swift::Optional<swift::String>::some(stringOrUndefined.value()) : swift::Optional<swift::String>::none());
+    }
+    inline std::optional<std::string> getStringOrNull() noexcept override {
+      auto result = _swiftPart.getStringOrNull();
+      return result ? result.get() : nullptr;
+    }
+    inline void setStringOrNull(const std::optional<std::string>& stringOrNull) noexcept override {
+      _swiftPart.setStringOrNull(stringOrNull.has_value() ? swift::Optional<swift::String>::some(stringOrNull.value()) : swift::Optional<swift::String>::none());
+    }
+    inline std::optional<std::string> getOptionalString() noexcept override {
+      auto result = _swiftPart.getOptionalString();
+      return result ? result.get() : nullptr;
+    }
+    inline void setOptionalString(const std::optional<std::string>& optionalString) noexcept override {
+      _swiftPart.setOptionalString(optionalString.has_value() ? swift::Optional<swift::String>::some(optionalString.value()) : swift::Optional<swift::String>::none());
+    }
 
   public:
     // Methods
-    inline void hallo(std::optional<double> value) override {
-      auto valueOrError = _swiftPart.hallo(value.has_value() ? swift::Optional<double>::some(value.value()) : swift::Optional<double>::none());
+    inline void simpleFunc() override {
+      auto valueOrError = _swiftPart.simpleFunc();
+      if (valueOrError.isError()) [[unlikely]] {
+        throw std::runtime_error(valueOrError.getError());
+      }
+    }
+    inline double addNumbers(double a, double b) override {
+      auto valueOrError = _swiftPart.addNumbers(std::forward<decltype(a)>(a), std::forward<decltype(b)>(b));
+      if (valueOrError.isError()) [[unlikely]] {
+        throw std::runtime_error(valueOrError.getError());
+      }
+      auto value = valueOrError.getValue();
+      return value;
+    }
+    inline std::string addStrings(const std::string& a, const std::string& b) override {
+      auto valueOrError = _swiftPart.addStrings(std::forward<decltype(a)>(a), std::forward<decltype(b)>(b));
+      if (valueOrError.isError()) [[unlikely]] {
+        throw std::runtime_error(valueOrError.getError());
+      }
+      auto value = valueOrError.getValue();
+      return value;
+    }
+    inline void multipleArguments(double num, const std::string& str, bool boo) override {
+      auto valueOrError = _swiftPart.multipleArguments(std::forward<decltype(num)>(num), std::forward<decltype(str)>(str), std::forward<decltype(boo)>(boo));
       if (valueOrError.isError()) [[unlikely]] {
         throw std::runtime_error(valueOrError.getError());
       }
