@@ -27,7 +27,7 @@ export function createCppUnion(
     )
     .join('\n')
   const cppCanConvertCases = enumMembers
-    .map((m) => `case hashString("${m.stringValue}"): return true;`)
+    .map((m) => `case hashString("${m.stringValue}"):`)
     .join('\n')
   const cxxNamespace = NitroConfig.getCxxNamespace('c++')
 
@@ -81,7 +81,9 @@ namespace margelo::nitro {
       std::string unionValue = JSIConverter<std::string>::fromJSI(runtime, value);
       switch (hashString(unionValue.c_str(), unionValue.size())) {
         ${indent(cppCanConvertCases, '        ')}
-        default: return false;
+          return true;
+        default:
+          return false;
       }
     }
   };

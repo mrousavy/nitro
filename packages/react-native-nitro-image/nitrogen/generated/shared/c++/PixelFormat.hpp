@@ -70,10 +70,12 @@ namespace margelo::nitro {
       }
       std::string unionValue = JSIConverter<std::string>::fromJSI(runtime, value);
       switch (hashString(unionValue.c_str(), unionValue.size())) {
-        case hashString("rgb"): return true;
-        case hashString("yuv-8bit"): return true;
-        case hashString("yuv-10bit"): return true;
-        default: return false;
+        case hashString("rgb"):
+        case hashString("yuv-8bit"):
+        case hashString("yuv-10bit"):
+          return true;
+        default:
+          return false;
       }
     }
   };

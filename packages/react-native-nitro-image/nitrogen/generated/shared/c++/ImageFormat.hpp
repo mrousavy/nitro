@@ -67,9 +67,11 @@ namespace margelo::nitro {
       }
       std::string unionValue = JSIConverter<std::string>::fromJSI(runtime, value);
       switch (hashString(unionValue.c_str(), unionValue.size())) {
-        case hashString("jpg"): return true;
-        case hashString("png"): return true;
-        default: return false;
+        case hashString("jpg"):
+        case hashString("png"):
+          return true;
+        default:
+          return false;
       }
     }
   };
