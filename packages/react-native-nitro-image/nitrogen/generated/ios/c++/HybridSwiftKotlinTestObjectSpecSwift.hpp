@@ -183,46 +183,46 @@ namespace margelo::nitro::image {
 
   public:
     // Properties inherited from base, currently throwing
-    inline double getNumberValue() noexcept override {
+    inline double getNumberValue() override {
       throw std::runtime_error("\"numberValue\" is implemented in Swift, and Nitro does currently not bridge between Swift and C++!");
     }
-    inline void setNumberValue(double numberValue) noexcept override {
+    inline void setNumberValue(double numberValue) override {
       throw std::runtime_error("\"numberValue\" is implemented in Swift, and Nitro does currently not bridge between Swift and C++!");
     }
-    inline bool getBoolValue() noexcept override {
+    inline bool getBoolValue() override {
       throw std::runtime_error("\"boolValue\" is implemented in Swift, and Nitro does currently not bridge between Swift and C++!");
     }
-    inline void setBoolValue(bool boolValue) noexcept override {
+    inline void setBoolValue(bool boolValue) override {
       throw std::runtime_error("\"boolValue\" is implemented in Swift, and Nitro does currently not bridge between Swift and C++!");
     }
-    inline std::string getStringValue() noexcept override {
+    inline std::string getStringValue() override {
       throw std::runtime_error("\"stringValue\" is implemented in Swift, and Nitro does currently not bridge between Swift and C++!");
     }
-    inline void setStringValue(const std::string& stringValue) noexcept override {
+    inline void setStringValue(const std::string& stringValue) override {
       throw std::runtime_error("\"stringValue\" is implemented in Swift, and Nitro does currently not bridge between Swift and C++!");
     }
-    inline int64_t getBigintValue() noexcept override {
+    inline int64_t getBigintValue() override {
       throw std::runtime_error("\"bigintValue\" is implemented in Swift, and Nitro does currently not bridge between Swift and C++!");
     }
-    inline void setBigintValue(int64_t bigintValue) noexcept override {
+    inline void setBigintValue(int64_t bigintValue) override {
       throw std::runtime_error("\"bigintValue\" is implemented in Swift, and Nitro does currently not bridge between Swift and C++!");
     }
-    inline std::optional<std::string> getStringOrUndefined() noexcept override {
+    inline std::optional<std::string> getStringOrUndefined() override {
       throw std::runtime_error("\"stringOrUndefined\" is implemented in Swift, and Nitro does currently not bridge between Swift and C++!");
     }
-    inline void setStringOrUndefined(const std::optional<std::string>& stringOrUndefined) noexcept override {
+    inline void setStringOrUndefined(const std::optional<std::string>& stringOrUndefined) override {
       throw std::runtime_error("\"stringOrUndefined\" is implemented in Swift, and Nitro does currently not bridge between Swift and C++!");
     }
-    inline std::optional<std::string> getStringOrNull() noexcept override {
+    inline std::optional<std::string> getStringOrNull() override {
       throw std::runtime_error("\"stringOrNull\" is implemented in Swift, and Nitro does currently not bridge between Swift and C++!");
     }
-    inline void setStringOrNull(const std::optional<std::string>& stringOrNull) noexcept override {
+    inline void setStringOrNull(const std::optional<std::string>& stringOrNull) override {
       throw std::runtime_error("\"stringOrNull\" is implemented in Swift, and Nitro does currently not bridge between Swift and C++!");
     }
-    inline std::optional<std::string> getOptionalString() noexcept override {
+    inline std::optional<std::string> getOptionalString() override {
       throw std::runtime_error("\"optionalString\" is implemented in Swift, and Nitro does currently not bridge between Swift and C++!");
     }
-    inline void setOptionalString(const std::optional<std::string>& optionalString) noexcept override {
+    inline void setOptionalString(const std::optional<std::string>& optionalString) override {
       throw std::runtime_error("\"optionalString\" is implemented in Swift, and Nitro does currently not bridge between Swift and C++!");
     }
 

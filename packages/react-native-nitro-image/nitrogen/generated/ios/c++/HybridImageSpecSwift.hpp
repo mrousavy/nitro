@@ -65,7 +65,7 @@ namespace margelo::nitro::image {
 
   public:
     // Properties using Swift types
-    inline ImageSize getSize_swift() {
+    inline ImageSize getSize_swift() noexcept {
       return _swiftPart.getSize();
     }
     inline PixelFormat getPixelFormat_swift() {
@@ -105,16 +105,16 @@ namespace margelo::nitro::image {
 
   public:
     // Properties inherited from base, currently throwing
-    inline ImageSize getSize() noexcept override {
+    inline ImageSize getSize() override {
       throw std::runtime_error("\"size\" is implemented in Swift, and Nitro does currently not bridge between Swift and C++!");
     }
-    inline PixelFormat getPixelFormat() noexcept override {
+    inline PixelFormat getPixelFormat() override {
       throw std::runtime_error("\"pixelFormat\" is implemented in Swift, and Nitro does currently not bridge between Swift and C++!");
     }
-    inline double getSomeSettableProp() noexcept override {
+    inline double getSomeSettableProp() override {
       throw std::runtime_error("\"someSettableProp\" is implemented in Swift, and Nitro does currently not bridge between Swift and C++!");
     }
-    inline void setSomeSettableProp(double someSettableProp) noexcept override {
+    inline void setSomeSettableProp(double someSettableProp) override {
       throw std::runtime_error("\"someSettableProp\" is implemented in Swift, and Nitro does currently not bridge between Swift and C++!");
     }
 
