@@ -8,8 +8,6 @@
 
 #pragma once
 
-#include "NitroImage-Swift-Cxx-Umbrella.hpp"
-
 #include "HybridSwiftKotlinTestObjectSpec.hpp"
 
 // Forward declaration of `HybridSwiftKotlinTestObjectSpecCxx` to properly resolve imports.
@@ -24,6 +22,8 @@ namespace NitroImage { class HybridSwiftKotlinTestObjectSpecCxx; }
 #else
 #error NitroModules cannot be found! Are you sure you installed NitroModules properly?
 #endif
+
+#include "NitroImage-Swift-Cxx-Umbrella.hpp"
 
 namespace margelo::nitro::image {
 
@@ -59,10 +59,6 @@ namespace margelo::nitro::image {
   public:
     // Methods
     inline void hallo(std::optional<double> value) override {
-    auto valueOrError = _swiftPart.hallo(value.has_value() ? swift::Optional<double>::some(value) : swift::Optional<double>::none());
-    if (valueOrError.isError()) [[unlikely]] {
-      throw std::runtime_error(valueOrError.getError());
-    }
   }
 
   private:

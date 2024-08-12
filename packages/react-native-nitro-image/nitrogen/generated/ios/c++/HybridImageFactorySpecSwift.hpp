@@ -8,8 +8,6 @@
 
 #pragma once
 
-#include "NitroImage-Swift-Cxx-Umbrella.hpp"
-
 #include "HybridImageFactorySpec.hpp"
 
 // Forward declaration of `HybridImageFactorySpecCxx` to properly resolve imports.
@@ -28,6 +26,8 @@ namespace margelo::nitro::image { class HybridImageSpecSwift; }
 #else
 #error NitroModules cannot be found! Are you sure you installed NitroModules properly?
 #endif
+
+#include "NitroImage-Swift-Cxx-Umbrella.hpp"
 
 namespace margelo::nitro::image {
 
