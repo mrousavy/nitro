@@ -1,12 +1,23 @@
 import * as React from 'react'
 
 import { StyleSheet, View, Text, ScrollView, Button } from 'react-native'
-import { HybridTestObject, ImageConstructors } from 'react-native-nitro-image'
+import {
+  HybridSwiftKotlinTestObject,
+  HybridTestObject,
+  ImageConstructors,
+} from 'react-native-nitro-image'
 import { getTests, type TestRunner } from '../getTests'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { logPrototypeChain } from '../logPrototypeChain'
 
 logPrototypeChain(HybridTestObject)
+
+const swiftObject = HybridSwiftKotlinTestObject
+console.log(swiftObject.stringOrUndefined)
+console.log((swiftObject.stringOrUndefined = 'hello'))
+console.log(swiftObject.stringOrUndefined)
+console.log((swiftObject.stringOrUndefined = undefined))
+console.log(swiftObject.stringOrUndefined)
 
 const allTests = getTests()
 
