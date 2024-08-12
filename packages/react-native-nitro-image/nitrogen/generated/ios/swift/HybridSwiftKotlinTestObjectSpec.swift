@@ -47,9 +47,9 @@ public protocol HybridSwiftKotlinTestObjectSpec: HybridObjectSpec {
   func createStrings() throws -> [String]
   func tryOptionalParams(num: Double, boo: Bool, str: String?) throws -> String
   func tryMiddleParam(num: Double, boo: Bool?, str: String) throws -> String
-  func getCar() throws -> margelo.nitro.image.Car
-  func isCarElectric(car: margelo.nitro.image.Car) throws -> Bool
-  func getDriver(car: margelo.nitro.image.Car) throws -> margelo.nitro.image.Person?
+  func getCar() throws -> Car
+  func isCarElectric(car: Car) throws -> Bool
+  func getDriver(car: Car) throws -> Person?
 }
 
 public extension HybridSwiftKotlinTestObjectSpec {

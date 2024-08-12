@@ -31,9 +31,11 @@ export class StructType implements Type {
   getCode(language: Language): string {
     switch (language) {
       case 'c++':
+        // Created in CppStruct.ts
         return this.structName
       case 'swift':
-        return NitroConfig.getCxxNamespace('swift', this.structName)
+        // Created in SwiftStruct.ts
+        return this.structName
       case 'kotlin':
         return NitroConfig.getAndroidPackage('java/kotlin', this.structName)
       default:
@@ -43,14 +45,14 @@ export class StructType implements Type {
     }
   }
   getExtraFiles(): SourceFile[] {
-    const referencedTypes = this.declarationFile.referencedTypes.flatMap((r) =>
-      r.getExtraFiles()
-    )
+    const referencedTypes = this.properties.flatMap((r) => r.getExtraFiles())
     return [this.declarationFile, ...referencedTypes]
   }
   getRequiredImports(): SourceImport[] {
     const cxxNamespace = NitroConfig.getCxxNamespace('c++')
-    const extraImport: SourceImport = {
+    const extraImports: SourceImport[] = []
+    // C++ struct (CppStruct.ts)
+    extraImports.push({
       name: this.declarationFile.name,
       language: this.declarationFile.language,
       forwardDeclaration: getForwardDeclaration(
@@ -59,7 +61,6 @@ export class StructType implements Type {
         cxxNamespace
       ),
       space: 'user',
-    }
-    return [extraImport]
+    return extraImports
   }
 }

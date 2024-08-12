@@ -6,60 +6,14 @@
 /// Copyright © 2024 Marc Rousavy @ Margelo
 ///
 
-import NitroModules
-
-public extension margelo.nitro.image.Car {
-  var year: Double {
-    get {
-      return self.__year
-    }
-    set {
-      self.__year = newValue
-    }
-  }
-  
-  var make: String {
-    get {
-      return String(self.__make)
-    }
-    set {
-      self.__make = std.string(newValue)
-    }
-  }
-  
-  var model: String {
-    get {
-      return String(self.__model)
-    }
-    set {
-      self.__model = std.string(newValue)
-    }
-  }
-  
-  var power: Double {
-    get {
-      return self.__power
-    }
-    set {
-      self.__power = newValue
-    }
-  }
-  
-  var powertrain: margelo.nitro.image.Powertrain {
-    get {
-      return self.__powertrain
-    }
-    set {
-      self.__powertrain = newValue
-    }
-  }
-  
-  var driver: margelo.nitro.image.Person? {
-    get {
-      return self.__driver.value
-    }
-    set {
-      // TODO: self.__driver = newValue
-    }
-  }
+/**
+ * A struct which can be represented as a JavaScript object (Car).
+ */
+public struct Car {
+  public var year: Double
+  public var make: String
+  public var model: String
+  public var power: Double
+  public var powertrain: margelo.nitro.image.Powertrain
+  public var driver: Person?
 }

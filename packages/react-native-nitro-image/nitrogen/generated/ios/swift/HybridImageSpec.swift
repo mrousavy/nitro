@@ -30,7 +30,7 @@ import NitroModules
  */
 public protocol HybridImageSpec: HybridObjectSpec {
   // Properties
-  var size: margelo.nitro.image.ImageSize { get }
+  var size: ImageSize { get }
   var pixelFormat: margelo.nitro.image.PixelFormat { get }
   var someSettableProp: Double { get set }
 

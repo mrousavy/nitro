@@ -195,7 +195,7 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
   }
   
   @inline(__always)
-  public func getCar() -> margelo.nitro.image.Car {
+  public func getCar() -> Car {
     do {
       return try self.implementation.getCar()
     } catch {
@@ -205,7 +205,7 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
   }
   
   @inline(__always)
-  public func isCarElectric(car: margelo.nitro.image.Car) -> Bool {
+  public func isCarElectric(car: Car) -> Bool {
     do {
       return try self.implementation.isCarElectric(car: car)
     } catch {
@@ -215,7 +215,7 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
   }
   
   @inline(__always)
-  public func getDriver(car: margelo.nitro.image.Car) -> margelo.nitro.image.Person? {
+  public func getDriver(car: Car) -> Person? {
     do {
       return try self.implementation.getDriver(car: car)
     } catch {

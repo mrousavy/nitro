@@ -6,24 +6,10 @@
 /// Copyright © 2024 Marc Rousavy @ Margelo
 ///
 
-import NitroModules
-
-public extension margelo.nitro.image.ImageSize {
-  var width: Double {
-    get {
-      return self.__width
-    }
-    set {
-      self.__width = newValue
-    }
-  }
-  
-  var height: Double {
-    get {
-      return self.__height
-    }
-    set {
-      self.__height = newValue
-    }
-  }
+/**
+ * A struct which can be represented as a JavaScript object (ImageSize).
+ */
+public struct ImageSize {
+  public var width: Double
+  public var height: Double
 }
