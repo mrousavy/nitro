@@ -71,11 +71,10 @@ namespace margelo::nitro::image {
       _swiftPart.setBoolValue(std::forward<decltype(boolValue)>(boolValue));
     }
     inline std::string getStringValue() noexcept override {
-      auto result = _swiftPart.getStringValue();
-      return result;
+      return _swiftPart.getStringValue();
     }
     inline void setStringValue(const std::string& stringValue) noexcept override {
-      _swiftPart.setStringValue(swift::String(stringValue));
+      _swiftPart.setStringValue(std::forward<decltype(stringValue)>(stringValue));
     }
     inline int64_t getBigintValue() noexcept override {
       return _swiftPart.getBigintValue();
@@ -84,25 +83,21 @@ namespace margelo::nitro::image {
       _swiftPart.setBigintValue(std::forward<decltype(bigintValue)>(bigintValue));
     }
     inline std::optional<std::string> getStringOrUndefined() noexcept override {
-      auto result = _swiftPart.getStringOrUndefined();
-      return result ? std::optional<std::string>(result.get()) : std::nullopt;
+      return std::nullopt;
     }
     inline void setStringOrUndefined(const std::optional<std::string>& stringOrUndefined) noexcept override {
-      _swiftPart.setStringOrUndefined(stringOrUndefined.has_value() ? swift::Optional<swift::String>::some(stringOrUndefined.value()) : swift::Optional<swift::String>::none());
+      
     }
     inline std::optional<std::string> getStringOrNull() noexcept override {
-      auto result = _swiftPart.getStringOrNull();
-      return result ? std::optional<std::string>(result.get()) : std::nullopt;
+      return std::nullopt;
     }
     inline void setStringOrNull(const std::optional<std::string>& stringOrNull) noexcept override {
-      _swiftPart.setStringOrNull(stringOrNull.has_value() ? swift::Optional<swift::String>::some(stringOrNull.value()) : swift::Optional<swift::String>::none());
+      
     }
     inline std::optional<std::string> getOptionalString() noexcept override {
-      auto result = _swiftPart.getOptionalString();
-      return result ? std::optional<std::string>(result.get()) : std::nullopt;
+      return std::nullopt;
     }
     inline void setOptionalString(const std::optional<std::string>& optionalString) noexcept override {
-      _swiftPart.setOptionalString(optionalString.has_value() ? swift::Optional<swift::String>::some(optionalString.value()) : swift::Optional<swift::String>::none());
     }
 
   public:
@@ -111,57 +106,35 @@ namespace margelo::nitro::image {
       _swiftPart.simpleFunc();
     }
     inline double addNumbers(double a, double b) override {
-      auto result = _swiftPart.addNumbers(std::forward<decltype(a)>(a), std::forward<decltype(b)>(b));
-      return result;
+      return _swiftPart.addNumbers(std::forward<decltype(a)>(a), std::forward<decltype(b)>(b));
     }
     inline std::string addStrings(const std::string& a, const std::string& b) override {
-      auto result = _swiftPart.addStrings(swift::String(a), swift::String(b));
-      return result;
+      return _swiftPart.addStrings(std::forward<decltype(a)>(a), std::forward<decltype(b)>(b));
     }
     inline void multipleArguments(double num, const std::string& str, bool boo) override {
-      _swiftPart.multipleArguments(std::forward<decltype(num)>(num), swift::String(str), std::forward<decltype(boo)>(boo));
+      _swiftPart.multipleArguments(std::forward<decltype(num)>(num), std::forward<decltype(str)>(str), std::forward<decltype(boo)>(boo));
     }
     inline std::vector<double> createNumbers() override {
-      auto result = _swiftPart.createNumbers();
-      return [&]() -> std::vector<double> {
-        std::vector<double> vector;
-        vector.reserve(result.getCount());
-        for (double i : result) {
-          vector.push_back(i);
-        }
-        return vector;
-      }();
+      return {};
     }
     inline std::vector<std::string> createStrings() override {
-      auto result = _swiftPart.createStrings();
-      return [&]() -> std::vector<std::string> {
-        std::vector<std::string> vector;
-        vector.reserve(result.getCount());
-        for (const swift::String& i : result) {
-          vector.push_back(i);
-        }
-        return vector;
-      }();
+      return {};
     }
     inline std::string tryOptionalParams(double num, bool boo, const std::optional<std::string>& str) override {
-      auto result = _swiftPart.tryOptionalParams(std::forward<decltype(num)>(num), std::forward<decltype(boo)>(boo), str.has_value() ? swift::Optional<swift::String>::some(str.value()) : swift::Optional<swift::String>::none());
-      return result;
+      return "";
     }
     inline std::string tryMiddleParam(double num, std::optional<bool> boo, const std::string& str) override {
-      auto result = _swiftPart.tryMiddleParam(std::forward<decltype(num)>(num), boo.has_value() ? swift::Optional<bool>::some(boo.value()) : swift::Optional<bool>::none(), swift::String(str));
-      return result;
+      return "";
     }
     inline Car getCar() override {
-      auto result = _swiftPart.getCar();
-      return result;
+      return _swiftPart.getCar();
     }
     inline bool isCarElectric(const Car& car) override {
-      auto result = _swiftPart.isCarElectric(std::forward<decltype(car)>(car));
-      return result;
+      return _swiftPart.isCarElectric(std::forward<decltype(car)>(car));
     }
     inline std::optional<Person> getDriver(const Car& car) override {
-      auto result = _swiftPart.getDriver(std::forward<decltype(car)>(car));
-      return result ? std::optional<Person>(result.get()) : std::nullopt;
+      return std::nullopt;
+      // return _swiftPart.getDriver(std::forward<decltype(car)>(car));
     }
 
   private:

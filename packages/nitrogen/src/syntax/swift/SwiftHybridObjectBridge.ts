@@ -78,28 +78,12 @@ public final class ${name.HybridTSpecCxx} {
 
   const cppProperties = spec.properties
     .map((p) => {
-      const bridged = new SwiftCxxBridgedType(p.type)
-      let getter: string
-      let setter: string
-
-      if (bridged.needsSpecialHandling) {
-        // we need custom C++ -> Swift conversion code
-        getter = `
-auto result = _swiftPart.${p.cppGetterName}();
-return ${bridged.parseFromSwiftToCpp('result', 'c++')};
-`
-        setter = `_swiftPart.${p.cppSetterName}(${bridged.parseFromCppToSwift(p.name, 'c++')});`
-      } else {
-        // just forward value directly
-        getter = `return _swiftPart.${p.cppGetterName}();`
-        setter = `_swiftPart.${p.cppSetterName}(std::forward<decltype(${p.name})>(${p.name}));`
-      }
       return p.getCode(
         'c++',
         { inline: true, override: true, noexcept: true },
         {
-          getter: getter.trim(),
-          setter: setter.trim(),
+          getter: `return _swiftPart.${p.cppGetterName}();`,
+          setter: `_swiftPart.${p.cppSetterName}(std::forward<decltype(${p.name})>(${p.name}));`,
         }
       )
     })
@@ -108,25 +92,13 @@ return ${bridged.parseFromSwiftToCpp('result', 'c++')};
   const cppMethods = spec.methods
     .map((m) => {
       const params = m.parameters
-        .map((p) => {
-          const bridged = new SwiftCxxBridgedType(p.type)
-          if (bridged.needsSpecialHandling) {
-            // we need custom C++ -> Swift conversion code
-            return bridged.parseFromCppToSwift(p.name, 'c++')
-          } else {
-            // just forward value directly
-            return `std::forward<decltype(${p.name})>(${p.name})`
-          }
-        })
+        .map((p) => `std::forward<decltype(${p.name})>(${p.name})`)
         .join(', ')
       const bridgedReturnType = new SwiftCxxBridgedType(m.returnType)
       let body: string
       if (bridgedReturnType.hasType) {
         // We have a return value, call func, and then convert the `result` from Swift
-        body = `
-auto result = _swiftPart.${m.name}(${params});
-return ${bridgedReturnType.parseFromSwiftToCpp('result', 'c++')};
-  `
+        body = `return _swiftPart.${m.name}(${params});`
       } else {
         // No return (void), just call func
         body = `_swiftPart.${m.name}(${params});`
@@ -255,13 +227,13 @@ function getPropertyForwardImplementation(property: Property): string {
   const getter = `
 @inline(__always)
 get {
-  return ${bridgedType.parseFromSwiftToCpp(`self.implementation.${property.name}`, 'swift')}
+  return self.implementation.${property.name}
 }
   `.trim()
   const setter = `
 @inline(__always)
 set {
-  self.implementation.${property.name} = ${bridgedType.parseFromCppToSwift('newValue', 'swift')}
+  self.implementation.${property.name} = newValue
 }
   `.trim()
 
@@ -285,16 +257,12 @@ function getMethodForwardImplementation(method: Method): string {
     return `${p.name}: ${bridgedType.getTypeCode('swift')}`
   })
   const passParams = method.parameters.map((p) => {
-    const bridgedType = new SwiftCxxBridgedType(p.type)
-    return `${p.name}: ${bridgedType.parseFromCppToSwift(p.name, 'swift')}`
+    return `${p.name}: ${p.name}`
   })
   let body: string
   if (returnType.hasType) {
     // We have a return value, call func, and then convert the `result` to C++
-    body = `
-let result = try self.implementation.${method.name}(${passParams.join(', ')})
-return ${returnType.parseFromSwiftToCpp('result', 'swift')}
-    `
+    body = `return try self.implementation.${method.name}(${passParams.join(', ')})`
   } else {
     // No return (void), just call func
     body = `try self.implementation.${method.name}(${passParams.join(', ')})`

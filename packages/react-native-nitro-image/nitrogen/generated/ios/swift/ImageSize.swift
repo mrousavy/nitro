@@ -9,5 +9,21 @@
 import NitroModules
 
 public extension margelo.nitro.image.ImageSize {
+  var width: Double {
+    get {
+      return self.__width
+    }
+    set {
+      self.__width = newValue
+    }
+  }
   
+  var height: Double {
+    get {
+      return self.__height
+    }
+    set {
+      self.__height = newValue
+    }
+  }
 }

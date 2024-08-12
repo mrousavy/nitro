@@ -47,8 +47,7 @@ public final class HybridImageFactorySpecCxx {
   @inline(__always)
   public func loadImageFromFile(path: String) -> HybridImageSpecCxx {
     do {
-      let result = try self.implementation.loadImageFromFile(path: path)
-      return result.createCxxBridge()
+      return try self.implementation.loadImageFromFile(path: path).createCxxBridge()
     } catch {
       // TODO: Wait for https://github.com/swiftlang/swift/issues/75290
       fatalError("Swift errors cannot be propagated to C++ yet! If you want to throw errors, consider using a Promise (async) or a variant type (sync) instead.")
@@ -58,8 +57,7 @@ public final class HybridImageFactorySpecCxx {
   @inline(__always)
   public func loadImageFromURL(path: String) -> HybridImageSpecCxx {
     do {
-      let result = try self.implementation.loadImageFromURL(path: path)
-      return result.createCxxBridge()
+      return try self.implementation.loadImageFromURL(path: path).createCxxBridge()
     } catch {
       // TODO: Wait for https://github.com/swiftlang/swift/issues/75290
       fatalError("Swift errors cannot be propagated to C++ yet! If you want to throw errors, consider using a Promise (async) or a variant type (sync) instead.")
@@ -69,8 +67,7 @@ public final class HybridImageFactorySpecCxx {
   @inline(__always)
   public func loadImageFromSystemName(path: String) -> HybridImageSpecCxx {
     do {
-      let result = try self.implementation.loadImageFromSystemName(path: path)
-      return result.createCxxBridge()
+      return try self.implementation.loadImageFromSystemName(path: path).createCxxBridge()
     } catch {
       // TODO: Wait for https://github.com/swiftlang/swift/issues/75290
       fatalError("Swift errors cannot be propagated to C++ yet! If you want to throw errors, consider using a Promise (async) or a variant type (sync) instead.")
@@ -80,8 +77,7 @@ public final class HybridImageFactorySpecCxx {
   @inline(__always)
   public func bounceBack(image: HybridImageSpecCxx) -> HybridImageSpecCxx {
     do {
-      let result = try self.implementation.bounceBack(image: image.implementation)
-      return result.createCxxBridge()
+      return try self.implementation.bounceBack(image: image.implementation).createCxxBridge()
     } catch {
       // TODO: Wait for https://github.com/swiftlang/swift/issues/75290
       fatalError("Swift errors cannot be propagated to C++ yet! If you want to throw errors, consider using a Promise (async) or a variant type (sync) instead.")

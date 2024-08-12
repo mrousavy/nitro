@@ -13,6 +13,11 @@
 #else
 #error NitroModules cannot be found! Are you sure you installed NitroModules properly?
 #endif
+#if __has_include(<NitroModules/NitroDefines.hpp>)
+#include <NitroModules/NitroDefines.hpp>
+#else
+#error NitroModules cannot be found! Are you sure you installed NitroModules properly?
+#endif
 
 // Forward declaration of `Powertrain` to properly resolve imports.
 namespace margelo::nitro::image { enum class Powertrain; }
@@ -29,12 +34,12 @@ namespace margelo::nitro::image {
    */
   struct Car {
   public:
-    double year;
-    std::string make;
-    std::string model;
-    double power;
-    Powertrain powertrain;
-    std::optional<Person> driver;
+    double year SWIFT_PRIVATE;
+    std::string make SWIFT_PRIVATE;
+    std::string model SWIFT_PRIVATE;
+    double power SWIFT_PRIVATE;
+    Powertrain powertrain SWIFT_PRIVATE;
+    std::optional<Person> driver SWIFT_PRIVATE;
 
   public:
     explicit Car(double year, std::string make, std::string model, double power, Powertrain powertrain, std::optional<Person> driver): year(year), make(make), model(model), power(power), powertrain(powertrain), driver(driver) {}

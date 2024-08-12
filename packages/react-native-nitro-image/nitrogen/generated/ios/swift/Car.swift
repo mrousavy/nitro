@@ -9,16 +9,57 @@
 import NitroModules
 
 public extension margelo.nitro.image.Car {
-  var driver: margelo.nitro.image.Person? { 
-  
-  get {
-    driver
+  var year: Double {
+    get {
+      return self.__year
+    }
+    set {
+      self.__year = newValue
+    }
   }
-            
   
-  set {
-    driver
+  var make: String {
+    get {
+      return String(self.__make)
+    }
+    set {
+      self.__make = std.string(newValue)
+    }
   }
-              
-   }
+  
+  var model: String {
+    get {
+      return String(self.__model)
+    }
+    set {
+      self.__model = std.string(newValue)
+    }
+  }
+  
+  var power: Double {
+    get {
+      return self.__power
+    }
+    set {
+      self.__power = newValue
+    }
+  }
+  
+  var powertrain: margelo.nitro.image.Powertrain {
+    get {
+      return self.__powertrain
+    }
+    set {
+      self.__powertrain = newValue
+    }
+  }
+  
+  var driver: margelo.nitro.image.Person? {
+    get {
+      return self.__driver.value
+    }
+    set {
+      // self.__driver = // TODO: newValue
+    }
+  }
 }

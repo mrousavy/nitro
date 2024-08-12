@@ -1,6 +1,6 @@
 import { ts, type PropertySignature } from 'ts-morph'
 import type { CodeNode } from './CodeNode.js'
-import { capitalizeName } from '../utils.js'
+import { capitalizeName, indent } from '../utils.js'
 import { type SourceFile, type SourceImport } from './SourceFile.js'
 import type { Language } from '../getPlatformSpecs.js'
 import type { NamedType } from './types/Type.js'
@@ -115,26 +115,33 @@ export class Property implements CodeNode {
       }
       case 'swift': {
         const type = this.type.getCode('swift')
-        let accessors: string
         if (body == null) {
-          accessors = this.isReadonly ? `get` : `get set`
+          const accessors = this.isReadonly ? `get` : `get set`
+          return `var ${this.name}: ${type} { ${accessors} }`
         } else {
           const lines: string[] = []
-          lines.push(`
+          lines.push(
+            `
 get {
-  ${body.getter}
+  ${indent(body.getter, '  ')}
 }
-          `)
+          `.trim()
+          )
           if (!this.isReadonly) {
-            lines.push(`
+            lines.push(
+              `
 set {
-  ${body.setter}
+  ${indent(body.setter, '  ')}
 }
-            `)
+            `.trim()
+            )
           }
-          accessors = '\n' + lines.join('\n') + '\n'
+          return `
+var ${this.name}: ${type} {
+  ${indent(lines.join('\n'), '  ')}
+}
+          `.trim()
         }
-        return `var ${this.name}: ${type} { ${accessors} }`
       }
       case 'kotlin': {
         const type = this.type.getCode('kotlin')

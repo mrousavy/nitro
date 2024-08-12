@@ -7,7 +7,6 @@ import {
 import { toReferenceType } from '../helpers.js'
 import type { SourceFile, SourceImport } from '../SourceFile.js'
 import { ArrayType } from '../types/ArrayType.js'
-import { EnumType } from '../types/EnumType.js'
 import { getTypeAs } from '../types/getTypeAs.js'
 import { HybridObjectType } from '../types/HybridObjectType.js'
 import { OptionalType } from '../types/OptionalType.js'
@@ -34,10 +33,6 @@ export class SwiftCxxBridgedType {
 
   get needsSpecialHandling(): boolean {
     switch (this.type.kind) {
-      case 'enum':
-        // Enums cannot be referenced from C++ <-> Swift bi-directionally,
-        // so we just pass the underlying raw value (int32), and cast from Int <-> Enum.
-        return true
       case 'hybrid-object':
         // Swift HybridObjects need to be wrapped in our own *Cxx Swift classes.
         // We wrap/unwrap them if needed.
@@ -94,15 +89,6 @@ export class SwiftCxxBridgedType {
 
   getTypeCode(language: 'swift' | 'c++'): string {
     switch (this.type.kind) {
-      case 'enum':
-        switch (language) {
-          case 'c++':
-            return 'int'
-          case 'swift':
-            return 'Int32'
-          default:
-            throw new Error(`Invalid language! ${language}`)
-        }
       case 'hybrid-object': {
         const name = getTypeHybridObjectName(this.type)
         switch (language) {
@@ -161,20 +147,6 @@ export class SwiftCxxBridgedType {
     language: 'swift' | 'c++'
   ): string {
     switch (this.type.kind) {
-      case 'enum':
-        const enumType = getTypeAs(this.type, EnumType)
-        switch (language) {
-          case 'c++':
-            return `static_cast<int>(${cppParameterName})`
-          case 'swift':
-            const fullName = NitroConfig.getCxxNamespace(
-              'swift',
-              enumType.enumName
-            )
-            return `${fullName}(rawValue: ${cppParameterName})!`
-          default:
-            throw new Error(`Invalid language! ${language}`)
-        }
       case 'hybrid-object':
         switch (language) {
           case 'c++':
@@ -192,6 +164,11 @@ export class SwiftCxxBridgedType {
         switch (language) {
           case 'c++':
             return `${cppParameterName}.has_value() ? swift::Optional<${type}>::some(${cppParameterName}.value()) : swift::Optional<${type}>::none()`
+          case 'swift':
+            return wrappingType.parseFromCppToSwift(
+              `${cppParameterName}.value`,
+              'swift'
+            )
           default:
             return cppParameterName
         }
@@ -200,6 +177,8 @@ export class SwiftCxxBridgedType {
         switch (language) {
           case 'c++':
             return `swift::String(${cppParameterName})`
+          case 'swift':
+            return `String(${cppParameterName})`
           default:
             return cppParameterName
         }
@@ -240,15 +219,6 @@ export class SwiftCxxBridgedType {
     language: 'swift' | 'c++'
   ): string {
     switch (this.type.kind) {
-      case 'enum':
-        switch (language) {
-          case 'c++':
-            return `static_cast<${this.type.getCode('c++')}>(${swiftParameterName})`
-          case 'swift':
-            return `${swiftParameterName}.rawValue`
-          default:
-            throw new Error(`Invalid language! ${language}`)
-        }
       case 'hybrid-object':
         const name = getTypeHybridObjectName(this.type)
         switch (language) {
@@ -273,8 +243,15 @@ export class SwiftCxxBridgedType {
         }
       }
       case 'string': {
-        // swift::String has operator std::string(), so it can be implicitly converted
-        return swiftParameterName
+        switch (language) {
+          case 'c++':
+            // swift::String has operator std::string(), so it can be implicitly converted
+            return swiftParameterName
+          case 'swift':
+            return `std.string(${swiftParameterName})`
+          default:
+            return swiftParameterName
+        }
       }
       case 'array': {
         const array = getTypeAs(this.type, ArrayType)

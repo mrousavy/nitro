@@ -66,8 +66,12 @@ namespace margelo::nitro::image {
       return _swiftPart.getSize();
     }
     inline PixelFormat getPixelFormat() noexcept override {
-      auto result = _swiftPart.getPixelFormat();
-      return static_cast<PixelFormat>(result);
+      auto px = _swiftPart.getPixelFormat();
+      if (px.isRgb()) {
+        return PixelFormat::RGB;
+      } else {
+        return PixelFormat::YUV_8BIT;
+      }
     }
     inline double getSomeSettableProp() noexcept override {
       return _swiftPart.getSomeSettableProp();
@@ -79,11 +83,10 @@ namespace margelo::nitro::image {
   public:
     // Methods
     inline double toArrayBuffer(ImageFormat format) override {
-      auto result = _swiftPart.toArrayBuffer(static_cast<int>(format));
-      return result;
+      return _swiftPart.toArrayBuffer(NitroImage::ImageFormat::jpg());
     }
     inline void saveToFile(const std::string& path, const Func_void_std__string& onFinished) override {
-      _swiftPart.saveToFile(swift::String(path), std::forward<decltype(onFinished)>(onFinished));
+      _swiftPart.saveToFile(std::forward<decltype(path)>(path), std::forward<decltype(onFinished)>(onFinished));
     }
 
   private:

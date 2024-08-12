@@ -13,6 +13,11 @@
 #else
 #error NitroModules cannot be found! Are you sure you installed NitroModules properly?
 #endif
+#if __has_include(<NitroModules/NitroDefines.hpp>)
+#include <NitroModules/NitroDefines.hpp>
+#else
+#error NitroModules cannot be found! Are you sure you installed NitroModules properly?
+#endif
 
 
 
@@ -25,8 +30,8 @@ namespace margelo::nitro::image {
    */
   struct ImageSize {
   public:
-    double width;
-    double height;
+    double width SWIFT_PRIVATE;
+    double height SWIFT_PRIVATE;
 
   public:
     explicit ImageSize(double width, double height): width(width), height(height) {}

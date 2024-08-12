@@ -132,8 +132,7 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
   @inline(__always)
   public func addNumbers(a: Double, b: Double) -> Double {
     do {
-      let result = try self.implementation.addNumbers(a: a, b: b)
-      return result
+      return try self.implementation.addNumbers(a: a, b: b)
     } catch {
       // TODO: Wait for https://github.com/swiftlang/swift/issues/75290
       fatalError("Swift errors cannot be propagated to C++ yet! If you want to throw errors, consider using a Promise (async) or a variant type (sync) instead.")
@@ -143,8 +142,7 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
   @inline(__always)
   public func addStrings(a: String, b: String) -> String {
     do {
-      let result = try self.implementation.addStrings(a: a, b: b)
-      return result
+      return try self.implementation.addStrings(a: a, b: b)
     } catch {
       // TODO: Wait for https://github.com/swiftlang/swift/issues/75290
       fatalError("Swift errors cannot be propagated to C++ yet! If you want to throw errors, consider using a Promise (async) or a variant type (sync) instead.")
@@ -164,8 +162,7 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
   @inline(__always)
   public func createNumbers() -> [Double] {
     do {
-      let result = try self.implementation.createNumbers()
-      return result
+      return try self.implementation.createNumbers()
     } catch {
       // TODO: Wait for https://github.com/swiftlang/swift/issues/75290
       fatalError("Swift errors cannot be propagated to C++ yet! If you want to throw errors, consider using a Promise (async) or a variant type (sync) instead.")
@@ -175,8 +172,7 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
   @inline(__always)
   public func createStrings() -> [String] {
     do {
-      let result = try self.implementation.createStrings()
-      return result
+      return try self.implementation.createStrings()
     } catch {
       // TODO: Wait for https://github.com/swiftlang/swift/issues/75290
       fatalError("Swift errors cannot be propagated to C++ yet! If you want to throw errors, consider using a Promise (async) or a variant type (sync) instead.")
@@ -186,8 +182,7 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
   @inline(__always)
   public func tryOptionalParams(num: Double, boo: Bool, str: String?) -> String {
     do {
-      let result = try self.implementation.tryOptionalParams(num: num, boo: boo, str: str)
-      return result
+      return try self.implementation.tryOptionalParams(num: num, boo: boo, str: str)
     } catch {
       // TODO: Wait for https://github.com/swiftlang/swift/issues/75290
       fatalError("Swift errors cannot be propagated to C++ yet! If you want to throw errors, consider using a Promise (async) or a variant type (sync) instead.")
@@ -197,8 +192,7 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
   @inline(__always)
   public func tryMiddleParam(num: Double, boo: Bool?, str: String) -> String {
     do {
-      let result = try self.implementation.tryMiddleParam(num: num, boo: boo, str: str)
-      return result
+      return try self.implementation.tryMiddleParam(num: num, boo: boo, str: str)
     } catch {
       // TODO: Wait for https://github.com/swiftlang/swift/issues/75290
       fatalError("Swift errors cannot be propagated to C++ yet! If you want to throw errors, consider using a Promise (async) or a variant type (sync) instead.")
@@ -208,8 +202,7 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
   @inline(__always)
   public func getCar() -> margelo.nitro.image.Car {
     do {
-      let result = try self.implementation.getCar()
-      return result
+      return try self.implementation.getCar()
     } catch {
       // TODO: Wait for https://github.com/swiftlang/swift/issues/75290
       fatalError("Swift errors cannot be propagated to C++ yet! If you want to throw errors, consider using a Promise (async) or a variant type (sync) instead.")
@@ -219,8 +212,7 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
   @inline(__always)
   public func isCarElectric(car: margelo.nitro.image.Car) -> Bool {
     do {
-      let result = try self.implementation.isCarElectric(car: car)
-      return result
+      return try self.implementation.isCarElectric(car: car)
     } catch {
       // TODO: Wait for https://github.com/swiftlang/swift/issues/75290
       fatalError("Swift errors cannot be propagated to C++ yet! If you want to throw errors, consider using a Promise (async) or a variant type (sync) instead.")
@@ -230,8 +222,7 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
   @inline(__always)
   public func getDriver(car: margelo.nitro.image.Car) -> margelo.nitro.image.Person? {
     do {
-      let result = try self.implementation.getDriver(car: car)
-      return result
+      return try self.implementation.getDriver(car: car)
     } catch {
       // TODO: Wait for https://github.com/swiftlang/swift/issues/75290
       fatalError("Swift errors cannot be propagated to C++ yet! If you want to throw errors, consider using a Promise (async) or a variant type (sync) instead.")
