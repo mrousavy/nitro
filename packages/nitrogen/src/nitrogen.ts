@@ -196,7 +196,7 @@ export async function runNitrogen({
 
   // iOS Podspec (Autolinking)
   const buildSetupFiles = [
-    createSwiftUmbrellaHeader(writtenFiles),
+    createSwiftUmbrellaHeader(),
     createPodspecRubyExtension(),
     createCMakeExtension(writtenFiles),
     createGradleExtension(),

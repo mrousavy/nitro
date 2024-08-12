@@ -8,28 +8,49 @@
 
 #pragma once
 
-namespace NitroImage {
-class HybridImageSpecCxx;
-class HybridImageFactorySpecCxx;
-class HybridSwiftKotlinTestObjectSpecCxx;
-}
+// Forward declaration of `AnyMap` to properly resolve imports.
+namespace NitroModules { class AnyMap; }
+// Forward declaration of `ArrayBuffer` to properly resolve imports.
+namespace NitroModules { class ArrayBuffer; }
+// Forward declaration of `Car` to properly resolve imports.
+namespace margelo::nitro::image { struct Car; }
+// Forward declaration of `HybridImageSpec` to properly resolve imports.
+namespace margelo::nitro::image { class HybridImageSpec; }
+// Forward declaration of `HybridTestObjectSpec` to properly resolve imports.
+namespace margelo::nitro::image { class HybridTestObjectSpec; }
+// Forward declaration of `ImageFormat` to properly resolve imports.
+namespace margelo::nitro::image { enum class ImageFormat; }
+// Forward declaration of `ImageSize` to properly resolve imports.
+namespace margelo::nitro::image { struct ImageSize; }
+// Forward declaration of `OldEnum` to properly resolve imports.
+namespace margelo::nitro::image { enum class OldEnum; }
+// Forward declaration of `Person` to properly resolve imports.
+namespace margelo::nitro::image { struct Person; }
+// Forward declaration of `PixelFormat` to properly resolve imports.
+namespace margelo::nitro::image { enum class PixelFormat; }
+// Forward declaration of `Powertrain` to properly resolve imports.
+namespace margelo::nitro::image { enum class Powertrain; }
 
-#include "HybridImageSpec.hpp"
-#include "ImageSize.hpp"
-#include "PixelFormat.hpp"
-#include "ImageFormat.hpp"
-#include "Func_void_std__string.hpp"
-#include "HybridImageFactorySpec.hpp"
-#include "HybridTestObjectSpec.hpp"
-#include "OldEnum.hpp"
-#include "Person.hpp"
+// Forward declaration of `HybridImageSpecCxx` to properly resolve imports.
+namespace NitroImage { class HybridImageSpecCxx; }
+// Forward declaration of `HybridTestObjectSpecCxx` to properly resolve imports.
+namespace NitroImage { class HybridTestObjectSpecCxx; }
+
 #include "Car.hpp"
-#include "Powertrain.hpp"
-#include "Func_void.hpp"
 #include "Func_std__future_double_.hpp"
 #include "Func_std__future_std__string_.hpp"
+#include "Func_void.hpp"
 #include "Func_void_std__string.hpp"
-#include "HybridSwiftKotlinTestObjectSpec.hpp"
+#include "HybridImageSpec.hpp"
+#include "HybridTestObjectSpec.hpp"
+#include "ImageFormat.hpp"
+#include "ImageSize.hpp"
+#include "OldEnum.hpp"
+#include "Person.hpp"
+#include "PixelFormat.hpp"
+#include "Powertrain.hpp"
+#include <NitroModules/AnyMap.hpp>
+#include <NitroModules/ArrayBuffer.hpp>
 
 #if __has_include("NitroImage-Swift.h")
 #include "NitroImage-Swift.h"

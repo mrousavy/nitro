@@ -28,7 +28,7 @@ namespace margelo::nitro::image { struct Car; }
 namespace NitroModules { class ArrayBuffer; }
 
 #include "HybridTestObjectSpec.hpp"
-#include "NitroModules/AnyMap.hpp"
+#include <NitroModules/AnyMap.hpp>
 #include "OldEnum.hpp"
 #include "Person.hpp"
 #include "Car.hpp"
@@ -36,7 +36,7 @@ namespace NitroModules { class ArrayBuffer; }
 #include "Func_std__future_double_.hpp"
 #include "Func_std__future_std__string_.hpp"
 #include "Func_void_std__string.hpp"
-#include "NitroModules/ArrayBuffer.hpp"
+#include <NitroModules/ArrayBuffer.hpp>
 
 namespace margelo::nitro::image {
 

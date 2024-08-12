@@ -97,7 +97,12 @@ export class FunctionType implements Type {
   }
   getRequiredImports(): SourceImport[] {
     return [
-      this.specialization.declarationFile,
+      {
+        language: 'c++',
+        name: this.specialization.declarationFile.name,
+        forwardDeclaration: undefined,
+        space: 'user',
+      },
       ...this.returnType.getRequiredImports(),
       ...this.parameters.flatMap((p) => p.getRequiredImports()),
     ]

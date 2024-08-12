@@ -51,6 +51,7 @@ export class SwiftCxxBridgedType {
           namespace
         ),
         language: 'c++',
+        space: 'user',
       })
     }
 
@@ -119,7 +120,7 @@ export class SwiftCxxBridgedType {
         const type = optionalType.wrappingType.getCode(language)
         switch (language) {
           case 'c++':
-            return `${cppParameterName}.has_value() ? swift::Optional<${type}>::some(${cppParameterName}) : swift::Optional<${type}>::none()`
+            return `${cppParameterName}.has_value() ? swift::Optional<${type}>::some(${cppParameterName}.value()) : swift::Optional<${type}>::none()`
           default:
             return cppParameterName
         }
