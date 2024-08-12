@@ -115,15 +115,15 @@ void HybridTestObject::multipleArguments(double num, const std::string& str, boo
   Logger::log(TAG, "Arguments received! num: %d | str: %s | boo: %i", num, str, boo);
 }
 
-std::vector<double> createNumbers() {
+std::vector<double> HybridTestObject::createNumbers() {
   return {10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
 }
 
-std::vector<std::string> createStrings() {
+std::vector<std::string> HybridTestObject::createStrings() {
   return {"h", "e", "ll", "o"};
 }
 
-std::vector<std::variant<std::string, double>> combineArrays(const std::vector<double>& numbers, const std::vector<std::string>& strings) {
+std::vector<std::variant<std::string, double>> HybridTestObject::combineArrays(const std::vector<double>& numbers, const std::vector<std::string>& strings) {
   std::vector<std::variant<std::string, double>> result;
   for (const auto& item : numbers) {
     result.push_back(item);
