@@ -25,7 +25,9 @@ export class TupleType implements Type {
       case 'c++':
         return `std::tuple<${types.join(', ')}>`
       case 'swift':
-        return `(${types.join(', ')})`
+        throw new Error(
+          `Tuples (${types}) are not yet supported in Swift! See https://github.com/swiftlang/swift/issues/75833`
+        )
       default:
         throw new Error(
           `Language ${language} is not yet supported for TupleType!`
