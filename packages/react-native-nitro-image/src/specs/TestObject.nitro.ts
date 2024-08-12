@@ -42,6 +42,11 @@ export interface TestObject extends HybridObject<{ ios: 'c++' }> {
   addStrings(a: string, b: string): string
   multipleArguments(num: number, str: string, boo: boolean): void
 
+  // Arrays
+  createNumbers(): number[]
+  createStrings(): string[]
+  combineArrays(numbers: number[], strings: string[]): (number | string)[]
+
   // Maps
   createMap(): AnyMap
   mapRoundtrip(map: AnyMap): AnyMap

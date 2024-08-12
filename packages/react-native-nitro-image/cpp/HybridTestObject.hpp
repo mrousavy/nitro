@@ -68,6 +68,10 @@ public:
   std::string tryMiddleParam(double num, std::optional<bool> boo, const std::string& str) override;
   std::variant<std::string, double>
   passVariant(const std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>>& either) override;
+  
+  std::vector<double> createNumbers() override;
+  std::vector<std::string> createStrings() override;
+  std::vector<std::variant<std::string, double>> combineArrays(const std::vector<double>& numbers, const std::vector<std::string>& strings) override;
 
   std::variant<bool, OldEnum> getVariantEnum(const std::variant<bool, OldEnum>& variant) override;
   std::variant<Person, Car> getVariantObjects(const std::variant<Person, Car>& variant) override;

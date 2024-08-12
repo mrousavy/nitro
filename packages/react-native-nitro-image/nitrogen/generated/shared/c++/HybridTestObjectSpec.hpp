@@ -90,6 +90,9 @@ namespace margelo::nitro::image {
       virtual double addNumbers(double a, double b) = 0;
       virtual std::string addStrings(const std::string& a, const std::string& b) = 0;
       virtual void multipleArguments(double num, const std::string& str, bool boo) = 0;
+      virtual std::vector<double> createNumbers() = 0;
+      virtual std::vector<std::string> createStrings() = 0;
+      virtual std::vector<std::variant<std::string, double>> combineArrays(const std::vector<double>& numbers, const std::vector<std::string>& strings) = 0;
       virtual std::shared_ptr<AnyMap> createMap() = 0;
       virtual std::shared_ptr<AnyMap> mapRoundtrip(const std::shared_ptr<AnyMap>& map) = 0;
       virtual double funcThatThrows() = 0;

@@ -40,6 +40,9 @@ namespace margelo::nitro::image {
       prototype.registerHybridMethod("addNumbers", &HybridTestObjectSpec::addNumbers);
       prototype.registerHybridMethod("addStrings", &HybridTestObjectSpec::addStrings);
       prototype.registerHybridMethod("multipleArguments", &HybridTestObjectSpec::multipleArguments);
+      prototype.registerHybridMethod("createNumbers", &HybridTestObjectSpec::createNumbers);
+      prototype.registerHybridMethod("createStrings", &HybridTestObjectSpec::createStrings);
+      prototype.registerHybridMethod("combineArrays", &HybridTestObjectSpec::combineArrays);
       prototype.registerHybridMethod("createMap", &HybridTestObjectSpec::createMap);
       prototype.registerHybridMethod("mapRoundtrip", &HybridTestObjectSpec::mapRoundtrip);
       prototype.registerHybridMethod("funcThatThrows", &HybridTestObjectSpec::funcThatThrows);

@@ -242,6 +242,28 @@ export function getTests(): TestRunner[] {
         .equals(HybridTestObject.createMap())
     ),
 
+    // Test Arrays
+    createTest('createNumbers(...)', () =>
+      it(() => HybridTestObject.createNumbers())
+        .didNotThrow()
+        .toBeArray()
+        .equals([10, 20, 30, 40, 50, 60, 70, 80, 90, 100])
+    ),
+    createTest('createStrings(...)', () =>
+      it(() => HybridTestObject.createStrings())
+        .didNotThrow()
+        .toBeArray()
+        .equals(['h', 'e', 'll', 'o'])
+    ),
+    createTest('combineArrays(...)', () =>
+      it(() =>
+        HybridTestObject.combineArrays([10, 20, 30], ['h', 'e', 'll', 'o'])
+      )
+        .didNotThrow()
+        .toBeArray()
+        .equals([10, 20, 30, 'h', 'e', 'll', 'o'])
+    ),
+
     // Test errors
     createTest('get valueThatWillThrowOnAccess', () =>
       it(() => HybridTestObject.valueThatWillThrowOnAccess).didThrow()
