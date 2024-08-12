@@ -66,7 +66,7 @@ namespace margelo::nitro::image {
   public:
     // Properties using Swift types
     inline ImageSize getSize_swift() {
-      throw std::runtime_error("Enums dont work in Swift yet!");
+      return _swiftPart.getSize();
     }
     inline PixelFormat getPixelFormat_swift() {
       throw std::runtime_error("Enums dont work in Swift yet!");
