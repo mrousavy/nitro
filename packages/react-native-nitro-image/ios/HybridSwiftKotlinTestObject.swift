@@ -23,9 +23,6 @@ class HybridSwiftKotlinTestObject : HybridSwiftKotlinTestObjectSpec {
   
   func simpleFunc() throws {
     // do nothing
-    
-    var car: margelo.nitro.image.CarSwift? = nil
-    car!.year = 55.0
   }
   
   func addNumbers(a: Double, b: Double) throws -> Double {
