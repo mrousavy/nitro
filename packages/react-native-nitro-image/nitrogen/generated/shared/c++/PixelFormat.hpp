@@ -51,7 +51,7 @@ namespace margelo::nitro {
         case hashString("yuv-8bit"): return PixelFormat::YUV_8BIT;
         case hashString("yuv-10bit"): return PixelFormat::YUV_10BIT;
         default: [[unlikely]]
-          throw std::runtime_error("Cannot convert " + unionValue + " to PixelFormat - invalid value!");
+          throw std::runtime_error("Cannot convert \"" + unionValue + "\" to enum PixelFormat - invalid value!");
       }
     }
     static inline jsi::Value toJSI(jsi::Runtime& runtime, PixelFormat arg) {

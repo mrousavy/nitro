@@ -63,7 +63,7 @@ namespace margelo::nitro {
       switch (hashString(unionValue.c_str(), unionValue.size())) {
         ${indent(cppFromJsiHashCases, '        ')}
         default: [[unlikely]]
-          throw std::runtime_error("Cannot convert " + unionValue + " to ${typename} - invalid value!");
+          throw std::runtime_error("Cannot convert \\"" + unionValue + "\\" to enum ${typename} - invalid value!");
       }
     }
     static inline jsi::Value toJSI(jsi::Runtime& runtime, ${typename} arg) {
