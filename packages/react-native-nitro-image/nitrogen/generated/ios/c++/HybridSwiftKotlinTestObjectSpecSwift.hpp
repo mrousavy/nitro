@@ -59,11 +59,11 @@ namespace margelo::nitro::image {
   public:
     // Methods
     inline void hallo(std::optional<double> value) override {
-    auto valueOrError = _swiftPart.hallo(value.has_value() ? swift::Optional<double>::some(value.value()) : swift::Optional<double>::none());
-    if (valueOrError.isError()) [[unlikely]] {
-      throw std::runtime_error(valueOrError.getError());
+      auto valueOrError = _swiftPart.hallo(value.has_value() ? swift::Optional<double>::some(value.value()) : swift::Optional<double>::none());
+      if (valueOrError.isError()) [[unlikely]] {
+        throw std::runtime_error(valueOrError.getError());
+      }
     }
-  }
 
   private:
     NitroImage::HybridSwiftKotlinTestObjectSpecCxx _swiftPart;

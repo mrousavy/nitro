@@ -224,11 +224,11 @@ namespace ${cxxNamespace} {
 
   public:
     // Properties
-    ${indent(cppProperties, '  ')}
+    ${indent(cppProperties, '    ')}
 
   public:
     // Methods
-    ${indent(cppMethods, '  ')}
+    ${indent(cppMethods, '    ')}
 
   private:
     ${iosModuleName}::${name.HybridTSpecCxx} _swiftPart;

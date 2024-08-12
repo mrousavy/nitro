@@ -63,35 +63,35 @@ namespace margelo::nitro::image {
   public:
     // Properties
     inline ImageSize getSize() noexcept override {
-    return _swiftPart.getSize();
-  }
-  inline PixelFormat getPixelFormat() noexcept override {
-    auto result = _swiftPart.getPixelFormat();
-    return static_cast<PixelFormat>(result);
-  }
-  inline double getSomeSettableProp() noexcept override {
-    return _swiftPart.getSomeSettableProp();
-  }
-  inline void setSomeSettableProp(double someSettableProp) noexcept override {
-    _swiftPart.setSomeSettableProp(std::forward<decltype(someSettableProp)>(someSettableProp));
-  }
+      return _swiftPart.getSize();
+    }
+    inline PixelFormat getPixelFormat() noexcept override {
+      auto result = _swiftPart.getPixelFormat();
+      return static_cast<PixelFormat>(result);
+    }
+    inline double getSomeSettableProp() noexcept override {
+      return _swiftPart.getSomeSettableProp();
+    }
+    inline void setSomeSettableProp(double someSettableProp) noexcept override {
+      _swiftPart.setSomeSettableProp(std::forward<decltype(someSettableProp)>(someSettableProp));
+    }
 
   public:
     // Methods
     inline double toArrayBuffer(ImageFormat format) override {
-    auto valueOrError = _swiftPart.toArrayBuffer(static_cast<int>(format));
-    if (valueOrError.isError()) [[unlikely]] {
-      throw std::runtime_error(valueOrError.getError());
+      auto valueOrError = _swiftPart.toArrayBuffer(static_cast<int>(format));
+      if (valueOrError.isError()) [[unlikely]] {
+        throw std::runtime_error(valueOrError.getError());
+      }
+      auto value = valueOrError.getValue();
+      return value;
     }
-    auto value = valueOrError.getValue();
-    return value;
-  }
-  inline void saveToFile(const std::string& path, const Func_void_std__string& onFinished) override {
-    auto valueOrError = _swiftPart.saveToFile(std::forward<decltype(path)>(path), std::forward<decltype(onFinished)>(onFinished));
-    if (valueOrError.isError()) [[unlikely]] {
-      throw std::runtime_error(valueOrError.getError());
+    inline void saveToFile(const std::string& path, const Func_void_std__string& onFinished) override {
+      auto valueOrError = _swiftPart.saveToFile(std::forward<decltype(path)>(path), std::forward<decltype(onFinished)>(onFinished));
+      if (valueOrError.isError()) [[unlikely]] {
+        throw std::runtime_error(valueOrError.getError());
+      }
     }
-  }
 
   private:
     NitroImage::HybridImageSpecCxx _swiftPart;
