@@ -37,6 +37,9 @@ namespace margelo::nitro::image {
       prototype.registerHybridMethod("createStrings", &HybridSwiftKotlinTestObjectSpec::createStrings);
       prototype.registerHybridMethod("tryOptionalParams", &HybridSwiftKotlinTestObjectSpec::tryOptionalParams);
       prototype.registerHybridMethod("tryMiddleParam", &HybridSwiftKotlinTestObjectSpec::tryMiddleParam);
+      prototype.registerHybridMethod("getCar", &HybridSwiftKotlinTestObjectSpec::getCar);
+      prototype.registerHybridMethod("isCarElectric", &HybridSwiftKotlinTestObjectSpec::isCarElectric);
+      prototype.registerHybridMethod("getDriver", &HybridSwiftKotlinTestObjectSpec::getDriver);
     });
   }
 

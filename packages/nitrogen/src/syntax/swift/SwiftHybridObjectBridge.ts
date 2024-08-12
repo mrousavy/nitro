@@ -246,6 +246,7 @@ namespace ${cxxNamespace} {
     subdirectory: [],
     platform: 'ios',
   })
+  files.push(...allBridgedTypes.flatMap((t) => t.getExtraFiles()))
   return files
 }
 

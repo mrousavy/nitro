@@ -5,13 +5,15 @@ import {
   type HybridObjectName,
 } from '../getHybridObjectName.js'
 import { toReferenceType } from '../helpers.js'
-import type { SourceImport } from '../SourceFile.js'
+import type { SourceFile, SourceImport } from '../SourceFile.js'
 import { ArrayType } from '../types/ArrayType.js'
 import { EnumType } from '../types/EnumType.js'
 import { getTypeAs } from '../types/getTypeAs.js'
 import { HybridObjectType } from '../types/HybridObjectType.js'
 import { OptionalType } from '../types/OptionalType.js'
+import { StructType } from '../types/StructType.js'
 import type { Type } from '../types/Type.js'
+import { createSwiftStruct } from './SwiftStruct.js'
 
 // TODO: Gradually add more Swift types as `JSIConverter<..>` overloads to avoid
 //       converting to C++ first. This could speed up swift::String, swift::Array, etc
@@ -74,6 +76,20 @@ export class SwiftCxxBridgedType {
     }
 
     return imports
+  }
+
+  getExtraFiles(): SourceFile[] {
+    const files: SourceFile[] = []
+    switch (this.type.kind) {
+      case 'struct': {
+        const struct = getTypeAs(this.type, StructType)
+        files.push(createSwiftStruct(struct))
+        break
+      }
+      default:
+        break
+    }
+    return files
   }
 
   getTypeCode(language: 'swift' | 'c++'): string {

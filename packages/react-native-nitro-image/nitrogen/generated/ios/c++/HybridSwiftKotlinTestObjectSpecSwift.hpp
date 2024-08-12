@@ -13,9 +13,13 @@
 // Forward declaration of `HybridSwiftKotlinTestObjectSpecCxx` to properly resolve imports.
 namespace NitroImage { class HybridSwiftKotlinTestObjectSpecCxx; }
 
+// Forward declaration of `Car` to properly resolve imports.
+namespace margelo::nitro::image { struct Car; }
+// Forward declaration of `Person` to properly resolve imports.
+namespace margelo::nitro::image { struct Person; }
 
-
-
+#include "Car.hpp"
+#include "Person.hpp"
 
 #if __has_include(<NitroModules/HybridContext.hpp>)
 #include <NitroModules/HybridContext.hpp>
@@ -146,6 +150,18 @@ namespace margelo::nitro::image {
     inline std::string tryMiddleParam(double num, std::optional<bool> boo, const std::string& str) override {
       auto result = _swiftPart.tryMiddleParam(std::forward<decltype(num)>(num), boo.has_value() ? swift::Optional<bool>::some(boo.value()) : swift::Optional<bool>::none(), swift::String(str));
       return result;
+    }
+    inline Car getCar() override {
+      auto result = _swiftPart.getCar();
+      return result;
+    }
+    inline bool isCarElectric(const Car& car) override {
+      auto result = _swiftPart.isCarElectric(std::forward<decltype(car)>(car));
+      return result;
+    }
+    inline std::optional<Person> getDriver(const Car& car) override {
+      auto result = _swiftPart.getDriver(std::forward<decltype(car)>(car));
+      return result ? std::optional<Person>(result.get()) : std::nullopt;
     }
 
   private:

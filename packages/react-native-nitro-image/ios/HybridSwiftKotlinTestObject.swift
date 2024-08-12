@@ -56,4 +56,38 @@ class HybridSwiftKotlinTestObject : HybridSwiftKotlinTestObjectSpec {
   func tryMiddleParam(num: Double, boo: Bool?, str: String) throws -> String {
     return str
   }
+  
+  func getCar() throws -> margelo.nitro.image.Car {
+    var car = margelo.nitro.image.Car(2018, "Lamborghini", "Huracan Performante", 640, .gas, .init(nilLiteral: ()))
+    let person = margelo.nitro.image.Car.makePerson(margelo.nitro.image.Person("Marc", 24))
+    car._driver = margelo.nitro.image.Person("Marc", 24)
+    return car
+  }
+  
+  func isCarElectric(car: margelo.nitro.image.Car) throws -> Bool {
+    return car.powertrain == .electric
+  }
+  
+  func getDriver(car: margelo.nitro.image.Car) throws -> margelo.nitro.image.Person? {
+    return nil
+  }
+}
+
+extension margelo.nitro.image.Car {
+  var _driver: margelo.nitro.image.Person? {
+    get {
+      if let value = driver.value {
+        return value
+      } else {
+        return nil
+      }
+    }
+    set {
+      if let newValue {
+        self.driver.pointee = newValue
+      } else {
+        self.driver = .init(nilLiteral: ())
+      }
+    }
+  }
 }

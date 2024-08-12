@@ -204,4 +204,37 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
       fatalError("Swift errors cannot be propagated to C++ yet! If you want to throw errors, consider using a Promise (async) or a variant type (sync) instead.")
     }
   }
+  
+  @inline(__always)
+  public func getCar() -> margelo.nitro.image.Car {
+    do {
+      let result = try self.implementation.getCar()
+      return result
+    } catch {
+      // TODO: Wait for https://github.com/swiftlang/swift/issues/75290
+      fatalError("Swift errors cannot be propagated to C++ yet! If you want to throw errors, consider using a Promise (async) or a variant type (sync) instead.")
+    }
+  }
+  
+  @inline(__always)
+  public func isCarElectric(car: margelo.nitro.image.Car) -> Bool {
+    do {
+      let result = try self.implementation.isCarElectric(car: car)
+      return result
+    } catch {
+      // TODO: Wait for https://github.com/swiftlang/swift/issues/75290
+      fatalError("Swift errors cannot be propagated to C++ yet! If you want to throw errors, consider using a Promise (async) or a variant type (sync) instead.")
+    }
+  }
+  
+  @inline(__always)
+  public func getDriver(car: margelo.nitro.image.Car) -> margelo.nitro.image.Person? {
+    do {
+      let result = try self.implementation.getDriver(car: car)
+      return result
+    } catch {
+      // TODO: Wait for https://github.com/swiftlang/swift/issues/75290
+      fatalError("Swift errors cannot be propagated to C++ yet! If you want to throw errors, consider using a Promise (async) or a variant type (sync) instead.")
+    }
+  }
 }

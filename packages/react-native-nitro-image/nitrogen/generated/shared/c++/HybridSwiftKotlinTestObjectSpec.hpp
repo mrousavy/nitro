@@ -14,9 +14,13 @@
 #error NitroModules cannot be found! Are you sure you installed NitroModules properly?
 #endif
 
+// Forward declaration of `Car` to properly resolve imports.
+namespace margelo::nitro::image { struct Car; }
+// Forward declaration of `Person` to properly resolve imports.
+namespace margelo::nitro::image { struct Person; }
 
-
-
+#include "Car.hpp"
+#include "Person.hpp"
 
 namespace margelo::nitro::image {
 
@@ -67,6 +71,9 @@ namespace margelo::nitro::image {
       virtual std::vector<std::string> createStrings() = 0;
       virtual std::string tryOptionalParams(double num, bool boo, const std::optional<std::string>& str) = 0;
       virtual std::string tryMiddleParam(double num, std::optional<bool> boo, const std::string& str) = 0;
+      virtual Car getCar() = 0;
+      virtual bool isCarElectric(const Car& car) = 0;
+      virtual std::optional<Person> getDriver(const Car& car) = 0;
 
     protected:
       // Hybrid Setup

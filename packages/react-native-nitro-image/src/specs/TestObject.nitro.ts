@@ -129,4 +129,9 @@ export interface SwiftKotlinTestObject extends HybridObject<{ ios: 'swift' }> {
   // Optional parameters
   tryOptionalParams(num: number, boo: boolean, str?: string): string
   tryMiddleParam(num: number, boo: boolean | undefined, str: string): string
+
+  // Objects
+  getCar(): Car
+  isCarElectric(car: Car): boolean
+  getDriver(car: Car): Person | undefined
 }
