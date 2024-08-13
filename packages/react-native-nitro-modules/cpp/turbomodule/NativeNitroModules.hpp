@@ -24,6 +24,8 @@ public:
 
   void install(jsi::Runtime& runtime);
   jsi::Value createHybridObject(jsi::Runtime& runtime, const jsi::String& hybridObjectName, const std::optional<jsi::Object>& args);
+  jsi::Value hasHybridObject(jsi::Runtime& runtime, const jsi::String& hybridObjectName);
+  jsi::Value getAllHybridObjectNames(jsi::Runtime& runtime);
 
 public:
   constexpr static auto kModuleName = "NitroModulesCxx";

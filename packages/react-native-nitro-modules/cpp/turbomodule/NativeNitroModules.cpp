@@ -32,12 +32,14 @@ jsi::Value NativeNitroModules::get(jsi::Runtime& runtime, const jsi::PropNameID&
   }
   if (name == "createHybridObject") {
     return jsi::Function::createFromHostFunction(
-        runtime, jsi::PropNameID::forUtf8(runtime, "install"), 2,
+        runtime, jsi::PropNameID::forUtf8(runtime, "createHybridObject"), 2,
         [=](jsi::Runtime& runtime, const jsi::Value& thisArg, const jsi::Value* args, size_t count) -> jsi::Value {
-          if (count != 1 && count != 2) {
+#if DEBUG
+          if (count != 1 && count != 2) [[unlikely]] {
             throw jsi::JSError(runtime, "NitroModules.createHybridObject(..) expects 1 or 2 arguments, but " + std::to_string(count) +
                                             " were supplied!");
           }
+#endif
           jsi::String objectName = args[0].asString(runtime);
           std::optional<jsi::Object> optionalArgs = std::nullopt;
           if (count > 1) {
@@ -46,6 +48,25 @@ jsi::Value NativeNitroModules::get(jsi::Runtime& runtime, const jsi::PropNameID&
 
           return createHybridObject(runtime, objectName, optionalArgs);
         });
+  }
+  if (name == "hasHybridObject") {
+    return jsi::Function::createFromHostFunction(
+        runtime, jsi::PropNameID::forUtf8(runtime, "hasHybridObject"), 1,
+        [=](jsi::Runtime& runtime, const jsi::Value& thisArg, const jsi::Value* args, size_t count) -> jsi::Value {
+#if DEBUG
+          if (count != 1) [[unlikely]] {
+            throw jsi::JSError(runtime,
+                               "NitroModules.hasHybridObject(..) expects 1 argument (name), but received " + std::to_string(count) + "!");
+          }
+#endif
+          jsi::String objectName = args[0].asString(runtime);
+          return hasHybridObject(runtime, objectName);
+        });
+  }
+  if (name == "getAllHybridObjectNames") {
+    return jsi::Function::createFromHostFunction(runtime, jsi::PropNameID::forUtf8(runtime, "getAllHybridObjectNames"), 0,
+                                                 [=](jsi::Runtime& runtime, const jsi::Value& thisArg, const jsi::Value* args,
+                                                     size_t count) -> jsi::Value { return getAllHybridObjectNames(runtime); });
   }
 
   return jsi::Value::undefined();
@@ -64,6 +85,21 @@ jsi::Value NativeNitroModules::createHybridObject(jsi::Runtime& runtime, const j
   // TODO: Pass args? Do we need that?
   auto hybridObject = HybridObjectRegistry::createHybridObject(name.c_str());
   return hybridObject->toObject(runtime);
+}
+
+jsi::Value NativeNitroModules::hasHybridObject(jsi::Runtime& runtime, const jsi::String& hybridObjectName) {
+  std::string name = hybridObjectName.utf8(runtime);
+  bool exists = HybridObjectRegistry::hasHybridObject(name);
+  return exists;
+}
+
+jsi::Value NativeNitroModules::getAllHybridObjectNames(jsi::Runtime& runtime) {
+  std::vector<std::string> keys = HybridObjectRegistry::getAllHybridObjectNames();
+  jsi::Array array(runtime, keys.size());
+  for (size_t i = 0; i < keys.size(); i++) {
+    array.setValueAtIndex(runtime, i, jsi::String::createFromUtf8(runtime, keys[i]));
+  }
+  return array;
 }
 
 } // namespace facebook::react

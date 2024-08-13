@@ -6,6 +6,8 @@ import { ModuleNotFoundError } from './ModuleNotFoundError'
 export interface Spec extends TurboModule {
   install(): void
   createHybridObject(name: string, args?: UnsafeObject): UnsafeObject
+  hasHybridObject(name: string): boolean
+  getAllHybridObjectNames(): string[]
 }
 
 let turboModule: Spec | undefined

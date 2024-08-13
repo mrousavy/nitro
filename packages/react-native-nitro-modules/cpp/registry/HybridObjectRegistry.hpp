@@ -15,7 +15,7 @@ namespace margelo::nitro {
 
 /**
  * A registry that holds initializers for HybridObjects.
- * This will be used to initialize them from JS using `NitroModules.get<T>(name)`.
+ * This will be used to initialize them from JS using `NitroModules.createHybridObject<T>(name)`.
  */
 class HybridObjectRegistry {
 public:
@@ -28,11 +28,13 @@ public:
   /**
    * Registers the given HybridObject in the `HybridObjectRegistry`.
    * It will be uniquely identified via it's `hybridObjectName`, and can be initialized from
-   * JS using `NitroModules.get<T>(name)` - which will call the `constructorFn` here.
+   * JS using `NitroModules.createHybridObject<T>(name)` - which will call the `constructorFn` here.
    */
   static void registerHybridObjectConstructor(const std::string& hybridObjectName, HybridObjectConstructorFn&& constructorFn);
 
   static std::shared_ptr<HybridObject> createHybridObject(const std::string& hybridObjectName);
+  static bool hasHybridObject(const std::string& hybridObjectName);
+  static std::vector<std::string> getAllHybridObjectNames();
 
 private:
   static std::unordered_map<std::string, HybridObjectConstructorFn>& getRegistry();
