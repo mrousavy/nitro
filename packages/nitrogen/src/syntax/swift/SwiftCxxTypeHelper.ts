@@ -32,9 +32,7 @@ export function createSwiftCxxHelpers(type: Type): SwiftCxxHelper | undefined {
 /**
  * Creates a C++ `create_optional<T>(value)` function that can be called from Swift.
  */
-export function createCxxOptionalSwiftHelper(
-  type: OptionalType
-): SwiftCxxHelper {
+function createCxxOptionalSwiftHelper(type: OptionalType): SwiftCxxHelper {
   const actualType = type.getCode('c++')
   const name = escapeCppName(type.getCode('c++'))
   return {
@@ -60,7 +58,7 @@ inline ${actualType} create_${name}(const ${type.wrappingType.getCode('c++')}& v
 /**
  * Creates a C++ `create_vector_T<T>(size)` function that can be called from Swift.
  */
-export function createCxxVectorSwiftHelper(type: ArrayType): SwiftCxxHelper {
+function createCxxVectorSwiftHelper(type: ArrayType): SwiftCxxHelper {
   const actualType = type.getCode('c++')
   const name = escapeCppName(type.getCode('c++'))
   return {
@@ -88,9 +86,7 @@ inline ${actualType} create_${name}(size_t size) {
 /**
  * Creates a C++ `makeUnorderedMap<T>(size)` function that can be called from Swift.
  */
-export function createCxxUnorderedMapSwiftHelper(
-  type: RecordType
-): SwiftCxxHelper {
+function createCxxUnorderedMapSwiftHelper(type: RecordType): SwiftCxxHelper {
   const actualType = type.getCode('c++')
   const name = escapeCppName(type.getCode('c++'))
   return {
@@ -118,9 +114,7 @@ inline ${actualType} create_${name}(size_t size) {
 /**
  * Creates a C++ `Func_XXXXX` specialization that can be used from Swift.
  */
-export function createCxxFunctionSwiftHelper(
-  type: FunctionType
-): SwiftCxxHelper {
+function createCxxFunctionSwiftHelper(type: FunctionType): SwiftCxxHelper {
   const name = type.specializationName
   return {
     funcName: `create_${name}`,
