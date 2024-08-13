@@ -12,15 +12,19 @@ export * from './specs/ImageFactory.nitro'
 /**
  * Constructors for creating instances of `Image`.
  */
-export const ImageConstructors = NitroModules.get<ImageFactory>('ImageFactory')
+export const ImageConstructors =
+  NitroModules.createHybridObject<ImageFactory>('ImageFactory')
 
 /**
  * The Hybrid Test Object
  */
-export const HybridTestObject = NitroModules.get<TestObject>('TestObject')
+export const HybridTestObject =
+  NitroModules.createHybridObject<TestObject>('TestObject')
 
 /**
  * The Swift-Kotlin implemented Hybrid Test Object
  */
 export const HybridSwiftKotlinTestObject =
-  NitroModules.get<SwiftKotlinTestObject>('SwiftKotlinTestObject')
+  NitroModules.createHybridObject<SwiftKotlinTestObject>(
+    'SwiftKotlinTestObject'
+  )

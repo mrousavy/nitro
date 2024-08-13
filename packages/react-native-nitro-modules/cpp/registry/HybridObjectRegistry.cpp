@@ -15,6 +15,19 @@ std::unordered_map<std::string, HybridObjectRegistry::HybridObjectConstructorFn>
   return _constructorsMap;
 }
 
+bool HybridObjectRegistry::hasHybridObject(const std::string& name) {
+  return getRegistry().contains(name);
+}
+
+std::vector<std::string> HybridObjectRegistry::getAllHybridObjectNames() {
+  std::vector<std::string> keys;
+  keys.reserve(getRegistry().size());
+  for (const auto& entry : getRegistry()) {
+    keys.push_back(entry.first);
+  }
+  return keys;
+}
+
 void HybridObjectRegistry::registerHybridObjectConstructor(const std::string& hybridObjectName, HybridObjectConstructorFn&& constructorFn) {
   Logger::log(TAG, "Registering HybridObject \"%s\"...", hybridObjectName);
   auto& map = HybridObjectRegistry::getRegistry();

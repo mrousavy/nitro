@@ -22,9 +22,23 @@ export const NitroModules = {
    * @returns An instance of {@linkcode T}
    * @throws an Error if {@linkcode T} has not been registered under the name {@linkcode name}.
    */
-  get<T extends HybridObject<any>>(name: string): T {
+  createHybridObject<T extends HybridObject<any>>(name: string): T {
     const nitro = getNativeNitroModules()
     const instance = nitro.createHybridObject(name)
     return instance as T
+  },
+  /**
+   * Get a list of all registered Hybrid Objects.
+   */
+  getAllHybridObjectNames(): string[] {
+    const nitro = getNativeNitroModules()
+    return nitro.getAllHybridObjectNames()
+  },
+  /**
+   * Returns whether a HybridObject under the given {@linkcode name} is registered, or not.
+   */
+  hasHybridObject(name: string): boolean {
+    const nitro = getNativeNitroModules()
+    return nitro.hasHybridObject(name)
   },
 }
