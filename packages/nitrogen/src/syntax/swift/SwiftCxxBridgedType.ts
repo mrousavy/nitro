@@ -211,7 +211,7 @@ export class SwiftCxxBridgedType {
         const wrapping = new SwiftCxxBridgedType(array.itemType)
         switch (language) {
           case 'swift':
-            return `${cppParameterName}.map({ ${wrapping.parseFromCppToSwift('$0', 'swift')} })`.trim()
+            return `${cppParameterName}.map({ val in ${wrapping.parseFromCppToSwift('val', 'swift')} })`.trim()
           default:
             return cppParameterName
         }

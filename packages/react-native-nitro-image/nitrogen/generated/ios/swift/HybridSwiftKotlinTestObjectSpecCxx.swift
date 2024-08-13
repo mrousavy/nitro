@@ -192,7 +192,7 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
     }
     @inline(__always)
     set {
-      self.implementation.someArray = newValue.map({ String($0) })
+      self.implementation.someArray = newValue.map({ val in String(val) })
     }
   }
   
