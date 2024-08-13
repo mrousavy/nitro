@@ -63,7 +63,7 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
     }
   }
   
-  public var stringValue: String {
+  public var stringValue: std.string {
     @inline(__always)
     get {
       return self.implementation.stringValue
@@ -85,7 +85,7 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
     }
   }
   
-  public var stringOrUndefined: String? {
+  public var stringOrUndefined: std.string? {
     @inline(__always)
     get {
       return self.implementation.stringOrUndefined
@@ -96,7 +96,7 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
     }
   }
   
-  public var stringOrNull: String? {
+  public var stringOrNull: std.string? {
     @inline(__always)
     get {
       return self.implementation.stringOrNull
@@ -107,7 +107,7 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
     }
   }
   
-  public var optionalString: String? {
+  public var optionalString: std.string? {
     @inline(__always)
     get {
       return self.implementation.optionalString
@@ -142,7 +142,7 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
   }
   
   @inline(__always)
-  public func addStrings(a: String, b: String) -> String {
+  public func addStrings(a: std.string, b: std.string) -> std.string {
     do {
       let result = try self.implementation.addStrings(a: a, b: b)
       return result
@@ -153,7 +153,7 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
   }
   
   @inline(__always)
-  public func multipleArguments(num: Double, str: String, boo: Bool) -> Void {
+  public func multipleArguments(num: Double, str: std.string, boo: Bool) -> Void {
     do {
       try self.implementation.multipleArguments(num: num, str: str, boo: boo)
       return 
@@ -175,10 +175,14 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
   }
   
   @inline(__always)
-  public func getStrings() -> [String] {
+  public func getStrings() -> margelo.nitro.image.std__vector_std__string_ {
     do {
       let result = try self.implementation.getStrings()
-      return result
+      var vector = margelo.nitro.image.create_std__vector_std__string_(result.count)
+      for value in result {
+        vector.push_back(std.string(value))
+      }
+      return vector
     } catch {
       let message = "\(error.localizedDescription)"
       fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
@@ -186,9 +190,9 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
   }
   
   @inline(__always)
-  public func callCallback(callback: margelo.nitro.image.Callback_void) -> Void {
+  public func callCallback(callback: margelo.nitro.image.Func_void) -> Void {
     do {
-      try self.implementation.callCallback(callback: { () -> Void in callback.call() })
+      try self.implementation.callCallback(callback: { () -> Void in callback() })
       return 
     } catch {
       let message = "\(error.localizedDescription)"

@@ -1,6 +1,6 @@
 #include <jni.h>
 
-#include "JCallback_void_std__string.hpp"
+#include "JFunc_void_std__string.hpp"
 #include "JHybridImage.hpp"
 #include "JHybridImageFactory.hpp"
 
@@ -10,7 +10,7 @@
 using namespace margelo::nitro::image;
 
 JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void*) {
-  JCallback_void_std__string::registerNatives();
+  JFunc_void_std__string::registerNatives();
   JHybridImage::registerNatives();
   JHybridImageFactory::registerNatives();
 

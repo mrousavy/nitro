@@ -20,7 +20,7 @@ class Image(val bitmap: Bitmap): HybridImage() {
         TODO("Not yet implemented")
     }
 
-    override fun saveToFile(path: String, onFinished: Callback_void_std__string) {
+    override fun saveToFile(path: String, onFinished: Func_void_std__string) {
         TODO("Not yet implemented")
     }
 

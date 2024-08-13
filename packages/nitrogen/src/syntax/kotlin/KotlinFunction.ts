@@ -7,7 +7,7 @@ export function createKotlinFunction(
   packageName: string,
   functionType: FunctionType
 ): SourceFile[] {
-  const name = `Callback_${functionType.specializationName}`
+  const name = functionType.specializationName
   const kotlinReturnType = functionType.returnType.getCode('kotlin')
   const kotlinParams = functionType.parameters.map(
     (p) => `${p.escapedName}: ${p.getCode('kotlin')}`

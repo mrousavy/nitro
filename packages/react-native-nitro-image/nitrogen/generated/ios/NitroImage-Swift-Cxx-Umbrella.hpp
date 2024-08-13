@@ -13,16 +13,16 @@
 namespace NitroModules { class AnyMap; }
 // Forward declaration of `ArrayBuffer` to properly resolve imports.
 namespace NitroModules { class ArrayBuffer; }
-// Forward declaration of `Callback_std__future_double_` to properly resolve imports.
-namespace margelo::nitro::image { struct Callback_std__future_double_; }
-// Forward declaration of `Callback_std__future_std__string_` to properly resolve imports.
-namespace margelo::nitro::image { struct Callback_std__future_std__string_; }
-// Forward declaration of `Callback_void_std__string` to properly resolve imports.
-namespace margelo::nitro::image { struct Callback_void_std__string; }
-// Forward declaration of `Callback_void` to properly resolve imports.
-namespace margelo::nitro::image { struct Callback_void; }
 // Forward declaration of `Car` to properly resolve imports.
 namespace margelo::nitro::image { struct Car; }
+// Forward declaration of `Func_std__future_double_` to properly resolve imports.
+namespace margelo::nitro::image { struct Func_std__future_double_; }
+// Forward declaration of `Func_std__future_std__string_` to properly resolve imports.
+namespace margelo::nitro::image { struct Func_std__future_std__string_; }
+// Forward declaration of `Func_void_std__string` to properly resolve imports.
+namespace margelo::nitro::image { struct Func_void_std__string; }
+// Forward declaration of `Func_void` to properly resolve imports.
+namespace margelo::nitro::image { struct Func_void; }
 // Forward declaration of `HybridImageSpecSwift` to properly resolve imports.
 namespace margelo::nitro::image { class HybridImageSpecSwift; }
 // Forward declaration of `HybridImageSpec` to properly resolve imports.
@@ -45,20 +45,20 @@ namespace margelo::nitro::image { enum class PixelFormat; }
 namespace margelo::nitro::image { enum class Powertrain; }
 
 // Include C++ defined types
-#if __has_include("Callback_std__future_double_.hpp")
- #include "Callback_std__future_double_.hpp"
-#endif
-#if __has_include("Callback_std__future_std__string_.hpp")
- #include "Callback_std__future_std__string_.hpp"
-#endif
-#if __has_include("Callback_void.hpp")
- #include "Callback_void.hpp"
-#endif
-#if __has_include("Callback_void_std__string.hpp")
- #include "Callback_void_std__string.hpp"
-#endif
 #if __has_include("Car.hpp")
  #include "Car.hpp"
+#endif
+#if __has_include("Func_std__future_double_.hpp")
+ #include "Func_std__future_double_.hpp"
+#endif
+#if __has_include("Func_std__future_std__string_.hpp")
+ #include "Func_std__future_std__string_.hpp"
+#endif
+#if __has_include("Func_void.hpp")
+ #include "Func_void.hpp"
+#endif
+#if __has_include("Func_void_std__string.hpp")
+ #include "Func_void_std__string.hpp"
 #endif
 #if __has_include("HybridImageSpec.hpp")
  #include "HybridImageSpec.hpp"

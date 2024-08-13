@@ -21,9 +21,12 @@ export class FunctionType implements Type {
   }
 
   get specializationName(): string {
-    return [this.returnType, ...this.parameters]
-      .map((p) => escapeCppName(p.getCode('c++')))
-      .join('_')
+    return (
+      'Func_' +
+      [this.returnType, ...this.parameters]
+        .map((p) => escapeCppName(p.getCode('c++')))
+        .join('_')
+    )
   }
 
   get jsName(): string {
@@ -74,14 +77,15 @@ export class FunctionType implements Type {
     }
   }
 
-  getCode(language: Language): string {
+  getCode(language: Language, includeNameInfo = true): string {
     switch (language) {
       case 'c++': {
         const params = this.parameters
           .map((p) => {
             const type = p.getCode('c++')
             const code = p.canBePassedByReference ? toReferenceType(type) : type
-            return `${code} /* ${p.name} */`
+            if (includeNameInfo) return `${code} /* ${p.name} */`
+            else return code
           })
           .join(', ')
         const returnType = this.returnType.getCode(language)
@@ -89,7 +93,11 @@ export class FunctionType implements Type {
       }
       case 'swift': {
         const params = this.parameters
-          .map((p) => `_ ${p.escapedName}: ${p.getCode(language)}`)
+          .map((p) => {
+            if (includeNameInfo)
+              return `_ ${p.escapedName}: ${p.getCode(language)}`
+            else return p.getCode(language)
+          })
           .join(', ')
         const returnType = this.returnType.getCode(language)
         return `(@escaping (${params}) -> ${returnType})`

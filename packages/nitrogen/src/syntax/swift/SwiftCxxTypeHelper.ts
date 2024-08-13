@@ -1,6 +1,7 @@
 import { escapeCppName } from '../helpers.js'
 import type { SourceImport } from '../SourceFile.js'
 import { ArrayType } from '../types/ArrayType.js'
+import { FunctionType } from '../types/FunctionType.js'
 import { getTypeAs } from '../types/getTypeAs.js'
 import { OptionalType } from '../types/OptionalType.js'
 import { RecordType } from '../types/RecordType.js'
@@ -20,6 +21,8 @@ export function createSwiftCxxHelpers(type: Type): SwiftCxxHelper[] {
       return createCxxVectorSwiftHelper(getTypeAs(type, ArrayType))
     case 'record':
       return createCxxUnorderedMapSwiftHelper(getTypeAs(type, RecordType))
+    case 'function':
+      return createCxxFunctionSwiftHelper(getTypeAs(type, FunctionType))
     default:
       return []
   }
@@ -31,7 +34,7 @@ export function createSwiftCxxHelpers(type: Type): SwiftCxxHelper[] {
 export function createCxxOptionalSwiftHelper(
   type: OptionalType
 ): SwiftCxxHelper[] {
-  const actualType = type.wrappingType.getCode('c++')
+  const actualType = type.getCode('c++')
   const name = escapeCppName(type.getCode('c++'))
   return [
     {
@@ -45,8 +48,9 @@ export function createCxxOptionalSwiftHelper(
         ...type.getRequiredImports(),
       ],
       cxxCode: `
-inline std::optional<${actualType}> create_${name}(const ${actualType}& value) {
-  return std::optional<${actualType}>(value);
+using ${name} = ${actualType};
+inline ${actualType} create_${name}(const ${type.wrappingType.getCode('c++')}& value) {
+  return ${actualType}(value);
 }
     `.trim(),
     },
@@ -57,7 +61,7 @@ inline std::optional<${actualType}> create_${name}(const ${actualType}& value) {
  * Creates a C++ `create_vector_T<T>(size)` function that can be called from Swift.
  */
 export function createCxxVectorSwiftHelper(type: ArrayType): SwiftCxxHelper[] {
-  const actualType = type.itemType.getCode('c++')
+  const actualType = type.getCode('c++')
   const name = escapeCppName(type.getCode('c++'))
   return [
     {
@@ -71,8 +75,9 @@ export function createCxxVectorSwiftHelper(type: ArrayType): SwiftCxxHelper[] {
         ...type.getRequiredImports(),
       ],
       cxxCode: `
-inline std::vector<${actualType}> create_${name}(size_t size) {
-  std::vector<${actualType}> vector;
+using ${name} = ${actualType};
+inline ${actualType} create_${name}(size_t size) {
+  ${actualType} vector;
   vector.reserve(size);
   return vector;
 }
@@ -87,8 +92,7 @@ inline std::vector<${actualType}> create_${name}(size_t size) {
 export function createCxxUnorderedMapSwiftHelper(
   type: RecordType
 ): SwiftCxxHelper[] {
-  const keyType = type.keyType.getCode('c++')
-  const valueType = type.valueType.getCode('c++')
+  const actualType = type.getCode('c++')
   const name = escapeCppName(type.getCode('c++'))
   return [
     {
@@ -102,11 +106,37 @@ export function createCxxUnorderedMapSwiftHelper(
         ...type.getRequiredImports(),
       ],
       cxxCode: `
-inline std::unordered_map<${keyType}, ${valueType}> create_${name}(size_t size) {
-  std::unordered_map<${keyType}, ${valueType}> map;
+using ${name} = ${actualType};
+inline ${actualType} create_${name}(size_t size) {
+  ${actualType} map;
   map.reserve(size);
   return map;
 }
+    `.trim(),
+    },
+  ]
+}
+
+/**
+ * Creates a C++ `Func_XXXXX` specialization that can be used from Swift.
+ */
+export function createCxxFunctionSwiftHelper(
+  type: FunctionType
+): SwiftCxxHelper[] {
+  const name = type.specializationName
+  return [
+    {
+      funcName: `create_${name}`,
+      requiredIncludes: [
+        {
+          name: 'functional',
+          space: 'system',
+          language: 'c++',
+        },
+        ...type.getRequiredImports(),
+      ],
+      cxxCode: `
+using ${name} = ${type.getCode('c++', false)};
     `.trim(),
     },
   ]

@@ -13,10 +13,10 @@
 // Forward declaration of `HybridSwiftKotlinTestObjectSpecCxx` to properly resolve imports.
 namespace NitroImage { class HybridSwiftKotlinTestObjectSpecCxx; }
 
-// Forward declaration of `Callback_void` to properly resolve imports.
-namespace margelo::nitro::image { struct Callback_void; }
+// Forward declaration of `Func_void` to properly resolve imports.
+namespace margelo::nitro::image { struct Func_void; }
 
-#include "Callback_void.hpp"
+#include "Func_void.hpp"
 
 #if __has_include(<NitroModules/HybridContext.hpp>)
 #include <NitroModules/HybridContext.hpp>
@@ -85,21 +85,21 @@ namespace margelo::nitro::image {
       return result ? result.get() : nullptr;
     }
     inline void setStringOrUndefined(const std::optional<std::string>& stringOrUndefined) noexcept override {
-      _swiftPart.setStringOrUndefined(stringOrUndefined.has_value() ? swift::Optional<swift::String>::some(stringOrUndefined.value()) : swift::Optional<swift::String>::none());
+      _swiftPart.setStringOrUndefined(stringOrUndefined.has_value() ? swift::Optional<std::string>::some(stringOrUndefined.value()) : swift::Optional<std::string>::none());
     }
     inline std::optional<std::string> getStringOrNull() noexcept override {
       auto result = _swiftPart.getStringOrNull();
       return result ? result.get() : nullptr;
     }
     inline void setStringOrNull(const std::optional<std::string>& stringOrNull) noexcept override {
-      _swiftPart.setStringOrNull(stringOrNull.has_value() ? swift::Optional<swift::String>::some(stringOrNull.value()) : swift::Optional<swift::String>::none());
+      _swiftPart.setStringOrNull(stringOrNull.has_value() ? swift::Optional<std::string>::some(stringOrNull.value()) : swift::Optional<std::string>::none());
     }
     inline std::optional<std::string> getOptionalString() noexcept override {
       auto result = _swiftPart.getOptionalString();
       return result ? result.get() : nullptr;
     }
     inline void setOptionalString(const std::optional<std::string>& optionalString) noexcept override {
-      _swiftPart.setOptionalString(optionalString.has_value() ? swift::Optional<swift::String>::some(optionalString.value()) : swift::Optional<swift::String>::none());
+      _swiftPart.setOptionalString(optionalString.has_value() ? swift::Optional<std::string>::some(optionalString.value()) : swift::Optional<std::string>::none());
     }
 
   public:

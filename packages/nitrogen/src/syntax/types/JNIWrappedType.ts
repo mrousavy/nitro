@@ -49,7 +49,7 @@ export class JNIWrappedType<T extends Type> implements Type {
       }
       case 'function': {
         const functionType = getTypeAs(this.type, FunctionType)
-        const name = `Callback_${functionType.specializationName}`
+        const name = functionType.specializationName
         return {
           language: 'c++',
           name: `J${name}.hpp`,
@@ -84,7 +84,7 @@ export class JNIWrappedType<T extends Type> implements Type {
       }
       case 'function': {
         const functionType = getTypeAs(this.type, FunctionType)
-        const name = `Callback_${functionType.specializationName}`
+        const name = functionType.specializationName
         return `jni::alias_ref<J${name}::javaobject>`
       }
       default:
