@@ -19,7 +19,11 @@ namespace margelo::nitro::image { struct Person; }
 #include <unordered_map>
 #include <vector>
 
-namespace margelo::nitro::image {
+/**
+ * Contains specialized versions of C++ templated types so they can be accessed from Swift,
+ * as well as helper functions to interact with those C++ types from Swift.
+ */
+namespace margelo::nitro::image::bridge::swift {
 
   using Func_void_std__string = std::function<void(const std::string&)>;
   
@@ -73,4 +77,4 @@ namespace margelo::nitro::image {
     return keys;
   }
 
-} // namespace margelo::nitro::image
+} // namespace margelo::nitro::image::bridge::swift

@@ -133,7 +133,7 @@ export class SwiftCxxBridgedType {
       case 'function':
       case 'record': {
         const bridge = this.getBridgeOrThrow()
-        return NitroConfig.getCxxNamespace(language, bridge.specializationName)
+        return `bridge.${bridge.specializationName}`
       }
       case 'string': {
         switch (language) {
@@ -218,10 +218,7 @@ export class SwiftCxxBridgedType {
       }
       case 'record': {
         const bridge = this.getBridgeOrThrow()
-        const getKeysFunc = NitroConfig.getCxxNamespace(
-          'swift',
-          `get_${bridge.specializationName}_keys`
-        )
+        const getKeysFunc = `bridge.get_${bridge.specializationName}_keys`
         const record = getTypeAs(this.type, RecordType)
         const wrappingKey = new SwiftCxxBridgedType(record.keyType)
         const wrappingValue = new SwiftCxxBridgedType(record.valueType)
@@ -310,7 +307,7 @@ export class SwiftCxxBridgedType {
         const optional = getTypeAs(this.type, OptionalType)
         const wrapping = new SwiftCxxBridgedType(optional.wrappingType)
         const bridge = this.getBridgeOrThrow()
-        const fullName = NitroConfig.getCxxNamespace(language, bridge.funcName)
+        const fullName = `bridge.${bridge.funcName}`
         switch (language) {
           case 'swift':
             return `
@@ -336,7 +333,7 @@ export class SwiftCxxBridgedType {
       }
       case 'array': {
         const bridge = this.getBridgeOrThrow()
-        const fullName = NitroConfig.getCxxNamespace('swift', bridge.funcName)
+        const fullName = `bridge.${bridge.funcName}`
         const array = getTypeAs(this.type, ArrayType)
         const wrapping = new SwiftCxxBridgedType(array.itemType)
         switch (language) {
@@ -355,7 +352,7 @@ export class SwiftCxxBridgedType {
       }
       case 'record': {
         const bridge = this.getBridgeOrThrow()
-        const createMap = NitroConfig.getCxxNamespace('swift', bridge.funcName)
+        const createMap = `bridge.${bridge.funcName}`
         const record = getTypeAs(this.type, RecordType)
         const wrappingKey = new SwiftCxxBridgedType(record.keyType)
         const wrappingValue = new SwiftCxxBridgedType(record.valueType)

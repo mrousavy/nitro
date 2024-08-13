@@ -19,13 +19,29 @@ import NitroModules
  * - Throwing methods need to be wrapped with a Result<T, Error> type, as exceptions cannot be propagated to C++
  */
 public final class HybridSwiftKotlinTestObjectSpecCxx {
+  /**
+   * The Swift <> C++ bridge's namespace (`margelo::nitro::image::bridge::swift`)
+   * from `NitroImage-Swift-Cxx-Bridge.hpp`.
+   * This contains specialized C++ templates, and C++ helper functions that can be accessed from Swift.
+   */
+  public typealias bridge = margelo.nitro.image.bridge.swift
+
+  /**
+   * Holds an instance of the `HybridSwiftKotlinTestObjectSpec` Swift protocol.
+   */
   private(set) var implementation: HybridSwiftKotlinTestObjectSpec
 
+  /**
+   * Create a new `HybridSwiftKotlinTestObjectSpecCxx` that wraps the given `HybridSwiftKotlinTestObjectSpec`.
+   * All properties and methods bridge to C++ types.
+   */
   public init(_ implementation: HybridSwiftKotlinTestObjectSpec) {
     self.implementation = implementation
   }
 
-  // HybridObject C++ part
+  /**
+   * Contains a (weak) reference to the C++ HybridObject to cache it.
+   */
   public var hybridContext: margelo.nitro.HybridContext {
     get {
       return self.implementation.hybridContext
@@ -35,7 +51,10 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
     }
   }
 
-  // Memory size of the Swift class (plus size of any other allocations)
+  /**
+   * Get the memory size of the Swift class (plus size of any other allocations)
+   * so the JS VM can properly track it and garbage-collect the JS object if needed.
+   */
   public var memorySize: Int {
     return self.implementation.memorySize
   }
@@ -85,12 +104,12 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
     }
   }
   
-  public var stringOrUndefined: margelo.nitro.image.std__optional_std__string_ {
+  public var stringOrUndefined: bridge.std__optional_std__string_ {
     @inline(__always)
     get {
       return {
         if let actualValue = self.implementation.stringOrUndefined {
-          return margelo.nitro.image.create_std__optional_std__string_(std.string(actualValue))
+          return bridge.create_std__optional_std__string_(std.string(actualValue))
         } else {
           return .init()
         }
@@ -108,12 +127,12 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
     }
   }
   
-  public var stringOrNull: margelo.nitro.image.std__optional_std__string_ {
+  public var stringOrNull: bridge.std__optional_std__string_ {
     @inline(__always)
     get {
       return {
         if let actualValue = self.implementation.stringOrNull {
-          return margelo.nitro.image.create_std__optional_std__string_(std.string(actualValue))
+          return bridge.create_std__optional_std__string_(std.string(actualValue))
         } else {
           return .init()
         }
@@ -131,12 +150,12 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
     }
   }
   
-  public var optionalString: margelo.nitro.image.std__optional_std__string_ {
+  public var optionalString: bridge.std__optional_std__string_ {
     @inline(__always)
     get {
       return {
         if let actualValue = self.implementation.optionalString {
-          return margelo.nitro.image.create_std__optional_std__string_(std.string(actualValue))
+          return bridge.create_std__optional_std__string_(std.string(actualValue))
         } else {
           return .init()
         }
@@ -154,11 +173,11 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
     }
   }
   
-  public var someMap: margelo.nitro.image.std__unordered_map_std__string__double_ {
+  public var someMap: bridge.std__unordered_map_std__string__double_ {
     @inline(__always)
     get {
       return {
-        var map = margelo.nitro.image.create_std__unordered_map_std__string__double_(self.implementation.someMap.count)
+        var map = bridge.create_std__unordered_map_std__string__double_(self.implementation.someMap.count)
         for (k, v) in self.implementation.someMap {
           map[std.string(k)] = v
         }
@@ -169,7 +188,7 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
     set {
       self.implementation.someMap = {
         var dictionary = Dictionary<String, Double>(minimumCapacity: newValue.size())
-        let keys = margelo.nitro.image.get_std__unordered_map_std__string__double__keys(newValue)
+        let keys = bridge.get_std__unordered_map_std__string__double__keys(newValue)
         for key in keys {
           let value = newValue[key]
           dictionary[String(key)] = value
@@ -179,11 +198,11 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
     }
   }
   
-  public var someArray: margelo.nitro.image.std__vector_std__string_ {
+  public var someArray: bridge.std__vector_std__string_ {
     @inline(__always)
     get {
       return {
-        var vector = margelo.nitro.image.create_std__vector_std__string_(self.implementation.someArray.count)
+        var vector = bridge.create_std__vector_std__string_(self.implementation.someArray.count)
         for item in self.implementation.someArray {
           vector.push_back(std.string(item))
         }
@@ -196,12 +215,12 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
     }
   }
   
-  public var someOptional: margelo.nitro.image.std__optional_std__string_ {
+  public var someOptional: bridge.std__optional_std__string_ {
     @inline(__always)
     get {
       return {
         if let actualValue = self.implementation.someOptional {
-          return margelo.nitro.image.create_std__optional_std__string_(std.string(actualValue))
+          return bridge.create_std__optional_std__string_(std.string(actualValue))
         } else {
           return .init()
         }
@@ -265,11 +284,11 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
   }
   
   @inline(__always)
-  public func getNumbers() -> margelo.nitro.image.std__vector_double_ {
+  public func getNumbers() -> bridge.std__vector_double_ {
     do {
       let result = try self.implementation.getNumbers()
       return {
-        var vector = margelo.nitro.image.create_std__vector_double_(result.count)
+        var vector = bridge.create_std__vector_double_(result.count)
         for item in result {
           vector.push_back(item)
         }
@@ -282,11 +301,11 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
   }
   
   @inline(__always)
-  public func getStrings() -> margelo.nitro.image.std__vector_std__string_ {
+  public func getStrings() -> bridge.std__vector_std__string_ {
     do {
       let result = try self.implementation.getStrings()
       return {
-        var vector = margelo.nitro.image.create_std__vector_std__string_(result.count)
+        var vector = bridge.create_std__vector_std__string_(result.count)
         for item in result {
           vector.push_back(std.string(item))
         }
@@ -299,7 +318,7 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
   }
   
   @inline(__always)
-  public func callCallback(callback: margelo.nitro.image.Func_void) -> Void {
+  public func callCallback(callback: bridge.Func_void) -> Void {
     do {
       try self.implementation.callCallback(callback: { () -> Void in
         callback()

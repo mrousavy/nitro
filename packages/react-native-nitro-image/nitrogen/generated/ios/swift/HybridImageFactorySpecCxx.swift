@@ -19,13 +19,29 @@ import NitroModules
  * - Throwing methods need to be wrapped with a Result<T, Error> type, as exceptions cannot be propagated to C++
  */
 public final class HybridImageFactorySpecCxx {
+  /**
+   * The Swift <> C++ bridge's namespace (`margelo::nitro::image::bridge::swift`)
+   * from `NitroImage-Swift-Cxx-Bridge.hpp`.
+   * This contains specialized C++ templates, and C++ helper functions that can be accessed from Swift.
+   */
+  public typealias bridge = margelo.nitro.image.bridge.swift
+
+  /**
+   * Holds an instance of the `HybridImageFactorySpec` Swift protocol.
+   */
   private(set) var implementation: HybridImageFactorySpec
 
+  /**
+   * Create a new `HybridImageFactorySpecCxx` that wraps the given `HybridImageFactorySpec`.
+   * All properties and methods bridge to C++ types.
+   */
   public init(_ implementation: HybridImageFactorySpec) {
     self.implementation = implementation
   }
 
-  // HybridObject C++ part
+  /**
+   * Contains a (weak) reference to the C++ HybridObject to cache it.
+   */
   public var hybridContext: margelo.nitro.HybridContext {
     get {
       return self.implementation.hybridContext
@@ -35,7 +51,10 @@ public final class HybridImageFactorySpecCxx {
     }
   }
 
-  // Memory size of the Swift class (plus size of any other allocations)
+  /**
+   * Get the memory size of the Swift class (plus size of any other allocations)
+   * so the JS VM can properly track it and garbage-collect the JS object if needed.
+   */
   public var memorySize: Int {
     return self.implementation.memorySize
   }
