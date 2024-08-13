@@ -33,7 +33,8 @@ ${createFileMetadataString(`${typename}.swift`)}
  * An Swift enum with associated values representing a Variant/Union type.
  * JS type: \`${jsSignature}\`
  */
-enum ${typename} {
+@frozen
+public enum ${typename} {
   ${indent(cases, '  ')}
 }
   `.trim()

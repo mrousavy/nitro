@@ -10,7 +10,8 @@
  * An Swift enum with associated values representing a Variant/Union type.
  * JS type: `string | number`
  */
-enum Variant_String_Double {
+@frozen
+public enum Variant_String_Double {
   case someString(String)
   case someDouble(Double)
 }

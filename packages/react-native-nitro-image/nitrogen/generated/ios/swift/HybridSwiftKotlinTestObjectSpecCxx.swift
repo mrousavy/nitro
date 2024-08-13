@@ -157,8 +157,6 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
   public var someVariant: margelo.nitro.image.std__variant_std__string__double_ {
     @inline(__always)
     get {
-      let test = margelo.nitro.image.create_std__variant_std__string__double_(55.0)
-      
       return {
         switch self.implementation.someVariant {
           case .someString(let value):
