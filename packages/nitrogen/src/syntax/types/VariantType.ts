@@ -1,6 +1,7 @@
 import type { Language } from '../../getPlatformSpecs.js'
 import { isNotDuplicate } from '../helpers.js'
 import { type SourceFile, type SourceImport } from '../SourceFile.js'
+import { getSwiftVariantTypename } from '../swift/SwiftVariant.js'
 import type { Type, TypeKind } from './Type.js'
 
 export class VariantType implements Type {
@@ -27,6 +28,8 @@ export class VariantType implements Type {
     switch (language) {
       case 'c++':
         return `std::variant<${types.join(', ')}>`
+      case 'swift':
+        return getSwiftVariantTypename(this)
       default:
         throw new Error(
           `Language ${language} is not yet supported for VariantType!`

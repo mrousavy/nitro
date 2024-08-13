@@ -51,4 +51,8 @@ class HybridSwiftKotlinTestObject : HybridSwiftKotlinTestObjectSpec {
       callback()
     }
   }
+  
+  var someVariant: Variant_String_Double {
+    return .someDouble(55)
+  }
 }

@@ -100,6 +100,10 @@ namespace margelo::nitro::image {
     inline void setOptionalString(const std::optional<std::string>& optionalString) noexcept override {
       _swiftPart.setOptionalString(optionalString);
     }
+    inline std::variant<std::string, double> getSomeVariant() noexcept override {
+      auto result = _swiftPart.getSomeVariant();
+      return result;
+    }
 
   public:
     // Methods

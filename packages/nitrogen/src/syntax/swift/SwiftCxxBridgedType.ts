@@ -1,4 +1,5 @@
 import { NitroConfig } from '../../config/NitroConfig.js'
+import { indent } from '../../utils.js'
 import { getForwardDeclaration } from '../c++/getForwardDeclaration.js'
 import {
   getHybridObjectName,
@@ -12,10 +13,12 @@ import { getTypeAs } from '../types/getTypeAs.js'
 import { HybridObjectType } from '../types/HybridObjectType.js'
 import { OptionalType } from '../types/OptionalType.js'
 import type { Type } from '../types/Type.js'
+import { VariantType } from '../types/VariantType.js'
 import {
   createSwiftCxxHelpers,
   type SwiftCxxHelper,
 } from './SwiftCxxTypeHelper.js'
+import { createSwiftVariant, getSwiftVariantCaseName } from './SwiftVariant.js'
 
 export class SwiftCxxBridgedType {
   private readonly type: Type
@@ -50,6 +53,9 @@ export class SwiftCxxBridgedType {
         return true
       case 'array':
         // swift::Array<T> <> std::vector<T>
+        return true
+      case 'variant':
+        // Variant_A_B_C <> std::variant<A, B, C>
         return true
       case 'function':
         // (@ecaping () -> Void) <> std::function<...>
@@ -99,6 +105,12 @@ export class SwiftCxxBridgedType {
   getExtraFiles(): SourceFile[] {
     const files: SourceFile[] = []
 
+    if (this.type.kind === 'variant') {
+      const variant = getTypeAs(this.type, VariantType)
+      const file = createSwiftVariant(variant)
+      files.push(file)
+    }
+
     return files
   }
 
@@ -127,6 +139,7 @@ export class SwiftCxxBridgedType {
       case 'optional':
       case 'array':
       case 'function':
+      case 'variant':
       case 'record': {
         const bridge = this.getBridgeOrThrow()
         return NitroConfig.getCxxNamespace(language, bridge.specializationName)
@@ -271,13 +284,13 @@ export class SwiftCxxBridgedType {
         const optional = getTypeAs(this.type, OptionalType)
         const wrapping = new SwiftCxxBridgedType(optional.wrappingType)
         const bridge = this.getBridgeOrThrow()
-        const fullName = NitroConfig.getCxxNamespace(language, bridge.funcName)
+        const makeFunc = NitroConfig.getCxxNamespace(language, bridge.funcName)
         switch (language) {
           case 'swift':
             return `
 {
   if let actualValue = ${swiftParameterName} {
-    return ${fullName}(${wrapping.parseFromSwiftToCpp('actualValue', language)})
+    return ${makeFunc}(${wrapping.parseFromSwiftToCpp('actualValue', language)})
   } else {
     return .init()
   }
@@ -295,16 +308,40 @@ export class SwiftCxxBridgedType {
             return swiftParameterName
         }
       }
+      case 'variant': {
+        const bridge = this.getBridgeOrThrow()
+        const makeFunc = NitroConfig.getCxxNamespace('swift', bridge.funcName)
+        const variant = getTypeAs(this.type, VariantType)
+        const cases = variant.variants
+          .map((t) => {
+            const caseName = getSwiftVariantCaseName(t)
+            const wrapping = new SwiftCxxBridgedType(t)
+            const parse = wrapping.parseFromSwiftToCpp('value', 'swift')
+            return `case .${caseName}(let value):\n  return ${makeFunc}(${parse})`
+          })
+          .join('\n')
+        switch (language) {
+          case 'swift':
+            return `
+{
+  switch ${swiftParameterName} {
+    ${indent(cases, '    ')}
+  }
+}()`.trim()
+          default:
+            return swiftParameterName
+        }
+      }
       case 'array': {
         const bridge = this.getBridgeOrThrow()
-        const fullName = NitroConfig.getCxxNamespace('swift', bridge.funcName)
+        const makeFunc = NitroConfig.getCxxNamespace('swift', bridge.funcName)
         const array = getTypeAs(this.type, ArrayType)
         const wrapping = new SwiftCxxBridgedType(array.itemType)
         switch (language) {
           case 'swift':
             return `
 {
-  var vector = ${fullName}(${swiftParameterName}.count)
+  var vector = ${makeFunc}(${swiftParameterName}.count)
   for item in ${swiftParameterName} {
     vector.push_back(${wrapping.parseFromSwiftToCpp('item', language)})
   }

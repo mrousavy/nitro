@@ -56,6 +56,7 @@ namespace margelo::nitro::image {
       virtual void setStringOrNull(const std::optional<std::string>& stringOrNull) = 0;
       virtual std::optional<std::string> getOptionalString() = 0;
       virtual void setOptionalString(const std::optional<std::string>& optionalString) = 0;
+      virtual std::variant<std::string, double> getSomeVariant() = 0;
 
     public:
       // Methods

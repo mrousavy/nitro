@@ -9,10 +9,19 @@
 #pragma once
 
 // Forward declarations of C++ defined types
+// Forward declaration of `Car` to properly resolve imports.
+namespace margelo::nitro::image { struct Car; }
+// Forward declaration of `HybridTestObjectSpec` to properly resolve imports.
+namespace margelo::nitro::image { class HybridTestObjectSpec; }
+// Forward declaration of `OldEnum` to properly resolve imports.
+namespace margelo::nitro::image { enum class OldEnum; }
 // Forward declaration of `Person` to properly resolve imports.
 namespace margelo::nitro::image { struct Person; }
 
 // Include C++ defined types
+#include "Car.hpp"
+#include "HybridTestObjectSpec.hpp"
+#include "OldEnum.hpp"
 #include "Person.hpp"
 #include <functional>
 #include <optional>
@@ -25,6 +34,14 @@ namespace margelo::nitro::image {
   using std__optional_std__string_ = std::optional<std::string>;
   inline std::optional<std::string> create_std__optional_std__string_(const std::string& value) {
     return std::optional<std::string>(value);
+  }
+  
+  using std__variant_std__string__double_ = std::variant<std::string, double>;
+  inline std::variant<std::string, double> create_std__variant_std__string__double_(const std::string& value) {
+    return value;
+  }
+  inline std::variant<std::string, double> create_std__variant_std__string__double_(double value) {
+    return value;
   }
   
   using std__optional_bool_ = std::optional<bool>;
@@ -46,9 +63,58 @@ namespace margelo::nitro::image {
     return vector;
   }
   
+  using std__variant_std__string__double__bool__std__vector_double___std__vector_std__string__ = std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>>;
+  inline std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>> create_std__variant_std__string__double__bool__std__vector_double___std__vector_std__string__(const std::string& value) {
+    return value;
+  }
+  inline std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>> create_std__variant_std__string__double__bool__std__vector_double___std__vector_std__string__(double value) {
+    return value;
+  }
+  inline std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>> create_std__variant_std__string__double__bool__std__vector_double___std__vector_std__string__(bool value) {
+    return value;
+  }
+  inline std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>> create_std__variant_std__string__double__bool__std__vector_double___std__vector_std__string__(const std::vector<double>& value) {
+    return value;
+  }
+  inline std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>> create_std__variant_std__string__double__bool__std__vector_double___std__vector_std__string__(const std::vector<std::string>& value) {
+    return value;
+  }
+  
+  using std__variant_bool__OldEnum_ = std::variant<bool, OldEnum>;
+  inline std::variant<bool, OldEnum> create_std__variant_bool__OldEnum_(bool value) {
+    return value;
+  }
+  inline std::variant<bool, OldEnum> create_std__variant_bool__OldEnum_(OldEnum value) {
+    return value;
+  }
+  
   using std__optional_Person_ = std::optional<Person>;
   inline std::optional<Person> create_std__optional_Person_(const Person& value) {
     return std::optional<Person>(value);
+  }
+  
+  using std__variant_Person__Car_ = std::variant<Person, Car>;
+  inline std::variant<Person, Car> create_std__variant_Person__Car_(const Person& value) {
+    return value;
+  }
+  inline std::variant<Person, Car> create_std__variant_Person__Car_(const Car& value) {
+    return value;
+  }
+  
+  using std__variant_std__shared_ptr_margelo__nitro__image__HybridTestObjectSpec___Person_ = std::variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectSpec>, Person>;
+  inline std::variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectSpec>, Person> create_std__variant_std__shared_ptr_margelo__nitro__image__HybridTestObjectSpec___Person_(const std::shared_ptr<margelo::nitro::image::HybridTestObjectSpec>& value) {
+    return value;
+  }
+  inline std::variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectSpec>, Person> create_std__variant_std__shared_ptr_margelo__nitro__image__HybridTestObjectSpec___Person_(const Person& value) {
+    return value;
+  }
+  
+  using std__variant_std__tuple_double__double___std__tuple_double__double__double__ = std::variant<std::tuple<double, double>, std::tuple<double, double, double>>;
+  inline std::variant<std::tuple<double, double>, std::tuple<double, double, double>> create_std__variant_std__tuple_double__double___std__tuple_double__double__double__(const std::tuple<double, double>& value) {
+    return value;
+  }
+  inline std::variant<std::tuple<double, double>, std::tuple<double, double, double>> create_std__variant_std__tuple_double__double___std__tuple_double__double__double__(const std::tuple<double, double, double>& value) {
+    return value;
   }
   
   using Func_void = std::function<void()>;
