@@ -65,7 +65,7 @@ ${createFileMetadataString(`J${name}.hpp`)}
 
 #pragma once
 
-#include <fbjni/fbjni.h
+#include <fbjni/fbjni.h>
 #include <functional>
 
 namespace ${cxxNamespace} {
