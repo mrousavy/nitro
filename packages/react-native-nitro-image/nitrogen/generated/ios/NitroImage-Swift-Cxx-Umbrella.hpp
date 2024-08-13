@@ -13,10 +13,22 @@
 namespace NitroModules { class AnyMap; }
 // Forward declaration of `ArrayBuffer` to properly resolve imports.
 namespace NitroModules { class ArrayBuffer; }
+// Forward declaration of `Callback_std__future_double_` to properly resolve imports.
+namespace margelo::nitro::image { struct Callback_std__future_double_; }
+// Forward declaration of `Callback_std__future_std__string_` to properly resolve imports.
+namespace margelo::nitro::image { struct Callback_std__future_std__string_; }
+// Forward declaration of `Callback_void_std__string` to properly resolve imports.
+namespace margelo::nitro::image { struct Callback_void_std__string; }
+// Forward declaration of `Callback_void` to properly resolve imports.
+namespace margelo::nitro::image { struct Callback_void; }
 // Forward declaration of `Car` to properly resolve imports.
 namespace margelo::nitro::image { struct Car; }
+// Forward declaration of `HybridImageSpecSwift` to properly resolve imports.
+namespace margelo::nitro::image { class HybridImageSpecSwift; }
 // Forward declaration of `HybridImageSpec` to properly resolve imports.
 namespace margelo::nitro::image { class HybridImageSpec; }
+// Forward declaration of `HybridTestObjectSpecSwift` to properly resolve imports.
+namespace margelo::nitro::image { class HybridTestObjectSpecSwift; }
 // Forward declaration of `HybridTestObjectSpec` to properly resolve imports.
 namespace margelo::nitro::image { class HybridTestObjectSpec; }
 // Forward declaration of `ImageFormat` to properly resolve imports.
@@ -33,23 +45,57 @@ namespace margelo::nitro::image { enum class PixelFormat; }
 namespace margelo::nitro::image { enum class Powertrain; }
 
 // Include C++ defined types
-#include "Car.hpp"
-#include "HybridImageSpec.hpp"
-#include "HybridTestObjectSpec.hpp"
-#include "ImageFormat.hpp"
-#include "ImageSize.hpp"
-#include "OldEnum.hpp"
-#include "Person.hpp"
-#include "PixelFormat.hpp"
-#include "Powertrain.hpp"
-#include <NitroModules/AnyMap.hpp>
-#include <NitroModules/ArrayBuffer.hpp>
-
-// Forward declarations of Swift defined types
-// Forward declaration of `HybridImageSpecCxx` to properly resolve imports.
-namespace NitroImage { class HybridImageSpecCxx; }
-// Forward declaration of `HybridTestObjectSpecCxx` to properly resolve imports.
-namespace NitroImage { class HybridTestObjectSpecCxx; }
+#if __has_include("Callback_std__future_double_.hpp")
+ #include "Callback_std__future_double_.hpp"
+#endif
+#if __has_include("Callback_std__future_std__string_.hpp")
+ #include "Callback_std__future_std__string_.hpp"
+#endif
+#if __has_include("Callback_void.hpp")
+ #include "Callback_void.hpp"
+#endif
+#if __has_include("Callback_void_std__string.hpp")
+ #include "Callback_void_std__string.hpp"
+#endif
+#if __has_include("Car.hpp")
+ #include "Car.hpp"
+#endif
+#if __has_include("HybridImageSpec.hpp")
+ #include "HybridImageSpec.hpp"
+#endif
+#if __has_include("HybridImageSpecSwift.hpp")
+ #include "HybridImageSpecSwift.hpp"
+#endif
+#if __has_include("HybridTestObjectSpec.hpp")
+ #include "HybridTestObjectSpec.hpp"
+#endif
+#if __has_include("HybridTestObjectSpecSwift.hpp")
+ #include "HybridTestObjectSpecSwift.hpp"
+#endif
+#if __has_include("ImageFormat.hpp")
+ #include "ImageFormat.hpp"
+#endif
+#if __has_include("ImageSize.hpp")
+ #include "ImageSize.hpp"
+#endif
+#if __has_include("OldEnum.hpp")
+ #include "OldEnum.hpp"
+#endif
+#if __has_include("Person.hpp")
+ #include "Person.hpp"
+#endif
+#if __has_include("PixelFormat.hpp")
+ #include "PixelFormat.hpp"
+#endif
+#if __has_include("Powertrain.hpp")
+ #include "Powertrain.hpp"
+#endif
+#if __has_include(<NitroModules/AnyMap.hpp>)
+ #include <NitroModules/AnyMap.hpp>
+#endif
+#if __has_include(<NitroModules/ArrayBuffer.hpp>)
+ #include <NitroModules/ArrayBuffer.hpp>
+#endif
 
 // Include Swift defined types
 #if __has_include("NitroImage-Swift.h")

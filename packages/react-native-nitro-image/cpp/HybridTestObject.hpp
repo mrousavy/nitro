@@ -81,12 +81,11 @@ public:
   int64_t calculateFibonacciSync(double value) override;
   std::future<int64_t> calculateFibonacciAsync(double value) override;
   std::future<void> wait(double seconds) override;
-  void callCallback(const Func_void& callback) override;
-  void getValueFromJSCallback(const Func_std__future_double_& getValue) override;
-  std::future<double> getValueFromJSCallbackAndWait(const Func_std__future_double_& getValue) override;
-  void callAll(const Func_void& first, const Func_void& second, const Func_void& third) override;
-  std::future<void> getValueFromJsCallback(const Func_std__future_std__string_& callback,
-                                           const Func_void_std__string& andThenCall) override;
+  void callCallback(const std::function<void()>& callback);
+  void getValueFromJSCallback(const std::function<std::future<double>()>& getValue);
+  std::future<double> getValueFromJSCallbackAndWait(const std::function<std::future<double>()>& getValue);
+  void callAll(const std::function<void()>& first, const std::function<void()>& second, const std::function<void()>& third);
+  std::future<void> getValueFromJsCallback(const std::function<std::future<std::string>()>& callback, const std::function<void(const std::string& /* valueFromJs */)>& andThenCall);
   Car getCar() override;
   bool isCarElectric(const Car& car) override;
   std::optional<Person> getDriver(const Car& car) override;

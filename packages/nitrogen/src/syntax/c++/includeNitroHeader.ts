@@ -14,11 +14,27 @@ export function includeNitroHeader(headerName: string): string {
   `.trim()
 }
 
-export function includeHeader(sourceImport: SourceImport): string {
-  switch (sourceImport.space) {
+export function includeHeader(
+  sourceImport: SourceImport,
+  force = true
+): string {
+  const header = getHeader(sourceImport.name, sourceImport.space)
+  if (force) {
+    return `#include ${header}`
+  } else {
+    return `
+#if __has_include(${header})
+ #include ${header}
+#endif
+    `.trim()
+  }
+}
+
+function getHeader(name: string, space: 'user' | 'system'): string {
+  switch (space) {
     case 'user':
-      return `#include "${sourceImport.name}"`
+      return `"${name}"`
     case 'system':
-      return `#include <${sourceImport.name}>`
+      return `<${name}>`
   }
 }

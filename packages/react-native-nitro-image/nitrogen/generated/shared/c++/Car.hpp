@@ -22,6 +22,8 @@ namespace margelo::nitro::image { struct Person; }
 #include "Powertrain.hpp"
 #include "Person.hpp"
 
+#include "Callback_void.hpp"
+
 namespace margelo::nitro::image {
 
   /**

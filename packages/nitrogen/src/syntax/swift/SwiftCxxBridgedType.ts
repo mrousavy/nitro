@@ -73,6 +73,16 @@ export class SwiftCxxBridgedType {
         language: 'c++',
         space: 'user',
       })
+    } else if (this.type.kind === 'function') {
+      const funcType = getTypeAs(this.type, FunctionType)
+      const name = `Callback_${funcType.specializationName}`
+      const namespace = NitroConfig.getCxxNamespace('c++')
+      imports.push({
+        name: `${name}.hpp`,
+        language: 'c++',
+        space: 'user',
+        forwardDeclaration: getForwardDeclaration('struct', name, namespace),
+      })
     }
 
     return imports
@@ -148,23 +158,11 @@ export class SwiftCxxBridgedType {
             throw new Error(`Invalid language! ${language}`)
         }
       }
-      // case 'function': {
-      //   const functionType = getTypeAs(this.type, FunctionType)
-      //   switch (language) {
-      //     case 'c++':
-      //       return NitroConfig.getCxxNamespace(
-      //         'c++',
-      //         functionType.specializationName
-      //       )
-      //     case 'swift':
-      //       return NitroConfig.getCxxNamespace(
-      //         'swift',
-      //         functionType.specializationName
-      //       )
-      //     default:
-      //       throw new Error(`Invalid language! ${language}`)
-      //   }
-      // }
+      case 'function': {
+        const functionType = getTypeAs(this.type, FunctionType)
+        const callbackName = `Callback_${functionType.specializationName}`
+        return NitroConfig.getCxxNamespace(language, callbackName)
+      }
       default:
         // No workaround - just return normal type
         return this.type.getCode(language)
@@ -257,10 +255,10 @@ export class SwiftCxxBridgedType {
             })
 
             if (funcType.returnType.kind === 'void') {
-              return `{ ${signature} in ${cppParameterName}(${paramsForward.join(', ')}) }`
+              return `{ ${signature} in ${cppParameterName}.call(${paramsForward.join(', ')}) }`
             } else {
               const resultBridged = new SwiftCxxBridgedType(funcType.returnType)
-              return `{ ${signature} in let result = ${cppParameterName}(${paramsForward.join(', ')}); return ${resultBridged.parseFromSwiftToCpp('result', 'swift')} }`
+              return `{ ${signature} in let result = ${cppParameterName}.call(${paramsForward.join(', ')}); return ${resultBridged.parseFromSwiftToCpp('result', 'swift')} }`
             }
           default:
             return cppParameterName

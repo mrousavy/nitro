@@ -114,7 +114,7 @@ namespace ${cxxNamespace} {
     declarationFile: {
       content: code.trim(),
       language: 'c++',
-      subdirectory: [],
+      subdirectory: ['bridge'],
       name: `${typename}.hpp`,
       platform: 'ios',
     },

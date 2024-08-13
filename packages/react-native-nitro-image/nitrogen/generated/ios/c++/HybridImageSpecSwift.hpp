@@ -19,10 +19,13 @@ namespace margelo::nitro::image { struct ImageSize; }
 namespace margelo::nitro::image { enum class PixelFormat; }
 // Forward declaration of `ImageFormat` to properly resolve imports.
 namespace margelo::nitro::image { enum class ImageFormat; }
+// Forward declaration of `Callback_void_std__string` to properly resolve imports.
+namespace margelo::nitro::image { struct Callback_void_std__string; }
 
 #include "ImageSize.hpp"
 #include "PixelFormat.hpp"
 #include "ImageFormat.hpp"
+#include "Callback_void_std__string.hpp"
 
 #if __has_include(<NitroModules/HybridContext.hpp>)
 #include <NitroModules/HybridContext.hpp>
