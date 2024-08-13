@@ -1,10 +1,11 @@
-import { escapeCppName } from '../helpers.js'
+import { escapeCppName, toReferenceType } from '../helpers.js'
 import type { SourceImport } from '../SourceFile.js'
 import { ArrayType } from '../types/ArrayType.js'
 import { FunctionType } from '../types/FunctionType.js'
 import { getTypeAs } from '../types/getTypeAs.js'
 import { OptionalType } from '../types/OptionalType.js'
 import { RecordType } from '../types/RecordType.js'
+import { TupleType } from '../types/TupleType.js'
 import type { Type } from '../types/Type.js'
 
 export interface SwiftCxxHelper {
@@ -24,6 +25,8 @@ export function createSwiftCxxHelpers(type: Type): SwiftCxxHelper | undefined {
       return createCxxUnorderedMapSwiftHelper(getTypeAs(type, RecordType))
     case 'function':
       return createCxxFunctionSwiftHelper(getTypeAs(type, FunctionType))
+    case 'tuple':
+      return createCxxTupleSwiftHelper(getTypeAs(type, TupleType))
     default:
       return undefined
   }
@@ -78,6 +81,39 @@ inline ${actualType} create_${name}(size_t size) {
   ${actualType} vector;
   vector.reserve(size);
   return vector;
+}
+    `.trim(),
+  }
+}
+
+/**
+ * Creates a C++ `create_tuple_A_B_C<A, B, C>(A, B, C)` function that can be called from Swift.
+ */
+function createCxxTupleSwiftHelper(type: TupleType): SwiftCxxHelper {
+  const actualType = type.getCode('c++')
+  const name = escapeCppName(type.getCode('c++'))
+  const typesSignature = type.itemTypes
+    .map((t, i) => {
+      const code = t.getCode('c++')
+      return `${t.canBePassedByReference ? toReferenceType(code) : code} arg${i}`
+    })
+    .join(', ')
+  const typesForward = type.itemTypes.map((_t, i) => `arg${i}`).join(', ')
+  return {
+    funcName: `create_${name}`,
+    specializationName: name,
+    requiredIncludes: [
+      {
+        name: 'tuple',
+        space: 'system',
+        language: 'c++',
+      },
+      ...type.getRequiredImports(),
+    ],
+    cxxCode: `
+using ${name} = ${actualType};
+inline ${actualType} create_${name}(${typesSignature}) {
+  return ${actualType} { ${typesForward} };
 }
     `.trim(),
   }

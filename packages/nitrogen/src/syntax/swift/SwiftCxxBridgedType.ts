@@ -11,6 +11,7 @@ import { FunctionType } from '../types/FunctionType.js'
 import { getTypeAs } from '../types/getTypeAs.js'
 import { HybridObjectType } from '../types/HybridObjectType.js'
 import { OptionalType } from '../types/OptionalType.js'
+import { TupleType } from '../types/TupleType.js'
 import type { Type } from '../types/Type.js'
 import {
   createSwiftCxxHelpers,
@@ -53,6 +54,9 @@ export class SwiftCxxBridgedType {
         return true
       case 'function':
         // (@ecaping () -> Void) <> std::function<...>
+        return true
+      case 'tuple':
+        // (A, B) <> std::tuple<A, B>
         return true
       default:
         return false
@@ -127,6 +131,7 @@ export class SwiftCxxBridgedType {
       case 'optional':
       case 'array':
       case 'function':
+      case 'tuple':
       case 'record': {
         const bridge = this.getBridgeOrThrow()
         return NitroConfig.getCxxNamespace(language, bridge.specializationName)
@@ -198,6 +203,14 @@ export class SwiftCxxBridgedType {
         switch (language) {
           case 'swift':
             return `String(${cppParameterName})`
+          default:
+            return cppParameterName
+        }
+      }
+      case 'tuple': {
+        switch (language) {
+          case 'swift':
+            return `${cppParameterName}.arg0`
           default:
             return cppParameterName
         }
@@ -291,6 +304,23 @@ export class SwiftCxxBridgedType {
         switch (language) {
           case 'swift':
             return `std.string(${swiftParameterName})`
+          default:
+            return swiftParameterName
+        }
+      }
+      case 'tuple': {
+        const tuple = getTypeAs(this.type, TupleType)
+        const bridge = this.getBridgeOrThrow()
+        const fullName = NitroConfig.getCxxNamespace(language, bridge.funcName)
+        switch (language) {
+          case 'swift':
+            const typesForward = tuple.itemTypes
+              .map((t, i) => {
+                const bridged = new SwiftCxxBridgedType(t)
+                return `${bridged.parseFromSwiftToCpp(`${swiftParameterName}.${i}`, language)}`
+              })
+              .join(', ')
+            return `${fullName}(${typesForward})`
           default:
             return swiftParameterName
         }
