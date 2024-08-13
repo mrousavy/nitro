@@ -5,6 +5,7 @@ import {
   type HybridObjectName,
 } from '../getHybridObjectName.js'
 import type { SourceImport } from '../SourceFile.js'
+import { ArrayType } from '../types/ArrayType.js'
 import { EnumType } from '../types/EnumType.js'
 import { getTypeAs } from '../types/getTypeAs.js'
 import { HybridObjectType } from '../types/HybridObjectType.js'
@@ -16,6 +17,10 @@ export class SwiftCxxBridgedType {
 
   constructor(type: Type) {
     this.type = type
+  }
+
+  get canBePassedByReference(): boolean {
+    return this.type.canBePassedByReference
   }
 
   get needsSpecialHandling(): boolean {
@@ -33,6 +38,9 @@ export class SwiftCxxBridgedType {
         return true
       case 'string':
         // swift::String <> std::string
+        return true
+      case 'array':
+        // swift::Array<T> <> std::vector<T>
         return true
       default:
         return false
@@ -83,12 +91,38 @@ export class SwiftCxxBridgedType {
             throw new Error(`Invalid language! ${language}`)
         }
       }
+      case 'optional': {
+        const optionalType = getTypeAs(this.type, OptionalType)
+        const wrapping = new SwiftCxxBridgedType(optionalType.wrappingType)
+        const type = wrapping.getTypeCode(language)
+        switch (language) {
+          case 'c++':
+            return `swift::Optional<${type}>`
+          case 'swift':
+            return `${type}?`
+          default:
+            throw new Error(`Invalid language! ${language}`)
+        }
+      }
       case 'string': {
         switch (language) {
           case 'c++':
             return `swift::String`
           case 'swift':
             return 'String'
+          default:
+            throw new Error(`Invalid language! ${language}`)
+        }
+      }
+      case 'array': {
+        const array = getTypeAs(this.type, ArrayType)
+        const wrapping = new SwiftCxxBridgedType(array.itemType)
+        const type = wrapping.getTypeCode(language)
+        switch (language) {
+          case 'c++':
+            return `swift::Array<${type}>`
+          case 'swift':
+            return `[${type}]`
           default:
             throw new Error(`Invalid language! ${language}`)
         }
@@ -147,6 +181,29 @@ export class SwiftCxxBridgedType {
             return cppParameterName
         }
       }
+      case 'array': {
+        const array = getTypeAs(this.type, ArrayType)
+        const wrapping = new SwiftCxxBridgedType(array.itemType)
+        const cxxType = array.itemType.getCode('c++')
+        const swiftType = wrapping.getTypeCode('c++')
+        const typeDecl = wrapping.canBePassedByReference
+          ? `const auto&`
+          : `auto`
+        switch (language) {
+          case 'c++':
+            return `
+[&]() -> swift::Array<${swiftType}> {
+  std::Array<${cxxType}> array;
+  array.reserveCapacity(${cppParameterName}.size());
+  for (${typeDecl} i : ${cppParameterName}) {
+    array.append(${wrapping.parseFromCppToSwift('i', language)});
+  }
+  return array;
+}()`.trim()
+          default:
+            return cppParameterName
+        }
+      }
       case 'void':
         // When type is void, don't return anything
         return ''
@@ -192,6 +249,28 @@ export class SwiftCxxBridgedType {
         switch (language) {
           case 'c++':
             return `std::string(${swiftParameterName})`
+          default:
+            return swiftParameterName
+        }
+      }
+      case 'array': {
+        const array = getTypeAs(this.type, ArrayType)
+        const wrapping = new SwiftCxxBridgedType(array.itemType)
+        const cxxType = array.itemType.getCode('c++')
+        const typeDecl = wrapping.canBePassedByReference
+          ? `const auto&`
+          : `auto`
+        switch (language) {
+          case 'c++':
+            return `
+[&]() -> std::vector<${cxxType}> {
+  std::vector<${cxxType}> vector;
+  vector.reserve(${swiftParameterName}.getCount());
+  for (${typeDecl} i : ${swiftParameterName}) {
+    vector.push_back(${wrapping.parseFromSwiftToCpp('i', language)});
+  }
+  return vector;
+}()`.trim()
           default:
             return swiftParameterName
         }

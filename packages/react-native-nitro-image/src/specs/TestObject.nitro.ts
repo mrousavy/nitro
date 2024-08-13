@@ -116,4 +116,7 @@ export interface SwiftKotlinTestObject extends HybridObject<{ ios: 'swift' }> {
   addNumbers(a: number, b: number): number
   addStrings(a: string, b: string): string
   multipleArguments(num: number, str: string, boo: boolean): void
+
+  getNumbers(): number[]
+  getStrings(): string[]
 }

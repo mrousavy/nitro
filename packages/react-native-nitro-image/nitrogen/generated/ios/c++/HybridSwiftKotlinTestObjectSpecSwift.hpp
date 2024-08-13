@@ -131,6 +131,36 @@ namespace margelo::nitro::image {
         throw std::runtime_error(valueOrError.getError());
       }
     }
+    inline std::vector<double> getNumbers() override {
+      auto valueOrError = _swiftPart.getNumbers();
+      if (valueOrError.isError()) [[unlikely]] {
+        throw std::runtime_error(valueOrError.getError());
+      }
+      auto value = valueOrError.getValue();
+      return [&]() -> std::vector<double> {
+        std::vector<double> vector;
+        vector.reserve(value.getCount());
+        for (auto i : value) {
+          vector.push_back(i);
+        }
+        return vector;
+      }();
+    }
+    inline std::vector<std::string> getStrings() override {
+      auto valueOrError = _swiftPart.getStrings();
+      if (valueOrError.isError()) [[unlikely]] {
+        throw std::runtime_error(valueOrError.getError());
+      }
+      auto value = valueOrError.getValue();
+      return [&]() -> std::vector<std::string> {
+        std::vector<std::string> vector;
+        vector.reserve(value.getCount());
+        for (const auto& i : value) {
+          vector.push_back(std::string(i));
+        }
+        return vector;
+      }();
+    }
 
   private:
     NitroImage::HybridSwiftKotlinTestObjectSpecCxx _swiftPart;

@@ -182,4 +182,36 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
       return .error(message: message)
     }
   }
+  
+  @inline(__always)
+  public func getNumbers() -> HybridSwiftKotlinTestObjectSpecCxx_getNumbers_Result {
+    do {
+      let result = try self.implementation.getNumbers()
+      return .value(result)
+    } catch RuntimeError.error(withMessage: let message) {
+      // A  `RuntimeError` was thrown.
+      return .error(message: message)
+    } catch {
+      // Any other kind of error was thrown.
+      // Due to a Swift bug, we have to copy the string here.
+      let message = "\(error.localizedDescription)"
+      return .error(message: message)
+    }
+  }
+  
+  @inline(__always)
+  public func getStrings() -> HybridSwiftKotlinTestObjectSpecCxx_getStrings_Result {
+    do {
+      let result = try self.implementation.getStrings()
+      return .value(result)
+    } catch RuntimeError.error(withMessage: let message) {
+      // A  `RuntimeError` was thrown.
+      return .error(message: message)
+    } catch {
+      // Any other kind of error was thrown.
+      // Due to a Swift bug, we have to copy the string here.
+      let message = "\(error.localizedDescription)"
+      return .error(message: message)
+    }
+  }
 }

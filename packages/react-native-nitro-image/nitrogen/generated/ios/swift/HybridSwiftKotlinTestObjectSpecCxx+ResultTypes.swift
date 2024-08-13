@@ -73,3 +73,31 @@ public enum HybridSwiftKotlinTestObjectSpecCxx_multipleArguments_Result {
   case value
   case error(message: String)
 }
+
+/**
+ * The exception-free result type for HybridSwiftKotlinTestObjectSpec.getNumbers(...).
+ * Original func:
+ * ```swift
+ * func getNumbers() throws -> [Double]
+ * ```
+ * - seealso: `HybridSwiftKotlinTestObjectSpec.getNumbers()`
+ */
+@frozen
+public enum HybridSwiftKotlinTestObjectSpecCxx_getNumbers_Result {
+  case value([Double])
+  case error(message: String)
+}
+
+/**
+ * The exception-free result type for HybridSwiftKotlinTestObjectSpec.getStrings(...).
+ * Original func:
+ * ```swift
+ * func getStrings() throws -> [String]
+ * ```
+ * - seealso: `HybridSwiftKotlinTestObjectSpec.getStrings()`
+ */
+@frozen
+public enum HybridSwiftKotlinTestObjectSpecCxx_getStrings_Result {
+  case value([String])
+  case error(message: String)
+}
