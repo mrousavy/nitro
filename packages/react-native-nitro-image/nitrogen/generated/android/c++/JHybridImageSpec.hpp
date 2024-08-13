@@ -6,6 +6,8 @@
 /// Copyright © 2024 Marc Rousavy @ Margelo
 ///
 
+#pragma once
+
 #include "HybridImageSpec.hpp"
 #include <fbjni/fbjni.h>
 
