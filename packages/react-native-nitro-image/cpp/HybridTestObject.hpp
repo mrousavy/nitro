@@ -85,7 +85,8 @@ public:
   void getValueFromJSCallback(const std::function<std::future<double>()>& getValue);
   std::future<double> getValueFromJSCallbackAndWait(const std::function<std::future<double>()>& getValue);
   void callAll(const std::function<void()>& first, const std::function<void()>& second, const std::function<void()>& third);
-  std::future<void> getValueFromJsCallback(const std::function<std::future<std::string>()>& callback, const std::function<void(const std::string& /* valueFromJs */)>& andThenCall);
+  std::future<void> getValueFromJsCallback(const std::function<std::future<std::string>()>& callback,
+                                           const std::function<void(const std::string& /* valueFromJs */)>& andThenCall);
   Car getCar() override;
   bool isCarElectric(const Car& car) override;
   std::optional<Person> getDriver(const Car& car) override;

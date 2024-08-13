@@ -225,7 +225,8 @@ std::future<double> HybridTestObject::getValueFromJSCallbackAndWait(const std::f
   });
 }
 
-void HybridTestObject::callAll(const std::function<void()>& first, const std::function<void()>& second, const std::function<void()>& third) {
+void HybridTestObject::callAll(const std::function<void()>& first, const std::function<void()>& second,
+                               const std::function<void()>& third) {
   first();
   second();
   third();
