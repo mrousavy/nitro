@@ -54,6 +54,8 @@ export function createCppFunctionSpecialization(
   const code = `
 ${createFileMetadataString(typename)}
 
+#pragma once
+
 #include <functional>
 #include <string>
 #include <future>
