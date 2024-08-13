@@ -13,10 +13,9 @@
 // Forward declaration of `HybridSwiftKotlinTestObjectSpecCxx` to properly resolve imports.
 namespace NitroImage { class HybridSwiftKotlinTestObjectSpecCxx; }
 
-// Forward declaration of `Func_void` to properly resolve imports.
-namespace margelo::nitro::image { struct Func_void; }
 
-#include "Func_void.hpp"
+
+
 
 #if __has_include(<NitroModules/HybridContext.hpp>)
 #include <NitroModules/HybridContext.hpp>

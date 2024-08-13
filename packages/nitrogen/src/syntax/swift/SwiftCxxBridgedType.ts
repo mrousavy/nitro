@@ -91,16 +91,6 @@ export class SwiftCxxBridgedType {
         language: 'c++',
         space: 'user',
       })
-    } else if (this.type.kind === 'function') {
-      const funcType = getTypeAs(this.type, FunctionType)
-      const name = funcType.specializationName
-      const namespace = NitroConfig.getCxxNamespace('c++')
-      imports.push({
-        name: `${name}.hpp`,
-        language: 'c++',
-        space: 'user',
-        forwardDeclaration: getForwardDeclaration('struct', name, namespace),
-      })
     }
 
     return imports
@@ -223,14 +213,22 @@ export class SwiftCxxBridgedType {
             const signature = `(${paramsSignature.join(', ')}) -> ${returnType}`
             const paramsForward = funcType.parameters.map((p) => {
               const bridged = new SwiftCxxBridgedType(p)
-              return bridged.parseFromCppToSwift(p.escapedName, 'swift')
+              return bridged.parseFromSwiftToCpp(p.escapedName, 'swift')
             })
 
             if (funcType.returnType.kind === 'void') {
-              return `{ ${signature} in ${cppParameterName}(${paramsForward.join(', ')}) }`
+              return `
+{ ${signature} in
+  ${cppParameterName}(${paramsForward.join(', ')})
+}`.trim()
             } else {
               const resultBridged = new SwiftCxxBridgedType(funcType.returnType)
-              return `{ ${signature} in let result = ${cppParameterName}(${paramsForward.join(', ')}); return ${resultBridged.parseFromSwiftToCpp('result', 'swift')} }`
+              return `
+{ ${signature} in
+  let result = ${cppParameterName}(${paramsForward.join(', ')})
+  return ${resultBridged.parseFromSwiftToCpp('result', 'swift')}
+}
+              `.trim()
             }
           default:
             return cppParameterName

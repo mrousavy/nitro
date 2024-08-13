@@ -1,9 +1,12 @@
 import { NitroConfig } from '../config/NitroConfig.js'
+import { getForwardDeclaration } from '../syntax/c++/getForwardDeclaration.js'
 import { includeHeader } from '../syntax/c++/includeNitroHeader.js'
 import { getAllKnownTypes } from '../syntax/createType.js'
+import { getHybridObjectName } from '../syntax/getHybridObjectName.js'
 import { createFileMetadataString, isNotDuplicate } from '../syntax/helpers.js'
 import type { SourceFile } from '../syntax/SourceFile.js'
-import { SwiftCxxBridgedType } from '../syntax/swift/SwiftCxxBridgedType.js'
+import { getTypeAs } from '../syntax/types/getTypeAs.js'
+import { HybridObjectType } from '../syntax/types/HybridObjectType.js'
 
 export function createSwiftUmbrellaHeader(): SourceFile {
   const moduleName = NitroConfig.getIosModuleName()
@@ -11,16 +14,21 @@ export function createSwiftUmbrellaHeader(): SourceFile {
 
   const types = getAllKnownTypes()
 
-  const requiredImports = types
-    .map((t) => new SwiftCxxBridgedType(t))
-    .flatMap((b) => b.getRequiredImports())
-  const includes = requiredImports
-    .map((i) => includeHeader(i, false))
+  const swiftForwardDeclares = types
+    .filter((t) => t.kind === 'hybrid-object')
+    .map((t) => {
+      const hybridObjectType = getTypeAs(t, HybridObjectType)
+      const name = getHybridObjectName(hybridObjectType.hybridObjectName)
+      return getForwardDeclaration('class', name.HybridTSpecCxx, moduleName)
+    })
     .filter(isNotDuplicate)
-  const forwardDeclarations = requiredImports
+
+  const imports = types.flatMap((t) => t.getRequiredImports())
+  const forwardDeclarations = imports
     .map((i) => i.forwardDeclaration)
     .filter((f) => f != null)
     .filter(isNotDuplicate)
+  const includes = imports.map((i) => includeHeader(i)).filter(isNotDuplicate)
 
   const code = `
 ${createFileMetadataString(filename, '///')}
@@ -32,6 +40,12 @@ ${forwardDeclarations.sort().join('\n')}
 
 // Include C++ defined types
 ${includes.sort().join('\n')}
+
+// C++ helpers for Swift
+#include "${moduleName}-Swift-Cxx-Bridge.hpp"
+
+// Forward declarations of Swift defined types
+${swiftForwardDeclares.sort().join('\n')}
 
 // Include Swift defined types
 #if __has_include("${moduleName}-Swift.h")

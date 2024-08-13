@@ -236,7 +236,9 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
   @inline(__always)
   public func callCallback(callback: margelo.nitro.image.Func_void) -> Void {
     do {
-      try self.implementation.callCallback(callback: { () -> Void in callback() })
+      try self.implementation.callCallback(callback: { () -> Void in
+    callback()
+  })
       return 
     } catch {
       let message = "\(error.localizedDescription)"
