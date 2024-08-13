@@ -28,7 +28,7 @@ export class FunctionType implements Type {
 
   get jsName(): string {
     const paramsJs = this.parameters
-      .map((p) => `${p.name}: ${p.getCode('c++')}`)
+      .map((p) => `${p.name}: ${p.kind}`)
       .join(', ')
     const returnType = this.returnType.getCode('c++')
     return `(${paramsJs}) => ${returnType}`

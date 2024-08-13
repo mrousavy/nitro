@@ -21,16 +21,23 @@
 namespace margelo::nitro::image {
 
   /**
-   * A `(path: std::string) => void` function.
+   * A `(path: string) => void` function.
    */
-  struct Callback {
+  struct Callback_void_std__string {
   public:
+    /**
+     * The type of the actual C++ `std::function<...>` that this Callback is wrapping.
+     */
     using FuncType = std::function<void(const std::string& /* path */)>;
 
   public:
-    explicit Callback(FuncType&& func): _func(func) { }
+    explicit Callback_void_std__string(FuncType&& func): _func(std::move(func)) { }
 
   public:
+    /**
+     * Call the `Callback` with the given arguments.
+     * JS callbacks are asynchronous as they have to be scheduled on the JS Thread.
+     */
     inline void call(const swift::String& path) const {
       _func(std::string(path));
     }

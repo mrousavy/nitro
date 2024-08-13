@@ -23,14 +23,21 @@ namespace margelo::nitro::image {
   /**
    * A `() => void` function.
    */
-  struct Callback {
+  struct Callback_void {
   public:
+    /**
+     * The type of the actual C++ `std::function<...>` that this Callback is wrapping.
+     */
     using FuncType = std::function<void()>;
 
   public:
-    explicit Callback(FuncType&& func): _func(func) { }
+    explicit Callback_void(FuncType&& func): _func(std::move(func)) { }
 
   public:
+    /**
+     * Call the `Callback` with the given arguments.
+     * JS callbacks are asynchronous as they have to be scheduled on the JS Thread.
+     */
     inline void call() const {
       _func();
     }

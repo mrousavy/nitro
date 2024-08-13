@@ -83,14 +83,21 @@ namespace ${cxxNamespace} {
   /**
    * A \`${funcType.jsName}\` function.
    */
-  struct Callback {
+  struct ${typename} {
   public:
+    /**
+     * The type of the actual C++ \`std::function<...>\` that this Callback is wrapping.
+     */
     using FuncType = ${funcType.getCode('c++')};
 
   public:
-    explicit Callback(FuncType&& func): _func(func) { }
+    explicit ${typename}(FuncType&& func): _func(std::move(func)) { }
 
   public:
+    /**
+     * Call the \`Callback\` with the given arguments.
+     * JS callbacks are asynchronous as they have to be scheduled on the JS Thread.
+     */
     inline ${bridgedReturnCode} call(${bridgedParamsSignature}) const {
       ${indent(body, '      ')}
     }
