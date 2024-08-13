@@ -59,12 +59,13 @@ class ${name} @DoNotStrip @Keep private constructor(hybridData: HybridData) {
   const paramsForward = functionType.parameters.map((p) => p.name)
   const jniClassDescriptor = NitroConfig.getAndroidPackage('c++/jni', name)
   const cxxNamespace = NitroConfig.getCxxNamespace('c++')
+  const typename = functionType.getCode('c++')
   const fbjniCode = `
 ${createFileMetadataString(`J${name}.hpp`)}
 
 #pragma once
 
-#include <fbjni/fbjni.h>
+#include <fbjni/fbjni.h
 #include <functional>
 
 namespace ${cxxNamespace} {
@@ -77,7 +78,7 @@ namespace ${cxxNamespace} {
    */
   struct J${name}: public jni::HybridClass<J${name}> {
   public:
-    static jni::local_ref<J${name}::javaobject> create(const ${name}& func) {
+    static jni::local_ref<J${name}::javaobject> create(const ${typename}& func) {
       return J${name}::newObjectCxxArgs(func);
     }
 
@@ -93,11 +94,11 @@ namespace ${cxxNamespace} {
     }
 
   private:
-    explicit J${name}(const ${name}& func): _func(func) { }
+    explicit J${name}(const ${typename}& func): _func(func) { }
 
   private:
     friend HybridBase;
-    ${name} _func;
+    ${typename} _func;
   };
 
 } // namespace ${cxxNamespace}
