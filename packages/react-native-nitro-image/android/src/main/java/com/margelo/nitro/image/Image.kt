@@ -3,7 +3,7 @@ package com.margelo.nitro.image
 import android.graphics.Bitmap
 import android.util.Log
 
-class Image(val bitmap: Bitmap): HybridImage() {
+class Image(val bitmap: Bitmap): HybridImageSpec() {
     override val size: ImageSize
         get() {
             return ImageSize(bitmap.width.toDouble(), bitmap.height.toDouble())
@@ -20,7 +20,7 @@ class Image(val bitmap: Bitmap): HybridImage() {
         TODO("Not yet implemented")
     }
 
-    override fun saveToFile(path: String, onFinished: Func_void_std__string) {
+    override fun saveToFile(path: String, onFinished: ((path: String) -> Unit)) {
         TODO("Not yet implemented")
     }
 
