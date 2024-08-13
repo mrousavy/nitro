@@ -4,7 +4,7 @@ import {
   getHybridObjectName,
   type HybridObjectName,
 } from '../getHybridObjectName.js'
-import type { SourceImport } from '../SourceFile.js'
+import type { SourceFile, SourceImport } from '../SourceFile.js'
 import { ArrayType } from '../types/ArrayType.js'
 import { EnumType } from '../types/EnumType.js'
 import { FunctionType } from '../types/FunctionType.js'
@@ -12,6 +12,7 @@ import { getTypeAs } from '../types/getTypeAs.js'
 import { HybridObjectType } from '../types/HybridObjectType.js'
 import { OptionalType } from '../types/OptionalType.js'
 import type { Type } from '../types/Type.js'
+import { createSwiftCallback } from './SwiftCallback.js'
 
 export class SwiftCxxBridgedType {
   private readonly type: Type
@@ -21,7 +22,7 @@ export class SwiftCxxBridgedType {
   }
 
   get hasType(): boolean {
-    return this.type.kind !== 'void'
+    return this.type.kind !== 'void' && this.type.kind !== 'null'
   }
 
   get canBePassedByReference(): boolean {
@@ -75,6 +76,18 @@ export class SwiftCxxBridgedType {
     }
 
     return imports
+  }
+
+  getExtraFiles(): SourceFile[] {
+    const files: SourceFile[] = []
+
+    if (this.type.kind === 'function') {
+      const funcType = getTypeAs(this.type, FunctionType)
+      const callbackFile = createSwiftCallback(funcType)
+      files.push(callbackFile.declarationFile)
+    }
+
+    return files
   }
 
   getTypeCode(language: 'swift' | 'c++'): string {
@@ -135,23 +148,23 @@ export class SwiftCxxBridgedType {
             throw new Error(`Invalid language! ${language}`)
         }
       }
-      case 'function': {
-        const functionType = getTypeAs(this.type, FunctionType)
-        switch (language) {
-          case 'c++':
-            return NitroConfig.getCxxNamespace(
-              'c++',
-              functionType.specializationName
-            )
-          case 'swift':
-            return NitroConfig.getCxxNamespace(
-              'swift',
-              functionType.specializationName
-            )
-          default:
-            throw new Error(`Invalid language! ${language}`)
-        }
-      }
+      // case 'function': {
+      //   const functionType = getTypeAs(this.type, FunctionType)
+      //   switch (language) {
+      //     case 'c++':
+      //       return NitroConfig.getCxxNamespace(
+      //         'c++',
+      //         functionType.specializationName
+      //       )
+      //     case 'swift':
+      //       return NitroConfig.getCxxNamespace(
+      //         'swift',
+      //         functionType.specializationName
+      //       )
+      //     default:
+      //       throw new Error(`Invalid language! ${language}`)
+      //   }
+      // }
       default:
         // No workaround - just return normal type
         return this.type.getCode(language)

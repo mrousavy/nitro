@@ -32,10 +32,6 @@ namespace NitroModules { class ArrayBuffer; }
 #include "OldEnum.hpp"
 #include "Person.hpp"
 #include "Car.hpp"
-#include "Func_void.hpp"
-#include "Func_std__future_double_.hpp"
-#include "Func_std__future_std__string_.hpp"
-#include "Func_void_std__string.hpp"
 #include <NitroModules/ArrayBuffer.hpp>
 
 namespace margelo::nitro::image {
@@ -105,11 +101,11 @@ namespace margelo::nitro::image {
       virtual int64_t calculateFibonacciSync(double value) = 0;
       virtual std::future<int64_t> calculateFibonacciAsync(double value) = 0;
       virtual std::future<void> wait(double seconds) = 0;
-      virtual void callCallback(const Func_void& callback) = 0;
-      virtual void getValueFromJSCallback(const Func_std__future_double_& getValue) = 0;
-      virtual std::future<double> getValueFromJSCallbackAndWait(const Func_std__future_double_& getValue) = 0;
-      virtual void callAll(const Func_void& first, const Func_void& second, const Func_void& third) = 0;
-      virtual std::future<void> getValueFromJsCallback(const Func_std__future_std__string_& callback, const Func_void_std__string& andThenCall) = 0;
+      virtual void callCallback(const std::function<void()>& callback) = 0;
+      virtual void getValueFromJSCallback(const std::function<std::future<double>()>& getValue) = 0;
+      virtual std::future<double> getValueFromJSCallbackAndWait(const std::function<std::future<double>()>& getValue) = 0;
+      virtual void callAll(const std::function<void()>& first, const std::function<void()>& second, const std::function<void()>& third) = 0;
+      virtual std::future<void> getValueFromJsCallback(const std::function<std::future<std::string>()>& callback, const std::function<void(const std::string& /* valueFromJs */)>& andThenCall) = 0;
       virtual Car getCar() = 0;
       virtual bool isCarElectric(const Car& car) = 0;
       virtual std::optional<Person> getDriver(const Car& car) = 0;

@@ -186,7 +186,7 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
   }
   
   @inline(__always)
-  public func callCallback(callback: margelo.nitro.image.Func_void) -> Void {
+  public func callCallback(callback: (@escaping () -> Void)) -> Void {
     do {
       try self.implementation.callCallback(callback: { () -> Void in callback() })
       return 

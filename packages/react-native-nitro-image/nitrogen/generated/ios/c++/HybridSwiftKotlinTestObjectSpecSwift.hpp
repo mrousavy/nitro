@@ -15,7 +15,7 @@ namespace NitroImage { class HybridSwiftKotlinTestObjectSpecCxx; }
 
 
 
-#include "Func_void.hpp"
+
 
 #if __has_include(<NitroModules/HybridContext.hpp>)
 #include <NitroModules/HybridContext.hpp>
@@ -139,7 +139,7 @@ namespace margelo::nitro::image {
         return vector;
       }();
     }
-    inline void callCallback(const Func_void& callback) override {
+    inline void callCallback(const std::function<void()>& callback) override {
       _swiftPart.callCallback(callback);
     }
 

@@ -41,7 +41,7 @@ namespace margelo::nitro::image {
   public:
     // Methods
     double toArrayBuffer(ImageFormat format) override;
-    void saveToFile(const std::string& path, const Func_void_std__string& onFinished) override;
+    void saveToFile(const std::string& path, const std::function<void(const std::string& /* path */)>& onFinished) override;
 
   private:
     friend HybridBase;

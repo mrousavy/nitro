@@ -228,6 +228,7 @@ namespace ${cxxNamespace} {
   `
 
   const files: SourceFile[] = []
+  files.push(...allBridgedTypes.flatMap((b) => b.getExtraFiles()))
   files.push({
     content: swiftCxxWrapperCode,
     language: 'swift',

@@ -1,8 +1,5 @@
 import type { Language } from '../../getPlatformSpecs.js'
-import {
-  createCppFunctionSpecialization,
-  type FunctionSpecialization,
-} from '../c++/CppFunctionSpecialization.js'
+import { escapeCppName, toReferenceType } from '../helpers.js'
 import { Parameter } from '../Parameter.js'
 import { type SourceFile, type SourceImport } from '../SourceFile.js'
 import { PromiseType } from './PromiseType.js'
@@ -11,7 +8,6 @@ import type { NamedType, Type, TypeKind } from './Type.js'
 export class FunctionType implements Type {
   readonly returnType: Type
   readonly parameters: NamedType[]
-  readonly specialization: FunctionSpecialization
 
   constructor(returnType: Type, parameters: NamedType[]) {
     if (returnType.kind === 'void') {
@@ -22,19 +18,25 @@ export class FunctionType implements Type {
       this.returnType = new PromiseType(returnType)
     }
     this.parameters = parameters
-    this.specialization = createCppFunctionSpecialization(
-      this.returnType,
-      this.parameters
-    )
+  }
+
+  get specializationName(): string {
+    return [this.returnType, ...this.parameters]
+      .map((p) => escapeCppName(p.getCode('c++')))
+      .join('_')
+  }
+
+  get jsName(): string {
+    const paramsJs = this.parameters
+      .map((p) => `${p.name}: ${p.getCode('c++')}`)
+      .join(', ')
+    const returnType = this.returnType.getCode('c++')
+    return `(${paramsJs}) => ${returnType}`
   }
 
   get canBePassedByReference(): boolean {
     // It's a function<..>, heavy to copy.
     return true
-  }
-
-  get specializationName(): string {
-    return this.specialization.typename
   }
 
   get kind(): TypeKind {
@@ -75,7 +77,15 @@ export class FunctionType implements Type {
   getCode(language: Language): string {
     switch (language) {
       case 'c++': {
-        return this.specialization.typename
+        const params = this.parameters
+          .map((p) => {
+            const type = p.getCode('c++')
+            const code = p.canBePassedByReference ? toReferenceType(type) : type
+            return `${code} /* ${p.name} */`
+          })
+          .join(', ')
+        const returnType = this.returnType.getCode(language)
+        return `std::function<${returnType}(${params})>`
       }
       case 'swift': {
         const params = this.parameters
@@ -97,21 +107,13 @@ export class FunctionType implements Type {
     }
   }
   getExtraFiles(): SourceFile[] {
-    const specialization = this.specialization
     return [
-      specialization.declarationFile,
       ...this.returnType.getExtraFiles(),
       ...this.parameters.flatMap((p) => p.getExtraFiles()),
     ]
   }
   getRequiredImports(): SourceImport[] {
     return [
-      {
-        language: 'c++',
-        name: this.specialization.declarationFile.name,
-        forwardDeclaration: undefined,
-        space: 'user',
-      },
       ...this.returnType.getRequiredImports(),
       ...this.parameters.flatMap((p) => p.getRequiredImports()),
     ]

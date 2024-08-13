@@ -79,7 +79,7 @@ public final class HybridImageSpecCxx {
   }
   
   @inline(__always)
-  public func saveToFile(path: String, onFinished: margelo.nitro.image.Func_void_std__string) -> Void {
+  public func saveToFile(path: String, onFinished: (@escaping (_ path: String) -> Void)) -> Void {
     do {
       try self.implementation.saveToFile(path: path, onFinished: { (path: String) -> Void in onFinished(path) })
       return 

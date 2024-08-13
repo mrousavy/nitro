@@ -34,10 +34,6 @@ namespace margelo::nitro::image { enum class Powertrain; }
 
 // Include C++ defined types
 #include "Car.hpp"
-#include "Func_std__future_double_.hpp"
-#include "Func_std__future_std__string_.hpp"
-#include "Func_void.hpp"
-#include "Func_void_std__string.hpp"
 #include "HybridImageSpec.hpp"
 #include "HybridTestObjectSpec.hpp"
 #include "ImageFormat.hpp"
