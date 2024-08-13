@@ -88,33 +88,69 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
   public var stringOrUndefined: margelo.nitro.image.std__optional_std__string_ {
     @inline(__always)
     get {
-      return { if let actualValue = self.implementation.stringOrUndefined { return margelo.nitro.image.create_std__optional_std__string_(std.string(actualValue)) } else { return .init() } }()
+      return {
+        if let actualValue = self.implementation.stringOrUndefined {
+          return margelo.nitro.image.create_std__optional_std__string_(std.string(actualValue))
+        } else {
+          return .init()
+        }
+      }()
     }
     @inline(__always)
     set {
-      self.implementation.stringOrUndefined = { if let actualValue = newValue.value { return String(actualValue) } else { return nil } }()
+      self.implementation.stringOrUndefined = {
+        if let actualValue = newValue.value {
+          return String(actualValue)
+        } else {
+          return nil
+        }
+      }()
     }
   }
   
   public var stringOrNull: margelo.nitro.image.std__optional_std__string_ {
     @inline(__always)
     get {
-      return { if let actualValue = self.implementation.stringOrNull { return margelo.nitro.image.create_std__optional_std__string_(std.string(actualValue)) } else { return .init() } }()
+      return {
+        if let actualValue = self.implementation.stringOrNull {
+          return margelo.nitro.image.create_std__optional_std__string_(std.string(actualValue))
+        } else {
+          return .init()
+        }
+      }()
     }
     @inline(__always)
     set {
-      self.implementation.stringOrNull = { if let actualValue = newValue.value { return String(actualValue) } else { return nil } }()
+      self.implementation.stringOrNull = {
+        if let actualValue = newValue.value {
+          return String(actualValue)
+        } else {
+          return nil
+        }
+      }()
     }
   }
   
   public var optionalString: margelo.nitro.image.std__optional_std__string_ {
     @inline(__always)
     get {
-      return { if let actualValue = self.implementation.optionalString { return margelo.nitro.image.create_std__optional_std__string_(std.string(actualValue)) } else { return .init() } }()
+      return {
+        if let actualValue = self.implementation.optionalString {
+          return margelo.nitro.image.create_std__optional_std__string_(std.string(actualValue))
+        } else {
+          return .init()
+        }
+      }()
     }
     @inline(__always)
     set {
-      self.implementation.optionalString = { if let actualValue = newValue.value { return String(actualValue) } else { return nil } }()
+      self.implementation.optionalString = {
+        if let actualValue = newValue.value {
+          return String(actualValue)
+        } else {
+          return nil
+        }
+      }()
     }
   }
 
@@ -167,7 +203,13 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
   public func getNumbers() -> margelo.nitro.image.std__vector_double_ {
     do {
       let result = try self.implementation.getNumbers()
-      return result
+      return {
+        var vector = margelo.nitro.image.create_std__vector_double_(result.count)
+        for item in result {
+          vector.push_back(item)
+        }
+        return vector
+      }()
     } catch {
       let message = "\(error.localizedDescription)"
       fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
@@ -178,7 +220,13 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
   public func getStrings() -> margelo.nitro.image.std__vector_std__string_ {
     do {
       let result = try self.implementation.getStrings()
-      return result
+      return {
+        var vector = margelo.nitro.image.create_std__vector_std__string_(result.count)
+        for item in result {
+          vector.push_back(std.string(item))
+        }
+        return vector
+      }()
     } catch {
       let message = "\(error.localizedDescription)"
       fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")

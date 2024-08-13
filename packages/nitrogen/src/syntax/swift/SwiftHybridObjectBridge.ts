@@ -255,16 +255,21 @@ namespace ${cxxNamespace} {
 
 function getPropertyForwardImplementation(property: Property): string {
   const bridgedType = new SwiftCxxBridgedType(property.type)
+  const convertToCpp = bridgedType.parseFromSwiftToCpp(
+    `self.implementation.${property.name}`,
+    'swift'
+  )
+  const convertFromCpp = bridgedType.parseFromCppToSwift('newValue', 'swift')
   const getter = `
 @inline(__always)
 get {
-  return ${bridgedType.parseFromSwiftToCpp(`self.implementation.${property.name}`, 'swift')}
+  return ${indent(convertToCpp, '  ')}
 }
   `.trim()
   const setter = `
 @inline(__always)
 set {
-  self.implementation.${property.name} = ${bridgedType.parseFromCppToSwift('newValue', 'swift')}
+  self.implementation.${property.name} = ${indent(convertFromCpp, '  ')}
 }
   `.trim()
 
@@ -301,7 +306,7 @@ function getMethodForwardImplementation(method: Method): string {
 public func ${method.name}(${params.join(', ')}) -> ${returnType.getTypeCode('swift')} {
   do {
     ${resultValue}try self.implementation.${method.name}(${passParams.join(', ')})
-    return ${returnValue}
+    return ${indent(returnValue, '    ')}
   } catch {
     let message = "\\(error.localizedDescription)"
     fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \\(message))")

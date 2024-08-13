@@ -120,25 +120,11 @@ namespace margelo::nitro::image {
     }
     inline std::vector<double> getNumbers() override {
       auto value = _swiftPart.getNumbers();
-      return [&]() -> std::vector<double> {
-        std::vector<double> vector;
-        vector.reserve(value.getCount());
-        for (auto i : value) {
-          vector.push_back(i);
-        }
-        return vector;
-      }();
+      return value;
     }
     inline std::vector<std::string> getStrings() override {
       auto value = _swiftPart.getStrings();
-      return [&]() -> std::vector<std::string> {
-        std::vector<std::string> vector;
-        vector.reserve(value.getCount());
-        for (const auto& i : value) {
-          vector.push_back(i);
-        }
-        return vector;
-      }();
+      return value;
     }
     inline void callCallback(const std::function<void()>& callback) override {
       _swiftPart.callCallback(callback);

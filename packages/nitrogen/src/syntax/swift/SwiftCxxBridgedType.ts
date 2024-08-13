@@ -192,7 +192,13 @@ export class SwiftCxxBridgedType {
         switch (language) {
           case 'swift':
             return `
-{ if let actualValue = ${cppParameterName}.value { return ${wrapping.parseFromCppToSwift('actualValue', language)} } else { return nil } }()
+{
+  if let actualValue = ${cppParameterName}.value {
+    return ${wrapping.parseFromCppToSwift('actualValue', language)}
+  } else {
+    return nil
+  }
+}()
   `.trim()
           default:
             return cppParameterName
@@ -271,7 +277,13 @@ export class SwiftCxxBridgedType {
         switch (language) {
           case 'swift':
             return `
-{ if let actualValue = ${swiftParameterName} { return ${fullName}(${wrapping.parseFromSwiftToCpp('actualValue', language)}) } else { return .init() } }()
+{
+  if let actualValue = ${swiftParameterName} {
+    return ${fullName}(${wrapping.parseFromSwiftToCpp('actualValue', language)})
+  } else {
+    return .init()
+  }
+}()
   `.trim()
           default:
             return swiftParameterName
@@ -286,22 +298,19 @@ export class SwiftCxxBridgedType {
         }
       }
       case 'array': {
+        const bridge = this.getBridgeOrThrow()
+        const fullName = NitroConfig.getCxxNamespace('swift', bridge.funcName)
         const array = getTypeAs(this.type, ArrayType)
         const wrapping = new SwiftCxxBridgedType(array.itemType)
-        const cxxType = array.itemType.getCode('c++')
-        const typeDecl = wrapping.canBePassedByReference
-          ? `const auto&`
-          : `auto`
         switch (language) {
-          case 'c++':
+          case 'swift':
             return `
-[&]() -> std::vector<${cxxType}> {
-  std::vector<${cxxType}> vector;
-  vector.reserve(${swiftParameterName}.getCount());
-  for (${typeDecl} i : ${swiftParameterName}) {
-    vector.push_back(${wrapping.parseFromSwiftToCpp('i', language)});
+{
+  var vector = ${fullName}(${swiftParameterName}.count)
+  for item in ${swiftParameterName} {
+    vector.push_back(${wrapping.parseFromSwiftToCpp('item', language)})
   }
-  return vector;
+  return vector
 }()`.trim()
           default:
             return swiftParameterName
