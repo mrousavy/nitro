@@ -305,7 +305,7 @@ function getMethodForwardImplementation(method: Method): string {
 @inline(__always)
 public func ${method.name}(${params.join(', ')}) -> ${returnType.getTypeCode('swift')} {
   do {
-    ${resultValue}try self.implementation.${method.name}(${passParams.join(', ')})
+    ${resultValue}try self.implementation.${method.name}(${indent(passParams.join(', '), '    ')})
     return ${indent(returnValue, '    ')}
   } catch {
     let message = "\\(error.localizedDescription)"
