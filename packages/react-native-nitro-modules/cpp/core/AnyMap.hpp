@@ -40,6 +40,12 @@ public:
    * Create a new instance of AnyMap.
    */
   explicit AnyMap() {}
+  /**
+   * Create a new instance of AnyMap with the given amount of spaces pre-allocated.
+   */
+  explicit AnyMap(size_t size) {
+    _map.reserve(size);
+  }
 
 public:
   /**
@@ -47,6 +53,12 @@ public:
    */
   static std::shared_ptr<AnyMap> make() {
     return std::make_shared<AnyMap>();
+  }
+  /**
+   * Create a new shared_ptr instance of AnyMap with the given amount of spaces pre-allocated.
+   */
+  static std::shared_ptr<AnyMap> make(size_t size) {
+    return std::make_shared<AnyMap>(size);
   }
 
 public:

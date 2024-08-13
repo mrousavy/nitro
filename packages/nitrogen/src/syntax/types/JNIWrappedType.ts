@@ -38,7 +38,7 @@ export class JNIWrappedType<T extends Type> implements Type {
           name: `J${structType.structName}.hpp`,
           space: 'user',
         }
-      case 'hybrid-object':
+      case 'hybrid-object': {
         const hybridObjectType = getTypeAs(this.type, HybridObjectType)
         const name = getHybridObjectName(hybridObjectType.hybridObjectName)
         return {
@@ -46,13 +46,16 @@ export class JNIWrappedType<T extends Type> implements Type {
           name: `${name.JHybridTSpec}.hpp`,
           space: 'user',
         }
-      case 'function':
+      }
+      case 'function': {
         const functionType = getTypeAs(this.type, FunctionType)
+        const name = functionType.specializationName
         return {
           language: 'c++',
-          name: `J${functionType.specialization.typename}.hpp`,
+          name: `J${name}.hpp`,
           space: 'user',
         }
+      }
       default:
         return undefined
     }
@@ -74,13 +77,16 @@ export class JNIWrappedType<T extends Type> implements Type {
       case 'struct':
         const structType = getTypeAs(this.type, StructType)
         return `J${structType.structName}`
-      case 'hybrid-object':
+      case 'hybrid-object': {
         const hybridObjectType = getTypeAs(this.type, HybridObjectType)
         const name = getHybridObjectName(hybridObjectType.hybridObjectName)
         return `jni::alias_ref<${name.JHybridTSpec}::javaobject>`
-      case 'function':
+      }
+      case 'function': {
         const functionType = getTypeAs(this.type, FunctionType)
-        return `jni::alias_ref<J${functionType.specialization.typename}::javaobject>`
+        const name = functionType.specializationName
+        return `jni::alias_ref<J${name}::javaobject>`
+      }
       default:
         return this.type.getCode(language)
     }

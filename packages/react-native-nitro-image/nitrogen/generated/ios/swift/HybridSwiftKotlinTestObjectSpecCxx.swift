@@ -51,7 +51,7 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
       self.implementation.numberValue = newValue
     }
   }
-
+  
   public var boolValue: Bool {
     @inline(__always)
     get {
@@ -62,18 +62,18 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
       self.implementation.boolValue = newValue
     }
   }
-
-  public var stringValue: String {
+  
+  public var stringValue: std.string {
     @inline(__always)
     get {
-      return self.implementation.stringValue
+      return std.string(self.implementation.stringValue)
     }
     @inline(__always)
     set {
-      self.implementation.stringValue = newValue
+      self.implementation.stringValue = String(newValue)
     }
   }
-
+  
   public var bigintValue: Int64 {
     @inline(__always)
     get {
@@ -84,102 +84,165 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
       self.implementation.bigintValue = newValue
     }
   }
-
-  public var stringOrUndefined: String? {
+  
+  public var stringOrUndefined: margelo.nitro.image.std__optional_std__string_ {
     @inline(__always)
     get {
-      return self.implementation.stringOrUndefined
+      return {
+        if let actualValue = self.implementation.stringOrUndefined {
+          return margelo.nitro.image.create_std__optional_std__string_(std.string(actualValue))
+        } else {
+          return .init()
+        }
+      }()
     }
     @inline(__always)
     set {
-      self.implementation.stringOrUndefined = newValue
+      self.implementation.stringOrUndefined = {
+        if let actualValue = newValue.value {
+          return String(actualValue)
+        } else {
+          return nil
+        }
+      }()
     }
   }
-
-  public var stringOrNull: String? {
+  
+  public var stringOrNull: margelo.nitro.image.std__optional_std__string_ {
     @inline(__always)
     get {
-      return self.implementation.stringOrNull
+      return {
+        if let actualValue = self.implementation.stringOrNull {
+          return margelo.nitro.image.create_std__optional_std__string_(std.string(actualValue))
+        } else {
+          return .init()
+        }
+      }()
     }
     @inline(__always)
     set {
-      self.implementation.stringOrNull = newValue
+      self.implementation.stringOrNull = {
+        if let actualValue = newValue.value {
+          return String(actualValue)
+        } else {
+          return nil
+        }
+      }()
     }
   }
-
-  public var optionalString: String? {
+  
+  public var optionalString: margelo.nitro.image.std__optional_std__string_ {
     @inline(__always)
     get {
-      return self.implementation.optionalString
+      return {
+        if let actualValue = self.implementation.optionalString {
+          return margelo.nitro.image.create_std__optional_std__string_(std.string(actualValue))
+        } else {
+          return .init()
+        }
+      }()
     }
     @inline(__always)
     set {
-      self.implementation.optionalString = newValue
+      self.implementation.optionalString = {
+        if let actualValue = newValue.value {
+          return String(actualValue)
+        } else {
+          return nil
+        }
+      }()
     }
   }
 
   // Methods
   @inline(__always)
-  public func simpleFunc() -> HybridSwiftKotlinTestObjectSpecCxx_simpleFunc_Result {
+  public func simpleFunc() -> Void {
     do {
       try self.implementation.simpleFunc()
-      return .value
-    } catch RuntimeError.error(withMessage: let message) {
-      // A  `RuntimeError` was thrown.
-      return .error(message: message)
+      return 
     } catch {
-      // Any other kind of error was thrown.
-      // Due to a Swift bug, we have to copy the string here.
       let message = "\(error.localizedDescription)"
-      return .error(message: message)
+      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
     }
   }
-
+  
   @inline(__always)
-  public func addNumbers(a: Double, b: Double) -> HybridSwiftKotlinTestObjectSpecCxx_addNumbers_Result {
+  public func addNumbers(a: Double, b: Double) -> Double {
     do {
       let result = try self.implementation.addNumbers(a: a, b: b)
-      return .value(result)
-    } catch RuntimeError.error(withMessage: let message) {
-      // A  `RuntimeError` was thrown.
-      return .error(message: message)
+      return result
     } catch {
-      // Any other kind of error was thrown.
-      // Due to a Swift bug, we have to copy the string here.
       let message = "\(error.localizedDescription)"
-      return .error(message: message)
+      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
     }
   }
-
+  
   @inline(__always)
-  public func addStrings(a: String, b: String) -> HybridSwiftKotlinTestObjectSpecCxx_addStrings_Result {
+  public func addStrings(a: std.string, b: std.string) -> std.string {
     do {
-      let result = try self.implementation.addStrings(a: a, b: b)
-      return .value(result)
-    } catch RuntimeError.error(withMessage: let message) {
-      // A  `RuntimeError` was thrown.
-      return .error(message: message)
+      let result = try self.implementation.addStrings(a: String(a), b: String(b))
+      return std.string(result)
     } catch {
-      // Any other kind of error was thrown.
-      // Due to a Swift bug, we have to copy the string here.
       let message = "\(error.localizedDescription)"
-      return .error(message: message)
+      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
     }
   }
-
+  
   @inline(__always)
-  public func multipleArguments(num: Double, str: String, boo: Bool) -> HybridSwiftKotlinTestObjectSpecCxx_multipleArguments_Result {
+  public func multipleArguments(num: Double, str: std.string, boo: Bool) -> Void {
     do {
-      try self.implementation.multipleArguments(num: num, str: str, boo: boo)
-      return .value
-    } catch RuntimeError.error(withMessage: let message) {
-      // A  `RuntimeError` was thrown.
-      return .error(message: message)
+      try self.implementation.multipleArguments(num: num, str: String(str), boo: boo)
+      return 
     } catch {
-      // Any other kind of error was thrown.
-      // Due to a Swift bug, we have to copy the string here.
       let message = "\(error.localizedDescription)"
-      return .error(message: message)
+      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
+    }
+  }
+  
+  @inline(__always)
+  public func getNumbers() -> margelo.nitro.image.std__vector_double_ {
+    do {
+      let result = try self.implementation.getNumbers()
+      return {
+        var vector = margelo.nitro.image.create_std__vector_double_(result.count)
+        for item in result {
+          vector.push_back(item)
+        }
+        return vector
+      }()
+    } catch {
+      let message = "\(error.localizedDescription)"
+      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
+    }
+  }
+  
+  @inline(__always)
+  public func getStrings() -> margelo.nitro.image.std__vector_std__string_ {
+    do {
+      let result = try self.implementation.getStrings()
+      return {
+        var vector = margelo.nitro.image.create_std__vector_std__string_(result.count)
+        for item in result {
+          vector.push_back(std.string(item))
+        }
+        return vector
+      }()
+    } catch {
+      let message = "\(error.localizedDescription)"
+      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
+    }
+  }
+  
+  @inline(__always)
+  public func callCallback(callback: margelo.nitro.image.Func_void) -> Void {
+    do {
+      try self.implementation.callCallback(callback: { () -> Void in
+        callback()
+      })
+      return 
+    } catch {
+      let message = "\(error.localizedDescription)"
+      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
     }
   }
 }

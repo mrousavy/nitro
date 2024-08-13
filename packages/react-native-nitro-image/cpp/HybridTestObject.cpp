@@ -205,18 +205,18 @@ std::future<void> HybridTestObject::wait(double seconds) {
   });
 }
 
-void HybridTestObject::callCallback(const Func_void& callback) {
+void HybridTestObject::callCallback(const std::function<void()>& callback) {
   callback();
 }
 
-void HybridTestObject::getValueFromJSCallback(const Func_std__future_double_& getValue) {
+void HybridTestObject::getValueFromJSCallback(const std::function<std::future<double>()>& getValue) {
   ThreadPool::getSharedPool()->run([=]() {
     std::future<double> future = getValue();
     future.wait();
   });
 }
 
-std::future<double> HybridTestObject::getValueFromJSCallbackAndWait(const Func_std__future_double_& getValue) {
+std::future<double> HybridTestObject::getValueFromJSCallbackAndWait(const std::function<std::future<double>()>& getValue) {
   return std::async(std::launch::async, [=]() -> double {
     std::future<double> future = getValue();
     future.wait();
@@ -225,14 +225,14 @@ std::future<double> HybridTestObject::getValueFromJSCallbackAndWait(const Func_s
   });
 }
 
-void HybridTestObject::callAll(const Func_void& first, const Func_void& second, const Func_void& third) {
+void HybridTestObject::callAll(const std::function<void()>& first, const std::function<void()>& second, const std::function<void()>& third) {
   first();
   second();
   third();
 }
 
-std::future<void> HybridTestObject::getValueFromJsCallback(const Func_std__future_std__string_& callback,
-                                                           const Func_void_std__string& andThenCall) {
+std::future<void> HybridTestObject::getValueFromJsCallback(const std::function<std::future<std::string>()>& callback,
+                                                           const std::function<void(const std::string& /* valueFromJs */)>& andThenCall) {
   return std::async(std::launch::async, [=]() {
     std::future<std::string> future = callback();
     std::string jsValue = future.get();

@@ -7,8 +7,7 @@ export function createKotlinFunction(
   packageName: string,
   functionType: FunctionType
 ): SourceFile[] {
-  const specialization = functionType.specialization
-  const specializationName = specialization.typename
+  const name = functionType.specializationName
   const kotlinReturnType = functionType.returnType.getCode('kotlin')
   const kotlinParams = functionType.parameters.map(
     (p) => `${p.escapedName}: ${p.getCode('kotlin')}`
@@ -16,7 +15,7 @@ export function createKotlinFunction(
   const lambdaTypename = `(${kotlinParams.join(', ')}) -> ${kotlinReturnType}`
 
   const kotlinCode = `
-${createFileMetadataString(`${specializationName}.kt`)}
+${createFileMetadataString(`${name}.kt`)}
 
 package ${packageName}
 
@@ -31,7 +30,7 @@ import com.facebook.proguard.annotations.DoNotStrip
 @DoNotStrip
 @Keep
 @Suppress("KotlinJniMissingFunction")
-class ${specializationName} @DoNotStrip @Keep private constructor(hybridData: HybridData) {
+class ${name} @DoNotStrip @Keep private constructor(hybridData: HybridData) {
   @DoNotStrip
   @Keep
   private val mHybridData: HybridData
@@ -58,31 +57,28 @@ class ${specializationName} @DoNotStrip @Keep private constructor(hybridData: Hy
     return `${type} ${p.escapedName}`
   })
   const paramsForward = functionType.parameters.map((p) => p.name)
-  const jniClassDescriptor = NitroConfig.getAndroidPackage(
-    'c++/jni',
-    specializationName
-  )
+  const jniClassDescriptor = NitroConfig.getAndroidPackage('c++/jni', name)
   const cxxNamespace = NitroConfig.getCxxNamespace('c++')
   const fbjniCode = `
-${createFileMetadataString(`J${specializationName}.hpp`)}
+${createFileMetadataString(`J${name}.hpp`)}
 
 #pragma once
 
 #include <fbjni/fbjni.h>
-#include "${specialization.declarationFile.name}"
+#include <functional>
 
 namespace ${cxxNamespace} {
 
   using namespace facebook;
 
   /**
-   * C++ representation of the callback ${specializationName}.
+   * C++ representation of the callback ${name}.
    * This is a Kotlin \`${lambdaTypename}\`, backed by a \`std::function<...>\`.
    */
-  struct J${specializationName}: public jni::HybridClass<J${specializationName}> {
+  struct J${name}: public jni::HybridClass<J${name}> {
   public:
-    static jni::local_ref<J${specializationName}::javaobject> create(const ${specializationName}& func) {
-      return J${specializationName}::newObjectCxxArgs(func);
+    static jni::local_ref<J${name}::javaobject> create(const ${name}& func) {
+      return J${name}::newObjectCxxArgs(func);
     }
 
   public:
@@ -93,15 +89,15 @@ namespace ${cxxNamespace} {
   public:
     static auto constexpr kJavaDescriptor = "${jniClassDescriptor}";
     static void registerNatives() {
-      registerHybrid({makeNativeMethod("call", J${specializationName}::call)});
+      registerHybrid({makeNativeMethod("call", J${name}::call)});
     }
 
   private:
-    explicit J${specializationName}(const ${specializationName}& func): _func(func) { }
+    explicit J${name}(const ${name}& func): _func(func) { }
 
   private:
     friend HybridBase;
-    ${specializationName} _func;
+    ${name} _func;
   };
 
 } // namespace ${cxxNamespace}
@@ -111,14 +107,14 @@ namespace ${cxxNamespace} {
   files.push({
     content: kotlinCode,
     language: 'kotlin',
-    name: `${specializationName}.kt`,
+    name: `${name}.kt`,
     subdirectory: NitroConfig.getAndroidPackageDirectory(),
     platform: 'android',
   })
   files.push({
     content: fbjniCode,
     language: 'c++',
-    name: `J${specializationName}.hpp`,
+    name: `J${name}.hpp`,
     subdirectory: [],
     platform: 'android',
   })

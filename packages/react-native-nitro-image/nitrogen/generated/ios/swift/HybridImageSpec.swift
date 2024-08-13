@@ -36,7 +36,7 @@ public protocol HybridImageSpec: HybridObjectSpec {
 
   // Methods
   func toArrayBuffer(format: margelo.nitro.image.ImageFormat) throws -> Double
-  func saveToFile(path: String, onFinished: margelo.nitro.image.Func_void_std__string) throws -> Void
+  func saveToFile(path: String, onFinished: (@escaping (_ path: String) -> Void)) throws -> Void
 }
 
 public extension HybridImageSpec {

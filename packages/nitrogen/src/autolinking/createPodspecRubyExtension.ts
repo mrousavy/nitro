@@ -43,12 +43,14 @@ def add_nitrogen_files(spec)
   spec.public_header_files = current_public_header_files + [
     # Generated specs
     "nitrogen/generated/shared/**/*.{h,hpp}",
+    # Swift to C++ bridging helpers
+    "nitrogen/generated/ios/${name}-Swift-Cxx-Bridge.hpp"
   ]
 
   current_private_header_files = spec.attributes_hash['private_header_files'] || []
   spec.private_header_files = current_private_header_files + [
     # iOS specific specs
-    "nitrogen/generated/ios/**/*.{h,hpp}",
+    "nitrogen/generated/ios/c++/**/*.{h,hpp}",
   ]
 
   current_pod_target_xcconfig = spec.attributes_hash['pod_target_xcconfig'] || {}

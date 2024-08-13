@@ -55,7 +55,7 @@ namespace margelo::nitro::image {
     static const auto method = _javaPart->getClass()->getMethod<double(JImageFormat)>("toArrayBuffer");
     throw std::runtime_error("toArrayBuffer(...) is not yet implemented!");
   }
-  void JHybridImageSpec::saveToFile(const std::string& path, const Func_void_std__string& onFinished) {
+  void JHybridImageSpec::saveToFile(const std::string& path, const std::function<void(const std::string& /* path */)>& onFinished) {
     static const auto method = _javaPart->getClass()->getMethod<void(std::string, jni::alias_ref<JFunc_void_std__string::javaobject>)>("saveToFile");
     throw std::runtime_error("saveToFile(...) is not yet implemented!");
   }

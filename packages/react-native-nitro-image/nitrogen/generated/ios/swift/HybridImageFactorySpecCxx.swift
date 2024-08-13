@@ -45,66 +45,46 @@ public final class HybridImageFactorySpecCxx {
 
   // Methods
   @inline(__always)
-  public func loadImageFromFile(path: String) -> HybridImageFactorySpecCxx_loadImageFromFile_Result {
+  public func loadImageFromFile(path: std.string) -> HybridImageSpecCxx {
     do {
-      let result = try self.implementation.loadImageFromFile(path: path)
-      return .value(result.createCxxBridge())
-    } catch RuntimeError.error(withMessage: let message) {
-      // A  `RuntimeError` was thrown.
-      return .error(message: message)
+      let result = try self.implementation.loadImageFromFile(path: String(path))
+      return result.createCxxBridge()
     } catch {
-      // Any other kind of error was thrown.
-      // Due to a Swift bug, we have to copy the string here.
       let message = "\(error.localizedDescription)"
-      return .error(message: message)
+      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
     }
   }
   
   @inline(__always)
-  public func loadImageFromURL(path: String) -> HybridImageFactorySpecCxx_loadImageFromURL_Result {
+  public func loadImageFromURL(path: std.string) -> HybridImageSpecCxx {
     do {
-      let result = try self.implementation.loadImageFromURL(path: path)
-      return .value(result.createCxxBridge())
-    } catch RuntimeError.error(withMessage: let message) {
-      // A  `RuntimeError` was thrown.
-      return .error(message: message)
+      let result = try self.implementation.loadImageFromURL(path: String(path))
+      return result.createCxxBridge()
     } catch {
-      // Any other kind of error was thrown.
-      // Due to a Swift bug, we have to copy the string here.
       let message = "\(error.localizedDescription)"
-      return .error(message: message)
+      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
     }
   }
   
   @inline(__always)
-  public func loadImageFromSystemName(path: String) -> HybridImageFactorySpecCxx_loadImageFromSystemName_Result {
+  public func loadImageFromSystemName(path: std.string) -> HybridImageSpecCxx {
     do {
-      let result = try self.implementation.loadImageFromSystemName(path: path)
-      return .value(result.createCxxBridge())
-    } catch RuntimeError.error(withMessage: let message) {
-      // A  `RuntimeError` was thrown.
-      return .error(message: message)
+      let result = try self.implementation.loadImageFromSystemName(path: String(path))
+      return result.createCxxBridge()
     } catch {
-      // Any other kind of error was thrown.
-      // Due to a Swift bug, we have to copy the string here.
       let message = "\(error.localizedDescription)"
-      return .error(message: message)
+      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
     }
   }
   
   @inline(__always)
-  public func bounceBack(image: HybridImageSpecCxx) -> HybridImageFactorySpecCxx_bounceBack_Result {
+  public func bounceBack(image: HybridImageSpecCxx) -> HybridImageSpecCxx {
     do {
       let result = try self.implementation.bounceBack(image: image.implementation)
-      return .value(result.createCxxBridge())
-    } catch RuntimeError.error(withMessage: let message) {
-      // A  `RuntimeError` was thrown.
-      return .error(message: message)
+      return result.createCxxBridge()
     } catch {
-      // Any other kind of error was thrown.
-      // Due to a Swift bug, we have to copy the string here.
       let message = "\(error.localizedDescription)"
-      return .error(message: message)
+      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
     }
   }
 }

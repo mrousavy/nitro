@@ -24,7 +24,6 @@ namespace margelo::nitro::image { enum class ImageFormat; }
 #include "ImageSize.hpp"
 #include "PixelFormat.hpp"
 #include "ImageFormat.hpp"
-#include "Func_void_std__string.hpp"
 
 namespace margelo::nitro::image {
 
@@ -58,7 +57,7 @@ namespace margelo::nitro::image {
     public:
       // Methods
       virtual double toArrayBuffer(ImageFormat format) = 0;
-      virtual void saveToFile(const std::string& path, const Func_void_std__string& onFinished) = 0;
+      virtual void saveToFile(const std::string& path, const std::function<void(const std::string& /* path */)>& onFinished) = 0;
 
     protected:
       // Hybrid Setup

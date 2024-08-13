@@ -45,7 +45,7 @@ abstract class HybridImageSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
-  abstract fun saveToFile(path: String, onFinished: com.margelo.nitro.image.Func_void_std__string): Unit
+  abstract fun saveToFile(path: String, onFinished: ((path: String) -> Unit)): Unit
 
   companion object {
     private const val TAG = "HybridImageSpec"

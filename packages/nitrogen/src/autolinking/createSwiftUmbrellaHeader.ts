@@ -41,6 +41,9 @@ ${forwardDeclarations.sort().join('\n')}
 // Include C++ defined types
 ${includes.sort().join('\n')}
 
+// C++ helpers for Swift
+#include "${moduleName}-Swift-Cxx-Bridge.hpp"
+
 // Forward declarations of Swift defined types
 ${swiftForwardDeclares.sort().join('\n')}
 

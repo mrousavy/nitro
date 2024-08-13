@@ -25,9 +25,11 @@ export class StringType implements Type {
         )
     }
   }
+
   getExtraFiles(): SourceFile[] {
     return []
   }
+
   getRequiredImports(): SourceImport[] {
     return []
   }

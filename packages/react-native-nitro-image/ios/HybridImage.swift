@@ -59,11 +59,11 @@ class HybridImage : HybridImageSpec {
     throw RuntimeError.error(withMessage: "toArrayBuffer() is not yet implemented!")
   }
 
-  func saveToFile(path: String, onFinished: native.Func_void_std__string) throws {
+  func saveToFile(path: String, onFinished: @escaping (_ path: String) -> Void) throws {
     print("Save To File called \(path)...")
     DispatchQueue.main.asyncAfter(deadline: .now() + 5, execute: {
       print("Executing callback now...")
-      onFinished(std.string(path))
+      onFinished(path)
       print("Callback executed!")
     })
   }

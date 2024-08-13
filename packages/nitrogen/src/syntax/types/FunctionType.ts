@@ -1,9 +1,5 @@
-import { NitroConfig } from '../../config/NitroConfig.js'
 import type { Language } from '../../getPlatformSpecs.js'
-import {
-  createCppFunctionSpecialization,
-  type FunctionSpecialization,
-} from '../c++/CppFunctionSpecialization.js'
+import { escapeCppName, toReferenceType } from '../helpers.js'
 import { Parameter } from '../Parameter.js'
 import { type SourceFile, type SourceImport } from '../SourceFile.js'
 import { PromiseType } from './PromiseType.js'
@@ -24,6 +20,23 @@ export class FunctionType implements Type {
     this.parameters = parameters
   }
 
+  get specializationName(): string {
+    return (
+      'Func_' +
+      [this.returnType, ...this.parameters]
+        .map((p) => escapeCppName(p.getCode('c++')))
+        .join('_')
+    )
+  }
+
+  get jsName(): string {
+    const paramsJs = this.parameters
+      .map((p) => `${p.name}: ${p.kind}`)
+      .join(', ')
+    const returnType = this.returnType.getCode('c++')
+    return `(${paramsJs}) => ${returnType}`
+  }
+
   get canBePassedByReference(): boolean {
     // It's a function<..>, heavy to copy.
     return true
@@ -31,10 +44,6 @@ export class FunctionType implements Type {
 
   get kind(): TypeKind {
     return 'function'
-  }
-
-  get specialization(): FunctionSpecialization {
-    return createCppFunctionSpecialization(this)
   }
 
   /**
@@ -68,19 +77,37 @@ export class FunctionType implements Type {
     }
   }
 
-  getCode(language: Language): string {
-    const specialization = this.specialization
-
+  getCode(language: Language, includeNameInfo = true): string {
     switch (language) {
-      case 'c++':
-        return specialization.typename
-      case 'swift':
-        return NitroConfig.getCxxNamespace('swift', specialization.typename)
+      case 'c++': {
+        const params = this.parameters
+          .map((p) => {
+            const type = p.getCode('c++')
+            const code = p.canBePassedByReference ? toReferenceType(type) : type
+            if (includeNameInfo) return `${code} /* ${p.name} */`
+            else return code
+          })
+          .join(', ')
+        const returnType = this.returnType.getCode(language)
+        return `std::function<${returnType}(${params})>`
+      }
+      case 'swift': {
+        const params = this.parameters
+          .map((p) => {
+            if (includeNameInfo)
+              return `_ ${p.escapedName}: ${p.getCode(language)}`
+            else return p.getCode(language)
+          })
+          .join(', ')
+        const returnType = this.returnType.getCode(language)
+        return `(@escaping (${params}) -> ${returnType})`
+      }
       case 'kotlin':
-        return NitroConfig.getAndroidPackage(
-          'java/kotlin',
-          specialization.typename
-        )
+        const params = this.parameters
+          .map((p) => `${p.escapedName}: ${p.getCode(language)}`)
+          .join(', ')
+        const returnType = this.returnType.getCode(language)
+        return `((${params}) -> ${returnType})`
       default:
         throw new Error(
           `Language ${language} is not yet supported for FunctionType!`
@@ -88,21 +115,13 @@ export class FunctionType implements Type {
     }
   }
   getExtraFiles(): SourceFile[] {
-    const specialization = this.specialization
     return [
-      specialization.declarationFile,
       ...this.returnType.getExtraFiles(),
       ...this.parameters.flatMap((p) => p.getExtraFiles()),
     ]
   }
   getRequiredImports(): SourceImport[] {
     return [
-      {
-        language: 'c++',
-        name: this.specialization.declarationFile.name,
-        forwardDeclaration: undefined,
-        space: 'user',
-      },
       ...this.returnType.getRequiredImports(),
       ...this.parameters.flatMap((p) => p.getRequiredImports()),
     ]

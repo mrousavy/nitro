@@ -34,10 +34,6 @@ namespace margelo::nitro::image { enum class Powertrain; }
 
 // Include C++ defined types
 #include "Car.hpp"
-#include "Func_std__future_double_.hpp"
-#include "Func_std__future_std__string_.hpp"
-#include "Func_void.hpp"
-#include "Func_void_std__string.hpp"
 #include "HybridImageSpec.hpp"
 #include "HybridTestObjectSpec.hpp"
 #include "ImageFormat.hpp"
@@ -48,6 +44,9 @@ namespace margelo::nitro::image { enum class Powertrain; }
 #include "Powertrain.hpp"
 #include <NitroModules/AnyMap.hpp>
 #include <NitroModules/ArrayBuffer.hpp>
+
+// C++ helpers for Swift
+#include "NitroImage-Swift-Cxx-Bridge.hpp"
 
 // Forward declarations of Swift defined types
 // Forward declaration of `HybridImageSpecCxx` to properly resolve imports.

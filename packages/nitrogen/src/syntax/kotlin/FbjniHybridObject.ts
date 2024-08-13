@@ -26,6 +26,8 @@ export function createFbjniHybridObject(spec: HybridObjectSpec): SourceFile[] {
   const cppHeaderCode = `
 ${createFileMetadataString(`${name.HybridTSpec}.hpp`)}
 
+#pragma once
+
 #include "${name.HybridTSpec}.hpp"
 #include <fbjni/fbjni.h>
 

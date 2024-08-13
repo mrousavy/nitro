@@ -67,10 +67,11 @@ namespace margelo::nitro::image {
       _swiftPart.setBoolValue(std::forward<decltype(boolValue)>(boolValue));
     }
     inline std::string getStringValue() noexcept override {
-      return _swiftPart.getStringValue();
+      auto result = _swiftPart.getStringValue();
+      return result;
     }
     inline void setStringValue(const std::string& stringValue) noexcept override {
-      _swiftPart.setStringValue(std::forward<decltype(stringValue)>(stringValue));
+      _swiftPart.setStringValue(stringValue);
     }
     inline int64_t getBigintValue() noexcept override {
       return _swiftPart.getBigintValue();
@@ -80,55 +81,52 @@ namespace margelo::nitro::image {
     }
     inline std::optional<std::string> getStringOrUndefined() noexcept override {
       auto result = _swiftPart.getStringOrUndefined();
-      return result.isSome() ? result.get() : nullptr;
+      return result;
     }
     inline void setStringOrUndefined(const std::optional<std::string>& stringOrUndefined) noexcept override {
-      _swiftPart.setStringOrUndefined(stringOrUndefined.has_value() ? swift::Optional<swift::String>::some(stringOrUndefined.value()) : swift::Optional<swift::String>::none());
+      _swiftPart.setStringOrUndefined(stringOrUndefined);
     }
     inline std::optional<std::string> getStringOrNull() noexcept override {
       auto result = _swiftPart.getStringOrNull();
-      return result ? result.get() : nullptr;
+      return result;
     }
     inline void setStringOrNull(const std::optional<std::string>& stringOrNull) noexcept override {
-      _swiftPart.setStringOrNull(stringOrNull.has_value() ? swift::Optional<swift::String>::some(stringOrNull.value()) : swift::Optional<swift::String>::none());
+      _swiftPart.setStringOrNull(stringOrNull);
     }
     inline std::optional<std::string> getOptionalString() noexcept override {
       auto result = _swiftPart.getOptionalString();
-      return result ? result.get() : nullptr;
+      return result;
     }
     inline void setOptionalString(const std::optional<std::string>& optionalString) noexcept override {
-      _swiftPart.setOptionalString(optionalString.has_value() ? swift::Optional<swift::String>::some(optionalString.value()) : swift::Optional<swift::String>::none());
+      _swiftPart.setOptionalString(optionalString);
     }
 
   public:
     // Methods
     inline void simpleFunc() override {
-      auto valueOrError = _swiftPart.simpleFunc();
-      if (valueOrError.isError()) [[unlikely]] {
-        throw std::runtime_error(valueOrError.getError());
-      }
+      _swiftPart.simpleFunc();
     }
     inline double addNumbers(double a, double b) override {
-      auto valueOrError = _swiftPart.addNumbers(std::forward<decltype(a)>(a), std::forward<decltype(b)>(b));
-      if (valueOrError.isError()) [[unlikely]] {
-        throw std::runtime_error(valueOrError.getError());
-      }
-      auto value = valueOrError.getValue();
+      auto value = _swiftPart.addNumbers(std::forward<decltype(a)>(a), std::forward<decltype(b)>(b));
       return value;
     }
     inline std::string addStrings(const std::string& a, const std::string& b) override {
-      auto valueOrError = _swiftPart.addStrings(std::forward<decltype(a)>(a), std::forward<decltype(b)>(b));
-      if (valueOrError.isError()) [[unlikely]] {
-        throw std::runtime_error(valueOrError.getError());
-      }
-      auto value = valueOrError.getValue();
+      auto value = _swiftPart.addStrings(a, b);
       return value;
     }
     inline void multipleArguments(double num, const std::string& str, bool boo) override {
-      auto valueOrError = _swiftPart.multipleArguments(std::forward<decltype(num)>(num), std::forward<decltype(str)>(str), std::forward<decltype(boo)>(boo));
-      if (valueOrError.isError()) [[unlikely]] {
-        throw std::runtime_error(valueOrError.getError());
-      }
+      _swiftPart.multipleArguments(std::forward<decltype(num)>(num), str, std::forward<decltype(boo)>(boo));
+    }
+    inline std::vector<double> getNumbers() override {
+      auto value = _swiftPart.getNumbers();
+      return value;
+    }
+    inline std::vector<std::string> getStrings() override {
+      auto value = _swiftPart.getStrings();
+      return value;
+    }
+    inline void callCallback(const std::function<void()>& callback) override {
+      _swiftPart.callCallback(callback);
     }
 
   private:

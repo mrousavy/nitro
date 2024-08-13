@@ -9,7 +9,7 @@
 #pragma once
 
 #include <fbjni/fbjni.h>
-#include "Func_void_std__string.hpp"
+#include <functional>
 
 namespace margelo::nitro::image {
 

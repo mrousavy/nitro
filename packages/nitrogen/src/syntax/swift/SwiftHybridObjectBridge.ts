@@ -5,14 +5,7 @@ import { indent } from '../../utils.js'
 import type { Method } from '../Method.js'
 import { createFileMetadataString, isNotDuplicate } from '../helpers.js'
 import type { SourceFile } from '../SourceFile.js'
-import {
-  getMethodResultType,
-  type MethodResult,
-} from './getMethodResultType.js'
-import {
-  getHybridObjectName,
-  type HybridObjectName,
-} from '../getHybridObjectName.js'
+import { getHybridObjectName } from '../getHybridObjectName.js'
 import { getForwardDeclaration } from '../c++/getForwardDeclaration.js'
 import { NitroConfig } from '../../config/NitroConfig.js'
 import { includeHeader, includeNitroHeader } from '../c++/includeNitroHeader.js'
@@ -30,15 +23,11 @@ export function createSwiftHybridObjectCxxBridge(
 ): SourceFile[] {
   const name = getHybridObjectName(spec.name)
 
-  const bridgedResultTypes = spec.methods.map((m) =>
-    getMethodResultType(name, m)
-  )
-
   const propertiesBridge = spec.properties
     .map((p) => getPropertyForwardImplementation(p))
     .join('\n\n')
   const methodsBridge = spec.methods
-    .map((m) => getMethodForwardImplementation(name, m))
+    .map((m) => getMethodForwardImplementation(m))
     .join('\n\n')
 
   const swiftCxxWrapperCode = `
@@ -131,27 +120,20 @@ return ${bridged.parseFromSwiftToCpp('result', 'c++')};
         .join(', ')
       const bridgedReturnType = new SwiftCxxBridgedType(m.returnType)
       const hasResult = m.returnType.kind !== 'void'
-      let body = `
-auto valueOrError = _swiftPart.${m.name}(${params});
-if (valueOrError.isError()) [[unlikely]] {
-  throw std::runtime_error(valueOrError.getError());
-}
-`.trim()
+      let body: string
       if (hasResult) {
-        body += '\n'
-        body += `
-auto value = valueOrError.getValue();
-`.trim()
-        if (bridgedReturnType.needsSpecialHandling) {
-          body += '\n'
-          body += `
+        // func returns something
+        body = `
+auto value = _swiftPart.${m.name}(${params});
 return ${bridgedReturnType.parseFromSwiftToCpp('value', 'c++')};
-`.trim()
-        } else {
-          body += '\n'
-          body += 'return value;'
-        }
+        `.trim()
+      } else {
+        // void func
+        body = `
+_swiftPart.${m.name}(${params});
+        `.trim()
       }
+
       return m.getCode('c++', { inline: true, override: true }, body)
     })
     .join('\n')
@@ -246,6 +228,7 @@ namespace ${cxxNamespace} {
   `
 
   const files: SourceFile[] = []
+  files.push(...allBridgedTypes.flatMap((b) => b.getExtraFiles()))
   files.push({
     content: swiftCxxWrapperCode,
     language: 'swift',
@@ -253,8 +236,6 @@ namespace ${cxxNamespace} {
     subdirectory: [],
     platform: 'ios',
   })
-  const resultTypesFile = getResultTypesFile(name, bridgedResultTypes)
-  files.push(resultTypesFile)
   files.push({
     content: cppHybridObjectCode,
     language: 'c++',
@@ -274,16 +255,21 @@ namespace ${cxxNamespace} {
 
 function getPropertyForwardImplementation(property: Property): string {
   const bridgedType = new SwiftCxxBridgedType(property.type)
+  const convertToCpp = bridgedType.parseFromSwiftToCpp(
+    `self.implementation.${property.name}`,
+    'swift'
+  )
+  const convertFromCpp = bridgedType.parseFromCppToSwift('newValue', 'swift')
   const getter = `
 @inline(__always)
 get {
-  return ${bridgedType.parseFromSwiftToCpp(`self.implementation.${property.name}`, 'swift')}
+  return ${indent(convertToCpp, '  ')}
 }
   `.trim()
   const setter = `
 @inline(__always)
 set {
-  self.implementation.${property.name} = ${bridgedType.parseFromCppToSwift('newValue', 'swift')}
+  self.implementation.${property.name} = ${indent(convertFromCpp, '  ')}
 }
   `.trim()
 
@@ -300,10 +286,7 @@ public var ${property.name}: ${bridgedType.getTypeCode('swift')} {
   return code.trim()
 }
 
-function getMethodForwardImplementation(
-  hybridObjectName: HybridObjectName,
-  method: Method
-): string {
+function getMethodForwardImplementation(method: Method): string {
   const returnType = new SwiftCxxBridgedType(method.returnType)
   const params = method.parameters.map((p) => {
     const bridgedType = new SwiftCxxBridgedType(p.type)
@@ -313,64 +296,21 @@ function getMethodForwardImplementation(
     const bridgedType = new SwiftCxxBridgedType(p.type)
     return `${p.name}: ${bridgedType.parseFromCppToSwift(p.name, 'swift')}`
   })
-  const resultType = getMethodResultType(hybridObjectName, method)
-  const resultValue = resultType.hasType ? `let result = ` : ''
-  const returnValue = resultType.hasType
-    ? `.value(${returnType.parseFromSwiftToCpp('result', 'swift')})`
-    : '.value'
+  const resultValue = returnType.hasType ? `let result = ` : ''
+  const returnValue = returnType.hasType
+    ? `${returnType.parseFromSwiftToCpp('result', 'swift')}`
+    : ''
   // TODO: Use @inlinable or @inline(__always)?
   return `
 @inline(__always)
-public func ${method.name}(${params.join(', ')}) -> ${resultType.typename} {
+public func ${method.name}(${params.join(', ')}) -> ${returnType.getTypeCode('swift')} {
   do {
-    ${resultValue}try self.implementation.${method.name}(${passParams.join(', ')})
-    return ${returnValue}
-  } catch RuntimeError.error(withMessage: let message) {
-    // A  \`RuntimeError\` was thrown.
-    return .error(message: message)
+    ${resultValue}try self.implementation.${method.name}(${indent(passParams.join(', '), '    ')})
+    return ${indent(returnValue, '    ')}
   } catch {
-    // Any other kind of error was thrown.
-    // Due to a Swift bug, we have to copy the string here.
     let message = "\\(error.localizedDescription)"
-    return .error(message: message)
+    fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \\(message))")
   }
 }
   `.trim()
-}
-
-/**
- * Get one file for all the result types of a specific module, combined.
- */
-function getResultTypesFile(
-  hybridObjectName: HybridObjectName,
-  resultTypes: MethodResult[]
-): SourceFile {
-  const name = `${hybridObjectName.HybridTSpecCxx}+ResultTypes.swift`
-  const allEnumsCode = resultTypes.map((r) => r.swiftEnumCode)
-
-  const code = `
-${createFileMetadataString(name)}
-
-/**
- * C++ does not support catching Swift errors yet, so we have to wrap
- * them in a Result type.
- * - .value means the function returned successfully (either a value, or void)
- * - .error means the function threw any Error. Only the message can be propagated
- *
- * ${hybridObjectName.HybridTSpecCxx} will then wrap all calls to ${hybridObjectName.HybridTSpec}
- * to properly catch Swift errors and return either .value or .error to C++.
- */
-
-import NitroModules
-
-${allEnumsCode.join('\n\n')}
-    `.trim()
-
-  return {
-    content: code,
-    language: 'swift',
-    subdirectory: [],
-    name: name,
-    platform: 'ios',
-  }
 }

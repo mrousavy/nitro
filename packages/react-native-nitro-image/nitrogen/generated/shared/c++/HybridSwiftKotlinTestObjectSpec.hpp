@@ -63,6 +63,9 @@ namespace margelo::nitro::image {
       virtual double addNumbers(double a, double b) = 0;
       virtual std::string addStrings(const std::string& a, const std::string& b) = 0;
       virtual void multipleArguments(double num, const std::string& str, bool boo) = 0;
+      virtual std::vector<double> getNumbers() = 0;
+      virtual std::vector<std::string> getStrings() = 0;
+      virtual void callCallback(const std::function<void()>& callback) = 0;
 
     protected:
       // Hybrid Setup
