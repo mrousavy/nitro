@@ -8,6 +8,7 @@
 import Foundation
 
 class HybridSwiftKotlinTestObject : HybridSwiftKotlinTestObjectSpec {
+  
   var hybridContext = margelo.nitro.HybridContext()
   var memorySize: Int {
     return getSizeOf(self)
@@ -43,5 +44,11 @@ class HybridSwiftKotlinTestObject : HybridSwiftKotlinTestObjectSpec {
   
   func getStrings() throws -> [String] {
     return ["h", "e", "ll", "o"]
+  }
+  
+  func callCallback(callback: @escaping () -> Void) throws {
+    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+      callback()
+    }
   }
 }

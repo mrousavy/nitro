@@ -119,4 +119,6 @@ export interface SwiftKotlinTestObject extends HybridObject<{ ios: 'swift' }> {
 
   getNumbers(): number[]
   getStrings(): string[]
+
+  callCallback(callback: () => void): void
 }

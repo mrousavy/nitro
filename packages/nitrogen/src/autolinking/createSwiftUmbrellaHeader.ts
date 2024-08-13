@@ -44,30 +44,6 @@ ${includes.sort().join('\n')}
 // Forward declarations of Swift defined types
 ${swiftForwardDeclares.sort().join('\n')}
 
-// Forward declare Swift internals
-namespace swift {
-// base
-template<class T>
-static constexpr bool isUsableInGenericContext = false;
-
-// swift::String
-class String;
-
-// swift::Optional<T>
-template<typename T>
-#ifdef __cpp_concepts
-requires swift::isUsableInGenericContext<T>
-#endif
-class Optional;
-
-// swift::Array<T>
-template<typename T>
-#ifdef __cpp_concepts
-requires swift::isUsableInGenericContext<T>
-#endif
-class Array;
-} // namespace swift
-
 // Include Swift defined types
 #if __has_include("${moduleName}-Swift.h")
 #include "${moduleName}-Swift.h"

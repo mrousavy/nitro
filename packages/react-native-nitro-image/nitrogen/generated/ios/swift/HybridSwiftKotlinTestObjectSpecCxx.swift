@@ -184,4 +184,15 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
       fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
     }
   }
+  
+  @inline(__always)
+  public func callCallback(callback: margelo.nitro.image.Func_void) -> Void {
+    do {
+      try self.implementation.callCallback(callback: { () -> Void in callback() })
+      return 
+    } catch {
+      let message = "\(error.localizedDescription)"
+      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
+    }
+  }
 }

@@ -1,4 +1,3 @@
-import { NitroConfig } from '../../config/NitroConfig.js'
 import type { Language } from '../../getPlatformSpecs.js'
 import {
   createCppFunctionSpecialization,
@@ -12,6 +11,7 @@ import type { NamedType, Type, TypeKind } from './Type.js'
 export class FunctionType implements Type {
   readonly returnType: Type
   readonly parameters: NamedType[]
+  readonly specialization: FunctionSpecialization
 
   constructor(returnType: Type, parameters: NamedType[]) {
     if (returnType.kind === 'void') {
@@ -22,6 +22,10 @@ export class FunctionType implements Type {
       this.returnType = new PromiseType(returnType)
     }
     this.parameters = parameters
+    this.specialization = createCppFunctionSpecialization(
+      this.returnType,
+      this.parameters
+    )
   }
 
   get canBePassedByReference(): boolean {
@@ -29,12 +33,12 @@ export class FunctionType implements Type {
     return true
   }
 
-  get kind(): TypeKind {
-    return 'function'
+  get specializationName(): string {
+    return this.specialization.typename
   }
 
-  get specialization(): FunctionSpecialization {
-    return createCppFunctionSpecialization(this)
+  get kind(): TypeKind {
+    return 'function'
   }
 
   /**
@@ -69,18 +73,23 @@ export class FunctionType implements Type {
   }
 
   getCode(language: Language): string {
-    const specialization = this.specialization
-
     switch (language) {
-      case 'c++':
-        return specialization.typename
-      case 'swift':
-        return NitroConfig.getCxxNamespace('swift', specialization.typename)
+      case 'c++': {
+        return this.specialization.typename
+      }
+      case 'swift': {
+        const params = this.parameters
+          .map((p) => `_ ${p.escapedName}: ${p.getCode(language)}`)
+          .join(', ')
+        const returnType = this.returnType.getCode(language)
+        return `(@escaping (${params}) -> ${returnType})`
+      }
       case 'kotlin':
-        return NitroConfig.getAndroidPackage(
-          'java/kotlin',
-          specialization.typename
-        )
+        const params = this.parameters
+          .map((p) => `${p.escapedName}: ${p.getCode(language)}`)
+          .join(', ')
+        const returnType = this.returnType.getCode(language)
+        return `((${params}) -> ${returnType})`
       default:
         throw new Error(
           `Language ${language} is not yet supported for FunctionType!`

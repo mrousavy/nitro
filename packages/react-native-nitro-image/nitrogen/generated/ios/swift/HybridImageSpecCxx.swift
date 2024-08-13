@@ -81,7 +81,7 @@ public final class HybridImageSpecCxx {
   @inline(__always)
   public func saveToFile(path: String, onFinished: margelo.nitro.image.Func_void_std__string) -> Void {
     do {
-      try self.implementation.saveToFile(path: path, onFinished: onFinished)
+      try self.implementation.saveToFile(path: path, onFinished: { (path: String) -> Void in onFinished(path) })
       return 
     } catch {
       let message = "\(error.localizedDescription)"

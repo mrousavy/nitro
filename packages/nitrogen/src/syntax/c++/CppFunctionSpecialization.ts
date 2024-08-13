@@ -6,7 +6,7 @@ import {
   toReferenceType,
 } from '../helpers.js'
 import type { SourceFile } from '../SourceFile.js'
-import type { FunctionType } from '../types/FunctionType.js'
+import type { NamedType, Type } from '../types/Type.js'
 
 export interface FunctionSpecialization {
   typename: string
@@ -14,20 +14,19 @@ export interface FunctionSpecialization {
 }
 
 export function createCppFunctionSpecialization(
-  func: FunctionType
+  returnType: Type,
+  parameters: NamedType[]
 ): FunctionSpecialization {
-  const returnType = func.returnType.getCode('c++')
-  const paramsEscaped = func.parameters
-    .map((p) => escapeCppName(p.getCode('c++')))
-    .join('_')
-  let typename = `Func_${escapeCppName(returnType)}`
-  if (paramsEscaped.length > 0) {
-    typename += `_${paramsEscaped}`
-  }
+  const returnTypeCode = returnType.getCode('c++')
+  const typename =
+    'Func_' +
+    [returnType, ...parameters]
+      .map((p) => escapeCppName(p.getCode('c++')))
+      .join('_')
 
   const extraImports = [
-    ...func.returnType.getRequiredImports(),
-    ...func.parameters.flatMap((p) => p.getRequiredImports()),
+    ...returnType.getRequiredImports(),
+    ...parameters.flatMap((p) => p.getRequiredImports()),
   ]
   const extraIncludes = extraImports
     .map((i) => `#include "${i.name}"`)
@@ -38,10 +37,10 @@ export function createCppFunctionSpecialization(
     .filter(isNotDuplicate)
     .join('\n')
 
-  const paramsJs = func.parameters
+  const paramsJs = parameters
     .map((p) => `${p.name}: ${p.getCode('c++')}`)
     .join(', ')
-  const paramsCpp = func.parameters
+  const paramsCpp = parameters
     .map((p) => {
       let type = p.getCode('c++')
       if (p.canBePassedByReference) {
@@ -66,9 +65,9 @@ ${extraIncludes}
 namespace ${cxxNamespace} {
 
   /**
-   * A \`(${paramsJs}) => ${returnType}\` function.
+   * A \`(${paramsJs}) => ${returnTypeCode}\` function.
    */
-  using ${typename} = std::function<${returnType}(${paramsCpp})>;
+  using ${typename} = std::function<${returnTypeCode}(${paramsCpp})>;
 
 } // namespace ${cxxNamespace}
   `

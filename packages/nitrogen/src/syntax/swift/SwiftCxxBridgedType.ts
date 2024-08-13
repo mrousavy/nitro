@@ -7,6 +7,7 @@ import {
 import type { SourceImport } from '../SourceFile.js'
 import { ArrayType } from '../types/ArrayType.js'
 import { EnumType } from '../types/EnumType.js'
+import { FunctionType } from '../types/FunctionType.js'
 import { getTypeAs } from '../types/getTypeAs.js'
 import { HybridObjectType } from '../types/HybridObjectType.js'
 import { OptionalType } from '../types/OptionalType.js'
@@ -45,6 +46,9 @@ export class SwiftCxxBridgedType {
         return true
       case 'array':
         // swift::Array<T> <> std::vector<T>
+        return true
+      case 'function':
+        // (@ecaping () -> Void) <> std::function<...>
         return true
       default:
         return false
@@ -131,6 +135,23 @@ export class SwiftCxxBridgedType {
             throw new Error(`Invalid language! ${language}`)
         }
       }
+      case 'function': {
+        const functionType = getTypeAs(this.type, FunctionType)
+        switch (language) {
+          case 'c++':
+            return NitroConfig.getCxxNamespace(
+              'c++',
+              functionType.specializationName
+            )
+          case 'swift':
+            return NitroConfig.getCxxNamespace(
+              'swift',
+              functionType.specializationName
+            )
+          default:
+            throw new Error(`Invalid language! ${language}`)
+        }
+      }
       default:
         // No workaround - just return normal type
         return this.type.getCode(language)
@@ -208,6 +229,30 @@ export class SwiftCxxBridgedType {
             return cppParameterName
         }
       }
+      case 'function': {
+        const funcType = getTypeAs(this.type, FunctionType)
+        switch (language) {
+          case 'swift':
+            const paramsSignature = funcType.parameters.map(
+              (p) => `${p.escapedName}: ${p.getCode('swift')}`
+            )
+            const returnType = funcType.returnType.getCode('swift')
+            const signature = `(${paramsSignature.join(', ')}) -> ${returnType}`
+            const paramsForward = funcType.parameters.map((p) => {
+              const bridged = new SwiftCxxBridgedType(p)
+              return bridged.parseFromCppToSwift(p.escapedName, 'swift')
+            })
+
+            if (funcType.returnType.kind === 'void') {
+              return `{ ${signature} in ${cppParameterName}(${paramsForward.join(', ')}) }`
+            } else {
+              const resultBridged = new SwiftCxxBridgedType(funcType.returnType)
+              return `{ ${signature} in let result = ${cppParameterName}(${paramsForward.join(', ')}); return ${resultBridged.parseFromSwiftToCpp('result', 'swift')} }`
+            }
+          default:
+            return cppParameterName
+        }
+      }
       case 'void':
         // When type is void, don't return anything
         return ''
@@ -279,6 +324,8 @@ export class SwiftCxxBridgedType {
             return swiftParameterName
         }
       }
+      case 'function':
+        throw new Error(`Functions cannot be returned from Swift to C++ yet!`)
       case 'void':
         // When type is void, don't return anything
         return ''
