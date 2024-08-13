@@ -120,98 +120,68 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
 
   // Methods
   @inline(__always)
-  public func simpleFunc() -> HybridSwiftKotlinTestObjectSpecCxx_simpleFunc_Result {
+  public func simpleFunc() -> Void {
     do {
       try self.implementation.simpleFunc()
-      return .value
-    } catch RuntimeError.error(withMessage: let message) {
-      // A  `RuntimeError` was thrown.
-      return .error(message: message)
+      return 
     } catch {
-      // Any other kind of error was thrown.
-      // Due to a Swift bug, we have to copy the string here.
       let message = "\(error.localizedDescription)"
-      return .error(message: message)
+      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
     }
   }
   
   @inline(__always)
-  public func addNumbers(a: Double, b: Double) -> HybridSwiftKotlinTestObjectSpecCxx_addNumbers_Result {
+  public func addNumbers(a: Double, b: Double) -> Double {
     do {
       let result = try self.implementation.addNumbers(a: a, b: b)
-      return .value(result)
-    } catch RuntimeError.error(withMessage: let message) {
-      // A  `RuntimeError` was thrown.
-      return .error(message: message)
+      return result
     } catch {
-      // Any other kind of error was thrown.
-      // Due to a Swift bug, we have to copy the string here.
       let message = "\(error.localizedDescription)"
-      return .error(message: message)
+      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
     }
   }
   
   @inline(__always)
-  public func addStrings(a: String, b: String) -> HybridSwiftKotlinTestObjectSpecCxx_addStrings_Result {
+  public func addStrings(a: String, b: String) -> String {
     do {
       let result = try self.implementation.addStrings(a: a, b: b)
-      return .value(result)
-    } catch RuntimeError.error(withMessage: let message) {
-      // A  `RuntimeError` was thrown.
-      return .error(message: message)
+      return result
     } catch {
-      // Any other kind of error was thrown.
-      // Due to a Swift bug, we have to copy the string here.
       let message = "\(error.localizedDescription)"
-      return .error(message: message)
+      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
     }
   }
   
   @inline(__always)
-  public func multipleArguments(num: Double, str: String, boo: Bool) -> HybridSwiftKotlinTestObjectSpecCxx_multipleArguments_Result {
+  public func multipleArguments(num: Double, str: String, boo: Bool) -> Void {
     do {
       try self.implementation.multipleArguments(num: num, str: str, boo: boo)
-      return .value
-    } catch RuntimeError.error(withMessage: let message) {
-      // A  `RuntimeError` was thrown.
-      return .error(message: message)
+      return 
     } catch {
-      // Any other kind of error was thrown.
-      // Due to a Swift bug, we have to copy the string here.
       let message = "\(error.localizedDescription)"
-      return .error(message: message)
+      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
     }
   }
   
   @inline(__always)
-  public func getNumbers() -> HybridSwiftKotlinTestObjectSpecCxx_getNumbers_Result {
+  public func getNumbers() -> [Double] {
     do {
       let result = try self.implementation.getNumbers()
-      return .value(result)
-    } catch RuntimeError.error(withMessage: let message) {
-      // A  `RuntimeError` was thrown.
-      return .error(message: message)
+      return result
     } catch {
-      // Any other kind of error was thrown.
-      // Due to a Swift bug, we have to copy the string here.
       let message = "\(error.localizedDescription)"
-      return .error(message: message)
+      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
     }
   }
   
   @inline(__always)
-  public func getStrings() -> HybridSwiftKotlinTestObjectSpecCxx_getStrings_Result {
+  public func getStrings() -> [String] {
     do {
       let result = try self.implementation.getStrings()
-      return .value(result)
-    } catch RuntimeError.error(withMessage: let message) {
-      // A  `RuntimeError` was thrown.
-      return .error(message: message)
+      return result
     } catch {
-      // Any other kind of error was thrown.
-      // Due to a Swift bug, we have to copy the string here.
       let message = "\(error.localizedDescription)"
-      return .error(message: message)
+      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
     }
   }
 }

@@ -19,6 +19,10 @@ export class SwiftCxxBridgedType {
     this.type = type
   }
 
+  get hasType(): boolean {
+    return this.type.kind !== 'void'
+  }
+
   get canBePassedByReference(): boolean {
     return this.type.canBePassedByReference
   }

@@ -104,39 +104,21 @@ namespace margelo::nitro::image {
   public:
     // Methods
     inline void simpleFunc() override {
-      auto valueOrError = _swiftPart.simpleFunc();
-      if (valueOrError.isError()) [[unlikely]] {
-        throw std::runtime_error(valueOrError.getError());
-      }
+      _swiftPart.simpleFunc();
     }
     inline double addNumbers(double a, double b) override {
-      auto valueOrError = _swiftPart.addNumbers(std::forward<decltype(a)>(a), std::forward<decltype(b)>(b));
-      if (valueOrError.isError()) [[unlikely]] {
-        throw std::runtime_error(valueOrError.getError());
-      }
-      auto value = valueOrError.getValue();
+      auto value = _swiftPart.addNumbers(std::forward<decltype(a)>(a), std::forward<decltype(b)>(b));
       return value;
     }
     inline std::string addStrings(const std::string& a, const std::string& b) override {
-      auto valueOrError = _swiftPart.addStrings(swift::String(a), swift::String(b));
-      if (valueOrError.isError()) [[unlikely]] {
-        throw std::runtime_error(valueOrError.getError());
-      }
-      auto value = valueOrError.getValue();
+      auto value = _swiftPart.addStrings(swift::String(a), swift::String(b));
       return std::string(value);
     }
     inline void multipleArguments(double num, const std::string& str, bool boo) override {
-      auto valueOrError = _swiftPart.multipleArguments(std::forward<decltype(num)>(num), swift::String(str), std::forward<decltype(boo)>(boo));
-      if (valueOrError.isError()) [[unlikely]] {
-        throw std::runtime_error(valueOrError.getError());
-      }
+      _swiftPart.multipleArguments(std::forward<decltype(num)>(num), swift::String(str), std::forward<decltype(boo)>(boo));
     }
     inline std::vector<double> getNumbers() override {
-      auto valueOrError = _swiftPart.getNumbers();
-      if (valueOrError.isError()) [[unlikely]] {
-        throw std::runtime_error(valueOrError.getError());
-      }
-      auto value = valueOrError.getValue();
+      auto value = _swiftPart.getNumbers();
       return [&]() -> std::vector<double> {
         std::vector<double> vector;
         vector.reserve(value.getCount());
@@ -147,11 +129,7 @@ namespace margelo::nitro::image {
       }();
     }
     inline std::vector<std::string> getStrings() override {
-      auto valueOrError = _swiftPart.getStrings();
-      if (valueOrError.isError()) [[unlikely]] {
-        throw std::runtime_error(valueOrError.getError());
-      }
-      auto value = valueOrError.getValue();
+      auto value = _swiftPart.getStrings();
       return [&]() -> std::vector<std::string> {
         std::vector<std::string> vector;
         vector.reserve(value.getCount());
