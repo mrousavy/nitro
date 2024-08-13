@@ -31,6 +31,9 @@ export class SwiftCxxBridgedType {
       case 'optional':
         // swift::Optional<T> <> std::optional<T>
         return true
+      case 'string':
+        // swift::String <> std::string
+        return true
       default:
         return false
     }
@@ -80,6 +83,16 @@ export class SwiftCxxBridgedType {
             throw new Error(`Invalid language! ${language}`)
         }
       }
+      case 'string': {
+        switch (language) {
+          case 'c++':
+            return `swift::String`
+          case 'swift':
+            return 'String'
+          default:
+            throw new Error(`Invalid language! ${language}`)
+        }
+      }
       default:
         // No workaround - just return normal type
         return this.type.getCode(language)
@@ -117,10 +130,19 @@ export class SwiftCxxBridgedType {
         }
       case 'optional': {
         const optionalType = getTypeAs(this.type, OptionalType)
-        const type = optionalType.wrappingType.getCode(language)
+        const wrapping = new SwiftCxxBridgedType(optionalType.wrappingType)
+        const type = wrapping.getTypeCode(language)
         switch (language) {
           case 'c++':
             return `${cppParameterName}.has_value() ? swift::Optional<${type}>::some(${cppParameterName}.value()) : swift::Optional<${type}>::none()`
+          default:
+            return cppParameterName
+        }
+      }
+      case 'string': {
+        switch (language) {
+          case 'c++':
+            return `swift::String(${cppParameterName})`
           default:
             return cppParameterName
         }
@@ -162,6 +184,14 @@ export class SwiftCxxBridgedType {
         switch (language) {
           case 'c++':
             return `${swiftParameterName} ? ${swiftParameterName}.get() : nullptr`
+          default:
+            return swiftParameterName
+        }
+      }
+      case 'string': {
+        switch (language) {
+          case 'c++':
+            return `std::string(${swiftParameterName})`
           default:
             return swiftParameterName
         }

@@ -67,10 +67,11 @@ namespace margelo::nitro::image {
       _swiftPart.setBoolValue(std::forward<decltype(boolValue)>(boolValue));
     }
     inline std::string getStringValue() noexcept override {
-      return _swiftPart.getStringValue();
+      auto result = _swiftPart.getStringValue();
+      return std::string(result);
     }
     inline void setStringValue(const std::string& stringValue) noexcept override {
-      _swiftPart.setStringValue(std::forward<decltype(stringValue)>(stringValue));
+      _swiftPart.setStringValue(swift::String(stringValue));
     }
     inline int64_t getBigintValue() noexcept override {
       return _swiftPart.getBigintValue();
@@ -80,7 +81,7 @@ namespace margelo::nitro::image {
     }
     inline std::optional<std::string> getStringOrUndefined() noexcept override {
       auto result = _swiftPart.getStringOrUndefined();
-      return result.isSome() ? result.get() : nullptr;
+      return result ? result.get() : nullptr;
     }
     inline void setStringOrUndefined(const std::optional<std::string>& stringOrUndefined) noexcept override {
       _swiftPart.setStringOrUndefined(stringOrUndefined.has_value() ? swift::Optional<swift::String>::some(stringOrUndefined.value()) : swift::Optional<swift::String>::none());
@@ -117,15 +118,15 @@ namespace margelo::nitro::image {
       return value;
     }
     inline std::string addStrings(const std::string& a, const std::string& b) override {
-      auto valueOrError = _swiftPart.addStrings(std::forward<decltype(a)>(a), std::forward<decltype(b)>(b));
+      auto valueOrError = _swiftPart.addStrings(swift::String(a), swift::String(b));
       if (valueOrError.isError()) [[unlikely]] {
         throw std::runtime_error(valueOrError.getError());
       }
       auto value = valueOrError.getValue();
-      return value;
+      return std::string(value);
     }
     inline void multipleArguments(double num, const std::string& str, bool boo) override {
-      auto valueOrError = _swiftPart.multipleArguments(std::forward<decltype(num)>(num), std::forward<decltype(str)>(str), std::forward<decltype(boo)>(boo));
+      auto valueOrError = _swiftPart.multipleArguments(std::forward<decltype(num)>(num), swift::String(str), std::forward<decltype(boo)>(boo));
       if (valueOrError.isError()) [[unlikely]] {
         throw std::runtime_error(valueOrError.getError());
       }

@@ -63,7 +63,7 @@ namespace margelo::nitro::image {
   public:
     // Methods
     inline std::shared_ptr<margelo::nitro::image::HybridImageSpec> loadImageFromFile(const std::string& path) override {
-      auto valueOrError = _swiftPart.loadImageFromFile(std::forward<decltype(path)>(path));
+      auto valueOrError = _swiftPart.loadImageFromFile(swift::String(path));
       if (valueOrError.isError()) [[unlikely]] {
         throw std::runtime_error(valueOrError.getError());
       }
@@ -71,7 +71,7 @@ namespace margelo::nitro::image {
       return HybridContext::getOrCreate<HybridImageSpecSwift>(value);
     }
     inline std::shared_ptr<margelo::nitro::image::HybridImageSpec> loadImageFromURL(const std::string& path) override {
-      auto valueOrError = _swiftPart.loadImageFromURL(std::forward<decltype(path)>(path));
+      auto valueOrError = _swiftPart.loadImageFromURL(swift::String(path));
       if (valueOrError.isError()) [[unlikely]] {
         throw std::runtime_error(valueOrError.getError());
       }
@@ -79,7 +79,7 @@ namespace margelo::nitro::image {
       return HybridContext::getOrCreate<HybridImageSpecSwift>(value);
     }
     inline std::shared_ptr<margelo::nitro::image::HybridImageSpec> loadImageFromSystemName(const std::string& path) override {
-      auto valueOrError = _swiftPart.loadImageFromSystemName(std::forward<decltype(path)>(path));
+      auto valueOrError = _swiftPart.loadImageFromSystemName(swift::String(path));
       if (valueOrError.isError()) [[unlikely]] {
         throw std::runtime_error(valueOrError.getError());
       }
