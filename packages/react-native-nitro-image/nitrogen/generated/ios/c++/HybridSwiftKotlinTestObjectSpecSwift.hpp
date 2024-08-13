@@ -100,6 +100,27 @@ namespace margelo::nitro::image {
     inline void setOptionalString(const std::optional<std::string>& optionalString) noexcept override {
       _swiftPart.setOptionalString(optionalString);
     }
+    inline std::unordered_map<std::string, double> getSomeMap() noexcept override {
+      auto result = _swiftPart.getSomeMap();
+      return result;
+    }
+    inline void setSomeMap(const std::unordered_map<std::string, double>& someMap) noexcept override {
+      _swiftPart.setSomeMap(someMap);
+    }
+    inline std::vector<std::string> getSomeArray() noexcept override {
+      auto result = _swiftPart.getSomeArray();
+      return result;
+    }
+    inline void setSomeArray(const std::vector<std::string>& someArray) noexcept override {
+      _swiftPart.setSomeArray(someArray);
+    }
+    inline std::optional<std::string> getSomeOptional() noexcept override {
+      auto result = _swiftPart.getSomeOptional();
+      return result;
+    }
+    inline void setSomeOptional(const std::optional<std::string>& someOptional) noexcept override {
+      _swiftPart.setSomeOptional(someOptional);
+    }
 
   public:
     // Methods

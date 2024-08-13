@@ -19,13 +19,29 @@ import NitroModules
  * - Throwing methods need to be wrapped with a Result<T, Error> type, as exceptions cannot be propagated to C++
  */
 public final class HybridImageSpecCxx {
+  /**
+   * The Swift <> C++ bridge's namespace (`margelo::nitro::image::bridge::swift`)
+   * from `NitroImage-Swift-Cxx-Bridge.hpp`.
+   * This contains specialized C++ templates, and C++ helper functions that can be accessed from Swift.
+   */
+  public typealias bridge = margelo.nitro.image.bridge.swift
+
+  /**
+   * Holds an instance of the `HybridImageSpec` Swift protocol.
+   */
   private(set) var implementation: HybridImageSpec
 
+  /**
+   * Create a new `HybridImageSpecCxx` that wraps the given `HybridImageSpec`.
+   * All properties and methods bridge to C++ types.
+   */
   public init(_ implementation: HybridImageSpec) {
     self.implementation = implementation
   }
 
-  // HybridObject C++ part
+  /**
+   * Contains a (weak) reference to the C++ HybridObject to cache it.
+   */
   public var hybridContext: margelo.nitro.HybridContext {
     get {
       return self.implementation.hybridContext
@@ -35,7 +51,10 @@ public final class HybridImageSpecCxx {
     }
   }
 
-  // Memory size of the Swift class (plus size of any other allocations)
+  /**
+   * Get the memory size of the Swift class (plus size of any other allocations)
+   * so the JS VM can properly track it and garbage-collect the JS object if needed.
+   */
   public var memorySize: Int {
     return self.implementation.memorySize
   }
@@ -79,7 +98,7 @@ public final class HybridImageSpecCxx {
   }
   
   @inline(__always)
-  public func saveToFile(path: std.string, onFinished: margelo.nitro.image.Func_void_std__string) -> Void {
+  public func saveToFile(path: std.string, onFinished: bridge.Func_void_std__string) -> Void {
     do {
       try self.implementation.saveToFile(path: String(path), onFinished: { (path: String) -> Void in
         onFinished(std.string(path))

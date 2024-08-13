@@ -16,9 +16,14 @@ namespace margelo::nitro::image { struct Person; }
 #include "Person.hpp"
 #include <functional>
 #include <optional>
+#include <unordered_map>
 #include <vector>
 
-namespace margelo::nitro::image {
+/**
+ * Contains specialized versions of C++ templated types so they can be accessed from Swift,
+ * as well as helper functions to interact with those C++ types from Swift.
+ */
+namespace margelo::nitro::image::bridge::swift {
 
   using Func_void_std__string = std::function<void(const std::string&)>;
   
@@ -56,5 +61,20 @@ namespace margelo::nitro::image {
   using Func_std__future_double_ = std::function<std::future<double>()>;
   
   using Func_std__future_std__string_ = std::function<std::future<std::string>()>;
+  
+  using std__unordered_map_std__string__double_ = std::unordered_map<std::string, double>;
+  inline std::unordered_map<std::string, double> create_std__unordered_map_std__string__double_(size_t size) {
+    std::unordered_map<std::string, double> map;
+    map.reserve(size);
+    return map;
+  }
+  inline std::vector<std::string> get_std__unordered_map_std__string__double__keys(const std__unordered_map_std__string__double_& map) {
+    std::vector<std::string> keys;
+    keys.reserve(map.size());
+    for (const auto& entry : map) {
+      keys.push_back(entry.first);
+    }
+    return keys;
+  }
 
-} // namespace margelo::nitro::image
+} // namespace margelo::nitro::image::bridge::swift

@@ -88,6 +88,7 @@ inline ${actualType} create_${name}(size_t size) {
  */
 function createCxxUnorderedMapSwiftHelper(type: RecordType): SwiftCxxHelper {
   const actualType = type.getCode('c++')
+  const keyType = type.keyType.getCode('c++')
   const name = escapeCppName(type.getCode('c++'))
   return {
     funcName: `create_${name}`,
@@ -106,6 +107,14 @@ inline ${actualType} create_${name}(size_t size) {
   ${actualType} map;
   map.reserve(size);
   return map;
+}
+inline std::vector<${keyType}> get_${name}_keys(const ${name}& map) {
+  std::vector<${keyType}> keys;
+  keys.reserve(map.size());
+  for (const auto& entry : map) {
+    keys.push_back(entry.first);
+  }
+  return keys;
 }
     `.trim(),
   }

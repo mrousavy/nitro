@@ -6,6 +6,8 @@ import type { SourceFile } from '../syntax/SourceFile.js'
 import { SwiftCxxBridgedType } from '../syntax/swift/SwiftCxxBridgedType.js'
 import { indent } from '../utils.js'
 
+const SWIFT_BRIDGE_NAMESPACE = ['bridge', 'swift']
+
 export function createSwiftCxxBridge(): SourceFile[] {
   const moduleName = NitroConfig.getIosModuleName()
   const bridgeName = `${moduleName}-Swift-Cxx-Bridge`
@@ -28,7 +30,10 @@ export function createSwiftCxxBridge(): SourceFile[] {
     .map((i) => i.forwardDeclaration)
     .filter((f) => f != null)
     .filter(isNotDuplicate)
-  const namespace = NitroConfig.getCxxNamespace('c++')
+  const namespace = NitroConfig.getCxxNamespace(
+    'c++',
+    ...SWIFT_BRIDGE_NAMESPACE
+  )
 
   const header = `
 ${createFileMetadataString(`${bridgeName}.hpp`)}
@@ -41,6 +46,10 @@ ${forwardDeclarations.sort().join('\n')}
 // Include C++ defined types
 ${includes.sort().join('\n')}
 
+/**
+ * Contains specialized versions of C++ templated types so they can be accessed from Swift,
+ * as well as helper functions to interact with those C++ types from Swift.
+ */
 namespace ${namespace} {
 
   ${indent(helperFunctions, '  ')}
