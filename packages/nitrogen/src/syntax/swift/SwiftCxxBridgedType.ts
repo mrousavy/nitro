@@ -13,6 +13,10 @@ import { HybridObjectType } from '../types/HybridObjectType.js'
 import { OptionalType } from '../types/OptionalType.js'
 import type { Type } from '../types/Type.js'
 import { createSwiftCallback } from './SwiftCallback.js'
+import {
+  createSwiftCxxHelpers,
+  type SwiftCxxHelper,
+} from './SwiftCxxTypeHelper.js'
 
 export class SwiftCxxBridgedType {
   private readonly type: Type
@@ -54,6 +58,12 @@ export class SwiftCxxBridgedType {
       default:
         return false
     }
+  }
+
+  getRequiredBridges(): SwiftCxxHelper[] {
+    // Since Swift doesn't support C++ templates, we need to create helper
+    // functions that create those types (specialized) for us.
+    return createSwiftCxxHelpers(this.type)
   }
 
   getRequiredImports(): SourceImport[] {
