@@ -1,6 +1,5 @@
 package com.margelo.nitro
 
-import android.util.Log
 import androidx.annotation.Keep
 import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
@@ -47,15 +46,5 @@ abstract class HybridObject {
 
     companion object {
         private const val TAG = "HybridObject"
-        init {
-            try {
-                Log.i(TAG, "Loading NitroModules C++ library...")
-                System.loadLibrary("NitroModules")
-                Log.i(TAG, "Successfully loaded NitroModules C++ library!")
-            } catch (e: Error) {
-                Log.e(TAG, "Failed to load NitroModules C++ library! Is it properly installed and linked?", e)
-                throw e
-            }
-        }
     }
 }

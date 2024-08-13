@@ -1,7 +1,5 @@
 package com.margelo.nitro;
 
-import android.util.Log;
-
 import java.util.function.Supplier;
 
 /**
@@ -18,13 +16,4 @@ public class HybridObjectRegistry {
     public static native void registerHybridObjectConstructor(String hybridObjectName, HybridObjectInitializer initializer);
 
     private static final String TAG = "HybridObjectRegistry";
-    static {
-        Log.i(TAG, "Loading native NitroModules C++ library...");
-        try {
-            System.loadLibrary("NitroModules");
-            Log.i(TAG, "Successfully loaded native NitroModules C++ library!");
-        } catch (Throwable e) {
-            Log.e(TAG, "Failed to load native NitroModules C++ library!", e);
-        }
-    }
 }
