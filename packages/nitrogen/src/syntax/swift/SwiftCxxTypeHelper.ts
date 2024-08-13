@@ -10,10 +10,11 @@ import type { Type } from '../types/Type.js'
 export interface SwiftCxxHelper {
   cxxCode: string
   funcName: string
+  specializationName: string
   requiredIncludes: SourceImport[]
 }
 
-export function createSwiftCxxHelpers(type: Type): SwiftCxxHelper[] {
+export function createSwiftCxxHelpers(type: Type): SwiftCxxHelper | undefined {
   switch (type.kind) {
     case 'optional':
       return createCxxOptionalSwiftHelper(getTypeAs(type, OptionalType))
@@ -24,7 +25,7 @@ export function createSwiftCxxHelpers(type: Type): SwiftCxxHelper[] {
     case 'function':
       return createCxxFunctionSwiftHelper(getTypeAs(type, FunctionType))
     default:
-      return []
+      return undefined
   }
 }
 
@@ -33,48 +34,47 @@ export function createSwiftCxxHelpers(type: Type): SwiftCxxHelper[] {
  */
 export function createCxxOptionalSwiftHelper(
   type: OptionalType
-): SwiftCxxHelper[] {
+): SwiftCxxHelper {
   const actualType = type.getCode('c++')
   const name = escapeCppName(type.getCode('c++'))
-  return [
-    {
-      funcName: `create_${name}`,
-      requiredIncludes: [
-        {
-          name: 'optional',
-          space: 'system',
-          language: 'c++',
-        },
-        ...type.getRequiredImports(),
-      ],
-      cxxCode: `
+  return {
+    funcName: `create_${name}`,
+    specializationName: name,
+    requiredIncludes: [
+      {
+        name: 'optional',
+        space: 'system',
+        language: 'c++',
+      },
+      ...type.getRequiredImports(),
+    ],
+    cxxCode: `
 using ${name} = ${actualType};
 inline ${actualType} create_${name}(const ${type.wrappingType.getCode('c++')}& value) {
   return ${actualType}(value);
 }
     `.trim(),
-    },
-  ]
+  }
 }
 
 /**
  * Creates a C++ `create_vector_T<T>(size)` function that can be called from Swift.
  */
-export function createCxxVectorSwiftHelper(type: ArrayType): SwiftCxxHelper[] {
+export function createCxxVectorSwiftHelper(type: ArrayType): SwiftCxxHelper {
   const actualType = type.getCode('c++')
   const name = escapeCppName(type.getCode('c++'))
-  return [
-    {
-      funcName: `create_${name}`,
-      requiredIncludes: [
-        {
-          name: 'vector',
-          space: 'system',
-          language: 'c++',
-        },
-        ...type.getRequiredImports(),
-      ],
-      cxxCode: `
+  return {
+    funcName: `create_${name}`,
+    specializationName: name,
+    requiredIncludes: [
+      {
+        name: 'vector',
+        space: 'system',
+        language: 'c++',
+      },
+      ...type.getRequiredImports(),
+    ],
+    cxxCode: `
 using ${name} = ${actualType};
 inline ${actualType} create_${name}(size_t size) {
   ${actualType} vector;
@@ -82,8 +82,7 @@ inline ${actualType} create_${name}(size_t size) {
   return vector;
 }
     `.trim(),
-    },
-  ]
+  }
 }
 
 /**
@@ -91,21 +90,21 @@ inline ${actualType} create_${name}(size_t size) {
  */
 export function createCxxUnorderedMapSwiftHelper(
   type: RecordType
-): SwiftCxxHelper[] {
+): SwiftCxxHelper {
   const actualType = type.getCode('c++')
   const name = escapeCppName(type.getCode('c++'))
-  return [
-    {
-      funcName: `create_${name}`,
-      requiredIncludes: [
-        {
-          name: 'unordered_map',
-          space: 'system',
-          language: 'c++',
-        },
-        ...type.getRequiredImports(),
-      ],
-      cxxCode: `
+  return {
+    funcName: `create_${name}`,
+    specializationName: name,
+    requiredIncludes: [
+      {
+        name: 'unordered_map',
+        space: 'system',
+        language: 'c++',
+      },
+      ...type.getRequiredImports(),
+    ],
+    cxxCode: `
 using ${name} = ${actualType};
 inline ${actualType} create_${name}(size_t size) {
   ${actualType} map;
@@ -113,8 +112,7 @@ inline ${actualType} create_${name}(size_t size) {
   return map;
 }
     `.trim(),
-    },
-  ]
+  }
 }
 
 /**
@@ -122,22 +120,21 @@ inline ${actualType} create_${name}(size_t size) {
  */
 export function createCxxFunctionSwiftHelper(
   type: FunctionType
-): SwiftCxxHelper[] {
+): SwiftCxxHelper {
   const name = type.specializationName
-  return [
-    {
-      funcName: `create_${name}`,
-      requiredIncludes: [
-        {
-          name: 'functional',
-          space: 'system',
-          language: 'c++',
-        },
-        ...type.getRequiredImports(),
-      ],
-      cxxCode: `
+  return {
+    funcName: `create_${name}`,
+    specializationName: name,
+    requiredIncludes: [
+      {
+        name: 'functional',
+        space: 'system',
+        language: 'c++',
+      },
+      ...type.getRequiredImports(),
+    ],
+    cxxCode: `
 using ${name} = ${type.getCode('c++', false)};
     `.trim(),
-    },
-  ]
+  }
 }

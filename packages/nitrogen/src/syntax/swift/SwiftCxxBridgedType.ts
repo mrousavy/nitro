@@ -59,10 +59,19 @@ export class SwiftCxxBridgedType {
     }
   }
 
-  getRequiredBridges(): SwiftCxxHelper[] {
+  getRequiredBridge(): SwiftCxxHelper | undefined {
     // Since Swift doesn't support C++ templates, we need to create helper
     // functions that create those types (specialized) for us.
     return createSwiftCxxHelpers(this.type)
+  }
+
+  private getBridgeOrThrow(): SwiftCxxHelper {
+    const bridge = this.getRequiredBridge()
+    if (bridge == null)
+      throw new Error(
+        `Type ${this.type.kind} requires a bridged specialization!`
+      )
+    return bridge
   }
 
   getRequiredImports(): SourceImport[] {
@@ -125,18 +134,12 @@ export class SwiftCxxBridgedType {
             throw new Error(`Invalid language! ${language}`)
         }
       }
-      case 'optional': {
-        const optionalType = getTypeAs(this.type, OptionalType)
-        const wrapping = new SwiftCxxBridgedType(optionalType.wrappingType)
-        const type = wrapping.getTypeCode(language)
-        switch (language) {
-          case 'c++':
-            return `swift::Optional<${type}>`
-          case 'swift':
-            return `${type}?`
-          default:
-            throw new Error(`Invalid language! ${language}`)
-        }
+      case 'optional':
+      case 'array':
+      case 'function':
+      case 'record': {
+        const bridge = this.getBridgeOrThrow()
+        return NitroConfig.getCxxNamespace(language, bridge.specializationName)
       }
       case 'string': {
         switch (language) {
@@ -147,24 +150,6 @@ export class SwiftCxxBridgedType {
           default:
             throw new Error(`Invalid language! ${language}`)
         }
-      }
-      case 'array': {
-        const array = getTypeAs(this.type, ArrayType)
-        const wrapping = new SwiftCxxBridgedType(array.itemType)
-        const type = wrapping.getTypeCode(language)
-        switch (language) {
-          case 'c++':
-            return `swift::Array<${type}>`
-          case 'swift':
-            return `[${type}]`
-          default:
-            throw new Error(`Invalid language! ${language}`)
-        }
-      }
-      case 'function': {
-        const functionType = getTypeAs(this.type, FunctionType)
-        const callbackName = functionType.specializationName
-        return NitroConfig.getCxxNamespace(language, callbackName)
       }
       default:
         // No workaround - just return normal type
@@ -202,43 +187,21 @@ export class SwiftCxxBridgedType {
             throw new Error(`Invalid language! ${language}`)
         }
       case 'optional': {
-        const optionalType = getTypeAs(this.type, OptionalType)
-        const wrapping = new SwiftCxxBridgedType(optionalType.wrappingType)
-        const type = wrapping.getTypeCode(language)
+        const optional = getTypeAs(this.type, OptionalType)
+        const wrapping = new SwiftCxxBridgedType(optional.wrappingType)
         switch (language) {
-          case 'c++':
-            return `${cppParameterName}.has_value() ? swift::Optional<${type}>::some(${cppParameterName}.value()) : swift::Optional<${type}>::none()`
+          case 'swift':
+            return `
+{ if let actualValue = ${cppParameterName}.value { return ${wrapping.parseFromCppToSwift('actualValue', language)} } else { return nil } }()
+  `.trim()
           default:
             return cppParameterName
         }
       }
       case 'string': {
         switch (language) {
-          case 'c++':
-            return `swift::String(${cppParameterName})`
-          default:
-            return cppParameterName
-        }
-      }
-      case 'array': {
-        const array = getTypeAs(this.type, ArrayType)
-        const wrapping = new SwiftCxxBridgedType(array.itemType)
-        const cxxType = array.itemType.getCode('c++')
-        const swiftType = wrapping.getTypeCode('c++')
-        const typeDecl = wrapping.canBePassedByReference
-          ? `const auto&`
-          : `auto`
-        switch (language) {
-          case 'c++':
-            return `
-[&]() -> swift::Array<${swiftType}> {
-  std::Array<${cxxType}> array;
-  array.reserveCapacity(${cppParameterName}.size());
-  for (${typeDecl} i : ${cppParameterName}) {
-    array.append(${wrapping.parseFromCppToSwift('i', language)});
-  }
-  return array;
-}()`.trim()
+          case 'swift':
+            return `String(${cppParameterName})`
           default:
             return cppParameterName
         }
@@ -301,17 +264,23 @@ export class SwiftCxxBridgedType {
             throw new Error(`Invalid language! ${language}`)
         }
       case 'optional': {
+        const optional = getTypeAs(this.type, OptionalType)
+        const wrapping = new SwiftCxxBridgedType(optional.wrappingType)
+        const bridge = this.getBridgeOrThrow()
+        const fullName = NitroConfig.getCxxNamespace(language, bridge.funcName)
         switch (language) {
-          case 'c++':
-            return `${swiftParameterName} ? ${swiftParameterName}.get() : nullptr`
+          case 'swift':
+            return `
+{ if let actualValue = ${swiftParameterName} { return ${fullName}(${wrapping.parseFromSwiftToCpp('actualValue', language)}) } else { return .init() } }()
+  `.trim()
           default:
             return swiftParameterName
         }
       }
       case 'string': {
         switch (language) {
-          case 'c++':
-            return `std::string(${swiftParameterName})`
+          case 'swift':
+            return `std.string(${swiftParameterName})`
           default:
             return swiftParameterName
         }

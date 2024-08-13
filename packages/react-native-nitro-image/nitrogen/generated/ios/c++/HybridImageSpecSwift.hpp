@@ -85,7 +85,7 @@ namespace margelo::nitro::image {
       return value;
     }
     inline void saveToFile(const std::string& path, const std::function<void(const std::string& /* path */)>& onFinished) override {
-      _swiftPart.saveToFile(swift::String(path), onFinished);
+      _swiftPart.saveToFile(path, onFinished);
     }
 
   private:

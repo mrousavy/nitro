@@ -47,7 +47,7 @@ public final class HybridImageFactorySpecCxx {
   @inline(__always)
   public func loadImageFromFile(path: std.string) -> HybridImageSpecCxx {
     do {
-      let result = try self.implementation.loadImageFromFile(path: path)
+      let result = try self.implementation.loadImageFromFile(path: String(path))
       return result.createCxxBridge()
     } catch {
       let message = "\(error.localizedDescription)"
@@ -58,7 +58,7 @@ public final class HybridImageFactorySpecCxx {
   @inline(__always)
   public func loadImageFromURL(path: std.string) -> HybridImageSpecCxx {
     do {
-      let result = try self.implementation.loadImageFromURL(path: path)
+      let result = try self.implementation.loadImageFromURL(path: String(path))
       return result.createCxxBridge()
     } catch {
       let message = "\(error.localizedDescription)"
@@ -69,7 +69,7 @@ public final class HybridImageFactorySpecCxx {
   @inline(__always)
   public func loadImageFromSystemName(path: std.string) -> HybridImageSpecCxx {
     do {
-      let result = try self.implementation.loadImageFromSystemName(path: path)
+      let result = try self.implementation.loadImageFromSystemName(path: String(path))
       return result.createCxxBridge()
     } catch {
       let message = "\(error.localizedDescription)"

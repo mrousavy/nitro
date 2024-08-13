@@ -12,7 +12,9 @@ export function createSwiftCxxBridge(): SourceFile[] {
 
   const types = getAllKnownTypes().map((t) => new SwiftCxxBridgedType(t))
 
-  const bridges = types.flatMap((t) => t.getRequiredBridges())
+  const bridges = types
+    .map((t) => t.getRequiredBridge())
+    .filter((b) => b != null)
   const helperFunctions = bridges
     .map((b) => b.cxxCode)
     .filter(isNotDuplicate)

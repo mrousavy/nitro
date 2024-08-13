@@ -66,11 +66,11 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
   public var stringValue: std.string {
     @inline(__always)
     get {
-      return self.implementation.stringValue
+      return std.string(self.implementation.stringValue)
     }
     @inline(__always)
     set {
-      self.implementation.stringValue = newValue
+      self.implementation.stringValue = String(newValue)
     }
   }
   
@@ -85,36 +85,36 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
     }
   }
   
-  public var stringOrUndefined: std.string? {
+  public var stringOrUndefined: margelo.nitro.image.std__optional_std__string_ {
     @inline(__always)
     get {
-      return self.implementation.stringOrUndefined
+      return { if let actualValue = self.implementation.stringOrUndefined { return margelo.nitro.image.create_std__optional_std__string_(std.string(actualValue)) } else { return .init() } }()
     }
     @inline(__always)
     set {
-      self.implementation.stringOrUndefined = newValue
+      self.implementation.stringOrUndefined = { if let actualValue = newValue.value { return String(actualValue) } else { return nil } }()
     }
   }
   
-  public var stringOrNull: std.string? {
+  public var stringOrNull: margelo.nitro.image.std__optional_std__string_ {
     @inline(__always)
     get {
-      return self.implementation.stringOrNull
+      return { if let actualValue = self.implementation.stringOrNull { return margelo.nitro.image.create_std__optional_std__string_(std.string(actualValue)) } else { return .init() } }()
     }
     @inline(__always)
     set {
-      self.implementation.stringOrNull = newValue
+      self.implementation.stringOrNull = { if let actualValue = newValue.value { return String(actualValue) } else { return nil } }()
     }
   }
   
-  public var optionalString: std.string? {
+  public var optionalString: margelo.nitro.image.std__optional_std__string_ {
     @inline(__always)
     get {
-      return self.implementation.optionalString
+      return { if let actualValue = self.implementation.optionalString { return margelo.nitro.image.create_std__optional_std__string_(std.string(actualValue)) } else { return .init() } }()
     }
     @inline(__always)
     set {
-      self.implementation.optionalString = newValue
+      self.implementation.optionalString = { if let actualValue = newValue.value { return String(actualValue) } else { return nil } }()
     }
   }
 
@@ -144,8 +144,8 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
   @inline(__always)
   public func addStrings(a: std.string, b: std.string) -> std.string {
     do {
-      let result = try self.implementation.addStrings(a: a, b: b)
-      return result
+      let result = try self.implementation.addStrings(a: String(a), b: String(b))
+      return std.string(result)
     } catch {
       let message = "\(error.localizedDescription)"
       fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
@@ -155,7 +155,7 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
   @inline(__always)
   public func multipleArguments(num: Double, str: std.string, boo: Bool) -> Void {
     do {
-      try self.implementation.multipleArguments(num: num, str: str, boo: boo)
+      try self.implementation.multipleArguments(num: num, str: String(str), boo: boo)
       return 
     } catch {
       let message = "\(error.localizedDescription)"
@@ -164,7 +164,7 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
   }
   
   @inline(__always)
-  public func getNumbers() -> [Double] {
+  public func getNumbers() -> margelo.nitro.image.std__vector_double_ {
     do {
       let result = try self.implementation.getNumbers()
       return result
@@ -178,11 +178,7 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
   public func getStrings() -> margelo.nitro.image.std__vector_std__string_ {
     do {
       let result = try self.implementation.getStrings()
-      var vector = margelo.nitro.image.create_std__vector_std__string_(result.count)
-      for value in result {
-        vector.push_back(std.string(value))
-      }
-      return vector
+      return result
     } catch {
       let message = "\(error.localizedDescription)"
       fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
