@@ -26,6 +26,8 @@ export class RecordType implements Type {
     switch (language) {
       case 'c++':
         return `std::unordered_map<${keyCode}, ${valueCode}>`
+      case 'swift':
+        return `Dictionary<${keyCode}, ${valueCode}>`
       default:
         throw new Error(
           `Language ${language} is not yet supported for RecordType!`

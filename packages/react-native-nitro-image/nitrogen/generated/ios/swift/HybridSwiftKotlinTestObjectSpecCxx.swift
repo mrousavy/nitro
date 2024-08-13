@@ -153,6 +153,71 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
       }()
     }
   }
+  
+  public var someMap: margelo.nitro.image.std__unordered_map_std__string__double_ {
+    @inline(__always)
+    get {
+      return {
+        var map = margelo.nitro.image.create_std__unordered_map_std__string__double_(self.implementation.someMap.count)
+        for (k, v) in self.implementation.someMap {
+          map[std.string(k)] = v
+        }
+        return map
+      }()
+    }
+    @inline(__always)
+    set {
+      self.implementation.someMap = {
+        var dictionary = Dictionary<String, Double>(minimumCapacity: newValue.size())
+        let keys = margelo.nitro.image.get_std__unordered_map_std__string__double__keys(newValue)
+        for key in keys {
+          let value = newValue[key]
+          dictionary[String(key)] = value
+        }
+        return dictionary
+      }()
+    }
+  }
+  
+  public var someArray: margelo.nitro.image.std__vector_std__string_ {
+    @inline(__always)
+    get {
+      return {
+        var vector = margelo.nitro.image.create_std__vector_std__string_(self.implementation.someArray.count)
+        for item in self.implementation.someArray {
+          vector.push_back(std.string(item))
+        }
+        return vector
+      }()
+    }
+    @inline(__always)
+    set {
+      self.implementation.someArray = newValue.map({ String($0) })
+    }
+  }
+  
+  public var someOptional: margelo.nitro.image.std__optional_std__string_ {
+    @inline(__always)
+    get {
+      return {
+        if let actualValue = self.implementation.someOptional {
+          return margelo.nitro.image.create_std__optional_std__string_(std.string(actualValue))
+        } else {
+          return .init()
+        }
+      }()
+    }
+    @inline(__always)
+    set {
+      self.implementation.someOptional = {
+        if let actualValue = newValue.value {
+          return String(actualValue)
+        } else {
+          return nil
+        }
+      }()
+    }
+  }
 
   // Methods
   @inline(__always)

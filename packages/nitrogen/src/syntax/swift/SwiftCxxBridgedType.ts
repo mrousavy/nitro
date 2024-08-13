@@ -11,6 +11,7 @@ import { FunctionType } from '../types/FunctionType.js'
 import { getTypeAs } from '../types/getTypeAs.js'
 import { HybridObjectType } from '../types/HybridObjectType.js'
 import { OptionalType } from '../types/OptionalType.js'
+import { RecordType } from '../types/RecordType.js'
 import type { Type } from '../types/Type.js'
 import {
   createSwiftCxxHelpers,
@@ -50,6 +51,9 @@ export class SwiftCxxBridgedType {
         return true
       case 'array':
         // swift::Array<T> <> std::vector<T>
+        return true
+      case 'record':
+        // Dictionary<K, V> <> std::unordered_map<K, V>
         return true
       case 'function':
         // (@ecaping () -> Void) <> std::function<...>
@@ -202,6 +206,41 @@ export class SwiftCxxBridgedType {
             return cppParameterName
         }
       }
+      case 'array': {
+        const array = getTypeAs(this.type, ArrayType)
+        const wrapping = new SwiftCxxBridgedType(array.itemType)
+        switch (language) {
+          case 'swift':
+            return `${cppParameterName}.map({ ${wrapping.parseFromCppToSwift('$0', 'swift')} })`.trim()
+          default:
+            return cppParameterName
+        }
+      }
+      case 'record': {
+        const bridge = this.getBridgeOrThrow()
+        const getKeysFunc = NitroConfig.getCxxNamespace(
+          'swift',
+          `get_${bridge.specializationName}_keys`
+        )
+        const record = getTypeAs(this.type, RecordType)
+        const wrappingKey = new SwiftCxxBridgedType(record.keyType)
+        const wrappingValue = new SwiftCxxBridgedType(record.valueType)
+        switch (language) {
+          case 'swift':
+            return `
+{
+  var dictionary = ${record.getCode('swift')}(minimumCapacity: ${cppParameterName}.size())
+  let keys = ${getKeysFunc}(${cppParameterName})
+  for key in keys {
+    let value = ${cppParameterName}[key]
+    dictionary[${wrappingKey.parseFromCppToSwift('key', 'swift')}] = ${wrappingValue.parseFromCppToSwift('value', 'swift')}
+  }
+  return dictionary
+}()`.trim()
+          default:
+            return cppParameterName
+        }
+      }
       case 'function': {
         const funcType = getTypeAs(this.type, FunctionType)
         switch (language) {
@@ -309,6 +348,26 @@ export class SwiftCxxBridgedType {
     vector.push_back(${wrapping.parseFromSwiftToCpp('item', language)})
   }
   return vector
+}()`.trim()
+          default:
+            return swiftParameterName
+        }
+      }
+      case 'record': {
+        const bridge = this.getBridgeOrThrow()
+        const createMap = NitroConfig.getCxxNamespace('swift', bridge.funcName)
+        const record = getTypeAs(this.type, RecordType)
+        const wrappingKey = new SwiftCxxBridgedType(record.keyType)
+        const wrappingValue = new SwiftCxxBridgedType(record.valueType)
+        switch (language) {
+          case 'swift':
+            return `
+{
+  var map = ${createMap}(${swiftParameterName}.count)
+  for (k, v) in ${swiftParameterName} {
+    map[${wrappingKey.parseFromSwiftToCpp('k', 'swift')}] = ${wrappingValue.parseFromSwiftToCpp('v', 'swift')}
+  }
+  return map
 }()`.trim()
           default:
             return swiftParameterName

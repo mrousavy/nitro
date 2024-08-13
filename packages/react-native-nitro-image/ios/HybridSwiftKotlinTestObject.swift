@@ -51,4 +51,29 @@ class HybridSwiftKotlinTestObject : HybridSwiftKotlinTestObjectSpec {
       callback()
     }
   }
+  
+  var someMap: Dictionary<String, Double> {
+    get {
+      return [
+        "hello": 55.0
+      ]
+    }
+    set {
+      
+    }
+  }
+  
+  var someArray: [String] {
+    get {
+      return ["hello"]
+    }
+    set {
+      
+    }
+  }
+  
+  var someOptional: String? {
+    get { return "Hello" }
+    set {  }
+  }
 }
