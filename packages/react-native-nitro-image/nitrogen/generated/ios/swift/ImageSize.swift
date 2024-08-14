@@ -8,12 +8,15 @@
 
 public typealias ImageSize = margelo.nitro.image.ImageSize
 
-public extension margelo.nitro.image.ImageSize {
+/**
+ * Represents an instance of `ImageSize`, backed by a C++ object.
+ */
+public extension ImageSize {
   /**
    * Create a new instance of `ImageSize`.
    */
   init(width: Double, height: Double) {
-    self.init(width,height)
+    self.init(width, height)
   }
 
   var width: Double {

@@ -35,7 +35,7 @@ public typealias ${struct.structName} = ${fullName}
 /**
  * Represents an instance of \`${struct.structName}\`, backed by a C++ object.
  */
-public extension ${fullName} {
+public extension ${struct.structName} {
   ${indent(init, '  ')}
 
   ${indent(bridgedProps, '  ')}
@@ -55,10 +55,12 @@ function createSwiftBridgedConstructor(struct: StructType): string {
   const params = struct.properties
     .map((p) => `${p.escapedName}: ${p.getCode('swift')}`)
     .join(', ')
-  const paramsForward = struct.properties.map((p) => {
-    const bridged = new SwiftCxxBridgedType(p)
-    return bridged.parseFromSwiftToCpp(p.escapedName, 'swift')
-  })
+  const paramsForward = struct.properties
+    .map((p) => {
+      const bridged = new SwiftCxxBridgedType(p)
+      return bridged.parseFromSwiftToCpp(p.escapedName, 'swift')
+    })
+    .join(', ')
   return `
 /**
  * Create a new instance of \`${struct.structName}\`.

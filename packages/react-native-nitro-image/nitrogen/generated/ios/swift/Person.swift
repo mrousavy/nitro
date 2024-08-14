@@ -8,12 +8,15 @@
 
 public typealias Person = margelo.nitro.image.Person
 
-public extension margelo.nitro.image.Person {
+/**
+ * Represents an instance of `Person`, backed by a C++ object.
+ */
+public extension Person {
   /**
    * Create a new instance of `Person`.
    */
   init(name: String, age: Double) {
-    self.init(std.string(name),age)
+    self.init(std.string(name), age)
   }
 
   var name: String {
