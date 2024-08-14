@@ -65,19 +65,35 @@ namespace margelo::nitro::image {
   public:
     // Methods
     inline std::shared_ptr<margelo::nitro::image::HybridImageSpec> loadImageFromFile(const std::string& path) override {
-      auto value = _swiftPart.loadImageFromFile(path);
+      auto result = _swiftPart.loadImageFromFile(path);
+      if (result.isFailure()) [[unlikely]] {
+        throw std::runtime_error(result.getFailure());
+      }
+      auto value = result.getSuccessful();
       return HybridContext::getOrCreate<HybridImageSpecSwift>(value);
     }
     inline std::shared_ptr<margelo::nitro::image::HybridImageSpec> loadImageFromURL(const std::string& path) override {
-      auto value = _swiftPart.loadImageFromURL(path);
+      auto result = _swiftPart.loadImageFromURL(path);
+      if (result.isFailure()) [[unlikely]] {
+        throw std::runtime_error(result.getFailure());
+      }
+      auto value = result.getSuccessful();
       return HybridContext::getOrCreate<HybridImageSpecSwift>(value);
     }
     inline std::shared_ptr<margelo::nitro::image::HybridImageSpec> loadImageFromSystemName(const std::string& path) override {
-      auto value = _swiftPart.loadImageFromSystemName(path);
+      auto result = _swiftPart.loadImageFromSystemName(path);
+      if (result.isFailure()) [[unlikely]] {
+        throw std::runtime_error(result.getFailure());
+      }
+      auto value = result.getSuccessful();
       return HybridContext::getOrCreate<HybridImageSpecSwift>(value);
     }
     inline std::shared_ptr<margelo::nitro::image::HybridImageSpec> bounceBack(const std::shared_ptr<margelo::nitro::image::HybridImageSpec>& image) override {
-      auto value = _swiftPart.bounceBack(std::static_pointer_cast<HybridImageSpecSwift>(image)->getSwiftPart());
+      auto result = _swiftPart.bounceBack(std::static_pointer_cast<HybridImageSpecSwift>(image)->getSwiftPart());
+      if (result.isFailure()) [[unlikely]] {
+        throw std::runtime_error(result.getFailure());
+      }
+      auto value = result.getSuccessful();
       return HybridContext::getOrCreate<HybridImageSpecSwift>(value);
     }
 

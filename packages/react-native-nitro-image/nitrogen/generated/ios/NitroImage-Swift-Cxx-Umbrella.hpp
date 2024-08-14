@@ -63,6 +63,20 @@ namespace NitroImage { class HybridImageSpecCxx; }
 // Forward declaration of `HybridTestObjectSpecCxx` to properly resolve imports.
 namespace NitroImage { class HybridTestObjectSpecCxx; }
 
+namespace NitroImage { struct HybridImageSpecCxx_toArrayBuffer_Result; }
+namespace NitroImage { struct HybridImageSpecCxx_saveToFile_Result; }
+namespace NitroImage { struct HybridImageFactorySpecCxx_loadImageFromFile_Result; }
+namespace NitroImage { struct HybridImageFactorySpecCxx_loadImageFromURL_Result; }
+namespace NitroImage { struct HybridImageFactorySpecCxx_loadImageFromSystemName_Result; }
+namespace NitroImage { struct HybridImageFactorySpecCxx_bounceBack_Result; }
+namespace NitroImage { struct HybridSwiftKotlinTestObjectSpecCxx_simpleFunc_Result; }
+namespace NitroImage { struct HybridSwiftKotlinTestObjectSpecCxx_addNumbers_Result; }
+namespace NitroImage { struct HybridSwiftKotlinTestObjectSpecCxx_addStrings_Result; }
+namespace NitroImage { struct HybridSwiftKotlinTestObjectSpecCxx_multipleArguments_Result; }
+namespace NitroImage { struct HybridSwiftKotlinTestObjectSpecCxx_getNumbers_Result; }
+namespace NitroImage { struct HybridSwiftKotlinTestObjectSpecCxx_getStrings_Result; }
+namespace NitroImage { struct HybridSwiftKotlinTestObjectSpecCxx_callCallback_Result; }
+
 // Include Swift defined types
 #if __has_include("NitroImage-Swift.h")
 #include "NitroImage-Swift.h"
