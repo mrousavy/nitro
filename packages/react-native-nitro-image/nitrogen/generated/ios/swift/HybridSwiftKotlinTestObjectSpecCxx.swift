@@ -386,4 +386,36 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
     }
   }
   
+  @inline(__always)
+  public func createNewBuffer(size: Double) -> ArrayBufferHolder {
+    do {
+      let result = try self.implementation.createNewBuffer(size: size)
+      return result
+    } catch {
+      let message = "\(error.localizedDescription)"
+      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
+    }
+  }
+  
+  @inline(__always)
+  public func newTestObject() -> HybridSwiftKotlinTestObjectSpecCxx {
+    do {
+      let result = try self.implementation.newTestObject()
+      return result.createCxxBridge()
+    } catch {
+      let message = "\(error.localizedDescription)"
+      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
+    }
+  }
+  
+  @inline(__always)
+  public func bounceBack(obj: HybridSwiftKotlinTestObjectSpecCxx) -> HybridSwiftKotlinTestObjectSpecCxx {
+    do {
+      let result = try self.implementation.bounceBack(obj: obj.implementation)
+      return result.createCxxBridge()
+    } catch {
+      let message = "\(error.localizedDescription)"
+      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
+    }
+  }
 }

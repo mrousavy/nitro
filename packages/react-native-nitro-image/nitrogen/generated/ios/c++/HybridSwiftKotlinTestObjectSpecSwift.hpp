@@ -21,6 +21,12 @@ namespace margelo::nitro::image { enum class Powertrain; }
 namespace margelo::nitro::image { struct Person; }
 // Forward declaration of `OldEnum` to properly resolve imports.
 namespace margelo::nitro::image { enum class OldEnum; }
+// Forward declaration of `ArrayBuffer` to properly resolve imports.
+namespace NitroModules { class ArrayBuffer; }
+// Forward declaration of `HybridSwiftKotlinTestObjectSpec` to properly resolve imports.
+namespace margelo::nitro::image { class HybridSwiftKotlinTestObjectSpec; }
+// Forward declaration of `HybridSwiftKotlinTestObjectSpecSwift` to properly resolve imports.
+namespace margelo::nitro::image { class HybridSwiftKotlinTestObjectSpecSwift; }
 
 #include <string>
 #include <optional>
@@ -196,6 +202,18 @@ namespace margelo::nitro::image {
     }
     inline void callCallback(const std::function<void()>& callback) override {
       _swiftPart.callCallback(callback);
+    }
+    inline std::shared_ptr<ArrayBuffer> createNewBuffer(double size) override {
+      auto value = _swiftPart.createNewBuffer(std::forward<decltype(size)>(size));
+      return value.getArrayBuffer();
+    }
+    inline std::shared_ptr<margelo::nitro::image::HybridSwiftKotlinTestObjectSpec> newTestObject() override {
+      auto value = _swiftPart.newTestObject();
+      return HybridContext::getOrCreate<HybridSwiftKotlinTestObjectSpecSwift>(value);
+    }
+    inline std::shared_ptr<margelo::nitro::image::HybridSwiftKotlinTestObjectSpec> bounceBack(const std::shared_ptr<margelo::nitro::image::HybridSwiftKotlinTestObjectSpec>& obj) override {
+      auto value = _swiftPart.bounceBack(std::static_pointer_cast<HybridSwiftKotlinTestObjectSpecSwift>(obj)->getSwiftPart());
+      return HybridContext::getOrCreate<HybridSwiftKotlinTestObjectSpecSwift>(value);
     }
 
   private:
