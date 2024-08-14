@@ -19,11 +19,11 @@ export function createSwiftStructBridge(
 var ${p.escapedName}: ${p.getCode('swift')} {
   @inline(__always)
   get {
-    return ${bridge.parseFromCppToSwift(cppName, 'swift')}
+    return ${indent(bridge.parseFromCppToSwift(cppName, 'swift'), '    ')}
   }
   @inline(__always)
   set {
-    ${cppName} = ${bridge.parseFromSwiftToCpp('newValue', 'swift')}
+    ${cppName} = ${indent(bridge.parseFromSwiftToCpp('newValue', 'swift'), '    ')}
   }
 }
     `.trim()

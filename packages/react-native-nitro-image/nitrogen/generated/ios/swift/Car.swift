@@ -86,22 +86,22 @@ public extension Car {
     @inline(__always)
     get {
       return {
-    if let actualValue = self.__driver.value {
-      return actualValue
-    } else {
-      return nil
-    }
-  }()
+        if let actualValue = self.__driver.value {
+          return actualValue
+        } else {
+          return nil
+        }
+      }()
     }
     @inline(__always)
     set {
       self.__driver = {
-    if let actualValue = newValue {
-      return bridge.create_std__optional_Person_(actualValue)
-    } else {
-      return .init()
-    }
-  }()
+        if let actualValue = newValue {
+          return bridge.create_std__optional_Person_(actualValue)
+        } else {
+          return .init()
+        }
+      }()
     }
   }
 }
