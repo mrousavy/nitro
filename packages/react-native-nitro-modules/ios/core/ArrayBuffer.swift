@@ -17,14 +17,15 @@ public extension ArrayBuffer {
                            size: Int,
                            onDelete delete: @escaping () -> Void) -> ArrayBufferHolder {
     // Convert escaping Swift closure to a `void*`
-    let wrappedClosure = Unmanaged.passUnretained(ClosureWrapper(closure: delete)).toOpaque()
+    let wrapper = ClosureWrapper(closure: delete)
+    let wrappedClosure = Unmanaged.passRetained(wrapper).toOpaque()
     
     return ArrayBufferHolder.makeBuffer(data, size, { context in
       guard let context else {
         fatalError("Context was null, even though we created one!")
       }
       // Convert `void*` to a Swift closure
-      let closure = Unmanaged<ClosureWrapper>.fromOpaque(context).takeUnretainedValue()
+      let closure = Unmanaged<ClosureWrapper>.fromOpaque(context).takeRetainedValue()
       // Call it (deleteFunc)
       closure.invoke()
     }, wrappedClosure)

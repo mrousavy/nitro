@@ -28,7 +28,7 @@ NativeArrayBuffer::NativeArrayBuffer(uint8_t* data, size_t size, DeleteFn delete
 
 NativeArrayBuffer::~NativeArrayBuffer() {
   if (_deleteFunc != nullptr) {
-    _deleteFunc(_data);
+    _deleteFunc(_deleteFuncContext);
   }
 }
 
