@@ -22,6 +22,8 @@ import {
 import { createSwiftEnumBridge } from './SwiftEnum.js'
 import { createSwiftStructBridge } from './SwiftStruct.js'
 
+// TODO: Remove enum bridge once Swift fixes bidirectional enums crashing the `-Swift.h` header.
+
 export class SwiftCxxBridgedType {
   readonly type: Type
 
