@@ -285,7 +285,7 @@ export class SwiftCxxBridgedType {
             return `
 { () -> ${optional.getCode('swift')} in
   if let actualValue = ${cppParameterName}.value {
-    return ${wrapping.parseFromCppToSwift('actualValue', language)}
+    return ${indent(wrapping.parseFromCppToSwift('actualValue', language), '    ')}
   } else {
     return nil
   }
@@ -388,14 +388,14 @@ case ${i}:
             if (funcType.returnType.kind === 'void') {
               return `
 { ${signature} in
-  ${cppParameterName}(${paramsForward.join(', ')})
+  ${cppParameterName}(${indent(paramsForward.join(', '), '  ')})
 }`.trim()
             } else {
               const resultBridged = new SwiftCxxBridgedType(funcType.returnType)
               return `
 { ${signature} in
   let result = ${cppParameterName}(${paramsForward.join(', ')})
-  return ${resultBridged.parseFromSwiftToCpp('result', 'swift')}
+  return ${indent(resultBridged.parseFromSwiftToCpp('result', 'swift'), '  ')}
 }
               `.trim()
             }
@@ -449,7 +449,7 @@ case ${i}:
             return `
 { () -> bridge.${bridge.specializationName} in
   if let actualValue = ${swiftParameterName} {
-    return ${makeFunc}(${wrapping.parseFromSwiftToCpp('actualValue', language)})
+    return ${makeFunc}(${indent(wrapping.parseFromSwiftToCpp('actualValue', language), '    ')})
   } else {
     return .init()
   }
@@ -486,7 +486,7 @@ case ${i}:
 { () -> bridge.${bridge.specializationName} in
   var vector = ${makeFunc}(${swiftParameterName}.count)
   for item in ${swiftParameterName} {
-    vector.push_back(${wrapping.parseFromSwiftToCpp('item', language)})
+    vector.push_back(${indent(wrapping.parseFromSwiftToCpp('item', language), '    ')})
   }
   return vector
 }()`.trim()
@@ -547,7 +547,7 @@ case ${i}:
 { () -> bridge.${bridge.specializationName} in
   var map = ${createMap}(${swiftParameterName}.count)
   for (k, v) in ${swiftParameterName} {
-    map[${wrappingKey.parseFromSwiftToCpp('k', 'swift')}] = ${wrappingValue.parseFromSwiftToCpp('v', 'swift')}
+    map[${indent(wrappingKey.parseFromSwiftToCpp('k', 'swift'), '    ')}] = ${indent(wrappingValue.parseFromSwiftToCpp('v', 'swift'), '    ')}
   }
   return map
 }()`.trim()
