@@ -132,4 +132,5 @@ export interface SwiftKotlinTestObject extends HybridObject<{ ios: 'swift' }> {
   oldEnum: OldEnum
 
   buffer: ArrayBuffer
+  createNewBuffer(size: number): ArrayBuffer
 }

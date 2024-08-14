@@ -96,6 +96,7 @@ namespace margelo::nitro::image {
       virtual std::vector<double> getNumbers() = 0;
       virtual std::vector<std::string> getStrings() = 0;
       virtual void callCallback(const std::function<void()>& callback) = 0;
+      virtual std::shared_ptr<ArrayBuffer> createNewBuffer(double size) = 0;
 
     protected:
       // Hybrid Setup

@@ -30,6 +30,10 @@ class HybridSwiftKotlinTestObject : HybridSwiftKotlinTestObjectSpec {
   var optionalString: String? = nil
   var buffer: ArrayBufferHolder = .allocate(size: 1024, initializeToZero: true)
   
+  func createNewBuffer(size: Double) throws -> ArrayBufferHolder {
+    return .allocate(size: Int(size))
+  }
+  
   func simpleFunc() throws {
     // do nothing
   }

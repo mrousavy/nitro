@@ -53,6 +53,7 @@ public protocol HybridSwiftKotlinTestObjectSpec: HybridObjectSpec {
   func getNumbers() throws -> [Double]
   func getStrings() throws -> [String]
   func callCallback(callback: (@escaping () -> Void)) throws -> Void
+  func createNewBuffer(size: Double) throws -> ArrayBufferHolder
 }
 
 public extension HybridSwiftKotlinTestObjectSpec {

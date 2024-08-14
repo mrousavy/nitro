@@ -196,6 +196,10 @@ namespace margelo::nitro::image {
     inline void callCallback(const std::function<void()>& callback) override {
       _swiftPart.callCallback(callback);
     }
+    inline std::shared_ptr<ArrayBuffer> createNewBuffer(double size) override {
+      auto value = _swiftPart.createNewBuffer(std::forward<decltype(size)>(size));
+      return value.getArrayBuffer();
+    }
 
   private:
     NitroImage::HybridSwiftKotlinTestObjectSpecCxx _swiftPart;

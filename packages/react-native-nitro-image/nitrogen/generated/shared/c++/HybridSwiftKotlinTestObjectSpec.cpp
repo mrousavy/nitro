@@ -50,6 +50,7 @@ namespace margelo::nitro::image {
       prototype.registerHybridMethod("getNumbers", &HybridSwiftKotlinTestObjectSpec::getNumbers);
       prototype.registerHybridMethod("getStrings", &HybridSwiftKotlinTestObjectSpec::getStrings);
       prototype.registerHybridMethod("callCallback", &HybridSwiftKotlinTestObjectSpec::callCallback);
+      prototype.registerHybridMethod("createNewBuffer", &HybridSwiftKotlinTestObjectSpec::createNewBuffer);
     });
   }
 
