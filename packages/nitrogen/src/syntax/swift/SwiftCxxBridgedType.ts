@@ -348,13 +348,13 @@ export class SwiftCxxBridgedType {
         const variant = getTypeAs(this.type, VariantType)
         const cases = variant.variants
           .map((t, i) => {
-            const getFunc = NitroConfig.getCxxNamespace(
-              'swift',
-              `get_${bridge.specializationName}_${i}`
-            )
+            const getFunc = `bridge.get_${bridge.specializationName}_${i}`
             const wrapping = new SwiftCxxBridgedType(t)
-            const parse = wrapping.parseFromSwiftToCpp('value', 'swift')
-            return `case ${i}:\n  return ${getFunc}(${parse})`
+            const caseName = getSwiftVariantCaseName(t)
+            return `
+case ${i}:
+  let actual = ${getFunc}(${cppParameterName})
+  return .${caseName}(${indent(wrapping.parseFromCppToSwift('actual', 'swift'), '  ')})`.trim()
           })
           .join('\n')
         switch (language) {
