@@ -12,6 +12,8 @@ public typealias Person = margelo.nitro.image.Person
  * Represents an instance of `Person`, backed by a C++ object.
  */
 public extension Person {
+  private typealias bridge = margelo.nitro.image.bridge.swift
+
   /**
    * Create a new instance of `Person`.
    */

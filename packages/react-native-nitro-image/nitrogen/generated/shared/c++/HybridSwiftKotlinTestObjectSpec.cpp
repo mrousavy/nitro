@@ -35,8 +35,8 @@ namespace margelo::nitro::image {
       prototype.registerHybridSetter("someArray", &HybridSwiftKotlinTestObjectSpec::setSomeArray);
       prototype.registerHybridGetter("someOptional", &HybridSwiftKotlinTestObjectSpec::getSomeOptional);
       prototype.registerHybridSetter("someOptional", &HybridSwiftKotlinTestObjectSpec::setSomeOptional);
-      prototype.registerHybridGetter("person", &HybridSwiftKotlinTestObjectSpec::getPerson);
-      prototype.registerHybridSetter("person", &HybridSwiftKotlinTestObjectSpec::setPerson);
+      prototype.registerHybridGetter("car", &HybridSwiftKotlinTestObjectSpec::getCar);
+      prototype.registerHybridSetter("car", &HybridSwiftKotlinTestObjectSpec::setCar);
       prototype.registerHybridGetter("powertrain", &HybridSwiftKotlinTestObjectSpec::getPowertrain);
       prototype.registerHybridSetter("powertrain", &HybridSwiftKotlinTestObjectSpec::setPowertrain);
       prototype.registerHybridGetter("oldEnum", &HybridSwiftKotlinTestObjectSpec::getOldEnum);

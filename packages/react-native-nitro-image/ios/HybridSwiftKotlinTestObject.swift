@@ -10,6 +10,8 @@ import Foundation
 class HybridSwiftKotlinTestObject : HybridSwiftKotlinTestObjectSpec {
   var person: Person = Person("Hello", 21)
   
+  var car: Car? = Car()
+  
   var powertrain: Powertrain = .gas
   var oldEnum: OldEnum = .first
   

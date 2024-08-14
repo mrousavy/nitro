@@ -1,11 +1,14 @@
 import { NitroConfig } from '../../config/NitroConfig.js'
 import { indent } from '../../utils.js'
 import { createFileMetadataString } from '../helpers.js'
-import type { SourceFile } from '../SourceFile.js'
-import type { StructType } from '../types/StructType.js'
+import type { FileWithReferencedTypes } from '../SourceFile.js'
+import { StructType } from '../types/StructType.js'
 import { SwiftCxxBridgedType } from './SwiftCxxBridgedType.js'
+import { BRIDGE_NAMESPACE } from './SwiftHybridObjectBridge.js'
 
-export function createSwiftStructBridge(struct: StructType): SourceFile {
+export function createSwiftStructBridge(
+  struct: StructType
+): FileWithReferencedTypes {
   const fullName = NitroConfig.getCxxNamespace('swift', struct.structName)
   const init = createSwiftBridgedConstructor(struct)
   const bridgedProps = struct.properties
@@ -36,6 +39,8 @@ public typealias ${struct.structName} = ${fullName}
  * Represents an instance of \`${struct.structName}\`, backed by a C++ object.
  */
 public extension ${struct.structName} {
+  private typealias bridge = ${BRIDGE_NAMESPACE}
+
   ${indent(init, '  ')}
 
   ${indent(bridgedProps, '  ')}
@@ -48,6 +53,7 @@ public extension ${struct.structName} {
     name: `${struct.structName}.swift`,
     platform: 'ios',
     subdirectory: [],
+    referencedTypes: struct.properties,
   }
 }
 
@@ -66,7 +72,7 @@ function createSwiftBridgedConstructor(struct: StructType): string {
  * Create a new instance of \`${struct.structName}\`.
  */
 init(${params}) {
-  self.init(${paramsForward})
+  self.init(${indent(paramsForward, '  ')})
 }
   `.trim()
 }

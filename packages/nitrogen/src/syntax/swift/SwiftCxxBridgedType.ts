@@ -14,6 +14,7 @@ import { OptionalType } from '../types/OptionalType.js'
 import { RecordType } from '../types/RecordType.js'
 import { StructType } from '../types/StructType.js'
 import type { Type } from '../types/Type.js'
+import { getReferencedTypes } from './getReferencedTypes.js'
 import {
   createSwiftCxxHelpers,
   type SwiftCxxHelper,
@@ -22,7 +23,7 @@ import { createSwiftEnumBridge } from './SwiftEnum.js'
 import { createSwiftStructBridge } from './SwiftStruct.js'
 
 export class SwiftCxxBridgedType {
-  private readonly type: Type
+  readonly type: Type
 
   constructor(type: Type) {
     this.type = type
@@ -103,22 +104,52 @@ export class SwiftCxxBridgedType {
       })
     }
 
+    // Recursively look into referenced types (e.g. the `T` of a `optional<T>`, or `T` of a `T[]`)
+    const referencedTypes = getReferencedTypes(this.type)
+    referencedTypes.forEach((t) => {
+      if (t === this.type) {
+        // break a recursion - we already know this type
+        return
+      }
+      const bridged = new SwiftCxxBridgedType(t)
+      imports.push(...bridged.getRequiredImports())
+    })
+
     return imports
   }
 
   getExtraFiles(): SourceFile[] {
     const files: SourceFile[] = []
 
-    if (this.type.kind === 'struct') {
-      const struct = getTypeAs(this.type, StructType)
-      const extensionFile = createSwiftStructBridge(struct)
-      files.push(extensionFile)
+    switch (this.type.kind) {
+      case 'struct': {
+        const struct = getTypeAs(this.type, StructType)
+        const extensionFile = createSwiftStructBridge(struct)
+        files.push(extensionFile)
+        extensionFile.referencedTypes.forEach((t) => {
+          const bridge = new SwiftCxxBridgedType(t)
+          files.push(...bridge.getExtraFiles())
+        })
+        break
+      }
+      case 'enum': {
+        const enumType = getTypeAs(this.type, EnumType)
+        const extensionFile = createSwiftEnumBridge(enumType)
+        files.push(extensionFile)
+        break
+      }
     }
-    if (this.type.kind === 'enum') {
-      const enumType = getTypeAs(this.type, EnumType)
-      const extensionFile = createSwiftEnumBridge(enumType)
-      files.push(extensionFile)
-    }
+
+    // Recursively look into referenced types (e.g. the `T` of a `optional<T>`, or `T` of a `T[]`)
+    const referencedTypes = getReferencedTypes(this.type)
+    referencedTypes.forEach((t) => {
+      if (t === this.type) {
+        // break a recursion - we already know this type
+        return
+      }
+      const bridged = new SwiftCxxBridgedType(t)
+      files.push(...bridged.getExtraFiles())
+    })
 
     return files
   }
