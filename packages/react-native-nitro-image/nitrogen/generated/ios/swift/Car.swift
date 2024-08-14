@@ -6,11 +6,11 @@
 /// Copyright © 2024 Marc Rousavy @ Margelo
 ///
 
-public typealias Car = margelo.nitro.image.Car
-
 /**
  * Represents an instance of `Car`, backed by a C++ object.
  */
+public typealias Car = margelo.nitro.image.Car
+
 public extension Car {
   private typealias bridge = margelo.nitro.image.bridge.swift
 

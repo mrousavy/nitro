@@ -6,11 +6,11 @@
 /// Copyright © 2024 Marc Rousavy @ Margelo
 ///
 
-public typealias ImageSize = margelo.nitro.image.ImageSize
-
 /**
  * Represents an instance of `ImageSize`, backed by a C++ object.
  */
+public typealias ImageSize = margelo.nitro.image.ImageSize
+
 public extension ImageSize {
   private typealias bridge = margelo.nitro.image.bridge.swift
 

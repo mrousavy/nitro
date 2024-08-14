@@ -33,11 +33,11 @@ var ${p.escapedName}: ${p.getCode('swift')} {
   const code = `
 ${createFileMetadataString(`${struct.structName}.swift`)}
 
-public typealias ${struct.structName} = ${fullName}
-
 /**
  * Represents an instance of \`${struct.structName}\`, backed by a C++ object.
  */
+public typealias ${struct.structName} = ${fullName}
+
 public extension ${struct.structName} {
   private typealias bridge = ${BRIDGE_NAMESPACE}
 

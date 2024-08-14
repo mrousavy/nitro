@@ -6,11 +6,11 @@
 /// Copyright © 2024 Marc Rousavy @ Margelo
 ///
 
-public typealias Person = margelo.nitro.image.Person
-
 /**
  * Represents an instance of `Person`, backed by a C++ object.
  */
+public typealias Person = margelo.nitro.image.Person
+
 public extension Person {
   private typealias bridge = margelo.nitro.image.bridge.swift
 
