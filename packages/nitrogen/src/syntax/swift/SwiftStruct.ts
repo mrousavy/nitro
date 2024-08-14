@@ -13,7 +13,7 @@ export function createSwiftStructBridge(
   const init = createSwiftBridgedConstructor(struct)
   const bridgedProps = struct.properties
     .map((p) => {
-      const bridge = new SwiftCxxBridgedType(p)
+      const bridge = new SwiftCxxBridgedType(p, true)
       const cppName = `self.__${p.escapedName}`
       return `
 var ${p.escapedName}: ${p.getCode('swift')} {
@@ -63,7 +63,7 @@ function createSwiftBridgedConstructor(struct: StructType): string {
     .join(', ')
   const paramsForward = struct.properties
     .map((p) => {
-      const bridged = new SwiftCxxBridgedType(p)
+      const bridged = new SwiftCxxBridgedType(p, true)
       return bridged.parseFromSwiftToCpp(p.escapedName, 'swift')
     })
     .join(', ')

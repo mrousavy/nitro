@@ -26,9 +26,11 @@ import { createSwiftStructBridge } from './SwiftStruct.js'
 
 export class SwiftCxxBridgedType {
   readonly type: Type
+  private readonly isBridgingToDirectCppTarget: boolean
 
-  constructor(type: Type) {
+  constructor(type: Type, isBridgingToDirectCppTarget: boolean = false) {
     this.type = type
+    this.isBridgingToDirectCppTarget = isBridgingToDirectCppTarget
   }
 
   get hasType(): boolean {
@@ -159,6 +161,9 @@ export class SwiftCxxBridgedType {
   getTypeCode(language: 'swift' | 'c++'): string {
     switch (this.type.kind) {
       case 'enum':
+        if (this.isBridgingToDirectCppTarget) {
+          return this.type.getCode('swift')
+        }
         switch (language) {
           case 'c++':
             return 'int'
@@ -207,6 +212,9 @@ export class SwiftCxxBridgedType {
   ): string {
     switch (this.type.kind) {
       case 'enum':
+        if (this.isBridgingToDirectCppTarget) {
+          return cppParameterName
+        }
         const enumType = getTypeAs(this.type, EnumType)
         switch (language) {
           case 'c++':
@@ -335,6 +343,9 @@ export class SwiftCxxBridgedType {
   ): string {
     switch (this.type.kind) {
       case 'enum':
+        if (this.isBridgingToDirectCppTarget) {
+          return swiftParameterName
+        }
         switch (language) {
           case 'c++':
             return `static_cast<${this.type.getCode('c++')}>(${swiftParameterName})`
