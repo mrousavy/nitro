@@ -122,10 +122,8 @@ export function createType(type: TSMorphType, isOptional: boolean): Type {
   const key = type.compilerType
   if (key != null && knownTypes.has(key)) {
     const known = knownTypes.get(key)!
-    if (isOptional) {
-      return known instanceof OptionalType ? known : new OptionalType(known)
-    } else {
-      return known instanceof OptionalType ? known.wrappingType : known
+    if (isOptional === known instanceof OptionalType) {
+      return known
     }
   }
 
