@@ -111,67 +111,83 @@ The following C++ / JS types are supported out of the box:
   <tr>
     <th>JS Type</th>
     <th>C++ Type</th>
+    <th>Swift Type</th>
   </tr>
 
   <tr>
     <td><code>number</code></td>
     <td><code>double</code> / <code>int</code> / <code>float</code></td>
+    <td><code>Double</code> / <code>Int</code> / <code>Float</code></td>
   </tr>
   <tr>
     <td><code>boolean</code></td>
     <td><code>bool</code></td>
+    <td><code>Bool</code></td>
   </tr>
   <tr>
     <td><code>string</code></td>
     <td><code>std::string</code></td>
+    <td><code>String</code></td>
   </tr>
   <tr>
     <td><code>bigint</code></td>
     <td><code>int64_t</code> / <code>uint64_t</code></td>
+    <td><code>Int64</code> / <code>UInt64</code></td>
   </tr>
   <tr>
     <td><code>T[]</code></td>
     <td><code>std::vector&lt;T&gt;</code></td>
+    <td><code>[T]</code></td>
   </tr>
   <tr>
     <td><code>[A, B, C, ...]</code></td>
     <td><code>std::tuple&lt;A, B, C, ...&gt;</code></td>
+    <td><code>(A, B, C)</code></td>
   </tr>
   <tr>
     <td><code>A | B | C | ...</code></td>
     <td><code>std::variant&lt;A, B, C, ...&gt;</code></td>
+    <td><code>enum Variant_A_B_C</code></td>
   </tr>
   <tr>
     <td><code>Record&lt;string, T&gt;</code></td>
     <td><code>std::unordered_map&lt;std::string, T&gt;</code></td>
+    <td><code>Dictionary&lt;String, T&gt;</code></td>
   </tr>
   <tr>
     <td><code>T?</code></td>
     <td><code>std::optional&lt;T&gt;</code></td>
+    <td><code>T?</code></td>
   </tr>
   <tr>
     <td><code>Promise&lt;T&gt;</code></td>
     <td><code>std::future&lt;T&gt;</code></td>
+    <td>❌</td>
   </tr>
   <tr>
     <td><code>(TArgs...) =&gt; void</code></td>
     <td><code>std::function&lt;void (TArgs...)&gt;</code></td>
+    <td><code>@escaping (TArgs...) -&gt; Void</code></td>
   </tr>
   <tr>
     <td><code>(TArgs...) =&gt; TReturn</code></td>
     <td><code>std::function&lt;std::future&lt;TReturn&gt; (TArgs...)&gt;</code></td>
+    <td>❌</td>
   </tr>
   <tr>
     <td><code>{ ... }</code></td>
     <td><code>std::shared_ptr&lt;<a href="./cpp/core/AnyMap.hpp">AnyMap</a>&gt;</code></td>
+    <td>❌</td>
   </tr>
   <tr>
     <td><code>ArrayBuffer</code></td>
     <td><code>std::shared_ptr&lt;<a href="./cpp/core/ArrayBuffer.hpp">ArrayBuffer</a>&gt;</code></td>
+    <td><code>ArrayBufferHolder</code></td>
   </tr>
   <tr>
     <td><code><a href="./src/HybridObject.ts">HybridObject</a></code></td>
     <td><code>std::shared_ptr&lt;<a href="./cpp/core/HybridObject.hpp">HybridObject</a>&gt;</code></td>
+    <td><code><a href="./ios/core/HybridObjectSpec.swift">HybridObjectSpec</a></code></td>
   </tr>
 </table>
 
