@@ -127,4 +127,7 @@ export interface SwiftKotlinTestObject extends HybridObject<{ ios: 'swift' }> {
   someOptional: string | undefined
 
   person: Person
+
+  powertrain: Powertrain
+  oldEnum: OldEnum
 }

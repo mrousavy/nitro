@@ -13,9 +13,6 @@ import { logPrototypeChain } from '../logPrototypeChain'
 logPrototypeChain(HybridTestObject)
 logPrototypeChain(HybridSwiftKotlinTestObject)
 
-console.log(HybridSwiftKotlinTestObject.getNumbers())
-console.log(HybridSwiftKotlinTestObject.getStrings())
-
 const allTests = getTests()
 
 interface TestState {

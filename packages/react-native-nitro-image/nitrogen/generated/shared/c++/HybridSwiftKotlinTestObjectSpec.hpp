@@ -16,8 +16,14 @@
 
 // Forward declaration of `Person` to properly resolve imports.
 namespace margelo::nitro::image { struct Person; }
+// Forward declaration of `Powertrain` to properly resolve imports.
+namespace margelo::nitro::image { enum class Powertrain; }
+// Forward declaration of `OldEnum` to properly resolve imports.
+namespace margelo::nitro::image { enum class OldEnum; }
 
 #include "Person.hpp"
+#include "Powertrain.hpp"
+#include "OldEnum.hpp"
 
 namespace margelo::nitro::image {
 
@@ -65,6 +71,10 @@ namespace margelo::nitro::image {
       virtual void setSomeOptional(const std::optional<std::string>& someOptional) = 0;
       virtual Person getPerson() = 0;
       virtual void setPerson(const Person& person) = 0;
+      virtual Powertrain getPowertrain() = 0;
+      virtual void setPowertrain(Powertrain powertrain) = 0;
+      virtual OldEnum getOldEnum() = 0;
+      virtual void setOldEnum(OldEnum oldEnum) = 0;
 
     public:
       // Methods

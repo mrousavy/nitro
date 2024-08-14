@@ -248,6 +248,28 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
       self.implementation.person = newValue
     }
   }
+  
+  public var powertrain: Int32 {
+    @inline(__always)
+    get {
+      return self.implementation.powertrain.rawValue
+    }
+    @inline(__always)
+    set {
+      self.implementation.powertrain = margelo.nitro.image.Powertrain(rawValue: newValue)!
+    }
+  }
+  
+  public var oldEnum: Int32 {
+    @inline(__always)
+    get {
+      return self.implementation.oldEnum.rawValue
+    }
+    @inline(__always)
+    set {
+      self.implementation.oldEnum = margelo.nitro.image.OldEnum(rawValue: newValue)!
+    }
+  }
 
   // Methods
   @inline(__always)
