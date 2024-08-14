@@ -25,8 +25,8 @@ using namespace facebook;
  */
 class ArrayBufferHolder {
 public:
-  ArrayBufferHolder(const std::shared_ptr<ArrayBuffer>& arrayBuffer): _arrayBuffer(arrayBuffer) { }
-  
+  ArrayBufferHolder(const std::shared_ptr<ArrayBuffer>& arrayBuffer) : _arrayBuffer(arrayBuffer) {}
+
 public:
   /**
    * Create a new `NativeArrayBuffer` that wraps the given data of the given size, without copying it.
@@ -38,21 +38,29 @@ public:
     auto arrayBuffer = ArrayBuffer::makeBuffer(data, size, deleteFunc, deleteFuncContext);
     return ArrayBufferHolder(arrayBuffer);
   }
-  
+
 public:
   /**
    * Gets the raw bytes the underlying `ArrayBuffer` points to.
    */
-  void* getData() const SWIFT_COMPUTED_PROPERTY { return _arrayBuffer->data(); }
+  void* getData() const SWIFT_COMPUTED_PROPERTY {
+    return _arrayBuffer->data();
+  }
   /**
    * Gets the size of the raw bytes the underlying `ArrayBuffer` points to.
    */
-  size_t getSize() const SWIFT_COMPUTED_PROPERTY { return _arrayBuffer->size(); }
-  
-  bool isOwner() const SWIFT_COMPUTED_PROPERTY { return _arrayBuffer->isOwner(); }
-  
+  size_t getSize() const SWIFT_COMPUTED_PROPERTY {
+    return _arrayBuffer->size();
+  }
+
+  bool isOwner() const SWIFT_COMPUTED_PROPERTY {
+    return _arrayBuffer->isOwner();
+  }
+
 public:
-  inline std::shared_ptr<ArrayBuffer> getArrayBuffer() const { return _arrayBuffer; }
+  inline std::shared_ptr<ArrayBuffer> getArrayBuffer() const {
+    return _arrayBuffer;
+  }
 
 private:
   std::shared_ptr<ArrayBuffer> _arrayBuffer;

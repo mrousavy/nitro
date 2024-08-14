@@ -24,7 +24,7 @@ std::shared_ptr<ArrayBuffer> ArrayBuffer::makeBuffer(uint8_t* data, size_t size,
 // 2. NativeArrayBuffer
 
 NativeArrayBuffer::NativeArrayBuffer(uint8_t* data, size_t size, DeleteFn deleteFunc, void* deleteFuncContext)
-      : ArrayBuffer(), _data(data), _size(size), _deleteFunc(deleteFunc), _deleteFuncContext(deleteFuncContext) { }
+    : ArrayBuffer(), _data(data), _size(size), _deleteFunc(deleteFunc), _deleteFuncContext(deleteFuncContext) {}
 
 NativeArrayBuffer::~NativeArrayBuffer() {
   if (_deleteFunc != nullptr) {
@@ -47,14 +47,14 @@ bool NativeArrayBuffer::isOwner() const noexcept {
 // 3. JSArrayBuffer
 
 JSArrayBuffer::JSArrayBuffer(jsi::Runtime* runtime, OwningReference<jsi::ArrayBuffer> jsReference)
-      : ArrayBuffer(), _runtime(runtime), _jsReference(jsReference), _initialThreadId(std::this_thread::get_id()) {}
+    : ArrayBuffer(), _runtime(runtime), _jsReference(jsReference), _initialThreadId(std::this_thread::get_id()) {}
 
 JSArrayBuffer::~JSArrayBuffer() {}
 
 uint8_t* JSArrayBuffer::data() {
   if (_initialThreadId != std::this_thread::get_id()) [[unlikely]] {
     throw std::runtime_error("`data()` can only be accessed synchronously on the JS Thread! "
-                              "If you want to access it elsewhere, copy it first.");
+                             "If you want to access it elsewhere, copy it first.");
   }
 
   OwningLock<jsi::ArrayBuffer> lock = _jsReference.lock();
@@ -69,7 +69,7 @@ uint8_t* JSArrayBuffer::data() {
 size_t JSArrayBuffer::size() const {
   if (_initialThreadId != std::this_thread::get_id()) [[unlikely]] {
     throw std::runtime_error("`size()` can only be accessed synchronously on the JS Thread! "
-                              "If you want to access it elsewhere, copy it first.");
+                             "If you want to access it elsewhere, copy it first.");
   }
 
   OwningLock<jsi::ArrayBuffer> lock = _jsReference.lock();
