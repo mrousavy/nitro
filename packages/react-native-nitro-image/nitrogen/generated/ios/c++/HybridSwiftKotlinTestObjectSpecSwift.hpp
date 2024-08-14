@@ -13,9 +13,10 @@
 // Forward declaration of `HybridSwiftKotlinTestObjectSpecCxx` to properly resolve imports.
 namespace NitroImage { class HybridSwiftKotlinTestObjectSpecCxx; }
 
+// Forward declaration of `Person` to properly resolve imports.
+namespace margelo::nitro::image { struct Person; }
 
-
-
+#include "Person.hpp"
 
 #if __has_include(<NitroModules/HybridContext.hpp>)
 #include <NitroModules/HybridContext.hpp>
@@ -120,6 +121,13 @@ namespace margelo::nitro::image {
     }
     inline void setSomeOptional(const std::optional<std::string>& someOptional) noexcept override {
       _swiftPart.setSomeOptional(someOptional);
+    }
+    inline Person getPerson() noexcept override {
+      auto result = _swiftPart.getPerson();
+      return result;
+    }
+    inline void setPerson(const Person& person) noexcept override {
+      _swiftPart.setPerson(person);
     }
 
   public:

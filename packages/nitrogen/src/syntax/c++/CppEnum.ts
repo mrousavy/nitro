@@ -14,7 +14,9 @@ export function createCppEnum(
 ): SourceFile {
   // Map enum to C++ code
   const cppEnumMembers = enumMembers
-    .map((m) => `${m.name} SWIFT_NAME(${m.name.toLowerCase()}) = ${m.value},`)
+    .map(
+      (m) => `${m.name}      SWIFT_NAME(${m.name.toLowerCase()}) = ${m.value},`
+    )
     .join('\n')
   const minValue = 0
   const maxValue = enumMembers.length - 1

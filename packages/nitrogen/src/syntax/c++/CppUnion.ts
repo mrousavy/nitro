@@ -13,7 +13,7 @@ export function createCppUnion(
   enumMembers: EnumMember[]
 ): SourceFile {
   const cppEnumMembers = enumMembers
-    .map((m, i) => `${m.name} SWIFT_NAME(${m.name.toLowerCase()}) = ${i},`)
+    .map((m, i) => `${m.name}      SWIFT_NAME(${m.name.toLowerCase()}) = ${i},`)
     .join('\n')
   const cppFromJsiHashCases = enumMembers
     .map((v) =>

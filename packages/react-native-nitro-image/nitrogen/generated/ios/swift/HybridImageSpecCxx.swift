@@ -60,7 +60,7 @@ public final class HybridImageSpecCxx {
   }
 
   // Properties
-  public var size: margelo.nitro.image.ImageSize {
+  public var size: ImageSize {
     @inline(__always)
     get {
       return self.implementation.size

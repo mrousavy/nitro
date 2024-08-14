@@ -30,8 +30,8 @@ namespace margelo::nitro::image {
    * An enum which can be represented as a JavaScript union (ImageFormat).
    */
   enum class ImageFormat {
-    JPG SWIFT_NAME(jpg) = 0,
-    PNG SWIFT_NAME(png) = 1,
+    JPG      SWIFT_NAME(jpg) = 0,
+    PNG      SWIFT_NAME(png) = 1,
   } CLOSED_ENUM;
 
 } // namespace margelo::nitro::image

@@ -12,11 +12,13 @@ import { getTypeAs } from '../types/getTypeAs.js'
 import { HybridObjectType } from '../types/HybridObjectType.js'
 import { OptionalType } from '../types/OptionalType.js'
 import { RecordType } from '../types/RecordType.js'
+import { StructType } from '../types/StructType.js'
 import type { Type } from '../types/Type.js'
 import {
   createSwiftCxxHelpers,
   type SwiftCxxHelper,
 } from './SwiftCxxTypeHelper.js'
+import { createSwiftStructBridge } from './SwiftStruct.js'
 
 export class SwiftCxxBridgedType {
   private readonly type: Type
@@ -54,6 +56,9 @@ export class SwiftCxxBridgedType {
         return true
       case 'record':
         // Dictionary<K, V> <> std::unordered_map<K, V>
+        return true
+      case 'struct':
+        // SomeStruct (Swift extension) <> SomeStruct (C++)
         return true
       case 'function':
         // (@ecaping () -> Void) <> std::function<...>
@@ -102,6 +107,12 @@ export class SwiftCxxBridgedType {
 
   getExtraFiles(): SourceFile[] {
     const files: SourceFile[] = []
+
+    if (this.type.kind === 'struct') {
+      const struct = getTypeAs(this.type, StructType)
+      const extensionFile = createSwiftStructBridge(struct)
+      files.push(extensionFile)
+    }
 
     return files
   }

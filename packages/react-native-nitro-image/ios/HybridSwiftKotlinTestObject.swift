@@ -8,6 +8,7 @@
 import Foundation
 
 class HybridSwiftKotlinTestObject : HybridSwiftKotlinTestObjectSpec {
+  var person: Person = Person("Hello", 21)
   
   var hybridContext = margelo.nitro.HybridContext()
   var memorySize: Int {

@@ -33,7 +33,7 @@ export class StructType implements Type {
       case 'c++':
         return this.structName
       case 'swift':
-        return NitroConfig.getCxxNamespace('swift', this.structName)
+        return this.structName
       case 'kotlin':
         return NitroConfig.getAndroidPackage('java/kotlin', this.structName)
       default:
