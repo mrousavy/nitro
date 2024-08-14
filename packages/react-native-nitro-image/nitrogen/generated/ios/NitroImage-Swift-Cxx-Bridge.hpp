@@ -39,13 +39,22 @@ namespace margelo::nitro::image { struct Person; }
  */
 namespace margelo::nitro::image::bridge::swift {
 
+  /**
+   * Specialized version of `std::function<void(const std::string&)>`.
+   */
   using Func_void_std__string = std::function<void(const std::string&)>;
   
+  /**
+   * Specialized version of `std::optional<std::string>`.
+   */
   using std__optional_std__string_ = std::optional<std::string>;
   inline std::optional<std::string> create_std__optional_std__string_(const std::string& value) {
     return std::optional<std::string>(value);
   }
   
+  /**
+   * Specialized version of `std::variant<std::string, double>`.
+   */
   using std__variant_std__string__double_ = std::variant<std::string, double>;
   inline std::variant<std::string, double> create_std__variant_std__string__double_(const std::string& value) {
     return value;
@@ -54,16 +63,25 @@ namespace margelo::nitro::image::bridge::swift {
     return value;
   }
   
+  /**
+   * Specialized version of `std::tuple<double, std::string>`.
+   */
   using std__tuple_double__std__string_ = std::tuple<double, std::string>;
-   inline std::tuple<double, std::string> create_std__tuple_double__std__string_(double arg0, const std::string& arg1) {
-     return std::tuple<double, std::string> { arg0, arg1 };
-   }
+  inline std::tuple<double, std::string> create_std__tuple_double__std__string_(double arg0, const std::string& arg1) {
+    return std::tuple<double, std::string> { arg0, arg1 };
+  }
   
+  /**
+   * Specialized version of `std::optional<bool>`.
+   */
   using std__optional_bool_ = std::optional<bool>;
   inline std::optional<bool> create_std__optional_bool_(const bool& value) {
     return std::optional<bool>(value);
   }
   
+  /**
+   * Specialized version of `std::vector<double>`.
+   */
   using std__vector_double_ = std::vector<double>;
   inline std::vector<double> create_std__vector_double_(size_t size) {
     std::vector<double> vector;
@@ -71,6 +89,9 @@ namespace margelo::nitro::image::bridge::swift {
     return vector;
   }
   
+  /**
+   * Specialized version of `std::vector<std::string>`.
+   */
   using std__vector_std__string_ = std::vector<std::string>;
   inline std::vector<std::string> create_std__vector_std__string_(size_t size) {
     std::vector<std::string> vector;
@@ -78,6 +99,9 @@ namespace margelo::nitro::image::bridge::swift {
     return vector;
   }
   
+  /**
+   * Specialized version of `std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>>`.
+   */
   using std__variant_std__string__double__bool__std__vector_double___std__vector_std__string__ = std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>>;
   inline std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>> create_std__variant_std__string__double__bool__std__vector_double___std__vector_std__string__(const std::string& value) {
     return value;
@@ -95,6 +119,9 @@ namespace margelo::nitro::image::bridge::swift {
     return value;
   }
   
+  /**
+   * Specialized version of `std::variant<bool, OldEnum>`.
+   */
   using std__variant_bool__OldEnum_ = std::variant<bool, OldEnum>;
   inline std::variant<bool, OldEnum> create_std__variant_bool__OldEnum_(bool value) {
     return value;
@@ -103,16 +130,25 @@ namespace margelo::nitro::image::bridge::swift {
     return value;
   }
   
+  /**
+   * Specialized version of `std::optional<Person>`.
+   */
   using std__optional_Person_ = std::optional<Person>;
   inline std::optional<Person> create_std__optional_Person_(const Person& value) {
     return std::optional<Person>(value);
   }
   
+  /**
+   * Specialized version of `std::optional<Car>`.
+   */
   using std__optional_Car_ = std::optional<Car>;
   inline std::optional<Car> create_std__optional_Car_(const Car& value) {
     return std::optional<Car>(value);
   }
   
+  /**
+   * Specialized version of `std::variant<Person, Car>`.
+   */
   using std__variant_Person__Car_ = std::variant<Person, Car>;
   inline std::variant<Person, Car> create_std__variant_Person__Car_(const Person& value) {
     return value;
@@ -121,6 +157,9 @@ namespace margelo::nitro::image::bridge::swift {
     return value;
   }
   
+  /**
+   * Specialized version of `std::variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectSpec>, Person>`.
+   */
   using std__variant_std__shared_ptr_margelo__nitro__image__HybridTestObjectSpec___Person_ = std::variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectSpec>, Person>;
   inline std::variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectSpec>, Person> create_std__variant_std__shared_ptr_margelo__nitro__image__HybridTestObjectSpec___Person_(const std::shared_ptr<margelo::nitro::image::HybridTestObjectSpec>& value) {
     return value;
@@ -129,16 +168,25 @@ namespace margelo::nitro::image::bridge::swift {
     return value;
   }
   
+  /**
+   * Specialized version of `std::tuple<double, double>`.
+   */
   using std__tuple_double__double_ = std::tuple<double, double>;
-   inline std::tuple<double, double> create_std__tuple_double__double_(double arg0, double arg1) {
-     return std::tuple<double, double> { arg0, arg1 };
-   }
+  inline std::tuple<double, double> create_std__tuple_double__double_(double arg0, double arg1) {
+    return std::tuple<double, double> { arg0, arg1 };
+  }
   
+  /**
+   * Specialized version of `std::tuple<double, double, double>`.
+   */
   using std__tuple_double__double__double_ = std::tuple<double, double, double>;
-   inline std::tuple<double, double, double> create_std__tuple_double__double__double_(double arg0, double arg1, double arg2) {
-     return std::tuple<double, double, double> { arg0, arg1, arg2 };
-   }
+  inline std::tuple<double, double, double> create_std__tuple_double__double__double_(double arg0, double arg1, double arg2) {
+    return std::tuple<double, double, double> { arg0, arg1, arg2 };
+  }
   
+  /**
+   * Specialized version of `std::variant<std::tuple<double, double>, std::tuple<double, double, double>>`.
+   */
   using std__variant_std__tuple_double__double___std__tuple_double__double__double__ = std::variant<std::tuple<double, double>, std::tuple<double, double, double>>;
   inline std::variant<std::tuple<double, double>, std::tuple<double, double, double>> create_std__variant_std__tuple_double__double___std__tuple_double__double__double__(const std::tuple<double, double>& value) {
     return value;
@@ -147,17 +195,32 @@ namespace margelo::nitro::image::bridge::swift {
     return value;
   }
   
+  /**
+   * Specialized version of `std::tuple<double, std::string, bool>`.
+   */
   using std__tuple_double__std__string__bool_ = std::tuple<double, std::string, bool>;
-   inline std::tuple<double, std::string, bool> create_std__tuple_double__std__string__bool_(double arg0, const std::string& arg1, bool arg2) {
-     return std::tuple<double, std::string, bool> { arg0, arg1, arg2 };
-   }
+  inline std::tuple<double, std::string, bool> create_std__tuple_double__std__string__bool_(double arg0, const std::string& arg1, bool arg2) {
+    return std::tuple<double, std::string, bool> { arg0, arg1, arg2 };
+  }
   
+  /**
+   * Specialized version of `std::function<void()>`.
+   */
   using Func_void = std::function<void()>;
   
+  /**
+   * Specialized version of `std::function<std::future<double>()>`.
+   */
   using Func_std__future_double_ = std::function<std::future<double>()>;
   
+  /**
+   * Specialized version of `std::function<std::future<std::string>()>`.
+   */
   using Func_std__future_std__string_ = std::function<std::future<std::string>()>;
   
+  /**
+   * Specialized version of `std::unordered_map<std::string, double>`.
+   */
   using std__unordered_map_std__string__double_ = std::unordered_map<std::string, double>;
   inline std::unordered_map<std::string, double> create_std__unordered_map_std__string__double_(size_t size) {
     std::unordered_map<std::string, double> map;

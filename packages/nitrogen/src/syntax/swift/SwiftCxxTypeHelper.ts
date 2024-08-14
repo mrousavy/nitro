@@ -53,6 +53,9 @@ function createCxxOptionalSwiftHelper(type: OptionalType): SwiftCxxHelper {
       ...type.getRequiredImports(),
     ],
     cxxCode: `
+/**
+ * Specialized version of \`${actualType}\`.
+ */
 using ${name} = ${actualType};
 inline ${actualType} create_${name}(const ${type.wrappingType.getCode('c++')}& value) {
   return ${actualType}(value);
@@ -79,6 +82,9 @@ function createCxxVectorSwiftHelper(type: ArrayType): SwiftCxxHelper {
       ...type.getRequiredImports(),
     ],
     cxxCode: `
+/**
+ * Specialized version of \`${actualType}\`.
+ */
 using ${name} = ${actualType};
 inline ${actualType} create_${name}(size_t size) {
   ${actualType} vector;
@@ -108,6 +114,9 @@ function createCxxUnorderedMapSwiftHelper(type: RecordType): SwiftCxxHelper {
       ...type.getRequiredImports(),
     ],
     cxxCode: `
+/**
+ * Specialized version of \`${actualType}\`.
+ */
 using ${name} = ${actualType};
 inline ${actualType} create_${name}(size_t size) {
   ${actualType} map;
@@ -143,6 +152,9 @@ function createCxxFunctionSwiftHelper(type: FunctionType): SwiftCxxHelper {
       ...type.getRequiredImports(),
     ],
     cxxCode: `
+/**
+ * Specialized version of \`${type.getCode('c++', false)}\`.
+ */
 using ${name} = ${type.getCode('c++', false)};
     `.trim(),
   }
@@ -178,6 +190,9 @@ inline ${actualType} create_${name}(${param} value) {
       ...type.getRequiredImports(),
     ],
     cxxCode: `
+/**
+ * Specialized version of \`${actualType}\`.
+ */
 using ${name} = ${actualType};
 ${functions}
       `.trim(),
@@ -209,6 +224,9 @@ function createCxxTupleSwiftHelper(type: TupleType): SwiftCxxHelper {
       ...type.getRequiredImports(),
     ],
     cxxCode: `
+/**
+ * Specialized version of \`${actualType}\`.
+ */
 using ${name} = ${actualType};
 inline ${actualType} create_${name}(${typesSignature}) {
   return ${actualType} { ${typesForward} };
