@@ -40,6 +40,7 @@ public protocol HybridSwiftKotlinTestObjectSpec: HybridObjectSpec {
   var someMap: Dictionary<String, Double> { get set }
   var someArray: [String] { get set }
   var someOptional: String? { get set }
+  var person: Person { get set }
 
   // Methods
   func simpleFunc() throws -> Void

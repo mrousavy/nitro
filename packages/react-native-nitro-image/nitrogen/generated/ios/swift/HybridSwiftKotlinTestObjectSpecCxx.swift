@@ -237,6 +237,17 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
       }()
     }
   }
+  
+  public var person: Person {
+    @inline(__always)
+    get {
+      return self.implementation.person
+    }
+    @inline(__always)
+    set {
+      self.implementation.person = newValue
+    }
+  }
 
   // Methods
   @inline(__always)

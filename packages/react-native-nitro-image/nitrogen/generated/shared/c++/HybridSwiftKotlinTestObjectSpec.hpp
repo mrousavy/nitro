@@ -14,9 +14,10 @@
 #error NitroModules cannot be found! Are you sure you installed NitroModules properly?
 #endif
 
+// Forward declaration of `Person` to properly resolve imports.
+namespace margelo::nitro::image { struct Person; }
 
-
-
+#include "Person.hpp"
 
 namespace margelo::nitro::image {
 
@@ -62,6 +63,8 @@ namespace margelo::nitro::image {
       virtual void setSomeArray(const std::vector<std::string>& someArray) = 0;
       virtual std::optional<std::string> getSomeOptional() = 0;
       virtual void setSomeOptional(const std::optional<std::string>& someOptional) = 0;
+      virtual Person getPerson() = 0;
+      virtual void setPerson(const Person& person) = 0;
 
     public:
       // Methods
