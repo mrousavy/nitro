@@ -10,8 +10,8 @@ import Foundation
 class HybridSwiftKotlinTestObject : HybridSwiftKotlinTestObjectSpec {
   var person: Person = Person("Hello", 21)
   
-  var powertrain: margelo.nitro.image.Powertrain = .gas
-  var oldEnum: margelo.nitro.image.OldEnum = .first
+  var powertrain: Powertrain = .gas
+  var oldEnum: OldEnum = .first
   
   var hybridContext = margelo.nitro.HybridContext()
   var memorySize: Int {

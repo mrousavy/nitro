@@ -41,8 +41,8 @@ public protocol HybridSwiftKotlinTestObjectSpec: HybridObjectSpec {
   var someArray: [String] { get set }
   var someOptional: String? { get set }
   var person: Person { get set }
-  var powertrain: margelo.nitro.image.Powertrain { get set }
-  var oldEnum: margelo.nitro.image.OldEnum { get set }
+  var powertrain: Powertrain { get set }
+  var oldEnum: OldEnum { get set }
 
   // Methods
   func simpleFunc() throws -> Void

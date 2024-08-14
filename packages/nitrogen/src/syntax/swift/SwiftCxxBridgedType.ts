@@ -18,6 +18,7 @@ import {
   createSwiftCxxHelpers,
   type SwiftCxxHelper,
 } from './SwiftCxxTypeHelper.js'
+import { createSwiftEnumBridge } from './SwiftEnum.js'
 import { createSwiftStructBridge } from './SwiftStruct.js'
 
 export class SwiftCxxBridgedType {
@@ -111,6 +112,11 @@ export class SwiftCxxBridgedType {
     if (this.type.kind === 'struct') {
       const struct = getTypeAs(this.type, StructType)
       const extensionFile = createSwiftStructBridge(struct)
+      files.push(extensionFile)
+    }
+    if (this.type.kind === 'enum') {
+      const enumType = getTypeAs(this.type, EnumType)
+      const extensionFile = createSwiftEnumBridge(enumType)
       files.push(extensionFile)
     }
 

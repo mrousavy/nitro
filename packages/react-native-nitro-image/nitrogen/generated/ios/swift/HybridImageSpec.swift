@@ -31,11 +31,11 @@ import NitroModules
 public protocol HybridImageSpec: HybridObjectSpec {
   // Properties
   var size: ImageSize { get }
-  var pixelFormat: margelo.nitro.image.PixelFormat { get }
+  var pixelFormat: PixelFormat { get }
   var someSettableProp: Double { get set }
 
   // Methods
-  func toArrayBuffer(format: margelo.nitro.image.ImageFormat) throws -> Double
+  func toArrayBuffer(format: ImageFormat) throws -> Double
   func saveToFile(path: String, onFinished: (@escaping (_ path: String) -> Void)) throws -> Void
 }
 

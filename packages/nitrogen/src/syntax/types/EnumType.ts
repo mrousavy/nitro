@@ -86,7 +86,7 @@ export class EnumType implements Type {
       case 'c++':
         return this.enumName
       case 'swift':
-        return NitroConfig.getCxxNamespace('swift', this.enumName)
+        return this.enumName
       case 'kotlin':
         return NitroConfig.getAndroidPackage('java/kotlin', this.enumName)
       default:
