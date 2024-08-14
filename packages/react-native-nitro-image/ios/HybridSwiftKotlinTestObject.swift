@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import NitroModules
 
 class HybridSwiftKotlinTestObject : HybridSwiftKotlinTestObjectSpec {
   func newTestObject() throws -> any HybridSwiftKotlinTestObjectSpec {
@@ -17,7 +18,7 @@ class HybridSwiftKotlinTestObject : HybridSwiftKotlinTestObjectSpec {
   
   var person: Person = Person("Hello", 21)
   
-  var car: Car? = .init(year: 2018, make: "Lamborghini", model: "Huracan", power: 740, powertrain: .gas, driver: nil)
+  var car: Car? = .init(year: 2018, make: "Lamborghini", model: "Huracan", power: 640, powertrain: .gas, driver: nil)
   
   var powertrain: Powertrain = .gas
   var oldEnum: OldEnum = .first
@@ -34,6 +35,11 @@ class HybridSwiftKotlinTestObject : HybridSwiftKotlinTestObjectSpec {
   var stringOrUndefined: String? = nil
   var stringOrNull: String? = nil
   var optionalString: String? = nil
+  var buffer: ArrayBufferHolder = .allocate(size: 1024, initializeToZero: true)
+  
+  func createNewBuffer(size: Double) throws -> ArrayBufferHolder {
+    return .allocate(size: Int(size))
+  }
   
   func simpleFunc() throws {
     // do nothing

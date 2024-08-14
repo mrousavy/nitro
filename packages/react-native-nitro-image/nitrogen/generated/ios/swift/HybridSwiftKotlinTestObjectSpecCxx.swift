@@ -282,6 +282,17 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
       self.implementation.oldEnum = margelo.nitro.image.OldEnum(rawValue: newValue)!
     }
   }
+  
+  public var buffer: ArrayBufferHolder {
+    @inline(__always)
+    get {
+      return self.implementation.buffer
+    }
+    @inline(__always)
+    set {
+      self.implementation.buffer = newValue
+    }
+  }
 
   // Methods
   @inline(__always)
@@ -369,6 +380,17 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
         callback()
       })
       return 
+    } catch {
+      let message = "\(error.localizedDescription)"
+      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
+    }
+  }
+  
+  @inline(__always)
+  public func createNewBuffer(size: Double) -> ArrayBufferHolder {
+    do {
+      let result = try self.implementation.createNewBuffer(size: size)
+      return result
     } catch {
       let message = "\(error.localizedDescription)"
       fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")

@@ -41,6 +41,8 @@ namespace margelo::nitro::image {
       prototype.registerHybridSetter("powertrain", &HybridSwiftKotlinTestObjectSpec::setPowertrain);
       prototype.registerHybridGetter("oldEnum", &HybridSwiftKotlinTestObjectSpec::getOldEnum);
       prototype.registerHybridSetter("oldEnum", &HybridSwiftKotlinTestObjectSpec::setOldEnum);
+      prototype.registerHybridGetter("buffer", &HybridSwiftKotlinTestObjectSpec::getBuffer);
+      prototype.registerHybridSetter("buffer", &HybridSwiftKotlinTestObjectSpec::setBuffer);
       prototype.registerHybridMethod("simpleFunc", &HybridSwiftKotlinTestObjectSpec::simpleFunc);
       prototype.registerHybridMethod("addNumbers", &HybridSwiftKotlinTestObjectSpec::addNumbers);
       prototype.registerHybridMethod("addStrings", &HybridSwiftKotlinTestObjectSpec::addStrings);
@@ -48,6 +50,7 @@ namespace margelo::nitro::image {
       prototype.registerHybridMethod("getNumbers", &HybridSwiftKotlinTestObjectSpec::getNumbers);
       prototype.registerHybridMethod("getStrings", &HybridSwiftKotlinTestObjectSpec::getStrings);
       prototype.registerHybridMethod("callCallback", &HybridSwiftKotlinTestObjectSpec::callCallback);
+      prototype.registerHybridMethod("createNewBuffer", &HybridSwiftKotlinTestObjectSpec::createNewBuffer);
       prototype.registerHybridMethod("newTestObject", &HybridSwiftKotlinTestObjectSpec::newTestObject);
       prototype.registerHybridMethod("bounceBack", &HybridSwiftKotlinTestObjectSpec::bounceBack);
     });

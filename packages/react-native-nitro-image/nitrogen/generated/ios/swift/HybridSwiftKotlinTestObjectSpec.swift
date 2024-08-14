@@ -43,6 +43,7 @@ public protocol HybridSwiftKotlinTestObjectSpec: HybridObjectSpec {
   var car: Car? { get set }
   var powertrain: Powertrain { get set }
   var oldEnum: OldEnum { get set }
+  var buffer: ArrayBufferHolder { get set }
 
   // Methods
   func simpleFunc() throws -> Void
@@ -52,6 +53,7 @@ public protocol HybridSwiftKotlinTestObjectSpec: HybridObjectSpec {
   func getNumbers() throws -> [Double]
   func getStrings() throws -> [String]
   func callCallback(callback: (@escaping () -> Void)) throws -> Void
+  func createNewBuffer(size: Double) throws -> ArrayBufferHolder
   func newTestObject() throws -> HybridSwiftKotlinTestObjectSpec
   func bounceBack(obj: HybridSwiftKotlinTestObjectSpec) throws -> HybridSwiftKotlinTestObjectSpec
 }

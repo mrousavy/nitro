@@ -79,6 +79,9 @@ export class SwiftCxxBridgedType {
       case 'function':
         // (@ecaping () -> Void) <> std::function<...>
         return true
+      case 'array-buffer':
+        // ArrayBufferHolder <> std::shared_ptr<ArrayBuffer>
+        return true
       default:
         return false
     }
@@ -115,6 +118,17 @@ export class SwiftCxxBridgedType {
         ),
         language: 'c++',
         space: 'user',
+      })
+    } else if (this.type.kind === 'array-buffer') {
+      imports.push({
+        name: 'NitroModules/ArrayBufferHolder.hpp',
+        forwardDeclaration: getForwardDeclaration(
+          'class',
+          'ArrayBufferHolder',
+          'NitroModules'
+        ),
+        language: 'c++',
+        space: 'system',
       })
     }
 
@@ -255,6 +269,14 @@ export class SwiftCxxBridgedType {
           default:
             throw new Error(`Invalid language! ${language}`)
         }
+      case 'array-buffer': {
+        switch (language) {
+          case 'c++':
+            return `ArrayBufferHolder(${cppParameterName})`
+          default:
+            return cppParameterName
+        }
+      }
       case 'optional': {
         const optional = getTypeAs(this.type, OptionalType)
         const wrapping = new SwiftCxxBridgedType(optional.wrappingType)
@@ -413,6 +435,14 @@ export class SwiftCxxBridgedType {
         switch (language) {
           case 'swift':
             return `std.string(${swiftParameterName})`
+          default:
+            return swiftParameterName
+        }
+      }
+      case 'array-buffer': {
+        switch (language) {
+          case 'c++':
+            return `${swiftParameterName}.getArrayBuffer()`
           default:
             return swiftParameterName
         }

@@ -18,7 +18,7 @@ export class ArrayBufferType implements Type {
       case 'c++':
         return 'std::shared_ptr<ArrayBuffer>'
       case 'swift':
-        return 'ArrayBuffer'
+        return 'ArrayBufferHolder'
       default:
         throw new Error(
           `Language ${language} is not yet supported for ArrayBufferType!`

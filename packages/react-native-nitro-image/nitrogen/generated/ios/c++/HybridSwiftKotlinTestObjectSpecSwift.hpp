@@ -21,6 +21,10 @@ namespace margelo::nitro::image { enum class Powertrain; }
 namespace margelo::nitro::image { struct Person; }
 // Forward declaration of `OldEnum` to properly resolve imports.
 namespace margelo::nitro::image { enum class OldEnum; }
+// Forward declaration of `ArrayBuffer` to properly resolve imports.
+namespace NitroModules { class ArrayBuffer; }
+// Forward declaration of `ArrayBufferHolder` to properly resolve imports.
+namespace NitroModules { class ArrayBufferHolder; }
 // Forward declaration of `HybridSwiftKotlinTestObjectSpec` to properly resolve imports.
 namespace margelo::nitro::image { class HybridSwiftKotlinTestObjectSpec; }
 // Forward declaration of `HybridSwiftKotlinTestObjectSpecSwift` to properly resolve imports.
@@ -34,6 +38,8 @@ namespace margelo::nitro::image { class HybridSwiftKotlinTestObjectSpecSwift; }
 #include "Powertrain.hpp"
 #include "Person.hpp"
 #include "OldEnum.hpp"
+#include <NitroModules/ArrayBuffer.hpp>
+#include <NitroModules/ArrayBufferHolder.hpp>
 #include <functional>
 #include <memory>
 #include "HybridSwiftKotlinTestObjectSpec.hpp"
@@ -164,6 +170,13 @@ namespace margelo::nitro::image {
     inline void setOldEnum(OldEnum oldEnum) noexcept override {
       _swiftPart.setOldEnum(static_cast<int>(oldEnum));
     }
+    inline std::shared_ptr<ArrayBuffer> getBuffer() noexcept override {
+      auto result = _swiftPart.getBuffer();
+      return result.getArrayBuffer();
+    }
+    inline void setBuffer(const std::shared_ptr<ArrayBuffer>& buffer) noexcept override {
+      _swiftPart.setBuffer(ArrayBufferHolder(buffer));
+    }
 
   public:
     // Methods
@@ -191,6 +204,10 @@ namespace margelo::nitro::image {
     }
     inline void callCallback(const std::function<void()>& callback) override {
       _swiftPart.callCallback(callback);
+    }
+    inline std::shared_ptr<ArrayBuffer> createNewBuffer(double size) override {
+      auto value = _swiftPart.createNewBuffer(std::forward<decltype(size)>(size));
+      return value.getArrayBuffer();
     }
     inline std::shared_ptr<margelo::nitro::image::HybridSwiftKotlinTestObjectSpec> newTestObject() override {
       auto value = _swiftPart.newTestObject();
