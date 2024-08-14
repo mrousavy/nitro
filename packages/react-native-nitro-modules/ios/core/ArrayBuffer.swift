@@ -41,7 +41,7 @@ public extension ArrayBufferHolder {
   static func allocate(size: Int, initializeToZero: Bool = false) -> ArrayBufferHolder {
     let data = UnsafeMutablePointer<UInt8>.allocate(capacity: size)
     if initializeToZero {
-      data.initialize(to: 0)
+      data.initialize(repeating: 0, count: size)
     }
     
     return ArrayBufferHolder.makeBuffer(data, size, { data in
