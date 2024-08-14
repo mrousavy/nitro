@@ -161,29 +161,54 @@ namespace margelo::nitro::image {
   public:
     // Methods
     inline void simpleFunc() override {
-      _swiftPart.simpleFunc();
+      auto result = _swiftPart.simpleFunc();
+      if (result.isFailure()) [[unlikely]] {
+        throw std::runtime_error(result.getFailure());
+      }
     }
     inline double addNumbers(double a, double b) override {
-      auto value = _swiftPart.addNumbers(std::forward<decltype(a)>(a), std::forward<decltype(b)>(b));
+      auto result = _swiftPart.addNumbers(std::forward<decltype(a)>(a), std::forward<decltype(b)>(b));
+      if (result.isFailure()) [[unlikely]] {
+        throw std::runtime_error(result.getFailure());
+      }
+      auto value = result.getSuccessful();
       return value;
     }
     inline std::string addStrings(const std::string& a, const std::string& b) override {
-      auto value = _swiftPart.addStrings(a, b);
+      auto result = _swiftPart.addStrings(a, b);
+      if (result.isFailure()) [[unlikely]] {
+        throw std::runtime_error(result.getFailure());
+      }
+      auto value = result.getSuccessful();
       return value;
     }
     inline void multipleArguments(double num, const std::string& str, bool boo) override {
-      _swiftPart.multipleArguments(std::forward<decltype(num)>(num), str, std::forward<decltype(boo)>(boo));
+      auto result = _swiftPart.multipleArguments(std::forward<decltype(num)>(num), str, std::forward<decltype(boo)>(boo));
+      if (result.isFailure()) [[unlikely]] {
+        throw std::runtime_error(result.getFailure());
+      }
     }
     inline std::vector<double> getNumbers() override {
-      auto value = _swiftPart.getNumbers();
+      auto result = _swiftPart.getNumbers();
+      if (result.isFailure()) [[unlikely]] {
+        throw std::runtime_error(result.getFailure());
+      }
+      auto value = result.getSuccessful();
       return value;
     }
     inline std::vector<std::string> getStrings() override {
-      auto value = _swiftPart.getStrings();
+      auto result = _swiftPart.getStrings();
+      if (result.isFailure()) [[unlikely]] {
+        throw std::runtime_error(result.getFailure());
+      }
+      auto value = result.getSuccessful();
       return value;
     }
     inline void callCallback(const std::function<void()>& callback) override {
-      _swiftPart.callCallback(callback);
+      auto result = _swiftPart.callCallback(callback);
+      if (result.isFailure()) [[unlikely]] {
+        throw std::runtime_error(result.getFailure());
+      }
     }
 
   private:
