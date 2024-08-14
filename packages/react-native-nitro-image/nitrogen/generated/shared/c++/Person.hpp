@@ -21,7 +21,7 @@
 
 
 
-
+#include <string>
 
 namespace margelo::nitro::image {
 

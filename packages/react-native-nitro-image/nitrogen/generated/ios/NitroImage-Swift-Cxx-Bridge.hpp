@@ -9,13 +9,18 @@
 #pragma once
 
 // Forward declarations of C++ defined types
+// Forward declaration of `Car` to properly resolve imports.
+namespace margelo::nitro::image { struct Car; }
 // Forward declaration of `Person` to properly resolve imports.
 namespace margelo::nitro::image { struct Person; }
 
 // Include C++ defined types
+#include "Car.hpp"
 #include "Person.hpp"
 #include <functional>
+#include <future>
 #include <optional>
+#include <string>
 #include <unordered_map>
 #include <vector>
 
@@ -54,6 +59,11 @@ namespace margelo::nitro::image::bridge::swift {
   using std__optional_Person_ = std::optional<Person>;
   inline std::optional<Person> create_std__optional_Person_(const Person& value) {
     return std::optional<Person>(value);
+  }
+  
+  using std__optional_Car_ = std::optional<Car>;
+  inline std::optional<Car> create_std__optional_Car_(const Car& value) {
+    return std::optional<Car>(value);
   }
   
   using Func_void = std::function<void()>;

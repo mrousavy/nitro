@@ -38,6 +38,13 @@ export class ArrayType implements Type {
     return this.itemType.getExtraFiles()
   }
   getRequiredImports(): SourceImport[] {
-    return this.itemType.getRequiredImports()
+    return [
+      {
+        language: 'c++',
+        name: 'vector',
+        space: 'system',
+      },
+      ...this.itemType.getRequiredImports(),
+    ]
   }
 }

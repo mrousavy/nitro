@@ -12,6 +12,8 @@ public typealias ImageSize = margelo.nitro.image.ImageSize
  * Represents an instance of `ImageSize`, backed by a C++ object.
  */
 public extension ImageSize {
+  private typealias bridge = margelo.nitro.image.bridge.swift
+
   /**
    * Create a new instance of `ImageSize`.
    */

@@ -238,14 +238,26 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
     }
   }
   
-  public var person: Person {
+  public var car: bridge.std__optional_Car_ {
     @inline(__always)
     get {
-      return self.implementation.person
+      return {
+        if let actualValue = self.implementation.car {
+          return bridge.create_std__optional_Car_(actualValue)
+        } else {
+          return .init()
+        }
+      }()
     }
     @inline(__always)
     set {
-      self.implementation.person = newValue
+      self.implementation.car = {
+        if let actualValue = newValue.value {
+          return actualValue
+        } else {
+          return nil
+        }
+      }()
     }
   }
   

@@ -13,16 +13,24 @@
 // Forward declaration of `HybridSwiftKotlinTestObjectSpecCxx` to properly resolve imports.
 namespace NitroImage { class HybridSwiftKotlinTestObjectSpecCxx; }
 
-// Forward declaration of `Person` to properly resolve imports.
-namespace margelo::nitro::image { struct Person; }
+// Forward declaration of `Car` to properly resolve imports.
+namespace margelo::nitro::image { struct Car; }
 // Forward declaration of `Powertrain` to properly resolve imports.
 namespace margelo::nitro::image { enum class Powertrain; }
+// Forward declaration of `Person` to properly resolve imports.
+namespace margelo::nitro::image { struct Person; }
 // Forward declaration of `OldEnum` to properly resolve imports.
 namespace margelo::nitro::image { enum class OldEnum; }
 
-#include "Person.hpp"
+#include <string>
+#include <optional>
+#include <unordered_map>
+#include <vector>
+#include "Car.hpp"
 #include "Powertrain.hpp"
+#include "Person.hpp"
 #include "OldEnum.hpp"
+#include <functional>
 
 #if __has_include(<NitroModules/HybridContext.hpp>)
 #include <NitroModules/HybridContext.hpp>
@@ -128,12 +136,12 @@ namespace margelo::nitro::image {
     inline void setSomeOptional(const std::optional<std::string>& someOptional) noexcept override {
       _swiftPart.setSomeOptional(someOptional);
     }
-    inline Person getPerson() noexcept override {
-      auto result = _swiftPart.getPerson();
+    inline std::optional<Car> getCar() noexcept override {
+      auto result = _swiftPart.getCar();
       return result;
     }
-    inline void setPerson(const Person& person) noexcept override {
-      _swiftPart.setPerson(person);
+    inline void setCar(const std::optional<Car>& car) noexcept override {
+      _swiftPart.setCar(car);
     }
     inline Powertrain getPowertrain() noexcept override {
       auto result = _swiftPart.getPowertrain();

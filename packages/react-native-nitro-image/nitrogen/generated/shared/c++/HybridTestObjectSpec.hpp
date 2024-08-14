@@ -27,11 +27,19 @@ namespace margelo::nitro::image { struct Car; }
 // Forward declaration of `ArrayBuffer` to properly resolve imports.
 namespace NitroModules { class ArrayBuffer; }
 
+#include <string>
+#include <optional>
+#include <variant>
+#include <tuple>
+#include <memory>
 #include "HybridTestObjectSpec.hpp"
 #include <NitroModules/AnyMap.hpp>
+#include <vector>
 #include "OldEnum.hpp"
 #include "Person.hpp"
 #include "Car.hpp"
+#include <future>
+#include <functional>
 #include <NitroModules/ArrayBuffer.hpp>
 
 namespace margelo::nitro::image {

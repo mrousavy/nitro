@@ -10,6 +10,12 @@ import { getForwardDeclaration } from '../c++/getForwardDeclaration.js'
 import { NitroConfig } from '../../config/NitroConfig.js'
 import { includeHeader, includeNitroHeader } from '../c++/includeNitroHeader.js'
 
+export const BRIDGE_NAMESPACE = NitroConfig.getCxxNamespace(
+  'swift',
+  'bridge',
+  'swift'
+)
+
 /**
  * Creates a Swift class that bridges Swift over to C++.
  * We need this because not all Swift types are accessible in C++, and vice versa.
@@ -52,7 +58,7 @@ public final class ${name.HybridTSpecCxx} {
    * from \`${moduleName}-Swift-Cxx-Bridge.hpp\`.
    * This contains specialized C++ templates, and C++ helper functions that can be accessed from Swift.
    */
-  public typealias bridge = ${NitroConfig.getCxxNamespace('swift', 'bridge', 'swift')}
+  public typealias bridge = ${BRIDGE_NAMESPACE}
 
   /**
    * Holds an instance of the \`${name.HybridTSpec}\` Swift protocol.

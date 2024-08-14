@@ -14,6 +14,7 @@ import { OptionalType } from '../types/OptionalType.js'
 import { RecordType } from '../types/RecordType.js'
 import { StructType } from '../types/StructType.js'
 import type { Type } from '../types/Type.js'
+import { getReferencedTypes } from './getReferencedTypes.js'
 import {
   createSwiftCxxHelpers,
   type SwiftCxxHelper,
@@ -21,11 +22,15 @@ import {
 import { createSwiftEnumBridge } from './SwiftEnum.js'
 import { createSwiftStructBridge } from './SwiftStruct.js'
 
-export class SwiftCxxBridgedType {
-  private readonly type: Type
+// TODO: Remove enum bridge once Swift fixes bidirectional enums crashing the `-Swift.h` header.
 
-  constructor(type: Type) {
+export class SwiftCxxBridgedType {
+  readonly type: Type
+  private readonly isBridgingToDirectCppTarget: boolean
+
+  constructor(type: Type, isBridgingToDirectCppTarget: boolean = false) {
     this.type = type
+    this.isBridgingToDirectCppTarget = isBridgingToDirectCppTarget
   }
 
   get hasType(): boolean {
@@ -103,22 +108,52 @@ export class SwiftCxxBridgedType {
       })
     }
 
+    // Recursively look into referenced types (e.g. the `T` of a `optional<T>`, or `T` of a `T[]`)
+    const referencedTypes = getReferencedTypes(this.type)
+    referencedTypes.forEach((t) => {
+      if (t === this.type) {
+        // break a recursion - we already know this type
+        return
+      }
+      const bridged = new SwiftCxxBridgedType(t)
+      imports.push(...bridged.getRequiredImports())
+    })
+
     return imports
   }
 
   getExtraFiles(): SourceFile[] {
     const files: SourceFile[] = []
 
-    if (this.type.kind === 'struct') {
-      const struct = getTypeAs(this.type, StructType)
-      const extensionFile = createSwiftStructBridge(struct)
-      files.push(extensionFile)
+    switch (this.type.kind) {
+      case 'struct': {
+        const struct = getTypeAs(this.type, StructType)
+        const extensionFile = createSwiftStructBridge(struct)
+        files.push(extensionFile)
+        extensionFile.referencedTypes.forEach((t) => {
+          const bridge = new SwiftCxxBridgedType(t)
+          files.push(...bridge.getExtraFiles())
+        })
+        break
+      }
+      case 'enum': {
+        const enumType = getTypeAs(this.type, EnumType)
+        const extensionFile = createSwiftEnumBridge(enumType)
+        files.push(extensionFile)
+        break
+      }
     }
-    if (this.type.kind === 'enum') {
-      const enumType = getTypeAs(this.type, EnumType)
-      const extensionFile = createSwiftEnumBridge(enumType)
-      files.push(extensionFile)
-    }
+
+    // Recursively look into referenced types (e.g. the `T` of a `optional<T>`, or `T` of a `T[]`)
+    const referencedTypes = getReferencedTypes(this.type)
+    referencedTypes.forEach((t) => {
+      if (t === this.type) {
+        // break a recursion - we already know this type
+        return
+      }
+      const bridged = new SwiftCxxBridgedType(t)
+      files.push(...bridged.getExtraFiles())
+    })
 
     return files
   }
@@ -126,6 +161,9 @@ export class SwiftCxxBridgedType {
   getTypeCode(language: 'swift' | 'c++'): string {
     switch (this.type.kind) {
       case 'enum':
+        if (this.isBridgingToDirectCppTarget) {
+          return this.type.getCode('swift')
+        }
         switch (language) {
           case 'c++':
             return 'int'
@@ -174,6 +212,9 @@ export class SwiftCxxBridgedType {
   ): string {
     switch (this.type.kind) {
       case 'enum':
+        if (this.isBridgingToDirectCppTarget) {
+          return cppParameterName
+        }
         const enumType = getTypeAs(this.type, EnumType)
         switch (language) {
           case 'c++':
@@ -302,6 +343,9 @@ export class SwiftCxxBridgedType {
   ): string {
     switch (this.type.kind) {
       case 'enum':
+        if (this.isBridgingToDirectCppTarget) {
+          return swiftParameterName
+        }
         switch (language) {
           case 'c++':
             return `static_cast<${this.type.getCode('c++')}>(${swiftParameterName})`

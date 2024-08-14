@@ -50,16 +50,17 @@ export class StructType implements Type {
   }
   getRequiredImports(): SourceImport[] {
     const cxxNamespace = NitroConfig.getCxxNamespace('c++')
-    const extraImport: SourceImport = {
-      name: this.declarationFile.name,
-      language: this.declarationFile.language,
-      forwardDeclaration: getForwardDeclaration(
-        'struct',
-        this.structName,
-        cxxNamespace
-      ),
-      space: 'user',
-    }
-    return [extraImport]
+    return [
+      {
+        name: this.declarationFile.name,
+        language: this.declarationFile.language,
+        forwardDeclaration: getForwardDeclaration(
+          'struct',
+          this.structName,
+          cxxNamespace
+        ),
+        space: 'user',
+      },
+    ]
   }
 }

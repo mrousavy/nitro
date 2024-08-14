@@ -40,7 +40,7 @@ public protocol HybridSwiftKotlinTestObjectSpec: HybridObjectSpec {
   var someMap: Dictionary<String, Double> { get set }
   var someArray: [String] { get set }
   var someOptional: String? { get set }
-  var person: Person { get set }
+  var car: Car? { get set }
   var powertrain: Powertrain { get set }
   var oldEnum: OldEnum { get set }
 

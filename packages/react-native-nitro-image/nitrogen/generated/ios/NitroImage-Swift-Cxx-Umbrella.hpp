@@ -44,6 +44,15 @@ namespace margelo::nitro::image { enum class Powertrain; }
 #include "Powertrain.hpp"
 #include <NitroModules/AnyMap.hpp>
 #include <NitroModules/ArrayBuffer.hpp>
+#include <functional>
+#include <future>
+#include <memory>
+#include <optional>
+#include <string>
+#include <tuple>
+#include <unordered_map>
+#include <variant>
+#include <vector>
 
 // C++ helpers for Swift
 #include "NitroImage-Swift-Cxx-Bridge.hpp"

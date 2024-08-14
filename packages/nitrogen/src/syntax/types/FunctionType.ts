@@ -122,6 +122,11 @@ export class FunctionType implements Type {
   }
   getRequiredImports(): SourceImport[] {
     return [
+      {
+        language: 'c++',
+        name: 'functional',
+        space: 'system',
+      },
       ...this.returnType.getRequiredImports(),
       ...this.parameters.flatMap((p) => p.getRequiredImports()),
     ]
