@@ -1,5 +1,6 @@
-import { escapeCppName } from '../helpers.js'
+import { escapeCppName, toReferenceType } from '../helpers.js'
 import type { SourceImport } from '../SourceFile.js'
+import { VariantType } from '../types/VariantType.js'
 import { ArrayType } from '../types/ArrayType.js'
 import { FunctionType } from '../types/FunctionType.js'
 import { getTypeAs } from '../types/getTypeAs.js'
@@ -24,6 +25,8 @@ export function createSwiftCxxHelpers(type: Type): SwiftCxxHelper | undefined {
       return createCxxUnorderedMapSwiftHelper(getTypeAs(type, RecordType))
     case 'function':
       return createCxxFunctionSwiftHelper(getTypeAs(type, FunctionType))
+    case 'variant':
+      return createCxxVariantSwiftHelper(getTypeAs(type, VariantType))
     default:
       return undefined
   }
@@ -139,5 +142,41 @@ function createCxxFunctionSwiftHelper(type: FunctionType): SwiftCxxHelper {
     cxxCode: `
 using ${name} = ${type.getCode('c++', false)};
     `.trim(),
+  }
+}
+
+/**
+ * Creates multiple C++ `create_variant_A_B_C<A, B, C>(A...)` functions that can be called from Swift.
+ */
+function createCxxVariantSwiftHelper(type: VariantType): SwiftCxxHelper {
+  const actualType = type.getCode('c++')
+  const name = escapeCppName(type.getCode('c++'))
+  const functions = type.variants
+    .map((t) => {
+      const param = t.canBePassedByReference
+        ? toReferenceType(t.getCode('c++'))
+        : t.getCode('c++')
+      return `
+inline ${actualType} create_${name}(${param} value) {
+  return value;
+}
+      `.trim()
+    })
+    .join('\n')
+  return {
+    funcName: `create_${name}`,
+    specializationName: name,
+    requiredIncludes: [
+      {
+        name: 'variant',
+        space: 'system',
+        language: 'c++',
+      },
+      ...type.getRequiredImports(),
+    ],
+    cxxCode: `
+using ${name} = ${actualType};
+${functions}
+      `.trim(),
   }
 }

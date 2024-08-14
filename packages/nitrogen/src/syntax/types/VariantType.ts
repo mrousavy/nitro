@@ -27,6 +27,10 @@ export class VariantType implements Type {
     switch (language) {
       case 'c++':
         return `std::variant<${types.join(', ')}>`
+      case 'swift':
+        throw new Error(
+          `Variant "${types.join(', ')}" is not yet supported in Swift due to a Swift bug! See https://github.com/swiftlang/swift/issues/75865`
+        )
       default:
         throw new Error(
           `Language ${language} is not yet supported for VariantType!`

@@ -1,4 +1,5 @@
 import { NitroConfig } from '../../config/NitroConfig.js'
+import { indent } from '../../utils.js'
 import { getForwardDeclaration } from '../c++/getForwardDeclaration.js'
 import {
   getHybridObjectName,
@@ -14,6 +15,7 @@ import { OptionalType } from '../types/OptionalType.js'
 import { RecordType } from '../types/RecordType.js'
 import { StructType } from '../types/StructType.js'
 import type { Type } from '../types/Type.js'
+import { VariantType } from '../types/VariantType.js'
 import { getReferencedTypes } from './getReferencedTypes.js'
 import {
   createSwiftCxxHelpers,
@@ -21,6 +23,7 @@ import {
 } from './SwiftCxxTypeHelper.js'
 import { createSwiftEnumBridge } from './SwiftEnum.js'
 import { createSwiftStructBridge } from './SwiftStruct.js'
+import { createSwiftVariant, getSwiftVariantCaseName } from './SwiftVariant.js'
 
 // TODO: Remove enum bridge once Swift fixes bidirectional enums crashing the `-Swift.h` header.
 
@@ -62,6 +65,9 @@ export class SwiftCxxBridgedType {
         return true
       case 'record':
         // Dictionary<K, V> <> std::unordered_map<K, V>
+        return true
+      case 'variant':
+        // Variant_A_B_C <> std::variant<A, B, C>
         return true
       case 'struct':
         // SomeStruct (Swift extension) <> SomeStruct (C++)
@@ -141,6 +147,11 @@ export class SwiftCxxBridgedType {
         const extensionFile = createSwiftEnumBridge(enumType)
         files.push(extensionFile)
         break
+      }
+      case 'variant': {
+        const variant = getTypeAs(this.type, VariantType)
+        const file = createSwiftVariant(variant)
+        files.push(file)
       }
     }
 
@@ -406,6 +417,30 @@ export class SwiftCxxBridgedType {
     vector.push_back(${wrapping.parseFromSwiftToCpp('item', language)})
   }
   return vector
+}()`.trim()
+          default:
+            return swiftParameterName
+        }
+      }
+      case 'variant': {
+        const bridge = this.getBridgeOrThrow()
+        const makeFunc = NitroConfig.getCxxNamespace('swift', bridge.funcName)
+        const variant = getTypeAs(this.type, VariantType)
+        const cases = variant.variants
+          .map((t) => {
+            const caseName = getSwiftVariantCaseName(t)
+            const wrapping = new SwiftCxxBridgedType(t)
+            const parse = wrapping.parseFromSwiftToCpp('value', 'swift')
+            return `case .${caseName}(let value):\n  return ${makeFunc}(${parse})`
+          })
+          .join('\n')
+        switch (language) {
+          case 'swift':
+            return `
+{
+  switch ${swiftParameterName} {
+    ${indent(cases, '    ')}
+  }
 }()`.trim()
           default:
             return swiftParameterName
