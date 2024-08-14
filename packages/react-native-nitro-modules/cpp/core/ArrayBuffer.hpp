@@ -8,7 +8,6 @@
 #pragma once
 
 #include "OwningReference.hpp"
-#include <functional>
 #include <jsi/jsi.h>
 #include <thread>
 
@@ -41,6 +40,12 @@ public:
    * memory that we didn't allocate, or from JS - which can be deleted at any point).
    */
   virtual bool isOwner() const noexcept = 0;
+  
+  /**
+   * Create a new `NativeArrayBuffer` that wraps the given data (without copy) of the given size,
+   * and calls `deleteFunc` with the given `deleteFuncContext` as a parameter in which `data` should be deleted.
+   */
+  static std::shared_ptr<ArrayBuffer> makeBuffer(uint8_t* data, size_t size, DeleteFn deleteFunc, void* deleteFuncContext);
 };
 
 /**
@@ -71,6 +76,8 @@ public:
   uint8_t* data() override;
   size_t size() const override;
   bool isOwner() const noexcept override;
+  
+  double something();
 
 private:
   uint8_t* _data;
@@ -107,7 +114,7 @@ public:
   /**
    * Returns `false` for JS-based ArrayBuffers.
    */
-  bool isOwner() const noexcept;
+  bool isOwner() const noexcept override;
 
 private:
   jsi::Runtime* _runtime;

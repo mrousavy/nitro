@@ -18,7 +18,7 @@ export class ArrayBufferType implements Type {
       case 'c++':
         return 'std::shared_ptr<ArrayBuffer>'
       case 'swift':
-        return 'ArrayBuffer'
+        return 'ArrayBufferHolder'
       default:
         throw new Error(
           `Language ${language} is not yet supported for ArrayBufferType!`
@@ -32,6 +32,16 @@ export class ArrayBufferType implements Type {
     return [
       {
         name: 'NitroModules/ArrayBuffer.hpp',
+        forwardDeclaration: getForwardDeclaration(
+          'class',
+          'ArrayBuffer',
+          'NitroModules'
+        ),
+        language: 'c++',
+        space: 'system',
+      },
+      {
+        name: 'NitroModules/ArrayBufferHolder.hpp',
         forwardDeclaration: getForwardDeclaration(
           'class',
           'ArrayBuffer',

@@ -37,7 +37,8 @@ Pod::Spec.new do |s|
     "cpp/utils/NitroHash.hpp",
     "cpp/utils/NitroDefines.hpp",
     # Public iOS-specific headers that will be exposed in modulemap (for Swift)
-    "ios/core/HybridContext.hpp"
+    "ios/core/ArrayBufferHolder.hpp",
+    "ios/core/HybridContext.hpp",
   ]
 
   s.pod_target_xcconfig = {

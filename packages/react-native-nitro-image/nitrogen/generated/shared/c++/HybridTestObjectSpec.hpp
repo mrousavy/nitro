@@ -41,6 +41,7 @@ namespace NitroModules { class ArrayBuffer; }
 #include <future>
 #include <functional>
 #include <NitroModules/ArrayBuffer.hpp>
+#include <NitroModules/ArrayBufferHolder.hpp>
 
 namespace margelo::nitro::image {
 

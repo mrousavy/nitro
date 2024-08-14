@@ -21,6 +21,8 @@ namespace margelo::nitro::image { enum class Powertrain; }
 namespace margelo::nitro::image { struct Person; }
 // Forward declaration of `OldEnum` to properly resolve imports.
 namespace margelo::nitro::image { enum class OldEnum; }
+// Forward declaration of `ArrayBuffer` to properly resolve imports.
+namespace NitroModules { class ArrayBuffer; }
 
 #include <string>
 #include <optional>
@@ -31,6 +33,8 @@ namespace margelo::nitro::image { enum class OldEnum; }
 #include "Person.hpp"
 #include "OldEnum.hpp"
 #include <functional>
+#include <NitroModules/ArrayBuffer.hpp>
+#include <NitroModules/ArrayBufferHolder.hpp>
 
 #if __has_include(<NitroModules/HybridContext.hpp>)
 #include <NitroModules/HybridContext.hpp>
@@ -184,6 +188,10 @@ namespace margelo::nitro::image {
     }
     inline void callCallback(const std::function<void()>& callback) override {
       _swiftPart.callCallback(callback);
+    }
+    inline std::shared_ptr<ArrayBuffer> getBuffer() override {
+      auto value = _swiftPart.getBuffer();
+      return value.getArrayBuffer();
     }
 
   private:

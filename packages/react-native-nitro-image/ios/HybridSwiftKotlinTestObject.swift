@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import NitroModules
 
 class HybridSwiftKotlinTestObject : HybridSwiftKotlinTestObjectSpec {
   var person: Person = Person("Hello", 21)
@@ -27,6 +28,13 @@ class HybridSwiftKotlinTestObject : HybridSwiftKotlinTestObjectSpec {
   var stringOrUndefined: String? = nil
   var stringOrNull: String? = nil
   var optionalString: String? = nil
+  
+  func getBuffer() throws -> ArrayBufferHolder {
+    let buffer: UnsafeMutablePointer<UInt8> = .allocate(capacity: 1024)
+    return ArrayBuffer.createBuffer(wrappingDataWithoutCopy: buffer, size: 1024) {
+      buffer.deallocate()
+    }
+  }
   
   func simpleFunc() throws {
     // do nothing

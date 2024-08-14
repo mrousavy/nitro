@@ -1,12 +1,11 @@
 //
-//  ArrayBuffer.hpp
+//  ArrayBuffer.cpp
 //  react-native-nitro
 //
 //  Created by Marc Rousavy on 14.07.24.
 //
 
-#pragma once
-
+#include "ArrayBuffer.hpp"
 #include "OwningReference.hpp"
 #include <functional>
 #include <jsi/jsi.h>
@@ -16,12 +15,18 @@ namespace margelo::nitro {
 
 using namespace facebook;
 
-// 1. NativeArrayBuffer
+// 1. ArrayBuffer
+
+std::shared_ptr<ArrayBuffer> ArrayBuffer::makeBuffer(uint8_t* data, size_t size, DeleteFn deleteFunc, void* deleteFuncContext) {
+  return std::make_shared<NativeArrayBuffer>(data, size, deleteFunc, deleteFuncContext);
+}
+
+// 2. NativeArrayBuffer
 
 NativeArrayBuffer::NativeArrayBuffer(uint8_t* data, size_t size, DeleteFn deleteFunc, void* deleteFuncContext)
       : ArrayBuffer(), _data(data), _size(size), _deleteFunc(deleteFunc), _deleteFuncContext(deleteFuncContext) { }
 
-~NativeArrayBuffer::NativeArrayBuffer() {
+NativeArrayBuffer::~NativeArrayBuffer() {
   if (_deleteFunc != nullptr) {
     _deleteFunc(_data);
   }
@@ -39,12 +44,12 @@ bool NativeArrayBuffer::isOwner() const noexcept {
   return _deleteFunc != nullptr;
 }
 
-// 2. JSArrayBuffer
+// 3. JSArrayBuffer
 
 JSArrayBuffer::JSArrayBuffer(jsi::Runtime* runtime, OwningReference<jsi::ArrayBuffer> jsReference)
       : ArrayBuffer(), _runtime(runtime), _jsReference(jsReference), _initialThreadId(std::this_thread::get_id()) {}
 
-~JSArrayBuffer::JSArrayBuffer() {}
+JSArrayBuffer::~JSArrayBuffer() {}
 
 uint8_t* JSArrayBuffer::data() {
   if (_initialThreadId != std::this_thread::get_id()) [[unlikely]] {
