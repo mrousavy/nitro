@@ -133,4 +133,6 @@ export interface SwiftKotlinTestObject extends HybridObject<{ ios: 'swift' }> {
 
   buffer: ArrayBuffer
   createNewBuffer(size: number): ArrayBuffer
+  newTestObject(): SwiftKotlinTestObject
+  bounceBack(obj: SwiftKotlinTestObject): SwiftKotlinTestObject
 }

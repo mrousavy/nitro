@@ -21,8 +21,6 @@ namespace margelo::nitro::image { enum class Powertrain; }
 namespace margelo::nitro::image { struct Person; }
 // Forward declaration of `OldEnum` to properly resolve imports.
 namespace margelo::nitro::image { enum class OldEnum; }
-// Forward declaration of `ArrayBuffer` to properly resolve imports.
-namespace NitroModules { class ArrayBuffer; }
 
 #include <string>
 #include <optional>
@@ -35,6 +33,9 @@ namespace NitroModules { class ArrayBuffer; }
 #include <NitroModules/ArrayBuffer.hpp>
 #include <NitroModules/ArrayBufferHolder.hpp>
 #include <functional>
+#include <memory>
+#include "HybridSwiftKotlinTestObjectSpec.hpp"
+#include "HybridSwiftKotlinTestObjectSpecSwift.hpp"
 
 #if __has_include(<NitroModules/HybridContext.hpp>)
 #include <NitroModules/HybridContext.hpp>
@@ -195,10 +196,6 @@ namespace margelo::nitro::image {
     }
     inline void callCallback(const std::function<void()>& callback) override {
       _swiftPart.callCallback(callback);
-    }
-    inline std::shared_ptr<ArrayBuffer> createNewBuffer(double size) override {
-      auto value = _swiftPart.createNewBuffer(std::forward<decltype(size)>(size));
-      return value.getArrayBuffer();
     }
 
   private:

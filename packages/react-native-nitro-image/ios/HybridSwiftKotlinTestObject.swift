@@ -9,6 +9,13 @@ import Foundation
 import NitroModules
 
 class HybridSwiftKotlinTestObject : HybridSwiftKotlinTestObjectSpec {
+  func newTestObject() throws -> any HybridSwiftKotlinTestObjectSpec {
+    return HybridSwiftKotlinTestObject()
+  }
+  func bounceBack(obj: any HybridSwiftKotlinTestObjectSpec) throws -> any HybridSwiftKotlinTestObjectSpec {
+    return obj
+  }
+  
   var person: Person = Person("Hello", 21)
   
   var car: Car? = .init(year: 2018, make: "Lamborghini", model: "Huracan", power: 640, powertrain: .gas, driver: nil)
