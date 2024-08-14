@@ -36,7 +36,6 @@ namespace margelo::nitro::image { class HybridSwiftKotlinTestObjectSpec; }
 #include <functional>
 #include <memory>
 #include "HybridSwiftKotlinTestObjectSpec.hpp"
-#include <variant>
 
 namespace margelo::nitro::image {
 
@@ -103,7 +102,6 @@ namespace margelo::nitro::image {
       virtual std::shared_ptr<ArrayBuffer> createNewBuffer(double size) = 0;
       virtual std::shared_ptr<margelo::nitro::image::HybridSwiftKotlinTestObjectSpec> newTestObject() = 0;
       virtual std::shared_ptr<margelo::nitro::image::HybridSwiftKotlinTestObjectSpec> bounceBack(const std::shared_ptr<margelo::nitro::image::HybridSwiftKotlinTestObjectSpec>& obj) = 0;
-      virtual void passVariant(const std::variant<std::string, double>& val) = 0;
 
     protected:
       // Hybrid Setup

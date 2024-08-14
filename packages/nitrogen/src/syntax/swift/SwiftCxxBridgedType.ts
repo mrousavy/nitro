@@ -283,7 +283,7 @@ export class SwiftCxxBridgedType {
         switch (language) {
           case 'swift':
             return `
-{
+{ () -> ${optional.getCode('swift')} in
   if let actualValue = ${cppParameterName}.value {
     return ${wrapping.parseFromCppToSwift('actualValue', language)}
   } else {
@@ -322,7 +322,7 @@ export class SwiftCxxBridgedType {
         switch (language) {
           case 'swift':
             return `
-{
+{ () -> ${record.getCode('swift')} in
   var dictionary = ${record.getCode('swift')}(minimumCapacity: ${cppParameterName}.size())
   let keys = ${getKeysFunc}(${cppParameterName})
   for key in keys {
@@ -360,7 +360,7 @@ case ${i}:
         switch (language) {
           case 'swift':
             return `
-{
+{ () -> ${variant.getCode('swift')} in
   switch ${cppParameterName}.index() {
     ${indent(cases, '    ')}
     default:
@@ -447,7 +447,7 @@ case ${i}:
         switch (language) {
           case 'swift':
             return `
-{
+{ () -> bridge.${bridge.specializationName} in
   if let actualValue = ${swiftParameterName} {
     return ${makeFunc}(${wrapping.parseFromSwiftToCpp('actualValue', language)})
   } else {
@@ -483,7 +483,7 @@ case ${i}:
         switch (language) {
           case 'swift':
             return `
-{
+{ () -> bridge.${bridge.specializationName} in
   var vector = ${makeFunc}(${swiftParameterName}.count)
   for item in ${swiftParameterName} {
     vector.push_back(${wrapping.parseFromSwiftToCpp('item', language)})
@@ -526,7 +526,7 @@ case ${i}:
         switch (language) {
           case 'swift':
             return `
-{
+{ () -> bridge.${bridge.specializationName} in
   switch ${swiftParameterName} {
     ${indent(cases, '    ')}
   }
@@ -544,7 +544,7 @@ case ${i}:
         switch (language) {
           case 'swift':
             return `
-{
+{ () -> bridge.${bridge.specializationName} in
   var map = ${createMap}(${swiftParameterName}.count)
   for (k, v) in ${swiftParameterName} {
     map[${wrappingKey.parseFromSwiftToCpp('k', 'swift')}] = ${wrappingValue.parseFromSwiftToCpp('v', 'swift')}

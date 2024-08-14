@@ -18,7 +18,7 @@ public extension Car {
    * Create a new instance of `Car`.
    */
   init(year: Double, make: String, model: String, power: Double, powertrain: Powertrain, driver: Person?) {
-    self.init(year, std.string(make), std.string(model), power, powertrain, {
+    self.init(year, std.string(make), std.string(model), power, powertrain, { () -> bridge.std__optional_Person_ in
       if let actualValue = driver {
         return bridge.create_std__optional_Person_(actualValue)
       } else {
@@ -85,7 +85,7 @@ public extension Car {
   var driver: Person? {
     @inline(__always)
     get {
-      return {
+      return { () -> Person? in
         if let actualValue = self.__driver.value {
           return actualValue
         } else {
@@ -95,7 +95,7 @@ public extension Car {
     }
     @inline(__always)
     set {
-      self.__driver = {
+      self.__driver = { () -> bridge.std__optional_Person_ in
         if let actualValue = newValue {
           return bridge.create_std__optional_Person_(actualValue)
         } else {
