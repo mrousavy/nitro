@@ -30,9 +30,9 @@ namespace NitroModules { class ArrayBuffer; }
 #include "Car.hpp"
 #include "Powertrain.hpp"
 #include "OldEnum.hpp"
-#include <functional>
 #include <NitroModules/ArrayBuffer.hpp>
 #include <NitroModules/ArrayBufferHolder.hpp>
+#include <functional>
 
 namespace margelo::nitro::image {
 
@@ -84,6 +84,8 @@ namespace margelo::nitro::image {
       virtual void setPowertrain(Powertrain powertrain) = 0;
       virtual OldEnum getOldEnum() = 0;
       virtual void setOldEnum(OldEnum oldEnum) = 0;
+      virtual std::shared_ptr<ArrayBuffer> getBuffer() = 0;
+      virtual void setBuffer(const std::shared_ptr<ArrayBuffer>& buffer) = 0;
 
     public:
       // Methods
@@ -94,7 +96,6 @@ namespace margelo::nitro::image {
       virtual std::vector<double> getNumbers() = 0;
       virtual std::vector<std::string> getStrings() = 0;
       virtual void callCallback(const std::function<void()>& callback) = 0;
-      virtual std::shared_ptr<ArrayBuffer> getBuffer() = 0;
 
     protected:
       // Hybrid Setup

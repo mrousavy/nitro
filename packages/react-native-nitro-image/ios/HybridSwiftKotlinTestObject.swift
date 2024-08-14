@@ -11,7 +11,7 @@ import NitroModules
 class HybridSwiftKotlinTestObject : HybridSwiftKotlinTestObjectSpec {
   var person: Person = Person("Hello", 21)
   
-  var car: Car? = Car()
+  var car: Car? = .init(year: 2018, make: "Lamborghini", model: "Huracan", power: 640, powertrain: .gas, driver: nil)
   
   var powertrain: Powertrain = .gas
   var oldEnum: OldEnum = .first
@@ -28,13 +28,7 @@ class HybridSwiftKotlinTestObject : HybridSwiftKotlinTestObjectSpec {
   var stringOrUndefined: String? = nil
   var stringOrNull: String? = nil
   var optionalString: String? = nil
-  
-  func getBuffer() throws -> ArrayBufferHolder {
-    let buffer: UnsafeMutablePointer<UInt8> = .allocate(capacity: 1024)
-    return ArrayBuffer.createBuffer(wrappingDataWithoutCopy: buffer, size: 1024) {
-      buffer.deallocate()
-    }
-  }
+  var buffer: ArrayBufferHolder = .allocate(size: 1024, initializeToZero: true)
   
   func simpleFunc() throws {
     // do nothing

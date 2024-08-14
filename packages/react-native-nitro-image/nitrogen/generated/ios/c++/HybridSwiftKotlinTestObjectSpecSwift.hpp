@@ -32,9 +32,9 @@ namespace NitroModules { class ArrayBuffer; }
 #include "Powertrain.hpp"
 #include "Person.hpp"
 #include "OldEnum.hpp"
-#include <functional>
 #include <NitroModules/ArrayBuffer.hpp>
 #include <NitroModules/ArrayBufferHolder.hpp>
+#include <functional>
 
 #if __has_include(<NitroModules/HybridContext.hpp>)
 #include <NitroModules/HybridContext.hpp>
@@ -161,6 +161,13 @@ namespace margelo::nitro::image {
     inline void setOldEnum(OldEnum oldEnum) noexcept override {
       _swiftPart.setOldEnum(static_cast<int>(oldEnum));
     }
+    inline std::shared_ptr<ArrayBuffer> getBuffer() noexcept override {
+      auto result = _swiftPart.getBuffer();
+      return result.getArrayBuffer();
+    }
+    inline void setBuffer(const std::shared_ptr<ArrayBuffer>& buffer) noexcept override {
+      _swiftPart.setBuffer(ArrayBufferHolder(buffer));
+    }
 
   public:
     // Methods
@@ -188,10 +195,6 @@ namespace margelo::nitro::image {
     }
     inline void callCallback(const std::function<void()>& callback) override {
       _swiftPart.callCallback(callback);
-    }
-    inline std::shared_ptr<ArrayBuffer> getBuffer() override {
-      auto value = _swiftPart.getBuffer();
-      return value.getArrayBuffer();
     }
 
   private:
