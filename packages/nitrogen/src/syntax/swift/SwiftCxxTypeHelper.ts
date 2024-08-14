@@ -166,7 +166,7 @@ using ${name} = ${type.getCode('c++', false)};
 function createCxxVariantSwiftHelper(type: VariantType): SwiftCxxHelper {
   const actualType = type.getCode('c++')
   const name = escapeCppName(type.getCode('c++'))
-  const functions = type.variants
+  const createFunctions = type.variants
     .map((t) => {
       const param = t.canBePassedByReference
         ? toReferenceType(t.getCode('c++'))
@@ -174,6 +174,15 @@ function createCxxVariantSwiftHelper(type: VariantType): SwiftCxxHelper {
       return `
 inline ${actualType} create_${name}(${param} value) {
   return value;
+}
+      `.trim()
+    })
+    .join('\n')
+  const getFunctions = type.variants
+    .map((t, i) => {
+      return `
+inline ${t.getCode('c++')} get_${name}_${i}(const ${actualType}& variant) {
+  return std::get<${i}>(variant);
 }
       `.trim()
     })
@@ -194,7 +203,8 @@ inline ${actualType} create_${name}(${param} value) {
  * Specialized version of \`${actualType}\`.
  */
 using ${name} = ${actualType};
-${functions}
+${createFunctions}
+${getFunctions}
       `.trim(),
   }
 }

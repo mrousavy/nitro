@@ -418,4 +418,16 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
       fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
     }
   }
+  
+  @inline(__always)
+  public func passVariant(val: bridge.std__variant_std__string__double_) -> Void {
+    do {
+      val.index()
+      try self.implementation.passVariant(val: val)
+      return 
+    } catch {
+      let message = "\(error.localizedDescription)"
+      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
+    }
+  }
 }

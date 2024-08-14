@@ -343,6 +343,32 @@ export class SwiftCxxBridgedType {
             return cppParameterName
         }
       }
+      case 'variant': {
+        const bridge = this.getBridgeOrThrow()
+        const variant = getTypeAs(this.type, VariantType)
+        const cases = variant.variants
+          .map((t, i) => {
+            const getFunc = `bridge.get_${bridge.specializationName}_${i}`
+            const wrapping = new SwiftCxxBridgedType(t)
+            const caseName = getSwiftVariantCaseName(t)
+            return `
+case ${i}:
+  let actual = ${getFunc}(${cppParameterName})
+  return .${caseName}(${indent(wrapping.parseFromCppToSwift('actual', 'swift'), '  ')})`.trim()
+          })
+          .join('\n')
+        switch (language) {
+          case 'swift':
+            return `
+{
+  switch ${cppParameterName}.index() {
+    ${indent(cases, '    ')}
+  }
+}()`.trim()
+          default:
+            return cppParameterName
+        }
+      }
       case 'function': {
         const funcType = getTypeAs(this.type, FunctionType)
         switch (language) {
