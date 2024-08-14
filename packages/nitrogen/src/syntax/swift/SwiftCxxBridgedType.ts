@@ -1,4 +1,5 @@
 import { NitroConfig } from '../../config/NitroConfig.js'
+import { indent } from '../../utils.js'
 import { getForwardDeclaration } from '../c++/getForwardDeclaration.js'
 import {
   getHybridObjectName,
@@ -13,7 +14,9 @@ import { HybridObjectType } from '../types/HybridObjectType.js'
 import { OptionalType } from '../types/OptionalType.js'
 import { RecordType } from '../types/RecordType.js'
 import { StructType } from '../types/StructType.js'
+import { TupleType } from '../types/TupleType.js'
 import type { Type } from '../types/Type.js'
+import { VariantType } from '../types/VariantType.js'
 import { getReferencedTypes } from './getReferencedTypes.js'
 import {
   createSwiftCxxHelpers,
@@ -21,6 +24,7 @@ import {
 } from './SwiftCxxTypeHelper.js'
 import { createSwiftEnumBridge } from './SwiftEnum.js'
 import { createSwiftStructBridge } from './SwiftStruct.js'
+import { createSwiftVariant, getSwiftVariantCaseName } from './SwiftVariant.js'
 
 // TODO: Remove enum bridge once Swift fixes bidirectional enums crashing the `-Swift.h` header.
 
@@ -62,6 +66,12 @@ export class SwiftCxxBridgedType {
         return true
       case 'record':
         // Dictionary<K, V> <> std::unordered_map<K, V>
+        return true
+      case 'variant':
+        // Variant_A_B_C <> std::variant<A, B, C>
+        return true
+      case 'tuple':
+        // (A, B) <> std::tuple<A, B>
         return true
       case 'struct':
         // SomeStruct (Swift extension) <> SomeStruct (C++)
@@ -142,6 +152,11 @@ export class SwiftCxxBridgedType {
         files.push(extensionFile)
         break
       }
+      case 'variant': {
+        const variant = getTypeAs(this.type, VariantType)
+        const file = createSwiftVariant(variant)
+        files.push(file)
+      }
     }
 
     // Recursively look into referenced types (e.g. the `T` of a `optional<T>`, or `T` of a `T[]`)
@@ -186,6 +201,8 @@ export class SwiftCxxBridgedType {
       case 'optional':
       case 'array':
       case 'function':
+      case 'variant':
+      case 'tuple':
       case 'record': {
         const bridge = this.getBridgeOrThrow()
         return `bridge.${bridge.specializationName}`
@@ -296,6 +313,14 @@ export class SwiftCxxBridgedType {
             return cppParameterName
         }
       }
+      case 'tuple': {
+        switch (language) {
+          case 'swift':
+            return `${cppParameterName}.arg0`
+          default:
+            return cppParameterName
+        }
+      }
       case 'function': {
         const funcType = getTypeAs(this.type, FunctionType)
         switch (language) {
@@ -368,13 +393,13 @@ export class SwiftCxxBridgedType {
         const optional = getTypeAs(this.type, OptionalType)
         const wrapping = new SwiftCxxBridgedType(optional.wrappingType)
         const bridge = this.getBridgeOrThrow()
-        const fullName = `bridge.${bridge.funcName}`
+        const makeFunc = `bridge.${bridge.funcName}`
         switch (language) {
           case 'swift':
             return `
 {
   if let actualValue = ${swiftParameterName} {
-    return ${fullName}(${wrapping.parseFromSwiftToCpp('actualValue', language)})
+    return ${makeFunc}(${wrapping.parseFromSwiftToCpp('actualValue', language)})
   } else {
     return .init()
   }
@@ -394,18 +419,59 @@ export class SwiftCxxBridgedType {
       }
       case 'array': {
         const bridge = this.getBridgeOrThrow()
-        const fullName = `bridge.${bridge.funcName}`
+        const makeFunc = `bridge.${bridge.funcName}`
         const array = getTypeAs(this.type, ArrayType)
         const wrapping = new SwiftCxxBridgedType(array.itemType)
         switch (language) {
           case 'swift':
             return `
 {
-  var vector = ${fullName}(${swiftParameterName}.count)
+  var vector = ${makeFunc}(${swiftParameterName}.count)
   for item in ${swiftParameterName} {
     vector.push_back(${wrapping.parseFromSwiftToCpp('item', language)})
   }
   return vector
+}()`.trim()
+          default:
+            return swiftParameterName
+        }
+      }
+      case 'tuple': {
+        const tuple = getTypeAs(this.type, TupleType)
+        const bridge = this.getBridgeOrThrow()
+        const makeFunc = NitroConfig.getCxxNamespace(language, bridge.funcName)
+        switch (language) {
+          case 'swift':
+            const typesForward = tuple.itemTypes
+              .map((t, i) => {
+                const bridged = new SwiftCxxBridgedType(t)
+                return `${bridged.parseFromSwiftToCpp(`${swiftParameterName}.${i}`, language)}`
+              })
+              .join(', ')
+            return `${makeFunc}(${typesForward})`
+          default:
+            return swiftParameterName
+        }
+      }
+      case 'variant': {
+        const bridge = this.getBridgeOrThrow()
+        const makeFunc = NitroConfig.getCxxNamespace('swift', bridge.funcName)
+        const variant = getTypeAs(this.type, VariantType)
+        const cases = variant.variants
+          .map((t) => {
+            const caseName = getSwiftVariantCaseName(t)
+            const wrapping = new SwiftCxxBridgedType(t)
+            const parse = wrapping.parseFromSwiftToCpp('value', 'swift')
+            return `case .${caseName}(let value):\n  return ${makeFunc}(${parse})`
+          })
+          .join('\n')
+        switch (language) {
+          case 'swift':
+            return `
+{
+  switch ${swiftParameterName} {
+    ${indent(cases, '    ')}
+  }
 }()`.trim()
           default:
             return swiftParameterName
