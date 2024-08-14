@@ -7,6 +7,7 @@ import { getTypeAs } from '../types/getTypeAs.js'
 import { OptionalType } from '../types/OptionalType.js'
 import { RecordType } from '../types/RecordType.js'
 import type { Type } from '../types/Type.js'
+import { TupleType } from '../types/TupleType.js'
 
 export interface SwiftCxxHelper {
   cxxCode: string
@@ -27,6 +28,8 @@ export function createSwiftCxxHelpers(type: Type): SwiftCxxHelper | undefined {
       return createCxxFunctionSwiftHelper(getTypeAs(type, FunctionType))
     case 'variant':
       return createCxxVariantSwiftHelper(getTypeAs(type, VariantType))
+    case 'tuple':
+      return createCxxTupleSwiftHelper(getTypeAs(type, TupleType))
     default:
       return undefined
   }
@@ -178,5 +181,38 @@ inline ${actualType} create_${name}(${param} value) {
 using ${name} = ${actualType};
 ${functions}
       `.trim(),
+  }
+}
+
+/**
+ * Creates a C++ `create_tuple_A_B_C<A, B, C>(A, B, C)` function that can be called from Swift.
+ */
+function createCxxTupleSwiftHelper(type: TupleType): SwiftCxxHelper {
+  const actualType = type.getCode('c++')
+  const name = escapeCppName(type.getCode('c++'))
+  const typesSignature = type.itemTypes
+    .map((t, i) => {
+      const code = t.getCode('c++')
+      return `${t.canBePassedByReference ? toReferenceType(code) : code} arg${i}`
+    })
+    .join(', ')
+  const typesForward = type.itemTypes.map((_t, i) => `arg${i}`).join(', ')
+  return {
+    funcName: `create_${name}`,
+    specializationName: name,
+    requiredIncludes: [
+      {
+        name: 'tuple',
+        space: 'system',
+        language: 'c++',
+      },
+      ...type.getRequiredImports(),
+    ],
+    cxxCode: `
+using ${name} = ${actualType};
+inline ${actualType} create_${name}(${typesSignature}) {
+  return ${actualType} { ${typesForward} };
+}
+     `.trim(),
   }
 }

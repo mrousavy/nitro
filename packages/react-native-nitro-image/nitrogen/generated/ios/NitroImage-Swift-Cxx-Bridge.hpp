@@ -11,17 +11,26 @@
 // Forward declarations of C++ defined types
 // Forward declaration of `Car` to properly resolve imports.
 namespace margelo::nitro::image { struct Car; }
+// Forward declaration of `HybridTestObjectSpec` to properly resolve imports.
+namespace margelo::nitro::image { class HybridTestObjectSpec; }
+// Forward declaration of `OldEnum` to properly resolve imports.
+namespace margelo::nitro::image { enum class OldEnum; }
 // Forward declaration of `Person` to properly resolve imports.
 namespace margelo::nitro::image { struct Person; }
 
 // Include C++ defined types
 #include "Car.hpp"
+#include "HybridTestObjectSpec.hpp"
+#include "OldEnum.hpp"
 #include "Person.hpp"
 #include <functional>
 #include <future>
+#include <memory>
 #include <optional>
 #include <string>
+#include <tuple>
 #include <unordered_map>
+#include <variant>
 #include <vector>
 
 /**
@@ -36,6 +45,19 @@ namespace margelo::nitro::image::bridge::swift {
   inline std::optional<std::string> create_std__optional_std__string_(const std::string& value) {
     return std::optional<std::string>(value);
   }
+  
+  using std__variant_std__string__double_ = std::variant<std::string, double>;
+  inline std::variant<std::string, double> create_std__variant_std__string__double_(const std::string& value) {
+    return value;
+  }
+  inline std::variant<std::string, double> create_std__variant_std__string__double_(double value) {
+    return value;
+  }
+  
+  using std__tuple_double__std__string_ = std::tuple<double, std::string>;
+   inline std::tuple<double, std::string> create_std__tuple_double__std__string_(double arg0, const std::string& arg1) {
+     return std::tuple<double, std::string> { arg0, arg1 };
+   }
   
   using std__optional_bool_ = std::optional<bool>;
   inline std::optional<bool> create_std__optional_bool_(const bool& value) {
@@ -56,6 +78,31 @@ namespace margelo::nitro::image::bridge::swift {
     return vector;
   }
   
+  using std__variant_std__string__double__bool__std__vector_double___std__vector_std__string__ = std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>>;
+  inline std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>> create_std__variant_std__string__double__bool__std__vector_double___std__vector_std__string__(const std::string& value) {
+    return value;
+  }
+  inline std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>> create_std__variant_std__string__double__bool__std__vector_double___std__vector_std__string__(double value) {
+    return value;
+  }
+  inline std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>> create_std__variant_std__string__double__bool__std__vector_double___std__vector_std__string__(bool value) {
+    return value;
+  }
+  inline std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>> create_std__variant_std__string__double__bool__std__vector_double___std__vector_std__string__(const std::vector<double>& value) {
+    return value;
+  }
+  inline std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>> create_std__variant_std__string__double__bool__std__vector_double___std__vector_std__string__(const std::vector<std::string>& value) {
+    return value;
+  }
+  
+  using std__variant_bool__OldEnum_ = std::variant<bool, OldEnum>;
+  inline std::variant<bool, OldEnum> create_std__variant_bool__OldEnum_(bool value) {
+    return value;
+  }
+  inline std::variant<bool, OldEnum> create_std__variant_bool__OldEnum_(OldEnum value) {
+    return value;
+  }
+  
   using std__optional_Person_ = std::optional<Person>;
   inline std::optional<Person> create_std__optional_Person_(const Person& value) {
     return std::optional<Person>(value);
@@ -65,6 +112,45 @@ namespace margelo::nitro::image::bridge::swift {
   inline std::optional<Car> create_std__optional_Car_(const Car& value) {
     return std::optional<Car>(value);
   }
+  
+  using std__variant_Person__Car_ = std::variant<Person, Car>;
+  inline std::variant<Person, Car> create_std__variant_Person__Car_(const Person& value) {
+    return value;
+  }
+  inline std::variant<Person, Car> create_std__variant_Person__Car_(const Car& value) {
+    return value;
+  }
+  
+  using std__variant_std__shared_ptr_margelo__nitro__image__HybridTestObjectSpec___Person_ = std::variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectSpec>, Person>;
+  inline std::variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectSpec>, Person> create_std__variant_std__shared_ptr_margelo__nitro__image__HybridTestObjectSpec___Person_(const std::shared_ptr<margelo::nitro::image::HybridTestObjectSpec>& value) {
+    return value;
+  }
+  inline std::variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectSpec>, Person> create_std__variant_std__shared_ptr_margelo__nitro__image__HybridTestObjectSpec___Person_(const Person& value) {
+    return value;
+  }
+  
+  using std__tuple_double__double_ = std::tuple<double, double>;
+   inline std::tuple<double, double> create_std__tuple_double__double_(double arg0, double arg1) {
+     return std::tuple<double, double> { arg0, arg1 };
+   }
+  
+  using std__tuple_double__double__double_ = std::tuple<double, double, double>;
+   inline std::tuple<double, double, double> create_std__tuple_double__double__double_(double arg0, double arg1, double arg2) {
+     return std::tuple<double, double, double> { arg0, arg1, arg2 };
+   }
+  
+  using std__variant_std__tuple_double__double___std__tuple_double__double__double__ = std::variant<std::tuple<double, double>, std::tuple<double, double, double>>;
+  inline std::variant<std::tuple<double, double>, std::tuple<double, double, double>> create_std__variant_std__tuple_double__double___std__tuple_double__double__double__(const std::tuple<double, double>& value) {
+    return value;
+  }
+  inline std::variant<std::tuple<double, double>, std::tuple<double, double, double>> create_std__variant_std__tuple_double__double___std__tuple_double__double__double__(const std::tuple<double, double, double>& value) {
+    return value;
+  }
+  
+  using std__tuple_double__std__string__bool_ = std::tuple<double, std::string, bool>;
+   inline std::tuple<double, std::string, bool> create_std__tuple_double__std__string__bool_(double arg0, const std::string& arg1, bool arg2) {
+     return std::tuple<double, std::string, bool> { arg0, arg1, arg2 };
+   }
   
   using Func_void = std::function<void()>;
   
