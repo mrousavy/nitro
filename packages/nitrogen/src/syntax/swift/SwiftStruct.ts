@@ -32,6 +32,9 @@ ${createFileMetadataString(`${struct.structName}.swift`)}
 
 public typealias ${struct.structName} = ${fullName}
 
+/**
+ * Represents an instance of \`${struct.structName}\`, backed by a C++ object.
+ */
 public extension ${fullName} {
   ${indent(init, '  ')}
 
