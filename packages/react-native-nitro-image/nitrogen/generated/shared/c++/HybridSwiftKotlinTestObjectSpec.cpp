@@ -53,7 +53,6 @@ namespace margelo::nitro::image {
       prototype.registerHybridMethod("createNewBuffer", &HybridSwiftKotlinTestObjectSpec::createNewBuffer);
       prototype.registerHybridMethod("newTestObject", &HybridSwiftKotlinTestObjectSpec::newTestObject);
       prototype.registerHybridMethod("bounceBack", &HybridSwiftKotlinTestObjectSpec::bounceBack);
-      prototype.registerHybridMethod("passVariant", &HybridSwiftKotlinTestObjectSpec::passVariant);
     });
   }
 

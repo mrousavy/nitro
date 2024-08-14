@@ -44,7 +44,6 @@ namespace margelo::nitro::image { class HybridSwiftKotlinTestObjectSpecSwift; }
 #include <memory>
 #include "HybridSwiftKotlinTestObjectSpec.hpp"
 #include "HybridSwiftKotlinTestObjectSpecSwift.hpp"
-#include <variant>
 
 #if __has_include(<NitroModules/HybridContext.hpp>)
 #include <NitroModules/HybridContext.hpp>
@@ -217,9 +216,6 @@ namespace margelo::nitro::image {
     inline std::shared_ptr<margelo::nitro::image::HybridSwiftKotlinTestObjectSpec> bounceBack(const std::shared_ptr<margelo::nitro::image::HybridSwiftKotlinTestObjectSpec>& obj) override {
       auto value = _swiftPart.bounceBack(std::static_pointer_cast<HybridSwiftKotlinTestObjectSpecSwift>(obj)->getSwiftPart());
       return HybridContext::getOrCreate<HybridSwiftKotlinTestObjectSpecSwift>(value);
-    }
-    inline void passVariant(const std::variant<std::string, double>& val) override {
-      _swiftPart.passVariant(val);
     }
 
   private:

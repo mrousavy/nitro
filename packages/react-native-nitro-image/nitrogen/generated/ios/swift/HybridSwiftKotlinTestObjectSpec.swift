@@ -56,7 +56,6 @@ public protocol HybridSwiftKotlinTestObjectSpec: HybridObjectSpec {
   func createNewBuffer(size: Double) throws -> ArrayBufferHolder
   func newTestObject() throws -> HybridSwiftKotlinTestObjectSpec
   func bounceBack(obj: HybridSwiftKotlinTestObjectSpec) throws -> HybridSwiftKotlinTestObjectSpec
-  func passVariant(val: Variant_String_Double) throws -> Void
 }
 
 public extension HybridSwiftKotlinTestObjectSpec {

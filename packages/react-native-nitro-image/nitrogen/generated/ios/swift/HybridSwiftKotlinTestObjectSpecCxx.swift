@@ -107,7 +107,7 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
   public var stringOrUndefined: bridge.std__optional_std__string_ {
     @inline(__always)
     get {
-      return {
+      return { () -> bridge.std__optional_std__string_ in
         if let actualValue = self.implementation.stringOrUndefined {
           return bridge.create_std__optional_std__string_(std.string(actualValue))
         } else {
@@ -117,7 +117,7 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
     }
     @inline(__always)
     set {
-      self.implementation.stringOrUndefined = {
+      self.implementation.stringOrUndefined = { () -> String? in
         if let actualValue = newValue.value {
           return String(actualValue)
         } else {
@@ -130,7 +130,7 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
   public var stringOrNull: bridge.std__optional_std__string_ {
     @inline(__always)
     get {
-      return {
+      return { () -> bridge.std__optional_std__string_ in
         if let actualValue = self.implementation.stringOrNull {
           return bridge.create_std__optional_std__string_(std.string(actualValue))
         } else {
@@ -140,7 +140,7 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
     }
     @inline(__always)
     set {
-      self.implementation.stringOrNull = {
+      self.implementation.stringOrNull = { () -> String? in
         if let actualValue = newValue.value {
           return String(actualValue)
         } else {
@@ -153,7 +153,7 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
   public var optionalString: bridge.std__optional_std__string_ {
     @inline(__always)
     get {
-      return {
+      return { () -> bridge.std__optional_std__string_ in
         if let actualValue = self.implementation.optionalString {
           return bridge.create_std__optional_std__string_(std.string(actualValue))
         } else {
@@ -163,7 +163,7 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
     }
     @inline(__always)
     set {
-      self.implementation.optionalString = {
+      self.implementation.optionalString = { () -> String? in
         if let actualValue = newValue.value {
           return String(actualValue)
         } else {
@@ -176,7 +176,7 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
   public var someMap: bridge.std__unordered_map_std__string__double_ {
     @inline(__always)
     get {
-      return {
+      return { () -> bridge.std__unordered_map_std__string__double_ in
         var map = bridge.create_std__unordered_map_std__string__double_(self.implementation.someMap.count)
         for (k, v) in self.implementation.someMap {
           map[std.string(k)] = v
@@ -186,7 +186,7 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
     }
     @inline(__always)
     set {
-      self.implementation.someMap = {
+      self.implementation.someMap = { () -> Dictionary<String, Double> in
         var dictionary = Dictionary<String, Double>(minimumCapacity: newValue.size())
         let keys = bridge.get_std__unordered_map_std__string__double__keys(newValue)
         for key in keys {
@@ -201,7 +201,7 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
   public var someArray: bridge.std__vector_std__string_ {
     @inline(__always)
     get {
-      return {
+      return { () -> bridge.std__vector_std__string_ in
         var vector = bridge.create_std__vector_std__string_(self.implementation.someArray.count)
         for item in self.implementation.someArray {
           vector.push_back(std.string(item))
@@ -218,7 +218,7 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
   public var someOptional: bridge.std__optional_std__string_ {
     @inline(__always)
     get {
-      return {
+      return { () -> bridge.std__optional_std__string_ in
         if let actualValue = self.implementation.someOptional {
           return bridge.create_std__optional_std__string_(std.string(actualValue))
         } else {
@@ -228,7 +228,7 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
     }
     @inline(__always)
     set {
-      self.implementation.someOptional = {
+      self.implementation.someOptional = { () -> String? in
         if let actualValue = newValue.value {
           return String(actualValue)
         } else {
@@ -241,7 +241,7 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
   public var car: bridge.std__optional_Car_ {
     @inline(__always)
     get {
-      return {
+      return { () -> bridge.std__optional_Car_ in
         if let actualValue = self.implementation.car {
           return bridge.create_std__optional_Car_(actualValue)
         } else {
@@ -251,7 +251,7 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
     }
     @inline(__always)
     set {
-      self.implementation.car = {
+      self.implementation.car = { () -> Car? in
         if let actualValue = newValue.value {
           return actualValue
         } else {
@@ -343,7 +343,7 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
   public func getNumbers() -> bridge.std__vector_double_ {
     do {
       let result = try self.implementation.getNumbers()
-      return {
+      return { () -> bridge.std__vector_double_ in
         var vector = bridge.create_std__vector_double_(result.count)
         for item in result {
           vector.push_back(item)
@@ -360,7 +360,7 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
   public func getStrings() -> bridge.std__vector_std__string_ {
     do {
       let result = try self.implementation.getStrings()
-      return {
+      return { () -> bridge.std__vector_std__string_ in
         var vector = bridge.create_std__vector_std__string_(result.count)
         for item in result {
           vector.push_back(std.string(item))
@@ -413,18 +413,6 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
     do {
       let result = try self.implementation.bounceBack(obj: obj.implementation)
       return result.createCxxBridge()
-    } catch {
-      let message = "\(error.localizedDescription)"
-      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
-    }
-  }
-  
-  @inline(__always)
-  public func passVariant(val: bridge.std__variant_std__string__double_) -> Void {
-    do {
-      val.index()
-      try self.implementation.passVariant(val: val)
-      return 
     } catch {
       let message = "\(error.localizedDescription)"
       fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
