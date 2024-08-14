@@ -196,6 +196,10 @@ namespace margelo::nitro::image {
       auto value = _swiftPart.newTestObject();
       return HybridContext::getOrCreate<HybridSwiftKotlinTestObjectSpecSwift>(value);
     }
+    inline std::shared_ptr<margelo::nitro::image::HybridSwiftKotlinTestObjectSpec> bounceBack(const std::shared_ptr<margelo::nitro::image::HybridSwiftKotlinTestObjectSpec>& obj) override {
+      auto value = _swiftPart.bounceBack(std::static_pointer_cast<HybridSwiftKotlinTestObjectSpecSwift>(obj)->getSwiftPart());
+      return HybridContext::getOrCreate<HybridSwiftKotlinTestObjectSpecSwift>(value);
+    }
 
   private:
     NitroImage::HybridSwiftKotlinTestObjectSpecCxx _swiftPart;

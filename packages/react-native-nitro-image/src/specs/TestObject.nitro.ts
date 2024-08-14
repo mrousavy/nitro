@@ -131,4 +131,5 @@ export interface SwiftKotlinTestObject extends HybridObject<{ ios: 'swift' }> {
   powertrain: Powertrain
   oldEnum: OldEnum
   newTestObject(): SwiftKotlinTestObject
+  bounceBack(obj: SwiftKotlinTestObject): SwiftKotlinTestObject
 }

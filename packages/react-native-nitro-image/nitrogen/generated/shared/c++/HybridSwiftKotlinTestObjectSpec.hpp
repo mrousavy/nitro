@@ -95,6 +95,7 @@ namespace margelo::nitro::image {
       virtual std::vector<std::string> getStrings() = 0;
       virtual void callCallback(const std::function<void()>& callback) = 0;
       virtual std::shared_ptr<margelo::nitro::image::HybridSwiftKotlinTestObjectSpec> newTestObject() = 0;
+      virtual std::shared_ptr<margelo::nitro::image::HybridSwiftKotlinTestObjectSpec> bounceBack(const std::shared_ptr<margelo::nitro::image::HybridSwiftKotlinTestObjectSpec>& obj) = 0;
 
     protected:
       // Hybrid Setup

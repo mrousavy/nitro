@@ -53,6 +53,7 @@ public protocol HybridSwiftKotlinTestObjectSpec: HybridObjectSpec {
   func getStrings() throws -> [String]
   func callCallback(callback: (@escaping () -> Void)) throws -> Void
   func newTestObject() throws -> HybridSwiftKotlinTestObjectSpec
+  func bounceBack(obj: HybridSwiftKotlinTestObjectSpec) throws -> HybridSwiftKotlinTestObjectSpec
 }
 
 public extension HybridSwiftKotlinTestObjectSpec {

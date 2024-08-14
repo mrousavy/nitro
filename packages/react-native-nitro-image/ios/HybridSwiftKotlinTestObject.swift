@@ -11,6 +11,9 @@ class HybridSwiftKotlinTestObject : HybridSwiftKotlinTestObjectSpec {
   func newTestObject() throws -> any HybridSwiftKotlinTestObjectSpec {
     return HybridSwiftKotlinTestObject()
   }
+  func bounceBack(obj: any HybridSwiftKotlinTestObjectSpec) throws -> any HybridSwiftKotlinTestObjectSpec {
+    return obj
+  }
   
   var person: Person = Person("Hello", 21)
   
