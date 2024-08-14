@@ -40,16 +40,6 @@ export class ArrayBufferType implements Type {
         language: 'c++',
         space: 'system',
       },
-      {
-        name: 'NitroModules/ArrayBufferHolder.hpp',
-        forwardDeclaration: getForwardDeclaration(
-          'class',
-          'ArrayBuffer',
-          'NitroModules'
-        ),
-        language: 'c++',
-        space: 'system',
-      },
     ]
   }
 }

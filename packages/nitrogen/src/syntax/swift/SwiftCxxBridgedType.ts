@@ -119,6 +119,17 @@ export class SwiftCxxBridgedType {
         language: 'c++',
         space: 'user',
       })
+    } else if (this.type.kind === 'array-buffer') {
+      imports.push({
+        name: 'NitroModules/ArrayBufferHolder.hpp',
+        forwardDeclaration: getForwardDeclaration(
+          'class',
+          'ArrayBufferHolder',
+          'NitroModules'
+        ),
+        language: 'c++',
+        space: 'system',
+      })
     }
 
     // Recursively look into referenced types (e.g. the `T` of a `optional<T>`, or `T` of a `T[]`)

@@ -23,6 +23,8 @@ namespace margelo::nitro::image { struct Person; }
 namespace margelo::nitro::image { enum class OldEnum; }
 // Forward declaration of `ArrayBuffer` to properly resolve imports.
 namespace NitroModules { class ArrayBuffer; }
+// Forward declaration of `ArrayBufferHolder` to properly resolve imports.
+namespace NitroModules { class ArrayBufferHolder; }
 // Forward declaration of `HybridSwiftKotlinTestObjectSpec` to properly resolve imports.
 namespace margelo::nitro::image { class HybridSwiftKotlinTestObjectSpec; }
 // Forward declaration of `HybridSwiftKotlinTestObjectSpecSwift` to properly resolve imports.

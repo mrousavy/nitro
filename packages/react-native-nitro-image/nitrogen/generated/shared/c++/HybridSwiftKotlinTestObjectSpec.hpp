@@ -33,7 +33,6 @@ namespace margelo::nitro::image { class HybridSwiftKotlinTestObjectSpec; }
 #include "Powertrain.hpp"
 #include "OldEnum.hpp"
 #include <NitroModules/ArrayBuffer.hpp>
-#include <NitroModules/ArrayBufferHolder.hpp>
 #include <functional>
 #include <memory>
 #include "HybridSwiftKotlinTestObjectSpec.hpp"
