@@ -7,7 +7,7 @@
 ///
 
 /**
- * Represents an instance of `Person`, backed by a C++ object.
+ * Represents an instance of `Person`, backed by a C++ struct.
  */
 public typealias Person = margelo.nitro.image.Person
 

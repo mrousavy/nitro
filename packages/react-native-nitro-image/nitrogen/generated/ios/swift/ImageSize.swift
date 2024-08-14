@@ -7,7 +7,7 @@
 ///
 
 /**
- * Represents an instance of `ImageSize`, backed by a C++ object.
+ * Represents an instance of `ImageSize`, backed by a C++ struct.
  */
 public typealias ImageSize = margelo.nitro.image.ImageSize
 

@@ -34,7 +34,7 @@ var ${p.escapedName}: ${p.getCode('swift')} {
 ${createFileMetadataString(`${struct.structName}.swift`)}
 
 /**
- * Represents an instance of \`${struct.structName}\`, backed by a C++ object.
+ * Represents an instance of \`${struct.structName}\`, backed by a C++ struct.
  */
 public typealias ${struct.structName} = ${fullName}
 

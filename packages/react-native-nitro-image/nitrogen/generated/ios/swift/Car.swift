@@ -7,7 +7,7 @@
 ///
 
 /**
- * Represents an instance of `Car`, backed by a C++ object.
+ * Represents an instance of `Car`, backed by a C++ struct.
  */
 public typealias Car = margelo.nitro.image.Car
 
