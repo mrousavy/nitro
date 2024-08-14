@@ -31,6 +31,12 @@ export class StringType implements Type {
   }
 
   getRequiredImports(): SourceImport[] {
-    return []
+    return [
+      {
+        language: 'c++',
+        name: 'string',
+        space: 'system',
+      },
+    ]
   }
 }

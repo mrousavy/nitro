@@ -36,6 +36,13 @@ export class TupleType implements Type {
     return this.itemTypes.flatMap((t) => t.getExtraFiles())
   }
   getRequiredImports(): SourceImport[] {
-    return this.itemTypes.flatMap((t) => t.getRequiredImports())
+    return [
+      {
+        language: 'c++',
+        name: 'tuple',
+        space: 'system',
+      },
+      ...this.itemTypes.flatMap((t) => t.getRequiredImports()),
+    ]
   }
 }

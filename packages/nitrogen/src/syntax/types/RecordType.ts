@@ -39,6 +39,11 @@ export class RecordType implements Type {
   }
   getRequiredImports(): SourceImport[] {
     return [
+      {
+        language: 'c++',
+        name: 'unordered_map',
+        space: 'system',
+      },
       ...this.keyType.getRequiredImports(),
       ...this.valueType.getRequiredImports(),
     ]

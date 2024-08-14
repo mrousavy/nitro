@@ -35,6 +35,13 @@ export class PromiseType implements Type {
     return this.resultingType.getExtraFiles()
   }
   getRequiredImports(): SourceImport[] {
-    return this.resultingType.getRequiredImports()
+    return [
+      {
+        language: 'c++',
+        name: 'future',
+        space: 'system',
+      },
+      ...this.resultingType.getRequiredImports(),
+    ]
   }
 }

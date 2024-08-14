@@ -21,9 +21,14 @@ namespace margelo::nitro::image { enum class Powertrain; }
 // Forward declaration of `OldEnum` to properly resolve imports.
 namespace margelo::nitro::image { enum class OldEnum; }
 
+#include <string>
+#include <optional>
+#include <unordered_map>
+#include <vector>
 #include "Car.hpp"
 #include "Powertrain.hpp"
 #include "OldEnum.hpp"
+#include <functional>
 
 namespace margelo::nitro::image {
 

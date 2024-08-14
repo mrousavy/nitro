@@ -53,6 +53,11 @@ export class HybridObjectType implements Type {
     const cxxNamespace = NitroConfig.getCxxNamespace('c++')
     return [
       {
+        language: 'c++',
+        name: 'memory',
+        space: 'system',
+      },
+      {
         name: `${name.HybridTSpec}.hpp`,
         forwardDeclaration: getForwardDeclaration(
           'class',

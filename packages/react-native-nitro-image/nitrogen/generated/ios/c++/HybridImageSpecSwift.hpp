@@ -23,6 +23,8 @@ namespace margelo::nitro::image { enum class ImageFormat; }
 #include "ImageSize.hpp"
 #include "PixelFormat.hpp"
 #include "ImageFormat.hpp"
+#include <string>
+#include <functional>
 
 #if __has_include(<NitroModules/HybridContext.hpp>)
 #include <NitroModules/HybridContext.hpp>

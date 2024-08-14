@@ -24,7 +24,9 @@ namespace margelo::nitro::image { enum class Powertrain; }
 // Forward declaration of `Person` to properly resolve imports.
 namespace margelo::nitro::image { struct Person; }
 
+#include <string>
 #include "Powertrain.hpp"
+#include <optional>
 #include "Person.hpp"
 
 namespace margelo::nitro::image {

@@ -15,7 +15,9 @@ namespace margelo::nitro::image { struct Person; }
 // Include C++ defined types
 #include "Person.hpp"
 #include <functional>
+#include <future>
 #include <optional>
+#include <string>
 #include <unordered_map>
 #include <vector>
 
