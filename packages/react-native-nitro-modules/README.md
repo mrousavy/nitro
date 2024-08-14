@@ -147,7 +147,7 @@ The following C++ / JS types are supported out of the box:
   <tr>
     <td><code>A | B | C | ...</code></td>
     <td><code>std::variant&lt;A, B, C, ...&gt;</code></td>
-    <td><code>enum Variant_A_B_C</code></td>
+    <td><code>Variant_A_B_C</code></td>
   </tr>
   <tr>
     <td><code>Record&lt;string, T&gt;</code></td>
@@ -182,12 +182,27 @@ The following C++ / JS types are supported out of the box:
   <tr>
     <td><code>ArrayBuffer</code></td>
     <td><code>std::shared_ptr&lt;<a href="./cpp/core/ArrayBuffer.hpp">ArrayBuffer</a>&gt;</code></td>
-    <td><code>ArrayBufferHolder</code></td>
+    <td><code><a href="./ios/core/ArrayBufferHolder.hpp">ArrayBufferHolder</a></code></td>
   </tr>
   <tr>
     <td><code><a href="./src/HybridObject.ts">HybridObject</a></code></td>
     <td><code>std::shared_ptr&lt;<a href="./cpp/core/HybridObject.hpp">HybridObject</a>&gt;</code></td>
     <td><code><a href="./ios/core/HybridObjectSpec.swift">HybridObjectSpec</a></code></td>
+  </tr>
+  <tr>
+    <td>..any <code>interface</code></td>
+    <td><code>T</code></td>
+    <td><code>T</code></td>
+  </tr>
+  <tr>
+    <td>..any <code>enum</code></td>
+    <td><code>T</code></td>
+    <td><code>T</code></td>
+  </tr>
+  <tr>
+    <td>..any <code>union</code></td>
+    <td><code>T</code></td>
+    <td><code>T</code></td>
   </tr>
 </table>
 
