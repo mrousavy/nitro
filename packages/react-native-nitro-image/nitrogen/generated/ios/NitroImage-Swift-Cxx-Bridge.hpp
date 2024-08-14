@@ -62,6 +62,12 @@ namespace margelo::nitro::image::bridge::swift {
   inline std::variant<std::string, double> create_std__variant_std__string__double_(double value) {
     return value;
   }
+  inline std::string get_std__variant_std__string__double__0(const std::variant<std::string, double>& variant) {
+    return std::get<0>(variant);
+  }
+  inline double get_std__variant_std__string__double__1(const std::variant<std::string, double>& variant) {
+    return std::get<1>(variant);
+  }
   
   /**
    * Specialized version of `std::tuple<double, std::string>`.
@@ -118,6 +124,21 @@ namespace margelo::nitro::image::bridge::swift {
   inline std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>> create_std__variant_std__string__double__bool__std__vector_double___std__vector_std__string__(const std::vector<std::string>& value) {
     return value;
   }
+  inline std::string get_std__variant_std__string__double__bool__std__vector_double___std__vector_std__string___0(const std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>>& variant) {
+    return std::get<0>(variant);
+  }
+  inline double get_std__variant_std__string__double__bool__std__vector_double___std__vector_std__string___1(const std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>>& variant) {
+    return std::get<1>(variant);
+  }
+  inline bool get_std__variant_std__string__double__bool__std__vector_double___std__vector_std__string___2(const std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>>& variant) {
+    return std::get<2>(variant);
+  }
+  inline std::vector<double> get_std__variant_std__string__double__bool__std__vector_double___std__vector_std__string___3(const std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>>& variant) {
+    return std::get<3>(variant);
+  }
+  inline std::vector<std::string> get_std__variant_std__string__double__bool__std__vector_double___std__vector_std__string___4(const std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>>& variant) {
+    return std::get<4>(variant);
+  }
   
   /**
    * Specialized version of `std::variant<bool, OldEnum>`.
@@ -128,6 +149,12 @@ namespace margelo::nitro::image::bridge::swift {
   }
   inline std::variant<bool, OldEnum> create_std__variant_bool__OldEnum_(OldEnum value) {
     return value;
+  }
+  inline bool get_std__variant_bool__OldEnum__0(const std::variant<bool, OldEnum>& variant) {
+    return std::get<0>(variant);
+  }
+  inline OldEnum get_std__variant_bool__OldEnum__1(const std::variant<bool, OldEnum>& variant) {
+    return std::get<1>(variant);
   }
   
   /**
@@ -156,6 +183,12 @@ namespace margelo::nitro::image::bridge::swift {
   inline std::variant<Person, Car> create_std__variant_Person__Car_(const Car& value) {
     return value;
   }
+  inline Person get_std__variant_Person__Car__0(const std::variant<Person, Car>& variant) {
+    return std::get<0>(variant);
+  }
+  inline Car get_std__variant_Person__Car__1(const std::variant<Person, Car>& variant) {
+    return std::get<1>(variant);
+  }
   
   /**
    * Specialized version of `std::variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectSpec>, Person>`.
@@ -166,6 +199,12 @@ namespace margelo::nitro::image::bridge::swift {
   }
   inline std::variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectSpec>, Person> create_std__variant_std__shared_ptr_margelo__nitro__image__HybridTestObjectSpec___Person_(const Person& value) {
     return value;
+  }
+  inline std::shared_ptr<margelo::nitro::image::HybridTestObjectSpec> get_std__variant_std__shared_ptr_margelo__nitro__image__HybridTestObjectSpec___Person__0(const std::variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectSpec>, Person>& variant) {
+    return std::get<0>(variant);
+  }
+  inline Person get_std__variant_std__shared_ptr_margelo__nitro__image__HybridTestObjectSpec___Person__1(const std::variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectSpec>, Person>& variant) {
+    return std::get<1>(variant);
   }
   
   /**
@@ -193,6 +232,12 @@ namespace margelo::nitro::image::bridge::swift {
   }
   inline std::variant<std::tuple<double, double>, std::tuple<double, double, double>> create_std__variant_std__tuple_double__double___std__tuple_double__double__double__(const std::tuple<double, double, double>& value) {
     return value;
+  }
+  inline std::tuple<double, double> get_std__variant_std__tuple_double__double___std__tuple_double__double__double___0(const std::variant<std::tuple<double, double>, std::tuple<double, double, double>>& variant) {
+    return std::get<0>(variant);
+  }
+  inline std::tuple<double, double, double> get_std__variant_std__tuple_double__double___std__tuple_double__double__double___1(const std::variant<std::tuple<double, double>, std::tuple<double, double, double>>& variant) {
+    return std::get<1>(variant);
   }
   
   /**

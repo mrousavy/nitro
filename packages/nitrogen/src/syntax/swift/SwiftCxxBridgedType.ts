@@ -343,6 +343,32 @@ export class SwiftCxxBridgedType {
             return cppParameterName
         }
       }
+      case 'variant': {
+        const bridge = this.getBridgeOrThrow()
+        const variant = getTypeAs(this.type, VariantType)
+        const cases = variant.variants
+          .map((t, i) => {
+            const getFunc = NitroConfig.getCxxNamespace(
+              'swift',
+              `get_${bridge.specializationName}_${i}`
+            )
+            const wrapping = new SwiftCxxBridgedType(t)
+            const parse = wrapping.parseFromSwiftToCpp('value', 'swift')
+            return `case ${i}:\n  return ${getFunc}(${parse})`
+          })
+          .join('\n')
+        switch (language) {
+          case 'swift':
+            return `
+{
+  switch ${cppParameterName}.index() {
+    ${indent(cases, '    ')}
+  }
+}()`.trim()
+          default:
+            return cppParameterName
+        }
+      }
       case 'function': {
         const funcType = getTypeAs(this.type, FunctionType)
         switch (language) {
