@@ -363,6 +363,8 @@ case ${i}:
 {
   switch ${cppParameterName}.index() {
     ${indent(cases, '    ')}
+    default:
+      fatalError("Variant can never have index \\(${cppParameterName}.index())!")
   }
 }()`.trim()
           default:
