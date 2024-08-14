@@ -21,6 +21,10 @@ namespace margelo::nitro::image { enum class Powertrain; }
 namespace margelo::nitro::image { struct Person; }
 // Forward declaration of `OldEnum` to properly resolve imports.
 namespace margelo::nitro::image { enum class OldEnum; }
+// Forward declaration of `HybridSwiftKotlinTestObjectSpec` to properly resolve imports.
+namespace margelo::nitro::image { class HybridSwiftKotlinTestObjectSpec; }
+// Forward declaration of `HybridSwiftKotlinTestObjectSpecSwift` to properly resolve imports.
+namespace margelo::nitro::image { class HybridSwiftKotlinTestObjectSpecSwift; }
 
 #include <string>
 #include <optional>
@@ -31,6 +35,9 @@ namespace margelo::nitro::image { enum class OldEnum; }
 #include "Person.hpp"
 #include "OldEnum.hpp"
 #include <functional>
+#include <memory>
+#include "HybridSwiftKotlinTestObjectSpec.hpp"
+#include "HybridSwiftKotlinTestObjectSpecSwift.hpp"
 
 #if __has_include(<NitroModules/HybridContext.hpp>)
 #include <NitroModules/HybridContext.hpp>
@@ -184,6 +191,10 @@ namespace margelo::nitro::image {
     }
     inline void callCallback(const std::function<void()>& callback) override {
       _swiftPart.callCallback(callback);
+    }
+    inline std::shared_ptr<margelo::nitro::image::HybridSwiftKotlinTestObjectSpec> newTestObject() override {
+      auto value = _swiftPart.newTestObject();
+      return HybridContext::getOrCreate<HybridSwiftKotlinTestObjectSpecSwift>(value);
     }
 
   private:
