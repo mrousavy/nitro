@@ -9,7 +9,14 @@
 public typealias ImageSize = margelo.nitro.image.ImageSize
 
 public extension margelo.nitro.image.ImageSize {
-  public var width: Double {
+  /**
+   * Create a new instance of `ImageSize`.
+   */
+  init(width: Double, height: Double) {
+    self.init(width,height)
+  }
+
+  var width: Double {
     @inline(__always)
     get {
       return self.__width
@@ -20,7 +27,7 @@ public extension margelo.nitro.image.ImageSize {
     }
   }
   
-  public var height: Double {
+  var height: Double {
     @inline(__always)
     get {
       return self.__height

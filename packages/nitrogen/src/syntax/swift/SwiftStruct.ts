@@ -7,12 +7,13 @@ import { SwiftCxxBridgedType } from './SwiftCxxBridgedType.js'
 
 export function createSwiftStructBridge(struct: StructType): SourceFile {
   const fullName = NitroConfig.getCxxNamespace('swift', struct.structName)
+  const init = createSwiftBridgedConstructor(struct)
   const bridgedProps = struct.properties
     .map((p) => {
       const bridge = new SwiftCxxBridgedType(p)
       const cppName = `self.__${p.escapedName}`
       return `
-public var ${p.escapedName}: ${p.getCode('swift')} {
+var ${p.escapedName}: ${p.getCode('swift')} {
   @inline(__always)
   get {
     return ${bridge.parseFromCppToSwift(cppName, 'swift')}
@@ -32,6 +33,8 @@ ${createFileMetadataString(`${struct.structName}.swift`)}
 public typealias ${struct.structName} = ${fullName}
 
 public extension ${fullName} {
+  ${indent(init, '  ')}
+
   ${indent(bridgedProps, '  ')}
 }
   `.trim()
@@ -43,4 +46,22 @@ public extension ${fullName} {
     platform: 'ios',
     subdirectory: [],
   }
+}
+
+function createSwiftBridgedConstructor(struct: StructType): string {
+  const params = struct.properties
+    .map((p) => `${p.escapedName}: ${p.getCode('swift')}`)
+    .join(', ')
+  const paramsForward = struct.properties.map((p) => {
+    const bridged = new SwiftCxxBridgedType(p)
+    return bridged.parseFromSwiftToCpp(p.escapedName, 'swift')
+  })
+  return `
+/**
+ * Create a new instance of \`${struct.structName}\`.
+ */
+init(${params}) {
+  self.init(${paramsForward})
+}
+  `.trim()
 }

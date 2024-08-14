@@ -13,6 +13,11 @@
 #else
 #error NitroModules cannot be found! Are you sure you installed NitroModules properly?
 #endif
+#if __has_include(<NitroModules/NitroDefines.hpp>)
+#include <NitroModules/NitroDefines.hpp>
+#else
+#error NitroModules cannot be found! Are you sure you installed NitroModules properly?
+#endif
 
 
 
@@ -25,8 +30,8 @@ namespace margelo::nitro::image {
    */
   struct Person {
   public:
-    std::string name;
-    double age;
+    std::string name     SWIFT_PRIVATE;
+    double age     SWIFT_PRIVATE;
 
   public:
     explicit Person(std::string name, double age): name(name), age(age) {}

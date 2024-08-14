@@ -11,7 +11,7 @@ export function createCppStruct(
 ): FileWithReferencedTypes {
   // Get C++ code for all struct members
   const cppStructProps = properties
-    .map((p) => `${p.getCode('c++')} ${p.escapedName};`)
+    .map((p) => `${p.getCode('c++')} ${p.escapedName}     SWIFT_PRIVATE;`)
     .join('\n')
   const cppConstructorParams = properties
     .map((p) => `${p.getCode('c++')} ${p.escapedName}`)
@@ -58,6 +58,7 @@ ${createFileMetadataString(`${typename}.hpp`)}
 #pragma once
 
 ${includeNitroHeader('JSIConverter.hpp')}
+${includeNitroHeader('NitroDefines.hpp')}
 
 ${cppForwardDeclarations.join('\n')}
 

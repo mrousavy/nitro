@@ -9,7 +9,14 @@
 public typealias Person = margelo.nitro.image.Person
 
 public extension margelo.nitro.image.Person {
-  public var name: String {
+  /**
+   * Create a new instance of `Person`.
+   */
+  init(name: String, age: Double) {
+    self.init(std.string(name),age)
+  }
+
+  var name: String {
     @inline(__always)
     get {
       return String(self.__name)
@@ -20,7 +27,7 @@ public extension margelo.nitro.image.Person {
     }
   }
   
-  public var age: Double {
+  var age: Double {
     @inline(__always)
     get {
       return self.__age

@@ -26,9 +26,9 @@ namespace margelo::nitro::image {
    * An enum which can be represented as a JavaScript enum (OldEnum).
    */
   enum class OldEnum {
-    FIRST SWIFT_NAME(first) = 0,
-    SECOND SWIFT_NAME(second) = 1,
-    THIRD SWIFT_NAME(third) = 2,
+    FIRST      SWIFT_NAME(first) = 0,
+    SECOND      SWIFT_NAME(second) = 1,
+    THIRD      SWIFT_NAME(third) = 2,
   } CLOSED_ENUM;
 
 } // namespace margelo::nitro::image

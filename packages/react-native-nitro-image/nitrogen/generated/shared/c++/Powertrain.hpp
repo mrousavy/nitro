@@ -30,9 +30,9 @@ namespace margelo::nitro::image {
    * An enum which can be represented as a JavaScript union (Powertrain).
    */
   enum class Powertrain {
-    ELECTRIC SWIFT_NAME(electric) = 0,
-    GAS SWIFT_NAME(gas) = 1,
-    HYBRID SWIFT_NAME(hybrid) = 2,
+    ELECTRIC      SWIFT_NAME(electric) = 0,
+    GAS      SWIFT_NAME(gas) = 1,
+    HYBRID      SWIFT_NAME(hybrid) = 2,
   } CLOSED_ENUM;
 
 } // namespace margelo::nitro::image

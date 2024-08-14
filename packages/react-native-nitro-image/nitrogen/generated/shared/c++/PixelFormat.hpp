@@ -30,9 +30,9 @@ namespace margelo::nitro::image {
    * An enum which can be represented as a JavaScript union (PixelFormat).
    */
   enum class PixelFormat {
-    RGB SWIFT_NAME(rgb) = 0,
-    YUV_8BIT SWIFT_NAME(yuv_8bit) = 1,
-    YUV_10BIT SWIFT_NAME(yuv_10bit) = 2,
+    RGB      SWIFT_NAME(rgb) = 0,
+    YUV_8BIT      SWIFT_NAME(yuv_8bit) = 1,
+    YUV_10BIT      SWIFT_NAME(yuv_10bit) = 2,
   } CLOSED_ENUM;
 
 } // namespace margelo::nitro::image
