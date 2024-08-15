@@ -57,7 +57,9 @@ public protocol HybridSwiftKotlinTestObjectSpec: HybridObjectSpec {
   func newTestObject() throws -> HybridSwiftKotlinTestObjectSpec
   func bounceBack(obj: HybridSwiftKotlinTestObjectSpec) throws -> HybridSwiftKotlinTestObjectSpec
   func call(args: CallbackHolder) throws -> Void
-  func someAsyncCode() throws -> Promise<Double>
+  func getNumberAsync() throws -> Promise<Double>
+  func getStringAsync() throws -> Promise<String>
+  func getCarAsync() throws -> Promise<Car>
 }
 
 public extension HybridSwiftKotlinTestObjectSpec {

@@ -13,6 +13,12 @@ import { logPrototypeChain } from '../logPrototypeChain'
 logPrototypeChain(HybridTestObject)
 logPrototypeChain(HybridSwiftKotlinTestObject)
 
+console.log('before async')
+HybridSwiftKotlinTestObject.getNumberAsync().then((c) => console.log('num:', c))
+HybridSwiftKotlinTestObject.getStringAsync().then((c) => console.log('str:', c))
+HybridSwiftKotlinTestObject.getCarAsync().then((c) => console.log('Car:', c))
+console.log('after async')
+
 const allTests = getTests()
 
 interface TestState {

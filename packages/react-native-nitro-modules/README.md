@@ -162,7 +162,7 @@ The following C++ / JS types are supported out of the box:
   <tr>
     <td><code>Promise&lt;T&gt;</code></td>
     <td><code>std::future&lt;T&gt;</code></td>
-    <td>❌</td>
+    <td><code><a href="./ios/core/Promise.swift">Promise&lt;T&gt;</a></code></td>
   </tr>
   <tr>
     <td><code>(TArgs...) =&gt; void</code></td>
@@ -185,7 +185,7 @@ The following C++ / JS types are supported out of the box:
     <td><code><a href="./ios/core/ArrayBufferHolder.hpp">ArrayBufferHolder</a></code></td>
   </tr>
   <tr>
-    <td><code><a href="./src/HybridObject.ts">HybridObject</a></code></td>
+    <td>..any <code><a href="./src/HybridObject.ts">HybridObject</a></code></td>
     <td><code>std::shared_ptr&lt;<a href="./cpp/core/HybridObject.hpp">HybridObject</a>&gt;</code></td>
     <td><code><a href="./ios/core/HybridObjectSpec.swift">HybridObjectSpec</a></code></td>
   </tr>
