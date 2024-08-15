@@ -150,14 +150,6 @@ function createCxxFunctionSwiftHelper(type: FunctionType): SwiftCxxHelper {
   const returnType = type.returnType.getCode('c++')
   const functionPointerParam = `${returnType}(*func)(${cfuncParams.join(', ')})`
 
-  const lambdaParams = type.parameters.map((p) => {
-    const code = p.canBePassedByReference
-      ? toReferenceType(p.getCode('c++'))
-      : p.getCode('c++')
-    return `${code} ${p.escapedName}`
-  })
-  const paramsForward = type.parameters.map((p) => p.escapedName)
-
   const name = type.specializationName
   return {
     funcName: `create_${name}`,
@@ -172,13 +164,11 @@ function createCxxFunctionSwiftHelper(type: FunctionType): SwiftCxxHelper {
     ],
     cxxCode: `
 /**
- * Specialized version of \`${escapeComments(type.getCode('c++'))}\`.
+ * Specialized version of \`${escapeComments(actualType)}\`.
  */
 using ${name} = ${actualType};
 inline ${name} create_${name}(${functionPointerParam}, void* context) {
-  return [&](${lambdaParams.join(', ')}) {
-    func(context, ${paramsForward.join(', ')});
-  };
+  return std::bind(func, context);
 }
     `.trim(),
   }

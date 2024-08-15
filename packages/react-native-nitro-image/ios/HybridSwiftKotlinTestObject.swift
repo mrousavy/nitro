@@ -9,6 +9,10 @@ import Foundation
 import NitroModules
 
 class HybridSwiftKotlinTestObject : HybridSwiftKotlinTestObjectSpec {
+  func call(args: CallbackHolder) throws {
+    args.callback("hello from Swift!")
+  }
+  
   func call(callMeMaybe: ((String) -> Void)?) throws {
     // do nothing
   }

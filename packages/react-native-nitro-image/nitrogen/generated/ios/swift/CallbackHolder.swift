@@ -18,7 +18,7 @@ public extension CallbackHolder {
    * Create a new instance of `CallbackHolder`.
    */
   init(callback: ((_ val: String) -> Void)) {
-    self.init({ () -> bridge.[object Object]
+    self.init({ () -> bridge.Func_void_std__string
       let context = Unmanaged.passRetained(ClosureWrapper(closure: callback)).toOpaque()
       var func = bridge.create_Func_void_std__string({ context in
         guard let context else { fatalError("Context was null, even though we created one!") }
@@ -37,7 +37,7 @@ public extension CallbackHolder {
     }
     @inline(__always)
     set {
-      self.__callback = { () -> bridge.[object Object]
+      self.__callback = { () -> bridge.Func_void_std__string
         let context = Unmanaged.passRetained(ClosureWrapper(closure: newValue)).toOpaque()
         var func = bridge.create_Func_void_std__string({ context in
           guard let context else { fatalError("Context was null, even though we created one!") }

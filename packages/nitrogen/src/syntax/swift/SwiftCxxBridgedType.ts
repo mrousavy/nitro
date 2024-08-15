@@ -559,7 +559,7 @@ case ${i}:
         const bridge = this.getBridgeOrThrow()
         const createFunc = `bridge.${bridge.funcName}`
         return `
-{ () -> bridge.${bridge}
+{ () -> bridge.${bridge.specializationName}
   let context = Unmanaged.passRetained(ClosureWrapper(closure: ${swiftParameterName})).toOpaque()
   var func = ${createFunc}({ context in
     guard let context else { fatalError("Context was null, even though we created one!") }
