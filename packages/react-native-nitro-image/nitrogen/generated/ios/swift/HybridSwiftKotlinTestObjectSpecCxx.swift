@@ -431,13 +431,13 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
   }
   
   @inline(__always)
-  public func someAsyncCode() -> bridge.PromiseHolder_void_ {
+  public func someAsyncCode() -> bridge.PromiseHolder_double_ {
     do {
       let result = try self.implementation.someAsyncCode()
-      return { () -> bridge.PromiseHolder_void_ in
-        let promiseHolder = bridge.create_PromiseHolder_void_()
+      return { () -> bridge.PromiseHolder_double_ in
+        let promiseHolder = bridge.create_PromiseHolder_double_()
         result
-          .then({ promiseHolder.resolve() })
+          .then({ promiseHolder.resolve($0) })
           .catch({ promiseHolder.reject(std.string(String(describing: $0))) })
         return promiseHolder
       }()

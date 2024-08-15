@@ -10,9 +10,6 @@ class Dispatcher;
 
 class JSPromise;
 
-template <typename TResult>
-class Promise;
-
 template <typename T, typename Enable>
 struct JSIConverter;
 } // namespace margelo::nitro
