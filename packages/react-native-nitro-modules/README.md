@@ -165,13 +165,13 @@ The following C++ / JS types are supported out of the box:
     <td><code><a href="./ios/core/Promise.swift">Promise&lt;T&gt;</a></code></td>
   </tr>
   <tr>
-    <td><code>(TArgs...) =&gt; void</code></td>
-    <td><code>std::function&lt;void (TArgs...)&gt;</code></td>
-    <td><code>@escaping (TArgs...) -&gt; Void</code></td>
+    <td><code>(T...) =&gt; void</code></td>
+    <td><code>std::function&lt;void (T...)&gt;</code></td>
+    <td><code>@escaping (T...) -&gt; Void</code></td>
   </tr>
   <tr>
-    <td><code>(TArgs...) =&gt; TReturn</code></td>
-    <td><code>std::function&lt;std::future&lt;TReturn&gt; (TArgs...)&gt;</code></td>
+    <td><code>(T...) =&gt; R</code></td>
+    <td><code>std::function&lt;std::future&lt;R&gt; (T...)&gt;</code></td>
     <td>❌</td>
   </tr>
   <tr>
