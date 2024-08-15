@@ -21,12 +21,8 @@ public extension CallbackHolder {
    */
   init(callback: @escaping (() -> Void)) {
     self.init({ () -> bridge.Func_void in
-      let context = Unmanaged.passRetained(ClosureWrapper(closure: callback)).toOpaque()
-      return bridge.create_Func_void({ context in
-        guard let context else { fatalError("Context was null, even though we created one!") }
-        let closure = Unmanaged<ClosureWrapper>.fromOpaque(context).takeRetainedValue()
-        closure.invoke()
-      }, context)
+      let (wrappedClosure, context) = ClosureWrapper.wrap(closure: callback)
+      return bridge.create_Func_void(wrappedClosure, context)
     }())
   }
 
@@ -40,12 +36,8 @@ public extension CallbackHolder {
     @inline(__always)
     set {
       self.__callback = { () -> bridge.Func_void in
-        let context = Unmanaged.passRetained(ClosureWrapper(closure: newValue)).toOpaque()
-        return bridge.create_Func_void({ context in
-          guard let context else { fatalError("Context was null, even though we created one!") }
-          let closure = Unmanaged<ClosureWrapper>.fromOpaque(context).takeRetainedValue()
-          closure.invoke()
-        }, context)
+        let (wrappedClosure, context) = ClosureWrapper.wrap(closure: newValue)
+        return bridge.create_Func_void(wrappedClosure, context)
       }()
     }
   }

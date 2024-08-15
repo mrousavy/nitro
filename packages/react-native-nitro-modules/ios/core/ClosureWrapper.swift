@@ -22,4 +22,22 @@ public final class ClosureWrapper {
   public func invoke() {
     closure()
   }
+  
+  /**
+   * Wraps the given Swift closure in a C-style function pointer with `void* context` associated to it.
+   * This way it can be passed to C/C++ and called without worrying about context/binding.
+   */
+  public static func wrap(closure: @escaping () -> Void) -> (@convention(c) (UnsafeMutableRawPointer?) -> Void, UnsafeMutableRawPointer) {
+    // Wrap closure in void*
+    let context = Unmanaged.passRetained(ClosureWrapper(closure: closure)).toOpaque()
+    // Create C-style Function Pointer
+    let cFunc: @convention(c) (UnsafeMutableRawPointer?) -> Void = { context in
+      guard let context else { fatalError("Context was null, even though we created one!") }
+      // Unwrap context from void* to closure again
+      let closure = Unmanaged<ClosureWrapper>.fromOpaque(context).takeRetainedValue()
+      // Call it!
+      closure.invoke()
+    }
+    return (cFunc, context)
+  }
 }

@@ -20,18 +20,9 @@ public extension ArrayBufferHolder {
                    size: Int,
                    onDelete delete: @escaping () -> Void) -> ArrayBufferHolder {
     // Convert escaping Swift closure to a `void*`
-    let wrapper = ClosureWrapper(closure: delete)
-    let wrappedClosure = Unmanaged.passRetained(wrapper).toOpaque()
-    
-    return ArrayBufferHolder.makeBuffer(data, size, { context in
-      guard let context else {
-        fatalError("Context was null, even though we created one!")
-      }
-      // Convert `void*` to a Swift closure
-      let closure = Unmanaged<ClosureWrapper>.fromOpaque(context).takeRetainedValue()
-      // Call it (deleteFunc)
-      closure.invoke()
-    }, wrappedClosure)
+    let (wrappedClosure, context) = ClosureWrapper.wrap(closure: delete)
+    // Create ArrayBufferHolder with our wrapped Swift closure to make it callable as a C-function pointer
+    return ArrayBufferHolder.makeBuffer(data, size, wrappedClosure, context)
   }
   
   /**
