@@ -12,6 +12,9 @@
 
 namespace margelo::nitro {
 
+/**
+ * Holds a `std::promise` that can be accessed from Swift using proper ref management.
+ */
 class PromiseHolder {
 public:
   
