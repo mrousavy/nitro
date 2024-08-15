@@ -18,7 +18,6 @@ struct JSIConverter;
 
 #include "Dispatcher.hpp"
 #include "JSPromise.hpp"
-#include "Promise.hpp"
 #include "ThreadPool.hpp"
 #include "TypeInfo.hpp"
 #include <future>
@@ -87,20 +86,6 @@ struct JSIConverter<std::future<TResult>> {
 
   static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
     throw std::runtime_error("jsi::Value of type Promise cannot be converted to std::future yet!");
-  }
-};
-
-// Promise<T> <> Promise<T>
-template <typename TResult>
-struct JSIConverter<Promise<TResult>> {
-  static inline std::future<TResult> fromJSI(jsi::Runtime&, const jsi::Value&) {
-    throw std::runtime_error("Promise cannot be converted to a native type - it needs to be awaited first!");
-  }
-  static inline jsi::Value toJSI(jsi::Runtime& runtime, const Promise<TResult>& arg) {
-    return JSIConverter<std::future<TResult>>::toJSI(runtime, arg.getFuture());
-  }
-  static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
-    throw std::runtime_error("jsi::Value of type Promise cannot be converted to a native Promise<T> yet!");
   }
 };
 
