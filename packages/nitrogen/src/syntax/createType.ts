@@ -172,7 +172,10 @@ export function createType(type: TSMorphType, isOptional: boolean): Type {
     } else if (isPromise(type)) {
       // It's a Promise!
       const [promiseResolvingType] = getArguments(type, 'Promise', 1)
-      const resolvingType = createType(promiseResolvingType, false)
+      const resolvingType = createType(
+        promiseResolvingType,
+        promiseResolvingType.isNullable()
+      )
       return new PromiseType(resolvingType)
     } else if (isRecord(type)) {
       // Record<K, V> -> unordered_map<K, V>
