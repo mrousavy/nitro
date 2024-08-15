@@ -1,5 +1,6 @@
 import type { SourceFile } from './syntax/SourceFile.js'
 import path from 'path'
+import type { SwiftCxxHelper } from './syntax/swift/SwiftCxxTypeHelper.js'
 
 export function capitalizeName(name: string): string {
   if (name.length === 0) return name
@@ -56,5 +57,16 @@ export function filterDuplicateFiles(
       throw new Error(`File "${f.name}"'s content differs!`)
     }
   }
+  return otherIndex === i
+}
+
+export function filterDuplicateHelperBridges(
+  bridge: SwiftCxxHelper,
+  i: number,
+  array: SwiftCxxHelper[]
+): boolean {
+  const otherIndex = array.findIndex(
+    (f2) => bridge.specializationName === f2.specializationName
+  )
   return otherIndex === i
 }

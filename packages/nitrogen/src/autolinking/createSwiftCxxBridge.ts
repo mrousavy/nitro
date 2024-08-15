@@ -5,7 +5,7 @@ import { createFileMetadataString, isNotDuplicate } from '../syntax/helpers.js'
 import type { SourceFile } from '../syntax/SourceFile.js'
 import { getReferencedTypes } from '../syntax/swift/getReferencedTypes.js'
 import { SwiftCxxBridgedType } from '../syntax/swift/SwiftCxxBridgedType.js'
-import { indent } from '../utils.js'
+import { filterDuplicateHelperBridges, indent } from '../utils.js'
 
 const SWIFT_BRIDGE_NAMESPACE = ['bridge', 'swift']
 
@@ -24,6 +24,7 @@ export function createSwiftCxxBridge(): SourceFile[] {
       })
     })
     .filter((b) => b != null)
+    .filter(filterDuplicateHelperBridges)
   const helperFunctions = bridges
     .map((b) => b.cxxCode)
     .filter(isNotDuplicate)
