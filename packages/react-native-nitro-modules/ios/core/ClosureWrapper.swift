@@ -13,9 +13,9 @@ import Foundation
  * passed to C-style function pointers via `void* context` parameters.
  */
 public final class ClosureWrapper {
-  let closure: () -> Void
+  private let closure: () -> Void
 
-  init(closure: @escaping () -> Void) {
+  public init(closure: @escaping () -> Void) {
     self.closure = closure
   }
 
