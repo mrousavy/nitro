@@ -9,6 +9,13 @@ import Foundation
 import NitroModules
 
 class HybridSwiftKotlinTestObject : HybridSwiftKotlinTestObjectSpec {
+  func someAsyncCode() throws -> Promise<Double> {
+    return Promise.parallel {
+      Thread.sleep(forTimeInterval: 1)
+      return 13
+    }
+  }
+  
   func call(args: CallbackHolder) throws {
     args.callback()
   }

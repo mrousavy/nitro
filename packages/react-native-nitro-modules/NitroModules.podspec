@@ -38,6 +38,7 @@ Pod::Spec.new do |s|
     "cpp/utils/NitroDefines.hpp",
     # Public iOS-specific headers that will be exposed in modulemap (for Swift)
     "ios/core/ArrayBufferHolder.hpp",
+    "ios/core/PromiseHolder.hpp",
     "ios/core/HybridContext.hpp",
   ]
 

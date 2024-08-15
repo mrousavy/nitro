@@ -8,7 +8,7 @@
 #pragma once
 
 #include "ArrayBuffer.hpp"
-#include "NitroDefines.hpp"
+#include <swift/bridging>
 #include <memory>
 
 namespace margelo::nitro {

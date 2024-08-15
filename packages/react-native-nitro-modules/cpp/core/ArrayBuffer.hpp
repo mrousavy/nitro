@@ -34,13 +34,20 @@ using DeleteFn = void (*)(void* context);
  */
 class ArrayBuffer : public jsi::MutableBuffer {
 public:
+  ArrayBuffer() = default;
+  ArrayBuffer(const ArrayBuffer&) = delete;
+  ArrayBuffer(ArrayBuffer&&) = delete;
+  virtual ~ArrayBuffer() = default;
+  
+public:
   /**
    * Returns whether this `ArrayBuffer` is actually owning the data,
    * or if it is just borrowed from an external source (either a native
    * memory that we didn't allocate, or from JS - which can be deleted at any point).
    */
   virtual bool isOwner() const noexcept = 0;
-
+  
+public:
   /**
    * Create a new `NativeArrayBuffer` that wraps the given data (without copy) of the given size,
    * and calls `deleteFunc` with the given `deleteFuncContext` as a parameter in which `data` should be deleted.

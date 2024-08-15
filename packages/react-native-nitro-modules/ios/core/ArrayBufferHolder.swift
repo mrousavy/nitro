@@ -1,5 +1,5 @@
 //
-//  ArrayBuffer.swift
+//  ArrayBufferHolder.swift
 //  NitroModules
 //
 //  Created by Marc Rousavy on 17.07.24.
@@ -7,6 +7,12 @@
 
 import Foundation
 
+/**
+ * Holds instances of `std::shared_ptr<ArrayBuffer>`, which can be passed
+ * between native and JS **without copy**.
+ *
+ * See `data`, `size` and `isOwning`.
+ */
 public typealias ArrayBufferHolder = margelo.nitro.ArrayBufferHolder
 
 public extension ArrayBufferHolder {

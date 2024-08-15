@@ -23,6 +23,7 @@ namespace margelo::nitro::image { struct Person; }
 #include "HybridTestObjectSpec.hpp"
 #include "OldEnum.hpp"
 #include "Person.hpp"
+#include <NitroModules/PromiseHolder.hpp>
 #include <functional>
 #include <future>
 #include <memory>
@@ -252,6 +253,22 @@ namespace margelo::nitro::image::bridge::swift {
   }
   
   /**
+   * Specialized version of `PromiseHolder<int64_t>`.
+   */
+  using PromiseHolder_int64_t_ = PromiseHolder<int64_t>;
+  inline PromiseHolder<int64_t> create_PromiseHolder_int64_t_() {
+    return PromiseHolder<int64_t>();
+  }
+  
+  /**
+   * Specialized version of `PromiseHolder<void>`.
+   */
+  using PromiseHolder_void_ = PromiseHolder<void>;
+  inline PromiseHolder<void> create_PromiseHolder_void_() {
+    return PromiseHolder<void>();
+  }
+  
+  /**
    * Specialized version of `std::function<void()>`.
    */
   using Func_void = std::function<void()>;
@@ -268,11 +285,27 @@ namespace margelo::nitro::image::bridge::swift {
   }
   
   /**
+   * Specialized version of `PromiseHolder<double>`.
+   */
+  using PromiseHolder_double_ = PromiseHolder<double>;
+  inline PromiseHolder<double> create_PromiseHolder_double_() {
+    return PromiseHolder<double>();
+  }
+  
+  /**
    * Specialized version of `std::function<std::future<std::string>()>`.
    */
   using Func_std__future_std__string_ = std::function<std::future<std::string>()>;
   inline Func_std__future_std__string_ create_Func_std__future_std__string_(std::future<std::string>(*func)(void* /* context */), void* context) {
     return std::bind(func, context);
+  }
+  
+  /**
+   * Specialized version of `PromiseHolder<std::string>`.
+   */
+  using PromiseHolder_std__string_ = PromiseHolder<std::string>;
+  inline PromiseHolder<std::string> create_PromiseHolder_std__string_() {
+    return PromiseHolder<std::string>();
   }
   
   /**

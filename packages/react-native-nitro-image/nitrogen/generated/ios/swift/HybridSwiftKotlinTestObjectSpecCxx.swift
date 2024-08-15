@@ -429,4 +429,21 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
       fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
     }
   }
+  
+  @inline(__always)
+  public func someAsyncCode() -> bridge.PromiseHolder_double_ {
+    do {
+      let result = try self.implementation.someAsyncCode()
+      return { () -> bridge.PromiseHolder_double_ in
+        let promiseHolder = bridge.create_PromiseHolder_double_()
+        result
+          .then({ promiseHolder.resolve($0) })
+          .catch({ promiseHolder.reject(std.string(String(describing: $0))) })
+        return promiseHolder
+      }()
+    } catch {
+      let message = "\(error.localizedDescription)"
+      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
+    }
+  }
 }

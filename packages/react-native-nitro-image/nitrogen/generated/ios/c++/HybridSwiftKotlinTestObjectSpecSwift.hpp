@@ -47,6 +47,8 @@ namespace margelo::nitro::image { struct CallbackHolder; }
 #include "HybridSwiftKotlinTestObjectSpec.hpp"
 #include "HybridSwiftKotlinTestObjectSpecSwift.hpp"
 #include "CallbackHolder.hpp"
+#include <future>
+#include <NitroModules/PromiseHolder.hpp>
 
 #if __has_include(<NitroModules/HybridContext.hpp>)
 #include <NitroModules/HybridContext.hpp>
@@ -222,6 +224,10 @@ namespace margelo::nitro::image {
     }
     inline void call(const CallbackHolder& args) override {
       _swiftPart.call(args);
+    }
+    inline std::future<double> someAsyncCode() override {
+      auto value = _swiftPart.someAsyncCode();
+      return value.getFuture();
     }
 
   private:
