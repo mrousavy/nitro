@@ -31,6 +31,7 @@ Pod::Spec.new do |s|
     "cpp/core/AnyMap.hpp",
     "cpp/core/ArrayBuffer.hpp",
     "cpp/core/HybridObject.hpp",
+    "cpp/core/Promise.hpp",
     "cpp/registry/HybridObjectRegistry.hpp",
     "cpp/jsi/JSIConverter.hpp",
     "cpp/threading/Dispatcher.hpp",
