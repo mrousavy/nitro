@@ -13,6 +13,7 @@
 
 namespace margelo::nitro {
 
+template <typename TResult>
 class Promise {
 public:
   void reject(const std::string& message) {
@@ -21,25 +22,25 @@ public:
     _promise->set_exception(exceptionPtr);
   }
 
-  void resolve(int result) {
+  void resolve(const TResult& result) {
     _promise->set_value(result);
   }
   
-  std::future<int> getFuture() const {
+  std::future<TResult> getFuture() const {
     return _promise->get_future();
   }
 
 private:
   explicit Promise() {
-    _promise = std::make_shared<std::promise<int>>();
+    _promise = std::make_shared<std::promise<TResult>>();
   }
   
 private:
-  std::shared_ptr<std::promise<int>> _promise;
+  std::shared_ptr<std::promise<TResult>> _promise;
 
 public:
-  static Promise run(void (*run)(const Promise& promise)) {
-    Promise promise;
+  static Promise<TResult> run(void (*run)(const Promise<TResult>& promise)) {
+    Promise<TResult> promise;
     run(promise);
     return promise;
   }

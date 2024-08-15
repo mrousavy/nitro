@@ -7,6 +7,10 @@
 // Forward declare a few of the common types that might have cyclic includes.
 namespace margelo::nitro {
 class Dispatcher;
+
+class JSPromise;
+
+template <typename TResult>
 class Promise;
 
 template <typename T, typename Enable>
@@ -90,13 +94,13 @@ struct JSIConverter<std::future<TResult>> {
 };
 
 // Promise<T> <> Promise<T>
-template <>
-struct JSIConverter<Promise> {
-  static inline std::future<void> fromJSI(jsi::Runtime&, const jsi::Value&) {
+template <typename TResult>
+struct JSIConverter<Promise<TResult>> {
+  static inline std::future<TResult> fromJSI(jsi::Runtime&, const jsi::Value&) {
     throw std::runtime_error("Promise cannot be converted to a native type - it needs to be awaited first!");
   }
-  static inline jsi::Value toJSI(jsi::Runtime& runtime, const Promise& arg) {
-    return JSIConverter<std::future<int>>::toJSI(runtime, arg.getFuture());
+  static inline jsi::Value toJSI(jsi::Runtime& runtime, const Promise<TResult>& arg) {
+    return JSIConverter<std::future<TResult>>::toJSI(runtime, arg.getFuture());
   }
   static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
     throw std::runtime_error("jsi::Value of type Promise cannot be converted to a native Promise<T> yet!");
