@@ -170,14 +170,6 @@ namespace margelo::nitro::image::bridge::swift {
   }
   
   /**
-   * Specialized version of `std::optional<Car>`.
-   */
-  using std__optional_Car_ = std::optional<Car>;
-  inline std::optional<Car> create_std__optional_Car_(const Car& value) {
-    return std::optional<Car>(value);
-  }
-  
-  /**
    * Specialized version of `std::variant<Person, Car>`.
    */
   using std__variant_Person__Car_ = std::variant<Person, Car>;
@@ -324,6 +316,14 @@ namespace margelo::nitro::image::bridge::swift {
       keys.push_back(entry.first);
     }
     return keys;
+  }
+  
+  /**
+   * Specialized version of `std::optional<Car>`.
+   */
+  using std__optional_Car_ = std::optional<Car>;
+  inline std::optional<Car> create_std__optional_Car_(const Car& value) {
+    return std::optional<Car>(value);
   }
   
   /**

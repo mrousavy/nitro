@@ -115,16 +115,21 @@ export function getAllKnownTypes(): Type[] {
   return Array.from(knownTypes.values())
 }
 
-function getTypeId(type: TSMorphType): string {
+function getTypeId(type: TSMorphType, isOptional: boolean): string {
   const symbol = type.getSymbol()
-  return symbol?.getFullyQualifiedName() ?? type.getText()
+  let key = type.getText()
+  if (symbol != null) {
+    key += '_' + symbol.getFullyQualifiedName()
+  }
+  if (isOptional) key += '?'
+  return key
 }
 
 /**
  * Create a new type (or return it from cache if it is already known)
  */
 export function createType(type: TSMorphType, isOptional: boolean): Type {
-  const key = getTypeId(type)
+  const key = getTypeId(type, isOptional)
   if (key != null && knownTypes.has(key)) {
     const known = knownTypes.get(key)!
     if (isOptional === known instanceof OptionalType) {
