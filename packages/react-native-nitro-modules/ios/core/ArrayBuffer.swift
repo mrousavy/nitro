@@ -16,7 +16,7 @@ public extension ArrayBufferHolder {
    * When the `ArrayBuffer` is no longer used, `onDelete` will be called, in which
    * you as a caller are responsible for deleting `data`.
    */
-  static func wrap(wrappingDataWithoutCopy data: UnsafeMutablePointer<UInt8>,
+  static func wrap(dataWithoutCopy data: UnsafeMutablePointer<UInt8>,
                    size: Int,
                    onDelete delete: @escaping () -> Void) -> ArrayBufferHolder {
     // Convert escaping Swift closure to a `void*`
