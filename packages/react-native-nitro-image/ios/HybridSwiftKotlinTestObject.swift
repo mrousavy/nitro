@@ -10,14 +10,14 @@ import NitroModules
 
 class HybridSwiftKotlinTestObject : HybridSwiftKotlinTestObjectSpec {
   
-  func getStringAsync() throws -> NitroModules.Promise<String> {
+  func getStringAsync() throws -> Promise<String> {
     return Promise.parallel {
       Thread.sleep(forTimeInterval: 1)
       return "hello from Swift!"
     }
   }
   
-  func getCarAsync() throws -> NitroModules.Promise<Car> {
+  func getCarAsync() throws -> Promise<Car> {
     return Promise.parallel {
       Thread.sleep(forTimeInterval: 1)
       let driver = Person(name: "Marc", age: 24)
