@@ -8,10 +8,12 @@
 #pragma once
 
 #include <future>
+#include "NitroDefines.hpp"
 
 namespace margelo::nitro {
 
 class PromiseHolder {
+public:
   
 };
 
