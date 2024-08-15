@@ -44,7 +44,7 @@ namespace margelo::nitro::image::bridge::swift {
    */
   using Func_void_std__string = std::function<void(const std::string& /* path */)>;
   inline Func_void_std__string create_Func_void_std__string(void(*func)(void* /* context */, const std::string&), void* context) {
-    return std::bind(func, context);
+    return std::bind(func, context, std::placeholders::_1);
   }
   
   /**

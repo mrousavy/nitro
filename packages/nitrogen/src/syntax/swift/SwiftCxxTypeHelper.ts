@@ -149,6 +149,10 @@ function createCxxFunctionSwiftHelper(type: FunctionType): SwiftCxxHelper {
   const cfuncParams = ['void* /* context */', ...params]
   const returnType = type.returnType.getCode('c++')
   const functionPointerParam = `${returnType}(*func)(${cfuncParams.join(', ')})`
+  const boundArgs = [
+    'context',
+    ...type.parameters.map((_, i) => `std::placeholders::_${i + 1}`),
+  ]
 
   const name = type.specializationName
   return {
@@ -168,7 +172,7 @@ function createCxxFunctionSwiftHelper(type: FunctionType): SwiftCxxHelper {
  */
 using ${name} = ${actualType};
 inline ${name} create_${name}(${functionPointerParam}, void* context) {
-  return std::bind(func, context);
+  return std::bind(func, ${boundArgs.join(', ')});
 }
     `.trim(),
   }

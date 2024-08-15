@@ -12,14 +12,14 @@ import Foundation
  * This can be used to create unmanaged pointers (`void*`) and
  * passed to C-style function pointers via `void* context` parameters.
  */
-final class ClosureWrapper {
+public final class ClosureWrapper {
   let closure: () -> Void
-  
+
   init(closure: @escaping () -> Void) {
     self.closure = closure
   }
-  
-  func invoke() {
+
+  public func invoke() {
     closure()
   }
 }
