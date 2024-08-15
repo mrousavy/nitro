@@ -83,9 +83,10 @@ extension Promise {
    * Create a new `Promise<T>` that runs the given `async` code in a `Task`.
    * This does not necessarily run the code in a different Thread, but supports Swift's `async`/`await`.
    */
-  public static func `async`(_ run: @escaping () async throws -> T) -> Promise<T> {
+  public static func `async`(_ priority: TaskPriority? = nil,
+                             _ run: @escaping () async throws -> T) -> Promise<T> {
     let promise = Promise()
-    Task {
+    Task(priority: priority) {
       do {
         let result = try await run()
         promise.resolve(withResult: result)
