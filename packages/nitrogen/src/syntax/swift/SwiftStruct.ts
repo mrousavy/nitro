@@ -33,6 +33,8 @@ var ${p.escapedName}: ${p.getCode('swift')} {
   const code = `
 ${createFileMetadataString(`${struct.structName}.swift`)}
 
+import NitroModules
+
 /**
  * Represents an instance of \`${struct.structName}\`, backed by a C++ struct.
  */

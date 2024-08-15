@@ -561,7 +561,7 @@ case ${i}:
         return `
 { () -> bridge.${bridge.specializationName}
   let context = Unmanaged.passRetained(ClosureWrapper(closure: ${swiftParameterName})).toOpaque()
-  var func = ${createFunc}({ context in
+  return ${createFunc}({ context in
     guard let context else { fatalError("Context was null, even though we created one!") }
     let closure = Unmanaged<ClosureWrapper>.fromOpaque(context).takeRetainedValue()
     closure.invoke()

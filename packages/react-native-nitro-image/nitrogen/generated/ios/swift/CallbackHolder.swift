@@ -6,6 +6,8 @@
 /// Copyright © 2024 Marc Rousavy @ Margelo
 ///
 
+import NitroModules
+
 /**
  * Represents an instance of `CallbackHolder`, backed by a C++ struct.
  */
@@ -20,7 +22,7 @@ public extension CallbackHolder {
   init(callback: ((_ val: String) -> Void)) {
     self.init({ () -> bridge.Func_void_std__string
       let context = Unmanaged.passRetained(ClosureWrapper(closure: callback)).toOpaque()
-      var func = bridge.create_Func_void_std__string({ context in
+      return bridge.create_Func_void_std__string({ context in
         guard let context else { fatalError("Context was null, even though we created one!") }
         let closure = Unmanaged<ClosureWrapper>.fromOpaque(context).takeRetainedValue()
         closure.invoke()
@@ -39,7 +41,7 @@ public extension CallbackHolder {
     set {
       self.__callback = { () -> bridge.Func_void_std__string
         let context = Unmanaged.passRetained(ClosureWrapper(closure: newValue)).toOpaque()
-        var func = bridge.create_Func_void_std__string({ context in
+        return bridge.create_Func_void_std__string({ context in
           guard let context else { fatalError("Context was null, even though we created one!") }
           let closure = Unmanaged<ClosureWrapper>.fromOpaque(context).takeRetainedValue()
           closure.invoke()

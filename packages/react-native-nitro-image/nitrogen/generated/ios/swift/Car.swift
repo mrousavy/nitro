@@ -6,6 +6,8 @@
 /// Copyright © 2024 Marc Rousavy @ Margelo
 ///
 
+import NitroModules
+
 /**
  * Represents an instance of `Car`, backed by a C++ struct.
  */
