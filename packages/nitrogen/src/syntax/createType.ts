@@ -106,7 +106,7 @@ export function createVoidType(): Type {
 }
 
 // Caches complex types (types that have a symbol)
-const knownTypes = new Map<ts.Type, Type>()
+const knownTypes = new Map<string, Type>()
 
 /**
  * Get a list of all currently known complex types.
@@ -115,11 +115,16 @@ export function getAllKnownTypes(): Type[] {
   return Array.from(knownTypes.values())
 }
 
+function getTypeId(type: TSMorphType): string {
+  const symbol = type.getSymbol()
+  return symbol?.getFullyQualifiedName() ?? type.getText()
+}
+
 /**
  * Create a new type (or return it from cache if it is already known)
  */
 export function createType(type: TSMorphType, isOptional: boolean): Type {
-  const key = type.compilerType
+  const key = getTypeId(type)
   if (key != null && knownTypes.has(key)) {
     const known = knownTypes.get(key)!
     if (isOptional === known instanceof OptionalType) {
