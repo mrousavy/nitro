@@ -65,6 +65,7 @@ namespace margelo::nitro::image { enum class Powertrain; }
 
 // Common Swift bridges for C++ types
 #include <NitroModules/ArrayBufferHolder.hpp>
+#include <NitroModules/PromiseHolder.hpp>
 
 // Forward declarations of Swift defined types
 // Forward declaration of `HybridImageSpecCxx` to properly resolve imports.
