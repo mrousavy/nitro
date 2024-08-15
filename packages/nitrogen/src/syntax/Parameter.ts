@@ -45,7 +45,11 @@ export class Parameter implements CodeNode {
         }
         return `${cppType} ${name}`
       case 'swift':
-        return `${name}: ${this.type.getCode('swift')}`
+        let flags = ''
+        if (this.type.kind === 'function') {
+          flags = '@escaping'
+        }
+        return `${name}: ${flags + this.type.getCode('swift')}`
       case 'kotlin':
         return `${name}: ${this.type.getCode('kotlin')}`
       default:
