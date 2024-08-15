@@ -8,6 +8,7 @@ import { OptionalType } from '../types/OptionalType.js'
 import { RecordType } from '../types/RecordType.js'
 import type { Type } from '../types/Type.js'
 import { TupleType } from '../types/TupleType.js'
+import { escapeComments } from '../../utils.js'
 
 export interface SwiftCxxHelper {
   cxxCode: string
@@ -54,7 +55,7 @@ function createCxxOptionalSwiftHelper(type: OptionalType): SwiftCxxHelper {
     ],
     cxxCode: `
 /**
- * Specialized version of \`${actualType}\`.
+ * Specialized version of \`${escapeComments(actualType)}\`.
  */
 using ${name} = ${actualType};
 inline ${actualType} create_${name}(const ${type.wrappingType.getCode('c++')}& value) {
@@ -83,7 +84,7 @@ function createCxxVectorSwiftHelper(type: ArrayType): SwiftCxxHelper {
     ],
     cxxCode: `
 /**
- * Specialized version of \`${actualType}\`.
+ * Specialized version of \`${escapeComments(actualType)}\`.
  */
 using ${name} = ${actualType};
 inline ${actualType} create_${name}(size_t size) {
@@ -115,7 +116,7 @@ function createCxxUnorderedMapSwiftHelper(type: RecordType): SwiftCxxHelper {
     ],
     cxxCode: `
 /**
- * Specialized version of \`${actualType}\`.
+ * Specialized version of \`${escapeComments(actualType)}\`.
  */
 using ${name} = ${actualType};
 inline ${actualType} create_${name}(size_t size) {
@@ -153,7 +154,7 @@ function createCxxFunctionSwiftHelper(type: FunctionType): SwiftCxxHelper {
     ],
     cxxCode: `
 /**
- * Specialized version of \`${type.getCode('c++', false)}\`.
+ * Specialized version of \`${escapeComments(type.getCode('c++'))}\`.
  */
 using ${name} = ${type.getCode('c++', false)};
     `.trim(),
@@ -200,7 +201,7 @@ inline ${t.getCode('c++')} get_${name}_${i}(const ${actualType}& variant) {
     ],
     cxxCode: `
 /**
- * Specialized version of \`${actualType}\`.
+ * Specialized version of \`${escapeComments(actualType)}\`.
  */
 using ${name} = ${actualType};
 ${createFunctions}
@@ -235,7 +236,7 @@ function createCxxTupleSwiftHelper(type: TupleType): SwiftCxxHelper {
     ],
     cxxCode: `
 /**
- * Specialized version of \`${actualType}\`.
+ * Specialized version of \`${escapeComments(actualType)}\`.
  */
 using ${name} = ${actualType};
 inline ${actualType} create_${name}(${typesSignature}) {

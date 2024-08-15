@@ -30,6 +30,13 @@ export function errorToString(error: unknown): string {
   return JSON.stringify(error)
 }
 
+export function escapeComments(string: string): string {
+  return string
+    .replace(/\/\*/g, '/ *') // Escape start of comment
+    .replace(/\*\//g, '* /') // Escape end of comment
+    .replace(/\/\//g, '/ /') // Escape single-line comment
+}
+
 function getFullPath(file: SourceFile): string {
   return path.join(
     file.platform,
