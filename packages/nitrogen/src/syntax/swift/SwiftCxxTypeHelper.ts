@@ -140,6 +140,20 @@ inline std::vector<${keyType}> get_${name}_keys(const ${name}& map) {
  * Creates a C++ `Func_XXXXX` specialization that can be used from Swift.
  */
 function createCxxFunctionSwiftHelper(type: FunctionType): SwiftCxxHelper {
+  const actualType = type.getCode('c++')
+  const params = type.parameters.map((p) =>
+    p.canBePassedByReference
+      ? toReferenceType(p.getCode('c++'))
+      : p.getCode('c++')
+  )
+  const cfuncParams = ['void* /* context */', ...params]
+  const returnType = type.returnType.getCode('c++')
+  const functionPointerParam = `${returnType}(*func)(${cfuncParams.join(', ')})`
+  const boundArgs = [
+    'context',
+    ...type.parameters.map((_, i) => `std::placeholders::_${i + 1}`),
+  ]
+
   const name = type.specializationName
   return {
     funcName: `create_${name}`,
@@ -154,9 +168,12 @@ function createCxxFunctionSwiftHelper(type: FunctionType): SwiftCxxHelper {
     ],
     cxxCode: `
 /**
- * Specialized version of \`${escapeComments(type.getCode('c++'))}\`.
+ * Specialized version of \`${escapeComments(actualType)}\`.
  */
-using ${name} = ${type.getCode('c++', false)};
+using ${name} = ${actualType};
+inline ${name} create_${name}(${functionPointerParam}, void* context) {
+  return std::bind(func, ${boundArgs.join(', ')});
+}
     `.trim(),
   }
 }

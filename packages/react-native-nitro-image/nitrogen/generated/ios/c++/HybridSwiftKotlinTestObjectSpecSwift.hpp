@@ -29,6 +29,8 @@ namespace NitroModules { class ArrayBufferHolder; }
 namespace margelo::nitro::image { class HybridSwiftKotlinTestObjectSpec; }
 // Forward declaration of `HybridSwiftKotlinTestObjectSpecSwift` to properly resolve imports.
 namespace margelo::nitro::image { class HybridSwiftKotlinTestObjectSpecSwift; }
+// Forward declaration of `CallbackHolder` to properly resolve imports.
+namespace margelo::nitro::image { struct CallbackHolder; }
 
 #include <string>
 #include <optional>
@@ -44,6 +46,7 @@ namespace margelo::nitro::image { class HybridSwiftKotlinTestObjectSpecSwift; }
 #include <memory>
 #include "HybridSwiftKotlinTestObjectSpec.hpp"
 #include "HybridSwiftKotlinTestObjectSpecSwift.hpp"
+#include "CallbackHolder.hpp"
 
 #if __has_include(<NitroModules/HybridContext.hpp>)
 #include <NitroModules/HybridContext.hpp>
@@ -216,6 +219,9 @@ namespace margelo::nitro::image {
     inline std::shared_ptr<margelo::nitro::image::HybridSwiftKotlinTestObjectSpec> bounceBack(const std::shared_ptr<margelo::nitro::image::HybridSwiftKotlinTestObjectSpec>& obj) override {
       auto value = _swiftPart.bounceBack(std::static_pointer_cast<HybridSwiftKotlinTestObjectSpecSwift>(obj)->getSwiftPart());
       return HybridContext::getOrCreate<HybridSwiftKotlinTestObjectSpecSwift>(value);
+    }
+    inline void call(const CallbackHolder& args) override {
+      _swiftPart.call(args);
     }
 
   private:

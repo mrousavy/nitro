@@ -555,8 +555,22 @@ case ${i}:
             return swiftParameterName
         }
       }
-      case 'function':
-        throw new Error(`Functions cannot be returned from Swift to C++ yet!`)
+      case 'function': {
+        const bridge = this.getBridgeOrThrow()
+        const func = getTypeAs(this.type, FunctionType)
+        if (func.parameters.length > 0) {
+          throw new Error(
+            `Swift functions **with parameters** cannot passed around bi-directionally yet! Either remove parameters from the function "${func.jsName}", or don't pass it around bi-directionally.`
+          )
+        }
+        const createFunc = `bridge.${bridge.funcName}`
+        return `
+{ () -> bridge.${bridge.specializationName} in
+  let (wrappedClosure, context) = ClosureWrapper.wrap(closure: ${swiftParameterName})
+  return ${createFunc}(wrappedClosure, context)
+}()
+        `.trim()
+      }
       case 'void':
         // When type is void, don't return anything
         return ''

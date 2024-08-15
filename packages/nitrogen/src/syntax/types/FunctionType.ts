@@ -77,6 +77,19 @@ export class FunctionType implements Type {
     }
   }
 
+  getCppFunctionPointerType(name: string, includeNameInfo = true): string {
+    const params = this.parameters
+      .map((p) => {
+        const type = p.getCode('c++')
+        const code = p.canBePassedByReference ? toReferenceType(type) : type
+        if (includeNameInfo) return `${code} /* ${p.name} */`
+        else return code
+      })
+      .join(', ')
+    const returnType = this.returnType.getCode('c++')
+    return `${returnType}(*${name})(${params})`
+  }
+
   getCode(language: Language, includeNameInfo = true): string {
     switch (language) {
       case 'c++': {

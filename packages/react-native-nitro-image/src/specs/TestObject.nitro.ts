@@ -101,6 +101,10 @@ export interface TestObject extends HybridObject<{ ios: 'c++' }> {
   newTestObject(): TestObject
 }
 
+interface CallbackHolder {
+  callback: () => void
+}
+
 export interface SwiftKotlinTestObject extends HybridObject<{ ios: 'swift' }> {
   // Test Primitives
   numberValue: number
@@ -135,4 +139,6 @@ export interface SwiftKotlinTestObject extends HybridObject<{ ios: 'swift' }> {
   createNewBuffer(size: number): ArrayBuffer
   newTestObject(): SwiftKotlinTestObject
   bounceBack(obj: SwiftKotlinTestObject): SwiftKotlinTestObject
+
+  call(args: CallbackHolder): void
 }

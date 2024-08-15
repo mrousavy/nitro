@@ -56,6 +56,7 @@ public protocol HybridSwiftKotlinTestObjectSpec: HybridObjectSpec {
   func createNewBuffer(size: Double) throws -> ArrayBufferHolder
   func newTestObject() throws -> HybridSwiftKotlinTestObjectSpec
   func bounceBack(obj: HybridSwiftKotlinTestObjectSpec) throws -> HybridSwiftKotlinTestObjectSpec
+  func call(args: CallbackHolder) throws -> Void
 }
 
 public extension HybridSwiftKotlinTestObjectSpec {
