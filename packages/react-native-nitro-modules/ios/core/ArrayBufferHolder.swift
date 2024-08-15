@@ -1,5 +1,5 @@
 //
-//  ArrayBuffer.swift
+//  ArrayBufferHolder.swift
 //  NitroModules
 //
 //  Created by Marc Rousavy on 17.07.24.
