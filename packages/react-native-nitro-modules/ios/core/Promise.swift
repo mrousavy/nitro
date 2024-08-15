@@ -130,6 +130,7 @@ extension Promise {
    * Add a continuation listener to this `Promise<T>`.
    * Once the `Promise<T>` resolves, the `onResolvedListener` will be called.
    */
+  @discardableResult
   public func then(_ onResolvedListener: @escaping (T) -> Void) -> Promise {
     switch state {
     case .result(let result):
@@ -146,6 +147,7 @@ extension Promise {
    * Add an error continuation listener to this `Promise<T>`.
    * Once the `Promise<T>` rejects, the `onRejectedListener` will be called with the error.
    */
+  @discardableResult
   public func `catch`(_ onRejectedListener: @escaping (Error) -> Void) -> Promise {
     switch state {
     case .error(let error):

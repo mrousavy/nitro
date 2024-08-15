@@ -497,11 +497,15 @@ case ${i}:
         const bridge = this.getBridgeOrThrow()
         const makePromise = `bridge.${bridge.funcName}`
         const promise = getTypeAs(this.type, PromiseType)
+        const resolvingType = new SwiftCxxBridgedType(promise.resultingType)
         switch (language) {
           case 'c++':
             return `${swiftParameterName}.getFuture()`
           case 'swift':
-            const arg = promise.resultingType.kind === 'void' ? '' : '$0'
+            const arg =
+              promise.resultingType.kind === 'void'
+                ? ''
+                : resolvingType.parseFromSwiftToCpp('$0', 'swift')
             return `
 { () -> bridge.${bridge.specializationName} in
   let promiseHolder = ${makePromise}()
