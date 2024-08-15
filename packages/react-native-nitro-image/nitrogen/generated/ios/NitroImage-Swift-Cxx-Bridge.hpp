@@ -40,7 +40,7 @@ namespace margelo::nitro::image { struct Person; }
 namespace margelo::nitro::image::bridge::swift {
 
   /**
-   * Specialized version of `std::function<void(const std::string&)>`.
+   * Specialized version of `std::function<void(const std::string& / * path * /)>`.
    */
   using Func_void_std__string = std::function<void(const std::string&)>;
   

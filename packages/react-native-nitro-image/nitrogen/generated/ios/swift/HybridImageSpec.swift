@@ -36,7 +36,7 @@ public protocol HybridImageSpec: HybridObjectSpec {
 
   // Methods
   func toArrayBuffer(format: ImageFormat) throws -> Double
-  func saveToFile(path: String, onFinished: (@escaping (_ path: String) -> Void)) throws -> Void
+  func saveToFile(path: String, onFinished: @escaping ((_ path: String) -> Void)) throws -> Void
 }
 
 public extension HybridImageSpec {

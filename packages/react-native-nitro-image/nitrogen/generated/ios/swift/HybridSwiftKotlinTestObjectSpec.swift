@@ -52,7 +52,7 @@ public protocol HybridSwiftKotlinTestObjectSpec: HybridObjectSpec {
   func multipleArguments(num: Double, str: String, boo: Bool) throws -> Void
   func getNumbers() throws -> [Double]
   func getStrings() throws -> [String]
-  func callCallback(callback: (@escaping () -> Void)) throws -> Void
+  func callCallback(callback: @escaping (() -> Void)) throws -> Void
   func createNewBuffer(size: Double) throws -> ArrayBufferHolder
   func newTestObject() throws -> HybridSwiftKotlinTestObjectSpec
   func bounceBack(obj: HybridSwiftKotlinTestObjectSpec) throws -> HybridSwiftKotlinTestObjectSpec

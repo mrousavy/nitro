@@ -47,7 +47,7 @@ export class Parameter implements CodeNode {
       case 'swift':
         let flags = ''
         if (this.type.kind === 'function') {
-          flags = '@escaping'
+          flags = '@escaping '
         }
         return `${name}: ${flags + this.type.getCode('swift')}`
       case 'kotlin':
