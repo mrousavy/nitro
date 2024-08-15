@@ -70,9 +70,10 @@ function parseConfig(json: string): NitroUserConfig {
             return `\`${prop}\`: ${i.message} (${i.code})`
         }
       })
-      throw new Error(
-        `Invalid nitro.json config file! ${issues.join(' - also, ')}`
+      console.error(
+        `❌  Invalid nitro.json config file! ${issues.join(' - also, ')}`
       )
+      process.exit()
     } else {
       throw error
     }
