@@ -102,7 +102,7 @@ export interface TestObject extends HybridObject<{ ios: 'c++' }> {
 }
 
 interface CallbackHolder {
-  callback: (val: string) => void
+  callback: () => void
 }
 
 export interface SwiftKotlinTestObject extends HybridObject<{ ios: 'swift' }> {

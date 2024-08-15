@@ -19,33 +19,33 @@ public extension CallbackHolder {
   /**
    * Create a new instance of `CallbackHolder`.
    */
-  init(callback: ((_ val: String) -> Void)) {
-    self.init({ () -> bridge.Func_void_std__string
+  init(callback: @escaping (() -> Void)) {
+    self.init({ () -> bridge.Func_void in
       let context = Unmanaged.passRetained(ClosureWrapper(closure: callback)).toOpaque()
-      return bridge.create_Func_void_std__string({ context in
+      return bridge.create_Func_void({ context in
         guard let context else { fatalError("Context was null, even though we created one!") }
         let closure = Unmanaged<ClosureWrapper>.fromOpaque(context).takeRetainedValue()
         closure.invoke()
-      })
+      }, context)
     }())
   }
 
-  var callback: ((_ val: String) -> Void) {
+  var callback: (() -> Void) {
     @inline(__always)
     get {
-      return { (val: String) -> Void in
-        self.__callback(std.string(val))
+      return { () -> Void in
+        self.__callback()
       }
     }
     @inline(__always)
     set {
-      self.__callback = { () -> bridge.Func_void_std__string
+      self.__callback = { () -> bridge.Func_void in
         let context = Unmanaged.passRetained(ClosureWrapper(closure: newValue)).toOpaque()
-        return bridge.create_Func_void_std__string({ context in
+        return bridge.create_Func_void({ context in
           guard let context else { fatalError("Context was null, even though we created one!") }
           let closure = Unmanaged<ClosureWrapper>.fromOpaque(context).takeRetainedValue()
           closure.invoke()
-        })
+        }, context)
       }()
     }
   }

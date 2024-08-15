@@ -559,13 +559,13 @@ case ${i}:
         const bridge = this.getBridgeOrThrow()
         const createFunc = `bridge.${bridge.funcName}`
         return `
-{ () -> bridge.${bridge.specializationName}
+{ () -> bridge.${bridge.specializationName} in
   let context = Unmanaged.passRetained(ClosureWrapper(closure: ${swiftParameterName})).toOpaque()
   return ${createFunc}({ context in
     guard let context else { fatalError("Context was null, even though we created one!") }
     let closure = Unmanaged<ClosureWrapper>.fromOpaque(context).takeRetainedValue()
     closure.invoke()
-  })
+  }, context)
 }()
         `.trim()
       }

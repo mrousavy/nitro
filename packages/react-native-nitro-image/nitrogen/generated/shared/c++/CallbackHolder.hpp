@@ -22,7 +22,6 @@
 
 
 #include <functional>
-#include <string>
 
 namespace margelo::nitro::image {
 
@@ -31,10 +30,10 @@ namespace margelo::nitro::image {
    */
   struct CallbackHolder {
   public:
-    std::function<void(const std::string& /* val */)> callback     SWIFT_PRIVATE;
+    std::function<void()> callback     SWIFT_PRIVATE;
 
   public:
-    explicit CallbackHolder(std::function<void(const std::string& /* val */)> callback): callback(callback) {}
+    explicit CallbackHolder(std::function<void()> callback): callback(callback) {}
   };
 
 } // namespace margelo::nitro::image
@@ -49,12 +48,12 @@ namespace margelo::nitro {
     static inline CallbackHolder fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       jsi::Object obj = arg.asObject(runtime);
       return CallbackHolder(
-        JSIConverter<std::function<void(const std::string& /* val */)>>::fromJSI(runtime, obj.getProperty(runtime, "callback"))
+        JSIConverter<std::function<void()>>::fromJSI(runtime, obj.getProperty(runtime, "callback"))
       );
     }
     static inline jsi::Value toJSI(jsi::Runtime& runtime, const CallbackHolder& arg) {
       jsi::Object obj(runtime);
-      obj.setProperty(runtime, "callback", JSIConverter<std::function<void(const std::string& /* val */)>>::toJSI(runtime, arg.callback));
+      obj.setProperty(runtime, "callback", JSIConverter<std::function<void()>>::toJSI(runtime, arg.callback));
       return obj;
     }
     static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
@@ -62,7 +61,7 @@ namespace margelo::nitro {
         return false;
       }
       jsi::Object obj = value.getObject(runtime);
-      if (!JSIConverter<std::function<void(const std::string& /* val */)>>::canConvert(runtime, obj.getProperty(runtime, "callback"))) return false;
+      if (!JSIConverter<std::function<void()>>::canConvert(runtime, obj.getProperty(runtime, "callback"))) return false;
       return true;
     }
   };

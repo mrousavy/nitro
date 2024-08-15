@@ -1,6 +1,7 @@
 import { NitroConfig } from '../../config/NitroConfig.js'
 import { indent } from '../../utils.js'
 import { createFileMetadataString } from '../helpers.js'
+import { Parameter } from '../Parameter.js'
 import type { FileWithReferencedTypes } from '../SourceFile.js'
 import { StructType } from '../types/StructType.js'
 import { SwiftCxxBridgedType } from './SwiftCxxBridgedType.js'
@@ -61,7 +62,8 @@ public extension ${struct.structName} {
 
 function createSwiftBridgedConstructor(struct: StructType): string {
   const params = struct.properties
-    .map((p) => `${p.escapedName}: ${p.getCode('swift')}`)
+    .map((p) => new Parameter(p.escapedName, p))
+    .map((p) => p.getCode('swift'))
     .join(', ')
   const paramsForward = struct.properties
     .map((p) => {
