@@ -9,6 +9,13 @@ import Foundation
 
 /**
  * Represents a Promise that can be passed to JS.
+ *
+ * Create a new Promise with the following APIs:
+ * - `Promise<T>.async { ... }` - Creates a new Promise that runs the given code in a Swift `async`/`await` Task.
+ * - `Promise<T>.parallel { ... }` - Creates a new Promise that runs the given code in a parallel `DispatchQueue`.
+ * - `Promise<T>.resolved(withResult:)` - Creates a new already resolved Promise.
+ * - `Promise<T>.rejected(withError:)` - Creates a new already rejected Promise.
+ * - `Promise<T>()` - Creates a new Promise with fully manual control over the `resolve(..)`/`reject(..)` functions.
  */
 public class Promise<T> {
   private enum State {
@@ -64,7 +71,7 @@ extension Promise {
   /**
    * Create a new `Promise<T>` already resolved with the given `T`.
    */
-  public static func resolved(withResult result: T) -> Promise<T> {
+  public static func resolved(withResult result: T) -> Promise {
     let promise = Promise()
     promise.state = .result(result)
     return promise
@@ -73,7 +80,7 @@ extension Promise {
   /**
    * Create a new `Promise<T>` already rejected with the given `Error`.
    */
-  public static func rejected(withError error: Error) -> Promise<T> {
+  public static func rejected(withError error: Error) -> Promise {
     let promise = Promise()
     promise.state = .error(error)
     return promise
@@ -84,7 +91,7 @@ extension Promise {
    * This does not necessarily run the code in a different Thread, but supports Swift's `async`/`await`.
    */
   public static func `async`(_ priority: TaskPriority? = nil,
-                             _ run: @escaping () async throws -> T) -> Promise<T> {
+                             _ run: @escaping () async throws -> T) -> Promise {
     let promise = Promise()
     Task(priority: priority) {
       do {
@@ -101,7 +108,7 @@ extension Promise {
    * Create a new `Promise<T>` that runs the given `run` function on a parallel Thread/`DispatchQueue`.
    */
   public static func parallel(_ queue: DispatchQueue = .global(),
-                              _ run: @escaping () throws -> T) -> Promise<T> {
+                              _ run: @escaping () throws -> T) -> Promise {
     let promise = Promise()
     queue.async {
       do {
@@ -123,7 +130,7 @@ extension Promise {
    * Add a continuation listener to this `Promise<T>`.
    * Once the `Promise<T>` resolves, the `onResolvedListener` will be called.
    */
-  public func then(_ onResolvedListener: @escaping (T) -> Void) {
+  public func then(_ onResolvedListener: @escaping (T) -> Void) -> Promise {
     switch state {
     case .result(let result):
       onResolvedListener(result)
@@ -132,13 +139,14 @@ extension Promise {
       onResolvedListeners.append(onResolvedListener)
       break
     }
+    return self
   }
   
   /**
    * Add an error continuation listener to this `Promise<T>`.
    * Once the `Promise<T>` rejects, the `onRejectedListener` will be called with the error.
    */
-  public func `catch`(_ onRejectedListener: @escaping (Error) -> Void) {
+  public func `catch`(_ onRejectedListener: @escaping (Error) -> Void) -> Promise {
     switch state {
     case .error(let error):
       onRejectedListener(error)
@@ -147,5 +155,6 @@ extension Promise {
       onRejectedListeners.append(onRejectedListener)
       break
     }
+    return self
   }
 }
