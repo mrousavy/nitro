@@ -42,7 +42,12 @@ namespace margelo::nitro::image::bridge::swift {
   /**
    * Specialized version of `std::function<void(const std::string& / * path * /)>`.
    */
-  using Func_void_std__string = std::function<void(const std::string&)>;
+  using Func_void_std__string = std::function<void(const std::string& /* path */)>;
+  inline Func_void_std__string create_Func_void_std__string(void(*func)(void* /* context */, const std::string&), void* context) {
+    return [&](const std::string& path) {
+      func(context, path);
+    };
+  }
   
   /**
    * Specialized version of `std::optional<std::string>`.
@@ -252,16 +257,31 @@ namespace margelo::nitro::image::bridge::swift {
    * Specialized version of `std::function<void()>`.
    */
   using Func_void = std::function<void()>;
+  inline Func_void create_Func_void(void(*func)(void* /* context */), void* context) {
+    return [&]() {
+      func(context, );
+    };
+  }
   
   /**
    * Specialized version of `std::function<std::future<double>()>`.
    */
   using Func_std__future_double_ = std::function<std::future<double>()>;
+  inline Func_std__future_double_ create_Func_std__future_double_(std::future<double>(*func)(void* /* context */), void* context) {
+    return [&]() {
+      func(context, );
+    };
+  }
   
   /**
    * Specialized version of `std::function<std::future<std::string>()>`.
    */
   using Func_std__future_std__string_ = std::function<std::future<std::string>()>;
+  inline Func_std__future_std__string_ create_Func_std__future_std__string_(std::future<std::string>(*func)(void* /* context */), void* context) {
+    return [&]() {
+      func(context, );
+    };
+  }
   
   /**
    * Specialized version of `std::unordered_map<std::string, double>`.

@@ -555,8 +555,20 @@ case ${i}:
             return swiftParameterName
         }
       }
-      case 'function':
-        throw new Error(`Functions cannot be returned from Swift to C++ yet!`)
+      case 'function': {
+        const bridge = this.getBridgeOrThrow()
+        const createFunc = `bridge.${bridge.funcName}`
+        return `
+{ () -> bridge.${bridge}
+  let context = Unmanaged.passRetained(ClosureWrapper(closure: ${swiftParameterName})).toOpaque()
+  var func = ${createFunc}({ context in
+    guard let context else { fatalError("Context was null, even though we created one!") }
+    let closure = Unmanaged<ClosureWrapper>.fromOpaque(context).takeRetainedValue()
+    closure.invoke()
+  })
+}()
+        `.trim()
+      }
       case 'void':
         // When type is void, don't return anything
         return ''

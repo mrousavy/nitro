@@ -24,6 +24,8 @@ namespace margelo::nitro::image { enum class OldEnum; }
 namespace NitroModules { class ArrayBuffer; }
 // Forward declaration of `HybridSwiftKotlinTestObjectSpec` to properly resolve imports.
 namespace margelo::nitro::image { class HybridSwiftKotlinTestObjectSpec; }
+// Forward declaration of `CallbackHolder` to properly resolve imports.
+namespace margelo::nitro::image { struct CallbackHolder; }
 
 #include <string>
 #include <optional>
@@ -36,6 +38,7 @@ namespace margelo::nitro::image { class HybridSwiftKotlinTestObjectSpec; }
 #include <functional>
 #include <memory>
 #include "HybridSwiftKotlinTestObjectSpec.hpp"
+#include "CallbackHolder.hpp"
 
 namespace margelo::nitro::image {
 
@@ -102,6 +105,7 @@ namespace margelo::nitro::image {
       virtual std::shared_ptr<ArrayBuffer> createNewBuffer(double size) = 0;
       virtual std::shared_ptr<margelo::nitro::image::HybridSwiftKotlinTestObjectSpec> newTestObject() = 0;
       virtual std::shared_ptr<margelo::nitro::image::HybridSwiftKotlinTestObjectSpec> bounceBack(const std::shared_ptr<margelo::nitro::image::HybridSwiftKotlinTestObjectSpec>& obj) = 0;
+      virtual void call(const CallbackHolder& args) = 0;
 
     protected:
       // Hybrid Setup
