@@ -53,7 +53,16 @@ public:
     return _arrayBuffer->size();
   }
 
-  bool isOwner() const SWIFT_COMPUTED_PROPERTY {
+  /**
+   * Whether the underlying `ArrayBuffer` actually owns the data it points to, or not.
+   *
+   * - If an `ArrayBuffer` owns the data, it is likely an ArrayBuffer created on the native side (C++/Swift).
+   *   This means the `ArrayBuffer` is safe to access as long as you have a reference to it, and cannot be deleted otherwise.
+   * - If an `ArrayBuffer` doesn't own the data, it is likely an ArrayBuffer coming from JS.
+   *   This means the `ArrayBuffer` is **NOT** safe to access outside of the synchronous function's scope.
+   *   If you plan on hopping do a different Thread, or storing a long-lived reference to it, make sure to **copy** the data.
+   */
+  bool getIsOwner() const SWIFT_COMPUTED_PROPERTY {
     return _arrayBuffer->isOwner();
   }
 
