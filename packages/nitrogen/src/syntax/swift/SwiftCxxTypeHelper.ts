@@ -9,6 +9,7 @@ import { RecordType } from '../types/RecordType.js'
 import type { Type } from '../types/Type.js'
 import { TupleType } from '../types/TupleType.js'
 import { escapeComments } from '../../utils.js'
+import { PromiseType } from '../types/PromiseType.js'
 
 export interface SwiftCxxHelper {
   cxxCode: string
@@ -31,6 +32,8 @@ export function createSwiftCxxHelpers(type: Type): SwiftCxxHelper | undefined {
       return createCxxVariantSwiftHelper(getTypeAs(type, VariantType))
     case 'tuple':
       return createCxxTupleSwiftHelper(getTypeAs(type, TupleType))
+    case 'promise':
+      return createCxxPromiseSwiftHelper(getTypeAs(type, PromiseType))
     default:
       return undefined
   }
@@ -41,7 +44,7 @@ export function createSwiftCxxHelpers(type: Type): SwiftCxxHelper | undefined {
  */
 function createCxxOptionalSwiftHelper(type: OptionalType): SwiftCxxHelper {
   const actualType = type.getCode('c++')
-  const name = escapeCppName(type.getCode('c++'))
+  const name = escapeCppName(actualType)
   return {
     funcName: `create_${name}`,
     specializationName: name,
@@ -70,7 +73,7 @@ inline ${actualType} create_${name}(const ${type.wrappingType.getCode('c++')}& v
  */
 function createCxxVectorSwiftHelper(type: ArrayType): SwiftCxxHelper {
   const actualType = type.getCode('c++')
-  const name = escapeCppName(type.getCode('c++'))
+  const name = escapeCppName(actualType)
   return {
     funcName: `create_${name}`,
     specializationName: name,
@@ -101,8 +104,8 @@ inline ${actualType} create_${name}(size_t size) {
  */
 function createCxxUnorderedMapSwiftHelper(type: RecordType): SwiftCxxHelper {
   const actualType = type.getCode('c++')
+  const name = escapeCppName(actualType)
   const keyType = type.keyType.getCode('c++')
-  const name = escapeCppName(type.getCode('c++'))
   return {
     funcName: `create_${name}`,
     specializationName: name,
@@ -183,7 +186,7 @@ inline ${name} create_${name}(${functionPointerParam}, void* context) {
  */
 function createCxxVariantSwiftHelper(type: VariantType): SwiftCxxHelper {
   const actualType = type.getCode('c++')
-  const name = escapeCppName(type.getCode('c++'))
+  const name = escapeCppName(actualType)
   const createFunctions = type.variants
     .map((t) => {
       const param = t.canBePassedByReference
@@ -232,7 +235,7 @@ ${getFunctions}
  */
 function createCxxTupleSwiftHelper(type: TupleType): SwiftCxxHelper {
   const actualType = type.getCode('c++')
-  const name = escapeCppName(type.getCode('c++'))
+  const name = escapeCppName(actualType)
   const typesSignature = type.itemTypes
     .map((t, i) => {
       const code = t.getCode('c++')
@@ -258,6 +261,36 @@ function createCxxTupleSwiftHelper(type: TupleType): SwiftCxxHelper {
 using ${name} = ${actualType};
 inline ${actualType} create_${name}(${typesSignature}) {
   return ${actualType} { ${typesForward} };
+}
+     `.trim(),
+  }
+}
+
+/**
+ * Creates a C++ `create_promise_T()` function that can be called from Swift to create a `PromiseHolder`.
+ */
+function createCxxPromiseSwiftHelper(type: PromiseType): SwiftCxxHelper {
+  const resultingType = type.resultingType.getCode('c++')
+  const actualType = `PromiseHolder<${resultingType}>`
+  const name = escapeCppName(actualType)
+  return {
+    funcName: `create_${name}`,
+    specializationName: name,
+    requiredIncludes: [
+      {
+        name: 'NitroModules/PromiseHolder.hpp',
+        space: 'system',
+        language: 'c++',
+      },
+      ...type.getRequiredImports(),
+    ],
+    cxxCode: `
+/**
+ * Specialized version of \`${escapeComments(actualType)}\`.
+ */
+using ${name} = ${actualType};
+inline ${actualType} create_${name}() {
+  return ${actualType}();
 }
      `.trim(),
   }

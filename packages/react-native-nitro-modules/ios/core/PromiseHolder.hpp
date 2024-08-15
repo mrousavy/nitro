@@ -9,16 +9,14 @@
 
 #include <future>
 #include <string>
-#include <swift/bridging>
 
 namespace margelo::nitro {
 
 /**
  * Holds a `std::promise` that can be accessed from Swift using proper ref management.
  */
+template <typename T>
 class PromiseHolder {
-  using T = int;
-  
 public:
   /**
    * Create a new PromiseHolder (and a new `std::promise<T>`).
@@ -30,14 +28,14 @@ public:
   /**
    * Resolve the underlying `std::promise<T>` with `T`.
    */
-  void resolve(const T& result) {
+  void resolve(const T& result) const {
     _promise->set_value(result);
   }
   
   /**
    * Reject the underlying `std::promise<T>` with the given message.
    */
-  void reject(const std::string& message) {
+  void reject(const std::string& message) const {
     try {
       throw std::runtime_error(message);
     } catch (...) {
@@ -53,6 +51,32 @@ public:
   
 private:
   std::shared_ptr<std::promise<T>> _promise;
+};
+
+// Specialization for `void` (no args to `resolve()`)
+template<>
+class PromiseHolder<void> {
+public:
+  explicit PromiseHolder() {
+    _promise = std::make_shared<std::promise<void>>();
+  }
+  
+  void resolve() const {
+    _promise->set_value();
+  }
+  
+  void reject(const std::string& message) const {
+    try {
+      throw std::runtime_error(message);
+    } catch (...) {
+      _promise->set_exception(std::current_exception());
+    }
+  }
+  
+  std::future<void> getFuture() { return _promise->get_future(); }
+  
+private:
+  std::shared_ptr<std::promise<void>> _promise;
 };
 
 } // namespace margelo::nitro

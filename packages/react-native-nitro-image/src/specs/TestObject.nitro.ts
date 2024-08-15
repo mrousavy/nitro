@@ -141,4 +141,6 @@ export interface SwiftKotlinTestObject extends HybridObject<{ ios: 'swift' }> {
   bounceBack(obj: SwiftKotlinTestObject): SwiftKotlinTestObject
 
   call(args: CallbackHolder): void
+
+  someAsyncCode(): Promise<void>
 }

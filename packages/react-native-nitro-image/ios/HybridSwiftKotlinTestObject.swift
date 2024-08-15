@@ -9,6 +9,10 @@ import Foundation
 import NitroModules
 
 class HybridSwiftKotlinTestObject : HybridSwiftKotlinTestObjectSpec {
+  func someAsyncCode() throws -> NitroModules.Promise<Void> {
+    return NitroModules.Promise()
+  }
+  
   func call(args: CallbackHolder) throws {
     args.callback()
   }

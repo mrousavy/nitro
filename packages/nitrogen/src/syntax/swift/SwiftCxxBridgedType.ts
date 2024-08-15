@@ -12,6 +12,7 @@ import { FunctionType } from '../types/FunctionType.js'
 import { getTypeAs } from '../types/getTypeAs.js'
 import { HybridObjectType } from '../types/HybridObjectType.js'
 import { OptionalType } from '../types/OptionalType.js'
+import { PromiseType } from '../types/PromiseType.js'
 import { RecordType } from '../types/RecordType.js'
 import { StructType } from '../types/StructType.js'
 import { TupleType } from '../types/TupleType.js'
@@ -82,6 +83,9 @@ export class SwiftCxxBridgedType {
       case 'array-buffer':
         // ArrayBufferHolder <> std::shared_ptr<ArrayBuffer>
         return true
+      case 'promise':
+        // PromiseHolder<T> <> std::shared_ptr<std::promise<T>>
+        return true
       default:
         return false
     }
@@ -127,6 +131,12 @@ export class SwiftCxxBridgedType {
           'ArrayBufferHolder',
           'NitroModules'
         ),
+        language: 'c++',
+        space: 'system',
+      })
+    } else if (this.type.kind === 'promise') {
+      imports.push({
+        name: 'NitroModules/PromiseHolder.hpp',
         language: 'c++',
         space: 'system',
       })
@@ -217,7 +227,8 @@ export class SwiftCxxBridgedType {
       case 'function':
       case 'variant':
       case 'tuple':
-      case 'record': {
+      case 'record':
+      case 'promise': {
         const bridge = this.getBridgeOrThrow()
         return `bridge.${bridge.specializationName}`
       }
@@ -276,6 +287,13 @@ export class SwiftCxxBridgedType {
           default:
             return cppParameterName
         }
+      }
+      case 'promise': {
+        const promise = getTypeAs(this.type, PromiseType)
+        const actualType = promise.resultingType.getCode('swift')
+        throw new Error(
+          `Promise<${actualType}> can not be passed from C++ to Swift yet! Await the Promise in JS, and pass ${actualType} to Swift instead.`
+        )
       }
       case 'optional': {
         const optional = getTypeAs(this.type, OptionalType)
@@ -471,6 +489,27 @@ case ${i}:
         switch (language) {
           case 'c++':
             return `${swiftParameterName}.getArrayBuffer()`
+          default:
+            return swiftParameterName
+        }
+      }
+      case 'promise': {
+        const bridge = this.getBridgeOrThrow()
+        const makePromise = `bridge.${bridge.funcName}`
+        const promise = getTypeAs(this.type, PromiseType)
+        switch (language) {
+          case 'c++':
+            return `${swiftParameterName}.getFuture()`
+          case 'swift':
+            const arg = promise.resultingType.kind === 'void' ? '' : '$0'
+            return `
+{ () -> bridge.${bridge.specializationName} in
+  let promiseHolder = ${makePromise}()
+  ${swiftParameterName}
+    .then({ promiseHolder.resolve(${arg}) })
+    .catch({ promiseHolder.reject(std.string(String(describing: $0))) })
+  return promiseHolder
+}()`.trim()
           default:
             return swiftParameterName
         }
