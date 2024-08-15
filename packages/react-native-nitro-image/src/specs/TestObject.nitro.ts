@@ -142,5 +142,7 @@ export interface SwiftKotlinTestObject extends HybridObject<{ ios: 'swift' }> {
 
   call(args: CallbackHolder): void
 
-  someAsyncCode(): Promise<number>
+  getNumberAsync(): Promise<number>
+  getStringAsync(): Promise<string>
+  getCarAsync(): Promise<Car>
 }

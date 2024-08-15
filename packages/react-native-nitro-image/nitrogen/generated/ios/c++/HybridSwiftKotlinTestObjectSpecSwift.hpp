@@ -225,8 +225,16 @@ namespace margelo::nitro::image {
     inline void call(const CallbackHolder& args) override {
       _swiftPart.call(args);
     }
-    inline std::future<double> someAsyncCode() override {
-      auto value = _swiftPart.someAsyncCode();
+    inline std::future<double> getNumberAsync() override {
+      auto value = _swiftPart.getNumberAsync();
+      return value.getFuture();
+    }
+    inline std::future<std::string> getStringAsync() override {
+      auto value = _swiftPart.getStringAsync();
+      return value.getFuture();
+    }
+    inline std::future<Car> getCarAsync() override {
+      auto value = _swiftPart.getCarAsync();
       return value.getFuture();
     }
 

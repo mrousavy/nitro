@@ -325,5 +325,13 @@ namespace margelo::nitro::image::bridge::swift {
     }
     return keys;
   }
+  
+  /**
+   * Specialized version of `PromiseHolder<Car>`.
+   */
+  using PromiseHolder_Car_ = PromiseHolder<Car>;
+  inline PromiseHolder<Car> create_PromiseHolder_Car_() {
+    return PromiseHolder<Car>();
+  }
 
 } // namespace margelo::nitro::image::bridge::swift

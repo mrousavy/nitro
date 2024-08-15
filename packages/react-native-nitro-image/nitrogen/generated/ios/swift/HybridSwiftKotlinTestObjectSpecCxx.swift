@@ -431,11 +431,45 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
   }
   
   @inline(__always)
-  public func someAsyncCode() -> bridge.PromiseHolder_double_ {
+  public func getNumberAsync() -> bridge.PromiseHolder_double_ {
     do {
-      let result = try self.implementation.someAsyncCode()
+      let result = try self.implementation.getNumberAsync()
       return { () -> bridge.PromiseHolder_double_ in
         let promiseHolder = bridge.create_PromiseHolder_double_()
+        result
+          .then({ promiseHolder.resolve($0) })
+          .catch({ promiseHolder.reject(std.string(String(describing: $0))) })
+        return promiseHolder
+      }()
+    } catch {
+      let message = "\(error.localizedDescription)"
+      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
+    }
+  }
+  
+  @inline(__always)
+  public func getStringAsync() -> bridge.PromiseHolder_std__string_ {
+    do {
+      let result = try self.implementation.getStringAsync()
+      return { () -> bridge.PromiseHolder_std__string_ in
+        let promiseHolder = bridge.create_PromiseHolder_std__string_()
+        result
+          .then({ promiseHolder.resolve(std.string($0)) })
+          .catch({ promiseHolder.reject(std.string(String(describing: $0))) })
+        return promiseHolder
+      }()
+    } catch {
+      let message = "\(error.localizedDescription)"
+      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
+    }
+  }
+  
+  @inline(__always)
+  public func getCarAsync() -> bridge.PromiseHolder_Car_ {
+    do {
+      let result = try self.implementation.getCarAsync()
+      return { () -> bridge.PromiseHolder_Car_ in
+        let promiseHolder = bridge.create_PromiseHolder_Car_()
         result
           .then({ promiseHolder.resolve($0) })
           .catch({ promiseHolder.reject(std.string(String(describing: $0))) })
