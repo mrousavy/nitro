@@ -45,6 +45,7 @@ import com.margelo.nitro.HybridObject
 @DoNotStrip
 @Keep
 abstract class ${name.HybridTSpec}: HybridObject() {
+  final override val mHybridData: HybridData = initHybrid()
   protected val TAG = "${name.HybridTSpec}"
 
   // Properties
@@ -53,7 +54,10 @@ abstract class ${name.HybridTSpec}: HybridObject() {
   // Methods
   ${indent(methods, '  ')}
 
+  @Suppress("KotlinJniMissingFunction")
   companion object {
+    private external fun initHybrid(): HybridData
+
     private const val TAG = "${name.HybridTSpec}"
     init {
       try {

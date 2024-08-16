@@ -28,14 +28,15 @@ ${createFileMetadataString(`${name.HybridTSpec}.hpp`)}
 
 #pragma once
 
-#include "${name.HybridTSpec}.hpp"
+#include <NitroModules/JHybridObject.hpp>
 #include <fbjni/fbjni.h>
+#include "${name.HybridTSpec}.hpp"
 
 namespace ${cxxNamespace} {
 
   using namespace facebook;
 
-  class ${name.JHybridTSpec}: public jni::HybridClass<${name.JHybridTSpec}>, public ${name.HybridTSpec} {
+  class ${name.JHybridTSpec}: public jni::HybridClass<${name.JHybridTSpec}, JHybridObject>, public ${name.HybridTSpec} {
   public:
     static auto constexpr kJavaDescriptor = "${jniClassDescriptor}";
     static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis);
@@ -43,7 +44,7 @@ namespace ${cxxNamespace} {
 
   private:
     // C++ constructor (called from Java via \`initHybrid()\`)
-    explicit ${name.JHybridTSpec}(jni::alias_ref<jhybridobject> jThis) : _javaPart(jni::make_global(jThis)) {}
+    explicit ${name.JHybridTSpec}(jni::alias_ref<jhybridobject> jThis) : HybridBase(jThis), _javaPart(jni::make_global(jThis)) {}
 
   public:
     size_t getExternalMemorySize() noexcept override;
@@ -61,6 +62,7 @@ namespace ${cxxNamespace} {
 
   private:
     friend HybridBase;
+    using HybridBase::HybridBase;
     jni::global_ref<${name.JHybridTSpec}::javaobject> _javaPart;
   };
 
