@@ -24,7 +24,6 @@ abstract class HybridImageFactorySpec: HybridObject() {
   protected val TAG = "HybridImageFactorySpec"
 
   // Properties
-  
 
   // Methods
   @DoNotStrip

@@ -18,8 +18,17 @@ struct JHybridObject : public jni::HybridClass<JHybridObject>, public HybridObje
 public:
   static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/HybridObject;";
 
+private:
+  explicit JHybridObject(jni::alias_ref<jhybridobject> jThis): HybridObject(TAG), _javaPart(jni::make_global(jThis)) { }
+
 public:
+  static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis);
   static void registerNatives();
+
+private:
+  static constexpr auto TAG = "HybridObject";
+  friend HybridBase;
+  jni::global_ref<JHybridObject::javaobject> _javaPart;
 };
 
 } // namespace margelo::nitro
