@@ -36,10 +36,9 @@ abstract class HybridObject {
      */
     @DoNotStrip
     @Keep
-    val mHybridData: HybridData
+    private val mHybridData: HybridData = initHybrid()
 
     init {
-        mHybridData = initHybrid()
     }
 
     private external fun initHybrid(): HybridData

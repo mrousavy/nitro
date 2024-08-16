@@ -45,7 +45,8 @@ import com.margelo.nitro.HybridObject
 @DoNotStrip
 @Keep
 abstract class ${name.HybridTSpec}: HybridObject() {
-  final override val mHybridData: HybridData = initHybrid()
+  @Suppress("unused")
+  private val mHybridData: HybridData = initHybrid()
   protected val TAG = "${name.HybridTSpec}"
 
   // Properties
