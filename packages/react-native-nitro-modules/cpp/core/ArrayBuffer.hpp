@@ -38,7 +38,7 @@ public:
   ArrayBuffer(const ArrayBuffer&) = delete;
   ArrayBuffer(ArrayBuffer&&) = delete;
   virtual ~ArrayBuffer() = default;
-  
+
 public:
   /**
    * Returns whether this `ArrayBuffer` is actually owning the data,
@@ -46,7 +46,7 @@ public:
    * memory that we didn't allocate, or from JS - which can be deleted at any point).
    */
   virtual bool isOwner() const noexcept = 0;
-  
+
 public:
   /**
    * Create a new `NativeArrayBuffer` that wraps the given data (without copy) of the given size,
@@ -83,8 +83,6 @@ public:
   uint8_t* data() override;
   size_t size() const override;
   bool isOwner() const noexcept override;
-
-  double something();
 
 private:
   uint8_t* _data;

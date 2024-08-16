@@ -23,7 +23,7 @@ using namespace facebook;
 
 // std::unordered_map<std::string, T> <> Record<string, T>
 template <typename ValueType>
-struct JSIConverter<std::unordered_map<std::string, ValueType>> {
+struct JSIConverter<std::unordered_map<std::string, ValueType>> final {
   static inline std::unordered_map<std::string, ValueType> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
     jsi::Object object = arg.asObject(runtime);
     jsi::Array propertyNames = object.getPropertyNames(runtime);

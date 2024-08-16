@@ -27,7 +27,7 @@ using namespace facebook;
 
 // AnyValue <> Record<K, V>
 template <>
-struct JSIConverter<AnyValue> {
+struct JSIConverter<AnyValue> final {
   static inline AnyValue fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
     return JSIConverter<AnyValue::variant>::fromJSI(runtime, arg);
   }
@@ -41,7 +41,7 @@ struct JSIConverter<AnyValue> {
 
 // AnyMap <> Record<K, V>
 template <>
-struct JSIConverter<std::shared_ptr<AnyMap>> {
+struct JSIConverter<std::shared_ptr<AnyMap>> final {
   static inline std::shared_ptr<AnyMap> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
     jsi::Object object = arg.asObject(runtime);
     jsi::Array propNames = object.getPropertyNames(runtime);

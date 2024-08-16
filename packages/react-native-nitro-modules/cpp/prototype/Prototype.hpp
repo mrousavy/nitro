@@ -38,8 +38,8 @@ using NativeInstanceId = std::type_index;
  */
 struct Prototype final {
 private:
-  std::shared_ptr<Prototype> _base = nullptr;
   NativeInstanceId _instanceTypeId;
+  std::shared_ptr<Prototype> _base = nullptr;
   std::unordered_map<std::string, HybridFunction> _methods;
   std::unordered_map<std::string, HybridFunction> _getters;
   std::unordered_map<std::string, HybridFunction> _setters;

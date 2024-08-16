@@ -4,4 +4,5 @@
 
 #pragma once
 
+// Forward include, because in react-native they use `.h` instead of `.hpp`
 #include "NativeNitroModules.hpp"

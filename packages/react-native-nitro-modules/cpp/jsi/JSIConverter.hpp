@@ -61,7 +61,7 @@ private:
 
 // int <> number
 template <>
-struct JSIConverter<int> {
+struct JSIConverter<int> final {
   static inline int fromJSI(jsi::Runtime&, const jsi::Value& arg) {
     return static_cast<int>(arg.asNumber());
   }
@@ -75,11 +75,11 @@ struct JSIConverter<int> {
 
 // std::monostate <> null
 template <>
-struct JSIConverter<std::monostate> {
-  static inline std::monostate fromJSI(jsi::Runtime&, const jsi::Value& arg) {
+struct JSIConverter<std::monostate> final {
+  static inline std::monostate fromJSI(jsi::Runtime&, const jsi::Value&) {
     return std::monostate();
   }
-  static inline jsi::Value toJSI(jsi::Runtime&, std::monostate arg) {
+  static inline jsi::Value toJSI(jsi::Runtime&, std::monostate) {
     return jsi::Value::null();
   }
   static inline bool canConvert(jsi::Runtime&, const jsi::Value& value) {
@@ -89,7 +89,7 @@ struct JSIConverter<std::monostate> {
 
 // double <> number
 template <>
-struct JSIConverter<double> {
+struct JSIConverter<double> final {
   static inline double fromJSI(jsi::Runtime&, const jsi::Value& arg) {
     return arg.asNumber();
   }
@@ -103,7 +103,7 @@ struct JSIConverter<double> {
 
 // float <> number
 template <>
-struct JSIConverter<float> {
+struct JSIConverter<float> final {
   static inline float fromJSI(jsi::Runtime&, const jsi::Value& arg) {
     return static_cast<float>(arg.asNumber());
   }
@@ -117,7 +117,7 @@ struct JSIConverter<float> {
 
 // int64_t <> BigInt
 template <>
-struct JSIConverter<int64_t> {
+struct JSIConverter<int64_t> final {
   static inline double fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
     return arg.asBigInt(runtime).asInt64(runtime);
   }
@@ -135,7 +135,7 @@ struct JSIConverter<int64_t> {
 
 // uint64_t <> BigInt
 template <>
-struct JSIConverter<uint64_t> {
+struct JSIConverter<uint64_t> final {
   static inline double fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
     return arg.asBigInt(runtime).asUint64(runtime);
   }
@@ -153,7 +153,7 @@ struct JSIConverter<uint64_t> {
 
 // bool <> boolean
 template <>
-struct JSIConverter<bool> {
+struct JSIConverter<bool> final {
   static inline bool fromJSI(jsi::Runtime&, const jsi::Value& arg) {
     return arg.asBool();
   }
@@ -167,7 +167,7 @@ struct JSIConverter<bool> {
 
 // std::string <> string
 template <>
-struct JSIConverter<std::string> {
+struct JSIConverter<std::string> final {
   static inline std::string fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
     return arg.asString(runtime).utf8(runtime);
   }

@@ -25,7 +25,7 @@ jsi::Value NativeNitroModules::get(jsi::Runtime& runtime, const jsi::PropNameID&
   if (name == "install") {
     return jsi::Function::createFromHostFunction(
         runtime, jsi::PropNameID::forUtf8(runtime, "install"), 0,
-        [=](jsi::Runtime& runtime, const jsi::Value& thisArg, const jsi::Value* args, size_t count) -> jsi::Value {
+        [this](jsi::Runtime& runtime, const jsi::Value& thisArg, const jsi::Value* args, size_t count) -> jsi::Value {
           install(runtime);
           return jsi::Value::undefined();
         });
@@ -33,7 +33,7 @@ jsi::Value NativeNitroModules::get(jsi::Runtime& runtime, const jsi::PropNameID&
   if (name == "createHybridObject") {
     return jsi::Function::createFromHostFunction(
         runtime, jsi::PropNameID::forUtf8(runtime, "createHybridObject"), 2,
-        [=](jsi::Runtime& runtime, const jsi::Value& thisArg, const jsi::Value* args, size_t count) -> jsi::Value {
+        [this](jsi::Runtime& runtime, const jsi::Value& thisArg, const jsi::Value* args, size_t count) -> jsi::Value {
 #if DEBUG
           if (count != 1 && count != 2) [[unlikely]] {
             throw jsi::JSError(runtime, "NitroModules.createHybridObject(..) expects 1 or 2 arguments, but " + std::to_string(count) +
@@ -52,7 +52,7 @@ jsi::Value NativeNitroModules::get(jsi::Runtime& runtime, const jsi::PropNameID&
   if (name == "hasHybridObject") {
     return jsi::Function::createFromHostFunction(
         runtime, jsi::PropNameID::forUtf8(runtime, "hasHybridObject"), 1,
-        [=](jsi::Runtime& runtime, const jsi::Value& thisArg, const jsi::Value* args, size_t count) -> jsi::Value {
+        [this](jsi::Runtime& runtime, const jsi::Value& thisArg, const jsi::Value* args, size_t count) -> jsi::Value {
 #if DEBUG
           if (count != 1) [[unlikely]] {
             throw jsi::JSError(runtime,
@@ -65,8 +65,8 @@ jsi::Value NativeNitroModules::get(jsi::Runtime& runtime, const jsi::PropNameID&
   }
   if (name == "getAllHybridObjectNames") {
     return jsi::Function::createFromHostFunction(runtime, jsi::PropNameID::forUtf8(runtime, "getAllHybridObjectNames"), 0,
-                                                 [=](jsi::Runtime& runtime, const jsi::Value& thisArg, const jsi::Value* args,
-                                                     size_t count) -> jsi::Value { return getAllHybridObjectNames(runtime); });
+                                                 [this](jsi::Runtime& runtime, const jsi::Value& thisArg, const jsi::Value* args,
+                                                        size_t count) -> jsi::Value { return getAllHybridObjectNames(runtime); });
   }
 
   return jsi::Value::undefined();
@@ -80,7 +80,7 @@ void NativeNitroModules::install(jsi::Runtime& runtime) {
 }
 
 jsi::Value NativeNitroModules::createHybridObject(jsi::Runtime& runtime, const jsi::String& hybridObjectName,
-                                                  const std::optional<jsi::Object>& args) {
+                                                  const std::optional<jsi::Object>&) {
   auto name = hybridObjectName.utf8(runtime);
   // TODO: Pass args? Do we need that?
   auto hybridObject = HybridObjectRegistry::createHybridObject(name.c_str());

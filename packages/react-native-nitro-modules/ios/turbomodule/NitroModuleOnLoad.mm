@@ -10,9 +10,9 @@
 #import <Foundation/Foundation.h>
 
 // just import headers so we have syntax highlighting
-#import "PromiseHolder.hpp"
 #import "ArrayBufferHolder.hpp"
 #import "HybridContext.hpp"
+#import "PromiseHolder.hpp"
 
 @interface NitroModulesOnLoad : NSObject
 @end

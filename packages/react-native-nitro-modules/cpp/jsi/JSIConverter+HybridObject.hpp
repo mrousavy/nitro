@@ -20,7 +20,7 @@ using namespace facebook;
 
 // HybridObject(NativeState) <> {}
 template <typename T>
-struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_v<T, jsi::NativeState>>> {
+struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_v<T, jsi::NativeState>>> final {
   using TPointee = typename T::element_type;
 
   static inline T fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {

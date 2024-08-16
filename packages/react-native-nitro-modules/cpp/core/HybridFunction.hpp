@@ -36,9 +36,9 @@ enum class FunctionType { METHOD, GETTER, SETTER };
  */
 class HybridFunction final {
 private:
-  std::string _name;
-  size_t _paramCount;
   jsi::HostFunctionType _function;
+  size_t _paramCount;
+  std::string _name;
 
 public:
   // getters

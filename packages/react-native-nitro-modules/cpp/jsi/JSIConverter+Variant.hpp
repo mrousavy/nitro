@@ -18,7 +18,6 @@ struct JSIConverter;
 #include "JSIConverter.hpp"
 
 #include "AnyMap.hpp"
-#include "IsInPack.hpp"
 #include "TypeInfo.hpp"
 #include <jsi/jsi.h>
 #include <memory>
@@ -30,8 +29,7 @@ using namespace facebook;
 
 // std::variant<A, B, C> <> A | B | C
 template <typename... Types>
-struct JSIConverter<std::variant<Types...>> {
-
+struct JSIConverter<std::variant<Types...>> final {
   static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
     // Check each type in `Types...` to make sure we can convert `jsi::Value` to one of those.
     return (JSIConverter<Types>::canConvert(runtime, value) || ...);

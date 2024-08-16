@@ -19,7 +19,7 @@ public:
   static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/HybridObject;";
 
 private:
-  explicit JHybridObject(jni::alias_ref<jhybridobject> jThis): HybridObject(TAG), _javaPart(jni::make_global(jThis)) { }
+  explicit JHybridObject(jni::alias_ref<jhybridobject> jThis) : HybridObject(TAG), _javaPart(jni::make_global(jThis)) {}
 
 public:
   static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis);

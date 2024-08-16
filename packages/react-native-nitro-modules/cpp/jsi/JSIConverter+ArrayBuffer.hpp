@@ -28,7 +28,7 @@ using namespace facebook;
 
 // MutableBuffer <> ArrayBuffer
 template <typename T>
-struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_v<T, jsi::MutableBuffer>>> {
+struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_v<T, jsi::MutableBuffer>>> final {
   static inline std::shared_ptr<ArrayBuffer> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
     jsi::Object object = arg.asObject(runtime);
 

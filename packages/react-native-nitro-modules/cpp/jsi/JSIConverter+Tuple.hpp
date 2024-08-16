@@ -23,7 +23,7 @@ using namespace facebook;
 
 // std::tuple<A, B, C> <> [A, B, C]
 template <typename... Types>
-struct JSIConverter<std::tuple<Types...>> {
+struct JSIConverter<std::tuple<Types...>> final {
   static inline std::tuple<Types...> fromJSI(jsi::Runtime& runtime, const jsi::Value& value) {
     jsi::Object object = value.asObject(runtime);
     jsi::Array array = object.asArray(runtime);
