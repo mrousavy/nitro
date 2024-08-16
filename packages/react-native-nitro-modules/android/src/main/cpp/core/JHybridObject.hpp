@@ -18,7 +18,7 @@ struct JHybridObject : public jni::HybridClass<JHybridObject>, public HybridObje
 public:
   static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/HybridObject;";
 
-private:
+protected:
   explicit JHybridObject(jni::alias_ref<jhybridobject> jThis) : HybridObject(TAG), _javaPart(jni::make_global(jThis)) {}
 
 public:
