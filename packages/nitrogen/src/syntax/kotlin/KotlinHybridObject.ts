@@ -56,6 +56,7 @@ abstract class ${name.HybridTSpec}: HybridObject() {
 
   @Suppress("KotlinJniMissingFunction")
   companion object {
+    @JvmStatic
     private external fun initHybrid(): HybridData
 
     private const val TAG = "${name.HybridTSpec}"
