@@ -24,6 +24,6 @@ class Image(val bitmap: Bitmap): HybridImageSpec() {
         TODO("Not yet implemented")
     }
 
-    override val memorySize: ULong
-        get() = bitmap.allocationByteCount.toULong()
+    override val memorySize: Long
+        get() = bitmap.allocationByteCount.toLong()
 }

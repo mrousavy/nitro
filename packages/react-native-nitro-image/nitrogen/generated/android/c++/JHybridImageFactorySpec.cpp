@@ -25,7 +25,7 @@ namespace margelo::nitro::image {
   }
 
   size_t JHybridImageFactorySpec::getExternalMemorySize() noexcept {
-    static const auto method = _javaPart->getClass()->getMethod<jlong()>("getMemorySize");
+    static const auto method = javaClassLocal()->getMethod<jlong()>("getMemorySize");
     return method(_javaPart.get());
   }
 

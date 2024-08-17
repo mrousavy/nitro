@@ -9,7 +9,7 @@ import com.facebook.proguard.annotations.DoNotStrip
  */
 @Keep
 @DoNotStrip
-@Suppress("KotlinJniMissingFunction")
+@Suppress("ConvertSecondaryConstructorToPrimary")
 abstract class HybridObject {
     /**
      * Get the memory size of the Kotlin instance (plus any external heap allocations),
@@ -29,21 +29,18 @@ abstract class HybridObject {
      */
     @get:DoNotStrip
     @get:Keep
-    abstract val memorySize: ULong
+    abstract val memorySize: Long
 
     /**
-     * Contains the C++ context (Hybrid Data) for the fbjni C++ part.
+     * Holds the C++ class (JHybridData, or any inheritances of it)
      */
     @DoNotStrip
     @Keep
-    private val mHybridData: HybridData = initHybrid()
+    private val mHybridData: HybridData
 
-    init {
-    }
-
-    private external fun initHybrid(): HybridData
-
-    companion object {
-        private const val TAG = "HybridObject"
+    @DoNotStrip
+    @Keep
+    constructor(hybridData: HybridData) {
+        mHybridData = hybridData
     }
 }

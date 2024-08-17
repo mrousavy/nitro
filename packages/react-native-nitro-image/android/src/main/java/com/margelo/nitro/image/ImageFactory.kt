@@ -17,6 +17,6 @@ class ImageFactory: HybridImageFactorySpec() {
         return image
     }
 
-    override val memorySize: ULong
-        get() = 5u
+    override val memorySize: Long
+        get() = 5
 }

@@ -20,9 +20,7 @@ import com.margelo.nitro.HybridObject
  */
 @DoNotStrip
 @Keep
-abstract class HybridImageSpec: HybridObject() {
-  @Suppress("unused")
-  private val mHybridData: HybridData = initHybrid()
+abstract class HybridImageSpec: HybridObject(initHybrid()) {
   protected val TAG = "HybridImageSpec"
 
   // Properties

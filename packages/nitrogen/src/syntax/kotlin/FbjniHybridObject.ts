@@ -44,7 +44,7 @@ namespace ${cxxNamespace} {
 
   private:
     // C++ constructor (called from Java via \`initHybrid()\`)
-    explicit ${name.JHybridTSpec}(jni::alias_ref<jhybridobject> jThis) : HybridBase(jThis), _javaPart(jni::make_global(jThis)) {}
+    explicit ${name.JHybridTSpec}(jni::alias_ref<jhybridobject> jThis) : _javaPart(jni::make_global(jThis)) {}
 
   public:
     size_t getExternalMemorySize() noexcept override;

@@ -25,6 +25,7 @@ using namespace facebook;
  */
 class HybridObject : public jsi::NativeState, public HybridObjectPrototype, public std::enable_shared_from_this<HybridObject> {
 public:
+HybridObject() { throw std::runtime_error("Invalid ctor!"); }
   /**
    * Create a new instance of a `HybridObject`.
    * The given `name` will be used for logging and stringifying.
@@ -38,11 +39,11 @@ public:
   /**
    * HybridObjects cannot be copied.
    */
-  HybridObject(const HybridObject& copy) = delete;
+  HybridObject(const HybridObject& copy) = default;
   /**
    * HybridObjects cannot be moved.
    */
-  HybridObject(HybridObject&& move) = delete;
+  HybridObject(HybridObject&& move) = default;
 
 public:
   /**

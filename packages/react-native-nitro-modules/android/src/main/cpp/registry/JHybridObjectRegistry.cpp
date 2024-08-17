@@ -17,12 +17,17 @@ void JHybridObjectRegistry::registerHybridObjectConstructor(jni::alias_ref<jni::
   HybridObjectRegistry::registerHybridObjectConstructor(hybridObjectName, [=]() -> std::shared_ptr<HybridObject> {
     // 1. Call the Java initializer function
     jni::local_ref<JHybridObject::javaobject> hybridObject = sharedInitializer->call();
+
+    std::string boo = hybridObject->toString();
     // 2. Make the resulting HybridObject a global (shared) reference
     jni::global_ref<JHybridObject::javaobject> globalHybridObject = jni::make_global(hybridObject);
     // 3. Create a shared_ptr from the JNI global reference
     std::shared_ptr<JHybridObject> sharedCppPart = JNISharedPtr::make_shared_from_jni<JHybridObject>(globalHybridObject);
     // 4. Up-cast to a HybridObject (kinda unsafe)
-    std::shared_ptr<HybridObject> cast = std::static_pointer_cast<HybridObject>(sharedCppPart);
+    std::shared_ptr<HybridObject> cast = std::reinterpret_pointer_cast<HybridObject>(sharedCppPart);
+
+    std::string str = cast->toString();
+
     return cast;
   });
 }

@@ -19,8 +19,8 @@ private:
 public:
   template <typename... Args>
   static void log(const char* tag, const char* message, Args&&... args) {
-    std::string formattedMessage = format(message, std::forward<Args>(args)...);
-    std::cout << "[Nitro." << tag << "] " << formattedMessage << std::endl;
+    //std::string formattedMessage = format(message, std::forward<Args>(args)...);
+    //std::cout << "[Nitro." << tag << "] " << formattedMessage << std::endl;
   }
 
 private:
