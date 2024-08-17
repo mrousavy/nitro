@@ -36,7 +36,7 @@ namespace ${cxxNamespace} {
 
   using namespace facebook;
 
-  class ${name.JHybridTSpec}: public jni::HybridClass<${name.JHybridTSpec}, JHybridObject>, public ${name.HybridTSpec} {
+  class ${name.JHybridTSpec}: public jni::HybridClass<${name.JHybridTSpec}, JHybridObject>, public virtual ${name.HybridTSpec} {
   public:
     static auto constexpr kJavaDescriptor = "${jniClassDescriptor}";
     static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis);
@@ -44,7 +44,10 @@ namespace ${cxxNamespace} {
 
   private:
     // C++ constructor (called from Java via \`initHybrid()\`)
-    explicit ${name.JHybridTSpec}(jni::alias_ref<jhybridobject> jThis) : _javaPart(jni::make_global(jThis)) {}
+    explicit ${name.JHybridTSpec}(jni::alias_ref<jhybridobject> jThis) :
+      HybridObject(${name.HybridTSpec}::TAG),
+      HybridBase(${name.HybridTSpec}::TAG),
+      _javaPart(jni::make_global(jThis)) {}
 
   public:
     size_t getExternalMemorySize() noexcept override;
