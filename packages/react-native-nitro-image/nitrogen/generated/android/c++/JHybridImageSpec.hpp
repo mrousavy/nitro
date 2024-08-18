@@ -16,7 +16,7 @@ namespace margelo::nitro::image {
 
   using namespace facebook;
 
-  class JHybridImageSpec: public jni::HybridClass<JHybridImageSpec, JHybridObject>, public virtual HybridImageSpec {
+  class JHybridImageSpec: public jni::HybridClass<JHybridImageSpec, JHybridObject>, public HybridImageSpec {
   public:
     static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/HybridImageSpec;";
     static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis);
@@ -24,7 +24,7 @@ namespace margelo::nitro::image {
 
   private:
     // C++ constructor (called from Java via `initHybrid()`)
-    explicit JHybridImageSpec(jni::alias_ref<jhybridobject> jThis) : HybridObject("TAG"), HybridBase("TAG"),
+    explicit JHybridImageSpec(jni::alias_ref<jhybridobject> jThis) : HybridObject(HybridImageSpec::TAG),
                                                                      _javaPart(jni::make_global(jThis)) {}
 
   public:

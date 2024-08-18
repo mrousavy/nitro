@@ -35,17 +35,14 @@ namespace margelo::nitro::image {
    * };
    * ```
    */
-  class HybridImageFactorySpec: public HybridObject {
+  class HybridImageFactorySpec: public virtual HybridObject {
     public:
-      // Constructor
-      explicit HybridImageFactorySpec(): HybridObject(TAG) { }
-
       // Destructor
-      ~HybridImageFactorySpec() { }
+      virtual ~HybridImageFactorySpec() { }
 
     public:
       // Properties
-      
+
 
     public:
       // Methods
