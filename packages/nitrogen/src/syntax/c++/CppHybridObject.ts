@@ -58,7 +58,7 @@ namespace ${cxxNamespace} {
       explicit ${name.HybridTSpec}(): HybridObject(TAG) { }
 
       // Destructor
-      ~${name.HybridTSpec}() { }
+      virtual ~${name.HybridTSpec}() { }
 
     public:
       // Properties
