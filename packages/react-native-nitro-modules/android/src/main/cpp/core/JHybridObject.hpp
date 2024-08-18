@@ -14,7 +14,7 @@ namespace margelo::nitro {
 
 using namespace facebook;
 
-struct JHybridObject : public jni::HybridClass<JHybridObject>, public HybridObject {
+struct JHybridObject : public jni::HybridClass<JHybridObject>, public virtual HybridObject {
 public:
   static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/HybridObject;";
 
