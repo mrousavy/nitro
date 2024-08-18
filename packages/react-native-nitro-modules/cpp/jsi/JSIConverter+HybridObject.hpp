@@ -47,7 +47,8 @@ struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_v<T, jsi::NativeState>>
       }
     }
 #endif
-    return object.getNativeState<TPointee>(runtime);
+    std::shared_ptr<jsi::NativeState> nativeState = object.getNativeState(runtime);
+    return std::dynamic_pointer_cast<TPointee>(nativeState);
   }
 
   static inline jsi::Value toJSI(jsi::Runtime& runtime, const T& arg) {
