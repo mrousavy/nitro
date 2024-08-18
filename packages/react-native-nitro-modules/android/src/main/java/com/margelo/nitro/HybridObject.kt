@@ -9,7 +9,6 @@ import com.facebook.proguard.annotations.DoNotStrip
  */
 @Keep
 @DoNotStrip
-@Suppress("ConvertSecondaryConstructorToPrimary")
 abstract class HybridObject {
     /**
      * Get the memory size of the Kotlin instance (plus any external heap allocations),
@@ -31,16 +30,5 @@ abstract class HybridObject {
     @get:Keep
     abstract val memorySize: Long
 
-    /**
-     * Holds the C++ class (JHybridData, or any inheritances of it)
-     */
-    @DoNotStrip
-    @Keep
-    private val mHybridData: HybridData
-
-    @DoNotStrip
-    @Keep
-    constructor(hybridData: HybridData) {
-        mHybridData = hybridData
-    }
+    open var mHybridData: HybridData? = null
 }

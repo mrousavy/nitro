@@ -20,8 +20,16 @@ import com.margelo.nitro.HybridObject
  */
 @DoNotStrip
 @Keep
-abstract class HybridImageSpec: HybridObject(initHybrid()) {
+abstract class HybridImageSpec: HybridObject() {
   protected val TAG = "HybridImageSpec"
+
+  @DoNotStrip
+  @Keep
+  final override var mHybridData: HybridData? = initHybrid()
+
+  init {
+    super.mHybridData = mHybridData
+  }
 
   // Properties
   @get:DoNotStrip
@@ -48,10 +56,9 @@ abstract class HybridImageSpec: HybridObject(initHybrid()) {
   abstract fun saveToFile(path: String, onFinished: ((path: String) -> Unit)): Unit
 
   @Suppress("KotlinJniMissingFunction")
-  companion object {
-    @JvmStatic
-    private external fun initHybrid(): HybridData
+  private external fun initHybrid(): HybridData
 
+  companion object {
     private const val TAG = "HybridImageSpec"
     init {
       try {

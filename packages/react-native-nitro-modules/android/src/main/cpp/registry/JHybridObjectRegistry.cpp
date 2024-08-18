@@ -24,7 +24,7 @@ void JHybridObjectRegistry::registerHybridObjectConstructor(jni::alias_ref<jni::
     // 3. Create a shared_ptr from the JNI global reference
     std::shared_ptr<JHybridObject> sharedCppPart = JNISharedPtr::make_shared_from_jni<JHybridObject>(globalHybridObject);
     // 4. Up-cast to a HybridObject (kinda unsafe)
-    std::shared_ptr<HybridObject> cast = std::reinterpret_pointer_cast<HybridObject>(sharedCppPart);
+    std::shared_ptr<HybridObject> cast = std::static_pointer_cast<HybridObject>(sharedCppPart);
 
     std::string str = cast->toString();
 
