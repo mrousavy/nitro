@@ -44,8 +44,15 @@ import com.margelo.nitro.HybridObject
  */
 @DoNotStrip
 @Keep
-abstract class ${name.HybridTSpec}: HybridObject {
+abstract class ${name.HybridTSpec}: HybridObject() {
+  @DoNotStrip
+  final override var mHybridData: HybridData? = initHybrid()
   protected val TAG = "${name.HybridTSpec}"
+
+  init {
+    // Pass it through to it's base class to represent inheritance to JHybridObject on C++ side
+    super.mHybridData = mHybridData
+  }
 
   // Properties
   ${indent(properties, '  ')}

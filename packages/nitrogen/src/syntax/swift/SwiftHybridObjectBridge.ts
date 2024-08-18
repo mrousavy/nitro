@@ -218,7 +218,9 @@ namespace ${cxxNamespace} {
   class ${name.HybridTSpecSwift} final: public ${name.HybridTSpec} {
   public:
     // Constructor from a Swift instance
-    explicit ${name.HybridTSpecSwift}(const ${iosModuleName}::${name.HybridTSpecCxx}& swiftPart): ${name.HybridTSpec}(), _swiftPart(swiftPart) { }
+    explicit ${name.HybridTSpecSwift}(const ${iosModuleName}::${name.HybridTSpecCxx}& swiftPart):
+      HybridObject(${name.HybridTSpec}::TAG),
+      _swiftPart(swiftPart) { }
 
   public:
     // Get the Swift part

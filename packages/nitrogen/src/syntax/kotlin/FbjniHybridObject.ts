@@ -36,7 +36,8 @@ namespace ${cxxNamespace} {
 
   using namespace facebook;
 
-  class ${name.JHybridTSpec}: public jni::HybridClass<${name.JHybridTSpec}, JHybridObject>, public virtual ${name.HybridTSpec} {
+  class ${name.JHybridTSpec} final: public jni::HybridClass<${name.JHybridTSpec}, JHybridObject>,
+                                public ${name.HybridTSpec} {
   public:
     static auto constexpr kJavaDescriptor = "${jniClassDescriptor}";
     static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis);
@@ -46,7 +47,6 @@ namespace ${cxxNamespace} {
     // C++ constructor (called from Java via \`initHybrid()\`)
     explicit ${name.JHybridTSpec}(jni::alias_ref<jhybridobject> jThis) :
       HybridObject(${name.HybridTSpec}::TAG),
-      HybridBase(${name.HybridTSpec}::TAG),
       _javaPart(jni::make_global(jThis)) {}
 
   public:
