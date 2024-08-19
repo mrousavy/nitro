@@ -158,9 +158,19 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
 
   parseFromCppToKotlin(
     parameterName: string,
-    _language: 'kotlin' | 'c++'
+    language: 'kotlin' | 'c++'
   ): string {
     switch (this.type.kind) {
+      case 'hybrid-object': {
+        switch (language) {
+          case 'c++':
+            const hybrid = getTypeAs(this.type, HybridObjectType)
+            const name = getHybridObjectName(hybrid.hybridObjectName)
+            return `std::static_pointer_cast<${name.JHybridTSpec}>(${parameterName})->getJavaPart()`
+          default:
+            return parameterName
+        }
+      }
       default:
         // no need to parse anything, just return as is
         return parameterName
