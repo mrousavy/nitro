@@ -161,6 +161,24 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
     language: 'kotlin' | 'c++'
   ): string {
     switch (this.type.kind) {
+      case 'struct': {
+        switch (language) {
+          case 'c++':
+            const struct = getTypeAs(this.type, StructType)
+            return `J${struct.structName}::fromCpp(${parameterName})`
+          default:
+            return parameterName
+        }
+      }
+      case 'enum': {
+        switch (language) {
+          case 'c++':
+            const enumType = getTypeAs(this.type, EnumType)
+            return `J${enumType.enumName}::fromCpp(${parameterName})`
+          default:
+            return parameterName
+        }
+      }
       case 'hybrid-object': {
         switch (language) {
           case 'c++':
@@ -182,6 +200,22 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
     language: 'kotlin' | 'c++'
   ): string {
     switch (this.type.kind) {
+      case 'struct': {
+        switch (language) {
+          case 'c++':
+            return `${parameterName}->toCpp()`
+          default:
+            return parameterName
+        }
+      }
+      case 'enum': {
+        switch (language) {
+          case 'c++':
+            return `${parameterName}->toCpp()`
+          default:
+            return parameterName
+        }
+      }
       case 'hybrid-object': {
         switch (language) {
           case 'c++':
