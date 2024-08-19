@@ -29,7 +29,7 @@ export interface BridgedType<
   getRequiredImports(): SourceImport[]
 
   /**
-   * Get all extra files that need to be created just for the bridge
+   * Get all extra files that need to be created for this type, as well as the bridge.
    */
   getExtraFiles(): SourceFile[]
 

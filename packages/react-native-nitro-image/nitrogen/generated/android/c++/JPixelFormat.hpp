@@ -18,7 +18,7 @@ namespace margelo::nitro::image {
   /**
    * The C++ JNI bridge between the C++ enum "PixelFormat" and the the Kotlin enum "PixelFormat".
    */
-  struct JPixelFormat: public jni::JavaClass<JPixelFormat> {
+  struct JPixelFormat final: public jni::JavaClass<JPixelFormat> {
   public:
     static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/PixelFormat;";
 
@@ -26,6 +26,7 @@ namespace margelo::nitro::image {
     /**
      * Convert this Java/Kotlin-based enum to the C++ enum PixelFormat.
      */
+    [[maybe_unused]]
     PixelFormat toCpp() {
       static const auto clazz = javaClassStatic();
       static const auto fieldOrdinal = clazz->getField<int>("ordinal");
@@ -37,6 +38,7 @@ namespace margelo::nitro::image {
     /**
      * Create a Java/Kotlin-based enum with the given C++ enum's value.
      */
+    [[maybe_unused]]
     static jni::alias_ref<JPixelFormat> fromCpp(PixelFormat value) {
       static const auto clazz = javaClassStatic();
       static const auto fieldRGB = clazz->getStaticField<JPixelFormat>("RGB");

@@ -9,6 +9,9 @@ import { getTypeAs } from '../types/getTypeAs.js'
 import { HybridObjectType } from '../types/HybridObjectType.js'
 import { StructType } from '../types/StructType.js'
 import type { Type } from '../types/Type.js'
+import { createKotlinEnum } from './KotlinEnum.js'
+import { createKotlinFunction } from './KotlinFunction.js'
+import { createKotlinStruct } from './KotlinStruct.js'
 
 export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
   readonly type: Type
@@ -52,6 +55,14 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
           space: 'user',
         })
         break
+      case 'function':
+        const functionType = getTypeAs(this.type, FunctionType)
+        imports.push({
+          language: 'c++',
+          name: `J${functionType.specializationName}.hpp`,
+          space: 'user',
+        })
+        break
       case 'hybrid-object': {
         const hybridObjectType = getTypeAs(this.type, HybridObjectType)
         const name = getHybridObjectName(hybridObjectType.hybridObjectName)
@@ -64,16 +75,6 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
           language: 'c++',
           name: 'NitroModules/JNISharedPtr.hpp',
           space: 'system',
-        })
-        break
-      }
-      case 'function': {
-        const functionType = getTypeAs(this.type, FunctionType)
-        const name = functionType.specializationName
-        imports.push({
-          language: 'c++',
-          name: `J${name}.hpp`,
-          space: 'user',
         })
         break
       }
@@ -95,6 +96,24 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
 
   getExtraFiles(): SourceFile[] {
     const files: SourceFile[] = []
+
+    switch (this.type.kind) {
+      case 'enum':
+        const enumType = getTypeAs(this.type, EnumType)
+        const enumFiles = createKotlinEnum(enumType)
+        files.push(...enumFiles)
+        break
+      case 'struct':
+        const structType = getTypeAs(this.type, StructType)
+        const structFiles = createKotlinStruct(structType)
+        files.push(...structFiles)
+        break
+      case 'function':
+        const functionType = getTypeAs(this.type, FunctionType)
+        const funcFiles = createKotlinFunction(functionType)
+        files.push(...funcFiles)
+        break
+    }
 
     // Recursively look into referenced types (e.g. the `T` of a `optional<T>`, or `T` of a `T[]`)
     const referencedTypes = getReferencedTypes(this.type)
@@ -119,22 +138,20 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
       case 'array':
         const arrayType = getTypeAs(this.type, ArrayType)
         const bridged = new KotlinCxxBridgedType(arrayType.itemType)
-        return `JCollection<${bridged.getTypeCode(language)}>`
+        return `jni::alias_ref<JCollection<${bridged.getTypeCode(language)}>>`
       case 'enum':
         const enumType = getTypeAs(this.type, EnumType)
-        return `J${enumType.enumName}`
+        return `jni::alias_ref<J${enumType.enumName}>`
       case 'struct':
         const structType = getTypeAs(this.type, StructType)
-        return `J${structType.structName}`
+        return `jni::alias_ref<J${structType.structName}>`
+      case 'function':
+        const functionType = getTypeAs(this.type, FunctionType)
+        return `jni::alias_ref<J${functionType.specializationName}::javaobject>`
       case 'hybrid-object': {
         const hybridObjectType = getTypeAs(this.type, HybridObjectType)
         const name = getHybridObjectName(hybridObjectType.hybridObjectName)
         return `jni::alias_ref<${name.JHybridTSpec}::javaobject>`
-      }
-      case 'function': {
-        const functionType = getTypeAs(this.type, FunctionType)
-        const name = functionType.specializationName
-        return `jni::alias_ref<J${name}::javaobject>`
       }
       default:
         return this.type.getCode(language)
@@ -179,6 +196,15 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
             return parameterName
         }
       }
+      case 'function': {
+        switch (language) {
+          case 'c++':
+            const func = getTypeAs(this.type, FunctionType)
+            return `J${func.specializationName}::fromCpp(${parameterName})`
+          default:
+            return parameterName
+        }
+      }
       case 'hybrid-object': {
         switch (language) {
           case 'c++':
@@ -200,15 +226,9 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
     language: 'kotlin' | 'c++'
   ): string {
     switch (this.type.kind) {
-      case 'struct': {
-        switch (language) {
-          case 'c++':
-            return `${parameterName}->toCpp()`
-          default:
-            return parameterName
-        }
-      }
-      case 'enum': {
+      case 'struct':
+      case 'enum':
+      case 'function': {
         switch (language) {
           case 'c++':
             return `${parameterName}->toCpp()`

@@ -179,7 +179,7 @@ The following C++ / JS types are supported out of the box:
     <td><code>(T...) =&gt; void</code></td>
     <td><code>std::function&lt;void (T...)&gt;</code></td>
     <td><code>@escaping (T...) -&gt; Void</code></td>
-    <td>❌</td>
+    <td>🟡  (not yet "nicely"-bridged)</td>
   </tr>
   <tr>
     <td><code>(T...) =&gt; R</code></td>

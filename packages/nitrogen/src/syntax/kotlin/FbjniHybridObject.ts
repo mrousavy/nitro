@@ -153,12 +153,14 @@ function getFbjniMethodForwardImplementation(
   const name = getHybridObjectName(spec.name)
 
   const returnJNI = new KotlinCxxBridgedType(method.returnType)
-  const paramsJNI = method.parameters.map(
-    (p) => new KotlinCxxBridgedType(p.type)
-  )
 
   const returnType = returnJNI.getTypeCode('c++')
-  const paramsTypes = paramsJNI.map((p) => p.getTypeCode('c++')).join(', ')
+  const paramsTypes = method.parameters
+    .map((p) => {
+      const bridge = new KotlinCxxBridgedType(p.type)
+      return `${bridge.getTypeCode('c++')} /* ${p.name} */`
+    })
+    .join(', ')
   const cxxSignature = `${returnType}(${paramsTypes})`
 
   const paramsForward = method.parameters.map((p) => {

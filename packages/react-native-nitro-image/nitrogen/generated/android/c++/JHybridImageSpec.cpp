@@ -44,12 +44,12 @@ namespace margelo::nitro::image {
 
   // Properties
   ImageSize JHybridImageSpec::getSize() {
-    static const auto method = _javaPart->getClass()->getMethod<JImageSize()>("getSize");
+    static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<JImageSize>()>("getSize");
     auto result = method(_javaPart);
     return result->toCpp();
   }
   PixelFormat JHybridImageSpec::getPixelFormat() {
-    static const auto method = _javaPart->getClass()->getMethod<JPixelFormat()>("getPixelFormat");
+    static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<JPixelFormat>()>("getPixelFormat");
     auto result = method(_javaPart);
     return result->toCpp();
   }
@@ -59,18 +59,19 @@ namespace margelo::nitro::image {
     return result;
   }
   void JHybridImageSpec::setSomeSettableProp(double someSettableProp) {
-    static const auto method = _javaPart->getClass()->getMethod<void(double)>("setSomeSettableProp");
+    static const auto method = _javaPart->getClass()->getMethod<void(double /* someSettableProp */)>("setSomeSettableProp");
     method(_javaPart, someSettableProp);
   }
 
   // Methods
   double JHybridImageSpec::toArrayBuffer(ImageFormat format) {
-    static const auto method = _javaPart->getClass()->getMethod<double(JImageFormat)>("toArrayBuffer");
-      throw std::runtime_error("Cannot convert ArrayBuffer yet!");
+    static const auto method = _javaPart->getClass()->getMethod<double(jni::alias_ref<JImageFormat> /* format */)>("toArrayBuffer");
+    auto result = method(_javaPart, JImageFormat::fromCpp(format));
+    return result;
   }
   void JHybridImageSpec::saveToFile(const std::string& path, const std::function<void(const std::string& /* path */)>& onFinished) {
-    static const auto method = _javaPart->getClass()->getMethod<void(std::string, jni::alias_ref<JFunc_void_std__string::javaobject>)>("saveToFile");
-      throw std::runtime_error("Cannot convert Function yet!");
+    static const auto method = _javaPart->getClass()->getMethod<void(std::string /* path */, jni::alias_ref<JFunc_void_std__string::javaobject> /* onFinished */)>("saveToFile");
+    method(_javaPart, path, JFunc_void_std__string::fromCpp(onFinished));
   }
 
 } // namespace margelo::nitro::image

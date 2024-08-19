@@ -3,6 +3,7 @@ import * as React from 'react'
 import { StyleSheet, View, Text, ScrollView, Button } from 'react-native'
 import {
   HybridTestObject,
+  ImageConstructors,
   HybridKotlinTestObject,
 } from 'react-native-nitro-image'
 import { getTests, type TestRunner } from '../getTests'
@@ -11,6 +12,11 @@ import { logPrototypeChain } from '../logPrototypeChain'
 
 logPrototypeChain(HybridTestObject)
 logPrototypeChain(HybridKotlinTestObject)
+
+console.log('loading image...')
+const image = ImageConstructors.loadImageFromFile('file')
+console.log('image:', image)
+image.saveToFile('somePath', (p) => console.log(`Image saved to ${p}!`))
 
 console.log(HybridKotlinTestObject)
 console.log(HybridKotlinTestObject.numberValue)
