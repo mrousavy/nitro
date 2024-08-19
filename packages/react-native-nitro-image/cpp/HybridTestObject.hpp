@@ -12,6 +12,9 @@
 namespace margelo::nitro::image {
 
 class HybridTestObject : public HybridTestObjectSpec {
+public:
+  HybridTestObject(): HybridObject(TAG) { }
+
 private:
   double _number;
   bool _bool;

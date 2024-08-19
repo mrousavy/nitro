@@ -25,7 +25,6 @@ using namespace facebook;
  */
 class HybridObject : public virtual jsi::NativeState, public HybridObjectPrototype, public std::enable_shared_from_this<HybridObject> {
 public:
-HybridObject() { throw std::runtime_error("Invalid ctor!"); }
   /**
    * Create a new instance of a `HybridObject`.
    * The given `name` will be used for logging and stringifying.
@@ -44,6 +43,12 @@ HybridObject() { throw std::runtime_error("Invalid ctor!"); }
    * HybridObjects cannot be moved.
    */
   HybridObject(HybridObject&& move) = default;
+  /**
+   * HybridObjects cannot be default-constructed!
+   */
+  HybridObject() {
+    throw std::runtime_error("Cannot default-construct HybridObject!");
+  }
 
 public:
   /**
@@ -61,7 +66,7 @@ public:
    */
   template <typename Derived>
   std::shared_ptr<Derived> shared() {
-    return std::static_pointer_cast<Derived>(shared_from_this());
+    return std::dynamic_pointer_cast<Derived>(shared_from_this());
   }
 
 public:
