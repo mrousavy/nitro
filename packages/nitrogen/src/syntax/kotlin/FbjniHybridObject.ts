@@ -1,5 +1,6 @@
 import { NitroConfig } from '../../config/NitroConfig.js'
 import { createIndentation, indent } from '../../utils.js'
+import { includeHeader } from '../c++/includeNitroHeader.js'
 import { getAllTypes } from '../getAllTypes.js'
 import { getHybridObjectName } from '../getHybridObjectName.js'
 import { createFileMetadataString, isNotDuplicate } from '../helpers.js'
@@ -7,7 +8,7 @@ import type { HybridObjectSpec } from '../HybridObjectSpec.js'
 import { Method } from '../Method.js'
 import type { Property } from '../Property.js'
 import type { SourceFile } from '../SourceFile.js'
-import { JNIWrappedType } from '../types/JNIWrappedType.js'
+import { KotlinCxxBridgedType } from './KotlinCxxBridgedType.js'
 
 export function createFbjniHybridObject(spec: HybridObjectSpec): SourceFile[] {
   const name = getHybridObjectName(spec.name)
@@ -81,11 +82,11 @@ ${spaces}                public ${name.HybridTSpec} {
     .join('\n')
   const allTypes = getAllTypes(spec)
   const jniImports = allTypes
-    .map((t) => new JNIWrappedType(t))
-    .map((t) => t.requiredJNIImport)
+    .map((t) => new KotlinCxxBridgedType(t))
+    .flatMap((t) => t.getRequiredImports())
     .filter((i) => i != null)
   const cppIncludes = jniImports
-    .map((i) => `#include "${i.name}"`)
+    .map((i) => includeHeader(i))
     .filter(isNotDuplicate)
   const cppForwardDeclarations = jniImports
     .map((i) => i.forwardDeclaration)
@@ -115,7 +116,7 @@ namespace ${cxxNamespace} {
 
   size_t ${name.JHybridTSpec}::getExternalMemorySize() noexcept {
     static const auto method = _javaPart->getClass()->getMethod<jlong()>("getMemorySize");
-    return method(_javaPart.get());
+    return method(_javaPart);
   }
 
   // Properties
@@ -151,23 +152,44 @@ function getFbjniMethodForwardImplementation(
 ): string {
   const name = getHybridObjectName(spec.name)
 
-  const returnJNI = new JNIWrappedType(method.returnType)
-  const paramsJNI = method.parameters.map((p) => new JNIWrappedType(p.type))
+  const returnJNI = new KotlinCxxBridgedType(method.returnType)
 
-  const returnType = returnJNI.getCode('c++')
-  const paramsTypes = paramsJNI.map((p) => p.getCode('c++')).join(', ')
+  const returnType = returnJNI.getTypeCode('c++')
+  const paramsTypes = method.parameters
+    .map((p) => {
+      const bridge = new KotlinCxxBridgedType(p.type)
+      return `${bridge.getTypeCode('c++')} /* ${p.name} */`
+    })
+    .join(', ')
   const cxxSignature = `${returnType}(${paramsTypes})`
 
-  const body = `
+  const paramsForward = method.parameters.map((p) => {
+    const bridged = new KotlinCxxBridgedType(p.type)
+    return bridged.parse(p.name, 'c++', 'kotlin', 'c++')
+  })
+  paramsForward.unshift('_javaPart') // <-- first param is always Java `this`
+
+  let body: string
+  if (returnJNI.hasType) {
+    // return something - we need to parse it
+    body = `
 static const auto method = _javaPart->getClass()->getMethod<${cxxSignature}>("${method.name}");
-throw std::runtime_error("${method.name}(...) is not yet implemented!");
-  `.trim()
+auto result = method(${paramsForward.join(', ')});
+return ${returnJNI.parse('result', 'kotlin', 'c++', 'c++')};
+    `
+  } else {
+    // void method. no return
+    body = `
+static const auto method = _javaPart->getClass()->getMethod<${cxxSignature}>("${method.name}");
+method(${paramsForward.join(', ')});
+   `
+  }
   const code = method.getCode(
     'c++',
     {
       classDefinitionName: name.JHybridTSpec,
     },
-    body
+    body.trim()
   )
   return code
 }

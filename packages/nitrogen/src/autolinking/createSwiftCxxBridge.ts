@@ -3,7 +3,7 @@ import { includeHeader } from '../syntax/c++/includeNitroHeader.js'
 import { getAllKnownTypes } from '../syntax/createType.js'
 import { createFileMetadataString, isNotDuplicate } from '../syntax/helpers.js'
 import type { SourceFile } from '../syntax/SourceFile.js'
-import { getReferencedTypes } from '../syntax/swift/getReferencedTypes.js'
+import { getReferencedTypes } from '../syntax/getReferencedTypes.js'
 import { SwiftCxxBridgedType } from '../syntax/swift/SwiftCxxBridgedType.js'
 import { filterDuplicateHelperBridges, indent } from '../utils.js'
 

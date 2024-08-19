@@ -37,7 +37,7 @@ namespace margelo::nitro::image {
 
   public:
     // Properties
-
+    
 
   public:
     // Methods

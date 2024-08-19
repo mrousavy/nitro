@@ -1,13 +1,13 @@
-import { ArrayType } from '../types/ArrayType.js'
-import { FunctionType } from '../types/FunctionType.js'
-import { getTypeAs } from '../types/getTypeAs.js'
-import { OptionalType } from '../types/OptionalType.js'
-import { PromiseType } from '../types/PromiseType.js'
-import { RecordType } from '../types/RecordType.js'
-import { StructType } from '../types/StructType.js'
-import { TupleType } from '../types/TupleType.js'
-import type { Type } from '../types/Type.js'
-import { VariantType } from '../types/VariantType.js'
+import { ArrayType } from './types/ArrayType.js'
+import { FunctionType } from './types/FunctionType.js'
+import { getTypeAs } from './types/getTypeAs.js'
+import { OptionalType } from './types/OptionalType.js'
+import { PromiseType } from './types/PromiseType.js'
+import { RecordType } from './types/RecordType.js'
+import { StructType } from './types/StructType.js'
+import { TupleType } from './types/TupleType.js'
+import type { Type } from './types/Type.js'
+import { VariantType } from './types/VariantType.js'
 
 export function getReferencedTypes(type: Type): Type[] {
   switch (type.kind) {

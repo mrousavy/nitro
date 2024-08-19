@@ -4,11 +4,9 @@ import { createFileMetadataString } from '../helpers.js'
 import type { SourceFile } from '../SourceFile.js'
 import { EnumType } from '../types/EnumType.js'
 
-export function createKotlinEnum(
-  packageName: string,
-  enumType: EnumType
-): SourceFile[] {
+export function createKotlinEnum(enumType: EnumType): SourceFile[] {
   const members = enumType.enumMembers.map((m) => m.name.toUpperCase())
+  const packageName = NitroConfig.getAndroidPackage('java/kotlin')
   const code = `
 ${createFileMetadataString(`${enumType.enumName}.kt`)}
 
@@ -49,7 +47,7 @@ namespace ${cxxNamespace} {
   /**
    * The C++ JNI bridge between the C++ enum "${enumType.enumName}" and the the Kotlin enum "${enumType.enumName}".
    */
-  struct J${enumType.enumName}: public jni::JavaClass<J${enumType.enumName}> {
+  struct J${enumType.enumName} final: public jni::JavaClass<J${enumType.enumName}> {
   public:
     static auto constexpr kJavaDescriptor = "${jniClassDescriptor}";
 
@@ -57,7 +55,8 @@ namespace ${cxxNamespace} {
     /**
      * Convert this Java/Kotlin-based enum to the C++ enum ${enumType.enumName}.
      */
-    ${enumType.enumName} to${enumType.enumName}() {
+    [[maybe_unused]]
+    ${enumType.enumName} toCpp() {
       static const auto clazz = javaClassStatic();
       static const auto fieldOrdinal = clazz->getField<int>("ordinal");
       int ordinal = this->getFieldValue(fieldOrdinal);
@@ -68,7 +67,8 @@ namespace ${cxxNamespace} {
     /**
      * Create a Java/Kotlin-based enum with the given C++ enum's value.
      */
-    static jni::alias_ref<J${enumType.enumName}> create(${enumType.enumName} value) {
+    [[maybe_unused]]
+    static jni::alias_ref<J${enumType.enumName}> fromCpp(${enumType.enumName} value) {
       ${indent(cppToJniConverterCode, '      ')}
     }
   };

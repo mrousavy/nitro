@@ -4,20 +4,23 @@ import { StyleSheet, View, Text, ScrollView, Button } from 'react-native'
 import {
   HybridTestObject,
   ImageConstructors,
-  HybridSwiftKotlinTestObject,
+  HybridKotlinTestObject,
 } from 'react-native-nitro-image'
 import { getTests, type TestRunner } from '../getTests'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { logPrototypeChain } from '../logPrototypeChain'
 
 logPrototypeChain(HybridTestObject)
-logPrototypeChain(HybridSwiftKotlinTestObject)
+logPrototypeChain(HybridKotlinTestObject)
 
-console.log('before async')
-HybridSwiftKotlinTestObject.getNumberAsync().then((c) => console.log('num:', c))
-HybridSwiftKotlinTestObject.getStringAsync().then((c) => console.log('str:', c))
-HybridSwiftKotlinTestObject.getCarAsync().then((c) => console.log('Car:', c))
-console.log('after async')
+console.log('loading image...')
+const image = ImageConstructors.loadImageFromFile('file')
+console.log('image:', image)
+image.saveToFile('somePath', (p) => console.log(`Image saved to ${p}!`))
+
+console.log(HybridKotlinTestObject)
+console.log(HybridKotlinTestObject.numberValue)
+console.log((HybridKotlinTestObject.numberValue = 55))
 
 const allTests = getTests()
 
@@ -119,23 +122,6 @@ export function HybridObjectTestsScreen() {
   const runAllTests = React.useCallback(() => {
     tests.forEach((t) => runTest(t))
   }, [runTest, tests])
-
-  const image = React.useMemo(() => {
-    console.log('Loading image...')
-    const i = ImageConstructors.loadImageFromSystemName('heart.fill')
-    ImageConstructors.bounceBack(i)
-    ImageConstructors.bounceBack(i)
-    ImageConstructors.bounceBack(i)
-    console.log('Image loaded!')
-    console.log(`Image is ${i.size.width}x${i.size.height}`)
-    return i
-  }, [])
-
-  React.useEffect(() => {
-    image.saveToFile('some path', (path) => {
-      console.log('saved to ' + path + '!')
-    })
-  }, [image])
 
   return (
     <SafeAreaView style={styles.container}>

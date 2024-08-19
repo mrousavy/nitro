@@ -18,15 +18,11 @@ import com.facebook.proguard.annotations.DoNotStrip
  */
 @DoNotStrip
 @Keep
-@Suppress("KotlinJniMissingFunction")
+@Suppress("KotlinJniMissingFunction", "ClassName", "unused")
 class Func_void_std__string @DoNotStrip @Keep private constructor(hybridData: HybridData) {
   @DoNotStrip
   @Keep
-  private val mHybridData: HybridData
-
-  init {
-    mHybridData = hybridData
-  }
+  private val mHybridData: HybridData = hybridData
 
   /**
    * Call the given JS callback.

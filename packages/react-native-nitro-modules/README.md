@@ -118,26 +118,26 @@ The following C++ / JS types are supported out of the box:
   <tr>
     <td><code>number</code></td>
     <td><code>double</code> / <code>int</code> / <code>float</code></td>
-    <td><code>Double</code> / <code>Int</code> / <code>Float</code></td>
-    <td>❌</td>
+    <td><code>Double</code></td>
+    <td><code>Double</code></td>
   </tr>
   <tr>
     <td><code>boolean</code></td>
     <td><code>bool</code></td>
     <td><code>Bool</code></td>
-    <td>❌</td>
+    <td><code>Boolean</code></td>
   </tr>
   <tr>
     <td><code>string</code></td>
     <td><code>std::string</code></td>
     <td><code>String</code></td>
-    <td>❌</td>
+    <td><code>String</code></td>
   </tr>
   <tr>
     <td><code>bigint</code></td>
     <td><code>int64_t</code> / <code>uint64_t</code></td>
-    <td><code>Int64</code> / <code>UInt64</code></td>
-    <td>❌</td>
+    <td><code>Int64</code></td>
+    <td><code>Long</code></td>
   </tr>
   <tr>
     <td><code>T[]</code></td>
@@ -179,7 +179,7 @@ The following C++ / JS types are supported out of the box:
     <td><code>(T...) =&gt; void</code></td>
     <td><code>std::function&lt;void (T...)&gt;</code></td>
     <td><code>@escaping (T...) -&gt; Void</code></td>
-    <td>❌</td>
+    <td>🟡  (not yet "nicely"-bridged)</td>
   </tr>
   <tr>
     <td><code>(T...) =&gt; R</code></td>
@@ -203,25 +203,25 @@ The following C++ / JS types are supported out of the box:
     <td>..any <code><a href="./src/HybridObject.ts">HybridObject</a></code></td>
     <td><code>std::shared_ptr&lt;<a href="./cpp/core/HybridObject.hpp">HybridObject</a>&gt;</code></td>
     <td><code><a href="./ios/core/HybridObjectSpec.swift">HybridObjectSpec</a></code></td>
-    <td>❌</td>
+    <td><code><a href="./android/core/HybridObject.kt">HybridObject</a></code></td>
   </tr>
   <tr>
     <td>..any <code>interface</code></td>
     <td><code>T</code></td>
     <td><code>T</code></td>
-    <td>❌</td>
+    <td><code>T</code></td>
   </tr>
   <tr>
     <td>..any <code>enum</code></td>
     <td><code>T</code></td>
     <td><code>T</code></td>
-    <td>❌</td>
+    <td><code>T</code></td>
   </tr>
   <tr>
     <td>..any <code>union</code></td>
     <td><code>T</code></td>
     <td><code>T</code></td>
-    <td>❌</td>
+    <td><code>T</code></td>
   </tr>
 </table>
 

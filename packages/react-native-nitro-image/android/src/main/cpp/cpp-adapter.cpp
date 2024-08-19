@@ -3,6 +3,7 @@
 #include "JFunc_void_std__string.hpp"
 #include "JHybridImageFactorySpec.hpp"
 #include "JHybridImageSpec.hpp"
+#include "JHybridKotlinTestObjectSpec.hpp"
 
 #include "HybridTestObject.hpp"
 #include <NitroModules/HybridObjectRegistry.hpp>
@@ -17,6 +18,7 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void*) {
     JFunc_void_std__string::registerNatives();
     JHybridImageSpec::registerNatives();
     JHybridImageFactorySpec::registerNatives();
+    JHybridKotlinTestObjectSpec::registerNatives();
 
     // 2. Register any custom C++ only HybridObjects manually
     HybridObjectRegistry::registerHybridObjectConstructor(
