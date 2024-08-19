@@ -39,22 +39,22 @@ namespace margelo::nitro::image {
 
   // Methods
   std::shared_ptr<margelo::nitro::image::HybridImageSpec> JHybridImageFactorySpec::loadImageFromFile(const std::string& path) {
-    static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<JHybridImageSpec::javaobject>(std::string)>("loadImageFromFile");
+    static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<JHybridImageSpec::javaobject>(std::string /* path */)>("loadImageFromFile");
     auto result = method(_javaPart, path);
     return JNISharedPtr::make_shared_from_jni<JHybridImageSpec>(jni::make_global(result));
   }
   std::shared_ptr<margelo::nitro::image::HybridImageSpec> JHybridImageFactorySpec::loadImageFromURL(const std::string& path) {
-    static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<JHybridImageSpec::javaobject>(std::string)>("loadImageFromURL");
+    static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<JHybridImageSpec::javaobject>(std::string /* path */)>("loadImageFromURL");
     auto result = method(_javaPart, path);
     return JNISharedPtr::make_shared_from_jni<JHybridImageSpec>(jni::make_global(result));
   }
   std::shared_ptr<margelo::nitro::image::HybridImageSpec> JHybridImageFactorySpec::loadImageFromSystemName(const std::string& path) {
-    static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<JHybridImageSpec::javaobject>(std::string)>("loadImageFromSystemName");
+    static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<JHybridImageSpec::javaobject>(std::string /* path */)>("loadImageFromSystemName");
     auto result = method(_javaPart, path);
     return JNISharedPtr::make_shared_from_jni<JHybridImageSpec>(jni::make_global(result));
   }
   std::shared_ptr<margelo::nitro::image::HybridImageSpec> JHybridImageFactorySpec::bounceBack(const std::shared_ptr<margelo::nitro::image::HybridImageSpec>& image) {
-    static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<JHybridImageSpec::javaobject>(jni::alias_ref<JHybridImageSpec::javaobject>)>("bounceBack");
+    static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<JHybridImageSpec::javaobject>(jni::alias_ref<JHybridImageSpec::javaobject> /* image */)>("bounceBack");
     auto result = method(_javaPart, std::static_pointer_cast<JHybridImageSpec>(image)->getJavaPart());
     return JNISharedPtr::make_shared_from_jni<JHybridImageSpec>(jni::make_global(result));
   }
