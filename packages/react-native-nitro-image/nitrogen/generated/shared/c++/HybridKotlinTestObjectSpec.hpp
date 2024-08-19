@@ -16,7 +16,7 @@
 
 
 
-
+#include <optional>
 
 namespace margelo::nitro::image {
 
@@ -44,6 +44,8 @@ namespace margelo::nitro::image {
       // Properties
       virtual double getNumberValue() = 0;
       virtual void setNumberValue(double numberValue) = 0;
+      virtual std::optional<double> getOptionalNumber() = 0;
+      virtual void setOptionalNumber(std::optional<double> optionalNumber) = 0;
 
     public:
       // Methods

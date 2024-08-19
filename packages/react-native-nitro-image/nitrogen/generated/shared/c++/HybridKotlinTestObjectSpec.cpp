@@ -17,6 +17,8 @@ namespace margelo::nitro::image {
     registerHybrids(this, [](Prototype& prototype) {
       prototype.registerHybridGetter("numberValue", &HybridKotlinTestObjectSpec::getNumberValue);
       prototype.registerHybridSetter("numberValue", &HybridKotlinTestObjectSpec::setNumberValue);
+      prototype.registerHybridGetter("optionalNumber", &HybridKotlinTestObjectSpec::getOptionalNumber);
+      prototype.registerHybridSetter("optionalNumber", &HybridKotlinTestObjectSpec::setOptionalNumber);
     });
   }
 

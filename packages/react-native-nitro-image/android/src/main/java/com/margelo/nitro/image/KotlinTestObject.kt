@@ -5,6 +5,7 @@ import com.margelo.nitro.functions.Function1
 
 class KotlinTestObject: HybridKotlinTestObjectSpec() {
     override var numberValue: Double = 0.0
+    override var optionalNumber: Double? = null
     override val memorySize: Long
         get() = 0
 
