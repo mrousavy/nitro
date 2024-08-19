@@ -1,76 +1,96 @@
-import type { Language } from '../../getPlatformSpecs.js'
+import type { BridgedType } from '../BridgedType.js'
 import { getHybridObjectName } from '../getHybridObjectName.js'
 import type { SourceFile, SourceImport } from '../SourceFile.js'
-import { ArrayType } from './ArrayType.js'
-import { EnumType } from './EnumType.js'
-import { FunctionType } from './FunctionType.js'
-import { getTypeAs } from './getTypeAs.js'
-import { HybridObjectType } from './HybridObjectType.js'
-import { StructType } from './StructType.js'
-import type { Type, TypeKind } from './Type.js'
+import { ArrayType } from '../types/ArrayType.js'
+import { EnumType } from '../types/EnumType.js'
+import { FunctionType } from '../types/FunctionType.js'
+import { getTypeAs } from '../types/getTypeAs.js'
+import { HybridObjectType } from '../types/HybridObjectType.js'
+import { StructType } from '../types/StructType.js'
+import type { Type } from '../types/Type.js'
 
-export class JNIWrappedType<T extends Type> implements Type {
-  readonly type: T
+export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
+  readonly type: Type
 
-  constructor(type: T) {
+  constructor(type: Type) {
     this.type = type
+  }
+
+  get hasType(): boolean {
+    return this.type.kind !== 'void' && this.type.kind !== 'null'
   }
 
   get canBePassedByReference(): boolean {
     return this.type.canBePassedByReference
   }
-  get kind(): TypeKind {
-    return this.type.kind
+
+  get needsSpecialHandling(): boolean {
+    switch (this.type.kind) {
+      default:
+        return false
+    }
   }
-  get requiredJNIImport(): SourceImport | undefined {
-    switch (this.kind) {
+
+  getRequiredImports(): SourceImport[] {
+    const imports = this.type.getRequiredImports()
+
+    switch (this.type.kind) {
       case 'enum':
         const enumType = getTypeAs(this.type, EnumType)
-        return {
+        imports.push({
           language: 'c++',
           name: `J${enumType.enumName}.hpp`,
           space: 'user',
-        }
+        })
+        break
       case 'struct':
         const structType = getTypeAs(this.type, StructType)
-        return {
+        imports.push({
           language: 'c++',
           name: `J${structType.structName}.hpp`,
           space: 'user',
-        }
+        })
+        break
       case 'hybrid-object': {
         const hybridObjectType = getTypeAs(this.type, HybridObjectType)
         const name = getHybridObjectName(hybridObjectType.hybridObjectName)
-        return {
+        imports.push({
           language: 'c++',
           name: `${name.JHybridTSpec}.hpp`,
           space: 'user',
-        }
+        })
+        break
       }
       case 'function': {
         const functionType = getTypeAs(this.type, FunctionType)
         const name = functionType.specializationName
-        return {
+        imports.push({
           language: 'c++',
           name: `J${name}.hpp`,
           space: 'user',
-        }
+        })
+        break
       }
-      default:
-        return undefined
     }
+
+    return imports
   }
 
-  getCode(language: Language): string {
+  getExtraFiles(): SourceFile[] {
+    const files: SourceFile[] = []
+    return files
+  }
+
+  getTypeCode(language: 'kotlin' | 'c++'): string {
     if (language !== 'c++') {
-      // JNI types only wrap C++ types
+      // In Kotlin, we just use the normal Kotlin types directly.
       return this.type.getCode(language)
     }
-    switch (this.kind) {
+    switch (this.type.kind) {
       case 'array':
         const arrayType = getTypeAs(this.type, ArrayType)
-        const wrapped = new JNIWrappedType(arrayType.itemType)
-        return `JCollection<${wrapped.getCode(language)}>`
+        const bridged = new KotlinCxxBridgedType(arrayType.itemType)
+        return `JCollection<${bridged.getTypeCode(language)}>`
       case 'enum':
         const enumType = getTypeAs(this.type, EnumType)
         return `J${enumType.enumName}`
@@ -92,14 +112,18 @@ export class JNIWrappedType<T extends Type> implements Type {
     }
   }
 
-  getExtraFiles(): SourceFile[] {
-    return this.type.getExtraFiles()
-  }
-  getRequiredImports(): SourceImport[] {
-    const imports = [...this.type.getRequiredImports()]
-    if (this.requiredJNIImport != null) {
-      imports.push(this.requiredJNIImport)
+  parse(
+    _parameterName: string,
+    from: 'c++' | 'kotlin',
+    to: 'kotlin' | 'c++',
+    _inLanguage: 'kotlin' | 'c++'
+  ): string {
+    if (from === 'c++') {
+      throw new Error(`Cannot parse from ${from} to ${to}!`)
+    } else if (from === 'kotlin') {
+      throw new Error(`Cannot parse from ${from} to ${to}!`)
+    } else {
+      throw new Error(`Cannot parse from ${from} to ${to}!`)
     }
-    return imports
   }
 }

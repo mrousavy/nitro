@@ -1,5 +1,6 @@
 import { NitroConfig } from '../../config/NitroConfig.js'
 import { indent } from '../../utils.js'
+import type { BridgedType } from '../BridgedType.js'
 import { getForwardDeclaration } from '../c++/getForwardDeclaration.js'
 import {
   getHybridObjectName,
@@ -29,7 +30,7 @@ import { createSwiftVariant, getSwiftVariantCaseName } from './SwiftVariant.js'
 
 // TODO: Remove enum bridge once Swift fixes bidirectional enums crashing the `-Swift.h` header.
 
-export class SwiftCxxBridgedType {
+export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
   readonly type: Type
   private readonly isBridgingToDirectCppTarget: boolean
 
@@ -245,6 +246,21 @@ export class SwiftCxxBridgedType {
       default:
         // No workaround - just return normal type
         return this.type.getCode(language)
+    }
+  }
+
+  parse(
+    parameterName: string,
+    from: 'c++' | 'swift',
+    to: 'swift' | 'c++',
+    inLanguage: 'swift' | 'c++'
+  ): string {
+    if (from === 'c++') {
+      return this.parseFromCppToSwift(parameterName, inLanguage)
+    } else if (from === 'swift') {
+      return this.parseFromSwiftToCpp(parameterName, inLanguage)
+    } else {
+      throw new Error(`Cannot parse from ${from} to ${to}!`)
     }
   }
 

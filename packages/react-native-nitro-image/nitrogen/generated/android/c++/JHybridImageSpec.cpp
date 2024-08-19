@@ -8,11 +8,21 @@
 
 #include "JHybridImageSpec.hpp"
 
+// Forward declaration of `ImageSize` to properly resolve imports.
+namespace margelo::nitro::image { struct ImageSize; }
+// Forward declaration of `PixelFormat` to properly resolve imports.
+namespace margelo::nitro::image { enum class PixelFormat; }
+// Forward declaration of `ImageFormat` to properly resolve imports.
+namespace margelo::nitro::image { enum class ImageFormat; }
 
-
+#include "ImageSize.hpp"
 #include "JImageSize.hpp"
+#include "PixelFormat.hpp"
 #include "JPixelFormat.hpp"
+#include "ImageFormat.hpp"
 #include "JImageFormat.hpp"
+#include "string"
+#include "functional"
 #include "JFunc_void_std__string.hpp"
 
 namespace margelo::nitro::image {

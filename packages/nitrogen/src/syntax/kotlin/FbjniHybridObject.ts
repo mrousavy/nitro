@@ -7,7 +7,7 @@ import type { HybridObjectSpec } from '../HybridObjectSpec.js'
 import { Method } from '../Method.js'
 import type { Property } from '../Property.js'
 import type { SourceFile } from '../SourceFile.js'
-import { JNIWrappedType } from '../types/JNIWrappedType.js'
+import { KotlinCxxBridgedType } from './KotlinCxxBridgedType.js'
 
 export function createFbjniHybridObject(spec: HybridObjectSpec): SourceFile[] {
   const name = getHybridObjectName(spec.name)
@@ -81,8 +81,8 @@ ${spaces}                public ${name.HybridTSpec} {
     .join('\n')
   const allTypes = getAllTypes(spec)
   const jniImports = allTypes
-    .map((t) => new JNIWrappedType(t))
-    .map((t) => t.requiredJNIImport)
+    .map((t) => new KotlinCxxBridgedType(t))
+    .flatMap((t) => t.getRequiredImports())
     .filter((i) => i != null)
   const cppIncludes = jniImports
     .map((i) => `#include "${i.name}"`)
@@ -151,11 +151,13 @@ function getFbjniMethodForwardImplementation(
 ): string {
   const name = getHybridObjectName(spec.name)
 
-  const returnJNI = new JNIWrappedType(method.returnType)
-  const paramsJNI = method.parameters.map((p) => new JNIWrappedType(p.type))
+  const returnJNI = new KotlinCxxBridgedType(method.returnType)
+  const paramsJNI = method.parameters.map(
+    (p) => new KotlinCxxBridgedType(p.type)
+  )
 
-  const returnType = returnJNI.getCode('c++')
-  const paramsTypes = paramsJNI.map((p) => p.getCode('c++')).join(', ')
+  const returnType = returnJNI.getTypeCode('c++')
+  const paramsTypes = paramsJNI.map((p) => p.getTypeCode('c++')).join(', ')
   const cxxSignature = `${returnType}(${paramsTypes})`
 
   const body = `

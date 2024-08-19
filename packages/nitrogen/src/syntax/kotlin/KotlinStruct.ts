@@ -2,8 +2,8 @@ import { NitroConfig } from '../../config/NitroConfig.js'
 import { capitalizeName, indent } from '../../utils.js'
 import { createFileMetadataString } from '../helpers.js'
 import type { SourceFile } from '../SourceFile.js'
-import { JNIWrappedType } from '../types/JNIWrappedType.js'
 import type { StructType } from '../types/StructType.js'
+import { KotlinCxxBridgedType } from './KotlinCxxBridgedType.js'
 
 export function createKotlinStruct(
   packageName: string,
@@ -101,8 +101,8 @@ function createJNIStructInitializer(structType: StructType): string {
   const lines: string[] = ['static const auto clazz = javaClassStatic();']
   for (const prop of structType.properties) {
     const fieldName = `field${capitalizeName(prop.escapedName)}`
-    const jniType = new JNIWrappedType(prop)
-    const type = jniType.getCode('c++')
+    const jniType = new KotlinCxxBridgedType(prop)
+    const type = jniType.getTypeCode('c++')
     lines.push(
       `static const auto ${fieldName} = clazz->getField<${type}>("${prop.escapedName}");`
     )

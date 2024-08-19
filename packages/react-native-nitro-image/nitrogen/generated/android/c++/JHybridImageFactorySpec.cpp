@@ -8,9 +8,13 @@
 
 #include "JHybridImageFactorySpec.hpp"
 
+// Forward declaration of `HybridImageSpec` to properly resolve imports.
+namespace margelo::nitro::image { class HybridImageSpec; }
 
-
+#include "memory"
+#include "HybridImageSpec.hpp"
 #include "JHybridImageSpec.hpp"
+#include "string"
 
 namespace margelo::nitro::image {
 
