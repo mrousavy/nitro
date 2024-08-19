@@ -1,5 +1,5 @@
 import { NitroConfig } from '../../config/NitroConfig.js'
-import { createFileMetadataString, toReferenceType } from '../helpers.js'
+import { createFileMetadataString } from '../helpers.js'
 import type { SourceFile } from '../SourceFile.js'
 import type { FunctionType } from '../types/FunctionType.js'
 
@@ -47,14 +47,12 @@ class ${name} @DoNotStrip @Keep private constructor(hybridData: HybridData) {
 
   functionType.getCode
   const cppReturnType = functionType.returnType.getCode('c++')
-  const cppParams = functionType.parameters.map((p) => {
-    let type = p.getCode('c++')
-    if (p.canBePassedByReference) {
-      type = toReferenceType(type)
-    }
-    return `${type} ${p.escapedName}`
-  })
-  const paramsForward = functionType.parameters.map((p) => p.name)
+  const cppParams = functionType.parameters.map(
+    (p) => `${p.getCode('c++')}&& ${p.escapedName}`
+  )
+  const paramsForward = functionType.parameters.map(
+    (p) => `std::forward<decltype(${p.name})>(${p.name})`
+  )
   const jniClassDescriptor = NitroConfig.getAndroidPackage('c++/jni', name)
   const cxxNamespace = NitroConfig.getCxxNamespace('c++')
   const typename = functionType.getCode('c++')
@@ -74,7 +72,7 @@ namespace ${cxxNamespace} {
    * C++ representation of the callback ${name}.
    * This is a Kotlin \`${lambdaTypename}\`, backed by a \`std::function<...>\`.
    */
-  struct J${name}: public jni::HybridClass<J${name}> {
+  struct J${name} final: public jni::HybridClass<J${name}> {
   public:
     static jni::local_ref<J${name}::javaobject> fromCpp(const ${typename}& func) {
       return J${name}::newObjectCxxArgs(func);

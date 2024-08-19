@@ -47,7 +47,7 @@ namespace ${cxxNamespace} {
   /**
    * The C++ JNI bridge between the C++ enum "${enumType.enumName}" and the the Kotlin enum "${enumType.enumName}".
    */
-  struct J${enumType.enumName}: public jni::JavaClass<J${enumType.enumName}> {
+  struct J${enumType.enumName} final: public jni::JavaClass<J${enumType.enumName}> {
   public:
     static auto constexpr kJavaDescriptor = "${jniClassDescriptor}";
 

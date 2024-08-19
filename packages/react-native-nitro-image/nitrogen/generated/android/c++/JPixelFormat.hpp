@@ -18,7 +18,7 @@ namespace margelo::nitro::image {
   /**
    * The C++ JNI bridge between the C++ enum "PixelFormat" and the the Kotlin enum "PixelFormat".
    */
-  struct JPixelFormat: public jni::JavaClass<JPixelFormat> {
+  struct JPixelFormat final: public jni::JavaClass<JPixelFormat> {
   public:
     static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/PixelFormat;";
 

@@ -53,7 +53,7 @@ namespace ${cxxNamespace} {
   /**
    * The C++ JNI bridge between the C++ struct "${structType.structName}" and the the Kotlin data class "${structType.structName}".
    */
-  struct J${structType.structName}: public jni::JavaClass<J${structType.structName}> {
+  struct J${structType.structName} final: public jni::JavaClass<J${structType.structName}> {
   public:
     static auto constexpr kJavaDescriptor = "${jniClassDescriptor}";
 
@@ -111,7 +111,8 @@ function createJNIStructInitializer(structType: StructType): string {
 
   const propsForward = structType.properties.map((p) => {
     const bridged = new KotlinCxxBridgedType(p)
-    return bridged.parse(p.escapedName, 'kotlin', 'c++', 'c++')
+    const parse = bridged.parse(p.escapedName, 'kotlin', 'c++', 'c++')
+    return `std::move(${parse})`
   })
   lines.push(`return ${structType.structName}(`)
   lines.push(`  ${indent(propsForward.join(',\n'), '  ')}`)
@@ -128,7 +129,8 @@ function createCppStructInitializer(
   const names = structType.properties.map((p) => {
     const name = `${cppValueName}.${p.escapedName}`
     const bridge = new KotlinCxxBridgedType(p)
-    return bridge.parse(name, 'c++', 'kotlin', 'c++')
+    const parse = bridge.parse(name, 'c++', 'kotlin', 'c++')
+    return `std::move(${parse})`
   })
   lines.push(`  ${indent(names.join(',\n'), '  ')}`)
   lines.push(');')
