@@ -140,13 +140,13 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
       case 'array':
         const arrayType = getTypeAs(this.type, ArrayType)
         const bridged = new KotlinCxxBridgedType(arrayType.itemType)
-        return `JCollection<${bridged.getTypeCode(language)}>`
+        return `jni::alias_ref<JCollection<${bridged.getTypeCode(language)}>>`
       case 'enum':
         const enumType = getTypeAs(this.type, EnumType)
-        return `J${enumType.enumName}`
+        return `jni::alias_ref<J${enumType.enumName}>`
       case 'struct':
         const structType = getTypeAs(this.type, StructType)
-        return `J${structType.structName}`
+        return `jni::alias_ref<J${structType.structName}>`
       case 'hybrid-object': {
         const hybridObjectType = getTypeAs(this.type, HybridObjectType)
         const name = getHybridObjectName(hybridObjectType.hybridObjectName)
