@@ -21,8 +21,8 @@ namespace margelo::nitro::image { enum class ImageFormat; }
 #include "JPixelFormat.hpp"
 #include "ImageFormat.hpp"
 #include "JImageFormat.hpp"
-#include "string"
-#include "functional"
+#include <string>
+#include <functional>
 #include "JFunc_void_std__string.hpp"
 
 namespace margelo::nitro::image {
@@ -39,7 +39,7 @@ namespace margelo::nitro::image {
 
   size_t JHybridImageSpec::getExternalMemorySize() noexcept {
     static const auto method = _javaPart->getClass()->getMethod<jlong()>("getMemorySize");
-    return method(_javaPart.get());
+    return method(_javaPart);
   }
 
   // Properties

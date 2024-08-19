@@ -11,10 +11,11 @@
 // Forward declaration of `HybridImageSpec` to properly resolve imports.
 namespace margelo::nitro::image { class HybridImageSpec; }
 
-#include "memory"
+#include <memory>
 #include "HybridImageSpec.hpp"
 #include "JHybridImageSpec.hpp"
-#include "string"
+#include <NitroModules/JNISharedPtr.hpp>
+#include <string>
 
 namespace margelo::nitro::image {
 
@@ -30,7 +31,7 @@ namespace margelo::nitro::image {
 
   size_t JHybridImageFactorySpec::getExternalMemorySize() noexcept {
     static const auto method = _javaPart->getClass()->getMethod<jlong()>("getMemorySize");
-    return method(_javaPart.get());
+    return method(_javaPart);
   }
 
   // Properties
@@ -40,17 +41,17 @@ namespace margelo::nitro::image {
   std::shared_ptr<margelo::nitro::image::HybridImageSpec> JHybridImageFactorySpec::loadImageFromFile(const std::string& path) {
     static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<JHybridImageSpec::javaobject>(std::string)>("loadImageFromFile");
     auto result = method(_javaPart, path);
-    throw std::runtime_error("Cannot convert HybridImageSpec yet!");
+    return JNISharedPtr::make_shared_from_jni<JHybridImageSpec>(jni::make_global(result));
   }
   std::shared_ptr<margelo::nitro::image::HybridImageSpec> JHybridImageFactorySpec::loadImageFromURL(const std::string& path) {
     static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<JHybridImageSpec::javaobject>(std::string)>("loadImageFromURL");
     auto result = method(_javaPart, path);
-      throw std::runtime_error("Cannot convert HybridImageSpec yet!");
+    return JNISharedPtr::make_shared_from_jni<JHybridImageSpec>(jni::make_global(result));
   }
   std::shared_ptr<margelo::nitro::image::HybridImageSpec> JHybridImageFactorySpec::loadImageFromSystemName(const std::string& path) {
     static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<JHybridImageSpec::javaobject>(std::string)>("loadImageFromSystemName");
     auto result = method(_javaPart, path);
-      throw std::runtime_error("Cannot convert HybridImageSpec yet!");
+    return JNISharedPtr::make_shared_from_jni<JHybridImageSpec>(jni::make_global(result));
   }
   std::shared_ptr<margelo::nitro::image::HybridImageSpec> JHybridImageFactorySpec::bounceBack(const std::shared_ptr<margelo::nitro::image::HybridImageSpec>& image) {
     static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<JHybridImageSpec::javaobject>(jni::alias_ref<JHybridImageSpec::javaobject>)>("bounceBack");

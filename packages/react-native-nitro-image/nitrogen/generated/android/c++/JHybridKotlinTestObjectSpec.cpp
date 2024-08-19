@@ -26,7 +26,7 @@ namespace margelo::nitro::image {
 
   size_t JHybridKotlinTestObjectSpec::getExternalMemorySize() noexcept {
     static const auto method = _javaPart->getClass()->getMethod<jlong()>("getMemorySize");
-    return method(_javaPart.get());
+    return method(_javaPart);
   }
 
   // Properties

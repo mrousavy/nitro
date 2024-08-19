@@ -1,5 +1,6 @@
 import { NitroConfig } from '../../config/NitroConfig.js'
 import { createIndentation, indent } from '../../utils.js'
+import { includeHeader } from '../c++/includeNitroHeader.js'
 import { getAllTypes } from '../getAllTypes.js'
 import { getHybridObjectName } from '../getHybridObjectName.js'
 import { createFileMetadataString, isNotDuplicate } from '../helpers.js'
@@ -85,7 +86,7 @@ ${spaces}                public ${name.HybridTSpec} {
     .flatMap((t) => t.getRequiredImports())
     .filter((i) => i != null)
   const cppIncludes = jniImports
-    .map((i) => `#include "${i.name}"`)
+    .map((i) => includeHeader(i))
     .filter(isNotDuplicate)
   const cppForwardDeclarations = jniImports
     .map((i) => i.forwardDeclaration)
@@ -115,7 +116,7 @@ namespace ${cxxNamespace} {
 
   size_t ${name.JHybridTSpec}::getExternalMemorySize() noexcept {
     static const auto method = _javaPart->getClass()->getMethod<jlong()>("getMemorySize");
-    return method(_javaPart.get());
+    return method(_javaPart);
   }
 
   // Properties
@@ -162,7 +163,7 @@ function getFbjniMethodForwardImplementation(
 
   const paramsForward = method.parameters.map((p) => {
     const bridged = new KotlinCxxBridgedType(p.type)
-    return bridged.parse(p.name, 'kotlin', 'c++', 'c++')
+    return bridged.parse(p.name, 'c++', 'kotlin', 'c++')
   })
   paramsForward.unshift('_javaPart') // <-- first param is always Java `this`
 
