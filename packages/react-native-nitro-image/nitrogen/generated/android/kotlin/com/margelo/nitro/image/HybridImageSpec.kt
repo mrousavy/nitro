@@ -54,7 +54,7 @@ abstract class HybridImageSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
-  abstract fun saveToFile(path: String, onFinished: ((path: String) -> Unit)): Unit
+  abstract fun saveToFile(path: String, onFinished: Func_void_std__string): Unit
 
   private external fun initHybrid(): HybridData
 

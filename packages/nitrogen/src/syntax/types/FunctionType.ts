@@ -116,11 +116,7 @@ export class FunctionType implements Type {
         return `((${params}) -> ${returnType})`
       }
       case 'kotlin':
-        const params = this.parameters
-          .map((p) => `${p.escapedName}: ${p.getCode(language)}`)
-          .join(', ')
-        const returnType = this.returnType.getCode(language)
-        return `((${params}) -> ${returnType})`
+        return this.specializationName
       default:
         throw new Error(
           `Language ${language} is not yet supported for FunctionType!`

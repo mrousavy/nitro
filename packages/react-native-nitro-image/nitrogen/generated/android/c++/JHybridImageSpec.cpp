@@ -59,13 +59,13 @@ namespace margelo::nitro::image {
     return result;
   }
   void JHybridImageSpec::setSomeSettableProp(double someSettableProp) {
-    static const auto method = _javaPart->getClass()->getMethod<void(double)>("setSomeSettableProp");
+    static const auto method = _javaPart->getClass()->getMethod<void(double /* someSettableProp */)>("setSomeSettableProp");
     method(_javaPart, someSettableProp);
   }
 
   // Methods
   double JHybridImageSpec::toArrayBuffer(ImageFormat format) {
-    static const auto method = _javaPart->getClass()->getMethod<double(jni::alias_ref<JImageFormat>)>("toArrayBuffer");
+    static const auto method = _javaPart->getClass()->getMethod<double(jni::alias_ref<JImageFormat> /* format */)>("toArrayBuffer");
     auto result = method(_javaPart, JImageFormat::fromCpp(format));
     return result;
   }

@@ -1,6 +1,8 @@
 package com.margelo.nitro.image
 
 import android.graphics.Bitmap
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 
 class Image(val bitmap: Bitmap): HybridImageSpec() {
@@ -20,8 +22,10 @@ class Image(val bitmap: Bitmap): HybridImageSpec() {
         TODO("Not yet implemented")
     }
 
-    override fun saveToFile(path: String, onFinished: ((path: String) -> Unit)) {
-        TODO("Not yet implemented")
+    override fun saveToFile(path: String, onFinished: Func_void_std__string) {
+        Handler(Looper.getMainLooper()).postDelayed({
+            onFinished.call(path)
+        }, 5000)
     }
 
     override val memorySize: Long
