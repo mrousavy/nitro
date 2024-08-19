@@ -7,8 +7,10 @@ import { EnumType } from '../types/EnumType.js'
 import { FunctionType } from '../types/FunctionType.js'
 import { getTypeAs } from '../types/getTypeAs.js'
 import { HybridObjectType } from '../types/HybridObjectType.js'
+import { OptionalType } from '../types/OptionalType.js'
 import { StructType } from '../types/StructType.js'
 import type { Type } from '../types/Type.js'
+import { getKotlinBoxedPrimitiveType } from './KotlinBoxedPrimitive.js'
 import { createKotlinEnum } from './KotlinEnum.js'
 import { createKotlinFunction } from './KotlinFunction.js'
 import { createKotlinStruct } from './KotlinStruct.js'
@@ -153,6 +155,21 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
         const name = getHybridObjectName(hybridObjectType.hybridObjectName)
         return `jni::alias_ref<${name.JHybridTSpec}::javaobject>`
       }
+      case 'optional': {
+        const optional = getTypeAs(this.type, OptionalType)
+        switch (optional.wrappingType.kind) {
+          // primitives need to be boxed to make them nullable
+          case 'number':
+          case 'boolean':
+          case 'bigint':
+            const boxed = getKotlinBoxedPrimitiveType(optional.wrappingType)
+            return `jni::alias_ref<${boxed}>`
+          default:
+            // all other types can be nullable as they are objects.
+            const bridge = new KotlinCxxBridgedType(optional.wrappingType)
+            return bridge.getTypeCode('c++')
+        }
+      }
       default:
         return this.type.getCode(language)
     }
@@ -175,9 +192,21 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
 
   parseFromCppToKotlin(
     parameterName: string,
-    language: 'kotlin' | 'c++'
+    language: 'kotlin' | 'c++',
+    isBoxed = false
   ): string {
     switch (this.type.kind) {
+      case 'number':
+      case 'boolean':
+      case 'bigint': {
+        if (isBoxed) {
+          // box a primitive (double) to an object (JDouble)
+          const boxed = getKotlinBoxedPrimitiveType(this.type)
+          return `${boxed}::valueOf(${parameterName}.value())`
+        } else {
+          return parameterName
+        }
+      }
       case 'struct': {
         switch (language) {
           case 'c++':
@@ -215,6 +244,16 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
             return parameterName
         }
       }
+      case 'optional': {
+        const optional = getTypeAs(this.type, OptionalType)
+        const bridge = new KotlinCxxBridgedType(optional.wrappingType)
+        switch (language) {
+          case 'c++':
+            return `${parameterName}.has_value() ? ${bridge.parseFromCppToKotlin(parameterName, 'c++', true)} : nullptr`
+          default:
+            return parameterName
+        }
+      }
       default:
         // no need to parse anything, just return as is
         return parameterName
@@ -223,9 +262,20 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
 
   parseFromKotlinToCpp(
     parameterName: string,
-    language: 'kotlin' | 'c++'
+    language: 'kotlin' | 'c++',
+    isBoxed = false
   ): string {
     switch (this.type.kind) {
+      case 'number':
+      case 'boolean':
+      case 'bigint': {
+        if (isBoxed) {
+          // unbox an object (JDouble) to a primitive (double)
+          return `${parameterName}->value()`
+        } else {
+          return parameterName
+        }
+      }
       case 'struct':
       case 'enum':
       case 'function': {
@@ -242,6 +292,21 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
             const hybrid = getTypeAs(this.type, HybridObjectType)
             const name = getHybridObjectName(hybrid.hybridObjectName)
             return `JNISharedPtr::make_shared_from_jni<${name.JHybridTSpec}>(jni::make_global(${parameterName}))`
+          default:
+            return parameterName
+        }
+      }
+      case 'optional': {
+        const optional = getTypeAs(this.type, OptionalType)
+        const bridge = new KotlinCxxBridgedType(optional.wrappingType)
+        switch (language) {
+          case 'c++':
+            const parsed = bridge.parseFromKotlinToCpp(
+              parameterName,
+              'c++',
+              true
+            )
+            return `${parameterName} != nullptr ? std::make_optional(${parsed}) : std::nullopt`
           default:
             return parameterName
         }

@@ -10,7 +10,7 @@
 
 
 
-
+#include <optional>
 
 namespace margelo::nitro::image {
 
@@ -38,6 +38,15 @@ namespace margelo::nitro::image {
   void JHybridKotlinTestObjectSpec::setNumberValue(double numberValue) {
     static const auto method = _javaPart->getClass()->getMethod<void(double /* numberValue */)>("setNumberValue");
     method(_javaPart, numberValue);
+  }
+  std::optional<double> JHybridKotlinTestObjectSpec::getOptionalNumber() {
+    static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<jni::JDouble>()>("getOptionalNumber");
+    auto result = method(_javaPart);
+    return result != nullptr ? std::make_optional(result->value()) : std::nullopt;
+  }
+  void JHybridKotlinTestObjectSpec::setOptionalNumber(std::optional<double> optionalNumber) {
+    static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<jni::JDouble> /* optionalNumber */)>("setOptionalNumber");
+    method(_javaPart, optionalNumber.has_value() ? jni::JDouble::valueOf(optionalNumber.value()) : nullptr);
   }
 
   // Methods

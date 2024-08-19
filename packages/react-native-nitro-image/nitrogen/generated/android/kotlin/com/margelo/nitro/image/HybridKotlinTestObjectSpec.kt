@@ -38,6 +38,12 @@ abstract class HybridKotlinTestObjectSpec: HybridObject() {
   @set:DoNotStrip
   @set:Keep
   abstract var numberValue: Double
+  
+  @get:DoNotStrip
+  @get:Keep
+  @set:DoNotStrip
+  @set:Keep
+  abstract var optionalNumber: Double?
 
   // Methods
   

@@ -39,6 +39,8 @@ namespace margelo::nitro::image {
     // Properties
     double getNumberValue() override;
     void setNumberValue(double numberValue) override;
+    std::optional<double> getOptionalNumber() override;
+    void setOptionalNumber(std::optional<double> optionalNumber) override;
 
   public:
     // Methods

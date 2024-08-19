@@ -333,5 +333,13 @@ namespace margelo::nitro::image::bridge::swift {
   inline PromiseHolder<Car> create_PromiseHolder_Car_() {
     return PromiseHolder<Car>();
   }
+  
+  /**
+   * Specialized version of `std::optional<double>`.
+   */
+  using std__optional_double_ = std::optional<double>;
+  inline std::optional<double> create_std__optional_double_(const double& value) {
+    return std::optional<double>(value);
+  }
 
 } // namespace margelo::nitro::image::bridge::swift
