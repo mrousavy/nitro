@@ -37,18 +37,21 @@ struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_v<T, jsi::NativeState>>
     jsi::Object object = arg.asObject(runtime);
 
 #if DEBUG
-    if (!object.hasNativeState<TPointee>(runtime)) [[unlikely]] {
-      if (!object.hasNativeState(runtime)) [[unlikely]] {
-        std::string stringRepresentation = arg.toString(runtime).utf8(runtime);
-        throw jsi::JSError(runtime, invalidTypeErrorMessage(stringRepresentation, "It does not have a NativeState!"));
-      } else {
-        std::string stringRepresentation = arg.toString(runtime).utf8(runtime);
-        throw jsi::JSError(runtime, invalidTypeErrorMessage(stringRepresentation, "It has a different NativeState<T>!"));
-      }
+    if (!object.hasNativeState(runtime)) [[unlikely]] {
+      std::string stringRepresentation = arg.toString(runtime).utf8(runtime);
+      throw jsi::JSError(runtime, invalidTypeErrorMessage(stringRepresentation, "It does not have a NativeState!"));
     }
 #endif
     std::shared_ptr<jsi::NativeState> nativeState = object.getNativeState(runtime);
-    return std::dynamic_pointer_cast<TPointee>(nativeState);
+    std::shared_ptr<TPointee> hybridObject = std::dynamic_pointer_cast<TPointee>(nativeState);
+#if DEBUG
+    if (hybridObject == nullptr) [[unlikely]] {
+        std::string stringRepresentation = arg.toString(runtime).utf8(runtime);
+        throw jsi::JSError(runtime, invalidTypeErrorMessage(stringRepresentation, "It is a different NativeState! "
+                                                                                  "It's not " + TypeInfo::getFriendlyTypename<TPointee>() + "."));
+    }
+#endif
+    return hybridObject;
   }
 
   static inline jsi::Value toJSI(jsi::Runtime& runtime, const T& arg) {

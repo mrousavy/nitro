@@ -91,7 +91,7 @@ public:
       std::shared_ptr<jsi::NativeState> nativeState = thisObject.getNativeState(runtime);
       std::shared_ptr<Derived> hybridInstance = std::dynamic_pointer_cast<Derived>(nativeState);
 #if DEBUG
-      if (hybridInstance == nullptr) {
+      if (hybridInstance == nullptr) [[unlikely]] {
         throw jsi::JSError(runtime, "Cannot call hybrid function " + name + "(...) - `this` has a NativeState, "
                                     "but it's the wrong type! It's not: " + TypeInfo::getFriendlyTypename<Derived>() + ".");
       }
