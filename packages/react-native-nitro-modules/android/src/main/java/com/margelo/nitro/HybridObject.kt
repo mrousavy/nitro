@@ -9,7 +9,6 @@ import com.facebook.proguard.annotations.DoNotStrip
  */
 @Keep
 @DoNotStrip
-@Suppress("KotlinJniMissingFunction")
 abstract class HybridObject {
     /**
      * Get the memory size of the Kotlin instance (plus any external heap allocations),
@@ -29,21 +28,20 @@ abstract class HybridObject {
      */
     @get:DoNotStrip
     @get:Keep
-    abstract val memorySize: ULong
+    abstract val memorySize: Long
 
     /**
-     * Contains the C++ context (Hybrid Data) for the fbjni C++ part.
+     * Holds the native C++ instance.
+     * In `HybridObject`, the C++ instance is a sub-class of `JHybridObject`, such as one of it's specs.
+     * This is `null`, until `updateNative(..)` is called.
      */
-    @DoNotStrip
-    @Keep
-    private val mHybridData: HybridData = initHybrid()
+    private var mHybridData: HybridData? = null
 
-    init {
-    }
-
-    private external fun initHybrid(): HybridData
-
-    companion object {
-        private const val TAG = "HybridObject"
+    /**
+     * Must be called in the constructor of a subclass of `HybridObject`, to initialize the C++
+     * `JHybridObject` with a subclass of it.
+     */
+    protected fun updateNative(hybridData: HybridData) {
+        mHybridData = hybridData
     }
 }

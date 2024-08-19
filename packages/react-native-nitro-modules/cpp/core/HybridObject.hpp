@@ -23,7 +23,7 @@ using namespace facebook;
  *
  * The new class can then be passed to JS using the `JSIConverter<HybridObject>`.
  */
-class HybridObject : public jsi::NativeState, public HybridObjectPrototype, public std::enable_shared_from_this<HybridObject> {
+class HybridObject : public virtual jsi::NativeState, public HybridObjectPrototype, public std::enable_shared_from_this<HybridObject> {
 public:
   /**
    * Create a new instance of a `HybridObject`.
@@ -38,11 +38,17 @@ public:
   /**
    * HybridObjects cannot be copied.
    */
-  HybridObject(const HybridObject& copy) = delete;
+  HybridObject(const HybridObject& copy) = default;
   /**
    * HybridObjects cannot be moved.
    */
-  HybridObject(HybridObject&& move) = delete;
+  HybridObject(HybridObject&& move) = default;
+  /**
+   * HybridObjects cannot be default-constructed!
+   */
+  HybridObject() {
+    throw std::runtime_error("Cannot default-construct HybridObject!");
+  }
 
 public:
   /**
@@ -60,7 +66,7 @@ public:
    */
   template <typename Derived>
   std::shared_ptr<Derived> shared() {
-    return std::static_pointer_cast<Derived>(shared_from_this());
+    return std::dynamic_pointer_cast<Derived>(shared_from_this());
   }
 
 public:

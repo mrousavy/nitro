@@ -52,13 +52,13 @@ namespace ${cxxNamespace} {
    * };
    * \`\`\`
    */
-  class ${name.HybridTSpec}: public HybridObject {
+  class ${name.HybridTSpec}: public virtual HybridObject {
     public:
       // Constructor
       explicit ${name.HybridTSpec}(): HybridObject(TAG) { }
 
       // Destructor
-      ~${name.HybridTSpec}() { }
+      virtual ~${name.HybridTSpec}() { }
 
     public:
       // Properties
