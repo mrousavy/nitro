@@ -1,5 +1,6 @@
 import type { BridgedType } from '../BridgedType.js'
 import { getHybridObjectName } from '../getHybridObjectName.js'
+import { getReferencedTypes } from '../getReferencedTypes.js'
 import type { SourceFile, SourceImport } from '../SourceFile.js'
 import { ArrayType } from '../types/ArrayType.js'
 import { EnumType } from '../types/EnumType.js'
@@ -73,11 +74,34 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
       }
     }
 
+    // Recursively look into referenced types (e.g. the `T` of a `optional<T>`, or `T` of a `T[]`)
+    const referencedTypes = getReferencedTypes(this.type)
+    referencedTypes.forEach((t) => {
+      if (t === this.type) {
+        // break a recursion - we already know this type
+        return
+      }
+      const bridged = new KotlinCxxBridgedType(t)
+      imports.push(...bridged.getRequiredImports())
+    })
+
     return imports
   }
 
   getExtraFiles(): SourceFile[] {
     const files: SourceFile[] = []
+
+    // Recursively look into referenced types (e.g. the `T` of a `optional<T>`, or `T` of a `T[]`)
+    const referencedTypes = getReferencedTypes(this.type)
+    referencedTypes.forEach((t) => {
+      if (t === this.type) {
+        // break a recursion - we already know this type
+        return
+      }
+      const bridged = new KotlinCxxBridgedType(t)
+      files.push(...bridged.getExtraFiles())
+    })
+
     return files
   }
 

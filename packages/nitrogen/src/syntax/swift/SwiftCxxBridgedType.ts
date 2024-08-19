@@ -19,7 +19,7 @@ import { StructType } from '../types/StructType.js'
 import { TupleType } from '../types/TupleType.js'
 import type { Type } from '../types/Type.js'
 import { VariantType } from '../types/VariantType.js'
-import { getReferencedTypes } from './getReferencedTypes.js'
+import { getReferencedTypes } from '../getReferencedTypes.js'
 import {
   createSwiftCxxHelpers,
   type SwiftCxxHelper,
