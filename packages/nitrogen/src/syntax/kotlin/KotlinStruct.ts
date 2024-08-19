@@ -61,6 +61,7 @@ namespace ${cxxNamespace} {
     /**
      * Convert this Java/Kotlin-based struct to the C++ struct ${structType.structName} by copying all values to C++.
      */
+    [[maybe_unused]]
     ${structType.structName} toCpp() {
       ${indent(jniStructInitializerBody, '      ')}
     }
@@ -69,6 +70,7 @@ namespace ${cxxNamespace} {
     /**
      * Create a Java/Kotlin-based struct by copying all values from the given C++ struct to Java.
      */
+    [[maybe_unused]]
     static jni::local_ref<J${structType.structName}::javaobject> fromCpp(const ${structType.structName}& value) {
       ${indent(cppStructInitializerBody, '      ')}
     }

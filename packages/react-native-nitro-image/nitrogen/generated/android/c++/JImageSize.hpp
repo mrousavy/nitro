@@ -26,6 +26,7 @@ namespace margelo::nitro::image {
     /**
      * Convert this Java/Kotlin-based struct to the C++ struct ImageSize by copying all values to C++.
      */
+    [[maybe_unused]]
     ImageSize toCpp() {
       static const auto clazz = javaClassStatic();
       static const auto fieldWidth = clazz->getField<double>("width");
@@ -42,6 +43,7 @@ namespace margelo::nitro::image {
     /**
      * Create a Java/Kotlin-based struct by copying all values from the given C++ struct to Java.
      */
+    [[maybe_unused]]
     static jni::local_ref<JImageSize::javaobject> fromCpp(const ImageSize& value) {
       return newInstance(
         std::move(value.width),
