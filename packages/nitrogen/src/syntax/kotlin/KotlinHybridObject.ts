@@ -44,14 +44,25 @@ import com.margelo.nitro.HybridObject
  */
 @DoNotStrip
 @Keep
+@Suppress("KotlinJniMissingFunction")
 abstract class ${name.HybridTSpec}: HybridObject() {
   protected val TAG = "${name.HybridTSpec}"
+
+  @DoNotStrip
+  val mHybridData: HybridData = initHybrid()
+
+  init {
+    // Pass it through to it's base class to represent inheritance to JHybridObject on C++ side
+    super.updateNative(mHybridData)
+  }
 
   // Properties
   ${indent(properties, '  ')}
 
   // Methods
   ${indent(methods, '  ')}
+
+  private external fun initHybrid(): HybridData
 
   companion object {
     private const val TAG = "${name.HybridTSpec}"

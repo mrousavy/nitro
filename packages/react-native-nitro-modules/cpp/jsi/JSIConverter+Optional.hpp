@@ -21,7 +21,7 @@ using namespace facebook;
 
 // std::optional<T> <> T | undefined
 template <typename TInner>
-struct JSIConverter<std::optional<TInner>> {
+struct JSIConverter<std::optional<TInner>> final {
   static inline std::optional<TInner> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
     if (arg.isUndefined() || arg.isNull()) {
       return std::nullopt;

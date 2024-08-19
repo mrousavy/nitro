@@ -7,8 +7,20 @@ export function capitalizeName(name: string): string {
   return name.charAt(0).toUpperCase() + name.slice(1)
 }
 
-export function indent(string: string, indentation: string): string {
-  return string.replaceAll('\n', `\n${indentation}`)
+export function createIndentation(spacesCount: number): string {
+  return Array.from(Array(spacesCount)).fill(' ').join('')
+}
+
+export function indent(string: string, spacesCount: number): string
+export function indent(string: string, indentation: string): string
+export function indent(string: string, indentation: string | number): string {
+  let spaces: string
+  if (typeof indentation === 'number') {
+    spaces = createIndentation(indentation)
+  } else {
+    spaces = indentation
+  }
+  return string.replaceAll('\n', `\n${spaces}`)
 }
 
 export function errorToString(error: unknown): string {

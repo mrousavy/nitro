@@ -126,6 +126,9 @@ In C++:
 ```cpp
 class HybridImage: public HybridImageSpec {
 public:
+  HybridImage(): HybridObject(TAG) { }
+
+public:
   double getWidth() override { return 13; }
   double getHeight() override { return 27; }
 };

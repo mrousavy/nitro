@@ -12,6 +12,9 @@
 namespace margelo::nitro::image {
 
 class HybridTestObject : public HybridTestObjectSpec {
+public:
+  HybridTestObject(): HybridObject(TAG) { }
+
 private:
   double _number;
   bool _bool;
@@ -81,12 +84,12 @@ public:
   int64_t calculateFibonacciSync(double value) override;
   std::future<int64_t> calculateFibonacciAsync(double value) override;
   std::future<void> wait(double seconds) override;
-  void callCallback(const std::function<void()>& callback);
-  void getValueFromJSCallback(const std::function<std::future<double>()>& getValue);
-  std::future<double> getValueFromJSCallbackAndWait(const std::function<std::future<double>()>& getValue);
-  void callAll(const std::function<void()>& first, const std::function<void()>& second, const std::function<void()>& third);
+  void callCallback(const std::function<void()>& callback) override;
+  void getValueFromJSCallback(const std::function<std::future<double>()>& getValue) override;
+  std::future<double> getValueFromJSCallbackAndWait(const std::function<std::future<double>()>& getValue) override;
+  void callAll(const std::function<void()>& first, const std::function<void()>& second, const std::function<void()>& third) override;
   std::future<void> getValueFromJsCallback(const std::function<std::future<std::string>()>& callback,
-                                           const std::function<void(const std::string& /* valueFromJs */)>& andThenCall);
+                                           const std::function<void(const std::string& /* valueFromJs */)>& andThenCall) override;
   Car getCar() override;
   bool isCarElectric(const Car& car) override;
   std::optional<Person> getDriver(const Car& car) override;

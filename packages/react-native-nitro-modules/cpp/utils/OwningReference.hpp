@@ -179,7 +179,10 @@ public:
   }
 
   inline bool operator!=(T* other) const {
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "Simplify"
     return !(this == other);
+#pragma clang diagnostic pop
   }
 
   inline bool operator==(const OwningReference<T>& other) const {
@@ -187,7 +190,10 @@ public:
   }
 
   inline bool operator!=(const OwningReference<T>& other) const {
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "Simplify"
     return !(this == other);
+#pragma clang diagnostic pop
   }
 
 private:

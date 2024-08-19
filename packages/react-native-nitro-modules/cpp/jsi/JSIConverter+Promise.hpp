@@ -30,7 +30,7 @@ using namespace facebook;
 
 // std::future<T> <> Promise<T>
 template <typename TResult>
-struct JSIConverter<std::future<TResult>> {
+struct JSIConverter<std::future<TResult>> final {
   static inline std::future<TResult> fromJSI(jsi::Runtime&, const jsi::Value&) {
     throw std::runtime_error("Promise cannot be converted to a native type - it needs to be awaited first!");
   }
@@ -84,7 +84,7 @@ struct JSIConverter<std::future<TResult>> {
     });
   }
 
-  static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
+  static inline bool canConvert(jsi::Runtime&, const jsi::Value&) {
     throw std::runtime_error("jsi::Value of type Promise cannot be converted to std::future yet!");
   }
 };

@@ -36,9 +36,9 @@ enum class FunctionType { METHOD, GETTER, SETTER };
  */
 class HybridFunction final {
 private:
-  std::string _name;
-  size_t _paramCount;
   jsi::HostFunctionType _function;
+  size_t _paramCount;
+  std::string _name;
 
 public:
   // getters
@@ -92,7 +92,8 @@ public:
         }
       }
 #endif
-      std::shared_ptr<Derived> hybridInstance = thisObject.getNativeState<Derived>(runtime);
+      std::shared_ptr<jsi::NativeState> nativeState = thisObject.getNativeState(runtime);
+      std::shared_ptr<Derived> hybridInstance = std::dynamic_pointer_cast<Derived>(nativeState);
 
       // 2. Make sure the given arguments match, either with a static size, or with potentially optional arguments size.
       constexpr size_t optionalArgsCount = trailing_optionals_count_v<Args...>;

@@ -22,7 +22,7 @@ using namespace facebook;
 
 // std::vector<T> <> T[]
 template <typename ElementType>
-struct JSIConverter<std::vector<ElementType>> {
+struct JSIConverter<std::vector<ElementType>> final {
   static inline std::vector<ElementType> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
     jsi::Array array = arg.asObject(runtime).asArray(runtime);
     size_t length = array.size(runtime);
