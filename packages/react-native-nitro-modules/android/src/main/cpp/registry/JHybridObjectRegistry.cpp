@@ -7,7 +7,7 @@
 
 #include "JHybridObjectRegistry.hpp"
 #include "HybridObjectRegistry.hpp"
-#include "JNISharedPtr.h"
+#include "JNISharedPtr.hpp"
 
 namespace margelo::nitro {
 

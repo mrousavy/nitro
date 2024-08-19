@@ -26,8 +26,20 @@ private:
 };
 
 class JNISharedPtr {
+private:
+    template <typename T, template <typename, typename...> class Base>
+    struct is_base_template_of {
+        template <typename U>
+        static std::true_type test(Base<U>*) {}
+
+        template <typename>
+        static std::false_type test(...) {}
+
+        static constexpr bool value = decltype(test<T>(nullptr))::value;
+    };
+
 public:
-  template <typename T, typename std::enable_if<std::is_base_of<jni::HybridClass<T>, T>::value>::type* = nullptr>
+  template <typename T, typename std::enable_if<is_base_template_of<T, jni::HybridClass>::value, int>::type = 0>
   static std::shared_ptr<T> make_shared_from_jni(jni::global_ref<typename T::javaobject> ref) {
     return std::shared_ptr<T>(ref->cthis(), GlobalRefDeleter<T>{ref});
   }

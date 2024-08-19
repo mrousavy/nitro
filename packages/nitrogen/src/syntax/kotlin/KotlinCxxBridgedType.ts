@@ -60,6 +60,11 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
           name: `${name.JHybridTSpec}.hpp`,
           space: 'user',
         })
+        imports.push({
+          language: 'c++',
+          name: 'NitroModules/JNISharedPtr.hpp',
+          space: 'system',
+        })
         break
       }
       case 'function': {
@@ -164,9 +169,19 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
 
   parseFromKotlinToCpp(
     parameterName: string,
-    _language: 'kotlin' | 'c++'
+    language: 'kotlin' | 'c++'
   ): string {
     switch (this.type.kind) {
+      case 'hybrid-object': {
+        switch (language) {
+          case 'c++':
+            const hybrid = getTypeAs(this.type, HybridObjectType)
+            const name = getHybridObjectName(hybrid.hybridObjectName)
+            return `JNISharedPtr::make_shared_from_jni<${name.JHybridTSpec}>(jni::make_global(${parameterName}))`
+          default:
+            return parameterName
+        }
+      }
       default:
         // no need to parse anything, just return as is
         return parameterName
