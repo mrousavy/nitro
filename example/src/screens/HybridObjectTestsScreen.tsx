@@ -4,20 +4,14 @@ import { StyleSheet, View, Text, ScrollView, Button } from 'react-native'
 import {
   HybridTestObject,
   ImageConstructors,
-  HybridSwiftKotlinTestObject,
+  HybridKotlinTestObject,
 } from 'react-native-nitro-image'
 import { getTests, type TestRunner } from '../getTests'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { logPrototypeChain } from '../logPrototypeChain'
 
 logPrototypeChain(HybridTestObject)
-logPrototypeChain(HybridSwiftKotlinTestObject)
-
-console.log('before async')
-HybridSwiftKotlinTestObject.getNumberAsync().then((c) => console.log('num:', c))
-HybridSwiftKotlinTestObject.getStringAsync().then((c) => console.log('str:', c))
-HybridSwiftKotlinTestObject.getCarAsync().then((c) => console.log('Car:', c))
-console.log('after async')
+logPrototypeChain(HybridKotlinTestObject)
 
 const allTests = getTests()
 

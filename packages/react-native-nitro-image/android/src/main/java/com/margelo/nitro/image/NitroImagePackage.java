@@ -28,6 +28,7 @@ public class NitroImagePackage extends TurboReactPackage {
       Log.i("YEET", "done ImageFactory!");
       return f;
     });
+    HybridObjectRegistry.registerHybridObjectConstructor("KotlinTestObject", KotlinTestObject::new);
   }
 
   @Override
