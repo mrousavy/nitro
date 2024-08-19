@@ -9,6 +9,9 @@ import { getTypeAs } from '../types/getTypeAs.js'
 import { HybridObjectType } from '../types/HybridObjectType.js'
 import { StructType } from '../types/StructType.js'
 import type { Type } from '../types/Type.js'
+import { createKotlinEnum } from './KotlinEnum.js'
+import { createKotlinFunction } from './KotlinFunction.js'
+import { createKotlinStruct } from './KotlinStruct.js'
 
 export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
   readonly type: Type
@@ -95,6 +98,24 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
 
   getExtraFiles(): SourceFile[] {
     const files: SourceFile[] = []
+
+    switch (this.type.kind) {
+      case 'enum':
+        const enumType = getTypeAs(this.type, EnumType)
+        const enumFiles = createKotlinEnum(enumType)
+        files.push(...enumFiles)
+        break
+      case 'struct':
+        const structType = getTypeAs(this.type, StructType)
+        const structFiles = createKotlinStruct(structType)
+        files.push(...structFiles)
+        break
+      case 'function':
+        const functionType = getTypeAs(this.type, FunctionType)
+        const funcFiles = createKotlinFunction(functionType)
+        files.push(...funcFiles)
+        break
+    }
 
     // Recursively look into referenced types (e.g. the `T` of a `optional<T>`, or `T` of a `T[]`)
     const referencedTypes = getReferencedTypes(this.type)

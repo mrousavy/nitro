@@ -5,10 +5,8 @@ import type { SourceFile } from '../SourceFile.js'
 import type { StructType } from '../types/StructType.js'
 import { KotlinCxxBridgedType } from './KotlinCxxBridgedType.js'
 
-export function createKotlinStruct(
-  packageName: string,
-  structType: StructType
-): SourceFile[] {
+export function createKotlinStruct(structType: StructType): SourceFile[] {
+  const packageName = NitroConfig.getAndroidPackage('java/kotlin')
   const values = structType.properties.map(
     (p) => `val ${p.escapedName}: ${p.getCode('kotlin')}`
   )
@@ -111,8 +109,10 @@ function createJNIStructInitializer(structType: StructType): string {
     )
   }
 
-  const propsForward = structType.properties.map((p) => p.escapedName)
-  // TODO: Properly convert C++ -> JNI (::javaobject)
+  const propsForward = structType.properties.map((p) => {
+    const bridged = new KotlinCxxBridgedType(p)
+    return bridged.parse(p.escapedName, 'kotlin', 'c++', 'c++')
+  })
   lines.push(`return ${structType.structName}(`)
   lines.push(`  ${indent(propsForward.join(',\n'), '  ')}`)
   lines.push(`);`)
@@ -125,9 +125,11 @@ function createCppStructInitializer(
 ): string {
   const lines: string[] = []
   lines.push(`return newInstance(`)
-  const names = structType.properties.map(
-    (p) => `${cppValueName}.${p.escapedName}`
-  )
+  const names = structType.properties.map((p) => {
+    const name = `${cppValueName}.${p.escapedName}`
+    const bridge = new KotlinCxxBridgedType(p)
+    return bridge.parse(name, 'c++', 'kotlin', 'c++')
+  })
   lines.push(`  ${indent(names.join(',\n'), '  ')}`)
   lines.push(');')
   return lines.join('\n')

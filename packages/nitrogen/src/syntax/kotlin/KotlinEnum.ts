@@ -4,11 +4,9 @@ import { createFileMetadataString } from '../helpers.js'
 import type { SourceFile } from '../SourceFile.js'
 import { EnumType } from '../types/EnumType.js'
 
-export function createKotlinEnum(
-  packageName: string,
-  enumType: EnumType
-): SourceFile[] {
+export function createKotlinEnum(enumType: EnumType): SourceFile[] {
   const members = enumType.enumMembers.map((m) => m.name.toUpperCase())
+  const packageName = NitroConfig.getAndroidPackage('java/kotlin')
   const code = `
 ${createFileMetadataString(`${enumType.enumName}.kt`)}
 

@@ -3,11 +3,9 @@ import { createFileMetadataString, toReferenceType } from '../helpers.js'
 import type { SourceFile } from '../SourceFile.js'
 import type { FunctionType } from '../types/FunctionType.js'
 
-export function createKotlinFunction(
-  packageName: string,
-  functionType: FunctionType
-): SourceFile[] {
+export function createKotlinFunction(functionType: FunctionType): SourceFile[] {
   const name = functionType.specializationName
+  const packageName = NitroConfig.getAndroidPackage('java/kotlin')
   const kotlinReturnType = functionType.returnType.getCode('kotlin')
   const kotlinParams = functionType.parameters.map(
     (p) => `${p.escapedName}: ${p.getCode('kotlin')}`

@@ -5,14 +5,8 @@ import { getHybridObjectName } from '../getHybridObjectName.js'
 import { createFileMetadataString } from '../helpers.js'
 import type { HybridObjectSpec } from '../HybridObjectSpec.js'
 import type { SourceFile } from '../SourceFile.js'
-import { EnumType } from '../types/EnumType.js'
-import { FunctionType } from '../types/FunctionType.js'
-import { getTypeAs } from '../types/getTypeAs.js'
-import { StructType } from '../types/StructType.js'
 import { createFbjniHybridObject } from './FbjniHybridObject.js'
-import { createKotlinEnum } from './KotlinEnum.js'
-import { createKotlinFunction } from './KotlinFunction.js'
-import { createKotlinStruct } from './KotlinStruct.js'
+import { KotlinCxxBridgedType } from './KotlinCxxBridgedType.js'
 
 export function createKotlinHybridObject(spec: HybridObjectSpec): SourceFile[] {
   const name = getHybridObjectName(spec.name)
@@ -85,27 +79,9 @@ abstract class ${name.HybridTSpec}: HybridObject() {
   const cppFiles = createFbjniHybridObject(spec)
 
   // 3. Create enums or structs in Kotlin
-  const allTypes = getAllTypes(spec)
-  const extraFiles: SourceFile[] = []
-  for (const type of allTypes) {
-    switch (type.kind) {
-      case 'enum':
-        const enumType = getTypeAs(type, EnumType)
-        const enumFiles = createKotlinEnum(javaPackage, enumType)
-        extraFiles.push(...enumFiles)
-        break
-      case 'struct':
-        const structType = getTypeAs(type, StructType)
-        const structFiles = createKotlinStruct(javaPackage, structType)
-        extraFiles.push(...structFiles)
-        break
-      case 'function':
-        const functionType = getTypeAs(type, FunctionType)
-        const funcFiles = createKotlinFunction(javaPackage, functionType)
-        extraFiles.push(...funcFiles)
-        break
-    }
-  }
+  const extraFiles = getAllTypes(spec)
+    .map((t) => new KotlinCxxBridgedType(t))
+    .flatMap((b) => b.getExtraFiles())
 
   const files: SourceFile[] = []
   files.push({
