@@ -25,10 +25,10 @@ abstract class HybridImageSpec: HybridObject() {
 
   @DoNotStrip
   @Keep
-  final override var mHybridData: HybridData? = initHybrid()
+  val mHybridData: HybridData = initHybrid()
 
   init {
-    super.mHybridData = mHybridData
+    super.updateNative(mHybridData)
   }
 
   // Properties

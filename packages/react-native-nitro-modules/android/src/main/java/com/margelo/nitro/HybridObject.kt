@@ -30,5 +30,18 @@ abstract class HybridObject {
     @get:Keep
     abstract val memorySize: Long
 
-    open var mHybridData: HybridData? = null
+    /**
+     * Holds the native C++ instance.
+     * In `HybridObject`, the C++ instance is a sub-class of `JHybridObject`, such as one of it's specs.
+     * This is `null`, until `updateNative(..)` is called.
+     */
+    private var mHybridData: HybridData? = null
+
+    /**
+     * Must be called in the constructor of a subclass of `HybridObject`, to initialize the C++
+     * `JHybridObject` with a subclass of it.
+     */
+    protected fun updateNative(hybridData: HybridData) {
+        mHybridData = hybridData
+    }
 }

@@ -20,15 +20,16 @@ import com.margelo.nitro.HybridObject
  */
 @DoNotStrip
 @Keep
+@Suppress("KotlinJniMissingFunction")
 abstract class HybridImageFactorySpec: HybridObject() {
   @Suppress("unused")
   protected val TAG = "HybridImageFactorySpec"
   @DoNotStrip
   @Keep
-  final override var mHybridData: HybridData? = initHybrid()
+  val mHybridData: HybridData = initHybrid()
 
   init {
-    super.mHybridData = mHybridData
+    super.updateNative(mHybridData)
   }
   // Properties
   
@@ -51,6 +52,7 @@ abstract class HybridImageFactorySpec: HybridObject() {
   abstract fun bounceBack(image: com.margelo.nitro.image.HybridImageSpec): com.margelo.nitro.image.HybridImageSpec
 
   private external fun initHybrid(): HybridData
+
   companion object {
     private const val TAG = "HybridImageFactorySpec"
     init {
