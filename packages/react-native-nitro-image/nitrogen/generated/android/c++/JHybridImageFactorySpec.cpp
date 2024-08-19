@@ -39,19 +39,22 @@ namespace margelo::nitro::image {
   // Methods
   std::shared_ptr<margelo::nitro::image::HybridImageSpec> JHybridImageFactorySpec::loadImageFromFile(const std::string& path) {
     static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<JHybridImageSpec::javaobject>(std::string)>("loadImageFromFile");
-    throw std::runtime_error("loadImageFromFile(...) is not yet implemented!");
+    auto result = method(_javaPart, path);
+    throw std::runtime_error("Cannot convert HybridImageSpec yet!");
   }
   std::shared_ptr<margelo::nitro::image::HybridImageSpec> JHybridImageFactorySpec::loadImageFromURL(const std::string& path) {
     static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<JHybridImageSpec::javaobject>(std::string)>("loadImageFromURL");
-    throw std::runtime_error("loadImageFromURL(...) is not yet implemented!");
+    auto result = method(_javaPart, path);
+      throw std::runtime_error("Cannot convert HybridImageSpec yet!");
   }
   std::shared_ptr<margelo::nitro::image::HybridImageSpec> JHybridImageFactorySpec::loadImageFromSystemName(const std::string& path) {
     static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<JHybridImageSpec::javaobject>(std::string)>("loadImageFromSystemName");
-    throw std::runtime_error("loadImageFromSystemName(...) is not yet implemented!");
+    auto result = method(_javaPart, path);
+      throw std::runtime_error("Cannot convert HybridImageSpec yet!");
   }
   std::shared_ptr<margelo::nitro::image::HybridImageSpec> JHybridImageFactorySpec::bounceBack(const std::shared_ptr<margelo::nitro::image::HybridImageSpec>& image) {
     static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<JHybridImageSpec::javaobject>(jni::alias_ref<JHybridImageSpec::javaobject>)>("bounceBack");
-    throw std::runtime_error("bounceBack(...) is not yet implemented!");
+      throw std::runtime_error("Cannot convert HybridImageSpec yet!");
   }
 
 } // namespace margelo::nitro::image

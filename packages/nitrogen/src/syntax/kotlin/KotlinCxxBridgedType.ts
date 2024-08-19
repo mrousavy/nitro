@@ -137,17 +137,39 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
   }
 
   parse(
-    _parameterName: string,
+    parameterName: string,
     from: 'c++' | 'kotlin',
     to: 'kotlin' | 'c++',
-    _inLanguage: 'kotlin' | 'c++'
+    inLanguage: 'kotlin' | 'c++'
   ): string {
     if (from === 'c++') {
-      throw new Error(`Cannot parse from ${from} to ${to}!`)
+      return this.parseFromCppToKotlin(parameterName, inLanguage)
     } else if (from === 'kotlin') {
-      throw new Error(`Cannot parse from ${from} to ${to}!`)
+      return this.parseFromKotlinToCpp(parameterName, inLanguage)
     } else {
-      throw new Error(`Cannot parse from ${from} to ${to}!`)
+      throw new Error(`Cannot parse "${parameterName}" from ${from} to ${to}!`)
+    }
+  }
+
+  parseFromCppToKotlin(
+    parameterName: string,
+    _language: 'kotlin' | 'c++'
+  ): string {
+    switch (this.type.kind) {
+      default:
+        // no need to parse anything, just return as is
+        return parameterName
+    }
+  }
+
+  parseFromKotlinToCpp(
+    parameterName: string,
+    _language: 'kotlin' | 'c++'
+  ): string {
+    switch (this.type.kind) {
+      default:
+        // no need to parse anything, just return as is
+        return parameterName
     }
   }
 }

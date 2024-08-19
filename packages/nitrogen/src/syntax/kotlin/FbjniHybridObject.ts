@@ -160,16 +160,33 @@ function getFbjniMethodForwardImplementation(
   const paramsTypes = paramsJNI.map((p) => p.getTypeCode('c++')).join(', ')
   const cxxSignature = `${returnType}(${paramsTypes})`
 
-  const body = `
+  const paramsForward = method.parameters.map((p) => {
+    const bridged = new KotlinCxxBridgedType(p.type)
+    return bridged.parse(p.name, 'kotlin', 'c++', 'c++')
+  })
+  paramsForward.unshift('_javaPart') // <-- first param is always Java `this`
+
+  let body: string
+  if (returnJNI.hasType) {
+    // return something - we need to parse it
+    body = `
 static const auto method = _javaPart->getClass()->getMethod<${cxxSignature}>("${method.name}");
-throw std::runtime_error("${method.name}(...) is not yet implemented!");
-  `.trim()
+auto result = method(${paramsForward.join(', ')});
+return ${returnJNI.parse('result', 'kotlin', 'c++', 'c++')};
+    `
+  } else {
+    // void method. no return
+    body = `
+static const auto method = _javaPart->getClass()->getMethod<${cxxSignature}>("${method.name}");
+method(${paramsForward.join(', ')});
+   `
+  }
   const code = method.getCode(
     'c++',
     {
       classDefinitionName: name.JHybridTSpec,
     },
-    body
+    body.trim()
   )
   return code
 }

@@ -32,11 +32,12 @@ namespace margelo::nitro::image {
   // Properties
   double JHybridKotlinTestObjectSpec::getNumberValue() {
     static const auto method = _javaPart->getClass()->getMethod<double()>("getNumberValue");
-    throw std::runtime_error("getNumberValue(...) is not yet implemented!");
+    auto result = method(_javaPart);
+    return result;
   }
   void JHybridKotlinTestObjectSpec::setNumberValue(double numberValue) {
     static const auto method = _javaPart->getClass()->getMethod<void(double)>("setNumberValue");
-    throw std::runtime_error("setNumberValue(...) is not yet implemented!");
+    method(_javaPart, numberValue);
   }
 
   // Methods

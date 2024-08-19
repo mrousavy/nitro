@@ -45,29 +45,32 @@ namespace margelo::nitro::image {
   // Properties
   ImageSize JHybridImageSpec::getSize() {
     static const auto method = _javaPart->getClass()->getMethod<JImageSize()>("getSize");
-    throw std::runtime_error("getSize(...) is not yet implemented!");
+    auto result = method(_javaPart);
+    throw std::runtime_error("Cannot convert ImageSize yet!");
   }
   PixelFormat JHybridImageSpec::getPixelFormat() {
     static const auto method = _javaPart->getClass()->getMethod<JPixelFormat()>("getPixelFormat");
-    throw std::runtime_error("getPixelFormat(...) is not yet implemented!");
+    auto result = method(_javaPart);
+      throw std::runtime_error("Cannot convert PixelFormat yet!");
   }
   double JHybridImageSpec::getSomeSettableProp() {
     static const auto method = _javaPart->getClass()->getMethod<double()>("getSomeSettableProp");
-    throw std::runtime_error("getSomeSettableProp(...) is not yet implemented!");
+    auto result = method(_javaPart);
+    return result;
   }
   void JHybridImageSpec::setSomeSettableProp(double someSettableProp) {
     static const auto method = _javaPart->getClass()->getMethod<void(double)>("setSomeSettableProp");
-    throw std::runtime_error("setSomeSettableProp(...) is not yet implemented!");
+    method(_javaPart, someSettableProp);
   }
 
   // Methods
   double JHybridImageSpec::toArrayBuffer(ImageFormat format) {
     static const auto method = _javaPart->getClass()->getMethod<double(JImageFormat)>("toArrayBuffer");
-    throw std::runtime_error("toArrayBuffer(...) is not yet implemented!");
+      throw std::runtime_error("Cannot convert ArrayBuffer yet!");
   }
   void JHybridImageSpec::saveToFile(const std::string& path, const std::function<void(const std::string& /* path */)>& onFinished) {
     static const auto method = _javaPart->getClass()->getMethod<void(std::string, jni::alias_ref<JFunc_void_std__string::javaobject>)>("saveToFile");
-    throw std::runtime_error("saveToFile(...) is not yet implemented!");
+      throw std::runtime_error("Cannot convert Function yet!");
   }
 
 } // namespace margelo::nitro::image
