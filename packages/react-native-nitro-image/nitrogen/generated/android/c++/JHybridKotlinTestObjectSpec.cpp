@@ -36,7 +36,7 @@ namespace margelo::nitro::image {
     return result;
   }
   void JHybridKotlinTestObjectSpec::setNumberValue(double numberValue) {
-      static const auto some = _javaPart->getClass()->getMethod<JFunction<int, double>()>("getCallable");
+      static const auto some = _javaPart->getClass()->getMethod<JFunction()>("getCallable");
       auto fun = some(_javaPart);
       int result = fun->call(55.0);
 

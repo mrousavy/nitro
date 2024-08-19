@@ -16,17 +16,16 @@ namespace margelo::nitro {
 using namespace facebook;
 
 
-template <typename R, typename... Args>
-struct JFunction: public jni::JavaClass<JFunction<R, Args...>> {
+struct JFunction: public jni::JavaClass<JFunction> {
 public:
     static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/functions/Function1;";
 
-    using Signature = R(Args...);
-    using Java = jni::JavaClass<JFunction<R, Args...>>;
-
-    R call(Args&&... args) {
-        static const auto method = Java::javaClassLocal()->template getMethod<Signature>("call");
-        return method(Java::self(), std::forward<Args>(args)...);
+    int call(double value) {
+        static const auto method = javaClassLocal()->getMethod<jobject(jobject)>("call");
+        jni::local_ref<jni::JObject> valueBoxed = jni::autobox(value);
+        jni::local_ref<jni::JObject> returnBoxed = method(self(), valueBoxed.get());
+        jni::local_ref<jni::JInteger> returnInt = jni::static_ref_cast<jni::JInteger>(returnBoxed);
+        return returnInt->value();
     }
 };
 
