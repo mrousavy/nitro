@@ -1,8 +1,10 @@
 package com.margelo.nitro.image
 
+import android.graphics.Bitmap
+
 class ImageFactory: HybridImageFactorySpec() {
     override fun loadImageFromFile(path: String): HybridImageSpec {
-        throw Error("loadImageFromFile(..) is not yet implemented!")
+        return Image(Bitmap.createBitmap(1920, 1080, Bitmap.Config.ARGB_8888))
     }
 
     override fun loadImageFromURL(path: String): HybridImageSpec {

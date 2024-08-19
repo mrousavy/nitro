@@ -210,6 +210,15 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
             return parameterName
         }
       }
+      case 'function': {
+        switch (language) {
+          case 'c++':
+            const func = getTypeAs(this.type, FunctionType)
+            return `${func.specializationName}::fromCpp(${parameterName})`
+          default:
+            return parameterName
+        }
+      }
       default:
         // no need to parse anything, just return as is
         return parameterName
@@ -221,15 +230,9 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
     language: 'kotlin' | 'c++'
   ): string {
     switch (this.type.kind) {
-      case 'struct': {
-        switch (language) {
-          case 'c++':
-            return `${parameterName}->toCpp()`
-          default:
-            return parameterName
-        }
-      }
-      case 'enum': {
+      case 'struct':
+      case 'enum':
+      case 'function': {
         switch (language) {
           case 'c++':
             return `${parameterName}->toCpp()`
