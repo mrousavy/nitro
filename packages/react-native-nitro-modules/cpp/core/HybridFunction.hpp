@@ -32,6 +32,11 @@ using namespace facebook;
 enum class FunctionType { METHOD, GETTER, SETTER };
 
 /**
+ * Represents signature of raw JSI Host Function
+ */
+using RawJSIMethod = std::tuple<jsi::Runtime&, const jsi::Value&, const jsi::Value*, size_t>;
+
+/**
  * Represents a Hybrid Function.
  */
 class HybridFunction final {
@@ -98,7 +103,11 @@ public:
       constexpr size_t optionalArgsCount = trailing_optionals_count_v<Args...>;
       constexpr size_t maxArgsCount = sizeof...(Args);
       constexpr size_t minArgsCount = maxArgsCount - optionalArgsCount;
-      bool isWithinArgsRange = (count >= minArgsCount && count <= maxArgsCount);
+
+      // we shouldn't statically validate the number of arguments for raw JSI functions.
+      constexpr bool isRawJSIMethod = std::is_same_v<std::tuple<Args...>, RawJSIMethod>;
+
+      bool isWithinArgsRange = (count >= minArgsCount && count <= maxArgsCount) || isRawJSIMethod;
       if (!isWithinArgsRange) [[unlikely]] {
         // invalid amount of arguments passed!
         std::string hybridObjectName = hybridInstance->getName();
@@ -118,7 +127,7 @@ public:
         if constexpr (std::is_same_v<ReturnType, jsi::Value>) {
           // If the return type is a jsi::Value, we assume the user wants full JSI code control.
           // The signature must be identical to jsi::HostFunction (jsi::Runtime&, jsi::Value& this, ...)
-          return (hybridInstance->*method)(runtime, thisValue, args, count);
+          return (hybridInstance.get()->*method)(runtime, thisValue, args, count);
         } else {
           // Call the actual method with JSI values as arguments and return a JSI value again.
           // Internally, this method converts the JSI values to C++ values.
