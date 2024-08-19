@@ -167,7 +167,7 @@ The following C++ / JS types are supported out of the box:
     <td><code>T?</code></td>
     <td><code>std::optional&lt;T&gt;</code></td>
     <td><code>T?</code></td>
-    <td>❌</td>
+    <td><code>T?</code></td>
   </tr>
   <tr>
     <td><code>Promise&lt;T&gt;</code></td>
