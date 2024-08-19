@@ -55,6 +55,14 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
           space: 'user',
         })
         break
+      case 'function':
+        const functionType = getTypeAs(this.type, FunctionType)
+        imports.push({
+          language: 'c++',
+          name: `J${functionType.specializationName}.hpp`,
+          space: 'user',
+        })
+        break
       case 'hybrid-object': {
         const hybridObjectType = getTypeAs(this.type, HybridObjectType)
         const name = getHybridObjectName(hybridObjectType.hybridObjectName)
@@ -67,16 +75,6 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
           language: 'c++',
           name: 'NitroModules/JNISharedPtr.hpp',
           space: 'system',
-        })
-        break
-      }
-      case 'function': {
-        const functionType = getTypeAs(this.type, FunctionType)
-        const name = functionType.specializationName
-        imports.push({
-          language: 'c++',
-          name: `J${name}.hpp`,
-          space: 'user',
         })
         break
       }
@@ -147,15 +145,13 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
       case 'struct':
         const structType = getTypeAs(this.type, StructType)
         return `jni::alias_ref<J${structType.structName}>`
+      case 'function':
+        const functionType = getTypeAs(this.type, FunctionType)
+        return `jni::alias_ref<J${functionType.specializationName}::javaobject>`
       case 'hybrid-object': {
         const hybridObjectType = getTypeAs(this.type, HybridObjectType)
         const name = getHybridObjectName(hybridObjectType.hybridObjectName)
         return `jni::alias_ref<${name.JHybridTSpec}::javaobject>`
-      }
-      case 'function': {
-        const functionType = getTypeAs(this.type, FunctionType)
-        const name = functionType.specializationName
-        return `jni::alias_ref<J${name}::javaobject>`
       }
       default:
         return this.type.getCode(language)
@@ -200,21 +196,21 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
             return parameterName
         }
       }
+      case 'function': {
+        switch (language) {
+          case 'c++':
+            const func = getTypeAs(this.type, FunctionType)
+            return `J${func.specializationName}::fromCpp(${parameterName})`
+          default:
+            return parameterName
+        }
+      }
       case 'hybrid-object': {
         switch (language) {
           case 'c++':
             const hybrid = getTypeAs(this.type, HybridObjectType)
             const name = getHybridObjectName(hybrid.hybridObjectName)
             return `std::static_pointer_cast<${name.JHybridTSpec}>(${parameterName})->getJavaPart()`
-          default:
-            return parameterName
-        }
-      }
-      case 'function': {
-        switch (language) {
-          case 'c++':
-            const func = getTypeAs(this.type, FunctionType)
-            return `${func.specializationName}::fromCpp(${parameterName})`
           default:
             return parameterName
         }
