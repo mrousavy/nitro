@@ -26,7 +26,7 @@ namespace margelo::nitro::image {
     /**
      * Convert this Java/Kotlin-based enum to the C++ enum ImageFormat.
      */
-    ImageFormat toImageFormat() {
+    ImageFormat toCpp() {
       static const auto clazz = javaClassStatic();
       static const auto fieldOrdinal = clazz->getField<int>("ordinal");
       int ordinal = this->getFieldValue(fieldOrdinal);
@@ -37,7 +37,7 @@ namespace margelo::nitro::image {
     /**
      * Create a Java/Kotlin-based enum with the given C++ enum's value.
      */
-    static jni::alias_ref<JImageFormat> create(ImageFormat value) {
+    static jni::alias_ref<JImageFormat> fromCpp(ImageFormat value) {
       static const auto clazz = javaClassStatic();
       static const auto fieldJPG = clazz->getStaticField<JImageFormat>("JPG");
       static const auto fieldPNG = clazz->getStaticField<JImageFormat>("PNG");

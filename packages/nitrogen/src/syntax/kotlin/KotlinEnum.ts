@@ -57,7 +57,7 @@ namespace ${cxxNamespace} {
     /**
      * Convert this Java/Kotlin-based enum to the C++ enum ${enumType.enumName}.
      */
-    ${enumType.enumName} to${enumType.enumName}() {
+    ${enumType.enumName} toCpp() {
       static const auto clazz = javaClassStatic();
       static const auto fieldOrdinal = clazz->getField<int>("ordinal");
       int ordinal = this->getFieldValue(fieldOrdinal);
@@ -68,7 +68,7 @@ namespace ${cxxNamespace} {
     /**
      * Create a Java/Kotlin-based enum with the given C++ enum's value.
      */
-    static jni::alias_ref<J${enumType.enumName}> create(${enumType.enumName} value) {
+    static jni::alias_ref<J${enumType.enumName}> fromCpp(${enumType.enumName} value) {
       ${indent(cppToJniConverterCode, '      ')}
     }
   };

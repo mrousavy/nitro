@@ -78,7 +78,7 @@ namespace ${cxxNamespace} {
    */
   struct J${name}: public jni::HybridClass<J${name}> {
   public:
-    static jni::local_ref<J${name}::javaobject> create(const ${typename}& func) {
+    static jni::local_ref<J${name}::javaobject> fromCpp(const ${typename}& func) {
       return J${name}::newObjectCxxArgs(func);
     }
 
