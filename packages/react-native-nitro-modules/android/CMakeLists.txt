@@ -16,6 +16,7 @@ file(GLOB_RECURSE android_files RELATIVE ${CMAKE_SOURCE_DIR}
 add_library(NitroModules SHARED
             ${shared_files}
             ${android_files}
+            src/main/cpp/platform/NitroLogger.cpp
 )
 
 # Specifies a path to native header files.

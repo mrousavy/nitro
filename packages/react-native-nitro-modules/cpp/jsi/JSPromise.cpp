@@ -38,7 +38,7 @@ void JSPromise::resolve(jsi::Runtime& runtime, jsi::Value&& result) {
   OwningLock<jsi::Function> lock = _resolver.lock();
 
   if (!_resolver) {
-    Logger::log(TAG, "Promise resolver function has already been deleted! Ignoring call..");
+    Logger::log(LogLevel::Error, TAG, "Promise resolver function has already been deleted! Ignoring call..");
     return;
   }
   _resolver->call(runtime, std::move(result));
@@ -48,7 +48,7 @@ void JSPromise::reject(jsi::Runtime& runtime, std::string message) {
   OwningLock<jsi::Function> lock = _rejecter.lock();
 
   if (!_rejecter) {
-    Logger::log(TAG, "Promise rejecter function has already been deleted! Ignoring call..");
+    Logger::log(LogLevel::Error, TAG, "Promise rejecter function has already been deleted! Ignoring call..");
     return;
   }
   jsi::JSError error(runtime, message);

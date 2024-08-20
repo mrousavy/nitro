@@ -39,7 +39,7 @@ public:
     }
 
     // Slow path - we need to create a new HybridObject that wraps our Swift implementation.
-    Logger::log(TAG, "Creating new HybridObject<%s> for %s...", TypeInfo::getFriendlyTypename<THybridObject>(),
+    Logger::log(LogLevel::Info, TAG, "Creating new HybridObject<%s> for %s...", TypeInfo::getFriendlyTypename<THybridObject>(),
                 TypeInfo::getFriendlyTypename<TSwiftPart>());
     hybridObject = std::make_shared<THybridObject>(std::forward<decltype(swiftPart)>(swiftPart));
     hybridContext.cppPart = hybridObject;

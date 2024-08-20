@@ -29,7 +29,7 @@ std::vector<std::string> HybridObjectRegistry::getAllHybridObjectNames() {
 }
 
 void HybridObjectRegistry::registerHybridObjectConstructor(const std::string& hybridObjectName, HybridObjectConstructorFn&& constructorFn) {
-  Logger::log(TAG, "Registering HybridObject \"%s\"...", hybridObjectName);
+  Logger::log(LogLevel::Info, TAG, "Registering HybridObject \"%s\"...", hybridObjectName.c_str());
   auto& map = HybridObjectRegistry::getRegistry();
 #ifndef NDEBUG
   if (map.contains(hybridObjectName)) [[unlikely]] {
@@ -43,7 +43,7 @@ void HybridObjectRegistry::registerHybridObjectConstructor(const std::string& hy
   }
 #endif
   map.insert({hybridObjectName, std::move(constructorFn)});
-  Logger::log(TAG, "Successfully registered HybridObject \"%s\"!", hybridObjectName);
+  Logger::log(LogLevel::Info, TAG, "Successfully registered HybridObject \"%s\"!", hybridObjectName.c_str());
 }
 
 std::shared_ptr<HybridObject> HybridObjectRegistry::createHybridObject(const std::string& hybridObjectName) {

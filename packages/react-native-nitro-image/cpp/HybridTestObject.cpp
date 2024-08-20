@@ -112,7 +112,7 @@ void HybridTestObject::simpleFunc() {
 }
 
 void HybridTestObject::multipleArguments(double num, const std::string& str, bool boo) {
-  Logger::log(TAG, "Arguments received! num: %d | str: %s | boo: %i", num, str, boo);
+  Logger::log(LogLevel::Info, TAG, "Arguments received! num: %d | str: %s | boo: %i", num, str.c_str(), boo);
 }
 
 std::shared_ptr<AnyMap> HybridTestObject::createMap() {

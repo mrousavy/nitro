@@ -24,7 +24,7 @@ inline void destroyReferences(const std::vector<BorrowingReference<T>>& referenc
 }
 
 JSICache::~JSICache() {
-  Logger::log(TAG, "Destroying JSICache...");
+  Logger::log(LogLevel::Info, TAG, "Destroying JSICache...");
   std::unique_lock lock(_mutex);
 
   destroyReferences(_objectCache);
@@ -43,7 +43,7 @@ JSICacheReference JSICache::getOrCreateCache(jsi::Runtime& runtime) {
       // It's still alive! Return it
       return JSICacheReference(strong);
     }
-    Logger::log(TAG, "JSICache was created, but it is no longer strong!");
+    Logger::log(LogLevel::Warning, TAG, "JSICache was created, but it is no longer strong!");
   }
 
 #ifndef NDEBUG
@@ -53,7 +53,7 @@ JSICacheReference JSICache::getOrCreateCache(jsi::Runtime& runtime) {
 #endif
 
   // Cache doesn't exist yet.
-  Logger::log(TAG, "Creating new JSICache<T> for runtime %s..", getRuntimeId(runtime));
+  Logger::log(LogLevel::Info, TAG, "Creating new JSICache<T> for runtime %s..", getRuntimeId(runtime).c_str());
   // Create new cache
   auto nativeState = std::shared_ptr<JSICache>(new JSICache(&runtime));
   // Wrap it in a jsi::Value using NativeState

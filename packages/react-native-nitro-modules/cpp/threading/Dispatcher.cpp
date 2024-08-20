@@ -11,7 +11,7 @@ static constexpr auto GLOBAL_DISPATCHER_HOLDER_NAME = "__nitroDispatcher";
 std::unordered_map<jsi::Runtime*, std::weak_ptr<Dispatcher>> Dispatcher::_globalCache;
 
 void Dispatcher::installRuntimeGlobalDispatcher(jsi::Runtime& runtime, std::shared_ptr<Dispatcher> dispatcher) {
-  Logger::log(TAG, "Installing global Dispatcher Holder into Runtime \"%s\"...", getRuntimeId(runtime));
+  Logger::log(LogLevel::Info, TAG, "Installing global Dispatcher Holder into Runtime \"%s\"...", getRuntimeId(runtime).c_str());
 
   // Store a weak reference in global cache
   _globalCache[&runtime] = std::weak_ptr(dispatcher);
@@ -33,7 +33,7 @@ std::shared_ptr<Dispatcher> Dispatcher::getRuntimeGlobalDispatcher(jsi::Runtime&
     }
   }
 
-  Logger::log(TAG, "Unknown Runtime (%s), looking for Dispatcher through JSI global lookup...", getRuntimeId(runtime));
+  Logger::log(LogLevel::Warning, TAG, "Unknown Runtime (%s), looking for Dispatcher through JSI global lookup...", getRuntimeId(runtime).c_str());
   jsi::Value dispatcherHolderValue = getRuntimeGlobalDispatcherHolder(runtime);
   jsi::Object dispatcherHolder = dispatcherHolderValue.getObject(runtime);
   return dispatcherHolder.getNativeState<Dispatcher>(runtime);
