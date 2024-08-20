@@ -30,7 +30,7 @@ jsi::Value HybridObjectPrototype::createPrototype(jsi::Runtime& runtime, const s
 
   // 2. We didn't find the given prototype in cache (either it's a new prototype, or a new runtime),
   //    so we need to create it. First, we need some helper methods from JS
-  Logger::log(TAG, "Creating new JS prototype for C++ instance type \"%s\"...", prototype->getNativeInstanceId().name());
+  Logger::log(LogLevel::Info, TAG, "Creating new JS prototype for C++ instance type \"%s\"...", prototype->getNativeInstanceId().name());
   jsi::Object objectConstructor = runtime.global().getPropertyAsObject(runtime, "Object");
   jsi::Function objectCreate = objectConstructor.getPropertyAsFunction(runtime, "create");
   jsi::Function objectDefineProperty = objectConstructor.getPropertyAsFunction(runtime, "defineProperty");

@@ -47,7 +47,7 @@ struct JSIConverter<std::function<ReturnType(Args...)>> final {
       std::shared_ptr<Dispatcher> dispatcher = weakDispatcher.lock();
       if (!dispatcher) {
         if constexpr (std::is_void_v<ResultingType>) {
-          Logger::log("JSIConverter", "Tried calling void(..) function, but the JS Dispatcher has already been deleted by JS!");
+          Logger::log(LogLevel::Error, "JSIConverter", "Tried calling void(..) function, but the JS Dispatcher has already been deleted by JS!");
           return;
         } else {
           throw std::runtime_error("Cannot call the given Function - the JS Dispatcher has already been destroyed by the JS Runtime!");
@@ -95,7 +95,7 @@ private:
     if (!function) {
       if constexpr (std::is_void_v<ResultingType>) {
         // runtime has already been deleted. since this returns void, we can just ignore it being deleted.
-        Logger::log("JSIConverter", "Tried calling void(..) function, but it has already been deleted by JS!");
+        Logger::log(LogLevel::Error, "JSIConverter", "Tried calling void(..) function, but it has already been deleted by JS!");
         return;
       } else {
         // runtime has already been deleted, but we are expecting a return value - throw an error in this case.
