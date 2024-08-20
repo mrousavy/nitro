@@ -24,7 +24,7 @@ struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_v<T, jsi::NativeState>>
   using TPointee = typename T::element_type;
 
   static inline T fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
-#if DEBUG
+#ifndef NDEBUG
     if (!arg.isObject()) [[unlikely]] {
       if (arg.isUndefined()) [[unlikely]] {
         throw jsi::JSError(runtime, invalidTypeErrorMessage("undefined", "It is undefined!"));
@@ -36,7 +36,7 @@ struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_v<T, jsi::NativeState>>
 #endif
     jsi::Object object = arg.asObject(runtime);
 
-#if DEBUG
+#ifndef NDEBUG
     if (!object.hasNativeState<TPointee>(runtime)) [[unlikely]] {
       if (!object.hasNativeState(runtime)) [[unlikely]] {
         std::string stringRepresentation = arg.toString(runtime).utf8(runtime);

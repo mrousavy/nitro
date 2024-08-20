@@ -76,24 +76,28 @@ public:
                                                               /* JS arguments */ const jsi::Value* args,
                                                               /* argument size */ size_t count) -> jsi::Value {
     // 1. Get actual `HybridObject` instance from `thisValue` (it's stored as `NativeState`)
-#if DEBUG
+#ifndef NDEBUG
       if (!thisValue.isObject()) [[unlikely]] {
         throw jsi::JSError(runtime, "Cannot call hybrid function " + name + "(...) - `this` is not bound!");
       }
 #endif
       jsi::Object thisObject = thisValue.getObject(runtime);
 
-#if DEBUG
-      if (!thisObject.hasNativeState<Derived>(runtime)) [[unlikely]] {
-        if (thisObject.hasNativeState(runtime)) {
-          throw jsi::JSError(runtime, "Cannot call hybrid function " + name + "(...) - `this` has a NativeState, but it's the wrong type!");
-        } else {
-          throw jsi::JSError(runtime, "Cannot call hybrid function " + name + "(...) - `this` does not have a NativeState!");
-        }
+#ifndef NDEBUG
+      if (!thisObject.hasNativeState(runtime)) [[unlikely]] {
+        throw jsi::JSError(runtime, "Cannot call hybrid function " + name +
+                                        "(...) - `this` does not have a NativeState! "
+                                        "Did you accidentally call " +
+                                        name + "(...) on the prototype directly?");
       }
 #endif
       std::shared_ptr<jsi::NativeState> nativeState = thisObject.getNativeState(runtime);
       std::shared_ptr<Derived> hybridInstance = std::dynamic_pointer_cast<Derived>(nativeState);
+#ifndef NDEBUG
+      if (hybridInstance == nullptr) [[unlikely]] {
+        throw jsi::JSError(runtime, "Cannot call hybrid function " + name + "(...) - `this` has a NativeState, but it's the wrong type!");
+      }
+#endif
 
       // 2. Make sure the given arguments match, either with a static size, or with potentially optional arguments size.
       constexpr size_t optionalArgsCount = trailing_optionals_count_v<Args...>;

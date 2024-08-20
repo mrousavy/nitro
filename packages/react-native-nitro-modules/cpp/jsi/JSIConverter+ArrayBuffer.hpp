@@ -32,7 +32,7 @@ struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_v<T, jsi::MutableBuffer
   static inline std::shared_ptr<ArrayBuffer> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
     jsi::Object object = arg.asObject(runtime);
 
-#if DEBUG
+#ifndef NDEBUG
     if (!object.isArrayBuffer(runtime)) [[unlikely]] {
       throw std::runtime_error("Object \"" + arg.toString(runtime).utf8(runtime) +
                                "\" is not an ArrayBuffer! "

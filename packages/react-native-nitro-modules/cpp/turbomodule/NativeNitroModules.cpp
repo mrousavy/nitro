@@ -34,7 +34,7 @@ jsi::Value NativeNitroModules::get(jsi::Runtime& runtime, const jsi::PropNameID&
     return jsi::Function::createFromHostFunction(
         runtime, jsi::PropNameID::forUtf8(runtime, "createHybridObject"), 2,
         [this](jsi::Runtime& runtime, const jsi::Value& thisArg, const jsi::Value* args, size_t count) -> jsi::Value {
-#if DEBUG
+#ifndef NDEBUG
           if (count != 1 && count != 2) [[unlikely]] {
             throw jsi::JSError(runtime, "NitroModules.createHybridObject(..) expects 1 or 2 arguments, but " + std::to_string(count) +
                                             " were supplied!");
@@ -53,7 +53,7 @@ jsi::Value NativeNitroModules::get(jsi::Runtime& runtime, const jsi::PropNameID&
     return jsi::Function::createFromHostFunction(
         runtime, jsi::PropNameID::forUtf8(runtime, "hasHybridObject"), 1,
         [this](jsi::Runtime& runtime, const jsi::Value& thisArg, const jsi::Value* args, size_t count) -> jsi::Value {
-#if DEBUG
+#ifndef NDEBUG
           if (count != 1) [[unlikely]] {
             throw jsi::JSError(runtime,
                                "NitroModules.hasHybridObject(..) expects 1 argument (name), but received " + std::to_string(count) + "!");
