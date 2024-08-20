@@ -3,7 +3,7 @@
   "packageManager": "bun@1.1.21",
   "private": true,
   "version": "0.5.0",
-  "repository": "https://github.com/mrousavy/react-native-nitro.git",
+  "repository": "https://github.com/mrousavy/nitro.git",
   "author": "Marc Rousavy <me@mrousavy.com> (https://github.com/mrousavy)",
   "scripts": {
     "check-all": "./scripts/clang-format.sh",

@@ -40,14 +40,14 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mrousavy/react-native-nitro.git"
+    "url": "git+https://github.com/mrousavy/nitro.git"
   },
   "author": "Marc Rousavy <me@mrousavy.com> (https://github.com/mrousavy)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/mrousavy/react-native-nitro/issues"
+    "url": "https://github.com/mrousavy/nitro/issues"
   },
-  "homepage": "https://github.com/mrousavy/react-native-nitro#readme",
+  "homepage": "https://github.com/mrousavy/nitro#readme",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },
