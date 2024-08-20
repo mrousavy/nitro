@@ -10,54 +10,112 @@
 #include <fbjni/fbjni.h>
 #include <functional>
 #include <utility>
-#include <NitroModules/ArrayBuffer.hpp>
+#include "ArrayBuffer.hpp"
 #include <fbjni/ByteBuffer.h>
+#include "ByteBufferArrayBuffer.hpp"
 
 namespace margelo::nitro {
 
 using namespace facebook;
 
 /**
- * Represents a Java `ArrayBuffer` that holds a `ByteBuffer`.
- * This is a owning Buffer, coming from Java.
+ * Represents a JS-based `ArrayBuffer` that can either hold a `ByteBuffer` (owning),
+ * or unknown/foreign memory, potentially from JS (non-owning).
  */
-struct JArrayBuffer : public jni::HybridClass<JArrayBuffer>,
-                      public ArrayBuffer {
+struct JArrayBuffer : public jni::HybridClass<JArrayBuffer> {
 public:
-  static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/core/ArrayBuffer;";
-  static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis,
-                                                jni::alias_ref<jni::JByteBuffer> byteBuffer) {
-      return makeCxxInstance(jThis, byteBuffer);
-  }
+    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/core/ArrayBuffer;";
 
 public:
-    uint8_t* data() override {
-        return _byteBuffer->getDirectBytes();
+    /**
+     * Create a new `JArrayBuffer` that wraps the given ArrayBuffer.
+     */
+    static jni::local_ref<JArrayBuffer::javaobject> wrap(const std::shared_ptr<ArrayBuffer>& arrayBuffer) {
+        return newObjectCxxArgs(arrayBuffer);
     }
-    size_t size() const override {
-        return _byteBuffer->getDirectSize();
+
+public:
+    /**
+     * Create a new `JArrayBuffer` that wraps the given `By
+     */
+    static jni::local_ref<JArrayBuffer::jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis,
+                                                                jni::alias_ref<jni::JByteBuffer> buffer) {
+        return makeCxxInstance(buffer);
     }
-    bool isOwner() const noexcept override {
-        return true;
+
+public:
+    /**
+     * Get whether the `ArrayBuffer` is holding data from a `ByteBuffer`.
+     */
+    bool getIsByteBuffer() {
+        auto byteBufferArrayBuffer = std::dynamic_pointer_cast<ByteBufferArrayBuffer>(_arrayBuffer);
+        return byteBufferArrayBuffer != nullptr;
+    }
+
+    /**
+     * Get whether the `ArrayBuffer` is owning the data and can safely hold onto it longer.
+     */
+    bool getIsOwner() {
+        return _arrayBuffer->isOwner();
+    }
+
+    /**
+     * Get the `ArrayBuffer`'s data as a `ByteBuffer`.
+     *
+     * - If the `ArrayBuffer` was created from a `ByteBuffer` (`isByteBuffer()`), this returns
+     * a reference to the original `ByteBuffer`, which is safe to be kept in memory for longer.
+     * - If the `ArrayBuffer` was created elsewhere (either in JS, or in C++), it does not have a
+     * `ByteBuffer`. In this case, `getBuffer()` will **copy** the data into a new `ByteBuffer` if
+     * `copyIfNeeded` is `true`, and **wrap** the data into a new `ByteBuffer` if `copyIfNeeded` is false.
+     */
+    jni::alias_ref<jni::JByteBuffer> getByteBuffer(bool copyIfNeeded) {
+        auto byteBufferArrayBuffer = std::dynamic_pointer_cast<ByteBufferArrayBuffer>(_arrayBuffer);
+        if (byteBufferArrayBuffer != nullptr) {
+            // It is a `ByteBufferArrayBuffer`, which has a `ByteBuffer` underneath!
+            return byteBufferArrayBuffer->getBuffer();
+        } else {
+            // It is a different kind of `ArrayBuffer`, we need to copy or wrap the data.
+            size_t size = _arrayBuffer->size();
+            if (copyIfNeeded) {
+                auto buffer = jni::JByteBuffer::allocateDirect(size);
+                buffer->order(jni::JByteOrder::bigEndian());
+                memcpy(buffer->getDirectAddress(), _arrayBuffer->data(), size);
+                return buffer;
+            } else {
+                auto buffer = jni::JByteBuffer::wrapBytes(_arrayBuffer->data(), size);
+                buffer->order(jni::JByteOrder::bigEndian());
+                return buffer;
+            }
+        }
+    }
+
+public:
+    /**
+     * Get the underlying `ArrayBuffer`.
+     */
+    std::shared_ptr<ArrayBuffer> getArrayBuffer() const {
+        return _arrayBuffer;
     }
 
 private:
-    JArrayBuffer(jni::alias_ref<jhybridobject> jThis,
-                 jni::alias_ref<jni::JByteBuffer> byteBuffer):
-                       _javaPart(jni::make_global(jThis)),
-                       _byteBuffer(jni::make_global(byteBuffer)) {}
+    JArrayBuffer(const std::shared_ptr<ArrayBuffer>& arrayBuffer): _arrayBuffer(arrayBuffer) {}
+    JArrayBuffer(jni::alias_ref<jni::JByteBuffer> byteBuffer) {
+        _arrayBuffer = std::make_shared<ByteBufferArrayBuffer>(byteBuffer);
+    }
 
 private:
     friend HybridBase;
     using HybridBase::HybridBase;
-    jni::global_ref<javaobject> _javaPart;
-    jni::global_ref<jni::JByteBuffer> _byteBuffer;
+    std::shared_ptr<ArrayBuffer> _arrayBuffer;
 
 public:
     static void registerNatives() {
-        registerHybrid({
-                               makeNativeMethod("initHybrid", JArrayBuffer::initHybrid)
-        });
+      registerHybrid({
+        makeNativeMethod("initHybrid", JArrayBuffer::initHybrid),
+        makeNativeMethod("getByteBuffer", JArrayBuffer::getByteBuffer),
+        makeNativeMethod("getIsByteBuffer", JArrayBuffer::getIsByteBuffer),
+        makeNativeMethod("getIsOwner", JArrayBuffer::getIsOwner)
+      });
     }
 };
 
