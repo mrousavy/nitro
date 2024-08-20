@@ -16,7 +16,7 @@ class KotlinTestObject: HybridKotlinTestObjectSpec() {
         get() = 0
 
     init {
-        someBuffer = ArrayBuffer(ByteBuffer.allocate(1024 * 1024))
+        someBuffer = ArrayBuffer(ByteBuffer.allocateDirect(1024 * 1024))
     }
 
     // Methods

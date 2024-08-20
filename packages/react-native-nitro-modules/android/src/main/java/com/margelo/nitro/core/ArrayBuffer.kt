@@ -62,6 +62,10 @@ class ArrayBuffer {
      * The `ByteBuffer` needs to remain valid for as long as the `ArrayBuffer` is alive.
      */
     constructor(byteBuffer: ByteBuffer) {
+        if (!byteBuffer.isDirect) {
+            throw Error("ArrayBuffers can only be created from direct ByteBuffers, " +
+                    "and the given ByteBuffer is not direct!")
+        }
         mHybridData = initHybrid(byteBuffer)
     }
 
