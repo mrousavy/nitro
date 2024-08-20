@@ -12,7 +12,7 @@ import android.util.Log
 import androidx.annotation.Keep
 import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
-import com.margelo.nitro.HybridObject
+import com.margelo.nitro.core.HybridObject
 
 /**
  * A Kotlin class representing the ImageFactory HybridObject.

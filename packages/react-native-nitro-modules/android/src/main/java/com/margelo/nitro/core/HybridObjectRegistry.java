@@ -1,4 +1,6 @@
-package com.margelo.nitro;
+package com.margelo.nitro.core;
+
+import com.margelo.nitro.JNIOnLoad;
 
 /**
  * A registry that holds initializers for HybridObjects.
