@@ -18,6 +18,4 @@ public class HybridObjectRegistry {
      * JS using `NitroModules.createHybridObject<T>(name)` - which will call the `constructorFn` here.
      */
     public static native void registerHybridObjectConstructor(String hybridObjectName, HybridObjectInitializer initializer);
-
-    private static final String TAG = "HybridObjectRegistry";
 }
