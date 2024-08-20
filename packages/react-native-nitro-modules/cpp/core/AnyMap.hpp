@@ -49,13 +49,13 @@ public:
 
 public:
   /**
-   * Create a new shared_ptr instance of AnyMap.
+   * Create a new `shared_ptr` instance of AnyMap.
    */
   static std::shared_ptr<AnyMap> make() {
     return std::make_shared<AnyMap>();
   }
   /**
-   * Create a new shared_ptr instance of AnyMap with the given amount of spaces pre-allocated.
+   * Create a new `shared_ptr` instance of AnyMap with the given amount of spaces pre-allocated.
    */
   static std::shared_ptr<AnyMap> make(size_t size) {
     return std::make_shared<AnyMap>(size);

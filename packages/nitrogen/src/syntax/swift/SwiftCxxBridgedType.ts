@@ -87,6 +87,9 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
       case 'promise':
         // PromiseHolder<T> <> std::shared_ptr<std::promise<T>>
         return true
+      case 'map':
+        // AnyMapHolder <> AnyMap
+        return true
       default:
         return false
     }
@@ -223,6 +226,14 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
             throw new Error(`Invalid language! ${language}`)
         }
       }
+      case 'map': {
+        switch (language) {
+          case 'swift':
+            return 'margelo.nitro.TSharedMap'
+          default:
+            return this.type.getCode(language)
+        }
+      }
       case 'optional':
       case 'array':
       case 'function':
@@ -343,6 +354,14 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
         switch (language) {
           case 'swift':
             return `${cppParameterName}.map({ val in ${wrapping.parseFromCppToSwift('val', 'swift')} })`.trim()
+          default:
+            return cppParameterName
+        }
+      }
+      case 'map': {
+        switch (language) {
+          case 'swift':
+            return `AnyMapHolder(withCppPart: ${cppParameterName})`
           default:
             return cppParameterName
         }
@@ -505,6 +524,14 @@ case ${i}:
         switch (language) {
           case 'c++':
             return `${swiftParameterName}.getArrayBuffer()`
+          default:
+            return swiftParameterName
+        }
+      }
+      case 'map': {
+        switch (language) {
+          case 'swift':
+            return `${swiftParameterName}.cppPart`
           default:
             return swiftParameterName
         }
