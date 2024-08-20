@@ -19,8 +19,25 @@ console.log('image:', image)
 image.saveToFile('somePath', (p) => console.log(`Image saved to ${p}!`))
 
 console.log(HybridKotlinTestObject)
-console.log(HybridKotlinTestObject.numberValue)
-console.log((HybridKotlinTestObject.numberValue = 55))
+console.log(HybridKotlinTestObject.primitiveArray)
+console.log((HybridKotlinTestObject.primitiveArray = [55, 13, 7]))
+
+console.log(HybridKotlinTestObject)
+console.log(HybridKotlinTestObject.carCollection)
+HybridKotlinTestObject.carCollection = [
+  {
+    make: 'Lamborghini',
+    model: 'Huracan',
+    power: 640,
+    powertrain: 'gas',
+    year: 2018,
+    driver: {
+      age: 24,
+      name: 'marc',
+    },
+  },
+]
+console.log(HybridKotlinTestObject.carCollection)
 
 const allTests = getTests()
 

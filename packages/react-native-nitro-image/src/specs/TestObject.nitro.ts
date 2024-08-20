@@ -150,4 +150,7 @@ export interface SwiftKotlinTestObject extends HybridObject<{ ios: 'swift' }> {
 export interface KotlinTestObject extends HybridObject<{ android: 'kotlin' }> {
   numberValue: number
   optionalNumber?: number
+
+  primitiveArray: number[]
+  carCollection: Car[]
 }

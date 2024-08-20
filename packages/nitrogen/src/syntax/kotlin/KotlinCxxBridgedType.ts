@@ -131,6 +131,19 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
     return files
   }
 
+  asJniReferenceType(referenceType: 'alias' | 'local' | 'global' = 'alias') {
+    switch (this.type.kind) {
+      case 'void':
+      case 'number':
+      case 'boolean':
+      case 'bigint':
+        // primitives are not references
+        return this.getTypeCode('c++')
+      default:
+        return `jni::${referenceType}_ref<${this.getTypeCode('c++')}>`
+    }
+  }
+
   getTypeCode(language: 'kotlin' | 'c++'): string {
     if (language !== 'c++') {
       // In Kotlin, we just use the normal Kotlin types directly.
@@ -138,22 +151,33 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
     }
     switch (this.type.kind) {
       case 'array':
-        const arrayType = getTypeAs(this.type, ArrayType)
-        const bridged = new KotlinCxxBridgedType(arrayType.itemType)
-        return `jni::alias_ref<JCollection<${bridged.getTypeCode(language)}>>`
+        const array = getTypeAs(this.type, ArrayType)
+        switch (array.itemType.kind) {
+          case 'number':
+            return 'jni::JArrayDouble'
+          case 'boolean':
+            return 'jni::JArrayBoolean'
+          case 'bigint':
+            return 'jni::JArrayLong'
+          default:
+            const bridged = new KotlinCxxBridgedType(array.itemType)
+            return `jni::JArrayClass<${bridged.getTypeCode(language)}>`
+        }
+      case 'string':
+        return 'jni::JString'
       case 'enum':
         const enumType = getTypeAs(this.type, EnumType)
-        return `jni::alias_ref<J${enumType.enumName}>`
+        return `J${enumType.enumName}`
       case 'struct':
         const structType = getTypeAs(this.type, StructType)
-        return `jni::alias_ref<J${structType.structName}>`
+        return `J${structType.structName}`
       case 'function':
         const functionType = getTypeAs(this.type, FunctionType)
-        return `jni::alias_ref<J${functionType.specializationName}::javaobject>`
+        return `J${functionType.specializationName}::javaobject`
       case 'hybrid-object': {
         const hybridObjectType = getTypeAs(this.type, HybridObjectType)
         const name = getHybridObjectName(hybridObjectType.hybridObjectName)
-        return `jni::alias_ref<${name.JHybridTSpec}::javaobject>`
+        return `${name.JHybridTSpec}::javaobject`
       }
       case 'optional': {
         const optional = getTypeAs(this.type, OptionalType)
@@ -163,7 +187,7 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
           case 'boolean':
           case 'bigint':
             const boxed = getKotlinBoxedPrimitiveType(optional.wrappingType)
-            return `jni::alias_ref<${boxed}>`
+            return boxed
           default:
             // all other types can be nullable as they are objects.
             const bridge = new KotlinCxxBridgedType(optional.wrappingType)
@@ -202,10 +226,13 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
         if (isBoxed) {
           // box a primitive (double) to an object (JDouble)
           const boxed = getKotlinBoxedPrimitiveType(this.type)
-          return `${boxed}::valueOf(${parameterName}.value())`
+          return `${boxed}::valueOf(${parameterName})`
         } else {
           return parameterName
         }
+      }
+      case 'string': {
+        return `jni::make_jstring(${parameterName})`
       }
       case 'struct': {
         switch (language) {
@@ -249,9 +276,44 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
         const bridge = new KotlinCxxBridgedType(optional.wrappingType)
         switch (language) {
           case 'c++':
-            return `${parameterName}.has_value() ? ${bridge.parseFromCppToKotlin(parameterName, 'c++', true)} : nullptr`
+            return `${parameterName}.has_value() ? ${bridge.parseFromCppToKotlin(`${parameterName}.value()`, 'c++', true)} : nullptr`
           default:
             return parameterName
+        }
+      }
+      case 'array': {
+        const array = getTypeAs(this.type, ArrayType)
+        const arrayType = this.getTypeCode('c++')
+        const bridge = new KotlinCxxBridgedType(array.itemType)
+        switch (array.itemType.kind) {
+          case 'number':
+          case 'boolean':
+          case 'bigint': {
+            // primitive arrays can be constructed more efficiently with region/batch access.
+            // no need to iterate through the entire array.
+            return `
+[&]() {
+  size_t size = ${parameterName}.size();
+  jni::local_ref<${arrayType}> array = ${arrayType}::newArray(size);
+  array->setRegion(0, size, ${parameterName}.data());
+  return array;
+}()
+`.trim()
+          }
+          default: {
+            // other arrays need to loop through
+            return `
+[&]() {
+  size_t size = ${parameterName}.size();
+  jni::local_ref<${arrayType}> array = ${arrayType}::newArray(size);
+  for (size_t i = 0; i < size; i++) {
+    auto element = ${parameterName}[i];
+    array->setElement(i, *${bridge.parseFromCppToKotlin('element', 'c++')});
+  }
+  return array;
+}()
+            `.trim()
+          }
         }
       }
       default:
@@ -276,6 +338,8 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
           return parameterName
         }
       }
+      case 'string':
+        return `${parameterName}->toStdString()`
       case 'struct':
       case 'enum':
       case 'function': {
@@ -309,6 +373,43 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
             return `${parameterName} != nullptr ? std::make_optional(${parsed}) : std::nullopt`
           default:
             return parameterName
+        }
+      }
+      case 'array': {
+        const array = getTypeAs(this.type, ArrayType)
+        const bridge = new KotlinCxxBridgedType(array.itemType)
+        const itemType = array.itemType.getCode('c++')
+        switch (array.itemType.kind) {
+          case 'number':
+          case 'boolean':
+          case 'bigint': {
+            // primitive arrays can use region/batch access,
+            // which we can use to construct the vector directly instead of looping through it.
+            return `
+[&]() {
+  size_t size = ${parameterName}->size();
+  std::vector<${itemType}> vector;
+  vector.reserve(size);
+  ${parameterName}->getRegion(0, size, vector.data());
+  return vector;
+}()
+`.trim()
+          }
+          default: {
+            // other arrays need to loop through
+            return `
+[&]() {
+  size_t size = ${parameterName}->size();
+  std::vector<${itemType}> vector;
+  vector.reserve(size);
+  for (size_t i = 0; i < size; i++) {
+    auto element = ${parameterName}->getElement(i);
+    vector.push_back(${bridge.parseFromKotlinToCpp('element', 'c++')});
+  }
+  return vector;
+}()
+            `.trim()
+          }
         }
       }
       default:

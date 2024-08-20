@@ -27,7 +27,16 @@ export class ArrayType implements Type {
       case 'swift':
         return `[${itemCode}]`
       case 'kotlin':
-        return `Collection<${itemCode}>`
+        switch (this.itemType.kind) {
+          case 'number':
+            return 'DoubleArray'
+          case 'boolean':
+            return 'BooleanArray'
+          case 'bigint':
+            return 'LongArray'
+          default:
+            return `Array<${itemCode}>`
+        }
       default:
         throw new Error(
           `Language ${language} is not yet supported for ArrayType!`
