@@ -76,25 +76,26 @@ public:
                                                               /* JS arguments */ const jsi::Value* args,
                                                               /* argument size */ size_t count) -> jsi::Value {
     // 1. Get actual `HybridObject` instance from `thisValue` (it's stored as `NativeState`)
-#if DEBUG
+#ifndef NDEBUG
       if (!thisValue.isObject()) [[unlikely]] {
         throw jsi::JSError(runtime, "Cannot call hybrid function " + name + "(...) - `this` is not bound!");
       }
 #endif
       jsi::Object thisObject = thisValue.getObject(runtime);
 
-#if DEBUG
+#ifndef NDEBUG
       if (!thisObject.hasNativeState(runtime)) [[unlikely]] {
-          throw jsi::JSError(runtime, "Cannot call hybrid function " + name + "(...) - `this` does not have a NativeState! "
-                                       "Did you accidentally call " + name + "(...) on the prototype directly?");
+        throw jsi::JSError(runtime, "Cannot call hybrid function " + name +
+                                        "(...) - `this` does not have a NativeState! "
+                                        "Did you accidentally call " +
+                                        name + "(...) on the prototype directly?");
       }
 #endif
       std::shared_ptr<jsi::NativeState> nativeState = thisObject.getNativeState(runtime);
       std::shared_ptr<Derived> hybridInstance = std::dynamic_pointer_cast<Derived>(nativeState);
-
-#if DEBUG
+#ifndef NDEBUG
       if (hybridInstance == nullptr) [[unlikely]] {
-          throw jsi::JSError(runtime, "Cannot call hybrid function " + name + "(...) - `this` has a NativeState, but it's the wrong type!");
+        throw jsi::JSError(runtime, "Cannot call hybrid function " + name + "(...) - `this` has a NativeState, but it's the wrong type!");
       }
 #endif
 

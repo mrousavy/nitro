@@ -112,7 +112,7 @@ jsi::Value HybridObject::toObject(jsi::Runtime& runtime) {
   // 6. Set memory size so Hermes GC knows about actual memory
   object.setExternalMemoryPressure(runtime, getExternalMemorySize());
 
-#if DEBUG
+#ifndef NDEBUG
   // 7. Assign a private __type property for debugging - this will be used so users know it's not just an empty object.
   object.setProperty(runtime, "__type", jsi::String::createFromUtf8(runtime, "NativeState<" + std::string(_name) + ">"));
 #endif

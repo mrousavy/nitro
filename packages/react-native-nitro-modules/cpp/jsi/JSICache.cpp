@@ -46,7 +46,7 @@ JSICacheReference JSICache::getOrCreateCache(jsi::Runtime& runtime) {
     Logger::log(TAG, "JSICache was created, but it is no longer strong!");
   }
 
-#if DEBUG
+#ifndef NDEBUG
   if (runtime.global().hasProperty(runtime, CACHE_PROP_NAME)) [[unlikely]] {
     throw std::runtime_error("The Runtime \"" + getRuntimeId(runtime) + "\" already has a global cache! (\"" + CACHE_PROP_NAME + "\")");
   }

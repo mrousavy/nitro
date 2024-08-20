@@ -40,7 +40,7 @@ std::shared_ptr<Dispatcher> Dispatcher::getRuntimeGlobalDispatcher(jsi::Runtime&
 }
 
 jsi::Value Dispatcher::getRuntimeGlobalDispatcherHolder(jsi::Runtime& runtime) {
-#if DEBUG
+#ifndef NDEBUG
   if (!runtime.global().hasProperty(runtime, GLOBAL_DISPATCHER_HOLDER_NAME)) {
     throw std::runtime_error("Failed to get current Dispatcher - the global Dispatcher "
                              "holder (global." +
