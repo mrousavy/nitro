@@ -18,6 +18,26 @@ public enum AnyValue {
   case string(String)
   case array([AnyValue])
   case object(Dictionary<String, AnyValue>)
+
+  static func create(_ value: margelo.nitro.AnyValue) -> AnyValue {
+    if margelo.nitro.is_AnyValue_null(value) {
+      return .null
+    } else if margelo.nitro.is_AnyValue_bool(value) {
+      return .bool(margelo.nitro.get_AnyValue_bool(value))
+    } else if margelo.nitro.is_AnyValue_number(value) {
+      return .number(margelo.nitro.get_AnyValue_number(value))
+    } else if margelo.nitro.is_AnyValue_bigint(value) {
+      return .bigint(margelo.nitro.get_AnyValue_bigint(value))
+    } else if margelo.nitro.is_AnyValue_string(value) {
+      return .string(margelo.nitro.get_AnyValue_string(value).toSwift())
+    } else if margelo.nitro.is_AnyValue_AnyArray(value) {
+      return .array(margelo.nitro.get_AnyValue_AnyArray(value).toSwift())
+    } else if margelo.nitro.is_AnyValue_AnyObject(value) {
+      return .object(margelo.nitro.get_AnyValue_AnyObject(value).toSwift())
+    } else {
+      fatalError("AnyValue has unknown type!")
+    }
+  }
 }
 
 /**
@@ -25,196 +45,196 @@ public enum AnyValue {
  */
 public class AnyMapHolder {
   let _cppPart: margelo.nitro.TSharedMap
-  
-  init() {
+
+  public init() {
     _cppPart = margelo.nitro.AnyMap.make()
   }
-  
-  init(withPreallocatedSize size: Int) {
+
+  public init(withPreallocatedSize size: Int) {
     _cppPart = margelo.nitro.AnyMap.make(size)
   }
-  
+
   // pragma MARK: Common Operations
-  
+
   /**
    * Returns whether the given key exists in the map.
    */
-  func contains(key: String) -> Bool {
+  public func contains(key: String) -> Bool {
     return _cppPart.pointee.contains(std.string(key))
   }
-  
+
   /**
    * Removes the given key from the map.
    */
-  func remove(key: String) {
+  public func remove(key: String) {
     _cppPart.pointee.remove(std.string(key))
   }
-  
+
   /**
    * Removes all keys in this map.
    */
-  func clear() {
+  public func clear() {
     _cppPart.pointee.clear()
   }
-  
+
   // pragma MARK: Getters
-  
+
   /**
    * Gets the double value at the given key.
    * If no value exists at the given key, or if it is not a double,
    * this function throws.
    */
-  func getDouble(key: String) -> Double {
+  public func getDouble(key: String) -> Double {
     return _cppPart.pointee.getDouble(std.string(key))
   }
-  
+
   /**
    * Gets the double value at the given key.
    * If no value exists at the given key, or if it is not a double,
    * this function throws.
    */
-  func getBoolean(key: String) -> Bool {
+  public func getBoolean(key: String) -> Bool {
     return _cppPart.pointee.getBoolean(std.string(key))
   }
-  
+
   /**
    * Gets the double value at the given key.
    * If no value exists at the given key, or if it is not a double,
    * this function throws.
    */
-  func getBigInt(key: String) -> Int64 {
+  public func getBigInt(key: String) -> Int64 {
     return _cppPart.pointee.getBigInt(std.string(key))
   }
-  
+
   /**
    * Gets the double value at the given key.
    * If no value exists at the given key, or if it is not a double,
    * this function throws.
    */
-  func getString(key: String) -> String {
+  public func getString(key: String) -> String {
     let value = _cppPart.pointee.getString(std.string(key))
     return String(value)
   }
-  
+
   /**
    * Gets the double value at the given key.
    * If no value exists at the given key, or if it is not a double,
    * this function throws.
    */
-  func getArray(key: String) -> [AnyValue] {
+  public func getArray(key: String) -> [AnyValue] {
     let value = _cppPart.pointee.getArray(std.string(key))
     return value.toSwift()
   }
-  
+
   /**
    * Gets the double value at the given key.
    * If no value exists at the given key, or if it is not a double,
    * this function throws.
    */
-  func getObject(key: String) -> Dictionary<String, AnyValue> {
+  public func getObject(key: String) -> Dictionary<String, AnyValue> {
     let value = _cppPart.pointee.getObject(std.string(key))
     return value.toSwift()
   }
-  
+
   // pragma MARK: Setters
-  
+
   /**
    * Set the given key to `null`.
    */
-  func setNull(key: String) {
+  public func setNull(key: String) {
     _cppPart.pointee.setNull(std.string(key))
   }
-  
+
   /**
    * Set the given key to the given double value.
    */
-  func setDouble(key: String, value: Double) {
+  public func setDouble(key: String, value: Double) {
     _cppPart.pointee.setDouble(std.string(key), value)
   }
-  
+
   /**
    * Set the given key to the given boolean value.
    */
-  func setBoolean(key: String, value: Bool) {
+  public func setBoolean(key: String, value: Bool) {
     _cppPart.pointee.setBoolean(std.string(key), value)
   }
-  
+
   /**
    * Set the given key to the given bigint value.
    */
-  func setBigInt(key: String, value: Int64) {
+  public func setBigInt(key: String, value: Int64) {
     _cppPart.pointee.setBigInt(std.string(key), value)
   }
-  
+
   /**
    * Set the given key to the given string value.
    */
-  func setString(key: String, value: String) {
+  public func setString(key: String, value: String) {
     _cppPart.pointee.setString(std.string(key), std.string(value))
   }
-  
+
   /**
    * Set the given key to the given array value.
    */
-  func setArray(key: String, value: [AnyValue]) {
+  public func setArray(key: String, value: [AnyValue]) {
     _cppPart.pointee.setArray(std.string(key), margelo.nitro.AnyArray.create(value))
   }
-  
+
   /**
    * Set the given key to the given object value.
    */
-  func setObject(key: String, value: Dictionary<String, AnyValue>) {
+  public func setObject(key: String, value: Dictionary<String, AnyValue>) {
     _cppPart.pointee.setObject(std.string(key), margelo.nitro.AnyObject.create(value))
   }
-  
+
   // pragma MARK: Is Getters
-  
+
   /**
    * Gets whether the given `key` is holding a null value, or not.
    */
-  func isNull(key: String) -> Bool {
+  public func isNull(key: String) -> Bool {
     return _cppPart.pointee.isNull(std.string(key))
   }
-  
+
   /**
    * Gets whether the given `key` is holding a double value, or not.
    */
-  func isDouble(key: String) -> Bool {
+  public func isDouble(key: String) -> Bool {
     return _cppPart.pointee.isDouble(std.string(key))
   }
-  
+
   /**
    * Gets whether the given `key` is holding a boolean value, or not.
    */
-  func isBool(key: String) -> Bool {
+  public func isBool(key: String) -> Bool {
     return _cppPart.pointee.isBoolean(std.string(key))
   }
-  
+
   /**
    * Gets whether the given `key` is holding a bigint value, or not.
    */
-  func isBigInt(key: String) -> Bool {
+  public func isBigInt(key: String) -> Bool {
     return _cppPart.pointee.isBigInt(std.string(key))
   }
-  
+
   /**
    * Gets whether the given `key` is holding a string value, or not.
    */
-  func isString(key: String) -> Bool {
+  public func isString(key: String) -> Bool {
     return _cppPart.pointee.isString(std.string(key))
   }
-  
+
   /**
    * Gets whether the given `key` is holding a array value, or not.
    */
-  func isArray(key: String) -> Bool {
+  public func isArray(key: String) -> Bool {
     return _cppPart.pointee.isArray(std.string(key))
   }
-  
+
   /**
    * Gets whether the given `key` is holding a object value, or not.
    */
-  func isObject(key: String) -> Bool {
+  public func isObject(key: String) -> Bool {
     return _cppPart.pointee.isObject(std.string(key))
   }
 }
@@ -271,30 +291,6 @@ extension std.string {
   }
 }
 
-// pragma MARK: AnyValue extension
-
-extension AnyValue {
-  static func create(_ value: margelo.nitro.AnyValue) -> AnyValue {
-    if margelo.nitro.is_AnyValue_null(value) {
-      return .null
-    } else if margelo.nitro.is_AnyValue_bool(value) {
-      return .bool(margelo.nitro.get_AnyValue_bool(value))
-    } else if margelo.nitro.is_AnyValue_number(value) {
-      return .number(margelo.nitro.get_AnyValue_number(value))
-    } else if margelo.nitro.is_AnyValue_bigint(value) {
-      return .bigint(margelo.nitro.get_AnyValue_bigint(value))
-    } else if margelo.nitro.is_AnyValue_string(value) {
-      return .string(margelo.nitro.get_AnyValue_string(value).toSwift())
-    } else if margelo.nitro.is_AnyValue_AnyArray(value) {
-      return .array(margelo.nitro.get_AnyValue_AnyArray(value).toSwift())
-    } else if margelo.nitro.is_AnyValue_AnyObject(value) {
-      return .object(margelo.nitro.get_AnyValue_AnyObject(value).toSwift())
-    } else {
-      fatalError("AnyValue has unknown type!")
-    }
-  }
-}
-
 // pragma MARK: margelo.nitro.AnyArray extension
 
 extension margelo.nitro.AnyArray {
@@ -306,7 +302,7 @@ extension margelo.nitro.AnyArray {
     }
     return vector
   }
-  
+
   func toSwift() -> [AnyValue] {
     var array: [AnyValue] = []
     array.reserveCapacity(self.size())
@@ -328,12 +324,12 @@ extension margelo.nitro.AnyObject {
     }
     return object
   }
-  
+
   func toSwift() -> Dictionary<String, AnyValue> {
     let keys = margelo.nitro.getAnyObjectKeys(self)
     var dictionary = Dictionary<String, AnyValue>(minimumCapacity: keys.size())
     for key in keys {
-      
+
     }
     return dictionary
   }
