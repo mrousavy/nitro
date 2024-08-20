@@ -2,6 +2,15 @@ import { NitroConfig } from '../../config/NitroConfig.js'
 import { createFileMetadataString } from '../helpers.js'
 import type { SourceFile } from '../SourceFile.js'
 import type { FunctionType } from '../types/FunctionType.js'
+import { isArrayOfPrimitives, isPrimitive } from './KotlinBoxedPrimitive.js'
+
+function isFunctionPurelyPrimitive(func: FunctionType): boolean {
+  if (!isPrimitive(func.returnType) && !isArrayOfPrimitives(func.returnType)) {
+    // return type is not primitive (or array of primitives)
+    return false
+  }
+  return func.parameters.every((p) => isPrimitive(p) || isArrayOfPrimitives(p))
+}
 
 export function createKotlinFunction(functionType: FunctionType): SourceFile[] {
   const name = functionType.specializationName
@@ -11,6 +20,8 @@ export function createKotlinFunction(functionType: FunctionType): SourceFile[] {
     (p) => `${p.escapedName}: ${p.getCode('kotlin')}`
   )
   const lambdaTypename = `(${kotlinParams.join(', ')}) -> ${kotlinReturnType}`
+  const isPurelyPrimitive = isFunctionPurelyPrimitive(functionType)
+  const annotation = isPurelyPrimitive ? 'CriticalNative' : 'FastNative'
 
   const kotlinCode = `
 ${createFileMetadataString(`${name}.kt`)}
@@ -20,6 +31,7 @@ package ${packageName}
 import androidx.annotation.Keep
 import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
+import dalvik.annotation.optimization.${annotation}
 
 /**
  * Represents the JavaScript callback "${lambdaTypename}".
@@ -37,6 +49,7 @@ class ${name} @DoNotStrip @Keep private constructor(hybridData: HybridData) {
    * Call the given JS callback.
    * @throws Throwable if the JS function itself throws an error, or if the JS function/runtime has already been deleted.
    */
+  @${annotation}
   external fun call(${kotlinParams.join(', ')}): ${kotlinReturnType}
 }
   `.trim()
