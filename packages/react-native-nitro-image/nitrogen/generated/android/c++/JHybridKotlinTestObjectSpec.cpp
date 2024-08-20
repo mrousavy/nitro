@@ -47,6 +47,25 @@ namespace margelo::nitro::image {
   void JHybridKotlinTestObjectSpec::setOptionalNumber(std::optional<double> optionalNumber) {
     static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<jni::JDouble> /* optionalNumber */)>("setOptionalNumber");
     method(_javaPart, optionalNumber.has_value() ? jni::JDouble::valueOf(optionalNumber.value()) : nullptr);
+  std::vector<double> JHybridKotlinTestObjectSpec::getPrimitiveArray() {
+    static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<jni::JArrayDouble>()>("getPrimitiveArray");
+    auto result = method(_javaPart);
+    return [&]() {
+      size_t size = result->size();
+      std::vector<double> vector;
+      vector.reserve(size);
+      result->getRegion(0, size, vector.data());
+      return vector;
+    }();
+  }
+  void JHybridKotlinTestObjectSpec::setPrimitiveArray(const std::vector<double>& primitiveArray) {
+    static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<jni::JArrayDouble> /* primitiveArray */)>("setPrimitiveArray");
+    method(_javaPart, [&]() {
+      size_t size = primitiveArray.size();
+      jni::local_ref<jni::JArrayDouble> array = jni::JArrayDouble::newArray(size);
+      array->setRegion(0, size, primitiveArray.data());
+      return array;
+    }());
   }
 
   // Methods
