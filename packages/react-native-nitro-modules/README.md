@@ -197,7 +197,7 @@ The following C++ / JS types are supported out of the box:
     <td><code>ArrayBuffer</code></td>
     <td><code>std::shared_ptr&lt;<a href="./cpp/core/ArrayBuffer.hpp">ArrayBuffer</a>&gt;</code></td>
     <td><code><a href="./ios/core/ArrayBufferHolder.hpp">ArrayBufferHolder</a></code></td>
-    <td>❌</td>
+    <td><code><a href="./android/src/main/java/com/margelo/nitro/core/ArrayBuffer.kt">ArrayBuffer</a></code></td>
   </tr>
   <tr>
     <td>..any <code><a href="./src/HybridObject.ts">HybridObject</a></code></td>
