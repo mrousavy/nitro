@@ -68,8 +68,8 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
       case 'array-buffer':
         imports.push({
           language: 'c++',
-          name: `JArrayBuffer.hpp`,
-          space: 'user',
+          name: 'NitroModules/JArrayBuffer.hpp',
+          space: 'system',
         })
         break
       case 'hybrid-object': {

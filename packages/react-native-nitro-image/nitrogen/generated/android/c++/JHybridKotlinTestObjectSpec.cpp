@@ -27,7 +27,7 @@ namespace NitroModules { class ArrayBuffer; }
 #include "Person.hpp"
 #include "JPerson.hpp"
 #include <NitroModules/ArrayBuffer.hpp>
-#include "JArrayBuffer.hpp"
+#include <NitroModules/JArrayBuffer.hpp>
 
 namespace margelo::nitro::image {
 
