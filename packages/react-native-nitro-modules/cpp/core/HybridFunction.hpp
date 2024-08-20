@@ -99,28 +99,33 @@ public:
       }
 #endif
 
-      // 2. Make sure the given arguments match, either with a static size, or with potentially optional arguments size.
-      constexpr size_t optionalArgsCount = trailing_optionals_count_v<Args...>;
-      constexpr size_t maxArgsCount = sizeof...(Args);
-      constexpr size_t minArgsCount = maxArgsCount - optionalArgsCount;
-      bool isWithinArgsRange = (count >= minArgsCount && count <= maxArgsCount);
-      if (!isWithinArgsRange) [[unlikely]] {
-        // invalid amount of arguments passed!
-        std::string hybridObjectName = hybridInstance->getName();
-        if constexpr (minArgsCount == maxArgsCount) {
-          // min and max args length is the same, so we don't have any optional parameters. fixed count
-          throw jsi::JSError(runtime, hybridObjectName + "." + name + "(...) expected " + std::to_string(maxArgsCount) +
-                                          " arguments, but received " + std::to_string(count) + "!");
-        } else {
-          // min and max args length are different, so we have optional parameters - variable length arguments.
-          throw jsi::JSError(runtime, hybridObjectName + "." + name + "(...) expected between " + std::to_string(minArgsCount) + " and " +
-                                          std::to_string(maxArgsCount) + " arguments, but received " + std::to_string(count) + "!");
+      // 2. Check if the method is a raw JSI method. With a raw JSI method, the user has full control and access to jsi::Runtime.
+      constexpr bool isRawJsiMethod = std::is_same_v<ReturnType, jsi::Value>;
+
+      if constexpr (!isRawJsiMethod) {
+        // 3. Make sure the given arguments match, either with a static size, or with potentially optional arguments size.
+        constexpr size_t optionalArgsCount = trailing_optionals_count_v<Args...>;
+        constexpr size_t maxArgsCount = sizeof...(Args);
+        constexpr size_t minArgsCount = maxArgsCount - optionalArgsCount;
+        bool isWithinArgsRange = (count >= minArgsCount && count <= maxArgsCount);
+        if (!isWithinArgsRange) [[unlikely]] {
+          // invalid amount of arguments passed!
+          std::string hybridObjectName = hybridInstance->getName();
+          if constexpr (minArgsCount == maxArgsCount) {
+            // min and max args length is the same, so we don't have any optional parameters. fixed count
+            throw jsi::JSError(runtime, hybridObjectName + "." + name + "(...) expected " + std::to_string(maxArgsCount) +
+                                            " arguments, but received " + std::to_string(count) + "!");
+          } else {
+            // min and max args length are different, so we have optional parameters - variable length arguments.
+            throw jsi::JSError(runtime, hybridObjectName + "." + name + "(...) expected between " + std::to_string(minArgsCount) + " and " +
+                                            std::to_string(maxArgsCount) + " arguments, but received " + std::to_string(count) + "!");
+          }
         }
       }
 
-      // 3. Actually call method - either raw JSI method, or by going through `JSIConverter<T>` first.
+      // 4. Actually call method - either raw JSI method, or by going through `JSIConverter<T>` first.
       try {
-        if constexpr (std::is_same_v<ReturnType, jsi::Value>) {
+        if constexpr (isRawJsiMethod) {
           // If the return type is a jsi::Value, we assume the user wants full JSI code control.
           // The signature must be identical to jsi::HostFunction (jsi::Runtime&, jsi::Value& this, ...)
           Derived* pointer = hybridInstance.get();
