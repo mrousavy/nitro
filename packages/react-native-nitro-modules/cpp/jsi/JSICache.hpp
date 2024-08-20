@@ -38,12 +38,11 @@ public:
   ~JSICache();
 
 public:
-  JSICache() = delete;
   JSICache(const JSICache&) = delete;
   JSICache(JSICache&&) = delete;
 
 private:
-  explicit JSICache(jsi::Runtime* runtime) : _runtime(runtime) {}
+  JSICache() = default;
 
 public:
   /**
@@ -59,7 +58,6 @@ private:
   friend class JSICacheReference;
 
 private:
-  jsi::Runtime* _runtime;
   std::mutex _mutex;
   std::vector<BorrowingReference<jsi::Object>> _objectCache;
   std::vector<BorrowingReference<jsi::Function>> _functionCache;

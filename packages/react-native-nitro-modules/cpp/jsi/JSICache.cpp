@@ -55,7 +55,7 @@ JSICacheReference JSICache::getOrCreateCache(jsi::Runtime& runtime) {
   // Cache doesn't exist yet.
   Logger::log(LogLevel::Info, TAG, "Creating new JSICache<T> for runtime %s..", getRuntimeId(runtime).c_str());
   // Create new cache
-  auto nativeState = std::shared_ptr<JSICache>(new JSICache(&runtime));
+  auto nativeState = std::shared_ptr<JSICache>(new JSICache());
   // Wrap it in a jsi::Value using NativeState
   jsi::Object cache(runtime);
   cache.setNativeState(runtime, nativeState);
