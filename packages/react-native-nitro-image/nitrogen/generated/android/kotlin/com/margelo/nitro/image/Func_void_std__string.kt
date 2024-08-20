@@ -11,6 +11,7 @@ package com.margelo.nitro.image
 import androidx.annotation.Keep
 import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
+import dalvik.annotation.optimization.FastNative
 
 /**
  * Represents the JavaScript callback "(path: String) -> Unit".
@@ -28,5 +29,6 @@ class Func_void_std__string @DoNotStrip @Keep private constructor(hybridData: Hy
    * Call the given JS callback.
    * @throws Throwable if the JS function itself throws an error, or if the JS function/runtime has already been deleted.
    */
+  @FastNative
   external fun call(path: String): Unit
 }
