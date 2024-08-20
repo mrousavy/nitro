@@ -138,9 +138,18 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
     }
     switch (this.type.kind) {
       case 'array':
-        const arrayType = getTypeAs(this.type, ArrayType)
-        const bridged = new KotlinCxxBridgedType(arrayType.itemType)
-        return `jni::alias_ref<JCollection<${bridged.getTypeCode(language)}>>`
+        const array = getTypeAs(this.type, ArrayType)
+        switch (array.itemType.kind) {
+          case 'number':
+            return 'jni::alias_ref<jni::JArrayDouble>'
+          case 'boolean':
+            return 'jni::alias_ref<jni::JArrayBoolean>'
+          case 'bigint':
+            return 'jni::alias_ref<jni::JArrayLong>'
+          default:
+            const bridged = new KotlinCxxBridgedType(array.itemType)
+            return `jni::alias_ref<jni::JArrayClass<${bridged.getTypeCode(language)}>>`
+        }
       case 'enum':
         const enumType = getTypeAs(this.type, EnumType)
         return `jni::alias_ref<J${enumType.enumName}>`
@@ -274,6 +283,44 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
           return `${parameterName}->value()`
         } else {
           return parameterName
+        }
+      }
+      case 'array': {
+        const array = getTypeAs(this.type, ArrayType)
+        const bridge = new KotlinCxxBridgedType(array.itemType)
+        const itemType = bridge.getTypeCode('c++')
+        switch (array.itemType.kind) {
+          case 'number':
+          case 'boolean':
+          case 'bigint': {
+            // primitive arrays can use region/batch access,
+            // which we can use to construct the vector directly instead of looping through it.
+            return `
+[&]() {
+  size_t size = ${parameterName}->size();
+  std::unique_ptr<${itemType}[]> region = ${parameterName}->getRegion(0, size);
+  ${itemType}* rawPointer = region.get();
+  std::vector<${itemType}> vector(rawPointer, rawPointer + size);
+  region.reset();
+  return vector;
+}()
+`.trim()
+          }
+          default: {
+            // other arrays need to loop through
+            return `
+[&]() {
+  size_t size = ${parameterName}->size();
+  std::vector<${itemType}> vector;
+  vector.reserve(size);
+  for (size_t i = 0; i < size; i++) {
+    auto element = ${parameterName}->getElement(i);
+    vector.push_back(${bridge.parseFromKotlinToCpp('element', 'c++')});
+  }
+  return vector;
+}()
+            `.trim()
+          }
         }
       }
       case 'struct':
