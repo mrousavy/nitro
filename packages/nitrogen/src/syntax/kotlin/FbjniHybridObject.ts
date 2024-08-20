@@ -154,11 +154,11 @@ function getFbjniMethodForwardImplementation(
 
   const returnJNI = new KotlinCxxBridgedType(method.returnType)
 
-  const returnType = returnJNI.getTypeCode('c++')
+  const returnType = returnJNI.asJniReferenceType('alias')
   const paramsTypes = method.parameters
     .map((p) => {
       const bridge = new KotlinCxxBridgedType(p.type)
-      return `${bridge.getTypeCode('c++')} /* ${p.name} */`
+      return `${bridge.asJniReferenceType('alias')} /* ${p.name} */`
     })
     .join(', ')
   const cxxSignature = `${returnType}(${paramsTypes})`

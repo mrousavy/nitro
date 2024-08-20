@@ -131,6 +131,20 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
     return files
   }
 
+  asJniReferenceType(referenceType: 'alias' | 'local' | 'global' = 'alias') {
+    switch (this.type.kind) {
+      case 'void':
+      case 'number':
+      case 'boolean':
+      case 'bigint':
+      case 'string':
+        // primitives are not references
+        return this.getTypeCode('c++')
+      default:
+        return `jni::${referenceType}_ref<${this.getTypeCode('c++')}>`
+    }
+  }
+
   getTypeCode(language: 'kotlin' | 'c++'): string {
     if (language !== 'c++') {
       // In Kotlin, we just use the normal Kotlin types directly.
@@ -141,28 +155,28 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
         const array = getTypeAs(this.type, ArrayType)
         switch (array.itemType.kind) {
           case 'number':
-            return 'jni::alias_ref<jni::JArrayDouble>'
+            return 'jni::JArrayDouble'
           case 'boolean':
-            return 'jni::alias_ref<jni::JArrayBoolean>'
+            return 'jni::JArrayBoolean'
           case 'bigint':
-            return 'jni::alias_ref<jni::JArrayLong>'
+            return 'jni::JArrayLong'
           default:
             const bridged = new KotlinCxxBridgedType(array.itemType)
-            return `jni::alias_ref<jni::JArrayClass<${bridged.getTypeCode(language)}>>`
+            return `jni::JArrayClass<${bridged.getTypeCode(language)}>`
         }
       case 'enum':
         const enumType = getTypeAs(this.type, EnumType)
-        return `jni::alias_ref<J${enumType.enumName}>`
+        return `J${enumType.enumName}`
       case 'struct':
         const structType = getTypeAs(this.type, StructType)
-        return `jni::alias_ref<J${structType.structName}>`
+        return `J${structType.structName}`
       case 'function':
         const functionType = getTypeAs(this.type, FunctionType)
-        return `jni::alias_ref<J${functionType.specializationName}::javaobject>`
+        return `J${functionType.specializationName}::javaobject`
       case 'hybrid-object': {
         const hybridObjectType = getTypeAs(this.type, HybridObjectType)
         const name = getHybridObjectName(hybridObjectType.hybridObjectName)
-        return `jni::alias_ref<${name.JHybridTSpec}::javaobject>`
+        return `${name.JHybridTSpec}::javaobject`
       }
       case 'optional': {
         const optional = getTypeAs(this.type, OptionalType)
@@ -172,7 +186,7 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
           case 'boolean':
           case 'bigint':
             const boxed = getKotlinBoxedPrimitiveType(optional.wrappingType)
-            return `jni::alias_ref<${boxed}>`
+            return boxed
           default:
             // all other types can be nullable as they are objects.
             const bridge = new KotlinCxxBridgedType(optional.wrappingType)
