@@ -87,6 +87,9 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
       case 'promise':
         // PromiseHolder<T> <> std::shared_ptr<std::promise<T>>
         return true
+      case 'map':
+        // AnyMapHolder <> AnyMap
+        return true
       default:
         return false
     }
@@ -347,6 +350,14 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
             return cppParameterName
         }
       }
+      case 'map': {
+        switch (language) {
+          case 'swift':
+            return `AnyMapHolder(withCppPart: ${cppParameterName})`
+          default:
+            return cppParameterName
+        }
+      }
       case 'record': {
         const bridge = this.getBridgeOrThrow()
         const getKeysFunc = `bridge.get_${bridge.specializationName}_keys`
@@ -505,6 +516,14 @@ case ${i}:
         switch (language) {
           case 'c++':
             return `${swiftParameterName}.getArrayBuffer()`
+          default:
+            return swiftParameterName
+        }
+      }
+      case 'map': {
+        switch (language) {
+          case 'swift':
+            return `${swiftParameterName}.cppPart`
           default:
             return swiftParameterName
         }

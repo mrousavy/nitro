@@ -43,6 +43,10 @@ public enum AnyValue {
  */
 public class AnyMapHolder {
   let _cppPart: margelo.nitro.TSharedMap
+  
+  public var cppPart: margelo.nitro.TSharedMap {
+    return _cppPart
+  }
 
   public init() {
     _cppPart = margelo.nitro.AnyMap.make()
@@ -50,6 +54,10 @@ public class AnyMapHolder {
 
   public init(withPreallocatedSize size: Int) {
     _cppPart = margelo.nitro.AnyMap.make(size)
+  }
+  
+  public init(withCppPart cppPart: margelo.nitro.TSharedMap) {
+    _cppPart = cppPart
   }
 
   // pragma MARK: Common Operations

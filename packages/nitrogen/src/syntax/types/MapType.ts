@@ -18,7 +18,7 @@ export class MapType implements Type {
       case 'c++':
         return 'std::shared_ptr<AnyMap>'
       case 'swift':
-        return 'AnyMap'
+        return 'AnyMapHolder'
       default:
         throw new Error(
           `Language ${language} is not yet supported for MapType!`
