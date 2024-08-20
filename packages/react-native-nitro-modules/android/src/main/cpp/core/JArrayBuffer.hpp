@@ -56,8 +56,6 @@ public:
      * Get whether the `ArrayBuffer` is owning the data and can safely hold onto it longer.
      */
     bool getIsOwner() {
-        jni::local_ref<JArrayBuffer::javaobject> obj;
-        obj->cthis()->getArrayBuffer()
         return _arrayBuffer->isOwner();
     }
 
