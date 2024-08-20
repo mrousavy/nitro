@@ -126,7 +126,7 @@ export interface SwiftKotlinTestObject extends HybridObject<{ ios: 'swift' }> {
 
   callCallback(callback: () => void): void
 
-  someMap: Record<string, number>
+  someRecord: Record<string, number>
   someArray: string[]
   someOptional: string | undefined
 

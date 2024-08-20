@@ -79,8 +79,8 @@ namespace margelo::nitro::image {
       virtual void setStringOrNull(const std::optional<std::string>& stringOrNull) = 0;
       virtual std::optional<std::string> getOptionalString() = 0;
       virtual void setOptionalString(const std::optional<std::string>& optionalString) = 0;
-      virtual std::unordered_map<std::string, double> getSomeMap() = 0;
-      virtual void setSomeMap(const std::unordered_map<std::string, double>& someMap) = 0;
+      virtual std::unordered_map<std::string, double> getSomeRecord() = 0;
+      virtual void setSomeRecord(const std::unordered_map<std::string, double>& someRecord) = 0;
       virtual std::vector<std::string> getSomeArray() = 0;
       virtual void setSomeArray(const std::vector<std::string>& someArray) = 0;
       virtual std::optional<std::string> getSomeOptional() = 0;

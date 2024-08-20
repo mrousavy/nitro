@@ -173,12 +173,12 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
     }
   }
   
-  public var someMap: bridge.std__unordered_map_std__string__double_ {
+  public var someRecord: bridge.std__unordered_map_std__string__double_ {
     @inline(__always)
     get {
       return { () -> bridge.std__unordered_map_std__string__double_ in
-        var map = bridge.create_std__unordered_map_std__string__double_(self.implementation.someMap.count)
-        for (k, v) in self.implementation.someMap {
+        var map = bridge.create_std__unordered_map_std__string__double_(self.implementation.someRecord.count)
+        for (k, v) in self.implementation.someRecord {
           map[std.string(k)] = v
         }
         return map
@@ -186,7 +186,7 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
     }
     @inline(__always)
     set {
-      self.implementation.someMap = { () -> Dictionary<String, Double> in
+      self.implementation.someRecord = { () -> Dictionary<String, Double> in
         var dictionary = Dictionary<String, Double>(minimumCapacity: newValue.size())
         let keys = bridge.get_std__unordered_map_std__string__double__keys(newValue)
         for key in keys {

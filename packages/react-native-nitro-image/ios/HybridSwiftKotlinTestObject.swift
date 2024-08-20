@@ -102,7 +102,7 @@ class HybridSwiftKotlinTestObject : HybridSwiftKotlinTestObjectSpec {
     }
   }
   
-  var someMap: Dictionary<String, Double> {
+  var someRecord: Dictionary<String, Double> {
     get {
       return [
         "hello": 55.0
