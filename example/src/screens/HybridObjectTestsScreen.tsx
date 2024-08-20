@@ -1,43 +1,17 @@
 import * as React from 'react'
 
 import { StyleSheet, View, Text, ScrollView, Button } from 'react-native'
-import {
-  HybridTestObject,
-  ImageConstructors,
-  HybridKotlinTestObject,
-} from 'react-native-nitro-image'
+import { HybridTestObject, ImageConstructors } from 'react-native-nitro-image'
 import { getTests, type TestRunner } from '../getTests'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { logPrototypeChain } from '../logPrototypeChain'
 
 logPrototypeChain(HybridTestObject)
-logPrototypeChain(HybridKotlinTestObject)
 
 console.log('loading image...')
-const image = ImageConstructors.loadImageFromFile('file')
+const image = ImageConstructors.loadImageFromSystemName('heart.fill')
 console.log('image:', image)
 image.saveToFile('somePath', (p) => console.log(`Image saved to ${p}!`))
-
-console.log(HybridKotlinTestObject)
-console.log(HybridKotlinTestObject.primitiveArray)
-console.log((HybridKotlinTestObject.primitiveArray = [55, 13, 7]))
-
-console.log(HybridKotlinTestObject)
-console.log(HybridKotlinTestObject.carCollection)
-HybridKotlinTestObject.carCollection = [
-  {
-    make: 'Lamborghini',
-    model: 'Huracan',
-    power: 640,
-    powertrain: 'gas',
-    year: 2018,
-    driver: {
-      age: 24,
-      name: 'marc',
-    },
-  },
-]
-console.log(HybridKotlinTestObject.carCollection)
 
 const allTests = getTests()
 
