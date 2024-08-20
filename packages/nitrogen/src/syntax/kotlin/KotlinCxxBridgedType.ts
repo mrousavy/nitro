@@ -263,6 +263,41 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
             return parameterName
         }
       }
+      case 'array': {
+        const array = getTypeAs(this.type, ArrayType)
+        const arrayType = this.getTypeCode('c++')
+        const bridge = new KotlinCxxBridgedType(array.itemType)
+        switch (array.itemType.kind) {
+          case 'number':
+          case 'boolean':
+          case 'bigint': {
+            // primitive arrays can be constructed more efficiently with region/batch access.
+            // no need to iterate through the entire array.
+            return `
+[&]() {
+  size_t size = ${parameterName}.size();
+  jni::local_ref<${arrayType}> array = ${arrayType}::newArray(size);
+  array->setRegion(0, size, ${parameterName}.data());
+  return array;
+}()
+`.trim()
+          }
+          default: {
+            // other arrays need to loop through
+            return `
+[&]() {
+  size_t size = ${parameterName}->size();
+  jni::local_ref<${arrayType}> array = ${arrayType}::newArray(size);
+  for (size_t i = 0; i < size; i++) {
+    auto element = ${parameterName}[i];
+    array->setElement(i, ${bridge.parseFromCppToKotlin('element', 'c++')});
+  }
+  return array;
+}()
+            `.trim()
+          }
+        }
+      }
       default:
         // no need to parse anything, just return as is
         return parameterName
@@ -283,44 +318,6 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
           return `${parameterName}->value()`
         } else {
           return parameterName
-        }
-      }
-      case 'array': {
-        const array = getTypeAs(this.type, ArrayType)
-        const bridge = new KotlinCxxBridgedType(array.itemType)
-        const itemType = bridge.getTypeCode('c++')
-        switch (array.itemType.kind) {
-          case 'number':
-          case 'boolean':
-          case 'bigint': {
-            // primitive arrays can use region/batch access,
-            // which we can use to construct the vector directly instead of looping through it.
-            return `
-[&]() {
-  size_t size = ${parameterName}->size();
-  std::unique_ptr<${itemType}[]> region = ${parameterName}->getRegion(0, size);
-  ${itemType}* rawPointer = region.get();
-  std::vector<${itemType}> vector(rawPointer, rawPointer + size);
-  region.reset();
-  return vector;
-}()
-`.trim()
-          }
-          default: {
-            // other arrays need to loop through
-            return `
-[&]() {
-  size_t size = ${parameterName}->size();
-  std::vector<${itemType}> vector;
-  vector.reserve(size);
-  for (size_t i = 0; i < size; i++) {
-    auto element = ${parameterName}->getElement(i);
-    vector.push_back(${bridge.parseFromKotlinToCpp('element', 'c++')});
-  }
-  return vector;
-}()
-            `.trim()
-          }
         }
       }
       case 'struct':
@@ -356,6 +353,43 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
             return `${parameterName} != nullptr ? std::make_optional(${parsed}) : std::nullopt`
           default:
             return parameterName
+        }
+      }
+      case 'array': {
+        const array = getTypeAs(this.type, ArrayType)
+        const bridge = new KotlinCxxBridgedType(array.itemType)
+        const itemType = bridge.getTypeCode('c++')
+        switch (array.itemType.kind) {
+          case 'number':
+          case 'boolean':
+          case 'bigint': {
+            // primitive arrays can use region/batch access,
+            // which we can use to construct the vector directly instead of looping through it.
+            return `
+[&]() {
+  size_t size = ${parameterName}->size();
+  std::vector<${itemType}> vector;
+  vector.reserve(size);
+  ${parameterName}->getRegion(0, size, vector.data());
+  return vector;
+}()
+`.trim()
+          }
+          default: {
+            // other arrays need to loop through
+            return `
+[&]() {
+  size_t size = ${parameterName}->size();
+  std::vector<${itemType}> vector;
+  vector.reserve(size);
+  for (size_t i = 0; i < size; i++) {
+    auto element = ${parameterName}->getElement(i);
+    vector.push_back(${bridge.parseFromKotlinToCpp('element', 'c++')});
+  }
+  return vector;
+}()
+            `.trim()
+          }
         }
       }
       default:
