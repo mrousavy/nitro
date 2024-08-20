@@ -25,9 +25,12 @@ int levelToAndroidLevel(LogLevel level) {
   }
 }
 
-void Logger::nativeLog(LogLevel level, const std::string& message) {
+void Logger::nativeLog(LogLevel level, const char* tag, const std::string& message) {
+#ifndef NDEBUG
   int logLevel = levelToAndroidLevel(level);
-  __android_log_print(logLevel, "Nitro", "%s", message.c_str());
+  std::string combinedTag = "Nitro." + std::string(tag);
+  __android_log_print(logLevel, combinedTag.c_str(), "%s", message.c_str());
+#endif
 }
 
 } // namespace margelo::nitro

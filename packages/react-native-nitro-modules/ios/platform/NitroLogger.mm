@@ -25,9 +25,11 @@ const char* levelToString(LogLevel level) {
   }
 }
 
-void Logger::nativeLog(LogLevel level, const std::string& message) {
+void Logger::nativeLog(LogLevel level, const char* tag, const std::string& message) {
+#ifndef NDEBUG
   const char* logLevel = levelToString(level);
-  NSLog(@"[%s] %s", logLevel, message.c_str());
+  NSLog(@"[%s] [Nitro.%s] %s", logLevel, tag, message.c_str());
+#endif
 }
 
 } // namespace margelo::nitro
