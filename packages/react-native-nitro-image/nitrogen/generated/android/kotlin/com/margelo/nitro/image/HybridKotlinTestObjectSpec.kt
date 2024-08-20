@@ -12,7 +12,7 @@ import android.util.Log
 import androidx.annotation.Keep
 import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
-import com.margelo.nitro.HybridObject
+import com.margelo.nitro.core.*
 
 /**
  * A Kotlin class representing the KotlinTestObject HybridObject.
@@ -56,6 +56,12 @@ abstract class HybridKotlinTestObjectSpec: HybridObject() {
   @set:DoNotStrip
   @set:Keep
   abstract var carCollection: Array<com.margelo.nitro.image.Car>
+  
+  @get:DoNotStrip
+  @get:Keep
+  @set:DoNotStrip
+  @set:Keep
+  abstract var someBuffer: ArrayBuffer
 
   // Methods
   

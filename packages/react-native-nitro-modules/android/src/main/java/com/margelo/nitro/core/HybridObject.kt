@@ -1,4 +1,4 @@
-package com.margelo.nitro
+package com.margelo.nitro.core
 
 import androidx.annotation.Keep
 import com.facebook.jni.HybridData

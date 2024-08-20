@@ -17,7 +17,7 @@ using namespace facebook;
 
 struct JHybridObjectRegistry : public jni::JavaClass<JHybridObjectRegistry> {
 public:
-  static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/HybridObjectRegistry;";
+  static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/core/HybridObjectRegistry;";
 
 public:
   static void registerHybridObjectConstructor(jni::alias_ref<jni::JClass> clazz, std::string hybridObjectName,

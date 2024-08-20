@@ -21,7 +21,7 @@ using namespace facebook;
  */
 struct JHybridObject : public jni::HybridClass<JHybridObject>, public virtual HybridObject {
 public:
-  static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/HybridObject;";
+  static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/core/HybridObject;";
 
   virtual ~JHybridObject() = default;
 

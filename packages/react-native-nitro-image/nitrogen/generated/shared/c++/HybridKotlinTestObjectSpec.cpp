@@ -23,6 +23,8 @@ namespace margelo::nitro::image {
       prototype.registerHybridSetter("primitiveArray", &HybridKotlinTestObjectSpec::setPrimitiveArray);
       prototype.registerHybridGetter("carCollection", &HybridKotlinTestObjectSpec::getCarCollection);
       prototype.registerHybridSetter("carCollection", &HybridKotlinTestObjectSpec::setCarCollection);
+      prototype.registerHybridGetter("someBuffer", &HybridKotlinTestObjectSpec::getSomeBuffer);
+      prototype.registerHybridSetter("someBuffer", &HybridKotlinTestObjectSpec::setSomeBuffer);
     });
   }
 

@@ -30,7 +30,7 @@ import android.util.Log
 import androidx.annotation.Keep
 import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
-import com.margelo.nitro.HybridObject
+import com.margelo.nitro.core.*
 
 /**
  * A Kotlin class representing the ${spec.name} HybridObject.

@@ -1,4 +1,6 @@
-package com.margelo.nitro;
+package com.margelo.nitro.core;
+
+import com.margelo.nitro.JNIOnLoad;
 
 /**
  * A registry that holds initializers for HybridObjects.
@@ -16,6 +18,4 @@ public class HybridObjectRegistry {
      * JS using `NitroModules.createHybridObject<T>(name)` - which will call the `constructorFn` here.
      */
     public static native void registerHybridObjectConstructor(String hybridObjectName, HybridObjectInitializer initializer);
-
-    private static final String TAG = "HybridObjectRegistry";
 }
