@@ -65,6 +65,13 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
           space: 'user',
         })
         break
+      case 'array-buffer':
+        imports.push({
+          language: 'c++',
+          name: `JArrayBuffer.hpp`,
+          space: 'user',
+        })
+        break
       case 'hybrid-object': {
         const hybridObjectType = getTypeAs(this.type, HybridObjectType)
         const name = getHybridObjectName(hybridObjectType.hybridObjectName)
@@ -179,6 +186,9 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
         const name = getHybridObjectName(hybridObjectType.hybridObjectName)
         return `${name.JHybridTSpec}::javaobject`
       }
+      case 'array-buffer': {
+        return `JArrayBuffer::javaobject`
+      }
       case 'optional': {
         const optional = getTypeAs(this.type, OptionalType)
         switch (optional.wrappingType.kind) {
@@ -281,6 +291,14 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
             return parameterName
         }
       }
+      case 'array-buffer': {
+        switch (language) {
+          case 'c++':
+            return `JArrayBuffer::wrap(${parameterName})`
+          default:
+            return parameterName
+        }
+      }
       case 'array': {
         const array = getTypeAs(this.type, ArrayType)
         const arrayType = this.getTypeCode('c++')
@@ -371,6 +389,14 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
               true
             )
             return `${parameterName} != nullptr ? std::make_optional(${parsed}) : std::nullopt`
+          default:
+            return parameterName
+        }
+      }
+      case 'array-buffer': {
+        switch (language) {
+          case 'c++':
+            return `${parameterName}->cthis()->getArrayBuffer()`
           default:
             return parameterName
         }

@@ -16,10 +16,13 @@
 
 // Forward declaration of `Car` to properly resolve imports.
 namespace margelo::nitro::image { struct Car; }
+// Forward declaration of `ArrayBuffer` to properly resolve imports.
+namespace NitroModules { class ArrayBuffer; }
 
 #include <optional>
 #include <vector>
 #include "Car.hpp"
+#include <NitroModules/ArrayBuffer.hpp>
 
 namespace margelo::nitro::image {
 
@@ -53,6 +56,8 @@ namespace margelo::nitro::image {
       virtual void setPrimitiveArray(const std::vector<double>& primitiveArray) = 0;
       virtual std::vector<Car> getCarCollection() = 0;
       virtual void setCarCollection(const std::vector<Car>& carCollection) = 0;
+      virtual std::shared_ptr<ArrayBuffer> getSomeBuffer() = 0;
+      virtual void setSomeBuffer(const std::shared_ptr<ArrayBuffer>& someBuffer) = 0;
 
     public:
       // Methods

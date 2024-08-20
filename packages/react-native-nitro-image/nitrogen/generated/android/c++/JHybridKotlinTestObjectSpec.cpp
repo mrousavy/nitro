@@ -14,6 +14,8 @@ namespace margelo::nitro::image { struct Car; }
 namespace margelo::nitro::image { enum class Powertrain; }
 // Forward declaration of `Person` to properly resolve imports.
 namespace margelo::nitro::image { struct Person; }
+// Forward declaration of `ArrayBuffer` to properly resolve imports.
+namespace NitroModules { class ArrayBuffer; }
 
 #include <optional>
 #include <vector>
@@ -24,6 +26,8 @@ namespace margelo::nitro::image { struct Person; }
 #include "JPowertrain.hpp"
 #include "Person.hpp"
 #include "JPerson.hpp"
+#include <NitroModules/ArrayBuffer.hpp>
+#include "JArrayBuffer.hpp"
 
 namespace margelo::nitro::image {
 
@@ -106,6 +110,15 @@ namespace margelo::nitro::image {
       }
       return array;
     }());
+  }
+  std::shared_ptr<ArrayBuffer> JHybridKotlinTestObjectSpec::getSomeBuffer() {
+    static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<JArrayBuffer::javaobject>()>("getSomeBuffer");
+    auto result = method(_javaPart);
+    return result->cthis()->getArrayBuffer();
+  }
+  void JHybridKotlinTestObjectSpec::setSomeBuffer(const std::shared_ptr<ArrayBuffer>& someBuffer) {
+    static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<JArrayBuffer::javaobject> /* someBuffer */)>("setSomeBuffer");
+    method(_javaPart, JArrayBuffer::wrap(someBuffer));
   }
 
   // Methods

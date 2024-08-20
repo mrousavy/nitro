@@ -19,6 +19,8 @@ export class ArrayBufferType implements Type {
         return 'std::shared_ptr<ArrayBuffer>'
       case 'swift':
         return 'ArrayBufferHolder'
+      case 'kotlin':
+        return 'ArrayBuffer'
       default:
         throw new Error(
           `Language ${language} is not yet supported for ArrayBufferType!`

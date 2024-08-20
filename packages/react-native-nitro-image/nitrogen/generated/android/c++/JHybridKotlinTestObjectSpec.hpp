@@ -45,6 +45,8 @@ namespace margelo::nitro::image {
     void setPrimitiveArray(const std::vector<double>& primitiveArray) override;
     std::vector<Car> getCarCollection() override;
     void setCarCollection(const std::vector<Car>& carCollection) override;
+    std::shared_ptr<ArrayBuffer> getSomeBuffer() override;
+    void setSomeBuffer(const std::shared_ptr<ArrayBuffer>& someBuffer) override;
 
   public:
     // Methods

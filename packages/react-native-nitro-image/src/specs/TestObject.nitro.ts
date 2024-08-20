@@ -153,4 +153,6 @@ export interface KotlinTestObject extends HybridObject<{ android: 'kotlin' }> {
 
   primitiveArray: number[]
   carCollection: Car[]
+
+  someBuffer: ArrayBuffer
 }
