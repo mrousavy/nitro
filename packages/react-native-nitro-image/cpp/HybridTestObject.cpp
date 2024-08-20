@@ -301,4 +301,12 @@ std::shared_ptr<HybridTestObjectSpec> HybridTestObject::newTestObject() {
   return std::make_shared<HybridTestObject>();
 }
 
+jsi::Value HybridTestObject::rawJsiFunc(jsi::Runtime& runtime, const jsi::Value& thisValue, const jsi::Value* args, size_t count) {
+  jsi::Array array(runtime, count);
+  for (size_t i = 0; i < count; i++) {
+    array.setValueAtIndex(runtime, i, jsi::Value(runtime, args[i]));
+  }
+  return array;
+}
+
 } // namespace margelo::nitro::image

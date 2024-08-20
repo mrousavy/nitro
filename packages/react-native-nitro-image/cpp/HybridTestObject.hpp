@@ -8,12 +8,15 @@
 #pragma once
 
 #include "HybridTestObjectSpec.hpp"
+#include <jsi/jsi.h>
 
 namespace margelo::nitro::image {
 
+using namespace facebook;
+
 class HybridTestObject : public HybridTestObjectSpec {
 public:
-  HybridTestObject(): HybridObject(TAG) { }
+  HybridTestObject() : HybridObject(TAG) {}
 
 private:
   double _number;
@@ -97,6 +100,16 @@ public:
   double getBufferLastItem(const std::shared_ptr<ArrayBuffer>& buffer) override;
   void setAllValuesTo(const std::shared_ptr<ArrayBuffer>& buffer, double value) override;
   std::shared_ptr<HybridTestObjectSpec> newTestObject() override;
+
+  // Raw JSI functions
+  jsi::Value rawJsiFunc(jsi::Runtime& runtime, const jsi::Value& thisValue, const jsi::Value* args, size_t count);
+
+  void loadHybridMethods() override {
+    // call base protoype
+    HybridTestObjectSpec::loadHybridMethods();
+    // register all methods we override here
+    registerHybrids(this, [](Prototype& prototype) { prototype.registerHybridMethod("rawJsiFunc", &HybridTestObject::rawJsiFunc); });
+  }
 };
 
 }; // namespace margelo::nitro::image

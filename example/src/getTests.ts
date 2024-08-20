@@ -672,5 +672,11 @@ export function getTests(): TestRunner[] {
         .didReturn('object')
         .toBeArray()
     ),
+    createTest('Call Raw JSI Func', () =>
+      // @ts-expect-error
+      it(() => HybridTestObject.rawJsiFunc(55, false, 'hello', { obj: true }))
+        .didNotThrow()
+        .equals([55, false, 'hello', { obj: true }])
+    ),
   ]
 }

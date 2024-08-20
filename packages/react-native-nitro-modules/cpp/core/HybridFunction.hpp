@@ -119,7 +119,8 @@ public:
         if constexpr (std::is_same_v<ReturnType, jsi::Value>) {
           // If the return type is a jsi::Value, we assume the user wants full JSI code control.
           // The signature must be identical to jsi::HostFunction (jsi::Runtime&, jsi::Value& this, ...)
-          return (hybridInstance->*method)(runtime, thisValue, args, count);
+          Derived* pointer = hybridInstance.get();
+          return (pointer->*method)(runtime, thisValue, args, count);
         } else {
           // Call the actual method with JSI values as arguments and return a JSI value again.
           // Internally, this method converts the JSI values to C++ values.

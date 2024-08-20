@@ -24,6 +24,7 @@ public:
   static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/HybridObject;";
 
   virtual ~JHybridObject() = default;
+
 private:
   friend HybridBase;
 };
