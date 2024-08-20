@@ -7,6 +7,8 @@ class KotlinTestObject: HybridKotlinTestObjectSpec() {
     override var numberValue: Double = 0.0
     override var optionalNumber: Double? = null
     override var primitiveArray: DoubleArray = doubleArrayOf()
+    override var carCollection: Array<Car> = emptyArray()
+
     override val memorySize: Long
         get() = 0
 

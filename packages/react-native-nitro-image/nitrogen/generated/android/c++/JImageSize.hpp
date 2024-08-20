@@ -11,6 +11,8 @@
 #include <fbjni/fbjni.h>
 #include "ImageSize.hpp"
 
+
+
 namespace margelo::nitro::image {
 
   using namespace facebook;
@@ -34,8 +36,8 @@ namespace margelo::nitro::image {
       static const auto fieldHeight = clazz->getField<double>("height");
       double height = this->getFieldValue(fieldHeight);
       return ImageSize(
-        std::move(width),
-        std::move(height)
+        width,
+        height
       );
     }
 
@@ -46,8 +48,8 @@ namespace margelo::nitro::image {
     [[maybe_unused]]
     static jni::local_ref<JImageSize::javaobject> fromCpp(const ImageSize& value) {
       return newInstance(
-        std::move(value.width),
-        std::move(value.height)
+        value.width,
+        value.height
       );
     }
   };

@@ -137,7 +137,6 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
       case 'number':
       case 'boolean':
       case 'bigint':
-      case 'string':
         // primitives are not references
         return this.getTypeCode('c++')
       default:
@@ -164,6 +163,8 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
             const bridged = new KotlinCxxBridgedType(array.itemType)
             return `jni::JArrayClass<${bridged.getTypeCode(language)}>`
         }
+      case 'string':
+        return 'jni::JString'
       case 'enum':
         const enumType = getTypeAs(this.type, EnumType)
         return `J${enumType.enumName}`
@@ -225,10 +226,13 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
         if (isBoxed) {
           // box a primitive (double) to an object (JDouble)
           const boxed = getKotlinBoxedPrimitiveType(this.type)
-          return `${boxed}::valueOf(${parameterName}.value())`
+          return `${boxed}::valueOf(${parameterName})`
         } else {
           return parameterName
         }
+      }
+      case 'string': {
+        return `jni::make_jstring(${parameterName})`
       }
       case 'struct': {
         switch (language) {
@@ -272,7 +276,7 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
         const bridge = new KotlinCxxBridgedType(optional.wrappingType)
         switch (language) {
           case 'c++':
-            return `${parameterName}.has_value() ? ${bridge.parseFromCppToKotlin(parameterName, 'c++', true)} : nullptr`
+            return `${parameterName}.has_value() ? ${bridge.parseFromCppToKotlin(`${parameterName}.value()`, 'c++', true)} : nullptr`
           default:
             return parameterName
         }
@@ -300,11 +304,11 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
             // other arrays need to loop through
             return `
 [&]() {
-  size_t size = ${parameterName}->size();
+  size_t size = ${parameterName}.size();
   jni::local_ref<${arrayType}> array = ${arrayType}::newArray(size);
   for (size_t i = 0; i < size; i++) {
     auto element = ${parameterName}[i];
-    array->setElement(i, ${bridge.parseFromCppToKotlin('element', 'c++')});
+    array->setElement(i, *${bridge.parseFromCppToKotlin('element', 'c++')});
   }
   return array;
 }()
@@ -334,6 +338,8 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
           return parameterName
         }
       }
+      case 'string':
+        return `${parameterName}->toStdString()`
       case 'struct':
       case 'enum':
       case 'function': {
@@ -372,7 +378,7 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
       case 'array': {
         const array = getTypeAs(this.type, ArrayType)
         const bridge = new KotlinCxxBridgedType(array.itemType)
-        const itemType = bridge.getTypeCode('c++')
+        const itemType = array.itemType.getCode('c++')
         switch (array.itemType.kind) {
           case 'number':
           case 'boolean':

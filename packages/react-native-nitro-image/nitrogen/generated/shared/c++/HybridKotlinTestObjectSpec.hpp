@@ -14,10 +14,12 @@
 #error NitroModules cannot be found! Are you sure you installed NitroModules properly?
 #endif
 
-
+// Forward declaration of `Car` to properly resolve imports.
+namespace margelo::nitro::image { struct Car; }
 
 #include <optional>
 #include <vector>
+#include "Car.hpp"
 
 namespace margelo::nitro::image {
 
@@ -49,6 +51,8 @@ namespace margelo::nitro::image {
       virtual void setOptionalNumber(std::optional<double> optionalNumber) = 0;
       virtual std::vector<double> getPrimitiveArray() = 0;
       virtual void setPrimitiveArray(const std::vector<double>& primitiveArray) = 0;
+      virtual std::vector<Car> getCarCollection() = 0;
+      virtual void setCarCollection(const std::vector<Car>& carCollection) = 0;
 
     public:
       // Methods

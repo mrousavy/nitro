@@ -43,6 +43,8 @@ namespace margelo::nitro::image {
     void setOptionalNumber(std::optional<double> optionalNumber) override;
     std::vector<double> getPrimitiveArray() override;
     void setPrimitiveArray(const std::vector<double>& primitiveArray) override;
+    std::vector<Car> getCarCollection() override;
+    void setCarCollection(const std::vector<Car>& carCollection) override;
 
   public:
     // Methods

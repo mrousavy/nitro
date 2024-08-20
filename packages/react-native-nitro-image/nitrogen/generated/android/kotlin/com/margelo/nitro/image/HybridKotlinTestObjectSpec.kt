@@ -50,6 +50,12 @@ abstract class HybridKotlinTestObjectSpec: HybridObject() {
   @set:DoNotStrip
   @set:Keep
   abstract var primitiveArray: DoubleArray
+  
+  @get:DoNotStrip
+  @get:Keep
+  @set:DoNotStrip
+  @set:Keep
+  abstract var carCollection: Array<com.margelo.nitro.image.Car>
 
   // Methods
   

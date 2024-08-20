@@ -1,6 +1,8 @@
 import { NitroConfig } from '../../config/NitroConfig.js'
 import { capitalizeName, indent } from '../../utils.js'
-import { createFileMetadataString } from '../helpers.js'
+import { includeHeader } from '../c++/includeNitroHeader.js'
+import { getReferencedTypes } from '../getReferencedTypes.js'
+import { createFileMetadataString, isNotDuplicate } from '../helpers.js'
 import type { SourceFile } from '../SourceFile.js'
 import type { StructType } from '../types/StructType.js'
 import { KotlinCxxBridgedType } from './KotlinCxxBridgedType.js'
@@ -38,6 +40,15 @@ data class ${structType.structName}(
     'value',
     structType
   )
+  const imports = structType.properties
+    .flatMap((p) => getReferencedTypes(p))
+    .map((t) => new KotlinCxxBridgedType(t))
+    .flatMap((t) => t.getRequiredImports())
+  const includes = imports
+    .map((i) => includeHeader(i))
+    .filter(isNotDuplicate)
+    .sort()
+
   const fbjniCode = `
 ${createFileMetadataString(`J${structType.structName}.hpp`)}
 
@@ -45,6 +56,8 @@ ${createFileMetadataString(`J${structType.structName}.hpp`)}
 
 #include <fbjni/fbjni.h>
 #include "${structType.declarationFile.name}"
+
+${includes.join('\n')}
 
 namespace ${cxxNamespace} {
 
@@ -102,19 +115,19 @@ function createJNIStructInitializer(structType: StructType): string {
   for (const prop of structType.properties) {
     const fieldName = `field${capitalizeName(prop.escapedName)}`
     const jniType = new KotlinCxxBridgedType(prop)
-    const type = jniType.getTypeCode('c++')
+    const signatureType = jniType.getTypeCode('c++')
+    const valueType = jniType.asJniReferenceType('local')
     lines.push(
-      `static const auto ${fieldName} = clazz->getField<${type}>("${prop.escapedName}");`
+      `static const auto ${fieldName} = clazz->getField<${signatureType}>("${prop.escapedName}");`
     )
     lines.push(
-      `${type} ${prop.escapedName} = this->getFieldValue(${fieldName});`
+      `${valueType} ${prop.escapedName} = this->getFieldValue(${fieldName});`
     )
   }
 
   const propsForward = structType.properties.map((p) => {
     const bridged = new KotlinCxxBridgedType(p)
-    const parse = bridged.parse(p.escapedName, 'kotlin', 'c++', 'c++')
-    return `std::move(${parse})`
+    return bridged.parse(p.escapedName, 'kotlin', 'c++', 'c++')
   })
   lines.push(`return ${structType.structName}(`)
   lines.push(`  ${indent(propsForward.join(',\n'), '  ')}`)
@@ -131,8 +144,7 @@ function createCppStructInitializer(
   const names = structType.properties.map((p) => {
     const name = `${cppValueName}.${p.escapedName}`
     const bridge = new KotlinCxxBridgedType(p)
-    const parse = bridge.parse(name, 'c++', 'kotlin', 'c++')
-    return `std::move(${parse})`
+    return bridge.parse(name, 'c++', 'kotlin', 'c++')
   })
   lines.push(`  ${indent(names.join(',\n'), '  ')}`)
   lines.push(');')

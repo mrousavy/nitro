@@ -341,5 +341,15 @@ namespace margelo::nitro::image::bridge::swift {
   inline std::optional<double> create_std__optional_double_(const double& value) {
     return std::optional<double>(value);
   }
+  
+  /**
+   * Specialized version of `std::vector<Car>`.
+   */
+  using std__vector_Car_ = std::vector<Car>;
+  inline std::vector<Car> create_std__vector_Car_(size_t size) {
+    std::vector<Car> vector;
+    vector.reserve(size);
+    return vector;
+  }
 
 } // namespace margelo::nitro::image::bridge::swift

@@ -152,4 +152,5 @@ export interface KotlinTestObject extends HybridObject<{ android: 'kotlin' }> {
   optionalNumber?: number
 
   primitiveArray: number[]
+  carCollection: Car[]
 }

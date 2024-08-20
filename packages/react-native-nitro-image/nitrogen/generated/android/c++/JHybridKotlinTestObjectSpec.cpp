@@ -8,10 +8,22 @@
 
 #include "JHybridKotlinTestObjectSpec.hpp"
 
-
+// Forward declaration of `Car` to properly resolve imports.
+namespace margelo::nitro::image { struct Car; }
+// Forward declaration of `Powertrain` to properly resolve imports.
+namespace margelo::nitro::image { enum class Powertrain; }
+// Forward declaration of `Person` to properly resolve imports.
+namespace margelo::nitro::image { struct Person; }
 
 #include <optional>
 #include <vector>
+#include "Car.hpp"
+#include "JCar.hpp"
+#include <string>
+#include "Powertrain.hpp"
+#include "JPowertrain.hpp"
+#include "Person.hpp"
+#include "JPerson.hpp"
 
 namespace margelo::nitro::image {
 
@@ -66,6 +78,32 @@ namespace margelo::nitro::image {
       size_t size = primitiveArray.size();
       jni::local_ref<jni::JArrayDouble> array = jni::JArrayDouble::newArray(size);
       array->setRegion(0, size, primitiveArray.data());
+      return array;
+    }());
+  }
+  std::vector<Car> JHybridKotlinTestObjectSpec::getCarCollection() {
+    static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<jni::JArrayClass<JCar>>()>("getCarCollection");
+    auto result = method(_javaPart);
+    return [&]() {
+      size_t size = result->size();
+      std::vector<Car> vector;
+      vector.reserve(size);
+      for (size_t i = 0; i < size; i++) {
+        auto element = result->getElement(i);
+        vector.push_back(element->toCpp());
+      }
+      return vector;
+    }();
+  }
+  void JHybridKotlinTestObjectSpec::setCarCollection(const std::vector<Car>& carCollection) {
+    static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<jni::JArrayClass<JCar>> /* carCollection */)>("setCarCollection");
+    method(_javaPart, [&]() {
+      size_t size = carCollection.size();
+      jni::local_ref<jni::JArrayClass<JCar>> array = jni::JArrayClass<JCar>::newArray(size);
+      for (size_t i = 0; i < size; i++) {
+        auto element = carCollection[i];
+        array->setElement(i, *JCar::fromCpp(element));
+      }
       return array;
     }());
   }
