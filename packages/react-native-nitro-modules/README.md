@@ -143,7 +143,7 @@ The following C++ / JS types are supported out of the box:
     <td><code>T[]</code></td>
     <td><code>std::vector&lt;T&gt;</code></td>
     <td><code>[T]</code></td>
-    <td>❌</td>
+    <td><code>Array&lt;T&gt;</code> / <code>PrimitiveArray</code></td>
   </tr>
   <tr>
     <td><code>[A, B, C, ...]</code></td>
