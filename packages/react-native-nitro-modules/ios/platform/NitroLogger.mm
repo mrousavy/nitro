@@ -7,6 +7,7 @@
 
 #include "NitroLogger.hpp"
 #include <Foundation/Foundation.h>
+#include "AnyMapHolder.hpp"
 
 namespace margelo::nitro {
 

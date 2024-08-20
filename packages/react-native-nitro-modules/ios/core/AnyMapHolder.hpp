@@ -8,14 +8,13 @@
 #pragma once
 
 #include "AnyMap.hpp"
-#include <memory>
 
 namespace margelo::nitro {
 
 using TSharedMap = std::shared_ptr<AnyMap>;
 
 AnyValue create_AnyValue() {
-  return AnyValue(std::monostate);
+  return AnyValue(std::monostate{ });
 }
 AnyValue create_AnyValue(bool boolValue) {
   return AnyValue(boolValue);
@@ -80,8 +79,8 @@ AnyObject get_AnyValue_AnyObject(const AnyValue& value) {
   return std::get<AnyObject>(value);
 }
 
-std::vector<string> getAnyObjectKeys(const AnyObject& object) {
-  std::vector<string> keys;
+std::vector<std::string> getAnyObjectKeys(const AnyObject& object) {
+  std::vector<std::string> keys;
   keys.reserve(object.size());
   for (const auto& entry : object) {
     keys.push_back(entry.first);
