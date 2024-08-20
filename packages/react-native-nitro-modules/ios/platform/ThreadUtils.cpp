@@ -7,7 +7,7 @@
 
 #include "ThreadUtils.hpp"
 #include <pthread.h>
-#include <sstream>>
+#include <sstream>
 #include <thread>
 
 namespace margelo::nitro {
