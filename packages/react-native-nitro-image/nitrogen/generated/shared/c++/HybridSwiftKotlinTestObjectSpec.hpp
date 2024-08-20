@@ -14,6 +14,8 @@
 #error NitroModules cannot be found! Are you sure you installed NitroModules properly?
 #endif
 
+// Forward declaration of `AnyMap` to properly resolve imports.
+namespace NitroModules { class AnyMap; }
 // Forward declaration of `Car` to properly resolve imports.
 namespace margelo::nitro::image { struct Car; }
 // Forward declaration of `Powertrain` to properly resolve imports.
@@ -31,6 +33,7 @@ namespace margelo::nitro::image { struct CallbackHolder; }
 #include <optional>
 #include <unordered_map>
 #include <vector>
+#include <NitroModules/AnyMap.hpp>
 #include "Car.hpp"
 #include "Powertrain.hpp"
 #include "OldEnum.hpp"
@@ -85,6 +88,8 @@ namespace margelo::nitro::image {
       virtual void setSomeArray(const std::vector<std::string>& someArray) = 0;
       virtual std::optional<std::string> getSomeOptional() = 0;
       virtual void setSomeOptional(const std::optional<std::string>& someOptional) = 0;
+      virtual std::shared_ptr<AnyMap> getSomeMap() = 0;
+      virtual void setSomeMap(const std::shared_ptr<AnyMap>& someMap) = 0;
       virtual std::optional<Car> getCar() = 0;
       virtual void setCar(const std::optional<Car>& car) = 0;
       virtual Powertrain getPowertrain() = 0;

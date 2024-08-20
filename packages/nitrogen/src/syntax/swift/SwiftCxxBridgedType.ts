@@ -226,6 +226,14 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
             throw new Error(`Invalid language! ${language}`)
         }
       }
+      case 'map': {
+        switch (language) {
+          case 'swift':
+            return 'margelo.nitro.TSharedMap'
+          default:
+            return this.type.getCode(language)
+        }
+      }
       case 'optional':
       case 'array':
       case 'function':

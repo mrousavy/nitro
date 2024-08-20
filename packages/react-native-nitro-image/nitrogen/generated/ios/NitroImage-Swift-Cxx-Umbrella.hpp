@@ -65,6 +65,7 @@ namespace margelo::nitro::image { enum class Powertrain; }
 
 // Common C++ types used in Swift
 #include <NitroModules/ArrayBufferHolder.hpp>
+#include <NitroModules/AnyMapHolder.hpp>
 #include <NitroModules/HybridContext.hpp>
 #include <NitroModules/PromiseHolder.hpp>
 

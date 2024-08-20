@@ -129,6 +129,7 @@ export interface SwiftKotlinTestObject extends HybridObject<{ ios: 'swift' }> {
   someRecord: Record<string, number>
   someArray: string[]
   someOptional: string | undefined
+  someMap: AnyMap
 
   car?: Car
 

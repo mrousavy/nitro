@@ -13,6 +13,8 @@
 // Forward declaration of `HybridSwiftKotlinTestObjectSpecCxx` to properly resolve imports.
 namespace NitroImage { class HybridSwiftKotlinTestObjectSpecCxx; }
 
+// Forward declaration of `AnyMap` to properly resolve imports.
+namespace NitroModules { class AnyMap; }
 // Forward declaration of `Car` to properly resolve imports.
 namespace margelo::nitro::image { struct Car; }
 // Forward declaration of `Powertrain` to properly resolve imports.
@@ -36,6 +38,7 @@ namespace margelo::nitro::image { struct CallbackHolder; }
 #include <optional>
 #include <unordered_map>
 #include <vector>
+#include <NitroModules/AnyMap.hpp>
 #include "Car.hpp"
 #include "Powertrain.hpp"
 #include "Person.hpp"
@@ -155,6 +158,13 @@ namespace margelo::nitro::image {
     }
     inline void setSomeOptional(const std::optional<std::string>& someOptional) noexcept override {
       _swiftPart.setSomeOptional(someOptional);
+    }
+    inline margelo::nitro::TSharedMap getSomeMap() noexcept override {
+      auto result = _swiftPart.getSomeMap();
+      return result;
+    }
+    inline void setSomeMap(const margelo::nitro::TSharedMap& someMap) noexcept override {
+      _swiftPart.setSomeMap(someMap);
     }
     inline std::optional<Car> getCar() noexcept override {
       auto result = _swiftPart.getCar();

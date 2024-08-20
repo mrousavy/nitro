@@ -238,6 +238,17 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
     }
   }
   
+  public var someMap: margelo.nitro.TSharedMap {
+    @inline(__always)
+    get {
+      return self.implementation.someMap.cppPart
+    }
+    @inline(__always)
+    set {
+      self.implementation.someMap = AnyMapHolder(withCppPart: newValue)
+    }
+  }
+  
   public var car: bridge.std__optional_Car_ {
     @inline(__always)
     get {

@@ -102,6 +102,8 @@ class HybridSwiftKotlinTestObject : HybridSwiftKotlinTestObjectSpec {
     }
   }
   
+  var someMap: AnyMapHolder = .init()
+  
   var someRecord: Dictionary<String, Double> {
     get {
       return [
