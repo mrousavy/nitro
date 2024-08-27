@@ -52,6 +52,7 @@ namespace margelo::nitro::image {
     // Methods
     std::future<void> asyncTest() override;
     std::shared_ptr<AnyMap> createMap() override;
+    void addOnPersonBornListener(const std::function<void(const Person& /* p */)>& callback) override;
 
   private:
     friend HybridBase;

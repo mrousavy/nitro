@@ -351,5 +351,13 @@ namespace margelo::nitro::image::bridge::swift {
     vector.reserve(size);
     return vector;
   }
+  
+  /**
+   * Specialized version of `std::function<void(const Person& / * p * /)>`.
+   */
+  using Func_void_Person = std::function<void(const Person& /* p */)>;
+  inline Func_void_Person create_Func_void_Person(void(*func)(void* /* context */, const Person&), void* context) {
+    return std::bind(func, context, std::placeholders::_1);
+  }
 
 } // namespace margelo::nitro::image::bridge::swift

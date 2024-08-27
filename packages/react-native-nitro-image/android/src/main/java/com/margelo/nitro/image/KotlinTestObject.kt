@@ -34,4 +34,8 @@ class KotlinTestObject: HybridKotlinTestObjectSpec() {
         map.setBigInt("bigint", 893256789)
         return map
     }
+
+    override fun addOnPersonBornListener(callback: Func_void_Person) {
+        callback.call(Person("Marc", 24.0))
+    }
 }

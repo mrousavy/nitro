@@ -34,6 +34,8 @@ namespace NitroModules { class AnyMap; }
 #include <NitroModules/JPromise.hpp>
 #include <NitroModules/AnyMap.hpp>
 #include <NitroModules/JAnyMap.hpp>
+#include <functional>
+#include "JFunc_void_Person.hpp"
 
 namespace margelo::nitro::image {
 
@@ -147,6 +149,10 @@ namespace margelo::nitro::image {
     static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<JAnyMap::javaobject>()>("createMap");
     auto result = method(_javaPart);
     return result->cthis()->getMap();
+  }
+  void JHybridKotlinTestObjectSpec::addOnPersonBornListener(const std::function<void(const Person& /* p */)>& callback) {
+    static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<JFunc_void_Person::javaobject> /* callback */)>("addOnPersonBornListener");
+    method(_javaPart, JFunc_void_Person::fromCpp(callback));
   }
 
 } // namespace margelo::nitro::image

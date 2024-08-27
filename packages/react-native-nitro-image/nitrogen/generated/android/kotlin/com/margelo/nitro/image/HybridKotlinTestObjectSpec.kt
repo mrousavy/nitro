@@ -71,6 +71,10 @@ abstract class HybridKotlinTestObjectSpec: HybridObject() {
   @DoNotStrip
   @Keep
   abstract fun createMap(): AnyMap
+  
+  @DoNotStrip
+  @Keep
+  abstract fun addOnPersonBornListener(callback: Func_void_Person): Unit
 
   private external fun initHybrid(): HybridData
 

@@ -19,7 +19,6 @@ export function createKotlinFunction(functionType: FunctionType): SourceFile[] {
   const kotlinParams = functionType.parameters.map(
     (p) => `${p.escapedName}: ${p.getCode('kotlin')}`
   )
-  const lambdaTypename = `(${kotlinParams.join(', ')}) -> ${kotlinReturnType}`
   const isPurelyPrimitive = isFunctionPurelyPrimitive(functionType)
   const annotation = isPurelyPrimitive ? 'CriticalNative' : 'FastNative'
 
@@ -34,16 +33,23 @@ import com.facebook.proguard.annotations.DoNotStrip
 import dalvik.annotation.optimization.${annotation}
 
 /**
- * Represents the JavaScript callback "${lambdaTypename}".
+ * Represents the JavaScript callback \`${functionType.jsName}\`.
  * This is implemented in C++, via a \`std::function<...>\`.
  */
 @DoNotStrip
 @Keep
 @Suppress("KotlinJniMissingFunction", "ClassName", "unused")
-class ${name} @DoNotStrip @Keep private constructor(hybridData: HybridData) {
+class ${name} {
   @DoNotStrip
   @Keep
-  private val mHybridData: HybridData = hybridData
+  private val mHybridData: HybridData
+
+  @Suppress("ConvertSecondaryConstructorToPrimary")
+  @DoNotStrip
+  @Keep
+  private constructor(hybridData: HybridData) {
+    mHybridData = hybridData
+  }
 
   /**
    * Call the given JS callback.
@@ -79,7 +85,7 @@ namespace ${cxxNamespace} {
 
   /**
    * C++ representation of the callback ${name}.
-   * This is a Kotlin \`${lambdaTypename}\`, backed by a \`std::function<...>\`.
+   * This is a Kotlin \`${functionType.jsName}\`, backed by a \`std::function<...>\`.
    */
   struct J${name} final: public jni::HybridClass<J${name}> {
   public:

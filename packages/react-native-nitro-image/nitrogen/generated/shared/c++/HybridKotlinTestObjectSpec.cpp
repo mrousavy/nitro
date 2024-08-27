@@ -27,6 +27,7 @@ namespace margelo::nitro::image {
       prototype.registerHybridSetter("someBuffer", &HybridKotlinTestObjectSpec::setSomeBuffer);
       prototype.registerHybridMethod("asyncTest", &HybridKotlinTestObjectSpec::asyncTest);
       prototype.registerHybridMethod("createMap", &HybridKotlinTestObjectSpec::createMap);
+      prototype.registerHybridMethod("addOnPersonBornListener", &HybridKotlinTestObjectSpec::addOnPersonBornListener);
     });
   }
 
