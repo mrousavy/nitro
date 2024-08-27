@@ -42,13 +42,12 @@ import dalvik.annotation.optimization.${annotation}
  */
 @DoNotStrip
 @Keep
-@Suppress("KotlinJniMissingFunction", "ClassName", "unused")
+@Suppress("ConvertSecondaryConstructorToPrimary", "KotlinJniMissingFunction", "ClassName", "unused")
 class ${name} {
   @DoNotStrip
   @Keep
   private val mHybridData: HybridData
 
-  @Suppress("ConvertSecondaryConstructorToPrimary")
   @DoNotStrip
   @Keep
   private constructor(hybridData: HybridData) {

@@ -19,13 +19,12 @@ import dalvik.annotation.optimization.FastNative
  */
 @DoNotStrip
 @Keep
-@Suppress("KotlinJniMissingFunction", "ClassName", "unused")
+@Suppress("ConvertSecondaryConstructorToPrimary", "KotlinJniMissingFunction", "ClassName", "unused")
 class Func_void_Person {
   @DoNotStrip
   @Keep
   private val mHybridData: HybridData
 
-  @Suppress("ConvertSecondaryConstructorToPrimary")
   @DoNotStrip
   @Keep
   private constructor(hybridData: HybridData) {
