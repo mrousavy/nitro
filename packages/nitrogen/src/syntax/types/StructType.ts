@@ -35,7 +35,7 @@ export class StructType implements Type {
       case 'swift':
         return this.structName
       case 'kotlin':
-        return NitroConfig.getAndroidPackage('java/kotlin', this.structName)
+        return this.structName
       default:
         throw new Error(
           `Language ${language} is not yet supported for StructType!`

@@ -4,6 +4,8 @@ import com.margelo.nitro.core.AnyMap
 import com.margelo.nitro.core.ArrayBuffer
 import com.margelo.nitro.core.Promise
 import java.nio.ByteBuffer
+import kotlin.concurrent.thread
+
 
 class KotlinTestObject: HybridKotlinTestObjectSpec() {
     override var numberValue: Double = 0.0
@@ -33,5 +35,21 @@ class KotlinTestObject: HybridKotlinTestObjectSpec() {
         map.setBoolean("bool", true)
         map.setBigInt("bigint", 893256789)
         return map
+    }
+
+    override fun addOnPersonBornListener(callback: (p: Person) -> Unit) {
+        callback(Person("Marc", 24.0))
+        thread {
+            Thread.sleep(500)
+            callback(Person("Marc", 24.0))
+        }
+        thread {
+            Thread.sleep(700)
+            callback(Person("Marc", 24.0))
+        }
+        thread {
+            Thread.sleep(1500)
+            callback(Person("Marc", 24.0))
+        }
     }
 }

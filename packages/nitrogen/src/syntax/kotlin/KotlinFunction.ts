@@ -1,8 +1,11 @@
 import { NitroConfig } from '../../config/NitroConfig.js'
-import { createFileMetadataString } from '../helpers.js'
+import { indent } from '../../utils.js'
+import { includeHeader } from '../c++/includeNitroHeader.js'
+import { createFileMetadataString, isNotDuplicate } from '../helpers.js'
 import type { SourceFile } from '../SourceFile.js'
 import type { FunctionType } from '../types/FunctionType.js'
 import { isArrayOfPrimitives, isPrimitive } from './KotlinBoxedPrimitive.js'
+import { KotlinCxxBridgedType } from './KotlinCxxBridgedType.js'
 
 function isFunctionPurelyPrimitive(func: FunctionType): boolean {
   if (!isPrimitive(func.returnType) && !isArrayOfPrimitives(func.returnType)) {
@@ -19,9 +22,9 @@ export function createKotlinFunction(functionType: FunctionType): SourceFile[] {
   const kotlinParams = functionType.parameters.map(
     (p) => `${p.escapedName}: ${p.getCode('kotlin')}`
   )
-  const lambdaTypename = `(${kotlinParams.join(', ')}) -> ${kotlinReturnType}`
   const isPurelyPrimitive = isFunctionPurelyPrimitive(functionType)
   const annotation = isPurelyPrimitive ? 'CriticalNative' : 'FastNative'
+  const lambdaSignature = `(${kotlinParams.join(', ')}) -> ${kotlinReturnType}`
 
   const kotlinCode = `
 ${createFileMetadataString(`${name}.kt`)}
@@ -34,16 +37,28 @@ import com.facebook.proguard.annotations.DoNotStrip
 import dalvik.annotation.optimization.${annotation}
 
 /**
- * Represents the JavaScript callback "${lambdaTypename}".
+ * Represents the JavaScript callback \`${functionType.jsName}\`.
  * This is implemented in C++, via a \`std::function<...>\`.
  */
 @DoNotStrip
 @Keep
-@Suppress("KotlinJniMissingFunction", "ClassName", "unused")
-class ${name} @DoNotStrip @Keep private constructor(hybridData: HybridData) {
+@Suppress("RedundantSuppression", "ConvertSecondaryConstructorToPrimary", "RedundantUnitReturnType", "KotlinJniMissingFunction", "ClassName", "unused")
+class ${name} {
   @DoNotStrip
   @Keep
-  private val mHybridData: HybridData = hybridData
+  private val mHybridData: HybridData
+
+  @DoNotStrip
+  @Keep
+  private constructor(hybridData: HybridData) {
+    mHybridData = hybridData
+  }
+
+  /**
+   * Converts this function to a Kotlin Lambda.
+   * This exists purely as syntactic sugar, and has minimal runtime overhead.
+   */
+  fun toLambda(): ${lambdaSignature} = this::call
 
   /**
    * Call the given JS callback.
@@ -54,17 +69,26 @@ class ${name} @DoNotStrip @Keep private constructor(hybridData: HybridData) {
 }
   `.trim()
 
-  functionType.getCode
   const cppReturnType = functionType.returnType.getCode('c++')
-  const cppParams = functionType.parameters.map(
-    (p) => `${p.getCode('c++')}&& ${p.escapedName}`
-  )
-  const paramsForward = functionType.parameters.map(
-    (p) => `std::forward<decltype(${p.name})>(${p.name})`
-  )
+  const cppParams = functionType.parameters.map((p) => {
+    const bridge = new KotlinCxxBridgedType(p)
+    const type = bridge.asJniReferenceType('alias')
+    return `const ${type}& ${p.escapedName}`
+  })
+  const paramsForward = functionType.parameters.map((p) => {
+    const bridge = new KotlinCxxBridgedType(p)
+    return bridge.parseFromKotlinToCpp(p.escapedName, 'c++', false)
+  })
   const jniClassDescriptor = NitroConfig.getAndroidPackage('c++/jni', name)
   const cxxNamespace = NitroConfig.getCxxNamespace('c++')
   const typename = functionType.getCode('c++')
+
+  const bridged = new KotlinCxxBridgedType(functionType)
+  const imports = bridged
+    .getRequiredImports()
+    .filter((i) => i.name !== `J${name}.hpp`)
+  const includes = imports.map((i) => includeHeader(i)).filter(isNotDuplicate)
+
   const fbjniCode = `
 ${createFileMetadataString(`J${name}.hpp`)}
 
@@ -73,13 +97,15 @@ ${createFileMetadataString(`J${name}.hpp`)}
 #include <fbjni/fbjni.h>
 #include <functional>
 
+${includes.join('\n')}
+
 namespace ${cxxNamespace} {
 
   using namespace facebook;
 
   /**
    * C++ representation of the callback ${name}.
-   * This is a Kotlin \`${lambdaTypename}\`, backed by a \`std::function<...>\`.
+   * This is a Kotlin \`${functionType.getCode('kotlin')}\`, backed by a \`std::function<...>\`.
    */
   struct J${name} final: public jni::HybridClass<J${name}> {
   public:
@@ -89,7 +115,7 @@ namespace ${cxxNamespace} {
 
   public:
     ${cppReturnType} call(${cppParams.join(', ')}) {
-      return _func(${paramsForward.join(', ')});
+      return _func(${indent(paramsForward.join(', '), '      ')});
     }
 
   public:

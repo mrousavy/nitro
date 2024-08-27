@@ -11,6 +11,9 @@
 #include <fbjni/fbjni.h>
 #include <functional>
 
+#include <functional>
+#include <string>
+
 namespace margelo::nitro::image {
 
   using namespace facebook;
@@ -26,8 +29,8 @@ namespace margelo::nitro::image {
     }
 
   public:
-    void call(std::string&& path) {
-      return _func(std::forward<decltype(path)>(path));
+    void call(const jni::alias_ref<jni::JString>& path) {
+      return _func(path->toStdString());
     }
 
   public:

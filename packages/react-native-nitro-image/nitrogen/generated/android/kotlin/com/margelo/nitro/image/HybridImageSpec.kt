@@ -20,7 +20,7 @@ import com.margelo.nitro.core.*
  */
 @DoNotStrip
 @Keep
-@Suppress("KotlinJniMissingFunction")
+@Suppress("RedundantSuppression", "KotlinJniMissingFunction", "PropertyName", "RedundantUnitReturnType", "unused")
 abstract class HybridImageSpec: HybridObject() {
   protected val TAG = "HybridImageSpec"
 
@@ -28,18 +28,19 @@ abstract class HybridImageSpec: HybridObject() {
   val mHybridData: HybridData = initHybrid()
 
   init {
-    // Pass it through to it's base class to represent inheritance to JHybridObject on C++ side
+    // Pass this `HybridData` through to it's base class,
+    // to represent inheritance to JHybridObject on C++ side
     super.updateNative(mHybridData)
   }
 
   // Properties
   @get:DoNotStrip
   @get:Keep
-  abstract val size: com.margelo.nitro.image.ImageSize
+  abstract val size: ImageSize
   
   @get:DoNotStrip
   @get:Keep
-  abstract val pixelFormat: com.margelo.nitro.image.PixelFormat
+  abstract val pixelFormat: PixelFormat
   
   @get:DoNotStrip
   @get:Keep
@@ -50,11 +51,18 @@ abstract class HybridImageSpec: HybridObject() {
   // Methods
   @DoNotStrip
   @Keep
-  abstract fun toArrayBuffer(format: com.margelo.nitro.image.ImageFormat): Double
+  abstract fun toArrayBuffer(format: ImageFormat): Double
   
   @DoNotStrip
   @Keep
-  abstract fun saveToFile(path: String, onFinished: Func_void_std__string): Unit
+  abstract fun saveToFile(path: String, onFinished: (path: String) -> Unit): Unit
+  
+  @DoNotStrip
+  @Keep
+  private fun saveToFile(path: String, onFinished: Func_void_std__string): Unit {
+    val result = saveToFile(path, onFinished.toLambda())
+    return result
+  }
 
   private external fun initHybrid(): HybridData
 

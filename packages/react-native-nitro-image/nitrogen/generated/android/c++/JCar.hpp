@@ -34,7 +34,7 @@ namespace margelo::nitro::image {
      * Convert this Java/Kotlin-based struct to the C++ struct Car by copying all values to C++.
      */
     [[maybe_unused]]
-    Car toCpp() {
+    Car toCpp() const {
       static const auto clazz = javaClassStatic();
       static const auto fieldYear = clazz->getField<double>("year");
       double year = this->getFieldValue(fieldYear);

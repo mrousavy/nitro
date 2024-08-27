@@ -168,59 +168,107 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
   }
 
   getTypeCode(language: 'kotlin' | 'c++'): string {
-    if (language !== 'c++') {
-      // In Kotlin, we just use the normal Kotlin types directly.
-      return this.type.getCode(language)
-    }
     switch (this.type.kind) {
       case 'array':
-        const array = getTypeAs(this.type, ArrayType)
-        switch (array.itemType.kind) {
-          case 'number':
-            return 'jni::JArrayDouble'
-          case 'boolean':
-            return 'jni::JArrayBoolean'
-          case 'bigint':
-            return 'jni::JArrayLong'
+        switch (language) {
+          case 'c++':
+            const array = getTypeAs(this.type, ArrayType)
+            switch (array.itemType.kind) {
+              case 'number':
+                return 'jni::JArrayDouble'
+              case 'boolean':
+                return 'jni::JArrayBoolean'
+              case 'bigint':
+                return 'jni::JArrayLong'
+              default:
+                const bridged = new KotlinCxxBridgedType(array.itemType)
+                return `jni::JArrayClass<${bridged.getTypeCode(language)}>`
+            }
           default:
-            const bridged = new KotlinCxxBridgedType(array.itemType)
-            return `jni::JArrayClass<${bridged.getTypeCode(language)}>`
+            return this.type.getCode(language)
         }
       case 'string':
-        return 'jni::JString'
+        switch (language) {
+          case 'c++':
+            return 'jni::JString'
+          default:
+            return this.type.getCode(language)
+        }
       case 'enum':
-        const enumType = getTypeAs(this.type, EnumType)
-        return `J${enumType.enumName}`
+        switch (language) {
+          case 'c++':
+            const enumType = getTypeAs(this.type, EnumType)
+            return `J${enumType.enumName}`
+          default:
+            return this.type.getCode(language)
+        }
       case 'struct':
-        const structType = getTypeAs(this.type, StructType)
-        return `J${structType.structName}`
+        switch (language) {
+          case 'c++':
+            const structType = getTypeAs(this.type, StructType)
+            return `J${structType.structName}`
+          default:
+            return this.type.getCode(language)
+        }
       case 'function':
         const functionType = getTypeAs(this.type, FunctionType)
-        return `J${functionType.specializationName}::javaobject`
+        switch (language) {
+          case 'c++':
+            return `J${functionType.specializationName}::javaobject`
+          case 'kotlin':
+            return functionType.specializationName
+          default:
+            return this.type.getCode(language)
+        }
       case 'hybrid-object': {
-        const hybridObjectType = getTypeAs(this.type, HybridObjectType)
-        const name = getHybridObjectName(hybridObjectType.hybridObjectName)
-        return `${name.JHybridTSpec}::javaobject`
+        switch (language) {
+          case 'c++':
+            const hybridObjectType = getTypeAs(this.type, HybridObjectType)
+            const name = getHybridObjectName(hybridObjectType.hybridObjectName)
+            return `${name.JHybridTSpec}::javaobject`
+          default:
+            return this.type.getCode(language)
+        }
       }
       case 'array-buffer':
-        return `JArrayBuffer::javaobject`
-      case 'promise':
-        return `JPromise::javaobject`
-      case 'map':
-        return `JAnyMap::javaobject`
-      case 'optional': {
-        const optional = getTypeAs(this.type, OptionalType)
-        switch (optional.wrappingType.kind) {
-          // primitives need to be boxed to make them nullable
-          case 'number':
-          case 'boolean':
-          case 'bigint':
-            const boxed = getKotlinBoxedPrimitiveType(optional.wrappingType)
-            return boxed
+        switch (language) {
+          case 'c++':
+            return `JArrayBuffer::javaobject`
           default:
-            // all other types can be nullable as they are objects.
-            const bridge = new KotlinCxxBridgedType(optional.wrappingType)
-            return bridge.getTypeCode('c++')
+            return this.type.getCode(language)
+        }
+      case 'promise':
+        switch (language) {
+          case 'c++':
+            return `JPromise::javaobject`
+          default:
+            return this.type.getCode(language)
+        }
+      case 'map':
+        switch (language) {
+          case 'c++':
+            return `JAnyMap::javaobject`
+          default:
+            return this.type.getCode(language)
+        }
+      case 'optional': {
+        switch (language) {
+          case 'c++':
+            const optional = getTypeAs(this.type, OptionalType)
+            switch (optional.wrappingType.kind) {
+              // primitives need to be boxed to make them nullable
+              case 'number':
+              case 'boolean':
+              case 'bigint':
+                const boxed = getKotlinBoxedPrimitiveType(optional.wrappingType)
+                return boxed
+              default:
+                // all other types can be nullable as they are objects.
+                const bridge = new KotlinCxxBridgedType(optional.wrappingType)
+                return bridge.getTypeCode('c++')
+            }
+          default:
+            return this.type.getCode(language)
         }
       }
       default:
@@ -251,18 +299,26 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
     switch (this.type.kind) {
       case 'number':
       case 'boolean':
-      case 'bigint': {
-        if (isBoxed) {
-          // box a primitive (double) to an object (JDouble)
-          const boxed = getKotlinBoxedPrimitiveType(this.type)
-          return `${boxed}::valueOf(${parameterName})`
-        } else {
-          return parameterName
+      case 'bigint':
+        switch (language) {
+          case 'c++':
+            if (isBoxed) {
+              // box a primitive (double) to an object (JDouble)
+              const boxed = getKotlinBoxedPrimitiveType(this.type)
+              return `${boxed}::valueOf(${parameterName})`
+            } else {
+              return parameterName
+            }
+          default:
+            return parameterName
         }
-      }
-      case 'string': {
-        return `jni::make_jstring(${parameterName})`
-      }
+      case 'string':
+        switch (language) {
+          case 'c++':
+            return `jni::make_jstring(${parameterName})`
+          default:
+            return parameterName
+        }
       case 'struct': {
         switch (language) {
           case 'c++':
@@ -286,6 +342,8 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
           case 'c++':
             const func = getTypeAs(this.type, FunctionType)
             return `J${func.specializationName}::fromCpp(${parameterName})`
+          case 'kotlin':
+            return `${parameterName}.toLambda()`
           default:
             return parameterName
         }
@@ -327,16 +385,18 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
         }
       }
       case 'array': {
-        const array = getTypeAs(this.type, ArrayType)
-        const arrayType = this.getTypeCode('c++')
-        const bridge = new KotlinCxxBridgedType(array.itemType)
-        switch (array.itemType.kind) {
-          case 'number':
-          case 'boolean':
-          case 'bigint': {
-            // primitive arrays can be constructed more efficiently with region/batch access.
-            // no need to iterate through the entire array.
-            return `
+        switch (language) {
+          case 'c++': {
+            const array = getTypeAs(this.type, ArrayType)
+            const arrayType = this.getTypeCode('c++')
+            const bridge = new KotlinCxxBridgedType(array.itemType)
+            switch (array.itemType.kind) {
+              case 'number':
+              case 'boolean':
+              case 'bigint': {
+                // primitive arrays can be constructed more efficiently with region/batch access.
+                // no need to iterate through the entire array.
+                return `
 [&]() {
   size_t size = ${parameterName}.size();
   jni::local_ref<${arrayType}> array = ${arrayType}::newArray(size);
@@ -344,10 +404,10 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
   return array;
 }()
 `.trim()
-          }
-          default: {
-            // other arrays need to loop through
-            return `
+              }
+              default: {
+                // other arrays need to loop through
+                return `
 [&]() {
   size_t size = ${parameterName}.size();
   jni::local_ref<${arrayType}> array = ${arrayType}::newArray(size);
@@ -358,7 +418,11 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
   return array;
 }()
             `.trim()
+              }
+            }
           }
+          default:
+            return parameterName
         }
       }
       default:
@@ -375,16 +439,25 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
     switch (this.type.kind) {
       case 'number':
       case 'boolean':
-      case 'bigint': {
-        if (isBoxed) {
-          // unbox an object (JDouble) to a primitive (double)
-          return `${parameterName}->value()`
-        } else {
-          return parameterName
+      case 'bigint':
+        switch (language) {
+          case 'c++':
+            if (isBoxed) {
+              // unbox an object (JDouble) to a primitive (double)
+              return `${parameterName}->value()`
+            } else {
+              return parameterName
+            }
+          default:
+            return parameterName
         }
-      }
       case 'string':
-        return `${parameterName}->toStdString()`
+        switch (language) {
+          case 'c++':
+            return `${parameterName}->toStdString()`
+          default:
+            return parameterName
+        }
       case 'struct':
       case 'enum':
       case 'function': {
@@ -437,23 +510,27 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
         }
       }
       case 'promise': {
-        const promise = getTypeAs(this.type, PromiseType)
-        const actualCppType = promise.resultingType.getCode('c++')
-        const resultingType = new KotlinCxxBridgedType(promise.resultingType)
-        let resolveBody: string
-        if (resultingType.hasType) {
-          // it's a Promise<T>
-          resolveBody = `
+        switch (language) {
+          case 'c++':
+            const promise = getTypeAs(this.type, PromiseType)
+            const actualCppType = promise.resultingType.getCode('c++')
+            const resultingType = new KotlinCxxBridgedType(
+              promise.resultingType
+            )
+            let resolveBody: string
+            if (resultingType.hasType) {
+              // it's a Promise<T>
+              resolveBody = `
 auto result = jni::static_ref_cast<${resultingType.getTypeCode('c++')}>(boxedResult);
 promise->set_value(${resultingType.parseFromKotlinToCpp('result', 'c++', true)});
           `.trim()
-        } else {
-          // it's a Promise<void>
-          resolveBody = `
+            } else {
+              // it's a Promise<void>
+              resolveBody = `
 promise->set_value();
           `.trim()
-        }
-        return `
+            }
+            return `
 [&]() {
   auto promise = std::make_shared<std::promise<${actualCppType}>>();
   ${parameterName}->cthis()->addOnResolvedListener([=](jni::alias_ref<jni::JObject> boxedResult) {
@@ -466,18 +543,23 @@ promise->set_value();
   return promise->get_future();
 }()
         `.trim()
+          default:
+            return parameterName
+        }
       }
       case 'array': {
-        const array = getTypeAs(this.type, ArrayType)
-        const bridge = new KotlinCxxBridgedType(array.itemType)
-        const itemType = array.itemType.getCode('c++')
-        switch (array.itemType.kind) {
-          case 'number':
-          case 'boolean':
-          case 'bigint': {
-            // primitive arrays can use region/batch access,
-            // which we can use to construct the vector directly instead of looping through it.
-            return `
+        switch (language) {
+          case 'c++':
+            const array = getTypeAs(this.type, ArrayType)
+            const bridge = new KotlinCxxBridgedType(array.itemType)
+            const itemType = array.itemType.getCode('c++')
+            switch (array.itemType.kind) {
+              case 'number':
+              case 'boolean':
+              case 'bigint': {
+                // primitive arrays can use region/batch access,
+                // which we can use to construct the vector directly instead of looping through it.
+                return `
 [&]() {
   size_t size = ${parameterName}->size();
   std::vector<${itemType}> vector;
@@ -486,10 +568,10 @@ promise->set_value();
   return vector;
 }()
 `.trim()
-          }
-          default: {
-            // other arrays need to loop through
-            return `
+              }
+              default: {
+                // other arrays need to loop through
+                return `
 [&]() {
   size_t size = ${parameterName}->size();
   std::vector<${itemType}> vector;
@@ -501,7 +583,10 @@ promise->set_value();
   return vector;
 }()
             `.trim()
-          }
+              }
+            }
+          default:
+            return parameterName
         }
       }
       default:

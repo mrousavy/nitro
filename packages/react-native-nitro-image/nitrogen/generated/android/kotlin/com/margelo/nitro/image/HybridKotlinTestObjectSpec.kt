@@ -20,7 +20,7 @@ import com.margelo.nitro.core.*
  */
 @DoNotStrip
 @Keep
-@Suppress("KotlinJniMissingFunction")
+@Suppress("RedundantSuppression", "KotlinJniMissingFunction", "PropertyName", "RedundantUnitReturnType", "unused")
 abstract class HybridKotlinTestObjectSpec: HybridObject() {
   protected val TAG = "HybridKotlinTestObjectSpec"
 
@@ -28,7 +28,8 @@ abstract class HybridKotlinTestObjectSpec: HybridObject() {
   val mHybridData: HybridData = initHybrid()
 
   init {
-    // Pass it through to it's base class to represent inheritance to JHybridObject on C++ side
+    // Pass this `HybridData` through to it's base class,
+    // to represent inheritance to JHybridObject on C++ side
     super.updateNative(mHybridData)
   }
 
@@ -55,7 +56,7 @@ abstract class HybridKotlinTestObjectSpec: HybridObject() {
   @get:Keep
   @set:DoNotStrip
   @set:Keep
-  abstract var carCollection: Array<com.margelo.nitro.image.Car>
+  abstract var carCollection: Array<Car>
   
   @get:DoNotStrip
   @get:Keep
@@ -71,6 +72,17 @@ abstract class HybridKotlinTestObjectSpec: HybridObject() {
   @DoNotStrip
   @Keep
   abstract fun createMap(): AnyMap
+  
+  @DoNotStrip
+  @Keep
+  abstract fun addOnPersonBornListener(callback: (p: Person) -> Unit): Unit
+  
+  @DoNotStrip
+  @Keep
+  private fun addOnPersonBornListener(callback: Func_void_Person): Unit {
+    val result = addOnPersonBornListener(callback.toLambda())
+    return result
+  }
 
   private external fun initHybrid(): HybridData
 

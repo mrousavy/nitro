@@ -33,7 +33,9 @@ namespace margelo::nitro::image {
     size_t getExternalMemorySize() noexcept override;
 
   public:
-    inline jni::global_ref<JHybridKotlinTestObjectSpec::javaobject>& getJavaPart() noexcept { return _javaPart; }
+    inline const jni::global_ref<JHybridKotlinTestObjectSpec::javaobject>& getJavaPart() const noexcept {
+      return _javaPart;
+    }
 
   public:
     // Properties
@@ -52,6 +54,7 @@ namespace margelo::nitro::image {
     // Methods
     std::future<void> asyncTest() override;
     std::shared_ptr<AnyMap> createMap() override;
+    void addOnPersonBornListener(const std::function<void(const Person& /* p */)>& callback) override;
 
   private:
     friend HybridBase;

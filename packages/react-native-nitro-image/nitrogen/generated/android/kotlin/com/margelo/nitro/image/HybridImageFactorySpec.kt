@@ -20,7 +20,7 @@ import com.margelo.nitro.core.*
  */
 @DoNotStrip
 @Keep
-@Suppress("KotlinJniMissingFunction")
+@Suppress("RedundantSuppression", "KotlinJniMissingFunction", "PropertyName", "RedundantUnitReturnType", "unused")
 abstract class HybridImageFactorySpec: HybridObject() {
   protected val TAG = "HybridImageFactorySpec"
 
@@ -28,7 +28,8 @@ abstract class HybridImageFactorySpec: HybridObject() {
   val mHybridData: HybridData = initHybrid()
 
   init {
-    // Pass it through to it's base class to represent inheritance to JHybridObject on C++ side
+    // Pass this `HybridData` through to it's base class,
+    // to represent inheritance to JHybridObject on C++ side
     super.updateNative(mHybridData)
   }
 
@@ -38,19 +39,19 @@ abstract class HybridImageFactorySpec: HybridObject() {
   // Methods
   @DoNotStrip
   @Keep
-  abstract fun loadImageFromFile(path: String): com.margelo.nitro.image.HybridImageSpec
+  abstract fun loadImageFromFile(path: String): HybridImageSpec
   
   @DoNotStrip
   @Keep
-  abstract fun loadImageFromURL(path: String): com.margelo.nitro.image.HybridImageSpec
+  abstract fun loadImageFromURL(path: String): HybridImageSpec
   
   @DoNotStrip
   @Keep
-  abstract fun loadImageFromSystemName(path: String): com.margelo.nitro.image.HybridImageSpec
+  abstract fun loadImageFromSystemName(path: String): HybridImageSpec
   
   @DoNotStrip
   @Keep
-  abstract fun bounceBack(image: com.margelo.nitro.image.HybridImageSpec): com.margelo.nitro.image.HybridImageSpec
+  abstract fun bounceBack(image: HybridImageSpec): HybridImageSpec
 
   private external fun initHybrid(): HybridData
 

@@ -33,11 +33,7 @@ export class HybridObjectType implements Type {
         return name.HybridTSpec
       }
       case 'kotlin': {
-        const fullName = NitroConfig.getAndroidPackage(
-          'java/kotlin',
-          name.HybridTSpec
-        )
-        return fullName
+        return name.HybridTSpec
       }
       default:
         throw new Error(
