@@ -36,12 +36,12 @@ class Func_void_Person {
    * Converts this function to a Kotlin Lambda.
    * This exists purely as syntactic sugar, and has minimal runtime overhead.
    */
-  fun toLambda(): (p: com.margelo.nitro.image.Person) -> Unit = this::call
+  fun toLambda(): (p: Person) -> Unit = this::call
 
   /**
    * Call the given JS callback.
    * @throws Throwable if the JS function itself throws an error, or if the JS function/runtime has already been deleted.
    */
   @FastNative
-  external fun call(p: com.margelo.nitro.image.Person): Unit
+  external fun call(p: Person): Unit
 }

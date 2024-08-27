@@ -21,6 +21,6 @@ data class Car(
   val make: String,
   val model: String,
   val power: Double,
-  val powertrain: com.margelo.nitro.image.Powertrain,
-  val driver: com.margelo.nitro.image.Person?
+  val powertrain: Powertrain,
+  val driver: Person?
 )

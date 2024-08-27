@@ -106,7 +106,7 @@ namespace ${cxxNamespace} {
 
   /**
    * C++ representation of the callback ${name}.
-   * This is a Kotlin \`${functionType.jsName}\`, backed by a \`std::function<...>\`.
+   * This is a Kotlin \`${functionType.getCode('kotlin')}\`, backed by a \`std::function<...>\`.
    */
   struct J${name} final: public jni::HybridClass<J${name}> {
   public:

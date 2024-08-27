@@ -20,7 +20,7 @@ namespace margelo::nitro::image {
 
   /**
    * C++ representation of the callback Func_void_std__string.
-   * This is a Kotlin `(path: string) => void`, backed by a `std::function<...>`.
+   * This is a Kotlin `(path: String) -> Unit`, backed by a `std::function<...>`.
    */
   struct JFunc_void_std__string final: public jni::HybridClass<JFunc_void_std__string> {
   public:

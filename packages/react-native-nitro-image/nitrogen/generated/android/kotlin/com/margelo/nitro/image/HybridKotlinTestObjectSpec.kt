@@ -56,7 +56,7 @@ abstract class HybridKotlinTestObjectSpec: HybridObject() {
   @get:Keep
   @set:DoNotStrip
   @set:Keep
-  abstract var carCollection: Array<com.margelo.nitro.image.Car>
+  abstract var carCollection: Array<Car>
   
   @get:DoNotStrip
   @get:Keep
@@ -75,7 +75,7 @@ abstract class HybridKotlinTestObjectSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
-  abstract fun addOnPersonBornListener(callback: (p: com.margelo.nitro.image.Person) -> Unit): Unit
+  abstract fun addOnPersonBornListener(callback: (p: Person) -> Unit): Unit
   
   @DoNotStrip
   @Keep

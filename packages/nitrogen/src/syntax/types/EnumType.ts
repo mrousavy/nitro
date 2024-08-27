@@ -88,7 +88,7 @@ export class EnumType implements Type {
       case 'swift':
         return this.enumName
       case 'kotlin':
-        return NitroConfig.getAndroidPackage('java/kotlin', this.enumName)
+        return this.enumName
       default:
         throw new Error(
           `Language ${language} is not yet supported for NumberType!`

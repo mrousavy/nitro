@@ -36,11 +36,11 @@ abstract class HybridImageSpec: HybridObject() {
   // Properties
   @get:DoNotStrip
   @get:Keep
-  abstract val size: com.margelo.nitro.image.ImageSize
+  abstract val size: ImageSize
   
   @get:DoNotStrip
   @get:Keep
-  abstract val pixelFormat: com.margelo.nitro.image.PixelFormat
+  abstract val pixelFormat: PixelFormat
   
   @get:DoNotStrip
   @get:Keep
@@ -51,7 +51,7 @@ abstract class HybridImageSpec: HybridObject() {
   // Methods
   @DoNotStrip
   @Keep
-  abstract fun toArrayBuffer(format: com.margelo.nitro.image.ImageFormat): Double
+  abstract fun toArrayBuffer(format: ImageFormat): Double
   
   @DoNotStrip
   @Keep

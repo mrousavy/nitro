@@ -22,7 +22,7 @@ namespace margelo::nitro::image {
 
   /**
    * C++ representation of the callback Func_void_Person.
-   * This is a Kotlin `(p: struct) => void`, backed by a `std::function<...>`.
+   * This is a Kotlin `(p: Person) -> Unit`, backed by a `std::function<...>`.
    */
   struct JFunc_void_Person final: public jni::HybridClass<JFunc_void_Person> {
   public:
