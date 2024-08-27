@@ -29,7 +29,7 @@ namespace margelo::nitro::image {
      * Convert this Java/Kotlin-based struct to the C++ struct Person by copying all values to C++.
      */
     [[maybe_unused]]
-    Person toCpp() {
+    Person toCpp() const {
       static const auto clazz = javaClassStatic();
       static const auto fieldName = clazz->getField<jni::JString>("name");
       jni::local_ref<jni::JString> name = this->getFieldValue(fieldName);

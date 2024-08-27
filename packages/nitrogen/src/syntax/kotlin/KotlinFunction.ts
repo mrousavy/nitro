@@ -1,8 +1,11 @@
 import { NitroConfig } from '../../config/NitroConfig.js'
-import { createFileMetadataString } from '../helpers.js'
+import { indent } from '../../utils.js'
+import { includeHeader } from '../c++/includeNitroHeader.js'
+import { createFileMetadataString, isNotDuplicate } from '../helpers.js'
 import type { SourceFile } from '../SourceFile.js'
 import type { FunctionType } from '../types/FunctionType.js'
 import { isArrayOfPrimitives, isPrimitive } from './KotlinBoxedPrimitive.js'
+import { KotlinCxxBridgedType } from './KotlinCxxBridgedType.js'
 
 function isFunctionPurelyPrimitive(func: FunctionType): boolean {
   if (!isPrimitive(func.returnType) && !isArrayOfPrimitives(func.returnType)) {
@@ -60,17 +63,26 @@ class ${name} {
 }
   `.trim()
 
-  functionType.getCode
   const cppReturnType = functionType.returnType.getCode('c++')
-  const cppParams = functionType.parameters.map(
-    (p) => `${p.getCode('c++')}&& ${p.escapedName}`
-  )
-  const paramsForward = functionType.parameters.map(
-    (p) => `std::forward<decltype(${p.name})>(${p.name})`
-  )
+  const cppParams = functionType.parameters.map((p) => {
+    const bridge = new KotlinCxxBridgedType(p)
+    const type = bridge.asJniReferenceType('alias')
+    return `const ${type}& ${p.escapedName}`
+  })
+  const paramsForward = functionType.parameters.map((p) => {
+    const bridge = new KotlinCxxBridgedType(p)
+    return bridge.parseFromKotlinToCpp(p.escapedName, 'c++', false)
+  })
   const jniClassDescriptor = NitroConfig.getAndroidPackage('c++/jni', name)
   const cxxNamespace = NitroConfig.getCxxNamespace('c++')
   const typename = functionType.getCode('c++')
+
+  const bridged = new KotlinCxxBridgedType(functionType)
+  const imports = bridged
+    .getRequiredImports()
+    .filter((i) => i.name !== `J${name}.hpp`)
+  const includes = imports.map((i) => includeHeader(i)).filter(isNotDuplicate)
+
   const fbjniCode = `
 ${createFileMetadataString(`J${name}.hpp`)}
 
@@ -78,6 +90,8 @@ ${createFileMetadataString(`J${name}.hpp`)}
 
 #include <fbjni/fbjni.h>
 #include <functional>
+
+${includes.join('\n')}
 
 namespace ${cxxNamespace} {
 
@@ -95,7 +109,7 @@ namespace ${cxxNamespace} {
 
   public:
     ${cppReturnType} call(${cppParams.join(', ')}) {
-      return _func(${paramsForward.join(', ')});
+      return _func(${indent(paramsForward.join(', '), '      ')});
     }
 
   public:

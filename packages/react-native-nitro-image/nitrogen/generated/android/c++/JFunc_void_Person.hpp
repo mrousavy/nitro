@@ -11,6 +11,11 @@
 #include <fbjni/fbjni.h>
 #include <functional>
 
+#include <functional>
+#include "Person.hpp"
+#include "JPerson.hpp"
+#include <string>
+
 namespace margelo::nitro::image {
 
   using namespace facebook;
@@ -26,8 +31,8 @@ namespace margelo::nitro::image {
     }
 
   public:
-    void call(Person&& p) {
-      return _func(std::forward<decltype(p)>(p));
+    void call(const jni::alias_ref<JPerson>& p) {
+      return _func(p->toCpp());
     }
 
   public:

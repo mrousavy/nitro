@@ -27,7 +27,7 @@ namespace margelo::nitro::image {
      * Convert this Java/Kotlin-based enum to the C++ enum Powertrain.
      */
     [[maybe_unused]]
-    Powertrain toCpp() {
+    Powertrain toCpp() const {
       static const auto clazz = javaClassStatic();
       static const auto fieldOrdinal = clazz->getField<int>("ordinal");
       int ordinal = this->getFieldValue(fieldOrdinal);

@@ -55,7 +55,9 @@ ${spaces}                public ${name.HybridTSpec} {
     size_t getExternalMemorySize() noexcept override;
 
   public:
-    inline jni::global_ref<${name.JHybridTSpec}::javaobject>& getJavaPart() noexcept { return _javaPart; }
+    inline const jni::global_ref<${name.JHybridTSpec}::javaobject>& getJavaPart() const noexcept {
+      return _javaPart;
+    }
 
   public:
     // Properties

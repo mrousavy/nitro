@@ -27,7 +27,7 @@ namespace margelo::nitro::image {
      * Convert this Java/Kotlin-based enum to the C++ enum PixelFormat.
      */
     [[maybe_unused]]
-    PixelFormat toCpp() {
+    PixelFormat toCpp() const {
       static const auto clazz = javaClassStatic();
       static const auto fieldOrdinal = clazz->getField<int>("ordinal");
       int ordinal = this->getFieldValue(fieldOrdinal);
