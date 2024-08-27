@@ -32,6 +32,10 @@ class Func_void_Person {
     mHybridData = hybridData
   }
 
+  /**
+   * Converts this function to a Kotlin Lambda.
+   * This exists purely as syntactic sugar, and has minimal runtime overhead.
+   */
   fun toLambda(): (p: com.margelo.nitro.image.Person) -> Unit = this::call
 
   /**

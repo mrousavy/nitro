@@ -74,7 +74,7 @@ abstract class HybridKotlinTestObjectSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
-  abstract fun addOnPersonBornListener(callback: Func_void_Person): Unit
+  abstract fun addOnPersonBornListener(callback: (p: com.margelo.nitro.image.Person) -> Unit): Unit
 
   private external fun initHybrid(): HybridData
 

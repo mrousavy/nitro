@@ -22,9 +22,9 @@ class Image(val bitmap: Bitmap): HybridImageSpec() {
         TODO("Not yet implemented")
     }
 
-    override fun saveToFile(path: String, onFinished: Func_void_std__string) {
+    override fun saveToFile(path: String, onFinished: (String) -> Unit) {
         Handler(Looper.getMainLooper()).postDelayed({
-            onFinished.call(path)
+            onFinished(path)
         }, 5000)
     }
 

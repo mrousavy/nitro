@@ -6,22 +6,6 @@ import com.margelo.nitro.core.Promise
 import java.nio.ByteBuffer
 import kotlin.concurrent.thread
 
-class Func_void_string {
-    operator fun invoke(value: String) {
-        // Your implementation
-    }
-}
-
-fun Func_void_string.toFunction(): (String) -> Unit = this::invoke
-
-fun doSomething(callback: (String) -> Unit) {
-    callback("55.0")
-}
-
-fun so () {
-    val myFunc = Func_void_string()
-    doSomething(myFunc.toFunction())  // Direct call, no extra object allocation
-}
 
 class KotlinTestObject: HybridKotlinTestObjectSpec() {
     override var numberValue: Double = 0.0
@@ -53,26 +37,19 @@ class KotlinTestObject: HybridKotlinTestObjectSpec() {
         return map
     }
 
-    fun onSomething(listen: (p: Person) -> Unit) {
-        listen(Person("name", 25.5))
-    }
-
-    override fun addOnPersonBornListener(callback: Func_void_Person) {
-        callback()
-        onSomething(callback)
-
-        callback.call(Person("Marc", 24.0))
+    override fun addOnPersonBornListener(callback: (p: Person) -> Unit) {
+        callback(Person("Marc", 24.0))
         thread {
             Thread.sleep(500)
-            callback.call(Person("Marc", 24.0))
+            callback(Person("Marc", 24.0))
         }
         thread {
             Thread.sleep(700)
-            callback.call(Person("Marc", 24.0))
+            callback(Person("Marc", 24.0))
         }
         thread {
             Thread.sleep(1500)
-            callback.call(Person("Marc", 24.0))
+            callback(Person("Marc", 24.0))
         }
     }
 }
