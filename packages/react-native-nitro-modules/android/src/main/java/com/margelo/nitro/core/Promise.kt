@@ -24,7 +24,7 @@ class Promise<T> {
    * Any `onResolved` listeners will be invoked.
    */
   fun resolve(result: T) {
-    resolve(result as Any)
+    nativeResolve(result as Any)
   }
 
   /**
@@ -32,12 +32,12 @@ class Promise<T> {
    * Any `onRejected` listeners will be invoked.
    */
   fun reject(error: Error) {
-    reject(error.toString())
+    nativeReject(error.toString())
   }
 
   // C++ functions
-  private external fun resolve(result: Any)
-  private external fun reject(error: String)
+  private external fun nativeResolve(result: Any)
+  private external fun nativeReject(error: String)
   private external fun initHybrid(): HybridData
 
   companion object {

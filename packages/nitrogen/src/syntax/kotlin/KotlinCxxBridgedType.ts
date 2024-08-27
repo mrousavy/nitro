@@ -8,6 +8,7 @@ import { FunctionType } from '../types/FunctionType.js'
 import { getTypeAs } from '../types/getTypeAs.js'
 import { HybridObjectType } from '../types/HybridObjectType.js'
 import { OptionalType } from '../types/OptionalType.js'
+import { PromiseType } from '../types/PromiseType.js'
 import { StructType } from '../types/StructType.js'
 import type { Type } from '../types/Type.js'
 import { getKotlinBoxedPrimitiveType } from './KotlinBoxedPrimitive.js'
@@ -69,6 +70,13 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
         imports.push({
           language: 'c++',
           name: 'NitroModules/JArrayBuffer.hpp',
+          space: 'system',
+        })
+        break
+      case 'promise':
+        imports.push({
+          language: 'c++',
+          name: 'NitroModules/JPromise.hpp',
           space: 'system',
         })
         break
@@ -186,9 +194,10 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
         const name = getHybridObjectName(hybridObjectType.hybridObjectName)
         return `${name.JHybridTSpec}::javaobject`
       }
-      case 'array-buffer': {
+      case 'array-buffer':
         return `JArrayBuffer::javaobject`
-      }
+      case 'promise':
+        return `JPromise::javaobject`
       case 'optional': {
         const optional = getTypeAs(this.type, OptionalType)
         switch (optional.wrappingType.kind) {
@@ -400,6 +409,25 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
           default:
             return parameterName
         }
+      }
+      case 'promise': {
+        const promise = getTypeAs(this.type, PromiseType)
+        const actualCppType = promise.resultingType.getCode('c++')
+        const resultingType = new KotlinCxxBridgedType(promise.resultingType)
+        return `
+[&]() {
+  auto promise = std::make_shared<std::promise<${actualCppType}>>();
+  ${parameterName}->cthis()->addOnResolvedListener([=](jni::alias_ref<jni::JObject> boxedResult) {
+    auto result = jni::static_ref_cast<${resultingType.getTypeCode('c++')}>(boxedResult);
+    promise->set_value(${resultingType.parseFromKotlinToCpp('result', 'c++', true)});
+  });
+  ${parameterName}->cthis()->addOnRejectedListener([=](jni::alias_ref<jni::JString> message) {
+    std::runtime_error error(message->toStdString());
+    promise->set_exception(std::make_exception_ptr(error));
+  });
+  return promise->get_future();
+}()
+        `.trim()
       }
       case 'array': {
         const array = getTypeAs(this.type, ArrayType)

@@ -1,8 +1,7 @@
 package com.margelo.nitro.image
 
-import com.facebook.proguard.annotations.DoNotStrip
 import com.margelo.nitro.core.ArrayBuffer
-import com.margelo.nitro.functions.Function1
+import com.margelo.nitro.core.Promise
 import java.nio.ByteBuffer
 
 class KotlinTestObject: HybridKotlinTestObjectSpec() {
@@ -20,8 +19,10 @@ class KotlinTestObject: HybridKotlinTestObjectSpec() {
     }
 
     // Methods
-    @DoNotStrip
-    fun getCallable(): com.margelo.nitro.functions.Function1<Int, Double> {
-        return Function1 { (it * 2).toInt() }
+    override fun asyncTest(): Promise<String> {
+        return Promise.async {
+            Thread.sleep(3000)
+            return@async "Hello from another Thread!"
+        }
     }
 }

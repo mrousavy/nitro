@@ -8,7 +8,6 @@
 #pragma once
 
 #include <fbjni/fbjni.h>
-#include <future>
 
 namespace margelo::nitro {
 
@@ -20,14 +19,14 @@ using namespace facebook;
 struct JPromise : public jni::HybridClass<JPromise> {
 public:
     static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/core/Promise;";
-    using OnResolvedFunc = std::function<void(jni::global_ref<jni::JObject>)>;
-    using OnRejectedFunc = std::function<void(jni::global_ref<jni::JString>)>;
+    using OnResolvedFunc = std::function<void(jni::alias_ref<jni::JObject>)>;
+    using OnRejectedFunc = std::function<void(jni::alias_ref<jni::JString>)>;
 
 public:
     /**
      * Create a new, still unresolved `JPromise` from Java.
      */
-    static jni::local_ref<JPromise::jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis) {
+    static jni::local_ref<JPromise::jhybriddata> initHybrid(jni::alias_ref<jhybridobject>) {
         return makeCxxInstance();
     }
 
@@ -55,10 +54,10 @@ public:
             _onResolvedListeners.push_back(std::move(onResolved));
         }
     }
-    void addOnRejectedListener(OnResolvedFunc&& onRejected) {
+    void addOnRejectedListener(OnRejectedFunc&& onRejected) {
         if (_error != nullptr) {
             // Promise is already rejected! Call the callback immediately
-            onRejected(_result);
+            onRejected(_error);
         } else {
             // Promise is not yet rejected, put the listener in our queue.
             _onRejectedListeners.push_back(std::move(onRejected));
@@ -81,8 +80,8 @@ public:
     static void registerNatives() {
       registerHybrid({
         makeNativeMethod("initHybrid", JPromise::initHybrid),
-        makeNativeMethod("resolve", JPromise::resolve),
-        makeNativeMethod("reject", JPromise::reject),
+        makeNativeMethod("nativeResolve", JPromise::resolve),
+        makeNativeMethod("nativeReject", JPromise::reject),
       });
     }
 };

@@ -29,6 +29,7 @@ namespace NitroModules { class ArrayBuffer; }
 #include <NitroModules/ArrayBuffer.hpp>
 #include <NitroModules/JArrayBuffer.hpp>
 #include <future>
+#include <NitroModules/JPromise.hpp>
 
 namespace margelo::nitro::image {
 
@@ -124,9 +125,20 @@ namespace margelo::nitro::image {
 
   // Methods
   std::future<std::string> JHybridKotlinTestObjectSpec::asyncTest() {
-    static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<std::future<std::string>>()>("asyncTest");
+    static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<JPromise::javaobject>()>("asyncTest");
     auto result = method(_javaPart);
-    return result;
+    return [&]() {
+      auto promise = std::make_shared<std::promise<std::string>>();
+      result->cthis()->addOnResolvedListener([=](jni::alias_ref<jni::JObject> boxedResult) {
+        auto result = jni::static_ref_cast<jni::JString>(boxedResult);
+        promise->set_value(result->toStdString());
+      });
+      result->cthis()->addOnRejectedListener([=](jni::alias_ref<jni::JString> message) {
+        std::runtime_error error(message->toStdString());
+        promise->set_exception(std::make_exception_ptr(error));
+      });
+      return promise->get_future();
+    }();
   }
 
 } // namespace margelo::nitro::image
