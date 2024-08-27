@@ -24,6 +24,8 @@ export class PromiseType implements Type {
         return `std::future<${resultingCode}>`
       case 'swift':
         return `Promise<${resultingCode}>`
+      case 'kotlin':
+        return `Promise<${resultingCode}>`
       default:
         throw new Error(
           `Language ${language} is not yet supported for PromiseType!`
