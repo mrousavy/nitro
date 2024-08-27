@@ -168,59 +168,107 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
   }
 
   getTypeCode(language: 'kotlin' | 'c++'): string {
-    if (language !== 'c++') {
-      // In Kotlin, we just use the normal Kotlin types directly.
-      return this.type.getCode(language)
-    }
     switch (this.type.kind) {
       case 'array':
-        const array = getTypeAs(this.type, ArrayType)
-        switch (array.itemType.kind) {
-          case 'number':
-            return 'jni::JArrayDouble'
-          case 'boolean':
-            return 'jni::JArrayBoolean'
-          case 'bigint':
-            return 'jni::JArrayLong'
+        switch (language) {
+          case 'c++':
+            const array = getTypeAs(this.type, ArrayType)
+            switch (array.itemType.kind) {
+              case 'number':
+                return 'jni::JArrayDouble'
+              case 'boolean':
+                return 'jni::JArrayBoolean'
+              case 'bigint':
+                return 'jni::JArrayLong'
+              default:
+                const bridged = new KotlinCxxBridgedType(array.itemType)
+                return `jni::JArrayClass<${bridged.getTypeCode(language)}>`
+            }
           default:
-            const bridged = new KotlinCxxBridgedType(array.itemType)
-            return `jni::JArrayClass<${bridged.getTypeCode(language)}>`
+            return this.type.getCode(language)
         }
       case 'string':
-        return 'jni::JString'
+        switch (language) {
+          case 'c++':
+            return 'jni::JString'
+          default:
+            return this.type.getCode(language)
+        }
       case 'enum':
-        const enumType = getTypeAs(this.type, EnumType)
-        return `J${enumType.enumName}`
+        switch (language) {
+          case 'c++':
+            const enumType = getTypeAs(this.type, EnumType)
+            return `J${enumType.enumName}`
+          default:
+            return this.type.getCode(language)
+        }
       case 'struct':
-        const structType = getTypeAs(this.type, StructType)
-        return `J${structType.structName}`
+        switch (language) {
+          case 'c++':
+            const structType = getTypeAs(this.type, StructType)
+            return `J${structType.structName}`
+          default:
+            return this.type.getCode(language)
+        }
       case 'function':
         const functionType = getTypeAs(this.type, FunctionType)
-        return `J${functionType.specializationName}::javaobject`
+        switch (language) {
+          case 'c++':
+            return `J${functionType.specializationName}::javaobject`
+          case 'kotlin':
+            return `J${functionType.specializationName}`
+          default:
+            return this.type.getCode(language)
+        }
       case 'hybrid-object': {
-        const hybridObjectType = getTypeAs(this.type, HybridObjectType)
-        const name = getHybridObjectName(hybridObjectType.hybridObjectName)
-        return `${name.JHybridTSpec}::javaobject`
+        switch (language) {
+          case 'c++':
+            const hybridObjectType = getTypeAs(this.type, HybridObjectType)
+            const name = getHybridObjectName(hybridObjectType.hybridObjectName)
+            return `${name.JHybridTSpec}::javaobject`
+          default:
+            return this.type.getCode(language)
+        }
       }
       case 'array-buffer':
-        return `JArrayBuffer::javaobject`
-      case 'promise':
-        return `JPromise::javaobject`
-      case 'map':
-        return `JAnyMap::javaobject`
-      case 'optional': {
-        const optional = getTypeAs(this.type, OptionalType)
-        switch (optional.wrappingType.kind) {
-          // primitives need to be boxed to make them nullable
-          case 'number':
-          case 'boolean':
-          case 'bigint':
-            const boxed = getKotlinBoxedPrimitiveType(optional.wrappingType)
-            return boxed
+        switch (language) {
+          case 'c++':
+            return `JArrayBuffer::javaobject`
           default:
-            // all other types can be nullable as they are objects.
-            const bridge = new KotlinCxxBridgedType(optional.wrappingType)
-            return bridge.getTypeCode('c++')
+            return this.type.getCode(language)
+        }
+      case 'promise':
+        switch (language) {
+          case 'c++':
+            return `JPromise::javaobject`
+          default:
+            return this.type.getCode(language)
+        }
+      case 'map':
+        switch (language) {
+          case 'c++':
+            return `JAnyMap::javaobject`
+          default:
+            return this.type.getCode(language)
+        }
+      case 'optional': {
+        switch (language) {
+          case 'c++':
+            const optional = getTypeAs(this.type, OptionalType)
+            switch (optional.wrappingType.kind) {
+              // primitives need to be boxed to make them nullable
+              case 'number':
+              case 'boolean':
+              case 'bigint':
+                const boxed = getKotlinBoxedPrimitiveType(optional.wrappingType)
+                return boxed
+              default:
+                // all other types can be nullable as they are objects.
+                const bridge = new KotlinCxxBridgedType(optional.wrappingType)
+                return bridge.getTypeCode('c++')
+            }
+          default:
+            return this.type.getCode(language)
         }
       }
       default:
