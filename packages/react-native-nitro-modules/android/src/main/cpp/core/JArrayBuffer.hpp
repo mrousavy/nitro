@@ -19,7 +19,7 @@ namespace margelo::nitro {
 using namespace facebook;
 
 /**
- * Represents a JS-based `ArrayBuffer` that can either hold a `ByteBuffer` (owning),
+ * Represents a `ArrayBuffer` that can either hold a `ByteBuffer` (owning),
  * or unknown/foreign memory, potentially from JS (non-owning).
  */
 struct JArrayBuffer : public jni::HybridClass<JArrayBuffer> {
@@ -36,7 +36,7 @@ public:
 
 public:
     /**
-     * Create a new `JArrayBuffer` that wraps the given `By
+     * Create a new `JArrayBuffer` that wraps the given `ByteBuffer` from Java.
      */
     static jni::local_ref<JArrayBuffer::jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis,
                                                                 jni::alias_ref<jni::JByteBuffer> buffer) {

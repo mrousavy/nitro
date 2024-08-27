@@ -156,4 +156,6 @@ export interface KotlinTestObject extends HybridObject<{ android: 'kotlin' }> {
   carCollection: Car[]
 
   someBuffer: ArrayBuffer
+
+  asyncTest(): Promise<void>
 }
