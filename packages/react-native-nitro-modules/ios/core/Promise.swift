@@ -160,3 +160,23 @@ extension Promise {
     return self
   }
 }
+
+/**
+ * Extensions to support await syntax.
+ */
+extension Promise {
+  /**
+   * Asynchronously await the result of the Promise.
+   * If the Promise is already resolved/rejected, this will continue immediately,
+   * otherwise it will asynchronously wait for a result or throw on a rejection.
+   */
+  public func `await`() async throws -> T {
+    return try await withCheckedThrowingContinuation { continuation in
+      self.then { result in
+        continuation.resume(returning: result)
+      }.catch { error in
+        continuation.resume(throwing: error)
+      }
+    }
+  }
+}
