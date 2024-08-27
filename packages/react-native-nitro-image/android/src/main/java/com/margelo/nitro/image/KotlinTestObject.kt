@@ -4,6 +4,7 @@ import com.margelo.nitro.core.AnyMap
 import com.margelo.nitro.core.ArrayBuffer
 import com.margelo.nitro.core.Promise
 import java.nio.ByteBuffer
+import kotlin.concurrent.thread
 
 class KotlinTestObject: HybridKotlinTestObjectSpec() {
     override var numberValue: Double = 0.0
@@ -37,5 +38,17 @@ class KotlinTestObject: HybridKotlinTestObjectSpec() {
 
     override fun addOnPersonBornListener(callback: Func_void_Person) {
         callback.call(Person("Marc", 24.0))
+        thread {
+            Thread.sleep(500)
+            callback.call(Person("Marc", 24.0))
+        }
+        thread {
+            Thread.sleep(700)
+            callback.call(Person("Marc", 24.0))
+        }
+        thread {
+            Thread.sleep(1500)
+            callback.call(Person("Marc", 24.0))
+        }
     }
 }

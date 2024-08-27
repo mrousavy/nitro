@@ -13,6 +13,10 @@ logPrototypeChain(HybridTestObject)
 
 console.log(HybridKotlinTestObject.createMap())
 
+HybridKotlinTestObject.addOnPersonBornListener((p) => {
+  console.log(`${p.name} was born! Age: ${p.age}`)
+})
+
 HybridKotlinTestObject.asyncTest()
   .then(console.log)
   .catch(console.warn)
