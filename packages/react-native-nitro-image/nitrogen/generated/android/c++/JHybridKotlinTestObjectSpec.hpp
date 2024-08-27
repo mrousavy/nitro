@@ -51,6 +51,7 @@ namespace margelo::nitro::image {
   public:
     // Methods
     std::future<void> asyncTest() override;
+    std::shared_ptr<AnyMap> createMap() override;
 
   private:
     friend HybridBase;

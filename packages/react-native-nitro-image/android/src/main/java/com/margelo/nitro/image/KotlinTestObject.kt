@@ -1,5 +1,6 @@
 package com.margelo.nitro.image
 
+import com.margelo.nitro.core.AnyMap
 import com.margelo.nitro.core.ArrayBuffer
 import com.margelo.nitro.core.Promise
 import java.nio.ByteBuffer
@@ -23,5 +24,14 @@ class KotlinTestObject: HybridKotlinTestObjectSpec() {
         return Promise.async {
             Thread.sleep(3000)
         }
+    }
+
+    override fun createMap(): AnyMap {
+        val map = AnyMap()
+        map.setDouble("double", 55.0)
+        map.setString("string", "String!")
+        map.setBoolean("bool", true)
+        map.setBigInt("bigint", 893256789)
+        return map
     }
 }
