@@ -28,7 +28,8 @@ abstract class HybridKotlinTestObjectSpec: HybridObject() {
   val mHybridData: HybridData = initHybrid()
 
   init {
-    // Pass it through to it's base class to represent inheritance to JHybridObject on C++ side
+    // Pass this `HybridData` through to it's base class,
+    // to represent inheritance to JHybridObject on C++ side
     super.updateNative(mHybridData)
   }
 
@@ -75,6 +76,13 @@ abstract class HybridKotlinTestObjectSpec: HybridObject() {
   @DoNotStrip
   @Keep
   abstract fun addOnPersonBornListener(callback: (p: com.margelo.nitro.image.Person) -> Unit): Unit
+  
+  @DoNotStrip
+  @Keep
+  private fun addOnPersonBornListener(callback: Func_void_Person): Unit {
+    val result = addOnPersonBornListener(callback.toLambda())
+    return result
+  }
 
   private external fun initHybrid(): HybridData
 

@@ -28,7 +28,8 @@ abstract class HybridImageFactorySpec: HybridObject() {
   val mHybridData: HybridData = initHybrid()
 
   init {
-    // Pass it through to it's base class to represent inheritance to JHybridObject on C++ side
+    // Pass this `HybridData` through to it's base class,
+    // to represent inheritance to JHybridObject on C++ side
     super.updateNative(mHybridData)
   }
 

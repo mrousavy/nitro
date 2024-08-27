@@ -4,7 +4,9 @@ import { getAllTypes } from '../getAllTypes.js'
 import { getHybridObjectName } from '../getHybridObjectName.js'
 import { createFileMetadataString } from '../helpers.js'
 import type { HybridObjectSpec } from '../HybridObjectSpec.js'
+import { Method } from '../Method.js'
 import type { SourceFile } from '../SourceFile.js'
+import { type Type } from '../types/Type.js'
 import { createFbjniHybridObject } from './FbjniHybridObject.js'
 import { KotlinCxxBridgedType } from './KotlinCxxBridgedType.js'
 
@@ -14,7 +16,7 @@ export function createKotlinHybridObject(spec: HybridObjectSpec): SourceFile[] {
     .map((p) => p.getCode('kotlin', { doNotStrip: true, virtual: true }))
     .join('\n\n')
   const methods = spec.methods
-    .map((p) => p.getCode('kotlin', { doNotStrip: true, virtual: true }))
+    .map((m) => getMethodForwardImplementation(m))
     .join('\n\n')
 
   const javaPackage = NitroConfig.getAndroidPackage('java/kotlin')
@@ -46,7 +48,8 @@ abstract class ${name.HybridTSpec}: HybridObject() {
   val mHybridData: HybridData = initHybrid()
 
   init {
-    // Pass it through to it's base class to represent inheritance to JHybridObject on C++ side
+    // Pass this \`HybridData\` through to it's base class,
+    // to represent inheritance to JHybridObject on C++ side
     super.updateNative(mHybridData)
   }
 
@@ -94,4 +97,43 @@ abstract class ${name.HybridTSpec}: HybridObject() {
   files.push(...cppFiles)
   files.push(...extraFiles)
   return files
+}
+
+function requiresSpecialBridging(type: Type): boolean {
+  return (
+    type.getCode('kotlin') !==
+    new KotlinCxxBridgedType(type).getTypeCode('kotlin')
+  )
+}
+
+function getMethodForwardImplementation(method: Method): string {
+  const bridgedReturn = new KotlinCxxBridgedType(method.returnType)
+  const requiresBridge =
+    requiresSpecialBridging(method.returnType) ||
+    method.parameters.some((p) => requiresSpecialBridging(p.type))
+
+  const code = method.getCode('kotlin', { doNotStrip: true, virtual: true })
+  if (requiresBridge) {
+    const paramsSignature = method.parameters.map((p) => {
+      const bridge = new KotlinCxxBridgedType(p.type)
+      return `${p.name}: ${bridge.getTypeCode('kotlin')}`
+    })
+    const paramsForward = method.parameters.map((p) => {
+      const bridge = new KotlinCxxBridgedType(p.type)
+      return bridge.parseFromCppToKotlin(p.name, 'kotlin')
+    })
+    const returnForward = bridgedReturn.parseFromKotlinToCpp('result', 'kotlin')
+    return `
+${code}
+
+@DoNotStrip
+@Keep
+private fun ${method.name}(${paramsSignature.join(', ')}): ${bridgedReturn.getTypeCode('kotlin')} {
+  val result = ${method.name}(${paramsForward.join(', ')})
+  return ${returnForward}
+}
+    `.trim()
+  } else {
+    return code
+  }
 }
