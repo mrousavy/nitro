@@ -13,11 +13,11 @@ import kotlin.concurrent.thread
  * Represents a Promise that can be passed to JS.
  *
  * Create a new Promise with the following APIs:
- * - `Promise<T>.async { ... }` - Creates a new Promise that runs the given suspending function in a Kotlin coroutine context/scope.
- * - `Promise<T>.parallel { ... }` - Creates a new Promise that runs the given code in a parallel Thread.
- * - `Promise<T>.resolved(withResult:)` - Creates a new already resolved Promise.
- * - `Promise<T>.rejected(withError:)` - Creates a new already rejected Promise.
- * - `Promise<T>()` - Creates a new Promise with fully manual control over the `resolve(..)`/`reject(..)` functions.
+ * - [Promise.async]` { ... }` - Creates a new Promise that runs the given suspending function in a Kotlin coroutine scope.
+ * - [Promise.parallel]` { ... }` - Creates a new Promise that runs the given code in a parallel Thread.
+ * - [Promise.resolved]`(..)` - Creates a new already resolved Promise.
+ * - [Promise.rejected]`(..)` - Creates a new already rejected Promise.
+ * - [Promise]`()` - Creates a new Promise with fully manual control over the `resolve(..)`/`reject(..)` functions.
  */
 @Suppress("KotlinJniMissingFunction")
 @Keep
@@ -25,6 +25,9 @@ import kotlin.concurrent.thread
 class Promise<T> {
   private val mHybridData: HybridData
 
+  /**
+   * Creates a new Promise with fully manual control over the `resolve(..)`/`reject(..)` functions
+   */
   init {
     mHybridData = initHybrid()
   }
