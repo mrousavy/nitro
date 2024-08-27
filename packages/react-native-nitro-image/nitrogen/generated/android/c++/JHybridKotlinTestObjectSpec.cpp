@@ -124,14 +124,13 @@ namespace margelo::nitro::image {
   }
 
   // Methods
-  std::future<std::string> JHybridKotlinTestObjectSpec::asyncTest() {
+  std::future<void> JHybridKotlinTestObjectSpec::asyncTest() {
     static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<JPromise::javaobject>()>("asyncTest");
     auto result = method(_javaPart);
     return [&]() {
-      auto promise = std::make_shared<std::promise<std::string>>();
+      auto promise = std::make_shared<std::promise<void>>();
       result->cthis()->addOnResolvedListener([=](jni::alias_ref<jni::JObject> boxedResult) {
-        auto result = jni::static_ref_cast<jni::JString>(boxedResult);
-        promise->set_value(result->toStdString());
+        promise->set_value();
       });
       result->cthis()->addOnRejectedListener([=](jni::alias_ref<jni::JString> message) {
         std::runtime_error error(message->toStdString());

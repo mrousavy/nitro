@@ -66,7 +66,7 @@ abstract class HybridKotlinTestObjectSpec: HybridObject() {
   // Methods
   @DoNotStrip
   @Keep
-  abstract fun asyncTest(): Promise<String>
+  abstract fun asyncTest(): Promise<Unit>
 
   private external fun initHybrid(): HybridData
 

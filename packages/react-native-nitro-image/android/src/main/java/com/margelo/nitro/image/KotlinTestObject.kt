@@ -19,10 +19,9 @@ class KotlinTestObject: HybridKotlinTestObjectSpec() {
     }
 
     // Methods
-    override fun asyncTest(): Promise<String> {
+    override fun asyncTest(): Promise<Unit> {
         return Promise.async {
             Thread.sleep(3000)
-            return@async "Hello from another Thread!"
         }
     }
 }

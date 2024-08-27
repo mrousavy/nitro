@@ -50,7 +50,7 @@ namespace margelo::nitro::image {
 
   public:
     // Methods
-    std::future<std::string> asyncTest() override;
+    std::future<void> asyncTest() override;
 
   private:
     friend HybridBase;

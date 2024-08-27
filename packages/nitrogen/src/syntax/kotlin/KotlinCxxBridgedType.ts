@@ -1,3 +1,4 @@
+import { indent } from '../../utils.js'
 import type { BridgedType } from '../BridgedType.js'
 import { getHybridObjectName } from '../getHybridObjectName.js'
 import { getReferencedTypes } from '../getReferencedTypes.js'
@@ -414,12 +415,24 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
         const promise = getTypeAs(this.type, PromiseType)
         const actualCppType = promise.resultingType.getCode('c++')
         const resultingType = new KotlinCxxBridgedType(promise.resultingType)
+        let resolveBody: string
+        if (resultingType.hasType) {
+          // it's a Promise<T>
+          resolveBody = `
+auto result = jni::static_ref_cast<${resultingType.getTypeCode('c++')}>(boxedResult);
+promise->set_value(${resultingType.parseFromKotlinToCpp('result', 'c++', true)});
+          `.trim()
+        } else {
+          // it's a Promise<void>
+          resolveBody = `
+promise->set_value();
+          `.trim()
+        }
         return `
 [&]() {
   auto promise = std::make_shared<std::promise<${actualCppType}>>();
   ${parameterName}->cthis()->addOnResolvedListener([=](jni::alias_ref<jni::JObject> boxedResult) {
-    auto result = jni::static_ref_cast<${resultingType.getTypeCode('c++')}>(boxedResult);
-    promise->set_value(${resultingType.parseFromKotlinToCpp('result', 'c++', true)});
+    ${indent(resolveBody, '    ')}
   });
   ${parameterName}->cthis()->addOnRejectedListener([=](jni::alias_ref<jni::JString> message) {
     std::runtime_error error(message->toStdString());

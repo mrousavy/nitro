@@ -24,7 +24,6 @@ namespace NitroModules { class ArrayBuffer; }
 #include "Car.hpp"
 #include <NitroModules/ArrayBuffer.hpp>
 #include <future>
-#include <string>
 
 namespace margelo::nitro::image {
 
@@ -63,7 +62,7 @@ namespace margelo::nitro::image {
 
     public:
       // Methods
-      virtual std::future<std::string> asyncTest() = 0;
+      virtual std::future<void> asyncTest() = 0;
 
     protected:
       // Hybrid Setup

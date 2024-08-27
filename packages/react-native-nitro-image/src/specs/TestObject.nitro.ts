@@ -157,5 +157,5 @@ export interface KotlinTestObject extends HybridObject<{ android: 'kotlin' }> {
 
   someBuffer: ArrayBuffer
 
-  asyncTest(): Promise<string>
+  asyncTest(): Promise<void>
 }
