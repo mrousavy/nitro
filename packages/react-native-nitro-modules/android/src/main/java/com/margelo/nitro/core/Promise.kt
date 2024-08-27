@@ -9,6 +9,16 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlin.concurrent.thread
 
+/**
+ * Represents a Promise that can be passed to JS.
+ *
+ * Create a new Promise with the following APIs:
+ * - `Promise<T>.async { ... }` - Creates a new Promise that runs the given suspending function in a Kotlin coroutine context/scope.
+ * - `Promise<T>.parallel { ... }` - Creates a new Promise that runs the given code in a parallel Thread.
+ * - `Promise<T>.resolved(withResult:)` - Creates a new already resolved Promise.
+ * - `Promise<T>.rejected(withError:)` - Creates a new already rejected Promise.
+ * - `Promise<T>()` - Creates a new Promise with fully manual control over the `resolve(..)`/`reject(..)` functions.
+ */
 @Suppress("KotlinJniMissingFunction")
 @Keep
 @DoNotStrip
