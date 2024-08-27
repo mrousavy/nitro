@@ -20,7 +20,7 @@ import com.margelo.nitro.core.*
  */
 @DoNotStrip
 @Keep
-@Suppress("KotlinJniMissingFunction")
+@Suppress("RedundantSuppression", "KotlinJniMissingFunction", "PropertyName", "RedundantUnitReturnType", "unused")
 abstract class HybridKotlinTestObjectSpec: HybridObject() {
   protected val TAG = "HybridKotlinTestObjectSpec"
 

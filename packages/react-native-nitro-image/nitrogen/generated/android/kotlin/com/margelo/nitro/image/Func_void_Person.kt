@@ -19,7 +19,7 @@ import dalvik.annotation.optimization.FastNative
  */
 @DoNotStrip
 @Keep
-@Suppress("ConvertSecondaryConstructorToPrimary", "KotlinJniMissingFunction", "ClassName", "unused")
+@Suppress("RedundantSuppression", "ConvertSecondaryConstructorToPrimary", "RedundantUnitReturnType", "KotlinJniMissingFunction", "ClassName", "unused")
 class Func_void_Person {
   @DoNotStrip
   @Keep

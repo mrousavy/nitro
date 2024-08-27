@@ -42,7 +42,7 @@ import dalvik.annotation.optimization.${annotation}
  */
 @DoNotStrip
 @Keep
-@Suppress("ConvertSecondaryConstructorToPrimary", "KotlinJniMissingFunction", "ClassName", "unused")
+@Suppress("RedundantSuppression", "ConvertSecondaryConstructorToPrimary", "RedundantUnitReturnType", "KotlinJniMissingFunction", "ClassName", "unused")
 class ${name} {
   @DoNotStrip
   @Keep
