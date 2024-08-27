@@ -148,13 +148,13 @@ The following C++ / JS types are supported out of the box:
   <tr>
     <td><code>[A, B, C, ...]</code></td>
     <td><code>std::tuple&lt;A, B, C, ...&gt;</code></td>
-    <td><code>(A, B, C)</code></td>
+    <td><code>(A, B, C)</code> 🟡  (<a href="https://github.com/mrousavy/nitro/issues/38">#38</a>)</td>
     <td>❌</td>
   </tr>
   <tr>
     <td><code>A | B | C | ...</code></td>
     <td><code>std::variant&lt;A, B, C, ...&gt;</code></td>
-    <td><code>Variant_A_B_C</code></td>
+    <td><code>Variant_A_B_C</code> 🟡  (<a href="https://github.com/mrousavy/nitro/issues/39">#39</a>)</td>
     <td>❌</td>
   </tr>
   <tr>
@@ -190,8 +190,8 @@ The following C++ / JS types are supported out of the box:
   <tr>
     <td><code>{ ... }</code></td>
     <td><code>std::shared_ptr&lt;<a href="./cpp/core/AnyMap.hpp">AnyMap</a>&gt;</code></td>
-    <td><code><a href="./ios/core/AnyMapHolder.swift">AnyMapHolder</a></code></td>
-    <td><code><a href="./android/src/main/java/com/margelo/nitro/core/AnyMap.kt">AnyMap</a></code></td>
+    <td><code><a href="./ios/core/AnyMapHolder.swift">AnyMapHolder</a></code> 🟡  (<a href="https://github.com/mrousavy/nitro/issues/57">#57</a>)</td>
+    <td><code><a href="./android/src/main/java/com/margelo/nitro/core/AnyMap.kt">AnyMap</a></code> 🟡  (<a href="https://github.com/mrousavy/nitro/issues/61">#61</a>)</td>
   </tr>
   <tr>
     <td><code>ArrayBuffer</code></td>
