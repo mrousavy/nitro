@@ -171,7 +171,7 @@ extension Promise {
    * otherwise it will asynchronously wait for a result or throw on a rejection.
    */
   public func `await`() async throws -> T {
-    return try await withCheckedThrowingContinuation { continuation in
+    return try await withUnsafeThrowingContinuation { continuation in
       self.then { result in
         continuation.resume(returning: result)
       }.catch { error in
