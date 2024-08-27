@@ -49,7 +49,8 @@ struct JSIConverter<std::future<TResult>> final {
         // the async function completed successfully, get a JS Dispatcher so we can resolve on JS Thread
         std::shared_ptr<Dispatcher> dispatcher = weakDispatcher.lock();
         if (!dispatcher) {
-          Logger::log(LogLevel::Error, "JSIConverter", "Tried resolving Promise on JS Thread, but the `Dispatcher` has already been destroyed!");
+          Logger::log(LogLevel::Error, "JSIConverter",
+                      "Tried resolving Promise on JS Thread, but the `Dispatcher` has already been destroyed!");
           return;
         }
 

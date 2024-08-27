@@ -18,12 +18,15 @@
 namespace margelo::nitro::image { struct Car; }
 // Forward declaration of `ArrayBuffer` to properly resolve imports.
 namespace NitroModules { class ArrayBuffer; }
+// Forward declaration of `AnyMap` to properly resolve imports.
+namespace NitroModules { class AnyMap; }
 
 #include <optional>
 #include <vector>
 #include "Car.hpp"
 #include <NitroModules/ArrayBuffer.hpp>
 #include <future>
+#include <NitroModules/AnyMap.hpp>
 
 namespace margelo::nitro::image {
 
@@ -63,6 +66,7 @@ namespace margelo::nitro::image {
     public:
       // Methods
       virtual std::future<void> asyncTest() = 0;
+      virtual std::shared_ptr<AnyMap> createMap() = 0;
 
     protected:
       // Hybrid Setup

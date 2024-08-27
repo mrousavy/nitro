@@ -47,7 +47,8 @@ struct JSIConverter<std::function<ReturnType(Args...)>> final {
       std::shared_ptr<Dispatcher> dispatcher = weakDispatcher.lock();
       if (!dispatcher) {
         if constexpr (std::is_void_v<ResultingType>) {
-          Logger::log(LogLevel::Error, "JSIConverter", "Tried calling void(..) function, but the JS Dispatcher has already been deleted by JS!");
+          Logger::log(LogLevel::Error, "JSIConverter",
+                      "Tried calling void(..) function, but the JS Dispatcher has already been deleted by JS!");
           return;
         } else {
           throw std::runtime_error("Cannot call the given Function - the JS Dispatcher has already been destroyed by the JS Runtime!");

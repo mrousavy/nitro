@@ -67,6 +67,10 @@ abstract class HybridKotlinTestObjectSpec: HybridObject() {
   @DoNotStrip
   @Keep
   abstract fun asyncTest(): Promise<Unit>
+  
+  @DoNotStrip
+  @Keep
+  abstract fun createMap(): AnyMap
 
   private external fun initHybrid(): HybridData
 

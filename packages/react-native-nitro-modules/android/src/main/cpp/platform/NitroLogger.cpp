@@ -12,16 +12,16 @@ namespace margelo::nitro {
 
 int levelToAndroidLevel(LogLevel level) {
   switch (level) {
-  case LogLevel::Debug:
-    return ANDROID_LOG_DEBUG;
-  case LogLevel::Info:
-    return ANDROID_LOG_INFO;
-  case LogLevel::Warning:
-    return ANDROID_LOG_WARN;
-  case LogLevel::Error:
-    return ANDROID_LOG_ERROR;
-  default:
-    throw std::runtime_error("Invalid LogLevel!");
+    case LogLevel::Debug:
+      return ANDROID_LOG_DEBUG;
+    case LogLevel::Info:
+      return ANDROID_LOG_INFO;
+    case LogLevel::Warning:
+      return ANDROID_LOG_WARN;
+    case LogLevel::Error:
+      return ANDROID_LOG_ERROR;
+    default:
+      throw std::runtime_error("Invalid LogLevel!");
   }
 }
 

@@ -1,7 +1,8 @@
 /// Entry point for JNI.
 
-#include "JHybridObjectRegistry.hpp"
+#include "JAnyMap.hpp"
 #include "JArrayBuffer.hpp"
+#include "JHybridObjectRegistry.hpp"
 #include "JPromise.hpp"
 #include "RegisterNativeNitroModules.hpp"
 #include <fbjni/fbjni.h>
@@ -17,6 +18,7 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void*) {
     // 2. Initialize all Java bindings
     JHybridObjectRegistry::registerNatives();
     JArrayBuffer::registerNatives();
+    JAnyMap::registerNatives();
     JPromise::registerNatives();
   });
 }

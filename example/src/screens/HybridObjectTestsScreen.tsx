@@ -11,6 +11,8 @@ import { logPrototypeChain } from '../logPrototypeChain'
 
 logPrototypeChain(HybridTestObject)
 
+console.log(HybridKotlinTestObject.createMap())
+
 HybridKotlinTestObject.asyncTest()
   .then(console.log)
   .catch(console.warn)

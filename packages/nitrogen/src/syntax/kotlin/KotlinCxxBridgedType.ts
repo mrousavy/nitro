@@ -81,6 +81,13 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
           space: 'system',
         })
         break
+      case 'map':
+        imports.push({
+          language: 'c++',
+          name: 'NitroModules/JAnyMap.hpp',
+          space: 'system',
+        })
+        break
       case 'hybrid-object': {
         const hybridObjectType = getTypeAs(this.type, HybridObjectType)
         const name = getHybridObjectName(hybridObjectType.hybridObjectName)
@@ -199,6 +206,8 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
         return `JArrayBuffer::javaobject`
       case 'promise':
         return `JPromise::javaobject`
+      case 'map':
+        return `JAnyMap::javaobject`
       case 'optional': {
         const optional = getTypeAs(this.type, OptionalType)
         switch (optional.wrappingType.kind) {
@@ -309,6 +318,14 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
             return parameterName
         }
       }
+      case 'map': {
+        switch (language) {
+          case 'c++':
+            return `JAnyMap::create(${parameterName})`
+          default:
+            return parameterName
+        }
+      }
       case 'array': {
         const array = getTypeAs(this.type, ArrayType)
         const arrayType = this.getTypeCode('c++')
@@ -407,6 +424,14 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
         switch (language) {
           case 'c++':
             return `${parameterName}->cthis()->getArrayBuffer()`
+          default:
+            return parameterName
+        }
+      }
+      case 'map': {
+        switch (language) {
+          case 'c++':
+            return `${parameterName}->cthis()->getMap()`
           default:
             return parameterName
         }

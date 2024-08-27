@@ -14,25 +14,25 @@ namespace margelo::nitro {
 using TSharedMap = std::shared_ptr<AnyMap>;
 
 inline AnyValue create_AnyValue() {
-  return AnyValue { std::monostate{ } };
+  return AnyValue{std::monostate{}};
 }
 inline AnyValue create_AnyValue(bool boolValue) {
-  return AnyValue { boolValue };
+  return AnyValue{boolValue};
 }
 inline AnyValue create_AnyValue(double doubleValue) {
-  return AnyValue { doubleValue };
+  return AnyValue{doubleValue};
 }
 inline AnyValue create_AnyValue(int64_t bigintValue) {
-  return AnyValue { bigintValue };
+  return AnyValue{bigintValue};
 }
 inline AnyValue create_AnyValue(const std::string& stringValue) {
-  return AnyValue { stringValue };
+  return AnyValue{stringValue};
 }
 inline AnyValue create_AnyValue(const AnyArray& arrayValue) {
-  return AnyValue { arrayValue };
+  return AnyValue{arrayValue};
 }
 inline AnyValue create_AnyValue(const AnyObject& objectValue) {
-  return AnyValue { objectValue };
+  return AnyValue{objectValue};
 }
 
 inline bool is_AnyValue_null(const AnyValue& value) {

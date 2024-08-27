@@ -16,6 +16,8 @@ namespace margelo::nitro::image { enum class Powertrain; }
 namespace margelo::nitro::image { struct Person; }
 // Forward declaration of `ArrayBuffer` to properly resolve imports.
 namespace NitroModules { class ArrayBuffer; }
+// Forward declaration of `AnyMap` to properly resolve imports.
+namespace NitroModules { class AnyMap; }
 
 #include <optional>
 #include <vector>
@@ -30,6 +32,8 @@ namespace NitroModules { class ArrayBuffer; }
 #include <NitroModules/JArrayBuffer.hpp>
 #include <future>
 #include <NitroModules/JPromise.hpp>
+#include <NitroModules/AnyMap.hpp>
+#include <NitroModules/JAnyMap.hpp>
 
 namespace margelo::nitro::image {
 
@@ -138,6 +142,11 @@ namespace margelo::nitro::image {
       });
       return promise->get_future();
     }();
+  }
+  std::shared_ptr<AnyMap> JHybridKotlinTestObjectSpec::createMap() {
+    static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<JAnyMap::javaobject>()>("createMap");
+    auto result = method(_javaPart);
+    return result->cthis()->getMap();
   }
 
 } // namespace margelo::nitro::image
