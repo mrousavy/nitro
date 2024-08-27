@@ -47,10 +47,22 @@ public:
 
 public:
     void addOnResolvedListener(OnResolvedFunc&& onResolved) {
-        _onResolvedListeners.push_back(std::move(onResolved));
+        if (_result != nullptr) {
+            // Promise is already resolved! Call the callback immediately
+            onResolved(_result);
+        } else {
+            // Promise is not yet resolved, put the listener in our queue.
+            _onResolvedListeners.push_back(std::move(onResolved));
+        }
     }
-    void addOnRejectedListener(OnResolvedFunc&& onResolved) {
-        _onResolvedListeners.push_back(std::move(onResolved));
+    void addOnRejectedListener(OnResolvedFunc&& onRejected) {
+        if (_error != nullptr) {
+            // Promise is already rejected! Call the callback immediately
+            onRejected(_result);
+        } else {
+            // Promise is not yet rejected, put the listener in our queue.
+            _onRejectedListeners.push_back(std::move(onRejected));
+        }
     }
 
 private:
