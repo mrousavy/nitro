@@ -1,8 +1,8 @@
 /// Entry point for JNI.
 
-#include "JHybridObjectRegistry.hpp"
-#include "JArrayBuffer.hpp"
 #include "JAnyMap.hpp"
+#include "JArrayBuffer.hpp"
+#include "JHybridObjectRegistry.hpp"
 #include "JPromise.hpp"
 #include "RegisterNativeNitroModules.hpp"
 #include <fbjni/fbjni.h>

@@ -49,8 +49,8 @@ HybridObject::HybridObject(const char* name) : HybridObjectPrototype(), _name(na
   _instanceId = getId(name);
   uint32_t alive = incrementAliveInstancesAndGet(_name);
   uint32_t totalObjects = getTotalAliveInstances();
-  Logger::log(LogLevel::Info, TAG, "(MEMORY) ✅ Creating %s (#%i)... (Total %s(s): %i | Total HybridObjects: %i)", _name, _instanceId, _name, alive,
-              totalObjects);
+  Logger::log(LogLevel::Info, TAG, "(MEMORY) ✅ Creating %s (#%i)... (Total %s(s): %i | Total HybridObjects: %i)", _name, _instanceId,
+              _name, alive, totalObjects);
 #endif
 }
 
@@ -58,8 +58,8 @@ HybridObject::~HybridObject() {
 #if LOG_MEMORY_ALLOCATIONS
   uint32_t alive = decrementAliveInstancesAndGet(_name);
   uint32_t totalObjects = getTotalAliveInstances();
-  Logger::log(LogLevel::Info, TAG, "(MEMORY) ❌ Deleting %s (#%i)... (Total %s(s): %i | Total HybridObjects: %i) ", _name, _instanceId, _name, alive,
-              totalObjects);
+  Logger::log(LogLevel::Info, TAG, "(MEMORY) ❌ Deleting %s (#%i)... (Total %s(s): %i | Total HybridObjects: %i) ", _name, _instanceId,
+              _name, alive, totalObjects);
 #endif
 }
 

@@ -6,23 +6,23 @@
 //
 
 #include "NitroLogger.hpp"
-#include <Foundation/Foundation.h>
 #include "AnyMapHolder.hpp"
+#include <Foundation/Foundation.h>
 
 namespace margelo::nitro {
 
 const char* levelToString(LogLevel level) {
   switch (level) {
-  case LogLevel::Debug:
-    return "DEBUG";
-  case LogLevel::Info:
-    return "INFO";
-  case LogLevel::Warning:
-    return "WARNING";
-  case LogLevel::Error:
-    return "ERROR";
-  default:
-    throw std::runtime_error("Invalid LogLevel!");
+    case LogLevel::Debug:
+      return "DEBUG";
+    case LogLevel::Info:
+      return "INFO";
+    case LogLevel::Warning:
+      return "WARNING";
+    case LogLevel::Error:
+      return "ERROR";
+    default:
+      throw std::runtime_error("Invalid LogLevel!");
   }
 }
 
