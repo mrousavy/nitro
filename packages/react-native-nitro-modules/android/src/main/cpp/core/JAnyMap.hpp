@@ -90,6 +90,9 @@ protected:
   }
 
 protected:
+  void setNull(const std::string& key) {
+    _map->setNull(key);
+  }
   void setDouble(const std::string& key, double value) {
     _map->setDouble(key, value);
   }
@@ -136,6 +139,7 @@ public:
         makeNativeMethod("getBigInt", JAnyMap::getBigInt),
         makeNativeMethod("getString", JAnyMap::getString),
         // set
+        makeNativeMethod("setNull", JAnyMap::setNull),
         makeNativeMethod("setDouble", JAnyMap::setDouble),
         makeNativeMethod("setBoolean", JAnyMap::setBoolean),
         makeNativeMethod("setBigInt", JAnyMap::setBigInt),

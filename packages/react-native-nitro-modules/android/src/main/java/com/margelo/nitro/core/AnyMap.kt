@@ -47,6 +47,7 @@ class AnyMap {
   external fun getBigInt(key: String): Long
   external fun getString(key: String): String
 
+  external fun setNull(key: String)
   external fun setDouble(key: String, value: Double)
   external fun setBoolean(key: String, value: Boolean)
   external fun setBigInt(key: String, value: Long)
