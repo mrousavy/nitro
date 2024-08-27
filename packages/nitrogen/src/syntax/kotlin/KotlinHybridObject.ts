@@ -5,6 +5,7 @@ import { getHybridObjectName } from '../getHybridObjectName.js'
 import { createFileMetadataString } from '../helpers.js'
 import type { HybridObjectSpec } from '../HybridObjectSpec.js'
 import { Method } from '../Method.js'
+import { Property } from '../Property.js'
 import type { SourceFile } from '../SourceFile.js'
 import { type Type } from '../types/Type.js'
 import { createFbjniHybridObject } from './FbjniHybridObject.js'
@@ -13,7 +14,7 @@ import { KotlinCxxBridgedType } from './KotlinCxxBridgedType.js'
 export function createKotlinHybridObject(spec: HybridObjectSpec): SourceFile[] {
   const name = getHybridObjectName(spec.name)
   const properties = spec.properties
-    .map((p) => p.getCode('kotlin', { doNotStrip: true, virtual: true }))
+    .map((p) => getPropertyForwardImplementation(p))
     .join('\n\n')
   const methods = spec.methods
     .map((m) => getMethodForwardImplementation(m))
@@ -132,6 +133,43 @@ private fun ${method.name}(${paramsSignature.join(', ')}): ${bridgedReturn.getTy
   val result = ${method.name}(${paramsForward.join(', ')})
   return ${returnForward}
 }
+    `.trim()
+  } else {
+    return code
+  }
+}
+
+function getPropertyForwardImplementation(property: Property): string {
+  const code = property.getCode('kotlin', { doNotStrip: true, virtual: true })
+  if (requiresSpecialBridging(property.type)) {
+    const bridged = new KotlinCxxBridgedType(property.type)
+
+    let keyword = property.isReadonly ? 'val' : 'var'
+    let modifiers: string[] = []
+    modifiers.push('@get:DoNotStrip', '@get:Keep')
+    if (!property.isReadonly) modifiers.push('@set:DoNotStrip', '@set:Keep')
+    let lines: string[] = []
+    lines.push(
+      `
+get() {
+  return ${indent(bridged.parseFromKotlinToCpp(property.name, 'kotlin'), '  ')}
+}
+    `.trim()
+    )
+    if (!property.isReadonly) {
+      lines.push(
+        `
+set(value) {
+  ${property.name} = ${indent(bridged.parseFromCppToKotlin('value', 'kotlin'), '  ')}
+}
+      `.trim()
+      )
+    }
+    return `
+${code}
+
+private ${keyword} ${property.name}: ${bridged.getTypeCode('kotlin')}
+  ${indent(lines.join('\n'), '  ')}
     `.trim()
   } else {
     return code
