@@ -32,6 +32,8 @@ class Func_void_Person {
     mHybridData = hybridData
   }
 
+  fun toLambda(): (p: com.margelo.nitro.image.Person) -> Unit = this::call
+
   /**
    * Call the given JS callback.
    * @throws Throwable if the JS function itself throws an error, or if the JS function/runtime has already been deleted.

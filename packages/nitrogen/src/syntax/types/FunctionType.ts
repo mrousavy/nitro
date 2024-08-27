@@ -115,8 +115,17 @@ export class FunctionType implements Type {
         const returnType = this.returnType.getCode(language)
         return `((${params}) -> ${returnType})`
       }
-      case 'kotlin':
-        return this.specializationName
+      case 'kotlin': {
+        const params = this.parameters
+          .map((p) => {
+            if (includeNameInfo)
+              return `${p.escapedName}: ${p.getCode(language)}`
+            else return p.getCode(language)
+          })
+          .join(', ')
+        const returnType = this.returnType.getCode(language)
+        return `(${params}) -> ${returnType}`
+      }
       default:
         throw new Error(
           `Language ${language} is not yet supported for FunctionType!`

@@ -24,6 +24,7 @@ export function createKotlinFunction(functionType: FunctionType): SourceFile[] {
   )
   const isPurelyPrimitive = isFunctionPurelyPrimitive(functionType)
   const annotation = isPurelyPrimitive ? 'CriticalNative' : 'FastNative'
+  const lambdaSignature = `(${kotlinParams.join(', ')}) -> ${kotlinReturnType}`
 
   const kotlinCode = `
 ${createFileMetadataString(`${name}.kt`)}
@@ -53,6 +54,12 @@ class ${name} {
   private constructor(hybridData: HybridData) {
     mHybridData = hybridData
   }
+
+  /**
+   * Converts this function to a Kotlin Lambda.
+   * This exists purely as syntactic sugar, and has minimal runtime overhead.
+   */
+  fun toLambda(): ${lambdaSignature} = this::call
 
   /**
    * Call the given JS callback.

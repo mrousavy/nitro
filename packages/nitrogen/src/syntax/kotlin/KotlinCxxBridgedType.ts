@@ -286,6 +286,8 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
           case 'c++':
             const func = getTypeAs(this.type, FunctionType)
             return `J${func.specializationName}::fromCpp(${parameterName})`
+          case 'kotlin':
+            return `${parameterName}.toLambda()`
           default:
             return parameterName
         }
