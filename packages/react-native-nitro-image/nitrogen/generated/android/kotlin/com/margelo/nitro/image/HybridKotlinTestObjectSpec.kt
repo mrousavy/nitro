@@ -83,6 +83,10 @@ abstract class HybridKotlinTestObjectSpec: HybridObject() {
     val result = addOnPersonBornListener(callback.toLambda())
     return result
   }
+  
+  @DoNotStrip
+  @Keep
+  abstract fun getSomeDictionary(): Map<String, String>
 
   private external fun initHybrid(): HybridData
 

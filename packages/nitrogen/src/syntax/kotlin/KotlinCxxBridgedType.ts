@@ -10,6 +10,7 @@ import { getTypeAs } from '../types/getTypeAs.js'
 import { HybridObjectType } from '../types/HybridObjectType.js'
 import { OptionalType } from '../types/OptionalType.js'
 import { PromiseType } from '../types/PromiseType.js'
+import { RecordType } from '../types/RecordType.js'
 import { StructType } from '../types/StructType.js'
 import type { Type } from '../types/Type.js'
 import { getKotlinBoxedPrimitiveType } from './KotlinBoxedPrimitive.js'
@@ -194,6 +195,21 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
           default:
             return this.type.getCode(language)
         }
+      case 'record': {
+        switch (language) {
+          case 'c++':
+            const recordType = getTypeAs(this.type, RecordType)
+            const keyType = new KotlinCxxBridgedType(
+              recordType.keyType
+            ).getTypeCode(language)
+            const valueType = new KotlinCxxBridgedType(
+              recordType.valueType
+            ).getTypeCode(language)
+            return `jni::JMap<${keyType}, ${valueType}>`
+          default:
+            return this.type.getCode(language)
+        }
+      }
       case 'enum':
         switch (language) {
           case 'c++':
@@ -384,6 +400,26 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
             return parameterName
         }
       }
+      case 'record': {
+        switch (language) {
+          case 'c++':
+            const record = getTypeAs(this.type, RecordType)
+            const keyType = new KotlinCxxBridgedType(record.keyType)
+            const valueType = new KotlinCxxBridgedType(record.valueType)
+            const javaMapType = `jni::JHashMap<${keyType.getTypeCode('c++')}, ${valueType.getTypeCode('c++')}>`
+            return `
+[&]() {
+  auto map = ${javaMapType}::create(${parameterName}.size());
+  for (const auto& entry : ${parameterName}) {
+    map->put(${keyType.parseFromCppToKotlin('entry.first', 'c++')}, ${valueType.parseFromCppToKotlin('entry.second', 'c++')})
+  }
+  return map;
+}()
+            `.trim()
+          default:
+            return parameterName
+        }
+      }
       case 'array': {
         switch (language) {
           case 'c++': {
@@ -509,40 +545,23 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
             return parameterName
         }
       }
-      case 'promise': {
+      case 'record': {
         switch (language) {
           case 'c++':
-            const promise = getTypeAs(this.type, PromiseType)
-            const actualCppType = promise.resultingType.getCode('c++')
-            const resultingType = new KotlinCxxBridgedType(
-              promise.resultingType
-            )
-            let resolveBody: string
-            if (resultingType.hasType) {
-              // it's a Promise<T>
-              resolveBody = `
-auto result = jni::static_ref_cast<${resultingType.getTypeCode('c++')}>(boxedResult);
-promise->set_value(${resultingType.parseFromKotlinToCpp('result', 'c++', true)});
-          `.trim()
-            } else {
-              // it's a Promise<void>
-              resolveBody = `
-promise->set_value();
-          `.trim()
-            }
+            const record = getTypeAs(this.type, RecordType)
+            const keyType = new KotlinCxxBridgedType(record.keyType)
+            const valueType = new KotlinCxxBridgedType(record.valueType)
+            const cxxType = this.type.getCode('c++')
             return `
 [&]() {
-  auto promise = std::make_shared<std::promise<${actualCppType}>>();
-  ${parameterName}->cthis()->addOnResolvedListener([=](jni::alias_ref<jni::JObject> boxedResult) {
-    ${indent(resolveBody, '    ')}
-  });
-  ${parameterName}->cthis()->addOnRejectedListener([=](jni::alias_ref<jni::JString> message) {
-    std::runtime_error error(message->toStdString());
-    promise->set_exception(std::make_exception_ptr(error));
-  });
-  return promise->get_future();
+  ${cxxType} map;
+  map.reserve(${parameterName}->size());
+  for (const auto& entry : *${parameterName}) {
+    map.emplace(${keyType.parseFromKotlinToCpp('entry.first', 'c++')}, ${valueType.parseFromKotlinToCpp('entry.second', 'c++')});
+  }
+  return map;
 }()
-        `.trim()
+            `.trim()
           default:
             return parameterName
         }
@@ -585,6 +604,44 @@ promise->set_value();
             `.trim()
               }
             }
+          default:
+            return parameterName
+        }
+      }
+      case 'promise': {
+        switch (language) {
+          case 'c++':
+            const promise = getTypeAs(this.type, PromiseType)
+            const actualCppType = promise.resultingType.getCode('c++')
+            const resultingType = new KotlinCxxBridgedType(
+              promise.resultingType
+            )
+            let resolveBody: string
+            if (resultingType.hasType) {
+              // it's a Promise<T>
+              resolveBody = `
+auto result = jni::static_ref_cast<${resultingType.getTypeCode('c++')}>(boxedResult);
+promise->set_value(${resultingType.parseFromKotlinToCpp('result', 'c++', true)});
+          `.trim()
+            } else {
+              // it's a Promise<void>
+              resolveBody = `
+promise->set_value();
+          `.trim()
+            }
+            return `
+[&]() {
+  auto promise = std::make_shared<std::promise<${actualCppType}>>();
+  ${parameterName}->cthis()->addOnResolvedListener([=](jni::alias_ref<jni::JObject> boxedResult) {
+    ${indent(resolveBody, '    ')}
+  });
+  ${parameterName}->cthis()->addOnRejectedListener([=](jni::alias_ref<jni::JString> message) {
+    std::runtime_error error(message->toStdString());
+    promise->set_exception(std::make_exception_ptr(error));
+  });
+  return promise->get_future();
+}()
+        `.trim()
           default:
             return parameterName
         }

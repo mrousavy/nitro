@@ -34,6 +34,7 @@ namespace NitroModules { class AnyMap; }
 #include <NitroModules/JPromise.hpp>
 #include <NitroModules/AnyMap.hpp>
 #include <NitroModules/JAnyMap.hpp>
+#include <unordered_map>
 #include <functional>
 #include "JFunc_void_Person.hpp"
 
@@ -153,6 +154,18 @@ namespace margelo::nitro::image {
   void JHybridKotlinTestObjectSpec::addOnPersonBornListener(const std::function<void(const Person& /* p */)>& callback) {
     static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<JFunc_void_Person::javaobject> /* callback */)>("addOnPersonBornListener");
     method(_javaPart, JFunc_void_Person::fromCpp(callback));
+  }
+  std::unordered_map<std::string, std::string> JHybridKotlinTestObjectSpec::getSomeDictionary() {
+    static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<jni::JMap<jni::JString, jni::JString>>()>("getSomeDictionary");
+    auto result = method(_javaPart);
+    return [&]() {
+      std::unordered_map<std::string, std::string> map;
+      map.reserve(result->size());
+      for (const auto& entry : *result) {
+        map.emplace(entry.first->toStdString(), entry.second->toStdString());
+      }
+      return map;
+    }();
   }
 
 } // namespace margelo::nitro::image

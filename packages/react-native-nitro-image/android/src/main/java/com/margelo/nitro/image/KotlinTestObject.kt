@@ -59,4 +59,8 @@ class KotlinTestObject: HybridKotlinTestObjectSpec() {
             callback(Person("Marc", 24.0))
         }
     }
+
+    override fun getSomeDictionary(): Map<String, String> {
+        return mapOf("test" to "something")
+    }
 }

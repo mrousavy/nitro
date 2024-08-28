@@ -31,6 +31,8 @@ namespace margelo::nitro::image { struct Person; }
 #include <NitroModules/AnyMap.hpp>
 #include <functional>
 #include "Person.hpp"
+#include <unordered_map>
+#include <string>
 
 namespace margelo::nitro::image {
 
@@ -72,6 +74,7 @@ namespace margelo::nitro::image {
       virtual std::future<void> asyncTest() = 0;
       virtual std::shared_ptr<AnyMap> createMap() = 0;
       virtual void addOnPersonBornListener(const std::function<void(const Person& /* p */)>& callback) = 0;
+      virtual std::unordered_map<std::string, std::string> getSomeDictionary() = 0;
 
     protected:
       // Hybrid Setup

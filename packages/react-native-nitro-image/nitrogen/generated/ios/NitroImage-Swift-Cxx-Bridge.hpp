@@ -359,5 +359,23 @@ namespace margelo::nitro::image::bridge::swift {
   inline Func_void_Person create_Func_void_Person(void(*func)(void* /* context */, const Person&), void* context) {
     return std::bind(func, context, std::placeholders::_1);
   }
+  
+  /**
+   * Specialized version of `std::unordered_map<std::string, std::string>`.
+   */
+  using std__unordered_map_std__string__std__string_ = std::unordered_map<std::string, std::string>;
+  inline std::unordered_map<std::string, std::string> create_std__unordered_map_std__string__std__string_(size_t size) {
+    std::unordered_map<std::string, std::string> map;
+    map.reserve(size);
+    return map;
+  }
+  inline std::vector<std::string> get_std__unordered_map_std__string__std__string__keys(const std__unordered_map_std__string__std__string_& map) {
+    std::vector<std::string> keys;
+    keys.reserve(map.size());
+    for (const auto& entry : map) {
+      keys.push_back(entry.first);
+    }
+    return keys;
+  }
 
 } // namespace margelo::nitro::image::bridge::swift
