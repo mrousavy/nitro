@@ -2,9 +2,8 @@ name: Lint TypeScript
 
 permissions:
   checks: write
-  contents: write
-  issues: write
-  pull-requests: write
+  contents: read
+  pull-requests: read
 
 on:
   push:
