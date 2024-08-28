@@ -6,6 +6,7 @@ import type { SourceFile } from '../syntax/SourceFile.js'
 import { getReferencedTypes } from '../syntax/getReferencedTypes.js'
 import { SwiftCxxBridgedType } from '../syntax/swift/SwiftCxxBridgedType.js'
 import { filterDuplicateHelperBridges, indent } from '../utils.js'
+import { BRIDGE_NAMESPACE } from '../syntax/swift/SwiftHybridObjectBridge.js'
 
 const SWIFT_BRIDGE_NAMESPACE = ['bridge', 'swift']
 
@@ -71,6 +72,20 @@ ${createFileMetadataString(`${bridgeName}.cpp`)}
 #include "${bridgeName}.hpp"
 `
 
+  const swiftBridges = types
+    .map((t) => createSwiftBridge(t))
+    .filter(isNotDuplicate)
+    .join('\n\n')
+  const swiftCode = `
+${createFileMetadataString(`${bridgeName}.swift`)}
+
+import NitroModules
+
+internal typealias bridge = ${BRIDGE_NAMESPACE}
+
+${swiftBridges}
+`
+
   const files: SourceFile[] = []
   files.push({
     content: header,
@@ -86,5 +101,29 @@ ${createFileMetadataString(`${bridgeName}.cpp`)}
     platform: 'ios',
     subdirectory: [],
   })
+  files.push({
+    content: swiftCode,
+    language: 'swift',
+    name: `${bridgeName}.swift`,
+    platform: 'ios',
+    subdirectory: [],
+  })
   return files
+}
+
+function createSwiftBridge(type: SwiftCxxBridgedType): string | undefined {
+  const cxxType = type.getTypeCode('swift')
+  const swiftType = type.type.getCode('swift')
+
+  return `
+internal extension ${cxxType} {
+  static func fromSwift(_ value: ${swiftType}) -> ${cxxType} {
+    return ${indent(type.parseFromSwiftToCpp('value', 'swift'), '    ')}
+  }
+
+  func toSwift() -> ${swiftType} {
+    return ${indent(type.parseFromCppToSwift('self', 'swift'), '    ')}
+  }
+}
+  `
 }
