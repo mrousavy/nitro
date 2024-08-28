@@ -30,6 +30,7 @@
     "typecheck": "tsc --noEmit",
     "clean": "del-cli android/build node_modules/**/android/build lib",
     "lint": "eslint \"**/*.{js,ts,tsx}\" --fix",
+    "lint-ci": "eslint \"**/*.{js,ts,tsx}\" -f @jamesacarr/github-actions",
     "typescript": "tsc --noEmit false",
     "specs": "bun run --filter=\"**\" typescript && bun nitro-codegen --logLevel=\"debug\""
   },

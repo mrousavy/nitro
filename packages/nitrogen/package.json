@@ -17,6 +17,7 @@
     "postinstall": "tsc || exit 0;",
     "typecheck": "tsc --noEmit",
     "lint": "eslint \"**/*.{js,ts,tsx}\" --fix",
+    "lint-ci": "eslint \"**/*.{js,ts,tsx}\" -f @jamesacarr/github-actions",
     "release": "tsc && release-it",
     "typescript": "tsc --noEmit false"
   },

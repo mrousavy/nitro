@@ -10,6 +10,7 @@
     "bootstrap": "bun --filter=\"**\" install && bun tsc && bun --filter=\"react-native-nitro-example\" pods",
     "typescript": "bun --filter=\"**\" typescript",
     "lint": "bun --filter=\"**\" lint",
+    "lint-fix": "bun --filter=\"**\" lint --fix",
     "release": "release-it",
     "clean": "rm -rf packages/**/tsconfig.tsbuildinfo packages/**/node_modules packages/**/lib"
   },
@@ -22,6 +23,7 @@
   "devDependencies": {
     "@release-it/conventional-changelog": "^8.0.1",
     "@release-it/bumper": "^6.0.1",
+    "@jamesacarr/eslint-formatter-github-actions": "^0.2.0",
     "release-it": "^17.6.0"
   },
   "release-it": {
