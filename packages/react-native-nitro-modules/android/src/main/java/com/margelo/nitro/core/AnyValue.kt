@@ -90,7 +90,7 @@ class AnyValue {
     /**
      * Gets whether this [AnyValue] instance is holding a [Long] value.
      */
-    external fun isLong(): Boolean
+    external fun isBigInt(): Boolean
 
     /**
      * Gets whether this [AnyValue] instance is holding a [String] value.
@@ -111,37 +111,37 @@ class AnyValue {
      * Get the [Double] value this [AnyValue] is holding.
      * @throws Error if this [AnyValue] is not holding a [Double] (see [isDouble]`()`)
      */
-    external fun getDouble(): Double
+    external fun asDouble(): Double
 
     /**
      * Get the [Boolean] value this [AnyValue] is holding.
      * @throws Error if this [AnyValue] is not holding a [Boolean] (see [isBoolean]`()`)
      */
-    external fun getBoolean(): Boolean
+    external fun asBoolean(): Boolean
 
     /**
      * Get the [Long] value this [AnyValue] is holding.
      * @throws Error if this [AnyValue] is not holding a [Long] (see [isLong]`()`)
      */
-    external fun getLong(): Long
+    external fun asBigInt(): Long
 
     /**
      * Get the [String] value this [AnyValue] is holding.
      * @throws Error if this [AnyValue] is not holding a [String] (see [isString]`()`)
      */
-    external fun getString(): String
+    external fun asString(): String
 
     /**
      * Get the [AnyArray] value this [AnyValue] is holding.
      * @throws Error if this [AnyValue] is not holding an [AnyArray] (see [isAnyArray]`()`)
      */
-    external fun getAnyArray(): AnyArray
+    external fun asAnyArray(): AnyArray
 
     /**
      * Get the [AnyObject] value this [AnyValue] is holding.
      * @throws Error if this [AnyValue] is not holding an [AnyObject] (see [isAnyObject]`()`)
      */
-    external fun getAnyObject(): AnyObject
+    external fun asAnyObject(): AnyObject
 
     private external fun initHybrid(): HybridData
     private external fun initHybrid(value: Double): HybridData

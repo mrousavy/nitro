@@ -105,10 +105,10 @@ using namespace facebook;
     bool isString() {
       return std::holds_alternative<std::string>(_value);
     }
-    bool isArray() {
+    bool isAnyArray() {
       return std::holds_alternative<AnyArray>(_value);
     }
-    bool isObject() {
+    bool isAnyObject() {
       return std::holds_alternative<AnyObject>(_value);
     }
 
@@ -125,7 +125,7 @@ using namespace facebook;
     std::string asString() {
       return std::get<std::string>(_value);
     }
-    jni::alias_ref<JAnyArray> asArray() {
+    jni::alias_ref<JAnyArray> asAnyArray() {
       auto vector = std::get<AnyArray>(_value);
       auto javaArray = jni::JArrayClass<JAnyValue::javaobject>::newArray(vector.size());
       for (size_t i = 0; i < vector.size(); i++) {
@@ -134,7 +134,7 @@ using namespace facebook;
       }
       return javaArray;
     }
-    jni::alias_ref<JAnyObject> asObject() {
+    jni::alias_ref<JAnyObject> asAnyObject() {
       auto map = std::get<AnyObject>(_value);
       auto javaMap = jni::JHashMap<jni::JString, JAnyValue::javaobject>::create(map.size());
       for (const auto& entry : map) {
@@ -172,15 +172,15 @@ using namespace facebook;
        makeNativeMethod("isBoolean", JAnyValue::isBoolean),
        makeNativeMethod("isBigInt", JAnyValue::isBigInt),
        makeNativeMethod("isString", JAnyValue::isString),
-       makeNativeMethod("isArray", JAnyValue::isArray),
-       makeNativeMethod("isObject", JAnyValue::isObject),
+       makeNativeMethod("isAnyArray", JAnyValue::isAnyArray),
+       makeNativeMethod("isAnyObject", JAnyValue::isAnyObject),
        // get
        makeNativeMethod("asDouble", JAnyValue::asDouble),
        makeNativeMethod("asBoolean", JAnyValue::asBoolean),
        makeNativeMethod("asBigInt", JAnyValue::asBigInt),
        makeNativeMethod("asString", JAnyValue::asString),
-       makeNativeMethod("asArray", JAnyValue::asArray),
-       makeNativeMethod("asObject", JAnyValue::asObject),
+       makeNativeMethod("asAnyArray", JAnyValue::asAnyArray),
+       makeNativeMethod("asAnyObject", JAnyValue::asAnyObject),
       });
     }
   };
