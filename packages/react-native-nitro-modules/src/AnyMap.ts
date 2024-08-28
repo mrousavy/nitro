@@ -18,5 +18,8 @@ export type ValueType =
  * - Objects of primitives (`Record<string, ValueType>`)
  * - Arrays of arrays or objects
  * - Objects of arrays or objects
+ *
+ * @note It is recommended to always use typed `interface`s instead of `AnyMap` for
+ * both type safety, as well as better performance.
  */
 export type AnyMap = Record<string, ValueType>
