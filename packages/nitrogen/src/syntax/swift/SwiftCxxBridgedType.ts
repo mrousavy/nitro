@@ -379,7 +379,9 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
   var dictionary = ${record.getCode('swift')}(minimumCapacity: ${cppParameterName}.size())
   let keys = ${getKeysFunc}(${cppParameterName})
   for key in keys {
-    let value = ${cppParameterName}[key]
+    guard let value = ${cppParameterName}[key] else {
+      fatalError("${this.type.getCode('c++')}'s values changed while trying to bridge them to Swift!")
+    }
     dictionary[${wrappingKey.parseFromCppToSwift('key', 'swift')}] = ${wrappingValue.parseFromCppToSwift('value', 'swift')}
   }
   return dictionary
