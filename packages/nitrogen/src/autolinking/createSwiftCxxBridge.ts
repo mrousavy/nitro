@@ -14,9 +14,10 @@ export function createSwiftCxxBridge(): SourceFile[] {
   const moduleName = NitroConfig.getIosModuleName()
   const bridgeName = `${moduleName}-Swift-Cxx-Bridge`
 
-  const types = getAllKnownTypes().map((t) => new SwiftCxxBridgedType(t))
+  const allTypes = getAllKnownTypes()
 
-  const bridges = types
+  const bridges = allTypes
+    .map((t) => new SwiftCxxBridgedType(t))
     .flatMap((t) => {
       const referenced = getReferencedTypes(t.type)
       return referenced.map((r) => {
@@ -72,9 +73,11 @@ ${createFileMetadataString(`${bridgeName}.cpp`)}
 #include "${bridgeName}.hpp"
 `
 
-  const swiftBridges = types
+  const swiftBridges = allTypes
+    .map((t) => new SwiftCxxBridgedType(t, true))
     .map((t) => createSwiftBridge(t))
     .filter(isNotDuplicate)
+    .filter((c) => c != null)
     .join('\n\n')
   const swiftCode = `
 ${createFileMetadataString(`${bridgeName}.swift`)}
@@ -112,10 +115,16 @@ ${swiftBridges}
 }
 
 function createSwiftBridge(type: SwiftCxxBridgedType): string | undefined {
-  const cxxType = type.getTypeCode('swift')
-  const swiftType = type.type.getCode('swift')
+  if (!type.needsSpecialHandling) {
+    // type does not need a bridge, it's a primitive
+    return undefined
+  }
 
-  return `
+  try {
+    const cxxType = type.getTypeCode('swift')
+    const swiftType = type.type.getCode('swift')
+
+    return `
 internal extension ${cxxType} {
   static func fromSwift(_ value: ${swiftType}) -> ${cxxType} {
     return ${indent(type.parseFromSwiftToCpp('value', 'swift'), '    ')}
@@ -126,4 +135,8 @@ internal extension ${cxxType} {
   }
 }
   `
+  } catch {
+    // The type is not available in Swift!
+    return undefined
+  }
 }
