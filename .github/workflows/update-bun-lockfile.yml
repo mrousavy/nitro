@@ -1,20 +1,22 @@
-name: 'Dependabot: Update bun.lockb'
+name: 'Update Lockfiles (bun.lockb + Podfile.lock)'
 
 on:
   pull_request:
     paths:
       - "package.json"
+      - "example/package.json"
 
 permissions:
   contents: write
 
 jobs:
-  update-bun-lockb:
-    name: "Update bun.lockb"
+  update-lockfiles:
+    name: "Update lockfiles (bun.lockb + Podfile.lock)"
     if: github.actor == 'dependabot[bot]'
     runs-on: ubuntu-latest
     steps:
       - uses: oven-sh/setup-bun@v1
+      - uses: ruby/setup-ruby@v1
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
@@ -22,6 +24,10 @@ jobs:
       - run: |
           bun install
           git add bun.lockb
+          cd example
+          bun pods
+          git add ios/Podfile.lock
+          cd ..
           git config --global user.name 'dependabot[bot]'
           git config --global user.email 'dependabot[bot]@users.noreply.github.com'
           git commit --amend --no-edit
