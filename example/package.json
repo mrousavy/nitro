@@ -46,6 +46,7 @@
       "@react-native",
       "prettier"
     ],
+    "plugins": ["prettier"],
     "rules": {
       "prettier/prettier": [
         "warn",
