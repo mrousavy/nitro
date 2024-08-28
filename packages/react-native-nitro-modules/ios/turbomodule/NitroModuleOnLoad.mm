@@ -13,6 +13,7 @@
 #import "ArrayBufferHolder.hpp"
 #import "HybridContext.hpp"
 #import "PromiseHolder.hpp"
+#import "SwiftClosure.hpp"
 
 @interface NitroModulesOnLoad : NSObject
 @end

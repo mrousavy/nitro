@@ -8,38 +8,52 @@
 import Foundation
 
 /**
- * Wraps a closure in a Swift class.
+ * Wraps a Swift closure in a Swift class.
  * This can be used to create unmanaged pointers (`void*`) and
  * passed to C-style function pointers via `void* context` parameters.
- *
- * To create a `ClosureWrapper`, use `ClosureWrapper.wrap(...)`.
  */
 public final class ClosureWrapper {
   private let closure: () -> Void
-
-  private init(closure: @escaping () -> Void) {
+  
+  init(closure: @escaping () -> Void) {
     self.closure = closure
   }
-
-  private func invoke() {
+  
+  func invoke() {
     closure()
   }
-  
+}
+
+/**
+ * Represents a Swift Closure that can be called from both C++ and Swift.
+ */
+public typealias SwiftClosure = margelo.nitro.SwiftClosure
+
+extension SwiftClosure {
   /**
-   * Wraps the given Swift closure in a C-style function pointer with `void* context` associated to it.
-   * This way it can be passed to C/C++ and called without worrying about context/binding.
+   * Create a new `SwiftClosure` wrapping the given Swift closure.
+   * This can then be called from both C++ and Swift.
    */
-  public static func wrap(closure: @escaping () -> Void) -> (@convention(c) (UnsafeMutableRawPointer?) -> Void, UnsafeMutableRawPointer) {
-    // Wrap closure in void*
+  init(wrappingClosure closure: @escaping () -> Void) {
+    // Wrap closure in void*, and increment it's ref count so it stays alive.
     let context = Unmanaged.passRetained(ClosureWrapper(closure: closure)).toOpaque()
-    // Create C-style Function Pointer
-    let cFunc: @convention(c) (UnsafeMutableRawPointer?) -> Void = { context in
+    
+    // Create a C-style Function Pointer, which calls the actual Swift closure.
+    let call: @convention(c) (UnsafeMutableRawPointer?) -> Void = { context in
       guard let context else { fatalError("Context was null, even though we created one!") }
-      // Unwrap context from void* to closure again
-      let closure = Unmanaged<ClosureWrapper>.fromOpaque(context).takeRetainedValue()
+      // Unwrap context from void* to closure again. We are assuming that it has not been deleted yet.
+      let closure = context.assumingMemoryBound(to: ClosureWrapper.self).pointee
       // Call it!
       closure.invoke()
     }
-    return (cFunc, context)
+    
+    // Create a C-style Function Pointer, which deletes the `ClosureWrapper`.
+    let destroy: @convention(c) (UnsafeMutableRawPointer?) -> Void = { context in
+      guard let context else { return }
+      // Release the void* holding our `ClosureWrapper`
+      Unmanaged<ClosureWrapper>.fromOpaque(context).release()
+    }
+    
+    self.init(context, call, destroy)
   }
 }

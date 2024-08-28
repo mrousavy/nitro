@@ -262,11 +262,9 @@ std::shared_ptr<ArrayBuffer> HybridTestObject::createArrayBuffer() {
   uint8_t* buffer = new uint8_t[size];
   return std::make_shared<NativeArrayBuffer>(
       buffer, size,
-      [](void* context) {
-        uint8_t* buffer = (uint8_t*)context;
+      [=]() {
         delete[] buffer;
-      },
-      (void*)buffer);
+      });
 }
 
 double HybridTestObject::getBufferLastItem(const std::shared_ptr<ArrayBuffer>& buffer) {

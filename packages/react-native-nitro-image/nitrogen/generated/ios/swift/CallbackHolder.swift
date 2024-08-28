@@ -21,8 +21,7 @@ public extension CallbackHolder {
    */
   init(callback: @escaping (() -> Void)) {
     self.init({ () -> bridge.Func_void in
-      let (wrappedClosure, context) = ClosureWrapper.wrap(closure: callback)
-      return bridge.create_Func_void(wrappedClosure, context)
+      fatalError("this wont work now")
     }())
   }
 
@@ -36,8 +35,7 @@ public extension CallbackHolder {
     @inline(__always)
     set {
       self.__callback = { () -> bridge.Func_void in
-        let (wrappedClosure, context) = ClosureWrapper.wrap(closure: newValue)
-        return bridge.create_Func_void(wrappedClosure, context)
+        fatalError("this wont work now")
       }()
     }
   }
