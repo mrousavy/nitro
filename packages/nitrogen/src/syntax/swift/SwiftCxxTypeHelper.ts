@@ -61,7 +61,7 @@ function createCxxOptionalSwiftHelper(type: OptionalType): SwiftCxxHelper {
  * Specialized version of \`${escapeComments(actualType)}\`.
  */
 using ${name} = ${actualType};
-inline ${actualType} create_${name}(const ${type.wrappingType.getCode('c++')}& value) {
+inline static ${actualType} create_${name}(const ${type.wrappingType.getCode('c++')}& value) {
   return ${actualType}(value);
 }
     `.trim(),
@@ -90,7 +90,7 @@ function createCxxVectorSwiftHelper(type: ArrayType): SwiftCxxHelper {
  * Specialized version of \`${escapeComments(actualType)}\`.
  */
 using ${name} = ${actualType};
-inline ${actualType} create_${name}(size_t size) {
+inline static ${actualType} create_${name}(size_t size) {
   ${actualType} vector;
   vector.reserve(size);
   return vector;
@@ -122,12 +122,12 @@ function createCxxUnorderedMapSwiftHelper(type: RecordType): SwiftCxxHelper {
  * Specialized version of \`${escapeComments(actualType)}\`.
  */
 using ${name} = ${actualType};
-inline ${actualType} create_${name}(size_t size) {
+inline static ${actualType} create_${name}(size_t size) {
   ${actualType} map;
   map.reserve(size);
   return map;
 }
-inline std::vector<${keyType}> get_${name}_keys(const ${name}& map) {
+inline static std::vector<${keyType}> get_${name}_keys(const ${name}& map) {
   std::vector<${keyType}> keys;
   keys.reserve(map.size());
   for (const auto& entry : map) {
@@ -174,7 +174,7 @@ function createCxxFunctionSwiftHelper(type: FunctionType): SwiftCxxHelper {
  * Specialized version of \`${escapeComments(actualType)}\`.
  */
 using ${name} = ${actualType};
-inline ${name} create_${name}(${functionPointerParam}, void* context) {
+inline static ${name} create_${name}(${functionPointerParam}, void* context) {
   return std::bind(func, ${boundArgs.join(', ')});
 }
     `.trim(),
@@ -193,7 +193,7 @@ function createCxxVariantSwiftHelper(type: VariantType): SwiftCxxHelper {
         ? toReferenceType(t.getCode('c++'))
         : t.getCode('c++')
       return `
-inline ${actualType} create_${name}(${param} value) {
+inline static ${actualType} create_${name}(${param} value) {
   return value;
 }
       `.trim()
@@ -202,7 +202,7 @@ inline ${actualType} create_${name}(${param} value) {
   const getFunctions = type.variants
     .map((t, i) => {
       return `
-inline ${t.getCode('c++')} get_${name}_${i}(const ${actualType}& variant) {
+inline static ${t.getCode('c++')} get_${name}_${i}(const ${actualType}& variant) {
   return std::get<${i}>(variant);
 }
       `.trim()
@@ -259,7 +259,7 @@ function createCxxTupleSwiftHelper(type: TupleType): SwiftCxxHelper {
  * Specialized version of \`${escapeComments(actualType)}\`.
  */
 using ${name} = ${actualType};
-inline ${actualType} create_${name}(${typesSignature}) {
+inline static ${actualType} create_${name}(${typesSignature}) {
   return ${actualType} { ${typesForward} };
 }
      `.trim(),
@@ -289,7 +289,7 @@ function createCxxPromiseSwiftHelper(type: PromiseType): SwiftCxxHelper {
  * Specialized version of \`${escapeComments(actualType)}\`.
  */
 using ${name} = ${actualType};
-inline ${actualType} create_${name}() {
+inline static ${actualType} create_${name}() {
   return ${actualType}();
 }
      `.trim(),
