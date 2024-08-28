@@ -191,7 +191,7 @@ The following C++ / JS types are supported out of the box:
     <td><code>{ ... }</code></td>
     <td><code>std::shared_ptr&lt;<a href="./cpp/core/AnyMap.hpp">AnyMap</a>&gt;</code></td>
     <td><code><a href="./ios/core/AnyMapHolder.swift">AnyMapHolder</a></code> 🟡  (<a href="https://github.com/mrousavy/nitro/issues/57">#57</a>)</td>
-    <td><code><a href="./android/src/main/java/com/margelo/nitro/core/AnyMap.kt">AnyMap</a></code> 🟡  (<a href="https://github.com/mrousavy/nitro/issues/61">#61</a>)</td>
+    <td><code><a href="./android/src/main/java/com/margelo/nitro/core/AnyMap.kt">AnyMap</a></code></td>
   </tr>
   <tr>
     <td><code>ArrayBuffer</code></td>
