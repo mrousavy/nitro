@@ -47,6 +47,7 @@ public protocol HybridSwiftKotlinTestObjectSpec: HybridObjectSpec {
   var buffer: ArrayBufferHolder { get set }
 
   // Methods
+  func getHolder() throws -> ComplexHolder
   func simpleFunc() throws -> Void
   func addNumbers(a: Double, b: Double) throws -> Double
   func addStrings(a: String, b: String) throws -> String

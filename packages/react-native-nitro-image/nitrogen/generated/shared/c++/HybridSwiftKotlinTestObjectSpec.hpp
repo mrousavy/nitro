@@ -24,6 +24,8 @@ namespace margelo::nitro::image { enum class Powertrain; }
 namespace margelo::nitro::image { enum class OldEnum; }
 // Forward declaration of `ArrayBuffer` to properly resolve imports.
 namespace NitroModules { class ArrayBuffer; }
+// Forward declaration of `ComplexHolder` to properly resolve imports.
+namespace margelo::nitro::image { struct ComplexHolder; }
 // Forward declaration of `HybridSwiftKotlinTestObjectSpec` to properly resolve imports.
 namespace margelo::nitro::image { class HybridSwiftKotlinTestObjectSpec; }
 // Forward declaration of `CallbackHolder` to properly resolve imports.
@@ -38,6 +40,7 @@ namespace margelo::nitro::image { struct CallbackHolder; }
 #include "Powertrain.hpp"
 #include "OldEnum.hpp"
 #include <NitroModules/ArrayBuffer.hpp>
+#include "ComplexHolder.hpp"
 #include <functional>
 #include <memory>
 #include "HybridSwiftKotlinTestObjectSpec.hpp"
@@ -101,6 +104,7 @@ namespace margelo::nitro::image {
 
     public:
       // Methods
+      virtual ComplexHolder getHolder() = 0;
       virtual void simpleFunc() = 0;
       virtual double addNumbers(double a, double b) = 0;
       virtual std::string addStrings(const std::string& a, const std::string& b) = 0;

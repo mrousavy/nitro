@@ -9,6 +9,10 @@ import Foundation
 import NitroModules
 
 class HybridSwiftKotlinTestObject : HybridSwiftKotlinTestObjectSpec {
+  func getHolder() throws -> ComplexHolder {
+    return ComplexHolder(first: ["value": "hello"])
+  }
+  
   
   func getStringAsync() throws -> Promise<String> {
     return Promise.parallel {

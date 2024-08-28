@@ -17,6 +17,8 @@ namespace NitroModules { class ArrayBuffer; }
 namespace margelo::nitro::image { struct CallbackHolder; }
 // Forward declaration of `Car` to properly resolve imports.
 namespace margelo::nitro::image { struct Car; }
+// Forward declaration of `ComplexHolder` to properly resolve imports.
+namespace margelo::nitro::image { struct ComplexHolder; }
 // Forward declaration of `HybridImageSpec` to properly resolve imports.
 namespace margelo::nitro::image { class HybridImageSpec; }
 // Forward declaration of `HybridSwiftKotlinTestObjectSpec` to properly resolve imports.
@@ -39,6 +41,7 @@ namespace margelo::nitro::image { enum class Powertrain; }
 // Include C++ defined types
 #include "CallbackHolder.hpp"
 #include "Car.hpp"
+#include "ComplexHolder.hpp"
 #include "HybridImageSpec.hpp"
 #include "HybridSwiftKotlinTestObjectSpec.hpp"
 #include "HybridTestObjectSpec.hpp"

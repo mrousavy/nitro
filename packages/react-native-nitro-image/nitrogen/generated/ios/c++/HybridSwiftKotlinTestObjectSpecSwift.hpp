@@ -27,6 +27,8 @@ namespace margelo::nitro::image { enum class OldEnum; }
 namespace NitroModules { class ArrayBuffer; }
 // Forward declaration of `ArrayBufferHolder` to properly resolve imports.
 namespace NitroModules { class ArrayBufferHolder; }
+// Forward declaration of `ComplexHolder` to properly resolve imports.
+namespace margelo::nitro::image { struct ComplexHolder; }
 // Forward declaration of `HybridSwiftKotlinTestObjectSpec` to properly resolve imports.
 namespace margelo::nitro::image { class HybridSwiftKotlinTestObjectSpec; }
 // Forward declaration of `HybridSwiftKotlinTestObjectSpecSwift` to properly resolve imports.
@@ -45,6 +47,7 @@ namespace margelo::nitro::image { struct CallbackHolder; }
 #include "OldEnum.hpp"
 #include <NitroModules/ArrayBuffer.hpp>
 #include <NitroModules/ArrayBufferHolder.hpp>
+#include "ComplexHolder.hpp"
 #include <functional>
 #include <memory>
 #include "HybridSwiftKotlinTestObjectSpec.hpp"
@@ -197,6 +200,10 @@ namespace margelo::nitro::image {
 
   public:
     // Methods
+    inline ComplexHolder getHolder() override {
+      auto value = _swiftPart.getHolder();
+      return value;
+    }
     inline void simpleFunc() override {
       _swiftPart.simpleFunc();
     }

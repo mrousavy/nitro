@@ -105,6 +105,10 @@ interface CallbackHolder {
   callback: () => void
 }
 
+interface ComplexHolder {
+  first: Record<string, string>
+}
+
 export interface SwiftKotlinTestObject extends HybridObject<{ ios: 'swift' }> {
   // Test Primitives
   numberValue: number
@@ -114,6 +118,8 @@ export interface SwiftKotlinTestObject extends HybridObject<{ ios: 'swift' }> {
   stringOrUndefined: string | undefined
   stringOrNull: string | null
   optionalString?: string
+
+  getHolder(): ComplexHolder
 
   // Basic function tests
   simpleFunc(): void
