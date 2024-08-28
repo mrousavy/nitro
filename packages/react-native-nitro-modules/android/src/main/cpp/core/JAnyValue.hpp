@@ -14,7 +14,6 @@ namespace margelo::nitro {
 
 using namespace facebook;
 
-
 /**
  * Represents an `AnyValue` (variant) implemented in Java.
  */
@@ -83,9 +82,9 @@ using namespace facebook;
     explicit JAnyValue(double value): _value(value) { }
     explicit JAnyValue(bool value): _value(value) { }
     explicit JAnyValue(int64_t value): _value(value) { }
-    explicit JAnyValue(std::string value): _value(value) { }
-    explicit JAnyValue(AnyArray&& value): _value(value) { }
-    explicit JAnyValue(AnyObject&& value): _value(value) { }
+    explicit JAnyValue(const std::string& value): _value(value) { }
+    explicit JAnyValue(AnyArray&& value): _value(std::move(value)) { }
+    explicit JAnyValue(AnyObject&& value): _value(std::move(value)) { }
     // C++ initializers
     explicit JAnyValue(const AnyValue& value): _value(value) {}
     explicit JAnyValue(AnyValue&& value): _value(std::move(value)) {}
@@ -185,5 +184,8 @@ using namespace facebook;
       });
     }
   };
+
+  using JAnyArray = JAnyValue::JAnyArray;
+  using JAnyObject = JAnyValue::JAnyObject;
 
 } // namespace margelo::nitro

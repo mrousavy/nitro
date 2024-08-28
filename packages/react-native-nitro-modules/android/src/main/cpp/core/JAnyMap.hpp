@@ -8,6 +8,7 @@
 #pragma once
 
 #include "AnyMap.hpp"
+#include "JAnyValue.hpp"
 #include <fbjni/fbjni.h>
 
 namespace margelo::nitro {
@@ -88,6 +89,25 @@ protected:
   std::string getString(const std::string& key) {
     return _map->getString(key);
   }
+  jni::alias_ref<JAnyArray> getAnyArray(const std::string& key) {
+    const auto& vector = _map->getArray(key);
+    auto javaArray = jni::JArrayClass<JAnyValue::javaobject>::newArray(vector.size());
+    for (size_t i = 0; i < vector.size(); i++) {
+      auto value = JAnyValue::create(vector[i]);
+      javaArray->setElement(i, value.get());
+    }
+    return javaArray;
+  }
+  jni::alias_ref<JAnyObject> getAnyObject(const std::string& key) {
+    const auto& map = _map->getObject(key);
+    auto javaMap = jni::JHashMap<jni::JString, JAnyValue::javaobject>::create(map.size());
+    for (const auto& entry : map) {
+      auto string = jni::make_jstring(entry.first);
+      auto value = JAnyValue::create(entry.second);
+      javaMap->put(string, value);
+    }
+    return javaMap;
+  }
 
 protected:
   void setNull(const std::string& key) {
@@ -104,6 +124,24 @@ protected:
   }
   void setString(const std::string& key, const std::string& value) {
     _map->setString(key, value);
+  }
+  void setAnyArray(const std::string& key, jni::alias_ref<JAnyArray>& value) {
+    std::vector<AnyValue> vector;
+    size_t size = value->size();
+    vector.reserve(size);
+    for (size_t i = 0; i < size; i++) {
+      auto anyValue = value->getElement(i);
+      vector.push_back(anyValue->cthis()->getValue());
+    }
+    _map->setArray(key, vector);
+  }
+  void setAnyObject(const std::string& key, const jni::alias_ref<JAnyObject>& value) {
+    std::unordered_map<std::string, AnyValue> map;
+    map.reserve(value->size());
+    for (const auto& entry : *value) {
+      map.emplace(entry.first->toStdString(), entry.second->cthis()->getValue());
+    }
+    _map->setObject(key, map);
   }
 
 public:
@@ -138,12 +176,16 @@ public:
         makeNativeMethod("getBoolean", JAnyMap::getBoolean),
         makeNativeMethod("getBigInt", JAnyMap::getBigInt),
         makeNativeMethod("getString", JAnyMap::getString),
+        makeNativeMethod("getAnyArray", JAnyMap::getAnyArray),
+        makeNativeMethod("getAnyObject", JAnyMap::getAnyObject),
         // set
         makeNativeMethod("setNull", JAnyMap::setNull),
         makeNativeMethod("setDouble", JAnyMap::setDouble),
         makeNativeMethod("setBoolean", JAnyMap::setBoolean),
         makeNativeMethod("setBigInt", JAnyMap::setBigInt),
         makeNativeMethod("setString", JAnyMap::setString),
+        makeNativeMethod("setAnyArray", JAnyMap::setAnyArray),
+        makeNativeMethod("setAnyObject", JAnyMap::setAnyObject),
     });
   }
 };

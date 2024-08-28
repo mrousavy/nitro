@@ -46,12 +46,16 @@ class AnyMap {
   external fun getBoolean(key: String): Boolean
   external fun getBigInt(key: String): Long
   external fun getString(key: String): String
+  external fun getAnyArray(key: String): AnyArray
+  external fun getAnyObject(key: String): AnyObject
 
   external fun setNull(key: String)
   external fun setDouble(key: String, value: Double)
   external fun setBoolean(key: String, value: Boolean)
   external fun setBigInt(key: String, value: Long)
   external fun setString(key: String, value: String)
+  external fun setAnyArray(key: String, value: AnyArray)
+  external fun setAnyObject(key: String, value: AnyObject)
 
   private external fun initHybrid(): HybridData
 }
