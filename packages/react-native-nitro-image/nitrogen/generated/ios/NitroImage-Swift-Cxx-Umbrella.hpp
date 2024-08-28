@@ -9,6 +9,8 @@
 #pragma once
 
 // Forward declarations of C++ defined types
+// Forward declaration of `AnotherHolder` to properly resolve imports.
+namespace margelo::nitro::image { struct AnotherHolder; }
 // Forward declaration of `AnyMap` to properly resolve imports.
 namespace NitroModules { class AnyMap; }
 // Forward declaration of `ArrayBuffer` to properly resolve imports.
@@ -39,6 +41,7 @@ namespace margelo::nitro::image { enum class PixelFormat; }
 namespace margelo::nitro::image { enum class Powertrain; }
 
 // Include C++ defined types
+#include "AnotherHolder.hpp"
 #include "CallbackHolder.hpp"
 #include "Car.hpp"
 #include "ComplexHolder.hpp"

@@ -48,6 +48,7 @@ public protocol HybridSwiftKotlinTestObjectSpec: HybridObjectSpec {
 
   // Methods
   func getHolder() throws -> ComplexHolder
+  func getAnother() throws -> AnotherHolder
   func simpleFunc() throws -> Void
   func addNumbers(a: Double, b: Double) throws -> Double
   func addStrings(a: String, b: String) throws -> String

@@ -29,6 +29,8 @@ namespace NitroModules { class ArrayBuffer; }
 namespace NitroModules { class ArrayBufferHolder; }
 // Forward declaration of `ComplexHolder` to properly resolve imports.
 namespace margelo::nitro::image { struct ComplexHolder; }
+// Forward declaration of `AnotherHolder` to properly resolve imports.
+namespace margelo::nitro::image { struct AnotherHolder; }
 // Forward declaration of `HybridSwiftKotlinTestObjectSpec` to properly resolve imports.
 namespace margelo::nitro::image { class HybridSwiftKotlinTestObjectSpec; }
 // Forward declaration of `HybridSwiftKotlinTestObjectSpecSwift` to properly resolve imports.
@@ -48,6 +50,7 @@ namespace margelo::nitro::image { struct CallbackHolder; }
 #include <NitroModules/ArrayBuffer.hpp>
 #include <NitroModules/ArrayBufferHolder.hpp>
 #include "ComplexHolder.hpp"
+#include "AnotherHolder.hpp"
 #include <functional>
 #include <memory>
 #include "HybridSwiftKotlinTestObjectSpec.hpp"
@@ -202,6 +205,10 @@ namespace margelo::nitro::image {
     // Methods
     inline ComplexHolder getHolder() override {
       auto value = _swiftPart.getHolder();
+      return value;
+    }
+    inline AnotherHolder getAnother() override {
+      auto value = _swiftPart.getAnother();
       return value;
     }
     inline void simpleFunc() override {

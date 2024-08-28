@@ -110,6 +110,10 @@ interface ComplexHolder {
   second: Record<string, string>
 }
 
+interface AnotherHolder {
+  third: Record<string, string>
+}
+
 export interface SwiftKotlinTestObject extends HybridObject<{ ios: 'swift' }> {
   // Test Primitives
   numberValue: number
@@ -121,6 +125,7 @@ export interface SwiftKotlinTestObject extends HybridObject<{ ios: 'swift' }> {
   optionalString?: string
 
   getHolder(): ComplexHolder
+  getAnother(): AnotherHolder
 
   // Basic function tests
   simpleFunc(): void

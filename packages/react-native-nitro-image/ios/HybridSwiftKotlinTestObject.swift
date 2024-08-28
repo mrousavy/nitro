@@ -13,6 +13,10 @@ class HybridSwiftKotlinTestObject : HybridSwiftKotlinTestObjectSpec {
     return ComplexHolder(first: ["value": "hello"], second: ["value": "world"])
   }
   
+  func getAnother() throws -> AnotherHolder {
+    return AnotherHolder(third: ["value": "! :)"])
+  }
+  
   
   func getStringAsync() throws -> Promise<String> {
     return Promise.parallel {

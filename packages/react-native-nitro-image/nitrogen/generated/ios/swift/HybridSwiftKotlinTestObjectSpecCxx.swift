@@ -318,6 +318,17 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
   }
   
   @inline(__always)
+  public func getAnother() -> AnotherHolder {
+    do {
+      let result = try self.implementation.getAnother()
+      return result
+    } catch {
+      let message = "\(error.localizedDescription)"
+      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
+    }
+  }
+  
+  @inline(__always)
   public func simpleFunc() -> Void {
     do {
       try self.implementation.simpleFunc()
