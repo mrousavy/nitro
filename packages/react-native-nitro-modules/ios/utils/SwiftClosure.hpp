@@ -18,7 +18,7 @@ namespace margelo::nitro {
  * or accessed directly via `getFunction()`.
  * Copying a `SwiftClosure` will copy the `std::function`.
  */
-struct SwiftClosure {
+struct SwiftClosure final {
 public:
   using CallFn = void(void*);
   using DeleteFn = void(void*);
