@@ -15,9 +15,9 @@ namespace margelo::nitro {
 using namespace facebook;
 
 /**
- * Represents a Promise implemented in Java.
+ * Represents an `AnyMap` implemented in Java.
  */
-class JAnyMap : public jni::HybridClass<JAnyMap> {
+class JAnyMap final : public jni::HybridClass<JAnyMap> {
 public:
   static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/core/AnyMap;";
 

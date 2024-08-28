@@ -1,6 +1,7 @@
 /// Entry point for JNI.
 
 #include "JAnyMap.hpp"
+#include "JAnyValue.hpp"
 #include "JArrayBuffer.hpp"
 #include "JHybridObjectRegistry.hpp"
 #include "JPromise.hpp"

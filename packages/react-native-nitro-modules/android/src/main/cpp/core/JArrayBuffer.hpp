@@ -22,7 +22,7 @@ using namespace facebook;
  * Represents a `ArrayBuffer` that can either hold a `ByteBuffer` (owning),
  * or unknown/foreign memory, potentially from JS (non-owning).
  */
-struct JArrayBuffer : public jni::HybridClass<JArrayBuffer> {
+class JArrayBuffer final : public jni::HybridClass<JArrayBuffer> {
 public:
   static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/core/ArrayBuffer;";
 
