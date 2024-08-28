@@ -6,7 +6,7 @@ import com.facebook.proguard.annotations.DoNotStrip
 
 /**
  * Represents an untyped map of string keys with associated values.
- * This is like an "`any`" JS object.
+ * This is like a JS [`object`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object).
  */
 @Suppress("KotlinJniMissingFunction")
 @Keep
@@ -46,12 +46,16 @@ class AnyMap {
   external fun getBoolean(key: String): Boolean
   external fun getBigInt(key: String): Long
   external fun getString(key: String): String
+  external fun getAnyArray(key: String): AnyArray
+  external fun getAnyObject(key: String): AnyObject
 
   external fun setNull(key: String)
   external fun setDouble(key: String, value: Double)
   external fun setBoolean(key: String, value: Boolean)
   external fun setBigInt(key: String, value: Long)
   external fun setString(key: String, value: String)
+  external fun setAnyArray(key: String, value: AnyArray)
+  external fun setAnyObject(key: String, value: AnyObject)
 
   private external fun initHybrid(): HybridData
 }

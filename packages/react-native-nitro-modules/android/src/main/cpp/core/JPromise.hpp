@@ -16,7 +16,7 @@ using namespace facebook;
 /**
  * Represents a Promise implemented in Java.
  */
-class JPromise : public jni::HybridClass<JPromise> {
+class JPromise final : public jni::HybridClass<JPromise> {
 public:
   static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/core/Promise;";
   using OnResolvedFunc = std::function<void(jni::alias_ref<jni::JObject>)>;
