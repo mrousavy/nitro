@@ -1,5 +1,5 @@
 //
-//  ClosureWrapper.swift
+//  SwiftClosure.swift
 //  NitroModules
 //
 //  Created by Marc Rousavy on 14.08.24.
