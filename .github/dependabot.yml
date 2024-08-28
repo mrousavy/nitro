@@ -1,0 +1,40 @@
+version: 2
+
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "dependencies"
+  - package-ecosystem: "gradle"
+    directories:
+      - "/packages/react-native-nitro-modules/android/"
+      - "/packages/react-native-nitro-image/android/"
+      - "/example/android/"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "nitro-core"
+      - "dependencies"
+      - "kotlin"
+  - package-ecosystem: "npm"
+    directories:
+      - "/packages/react-native-nitro-modules/"
+      - "/packages/react-native-nitro-image/"
+      - "/example/"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "nitro-core"
+      - "dependencies"
+      - "typescript"
+  - package-ecosystem: "npm"
+    directories:
+      - "/packages/nitrogen/"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "nitrogen"
+      - "dependencies"
+      - "typescript"
