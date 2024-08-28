@@ -125,7 +125,7 @@ protected:
   void setString(const std::string& key, const std::string& value) {
     _map->setString(key, value);
   }
-  void setAnyArray(const std::string& key, jni::alias_ref<JAnyArray>& value) {
+  void setAnyArray(const std::string& key, jni::alias_ref<JAnyArray> value) {
     std::vector<AnyValue> vector;
     size_t size = value->size();
     vector.reserve(size);
