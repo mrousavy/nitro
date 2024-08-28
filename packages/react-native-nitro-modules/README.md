@@ -161,7 +161,7 @@ The following C++ / JS types are supported out of the box:
     <td><code>Record&lt;string, T&gt;</code></td>
     <td><code>std::unordered_map&lt;std::string, T&gt;</code></td>
     <td><code>Dictionary&lt;String, T&gt;</code></td>
-    <td>❌</td>
+    <td><code>Map&lt;std::string, T&gt;</code></td>
   </tr>
   <tr>
     <td><code>T?</code></td>

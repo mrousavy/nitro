@@ -59,4 +59,6 @@ class KotlinTestObject: HybridKotlinTestObjectSpec() {
             callback(Person("Marc", 24.0))
         }
     }
+
+    override var someRecord: Map<String, String> = mapOf("something" to "else")
 }

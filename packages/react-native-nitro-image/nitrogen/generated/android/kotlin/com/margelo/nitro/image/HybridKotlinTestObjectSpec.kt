@@ -63,6 +63,12 @@ abstract class HybridKotlinTestObjectSpec: HybridObject() {
   @set:DoNotStrip
   @set:Keep
   abstract var someBuffer: ArrayBuffer
+  
+  @get:DoNotStrip
+  @get:Keep
+  @set:DoNotStrip
+  @set:Keep
+  abstract var someRecord: Map<String, String>
 
   // Methods
   @DoNotStrip

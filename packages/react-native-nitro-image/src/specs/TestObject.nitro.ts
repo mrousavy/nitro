@@ -162,4 +162,6 @@ export interface KotlinTestObject extends HybridObject<{ android: 'kotlin' }> {
   createMap(): AnyMap
 
   addOnPersonBornListener(callback: (p: Person) => void): void
+
+  someRecord: Record<string, string>
 }

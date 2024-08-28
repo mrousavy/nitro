@@ -27,6 +27,8 @@ namespace margelo::nitro::image { struct Person; }
 #include <vector>
 #include "Car.hpp"
 #include <NitroModules/ArrayBuffer.hpp>
+#include <unordered_map>
+#include <string>
 #include <future>
 #include <NitroModules/AnyMap.hpp>
 #include <functional>
@@ -66,6 +68,8 @@ namespace margelo::nitro::image {
       virtual void setCarCollection(const std::vector<Car>& carCollection) = 0;
       virtual std::shared_ptr<ArrayBuffer> getSomeBuffer() = 0;
       virtual void setSomeBuffer(const std::shared_ptr<ArrayBuffer>& someBuffer) = 0;
+      virtual std::unordered_map<std::string, std::string> getSomeRecord() = 0;
+      virtual void setSomeRecord(const std::unordered_map<std::string, std::string>& someRecord) = 0;
 
     public:
       // Methods
