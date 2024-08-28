@@ -6,7 +6,7 @@ import com.facebook.proguard.annotations.DoNotStrip
 
 /**
  * Represents an untyped map of string keys with associated values.
- * This is like an "`any`" JS object.
+ * This is like a JS [`object`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object).
  */
 @Suppress("KotlinJniMissingFunction")
 @Keep
