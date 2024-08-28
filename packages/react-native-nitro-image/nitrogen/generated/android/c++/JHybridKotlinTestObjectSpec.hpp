@@ -49,13 +49,14 @@ namespace margelo::nitro::image {
     void setCarCollection(const std::vector<Car>& carCollection) override;
     std::shared_ptr<ArrayBuffer> getSomeBuffer() override;
     void setSomeBuffer(const std::shared_ptr<ArrayBuffer>& someBuffer) override;
+    std::unordered_map<std::string, std::string> getSomeRecord() override;
+    void setSomeRecord(const std::unordered_map<std::string, std::string>& someRecord) override;
 
   public:
     // Methods
     std::future<void> asyncTest() override;
     std::shared_ptr<AnyMap> createMap() override;
     void addOnPersonBornListener(const std::function<void(const Person& /* p */)>& callback) override;
-    std::unordered_map<std::string, std::string> getSomeDictionary() override;
 
   private:
     friend HybridBase;

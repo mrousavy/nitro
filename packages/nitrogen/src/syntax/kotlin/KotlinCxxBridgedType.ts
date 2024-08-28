@@ -404,14 +404,16 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
         switch (language) {
           case 'c++':
             const record = getTypeAs(this.type, RecordType)
-            const keyType = new KotlinCxxBridgedType(record.keyType)
-            const valueType = new KotlinCxxBridgedType(record.valueType)
-            const javaMapType = `jni::JHashMap<${keyType.getTypeCode('c++')}, ${valueType.getTypeCode('c++')}>`
+            const key = new KotlinCxxBridgedType(record.keyType)
+            const value = new KotlinCxxBridgedType(record.valueType)
+            const parseKey = key.parseFromCppToKotlin('entry.first', 'c++')
+            const parseValue = value.parseFromCppToKotlin('entry.second', 'c++')
+            const javaMapType = `jni::JHashMap<${key.getTypeCode('c++')}, ${value.getTypeCode('c++')}>`
             return `
 [&]() {
   auto map = ${javaMapType}::create(${parameterName}.size());
   for (const auto& entry : ${parameterName}) {
-    map->put(${keyType.parseFromCppToKotlin('entry.first', 'c++')}, ${valueType.parseFromCppToKotlin('entry.second', 'c++')})
+    map->put(${indent(parseKey, '    ')}, ${indent(parseValue, '    ')});
   }
   return map;
 }()
@@ -448,7 +450,7 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
   size_t size = ${parameterName}.size();
   jni::local_ref<${arrayType}> array = ${arrayType}::newArray(size);
   for (size_t i = 0; i < size; i++) {
-    auto element = ${parameterName}[i];
+    const auto& element = ${parameterName}[i];
     array->setElement(i, *${bridge.parseFromCppToKotlin('element', 'c++')});
   }
   return array;
@@ -549,15 +551,17 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
         switch (language) {
           case 'c++':
             const record = getTypeAs(this.type, RecordType)
-            const keyType = new KotlinCxxBridgedType(record.keyType)
-            const valueType = new KotlinCxxBridgedType(record.valueType)
+            const key = new KotlinCxxBridgedType(record.keyType)
+            const value = new KotlinCxxBridgedType(record.valueType)
+            const parseKey = key.parseFromKotlinToCpp('entry.first', 'c++')
+            const parseValue = value.parseFromKotlinToCpp('entry.second', 'c++')
             const cxxType = this.type.getCode('c++')
             return `
 [&]() {
   ${cxxType} map;
   map.reserve(${parameterName}->size());
   for (const auto& entry : *${parameterName}) {
-    map.emplace(${keyType.parseFromKotlinToCpp('entry.first', 'c++')}, ${valueType.parseFromKotlinToCpp('entry.second', 'c++')});
+    map.emplace(${indent(parseKey, '    ')}, ${indent(parseValue, '    ')});
   }
   return map;
 }()
@@ -632,10 +636,10 @@ promise->set_value();
             return `
 [&]() {
   auto promise = std::make_shared<std::promise<${actualCppType}>>();
-  ${parameterName}->cthis()->addOnResolvedListener([=](jni::alias_ref<jni::JObject> boxedResult) {
+  ${parameterName}->cthis()->addOnResolvedListener([=](const jni::global_ref<jni::JObject>& boxedResult) {
     ${indent(resolveBody, '    ')}
   });
-  ${parameterName}->cthis()->addOnRejectedListener([=](jni::alias_ref<jni::JString> message) {
+  ${parameterName}->cthis()->addOnRejectedListener([=](const jni::global_ref<jni::JString>& message) {
     std::runtime_error error(message->toStdString());
     promise->set_exception(std::make_exception_ptr(error));
   });

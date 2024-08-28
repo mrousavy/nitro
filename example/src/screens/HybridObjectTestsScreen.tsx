@@ -12,6 +12,9 @@ import { logPrototypeChain } from '../logPrototypeChain'
 logPrototypeChain(HybridTestObject)
 
 console.log(HybridKotlinTestObject.createMap())
+console.log(HybridKotlinTestObject.someRecord)
+console.log((HybridKotlinTestObject.someRecord = { hello: 'world' }))
+console.log(HybridKotlinTestObject.someRecord)
 
 HybridKotlinTestObject.addOnPersonBornListener((p) => {
   console.log(`${p.name} was born! Age: ${p.age}`)

@@ -30,11 +30,11 @@ namespace NitroModules { class AnyMap; }
 #include "JPerson.hpp"
 #include <NitroModules/ArrayBuffer.hpp>
 #include <NitroModules/JArrayBuffer.hpp>
+#include <unordered_map>
 #include <future>
 #include <NitroModules/JPromise.hpp>
 #include <NitroModules/AnyMap.hpp>
 #include <NitroModules/JAnyMap.hpp>
-#include <unordered_map>
 #include <functional>
 #include "JFunc_void_Person.hpp"
 
@@ -114,7 +114,7 @@ namespace margelo::nitro::image {
       size_t size = carCollection.size();
       jni::local_ref<jni::JArrayClass<JCar>> array = jni::JArrayClass<JCar>::newArray(size);
       for (size_t i = 0; i < size; i++) {
-        auto element = carCollection[i];
+        const auto& element = carCollection[i];
         array->setElement(i, *JCar::fromCpp(element));
       }
       return array;
@@ -129,6 +129,28 @@ namespace margelo::nitro::image {
     static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<JArrayBuffer::javaobject> /* someBuffer */)>("setSomeBuffer");
     method(_javaPart, JArrayBuffer::wrap(someBuffer));
   }
+  std::unordered_map<std::string, std::string> JHybridKotlinTestObjectSpec::getSomeRecord() {
+    static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<jni::JMap<jni::JString, jni::JString>>()>("getSomeRecord");
+    auto result = method(_javaPart);
+    return [&]() {
+      std::unordered_map<std::string, std::string> map;
+      map.reserve(result->size());
+      for (const auto& entry : *result) {
+        map.emplace(entry.first->toStdString(), entry.second->toStdString());
+      }
+      return map;
+    }();
+  }
+  void JHybridKotlinTestObjectSpec::setSomeRecord(const std::unordered_map<std::string, std::string>& someRecord) {
+    static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<jni::JMap<jni::JString, jni::JString>> /* someRecord */)>("setSomeRecord");
+    method(_javaPart, [&]() {
+      auto map = jni::JHashMap<jni::JString, jni::JString>::create(someRecord.size());
+      for (const auto& entry : someRecord) {
+        map->put(jni::make_jstring(entry.first), jni::make_jstring(entry.second));
+      }
+      return map;
+    }());
+  }
 
   // Methods
   std::future<void> JHybridKotlinTestObjectSpec::asyncTest() {
@@ -136,10 +158,10 @@ namespace margelo::nitro::image {
     auto result = method(_javaPart);
     return [&]() {
       auto promise = std::make_shared<std::promise<void>>();
-      result->cthis()->addOnResolvedListener([=](jni::alias_ref<jni::JObject> boxedResult) {
+      result->cthis()->addOnResolvedListener([=](const jni::global_ref<jni::JObject>& boxedResult) {
         promise->set_value();
       });
-      result->cthis()->addOnRejectedListener([=](jni::alias_ref<jni::JString> message) {
+      result->cthis()->addOnRejectedListener([=](const jni::global_ref<jni::JString>& message) {
         std::runtime_error error(message->toStdString());
         promise->set_exception(std::make_exception_ptr(error));
       });
@@ -154,18 +176,6 @@ namespace margelo::nitro::image {
   void JHybridKotlinTestObjectSpec::addOnPersonBornListener(const std::function<void(const Person& /* p */)>& callback) {
     static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<JFunc_void_Person::javaobject> /* callback */)>("addOnPersonBornListener");
     method(_javaPart, JFunc_void_Person::fromCpp(callback));
-  }
-  std::unordered_map<std::string, std::string> JHybridKotlinTestObjectSpec::getSomeDictionary() {
-    static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<jni::JMap<jni::JString, jni::JString>>()>("getSomeDictionary");
-    auto result = method(_javaPart);
-    return [&]() {
-      std::unordered_map<std::string, std::string> map;
-      map.reserve(result->size());
-      for (const auto& entry : *result) {
-        map.emplace(entry.first->toStdString(), entry.second->toStdString());
-      }
-      return map;
-    }();
   }
 
 } // namespace margelo::nitro::image

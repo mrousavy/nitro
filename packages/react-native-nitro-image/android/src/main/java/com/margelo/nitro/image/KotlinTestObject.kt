@@ -60,7 +60,5 @@ class KotlinTestObject: HybridKotlinTestObjectSpec() {
         }
     }
 
-    override fun getSomeDictionary(): Map<String, String> {
-        return mapOf("test" to "something")
-    }
+    override var someRecord: Map<String, String> = mapOf("something" to "else")
 }

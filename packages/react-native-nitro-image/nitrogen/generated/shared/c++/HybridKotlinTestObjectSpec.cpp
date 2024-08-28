@@ -25,10 +25,11 @@ namespace margelo::nitro::image {
       prototype.registerHybridSetter("carCollection", &HybridKotlinTestObjectSpec::setCarCollection);
       prototype.registerHybridGetter("someBuffer", &HybridKotlinTestObjectSpec::getSomeBuffer);
       prototype.registerHybridSetter("someBuffer", &HybridKotlinTestObjectSpec::setSomeBuffer);
+      prototype.registerHybridGetter("someRecord", &HybridKotlinTestObjectSpec::getSomeRecord);
+      prototype.registerHybridSetter("someRecord", &HybridKotlinTestObjectSpec::setSomeRecord);
       prototype.registerHybridMethod("asyncTest", &HybridKotlinTestObjectSpec::asyncTest);
       prototype.registerHybridMethod("createMap", &HybridKotlinTestObjectSpec::createMap);
       prototype.registerHybridMethod("addOnPersonBornListener", &HybridKotlinTestObjectSpec::addOnPersonBornListener);
-      prototype.registerHybridMethod("getSomeDictionary", &HybridKotlinTestObjectSpec::getSomeDictionary);
     });
   }
 

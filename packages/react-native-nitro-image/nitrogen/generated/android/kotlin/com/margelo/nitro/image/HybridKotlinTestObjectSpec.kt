@@ -63,6 +63,12 @@ abstract class HybridKotlinTestObjectSpec: HybridObject() {
   @set:DoNotStrip
   @set:Keep
   abstract var someBuffer: ArrayBuffer
+  
+  @get:DoNotStrip
+  @get:Keep
+  @set:DoNotStrip
+  @set:Keep
+  abstract var someRecord: Map<String, String>
 
   // Methods
   @DoNotStrip
@@ -83,10 +89,6 @@ abstract class HybridKotlinTestObjectSpec: HybridObject() {
     val result = addOnPersonBornListener(callback.toLambda())
     return result
   }
-  
-  @DoNotStrip
-  @Keep
-  abstract fun getSomeDictionary(): Map<String, String>
 
   private external fun initHybrid(): HybridData
 
