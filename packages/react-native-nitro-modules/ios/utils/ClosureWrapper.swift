@@ -12,7 +12,7 @@ import Foundation
  * This can be used to create unmanaged pointers (`void*`) and
  * passed to C-style function pointers via `void* context` parameters.
  */
-public final class ClosureWrapper {
+fileprivate final class ClosureWrapper {
   private let closure: () -> Void
   
   init(closure: @escaping () -> Void) {
@@ -29,7 +29,7 @@ public final class ClosureWrapper {
  */
 public typealias SwiftClosure = margelo.nitro.SwiftClosure
 
-extension SwiftClosure {
+public extension SwiftClosure {
   /**
    * Create a new `SwiftClosure` wrapping the given Swift closure.
    * This can then be called from both C++ and Swift.
