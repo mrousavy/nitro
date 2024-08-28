@@ -190,9 +190,7 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
         var dictionary = Dictionary<String, Double>(minimumCapacity: newValue.size())
         let keys = bridge.get_std__unordered_map_std__string__double__keys(newValue)
         for key in keys {
-          guard let value = newValue[key] else {
-            fatalError("std::unordered_map<std::string, double>'s values changed while trying to bridge them to Swift!")
-          }
+          let value = newValue[key]!
           dictionary[String(key)] = value
         }
         return dictionary
