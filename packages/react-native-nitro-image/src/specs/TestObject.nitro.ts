@@ -107,6 +107,7 @@ interface CallbackHolder {
 
 interface ComplexHolder {
   first: Record<string, string>
+  second: Record<string, string>
 }
 
 export interface SwiftKotlinTestObject extends HybridObject<{ ios: 'swift' }> {

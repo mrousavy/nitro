@@ -10,7 +10,7 @@ import NitroModules
 
 class HybridSwiftKotlinTestObject : HybridSwiftKotlinTestObjectSpec {
   func getHolder() throws -> ComplexHolder {
-    return ComplexHolder(first: ["value": "hello"])
+    return ComplexHolder(first: ["value": "hello"], second: ["value": "world"])
   }
   
   

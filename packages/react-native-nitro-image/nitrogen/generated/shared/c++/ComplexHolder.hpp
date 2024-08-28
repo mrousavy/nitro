@@ -32,9 +32,10 @@ namespace margelo::nitro::image {
   struct ComplexHolder {
   public:
     std::unordered_map<std::string, std::string> first     SWIFT_PRIVATE;
+    std::unordered_map<std::string, std::string> second     SWIFT_PRIVATE;
 
   public:
-    explicit ComplexHolder(std::unordered_map<std::string, std::string> first): first(first) {}
+    explicit ComplexHolder(std::unordered_map<std::string, std::string> first, std::unordered_map<std::string, std::string> second): first(first), second(second) {}
   };
 
 } // namespace margelo::nitro::image
@@ -49,12 +50,14 @@ namespace margelo::nitro {
     static inline ComplexHolder fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       jsi::Object obj = arg.asObject(runtime);
       return ComplexHolder(
-        JSIConverter<std::unordered_map<std::string, std::string>>::fromJSI(runtime, obj.getProperty(runtime, "first"))
+        JSIConverter<std::unordered_map<std::string, std::string>>::fromJSI(runtime, obj.getProperty(runtime, "first")),
+        JSIConverter<std::unordered_map<std::string, std::string>>::fromJSI(runtime, obj.getProperty(runtime, "second"))
       );
     }
     static inline jsi::Value toJSI(jsi::Runtime& runtime, const ComplexHolder& arg) {
       jsi::Object obj(runtime);
       obj.setProperty(runtime, "first", JSIConverter<std::unordered_map<std::string, std::string>>::toJSI(runtime, arg.first));
+      obj.setProperty(runtime, "second", JSIConverter<std::unordered_map<std::string, std::string>>::toJSI(runtime, arg.second));
       return obj;
     }
     static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
@@ -63,6 +66,7 @@ namespace margelo::nitro {
       }
       jsi::Object obj = value.getObject(runtime);
       if (!JSIConverter<std::unordered_map<std::string, std::string>>::canConvert(runtime, obj.getProperty(runtime, "first"))) return false;
+      if (!JSIConverter<std::unordered_map<std::string, std::string>>::canConvert(runtime, obj.getProperty(runtime, "second"))) return false;
       return true;
     }
   };

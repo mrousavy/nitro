@@ -19,10 +19,16 @@ public extension ComplexHolder {
   /**
    * Create a new instance of `ComplexHolder`.
    */
-  init(first: Dictionary<String, String>) {
+  init(first: Dictionary<String, String>, second: Dictionary<String, String>) {
     self.init({ () -> bridge.std__unordered_map_std__string__std__string_ in
       var map = bridge.create_std__unordered_map_std__string__std__string_(first.count)
       for (k, v) in first {
+        map[std.string(k)] = std.string(v)
+      }
+      return map
+    }(), { () -> bridge.std__unordered_map_std__string__std__string_ in
+      var map = bridge.create_std__unordered_map_std__string__std__string_(second.count)
+      for (k, v) in second {
         map[std.string(k)] = std.string(v)
       }
       return map
@@ -45,6 +51,31 @@ public extension ComplexHolder {
     @inline(__always)
     set {
       self.__first = { () -> bridge.std__unordered_map_std__string__std__string_ in
+        var map = bridge.create_std__unordered_map_std__string__std__string_(newValue.count)
+        for (k, v) in newValue {
+          map[std.string(k)] = std.string(v)
+        }
+        return map
+      }()
+    }
+  }
+  
+  var second: Dictionary<String, String> {
+    @inline(__always)
+    get {
+      return { () -> Dictionary<String, String> in
+        var dictionary = Dictionary<String, String>(minimumCapacity: self.__second.size())
+        let keys = bridge.get_std__unordered_map_std__string__std__string__keys(self.__second)
+        for key in keys {
+          let value = self.__second[key]!
+          dictionary[String(key)] = String(value)
+        }
+        return dictionary
+      }()
+    }
+    @inline(__always)
+    set {
+      self.__second = { () -> bridge.std__unordered_map_std__string__std__string_ in
         var map = bridge.create_std__unordered_map_std__string__std__string_(newValue.count)
         for (k, v) in newValue {
           map[std.string(k)] = std.string(v)
