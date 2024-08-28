@@ -1,6 +1,7 @@
 package com.margelo.nitro.image
 
 import com.margelo.nitro.core.AnyMap
+import com.margelo.nitro.core.AnyValue
 import com.margelo.nitro.core.ArrayBuffer
 import com.margelo.nitro.core.Promise
 import java.nio.ByteBuffer
@@ -34,6 +35,12 @@ class KotlinTestObject: HybridKotlinTestObjectSpec() {
         map.setString("string", "String!")
         map.setBoolean("bool", true)
         map.setBigInt("bigint", 893256789)
+        map.setAnyObject("object", mapOf("first" to AnyValue(1), "second" to AnyValue("string"), "third" to AnyValue(
+            mapOf("nested" to AnyValue(true))
+        )))
+        map.setAnyArray("array", arrayOf(AnyValue(11), AnyValue(true), AnyValue(33.5), AnyValue("string"), AnyValue(
+            arrayOf(AnyValue("nested"), AnyValue(true))
+        )))
         return map
     }
 

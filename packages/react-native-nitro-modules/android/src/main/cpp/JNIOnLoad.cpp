@@ -20,6 +20,7 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void*) {
     JHybridObjectRegistry::registerNatives();
     JArrayBuffer::registerNatives();
     JAnyMap::registerNatives();
+    JAnyValue::registerNatives();
     JPromise::registerNatives();
   });
 }
