@@ -40,9 +40,8 @@ extension SwiftClosure {
     
     // Create a C-style Function Pointer, which calls the actual Swift closure.
     let call: @convention(c) (UnsafeMutableRawPointer?) -> Void = { context in
-      guard let context else { fatalError("Context was null, even though we created one!") }
       // Unwrap context from void* to closure again. We are assuming that it has not been deleted yet.
-      let closure = context.assumingMemoryBound(to: ClosureWrapper.self).pointee
+      let closure = context!.assumingMemoryBound(to: ClosureWrapper.self).pointee
       // Call it!
       closure.invoke()
     }
