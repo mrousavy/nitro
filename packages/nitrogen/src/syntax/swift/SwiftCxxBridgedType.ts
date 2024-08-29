@@ -674,27 +674,27 @@ case ${i}:
             const createFunc = `bridge.${bridge.funcName}`
             return `
 { () -> bridge.${bridge.specializationName} in
-class ClosureHolder {
-let closure: ${func.getCode('swift')}
-init(wrappingClosure closure: @escaping ${func.getCode('swift')}) {
-self.closure = closure
-}
-func invoke(${paramsSignature}) {
-self.closure(${paramsForward})
-}
-}
+  class ClosureHolder {
+    let closure: ${func.getCode('swift')}
+    init(wrappingClosure closure: @escaping ${func.getCode('swift')}) {
+      self.closure = closure
+    }
+    func invoke(${paramsSignature}) {
+      self.closure(${indent(paramsForward, '    ')})
+    }
+  }
 
-let closureHolder = Unmanaged.passRetained(ClosureHolder(wrappingClosure: ${swiftParameterName})).toOpaque()
-func callClosure(${cFuncParamsSignature}) -> Void {
-let closure = closureHolder!.assumingMemoryBound(to: ClosureHolder.self).pointee
-closure.invoke(${cFuncParamsForward})
-}
-func destroyClosure(_ closureHolder: UnsafeMutableRawPointer?) -> Void {
-guard let closureHolder else { fatalError("ClosureHolder was released twice!") }
-Unmanaged<ClosureHolder>.fromOpaque(closureHolder).release()
-}
+  let closureHolder = Unmanaged.passRetained(ClosureHolder(wrappingClosure: ${swiftParameterName})).toOpaque()
+  func callClosure(${cFuncParamsSignature}) -> Void {
+    let closure = closureHolder!.assumingMemoryBound(to: ClosureHolder.self).pointee
+    closure.invoke(${indent(cFuncParamsForward, '    ')})
+  }
+  func destroyClosure(_ closureHolder: UnsafeMutableRawPointer?) -> Void {
+    guard let closureHolder else { fatalError("ClosureHolder was released twice!") }
+    Unmanaged<ClosureHolder>.fromOpaque(closureHolder).release()
+  }
 
-return ${createFunc}(closureHolder, callClosure, destroyClosure)
+  return ${createFunc}(closureHolder, callClosure, destroyClosure)
 }()
   `.trim()
           }
