@@ -18,4 +18,4 @@ jobs:
       - name: Install dependencies
         run: bun install
       - name: Build website
-        run: cd docs && bun build
+        run: cd docs && bun run build
