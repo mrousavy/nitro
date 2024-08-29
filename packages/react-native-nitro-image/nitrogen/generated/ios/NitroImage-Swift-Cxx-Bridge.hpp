@@ -50,6 +50,9 @@ namespace margelo::nitro::image::bridge::swift {
       call(sharedClosureHolder.get(), path);
     };
   }
+  inline std::shared_ptr<Func_void_std__string> share_Func_void_std__string(const Func_void_std__string& value) {
+    return std::make_shared<Func_void_std__string>(value);
+  }
   
   /**
    * Specialized version of `std::optional<std::string>`.
@@ -273,6 +276,9 @@ namespace margelo::nitro::image::bridge::swift {
       call(sharedClosureHolder.get());
     };
   }
+  inline std::shared_ptr<Func_void> share_Func_void(const Func_void& value) {
+    return std::make_shared<Func_void>(value);
+  }
   
   /**
    * Specialized version of `std::function<std::future<double>()>`.
@@ -284,6 +290,9 @@ namespace margelo::nitro::image::bridge::swift {
       auto result = call(sharedClosureHolder.get());
       return result.getFuture();
     };
+  }
+  inline std::shared_ptr<Func_std__future_double_> share_Func_std__future_double_(const Func_std__future_double_& value) {
+    return std::make_shared<Func_std__future_double_>(value);
   }
   
   /**
@@ -304,6 +313,9 @@ namespace margelo::nitro::image::bridge::swift {
       auto result = call(sharedClosureHolder.get());
       return result.getFuture();
     };
+  }
+  inline std::shared_ptr<Func_std__future_std__string_> share_Func_std__future_std__string_(const Func_std__future_std__string_& value) {
+    return std::make_shared<Func_std__future_std__string_>(value);
   }
   
   /**
@@ -393,6 +405,9 @@ namespace margelo::nitro::image::bridge::swift {
     return [sharedClosureHolder, call](const Person& p) -> void {
       call(sharedClosureHolder.get(), p);
     };
+  }
+  inline std::shared_ptr<Func_void_Person> share_Func_void_Person(const Func_void_Person& value) {
+    return std::make_shared<Func_void_Person>(value);
   }
 
 } // namespace margelo::nitro::image::bridge::swift

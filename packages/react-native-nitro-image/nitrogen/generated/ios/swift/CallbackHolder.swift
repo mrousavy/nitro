@@ -32,25 +32,27 @@ public extension CallbackHolder {
       }
     
       let closureHolder = Unmanaged.passRetained(ClosureHolder(wrappingClosure: callback)).toOpaque()
-      let call: @convention(c) (UnsafeMutableRawPointer?) -> Void = { closureHolder in
-        let closure = closureHolder!.assumingMemoryBound(to: ClosureHolder.self).pointee
+      func callClosure(closureHolder: UnsafeMutableRawPointer?) -> Void {
+        let closure = Unmanaged<ClosureHolder>.fromOpaque(closureHolder!).takeUnretainedValue()
         closure.invoke()
       }
-      let destroy: @convention(c) (UnsafeMutableRawPointer?) -> Void = { closureHolder in
-        guard let closureHolder else { fatalError("ClosureHolder was released twice!") }
-        Unmanaged<ClosureHolder>.fromOpaque(closureHolder).release()
+      func destroyClosure(_ closureHolder: UnsafeMutableRawPointer?) -> Void {
+        Unmanaged<ClosureHolder>.fromOpaque(closureHolder!).release()
       }
     
-      return bridge.create_Func_void(closureHolder, call, destroy)
+      return bridge.create_Func_void(closureHolder, callClosure, destroyClosure)
     }())
   }
 
   var callback: (() -> Void) {
     @inline(__always)
     get {
-      return { () -> Void in
-        self.__callback()
-      }
+      return { () -> (() -> Void) in
+        let shared = bridge.share_Func_void(self.__callback)
+        return { () -> Void in
+          shared.pointee()
+        }
+      }()
     }
     @inline(__always)
     set {
@@ -66,16 +68,15 @@ public extension CallbackHolder {
         }
       
         let closureHolder = Unmanaged.passRetained(ClosureHolder(wrappingClosure: newValue)).toOpaque()
-        let call: @convention(c) (UnsafeMutableRawPointer?) -> Void = { closureHolder in
-          let closure = closureHolder!.assumingMemoryBound(to: ClosureHolder.self).pointee
+        func callClosure(closureHolder: UnsafeMutableRawPointer?) -> Void {
+          let closure = Unmanaged<ClosureHolder>.fromOpaque(closureHolder!).takeUnretainedValue()
           closure.invoke()
         }
-        let destroy: @convention(c) (UnsafeMutableRawPointer?) -> Void = { closureHolder in
-          guard let closureHolder else { fatalError("ClosureHolder was released twice!") }
-          Unmanaged<ClosureHolder>.fromOpaque(closureHolder).release()
+        func destroyClosure(_ closureHolder: UnsafeMutableRawPointer?) -> Void {
+          Unmanaged<ClosureHolder>.fromOpaque(closureHolder!).release()
         }
       
-        return bridge.create_Func_void(closureHolder, call, destroy)
+        return bridge.create_Func_void(closureHolder, callClosure, destroyClosure)
       }()
     }
   }

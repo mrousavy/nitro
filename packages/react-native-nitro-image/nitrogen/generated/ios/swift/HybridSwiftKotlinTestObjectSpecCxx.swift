@@ -387,9 +387,12 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
   @inline(__always)
   public func callCallback(callback: bridge.Func_void) -> Void {
     do {
-      try self.implementation.callCallback(callback: { () -> Void in
-        callback()
-      })
+      try self.implementation.callCallback(callback: { () -> (() -> Void) in
+        let shared = bridge.share_Func_void(callback)
+        return { () -> Void in
+          shared.pointee()
+        }
+      }())
       return 
     } catch {
       let message = "\(error.localizedDescription)"

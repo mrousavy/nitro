@@ -100,9 +100,12 @@ public final class HybridImageSpecCxx {
   @inline(__always)
   public func saveToFile(path: std.string, onFinished: bridge.Func_void_std__string) -> Void {
     do {
-      try self.implementation.saveToFile(path: String(path), onFinished: { (path: String) -> Void in
-        onFinished(std.string(path))
-      })
+      try self.implementation.saveToFile(path: String(path), onFinished: { () -> ((String) -> Void) in
+        let shared = bridge.share_Func_void_std__string(onFinished)
+        return { (path: String) -> Void in
+          shared.pointee(std.string(path))
+        }
+      }())
       return 
     } catch {
       let message = "\(error.localizedDescription)"
