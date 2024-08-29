@@ -31,8 +31,8 @@ namespace margelo::nitro::image {
    */
   enum class PixelFormat {
     RGB      SWIFT_NAME(rgb) = 0,
-    YUV_8BIT      SWIFT_NAME(yuv_8bit) = 1,
-    YUV_10BIT      SWIFT_NAME(yuv_10bit) = 2,
+    YUV_8BIT      SWIFT_NAME(yuv8bit) = 1,
+    YUV_10BIT      SWIFT_NAME(yuv10bit) = 2,
   } CLOSED_ENUM;
 
 } // namespace margelo::nitro::image

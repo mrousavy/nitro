@@ -1,6 +1,6 @@
 import type { SourceFile } from '../SourceFile.js'
 import { createFileMetadataString } from './../helpers.js'
-import { indent } from '../../utils.js'
+import { indent, toLowerCamelCase } from '../../utils.js'
 import type { EnumMember } from '../types/EnumType.js'
 import { includeNitroHeader } from './includeNitroHeader.js'
 import { NitroConfig } from '../../config/NitroConfig.js'
@@ -13,7 +13,9 @@ export function createCppUnion(
   enumMembers: EnumMember[]
 ): SourceFile {
   const cppEnumMembers = enumMembers
-    .map((m, i) => `${m.name}      SWIFT_NAME(${m.name.toLowerCase()}) = ${i},`)
+    .map(
+      (m, i) => `${m.name}      SWIFT_NAME(${toLowerCamelCase(m.name)}) = ${i},`
+    )
     .join('\n')
   const cppFromJsiHashCases = enumMembers
     .map((v) =>
