@@ -22,7 +22,7 @@ using namespace facebook;
  * The JSIConverter<T> class can convert any type from and to a jsi::Value.
  * It uses templates to statically create fromJSI/toJSI methods, and will throw compile-time errors
  * if a given type is not convertable.
- * Value types, custom types (HostObjects), and even functions with any number of arguments/types are supported.
+ * Value types, custom types (HybridObject), and even functions with any number of arguments/types are supported.
  * This type can be extended by just creating a new template for JSIConverter in a header.
  */
 template <typename T, typename Enable = void>

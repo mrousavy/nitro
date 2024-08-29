@@ -75,16 +75,34 @@ public:
    */
   std::string getName();
   /**
-   * Get a string representation of this HostObject, useful for logging or debugging.
-   */
-  virtual std::string toString();
-  /**
    * Compare this HybridObject for reference equality to the other HybridObject.
    *
    * While two `jsi::Object`s of the same `HybridObject` might not be equal when compared with `==`,
    * they might still be the same `HybridObject` - in this case `equals(other)` will return true.
    */
   bool equals(std::shared_ptr<HybridObject> other);
+  /**
+   * Get a string representation of this `HybridObject` - useful for logging or debugging.
+   */
+  virtual std::string toString();
+  /**
+   * Eagerly- (and manually-) dispose all native resources this `HybridObject` holds.
+   * This method can only be manually called from JS using `dispose()`.
+   *
+   * If this method is never manually called, a `HybridObject` is expected to disposes it's
+   * resources as usual via the object's destructor (`~HybridObject()`, `deinit` or `finalize()`).
+   *
+   * By default, this method does nothing. It can be overridden to perform actual disposing/cleanup
+   * if required.
+   */
+  virtual void dispose() { }
+  
+private:
+  /**
+   * The actual `dispose()` function from JS.
+   * This needs to be a raw JSI function as we remove the NativeState here.
+   */
+  jsi::Value disposeRaw(jsi::Runtime& runtime, const jsi::Value& thisArg, const jsi::Value* args, size_t count);
 
 protected:
   /**
