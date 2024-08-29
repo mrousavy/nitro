@@ -1,29 +1,12 @@
 import * as React from 'react'
 
 import { StyleSheet, View, Text, ScrollView, Button } from 'react-native'
-import {
-  HybridTestObject,
-  HybridKotlinTestObject,
-} from 'react-native-nitro-image'
+import { HybridTestObject } from 'react-native-nitro-image'
 import { getTests, type TestRunner } from '../getTests'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { logPrototypeChain } from '../logPrototypeChain'
 
 logPrototypeChain(HybridTestObject)
-
-console.log(HybridKotlinTestObject.createMap())
-console.log(HybridKotlinTestObject.someRecord)
-console.log((HybridKotlinTestObject.someRecord = { hello: 'world' }))
-console.log(HybridKotlinTestObject.someRecord)
-
-HybridKotlinTestObject.addOnPersonBornListener((p) => {
-  console.log(`${p.name} was born! Age: ${p.age}`)
-})
-
-HybridKotlinTestObject.asyncTest()
-  .then(console.log)
-  .catch(console.warn)
-  .finally(console.debug)
 
 const allTests = getTests()
 

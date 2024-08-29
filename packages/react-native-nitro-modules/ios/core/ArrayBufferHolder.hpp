@@ -8,6 +8,7 @@
 #pragma once
 
 #include "ArrayBuffer.hpp"
+#include "SwiftClosure.hpp"
 #include <memory>
 #include <swift/bridging>
 
@@ -32,10 +33,11 @@ public:
    * Create a new `NativeArrayBuffer` that wraps the given data of the given size, without copying it.
    *
    * Once the `ArrayBuffer` is no longer in use, the given `deleteFunc` will be called with the given `deleteFuncContext`
-   * as an argument. The caller is responsible for deleting `data` (and `deleteFuncContext`) once this is called.
+   * as an argument. The caller is responsible for deleting `data` once this is called.
    */
-  static ArrayBufferHolder makeBuffer(uint8_t* data, size_t size, DeleteFn deleteFunc, void* deleteFuncContext) {
-    auto arrayBuffer = ArrayBuffer::makeBuffer(data, size, deleteFunc, deleteFuncContext);
+  static ArrayBufferHolder makeBuffer(uint8_t* data, size_t size, SwiftClosure destroy) {
+    std::function<void()> deleteFunc = destroy.getFunction();
+    auto arrayBuffer = ArrayBuffer::makeBuffer(data, size, std::move(deleteFunc));
     return ArrayBufferHolder(arrayBuffer);
   }
 

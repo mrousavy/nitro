@@ -41,6 +41,7 @@ Pod::Spec.new do |s|
     "ios/core/PromiseHolder.hpp",
     "ios/core/AnyMapHolder.hpp",
     "ios/core/HybridContext.hpp",
+    "ios/utils/SwiftClosure.hpp",
   ]
 
   s.pod_target_xcconfig = {

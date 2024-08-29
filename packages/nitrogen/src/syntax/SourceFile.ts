@@ -1,5 +1,5 @@
 import type { Language, Platform } from '../getPlatformSpecs.js'
-import type { NamedType } from './types/Type.js'
+import type { Type } from './types/Type.js'
 
 /**
  * Represents a file with source code, in a specific programming language.
@@ -35,7 +35,7 @@ export interface FileWithReferencedTypes extends SourceFile {
    * All external types this {@linkcode SourceFile} references,
    * either as return types, parameter types, or member types.
    */
-  referencedTypes: NamedType[]
+  referencedTypes: Type[]
 }
 
 /**

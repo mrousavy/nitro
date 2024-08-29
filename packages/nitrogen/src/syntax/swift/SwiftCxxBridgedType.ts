@@ -242,7 +242,14 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
       case 'record':
       case 'promise': {
         const bridge = this.getBridgeOrThrow()
-        return `bridge.${bridge.specializationName}`
+        switch (language) {
+          case 'swift':
+            return `bridge.${bridge.specializationName}`
+          case 'c++':
+            return bridge.cxxType
+          default:
+            return this.type.getCode(language)
+        }
       }
       case 'string': {
         switch (language) {
@@ -426,8 +433,10 @@ case ${i}:
       }
       case 'function': {
         const funcType = getTypeAs(this.type, FunctionType)
+        const bridge = this.getBridgeOrThrow()
         switch (language) {
           case 'swift':
+            const swiftClosureType = funcType.getCode('swift', false)
             const paramsSignature = funcType.parameters.map(
               (p) => `${p.escapedName}: ${p.getCode('swift')}`
             )
@@ -440,17 +449,22 @@ case ${i}:
 
             if (funcType.returnType.kind === 'void') {
               return `
-{ ${signature} in
-  ${cppParameterName}(${indent(paramsForward.join(', '), '  ')})
-}`.trim()
+{ () -> ${swiftClosureType} in
+  let shared = bridge.share_${bridge.specializationName}(${cppParameterName})
+  return { ${signature} in
+    shared.pointee(${indent(paramsForward.join(', '), '  ')})
+  }
+}()`.trim()
             } else {
               const resultBridged = new SwiftCxxBridgedType(funcType.returnType)
               return `
-{ ${signature} in
-  let result = ${cppParameterName}(${paramsForward.join(', ')})
-  return ${indent(resultBridged.parseFromSwiftToCpp('result', 'swift'), '  ')}
-}
-              `.trim()
+{ () -> ${swiftClosureType} in
+  let shared = bridge.share_${bridge.specializationName}(${cppParameterName})
+  return { ${signature} in
+    let result = shared.pointee(${paramsForward.join(', ')})
+    return ${indent(resultBridged.parseFromSwiftToCpp('result', 'swift'), '  ')}
+  }
+}()`.trim()
             }
           default:
             return cppParameterName
@@ -642,20 +656,57 @@ case ${i}:
         }
       }
       case 'function': {
-        const bridge = this.getBridgeOrThrow()
-        const func = getTypeAs(this.type, FunctionType)
-        if (func.parameters.length > 0) {
-          throw new Error(
-            `Swift functions **with parameters** cannot passed around bi-directionally yet! Either remove parameters from the function "${func.jsName}", or don't pass it around bi-directionally.`
-          )
-        }
-        const createFunc = `bridge.${bridge.funcName}`
-        return `
+        switch (language) {
+          case 'swift': {
+            const bridge = this.getBridgeOrThrow()
+            const func = getTypeAs(this.type, FunctionType)
+            const cFuncParamsForward = func.parameters
+              .map((p) => {
+                const bridged = new SwiftCxxBridgedType(p)
+                return bridged.parseFromCppToSwift(p.escapedName, 'swift')
+              })
+              .join(', ')
+            const paramsSignature = func.parameters
+              .map((p) => `_ ${p.escapedName}: ${p.getCode('swift')}`)
+              .join(', ')
+            const paramsForward = func.parameters
+              .map((p) => p.escapedName)
+              .join(', ')
+            const cFuncParamsSignature = [
+              'closureHolder: UnsafeMutableRawPointer?',
+              ...func.parameters.map(
+                (p) => `${p.escapedName}: ${p.getCode('swift')}`
+              ),
+            ].join(', ')
+            const createFunc = `bridge.${bridge.funcName}`
+            return `
 { () -> bridge.${bridge.specializationName} in
-  let (wrappedClosure, context) = ClosureWrapper.wrap(closure: ${swiftParameterName})
-  return ${createFunc}(wrappedClosure, context)
+  class ClosureHolder {
+    let closure: ${func.getCode('swift')}
+    init(wrappingClosure closure: @escaping ${func.getCode('swift')}) {
+      self.closure = closure
+    }
+    func invoke(${paramsSignature}) {
+      self.closure(${indent(paramsForward, '    ')})
+    }
+  }
+
+  let closureHolder = Unmanaged.passRetained(ClosureHolder(wrappingClosure: ${swiftParameterName})).toOpaque()
+  func callClosure(${cFuncParamsSignature}) -> Void {
+    let closure = Unmanaged<ClosureHolder>.fromOpaque(closureHolder!).takeUnretainedValue()
+    closure.invoke(${indent(cFuncParamsForward, '    ')})
+  }
+  func destroyClosure(_ closureHolder: UnsafeMutableRawPointer?) -> Void {
+    Unmanaged<ClosureHolder>.fromOpaque(closureHolder!).release()
+  }
+
+  return ${createFunc}(closureHolder, callClosure, destroyClosure)
 }()
-        `.trim()
+  `.trim()
+          }
+          default:
+            return swiftParameterName
+        }
       }
       case 'void':
         // When type is void, don't return anything

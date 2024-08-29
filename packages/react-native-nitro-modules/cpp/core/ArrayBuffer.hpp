@@ -15,7 +15,7 @@ namespace margelo::nitro {
 
 using namespace facebook;
 
-using DeleteFn = void (*)(void* context);
+using DeleteFn = std::function<void()>;
 
 /**
  * Represents a raw byte buffer that can be read from-, and
@@ -50,9 +50,9 @@ public:
 public:
   /**
    * Create a new `NativeArrayBuffer` that wraps the given data (without copy) of the given size,
-   * and calls `deleteFunc` with the given `deleteFuncContext` as a parameter in which `data` should be deleted.
+   * and calls `deleteFunc` in which `data` should be deleted.
    */
-  static std::shared_ptr<ArrayBuffer> makeBuffer(uint8_t* data, size_t size, DeleteFn deleteFunc, void* deleteFuncContext);
+  static std::shared_ptr<ArrayBuffer> makeBuffer(uint8_t* data, size_t size, DeleteFn&& deleteFunc);
 };
 
 /**
@@ -74,9 +74,9 @@ public:
    * and will only delete it once this `ArrayBuffer` gets deleted.
    *
    * Once this `ArrayBuffer` goes out of scope, `deleteFunc` will be called.
-   * The caller is responsible for deleting the memory (`data` and `deleteFuncContext`) here.
+   * The caller is responsible for deleting the memory (`data`) here.
    */
-  NativeArrayBuffer(uint8_t* data, size_t size, DeleteFn deleteFunc, void* deleteFuncContext);
+  NativeArrayBuffer(uint8_t* data, size_t size, DeleteFn&& deleteFunc);
   ~NativeArrayBuffer();
 
 public:
