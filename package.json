@@ -9,8 +9,6 @@
     "check-all": "./scripts/clang-format.sh",
     "bootstrap": "bun --filter=\"**\" install && bun tsc && bun --filter=\"react-native-nitro-example\" pods",
     "typescript": "bun --filter=\"**\" typescript",
-    "lint": "bun --filter=\"**\" lint",
-    "lint-fix": "bun --filter=\"**\" lint --fix",
     "release": "release-it",
     "clean": "rm -rf packages/**/tsconfig.tsbuildinfo packages/**/node_modules packages/**/lib"
   },
