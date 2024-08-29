@@ -18,7 +18,8 @@
     "packages/react-native-nitro-modules",
     "packages/nitrogen",
     "packages/react-native-nitro-image",
-    "example"
+    "example",
+    "docs"
   ],
   "devDependencies": {
     "@release-it/conventional-changelog": "^8.0.1",
