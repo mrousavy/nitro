@@ -108,7 +108,7 @@ public:
     // call base protoype
     HybridTestObjectSpec::loadHybridMethods();
     // register all methods we override here
-    registerHybrids(this, [](Prototype& prototype) { prototype.registerHybridMethod("rawJsiFunc", &HybridTestObject::rawJsiFunc); });
+    registerHybrids(this, [](Prototype& prototype) { prototype.registerRawHybridMethod("rawJsiFunc", 0, &HybridTestObject::rawJsiFunc); });
   }
 };
 

@@ -80,4 +80,19 @@ export interface HybridObject<Platforms extends PlatformSpec = {}> {
    * ```
    */
   equals(other: HybridObject<Platforms>): boolean
+  /**
+   * Disposes any resources this {@linkcode HybridObject} might hold natively,
+   * and finally releases this {@linkcode HybridObject}'s `NativeState`.
+   *
+   * After calling {@linkcode dispose()}, this object can no longer be used.
+   *
+   * Eagerly disposing a {@linkcode HybridObject} could be beneficial for a queue-/handler-architecture
+   * where a bunch of Hybrid Objects are allocated, and later deallocated once a callback (e.g. a render function)
+   * completes.
+   *
+   * @note It is **NOT** required to call {@linkcode dispose()} manually, as the JavaScript
+   * Garbage Collector automatically disposes and releases any resources when needed.
+   * It is purely optional to eagerly-, and manually-, call {@linkcode dispose()} here - **use with caution!**
+   */
+  dispose(): void
 }

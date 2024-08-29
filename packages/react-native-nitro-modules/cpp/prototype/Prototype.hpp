@@ -103,25 +103,6 @@ public:
 
 public:
   /**
-   * Registers the given C++ method as a Hybrid Method that can be called from JS, through the object's Prototype.
-   * Example:
-   * ```cpp
-   * registerHybridMethod("sayHello", &MyObject::sayHello);
-   * ```
-   */
-  template <typename Derived, typename ReturnType, typename... Args>
-  inline void registerHybridMethod(std::string name, ReturnType (Derived::*method)(Args...)) {
-    if (_getters.contains(name) || _setters.contains(name)) [[unlikely]] {
-      throw std::runtime_error("Cannot add Hybrid Method \"" + name + "\" - a property with that name already exists!");
-    }
-    if (_methods.contains(name)) [[unlikely]] {
-      throw std::runtime_error("Cannot add Hybrid Method \"" + name + "\" - a method with that name already exists!");
-    }
-
-    _methods.emplace(name, HybridFunction::createHybridFunction(name, method, FunctionType::METHOD));
-  }
-
-  /**
    * Registers the given C++ method as a property getter that can be called from JS, through the object's Prototype.
    * Example:
    * ```cpp
@@ -137,7 +118,7 @@ public:
       throw std::runtime_error("Cannot add Hybrid Property Getter \"" + name + "\" - a method with that name already exists!");
     }
 
-    _getters.emplace(name, HybridFunction::createHybridFunction(name, method, FunctionType::GETTER));
+    _getters.emplace(name, HybridFunction::createHybridFunction(name, method, FunctionKind::GETTER));
   }
 
   /**
@@ -156,7 +137,47 @@ public:
       throw std::runtime_error("Cannot add Hybrid Property Setter \"" + name + "\" - a method with that name already exists!");
     }
 
-    _setters.emplace(name, HybridFunction::createHybridFunction(name, method, FunctionType::SETTER));
+    _setters.emplace(name, HybridFunction::createHybridFunction(name, method, FunctionKind::SETTER));
+  }
+
+  /**
+   * Registers the given C++ method as a Hybrid Method that can be called from JS, through the object's Prototype.
+   * Example:
+   * ```cpp
+   * registerHybridMethod("sayHello", &MyObject::sayHello);
+   * ```
+   */
+  template <typename Derived, typename ReturnType, typename... Args>
+  inline void registerHybridMethod(std::string name, ReturnType (Derived::*method)(Args...)) {
+    if (_getters.contains(name) || _setters.contains(name)) [[unlikely]] {
+      throw std::runtime_error("Cannot add Hybrid Method \"" + name + "\" - a property with that name already exists!");
+    }
+    if (_methods.contains(name)) [[unlikely]] {
+      throw std::runtime_error("Cannot add Hybrid Method \"" + name + "\" - a method with that name already exists!");
+    }
+
+    _methods.emplace(name, HybridFunction::createHybridFunction(name, method, FunctionKind::METHOD));
+  }
+
+  /**
+   * Registers the given raw JSI C++ method as a Hybrid Method that can be called from JS, through the object's Prototype.
+   * Example:
+   * ```cpp
+   * registerRawHybridMethod("sayHello", &MyObject::sayHello);
+   * ```
+   */
+  template <typename Derived>
+  inline void registerRawHybridMethod(std::string name, size_t expectedArgumentsCount,
+                                      jsi::Value (Derived::*method)(jsi::Runtime& runtime, const jsi::Value& thisArg,
+                                                                    const jsi::Value* args, size_t count)) {
+    if (_getters.contains(name) || _setters.contains(name)) [[unlikely]] {
+      throw std::runtime_error("Cannot add Hybrid Method \"" + name + "\" - a property with that name already exists!");
+    }
+    if (_methods.contains(name)) [[unlikely]] {
+      throw std::runtime_error("Cannot add Hybrid Method \"" + name + "\" - a method with that name already exists!");
+    }
+
+    _methods.emplace(name, HybridFunction::createRawHybridFunction(name, expectedArgumentsCount, method));
   }
 };
 

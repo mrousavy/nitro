@@ -71,6 +71,20 @@ public:
     return name;
   }
 
+  /**
+   * Get a friendly name of the type `T` (if possible, demangled), without any namespaces
+   */
+  template <typename T>
+  static inline std::string getFriendlyTypenameNoNamespace() {
+    std::string friendly = getFriendlyTypename<T>();
+    size_t lastColon = friendly.rfind(':');
+    if (lastColon == std::string::npos) {
+      // Type does not have any namespace (:), just return as is.
+      return friendly;
+    }
+    return friendly.substr(lastColon + 1);
+  }
+
   template <typename... Types>
   static inline std::string getFriendlyTypenames() {
     std::ostringstream stream;

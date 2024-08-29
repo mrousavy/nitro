@@ -26,10 +26,10 @@ namespace margelo::nitro {
 using namespace facebook;
 
 /**
- * Represents the type of a function - it can be either a normal function ("METHOD"),
+ * Represents the kind of a function - it can be either a normal function ("METHOD"),
  * or a property ("GETTER" + "SETTER")
  */
-enum class FunctionType { METHOD, GETTER, SETTER };
+enum class FunctionKind { METHOD, GETTER, SETTER };
 
 /**
  * Represents a Hybrid Function.
@@ -69,35 +69,14 @@ public:
    * and assumes that the object this is called on has a proper `this` configured.
    * The object's `this` needs to be a `NativeState`.
    */
-  template <typename Derived, typename ReturnType, typename... Args>
-  static inline HybridFunction createHybridFunction(const std::string& name, ReturnType (Derived::*method)(Args...), FunctionType type) {
-    jsi::HostFunctionType hostFunction = [name, method, type](/* JS Runtime */ jsi::Runtime& runtime,
+  template <typename THybrid, typename ReturnType, typename... Args>
+  static inline HybridFunction createHybridFunction(const std::string& name, ReturnType (THybrid::*method)(Args...), FunctionKind kind) {
+    jsi::HostFunctionType hostFunction = [name, method, kind](/* JS Runtime */ jsi::Runtime& runtime,
                                                               /* HybridObject */ const jsi::Value& thisValue,
                                                               /* JS arguments */ const jsi::Value* args,
                                                               /* argument size */ size_t count) -> jsi::Value {
-    // 1. Get actual `HybridObject` instance from `thisValue` (it's stored as `NativeState`)
-#ifndef NDEBUG
-      if (!thisValue.isObject()) [[unlikely]] {
-        throw jsi::JSError(runtime, "Cannot call hybrid function " + name + "(...) - `this` is not bound!");
-      }
-#endif
-      jsi::Object thisObject = thisValue.getObject(runtime);
-
-#ifndef NDEBUG
-      if (!thisObject.hasNativeState(runtime)) [[unlikely]] {
-        throw jsi::JSError(runtime, "Cannot call hybrid function " + name +
-                                        "(...) - `this` does not have a NativeState! "
-                                        "Did you accidentally call " +
-                                        name + "(...) on the prototype directly?");
-      }
-#endif
-      std::shared_ptr<jsi::NativeState> nativeState = thisObject.getNativeState(runtime);
-      std::shared_ptr<Derived> hybridInstance = std::dynamic_pointer_cast<Derived>(nativeState);
-#ifndef NDEBUG
-      if (hybridInstance == nullptr) [[unlikely]] {
-        throw jsi::JSError(runtime, "Cannot call hybrid function " + name + "(...) - `this` has a NativeState, but it's the wrong type!");
-      }
-#endif
+      // 1. Get actual `HybridObject` instance from `thisValue` (it's stored as `NativeState`)
+      std::shared_ptr<THybrid> hybridInstance = getHybridObjectNativeState<THybrid>(runtime, thisValue, kind, name);
 
       // 2. Make sure the given arguments match, either with a static size, or with potentially optional arguments size.
       constexpr size_t optionalArgsCount = trailing_optionals_count_v<Args...>;
@@ -106,46 +85,60 @@ public:
       bool isWithinArgsRange = (count >= minArgsCount && count <= maxArgsCount);
       if (!isWithinArgsRange) [[unlikely]] {
         // invalid amount of arguments passed!
-        std::string hybridObjectName = hybridInstance->getName();
+        std::string funcName = getHybridFuncFullName<THybrid>(kind, name, hybridInstance.get());
         if constexpr (minArgsCount == maxArgsCount) {
           // min and max args length is the same, so we don't have any optional parameters. fixed count
-          throw jsi::JSError(runtime, hybridObjectName + "." + name + "(...) expected " + std::to_string(maxArgsCount) +
-                                          " arguments, but received " + std::to_string(count) + "!");
+          throw jsi::JSError(runtime, "`" + funcName + "` expected " + std::to_string(maxArgsCount) + " arguments, but received " +
+                                          std::to_string(count) + "!");
         } else {
           // min and max args length are different, so we have optional parameters - variable length arguments.
-          throw jsi::JSError(runtime, hybridObjectName + "." + name + "(...) expected between " + std::to_string(minArgsCount) + " and " +
+          throw jsi::JSError(runtime, "`" + funcName + "` expected between " + std::to_string(minArgsCount) + " and " +
                                           std::to_string(maxArgsCount) + " arguments, but received " + std::to_string(count) + "!");
         }
       }
 
-      // 3. Actually call method - either raw JSI method, or by going through `JSIConverter<T>` first.
       try {
-        if constexpr (std::is_same_v<ReturnType, jsi::Value>) {
-          // If the return type is a jsi::Value, we assume the user wants full JSI code control.
-          // The signature must be identical to jsi::HostFunction (jsi::Runtime&, jsi::Value& this, ...)
-          Derived* pointer = hybridInstance.get();
-          return (pointer->*method)(runtime, thisValue, args, count);
-        } else {
-          // Call the actual method with JSI values as arguments and return a JSI value again.
-          // Internally, this method converts the JSI values to C++ values.
-          return callMethod(hybridInstance.get(), method, runtime, args, count, std::index_sequence_for<Args...>{});
-        }
+        // 3. Actually call the method with JSI values as arguments and return a JSI value again.
+        //    Internally, this method converts the JSI values to C++ values using `JSIConverter<T>`.
+        return callMethod(hybridInstance.get(), method, runtime, args, count, std::index_sequence_for<Args...>{});
       } catch (const std::exception& exception) {
         // Some exception was thrown - add method name information and re-throw as `JSError`.
-        std::string hybridObjectName = hybridInstance->getName();
+        std::string funcName = getHybridFuncFullName<THybrid>(kind, name, hybridInstance.get());
         std::string message = exception.what();
-        std::string suffix = type == FunctionType::METHOD ? "(...)" : "";
-        throw jsi::JSError(runtime, hybridObjectName + "." + name + suffix + ": " + message);
+        throw jsi::JSError(runtime, funcName + ": " + message);
       } catch (...) {
         // Some unknown exception was thrown - add method name information and re-throw as `JSError`.
-        std::string hybridObjectName = hybridInstance->getName();
+        std::string funcName = getHybridFuncFullName<THybrid>(kind, name, hybridInstance.get());
         std::string errorName = TypeInfo::getCurrentExceptionName();
-        std::string suffix = type == FunctionType::METHOD ? "(...)" : "";
-        throw jsi::JSError(runtime, hybridObjectName + "." + name + suffix + " threw an unknown " + errorName + " error.");
+        throw jsi::JSError(runtime, "`" + funcName + "` threw an unknown " + errorName + " error.");
       }
     };
 
     return HybridFunction(std::move(hostFunction), sizeof...(Args), name);
+  }
+
+  /**
+   * Create a new `HybridFunction` that can be called from JS.
+   * Unlike `createHybridFunction(...)`, this method does **not** perform any argument parsing or size checking.
+   * It is a raw-, untyped JSI method, and the user is expected to manually handle arguments and return values.
+   */
+  template <typename Derived>
+  static inline HybridFunction createRawHybridFunction(const std::string& name, size_t expectedArgumentsCount,
+                                                       jsi::Value (Derived::*method)(jsi::Runtime& runtime, const jsi::Value& thisArg,
+                                                                                     const jsi::Value* args, size_t count)) {
+    jsi::HostFunctionType hostFunction = [name, method](/* JS Runtime */ jsi::Runtime& runtime,
+                                                        /* HybridObject */ const jsi::Value& thisValue,
+                                                        /* JS arguments */ const jsi::Value* args,
+                                                        /* argument size */ size_t count) -> jsi::Value {
+      // 1. Get actual `HybridObject` instance from `thisValue` (it's stored as `NativeState`)
+      std::shared_ptr<Derived> hybridInstance = getHybridObjectNativeState<Derived>(runtime, thisValue, FunctionKind::METHOD, name);
+
+      // 2. Call the raw JSI method using raw JSI Values. Exceptions are also expected to be handled by the user.
+      Derived* pointer = hybridInstance.get();
+      return (pointer->*method)(runtime, thisValue, args, count);
+    };
+
+    return HybridFunction(std::move(hostFunction), expectedArgumentsCount, name);
   }
 
 private:
@@ -166,6 +159,81 @@ private:
       // It's returning some C++ type, we need to convert that to a JSI value now.
       ReturnType result = (obj->*method)(JSIConverter<std::decay_t<Args>>::fromJSI(runtime, Is < argsSize ? args[Is] : defaultValue)...);
       return JSIConverter<std::decay_t<ReturnType>>::toJSI(runtime, std::move(result));
+    }
+  }
+
+private:
+  /**
+   * Get the `NativeState` of the given `value`.
+   */
+  template <typename THybrid>
+  static inline std::shared_ptr<THybrid> getHybridObjectNativeState(jsi::Runtime& runtime, const jsi::Value& value, FunctionKind funcKind,
+                                                                    const std::string& funcName) {
+    // 1. Convert jsi::Value to jsi::Object
+#ifndef NDEBUG
+    if (!value.isObject()) [[unlikely]] {
+      throw jsi::JSError(runtime, "Cannot " + getHybridFuncDebugInfo<THybrid>(funcKind, funcName) + " - `this` is not bound!");
+    }
+#endif
+    jsi::Object object = value.getObject(runtime);
+
+    // 2. Check if it even has any kind of `NativeState`
+#ifndef NDEBUG
+    if (!object.hasNativeState(runtime)) [[unlikely]] {
+      throw jsi::JSError(runtime, "Cannot " + getHybridFuncDebugInfo<THybrid>(funcKind, funcName) +
+                                      " - `this` does not have a NativeState! Suggestions:\n"
+                                      "- Did you accidentally destructure the `HybridObject` and lose a reference to the original object?\n"
+                                      "- Did you call `dispose()` on the `HybridObject` before?"
+                                      "- Did you accidentally call `" +
+                                      funcName + "` on the prototype directly?\n");
+    }
+#endif
+
+    // 3. Get `NativeState` from the jsi::Object and check if it is non-null
+    std::shared_ptr<jsi::NativeState> nativeState = object.getNativeState(runtime);
+#ifndef NDEBUG
+    if (nativeState == nullptr) [[unlikely]] {
+      throw jsi::JSError(runtime, "Cannot " + getHybridFuncDebugInfo<THybrid>(funcKind, funcName) +
+                                      " - `this`'s `NativeState` is `nullptr`, "
+                                      "did you accidentally call `dispose()` on this object?");
+    }
+#endif
+
+    // 4. Try casting it to our desired target type.
+    std::shared_ptr<THybrid> hybridInstance = std::dynamic_pointer_cast<THybrid>(nativeState);
+#ifndef NDEBUG
+    if (hybridInstance == nullptr) [[unlikely]] {
+      throw jsi::JSError(runtime, "Cannot " + getHybridFuncDebugInfo<THybrid>(funcKind, funcName) +
+                                      " - `this` has a NativeState, but it's the wrong type!");
+    }
+#endif
+    return hybridInstance;
+  }
+
+private:
+  template <typename THybrid>
+  static inline std::string getHybridFuncFullName(FunctionKind kind, const std::string& registrationName,
+                                                  THybrid* hybridInstance = nullptr) {
+    std::string typeName = hybridInstance != nullptr ? hybridInstance->getName() : TypeInfo::getFriendlyTypenameNoNamespace<THybrid>();
+    switch (kind) {
+      case FunctionKind::METHOD:
+        return typeName + "." + registrationName + "(...)";
+      case FunctionKind::GETTER:
+      case FunctionKind::SETTER:
+        return typeName + "." + registrationName;
+    }
+  }
+  template <typename THybrid>
+  static inline std::string getHybridFuncDebugInfo(FunctionKind kind, const std::string& registrationName,
+                                                   THybrid* hybridInstance = nullptr) {
+    auto funcName = getHybridFuncFullName<THybrid>(kind, registrationName, hybridInstance);
+    switch (kind) {
+      case FunctionKind::METHOD:
+        return "call hybrid function `" + funcName + "`";
+      case FunctionKind::GETTER:
+        return "get hybrid property `" + funcName + "`";
+      case FunctionKind::SETTER:
+        return "set hybrid property `" + funcName + "`";
     }
   }
 };
