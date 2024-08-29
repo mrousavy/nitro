@@ -118,7 +118,7 @@ public:
       throw std::runtime_error("Cannot add Hybrid Property Getter \"" + name + "\" - a method with that name already exists!");
     }
 
-    _getters.emplace(name, HybridFunction::createHybridFunction(name, method, FunctionType::GETTER));
+    _getters.emplace(name, HybridFunction::createHybridFunction(name, method, FunctionKind::GETTER));
   }
 
   /**
@@ -137,7 +137,7 @@ public:
       throw std::runtime_error("Cannot add Hybrid Property Setter \"" + name + "\" - a method with that name already exists!");
     }
 
-    _setters.emplace(name, HybridFunction::createHybridFunction(name, method, FunctionType::SETTER));
+    _setters.emplace(name, HybridFunction::createHybridFunction(name, method, FunctionKind::SETTER));
   }
 
   /**
@@ -156,7 +156,7 @@ public:
       throw std::runtime_error("Cannot add Hybrid Method \"" + name + "\" - a method with that name already exists!");
     }
 
-    _methods.emplace(name, HybridFunction::createHybridFunction(name, method, FunctionType::METHOD));
+    _methods.emplace(name, HybridFunction::createHybridFunction(name, method, FunctionKind::METHOD));
   }
 
   /**
