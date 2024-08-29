@@ -22,7 +22,9 @@ public:
 public:
   jsi::Value get(jsi::Runtime& runtime, const jsi::PropNameID& propName) override;
 
+  // Setup
   void install(jsi::Runtime& runtime);
+  // Hybrid Objects stuff
   jsi::Value createHybridObject(jsi::Runtime& runtime, const jsi::String& hybridObjectName, const std::optional<jsi::Object>& args);
   jsi::Value hasHybridObject(jsi::Runtime& runtime, const jsi::String& hybridObjectName);
   jsi::Value getAllHybridObjectNames(jsi::Runtime& runtime);
