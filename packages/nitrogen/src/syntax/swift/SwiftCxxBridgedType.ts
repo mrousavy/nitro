@@ -657,8 +657,14 @@ case ${i}:
             new SwiftCxxBridgedType(p).getTypeCode('swift')
           ),
         ]
-        const cFuncParamsForward = func.parameters.map((p) => p.escapedName)
-        const cFuncParamsSignature = ['closureHolder', ...cFuncParamsForward]
+        const cFuncParamsSignature = [
+          'closureHolder',
+          ...func.parameters.map((p) => p.escapedName),
+        ]
+        const cFuncParamsForward = func.parameters.map((p) => {
+          const bridged = new SwiftCxxBridgedType(p)
+          return bridged.parseFromCppToSwift(p.escapedName, 'swift')
+        })
         const paramsSignature = func.parameters
           .map((p) => `${p.escapedName}: ${p.getCode('swift')}`)
           .join(', ')
