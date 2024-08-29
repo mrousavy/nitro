@@ -185,6 +185,10 @@ function createCxxFunctionSwiftHelper(type: FunctionType): SwiftCxxHelper {
     body = `call(${indent(paramsForward.join(', '), '    ')});`
   }
 
+  // TODO: Remove shared_Func_void(...) function that returns a std::shared_ptr<std::function<...>>
+  //       once Swift fixes the bug where a regular std::function cannot be captured.
+  //       https://github.com/swiftlang/swift/issues/76143
+
   return {
     cxxType: actualType,
     funcName: `create_${name}`,
