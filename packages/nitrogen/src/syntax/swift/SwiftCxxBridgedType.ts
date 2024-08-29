@@ -433,8 +433,10 @@ case ${i}:
       }
       case 'function': {
         const funcType = getTypeAs(this.type, FunctionType)
+        const bridge = this.getBridgeOrThrow()
         switch (language) {
           case 'swift':
+            const swiftClosureType = funcType.getCode('swift', false)
             const paramsSignature = funcType.parameters.map(
               (p) => `${p.escapedName}: ${p.getCode('swift')}`
             )
@@ -447,17 +449,22 @@ case ${i}:
 
             if (funcType.returnType.kind === 'void') {
               return `
-{ ${signature} in
-  ${cppParameterName}(${indent(paramsForward.join(', '), '  ')})
-}`.trim()
+{ () -> ${swiftClosureType} in
+  let shared = bridge.share_${bridge.specializationName}(${cppParameterName})
+  return { ${signature} in
+    shared.pointee(${indent(paramsForward.join(', '), '  ')})
+  }
+}()`.trim()
             } else {
               const resultBridged = new SwiftCxxBridgedType(funcType.returnType)
               return `
-{ ${signature} in
-  let result = ${cppParameterName}(${paramsForward.join(', ')})
-  return ${indent(resultBridged.parseFromSwiftToCpp('result', 'swift'), '  ')}
-}
-              `.trim()
+{ () -> ${swiftClosureType} in
+  let shared = bridge.share_${bridge.specializationName}(${cppParameterName})
+  return { ${signature} in
+    let result = shared.pointee(${paramsForward.join(', ')})
+    return ${indent(resultBridged.parseFromSwiftToCpp('result', 'swift'), '  ')}
+  }
+}()`.trim()
             }
           default:
             return cppParameterName

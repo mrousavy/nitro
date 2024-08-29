@@ -213,6 +213,9 @@ inline ${name} create_${name}(void* closureHolder, ${functionPointerParam}, void
     ${body}
   };
 }
+inline std::shared_ptr<${name}> share_${name}(const ${name}& value) {
+  return std::make_shared<${name}>(value);
+}
     `.trim(),
   }
 }
