@@ -82,3 +82,17 @@ export function filterDuplicateHelperBridges(
   )
   return otherIndex === i
 }
+
+export function toLowerCamelCase(string: string): string {
+  const parts = string.split('_').filter((part) => part !== '')
+
+  if (parts.length === 0) return ''
+
+  const camelCaseString = parts[0]!.toLowerCase()
+
+  const camelCased = parts
+    .slice(1)
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1).toLowerCase())
+
+  return camelCaseString + camelCased.join('')
+}

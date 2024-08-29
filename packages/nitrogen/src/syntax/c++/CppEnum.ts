@@ -1,5 +1,5 @@
 import { NitroConfig } from '../../config/NitroConfig.js'
-import { indent } from '../../utils.js'
+import { indent, toLowerCamelCase } from '../../utils.js'
 import type { SourceFile } from '../SourceFile.js'
 import { createFileMetadataString } from '../helpers.js'
 import type { EnumMember } from '../types/EnumType.js'
@@ -15,7 +15,8 @@ export function createCppEnum(
   // Map enum to C++ code
   const cppEnumMembers = enumMembers
     .map(
-      (m) => `${m.name}      SWIFT_NAME(${m.name.toLowerCase()}) = ${m.value},`
+      (m) =>
+        `${m.name}      SWIFT_NAME(${toLowerCamelCase(m.name)}) = ${m.value},`
     )
     .join('\n')
   const minValue = 0
