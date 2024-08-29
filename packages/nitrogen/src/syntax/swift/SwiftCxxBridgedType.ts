@@ -649,52 +649,58 @@ case ${i}:
         }
       }
       case 'function': {
-        const bridge = this.getBridgeOrThrow()
-        const func = getTypeAs(this.type, FunctionType)
-        const cFuncParamsForward = func.parameters
-          .map((p) => {
-            const bridged = new SwiftCxxBridgedType(p)
-            return bridged.parseFromCppToSwift(p.escapedName, 'swift')
-          })
-          .join(', ')
-        const paramsSignature = func.parameters
-          .map((p) => `_ ${p.escapedName}: ${p.getCode('swift')}`)
-          .join(', ')
-        const paramsForward = func.parameters
-          .map((p) => p.escapedName)
-          .join(', ')
-        const cFuncParamsSignature = [
-          'closureHolder: UnsafeMutableRawPointer?',
-          ...func.parameters.map(
-            (p) => `${p.escapedName}: ${p.getCode('swift')}`
-          ),
-        ].join(', ')
-        const createFunc = `bridge.${bridge.funcName}`
-        return `
+        switch (language) {
+          case 'swift': {
+            const bridge = this.getBridgeOrThrow()
+            const func = getTypeAs(this.type, FunctionType)
+            const cFuncParamsForward = func.parameters
+              .map((p) => {
+                const bridged = new SwiftCxxBridgedType(p)
+                return bridged.parseFromCppToSwift(p.escapedName, 'swift')
+              })
+              .join(', ')
+            const paramsSignature = func.parameters
+              .map((p) => `_ ${p.escapedName}: ${p.getCode('swift')}`)
+              .join(', ')
+            const paramsForward = func.parameters
+              .map((p) => p.escapedName)
+              .join(', ')
+            const cFuncParamsSignature = [
+              'closureHolder: UnsafeMutableRawPointer?',
+              ...func.parameters.map(
+                (p) => `${p.escapedName}: ${p.getCode('swift')}`
+              ),
+            ].join(', ')
+            const createFunc = `bridge.${bridge.funcName}`
+            return `
 { () -> bridge.${bridge.specializationName} in
-  class ClosureHolder {
-    let closure: ${func.getCode('swift')}
-    init(wrappingClosure closure: @escaping ${func.getCode('swift')}) {
-      self.closure = closure
-    }
-    func invoke(${paramsSignature}) {
-      self.closure(${paramsForward})
-    }
-  }
+class ClosureHolder {
+let closure: ${func.getCode('swift')}
+init(wrappingClosure closure: @escaping ${func.getCode('swift')}) {
+self.closure = closure
+}
+func invoke(${paramsSignature}) {
+self.closure(${paramsForward})
+}
+}
 
-  let closureHolder = Unmanaged.passRetained(ClosureHolder(wrappingClosure: ${swiftParameterName})).toOpaque()
-  func callClosure(${cFuncParamsSignature}) -> Void {
-    let closure = closureHolder!.assumingMemoryBound(to: ClosureHolder.self).pointee
-    closure.invoke(${cFuncParamsForward})
-  }
-  func destroyClosure(_ closureHolder: UnsafeMutableRawPointer?) -> Void {
-    guard let closureHolder else { fatalError("ClosureHolder was released twice!") }
-    Unmanaged<ClosureHolder>.fromOpaque(closureHolder).release()
-  }
+let closureHolder = Unmanaged.passRetained(ClosureHolder(wrappingClosure: ${swiftParameterName})).toOpaque()
+func callClosure(${cFuncParamsSignature}) -> Void {
+let closure = closureHolder!.assumingMemoryBound(to: ClosureHolder.self).pointee
+closure.invoke(${cFuncParamsForward})
+}
+func destroyClosure(_ closureHolder: UnsafeMutableRawPointer?) -> Void {
+guard let closureHolder else { fatalError("ClosureHolder was released twice!") }
+Unmanaged<ClosureHolder>.fromOpaque(closureHolder).release()
+}
 
-  return ${createFunc}(closureHolder, callClosure, destroyClosure)
+return ${createFunc}(closureHolder, callClosure, destroyClosure)
 }()
-        `.trim()
+  `.trim()
+          }
+          default:
+            return swiftParameterName
+        }
       }
       case 'void':
         // When type is void, don't return anything
