@@ -10,3 +10,36 @@
  * Represents the JS enum `OldEnum`, backed by a C++ enum.
  */
 public typealias OldEnum = margelo.nitro.image.OldEnum
+
+public extension OldEnum {
+  /**
+   * Get a OldEnum for the given String value, or
+   * return `nil` if the given value was invalid/unknown.
+   */
+  init?(fromString string: String) {
+    switch string {
+      case "FIRST":
+        self = .first
+      case "SECOND":
+        self = .second
+      case "THIRD":
+        self = .third
+      default:
+        return nil
+    }
+  }
+
+  /**
+   * Get the String value this OldEnum represents.
+   */
+  var stringValue: String {
+    switch self {
+      case .first:
+        return "FIRST"
+      case .second:
+        return "SECOND"
+      case .third:
+        return "THIRD"
+    }
+  }
+}
