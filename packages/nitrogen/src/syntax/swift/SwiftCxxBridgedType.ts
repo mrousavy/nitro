@@ -686,12 +686,11 @@ case ${i}:
 
   let closureHolder = Unmanaged.passRetained(ClosureHolder(wrappingClosure: ${swiftParameterName})).toOpaque()
   func callClosure(${cFuncParamsSignature}) -> Void {
-    let closure = closureHolder!.assumingMemoryBound(to: ClosureHolder.self).pointee
+    let closure = Unmanaged<ClosureHolder>.fromOpaque(closureHolder!).takeUnretainedValue()
     closure.invoke(${indent(cFuncParamsForward, '    ')})
   }
   func destroyClosure(_ closureHolder: UnsafeMutableRawPointer?) -> Void {
-    guard let closureHolder else { fatalError("ClosureHolder was released twice!") }
-    Unmanaged<ClosureHolder>.fromOpaque(closureHolder).release()
+    Unmanaged<ClosureHolder>.fromOpaque(closureHolder!).release()
   }
 
   return ${createFunc}(closureHolder, callClosure, destroyClosure)
