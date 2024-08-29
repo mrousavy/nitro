@@ -651,6 +651,14 @@ case ${i}:
       case 'function': {
         const bridge = this.getBridgeOrThrow()
         const func = getTypeAs(this.type, FunctionType)
+        const cFuncParamsTypes = [
+          'UnsafeMutableRawPointer?',
+          ...func.parameters.map((p) =>
+            new SwiftCxxBridgedType(p).getTypeCode('swift')
+          ),
+        ]
+        const cFuncParamsForward = func.parameters.map((p) => p.escapedName)
+        const cFuncParamsSignature = ['closureHolder', ...cFuncParamsForward]
         const paramsSignature = func.parameters
           .map((p) => `${p.escapedName}: ${p.getCode('swift')}`)
           .join(', ')
@@ -667,13 +675,12 @@ case ${i}:
       self.closure(${paramsForward})
     }
   }
+
   let closureHolder = Unmanaged.passRetained(ClosureHolder(wrappingClosure: ${swiftParameterName})).toOpaque()
-
-  let call: @convention(c) (UnsafeMutableRawPointer?) -> Void = { closureHolder in
+  let call: @convention(c) (${cFuncParamsTypes.join(', ')}) -> Void = { ${cFuncParamsSignature.join(', ')} in
     let closure = closureHolder!.assumingMemoryBound(to: ClosureHolder.self).pointee
-    closure.invoke()
+    closure.invoke(${cFuncParamsForward.join(', ')})
   }
-
   let destroy: @convention(c) (UnsafeMutableRawPointer?) -> Void = { closureHolder in
     guard let closureHolder else { fatalError("ClosureHolder was released twice!") }
     Unmanaged<ClosureHolder>.fromOpaque(closureHolder).release()

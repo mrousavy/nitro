@@ -30,13 +30,12 @@ public extension CallbackHolder {
           self.closure()
         }
       }
-      let closureHolder = Unmanaged.passRetained(ClosureHolder(wrappingClosure: callback)).toOpaque()
     
+      let closureHolder = Unmanaged.passRetained(ClosureHolder(wrappingClosure: callback)).toOpaque()
       let call: @convention(c) (UnsafeMutableRawPointer?) -> Void = { closureHolder in
         let closure = closureHolder!.assumingMemoryBound(to: ClosureHolder.self).pointee
         closure.invoke()
       }
-    
       let destroy: @convention(c) (UnsafeMutableRawPointer?) -> Void = { closureHolder in
         guard let closureHolder else { fatalError("ClosureHolder was released twice!") }
         Unmanaged<ClosureHolder>.fromOpaque(closureHolder).release()
@@ -65,13 +64,12 @@ public extension CallbackHolder {
             self.closure()
           }
         }
-        let closureHolder = Unmanaged.passRetained(ClosureHolder(wrappingClosure: newValue)).toOpaque()
       
+        let closureHolder = Unmanaged.passRetained(ClosureHolder(wrappingClosure: newValue)).toOpaque()
         let call: @convention(c) (UnsafeMutableRawPointer?) -> Void = { closureHolder in
           let closure = closureHolder!.assumingMemoryBound(to: ClosureHolder.self).pointee
           closure.invoke()
         }
-      
         let destroy: @convention(c) (UnsafeMutableRawPointer?) -> Void = { closureHolder in
           guard let closureHolder else { fatalError("ClosureHolder was released twice!") }
           Unmanaged<ClosureHolder>.fromOpaque(closureHolder).release()
