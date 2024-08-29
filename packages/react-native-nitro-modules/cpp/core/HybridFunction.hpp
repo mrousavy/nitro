@@ -90,8 +90,17 @@ private:
     }
 #endif
 
-    // 3. Get `NativeState` and try casting it to our desired state
+    // 3. Get `NativeState` from the jsi::Object and check if it is non-null
     std::shared_ptr<jsi::NativeState> nativeState = object.getNativeState(runtime);
+#ifndef NDEBUG
+    if (nativeState == nullptr) [[unlikely]] {
+      throw jsi::JSError(runtime, "Cannot call hybrid function " + name +
+                                      "(...) - `this`'s `NativeState` is `nullptr`, "
+                                      "did you accidentally call `dispose()` on this object?");
+    }
+#endif
+
+    // 4. Try casting it to our desired target type.
     std::shared_ptr<THybrid> hybridInstance = std::dynamic_pointer_cast<THybrid>(nativeState);
 #ifndef NDEBUG
     if (hybridInstance == nullptr) [[unlikely]] {
