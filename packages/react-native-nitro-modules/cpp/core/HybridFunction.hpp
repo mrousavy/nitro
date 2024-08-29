@@ -62,7 +62,70 @@ private:
   HybridFunction(jsi::HostFunctionType&& function, size_t paramCount, const std::string& name)
       : _function(std::move(function)), _paramCount(paramCount), _name(name) {}
 
+private:
+  /**
+   * Get the `NativeState` of the given `value`.
+   */
+  template <typename THybrid>
+  static inline std::shared_ptr<THybrid> getHybridObjectNativeState(jsi::Runtime& runtime, const jsi::Value& value,
+                                                                    const std::string& name) {
+    // 1. Convert jsi::Value to jsi::Object
+#ifndef NDEBUG
+    if (!value.isObject()) [[unlikely]] {
+      throw jsi::JSError(runtime, "Cannot call hybrid function " + name + "(...) - `this` is not bound!");
+    }
+#endif
+    jsi::Object object = value.getObject(runtime);
+
+    // 2. Check if it even has any kind of `NativeState`
+#ifndef NDEBUG
+    if (!object.hasNativeState(runtime)) [[unlikely]] {
+      throw jsi::JSError(runtime, "Cannot call hybrid function " + name +
+                                      "(...) - `this` does not have a NativeState! Suggestions:\n"
+                                      "- Did you accidentally call " +
+                                      name +
+                                      "(...) on the prototype directly?\n"
+                                      "- Did you accidentally destructure the `HybridObject` and lose a reference to the original object?\n"
+                                      "- Did you call `dispose()` on the `HybridObject` before?");
+    }
+#endif
+
+    // 3. Get `NativeState` and try casting it to our desired state
+    std::shared_ptr<jsi::NativeState> nativeState = object.getNativeState(runtime);
+    std::shared_ptr<THybrid> hybridInstance = std::dynamic_pointer_cast<THybrid>(nativeState);
+#ifndef NDEBUG
+    if (hybridInstance == nullptr) [[unlikely]] {
+      throw jsi::JSError(runtime, "Cannot call hybrid function " + name + "(...) - `this` has a NativeState, but it's the wrong type!");
+    }
+#endif
+    return hybridInstance;
+  }
+
 public:
+  /**
+   * Create a new `HybridFunction` that can be called from JS.
+   * Unlike `createHybridFunction(...)`, this method does **not** perform any argument parsing or size checking.
+   * It is a raw-, untyped JSI method, and the user is expected to manually handle arguments and return values.
+   */
+  template <typename Derived>
+  static inline HybridFunction createRawHybridFunction(const std::string& name, size_t expectedArgumentsCount,
+                                                       jsi::Value (Derived::*method)(jsi::Runtime& runtime, const jsi::Value& thisArg,
+                                                                                     const jsi::Value* args, size_t count)) {
+    jsi::HostFunctionType hostFunction = [name, method](/* JS Runtime */ jsi::Runtime& runtime,
+                                                        /* HybridObject */ const jsi::Value& thisValue,
+                                                        /* JS arguments */ const jsi::Value* args,
+                                                        /* argument size */ size_t count) -> jsi::Value {
+      // 1. Get actual `HybridObject` instance from `thisValue` (it's stored as `NativeState`)
+      std::shared_ptr<Derived> hybridInstance = getHybridObjectNativeState<Derived>(runtime, thisValue, name);
+
+      // 2. Call the raw JSI method using raw JSI Values. Exceptions are also expected to be handled by the user.
+      Derived* pointer = hybridInstance.get();
+      return (pointer->*method)(runtime, thisValue, args, count);
+    };
+
+    return HybridFunction(std::move(hostFunction), expectedArgumentsCount, name);
+  }
+
   /**
    * Create a new `HybridFunction` that can be called from JS.
    * This performs proper JSI -> C++ conversion using `JSIConverter<T>`,
@@ -75,29 +138,8 @@ public:
                                                               /* HybridObject */ const jsi::Value& thisValue,
                                                               /* JS arguments */ const jsi::Value* args,
                                                               /* argument size */ size_t count) -> jsi::Value {
-    // 1. Get actual `HybridObject` instance from `thisValue` (it's stored as `NativeState`)
-#ifndef NDEBUG
-      if (!thisValue.isObject()) [[unlikely]] {
-        throw jsi::JSError(runtime, "Cannot call hybrid function " + name + "(...) - `this` is not bound!");
-      }
-#endif
-      jsi::Object thisObject = thisValue.getObject(runtime);
-
-#ifndef NDEBUG
-      if (!thisObject.hasNativeState(runtime)) [[unlikely]] {
-        throw jsi::JSError(runtime, "Cannot call hybrid function " + name +
-                                        "(...) - `this` does not have a NativeState! "
-                                        "Did you accidentally call " +
-                                        name + "(...) on the prototype directly?");
-      }
-#endif
-      std::shared_ptr<jsi::NativeState> nativeState = thisObject.getNativeState(runtime);
-      std::shared_ptr<Derived> hybridInstance = std::dynamic_pointer_cast<Derived>(nativeState);
-#ifndef NDEBUG
-      if (hybridInstance == nullptr) [[unlikely]] {
-        throw jsi::JSError(runtime, "Cannot call hybrid function " + name + "(...) - `this` has a NativeState, but it's the wrong type!");
-      }
-#endif
+      // 1. Get actual `HybridObject` instance from `thisValue` (it's stored as `NativeState`)
+      std::shared_ptr<Derived> hybridInstance = getHybridObjectNativeState<Derived>(runtime, thisValue, name);
 
       // 2. Make sure the given arguments match, either with a static size, or with potentially optional arguments size.
       constexpr size_t optionalArgsCount = trailing_optionals_count_v<Args...>;
@@ -118,18 +160,10 @@ public:
         }
       }
 
-      // 3. Actually call method - either raw JSI method, or by going through `JSIConverter<T>` first.
       try {
-        if constexpr (std::is_same_v<ReturnType, jsi::Value>) {
-          // If the return type is a jsi::Value, we assume the user wants full JSI code control.
-          // The signature must be identical to jsi::HostFunction (jsi::Runtime&, jsi::Value& this, ...)
-          Derived* pointer = hybridInstance.get();
-          return (pointer->*method)(runtime, thisValue, args, count);
-        } else {
-          // Call the actual method with JSI values as arguments and return a JSI value again.
-          // Internally, this method converts the JSI values to C++ values.
-          return callMethod(hybridInstance.get(), method, runtime, args, count, std::index_sequence_for<Args...>{});
-        }
+        // 3. Actually call the method with JSI values as arguments and return a JSI value again.
+        //    Internally, this method converts the JSI values to C++ values using `JSIConverter<T>`.
+        return callMethod(hybridInstance.get(), method, runtime, args, count, std::index_sequence_for<Args...>{});
       } catch (const std::exception& exception) {
         // Some exception was thrown - add method name information and re-throw as `JSError`.
         std::string hybridObjectName = hybridInstance->getName();

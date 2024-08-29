@@ -95,8 +95,8 @@ public:
    * By default, this method does nothing. It can be overridden to perform actual disposing/cleanup
    * if required.
    */
-  virtual void dispose() { }
-  
+  virtual void dispose() {}
+
 private:
   /**
    * The actual `dispose()` function from JS.

@@ -260,11 +260,7 @@ std::optional<Person> HybridTestObject::getDriver(const Car& car) {
 std::shared_ptr<ArrayBuffer> HybridTestObject::createArrayBuffer() {
   size_t size = 1024 * 1024 * 10; // 10MB
   uint8_t* buffer = new uint8_t[size];
-  return std::make_shared<NativeArrayBuffer>(
-      buffer, size,
-      [=]() {
-        delete[] buffer;
-      });
+  return std::make_shared<NativeArrayBuffer>(buffer, size, [=]() { delete[] buffer; });
 }
 
 double HybridTestObject::getBufferLastItem(const std::shared_ptr<ArrayBuffer>& buffer) {
