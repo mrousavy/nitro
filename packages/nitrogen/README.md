@@ -1,8 +1,8 @@
 <a href="https://margelo.io">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="../../docs/img/banner-nitrogen-dark.png" />
-    <source media="(prefers-color-scheme: light)" srcset="../../docs/img/banner-nitrogen-light.png" />
-    <img alt="Nitrogen" src="../../docs/img/banner-nitrogen-light.png" />
+    <source media="(prefers-color-scheme: dark)" srcset="../../docs/static/img/banner-nitrogen-dark.png" />
+    <source media="(prefers-color-scheme: light)" srcset="../../docs/static/img/banner-nitrogen-light.png" />
+    <img alt="Nitrogen" src="../../docs/static/img/banner-nitrogen-light.png" />
   </picture>
 </a>
 
