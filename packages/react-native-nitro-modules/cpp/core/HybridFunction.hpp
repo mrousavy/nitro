@@ -63,16 +63,28 @@ private:
       : _function(std::move(function)), _paramCount(paramCount), _name(name) {}
 
 private:
+  static inline std::string getHybridFuncDebugInfo(FunctionType funcType,
+                                                   const std::string& funcName) {
+    switch (funcType) {
+      case FunctionType::METHOD:
+        return "call hybrid function `" + funcName + "(...)`";
+      case FunctionType::GETTER:
+        return "get hybrid property `" + funcName + "`";
+      case FunctionType::SETTER:
+        return "set hybrid property `" + funcName + "`";
+    }
+  }
+  
   /**
    * Get the `NativeState` of the given `value`.
    */
   template <typename THybrid>
   static inline std::shared_ptr<THybrid> getHybridObjectNativeState(jsi::Runtime& runtime, const jsi::Value& value,
-                                                                    const std::string& name) {
+                                                                    FunctionType funcType, const std::string& funcName) {
     // 1. Convert jsi::Value to jsi::Object
 #ifndef NDEBUG
     if (!value.isObject()) [[unlikely]] {
-      throw jsi::JSError(runtime, "Cannot call hybrid function " + name + "(...) - `this` is not bound!");
+      throw jsi::JSError(runtime, "Cannot " + getHybridFuncDebugInfo(funcType, funcName) + " - `this` is not bound!");
     }
 #endif
     jsi::Object object = value.getObject(runtime);
@@ -80,13 +92,10 @@ private:
     // 2. Check if it even has any kind of `NativeState`
 #ifndef NDEBUG
     if (!object.hasNativeState(runtime)) [[unlikely]] {
-      throw jsi::JSError(runtime, "Cannot call hybrid function " + name +
-                                      "(...) - `this` does not have a NativeState! Suggestions:\n"
-                                      "- Did you accidentally call " +
-                                      name +
-                                      "(...) on the prototype directly?\n"
+      throw jsi::JSError(runtime, "Cannot " + getHybridFuncDebugInfo(funcType, funcName) + " - `this` does not have a NativeState! Suggestions:\n"
                                       "- Did you accidentally destructure the `HybridObject` and lose a reference to the original object?\n"
-                                      "- Did you call `dispose()` on the `HybridObject` before?");
+                                      "- Did you call `dispose()` on the `HybridObject` before?"
+                                      "- Did you accidentally call `" + funcName + "` on the prototype directly?\n");
     }
 #endif
 
@@ -94,8 +103,7 @@ private:
     std::shared_ptr<jsi::NativeState> nativeState = object.getNativeState(runtime);
 #ifndef NDEBUG
     if (nativeState == nullptr) [[unlikely]] {
-      throw jsi::JSError(runtime, "Cannot call hybrid function " + name +
-                                      "(...) - `this`'s `NativeState` is `nullptr`, "
+      throw jsi::JSError(runtime, "Cannot " + getHybridFuncDebugInfo(funcType, funcName) + " - `this`'s `NativeState` is `nullptr`, "
                                       "did you accidentally call `dispose()` on this object?");
     }
 #endif
@@ -104,7 +112,7 @@ private:
     std::shared_ptr<THybrid> hybridInstance = std::dynamic_pointer_cast<THybrid>(nativeState);
 #ifndef NDEBUG
     if (hybridInstance == nullptr) [[unlikely]] {
-      throw jsi::JSError(runtime, "Cannot call hybrid function " + name + "(...) - `this` has a NativeState, but it's the wrong type!");
+      throw jsi::JSError(runtime, "Cannot " + getHybridFuncDebugInfo(funcType, funcName) + " - `this` has a NativeState, but it's the wrong type!");
     }
 #endif
     return hybridInstance;
@@ -125,7 +133,7 @@ public:
                                                         /* JS arguments */ const jsi::Value* args,
                                                         /* argument size */ size_t count) -> jsi::Value {
       // 1. Get actual `HybridObject` instance from `thisValue` (it's stored as `NativeState`)
-      std::shared_ptr<Derived> hybridInstance = getHybridObjectNativeState<Derived>(runtime, thisValue, name);
+      std::shared_ptr<Derived> hybridInstance = getHybridObjectNativeState<Derived>(runtime, thisValue, FunctionType::METHOD, name);
 
       // 2. Call the raw JSI method using raw JSI Values. Exceptions are also expected to be handled by the user.
       Derived* pointer = hybridInstance.get();
@@ -148,7 +156,7 @@ public:
                                                               /* JS arguments */ const jsi::Value* args,
                                                               /* argument size */ size_t count) -> jsi::Value {
       // 1. Get actual `HybridObject` instance from `thisValue` (it's stored as `NativeState`)
-      std::shared_ptr<Derived> hybridInstance = getHybridObjectNativeState<Derived>(runtime, thisValue, name);
+      std::shared_ptr<Derived> hybridInstance = getHybridObjectNativeState<Derived>(runtime, thisValue, type, name);
 
       // 2. Make sure the given arguments match, either with a static size, or with potentially optional arguments size.
       constexpr size_t optionalArgsCount = trailing_optionals_count_v<Args...>;
