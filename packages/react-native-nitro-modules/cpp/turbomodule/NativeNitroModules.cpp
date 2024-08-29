@@ -68,6 +68,24 @@ jsi::Value NativeNitroModules::get(jsi::Runtime& runtime, const jsi::PropNameID&
                                                  [this](jsi::Runtime& runtime, const jsi::Value& thisArg, const jsi::Value* args,
                                                         size_t count) -> jsi::Value { return getAllHybridObjectNames(runtime); });
   }
+  if (name == "hasNativeState") {
+    return jsi::Function::createFromHostFunction(
+        runtime, jsi::PropNameID::forUtf8(runtime, "hasNativeState"), 1,
+        [](jsi::Runtime& runtime, const jsi::Value& thisArg, const jsi::Value* args, size_t count) -> jsi::Value {
+          jsi::Object object = args[0].asObject(runtime);
+          bool has = object.hasNativeState(runtime) && object.getNativeState(runtime) != nullptr;
+          return jsi::Value(has);
+        });
+  }
+  if (name == "removeNativeState") {
+    return jsi::Function::createFromHostFunction(
+        runtime, jsi::PropNameID::forUtf8(runtime, "removeNativeState"), 1,
+        [](jsi::Runtime& runtime, const jsi::Value& thisArg, const jsi::Value* args, size_t count) -> jsi::Value {
+          jsi::Object object = args[0].asObject(runtime);
+          object.setNativeState(runtime, nullptr);
+          return jsi::Value::undefined();
+        });
+  }
 
   return jsi::Value::undefined();
 }

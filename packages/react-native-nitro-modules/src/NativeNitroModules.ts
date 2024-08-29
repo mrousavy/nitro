@@ -4,10 +4,15 @@ import type { UnsafeObject } from 'react-native/Libraries/Types/CodegenTypes'
 import { ModuleNotFoundError } from './ModuleNotFoundError'
 
 export interface Spec extends TurboModule {
+  // Set up
   install(): void
+  // Hybrid Objects stuff
   createHybridObject(name: string, args?: UnsafeObject): UnsafeObject
   hasHybridObject(name: string): boolean
   getAllHybridObjectNames(): string[]
+  // JSI Helpers
+  hasNativeState(obj: UnsafeObject): boolean
+  removeNativeState(obj: UnsafeObject): void
 }
 
 let turboModule: Spec | undefined

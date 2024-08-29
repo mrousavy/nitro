@@ -41,4 +41,28 @@ export const NitroModules = {
     const nitro = getNativeNitroModules()
     return nitro.hasHybridObject(name)
   },
+  /**
+   * Returns whether the given {@linkcode object} has a `NativeState` or not.
+   *
+   * This can be a quick way to check if an object is a valid {@linkcode HybridObject},
+   * and has not yet been disposed.
+   * @example
+   * ```ts
+   * const someObject = NitroModules.createHybridObject<Some>('Some')
+   * console.log(NitroModules.hasNativeState(someObject)) // -> true
+   * someObject.dispose()
+   * console.log(NitroModules.hasNativeState(someObject)) // -> false
+   * ```
+   */
+  hasNativeState(object: object): boolean {
+    const nitro = getNativeNitroModules()
+    return nitro.hasNativeState(object)
+  },
+  /**
+   * Forcefully removes the `NativeState` of the given {@linkcode object}.
+   */
+  removeNativeState(object: object): void {
+    const nitro = getNativeNitroModules()
+    nitro.removeNativeState(object)
+  },
 }
