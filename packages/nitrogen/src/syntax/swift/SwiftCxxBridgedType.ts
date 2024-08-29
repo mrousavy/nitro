@@ -242,7 +242,14 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
       case 'record':
       case 'promise': {
         const bridge = this.getBridgeOrThrow()
-        return `bridge.${bridge.specializationName}`
+        switch (language) {
+          case 'swift':
+            return `bridge.${bridge.specializationName}`
+          case 'c++':
+            return bridge.cxxType
+          default:
+            return this.type.getCode(language)
+        }
       }
       case 'string': {
         switch (language) {
@@ -644,16 +651,35 @@ case ${i}:
       case 'function': {
         const bridge = this.getBridgeOrThrow()
         const func = getTypeAs(this.type, FunctionType)
-        if (func.parameters.length > 0) {
-          throw new Error(
-            `Swift functions **with parameters** cannot passed around bi-directionally yet! Either remove parameters from the function "${func.jsName}", or don't pass it around bi-directionally.`
-          )
-        }
+        const paramsSignature = func.parameters
+          .map((p) => `${p.escapedName}: ${p.getCode('swift')}`)
+          .join(', ')
+        const paramsForward = func.parameters.map((p) => p.escapedName)
         const createFunc = `bridge.${bridge.funcName}`
         return `
 { () -> bridge.${bridge.specializationName} in
-  let (wrappedClosure, context) = ClosureWrapper.wrap(closure: ${swiftParameterName})
-  return ${createFunc}(wrappedClosure, context)
+  class ClosureHolder {
+    let closure: ${func.getCode('swift')}
+    init(wrappingClosure closure: @escaping ${func.getCode('swift')}) {
+      self.closure = closure
+    }
+    func invoke(${paramsSignature}) {
+      self.closure(${paramsForward})
+    }
+  }
+  let closureHolder = Unmanaged.passRetained(ClosureHolder(wrappingClosure: ${swiftParameterName})).toOpaque()
+
+  let call: @convention(c) (UnsafeMutableRawPointer?) -> Void = { closureHolder in
+    let closure = closureHolder!.assumingMemoryBound(to: ClosureHolder.self).pointee
+    closure.invoke()
+  }
+
+  let destroy: @convention(c) (UnsafeMutableRawPointer?) -> Void = { closureHolder in
+    guard let closureHolder else { fatalError("ClosureHolder was released twice!") }
+    Unmanaged<ClosureHolder>.fromOpaque(closureHolder).release()
+  }
+
+  return ${createFunc}(closureHolder, call, destroy)
 }()
         `.trim()
       }

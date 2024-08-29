@@ -8,13 +8,15 @@ import { OptionalType } from '../types/OptionalType.js'
 import { RecordType } from '../types/RecordType.js'
 import type { Type } from '../types/Type.js'
 import { TupleType } from '../types/TupleType.js'
-import { escapeComments } from '../../utils.js'
+import { escapeComments, indent } from '../../utils.js'
 import { PromiseType } from '../types/PromiseType.js'
+import { SwiftCxxBridgedType } from './SwiftCxxBridgedType.js'
 
 export interface SwiftCxxHelper {
   cxxCode: string
   funcName: string
   specializationName: string
+  cxxType: string
   requiredIncludes: SourceImport[]
 }
 
@@ -46,6 +48,7 @@ function createCxxOptionalSwiftHelper(type: OptionalType): SwiftCxxHelper {
   const actualType = type.getCode('c++')
   const name = escapeCppName(actualType)
   return {
+    cxxType: actualType,
     funcName: `create_${name}`,
     specializationName: name,
     requiredIncludes: [
@@ -75,6 +78,7 @@ function createCxxVectorSwiftHelper(type: ArrayType): SwiftCxxHelper {
   const actualType = type.getCode('c++')
   const name = escapeCppName(actualType)
   return {
+    cxxType: actualType,
     funcName: `create_${name}`,
     specializationName: name,
     requiredIncludes: [
@@ -107,6 +111,7 @@ function createCxxUnorderedMapSwiftHelper(type: RecordType): SwiftCxxHelper {
   const name = escapeCppName(actualType)
   const keyType = type.keyType.getCode('c++')
   return {
+    cxxType: actualType,
     funcName: `create_${name}`,
     specializationName: name,
     requiredIncludes: [
@@ -144,26 +149,54 @@ inline std::vector<${keyType}> get_${name}_keys(const ${name}& map) {
  */
 function createCxxFunctionSwiftHelper(type: FunctionType): SwiftCxxHelper {
   const actualType = type.getCode('c++')
-  const params = type.parameters.map((p) =>
-    p.canBePassedByReference
-      ? toReferenceType(p.getCode('c++'))
-      : p.getCode('c++')
-  )
-  const cfuncParams = ['void* /* context */', ...params]
-  const returnType = type.returnType.getCode('c++')
-  const functionPointerParam = `${returnType}(*func)(${cfuncParams.join(', ')})`
-  const boundArgs = [
-    'context',
-    ...type.parameters.map((_, i) => `std::placeholders::_${i + 1}`),
+  const returnBridge = new SwiftCxxBridgedType(type.returnType)
+  const paramsSignature = type.parameters.map((p) => {
+    if (p.canBePassedByReference) {
+      return `${toReferenceType(p.getCode('c++'))} ${p.escapedName}`
+    } else {
+      return `${p.getCode('c++')} ${p.escapedName}`
+    }
+  })
+  const paramsForward = [
+    'sharedClosureHolder.get()',
+    ...type.parameters.map((p) => {
+      const bridge = new SwiftCxxBridgedType(p)
+      return bridge.parseFromCppToSwift(p.escapedName, 'c++')
+    }),
   ]
-
+  const callFuncReturnType = returnBridge.getTypeCode('c++')
+  const callFuncParams = [
+    'void* /* closureHolder */',
+    ...type.parameters.map((p) => {
+      const bridge = new SwiftCxxBridgedType(p)
+      return bridge.getTypeCode('c++')
+    }),
+  ]
+  const functionPointerParam = `${callFuncReturnType}(*call)(${callFuncParams.join(', ')})`
   const name = type.specializationName
+
+  let body: string
+  if (returnBridge.hasType) {
+    body = `
+    auto result = call(${indent(paramsForward.join(', '), '    ')});
+    return ${indent(returnBridge.parseFromSwiftToCpp('result', 'c++'), '    ')};
+    `.trim()
+  } else {
+    body = `call(${indent(paramsForward.join(', '), '    ')});`
+  }
+
   return {
+    cxxType: actualType,
     funcName: `create_${name}`,
     specializationName: name,
     requiredIncludes: [
       {
         name: 'functional',
+        space: 'system',
+        language: 'c++',
+      },
+      {
+        name: 'memory',
         space: 'system',
         language: 'c++',
       },
@@ -174,8 +207,11 @@ function createCxxFunctionSwiftHelper(type: FunctionType): SwiftCxxHelper {
  * Specialized version of \`${escapeComments(actualType)}\`.
  */
 using ${name} = ${actualType};
-inline ${name} create_${name}(${functionPointerParam}, void* context) {
-  return std::bind(func, ${boundArgs.join(', ')});
+inline ${name} create_${name}(void* closureHolder, ${functionPointerParam}, void(*destroy)(void*)) {
+  std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
+  return [sharedClosureHolder, call](${paramsSignature.join(', ')}) -> ${type.returnType.getCode('c++')} {
+    ${body}
+  };
 }
     `.trim(),
   }
@@ -209,6 +245,7 @@ inline ${t.getCode('c++')} get_${name}_${i}(const ${actualType}& variant) {
     })
     .join('\n')
   return {
+    cxxType: actualType,
     funcName: `create_${name}`,
     specializationName: name,
     requiredIncludes: [
@@ -244,6 +281,7 @@ function createCxxTupleSwiftHelper(type: TupleType): SwiftCxxHelper {
     .join(', ')
   const typesForward = type.itemTypes.map((_t, i) => `arg${i}`).join(', ')
   return {
+    cxxType: actualType,
     funcName: `create_${name}`,
     specializationName: name,
     requiredIncludes: [
@@ -274,6 +312,7 @@ function createCxxPromiseSwiftHelper(type: PromiseType): SwiftCxxHelper {
   const actualType = `PromiseHolder<${resultingType}>`
   const name = escapeCppName(actualType)
   return {
+    cxxType: actualType,
     funcName: `create_${name}`,
     specializationName: name,
     requiredIncludes: [

@@ -21,7 +21,28 @@ public extension CallbackHolder {
    */
   init(callback: @escaping (() -> Void)) {
     self.init({ () -> bridge.Func_void in
-      fatalError("this wont work now")
+      class ClosureHolder {
+        let closure: (() -> Void)
+        init(wrappingClosure closure: @escaping (() -> Void)) {
+          self.closure = closure
+        }
+        func invoke() {
+          self.closure()
+        }
+      }
+      let closureHolder = Unmanaged.passRetained(ClosureHolder(wrappingClosure: callback)).toOpaque()
+    
+      let call: @convention(c) (UnsafeMutableRawPointer?) -> Void = { closureHolder in
+        let closure = closureHolder!.assumingMemoryBound(to: ClosureHolder.self).pointee
+        closure.invoke()
+      }
+    
+      let destroy: @convention(c) (UnsafeMutableRawPointer?) -> Void = { closureHolder in
+        guard let closureHolder else { fatalError("ClosureHolder was released twice!") }
+        Unmanaged<ClosureHolder>.fromOpaque(closureHolder).release()
+      }
+    
+      return bridge.create_Func_void(closureHolder, call, destroy)
     }())
   }
 
@@ -35,7 +56,28 @@ public extension CallbackHolder {
     @inline(__always)
     set {
       self.__callback = { () -> bridge.Func_void in
-        fatalError("this wont work now")
+        class ClosureHolder {
+          let closure: (() -> Void)
+          init(wrappingClosure closure: @escaping (() -> Void)) {
+            self.closure = closure
+          }
+          func invoke() {
+            self.closure()
+          }
+        }
+        let closureHolder = Unmanaged.passRetained(ClosureHolder(wrappingClosure: newValue)).toOpaque()
+      
+        let call: @convention(c) (UnsafeMutableRawPointer?) -> Void = { closureHolder in
+          let closure = closureHolder!.assumingMemoryBound(to: ClosureHolder.self).pointee
+          closure.invoke()
+        }
+      
+        let destroy: @convention(c) (UnsafeMutableRawPointer?) -> Void = { closureHolder in
+          guard let closureHolder else { fatalError("ClosureHolder was released twice!") }
+          Unmanaged<ClosureHolder>.fromOpaque(closureHolder).release()
+        }
+      
+        return bridge.create_Func_void(closureHolder, call, destroy)
       }()
     }
   }

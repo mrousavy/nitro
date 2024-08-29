@@ -44,8 +44,11 @@ namespace margelo::nitro::image::bridge::swift {
    * Specialized version of `std::function<void(const std::string& / * path * /)>`.
    */
   using Func_void_std__string = std::function<void(const std::string& /* path */)>;
-  inline Func_void_std__string create_Func_void_std__string(void(*func)(void* /* context */, const std::string&), void* context) {
-    return std::bind(func, context, std::placeholders::_1);
+  inline Func_void_std__string create_Func_void_std__string(void* closureHolder, void(*call)(void* /* closureHolder */, std::string), void(*destroy)(void*)) {
+    std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
+    return [sharedClosureHolder, call](const std::string& path) -> void {
+      call(sharedClosureHolder.get(), path);
+    };
   }
   
   /**
@@ -264,16 +267,23 @@ namespace margelo::nitro::image::bridge::swift {
    * Specialized version of `std::function<void()>`.
    */
   using Func_void = std::function<void()>;
-  inline Func_void create_Func_void(void(*func)(void* /* context */), void* context) {
-    return std::bind(func, context);
+  inline Func_void create_Func_void(void* closureHolder, void(*call)(void* /* closureHolder */), void(*destroy)(void*)) {
+    std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
+    return [sharedClosureHolder, call]() -> void {
+      call(sharedClosureHolder.get());
+    };
   }
   
   /**
    * Specialized version of `std::function<std::future<double>()>`.
    */
   using Func_std__future_double_ = std::function<std::future<double>()>;
-  inline Func_std__future_double_ create_Func_std__future_double_(std::future<double>(*func)(void* /* context */), void* context) {
-    return std::bind(func, context);
+  inline Func_std__future_double_ create_Func_std__future_double_(void* closureHolder, PromiseHolder<double>(*call)(void* /* closureHolder */), void(*destroy)(void*)) {
+    std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
+    return [sharedClosureHolder, call]() -> std::future<double> {
+      auto result = call(sharedClosureHolder.get());
+      return result.getFuture();
+    };
   }
   
   /**
@@ -288,8 +298,12 @@ namespace margelo::nitro::image::bridge::swift {
    * Specialized version of `std::function<std::future<std::string>()>`.
    */
   using Func_std__future_std__string_ = std::function<std::future<std::string>()>;
-  inline Func_std__future_std__string_ create_Func_std__future_std__string_(std::future<std::string>(*func)(void* /* context */), void* context) {
-    return std::bind(func, context);
+  inline Func_std__future_std__string_ create_Func_std__future_std__string_(void* closureHolder, PromiseHolder<std::string>(*call)(void* /* closureHolder */), void(*destroy)(void*)) {
+    std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
+    return [sharedClosureHolder, call]() -> std::future<std::string> {
+      auto result = call(sharedClosureHolder.get());
+      return result.getFuture();
+    };
   }
   
   /**
@@ -374,8 +388,11 @@ namespace margelo::nitro::image::bridge::swift {
    * Specialized version of `std::function<void(const Person& / * p * /)>`.
    */
   using Func_void_Person = std::function<void(const Person& /* p */)>;
-  inline Func_void_Person create_Func_void_Person(void(*func)(void* /* context */, const Person&), void* context) {
-    return std::bind(func, context, std::placeholders::_1);
+  inline Func_void_Person create_Func_void_Person(void* closureHolder, void(*call)(void* /* closureHolder */, Person), void(*destroy)(void*)) {
+    std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
+    return [sharedClosureHolder, call](const Person& p) -> void {
+      call(sharedClosureHolder.get(), p);
+    };
   }
 
 } // namespace margelo::nitro::image::bridge::swift
