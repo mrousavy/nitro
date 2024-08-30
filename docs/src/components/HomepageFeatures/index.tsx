@@ -5,43 +5,48 @@ import styles from './styles.module.css';
 type FeatureItem = {
   title: string;
   description: JSX.Element;
+  imageSource: any;
 };
 
 const FeatureList: FeatureItem[] = [
   {
-    title: 'Easy to Use',
+    title: 'Mindblowingly Fast',
+    imageSource: require('@site/static/img/graphic-rocket.png').default,
     description: (
       <>
-        Docusaurus was designed from the ground up to be easily installed and
-        used to get your website up and running quickly.
+        Nitro Modules are up to 59x faster than Expo-, and up to 15x faster than Turbo-Modules.
       </>
     ),
   },
   {
-    title: 'Focus on What Matters',
+    title: 'Statically Typed',
+    imageSource: require('@site/static/img/graphic-ladder.png').default,
     description: (
       <>
-        Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go
-        ahead and move your docs into the <code>docs</code> directory.
+        Nitro's code-generator ("Nitrogen") statically generates
+        type-safe C++/Swift/Kotlin types from your TypeScript interfaces.
+        This way you'll never pass wrong types, nulls or undefined again!
       </>
     ),
   },
   {
-    title: 'Powered by React',
+    title: 'Powerful and Flexible',
+    imageSource: require('@site/static/img/graphic-spring.png').default,
     description: (
       <>
-        Extend or customize your website layout by reusing React. Docusaurus can
-        be extended while reusing the same header and footer.
+        Similar to pure JavaScript objects, a "HybridObject" in Nitro can
+        work with almost all JavaScript types such as primitives, typed- or untyped-
+        objects, arrays and even variants or other native objects.
       </>
     ),
   },
 ];
 
-function Feature({title, description}: FeatureItem) {
+function Feature({title, imageSource, description}: FeatureItem) {
   return (
     <div className={clsx('col col--4')}>
       <div className="text--center">
-        {/* <Svg className={styles.featureSvg} role="img" /> */}
+        <img src={imageSource} className={styles.featureSvg} />
       </div>
       <div className="text--center padding-horiz--md">
         <Heading as="h3">{title}</Heading>

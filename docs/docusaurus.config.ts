@@ -37,6 +37,7 @@ const config: Config = {
         docs: {
           sidebarPath: './sidebars.ts',
         },
+        blog: false,
         theme: {
           customCss: './src/css/custom.css',
         },
@@ -46,6 +47,11 @@ const config: Config = {
 
   themeConfig: {
     image: 'img/social-card.png',
+    colorMode: {
+      defaultMode: 'light',
+      disableSwitch: false,
+      respectPrefersColorScheme: true,
+    },
     navbar: {
       title: 'Nitro',
       logo: {

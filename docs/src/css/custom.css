@@ -6,25 +6,31 @@
 
 /* You can override the default Infima variables here. */
 :root {
-  --ifm-color-primary: #2e8555;
-  --ifm-color-primary-dark: #29784c;
-  --ifm-color-primary-darker: #277148;
-  --ifm-color-primary-darkest: #205d3b;
-  --ifm-color-primary-light: #33925d;
-  --ifm-color-primary-lighter: #359962;
-  --ifm-color-primary-lightest: #3cad6e;
+  --ifm-color-primary: #006bb6; /* Vibrant Blue */
+  --ifm-color-primary-dark: #005a99; /* Slightly darker shade of Blue */
+  --ifm-color-primary-darker: #004d82; /* Even darker */
+  --ifm-color-primary-darkest: #003f6b; /* Darkest shade */
+  --ifm-color-primary-light: #3399ff; /* Lighter Blue */
+  --ifm-color-primary-lighter: #66b2ff; /* Even lighter */
+  --ifm-color-primary-lightest: #99ccff; /* Lightest Blue */
   --ifm-code-font-size: 95%;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1); /* Keeping this as is for contrast */
+
+  /* Accent color for specific elements */
+  --ifm-color-accent: #ff3030; /* Red accent for buttons, links, etc. */
 }
 
 /* For readability concerns, you should choose a lighter palette in dark mode. */
 [data-theme='dark'] {
-  --ifm-color-primary: #25c2a0;
-  --ifm-color-primary-dark: #21af90;
-  --ifm-color-primary-darker: #1fa588;
-  --ifm-color-primary-darkest: #1a8870;
-  --ifm-color-primary-light: #29d5b0;
-  --ifm-color-primary-lighter: #32d8b4;
-  --ifm-color-primary-lightest: #4fddbf;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+  --ifm-color-primary: #3399ff; /* Lighter Vibrant Blue */
+  --ifm-color-primary-dark: #2e89e0; /* Slightly darker Blue */
+  --ifm-color-primary-darker: #2877c7; /* Even darker Blue */
+  --ifm-color-primary-darkest: #2064a8; /* Darker but still bright Blue */
+  --ifm-color-primary-light: #66b2ff; /* Very Light Blue */
+  --ifm-color-primary-lighter: #80c1ff; /* Lighter Blue */
+  --ifm-color-primary-lightest: #99d1ff; /* Lightest Blue */
+  --docusaurus-highlighted-code-line-bg: rgba(255, 255, 255, 0.2); /* Slightly more contrast */
+
+  /* Accent color for specific elements */
+  --ifm-color-accent: #ff4c4c; /* Slightly brighter Red accent for better contrast */
 }
