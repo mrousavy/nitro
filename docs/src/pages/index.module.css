@@ -28,6 +28,7 @@
   background: linear-gradient(0deg, #2b2b2b 0%, #575757 100%);
   color: white;
   font-weight: 600;
+  font-size: 1.1rem;
   padding: 8px 32px;
   font-family: 'Satoshi', sans-serif;
   transition: all 0.15s ease-in-out;
@@ -36,6 +37,7 @@
     0px 12px 32px 0px rgba(7, 7, 7, 0.3),
     0px 0px 0px 1.5px #313131;
 }
+
 .heroButton:hover {
   text-decoration: none;
   color: white;
