@@ -14,7 +14,12 @@
   --ifm-color-primary-lighter: #6aa6f2; /* Even lighter for hover states, etc. */
   --ifm-color-primary-lightest: #8abcfb; /* Lightest Blue for backgrounds */
   --ifm-code-font-size: 95%;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.05); /* Reduced contrast for better readability */
+  --docusaurus-highlighted-code-line-bg: rgba(
+    0,
+    0,
+    0,
+    0.05
+  ); /* Reduced contrast for better readability */
 
   /* Accent color for specific elements */
   --ifm-color-accent: #ff4c4c; /* Slightly brighter Red accent for better contrast */
@@ -32,7 +37,12 @@
   --ifm-color-primary-light: #66b2ff; /* Very Light Blue */
   --ifm-color-primary-lighter: #80c1ff; /* Lighter Blue */
   --ifm-color-primary-lightest: #99d1ff; /* Lightest Blue */
-  --docusaurus-highlighted-code-line-bg: rgba(255, 255, 255, 0.2); /* Slightly more contrast */
+  --docusaurus-highlighted-code-line-bg: rgba(
+    255,
+    255,
+    255,
+    0.2
+  ); /* Slightly more contrast */
 
   /* Accent color for specific elements */
   --ifm-color-accent: #ff4c4c; /* Slightly brighter Red accent for better contrast */
@@ -41,7 +51,20 @@
   --code-diff-remove: #e5737366;
 }
 
-
+.hero__title {
+  /* Your custom styles here */
+  font-family: 'Clash Display', sans-serif;
+  font-weight: 500;
+  font-size: 3rem;
+}
+.hero__subtitle {
+  /* Your custom styles here */
+  font-family: 'Satoshi', sans-serif;
+  font-weight: 500;
+  opacity: 0.7;
+  font-size: 1.5rem;
+  max-width: 700px;
+}
 /* For adding diff + / - to prism codeblocks */
 .code-block-diff-add-line {
   background-color: var(--code-diff-add);
@@ -77,9 +100,9 @@
  * use magic comments to mark diff blocks
  */
 pre code:has(.code-block-diff-add-line) {
-  padding-left: 40px!important;
+  padding-left: 40px !important;
 }
 
 pre code:has(.code-block-diff-remove-line) {
-  padding-left: 40px!important;
+  padding-left: 40px !important;
 }
