@@ -6,8 +6,12 @@
 .heroBanner {
   padding: 4rem 0;
   text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   position: relative;
   overflow: hidden;
+  min-height: 500px;
 }
 
 @media screen and (max-width: 996px) {
@@ -24,4 +28,54 @@
 
 .heroImage {
   width: 10rem;
+}
+
+.bgPattern {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('/static/img/grid-bg.png');
+  background-size: 64px 64px;
+  background-repeat: repeat;
+  opacity: 0.2;
+}
+.bgNoise {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('/static/img/noise.png');
+  background-size: 64px 64px;
+  background-repeat: repeat;
+  mix-blend-mode: screen;
+  opacity: 0.25;
+}
+
+[data-theme='dark'] .bgNoise {
+  mix-blend-mode: multiply;
+}
+
+[data-theme='light'] .bgPattern {
+  filter: invert(1);
+}
+
+.heroBgImage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: bottom;
+}
+
+[data-theme='dark'] .heroBgImage {
+  filter: invert(1) hue-rotate(180deg);
+}
+
+.heroContentContainer {
+  position: relative;
 }
