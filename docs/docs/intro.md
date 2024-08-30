@@ -9,11 +9,78 @@ Nitro is a framework for building native modules in React Native.
 - A **Hybrid Object** is a native object in Nitro, implemented in either C++, Swift or Kotlin.
 - **Nitrogen** is a code-generator a library author can use to generate native bindings from a custom TypeScript interface.
 
+<div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
+<div style={{ flex: 1, maxWidth: '50%', marginRight: 15 }}>
+
+```ts title="Math.nitro.ts"
+/**
+ * Represents a native Math Hybrid Object
+ */
+export interface Math extends HybridObject {
+  // Read-only property
+  readonly pi: number
+  // Callable synchronous function
+  add(a: number, b: number): number
+}
+```
+
+</div>
+<div style={{ flex: 1, maxWidth: '50%', marginLeft: 15 }}>
+
+```swift title="HybridMath.swift"
+class HybridMath : HybridMathSpec {
+  var pi: Double {
+    return Double.pi
+  }
+
+  func add(a: Double, b: Double) -> Double {
+    return a + b
+  }
+}
+```
+
+</div>
+</div>
+
 ## Other frameworks
 
 ### Turbo Modules
 
-React Native's standard framework for building native modules is "Turbo Modules".
+React Native core already ships with a framework for building native modules: **Turbo Modules**.
+
+<div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
+<div style={{ flex: 1, maxWidth: '50%', marginRight: 15 }}>
+
+```swift title="Nitro Module (Swift)"
+class HybridMath : HybridMathSpec {
+  public var pi: Double {
+    return Double.pi
+  }
+
+  public func add(a: Double, b: Double) -> Double {
+    return a + b
+  }
+}
+```
+
+</div>
+<div style={{ flex: 1, maxWidth: '50%', marginLeft: 15 }}>
+
+```objc title="Turbo Module (Objective-C)"
+@implementation RTNMath
+RCT_EXPORT_MODULE()
+
+// Properties (pi) are not supported
+
+- (double)add:(double)a b:(double)b {
+  return a + b;
+}
+@end
+```
+
+</div>
+</div>
+
 Nitro is pretty similar to Turbo, with a few fundamental differences:
 
 - Code Generator
@@ -23,6 +90,39 @@ Nitro is pretty similar to Turbo, with a few fundamental differences:
 ### Expo Modules
 
 Expo's recommended approach of building native modules is called "Expo Modules".
+
+<div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
+<div style={{ flex: 1, maxWidth: '50%', marginRight: 15 }}>
+
+```swift title="Nitro Module (Swift)"
+class HybridMath : HybridMathSpec {
+  public var pi: Double {
+    return Double.pi
+  }
+
+  public func add(a: Double, b: Double) -> Double {
+    return a + b
+  }
+}
+```
+
+</div>
+<div style={{ flex: 1, maxWidth: '50%', marginLeft: 15 }}>
+
+```swift title="Expo Module (Swift)"
+public class ExpoSettingsModule: Module {
+  public func definition() -> ModuleDefinition {
+    Name("Math")
+
+    Function("add") { (a: Double, b: Double) -> Double in
+      a + b
+    }
+  }
+}
+```
+
+</div>
+</div>
 
 ### Supported Types
 
