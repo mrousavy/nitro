@@ -17,7 +17,13 @@ const sidebars: SidebarsConfig = {
     {
       type: 'category',
       label: 'Nitrogen',
-      items: ['nitrogen/getting-started'],
+      items: [
+        'nitrogen/getting-started',
+        'nitrogen/primitives',
+        'nitrogen/strings',
+        'nitrogen/arrays',
+        'nitrogen/enums',
+      ],
     },
   ],
 };

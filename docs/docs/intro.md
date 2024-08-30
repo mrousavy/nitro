@@ -16,7 +16,7 @@ Nitro is a framework for building native modules in React Native.
 /**
  * Represents a native Math Hybrid Object
  */
-export interface Math extends HybridObject {
+interface Math extends HybridObject {
   // Read-only property
   readonly pi: number
   // Callable synchronous function
