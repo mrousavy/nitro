@@ -7,11 +7,14 @@ import Heading from '@theme/Heading';
 
 import styles from './index.module.css';
 
+const Icon = require('@site/static/img/nos.png').default
+
 function HomepageHeader() {
   const {siteConfig} = useDocusaurusContext();
   return (
     <header className={clsx('hero hero--primary', styles.heroBanner)}>
       <div className="container">
+        <img src={Icon} className={styles.heroImage} />
         <Heading as="h1" className="hero__title">
           {siteConfig.title}
         </Heading>
