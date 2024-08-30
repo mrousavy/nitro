@@ -4,7 +4,7 @@ import type * as Preset from '@docusaurus/preset-classic';
 
 const config: Config = {
   title: 'Nitro Modules',
-  tagline: 'Highly efficient native modules with a statically compiled binding layer to JSI, and typesafe JS bindings',
+  tagline: 'A framework to build mindblowingly fast native modules with type-safe statically compiled JS bindings.',
   favicon: 'img/favicon.ico',
 
   // Set the production url of your site here

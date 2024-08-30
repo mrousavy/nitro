@@ -14,7 +14,9 @@ const FeatureList: FeatureItem[] = [
     imageSource: require('@site/static/img/graphic-rocket.png').default,
     description: (
       <>
-        Nitro Modules are up to 59x faster than Expo-, and up to 15x faster than Turbo-Modules.
+        Nitro Modules are built ontop of a highly optimized JSI foundation
+        that handles caching and property lookup really well.
+        Nitro is up to <b>59x faster</b> than ExpoModules and 15x faster than TurboModules.
       </>
     ),
   },
@@ -23,8 +25,8 @@ const FeatureList: FeatureItem[] = [
     imageSource: require('@site/static/img/graphic-ladder.png').default,
     description: (
       <>
-        Nitro's code-generator ("Nitrogen") statically generates
-        type-safe C++/Swift/Kotlin types from your TypeScript interfaces.
+        Nitro's code-generator ("Nitrogen") statically generates <b>type-safe</b> C++/Swift/Kotlin
+        types from your TypeScript interfaces.
         This way you'll never pass wrong types, nulls or undefined again!
       </>
     ),
@@ -35,7 +37,7 @@ const FeatureList: FeatureItem[] = [
     description: (
       <>
         Similar to pure JavaScript objects, a "HybridObject" in Nitro can
-        work with almost all JavaScript types such as primitives, typed- or untyped-
+        work with almost <b>all JavaScript types</b> such as primitives, typed- or untyped-
         objects, arrays and even variants or other native objects.
       </>
     ),
