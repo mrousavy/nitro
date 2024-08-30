@@ -1,10 +1,11 @@
-import {themes as prismThemes} from 'prism-react-renderer';
-import type {Config} from '@docusaurus/types';
+import { themes as prismThemes } from 'prism-react-renderer';
+import type { Config } from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 
 const config: Config = {
   title: 'Nitro Modules',
-  tagline: 'A framework to build mindblowingly fast native modules with type-safe statically compiled JS bindings.',
+  tagline:
+    'A framework to build mindblowingly fast native modules with type-safe statically compiled JS bindings.',
   favicon: 'img/favicon.ico',
 
   // Set the production url of your site here
@@ -51,6 +52,22 @@ const config: Config = {
       minHeadingLevel: 2,
       maxHeadingLevel: 5,
     },
+    headTags: [
+      {
+        tagName: 'link',
+        attributes: {
+          rel: 'stylesheet',
+          href: 'https://api.fontshare.com/css?f[]=clash-display@500&display=swap',
+        },
+      },
+      {
+        tagName: 'link',
+        attributes: {
+          rel: 'stylesheet',
+          href: 'https://api.fontshare.com/css?f[]=satoshi@500,600&display=swap',
+        },
+      },
+    ],
     colorMode: {
       defaultMode: 'light',
       disableSwitch: false,
@@ -127,11 +144,11 @@ const config: Config = {
       magicComments: [
         {
           className: 'code-block-diff-add-line',
-          line: 'diff-add'
+          line: 'diff-add',
         },
         {
           className: 'code-block-diff-remove-line',
-          line: 'diff-remove'
+          line: 'diff-remove',
         },
         {
           className: 'code-block-error-line',

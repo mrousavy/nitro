@@ -51,6 +51,20 @@
   --code-diff-remove: #e5737366;
 }
 
+.hero__title {
+  /* Your custom styles here */
+  font-family: 'Clash Display', sans-serif;
+  font-weight: 500;
+  font-size: 3rem;
+}
+.hero__subtitle {
+  /* Your custom styles here */
+  font-family: 'Satoshi', sans-serif;
+  font-weight: 500;
+  opacity: 0.7;
+  font-size: 1.5rem;
+  max-width: 700px;
+}
 /* For adding diff + / - to prism codeblocks */
 .code-block-diff-add-line {
   background-color: var(--code-diff-add);
