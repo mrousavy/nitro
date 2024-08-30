@@ -6,6 +6,7 @@
 
 /* You can override the default Infima variables here. */
 :root {
+  --ifm-font-family-base: 'Satoshi', sans-serif;
   --ifm-color-primary: #006bb6; /* More vibrant, easier-to-read Blue */
   --ifm-color-primary-dark: #1560c4; /* Slightly darker, but still bright */
   --ifm-color-primary-darker: #124ca1; /* Darker Blue, but more legible */
@@ -23,7 +24,6 @@
 
   /* Accent color for specific elements */
   --ifm-color-accent: #ff4c4c; /* Slightly brighter Red accent for better contrast */
-
   --code-diff-add: #c8f2c299;
   --code-diff-remove: #fcd4d499;
 }
@@ -37,6 +37,8 @@
   --ifm-color-primary-light: #66b2ff; /* Very Light Blue */
   --ifm-color-primary-lighter: #80c1ff; /* Lighter Blue */
   --ifm-color-primary-lightest: #99d1ff; /* Lightest Blue */
+  --ifm-background-color: #151515 !important;
+  --ifm-background-surface-color: #151515 !important;
   --docusaurus-highlighted-code-line-bg: rgba(
     255,
     255,
@@ -46,9 +48,22 @@
 
   /* Accent color for specific elements */
   --ifm-color-accent: #ff4c4c; /* Slightly brighter Red accent for better contrast */
-
   --code-diff-add: #81c78466;
   --code-diff-remove: #e5737366;
+}
+
+.footer {
+  --ifm-footer-background-color: #fbfbfb !important;
+}
+[data-theme='light'] .footer {
+  border-top: 1px solid rgba(0, 0, 0, 0.04);
+  --ifm-footer-color: #d4d4d4 !important;
+  --ifm-footer-link-color: #868686 !important;
+  --ifm-footer-title-color: #2a2a2a !important;
+}
+[data-theme='dark'] .footer {
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  --ifm-footer-background-color: #181818 !important;
 }
 
 .hero__title {
@@ -137,4 +152,12 @@ pre code:has(.code-block-diff-remove-line) {
 
 .side-by-side-block .theme-code-block {
   flex: 1;
+}
+body,
+p,
+li,
+div {
+  font-weight: 500;
+  letter-spacing: 0.01rem;
+  font-size: 1rem;
 }

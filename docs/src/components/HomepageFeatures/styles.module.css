@@ -1,15 +1,28 @@
 .features {
   display: flex;
   align-items: center;
-  padding: 2rem 0;
+  padding: 4rem 0;
   width: 100%;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+[data-theme='dark'] .features {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .featureSvg {
-  height: 200px;
-  width: 200px;
+  height: 128px;
+  width: 128px;
 }
 
 .highlight {
   color: var(--ifm-color-accent);
+}
+
+.description {
+  opacity: 0.8;
+}
+.title {
+  font-family: 'Clash Display', sans-serif;
+  font-weight: 500;
+  font-size: 1.8rem;
 }
