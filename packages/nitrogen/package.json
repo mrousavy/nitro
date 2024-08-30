@@ -102,6 +102,5 @@
     "trailingComma": "es5",
     "useTabs": false,
     "semi": false
-  },
-  "react-native-nitro-modules": "0.6.0"
+  }
 }
