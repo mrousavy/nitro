@@ -13,15 +13,15 @@ Nitro is a framework for building native modules in React Native.
 <div style={{ flex: 1, maxWidth: '50%', marginRight: 15 }}>
 
 ```ts title="Math.nitro.ts"
-/**
- * Represents a native Math Hybrid Object
- */
 interface Math extends HybridObject {
-  // Read-only property
   readonly pi: number
-  // Callable synchronous function
   add(a: number, b: number): number
 }
+
+
+
+
+
 ```
 
 </div>
@@ -48,32 +48,30 @@ class HybridMath : HybridMathSpec {
 
 React Native core already ships with a framework for building native modules: **Turbo Modules**.
 
-<div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
-<div style={{ flex: 1, maxWidth: '50%', marginRight: 15 }}>
+<div style={{ display: 'flex', justifyContent: 'space-evenly', }}>
+<div style={{ flex: 1, marginRight: 15, maxWidth: '50%' }}>
 
 ```swift title="Nitro Module (Swift)"
 class HybridMath : HybridMathSpec {
-  public var pi: Double {
-    return Double.pi
-  }
-
-  public func add(a: Double, b: Double) -> Double {
+  func add(a: Double, b: Double) -> Double {
     return a + b
   }
 }
+
+
+
 ```
 
 </div>
-<div style={{ flex: 1, maxWidth: '50%', marginLeft: 15 }}>
+<div style={{ flex: 1, marginLeft: 15, maxWidth: '50%' }}>
 
 ```objc title="Turbo Module (Objective-C)"
 @implementation RTNMath
 RCT_EXPORT_MODULE()
 
-// Properties (pi) are not supported
-
-- (double)add:(double)a b:(double)b {
-  return a + b;
+- (NSNumber*)add:(NSNumber*)a b:(NSNumber*)b {
+  double added = a.doubleValue + b.doubleValue;
+  return [NSNumber numberWithDouble:added];
 }
 @end
 ```
@@ -96,14 +94,15 @@ Expo's recommended approach of building native modules is called "Expo Modules".
 
 ```swift title="Nitro Module (Swift)"
 class HybridMath : HybridMathSpec {
-  public var pi: Double {
-    return Double.pi
-  }
-
-  public func add(a: Double, b: Double) -> Double {
+  func add(a: Double, b: Double) -> Double {
     return a + b
   }
 }
+
+
+
+
+
 ```
 
 </div>
@@ -114,7 +113,8 @@ public class ExpoSettingsModule: Module {
   public func definition() -> ModuleDefinition {
     Name("Math")
 
-    Function("add") { (a: Double, b: Double) -> Double in
+    Function("add") { (a: Double,
+                       b: Double) -> Double in
       a + b
     }
   }
