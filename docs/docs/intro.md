@@ -1,47 +1,167 @@
 ---
-sidebar_position: 1
 ---
 
-# Tutorial Intro
+# What is Nitro?
 
-Let's discover **Docusaurus in less than 5 minutes**.
+Nitro is a framework for building native modules in React Native.
 
-## Getting Started
+- A **Nitro Module** is a library built with Nitro.
+- A **Hybrid Object** is a native object in Nitro, implemented in either C++, Swift or Kotlin.
+- **Nitrogen** is a code-generator a library author can use to generate native bindings from a custom TypeScript interface.
 
-Get started by **creating a new site**.
+## Other frameworks
 
-Or **try Docusaurus immediately** with **[docusaurus.new](https://docusaurus.new)**.
+### Turbo Modules
 
-### What you'll need
+React Native's standard framework for building native modules is "Turbo Modules".
+Nitro is pretty similar to Turbo, with a few fundamental differences:
 
-- [Node.js](https://nodejs.org/en/download/) version 18.0 or above:
-  - When installing Node.js, you are recommended to check all checkboxes related to dependencies.
+- Code Generator
+  - Both Turbo and Nitro have a code generator which generates native code/interfaces from TypeScript sources.
+  - Nitro supports
 
-## Generate a new site
+### Expo Modules
 
-Generate a new Docusaurus site using the **classic template**.
+Expo's recommended approach of building native modules is called "Expo Modules".
 
-The classic template will automatically be added to your project after you run the command:
+### Supported Types
 
-```bash
-npm init docusaurus@latest my-website classic
-```
+<table>
+  <tr>
+    <th>JS Type</th>
+    <th>Expo Modules</th>
+    <th>Turbo Modules</th>
+    <th>Nitro Modules</th>
+  </tr>
+  <tr>
+    <td><code>number</code></td>
+    <td>✅</td>
+    <td>✅</td>
+    <td>✅</td>
+  </tr>
+  <tr>
+    <td><code>boolean</code></td>
+    <td>✅</td>
+    <td>✅</td>
+    <td>✅</td>
+  </tr>
+  <tr>
+    <td><code>string</code></td>
+    <td>✅</td>
+    <td>✅</td>
+    <td>✅</td>
+  </tr>
+  <tr>
+    <td><code>bigint</code></td>
+    <td>❌</td>
+    <td>❌</td>
+    <td>✅</td>
+  </tr>
+  <tr>
+    <td><code>object</code></td>
+    <td>✅</td>
+    <td>✅</td>
+    <td>✅</td>
+  </tr>
+  <tr>
+    <td><code>T?</code></td>
+    <td>✅</td>
+    <td>✅</td>
+    <td>✅</td>
+  </tr>
+  <tr>
+    <td><code>T[]</code></td>
+    <td>✅</td>
+    <td>✅</td>
+    <td>✅</td>
+  </tr>
+  <tr>
+    <td><code>Promise&lt;T&gt;</code></td>
+    <td>✅</td>
+    <td>✅</td>
+    <td>✅</td>
+  </tr>
+  <tr>
+    <td><code>(T...) =&gt; void</code></td>
+    <td>✅</td>
+    <td>✅</td>
+    <td>✅</td>
+  </tr>
+  <tr>
+    <td><code>(T...) =&gt; R</code></td>
+    <td>❌</td>
+    <td>❌</td>
+    <td>✅</td>
+  </tr>
+  <tr>
+    <td><code>[A, B, C, ...]</code></td>
+    <td>❌</td>
+    <td>❌</td>
+    <td>✅</td>
+  </tr>
+  <tr>
+    <td><code>A | B | C | ...</code></td>
+    <td>❌</td>
+    <td>❌</td>
+    <td>✅</td>
+  </tr>
+  <tr>
+    <td><code>Record&lt;string, T&gt;</code></td>
+    <td>❌</td>
+    <td>❌</td>
+    <td>✅</td>
+  </tr>
+  <tr>
+    <td><code>ArrayBuffer</code></td>
+    <td>❌</td>
+    <td>❌</td>
+    <td>✅</td>
+  </tr>
+  <tr>
+    <td>..any <code>HybridObject</code></td>
+    <td>❌</td>
+    <td>❌</td>
+    <td>✅</td>
+  </tr>
+  <tr>
+    <td>..any <code>interface</code></td>
+    <td>❌</td>
+    <td>✅</td>
+    <td>✅</td>
+  </tr>
+  <tr>
+    <td>..any <code>enum</code></td>
+    <td>❌</td>
+    <td>✅</td>
+    <td>✅</td>
+  </tr>
+  <tr>
+    <td>..any <code>union</code></td>
+    <td>❌</td>
+    <td>❌</td>
+    <td>✅</td>
+  </tr>
+</table>
 
-You can type this command into Command Prompt, Powershell, Terminal, or any other integrated terminal of your code editor.
+### Benchmarks
 
-The command also installs all necessary dependencies you need to run Docusaurus.
-
-## Start your site
-
-Run the development server:
-
-```bash
-cd my-website
-npm run start
-```
-
-The `cd` command changes the directory you're working with. In order to work with your newly created Docusaurus site, you'll need to navigate the terminal there.
-
-The `npm run start` command builds your website locally and serves it through a development server, ready for you to view at http://localhost:3000/.
-
-Open `docs/intro.md` (this page) and edit some lines: the site **reloads automatically** and displays your changes.
+<table>
+  <tr>
+    <th></th>
+    <th>ExpoModules</th>
+    <th>TurboModules</th>
+    <th>NitroModules</th>
+  </tr>
+  <tr>
+    <td>100.000x <code>addNumbers(...)</code></td>
+    <td>404.95ms</td>
+    <td>108.84ms</td>
+    <td><b>7.25ms</b></td>
+  </tr>
+  <tr>
+    <td>100.000x <code>addStrings(...)</code></td>
+    <td>420.69ms</td>
+    <td>169.84ms</td>
+    <td><b>30.71ms</b></td>
+  </tr>
+</table>
