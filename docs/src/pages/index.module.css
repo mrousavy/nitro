@@ -20,10 +20,31 @@
   }
 }
 
-.buttons {
+.heroButton {
   display: flex;
   align-items: center;
   justify-content: center;
+  border-radius: 12px;
+  background: linear-gradient(0deg, #2b2b2b 0%, #575757 100%);
+  color: white;
+  font-weight: 600;
+  padding: 8px 32px;
+  font-family: 'Satoshi', sans-serif;
+  transition: all 0.15s ease-in-out;
+  box-shadow:
+    0px 0px 0px 1.5px rgba(255, 255, 255, 0.1) inset,
+    0px 12px 32px 0px rgba(7, 7, 7, 0.3),
+    0px 0px 0px 1.5px #313131;
+}
+.heroButton:hover {
+  text-decoration: none;
+  color: white;
+  transform: scale(1.05);
+  box-shadow:
+    0px 0px 0px 1.5px rgba(255, 255, 255, 0.1) inset,
+    0px 16px 40px 0px rgba(7, 7, 7, 0.6),
+    0px 0px 0px 1.5px #313131;
+  transition: all 0.15s ease-in-out;
 }
 
 .heroImage {
@@ -78,4 +99,8 @@
 
 .heroContentContainer {
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 }
