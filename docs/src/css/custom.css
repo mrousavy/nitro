@@ -1,0 +1,85 @@
+/**
+ * Any CSS included here will be global. The classic template
+ * bundles Infima by default. Infima is a CSS framework designed to
+ * work well for content-centric websites.
+ */
+
+/* You can override the default Infima variables here. */
+:root {
+  --ifm-color-primary: #006bb6; /* More vibrant, easier-to-read Blue */
+  --ifm-color-primary-dark: #1560c4; /* Slightly darker, but still bright */
+  --ifm-color-primary-darker: #124ca1; /* Darker Blue, but more legible */
+  --ifm-color-primary-darkest: #0f3b7e; /* Darkest Blue, keeping it visible */
+  --ifm-color-primary-light: #4a90e2; /* Lighter Blue for contrast */
+  --ifm-color-primary-lighter: #6aa6f2; /* Even lighter for hover states, etc. */
+  --ifm-color-primary-lightest: #8abcfb; /* Lightest Blue for backgrounds */
+  --ifm-code-font-size: 95%;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.05); /* Reduced contrast for better readability */
+
+  /* Accent color for specific elements */
+  --ifm-color-accent: #ff4c4c; /* Slightly brighter Red accent for better contrast */
+
+  --code-diff-add: #c8f2c299;
+  --code-diff-remove: #fcd4d499;
+}
+
+/* For readability concerns, you should choose a lighter palette in dark mode. */
+[data-theme='dark'] {
+  --ifm-color-primary: #3399ff; /* Lighter Vibrant Blue */
+  --ifm-color-primary-dark: #2e89e0; /* Slightly darker Blue */
+  --ifm-color-primary-darker: #2877c7; /* Even darker Blue */
+  --ifm-color-primary-darkest: #2064a8; /* Darker but still bright Blue */
+  --ifm-color-primary-light: #66b2ff; /* Very Light Blue */
+  --ifm-color-primary-lighter: #80c1ff; /* Lighter Blue */
+  --ifm-color-primary-lightest: #99d1ff; /* Lightest Blue */
+  --docusaurus-highlighted-code-line-bg: rgba(255, 255, 255, 0.2); /* Slightly more contrast */
+
+  /* Accent color for specific elements */
+  --ifm-color-accent: #ff4c4c; /* Slightly brighter Red accent for better contrast */
+
+  --code-diff-add: #81c78466;
+  --code-diff-remove: #e5737366;
+}
+
+
+/* For adding diff + / - to prism codeblocks */
+.code-block-diff-add-line {
+  background-color: var(--code-diff-add);
+  display: block;
+  padding-left: 40px;
+  margin-left: -40px;
+  margin-right: -16px;
+}
+
+.code-block-diff-add-line::before {
+  position: absolute;
+  left: 8px;
+  padding-right: 8px;
+  content: '+';
+}
+
+.code-block-diff-remove-line {
+  background-color: var(--code-diff-remove);
+  display: block;
+  padding-left: 40px;
+  margin-left: -40px;
+  margin-right: -16px;
+}
+
+.code-block-diff-remove-line::before {
+  position: absolute;
+  left: 8px;
+  padding-right: 8px;
+  content: '-';
+}
+
+/**
+ * use magic comments to mark diff blocks
+ */
+pre code:has(.code-block-diff-add-line) {
+  padding-left: 40px!important;
+}
+
+pre code:has(.code-block-diff-remove-line) {
+  padding-left: 40px!important;
+}

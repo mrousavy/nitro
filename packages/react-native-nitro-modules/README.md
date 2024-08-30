@@ -1,8 +1,8 @@
 <a href="https://margelo.io">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="../../docs/img/banner-react-native-nitro-modules-dark.png" />
-    <source media="(prefers-color-scheme: light)" srcset="../../docs/img/banner-react-native-nitro-modules-light.png" />
-    <img alt="Nitrogen" src="../../docs/img/banner-react-native-nitro-modules-light.png" />
+    <source media="(prefers-color-scheme: dark)" srcset="../../docs/static/img/banner-react-native-nitro-modules-dark.png" />
+    <source media="(prefers-color-scheme: light)" srcset="../../docs/static/img/banner-react-native-nitro-modules-light.png" />
+    <img alt="Nitrogen" src="../../docs/static/img/banner-react-native-nitro-modules-light.png" />
   </picture>
 </a>
 
