@@ -1,6 +1,6 @@
 {
   "name": "nitro-codegen",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "The code-generator for react-native-nitro-modules.",
   "main": "lib/index",
   "types": "lib/index.d.ts",
@@ -45,7 +45,7 @@
   },
   "dependencies": {
     "chalk": "^5.3.0",
-    "react-native-nitro-modules": "^0.5.0",
+    "react-native-nitro-modules": "^0.6.0",
     "ts-morph": "^23.0.0",
     "yargs": "^17.7.2",
     "zod": "^3.23.8"
@@ -75,7 +75,9 @@
       "@react-native",
       "prettier"
     ],
-    "plugins": ["prettier"],
+    "plugins": [
+      "prettier"
+    ],
     "rules": {
       "prettier/prettier": [
         "warn",
@@ -100,5 +102,6 @@
     "trailingComma": "es5",
     "useTabs": false,
     "semi": false
-  }
+  },
+  "react-native-nitro-modules": "0.6.0"
 }
