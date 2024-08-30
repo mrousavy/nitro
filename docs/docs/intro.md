@@ -48,6 +48,8 @@ class HybridMath : HybridMathSpec {
 
 React Native core already ships with a framework for building native modules: **Turbo Modules**.
 
+#### Synchronous functions
+
 <div style={{ display: 'flex', justifyContent: 'space-evenly', }}>
 <div style={{ flex: 1, marginRight: 15, maxWidth: '50%' }}>
 
@@ -79,15 +81,56 @@ RCT_EXPORT_MODULE()
 </div>
 </div>
 
-Nitro is pretty similar to Turbo, with a few fundamental differences:
+#### Asynchronous functions
 
-- Code Generator
-  - Both Turbo and Nitro have a code generator which generates native code/interfaces from TypeScript sources.
-  - Nitro supports
+<div style={{ display: 'flex', justifyContent: 'space-evenly', }}>
+<div style={{ flex: 1, marginRight: 15, maxWidth: '50%' }}>
+
+```swift title="Nitro Module (Swift)"
+class HybridMath : HybridMathSpec {
+  func add(a: Double,
+           b: Double) -> Promise<Double> {
+    return Promise.async { a + b }
+  }
+}
+
+
+
+
+
+
+
+
+```
+
+</div>
+<div style={{ flex: 1, marginLeft: 15, maxWidth: '50%' }}>
+
+```objc title="Turbo Module (Objective-C)"
+@implementation RTNMath
+RCT_EXPORT_MODULE()
+
+- (void)add:(double)a
+          b:(double)b
+    resolve:(RCTPromiseResolveBlock)resolve
+     reject:(RCTPromiseRejectBlock)reject {
+  dispatch_async(
+    dispatch_get_global_queue(0, 0),
+    ^{
+      resolve([NSNumber numberWithDouble:a+b]);
+    }
+  );
+}
+```
+
+</div>
+</div>
 
 ### Expo Modules
 
 Expo's recommended approach of building native modules is called "Expo Modules".
+
+#### Synchronous Functions
 
 <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
 <div style={{ flex: 1, maxWidth: '50%', marginRight: 15 }}>
@@ -115,7 +158,44 @@ public class ExpoSettingsModule: Module {
 
     Function("add") { (a: Double,
                        b: Double) -> Double in
-      a + b
+      return a + b
+    }
+  }
+}
+```
+
+</div>
+</div>
+
+#### Asynchronous Functions
+
+<div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
+<div style={{ flex: 1, maxWidth: '50%', marginRight: 15 }}>
+
+```swift title="Nitro Module (Swift)"
+class HybridMath : HybridMathSpec {
+  func add(a: Double,
+           b: Double) -> Promise<Double> {
+    return Promise.async { a + b }
+  }
+}
+
+
+
+
+```
+
+</div>
+<div style={{ flex: 1, maxWidth: '50%', marginLeft: 15 }}>
+
+```swift title="Expo Module (Swift)"
+public class ExpoSettingsModule: Module {
+  public func definition() -> ModuleDefinition {
+    Name("Math")
+
+    AsyncFunction("add") { (a: Double,
+                            b: Double) in
+      return a + b
     }
   }
 }
