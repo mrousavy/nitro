@@ -114,8 +114,27 @@ const config: Config = {
       copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
     },
     prism: {
-      theme: prismThemes.github,
-      darkTheme: prismThemes.dracula,
+      theme: prismThemes.oneLight,
+      darkTheme: prismThemes.oneDark,
+      additionalLanguages: [
+        'bash',
+        'json',
+        'kotlin',
+        'ruby',
+        'cmake',
+        'groovy',
+        'java',
+      ],
+      magicComments: [
+        {
+          className: 'code-block-diff-add-line',
+          line: 'diff-add'
+        },
+        {
+          className: 'code-block-diff-remove-line',
+          line: 'diff-remove'
+        }
+      ],
     },
   } satisfies Preset.ThemeConfig,
 };

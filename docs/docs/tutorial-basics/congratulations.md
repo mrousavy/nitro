@@ -12,6 +12,14 @@ Have **5 more minutes**? Take a look at **[versioning](../tutorial-extras/manage
 
 Anything **unclear** or **buggy** in this tutorial? [Please report it!](https://github.com/facebook/docusaurus/discussions/4610)
 
+```cpp
+// diff-remove
+void hello() {
+  // diff-add
+  return 55
+}
+```
+
 ## What's next?
 
 - Read the [official documentation](https://docusaurus.io/)
