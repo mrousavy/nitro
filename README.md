@@ -16,16 +16,11 @@ It consists of two parts:
 
 ## Installation
 
-1. Install [react-native-nitro-modules](https://npmjs.org/react-native-nitro-modules) from npm:
-    ```sh
-    npm i react-native-nitro-modules
-    cd ios && pod install
-    ```
-2. If you don't already have one, add an empty Swift file to your iOS project (including a generated bridging header).
-    1. Open your `.xcworkspace` in Xcode
-    2. Right-click on your app's project on the left
-    3. **New File** > **Swift File** > Call it **EmptyFile.swift** > **Create**
-    4. When promted to create a Bridging Header, press **Create Bridging Header**
+Install [react-native-nitro-modules](https://npmjs.org/react-native-nitro-modules) from npm:
+```sh
+npm i react-native-nitro-modules
+cd ios && pod install
+```
 
 ## Documentation
 
