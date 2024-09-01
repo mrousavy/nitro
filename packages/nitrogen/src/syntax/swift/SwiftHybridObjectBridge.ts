@@ -150,8 +150,8 @@ return ${bridged.parseFromSwiftToCpp('result', 'c++')};
       if (hasResult) {
         // func returns something
         body = `
-auto value = _swiftPart.${m.name}(${params});
-return ${bridgedReturnType.parseFromSwiftToCpp('value', 'c++')};
+auto __result = _swiftPart.${m.name}(${params});
+return ${bridgedReturnType.parseFromSwiftToCpp('__result', 'c++')};
         `.trim()
       } else {
         // void func
