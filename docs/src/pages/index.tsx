@@ -7,8 +7,9 @@ import Heading from '@theme/Heading';
 
 import styles from './index.module.css';
 
-const Icon = require('@site/static/img/nos.png').default;
+const Logo = require('@site/static/img/nos.png').default;
 const BgImage = require('@site/static/img/hero-bg-light.webp').default;
+
 function HomepageHeader() {
   const { siteConfig } = useDocusaurusContext();
   return (
@@ -18,12 +19,13 @@ function HomepageHeader() {
         <div className={styles.bgNoise} />
         <div className={styles.bgPattern} />
         <div className={styles.heroContentContainer}>
+          {/* <img className={styles.heroLogo} src={Logo} /> */}
           <Heading as="h1" className="hero__title">
             {siteConfig.title}
           </Heading>
           <p className="hero__subtitle">{siteConfig.tagline}</p>
 
-          <Link to="/docs/intro" className={styles.heroButton}>
+          <Link to="/docs/intro" className={styles.heroButtonSimple}>
             Get Started - 5min 🔥
           </Link>
         </div>
