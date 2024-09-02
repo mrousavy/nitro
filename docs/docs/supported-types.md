@@ -687,18 +687,43 @@ class HybridCropper: HybridCropperSpec {
 
     #### Custom interfaces (structs)
 
-    Any custom `interface` or `type` will be represented as a `struct` in C++/Swift/Kotlin. Simply define the type in your `.nitro.ts` spec:
+    Any custom `interface` or `type` will be represented as a fully type-safe `struct` in C++/Swift/Kotlin. Simply define the type in your `.nitro.ts` spec:
 
-    ```ts
-    interface DivisionResult {
-      value: number
-      remainder: number
+    <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
+    <div style={{ flex: 1, maxWidth: '45%', marginRight: 15 }}>
+
+    ```ts title="Nitro.nitro.ts"
+    interface Person {
+      name: string
+      age: number
     }
 
-    interface Math extends HybridObject {
-      divide(a: number, b: number): DivionResult
+    interface Nitro extends HybridObject {
+      getAuthor(): Person
     }
     ```
+
+    </div>
+    <div style={{ flex: 1, maxWidth: '55%', marginLeft: 15 }}>
+
+    ```swift title="HybridNitro.swift"
+    class HybridNitro: HybridNitroSpec {
+      func getAuthor() -> Person {
+        return Person(name: "Marc", age: 24)
+      }
+    }
+
+
+
+    ```
+
+    </div>
+    </div>
+
+    Nitro enforces full type-safety to avoid passing or returning wrong types.
+    Both `value` and `remainder` are always part of `Result`, they are never a different type than a `number`, and never null or undefined.
+
+    This makes the TypeScript definition the **single source of truth**, allowing you to rely on types! 🤩
 
     #### Enums (TypeScript enum)
 
@@ -706,13 +731,29 @@ class HybridCropper: HybridCropperSpec {
     so Nitrogen will just generate a C++ enum natively, and bridges to JS using simple integers:
 
     ```ts
-    interface Math extends HybridObject {
-
+    enum Gender {
+      MALE,
+      FEMALE
+    }
+    interface Person extends HybridObject {
+      getGender(): Gender
     }
     ```
 
+    This is efficient because `MALE` is the number `0`, `FEMALE` is the number `1`, and all other values are invalid.
+
     #### Enums (TypeScript union)
 
+    A [TypeScript union](https://www.typescriptlang.org/docs/handbook/unions-and-intersections.html#intersection-types) is essentially just a string, which is only "typed" via TypeScript.
+
+    ```ts
+    type Gender = 'male' | 'female'
+    interface Person extends HybridObject {
+      getGender(): Gender
+    }
+    ```
+
+    Nitrogen statically generates hashes for the strings `"male"` and `"female"` at compile-time, allowing for very efficient conversions between JS `string`s and native `enum`s.
 
 
   </TabItem>
@@ -799,7 +840,8 @@ class HybridCropper: HybridCropperSpec {
     };
     ```
 
-    ..which can now safely be called with any JS value. If the given JS value is not an object of exactly the shape of `Person` (that is, a `name: string` and an `age: number` values)
+    ..which can now safely be called with any JS value.
+    If the given JS value is not an object of exactly the shape of `Person` (that is, a `name: string` and an `age: number` values), Nitro will throw an error.
 
   </TabItem>
 </Tabs>
