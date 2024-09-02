@@ -170,10 +170,7 @@ Primitives are very efficient and can be passed with little to no overhead, espe
 
 ### Arrays (`T[]`)
 
-Arrays of items are represented with the most common, and most efficient array datastructures in native languages.
-
-In C++, a `T[]` is a `std::vector<T>`.
-Both Swift and Kotlin use their native array types (`[T]`/`Array<T>`), which need to be copied to a C++ `std::vector<T>`.
+Arrays of items are represented with the most common, and most efficient array datastructures in native languages, such as `std::vector<T>` or `Array<T>`.
 
 #### Kotlin `PrimitiveArray`
 
@@ -187,7 +184,7 @@ This will replace the following arrays:
 
 ### Optionals (`T?`)
 
-Optional or nullable values can be represented using either the questionmark operator (`?`), or by adding an `undefined` variant:
+Optional or nullable values can be declared using either the questionmark operator (`?`), or by adding an `undefined` variant:
 
 <Tabs>
   <TabItem value="ts" label="TypeScript" default>
@@ -226,7 +223,7 @@ Optional or nullable values can be represented using either the questionmark ope
 
 ### Tuples (`[A, B, ...]`)
 
-A Tuple is a fixed-length set of items with given, possibly different types. Example:
+A Tuple is a fixed-length set of items of the given types. Example:
 
 ```ts
 type Point = [number, number]
@@ -234,6 +231,20 @@ interface Math extends HybridObject {
   distance(a: Point, b: Point): number
 }
 ```
+
+Tuples can also have different types per value:
+
+```ts
+type Good = [number, string, Person]
+type Bad = (number | string | Person)[]
+interface Test extends HybridObject {
+  good(values: Good): void
+  bad(values: Bad): void
+}
+```
+
+The tuple "`Good`" in the example above is better and more efficient than "`Bad`" because it's length is known at compile-time,
+each parameter is type-safe (`Good[0] = number`, `Bad[0] = number | string | Person`), and it doesn't use variants.
 
 ### Variants (`A | B | ...`)
 
@@ -348,11 +359,11 @@ Once the callback is no longer used, it will be safely deleted from memory.
 
     ```cpp
     void listenToOrientation(std::function<void(Orientation)> onChanged) {
-      this->_listeners.push_back(onChanged);
+      this->listeners.push_back(onChanged);
     }
 
     void onRotate() {
-      for (const auto& listener: this->_listeners) {
+      for (const auto& listener: this->listeners) {
         listener(newOrientation);
       }
     }
