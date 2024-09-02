@@ -562,13 +562,13 @@ case ${i}:
             const arg =
               promise.resultingType.kind === 'void'
                 ? ''
-                : resolvingType.parseFromSwiftToCpp('$0', 'swift')
+                : resolvingType.parseFromSwiftToCpp('__result', 'swift')
             return `
 { () -> bridge.${bridge.specializationName} in
   let promiseHolder = ${makePromise}()
   ${swiftParameterName}
-    .then({ promiseHolder.resolve(${arg}) })
-    .catch({ promiseHolder.reject(std.string(String(describing: $0))) })
+    .then({ __result in promiseHolder.resolve(${arg}) })
+    .catch({ __error in promiseHolder.reject(std.string(String(describing: __error))) })
   return promiseHolder
 }()`.trim()
           default:
