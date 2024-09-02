@@ -451,8 +451,8 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
       return { () -> bridge.PromiseHolder_double_ in
         let promiseHolder = bridge.create_PromiseHolder_double_()
         result
-          .then({ promiseHolder.resolve($0) })
-          .catch({ promiseHolder.reject(std.string(String(describing: $0))) })
+          .then({ __result in promiseHolder.resolve(__result) })
+          .catch({ __error in promiseHolder.reject(std.string(String(describing: __error))) })
         return promiseHolder
       }()
     } catch {
@@ -468,8 +468,8 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
       return { () -> bridge.PromiseHolder_std__string_ in
         let promiseHolder = bridge.create_PromiseHolder_std__string_()
         result
-          .then({ promiseHolder.resolve(std.string($0)) })
-          .catch({ promiseHolder.reject(std.string(String(describing: $0))) })
+          .then({ __result in promiseHolder.resolve(std.string(__result)) })
+          .catch({ __error in promiseHolder.reject(std.string(String(describing: __error))) })
         return promiseHolder
       }()
     } catch {
@@ -485,8 +485,8 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
       return { () -> bridge.PromiseHolder_Car_ in
         let promiseHolder = bridge.create_PromiseHolder_Car_()
         result
-          .then({ promiseHolder.resolve($0) })
-          .catch({ promiseHolder.reject(std.string(String(describing: $0))) })
+          .then({ __result in promiseHolder.resolve(__result) })
+          .catch({ __error in promiseHolder.reject(std.string(String(describing: __error))) })
         return promiseHolder
       }()
     } catch {

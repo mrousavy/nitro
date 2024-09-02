@@ -201,53 +201,53 @@ namespace margelo::nitro::image {
       _swiftPart.simpleFunc();
     }
     inline double addNumbers(double a, double b) override {
-      auto value = _swiftPart.addNumbers(std::forward<decltype(a)>(a), std::forward<decltype(b)>(b));
-      return value;
+      auto __result = _swiftPart.addNumbers(std::forward<decltype(a)>(a), std::forward<decltype(b)>(b));
+      return __result;
     }
     inline std::string addStrings(const std::string& a, const std::string& b) override {
-      auto value = _swiftPart.addStrings(a, b);
-      return value;
+      auto __result = _swiftPart.addStrings(a, b);
+      return __result;
     }
     inline void multipleArguments(double num, const std::string& str, bool boo) override {
       _swiftPart.multipleArguments(std::forward<decltype(num)>(num), str, std::forward<decltype(boo)>(boo));
     }
     inline std::vector<double> getNumbers() override {
-      auto value = _swiftPart.getNumbers();
-      return value;
+      auto __result = _swiftPart.getNumbers();
+      return __result;
     }
     inline std::vector<std::string> getStrings() override {
-      auto value = _swiftPart.getStrings();
-      return value;
+      auto __result = _swiftPart.getStrings();
+      return __result;
     }
     inline void callCallback(const std::function<void()>& callback) override {
       _swiftPart.callCallback(callback);
     }
     inline std::shared_ptr<ArrayBuffer> createNewBuffer(double size) override {
-      auto value = _swiftPart.createNewBuffer(std::forward<decltype(size)>(size));
-      return value.getArrayBuffer();
+      auto __result = _swiftPart.createNewBuffer(std::forward<decltype(size)>(size));
+      return __result.getArrayBuffer();
     }
     inline std::shared_ptr<margelo::nitro::image::HybridSwiftKotlinTestObjectSpec> newTestObject() override {
-      auto value = _swiftPart.newTestObject();
-      return HybridContext::getOrCreate<HybridSwiftKotlinTestObjectSpecSwift>(value);
+      auto __result = _swiftPart.newTestObject();
+      return HybridContext::getOrCreate<HybridSwiftKotlinTestObjectSpecSwift>(__result);
     }
     inline std::shared_ptr<margelo::nitro::image::HybridSwiftKotlinTestObjectSpec> bounceBack(const std::shared_ptr<margelo::nitro::image::HybridSwiftKotlinTestObjectSpec>& obj) override {
-      auto value = _swiftPart.bounceBack(std::static_pointer_cast<HybridSwiftKotlinTestObjectSpecSwift>(obj)->getSwiftPart());
-      return HybridContext::getOrCreate<HybridSwiftKotlinTestObjectSpecSwift>(value);
+      auto __result = _swiftPart.bounceBack(std::static_pointer_cast<HybridSwiftKotlinTestObjectSpecSwift>(obj)->getSwiftPart());
+      return HybridContext::getOrCreate<HybridSwiftKotlinTestObjectSpecSwift>(__result);
     }
     inline void call(const CallbackHolder& args) override {
       _swiftPart.call(args);
     }
     inline std::future<double> getNumberAsync() override {
-      auto value = _swiftPart.getNumberAsync();
-      return value.getFuture();
+      auto __result = _swiftPart.getNumberAsync();
+      return __result.getFuture();
     }
     inline std::future<std::string> getStringAsync() override {
-      auto value = _swiftPart.getStringAsync();
-      return value.getFuture();
+      auto __result = _swiftPart.getStringAsync();
+      return __result.getFuture();
     }
     inline std::future<Car> getCarAsync() override {
-      auto value = _swiftPart.getCarAsync();
-      return value.getFuture();
+      auto __result = _swiftPart.getCarAsync();
+      return __result.getFuture();
     }
 
   private:

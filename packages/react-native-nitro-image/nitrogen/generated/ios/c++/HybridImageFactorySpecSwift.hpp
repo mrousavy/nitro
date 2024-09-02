@@ -67,20 +67,20 @@ namespace margelo::nitro::image {
   public:
     // Methods
     inline std::shared_ptr<margelo::nitro::image::HybridImageSpec> loadImageFromFile(const std::string& path) override {
-      auto value = _swiftPart.loadImageFromFile(path);
-      return HybridContext::getOrCreate<HybridImageSpecSwift>(value);
+      auto __result = _swiftPart.loadImageFromFile(path);
+      return HybridContext::getOrCreate<HybridImageSpecSwift>(__result);
     }
     inline std::shared_ptr<margelo::nitro::image::HybridImageSpec> loadImageFromURL(const std::string& path) override {
-      auto value = _swiftPart.loadImageFromURL(path);
-      return HybridContext::getOrCreate<HybridImageSpecSwift>(value);
+      auto __result = _swiftPart.loadImageFromURL(path);
+      return HybridContext::getOrCreate<HybridImageSpecSwift>(__result);
     }
     inline std::shared_ptr<margelo::nitro::image::HybridImageSpec> loadImageFromSystemName(const std::string& path) override {
-      auto value = _swiftPart.loadImageFromSystemName(path);
-      return HybridContext::getOrCreate<HybridImageSpecSwift>(value);
+      auto __result = _swiftPart.loadImageFromSystemName(path);
+      return HybridContext::getOrCreate<HybridImageSpecSwift>(__result);
     }
     inline std::shared_ptr<margelo::nitro::image::HybridImageSpec> bounceBack(const std::shared_ptr<margelo::nitro::image::HybridImageSpec>& image) override {
-      auto value = _swiftPart.bounceBack(std::static_pointer_cast<HybridImageSpecSwift>(image)->getSwiftPart());
-      return HybridContext::getOrCreate<HybridImageSpecSwift>(value);
+      auto __result = _swiftPart.bounceBack(std::static_pointer_cast<HybridImageSpecSwift>(image)->getSwiftPart());
+      return HybridContext::getOrCreate<HybridImageSpecSwift>(__result);
     }
 
   private:
