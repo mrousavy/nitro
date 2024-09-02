@@ -66,7 +66,7 @@ const config: Config = {
           label: 'Tutorial',
         },
         {
-          href: 'https://github.com/facebook/docusaurus',
+          href: 'https://github.com/mrousavy/nitro',
           label: 'GitHub',
           position: 'right',
         },
@@ -76,28 +76,19 @@ const config: Config = {
       style: 'dark',
       links: [
         {
-          title: 'Docs',
-          items: [
-            {
-              label: 'Tutorial',
-              to: '/docs/intro',
-            },
-          ],
-        },
-        {
           title: 'Community',
           items: [
-            {
-              label: 'Stack Overflow',
-              href: 'https://stackoverflow.com/questions/tagged/docusaurus',
-            },
             {
               label: 'Discord',
               href: 'https://discordapp.com/invite/docusaurus',
             },
             {
               label: 'Twitter',
-              href: 'https://twitter.com/docusaurus',
+              href: 'https://twitter.com/mrousavy',
+            },
+            {
+              label: 'GitHub Sponsors',
+              href: 'https://github.com/sponsors/mrousavy',
             },
           ],
         },
@@ -105,13 +96,17 @@ const config: Config = {
           title: 'More',
           items: [
             {
-              label: 'GitHub',
-              href: 'https://github.com/facebook/docusaurus',
+              label: 'mrousavy.com',
+              href: 'https://mrousavy.com',
+            },
+            {
+              label: 'margelo.com',
+              href: 'https://margelo.com',
             },
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
+      copyright: `Copyright © ${new Date().getFullYear()} Marc Rousavy / Margelo`,
     },
     prism: {
       theme: prismThemes.oneLight,
@@ -133,7 +128,11 @@ const config: Config = {
         {
           className: 'code-block-diff-remove-line',
           line: 'diff-remove'
-        }
+        },
+        {
+          className: 'code-block-error-line',
+          line: 'code-error',
+        },
       ],
     },
   } satisfies Preset.ThemeConfig,
