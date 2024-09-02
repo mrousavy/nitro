@@ -30,7 +30,7 @@ public extension ArrayBufferHolder {
     // Create ArrayBufferHolder with our wrapped Swift closure to make it callable as a C-function pointer
     return ArrayBufferHolder.makeBuffer(data, size, swiftClosure)
   }
-  
+
   /**
    * Allocate a new buffer of the given `size`.
    * If `initializeToZero` is `true`, all bytes are set to `0`, otherwise they are left untouched.
@@ -40,7 +40,20 @@ public extension ArrayBufferHolder {
     if initializeToZero {
       data.initialize(repeating: 0, count: size)
     }
-    
+
+    let deleteFunc = SwiftClosure {
+      data.deallocate()
+    }
+    return ArrayBufferHolder.makeBuffer(data, size, deleteFunc)
+  }
+
+  /**
+   * Copy the given `ArrayBufferHolder` into a new **owning** `ArrayBufferHolder`.
+   */
+  static func copy(of other: ArrayBufferHolder) -> ArrayBufferHolder {
+    let data = UnsafeMutablePointer<UInt8>.allocate(capacity: other.size)
+    data.initialize(from: &other.data, count: other.size)
+
     let deleteFunc = SwiftClosure {
       data.deallocate()
     }
