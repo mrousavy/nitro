@@ -497,7 +497,7 @@ While typed maps are very efficient, Nitro cannot sufficiently optimize the obje
 If possible, **avoid typed maps** and use [arrays](#arrays-t) for unknown number of items, or [strongly typed objects](#custom-types-any-t) for known number of items instead.
 :::
 
-### Untyped maps (`AnyMap`)
+### Untyped maps (`AnyMap` / `object`)
 
 An untyped map represents a JSON-like structure with a value that can either be a `number`, a `string`, a `boolean`, a `bigint`, a `null`, an array or an object.
 
@@ -537,7 +537,7 @@ While untyped maps are implemented efficiently, Nitro cannot sufficiently optimi
 If possible, **avoid untyped maps** and use [strongly typed objects](#custom-types-any-t) instead.
 :::
 
-### Data ArrayBuffers (`ArrayBuffer`)
+### ArrayBuffers (`ArrayBuffer`)
 
 Array Buffers allow highly efficient access to the same data from both JS and native.
 Passing an `ArrayBuffer` from native to JS and back does not involve any copies, and is therefore the fastest way of passing around data in Nitro.
