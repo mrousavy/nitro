@@ -83,8 +83,8 @@ namespace margelo::nitro::image {
   public:
     // Methods
     inline double toArrayBuffer(ImageFormat format) override {
-      auto value = _swiftPart.toArrayBuffer(static_cast<int>(format));
-      return value;
+      auto __result = _swiftPart.toArrayBuffer(static_cast<int>(format));
+      return __result;
     }
     inline void saveToFile(const std::string& path, const std::function<void(const std::string& /* path */)>& onFinished) override {
       _swiftPart.saveToFile(path, onFinished);

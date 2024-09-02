@@ -674,9 +674,10 @@ case ${i}:
               .join(', ')
             const cFuncParamsSignature = [
               'closureHolder: UnsafeMutableRawPointer?',
-              ...func.parameters.map(
-                (p) => `${p.escapedName}: ${p.getCode('swift')}`
-              ),
+              ...func.parameters.map((p) => {
+                const bridged = new SwiftCxxBridgedType(p)
+                return `${p.escapedName}: ${bridged.getTypeCode('swift')}`
+              }),
             ].join(', ')
             const createFunc = `bridge.${bridge.funcName}`
             return `
