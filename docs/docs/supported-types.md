@@ -245,9 +245,9 @@ interface Math extends HybridObject {
 }
 ```
 
-:::info
+:::tip
 While variants are still very efficient, they need runtime-checks for type conversions,
-which comes with a tiny overhead compared to all other statically defined types.
+which comes with a tiny overhead compared to all other statically defined types. If possible, **avoid variants**.
 :::
 
 ### Promises (`Promise<T>`)
@@ -257,7 +257,7 @@ This allows your native code to perform heavy-, long-running tasks in parallel, 
 
 <Tabs>
   <TabItem value="ts" label="TypeScript" default>
-    In TypeScript, a `Promise<T>` is representing using the built-in `Promise<T>` type:
+    In TypeScript, a `Promise<T>` is represented using the built-in `Promise<T>` type:
 
     ```ts
     interface Math extends HybridObject {
@@ -444,6 +444,228 @@ interface Camera {
 Thanks to Nitro's clever function system, functions can be safely held in memory and called as many times as you like, just like in a normal JS class.
 This makes "Events" obsolete, and allows using as many callbacks per native method as required.
 
+### Typed maps (`Record<string, T>`)
+
+A typed map is an object where each value is of the given type `T`.
+
+For example, if your API returns a map of users with their ages, you _could_ use a `Record<string, number>`:
+
+<Tabs>
+  <TabItem value="ts" label="TypeScript" default>
+    ```ts
+    interface Database extends HybridObject {
+      getAllUsers(): Record<string, number>
+    }
+    ```
+  </TabItem>
+  <TabItem value="cpp" label="C++">
+    ```cpp
+    class HybridDatabase: public HybridDatabaseSpec {
+      std::unordered_map<std::string, double> getAllUsers();
+    }
+    ```
+  </TabItem>
+  <TabItem value="swift" label="Swift">
+    ```swift
+    class HybridDatabase: HybridDatabaseSpec {
+      func getAllUsers() -> Dictionary<String, Double>
+    }
+    ```
+  </TabItem>
+  <TabItem value="kotlin" label="Kotlin">
+    ```kotlin
+    class HybridDatabase: HybridDatabaseSpec() {
+      fun getAllUsers(): Map<String, Double>
+    }
+    ```
+  </TabItem>
+</Tabs>
+
+:::tip
+While typed maps are very efficient, Nitro cannot sufficiently optimize the object as keys are not known in advance.
+If possible, **avoid typed maps** and use [arrays](#arrays-t) for unknown number of items, or [strongly typed objects](#custom-types-any-t) for known number of items instead.
+:::
+
+### Untyped maps (`AnyMap`)
+
+An untyped map represents a JSON-like structure with a value that can either be a `number`, a `string`, a `boolean`, a `bigint`, a `null`, an array or an object.
+
+<Tabs>
+  <TabItem value="ts" label="TypeScript" default>
+    ```ts
+    interface Fetch extends HybridObject {
+      get(url: string): AnyMap
+    }
+    ```
+  </TabItem>
+  <TabItem value="cpp" label="C++">
+    ```cpp
+    class HybridFetch: public HybridFetchSpec {
+      std::shared_ptr<AnyMap> get(const std::string& url);
+    }
+    ```
+  </TabItem>
+  <TabItem value="swift" label="Swift">
+    ```swift
+    class HybridFetch: HybridFetchSpec {
+      func get(url: String) -> AnyMapHolder
+    }
+    ```
+  </TabItem>
+  <TabItem value="kotlin" label="Kotlin">
+    ```kotlin
+    class HybridFetch: HybridFetchSpec() {
+      fun get(url: String): AnyMap
+    }
+    ```
+  </TabItem>
+</Tabs>
+
+:::tip
+While untyped maps are implemented efficiently, Nitro cannot sufficiently optimize the object as keys and value-types are not known in advance.
+If possible, **avoid untyped maps** and use [strongly typed objects](#custom-types-any-t) instead.
+:::
+
+### Data ArrayBuffers (`ArrayBuffer`)
+
+Array Buffers allow highly efficient access to the same data from both JS and native.
+Passing an `ArrayBuffer` from native to JS and back does not involve any copies, and is therefore the fastest way of passing around data in Nitro.
+
+It is important to understand the ownership, and threading concerns around such shared memory access.
+
+#### Ownership
+
+- An `ArrayBuffer` that was created on the native side is **owning**, which means you can safely access it's data as long as the `ArrayBuffer` reference is alive.
+It can be safely held strong for longer, e.g. as a class property/member, and accessed from different Threads.
+
+  ```swift
+  func doSomething() -> ArrayBufferHolder {
+    let buffer = ArrayBufferHolder.allocate(1024 * 10)
+    let data = buffer.data   // <-- ✅ safe to do because we own it!
+    self.buffer = buffer     // <-- ✅ safe to do to use it later!
+    DispatchQueue.global().async {
+      let data = buffer.data // <-- ✅ also safe because we own it!
+    }
+    return buffer
+  }
+  ```
+
+- An `ArrayBuffer` that was received as a parameter from JS cannot be safely kept strong as the JS VM can delete it at any point, hence it is **non-owning**.
+It's data can only be safely accessed before the synchronous function returned, as this will stay within the JS bounds.
+
+  ```swift
+  func doSomething(buffer: ArrayBufferHolder) {
+    let data = buffer.data   // <-- ✅ safe to do because we're still sync
+    DispatchQueue.global().async {
+      // code-error
+      let data = buffer.data // <-- ❌ NOT safe
+    }
+  }
+  ```
+  If you need a non-owning buffer's data for longer, **copy it first**:
+  ```swift
+  func doSomething(buffer: ArrayBufferHolder) {
+    let copy = ArrayBufferHolder.copy(of: buffer)
+    DispatchQueue.global().async {
+      let data = copy.data // <-- ✅ safe now because we have a owning copy
+    }
+  }
+  ```
+
+#### Threading
+
+An `ArrayBuffer` can be accessed from both JS and native, and even from multiple Threads at once, but they are **not thread-safe**.
+To prevent race conditions or garbage-data from being read, make sure to not read from- and write to- the `ArrayBuffer` at the same time.
+
+### Other Hybrid Objects (`HybridObject`)
+
+Since Nitro Modules are object-oriented, a `HybridObject` itself is a first-class citizen.
+This means you can pass around instances of native `HybridObject`s between JS and native, allowing for safe interface-level abstractions:
+
+<div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
+<div style={{ flex: 1, maxWidth: '50%', marginRight: 15 }}>
+
+```ts title="Camera.nitro.ts"
+interface Image extends HybridObject {
+  readonly width: number
+  readonly height: number
+}
+
+interface Camera extends HybridObject {
+  takePhoto(): Image
+}
+```
+
+</div>
+<div style={{ flex: 1, maxWidth: '50%', marginLeft: 15 }}>
+
+```swift title="HybridCamera.swift"
+class HybridImage: HybridImageSpec {
+  var width: Double { get }
+  var height: Double { get }
+}
+
+class HybridCamera: HybridCameraSpec {
+  func takePhoto() -> HybridImageSpec
+}
+```
+
+</div>
+</div>
+
+#### Interface-level abstraction
+
+Since Hybrid Objects are declared as interfaces, `Image` could have different implementations...
+
+```swift
+class HybridUIImage: HybridImageSpec {
+  // ...
+  var uiImage: UIImage
+}
+class HybridCGImage: HybridImageSpec {
+  // ...
+  var cgImage: CGImage
+}
+class HybridBufferImage: HybridImageSpec {
+  // ...
+  var gpuBuffer: CMSampleBuffer
+}
+```
+
+...but still be used exactly the same in other places, as it is all a `HybridImageSpec`.
+Even if they use different implementations under the hood, they all share a common interface with properties like `width`, `height` and more:
+
+<div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
+<div style={{ flex: 1, maxWidth: '45%', marginRight: 15 }}>
+
+```ts title="Cropper.nitro.ts"
+interface Cropper extends HybridObject {
+  crop(image: Image,
+       size: Size): Image
+}
+
+
+
+
+```
+
+</div>
+<div style={{ flex: 1, maxWidth: '55%', marginLeft: 15 }}>
+
+```swift title="Cropper.swift"
+class HybridCropper: HybridCropperSpec {
+  func crop(image: HybridImageSpec,
+            size: Size) -> HybridImageSpec {
+    let data = image.data
+    let croppedData = myCustomCropFunction(data, size)
+    return HybridCGImage(data: croppedData)
+  }
+}
+```
+
+</div>
+</div>
+
 ### Custom Types (...any `T`)
 
 <Tabs groupId="nitrogen-or-not">
@@ -491,7 +713,7 @@ This makes "Events" obsolete, and allows using as many callbacks per native meth
 
     For example, if you want to use `float` directly you can tell Nitro how to convert a `jsi::Value` to `float` by implementing `JSIConverter<float>`:
 
-    ```cpp
+    ```cpp title="JSIConverter+Float.hpp"
     template <>
     struct JSIConverter<float> final {
       static inline float fromJSI(jsi::Runtime&, const jsi::Value& arg) {
@@ -508,7 +730,7 @@ This makes "Events" obsolete, and allows using as many callbacks per native meth
 
     Then just use it in your methods:
 
-    ```cpp
+    ```cpp title="HybridMath.hpp"
     class HybridMath : public HybridObject {
     public:
       float add(float a, float b) {
@@ -532,7 +754,7 @@ This makes "Events" obsolete, and allows using as many callbacks per native meth
 
     The same goes for any complex type, like a custom typed `struct`:
 
-    ```cpp
+    ```cpp title="JSIConverter+Person.hpp"
     struct Person {
       std::string name;
       double age;
