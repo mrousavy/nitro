@@ -452,7 +452,7 @@ interface Camera {
 }
 ```
 
-Thanks to Nitro's clever function system, functions can be safely held in memory and called as many times as you like, just like in a normal JS class.
+Thanks to Nitro's clever reference system, functions can be safely held in memory and called as many times as you like, just like in a normal JS class.
 This makes "Events" obsolete, and allows using as many callbacks per native method as required.
 
 ### Typed maps (`Record<string, T>`)
