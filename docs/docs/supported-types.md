@@ -6,18 +6,38 @@ import TabItem from '@theme/TabItem';
 
 # Types
 
-Nitro uses a templating system called `JSIConverter<T>` to efficiently convert between JS and C++ types - statically defined and **fully typesafe at compile-time**.
+Nitro uses an extensible typing system to efficiently convert between JS and C++ types - **statically defined** and fully **type-safe** and **null-safe at compile-time**.
 
 For example, a JS `number` will always be a `double` on the native side:
 
-```cpp
+
+<div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
+<div style={{ flex: 1, maxWidth: '50%', marginRight: 15 }}>
+
+```ts title="Math.nitro.ts"
+interface Math extends HybridObject {
+  add(a: number, b: number): number
+}
+```
+
+</div>
+<div style={{ flex: 1, maxWidth: '50%', marginLeft: 15 }}>
+
+```cpp title="HybridMath.hpp"
 class HybridMath : public HybridMathSpec {
-public:
   double add(double a, double b);
 }
 ```
 
-If the user passes a different type to `add(...)` (for example, a `string`), Nitro will throw an error. By using TypeScipt, all type errors will also be visible at compile-time in your code editor.
+</div>
+</div>
+
+Nitro strictly enforces **type-safety** and **null-safety** - both at compile-time and at runtime.
+This prevents accidentally passing a wrong type to `add(..)` (for example, a `string`) and performs null-checks to prevent passing and returning `null`/`undefined` values.
+
+On the native side (C++/Swift/Kotlin), type-, and null-safety is enforced via the compiler, and via debug-only runtime checks. Your native method's arguments are guaranteed to be type-safe and null-safe, and the compiler enforces return types so you cannot return a value that isn't expected by the TypeScript specs.
+
+On the JS side (TypeScript), type- and null-safety is enforced via TypeScript - so use it!
 
 ## Supported Types
 
@@ -62,28 +82,22 @@ These are all the types Nitro supports out of the box:
     <td><code>Array&lt;T&gt;</code> / <code>PrimitiveArray</code></td>
   </tr>
   <tr>
-    <td><code>[A, B, C, ...]</code></td>
-    <td><code>std::tuple&lt;A, B, C, ...&gt;</code></td>
-    <td><code>(A, B, C)</code> 🟡  (<a href="https://github.com/mrousavy/nitro/issues/38">#38</a>)</td>
-    <td>❌</td>
-  </tr>
-  <tr>
-    <td><code>A | B | C | ...</code></td>
-    <td><code>std::variant&lt;A, B, C, ...&gt;</code></td>
-    <td><code>Variant_A_B_C</code> 🟡  (<a href="https://github.com/mrousavy/nitro/issues/39">#39</a>)</td>
-    <td>❌</td>
-  </tr>
-  <tr>
-    <td><code>Record&lt;string, T&gt;</code></td>
-    <td><code>std::unordered_map&lt;std::string, T&gt;</code></td>
-    <td><code>Dictionary&lt;String, T&gt;</code></td>
-    <td><code>Map&lt;String, T&gt;</code></td>
-  </tr>
-  <tr>
     <td><code>T?</code></td>
     <td><code>std::optional&lt;T&gt;</code></td>
     <td><code>T?</code></td>
     <td><code>T?</code></td>
+  </tr>
+  <tr>
+    <td><code>[A, B, ...]</code></td>
+    <td><code>std::tuple&lt;A, B, ...&gt;</code></td>
+    <td><code>(A, B)</code> 🟡  (<a href="https://github.com/mrousavy/nitro/issues/38">#38</a>)</td>
+    <td>❌</td>
+  </tr>
+  <tr>
+    <td><code>A | B | ...</code></td>
+    <td><code>std::variant&lt;A, B, ...&gt;</code></td>
+    <td><code>Variant_A_B</code> 🟡  (<a href="https://github.com/mrousavy/nitro/issues/39">#39</a>)</td>
+    <td>❌</td>
   </tr>
   <tr>
     <td><code>Promise&lt;T&gt;</code></td>
@@ -102,6 +116,12 @@ These are all the types Nitro supports out of the box:
     <td><code>std::function&lt;std::future&lt;R&gt; (T...)&gt;</code></td>
     <td>❌</td>
     <td>❌</td>
+  </tr>
+  <tr>
+    <td><code>Record&lt;string, T&gt;</code></td>
+    <td><code>std::unordered_map&lt;std::string, T&gt;</code></td>
+    <td><code>Dictionary&lt;String, T&gt;</code></td>
+    <td><code>Map&lt;String, T&gt;</code></td>
   </tr>
   <tr>
     <td><code>object</code></td>
@@ -141,13 +161,324 @@ These are all the types Nitro supports out of the box:
   </tr>
 </table>
 
-### Custom Types
+### Primitives (`number`, `boolean`, `bigint`)
+
+Primitive datatypes like `number`, `boolean` or `bigint` can use platform-native datatypes directly.
+For example, a JS `number` is always a 64-bit `double` in C++, a `Double` in Swift, and a `Double` in Kotlin.
+
+Primitives are very efficient and can be passed with little to no overhead, especially between C++ and Swift, and C++ and Kotlin.
+
+### Arrays (`T[]`)
+
+Arrays of items are represented with the most common, and most efficient array datastructures in native languages.
+
+In C++, a `T[]` is a `std::vector<T>`.
+Both Swift and Kotlin use their native array types (`[T]`/`Array<T>`), which need to be copied to a C++ `std::vector<T>`.
+
+#### Kotlin `PrimitiveArray`
+
+As a performance improvement, the JNI (C++ -> Kotlin interface) provides **Primitive Array** datatypes which can avoid boxing primitives into `Object`s, and provides bulk copy methods.
+This makes all array operations **a lot faster**, and Nitrogen is smart enough to ✨**automagically**✨ use Primitive Arrays whenever possible.
+This will replace the following arrays:
+
+- `Array<Double>` -> [`DoubleArray`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double-array/)
+- `Array<Boolean>` -> [`BooleanArray`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean-array/)
+- `Array<Long>` -> [`LongArray`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long-array/)
+
+### Optionals (`T?`)
+
+Optional or nullable values can be represented using either the questionmark operator (`?`), or by adding an `undefined` variant:
+
+<Tabs>
+  <TabItem value="ts" label="TypeScript" default>
+    ```ts
+    interface Math extends HybridObject {
+      a?: number
+      b: number | undefined
+    }
+    ```
+  </TabItem>
+  <TabItem value="cpp" label="C++">
+    ```cpp
+    class HybridMath: public HybridMathSpec {
+      std::optional<double> a;
+      std::optional<double> b;
+    };
+    ```
+  </TabItem>
+  <TabItem value="swift" label="Swift">
+    ```swift
+    class HybridMath: HybridMathSpec {
+      var a: Double?
+      var b: Double?
+    }
+    ```
+  </TabItem>
+  <TabItem value="kotlin" label="Kotlin">
+    ```kotlin
+    class HybridMath: HybridMathSpec() {
+      override var a: Double?
+      override var b: Double?
+    }
+    ```
+  </TabItem>
+</Tabs>
+
+### Tuples (`[A, B, ...]`)
+
+A Tuple is a fixed-length set of items with given, possibly different types. Example:
+
+```ts
+type Point = [number, number]
+interface Math extends HybridObject {
+  distance(a: Point, b: Point): number
+}
+```
+
+### Variants (`A | B | ...`)
+
+A Variant is a type of either one of the values defined in it's declaration. Example:
+
+```ts
+interface Math extends HybridObject {
+  distance(value: number | Point): number
+}
+```
+
+:::info
+While variants are still very efficient, they need runtime-checks for type conversions,
+which comes with a tiny overhead compared to all other statically defined types.
+:::
+
+### Promises (`Promise<T>`)
+
+A function can be made asynchronous by returning a `Promise` to JS.
+This allows your native code to perform heavy-, long-running tasks in parallel, while the JS thread can continue rendering and performing other business logic.
+
+<Tabs>
+  <TabItem value="ts" label="TypeScript" default>
+    In TypeScript, a `Promise<T>` is representing using the built-in `Promise<T>` type:
+
+    ```ts
+    interface Math extends HybridObject {
+      fibonacci(n: number): Promise<number>
+    }
+
+    const math = // ...
+    await math.fibonacci(13)
+    ```
+  </TabItem>
+  <TabItem value="cpp" label="C++">
+    In C++, a `Promise<T>` is represented as an `std::future<T>`. For example, with [`std::async`](https://en.cppreference.com/w/cpp/thread/async):
+
+    ```cpp
+    std::future<double> fibonacci(double n) {
+      return std::async(std::launch::async, [=]() -> double {
+        // This runs on a separate Thread!
+        return calculateFibonacciSequence(n);
+      });
+    }
+    ```
+  </TabItem>
+  <TabItem value="swift" label="Swift">
+    In Swift, a `Promise<T>` can be created via Nitro's [`Promise<T>`](https://github.com/mrousavy/nitro/blob/main/packages/react-native-nitro-modules/ios/core/Promise.swift) type - for example, to use Swift's new async/await syntax:
+
+    ```swift
+    func fibonacci(n: Double) -> Promise<Double> {
+      return Promise.async {
+        // This runs on a separate Thread, and can use `await` syntax!
+        return try await calculateFibonacciSequence(n)
+      }
+    }
+    ```
+  </TabItem>
+  <TabItem value="kotlin" label="Kotlin">
+    In Kotlin, a `Promise<T>` can be created via Nitro's [`Promise<T>`](https://github.com/mrousavy/nitro/blob/main/packages/react-native-nitro-modules/android/src/main/java/com/margelo/nitro/core/Promise.kt) type - for example, to use Kotlin's coroutine syntax:
+
+    ```kotlin
+    fun fibonacci(n: Double): Promise<Double> {
+      return Promise.async {
+        // This runs on a separate Thread, and can use suspending coroutine functions!
+        return calculateFibonacciSequence(n)
+      }
+    }
+    ```
+  </TabItem>
+</Tabs>
+
+Additionally, Nitro statically enforces that **Promises can never go stale**, preventing you from accidentally "forgetting" to resolve or reject a Promise:
+
+```swift title="HybridMath.swift"
+func saveToFile(image: HybridImage) -> Promise<Void> {
+  guard let data = image.data else { return }
+  // code-error
+                                     ^ // Error: Cannot return void!
+  return Promise.async {
+    data.writeToFile("file://tmp/img.png")
+  }
+}
+```
+
+### Callbacks (`(...) => T`)
+
+Callbacks are functions created in one language and passed to another to provide a way to "call back" later.
+
+Nitro has a clever reference counting system to allow users to use callbacks/functions from JS safely, and without any limitations.
+Each callback can be held as a strong reference on the native side, and safely be called as often as needed.
+Once the callback is no longer used, it will be safely deleted from memory.
+
+<Tabs>
+  <TabItem value="ts" label="TypeScript" default>
+    In TypeScript, a callback is representing as an anonymous function:
+
+    ```ts
+    type Orientation = "portrait" | "landscape"
+    interface DeviceInfo extends HybridObject {
+      listenToOrientation(onChanged: (o: Orientation) => void): void
+    }
+
+    const deviceInfo = // ...
+    deviceInfo.listenToOrientation((o) => {
+      console.log(`Orientation changed to ${o}!`)
+    })
+    ```
+  </TabItem>
+  <TabItem value="cpp" label="C++">
+    In C++, a callback is represented as a function:
+
+    ```cpp
+    void listenToOrientation(std::function<void(Orientation)> onChanged) {
+      this->_listeners.push_back(onChanged);
+    }
+
+    void onRotate() {
+      for (const auto& listener: this->_listeners) {
+        listener(newOrientation);
+      }
+    }
+    ```
+  </TabItem>
+  <TabItem value="swift" label="Swift">
+    In Swift, a callback is represented as a closure:
+
+    ```swift
+    func listenToOrientation(onChanged: (Orientation) -> Void) {
+      self.listeners.append(onChanged)
+    }
+
+    func onRotate() {
+      for listener in self.listeners {
+        listener(newOrientation)
+      }
+    }
+    ```
+  </TabItem>
+  <TabItem value="kotlin" label="Kotlin">
+    In Kotlin, a callback is represented as a lambda:
+
+    ```kotlin
+    fun listenToOrientation(onChanged: (Orientation) -> Unit) {
+      this.listeners.add(onChanged)
+    }
+
+    fun onRotate() {
+      for (listener in this.listeners) {
+        listener(newOrientation)
+      }
+    }
+    ```
+  </TabItem>
+</Tabs>
+
+Since callbacks can be safely kept in memory for longer and called multiple times, Nitro does not have a special type for an "event".
+It is simply a function you store in memory and call later. ✨
+
+#### Callbacks that return a value (`(...) => T`)
+
+Since JS callbacks could theoretically be called from any native Thread,
+Nitro safely wraps the result types of callbacks that return a value in **Promises which need to be awaited**.
+
+<div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
+<div style={{ flex: 1, maxWidth: '50%', marginRight: 15 }}>
+
+```ts title="Math.nitro.ts"
+interface Math extends HybridObject {
+  some(getValue: () => number): void
+}
+
+
+
+```
+
+</div>
+<div style={{ flex: 1, maxWidth: '50%', marginLeft: 15 }}>
+
+```swift title="HybridMath.swift"
+func some(getValue: () -> Promise<Double>) {
+  Task {
+    let promise = getValue()
+    let valueFromJs = promise.await()
+  }
+}
+```
+
+</div>
+</div>
+
+#### How was it before Nitro?
+
+Conventionally (in legacy React Native Native Modules), a native method could only have a maximum of two callbacks, one "success" and one "failure" callback.
+Once one of these callbacks is called, both will be destroyed and can no longer be called later.
+This is why React Native introduced "Events" as a way to call into JS more than just once.
+This also meant that an asynchronous function could not have any callbacks, since a Promise's resolve and reject functions are already two callbacks.
+For example, this was **not possible**:
+
+```ts
+interface Camera {
+  startRecording(onStatusUpdate: () => void,
+                 onRecordingFailed: () => void,
+                 onRecordingFinished: () => void): Promise<void>
+}
+```
+
+Thanks to Nitro's clever function system, functions can be safely held in memory and called as many times as you like, just like in a normal JS class.
+This makes "Events" obsolete, and allows using as many callbacks per native method as required.
+
+### Custom Types (...any `T`)
 
 <Tabs groupId="nitrogen-or-not">
-  <TabItem value="nitrogen" label="With Nitrogen" default>
+  <TabItem value="nitrogen" label="With Nitrogen ✨" default>
 
 
-    Nitrogen does this automagically.
+    Nitrogen can ✨**automagically**✨ generate custom types and their respective bindings for any types used in your specs.
+
+    #### Custom interfaces (structs)
+
+    Any custom `interface` or `type` will be represented as a `struct` in C++/Swift/Kotlin. Simply define the type in your `.nitro.ts` spec:
+
+    ```ts
+    interface DivisionResult {
+      value: number
+      remainder: number
+    }
+
+    interface Math extends HybridObject {
+      divide(a: number, b: number): DivionResult
+    }
+    ```
+
+    #### Enums (TypeScript enum)
+
+    A [TypeScript enum](https://www.typescriptlang.org/docs/handbook/enums.html) is essentially just an object where each key has an incrementing integer value,
+    so Nitrogen will just generate a C++ enum natively, and bridges to JS using simple integers:
+
+    ```ts
+    interface Math extends HybridObject {
+
+    }
+    ```
+
+    #### Enums (TypeScript union)
 
 
 

@@ -128,7 +128,11 @@ const config: Config = {
         {
           className: 'code-block-diff-remove-line',
           line: 'diff-remove'
-        }
+        },
+        {
+          className: 'code-block-error-line',
+          line: 'code-error',
+        },
       ],
     },
   } satisfies Preset.ThemeConfig,
