@@ -41,6 +41,12 @@ class ArrayBuffer {
         get() = getIsByteBuffer()
 
     /**
+     * Get the size of bytes in this `ArrayBuffer`.
+     */
+    val size: Long
+        get() = getBufferSize()
+
+    /**
      * Get a `ByteBuffer` that holds- or wraps- the underlying data.
      * - If this `ArrayBuffer` has been created from Kotlin/Java, it is already holding a
      * `ByteBuffer` (`isByteBuffer == true`). In this case, the returned buffer is safe to access,
@@ -81,4 +87,25 @@ class ArrayBuffer {
     private external fun getIsOwner(): Boolean
     private external fun getIsByteBuffer(): Boolean
     private external fun initHybrid(buffer: ByteBuffer): HybridData
+    private external fun getBufferSize(): Long
+
+    companion object {
+        /**
+         * Copy the given `ArrayBuffer` into a new **owning** `ArrayBuffer`.
+         */
+        public fun copyOf(other: ArrayBuffer): ArrayBuffer {
+            // 1. Create a new buffer with the same size as the other
+            val newBuffer = ByteBuffer.allocateDirect(other.size)
+            // 2. Prepare the source buffer
+            val originalBuffer = other.getBuffer(false)
+            originalBuffer.rewind()
+            // 3. Copy over the source buffer into the new buffer
+            newBuffer.put(originalBuffer)
+            // 4. Rewing both buffers again to index 0
+            newBuffer.rewind()
+            originalBuffer.rewind()
+            // 5. Create a new `ArrayBuffer`
+            return ArrayBuffer(newBuffer)
+        }
+    }
 }
