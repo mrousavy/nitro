@@ -3,6 +3,7 @@ package com.margelo.nitro.core
 import androidx.annotation.Keep
 import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
+import dalvik.annotation.optimization.CriticalNative
 
 typealias AnyArray = Array<AnyValue>
 typealias AnyObject = Map<String, AnyValue>
@@ -75,54 +76,64 @@ class AnyValue {
     /**
      * Gets whether this [AnyValue] instance is holding a `null`.
      */
+    @CriticalNative
     external fun isNull(): Boolean
 
     /**
      * Gets whether this [AnyValue] instance is holding a [Double] value.
      */
+    @CriticalNative
     external fun isDouble(): Boolean
 
     /**
      * Gets whether this [AnyValue] instance is holding a [Boolean] value.
      */
+    @CriticalNative
     external fun isBoolean(): Boolean
 
     /**
      * Gets whether this [AnyValue] instance is holding a [Long] value.
      */
+    @CriticalNative
     external fun isBigInt(): Boolean
 
     /**
      * Gets whether this [AnyValue] instance is holding a [String] value.
      */
+    @CriticalNative
     external fun isString(): Boolean
 
     /**
      * Gets whether this [AnyValue] instance is holding an [AnyArray] value.
      */
+    @CriticalNative
     external fun isAnyArray(): Boolean
 
     /**
      * Gets whether this [AnyValue] instance is holding an [AnyObject] value.
      */
+    @CriticalNative
     external fun isAnyObject(): Boolean
 
     /**
      * Get the [Double] value this [AnyValue] is holding.
      * @throws Error if this [AnyValue] is not holding a [Double] (see [isDouble]`()`)
      */
+    @CriticalNative
     external fun asDouble(): Double
 
     /**
      * Get the [Boolean] value this [AnyValue] is holding.
      * @throws Error if this [AnyValue] is not holding a [Boolean] (see [isBoolean]`()`)
      */
+    @CriticalNative
     external fun asBoolean(): Boolean
 
     /**
      * Get the [Long] value this [AnyValue] is holding.
      * @throws Error if this [AnyValue] is not holding a [Long] (see [isLong]`()`)
      */
+    @CriticalNative
     external fun asBigInt(): Long
 
     /**
