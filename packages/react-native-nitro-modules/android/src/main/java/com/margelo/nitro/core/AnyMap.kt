@@ -71,6 +71,7 @@ class AnyMap {
   external fun setBoolean(key: String, value: Boolean)
   @CriticalNative
   external fun setBigInt(key: String, value: Long)
+  @CriticalNative
   external fun setString(key: String, value: String)
   external fun setAnyArray(key: String, value: AnyArray)
   external fun setAnyObject(key: String, value: AnyObject)
