@@ -94,13 +94,13 @@ pre code:has(.code-block-diff-remove-line) {
 
 .side-by-side-container {
   display: flex;
-  justify-content: space-evenly;
-  max-width: 100%;
   gap: 15px;
+  max-width: 100%;
   box-sizing: border-box;
 }
 
 .side-by-side-block {
-  max-width: 50%;
+  flex: 1 1 0;
+  min-width: 0;
   box-sizing: border-box;
 }
