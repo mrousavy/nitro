@@ -94,9 +94,17 @@ pre code:has(.code-block-diff-remove-line) {
 
 .side-by-side-container {
   display: flex;
+  flex-direction: row;
   gap: 15px;
   max-width: 100%;
   box-sizing: border-box;
+}
+
+@media (max-width: 768px) or (((min-width: 997px) and (max-width: 1320px))) {
+  .side-by-side-container {
+    gap: 0px;
+    flex-direction: column;
+  }
 }
 
 .side-by-side-block {

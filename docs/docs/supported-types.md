@@ -407,8 +407,8 @@ It is simply a function you store in memory and call later. ✨
 Since JS callbacks could theoretically be called from any native Thread,
 Nitro safely wraps the result types of callbacks that return a value in **Promises which need to be awaited**.
 
-<div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
-<div style={{ flex: 1, maxWidth: '50%', marginRight: 15 }}>
+<div className="side-by-side-container">
+<div className="side-by-side-block">
 
 ```ts title="Math.nitro.ts"
 interface Math extends HybridObject {
@@ -420,7 +420,7 @@ interface Math extends HybridObject {
 ```
 
 </div>
-<div style={{ flex: 1, maxWidth: '50%', marginLeft: 15 }}>
+<div className="side-by-side-block">
 
 ```swift title="HybridMath.swift"
 func some(getValue: () -> Promise<Double>) {
@@ -591,8 +591,8 @@ To prevent race conditions or garbage-data from being read, make sure to not rea
 Since Nitro Modules are object-oriented, a `HybridObject` itself is a first-class citizen.
 This means you can pass around instances of native `HybridObject`s between JS and native, allowing for safe interface-level abstractions:
 
-<div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
-<div style={{ flex: 1, maxWidth: '50%', marginRight: 15 }}>
+<div className="side-by-side-container">
+<div className="side-by-side-block">
 
 ```ts title="Camera.nitro.ts"
 interface Image extends HybridObject {
@@ -606,7 +606,7 @@ interface Camera extends HybridObject {
 ```
 
 </div>
-<div style={{ flex: 1, maxWidth: '50%', marginLeft: 15 }}>
+<div className="side-by-side-block">
 
 ```swift title="HybridCamera.swift"
 class HybridImage: HybridImageSpec {
@@ -644,8 +644,8 @@ class HybridBufferImage: HybridImageSpec {
 ...but still be used exactly the same in other places, as it is all a `HybridImageSpec`.
 Even if they use different implementations under the hood, they all share a common interface with properties like `width`, `height` and more:
 
-<div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
-<div style={{ flex: 1, maxWidth: '45%', marginRight: 15 }}>
+<div className="side-by-side-container">
+<div className="side-by-side-block">
 
 ```ts title="Cropper.nitro.ts"
 interface Cropper extends HybridObject {
@@ -659,7 +659,7 @@ interface Cropper extends HybridObject {
 ```
 
 </div>
-<div style={{ flex: 1, maxWidth: '55%', marginLeft: 15 }}>
+<div className="side-by-side-block">
 
 ```swift title="Cropper.swift"
 class HybridCropper: HybridCropperSpec {
@@ -687,8 +687,8 @@ class HybridCropper: HybridCropperSpec {
 
     Any custom `interface` or `type` will be represented as a fully type-safe `struct` in C++/Swift/Kotlin. Simply define the type in your `.nitro.ts` spec:
 
-    <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
-    <div style={{ flex: 1, maxWidth: '45%', marginRight: 15 }}>
+    <div className="side-by-side-container">
+    <div className="side-by-side-block">
 
     ```ts title="Nitro.nitro.ts"
     interface Person {
@@ -702,7 +702,7 @@ class HybridCropper: HybridCropperSpec {
     ```
 
     </div>
-    <div style={{ flex: 1, maxWidth: '55%', marginLeft: 15 }}>
+    <div className="side-by-side-block">
 
     ```swift title="HybridNitro.swift"
     class HybridNitro: HybridNitroSpec {

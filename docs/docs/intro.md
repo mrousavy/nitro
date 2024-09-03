@@ -9,8 +9,8 @@ Nitro is a framework for building native modules in React Native.
 - A **Hybrid Object** is a native object in Nitro, implemented in either C++, Swift or Kotlin.
 - **Nitrogen** is a code-generator a library author can use to generate native bindings from a custom TypeScript interface.
 
-<div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
-<div style={{ flex: 1, maxWidth: '50%', marginRight: 15 }}>
+<div className="side-by-side-container">
+<div className="side-by-side-block">
 
 ```ts title="Math.nitro.ts"
 interface Math extends HybridObject {
@@ -25,7 +25,7 @@ interface Math extends HybridObject {
 ```
 
 </div>
-<div style={{ flex: 1, maxWidth: '50%', marginLeft: 15 }}>
+<div className="side-by-side-block">
 
 ```swift title="HybridMath.swift"
 class HybridMath : HybridMathSpec {
@@ -50,8 +50,8 @@ React Native core already ships with a framework for building native modules: **
 
 #### Synchronous functions
 
-<div style={{ display: 'flex', justifyContent: 'space-evenly', }}>
-<div style={{ flex: 1, marginRight: 15, maxWidth: '50%' }}>
+<div className="side-by-side-container">
+<div className="side-by-side-block">
 
 ```swift title="Nitro Module (Swift)"
 class HybridMath : HybridMathSpec {
@@ -65,7 +65,7 @@ class HybridMath : HybridMathSpec {
 ```
 
 </div>
-<div style={{ flex: 1, marginLeft: 15, maxWidth: '50%' }}>
+<div className="side-by-side-block">
 
 ```objc title="Turbo Module (Objective-C)"
 @implementation RTNMath
@@ -83,8 +83,8 @@ RCT_EXPORT_MODULE()
 
 #### Asynchronous functions
 
-<div style={{ display: 'flex', justifyContent: 'space-evenly', }}>
-<div style={{ flex: 1, marginRight: 15, maxWidth: '50%' }}>
+<div className="side-by-side-container">
+<div className="side-by-side-block">
 
 ```swift title="Nitro Module (Swift)"
 class HybridMath : HybridMathSpec {
@@ -104,7 +104,7 @@ class HybridMath : HybridMathSpec {
 ```
 
 </div>
-<div style={{ flex: 1, marginLeft: 15, maxWidth: '50%' }}>
+<div className="side-by-side-block">
 
 ```objc title="Turbo Module (Objective-C)"
 @implementation RTNMath
@@ -132,8 +132,8 @@ Expo's recommended approach of building native modules is called "Expo Modules".
 
 #### Synchronous Functions
 
-<div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
-<div style={{ flex: 1, maxWidth: '50%', marginRight: 15 }}>
+<div className="side-by-side-container">
+<div className="side-by-side-block">
 
 ```swift title="Nitro Module (Swift)"
 class HybridMath : HybridMathSpec {
@@ -149,7 +149,7 @@ class HybridMath : HybridMathSpec {
 ```
 
 </div>
-<div style={{ flex: 1, maxWidth: '50%', marginLeft: 15 }}>
+<div className="side-by-side-block">
 
 ```swift title="Expo Module (Swift)"
 public class ExpoSettingsModule: Module {
@@ -169,8 +169,8 @@ public class ExpoSettingsModule: Module {
 
 #### Asynchronous Functions
 
-<div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
-<div style={{ flex: 1, maxWidth: '50%', marginRight: 15 }}>
+<div className="side-by-side-container">
+<div className="side-by-side-block">
 
 ```swift title="Nitro Module (Swift)"
 class HybridMath : HybridMathSpec {
@@ -186,7 +186,7 @@ class HybridMath : HybridMathSpec {
 ```
 
 </div>
-<div style={{ flex: 1, maxWidth: '50%', marginLeft: 15 }}>
+<div className="side-by-side-block">
 
 ```swift title="Expo Module (Swift)"
 public class ExpoSettingsModule: Module {
