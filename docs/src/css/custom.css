@@ -98,6 +98,7 @@ pre code:has(.code-block-diff-remove-line) {
   gap: 15px;
   max-width: 100%;
   box-sizing: border-box;
+  align-items: stretch;
 }
 
 @media (max-width: 768px) or (((min-width: 997px) and (max-width: 1320px))) {
@@ -111,4 +112,11 @@ pre code:has(.code-block-diff-remove-line) {
   flex: 1 1 0;
   min-width: 0;
   box-sizing: border-box;
+  flex-direction: row;
+  align-items: stretch;
+  display: flex;
+}
+
+.side-by-side-block .theme-code-block {
+  flex: 1;
 }

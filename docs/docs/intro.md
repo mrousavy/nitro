@@ -17,11 +17,6 @@ interface Math extends HybridObject {
   readonly pi: number
   add(a: number, b: number): number
 }
-
-
-
-
-
 ```
 
 </div>
@@ -59,9 +54,6 @@ class HybridMath : HybridMathSpec {
     return a + b
   }
 }
-
-
-
 ```
 
 </div>
@@ -93,14 +85,6 @@ class HybridMath : HybridMathSpec {
     return Promise.async { a + b }
   }
 }
-
-
-
-
-
-
-
-
 ```
 
 </div>
@@ -141,11 +125,6 @@ class HybridMath : HybridMathSpec {
     return a + b
   }
 }
-
-
-
-
-
 ```
 
 </div>
@@ -179,10 +158,6 @@ class HybridMath : HybridMathSpec {
     return Promise.async { a + b }
   }
 }
-
-
-
-
 ```
 
 </div>

@@ -414,9 +414,6 @@ Nitro safely wraps the result types of callbacks that return a value in **Promis
 interface Math extends HybridObject {
   some(getValue: () => number): void
 }
-
-
-
 ```
 
 </div>
@@ -652,10 +649,6 @@ interface Cropper extends HybridObject {
   crop(image: Image,
        size: Size): Image
 }
-
-
-
-
 ```
 
 </div>
