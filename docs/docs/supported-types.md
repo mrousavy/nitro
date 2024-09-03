@@ -266,7 +266,7 @@ This allows your native code to perform heavy-, long-running tasks in parallel, 
 
 <Tabs>
   <TabItem value="ts" label="TypeScript" default>
-    In TypeScript, a `Promise<T>` is represented using the built-in `Promise<T>` type, which can be awaited:
+    In JS, a Promise is represented using the built-in `Promise<T>` type, which can be awaited:
 
     ```ts
     interface Math extends HybridObject {
