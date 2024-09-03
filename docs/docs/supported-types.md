@@ -719,7 +719,7 @@ class HybridCropper: HybridCropperSpec {
     </div>
 
     Nitro enforces full type-safety to avoid passing or returning wrong types.
-    Both `value` and `remainder` are always part of `Result`, they are never a different type than a `number`, and never null or undefined.
+    Both `name` and `age` are always part of `Person`, they are never a different type than a `string`/`number`, and never null or undefined.
 
     This makes the TypeScript definition the **single source of truth**, allowing you to rely on types! 🤩
 
