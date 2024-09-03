@@ -333,12 +333,12 @@ func saveToFile(image: HybridImage) -> Promise<Void> {
 Callbacks are functions created in one language and passed to another to provide a way to "call back" later.
 
 Nitro has a clever reference counting system to allow users to use callbacks/functions from JS safely, and without any limitations.
-Each callback can be held as a strong reference on the native side, and safely be called as often as needed.
+Each callback holds a strong reference on the native side and can be called as often as needed.
 Once the callback is no longer used, it will be safely deleted from memory.
 
 <Tabs>
   <TabItem value="ts" label="TypeScript" default>
-    In TypeScript, a callback is representing as an anonymous function:
+    In TypeScript, a callback is represented as an anonymous function:
 
     ```ts
     type Orientation = "portrait" | "landscape"
