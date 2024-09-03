@@ -35,8 +35,6 @@ class HybridMath : public HybridMathSpec {
 Nitro strictly enforces **type-safety** and **null-safety** - both at compile-time and at runtime.
 This prevents accidentally passing a wrong type to `add(..)` (for example, a `string`) and performs null-checks to prevent passing and returning `null`/`undefined` values.
 
-On the native side (C++/Swift/Kotlin), type-, and null-safety is enforced via the compiler, and via debug-only runtime checks. Your native method's arguments are guaranteed to be type-safe and null-safe, and the compiler enforces return types so you cannot return a value that isn't expected by the TypeScript specs.
-
 On the JS side (TypeScript), type- and null-safety is enforced via TypeScript - so use it!
 
 ## Supported Types
@@ -184,7 +182,7 @@ This will replace the following arrays:
 
 ### Optionals (`T?`)
 
-Optional or nullable values can be declared using either the questionmark operator (`?`), or by adding an `undefined` variant:
+Optional or nullable values can be declared either by using the questionmark operator (`?`), or by adding an `undefined` variant:
 
 <Tabs>
   <TabItem value="ts" label="TypeScript" default>
@@ -268,7 +266,7 @@ This allows your native code to perform heavy-, long-running tasks in parallel, 
 
 <Tabs>
   <TabItem value="ts" label="TypeScript" default>
-    In TypeScript, a `Promise<T>` is represented using the built-in `Promise<T>` type:
+    In TypeScript, a `Promise<T>` is represented using the built-in `Promise<T>` type, which can be awaited:
 
     ```ts
     interface Math extends HybridObject {
