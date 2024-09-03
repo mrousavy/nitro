@@ -89,6 +89,10 @@ public:
     }
   }
 
+  int getBufferSize() {
+    return static_cast<int>(_arrayBuffer->size());
+  }
+
 public:
   /**
    * Get the underlying `ArrayBuffer`.
@@ -112,7 +116,8 @@ public:
   static void registerNatives() {
     registerHybrid(
         {makeNativeMethod("initHybrid", JArrayBuffer::initHybrid), makeNativeMethod("getByteBuffer", JArrayBuffer::getByteBuffer),
-         makeNativeMethod("getIsByteBuffer", JArrayBuffer::getIsByteBuffer), makeNativeMethod("getIsOwner", JArrayBuffer::getIsOwner)});
+         makeNativeMethod("getIsByteBuffer", JArrayBuffer::getIsByteBuffer), makeNativeMethod("getIsOwner", JArrayBuffer::getIsOwner),
+         makeNativeMethod("getBufferSize", JArrayBuffer::getBufferSize)});
   }
 };
 
