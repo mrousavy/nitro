@@ -3,6 +3,7 @@ package com.margelo.nitro.core
 import androidx.annotation.Keep
 import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
+import dalvik.annotation.optimization.CriticalNative
 import java.nio.ByteBuffer
 
 /**
@@ -43,7 +44,7 @@ class ArrayBuffer {
     /**
      * Get the size of bytes in this `ArrayBuffer`.
      */
-    val size: Long
+    val size: Int
         get() = getBufferSize()
 
     /**
@@ -83,17 +84,20 @@ class ArrayBuffer {
         mHybridData = hybridData
     }
 
-    private external fun getByteBuffer(copyIfNeeded: Boolean): ByteBuffer
-    private external fun getIsOwner(): Boolean
-    private external fun getIsByteBuffer(): Boolean
     private external fun initHybrid(buffer: ByteBuffer): HybridData
-    private external fun getBufferSize(): Long
+    private external fun getByteBuffer(copyIfNeeded: Boolean): ByteBuffer
+    @CriticalNative
+    private external fun getIsOwner(): Boolean
+    @CriticalNative
+    private external fun getIsByteBuffer(): Boolean
+    @CriticalNative
+    private external fun getBufferSize(): Int
 
     companion object {
         /**
          * Copy the given `ArrayBuffer` into a new **owning** `ArrayBuffer`.
          */
-        public fun copyOf(other: ArrayBuffer): ArrayBuffer {
+        fun copyOf(other: ArrayBuffer): ArrayBuffer {
             // 1. Create a new buffer with the same size as the other
             val newBuffer = ByteBuffer.allocateDirect(other.size)
             // 2. Prepare the source buffer
@@ -101,7 +105,7 @@ class ArrayBuffer {
             originalBuffer.rewind()
             // 3. Copy over the source buffer into the new buffer
             newBuffer.put(originalBuffer)
-            // 4. Rewing both buffers again to index 0
+            // 4. Rewind both buffers again to index 0
             newBuffer.rewind()
             originalBuffer.rewind()
             // 5. Create a new `ArrayBuffer`

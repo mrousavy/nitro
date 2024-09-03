@@ -89,8 +89,8 @@ public:
     }
   }
 
-  jlong getBufferSize() {
-    return static_cast<jlong>(_arrayBuffer->size());
+  int getBufferSize() {
+    return static_cast<int>(_arrayBuffer->size());
   }
 
 public:
