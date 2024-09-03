@@ -91,3 +91,16 @@ pre code:has(.code-block-diff-add-line) {
 pre code:has(.code-block-diff-remove-line) {
   padding-left: 40px!important;
 }
+
+.side-by-side-container {
+  display: flex;
+  justify-content: space-evenly;
+  max-width: 100%;
+  gap: 15px;
+  box-sizing: border-box;
+}
+
+.side-by-side-block {
+  max-width: 50%;
+  box-sizing: border-box;
+}

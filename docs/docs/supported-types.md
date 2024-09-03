@@ -11,8 +11,8 @@ Nitro uses an extensible typing system to efficiently convert between JS and C++
 For example, a JS `number` will always be a `double` on the native side:
 
 
-<div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
-<div style={{ flex: 1, maxWidth: '50%', marginRight: 15 }}>
+<div className="side-by-side-container">
+<div className="side-by-side-block">
 
 ```ts title="Math.nitro.ts"
 interface Math extends HybridObject {
@@ -21,7 +21,7 @@ interface Math extends HybridObject {
 ```
 
 </div>
-<div style={{ flex: 1, maxWidth: '50%', marginLeft: 15 }}>
+<div className="side-by-side-block">
 
 ```cpp title="HybridMath.hpp"
 class HybridMath : public HybridMathSpec {
