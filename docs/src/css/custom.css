@@ -9,9 +9,9 @@
   --ifm-color-primary-lightest: #8abcfb;
   --ifm-code-font-size: 95%;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.05);
+  --ifm-background-color: #f0f9ff;
+  --ifm-color-accent: #ff4c4c;
 
-  /* Accent color for specific elements */
-  --ifm-color-accent: #ff4c4c; /* Slightly brighter Red accent for better contrast */
   --code-diff-add: #c8f2c299;
   --code-diff-remove: #fcd4d499;
 }
@@ -24,8 +24,8 @@
   --ifm-color-primary-light: #66b2ff;
   --ifm-color-primary-lighter: #80c1ff;
   --ifm-color-primary-lightest: #99d1ff;
-  --ifm-background-color: #151515 !important;
-  --ifm-background-surface-color: #151515 !important;
+  --ifm-background-color: #191e2d !important;
+  --ifm-background-surface-color: #232a3f !important;
   --docusaurus-highlighted-code-line-bg: rgba(255, 255, 255, 0.2);
 
   /* Accent color for specific elements */
@@ -35,24 +35,40 @@
 }
 
 .footer {
-  --ifm-footer-background-color: #fbfbfb !important;
+  --ifm-footer-background-color: #e0f2ff !important;
+}
+
+.footer__copyright {
+  text-align: left;
+  opacity: 0.3;
 }
 [data-theme='light'] .footer {
   border-top: 2px solid #232a3f;
-  --ifm-footer-color: #d4d4d4 !important;
-  --ifm-footer-link-color: #868686 !important;
-  --ifm-footer-title-color: #2a2a2a !important;
+  --ifm-footer-color: #232a3f !important;
+  --ifm-footer-link-color: #232a3f !important;
+  --ifm-footer-title-color: #232a3f !important;
 }
 [data-theme='dark'] .footer {
-  border-top: 2px solid #232a3f;
-  --ifm-footer-background-color: #181818 !important;
-  --ifm-footer-color: #404040 !important;
-  --ifm-footer-link-color: #868686 !important;
-  --ifm-footer-title-color: #dedede !important;
+  border-top: 2px solid #656d86;
+  --ifm-footer-background-color: #191e2d !important;
+  --ifm-footer-color: #a8c4d8 !important;
+  --ifm-footer-link-color: #a8c4d8 !important;
+  --ifm-footer-title-color: #a8c4d8 !important;
 }
 .navbar {
   border-bottom: 2px solid #232a3f;
+  background-color: #e0f2ff;
 }
+[data-theme='dark'] .navbar {
+  background-color: #191e2d;
+  border-bottom: 2px solid #656d86;
+}
+.navbar a {
+  font-family: 'Satoshi', sans-serif;
+  font-weight: 700;
+  /* text-transform: uppercase; */
+}
+
 .hero__title {
   font-family: 'Clash Display', sans-serif;
   font-weight: 500;

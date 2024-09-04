@@ -4,9 +4,11 @@
   padding: 4rem 0;
   width: 100%;
   border-top: 2px solid #232a3f;
+  background-color: #f0f9ff;
 }
 [data-theme='dark'] .features {
-  border-top: 2px solid #232a3f;
+  border-top: 2px solid #656d86;
+  background-color: #191e2d;
 }
 
 .featureSvg {

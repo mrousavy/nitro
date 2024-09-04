@@ -8,9 +8,12 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  padding: 4rem 0;
+  padding: 6rem 0;
   background-color: #92c5e7;
   background: color(display-p3 0.5707 0.772 0.9073);
+}
+[data-theme='dark'] .heroBanner {
+  background-color: #183f58;
 }
 
 .heroLogo {

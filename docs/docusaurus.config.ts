@@ -69,21 +69,22 @@ const config: Config = {
     ],
     colorMode: {
       defaultMode: 'light',
-      disableSwitch: false,
-      respectPrefersColorScheme: true,
+      disableSwitch: true,
+      respectPrefersColorScheme: false,
     },
     navbar: {
-      title: 'Nitro',
       logo: {
         alt: 'Nitrous Logo',
-        src: 'img/nos.png',
+        src: 'img/logo.svg',
+        height: 32,
+        width: 160,
       },
       items: [
         {
           type: 'docSidebar',
           sidebarId: 'tutorialSidebar',
-          position: 'left',
-          label: 'Tutorial',
+          position: 'right',
+          label: 'Docs',
         },
         {
           href: 'https://github.com/mrousavy/nitro',
