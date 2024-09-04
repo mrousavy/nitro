@@ -4,16 +4,19 @@
  */
 
 .heroBanner {
-  padding: 4rem 0;
-  text-align: center;
   display: flex;
   align-items: center;
   justify-content: center;
-  position: relative;
   overflow: hidden;
-  min-height: 500px;
+  padding: 4rem 0;
+  background-color: #92c5e7;
+  background: color(display-p3 0.5707 0.772 0.9073);
 }
 
+.heroLogo {
+  max-width: 25rem;
+  width: 100%;
+}
 @media screen and (max-width: 996px) {
   .heroBanner {
     padding: 2rem;
@@ -24,94 +27,53 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 12px;
-  background: linear-gradient(0deg, #2b2b2b 0%, #575757 100%);
+  font-weight: 700;
+  font-size: 1.3rem;
+  padding: 10px 45px;
+  border-radius: 8px;
   color: white;
-  font-weight: 600;
-  font-size: 1.1rem;
-  padding: 8px 32px;
-  font-family: 'Satoshi', sans-serif;
-  transition: all 0.15s ease-in-out;
-  box-shadow:
-    0px 0px 0px 1.5px rgba(255, 255, 255, 0.1) inset,
-    0px 12px 32px 0px rgba(7, 7, 7, 0.3),
-    0px 0px 0px 1.5px #313131;
+  border: 2px solid #212a41;
+  background: #d32e5e;
+  background: color(display-p3 0.7608 0.2431 0.3725);
+  transition: transform 0.2s ease;
+  position: relative;
+  transform-style: preserve-3d;
 }
-
-.heroButton:hover {
-  text-decoration: none;
-  color: white;
-  transform: scale(1.05);
-  box-shadow:
-    0px 0px 0px 1.5px rgba(255, 255, 255, 0.1) inset,
-    0px 16px 40px 0px rgba(7, 7, 7, 0.6),
-    0px 0px 0px 1.5px #313131;
-  transition: all 0.15s ease-in-out;
-}
-.heroButtonSimple {
+.heroButton::before,
+.heroButton::after {
+  content: '';
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 12px;
-  color: black;
-  background-color: white;
-  font-weight: 600;
-  font-size: 1.1rem;
-  padding: 8px 32px;
-  font-family: 'Satoshi', sans-serif;
-  transition: all 0.15s ease-in-out;
-  box-shadow: 0px 12px 32px 0px rgba(7, 7, 7, 0.1);
-  /* 0px 0px 0px 3px rgba(7, 7, 7, 0.08); */
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border: 2px solid #212a41;
+  border-radius: 8px;
+  transition: transform 0.2s ease;
+  transform: translateZ(-1px);
+}
+.heroButton::before {
+  background-color: #289eec;
+}
+.heroButton::after {
+  background-color: #59b3ef;
+}
+.heroButton:hover {
+  transform: translate(-16px, -16px);
+  text-decoration: none;
+  color: white;
+}
+
+.heroButton:hover::before {
+  transform: translate(8px, 8px) translateZ(-1px);
+}
+.heroButton:hover::after {
+  transform: translate(16px, 16px) translateZ(-2px);
 }
 
 .heroImage {
   width: 10rem;
-}
-
-.bgPattern {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: url('/static/img/grid-bg.png');
-  background-size: 64px 64px;
-  background-repeat: repeat;
-  opacity: 0.2;
-}
-.bgNoise {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: url('/static/img/noise.png');
-  background-size: 64px 64px;
-  background-repeat: repeat;
-  mix-blend-mode: screen;
-  opacity: 0.25;
-}
-
-[data-theme='dark'] .bgNoise {
-  mix-blend-mode: multiply;
-}
-
-[data-theme='light'] .bgPattern {
-  filter: invert(1);
-}
-
-.heroBgImage {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: bottom;
-}
-
-[data-theme='dark'] .heroBgImage {
-  filter: invert(1) hue-rotate(180deg);
 }
 
 .heroContentContainer {
@@ -120,10 +82,12 @@
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  text-align: center;
+  gap: 1rem;
 }
 
-.heroLogo {
-  width: 100px;
-  height: 100px;
+.heroIcon {
+  width: 150px;
+  height: 150px;
   color: white;
 }

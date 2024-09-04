@@ -19,7 +19,6 @@ const config: Config = {
   projectName: 'nitro',
   deploymentBranch: 'gh-pages',
   trailingSlash: false,
-
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
 

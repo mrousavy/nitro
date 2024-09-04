@@ -1,26 +1,14 @@
-/**
- * Any CSS included here will be global. The classic template
- * bundles Infima by default. Infima is a CSS framework designed to
- * work well for content-centric websites.
- */
-
-/* You can override the default Infima variables here. */
 :root {
   --ifm-font-family-base: 'Satoshi', sans-serif;
-  --ifm-color-primary: #006bb6; /* More vibrant, easier-to-read Blue */
-  --ifm-color-primary-dark: #1560c4; /* Slightly darker, but still bright */
-  --ifm-color-primary-darker: #124ca1; /* Darker Blue, but more legible */
-  --ifm-color-primary-darkest: #0f3b7e; /* Darkest Blue, keeping it visible */
-  --ifm-color-primary-light: #4a90e2; /* Lighter Blue for contrast */
-  --ifm-color-primary-lighter: #6aa6f2; /* Even lighter for hover states, etc. */
-  --ifm-color-primary-lightest: #8abcfb; /* Lightest Blue for backgrounds */
+  --ifm-color-primary: #006bb6;
+  --ifm-color-primary-dark: #1560c4;
+  --ifm-color-primary-darker: #124ca1;
+  --ifm-color-primary-darkest: #0f3b7e;
+  --ifm-color-primary-light: #4a90e2;
+  --ifm-color-primary-lighter: #6aa6f2;
+  --ifm-color-primary-lightest: #8abcfb;
   --ifm-code-font-size: 95%;
-  --docusaurus-highlighted-code-line-bg: rgba(
-    0,
-    0,
-    0,
-    0.05
-  ); /* Reduced contrast for better readability */
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.05);
 
   /* Accent color for specific elements */
   --ifm-color-accent: #ff4c4c; /* Slightly brighter Red accent for better contrast */
@@ -28,23 +16,17 @@
   --code-diff-remove: #fcd4d499;
 }
 
-/* For readability concerns, you should choose a lighter palette in dark mode. */
 [data-theme='dark'] {
-  --ifm-color-primary: #3399ff; /* Lighter Vibrant Blue */
-  --ifm-color-primary-dark: #2e89e0; /* Slightly darker Blue */
-  --ifm-color-primary-darker: #2877c7; /* Even darker Blue */
-  --ifm-color-primary-darkest: #2064a8; /* Darker but still bright Blue */
-  --ifm-color-primary-light: #66b2ff; /* Very Light Blue */
-  --ifm-color-primary-lighter: #80c1ff; /* Lighter Blue */
-  --ifm-color-primary-lightest: #99d1ff; /* Lightest Blue */
+  --ifm-color-primary: #3399ff;
+  --ifm-color-primary-dark: #2e89e0;
+  --ifm-color-primary-darker: #2877c7;
+  --ifm-color-primary-darkest: #2064a8;
+  --ifm-color-primary-light: #66b2ff;
+  --ifm-color-primary-lighter: #80c1ff;
+  --ifm-color-primary-lightest: #99d1ff;
   --ifm-background-color: #151515 !important;
   --ifm-background-surface-color: #151515 !important;
-  --docusaurus-highlighted-code-line-bg: rgba(
-    255,
-    255,
-    255,
-    0.2
-  ); /* Slightly more contrast */
+  --docusaurus-highlighted-code-line-bg: rgba(255, 255, 255, 0.2);
 
   /* Accent color for specific elements */
   --ifm-color-accent: #ff4c4c; /* Slightly brighter Red accent for better contrast */
@@ -56,30 +38,30 @@
   --ifm-footer-background-color: #fbfbfb !important;
 }
 [data-theme='light'] .footer {
-  border-top: 1px solid rgba(0, 0, 0, 0.04);
+  border-top: 2px solid #232a3f;
   --ifm-footer-color: #d4d4d4 !important;
   --ifm-footer-link-color: #868686 !important;
   --ifm-footer-title-color: #2a2a2a !important;
 }
 [data-theme='dark'] .footer {
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  border-top: 2px solid #232a3f;
   --ifm-footer-background-color: #181818 !important;
   --ifm-footer-color: #404040 !important;
   --ifm-footer-link-color: #868686 !important;
   --ifm-footer-title-color: #dedede !important;
 }
-
+.navbar {
+  border-bottom: 2px solid #232a3f;
+}
 .hero__title {
-  /* Your custom styles here */
   font-family: 'Clash Display', sans-serif;
   font-weight: 500;
   font-size: 3rem;
 }
 .hero__subtitle {
-  /* Your custom styles here */
   font-family: 'Satoshi', sans-serif;
   font-weight: 500;
-  opacity: 0.7;
+  color: #232a3f;
   font-size: 1.5rem;
   max-width: 700px;
 }
