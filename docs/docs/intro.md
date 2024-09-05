@@ -208,7 +208,7 @@ public class ExpoSettingsModule: Module {
   </tr>
   <tr>
     <td><code>bigint</code></td>
-    <td>❌</td>
+    <td>✅</td>
     <td>❌</td>
     <td>✅</td>
   </tr>
@@ -256,7 +256,7 @@ public class ExpoSettingsModule: Module {
   </tr>
   <tr>
     <td><code>A | B | C | ...</code></td>
-    <td>❌</td>
+    <td>✅</td>
     <td>❌</td>
     <td>✅</td>
   </tr>
@@ -268,31 +268,31 @@ public class ExpoSettingsModule: Module {
   </tr>
   <tr>
     <td><code>ArrayBuffer</code></td>
-    <td>❌</td>
+    <td>✅</td>
     <td>❌</td>
     <td>✅</td>
   </tr>
   <tr>
     <td>..any <code>HybridObject</code></td>
-    <td>❌</td>
+    <td>✅</td>
     <td>❌</td>
     <td>✅</td>
   </tr>
   <tr>
     <td>..any <code>interface</code></td>
-    <td>❌</td>
+    <td>❌ (no codegen)</td>
     <td>✅</td>
     <td>✅</td>
   </tr>
   <tr>
     <td>..any <code>enum</code></td>
-    <td>❌</td>
+    <td>❌ (no codegen)</td>
     <td>✅</td>
     <td>✅</td>
   </tr>
   <tr>
     <td>..any <code>union</code></td>
-    <td>❌</td>
+    <td>❌ (no codegen)</td>
     <td>❌</td>
     <td>✅</td>
   </tr>
