@@ -443,7 +443,7 @@ case ${i}:
             const returnType = funcType.returnType.getCode('swift')
             const signature = `(${paramsSignature.join(', ')}) -> ${returnType}`
             const paramsForward = funcType.parameters.map((p) => {
-              const bridged = new SwiftCxxBridgedType(p)
+              const bridged = new SwiftCxxBridgedType(p, true)
               return bridged.parseFromSwiftToCpp(p.escapedName, 'swift')
             })
 
