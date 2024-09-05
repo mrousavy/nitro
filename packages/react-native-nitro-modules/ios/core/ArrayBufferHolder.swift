@@ -52,11 +52,12 @@ public extension ArrayBufferHolder {
    */
   static func copy(of other: ArrayBufferHolder) -> ArrayBufferHolder {
     let data = UnsafeMutablePointer<UInt8>.allocate(capacity: other.size)
-    data.initialize(from: &other.data, count: other.size)
+    let pointer = other.data.assumingMemoryBound(to: UInt8.self)
+    data.initialize(from: pointer, count: other.size)
 
     let deleteFunc = SwiftClosure {
       data.deallocate()
     }
-    return ArrayBufferHolder.makeBuffer(data, size, deleteFunc)
+    return ArrayBufferHolder.makeBuffer(data, other.size, deleteFunc)
   }
 }
