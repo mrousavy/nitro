@@ -124,7 +124,7 @@ private:
     } else {
       // it is a custom type, parse it to a JS value
       ReturnType result = function(JSIConverter<std::decay_t<Args>>::fromJSI(runtime, args[Is])...);
-      return JSIConverter<ReturnType>::toJSI(runtime, result);
+      return JSIConverter<ReturnType>::toJSI(runtime, std::forward<ReturnType>(result));
     }
   }
 };

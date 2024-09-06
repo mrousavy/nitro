@@ -63,7 +63,7 @@ struct JSIConverter<std::future<TResult>> final {
             } else {
               // it's returning a custom type, convert it to a jsi::Value
               TResult result = sharedFuture->get();
-              jsi::Value jsResult = JSIConverter<TResult>::toJSI(runtime, result);
+              jsi::Value jsResult = JSIConverter<TResult>::toJSI(runtime, std::forward<TResult>(result));
               promise->resolve(runtime, std::move(jsResult));
             }
           } catch (const std::exception& exception) {
