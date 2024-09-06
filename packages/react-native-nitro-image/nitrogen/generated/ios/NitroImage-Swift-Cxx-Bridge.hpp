@@ -57,6 +57,8 @@ namespace margelo::nitro::image::bridge::swift {
       _func(path);
     }
   
+    const std::function<void(const std::string& /* path */)>& getFunction() const { return _func; }
+  
   private:
     std::function<void(const std::string& /* path */)> _func;
   };
@@ -296,6 +298,8 @@ namespace margelo::nitro::image::bridge::swift {
       _func();
     }
   
+    const std::function<void()>& getFunction() const { return _func; }
+  
   private:
     std::function<void()> _func;
   };
@@ -323,6 +327,8 @@ namespace margelo::nitro::image::bridge::swift {
       auto result = _func();
       throw std::runtime_error("Promise cannot be passed to Swift yet!");
     }
+  
+    const std::function<std::future<double>()>& getFunction() const { return _func; }
   
   private:
     std::function<std::future<double>()> _func;
@@ -360,6 +366,8 @@ namespace margelo::nitro::image::bridge::swift {
       auto result = _func();
       throw std::runtime_error("Promise cannot be passed to Swift yet!");
     }
+  
+    const std::function<std::future<std::string>()>& getFunction() const { return _func; }
   
   private:
     std::function<std::future<std::string>()> _func;
@@ -431,6 +439,8 @@ namespace margelo::nitro::image::bridge::swift {
       _func(static_cast<Powertrain>(value));
     }
   
+    const std::function<void(Powertrain /* value */)>& getFunction() const { return _func; }
+  
   private:
     std::function<void(Powertrain /* value */)> _func;
   };
@@ -493,6 +503,8 @@ namespace margelo::nitro::image::bridge::swift {
     void call(const Person& p) const {
       _func(p);
     }
+  
+    const std::function<void(const Person& /* p */)>& getFunction() const { return _func; }
   
   private:
     std::function<void(const Person& /* p */)> _func;

@@ -235,6 +235,8 @@ public:
     ${callCppFuncBody}
   }
 
+  const ${actualType}& getFunction() const { return _func; }
+
 private:
   ${actualType} _func;
 };

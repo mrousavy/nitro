@@ -703,6 +703,8 @@ case ${i}:
 }()
   `.trim()
           }
+          case 'c++':
+            return `${swiftParameterName}.getFunction()`
           default:
             return swiftParameterName
         }
