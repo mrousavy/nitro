@@ -325,7 +325,7 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
       case 'promise': {
         switch (language) {
           case 'c++':
-            return 'throw std::runtime_error("Promise<..> cannot be converted to Swift yet!");'
+            return `[]() -> ${this.getTypeCode('c++')} { throw std::runtime_error("Promise<..> cannot be converted to Swift yet!"); }()`
           default:
             return cppParameterName
         }
@@ -437,6 +437,7 @@ case ${i}:
         switch (language) {
           case 'swift':
             const swiftClosureType = funcType.getCode('swift', false)
+            const bridge = this.getBridgeOrThrow()
             const paramsSignature = funcType.parameters.map(
               (p) => `${p.escapedName}: ${p.getCode('swift')}`
             )
@@ -450,16 +451,18 @@ case ${i}:
             if (funcType.returnType.kind === 'void') {
               return `
 { () -> ${swiftClosureType} in
+  let shared = bridge.share_${bridge.specializationName}(${cppParameterName})
   return { ${signature} in
-    ${cppParameterName}(${indent(paramsForward.join(', '), '  ')})
+    shared.pointee.call(${indent(paramsForward.join(', '), '  ')})
   }
 }()`.trim()
             } else {
               const resultBridged = new SwiftCxxBridgedType(funcType.returnType)
               return `
 { () -> ${swiftClosureType} in
+  let shared = bridge.share_${bridge.specializationName}(${cppParameterName})
   return { ${signature} in
-    let result = ${cppParameterName}(${paramsForward.join(', ')})
+    let result = shared.pointee.call(${paramsForward.join(', ')})
     return ${indent(resultBridged.parseFromSwiftToCpp('result', 'swift'), '  ')}
   }
 }()`.trim()
@@ -679,7 +682,7 @@ case ${i}:
             ].join(', ')
             const createFunc = `bridge.${bridge.funcName}`
             return `
-{ () -> bridge.${bridge.specializationName}.TFunc in
+{ () -> bridge.${bridge.specializationName} in
   class ClosureHolder {
     let closure: ${func.getCode('swift')}
     init(wrappingClosure closure: @escaping ${func.getCode('swift')}) {
@@ -699,8 +702,7 @@ case ${i}:
     Unmanaged<ClosureHolder>.fromOpaque(closureHolder!).release()
   }
 
-  let funcWrapper = ${createFunc}(closureHolder, callClosure, destroyClosure)
-  return funcWrapper.function
+  return ${createFunc}(closureHolder, callClosure, destroyClosure)
 }()
   `.trim()
           }

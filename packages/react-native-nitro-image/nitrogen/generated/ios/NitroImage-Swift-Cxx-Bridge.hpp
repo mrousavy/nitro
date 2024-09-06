@@ -44,15 +44,16 @@ namespace margelo::nitro::image { enum class Powertrain; }
 namespace margelo::nitro::image::bridge::swift {
 
   /**
-   * Wrapper class for a `std::function<void(const std::string& / * path * /)>`, this can be called from Swift.
+   * Specialized version of `std::function<void(const std::string&)>`.
    */
-  class Func_void_std__string {
+  using Func_void_std__string = std::function<void(const std::string& /* path */)>;
+  /**
+   * Wrapper class for a `std::function<void(const std::string& / * path * /)>`, this can be used from Swift.
+   */
+  class Func_void_std__string_Wrapper {
   public:
-    using TFunc = std::function<void(const std::string& /* path */)>;
-  
-  public:
-    explicit Func_void_std__string(const std::function<void(const std::string& /* path */)>& func): function(func) {}
-    explicit Func_void_std__string(std::function<void(const std::string& /* path */)>&& func): function(std::move(func)) {}
+    explicit Func_void_std__string_Wrapper(const std::function<void(const std::string& /* path */)>& func): function(func) {}
+    explicit Func_void_std__string_Wrapper(std::function<void(const std::string& /* path */)>&& func): function(std::move(func)) {}
   
     void call(const std::string& path) const {
       function(path);
@@ -66,8 +67,8 @@ namespace margelo::nitro::image::bridge::swift {
       call(sharedClosureHolder.get(), path);
     });
   }
-  inline std::shared_ptr<Func_void_std__string> share_Func_void_std__string(const Func_void_std__string& value) {
-    return std::make_shared<Func_void_std__string>(value);
+  inline std::shared_ptr<Func_void_std__string_Wrapper> share_Func_void_std__string(const Func_void_std__string& value) {
+    return std::make_shared<Func_void_std__string_Wrapper>(value);
   }
   
   /**
@@ -283,15 +284,16 @@ namespace margelo::nitro::image::bridge::swift {
   }
   
   /**
-   * Wrapper class for a `std::function<void()>`, this can be called from Swift.
+   * Specialized version of `std::function<void()>`.
    */
-  class Func_void {
+  using Func_void = std::function<void()>;
+  /**
+   * Wrapper class for a `std::function<void()>`, this can be used from Swift.
+   */
+  class Func_void_Wrapper {
   public:
-    using TFunc = std::function<void()>;
-  
-  public:
-    explicit Func_void(const std::function<void()>& func): function(func) {}
-    explicit Func_void(std::function<void()>&& func): function(std::move(func)) {}
+    explicit Func_void_Wrapper(const std::function<void()>& func): function(func) {}
+    explicit Func_void_Wrapper(std::function<void()>&& func): function(std::move(func)) {}
   
     void call() const {
       function();
@@ -305,24 +307,25 @@ namespace margelo::nitro::image::bridge::swift {
       call(sharedClosureHolder.get());
     });
   }
-  inline std::shared_ptr<Func_void> share_Func_void(const Func_void& value) {
-    return std::make_shared<Func_void>(value);
+  inline std::shared_ptr<Func_void_Wrapper> share_Func_void(const Func_void& value) {
+    return std::make_shared<Func_void_Wrapper>(value);
   }
   
   /**
-   * Wrapper class for a `std::function<std::future<double>()>`, this can be called from Swift.
+   * Specialized version of `std::function<std::future<double>()>`.
    */
-  class Func_std__future_double_ {
+  using Func_std__future_double_ = std::function<std::future<double>()>;
+  /**
+   * Wrapper class for a `std::function<std::future<double>()>`, this can be used from Swift.
+   */
+  class Func_std__future_double__Wrapper {
   public:
-    using TFunc = std::function<std::future<double>()>;
-  
-  public:
-    explicit Func_std__future_double_(const std::function<std::future<double>()>& func): function(func) {}
-    explicit Func_std__future_double_(std::function<std::future<double>()>&& func): function(std::move(func)) {}
+    explicit Func_std__future_double__Wrapper(const std::function<std::future<double>()>& func): function(func) {}
+    explicit Func_std__future_double__Wrapper(std::function<std::future<double>()>&& func): function(std::move(func)) {}
   
     PromiseHolder<double> call() const {
       auto result = function();
-      throw std::runtime_error("Promises cannot be passed to Swift yet!");
+      return []() -> PromiseHolder<double> { throw std::runtime_error("Promise<..> cannot be converted to Swift yet!"); }();
     }
   
     std::function<std::future<double>()> function;
@@ -334,8 +337,8 @@ namespace margelo::nitro::image::bridge::swift {
       return result.getFuture();
     });
   }
-  inline std::shared_ptr<Func_std__future_double_> share_Func_std__future_double_(const Func_std__future_double_& value) {
-    return std::make_shared<Func_std__future_double_>(value);
+  inline std::shared_ptr<Func_std__future_double__Wrapper> share_Func_std__future_double_(const Func_std__future_double_& value) {
+    return std::make_shared<Func_std__future_double__Wrapper>(value);
   }
   
   /**
@@ -347,19 +350,20 @@ namespace margelo::nitro::image::bridge::swift {
   }
   
   /**
-   * Wrapper class for a `std::function<std::future<std::string>()>`, this can be called from Swift.
+   * Specialized version of `std::function<std::future<std::string>()>`.
    */
-  class Func_std__future_std__string_ {
+  using Func_std__future_std__string_ = std::function<std::future<std::string>()>;
+  /**
+   * Wrapper class for a `std::function<std::future<std::string>()>`, this can be used from Swift.
+   */
+  class Func_std__future_std__string__Wrapper {
   public:
-    using TFunc = std::function<std::future<std::string>()>;
-  
-  public:
-    explicit Func_std__future_std__string_(const std::function<std::future<std::string>()>& func): function(func) {}
-    explicit Func_std__future_std__string_(std::function<std::future<std::string>()>&& func): function(std::move(func)) {}
+    explicit Func_std__future_std__string__Wrapper(const std::function<std::future<std::string>()>& func): function(func) {}
+    explicit Func_std__future_std__string__Wrapper(std::function<std::future<std::string>()>&& func): function(std::move(func)) {}
   
     PromiseHolder<std::string> call() const {
       auto result = function();
-      throw std::runtime_error("Promises cannot be passed to Swift yet!");
+      return []() -> PromiseHolder<std::string> { throw std::runtime_error("Promise<..> cannot be converted to Swift yet!"); }();
     }
   
     std::function<std::future<std::string>()> function;
@@ -371,8 +375,8 @@ namespace margelo::nitro::image::bridge::swift {
       return result.getFuture();
     });
   }
-  inline std::shared_ptr<Func_std__future_std__string_> share_Func_std__future_std__string_(const Func_std__future_std__string_& value) {
-    return std::make_shared<Func_std__future_std__string_>(value);
+  inline std::shared_ptr<Func_std__future_std__string__Wrapper> share_Func_std__future_std__string_(const Func_std__future_std__string_& value) {
+    return std::make_shared<Func_std__future_std__string__Wrapper>(value);
   }
   
   /**
@@ -418,15 +422,16 @@ namespace margelo::nitro::image::bridge::swift {
   }
   
   /**
-   * Wrapper class for a `std::function<void(Powertrain / * value * /)>`, this can be called from Swift.
+   * Specialized version of `std::function<void(Powertrain)>`.
    */
-  class Func_void_Powertrain {
+  using Func_void_Powertrain = std::function<void(Powertrain /* value */)>;
+  /**
+   * Wrapper class for a `std::function<void(Powertrain / * value * /)>`, this can be used from Swift.
+   */
+  class Func_void_Powertrain_Wrapper {
   public:
-    using TFunc = std::function<void(Powertrain /* value */)>;
-  
-  public:
-    explicit Func_void_Powertrain(const std::function<void(Powertrain /* value */)>& func): function(func) {}
-    explicit Func_void_Powertrain(std::function<void(Powertrain /* value */)>&& func): function(std::move(func)) {}
+    explicit Func_void_Powertrain_Wrapper(const std::function<void(Powertrain /* value */)>& func): function(func) {}
+    explicit Func_void_Powertrain_Wrapper(std::function<void(Powertrain /* value */)>&& func): function(std::move(func)) {}
   
     void call(Powertrain value) const {
       function(static_cast<Powertrain>(value));
@@ -440,8 +445,8 @@ namespace margelo::nitro::image::bridge::swift {
       call(sharedClosureHolder.get(), static_cast<int>(value));
     });
   }
-  inline std::shared_ptr<Func_void_Powertrain> share_Func_void_Powertrain(const Func_void_Powertrain& value) {
-    return std::make_shared<Func_void_Powertrain>(value);
+  inline std::shared_ptr<Func_void_Powertrain_Wrapper> share_Func_void_Powertrain(const Func_void_Powertrain& value) {
+    return std::make_shared<Func_void_Powertrain_Wrapper>(value);
   }
   
   /**
@@ -481,15 +486,16 @@ namespace margelo::nitro::image::bridge::swift {
   }
   
   /**
-   * Wrapper class for a `std::function<void(const Person& / * p * /)>`, this can be called from Swift.
+   * Specialized version of `std::function<void(const Person&)>`.
    */
-  class Func_void_Person {
+  using Func_void_Person = std::function<void(const Person& /* p */)>;
+  /**
+   * Wrapper class for a `std::function<void(const Person& / * p * /)>`, this can be used from Swift.
+   */
+  class Func_void_Person_Wrapper {
   public:
-    using TFunc = std::function<void(const Person& /* p */)>;
-  
-  public:
-    explicit Func_void_Person(const std::function<void(const Person& /* p */)>& func): function(func) {}
-    explicit Func_void_Person(std::function<void(const Person& /* p */)>&& func): function(std::move(func)) {}
+    explicit Func_void_Person_Wrapper(const std::function<void(const Person& /* p */)>& func): function(func) {}
+    explicit Func_void_Person_Wrapper(std::function<void(const Person& /* p */)>&& func): function(std::move(func)) {}
   
     void call(const Person& p) const {
       function(p);
@@ -503,8 +509,8 @@ namespace margelo::nitro::image::bridge::swift {
       call(sharedClosureHolder.get(), p);
     });
   }
-  inline std::shared_ptr<Func_void_Person> share_Func_void_Person(const Func_void_Person& value) {
-    return std::make_shared<Func_void_Person>(value);
+  inline std::shared_ptr<Func_void_Person_Wrapper> share_Func_void_Person(const Func_void_Person& value) {
+    return std::make_shared<Func_void_Person_Wrapper>(value);
   }
 
 } // namespace margelo::nitro::image::bridge::swift

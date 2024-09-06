@@ -178,6 +178,7 @@ function createCxxFunctionSwiftHelper(type: FunctionType): SwiftCxxHelper {
   ]
   const functionPointerParam = `${callFuncReturnType}(*call)(${callFuncParams.join(', ')})`
   const name = type.specializationName
+  const wrapperName = `${name}_Wrapper`
 
   let callCppFuncBody: string
   if (returnBridge.hasType) {
@@ -222,15 +223,16 @@ function createCxxFunctionSwiftHelper(type: FunctionType): SwiftCxxHelper {
     ],
     cxxCode: `
 /**
- * Wrapper class for a \`${escapeComments(actualType)}\`, this can be called from Swift.
+ * Specialized version of \`${type.getCode('c++', false)}\`.
  */
-class ${name} {
+using ${name} = ${actualType};
+/**
+ * Wrapper class for a \`${escapeComments(actualType)}\`, this can be used from Swift.
+ */
+class ${wrapperName} {
 public:
-  using TFunc = ${actualType};
-
-public:
-  explicit ${name}(const ${actualType}& func): function(func) {}
-  explicit ${name}(${actualType}&& func): function(std::move(func)) {}
+  explicit ${wrapperName}(const ${actualType}& func): function(func) {}
+  explicit ${wrapperName}(${actualType}&& func): function(std::move(func)) {}
 
   ${callFuncReturnType} call(${paramsSignature.join(', ')}) const {
     ${callCppFuncBody}
@@ -244,8 +246,8 @@ inline ${name} create_${name}(void* closureHolder, ${functionPointerParam}, void
     ${callSwiftFuncBody}
   });
 }
-inline std::shared_ptr<${name}> share_${name}(const ${name}& value) {
-  return std::make_shared<${name}>(value);
+inline std::shared_ptr<${wrapperName}> share_${name}(const ${name}& value) {
+  return std::make_shared<${wrapperName}>(value);
 }
     `.trim(),
   }
