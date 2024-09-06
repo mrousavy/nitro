@@ -9,6 +9,12 @@ import Foundation
 import NitroModules
 
 class HybridSwiftKotlinTestObject : HybridSwiftKotlinTestObjectSpec {
+  func doSomeStuff(withEnum callback: @escaping ((Powertrain) -> Void)) throws {
+    DispatchQueue.global().asyncAfter(deadline: .now() + 2) {
+      callback(.gas)
+    }
+  }
+  
   
   func getStringAsync() throws -> Promise<String> {
     return Promise.parallel {
