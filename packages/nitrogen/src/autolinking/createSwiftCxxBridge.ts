@@ -32,7 +32,7 @@ export function createSwiftCxxBridge(): SourceFile[] {
 
   const requiredImports = bridges.flatMap((b) => b.requiredIncludes)
   const includes = requiredImports
-    .map((i) => includeHeader(i))
+    .map((i) => includeHeader(i, false))
     .filter(isNotDuplicate)
   const forwardDeclarations = requiredImports
     .map((i) => i.forwardDeclaration)

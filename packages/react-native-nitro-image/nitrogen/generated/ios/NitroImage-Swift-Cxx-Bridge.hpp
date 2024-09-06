@@ -9,10 +9,14 @@
 #pragma once
 
 // Forward declarations of C++ defined types
+// Forward declaration of `ArrayBufferHolder` to properly resolve imports.
+namespace NitroModules { class ArrayBufferHolder; }
 // Forward declaration of `ArrayBuffer` to properly resolve imports.
 namespace NitroModules { class ArrayBuffer; }
 // Forward declaration of `Car` to properly resolve imports.
 namespace margelo::nitro::image { struct Car; }
+// Forward declaration of `HybridTestObjectSpecSwift` to properly resolve imports.
+namespace margelo::nitro::image { class HybridTestObjectSpecSwift; }
 // Forward declaration of `HybridTestObjectSpec` to properly resolve imports.
 namespace margelo::nitro::image { class HybridTestObjectSpec; }
 // Forward declaration of `OldEnum` to properly resolve imports.
@@ -23,23 +27,60 @@ namespace margelo::nitro::image { struct Person; }
 namespace margelo::nitro::image { enum class Powertrain; }
 
 // Include C++ defined types
-#include "Car.hpp"
-#include "HybridTestObjectSpec.hpp"
-#include "OldEnum.hpp"
-#include "Person.hpp"
-#include "Powertrain.hpp"
-#include <NitroModules/ArrayBuffer.hpp>
-#include <NitroModules/ArrayBufferHolder.hpp>
-#include <NitroModules/PromiseHolder.hpp>
-#include <functional>
-#include <future>
-#include <memory>
-#include <optional>
-#include <string>
-#include <tuple>
-#include <unordered_map>
-#include <variant>
-#include <vector>
+#if __has_include("Car.hpp")
+ #include "Car.hpp"
+#endif
+#if __has_include("HybridTestObjectSpec.hpp")
+ #include "HybridTestObjectSpec.hpp"
+#endif
+#if __has_include("HybridTestObjectSpecSwift.hpp")
+ #include "HybridTestObjectSpecSwift.hpp"
+#endif
+#if __has_include("OldEnum.hpp")
+ #include "OldEnum.hpp"
+#endif
+#if __has_include("Person.hpp")
+ #include "Person.hpp"
+#endif
+#if __has_include("Powertrain.hpp")
+ #include "Powertrain.hpp"
+#endif
+#if __has_include(<NitroModules/ArrayBuffer.hpp>)
+ #include <NitroModules/ArrayBuffer.hpp>
+#endif
+#if __has_include(<NitroModules/ArrayBufferHolder.hpp>)
+ #include <NitroModules/ArrayBufferHolder.hpp>
+#endif
+#if __has_include(<NitroModules/PromiseHolder.hpp>)
+ #include <NitroModules/PromiseHolder.hpp>
+#endif
+#if __has_include(<functional>)
+ #include <functional>
+#endif
+#if __has_include(<future>)
+ #include <future>
+#endif
+#if __has_include(<memory>)
+ #include <memory>
+#endif
+#if __has_include(<optional>)
+ #include <optional>
+#endif
+#if __has_include(<string>)
+ #include <string>
+#endif
+#if __has_include(<tuple>)
+ #include <tuple>
+#endif
+#if __has_include(<unordered_map>)
+ #include <unordered_map>
+#endif
+#if __has_include(<variant>)
+ #include <variant>
+#endif
+#if __has_include(<vector>)
+ #include <vector>
+#endif
 
 /**
  * Contains specialized versions of C++ templated types so they can be accessed from Swift,
