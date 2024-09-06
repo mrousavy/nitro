@@ -9,6 +9,8 @@
 #pragma once
 
 // Forward declarations of C++ defined types
+// Forward declaration of `ArrayBuffer` to properly resolve imports.
+namespace NitroModules { class ArrayBuffer; }
 // Forward declaration of `Car` to properly resolve imports.
 namespace margelo::nitro::image { struct Car; }
 // Forward declaration of `HybridTestObjectSpec` to properly resolve imports.
@@ -26,6 +28,8 @@ namespace margelo::nitro::image { enum class Powertrain; }
 #include "OldEnum.hpp"
 #include "Person.hpp"
 #include "Powertrain.hpp"
+#include <NitroModules/ArrayBuffer.hpp>
+#include <NitroModules/ArrayBufferHolder.hpp>
 #include <NitroModules/PromiseHolder.hpp>
 #include <functional>
 #include <future>
@@ -55,7 +59,7 @@ namespace margelo::nitro::image::bridge::swift {
     explicit Func_void_std__string_Wrapper(const std::function<void(const std::string& /* path */)>& func): function(func) {}
     explicit Func_void_std__string_Wrapper(std::function<void(const std::string& /* path */)>&& func): function(std::move(func)) {}
   
-    void call(const std::string& path) const {
+    void call(std::string path) const {
       function(path);
     }
   
@@ -422,31 +426,31 @@ namespace margelo::nitro::image::bridge::swift {
   }
   
   /**
-   * Specialized version of `std::function<void(Powertrain)>`.
+   * Specialized version of `std::function<void(Powertrain, const std::string&, const std::shared_ptr<ArrayBuffer>&)>`.
    */
-  using Func_void_Powertrain = std::function<void(Powertrain /* value */)>;
+  using Func_void_Powertrain_std__string_std__shared_ptr_ArrayBuffer_ = std::function<void(Powertrain /* value */, const std::string& /* str */, const std::shared_ptr<ArrayBuffer>& /* buf */)>;
   /**
-   * Wrapper class for a `std::function<void(Powertrain / * value * /)>`, this can be used from Swift.
+   * Wrapper class for a `std::function<void(Powertrain / * value * /, const std::string& / * str * /, const std::shared_ptr<ArrayBuffer>& / * buf * /)>`, this can be used from Swift.
    */
-  class Func_void_Powertrain_Wrapper {
+  class Func_void_Powertrain_std__string_std__shared_ptr_ArrayBuffer__Wrapper {
   public:
-    explicit Func_void_Powertrain_Wrapper(const std::function<void(Powertrain /* value */)>& func): function(func) {}
-    explicit Func_void_Powertrain_Wrapper(std::function<void(Powertrain /* value */)>&& func): function(std::move(func)) {}
+    explicit Func_void_Powertrain_std__string_std__shared_ptr_ArrayBuffer__Wrapper(const std::function<void(Powertrain /* value */, const std::string& /* str */, const std::shared_ptr<ArrayBuffer>& /* buf */)>& func): function(func) {}
+    explicit Func_void_Powertrain_std__string_std__shared_ptr_ArrayBuffer__Wrapper(std::function<void(Powertrain /* value */, const std::string& /* str */, const std::shared_ptr<ArrayBuffer>& /* buf */)>&& func): function(std::move(func)) {}
   
-    void call(Powertrain value) const {
-      function(static_cast<Powertrain>(value));
+    void call(int value, std::string str, std::shared_ptr<ArrayBuffer> buf) const {
+      function(static_cast<Powertrain>(value), str, buf);
     }
   
-    std::function<void(Powertrain /* value */)> function;
+    std::function<void(Powertrain /* value */, const std::string& /* str */, const std::shared_ptr<ArrayBuffer>& /* buf */)> function;
   };
-  inline Func_void_Powertrain create_Func_void_Powertrain(void* closureHolder, void(*call)(void* /* closureHolder */, int), void(*destroy)(void*)) {
+  inline Func_void_Powertrain_std__string_std__shared_ptr_ArrayBuffer_ create_Func_void_Powertrain_std__string_std__shared_ptr_ArrayBuffer_(void* closureHolder, void(*call)(void* /* closureHolder */, int, std::string, std::shared_ptr<ArrayBuffer>), void(*destroy)(void*)) {
     std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
-    return Func_void_Powertrain([sharedClosureHolder, call](Powertrain value) -> void {
-      call(sharedClosureHolder.get(), static_cast<int>(value));
+    return Func_void_Powertrain_std__string_std__shared_ptr_ArrayBuffer_([sharedClosureHolder, call](Powertrain value, const std::string& str, const std::shared_ptr<ArrayBuffer>& buf) -> void {
+      call(sharedClosureHolder.get(), static_cast<int>(value), str, buf);
     });
   }
-  inline std::shared_ptr<Func_void_Powertrain_Wrapper> share_Func_void_Powertrain(const Func_void_Powertrain& value) {
-    return std::make_shared<Func_void_Powertrain_Wrapper>(value);
+  inline std::shared_ptr<Func_void_Powertrain_std__string_std__shared_ptr_ArrayBuffer__Wrapper> share_Func_void_Powertrain_std__string_std__shared_ptr_ArrayBuffer_(const Func_void_Powertrain_std__string_std__shared_ptr_ArrayBuffer_& value) {
+    return std::make_shared<Func_void_Powertrain_std__string_std__shared_ptr_ArrayBuffer__Wrapper>(value);
   }
   
   /**
@@ -497,7 +501,7 @@ namespace margelo::nitro::image::bridge::swift {
     explicit Func_void_Person_Wrapper(const std::function<void(const Person& /* p */)>& func): function(func) {}
     explicit Func_void_Person_Wrapper(std::function<void(const Person& /* p */)>&& func): function(std::move(func)) {}
   
-    void call(const Person& p) const {
+    void call(Person p) const {
       function(p);
     }
   

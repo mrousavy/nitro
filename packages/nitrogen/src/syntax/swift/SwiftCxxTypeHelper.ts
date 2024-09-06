@@ -157,6 +157,11 @@ function createCxxFunctionSwiftHelper(type: FunctionType): SwiftCxxHelper {
       return `${p.getCode('c++')} ${p.escapedName}`
     }
   })
+  const callCppFuncParamsSignature = type.parameters.map((p) => {
+    const bridge = new SwiftCxxBridgedType(p)
+    const cppType = bridge.getTypeCode('c++')
+    return `${cppType} ${p.escapedName}`
+  })
   const callParamsForward = type.parameters.map((p) => {
     const bridge = new SwiftCxxBridgedType(p)
     return bridge.parseFromSwiftToCpp(p.escapedName, 'c++')
@@ -234,7 +239,7 @@ public:
   explicit ${wrapperName}(const ${actualType}& func): function(func) {}
   explicit ${wrapperName}(${actualType}&& func): function(std::move(func)) {}
 
-  ${callFuncReturnType} call(${paramsSignature.join(', ')}) const {
+  ${callFuncReturnType} call(${callCppFuncParamsSignature.join(', ')}) const {
     ${callCppFuncBody}
   }
 

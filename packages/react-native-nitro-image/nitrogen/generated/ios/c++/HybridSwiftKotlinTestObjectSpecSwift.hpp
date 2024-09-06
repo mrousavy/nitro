@@ -249,7 +249,7 @@ namespace margelo::nitro::image {
       auto __result = _swiftPart.getCarAsync();
       return __result.getFuture();
     }
-    inline void doSomeStuff(const std::function<void(Powertrain /* value */)>& withEnum) override {
+    inline void doSomeStuff(const std::function<void(Powertrain /* value */, const std::string& /* str */, const std::shared_ptr<ArrayBuffer>& /* buf */)>& withEnum) override {
       _swiftPart.doSomeStuff(withEnum);
     }
 

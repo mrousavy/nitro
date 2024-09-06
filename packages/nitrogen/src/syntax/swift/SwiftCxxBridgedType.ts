@@ -316,7 +316,7 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
         }
       case 'array-buffer': {
         switch (language) {
-          case 'c++':
+          case 'swift':
             return `ArrayBufferHolder(${cppParameterName})`
           default:
             return cppParameterName
@@ -444,7 +444,7 @@ case ${i}:
             const returnType = funcType.returnType.getCode('swift')
             const signature = `(${paramsSignature.join(', ')}) -> ${returnType}`
             const paramsForward = funcType.parameters.map((p) => {
-              const bridged = new SwiftCxxBridgedType(p, true)
+              const bridged = new SwiftCxxBridgedType(p)
               return bridged.parseFromSwiftToCpp(p.escapedName, 'swift')
             })
 
@@ -537,7 +537,7 @@ case ${i}:
       }
       case 'array-buffer': {
         switch (language) {
-          case 'c++':
+          case 'swift':
             return `${swiftParameterName}.getArrayBuffer()`
           default:
             return swiftParameterName

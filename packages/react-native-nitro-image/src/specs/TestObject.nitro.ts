@@ -147,7 +147,9 @@ export interface SwiftKotlinTestObject extends HybridObject<{ ios: 'swift' }> {
   getStringAsync(): Promise<string>
   getCarAsync(): Promise<Car>
 
-  doSomeStuff(withEnum: (value: Powertrain) => void): void
+  doSomeStuff(
+    withEnum: (value: Powertrain, str: string, buf: ArrayBuffer) => void
+  ): void
 }
 
 export interface KotlinTestObject extends HybridObject<{ android: 'kotlin' }> {

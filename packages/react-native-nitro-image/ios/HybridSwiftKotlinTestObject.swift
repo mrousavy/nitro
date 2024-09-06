@@ -13,9 +13,9 @@ class HybridSwiftKotlinTestObject : HybridSwiftKotlinTestObjectSpec {
     args.callback()
   }
   
-  func doSomeStuff(withEnum callback: @escaping ((Powertrain) -> Void)) throws {
+  func doSomeStuff(withEnum callback: @escaping ((Powertrain, String, ArrayBufferHolder) -> Void)) throws {
     DispatchQueue.global().asyncAfter(deadline: .now() + 2) {
-      callback(.gas)
+      callback(.gas, "HELLO!", .allocate(size: 2048))
     }
   }
   

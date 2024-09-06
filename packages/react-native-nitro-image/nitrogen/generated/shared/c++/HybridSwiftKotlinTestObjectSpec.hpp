@@ -115,7 +115,7 @@ namespace margelo::nitro::image {
       virtual std::future<double> getNumberAsync() = 0;
       virtual std::future<std::string> getStringAsync() = 0;
       virtual std::future<Car> getCarAsync() = 0;
-      virtual void doSomeStuff(const std::function<void(Powertrain /* value */)>& withEnum) = 0;
+      virtual void doSomeStuff(const std::function<void(Powertrain /* value */, const std::string& /* str */, const std::shared_ptr<ArrayBuffer>& /* buf */)>& withEnum) = 0;
 
     protected:
       // Hybrid Setup
