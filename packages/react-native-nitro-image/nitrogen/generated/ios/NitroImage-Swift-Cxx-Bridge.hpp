@@ -437,16 +437,16 @@ namespace margelo::nitro::image::bridge::swift {
     explicit Func_void_Powertrain_std__string_std__shared_ptr_ArrayBuffer__Wrapper(const std::function<void(Powertrain /* value */, const std::string& /* str */, const std::shared_ptr<ArrayBuffer>& /* buf */)>& func): function(func) {}
     explicit Func_void_Powertrain_std__string_std__shared_ptr_ArrayBuffer__Wrapper(std::function<void(Powertrain /* value */, const std::string& /* str */, const std::shared_ptr<ArrayBuffer>& /* buf */)>&& func): function(std::move(func)) {}
   
-    void call(int value, std::string str, std::shared_ptr<ArrayBuffer> buf) const {
-      function(static_cast<Powertrain>(value), str, buf);
+    void call(int value, std::string str, ArrayBufferHolder buf) const {
+      function(static_cast<Powertrain>(value), str, buf.getArrayBuffer());
     }
   
     std::function<void(Powertrain /* value */, const std::string& /* str */, const std::shared_ptr<ArrayBuffer>& /* buf */)> function;
   };
-  inline Func_void_Powertrain_std__string_std__shared_ptr_ArrayBuffer_ create_Func_void_Powertrain_std__string_std__shared_ptr_ArrayBuffer_(void* closureHolder, void(*call)(void* /* closureHolder */, int, std::string, std::shared_ptr<ArrayBuffer>), void(*destroy)(void*)) {
+  inline Func_void_Powertrain_std__string_std__shared_ptr_ArrayBuffer_ create_Func_void_Powertrain_std__string_std__shared_ptr_ArrayBuffer_(void* closureHolder, void(*call)(void* /* closureHolder */, int, std::string, ArrayBufferHolder), void(*destroy)(void*)) {
     std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
     return Func_void_Powertrain_std__string_std__shared_ptr_ArrayBuffer_([sharedClosureHolder, call](Powertrain value, const std::string& str, const std::shared_ptr<ArrayBuffer>& buf) -> void {
-      call(sharedClosureHolder.get(), static_cast<int>(value), str, buf);
+      call(sharedClosureHolder.get(), static_cast<int>(value), str, ArrayBufferHolder(buf));
     });
   }
   inline std::shared_ptr<Func_void_Powertrain_std__string_std__shared_ptr_ArrayBuffer__Wrapper> share_Func_void_Powertrain_std__string_std__shared_ptr_ArrayBuffer_(const Func_void_Powertrain_std__string_std__shared_ptr_ArrayBuffer_& value) {

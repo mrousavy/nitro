@@ -251,6 +251,12 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
             return this.type.getCode(language)
         }
       }
+      case 'array-buffer':
+        if (this.isBridgingToDirectCppTarget) {
+          return this.type.getCode(language)
+        } else {
+          return `ArrayBufferHolder`
+        }
       case 'string': {
         switch (language) {
           case 'c++':
@@ -317,7 +323,17 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
       case 'array-buffer': {
         switch (language) {
           case 'swift':
-            return `ArrayBufferHolder(${cppParameterName})`
+            if (this.isBridgingToDirectCppTarget) {
+              return `ArrayBufferHolder(${cppParameterName})`
+            } else {
+              return cppParameterName
+            }
+          case 'c++':
+            if (this.isBridgingToDirectCppTarget) {
+              return cppParameterName
+            } else {
+              return `ArrayBufferHolder(${cppParameterName})`
+            }
           default:
             return cppParameterName
         }
@@ -538,7 +554,17 @@ case ${i}:
       case 'array-buffer': {
         switch (language) {
           case 'swift':
-            return `${swiftParameterName}.getArrayBuffer()`
+            if (this.isBridgingToDirectCppTarget) {
+              return `${swiftParameterName}.getArrayBuffer()`
+            } else {
+              return swiftParameterName
+            }
+          case 'c++':
+            if (this.isBridgingToDirectCppTarget) {
+              return swiftParameterName
+            } else {
+              return `${swiftParameterName}.getArrayBuffer()`
+            }
           default:
             return swiftParameterName
         }
