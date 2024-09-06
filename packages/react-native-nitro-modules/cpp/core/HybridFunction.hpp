@@ -158,7 +158,7 @@ private:
     } else {
       // It's returning some C++ type, we need to convert that to a JSI value now.
       ReturnType result = (obj->*method)(JSIConverter<std::decay_t<Args>>::fromJSI(runtime, Is < argsSize ? args[Is] : defaultValue)...);
-      return JSIConverter<std::decay_t<ReturnType>>::toJSI(runtime, std::move(result));
+      return JSIConverter<ReturnType>::toJSI(runtime, std::forward<ReturnType>(result));
     }
   }
 
