@@ -323,11 +323,12 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
         }
       }
       case 'promise': {
-        const promise = getTypeAs(this.type, PromiseType)
-        const actualType = promise.resultingType.getCode('swift')
-        throw new Error(
-          `Promise<${actualType}> can not be passed from C++ to Swift yet! Await the Promise in JS, and pass ${actualType} to Swift instead.`
-        )
+        switch (language) {
+          case 'c++':
+            return `[]() -> ${this.getTypeCode('c++')} { throw std::runtime_error("Promise<..> cannot be converted to Swift yet!"); }()`
+          default:
+            return cppParameterName
+        }
       }
       case 'optional': {
         const optional = getTypeAs(this.type, OptionalType)
@@ -433,17 +434,17 @@ case ${i}:
       }
       case 'function': {
         const funcType = getTypeAs(this.type, FunctionType)
-        const bridge = this.getBridgeOrThrow()
         switch (language) {
           case 'swift':
             const swiftClosureType = funcType.getCode('swift', false)
+            const bridge = this.getBridgeOrThrow()
             const paramsSignature = funcType.parameters.map(
               (p) => `${p.escapedName}: ${p.getCode('swift')}`
             )
             const returnType = funcType.returnType.getCode('swift')
             const signature = `(${paramsSignature.join(', ')}) -> ${returnType}`
             const paramsForward = funcType.parameters.map((p) => {
-              const bridged = new SwiftCxxBridgedType(p)
+              const bridged = new SwiftCxxBridgedType(p, true)
               return bridged.parseFromSwiftToCpp(p.escapedName, 'swift')
             })
 
@@ -452,7 +453,7 @@ case ${i}:
 { () -> ${swiftClosureType} in
   let shared = bridge.share_${bridge.specializationName}(${cppParameterName})
   return { ${signature} in
-    shared.pointee(${indent(paramsForward.join(', '), '  ')})
+    shared.pointee.call(${indent(paramsForward.join(', '), '  ')})
   }
 }()`.trim()
             } else {
@@ -461,7 +462,7 @@ case ${i}:
 { () -> ${swiftClosureType} in
   let shared = bridge.share_${bridge.specializationName}(${cppParameterName})
   return { ${signature} in
-    let result = shared.pointee(${paramsForward.join(', ')})
+    let result = shared.pointee.call(${paramsForward.join(', ')})
     return ${indent(resultBridged.parseFromSwiftToCpp('result', 'swift'), '  ')}
   }
 }()`.trim()

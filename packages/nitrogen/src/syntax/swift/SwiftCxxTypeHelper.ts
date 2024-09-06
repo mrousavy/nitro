@@ -157,6 +157,10 @@ function createCxxFunctionSwiftHelper(type: FunctionType): SwiftCxxHelper {
       return `${p.getCode('c++')} ${p.escapedName}`
     }
   })
+  const callParamsForward = type.parameters.map((p) => {
+    const bridge = new SwiftCxxBridgedType(p)
+    return bridge.parseFromSwiftToCpp(p.escapedName, 'c++')
+  })
   const paramsForward = [
     'sharedClosureHolder.get()',
     ...type.parameters.map((p) => {
@@ -174,15 +178,26 @@ function createCxxFunctionSwiftHelper(type: FunctionType): SwiftCxxHelper {
   ]
   const functionPointerParam = `${callFuncReturnType}(*call)(${callFuncParams.join(', ')})`
   const name = type.specializationName
+  const wrapperName = `${name}_Wrapper`
 
-  let body: string
+  let callCppFuncBody: string
   if (returnBridge.hasType) {
-    body = `
+    callCppFuncBody = `
+    auto result = function(${indent(callParamsForward.join(', '), '    ')});
+    return ${indent(returnBridge.parseFromCppToSwift('result', 'c++'), '    ')};
+    `.trim()
+  } else {
+    callCppFuncBody = `function(${indent(callParamsForward.join(', '), '    ')});`
+  }
+
+  let callSwiftFuncBody: string
+  if (returnBridge.hasType) {
+    callSwiftFuncBody = `
     auto result = call(${indent(paramsForward.join(', '), '    ')});
     return ${indent(returnBridge.parseFromSwiftToCpp('result', 'c++'), '    ')};
     `.trim()
   } else {
-    body = `call(${indent(paramsForward.join(', '), '    ')});`
+    callSwiftFuncBody = `call(${indent(paramsForward.join(', '), '    ')});`
   }
 
   // TODO: Remove shared_Func_void(...) function that returns a std::shared_ptr<std::function<...>>
@@ -208,17 +223,31 @@ function createCxxFunctionSwiftHelper(type: FunctionType): SwiftCxxHelper {
     ],
     cxxCode: `
 /**
- * Specialized version of \`${escapeComments(actualType)}\`.
+ * Specialized version of \`${type.getCode('c++', false)}\`.
  */
 using ${name} = ${actualType};
+/**
+ * Wrapper class for a \`${escapeComments(actualType)}\`, this can be used from Swift.
+ */
+class ${wrapperName} {
+public:
+  explicit ${wrapperName}(const ${actualType}& func): function(func) {}
+  explicit ${wrapperName}(${actualType}&& func): function(std::move(func)) {}
+
+  ${callFuncReturnType} call(${paramsSignature.join(', ')}) const {
+    ${callCppFuncBody}
+  }
+
+  ${actualType} function;
+};
 inline ${name} create_${name}(void* closureHolder, ${functionPointerParam}, void(*destroy)(void*)) {
   std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
-  return [sharedClosureHolder, call](${paramsSignature.join(', ')}) -> ${type.returnType.getCode('c++')} {
-    ${body}
-  };
+  return ${name}([sharedClosureHolder, call](${paramsSignature.join(', ')}) -> ${type.returnType.getCode('c++')} {
+    ${callSwiftFuncBody}
+  });
 }
-inline std::shared_ptr<${name}> share_${name}(const ${name}& value) {
-  return std::make_shared<${name}>(value);
+inline std::shared_ptr<${wrapperName}> share_${name}(const ${name}& value) {
+  return std::make_shared<${wrapperName}>(value);
 }
     `.trim(),
   }

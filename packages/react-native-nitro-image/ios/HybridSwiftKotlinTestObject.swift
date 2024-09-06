@@ -9,6 +9,16 @@ import Foundation
 import NitroModules
 
 class HybridSwiftKotlinTestObject : HybridSwiftKotlinTestObjectSpec {
+  func call(args: CallbackHolder) throws {
+    args.callback()
+  }
+  
+  func doSomeStuff(withEnum callback: @escaping ((Powertrain) -> Void)) throws {
+    DispatchQueue.global().asyncAfter(deadline: .now() + 2) {
+      callback(.gas)
+    }
+  }
+  
   
   func getStringAsync() throws -> Promise<String> {
     return Promise.parallel {
@@ -30,10 +40,6 @@ class HybridSwiftKotlinTestObject : HybridSwiftKotlinTestObjectSpec {
       Thread.sleep(forTimeInterval: 1)
       return 13
     }
-  }
-  
-  func call(args: CallbackHolder) throws {
-    args.callback()
   }
   
   func call(callMeMaybe: ((String) -> Void)?) throws {
