@@ -48,9 +48,8 @@ public extension CallbackHolder {
     @inline(__always)
     get {
       return { () -> (() -> Void) in
-        let shared = bridge.share_Func_void(self.__callback)
         return { () -> Void in
-          shared.pointee()
+          self.__callback()
         }
       }()
     }

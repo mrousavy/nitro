@@ -44,14 +44,27 @@ namespace margelo::nitro::image { enum class Powertrain; }
 namespace margelo::nitro::image::bridge::swift {
 
   /**
-   * Specialized version of `std::function<void(const std::string& / * path * /)>`.
+   * Wrapper class for a `std::function<void(const std::string& / * path * /)>`, this can be called from Swift.
    */
-  using Func_void_std__string = std::function<void(const std::string& /* path */)>;
+  class Func_void_std__string {
+  public:
+    explicit Func_void_std__string(const std::function<void(const std::string& /* path */)>& func): _func(func) {}
+    explicit Func_void_std__string(std::function<void(const std::string& /* path */)>&& func): _func(std::move(func)) {}
+    Func_void_std__string(Func_void_std__string&&) = default;
+    Func_void_std__string(const Func_void_std__string&) = default;
+  
+    void call(const std::string& path) const {
+      _func(path);
+    }
+  
+  private:
+    std::function<void(const std::string& /* path */)> _func;
+  };
   inline Func_void_std__string create_Func_void_std__string(void* closureHolder, void(*call)(void* /* closureHolder */, std::string), void(*destroy)(void*)) {
     std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
-    return [sharedClosureHolder, call](const std::string& path) -> void {
+    return Func_void_std__string([sharedClosureHolder, call](const std::string& path) -> void {
       call(sharedClosureHolder.get(), path);
-    };
+    });
   }
   inline std::shared_ptr<Func_void_std__string> share_Func_void_std__string(const Func_void_std__string& value) {
     return std::make_shared<Func_void_std__string>(value);
@@ -270,29 +283,56 @@ namespace margelo::nitro::image::bridge::swift {
   }
   
   /**
-   * Specialized version of `std::function<void()>`.
+   * Wrapper class for a `std::function<void()>`, this can be called from Swift.
    */
-  using Func_void = std::function<void()>;
+  class Func_void {
+  public:
+    explicit Func_void(const std::function<void()>& func): _func(func) {}
+    explicit Func_void(std::function<void()>&& func): _func(std::move(func)) {}
+    Func_void(Func_void&&) = default;
+    Func_void(const Func_void&) = default;
+  
+    void call() const {
+      _func();
+    }
+  
+  private:
+    std::function<void()> _func;
+  };
   inline Func_void create_Func_void(void* closureHolder, void(*call)(void* /* closureHolder */), void(*destroy)(void*)) {
     std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
-    return [sharedClosureHolder, call]() -> void {
+    return Func_void([sharedClosureHolder, call]() -> void {
       call(sharedClosureHolder.get());
-    };
+    });
   }
   inline std::shared_ptr<Func_void> share_Func_void(const Func_void& value) {
     return std::make_shared<Func_void>(value);
   }
   
   /**
-   * Specialized version of `std::function<std::future<double>()>`.
+   * Wrapper class for a `std::function<std::future<double>()>`, this can be called from Swift.
    */
-  using Func_std__future_double_ = std::function<std::future<double>()>;
+  class Func_std__future_double_ {
+  public:
+    explicit Func_std__future_double_(const std::function<std::future<double>()>& func): _func(func) {}
+    explicit Func_std__future_double_(std::function<std::future<double>()>&& func): _func(std::move(func)) {}
+    Func_std__future_double_(Func_std__future_double_&&) = default;
+    Func_std__future_double_(const Func_std__future_double_&) = default;
+  
+    PromiseHolder<double> call() const {
+      auto result = _func();
+      throw std::runtime_error("Promise cannot be passed to Swift yet!");
+    }
+  
+  private:
+    std::function<std::future<double>()> _func;
+  };
   inline Func_std__future_double_ create_Func_std__future_double_(void* closureHolder, PromiseHolder<double>(*call)(void* /* closureHolder */), void(*destroy)(void*)) {
     std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
-    return [sharedClosureHolder, call]() -> std::future<double> {
+    return Func_std__future_double_([sharedClosureHolder, call]() -> std::future<double> {
       auto result = call(sharedClosureHolder.get());
       return result.getFuture();
-    };
+    });
   }
   inline std::shared_ptr<Func_std__future_double_> share_Func_std__future_double_(const Func_std__future_double_& value) {
     return std::make_shared<Func_std__future_double_>(value);
@@ -307,15 +347,29 @@ namespace margelo::nitro::image::bridge::swift {
   }
   
   /**
-   * Specialized version of `std::function<std::future<std::string>()>`.
+   * Wrapper class for a `std::function<std::future<std::string>()>`, this can be called from Swift.
    */
-  using Func_std__future_std__string_ = std::function<std::future<std::string>()>;
+  class Func_std__future_std__string_ {
+  public:
+    explicit Func_std__future_std__string_(const std::function<std::future<std::string>()>& func): _func(func) {}
+    explicit Func_std__future_std__string_(std::function<std::future<std::string>()>&& func): _func(std::move(func)) {}
+    Func_std__future_std__string_(Func_std__future_std__string_&&) = default;
+    Func_std__future_std__string_(const Func_std__future_std__string_&) = default;
+  
+    PromiseHolder<std::string> call() const {
+      auto result = _func();
+      throw std::runtime_error("Promise cannot be passed to Swift yet!");
+    }
+  
+  private:
+    std::function<std::future<std::string>()> _func;
+  };
   inline Func_std__future_std__string_ create_Func_std__future_std__string_(void* closureHolder, PromiseHolder<std::string>(*call)(void* /* closureHolder */), void(*destroy)(void*)) {
     std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
-    return [sharedClosureHolder, call]() -> std::future<std::string> {
+    return Func_std__future_std__string_([sharedClosureHolder, call]() -> std::future<std::string> {
       auto result = call(sharedClosureHolder.get());
       return result.getFuture();
-    };
+    });
   }
   inline std::shared_ptr<Func_std__future_std__string_> share_Func_std__future_std__string_(const Func_std__future_std__string_& value) {
     return std::make_shared<Func_std__future_std__string_>(value);
@@ -364,14 +418,27 @@ namespace margelo::nitro::image::bridge::swift {
   }
   
   /**
-   * Specialized version of `std::function<void(Powertrain / * value * /)>`.
+   * Wrapper class for a `std::function<void(Powertrain / * value * /)>`, this can be called from Swift.
    */
-  using Func_void_Powertrain = std::function<void(Powertrain /* value */)>;
+  class Func_void_Powertrain {
+  public:
+    explicit Func_void_Powertrain(const std::function<void(Powertrain /* value */)>& func): _func(func) {}
+    explicit Func_void_Powertrain(std::function<void(Powertrain /* value */)>&& func): _func(std::move(func)) {}
+    Func_void_Powertrain(Func_void_Powertrain&&) = default;
+    Func_void_Powertrain(const Func_void_Powertrain&) = default;
+  
+    void call(Powertrain value) const {
+      _func(static_cast<Powertrain>(value));
+    }
+  
+  private:
+    std::function<void(Powertrain /* value */)> _func;
+  };
   inline Func_void_Powertrain create_Func_void_Powertrain(void* closureHolder, void(*call)(void* /* closureHolder */, int), void(*destroy)(void*)) {
     std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
-    return [sharedClosureHolder, call](Powertrain value) -> void {
+    return Func_void_Powertrain([sharedClosureHolder, call](Powertrain value) -> void {
       call(sharedClosureHolder.get(), static_cast<int>(value));
-    };
+    });
   }
   inline std::shared_ptr<Func_void_Powertrain> share_Func_void_Powertrain(const Func_void_Powertrain& value) {
     return std::make_shared<Func_void_Powertrain>(value);
@@ -414,14 +481,27 @@ namespace margelo::nitro::image::bridge::swift {
   }
   
   /**
-   * Specialized version of `std::function<void(const Person& / * p * /)>`.
+   * Wrapper class for a `std::function<void(const Person& / * p * /)>`, this can be called from Swift.
    */
-  using Func_void_Person = std::function<void(const Person& /* p */)>;
+  class Func_void_Person {
+  public:
+    explicit Func_void_Person(const std::function<void(const Person& /* p */)>& func): _func(func) {}
+    explicit Func_void_Person(std::function<void(const Person& /* p */)>&& func): _func(std::move(func)) {}
+    Func_void_Person(Func_void_Person&&) = default;
+    Func_void_Person(const Func_void_Person&) = default;
+  
+    void call(const Person& p) const {
+      _func(p);
+    }
+  
+  private:
+    std::function<void(const Person& /* p */)> _func;
+  };
   inline Func_void_Person create_Func_void_Person(void* closureHolder, void(*call)(void* /* closureHolder */, Person), void(*destroy)(void*)) {
     std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
-    return [sharedClosureHolder, call](const Person& p) -> void {
+    return Func_void_Person([sharedClosureHolder, call](const Person& p) -> void {
       call(sharedClosureHolder.get(), p);
-    };
+    });
   }
   inline std::shared_ptr<Func_void_Person> share_Func_void_Person(const Func_void_Person& value) {
     return std::make_shared<Func_void_Person>(value);

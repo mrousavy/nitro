@@ -323,11 +323,12 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
         }
       }
       case 'promise': {
-        const promise = getTypeAs(this.type, PromiseType)
-        const actualType = promise.resultingType.getCode('swift')
-        throw new Error(
-          `Promise<${actualType}> can not be passed from C++ to Swift yet! Await the Promise in JS, and pass ${actualType} to Swift instead.`
-        )
+        switch (language) {
+          case 'swift':
+            return 'throw std::runtime_error("Promise<..> cannot be converted to Swift yet!");'
+          default:
+            return cppParameterName
+        }
       }
       case 'optional': {
         const optional = getTypeAs(this.type, OptionalType)
@@ -433,7 +434,6 @@ case ${i}:
       }
       case 'function': {
         const funcType = getTypeAs(this.type, FunctionType)
-        const bridge = this.getBridgeOrThrow()
         switch (language) {
           case 'swift':
             const swiftClosureType = funcType.getCode('swift', false)
@@ -450,18 +450,16 @@ case ${i}:
             if (funcType.returnType.kind === 'void') {
               return `
 { () -> ${swiftClosureType} in
-  let shared = bridge.share_${bridge.specializationName}(${cppParameterName})
   return { ${signature} in
-    shared.pointee(${indent(paramsForward.join(', '), '  ')})
+    ${cppParameterName}(${indent(paramsForward.join(', '), '  ')})
   }
 }()`.trim()
             } else {
               const resultBridged = new SwiftCxxBridgedType(funcType.returnType)
               return `
 { () -> ${swiftClosureType} in
-  let shared = bridge.share_${bridge.specializationName}(${cppParameterName})
   return { ${signature} in
-    let result = shared.pointee(${paramsForward.join(', ')})
+    let result = ${cppParameterName}(${paramsForward.join(', ')})
     return ${indent(resultBridged.parseFromSwiftToCpp('result', 'swift'), '  ')}
   }
 }()`.trim()

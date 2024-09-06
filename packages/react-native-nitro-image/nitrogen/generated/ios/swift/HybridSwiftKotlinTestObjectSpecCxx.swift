@@ -388,9 +388,8 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
   public func callCallback(callback: bridge.Func_void) -> Void {
     do {
       try self.implementation.callCallback(callback: { () -> (() -> Void) in
-        let shared = bridge.share_Func_void(callback)
         return { () -> Void in
-          shared.pointee()
+          callback()
         }
       }())
       return 
@@ -499,9 +498,8 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
   public func doSomeStuff(withEnum: bridge.Func_void_Powertrain) -> Void {
     do {
       try self.implementation.doSomeStuff(withEnum: { () -> ((Powertrain) -> Void) in
-        let shared = bridge.share_Func_void_Powertrain(withEnum)
         return { (value: Powertrain) -> Void in
-          shared.pointee(value)
+          withEnum(value)
         }
       }())
       return 
