@@ -20,7 +20,7 @@ public extension CallbackHolder {
    * Create a new instance of `CallbackHolder`.
    */
   init(callback: @escaping (() -> Void)) {
-    self.init({ () -> bridge.Func_void in
+    self.init({ () -> bridge.Func_void.TFunc in
       class ClosureHolder {
         let closure: (() -> Void)
         init(wrappingClosure closure: @escaping (() -> Void)) {
@@ -40,7 +40,8 @@ public extension CallbackHolder {
         Unmanaged<ClosureHolder>.fromOpaque(closureHolder!).release()
       }
     
-      return bridge.create_Func_void(closureHolder, callClosure, destroyClosure)
+      let funcWrapper = bridge.create_Func_void(closureHolder, callClosure, destroyClosure)
+      return funcWrapper.function
     }())
   }
 
@@ -55,7 +56,7 @@ public extension CallbackHolder {
     }
     @inline(__always)
     set {
-      self.__callback = { () -> bridge.Func_void in
+      self.__callback = { () -> bridge.Func_void.TFunc in
         class ClosureHolder {
           let closure: (() -> Void)
           init(wrappingClosure closure: @escaping (() -> Void)) {
@@ -75,7 +76,8 @@ public extension CallbackHolder {
           Unmanaged<ClosureHolder>.fromOpaque(closureHolder!).release()
         }
       
-        return bridge.create_Func_void(closureHolder, callClosure, destroyClosure)
+        let funcWrapper = bridge.create_Func_void(closureHolder, callClosure, destroyClosure)
+        return funcWrapper.function
       }()
     }
   }

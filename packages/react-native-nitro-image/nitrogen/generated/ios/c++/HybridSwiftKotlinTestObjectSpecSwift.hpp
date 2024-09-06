@@ -220,7 +220,7 @@ namespace margelo::nitro::image {
       return __result;
     }
     inline void callCallback(const std::function<void()>& callback) override {
-      _swiftPart.callCallback(callback);
+      _swiftPart.callCallback(bridge::swift::Func_void(callback));
     }
     inline std::shared_ptr<ArrayBuffer> createNewBuffer(double size) override {
       auto __result = _swiftPart.createNewBuffer(std::forward<decltype(size)>(size));
@@ -250,7 +250,7 @@ namespace margelo::nitro::image {
       return __result.getFuture();
     }
     inline void doSomeStuff(const std::function<void(Powertrain /* value */)>& withEnum) override {
-      _swiftPart.doSomeStuff(withEnum);
+      _swiftPart.doSomeStuff(bridge::swift::Func_void_Powertrain(withEnum));
     }
 
   private:

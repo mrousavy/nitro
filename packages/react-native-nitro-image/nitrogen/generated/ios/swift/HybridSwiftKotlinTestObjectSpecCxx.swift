@@ -389,7 +389,7 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
     do {
       try self.implementation.callCallback(callback: { () -> (() -> Void) in
         return { () -> Void in
-          callback()
+          callback.call()
         }
       }())
       return 
@@ -499,7 +499,7 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
     do {
       try self.implementation.doSomeStuff(withEnum: { () -> ((Powertrain) -> Void) in
         return { (value: Powertrain) -> Void in
-          withEnum(value)
+          withEnum.call(value)
         }
       }())
       return 

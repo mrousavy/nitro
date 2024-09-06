@@ -102,7 +102,7 @@ public final class HybridImageSpecCxx {
     do {
       try self.implementation.saveToFile(path: String(path), onFinished: { () -> ((String) -> Void) in
         return { (path: String) -> Void in
-          onFinished(std.string(path))
+          onFinished.call(std.string(path))
         }
       }())
       return 

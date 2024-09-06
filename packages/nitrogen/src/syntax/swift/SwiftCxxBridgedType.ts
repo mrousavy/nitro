@@ -324,7 +324,7 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
       }
       case 'promise': {
         switch (language) {
-          case 'swift':
+          case 'c++':
             return 'throw std::runtime_error("Promise<..> cannot be converted to Swift yet!");'
           default:
             return cppParameterName
@@ -679,7 +679,7 @@ case ${i}:
             ].join(', ')
             const createFunc = `bridge.${bridge.funcName}`
             return `
-{ () -> bridge.${bridge.specializationName} in
+{ () -> bridge.${bridge.specializationName}.TFunc in
   class ClosureHolder {
     let closure: ${func.getCode('swift')}
     init(wrappingClosure closure: @escaping ${func.getCode('swift')}) {
@@ -699,12 +699,11 @@ case ${i}:
     Unmanaged<ClosureHolder>.fromOpaque(closureHolder!).release()
   }
 
-  return ${createFunc}(closureHolder, callClosure, destroyClosure)
+  let funcWrapper = ${createFunc}(closureHolder, callClosure, destroyClosure)
+  return funcWrapper.function
 }()
   `.trim()
           }
-          case 'c++':
-            return `${swiftParameterName}.getFunction()`
           default:
             return swiftParameterName
         }

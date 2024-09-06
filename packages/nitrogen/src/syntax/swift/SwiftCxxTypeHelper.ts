@@ -182,11 +182,11 @@ function createCxxFunctionSwiftHelper(type: FunctionType): SwiftCxxHelper {
   let callCppFuncBody: string
   if (returnBridge.hasType) {
     callCppFuncBody = `
-    auto result = _func(${indent(callParamsForward.join(', '), '    ')});
+    auto result = function(${indent(callParamsForward.join(', '), '    ')});
     return ${indent(returnBridge.parseFromCppToSwift('result', 'c++'), '    ')};
     `.trim()
   } else {
-    callCppFuncBody = `_func(${indent(callParamsForward.join(', '), '    ')});`
+    callCppFuncBody = `function(${indent(callParamsForward.join(', '), '    ')});`
   }
 
   let callSwiftFuncBody: string
@@ -226,19 +226,17 @@ function createCxxFunctionSwiftHelper(type: FunctionType): SwiftCxxHelper {
  */
 class ${name} {
 public:
-  explicit ${name}(const ${actualType}& func): _func(func) {}
-  explicit ${name}(${actualType}&& func): _func(std::move(func)) {}
-  ${name}(${name}&&) = default;
-  ${name}(const ${name}&) = default;
+  using TFunc = ${actualType};
+
+public:
+  explicit ${name}(const ${actualType}& func): function(func) {}
+  explicit ${name}(${actualType}&& func): function(std::move(func)) {}
 
   ${callFuncReturnType} call(${paramsSignature.join(', ')}) const {
     ${callCppFuncBody}
   }
 
-  const ${actualType}& getFunction() const { return _func; }
-
-private:
-  ${actualType} _func;
+  ${actualType} function;
 };
 inline ${name} create_${name}(void* closureHolder, ${functionPointerParam}, void(*destroy)(void*)) {
   std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
