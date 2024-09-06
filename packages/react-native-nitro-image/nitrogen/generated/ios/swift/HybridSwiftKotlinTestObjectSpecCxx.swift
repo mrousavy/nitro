@@ -496,12 +496,12 @@ public final class HybridSwiftKotlinTestObjectSpecCxx {
   }
   
   @inline(__always)
-  public func doSomeStuff(withEnum: bridge.Func_void_Powertrain) -> Void {
+  public func doSomeStuff(withEnum: bridge.Func_void_Powertrain_std__string_std__shared_ptr_ArrayBuffer_) -> Void {
     do {
-      try self.implementation.doSomeStuff(withEnum: { () -> ((Powertrain) -> Void) in
-        let shared = bridge.share_Func_void_Powertrain(withEnum)
-        return { (value: Powertrain) -> Void in
-          shared.pointee.call(value)
+      try self.implementation.doSomeStuff(withEnum: { () -> ((Powertrain, String, ArrayBufferHolder) -> Void) in
+        let shared = bridge.share_Func_void_Powertrain_std__string_std__shared_ptr_ArrayBuffer_(withEnum)
+        return { (value: Powertrain, str: String, buf: ArrayBufferHolder) -> Void in
+          shared.pointee.call(value.rawValue, std.string(str), buf)
         }
       }())
       return 

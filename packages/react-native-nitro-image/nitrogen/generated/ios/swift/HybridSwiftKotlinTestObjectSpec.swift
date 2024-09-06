@@ -61,7 +61,7 @@ public protocol HybridSwiftKotlinTestObjectSpec: HybridObjectSpec {
   func getNumberAsync() throws -> Promise<Double>
   func getStringAsync() throws -> Promise<String>
   func getCarAsync() throws -> Promise<Car>
-  func doSomeStuff(withEnum: @escaping ((_ value: Powertrain) -> Void)) throws -> Void
+  func doSomeStuff(withEnum: @escaping ((_ value: Powertrain, _ str: String, _ buf: ArrayBufferHolder) -> Void)) throws -> Void
 }
 
 public extension HybridSwiftKotlinTestObjectSpec {

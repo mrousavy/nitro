@@ -46,6 +46,7 @@ export function createSwiftCxxHelpers(type: Type): SwiftCxxHelper | undefined {
  */
 function createCxxOptionalSwiftHelper(type: OptionalType): SwiftCxxHelper {
   const actualType = type.getCode('c++')
+  const bridgedType = new SwiftCxxBridgedType(type)
   const name = escapeCppName(actualType)
   return {
     cxxType: actualType,
@@ -57,7 +58,7 @@ function createCxxOptionalSwiftHelper(type: OptionalType): SwiftCxxHelper {
         space: 'system',
         language: 'c++',
       },
-      ...type.getRequiredImports(),
+      ...bridgedType.getRequiredImports(),
     ],
     cxxCode: `
 /**
@@ -76,6 +77,7 @@ inline ${actualType} create_${name}(const ${type.wrappingType.getCode('c++')}& v
  */
 function createCxxVectorSwiftHelper(type: ArrayType): SwiftCxxHelper {
   const actualType = type.getCode('c++')
+  const bridgedType = new SwiftCxxBridgedType(type)
   const name = escapeCppName(actualType)
   return {
     cxxType: actualType,
@@ -87,7 +89,7 @@ function createCxxVectorSwiftHelper(type: ArrayType): SwiftCxxHelper {
         space: 'system',
         language: 'c++',
       },
-      ...type.getRequiredImports(),
+      ...bridgedType.getRequiredImports(),
     ],
     cxxCode: `
 /**
@@ -108,6 +110,7 @@ inline ${actualType} create_${name}(size_t size) {
  */
 function createCxxUnorderedMapSwiftHelper(type: RecordType): SwiftCxxHelper {
   const actualType = type.getCode('c++')
+  const bridgedType = new SwiftCxxBridgedType(type)
   const name = escapeCppName(actualType)
   const keyType = type.keyType.getCode('c++')
   return {
@@ -120,7 +123,7 @@ function createCxxUnorderedMapSwiftHelper(type: RecordType): SwiftCxxHelper {
         space: 'system',
         language: 'c++',
       },
-      ...type.getRequiredImports(),
+      ...bridgedType.getRequiredImports(),
     ],
     cxxCode: `
 /**
@@ -149,6 +152,7 @@ inline std::vector<${keyType}> get_${name}_keys(const ${name}& map) {
  */
 function createCxxFunctionSwiftHelper(type: FunctionType): SwiftCxxHelper {
   const actualType = type.getCode('c++')
+  const bridgedType = new SwiftCxxBridgedType(type)
   const returnBridge = new SwiftCxxBridgedType(type.returnType)
   const paramsSignature = type.parameters.map((p) => {
     if (p.canBePassedByReference) {
@@ -156,6 +160,11 @@ function createCxxFunctionSwiftHelper(type: FunctionType): SwiftCxxHelper {
     } else {
       return `${p.getCode('c++')} ${p.escapedName}`
     }
+  })
+  const callCppFuncParamsSignature = type.parameters.map((p) => {
+    const bridge = new SwiftCxxBridgedType(p)
+    const cppType = bridge.getTypeCode('c++')
+    return `${cppType} ${p.escapedName}`
   })
   const callParamsForward = type.parameters.map((p) => {
     const bridge = new SwiftCxxBridgedType(p)
@@ -219,7 +228,7 @@ function createCxxFunctionSwiftHelper(type: FunctionType): SwiftCxxHelper {
         space: 'system',
         language: 'c++',
       },
-      ...type.getRequiredImports(),
+      ...bridgedType.getRequiredImports(),
     ],
     cxxCode: `
 /**
@@ -234,7 +243,7 @@ public:
   explicit ${wrapperName}(const ${actualType}& func): function(func) {}
   explicit ${wrapperName}(${actualType}&& func): function(std::move(func)) {}
 
-  ${callFuncReturnType} call(${paramsSignature.join(', ')}) const {
+  ${callFuncReturnType} call(${callCppFuncParamsSignature.join(', ')}) const {
     ${callCppFuncBody}
   }
 
@@ -258,6 +267,7 @@ inline std::shared_ptr<${wrapperName}> share_${name}(const ${name}& value) {
  */
 function createCxxVariantSwiftHelper(type: VariantType): SwiftCxxHelper {
   const actualType = type.getCode('c++')
+  const bridgedType = new SwiftCxxBridgedType(type)
   const name = escapeCppName(actualType)
   const createFunctions = type.variants
     .map((t) => {
@@ -290,7 +300,7 @@ inline ${t.getCode('c++')} get_${name}_${i}(const ${actualType}& variant) {
         space: 'system',
         language: 'c++',
       },
-      ...type.getRequiredImports(),
+      ...bridgedType.getRequiredImports(),
     ],
     cxxCode: `
 /**
@@ -308,6 +318,7 @@ ${getFunctions}
  */
 function createCxxTupleSwiftHelper(type: TupleType): SwiftCxxHelper {
   const actualType = type.getCode('c++')
+  const bridgedType = new SwiftCxxBridgedType(type)
   const name = escapeCppName(actualType)
   const typesSignature = type.itemTypes
     .map((t, i) => {
@@ -326,7 +337,7 @@ function createCxxTupleSwiftHelper(type: TupleType): SwiftCxxHelper {
         space: 'system',
         language: 'c++',
       },
-      ...type.getRequiredImports(),
+      ...bridgedType.getRequiredImports(),
     ],
     cxxCode: `
 /**
@@ -345,6 +356,7 @@ inline ${actualType} create_${name}(${typesSignature}) {
  */
 function createCxxPromiseSwiftHelper(type: PromiseType): SwiftCxxHelper {
   const resultingType = type.resultingType.getCode('c++')
+  const bridgedType = new SwiftCxxBridgedType(type)
   const actualType = `PromiseHolder<${resultingType}>`
   const name = escapeCppName(actualType)
   return {
@@ -357,7 +369,7 @@ function createCxxPromiseSwiftHelper(type: PromiseType): SwiftCxxHelper {
         space: 'system',
         language: 'c++',
       },
-      ...type.getRequiredImports(),
+      ...bridgedType.getRequiredImports(),
     ],
     cxxCode: `
 /**
