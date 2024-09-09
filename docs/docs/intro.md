@@ -262,7 +262,7 @@ public class ExpoSettingsModule: Module {
   </tr>
   <tr>
     <td><code>Record&lt;string, T&gt;</code></td>
-    <td>❌</td>
+    <td>❌ (no codegen)</td>
     <td>❌</td>
     <td>✅</td>
   </tr>
