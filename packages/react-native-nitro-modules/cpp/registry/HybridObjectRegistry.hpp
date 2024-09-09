@@ -32,6 +32,12 @@ public:
    */
   static void registerHybridObjectConstructor(const std::string& hybridObjectName, HybridObjectConstructorFn&& constructorFn);
 
+  /**
+   * Unregisters a Hybrid Object with the given `hybridObjectName`.
+   * It is recommended to not use this method, as this makes HybridObject constructors unpredictable from JS.
+   */
+  static void unregisterHybridObjectConstructor(const std::string& hybridObjectName);
+
   static std::shared_ptr<HybridObject> createHybridObject(const std::string& hybridObjectName);
   static bool hasHybridObject(const std::string& hybridObjectName);
   static std::vector<std::string> getAllHybridObjectNames();

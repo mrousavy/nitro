@@ -46,6 +46,11 @@ void HybridObjectRegistry::registerHybridObjectConstructor(const std::string& hy
   Logger::log(LogLevel::Info, TAG, "Successfully registered HybridObject \"%s\"!", hybridObjectName.c_str());
 }
 
+void HybridObjectRegistry::unregisterHybridObjectConstructor(const std::string& hybridObjectName) {
+  Logger::log(LogLevel::Info, TAG, "Unregistering HybridObject \"%s\"...", hybridObjectName.c_str());
+  map.erase(hybridObjectName);
+}
+
 std::shared_ptr<HybridObject> HybridObjectRegistry::createHybridObject(const std::string& hybridObjectName) {
   auto& map = HybridObjectRegistry::getRegistry();
   auto fn = map.find(hybridObjectName);
