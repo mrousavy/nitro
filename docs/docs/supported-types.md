@@ -37,6 +37,10 @@ This prevents accidentally passing a wrong type to `add(..)` (for example, a `st
 
 On the JS side (TypeScript), type- and null-safety is enforced via TypeScript - so use it!
 
+## Nitrogen
+
+When using Nitro's code-generator ("**nitrogen**") all TypeScript type declarations will be bridged to the respective native types automatically.
+
 ## Supported Types
 
 These are all the types Nitro supports out of the box:
