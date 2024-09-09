@@ -166,6 +166,12 @@ For example, a JS `number` is always a 64-bit `double` in C++, a `Double` in Swi
 
 Primitives are very efficient and can be passed with little to no overhead, especially between C++ and Swift, and C++ and Kotlin.
 
+#### `bigint`'s actual type
+
+A `bigint` is actually a variable-size type. While it is bridged to a 64-bit Integer (-2<sup>63</sup> … 2<sup>63</sup>−1), it can theoretically be larger than that.
+
+Since there is no built-in equivalent of `bigint` in C++/Swift/Kotlin, you'd need to stringify the `bigint` value on the JS side and parse it from a string to your big number library of choice on the native side again in cases where you really need big numbers.
+
 ### Arrays (`T[]`)
 
 Arrays of items are represented with the most common, and most efficient array datastructures in native languages, such as `std::vector<T>` or `Array<T>`.

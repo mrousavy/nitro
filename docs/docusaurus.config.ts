@@ -47,6 +47,7 @@ const config: Config = {
 
   themeConfig: {
     image: 'img/social-card.png',
+    toc_max_heading_level: 5,
     colorMode: {
       defaultMode: 'light',
       disableSwitch: false,
