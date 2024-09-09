@@ -1,4 +1,5 @@
 ---
+toc_max_heading_level: 5
 ---
 
 import Tabs from '@theme/Tabs';
