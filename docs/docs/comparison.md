@@ -1,0 +1,367 @@
+---
+---
+
+# Comparison with other frameworks
+
+Nitro is not the only one of it's kind. There's multiple ways to build native modules for React Native:
+
+- [Turbo Modules](#turbo-modules)
+- [Legacy Native Modules](#turbo-modules)
+- [Expo Modules](#expo-modules)
+
+## Turbo Modules
+
+[Turbo Modules](https://github.com/reactwg/react-native-new-architecture/blob/main/docs/turbo-modules.md) are React Native's default framework for building native modules.
+They use a code-generator called "[codegen](https://github.com/reactwg/react-native-new-architecture/blob/main/docs/codegen.md)" to convert Flow (or TypeScript) specs to native interfaces, similar to Nitro.
+
+<div className="side-by-side-container">
+<div className="side-by-side-block">
+
+```swift title="Nitro Module (Swift)"
+class HybridMath : HybridMathSpec {
+  func add(a: Double, b: Double) -> Double {
+    return a + b
+  }
+}
+```
+
+</div>
+<div className="side-by-side-block">
+
+```objc title="Turbo Module (Objective-C)"
+@implementation RTNMath
+RCT_EXPORT_MODULE()
+
+- (NSNumber*)add:(NSNumber*)a b:(NSNumber*)b {
+  double added = a.doubleValue + b.doubleValue;
+  return [NSNumber numberWithDouble:added];
+}
+@end
+```
+
+</div>
+</div>
+
+Turbo Modules can be built with Objective-C for iOS and Java for Android, or C++ for cross-platform.
+
+### Shipped with react-native core
+
+Unlike Nitro, Turbo Modules are actually part of react-native core. This means, users don't have to install a single dependency to build or use a Turbo Module.
+
+### No Swift
+
+There is no Swift support for Turbo Modules. You could bridge from Objective-C to Swift, but that would still always go through Objective-C, which is comparatively slower than bridging directly from C++ to Swift, like Nitro does.
+
+<div className="side-by-side-container">
+<div className="side-by-side-block">
+
+```mermaid
+---
+title: "Nitro Modules"
+---
+graph LR;
+    JS--> C++ --> Swift;
+```
+
+</div>
+<div className="side-by-side-block">
+
+```mermaid
+---
+title: "Turbo Modules"
+---
+graph LR;
+    JS--> C++ --> Objective-C --> Swift;
+```
+
+</div>
+</div>
+
+### Codegen
+
+Codegen is similar to Nitrogen as it also generates native interfaces from TypeScript specifications. This ensures type-safety on the JavaScript side, as specs have to be implemented on the native side in order for the app to build successfully. This prevents any wrong type errors and ensures undefined/null-safety.
+
+<div className="side-by-side-container">
+<div className="side-by-side-block">
+
+```ts title="Nitrogen"
+export interface Math extends HybridObject {
+  add(a: number, b: number): Promise<number>
+}
+
+export const Math =
+  NitroModules.createHybridObject<Math>("Math")
+```
+
+</div>
+<div className="side-by-side-block">
+
+```ts title="Codegen"
+export interface Spec extends TurboModule {
+  add(a: number, b: number): Promise<number>;
+}
+
+export const Math =
+  TurboModuleRegistry.get<Spec>("RTNMath")
+    as Spec | null;
+```
+
+</div>
+</div>
+
+#### Codegen runs on app build
+
+Nitrogen is executed explicitly by the library developer and all generated interfaces are local and have to be committed to the GitHub repository.
+Codegen on the other hand runs on app build, which causes specs to always be re-generated for every app.
+
+#### Codegen does not parse AST
+
+As opposed to Nitrogen, Codegen does not actually parse the syntax using an AST parser. Instead, it parses all Flow/TypeScript specs as text. This means, you cannot import an types into your spec files using Codegen, as it does not know how to resolve types in other files. Nitrogen can parse that as it uses an actual AST parser.
+
+## Legacy Native Modules
+
+Prior to [Turbo Modules](#turbo-modules), React Native provided a default approach for building native modules which was just called ["Native Modules"](https://reactnative.dev/docs/native-modules-intro).
+Instead of using JSI, Native Modules were built ontop of a communication layer that sent events and commands using JSON messages, both asynchronous and batched.
+
+They are now deprecated in favor of [Turbo Modules](#turbo-modules).
+
+Because Turbo Modules are just an evolution of Native Modules, their API is almost identical:
+
+<div className="side-by-side-container">
+<div className="side-by-side-block">
+
+```swift title="Nitro Module (Swift)"
+class HybridMath : HybridMathSpec {
+  func add(a: Double, b: Double) -> Double {
+    return a + b
+  }
+}
+```
+
+</div>
+<div className="side-by-side-block">
+
+```objc title="Native Module (Objective-C)"
+@implementation RTNMath
+RCT_EXPORT_MODULE()
+
+- (NSNumber*)add:(NSNumber*)a b:(NSNumber*)b {
+  double added = a.doubleValue + b.doubleValue;
+  return [NSNumber numberWithDouble:added];
+}
+@end
+```
+
+</div>
+</div>
+
+## Expo Modules
+
+Expo's recommended approach of building native modules is called "Expo Modules".
+
+### Synchronous Functions
+
+<div className="side-by-side-container">
+<div className="side-by-side-block">
+
+```swift title="Nitro Module (Swift)"
+class HybridMath : HybridMathSpec {
+  func add(a: Double, b: Double) -> Double {
+    return a + b
+  }
+}
+```
+
+</div>
+<div className="side-by-side-block">
+
+```swift title="Expo Module (Swift)"
+public class ExpoSettingsModule: Module {
+  public func definition() -> ModuleDefinition {
+    Name("Math")
+
+    Function("add") { (a: Double,
+                       b: Double) -> Double in
+      return a + b
+    }
+  }
+}
+```
+
+</div>
+</div>
+
+### Asynchronous Functions
+
+<div className="side-by-side-container">
+<div className="side-by-side-block">
+
+```swift title="Nitro Module (Swift)"
+class HybridMath : HybridMathSpec {
+  func add(a: Double,
+           b: Double) -> Promise<Double> {
+    return Promise.async { a + b }
+  }
+}
+```
+
+</div>
+<div className="side-by-side-block">
+
+```swift title="Expo Module (Swift)"
+public class ExpoSettingsModule: Module {
+  public func definition() -> ModuleDefinition {
+    Name("Math")
+
+    AsyncFunction("add") { (a: Double,
+                            b: Double) in
+      return a + b
+    }
+  }
+}
+```
+
+</div>
+</div>
+
+## Supported Types
+
+<table>
+  <tr>
+    <th>JS Type</th>
+    <th>Expo Modules</th>
+    <th>Turbo Modules</th>
+    <th>Nitro Modules</th>
+  </tr>
+  <tr>
+    <td><code>number</code></td>
+    <td>✅</td>
+    <td>✅</td>
+    <td>✅</td>
+  </tr>
+  <tr>
+    <td><code>boolean</code></td>
+    <td>✅</td>
+    <td>✅</td>
+    <td>✅</td>
+  </tr>
+  <tr>
+    <td><code>string</code></td>
+    <td>✅</td>
+    <td>✅</td>
+    <td>✅</td>
+  </tr>
+  <tr>
+    <td><code>bigint</code></td>
+    <td>✅</td>
+    <td>❌</td>
+    <td>✅</td>
+  </tr>
+  <tr>
+    <td><code>object</code></td>
+    <td>✅</td>
+    <td>✅</td>
+    <td>✅</td>
+  </tr>
+  <tr>
+    <td><code>T?</code></td>
+    <td>✅</td>
+    <td>✅</td>
+    <td>✅</td>
+  </tr>
+  <tr>
+    <td><code>T[]</code></td>
+    <td>✅</td>
+    <td>✅</td>
+    <td>✅</td>
+  </tr>
+  <tr>
+    <td><code>Promise&lt;T&gt;</code></td>
+    <td>✅</td>
+    <td>✅</td>
+    <td>✅</td>
+  </tr>
+  <tr>
+    <td><code>(T...) =&gt; void</code></td>
+    <td>✅</td>
+    <td>✅</td>
+    <td>✅</td>
+  </tr>
+  <tr>
+    <td><code>(T...) =&gt; R</code></td>
+    <td>❌</td>
+    <td>❌</td>
+    <td>✅</td>
+  </tr>
+  <tr>
+    <td><code>[A, B, C, ...]</code></td>
+    <td>❌</td>
+    <td>❌</td>
+    <td>✅</td>
+  </tr>
+  <tr>
+    <td><code>A | B | C | ...</code></td>
+    <td>✅</td>
+    <td>❌</td>
+    <td>✅</td>
+  </tr>
+  <tr>
+    <td><code>Record&lt;string, T&gt;</code></td>
+    <td>❌ (no codegen)</td>
+    <td>❌</td>
+    <td>✅</td>
+  </tr>
+  <tr>
+    <td><code>ArrayBuffer</code></td>
+    <td>✅</td>
+    <td>❌</td>
+    <td>✅</td>
+  </tr>
+  <tr>
+    <td>..any <code>HybridObject</code></td>
+    <td>✅</td>
+    <td>❌</td>
+    <td>✅</td>
+  </tr>
+  <tr>
+    <td>..any <code>interface</code></td>
+    <td>❌ (no codegen)</td>
+    <td>✅</td>
+    <td>✅</td>
+  </tr>
+  <tr>
+    <td>..any <code>enum</code></td>
+    <td>❌ (no codegen)</td>
+    <td>✅</td>
+    <td>✅</td>
+  </tr>
+  <tr>
+    <td>..any <code>union</code></td>
+    <td>❌ (no codegen)</td>
+    <td>❌</td>
+    <td>✅</td>
+  </tr>
+</table>
+
+## Benchmarks
+
+<table>
+  <tr>
+    <th></th>
+    <th>ExpoModules</th>
+    <th>TurboModules</th>
+    <th>NitroModules</th>
+  </tr>
+  <tr>
+    <td>100.000x <code>addNumbers(...)</code></td>
+    <td>404.95ms</td>
+    <td>108.84ms</td>
+    <td><b>7.25ms</b></td>
+  </tr>
+  <tr>
+    <td>100.000x <code>addStrings(...)</code></td>
+    <td>420.69ms</td>
+    <td>169.84ms</td>
+    <td><b>30.71ms</b></td>
+  </tr>
+</table>

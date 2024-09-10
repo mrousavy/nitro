@@ -14,6 +14,7 @@ const sidebars: SidebarsConfig = {
   tutorialSidebar: [
     'intro',
     'supported-types',
+    'comparison',
     'for-users',
     {
       type: 'category',
