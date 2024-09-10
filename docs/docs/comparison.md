@@ -12,7 +12,7 @@ Nitro is not the only one of it's kind. There's multiple ways to build native mo
 
 ## Benchmarks
 
-Nitro has proven to be up to **~15x faster** than Turbo Modules, and **~55x faster** than Expo Modules. (see [NitroBenchmarks](https://github.com/mrousavy/NitroBenchmarks))
+Nitro has proven to be up to **~59x faster** than Expo Modules, and **~15x faster** than Turbo Modules. (see [NitroBenchmarks](https://github.com/mrousavy/NitroBenchmarks))
 
 <table>
   <tr>
@@ -23,15 +23,15 @@ Nitro has proven to be up to **~15x faster** than Turbo Modules, and **~55x fast
   </tr>
   <tr>
     <td>100.000x <code>addNumbers(...)</code></td>
-    <td>404.95ms</td>
-    <td>108.84ms</td>
-    <td><b>7.25ms</b></td>
+    <td>434.85</td>
+    <td>115.86ms</td>
+    <td><b>7.27ms</b></td>
   </tr>
   <tr>
     <td>100.000x <code>addStrings(...)</code></td>
-    <td>420.69ms</td>
-    <td>169.84ms</td>
-    <td><b>30.71ms</b></td>
+    <td>429.53ms</td>
+    <td>179.02ms</td>
+    <td><b>29.94ms</b></td>
   </tr>
 </table>
 
@@ -296,7 +296,7 @@ Codegen on the other hand runs on app build, which causes specs to always be re-
 
 #### Codegen cannot resolve imports
 
-As opposed to Nitrogen, Codegen can not resolve type imports from separate files. 
+As opposed to Nitrogen, Codegen can not resolve type imports from separate files.
 
 #### Codegen supports Flow
 

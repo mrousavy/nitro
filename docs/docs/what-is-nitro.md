@@ -38,7 +38,7 @@ class HybridMath : HybridMathSpec {
 
 ## Performance
 
-Nitro is all about performance. In some benchmarks, Nitro has proven to be **~15x faster** than Turbo Modules, and **~55x faster** than Expo Modules. 
+Nitro is all about performance. In some benchmarks, Nitro has proven to be up to **~59x faster** than Expo Modules, and **~15x faster** than Turbo Modules. 
 
 <table>
   <tr>
@@ -49,15 +49,15 @@ Nitro is all about performance. In some benchmarks, Nitro has proven to be **~15
   </tr>
   <tr>
     <td>100.000x <code>addNumbers(...)</code></td>
-    <td>404.95ms</td>
-    <td>108.84ms</td>
-    <td><b>7.25ms</b></td>
+    <td>434.85</td>
+    <td>115.86ms</td>
+    <td><b>7.27ms</b></td>
   </tr>
   <tr>
     <td>100.000x <code>addStrings(...)</code></td>
-    <td>420.69ms</td>
-    <td>169.84ms</td>
-    <td><b>30.71ms</b></td>
+    <td>429.53ms</td>
+    <td>179.02ms</td>
+    <td><b>29.94ms</b></td>
   </tr>
 </table>
 
@@ -145,16 +145,16 @@ It has first-class support for modern language features.
 
 Nitro bridges to Swift directly using the new highly efficient [Swift &lt;&gt; C++ interop](https://www.swift.org/documentation/cxx-interop/).
 
-* **Protocols**: Every Hybrid Object's generated specification is a Swift protocol.
-* **Properties**: A getter (and setter) property can be implemented using Swift properties.
-* **Async**/**Await**: Asynchronous functions can use Swift's new async/await syntax using the `Promise.async` API.
+* **Protocols**: Every Hybrid Object's generated specification is a [Swift protocol](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/protocols/).
+* **Properties**: A getter (and setter) property can be implemented using [Swift properties](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/properties/).
+* **Async**/**Await**: Asynchronous functions can use Swift's new [async/await syntax](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/concurrency/) using the `Promise.async` API.
 * **No Objective-C**: Instead of bridging through Objective-C interfaces, Nitro bridges to Swift directly from C++.
 
 ### Kotlin
 
 Nitro bridges to Kotlin directly using [fbjni](https://github.com/facebookincubator/fbjni).
 
-* **Interfaces**: Every Hybrid Object's generated specification is a Kotlin interface.
-* **Properties**: A getter (and setter) property can be implemented using Kotlin properties.
-* **Coroutines**: Asynchronous functions can use Kotlin's coroutine syntax using the `Promise.async` API.
+* **Interfaces**: Every Hybrid Object's generated specification is a [Kotlin interface](https://kotlinlang.org/docs/interfaces.html).
+* **Properties**: A getter (and setter) property can be implemented using [Kotlin properties](https://kotlinlang.org/docs/properties.html).
+* **Coroutines**: Asynchronous functions can use Kotlin's [coroutine syntax](https://kotlinlang.org/docs/coroutines-overview.html) using the `Promise.async` API.
 * **No Java**: Instead of requiring Java classes, Nitro bridges to Kotlin directly.
