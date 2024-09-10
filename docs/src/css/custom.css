@@ -224,7 +224,6 @@ pre {
   border-radius: 8px;
   border: 2px solid #232a3f;
   background-color: #e0f2ff;
-  /* border: none; */
   color: #232a3f;
   font-weight: 700;
 }
@@ -238,4 +237,29 @@ pre {
   color: #232a3f;
   padding: 3px 8px;
   border: none;
+}
+
+.node > rect {
+  rx: 6 !important;
+  ry: 6 !important;
+  stroke-width: 2px !important;
+  stroke: #c2ddf0 !important;
+  fill: #e6f4ff !important;
+}
+.nodeLabel {
+  font-family: 'Satoshi', sans-serif;
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: #3a7aa9 !important;
+}
+.edgePaths > path {
+  transform: scale(0.7);
+  transform-origin: center;
+  transform-box: fill-box;
+  stroke-width: 3px !important;
+}
+.flowchartTitleText {
+  font-family: 'Satoshi', sans-serif;
+  font-weight: 600;
+  font-size: 0.9rem;
 }
