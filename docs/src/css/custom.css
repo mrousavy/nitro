@@ -179,7 +179,7 @@ h3 {
 
 .breadcrumbs__item--active .breadcrumbs__link {
   /* border: 2px solid #232a3f28 !important; */
-  background-color: #d0e7f6 !important;
+  background-color: #d0e8f7 !important;
   font-weight: 700;
 }
 
@@ -195,7 +195,7 @@ h3 {
   color: #232a3f;
 }
 .menu__link--active:not(.menu__link--sublist) {
-  background-color: white;
+  background-color: #d0e8f7;
   box-shadow: 0 0 0 2px #232a3f inset;
 }
 .menu {
@@ -223,11 +223,19 @@ pre {
 .pagination-nav__link {
   border-radius: 8px;
   border: 2px solid #232a3f;
-  background-color: #d0e7f6;
+  background-color: #d0e8f7;
   color: #232a3f;
   font-weight: 700;
 }
 
 .theme-doc-sidebar-container {
   border-right: 2px solid #232a3f !important;
+}
+
+p > code {
+  background-color: #d0e8f7;
+  color: #232a3f;
+  font-size: 0.9rem;
+  padding: 3px 8px;
+  border: none;
 }
