@@ -91,11 +91,29 @@ const config: Config = {
           label: 'Docs',
         },
         {
+          type: 'doc',
+          docId: 'for-users',
+          position: 'left',
+          label: 'Installation',
+        },
+        {
+          type: 'search',
+          position: 'right',
+        },
+        {
           href: 'https://github.com/mrousavy/nitro',
           label: 'GitHub',
           position: 'right',
         },
       ],
+    },
+    algolia: {
+      appId: 'YOUR_APP_ID',
+      apiKey: 'YOUR_SEARCH_API_KEY',
+      indexName: 'nitro',
+      contextualSearch: true,
+      searchPagePath: false,
+      insights: false,
     },
     footer: {
       style: 'dark',
