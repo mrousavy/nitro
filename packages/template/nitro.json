@@ -1,0 +1,10 @@
+{
+  "cxxNamespace": ["<<cxxNamespace>>"],
+  "ios": {
+    "iosModulename": "<<iosModulename>>"
+  },
+  "android": {
+    "androidNamespace": ["<<androidNamespace>>"],
+    "androidCxxLibName": "<<androidCxxLibName>>"
+  }
+}
