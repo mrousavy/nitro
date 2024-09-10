@@ -13,10 +13,8 @@ import type {SidebarsConfig} from '@docusaurus/plugin-content-docs';
 const sidebars: SidebarsConfig = {
   docs: [
     'what-is-nitro',
-    'comparison',
     'hybrid-objects',
     'nitrogen',
-    'for-users',
     {
       type: 'category',
       label: 'Types',
@@ -36,6 +34,8 @@ const sidebars: SidebarsConfig = {
         'types/custom-types',
       ],
     },
+    'comparison',
+    'for-users',
   ],
 };
 
