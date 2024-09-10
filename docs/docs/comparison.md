@@ -513,7 +513,7 @@ I could not find any documentation for Shared Objects, so I cannot really compar
 
 #### No tuples
 
-There are no tuples in Turbo.
+There are no tuples in Expo Modules.
 
 ```ts
 type SomeTuple = [number, number]
@@ -521,7 +521,7 @@ type SomeTuple = [number, number]
 
 #### No callbacks with return values
 
-Turbo-Modules does not allow JS callbacks to return a value.
+Expo-Modules does not allow JS callbacks to return a value.
 
 ```ts
 type SomeCallback = () => number
