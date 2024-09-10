@@ -12,7 +12,7 @@ Nitro is not the only one of it's kind. There's multiple ways to build native mo
 ## Turbo Modules
 
 [Turbo Modules](https://github.com/reactwg/react-native-new-architecture/blob/main/docs/turbo-modules.md) are React Native's default framework for building native modules.
-They use a code-generator called "[codegen](https://github.com/reactwg/react-native-new-architecture/blob/main/docs/codegen.md)" to convert Flow (or TypeScript) specs to native interfaces, similar to Nitro.
+They use a code-generator called "[codegen](https://github.com/reactwg/react-native-new-architecture/blob/main/docs/codegen.md)" to convert Flow (or TypeScript) specs to native interfaces, similar to Nitro's nitrogen.
 
 <div className="side-by-side-container">
 <div className="side-by-side-block">
@@ -46,11 +46,13 @@ Turbo Modules can be built with Objective-C for iOS and Java for Android, or C++
 
 ### Shipped with react-native core
 
-Unlike Nitro, Turbo Modules are actually part of react-native core. This means, users don't have to install a single dependency to build or use a Turbo Module.
+Unlike Nitro, Turbo Modules are actually part of react-native core. This means, users don't have to install a single dependency to build- or use a Turbo Module.
 
-### No Swift
+### Implementation details
 
-There is no Swift support for Turbo Modules. You could bridge from Objective-C to Swift, but that would still always go through Objective-C, which is comparatively slower than bridging directly from C++ to Swift, like Nitro does.
+#### No Swift
+
+There is no direct Swift support for Turbo Modules. You could bridge from Objective-C to Swift, but that would still always go through Objective-C, which is comparatively slower than bridging directly from C++ to Swift, like Nitro does.
 
 <div className="side-by-side-container">
 <div className="side-by-side-block">
@@ -76,6 +78,105 @@ graph LR;
 
 </div>
 </div>
+
+#### Not object-oriented
+
+While a Turbo Module can represent many types from JavaScript, there is no equivalent to Nitro's **Hybrid Object** in Turbo Modules. Instead, every Turbo Module is a singleton, and every native method is similar to a static method.
+
+Native objects, like Image instances, can not be represented in Turbo Modules. Common workarounds include writing the image to a file, converting images to base64 strings, or using Blobs - which all introduce runtime overhead and performance hits _just to pass an image instance to JS_.
+
+<div className="side-by-side-container">
+<div className="side-by-side-block">
+
+```swift title="HybridImageEditor.swift"
+class HybridImageEditor: HybridImageEditorSpec {
+  func crop(image: HybridImage,
+            size: Size) -> HybridImage {
+    let original = image.cgImage
+    let cropped = original.cropping(to: size)
+    return HybridImage(cgImage: cropped)
+  }
+}
+```
+
+</div>
+<div className="side-by-side-block">
+
+```objc title="ImageEditor.mm"
+@implementation ImageEditor
+- (NSString*)crop:(NSString*)imageUri
+             size:(CGRect)size {
+  UIImage* image = [UIImage imageWithContentsOfFile:imageUri];
+  CGImageRef cropped = CGImageCreateWithImageInRect([image CGImage], size);
+  UIImage* croppedImage = [UIImage imageWithCGImage:cropped];
+  CGImageRelease(cropped);
+
+  NSString* fileName = [NSString stringWithFormat:@"%@.png", [[NSUUID UUID] UUIDString]];
+  NSString* filePath = [NSTemporaryDirectory() stringByAppendingPathComponent:fileName];
+  NSData* pngData = UIImagePNGRepresentation(croppedImage);
+  [pngData writeToFile:tempPath atomically:YES];
+  return tempPath;
+}
+@end
+```
+
+</div>
+</div>
+
+Using native objects (like the `HybridImage`) directly is much more efficient and performant, as well as more convenient to use than to write everything to a file.
+
+#### Events
+
+Since functions are not first-class citizens in Turbo Modules, you cannot hold onto a JavaScript callback in native code and call it more often, like you could in Nitro.
+Instead, Turbo Modules has "Events". Events are essentially just native functions that notify JS and potentially also pass data to JS more often.
+
+<div className="side-by-side-container">
+<div className="side-by-side-block">
+
+```swift title="HybridMath.swift (Nitro)"
+class Math: MathSpec {
+  var listeners: [(String) -> Void] = []
+  func addListener(listener: (String) -> Void) {
+    listeners.add(listener)
+  }
+
+  func onSomethingChanged(msg: String) {
+    for listener in listeners {
+      listener(message)
+    }
+  }
+}
+```
+
+</div>
+<div className="side-by-side-block">
+
+```objc title="RTNMath.mm (Turbo)"
+@implementation RTNMath
+RCT_EXPORT_MODULE();
+
+- (NSArray<NSString *> *)supportedEvents {
+  return @[@"onSomethingChanged"];
+}
+
+- (void)onSomethingChanged:(NSString *)message {
+  [self sendEventWithName:@"onSomethingChanged"
+                     body:@{@"msg": message}];
+}
+@end
+```
+
+</div>
+</div>
+
+Events are untyped and have to be natively defined via `supportedEvents`. In Nitro, this would be fully typesafe as functions are first class citizens. (see `addListener(..)`)
+
+#### HostObject vs NativeState
+
+As of today, Turbo Modules are implemented using `jsi::HostObject`, whereas Nitro Modules are built with `jsi::NativeState`.
+NativeState has been proven to be much more efficient and performant, as property- and method-access is much faster - it can be properly cached by the JS Runtime and does not involve any virtual/Proxy-like accessors.
+
+Additionally, Nitro Modules properly set up memory pressure per object, so the JS garbage collector actually knows a native module's memory size and can properly delete them when no longer needed. This is not the case with Turbo Modules.
 
 ### Codegen
 
@@ -118,12 +219,14 @@ Codegen on the other hand runs on app build, which causes specs to always be re-
 
 As opposed to Nitrogen, Codegen does not actually parse the syntax using an AST parser. Instead, it parses all Flow/TypeScript specs as text. This means, you cannot import an types into your spec files using Codegen, as it does not know how to resolve types in other files. Nitrogen can parse that as it uses an actual AST parser.
 
+#### Codegen supports Flow
+
+Unlike nitrogen, codegen also supports [Flow](https://flow.org).
+
 ## Legacy Native Modules
 
 Prior to [Turbo Modules](#turbo-modules), React Native provided a default approach for building native modules which was just called ["Native Modules"](https://reactnative.dev/docs/native-modules-intro).
 Instead of using JSI, Native Modules were built ontop of a communication layer that sent events and commands using JSON messages, both asynchronous and batched.
-
-They are now deprecated in favor of [Turbo Modules](#turbo-modules).
 
 Because Turbo Modules are just an evolution of Native Modules, their API is almost identical:
 
@@ -154,6 +257,8 @@ RCT_EXPORT_MODULE()
 
 </div>
 </div>
+
+They are now deprecated in favor of [Turbo Modules](#turbo-modules).
 
 ## Expo Modules
 
