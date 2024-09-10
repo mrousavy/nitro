@@ -34,6 +34,7 @@ const sidebars: SidebarsConfig = {
         'types/custom-types',
       ],
     },
+    'errors',
     'performance-tips',
     'view-components',
     'comparison',
