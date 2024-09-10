@@ -118,9 +118,28 @@ interface Math extends HybridObject {
 
 Now run nitrogen:
 
-```sh
-npm run nitrogen
-```
+<Tabs groupId="package-manager">
+  <TabItem value="npm" label="npm" default>
+    ```sh
+    npm run nitrogen
+    ```
+  </TabItem>
+  <TabItem value="yarn" label="yarn">
+    ```sh
+    yarn nitrogen
+    ```
+  </TabItem>
+  <TabItem value="pnpm" label="pnpm">
+    ```sh
+    pnpm nitrogen
+    ```
+  </TabItem>
+  <TabItem value="bun" label="bun">
+    ```sh
+    bun nitrogen
+    ```
+  </TabItem>
+</Tabs>
 
 This will generate a single C++ interface by default, which goes into `./nitrogen/generated/`:
 
