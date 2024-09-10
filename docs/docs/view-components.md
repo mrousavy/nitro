@@ -89,13 +89,13 @@ To allow your Nitro Hybrid Object to find the Turbo-/Expo-View, we need to throw
 It is up to the developer on how to handle this most efficiently, but here's an example:
 
 <Tabs groupId="native-platform-language">
-  <TabItem value="objc" label="Objective-C" default>
+  <TabItem value="objc" label="iOS (Objective-C)" default>
     ```objc
-    @implementation NitroImage
+    @implementation NitroImageView
 
     // Global map of nitroId to view instances
-    + (NSMapTable<NSNumber*, NitroImage*>*) globalViewsMap {
-      static NSMapTable<NSNumber*, NitroImage*>* _map;
+    + (NSMapTable<NSNumber*, NitroImageView*>*) globalViewsMap {
+      static NSMapTable<NSNumber*, NitroImageView*>* _map;
       if (_map == nil) {
         _map = [NSMapTable strongToWeakObjectsMapTable];
       }
@@ -110,12 +110,12 @@ It is up to the developer on how to handle this most efficiently, but here's an 
     @end
     ```
   </TabItem>
-  <TabItem value="kotlin" label="Kotlin">
+  <TabItem value="kotlin" label="Android (Kotlin)">
     ```kotlin
-    class NitroImage {
+    class NitroImageView {
       companion object {
         // Global map of nitroId to view instances
-        val globalViewsMap = HashMap<Double, WeakReference<NitroImage>>()
+        val globalViewsMap = HashMap<Double, WeakReference<NitroImageView>>()
       }
 
       // Override `nitroId` setter to throw `this` into global map
@@ -143,10 +143,10 @@ export interface NitroImageViewManager extends HybridObject {
 }
 ```
 
-Now implement `NitroImageViewManager` in Swift and Kotlin, and assume it has to be created with a valid `NitroImage` instance:
+Now implement `NitroImageViewManager` in Swift and Kotlin, and assume it has to be created with a valid `NitroImageView` instance:
 
 <Tabs>
-  <TabItem value="swift" label="Swift" default>
+  <TabItem value="swift" label="iOS (Swift)" default>
     ```swift
     class HybridNitroImageViewManager: HybridNitroImageViewManagerSpec {
       private let view: NitroImageView
@@ -165,7 +165,7 @@ Now implement `NitroImageViewManager` in Swift and Kotlin, and assume it has to 
     }
     ```
   </TabItem>
-  <TabItem value="kotlin" label="Kotlin">
+  <TabItem value="kotlin" label="Android (Kotlin)">
     ```kotlin
     class HybridNitroImageViewManager: HybridNitroImageViewManagerSpec() {
       private val view: NitroImageView
@@ -187,7 +187,7 @@ Now implement `NitroImageViewManager` in Swift and Kotlin, and assume it has to 
 
 ### 6. Connect the Nitro view manager to the native View
 
-To actually create instances of `HybridNitroImageViewManager`, we need to first resolve the view. For that, we created a helper `NitroImageViewManagerRegistry`:
+To actually create instances of `HybridNitroImageViewManager`, we need to first find the view for the given `nitroId`. For that, we created a helper `NitroImageViewManagerRegistry`:
 
 ```ts
 export interface NitroImageViewManagerRegistry extends HybridObject {
@@ -198,7 +198,7 @@ export interface NitroImageViewManagerRegistry extends HybridObject {
 ..which we need to implement in native:
 
 <Tabs>
-  <TabItem value="swift" label="Swift" default>
+  <TabItem value="swift" label="iOS (Swift)" default>
     ```swift
     class HybridNitroImageViewManagerRegistry: HybridNitroImageViewManagerRegistrySpec {
       func createViewManager(nitroId: Double) -> NitroImageViewManagerSpec {
@@ -208,7 +208,7 @@ export interface NitroImageViewManagerRegistry extends HybridObject {
     }
     ```
   </TabItem>
-  <TabItem value="kotlin" label="Kotlin">
+  <TabItem value="kotlin" label="Android (Kotlin)">
     ```kotlin
     class HybridNitroImageViewManagerRegistry: HybridNitroImageViewManagerRegistrySpec() {
       fun createViewManager(nitroId: Double): NitroImageViewManagerSpec {
@@ -226,6 +226,7 @@ After setting up those bindings, we can now route all our props through Nitro - 
 
 ```tsx title="NitroImage.tsx
 const NativeNitroImageView = /* From Turbo-/Expo- APIs */
+const NitroViewManagerFactory = NitroModules.createHybridObject("NitroViewManagerFactory")
 
 let nitroIdCounter = 0
 export function NitroImage(props: NitroImageProps) {
@@ -233,10 +234,12 @@ export function NitroImage(props: NitroImageProps) {
   const nitroViewManager = useRef<NitroViewManager>(null)
 
   useEffect(() => {
+    // Create a View Manager for the respective View (looked up via `nitroId`)
     nitroViewManager.current = NitroViewManagerFactory.createViewManager(nitroId)
   }, [nitroId])
 
   useEffect(() => {
+    // Update props through Nitro - this natively sets them on the view as well.
     nitroViewManager.current.image = props.image
     nitroViewManager.current.opacity = props.opacity
   }, [props.image, props.opacity])
