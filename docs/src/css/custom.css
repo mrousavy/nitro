@@ -223,7 +223,8 @@ pre {
 .pagination-nav__link {
   border-radius: 8px;
   border: 2px solid #232a3f;
-  background-color: #d0e8f7;
+  background-color: #e0f2ff;
+  /* border: none; */
   color: #232a3f;
   font-weight: 700;
 }
@@ -232,10 +233,9 @@ pre {
   border-right: 2px solid #232a3f !important;
 }
 
-p > code {
-  background-color: #d0e8f7;
+:is(p, h1, h2, h3, td, li, a) > code {
+  background-color: #ffffff;
   color: #232a3f;
-  font-size: 0.9rem;
   padding: 3px 8px;
   border: none;
 }
