@@ -6,6 +6,7 @@
   border-top: 2px solid #232a3f;
   background-color: #f0f9ff;
 }
+
 [data-theme='dark'] .features {
   border-top: 2px solid #656d86;
   background-color: #191e2d;
@@ -17,15 +18,33 @@
   margin-bottom: 1rem;
 }
 
+[data-theme='dark'] .featureSvg {
+  filter: brightness(0.8) contrast(1.2);
+}
+
 .highlight {
+  color: var(--ifm-color-accent);
+}
+
+[data-theme='dark'] .highlight {
   color: var(--ifm-color-accent);
 }
 
 .description {
   opacity: 0.8;
 }
+
+[data-theme='dark'] .description {
+  opacity: 0.9;
+  color: #a8c4d8;
+}
+
 .title {
   font-family: 'Clash Display', sans-serif;
   font-weight: 500;
   font-size: 1.8rem;
+}
+
+[data-theme='dark'] .title {
+  color: #e0e0e0;
 }

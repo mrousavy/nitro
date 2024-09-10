@@ -15,6 +15,7 @@
 
 [data-theme='dark'] .heroBanner {
   background-color: #183f58;
+  background: color(display-p3 0.0941 0.2471 0.3451);
 }
 
 .heroLogo {
@@ -38,6 +39,14 @@
   position: relative;
   transform-style: preserve-3d;
 }
+
+[data-theme='dark'] .heroButton {
+  color: #e0e0e0;
+  border-color: #00000090;
+  background: #ff4c7c;
+  background: color(display-p3 0.8431 0.3294 0.4863);
+}
+
 .heroButton::before,
 .heroButton::after {
   content: '';
@@ -52,21 +61,42 @@
   transition: transform 0.2s ease;
   transform: translateZ(-1px);
 }
+
+[data-theme='dark'] .heroButton::before,
+[data-theme='dark'] .heroButton::after {
+  border-color: #0000005e;
+}
+
 .heroButton::before {
   background-color: #289eec;
 }
+
+[data-theme='dark'] .heroButton::before {
+  background-color: #1c7ab3;
+}
+
 .heroButton::after {
   background-color: #59b3ef;
 }
+
+[data-theme='dark'] .heroButton::after {
+  background-color: #3399ff;
+}
+
 .heroButton:hover {
   transform: translate(-16px, -16px);
   text-decoration: none;
   color: white;
 }
 
+[data-theme='dark'] .heroButton:hover {
+  color: #e0e0e0;
+}
+
 .heroButton:hover::before {
   transform: translate(8px, 8px) translateZ(-1px);
 }
+
 .heroButton:hover::after {
   transform: translate(16px, 16px) translateZ(-2px);
 }
