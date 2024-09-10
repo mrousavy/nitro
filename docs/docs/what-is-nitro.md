@@ -116,6 +116,26 @@ interface Math extends HybridObject {
 }
 ```
 
+## Object-Oriented approach
+
+Every Hybrid Object in Nitro is a native object, which can be created, passed around, and destroyed.
+
+```ts
+interface Image extends HybridObject {
+  readonly width: number
+  readonly height: number
+  saveToFile(path: string): Promise<void>
+}
+
+interface ImageEditor extends HybridObject {
+  loadImage(path: string): Promise<Image>
+  crop(image: Image, size: Size): Image
+}
+```
+
+Functions (or "callbacks") are also first-class citizens of Nitro, which means they can safely be kept in memory, called as often as needed, and will automatically be cleaned up when no longer needed.
+This is somewhat similar to how other frameworks (like Turbo-Modules) implement "events".
+
 ## Modern Languages
 
 Nitro is a modern framework, built ontop of modern languages like Swift and Kotlin.

@@ -111,6 +111,10 @@ const config: Config = {
               label: 'margelo.com',
               href: 'https://margelo.com',
             },
+            {
+              label: 'Nitro Benchmarks',
+              href: 'https://github.com/mrousavy/NitroBenchmarks',
+            },
           ],
         },
       ],
