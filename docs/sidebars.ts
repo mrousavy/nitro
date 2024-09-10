@@ -15,6 +15,7 @@ const sidebars: SidebarsConfig = {
     'intro',
     'supported-types',
     'comparison',
+    'nitrogen',
     'for-users',
     {
       type: 'category',

@@ -10,7 +10,6 @@ Nitro uses an extensible typing system to efficiently convert between JS and C++
 
 For example, a JS `number` will always be a `double` on the native side:
 
-
 <div className="side-by-side-container">
 <div className="side-by-side-block">
 
@@ -36,6 +35,11 @@ Nitro strictly enforces **type-safety** and **null-safety** - both at compile-ti
 This prevents accidentally passing a wrong type to `add(..)` (for example, a `string`) and performs null-checks to prevent passing and returning `null`/`undefined` values.
 
 On the JS side (TypeScript), type- and null-safety is enforced via TypeScript - so use it!
+
+## Nitrogen
+
+[Nitrogen](nitrogen) ensures that TypeScript definitions are always in sync with native type definitions.
+You can also use Nitro without nitrogen, in this case TypeScript definitions have to be written manually.
 
 ## Supported Types
 
