@@ -147,6 +147,7 @@ This will generate a single C++ interface by default, which goes into `./nitroge
 ```
 
 Note: You should push the files in `nitrogen/generated` to git, and make sure those files are part of your npm package.
+This way your library will always ship a working package as a whole (including generated interfaces), and the user does not need to do anything else than to install your package.
 
 ### 3. Implement (native)
 
