@@ -11,19 +11,29 @@ import type {SidebarsConfig} from '@docusaurus/plugin-content-docs';
  Create as many sidebars as you want.
  */
 const sidebars: SidebarsConfig = {
-  tutorialSidebar: [
-    'intro',
-    'supported-types',
+  docs: [
+    'what-is-nitro',
+    'comparison',
+    'hybrid-objects',
+    'nitrogen',
     'for-users',
     {
       type: 'category',
-      label: 'Nitrogen',
+      label: 'Types',
       items: [
-        'nitrogen/getting-started',
-        'nitrogen/primitives',
-        'nitrogen/strings',
-        'nitrogen/arrays',
-        'nitrogen/enums',
+        'types/types',
+        'types/primitives',
+        'types/arrays',
+        'types/optionals',
+        'types/tuples',
+        'types/variants',
+        'types/promises',
+        'types/callbacks',
+        'types/typed-maps',
+        'types/untyped-maps',
+        'types/array-buffers',
+        'types/hybrid-objects',
+        'types/custom-types',
       ],
     },
   ],

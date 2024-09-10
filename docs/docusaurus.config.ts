@@ -45,6 +45,10 @@ const config: Config = {
     ],
   ],
 
+  markdown: {
+    mermaid: true,
+  },
+  themes: ['@docusaurus/theme-mermaid'],
   themeConfig: {
     image: 'img/social-card.png',
     tableOfContents: {
@@ -65,9 +69,9 @@ const config: Config = {
       items: [
         {
           type: 'docSidebar',
-          sidebarId: 'tutorialSidebar',
+          sidebarId: 'docs',
           position: 'left',
-          label: 'Tutorial',
+          label: 'Docs',
         },
         {
           href: 'https://github.com/mrousavy/nitro',
@@ -107,6 +111,10 @@ const config: Config = {
               label: 'margelo.com',
               href: 'https://margelo.com',
             },
+            {
+              label: 'Nitro Benchmarks',
+              href: 'https://github.com/mrousavy/NitroBenchmarks',
+            },
           ],
         },
       ],
@@ -125,6 +133,11 @@ const config: Config = {
         'java',
       ],
       magicComments: [
+        {
+          className: 'theme-code-block-highlighted-line',
+          line: 'highlight-next-line',
+          block: {start: 'highlight-start', end: 'highlight-end'},
+        },
         {
           className: 'code-block-diff-add-line',
           line: 'diff-add'
