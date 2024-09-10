@@ -11,7 +11,7 @@ type FeatureItem = {
 const FeatureList: FeatureItem[] = [
   {
     title: 'Mindblowingly Fast',
-    imageSource: require('@site/static/img/graphic-rocket.png').default,
+    imageSource: require('@site/static/img/lightning-bolt.png').default,
     description: (
       <>
         Nitro Modules are built ontop of a highly optimized JSI foundation that
@@ -22,7 +22,7 @@ const FeatureList: FeatureItem[] = [
   },
   {
     title: 'Statically Typed',
-    imageSource: require('@site/static/img/graphic-ladder.png').default,
+    imageSource: require('@site/static/img/dna.png').default,
     description: (
       <>
         Nitro's code-generator ("Nitrogen") statically generates{' '}
@@ -33,7 +33,7 @@ const FeatureList: FeatureItem[] = [
   },
   {
     title: 'Powerful and Flexible',
-    imageSource: require('@site/static/img/graphic-spring.png').default,
+    imageSource: require('@site/static/img/spring.png').default,
     description: (
       <>
         Similar to pure JavaScript objects, a "HybridObject" in Nitro can work
