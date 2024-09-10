@@ -8,10 +8,11 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  padding: 6rem 0;
+  padding: 6rem 2rem;
   background-color: #92c5e7;
   background: color(display-p3 0.5707 0.772 0.9073);
 }
+
 [data-theme='dark'] .heroBanner {
   background-color: #183f58;
 }
@@ -19,11 +20,6 @@
 .heroLogo {
   max-width: 25rem;
   width: 100%;
-}
-@media screen and (max-width: 996px) {
-  .heroBanner {
-    padding: 2rem;
-  }
 }
 
 .heroButton {
@@ -75,10 +71,6 @@
   transform: translate(16px, 16px) translateZ(-2px);
 }
 
-.heroImage {
-  width: 10rem;
-}
-
 .heroContentContainer {
   position: relative;
   display: flex;
@@ -90,7 +82,7 @@
 }
 
 .heroIcon {
-  width: 150px;
-  height: 150px;
-  color: white;
+  width: 132px;
+  height: 132px;
+  margin-bottom: 1rem;
 }
