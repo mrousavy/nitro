@@ -11,9 +11,9 @@ import type {SidebarsConfig} from '@docusaurus/plugin-content-docs';
  Create as many sidebars as you want.
  */
 const sidebars: SidebarsConfig = {
-  tutorialSidebar: [
+  docs: [
     'intro',
-    'supported-types',
+    'types',
     'comparison',
     'nitrogen',
     'for-users',
