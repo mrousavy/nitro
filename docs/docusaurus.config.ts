@@ -67,7 +67,7 @@ const config: Config = {
         tagName: 'link',
         attributes: {
           rel: 'stylesheet',
-          href: 'https://api.fontshare.com/css?f[]=satoshi@500,600&display=swap',
+          href: 'https://api.fontshare.com/css?f[]=satoshi@500,600,700&display=swap',
         },
       },
     ],
@@ -140,27 +140,29 @@ const config: Config = {
     metadata: [
       {
         name: 'author',
-        content: 'Marc Rousavy'
+        content: 'Marc Rousavy',
       },
       {
         name: 'keywords',
-        content: 'react, native, nitro, modules, react-native, native, turbo, expo, documentation, coding, docs, guides, marc, rousavy, mrousavy'
+        content:
+          'react, native, nitro, modules, react-native, native, turbo, expo, documentation, coding, docs, guides, marc, rousavy, mrousavy',
       },
       {
         name: 'og:title',
-        content: 'Nitro Documentation'
+        content: 'Nitro Documentation',
       },
       {
         name: 'og:type',
-        content: 'application'
+        content: 'application',
       },
       {
         name: 'og:description',
-        content: 'A framework to build mindblowingly fast native modules with type-safe statically compiled JS bindings.'
+        content:
+          'A framework to build mindblowingly fast native modules with type-safe statically compiled JS bindings.',
       },
       {
         name: 'og:image',
-        content: '/img/social-card.png'
+        content: '/img/social-card.png',
       },
     ],
     prism: {

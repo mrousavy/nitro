@@ -1,12 +1,16 @@
 :root {
   --ifm-font-family-base: 'Satoshi', sans-serif;
-  --ifm-color-primary: #006bb6;
+  --ifm-heading-color: #232a3f;
+  --ifm-color-black: #232a3f;
+  --ifm-font-color-base: #232a3f;
+  --ifm-color-primary: #1c91df;
   --ifm-color-primary-dark: #1560c4;
   --ifm-color-primary-darker: #124ca1;
   --ifm-color-primary-darkest: #0f3b7e;
   --ifm-color-primary-light: #4a90e2;
   --ifm-color-primary-lighter: #6aa6f2;
   --ifm-color-primary-lightest: #8abcfb;
+  --ifm-menu-color-active: #232a3f;
   --ifm-code-font-size: 95%;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.05);
   --ifm-background-color: #f0f9ff;
@@ -161,4 +165,41 @@ div {
   font-weight: 500;
   letter-spacing: 0.01rem;
   font-size: 1rem;
+}
+
+.docs-wrapper h1,
+h2,
+h3 {
+  font-family: 'Clash Display', sans-serif;
+  font-weight: 600;
+}
+
+.breadcrumbs__link {
+  color: #232a3f !important;
+}
+
+.breadcrumbs__item--active .breadcrumbs__link {
+  border-color: #232a3f !important;
+  border: 2px solid !important;
+  background-color: white !important;
+  font-weight: 700;
+}
+
+.menu__link {
+  padding: 10px 12px;
+  font-weight: 700;
+  border-radius: 6px;
+  color: #232a3f;
+}
+.menu__link:hover,
+.menu__list-item-collapsible:hover {
+  background-color: #232a3f0e;
+  color: #232a3f;
+}
+.menu__link--active:not(.menu__link--sublist) {
+  background-color: #e0f2ff;
+  box-shadow: 0 0 0 2px #232a3f inset;
+}
+.menu {
+  padding-right: 8px !important;
 }
