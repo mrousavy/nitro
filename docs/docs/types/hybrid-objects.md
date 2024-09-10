@@ -64,8 +64,7 @@ Even if they use different implementations under the hood, they all share a comm
 
 ```ts title="Cropper.nitro.ts"
 interface Cropper extends HybridObject {
-  crop(image: Image,
-       size: Size): Image
+  crop(image: Image, size: Size): Image
 }
 ```
 
