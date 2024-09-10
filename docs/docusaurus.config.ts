@@ -93,7 +93,7 @@ const config: Config = {
         {
           type: 'doc',
           docId: 'for-users',
-          position: 'left',
+          position: 'right',
           label: 'Installation',
         },
         {
