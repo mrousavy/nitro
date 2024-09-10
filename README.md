@@ -24,8 +24,9 @@ cd ios && pod install
 
 ## Documentation
 
-- [**Nitrogen** docs](./packages/nitrogen/README.md)
-- [**react-native-nitro-modules** docs](./packages/react-native-nitro-modules/README.md)
+- [**Nitro** docs 📚](https://mrousavy.github.io/nitro/)
+- [**nitrogen**/README.md](./packages/nitrogen/README.md)
+- [**react-native-nitro-modules**/README.md](./packages/react-native-nitro-modules/README.md)
 - [**react-native-nitro-image** example module](./packages/react-native-nitro-image/README.md)
 
 ## Supported Platforms
