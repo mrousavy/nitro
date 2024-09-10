@@ -291,16 +291,16 @@ export const Math =
 
 #### Codegen runs on app build
 
-Nitrogen is executed explicitly by the library developer and all generated interfaces are local and have to be committed to the GitHub repository.
+Nitrogen is executed explicitly by the library developer and all generated interfaces are part of the npm package to always ship a working solution.
 Codegen on the other hand runs on app build, which causes specs to always be re-generated for every app.
 
 #### Codegen cannot resolve imports
 
-As opposed to Nitrogen, Codegen can not resolve type imports from separate files.
+While Nitrogen can properly resolve imports from other files, Codegen can not.
 
 #### Codegen supports Flow
 
-Unlike nitrogen, codegen also supports [Flow](https://flow.org).
+Codegen also supports [Flow](https://flow.org), while Nitrogen doesn't.
 
 ## Legacy Native Modules
 
