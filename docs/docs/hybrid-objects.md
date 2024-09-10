@@ -36,6 +36,8 @@ class HybridMath : HybridMathSpec {
 </div>
 </div>
 
+## Working with Hybrid Objects
+
 Hybrid Objects can be created using `createHybridObject(...)` if they have been registered on the native side:
 
 ```ts
@@ -69,6 +71,35 @@ graph TD;
   HybridImageSpec-->Image["const image"]
 ```
 </div>
+
+## Base Methods
+
+Every Hybrid Object has base methods and properties:
+
+```ts
+const math = NitroModules.createHybridObject<Math>("Math")
+const anotherMath = math
+
+console.log(math.name) // "Math"
+console.log(math.toString()) // "[HybridObject Math]"
+console.log(math.equals(anotherMath)) // true
+```
+
+### `dispose()`
+
+Every Hybrid Object has a `dispose()` method.
+Usually, you should not need to manually dispose Hybrid Objects as the JS garbage collector will delete any unused objects anyways.
+Also, most Hybrid Objects in Nitro are just statically exported singletons, in which case they should never be deleted throughout the app's lifetime.
+
+In some rare, often performance-critical- cases it is beneficial to eagerly destroy any Hybrid Objects, which is why `dispose()` exists.
+For example, [VisionCamera](https://github.com/mrousavy/react-native-vision-camera) uses `dispose()` to clean up already processed Frames to make room for new incoming Frames:
+
+```ts
+const onFrameListener = (frame: Frame) => {
+  doSomeProcessing(frame)
+  frame.dispose()
+}
+```
 
 ## Implementation
 
@@ -120,7 +151,7 @@ Hybrid Objects can be implemented in C++, Swift or Kotlin:
   </TabItem>
   <TabItem value="manually" label="Manually">
 
-  To implement a Hybrid Object, you need to implement the [`HybridObject`](https://github.com/mrousavy/nitro/blob/main/packages/react-native-nitro-modules/cpp/core/HybridObject.hpp) C++ base class, and override `loadHybridMethods()`:
+  To implement a Hybrid Object without nitrogen, you just need to create a C++ class that inherits from the [`HybridObject`](https://github.com/mrousavy/nitro/blob/main/packages/react-native-nitro-modules/cpp/core/HybridObject.hpp) base class, and override `loadHybridMethods()`:
 
   <div className="side-by-side-container">
     <div className="side-by-side-block">
