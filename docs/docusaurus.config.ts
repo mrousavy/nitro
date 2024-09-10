@@ -137,6 +137,32 @@ const config: Config = {
       ],
       copyright: `Copyright © ${new Date().getFullYear()} Marc Rousavy / Margelo`,
     },
+    metadata: [
+      {
+        name: 'author',
+        content: 'Marc Rousavy'
+      },
+      {
+        name: 'keywords',
+        content: 'react, native, nitro, modules, react-native, native, turbo, expo, documentation, coding, docs, guides, marc, rousavy, mrousavy'
+      },
+      {
+        name: 'og:title',
+        content: 'Nitro Documentation'
+      },
+      {
+        name: 'og:type',
+        content: 'application'
+      },
+      {
+        name: 'og:description',
+        content: 'A framework to build mindblowingly fast native modules with type-safe statically compiled JS bindings.'
+      },
+      {
+        name: 'og:image',
+        content: '/img/social-card.png'
+      },
+    ],
     prism: {
       theme: prismThemes.oneLight,
       darkTheme: prismThemes.oneDark,

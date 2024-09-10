@@ -32,7 +32,7 @@ export default function Home(): JSX.Element {
   return (
     <Layout
       title="Welcome to Nitro!"
-      description="Description will go into a meta tag in <head />"
+      description="A framework to build mindblowingly fast native modules with type-safe statically compiled JS bindings."
     >
       <HomepageHeader />
       <main>
