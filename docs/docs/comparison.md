@@ -189,7 +189,7 @@ Using native objects (like the `HybridImage`) directly is much more efficient an
 
 #### No tuples
 
-There are no tuples in Turbo.
+There are no tuples in Turbo Modules.
 
 ```ts
 type SomeTuple = [number, number]
@@ -197,7 +197,7 @@ type SomeTuple = [number, number]
 
 #### No callbacks with return values
 
-Turbo-Modules does not allow JS callbacks to return a value.
+Turbo Modules do not allow JS callbacks to return a value.
 
 ```ts
 type SomeCallback = () => number
