@@ -187,14 +187,6 @@ class HybridImageEditor: HybridImageEditorSpec {
 
 Using native objects (like the `HybridImage`) directly is much more efficient and performant, as well as more convenient to use than to write everything to a file.
 
-#### No variants
-
-There are no variants in Turbo.
-
-```ts
-type SomeVariant = number | string
-```
-
 #### No tuples
 
 There are no tuples in Turbo.
@@ -302,9 +294,9 @@ export const Math =
 Nitrogen is executed explicitly by the library developer and all generated interfaces are local and have to be committed to the GitHub repository.
 Codegen on the other hand runs on app build, which causes specs to always be re-generated for every app.
 
-#### Codegen does not parse AST
+#### Codegen cannot resolve imports
 
-As opposed to Nitrogen, Codegen does not actually parse the syntax using an AST parser. Instead, it parses all Flow/TypeScript specs as text. This means, you cannot import an types into your spec files using Codegen, as it does not know how to resolve types in other files. Nitrogen can parse that as it uses an actual AST parser.
+As opposed to Nitrogen, Codegen can not resolve type imports from separate files. 
 
 #### Codegen supports Flow
 
