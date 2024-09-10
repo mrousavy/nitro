@@ -1,8 +1,16 @@
+/* Root variables */
 :root {
+  /* Font family */
   --ifm-font-family-base: 'Satoshi', sans-serif;
+
+  /* Colors */
   --ifm-heading-color: #232a3f;
   --ifm-color-black: #232a3f;
   --ifm-font-color-base: #232a3f;
+  --ifm-color-accent: #ff4c4c;
+  --ifm-background-color: #f0f9ff;
+
+  /* Primary colors */
   --ifm-color-primary: #1c91df;
   --ifm-color-primary-dark: #1560c4;
   --ifm-color-primary-darker: #124ca1;
@@ -10,16 +18,20 @@
   --ifm-color-primary-light: #4a90e2;
   --ifm-color-primary-lighter: #6aa6f2;
   --ifm-color-primary-lightest: #8abcfb;
+
+  /* Menu and code */
   --ifm-menu-color-active: #232a3f;
   --ifm-code-font-size: 95%;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.05);
-  --ifm-background-color: #f0f9ff;
-  --ifm-color-accent: #ff4c4c;
+
+  /* Code diff */
   --code-diff-add: #c8f2c299;
   --code-diff-remove: #fcd4d499;
 }
 
+/* Dark theme */
 [data-theme='dark'] {
+  /* Primary colors */
   --ifm-color-primary: #3399ff;
   --ifm-color-primary-dark: #2e89e0;
   --ifm-color-primary-darker: #2877c7;
@@ -27,16 +39,21 @@
   --ifm-color-primary-light: #66b2ff;
   --ifm-color-primary-lighter: #80c1ff;
   --ifm-color-primary-lightest: #99d1ff;
+
+  /* Background colors */
   --ifm-background-color: #191e2d !important;
   --ifm-background-surface-color: #232a3f !important;
   --docusaurus-highlighted-code-line-bg: rgba(255, 255, 255, 0.2);
 
-  /* Accent color for specific elements */
-  --ifm-color-accent: #ff4c4c; /* Slightly brighter Red accent for better contrast */
+  /* Accent color */
+  --ifm-color-accent: #ff4c4c;
+
+  /* Code diff */
   --code-diff-add: #81c78466;
   --code-diff-remove: #e5737366;
 }
 
+/* Footer styles */
 .footer {
   --ifm-footer-background-color: #e0f2ff !important;
 }
@@ -45,12 +62,14 @@
   text-align: left;
   opacity: 0.3;
 }
+
 [data-theme='light'] .footer {
   border-top: 2px solid #232a3f;
   --ifm-footer-color: #232a3f !important;
   --ifm-footer-link-color: #232a3f !important;
   --ifm-footer-title-color: #232a3f !important;
 }
+
 [data-theme='dark'] .footer {
   border-top: 2px solid #656d86;
   --ifm-footer-background-color: #191e2d !important;
@@ -58,25 +77,30 @@
   --ifm-footer-link-color: #a8c4d8 !important;
   --ifm-footer-title-color: #a8c4d8 !important;
 }
+
+/* Navbar styles */
 .navbar {
   border-bottom: 2px solid #232a3f;
   background-color: #e0f2ff;
 }
+
 [data-theme='dark'] .navbar {
   background-color: #191e2d;
   border-bottom: 2px solid #656d86;
 }
+
 .navbar a {
   font-family: 'Satoshi', sans-serif;
   font-weight: 700;
-  /* text-transform: uppercase; */
 }
 
+/* Hero section styles */
 .hero__title {
   font-family: 'Clash Display', sans-serif;
   font-weight: 500;
   font-size: 3rem;
 }
+
 .hero__subtitle {
   font-family: 'Satoshi', sans-serif;
   font-weight: 500;
@@ -84,34 +108,36 @@
   font-size: 1.5rem;
   max-width: 700px;
 }
-/* For adding diff + / - to prism codeblocks */
-.code-block-diff-add-line {
-  background-color: var(--code-diff-add);
+
+/* Code block diff styles */
+.code-block-diff-add-line,
+.code-block-diff-remove-line {
   display: block;
   padding-left: 40px;
   margin-left: -40px;
   margin-right: -16px;
 }
 
-.code-block-diff-add-line::before {
-  position: absolute;
-  left: 8px;
-  padding-right: 8px;
-  content: '+';
+.code-block-diff-add-line {
+  background-color: var(--code-diff-add);
 }
 
 .code-block-diff-remove-line {
   background-color: var(--code-diff-remove);
-  display: block;
-  padding-left: 40px;
-  margin-left: -40px;
-  margin-right: -16px;
 }
 
+.code-block-diff-add-line::before,
 .code-block-diff-remove-line::before {
   position: absolute;
   left: 8px;
   padding-right: 8px;
+}
+
+.code-block-diff-add-line::before {
+  content: '+';
+}
+
+.code-block-diff-remove-line::before {
   content: '-';
 }
 
@@ -123,17 +149,12 @@
   border-left: 3px solid #ff000080;
 }
 
-/**
- * use magic comments to mark diff blocks
- */
-pre code:has(.code-block-diff-add-line) {
-  padding-left: 40px !important;
-}
-
+pre code:has(.code-block-diff-add-line),
 pre code:has(.code-block-diff-remove-line) {
   padding-left: 40px !important;
 }
 
+/* Side-by-side container styles */
 .side-by-side-container {
   display: flex;
   flex-direction: row;
@@ -157,6 +178,8 @@ pre code:has(.code-block-diff-remove-line) {
 .side-by-side-block .theme-code-block {
   flex: 1;
 }
+
+/* Typography styles */
 body,
 p,
 li,
@@ -173,53 +196,61 @@ h3 {
   font-weight: 600;
 }
 
+/* Breadcrumbs styles */
 .breadcrumbs__link {
   color: #232a3f !important;
 }
 
 .breadcrumbs__item--active .breadcrumbs__link {
-  /* border: 2px solid #232a3f28 !important; */
   background-color: #d0e8f7 !important;
   font-weight: 700;
 }
 
+/* Menu styles */
 .menu__link {
   padding: 10px 12px;
   font-weight: 700;
   border-radius: 8px;
   color: #232a3f;
 }
+
 .menu__link:hover,
 .menu__list-item-collapsible:hover {
   background-color: #232a3f0e;
   color: #232a3f;
 }
+
 .menu__link--active:not(.menu__link--sublist) {
   background-color: #d0e8f7;
   box-shadow: 0 0 0 2px #232a3f inset;
 }
+
 .menu {
   padding: 12px 12px 12px 12px !important;
 }
+
 .menu__list-item:not(:first-child) {
   margin-top: 0.35rem;
 }
 
+/* Code block styles */
 .theme-code-block {
   border: 2px solid #232a3f;
 }
 
-/* first child of .theme-code-block */
 .theme-code-block > div:nth-of-type(1) {
   border-color: #232a3f;
   border-width: 2px;
 }
+
 .theme-code-block,
 .theme-code-block > code,
 pre {
   background-color: white !important;
   box-shadow: none !important;
 }
+
+/* Pagination styles */
 .pagination-nav__link {
   border-radius: 8px;
   border: 2px solid #232a3f;
@@ -228,10 +259,12 @@ pre {
   font-weight: 700;
 }
 
+/* Sidebar styles */
 .theme-doc-sidebar-container {
   border-right: 2px solid #232a3f !important;
 }
 
+/* Inline code styles */
 :is(p, h1, h2, h3, td, li, a) > code {
   background-color: #ffffff;
   color: #232a3f;
@@ -239,25 +272,29 @@ pre {
   border: none;
 }
 
+/* Flowchart styles */
 .node > rect {
-  rx: 6 !important;
-  ry: 6 !important;
+  rx: 6px !important;
+  ry: 6px !important;
   stroke-width: 2px !important;
   stroke: #c2ddf0 !important;
   fill: #e6f4ff !important;
 }
+
 .nodeLabel {
   font-family: 'Satoshi', sans-serif;
   font-weight: 500;
   font-size: 0.9rem;
   color: #3a7aa9 !important;
 }
+
 .edgePaths > path {
   transform: scale(0.7);
   transform-origin: center;
   transform-box: fill-box;
   stroke-width: 3px !important;
 }
+
 .flowchartTitleText {
   font-family: 'Satoshi', sans-serif;
   font-weight: 600;
