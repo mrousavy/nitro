@@ -77,7 +77,7 @@ class HybridCropper: HybridCropperSpec {
   func crop(image: HybridImageSpec,
             size: Size) -> HybridImageSpec {
     let data = image.data
-    let croppedData = myCustomCropFunction(data, size)
+    let croppedData = cropFunc(data, size)
     return HybridCGImage(data: croppedData)
   }
 }
