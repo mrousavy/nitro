@@ -95,9 +95,13 @@ Either generate one automatically using `nitrogen`, or create a `nitro.json` you
 </Tabs>
 
 
-## Run it
+## Usage
 
-Nitrogen parses all TypeScript files that end in `.nitro.ts`. For example, let's create `Math.nitro.ts`:
+Nitrogen parses all TypeScript files that end in `.nitro.ts`.
+
+### 1. Write TypeScript specs (JS)
+
+For example, let's create `Math.nitro.ts`:
 
 ```ts title="Math.nitro.ts"
 interface Math extends HybridObject {
@@ -105,8 +109,111 @@ interface Math extends HybridObject {
 }
 ```
 
+### 2. Generate native specs (JS -> native)
+
 Now run nitrogen:
 
 ```sh
 npm run nitrogen
+```
+
+This will generate a single C++ interface by default, which goes into `./nitrogen/generated/`:
+
+```
+🔧  Loading nitro.json config...
+🚀  Nitrogen runs at ~/Projects/nitro/example/dummy
+    🔍  Nitrogen found 1 spec in ~/Projects/nitro/example/dummy
+⏳  Parsing Math.nitro.ts...
+    ⚙️  Generating specs for HybridObject "Math"...
+        shared: Generating C++ code...
+⛓️   Setting up build configs for autolinking...
+🎉  Generated 1/1 HybridObject in 0.6s!
+💡  Your code is in ./nitrogen/generated
+‼️  Added 8 files - you need to run `pod install`/sync gradle to update files!
+```
+
+Note: You should push the files in `nitrogen/generated` to git, and make sure those files are part of your npm package.
+
+### 3. Implement (native)
+
+To implement `Math` now, you just need to implement the spec:
+
+<Tabs groupId="native-language">
+  <TabItem value="swift" label="Swift" default>
+    ```swift title="HybridMath.swift"
+    class HybridMath : HybridMathSpec {
+      public func add(a: Double, b: Double) throws -> Double {
+        return a + b
+      }
+    }
+    ```
+  </TabItem>
+  <TabItem value="kotlin" label="Kotlin">
+    ```kotlin title="HybridMath.kt"
+    class HybridMath : HybridMathSpec() {
+      override fun add(a: Double, b: Double): Double {
+        return a + b
+      }
+    }
+    ```
+  </TabItem>
+  <TabItem value="c++" label="C++">
+    <div className="side-by-side-container">
+      <div className="side-by-side-block">
+        ```cpp title="HybridMath.hpp"
+        class HybridMath: public HybridMathSpec {
+        public:
+          double add(double a, double b) override;
+        };
+        ```
+      </div>
+      <div className="side-by-side-block">
+        ```cpp title="HybridMath.cpp"
+        double HybridMath::add(double a, double b) {
+          return a + b;
+        }
+        ```
+      </div>
+    </div>
+  </TabItem>
+</Tabs>
+
+### 4. Register (native)
+
+Then, register `HybridMath` somewhere on app startup so JS can initialize it.
+
+<Tabs groupId="native-language">
+  <TabItem value="swift" label="Swift" default>
+    ```swift
+    HybridObjectRegistry.registerHybridObjectConstructor("Math") {
+      return HybridMath()
+    }
+    ```
+  </TabItem>
+  <TabItem value="kotlin" label="Kotlin">
+    ```kotlin
+    HybridObjectRegistry.registerHybridObjectConstructor("Math") {
+      HybridMath()
+    }
+    ```
+  </TabItem>
+  <TabItem value="c++" label="C++">
+    ```cpp
+    HybridObjectRegistry::registerHybridObjectConstructor(
+      "Math",
+      []() -> std::shared_ptr<HybridObject> {
+        return std::make_shared<HybridMath>();
+      }
+    );
+    ```
+  </TabItem>
+</Tabs>
+
+### 5. Initialize (TS)
+
+And finally, to initialize `HybridMath` from JS you just need to call `createHybridObject`:
+
+```ts
+export const MathModule = NitroModules.createHybridObject<Math>("Math")
+const result = MathModule.add(5, 7)
 ```
