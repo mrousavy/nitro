@@ -1,21 +1,12 @@
 import * as React from 'react'
 
 import { StyleSheet, View, Text, ScrollView, Button } from 'react-native'
-import {
-  HybridKotlinTestObject,
-  HybridTestObject,
-} from 'react-native-nitro-image'
+import { HybridTestObject } from 'react-native-nitro-image'
 import { getTests, type TestRunner } from '../getTests'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { logPrototypeChain } from '../logPrototypeChain'
 
 logPrototypeChain(HybridTestObject)
-
-HybridKotlinTestObject.doSomeStuff((p, str, buf) => {
-  console.log(p)
-  console.log(str)
-  console.log(buf)
-})
 
 const allTests = getTests()
 

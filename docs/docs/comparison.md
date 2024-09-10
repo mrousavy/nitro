@@ -5,9 +5,35 @@
 
 Nitro is not the only one of it's kind. There's multiple ways to build native modules for React Native:
 
+- Nitro Modules
 - [Turbo Modules](#turbo-modules)
 - [Legacy Native Modules](#turbo-modules)
 - [Expo Modules](#expo-modules)
+
+Nitro has proven to be up to **~15x faster** than Turbo Modules, and **~55x faster** than Expo Modules. (see [NitroBenchmarks](https://github.com/mrousavy/NitroBenchmarks))
+
+<table>
+  <tr>
+    <th></th>
+    <th>ExpoModules</th>
+    <th>TurboModules</th>
+    <th>NitroModules</th>
+  </tr>
+  <tr>
+    <td>100.000x <code>addNumbers(...)</code></td>
+    <td>404.95ms</td>
+    <td>108.84ms</td>
+    <td><b>7.25ms</b></td>
+  </tr>
+  <tr>
+    <td>100.000x <code>addStrings(...)</code></td>
+    <td>420.69ms</td>
+    <td>169.84ms</td>
+    <td><b>30.71ms</b></td>
+  </tr>
+</table>
+
+It's not all about performance though - there are some key differences between Nitro-, Turbo- and Expo-Modules:
 
 ## Turbo Modules
 
@@ -445,28 +471,5 @@ public class ExpoSettingsModule: Module {
     <td>❌ (no codegen)</td>
     <td>❌</td>
     <td>✅</td>
-  </tr>
-</table>
-
-## Benchmarks
-
-<table>
-  <tr>
-    <th></th>
-    <th>ExpoModules</th>
-    <th>TurboModules</th>
-    <th>NitroModules</th>
-  </tr>
-  <tr>
-    <td>100.000x <code>addNumbers(...)</code></td>
-    <td>404.95ms</td>
-    <td>108.84ms</td>
-    <td><b>7.25ms</b></td>
-  </tr>
-  <tr>
-    <td>100.000x <code>addStrings(...)</code></td>
-    <td>420.69ms</td>
-    <td>169.84ms</td>
-    <td><b>30.71ms</b></td>
   </tr>
 </table>
