@@ -72,33 +72,23 @@ Nitrogen should be installed as a dev-dependency in the Nitro Module (library).
 </Tabs>
 
 Each Nitro Module needs to have a `nitro.json` configuration file.
-Either generate one automatically using `nitrogen`, or create a `nitro.json` yourself manually:
 
-<Tabs>
-  <TabItem value="cli-init" label="Create with nitrogen" default>
-    Run `nitrogen init` in the root directory of your Nitro Module (next to `package.json`):
-    ```sh
-    npm run nitrogen init <moduleName>
-    ```
-  </TabItem>
-  <TabItem value="manually" label="Create nitro.json manually">
-    Create a `nitro.json` file in the root directory of your Nitro Module (next to `package.json`), and add the following content:
-    ```json
-    {
-      "cxxNamespace": ["math"],
-      "ios": {
-        "iosModulename": "NitroMath"
-      },
-      "android": {
-        "androidNamespace": ["math"],
-        "androidCxxLibName": "NitroMath"
-      }
-    }
-    ```
-    Tweak your module name as needed.
-  </TabItem>
-</Tabs>
+Create a `nitro.json` file in the root directory of your Nitro Module (next to `package.json`), and add the following content:
 
+```json title="nitro.json"
+{
+  "cxxNamespace": ["math"],
+  "ios": {
+    "iosModulename": "NitroMath"
+  },
+  "android": {
+    "androidNamespace": ["math"],
+    "androidCxxLibName": "NitroMath"
+  }
+}
+```
+
+Tweak your module name and namespaces as needed.
 
 ## Usage
 
@@ -157,6 +147,7 @@ This will generate a single C++ interface by default, which goes into `./nitroge
 ```
 
 Note: You should push the files in `nitrogen/generated` to git, and make sure those files are part of your npm package.
+This way your library will always ship a working package as a whole (including generated interfaces), and the user does not need to do anything else than to install your package.
 
 ### 3. Implement (native)
 

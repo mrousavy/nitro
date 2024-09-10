@@ -13,6 +13,7 @@ import type {SidebarsConfig} from '@docusaurus/plugin-content-docs';
 const sidebars: SidebarsConfig = {
   docs: [
     'what-is-nitro',
+    'nitro-modules',
     'hybrid-objects',
     'nitrogen',
     {

@@ -12,7 +12,7 @@ Nitro is not the only one of it's kind. There's multiple ways to build native mo
 
 ## Benchmarks
 
-Nitro has proven to be up to **~15x faster** than Turbo Modules, and **~55x faster** than Expo Modules. (see [NitroBenchmarks](https://github.com/mrousavy/NitroBenchmarks))
+Nitro has proven to be up to **~59x faster** than Expo Modules, and **~15x faster** than Turbo Modules. (see [NitroBenchmarks](https://github.com/mrousavy/NitroBenchmarks))
 
 <table>
   <tr>
@@ -23,15 +23,15 @@ Nitro has proven to be up to **~15x faster** than Turbo Modules, and **~55x fast
   </tr>
   <tr>
     <td>100.000x <code>addNumbers(...)</code></td>
-    <td>404.95ms</td>
-    <td>108.84ms</td>
-    <td><b>7.25ms</b></td>
+    <td>434.85</td>
+    <td>115.86ms</td>
+    <td><b>7.27ms</b></td>
   </tr>
   <tr>
     <td>100.000x <code>addStrings(...)</code></td>
-    <td>420.69ms</td>
-    <td>169.84ms</td>
-    <td><b>30.71ms</b></td>
+    <td>429.53ms</td>
+    <td>179.02ms</td>
+    <td><b>29.94ms</b></td>
   </tr>
 </table>
 
@@ -189,7 +189,7 @@ Using native objects (like the `HybridImage`) directly is much more efficient an
 
 #### No tuples
 
-There are no tuples in Turbo.
+There are no tuples in Turbo Modules.
 
 ```ts
 type SomeTuple = [number, number]
@@ -197,7 +197,7 @@ type SomeTuple = [number, number]
 
 #### No callbacks with return values
 
-Turbo-Modules does not allow JS callbacks to return a value.
+Turbo Modules do not allow JS callbacks to return a value.
 
 ```ts
 type SomeCallback = () => number
@@ -291,16 +291,16 @@ export const Math =
 
 #### Codegen runs on app build
 
-Nitrogen is executed explicitly by the library developer and all generated interfaces are local and have to be committed to the GitHub repository.
+Nitrogen is executed explicitly by the library developer and all generated interfaces are part of the npm package to always ship a working solution.
 Codegen on the other hand runs on app build, which causes specs to always be re-generated for every app.
 
 #### Codegen cannot resolve imports
 
-As opposed to Nitrogen, Codegen can not resolve type imports from separate files. 
+While Nitrogen can properly resolve imports from other files, Codegen can not.
 
 #### Codegen supports Flow
 
-Unlike nitrogen, codegen also supports [Flow](https://flow.org).
+Codegen also supports [Flow](https://flow.org), while Nitrogen doesn't.
 
 ## Legacy Native Modules
 
