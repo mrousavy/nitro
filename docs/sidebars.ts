@@ -15,6 +15,7 @@ const sidebars: SidebarsConfig = {
     'what-is-nitro',
     'types',
     'comparison',
+    'hybrid-objects',
     'nitrogen',
     'for-users',
     {

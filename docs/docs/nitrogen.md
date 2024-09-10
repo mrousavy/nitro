@@ -33,6 +33,11 @@ protocol HybridMathSpec: HybridObjectSpec {
 
 When `HybridMathSpec` is not implemented properly (e.g. if `add(..)` is missing, or if a type is incorrect), **the app will not compile**, which ensures full **type-safety** and **null-safety**.
 
+## Nitrogen is optional
+
+Nitrogen is a fully optional CLI that does some of the work for you.
+You can also build Nitro Modules and create Hybrid Objects without nitrogen, by just calling the `registerHybrids` method yourself.
+
 ## Who uses Nitrogen?
 
 Nitrogen should be used by library-authors, and generated specs should be committed to the repository/package.
