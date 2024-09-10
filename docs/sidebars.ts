@@ -18,17 +18,6 @@ const sidebars: SidebarsConfig = {
     'hybrid-objects',
     'nitrogen',
     'for-users',
-    {
-      type: 'category',
-      label: 'Nitrogen',
-      items: [
-        'nitrogen/getting-started',
-        'nitrogen/primitives',
-        'nitrogen/strings',
-        'nitrogen/arrays',
-        'nitrogen/enums',
-      ],
-    },
   ],
 };
 

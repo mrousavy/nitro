@@ -3,10 +3,10 @@
 
 # What is Nitro?
 
-Nitro is a framework for building native modules in React Native.
+Nitro is a framework for building powerful and fast native modules in React Native.
 
 - A **Nitro Module** is a library built with Nitro.
-- A **Hybrid Object** is a native object in Nitro, implemented in either C++, Swift or Kotlin.
+- A [**Hybrid Object**](hybrid-objects) is a native object in Nitro, implemented in either C++, Swift or Kotlin.
 - [**Nitrogen**](nitrogen) is a code-generator a library author can use to generate native bindings from a custom TypeScript interface.
 
 <div className="side-by-side-container">
