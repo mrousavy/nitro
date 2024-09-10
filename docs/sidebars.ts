@@ -13,11 +13,29 @@ import type {SidebarsConfig} from '@docusaurus/plugin-content-docs';
 const sidebars: SidebarsConfig = {
   docs: [
     'what-is-nitro',
-    'types',
     'comparison',
     'hybrid-objects',
     'nitrogen',
     'for-users',
+    {
+      type: 'category',
+      label: 'Types',
+      items: [
+        'types/types',
+        'types/primitives',
+        'types/arrays',
+        'types/optionals',
+        'types/tuples',
+        'types/variants',
+        'types/promises',
+        'types/callbacks',
+        'types/typed-maps',
+        'types/untyped-maps',
+        'types/array-buffers',
+        'types/hybrid-objects',
+        'types/custom-types',
+      ],
+    },
   ],
 };
 
