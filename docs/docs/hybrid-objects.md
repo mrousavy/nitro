@@ -120,6 +120,60 @@ Hybrid Objects can be implemented in C++, Swift or Kotlin:
   </TabItem>
   <TabItem value="manually" label="Manually">
 
+  To implement a Hybrid Object, you need to implement the [`HybridObject`](https://github.com/mrousavy/nitro/blob/main/packages/react-native-nitro-modules/cpp/core/HybridObject.hpp) C++ base class, and override `loadHybridMethods()`:
+
+  <div className="side-by-side-container">
+    <div className="side-by-side-block">
+      ```cpp title="HybridMath.hpp"
+      class HybridMath: public HybridObject {
+      public:
+        HybridMath(): HybridObject(NAME) { }
+
+      public:
+        double add(double a, double b);
+
+      protected:
+        void loadHybridMethods() override;
+
+      private:
+        static constexpr auto NAME = "Math";
+      };
+      ```
+    </div>
+    <div className="side-by-side-block">
+      ```cpp title="HybridMath.cpp"
+      double HybridMath::add(double a, double b) {
+        return a + b;
+      }
+
+      void HybridMath::loadHybridMethods() {
+        // register base methods (toString, ...)
+        HybridObject::loadHybridMethods();
+        // register custom methods (add)
+        registerHybrids(this, [](Prototype& proto) {
+          proto.registerHybridMethod(
+            "add",
+            &HybridMath::add
+          );
+        });
+      }
+      ```
+    </div>
+  </div>
+
+  A Hybrid Object should also override `getExternalMemorySize()` to properly reflect native memory size:
+
+  ```cpp
+  class HybridMath: public HybridObject {
+  public:
+    // ...
+    size_t getExternalMemorySize() override {
+      return sizeOfSomeImageWeAllocated;
+    }
+  }
+  ```
+
+  Optionally, you can also override `toString()` and `dispose()` for custom behaviour.
 
   </TabItem>
 </Tabs>
