@@ -34,6 +34,7 @@ const sidebars: SidebarsConfig = {
         'types/custom-types',
       ],
     },
+    'view-components',
     'comparison',
     'for-users',
   ],
