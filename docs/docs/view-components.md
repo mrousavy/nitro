@@ -46,6 +46,11 @@ For this, we'll only create one prop for our view which will be used to connect 
 
 ```ts
 interface NativeProps extends ViewProps {
+// diff-remove
+  opacity: number
+// diff-remove
+  image: Image
+// diff-add
   nitroId: number
 }
 ```
