@@ -10,6 +10,8 @@ Nitro is not the only one of it's kind. There's multiple ways to build native mo
 - [Legacy Native Modules](#turbo-modules)
 - [Expo Modules](#expo-modules)
 
+## Benchmarks
+
 Nitro has proven to be up to **~15x faster** than Turbo Modules, and **~55x faster** than Expo Modules. (see [NitroBenchmarks](https://github.com/mrousavy/NitroBenchmarks))
 
 <table>
@@ -105,6 +107,40 @@ graph LR;
 </div>
 </div>
 
+#### No properties
+
+A Turbo Module does not provide a syntax for properties. Instead, conventional getter/setter methods have to be used.
+
+<div className="side-by-side-container">
+<div className="side-by-side-block">
+
+```swift title="Nitro Module (Swift)"
+class HybridMath : HybridMathSpec {
+  var someValue: Double
+}
+```
+
+</div>
+<div className="side-by-side-block">
+
+```objc title="Turbo Module (Objective-C)"
+@implementation RTNMath {
+  NSNumber* _someValue;
+}
+RCT_EXPORT_MODULE()
+
+- (NSNumber*)getSomeValue {
+  return _someValue;
+}
+- (void)setSomeValue:(NSNumber*)someValue {
+  _someValue = someValue;
+}
+@end
+```
+
+</div>
+</div>
+
 #### Not object-oriented
 
 While a Turbo Module can represent many types from JavaScript, there is no equivalent to Nitro's **Hybrid Object** in Turbo Modules. Instead, every Turbo Module is a singleton, and every native method is similar to a static method.
@@ -151,6 +187,30 @@ class HybridImageEditor: HybridImageEditorSpec {
 
 Using native objects (like the `HybridImage`) directly is much more efficient and performant, as well as more convenient to use than to write everything to a file.
 
+#### No variants
+
+There are no variants in Turbo.
+
+```ts
+type SomeVariant = number | string
+```
+
+#### No tuples
+
+There are no tuples in Turbo.
+
+```ts
+type SomeTuple = [number, number]
+```
+
+#### No callbacks with return values
+
+Turbo-Modules does not allow JS callbacks to return a value.
+
+```ts
+type SomeCallback = () => number
+```
+
 #### Events
 
 Since functions are not first-class citizens in Turbo Modules, you cannot hold onto a JavaScript callback in native code and call it more often, like you could in Nitro.
@@ -166,9 +226,9 @@ class Math: MathSpec {
     listeners.add(listener)
   }
 
-  func onSomethingChanged(msg: String) {
+  func onSomethingChanged() {
     for listener in listeners {
-      listener(message)
+      listener("something changed!")
     }
   }
 }
@@ -185,7 +245,8 @@ RCT_EXPORT_MODULE();
   return @[@"onSomethingChanged"];
 }
 
-- (void)onSomethingChanged:(NSString *)message {
+- (void)onSomethingChanged {
+  NSString* message = @"something changed!";
   [self sendEventWithName:@"onSomethingChanged"
                      body:@{@"msg": message}];
 }
@@ -288,9 +349,12 @@ They are now deprecated in favor of [Turbo Modules](#turbo-modules).
 
 ## Expo Modules
 
-Expo's recommended approach of building native modules is called "Expo Modules".
+[Expo Modules](https://docs.expo.dev/modules/overview/) is an easy to use API to build native modules by Expo.
 
-### Synchronous Functions
+Unlike both Nitro- and Turbo-, Expo-Modules does not have a code-generator.
+All native modules are considered untyped, and TypeScript definitions can be written afterwards.
+
+An Expo Module can be written using a declarative syntax (_DSL_) where each function and property is declared inside the `definition()` function:
 
 <div className="side-by-side-container">
 <div className="side-by-side-block">
@@ -307,7 +371,7 @@ class HybridMath : HybridMathSpec {
 <div className="side-by-side-block">
 
 ```swift title="Expo Module (Swift)"
-public class ExpoSettingsModule: Module {
+public class MathModule: Module {
   public func definition() -> ModuleDefinition {
     Name("Math")
 
@@ -322,16 +386,53 @@ public class ExpoSettingsModule: Module {
 </div>
 </div>
 
-### Asynchronous Functions
+### Implementation details
+
+#### Swift support
+
+Just like Nitro, Expo Modules are written in Swift, instead of Objective-C.
+
+Expo Modules however bridge through Objective-C, whereas Nitro bridges to Swift directly (using the new Swift &lt;&gt; C++ interop) which has proven to be much more efficient.
 
 <div className="side-by-side-container">
 <div className="side-by-side-block">
 
-```swift title="Nitro Module (Swift)"
-class HybridMath : HybridMathSpec {
-  func add(a: Double,
-           b: Double) -> Promise<Double> {
-    return Promise.async { a + b }
+```mermaid
+---
+title: "Nitro Modules"
+---
+graph LR;
+    JS--> C++ --> Swift;
+```
+
+</div>
+<div className="side-by-side-block">
+
+```mermaid
+---
+title: "Expo Modules"
+---
+graph LR;
+    JS--> C++ --> Objective-C --> Swift;
+```
+
+</div>
+</div>
+
+#### Kotlin coroutines
+
+Asynchronous functions can be implemented using Kotlin coroutines, which is a convenient pattern for asynchronous code. This is similar to Nitro's `Promise.async` function.
+
+<div className="side-by-side-container">
+<div className="side-by-side-block">
+
+```kotlin title="HybridMath.kt (Nitro)"
+class HybridMath: HybridMathSpec {
+  override fun doSomeWork(): Promise<String> {
+    return Promise.async {
+      delay(5000)
+      return@async "done!"
+    }
   }
 }
 ```
@@ -339,13 +440,132 @@ class HybridMath : HybridMathSpec {
 </div>
 <div className="side-by-side-block">
 
-```swift title="Expo Module (Swift)"
-public class ExpoSettingsModule: Module {
+```kotlin title="Math.kt (Expo)"
+class MathModule: Module {
+  override fun definition() = ModuleDefinition {
+    Name("Math")
+
+    AsyncFunction("doSomeWork") Coroutine {
+      delay(5000)
+      return@Coroutine "done!"
+    }
+  }
+}
+```
+
+</div>
+</div>
+
+#### Properties
+
+Expo Modules supports getting and setting properties, just like Nitro.
+
+#### Events
+
+Similar to Turbo Modules, Expo Modules also uses Events to notify JS about any changes on the native side.
+
+<div className="side-by-side-container">
+<div className="side-by-side-block">
+
+```swift title="HybridMath.swift (Nitro)"
+class Math: MathSpec {
+  var listeners: [(String) -> Void] = []
+  func addListener(listener: (String) -> Void) {
+    listeners.add(listener)
+  }
+
+  func onSomethingChanged() {
+    for listener in listeners {
+      listener("something changed!")
+    }
+  }
+}
+```
+
+</div>
+<div className="side-by-side-block">
+
+```swift title="MathModule.swift (Expo)"
+let SOMETHING_CHANGED = "onSomethingChanged"
+public class MathModule: Module {
+  public func definition() -> ModuleDefinition {
+    Name("Math")
+    Events(SOMETHING_CHANGED)
+  }
+
+  private func onSomethingChanged() {
+    sendEvent(SOMETHING_CHANGED, [
+      "message": "something changed!"
+    ])
+  }
+}
+```
+
+</div>
+</div>
+
+#### HostObject vs NativeState
+
+As of today, Expo Modules are implemented using `jsi::HostObject`, whereas Nitro Modules are built with `jsi::NativeState`.
+NativeState has been proven to be much more efficient and performant, as property- and method-access is much faster - it can be properly cached by the JS Runtime and does not involve any virtual/Proxy-like accessors.
+
+Expo-Modules do however properly set memory pressure of native objects, just like in Nitro.
+
+#### Shared Objects
+
+Expo Modules has a concept of "shared objects", which is similar to Hybrid Objects in Nitro.
+
+:::note
+I could not find any documentation for Shared Objects, so I cannot really compare them here.
+:::
+
+#### No tuples
+
+There are no tuples in Turbo.
+
+```ts
+type SomeTuple = [number, number]
+```
+
+#### No callbacks with return values
+
+Turbo-Modules does not allow JS callbacks to return a value.
+
+```ts
+type SomeCallback = () => number
+```
+
+### No code-generator
+
+Since Expo Modules does not provide a code-generator, all native modules are untyped by default.
+While TypeScript definitions can be written afterwards, it is possible that the handwritten TypeScript definitions are out of sync with the actual native types due to a user-error, especially when it comes to null-safety.
+
+<div className="side-by-side-container">
+<div className="side-by-side-block">
+
+```ts title="Math.ts (Expo JS side)"
+interface Math {
+  add(a: number, b: number | undefined): number
+//  b can be undefined here: ^
+}
+
+const math = ...
+math.add(5, undefined)
+// code-error
+//          ^ will throw at runtime!
+```
+
+</div>
+<div className="side-by-side-block">
+
+```swift title="HybridMath.swift (Expo Native side)"
+public class MathModule: Module {
   public func definition() -> ModuleDefinition {
     Name("Math")
 
-    AsyncFunction("add") { (a: Double,
-                            b: Double) in
+    Function("add") { (a: Double,
+                       b: Double) -> Double in
+// b CANNOT be undefined here: ^
       return a + b
     }
   }
@@ -473,3 +693,7 @@ public class ExpoSettingsModule: Module {
     <td>✅</td>
   </tr>
 </table>
+
+## Correctness of this page
+
+Note: If anything is missing, wrong, or outdated, please let me know so I can correct it immediately!
