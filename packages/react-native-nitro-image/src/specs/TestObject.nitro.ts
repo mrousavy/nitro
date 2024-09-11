@@ -26,6 +26,8 @@ export interface Person {
   age: number
 }
 
+export type DiscriminatedUnion = 'one' | 2 | ['three']
+
 export interface TestObject extends HybridObject<{ ios: 'c++' }> {
   // Test Primitives
   numberValue: number
@@ -99,6 +101,11 @@ export interface TestObject extends HybridObject<{ ios: 'c++' }> {
   // Other HybridObjects
   readonly self: TestObject
   newTestObject(): TestObject
+
+  // Discriminated Unions
+  discriminatedUnion: DiscriminatedUnion
+  optionalDiscriminatedUnion: DiscriminatedUnion
+  tryOptionalDiscriminatedUnion(union?: DiscriminatedUnion): string
 }
 
 interface CallbackHolder {

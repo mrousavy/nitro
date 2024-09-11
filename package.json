@@ -66,5 +66,12 @@
         }
       }
     }
-  }
+  },
+  "trustedDependencies": [
+    "core-js",
+    "core-js-pure",
+    "nitro-codegen",
+    "react-native-nitro-image",
+    "react-native-nitro-modules"
+  ]
 }
