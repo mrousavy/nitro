@@ -181,6 +181,7 @@ export async function runNitrogen({
             `        ❌  Failed to generate spec for ${moduleName}! ${message}`
           )
         )
+        process.exitCode = 1
       }
     }
 
