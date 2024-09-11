@@ -7,7 +7,7 @@ import {
 } from '../../syntax/helpers.js'
 import type { SourceFile } from '../../syntax/SourceFile.js'
 
-interface CMakeFile extends Omit<SourceFile, 'language'> {
+export interface CMakeFile extends Omit<SourceFile, 'language'> {
   language: 'cmake'
 }
 
