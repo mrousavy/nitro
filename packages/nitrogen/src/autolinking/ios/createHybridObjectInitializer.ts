@@ -19,11 +19,12 @@ export function createHybridObjectIntializer(): ObjcFile {
   )
 
   const cppRegistrations = cppHybridObjects.map((h) => {
+    const hybridObjectName = getHybridObjectName(h.name)
     return `
 HybridObjectRegistry::registerHybridObjectConstructor(
   "${h.name}",
   []() -> std::shared_ptr<HybridObject> {
-    return std::make_shared<${h.name}>();
+    return std::make_shared<${hybridObjectName.HybridT}>();
   }
 );
       `.trim()

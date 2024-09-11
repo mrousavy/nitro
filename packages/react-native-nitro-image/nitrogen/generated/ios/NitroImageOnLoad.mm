@@ -22,7 +22,7 @@
   HybridObjectRegistry::registerHybridObjectConstructor(
     "TestObject",
     []() -> std::shared_ptr<HybridObject> {
-      return std::make_shared<TestObject>();
+      return std::make_shared<HybridTestObject>();
     }
   );
   HybridObjectRegistry::registerHybridObjectConstructor(
