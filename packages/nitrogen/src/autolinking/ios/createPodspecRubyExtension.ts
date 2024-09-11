@@ -1,6 +1,6 @@
-import { NitroConfig } from '../config/NitroConfig.js'
-import { createFileMetadataString } from '../syntax/helpers.js'
-import type { SourceFile } from '../syntax/SourceFile.js'
+import { NitroConfig } from '../../config/NitroConfig.js'
+import { createFileMetadataString } from '../../syntax/helpers.js'
+import type { SourceFile } from '../../syntax/SourceFile.js'
 
 interface RubyFile extends Omit<SourceFile, 'language'> {
   language: 'ruby'

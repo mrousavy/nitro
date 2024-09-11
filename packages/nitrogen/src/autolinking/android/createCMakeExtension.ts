@@ -1,11 +1,11 @@
-import { NitroConfig } from '../config/NitroConfig.js'
-import { indent } from '../utils.js'
+import { NitroConfig } from '../../config/NitroConfig.js'
+import { indent } from '../../utils.js'
 import {
   createFileMetadataString,
   getRelativeDirectory,
   isCppFile,
-} from '../syntax/helpers.js'
-import type { SourceFile } from '../syntax/SourceFile.js'
+} from '../../syntax/helpers.js'
+import type { SourceFile } from '../../syntax/SourceFile.js'
 
 interface CMakeFile extends Omit<SourceFile, 'language'> {
   language: 'cmake'
