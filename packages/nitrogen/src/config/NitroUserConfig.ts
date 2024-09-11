@@ -47,6 +47,11 @@ export const NitroUserConfigSchema = z.object({
      */
     androidCxxLibName: z.string().regex(safeNamePattern),
   }),
+  /**
+   * A list of paths relative to the project directory that should be ignored by nitrogen.
+   * Nitrogen will not look for `.nitro.ts` files in these directories.
+   */
+  ignorePaths: z.array(z.string()).optional(),
 })
 
 /**

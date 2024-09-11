@@ -18,6 +18,7 @@ import { createCMakeExtension } from './autolinking/createCMakeExtension.js'
 import { createGradleExtension } from './autolinking/createGradleExtension.js'
 import { createSwiftUmbrellaHeader } from './autolinking/createSwiftUmbrellaHeader.js'
 import { createSwiftCxxBridge } from './autolinking/createSwiftCxxBridge.js'
+import { NitroConfig } from './config/NitroConfig.js'
 
 interface NitrogenOptions {
   baseDirectory: string
@@ -45,7 +46,13 @@ export async function runNitrogen({
       noUncheckedIndexedAccess: true,
     },
   })
-  project.addSourceFilesAtPaths(path.join(baseDirectory, '/**/*.nitro.ts'))
+
+  const ignorePaths = NitroConfig.getIgnorePaths()
+  const globPattern = [path.join(baseDirectory, '/**/*.nitro.ts')]
+  ignorePaths.forEach((ignorePath) => {
+    globPattern.push('!' + path.join(baseDirectory, ignorePath))
+  })
+  project.addSourceFilesAtPaths(globPattern)
 
   // Loop through all source files to log them
   console.log(
