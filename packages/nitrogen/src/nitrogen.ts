@@ -206,10 +206,9 @@ export async function runNitrogen({
   const autolinkingFiles = [iosFiles, androidFiles]
   for (const autolinking of autolinkingFiles) {
     Logger.info(
-      `    Creating autolinking build setup for ${autolinking.platform}...`
+      `    Creating autolinking build setup for ${chalk.dim(autolinking.platform)}...`
     )
     for (const file of iosFiles.sourceFiles) {
-      Logger.info(`      ${chalk.dim(file.platform)}: Creating ${file.name}...`)
       const basePath = path.join(outputDirectory, file.platform)
       const actualPath = await writeFile(
         basePath,
