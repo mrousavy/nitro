@@ -35,6 +35,7 @@ const sidebars: SidebarsConfig = {
         'types/custom-types',
       ],
     },
+    'using-nitro-in-your-app',
     'errors',
     'performance-tips',
     'view-components',
