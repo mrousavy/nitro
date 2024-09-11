@@ -35,6 +35,8 @@ Nitro has proven to be up to **~59x faster** than Expo Modules, and **~15x faste
   </tr>
 </table>
 
+Note: This is a very niche benchmark that soley focuses on the performance of calling a single native function, including converting parameters and return values. In a real world app, results may vary.
+
 It's not all about performance though - there are some key differences between Nitro-, Turbo- and Expo-Modules:
 
 ## Turbo Modules
