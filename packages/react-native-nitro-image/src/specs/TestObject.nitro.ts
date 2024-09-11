@@ -104,7 +104,8 @@ export interface TestObject extends HybridObject<{ ios: 'c++' }> {
 
   // Discriminated Unions
   discriminatedUnion: DiscriminatedUnion
-  optionalDiscriminatedUnion: DiscriminatedUnion
+  optionalDiscriminatedUnion?: DiscriminatedUnion
+  tryDiscriminatedUnion(union: DiscriminatedUnion): string
   tryOptionalDiscriminatedUnion(union?: DiscriminatedUnion): string
 }
 
