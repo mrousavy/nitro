@@ -43,12 +43,15 @@ HybridObjectRegistry::registerHybridObjectConstructor(
       `.trim()
   })
 
+  const umbrellaImport =
+    swiftHybridObjects.length > 0 ? `#import "${umbrellaHeaderName}"` : ''
+
   const code = `
 ${createFileMetadataString(filename)}
 
 #import <Foundation/Foundation.h>
 #import <NitroModules/HybridObjectRegistry.hpp>
-#import "${umbrellaHeaderName}"
+${umbrellaImport}
 
 @interface ${name} : NSObject
 @end
