@@ -14,10 +14,12 @@ function readFile(configPath: string): string {
       switch (error.code) {
         case 'ENOENT':
         case 'ENOTDIR':
-          // this directory doesn't contain a nitro.json config - go up one directory and try again
-          throw new Error(
-            `The path ${chalk.underline(configPath)} does not exist! Create a ${chalk.underline('nitro.json')} file and try again.`
+          console.error(
+            `❌  The path ${chalk.underline(configPath)} does not exist! Create a ${chalk.underline('nitro.json')} file and try again.`
           )
+          process.exit(1)
+          // @ts-expect-error
+          break
         default:
           throw error
       }
@@ -73,7 +75,7 @@ function parseConfig(json: string): NitroUserConfig {
       console.error(
         `❌  Invalid nitro.json config file! ${issues.join(' - also, ')}`
       )
-      process.exit()
+      process.exit(1)
     } else {
       throw error
     }
