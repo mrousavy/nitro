@@ -101,4 +101,8 @@ export const NitroConfig = {
     const userPackage = getUserConfig().android.androidNamespace
     return [...ANDROID_BASE_NAMESPACE, ...userPackage, ...subPackage]
   },
+
+  getIgnorePaths(): string[] {
+    return getUserConfig().ignorePaths ?? []
+  },
 }
