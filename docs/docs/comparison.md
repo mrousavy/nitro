@@ -567,6 +567,8 @@ public class MathModule: Module {
 </div>
 </div>
 
+Note: It is also possible for Nitro specs to go out of sync, but only if you forget to run Nitrogen. In both cases, it's a user-error - one more likely than the other.
+
 ## Supported Types
 
 <table>
