@@ -7,6 +7,7 @@
 ///
 
 #import <Foundation/Foundation.h>
+#import <NitroModules/HybridObjectRegistry.hpp>
 #import "NitroImage-Swift-Cxx-Umbrella.hpp"
 
 @interface NitroImageOnLoad : NSObject
@@ -15,7 +16,36 @@
 @implementation NitroImageOnLoad
 
 + (void) load {
-  // TODO: Register Hybrid Objects here!
+  using namespace margelo::nitro;
+  using namespace margelo::nitro::image;
+
+  HybridObjectRegistry::registerHybridObjectConstructor(
+    "TestObject",
+    []() -> std::shared_ptr<HybridObject> {
+      return std::make_shared<TestObject>();
+    }
+  );
+  HybridObjectRegistry::registerHybridObjectConstructor(
+    "Image",
+    []() -> std::shared_ptr<HybridObject> {
+      auto swiftPart = NitroImage::HybridImageSpecCxx::init();
+      return std::make_shared<HybridImageSpecSwift>(swiftPart);
+    }
+  );
+  HybridObjectRegistry::registerHybridObjectConstructor(
+    "ImageFactory",
+    []() -> std::shared_ptr<HybridObject> {
+      auto swiftPart = NitroImage::HybridImageFactorySpecCxx::init();
+      return std::make_shared<HybridImageFactorySpecSwift>(swiftPart);
+    }
+  );
+  HybridObjectRegistry::registerHybridObjectConstructor(
+    "SwiftKotlinTestObject",
+    []() -> std::shared_ptr<HybridObject> {
+      auto swiftPart = NitroImage::HybridSwiftKotlinTestObjectSpecCxx::init();
+      return std::make_shared<HybridSwiftKotlinTestObjectSpecSwift>(swiftPart);
+    }
+  );
 }
 
 @end
