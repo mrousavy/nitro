@@ -50,9 +50,7 @@ export async function runNitrogen({
   const ignorePaths = NitroConfig.getIgnorePaths()
   const globPattern = [path.join(baseDirectory, '/**/*.nitro.ts')]
   ignorePaths.forEach((ignorePath) => {
-    globPattern.push(
-      '!' + path.join(baseDirectory, ignorePath, '/**/*.nitro.ts')
-    )
+    globPattern.push('!' + path.join(baseDirectory, ignorePath))
   })
   project.addSourceFilesAtPaths(globPattern)
 
