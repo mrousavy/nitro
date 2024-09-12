@@ -6,6 +6,8 @@
 /// Copyright © 2024 Marc Rousavy @ Margelo
 ///
 
+#include <jni.h>
+
 namespace margelo::nitro::image {
 
   /**

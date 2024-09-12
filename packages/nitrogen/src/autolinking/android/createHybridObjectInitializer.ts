@@ -45,6 +45,8 @@ export function createHybridObjectIntializer(): SourceFile[] {
   const hppCode = `
 ${createFileMetadataString(`${autolinkingClassName}.hpp`)}
 
+#include <jni.h>
+
 namespace ${cxxNamespace} {
 
   /**
