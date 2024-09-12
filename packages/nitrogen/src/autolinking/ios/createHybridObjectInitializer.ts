@@ -8,7 +8,7 @@ type ObjcFile = Omit<SourceFile, 'language'> & { language: 'objective-c++' }
 type SwiftFile = Omit<SourceFile, 'language'> & { language: 'swift' }
 
 export function createHybridObjectIntializer(): [ObjcFile, SwiftFile] {
-  const onLoadName = `${NitroConfig.getIosModuleName()}OnLoad`
+  const autolinkingClassName = `${NitroConfig.getIosModuleName()}Autolinking`
   const umbrellaHeaderName = `${NitroConfig.getIosModuleName()}-Swift-Cxx-Umbrella.hpp`
 
   const autolinkedHybridObjects = NitroConfig.getAutolinkedHybridObjects()
@@ -64,7 +64,7 @@ public static func create${hybridObjectName}() -> ${HybridTSpecCxx} {
 HybridObjectRegistry::registerHybridObjectConstructor(
   "${hybridObjectName}",
   []() -> std::shared_ptr<HybridObject> {
-    auto swiftPart = ${swiftNamespace}::${onLoadName}::create${hybridObjectName}();
+    auto swiftPart = ${swiftNamespace}::${autolinkingClassName}::create${hybridObjectName}();
     return std::make_shared<${HybridTSpecSwift}>(swiftPart);
   }
 );
@@ -79,7 +79,7 @@ HybridObjectRegistry::registerHybridObjectConstructor(
   const imports = cppIncludes.map((i) => `#import "${i}"`).join('\n')
 
   const objcCode = `
-${createFileMetadataString(`${onLoadName}.mm`)}
+${createFileMetadataString(`${autolinkingClassName}.mm`)}
 
 #import <Foundation/Foundation.h>
 #import <NitroModules/HybridObjectRegistry.hpp>
@@ -88,10 +88,10 @@ ${umbrellaImport}
 
 ${imports}
 
-@interface ${onLoadName} : NSObject
+@interface ${autolinkingClassName} : NSObject
 @end
 
-@implementation ${onLoadName}
+@implementation ${autolinkingClassName}
 
 + (void) load {
   using namespace margelo::nitro;
@@ -104,9 +104,9 @@ ${imports}
   `.trim()
 
   const swiftCode = `
-${createFileMetadataString(`${onLoadName}.swift`)}
+${createFileMetadataString(`${autolinkingClassName}.swift`)}
 
-public final class ${onLoadName} {
+public final class ${autolinkingClassName} {
   ${indent(swiftFunctions.join('\n\n'), '  ')}
 }
   `.trim()
@@ -115,14 +115,14 @@ public final class ${onLoadName} {
     {
       content: objcCode,
       language: 'objective-c++',
-      name: `${onLoadName}.mm`,
+      name: `${autolinkingClassName}.mm`,
       platform: 'ios',
       subdirectory: [],
     },
     {
       content: swiftCode,
       language: 'swift',
-      name: `${onLoadName}.swift`,
+      name: `${autolinkingClassName}.swift`,
       platform: 'ios',
       subdirectory: [],
     },
