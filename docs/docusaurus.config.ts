@@ -93,7 +93,7 @@ const config: Config = {
     algolia: {
       appId: 'Y788VW5KZO',
       apiKey: 'c077f6bb95a5a11a69a7e65315a795c5',
-      indexName: 'nitro',
+      indexName: 'mrousavyio',
       contextualSearch: true,
       searchPagePath: false,
       insights: false,
