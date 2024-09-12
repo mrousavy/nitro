@@ -8,22 +8,39 @@
 
 #include <jni.h>
 #include <fbjni/fbjni.h>
-
-#include "JFunc_void_Person.hpp"
-#include "JFunc_void_std__string.hpp"
-#include "JHybridImageFactorySpec.hpp"
-#include "JHybridImageSpec.hpp"
-#include "JHybridKotlinTestObjectSpec.hpp"
-
-#include "HybridTestObject.hpp"
 #include <NitroModules/HybridObjectRegistry.hpp>
 
-using namespace margelo::nitro::image;
+#include "HybridImageSpec.hpp"
+#include "JFunc_void_std__string.hpp"
+#include "HybridImageFactorySpec.hpp"
+#include "HybridKotlinTestObjectSpec.hpp"
+#include "JFunc_void_Person.hpp"
+#include "HybridTestObject.hpp"
 
+/**
+ * Called when Java loads the native C++ library (`System.loadLibrary("NitroImage")`)
+ */
 JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void*) {
-return facebook::jni::initialize(vm, [] {
-  // TODO: Register JNI natives here
+  using namespace margelo::nitro;
+  using namespace margelo::nitro::image;
 
-  // TODO: Register C++ turbo modules here
-});
+  return facebook::jni::initialize(vm, [] {
+    // Register native JNI methods
+    margelo::nitro::image::JHybridImageSpec::registerNatives();
+    margelo::nitro::image::JFunc_void_std__string::registerNatives();
+    margelo::nitro::image::JHybridImageFactorySpec::registerNatives();
+    margelo::nitro::image::JHybridKotlinTestObjectSpec::registerNatives();
+    margelo::nitro::image::JFunc_void_Person::registerNatives();
+
+    // Register Nitro Hybrid Objects
+    HybridObjectRegistry::registerHybridObjectConstructor(
+      "TestObject",
+      []() -> std::shared_ptr<HybridObject> {
+        static_assert(std::is_default_constructible_v<HybridTestObject>,
+                      "The HybridObject \"HybridTestObject\" is not default-constructible! "
+                      "Create a public constructor that takes zero arguments to be able to autolink this HybridObject.");
+        return std::make_shared<HybridTestObject>();
+      }
+    );
+  });
 }
