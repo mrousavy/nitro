@@ -66,6 +66,7 @@ ${createFileMetadataString(filename)}
 #import <Foundation/Foundation.h>
 #import <NitroModules/HybridObjectRegistry.hpp>
 ${umbrellaImport}
+#import <type_traits>
 
 @interface ${name} : NSObject
 @end
