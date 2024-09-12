@@ -10,7 +10,7 @@
   "autolinking": {
     "ImageFactory": {
       "swift": "HybridImageFactory",
-      "kotlin": "HybridImageFactory"
+      "kotlin": "ImageFactory"
     },
     "TestObject": {
       "cpp": "HybridTestObject"
@@ -19,7 +19,7 @@
       "swift": "HybridSwiftKotlinTestObject"
     },
     "KotlinTestObject": {
-      "kotlin": "HybridKotlinTestObject"
+      "kotlin": "KotlinTestObject"
     }
   },
   "ignorePaths": ["node_modules"]

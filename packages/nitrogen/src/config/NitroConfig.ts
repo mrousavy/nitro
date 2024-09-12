@@ -87,7 +87,7 @@ export const NitroConfig = {
       case 'java/kotlin':
         return namespace.join('.')
       case 'c++/jni':
-        return 'L' + namespace.join('/') + ';'
+        return namespace.join('/')
       default:
         throw new Error(`Invalid language for getAndroidPackage: ${language}`)
     }

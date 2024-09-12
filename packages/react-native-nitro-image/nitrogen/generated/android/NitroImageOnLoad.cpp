@@ -39,7 +39,7 @@ int initialize(JavaVM* vm) {
     HybridObjectRegistry::registerHybridObjectConstructor(
       "ImageFactory",
       []() -> std::shared_ptr<HybridObject> {
-        static auto javaClass = jni::findClassLocal("Lcom/margelo/nitro/image/HybridImageFactory;");
+        static auto javaClass = jni::findClassLocal("com/margelo/nitro/image/ImageFactory");
         static auto defaultConstructor = javaClass->getConstructor<JHybridImageFactorySpec::javaobject()>();
     
         auto instance = javaClass->newObject(defaultConstructor);
@@ -59,7 +59,7 @@ int initialize(JavaVM* vm) {
     HybridObjectRegistry::registerHybridObjectConstructor(
       "KotlinTestObject",
       []() -> std::shared_ptr<HybridObject> {
-        static auto javaClass = jni::findClassLocal("Lcom/margelo/nitro/image/HybridKotlinTestObject;");
+        static auto javaClass = jni::findClassLocal("com/margelo/nitro/image/KotlinTestObject");
         static auto defaultConstructor = javaClass->getConstructor<JHybridKotlinTestObjectSpec::javaobject()>();
     
         auto instance = javaClass->newObject(defaultConstructor);

@@ -109,7 +109,7 @@ namespace ${cxxNamespace} {
     }
 
   public:
-    static auto constexpr kJavaDescriptor = "${jniClassDescriptor}";
+    static auto constexpr kJavaDescriptor = "L${jniClassDescriptor};";
     static void registerNatives() {
       registerHybrid({makeNativeMethod("call", J${name}::call)});
     }

@@ -42,7 +42,7 @@ namespace ${cxxNamespace} {
   class ${name.JHybridTSpec} final: public jni::HybridClass<${name.JHybridTSpec}, JHybridObject>,
 ${spaces}                public ${name.HybridTSpec} {
   public:
-    static auto constexpr kJavaDescriptor = "${jniClassDescriptor}";
+    static auto constexpr kJavaDescriptor = "L${jniClassDescriptor};";
     static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis);
     static void registerNatives();
 

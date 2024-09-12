@@ -27,4 +27,8 @@ public class NitroImagePackage extends TurboReactPackage {
         return new HashMap<>();
     };
   }
+
+  static {
+    System.loadLibrary("NitroImage");
+  }
 }
