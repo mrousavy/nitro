@@ -39,7 +39,7 @@ jobs:
       - uses: reviewdog/action-setup@v1
 
       - name: Install npm dependencies (bun)
-        run: bun install
+        run: bun install --frozen-lockfile
 
       - name: Run TypeScript (tsc)
         run: |
@@ -56,7 +56,7 @@ jobs:
       - uses: reviewdog/action-setup@v1
 
       - name: Install npm dependencies (bun)
-        run: bun install
+        run: bun install --frozen-lockfile
 
       - name: Run ESLint CI in example/
         working-directory: example
