@@ -248,12 +248,6 @@ In your `nitro.json`, register `HybridMath` in the `"autolinking"` section:
       }
     }
     ```
-
-    :::warning
-    - Make sure `HybridMath` is default-constructible. That is, it has a public initializer that takes no arguments.
-    - Make sure the Java/Kotlin class `HybridMath` is inside the package/namespace `com.margelo.nitro.<<androidNamespace>>` (as configured in `nitro.json`).
-    - Make sure the Java/Kotlin class `HybridMath` is annotated with `@DoNotStrip` to avoid it from being compiled out in production builds.
-    :::
   </TabItem>
   <TabItem value="cpp" label="C++">
     ```json
@@ -266,13 +260,61 @@ In your `nitro.json`, register `HybridMath` in the `"autolinking"` section:
       }
     }
     ```
-
-    :::warning
-    - Make sure `HybridMath` is default-constructible. That is, it has a public constructor that takes no arguments.
-    - Make sure the `HybridMath` class is defined in a header named `HybridMath.hpp` - this is what Nitro will import.
-    - Also make sure `HybridMath` is either in the global namespace, or in `margelo::nitro::<cxxNamespace>` (configured in `nitro.json`).
-    :::
   </TabItem>
+</Tabs>
+
+Make sure `HybridMath` is default-constructible and scoped inside the correct namespace/package/file, then run Nitrogen.
+
+#### 5.1. Initialize Android (C*+)
+
+For Android, you also need to explicitly call `initialize()` in your JNI OnLoad function (most of the time this is inside `cpp-adapter.cpp`):
+
+```cpp title="cpp-adapter.cpp"
+#include <jni.h>
+#include "NitroMathOnLoad.hpp"
+
+JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void*) {
+  return margelo::nitro::math::initialize(vm);
+}
+```
+
+#### 5.2. Initialize Android (Java/Kotlin)
+
+Then, to make sure `JNI_OnLoad` is called, you need to load the C++ library somewhere from your Java/Kotlin code.
+
+<Tabs>
+<TabItem value="module" label="Nitro Module (library)">
+
+Inside `NitroMathPackage.java`, add:
+
+```java
+public class NitroMathPackage extends TurboReactPackage {
+  // ...
+  static {
+    System.loadLibrary("NitroMath");
+  }
+}
+```
+
+The `NitroMathPackage` will be initialized by React Native's own autolinking system. We just create an empty dummy Package which we use to initialize Nitro instead.
+
+</TabItem>
+<TabItem value="app" label="App">
+
+Inside `MainApplication.kt`, add:
+
+```kt
+class MainApplication {
+  // ...
+  companion object {
+    init {
+      System.loadLibrary("NitroMath")
+    }
+  }
+}
+```
+
+</TabItem>
 </Tabs>
 
 ### 6. Initialize the Hybrid Objects
