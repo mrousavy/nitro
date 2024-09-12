@@ -14,7 +14,7 @@ namespace margelo::nitro::image {
    * Example:
    * ```cpp (cpp-adapter.cpp)
    * JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void*) {
-   *   return margelo::nitro::image::initialize();
+   *   return margelo::nitro::image::initialize(vm);
    * }
    * ```
    */
