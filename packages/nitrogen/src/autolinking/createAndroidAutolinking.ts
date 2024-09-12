@@ -1,6 +1,7 @@
 import type { SourceFile, SourceImport } from '../syntax/SourceFile.js'
 import { createCMakeExtension } from './android/createCMakeExtension.js'
 import { createGradleExtension } from './android/createGradleExtension.js'
+import { createHybridObjectIntializer } from './android/createHybridObjectInitializer.js'
 import type { Autolinking } from './Autolinking.js'
 
 interface JNIHybridRegistration {
@@ -17,10 +18,11 @@ export function createAndroidAutolinking(
 ): AndroidAutolinking {
   const cmakeExtension = createCMakeExtension(allFiles)
   const gradleExtension = createGradleExtension()
+  const hybridObjectInitializer = createHybridObjectIntializer()
 
   return {
     platform: 'android',
     jniHybridRegistrations: [],
-    sourceFiles: [cmakeExtension, gradleExtension],
+    sourceFiles: [cmakeExtension, gradleExtension, ...hybridObjectInitializer],
   }
 }

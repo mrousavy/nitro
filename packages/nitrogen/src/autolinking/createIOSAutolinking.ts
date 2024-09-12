@@ -11,6 +11,7 @@ export function createIOSAutolinking(): IOSAutolinking {
   const swiftCxxBridge = createSwiftCxxBridge()
   const swiftUmbrellaHeader = createSwiftUmbrellaHeader()
   const hybridObjectInitializer = createHybridObjectIntializer()
+
   return {
     platform: 'ios',
     sourceFiles: [
