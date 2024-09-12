@@ -27,7 +27,9 @@
   HybridObjectRegistry::registerHybridObjectConstructor(
     "ImageFactory",
     []() -> std::shared_ptr<HybridObject> {
-      auto swiftPart = NitroImage::NitroImageOnLoadSwift::createImageFactory();
+      // 1. Create an instance of a Swift class that implements the `HybridImageFactorySpec` protocol
+      auto swiftPart = NitroImage::NitroImageOnLoad::createImageFactory();
+      // 2. Wrap that in the generated C++ class that bridges everything over to Swift
       return std::make_shared<HybridImageFactorySpecSwift>(swiftPart);
     }
   );
@@ -41,7 +43,7 @@
   HybridObjectRegistry::registerHybridObjectConstructor(
     "SwiftKotlinTestObject",
     []() -> std::shared_ptr<HybridObject> {
-      auto swiftPart = NitroImage::NitroImageOnLoadSwift::createSwiftKotlinTestObject();
+      auto swiftPart = NitroImage::NitroImageOnLoad::createSwiftKotlinTestObject();
       return std::make_shared<HybridSwiftKotlinTestObjectSpecSwift>(swiftPart);
     }
   );
