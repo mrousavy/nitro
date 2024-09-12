@@ -48,7 +48,7 @@ After installing Nitro, you can start creating your [Hybrid Objects](hybrid-obje
 
   Nitrogen will ✨ automagically ✨ generate native specifications for each Hybrid Object based on a given TypeScript definition.
 
-  ### Installing Nitrogen
+  ### 1. Installing Nitrogen
 
   First, install Nitrogen:
 
@@ -130,7 +130,7 @@ After installing Nitro, you can start creating your [Hybrid Objects](hybrid-obje
   include(${CMAKE_SOURCE_DIR}/../nitrogen/generated/android/NitroImage+autolinking.cmake)
   ```
 
-  ### Creating Nitro specs
+  ### 2. Creating Nitro specs
 
   After Nitrogen has been successfully set up, create your first spec. Let's create `Math.nitro.ts`:
 
@@ -184,35 +184,45 @@ After installing Nitro, you can start creating your [Hybrid Objects](hybrid-obje
     </TabItem>
   </Tabs>
 
-  ### Registering the Hybrid Objects
+  ### 3. Registering the Hybrid Objects
 
-  To allow JS to actually initialize the `Math` Hybrid Object, we need to tell Nitro how to create instances of it.
-  For this, simply use the `HybridObjectRegistry` somewhere on app startup (e.g. in `AppDelegate`):
-
-  <Tabs groupId="native-language">
-    <TabItem value="swift" label="Swift" default>
-      ```swift
-      HybridObjectRegistry.registerHybridObjectConstructor("Math") {
-        return HybridMath()
-      }
-      ```
-    </TabItem>
-    <TabItem value="kotlin" label="Kotlin">
-      ```kotlin
-      HybridObjectRegistry.registerHybridObjectConstructor("Math") {
-        HybridMath()
-      }
-      ```
-    </TabItem>
-    <TabItem value="c++" label="C++">
-      ```cpp
-      HybridObjectRegistry::registerHybridObjectConstructor(
-        "Math",
-        []() -> std::shared_ptr<HybridObject> {
-          return std::make_shared<HybridMath>();
+  Nitro needs to be able to initialize an instance of your Hybrid Object - so we need to tell it how to do that.
+  In your `nitro.json`, register `HybridMath` in the `"autolinking"` section:
+  <Tabs>
+    <TabItem value="swift-kotlin" label="Swift/Kotlin" default>
+      ```json
+      {
+        ...
+        "autolinking": {
+          "Math": {
+            "swift": "HybridMath",
+            "kotlin": "HybridMath"
+          }
         }
-      );
+      }
       ```
+
+      :::warning
+      - Make sure `HybridMath` is default-constructible. That is, it has a public initializer that takes no arguments.
+      :::
+    </TabItem>
+    <TabItem value="cpp" label="C++">
+      ```json
+      {
+        ...
+        "autolinking": {
+          "Math": {
+            "cpp": "HybridMath"
+          }
+        }
+      }
+      ```
+
+      :::warning
+      - Make sure `HybridMath` is default-constructible. That is, it has a public constructor that takes no arguments.
+      - Make sure the `HybridMath` class is defined in a header named `HybridMath.hpp` - this is what Nitro will import.
+      - Also make sure `HybridMath` is either in the global namespace, or in `margelo::nitro::<cxxNamespace>` (configured in `nitro.json`).
+      :::
     </TabItem>
   </Tabs>
 

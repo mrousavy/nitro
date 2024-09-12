@@ -636,10 +636,10 @@ promise->set_value();
             return `
 [&]() {
   auto promise = std::make_shared<std::promise<${actualCppType}>>();
-  ${parameterName}->cthis()->addOnResolvedListener([=](const jni::global_ref<jni::JObject>& boxedResult) {
+  ${parameterName}->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& boxedResult) {
     ${indent(resolveBody, '    ')}
   });
-  ${parameterName}->cthis()->addOnRejectedListener([=](const jni::global_ref<jni::JString>& message) {
+  ${parameterName}->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JString>& message) {
     std::runtime_error error(message->toStdString());
     promise->set_exception(std::make_exception_ptr(error));
   });

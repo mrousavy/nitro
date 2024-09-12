@@ -3,7 +3,7 @@ package com.margelo.nitro.core
 import androidx.annotation.Keep
 import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
-import dalvik.annotation.optimization.CriticalNative
+import dalvik.annotation.optimization.FastNative
 
 /**
  * Represents an untyped map of string keys with associated values.
@@ -31,47 +31,47 @@ class AnyMap {
   }
 
 
-  @CriticalNative
+  @FastNative
   external fun contains(key: String): Boolean
-  @CriticalNative
+  @FastNative
   external fun remove(key: String)
-  @CriticalNative
+  @FastNative
   external fun clear()
 
-  @CriticalNative
+  @FastNative
   external fun isNull(key: String): Boolean
-  @CriticalNative
+  @FastNative
   external fun isDouble(key: String): Boolean
-  @CriticalNative
+  @FastNative
   external fun isBoolean(key: String): Boolean
-  @CriticalNative
+  @FastNative
   external fun isBigInt(key: String): Boolean
-  @CriticalNative
+  @FastNative
   external fun isString(key: String): Boolean
-  @CriticalNative
+  @FastNative
   external fun isArray(key: String): Boolean
-  @CriticalNative
+  @FastNative
   external fun isObject(key: String): Boolean
 
-  @CriticalNative
+  @FastNative
   external fun getDouble(key: String): Double
-  @CriticalNative
+  @FastNative
   external fun getBoolean(key: String): Boolean
-  @CriticalNative
+  @FastNative
   external fun getBigInt(key: String): Long
   external fun getString(key: String): String
   external fun getAnyArray(key: String): AnyArray
   external fun getAnyObject(key: String): AnyObject
 
-  @CriticalNative
+  @FastNative
   external fun setNull(key: String)
-  @CriticalNative
+  @FastNative
   external fun setDouble(key: String, value: Double)
-  @CriticalNative
+  @FastNative
   external fun setBoolean(key: String, value: Boolean)
-  @CriticalNative
+  @FastNative
   external fun setBigInt(key: String, value: Long)
-  @CriticalNative
+  @FastNative
   external fun setString(key: String, value: String)
   external fun setAnyArray(key: String, value: AnyArray)
   external fun setAnyObject(key: String, value: AnyObject)

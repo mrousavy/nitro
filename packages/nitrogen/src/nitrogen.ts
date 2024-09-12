@@ -13,12 +13,9 @@ import { writeFile } from './writeFile.js'
 import chalk from 'chalk'
 import { groupByPlatform, type SourceFile } from './syntax/SourceFile.js'
 import { Logger } from './Logger.js'
-import { createPodspecRubyExtension } from './autolinking/createPodspecRubyExtension.js'
-import { createCMakeExtension } from './autolinking/createCMakeExtension.js'
-import { createGradleExtension } from './autolinking/createGradleExtension.js'
-import { createSwiftUmbrellaHeader } from './autolinking/createSwiftUmbrellaHeader.js'
-import { createSwiftCxxBridge } from './autolinking/createSwiftCxxBridge.js'
 import { NitroConfig } from './config/NitroConfig.js'
+import { createIOSAutolinking } from './autolinking/createIOSAutolinking.js'
+import { createAndroidAutolinking } from './autolinking/createAndroidAutolinking.js'
 
 interface NitrogenOptions {
   baseDirectory: string
@@ -201,23 +198,24 @@ export async function runNitrogen({
     }
   }
 
+  // Autolinking
   Logger.info(`⛓️   Setting up build configs for autolinking...`)
+  const iosFiles = createIOSAutolinking()
+  const androidFiles = createAndroidAutolinking(writtenFiles)
 
-  // iOS Podspec (Autolinking)
-  const buildSetupFiles = [
-    createSwiftUmbrellaHeader(),
-    ...createSwiftCxxBridge(),
-    createPodspecRubyExtension(),
-    createCMakeExtension(writtenFiles),
-    createGradleExtension(),
-  ]
-  for (const file of buildSetupFiles) {
+  const autolinkingFiles = [iosFiles, androidFiles]
+  for (const autolinking of autolinkingFiles) {
     Logger.info(
-      `    ${chalk.dim(file.platform)}: Creating ${file.platform} autolinking build setup...`
+      `    Creating autolinking build setup for ${chalk.dim(autolinking.platform)}...`
     )
-    const basePath = path.join(outputDirectory, file.platform)
-    const actualPath = await writeFile(basePath, file as unknown as SourceFile)
-    filesAfter.push(actualPath)
+    for (const file of autolinking.sourceFiles) {
+      const basePath = path.join(outputDirectory, file.platform)
+      const actualPath = await writeFile(
+        basePath,
+        file as unknown as SourceFile
+      )
+      filesAfter.push(actualPath)
+    }
   }
 
   return {

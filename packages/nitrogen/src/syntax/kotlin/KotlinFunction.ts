@@ -4,16 +4,8 @@ import { includeHeader } from '../c++/includeNitroHeader.js'
 import { createFileMetadataString, isNotDuplicate } from '../helpers.js'
 import type { SourceFile } from '../SourceFile.js'
 import type { FunctionType } from '../types/FunctionType.js'
-import { isArrayOfPrimitives, isPrimitive } from './KotlinBoxedPrimitive.js'
+import { addJNINativeRegistration } from './JNINativeRegistrations.js'
 import { KotlinCxxBridgedType } from './KotlinCxxBridgedType.js'
-
-function isFunctionPurelyPrimitive(func: FunctionType): boolean {
-  if (!isPrimitive(func.returnType) && !isArrayOfPrimitives(func.returnType)) {
-    // return type is not primitive (or array of primitives)
-    return false
-  }
-  return func.parameters.every((p) => isPrimitive(p) || isArrayOfPrimitives(p))
-}
 
 export function createKotlinFunction(functionType: FunctionType): SourceFile[] {
   const name = functionType.specializationName
@@ -22,8 +14,6 @@ export function createKotlinFunction(functionType: FunctionType): SourceFile[] {
   const kotlinParams = functionType.parameters.map(
     (p) => `${p.escapedName}: ${p.getCode('kotlin')}`
   )
-  const isPurelyPrimitive = isFunctionPurelyPrimitive(functionType)
-  const annotation = isPurelyPrimitive ? 'CriticalNative' : 'FastNative'
   const lambdaSignature = `(${kotlinParams.join(', ')}) -> ${kotlinReturnType}`
 
   const kotlinCode = `
@@ -34,7 +24,7 @@ package ${packageName}
 import androidx.annotation.Keep
 import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
-import dalvik.annotation.optimization.${annotation}
+import dalvik.annotation.optimization.FastNative
 
 /**
  * Represents the JavaScript callback \`${functionType.jsName}\`.
@@ -64,7 +54,7 @@ class ${name} {
    * Call the given JS callback.
    * @throws Throwable if the JS function itself throws an error, or if the JS function/runtime has already been deleted.
    */
-  @${annotation}
+  @FastNative
   external fun call(${kotlinParams.join(', ')}): ${kotlinReturnType}
 }
   `.trim()
@@ -119,7 +109,7 @@ namespace ${cxxNamespace} {
     }
 
   public:
-    static auto constexpr kJavaDescriptor = "${jniClassDescriptor}";
+    static auto constexpr kJavaDescriptor = "L${jniClassDescriptor};";
     static void registerNatives() {
       registerHybrid({makeNativeMethod("call", J${name}::call)});
     }
@@ -134,6 +124,17 @@ namespace ${cxxNamespace} {
 
 } // namespace ${cxxNamespace}
   `.trim()
+
+  // Make sure we register all native JNI methods on app startup
+  addJNINativeRegistration({
+    namespace: cxxNamespace,
+    className: `J${name}`,
+    import: {
+      name: `J${name}.hpp`,
+      space: 'user',
+      language: 'c++',
+    },
+  })
 
   const files: SourceFile[] = []
   files.push({

@@ -87,7 +87,7 @@ export const NitroConfig = {
       case 'java/kotlin':
         return namespace.join('.')
       case 'c++/jni':
-        return 'L' + namespace.join('/') + ';'
+        return namespace.join('/')
       default:
         throw new Error(`Invalid language for getAndroidPackage: ${language}`)
     }
@@ -102,7 +102,19 @@ export const NitroConfig = {
     return [...ANDROID_BASE_NAMESPACE, ...userPackage, ...subPackage]
   },
 
+  /**
+   * Get the paths that will be ignored when loading the TypeScript project.
+   * In most cases, this just contains `node_modules/`.
+   */
   getIgnorePaths(): string[] {
     return getUserConfig().ignorePaths ?? []
+  },
+
+  /**
+   * Get the autolinking configuration of all HybridObjects.
+   * Those will be generated and default-constructed.
+   */
+  getAutolinkedHybridObjects(): NitroUserConfig['autolinking'] {
+    return getUserConfig().autolinking
   },
 }

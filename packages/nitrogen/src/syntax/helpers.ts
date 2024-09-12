@@ -54,3 +54,7 @@ export function getRelativeDirectory(file: SourceFile): string {
     file.name
   )
 }
+
+export function getRelativeDirectoryGenerated(...subpath: string[]): string {
+  return path.join('..', 'nitrogen', 'generated', ...subpath)
+}

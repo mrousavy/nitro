@@ -1,8 +1,8 @@
-import { NitroConfig } from '../config/NitroConfig.js'
-import { createFileMetadataString } from '../syntax/helpers.js'
-import type { SourceFile } from '../syntax/SourceFile.js'
+import { NitroConfig } from '../../config/NitroConfig.js'
+import { createFileMetadataString } from '../../syntax/helpers.js'
+import type { SourceFile } from '../../syntax/SourceFile.js'
 
-interface RubyFile extends Omit<SourceFile, 'language'> {
+export interface RubyFile extends Omit<SourceFile, 'language'> {
   language: 'ruby'
 }
 
@@ -36,7 +36,7 @@ def add_nitrogen_files(spec)
     # Generated cross-platform specs
     "nitrogen/generated/shared/**/*.{h,hpp,c,cpp,swift}",
     # Generated bridges for the cross-platform specs
-    "nitrogen/generated/ios/**/*.{h,hpp,c,cpp,swift}",
+    "nitrogen/generated/ios/**/*.{h,hpp,c,cpp,mm,swift}",
   ]
 
   current_public_header_files = spec.attributes_hash['public_header_files'] || []

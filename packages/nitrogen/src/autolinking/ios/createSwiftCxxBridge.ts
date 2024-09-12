@@ -1,11 +1,14 @@
-import { NitroConfig } from '../config/NitroConfig.js'
-import { includeHeader } from '../syntax/c++/includeNitroHeader.js'
-import { getAllKnownTypes } from '../syntax/createType.js'
-import { createFileMetadataString, isNotDuplicate } from '../syntax/helpers.js'
-import type { SourceFile } from '../syntax/SourceFile.js'
-import { getReferencedTypes } from '../syntax/getReferencedTypes.js'
-import { SwiftCxxBridgedType } from '../syntax/swift/SwiftCxxBridgedType.js'
-import { filterDuplicateHelperBridges, indent } from '../utils.js'
+import { NitroConfig } from '../../config/NitroConfig.js'
+import { includeHeader } from '../../syntax/c++/includeNitroHeader.js'
+import { getAllKnownTypes } from '../../syntax/createType.js'
+import {
+  createFileMetadataString,
+  isNotDuplicate,
+} from '../../syntax/helpers.js'
+import type { SourceFile } from '../../syntax/SourceFile.js'
+import { getReferencedTypes } from '../../syntax/getReferencedTypes.js'
+import { SwiftCxxBridgedType } from '../../syntax/swift/SwiftCxxBridgedType.js'
+import { filterDuplicateHelperBridges, indent } from '../../utils.js'
 
 const SWIFT_BRIDGE_NAMESPACE = ['bridge', 'swift']
 

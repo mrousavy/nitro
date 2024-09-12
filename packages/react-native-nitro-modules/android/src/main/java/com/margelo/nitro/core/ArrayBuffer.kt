@@ -3,7 +3,7 @@ package com.margelo.nitro.core
 import androidx.annotation.Keep
 import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
-import dalvik.annotation.optimization.CriticalNative
+import dalvik.annotation.optimization.FastNative
 import java.nio.ByteBuffer
 
 /**
@@ -86,11 +86,11 @@ class ArrayBuffer {
 
     private external fun initHybrid(buffer: ByteBuffer): HybridData
     private external fun getByteBuffer(copyIfNeeded: Boolean): ByteBuffer
-    @CriticalNative
+    @FastNative
     private external fun getIsOwner(): Boolean
-    @CriticalNative
+    @FastNative
     private external fun getIsByteBuffer(): Boolean
-    @CriticalNative
+    @FastNative
     private external fun getBufferSize(): Int
 
     companion object {

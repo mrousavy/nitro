@@ -48,6 +48,21 @@ export const NitroUserConfigSchema = z.object({
     androidCxxLibName: z.string().regex(safeNamePattern),
   }),
   /**
+   * Configures the code that gets generated for autolinking (registering)
+   * Hybrid Object constructors.
+   *
+   * Each class listed here needs to have a default constructor/initializer that takes
+   * zero arguments.
+   */
+  autolinking: z.record(
+    z.string(),
+    z.object({
+      cpp: z.string().optional(),
+      swift: z.string().optional(),
+      kotlin: z.string().optional(),
+    })
+  ),
+  /**
    * A list of paths relative to the project directory that should be ignored by nitrogen.
    * Nitrogen will not look for `.nitro.ts` files in these directories.
    */
@@ -72,6 +87,7 @@ export function writeUserConfigFile(
     ios: {
       iosModulename: `Nitro${capitalizeName(moduleName)}`,
     },
+    autolinking: {},
   }
   const dir = path.join(directory, 'nitro.json')
   return fs.writeFile(dir, JSON.stringify(config, null, 2))
