@@ -86,7 +86,8 @@ After installing Nitro, you can start creating your [Hybrid Objects](hybrid-obje
     "android": {
       "androidNamespace": ["example"],
       "androidCxxLibName": "NitroExample"
-    }
+    },
+    "autolinking": {}
   }
   ```
 

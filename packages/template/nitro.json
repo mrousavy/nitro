@@ -7,5 +7,6 @@
     "androidNamespace": ["<<androidNamespace>>"],
     "androidCxxLibName": "<<androidCxxLibName>>"
   },
+  "autolinking": {},
   "ignorePaths": ["node_modules"]
 }
