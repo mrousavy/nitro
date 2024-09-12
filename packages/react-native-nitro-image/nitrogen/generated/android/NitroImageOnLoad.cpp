@@ -8,6 +8,7 @@
 
 #include "NitroImageOnLoad.hpp"
 
+#include "NitroModules/NitroLogger.hpp"
 #include <jni.h>
 #include <fbjni/fbjni.h>
 #include <NitroModules/HybridObjectRegistry.hpp>
@@ -20,6 +21,11 @@
 #include "HybridTestObject.hpp"
 
 namespace margelo::nitro::image {
+
+class JKotlinTestObject : public facebook::jni::JavaClass<JKotlinTestObject, JHybridKotlinTestObjectSpec> {
+public:
+    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/KotlinTestObject;";
+};
 
 int initialize(JavaVM* vm) {
   using namespace margelo::nitro;
@@ -43,6 +49,15 @@ int initialize(JavaVM* vm) {
         return std::make_shared<HybridTestObject>();
       }
     );
+
+    auto testClass = facebook::jni::findClassLocal("com/margelo/nitro/image/KotlinTestObject");
+    auto testConstructor = testClass->getConstructor<JHybridKotlinTestObjectSpec::javaobject()>();
+  auto testObj = testClass->newObject(testConstructor);
+  testObj->cthis()->setNumberValue(55);
+  double value = testObj->cthis()->getNumberValue();
+
+  Logger::log(LogLevel::Info, "TestObject", "Result: %f", value);
+
   });
 }
 
