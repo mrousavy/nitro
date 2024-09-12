@@ -16,11 +16,10 @@ namespace margelo::nitro::image {
 
   using namespace facebook;
 
-  class JHybridKotlinTestObjectSpec : public jni::HybridClass<JHybridKotlinTestObjectSpec, JHybridObject>,
+  class JHybridKotlinTestObjectSpec final: public jni::HybridClass<JHybridKotlinTestObjectSpec, JHybridObject>,
                                            public HybridKotlinTestObjectSpec {
-  private:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/HybridKotlinTestObjectSpec;";
   public:
+    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/HybridKotlinTestObjectSpec;";
     static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis);
     static void registerNatives();
 

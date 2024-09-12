@@ -8,7 +8,6 @@
 
 #include "NitroImageOnLoad.hpp"
 
-#include "NitroModules/NitroLogger.hpp"
 #include <jni.h>
 #include <fbjni/fbjni.h>
 #include <NitroModules/HybridObjectRegistry.hpp>
@@ -18,18 +17,15 @@
 #include "JHybridImageFactorySpec.hpp"
 #include "JHybridKotlinTestObjectSpec.hpp"
 #include "JFunc_void_Person.hpp"
+#include <NitroModules/JNISharedPtr.hpp>
 #include "HybridTestObject.hpp"
 
 namespace margelo::nitro::image {
 
-class JKotlinTestObject : public facebook::jni::JavaClass<JKotlinTestObject, JHybridKotlinTestObjectSpec> {
-public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/KotlinTestObject;";
-};
-
 int initialize(JavaVM* vm) {
   using namespace margelo::nitro;
   using namespace margelo::nitro::image;
+  using namespace facebook;
 
   return facebook::jni::initialize(vm, [] {
     // Register native JNI methods
@@ -41,6 +37,17 @@ int initialize(JavaVM* vm) {
 
     // Register Nitro Hybrid Objects
     HybridObjectRegistry::registerHybridObjectConstructor(
+      "ImageFactory",
+      []() -> std::shared_ptr<HybridObject> {
+        static auto javaClass = jni::findClassLocal("Lcom/margelo/nitro/image/HybridImageFactory;");
+        static auto defaultConstructor = javaClass->getConstructor<JHybridImageFactorySpec::javaobject()>();
+    
+        auto instance = javaClass->newObject(defaultConstructor);
+        auto globalRef = jni::make_global(instance);
+        return JNISharedPtr::make_shared_from_jni<JHybridImageFactorySpec>(globalRef);
+      }
+    );
+    HybridObjectRegistry::registerHybridObjectConstructor(
       "TestObject",
       []() -> std::shared_ptr<HybridObject> {
         static_assert(std::is_default_constructible_v<HybridTestObject>,
@@ -49,15 +56,17 @@ int initialize(JavaVM* vm) {
         return std::make_shared<HybridTestObject>();
       }
     );
-
-    auto testClass = facebook::jni::findClassLocal("com/margelo/nitro/image/KotlinTestObject");
-    auto testConstructor = testClass->getConstructor<JHybridKotlinTestObjectSpec::javaobject()>();
-  auto testObj = testClass->newObject(testConstructor);
-  testObj->cthis()->setNumberValue(55);
-  double value = testObj->cthis()->getNumberValue();
-
-  Logger::log(LogLevel::Info, "TestObject", "Result: %f", value);
-
+    HybridObjectRegistry::registerHybridObjectConstructor(
+      "KotlinTestObject",
+      []() -> std::shared_ptr<HybridObject> {
+        static auto javaClass = jni::findClassLocal("Lcom/margelo/nitro/image/HybridKotlinTestObject;");
+        static auto defaultConstructor = javaClass->getConstructor<JHybridKotlinTestObjectSpec::javaobject()>();
+    
+        auto instance = javaClass->newObject(defaultConstructor);
+        auto globalRef = jni::make_global(instance);
+        return JNISharedPtr::make_shared_from_jni<JHybridKotlinTestObjectSpec>(globalRef);
+      }
+    );
   });
 }
 

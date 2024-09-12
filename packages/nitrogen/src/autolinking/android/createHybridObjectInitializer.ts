@@ -6,6 +6,7 @@ import {
   isNotDuplicate,
 } from '../../syntax/helpers.js'
 import { getJNINativeRegistrations } from '../../syntax/kotlin/JNINativeRegistrations.js'
+import { createJNIHybridObjectRegistration } from '../../syntax/kotlin/KotlinHybridObjectRegistration.js'
 import type { SourceFile, SourceImport } from '../../syntax/SourceFile.js'
 import { indent } from '../../utils.js'
 
@@ -29,6 +30,15 @@ export function createHybridObjectIntializer(): SourceFile[] {
       const { cppCode, requiredImports } = createCppHybridObjectRegistration({
         hybridObjectName: hybridObjectName,
         cppClassName: config.cpp,
+      })
+      cppHybridObjectImports.push(...requiredImports)
+      cppRegistrations.push(cppCode)
+    }
+    if (config?.kotlin != null) {
+      // Autolink a Kotlin HybridObject through JNI/C++!
+      const { cppCode, requiredImports } = createJNIHybridObjectRegistration({
+        hybridObjectName: hybridObjectName,
+        jniClassName: config.kotlin,
       })
       cppHybridObjectImports.push(...requiredImports)
       cppRegistrations.push(cppCode)
@@ -80,6 +90,7 @@ namespace ${cxxNamespace} {
 int initialize(JavaVM* vm) {
   using namespace margelo::nitro;
   using namespace ${cxxNamespace};
+  using namespace facebook;
 
   return facebook::jni::initialize(vm, [] {
     // Register native JNI methods
