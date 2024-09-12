@@ -91,8 +91,8 @@ const config: Config = {
       ],
     },
     algolia: {
-      appId: 'YOUR_APP_ID',
-      apiKey: 'YOUR_SEARCH_API_KEY',
+      appId: 'Y788VW5KZO',
+      apiKey: 'c077f6bb95a5a11a69a7e65315a795c5',
       indexName: 'nitro',
       contextualSearch: true,
       searchPagePath: false,
