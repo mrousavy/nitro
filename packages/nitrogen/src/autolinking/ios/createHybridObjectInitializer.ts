@@ -57,7 +57,7 @@ public static func create${hybridObjectName}() -> ${HybridTSpecCxx} {
 HybridObjectRegistry::registerHybridObjectConstructor(
   "${hybridObjectName}",
   []() -> std::shared_ptr<HybridObject> {
-    auto swiftPart = ${swiftNamespace}::${onLoadName}::create${hybridObjectName}();
+    auto swiftPart = ${swiftNamespace}::${onLoadName}Swift::create${hybridObjectName}();
     return std::make_shared<${HybridTSpecSwift}>(swiftPart);
   }
 );
@@ -97,9 +97,9 @@ ${imports}
   `.trim()
 
   const swiftCode = `
-${createFileMetadataString(`${onLoadName}.swift`)}
+${createFileMetadataString(`${onLoadName}Swift.swift`)}
 
-public final class ${onLoadName} {
+public final class ${onLoadName}Swift {
   ${indent(swiftFunctions.join('\n\n'), '  ')}
 }
   `.trim()
@@ -115,7 +115,7 @@ public final class ${onLoadName} {
     {
       content: swiftCode,
       language: 'swift',
-      name: `${onLoadName}.swift`,
+      name: `${onLoadName}Swift.swift`,
       platform: 'ios',
       subdirectory: [],
     },
