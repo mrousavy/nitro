@@ -4,6 +4,7 @@ import { includeHeader } from '../c++/includeNitroHeader.js'
 import { createFileMetadataString, isNotDuplicate } from '../helpers.js'
 import type { SourceFile } from '../SourceFile.js'
 import type { FunctionType } from '../types/FunctionType.js'
+import { addJNINativeRegistration } from './JNINativeRegistrations.js'
 import { isArrayOfPrimitives, isPrimitive } from './KotlinBoxedPrimitive.js'
 import { KotlinCxxBridgedType } from './KotlinCxxBridgedType.js'
 
@@ -134,6 +135,17 @@ namespace ${cxxNamespace} {
 
 } // namespace ${cxxNamespace}
   `.trim()
+
+  // Make sure we register all native JNI methods on app startup
+  addJNINativeRegistration({
+    namespace: cxxNamespace,
+    className: `J${name}`,
+    import: {
+      name: `J${name}.hpp`,
+      space: 'user',
+      language: 'c++',
+    },
+  })
 
   const files: SourceFile[] = []
   files.push({

@@ -11,9 +11,9 @@
 #import "NitroImage-Swift-Cxx-Umbrella.hpp"
 #import <type_traits>
 
-#import "HybridImageFactorySpecSwift.hpp"
-#import "HybridTestObject.hpp"
-#import "HybridSwiftKotlinTestObjectSpecSwift.hpp"
+#include "HybridImageFactorySpecSwift.hpp"
+#include "HybridTestObject.hpp"
+#include "HybridSwiftKotlinTestObjectSpecSwift.hpp"
 
 @interface NitroImageAutolinking : NSObject
 @end
@@ -34,7 +34,9 @@
   HybridObjectRegistry::registerHybridObjectConstructor(
     "TestObject",
     []() -> std::shared_ptr<HybridObject> {
-      static_assert(std::is_default_constructible_v<HybridTestObject>, "The HybridObject \"HybridTestObject\" is not default-constructible! Create a public constructor that takes zero arguments to be able to autolink this HybridObject.");
+      static_assert(std::is_default_constructible_v<HybridTestObject>,
+                    "The HybridObject \"HybridTestObject\" is not default-constructible! "
+                    "Create a public constructor that takes zero arguments to be able to autolink this HybridObject.");
       return std::make_shared<HybridTestObject>();
     }
   );
