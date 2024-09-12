@@ -11,6 +11,10 @@
 #import "NitroImage-Swift-Cxx-Umbrella.hpp"
 #import <type_traits>
 
+#import "HybridImageFactorySpecSwift.hpp"
+#import "HybridTestObject.hpp"
+#import "HybridSwiftKotlinTestObjectSpecSwift.hpp"
+
 @interface NitroImageOnLoad : NSObject
 @end
 
@@ -23,7 +27,7 @@
   HybridObjectRegistry::registerHybridObjectConstructor(
     "ImageFactory",
     []() -> std::shared_ptr<HybridObject> {
-      auto swiftPart = NitroImage::HybridImageFactorySpecCxx::init();
+      auto swiftPart = NitroImage::NitroImageOnLoad::createImageFactory();
       return std::make_shared<HybridImageFactorySpecSwift>(swiftPart);
     }
   );
@@ -37,7 +41,7 @@
   HybridObjectRegistry::registerHybridObjectConstructor(
     "SwiftKotlinTestObject",
     []() -> std::shared_ptr<HybridObject> {
-      auto swiftPart = NitroImage::HybridSwiftKotlinTestObjectSpecCxx::init();
+      auto swiftPart = NitroImage::NitroImageOnLoad::createSwiftKotlinTestObject();
       return std::make_shared<HybridSwiftKotlinTestObjectSpecSwift>(swiftPart);
     }
   );

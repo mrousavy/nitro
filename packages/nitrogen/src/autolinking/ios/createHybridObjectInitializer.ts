@@ -5,14 +5,15 @@ import type { SourceFile } from '../../syntax/SourceFile.js'
 import { indent } from '../../utils.js'
 
 type ObjcFile = Omit<SourceFile, 'language'> & { language: 'objective-c++' }
+type SwiftFile = Omit<SourceFile, 'language'> & { language: 'swift' }
 
-export function createHybridObjectIntializer(): ObjcFile {
-  const name = `${NitroConfig.getIosModuleName()}OnLoad`
-  const filename = `${name}.mm`
+export function createHybridObjectIntializer(): [ObjcFile, SwiftFile] {
+  const onLoadName = `${NitroConfig.getIosModuleName()}OnLoad`
   const umbrellaHeaderName = `${NitroConfig.getIosModuleName()}-Swift-Cxx-Umbrella.hpp`
 
   const autolinkedHybridObjects = NitroConfig.getAutolinkedHybridObjects()
 
+  const swiftFunctions: string[] = []
   const cppRegistrations: string[] = []
   const cppIncludes: string[] = []
   let containsSwiftObjects = false
@@ -38,16 +39,25 @@ HybridObjectRegistry::registerHybridObjectConstructor(
     if (config?.swift != null) {
       // Autolink a Swift HybridObject!
       containsSwiftObjects = true
+      const hybridObjectClassName = config.swift
       const swiftNamespace = NitroConfig.getIosModuleName()
       const { HybridTSpecCxx, HybridTSpecSwift } =
         getHybridObjectName(hybridObjectName)
       cppIncludes.push(`${HybridTSpecSwift}.hpp`)
+      swiftFunctions.push(
+        `
+public static func create${hybridObjectName}() -> ${HybridTSpecCxx} {
+  let hybridObject = ${hybridObjectClassName}()
+  return hybridObject.createCxxBridge()
+}
+      `.trim()
+      )
       cppRegistrations.push(
         `
 HybridObjectRegistry::registerHybridObjectConstructor(
   "${hybridObjectName}",
   []() -> std::shared_ptr<HybridObject> {
-    auto swiftPart = ${swiftNamespace}::${HybridTSpecCxx}::init();
+    auto swiftPart = ${swiftNamespace}::${onLoadName}::create${hybridObjectName}();
     return std::make_shared<${HybridTSpecSwift}>(swiftPart);
   }
 );
@@ -59,19 +69,22 @@ HybridObjectRegistry::registerHybridObjectConstructor(
   const umbrellaImport = containsSwiftObjects
     ? `#import "${umbrellaHeaderName}"`
     : ''
+  const imports = cppIncludes.map((i) => `#import "${i}"`).join('\n')
 
-  const code = `
-${createFileMetadataString(filename)}
+  const objcCode = `
+${createFileMetadataString(`${onLoadName}.mm`)}
 
 #import <Foundation/Foundation.h>
 #import <NitroModules/HybridObjectRegistry.hpp>
 ${umbrellaImport}
 #import <type_traits>
 
-@interface ${name} : NSObject
+${imports}
+
+@interface ${onLoadName} : NSObject
 @end
 
-@implementation ${name}
+@implementation ${onLoadName}
 
 + (void) load {
   using namespace margelo::nitro;
@@ -83,11 +96,28 @@ ${umbrellaImport}
 @end
   `.trim()
 
-  return {
-    content: code,
-    language: 'objective-c++',
-    name: filename,
-    platform: 'ios',
-    subdirectory: [],
-  }
+  const swiftCode = `
+${createFileMetadataString(`${onLoadName}.swift`)}
+
+public final class ${onLoadName} {
+  ${indent(swiftFunctions.join('\n\n'), '  ')}
+}
+  `.trim()
+
+  return [
+    {
+      content: objcCode,
+      language: 'objective-c++',
+      name: `${onLoadName}.mm`,
+      platform: 'ios',
+      subdirectory: [],
+    },
+    {
+      content: swiftCode,
+      language: 'swift',
+      name: `${onLoadName}.swift`,
+      platform: 'ios',
+      subdirectory: [],
+    },
+  ]
 }

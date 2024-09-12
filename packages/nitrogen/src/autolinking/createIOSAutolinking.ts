@@ -17,7 +17,7 @@ export function createIOSAutolinking(): IOSAutolinking {
       podspecExtension,
       ...swiftCxxBridge,
       swiftUmbrellaHeader,
-      hybridObjectInitializer,
+      ...hybridObjectInitializer,
     ],
   }
 }
