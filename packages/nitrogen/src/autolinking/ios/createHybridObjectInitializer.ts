@@ -1,5 +1,4 @@
 import { NitroConfig } from '../../config/NitroConfig.js'
-import { getAllKnownHybridObjects } from '../../HybridObjectRegistry.js'
 import { getHybridObjectName } from '../../syntax/getHybridObjectName.js'
 import { createFileMetadataString } from '../../syntax/helpers.js'
 import type { SourceFile } from '../../syntax/SourceFile.js'
@@ -11,40 +10,55 @@ export function createHybridObjectIntializer(): ObjcFile {
   const name = `${NitroConfig.getIosModuleName()}OnLoad`
   const filename = `${name}.mm`
   const umbrellaHeaderName = `${NitroConfig.getIosModuleName()}-Swift-Cxx-Umbrella.hpp`
-  const cppHybridObjects = getAllKnownHybridObjects().filter(
-    (h) => h.language === 'c++'
-  )
-  const swiftHybridObjects = getAllKnownHybridObjects().filter(
-    (h) => h.language === 'swift'
-  )
 
-  const cppRegistrations = cppHybridObjects.map((h) => {
-    const hybridObjectName = getHybridObjectName(h.name)
-    return `
+  const autolinkedHybridObjects = NitroConfig.getAutolinkedHybridObjects()
+
+  const cppRegistrations: string[] = []
+  const cppIncludes: string[] = []
+  let containsSwiftObjects = false
+  for (const hybridObjectName of Object.keys(autolinkedHybridObjects)) {
+    const config = autolinkedHybridObjects[hybridObjectName]
+
+    if (config?.cpp != null) {
+      // Autolink a C++ HybridObject!
+      const hybridObjectClassName = config.cpp
+      cppIncludes.push(`${hybridObjectClassName}.hpp`)
+      cppRegistrations.push(
+        `
 HybridObjectRegistry::registerHybridObjectConstructor(
-  "${h.name}",
+  "${hybridObjectName}",
   []() -> std::shared_ptr<HybridObject> {
-    return std::make_shared<${hybridObjectName.HybridT}>();
+    static_assert(std::is_default_constructible_v<${hybridObjectClassName}>, "The HybridObject \\"${hybridObjectClassName}\\" is not default-constructible! Create a public constructor that takes zero arguments to be able to autolink this HybridObject.");
+    return std::make_shared<${hybridObjectClassName}>();
   }
 );
       `.trim()
-  })
-  const swiftRegistrations = swiftHybridObjects.map((h) => {
-    const hybridObjectName = getHybridObjectName(h.name)
-    const swiftNamespace = NitroConfig.getIosModuleName()
-    return `
+      )
+    }
+    if (config?.swift != null) {
+      // Autolink a Swift HybridObject!
+      containsSwiftObjects = true
+      const swiftNamespace = NitroConfig.getIosModuleName()
+      const { HybridTSpecCxx, HybridTSpecSwift } =
+        getHybridObjectName(hybridObjectName)
+      cppIncludes.push(`${HybridTSpecSwift}.hpp`)
+      cppRegistrations.push(
+        `
 HybridObjectRegistry::registerHybridObjectConstructor(
-  "${h.name}",
+  "${hybridObjectName}",
   []() -> std::shared_ptr<HybridObject> {
-    auto swiftPart = ${swiftNamespace}::${hybridObjectName.HybridTSpecCxx}::init();
-    return std::make_shared<${hybridObjectName.HybridTSpecSwift}>(swiftPart);
+    auto swiftPart = ${swiftNamespace}::${HybridTSpecCxx}::init();
+    return std::make_shared<${HybridTSpecSwift}>(swiftPart);
   }
 );
       `.trim()
-  })
+      )
+    }
+  }
 
-  const umbrellaImport =
-    swiftHybridObjects.length > 0 ? `#import "${umbrellaHeaderName}"` : ''
+  const umbrellaImport = containsSwiftObjects
+    ? `#import "${umbrellaHeaderName}"`
+    : ''
 
   const code = `
 ${createFileMetadataString(filename)}
@@ -63,7 +77,6 @@ ${umbrellaImport}
   using namespace ${NitroConfig.getCxxNamespace('c++')};
 
   ${indent(cppRegistrations.join('\n'), '  ')}
-  ${indent(swiftRegistrations.join('\n'), '  ')}
 }
 
 @end

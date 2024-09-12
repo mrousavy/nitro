@@ -7,5 +7,20 @@
     "androidNamespace": ["image"],
     "androidCxxLibName": "NitroImage"
   },
+  "autolinking": {
+    "ImageFactory": {
+      "swift": "HybridImageFactory",
+      "kotlin": "HybridImageFactory"
+    },
+    "TestObject": {
+      "cpp": "HybridTestObject"
+    },
+    "SwiftKotlinTestObject": {
+      "swift": "HybridSwiftKotlinTestObject"
+    },
+    "KotlinTestObject": {
+      "kotlin": "HybridKotlinTestObject"
+    }
+  },
   "ignorePaths": ["node_modules"]
 }
