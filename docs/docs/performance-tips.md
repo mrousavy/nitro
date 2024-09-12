@@ -136,6 +136,8 @@ interface GoodDatabase extends HybridObject {
 </div>
 </div>
 
+Keep in mind that switching to a different Thread on the native side introduces a small overhead by itself. This only benefits performance if the actual computation inside the function body takes longer than the thread-switch.
+
 ## Use `ArrayBuffer` for large data
 
 For large data sets, conventional [arrays](types/arrays) are in-efficient as each value has to be copied individually.
