@@ -208,7 +208,7 @@ export async function runNitrogen({
     Logger.info(
       `    Creating autolinking build setup for ${chalk.dim(autolinking.platform)}...`
     )
-    for (const file of iosFiles.sourceFiles) {
+    for (const file of autolinking.sourceFiles) {
       const basePath = path.join(outputDirectory, file.platform)
       const actualPath = await writeFile(
         basePath,
