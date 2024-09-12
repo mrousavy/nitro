@@ -236,7 +236,7 @@ That way the JS garbage collector knows how big an `Image` is exactly in memory,
 While Nitro is insanely fast, there is still an unavoidable overhead associated with calling native code from JS.
 In general, it is a good practice to stay within one environment (here; JavaScript) as long as possible, and only call into native when really needed.
 
-Some things (like the `Math.add(...)` function I often use) are faster in JavaScript, as the overhead of calling into native might be bigger than the overall execution time of the function.
+Some things (like the `Math.add(...)` function I often use) are faster in JavaScript, as the overhead of calling into native might be greater than the overall execution time of the function.
 
 ## Use C++ if possible
 
