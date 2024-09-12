@@ -7,7 +7,6 @@ import { Property } from './syntax/Property.js'
 import { Method } from './syntax/Method.js'
 import { createSwiftHybridObject } from './syntax/swift/SwiftHybridObject.js'
 import { createKotlinHybridObject } from './syntax/kotlin/KotlinHybridObject.js'
-import { addHybridObject } from './HybridObjectRegistry.js'
 
 export function generatePlatformFiles(
   declaration: InterfaceDeclaration,
@@ -42,7 +41,6 @@ function getHybridObjectSpec(
     properties: properties.map((p) => new Property(p)),
     methods: methods.map((m) => new Method(m)),
   }
-  addHybridObject(spec)
   return spec
 }
 
