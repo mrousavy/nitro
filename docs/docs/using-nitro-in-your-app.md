@@ -253,7 +253,8 @@ After installing Nitro, you can start creating your [Hybrid Objects](hybrid-obje
 
       :::warning
       - Make sure `HybridMath` is default-constructible. That is, it has a public initializer that takes no arguments.
-      - Make sure the `HybridMath` Kotlin class is inside the package `com.margelo.nitro.<<androidNamespace>>` (as configured in `nitro.json`)
+      - Make sure the Java/Kotlin class `HybridMath` is inside the package/namespace `com.margelo.nitro.<<androidNamespace>>` (as configured in `nitro.json`).
+      - Make sure the Java/Kotlin class `HybridMath` is annotated with `@DoNotStrip` to avoid it from being compiled out in production builds.
       :::
     </TabItem>
     <TabItem value="cpp" label="C++">
