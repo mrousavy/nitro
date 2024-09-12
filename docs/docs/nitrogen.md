@@ -214,6 +214,8 @@ In your `nitro.json`, register `HybridMath` in the `"autolinking"` section:
 
     :::warning
     - Make sure `HybridMath` is default-constructible. That is, it has a public initializer that takes no arguments.
+    - Make sure the Java/Kotlin class `HybridMath` is inside the package/namespace `com.margelo.nitro.<<androidNamespace>>` (as configured in `nitro.json`).
+    - Make sure the Java/Kotlin class `HybridMath` is annotated with `@DoNotStrip` to avoid it from being compiled out in production builds.
     :::
   </TabItem>
   <TabItem value="cpp" label="C++">
