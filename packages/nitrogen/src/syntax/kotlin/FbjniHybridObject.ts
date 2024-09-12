@@ -82,7 +82,7 @@ ${spaces}                public ${name.HybridTSpec} {
     namespace: cxxNamespace,
     className: `${name.JHybridTSpec}`,
     import: {
-      name: `${name.HybridTSpec}.hpp`,
+      name: `${name.JHybridTSpec}.hpp`,
       space: 'user',
       language: 'c++',
     },

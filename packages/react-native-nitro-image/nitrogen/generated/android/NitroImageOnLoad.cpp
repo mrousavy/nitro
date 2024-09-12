@@ -6,21 +6,22 @@
 /// Copyright © 2024 Marc Rousavy @ Margelo
 ///
 
+#include "NitroImageOnLoad.hpp"
+
 #include <jni.h>
 #include <fbjni/fbjni.h>
 #include <NitroModules/HybridObjectRegistry.hpp>
 
-#include "HybridImageSpec.hpp"
+#include "JHybridImageSpec.hpp"
 #include "JFunc_void_std__string.hpp"
-#include "HybridImageFactorySpec.hpp"
-#include "HybridKotlinTestObjectSpec.hpp"
+#include "JHybridImageFactorySpec.hpp"
+#include "JHybridKotlinTestObjectSpec.hpp"
 #include "JFunc_void_Person.hpp"
 #include "HybridTestObject.hpp"
 
-/**
- * Called when Java loads the native C++ library (`System.loadLibrary("NitroImage")`)
- */
-JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void*) {
+namespace margelo::nitro::image {
+
+int initialize(JavaVM* vm) {
   using namespace margelo::nitro;
   using namespace margelo::nitro::image;
 
@@ -44,3 +45,5 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void*) {
     );
   });
 }
+
+} // namespace margelo::nitro::image

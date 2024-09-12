@@ -10,6 +10,7 @@ import type { SourceFile, SourceImport } from '../../syntax/SourceFile.js'
 import { indent } from '../../utils.js'
 
 export function createHybridObjectIntializer(): SourceFile[] {
+  const cxxNamespace = NitroConfig.getCxxNamespace('c++')
   const autolinkingClassName = `${NitroConfig.getIosModuleName()}OnLoad`
 
   const jniRegistrations = getJNINativeRegistrations().map(
@@ -41,8 +42,30 @@ export function createHybridObjectIntializer(): SourceFile[] {
     .filter(isNotDuplicate)
     .join('\n')
 
+  const hppCode = `
+${createFileMetadataString(`${autolinkingClassName}.hpp`)}
+
+namespace ${cxxNamespace} {
+
+  /**
+   * Initializes the native (C++) part of ${NitroConfig.getAndroidCxxLibName()}, and autolinks all Hybrid Objects.
+   * Call this in your \`JNI_OnLoad\` function (probably inside \`cpp-adapter.cpp\`).
+   * Example:
+   * \`\`\`cpp (cpp-adapter.cpp)
+   * JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void*) {
+   *   return ${cxxNamespace}::initialize(vm);
+   * }
+   * \`\`\`
+   */
+  int initialize(JavaVM* vm);
+
+} // namespace ${cxxNamespace}
+
+    `
   const cppCode = `
 ${createFileMetadataString(`${autolinkingClassName}.cpp`)}
+
+#include "${autolinkingClassName}.hpp"
 
 #include <jni.h>
 #include <fbjni/fbjni.h>
@@ -50,12 +73,11 @@ ${createFileMetadataString(`${autolinkingClassName}.cpp`)}
 
 ${includes}
 
-/**
- * Called when Java loads the native C++ library (\`System.loadLibrary("${NitroConfig.getAndroidCxxLibName()}")\`)
- */
-JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void*) {
+namespace ${cxxNamespace} {
+
+int initialize(JavaVM* vm) {
   using namespace margelo::nitro;
-  using namespace ${NitroConfig.getCxxNamespace('c++')};
+  using namespace ${cxxNamespace};
 
   return facebook::jni::initialize(vm, [] {
     // Register native JNI methods
@@ -66,9 +88,18 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void*) {
   });
 }
 
+} // namespace ${cxxNamespace}
+
   `.trim()
 
   return [
+    {
+      content: hppCode,
+      language: 'c++',
+      name: `${autolinkingClassName}.hpp`,
+      platform: 'android',
+      subdirectory: [],
+    },
     {
       content: cppCode,
       language: 'c++',
