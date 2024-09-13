@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - '.github/workflows/validate-cpp.yml'
+      - '.github/workflows/lint-cpp.yml'
       - '**/*.h'
       - '**/*.hpp'
       - '**/*.cpp'
@@ -13,7 +13,7 @@ on:
       - '**/*.mm'
   pull_request:
     paths:
-      - '.github/workflows/validate-cpp.yml'
+      - '.github/workflows/lint-cpp.yml'
       - '**/*.h'
       - '**/*.hpp'
       - '**/*.cpp'
