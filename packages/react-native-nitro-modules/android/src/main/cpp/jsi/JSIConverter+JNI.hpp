@@ -10,6 +10,9 @@ template <typename T, typename Enable>
 struct JSIConverter;
 } // namespace margelo::nitro
 
+#include "JAnyMap.hpp"
+#include "JArrayBuffer.hpp"
+#include "JHybridObject.hpp"
 #include "JSIConverter.hpp"
 #include <fbjni/fbjni.h>
 #include <jni.h>
@@ -157,7 +160,7 @@ struct JSIConverter<jni::alias_ref<jni::JArrayDouble>> final {
     delete[] data;
     return result;
   }
-  static inline jsi::Value toJSI(jsi::Runtime& runtime, jni::alias_ref<jni::JArrayDouble>& arg) {
+  static inline jsi::Value toJSI(jsi::Runtime& runtime, jni::alias_ref<jni::JArrayDouble> arg) {
     size_t size = arg->size();
     jsi::Array array = jsi::Array(runtime, size);
     std::unique_ptr<double[]> region = arg->getRegion(0, static_cast<jsize>(size));
@@ -290,6 +293,44 @@ struct JSIConverter<jni::alias_ref<jni::JMap<K, V>>> final {
     }
     jsi::Object object = value.getObject(runtime);
     return isPlainObject(runtime, object);
+  }
+};
+
+// {} <> JHybridObject
+template <typename TJHybrid>
+struct JSIConverter<jni::alias_ref<TJHybrid>, std::enable_if_t<std::is_base_of_v<JHybridObject, TJHybrid>>> final {
+  static inline jni::alias_ref<TJHybrid> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+    throw std::runtime_error("Cannot convert jsi::Value -> JHybridObject yet!");
+  }
+  static inline jsi::Value toJSI(jsi::Runtime& runtime, jni::alias_ref<TJHybrid> arg) {
+    return arg->cthis()->toObject();
+  }
+  static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
+    if (!value.isObject()) {
+      return false;
+    }
+    jsi::Object object = value.getObject(runtime);
+    return object.hasNativeState(runtime);
+  }
+};
+
+// ArrayBuffer <> JArrayBuffer
+template <>
+struct JSIConverter<jni::alias_ref<JArrayBuffer::javaobject>> final {
+  static inline jni::alias_ref<JArrayBuffer::javaobject> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+    std::shared_ptr<ArrayBuffer> jsArrayBuffer = JSIConverter<std::shared_ptr<ArrayBuffer>>::fromJSI(runtime, arg);
+    return JArrayBuffer::wrap(jsArrayBuffer);
+  }
+  static inline jsi::Value toJSI(jsi::Runtime& runtime, const jni::alias_ref<JArrayBuffer::javaobject>& arg) {
+    std::shared_ptr<ArrayBuffer> arrayBuffer = arg->cthis()->getArrayBuffer();
+    return jsi::ArrayBuffer(runtime, arrayBuffer);
+  }
+  static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
+    if (!value.isObject()) {
+      return false;
+    }
+    jsi::Object object = value.getObject(runtime);
+    return object.isArrayBuffer(runtime);
   }
 };
 
