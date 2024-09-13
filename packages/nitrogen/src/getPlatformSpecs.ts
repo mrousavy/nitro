@@ -1,5 +1,5 @@
 import type { PlatformSpec } from 'react-native-nitro-modules'
-import type { TypeNode } from 'ts-morph'
+import type { InterfaceDeclaration, TypeNode } from 'ts-morph'
 import { ts, Symbol } from 'ts-morph'
 
 export type Platform = keyof Required<PlatformSpec>
@@ -44,7 +44,7 @@ function isValidLanguageForPlatform(
   return platformLanguages[platform].includes(language)
 }
 
-export function getPlatformSpec(
+function getPlatformSpec(
   moduleName: string,
   platformSpecs: TypeNode<ts.TypeNode>
 ): PlatformSpec {
@@ -87,4 +87,32 @@ export function getPlatformSpec(
   }
 
   return result
+}
+
+export function getHybridObjectPlatforms(
+  module: InterfaceDeclaration
+): PlatformSpec | undefined {
+  const heritageClauses = module.getHeritageClauses()
+
+  for (const clause of heritageClauses) {
+    const types = clause.getTypeNodes()
+    for (const type of types) {
+      const typename = type.getText()
+      if (typename.startsWith('HybridObject<')) {
+        // It extends HybridObject<...>
+        const genericArguments = type.getTypeArguments()
+        const platformSpecsArgument = genericArguments[0]
+        if (platformSpecsArgument == null) {
+          throw new Error(
+            `${module.getName()} does not properly extend HybridObject<T>! ${typename} does not have a single generic type argument for platform spec languages!`
+          )
+        }
+        return getPlatformSpec(module.getName(), platformSpecsArgument)
+      } else if (typename === 'HybridObject') {
+        // It extends HybridObject with default type arguments
+        return { android: 'c++', ios: 'c++' }
+      }
+    }
+  }
+  return undefined
 }

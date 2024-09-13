@@ -1,5 +1,5 @@
 import { Project } from 'ts-morph'
-import { getPlatformSpec, type Platform } from './getPlatformSpecs.js'
+import { getHybridObjectPlatforms, type Platform } from './getPlatformSpecs.js'
 import { generatePlatformFiles } from './createPlatformSpec.js'
 import path from 'path'
 import { prettifyDirectory } from './getCurrentDir.js'
@@ -95,31 +95,9 @@ export async function runNitrogen({
         moduleName = module.getName()
 
         // Find out if it extends HybridObject
-        const heritageClauses = module.getHeritageClauses()
-        const platformSpecs = heritageClauses.map((clause) => {
-          const types = clause.getTypeNodes()
-          for (const type of types) {
-            const typeName = type.getText()
-            if (!typeName.startsWith('HybridObject')) {
-              continue
-            }
-            const genericArguments = type.getTypeArguments()
-            const platformSpecsArgument = genericArguments[0]
-            if (
-              genericArguments.length !== 1 ||
-              platformSpecsArgument == null
-            ) {
-              throw new Error(
-                `${moduleName} does not properly extend HybridObject<T> - ${typeName} does not have a single generic type argument for platform spec languages.`
-              )
-            }
-            return getPlatformSpec(moduleName, platformSpecsArgument)
-          }
-          return undefined
-        })
-        const platformSpec = platformSpecs.find((s) => s != null)
+        const platformSpec = getHybridObjectPlatforms(module)
         if (platformSpec == null) {
-          // Skip this interface if it doesn't extend HybridObject
+          // It does not extend HybridObject, continue..
           continue
         }
 
