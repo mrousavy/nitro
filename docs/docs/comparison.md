@@ -23,7 +23,7 @@ Nitro is not the only one of it's kind. There's multiple ways to build native mo
   </tr>
   <tr>
     <td>100.000x <code>addNumbers(...)</code></td>
-    <td>434.85</td>
+    <td>434.85ms</td>
     <td>115.86ms</td>
     <td><b>7.27ms</b></td>
   </tr>
