@@ -37,19 +37,6 @@ jobs:
       - name: Install npm dependencies (bun)
         run: bun install --frozen-lockfile
 
-      - name: Install npm dependencies (bun)
-        working-directory: example
-        run: bun install --frozen-lockfile
-      - name: Install npm dependencies (bun)
-        working-directory: packages/nitrogen
-        run: bun install --frozen-lockfile
-      - name: Install npm dependencies (bun)
-        working-directory: packages/react-native-nitro-modules
-        run: bun install --frozen-lockfile
-      - name: Install npm dependencies (bun)
-        working-directory: packages/react-native-nitro-image
-        run: bun install --frozen-lockfile
-
       - name: Run nitro-codegen in packages/react-native-nitro-image
         working-directory: packages/react-native-nitro-image
         run: bun run nitro-codegen --logLevel="debug"
