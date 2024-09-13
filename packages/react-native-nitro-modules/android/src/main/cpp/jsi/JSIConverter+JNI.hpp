@@ -29,10 +29,10 @@ struct JSIConverter<jni::alias_ref<T>> final {
   static inline jni::alias_ref<T> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
     return JSIConverter<T>::fromJSI(runtime, arg);
   }
-  static inline jsi::Value toJSI(jsi::Runtime&, const jni::alias_ref<T>& arg) {
+  static inline jsi::Value toJSI(jsi::Runtime& runtime, const jni::alias_ref<T>& arg) {
     return JSIConverter<T>::toJSI(runtime, arg);
   }
-  static inline bool canConvert(jsi::Runtime&, const jsi::Value& value) {
+  static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
     return JSIConverter<T>::canConvert(runtime, value);
   }
 };
