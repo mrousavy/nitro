@@ -6,6 +6,7 @@
 ///
 
 #include "JHybridImageSpec.hpp"
+#include <NitroModules/JSIConverter+JNI.hpp>
 
 namespace margelo::nitro::image {
 

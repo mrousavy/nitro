@@ -158,6 +158,7 @@ ${spaces}                public ${name.HybridTSpec} {
 ${createFileMetadataString(`${name.JHybridTSpec}.cpp`)}
 
 #include "${name.JHybridTSpec}.hpp"
+#include <NitroModules/JSIConverter+JNI.hpp>
 
 namespace ${cxxNamespace} {
 
