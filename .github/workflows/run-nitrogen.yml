@@ -1,0 +1,45 @@
+name: Run Nitrogen
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/run-nitrogen.yml'
+      - '**/*.ts'
+      - '**/*.tsx'
+      - '**/*.js'
+      - '**/*.jsx'
+      - '**/*.json'
+      - '**/*.lockb'
+      - '**/package.json'
+      - 'packages/nitrogen/**'
+  pull_request:
+    paths:
+      - '.github/workflows/run-nitrogen.yml'
+      - '**/*.ts'
+      - '**/*.tsx'
+      - '**/*.js'
+      - '**/*.jsx'
+      - '**/*.json'
+      - '**/*.lockb'
+      - '**/package.json'
+      - 'packages/nitrogen/**'
+
+jobs:
+  lint:
+    name: Run Nitrogen for example module (react-native-nitro-image)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+
+      - name: Install npm dependencies (bun)
+        run: bun install --frozen-lockfile
+
+      - name: Run nitro-codegen in packages/react-native-nitro-image
+        working-directory: packages/react-native-nitro-image
+        run: bun specs
+
+      - name: Verify no files have changed after nitrogen
+        run: git diff --exit-code HEAD
