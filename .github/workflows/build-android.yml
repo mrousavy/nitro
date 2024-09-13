@@ -55,8 +55,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
       - name: Run Gradle Build for example/android/
-        run: cd example/android && ./gradlew assembleDebug --no-daemon --build-cache && cd ../..
+        working-directory: example/android
+        run: ./gradlew assembleDebug --no-daemon --build-cache
 
       # Gradle cache doesn't like daemons
       - name: Stop Gradle Daemon
-        run: cd android && ./gradlew --stop
+        working-directory: example/android
+        run: ./gradlew --stop

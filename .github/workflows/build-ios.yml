@@ -34,9 +34,6 @@ jobs:
   build:
     name: Build iOS Example App
     runs-on: macOS-latest
-    defaults:
-      run:
-        working-directory: example/ios
     steps:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2
@@ -55,6 +52,9 @@ jobs:
           bundler-cache: true
           working-directory: example/ios
 
+      - name: Install xcpretty
+        run: gem install xcpretty
+
       - name: Restore Pods cache
         uses: actions/cache@v4
         with:
@@ -63,10 +63,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pods-
       - name: Install Pods
+        working-directory: example/ios
         run: pod install
-      - name: Install xcpretty
-        run: gem install xcpretty
       - name: Build App
+        working-directory: example/ios
         run: "set -o pipefail && xcodebuild \
           CC=clang CPLUSPLUS=clang++ LD=clang LDPLUSPLUS=clang++ \
           -derivedDataPath build -UseModernBuildSystem=YES \
