@@ -11,6 +11,15 @@
 #include <fbjni/fbjni.h>
 #include "HybridImageFactorySpec.hpp"
 
+// Forward declaration of `HybridImageSpec` to properly resolve imports.
+namespace margelo::nitro::image { class HybridImageSpec; }
+
+#include <memory>
+#include "HybridImageSpec.hpp"
+#include "JHybridImageSpec.hpp"
+#include <NitroModules/JNISharedPtr.hpp>
+#include <string>
+
 namespace margelo::nitro::image {
 
   using namespace facebook;
@@ -46,6 +55,14 @@ namespace margelo::nitro::image {
     std::shared_ptr<margelo::nitro::image::HybridImageSpec> loadImageFromURL(const std::string& path) override;
     std::shared_ptr<margelo::nitro::image::HybridImageSpec> loadImageFromSystemName(const std::string& path) override;
     std::shared_ptr<margelo::nitro::image::HybridImageSpec> bounceBack(const std::shared_ptr<margelo::nitro::image::HybridImageSpec>& image) override;
+
+  public:
+    // Properties (overriden by JNI)
+    
+
+  protected:
+    // Override prototype to use JNI methods
+    void loadHybridMethods() override;
 
   private:
     friend HybridBase;

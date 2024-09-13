@@ -11,6 +11,36 @@
 #include <fbjni/fbjni.h>
 #include "HybridKotlinTestObjectSpec.hpp"
 
+// Forward declaration of `Car` to properly resolve imports.
+namespace margelo::nitro::image { struct Car; }
+// Forward declaration of `Powertrain` to properly resolve imports.
+namespace margelo::nitro::image { enum class Powertrain; }
+// Forward declaration of `Person` to properly resolve imports.
+namespace margelo::nitro::image { struct Person; }
+// Forward declaration of `ArrayBuffer` to properly resolve imports.
+namespace NitroModules { class ArrayBuffer; }
+// Forward declaration of `AnyMap` to properly resolve imports.
+namespace NitroModules { class AnyMap; }
+
+#include <optional>
+#include <vector>
+#include "Car.hpp"
+#include "JCar.hpp"
+#include <string>
+#include "Powertrain.hpp"
+#include "JPowertrain.hpp"
+#include "Person.hpp"
+#include "JPerson.hpp"
+#include <NitroModules/ArrayBuffer.hpp>
+#include <NitroModules/JArrayBuffer.hpp>
+#include <unordered_map>
+#include <future>
+#include <NitroModules/JPromise.hpp>
+#include <NitroModules/AnyMap.hpp>
+#include <NitroModules/JAnyMap.hpp>
+#include <functional>
+#include "JFunc_void_Person.hpp"
+
 namespace margelo::nitro::image {
 
   using namespace facebook;
@@ -56,6 +86,25 @@ namespace margelo::nitro::image {
     std::future<void> asyncTest() override;
     std::shared_ptr<AnyMap> createMap() override;
     void addOnPersonBornListener(const std::function<void(const Person& /* p */)>& callback) override;
+
+  public:
+    // Properties (overriden by JNI)
+    double getNumberValueJNI();
+    void setNumberValueJNI(double numberValue);
+    jni::local_ref<jni::JDouble> getOptionalNumberJNI();
+    void setOptionalNumberJNI(jni::alias_ref<jni::JDouble> optionalNumber);
+    jni::local_ref<jni::JArrayDouble> getPrimitiveArrayJNI();
+    void setPrimitiveArrayJNI(const jni::alias_ref<jni::JArrayDouble>& primitiveArray);
+    jni::local_ref<jni::JArrayClass<JCar>> getCarCollectionJNI();
+    void setCarCollectionJNI(const jni::alias_ref<jni::JArrayClass<JCar>>& carCollection);
+    jni::local_ref<JArrayBuffer::javaobject> getSomeBufferJNI();
+    void setSomeBufferJNI(const jni::alias_ref<JArrayBuffer::javaobject>& someBuffer);
+    jni::local_ref<jni::JMap<jni::JString, jni::JString>> getSomeRecordJNI();
+    void setSomeRecordJNI(const jni::alias_ref<jni::JMap<jni::JString, jni::JString>>& someRecord);
+
+  protected:
+    // Override prototype to use JNI methods
+    void loadHybridMethods() override;
 
   private:
     friend HybridBase;

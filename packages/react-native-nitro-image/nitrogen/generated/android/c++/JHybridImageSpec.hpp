@@ -11,6 +11,23 @@
 #include <fbjni/fbjni.h>
 #include "HybridImageSpec.hpp"
 
+// Forward declaration of `ImageSize` to properly resolve imports.
+namespace margelo::nitro::image { struct ImageSize; }
+// Forward declaration of `PixelFormat` to properly resolve imports.
+namespace margelo::nitro::image { enum class PixelFormat; }
+// Forward declaration of `ImageFormat` to properly resolve imports.
+namespace margelo::nitro::image { enum class ImageFormat; }
+
+#include "ImageSize.hpp"
+#include "JImageSize.hpp"
+#include "PixelFormat.hpp"
+#include "JPixelFormat.hpp"
+#include "ImageFormat.hpp"
+#include "JImageFormat.hpp"
+#include <string>
+#include <functional>
+#include "JFunc_void_std__string.hpp"
+
 namespace margelo::nitro::image {
 
   using namespace facebook;
@@ -47,6 +64,17 @@ namespace margelo::nitro::image {
     // Methods
     double toArrayBuffer(ImageFormat format) override;
     void saveToFile(const std::string& path, const std::function<void(const std::string& /* path */)>& onFinished) override;
+
+  public:
+    // Properties (overriden by JNI)
+    jni::local_ref<JImageSize> getSizeJNI();
+    jni::local_ref<JPixelFormat> getPixelFormatJNI();
+    double getSomeSettablePropJNI();
+    void setSomeSettablePropJNI(double someSettableProp);
+
+  protected:
+    // Override prototype to use JNI methods
+    void loadHybridMethods() override;
 
   private:
     friend HybridBase;

@@ -7,15 +7,6 @@
 
 #include "JHybridImageFactorySpec.hpp"
 
-// Forward declaration of `HybridImageSpec` to properly resolve imports.
-namespace margelo::nitro::image { class HybridImageSpec; }
-
-#include <memory>
-#include "HybridImageSpec.hpp"
-#include "JHybridImageSpec.hpp"
-#include <NitroModules/JNISharedPtr.hpp>
-#include <string>
-
 namespace margelo::nitro::image {
 
   jni::local_ref<JHybridImageFactorySpec::jhybriddata> JHybridImageFactorySpec::initHybrid(jni::alias_ref<jhybridobject> jThis) {
@@ -56,6 +47,15 @@ namespace margelo::nitro::image {
     static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<JHybridImageSpec::javaobject>(jni::alias_ref<JHybridImageSpec::javaobject> /* image */)>("bounceBack");
     auto result = method(_javaPart, std::static_pointer_cast<JHybridImageSpec>(image)->getJavaPart());
     return JNISharedPtr::make_shared_from_jni<JHybridImageSpec>(jni::make_global(result));
+  }
+
+  void JHybridImageFactorySpec::loadHybridMethods() {
+    // Load base Prototype methods
+    HybridImageFactorySpec::loadHybridMethods();
+    // Override base Prototype methods with JNI methods
+    registerHybrids(this, [](Prototype& prototype) {
+
+    });
   }
 
 } // namespace margelo::nitro::image

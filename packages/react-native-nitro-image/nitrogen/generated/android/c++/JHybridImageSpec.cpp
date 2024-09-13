@@ -7,23 +7,6 @@
 
 #include "JHybridImageSpec.hpp"
 
-// Forward declaration of `ImageSize` to properly resolve imports.
-namespace margelo::nitro::image { struct ImageSize; }
-// Forward declaration of `PixelFormat` to properly resolve imports.
-namespace margelo::nitro::image { enum class PixelFormat; }
-// Forward declaration of `ImageFormat` to properly resolve imports.
-namespace margelo::nitro::image { enum class ImageFormat; }
-
-#include "ImageSize.hpp"
-#include "JImageSize.hpp"
-#include "PixelFormat.hpp"
-#include "JPixelFormat.hpp"
-#include "ImageFormat.hpp"
-#include "JImageFormat.hpp"
-#include <string>
-#include <functional>
-#include "JFunc_void_std__string.hpp"
-
 namespace margelo::nitro::image {
 
   jni::local_ref<JHybridImageSpec::jhybriddata> JHybridImageSpec::initHybrid(jni::alias_ref<jhybridobject> jThis) {
@@ -71,6 +54,15 @@ namespace margelo::nitro::image {
   void JHybridImageSpec::saveToFile(const std::string& path, const std::function<void(const std::string& /* path */)>& onFinished) {
     static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<jni::JString> /* path */, jni::alias_ref<JFunc_void_std__string::javaobject> /* onFinished */)>("saveToFile");
     method(_javaPart, jni::make_jstring(path), JFunc_void_std__string::fromCpp(onFinished));
+  }
+
+  void JHybridImageSpec::loadHybridMethods() {
+    // Load base Prototype methods
+    HybridImageSpec::loadHybridMethods();
+    // Override base Prototype methods with JNI methods
+    registerHybrids(this, [](Prototype& prototype) {
+
+    });
   }
 
 } // namespace margelo::nitro::image

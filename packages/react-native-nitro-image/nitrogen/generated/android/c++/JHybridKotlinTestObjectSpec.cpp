@@ -7,36 +7,6 @@
 
 #include "JHybridKotlinTestObjectSpec.hpp"
 
-// Forward declaration of `Car` to properly resolve imports.
-namespace margelo::nitro::image { struct Car; }
-// Forward declaration of `Powertrain` to properly resolve imports.
-namespace margelo::nitro::image { enum class Powertrain; }
-// Forward declaration of `Person` to properly resolve imports.
-namespace margelo::nitro::image { struct Person; }
-// Forward declaration of `ArrayBuffer` to properly resolve imports.
-namespace NitroModules { class ArrayBuffer; }
-// Forward declaration of `AnyMap` to properly resolve imports.
-namespace NitroModules { class AnyMap; }
-
-#include <optional>
-#include <vector>
-#include "Car.hpp"
-#include "JCar.hpp"
-#include <string>
-#include "Powertrain.hpp"
-#include "JPowertrain.hpp"
-#include "Person.hpp"
-#include "JPerson.hpp"
-#include <NitroModules/ArrayBuffer.hpp>
-#include <NitroModules/JArrayBuffer.hpp>
-#include <unordered_map>
-#include <future>
-#include <NitroModules/JPromise.hpp>
-#include <NitroModules/AnyMap.hpp>
-#include <NitroModules/JAnyMap.hpp>
-#include <functional>
-#include "JFunc_void_Person.hpp"
-
 namespace margelo::nitro::image {
 
   jni::local_ref<JHybridKotlinTestObjectSpec::jhybriddata> JHybridKotlinTestObjectSpec::initHybrid(jni::alias_ref<jhybridobject> jThis) {
@@ -175,6 +145,15 @@ namespace margelo::nitro::image {
   void JHybridKotlinTestObjectSpec::addOnPersonBornListener(const std::function<void(const Person& /* p */)>& callback) {
     static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<JFunc_void_Person::javaobject> /* callback */)>("addOnPersonBornListener");
     method(_javaPart, JFunc_void_Person::fromCpp(callback));
+  }
+
+  void JHybridKotlinTestObjectSpec::loadHybridMethods() {
+    // Load base Prototype methods
+    HybridKotlinTestObjectSpec::loadHybridMethods();
+    // Override base Prototype methods with JNI methods
+    registerHybrids(this, [](Prototype& prototype) {
+
+    });
   }
 
 } // namespace margelo::nitro::image

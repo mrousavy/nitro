@@ -3,7 +3,11 @@ import { createIndentation, indent } from '../../utils.js'
 import { includeHeader } from '../c++/includeNitroHeader.js'
 import { getAllTypes } from '../getAllTypes.js'
 import { getHybridObjectName } from '../getHybridObjectName.js'
-import { createFileMetadataString, isNotDuplicate } from '../helpers.js'
+import {
+  createFileMetadataString,
+  isNotDuplicate,
+  toReferenceType,
+} from '../helpers.js'
 import type { HybridObjectSpec } from '../HybridObjectSpec.js'
 import { Method } from '../Method.js'
 import type { Property } from '../Property.js'
@@ -13,16 +17,34 @@ import { KotlinCxxBridgedType } from './KotlinCxxBridgedType.js'
 
 export function createFbjniHybridObject(spec: HybridObjectSpec): SourceFile[] {
   const name = getHybridObjectName(spec.name)
+
+  const allTypes = getAllTypes(spec)
+  const jniImports = allTypes
+    .map((t) => new KotlinCxxBridgedType(t))
+    .flatMap((t) => t.getRequiredImports())
+    .filter((i) => i != null)
+  const cppIncludes = jniImports
+    .map((i) => includeHeader(i))
+    .filter(isNotDuplicate)
+  const cppForwardDeclarations = jniImports
+    .map((i) => i.forwardDeclaration)
+    .filter((d) => d != null)
+    .filter(isNotDuplicate)
+
   const propertiesDecl = spec.properties
     .map((p) => p.getCode('c++', { override: true }))
     .join('\n')
   const methodsDecl = spec.methods
     .map((p) => p.getCode('c++', { override: true }))
     .join('\n')
+  const jniPropertiesDecl = spec.properties
+    .map((p) => getJniOverridePropertySignature(p))
+    .join('\n')
   const jniClassDescriptor = NitroConfig.getAndroidPackage(
     'c++/jni',
     name.HybridTSpec
   )
+
   const cxxNamespace = NitroConfig.getCxxNamespace('c++')
   const spaces = createIndentation(name.JHybridTSpec.length)
 
@@ -34,6 +56,10 @@ ${createFileMetadataString(`${name.HybridTSpec}.hpp`)}
 #include <NitroModules/JHybridObject.hpp>
 #include <fbjni/fbjni.h>
 #include "${name.HybridTSpec}.hpp"
+
+${cppForwardDeclarations.join('\n')}
+
+${cppIncludes.join('\n')}
 
 namespace ${cxxNamespace} {
 
@@ -68,6 +94,14 @@ ${spaces}                public ${name.HybridTSpec} {
     // Methods
     ${indent(methodsDecl, '    ')}
 
+  public:
+    // Properties (overriden by JNI)
+    ${indent(jniPropertiesDecl, '    ')}
+
+  protected:
+    // Override prototype to use JNI methods
+    void loadHybridMethods() override;
+
   private:
     friend HybridBase;
     using HybridBase::HybridBase;
@@ -94,27 +128,11 @@ ${spaces}                public ${name.HybridTSpec} {
   const methodsImpl = spec.methods
     .map((m) => getFbjniMethodForwardImplementation(spec, m))
     .join('\n')
-  const allTypes = getAllTypes(spec)
-  const jniImports = allTypes
-    .map((t) => new KotlinCxxBridgedType(t))
-    .flatMap((t) => t.getRequiredImports())
-    .filter((i) => i != null)
-  const cppIncludes = jniImports
-    .map((i) => includeHeader(i))
-    .filter(isNotDuplicate)
-  const cppForwardDeclarations = jniImports
-    .map((i) => i.forwardDeclaration)
-    .filter((d) => d != null)
-    .filter(isNotDuplicate)
 
   const cppImplCode = `
 ${createFileMetadataString(`${name.JHybridTSpec}.cpp`)}
 
 #include "${name.JHybridTSpec}.hpp"
-
-${cppForwardDeclarations.join('\n')}
-
-${cppIncludes.join('\n')}
 
 namespace ${cxxNamespace} {
 
@@ -138,6 +156,15 @@ namespace ${cxxNamespace} {
 
   // Methods
   ${indent(methodsImpl, '  ')}
+
+  void ${name.JHybridTSpec}::loadHybridMethods() {
+    // Load base Prototype methods
+    ${name.HybridTSpec}::loadHybridMethods();
+    // Override base Prototype methods with JNI methods
+    registerHybrids(this, [](Prototype& prototype) {
+
+    });
+  }
 
 } // namespace ${cxxNamespace}
   `.trim()
@@ -217,4 +244,21 @@ function getFbjniPropertyForwardImplementation(
   )
 
   return methods.join('\n')
+}
+
+function getJniOverridePropertySignature(property: Property): string {
+  const bridged = new KotlinCxxBridgedType(property.type)
+  const lines: string[] = []
+  // Getter signature
+  lines.push(
+    `${bridged.asJniReferenceType('local')} ${property.cppGetterName}JNI();`
+  )
+  if (!property.isReadonly) {
+    const type = bridged.canBePassedByReference
+      ? toReferenceType(bridged.asJniReferenceType('alias'))
+      : bridged.asJniReferenceType('alias')
+    // Setter signature
+    lines.push(`void ${property.cppSetterName}JNI(${type} ${property.name});`)
+  }
+  return lines.join('\n')
 }
