@@ -1,0 +1,62 @@
+name: Build Android
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/build-android.yml'
+      - 'example/android'
+      - 'packages/react-native-nitro-image/nitrogen'
+      - 'packages/react-native-nitro-image/cpp'
+      - 'packages/react-native-nitro-image/android'
+      - 'packages/react-native-nitro-modules/cpp'
+      - 'packages/react-native-nitro-modules/android'
+      - '**/bun.lockb'
+      - '**/react-native.config.js'
+      - '**/nitro.json'
+  pull_request:
+    paths:
+      - '.github/workflows/build-android.yml'
+      - 'example/android'
+      - 'packages/react-native-nitro-image/nitrogen'
+      - 'packages/react-native-nitro-image/cpp'
+      - 'packages/react-native-nitro-image/android'
+      - 'packages/react-native-nitro-modules/cpp'
+      - 'packages/react-native-nitro-modules/android'
+      - '**/bun.lockb'
+      - '**/react-native.config.js'
+      - '**/nitro.json'
+
+jobs:
+  build:
+    name: Build Android Example App
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+
+      - name: Install npm dependencies (bun)
+        run: bun install --frozen-lockfile
+
+      - name: Setup JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: 17
+          java-package: jdk
+
+      - name: Restore Gradle cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+      - name: Run Gradle Build for example/android/
+        run: cd example/android && ./gradlew assembleDebug --no-daemon --build-cache && cd ../..
+
+      # Gradle cache doesn't like daemons
+      - name: Stop Gradle Daemon
+        run: cd android && ./gradlew --stop

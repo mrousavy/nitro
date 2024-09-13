@@ -14,6 +14,8 @@ on:
       - 'packages/react-native-nitro-modules/ios'
       - '**/Podfile.lock'
       - '**/*.podspec'
+      - '**/react-native.config.js'
+      - '**/nitro.json'
   pull_request:
     paths:
       - '.github/workflows/build-ios.yml'
@@ -25,6 +27,8 @@ on:
       - 'packages/react-native-nitro-modules/ios'
       - '**/Podfile.lock'
       - '**/*.podspec'
+      - '**/react-native.config.js'
+      - '**/nitro.json'
 
 jobs:
   build:
