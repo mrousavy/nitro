@@ -39,7 +39,7 @@ jobs:
 
       - name: Run nitro-codegen in packages/react-native-nitro-image
         working-directory: packages/react-native-nitro-image
-        run: bun specs
+        run: bun nitro-codegen --logLevel="debug"
 
       - name: Verify no files have changed after nitrogen
         run: git diff --exit-code HEAD
