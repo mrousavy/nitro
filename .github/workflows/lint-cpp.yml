@@ -1,0 +1,39 @@
+name: Validate C++
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/validate-cpp.yml'
+      - '**/*.h'
+      - '**/*.hpp'
+      - '**/*.cpp'
+      - '**/*.c'
+      - '**/*.mm'
+  pull_request:
+    paths:
+      - '.github/workflows/validate-cpp.yml'
+      - '**/*.h'
+      - '**/*.hpp'
+      - '**/*.cpp'
+      - '**/*.c'
+      - '**/*.mm'
+
+jobs:
+  lint:
+    name: Check clang-format
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+
+      - name: Install npm dependencies (bun)
+        run: bun install --frozen-lockfile
+
+      - name: Run clang-format style check
+        uses: mrousavy/clang-format-action@v1
+        with:
+          clang-format-version: '16'
+          clang-format-style-path: .clang-format
+
