@@ -40,6 +40,9 @@ export function createFbjniHybridObject(spec: HybridObjectSpec): SourceFile[] {
   const jniPropertiesDecl = spec.properties
     .map((p) => getJniOverridePropertySignature(p))
     .join('\n')
+  const jniMethdsDecl = spec.methods
+    .map((m) => getJniOverrideMethodSignature(m))
+    .join('\n')
   const jniClassDescriptor = NitroConfig.getAndroidPackage(
     'c++/jni',
     name.HybridTSpec
@@ -97,6 +100,10 @@ ${spaces}                public ${name.HybridTSpec} {
   public:
     // Properties (overriden by JNI)
     ${indent(jniPropertiesDecl, '    ')}
+
+  public:
+    // Methods (overriden by JNI)
+    ${indent(jniMethdsDecl, '    ')}
 
   protected:
     // Override prototype to use JNI methods
@@ -261,4 +268,17 @@ function getJniOverridePropertySignature(property: Property): string {
     lines.push(`void ${property.cppSetterName}JNI(${type} ${property.name});`)
   }
   return lines.join('\n')
+}
+
+function getJniOverrideMethodSignature(method: Method): string {
+  const bridgedReturn = new KotlinCxxBridgedType(method.returnType)
+  const parameters = method.parameters.map((p) => {
+    const bridged = new KotlinCxxBridgedType(p.type)
+    if (bridged.canBePassedByReference) {
+      return `${toReferenceType(bridged.asJniReferenceType('alias'))} ${p.name}`
+    } else {
+      return `${bridged.asJniReferenceType('alias')} ${p.name}`
+    }
+  })
+  return `${bridgedReturn.asJniReferenceType('local')} ${method.name}JNI(${parameters.join(', ')});`
 }

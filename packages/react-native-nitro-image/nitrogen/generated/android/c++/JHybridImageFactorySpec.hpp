@@ -60,6 +60,13 @@ namespace margelo::nitro::image {
     // Properties (overriden by JNI)
     
 
+  public:
+    // Methods (overriden by JNI)
+    jni::local_ref<JHybridImageSpec::javaobject> loadImageFromFileJNI(const jni::alias_ref<jni::JString>& path);
+    jni::local_ref<JHybridImageSpec::javaobject> loadImageFromURLJNI(const jni::alias_ref<jni::JString>& path);
+    jni::local_ref<JHybridImageSpec::javaobject> loadImageFromSystemNameJNI(const jni::alias_ref<jni::JString>& path);
+    jni::local_ref<JHybridImageSpec::javaobject> bounceBackJNI(const jni::alias_ref<JHybridImageSpec::javaobject>& image);
+
   protected:
     // Override prototype to use JNI methods
     void loadHybridMethods() override;

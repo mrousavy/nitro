@@ -72,6 +72,11 @@ namespace margelo::nitro::image {
     double getSomeSettablePropJNI();
     void setSomeSettablePropJNI(double someSettableProp);
 
+  public:
+    // Methods (overriden by JNI)
+    double toArrayBufferJNI(jni::alias_ref<JImageFormat> format);
+    void saveToFileJNI(const jni::alias_ref<jni::JString>& path, const jni::alias_ref<JFunc_void_std__string::javaobject>& onFinished);
+
   protected:
     // Override prototype to use JNI methods
     void loadHybridMethods() override;
