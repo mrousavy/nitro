@@ -278,7 +278,7 @@ function getJniOverridePropertySignature(property: Property): string {
   const lines: string[] = []
   // Getter signature
   lines.push(
-    `${bridged.asJniReferenceType('local')} ${property.cppGetterName}JNI();`
+    `${bridged.asJniReferenceType('alias')} ${property.cppGetterName}JNI();`
   )
   if (!property.isReadonly) {
     const type = bridged.canBePassedByReference
@@ -300,5 +300,5 @@ function getJniOverrideMethodSignature(method: Method): string {
       return `${bridged.asJniReferenceType('alias')} ${p.name}`
     }
   })
-  return `${bridgedReturn.asJniReferenceType('local')} ${method.name}JNI(${parameters.join(', ')});`
+  return `${bridgedReturn.asJniReferenceType('alias')} ${method.name}JNI(${parameters.join(', ')});`
 }

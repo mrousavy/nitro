@@ -23,7 +23,7 @@ using namespace facebook;
 
 // number? <> JDouble?
 template <>
-struct JSIConverter<jni::JDouble> final {
+struct JSIConverter<jni::alias_ref<jni::JDouble>> final {
   static inline jni::local_ref<jni::JDouble> fromJSI(jsi::Runtime&, const jsi::Value& arg) {
     if (arg.isUndefined() || arg.isNull()) {
       return nullptr;
@@ -45,7 +45,7 @@ struct JSIConverter<jni::JDouble> final {
 
 // boolean? <> JBoolean?
 template <>
-struct JSIConverter<jni::JBoolean> final {
+struct JSIConverter<jni::alias_ref<jni::JBoolean>> final {
   static inline jni::local_ref<jni::JBoolean> fromJSI(jsi::Runtime&, const jsi::Value& arg) {
     if (arg.isUndefined() || arg.isNull()) {
       return nullptr;
@@ -67,7 +67,7 @@ struct JSIConverter<jni::JBoolean> final {
 
 // bigint? <> JLong?
 template <>
-struct JSIConverter<jni::JLong> final {
+struct JSIConverter<jni::alias_ref<jni::JLong>> final {
   static inline jni::local_ref<jni::JLong> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
     if (arg.isUndefined() || arg.isNull()) {
       return nullptr;
@@ -89,7 +89,7 @@ struct JSIConverter<jni::JLong> final {
 
 // string <> JString
 template <>
-struct JSIConverter<jni::JString> final {
+struct JSIConverter<jni::alias_ref<jni::JString>> final {
   static inline jni::local_ref<jni::JString> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
     return jni::make_jstring(arg.asString(runtime).utf8(runtime));
   }
@@ -103,7 +103,7 @@ struct JSIConverter<jni::JString> final {
 
 // [] <> JArray
 template <typename T>
-struct JSIConverter<jni::JArrayClass<T>> final {
+struct JSIConverter<jni::alias_ref<jni::JArrayClass<T>>> final {
   static inline jni::local_ref<jni::JArrayClass<T>> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
     jsi::Object object = arg.asObject(runtime);
     jsi::Array array = object.asArray(runtime);
@@ -128,6 +128,39 @@ struct JSIConverter<jni::JArrayClass<T>> final {
     }
     jsi::Object object = value.getObject(runtime);
     return object.isArray(runtime);
+  }
+};
+
+// {} <> JMap
+template <typename K, typename V>
+struct JSIConverter<jni::alias_ref<jni::JMap<K, V>>> final {
+  static inline jni::local_ref<jni::JMap<K, V>> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+    jsi::Object object = arg.asObject(runtime);
+    jsi::Array propertyNames = object.getPropertyNames(runtime);
+    size_t size = propertyNames.size(runtime);
+    jni::local_ref<jni::JHashMap<K, V>> map = jni::JHashMap<K, V>::create(size);
+    for (size_t i = 0; i < size; i++) {
+      jsi::Value key = propertyNames.getValueAtIndex(runtime, i);
+      jsi::Value value = object.getProperty(runtime, key.asString(runtime));
+      map->put(JSIConverter<K>::fromJSI(runtime, key), JSIConverter<V>::fromJSI(runtime, value));
+    }
+    return map;
+  }
+  static inline jsi::Value toJSI(jsi::Runtime& runtime, jni::alias_ref<jni::JMap<K, V>> arg) {
+    jsi::Object object = jsi::Object(runtime);
+    size_t size = arg->size();
+    for (const auto& entry : *arg) {
+      jsi::String key = jsi::String::createFromUtf8(runtime, entry.first->toStdString());
+      object.setProperty(runtime, key, JSIConverter<V>::toJSI(runtime, entry.second));
+    }
+    return object;
+  }
+  static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
+    if (!value.isObject()) {
+      return false;
+    }
+    jsi::Object object = value.getObject(runtime);
+    return isPlainObject(runtime, object);
   }
 };
 

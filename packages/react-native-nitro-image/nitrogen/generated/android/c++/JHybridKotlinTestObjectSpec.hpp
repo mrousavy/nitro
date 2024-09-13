@@ -91,21 +91,21 @@ namespace margelo::nitro::image {
     // Properties (overriden by JNI)
     double getNumberValueJNI();
     void setNumberValueJNI(double numberValue);
-    jni::local_ref<jni::JDouble> getOptionalNumberJNI();
+    jni::alias_ref<jni::JDouble> getOptionalNumberJNI();
     void setOptionalNumberJNI(jni::alias_ref<jni::JDouble> optionalNumber);
-    jni::local_ref<jni::JArrayDouble> getPrimitiveArrayJNI();
+    jni::alias_ref<jni::JArrayDouble> getPrimitiveArrayJNI();
     void setPrimitiveArrayJNI(const jni::alias_ref<jni::JArrayDouble>& primitiveArray);
-    jni::local_ref<jni::JArrayClass<JCar>> getCarCollectionJNI();
+    jni::alias_ref<jni::JArrayClass<JCar>> getCarCollectionJNI();
     void setCarCollectionJNI(const jni::alias_ref<jni::JArrayClass<JCar>>& carCollection);
-    jni::local_ref<JArrayBuffer::javaobject> getSomeBufferJNI();
+    jni::alias_ref<JArrayBuffer::javaobject> getSomeBufferJNI();
     void setSomeBufferJNI(const jni::alias_ref<JArrayBuffer::javaobject>& someBuffer);
-    jni::local_ref<jni::JMap<jni::JString, jni::JString>> getSomeRecordJNI();
+    jni::alias_ref<jni::JMap<jni::JString, jni::JString>> getSomeRecordJNI();
     void setSomeRecordJNI(const jni::alias_ref<jni::JMap<jni::JString, jni::JString>>& someRecord);
 
   public:
     // Methods (overriden by JNI)
-    jni::local_ref<JPromise::javaobject> asyncTestJNI();
-    jni::local_ref<JAnyMap::javaobject> createMapJNI();
+    jni::alias_ref<JPromise::javaobject> asyncTestJNI();
+    jni::alias_ref<JAnyMap::javaobject> createMapJNI();
     void addOnPersonBornListenerJNI(const jni::alias_ref<JFunc_void_Person::javaobject>& callback);
 
   protected:
