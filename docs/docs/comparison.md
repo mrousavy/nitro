@@ -12,7 +12,7 @@ Nitro is not the only one of it's kind. There's multiple ways to build native mo
 
 ## Benchmarks
 
-In [some benchmarks](https://github.com/mrousavy/NitroBenchmarks), Nitro has proven to be up to **~59x faster** than Expo Modules, and **~15x faster** than Turbo Modules when calling a single native function from JavaScript.
+[This benchmark](https://github.com/mrousavy/NitroBenchmarks) compares the total execution time when calling a single native method 100.000 times:
 
 <table>
   <tr>

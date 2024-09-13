@@ -38,7 +38,7 @@ class HybridMath : HybridMathSpec {
 
 ## Performance
 
-Nitro is all about **performance**. In [some benchmarks](https://github.com/mrousavy/NitroBenchmarks), Nitro has proven to be up to **~59x faster** than Expo Modules, and **~15x faster** than Turbo Modules when calling a single native function from JavaScript.
+Nitro is all about **performance**. [This benchmark](https://github.com/mrousavy/NitroBenchmarks) compares the total execution time when calling a single native method 100.000 times:
 
 <table>
   <tr>
