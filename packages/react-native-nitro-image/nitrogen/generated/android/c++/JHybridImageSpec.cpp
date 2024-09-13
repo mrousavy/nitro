@@ -61,7 +61,12 @@ namespace margelo::nitro::image {
     HybridImageSpec::loadHybridMethods();
     // Override base Prototype methods with JNI methods
     registerHybrids(this, [](Prototype& prototype) {
-
+      prototype.registerHybridGetter("size", &JHybridImageSpec::getSizeJNI);
+      prototype.registerHybridGetter("pixelFormat", &JHybridImageSpec::getPixelFormatJNI);
+      prototype.registerHybridGetter("someSettableProp", &JHybridImageSpec::getSomeSettablePropJNI);
+      prototype.registerHybridSetter("someSettableProp", &JHybridImageSpec::setSomeSettablePropJNI);
+      prototype.registerHybridMethod("toArrayBuffer", &JHybridImageSpec::toArrayBufferJNI);
+      prototype.registerHybridMethod("saveToFile", &JHybridImageSpec::saveToFileJNI);
     });
   }
 

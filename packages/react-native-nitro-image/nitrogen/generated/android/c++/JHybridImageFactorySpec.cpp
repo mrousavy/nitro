@@ -54,7 +54,11 @@ namespace margelo::nitro::image {
     HybridImageFactorySpec::loadHybridMethods();
     // Override base Prototype methods with JNI methods
     registerHybrids(this, [](Prototype& prototype) {
-
+      
+      prototype.registerHybridMethod("loadImageFromFile", &JHybridImageFactorySpec::loadImageFromFileJNI);
+      prototype.registerHybridMethod("loadImageFromURL", &JHybridImageFactorySpec::loadImageFromURLJNI);
+      prototype.registerHybridMethod("loadImageFromSystemName", &JHybridImageFactorySpec::loadImageFromSystemNameJNI);
+      prototype.registerHybridMethod("bounceBack", &JHybridImageFactorySpec::bounceBackJNI);
     });
   }
 

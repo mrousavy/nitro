@@ -135,7 +135,25 @@ ${spaces}                public ${name.HybridTSpec} {
   const methodsImpl = spec.methods
     .map((m) => getFbjniMethodForwardImplementation(spec, m))
     .join('\n')
-
+  const propertyOverrideRegistrations = spec.properties
+    .flatMap((p) => {
+      const getterRegistration = `prototype.registerHybridGetter("${p.name}", &${name.JHybridTSpec}::${p.cppGetterName}JNI);`
+      if (p.isReadonly) {
+        return [getterRegistration]
+      } else {
+        return [
+          getterRegistration,
+          `prototype.registerHybridSetter("${p.name}", &${name.JHybridTSpec}::${p.cppSetterName}JNI);`,
+        ]
+      }
+    })
+    .join('\n')
+  const methodOverrideRegistrations = spec.methods
+    .map(
+      (m) =>
+        `prototype.registerHybridMethod("${m.name}", &${name.JHybridTSpec}::${m.name}JNI);`
+    )
+    .join('\n')
   const cppImplCode = `
 ${createFileMetadataString(`${name.JHybridTSpec}.cpp`)}
 
@@ -169,7 +187,8 @@ namespace ${cxxNamespace} {
     ${name.HybridTSpec}::loadHybridMethods();
     // Override base Prototype methods with JNI methods
     registerHybrids(this, [](Prototype& prototype) {
-
+      ${indent(propertyOverrideRegistrations, '      ')}
+      ${indent(methodOverrideRegistrations, '      ')}
     });
   }
 

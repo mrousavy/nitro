@@ -152,7 +152,21 @@ namespace margelo::nitro::image {
     HybridKotlinTestObjectSpec::loadHybridMethods();
     // Override base Prototype methods with JNI methods
     registerHybrids(this, [](Prototype& prototype) {
-
+      prototype.registerHybridGetter("numberValue", &JHybridKotlinTestObjectSpec::getNumberValueJNI);
+      prototype.registerHybridSetter("numberValue", &JHybridKotlinTestObjectSpec::setNumberValueJNI);
+      prototype.registerHybridGetter("optionalNumber", &JHybridKotlinTestObjectSpec::getOptionalNumberJNI);
+      prototype.registerHybridSetter("optionalNumber", &JHybridKotlinTestObjectSpec::setOptionalNumberJNI);
+      prototype.registerHybridGetter("primitiveArray", &JHybridKotlinTestObjectSpec::getPrimitiveArrayJNI);
+      prototype.registerHybridSetter("primitiveArray", &JHybridKotlinTestObjectSpec::setPrimitiveArrayJNI);
+      prototype.registerHybridGetter("carCollection", &JHybridKotlinTestObjectSpec::getCarCollectionJNI);
+      prototype.registerHybridSetter("carCollection", &JHybridKotlinTestObjectSpec::setCarCollectionJNI);
+      prototype.registerHybridGetter("someBuffer", &JHybridKotlinTestObjectSpec::getSomeBufferJNI);
+      prototype.registerHybridSetter("someBuffer", &JHybridKotlinTestObjectSpec::setSomeBufferJNI);
+      prototype.registerHybridGetter("someRecord", &JHybridKotlinTestObjectSpec::getSomeRecordJNI);
+      prototype.registerHybridSetter("someRecord", &JHybridKotlinTestObjectSpec::setSomeRecordJNI);
+      prototype.registerHybridMethod("asyncTest", &JHybridKotlinTestObjectSpec::asyncTestJNI);
+      prototype.registerHybridMethod("createMap", &JHybridKotlinTestObjectSpec::createMapJNI);
+      prototype.registerHybridMethod("addOnPersonBornListener", &JHybridKotlinTestObjectSpec::addOnPersonBornListenerJNI);
     });
   }
 
