@@ -56,25 +56,29 @@ After installing Nitro, you can start creating your [Hybrid Objects](hybrid-obje
   <Tabs groupId="package-manager">
     <TabItem value="npm" label="npm" default>
       ```sh
-      npm i nitrogen --save-dev
+      npm i nitro-codegen --save-dev
       ```
     </TabItem>
     <TabItem value="yarn" label="yarn">
       ```sh
-      yarn add nitrogen -D
+      yarn add nitro-codegen -D
       ```
     </TabItem>
     <TabItem value="pnpm" label="pnpm">
       ```sh
-      pnpm add nitrogen -D
+      pnpm add nitro-codegen -D
       ```
     </TabItem>
     <TabItem value="bun" label="bun">
       ```sh
-      bun i nitrogen -d
+      bun i nitro-codegen -d
       ```
     </TabItem>
   </Tabs>
+
+  :::warning
+  Nitrogen is currently named `nitro-codegen` instead of `nitrogen` on npm.
+  :::
 
   Then, create your `nitro.json` configuration in your app's root directory:
 
@@ -108,8 +112,12 @@ After installing Nitro, you can start creating your [Hybrid Objects](hybrid-obje
   And now let's run Nitrogen:
 
   ```sh
-  npm run nitrogen
+  npm run nitro-codegen
   ```
+
+  :::warning
+  Nitrogen is currently named `nitro-codegen` instead of `nitrogen` on npm.
+  :::
 
   This will generate the native Swift and Kotlin protocol "`HybridMathSpec`", as well as some helper classes for autolinking and bridging to C++.
 

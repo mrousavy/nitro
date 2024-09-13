@@ -52,25 +52,29 @@ Nitrogen should be installed as a dev-dependency in the Nitro Module (library).
 <Tabs groupId="package-manager">
   <TabItem value="npm" label="npm" default>
     ```sh
-    npm i nitrogen --save-dev
+    npm i nitro-codegen --save-dev
     ```
   </TabItem>
   <TabItem value="yarn" label="yarn">
     ```sh
-    yarn add nitrogen -D
+    yarn add nitro-codegen -D
     ```
   </TabItem>
   <TabItem value="pnpm" label="pnpm">
     ```sh
-    pnpm add nitrogen -D
+    pnpm add nitro-codegen -D
     ```
   </TabItem>
   <TabItem value="bun" label="bun">
     ```sh
-    bun i nitrogen -d
+    bun i nitro-codegen -d
     ```
   </TabItem>
 </Tabs>
+
+:::warning
+Nitrogen is currently named `nitro-codegen` instead of `nitrogen` on npm.
+:::
 
 Each Nitro Module needs to have a `nitro.json` configuration file.
 
@@ -113,25 +117,29 @@ Now run nitrogen:
 <Tabs groupId="package-manager">
   <TabItem value="npm" label="npm" default>
     ```sh
-    npm run nitrogen
+    npm run nitro-codegen
     ```
   </TabItem>
   <TabItem value="yarn" label="yarn">
     ```sh
-    yarn nitrogen
+    yarn nitro-codegen
     ```
   </TabItem>
   <TabItem value="pnpm" label="pnpm">
     ```sh
-    pnpm nitrogen
+    pnpm nitro-codegen
     ```
   </TabItem>
   <TabItem value="bun" label="bun">
     ```sh
-    bun nitrogen
+    bun nitro-codegen
     ```
   </TabItem>
 </Tabs>
+
+:::warning
+Nitrogen is currently named `nitro-codegen` instead of `nitrogen` on npm.
+:::
 
 This will generate a single C++ interface by default, which goes into `./nitrogen/generated/`:
 
