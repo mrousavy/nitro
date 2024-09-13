@@ -61,6 +61,8 @@ Nitro is all about **performance**. In [some benchmarks](https://github.com/mrou
   </tr>
 </table>
 
+Note: These benchmarks only compare native method throughput in extreme cases, and do not necessarily reflect real world use-cases. In a real-world app, results may vary. See [NitroBenchmarks](https://github.com/mrousavy/NitroBenchmarks) for full context.
+
 ### Lightweight layer
 
 While Nitro is built ontop of JSI, the layer is very lightweight and efficient.

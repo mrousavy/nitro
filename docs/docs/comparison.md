@@ -35,7 +35,7 @@ In [some benchmarks](https://github.com/mrousavy/NitroBenchmarks), Nitro has pro
   </tr>
 </table>
 
-Note that this specifically benchmarks simple native method throughput and does not necessarily reflect a real world use-case. In a real world app, results may vary.
+Note: These benchmarks only compare native method throughput in extreme cases, and do not necessarily reflect real world use-cases. In a real-world app, results may vary. See [NitroBenchmarks](https://github.com/mrousavy/NitroBenchmarks) for full context.
 
 It's not all about performance though - there are some key differences between Nitro-, Turbo- and Expo-Modules:
 
