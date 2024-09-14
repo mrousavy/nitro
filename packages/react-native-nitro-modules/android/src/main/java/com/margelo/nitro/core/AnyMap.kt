@@ -31,8 +31,6 @@ class AnyMap {
     mHybridData = hybridData
   }
 
-  private external fun getJavaMap(): HashMap<String, Any>
-
   fun contains(key: String): Boolean {
     return map.contains(key)
   }
@@ -119,13 +117,14 @@ class AnyMap {
     map[key] = value
   }
 
-  fun setAnyArray(key: String, value: AnyArray) {
+  fun setAnyArray(key: String, value: Array<Any>) {
     map[key] = value
   }
 
-  fun setAnyObject(key: String, value: AnyObject) {
+  fun setAnyObject(key: String, value: Map<String, Any>) {
     map[key] = value
   }
 
+  private external fun getJavaMap(): HashMap<String, Any>
   private external fun initHybrid(): HybridData
 }

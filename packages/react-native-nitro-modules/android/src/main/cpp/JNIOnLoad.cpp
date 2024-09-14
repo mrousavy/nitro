@@ -1,7 +1,6 @@
 /// Entry point for JNI.
 
 #include "JAnyMap.hpp"
-#include "JAnyValue.hpp"
 #include "JArrayBuffer.hpp"
 #include "JHybridObjectRegistry.hpp"
 #include "JNativeFunction.hpp"
@@ -20,7 +19,6 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void*) {
     JHybridObjectRegistry::registerNatives();
     JArrayBuffer::registerNatives();
     JAnyMap::registerNatives();
-    JAnyValue::registerNatives();
     JNativeFunction::registerNatives();
   });
 }

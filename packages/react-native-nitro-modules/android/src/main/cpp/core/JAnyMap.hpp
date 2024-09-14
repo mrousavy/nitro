@@ -8,7 +8,6 @@
 #pragma once
 
 #include "AnyMap.hpp"
-#include "JAnyValue.hpp"
 #include <fbjni/fbjni.h>
 
 namespace margelo::nitro {
@@ -183,33 +182,6 @@ public:
         // init
         makeNativeMethod("initHybrid", JAnyMap::initHybrid),
         makeNativeMethod("getJavaMap", JAnyMap::getJavaMap),
-        // helpers
-        makeNativeMethod("contains", JAnyMap::contains),
-        makeNativeMethod("remove", JAnyMap::remove),
-        makeNativeMethod("clear", JAnyMap::clear),
-        // is
-        makeNativeMethod("isNull", JAnyMap::isNull),
-        makeNativeMethod("isDouble", JAnyMap::isDouble),
-        makeNativeMethod("isBoolean", JAnyMap::isBoolean),
-        makeNativeMethod("isBigInt", JAnyMap::isBigInt),
-        makeNativeMethod("isString", JAnyMap::isString),
-        makeNativeMethod("isArray", JAnyMap::isArray),
-        makeNativeMethod("isObject", JAnyMap::isObject),
-        // get
-        makeNativeMethod("getDouble", JAnyMap::getDouble),
-        makeNativeMethod("getBoolean", JAnyMap::getBoolean),
-        makeNativeMethod("getBigInt", JAnyMap::getBigInt),
-        makeNativeMethod("getString", JAnyMap::getString),
-        makeNativeMethod("getAnyArray", JAnyMap::getAnyArray),
-        makeNativeMethod("getAnyObject", JAnyMap::getAnyObject),
-        // set
-        makeNativeMethod("setNull", JAnyMap::setNull),
-        makeNativeMethod("setDouble", JAnyMap::setDouble),
-        makeNativeMethod("setBoolean", JAnyMap::setBoolean),
-        makeNativeMethod("setBigInt", JAnyMap::setBigInt),
-        makeNativeMethod("setString", JAnyMap::setString),
-        makeNativeMethod("setAnyArray", JAnyMap::setAnyArray),
-        makeNativeMethod("setAnyObject", JAnyMap::setAnyObject),
     });
   }
 };
