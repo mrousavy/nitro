@@ -42,10 +42,11 @@ int initialize(JavaVM* vm) {
         static auto defaultConstructor = javaClass->getConstructor<JHybridImageFactorySpec::javaobject()>();
     
         auto instance = javaClass->newObject(defaultConstructor);
+    #ifndef NDEBUG
         if (instance == nullptr) [[unlikely]] {
           throw std::runtime_error("Failed to create an instance of \"JHybridImageFactorySpec\" - the constructor returned null!");
         }
-    
+    #endif
         auto globalRef = jni::make_global(instance);
         return JNISharedPtr::make_shared_from_jni<JHybridImageFactorySpec>(globalRef);
       }
@@ -66,10 +67,11 @@ int initialize(JavaVM* vm) {
         static auto defaultConstructor = javaClass->getConstructor<JHybridKotlinTestObjectSpec::javaobject()>();
     
         auto instance = javaClass->newObject(defaultConstructor);
+    #ifndef NDEBUG
         if (instance == nullptr) [[unlikely]] {
           throw std::runtime_error("Failed to create an instance of \"JHybridKotlinTestObjectSpec\" - the constructor returned null!");
         }
-    
+    #endif
         auto globalRef = jni::make_global(instance);
         return JNISharedPtr::make_shared_from_jni<JHybridKotlinTestObjectSpec>(globalRef);
       }
