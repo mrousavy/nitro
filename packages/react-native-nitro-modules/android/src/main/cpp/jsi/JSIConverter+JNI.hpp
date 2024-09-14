@@ -40,6 +40,19 @@ struct JSIConverter<jni::alias_ref<T>> final {
   }
 };
 
+template <typename T>
+struct JSIConverter<jni::local_ref<T>> final {
+  static inline jni::alias_ref<T> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+    return JSIConverter<T>::fromJSI(runtime, arg);
+  }
+  static inline jsi::Value toJSI(jsi::Runtime& runtime, const jni::alias_ref<T>& arg) {
+    return JSIConverter<T>::toJSI(runtime, arg);
+  }
+  static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
+    return JSIConverter<T>::canConvert(runtime, value);
+  }
+};
+
 // number? <> JDouble?
 template <>
 struct JSIConverter<jni::JDouble> final {
@@ -129,7 +142,7 @@ struct JSIConverter<jni::JArrayClass<T>> final {
     size_t size = array.size(runtime);
     jni::local_ref<jni::JArrayClass<T>> result = jni::JArrayClass<T>::newArray(size);
     for (size_t i = 0; i < size; i++) {
-      result->setElement(i, JSIConverter<T>::fromJSI(runtime, array.getValueAtIndex(runtime, i)));
+      result->setElement(i, *JSIConverter<T>::fromJSI(runtime, array.getValueAtIndex(runtime, i)));
     }
     return result;
   }
