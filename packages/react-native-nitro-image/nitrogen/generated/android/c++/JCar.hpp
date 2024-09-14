@@ -9,6 +9,7 @@
 
 #include <fbjni/fbjni.h>
 #include "Car.hpp"
+#include <NitroModules/JSIConverter.hpp>
 
 #include "JPerson.hpp"
 #include "JPowertrain.hpp"
@@ -75,3 +76,31 @@ namespace margelo::nitro::image {
   };
 
 } // namespace margelo::nitro::image
+
+namespace margelo::nitro {
+
+  using namespace margelo::nitro::image;
+
+  // C++/JNI JCar <> JS Car (object)
+  template <>
+  struct JSIConverter<JCar> {
+    static inline jni::local_ref<JCar> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+      jsi::Object obj = arg.asObject(runtime);
+      throw std::runtime_error("Not yet implemented!");
+    }
+    static inline jsi::Value toJSI(jsi::Runtime& runtime, const jni::alias_ref<JCar>& arg) {
+      jsi::Object obj(runtime);
+      throw std::runtime_error("Not yet implemented!");
+      return obj;
+    }
+    static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
+      if (!value.isObject()) {
+        return false;
+      }
+      jsi::Object obj = value.getObject(runtime);
+      throw std::runtime_error("Not yet implemented!");
+      return true;
+    }
+  };
+
+} // namespace margelo::nitro

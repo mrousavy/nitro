@@ -9,6 +9,7 @@
 
 #include <fbjni/fbjni.h>
 #include "Person.hpp"
+#include <NitroModules/JSIConverter.hpp>
 
 #include <string>
 
@@ -54,3 +55,31 @@ namespace margelo::nitro::image {
   };
 
 } // namespace margelo::nitro::image
+
+namespace margelo::nitro {
+
+  using namespace margelo::nitro::image;
+
+  // C++/JNI JPerson <> JS Person (object)
+  template <>
+  struct JSIConverter<JPerson> {
+    static inline jni::local_ref<JPerson> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+      jsi::Object obj = arg.asObject(runtime);
+      throw std::runtime_error("Not yet implemented!");
+    }
+    static inline jsi::Value toJSI(jsi::Runtime& runtime, const jni::alias_ref<JPerson>& arg) {
+      jsi::Object obj(runtime);
+      throw std::runtime_error("Not yet implemented!");
+      return obj;
+    }
+    static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
+      if (!value.isObject()) {
+        return false;
+      }
+      jsi::Object obj = value.getObject(runtime);
+      throw std::runtime_error("Not yet implemented!");
+      return true;
+    }
+  };
+
+} // namespace margelo::nitro

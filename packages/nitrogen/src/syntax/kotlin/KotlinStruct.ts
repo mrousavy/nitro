@@ -9,6 +9,7 @@ import { KotlinCxxBridgedType } from './KotlinCxxBridgedType.js'
 
 export function createKotlinStruct(structType: StructType): SourceFile[] {
   const packageName = NitroConfig.getAndroidPackage('java/kotlin')
+  const jniName = `J${structType.structName}`
   const values = structType.properties.map(
     (p) => `val ${p.escapedName}: ${p.getCode('kotlin')}`
   )
@@ -50,12 +51,13 @@ data class ${structType.structName}(
     .sort()
 
   const fbjniCode = `
-${createFileMetadataString(`J${structType.structName}.hpp`)}
+${createFileMetadataString(`${jniName}.hpp`)}
 
 #pragma once
 
 #include <fbjni/fbjni.h>
 #include "${structType.declarationFile.name}"
+#include <NitroModules/JSIConverter.hpp>
 
 ${includes.join('\n')}
 
@@ -66,7 +68,7 @@ namespace ${cxxNamespace} {
   /**
    * The C++ JNI bridge between the C++ struct "${structType.structName}" and the the Kotlin data class "${structType.structName}".
    */
-  struct J${structType.structName} final: public jni::JavaClass<J${structType.structName}> {
+  struct ${jniName} final: public jni::JavaClass<${jniName}> {
   public:
     static auto constexpr kJavaDescriptor = "L${jniClassDescriptor};";
 
@@ -84,12 +86,40 @@ namespace ${cxxNamespace} {
      * Create a Java/Kotlin-based struct by copying all values from the given C++ struct to Java.
      */
     [[maybe_unused]]
-    static jni::local_ref<J${structType.structName}::javaobject> fromCpp(const ${structType.structName}& value) {
+    static jni::local_ref<${jniName}::javaobject> fromCpp(const ${structType.structName}& value) {
       ${indent(cppStructInitializerBody, '      ')}
     }
   };
 
 } // namespace ${cxxNamespace}
+
+namespace margelo::nitro {
+
+  using namespace ${cxxNamespace};
+
+  // C++/JNI ${jniName} <> JS ${structType.structName} (object)
+  template <>
+  struct JSIConverter<${jniName}> {
+    static inline jni::local_ref<${jniName}> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+      jsi::Object obj = arg.asObject(runtime);
+      throw std::runtime_error("Not yet implemented!");
+    }
+    static inline jsi::Value toJSI(jsi::Runtime& runtime, const jni::alias_ref<${jniName}>& arg) {
+      jsi::Object obj(runtime);
+      throw std::runtime_error("Not yet implemented!");
+      return obj;
+    }
+    static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
+      if (!value.isObject()) {
+        return false;
+      }
+      jsi::Object obj = value.getObject(runtime);
+      throw std::runtime_error("Not yet implemented!");
+      return true;
+    }
+  };
+
+} // namespace margelo::nitro
   `.trim()
 
   const files: SourceFile[] = []

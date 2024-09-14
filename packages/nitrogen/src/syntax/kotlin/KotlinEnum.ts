@@ -6,6 +6,7 @@ import { EnumType } from '../types/EnumType.js'
 
 export function createKotlinEnum(enumType: EnumType): SourceFile[] {
   const members = enumType.enumMembers.map((m) => m.name.toUpperCase())
+  const jniName = `J${enumType.enumName}`
   const packageName = NitroConfig.getAndroidPackage('java/kotlin')
   const code = `
 ${createFileMetadataString(`${enumType.enumName}.kt`)}
@@ -33,12 +34,13 @@ enum class ${enumType.enumName} {
   const cppToJniConverterCode = getCppToJniConverterCode('value', enumType)
 
   const fbjniCode = `
-${createFileMetadataString(`J${enumType.enumName}.hpp`)}
+${createFileMetadataString(`${jniName}.hpp`)}
 
 #pragma once
 
 #include <fbjni/fbjni.h>
 #include "${enumType.declarationFile.name}"
+#include <NitroModules/JSIConverter.hpp>
 
 namespace ${cxxNamespace} {
 
@@ -47,7 +49,7 @@ namespace ${cxxNamespace} {
   /**
    * The C++ JNI bridge between the C++ enum "${enumType.enumName}" and the the Kotlin enum "${enumType.enumName}".
    */
-  struct J${enumType.enumName} final: public jni::JavaClass<J${enumType.enumName}> {
+  struct ${jniName} final: public jni::JavaClass<${jniName}> {
   public:
     static auto constexpr kJavaDescriptor = "L${jniClassDescriptor};";
 
@@ -56,7 +58,7 @@ namespace ${cxxNamespace} {
      * Convert this Java/Kotlin-based enum to the C++ enum ${enumType.enumName}.
      */
     [[maybe_unused]]
-    ${enumType.enumName} toCpp() const {
+    [[nodiscard]] ${enumType.enumName} toCpp() const {
       static const auto clazz = javaClassStatic();
       static const auto fieldOrdinal = clazz->getField<int>("ordinal");
       int ordinal = this->getFieldValue(fieldOrdinal);
@@ -68,12 +70,35 @@ namespace ${cxxNamespace} {
      * Create a Java/Kotlin-based enum with the given C++ enum's value.
      */
     [[maybe_unused]]
-    static jni::alias_ref<J${enumType.enumName}> fromCpp(${enumType.enumName} value) {
+    static jni::alias_ref<${jniName}> fromCpp(${enumType.enumName} value) {
       ${indent(cppToJniConverterCode, '      ')}
     }
   };
 
 } // namespace ${cxxNamespace}
+
+
+namespace margelo::nitro {
+
+  using namespace ${cxxNamespace};
+
+  // C++/JNI ${jniName} <> JS ${enumType.enumName}
+  template <>
+  struct JSIConverter<${jniName}> {
+    static inline jni::alias_ref<${jniName}> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+      ${enumType.enumName} cppValue = JSIConverter<${enumType.enumName}>::fromJSI(runtime, arg);
+      return ${jniName}::fromCpp(cppValue);
+    }
+    static inline jsi::Value toJSI(jsi::Runtime& runtime, const jni::alias_ref<${jniName}>& arg) {
+      ${enumType.enumName} cppValue = arg->toCpp();
+      return JSIConverter<${enumType.enumName}>::toJSI(runtime, cppValue);
+    }
+    static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
+      return JSIConverter<${enumType.enumName}>::canConvert(runtime, value);
+    }
+  };
+
+} // namespace margelo::nitro
   `.trim()
 
   const files: SourceFile[] = []
@@ -87,7 +112,7 @@ namespace ${cxxNamespace} {
   files.push({
     content: fbjniCode,
     language: 'c++',
-    name: `J${enumType.enumName}.hpp`,
+    name: `${jniName}.hpp`,
     subdirectory: [],
     platform: 'android',
   })

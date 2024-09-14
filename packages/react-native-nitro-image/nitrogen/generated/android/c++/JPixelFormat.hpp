@@ -9,6 +9,7 @@
 
 #include <fbjni/fbjni.h>
 #include "PixelFormat.hpp"
+#include <NitroModules/JSIConverter.hpp>
 
 namespace margelo::nitro::image {
 
@@ -26,7 +27,7 @@ namespace margelo::nitro::image {
      * Convert this Java/Kotlin-based enum to the C++ enum PixelFormat.
      */
     [[maybe_unused]]
-    PixelFormat toCpp() const {
+    [[nodiscard]] PixelFormat toCpp() const {
       static const auto clazz = javaClassStatic();
       static const auto fieldOrdinal = clazz->getField<int>("ordinal");
       int ordinal = this->getFieldValue(fieldOrdinal);
@@ -59,3 +60,26 @@ namespace margelo::nitro::image {
   };
 
 } // namespace margelo::nitro::image
+
+
+namespace margelo::nitro {
+
+  using namespace margelo::nitro::image;
+
+  // C++/JNI JPixelFormat <> JS PixelFormat
+  template <>
+  struct JSIConverter<JPixelFormat> {
+    static inline jni::alias_ref<JPixelFormat> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+      PixelFormat cppValue = JSIConverter<PixelFormat>::fromJSI(runtime, arg);
+      return JPixelFormat::fromCpp(cppValue);
+    }
+    static inline jsi::Value toJSI(jsi::Runtime& runtime, const jni::alias_ref<JPixelFormat>& arg) {
+      PixelFormat cppValue = arg->toCpp();
+      return JSIConverter<PixelFormat>::toJSI(runtime, cppValue);
+    }
+    static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
+      return JSIConverter<PixelFormat>::canConvert(runtime, value);
+    }
+  };
+
+} // namespace margelo::nitro

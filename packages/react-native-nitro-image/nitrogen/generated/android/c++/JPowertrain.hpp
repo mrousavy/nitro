@@ -9,6 +9,7 @@
 
 #include <fbjni/fbjni.h>
 #include "Powertrain.hpp"
+#include <NitroModules/JSIConverter.hpp>
 
 namespace margelo::nitro::image {
 
@@ -59,3 +60,26 @@ namespace margelo::nitro::image {
   };
 
 } // namespace margelo::nitro::image
+
+
+namespace margelo::nitro {
+
+  using namespace margelo::nitro::image;
+
+  // C++/JNI JPowertrain <> JS Powertrain
+  template <>
+  struct JSIConverter<JPowertrain> {
+    static inline jni::alias_ref<JPowertrain> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+      Powertrain cppValue = JSIConverter<Powertrain>::fromJSI(runtime, arg);
+      return JPowertrain::fromCpp(cppValue);
+    }
+    static inline jsi::Value toJSI(jsi::Runtime& runtime, const jni::alias_ref<JPowertrain>& arg) {
+      Powertrain cppValue = arg->toCpp();
+      return JSIConverter<Powertrain>::toJSI(runtime, cppValue);
+    }
+    static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
+      return JSIConverter<Powertrain>::canConvert(runtime, value);
+    }
+  };
+
+} // namespace margelo::nitro
