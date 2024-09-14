@@ -23,20 +23,20 @@ namespace margelo::nitro {
 using namespace facebook;
 
 // Promise <> JPromise
-template <>
-struct JSIConverter<JPromise::javaobject> final {
-  static inline jni::alias_ref<JPromise::javaobject> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+template <typename T>
+struct JSIConverter<JPromise<T>> final {
+  static inline jni::alias_ref<JPromise<T>> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
     throw std::runtime_error("Promise cannot be converted to a native type - it needs to be awaited first!");
   }
-  static inline jsi::Value toJSI(jsi::Runtime& runtime, const jni::alias_ref<JPromise::javaobject>& arg) {
+  static inline jsi::Value toJSI(jsi::Runtime& runtime, const jni::alias_ref<JPromise<T>>& arg) {
     std::shared_ptr<Dispatcher> strongDispatcher = Dispatcher::getRuntimeGlobalDispatcher(runtime);
     std::weak_ptr<Dispatcher> weakDispatcher = strongDispatcher;
 
-    jni::global_ref<JPromise::javaobject> javaPromise = jni::make_global(arg);
+    jni::global_ref<JPromise<T>> javaPromise = jni::make_global(arg);
 
     return JSPromise::createPromise(runtime, [weakDispatcher, javaPromise](jsi::Runtime& runtime, std::shared_ptr<JSPromise> promise) {
       // on resolved listener
-      javaPromise->cthis()->addOnResolvedListener([&runtime, weakDispatcher, promise](jni::alias_ref<jni::JObject> result) {
+      javaPromise->addOnResolvedListener([&runtime, weakDispatcher, promise](jni::alias_ref<jni::JObject> result) {
         std::shared_ptr<Dispatcher> dispatcher = weakDispatcher.lock();
         if (!dispatcher) {
           Logger::log(LogLevel::Error, "JSIConverter",
@@ -50,7 +50,7 @@ struct JSIConverter<JPromise::javaobject> final {
         });
       });
       // on rejected listener
-      javaPromise->cthis()->addOnRejectedListener([&runtime, weakDispatcher, promise](jni::alias_ref<jni::JString> errorMessage) {
+      javaPromise->addOnRejectedListener([&runtime, weakDispatcher, promise](jni::alias_ref<jni::JString> errorMessage) {
         std::shared_ptr<Dispatcher> dispatcher = weakDispatcher.lock();
         if (!dispatcher) {
           Logger::log(LogLevel::Error, "JSIConverter",

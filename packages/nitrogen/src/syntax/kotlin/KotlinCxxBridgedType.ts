@@ -259,9 +259,11 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
             return this.type.getCode(language)
         }
       case 'promise':
+        const promise = getTypeAs(this.type, PromiseType)
+        const resolving = new KotlinCxxBridgedType(promise.resultingType)
         switch (language) {
           case 'c++':
-            return `JPromise::javaobject`
+            return `JPromise<${resolving.getTypeCode('c++')}>::javaobject`
           default:
             return this.type.getCode(language)
         }
@@ -641,10 +643,10 @@ promise->set_value();
             return `
 [&]() {
   auto promise = std::make_shared<std::promise<${actualCppType}>>();
-  ${parameterName}->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& boxedResult) {
+  ${parameterName}->addOnResolvedListener([=](jni::alias_ref<jni::JObject> boxedResult) {
     ${indent(resolveBody, '    ')}
   });
-  ${parameterName}->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JString>& message) {
+  ${parameterName}->addOnRejectedListener([=](jni::alias_ref<jni::JString> message) {
     std::runtime_error error(message->toStdString());
     promise->set_exception(std::make_exception_ptr(error));
   });

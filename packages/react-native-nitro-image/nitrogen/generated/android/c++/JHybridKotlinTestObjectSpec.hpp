@@ -106,7 +106,7 @@ namespace margelo::nitro::image {
 
   public:
     // Methods (overriden by JNI)
-    jni::alias_ref<JPromise::javaobject> asyncTestJNI();
+    jni::alias_ref<JPromise<void>::javaobject> asyncTestJNI();
     jni::alias_ref<JAnyMap::javaobject> createMapJNI();
     void addOnPersonBornListenerJNI(const jni::alias_ref<JFunc_void_Person::javaobject>& callback);
 

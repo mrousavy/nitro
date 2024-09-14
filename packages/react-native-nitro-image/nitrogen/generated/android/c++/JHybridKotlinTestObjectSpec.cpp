@@ -115,10 +115,10 @@ namespace margelo::nitro::image {
     auto result = this->asyncTestJNI();
     return [&]() {
       auto promise = std::make_shared<std::promise<void>>();
-      result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& boxedResult) {
+      result->addOnResolvedListener([=](jni::alias_ref<jni::JObject> boxedResult) {
         promise->set_value();
       });
-      result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JString>& message) {
+      result->addOnRejectedListener([=](jni::alias_ref<jni::JString> message) {
         std::runtime_error error(message->toStdString());
         promise->set_exception(std::make_exception_ptr(error));
       });
@@ -184,8 +184,8 @@ namespace margelo::nitro::image {
   }
 
   // JNI Methods
-  jni::alias_ref<JPromise::javaobject> JHybridKotlinTestObjectSpec::asyncTestJNI() {
-    static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<JPromise::javaobject>()>("asyncTest");
+  jni::alias_ref<JPromise<void>::javaobject> JHybridKotlinTestObjectSpec::asyncTestJNI() {
+    static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<JPromise<void>::javaobject>()>("asyncTest");
     return method(_javaPart);
   }
   jni::alias_ref<JAnyMap::javaobject> JHybridKotlinTestObjectSpec::createMapJNI() {
