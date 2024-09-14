@@ -12,8 +12,8 @@ struct JSIConverter;
 
 #include "AnyMap.hpp"
 #include "JAnyMap.hpp"
-#include "JSIConverter+JString.hpp"
 #include "JSIConverter+JObject.hpp"
+#include "JSIConverter+JString.hpp"
 #include "JSIConverter.hpp"
 #include <fbjni/fbjni.h>
 #include <jni.h>
