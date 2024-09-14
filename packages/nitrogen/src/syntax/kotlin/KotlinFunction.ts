@@ -1,7 +1,11 @@
 import { NitroConfig } from '../../config/NitroConfig.js'
 import { indent } from '../../utils.js'
 import { includeHeader } from '../c++/includeNitroHeader.js'
-import { createFileMetadataString, isNotDuplicate } from '../helpers.js'
+import {
+  createFileMetadataString,
+  isNotDuplicate,
+  toReferenceType,
+} from '../helpers.js'
 import type { SourceFile } from '../SourceFile.js'
 import type { FunctionType } from '../types/FunctionType.js'
 import { addJNINativeRegistration } from './JNINativeRegistrations.js'
@@ -60,18 +64,65 @@ class ${name} {
   `.trim()
 
   const cppReturnType = functionType.returnType.getCode('c++')
-  const cppParams = functionType.parameters.map((p) => {
+  const jniParams = functionType.parameters.map((p) => {
     const bridge = new KotlinCxxBridgedType(p)
     const type = bridge.asJniReferenceType('alias')
     return `const ${type}& ${p.escapedName}`
   })
-  const paramsForward = functionType.parameters.map((p) => {
+  const jniParamsForward = functionType.parameters.map((p) => p.name)
+  const jniClassDescriptor = NitroConfig.getAndroidPackage('c++/jni', name)
+  const cxxNamespace = NitroConfig.getCxxNamespace('c++')
+  const cppFunctionType = functionType.getCode('c++')
+
+  const bridgedReturn = new KotlinCxxBridgedType(functionType.returnType)
+  const bridgedParameters = functionType.parameters.map((p) => {
+    const bridge = new KotlinCxxBridgedType(p)
+    return `${bridge.asJniReferenceType('alias')} /* ${p.name} */`
+  })
+  const jniFunctionType = `std::function<${bridgedReturn.asJniReferenceType('local')}(${bridgedParameters.join(', ')})>`
+
+  const cppParams = functionType.parameters.map((p) => {
+    if (p.canBePassedByReference) {
+      return `${toReferenceType(p.getCode('c++'))} ${p.escapedName}`
+    } else {
+      return `${p.getCode('c++')} ${p.escapedName}`
+    }
+  })
+  const cppToJniParamsForward = functionType.parameters.map((p) => {
+    const bridge = new KotlinCxxBridgedType(p)
+    return bridge.parseFromCppToKotlin(p.escapedName, 'c++', false)
+  })
+  let cppToJniForwardBody: string
+  if (bridgedReturn.hasType) {
+    // it returns some value
+    cppToJniForwardBody = `
+${bridgedReturn.asJniReferenceType('local')} result = javaFunc(${indent(cppToJniParamsForward.join(', '), '        ')});
+return ${bridgedReturn.parseFromKotlinToCpp('result', 'kotlin')}
+    `.trim()
+  } else {
+    // it returns void
+    cppToJniForwardBody = `
+javaFunc(${indent(cppToJniParamsForward.join(', '), '        ')});
+    `.trim()
+  }
+
+  const jniToCppParamsForward = functionType.parameters.map((p) => {
     const bridge = new KotlinCxxBridgedType(p)
     return bridge.parseFromKotlinToCpp(p.escapedName, 'c++', false)
   })
-  const jniClassDescriptor = NitroConfig.getAndroidPackage('c++/jni', name)
-  const cxxNamespace = NitroConfig.getCxxNamespace('c++')
-  const typename = functionType.getCode('c++')
+  let jniToCppForwardBody: string
+  if (bridgedReturn.hasType) {
+    // it returns some value
+    jniToCppForwardBody = `
+${cppReturnType} result = func(${indent(jniToCppParamsForward.join(', '), '        ')});
+return ${bridgedReturn.parseFromKotlinToCpp('result', 'kotlin')}
+    `.trim()
+  } else {
+    // it returns void
+    jniToCppForwardBody = `
+func(${indent(jniToCppParamsForward.join(', '), '        ')});
+    `.trim()
+  }
 
   const bridged = new KotlinCxxBridgedType(functionType)
   const imports = bridged
@@ -100,21 +151,42 @@ namespace ${cxxNamespace} {
    */
   struct J${name} final: public jni::HybridClass<J${name}> {
   public:
-    static jni::local_ref<J${name}::javaobject> fromCpp(const ${typename}& func) {
+    static jni::local_ref<J${name}::javaobject> wrap(const ${jniFunctionType}& func) {
       return J${name}::newObjectCxxArgs(func);
     }
-    static jni::local_ref<J${name}::javaobject> fromCpp(${typename}&& func) {
+    static jni::local_ref<J${name}::javaobject> wrap(${jniFunctionType}&& func) {
       return J${name}::newObjectCxxArgs(std::move(func));
     }
 
-  public:
-    ${cppReturnType} call(${cppParams.join(', ')}) {
-      return _func(${indent(paramsForward.join(', '), '      ')});
+    static jni::local_ref<J${name}::javaobject> fromCpp(const ${cppFunctionType}& func) {
+      return wrap([func](${jniParams.join(', ')}) {
+        ${indent(jniToCppForwardBody, '        ')}
+      });
+    }
+    static jni::local_ref<J${name}::javaobject> fromCpp(${cppFunctionType}&& func) {
+      return wrap([func = std::move(func)](${jniParams.join(', ')}) {
+        ${indent(jniToCppForwardBody, '        ')}
+      });
     }
 
   public:
-    inline const ${typename}& getFunction() const noexcept {
+    ${cppReturnType} call(${jniParams.join(', ')}) {
+      return _func(${indent(jniParamsForward.join(', '), '      ')});
+    }
+
+  public:
+    [[nodiscard]] inline const ${jniFunctionType}& getFunction() const noexcept {
       return _func;
+    }
+
+    /**
+     * Convert this JNI-based function to a C++ function with proper type conversion.
+     */
+    [[nodiscard]] ${cppFunctionType} toCpp() const {
+      ${jniFunctionType} javaFunc = _func;
+      return [javaFunc](${cppParams.join(', ')}) {
+        ${indent(cppToJniForwardBody, '        ')}
+      };
     }
 
   public:
@@ -124,12 +196,12 @@ namespace ${cxxNamespace} {
     }
 
   private:
-    explicit J${name}(const ${typename}& func): _func(func) { }
-    explicit J${name}(${typename}&& func): _func(std::move(func)) { }
+    explicit J${name}(const ${jniFunctionType}& func): _func(func) { }
+    explicit J${name}(${jniFunctionType}&& func): _func(std::move(func)) { }
 
   private:
     friend HybridBase;
-    ${typename} _func;
+    ${jniFunctionType} _func;
   };
 
 } // namespace ${cxxNamespace}
@@ -140,13 +212,13 @@ namespace margelo::nitro {
   template <>
   struct JSIConverter<J${name}::javaobject> final {
     static inline jni::local_ref<J${name}::javaobject> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
-      return J${name}::fromCpp(JSIConverter<${typename}>::fromJSI(runtime, arg));
+      return J${name}::wrap(JSIConverter<${jniFunctionType}>::fromJSI(runtime, arg));
     }
     static inline jsi::Value toJSI(jsi::Runtime& runtime, const jni::alias_ref<J${name}::javaobject>& arg) {
-      return JSIConverter<${typename}>::toJSI(runtime, arg->cthis()->getFunction());
+      return JSIConverter<${jniFunctionType}>::toJSI(runtime, arg->cthis()->getFunction());
     }
     static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
-      return JSIConverter<${typename}>::canConvert(runtime, value);
+      return JSIConverter<${jniFunctionType}>::canConvert(runtime, value);
     }
   };
 

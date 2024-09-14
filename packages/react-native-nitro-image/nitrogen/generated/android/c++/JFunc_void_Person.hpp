@@ -26,21 +26,42 @@ namespace margelo::nitro::image {
    */
   struct JFunc_void_Person final: public jni::HybridClass<JFunc_void_Person> {
   public:
-    static jni::local_ref<JFunc_void_Person::javaobject> fromCpp(const std::function<void(const Person& /* p */)>& func) {
+    static jni::local_ref<JFunc_void_Person::javaobject> wrap(const std::function<void(jni::alias_ref<JPerson> /* p */)>& func) {
       return JFunc_void_Person::newObjectCxxArgs(func);
     }
-    static jni::local_ref<JFunc_void_Person::javaobject> fromCpp(std::function<void(const Person& /* p */)>&& func) {
+    static jni::local_ref<JFunc_void_Person::javaobject> wrap(std::function<void(jni::alias_ref<JPerson> /* p */)>&& func) {
       return JFunc_void_Person::newObjectCxxArgs(std::move(func));
+    }
+
+    static jni::local_ref<JFunc_void_Person::javaobject> fromCpp(const std::function<void(const Person& /* p */)>& func) {
+      return wrap([func](const jni::alias_ref<JPerson>& p) {
+        func(p->toCpp());
+      });
+    }
+    static jni::local_ref<JFunc_void_Person::javaobject> fromCpp(std::function<void(const Person& /* p */)>&& func) {
+      return wrap([func = std::move(func)](const jni::alias_ref<JPerson>& p) {
+        func(p->toCpp());
+      });
     }
 
   public:
     void call(const jni::alias_ref<JPerson>& p) {
-      return _func(p->toCpp());
+      return _func(p);
     }
 
   public:
-    inline const std::function<void(const Person& /* p */)>& getFunction() const noexcept {
+    inline const std::function<void(jni::alias_ref<JPerson> /* p */)>& getFunction() const noexcept {
       return _func;
+    }
+
+    /**
+     * Convert this JNI-based function to a C++ function with proper type conversion.
+     */
+    std::function<void(const Person& /* p */)> toCpp() const {
+      std::function<void(jni::alias_ref<JPerson> /* p */)> javaFunc = _func;
+      return [javaFunc](const Person& p) {
+        javaFunc(JPerson::fromCpp(p));
+      };
     }
 
   public:
@@ -50,12 +71,12 @@ namespace margelo::nitro::image {
     }
 
   private:
-    explicit JFunc_void_Person(const std::function<void(const Person& /* p */)>& func): _func(func) { }
-    explicit JFunc_void_Person(std::function<void(const Person& /* p */)>&& func): _func(std::move(func)) { }
+    explicit JFunc_void_Person(const std::function<void(jni::alias_ref<JPerson> /* p */)>& func): _func(func) { }
+    explicit JFunc_void_Person(std::function<void(jni::alias_ref<JPerson> /* p */)>&& func): _func(std::move(func)) { }
 
   private:
     friend HybridBase;
-    std::function<void(const Person& /* p */)> _func;
+    std::function<void(jni::alias_ref<JPerson> /* p */)> _func;
   };
 
 } // namespace margelo::nitro::image
@@ -66,13 +87,13 @@ namespace margelo::nitro {
   template <>
   struct JSIConverter<JFunc_void_Person::javaobject> final {
     static inline jni::local_ref<JFunc_void_Person::javaobject> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
-      return JFunc_void_Person::fromCpp(JSIConverter<std::function<void(const Person& /* p */)>>::fromJSI(runtime, arg));
+      return JFunc_void_Person::wrap(JSIConverter<std::function<void(jni::alias_ref<JPerson> /* p */)>>::fromJSI(runtime, arg));
     }
     static inline jsi::Value toJSI(jsi::Runtime& runtime, const jni::alias_ref<JFunc_void_Person::javaobject>& arg) {
-      return JSIConverter<std::function<void(const Person& /* p */)>>::toJSI(runtime, arg->cthis()->getFunction());
+      return JSIConverter<std::function<void(jni::alias_ref<JPerson> /* p */)>>::toJSI(runtime, arg->cthis()->getFunction());
     }
     static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
-      return JSIConverter<std::function<void(const Person& /* p */)>>::canConvert(runtime, value);
+      return JSIConverter<std::function<void(jni::alias_ref<JPerson> /* p */)>>::canConvert(runtime, value);
     }
   };
 
