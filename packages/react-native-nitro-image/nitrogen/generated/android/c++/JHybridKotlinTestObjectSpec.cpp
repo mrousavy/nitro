@@ -27,26 +27,21 @@ namespace margelo::nitro::image {
 
   // Properties
   double JHybridKotlinTestObjectSpec::getNumberValue() {
-    static const auto method = _javaPart->getClass()->getMethod<double()>("getNumberValue");
-    auto result = method(_javaPart);
+    auto result = this->getNumberValueJNI();
     return result;
   }
   void JHybridKotlinTestObjectSpec::setNumberValue(double numberValue) {
-    static const auto method = _javaPart->getClass()->getMethod<void(double /* numberValue */)>("setNumberValue");
-    method(_javaPart, numberValue);
+    this->setNumberValueJNI(numberValue);
   }
   std::optional<double> JHybridKotlinTestObjectSpec::getOptionalNumber() {
-    static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<jni::JDouble>()>("getOptionalNumber");
-    auto result = method(_javaPart);
+    auto result = this->getOptionalNumberJNI();
     return result != nullptr ? std::make_optional(result->value()) : std::nullopt;
   }
   void JHybridKotlinTestObjectSpec::setOptionalNumber(std::optional<double> optionalNumber) {
-    static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<jni::JDouble> /* optionalNumber */)>("setOptionalNumber");
-    method(_javaPart, optionalNumber.has_value() ? jni::JDouble::valueOf(optionalNumber.value()) : nullptr);
+    this->setOptionalNumberJNI(optionalNumber.has_value() ? jni::JDouble::valueOf(optionalNumber.value()) : nullptr);
   }
   std::vector<double> JHybridKotlinTestObjectSpec::getPrimitiveArray() {
-    static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<jni::JArrayDouble>()>("getPrimitiveArray");
-    auto result = method(_javaPart);
+    auto result = this->getPrimitiveArrayJNI();
     return [&]() {
       size_t size = result->size();
       std::vector<double> vector;
@@ -56,8 +51,7 @@ namespace margelo::nitro::image {
     }();
   }
   void JHybridKotlinTestObjectSpec::setPrimitiveArray(const std::vector<double>& primitiveArray) {
-    static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<jni::JArrayDouble> /* primitiveArray */)>("setPrimitiveArray");
-    method(_javaPart, [&]() {
+    this->setPrimitiveArrayJNI([&]() {
       size_t size = primitiveArray.size();
       jni::local_ref<jni::JArrayDouble> array = jni::JArrayDouble::newArray(size);
       array->setRegion(0, size, primitiveArray.data());
@@ -65,8 +59,7 @@ namespace margelo::nitro::image {
     }());
   }
   std::vector<Car> JHybridKotlinTestObjectSpec::getCarCollection() {
-    static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<jni::JArrayClass<JCar>>()>("getCarCollection");
-    auto result = method(_javaPart);
+    auto result = this->getCarCollectionJNI();
     return [&]() {
       size_t size = result->size();
       std::vector<Car> vector;
@@ -79,8 +72,7 @@ namespace margelo::nitro::image {
     }();
   }
   void JHybridKotlinTestObjectSpec::setCarCollection(const std::vector<Car>& carCollection) {
-    static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<jni::JArrayClass<JCar>> /* carCollection */)>("setCarCollection");
-    method(_javaPart, [&]() {
+    this->setCarCollectionJNI([&]() {
       size_t size = carCollection.size();
       jni::local_ref<jni::JArrayClass<JCar>> array = jni::JArrayClass<JCar>::newArray(size);
       for (size_t i = 0; i < size; i++) {
@@ -91,17 +83,14 @@ namespace margelo::nitro::image {
     }());
   }
   std::shared_ptr<ArrayBuffer> JHybridKotlinTestObjectSpec::getSomeBuffer() {
-    static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<JArrayBuffer::javaobject>()>("getSomeBuffer");
-    auto result = method(_javaPart);
+    auto result = this->getSomeBufferJNI();
     return result->cthis()->getArrayBuffer();
   }
   void JHybridKotlinTestObjectSpec::setSomeBuffer(const std::shared_ptr<ArrayBuffer>& someBuffer) {
-    static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<JArrayBuffer::javaobject> /* someBuffer */)>("setSomeBuffer");
-    method(_javaPart, JArrayBuffer::wrap(someBuffer));
+    this->setSomeBufferJNI(JArrayBuffer::wrap(someBuffer));
   }
   std::unordered_map<std::string, std::string> JHybridKotlinTestObjectSpec::getSomeRecord() {
-    static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<jni::JMap<jni::JString, jni::JString>>()>("getSomeRecord");
-    auto result = method(_javaPart);
+    auto result = this->getSomeRecordJNI();
     return [&]() {
       std::unordered_map<std::string, std::string> map;
       map.reserve(result->size());
@@ -112,8 +101,7 @@ namespace margelo::nitro::image {
     }();
   }
   void JHybridKotlinTestObjectSpec::setSomeRecord(const std::unordered_map<std::string, std::string>& someRecord) {
-    static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<jni::JMap<jni::JString, jni::JString>> /* someRecord */)>("setSomeRecord");
-    method(_javaPart, [&]() {
+    this->setSomeRecordJNI([&]() {
       auto map = jni::JHashMap<jni::JString, jni::JString>::create(someRecord.size());
       for (const auto& entry : someRecord) {
         map->put(jni::make_jstring(entry.first), jni::make_jstring(entry.second));
@@ -124,8 +112,7 @@ namespace margelo::nitro::image {
 
   // Methods
   std::future<void> JHybridKotlinTestObjectSpec::asyncTest() {
-    static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<JPromise::javaobject>()>("asyncTest");
-    auto result = method(_javaPart);
+    auto result = this->asyncTestJNI();
     return [&]() {
       auto promise = std::make_shared<std::promise<void>>();
       result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& boxedResult) {
@@ -139,13 +126,11 @@ namespace margelo::nitro::image {
     }();
   }
   std::shared_ptr<AnyMap> JHybridKotlinTestObjectSpec::createMap() {
-    static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<JAnyMap::javaobject>()>("createMap");
-    auto result = method(_javaPart);
+    auto result = this->createMapJNI();
     return result->cthis()->getMap();
   }
   void JHybridKotlinTestObjectSpec::addOnPersonBornListener(const std::function<void(const Person& /* p */)>& callback) {
-    static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<JFunc_void_Person::javaobject> /* callback */)>("addOnPersonBornListener");
-    method(_javaPart, JFunc_void_Person::fromCpp(callback));
+    this->addOnPersonBornListenerJNI(JFunc_void_Person::fromCpp(callback));
   }
 
   // JNI Properties

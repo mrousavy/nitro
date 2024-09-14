@@ -27,34 +27,28 @@ namespace margelo::nitro::image {
 
   // Properties
   ImageSize JHybridImageSpec::getSize() {
-    static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<JImageSize>()>("getSize");
-    auto result = method(_javaPart);
+    auto result = this->getSizeJNI();
     return result->toCpp();
   }
   PixelFormat JHybridImageSpec::getPixelFormat() {
-    static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<JPixelFormat>()>("getPixelFormat");
-    auto result = method(_javaPart);
+    auto result = this->getPixelFormatJNI();
     return result->toCpp();
   }
   double JHybridImageSpec::getSomeSettableProp() {
-    static const auto method = _javaPart->getClass()->getMethod<double()>("getSomeSettableProp");
-    auto result = method(_javaPart);
+    auto result = this->getSomeSettablePropJNI();
     return result;
   }
   void JHybridImageSpec::setSomeSettableProp(double someSettableProp) {
-    static const auto method = _javaPart->getClass()->getMethod<void(double /* someSettableProp */)>("setSomeSettableProp");
-    method(_javaPart, someSettableProp);
+    this->setSomeSettablePropJNI(someSettableProp);
   }
 
   // Methods
   double JHybridImageSpec::toArrayBuffer(ImageFormat format) {
-    static const auto method = _javaPart->getClass()->getMethod<double(jni::alias_ref<JImageFormat> /* format */)>("toArrayBuffer");
-    auto result = method(_javaPart, JImageFormat::fromCpp(format));
+    auto result = this->toArrayBufferJNI(JImageFormat::fromCpp(format));
     return result;
   }
   void JHybridImageSpec::saveToFile(const std::string& path, const std::function<void(const std::string& /* path */)>& onFinished) {
-    static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<jni::JString> /* path */, jni::alias_ref<JFunc_void_std__string::javaobject> /* onFinished */)>("saveToFile");
-    method(_javaPart, jni::make_jstring(path), JFunc_void_std__string::fromCpp(onFinished));
+    this->saveToFileJNI(jni::make_jstring(path), JFunc_void_std__string::fromCpp(onFinished));
   }
 
   // JNI Properties

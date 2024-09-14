@@ -315,35 +315,22 @@ function getFbjniMethodForwardImplementation(
   const name = getHybridObjectName(spec.name)
 
   const returnJNI = new KotlinCxxBridgedType(method.returnType)
-
-  const returnType = returnJNI.asJniReferenceType('alias')
-  const paramsTypes = method.parameters
-    .map((p) => {
-      const bridge = new KotlinCxxBridgedType(p.type)
-      return `${bridge.asJniReferenceType('alias')} /* ${p.name} */`
-    })
-    .join(', ')
-  const cxxSignature = `${returnType}(${paramsTypes})`
-
   const paramsForward = method.parameters.map((p) => {
     const bridged = new KotlinCxxBridgedType(p.type)
     return bridged.parse(p.name, 'c++', 'kotlin', 'c++')
   })
-  paramsForward.unshift('_javaPart') // <-- first param is always Java `this`
 
   let body: string
   if (returnJNI.hasType) {
     // return something - we need to parse it
     body = `
-static const auto method = _javaPart->getClass()->getMethod<${cxxSignature}>("${method.name}");
-auto result = method(${paramsForward.join(', ')});
-return ${returnJNI.parse('result', 'kotlin', 'c++', 'c++')};
+auto result = this->${method.name}JNI(${paramsForward.join(', ')});
+return ${returnJNI.parseFromKotlinToCpp('result', 'c++')};
     `
   } else {
     // void method. no return
     body = `
-static const auto method = _javaPart->getClass()->getMethod<${cxxSignature}>("${method.name}");
-method(${paramsForward.join(', ')});
+this->${method.name}JNI(${paramsForward.join(', ')});
    `
   }
   const code = method.getCode(
