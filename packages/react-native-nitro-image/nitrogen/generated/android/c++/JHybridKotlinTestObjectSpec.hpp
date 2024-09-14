@@ -56,6 +56,7 @@ namespace margelo::nitro::image {
     // C++ constructor (called from Java via `initHybrid()`)
     explicit JHybridKotlinTestObjectSpec(jni::alias_ref<jhybridobject> jThis) :
       HybridObject(HybridKotlinTestObjectSpec::TAG),
+      HybridBase /* JHybridObject */ (jni::static_ref_cast<JHybridObject::javaobject>(jThis)),
       _javaPart(jni::make_global(jThis)) {}
 
   public:

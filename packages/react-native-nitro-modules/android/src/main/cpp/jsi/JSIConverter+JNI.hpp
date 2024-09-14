@@ -130,7 +130,7 @@ struct JSIConverter<jni::JArrayClass<T>> final {
     }
     return result;
   }
-  static inline jsi::Value toJSI(jsi::Runtime& runtime, const jni::alias_ref<jni::JArrayClass<T>>& arg) {
+  static inline jsi::Value toJSI(jsi::Runtime& runtime, jni::alias_ref<jni::JArrayClass<T>> arg) {
     size_t size = arg->size();
     jsi::Array array = jsi::Array(runtime, size);
     for (size_t i = 0; i < size; i++) {
@@ -310,13 +310,20 @@ struct JSIConverter<jni::JMap<K, V>> final {
 };
 
 // {} <> JHybridObject
-template <typename TJHybrid>
-struct JSIConverter<TJHybrid, std::enable_if_t<std::is_base_of_v<JHybridObject, TJHybrid>>> final {
-  static inline jni::alias_ref<TJHybrid> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
-    throw std::runtime_error("Cannot convert jsi::Value -> JHybridObject yet!");
+template <>
+struct JSIConverter<JHybridObject::javaobject> final {
+  static inline jni::alias_ref<JHybridObject::javaobject> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+    jsi::Object object = arg.asObject(runtime);
+    if (!object.hasNativeState<JHybridObject>(runtime)) [[unlikely]] {
+        std::string typeDescription = arg.toString(runtime).utf8(runtime);
+        throw std::runtime_error("Cannot convert \"" + typeDescription + "\" to JHybridObject! It does not have a NativeState.");
+    }
+    std::shared_ptr<jsi::NativeState> nativeState = object.getNativeState(runtime);
+    std::shared_ptr<JHybridObject> jhybridObject = std::dynamic_pointer_cast<JHybridObject>(nativeState);
+    return jhybridObject->getJavaPart();
   }
-  static inline jsi::Value toJSI(jsi::Runtime& runtime, jni::alias_ref<TJHybrid> arg) {
-    return arg->cthis()->toObject();
+  static inline jsi::Value toJSI(jsi::Runtime& runtime, const jni::alias_ref<JHybridObject::javaobject>& arg) {
+    return arg->cthis()->toObject(runtime);
   }
   static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
     if (!value.isObject()) {

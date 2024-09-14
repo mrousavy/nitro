@@ -79,6 +79,7 @@ ${spaces}                public ${name.HybridTSpec} {
     // C++ constructor (called from Java via \`initHybrid()\`)
     explicit ${name.JHybridTSpec}(jni::alias_ref<jhybridobject> jThis) :
       HybridObject(${name.HybridTSpec}::TAG),
+      HybridBase /* JHybridObject */ (jni::static_ref_cast<JHybridObject::javaobject>(jThis)),
       _javaPart(jni::make_global(jThis)) {}
 
   public:
