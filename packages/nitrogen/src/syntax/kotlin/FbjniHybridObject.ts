@@ -56,6 +56,7 @@ ${createFileMetadataString(`${name.HybridTSpec}.hpp`)}
 
 #pragma once
 
+#include <NitroModules/JSIConverter.hpp>
 #include <NitroModules/JHybridObject.hpp>
 #include <fbjni/fbjni.h>
 #include "${name.HybridTSpec}.hpp"
@@ -117,6 +118,35 @@ ${spaces}                public ${name.HybridTSpec} {
   };
 
 } // namespace ${cxxNamespace}
+
+namespace margelo::nitro {
+
+  // NativeState<{}> <> ${name.JHybridTSpec}
+  template <>
+  struct JSIConverter<${name.JHybridTSpec}::javaobject> final {
+    static inline jni::alias_ref<${name.JHybridTSpec}::javaobject> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+      jsi::Object object = arg.asObject(runtime);
+      if (!object.hasNativeState<JHybridObject>(runtime)) [[unlikely]] {
+        std::string typeDescription = arg.toString(runtime).utf8(runtime);
+        throw std::runtime_error("Cannot convert \\"" + typeDescription + "\\" to JHybridObject! It does not have a NativeState.");
+      }
+      std::shared_ptr<jsi::NativeState> nativeState = object.getNativeState(runtime);
+      std::shared_ptr<${name.JHybridTSpec}> jhybridObject = std::dynamic_pointer_cast<${name.JHybridTSpec}>(nativeState);
+      return jhybridObject->getJavaPart();
+    }
+    static inline jsi::Value toJSI(jsi::Runtime& runtime, const jni::alias_ref<${name.JHybridTSpec}::javaobject>& arg) {
+      return arg->cthis()->toObject(runtime);
+    }
+    static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
+      if (!value.isObject()) {
+        return false;
+      }
+      jsi::Object object = value.getObject(runtime);
+      return object.hasNativeState<${name.JHybridTSpec}>(runtime);
+    }
+  };
+
+} // namespace margelo::nitro
   `.trim()
 
   // Make sure we register all native JNI methods on app startup

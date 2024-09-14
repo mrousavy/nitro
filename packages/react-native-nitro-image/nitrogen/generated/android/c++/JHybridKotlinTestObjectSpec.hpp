@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include <NitroModules/JSIConverter.hpp>
 #include <NitroModules/JHybridObject.hpp>
 #include <fbjni/fbjni.h>
 #include "HybridKotlinTestObjectSpec.hpp"
@@ -120,3 +121,32 @@ namespace margelo::nitro::image {
   };
 
 } // namespace margelo::nitro::image
+
+namespace margelo::nitro {
+
+  // NativeState<{}> <> JHybridKotlinTestObjectSpec
+  template <>
+  struct JSIConverter<JHybridKotlinTestObjectSpec::javaobject> final {
+    static inline jni::alias_ref<JHybridKotlinTestObjectSpec::javaobject> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+      jsi::Object object = arg.asObject(runtime);
+      if (!object.hasNativeState<JHybridObject>(runtime)) [[unlikely]] {
+        std::string typeDescription = arg.toString(runtime).utf8(runtime);
+        throw std::runtime_error("Cannot convert \"" + typeDescription + "\" to JHybridObject! It does not have a NativeState.");
+      }
+      std::shared_ptr<jsi::NativeState> nativeState = object.getNativeState(runtime);
+      std::shared_ptr<JHybridKotlinTestObjectSpec> jhybridObject = std::dynamic_pointer_cast<JHybridKotlinTestObjectSpec>(nativeState);
+      return jhybridObject->getJavaPart();
+    }
+    static inline jsi::Value toJSI(jsi::Runtime& runtime, const jni::alias_ref<JHybridKotlinTestObjectSpec::javaobject>& arg) {
+      return arg->cthis()->toObject(runtime);
+    }
+    static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
+      if (!value.isObject()) {
+        return false;
+      }
+      jsi::Object object = value.getObject(runtime);
+      return object.hasNativeState<JHybridKotlinTestObjectSpec>(runtime);
+    }
+  };
+
+} // namespace margelo::nitro
