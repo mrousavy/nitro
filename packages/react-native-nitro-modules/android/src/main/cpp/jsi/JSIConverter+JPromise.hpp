@@ -34,7 +34,7 @@ struct JSIConverter<JPromise<T>> final {
 
     jni::global_ref<JPromise<T>> javaPromise = jni::make_global(arg);
 
-    return JSPromise::createPromise(runtime, [weakDispatcher, javaPromise](jsi::Runtime& runtime, std::shared_ptr<JSPromise> promise) {
+    return JSPromise::createPromise(runtime, [weakDispatcher, javaPromise](jsi::Runtime& runtime, std::shared_ptr<JSPromise> promise) mutable {
       // on resolved listener
       javaPromise->addOnResolvedListener([&runtime, weakDispatcher, promise](jni::alias_ref<jni::JObject> result) {
         std::shared_ptr<Dispatcher> dispatcher = weakDispatcher.lock();

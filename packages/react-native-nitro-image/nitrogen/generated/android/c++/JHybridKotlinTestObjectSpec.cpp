@@ -184,8 +184,8 @@ namespace margelo::nitro::image {
   }
 
   // JNI Methods
-  jni::alias_ref<JPromise<void>::javaobject> JHybridKotlinTestObjectSpec::asyncTestJNI() {
-    static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<JPromise<void>::javaobject>()>("asyncTest");
+  jni::alias_ref<JPromise<void>> JHybridKotlinTestObjectSpec::asyncTestJNI() {
+    static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<JPromise<void>>()>("asyncTest");
     return method(_javaPart);
   }
   jni::alias_ref<JAnyMap::javaobject> JHybridKotlinTestObjectSpec::createMapJNI() {

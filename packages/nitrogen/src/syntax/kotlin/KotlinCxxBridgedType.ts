@@ -263,7 +263,7 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
         const resolving = new KotlinCxxBridgedType(promise.resultingType)
         switch (language) {
           case 'c++':
-            return `JPromise<${resolving.getTypeCode('c++')}>::javaobject`
+            return `JPromise<${resolving.getTypeCode('c++')}>`
           default:
             return this.type.getCode(language)
         }
