@@ -12,18 +12,20 @@ import { logPrototypeChain } from '../logPrototypeChain'
 logPrototypeChain(HybridTestObject)
 logPrototypeChain(HybridKotlinTestObject)
 
-HybridKotlinTestObject.someString =
-  'HELLO WORLD! Ths hioeugh uioweghioewguiowe geoguerg uioergz uiegz euiogz eri8ougz 89erzg 8934z t8943zgtuihuieahuihLO WORLD! Ths hioeugh uioweghioewguiowe geoguerg uioergz uiegz euiogz eri8ougz 89erzg 8934z t8943zgtuihuieahuihLO WORLD! Ths hioeugh uioweghioewguiowe geoguerg uioergz uiegz euiogz eri8ougz 89erzg 8934z t8943zgtuihuieahuihLO WORLD! Ths hioeugh uioweghioewguiowe geoguerg uioergz uiegz euiogz eri8ougz 89erzg 8934z t8943zgtuihuieahuihLO WORLD! Ths hioeugh uioweghioewguiowe geoguerg uioergz uiegz euiogz eri8ougz 89erzg 8934z t8943zgtuihuieahuihLO WORLD! Ths hioeugh uioweghioewguiowe geoguerg uioergz uiegz euiogz eri8ougz 89erzg 8934z t8943zgtuihuieahuihLO WORLD! Ths hioeugh uioweghioewguiowe geoguerg uioergz uiegz euiogz eri8ougz 89erzg 8934z t8943zgtuihuieahuihLO WORLD! Ths hioeugh uioweghioewguiowe geoguerg uioergz uiegz euiogz eri8ougz 89erzg 8934z t8943zgtuihuieahuih'
 setTimeout(() => {
-  let map = HybridKotlinTestObject.createMap()
+  let listenerCalls = 0
   const start = performance.now()
-  for (let i = 0; i < 100_000; i++) {
-    map = HybridKotlinTestObject.mapRoundtrip(map)
+  for (let i = 0; i < 10_00; i++) {
+    HybridKotlinTestObject.addOnPersonBornListener(() => {
+      listenerCalls++
+    })
   }
   const end = performance.now()
-  console.log(
-    `10k iterations took ${(end - start).toFixed(2)}ms! Map: ${Object.keys(map)}`
-  )
+  setTimeout(() => {
+    console.log(
+      `10k iterations took ${(end - start).toFixed(2)}ms! Listener calls: ${listenerCalls}`
+    )
+  }, 1000)
 }, 5000)
 
 const allTests = getTests()
