@@ -9,6 +9,7 @@
 
 #include <fbjni/fbjni.h>
 #include <functional>
+#include <NitroModules/JSIConverter.hpp>
 
 #include <functional>
 #include "Person.hpp"
@@ -49,3 +50,21 @@ namespace margelo::nitro::image {
   };
 
 } // namespace margelo::nitro::image
+
+namespace margelo::nitro {
+
+  // (Args...) => T <> JFunc_void_Person
+  template <>
+  struct JSIConverter<JFunc_void_Person::javaobject> final {
+    static inline jni::alias_ref<JFunc_void_Person::javaobject> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+      throw std::runtime_error("Cannot convert jsi::Function to JFunc_void_Person yet!");
+    }
+    static inline jsi::Value toJSI(jsi::Runtime& runtime, const jni::alias_ref<JFunc_void_Person::javaobject>& arg) {
+      throw std::runtime_error("Cannot convert JFunc_void_Person to jsi::Function yet!");
+    }
+    static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
+      throw std::runtime_error("Cannot convert jsi::Function to JFunc_void_Person yet!");
+    }
+  };
+
+} // namespace margelo::nitro

@@ -86,6 +86,7 @@ ${createFileMetadataString(`J${name}.hpp`)}
 
 #include <fbjni/fbjni.h>
 #include <functional>
+#include <NitroModules/JSIConverter.hpp>
 
 ${includes.join('\n')}
 
@@ -123,6 +124,24 @@ namespace ${cxxNamespace} {
   };
 
 } // namespace ${cxxNamespace}
+
+namespace margelo::nitro {
+
+  // (Args...) => T <> J${name}
+  template <>
+  struct JSIConverter<J${name}::javaobject> final {
+    static inline jni::alias_ref<J${name}::javaobject> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+      throw std::runtime_error("Cannot convert jsi::Function to J${name} yet!");
+    }
+    static inline jsi::Value toJSI(jsi::Runtime& runtime, const jni::alias_ref<J${name}::javaobject>& arg) {
+      throw std::runtime_error("Cannot convert J${name} to jsi::Function yet!");
+    }
+    static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
+      throw std::runtime_error("Cannot convert jsi::Function to J${name} yet!");
+    }
+  };
+
+} // namespace margelo::nitro
   `.trim()
 
   // Make sure we register all native JNI methods on app startup

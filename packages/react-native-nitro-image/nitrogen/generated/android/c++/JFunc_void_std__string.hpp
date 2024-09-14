@@ -9,6 +9,7 @@
 
 #include <fbjni/fbjni.h>
 #include <functional>
+#include <NitroModules/JSIConverter.hpp>
 
 #include <functional>
 #include <string>
@@ -47,3 +48,21 @@ namespace margelo::nitro::image {
   };
 
 } // namespace margelo::nitro::image
+
+namespace margelo::nitro {
+
+  // (Args...) => T <> JFunc_void_std__string
+  template <>
+  struct JSIConverter<JFunc_void_std__string::javaobject> final {
+    static inline jni::alias_ref<JFunc_void_std__string::javaobject> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+      throw std::runtime_error("Cannot convert jsi::Function to JFunc_void_std__string yet!");
+    }
+    static inline jsi::Value toJSI(jsi::Runtime& runtime, const jni::alias_ref<JFunc_void_std__string::javaobject>& arg) {
+      throw std::runtime_error("Cannot convert JFunc_void_std__string to jsi::Function yet!");
+    }
+    static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
+      throw std::runtime_error("Cannot convert jsi::Function to JFunc_void_std__string yet!");
+    }
+  };
+
+} // namespace margelo::nitro
