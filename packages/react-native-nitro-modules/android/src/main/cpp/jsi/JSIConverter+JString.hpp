@@ -23,10 +23,15 @@ using namespace facebook;
 template <>
 struct JSIConverter<jni::JString> final {
   static inline jni::local_ref<jni::JString> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+      // TODO: Construct JString more efficiently by avoiding std::string and instead using char*.
+      //       JSI needs to add an API for that though!
     return jni::make_jstring(arg.asString(runtime).utf8(runtime));
   }
   static inline jsi::Value toJSI(jsi::Runtime& runtime, const jni::alias_ref<jni::JString>& arg) {
-    return jsi::String::createFromUtf8(runtime, arg->toStdString());
+    JNIEnv* env = jni::Environment::current();
+    size_t length = env->GetStringLength(arg.get());
+    const char* nativeString = env->GetStringUTFChars(arg.get(), JNI_FALSE);
+    return jsi::String::createFromUtf8(runtime, reinterpret_cast<const uint8_t*>(nativeString), length);
   }
   static inline bool canConvert(jsi::Runtime&, const jsi::Value& value) {
     return value.isString();
