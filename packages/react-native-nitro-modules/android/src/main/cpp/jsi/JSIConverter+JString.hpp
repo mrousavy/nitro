@@ -23,8 +23,8 @@ using namespace facebook;
 template <>
 struct JSIConverter<jni::JString> final {
   static inline jni::local_ref<jni::JString> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
-      // TODO: Construct JString more efficiently by avoiding std::string and instead using char*.
-      //       JSI needs to add an API for that though!
+    // TODO: Construct JString more efficiently by avoiding std::string and instead using char*.
+    //       JSI needs to add an API for that though!
     return jni::make_jstring(arg.asString(runtime).utf8(runtime));
   }
   static inline jsi::Value toJSI(jsi::Runtime& runtime, const jni::alias_ref<jni::JString>& arg) {
