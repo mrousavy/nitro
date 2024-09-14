@@ -30,7 +30,12 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
   }
 
   get canBePassedByReference(): boolean {
-    return this.type.canBePassedByReference
+    switch (this.type.kind) {
+      case 'enum':
+        return true
+      default:
+        return this.type.canBePassedByReference
+    }
   }
 
   get needsSpecialHandling(): boolean {
@@ -168,6 +173,30 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
     }
   }
 
+  get isJniReferenceType(): boolean {
+    switch (this.type.kind) {
+      case 'void':
+      case 'number':
+      case 'boolean':
+      case 'bigint':
+        return false
+      default:
+        return true
+    }
+  }
+
+  get isJniHybridClass(): boolean {
+    switch (this.type.kind) {
+      case 'function':
+      case 'hybrid-object':
+      case 'array-buffer':
+      case 'map':
+        return true
+      default:
+        return false
+    }
+  }
+
   getTypeCode(language: 'kotlin' | 'c++'): string {
     switch (this.type.kind) {
       case 'array':
@@ -254,9 +283,11 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
             return this.type.getCode(language)
         }
       case 'promise':
+        const promise = getTypeAs(this.type, PromiseType)
+        const resolving = new KotlinCxxBridgedType(promise.resultingType)
         switch (language) {
           case 'c++':
-            return `JPromise::javaobject`
+            return `JPromise<${resolving.getTypeCode('c++')}>`
           default:
             return this.type.getCode(language)
         }
@@ -369,7 +400,7 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
           case 'c++':
             const hybrid = getTypeAs(this.type, HybridObjectType)
             const name = getHybridObjectName(hybrid.hybridObjectName)
-            return `std::static_pointer_cast<${name.JHybridTSpec}>(${parameterName})->getJavaPart()`
+            return `jni::make_local(std::static_pointer_cast<${name.JHybridTSpec}>(${parameterName})->getJavaPart())`
           default:
             return parameterName
         }
@@ -636,10 +667,10 @@ promise->set_value();
             return `
 [&]() {
   auto promise = std::make_shared<std::promise<${actualCppType}>>();
-  ${parameterName}->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& boxedResult) {
+  ${parameterName}->addOnResolvedListener([=](jni::alias_ref<jni::JObject> boxedResult) {
     ${indent(resolveBody, '    ')}
   });
-  ${parameterName}->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JString>& message) {
+  ${parameterName}->addOnRejectedListener([=](jni::alias_ref<jni::JString> message) {
     std::runtime_error error(message->toStdString());
     promise->set_exception(std::make_exception_ptr(error));
   });

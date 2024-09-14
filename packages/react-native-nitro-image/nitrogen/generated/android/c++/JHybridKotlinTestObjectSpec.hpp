@@ -7,9 +7,40 @@
 
 #pragma once
 
+#include <NitroModules/JSIConverter.hpp>
 #include <NitroModules/JHybridObject.hpp>
 #include <fbjni/fbjni.h>
 #include "HybridKotlinTestObjectSpec.hpp"
+
+// Forward declaration of `Car` to properly resolve imports.
+namespace margelo::nitro::image { struct Car; }
+// Forward declaration of `Powertrain` to properly resolve imports.
+namespace margelo::nitro::image { enum class Powertrain; }
+// Forward declaration of `Person` to properly resolve imports.
+namespace margelo::nitro::image { struct Person; }
+// Forward declaration of `ArrayBuffer` to properly resolve imports.
+namespace NitroModules { class ArrayBuffer; }
+// Forward declaration of `AnyMap` to properly resolve imports.
+namespace NitroModules { class AnyMap; }
+
+#include <optional>
+#include <vector>
+#include "Car.hpp"
+#include "JCar.hpp"
+#include <string>
+#include "Powertrain.hpp"
+#include "JPowertrain.hpp"
+#include "Person.hpp"
+#include "JPerson.hpp"
+#include <NitroModules/ArrayBuffer.hpp>
+#include <NitroModules/JArrayBuffer.hpp>
+#include <unordered_map>
+#include <future>
+#include <NitroModules/JPromise.hpp>
+#include <NitroModules/AnyMap.hpp>
+#include <NitroModules/JAnyMap.hpp>
+#include <functional>
+#include "JFunc_void_Person.hpp"
 
 namespace margelo::nitro::image {
 
@@ -26,6 +57,7 @@ namespace margelo::nitro::image {
     // C++ constructor (called from Java via `initHybrid()`)
     explicit JHybridKotlinTestObjectSpec(jni::alias_ref<jhybridobject> jThis) :
       HybridObject(HybridKotlinTestObjectSpec::TAG),
+      HybridBase /* JHybridObject */ (jni::static_ref_cast<JHybridObject::javaobject>(jThis)),
       _javaPart(jni::make_global(jThis)) {}
 
   public:
@@ -50,12 +82,43 @@ namespace margelo::nitro::image {
     void setSomeBuffer(const std::shared_ptr<ArrayBuffer>& someBuffer) override;
     std::unordered_map<std::string, std::string> getSomeRecord() override;
     void setSomeRecord(const std::unordered_map<std::string, std::string>& someRecord) override;
+    std::string getSomeString() override;
+    void setSomeString(const std::string& someString) override;
 
   public:
     // Methods
     std::future<void> asyncTest() override;
     std::shared_ptr<AnyMap> createMap() override;
+    std::shared_ptr<AnyMap> mapRoundtrip(const std::shared_ptr<AnyMap>& map) override;
     void addOnPersonBornListener(const std::function<void(const Person& /* p */)>& callback) override;
+
+  public:
+    // Properties (overriden by JNI)
+    double getNumberValueJNI();
+    void setNumberValueJNI(double numberValue);
+    jni::local_ref<jni::JDouble> getOptionalNumberJNI();
+    void setOptionalNumberJNI(jni::local_ref<jni::JDouble> optionalNumber);
+    jni::local_ref<jni::JArrayDouble> getPrimitiveArrayJNI();
+    void setPrimitiveArrayJNI(const jni::local_ref<jni::JArrayDouble>& primitiveArray);
+    jni::local_ref<jni::JArrayClass<JCar>> getCarCollectionJNI();
+    void setCarCollectionJNI(const jni::local_ref<jni::JArrayClass<JCar>>& carCollection);
+    jni::local_ref<JArrayBuffer::javaobject> getSomeBufferJNI();
+    void setSomeBufferJNI(const jni::local_ref<JArrayBuffer::javaobject>& someBuffer);
+    jni::local_ref<jni::JMap<jni::JString, jni::JString>> getSomeRecordJNI();
+    void setSomeRecordJNI(const jni::local_ref<jni::JMap<jni::JString, jni::JString>>& someRecord);
+    jni::local_ref<jni::JString> getSomeStringJNI();
+    void setSomeStringJNI(const jni::local_ref<jni::JString>& someString);
+
+  public:
+    // Methods (overriden by JNI)
+    jni::local_ref<JPromise<void>> asyncTestJNI();
+    jni::local_ref<JAnyMap::javaobject> createMapJNI();
+    jni::local_ref<JAnyMap::javaobject> mapRoundtripJNI(const jni::local_ref<JAnyMap::javaobject>& map);
+    void addOnPersonBornListenerJNI(const jni::local_ref<JFunc_void_Person::javaobject>& callback);
+
+  protected:
+    // Override prototype to use JNI methods
+    void loadHybridMethods() override;
 
   private:
     friend HybridBase;
@@ -64,3 +127,32 @@ namespace margelo::nitro::image {
   };
 
 } // namespace margelo::nitro::image
+
+namespace margelo::nitro {
+
+  // NativeState<{}> <> JHybridKotlinTestObjectSpec
+  template <>
+  struct JSIConverter<JHybridKotlinTestObjectSpec::javaobject> final {
+    static inline jni::local_ref<JHybridKotlinTestObjectSpec::javaobject> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+      jsi::Object object = arg.asObject(runtime);
+      if (!object.hasNativeState<JHybridObject>(runtime)) [[unlikely]] {
+        std::string typeDescription = arg.toString(runtime).utf8(runtime);
+        throw std::runtime_error("Cannot convert \"" + typeDescription + "\" to JHybridObject! It does not have a NativeState.");
+      }
+      std::shared_ptr<jsi::NativeState> nativeState = object.getNativeState(runtime);
+      std::shared_ptr<JHybridKotlinTestObjectSpec> jhybridObject = std::dynamic_pointer_cast<JHybridKotlinTestObjectSpec>(nativeState);
+      return jni::make_local(jhybridObject->getJavaPart());
+    }
+    static inline jsi::Value toJSI(jsi::Runtime& runtime, const jni::alias_ref<JHybridKotlinTestObjectSpec::javaobject>& arg) {
+      return arg->cthis()->toObject(runtime);
+    }
+    static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
+      if (!value.isObject()) {
+        return false;
+      }
+      jsi::Object object = value.getObject(runtime);
+      return object.hasNativeState<JHybridKotlinTestObjectSpec>(runtime);
+    }
+  };
+
+} // namespace margelo::nitro

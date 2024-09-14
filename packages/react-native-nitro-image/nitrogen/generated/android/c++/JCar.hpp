@@ -9,6 +9,8 @@
 
 #include <fbjni/fbjni.h>
 #include "Car.hpp"
+#include <NitroModules/JSIConverter.hpp>
+#include <NitroModules/JSIConverter+JNI.hpp>
 
 #include "JPerson.hpp"
 #include "JPowertrain.hpp"
@@ -30,10 +32,45 @@ namespace margelo::nitro::image {
 
   public:
     /**
+     * Create a Java/Kotlin-based struct by copying all values from the given C++ struct to Java.
+     */
+    [[maybe_unused]]
+    static jni::local_ref<JCar::javaobject> fromCpp(const Car& value) {
+      return newInstance(
+        value.year,
+        jni::make_jstring(value.make),
+        jni::make_jstring(value.model),
+        value.power,
+        JPowertrain::fromCpp(value.powertrain),
+        value.driver.has_value() ? JPerson::fromCpp(value.driver.value()) : nullptr
+      );
+    }
+
+    /**
+     * Create a Java/Kotlin-based struct from the given Java values.
+     */
+    static jni::local_ref<JCar::javaobject> create(double year,
+                                                   const jni::alias_ref<jni::JString>& make,
+                                                   const jni::alias_ref<jni::JString>& model,
+                                                   double power,
+                                                   const jni::alias_ref<JPowertrain>& powertrain,
+                                                   const jni::alias_ref<JPerson>& driver) {
+      return newInstance(
+        year,
+        make,
+        model,
+        power,
+        powertrain,
+        driver
+      );
+    }
+
+  public:
+    /**
      * Convert this Java/Kotlin-based struct to the C++ struct Car by copying all values to C++.
      */
     [[maybe_unused]]
-    Car toCpp() const {
+    [[nodiscard]] Car toCpp() const {
       static const auto clazz = javaClassStatic();
       static const auto fieldYear = clazz->getField<double>("year");
       double year = this->getFieldValue(fieldYear);
@@ -58,20 +95,80 @@ namespace margelo::nitro::image {
     }
 
   public:
-    /**
-     * Create a Java/Kotlin-based struct by copying all values from the given C++ struct to Java.
-     */
-    [[maybe_unused]]
-    static jni::local_ref<JCar::javaobject> fromCpp(const Car& value) {
-      return newInstance(
-        value.year,
-        jni::make_jstring(value.make),
-        jni::make_jstring(value.model),
-        value.power,
-        JPowertrain::fromCpp(value.powertrain),
-        value.driver.has_value() ? JPerson::fromCpp(value.driver.value()) : nullptr
-      );
+    [[nodiscard]] double getYear() const {
+      static const auto field = javaClassStatic()->getField<double>("year");
+      return this->getFieldValue(field);
+    }
+    
+    [[nodiscard]] jni::local_ref<jni::JString> getMake() const {
+      static const auto field = javaClassStatic()->getField<jni::JString>("make");
+      return this->getFieldValue(field);
+    }
+    
+    [[nodiscard]] jni::local_ref<jni::JString> getModel() const {
+      static const auto field = javaClassStatic()->getField<jni::JString>("model");
+      return this->getFieldValue(field);
+    }
+    
+    [[nodiscard]] double getPower() const {
+      static const auto field = javaClassStatic()->getField<double>("power");
+      return this->getFieldValue(field);
+    }
+    
+    [[nodiscard]] jni::local_ref<JPowertrain> getPowertrain() const {
+      static const auto field = javaClassStatic()->getField<JPowertrain>("powertrain");
+      return this->getFieldValue(field);
+    }
+    
+    [[nodiscard]] jni::local_ref<JPerson> getDriver() const {
+      static const auto field = javaClassStatic()->getField<JPerson>("driver");
+      return this->getFieldValue(field);
     }
   };
 
 } // namespace margelo::nitro::image
+
+namespace margelo::nitro {
+
+  using namespace margelo::nitro::image;
+
+  // C++/JNI JCar <> JS Car (object)
+  template <>
+  struct JSIConverter<JCar> {
+    static inline jni::local_ref<JCar> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+      jsi::Object obj = arg.asObject(runtime);
+      return JCar::create(
+        JSIConverter<double>::fromJSI(runtime, obj.getProperty(runtime, "year")),
+        JSIConverter<jni::JString>::fromJSI(runtime, obj.getProperty(runtime, "make")),
+        JSIConverter<jni::JString>::fromJSI(runtime, obj.getProperty(runtime, "model")),
+        JSIConverter<double>::fromJSI(runtime, obj.getProperty(runtime, "power")),
+        JSIConverter<JPowertrain>::fromJSI(runtime, obj.getProperty(runtime, "powertrain")),
+        JSIConverter<JPerson>::fromJSI(runtime, obj.getProperty(runtime, "driver"))
+      );
+    }
+    static inline jsi::Value toJSI(jsi::Runtime& runtime, const jni::alias_ref<JCar>& arg) {
+      jsi::Object obj(runtime);
+      obj.setProperty(runtime, "year", JSIConverter<double>::toJSI(runtime, arg->getYear()));
+      obj.setProperty(runtime, "make", JSIConverter<jni::JString>::toJSI(runtime, arg->getMake()));
+      obj.setProperty(runtime, "model", JSIConverter<jni::JString>::toJSI(runtime, arg->getModel()));
+      obj.setProperty(runtime, "power", JSIConverter<double>::toJSI(runtime, arg->getPower()));
+      obj.setProperty(runtime, "powertrain", JSIConverter<JPowertrain>::toJSI(runtime, arg->getPowertrain()));
+      obj.setProperty(runtime, "driver", JSIConverter<JPerson>::toJSI(runtime, arg->getDriver()));
+      return obj;
+    }
+    static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
+      if (!value.isObject()) {
+        return false;
+      }
+      jsi::Object obj = value.getObject(runtime);
+      if (!JSIConverter<double>::canConvert(runtime, obj.getProperty(runtime, "year"))) return false;
+      if (!JSIConverter<jni::JString>::canConvert(runtime, obj.getProperty(runtime, "make"))) return false;
+      if (!JSIConverter<jni::JString>::canConvert(runtime, obj.getProperty(runtime, "model"))) return false;
+      if (!JSIConverter<double>::canConvert(runtime, obj.getProperty(runtime, "power"))) return false;
+      if (!JSIConverter<JPowertrain>::canConvert(runtime, obj.getProperty(runtime, "powertrain"))) return false;
+      if (!JSIConverter<JPerson>::canConvert(runtime, obj.getProperty(runtime, "driver"))) return false;
+      return true;
+    }
+  };
+
+} // namespace margelo::nitro

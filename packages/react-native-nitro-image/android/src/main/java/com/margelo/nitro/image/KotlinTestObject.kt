@@ -14,6 +14,7 @@ class KotlinTestObject: HybridKotlinTestObjectSpec() {
     override var primitiveArray: DoubleArray = doubleArrayOf()
     override var carCollection: Array<Car> = emptyArray()
     override var someBuffer: ArrayBuffer
+    override var someString: String = ""
 
     override val memorySize: Long
         get() = 0
@@ -27,6 +28,10 @@ class KotlinTestObject: HybridKotlinTestObjectSpec() {
         return Promise.async {
             Thread.sleep(3000)
         }
+    }
+
+    override fun mapRoundtrip(map: AnyMap): AnyMap {
+        return map
     }
 
     override fun createMap(): AnyMap {

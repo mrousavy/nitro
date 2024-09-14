@@ -68,6 +68,12 @@ abstract class HybridKotlinTestObjectSpec: HybridObject() {
   @set:DoNotStrip
   @set:Keep
   abstract var someRecord: Map<String, String>
+  
+  @get:DoNotStrip
+  @get:Keep
+  @set:DoNotStrip
+  @set:Keep
+  abstract var someString: String
 
   // Methods
   @DoNotStrip
@@ -77,6 +83,10 @@ abstract class HybridKotlinTestObjectSpec: HybridObject() {
   @DoNotStrip
   @Keep
   abstract fun createMap(): AnyMap
+  
+  @DoNotStrip
+  @Keep
+  abstract fun mapRoundtrip(map: AnyMap): AnyMap
   
   @DoNotStrip
   @Keep

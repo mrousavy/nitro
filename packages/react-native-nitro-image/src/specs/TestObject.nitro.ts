@@ -164,8 +164,11 @@ export interface KotlinTestObject extends HybridObject<{ android: 'kotlin' }> {
   asyncTest(): Promise<void>
 
   createMap(): AnyMap
+  mapRoundtrip(map: AnyMap): AnyMap
 
   addOnPersonBornListener(callback: (p: Person) => void): void
 
   someRecord: Record<string, string>
+
+  someString: string
 }

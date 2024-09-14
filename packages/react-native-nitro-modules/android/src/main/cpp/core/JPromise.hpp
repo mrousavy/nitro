@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include "JNativeFunction.hpp"
 #include <fbjni/fbjni.h>
 
 namespace margelo::nitro {
@@ -16,72 +17,76 @@ using namespace facebook;
 /**
  * Represents a Promise implemented in Java.
  */
-class JPromise final : public jni::HybridClass<JPromise> {
+template <typename T>
+struct JPromise final : public jni::JavaClass<JPromise<T>> {
+public:
+  static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/core/Promise;";
+  using OnResolvedFunc = std::function<void(jni::alias_ref<T>)>;
+  using OnRejectedFunc = std::function<void(jni::alias_ref<jni::JString>)>;
+
+  using jni::JavaClass<JPromise<T>>::javaClassStatic;
+  using jni::JavaClass<JPromise<T>>::self;
+
+public:
+  void resolve(jni::alias_ref<jni::JObject> result) {
+    static const auto method = javaClassStatic()->template getMethod<void(jni::alias_ref<jni::JObject>)>("resolve");
+    method(self(), result);
+  }
+  void reject(jni::alias_ref<jni::JString> error) {
+    static const auto method = javaClassStatic()->template getMethod<void(jni::alias_ref<jni::JString>)>("reject");
+    method(self(), error);
+  }
+
+public:
+  void addOnResolvedListener(OnResolvedFunc&& onResolved) {
+    static const auto method =
+        javaClassStatic()->template getMethod<void(jni::alias_ref<JNativeFunction::javaobject>)>("addOnResolvedListener");
+    auto nativeFunction = JNativeFunction::create(
+        [onResolved = std::move(onResolved)](const jni::alias_ref<jni::JObject>& value) { onResolved(jni::static_ref_cast<T>(value)); });
+    method(self(), nativeFunction);
+  }
+  void addOnRejectedListener(OnRejectedFunc&& onRejected) {
+    static const auto method =
+        javaClassStatic()->template getMethod<void(jni::alias_ref<JNativeFunction::javaobject>)>("addOnRejectedListener");
+    auto nativeFunction = JNativeFunction::create([onResolved = std::move(onRejected)](const jni::alias_ref<jni::JObject>& value) {
+      onResolved(jni::static_ref_cast<jni::JString>(value));
+    });
+    method(self(), nativeFunction);
+  }
+};
+
+template <>
+struct JPromise<void> final : public jni::JavaClass<JPromise<void>> {
 public:
   static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/core/Promise;";
   using OnResolvedFunc = std::function<void(jni::alias_ref<jni::JObject>)>;
   using OnRejectedFunc = std::function<void(jni::alias_ref<jni::JString>)>;
 
 public:
-  /**
-   * Create a new, still unresolved `JPromise` from Java.
-   */
-  static jni::local_ref<JPromise::jhybriddata> initHybrid(jni::alias_ref<jhybridobject>) {
-    return makeCxxInstance();
-  }
-
-public:
-  void resolve(jni::alias_ref<jni::JObject> result) {
-    _result = jni::make_global(result);
-    for (const auto& onResolved : _onResolvedListeners) {
-      onResolved(_result);
-    }
+  void resolve() {
+    static const auto method = javaClassStatic()->template getMethod<void(jni::alias_ref<jni::JObject>)>("resolve");
+    method(self(), nullptr);
   }
   void reject(jni::alias_ref<jni::JString> error) {
-    _error = jni::make_global(error);
-    for (const auto& onRejected : _onRejectedListeners) {
-      onRejected(_error);
-    }
+    static const auto method = javaClassStatic()->template getMethod<void(jni::alias_ref<jni::JString>)>("reject");
+    method(self(), error);
   }
 
 public:
   void addOnResolvedListener(OnResolvedFunc&& onResolved) {
-    if (_result != nullptr) {
-      // Promise is already resolved! Call the callback immediately
-      onResolved(_result);
-    } else {
-      // Promise is not yet resolved, put the listener in our queue.
-      _onResolvedListeners.push_back(std::move(onResolved));
-    }
+    static const auto method =
+        javaClassStatic()->template getMethod<void(jni::alias_ref<JNativeFunction::javaobject>)>("addOnResolvedListener");
+    auto nativeFunction =
+        JNativeFunction::create([onResolved = std::move(onResolved)](const jni::alias_ref<jni::JObject>& value) { onResolved(value); });
+    method(self(), nativeFunction);
   }
   void addOnRejectedListener(OnRejectedFunc&& onRejected) {
-    if (_error != nullptr) {
-      // Promise is already rejected! Call the callback immediately
-      onRejected(_error);
-    } else {
-      // Promise is not yet rejected, put the listener in our queue.
-      _onRejectedListeners.push_back(std::move(onRejected));
-    }
-  }
-
-private:
-  JPromise() {}
-
-private:
-  friend HybridBase;
-  using HybridBase::HybridBase;
-  jni::global_ref<jni::JObject> _result;
-  jni::global_ref<jni::JString> _error;
-  std::vector<OnResolvedFunc> _onResolvedListeners;
-  std::vector<OnRejectedFunc> _onRejectedListeners;
-
-public:
-  static void registerNatives() {
-    registerHybrid({
-        makeNativeMethod("initHybrid", JPromise::initHybrid),
-        makeNativeMethod("nativeResolve", JPromise::resolve),
-        makeNativeMethod("nativeReject", JPromise::reject),
+    static const auto method =
+        javaClassStatic()->template getMethod<void(jni::alias_ref<JNativeFunction::javaobject>)>("addOnRejectedListener");
+    auto nativeFunction = JNativeFunction::create([onResolved = std::move(onRejected)](const jni::alias_ref<jni::JObject>& value) {
+      onResolved(jni::static_ref_cast<jni::JString>(value));
     });
+    method(self(), nativeFunction);
   }
 };
 

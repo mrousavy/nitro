@@ -9,6 +9,8 @@
 
 #include <fbjni/fbjni.h>
 #include "Person.hpp"
+#include <NitroModules/JSIConverter.hpp>
+#include <NitroModules/JSIConverter+JNI.hpp>
 
 #include <string>
 
@@ -25,10 +27,33 @@ namespace margelo::nitro::image {
 
   public:
     /**
+     * Create a Java/Kotlin-based struct by copying all values from the given C++ struct to Java.
+     */
+    [[maybe_unused]]
+    static jni::local_ref<JPerson::javaobject> fromCpp(const Person& value) {
+      return newInstance(
+        jni::make_jstring(value.name),
+        value.age
+      );
+    }
+
+    /**
+     * Create a Java/Kotlin-based struct from the given Java values.
+     */
+    static jni::local_ref<JPerson::javaobject> create(const jni::alias_ref<jni::JString>& name,
+                                                      double age) {
+      return newInstance(
+        name,
+        age
+      );
+    }
+
+  public:
+    /**
      * Convert this Java/Kotlin-based struct to the C++ struct Person by copying all values to C++.
      */
     [[maybe_unused]]
-    Person toCpp() const {
+    [[nodiscard]] Person toCpp() const {
       static const auto clazz = javaClassStatic();
       static const auto fieldName = clazz->getField<jni::JString>("name");
       jni::local_ref<jni::JString> name = this->getFieldValue(fieldName);
@@ -41,16 +66,48 @@ namespace margelo::nitro::image {
     }
 
   public:
-    /**
-     * Create a Java/Kotlin-based struct by copying all values from the given C++ struct to Java.
-     */
-    [[maybe_unused]]
-    static jni::local_ref<JPerson::javaobject> fromCpp(const Person& value) {
-      return newInstance(
-        jni::make_jstring(value.name),
-        value.age
-      );
+    [[nodiscard]] jni::local_ref<jni::JString> getName() const {
+      static const auto field = javaClassStatic()->getField<jni::JString>("name");
+      return this->getFieldValue(field);
+    }
+    
+    [[nodiscard]] double getAge() const {
+      static const auto field = javaClassStatic()->getField<double>("age");
+      return this->getFieldValue(field);
     }
   };
 
 } // namespace margelo::nitro::image
+
+namespace margelo::nitro {
+
+  using namespace margelo::nitro::image;
+
+  // C++/JNI JPerson <> JS Person (object)
+  template <>
+  struct JSIConverter<JPerson> {
+    static inline jni::local_ref<JPerson> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+      jsi::Object obj = arg.asObject(runtime);
+      return JPerson::create(
+        JSIConverter<jni::JString>::fromJSI(runtime, obj.getProperty(runtime, "name")),
+        JSIConverter<double>::fromJSI(runtime, obj.getProperty(runtime, "age"))
+      );
+    }
+    static inline jsi::Value toJSI(jsi::Runtime& runtime, const jni::alias_ref<JPerson>& arg) {
+      jsi::Object obj(runtime);
+      obj.setProperty(runtime, "name", JSIConverter<jni::JString>::toJSI(runtime, arg->getName()));
+      obj.setProperty(runtime, "age", JSIConverter<double>::toJSI(runtime, arg->getAge()));
+      return obj;
+    }
+    static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
+      if (!value.isObject()) {
+        return false;
+      }
+      jsi::Object obj = value.getObject(runtime);
+      if (!JSIConverter<jni::JString>::canConvert(runtime, obj.getProperty(runtime, "name"))) return false;
+      if (!JSIConverter<double>::canConvert(runtime, obj.getProperty(runtime, "age"))) return false;
+      return true;
+    }
+  };
+
+} // namespace margelo::nitro

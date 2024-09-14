@@ -33,6 +33,7 @@ include_directories(
   ../cpp/utils
   # Android-specific C++ includes
   src/main/cpp/core
+  src/main/cpp/jsi
   src/main/cpp/registry
   src/main/cpp/platform
   src/main/cpp/utils

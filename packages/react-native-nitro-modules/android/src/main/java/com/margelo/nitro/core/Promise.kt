@@ -2,6 +2,7 @@ package com.margelo.nitro.core
 
 import androidx.annotation.Keep
 import com.facebook.jni.HybridData
+import com.facebook.jni.NativeRunnable
 import com.facebook.proguard.annotations.DoNotStrip
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -19,17 +20,21 @@ import kotlin.concurrent.thread
  * - [Promise.rejected]`(..)` - Creates a new already rejected Promise.
  * - [Promise]`()` - Creates a new Promise with fully manual control over the `resolve(..)`/`reject(..)` functions.
  */
-@Suppress("KotlinJniMissingFunction")
+@Suppress("JoinDeclarationAndAssignment")
 @Keep
 @DoNotStrip
 class Promise<T> {
-  private val mHybridData: HybridData
+  private val onResolvedListeners: ArrayList<(T) -> Unit>
+  private val onRejectedListeners: ArrayList<(String) -> Unit>
+  private var result: T? = null
+  private var error: String? = null
 
   /**
    * Creates a new Promise with fully manual control over the `resolve(..)`/`reject(..)` functions
    */
   init {
-    mHybridData = initHybrid()
+    onResolvedListeners = arrayListOf()
+    onRejectedListeners = arrayListOf()
   }
 
   /**
@@ -37,7 +42,17 @@ class Promise<T> {
    * Any `onResolved` listeners will be invoked.
    */
   fun resolve(result: T) {
-    nativeResolve(result as Any)
+    this.result = result
+    onResolvedListeners.forEach { listener -> listener(result) }
+  }
+
+  /**
+   * Rejects the Promise with the given error.
+   * Any `onRejected` listeners will be invoked.
+   */
+  fun reject(error: String) {
+    this.error = error
+    onRejectedListeners.forEach { listener -> listener(error) }
   }
 
   /**
@@ -45,13 +60,44 @@ class Promise<T> {
    * Any `onRejected` listeners will be invoked.
    */
   fun reject(error: Error) {
-    nativeReject(error.toString())
+    reject(error.toString())
   }
 
-  // C++ functions
-  private external fun nativeResolve(result: Any)
-  private external fun nativeReject(error: String)
-  private external fun initHybrid(): HybridData
+  /**
+   * Add a listener that will be called when this Promise will be resolved.
+   * If this Promise is already resolved, [listener] will be called immediately.
+   */
+  fun addOnResolvedListener(listener: (T) -> Unit) {
+    if (this.result != null) {
+      listener(this.result!!)
+    } else {
+      onResolvedListeners.add(listener)
+    }
+  }
+
+  /**
+   * Add a listener that will be called when this Promise will be rejected.
+   * If this Promise is already rejected, [listener] will be called immediately.
+   */
+  fun addOnRejectedListener(listener: (String) -> Unit) {
+    if (this.error != null) {
+      listener(this.error.toString())
+    } else {
+      onRejectedListeners.add(listener)
+    }
+  }
+
+  @Keep
+  @DoNotStrip
+  private fun addOnResolvedListener(listener: NativeFunction<T>) {
+    this.addOnResolvedListener { value -> listener.invoke(value) }
+  }
+
+  @Keep
+  @DoNotStrip
+  private fun addOnRejectedListener(listener: NativeFunction<String>) {
+    this.addOnRejectedListener { value -> listener.invoke(value) }
+  }
 
   companion object {
     private val defaultScope = CoroutineScope(Dispatchers.Default)

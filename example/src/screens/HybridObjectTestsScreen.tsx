@@ -1,12 +1,32 @@
 import * as React from 'react'
 
 import { StyleSheet, View, Text, ScrollView, Button } from 'react-native'
-import { HybridTestObject } from 'react-native-nitro-image'
+import {
+  HybridTestObject,
+  HybridKotlinTestObject,
+} from 'react-native-nitro-image'
 import { getTests, type TestRunner } from '../getTests'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { logPrototypeChain } from '../logPrototypeChain'
 
 logPrototypeChain(HybridTestObject)
+logPrototypeChain(HybridKotlinTestObject)
+
+setTimeout(() => {
+  let listenerCalls = 0
+  const start = performance.now()
+  for (let i = 0; i < 10_00; i++) {
+    HybridKotlinTestObject.addOnPersonBornListener(() => {
+      listenerCalls++
+    })
+  }
+  const end = performance.now()
+  setTimeout(() => {
+    console.log(
+      `10k iterations took ${(end - start).toFixed(2)}ms! Listener calls: ${listenerCalls}`
+    )
+  }, 1000)
+}, 5000)
 
 const allTests = getTests()
 

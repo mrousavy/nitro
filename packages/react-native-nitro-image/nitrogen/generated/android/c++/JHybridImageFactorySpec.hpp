@@ -7,9 +7,19 @@
 
 #pragma once
 
+#include <NitroModules/JSIConverter.hpp>
 #include <NitroModules/JHybridObject.hpp>
 #include <fbjni/fbjni.h>
 #include "HybridImageFactorySpec.hpp"
+
+// Forward declaration of `HybridImageSpec` to properly resolve imports.
+namespace margelo::nitro::image { class HybridImageSpec; }
+
+#include <memory>
+#include "HybridImageSpec.hpp"
+#include "JHybridImageSpec.hpp"
+#include <NitroModules/JNISharedPtr.hpp>
+#include <string>
 
 namespace margelo::nitro::image {
 
@@ -26,6 +36,7 @@ namespace margelo::nitro::image {
     // C++ constructor (called from Java via `initHybrid()`)
     explicit JHybridImageFactorySpec(jni::alias_ref<jhybridobject> jThis) :
       HybridObject(HybridImageFactorySpec::TAG),
+      HybridBase /* JHybridObject */ (jni::static_ref_cast<JHybridObject::javaobject>(jThis)),
       _javaPart(jni::make_global(jThis)) {}
 
   public:
@@ -47,6 +58,21 @@ namespace margelo::nitro::image {
     std::shared_ptr<margelo::nitro::image::HybridImageSpec> loadImageFromSystemName(const std::string& path) override;
     std::shared_ptr<margelo::nitro::image::HybridImageSpec> bounceBack(const std::shared_ptr<margelo::nitro::image::HybridImageSpec>& image) override;
 
+  public:
+    // Properties (overriden by JNI)
+    
+
+  public:
+    // Methods (overriden by JNI)
+    jni::local_ref<JHybridImageSpec::javaobject> loadImageFromFileJNI(const jni::local_ref<jni::JString>& path);
+    jni::local_ref<JHybridImageSpec::javaobject> loadImageFromURLJNI(const jni::local_ref<jni::JString>& path);
+    jni::local_ref<JHybridImageSpec::javaobject> loadImageFromSystemNameJNI(const jni::local_ref<jni::JString>& path);
+    jni::local_ref<JHybridImageSpec::javaobject> bounceBackJNI(const jni::local_ref<JHybridImageSpec::javaobject>& image);
+
+  protected:
+    // Override prototype to use JNI methods
+    void loadHybridMethods() override;
+
   private:
     friend HybridBase;
     using HybridBase::HybridBase;
@@ -54,3 +80,32 @@ namespace margelo::nitro::image {
   };
 
 } // namespace margelo::nitro::image
+
+namespace margelo::nitro {
+
+  // NativeState<{}> <> JHybridImageFactorySpec
+  template <>
+  struct JSIConverter<JHybridImageFactorySpec::javaobject> final {
+    static inline jni::local_ref<JHybridImageFactorySpec::javaobject> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+      jsi::Object object = arg.asObject(runtime);
+      if (!object.hasNativeState<JHybridObject>(runtime)) [[unlikely]] {
+        std::string typeDescription = arg.toString(runtime).utf8(runtime);
+        throw std::runtime_error("Cannot convert \"" + typeDescription + "\" to JHybridObject! It does not have a NativeState.");
+      }
+      std::shared_ptr<jsi::NativeState> nativeState = object.getNativeState(runtime);
+      std::shared_ptr<JHybridImageFactorySpec> jhybridObject = std::dynamic_pointer_cast<JHybridImageFactorySpec>(nativeState);
+      return jni::make_local(jhybridObject->getJavaPart());
+    }
+    static inline jsi::Value toJSI(jsi::Runtime& runtime, const jni::alias_ref<JHybridImageFactorySpec::javaobject>& arg) {
+      return arg->cthis()->toObject(runtime);
+    }
+    static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
+      if (!value.isObject()) {
+        return false;
+      }
+      jsi::Object object = value.getObject(runtime);
+      return object.hasNativeState<JHybridImageFactorySpec>(runtime);
+    }
+  };
+
+} // namespace margelo::nitro

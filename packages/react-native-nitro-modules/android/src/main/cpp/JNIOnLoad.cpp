@@ -4,7 +4,7 @@
 #include "JAnyValue.hpp"
 #include "JArrayBuffer.hpp"
 #include "JHybridObjectRegistry.hpp"
-#include "JPromise.hpp"
+#include "JNativeFunction.hpp"
 #include "RegisterNativeNitroModules.hpp"
 #include <fbjni/fbjni.h>
 #include <jni.h>
@@ -21,6 +21,6 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void*) {
     JArrayBuffer::registerNatives();
     JAnyMap::registerNatives();
     JAnyValue::registerNatives();
-    JPromise::registerNatives();
+    JNativeFunction::registerNatives();
   });
 }

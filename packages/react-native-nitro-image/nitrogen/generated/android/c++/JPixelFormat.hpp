@@ -9,6 +9,7 @@
 
 #include <fbjni/fbjni.h>
 #include "PixelFormat.hpp"
+#include <NitroModules/JSIConverter.hpp>
 
 namespace margelo::nitro::image {
 
@@ -26,7 +27,7 @@ namespace margelo::nitro::image {
      * Convert this Java/Kotlin-based enum to the C++ enum PixelFormat.
      */
     [[maybe_unused]]
-    PixelFormat toCpp() const {
+    [[nodiscard]] PixelFormat toCpp() const {
       static const auto clazz = javaClassStatic();
       static const auto fieldOrdinal = clazz->getField<int>("ordinal");
       int ordinal = this->getFieldValue(fieldOrdinal);
@@ -38,7 +39,7 @@ namespace margelo::nitro::image {
      * Create a Java/Kotlin-based enum with the given C++ enum's value.
      */
     [[maybe_unused]]
-    static jni::alias_ref<JPixelFormat> fromCpp(PixelFormat value) {
+    static jni::local_ref<JPixelFormat> fromCpp(PixelFormat value) {
       static const auto clazz = javaClassStatic();
       static const auto fieldRGB = clazz->getStaticField<JPixelFormat>("RGB");
       static const auto fieldYUV_8BIT = clazz->getStaticField<JPixelFormat>("YUV_8BIT");
@@ -46,11 +47,11 @@ namespace margelo::nitro::image {
       
       switch (value) {
         case PixelFormat::RGB:
-          return clazz->getStaticFieldValue(fieldRGB);
+          return jni::make_local(clazz->getStaticFieldValue(fieldRGB));
         case PixelFormat::YUV_8BIT:
-          return clazz->getStaticFieldValue(fieldYUV_8BIT);
+          return jni::make_local(clazz->getStaticFieldValue(fieldYUV_8BIT));
         case PixelFormat::YUV_10BIT:
-          return clazz->getStaticFieldValue(fieldYUV_10BIT);
+          return jni::make_local(clazz->getStaticFieldValue(fieldYUV_10BIT));
         default:
           std::string stringValue = std::to_string(static_cast<int>(value));
           throw std::runtime_error("Invalid enum value (" + stringValue + "!");
@@ -59,3 +60,26 @@ namespace margelo::nitro::image {
   };
 
 } // namespace margelo::nitro::image
+
+
+namespace margelo::nitro {
+
+  using namespace margelo::nitro::image;
+
+  // C++/JNI JPixelFormat <> JS PixelFormat
+  template <>
+  struct JSIConverter<JPixelFormat> {
+    static inline jni::local_ref<JPixelFormat> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+      PixelFormat cppValue = JSIConverter<PixelFormat>::fromJSI(runtime, arg);
+      return JPixelFormat::fromCpp(cppValue);
+    }
+    static inline jsi::Value toJSI(jsi::Runtime& runtime, const jni::alias_ref<JPixelFormat>& arg) {
+      PixelFormat cppValue = arg->toCpp();
+      return JSIConverter<PixelFormat>::toJSI(runtime, cppValue);
+    }
+    static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
+      return JSIConverter<PixelFormat>::canConvert(runtime, value);
+    }
+  };
+
+} // namespace margelo::nitro
