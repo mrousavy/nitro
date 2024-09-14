@@ -39,16 +39,16 @@ namespace margelo::nitro::image {
      * Create a Java/Kotlin-based enum with the given C++ enum's value.
      */
     [[maybe_unused]]
-    static jni::alias_ref<JImageFormat> fromCpp(ImageFormat value) {
+    static jni::local_ref<JImageFormat> fromCpp(ImageFormat value) {
       static const auto clazz = javaClassStatic();
       static const auto fieldJPG = clazz->getStaticField<JImageFormat>("JPG");
       static const auto fieldPNG = clazz->getStaticField<JImageFormat>("PNG");
       
       switch (value) {
         case ImageFormat::JPG:
-          return clazz->getStaticFieldValue(fieldJPG);
+          return jni::make_local(clazz->getStaticFieldValue(fieldJPG));
         case ImageFormat::PNG:
-          return clazz->getStaticFieldValue(fieldPNG);
+          return jni::make_local(clazz->getStaticFieldValue(fieldPNG));
         default:
           std::string stringValue = std::to_string(static_cast<int>(value));
           throw std::runtime_error("Invalid enum value (" + stringValue + "!");
@@ -66,7 +66,7 @@ namespace margelo::nitro {
   // C++/JNI JImageFormat <> JS ImageFormat
   template <>
   struct JSIConverter<JImageFormat> {
-    static inline jni::alias_ref<JImageFormat> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+    static inline jni::local_ref<JImageFormat> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       ImageFormat cppValue = JSIConverter<ImageFormat>::fromJSI(runtime, arg);
       return JImageFormat::fromCpp(cppValue);
     }

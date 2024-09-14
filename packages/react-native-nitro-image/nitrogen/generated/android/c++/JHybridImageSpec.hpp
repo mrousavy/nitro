@@ -76,8 +76,8 @@ namespace margelo::nitro::image {
 
   public:
     // Methods (overriden by JNI)
-    double toArrayBufferJNI(const jni::alias_ref<JImageFormat>& format);
-    void saveToFileJNI(const jni::alias_ref<jni::JString>& path, const jni::alias_ref<JFunc_void_std__string::javaobject>& onFinished);
+    double toArrayBufferJNI(const jni::local_ref<JImageFormat>& format);
+    void saveToFileJNI(const jni::local_ref<jni::JString>& path, const jni::local_ref<JFunc_void_std__string::javaobject>& onFinished);
 
   protected:
     // Override prototype to use JNI methods
@@ -96,7 +96,7 @@ namespace margelo::nitro {
   // NativeState<{}> <> JHybridImageSpec
   template <>
   struct JSIConverter<JHybridImageSpec::javaobject> final {
-    static inline jni::global_ref<JHybridImageSpec::javaobject> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+    static inline jni::local_ref<JHybridImageSpec::javaobject> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       jsi::Object object = arg.asObject(runtime);
       if (!object.hasNativeState<JHybridObject>(runtime)) [[unlikely]] {
         std::string typeDescription = arg.toString(runtime).utf8(runtime);
@@ -104,7 +104,7 @@ namespace margelo::nitro {
       }
       std::shared_ptr<jsi::NativeState> nativeState = object.getNativeState(runtime);
       std::shared_ptr<JHybridImageSpec> jhybridObject = std::dynamic_pointer_cast<JHybridImageSpec>(nativeState);
-      return jhybridObject->getJavaPart();
+      return jni::make_local(jhybridObject->getJavaPart());
     }
     static inline jsi::Value toJSI(jsi::Runtime& runtime, const jni::local_ref<JHybridImageSpec::javaobject>& arg) {
       return arg->cthis()->toObject(runtime);

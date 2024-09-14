@@ -42,7 +42,7 @@ namespace margelo::nitro::image {
     return JNISharedPtr::make_shared_from_jni<JHybridImageSpec>(jni::make_global(result));
   }
   std::shared_ptr<margelo::nitro::image::HybridImageSpec> JHybridImageFactorySpec::bounceBack(const std::shared_ptr<margelo::nitro::image::HybridImageSpec>& image) {
-    auto result = this->bounceBackJNI(std::static_pointer_cast<JHybridImageSpec>(image)->getJavaPart());
+    auto result = this->bounceBackJNI(jni::make_local(std::static_pointer_cast<JHybridImageSpec>(image)->getJavaPart()));
     return JNISharedPtr::make_shared_from_jni<JHybridImageSpec>(jni::make_global(result));
   }
 
@@ -50,20 +50,20 @@ namespace margelo::nitro::image {
   
 
   // JNI Methods
-  jni::local_ref<JHybridImageSpec::javaobject> JHybridImageFactorySpec::loadImageFromFileJNI(const jni::alias_ref<jni::JString>& path) {
-    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JHybridImageSpec::javaobject>(jni::alias_ref<jni::JString> /* path */)>("loadImageFromFile");
+  jni::local_ref<JHybridImageSpec::javaobject> JHybridImageFactorySpec::loadImageFromFileJNI(const jni::local_ref<jni::JString>& path) {
+    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JHybridImageSpec::javaobject>(jni::local_ref<jni::JString> /* path */)>("loadImageFromFile");
     return method(_javaPart, path);
   }
-  jni::local_ref<JHybridImageSpec::javaobject> JHybridImageFactorySpec::loadImageFromURLJNI(const jni::alias_ref<jni::JString>& path) {
-    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JHybridImageSpec::javaobject>(jni::alias_ref<jni::JString> /* path */)>("loadImageFromURL");
+  jni::local_ref<JHybridImageSpec::javaobject> JHybridImageFactorySpec::loadImageFromURLJNI(const jni::local_ref<jni::JString>& path) {
+    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JHybridImageSpec::javaobject>(jni::local_ref<jni::JString> /* path */)>("loadImageFromURL");
     return method(_javaPart, path);
   }
-  jni::local_ref<JHybridImageSpec::javaobject> JHybridImageFactorySpec::loadImageFromSystemNameJNI(const jni::alias_ref<jni::JString>& path) {
-    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JHybridImageSpec::javaobject>(jni::alias_ref<jni::JString> /* path */)>("loadImageFromSystemName");
+  jni::local_ref<JHybridImageSpec::javaobject> JHybridImageFactorySpec::loadImageFromSystemNameJNI(const jni::local_ref<jni::JString>& path) {
+    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JHybridImageSpec::javaobject>(jni::local_ref<jni::JString> /* path */)>("loadImageFromSystemName");
     return method(_javaPart, path);
   }
-  jni::local_ref<JHybridImageSpec::javaobject> JHybridImageFactorySpec::bounceBackJNI(const jni::alias_ref<JHybridImageSpec::javaobject>& image) {
-    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JHybridImageSpec::javaobject>(jni::alias_ref<JHybridImageSpec::javaobject> /* image */)>("bounceBack");
+  jni::local_ref<JHybridImageSpec::javaobject> JHybridImageFactorySpec::bounceBackJNI(const jni::local_ref<JHybridImageSpec::javaobject>& image) {
+    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JHybridImageSpec::javaobject>(jni::local_ref<JHybridImageSpec::javaobject> /* image */)>("bounceBack");
     return method(_javaPart, image);
   }
 

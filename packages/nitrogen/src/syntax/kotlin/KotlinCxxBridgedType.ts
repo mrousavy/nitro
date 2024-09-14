@@ -376,7 +376,7 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
           case 'c++':
             const hybrid = getTypeAs(this.type, HybridObjectType)
             const name = getHybridObjectName(hybrid.hybridObjectName)
-            return `std::static_pointer_cast<${name.JHybridTSpec}>(${parameterName})->getJavaPart()`
+            return `jni::make_local(std::static_pointer_cast<${name.JHybridTSpec}>(${parameterName})->getJavaPart())`
           default:
             return parameterName
         }

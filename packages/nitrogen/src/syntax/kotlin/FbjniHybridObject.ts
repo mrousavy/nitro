@@ -124,7 +124,7 @@ namespace margelo::nitro {
   // NativeState<{}> <> ${name.JHybridTSpec}
   template <>
   struct JSIConverter<${name.JHybridTSpec}::javaobject> final {
-    static inline jni::global_ref<${name.JHybridTSpec}::javaobject> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+    static inline jni::local_ref<${name.JHybridTSpec}::javaobject> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       jsi::Object object = arg.asObject(runtime);
       if (!object.hasNativeState<JHybridObject>(runtime)) [[unlikely]] {
         std::string typeDescription = arg.toString(runtime).utf8(runtime);
@@ -132,7 +132,7 @@ namespace margelo::nitro {
       }
       std::shared_ptr<jsi::NativeState> nativeState = object.getNativeState(runtime);
       std::shared_ptr<${name.JHybridTSpec}> jhybridObject = std::dynamic_pointer_cast<${name.JHybridTSpec}>(nativeState);
-      return jhybridObject->getJavaPart();
+      return jni::make_local(jhybridObject->getJavaPart());
     }
     static inline jsi::Value toJSI(jsi::Runtime& runtime, const jni::local_ref<${name.JHybridTSpec}::javaobject>& arg) {
       return arg->cthis()->toObject(runtime);
@@ -269,16 +269,16 @@ function getJniOverrideMethodImplementation(
   const paramsTypes = method.parameters
     .map((p) => {
       const bridge = new KotlinCxxBridgedType(p.type)
-      return `${bridge.asJniReferenceType('alias')} /* ${p.name} */`
+      return `${bridge.asJniReferenceType('local')} /* ${p.name} */`
     })
     .join(', ')
   const paramsSignature = method.parameters
     .map((p) => {
       const bridge = new KotlinCxxBridgedType(p.type)
       if (bridge.canBePassedByReference) {
-        return `${toReferenceType(bridge.asJniReferenceType('alias'))} ${p.name}`
+        return `${toReferenceType(bridge.asJniReferenceType('local'))} ${p.name}`
       } else {
-        return `${bridge.asJniReferenceType('alias')} ${p.name}`
+        return `${bridge.asJniReferenceType('local')} ${p.name}`
       }
     })
     .join(', ')
@@ -363,8 +363,8 @@ function getJniOverridePropertySignature(property: Property): string {
   )
   if (!property.isReadonly) {
     const type = bridged.canBePassedByReference
-      ? toReferenceType(bridged.asJniReferenceType('alias'))
-      : bridged.asJniReferenceType('alias')
+      ? toReferenceType(bridged.asJniReferenceType('local'))
+      : bridged.asJniReferenceType('local')
     // Setter signature
     lines.push(`void ${property.cppSetterName}JNI(${type} ${property.name});`)
   }
@@ -376,9 +376,9 @@ function getJniOverrideMethodSignature(method: Method): string {
   const parameters = method.parameters.map((p) => {
     const bridged = new KotlinCxxBridgedType(p.type)
     if (bridged.canBePassedByReference) {
-      return `${toReferenceType(bridged.asJniReferenceType('alias'))} ${p.name}`
+      return `${toReferenceType(bridged.asJniReferenceType('local'))} ${p.name}`
     } else {
-      return `${bridged.asJniReferenceType('alias')} ${p.name}`
+      return `${bridged.asJniReferenceType('local')} ${p.name}`
     }
   })
   return `${bridgedReturn.asJniReferenceType('local')} ${method.name}JNI(${parameters.join(', ')});`

@@ -70,7 +70,7 @@ namespace ${cxxNamespace} {
      * Create a Java/Kotlin-based enum with the given C++ enum's value.
      */
     [[maybe_unused]]
-    static jni::alias_ref<${jniName}> fromCpp(${enumType.enumName} value) {
+    static jni::local_ref<${jniName}> fromCpp(${enumType.enumName} value) {
       ${indent(cppToJniConverterCode, '      ')}
     }
   };
@@ -85,7 +85,7 @@ namespace margelo::nitro {
   // C++/JNI ${jniName} <> JS ${enumType.enumName}
   template <>
   struct JSIConverter<${jniName}> {
-    static inline jni::alias_ref<${jniName}> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+    static inline jni::local_ref<${jniName}> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       ${enumType.enumName} cppValue = JSIConverter<${enumType.enumName}>::fromJSI(runtime, arg);
       return ${jniName}::fromCpp(cppValue);
     }
@@ -134,7 +134,7 @@ function getCppToJniConverterCode(
     const fieldName = `field${capitalizeName(m.name)}`
     return `
 case ${enumType.enumName}::${m.name}:
-  return clazz->getStaticFieldValue(${fieldName});
+  return jni::make_local(clazz->getStaticFieldValue(${fieldName}));
 `.trim()
   })
 

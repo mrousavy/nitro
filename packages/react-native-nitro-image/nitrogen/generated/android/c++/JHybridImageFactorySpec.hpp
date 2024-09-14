@@ -64,10 +64,10 @@ namespace margelo::nitro::image {
 
   public:
     // Methods (overriden by JNI)
-    jni::local_ref<JHybridImageSpec::javaobject> loadImageFromFileJNI(const jni::alias_ref<jni::JString>& path);
-    jni::local_ref<JHybridImageSpec::javaobject> loadImageFromURLJNI(const jni::alias_ref<jni::JString>& path);
-    jni::local_ref<JHybridImageSpec::javaobject> loadImageFromSystemNameJNI(const jni::alias_ref<jni::JString>& path);
-    jni::local_ref<JHybridImageSpec::javaobject> bounceBackJNI(const jni::alias_ref<JHybridImageSpec::javaobject>& image);
+    jni::local_ref<JHybridImageSpec::javaobject> loadImageFromFileJNI(const jni::local_ref<jni::JString>& path);
+    jni::local_ref<JHybridImageSpec::javaobject> loadImageFromURLJNI(const jni::local_ref<jni::JString>& path);
+    jni::local_ref<JHybridImageSpec::javaobject> loadImageFromSystemNameJNI(const jni::local_ref<jni::JString>& path);
+    jni::local_ref<JHybridImageSpec::javaobject> bounceBackJNI(const jni::local_ref<JHybridImageSpec::javaobject>& image);
 
   protected:
     // Override prototype to use JNI methods
@@ -86,7 +86,7 @@ namespace margelo::nitro {
   // NativeState<{}> <> JHybridImageFactorySpec
   template <>
   struct JSIConverter<JHybridImageFactorySpec::javaobject> final {
-    static inline jni::global_ref<JHybridImageFactorySpec::javaobject> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+    static inline jni::local_ref<JHybridImageFactorySpec::javaobject> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       jsi::Object object = arg.asObject(runtime);
       if (!object.hasNativeState<JHybridObject>(runtime)) [[unlikely]] {
         std::string typeDescription = arg.toString(runtime).utf8(runtime);
@@ -94,7 +94,7 @@ namespace margelo::nitro {
       }
       std::shared_ptr<jsi::NativeState> nativeState = object.getNativeState(runtime);
       std::shared_ptr<JHybridImageFactorySpec> jhybridObject = std::dynamic_pointer_cast<JHybridImageFactorySpec>(nativeState);
-      return jhybridObject->getJavaPart();
+      return jni::make_local(jhybridObject->getJavaPart());
     }
     static inline jsi::Value toJSI(jsi::Runtime& runtime, const jni::local_ref<JHybridImageFactorySpec::javaobject>& arg) {
       return arg->cthis()->toObject(runtime);

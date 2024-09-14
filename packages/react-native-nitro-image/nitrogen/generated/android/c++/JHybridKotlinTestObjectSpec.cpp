@@ -146,40 +146,40 @@ namespace margelo::nitro::image {
     static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<jni::JDouble>()>("getOptionalNumber");
     return method(_javaPart);
   }
-  void JHybridKotlinTestObjectSpec::setOptionalNumberJNI(jni::alias_ref<jni::JDouble> optionalNumber) {
-    static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<jni::JDouble> /* optionalNumber */)>("setOptionalNumber");
+  void JHybridKotlinTestObjectSpec::setOptionalNumberJNI(jni::local_ref<jni::JDouble> optionalNumber) {
+    static const auto method = _javaPart->getClass()->getMethod<void(jni::local_ref<jni::JDouble> /* optionalNumber */)>("setOptionalNumber");
     return method(_javaPart, optionalNumber);
   }
   jni::local_ref<jni::JArrayDouble> JHybridKotlinTestObjectSpec::getPrimitiveArrayJNI() {
     static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<jni::JArrayDouble>()>("getPrimitiveArray");
     return method(_javaPart);
   }
-  void JHybridKotlinTestObjectSpec::setPrimitiveArrayJNI(const jni::alias_ref<jni::JArrayDouble>& primitiveArray) {
-    static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<jni::JArrayDouble> /* primitiveArray */)>("setPrimitiveArray");
+  void JHybridKotlinTestObjectSpec::setPrimitiveArrayJNI(const jni::local_ref<jni::JArrayDouble>& primitiveArray) {
+    static const auto method = _javaPart->getClass()->getMethod<void(jni::local_ref<jni::JArrayDouble> /* primitiveArray */)>("setPrimitiveArray");
     return method(_javaPart, primitiveArray);
   }
   jni::local_ref<jni::JArrayClass<JCar>> JHybridKotlinTestObjectSpec::getCarCollectionJNI() {
     static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<jni::JArrayClass<JCar>>()>("getCarCollection");
     return method(_javaPart);
   }
-  void JHybridKotlinTestObjectSpec::setCarCollectionJNI(const jni::alias_ref<jni::JArrayClass<JCar>>& carCollection) {
-    static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<jni::JArrayClass<JCar>> /* carCollection */)>("setCarCollection");
+  void JHybridKotlinTestObjectSpec::setCarCollectionJNI(const jni::local_ref<jni::JArrayClass<JCar>>& carCollection) {
+    static const auto method = _javaPart->getClass()->getMethod<void(jni::local_ref<jni::JArrayClass<JCar>> /* carCollection */)>("setCarCollection");
     return method(_javaPart, carCollection);
   }
   jni::local_ref<JArrayBuffer::javaobject> JHybridKotlinTestObjectSpec::getSomeBufferJNI() {
     static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JArrayBuffer::javaobject>()>("getSomeBuffer");
     return method(_javaPart);
   }
-  void JHybridKotlinTestObjectSpec::setSomeBufferJNI(const jni::alias_ref<JArrayBuffer::javaobject>& someBuffer) {
-    static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<JArrayBuffer::javaobject> /* someBuffer */)>("setSomeBuffer");
+  void JHybridKotlinTestObjectSpec::setSomeBufferJNI(const jni::local_ref<JArrayBuffer::javaobject>& someBuffer) {
+    static const auto method = _javaPart->getClass()->getMethod<void(jni::local_ref<JArrayBuffer::javaobject> /* someBuffer */)>("setSomeBuffer");
     return method(_javaPart, someBuffer);
   }
   jni::local_ref<jni::JMap<jni::JString, jni::JString>> JHybridKotlinTestObjectSpec::getSomeRecordJNI() {
     static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<jni::JMap<jni::JString, jni::JString>>()>("getSomeRecord");
     return method(_javaPart);
   }
-  void JHybridKotlinTestObjectSpec::setSomeRecordJNI(const jni::alias_ref<jni::JMap<jni::JString, jni::JString>>& someRecord) {
-    static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<jni::JMap<jni::JString, jni::JString>> /* someRecord */)>("setSomeRecord");
+  void JHybridKotlinTestObjectSpec::setSomeRecordJNI(const jni::local_ref<jni::JMap<jni::JString, jni::JString>>& someRecord) {
+    static const auto method = _javaPart->getClass()->getMethod<void(jni::local_ref<jni::JMap<jni::JString, jni::JString>> /* someRecord */)>("setSomeRecord");
     return method(_javaPart, someRecord);
   }
 
@@ -192,8 +192,8 @@ namespace margelo::nitro::image {
     static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JAnyMap::javaobject>()>("createMap");
     return method(_javaPart);
   }
-  void JHybridKotlinTestObjectSpec::addOnPersonBornListenerJNI(const jni::alias_ref<JFunc_void_Person::javaobject>& callback) {
-    static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<JFunc_void_Person::javaobject> /* callback */)>("addOnPersonBornListener");
+  void JHybridKotlinTestObjectSpec::addOnPersonBornListenerJNI(const jni::local_ref<JFunc_void_Person::javaobject>& callback) {
+    static const auto method = _javaPart->getClass()->getMethod<void(jni::local_ref<JFunc_void_Person::javaobject> /* callback */)>("addOnPersonBornListener");
     return method(_javaPart, callback);
   }
 

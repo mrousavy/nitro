@@ -39,7 +39,7 @@ namespace margelo::nitro::image {
      * Create a Java/Kotlin-based enum with the given C++ enum's value.
      */
     [[maybe_unused]]
-    static jni::alias_ref<JPowertrain> fromCpp(Powertrain value) {
+    static jni::local_ref<JPowertrain> fromCpp(Powertrain value) {
       static const auto clazz = javaClassStatic();
       static const auto fieldELECTRIC = clazz->getStaticField<JPowertrain>("ELECTRIC");
       static const auto fieldGAS = clazz->getStaticField<JPowertrain>("GAS");
@@ -47,11 +47,11 @@ namespace margelo::nitro::image {
       
       switch (value) {
         case Powertrain::ELECTRIC:
-          return clazz->getStaticFieldValue(fieldELECTRIC);
+          return jni::make_local(clazz->getStaticFieldValue(fieldELECTRIC));
         case Powertrain::GAS:
-          return clazz->getStaticFieldValue(fieldGAS);
+          return jni::make_local(clazz->getStaticFieldValue(fieldGAS));
         case Powertrain::HYBRID:
-          return clazz->getStaticFieldValue(fieldHYBRID);
+          return jni::make_local(clazz->getStaticFieldValue(fieldHYBRID));
         default:
           std::string stringValue = std::to_string(static_cast<int>(value));
           throw std::runtime_error("Invalid enum value (" + stringValue + "!");
@@ -69,7 +69,7 @@ namespace margelo::nitro {
   // C++/JNI JPowertrain <> JS Powertrain
   template <>
   struct JSIConverter<JPowertrain> {
-    static inline jni::alias_ref<JPowertrain> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+    static inline jni::local_ref<JPowertrain> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       Powertrain cppValue = JSIConverter<Powertrain>::fromJSI(runtime, arg);
       return JPowertrain::fromCpp(cppValue);
     }
