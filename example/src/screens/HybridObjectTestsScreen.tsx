@@ -22,7 +22,7 @@ setTimeout(() => {
   }
   const end = performance.now()
   console.log(
-    `10k iterations took ${(end - start).toFixed(2)}ms! Map: ${JSON.stringify(map)}`
+    `10k iterations took ${(end - start).toFixed(2)}ms! Map: ${Object.keys(map)}`
   )
 }, 5000)
 
