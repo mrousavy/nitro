@@ -46,7 +46,13 @@ struct JSIConverter<jni::JObject> final {
       return JSIConverter<jni::JMap<jni::JString, jni::JObject>>::toJSI(
           runtime, jni::static_ref_cast<jni::JMap<jni::JString, jni::JObject>>(boxedValue));
     } else [[unlikely]] {
-      throw std::runtime_error("Cannot convert \"" + boxedValue->toString() + "\" to jsi::Value!");
+      // It's an unknown type! Let's give the developer some hints..
+      if (boxedValue->isInstanceOf(jni::JInteger::javaClassStatic())) {
+        throw std::runtime_error("Cannot convert Integer \"" + boxedValue->toString() +
+                                 "\" to jsi::Value! JavaScript uses Doubles for numbers.");
+      } else {
+        throw std::runtime_error("Cannot convert \"" + boxedValue->toString() + "\" to jsi::Value!");
+      }
     }
   }
   static inline jni::local_ref<jni::JObject> fromJSI(jsi::Runtime& runtime, const jsi::Value& value) {

@@ -39,8 +39,8 @@ class KotlinTestObject: HybridKotlinTestObjectSpec() {
         map.setString("string", "String!")
         map.setBoolean("bool", true)
         map.setBigInt("bigint", 893256789)
-        map.setAnyObject("object", mapOf("first" to 1, "second" to "string", "third" to mapOf("nested" to true)))
-        map.setAnyArray("array", arrayOf(11, true, 33.5, "string", arrayOf("nested", true)))
+        map.setAnyObject("object", mapOf("first" to 1.0, "second" to "string", "third" to mapOf("nested" to true)))
+        map.setAnyArray("array", arrayOf(11.0, true, 33.5, "string", arrayOf("nested", true)))
         return map
     }
 
