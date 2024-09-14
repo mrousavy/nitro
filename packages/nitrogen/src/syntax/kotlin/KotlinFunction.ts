@@ -103,10 +103,18 @@ namespace ${cxxNamespace} {
     static jni::local_ref<J${name}::javaobject> fromCpp(const ${typename}& func) {
       return J${name}::newObjectCxxArgs(func);
     }
+    static jni::local_ref<J${name}::javaobject> fromCpp(${typename}&& func) {
+      return J${name}::newObjectCxxArgs(std::move(func));
+    }
 
   public:
     ${cppReturnType} call(${cppParams.join(', ')}) {
       return _func(${indent(paramsForward.join(', '), '      ')});
+    }
+
+  public:
+    inline const ${typename}& getFunction() const noexcept {
+      return _func;
     }
 
   public:
@@ -117,6 +125,7 @@ namespace ${cxxNamespace} {
 
   private:
     explicit J${name}(const ${typename}& func): _func(func) { }
+    explicit J${name}(${typename}&& func): _func(std::move(func)) { }
 
   private:
     friend HybridBase;
@@ -131,13 +140,13 @@ namespace margelo::nitro {
   template <>
   struct JSIConverter<J${name}::javaobject> final {
     static inline jni::alias_ref<J${name}::javaobject> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
-      throw std::runtime_error("Cannot convert jsi::Function to J${name} yet!");
+      return J${name}::fromCpp(JSIConverter<${typename}>::fromJSI(runtime, arg));
     }
     static inline jsi::Value toJSI(jsi::Runtime& runtime, const jni::alias_ref<J${name}::javaobject>& arg) {
-      throw std::runtime_error("Cannot convert J${name} to jsi::Function yet!");
+      return JSIConverter<${typename}>::toJSI(runtime, arg->cthis()->getFunction());
     }
     static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
-      throw std::runtime_error("Cannot convert jsi::Function to J${name} yet!");
+      return JSIConverter<${typename}>::canConvert(runtime, value);
     }
   };
 

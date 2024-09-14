@@ -29,10 +29,18 @@ namespace margelo::nitro::image {
     static jni::local_ref<JFunc_void_Person::javaobject> fromCpp(const std::function<void(const Person& /* p */)>& func) {
       return JFunc_void_Person::newObjectCxxArgs(func);
     }
+    static jni::local_ref<JFunc_void_Person::javaobject> fromCpp(std::function<void(const Person& /* p */)>&& func) {
+      return JFunc_void_Person::newObjectCxxArgs(std::move(func));
+    }
 
   public:
     void call(const jni::alias_ref<JPerson>& p) {
       return _func(p->toCpp());
+    }
+
+  public:
+    inline const std::function<void(const Person& /* p */)>& getFunction() const noexcept {
+      return _func;
     }
 
   public:
@@ -43,6 +51,7 @@ namespace margelo::nitro::image {
 
   private:
     explicit JFunc_void_Person(const std::function<void(const Person& /* p */)>& func): _func(func) { }
+    explicit JFunc_void_Person(std::function<void(const Person& /* p */)>&& func): _func(std::move(func)) { }
 
   private:
     friend HybridBase;
@@ -57,13 +66,13 @@ namespace margelo::nitro {
   template <>
   struct JSIConverter<JFunc_void_Person::javaobject> final {
     static inline jni::alias_ref<JFunc_void_Person::javaobject> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
-      throw std::runtime_error("Cannot convert jsi::Function to JFunc_void_Person yet!");
+      return JFunc_void_Person::fromCpp(JSIConverter<std::function<void(const Person& /* p */)>>::fromJSI(runtime, arg));
     }
     static inline jsi::Value toJSI(jsi::Runtime& runtime, const jni::alias_ref<JFunc_void_Person::javaobject>& arg) {
-      throw std::runtime_error("Cannot convert JFunc_void_Person to jsi::Function yet!");
+      return JSIConverter<std::function<void(const Person& /* p */)>>::toJSI(runtime, arg->cthis()->getFunction());
     }
     static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
-      throw std::runtime_error("Cannot convert jsi::Function to JFunc_void_Person yet!");
+      return JSIConverter<std::function<void(const Person& /* p */)>>::canConvert(runtime, value);
     }
   };
 
