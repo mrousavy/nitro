@@ -12,6 +12,18 @@ import { logPrototypeChain } from '../logPrototypeChain'
 logPrototypeChain(HybridTestObject)
 logPrototypeChain(HybridKotlinTestObject)
 
+HybridKotlinTestObject.someString =
+  'HELLO WORLD! Ths hioeugh uioweghioewguiowe geoguerg uioergz uiegz euiogz eri8ougz 89erzg 8934z t8943zgtuihuieahuihLO WORLD! Ths hioeugh uioweghioewguiowe geoguerg uioergz uiegz euiogz eri8ougz 89erzg 8934z t8943zgtuihuieahuihLO WORLD! Ths hioeugh uioweghioewguiowe geoguerg uioergz uiegz euiogz eri8ougz 89erzg 8934z t8943zgtuihuieahuihLO WORLD! Ths hioeugh uioweghioewguiowe geoguerg uioergz uiegz euiogz eri8ougz 89erzg 8934z t8943zgtuihuieahuihLO WORLD! Ths hioeugh uioweghioewguiowe geoguerg uioergz uiegz euiogz eri8ougz 89erzg 8934z t8943zgtuihuieahuihLO WORLD! Ths hioeugh uioweghioewguiowe geoguerg uioergz uiegz euiogz eri8ougz 89erzg 8934z t8943zgtuihuieahuihLO WORLD! Ths hioeugh uioweghioewguiowe geoguerg uioergz uiegz euiogz eri8ougz 89erzg 8934z t8943zgtuihuieahuihLO WORLD! Ths hioeugh uioweghioewguiowe geoguerg uioergz uiegz euiogz eri8ougz 89erzg 8934z t8943zgtuihuieahuih'
+setTimeout(() => {
+  let str: string = 'hmm'
+  const start = performance.now()
+  for (let i = 0; i < 100_000; i++) {
+    str = HybridKotlinTestObject.someString
+  }
+  const end = performance.now()
+  console.log(`10k iterations took ${(end - start).toFixed(2)}ms! Str: ${str}`)
+}, 5000)
+
 const allTests = getTests()
 
 interface TestState {
