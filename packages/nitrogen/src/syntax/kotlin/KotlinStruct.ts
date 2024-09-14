@@ -2,9 +2,14 @@ import { NitroConfig } from '../../config/NitroConfig.js'
 import { capitalizeName, indent } from '../../utils.js'
 import { includeHeader } from '../c++/includeNitroHeader.js'
 import { getReferencedTypes } from '../getReferencedTypes.js'
-import { createFileMetadataString, isNotDuplicate } from '../helpers.js'
+import {
+  createFileMetadataString,
+  isNotDuplicate,
+  toReferenceType,
+} from '../helpers.js'
 import type { SourceFile } from '../SourceFile.js'
 import type { StructType } from '../types/StructType.js'
+import type { NamedType } from '../types/Type.js'
 import { KotlinCxxBridgedType } from './KotlinCxxBridgedType.js'
 
 export function createKotlinStruct(structType: StructType): SourceFile[] {
@@ -41,6 +46,9 @@ data class ${structType.structName}(
     'value',
     structType
   )
+  const jniPropertiesGetters = structType.properties
+    .map((p) => createJNIPropertyGetter(p))
+    .join('\n\n')
   const imports = structType.properties
     .flatMap((p) => getReferencedTypes(p))
     .map((t) => new KotlinCxxBridgedType(t))
@@ -50,6 +58,31 @@ data class ${structType.structName}(
     .filter(isNotDuplicate)
     .sort()
 
+  const ctorIndent = jniName.length + 47
+  const jniParametersSignature = structType.properties.map((p) => {
+    const bridge = new KotlinCxxBridgedType(p)
+    if (bridge.canBePassedByReference) {
+      return `${toReferenceType(bridge.asJniReferenceType('alias'))} ${p.escapedName}`
+    } else {
+      return `${bridge.asJniReferenceType('alias')} ${p.escapedName}`
+    }
+  })
+  const paramsForward = structType.properties.map((p) => p.escapedName)
+  const fromJsiConverters = structType.properties.map((p) => {
+    const bridge = new KotlinCxxBridgedType(p)
+    return `JSIConverter<${bridge.getTypeCode('c++')}>::fromJSI(runtime, obj.getProperty(runtime, "${p.name}"))`
+  })
+  const toJsiConverters = structType.properties.map((p) => {
+    const bridge = new KotlinCxxBridgedType(p)
+    const converter = `JSIConverter<${bridge.getTypeCode('c++')}>::toJSI(runtime, arg->get${capitalizeName(p.escapedName)}())`
+    return `obj.setProperty(runtime, "${p.name}", ${converter});`
+  })
+  const canJsiConverters = structType.properties.map((p) => {
+    const bridge = new KotlinCxxBridgedType(p)
+    const canConvert = `JSIConverter<${bridge.getTypeCode('c++')}>::canConvert(runtime, obj.getProperty(runtime, "${p.name}"))`
+    return `if (!${canConvert}) return false;`
+  })
+
   const fbjniCode = `
 ${createFileMetadataString(`${jniName}.hpp`)}
 
@@ -58,6 +91,7 @@ ${createFileMetadataString(`${jniName}.hpp`)}
 #include <fbjni/fbjni.h>
 #include "${structType.declarationFile.name}"
 #include <NitroModules/JSIConverter.hpp>
+#include <NitroModules/JSIConverter+JNI.hpp>
 
 ${includes.join('\n')}
 
@@ -74,21 +108,33 @@ namespace ${cxxNamespace} {
 
   public:
     /**
-     * Convert this Java/Kotlin-based struct to the C++ struct ${structType.structName} by copying all values to C++.
-     */
-    [[maybe_unused]]
-    ${structType.structName} toCpp() const {
-      ${indent(jniStructInitializerBody, '      ')}
-    }
-
-  public:
-    /**
      * Create a Java/Kotlin-based struct by copying all values from the given C++ struct to Java.
      */
     [[maybe_unused]]
     static jni::local_ref<${jniName}::javaobject> fromCpp(const ${structType.structName}& value) {
       ${indent(cppStructInitializerBody, '      ')}
     }
+
+    /**
+     * Create a Java/Kotlin-based struct from the given Java values.
+     */
+    static jni::local_ref<${jniName}::javaobject> create(${indent(jniParametersSignature.join(',\n'), ctorIndent)}) {
+      return newInstance(
+        ${indent(paramsForward.join(',\n'), '        ')}
+      );
+    }
+
+  public:
+    /**
+     * Convert this Java/Kotlin-based struct to the C++ struct ${structType.structName} by copying all values to C++.
+     */
+    [[maybe_unused]]
+    [[nodiscard]] ${structType.structName} toCpp() const {
+      ${indent(jniStructInitializerBody, '      ')}
+    }
+
+  public:
+    ${indent(jniPropertiesGetters, '    ')}
   };
 
 } // namespace ${cxxNamespace}
@@ -102,11 +148,13 @@ namespace margelo::nitro {
   struct JSIConverter<${jniName}> {
     static inline jni::local_ref<${jniName}> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       jsi::Object obj = arg.asObject(runtime);
-      throw std::runtime_error("Not yet implemented!");
+      return ${jniName}::create(
+        ${indent(fromJsiConverters.join(',\n'), '        ')}
+      );
     }
     static inline jsi::Value toJSI(jsi::Runtime& runtime, const jni::alias_ref<${jniName}>& arg) {
       jsi::Object obj(runtime);
-      throw std::runtime_error("Not yet implemented!");
+      ${indent(toJsiConverters.join('\n'), '      ')}
       return obj;
     }
     static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
@@ -114,7 +162,7 @@ namespace margelo::nitro {
         return false;
       }
       jsi::Object obj = value.getObject(runtime);
-      throw std::runtime_error("Not yet implemented!");
+      ${indent(canJsiConverters.join('\n'), '      ')}
       return true;
     }
   };
@@ -179,4 +227,14 @@ function createCppStructInitializer(
   lines.push(`  ${indent(names.join(',\n'), '  ')}`)
   lines.push(');')
   return lines.join('\n')
+}
+
+function createJNIPropertyGetter(property: NamedType): string {
+  const bridge = new KotlinCxxBridgedType(property)
+  return `
+[[nodiscard]] ${bridge.asJniReferenceType('local')} get${capitalizeName(property.escapedName)}() const {
+  static const auto field = javaClassStatic()->getField<${bridge.getTypeCode('c++')}>("${property.escapedName}");
+  return this->getFieldValue(field);
+}
+  `.trim()
 }

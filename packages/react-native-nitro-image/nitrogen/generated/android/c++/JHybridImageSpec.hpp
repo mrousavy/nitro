@@ -76,7 +76,7 @@ namespace margelo::nitro::image {
 
   public:
     // Methods (overriden by JNI)
-    double toArrayBufferJNI(jni::alias_ref<JImageFormat> format);
+    double toArrayBufferJNI(const jni::alias_ref<JImageFormat>& format);
     void saveToFileJNI(const jni::alias_ref<jni::JString>& path, const jni::alias_ref<JFunc_void_std__string::javaobject>& onFinished);
 
   protected:

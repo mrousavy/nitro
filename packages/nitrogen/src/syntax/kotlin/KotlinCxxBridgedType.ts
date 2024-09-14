@@ -30,7 +30,12 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
   }
 
   get canBePassedByReference(): boolean {
-    return this.type.canBePassedByReference
+    switch (this.type.kind) {
+      case 'enum':
+        return true
+      default:
+        return this.type.canBePassedByReference
+    }
   }
 
   get needsSpecialHandling(): boolean {

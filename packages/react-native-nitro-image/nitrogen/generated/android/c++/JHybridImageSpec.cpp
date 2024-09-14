@@ -70,7 +70,7 @@ namespace margelo::nitro::image {
   }
 
   // JNI Methods
-  double JHybridImageSpec::toArrayBufferJNI(jni::alias_ref<JImageFormat> format) {
+  double JHybridImageSpec::toArrayBufferJNI(const jni::alias_ref<JImageFormat>& format) {
     static const auto method = _javaPart->getClass()->getMethod<double(jni::alias_ref<JImageFormat> /* format */)>("toArrayBuffer");
     return method(_javaPart, format);
   }
