@@ -10,13 +10,13 @@ template <typename T, typename Enable>
 struct JSIConverter;
 } // namespace margelo::nitro
 
+#include "Dispatcher.hpp"
 #include "JAnyMap.hpp"
 #include "JArrayBuffer.hpp"
 #include "JHybridObject.hpp"
 #include "JPromise.hpp"
-#include "Dispatcher.hpp"
-#include "JSPromise.hpp"
 #include "JSIConverter.hpp"
+#include "JSPromise.hpp"
 #include <fbjni/fbjni.h>
 #include <jni.h>
 #include <jsi/jsi.h>
@@ -318,8 +318,8 @@ struct JSIConverter<JHybridObject::javaobject> final {
   static inline jni::alias_ref<JHybridObject::javaobject> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
     jsi::Object object = arg.asObject(runtime);
     if (!object.hasNativeState<JHybridObject>(runtime)) [[unlikely]] {
-        std::string typeDescription = arg.toString(runtime).utf8(runtime);
-        throw std::runtime_error("Cannot convert \"" + typeDescription + "\" to JHybridObject! It does not have a NativeState.");
+      std::string typeDescription = arg.toString(runtime).utf8(runtime);
+      throw std::runtime_error("Cannot convert \"" + typeDescription + "\" to JHybridObject! It does not have a NativeState.");
     }
     std::shared_ptr<jsi::NativeState> nativeState = object.getNativeState(runtime);
     std::shared_ptr<JHybridObject> jhybridObject = std::dynamic_pointer_cast<JHybridObject>(nativeState);
@@ -360,48 +360,64 @@ struct JSIConverter<JArrayBuffer::javaobject> final {
 // Promise <> JPromise
 template <>
 struct JSIConverter<JPromise::javaobject> final {
-    static inline jni::alias_ref<JPromise::javaobject> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
-        throw std::runtime_error("Promise cannot be converted to a native type - it needs to be awaited first!");
-    }
-    static inline jsi::Value toJSI(jsi::Runtime& runtime, const jni::alias_ref<JPromise::javaobject>& arg) {
-        std::shared_ptr<Dispatcher> strongDispatcher = Dispatcher::getRuntimeGlobalDispatcher(runtime);
-        std::weak_ptr<Dispatcher> weakDispatcher = strongDispatcher;
+  static inline jni::alias_ref<JPromise::javaobject> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+    throw std::runtime_error("Promise cannot be converted to a native type - it needs to be awaited first!");
+  }
+  static inline jsi::Value toJSI(jsi::Runtime& runtime, const jni::alias_ref<JPromise::javaobject>& arg) {
+    std::shared_ptr<Dispatcher> strongDispatcher = Dispatcher::getRuntimeGlobalDispatcher(runtime);
+    std::weak_ptr<Dispatcher> weakDispatcher = strongDispatcher;
 
-        jni::global_ref<JPromise::javaobject> javaPromise = jni::make_global(arg);
+    jni::global_ref<JPromise::javaobject> javaPromise = jni::make_global(arg);
 
-        return JSPromise::createPromise(runtime, [weakDispatcher, javaPromise](jsi::Runtime& runtime, std::shared_ptr<JSPromise> promise) {
-            // on resolved listener
-            javaPromise->cthis()->addOnResolvedListener([&runtime, weakDispatcher, promise](jni::alias_ref<jni::JObject> result) {
-                std::shared_ptr<Dispatcher> dispatcher = weakDispatcher.lock();
-                if (!dispatcher) {
-                    Logger::log(LogLevel::Error, "JSIConverter",
-                                "Tried resolving Promise on JS Thread, but the `Dispatcher` has already been destroyed!");
-                    return;
-                }
-                jni::global_ref<jni::JObject> javaResult = jni::make_global(result);
-                dispatcher->runAsync([&runtime, promise, javaResult]() {
-                    // TODO: Figure out how to JSIConverter::toJSI(...) the javaResult type here now...
-                    promise->reject(runtime, "TODO: I don't know how to convert javaResult to jsi::Value now. It is boxed in a JObject...");
-                });
-            });
-            // on rejected listener
-            javaPromise->cthis()->addOnRejectedListener([&runtime, weakDispatcher, promise](jni::alias_ref<jni::JString> errorMessage) {
-                std::shared_ptr<Dispatcher> dispatcher = weakDispatcher.lock();
-                if (!dispatcher) {
-                    Logger::log(LogLevel::Error, "JSIConverter",
-                                "Tried rejecting Promise on JS Thread, but the `Dispatcher` has already been destroyed!");
-                    return;
-                }
-                jni::global_ref<jni::JString> javaError = jni::make_global(errorMessage);
-                dispatcher->runAsync([&runtime, promise, javaError]() {
-                    promise->reject(runtime, javaError->toStdString());
-                });
-            });
+    return JSPromise::createPromise(runtime, [weakDispatcher, javaPromise](jsi::Runtime& runtime, std::shared_ptr<JSPromise> promise) {
+      // on resolved listener
+      javaPromise->cthis()->addOnResolvedListener([&runtime, weakDispatcher, promise](jni::alias_ref<jni::JObject> result) {
+        std::shared_ptr<Dispatcher> dispatcher = weakDispatcher.lock();
+        if (!dispatcher) {
+          Logger::log(LogLevel::Error, "JSIConverter",
+                      "Tried resolving Promise on JS Thread, but the `Dispatcher` has already been destroyed!");
+          return;
+        }
+        jni::global_ref<jni::JObject> javaResult = jni::make_global(result);
+        dispatcher->runAsync([&runtime, promise, javaResult]() {
+          // TODO: Figure out how to JSIConverter::toJSI(...) the javaResult type here now...
+          promise->reject(runtime, "TODO: I don't know how to convert javaResult to jsi::Value now. It is boxed in a JObject...");
         });
-    }
-    static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
-        throw std::runtime_error("jsi::Value of type Promise cannot be converted to JPromise yet!");
-    }
+      });
+      // on rejected listener
+      javaPromise->cthis()->addOnRejectedListener([&runtime, weakDispatcher, promise](jni::alias_ref<jni::JString> errorMessage) {
+        std::shared_ptr<Dispatcher> dispatcher = weakDispatcher.lock();
+        if (!dispatcher) {
+          Logger::log(LogLevel::Error, "JSIConverter",
+                      "Tried rejecting Promise on JS Thread, but the `Dispatcher` has already been destroyed!");
+          return;
+        }
+        jni::global_ref<jni::JString> javaError = jni::make_global(errorMessage);
+        dispatcher->runAsync([&runtime, promise, javaError]() { promise->reject(runtime, javaError->toStdString()); });
+      });
+    });
+  }
+  static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
+    throw std::runtime_error("jsi::Value of type Promise cannot be converted to JPromise yet!");
+  }
+};
+
+// {} <> JAnyMap
+template <>
+struct JSIConverter<JAnyMap::javaobject> final {
+  static inline jni::alias_ref<JAnyMap::javaobject> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+    // TODO: Stay within Java's data structures to convert AnyMap more efficiently.
+    auto anyMap = JSIConverter<std::shared_ptr<AnyMap>>::fromJSI(runtime, arg);
+    return JAnyMap::create(anyMap);
+  }
+  static inline jsi::Value toJSI(jsi::Runtime& runtime, const jni::alias_ref<JAnyMap::javaobject>& arg) {
+    // TODO: Stay within Java's data structures to convert AnyMap more efficiently.
+    auto anyMap = arg->cthis()->getMap();
+    return JSIConverter<std::shared_ptr<AnyMap>>::toJSI(runtime, anyMap);
+  }
+  static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
+    return JSIConverter<std::shared_ptr<AnyMap>>::canConvert(runtime, value);
+  }
 };
 
 } // namespace margelo::nitro

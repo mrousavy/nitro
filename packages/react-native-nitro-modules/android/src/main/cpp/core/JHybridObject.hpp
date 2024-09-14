@@ -23,8 +23,7 @@ class JHybridObject : public jni::HybridClass<JHybridObject>, public virtual Hyb
 public:
   static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/core/HybridObject;";
 
-  explicit JHybridObject(const jni::alias_ref<JHybridObject::javaobject>& javaPart):
-    _javaPart(jni::make_global(javaPart)) { }
+  explicit JHybridObject(const jni::alias_ref<JHybridObject::javaobject>& javaPart) : _javaPart(jni::make_global(javaPart)) {}
 
   ~JHybridObject() override = default;
 
