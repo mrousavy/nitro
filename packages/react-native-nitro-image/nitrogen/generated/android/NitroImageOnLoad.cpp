@@ -40,7 +40,7 @@ int initialize(JavaVM* vm) {
       []() -> std::shared_ptr<HybridObject> {
         static auto javaClass = jni::findClassStatic("com/margelo/nitro/image/ImageFactory");
         static auto defaultConstructor = javaClass->getConstructor<JHybridImageFactorySpec::javaobject()>();
-
+    
         auto instance = javaClass->newObject(defaultConstructor);
     #ifndef NDEBUG
         if (instance == nullptr) [[unlikely]] {
@@ -65,7 +65,7 @@ int initialize(JavaVM* vm) {
       []() -> std::shared_ptr<HybridObject> {
         static auto javaClass = jni::findClassStatic("com/margelo/nitro/image/KotlinTestObject");
         static auto defaultConstructor = javaClass->getConstructor<JHybridKotlinTestObjectSpec::javaobject()>();
-
+    
         auto instance = javaClass->newObject(defaultConstructor);
     #ifndef NDEBUG
         if (instance == nullptr) [[unlikely]] {
