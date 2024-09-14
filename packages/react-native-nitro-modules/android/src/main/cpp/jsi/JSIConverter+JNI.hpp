@@ -11,6 +11,7 @@
 #include "JSIConverter+JHybridObject.hpp"
 #include "JSIConverter+JMap.hpp"
 #include "JSIConverter+JNIReference.hpp"
+#include "JSIConverter+JObject.hpp"
 #include "JSIConverter+JPromise.hpp"
 #include "JSIConverter+JString.hpp"
 #include "JSIConverter+PrimitiveArray.hpp"

@@ -28,7 +28,8 @@ struct JSIConverter<jni::JArrayClass<T>> final {
 
     jni::local_ref<jni::JArrayClass<T>> result = jni::JArrayClass<T>::newArray(size);
     for (size_t i = 0; i < size; i++) {
-      result->setElement(i, *JSIConverter<T>::fromJSI(runtime, array.getValueAtIndex(runtime, i)));
+      auto element = JSIConverter<T>::fromJSI(runtime, array.getValueAtIndex(runtime, i));
+      result->setElement(i, *element);
     }
     return result;
   }
