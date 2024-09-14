@@ -30,6 +30,10 @@ class KotlinTestObject: HybridKotlinTestObjectSpec() {
         }
     }
 
+    override fun mapRoundtrip(map: AnyMap): AnyMap {
+        return map
+    }
+
     override fun createMap(): AnyMap {
         val map = AnyMap()
         map.setDouble("double", 55.0)

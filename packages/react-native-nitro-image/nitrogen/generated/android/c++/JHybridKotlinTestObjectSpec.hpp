@@ -89,6 +89,7 @@ namespace margelo::nitro::image {
     // Methods
     std::future<void> asyncTest() override;
     std::shared_ptr<AnyMap> createMap() override;
+    std::shared_ptr<AnyMap> mapRoundtrip(const std::shared_ptr<AnyMap>& map) override;
     void addOnPersonBornListener(const std::function<void(const Person& /* p */)>& callback) override;
 
   public:
@@ -112,6 +113,7 @@ namespace margelo::nitro::image {
     // Methods (overriden by JNI)
     jni::local_ref<JPromise<void>> asyncTestJNI();
     jni::local_ref<JAnyMap::javaobject> createMapJNI();
+    jni::local_ref<JAnyMap::javaobject> mapRoundtripJNI(const jni::local_ref<JAnyMap::javaobject>& map);
     void addOnPersonBornListenerJNI(const jni::local_ref<JFunc_void_Person::javaobject>& callback);
 
   protected:

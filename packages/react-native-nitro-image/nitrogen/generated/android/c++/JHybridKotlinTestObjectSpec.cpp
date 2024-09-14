@@ -136,6 +136,10 @@ namespace margelo::nitro::image {
     auto result = this->createMapJNI();
     return result->cthis()->getMap();
   }
+  std::shared_ptr<AnyMap> JHybridKotlinTestObjectSpec::mapRoundtrip(const std::shared_ptr<AnyMap>& map) {
+    auto result = this->mapRoundtripJNI(JAnyMap::create(map));
+    return result->cthis()->getMap();
+  }
   void JHybridKotlinTestObjectSpec::addOnPersonBornListener(const std::function<void(const Person& /* p */)>& callback) {
     this->addOnPersonBornListenerJNI(JFunc_void_Person::fromCpp(callback));
   }
@@ -207,6 +211,10 @@ namespace margelo::nitro::image {
     static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JAnyMap::javaobject>()>("createMap");
     return method(_javaPart);
   }
+  jni::local_ref<JAnyMap::javaobject> JHybridKotlinTestObjectSpec::mapRoundtripJNI(const jni::local_ref<JAnyMap::javaobject>& map) {
+    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JAnyMap::javaobject>(jni::alias_ref<JAnyMap::javaobject> /* map */)>("mapRoundtrip");
+    return method(_javaPart, map);
+  }
   void JHybridKotlinTestObjectSpec::addOnPersonBornListenerJNI(const jni::local_ref<JFunc_void_Person::javaobject>& callback) {
     static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<JFunc_void_Person::javaobject> /* callback */)>("addOnPersonBornListener");
     return method(_javaPart, callback);
@@ -233,6 +241,7 @@ namespace margelo::nitro::image {
       prototype.registerHybridSetter("someString", &JHybridKotlinTestObjectSpec::setSomeStringJNI);
       prototype.registerHybridMethod("asyncTest", &JHybridKotlinTestObjectSpec::asyncTestJNI);
       prototype.registerHybridMethod("createMap", &JHybridKotlinTestObjectSpec::createMapJNI);
+      prototype.registerHybridMethod("mapRoundtrip", &JHybridKotlinTestObjectSpec::mapRoundtripJNI);
       prototype.registerHybridMethod("addOnPersonBornListener", &JHybridKotlinTestObjectSpec::addOnPersonBornListenerJNI);
     });
   }

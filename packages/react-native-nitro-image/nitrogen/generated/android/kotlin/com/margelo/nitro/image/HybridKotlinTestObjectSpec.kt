@@ -86,6 +86,10 @@ abstract class HybridKotlinTestObjectSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
+  abstract fun mapRoundtrip(map: AnyMap): AnyMap
+  
+  @DoNotStrip
+  @Keep
   abstract fun addOnPersonBornListener(callback: (p: Person) -> Unit): Unit
   
   @DoNotStrip
