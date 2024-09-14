@@ -148,6 +148,70 @@ namespace margelo::nitro::image {
     method(_javaPart, JFunc_void_Person::fromCpp(callback));
   }
 
+  // JNI Properties
+  double JHybridKotlinTestObjectSpec::getNumberValueJNI() {
+    static const auto method = _javaPart->getClass()->getMethod<double()>("getNumberValue");
+    return method(_javaPart);
+  }
+  void JHybridKotlinTestObjectSpec::setNumberValueJNI(double numberValue) {
+    static const auto method = _javaPart->getClass()->getMethod<void(double /* numberValue */)>("setNumberValue");
+    return method(_javaPart, numberValue);
+  }
+  jni::alias_ref<jni::JDouble> JHybridKotlinTestObjectSpec::getOptionalNumberJNI() {
+    static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<jni::JDouble>()>("getOptionalNumber");
+    return method(_javaPart);
+  }
+  void JHybridKotlinTestObjectSpec::setOptionalNumberJNI(jni::alias_ref<jni::JDouble> optionalNumber) {
+    static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<jni::JDouble> /* optionalNumber */)>("setOptionalNumber");
+    return method(_javaPart, optionalNumber);
+  }
+  jni::alias_ref<jni::JArrayDouble> JHybridKotlinTestObjectSpec::getPrimitiveArrayJNI() {
+    static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<jni::JArrayDouble>()>("getPrimitiveArray");
+    return method(_javaPart);
+  }
+  void JHybridKotlinTestObjectSpec::setPrimitiveArrayJNI(const jni::alias_ref<jni::JArrayDouble>& primitiveArray) {
+    static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<jni::JArrayDouble> /* primitiveArray */)>("setPrimitiveArray");
+    return method(_javaPart, primitiveArray);
+  }
+  jni::alias_ref<jni::JArrayClass<JCar>> JHybridKotlinTestObjectSpec::getCarCollectionJNI() {
+    static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<jni::JArrayClass<JCar>>()>("getCarCollection");
+    return method(_javaPart);
+  }
+  void JHybridKotlinTestObjectSpec::setCarCollectionJNI(const jni::alias_ref<jni::JArrayClass<JCar>>& carCollection) {
+    static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<jni::JArrayClass<JCar>> /* carCollection */)>("setCarCollection");
+    return method(_javaPart, carCollection);
+  }
+  jni::alias_ref<JArrayBuffer::javaobject> JHybridKotlinTestObjectSpec::getSomeBufferJNI() {
+    static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<JArrayBuffer::javaobject>()>("getSomeBuffer");
+    return method(_javaPart);
+  }
+  void JHybridKotlinTestObjectSpec::setSomeBufferJNI(const jni::alias_ref<JArrayBuffer::javaobject>& someBuffer) {
+    static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<JArrayBuffer::javaobject> /* someBuffer */)>("setSomeBuffer");
+    return method(_javaPart, someBuffer);
+  }
+  jni::alias_ref<jni::JMap<jni::JString, jni::JString>> JHybridKotlinTestObjectSpec::getSomeRecordJNI() {
+    static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<jni::JMap<jni::JString, jni::JString>>()>("getSomeRecord");
+    return method(_javaPart);
+  }
+  void JHybridKotlinTestObjectSpec::setSomeRecordJNI(const jni::alias_ref<jni::JMap<jni::JString, jni::JString>>& someRecord) {
+    static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<jni::JMap<jni::JString, jni::JString>> /* someRecord */)>("setSomeRecord");
+    return method(_javaPart, someRecord);
+  }
+
+  // JNI Methods
+  jni::alias_ref<JPromise::javaobject> JHybridKotlinTestObjectSpec::asyncTestJNI() {
+    static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<JPromise::javaobject>()>("asyncTest");
+    return method(_javaPart);
+  }
+  jni::alias_ref<JAnyMap::javaobject> JHybridKotlinTestObjectSpec::createMapJNI() {
+    static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<JAnyMap::javaobject>()>("createMap");
+    return method(_javaPart);
+  }
+  void JHybridKotlinTestObjectSpec::addOnPersonBornListenerJNI(const jni::alias_ref<JFunc_void_Person::javaobject>& callback) {
+    static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<JFunc_void_Person::javaobject> /* callback */)>("addOnPersonBornListener");
+    return method(_javaPart, callback);
+  }
+
   void JHybridKotlinTestObjectSpec::loadHybridMethods() {
     // Load base Prototype methods
     HybridKotlinTestObjectSpec::loadHybridMethods();

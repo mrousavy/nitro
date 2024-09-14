@@ -57,6 +57,34 @@ namespace margelo::nitro::image {
     method(_javaPart, jni::make_jstring(path), JFunc_void_std__string::fromCpp(onFinished));
   }
 
+  // JNI Properties
+  jni::alias_ref<JImageSize> JHybridImageSpec::getSizeJNI() {
+    static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<JImageSize>()>("getSize");
+    return method(_javaPart);
+  }
+  jni::alias_ref<JPixelFormat> JHybridImageSpec::getPixelFormatJNI() {
+    static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<JPixelFormat>()>("getPixelFormat");
+    return method(_javaPart);
+  }
+  double JHybridImageSpec::getSomeSettablePropJNI() {
+    static const auto method = _javaPart->getClass()->getMethod<double()>("getSomeSettableProp");
+    return method(_javaPart);
+  }
+  void JHybridImageSpec::setSomeSettablePropJNI(double someSettableProp) {
+    static const auto method = _javaPart->getClass()->getMethod<void(double /* someSettableProp */)>("setSomeSettableProp");
+    return method(_javaPart, someSettableProp);
+  }
+
+  // JNI Methods
+  double JHybridImageSpec::toArrayBufferJNI(jni::alias_ref<JImageFormat> format) {
+    static const auto method = _javaPart->getClass()->getMethod<double(jni::alias_ref<JImageFormat> /* format */)>("toArrayBuffer");
+    return method(_javaPart, format);
+  }
+  void JHybridImageSpec::saveToFileJNI(const jni::alias_ref<jni::JString>& path, const jni::alias_ref<JFunc_void_std__string::javaobject>& onFinished) {
+    static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<jni::JString> /* path */, jni::alias_ref<JFunc_void_std__string::javaobject> /* onFinished */)>("saveToFile");
+    return method(_javaPart, path, onFinished);
+  }
+
   void JHybridImageSpec::loadHybridMethods() {
     // Load base Prototype methods
     HybridImageSpec::loadHybridMethods();

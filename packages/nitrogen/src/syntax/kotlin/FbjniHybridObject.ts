@@ -161,10 +161,16 @@ namespace margelo::nitro {
   })
 
   const propertiesImpl = spec.properties
-    .map((m) => getFbjniPropertyForwardImplementation(spec, m))
+    .map((p) => getFbjniPropertyForwardImplementation(spec, p))
     .join('\n')
   const methodsImpl = spec.methods
     .map((m) => getFbjniMethodForwardImplementation(spec, m))
+    .join('\n')
+  const jniPropertiesImpl = spec.properties
+    .map((p) => getJniOverridePropertyImplementation(spec, p))
+    .join('\n')
+  const jniMethodsImpl = spec.methods
+    .map((m) => getJniOverrideMethodImplementation(spec, m))
     .join('\n')
   const propertyOverrideRegistrations = spec.properties
     .flatMap((p) => {
@@ -214,6 +220,12 @@ namespace ${cxxNamespace} {
   // Methods
   ${indent(methodsImpl, '  ')}
 
+  // JNI Properties
+  ${indent(jniPropertiesImpl, '  ')}
+
+  // JNI Methods
+  ${indent(jniMethodsImpl, '  ')}
+
   void ${name.JHybridTSpec}::loadHybridMethods() {
     // Load base Prototype methods
     ${name.HybridTSpec}::loadHybridMethods();
@@ -243,6 +255,57 @@ namespace ${cxxNamespace} {
     platform: 'android',
   })
   return files
+}
+
+function getJniOverrideMethodImplementation(
+  spec: HybridObjectSpec,
+  method: Method
+): string {
+  const name = getHybridObjectName(spec.name)
+
+  const returnJNI = new KotlinCxxBridgedType(method.returnType)
+
+  const returnType = returnJNI.asJniReferenceType('alias')
+  const paramsTypes = method.parameters
+    .map((p) => {
+      const bridge = new KotlinCxxBridgedType(p.type)
+      return `${bridge.asJniReferenceType('alias')} /* ${p.name} */`
+    })
+    .join(', ')
+  const paramsSignature = method.parameters
+    .map((p) => {
+      const bridge = new KotlinCxxBridgedType(p.type)
+      if (bridge.canBePassedByReference) {
+        return `${toReferenceType(bridge.asJniReferenceType('alias'))} ${p.name}`
+      } else {
+        return `${bridge.asJniReferenceType('alias')} ${p.name}`
+      }
+    })
+    .join(', ')
+  const cxxSignature = `${returnType}(${paramsTypes})`
+
+  const paramsForward = [
+    '_javaPart',
+    ...method.parameters.map((p) => p.name),
+  ].join(', ')
+
+  return `
+${returnType} ${name.JHybridTSpec}::${method.name}JNI(${paramsSignature}) {
+  static const auto method = _javaPart->getClass()->getMethod<${cxxSignature}>("${method.name}");
+  return method(${paramsForward});
+}
+    `.trim()
+}
+
+function getJniOverridePropertyImplementation(
+  spec: HybridObjectSpec,
+  property: Property
+): string {
+  const methods = property.cppMethods.map((m) =>
+    getJniOverrideMethodImplementation(spec, m)
+  )
+
+  return methods.join('\n')
 }
 
 function getFbjniMethodForwardImplementation(
