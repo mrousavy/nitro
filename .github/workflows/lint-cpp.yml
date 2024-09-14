@@ -41,9 +41,8 @@ jobs:
         run: bun install --frozen-lockfile
 
       - name: Run clang-format style check
-        uses: mrousavy/clang-format-action@v1
+        uses: jidicula/clang-format-action@v4.13.0
         with:
-          clang-format-version: '16'
+          clang-format-version: '18'
           check-path: ${{ matrix.path }}
-          clang-format-style-path: .clang-format
 
