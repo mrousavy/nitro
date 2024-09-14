@@ -10,8 +10,8 @@ template <typename T, typename Enable>
 struct JSIConverter;
 } // namespace margelo::nitro
 
-#include "JSIConverter.hpp"
 #include "JHybridObject.hpp"
+#include "JSIConverter.hpp"
 #include <fbjni/fbjni.h>
 #include <jni.h>
 #include <jsi/jsi.h>

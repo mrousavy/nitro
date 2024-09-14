@@ -10,10 +10,10 @@ template <typename T, typename Enable>
 struct JSIConverter;
 } // namespace margelo::nitro
 
-#include "JSIConverter.hpp"
-#include "JPromise.hpp"
-#include "JSPromise.hpp"
 #include "Dispatcher.hpp"
+#include "JPromise.hpp"
+#include "JSIConverter.hpp"
+#include "JSPromise.hpp"
 #include <fbjni/fbjni.h>
 #include <jni.h>
 #include <jsi/jsi.h>
