@@ -38,127 +38,141 @@ public:
 
 private:
   JAnyMap() {
-    _map = std::make_shared<AnyMap>();
+    auto map = jni::JHashMap<jni::JString, jni::JObject>::create();
+    _map = jni::make_global(map);
   }
-  JAnyMap(const std::shared_ptr<AnyMap>& map) : _map(map) {}
+  JAnyMap(const std::shared_ptr<AnyMap>& map) {
+      // TODO: Implement c++ -> java
+      throw std::runtime_error("Cannot create a JAnyMap from a C++ AnyMap yet!");
+  }
 
 protected:
   bool contains(const std::string& key) {
-    return _map->contains(key);
+    static const auto method = _map->javaClassStatic()->getMethod<jboolean(jni::local_ref<jni::JObject>)>("containsKey");
+    return method(_map, jni::make_jstring(key));
   }
   void remove(const std::string& key) {
-    _map->remove(key);
+    static const auto method = _map->javaClassStatic()->getMethod<void(jni::local_ref<jni::JObject>)>("remove");
+    method(_map, jni::make_jstring(key));
   }
   void clear() {
-    _map->clear();
+    static const auto method = _map->javaClassStatic()->getMethod<void()>("clear");
+    method(_map);
+  }
+
+private:
+  jni::local_ref<jni::JObject> get(const jni::alias_ref<jni::JString>& key) {
+    static const auto method = _map->javaClassStatic()->getMethod<jni::JObject(jni::alias_ref<jni::JObject>)>("get");
+    return method(_map, key);
   }
 
 protected:
-  bool isNull(const std::string& key) {
-    return _map->isNull(key);
+  bool isNull(const jni::alias_ref<jni::JString>& key) {
+    jni::local_ref<jni::JObject> result = get(key);
+    return result == nullptr;
   }
-  bool isDouble(const std::string& key) {
-    return _map->isDouble(key);
+  bool isDouble(const jni::alias_ref<jni::JString>& key) {
+      static const auto doubleClass = jni::JDouble::javaClassStatic();
+      jni::local_ref<jni::JObject> result = get(key);
+      return result->isInstanceOf(doubleClass);
   }
-  bool isBoolean(const std::string& key) {
-    return _map->isBoolean(key);
+  bool isBoolean(const jni::alias_ref<jni::JString>& key) {
+      static const auto booleanClass = jni::JBoolean::javaClassStatic();
+      jni::local_ref<jni::JObject> result = get(key);
+      return result->isInstanceOf(booleanClass);
   }
-  bool isBigInt(const std::string& key) {
-    return _map->isBigInt(key);
+  bool isBigInt(const jni::alias_ref<jni::JString>& key) {
+      static const auto longClass = jni::JLong::javaClassStatic();
+      jni::local_ref<jni::JObject> result = get(key);
+      return result->isInstanceOf(longClass);
   }
-  bool isString(const std::string& key) {
-    return _map->isString(key);
+  bool isString(const jni::alias_ref<jni::JString>& key) {
+      static const auto stringClass = jni::JString::javaClassStatic();
+      jni::local_ref<jni::JObject> result = get(key);
+      return result->isInstanceOf(stringClass);
   }
-  bool isArray(const std::string& key) {
-    return _map->isArray(key);
+  bool isArray(const jni::alias_ref<jni::JString>& key) {
+      static const auto arrayClass = jni::JArrayClass<jni::JObject>::javaClassStatic();
+      jni::local_ref<jni::JObject> result = get(key);
+      return result->isInstanceOf(arrayClass);
   }
-  bool isObject(const std::string& key) {
-    return _map->isObject(key);
-  }
-
-protected:
-  double getDouble(const std::string& key) {
-    return _map->getDouble(key);
-  }
-  bool getBoolean(const std::string& key) {
-    return _map->getBoolean(key);
-  }
-  int64_t getBigInt(const std::string& key) {
-    return _map->getBigInt(key);
-  }
-  std::string getString(const std::string& key) {
-    return _map->getString(key);
-  }
-  jni::alias_ref<JAnyArray> getAnyArray(const std::string& key) {
-    const auto& vector = _map->getArray(key);
-    auto javaArray = jni::JArrayClass<JAnyValue::javaobject>::newArray(vector.size());
-    for (size_t i = 0; i < vector.size(); i++) {
-      auto value = JAnyValue::create(vector[i]);
-      javaArray->setElement(i, value.get());
-    }
-    return javaArray;
-  }
-  jni::alias_ref<JAnyObject> getAnyObject(const std::string& key) {
-    const auto& map = _map->getObject(key);
-    auto javaMap = jni::JHashMap<jni::JString, JAnyValue::javaobject>::create(map.size());
-    for (const auto& entry : map) {
-      auto string = jni::make_jstring(entry.first);
-      auto value = JAnyValue::create(entry.second);
-      javaMap->put(string, value);
-    }
-    return javaMap;
+  bool isObject(const jni::alias_ref<jni::JString>& key) {
+      static const auto mapClass = jni::JMap<jni::JObject, jni::JObject>::javaClassStatic();
+      jni::local_ref<jni::JObject> result = get(key);
+      return result->isInstanceOf(mapClass);
   }
 
 protected:
-  void setNull(const std::string& key) {
-    _map->setNull(key);
+  jni::local_ref<jni::JDouble> getDouble(const jni::alias_ref<jni::JString>& key) {
+    jni::local_ref<jni::JObject> result = get(key);
+    return jni::static_ref_cast<jni::JDouble>(result);
   }
-  void setDouble(const std::string& key, double value) {
-    _map->setDouble(key, value);
+jni::local_ref<jni::JBoolean> getBoolean(const jni::alias_ref<jni::JString>& key) {
+      jni::local_ref<jni::JObject> result = get(key);
+      return jni::static_ref_cast<jni::JBoolean>(result);
   }
-  void setBoolean(const std::string& key, bool value) {
-    _map->setBoolean(key, value);
+    jni::local_ref<jni::JLong> getBigInt(const jni::alias_ref<jni::JString>& key) {
+      jni::local_ref<jni::JObject> result = get(key);
+      return jni::static_ref_cast<jni::JLong>(result);
   }
-  void setBigInt(const std::string& key, int64_t value) {
-    _map->setBigInt(key, value);
+    jni::local_ref<jni::JString> getString(const jni::alias_ref<jni::JString>& key) {
+      jni::local_ref<jni::JObject> result = get(key);
+      return jni::static_ref_cast<jni::JString>(result);
   }
-  void setString(const std::string& key, const std::string& value) {
-    _map->setString(key, value);
+    jni::local_ref<jni::JArrayClass<jni::JObject>> getAnyArray(const jni::alias_ref<jni::JString>& key) {
+        jni::local_ref<jni::JObject> result = get(key);
+        return jni::static_ref_cast<jni::JArrayClass<jni::JObject>>(result);
   }
-  void setAnyArray(const std::string& key, jni::alias_ref<JAnyArray> value) {
-    std::vector<AnyValue> vector;
-    size_t size = value->size();
-    vector.reserve(size);
-    for (size_t i = 0; i < size; i++) {
-      auto anyValue = value->getElement(i);
-      vector.push_back(anyValue->cthis()->getValue());
-    }
-    _map->setArray(key, vector);
+  jni::local_ref<jni::JMap<jni::JString, jni::JObject>> getAnyObject(const jni::alias_ref<jni::JString>& key) {
+      jni::local_ref<jni::JObject> result = get(key);
+      return jni::static_ref_cast<jni::JMap<jni::JString, jni::JObject>>(result);
   }
-  void setAnyObject(const std::string& key, const jni::alias_ref<JAnyObject>& value) {
-    std::unordered_map<std::string, AnyValue> map;
-    map.reserve(value->size());
-    for (const auto& entry : *value) {
-      map.emplace(entry.first->toStdString(), entry.second->cthis()->getValue());
-    }
-    _map->setObject(key, map);
+
+protected:
+  void setNull(const jni::alias_ref<jni::JString>& key) {
+    _map->put(key, nullptr);
+  }
+  void setDouble(const jni::alias_ref<jni::JString>& key, double value) {
+      _map->put(key, jni::autobox(value));
+  }
+  void setBoolean(const jni::alias_ref<jni::JString>& key, bool value) {
+      _map->put(key, jni::autobox(value));
+  }
+  void setBigInt(const jni::alias_ref<jni::JString>& key, int64_t value) {
+      _map->put(key, jni::autobox(value));
+  }
+  void setString(const jni::alias_ref<jni::JString>& key, const jni::alias_ref<jni::JString>& value) {
+      _map->put(key, value);
+  }
+  void setAnyArray(const jni::alias_ref<jni::JString>& key, jni::alias_ref<jni::JArrayClass<jni::JObject>> value) {
+      _map->put(key, value);
+  }
+  void setAnyObject(const jni::alias_ref<jni::JString>& key, jni::alias_ref<jni::JMap<jni::JString, jni::JObject>> value) {
+      _map->put(key, value);
+  }
+
+protected:
+  jni::global_ref<jni::JHashMap<jni::JString, jni::JObject>> getJavaMap() {
+      return _map;
   }
 
 public:
   std::shared_ptr<AnyMap> getMap() const {
-    return _map;
+      // TODO: java -> c++
+    throw std::runtime_error("JAnyMap cannot be converted to C++ AnyMap yet!");
   }
 
 private:
   friend HybridBase;
   using HybridBase::HybridBase;
-  std::shared_ptr<AnyMap> _map;
+  jni::global_ref<jni::JHashMap<jni::JString, jni::JObject>> _map;
 
 public:
   static void registerNatives() {
     registerHybrid({
         // init
         makeNativeMethod("initHybrid", JAnyMap::initHybrid),
+        makeNativeMethod("getJavaMap", JAnyMap::getJavaMap),
         // helpers
         makeNativeMethod("contains", JAnyMap::contains),
         makeNativeMethod("remove", JAnyMap::remove),

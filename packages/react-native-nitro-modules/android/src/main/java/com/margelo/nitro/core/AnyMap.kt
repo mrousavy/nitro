@@ -14,6 +14,7 @@ import dalvik.annotation.optimization.FastNative
 @DoNotStrip
 class AnyMap {
   private val mHybridData: HybridData
+  private val map: HashMap<String, Any> by lazy { getJavaMap() }
 
   /**
    * Create a new empty `AnyMap`.
@@ -30,51 +31,101 @@ class AnyMap {
     mHybridData = hybridData
   }
 
+  private external fun getJavaMap(): HashMap<String, Any>
 
-  @FastNative
-  external fun contains(key: String): Boolean
-  @FastNative
-  external fun remove(key: String)
-  @FastNative
-  external fun clear()
+  fun contains(key: String): Boolean {
+    return map.contains(key)
+  }
 
-  @FastNative
-  external fun isNull(key: String): Boolean
-  @FastNative
-  external fun isDouble(key: String): Boolean
-  @FastNative
-  external fun isBoolean(key: String): Boolean
-  @FastNative
-  external fun isBigInt(key: String): Boolean
-  @FastNative
-  external fun isString(key: String): Boolean
-  @FastNative
-  external fun isArray(key: String): Boolean
-  @FastNative
-  external fun isObject(key: String): Boolean
+  fun remove(key: String) {
+    map.remove(key)
+  }
 
-  @FastNative
-  external fun getDouble(key: String): Double
-  @FastNative
-  external fun getBoolean(key: String): Boolean
-  @FastNative
-  external fun getBigInt(key: String): Long
-  external fun getString(key: String): String
-  external fun getAnyArray(key: String): AnyArray
-  external fun getAnyObject(key: String): AnyObject
+  fun clear() {
+    map.clear()
+  }
 
-  @FastNative
-  external fun setNull(key: String)
-  @FastNative
-  external fun setDouble(key: String, value: Double)
-  @FastNative
-  external fun setBoolean(key: String, value: Boolean)
-  @FastNative
-  external fun setBigInt(key: String, value: Long)
-  @FastNative
-  external fun setString(key: String, value: String)
-  external fun setAnyArray(key: String, value: AnyArray)
-  external fun setAnyObject(key: String, value: AnyObject)
+  fun isNull(key: String): Boolean {
+    return map[key] == null
+  }
+
+  fun isDouble(key: String): Boolean {
+    return map[key] is Double
+  }
+
+  fun isBoolean(key: String): Boolean {
+    return map[key] is Boolean
+  }
+
+  fun isBigInt(key: String): Boolean {
+    return map[key] is Long
+  }
+
+  fun isString(key: String): Boolean {
+    return map[key] is String
+  }
+
+  fun isArray(key: String): Boolean {
+    return map[key] is Array<*>
+  }
+
+  fun isObject(key: String): Boolean {
+    return map[key] is Map<*, *>
+  }
+
+  fun getDouble(key: String): Double {
+    return map[key] as Double
+  }
+
+  fun getBoolean(key: String): Boolean {
+    return map[key] as Boolean
+  }
+
+  fun getBigInt(key: String): Long {
+    return map[key] as Long
+  }
+
+  fun getString(key: String): String {
+    return map[key] as String
+  }
+
+  fun getAnyArray(key: String): Array<Any> {
+    return map[key] as Array<Any>
+  }
+
+  fun getAnyObject(key: String): Map<String, Any> {
+    return map[key] as Map<String, Any>
+  }
+
+
+  fun setNull(key: String) {
+    // TODO: Actually set a null instance?
+    remove(key)
+  }
+
+  fun setDouble(key: String, value: Double) {
+    map[key] = value
+  }
+
+  fun setBoolean(key: String, value: Boolean) {
+    map[key] = value
+  }
+
+  fun setBigInt(key: String, value: Long) {
+    map[key] = value
+  }
+
+  fun setString(key: String, value: String) {
+    map[key] = value
+  }
+
+  fun setAnyArray(key: String, value: AnyArray) {
+    map[key] = value
+  }
+
+  fun setAnyObject(key: String, value: AnyObject) {
+    map[key] = value
+  }
 
   private external fun initHybrid(): HybridData
 }
