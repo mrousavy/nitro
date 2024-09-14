@@ -152,7 +152,7 @@ namespace margelo::nitro {
         ${indent(fromJsiConverters.join(',\n'), '        ')}
       );
     }
-    static inline jsi::Value toJSI(jsi::Runtime& runtime, const jni::local_ref<${jniName}>& arg) {
+    static inline jsi::Value toJSI(jsi::Runtime& runtime, const jni::alias_ref<${jniName}>& arg) {
       jsi::Object obj(runtime);
       ${indent(toJsiConverters.join('\n'), '      ')}
       return obj;

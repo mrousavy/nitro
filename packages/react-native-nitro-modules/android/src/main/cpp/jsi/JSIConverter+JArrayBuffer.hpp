@@ -27,7 +27,7 @@ struct JSIConverter<JArrayBuffer::javaobject> final {
     std::shared_ptr<ArrayBuffer> jsArrayBuffer = JSIConverter<std::shared_ptr<ArrayBuffer>>::fromJSI(runtime, arg);
     return JArrayBuffer::wrap(jsArrayBuffer);
   }
-  static inline jsi::Value toJSI(jsi::Runtime& runtime, const jni::local_ref<JArrayBuffer::javaobject>& arg) {
+  static inline jsi::Value toJSI(jsi::Runtime& runtime, const jni::alias_ref<JArrayBuffer::javaobject>& arg) {
     std::shared_ptr<ArrayBuffer> arrayBuffer = arg->cthis()->getArrayBuffer();
     return jsi::ArrayBuffer(runtime, arrayBuffer);
   }

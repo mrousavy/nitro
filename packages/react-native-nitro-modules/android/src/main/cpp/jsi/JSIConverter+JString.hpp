@@ -25,7 +25,7 @@ struct JSIConverter<jni::JString> final {
   static inline jni::local_ref<jni::JString> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
     return jni::make_jstring(arg.asString(runtime).utf8(runtime));
   }
-  static inline jsi::Value toJSI(jsi::Runtime& runtime, const jni::local_ref<jni::JString>& arg) {
+  static inline jsi::Value toJSI(jsi::Runtime& runtime, const jni::alias_ref<jni::JString>& arg) {
     return jsi::String::createFromUtf8(runtime, arg->toStdString());
   }
   static inline bool canConvert(jsi::Runtime&, const jsi::Value& value) {

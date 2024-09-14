@@ -32,7 +32,7 @@ struct JSIConverter<jni::JArrayClass<T>> final {
     }
     return result;
   }
-  static inline jsi::Value toJSI(jsi::Runtime& runtime, jni::local_ref<jni::JArrayClass<T>> arg) {
+  static inline jsi::Value toJSI(jsi::Runtime& runtime, jni::alias_ref<jni::JArrayClass<T>> arg) {
     size_t size = arg->size();
     jsi::Array array = jsi::Array(runtime, size);
     for (size_t i = 0; i < size; i++) {

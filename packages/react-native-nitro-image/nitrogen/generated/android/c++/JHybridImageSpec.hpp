@@ -106,7 +106,7 @@ namespace margelo::nitro {
       std::shared_ptr<JHybridImageSpec> jhybridObject = std::dynamic_pointer_cast<JHybridImageSpec>(nativeState);
       return jni::make_local(jhybridObject->getJavaPart());
     }
-    static inline jsi::Value toJSI(jsi::Runtime& runtime, const jni::local_ref<JHybridImageSpec::javaobject>& arg) {
+    static inline jsi::Value toJSI(jsi::Runtime& runtime, const jni::alias_ref<JHybridImageSpec::javaobject>& arg) {
       return arg->cthis()->toObject(runtime);
     }
     static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {

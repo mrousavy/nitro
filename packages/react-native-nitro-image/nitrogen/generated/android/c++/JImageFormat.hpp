@@ -70,7 +70,7 @@ namespace margelo::nitro {
       ImageFormat cppValue = JSIConverter<ImageFormat>::fromJSI(runtime, arg);
       return JImageFormat::fromCpp(cppValue);
     }
-    static inline jsi::Value toJSI(jsi::Runtime& runtime, const jni::local_ref<JImageFormat>& arg) {
+    static inline jsi::Value toJSI(jsi::Runtime& runtime, const jni::alias_ref<JImageFormat>& arg) {
       ImageFormat cppValue = arg->toCpp();
       return JSIConverter<ImageFormat>::toJSI(runtime, cppValue);
     }

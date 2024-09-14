@@ -33,7 +33,7 @@ struct JSIConverter<JHybridObject::javaobject> final {
     std::shared_ptr<JHybridObject> jhybridObject = std::dynamic_pointer_cast<JHybridObject>(nativeState);
     return jni::make_local(jhybridObject->getJavaPart());
   }
-  static inline jsi::Value toJSI(jsi::Runtime& runtime, const jni::local_ref<JHybridObject::javaobject>& arg) {
+  static inline jsi::Value toJSI(jsi::Runtime& runtime, const jni::alias_ref<JHybridObject::javaobject>& arg) {
     return arg->cthis()->toObject(runtime);
   }
   static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
