@@ -71,12 +71,12 @@ namespace margelo::nitro::image {
 
   // JNI Methods
   double JHybridImageSpec::toArrayBufferJNI(const jni::local_ref<JImageFormat>& format) {
-    static const auto method = _javaPart->getClass()->getMethod<double(JImageFormat /* format */)>("toArrayBuffer");
-    return method(_javaPart, *format);
+    static const auto method = _javaPart->getClass()->getMethod<double(jni::alias_ref<JImageFormat> /* format */)>("toArrayBuffer");
+    return method(_javaPart, format);
   }
   void JHybridImageSpec::saveToFileJNI(const jni::local_ref<jni::JString>& path, const jni::local_ref<JFunc_void_std__string::javaobject>& onFinished) {
-    static const auto method = _javaPart->getClass()->getMethod<void(jni::JString /* path */, JFunc_void_std__string::javaobject /* onFinished */)>("saveToFile");
-    return method(_javaPart, *path, onFinished.get());
+    static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<jni::JString> /* path */, jni::alias_ref<JFunc_void_std__string::javaobject> /* onFinished */)>("saveToFile");
+    return method(_javaPart, path, onFinished);
   }
 
   void JHybridImageSpec::loadHybridMethods() {

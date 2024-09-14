@@ -279,25 +279,14 @@ function getJniOverrideMethodImplementation(
   const paramsTypes = method.parameters
     .map((p) => {
       const bridge = new KotlinCxxBridgedType(p.type)
-      return `${bridge.getTypeCode('c++')} /* ${p.name} */`
+      return `${bridge.asJniReferenceType('alias')} /* ${p.name} */`
     })
     .join(', ')
   const jniSignature = `${returnType}(${paramsTypes})`
 
   const paramsForward = [
     '_javaPart',
-    ...method.parameters.map((p) => {
-      const bridged = new KotlinCxxBridgedType(p.type)
-      if (bridged.isJniReferenceType) {
-        if (bridged.isJniHybridClass) {
-          return `${p.name}.get()`
-        } else {
-          return `*${p.name}`
-        }
-      } else {
-        return p.name
-      }
-    }),
+    ...method.parameters.map((p) => p.name),
   ].join(', ')
 
   return `
