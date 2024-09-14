@@ -36,9 +36,8 @@ struct JSIConverter<JAnyMap::javaobject> final {
     for (size_t i = 0; i < size; i++) {
       jsi::Value key = properties.getValueAtIndex(runtime, i);
       jsi::Value value = object.getProperty(runtime, key.asString(runtime));
-      jni::local_ref<jni::JString> javaKey = JSIConverter<jni::JString>::fromJSI(runtime, key);
-      jni::local_ref<jni::JObject> javaValue = JSIConverter<jni::JObject>::fromJSI(runtime, value);
-      javaMap->put(javaKey, javaValue);
+      javaMap->put(JSIConverter<jni::JString>::fromJSI(runtime, key),
+                   JSIConverter<jni::JObject>::fromJSI(runtime, value));
     }
 
     return map;
@@ -48,8 +47,7 @@ struct JSIConverter<JAnyMap::javaobject> final {
     auto map = arg->cthis()->getJavaMap();
     for (const auto& entry : *map) {
       jsi::String key = JSIConverter<jni::JString>::toJSI(runtime, entry.first).getString(runtime);
-      jni::alias_ref<jni::JObject> value = entry.second;
-      object.setProperty(runtime, key, JSIConverter<jni::JObject>::toJSI(runtime, value));
+      object.setProperty(runtime, key, JSIConverter<jni::JObject>::toJSI(runtime, entry.second));
     }
     return object;
   }
