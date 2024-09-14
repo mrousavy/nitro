@@ -265,13 +265,6 @@ function getJniOverrideMethodImplementation(
 
   const returnJNI = new KotlinCxxBridgedType(method.returnType)
 
-  const returnType = returnJNI.asJniReferenceType('local')
-  const paramsTypes = method.parameters
-    .map((p) => {
-      const bridge = new KotlinCxxBridgedType(p.type)
-      return `${bridge.asJniReferenceType('local')} /* ${p.name} */`
-    })
-    .join(', ')
   const paramsSignature = method.parameters
     .map((p) => {
       const bridge = new KotlinCxxBridgedType(p.type)
@@ -282,16 +275,34 @@ function getJniOverrideMethodImplementation(
       }
     })
     .join(', ')
-  const cxxSignature = `${returnType}(${paramsTypes})`
+  const returnType = returnJNI.asJniReferenceType('local')
+  const paramsTypes = method.parameters
+    .map((p) => {
+      const bridge = new KotlinCxxBridgedType(p.type)
+      return `${bridge.getTypeCode('c++')} /* ${p.name} */`
+    })
+    .join(', ')
+  const jniSignature = `${returnType}(${paramsTypes})`
 
   const paramsForward = [
     '_javaPart',
-    ...method.parameters.map((p) => p.name),
+    ...method.parameters.map((p) => {
+      const bridged = new KotlinCxxBridgedType(p.type)
+      if (bridged.isJniReferenceType) {
+        if (bridged.isJniHybridClass) {
+          return `${p.name}.get()`
+        } else {
+          return `*${p.name}`
+        }
+      } else {
+        return p.name
+      }
+    }),
   ].join(', ')
 
   return `
 ${returnType} ${name.JHybridTSpec}::${method.name}JNI(${paramsSignature}) {
-  static const auto method = _javaPart->getClass()->getMethod<${cxxSignature}>("${method.name}");
+  static const auto method = _javaPart->getClass()->getMethod<${jniSignature}>("${method.name}");
   return method(${paramsForward});
 }
     `.trim()

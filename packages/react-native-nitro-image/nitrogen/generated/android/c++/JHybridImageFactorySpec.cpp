@@ -51,20 +51,20 @@ namespace margelo::nitro::image {
 
   // JNI Methods
   jni::local_ref<JHybridImageSpec::javaobject> JHybridImageFactorySpec::loadImageFromFileJNI(const jni::local_ref<jni::JString>& path) {
-    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JHybridImageSpec::javaobject>(jni::local_ref<jni::JString> /* path */)>("loadImageFromFile");
-    return method(_javaPart, path);
+    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JHybridImageSpec::javaobject>(jni::JString /* path */)>("loadImageFromFile");
+    return method(_javaPart, *path);
   }
   jni::local_ref<JHybridImageSpec::javaobject> JHybridImageFactorySpec::loadImageFromURLJNI(const jni::local_ref<jni::JString>& path) {
-    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JHybridImageSpec::javaobject>(jni::local_ref<jni::JString> /* path */)>("loadImageFromURL");
-    return method(_javaPart, path);
+    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JHybridImageSpec::javaobject>(jni::JString /* path */)>("loadImageFromURL");
+    return method(_javaPart, *path);
   }
   jni::local_ref<JHybridImageSpec::javaobject> JHybridImageFactorySpec::loadImageFromSystemNameJNI(const jni::local_ref<jni::JString>& path) {
-    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JHybridImageSpec::javaobject>(jni::local_ref<jni::JString> /* path */)>("loadImageFromSystemName");
-    return method(_javaPart, path);
+    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JHybridImageSpec::javaobject>(jni::JString /* path */)>("loadImageFromSystemName");
+    return method(_javaPart, *path);
   }
   jni::local_ref<JHybridImageSpec::javaobject> JHybridImageFactorySpec::bounceBackJNI(const jni::local_ref<JHybridImageSpec::javaobject>& image) {
-    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JHybridImageSpec::javaobject>(jni::local_ref<JHybridImageSpec::javaobject> /* image */)>("bounceBack");
-    return method(_javaPart, image);
+    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JHybridImageSpec::javaobject>(JHybridImageSpec::javaobject /* image */)>("bounceBack");
+    return method(_javaPart, image.get());
   }
 
   void JHybridImageFactorySpec::loadHybridMethods() {

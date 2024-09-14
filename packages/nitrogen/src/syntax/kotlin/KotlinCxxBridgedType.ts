@@ -173,6 +173,30 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
     }
   }
 
+  get isJniReferenceType(): boolean {
+    switch (this.type.kind) {
+      case 'void':
+      case 'number':
+      case 'boolean':
+      case 'bigint':
+        return false
+      default:
+        return true
+    }
+  }
+
+  get isJniHybridClass(): boolean {
+    switch (this.type.kind) {
+      case 'function':
+      case 'hybrid-object':
+      case 'array-buffer':
+      case 'map':
+        return true
+      default:
+        return false
+    }
+  }
+
   getTypeCode(language: 'kotlin' | 'c++'): string {
     switch (this.type.kind) {
       case 'array':
