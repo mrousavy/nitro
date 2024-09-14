@@ -2,8 +2,6 @@
 
 #include "JFunc_void_Person.hpp"
 #include "JFunc_void_std__string.hpp"
-#include "JHybridImageFactorySpec.hpp"
-#include "JHybridImageSpec.hpp"
 #include "JHybridKotlinTestObjectSpec.hpp"
 
 #include "HybridTestObject.hpp"
