@@ -37,7 +37,7 @@ struct JSIConverter<jni::JDouble> final {
     }
   }
   static inline bool canConvert(jsi::Runtime&, const jsi::Value& value) {
-    return value.isUndefined() || value.isNull() || value.isNumber();
+    return value.isNumber() || value.isUndefined() || value.isNull();
   }
 };
 
@@ -59,7 +59,7 @@ struct JSIConverter<jni::JBoolean> final {
     }
   }
   static inline bool canConvert(jsi::Runtime&, const jsi::Value& value) {
-    return value.isUndefined() || value.isNull() || value.isBool();
+    return value.isBool() || value.isUndefined() || value.isNull();
   }
 };
 
@@ -81,7 +81,7 @@ struct JSIConverter<jni::JLong> final {
     }
   }
   static inline bool canConvert(jsi::Runtime&, const jsi::Value& value) {
-    return value.isUndefined() || value.isNull() || value.isBigInt();
+    return value.isBigInt() || value.isUndefined() || value.isNull();
   }
 };
 

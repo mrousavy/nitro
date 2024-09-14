@@ -12,6 +12,7 @@ struct JSIConverter;
 
 #include "AnyMap.hpp"
 #include "JAnyMap.hpp"
+#include "JSIConverter+JString.hpp"
 #include "JSIConverter+JObject.hpp"
 #include "JSIConverter.hpp"
 #include <fbjni/fbjni.h>
@@ -31,7 +32,7 @@ struct JSIConverter<JAnyMap::javaobject> final {
     size_t size = properties.size(runtime);
 
     jni::local_ref<JAnyMap::javaobject> map = JAnyMap::create(size);
-    jni::alias_ref<jni::JMap<jni::JString, jni::JObject>> javaMap = map->cthis()->getJavaMap();
+    jni::global_ref<jni::JMap<jni::JString, jni::JObject>> javaMap = map->cthis()->getJavaMap();
     for (size_t i = 0; i < size; i++) {
       jsi::Value key = properties.getValueAtIndex(runtime, i);
       jsi::Value value = object.getProperty(runtime, key.asString(runtime));
