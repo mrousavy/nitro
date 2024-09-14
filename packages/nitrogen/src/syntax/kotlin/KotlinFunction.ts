@@ -64,12 +64,24 @@ class ${name} {
   `.trim()
 
   const cppReturnType = functionType.returnType.getCode('c++')
-  const jniParams = functionType.parameters.map((p) => {
+  const jniRawParams = functionType.parameters.map((p) => {
     const bridge = new KotlinCxxBridgedType(p)
     const type = bridge.asJniReferenceType('alias')
+    return `${type} ${p.escapedName}`
+  })
+  const jniParams = functionType.parameters.map((p) => {
+    const bridge = new KotlinCxxBridgedType(p)
+    const type = bridge.asJniReferenceType('global')
     return `const ${type}& ${p.escapedName}`
   })
-  const jniParamsForward = functionType.parameters.map((p) => p.name)
+  const jniParamsForward = functionType.parameters.map((p) => {
+    const bridge = new KotlinCxxBridgedType(p)
+    if (bridge.isJniReferenceType) {
+      return `jni::make_global(${p.escapedName})`
+    } else {
+      return p.escapedName
+    }
+  })
   const jniClassDescriptor = NitroConfig.getAndroidPackage('c++/jni', name)
   const cxxNamespace = NitroConfig.getCxxNamespace('c++')
   const cppFunctionType = functionType.getCode('c++')
@@ -77,7 +89,7 @@ class ${name} {
   const bridgedReturn = new KotlinCxxBridgedType(functionType.returnType)
   const bridgedParameters = functionType.parameters.map((p) => {
     const bridge = new KotlinCxxBridgedType(p)
-    return `${bridge.asJniReferenceType('alias')} /* ${p.name} */`
+    return `${bridge.asJniReferenceType('global')} /* ${p.name} */`
   })
   const jniFunctionType = `std::function<${bridgedReturn.asJniReferenceType('local')}(${bridgedParameters.join(', ')})>`
 
@@ -90,7 +102,12 @@ class ${name} {
   })
   const cppToJniParamsForward = functionType.parameters.map((p) => {
     const bridge = new KotlinCxxBridgedType(p)
-    return bridge.parseFromCppToKotlin(p.escapedName, 'c++', false)
+    const forward = bridge.parseFromCppToKotlin(p.escapedName, 'c++', false)
+    if (bridge.isJniReferenceType) {
+      return `jni::make_global(${forward})`
+    } else {
+      return forward
+    }
   })
   let cppToJniForwardBody: string
   if (bridgedReturn.hasType) {
@@ -170,7 +187,7 @@ namespace ${cxxNamespace} {
     }
 
   public:
-    ${cppReturnType} call(${jniParams.join(', ')}) {
+    ${cppReturnType} call(${jniRawParams.join(', ')}) {
       return _func(${indent(jniParamsForward.join(', '), '      ')});
     }
 
