@@ -35,12 +35,12 @@ public:
   static jni::local_ref<JAnyMap::javaobject> create(const std::shared_ptr<AnyMap>& map) {
     return newObjectCxxArgs(map);
   }
-    /**
-     * Create a new `JAnyMap` with the given pre-allocated size.
-     */
-    static jni::local_ref<JAnyMap::javaobject> create(size_t size) {
-        return newObjectCxxArgs(size);
-    }
+  /**
+   * Create a new `JAnyMap` with the given pre-allocated size.
+   */
+  static jni::local_ref<JAnyMap::javaobject> create(size_t size) {
+    return newObjectCxxArgs(size);
+  }
 
 private:
   explicit JAnyMap() {
@@ -142,15 +142,15 @@ public:
   void setNull(const jni::alias_ref<jni::JString>& key) {
     _map->put(key, nullptr);
   }
-    void setDouble(const jni::alias_ref<jni::JString>& key, double value) {
-        _map->put(key, jni::autobox(value));
-    }
-    void setBoolean(const jni::alias_ref<jni::JString>& key, bool value) {
-        _map->put(key, jni::autobox(value));
-    }
-    void setBigInt(const jni::alias_ref<jni::JString>& key, int64_t value) {
-        _map->put(key, jni::autobox(value));
-    }
+  void setDouble(const jni::alias_ref<jni::JString>& key, double value) {
+    _map->put(key, jni::autobox(value));
+  }
+  void setBoolean(const jni::alias_ref<jni::JString>& key, bool value) {
+    _map->put(key, jni::autobox(value));
+  }
+  void setBigInt(const jni::alias_ref<jni::JString>& key, int64_t value) {
+    _map->put(key, jni::autobox(value));
+  }
   void setString(const jni::alias_ref<jni::JString>& key, const jni::alias_ref<jni::JString>& value) {
     _map->put(key, value);
   }
