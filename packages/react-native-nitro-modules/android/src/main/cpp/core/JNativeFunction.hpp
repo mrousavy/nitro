@@ -22,16 +22,16 @@ public:
   static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/core/NativeFunction;";
 
   static jni::local_ref<JNativeFunction::javaobject> create(TFunc&& function) {
-      return newObjectCxxArgs(std::move(function));
+    return newObjectCxxArgs(std::move(function));
   }
 
 public:
   void invoke(jni::alias_ref<jni::JObject> value) {
-      _function(value);
+    _function(value);
   }
 
 private:
-  explicit JNativeFunction(TFunc&& function): _function(std::move(function)) {}
+  explicit JNativeFunction(TFunc&& function) : _function(std::move(function)) {}
 
 private:
   friend HybridBase;
