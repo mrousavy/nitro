@@ -38,10 +38,14 @@ int initialize(JavaVM* vm) {
     HybridObjectRegistry::registerHybridObjectConstructor(
       "ImageFactory",
       []() -> std::shared_ptr<HybridObject> {
-        static auto javaClass = jni::findClassLocal("com/margelo/nitro/image/ImageFactory");
+        static auto javaClass = jni::findClassStatic("com/margelo/nitro/image/ImageFactory");
         static auto defaultConstructor = javaClass->getConstructor<JHybridImageFactorySpec::javaobject()>();
     
         auto instance = javaClass->newObject(defaultConstructor);
+        if (instance == nullptr) [[unlikely]] {
+          throw std::runtime_error("Failed to create an instance of \"JHybridImageFactorySpec\" - the constructor returned null!");
+        }
+    
         auto globalRef = jni::make_global(instance);
         return JNISharedPtr::make_shared_from_jni<JHybridImageFactorySpec>(globalRef);
       }
@@ -58,10 +62,14 @@ int initialize(JavaVM* vm) {
     HybridObjectRegistry::registerHybridObjectConstructor(
       "KotlinTestObject",
       []() -> std::shared_ptr<HybridObject> {
-        static auto javaClass = jni::findClassLocal("com/margelo/nitro/image/KotlinTestObject");
+        static auto javaClass = jni::findClassStatic("com/margelo/nitro/image/KotlinTestObject");
         static auto defaultConstructor = javaClass->getConstructor<JHybridKotlinTestObjectSpec::javaobject()>();
     
         auto instance = javaClass->newObject(defaultConstructor);
+        if (instance == nullptr) [[unlikely]] {
+          throw std::runtime_error("Failed to create an instance of \"JHybridKotlinTestObjectSpec\" - the constructor returned null!");
+        }
+    
         auto globalRef = jni::make_global(instance);
         return JNISharedPtr::make_shared_from_jni<JHybridKotlinTestObjectSpec>(globalRef);
       }
