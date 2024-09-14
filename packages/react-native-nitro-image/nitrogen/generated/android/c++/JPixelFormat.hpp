@@ -73,7 +73,7 @@ namespace margelo::nitro {
       PixelFormat cppValue = JSIConverter<PixelFormat>::fromJSI(runtime, arg);
       return JPixelFormat::fromCpp(cppValue);
     }
-    static inline jsi::Value toJSI(jsi::Runtime& runtime, const jni::alias_ref<JPixelFormat>& arg) {
+    static inline jsi::Value toJSI(jsi::Runtime& runtime, const jni::local_ref<JPixelFormat>& arg) {
       PixelFormat cppValue = arg->toCpp();
       return JSIConverter<PixelFormat>::toJSI(runtime, cppValue);
     }

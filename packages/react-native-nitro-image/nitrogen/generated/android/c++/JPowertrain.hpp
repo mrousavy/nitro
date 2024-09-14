@@ -73,7 +73,7 @@ namespace margelo::nitro {
       Powertrain cppValue = JSIConverter<Powertrain>::fromJSI(runtime, arg);
       return JPowertrain::fromCpp(cppValue);
     }
-    static inline jsi::Value toJSI(jsi::Runtime& runtime, const jni::alias_ref<JPowertrain>& arg) {
+    static inline jsi::Value toJSI(jsi::Runtime& runtime, const jni::local_ref<JPowertrain>& arg) {
       Powertrain cppValue = arg->toCpp();
       return JSIConverter<Powertrain>::toJSI(runtime, cppValue);
     }

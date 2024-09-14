@@ -89,7 +89,7 @@ namespace margelo::nitro {
       ${enumType.enumName} cppValue = JSIConverter<${enumType.enumName}>::fromJSI(runtime, arg);
       return ${jniName}::fromCpp(cppValue);
     }
-    static inline jsi::Value toJSI(jsi::Runtime& runtime, const jni::alias_ref<${jniName}>& arg) {
+    static inline jsi::Value toJSI(jsi::Runtime& runtime, const jni::local_ref<${jniName}>& arg) {
       ${enumType.enumName} cppValue = arg->toCpp();
       return JSIConverter<${enumType.enumName}>::toJSI(runtime, cppValue);
     }

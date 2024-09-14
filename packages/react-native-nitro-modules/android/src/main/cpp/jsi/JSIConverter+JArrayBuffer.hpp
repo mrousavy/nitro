@@ -23,11 +23,11 @@ using namespace facebook;
 // ArrayBuffer <> JArrayBuffer
 template <>
 struct JSIConverter<JArrayBuffer::javaobject> final {
-  static inline jni::alias_ref<JArrayBuffer::javaobject> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+  static inline jni::local_ref<JArrayBuffer::javaobject> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
     std::shared_ptr<ArrayBuffer> jsArrayBuffer = JSIConverter<std::shared_ptr<ArrayBuffer>>::fromJSI(runtime, arg);
     return JArrayBuffer::wrap(jsArrayBuffer);
   }
-  static inline jsi::Value toJSI(jsi::Runtime& runtime, const jni::alias_ref<JArrayBuffer::javaobject>& arg) {
+  static inline jsi::Value toJSI(jsi::Runtime& runtime, const jni::local_ref<JArrayBuffer::javaobject>& arg) {
     std::shared_ptr<ArrayBuffer> arrayBuffer = arg->cthis()->getArrayBuffer();
     return jsi::ArrayBuffer(runtime, arrayBuffer);
   }

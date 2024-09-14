@@ -29,7 +29,7 @@ struct JSIConverter<jni::JDouble> final {
       return jni::JDouble::valueOf(arg.asNumber());
     }
   }
-  static inline jsi::Value toJSI(jsi::Runtime&, const jni::alias_ref<jni::JDouble>& arg) {
+  static inline jsi::Value toJSI(jsi::Runtime&, const jni::local_ref<jni::JDouble>& arg) {
     if (arg == nullptr) {
       return jsi::Value::undefined();
     } else {
@@ -51,7 +51,7 @@ struct JSIConverter<jni::JBoolean> final {
       return jni::JBoolean::valueOf(arg.asBool());
     }
   }
-  static inline jsi::Value toJSI(jsi::Runtime&, const jni::alias_ref<jni::JBoolean>& arg) {
+  static inline jsi::Value toJSI(jsi::Runtime&, const jni::local_ref<jni::JBoolean>& arg) {
     if (arg == nullptr) {
       return jsi::Value::undefined();
     } else {
@@ -73,7 +73,7 @@ struct JSIConverter<jni::JLong> final {
       return jni::JLong::valueOf(arg.asBigInt(runtime).asInt64(runtime));
     }
   }
-  static inline jsi::Value toJSI(jsi::Runtime& runtime, const jni::alias_ref<jni::JLong>& arg) {
+  static inline jsi::Value toJSI(jsi::Runtime& runtime, const jni::local_ref<jni::JLong>& arg) {
     if (arg == nullptr) {
       return jsi::Value::undefined();
     } else {

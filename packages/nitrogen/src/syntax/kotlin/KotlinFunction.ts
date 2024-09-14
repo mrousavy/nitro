@@ -139,10 +139,10 @@ namespace margelo::nitro {
   // (Args...) => T <> J${name}
   template <>
   struct JSIConverter<J${name}::javaobject> final {
-    static inline jni::alias_ref<J${name}::javaobject> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+    static inline jni::local_ref<J${name}::javaobject> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       return J${name}::fromCpp(JSIConverter<${typename}>::fromJSI(runtime, arg));
     }
-    static inline jsi::Value toJSI(jsi::Runtime& runtime, const jni::alias_ref<J${name}::javaobject>& arg) {
+    static inline jsi::Value toJSI(jsi::Runtime& runtime, const jni::local_ref<J${name}::javaobject>& arg) {
       return JSIConverter<${typename}>::toJSI(runtime, arg->cthis()->getFunction());
     }
     static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {

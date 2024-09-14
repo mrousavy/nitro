@@ -65,10 +65,10 @@ namespace margelo::nitro {
   // (Args...) => T <> JFunc_void_Person
   template <>
   struct JSIConverter<JFunc_void_Person::javaobject> final {
-    static inline jni::alias_ref<JFunc_void_Person::javaobject> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+    static inline jni::local_ref<JFunc_void_Person::javaobject> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       return JFunc_void_Person::fromCpp(JSIConverter<std::function<void(const Person& /* p */)>>::fromJSI(runtime, arg));
     }
-    static inline jsi::Value toJSI(jsi::Runtime& runtime, const jni::alias_ref<JFunc_void_Person::javaobject>& arg) {
+    static inline jsi::Value toJSI(jsi::Runtime& runtime, const jni::local_ref<JFunc_void_Person::javaobject>& arg) {
       return JSIConverter<std::function<void(const Person& /* p */)>>::toJSI(runtime, arg->cthis()->getFunction());
     }
     static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {

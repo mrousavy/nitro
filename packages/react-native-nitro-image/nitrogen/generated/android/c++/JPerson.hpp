@@ -93,7 +93,7 @@ namespace margelo::nitro {
         JSIConverter<double>::fromJSI(runtime, obj.getProperty(runtime, "age"))
       );
     }
-    static inline jsi::Value toJSI(jsi::Runtime& runtime, const jni::alias_ref<JPerson>& arg) {
+    static inline jsi::Value toJSI(jsi::Runtime& runtime, const jni::local_ref<JPerson>& arg) {
       jsi::Object obj(runtime);
       obj.setProperty(runtime, "name", JSIConverter<jni::JString>::toJSI(runtime, arg->getName()));
       obj.setProperty(runtime, "age", JSIConverter<double>::toJSI(runtime, arg->getAge()));

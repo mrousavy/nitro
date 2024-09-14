@@ -643,10 +643,10 @@ promise->set_value();
             return `
 [&]() {
   auto promise = std::make_shared<std::promise<${actualCppType}>>();
-  ${parameterName}->addOnResolvedListener([=](jni::alias_ref<jni::JObject> boxedResult) {
+  ${parameterName}->addOnResolvedListener([=](jni::local_ref<jni::JObject> boxedResult) {
     ${indent(resolveBody, '    ')}
   });
-  ${parameterName}->addOnRejectedListener([=](jni::alias_ref<jni::JString> message) {
+  ${parameterName}->addOnRejectedListener([=](jni::local_ref<jni::JString> message) {
     std::runtime_error error(message->toStdString());
     promise->set_exception(std::make_exception_ptr(error));
   });

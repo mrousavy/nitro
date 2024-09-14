@@ -86,7 +86,7 @@ namespace margelo::nitro {
   // NativeState<{}> <> JHybridImageFactorySpec
   template <>
   struct JSIConverter<JHybridImageFactorySpec::javaobject> final {
-    static inline jni::alias_ref<JHybridImageFactorySpec::javaobject> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+    static inline jni::global_ref<JHybridImageFactorySpec::javaobject> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       jsi::Object object = arg.asObject(runtime);
       if (!object.hasNativeState<JHybridObject>(runtime)) [[unlikely]] {
         std::string typeDescription = arg.toString(runtime).utf8(runtime);
@@ -96,7 +96,7 @@ namespace margelo::nitro {
       std::shared_ptr<JHybridImageFactorySpec> jhybridObject = std::dynamic_pointer_cast<JHybridImageFactorySpec>(nativeState);
       return jhybridObject->getJavaPart();
     }
-    static inline jsi::Value toJSI(jsi::Runtime& runtime, const jni::alias_ref<JHybridImageFactorySpec::javaobject>& arg) {
+    static inline jsi::Value toJSI(jsi::Runtime& runtime, const jni::local_ref<JHybridImageFactorySpec::javaobject>& arg) {
       return arg->cthis()->toObject(runtime);
     }
     static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {

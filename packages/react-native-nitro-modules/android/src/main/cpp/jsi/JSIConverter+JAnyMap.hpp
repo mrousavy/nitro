@@ -24,12 +24,12 @@ using namespace facebook;
 // {} <> JAnyMap
 template <>
 struct JSIConverter<JAnyMap::javaobject> final {
-  static inline jni::alias_ref<JAnyMap::javaobject> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+  static inline jni::local_ref<JAnyMap::javaobject> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
     // TODO: Stay within Java's data structures to convert AnyMap more efficiently.
     auto anyMap = JSIConverter<std::shared_ptr<AnyMap>>::fromJSI(runtime, arg);
     return JAnyMap::create(anyMap);
   }
-  static inline jsi::Value toJSI(jsi::Runtime& runtime, const jni::alias_ref<JAnyMap::javaobject>& arg) {
+  static inline jsi::Value toJSI(jsi::Runtime& runtime, const jni::local_ref<JAnyMap::javaobject>& arg) {
     // TODO: Stay within Java's data structures to convert AnyMap more efficiently.
     auto anyMap = arg->cthis()->getMap();
     return JSIConverter<std::shared_ptr<AnyMap>>::toJSI(runtime, anyMap);

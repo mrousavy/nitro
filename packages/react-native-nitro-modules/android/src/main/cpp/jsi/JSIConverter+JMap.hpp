@@ -34,7 +34,7 @@ struct JSIConverter<jni::JMap<K, V>> final {
     }
     return map;
   }
-  static inline jsi::Value toJSI(jsi::Runtime& runtime, jni::alias_ref<jni::JMap<K, V>> arg) {
+  static inline jsi::Value toJSI(jsi::Runtime& runtime, jni::local_ref<jni::JMap<K, V>> arg) {
     jsi::Object object = jsi::Object(runtime);
     size_t size = arg->size();
     for (const auto& entry : *arg) {

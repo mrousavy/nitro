@@ -115,10 +115,10 @@ namespace margelo::nitro::image {
     auto result = this->asyncTestJNI();
     return [&]() {
       auto promise = std::make_shared<std::promise<void>>();
-      result->addOnResolvedListener([=](jni::alias_ref<jni::JObject> boxedResult) {
+      result->addOnResolvedListener([=](jni::local_ref<jni::JObject> boxedResult) {
         promise->set_value();
       });
-      result->addOnRejectedListener([=](jni::alias_ref<jni::JString> message) {
+      result->addOnRejectedListener([=](jni::local_ref<jni::JString> message) {
         std::runtime_error error(message->toStdString());
         promise->set_exception(std::make_exception_ptr(error));
       });

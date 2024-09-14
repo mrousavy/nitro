@@ -36,7 +36,7 @@ struct JSIConverter<jni::JArrayDouble> final {
     delete[] data;
     return result;
   }
-  static inline jsi::Value toJSI(jsi::Runtime& runtime, jni::alias_ref<jni::JArrayDouble> arg) {
+  static inline jsi::Value toJSI(jsi::Runtime& runtime, jni::local_ref<jni::JArrayDouble> arg) {
     size_t size = arg->size();
     jsi::Array array = jsi::Array(runtime, size);
     std::unique_ptr<double[]> region = arg->getRegion(0, static_cast<jsize>(size));
@@ -76,7 +76,7 @@ struct JSIConverter<jni::JArrayBoolean> final {
     delete[] data;
     return result;
   }
-  static inline jsi::Value toJSI(jsi::Runtime& runtime, jni::alias_ref<jni::JArrayBoolean>& arg) {
+  static inline jsi::Value toJSI(jsi::Runtime& runtime, jni::local_ref<jni::JArrayBoolean>& arg) {
     size_t size = arg->size();
     jsi::Array array = jsi::Array(runtime, size);
     std::unique_ptr<jboolean[]> region = arg->getRegion(0, static_cast<jsize>(size));
@@ -116,7 +116,7 @@ struct JSIConverter<jni::JArrayLong> final {
     delete[] data;
     return result;
   }
-  static inline jsi::Value toJSI(jsi::Runtime& runtime, jni::alias_ref<jni::JArrayLong>& arg) {
+  static inline jsi::Value toJSI(jsi::Runtime& runtime, jni::local_ref<jni::JArrayLong>& arg) {
     size_t size = arg->size();
     jsi::Array array = jsi::Array(runtime, size);
     std::unique_ptr<jlong[]> region = arg->getRegion(0, static_cast<jsize>(size));

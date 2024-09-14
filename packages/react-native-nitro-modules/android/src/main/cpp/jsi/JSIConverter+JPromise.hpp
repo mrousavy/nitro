@@ -25,10 +25,10 @@ using namespace facebook;
 // Promise <> JPromise
 template <typename T>
 struct JSIConverter<JPromise<T>> final {
-  static inline jni::alias_ref<JPromise<T>> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+  static inline jni::local_ref<JPromise<T>> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
     throw std::runtime_error("Promise cannot be converted to a native type - it needs to be awaited first!");
   }
-  static inline jsi::Value toJSI(jsi::Runtime& runtime, const jni::alias_ref<JPromise<T>>& arg) {
+  static inline jsi::Value toJSI(jsi::Runtime& runtime, const jni::local_ref<JPromise<T>>& arg) {
     std::shared_ptr<Dispatcher> strongDispatcher = Dispatcher::getRuntimeGlobalDispatcher(runtime);
     std::weak_ptr<Dispatcher> weakDispatcher = strongDispatcher;
 
@@ -37,7 +37,7 @@ struct JSIConverter<JPromise<T>> final {
     return JSPromise::createPromise(
         runtime, [weakDispatcher, javaPromise](jsi::Runtime& runtime, std::shared_ptr<JSPromise> promise) mutable {
           // on resolved listener
-          javaPromise->addOnResolvedListener([&runtime, weakDispatcher, promise](jni::alias_ref<jni::JObject> result) {
+          javaPromise->addOnResolvedListener([&runtime, weakDispatcher, promise](jni::local_ref<jni::JObject> result) {
             std::shared_ptr<Dispatcher> dispatcher = weakDispatcher.lock();
             if (!dispatcher) {
               Logger::log(LogLevel::Error, "JSIConverter",
@@ -54,7 +54,7 @@ struct JSIConverter<JPromise<T>> final {
             });
           });
           // on rejected listener
-          javaPromise->addOnRejectedListener([&runtime, weakDispatcher, promise](jni::alias_ref<jni::JString> errorMessage) {
+          javaPromise->addOnRejectedListener([&runtime, weakDispatcher, promise](jni::local_ref<jni::JString> errorMessage) {
             std::shared_ptr<Dispatcher> dispatcher = weakDispatcher.lock();
             if (!dispatcher) {
               Logger::log(LogLevel::Error, "JSIConverter",

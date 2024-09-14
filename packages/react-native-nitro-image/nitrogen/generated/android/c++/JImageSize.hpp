@@ -93,7 +93,7 @@ namespace margelo::nitro {
         JSIConverter<double>::fromJSI(runtime, obj.getProperty(runtime, "height"))
       );
     }
-    static inline jsi::Value toJSI(jsi::Runtime& runtime, const jni::alias_ref<JImageSize>& arg) {
+    static inline jsi::Value toJSI(jsi::Runtime& runtime, const jni::local_ref<JImageSize>& arg) {
       jsi::Object obj(runtime);
       obj.setProperty(runtime, "width", JSIConverter<double>::toJSI(runtime, arg->getWidth()));
       obj.setProperty(runtime, "height", JSIConverter<double>::toJSI(runtime, arg->getHeight()));

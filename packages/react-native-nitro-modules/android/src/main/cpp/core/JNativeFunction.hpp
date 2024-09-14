@@ -18,7 +18,7 @@ using namespace facebook;
  */
 class JNativeFunction final : public jni::HybridClass<JNativeFunction> {
 public:
-  using TFunc = std::function<void(const jni::alias_ref<jni::JObject>& /* value */)>;
+  using TFunc = std::function<void(const jni::local_ref<jni::JObject>& /* value */)>;
   static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/core/NativeFunction;";
 
   static jni::local_ref<JNativeFunction::javaobject> create(TFunc&& function) {
@@ -27,7 +27,7 @@ public:
 
 public:
   void invoke(jni::alias_ref<jni::JObject> value) {
-    _function(value);
+    _function(jni::make_local(value));
   }
 
 private:

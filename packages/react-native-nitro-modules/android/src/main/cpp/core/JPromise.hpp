@@ -21,8 +21,8 @@ template <typename T>
 struct JPromise final : public jni::JavaClass<JPromise<T>> {
 public:
   static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/core/Promise;";
-  using OnResolvedFunc = std::function<void(jni::alias_ref<T>)>;
-  using OnRejectedFunc = std::function<void(jni::alias_ref<jni::JString>)>;
+  using OnResolvedFunc = std::function<void(jni::local_ref<T>)>;
+  using OnRejectedFunc = std::function<void(jni::local_ref<jni::JString>)>;
 
   using jni::JavaClass<JPromise<T>>::javaClassStatic;
   using jni::JavaClass<JPromise<T>>::self;
@@ -42,13 +42,13 @@ public:
     static const auto method =
         javaClassStatic()->template getMethod<void(jni::alias_ref<JNativeFunction::javaobject>)>("addOnResolvedListener");
     auto nativeFunction = JNativeFunction::create(
-        [onResolved = std::move(onResolved)](const jni::alias_ref<jni::JObject>& value) { onResolved(jni::static_ref_cast<T>(value)); });
+        [onResolved = std::move(onResolved)](const jni::local_ref<jni::JObject>& value) { onResolved(jni::static_ref_cast<T>(value)); });
     method(self(), nativeFunction);
   }
   void addOnRejectedListener(OnRejectedFunc&& onRejected) {
     static const auto method =
         javaClassStatic()->template getMethod<void(jni::alias_ref<JNativeFunction::javaobject>)>("addOnRejectedListener");
-    auto nativeFunction = JNativeFunction::create([onResolved = std::move(onRejected)](const jni::alias_ref<jni::JObject>& value) {
+    auto nativeFunction = JNativeFunction::create([onResolved = std::move(onRejected)](const jni::local_ref<jni::JObject>& value) {
       onResolved(jni::static_ref_cast<jni::JString>(value));
     });
     method(self(), nativeFunction);
@@ -59,8 +59,8 @@ template <>
 struct JPromise<void> final : public jni::JavaClass<JPromise<void>> {
 public:
   static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/core/Promise;";
-  using OnResolvedFunc = std::function<void(jni::alias_ref<jni::JObject>)>;
-  using OnRejectedFunc = std::function<void(jni::alias_ref<jni::JString>)>;
+  using OnResolvedFunc = std::function<void(jni::local_ref<jni::JObject>)>;
+  using OnRejectedFunc = std::function<void(jni::local_ref<jni::JString>)>;
 
 public:
   void resolve() {
@@ -77,13 +77,13 @@ public:
     static const auto method =
         javaClassStatic()->template getMethod<void(jni::alias_ref<JNativeFunction::javaobject>)>("addOnResolvedListener");
     auto nativeFunction =
-        JNativeFunction::create([onResolved = std::move(onResolved)](const jni::alias_ref<jni::JObject>& value) { onResolved(value); });
+        JNativeFunction::create([onResolved = std::move(onResolved)](const jni::local_ref<jni::JObject>& value) { onResolved(value); });
     method(self(), nativeFunction);
   }
   void addOnRejectedListener(OnRejectedFunc&& onRejected) {
     static const auto method =
         javaClassStatic()->template getMethod<void(jni::alias_ref<JNativeFunction::javaobject>)>("addOnRejectedListener");
-    auto nativeFunction = JNativeFunction::create([onResolved = std::move(onRejected)](const jni::alias_ref<jni::JObject>& value) {
+    auto nativeFunction = JNativeFunction::create([onResolved = std::move(onRejected)](const jni::local_ref<jni::JObject>& value) {
       onResolved(jni::static_ref_cast<jni::JString>(value));
     });
     method(self(), nativeFunction);

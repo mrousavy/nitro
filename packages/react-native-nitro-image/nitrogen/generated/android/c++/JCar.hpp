@@ -146,7 +146,7 @@ namespace margelo::nitro {
         JSIConverter<JPerson>::fromJSI(runtime, obj.getProperty(runtime, "driver"))
       );
     }
-    static inline jsi::Value toJSI(jsi::Runtime& runtime, const jni::alias_ref<JCar>& arg) {
+    static inline jsi::Value toJSI(jsi::Runtime& runtime, const jni::local_ref<JCar>& arg) {
       jsi::Object obj(runtime);
       obj.setProperty(runtime, "year", JSIConverter<double>::toJSI(runtime, arg->getYear()));
       obj.setProperty(runtime, "make", JSIConverter<jni::JString>::toJSI(runtime, arg->getMake()));
