@@ -69,6 +69,8 @@ namespace margelo::nitro::image {
       virtual void setSomeBuffer(const std::shared_ptr<ArrayBuffer>& someBuffer) = 0;
       virtual std::unordered_map<std::string, std::string> getSomeRecord() = 0;
       virtual void setSomeRecord(const std::unordered_map<std::string, std::string>& someRecord) = 0;
+      virtual std::string getSomeString() = 0;
+      virtual void setSomeString(const std::string& someString) = 0;
 
     public:
       // Methods

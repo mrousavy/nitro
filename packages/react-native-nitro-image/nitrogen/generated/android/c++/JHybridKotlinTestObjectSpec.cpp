@@ -109,6 +109,13 @@ namespace margelo::nitro::image {
       return map;
     }());
   }
+  std::string JHybridKotlinTestObjectSpec::getSomeString() {
+    auto result = this->getSomeStringJNI();
+    return result->toStdString();
+  }
+  void JHybridKotlinTestObjectSpec::setSomeString(const std::string& someString) {
+    this->setSomeStringJNI(jni::make_jstring(someString));
+  }
 
   // Methods
   std::future<void> JHybridKotlinTestObjectSpec::asyncTest() {
@@ -182,6 +189,14 @@ namespace margelo::nitro::image {
     static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<jni::JMap<jni::JString, jni::JString>> /* someRecord */)>("setSomeRecord");
     return method(_javaPart, someRecord);
   }
+  jni::local_ref<jni::JString> JHybridKotlinTestObjectSpec::getSomeStringJNI() {
+    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<jni::JString>()>("getSomeString");
+    return method(_javaPart);
+  }
+  void JHybridKotlinTestObjectSpec::setSomeStringJNI(const jni::local_ref<jni::JString>& someString) {
+    static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<jni::JString> /* someString */)>("setSomeString");
+    return method(_javaPart, someString);
+  }
 
   // JNI Methods
   jni::local_ref<JPromise<void>> JHybridKotlinTestObjectSpec::asyncTestJNI() {
@@ -214,6 +229,8 @@ namespace margelo::nitro::image {
       prototype.registerHybridSetter("someBuffer", &JHybridKotlinTestObjectSpec::setSomeBufferJNI);
       prototype.registerHybridGetter("someRecord", &JHybridKotlinTestObjectSpec::getSomeRecordJNI);
       prototype.registerHybridSetter("someRecord", &JHybridKotlinTestObjectSpec::setSomeRecordJNI);
+      prototype.registerHybridGetter("someString", &JHybridKotlinTestObjectSpec::getSomeStringJNI);
+      prototype.registerHybridSetter("someString", &JHybridKotlinTestObjectSpec::setSomeStringJNI);
       prototype.registerHybridMethod("asyncTest", &JHybridKotlinTestObjectSpec::asyncTestJNI);
       prototype.registerHybridMethod("createMap", &JHybridKotlinTestObjectSpec::createMapJNI);
       prototype.registerHybridMethod("addOnPersonBornListener", &JHybridKotlinTestObjectSpec::addOnPersonBornListenerJNI);

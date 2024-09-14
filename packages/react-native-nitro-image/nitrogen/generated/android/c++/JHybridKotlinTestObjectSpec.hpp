@@ -82,6 +82,8 @@ namespace margelo::nitro::image {
     void setSomeBuffer(const std::shared_ptr<ArrayBuffer>& someBuffer) override;
     std::unordered_map<std::string, std::string> getSomeRecord() override;
     void setSomeRecord(const std::unordered_map<std::string, std::string>& someRecord) override;
+    std::string getSomeString() override;
+    void setSomeString(const std::string& someString) override;
 
   public:
     // Methods
@@ -103,6 +105,8 @@ namespace margelo::nitro::image {
     void setSomeBufferJNI(const jni::local_ref<JArrayBuffer::javaobject>& someBuffer);
     jni::local_ref<jni::JMap<jni::JString, jni::JString>> getSomeRecordJNI();
     void setSomeRecordJNI(const jni::local_ref<jni::JMap<jni::JString, jni::JString>>& someRecord);
+    jni::local_ref<jni::JString> getSomeStringJNI();
+    void setSomeStringJNI(const jni::local_ref<jni::JString>& someString);
 
   public:
     // Methods (overriden by JNI)
