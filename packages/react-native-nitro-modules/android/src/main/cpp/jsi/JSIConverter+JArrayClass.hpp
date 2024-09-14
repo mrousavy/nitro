@@ -23,9 +23,9 @@ using namespace facebook;
 template <typename T>
 struct JSIConverter<jni::JArrayClass<T>> final {
   static inline jni::local_ref<jni::JArrayClass<T>> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
-    jsi::Object object = arg.asObject(runtime);
-    jsi::Array array = object.asArray(runtime);
+    jsi::Array array = arg.asObject(runtime).asArray(runtime);
     size_t size = array.size(runtime);
+
     jni::local_ref<jni::JArrayClass<T>> result = jni::JArrayClass<T>::newArray(size);
     for (size_t i = 0; i < size; i++) {
       result->setElement(i, *JSIConverter<T>::fromJSI(runtime, array.getValueAtIndex(runtime, i)));
