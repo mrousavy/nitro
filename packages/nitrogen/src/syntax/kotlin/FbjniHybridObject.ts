@@ -265,7 +265,7 @@ function getJniOverrideMethodImplementation(
 
   const returnJNI = new KotlinCxxBridgedType(method.returnType)
 
-  const returnType = returnJNI.asJniReferenceType('alias')
+  const returnType = returnJNI.asJniReferenceType('local')
   const paramsTypes = method.parameters
     .map((p) => {
       const bridge = new KotlinCxxBridgedType(p.type)
@@ -359,7 +359,7 @@ function getJniOverridePropertySignature(property: Property): string {
   const lines: string[] = []
   // Getter signature
   lines.push(
-    `${bridged.asJniReferenceType('alias')} ${property.cppGetterName}JNI();`
+    `${bridged.asJniReferenceType('local')} ${property.cppGetterName}JNI();`
   )
   if (!property.isReadonly) {
     const type = bridged.canBePassedByReference
@@ -381,5 +381,5 @@ function getJniOverrideMethodSignature(method: Method): string {
       return `${bridged.asJniReferenceType('alias')} ${p.name}`
     }
   })
-  return `${bridgedReturn.asJniReferenceType('alias')} ${method.name}JNI(${parameters.join(', ')});`
+  return `${bridgedReturn.asJniReferenceType('local')} ${method.name}JNI(${parameters.join(', ')});`
 }

@@ -69,8 +69,8 @@ namespace margelo::nitro::image {
 
   public:
     // Properties (overriden by JNI)
-    jni::alias_ref<JImageSize> getSizeJNI();
-    jni::alias_ref<JPixelFormat> getPixelFormatJNI();
+    jni::local_ref<JImageSize> getSizeJNI();
+    jni::local_ref<JPixelFormat> getPixelFormatJNI();
     double getSomeSettablePropJNI();
     void setSomeSettablePropJNI(double someSettableProp);
 
