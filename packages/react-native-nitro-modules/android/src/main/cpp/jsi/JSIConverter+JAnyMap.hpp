@@ -36,8 +36,7 @@ struct JSIConverter<JAnyMap::javaobject> final {
     for (size_t i = 0; i < size; i++) {
       jsi::Value key = properties.getValueAtIndex(runtime, i);
       jsi::Value value = object.getProperty(runtime, key.asString(runtime));
-      javaMap->put(JSIConverter<jni::JString>::fromJSI(runtime, key),
-                   JSIConverter<jni::JObject>::fromJSI(runtime, value));
+      javaMap->put(JSIConverter<jni::JString>::fromJSI(runtime, key), JSIConverter<jni::JObject>::fromJSI(runtime, value));
     }
 
     return map;

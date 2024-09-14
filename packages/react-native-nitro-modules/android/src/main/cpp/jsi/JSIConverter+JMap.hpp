@@ -30,8 +30,7 @@ struct JSIConverter<jni::JMap<K, V>> final {
     for (size_t i = 0; i < size; i++) {
       jsi::Value key = propertyNames.getValueAtIndex(runtime, i);
       jsi::Value value = object.getProperty(runtime, key.asString(runtime));
-      map->put(JSIConverter<K>::fromJSI(runtime, key),
-               JSIConverter<V>::fromJSI(runtime, value));
+      map->put(JSIConverter<K>::fromJSI(runtime, key), JSIConverter<V>::fromJSI(runtime, value));
     }
     return map;
   }
