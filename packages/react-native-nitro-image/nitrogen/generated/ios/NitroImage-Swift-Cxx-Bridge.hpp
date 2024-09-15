@@ -149,6 +149,45 @@ namespace margelo::nitro::image::bridge::swift {
   }
   
   /**
+   * Specialized version of `std::tuple<std::string>`.
+   */
+  using std__tuple_std__string_ = std::tuple<std::string>;
+  inline std::tuple<std::string> create_std__tuple_std__string_(const std::string& arg0) {
+    return std::tuple<std::string> { arg0 };
+  }
+  
+  /**
+   * Specialized version of `std::variant<double, std::string, std::tuple<std::string>>`.
+   */
+  using std__variant_double__std__string__std__tuple_std__string__ = std::variant<double, std::string, std::tuple<std::string>>;
+  inline std::variant<double, std::string, std::tuple<std::string>> create_std__variant_double__std__string__std__tuple_std__string__(double value) {
+    return value;
+  }
+  inline std::variant<double, std::string, std::tuple<std::string>> create_std__variant_double__std__string__std__tuple_std__string__(const std::string& value) {
+    return value;
+  }
+  inline std::variant<double, std::string, std::tuple<std::string>> create_std__variant_double__std__string__std__tuple_std__string__(const std::tuple<std::string>& value) {
+    return value;
+  }
+  inline double get_std__variant_double__std__string__std__tuple_std__string___0(const std::variant<double, std::string, std::tuple<std::string>>& variant) {
+    return std::get<0>(variant);
+  }
+  inline std::string get_std__variant_double__std__string__std__tuple_std__string___1(const std::variant<double, std::string, std::tuple<std::string>>& variant) {
+    return std::get<1>(variant);
+  }
+  inline std::tuple<std::string> get_std__variant_double__std__string__std__tuple_std__string___2(const std::variant<double, std::string, std::tuple<std::string>>& variant) {
+    return std::get<2>(variant);
+  }
+  
+  /**
+   * Specialized version of `std::optional<std::variant<double, std::string, std::tuple<std::string>>>`.
+   */
+  using std__optional_std__variant_double__std__string__std__tuple_std__string___ = std::optional<std::variant<double, std::string, std::tuple<std::string>>>;
+  inline std::optional<std::variant<double, std::string, std::tuple<std::string>>> create_std__optional_std__variant_double__std__string__std__tuple_std__string___(const std::variant<double, std::string, std::tuple<std::string>>& value) {
+    return std::optional<std::variant<double, std::string, std::tuple<std::string>>>(value);
+  }
+  
+  /**
    * Specialized version of `std::optional<bool>`.
    */
   using std__optional_bool_ = std::optional<bool>;

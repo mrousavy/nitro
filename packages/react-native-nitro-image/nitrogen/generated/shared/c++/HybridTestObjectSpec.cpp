@@ -35,6 +35,10 @@ namespace margelo::nitro::image {
       prototype.registerHybridGetter("someTuple", &HybridTestObjectSpec::getSomeTuple);
       prototype.registerHybridSetter("someTuple", &HybridTestObjectSpec::setSomeTuple);
       prototype.registerHybridGetter("self", &HybridTestObjectSpec::getSelf);
+      prototype.registerHybridGetter("discriminatedUnion", &HybridTestObjectSpec::getDiscriminatedUnion);
+      prototype.registerHybridSetter("discriminatedUnion", &HybridTestObjectSpec::setDiscriminatedUnion);
+      prototype.registerHybridGetter("optionalDiscriminatedUnion", &HybridTestObjectSpec::getOptionalDiscriminatedUnion);
+      prototype.registerHybridSetter("optionalDiscriminatedUnion", &HybridTestObjectSpec::setOptionalDiscriminatedUnion);
       prototype.registerHybridMethod("simpleFunc", &HybridTestObjectSpec::simpleFunc);
       prototype.registerHybridMethod("addNumbers", &HybridTestObjectSpec::addNumbers);
       prototype.registerHybridMethod("addStrings", &HybridTestObjectSpec::addStrings);
@@ -66,6 +70,8 @@ namespace margelo::nitro::image {
       prototype.registerHybridMethod("getBufferLastItem", &HybridTestObjectSpec::getBufferLastItem);
       prototype.registerHybridMethod("setAllValuesTo", &HybridTestObjectSpec::setAllValuesTo);
       prototype.registerHybridMethod("newTestObject", &HybridTestObjectSpec::newTestObject);
+      prototype.registerHybridMethod("tryDiscriminatedUnion", &HybridTestObjectSpec::tryDiscriminatedUnion);
+      prototype.registerHybridMethod("tryOptionalDiscriminatedUnion", &HybridTestObjectSpec::tryOptionalDiscriminatedUnion);
     });
   }
 

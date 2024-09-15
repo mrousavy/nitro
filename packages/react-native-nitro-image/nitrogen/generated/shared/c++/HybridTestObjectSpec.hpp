@@ -86,6 +86,10 @@ namespace margelo::nitro::image {
       virtual std::tuple<double, std::string> getSomeTuple() = 0;
       virtual void setSomeTuple(const std::tuple<double, std::string>& someTuple) = 0;
       virtual std::shared_ptr<margelo::nitro::image::HybridTestObjectSpec> getSelf() = 0;
+      virtual std::variant<double, std::string, std::tuple<std::string>> getDiscriminatedUnion() = 0;
+      virtual void setDiscriminatedUnion(const std::variant<double, std::string, std::tuple<std::string>>& discriminatedUnion) = 0;
+      virtual std::optional<std::variant<double, std::string, std::tuple<std::string>>> getOptionalDiscriminatedUnion() = 0;
+      virtual void setOptionalDiscriminatedUnion(const std::optional<std::variant<double, std::string, std::tuple<std::string>>>& optionalDiscriminatedUnion) = 0;
 
     public:
       // Methods
@@ -120,6 +124,8 @@ namespace margelo::nitro::image {
       virtual double getBufferLastItem(const std::shared_ptr<ArrayBuffer>& buffer) = 0;
       virtual void setAllValuesTo(const std::shared_ptr<ArrayBuffer>& buffer, double value) = 0;
       virtual std::shared_ptr<margelo::nitro::image::HybridTestObjectSpec> newTestObject() = 0;
+      virtual std::string tryDiscriminatedUnion(const std::variant<double, std::string, std::tuple<std::string>>& union) = 0;
+      virtual std::string tryOptionalDiscriminatedUnion(const std::optional<std::variant<double, std::string, std::tuple<std::string>>>& union) = 0;
 
     protected:
       // Hybrid Setup
