@@ -153,7 +153,7 @@ export function createType(type: TSMorphType, isOptional: boolean): Type {
         return createType(type.getBaseTypeOfLiteralType(), isOptional)
       }
       return new NumberType()
-    } else if (type.isString()) {
+    } else if (type.isString() || type.isStringLiteral()) {
       return new StringType()
     } else if (type.isBigInt() || type.isBigIntLiteral()) {
       return new BigIntType()
@@ -232,7 +232,7 @@ export function createType(type: TSMorphType, isOptional: boolean): Type {
         variants = removeDuplicates(variants)
 
         if (variants.length === 1) {
-          // It's just one type with undefined/null varians - so we treat it like a simple optional.
+          // It's just one type with undefined/null variant - so we treat it like a simple optional.
           return variants[0]!
         }
 
@@ -256,10 +256,6 @@ export function createType(type: TSMorphType, isOptional: boolean): Type {
     } else if (type.isObject()) {
       throw new Error(
         `Anonymous objects cannot be represented in C++! Extract "${type.getText()}" to a separate interface/type declaration.`
-      )
-    } else if (type.isStringLiteral()) {
-      throw new Error(
-        `String literal ${type.getText()} cannot be represented in C++ because it is ambiguous between a string and a discriminating union enum.`
       )
     } else {
       throw new Error(
