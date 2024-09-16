@@ -204,7 +204,6 @@ To implement `Math` now, you just need to implement the spec:
     ```swift title="HybridMath.swift"
     class HybridMath : HybridMathSpec {
       var hybridContext = margelo.nitro.HybridContext()
-
       var memorySize: Int {
         return getSizeOf(self)
       }
