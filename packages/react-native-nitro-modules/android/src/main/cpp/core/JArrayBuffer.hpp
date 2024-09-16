@@ -78,12 +78,12 @@ public:
       size_t size = _arrayBuffer->size();
       if (copyIfNeeded) {
         auto buffer = jni::JByteBuffer::allocateDirect(size);
-        buffer->order(jni::JByteOrder::bigEndian());
+        buffer->order(jni::JByteOrder::nativeOrder());
         memcpy(buffer->getDirectAddress(), _arrayBuffer->data(), size);
         return buffer;
       } else {
         auto buffer = jni::JByteBuffer::wrapBytes(_arrayBuffer->data(), size);
-        buffer->order(jni::JByteOrder::bigEndian());
+        buffer->order(jni::JByteOrder::nativeOrder());
         return buffer;
       }
     }
