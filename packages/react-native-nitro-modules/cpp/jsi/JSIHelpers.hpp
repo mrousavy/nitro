@@ -1,6 +1,6 @@
 //
 //  JSIHelpers.hpp
-//  Pods
+//  Nitro
 //
 //  Created by Marc Rousavy on 07.08.24.
 //

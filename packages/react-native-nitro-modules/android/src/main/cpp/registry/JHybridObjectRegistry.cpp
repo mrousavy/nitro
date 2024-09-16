@@ -8,6 +8,7 @@
 #include "JHybridObjectRegistry.hpp"
 #include "HybridObjectRegistry.hpp"
 #include "JNISharedPtr.hpp"
+#include "NitroDefines.hpp"
 
 namespace margelo::nitro {
 
@@ -17,7 +18,7 @@ void JHybridObjectRegistry::registerHybridObjectConstructor(jni::alias_ref<jni::
   HybridObjectRegistry::registerHybridObjectConstructor(hybridObjectName, [=]() -> std::shared_ptr<HybridObject> {
     // 1. Call the Java initializer function
     jni::local_ref<JHybridObject::javaobject> hybridObject = sharedInitializer->call();
-#ifndef NDEBUG
+#ifdef NITRO_DEBUG
     if (hybridObject == nullptr) [[unlikely]] {
       throw std::runtime_error("Failed to create HybridObject \"" + hybridObjectName + "\" - the constructor returned null!");
     }

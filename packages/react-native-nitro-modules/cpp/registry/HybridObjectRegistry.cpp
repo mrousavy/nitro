@@ -6,6 +6,7 @@
 //
 
 #include "HybridObjectRegistry.hpp"
+#include "NitroDefines.hpp"
 #include "NitroLogger.hpp"
 
 namespace margelo::nitro {
@@ -31,7 +32,7 @@ std::vector<std::string> HybridObjectRegistry::getAllHybridObjectNames() {
 void HybridObjectRegistry::registerHybridObjectConstructor(const std::string& hybridObjectName, HybridObjectConstructorFn&& constructorFn) {
   Logger::log(LogLevel::Info, TAG, "Registering HybridObject \"%s\"...", hybridObjectName.c_str());
   auto& map = HybridObjectRegistry::getRegistry();
-#ifndef NDEBUG
+#ifdef NITRO_DEBUG
   if (map.contains(hybridObjectName)) [[unlikely]] {
     auto message =
         "HybridObject \"" + std::string(hybridObjectName) +
@@ -63,7 +64,7 @@ std::shared_ptr<HybridObject> HybridObjectRegistry::createHybridObject(const std
   }
   std::shared_ptr<HybridObject> instance = fn->second();
 
-#ifndef NDEBUG
+#ifdef NITRO_DEBUG
   if (instance == nullptr) [[unlikely]] {
     throw std::runtime_error("Failed to create HybridObject \"" + hybridObjectName +
                              "\" - "

@@ -6,6 +6,7 @@
 //
 
 #include "HybridObjectPrototype.hpp"
+#include "NitroDefines.hpp"
 #include "NitroLogger.hpp"
 
 namespace margelo::nitro {
@@ -69,7 +70,7 @@ jsi::Value HybridObjectPrototype::createPrototype(jsi::Runtime& runtime, const s
   prototypeCache.emplace(prototype->getNativeInstanceId(), cachedObject);
 
   // 7. In DEBUG, add a __type info to the prototype object.
-#ifndef NDEBUG
+#ifdef NITRO_DEBUG
   auto typeName = "Prototype<" + std::string(prototype->getNativeInstanceId().name()) + ">";
   cachedObject->setProperty(runtime, "__type", jsi::String::createFromUtf8(runtime, typeName));
 #endif

@@ -7,6 +7,7 @@
 
 #include "NitroLogger.hpp"
 #include "AnyMapHolder.hpp"
+#include "NitroDefines.hpp"
 #include <Foundation/Foundation.h>
 
 namespace margelo::nitro {
@@ -27,7 +28,7 @@ const char* levelToString(LogLevel level) {
 }
 
 void Logger::nativeLog(LogLevel level, const char* tag, const std::string& message) {
-#ifndef NDEBUG
+#ifdef NITRO_DEBUG
   const char* logLevel = levelToString(level);
   NSLog(@"[%s] [Nitro.%s] %s", logLevel, tag, message.c_str());
 #endif

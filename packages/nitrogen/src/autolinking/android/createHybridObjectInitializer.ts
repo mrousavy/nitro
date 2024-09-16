@@ -56,6 +56,7 @@ export function createHybridObjectIntializer(): SourceFile[] {
 ${createFileMetadataString(`${autolinkingClassName}.hpp`)}
 
 #include <jni.h>
+#include <NitroModules/NitroDefines.hpp>
 
 namespace ${cxxNamespace} {
 
