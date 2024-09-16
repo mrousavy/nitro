@@ -105,7 +105,7 @@ Nitrogen parses all TypeScript files that end in `.nitro.ts`.
 For example, let's create `Math.nitro.ts`:
 
 ```ts title="Math.nitro.ts"
-interface Math extends HybridObject {
+export interface Math extends HybridObject<{ ios: 'swift', android: 'kotlin'}> {
   add(a: number, b: number): number
 }
 ```
