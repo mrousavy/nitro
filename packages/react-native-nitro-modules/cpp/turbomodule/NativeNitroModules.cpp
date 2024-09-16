@@ -87,6 +87,13 @@ jsi::Value NativeNitroModules::get(jsi::Runtime& runtime, const jsi::PropNameID&
           return jsi::Value::undefined();
         });
   }
+  if (name == "buildType") {
+#ifdef NITRO_DEBUG
+    return jsi::String::createFromAscii(runtime, "debug");
+#else
+    return jsi::String::createFromAscii(runtime, "release");
+#endif
+  }
 
   return jsi::Value::undefined();
 }

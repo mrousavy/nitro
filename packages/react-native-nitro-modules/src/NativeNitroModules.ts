@@ -13,6 +13,7 @@ export interface Spec extends TurboModule {
   // JSI Helpers
   hasNativeState(obj: UnsafeObject): boolean
   removeNativeState(obj: UnsafeObject): void
+  buildType: 'debug' | 'release'
 }
 
 let turboModule: Spec | undefined
