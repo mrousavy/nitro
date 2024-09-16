@@ -335,7 +335,7 @@ class MainApplication {
 
 ### 6. Initialize the Hybrid Objects
 
-And finally, to initialize `HybridMath` from JS you just need to call `createHybridObject`, passing in the `Math` Spec defined in `Math.nitro.ts` as a generic type parameter:
+And finally, to initialize `HybridMath` from JS you just need to call `createHybridObject`:
 
 ```ts
 export const MathModule = NitroModules.createHybridObject<Math>("Math")
