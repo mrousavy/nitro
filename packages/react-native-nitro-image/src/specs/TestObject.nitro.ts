@@ -26,7 +26,7 @@ export interface Person {
   age: number
 }
 
-export interface TestObject extends HybridObject<{ ios: 'c++' }> {
+export interface TestObjectCpp extends HybridObject<{ ios: 'c++' }> {
   // Test Primitives
   numberValue: number
   boolValue: boolean
@@ -63,7 +63,7 @@ export interface TestObject extends HybridObject<{ ios: 'c++' }> {
   // Complex variants
   getVariantEnum(variant: OldEnum | boolean): OldEnum | boolean
   getVariantObjects(variant: Person | Car): Person | Car
-  getVariantHybrid(variant: TestObject | Person): TestObject | Person
+  getVariantHybrid(variant: TestObjectCpp | Person): TestObjectCpp | Person
   getVariantTuple(variant: Float2 | Float3): Float2 | Float3
 
   // Tuples
@@ -97,15 +97,12 @@ export interface TestObject extends HybridObject<{ ios: 'c++' }> {
   setAllValuesTo(buffer: ArrayBuffer, value: number): void
 
   // Other HybridObjects
-  readonly self: TestObject
-  newTestObject(): TestObject
+  readonly self: TestObjectCpp
+  newTestObject(): TestObjectCpp
 }
 
-interface CallbackHolder {
-  callback: () => void
-}
-
-export interface SwiftKotlinTestObject extends HybridObject<{ ios: 'swift' }> {
+export interface TestObjectSwiftKotlin
+  extends HybridObject<{ ios: 'swift'; android: 'kotlin' }> {
   // Test Primitives
   numberValue: number
   boolValue: boolean
@@ -121,53 +118,64 @@ export interface SwiftKotlinTestObject extends HybridObject<{ ios: 'swift' }> {
   addStrings(a: string, b: string): string
   multipleArguments(num: number, str: string, boo: boolean): void
 
-  getNumbers(): number[]
-  getStrings(): string[]
-
-  callCallback(callback: () => void): void
-
-  someRecord: Record<string, number>
-  someArray: string[]
-  someOptional: string | undefined
-  someMap: AnyMap
-
-  car?: Car
-
-  powertrain: Powertrain
-  oldEnum: OldEnum
-
-  buffer: ArrayBuffer
-  createNewBuffer(size: number): ArrayBuffer
-  newTestObject(): SwiftKotlinTestObject
-  bounceBack(obj: SwiftKotlinTestObject): SwiftKotlinTestObject
-
-  call(args: CallbackHolder): void
-
-  getNumberAsync(): Promise<number>
-  getStringAsync(): Promise<string>
-  getCarAsync(): Promise<Car>
-
-  doSomeStuff(
-    withEnum: (value: Powertrain, str: string, buf: ArrayBuffer) => void
-  ): void
-}
-
-export interface KotlinTestObject extends HybridObject<{ android: 'kotlin' }> {
-  numberValue: number
-  optionalNumber?: number
-
-  primitiveArray: number[]
-  carCollection: Car[]
-
-  someBuffer: ArrayBuffer
-
-  asyncTest(): Promise<void>
-
+  // Maps
   createMap(): AnyMap
+  mapRoundtrip(map: AnyMap): AnyMap
 
-  addOnPersonBornListener(callback: (p: Person) => void): void
+  // Errors
+  valueThatWillThrowOnAccess: number
+  funcThatThrows(): number
 
-  something1(optional?: Powertrain): void
+  // Optional parameters
+  tryOptionalParams(num: number, boo: boolean, str?: string): string
+  tryMiddleParam(num: number, boo: boolean | undefined, str: string): string
 
-  someRecord: Record<string, string>
+  // TODO: Variants are not yet supported in Swift/Kotlin!
+  // Variants
+  // someVariant: number | string
+  // passVariant(
+  //   either: number | string | number[] | string[] | boolean
+  // ): number | string
+
+  // TODO: Variants are not yet supported in Swift/Kotlin!
+  // Complex variants
+  // getVariantEnum(variant: OldEnum | boolean): OldEnum | boolean
+  // getVariantObjects(variant: Person | Car): Person | Car
+  // getVariantHybrid(variant: TestObjectCpp | Person): TestObjectCpp | Person
+  // getVariantTuple(variant: Float2 | Float3): Float2 | Float3
+
+  // TODO: Tuples are not yet supported in Swift/Kotlin!
+  // Tuples
+  // someTuple: [number, string]
+  // flip(tuple: Float3): Float3
+  // passTuple(tuple: TestTuple): [number, string, boolean]
+
+  // Promises
+  calculateFibonacciSync(value: number): bigint
+  calculateFibonacciAsync(value: number): Promise<bigint>
+  wait(seconds: number): Promise<void>
+
+  // Callbacks
+  callCallback(callback: () => void): void
+  getValueFromJSCallback(getValue: () => number): void
+  getValueFromJSCallbackAndWait(getValue: () => number): Promise<number>
+  callAll(first: () => void, second: () => void, third: () => void): void
+  getValueFromJsCallback(
+    callback: () => string,
+    andThenCall: (valueFromJs: string) => void
+  ): Promise<void>
+
+  // Objects
+  getCar(): Car
+  isCarElectric(car: Car): boolean
+  getDriver(car: Car): Person | undefined
+
+  // ArrayBuffers
+  createArrayBuffer(): ArrayBuffer
+  getBufferLastItem(buffer: ArrayBuffer): number
+  setAllValuesTo(buffer: ArrayBuffer, value: number): void
+
+  // Other HybridObjects
+  readonly self: TestObjectCpp
+  newTestObject(): TestObjectCpp
 }

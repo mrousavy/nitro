@@ -19,17 +19,17 @@ namespace margelo::nitro::image {
 
   /**
    * C++ representation of the callback Func_void_std__string.
-   * This is a Kotlin `(path: String) -> Unit`, backed by a `std::function<...>`.
+   * This is a Kotlin `(valueFromJs: String) -> Unit`, backed by a `std::function<...>`.
    */
   struct JFunc_void_std__string final: public jni::HybridClass<JFunc_void_std__string> {
   public:
-    static jni::local_ref<JFunc_void_std__string::javaobject> fromCpp(const std::function<void(const std::string& /* path */)>& func) {
+    static jni::local_ref<JFunc_void_std__string::javaobject> fromCpp(const std::function<void(const std::string& /* valueFromJs */)>& func) {
       return JFunc_void_std__string::newObjectCxxArgs(func);
     }
 
   public:
-    void call(const jni::alias_ref<jni::JString>& path) {
-      return _func(path->toStdString());
+    void call(const jni::alias_ref<jni::JString>& valueFromJs) {
+      return _func(valueFromJs->toStdString());
     }
 
   public:
@@ -39,11 +39,11 @@ namespace margelo::nitro::image {
     }
 
   private:
-    explicit JFunc_void_std__string(const std::function<void(const std::string& /* path */)>& func): _func(func) { }
+    explicit JFunc_void_std__string(const std::function<void(const std::string& /* valueFromJs */)>& func): _func(func) { }
 
   private:
     friend HybridBase;
-    std::function<void(const std::string& /* path */)> _func;
+    std::function<void(const std::string& /* valueFromJs */)> _func;
   };
 
 } // namespace margelo::nitro::image
