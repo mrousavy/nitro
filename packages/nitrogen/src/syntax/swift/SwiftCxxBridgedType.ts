@@ -348,7 +348,7 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
       }
       case 'optional': {
         const optional = getTypeAs(this.type, OptionalType)
-        const wrapping = new SwiftCxxBridgedType(optional.wrappingType)
+        const wrapping = new SwiftCxxBridgedType(optional.wrappingType, true)
         switch (language) {
           case 'swift':
             return `
@@ -525,7 +525,7 @@ case ${i}:
         }
       case 'optional': {
         const optional = getTypeAs(this.type, OptionalType)
-        const wrapping = new SwiftCxxBridgedType(optional.wrappingType)
+        const wrapping = new SwiftCxxBridgedType(optional.wrappingType, true)
         const bridge = this.getBridgeOrThrow()
         const makeFunc = `bridge.${bridge.funcName}`
         switch (language) {
