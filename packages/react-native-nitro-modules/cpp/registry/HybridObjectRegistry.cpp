@@ -66,7 +66,7 @@ std::shared_ptr<HybridObject> HybridObjectRegistry::createHybridObject(const std
                    "`System.loadLibrary(\"<<androidCxxLibName>>\")` somewhere on app-startup.\n"
                    "- If you use Nitrogen, make sure your cpp-adapter.cpp calls `margelo::nitro::<<cxxNamespace>>::initialize(vm)`.\n"
                    "- If you use Nitrogen, inspect the generated `<<androidCxxLibName>>OnLoad.cpp` file.\n"
-                   "- If you don't use Nitrogen, make sure you called `HybridObjectRegistry.registerHybridObject(...)`.\n";
+                   "- If you don't use Nitrogen, make sure you called `HybridObjectRegistry.registerHybridObject(...)`.";
     throw std::runtime_error(message);
   }
   std::shared_ptr<HybridObject> instance = fn->second();
