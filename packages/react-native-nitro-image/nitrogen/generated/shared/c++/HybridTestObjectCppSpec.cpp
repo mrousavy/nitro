@@ -28,8 +28,6 @@ namespace margelo::nitro::image {
       prototype.registerHybridSetter("stringOrNull", &HybridTestObjectCppSpec::setStringOrNull);
       prototype.registerHybridGetter("optionalString", &HybridTestObjectCppSpec::getOptionalString);
       prototype.registerHybridSetter("optionalString", &HybridTestObjectCppSpec::setOptionalString);
-      prototype.registerHybridGetter("valueThatWillThrowOnAccess", &HybridTestObjectCppSpec::getValueThatWillThrowOnAccess);
-      prototype.registerHybridSetter("valueThatWillThrowOnAccess", &HybridTestObjectCppSpec::setValueThatWillThrowOnAccess);
       prototype.registerHybridGetter("someVariant", &HybridTestObjectCppSpec::getSomeVariant);
       prototype.registerHybridSetter("someVariant", &HybridTestObjectCppSpec::setSomeVariant);
       prototype.registerHybridGetter("someTuple", &HybridTestObjectCppSpec::getSomeTuple);

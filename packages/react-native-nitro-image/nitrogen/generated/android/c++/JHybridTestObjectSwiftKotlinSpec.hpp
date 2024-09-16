@@ -52,8 +52,6 @@ namespace margelo::nitro::image {
     void setStringOrNull(const std::optional<std::string>& stringOrNull) override;
     std::optional<std::string> getOptionalString() override;
     void setOptionalString(const std::optional<std::string>& optionalString) override;
-    double getValueThatWillThrowOnAccess() override;
-    void setValueThatWillThrowOnAccess(double valueThatWillThrowOnAccess) override;
     std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec> getSelf() override;
 
   public:
@@ -71,10 +69,7 @@ namespace margelo::nitro::image {
     std::future<int64_t> calculateFibonacciAsync(double value) override;
     std::future<void> wait(double seconds) override;
     void callCallback(const std::function<void()>& callback) override;
-    void getValueFromJSCallback(const std::function<std::future<double>()>& getValue) override;
-    std::future<double> getValueFromJSCallbackAndWait(const std::function<std::future<double>()>& getValue) override;
     void callAll(const std::function<void()>& first, const std::function<void()>& second, const std::function<void()>& third) override;
-    std::future<void> getValueFromJsCallback(const std::function<std::future<std::string>()>& callback, const std::function<void(const std::string& /* valueFromJs */)>& andThenCall) override;
     Car getCar() override;
     bool isCarElectric(const Car& car) override;
     std::optional<Person> getDriver(const Car& car) override;

@@ -129,12 +129,6 @@ namespace margelo::nitro::image {
     inline void setOptionalString(const std::optional<std::string>& optionalString) noexcept override {
       _swiftPart.setOptionalString(optionalString);
     }
-    inline double getValueThatWillThrowOnAccess() noexcept override {
-      return _swiftPart.getValueThatWillThrowOnAccess();
-    }
-    inline void setValueThatWillThrowOnAccess(double valueThatWillThrowOnAccess) noexcept override {
-      _swiftPart.setValueThatWillThrowOnAccess(std::forward<decltype(valueThatWillThrowOnAccess)>(valueThatWillThrowOnAccess));
-    }
     inline std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec> getSelf() noexcept override {
       auto result = _swiftPart.getSelf();
       return HybridContext::getOrCreate<HybridTestObjectCppSpecSwift>(result);
@@ -191,19 +185,8 @@ namespace margelo::nitro::image {
     inline void callCallback(const std::function<void()>& callback) override {
       _swiftPart.callCallback(callback);
     }
-    inline void getValueFromJSCallback(const std::function<std::future<double>()>& getValue) override {
-      _swiftPart.getValueFromJSCallback(getValue);
-    }
-    inline std::future<double> getValueFromJSCallbackAndWait(const std::function<std::future<double>()>& getValue) override {
-      auto __result = _swiftPart.getValueFromJSCallbackAndWait(getValue);
-      return __result.getFuture();
-    }
     inline void callAll(const std::function<void()>& first, const std::function<void()>& second, const std::function<void()>& third) override {
       _swiftPart.callAll(first, second, third);
-    }
-    inline std::future<void> getValueFromJsCallback(const std::function<std::future<std::string>()>& callback, const std::function<void(const std::string& /* valueFromJs */)>& andThenCall) override {
-      auto __result = _swiftPart.getValueFromJsCallback(callback, andThenCall);
-      return __result.getFuture();
     }
     inline Car getCar() override {
       auto __result = _swiftPart.getCar();

@@ -77,12 +77,6 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @get:DoNotStrip
   @get:Keep
-  @set:DoNotStrip
-  @set:Keep
-  abstract var valueThatWillThrowOnAccess: Double
-  
-  @get:DoNotStrip
-  @get:Keep
   abstract val self: HybridTestObjectCppSpec
 
   // Methods
@@ -147,45 +141,12 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
-  abstract fun getValueFromJSCallback(getValue: () -> Promise<Double>): Unit
-  
-  @DoNotStrip
-  @Keep
-  private fun getValueFromJSCallback(getValue: Func_std__future_double_): Unit {
-    val result = getValueFromJSCallback(getValue.toLambda())
-    return result
-  }
-  
-  @DoNotStrip
-  @Keep
-  abstract fun getValueFromJSCallbackAndWait(getValue: () -> Promise<Double>): Promise<Double>
-  
-  @DoNotStrip
-  @Keep
-  private fun getValueFromJSCallbackAndWait(getValue: Func_std__future_double_): Promise<Double> {
-    val result = getValueFromJSCallbackAndWait(getValue.toLambda())
-    return result
-  }
-  
-  @DoNotStrip
-  @Keep
   abstract fun callAll(first: () -> Unit, second: () -> Unit, third: () -> Unit): Unit
   
   @DoNotStrip
   @Keep
   private fun callAll(first: Func_void, second: Func_void, third: Func_void): Unit {
     val result = callAll(first.toLambda(), second.toLambda(), third.toLambda())
-    return result
-  }
-  
-  @DoNotStrip
-  @Keep
-  abstract fun getValueFromJsCallback(callback: () -> Promise<String>, andThenCall: (valueFromJs: String) -> Unit): Promise<Unit>
-  
-  @DoNotStrip
-  @Keep
-  private fun getValueFromJsCallback(callback: Func_std__future_std__string_, andThenCall: Func_void_std__string): Promise<Unit> {
-    val result = getValueFromJsCallback(callback.toLambda(), andThenCall.toLambda())
     return result
   }
   

@@ -172,17 +172,6 @@ public final class HybridTestObjectSwiftKotlinSpecCxx {
     }
   }
   
-  public var valueThatWillThrowOnAccess: Double {
-    @inline(__always)
-    get {
-      return self.implementation.valueThatWillThrowOnAccess
-    }
-    @inline(__always)
-    set {
-      self.implementation.valueThatWillThrowOnAccess = newValue
-    }
-  }
-  
   public var self: HybridTestObjectCppSpecCxx {
     @inline(__always)
     get {
@@ -364,58 +353,6 @@ public final class HybridTestObjectSwiftKotlinSpecCxx {
   }
   
   @inline(__always)
-  public func getValueFromJSCallback(getValue: bridge.Func_std__future_double_) -> Void {
-    do {
-      try self.implementation.getValueFromJSCallback(getValue: { () -> (() -> Promise<Double>) in
-        let shared = bridge.share_Func_std__future_double_(getValue)
-        return { () -> Promise<Double> in
-          let result = shared.pointee.call()
-          return { () -> bridge.PromiseHolder_double_ in
-          let promiseHolder = bridge.create_PromiseHolder_double_()
-          result
-            .then({ __result in promiseHolder.resolve(__result) })
-            .catch({ __error in promiseHolder.reject(std.string(String(describing: __error))) })
-          return promiseHolder
-        }()
-        }
-      }())
-      return 
-    } catch {
-      let message = "\(error.localizedDescription)"
-      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
-    }
-  }
-  
-  @inline(__always)
-  public func getValueFromJSCallbackAndWait(getValue: bridge.Func_std__future_double_) -> bridge.PromiseHolder_double_ {
-    do {
-      let result = try self.implementation.getValueFromJSCallbackAndWait(getValue: { () -> (() -> Promise<Double>) in
-        let shared = bridge.share_Func_std__future_double_(getValue)
-        return { () -> Promise<Double> in
-          let result = shared.pointee.call()
-          return { () -> bridge.PromiseHolder_double_ in
-          let promiseHolder = bridge.create_PromiseHolder_double_()
-          result
-            .then({ __result in promiseHolder.resolve(__result) })
-            .catch({ __error in promiseHolder.reject(std.string(String(describing: __error))) })
-          return promiseHolder
-        }()
-        }
-      }())
-      return { () -> bridge.PromiseHolder_double_ in
-        let promiseHolder = bridge.create_PromiseHolder_double_()
-        result
-          .then({ __result in promiseHolder.resolve(__result) })
-          .catch({ __error in promiseHolder.reject(std.string(String(describing: __error))) })
-        return promiseHolder
-      }()
-    } catch {
-      let message = "\(error.localizedDescription)"
-      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
-    }
-  }
-  
-  @inline(__always)
   public func callAll(first: bridge.Func_void, second: bridge.Func_void, third: bridge.Func_void) -> Void {
     do {
       try self.implementation.callAll(first: { () -> (() -> Void) in
@@ -435,40 +372,6 @@ public final class HybridTestObjectSwiftKotlinSpecCxx {
         }
       }())
       return 
-    } catch {
-      let message = "\(error.localizedDescription)"
-      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
-    }
-  }
-  
-  @inline(__always)
-  public func getValueFromJsCallback(callback: bridge.Func_std__future_std__string_, andThenCall: bridge.Func_void_std__string) -> bridge.PromiseHolder_void_ {
-    do {
-      let result = try self.implementation.getValueFromJsCallback(callback: { () -> (() -> Promise<String>) in
-        let shared = bridge.share_Func_std__future_std__string_(callback)
-        return { () -> Promise<String> in
-          let result = shared.pointee.call()
-          return { () -> bridge.PromiseHolder_std__string_ in
-          let promiseHolder = bridge.create_PromiseHolder_std__string_()
-          result
-            .then({ __result in promiseHolder.resolve(std.string(__result)) })
-            .catch({ __error in promiseHolder.reject(std.string(String(describing: __error))) })
-          return promiseHolder
-        }()
-        }
-      }(), andThenCall: { () -> ((String) -> Void) in
-        let shared = bridge.share_Func_void_std__string(andThenCall)
-        return { (valueFromJs: String) -> Void in
-          shared.pointee.call(std.string(valueFromJs))
-        }
-      }())
-      return { () -> bridge.PromiseHolder_void_ in
-        let promiseHolder = bridge.create_PromiseHolder_void_()
-        result
-          .then({ __result in promiseHolder.resolve() })
-          .catch({ __error in promiseHolder.reject(std.string(String(describing: __error))) })
-        return promiseHolder
-      }()
     } catch {
       let message = "\(error.localizedDescription)"
       fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")

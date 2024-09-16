@@ -73,8 +73,6 @@ namespace margelo::nitro::image {
       virtual void setStringOrNull(const std::optional<std::string>& stringOrNull) = 0;
       virtual std::optional<std::string> getOptionalString() = 0;
       virtual void setOptionalString(const std::optional<std::string>& optionalString) = 0;
-      virtual double getValueThatWillThrowOnAccess() = 0;
-      virtual void setValueThatWillThrowOnAccess(double valueThatWillThrowOnAccess) = 0;
       virtual std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec> getSelf() = 0;
 
     public:
@@ -92,10 +90,7 @@ namespace margelo::nitro::image {
       virtual std::future<int64_t> calculateFibonacciAsync(double value) = 0;
       virtual std::future<void> wait(double seconds) = 0;
       virtual void callCallback(const std::function<void()>& callback) = 0;
-      virtual void getValueFromJSCallback(const std::function<std::future<double>()>& getValue) = 0;
-      virtual std::future<double> getValueFromJSCallbackAndWait(const std::function<std::future<double>()>& getValue) = 0;
       virtual void callAll(const std::function<void()>& first, const std::function<void()>& second, const std::function<void()>& third) = 0;
-      virtual std::future<void> getValueFromJsCallback(const std::function<std::future<std::string>()>& callback, const std::function<void(const std::string& /* valueFromJs */)>& andThenCall) = 0;
       virtual Car getCar() = 0;
       virtual bool isCarElectric(const Car& car) = 0;
       virtual std::optional<Person> getDriver(const Car& car) = 0;

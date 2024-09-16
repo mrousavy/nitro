@@ -36,7 +36,6 @@ public protocol HybridTestObjectSwiftKotlinSpec: HybridObjectSpec {
   var stringOrUndefined: String? { get set }
   var stringOrNull: String? { get set }
   var optionalString: String? { get set }
-  var valueThatWillThrowOnAccess: Double { get set }
   var self: HybridTestObjectCppSpec { get }
 
   // Methods
@@ -53,10 +52,7 @@ public protocol HybridTestObjectSwiftKotlinSpec: HybridObjectSpec {
   func calculateFibonacciAsync(value: Double) throws -> Promise<Int64>
   func wait(seconds: Double) throws -> Promise<Void>
   func callCallback(callback: @escaping (() -> Void)) throws -> Void
-  func getValueFromJSCallback(getValue: @escaping (() -> Promise<Double>)) throws -> Void
-  func getValueFromJSCallbackAndWait(getValue: @escaping (() -> Promise<Double>)) throws -> Promise<Double>
   func callAll(first: @escaping (() -> Void), second: @escaping (() -> Void), third: @escaping (() -> Void)) throws -> Void
-  func getValueFromJsCallback(callback: @escaping (() -> Promise<String>), andThenCall: @escaping ((_ valueFromJs: String) -> Void)) throws -> Promise<Void>
   func getCar() throws -> Car
   func isCarElectric(car: Car) throws -> Bool
   func getDriver(car: Car) throws -> Person?

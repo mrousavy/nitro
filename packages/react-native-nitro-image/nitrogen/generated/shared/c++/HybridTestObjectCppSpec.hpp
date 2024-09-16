@@ -79,8 +79,6 @@ namespace margelo::nitro::image {
       virtual void setStringOrNull(const std::optional<std::string>& stringOrNull) = 0;
       virtual std::optional<std::string> getOptionalString() = 0;
       virtual void setOptionalString(const std::optional<std::string>& optionalString) = 0;
-      virtual double getValueThatWillThrowOnAccess() = 0;
-      virtual void setValueThatWillThrowOnAccess(double valueThatWillThrowOnAccess) = 0;
       virtual std::variant<std::string, double> getSomeVariant() = 0;
       virtual void setSomeVariant(const std::variant<std::string, double>& someVariant) = 0;
       virtual std::tuple<double, std::string> getSomeTuple() = 0;

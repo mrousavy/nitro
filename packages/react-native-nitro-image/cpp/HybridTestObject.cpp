@@ -70,14 +70,6 @@ void HybridTestObject::setOptionalString(const std::optional<std::string>& optio
   _optionalString = optionalString;
 }
 
-double HybridTestObject::getValueThatWillThrowOnAccess() {
-  throw std::runtime_error("The stars are not aligned for this to work right now!");
-}
-
-void HybridTestObject::setValueThatWillThrowOnAccess(double valueThatWillThrowOnAccess) {
-  throw std::runtime_error("This value can only be set in 100000 years!");
-}
-
 std::variant<std::string, double> HybridTestObject::getSomeVariant() {
   return _variant;
 }

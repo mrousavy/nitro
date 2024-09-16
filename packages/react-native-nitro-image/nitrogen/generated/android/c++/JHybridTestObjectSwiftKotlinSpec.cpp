@@ -40,9 +40,6 @@ namespace NitroModules { class ArrayBuffer; }
 #include <NitroModules/JArrayBuffer.hpp>
 #include <functional>
 #include "JFunc_void.hpp"
-#include "JFunc_std__future_double_.hpp"
-#include "JFunc_std__future_std__string_.hpp"
-#include "JFunc_void_std__string.hpp"
 
 namespace margelo::nitro::image {
 
@@ -124,15 +121,6 @@ namespace margelo::nitro::image {
   void JHybridTestObjectSwiftKotlinSpec::setOptionalString(const std::optional<std::string>& optionalString) {
     static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<jni::JString> /* optionalString */)>("setOptionalString");
     method(_javaPart, optionalString.has_value() ? jni::make_jstring(optionalString.value()) : nullptr);
-  }
-  double JHybridTestObjectSwiftKotlinSpec::getValueThatWillThrowOnAccess() {
-    static const auto method = _javaPart->getClass()->getMethod<double()>("getValueThatWillThrowOnAccess");
-    auto result = method(_javaPart);
-    return result;
-  }
-  void JHybridTestObjectSwiftKotlinSpec::setValueThatWillThrowOnAccess(double valueThatWillThrowOnAccess) {
-    static const auto method = _javaPart->getClass()->getMethod<void(double /* valueThatWillThrowOnAccess */)>("setValueThatWillThrowOnAccess");
-    method(_javaPart, valueThatWillThrowOnAccess);
   }
   std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec> JHybridTestObjectSwiftKotlinSpec::getSelf() {
     static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<JHybridTestObjectCppSpec::javaobject>()>("getSelf");
@@ -224,44 +212,9 @@ namespace margelo::nitro::image {
     static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<JFunc_void::javaobject> /* callback */)>("callCallback");
     method(_javaPart, JFunc_void::fromCpp(callback));
   }
-  void JHybridTestObjectSwiftKotlinSpec::getValueFromJSCallback(const std::function<std::future<double>()>& getValue) {
-    static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<JFunc_std__future_double_::javaobject> /* getValue */)>("getValueFromJSCallback");
-    method(_javaPart, JFunc_std__future_double_::fromCpp(getValue));
-  }
-  std::future<double> JHybridTestObjectSwiftKotlinSpec::getValueFromJSCallbackAndWait(const std::function<std::future<double>()>& getValue) {
-    static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<JPromise::javaobject>(jni::alias_ref<JFunc_std__future_double_::javaobject> /* getValue */)>("getValueFromJSCallbackAndWait");
-    auto result = method(_javaPart, JFunc_std__future_double_::fromCpp(getValue));
-    return [&]() {
-      auto promise = std::make_shared<std::promise<double>>();
-      result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& boxedResult) {
-        auto result = jni::static_ref_cast<double>(boxedResult);
-        promise->set_value(result->value());
-      });
-      result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JString>& message) {
-        std::runtime_error error(message->toStdString());
-        promise->set_exception(std::make_exception_ptr(error));
-      });
-      return promise->get_future();
-    }();
-  }
   void JHybridTestObjectSwiftKotlinSpec::callAll(const std::function<void()>& first, const std::function<void()>& second, const std::function<void()>& third) {
     static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<JFunc_void::javaobject> /* first */, jni::alias_ref<JFunc_void::javaobject> /* second */, jni::alias_ref<JFunc_void::javaobject> /* third */)>("callAll");
     method(_javaPart, JFunc_void::fromCpp(first), JFunc_void::fromCpp(second), JFunc_void::fromCpp(third));
-  }
-  std::future<void> JHybridTestObjectSwiftKotlinSpec::getValueFromJsCallback(const std::function<std::future<std::string>()>& callback, const std::function<void(const std::string& /* valueFromJs */)>& andThenCall) {
-    static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<JPromise::javaobject>(jni::alias_ref<JFunc_std__future_std__string_::javaobject> /* callback */, jni::alias_ref<JFunc_void_std__string::javaobject> /* andThenCall */)>("getValueFromJsCallback");
-    auto result = method(_javaPart, JFunc_std__future_std__string_::fromCpp(callback), JFunc_void_std__string::fromCpp(andThenCall));
-    return [&]() {
-      auto promise = std::make_shared<std::promise<void>>();
-      result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& boxedResult) {
-        promise->set_value();
-      });
-      result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JString>& message) {
-        std::runtime_error error(message->toStdString());
-        promise->set_exception(std::make_exception_ptr(error));
-      });
-      return promise->get_future();
-    }();
   }
   Car JHybridTestObjectSwiftKotlinSpec::getCar() {
     static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<JCar>()>("getCar");

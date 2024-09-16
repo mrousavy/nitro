@@ -47,7 +47,6 @@ export interface TestObjectCpp extends HybridObject<{ ios: 'c++' }> {
   mapRoundtrip(map: AnyMap): AnyMap
 
   // Errors
-  valueThatWillThrowOnAccess: number
   funcThatThrows(): number
 
   // Optional parameters
@@ -123,7 +122,6 @@ export interface TestObjectSwiftKotlin
   mapRoundtrip(map: AnyMap): AnyMap
 
   // Errors
-  valueThatWillThrowOnAccess: number
   funcThatThrows(): number
 
   // Optional parameters
@@ -157,13 +155,14 @@ export interface TestObjectSwiftKotlin
 
   // Callbacks
   callCallback(callback: () => void): void
-  getValueFromJSCallback(getValue: () => number): void
-  getValueFromJSCallbackAndWait(getValue: () => number): Promise<number>
   callAll(first: () => void, second: () => void, third: () => void): void
-  getValueFromJsCallback(
-    callback: () => string,
-    andThenCall: (valueFromJs: string) => void
-  ): Promise<void>
+  // TODO: Callbacks that return a value are not supported in Swift yet!
+  // getValueFromJSCallback(getValue: () => number): void
+  // getValueFromJSCallbackAndWait(getValue: () => number): Promise<number>
+  // getValueFromJsCallback(
+  //   callback: () => string,
+  //   andThenCall: (valueFromJs: string) => void
+  // ): Promise<void>
 
   // Objects
   getCar(): Car

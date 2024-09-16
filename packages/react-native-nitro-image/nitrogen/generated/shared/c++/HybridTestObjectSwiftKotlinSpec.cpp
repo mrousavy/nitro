@@ -28,8 +28,6 @@ namespace margelo::nitro::image {
       prototype.registerHybridSetter("stringOrNull", &HybridTestObjectSwiftKotlinSpec::setStringOrNull);
       prototype.registerHybridGetter("optionalString", &HybridTestObjectSwiftKotlinSpec::getOptionalString);
       prototype.registerHybridSetter("optionalString", &HybridTestObjectSwiftKotlinSpec::setOptionalString);
-      prototype.registerHybridGetter("valueThatWillThrowOnAccess", &HybridTestObjectSwiftKotlinSpec::getValueThatWillThrowOnAccess);
-      prototype.registerHybridSetter("valueThatWillThrowOnAccess", &HybridTestObjectSwiftKotlinSpec::setValueThatWillThrowOnAccess);
       prototype.registerHybridGetter("self", &HybridTestObjectSwiftKotlinSpec::getSelf);
       prototype.registerHybridMethod("simpleFunc", &HybridTestObjectSwiftKotlinSpec::simpleFunc);
       prototype.registerHybridMethod("addNumbers", &HybridTestObjectSwiftKotlinSpec::addNumbers);
@@ -44,10 +42,7 @@ namespace margelo::nitro::image {
       prototype.registerHybridMethod("calculateFibonacciAsync", &HybridTestObjectSwiftKotlinSpec::calculateFibonacciAsync);
       prototype.registerHybridMethod("wait", &HybridTestObjectSwiftKotlinSpec::wait);
       prototype.registerHybridMethod("callCallback", &HybridTestObjectSwiftKotlinSpec::callCallback);
-      prototype.registerHybridMethod("getValueFromJSCallback", &HybridTestObjectSwiftKotlinSpec::getValueFromJSCallback);
-      prototype.registerHybridMethod("getValueFromJSCallbackAndWait", &HybridTestObjectSwiftKotlinSpec::getValueFromJSCallbackAndWait);
       prototype.registerHybridMethod("callAll", &HybridTestObjectSwiftKotlinSpec::callAll);
-      prototype.registerHybridMethod("getValueFromJsCallback", &HybridTestObjectSwiftKotlinSpec::getValueFromJsCallback);
       prototype.registerHybridMethod("getCar", &HybridTestObjectSwiftKotlinSpec::getCar);
       prototype.registerHybridMethod("isCarElectric", &HybridTestObjectSwiftKotlinSpec::isCarElectric);
       prototype.registerHybridMethod("getDriver", &HybridTestObjectSwiftKotlinSpec::getDriver);
