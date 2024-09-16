@@ -1,6 +1,13 @@
 import * as React from 'react'
 
-import { StyleSheet, View, Text, ScrollView, Button } from 'react-native'
+import {
+  StyleSheet,
+  View,
+  Text,
+  ScrollView,
+  Button,
+  Platform,
+} from 'react-native'
 import {
   HybridTestObjectCpp,
   HybridTestObjectSwiftKotlin,
@@ -9,6 +16,7 @@ import { getTests, type TestRunner } from '../getTests'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { logPrototypeChain } from '../logPrototypeChain'
 import SegmentedControl from '@react-native-segmented-control/segmented-control'
+import { NitroModules } from 'react-native-nitro-modules'
 
 logPrototypeChain(HybridTestObjectCpp)
 
@@ -128,14 +136,18 @@ export function HybridObjectTestsScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.header}>HybridObject Tests</Text>
-      <SegmentedControl
-        style={styles.segmentedControl}
-        values={['C++', 'Swift/Kotlin']}
-        selectedIndex={selectedIndex}
-        onChange={({ nativeEvent: { selectedSegmentIndex } }) => {
-          setSelectedIndex(selectedSegmentIndex)
-        }}
-      />
+      <View style={styles.topControls}>
+        <SegmentedControl
+          style={styles.segmentedControl}
+          values={['C++', 'Swift/Kotlin']}
+          selectedIndex={selectedIndex}
+          onChange={({ nativeEvent: { selectedSegmentIndex } }) => {
+            setSelectedIndex(selectedSegmentIndex)
+          }}
+        />
+        <View style={styles.flex} />
+        <Text style={styles.buildTypeText}>{NitroModules.buildType}</Text>
+      </View>
 
       <ScrollView contentContainerStyle={styles.scrollContent}>
         {tests.map((t, i) => (
@@ -170,11 +182,22 @@ const styles = StyleSheet.create({
   scrollContent: {
     paddingHorizontal: 15,
   },
-  segmentedControl: {
-    alignSelf: 'flex-start',
-    minWidth: 180,
-    marginLeft: 15,
+  topControls: {
+    marginHorizontal: 15,
     marginBottom: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  buildTypeText: {
+    fontFamily: Platform.select({
+      ios: 'Menlo',
+      macos: 'Menlo',
+      android: 'monospace',
+    }),
+    fontWeight: 'bold',
+  },
+  segmentedControl: {
+    minWidth: 180,
   },
   box: {
     width: 60,

@@ -42,7 +42,7 @@ HybridObjectRegistry::registerHybridObjectConstructor(
     static auto defaultConstructor = javaClass->getConstructor<${JHybridTSpec}::javaobject()>();
 
     auto instance = javaClass->newObject(defaultConstructor);
-#ifndef NDEBUG
+#ifdef NITRO_DEBUG
     if (instance == nullptr) [[unlikely]] {
       throw std::runtime_error("Failed to create an instance of \\"${JHybridTSpec}\\" - the constructor returned null!");
     }

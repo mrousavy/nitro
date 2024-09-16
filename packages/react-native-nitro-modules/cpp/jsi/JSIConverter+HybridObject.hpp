@@ -10,6 +10,7 @@ class HybridObject;
 } // namespace margelo::nitro
 
 #include "IsSharedPtrTo.hpp"
+#include "NitroDefines.hpp"
 #include "TypeInfo.hpp"
 #include <jsi/jsi.h>
 #include <type_traits>
@@ -24,7 +25,7 @@ struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_v<T, jsi::NativeState>>
   using TPointee = typename T::element_type;
 
   static inline T fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
-#ifndef NDEBUG
+#ifdef NITRO_DEBUG
     if (!arg.isObject()) [[unlikely]] {
       if (arg.isUndefined()) [[unlikely]] {
         throw jsi::JSError(runtime, invalidTypeErrorMessage("undefined", "It is undefined!"));
@@ -36,7 +37,7 @@ struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_v<T, jsi::NativeState>>
 #endif
     jsi::Object object = arg.asObject(runtime);
 
-#ifndef NDEBUG
+#ifdef NITRO_DEBUG
     if (!object.hasNativeState<TPointee>(runtime)) [[unlikely]] {
       if (!object.hasNativeState(runtime)) [[unlikely]] {
         std::string stringRepresentation = arg.toString(runtime).utf8(runtime);

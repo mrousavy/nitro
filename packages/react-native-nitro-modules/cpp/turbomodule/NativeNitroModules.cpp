@@ -9,6 +9,7 @@
 #include "CallInvokerDispatcher.hpp"
 #include "Dispatcher.hpp"
 #include "HybridObjectRegistry.hpp"
+#include "NitroDefines.hpp"
 
 namespace facebook::react {
 
@@ -34,7 +35,7 @@ jsi::Value NativeNitroModules::get(jsi::Runtime& runtime, const jsi::PropNameID&
     return jsi::Function::createFromHostFunction(
         runtime, jsi::PropNameID::forUtf8(runtime, "createHybridObject"), 2,
         [this](jsi::Runtime& runtime, const jsi::Value& thisArg, const jsi::Value* args, size_t count) -> jsi::Value {
-#ifndef NDEBUG
+#ifdef NITRO_DEBUG
           if (count != 1 && count != 2) [[unlikely]] {
             throw jsi::JSError(runtime, "NitroModules.createHybridObject(..) expects 1 or 2 arguments, but " + std::to_string(count) +
                                             " were supplied!");
@@ -53,7 +54,7 @@ jsi::Value NativeNitroModules::get(jsi::Runtime& runtime, const jsi::PropNameID&
     return jsi::Function::createFromHostFunction(
         runtime, jsi::PropNameID::forUtf8(runtime, "hasHybridObject"), 1,
         [this](jsi::Runtime& runtime, const jsi::Value& thisArg, const jsi::Value* args, size_t count) -> jsi::Value {
-#ifndef NDEBUG
+#ifdef NITRO_DEBUG
           if (count != 1) [[unlikely]] {
             throw jsi::JSError(runtime,
                                "NitroModules.hasHybridObject(..) expects 1 argument (name), but received " + std::to_string(count) + "!");
@@ -85,6 +86,13 @@ jsi::Value NativeNitroModules::get(jsi::Runtime& runtime, const jsi::PropNameID&
           object.setNativeState(runtime, nullptr);
           return jsi::Value::undefined();
         });
+  }
+  if (name == "buildType") {
+#ifdef NITRO_DEBUG
+    return jsi::String::createFromAscii(runtime, "debug");
+#else
+    return jsi::String::createFromAscii(runtime, "release");
+#endif
   }
 
   return jsi::Value::undefined();

@@ -65,4 +65,12 @@ export const NitroModules = {
     const nitro = getNativeNitroModules()
     nitro.removeNativeState(object)
   },
+  /**
+   * Gets the current build type configuration as defined in the `NITRO_DEBUG`
+   * preprocessor flag.
+   */
+  get buildType(): 'debug' | 'release' {
+    const nitro = getNativeNitroModules()
+    return nitro.buildType
+  },
 }
