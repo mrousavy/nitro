@@ -1,6 +1,9 @@
 import { NitroModules } from 'react-native-nitro-modules'
 import type { ImageFactory } from './specs/ImageFactory.nitro'
-import { type TestObject } from './specs/TestObject.nitro'
+import {
+  type TestObjectCpp,
+  type TestObjectSwiftKotlin,
+} from './specs/TestObject.nitro'
 
 export * from './specs/TestObject.nitro'
 export * from './specs/Image.nitro'
@@ -13,12 +16,15 @@ export const ImageConstructors =
   NitroModules.createHybridObject<ImageFactory>('ImageFactory')
 
 /**
- * The Hybrid Test Object
+ * The Hybrid Test Object in C++
  */
-export const HybridTestObject =
-  NitroModules.createHybridObject<TestObject>('TestObject')
+export const HybridTestObjectCpp =
+  NitroModules.createHybridObject<TestObjectCpp>('TestObjectCpp')
 
-// export const HybridKotlinTestObject =
-//   NitroModules.createHybridObject<SwiftKotlinTestObject>(
-//     'SwiftKotlinTestObject'
-//   )
+/**
+ * The Hybrid Test Object in Swift/Kotlin
+ */
+export const HybridTestObjectSwiftKotlin =
+  NitroModules.createHybridObject<TestObjectSwiftKotlin>(
+    'TestObjectSwiftKotlin'
+  )

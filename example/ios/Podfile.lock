@@ -29,7 +29,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - NitroModules (0.7.0):
+  - NitroModules (0.8.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1346,6 +1346,8 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
+  - react-native-segmented-control (2.5.2):
+    - React-Core
   - React-nativeconfig (0.75.2)
   - React-NativeModulesApple (0.75.2):
     - glog
@@ -1650,6 +1652,7 @@ DEPENDENCIES:
   - React-Mapbuffer (from `../../node_modules/react-native/ReactCommon`)
   - React-microtasksnativemodule (from `../../node_modules/react-native/ReactCommon/react/nativemodule/microtasks`)
   - react-native-safe-area-context (from `../../node_modules/react-native-safe-area-context`)
+  - "react-native-segmented-control (from `../../node_modules/@react-native-segmented-control/segmented-control`)"
   - React-nativeconfig (from `../../node_modules/react-native/ReactCommon`)
   - React-NativeModulesApple (from `../../node_modules/react-native/ReactCommon/react/nativemodule/core/platform/ios`)
   - React-perflogger (from `../../node_modules/react-native/ReactCommon/reactperflogger`)
@@ -1760,6 +1763,8 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/react-native/ReactCommon/react/nativemodule/microtasks"
   react-native-safe-area-context:
     :path: "../../node_modules/react-native-safe-area-context"
+  react-native-segmented-control:
+    :path: "../../node_modules/@react-native-segmented-control/segmented-control"
   React-nativeconfig:
     :path: "../../node_modules/react-native/ReactCommon"
   React-NativeModulesApple:
@@ -1820,11 +1825,11 @@ SPEC CHECKSUMS:
   DoubleConversion: 76ab83afb40bddeeee456813d9c04f67f78771b5
   FBLazyVector: 38bb611218305c3bc61803e287b8a81c6f63b619
   fmt: 4c2741a687cc09f0634a2e2c72a838b99f1ff120
-  glog: 69ef571f3de08433d766d614c73a9838a06bf7eb
+  glog: fdfdfe5479092de0c4bdbebedd9056951f092c4f
   hermes-engine: 3b6e0717ca847e2fc90a201e59db36caf04dee88
   NitroImage: 0cffeee137c14b8c8df97649626646528cb89b28
-  NitroModules: 47b80650d063f9b8ae7a3e02564cd282ad3d2ac9
-  RCT-Folly: 4464f4d875961fce86008d45f4ecf6cef6de0740
+  NitroModules: 7184d6a9527f2d015c7e4865ee6615b3e26d9cfb
+  RCT-Folly: 02617c592a293bd6d418e0a88ff4ee1f88329b47
   RCTDeprecation: 34cbf122b623037ea9facad2e92e53434c5c7422
   RCTRequired: 24c446d7bcd0f517d516b6265d8df04dc3eb1219
   RCTTypeSafety: ef5e91bd791abd3a99b2c75fd565791102a66352
@@ -1854,6 +1859,7 @@ SPEC CHECKSUMS:
   React-Mapbuffer: 1c08607305558666fd16678b85ef135e455d5c96
   React-microtasksnativemodule: f13f03163b6a5ec66665dfe80a0df4468bb766a6
   react-native-safe-area-context: 38fdd9b3c5561de7cabae64bd0cd2ce05d2768a1
+  react-native-segmented-control: b92809e9111013dfa266e1168ba366d62898d9a4
   React-nativeconfig: 57781b79e11d5af7573e6f77cbf1143b71802a6d
   React-NativeModulesApple: 7ff2e2cfb2e5fa5bdedcecf28ce37e696c6ef1e1
   React-perflogger: 8a360ccf603de6ddbe9ff8f54383146d26e6c936
@@ -1885,4 +1891,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 83ff0c12eb91f4379210b71045e485dacb487fe9
 
-COCOAPODS: 1.15.2
+COCOAPODS: 1.14.3

@@ -12,14 +12,12 @@
       "swift": "HybridImageFactory",
       "kotlin": "ImageFactory"
     },
-    "TestObject": {
-      "cpp": "HybridTestObject"
+    "TestObjectCpp": {
+      "cpp": "HybridTestObjectCpp"
     },
-    "SwiftKotlinTestObject": {
-      "swift": "HybridSwiftKotlinTestObject"
-    },
-    "KotlinTestObject": {
-      "kotlin": "KotlinTestObject"
+    "TestObjectSwiftKotlin": {
+      "swift": "HybridTestObjectSwift",
+      "kotlin": "HybridTestObjectKotlin"
     }
   },
   "ignorePaths": ["node_modules"]

@@ -68,22 +68,22 @@ public:
    * `ByteBuffer`. In this case, `getBuffer()` will **copy** the data into a new `ByteBuffer` if
    * `copyIfNeeded` is `true`, and **wrap** the data into a new `ByteBuffer` if `copyIfNeeded` is false.
    */
-  jni::alias_ref<jni::JByteBuffer> getByteBuffer(bool copyIfNeeded) {
+  jni::local_ref<jni::JByteBuffer> getByteBuffer(bool copyIfNeeded) {
     auto byteBufferArrayBuffer = std::dynamic_pointer_cast<ByteBufferArrayBuffer>(_arrayBuffer);
     if (byteBufferArrayBuffer != nullptr) {
       // It is a `ByteBufferArrayBuffer`, which has a `ByteBuffer` underneath!
-      return byteBufferArrayBuffer->getBuffer();
+      return jni::make_local(byteBufferArrayBuffer->getBuffer());
     } else {
       // It is a different kind of `ArrayBuffer`, we need to copy or wrap the data.
       size_t size = _arrayBuffer->size();
       if (copyIfNeeded) {
         auto buffer = jni::JByteBuffer::allocateDirect(size);
-        buffer->order(jni::JByteOrder::bigEndian());
+        buffer->order(jni::JByteOrder::nativeOrder());
         memcpy(buffer->getDirectAddress(), _arrayBuffer->data(), size);
         return buffer;
       } else {
         auto buffer = jni::JByteBuffer::wrapBytes(_arrayBuffer->data(), size);
-        buffer->order(jni::JByteOrder::bigEndian());
+        buffer->order(jni::JByteOrder::nativeOrder());
         return buffer;
       }
     }

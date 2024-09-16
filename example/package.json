@@ -15,6 +15,7 @@
     "build:ios": "cd ios && xcodebuild -workspace NitroExample.xcworkspace -scheme NitroExample -configuration Debug -sdk iphonesimulator CC=clang CPLUSPLUS=clang++ LD=clang LDPLUSPLUS=clang++ GCC_OPTIMIZATION_LEVEL=0 GCC_PRECOMPILE_PREFIX_HEADER=YES ASSETCATALOG_COMPILER_OPTIMIZATION=time DEBUG_INFORMATION_FORMAT=dwarf COMPILER_INDEX_STORE_ENABLE=NO"
   },
   "dependencies": {
+    "@react-native-segmented-control/segmented-control": "^2.5.2",
     "deep-equal": "^2.2.3",
     "react": "^18.3.1",
     "react-native": "^0.75.2",

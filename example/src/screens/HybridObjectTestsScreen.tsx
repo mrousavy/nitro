@@ -1,14 +1,16 @@
 import * as React from 'react'
 
 import { StyleSheet, View, Text, ScrollView, Button } from 'react-native'
-import { HybridTestObject } from 'react-native-nitro-image'
+import {
+  HybridTestObjectCpp,
+  HybridTestObjectSwiftKotlin,
+} from 'react-native-nitro-image'
 import { getTests, type TestRunner } from '../getTests'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { logPrototypeChain } from '../logPrototypeChain'
+import SegmentedControl from '@react-native-segmented-control/segmented-control'
 
-logPrototypeChain(HybridTestObject)
-
-const allTests = getTests()
+logPrototypeChain(HybridTestObjectCpp)
 
 interface TestState {
   runner: TestRunner
@@ -38,6 +40,15 @@ function TestCase({ test, onRunPressed }: TestCaseProps): React.ReactElement {
 }
 
 export function HybridObjectTestsScreen() {
+  const [selectedIndex, setSelectedIndex] = React.useState(0)
+  const selectedObject = [HybridTestObjectCpp, HybridTestObjectSwiftKotlin][
+    selectedIndex
+  ]
+  console.log(`Showing Tests for HybridObject "${selectedObject?.name}"`)
+  const allTests = React.useMemo(
+    () => getTests(selectedObject ?? HybridTestObjectCpp),
+    [selectedObject]
+  )
   const [tests, setTests] = React.useState<TestState[]>(() =>
     allTests.map((t) => ({
       runner: t,
@@ -45,6 +56,17 @@ export function HybridObjectTestsScreen() {
       extraMessage: '',
     }))
   )
+
+  React.useEffect(() => {
+    setTests(
+      allTests.map((t) => ({
+        runner: t,
+        state: '📱 Click to run',
+        extraMessage: '',
+      }))
+    )
+  }, [allTests])
+
   const status = React.useMemo(() => {
     const passed = tests.filter((t) => t.state === '✅ Passed').length
     const failed = tests.filter((t) => t.state === '❌ Failed').length
@@ -65,53 +87,56 @@ export function HybridObjectTestsScreen() {
     return `📱 Idle`
   }, [tests])
 
-  const updateTest = React.useCallback(
-    (
-      runner: TestRunner,
-      newState: TestState['state'],
-      newMessage: TestState['extraMessage']
-    ) => {
-      setTests((t) => {
-        const indexOfTest = t.findIndex((v) => v.runner === runner)
-        if (indexOfTest === -1) {
-          throw new Error(
-            `Test ${runner} does not exist in all tests! What did you click? lol`
-          )
-        }
-        const copy = [...t]
-        copy[indexOfTest]!.state = newState
-        copy[indexOfTest]!.extraMessage = newMessage
-        return copy
-      })
-    },
-    []
-  )
+  const updateTest = (
+    runner: TestRunner,
+    newState: TestState['state'],
+    newMessage: TestState['extraMessage']
+  ) => {
+    setTests((t) => {
+      const indexOfTest = t.findIndex((v) => v.runner === runner)
+      if (indexOfTest === -1) {
+        throw new Error(
+          `Test ${runner} does not exist in all tests! What did you click? lol`
+        )
+      }
+      const copy = [...t]
+      copy[indexOfTest]!.state = newState
+      copy[indexOfTest]!.extraMessage = newMessage
+      return copy
+    })
+  }
 
-  const runTest = React.useCallback(
-    (test: TestState) => {
-      updateTest(test.runner, '⏳ Running', '')
-      requestAnimationFrame(async () => {
-        const result = await test.runner.run()
-        switch (result.status) {
-          case 'successful':
-            updateTest(test.runner, '✅ Passed', `Result: ${result.result}`)
-            break
-          case 'failed':
-            updateTest(test.runner, '❌ Failed', `Error: ${result.message}`)
-            break
-        }
-      })
-    },
-    [updateTest]
-  )
+  const runTest = (test: TestState) => {
+    updateTest(test.runner, '⏳ Running', '')
+    requestAnimationFrame(async () => {
+      const result = await test.runner.run()
+      switch (result.status) {
+        case 'successful':
+          updateTest(test.runner, '✅ Passed', `Result: ${result.result}`)
+          break
+        case 'failed':
+          updateTest(test.runner, '❌ Failed', `Error: ${result.message}`)
+          break
+      }
+    })
+  }
 
-  const runAllTests = React.useCallback(() => {
+  const runAllTests = () => {
     tests.forEach((t) => runTest(t))
-  }, [runTest, tests])
+  }
 
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.header}>HybridObject Tests</Text>
+      <SegmentedControl
+        style={styles.segmentedControl}
+        values={['C++', 'Swift/Kotlin']}
+        selectedIndex={selectedIndex}
+        onChange={({ nativeEvent: { selectedSegmentIndex } }) => {
+          setSelectedIndex(selectedSegmentIndex)
+        }}
+      />
+
       <ScrollView contentContainerStyle={styles.scrollContent}>
         {tests.map((t, i) => (
           <TestCase
@@ -144,6 +169,12 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     paddingHorizontal: 15,
+  },
+  segmentedControl: {
+    alignSelf: 'flex-start',
+    minWidth: 180,
+    marginLeft: 15,
+    marginBottom: 10,
   },
   box: {
     width: 60,
