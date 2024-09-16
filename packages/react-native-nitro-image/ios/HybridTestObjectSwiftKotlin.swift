@@ -49,8 +49,8 @@ class HybridTestObjectSwiftKotlin : HybridTestObjectSwiftKotlinSpec {
     return 0
   }
   
-  func createMap() throws -> NitroModules.AnyMapHolder {
-    let map = NitroModules.AnyMapHolder()
+  func createMap() throws -> AnyMapHolder {
+    let map = AnyMapHolder()
     map.setDouble(key: "number", value: numberValue)
     map.setBoolean(key: "bool", value: boolValue)
     map.setString(key: "string", value: stringValue)
@@ -67,15 +67,25 @@ class HybridTestObjectSwiftKotlin : HybridTestObjectSwiftKotlinSpec {
       // TODO: Arrays are not supported yet on Swift AnyValue
       // "array": .array(
     ])
+    return map
   }
   
-  func mapRoundtrip(map: NitroModules.AnyMapHolder) throws -> NitroModules.AnyMapHolder {
+  var thisObject: any HybridTestObjectSwiftKotlinSpec {
+    return self
+  }
+  
+  func newTestObject() throws -> any HybridTestObjectSwiftKotlinSpec {
+    return HybridTestObjectSwiftKotlin()
+  }
+  
+  func mapRoundtrip(map: AnyMapHolder) throws -> AnyMapHolder {
     return map
   }
   
   func funcThatThrows() throws -> Double {
     // TODO: Swift functions can not throw yet! Errors are not propagated up to C++.
     // throw RuntimeError.error(withMessage: "This function will only work after sacrificing seven lambs!")
+    return 55
   }
   
   func tryOptionalParams(num: Double, boo: Bool, str: String?) throws -> String {
@@ -106,15 +116,15 @@ class HybridTestObjectSwiftKotlin : HybridTestObjectSwiftKotlinSpec {
     return b
   }
   
-  func calculateFibonacciAsync(value: Double) throws -> NitroModules.Promise<Int64> {
+  func calculateFibonacciAsync(value: Double) throws -> Promise<Int64> {
     return Promise.async {
-      return calculateFibonacciSync(value: value)
+      return try self.calculateFibonacciSync(value: value)
     }
   }
   
-  func wait(seconds: Double) throws -> NitroModules.Promise<Void> {
+  func wait(seconds: Double) throws -> Promise<Void> {
     return Promise.async {
-      Thread.sleep(forTimeInterval: 5000)
+      try await Task.sleep(nanoseconds: 5 * 1_000_000)
     }
   }
   
@@ -136,17 +146,17 @@ class HybridTestObjectSwiftKotlin : HybridTestObjectSwiftKotlinSpec {
     return car.driver
   }
   
-  func createArrayBuffer() throws -> NitroModules.ArrayBufferHolder {
+  func createArrayBuffer() throws -> ArrayBufferHolder {
     return .allocate(size: 1024 * 1024 * 10) // 10 MB
   }
   
-  func getBufferLastItem(buffer: NitroModules.ArrayBufferHolder) throws -> Double {
+  func getBufferLastItem(buffer: ArrayBufferHolder) throws -> Double {
     let lastBytePointer = buffer.data.advanced(by: buffer.size - 1)
     let lastByte = lastBytePointer.load(as: UInt8.self)
     return Double(lastByte)
   }
   
-  func setAllValuesTo(buffer: NitroModules.ArrayBufferHolder, value: Double) throws {
+  func setAllValuesTo(buffer: ArrayBufferHolder, value: Double) throws {
     memset(buffer.data, Int32(value), buffer.size)
   }
 }
