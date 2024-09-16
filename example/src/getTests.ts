@@ -657,13 +657,12 @@ export function getTests(
       it(() => testObject.toString())
         .didNotThrow()
         .didReturn('string')
-        .equals('[HybridObject TestObject]')
+        .equals(`[HybridObject ${testObject.name}]`)
     ),
     createTest('.name', () =>
       it(() => testObject.name)
         .didNotThrow()
         .didReturn('string')
-        .equals('TestObject')
     ),
     createTest('.equals(...) == true', () =>
       it(() => testObject.equals(testObject))
