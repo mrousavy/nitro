@@ -78,7 +78,7 @@ namespace margelo::nitro::image {
     method(_javaPart, boolValue);
   }
   std::string JHybridTestObjectSwiftKotlinSpec::getStringValue() {
-    static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<jni::JString>()>("getStringValue");
+    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<jni::JString>()>("getStringValue");
     auto result = method(_javaPart);
     return result->toStdString();
   }
@@ -96,7 +96,7 @@ namespace margelo::nitro::image {
     method(_javaPart, bigintValue);
   }
   std::optional<std::string> JHybridTestObjectSwiftKotlinSpec::getStringOrUndefined() {
-    static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<jni::JString>()>("getStringOrUndefined");
+    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<jni::JString>()>("getStringOrUndefined");
     auto result = method(_javaPart);
     return result != nullptr ? std::make_optional(result->toStdString()) : std::nullopt;
   }
@@ -105,7 +105,7 @@ namespace margelo::nitro::image {
     method(_javaPart, stringOrUndefined.has_value() ? jni::make_jstring(stringOrUndefined.value()) : nullptr);
   }
   std::optional<std::string> JHybridTestObjectSwiftKotlinSpec::getStringOrNull() {
-    static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<jni::JString>()>("getStringOrNull");
+    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<jni::JString>()>("getStringOrNull");
     auto result = method(_javaPart);
     return result != nullptr ? std::make_optional(result->toStdString()) : std::nullopt;
   }
@@ -114,7 +114,7 @@ namespace margelo::nitro::image {
     method(_javaPart, stringOrNull.has_value() ? jni::make_jstring(stringOrNull.value()) : nullptr);
   }
   std::optional<std::string> JHybridTestObjectSwiftKotlinSpec::getOptionalString() {
-    static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<jni::JString>()>("getOptionalString");
+    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<jni::JString>()>("getOptionalString");
     auto result = method(_javaPart);
     return result != nullptr ? std::make_optional(result->toStdString()) : std::nullopt;
   }
@@ -123,7 +123,7 @@ namespace margelo::nitro::image {
     method(_javaPart, optionalString.has_value() ? jni::make_jstring(optionalString.value()) : nullptr);
   }
   std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec> JHybridTestObjectSwiftKotlinSpec::getThisObject() {
-    static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<JHybridTestObjectSwiftKotlinSpec::javaobject>()>("getThisObject");
+    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JHybridTestObjectSwiftKotlinSpec::javaobject>()>("getThisObject");
     auto result = method(_javaPart);
     return JNISharedPtr::make_shared_from_jni<JHybridTestObjectSwiftKotlinSpec>(jni::make_global(result));
   }
@@ -139,7 +139,7 @@ namespace margelo::nitro::image {
     return result;
   }
   std::string JHybridTestObjectSwiftKotlinSpec::addStrings(const std::string& a, const std::string& b) {
-    static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<jni::JString>(jni::alias_ref<jni::JString> /* a */, jni::alias_ref<jni::JString> /* b */)>("addStrings");
+    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<jni::JString>(jni::alias_ref<jni::JString> /* a */, jni::alias_ref<jni::JString> /* b */)>("addStrings");
     auto result = method(_javaPart, jni::make_jstring(a), jni::make_jstring(b));
     return result->toStdString();
   }
@@ -148,12 +148,12 @@ namespace margelo::nitro::image {
     method(_javaPart, num, jni::make_jstring(str), boo);
   }
   std::shared_ptr<AnyMap> JHybridTestObjectSwiftKotlinSpec::createMap() {
-    static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<JAnyMap::javaobject>()>("createMap");
+    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JAnyMap::javaobject>()>("createMap");
     auto result = method(_javaPart);
     return result->cthis()->getMap();
   }
   std::shared_ptr<AnyMap> JHybridTestObjectSwiftKotlinSpec::mapRoundtrip(const std::shared_ptr<AnyMap>& map) {
-    static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<JAnyMap::javaobject>(jni::alias_ref<JAnyMap::javaobject> /* map */)>("mapRoundtrip");
+    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JAnyMap::javaobject>(jni::alias_ref<JAnyMap::javaobject> /* map */)>("mapRoundtrip");
     auto result = method(_javaPart, JAnyMap::create(map));
     return result->cthis()->getMap();
   }
@@ -163,12 +163,12 @@ namespace margelo::nitro::image {
     return result;
   }
   std::string JHybridTestObjectSwiftKotlinSpec::tryOptionalParams(double num, bool boo, const std::optional<std::string>& str) {
-    static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<jni::JString>(double /* num */, jboolean /* boo */, jni::alias_ref<jni::JString> /* str */)>("tryOptionalParams");
+    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<jni::JString>(double /* num */, jboolean /* boo */, jni::alias_ref<jni::JString> /* str */)>("tryOptionalParams");
     auto result = method(_javaPart, num, boo, str.has_value() ? jni::make_jstring(str.value()) : nullptr);
     return result->toStdString();
   }
   std::string JHybridTestObjectSwiftKotlinSpec::tryMiddleParam(double num, std::optional<bool> boo, const std::string& str) {
-    static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<jni::JString>(double /* num */, jni::alias_ref<jni::JBoolean> /* boo */, jni::alias_ref<jni::JString> /* str */)>("tryMiddleParam");
+    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<jni::JString>(double /* num */, jni::alias_ref<jni::JBoolean> /* boo */, jni::alias_ref<jni::JString> /* str */)>("tryMiddleParam");
     auto result = method(_javaPart, num, boo.has_value() ? jni::JBoolean::valueOf(boo.value()) : nullptr, jni::make_jstring(str));
     return result->toStdString();
   }
@@ -178,7 +178,7 @@ namespace margelo::nitro::image {
     return result;
   }
   std::future<int64_t> JHybridTestObjectSwiftKotlinSpec::calculateFibonacciAsync(double value) {
-    static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<JPromise::javaobject>(double /* value */)>("calculateFibonacciAsync");
+    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JPromise::javaobject>(double /* value */)>("calculateFibonacciAsync");
     auto result = method(_javaPart, value);
     return [&]() {
       auto promise = std::make_shared<std::promise<int64_t>>();
@@ -194,7 +194,7 @@ namespace margelo::nitro::image {
     }();
   }
   std::future<void> JHybridTestObjectSwiftKotlinSpec::wait(double seconds) {
-    static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<JPromise::javaobject>(double /* seconds */)>("wait");
+    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JPromise::javaobject>(double /* seconds */)>("wait");
     auto result = method(_javaPart, seconds);
     return [&]() {
       auto promise = std::make_shared<std::promise<void>>();
@@ -217,7 +217,7 @@ namespace margelo::nitro::image {
     method(_javaPart, JFunc_void::fromCpp(first), JFunc_void::fromCpp(second), JFunc_void::fromCpp(third));
   }
   Car JHybridTestObjectSwiftKotlinSpec::getCar() {
-    static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<JCar>()>("getCar");
+    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JCar>()>("getCar");
     auto result = method(_javaPart);
     return result->toCpp();
   }
@@ -227,12 +227,12 @@ namespace margelo::nitro::image {
     return result;
   }
   std::optional<Person> JHybridTestObjectSwiftKotlinSpec::getDriver(const Car& car) {
-    static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<JPerson>(jni::alias_ref<JCar> /* car */)>("getDriver");
+    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JPerson>(jni::alias_ref<JCar> /* car */)>("getDriver");
     auto result = method(_javaPart, JCar::fromCpp(car));
     return result != nullptr ? std::make_optional(result->toCpp()) : std::nullopt;
   }
   std::shared_ptr<ArrayBuffer> JHybridTestObjectSwiftKotlinSpec::createArrayBuffer() {
-    static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<JArrayBuffer::javaobject>()>("createArrayBuffer");
+    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JArrayBuffer::javaobject>()>("createArrayBuffer");
     auto result = method(_javaPart);
     return result->cthis()->getArrayBuffer();
   }
@@ -246,7 +246,7 @@ namespace margelo::nitro::image {
     method(_javaPart, JArrayBuffer::wrap(buffer), value);
   }
   std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec> JHybridTestObjectSwiftKotlinSpec::newTestObject() {
-    static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<JHybridTestObjectSwiftKotlinSpec::javaobject>()>("newTestObject");
+    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JHybridTestObjectSwiftKotlinSpec::javaobject>()>("newTestObject");
     auto result = method(_javaPart);
     return JNISharedPtr::make_shared_from_jni<JHybridTestObjectSwiftKotlinSpec>(jni::make_global(result));
   }
