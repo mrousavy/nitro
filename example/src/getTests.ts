@@ -128,15 +128,21 @@ export function getTests(
       it(() => (testObject.numberValue = 13)).didNotThrow()
     ),
     createTest('get numberValue (== 13)', () =>
-      it(() => testObject.numberValue)
+      it(() => {
+        testObject.numberValue = 14
+        return testObject.numberValue
+      })
         .didNotThrow()
-        .equals(13)
+        .equals(14)
     ),
     createTest('set boolValue to true', () =>
       it(() => (testObject.boolValue = true)).didNotThrow()
     ),
     createTest('get boolValue (== true)', () =>
-      it(() => testObject.boolValue)
+      it(() => {
+        testObject.boolValue = true
+        return testObject.boolValue
+      })
         .didNotThrow()
         .equals(true)
     ),
@@ -144,7 +150,10 @@ export function getTests(
       it(() => (testObject.stringValue = 'hello!')).didNotThrow()
     ),
     createTest("get stringValue (== 'hello!')", () =>
-      it(() => testObject.stringValue)
+      it(() => {
+        testObject.stringValue = 'hello!'
+        return testObject.stringValue
+      })
         .didNotThrow()
         .equals('hello!')
     ),
@@ -152,7 +161,10 @@ export function getTests(
       it(() => (testObject.bigintValue = 7362572367826385n)).didNotThrow()
     ),
     createTest('get bigintValue (== 7362572367826385n)', () =>
-      it(() => testObject.bigintValue)
+      it(() => {
+        testObject.bigintValue = 7362572367826385n
+        return testObject.bigintValue
+      })
         .didNotThrow()
         .equals(7362572367826385n)
     ),
@@ -163,7 +175,10 @@ export function getTests(
       }).didNotThrow()
     ),
     createTest('get stringOrUndefined (== undefined)', () =>
-      it(() => testObject.stringOrUndefined)
+      it(() => {
+        testObject.stringOrUndefined = undefined
+        return testObject.stringOrUndefined
+      })
         .didNotThrow()
         .equals(undefined)
     ),
@@ -174,7 +189,10 @@ export function getTests(
       }).didNotThrow()
     ),
     createTest('get stringOrNull (== undefined)', () =>
-      it(() => testObject.stringOrNull)
+      it(() => {
+        testObject.stringOrNull = null
+        return testObject.stringOrNull
+      })
         .didNotThrow()
         .equals(null)
     ),
@@ -185,7 +203,10 @@ export function getTests(
       }).didNotThrow()
     ),
     createTest('get optionalString (== undefined)', () =>
-      it(() => testObject.optionalString)
+      it(() => {
+        testObject.optionalString = undefined
+        return testObject.optionalString
+      })
         .didNotThrow()
         .equals(undefined)
     ),
@@ -294,13 +315,19 @@ export function getTests(
             it(() => (testObject.someVariant = 55)).didNotThrow()
           ),
           createTest('get someVariant (== 55)', () =>
-            it(() => testObject.someVariant).equals(55)
+            it(() => {
+              testObject.someVariant = 55
+              return testObject.someVariant
+            }).equals(55)
           ),
           createTest("set someVariant to 'some-string'", () =>
             it(() => (testObject.someVariant = 'some-string')).didNotThrow()
           ),
           createTest("get someVariant (== 'some-string')", () =>
-            it(() => testObject.someVariant).equals('some-string')
+            it(() => {
+              testObject.someVariant = 'some-string'
+              return testObject.someVariant
+            }).equals('some-string')
           ),
           createTest('set someVariant to false', () =>
             it(
@@ -445,7 +472,10 @@ export function getTests(
             it(() => (testObject.someTuple = [55, 'hello'])).didNotThrow()
           ),
           createTest("get someTuple (== [55, 'hello'])", () =>
-            it(() => testObject.someTuple).equals([55, 'hello'])
+            it(() => {
+              testObject.someTuple = [55, 'hello']
+              return testObject.someTuple
+            }).equals([55, 'hello'])
           ),
           createTest('flip([10, 20, 30])', () =>
             it(() => testObject.flip([10, 20, 30]))
