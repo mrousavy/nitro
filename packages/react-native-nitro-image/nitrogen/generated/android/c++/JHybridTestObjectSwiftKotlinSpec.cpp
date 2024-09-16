@@ -183,7 +183,7 @@ namespace margelo::nitro::image {
     return [&]() {
       auto promise = std::make_shared<std::promise<int64_t>>();
       result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& boxedResult) {
-        auto result = jni::static_ref_cast<int64_t>(boxedResult);
+        auto result = jni::static_ref_cast<jni::JLong>(boxedResult);
         promise->set_value(result->value());
       });
       result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JString>& message) {

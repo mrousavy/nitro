@@ -168,8 +168,20 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
     }
   }
 
-  getTypeCode(language: 'kotlin' | 'c++'): string {
+  getTypeCode(language: 'kotlin' | 'c++', isBoxed = false): string {
     switch (this.type.kind) {
+      case 'number':
+      case 'bigint':
+      case 'boolean':
+        if (isBoxed) {
+          return getKotlinBoxedPrimitiveType(this.type)
+        } else {
+          if (this.type.kind === 'boolean' && language === 'c++') {
+            // JNI does not use `bool`, so it is a jboolean instead.
+            return 'jboolean'
+          }
+          return this.type.getCode(language)
+        }
       case 'array':
         switch (language) {
           case 'c++':
@@ -185,13 +197,6 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
                 const bridged = new KotlinCxxBridgedType(array.itemType)
                 return `jni::JArrayClass<${bridged.getTypeCode(language)}>`
             }
-          default:
-            return this.type.getCode(language)
-        }
-      case 'boolean':
-        switch (language) {
-          case 'c++':
-            return 'jboolean'
           default:
             return this.type.getCode(language)
         }
@@ -631,7 +636,7 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
             if (resultingType.hasType) {
               // it's a Promise<T>
               resolveBody = `
-auto result = jni::static_ref_cast<${resultingType.getTypeCode('c++')}>(boxedResult);
+auto result = jni::static_ref_cast<${resultingType.getTypeCode('c++', true)}>(boxedResult);
 promise->set_value(${resultingType.parseFromKotlinToCpp('result', 'c++', true)});
           `.trim()
             } else {
