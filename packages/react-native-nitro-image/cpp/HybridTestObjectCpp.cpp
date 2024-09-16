@@ -164,8 +164,8 @@ std::variant<Person, Car> HybridTestObjectCpp::getVariantObjects(const std::vari
   return variant;
 }
 
-std::variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>, Person>
-HybridTestObjectCpp::getVariantHybrid(const std::variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>, Person>& variant) {
+std::variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>, Person> HybridTestObjectCpp::getVariantHybrid(
+    const std::variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>, Person>& variant) {
   return variant;
 }
 
@@ -218,14 +218,15 @@ std::future<double> HybridTestObjectCpp::getValueFromJSCallbackAndWait(const std
 }
 
 void HybridTestObjectCpp::callAll(const std::function<void()>& first, const std::function<void()>& second,
-                               const std::function<void()>& third) {
+                                  const std::function<void()>& third) {
   first();
   second();
   third();
 }
 
-std::future<void> HybridTestObjectCpp::getValueFromJsCallback(const std::function<std::future<std::string>()>& callback,
-                                                           const std::function<void(const std::string& /* valueFromJs */)>& andThenCall) {
+std::future<void>
+HybridTestObjectCpp::getValueFromJsCallback(const std::function<std::future<std::string>()>& callback,
+                                            const std::function<void(const std::string& /* valueFromJs */)>& andThenCall) {
   return std::async(std::launch::async, [=]() {
     std::future<std::string> future = callback();
     std::string jsValue = future.get();
