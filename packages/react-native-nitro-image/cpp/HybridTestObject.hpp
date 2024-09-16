@@ -57,7 +57,7 @@ public:
   void setSomeVariant(const std::variant<std::string, double>& variant) override;
   std::tuple<double, std::string> getSomeTuple() override;
   void setSomeTuple(const std::tuple<double, std::string>& tuple) override;
-  std::shared_ptr<HybridTestObjectSpec> getSelf() override;
+  std::shared_ptr<HybridTestObjectSpec> getThisObject() override;
 
 public:
   // Methods

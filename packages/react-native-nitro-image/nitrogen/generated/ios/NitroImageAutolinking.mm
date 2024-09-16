@@ -11,8 +11,8 @@
 #import <type_traits>
 
 #include "HybridImageFactorySpecSwift.hpp"
-#include "HybridTestObject.hpp"
-#include "HybridSwiftKotlinTestObjectSpecSwift.hpp"
+#include "HybridTestObjectCpp.hpp"
+#include "HybridTestObjectSwiftKotlinSpecSwift.hpp"
 
 @interface NitroImageAutolinking : NSObject
 @end
@@ -31,19 +31,19 @@
     }
   );
   HybridObjectRegistry::registerHybridObjectConstructor(
-    "TestObject",
+    "TestObjectCpp",
     []() -> std::shared_ptr<HybridObject> {
-      static_assert(std::is_default_constructible_v<HybridTestObject>,
-                    "The HybridObject \"HybridTestObject\" is not default-constructible! "
+      static_assert(std::is_default_constructible_v<HybridTestObjectCpp>,
+                    "The HybridObject \"HybridTestObjectCpp\" is not default-constructible! "
                     "Create a public constructor that takes zero arguments to be able to autolink this HybridObject.");
-      return std::make_shared<HybridTestObject>();
+      return std::make_shared<HybridTestObjectCpp>();
     }
   );
   HybridObjectRegistry::registerHybridObjectConstructor(
-    "SwiftKotlinTestObject",
+    "TestObjectSwiftKotlin",
     []() -> std::shared_ptr<HybridObject> {
-      auto swiftPart = NitroImage::NitroImageAutolinking::createSwiftKotlinTestObject();
-      return std::make_shared<HybridSwiftKotlinTestObjectSpecSwift>(swiftPart);
+      auto swiftPart = NitroImage::NitroImageAutolinking::createTestObjectSwiftKotlin();
+      return std::make_shared<HybridTestObjectSwiftKotlinSpecSwift>(swiftPart);
     }
   );
 }

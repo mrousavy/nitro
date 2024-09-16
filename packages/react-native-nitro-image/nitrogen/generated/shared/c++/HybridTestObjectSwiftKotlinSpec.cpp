@@ -28,7 +28,7 @@ namespace margelo::nitro::image {
       prototype.registerHybridSetter("stringOrNull", &HybridTestObjectSwiftKotlinSpec::setStringOrNull);
       prototype.registerHybridGetter("optionalString", &HybridTestObjectSwiftKotlinSpec::getOptionalString);
       prototype.registerHybridSetter("optionalString", &HybridTestObjectSwiftKotlinSpec::setOptionalString);
-      prototype.registerHybridGetter("self", &HybridTestObjectSwiftKotlinSpec::getSelf);
+      prototype.registerHybridGetter("thisObject", &HybridTestObjectSwiftKotlinSpec::getThisObject);
       prototype.registerHybridMethod("simpleFunc", &HybridTestObjectSwiftKotlinSpec::simpleFunc);
       prototype.registerHybridMethod("addNumbers", &HybridTestObjectSwiftKotlinSpec::addNumbers);
       prototype.registerHybridMethod("addStrings", &HybridTestObjectSwiftKotlinSpec::addStrings);

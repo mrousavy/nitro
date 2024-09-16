@@ -18,6 +18,8 @@ namespace margelo::nitro::image { struct Car; }
 namespace margelo::nitro::image { class HybridImageSpec; }
 // Forward declaration of `HybridTestObjectCppSpec` to properly resolve imports.
 namespace margelo::nitro::image { class HybridTestObjectCppSpec; }
+// Forward declaration of `HybridTestObjectSwiftKotlinSpec` to properly resolve imports.
+namespace margelo::nitro::image { class HybridTestObjectSwiftKotlinSpec; }
 // Forward declaration of `ImageFormat` to properly resolve imports.
 namespace margelo::nitro::image { enum class ImageFormat; }
 // Forward declaration of `ImageSize` to properly resolve imports.
@@ -35,6 +37,7 @@ namespace margelo::nitro::image { enum class Powertrain; }
 #include "Car.hpp"
 #include "HybridImageSpec.hpp"
 #include "HybridTestObjectCppSpec.hpp"
+#include "HybridTestObjectSwiftKotlinSpec.hpp"
 #include "ImageFormat.hpp"
 #include "ImageSize.hpp"
 #include "OldEnum.hpp"
@@ -66,6 +69,8 @@ namespace margelo::nitro::image { enum class Powertrain; }
 namespace NitroImage { class HybridImageSpecCxx; }
 // Forward declaration of `HybridTestObjectCppSpecCxx` to properly resolve imports.
 namespace NitroImage { class HybridTestObjectCppSpecCxx; }
+// Forward declaration of `HybridTestObjectSwiftKotlinSpecCxx` to properly resolve imports.
+namespace NitroImage { class HybridTestObjectSwiftKotlinSpecCxx; }
 
 // Include Swift defined types
 #if __has_include("NitroImage-Swift.h")

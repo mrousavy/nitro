@@ -13,8 +13,8 @@
 #error NitroModules cannot be found! Are you sure you installed NitroModules properly?
 #endif
 
-// Forward declaration of `HybridTestObjectCppSpec` to properly resolve imports.
-namespace margelo::nitro::image { class HybridTestObjectCppSpec; }
+// Forward declaration of `HybridTestObjectSwiftKotlinSpec` to properly resolve imports.
+namespace margelo::nitro::image { class HybridTestObjectSwiftKotlinSpec; }
 // Forward declaration of `AnyMap` to properly resolve imports.
 namespace NitroModules { class AnyMap; }
 // Forward declaration of `Car` to properly resolve imports.
@@ -27,7 +27,7 @@ namespace NitroModules { class ArrayBuffer; }
 #include <string>
 #include <optional>
 #include <memory>
-#include "HybridTestObjectCppSpec.hpp"
+#include "HybridTestObjectSwiftKotlinSpec.hpp"
 #include <NitroModules/AnyMap.hpp>
 #include <future>
 #include <functional>
@@ -73,7 +73,7 @@ namespace margelo::nitro::image {
       virtual void setStringOrNull(const std::optional<std::string>& stringOrNull) = 0;
       virtual std::optional<std::string> getOptionalString() = 0;
       virtual void setOptionalString(const std::optional<std::string>& optionalString) = 0;
-      virtual std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec> getSelf() = 0;
+      virtual std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec> getThisObject() = 0;
 
     public:
       // Methods
@@ -97,7 +97,7 @@ namespace margelo::nitro::image {
       virtual std::shared_ptr<ArrayBuffer> createArrayBuffer() = 0;
       virtual double getBufferLastItem(const std::shared_ptr<ArrayBuffer>& buffer) = 0;
       virtual void setAllValuesTo(const std::shared_ptr<ArrayBuffer>& buffer, double value) = 0;
-      virtual std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec> newTestObject() = 0;
+      virtual std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec> newTestObject() = 0;
 
     protected:
       // Hybrid Setup

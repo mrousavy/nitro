@@ -17,8 +17,7 @@
 #include "JHybridTestObjectSwiftKotlinSpec.hpp"
 #include "JFunc_void.hpp"
 #include <NitroModules/JNISharedPtr.hpp>
-#include "HybridTestObject.hpp"
-#include "JHybridKotlinTestObjectSpec.hpp"
+#include "HybridTestObjectCpp.hpp"
 
 namespace margelo::nitro::image {
 
@@ -56,28 +55,28 @@ int initialize(JavaVM* vm) {
       }
     );
     HybridObjectRegistry::registerHybridObjectConstructor(
-      "TestObject",
+      "TestObjectCpp",
       []() -> std::shared_ptr<HybridObject> {
-        static_assert(std::is_default_constructible_v<HybridTestObject>,
-                      "The HybridObject \"HybridTestObject\" is not default-constructible! "
+        static_assert(std::is_default_constructible_v<HybridTestObjectCpp>,
+                      "The HybridObject \"HybridTestObjectCpp\" is not default-constructible! "
                       "Create a public constructor that takes zero arguments to be able to autolink this HybridObject.");
-        return std::make_shared<HybridTestObject>();
+        return std::make_shared<HybridTestObjectCpp>();
       }
     );
     HybridObjectRegistry::registerHybridObjectConstructor(
-      "KotlinTestObject",
+      "TestObjectSwiftKotlin",
       []() -> std::shared_ptr<HybridObject> {
-        static auto javaClass = jni::findClassStatic("com/margelo/nitro/image/KotlinTestObject");
-        static auto defaultConstructor = javaClass->getConstructor<JHybridKotlinTestObjectSpec::javaobject()>();
+        static auto javaClass = jni::findClassStatic("com/margelo/nitro/image/HybridTestObjectSwiftKotlin");
+        static auto defaultConstructor = javaClass->getConstructor<JHybridTestObjectSwiftKotlinSpec::javaobject()>();
     
         auto instance = javaClass->newObject(defaultConstructor);
     #ifndef NDEBUG
         if (instance == nullptr) [[unlikely]] {
-          throw std::runtime_error("Failed to create an instance of \"JHybridKotlinTestObjectSpec\" - the constructor returned null!");
+          throw std::runtime_error("Failed to create an instance of \"JHybridTestObjectSwiftKotlinSpec\" - the constructor returned null!");
         }
     #endif
         auto globalRef = jni::make_global(instance);
-        return JNISharedPtr::make_shared_from_jni<JHybridKotlinTestObjectSpec>(globalRef);
+        return JNISharedPtr::make_shared_from_jni<JHybridTestObjectSwiftKotlinSpec>(globalRef);
       }
     );
   });

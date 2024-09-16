@@ -172,10 +172,10 @@ public final class HybridTestObjectSwiftKotlinSpecCxx {
     }
   }
   
-  public var self: HybridTestObjectCppSpecCxx {
+  public var thisObject: HybridTestObjectSwiftKotlinSpecCxx {
     @inline(__always)
     get {
-      return self.implementation.self.createCxxBridge()
+      return self.implementation.thisObject.createCxxBridge()
     }
   }
 
@@ -451,7 +451,7 @@ public final class HybridTestObjectSwiftKotlinSpecCxx {
   }
   
   @inline(__always)
-  public func newTestObject() -> HybridTestObjectCppSpecCxx {
+  public func newTestObject() -> HybridTestObjectSwiftKotlinSpecCxx {
     do {
       let result = try self.implementation.newTestObject()
       return result.createCxxBridge()

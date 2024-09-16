@@ -52,7 +52,7 @@ namespace margelo::nitro::image {
     void setStringOrNull(const std::optional<std::string>& stringOrNull) override;
     std::optional<std::string> getOptionalString() override;
     void setOptionalString(const std::optional<std::string>& optionalString) override;
-    std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec> getSelf() override;
+    std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec> getThisObject() override;
 
   public:
     // Methods
@@ -76,7 +76,7 @@ namespace margelo::nitro::image {
     std::shared_ptr<ArrayBuffer> createArrayBuffer() override;
     double getBufferLastItem(const std::shared_ptr<ArrayBuffer>& buffer) override;
     void setAllValuesTo(const std::shared_ptr<ArrayBuffer>& buffer, double value) override;
-    std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec> newTestObject() override;
+    std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec> newTestObject() override;
 
   private:
     friend HybridBase;

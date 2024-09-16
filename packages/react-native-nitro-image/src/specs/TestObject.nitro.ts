@@ -96,7 +96,7 @@ export interface TestObjectCpp extends HybridObject<{ ios: 'c++' }> {
   setAllValuesTo(buffer: ArrayBuffer, value: number): void
 
   // Other HybridObjects
-  readonly self: TestObjectCpp
+  readonly thisObject: TestObjectCpp
   newTestObject(): TestObjectCpp
 }
 
@@ -139,7 +139,7 @@ export interface TestObjectSwiftKotlin
   // Complex variants
   // getVariantEnum(variant: OldEnum | boolean): OldEnum | boolean
   // getVariantObjects(variant: Person | Car): Person | Car
-  // getVariantHybrid(variant: TestObjectCpp | Person): TestObjectCpp | Person
+  // getVariantHybrid(variant: TestObjectSwiftKotlin | Person): TestObjectSwiftKotlin | Person
   // getVariantTuple(variant: Float2 | Float3): Float2 | Float3
 
   // TODO: Tuples are not yet supported in Swift/Kotlin!
@@ -175,6 +175,6 @@ export interface TestObjectSwiftKotlin
   setAllValuesTo(buffer: ArrayBuffer, value: number): void
 
   // Other HybridObjects
-  readonly self: TestObjectCpp
-  newTestObject(): TestObjectCpp
+  readonly thisObject: TestObjectSwiftKotlin
+  newTestObject(): TestObjectSwiftKotlin
 }

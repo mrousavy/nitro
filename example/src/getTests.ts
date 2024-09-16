@@ -612,7 +612,7 @@ export function getTests(
 
     // Hybrid Object Tests
     createTest('get self', () =>
-      it(() => testObject.self)
+      it(() => testObject.thisObject)
         .didNotThrow()
         .didReturn('object')
         .toContain('bigintValue')
@@ -671,13 +671,13 @@ export function getTests(
         .equals(true)
     ),
     createTest('.equals(.self) == true', () =>
-      it(() => testObject.equals(testObject.self))
+      it(() => testObject.equals(testObject.thisObject))
         .didNotThrow()
         .equals(true)
     ),
     createTest('.self == .self', () =>
       // eslint-disable-next-line no-self-compare
-      it(() => testObject.self === testObject.self)
+      it(() => testObject.thisObject === testObject.thisObject)
         .didNotThrow()
         .equals(true)
     ),

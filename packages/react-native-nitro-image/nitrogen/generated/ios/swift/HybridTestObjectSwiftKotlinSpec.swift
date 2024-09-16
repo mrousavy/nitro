@@ -36,7 +36,7 @@ public protocol HybridTestObjectSwiftKotlinSpec: HybridObjectSpec {
   var stringOrUndefined: String? { get set }
   var stringOrNull: String? { get set }
   var optionalString: String? { get set }
-  var self: HybridTestObjectCppSpec { get }
+  var thisObject: HybridTestObjectSwiftKotlinSpec { get }
 
   // Methods
   func simpleFunc() throws -> Void
@@ -59,7 +59,7 @@ public protocol HybridTestObjectSwiftKotlinSpec: HybridObjectSpec {
   func createArrayBuffer() throws -> ArrayBufferHolder
   func getBufferLastItem(buffer: ArrayBufferHolder) throws -> Double
   func setAllValuesTo(buffer: ArrayBufferHolder, value: Double) throws -> Void
-  func newTestObject() throws -> HybridTestObjectCppSpec
+  func newTestObject() throws -> HybridTestObjectSwiftKotlinSpec
 }
 
 public extension HybridTestObjectSwiftKotlinSpec {

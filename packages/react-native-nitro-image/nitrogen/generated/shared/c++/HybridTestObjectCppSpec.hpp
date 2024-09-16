@@ -83,7 +83,7 @@ namespace margelo::nitro::image {
       virtual void setSomeVariant(const std::variant<std::string, double>& someVariant) = 0;
       virtual std::tuple<double, std::string> getSomeTuple() = 0;
       virtual void setSomeTuple(const std::tuple<double, std::string>& someTuple) = 0;
-      virtual std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec> getSelf() = 0;
+      virtual std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec> getThisObject() = 0;
 
     public:
       // Methods

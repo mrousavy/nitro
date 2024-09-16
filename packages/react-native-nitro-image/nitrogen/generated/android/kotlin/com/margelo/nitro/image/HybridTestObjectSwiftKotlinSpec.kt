@@ -77,7 +77,7 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @get:DoNotStrip
   @get:Keep
-  abstract val self: HybridTestObjectCppSpec
+  abstract val thisObject: HybridTestObjectSwiftKotlinSpec
 
   // Methods
   @DoNotStrip
@@ -176,7 +176,7 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
-  abstract fun newTestObject(): HybridTestObjectCppSpec
+  abstract fun newTestObject(): HybridTestObjectSwiftKotlinSpec
 
   private external fun initHybrid(): HybridData
 
