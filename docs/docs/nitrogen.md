@@ -273,7 +273,7 @@ In your `nitro.json`, register `HybridMath` in the `"autolinking"` section:
 
 Make sure `HybridMath` is default-constructible and scoped inside the correct namespace/package/file, then run Nitrogen.
 
-#### 5.1. Initialize Android (C*+)
+#### 5.1. Initialize Android (C++)
 
 For Android, you also need to explicitly call `initialize()` in your JNI OnLoad function (most of the time this is inside `cpp-adapter.cpp`):
 
