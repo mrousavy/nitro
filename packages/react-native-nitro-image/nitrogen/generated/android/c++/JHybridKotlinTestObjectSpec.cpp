@@ -176,5 +176,9 @@ namespace margelo::nitro::image {
     static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<JFunc_void_Person::javaobject> /* callback */)>("addOnPersonBornListener");
     method(_javaPart, JFunc_void_Person::fromCpp(callback));
   }
+  void JHybridKotlinTestObjectSpec::something1(std::optional<Powertrain> optional) {
+    static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<JPowertrain> /* optional */)>("something1");
+    method(_javaPart, optional.has_value() ? JPowertrain::fromCpp(optional.value()) : nullptr);
+  }
 
 } // namespace margelo::nitro::image

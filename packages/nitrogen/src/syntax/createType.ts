@@ -209,10 +209,14 @@ export function createType(type: TSMorphType, isOptional: boolean): Type {
       return new EnumType(typename, enumDeclaration)
     } else if (type.isUnion()) {
       // It is some kind of union - either full of strings (then it's an enum, or different types, then it's a Variant)
-      const isEnumUnion = type.getUnionTypes().every((t) => t.isStringLiteral())
+      const types = type.getUnionTypes()
+      const nonNullTypes = types.filter(
+        (t) => !t.isNull() && !t.isUndefined() && !t.isVoid()
+      )
+      const isEnumUnion = nonNullTypes.every((t) => t.isStringLiteral())
       if (isEnumUnion) {
         // It consists only of string literaly - that means it's describing an enum!
-        const symbol = type.getAliasSymbol()
+        const symbol = type.getNonNullableType().getAliasSymbol()
         if (symbol == null) {
           // If there is no alias, it is an inline union instead of a separate type declaration!
           throw new Error(
@@ -258,9 +262,7 @@ export function createType(type: TSMorphType, isOptional: boolean): Type {
         `Anonymous objects cannot be represented in C++! Extract "${type.getText()}" to a separate interface/type declaration.`
       )
     } else if (type.isStringLiteral()) {
-      throw new Error(
-        `String literal ${type.getText()} cannot be represented in C++ because it is ambiguous between a string and a discriminating union enum.`
-      )
+      return new StringType()
     } else {
       throw new Error(
         `The TypeScript type "${type.getText()}" cannot be represented in C++!`
