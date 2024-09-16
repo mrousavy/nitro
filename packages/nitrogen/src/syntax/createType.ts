@@ -229,6 +229,7 @@ export function createType(type: TSMorphType, isOptional: boolean): Type {
       } else {
         // It consists of different types - that means it's a variant!
         let variants = type
+          .getNonNullableType()
           .getUnionTypes()
           // Filter out any nulls or undefineds, as those are already treated as `isOptional`.
           .filter((t) => !t.isNull() && !t.isUndefined() && !t.isVoid())
