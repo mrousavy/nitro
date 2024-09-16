@@ -1,11 +1,11 @@
 //
-//  HybridTestObject.cpp
+//  HybridTestObjectCpp.cpp
 //  NitroImage
 //
 //  Created by Marc Rousavy on 30.07.24.
 //
 
-#include "HybridTestObject.hpp"
+#include "HybridTestObjectCpp.hpp"
 #include <NitroModules/AnyMap.hpp>
 #include <NitroModules/NitroLogger.hpp>
 #include <chrono>
@@ -14,100 +14,100 @@
 namespace margelo::nitro::image {
 
 // Properties
-double HybridTestObject::getNumberValue() {
+double HybridTestObjectCpp::getNumberValue() {
   return _number;
 }
 
-void HybridTestObject::setNumberValue(double numberValue) {
+void HybridTestObjectCpp::setNumberValue(double numberValue) {
   _number = numberValue;
 }
 
-bool HybridTestObject::getBoolValue() {
+bool HybridTestObjectCpp::getBoolValue() {
   return _bool;
 }
 
-void HybridTestObject::setBoolValue(bool boolValue) {
+void HybridTestObjectCpp::setBoolValue(bool boolValue) {
   _bool = boolValue;
 }
 
-std::string HybridTestObject::getStringValue() {
+std::string HybridTestObjectCpp::getStringValue() {
   return _string;
 }
 
-void HybridTestObject::setStringValue(const std::string& stringValue) {
+void HybridTestObjectCpp::setStringValue(const std::string& stringValue) {
   _string = stringValue;
 }
 
-int64_t HybridTestObject::getBigintValue() {
+int64_t HybridTestObjectCpp::getBigintValue() {
   return _bigint;
 }
 
-void HybridTestObject::setBigintValue(int64_t bigintValue) {
+void HybridTestObjectCpp::setBigintValue(int64_t bigintValue) {
   _bigint = bigintValue;
 }
 
-std::optional<std::string> HybridTestObject::getStringOrUndefined() {
+std::optional<std::string> HybridTestObjectCpp::getStringOrUndefined() {
   return _optionalString;
 }
 
-void HybridTestObject::setStringOrUndefined(const std::optional<std::string>& stringOrUndefined) {
+void HybridTestObjectCpp::setStringOrUndefined(const std::optional<std::string>& stringOrUndefined) {
   _optionalString = stringOrUndefined;
 }
 
-std::optional<std::string> HybridTestObject::getStringOrNull() {
+std::optional<std::string> HybridTestObjectCpp::getStringOrNull() {
   return _optionalString;
 }
 
-void HybridTestObject::setStringOrNull(const std::optional<std::string>& stringOrNull) {
+void HybridTestObjectCpp::setStringOrNull(const std::optional<std::string>& stringOrNull) {
   _optionalString = stringOrNull;
 }
 
-std::optional<std::string> HybridTestObject::getOptionalString() {
+std::optional<std::string> HybridTestObjectCpp::getOptionalString() {
   return _optionalString;
 }
 
-void HybridTestObject::setOptionalString(const std::optional<std::string>& optionalString) {
+void HybridTestObjectCpp::setOptionalString(const std::optional<std::string>& optionalString) {
   _optionalString = optionalString;
 }
 
-std::variant<std::string, double> HybridTestObject::getSomeVariant() {
+std::variant<std::string, double> HybridTestObjectCpp::getSomeVariant() {
   return _variant;
 }
 
-void HybridTestObject::setSomeVariant(const std::variant<std::string, double>& variant) {
+void HybridTestObjectCpp::setSomeVariant(const std::variant<std::string, double>& variant) {
   _variant = variant;
 }
 
-std::tuple<double, std::string> HybridTestObject::getSomeTuple() {
+std::tuple<double, std::string> HybridTestObjectCpp::getSomeTuple() {
   return _tuple;
 }
 
-void HybridTestObject::setSomeTuple(const std::tuple<double, std::string>& tuple) {
+void HybridTestObjectCpp::setSomeTuple(const std::tuple<double, std::string>& tuple) {
   _tuple = tuple;
 }
 
-std::shared_ptr<HybridTestObjectSpec> HybridTestObject::getThisObject() {
-  return shared<HybridTestObjectSpec>();
+std::shared_ptr<HybridTestObjectCppSpec> HybridTestObjectCpp::getThisObject() {
+  return shared<HybridTestObjectCppSpec>();
 }
 
 // Methods
-double HybridTestObject::addNumbers(double a, double b) {
+double HybridTestObjectCpp::addNumbers(double a, double b) {
   return a + b;
 }
 
-std::string HybridTestObject::addStrings(const std::string& a, const std::string& b) {
+std::string HybridTestObjectCpp::addStrings(const std::string& a, const std::string& b) {
   return a + b;
 }
 
-void HybridTestObject::simpleFunc() {
+void HybridTestObjectCpp::simpleFunc() {
   // do nothing
 }
 
-void HybridTestObject::multipleArguments(double num, const std::string& str, bool boo) {
+void HybridTestObjectCpp::multipleArguments(double num, const std::string& str, bool boo) {
   Logger::log(LogLevel::Info, TAG, "Arguments received! num: %f | str: %s | boo: %i", num, str.c_str(), boo);
 }
 
-std::shared_ptr<AnyMap> HybridTestObject::createMap() {
+std::shared_ptr<AnyMap> HybridTestObjectCpp::createMap() {
   auto map = AnyMap::make();
   map->setDouble("number", getNumberValue());
   map->setBoolean("bool", getBoolValue());
@@ -125,15 +125,15 @@ std::shared_ptr<AnyMap> HybridTestObject::createMap() {
   return map;
 }
 
-std::shared_ptr<AnyMap> HybridTestObject::mapRoundtrip(const std::shared_ptr<AnyMap>& map) {
+std::shared_ptr<AnyMap> HybridTestObjectCpp::mapRoundtrip(const std::shared_ptr<AnyMap>& map) {
   return map;
 }
 
-double HybridTestObject::funcThatThrows() {
+double HybridTestObjectCpp::funcThatThrows() {
   throw std::runtime_error("This function will only work after sacrificing seven lambs!");
 }
 
-std::string HybridTestObject::tryOptionalParams(double num, bool boo, const std::optional<std::string>& str) {
+std::string HybridTestObjectCpp::tryOptionalParams(double num, bool boo, const std::optional<std::string>& str) {
   if (str.has_value()) {
     return str.value();
   } else {
@@ -141,12 +141,12 @@ std::string HybridTestObject::tryOptionalParams(double num, bool boo, const std:
   }
 }
 
-std::string HybridTestObject::tryMiddleParam(double num, std::optional<bool> boo, const std::string& str) {
+std::string HybridTestObjectCpp::tryMiddleParam(double num, std::optional<bool> boo, const std::string& str) {
   return str;
 }
 
 std::variant<std::string, double>
-HybridTestObject::passVariant(const std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>>& either) {
+HybridTestObjectCpp::passVariant(const std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>>& either) {
   if (std::holds_alternative<std::string>(either)) {
     return std::get<std::string>(either);
   } else if (std::holds_alternative<double>(either)) {
@@ -156,59 +156,59 @@ HybridTestObject::passVariant(const std::variant<std::string, double, bool, std:
   }
 }
 
-std::variant<bool, OldEnum> HybridTestObject::getVariantEnum(const std::variant<bool, OldEnum>& variant) {
+std::variant<bool, OldEnum> HybridTestObjectCpp::getVariantEnum(const std::variant<bool, OldEnum>& variant) {
   return variant;
 }
 
-std::variant<Person, Car> HybridTestObject::getVariantObjects(const std::variant<Person, Car>& variant) {
+std::variant<Person, Car> HybridTestObjectCpp::getVariantObjects(const std::variant<Person, Car>& variant) {
   return variant;
 }
 
-std::variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectSpec>, Person>
-HybridTestObject::getVariantHybrid(const std::variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectSpec>, Person>& variant) {
+std::variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>, Person>
+HybridTestObjectCpp::getVariantHybrid(const std::variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>, Person>& variant) {
   return variant;
 }
 
 std::variant<std::tuple<double, double>, std::tuple<double, double, double>>
-HybridTestObject::getVariantTuple(const std::variant<std::tuple<double, double>, std::tuple<double, double, double>>& variant) {
+HybridTestObjectCpp::getVariantTuple(const std::variant<std::tuple<double, double>, std::tuple<double, double, double>>& variant) {
   return variant;
 }
 
-std::tuple<double, double, double> HybridTestObject::flip(const std::tuple<double, double, double>& tuple) {
+std::tuple<double, double, double> HybridTestObjectCpp::flip(const std::tuple<double, double, double>& tuple) {
   return {std::get<2>(tuple), std::get<1>(tuple), std::get<0>(tuple)};
 }
 
-std::tuple<double, std::string, bool> HybridTestObject::passTuple(const std::tuple<double, std::string, bool>& tuple) {
+std::tuple<double, std::string, bool> HybridTestObjectCpp::passTuple(const std::tuple<double, std::string, bool>& tuple) {
   return tuple;
 }
 
-int64_t HybridTestObject::calculateFibonacciSync(double value) {
+int64_t HybridTestObjectCpp::calculateFibonacciSync(double value) {
   return calculateFibonacci(value);
 }
 
-std::future<int64_t> HybridTestObject::calculateFibonacciAsync(double value) {
+std::future<int64_t> HybridTestObjectCpp::calculateFibonacciAsync(double value) {
   return std::async(std::launch::async, [=]() -> int64_t { return this->calculateFibonacci(value); });
 }
 
-std::future<void> HybridTestObject::wait(double seconds) {
+std::future<void> HybridTestObjectCpp::wait(double seconds) {
   return std::async(std::launch::async, [=]() {
     std::chrono::nanoseconds nanoseconds(static_cast<int64_t>(seconds * 1'000'000'000));
     std::this_thread::sleep_for(nanoseconds);
   });
 }
 
-void HybridTestObject::callCallback(const std::function<void()>& callback) {
+void HybridTestObjectCpp::callCallback(const std::function<void()>& callback) {
   callback();
 }
 
-void HybridTestObject::getValueFromJSCallback(const std::function<std::future<double>()>& getValue) {
+void HybridTestObjectCpp::getValueFromJSCallback(const std::function<std::future<double>()>& getValue) {
   ThreadPool::getSharedPool()->run([=]() {
     std::future<double> future = getValue();
     future.wait();
   });
 }
 
-std::future<double> HybridTestObject::getValueFromJSCallbackAndWait(const std::function<std::future<double>()>& getValue) {
+std::future<double> HybridTestObjectCpp::getValueFromJSCallbackAndWait(const std::function<std::future<double>()>& getValue) {
   return std::async(std::launch::async, [=]() -> double {
     std::future<double> future = getValue();
     future.wait();
@@ -217,14 +217,14 @@ std::future<double> HybridTestObject::getValueFromJSCallbackAndWait(const std::f
   });
 }
 
-void HybridTestObject::callAll(const std::function<void()>& first, const std::function<void()>& second,
+void HybridTestObjectCpp::callAll(const std::function<void()>& first, const std::function<void()>& second,
                                const std::function<void()>& third) {
   first();
   second();
   third();
 }
 
-std::future<void> HybridTestObject::getValueFromJsCallback(const std::function<std::future<std::string>()>& callback,
+std::future<void> HybridTestObjectCpp::getValueFromJsCallback(const std::function<std::future<std::string>()>& callback,
                                                            const std::function<void(const std::string& /* valueFromJs */)>& andThenCall) {
   return std::async(std::launch::async, [=]() {
     std::future<std::string> future = callback();
@@ -233,15 +233,15 @@ std::future<void> HybridTestObject::getValueFromJsCallback(const std::function<s
   });
 }
 
-Car HybridTestObject::getCar() {
+Car HybridTestObjectCpp::getCar() {
   return Car(2018, "Lamborghini", "Huracan Performante", 640, Powertrain::GAS, std::nullopt);
 }
 
-bool HybridTestObject::isCarElectric(const Car& car) {
+bool HybridTestObjectCpp::isCarElectric(const Car& car) {
   return car.powertrain == Powertrain::ELECTRIC;
 }
 
-std::optional<Person> HybridTestObject::getDriver(const Car& car) {
+std::optional<Person> HybridTestObjectCpp::getDriver(const Car& car) {
   if (car.driver.has_value()) {
     return car.driver.value();
   } else {
@@ -249,13 +249,13 @@ std::optional<Person> HybridTestObject::getDriver(const Car& car) {
   }
 }
 
-std::shared_ptr<ArrayBuffer> HybridTestObject::createArrayBuffer() {
+std::shared_ptr<ArrayBuffer> HybridTestObjectCpp::createArrayBuffer() {
   size_t size = 1024 * 1024 * 10; // 10MB
   uint8_t* buffer = new uint8_t[size];
   return std::make_shared<NativeArrayBuffer>(buffer, size, [=]() { delete[] buffer; });
 }
 
-double HybridTestObject::getBufferLastItem(const std::shared_ptr<ArrayBuffer>& buffer) {
+double HybridTestObjectCpp::getBufferLastItem(const std::shared_ptr<ArrayBuffer>& buffer) {
   size_t size = buffer->size();
   if (size == 0) {
     throw std::runtime_error("ArrayBuffer's size is 0!");
@@ -268,7 +268,7 @@ double HybridTestObject::getBufferLastItem(const std::shared_ptr<ArrayBuffer>& b
   return static_cast<double>(lastItem);
 }
 
-void HybridTestObject::setAllValuesTo(const std::shared_ptr<ArrayBuffer>& buffer, double value) {
+void HybridTestObjectCpp::setAllValuesTo(const std::shared_ptr<ArrayBuffer>& buffer, double value) {
   size_t size = buffer->size();
   if (size == 0) {
     throw std::runtime_error("ArrayBuffer's size is 0!");
@@ -283,11 +283,11 @@ void HybridTestObject::setAllValuesTo(const std::shared_ptr<ArrayBuffer>& buffer
   }
 }
 
-std::shared_ptr<HybridTestObjectSpec> HybridTestObject::newTestObject() {
-  return std::make_shared<HybridTestObject>();
+std::shared_ptr<HybridTestObjectCppSpec> HybridTestObjectCpp::newTestObject() {
+  return std::make_shared<HybridTestObjectCpp>();
 }
 
-jsi::Value HybridTestObject::rawJsiFunc(jsi::Runtime& runtime, const jsi::Value& thisValue, const jsi::Value* args, size_t count) {
+jsi::Value HybridTestObjectCpp::rawJsiFunc(jsi::Runtime& runtime, const jsi::Value& thisValue, const jsi::Value* args, size_t count) {
   jsi::Array array(runtime, count);
   for (size_t i = 0; i < count; i++) {
     array.setValueAtIndex(runtime, i, jsi::Value(runtime, args[i]));

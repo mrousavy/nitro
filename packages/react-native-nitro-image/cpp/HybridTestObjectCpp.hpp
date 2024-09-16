@@ -7,16 +7,16 @@
 
 #pragma once
 
-#include "HybridTestObjectSpec.hpp"
+#include "HybridTestObjectCppSpec.hpp"
 #include <jsi/jsi.h>
 
 namespace margelo::nitro::image {
 
 using namespace facebook;
 
-class HybridTestObject : public HybridTestObjectSpec {
+class HybridTestObjectCpp : public HybridTestObjectCppSpec {
 public:
-  HybridTestObject() : HybridObject(TAG) {}
+  HybridTestObjectCpp() : HybridObject(TAG) {}
 
 private:
   double _number;
@@ -57,7 +57,7 @@ public:
   void setSomeVariant(const std::variant<std::string, double>& variant) override;
   std::tuple<double, std::string> getSomeTuple() override;
   void setSomeTuple(const std::tuple<double, std::string>& tuple) override;
-  std::shared_ptr<HybridTestObjectSpec> getThisObject() override;
+  std::shared_ptr<HybridTestObjectCppSpec> getThisObject() override;
 
 public:
   // Methods
@@ -75,8 +75,8 @@ public:
 
   std::variant<bool, OldEnum> getVariantEnum(const std::variant<bool, OldEnum>& variant) override;
   std::variant<Person, Car> getVariantObjects(const std::variant<Person, Car>& variant) override;
-  std::variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectSpec>, Person>
-  getVariantHybrid(const std::variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectSpec>, Person>& variant) override;
+  std::variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>, Person>
+  getVariantHybrid(const std::variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>, Person>& variant) override;
   std::variant<std::tuple<double, double>, std::tuple<double, double, double>>
   getVariantTuple(const std::variant<std::tuple<double, double>, std::tuple<double, double, double>>& variant) override;
 
@@ -97,16 +97,16 @@ public:
   std::shared_ptr<ArrayBuffer> createArrayBuffer() override;
   double getBufferLastItem(const std::shared_ptr<ArrayBuffer>& buffer) override;
   void setAllValuesTo(const std::shared_ptr<ArrayBuffer>& buffer, double value) override;
-  std::shared_ptr<HybridTestObjectSpec> newTestObject() override;
+  std::shared_ptr<HybridTestObjectCppSpec> newTestObject() override;
 
   // Raw JSI functions
   jsi::Value rawJsiFunc(jsi::Runtime& runtime, const jsi::Value& thisValue, const jsi::Value* args, size_t count);
 
   void loadHybridMethods() override {
     // call base protoype
-    HybridTestObjectSpec::loadHybridMethods();
+    HybridTestObjectCppSpec::loadHybridMethods();
     // register all methods we override here
-    registerHybrids(this, [](Prototype& prototype) { prototype.registerRawHybridMethod("rawJsiFunc", 0, &HybridTestObject::rawJsiFunc); });
+    registerHybrids(this, [](Prototype& prototype) { prototype.registerRawHybridMethod("rawJsiFunc", 0, &HybridTestObjectCpp::rawJsiFunc); });
   }
 };
 
