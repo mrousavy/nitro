@@ -69,12 +69,12 @@ namespace margelo::nitro::image {
     method(_javaPart, numberValue);
   }
   bool JHybridTestObjectSwiftKotlinSpec::getBoolValue() {
-    static const auto method = _javaPart->getClass()->getMethod<bool()>("getBoolValue");
+    static const auto method = _javaPart->getClass()->getMethod<jboolean()>("getBoolValue");
     auto result = method(_javaPart);
     return result;
   }
   void JHybridTestObjectSwiftKotlinSpec::setBoolValue(bool boolValue) {
-    static const auto method = _javaPart->getClass()->getMethod<void(bool /* boolValue */)>("setBoolValue");
+    static const auto method = _javaPart->getClass()->getMethod<void(jboolean /* boolValue */)>("setBoolValue");
     method(_javaPart, boolValue);
   }
   std::string JHybridTestObjectSwiftKotlinSpec::getStringValue() {
@@ -144,7 +144,7 @@ namespace margelo::nitro::image {
     return result->toStdString();
   }
   void JHybridTestObjectSwiftKotlinSpec::multipleArguments(double num, const std::string& str, bool boo) {
-    static const auto method = _javaPart->getClass()->getMethod<void(double /* num */, jni::alias_ref<jni::JString> /* str */, bool /* boo */)>("multipleArguments");
+    static const auto method = _javaPart->getClass()->getMethod<void(double /* num */, jni::alias_ref<jni::JString> /* str */, jboolean /* boo */)>("multipleArguments");
     method(_javaPart, num, jni::make_jstring(str), boo);
   }
   std::shared_ptr<AnyMap> JHybridTestObjectSwiftKotlinSpec::createMap() {
@@ -163,7 +163,7 @@ namespace margelo::nitro::image {
     return result;
   }
   std::string JHybridTestObjectSwiftKotlinSpec::tryOptionalParams(double num, bool boo, const std::optional<std::string>& str) {
-    static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<jni::JString>(double /* num */, bool /* boo */, jni::alias_ref<jni::JString> /* str */)>("tryOptionalParams");
+    static const auto method = _javaPart->getClass()->getMethod<jni::alias_ref<jni::JString>(double /* num */, jboolean /* boo */, jni::alias_ref<jni::JString> /* str */)>("tryOptionalParams");
     auto result = method(_javaPart, num, boo, str.has_value() ? jni::make_jstring(str.value()) : nullptr);
     return result->toStdString();
   }
@@ -222,7 +222,7 @@ namespace margelo::nitro::image {
     return result->toCpp();
   }
   bool JHybridTestObjectSwiftKotlinSpec::isCarElectric(const Car& car) {
-    static const auto method = _javaPart->getClass()->getMethod<bool(jni::alias_ref<JCar> /* car */)>("isCarElectric");
+    static const auto method = _javaPart->getClass()->getMethod<jboolean(jni::alias_ref<JCar> /* car */)>("isCarElectric");
     auto result = method(_javaPart, JCar::fromCpp(car));
     return result;
   }

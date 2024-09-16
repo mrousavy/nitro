@@ -188,6 +188,13 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
           default:
             return this.type.getCode(language)
         }
+      case 'boolean':
+        switch (language) {
+          case 'c++':
+            return 'jboolean'
+          default:
+            return this.type.getCode(language)
+        }
       case 'string':
         switch (language) {
           case 'c++':
