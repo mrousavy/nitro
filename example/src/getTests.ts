@@ -312,7 +312,7 @@ export function getTests(
         .didNotThrow()
         .equals('gas')
     ),
-    createTest('tryMiddleParam(...)', () =>
+    createTest('tryOptionalEnum(...)', () =>
       it(() => testObject.tryOptionalEnum(undefined))
         .didNotThrow()
         .equals(undefined)

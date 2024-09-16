@@ -100,8 +100,8 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
     return str
   }
 
-  func tryOptionalEnum(powertrain: Powertrain?) throws -> Powertrain? {
-    return powertrain
+  func tryOptionalEnum(value: Powertrain?) throws -> Powertrain? {
+    return value
   }
 
   func calculateFibonacciSync(value: Double) throws -> Int64 {

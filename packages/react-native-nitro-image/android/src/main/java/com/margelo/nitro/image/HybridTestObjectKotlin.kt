@@ -72,8 +72,8 @@ class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
     }
 
 
-    override fun tryOptionalEnum(powertrain: Powertrain?): Powertrain? {
-        return powertrain
+    override fun tryOptionalEnum(value: Powertrain?): Powertrain? {
+        return value
     }
 
     override fun calculateFibonacciSync(value: Double): Long {
