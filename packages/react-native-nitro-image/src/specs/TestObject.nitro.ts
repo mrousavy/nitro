@@ -167,5 +167,7 @@ export interface KotlinTestObject extends HybridObject<{ android: 'kotlin' }> {
 
   addOnPersonBornListener(callback: (p: Person) => void): void
 
+  something1(optional?: Powertrain): void
+
   someRecord: Record<string, string>
 }

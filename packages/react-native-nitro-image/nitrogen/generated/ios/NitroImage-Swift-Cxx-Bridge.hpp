@@ -556,5 +556,13 @@ namespace margelo::nitro::image::bridge::swift {
   inline std::shared_ptr<Func_void_Person_Wrapper> share_Func_void_Person(const Func_void_Person& value) {
     return std::make_shared<Func_void_Person_Wrapper>(value);
   }
+  
+  /**
+   * Specialized version of `std::optional<Powertrain>`.
+   */
+  using std__optional_Powertrain_ = std::optional<Powertrain>;
+  inline std::optional<Powertrain> create_std__optional_Powertrain_(const Powertrain& value) {
+    return std::optional<Powertrain>(value);
+  }
 
 } // namespace margelo::nitro::image::bridge::swift

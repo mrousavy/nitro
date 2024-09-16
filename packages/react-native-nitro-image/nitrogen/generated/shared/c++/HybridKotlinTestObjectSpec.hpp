@@ -21,6 +21,8 @@ namespace NitroModules { class ArrayBuffer; }
 namespace NitroModules { class AnyMap; }
 // Forward declaration of `Person` to properly resolve imports.
 namespace margelo::nitro::image { struct Person; }
+// Forward declaration of `Powertrain` to properly resolve imports.
+namespace margelo::nitro::image { enum class Powertrain; }
 
 #include <optional>
 #include <vector>
@@ -32,6 +34,7 @@ namespace margelo::nitro::image { struct Person; }
 #include <NitroModules/AnyMap.hpp>
 #include <functional>
 #include "Person.hpp"
+#include "Powertrain.hpp"
 
 namespace margelo::nitro::image {
 
@@ -75,6 +78,7 @@ namespace margelo::nitro::image {
       virtual std::future<void> asyncTest() = 0;
       virtual std::shared_ptr<AnyMap> createMap() = 0;
       virtual void addOnPersonBornListener(const std::function<void(const Person& /* p */)>& callback) = 0;
+      virtual void something1(std::optional<Powertrain> optional) = 0;
 
     protected:
       // Hybrid Setup
