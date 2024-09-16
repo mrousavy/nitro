@@ -208,7 +208,10 @@ export function createType(type: TSMorphType, isOptional: boolean): Type {
       )
       return new EnumType(typename, enumDeclaration)
     } else if (type.isUnion()) {
-      // It is some kind of union - either full of strings (then it's an enum, or different types, then it's a Variant)
+      // It is some kind of union;
+      // - of string literals (then it's an enum)
+      // - of type `T | undefined` (then it's just optional `T`)
+      // - of different types (then it's a variant `A | B | C`)
       const types = type.getUnionTypes()
       const nonNullTypes = types.filter(
         (t) => !t.isNull() && !t.isUndefined() && !t.isVoid()
@@ -229,7 +232,6 @@ export function createType(type: TSMorphType, isOptional: boolean): Type {
       } else {
         // It consists of different types - that means it's a variant!
         let variants = type
-          .getNonNullableType()
           .getUnionTypes()
           // Filter out any nulls or undefineds, as those are already treated as `isOptional`.
           .filter((t) => !t.isNull() && !t.isUndefined() && !t.isVoid())
