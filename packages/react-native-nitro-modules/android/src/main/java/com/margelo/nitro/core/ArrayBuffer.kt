@@ -80,6 +80,8 @@ class ArrayBuffer {
      * Create a new **non-owning-** `ArrayBuffer` that holds foreign data, potentially coming from JS.
      */
     @Suppress("unused")
+    @Keep
+    @DoNotStrip
     private constructor(hybridData: HybridData) {
         mHybridData = hybridData
     }
