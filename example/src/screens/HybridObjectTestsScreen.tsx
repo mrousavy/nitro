@@ -1,6 +1,13 @@
 import * as React from 'react'
 
-import { StyleSheet, View, Text, ScrollView, Button } from 'react-native'
+import {
+  StyleSheet,
+  View,
+  Text,
+  ScrollView,
+  Button,
+  Platform,
+} from 'react-native'
 import {
   HybridTestObjectCpp,
   HybridTestObjectSwiftKotlin,
@@ -139,7 +146,7 @@ export function HybridObjectTestsScreen() {
           }}
         />
         <View style={styles.flex} />
-        <Text>{NitroModules.buildType}</Text>
+        <Text style={styles.buildTypeText}>{NitroModules.buildType}</Text>
       </View>
 
       <ScrollView contentContainerStyle={styles.scrollContent}>
@@ -176,9 +183,18 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
   },
   topControls: {
-    marginLeft: 15,
+    marginHorizontal: 15,
     marginBottom: 10,
     flexDirection: 'row',
+    alignItems: 'center',
+  },
+  buildTypeText: {
+    fontFamily: Platform.select({
+      ios: 'Menlo',
+      macos: 'Menlo',
+      android: 'monospace',
+    }),
+    fontWeight: 'bold',
   },
   segmentedControl: {
     minWidth: 180,
