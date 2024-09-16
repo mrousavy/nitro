@@ -3,7 +3,7 @@ import { TurboModuleRegistry } from 'react-native'
 import type { UnsafeObject } from 'react-native/Libraries/Types/CodegenTypes'
 import { ModuleNotFoundError } from './ModuleNotFoundError'
 
-export interface Spec extends TurboModule {
+export interface NativeNitroSpec extends TurboModule {
   // Set up
   install(): void
   // Hybrid Objects stuff
@@ -16,12 +16,13 @@ export interface Spec extends TurboModule {
   buildType: 'debug' | 'release'
 }
 
-let turboModule: Spec | undefined
-export function getNativeNitroModules(): Spec {
+let turboModule: NativeNitroSpec | undefined
+export function getNativeNitroModules(): NativeNitroSpec {
   if (turboModule == null) {
     try {
       // 1. Get (and initialize) the C++ TurboModule
-      turboModule = TurboModuleRegistry.getEnforcing<Spec>('NitroModulesCxx')
+      turboModule =
+        TurboModuleRegistry.getEnforcing<NativeNitroSpec>('NitroModulesCxx')
 
       // 2. Install Dispatcher and required bindings into the Runtime
       turboModule.install()

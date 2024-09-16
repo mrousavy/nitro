@@ -147,8 +147,5 @@
         }
       ]
     ]
-  },
-  "codegenConfig": {
-    "includesGeneratedCode": true
   }
 }
