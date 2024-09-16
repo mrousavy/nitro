@@ -29,7 +29,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - NitroModules (0.8.0):
+  - NitroModules (0.9.1):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1828,7 +1828,7 @@ SPEC CHECKSUMS:
   glog: fdfdfe5479092de0c4bdbebedd9056951f092c4f
   hermes-engine: 3b6e0717ca847e2fc90a201e59db36caf04dee88
   NitroImage: 0cffeee137c14b8c8df97649626646528cb89b28
-  NitroModules: 7184d6a9527f2d015c7e4865ee6615b3e26d9cfb
+  NitroModules: a3e3619f2c74dd9a706d3597d7c359d56e94ef22
   RCT-Folly: 02617c592a293bd6d418e0a88ff4ee1f88329b47
   RCTDeprecation: 34cbf122b623037ea9facad2e92e53434c5c7422
   RCTRequired: 24c446d7bcd0f517d516b6265d8df04dc3eb1219
