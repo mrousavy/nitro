@@ -139,7 +139,7 @@ class HybridTestObjectSwiftKotlin : HybridTestObjectSwiftKotlinSpec {
   }
   
   func isCarElectric(car: Car) throws -> Bool {
-    return car.powertrain == .gas
+    return car.powertrain == .electric
   }
   
   func getDriver(car: Car) throws -> Person? {
