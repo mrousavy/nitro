@@ -36,7 +36,7 @@ public:
   }
 
 public:
-  [[nodiscard]] jni::alias_ref<jni::JByteBuffer> getBuffer() const {
+  [[nodiscard]] const jni::global_ref<jni::JByteBuffer>& getBuffer() const {
     return _byteBuffer;
   }
 
