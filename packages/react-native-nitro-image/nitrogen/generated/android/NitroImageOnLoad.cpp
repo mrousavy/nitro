@@ -66,7 +66,7 @@ int initialize(JavaVM* vm) {
     HybridObjectRegistry::registerHybridObjectConstructor(
       "TestObjectSwiftKotlin",
       []() -> std::shared_ptr<HybridObject> {
-        static auto javaClass = jni::findClassStatic("com/margelo/nitro/image/HybridTestObjectSwiftKotlin");
+        static auto javaClass = jni::findClassStatic("com/margelo/nitro/image/HybridTestObjectKotlin");
         static auto defaultConstructor = javaClass->getConstructor<JHybridTestObjectSwiftKotlinSpec::javaobject()>();
     
         auto instance = javaClass->newObject(defaultConstructor);

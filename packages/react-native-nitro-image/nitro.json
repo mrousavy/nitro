@@ -16,8 +16,8 @@
       "cpp": "HybridTestObjectCpp"
     },
     "TestObjectSwiftKotlin": {
-      "swift": "HybridTestObjectSwiftKotlin",
-      "kotlin": "HybridTestObjectSwiftKotlin"
+      "swift": "HybridTestObjectSwift",
+      "kotlin": "HybridTestObjectKotlin"
     }
   },
   "ignorePaths": ["node_modules"]
