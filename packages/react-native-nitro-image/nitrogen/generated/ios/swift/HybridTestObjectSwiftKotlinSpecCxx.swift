@@ -277,13 +277,7 @@ public final class HybridTestObjectSwiftKotlinSpecCxx {
   @inline(__always)
   public func tryMiddleParam(num: Double, boo: bridge.std__optional_bool_, str: std.string) -> std.string {
     do {
-      let result = try self.implementation.tryMiddleParam(num: num, boo: { () -> Bool? in
-        if let actualValue = boo.value {
-          return actualValue
-        } else {
-          return nil
-        }
-      }(), str: String(str))
+      let result = try self.implementation.tryMiddleParam(num: num, boo: boo.value, str: String(str))
       return std.string(result)
     } catch {
       let message = "\(error.localizedDescription)"
@@ -294,13 +288,7 @@ public final class HybridTestObjectSwiftKotlinSpecCxx {
   @inline(__always)
   public func tryOptionalEnum(value: bridge.std__optional_Powertrain_) -> bridge.std__optional_Powertrain_ {
     do {
-      let result = try self.implementation.tryOptionalEnum(value: { () -> Powertrain? in
-        if let actualValue = value.value {
-          return actualValue
-        } else {
-          return nil
-        }
-      }())
+      let result = try self.implementation.tryOptionalEnum(value: value.value)
       return { () -> bridge.std__optional_Powertrain_ in
         if let actualValue = result {
           return bridge.create_std__optional_Powertrain_(actualValue)
