@@ -17,6 +17,8 @@
 namespace margelo::nitro::image { class HybridTestObjectCppSpec; }
 // Forward declaration of `AnyMap` to properly resolve imports.
 namespace NitroModules { class AnyMap; }
+// Forward declaration of `Powertrain` to properly resolve imports.
+namespace margelo::nitro::image { enum class Powertrain; }
 // Forward declaration of `OldEnum` to properly resolve imports.
 namespace margelo::nitro::image { enum class OldEnum; }
 // Forward declaration of `Person` to properly resolve imports.
@@ -33,6 +35,7 @@ namespace NitroModules { class ArrayBuffer; }
 #include <memory>
 #include "HybridTestObjectCppSpec.hpp"
 #include <NitroModules/AnyMap.hpp>
+#include "Powertrain.hpp"
 #include <vector>
 #include "OldEnum.hpp"
 #include "Person.hpp"
@@ -96,6 +99,7 @@ namespace margelo::nitro::image {
       virtual double funcThatThrows() = 0;
       virtual std::string tryOptionalParams(double num, bool boo, const std::optional<std::string>& str) = 0;
       virtual std::string tryMiddleParam(double num, std::optional<bool> boo, const std::string& str) = 0;
+      virtual std::optional<Powertrain> tryOptionalEnum(std::optional<Powertrain> value) = 0;
       virtual std::variant<std::string, double> passVariant(const std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>>& either) = 0;
       virtual std::variant<bool, OldEnum> getVariantEnum(const std::variant<bool, OldEnum>& variant) = 0;
       virtual std::variant<Person, Car> getVariantObjects(const std::variant<Person, Car>& variant) = 0;

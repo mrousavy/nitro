@@ -11,10 +11,10 @@
 namespace margelo::nitro::image { class HybridTestObjectSwiftKotlinSpec; }
 // Forward declaration of `AnyMap` to properly resolve imports.
 namespace NitroModules { class AnyMap; }
-// Forward declaration of `Car` to properly resolve imports.
-namespace margelo::nitro::image { struct Car; }
 // Forward declaration of `Powertrain` to properly resolve imports.
 namespace margelo::nitro::image { enum class Powertrain; }
+// Forward declaration of `Car` to properly resolve imports.
+namespace margelo::nitro::image { struct Car; }
 // Forward declaration of `Person` to properly resolve imports.
 namespace margelo::nitro::image { struct Person; }
 // Forward declaration of `ArrayBuffer` to properly resolve imports.
@@ -28,12 +28,12 @@ namespace NitroModules { class ArrayBuffer; }
 #include <NitroModules/JNISharedPtr.hpp>
 #include <NitroModules/AnyMap.hpp>
 #include <NitroModules/JAnyMap.hpp>
+#include "Powertrain.hpp"
+#include "JPowertrain.hpp"
 #include <future>
 #include <NitroModules/JPromise.hpp>
 #include "Car.hpp"
 #include "JCar.hpp"
-#include "Powertrain.hpp"
-#include "JPowertrain.hpp"
 #include "Person.hpp"
 #include "JPerson.hpp"
 #include <NitroModules/ArrayBuffer.hpp>
@@ -171,6 +171,11 @@ namespace margelo::nitro::image {
     static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<jni::JString>(double /* num */, jni::alias_ref<jni::JBoolean> /* boo */, jni::alias_ref<jni::JString> /* str */)>("tryMiddleParam");
     auto result = method(_javaPart, num, boo.has_value() ? jni::JBoolean::valueOf(boo.value()) : nullptr, jni::make_jstring(str));
     return result->toStdString();
+  }
+  std::optional<Powertrain> JHybridTestObjectSwiftKotlinSpec::tryOptionalEnum(std::optional<Powertrain> value) {
+    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JPowertrain>(jni::alias_ref<JPowertrain> /* value */)>("tryOptionalEnum");
+    auto result = method(_javaPart, value.has_value() ? JPowertrain::fromCpp(value.value()) : nullptr);
+    return result != nullptr ? std::make_optional(result->toCpp()) : std::nullopt;
   }
   int64_t JHybridTestObjectSwiftKotlinSpec::calculateFibonacciSync(double value) {
     static const auto method = _javaPart->getClass()->getMethod<int64_t(double /* value */)>("calculateFibonacciSync");

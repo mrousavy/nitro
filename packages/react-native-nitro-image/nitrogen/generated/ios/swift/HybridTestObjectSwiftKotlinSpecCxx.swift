@@ -292,6 +292,29 @@ public final class HybridTestObjectSwiftKotlinSpecCxx {
   }
   
   @inline(__always)
+  public func tryOptionalEnum(value: bridge.std__optional_Powertrain_) -> bridge.std__optional_Powertrain_ {
+    do {
+      let result = try self.implementation.tryOptionalEnum(value: { () -> Powertrain? in
+        if let actualValue = value.value {
+          return margelo.nitro.image.Powertrain(rawValue: actualValue)!
+        } else {
+          return nil
+        }
+      }())
+      return { () -> bridge.std__optional_Powertrain_ in
+        if let actualValue = result {
+          return bridge.create_std__optional_Powertrain_(actualValue.rawValue)
+        } else {
+          return .init()
+        }
+      }()
+    } catch {
+      let message = "\(error.localizedDescription)"
+      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
+    }
+  }
+  
+  @inline(__always)
   public func calculateFibonacciSync(value: Double) -> Int64 {
     do {
       let result = try self.implementation.calculateFibonacciSync(value: value)

@@ -52,6 +52,7 @@ export interface TestObjectCpp extends HybridObject<{ ios: 'c++' }> {
   // Optional parameters
   tryOptionalParams(num: number, boo: boolean, str?: string): string
   tryMiddleParam(num: number, boo: boolean | undefined, str: string): string
+  tryOptionalEnum(value?: Powertrain): Powertrain | undefined
 
   // Variants
   someVariant: number | string
@@ -127,6 +128,7 @@ export interface TestObjectSwiftKotlin
   // Optional parameters
   tryOptionalParams(num: number, boo: boolean, str?: string): string
   tryMiddleParam(num: number, boo: boolean | undefined, str: string): string
+  tryOptionalEnum(value?: Powertrain): Powertrain | undefined
 
   // TODO: Variants are not yet supported in Swift/Kotlin!
   // Variants

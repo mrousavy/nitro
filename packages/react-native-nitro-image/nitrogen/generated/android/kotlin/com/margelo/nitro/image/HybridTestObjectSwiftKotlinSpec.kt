@@ -118,6 +118,10 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
+  abstract fun tryOptionalEnum(value: Powertrain?): Powertrain?
+  
+  @DoNotStrip
+  @Keep
   abstract fun calculateFibonacciSync(value: Double): Long
   
   @DoNotStrip
