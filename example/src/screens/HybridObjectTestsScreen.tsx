@@ -87,49 +87,43 @@ export function HybridObjectTestsScreen() {
     return `📱 Idle`
   }, [tests])
 
-  const updateTest = React.useCallback(
-    (
-      runner: TestRunner,
-      newState: TestState['state'],
-      newMessage: TestState['extraMessage']
-    ) => {
-      setTests((t) => {
-        const indexOfTest = t.findIndex((v) => v.runner === runner)
-        if (indexOfTest === -1) {
-          throw new Error(
-            `Test ${runner} does not exist in all tests! What did you click? lol`
-          )
-        }
-        const copy = [...t]
-        copy[indexOfTest]!.state = newState
-        copy[indexOfTest]!.extraMessage = newMessage
-        return copy
-      })
-    },
-    []
-  )
+  const updateTest = (
+    runner: TestRunner,
+    newState: TestState['state'],
+    newMessage: TestState['extraMessage']
+  ) => {
+    setTests((t) => {
+      const indexOfTest = t.findIndex((v) => v.runner === runner)
+      if (indexOfTest === -1) {
+        throw new Error(
+          `Test ${runner} does not exist in all tests! What did you click? lol`
+        )
+      }
+      const copy = [...t]
+      copy[indexOfTest]!.state = newState
+      copy[indexOfTest]!.extraMessage = newMessage
+      return copy
+    })
+  }
 
-  const runTest = React.useCallback(
-    (test: TestState) => {
-      updateTest(test.runner, '⏳ Running', '')
-      requestAnimationFrame(async () => {
-        const result = await test.runner.run()
-        switch (result.status) {
-          case 'successful':
-            updateTest(test.runner, '✅ Passed', `Result: ${result.result}`)
-            break
-          case 'failed':
-            updateTest(test.runner, '❌ Failed', `Error: ${result.message}`)
-            break
-        }
-      })
-    },
-    [updateTest]
-  )
+  const runTest = (test: TestState) => {
+    updateTest(test.runner, '⏳ Running', '')
+    requestAnimationFrame(async () => {
+      const result = await test.runner.run()
+      switch (result.status) {
+        case 'successful':
+          updateTest(test.runner, '✅ Passed', `Result: ${result.result}`)
+          break
+        case 'failed':
+          updateTest(test.runner, '❌ Failed', `Error: ${result.message}`)
+          break
+      }
+    })
+  }
 
-  const runAllTests = React.useCallback(() => {
+  const runAllTests = () => {
     tests.forEach((t) => runTest(t))
-  }, [runTest, tests])
+  }
 
   return (
     <SafeAreaView style={styles.container}>
