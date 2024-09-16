@@ -115,7 +115,7 @@ export async function runNitrogen({
           `    ⚙️   Generating specs for HybridObject "${chalk.bold(moduleName)}"...`
         )
 
-        // Create all files and throw it into a big lsit
+        // Create all files and throw it into a big list
         const allFiles = platforms
           .flatMap((p) => {
             const language = platformSpec[p]!

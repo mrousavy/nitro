@@ -239,7 +239,7 @@ export function createType(type: TSMorphType, isOptional: boolean): Type {
         variants = removeDuplicates(variants)
 
         if (variants.length === 1) {
-          // It's just one type with undefined/null varians - so we treat it like a simple optional.
+          // It's just one type with undefined/null variant(s) - so we treat it like a simple optional.
           return variants[0]!
         }
 
