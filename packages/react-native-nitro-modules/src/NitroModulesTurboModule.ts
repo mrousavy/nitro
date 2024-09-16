@@ -3,6 +3,9 @@ import { TurboModuleRegistry } from 'react-native'
 import type { UnsafeObject } from 'react-native/Libraries/Types/CodegenTypes'
 import { ModuleNotFoundError } from './ModuleNotFoundError'
 
+// This TurboModule is *not* codegen'd.
+// It's handwritten, because otherwise the app's CMakeLists wants to build it.
+// Instead, we want to build it ourselves and have full control over the CMakeLists.
 export interface NativeNitroSpec extends TurboModule {
   // Set up
   install(): void

@@ -1,4 +1,4 @@
-import { getNativeNitroModules } from './NativeNitroModules'
+import { getNativeNitroModules } from './NitroModulesTurboModule'
 import type { HybridObject } from './HybridObject'
 
 // TODO: Do we wanna support such constructors?
