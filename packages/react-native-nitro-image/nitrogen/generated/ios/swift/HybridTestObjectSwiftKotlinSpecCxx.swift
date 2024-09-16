@@ -296,14 +296,14 @@ public final class HybridTestObjectSwiftKotlinSpecCxx {
     do {
       let result = try self.implementation.tryOptionalEnum(value: { () -> Powertrain? in
         if let actualValue = value.value {
-          return margelo.nitro.image.Powertrain(rawValue: actualValue)!
+          return margelo.nitro.image.Powertrain(rawValue: actualValue.rawValue)!
         } else {
           return nil
         }
       }())
       return { () -> bridge.std__optional_Powertrain_ in
         if let actualValue = result {
-          return bridge.create_std__optional_Powertrain_(actualValue.rawValue)
+          return bridge.create_std__optional_Powertrain_(actualValue)
         } else {
           return .init()
         }
