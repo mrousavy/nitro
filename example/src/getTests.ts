@@ -721,11 +721,17 @@ export function getTests(
         .didReturn('object')
         .toBeArray()
     ),
-    createTest('Call Raw JSI Func', () =>
-      // @ts-expect-error
-      it(() => testObject.rawJsiFunc(55, false, 'hello', { obj: true }))
-        .didNotThrow()
-        .equals([55, false, 'hello', { obj: true }])
-    ),
+    ...('rawJsiFunc' in testObject
+      ? [
+          createTest('Call Raw JSI Func', () =>
+            // @ts-expect-error
+            it(() => testObject.rawJsiFunc(55, false, 'hello', { obj: true }))
+              .didNotThrow()
+              .equals([55, false, 'hello', { obj: true }])
+          ),
+        ]
+      : [
+          // Swift/Kotlin Test Objects don't have raw JSI functions!
+        ]),
   ]
 }
