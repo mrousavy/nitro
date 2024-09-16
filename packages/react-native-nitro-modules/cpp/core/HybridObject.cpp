@@ -4,64 +4,11 @@
 
 #include "HybridObject.hpp"
 #include "JSIConverter.hpp"
-#include "NitroLogger.hpp"
-
-#define LOG_MEMORY_ALLOCATIONS false
 
 namespace margelo::nitro {
 
-#if LOG_MEMORY_ALLOCATIONS
-static std::mutex _instanceCounterMutex;
-static std::unordered_map<const char*, uint32_t> _aliveInstances;
-static std::unordered_map<const char*, int> _instanceIds;
-
-static uint32_t incrementAliveInstancesAndGet(const char* name) {
-  std::unique_lock lock(_instanceCounterMutex);
-  return ++_aliveInstances[name];
-}
-
-static uint32_t decrementAliveInstancesAndGet(const char* name) {
-  std::unique_lock lock(_instanceCounterMutex);
-  return --_aliveInstances[name];
-}
-
-static uint32_t getTotalAliveInstances() {
-  std::unique_lock lock(_instanceCounterMutex);
-  uint32_t total = 0;
-  for (const auto& iter : _aliveInstances) {
-    total += iter.second;
-  }
-  return total;
-}
-
-static int getId(const char* name) {
-  std::unique_lock lock(_instanceCounterMutex);
-  if (_instanceIds.find(name) == _instanceIds.end()) {
-    _instanceIds.insert({name, 1});
-  }
-  auto iterator = _instanceIds.find(name);
-  return iterator->second++;
-}
-#endif
-
-HybridObject::HybridObject(const char* name) : HybridObjectPrototype(), _name(name) {
-#if LOG_MEMORY_ALLOCATIONS
-  _instanceId = getId(name);
-  uint32_t alive = incrementAliveInstancesAndGet(_name);
-  uint32_t totalObjects = getTotalAliveInstances();
-  Logger::log(LogLevel::Info, TAG, "(MEMORY) ✅ Creating %s (#%i)... (Total %s(s): %i | Total HybridObjects: %i)", _name, _instanceId,
-              _name, alive, totalObjects);
-#endif
-}
-
-HybridObject::~HybridObject() {
-#if LOG_MEMORY_ALLOCATIONS
-  uint32_t alive = decrementAliveInstancesAndGet(_name);
-  uint32_t totalObjects = getTotalAliveInstances();
-  Logger::log(LogLevel::Info, TAG, "(MEMORY) ❌ Deleting %s (#%i)... (Total %s(s): %i | Total HybridObjects: %i) ", _name, _instanceId,
-              _name, alive, totalObjects);
-#endif
-}
+HybridObject::HybridObject(const char* name) : HybridObjectPrototype(), _name(name) {}
+HybridObject::~HybridObject() {}
 
 std::string HybridObject::toString() {
   return "[HybridObject " + std::string(_name) + "]";
