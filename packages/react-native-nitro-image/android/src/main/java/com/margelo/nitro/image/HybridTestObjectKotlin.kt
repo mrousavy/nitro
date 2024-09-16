@@ -91,7 +91,7 @@ class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
     }
 
     override fun wait(seconds: Double): Promise<Unit> {
-        return Promise.async { delay(5000) }
+        return Promise.async { delay(seconds.toLong() * 1000) }
     }
 
     override fun callCallback(callback: () -> Unit) {

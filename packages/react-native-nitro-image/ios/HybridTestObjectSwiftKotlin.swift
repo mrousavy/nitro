@@ -124,7 +124,7 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
 
   func wait(seconds: Double) throws -> Promise<Void> {
     return Promise.async {
-      try await Task.sleep(nanoseconds: 5 * 1_000_000)
+      try await Task.sleep(nanoseconds: UInt64(seconds) * 1_000_000_000)
     }
   }
 
