@@ -17,6 +17,8 @@
 namespace margelo::nitro::image { class HybridTestObjectSwiftKotlinSpec; }
 // Forward declaration of `AnyMap` to properly resolve imports.
 namespace NitroModules { class AnyMap; }
+// Forward declaration of `Powertrain` to properly resolve imports.
+namespace margelo::nitro::image { enum class Powertrain; }
 // Forward declaration of `Car` to properly resolve imports.
 namespace margelo::nitro::image { struct Car; }
 // Forward declaration of `Person` to properly resolve imports.
@@ -29,6 +31,7 @@ namespace NitroModules { class ArrayBuffer; }
 #include <memory>
 #include "HybridTestObjectSwiftKotlinSpec.hpp"
 #include <NitroModules/AnyMap.hpp>
+#include "Powertrain.hpp"
 #include <future>
 #include <functional>
 #include "Car.hpp"
@@ -86,6 +89,7 @@ namespace margelo::nitro::image {
       virtual double funcThatThrows() = 0;
       virtual std::string tryOptionalParams(double num, bool boo, const std::optional<std::string>& str) = 0;
       virtual std::string tryMiddleParam(double num, std::optional<bool> boo, const std::string& str) = 0;
+      virtual std::optional<Powertrain> tryOptionalEnum(std::optional<Powertrain> value) = 0;
       virtual int64_t calculateFibonacciSync(double value) = 0;
       virtual std::future<int64_t> calculateFibonacciAsync(double value) = 0;
       virtual std::future<void> wait(double seconds) = 0;

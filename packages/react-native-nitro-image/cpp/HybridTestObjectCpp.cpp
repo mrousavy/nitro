@@ -145,6 +145,10 @@ std::string HybridTestObjectCpp::tryMiddleParam(double num, std::optional<bool> 
   return str;
 }
 
+std::optional<Powertrain> HybridTestObjectCpp::tryOptionalEnum(std::optional<Powertrain> value) {
+  return value;
+}
+
 std::variant<std::string, double>
 HybridTestObjectCpp::passVariant(const std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>>& either) {
   if (std::holds_alternative<std::string>(either)) {

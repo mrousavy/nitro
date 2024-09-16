@@ -18,10 +18,10 @@ namespace margelo::nitro::image { class HybridTestObjectSwiftKotlinSpec; }
 namespace margelo::nitro::image { class HybridTestObjectSwiftKotlinSpecSwift; }
 // Forward declaration of `AnyMap` to properly resolve imports.
 namespace NitroModules { class AnyMap; }
-// Forward declaration of `Car` to properly resolve imports.
-namespace margelo::nitro::image { struct Car; }
 // Forward declaration of `Powertrain` to properly resolve imports.
 namespace margelo::nitro::image { enum class Powertrain; }
+// Forward declaration of `Car` to properly resolve imports.
+namespace margelo::nitro::image { struct Car; }
 // Forward declaration of `Person` to properly resolve imports.
 namespace margelo::nitro::image { struct Person; }
 // Forward declaration of `ArrayBuffer` to properly resolve imports.
@@ -35,11 +35,11 @@ namespace NitroModules { class ArrayBufferHolder; }
 #include "HybridTestObjectSwiftKotlinSpec.hpp"
 #include "HybridTestObjectSwiftKotlinSpecSwift.hpp"
 #include <NitroModules/AnyMap.hpp>
+#include "Powertrain.hpp"
 #include <future>
 #include <NitroModules/PromiseHolder.hpp>
 #include <functional>
 #include "Car.hpp"
-#include "Powertrain.hpp"
 #include "Person.hpp"
 #include <NitroModules/ArrayBuffer.hpp>
 #include <NitroModules/ArrayBufferHolder.hpp>
@@ -168,6 +168,10 @@ namespace margelo::nitro::image {
     }
     inline std::string tryMiddleParam(double num, std::optional<bool> boo, const std::string& str) override {
       auto __result = _swiftPart.tryMiddleParam(std::forward<decltype(num)>(num), boo, str);
+      return __result;
+    }
+    inline std::optional<Powertrain> tryOptionalEnum(std::optional<Powertrain> value) override {
+      auto __result = _swiftPart.tryOptionalEnum(value);
       return __result;
     }
     inline int64_t calculateFibonacciSync(double value) override {

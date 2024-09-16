@@ -144,6 +144,14 @@ namespace margelo::nitro::image::bridge::swift {
   }
   
   /**
+   * Specialized version of `std::optional<Powertrain>`.
+   */
+  using std__optional_Powertrain_ = std::optional<Powertrain>;
+  inline std::optional<Powertrain> create_std__optional_Powertrain_(const Powertrain& value) {
+    return std::optional<Powertrain>(value);
+  }
+  
+  /**
    * Specialized version of `std::vector<double>`.
    */
   using std__vector_double_ = std::vector<double>;

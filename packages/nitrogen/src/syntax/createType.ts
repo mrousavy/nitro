@@ -265,7 +265,9 @@ export function createType(type: TSMorphType, isOptional: boolean): Type {
         `Anonymous objects cannot be represented in C++! Extract "${type.getText()}" to a separate interface/type declaration.`
       )
     } else if (type.isStringLiteral()) {
-      return new StringType()
+      throw new Error(
+        `String literal ${type.getText()} cannot be represented in C++ because it is ambiguous between a string and a discriminating union enum.`
+      )
     } else {
       throw new Error(
         `The TypeScript type "${type.getText()}" cannot be represented in C++!`

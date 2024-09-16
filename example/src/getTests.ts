@@ -307,6 +307,16 @@ export function getTests(
         .didNotThrow()
         .equals('passed')
     ),
+    createTest('tryOptionalEnum(...)', () =>
+      it(() => testObject.tryOptionalEnum('gas'))
+        .didNotThrow()
+        .equals('gas')
+    ),
+    createTest('tryOptionalEnum(...)', () =>
+      it(() => testObject.tryOptionalEnum(undefined))
+        .didNotThrow()
+        .equals(undefined)
+    ),
 
     // Variants tests
     ...('someVariant' in testObject
