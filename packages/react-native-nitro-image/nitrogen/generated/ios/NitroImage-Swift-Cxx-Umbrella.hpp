@@ -14,6 +14,8 @@ namespace NitroModules { class AnyMap; }
 namespace NitroModules { class ArrayBuffer; }
 // Forward declaration of `Car` to properly resolve imports.
 namespace margelo::nitro::image { struct Car; }
+// Forward declaration of `HybridImageFactorySpec` to properly resolve imports.
+namespace margelo::nitro::image { class HybridImageFactorySpec; }
 // Forward declaration of `HybridImageSpec` to properly resolve imports.
 namespace margelo::nitro::image { class HybridImageSpec; }
 // Forward declaration of `HybridTestObjectCppSpec` to properly resolve imports.
@@ -35,6 +37,7 @@ namespace margelo::nitro::image { enum class Powertrain; }
 
 // Include C++ defined types
 #include "Car.hpp"
+#include "HybridImageFactorySpec.hpp"
 #include "HybridImageSpec.hpp"
 #include "HybridTestObjectCppSpec.hpp"
 #include "HybridTestObjectSwiftKotlinSpec.hpp"
@@ -65,6 +68,8 @@ namespace margelo::nitro::image { enum class Powertrain; }
 #include <NitroModules/PromiseHolder.hpp>
 
 // Forward declarations of Swift defined types
+// Forward declaration of `HybridImageFactorySpecCxx` to properly resolve imports.
+namespace NitroImage { class HybridImageFactorySpecCxx; }
 // Forward declaration of `HybridImageSpecCxx` to properly resolve imports.
 namespace NitroImage { class HybridImageSpecCxx; }
 // Forward declaration of `HybridTestObjectCppSpecCxx` to properly resolve imports.

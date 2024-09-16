@@ -7,12 +7,18 @@ import { Property } from './syntax/Property.js'
 import { Method } from './syntax/Method.js'
 import { createSwiftHybridObject } from './syntax/swift/SwiftHybridObject.js'
 import { createKotlinHybridObject } from './syntax/kotlin/KotlinHybridObject.js'
+import { createType } from './syntax/createType.js'
 
 export function generatePlatformFiles(
   declaration: InterfaceDeclaration,
   language: Language
 ): SourceFile[] {
   const spec = getHybridObjectSpec(declaration, language)
+
+  // TODO: We currently just call this so the HybridObject itself is a "known type".
+  // This causes the Swift Umbrella header to properly forward-declare it.
+  // Without this, only Hybrid Objects that are actually used in public APIs will be forward-declared.
+  createType(declaration.getType(), false)
 
   switch (language) {
     case 'c++':
