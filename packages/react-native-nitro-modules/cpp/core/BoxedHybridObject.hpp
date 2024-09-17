@@ -27,6 +27,7 @@ public:
 
 public:
   jsi::Value get(jsi::Runtime& runtime, const jsi::PropNameID& propName) override;
+  std::vector<jsi::PropNameID> getPropertyNames(jsi::Runtime& runtime) override;
 
 private:
   std::shared_ptr<HybridObject> _hybridObject;

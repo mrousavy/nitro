@@ -9,6 +9,10 @@
 
 namespace margelo::nitro {
 
+std::vector<jsi::PropNameID> BoxedHybridObject::getPropertyNames(facebook::jsi::Runtime& runtime) {
+  return jsi::PropNameID::names(runtime, "unbox");
+}
+
 jsi::Value BoxedHybridObject::get(jsi::Runtime& runtime, const jsi::PropNameID& propName) {
   std::string name = propName.utf8(runtime);
 
