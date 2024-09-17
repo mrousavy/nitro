@@ -86,6 +86,7 @@ PODS:
     - React-RCTText (= 0.75.2)
     - React-RCTVibration (= 0.75.2)
   - React-callinvoker (0.75.2)
+  - React-Codegen (0.1.0)
   - React-Core (0.75.2):
     - glog
     - hermes-engine
@@ -1348,6 +1349,13 @@ PODS:
     - Yoga
   - react-native-segmented-control (2.5.2):
     - React-Core
+  - react-native-worklets-core (1.3.3):
+    - RCT-Folly
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Codegen
+    - React-Core
+    - ReactCommon/turbomodule/core
   - React-nativeconfig (0.75.2)
   - React-NativeModulesApple (0.75.2):
     - glog
@@ -1653,6 +1661,7 @@ DEPENDENCIES:
   - React-microtasksnativemodule (from `../../node_modules/react-native/ReactCommon/react/nativemodule/microtasks`)
   - react-native-safe-area-context (from `../../node_modules/react-native-safe-area-context`)
   - "react-native-segmented-control (from `../../node_modules/@react-native-segmented-control/segmented-control`)"
+  - react-native-worklets-core (from `../../node_modules/react-native-worklets-core`)
   - React-nativeconfig (from `../../node_modules/react-native/ReactCommon`)
   - React-NativeModulesApple (from `../../node_modules/react-native/ReactCommon/react/nativemodule/core/platform/ios`)
   - React-perflogger (from `../../node_modules/react-native/ReactCommon/reactperflogger`)
@@ -1683,6 +1692,7 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - React-Codegen
     - SocketRocket
 
 EXTERNAL SOURCES:
@@ -1765,6 +1775,8 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/react-native-safe-area-context"
   react-native-segmented-control:
     :path: "../../node_modules/@react-native-segmented-control/segmented-control"
+  react-native-worklets-core:
+    :path: "../../node_modules/react-native-worklets-core"
   React-nativeconfig:
     :path: "../../node_modules/react-native/ReactCommon"
   React-NativeModulesApple:
@@ -1835,6 +1847,7 @@ SPEC CHECKSUMS:
   RCTTypeSafety: ef5e91bd791abd3a99b2c75fd565791102a66352
   React: 643f06bc294806d2db2526b424fdf759e107f514
   React-callinvoker: 34d1fa0c340104f324e2521f546196beb44dfad2
+  React-Codegen: 4b8b4817cea7a54b83851d4c1f91f79aa73de30a
   React-Core: facd883836d8d1cc1949d2053c58eab5fb22eb75
   React-CoreModules: f92a2cb11d22f6066823ca547c61e900325dfe44
   React-cxxreact: f5595a4cbfe5a4e9d401dffa2c1c78bbbbbe75e4
@@ -1860,6 +1873,7 @@ SPEC CHECKSUMS:
   React-microtasksnativemodule: f13f03163b6a5ec66665dfe80a0df4468bb766a6
   react-native-safe-area-context: 38fdd9b3c5561de7cabae64bd0cd2ce05d2768a1
   react-native-segmented-control: b92809e9111013dfa266e1168ba366d62898d9a4
+  react-native-worklets-core: 80d4a9b195d3e806c5e02942cfb5a43c6f99d02d
   React-nativeconfig: 57781b79e11d5af7573e6f77cbf1143b71802a6d
   React-NativeModulesApple: 7ff2e2cfb2e5fa5bdedcecf28ce37e696c6ef1e1
   React-perflogger: 8a360ccf603de6ddbe9ff8f54383146d26e6c936
