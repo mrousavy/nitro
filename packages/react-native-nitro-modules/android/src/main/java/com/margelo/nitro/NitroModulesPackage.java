@@ -19,9 +19,17 @@ public class NitroModulesPackage extends TurboReactPackage {
     JNIOnLoad.initializeNativeNitro();
   }
 
+  private static ReactApplicationContext _reactContext;
+
+  public static ReactApplicationContext getReactContext() {
+    return _reactContext;
+  }
+
   @Nullable
   @Override
   public NativeModule getModule(String name, ReactApplicationContext reactContext) {
+    _reactContext = reactContext;
+
     if (name.equals(NativeNitroOnLoadModule.NAME)) {
       return new NativeNitroOnLoadModule(reactContext);
     } else {
