@@ -17,6 +17,7 @@ export interface NativeNitroSpec extends TurboModule {
   hasNativeState(obj: UnsafeObject): boolean
   removeNativeState(obj: UnsafeObject): void
   buildType: 'debug' | 'release'
+  box(obj: UnsafeObject): UnsafeObject
 }
 
 let turboModule: NativeNitroSpec | undefined
