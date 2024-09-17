@@ -43,12 +43,12 @@ namespace margelo::nitro::image {
 
   // Properties
   ImageSize JHybridImageSpec::getSize() {
-    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JImageSize>()>("getSize");
+    static const auto method = _javaPart->getClass()->getMethod<JImageSize()>("getSize");
     auto result = method(_javaPart);
     return result->toCpp();
   }
   PixelFormat JHybridImageSpec::getPixelFormat() {
-    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JPixelFormat>()>("getPixelFormat");
+    static const auto method = _javaPart->getClass()->getMethod<JPixelFormat()>("getPixelFormat");
     auto result = method(_javaPart);
     return result->toCpp();
   }

@@ -168,7 +168,7 @@ function getFbjniMethodForwardImplementation(
 
   const returnJNI = new KotlinCxxBridgedType(method.returnType)
 
-  const returnType = returnJNI.asJniReferenceType('local')
+  const returnType = returnJNI.getTypeCode('c++')
   const paramsTypes = method.parameters
     .map((p) => {
       const bridge = new KotlinCxxBridgedType(p.type)
