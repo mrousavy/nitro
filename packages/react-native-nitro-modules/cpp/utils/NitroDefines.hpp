@@ -15,6 +15,11 @@
 #ifdef NDEBUG
 #undef NITRO_DEBUG
 #endif
+#ifdef ANDROID
+#ifndef NDEBUG
+#define NITRO_DEBUG
+#endif
+#endif
 
 // Helper to find out if a C++ compiler attribute is available
 #ifdef __has_attribute
