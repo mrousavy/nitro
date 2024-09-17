@@ -70,7 +70,7 @@ public:
 };
 ```
 
-Then, simply install this Dispatcher into your runtime:
+Then, simply install this `Dispatcher` into your runtime so Nitro can use it:
 
 ```cpp
 auto myDispatcher = std::make_shared<MyRuntimeDispatcher>();
