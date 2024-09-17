@@ -147,5 +147,13 @@
         }
       ]
     ]
+  },
+  "codegenConfig": {
+    "name": "NitroModules",
+    "type": "modules",
+    "jsSrcsDir": "src",
+    "android": {
+      "javaPackageName": "com.margelo.nitro"
+    }
   }
 }

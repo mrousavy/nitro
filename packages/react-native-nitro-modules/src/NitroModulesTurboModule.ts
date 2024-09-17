@@ -2,6 +2,7 @@ import type { TurboModule } from 'react-native'
 import { TurboModuleRegistry } from 'react-native'
 import type { UnsafeObject } from 'react-native/Libraries/Types/CodegenTypes'
 import { ModuleNotFoundError } from './ModuleNotFoundError'
+import NativeNitroOnLoad from './NativeNitroOnLoad'
 
 // This TurboModule is *not* codegen'd.
 // It's handwritten, because otherwise the app's CMakeLists wants to build it.
@@ -22,6 +23,7 @@ export interface NativeNitroSpec extends TurboModule {
 
 let turboModule: NativeNitroSpec | undefined
 export function getNativeNitroModules(): NativeNitroSpec {
+  NativeNitroOnLoad.init()
   if (turboModule == null) {
     try {
       // 1. Get (and initialize) the C++ TurboModule
