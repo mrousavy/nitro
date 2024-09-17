@@ -55,10 +55,9 @@ In future versions of [react-native-worklets-core](https://github.com/margelo/re
 ## Dispatcher
 
 All synchronous APIs of Nitro work ✨ automagically ✨ on any runtime, but asynchronous APIs (Promises and callbacks) require a `Dispatcher`.
-
 If you call an asynchronous API on a runtime that Nitro doesn't know, it likely doesn't have a `Dispatcher`, so it doesn't know how to call back to the JS Thread after the asynchronous operation has finished (Promise resolve or callback call).
 
-If you created that `jsi::Runtime`, you need to create a `Dispatcher` for it and implement `runSync` and `runAsync`:
+If **you** created that `jsi::Runtime`, you need to create a `Dispatcher` for it and implement `runSync` and `runAsync`:
 
 ```cpp
 #include <NitroModules/Dispatcher.hpp>
