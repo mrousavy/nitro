@@ -17,8 +17,21 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { logPrototypeChain } from '../logPrototypeChain'
 import SegmentedControl from '@react-native-segmented-control/segmented-control'
 import { NitroModules } from 'react-native-nitro-modules'
+import { Worklets } from 'react-native-worklets-core'
 
 logPrototypeChain(HybridTestObjectCpp)
+
+const context = Worklets.createContext('DummyContext')
+context.runAsync(() => {
+  'worklet'
+  try {
+    console.log('running...')
+    console.log(HybridTestObjectCpp.addNumbers(5, 5))
+    console.log('ran!')
+  } catch (e) {
+    console.error(e.message)
+  }
+})
 
 interface TestState {
   runner: TestRunner
