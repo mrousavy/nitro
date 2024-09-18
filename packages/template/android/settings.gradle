@@ -1,0 +1,3 @@
+rootProject.name = "<<androidCxxLibName>>"
+include ":react-native-nitro-modules"
+project(":react-native-nitro-modules").projectDir = file("../../../node_modules/react-native-nitro-modules/android")
