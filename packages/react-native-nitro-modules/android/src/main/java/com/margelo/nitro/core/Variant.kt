@@ -25,6 +25,7 @@ sealed class Variant3<out A, out B, out C> {
     @DoNotStrip
     data class Third<C>(val value: C) : Variant3<Nothing, Nothing, C>()
 
+    @DoNotStrip
     inline fun <reified T> getAs(): T? = when (this) {
         is First -> value as? T
         is Second -> value as? T
