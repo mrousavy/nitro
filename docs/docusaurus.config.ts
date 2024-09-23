@@ -97,12 +97,12 @@ const config: Config = {
           label: 'Installation',
         },
         {
-          type: 'search',
+          href: 'https://github.com/mrousavy/nitro',
+          label: 'GitHub',
           position: 'right',
         },
         {
-          href: 'https://github.com/mrousavy/nitro',
-          label: 'GitHub',
+          type: 'search',
           position: 'right',
         },
       ],
@@ -122,7 +122,7 @@ const config: Config = {
       ignorePatterns: ['/tags/**'],
       filename: 'sitemap.xml',
       createSitemapItems: async (params) => {
-        const {defaultCreateSitemapItems, ...rest} = params;
+        const { defaultCreateSitemapItems, ...rest } = params;
         const items = await defaultCreateSitemapItems(rest);
         return items.filter((item) => !item.url.includes('/page/'));
       },

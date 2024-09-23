@@ -394,3 +394,21 @@ pre {
 [data-theme='dark'] .flowchartTitleText {
   fill: #a8c4d8 !important;
 }
+
+/* Algolia search styles */
+
+.DocSearch-Button {
+  font-family: 'Satoshi', sans-serif;
+  color: #232a3f !important;
+  border-radius: 8px !important;
+}
+[data-theme='light'] .DocSearch-Button {
+  background-color: white !important;
+}
+[data-theme='dark'] .DocSearch-Button {
+  background-color: #2c3655 !important;
+  color: white !important;
+}
+.DocSearch-Button-Keys {
+  display: none !important;
+}
