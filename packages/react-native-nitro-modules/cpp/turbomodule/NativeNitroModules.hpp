@@ -7,7 +7,13 @@
 
 #pragma once
 
-#include <ReactCodegen/NitroModulesJSI.h>
+#if __has_include(<ReactCodegen/NitroModulesJSI.h>) // CocoaPod headers on Apple
+#include <React-Codegen/AppSpecsJSI.h>
+#elif __has_include("NitroModulesJSI.h") // CMake headers on Android
+#include "AppSpecsJSI.h"
+#else
+#error "Could not find the generated specs for NativeNitroModules! Did CodeGen run?"
+#endif
 
 namespace facebook::react {
 
