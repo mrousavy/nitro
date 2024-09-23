@@ -19,7 +19,7 @@ public:
   static constexpr auto kJavaDescriptor = "Lcom/example/Variant2;"; // Adjust the descriptor to your package.
 };
 template <typename A>
-class JVariant2_First : public JVariant2<A, jobject> {
+class JVariant2_First : public jni::JavaClass<JVariant2_First<A>, JVariant2<A, jobject>> {
 public:
   static constexpr auto kJavaDescriptor = "Lcom/example/Variant2$First;";
 
@@ -33,7 +33,7 @@ public:
   }
 };
 template <typename B>
-class JVariant2_Second : public JVariant2<jobject, B> {
+class JVariant2_Second : public jni::JavaClass<JVariant2_Second<B>, JVariant2<jobject, B>> {
 public:
   static constexpr auto kJavaDescriptor = "Lcom/example/Variant2$Second;";
 
