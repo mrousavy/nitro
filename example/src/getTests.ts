@@ -540,24 +540,28 @@ export function getTests(
         .equals(true)
     ),
     createTest('callWithOptional(undefined)', async () =>
-      it(() => {
-        let calledBack: number | undefined
-        testObject.callWithOptional(undefined, (val) => {
-          calledBack = val
+      (
+        await it<number | undefined>(async () => {
+          return timeoutedPromise((complete) => {
+            testObject.callWithOptional(undefined, (val) => {
+              complete(val)
+            })
+          })
         })
-        return calledBack
-      })
+      )
         .didNotThrow()
         .equals(undefined)
     ),
     createTest('callWithOptional(433)', async () =>
-      it(() => {
-        let calledBack: number | undefined
-        testObject.callWithOptional(433, (val) => {
-          calledBack = val
+      (
+        await it<number | undefined>(async () => {
+          return timeoutedPromise((complete) => {
+            testObject.callWithOptional(433, (val) => {
+              complete(val)
+            })
+          })
         })
-        return calledBack
-      })
+      )
         .didNotThrow()
         .equals(433)
     ),
