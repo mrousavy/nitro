@@ -20,6 +20,9 @@ class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
     override var optionalString: String? = null
     override val thisObject: HybridTestObjectSwiftKotlinSpec
         get() = this
+    override var someVariantFirst:
+        get() = TODO("Not yet implemented")
+        set(value) {}
 
     override fun simpleFunc() {
         // do nothing
