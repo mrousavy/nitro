@@ -8,7 +8,6 @@
 #pragma once
 
 #include <ReactCodegen/NitroModulesJSI.h>
-#include <ReactCommon/TurboModule.h>
 
 namespace facebook::react {
 
