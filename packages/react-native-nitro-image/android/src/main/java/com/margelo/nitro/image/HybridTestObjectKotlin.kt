@@ -103,7 +103,7 @@ class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
         callback()
     }
 
-    override fun callWithOptional(value: Double?, callback: (maybe: Double) -> Unit): Unit {
+    override fun callWithOptional(value: Double?, callback: (maybe: Double?) -> Unit): Unit {
         callback(value)
     }
 

@@ -205,7 +205,7 @@ void HybridTestObjectCpp::callCallback(const std::function<void()>& callback) {
   callback();
 }
 
-void HybridTestObjectCpp::callWithOptional(std::optional<double> value, const std::function<void(double /* maybe */)>& callback) {
+void HybridTestObjectCpp::callWithOptional(std::optional<double> value, const std::function<void(std::optional<double> /* maybe */)>& callback) {
   callback(value);
 }
 

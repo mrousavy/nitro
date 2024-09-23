@@ -43,7 +43,7 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
     callback()
   }
 
-  func callWithOptional(value: Double?, callback: @escaping ((_ maybe: Double) -> Void)) throws -> Void {
+  func callWithOptional(value: Double?, callback: @escaping ((_ maybe: Double?) -> Void)) throws -> Void {
     callback(value)
   }
 
