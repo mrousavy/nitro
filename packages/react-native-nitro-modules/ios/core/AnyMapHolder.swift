@@ -7,10 +7,6 @@
 
 import Foundation
 
-public struct ArrayHolder<T> {
-  let array: [T]
-}
-
 /**
  * Represents any value representable by the `AnyMap`.
  * Note: Arrays are currently not implemented due to a Swift compiler bug https://github.com/swiftlang/swift/issues/75994
@@ -21,7 +17,7 @@ public indirect enum AnyValue {
   case bool(Bool)
   case bigint(Int64)
   case string(String)
-  case array(ArrayHolder<AnyValue>)
+  case array(Array<AnyValue>)
   case object(Dictionary<String, AnyValue>)
 
   static func create(_ value: margelo.nitro.AnyValue) -> AnyValue {
@@ -36,8 +32,7 @@ public indirect enum AnyValue {
     } else if margelo.nitro.is_AnyValue_string(value) {
       return .string(margelo.nitro.get_AnyValue_string(value).toSwift())
     } else if margelo.nitro.is_AnyValue_AnyArray(value) {
-      let array = margelo.nitro.get_AnyValue_AnyArray(value).toSwift()
-      return .array(ArrayHolder(array: array))
+      return .array(margelo.nitro.get_AnyValue_AnyArray(value).toSwift())
     } else if margelo.nitro.is_AnyValue_AnyObject(value) {
       return .object(margelo.nitro.get_AnyValue_AnyObject(value).toSwift())
     } else {
@@ -269,7 +264,7 @@ extension margelo.nitro.AnyValue {
     case .string(let string):
       return create(string)
     case .array(let array):
-      return create(array.array)
+      return create(array)
     case .object(let object):
       return create(object)
     }
