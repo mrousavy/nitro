@@ -13,6 +13,7 @@ import { PromiseType } from '../types/PromiseType.js'
 import { RecordType } from '../types/RecordType.js'
 import { StructType } from '../types/StructType.js'
 import type { Type } from '../types/Type.js'
+import { VariantType } from '../types/VariantType.js'
 import { getKotlinBoxedPrimitiveType } from './KotlinBoxedPrimitive.js'
 import { createKotlinEnum } from './KotlinEnum.js'
 import { createKotlinFunction } from './KotlinFunction.js'
@@ -86,6 +87,13 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
         imports.push({
           language: 'c++',
           name: 'NitroModules/JAnyMap.hpp',
+          space: 'system',
+        })
+        break
+      case 'variant':
+        imports.push({
+          language: 'c++',
+          name: 'NitroModules/JVariant.hpp',
           space: 'system',
         })
         break
@@ -265,6 +273,19 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
           default:
             return this.type.getCode(language)
         }
+      case 'variant': {
+        switch (language) {
+          case 'c++':
+            const variant = getTypeAs(this.type, VariantType)
+            const variants = variant.variants.map((v) => {
+              const bridge = new KotlinCxxBridgedType(v)
+              return bridge.getTypeCode('c++', true)
+            })
+            return `JVariant${variant.variants.length}<${variants.join(', ')}>`
+          default:
+            return this.type.getCode(language)
+        }
+      }
       case 'promise':
         switch (language) {
           case 'c++':
@@ -352,6 +373,16 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
           case 'c++':
             const struct = getTypeAs(this.type, StructType)
             return `J${struct.structName}::fromCpp(${parameterName})`
+          default:
+            return parameterName
+        }
+      }
+      case 'variant': {
+        switch (language) {
+          case 'c++':
+            return `[=]() -> ${this.asJniReferenceType('alias')} { throw std::runtime_error("Cannot convert C++ variant to Kotlin/JNI variant yet!"); }()`
+          // const variant = getTypeAs(this.type, VariantType)
+          // return `JVariant${variant.variants.length}::create(${parameterName})`
           default:
             return parameterName
         }
@@ -514,6 +545,14 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
         switch (language) {
           case 'c++':
             return `${parameterName}->toCpp()`
+          default:
+            return parameterName
+        }
+      }
+      case 'variant': {
+        switch (language) {
+          case 'c++':
+            return `[=]() -> ${this.type.getCode('c++')} { throw std::runtime_error("Cannot convert Kotlin variant to C++ variant yet!"); }()`
           default:
             return parameterName
         }
