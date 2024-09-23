@@ -338,7 +338,8 @@ extension margelo.nitro.AnyObject {
     let keys = margelo.nitro.getAnyObjectKeys(self)
     var dictionary = Dictionary<String, AnyValue>(minimumCapacity: keys.size())
     for key in keys {
-
+      let value = margelo.nitro.getAnyObjectValue(self, key)
+      dictionary[String(key)] = AnyValue.create(value)
     }
     return dictionary
   }
