@@ -60,16 +60,15 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
     map.setString(key: "string", value: stringValue)
     map.setBigInt(key: "bigint", value: bigintValue)
     map.setNull(key: "null")
-    // TODO: Arrays are not supported yet on Swift AnyMap
-    // map.setArray(
+    let array: [AnyValue] = [.number(numberValue), .bool(boolValue), .string(stringValue), .bigint(bigintValue)]
+    map.setArray(key: "array", value: array)
     map.setObject(key: "object", value: [
       "number": .number(numberValue),
       "bool": .bool(boolValue),
       "string": .string(stringValue),
-      "bigint": .bool(boolValue),
+      "bigint": .bigint(bigintValue),
       "null": .null,
-      // TODO: Arrays are not supported yet on Swift AnyValue
-      // "array": .array(
+      "array": .array([.number(numberValue), .bool(boolValue), .string(stringValue), .bigint(bigintValue), .array(array)])
     ])
     return map
   }

@@ -250,11 +250,36 @@ export function getTests(
       it(() => testObject.createMap().array)
         .didNotThrow()
         .didReturn('object')
+        .equals([
+          testObject.numberValue,
+          testObject.boolValue,
+          testObject.stringValue,
+          testObject.bigintValue,
+        ])
     ),
     createTest('createMap().object', () =>
       it(() => testObject.createMap().object)
         .didNotThrow()
         .didReturn('object')
+        .equals({
+          array: [
+            testObject.numberValue,
+            testObject.boolValue,
+            testObject.stringValue,
+            testObject.bigintValue,
+            [
+              testObject.numberValue,
+              testObject.boolValue,
+              testObject.stringValue,
+              testObject.bigintValue,
+            ],
+          ],
+          bigint: testObject.bigintValue,
+          bool: testObject.boolValue,
+          string: testObject.stringValue,
+          number: testObject.numberValue,
+          null: null,
+        })
     ),
     createTest('mapRoundtrip(...)', () =>
       it(() => testObject.mapRoundtrip(testObject.createMap()))
