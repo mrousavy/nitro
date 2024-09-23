@@ -275,8 +275,8 @@ function createCxxVariantSwiftHelper(type: VariantType): SwiftCxxHelper {
         ? toReferenceType(t.getCode('c++'))
         : t.getCode('c++')
       return `
-inline ${actualType} create_${name}(${param} value) {
-  return value;
+inline ${name} create_${name}(${param} value) {
+  return ${name}(value);
 }
       `.trim()
     })
@@ -284,8 +284,8 @@ inline ${actualType} create_${name}(${param} value) {
   const getFunctions = type.variants
     .map((t, i) => {
       return `
-inline ${t.getCode('c++')} get_${name}_${i}(const ${actualType}& variant) {
-  return std::get<${i}>(variant);
+inline ${t.getCode('c++')} get_${name}_${i}(const ${name}& variantWrapper) {
+  return std::get<${i}>(variantWrapper.variant);
 }
       `.trim()
     })
@@ -304,9 +304,20 @@ inline ${t.getCode('c++')} get_${name}_${i}(const ${actualType}& variant) {
     ],
     cxxCode: `
 /**
- * Specialized version of \`${escapeComments(actualType)}\`.
+ * Wrapper struct for \`${escapeComments(actualType)}\`.
+ * std::variant cannot be used in Swift because of a Swift bug.
+ * Not even specializing it works. So we create a wrapper struct.
  */
-using ${name} = ${actualType};
+struct ${name} {
+  ${actualType} variant;
+  ${name}(${actualType} variant): variant(variant) { }
+  operator ${actualType}() const {
+    return variant;
+  }
+  inline size_t index() const {
+    return variant.index();
+  }
+};
 ${createFunctions}
 ${getFunctions}
       `.trim(),

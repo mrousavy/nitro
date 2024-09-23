@@ -85,11 +85,11 @@ namespace margelo::nitro::image::bridge::swift {
   public:
     explicit Func_void_std__string_Wrapper(const std::function<void(const std::string& /* path */)>& func): function(func) {}
     explicit Func_void_std__string_Wrapper(std::function<void(const std::string& /* path */)>&& func): function(std::move(func)) {}
-
+  
     void call(std::string path) const {
       function(path);
     }
-
+  
     std::function<void(const std::string& /* path */)> function;
   };
   inline Func_void_std__string create_Func_void_std__string(void* closureHolder, void(*call)(void* /* closureHolder */, std::string), void(*destroy)(void*)) {
@@ -101,7 +101,7 @@ namespace margelo::nitro::image::bridge::swift {
   inline std::shared_ptr<Func_void_std__string_Wrapper> share_Func_void_std__string(const Func_void_std__string& value) {
     return std::make_shared<Func_void_std__string_Wrapper>(value);
   }
-
+  
   /**
    * Specialized version of `std::optional<std::string>`.
    */
@@ -109,27 +109,35 @@ namespace margelo::nitro::image::bridge::swift {
   inline std::optional<std::string> create_std__optional_std__string_(const std::string& value) {
     return std::optional<std::string>(value);
   }
-
+  
   /**
-   * Specialized version of `std::variant<std::string, double>`.
+   * Wrapper struct for `std::variant<std::string, double>`.
+   * std::variant cannot be used in Swift because of a Swift bug.
+   * Not even specializing it works. So we create a wrapper struct.
    */
-struct std__variant_std__string__double_ {
-  std::variant<std::string, double> value;
-};
-
+  struct std__variant_std__string__double_ {
+    std::variant<std::string, double> variant;
+    std__variant_std__string__double_(std::variant<std::string, double> variant): variant(variant) { }
+    operator std::variant<std::string, double>() const {
+      return variant;
+    }
+    inline size_t index() const {
+      return variant.index();
+    }
+  };
   inline std__variant_std__string__double_ create_std__variant_std__string__double_(const std::string& value) {
-    return { .value = value };
+    return std__variant_std__string__double_(value);
   }
   inline std__variant_std__string__double_ create_std__variant_std__string__double_(double value) {
-    return { .value = value };
+    return std__variant_std__string__double_(value);
   }
-  inline std::string get_std__variant_std__string__double__0(const std__variant_std__string__double_& variant) {
-    return std::get<0>(variant.value);
+  inline std::string get_std__variant_std__string__double__0(const std__variant_std__string__double_& variantWrapper) {
+    return std::get<0>(variantWrapper.variant);
   }
-  inline double get_std__variant_std__string__double__1(const std__variant_std__string__double_& variant) {
-    return std::get<1>(variant.value);
+  inline double get_std__variant_std__string__double__1(const std__variant_std__string__double_& variantWrapper) {
+    return std::get<1>(variantWrapper.variant);
   }
-
+  
   /**
    * Specialized version of `std::tuple<double, std::string>`.
    */
@@ -137,7 +145,7 @@ struct std__variant_std__string__double_ {
   inline std::tuple<double, std::string> create_std__tuple_double__std__string_(double arg0, const std::string& arg1) {
     return std::tuple<double, std::string> { arg0, arg1 };
   }
-
+  
   /**
    * Specialized version of `std::optional<bool>`.
    */
@@ -145,7 +153,7 @@ struct std__variant_std__string__double_ {
   inline std::optional<bool> create_std__optional_bool_(const bool& value) {
     return std::optional<bool>(value);
   }
-
+  
   /**
    * Specialized version of `std::optional<Powertrain>`.
    */
@@ -153,7 +161,7 @@ struct std__variant_std__string__double_ {
   inline std::optional<Powertrain> create_std__optional_Powertrain_(const Powertrain& value) {
     return std::optional<Powertrain>(value);
   }
-
+  
   /**
    * Specialized version of `std::vector<double>`.
    */
@@ -163,7 +171,7 @@ struct std__variant_std__string__double_ {
     vector.reserve(size);
     return vector;
   }
-
+  
   /**
    * Specialized version of `std::vector<std::string>`.
    */
@@ -173,59 +181,81 @@ struct std__variant_std__string__double_ {
     vector.reserve(size);
     return vector;
   }
-
+  
   /**
-   * Specialized version of `std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>>`.
+   * Wrapper struct for `std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>>`.
+   * std::variant cannot be used in Swift because of a Swift bug.
+   * Not even specializing it works. So we create a wrapper struct.
    */
-  using std__variant_std__string__double__bool__std__vector_double___std__vector_std__string__ = std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>>;
-  inline std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>> create_std__variant_std__string__double__bool__std__vector_double___std__vector_std__string__(const std::string& value) {
-    return value;
+  struct std__variant_std__string__double__bool__std__vector_double___std__vector_std__string__ {
+    std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>> variant;
+    std__variant_std__string__double__bool__std__vector_double___std__vector_std__string__(std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>> variant): variant(variant) { }
+    operator std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>>() const {
+      return variant;
+    }
+    inline size_t index() const {
+      return variant.index();
+    }
+  };
+  inline std__variant_std__string__double__bool__std__vector_double___std__vector_std__string__ create_std__variant_std__string__double__bool__std__vector_double___std__vector_std__string__(const std::string& value) {
+    return std__variant_std__string__double__bool__std__vector_double___std__vector_std__string__(value);
   }
-  inline std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>> create_std__variant_std__string__double__bool__std__vector_double___std__vector_std__string__(double value) {
-    return value;
+  inline std__variant_std__string__double__bool__std__vector_double___std__vector_std__string__ create_std__variant_std__string__double__bool__std__vector_double___std__vector_std__string__(double value) {
+    return std__variant_std__string__double__bool__std__vector_double___std__vector_std__string__(value);
   }
-  inline std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>> create_std__variant_std__string__double__bool__std__vector_double___std__vector_std__string__(bool value) {
-    return value;
+  inline std__variant_std__string__double__bool__std__vector_double___std__vector_std__string__ create_std__variant_std__string__double__bool__std__vector_double___std__vector_std__string__(bool value) {
+    return std__variant_std__string__double__bool__std__vector_double___std__vector_std__string__(value);
   }
-  inline std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>> create_std__variant_std__string__double__bool__std__vector_double___std__vector_std__string__(const std::vector<double>& value) {
-    return value;
+  inline std__variant_std__string__double__bool__std__vector_double___std__vector_std__string__ create_std__variant_std__string__double__bool__std__vector_double___std__vector_std__string__(const std::vector<double>& value) {
+    return std__variant_std__string__double__bool__std__vector_double___std__vector_std__string__(value);
   }
-  inline std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>> create_std__variant_std__string__double__bool__std__vector_double___std__vector_std__string__(const std::vector<std::string>& value) {
-    return value;
+  inline std__variant_std__string__double__bool__std__vector_double___std__vector_std__string__ create_std__variant_std__string__double__bool__std__vector_double___std__vector_std__string__(const std::vector<std::string>& value) {
+    return std__variant_std__string__double__bool__std__vector_double___std__vector_std__string__(value);
   }
-  inline std::string get_std__variant_std__string__double__bool__std__vector_double___std__vector_std__string___0(const std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>>& variant) {
-    return std::get<0>(variant);
+  inline std::string get_std__variant_std__string__double__bool__std__vector_double___std__vector_std__string___0(const std__variant_std__string__double__bool__std__vector_double___std__vector_std__string__& variantWrapper) {
+    return std::get<0>(variantWrapper.variant);
   }
-  inline double get_std__variant_std__string__double__bool__std__vector_double___std__vector_std__string___1(const std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>>& variant) {
-    return std::get<1>(variant);
+  inline double get_std__variant_std__string__double__bool__std__vector_double___std__vector_std__string___1(const std__variant_std__string__double__bool__std__vector_double___std__vector_std__string__& variantWrapper) {
+    return std::get<1>(variantWrapper.variant);
   }
-  inline bool get_std__variant_std__string__double__bool__std__vector_double___std__vector_std__string___2(const std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>>& variant) {
-    return std::get<2>(variant);
+  inline bool get_std__variant_std__string__double__bool__std__vector_double___std__vector_std__string___2(const std__variant_std__string__double__bool__std__vector_double___std__vector_std__string__& variantWrapper) {
+    return std::get<2>(variantWrapper.variant);
   }
-  inline std::vector<double> get_std__variant_std__string__double__bool__std__vector_double___std__vector_std__string___3(const std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>>& variant) {
-    return std::get<3>(variant);
+  inline std::vector<double> get_std__variant_std__string__double__bool__std__vector_double___std__vector_std__string___3(const std__variant_std__string__double__bool__std__vector_double___std__vector_std__string__& variantWrapper) {
+    return std::get<3>(variantWrapper.variant);
   }
-  inline std::vector<std::string> get_std__variant_std__string__double__bool__std__vector_double___std__vector_std__string___4(const std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>>& variant) {
-    return std::get<4>(variant);
+  inline std::vector<std::string> get_std__variant_std__string__double__bool__std__vector_double___std__vector_std__string___4(const std__variant_std__string__double__bool__std__vector_double___std__vector_std__string__& variantWrapper) {
+    return std::get<4>(variantWrapper.variant);
   }
-
+  
   /**
-   * Specialized version of `std::variant<bool, OldEnum>`.
+   * Wrapper struct for `std::variant<bool, OldEnum>`.
+   * std::variant cannot be used in Swift because of a Swift bug.
+   * Not even specializing it works. So we create a wrapper struct.
    */
-  using std__variant_bool__OldEnum_ = std::variant<bool, OldEnum>;
-  inline std::variant<bool, OldEnum> create_std__variant_bool__OldEnum_(bool value) {
-    return value;
+  struct std__variant_bool__OldEnum_ {
+    std::variant<bool, OldEnum> variant;
+    std__variant_bool__OldEnum_(std::variant<bool, OldEnum> variant): variant(variant) { }
+    operator std::variant<bool, OldEnum>() const {
+      return variant;
+    }
+    inline size_t index() const {
+      return variant.index();
+    }
+  };
+  inline std__variant_bool__OldEnum_ create_std__variant_bool__OldEnum_(bool value) {
+    return std__variant_bool__OldEnum_(value);
   }
-  inline std::variant<bool, OldEnum> create_std__variant_bool__OldEnum_(OldEnum value) {
-    return value;
+  inline std__variant_bool__OldEnum_ create_std__variant_bool__OldEnum_(OldEnum value) {
+    return std__variant_bool__OldEnum_(value);
   }
-  inline bool get_std__variant_bool__OldEnum__0(const std::variant<bool, OldEnum>& variant) {
-    return std::get<0>(variant);
+  inline bool get_std__variant_bool__OldEnum__0(const std__variant_bool__OldEnum_& variantWrapper) {
+    return std::get<0>(variantWrapper.variant);
   }
-  inline OldEnum get_std__variant_bool__OldEnum__1(const std::variant<bool, OldEnum>& variant) {
-    return std::get<1>(variant);
+  inline OldEnum get_std__variant_bool__OldEnum__1(const std__variant_bool__OldEnum_& variantWrapper) {
+    return std::get<1>(variantWrapper.variant);
   }
-
+  
   /**
    * Specialized version of `std::optional<Person>`.
    */
@@ -233,41 +263,63 @@ struct std__variant_std__string__double_ {
   inline std::optional<Person> create_std__optional_Person_(const Person& value) {
     return std::optional<Person>(value);
   }
-
+  
   /**
-   * Specialized version of `std::variant<Person, Car>`.
+   * Wrapper struct for `std::variant<Person, Car>`.
+   * std::variant cannot be used in Swift because of a Swift bug.
+   * Not even specializing it works. So we create a wrapper struct.
    */
-  using std__variant_Person__Car_ = std::variant<Person, Car>;
-  inline std::variant<Person, Car> create_std__variant_Person__Car_(const Person& value) {
-    return value;
+  struct std__variant_Person__Car_ {
+    std::variant<Person, Car> variant;
+    std__variant_Person__Car_(std::variant<Person, Car> variant): variant(variant) { }
+    operator std::variant<Person, Car>() const {
+      return variant;
+    }
+    inline size_t index() const {
+      return variant.index();
+    }
+  };
+  inline std__variant_Person__Car_ create_std__variant_Person__Car_(const Person& value) {
+    return std__variant_Person__Car_(value);
   }
-  inline std::variant<Person, Car> create_std__variant_Person__Car_(const Car& value) {
-    return value;
+  inline std__variant_Person__Car_ create_std__variant_Person__Car_(const Car& value) {
+    return std__variant_Person__Car_(value);
   }
-  inline Person get_std__variant_Person__Car__0(const std::variant<Person, Car>& variant) {
-    return std::get<0>(variant);
+  inline Person get_std__variant_Person__Car__0(const std__variant_Person__Car_& variantWrapper) {
+    return std::get<0>(variantWrapper.variant);
   }
-  inline Car get_std__variant_Person__Car__1(const std::variant<Person, Car>& variant) {
-    return std::get<1>(variant);
+  inline Car get_std__variant_Person__Car__1(const std__variant_Person__Car_& variantWrapper) {
+    return std::get<1>(variantWrapper.variant);
   }
-
+  
   /**
-   * Specialized version of `std::variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>, Person>`.
+   * Wrapper struct for `std::variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>, Person>`.
+   * std::variant cannot be used in Swift because of a Swift bug.
+   * Not even specializing it works. So we create a wrapper struct.
    */
-  using std__variant_std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec___Person_ = std::variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>, Person>;
-  inline std::variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>, Person> create_std__variant_std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec___Person_(const std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>& value) {
-    return value;
+  struct std__variant_std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec___Person_ {
+    std::variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>, Person> variant;
+    std__variant_std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec___Person_(std::variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>, Person> variant): variant(variant) { }
+    operator std::variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>, Person>() const {
+      return variant;
+    }
+    inline size_t index() const {
+      return variant.index();
+    }
+  };
+  inline std__variant_std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec___Person_ create_std__variant_std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec___Person_(const std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>& value) {
+    return std__variant_std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec___Person_(value);
   }
-  inline std::variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>, Person> create_std__variant_std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec___Person_(const Person& value) {
-    return value;
+  inline std__variant_std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec___Person_ create_std__variant_std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec___Person_(const Person& value) {
+    return std__variant_std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec___Person_(value);
   }
-  inline std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec> get_std__variant_std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec___Person__0(const std::variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>, Person>& variant) {
-    return std::get<0>(variant);
+  inline std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec> get_std__variant_std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec___Person__0(const std__variant_std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec___Person_& variantWrapper) {
+    return std::get<0>(variantWrapper.variant);
   }
-  inline Person get_std__variant_std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec___Person__1(const std::variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>, Person>& variant) {
-    return std::get<1>(variant);
+  inline Person get_std__variant_std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec___Person__1(const std__variant_std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec___Person_& variantWrapper) {
+    return std::get<1>(variantWrapper.variant);
   }
-
+  
   /**
    * Specialized version of `std::tuple<double, double>`.
    */
@@ -275,7 +327,7 @@ struct std__variant_std__string__double_ {
   inline std::tuple<double, double> create_std__tuple_double__double_(double arg0, double arg1) {
     return std::tuple<double, double> { arg0, arg1 };
   }
-
+  
   /**
    * Specialized version of `std::tuple<double, double, double>`.
    */
@@ -283,24 +335,35 @@ struct std__variant_std__string__double_ {
   inline std::tuple<double, double, double> create_std__tuple_double__double__double_(double arg0, double arg1, double arg2) {
     return std::tuple<double, double, double> { arg0, arg1, arg2 };
   }
-
+  
   /**
-   * Specialized version of `std::variant<std::tuple<double, double>, std::tuple<double, double, double>>`.
+   * Wrapper struct for `std::variant<std::tuple<double, double>, std::tuple<double, double, double>>`.
+   * std::variant cannot be used in Swift because of a Swift bug.
+   * Not even specializing it works. So we create a wrapper struct.
    */
-  using std__variant_std__tuple_double__double___std__tuple_double__double__double__ = std::variant<std::tuple<double, double>, std::tuple<double, double, double>>;
-  inline std::variant<std::tuple<double, double>, std::tuple<double, double, double>> create_std__variant_std__tuple_double__double___std__tuple_double__double__double__(const std::tuple<double, double>& value) {
-    return value;
+  struct std__variant_std__tuple_double__double___std__tuple_double__double__double__ {
+    std::variant<std::tuple<double, double>, std::tuple<double, double, double>> variant;
+    std__variant_std__tuple_double__double___std__tuple_double__double__double__(std::variant<std::tuple<double, double>, std::tuple<double, double, double>> variant): variant(variant) { }
+    operator std::variant<std::tuple<double, double>, std::tuple<double, double, double>>() const {
+      return variant;
+    }
+    inline size_t index() const {
+      return variant.index();
+    }
+  };
+  inline std__variant_std__tuple_double__double___std__tuple_double__double__double__ create_std__variant_std__tuple_double__double___std__tuple_double__double__double__(const std::tuple<double, double>& value) {
+    return std__variant_std__tuple_double__double___std__tuple_double__double__double__(value);
   }
-  inline std::variant<std::tuple<double, double>, std::tuple<double, double, double>> create_std__variant_std__tuple_double__double___std__tuple_double__double__double__(const std::tuple<double, double, double>& value) {
-    return value;
+  inline std__variant_std__tuple_double__double___std__tuple_double__double__double__ create_std__variant_std__tuple_double__double___std__tuple_double__double__double__(const std::tuple<double, double, double>& value) {
+    return std__variant_std__tuple_double__double___std__tuple_double__double__double__(value);
   }
-  inline std::tuple<double, double> get_std__variant_std__tuple_double__double___std__tuple_double__double__double___0(const std::variant<std::tuple<double, double>, std::tuple<double, double, double>>& variant) {
-    return std::get<0>(variant);
+  inline std::tuple<double, double> get_std__variant_std__tuple_double__double___std__tuple_double__double__double___0(const std__variant_std__tuple_double__double___std__tuple_double__double__double__& variantWrapper) {
+    return std::get<0>(variantWrapper.variant);
   }
-  inline std::tuple<double, double, double> get_std__variant_std__tuple_double__double___std__tuple_double__double__double___1(const std::variant<std::tuple<double, double>, std::tuple<double, double, double>>& variant) {
-    return std::get<1>(variant);
+  inline std::tuple<double, double, double> get_std__variant_std__tuple_double__double___std__tuple_double__double__double___1(const std__variant_std__tuple_double__double___std__tuple_double__double__double__& variantWrapper) {
+    return std::get<1>(variantWrapper.variant);
   }
-
+  
   /**
    * Specialized version of `std::tuple<double, std::string, bool>`.
    */
@@ -308,7 +371,7 @@ struct std__variant_std__string__double_ {
   inline std::tuple<double, std::string, bool> create_std__tuple_double__std__string__bool_(double arg0, const std::string& arg1, bool arg2) {
     return std::tuple<double, std::string, bool> { arg0, arg1, arg2 };
   }
-
+  
   /**
    * Specialized version of `PromiseHolder<int64_t>`.
    */
@@ -316,7 +379,7 @@ struct std__variant_std__string__double_ {
   inline PromiseHolder<int64_t> create_PromiseHolder_int64_t_() {
     return PromiseHolder<int64_t>();
   }
-
+  
   /**
    * Specialized version of `PromiseHolder<void>`.
    */
@@ -324,7 +387,7 @@ struct std__variant_std__string__double_ {
   inline PromiseHolder<void> create_PromiseHolder_void_() {
     return PromiseHolder<void>();
   }
-
+  
   /**
    * Specialized version of `std::function<void()>`.
    */
@@ -336,11 +399,11 @@ struct std__variant_std__string__double_ {
   public:
     explicit Func_void_Wrapper(const std::function<void()>& func): function(func) {}
     explicit Func_void_Wrapper(std::function<void()>&& func): function(std::move(func)) {}
-
+  
     void call() const {
       function();
     }
-
+  
     std::function<void()> function;
   };
   inline Func_void create_Func_void(void* closureHolder, void(*call)(void* /* closureHolder */), void(*destroy)(void*)) {
@@ -352,7 +415,7 @@ struct std__variant_std__string__double_ {
   inline std::shared_ptr<Func_void_Wrapper> share_Func_void(const Func_void& value) {
     return std::make_shared<Func_void_Wrapper>(value);
   }
-
+  
   /**
    * Specialized version of `std::function<std::future<double>()>`.
    */
@@ -364,12 +427,12 @@ struct std__variant_std__string__double_ {
   public:
     explicit Func_std__future_double__Wrapper(const std::function<std::future<double>()>& func): function(func) {}
     explicit Func_std__future_double__Wrapper(std::function<std::future<double>()>&& func): function(std::move(func)) {}
-
+  
     PromiseHolder<double> call() const {
       auto result = function();
       return []() -> PromiseHolder<double> { throw std::runtime_error("Promise<..> cannot be converted to Swift yet!"); }();
     }
-
+  
     std::function<std::future<double>()> function;
   };
   inline Func_std__future_double_ create_Func_std__future_double_(void* closureHolder, PromiseHolder<double>(*call)(void* /* closureHolder */), void(*destroy)(void*)) {
@@ -382,7 +445,7 @@ struct std__variant_std__string__double_ {
   inline std::shared_ptr<Func_std__future_double__Wrapper> share_Func_std__future_double_(const Func_std__future_double_& value) {
     return std::make_shared<Func_std__future_double__Wrapper>(value);
   }
-
+  
   /**
    * Specialized version of `PromiseHolder<double>`.
    */
@@ -390,7 +453,7 @@ struct std__variant_std__string__double_ {
   inline PromiseHolder<double> create_PromiseHolder_double_() {
     return PromiseHolder<double>();
   }
-
+  
   /**
    * Specialized version of `std::optional<double>`.
    */
@@ -398,7 +461,7 @@ struct std__variant_std__string__double_ {
   inline std::optional<double> create_std__optional_double_(const double& value) {
     return std::optional<double>(value);
   }
-
+  
   /**
    * Specialized version of `std::function<void(std::optional<double>)>`.
    */
@@ -410,11 +473,11 @@ struct std__variant_std__string__double_ {
   public:
     explicit Func_void_std__optional_double__Wrapper(const std::function<void(std::optional<double> /* maybe */)>& func): function(func) {}
     explicit Func_void_std__optional_double__Wrapper(std::function<void(std::optional<double> /* maybe */)>&& func): function(std::move(func)) {}
-
+  
     void call(std::optional<double> maybe) const {
       function(maybe);
     }
-
+  
     std::function<void(std::optional<double> /* maybe */)> function;
   };
   inline Func_void_std__optional_double_ create_Func_void_std__optional_double_(void* closureHolder, void(*call)(void* /* closureHolder */, std::optional<double>), void(*destroy)(void*)) {
@@ -426,7 +489,7 @@ struct std__variant_std__string__double_ {
   inline std::shared_ptr<Func_void_std__optional_double__Wrapper> share_Func_void_std__optional_double_(const Func_void_std__optional_double_& value) {
     return std::make_shared<Func_void_std__optional_double__Wrapper>(value);
   }
-
+  
   /**
    * Specialized version of `std::function<std::future<std::string>()>`.
    */
@@ -438,12 +501,12 @@ struct std__variant_std__string__double_ {
   public:
     explicit Func_std__future_std__string__Wrapper(const std::function<std::future<std::string>()>& func): function(func) {}
     explicit Func_std__future_std__string__Wrapper(std::function<std::future<std::string>()>&& func): function(std::move(func)) {}
-
+  
     PromiseHolder<std::string> call() const {
       auto result = function();
       return []() -> PromiseHolder<std::string> { throw std::runtime_error("Promise<..> cannot be converted to Swift yet!"); }();
     }
-
+  
     std::function<std::future<std::string>()> function;
   };
   inline Func_std__future_std__string_ create_Func_std__future_std__string_(void* closureHolder, PromiseHolder<std::string>(*call)(void* /* closureHolder */), void(*destroy)(void*)) {
@@ -456,7 +519,7 @@ struct std__variant_std__string__double_ {
   inline std::shared_ptr<Func_std__future_std__string__Wrapper> share_Func_std__future_std__string_(const Func_std__future_std__string_& value) {
     return std::make_shared<Func_std__future_std__string__Wrapper>(value);
   }
-
+  
   /**
    * Specialized version of `PromiseHolder<std::string>`.
    */

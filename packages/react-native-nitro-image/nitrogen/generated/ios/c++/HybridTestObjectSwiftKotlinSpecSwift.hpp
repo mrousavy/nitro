@@ -132,10 +132,10 @@ namespace margelo::nitro::image {
     }
     inline std::variant<std::string, double> getSomeVariantFirst() noexcept override {
       auto result = _swiftPart.getSomeVariantFirst();
-      return result.value;
+      return result;
     }
     inline void setSomeVariantFirst(const std::variant<std::string, double>& someVariantFirst) noexcept override {
-      _swiftPart.setSomeVariantFirst({ .value = someVariantFirst});
+      _swiftPart.setSomeVariantFirst(someVariantFirst);
     }
     inline std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec> getThisObject() noexcept override {
       auto result = _swiftPart.getThisObject();

@@ -187,7 +187,7 @@ public final class HybridTestObjectSwiftKotlinSpecCxx {
     @inline(__always)
     set {
       self.implementation.someVariantFirst = { () -> Variant_String_Double in
-        switch newValue.value.index() {
+        switch newValue.index() {
           case 0:
             let actual = bridge.get_std__variant_std__string__double__0(newValue)
             return .someString(String(actual))
@@ -195,7 +195,7 @@ public final class HybridTestObjectSwiftKotlinSpecCxx {
             let actual = bridge.get_std__variant_std__string__double__1(newValue)
             return .someDouble(actual)
           default:
-            fatalError("Variant can never have index \(newValue.value.index())!")
+            fatalError("Variant can never have index \(newValue.index())!")
         }
       }()
     }
