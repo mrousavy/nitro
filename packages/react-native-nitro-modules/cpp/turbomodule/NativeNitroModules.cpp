@@ -38,8 +38,8 @@ jsi::Value NativeNitroModules::get(jsi::Runtime& runtime, const jsi::PropNameID&
         [this](jsi::Runtime& runtime, const jsi::Value& thisArg, const jsi::Value* args, size_t count) -> jsi::Value {
 #ifdef NITRO_DEBUG
           if (count != 1) [[unlikely]] {
-            throw jsi::JSError(runtime, "NitroModules.createHybridObject(..) expects 1 argument, but " + std::to_string(count) +
-                                            " were supplied!");
+            throw jsi::JSError(runtime,
+                               "NitroModules.createHybridObject(..) expects 1 argument, but " + std::to_string(count) + " were supplied!");
           }
 #endif
           jsi::String objectName = args[0].asString(runtime);
