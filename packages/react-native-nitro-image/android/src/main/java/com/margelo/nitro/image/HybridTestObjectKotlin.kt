@@ -44,13 +44,15 @@ class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
         map.setString("string", stringValue)
         map.setBigInt("bigint", bigintValue)
         map.setNull("null")
-        map.setAnyArray("array", arrayOf(AnyValue(numberValue), AnyValue(boolValue), AnyValue(stringValue), AnyValue(bigintValue)))
+        val array = arrayOf(AnyValue(numberValue), AnyValue(boolValue), AnyValue(stringValue), AnyValue(bigintValue))
+        map.setAnyArray("array", array)
         map.setAnyObject("object", mapOf(
             "number" to AnyValue(numberValue),
             "bool" to AnyValue(boolValue),
             "string" to AnyValue(stringValue),
             "bigint" to AnyValue(bigintValue),
-            "null" to AnyValue()
+            "null" to AnyValue(),
+            "array" to AnyValue(arrayOf(AnyValue(numberValue), AnyValue(boolValue), AnyValue(stringValue), AnyValue(bigintValue), AnyValue(array)))
         ))
         return map
     }
