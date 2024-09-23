@@ -156,11 +156,11 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
-  abstract fun callWithOptional(value: Double?, callback: (maybe: Double) -> Unit): Unit
+  abstract fun callWithOptional(value: Double?, callback: (maybe: Double?) -> Unit): Unit
   
   @DoNotStrip
   @Keep
-  private fun callWithOptional(value: Double?, callback: Func_void_double): Unit {
+  private fun callWithOptional(value: Double?, callback: Func_void_std__optional_double_): Unit {
     val result = callWithOptional(value, callback.toLambda())
     return result
   }

@@ -40,7 +40,7 @@ namespace NitroModules { class ArrayBuffer; }
 #include <NitroModules/JArrayBuffer.hpp>
 #include <functional>
 #include "JFunc_void.hpp"
-#include "JFunc_void_double.hpp"
+#include "JFunc_void_std__optional_double_.hpp"
 
 namespace margelo::nitro::image {
 
@@ -222,9 +222,9 @@ namespace margelo::nitro::image {
     static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<JFunc_void::javaobject> /* first */, jni::alias_ref<JFunc_void::javaobject> /* second */, jni::alias_ref<JFunc_void::javaobject> /* third */)>("callAll");
     method(_javaPart, JFunc_void::fromCpp(first), JFunc_void::fromCpp(second), JFunc_void::fromCpp(third));
   }
-  void JHybridTestObjectSwiftKotlinSpec::callWithOptional(std::optional<double> value, const std::function<void(double /* maybe */)>& callback) {
-    static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<jni::JDouble> /* value */, jni::alias_ref<JFunc_void_double::javaobject> /* callback */)>("callWithOptional");
-    method(_javaPart, value.has_value() ? jni::JDouble::valueOf(value.value()) : nullptr, JFunc_void_double::fromCpp(callback));
+  void JHybridTestObjectSwiftKotlinSpec::callWithOptional(std::optional<double> value, const std::function<void(std::optional<double> /* maybe */)>& callback) {
+    static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<jni::JDouble> /* value */, jni::alias_ref<JFunc_void_std__optional_double_::javaobject> /* callback */)>("callWithOptional");
+    method(_javaPart, value.has_value() ? jni::JDouble::valueOf(value.value()) : nullptr, JFunc_void_std__optional_double_::fromCpp(callback));
   }
   Car JHybridTestObjectSwiftKotlinSpec::getCar() {
     static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JCar>()>("getCar");

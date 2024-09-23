@@ -16,7 +16,7 @@
 #include "JHybridImageFactorySpec.hpp"
 #include "JHybridTestObjectSwiftKotlinSpec.hpp"
 #include "JFunc_void.hpp"
-#include "JFunc_void_double.hpp"
+#include "JFunc_void_std__optional_double_.hpp"
 #include <NitroModules/JNISharedPtr.hpp>
 #include "HybridTestObjectCpp.hpp"
 
@@ -37,7 +37,7 @@ int initialize(JavaVM* vm) {
     margelo::nitro::image::JFunc_void::registerNatives();
     margelo::nitro::image::JFunc_void::registerNatives();
     margelo::nitro::image::JFunc_void::registerNatives();
-    margelo::nitro::image::JFunc_void_double::registerNatives();
+    margelo::nitro::image::JFunc_void_std__optional_double_::registerNatives();
 
     // Register Nitro Hybrid Objects
     HybridObjectRegistry::registerHybridObjectConstructor(

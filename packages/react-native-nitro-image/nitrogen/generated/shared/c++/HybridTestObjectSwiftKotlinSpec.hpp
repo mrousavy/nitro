@@ -95,7 +95,7 @@ namespace margelo::nitro::image {
       virtual std::future<void> wait(double seconds) = 0;
       virtual void callCallback(const std::function<void()>& callback) = 0;
       virtual void callAll(const std::function<void()>& first, const std::function<void()>& second, const std::function<void()>& third) = 0;
-      virtual void callWithOptional(std::optional<double> value, const std::function<void(double /* maybe */)>& callback) = 0;
+      virtual void callWithOptional(std::optional<double> value, const std::function<void(std::optional<double> /* maybe */)>& callback) = 0;
       virtual Car getCar() = 0;
       virtual bool isCarElectric(const Car& car) = 0;
       virtual std::optional<Person> getDriver(const Car& car) = 0;
