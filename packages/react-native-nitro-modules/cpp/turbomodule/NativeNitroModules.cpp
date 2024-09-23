@@ -19,8 +19,6 @@ using namespace margelo::nitro;
 NativeNitroModules::NativeNitroModules(std::shared_ptr<CallInvoker> jsInvoker)
     : TurboModule(kModuleName, jsInvoker), _callInvoker(jsInvoker) {}
 
-NativeNitroModules::~NativeNitroModules() {}
-
 jsi::Value NativeNitroModules::get(jsi::Runtime& runtime, const jsi::PropNameID& propName) {
   std::string name = propName.utf8(runtime);
 
