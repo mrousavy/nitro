@@ -2,10 +2,10 @@ package com.margelo.nitro.core
 
 /**
  * Represents a Variant type that holds one of the specified types.
+ * In Kotlin, variants between 2 and 9 distinct types are supported.
  */
 sealed class Variant<out T> {
-    data class Variant1<A>(val value: A) : Variant<A>()
-    data class Variant2<A, B>(val value: Either<A, B>) : Variant<Either<A, B>>()
+    data class Variant2<A, B>(val value: Either2<A, B>) : Variant<Either2<A, B>>()
     data class Variant3<A, B, C>(val value: Either3<A, B, C>) : Variant<Either3<A, B, C>>()
     data class Variant4<A, B, C, D>(val value: Either4<A, B, C, D>) : Variant<Either4<A, B, C, D>>()
     data class Variant5<A, B, C, D, E>(val value: Either5<A, B, C, D, E>) : Variant<Either5<A, B, C, D, E>>()
@@ -15,8 +15,7 @@ sealed class Variant<out T> {
     data class Variant9<A, B, C, D, E, F, G, H, I>(val value: Either9<A, B, C, D, E, F, G, H, I>) : Variant<Either9<A, B, C, D, E, F, G, H, I>>()
 
     inline fun <reified A> get(): A? = when (this) {
-        is Variant1<*> -> value as? A
-        is Variant2<*, *> -> (value as? Either.Left)?.value as? A ?: (value as? Either.Right)?.value as? A
+        is Variant2<*, *> -> value.getAs<A>()
         is Variant3<*, *, *> -> value.getAs<A>()
         is Variant4<*, *, *, *> -> value.getAs<A>()
         is Variant5<*, *, *, *, *> -> value.getAs<A>()
@@ -27,9 +26,14 @@ sealed class Variant<out T> {
     }
 }
 
-sealed class Either<out A, out B> {
-    data class Left<A>(val value: A) : Either<A, Nothing>()
-    data class Right<B>(val value: B) : Either<Nothing, B>()
+sealed class Either2<out A, out B> {
+    data class First<A>(val value: A) : Either2<A, Nothing>()
+    data class Second<B>(val value: B) : Either2<Nothing, B>()
+
+    inline fun <reified T> getAs(): T? = when (this) {
+        is First -> value as? T
+        is Second -> value as? T
+    }
 }
 
 sealed class Either3<out A, out B, out C> {
