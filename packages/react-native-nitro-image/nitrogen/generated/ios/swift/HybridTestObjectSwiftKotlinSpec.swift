@@ -54,6 +54,7 @@ public protocol HybridTestObjectSwiftKotlinSpec: HybridObjectSpec {
   func wait(seconds: Double) throws -> Promise<Void>
   func callCallback(callback: @escaping (() -> Void)) throws -> Void
   func callAll(first: @escaping (() -> Void), second: @escaping (() -> Void), third: @escaping (() -> Void)) throws -> Void
+  func callWithOptional(value: Double?, callback: @escaping ((_ maybe: Double) -> Void)) throws -> Void
   func getCar() throws -> Car
   func isCarElectric(car: Car) throws -> Bool
   func getDriver(car: Car) throws -> Person?

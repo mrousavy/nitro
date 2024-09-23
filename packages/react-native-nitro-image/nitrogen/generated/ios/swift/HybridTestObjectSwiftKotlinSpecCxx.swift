@@ -390,6 +390,22 @@ public final class HybridTestObjectSwiftKotlinSpecCxx {
   }
   
   @inline(__always)
+  public func callWithOptional(value: bridge.std__optional_double_, callback: bridge.Func_void_double) -> Void {
+    do {
+      try self.implementation.callWithOptional(value: value.value, callback: { () -> ((Double) -> Void) in
+        let shared = bridge.share_Func_void_double(callback)
+        return { (maybe: Double) -> Void in
+          shared.pointee.call(maybe)
+        }
+      }())
+      return 
+    } catch {
+      let message = "\(error.localizedDescription)"
+      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
+    }
+  }
+  
+  @inline(__always)
   public func getCar() -> Car {
     do {
       let result = try self.implementation.getCar()

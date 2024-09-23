@@ -79,6 +79,10 @@ export interface TestObjectCpp extends HybridObject<{ ios: 'c++' }> {
   // Callbacks
   callCallback(callback: () => void): void
   getValueFromJSCallback(getValue: () => number): void
+  callWithOptional(
+    value: number | undefined,
+    callback: (maybe: number | undefined) => void
+  ): void
   getValueFromJSCallbackAndWait(getValue: () => number): Promise<number>
   callAll(first: () => void, second: () => void, third: () => void): void
   getValueFromJsCallback(
@@ -158,6 +162,10 @@ export interface TestObjectSwiftKotlin
   // Callbacks
   callCallback(callback: () => void): void
   callAll(first: () => void, second: () => void, third: () => void): void
+  callWithOptional(
+    value: number | undefined,
+    callback: (maybe: number | undefined) => void
+  ): void
   // TODO: Callbacks that return a value are not supported in Swift yet!
   // getValueFromJSCallback(getValue: () => number): void
   // getValueFromJSCallbackAndWait(getValue: () => number): Promise<number>

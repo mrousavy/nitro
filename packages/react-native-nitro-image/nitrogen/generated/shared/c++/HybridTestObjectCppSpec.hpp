@@ -112,6 +112,7 @@ namespace margelo::nitro::image {
       virtual std::future<void> wait(double seconds) = 0;
       virtual void callCallback(const std::function<void()>& callback) = 0;
       virtual void getValueFromJSCallback(const std::function<std::future<double>()>& getValue) = 0;
+      virtual void callWithOptional(std::optional<double> value, const std::function<void(double /* maybe */)>& callback) = 0;
       virtual std::future<double> getValueFromJSCallbackAndWait(const std::function<std::future<double>()>& getValue) = 0;
       virtual void callAll(const std::function<void()>& first, const std::function<void()>& second, const std::function<void()>& third) = 0;
       virtual std::future<void> getValueFromJsCallback(const std::function<std::future<std::string>()>& callback, const std::function<void(const std::string& /* valueFromJs */)>& andThenCall) = 0;

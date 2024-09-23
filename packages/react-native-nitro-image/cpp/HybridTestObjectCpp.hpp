@@ -87,6 +87,7 @@ public:
   std::future<int64_t> calculateFibonacciAsync(double value) override;
   std::future<void> wait(double seconds) override;
   void callCallback(const std::function<void()>& callback) override;
+  void callWithOptional(std::optional<double> value, const std::function<void(double /* maybe */)>& callback) override;
   void getValueFromJSCallback(const std::function<std::future<double>()>& getValue) override;
   std::future<double> getValueFromJSCallbackAndWait(const std::function<std::future<double>()>& getValue) override;
   void callAll(const std::function<void()>& first, const std::function<void()>& second, const std::function<void()>& third) override;
