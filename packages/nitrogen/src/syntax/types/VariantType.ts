@@ -29,6 +29,8 @@ export class VariantType implements Type {
         return `std::variant<${types.join(', ')}>`
       case 'swift':
         return `Variant_${types.join('_')}`
+      case 'kotlin':
+        return `Variant_${types.join('_')}`
       default:
         throw new Error(
           `Language ${language} is not yet supported for VariantType!`

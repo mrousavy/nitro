@@ -650,14 +650,13 @@ case ${i}:
       }
       case 'variant': {
         const bridge = this.getBridgeOrThrow()
-        const makeFunc = NitroConfig.getCxxNamespace('swift', bridge.funcName)
         const variant = getTypeAs(this.type, VariantType)
         const cases = variant.variants
           .map((t) => {
             const caseName = getSwiftVariantCaseName(t)
             const wrapping = new SwiftCxxBridgedType(t)
             const parse = wrapping.parseFromSwiftToCpp('value', 'swift')
-            return `case .${caseName}(let value):\n  return ${makeFunc}(${parse})`
+            return `case .${caseName}(let value):\n  return bridge.${bridge.funcName}(${parse})`
           })
           .join('\n')
         switch (language) {

@@ -9,6 +9,8 @@ import Foundation
 import NitroModules
 
 class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
+  var someVariantFirst: Variant_String_Double = .someDouble(55)
+  
   var numberValue: Double = 0.0
 
   var boolValue: Bool = false

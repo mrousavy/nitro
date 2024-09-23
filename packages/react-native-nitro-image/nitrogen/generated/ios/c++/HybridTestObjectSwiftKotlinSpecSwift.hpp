@@ -31,6 +31,7 @@ namespace NitroModules { class ArrayBufferHolder; }
 
 #include <string>
 #include <optional>
+#include <variant>
 #include <memory>
 #include "HybridTestObjectSwiftKotlinSpec.hpp"
 #include "HybridTestObjectSwiftKotlinSpecSwift.hpp"
@@ -128,6 +129,13 @@ namespace margelo::nitro::image {
     }
     inline void setOptionalString(const std::optional<std::string>& optionalString) noexcept override {
       _swiftPart.setOptionalString(optionalString);
+    }
+    inline std::variant<std::string, double> getSomeVariantFirst() noexcept override {
+      auto result = _swiftPart.getSomeVariantFirst();
+      return result.value;
+    }
+    inline void setSomeVariantFirst(const std::variant<std::string, double>& someVariantFirst) noexcept override {
+      _swiftPart.setSomeVariantFirst({ .value = someVariantFirst});
     }
     inline std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec> getThisObject() noexcept override {
       auto result = _swiftPart.getThisObject();

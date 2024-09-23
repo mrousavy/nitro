@@ -172,6 +172,35 @@ public final class HybridTestObjectSwiftKotlinSpecCxx {
     }
   }
   
+  public var someVariantFirst: bridge.std__variant_std__string__double_ {
+    @inline(__always)
+    get {
+      return { () -> bridge.std__variant_std__string__double_ in
+        switch self.implementation.someVariantFirst {
+          case .someString(let value):
+            return bridge.create_std__variant_std__string__double_(std.string(value))
+          case .someDouble(let value):
+            return bridge.create_std__variant_std__string__double_(value)
+        }
+      }()
+    }
+    @inline(__always)
+    set {
+      self.implementation.someVariantFirst = { () -> Variant_String_Double in
+        switch newValue.value.index() {
+          case 0:
+            let actual = bridge.get_std__variant_std__string__double__0(newValue)
+            return .someString(String(actual))
+          case 1:
+            let actual = bridge.get_std__variant_std__string__double__1(newValue)
+            return .someDouble(actual)
+          default:
+            fatalError("Variant can never have index \(newValue.value.index())!")
+        }
+      }()
+    }
+  }
+  
   public var thisObject: HybridTestObjectSwiftKotlinSpecCxx {
     @inline(__always)
     get {

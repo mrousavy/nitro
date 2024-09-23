@@ -28,6 +28,7 @@ namespace NitroModules { class ArrayBuffer; }
 
 #include <string>
 #include <optional>
+#include <variant>
 #include <memory>
 #include "HybridTestObjectSwiftKotlinSpec.hpp"
 #include <NitroModules/AnyMap.hpp>
@@ -76,6 +77,8 @@ namespace margelo::nitro::image {
       virtual void setStringOrNull(const std::optional<std::string>& stringOrNull) = 0;
       virtual std::optional<std::string> getOptionalString() = 0;
       virtual void setOptionalString(const std::optional<std::string>& optionalString) = 0;
+      virtual std::variant<std::string, double> getSomeVariantFirst() SWIFT_PRIVATE = 0;
+      virtual void setSomeVariantFirst(const std::variant<std::string, double>& someVariantFirst) = 0;
       virtual std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec> getThisObject() = 0;
 
     public:
