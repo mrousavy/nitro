@@ -19,8 +19,6 @@ using namespace margelo::nitro;
 NativeNitroModules::NativeNitroModules(std::shared_ptr<CallInvoker> jsInvoker)
     : TurboModule(kModuleName, jsInvoker), _callInvoker(jsInvoker) {}
 
-NativeNitroModules::~NativeNitroModules() {}
-
 jsi::Value NativeNitroModules::get(jsi::Runtime& runtime, const jsi::PropNameID& propName) {
   std::string name = propName.utf8(runtime);
 
@@ -34,21 +32,16 @@ jsi::Value NativeNitroModules::get(jsi::Runtime& runtime, const jsi::PropNameID&
   }
   if (name == "createHybridObject") {
     return jsi::Function::createFromHostFunction(
-        runtime, jsi::PropNameID::forUtf8(runtime, "createHybridObject"), 2,
+        runtime, jsi::PropNameID::forUtf8(runtime, "createHybridObject"), 1,
         [this](jsi::Runtime& runtime, const jsi::Value& thisArg, const jsi::Value* args, size_t count) -> jsi::Value {
 #ifdef NITRO_DEBUG
-          if (count != 1 && count != 2) [[unlikely]] {
-            throw jsi::JSError(runtime, "NitroModules.createHybridObject(..) expects 1 or 2 arguments, but " + std::to_string(count) +
-                                            " were supplied!");
+          if (count != 1) [[unlikely]] {
+            throw jsi::JSError(runtime,
+                               "NitroModules.createHybridObject(..) expects 1 argument, but " + std::to_string(count) + " were supplied!");
           }
 #endif
           jsi::String objectName = args[0].asString(runtime);
-          std::optional<jsi::Object> optionalArgs = std::nullopt;
-          if (count > 1) {
-            optionalArgs = args[1].asObject(runtime);
-          }
-
-          return createHybridObject(runtime, objectName, optionalArgs);
+          return createHybridObject(runtime, objectName);
         });
   }
   if (name == "hasHybridObject") {
@@ -129,11 +122,9 @@ void NativeNitroModules::install(jsi::Runtime& runtime) {
   Dispatcher::installRuntimeGlobalDispatcher(runtime, dispatcher);
 }
 
-jsi::Value NativeNitroModules::createHybridObject(jsi::Runtime& runtime, const jsi::String& hybridObjectName,
-                                                  const std::optional<jsi::Object>&) {
+jsi::Value NativeNitroModules::createHybridObject(jsi::Runtime& runtime, const jsi::String& hybridObjectName) {
   auto name = hybridObjectName.utf8(runtime);
-  // TODO: Pass args? Do we need that?
-  auto hybridObject = HybridObjectRegistry::createHybridObject(name.c_str());
+  auto hybridObject = HybridObjectRegistry::createHybridObject(name);
   return hybridObject->toObject(runtime);
 }
 
