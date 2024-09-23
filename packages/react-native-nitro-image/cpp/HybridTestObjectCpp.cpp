@@ -205,6 +205,11 @@ void HybridTestObjectCpp::callCallback(const std::function<void()>& callback) {
   callback();
 }
 
+void HybridTestObjectCpp::callWithOptional(std::optional<double> value,
+                                           const std::function<void(std::optional<double> /* maybe */)>& callback) {
+  callback(value);
+}
+
 void HybridTestObjectCpp::getValueFromJSCallback(const std::function<std::future<double>()>& getValue) {
   ThreadPool::getSharedPool()->run([=]() {
     std::future<double> future = getValue();

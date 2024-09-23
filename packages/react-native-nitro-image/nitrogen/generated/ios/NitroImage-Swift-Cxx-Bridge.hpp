@@ -389,6 +389,42 @@ namespace margelo::nitro::image::bridge::swift {
   }
   
   /**
+   * Specialized version of `std::optional<double>`.
+   */
+  using std__optional_double_ = std::optional<double>;
+  inline std::optional<double> create_std__optional_double_(const double& value) {
+    return std::optional<double>(value);
+  }
+  
+  /**
+   * Specialized version of `std::function<void(std::optional<double>)>`.
+   */
+  using Func_void_std__optional_double_ = std::function<void(std::optional<double> /* maybe */)>;
+  /**
+   * Wrapper class for a `std::function<void(std::optional<double> / * maybe * /)>`, this can be used from Swift.
+   */
+  class Func_void_std__optional_double__Wrapper {
+  public:
+    explicit Func_void_std__optional_double__Wrapper(const std::function<void(std::optional<double> /* maybe */)>& func): function(func) {}
+    explicit Func_void_std__optional_double__Wrapper(std::function<void(std::optional<double> /* maybe */)>&& func): function(std::move(func)) {}
+  
+    void call(std::optional<double> maybe) const {
+      function(maybe);
+    }
+  
+    std::function<void(std::optional<double> /* maybe */)> function;
+  };
+  inline Func_void_std__optional_double_ create_Func_void_std__optional_double_(void* closureHolder, void(*call)(void* /* closureHolder */, std::optional<double>), void(*destroy)(void*)) {
+    std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
+    return Func_void_std__optional_double_([sharedClosureHolder, call](std::optional<double> maybe) -> void {
+      call(sharedClosureHolder.get(), maybe);
+    });
+  }
+  inline std::shared_ptr<Func_void_std__optional_double__Wrapper> share_Func_void_std__optional_double_(const Func_void_std__optional_double_& value) {
+    return std::make_shared<Func_void_std__optional_double__Wrapper>(value);
+  }
+  
+  /**
    * Specialized version of `std::function<std::future<std::string>()>`.
    */
   using Func_std__future_std__string_ = std::function<std::future<std::string>()>;

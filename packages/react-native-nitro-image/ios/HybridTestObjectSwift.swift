@@ -43,6 +43,10 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
     callback()
   }
 
+  func callWithOptional(value: Double?, callback: @escaping ((_ maybe: Double?) -> Void)) throws -> Void {
+    callback(value)
+  }
+
   var hybridContext: margelo.nitro.HybridContext = .init()
 
   var memorySize: Int {

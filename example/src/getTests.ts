@@ -539,6 +539,28 @@ export function getTests(
         .didNotThrow()
         .equals(true)
     ),
+    createTest('callWithOptional(undefined)', async () =>
+      it(() => {
+        let calledBack: number | undefined
+        testObject.callWithOptional(undefined, (val) => {
+          calledBack = val
+        })
+        return calledBack
+      })
+        .didNotThrow()
+        .equals(undefined)
+    ),
+    createTest('callWithOptional(433)', async () =>
+      it(() => {
+        let calledBack: number | undefined
+        testObject.callWithOptional(433, (val) => {
+          calledBack = val
+        })
+        return calledBack
+      })
+        .didNotThrow()
+        .equals(433)
+    ),
     ...('getValueFromJSCallback' in testObject
       ? [
           createTest('getValueFromJSCallback(...)', async () =>

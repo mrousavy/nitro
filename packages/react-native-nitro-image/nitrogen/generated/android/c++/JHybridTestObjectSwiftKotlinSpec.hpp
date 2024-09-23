@@ -71,6 +71,7 @@ namespace margelo::nitro::image {
     std::future<void> wait(double seconds) override;
     void callCallback(const std::function<void()>& callback) override;
     void callAll(const std::function<void()>& first, const std::function<void()>& second, const std::function<void()>& third) override;
+    void callWithOptional(std::optional<double> value, const std::function<void(std::optional<double> /* maybe */)>& callback) override;
     Car getCar() override;
     bool isCarElectric(const Car& car) override;
     std::optional<Person> getDriver(const Car& car) override;

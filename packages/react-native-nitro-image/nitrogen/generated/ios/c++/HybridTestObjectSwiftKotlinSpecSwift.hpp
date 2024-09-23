@@ -192,6 +192,9 @@ namespace margelo::nitro::image {
     inline void callAll(const std::function<void()>& first, const std::function<void()>& second, const std::function<void()>& third) override {
       _swiftPart.callAll(first, second, third);
     }
+    inline void callWithOptional(std::optional<double> value, const std::function<void(std::optional<double> /* maybe */)>& callback) override {
+      _swiftPart.callWithOptional(value, callback);
+    }
     inline Car getCar() override {
       auto __result = _swiftPart.getCar();
       return __result;
