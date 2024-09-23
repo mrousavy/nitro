@@ -7,16 +7,21 @@
 
 import Foundation
 
+public struct ArrayHolder<T> {
+  let array: [T]
+}
+
 /**
  * Represents any value representable by the `AnyMap`.
  * Note: Arrays are currently not implemented due to a Swift compiler bug https://github.com/swiftlang/swift/issues/75994
  */
-public enum AnyValue {
+public indirect enum AnyValue {
   case null
   case number(Double)
   case bool(Bool)
   case bigint(Int64)
   case string(String)
+  case array(ArrayHolder<AnyValue>)
   case object(Dictionary<String, AnyValue>)
 
   static func create(_ value: margelo.nitro.AnyValue) -> AnyValue {
@@ -30,6 +35,9 @@ public enum AnyValue {
       return .bigint(margelo.nitro.get_AnyValue_bigint(value))
     } else if margelo.nitro.is_AnyValue_string(value) {
       return .string(margelo.nitro.get_AnyValue_string(value).toSwift())
+    } else if margelo.nitro.is_AnyValue_AnyArray(value) {
+      let array = margelo.nitro.get_AnyValue_AnyArray(value).toSwift()
+      return .array(ArrayHolder(array: array))
     } else if margelo.nitro.is_AnyValue_AnyObject(value) {
       return .object(margelo.nitro.get_AnyValue_AnyObject(value).toSwift())
     } else {
@@ -95,7 +103,7 @@ public class AnyMapHolder {
   }
 
   /**
-   * Gets the double value at the given key.
+   * Gets the boolean value at the given key.
    * If no value exists at the given key, or if it is not a double,
    * this function throws.
    */
@@ -104,7 +112,7 @@ public class AnyMapHolder {
   }
 
   /**
-   * Gets the double value at the given key.
+   * Gets the bigint value at the given key.
    * If no value exists at the given key, or if it is not a double,
    * this function throws.
    */
@@ -113,7 +121,7 @@ public class AnyMapHolder {
   }
 
   /**
-   * Gets the double value at the given key.
+   * Gets the string value at the given key.
    * If no value exists at the given key, or if it is not a double,
    * this function throws.
    */
@@ -121,9 +129,19 @@ public class AnyMapHolder {
     let value = _cppPart.pointee.getString(std.string(key))
     return String(value)
   }
-
+  
   /**
-   * Gets the double value at the given key.
+   * Gets the array value at the given key.
+   * If no value exists at the given key, or if it is not a double,
+   * this function throws.
+   */
+  public func getArray(key: String) -> [AnyValue] {
+    let value = _cppPart.pointee.getArray(std.string(key))
+    return value.toSwift()
+  }
+  
+  /**
+   * Gets the object value at the given key.
    * If no value exists at the given key, or if it is not a double,
    * this function throws.
    */
@@ -168,7 +186,14 @@ public class AnyMapHolder {
   public func setString(key: String, value: String) {
     _cppPart.pointee.setString(std.string(key), std.string(value))
   }
-
+  
+  /**
+   * Set the given key to the given array value.
+   */
+  public func setArray(key: String, value: [AnyValue]) {
+    _cppPart.pointee.setArray(std.string(key), margelo.nitro.AnyArray.create(value))
+  }
+  
   /**
    * Set the given key to the given object value.
    */
@@ -212,9 +237,16 @@ public class AnyMapHolder {
   public func isString(key: String) -> Bool {
     return _cppPart.pointee.isString(std.string(key))
   }
-
+  
   /**
-   * Gets whether the given `key` is holding a object value, or not.
+   * Gets whether the given `key` is holding an array value, or not.
+   */
+  public func isArray(key: String) -> Bool {
+    return _cppPart.pointee.isArray(std.string(key))
+  }
+  
+  /**
+   * Gets whether the given `key` is holding an object value, or not.
    */
   public func isObject(key: String) -> Bool {
     return _cppPart.pointee.isObject(std.string(key))
@@ -236,6 +268,8 @@ extension margelo.nitro.AnyValue {
       return create(bigint)
     case .string(let string):
       return create(string)
+    case .array(let array):
+      return create(array.array)
     case .object(let object):
       return create(object)
     }
