@@ -281,11 +281,12 @@ export function getTests(
           null: null,
         })
     ),
-    createTest('mapRoundtrip(...)', () =>
-      it(() => testObject.mapRoundtrip(testObject.createMap()))
+    createTest('mapRoundtrip(...)', () => {
+      const map = testObject.createMap()
+      return it(() => testObject.mapRoundtrip(map))
         .didNotThrow()
-        .equals(testObject.createMap())
-    ),
+        .equals(map)
+    }),
 
     // Test errors
     createTest('funcThatThrows()', () =>
