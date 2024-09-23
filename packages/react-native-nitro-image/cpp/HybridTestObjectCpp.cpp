@@ -115,13 +115,14 @@ std::shared_ptr<AnyMap> HybridTestObjectCpp::createMap() {
   map->setBigInt("bigint", getBigintValue());
   map->setNull("null");
   std::vector<AnyValue> array{getNumberValue(), getBoolValue(), getStringValue(), getBigintValue()};
-  map->setArray("array", {getNumberValue(), getBoolValue(), getStringValue(), getBigintValue(), array});
+  map->setArray("array", array);
+  std::vector<AnyValue> nestedArray{getNumberValue(), getBoolValue(), getStringValue(), getBigintValue(), array};
   map->setObject("object", {{"number", getNumberValue()},
                             {"bool", getBoolValue()},
                             {"string", getStringValue()},
                             {"bigint", getBigintValue()},
                             {"null", std::monostate()},
-                            {"array", array}});
+                            {"array", nestedArray}});
   return map;
 }
 
