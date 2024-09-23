@@ -651,16 +651,16 @@ case ${i}:
       case 'variant': {
         const bridge = this.getBridgeOrThrow()
         const variant = getTypeAs(this.type, VariantType)
-        const cases = variant.variants
-          .map((t) => {
-            const caseName = getSwiftVariantCaseName(t)
-            const wrapping = new SwiftCxxBridgedType(t)
-            const parse = wrapping.parseFromSwiftToCpp('value', 'swift')
-            return `case .${caseName}(let value):\n  return bridge.${bridge.funcName}(${parse})`
-          })
-          .join('\n')
         switch (language) {
           case 'swift':
+            const cases = variant.variants
+              .map((t) => {
+                const caseName = getSwiftVariantCaseName(t)
+                const wrapping = new SwiftCxxBridgedType(t)
+                const parse = wrapping.parseFromSwiftToCpp('value', 'swift')
+                return `case .${caseName}(let value):\n  return bridge.${bridge.funcName}(${parse})`
+              })
+              .join('\n')
             return `
 { () -> bridge.${bridge.specializationName} in
   switch ${swiftParameterName} {
