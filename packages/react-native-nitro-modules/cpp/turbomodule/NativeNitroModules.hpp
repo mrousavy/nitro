@@ -25,7 +25,7 @@ public:
   // Setup
   void install(jsi::Runtime& runtime);
   // Hybrid Objects stuff
-  jsi::Value createHybridObject(jsi::Runtime& runtime, const jsi::String& hybridObjectName, const std::optional<jsi::Object>& args);
+  jsi::Value createHybridObject(jsi::Runtime& runtime, const jsi::String& hybridObjectName);
   jsi::Value hasHybridObject(jsi::Runtime& runtime, const jsi::String& hybridObjectName);
   jsi::Value getAllHybridObjectNames(jsi::Runtime& runtime);
 

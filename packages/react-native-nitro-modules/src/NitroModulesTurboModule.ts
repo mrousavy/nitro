@@ -10,7 +10,7 @@ export interface NativeNitroSpec extends TurboModule {
   // Set up
   install(): void
   // Hybrid Objects stuff
-  createHybridObject(name: string, args?: UnsafeObject): UnsafeObject
+  createHybridObject(name: string): UnsafeObject
   hasHybridObject(name: string): boolean
   getAllHybridObjectNames(): string[]
   // JSI Helpers
