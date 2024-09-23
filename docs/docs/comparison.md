@@ -12,7 +12,7 @@ Nitro is not the only one of it's kind. There's multiple ways to build native mo
 
 ## Benchmarks
 
-Nitro has proven to be up to **~59x faster** than Expo Modules, and **~15x faster** than Turbo Modules. (see [NitroBenchmarks](https://github.com/mrousavy/NitroBenchmarks))
+[This benchmark](https://github.com/mrousavy/NitroBenchmarks) compares the total execution time when calling a single native method 100.000 times:
 
 <table>
   <tr>
@@ -23,7 +23,7 @@ Nitro has proven to be up to **~59x faster** than Expo Modules, and **~15x faste
   </tr>
   <tr>
     <td>100.000x <code>addNumbers(...)</code></td>
-    <td>434.85</td>
+    <td>434.85ms</td>
     <td>115.86ms</td>
     <td><b>7.27ms</b></td>
   </tr>
@@ -34,6 +34,8 @@ Nitro has proven to be up to **~59x faster** than Expo Modules, and **~15x faste
     <td><b>29.94ms</b></td>
   </tr>
 </table>
+
+Note: These benchmarks only compare native method throughput in extreme cases, and do not necessarily reflect real world use-cases. In a real-world app, results may vary. See [NitroBenchmarks](https://github.com/mrousavy/NitroBenchmarks) for full context.
 
 It's not all about performance though - there are some key differences between Nitro-, Turbo- and Expo-Modules:
 
@@ -566,6 +568,8 @@ public class MathModule: Module {
 
 </div>
 </div>
+
+Note: It is also possible for Nitro specs to go out of sync, but only if you forget to run Nitrogen. In both cases, it's a user-error - one more likely than the other.
 
 ## Supported Types
 

@@ -136,6 +136,8 @@ interface GoodDatabase extends HybridObject {
 </div>
 </div>
 
+Keep in mind that switching to a different Thread on the native side introduces a small overhead by itself. This only benefits performance if the actual computation inside the function body takes longer than the thread-switch.
+
 ## Use `ArrayBuffer` for large data
 
 For large data sets, conventional [arrays](types/arrays) are in-efficient as each value has to be copied individually.
@@ -212,12 +214,29 @@ The **Bad** example is significantly slower than **Good**, because Nitro has to 
 
 The **Good** example is significantly faster than **Bad** because the result of `getAllData()` is a [Hybrid Object](types/hybrid-objects), and all the thousands of rows do not have to be converted to JS at all, instead they are simply held in native memory. The function `findRowWithName(...)` iterates through the list on the native side and finds the matching row - only this single row will then have to be converted to JS.
 
+## Properly use `memorySize`
+
+Since Hybrid Objects are implemented in native code, the JS runtime does not know the memory size of such objects.
+To let the JavaScript runtime know about a Hybrid Object's actual size in memory, Nitro exposes a `memorySize` (or `getExternalMemoryPressure()`) API which you can use to give a rough estimation on the native object's memory size (including any heap allocations you perform):
+
+```swift
+class HybridImage : HybridImageSpec {
+  private var cgImage: CGImage
+  public var memorySize: Int {
+    let imageSize = cgImage.width * cgImage.height * cgImage.bytesPerPixel
+    return getSizeOf(self) + imageSize
+  }
+}
+```
+
+That way the JS garbage collector knows how big an `Image` is exactly in memory, and can delete any unused `Image` objects sooner to free up the native memory (`cgImage`), potentially avoiding memory warnings or garbage collector panics.
+
 ## Avoid too many native calls
 
 While Nitro is insanely fast, there is still an unavoidable overhead associated with calling native code from JS.
 In general, it is a good practice to stay within one environment (here; JavaScript) as long as possible, and only call into native when really needed.
 
-Some things (like the `Math.add(...)` function I often use) are faster in JavaScript, as the overhead of calling into native might be bigger than the overall execution time of the function.
+Some things (like the `Math.add(...)` function I often use) are faster in JavaScript, as the overhead of calling into native might be greater than the overall execution time of the function.
 
 ## Use C++ if possible
 

@@ -68,7 +68,7 @@ namespace ${cxxNamespace} {
    */
   struct J${structType.structName} final: public jni::JavaClass<J${structType.structName}> {
   public:
-    static auto constexpr kJavaDescriptor = "${jniClassDescriptor}";
+    static auto constexpr kJavaDescriptor = "L${jniClassDescriptor};";
 
   public:
     /**

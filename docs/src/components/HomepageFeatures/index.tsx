@@ -15,8 +15,8 @@ const FeatureList: FeatureItem[] = [
     description: (
       <>
         Nitro Modules are built ontop of a highly optimized JSI foundation that
-        handles caching and property lookup really well. Nitro is up to{' '}
-        <b>55x faster</b> than ExpoModules and 15x faster than TurboModules.
+        handles caching and property lookup really well. Nitro's communication
+        layer is incredibly efficient and lightweight in memory!
       </>
     ),
   },

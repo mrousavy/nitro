@@ -108,12 +108,24 @@ const config: Config = {
       ],
     },
     algolia: {
-      appId: 'YOUR_APP_ID',
-      apiKey: 'YOUR_SEARCH_API_KEY',
-      indexName: 'nitro',
+      appId: 'Y788VW5KZO',
+      apiKey: 'c077f6bb95a5a11a69a7e65315a795c5',
+      indexName: 'mrousavyio',
       contextualSearch: true,
       searchPagePath: false,
       insights: false,
+    },
+    sitemap: {
+      lastmod: 'date',
+      changefreq: 'weekly',
+      priority: 0.5,
+      ignorePatterns: ['/tags/**'],
+      filename: 'sitemap.xml',
+      createSitemapItems: async (params) => {
+        const {defaultCreateSitemapItems, ...rest} = params;
+        const items = await defaultCreateSitemapItems(rest);
+        return items.filter((item) => !item.url.includes('/page/'));
+      },
     },
     footer: {
       style: 'dark',

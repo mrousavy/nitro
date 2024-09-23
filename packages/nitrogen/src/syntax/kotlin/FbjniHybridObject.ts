@@ -8,6 +8,7 @@ import type { HybridObjectSpec } from '../HybridObjectSpec.js'
 import { Method } from '../Method.js'
 import type { Property } from '../Property.js'
 import type { SourceFile } from '../SourceFile.js'
+import { addJNINativeRegistration } from './JNINativeRegistrations.js'
 import { KotlinCxxBridgedType } from './KotlinCxxBridgedType.js'
 
 export function createFbjniHybridObject(spec: HybridObjectSpec): SourceFile[] {
@@ -41,7 +42,7 @@ namespace ${cxxNamespace} {
   class ${name.JHybridTSpec} final: public jni::HybridClass<${name.JHybridTSpec}, JHybridObject>,
 ${spaces}                public ${name.HybridTSpec} {
   public:
-    static auto constexpr kJavaDescriptor = "${jniClassDescriptor}";
+    static auto constexpr kJavaDescriptor = "L${jniClassDescriptor};";
     static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis);
     static void registerNatives();
 
@@ -75,6 +76,17 @@ ${spaces}                public ${name.HybridTSpec} {
 
 } // namespace ${cxxNamespace}
   `.trim()
+
+  // Make sure we register all native JNI methods on app startup
+  addJNINativeRegistration({
+    namespace: cxxNamespace,
+    className: `${name.JHybridTSpec}`,
+    import: {
+      name: `${name.JHybridTSpec}.hpp`,
+      space: 'user',
+      language: 'c++',
+    },
+  })
 
   const propertiesImpl = spec.properties
     .map((m) => getFbjniPropertyForwardImplementation(spec, m))

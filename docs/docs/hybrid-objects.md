@@ -123,6 +123,11 @@ Hybrid Objects can be implemented in C++, Swift or Kotlin:
     <TabItem value="swift" label="Swift" default>
       ```swift title="HybridMath.swift"
       class HybridMath : HybridMathSpec {
+        public var hybridContext = margelo.nitro.HybridContext()
+        public var memorySize: Int {
+          return getSizeOf(self)
+        }
+
         public var pi: Double {
           return Double.pi
         }
@@ -135,6 +140,9 @@ Hybrid Objects can be implemented in C++, Swift or Kotlin:
     <TabItem value="kotlin" label="Kotlin">
       ```kotlin title="HybridMath.kt"
       class HybridMath : HybridMathSpec() {
+        override val memorySize: Long
+            get() = 0L
+
         override var pi: Double
           get() = Double.PI
 
@@ -208,3 +216,70 @@ Hybrid Objects can be implemented in C++, Swift or Kotlin:
 
   </TabItem>
 </Tabs>
+
+## Memory Size (`memorySize`)
+
+Since it's implementation is in native code, the JavaScript runtime does not know the actual memory size of a Hybrid Object.
+Nitro allows Hybrid Objects to declare their memory size via the `memorySize`/`getExternalMemorySize()` accessors, which can account for any external heap allocations you perform:
+
+```swift
+class HybridImage : HybridImageSpec {
+  private var cgImage: CGImage
+  public var memorySize: Int {
+    let imageSize = cgImage.width * cgImage.height * cgImage.bytesPerPixel
+    return getSizeOf(self) + imageSize
+  }
+}
+```
+
+Any unused `Image` objects can now be deleted sooner by the JS garbage collector, preventing memory pressures or frequent garbage collector calls.
+
+:::tip
+It is safe to return `0` here, but recommended to somewhat closely estimate the actual size of native object if possible.
+:::
+
+## Overriding or adding methods/properties
+
+In a C++ Hybrid Object you can override or add methods and properties by overriding the `loadHybridMethods()` method, and calling `registerHybrids(...)`:
+
+```cpp title="HybridMath.hpp"
+class HybridMath: HybridMathSpec {
+public:
+  std::string sayHello();
+
+  void loadHybridMethods() override {
+    // register base protoype
+    HybridMathSpec::loadHybridMethods();
+    // register all methods we override here
+    registerHybrids(this, [](Prototype& prototype) {
+      prototype.registerHybridMethod("sayHello", &HybridMath::sayHello);
+    });
+  }
+}
+```
+
+If a method or property is added that already exists in a base class it will be overridden - similar to how a JS class can override methods/properties from it's base class.
+The prototype's prototype will still contain the original method/property.
+
+### Raw JSI methods
+
+If for some reason Nitro's typing system is not sufficient in your case, you can also create a raw JSI method using `registerRawHybridMethod(...)` to directly work with the `jsi::Runtime` and `jsi::Value` types:
+
+```cpp title="HybridMath.hpp"
+class HybridMath: HybridMathSpec {
+public:
+  jsi::Value sayHello(jsi::Runtime& runtime,
+                      const jsi::Value& thisValue,
+                      const jsi::Value* args,
+                      size_t count);
+
+  void loadHybridMethods() override {
+    // register base protoype
+    HybridMathSpec::loadHybridMethods();
+    // register all methods we override here
+    registerHybrids(this, [](Prototype& prototype) {
+      prototype.registerRawHybridMethod("sayHello", 0, &HybridMath::sayHello);
+    });
+  }
+}
+```

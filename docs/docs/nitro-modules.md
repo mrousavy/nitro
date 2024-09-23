@@ -29,15 +29,15 @@ cp -R /tmp/nitro/packages/template my-new-library
 
 ### 2. Replace all placeholders
 
-You need to replace all `<<*>>` placeholders and filenames for each value in `nitro.json`. For example, `<<iosModulename>>` can be replaced with `Math`:
+You need to replace all `<<*>>` placeholders and filenames for each value in `nitro.json`. For example, `<<iosModulename>>` can be replaced with `NitroMath`:
 
-```ruby
+```ruby title="NitroMath.podspec"
 ...
 Pod::Spec.new do |s|
 // diff-remove
   s.name         = "<<iosModulename>>"
 // diff-add
-  s.name         = "Math"
+  s.name         = "NitroMath"
 ...
 ```
 
@@ -53,7 +53,7 @@ After properly creating a Nitro Module, it's time to set up an example app to te
   </TabItem>
   <TabItem value="bare" label="Bare RN">
   ```sh
-  npx @react-native-community/cli@latest init MathExample
+  npx @react-native-community/cli@latest init NitroMathExample
   ```
   </TabItem>
 </Tabs>

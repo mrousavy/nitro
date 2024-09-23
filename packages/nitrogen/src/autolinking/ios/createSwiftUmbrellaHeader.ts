@@ -1,12 +1,15 @@
-import { NitroConfig } from '../config/NitroConfig.js'
-import { getForwardDeclaration } from '../syntax/c++/getForwardDeclaration.js'
-import { includeHeader } from '../syntax/c++/includeNitroHeader.js'
-import { getAllKnownTypes } from '../syntax/createType.js'
-import { getHybridObjectName } from '../syntax/getHybridObjectName.js'
-import { createFileMetadataString, isNotDuplicate } from '../syntax/helpers.js'
-import type { SourceFile } from '../syntax/SourceFile.js'
-import { getTypeAs } from '../syntax/types/getTypeAs.js'
-import { HybridObjectType } from '../syntax/types/HybridObjectType.js'
+import { NitroConfig } from '../../config/NitroConfig.js'
+import { getForwardDeclaration } from '../../syntax/c++/getForwardDeclaration.js'
+import { includeHeader } from '../../syntax/c++/includeNitroHeader.js'
+import { getAllKnownTypes } from '../../syntax/createType.js'
+import { getHybridObjectName } from '../../syntax/getHybridObjectName.js'
+import {
+  createFileMetadataString,
+  isNotDuplicate,
+} from '../../syntax/helpers.js'
+import type { SourceFile } from '../../syntax/SourceFile.js'
+import { getTypeAs } from '../../syntax/types/getTypeAs.js'
+import { HybridObjectType } from '../../syntax/types/HybridObjectType.js'
 
 export function createSwiftUmbrellaHeader(): SourceFile {
   const moduleName = NitroConfig.getIosModuleName()

@@ -49,7 +49,7 @@ namespace ${cxxNamespace} {
    */
   struct J${enumType.enumName} final: public jni::JavaClass<J${enumType.enumName}> {
   public:
-    static auto constexpr kJavaDescriptor = "${jniClassDescriptor}";
+    static auto constexpr kJavaDescriptor = "L${jniClassDescriptor};";
 
   public:
     /**

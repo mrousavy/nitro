@@ -38,7 +38,7 @@ class HybridMath : HybridMathSpec {
 
 ## Performance
 
-Nitro is all about **performance**. In [some benchmarks](https://github.com/mrousavy/NitroBenchmarks), Nitro has proven to be up to **~59x faster** than Expo Modules, and **~15x faster** than Turbo Modules.
+Nitro is all about **performance**. [This benchmark](https://github.com/mrousavy/NitroBenchmarks) compares the total execution time when calling a single native method 100.000 times:
 
 <table>
   <tr>
@@ -49,7 +49,7 @@ Nitro is all about **performance**. In [some benchmarks](https://github.com/mrou
   </tr>
   <tr>
     <td>100.000x <code>addNumbers(...)</code></td>
-    <td>434.85</td>
+    <td>434.85ms</td>
     <td>115.86ms</td>
     <td><b>7.27ms</b></td>
   </tr>
@@ -60,6 +60,8 @@ Nitro is all about **performance**. In [some benchmarks](https://github.com/mrou
     <td><b>29.94ms</b></td>
   </tr>
 </table>
+
+Note: These benchmarks only compare native method throughput in extreme cases, and do not necessarily reflect real world use-cases. In a real-world app, results may vary. See [NitroBenchmarks](https://github.com/mrousavy/NitroBenchmarks) for full context.
 
 ### Lightweight layer
 

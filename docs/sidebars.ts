@@ -16,6 +16,9 @@ const sidebars: SidebarsConfig = {
     'nitro-modules',
     'hybrid-objects',
     'nitrogen',
+    'using-nitro-in-your-app',
+    'using-nitro-in-a-library',
+    'configuration-nitro-json',
     {
       type: 'category',
       label: 'Types',

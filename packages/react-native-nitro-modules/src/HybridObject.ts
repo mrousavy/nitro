@@ -21,6 +21,7 @@ export interface PlatformSpec {
  *
  * @type Platforms: The type of platforms this HybridObject will be implemented in. By default, it is
  * a C++ `HybridObject`.
+ * @default { ios: 'c++', android: 'c++' }
  * @example
  * ```ts
  * interface Photo extends HybridObject<{ ios: 'swift', android: 'kotlin' }> {

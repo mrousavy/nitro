@@ -1,5 +1,5 @@
 import { Project } from 'ts-morph'
-import { getPlatformSpec, type Platform } from './getPlatformSpecs.js'
+import { getHybridObjectPlatforms, type Platform } from './getPlatformSpecs.js'
 import { generatePlatformFiles } from './createPlatformSpec.js'
 import path from 'path'
 import { prettifyDirectory } from './getCurrentDir.js'
@@ -13,11 +13,9 @@ import { writeFile } from './writeFile.js'
 import chalk from 'chalk'
 import { groupByPlatform, type SourceFile } from './syntax/SourceFile.js'
 import { Logger } from './Logger.js'
-import { createPodspecRubyExtension } from './autolinking/createPodspecRubyExtension.js'
-import { createCMakeExtension } from './autolinking/createCMakeExtension.js'
-import { createGradleExtension } from './autolinking/createGradleExtension.js'
-import { createSwiftUmbrellaHeader } from './autolinking/createSwiftUmbrellaHeader.js'
-import { createSwiftCxxBridge } from './autolinking/createSwiftCxxBridge.js'
+import { NitroConfig } from './config/NitroConfig.js'
+import { createIOSAutolinking } from './autolinking/createIOSAutolinking.js'
+import { createAndroidAutolinking } from './autolinking/createAndroidAutolinking.js'
 
 interface NitrogenOptions {
   baseDirectory: string
@@ -45,7 +43,13 @@ export async function runNitrogen({
       noUncheckedIndexedAccess: true,
     },
   })
-  project.addSourceFilesAtPaths(path.join(baseDirectory, '/**/*.nitro.ts'))
+
+  const ignorePaths = NitroConfig.getIgnorePaths()
+  const globPattern = [path.join(baseDirectory, '/**/*.nitro.ts')]
+  ignorePaths.forEach((ignorePath) => {
+    globPattern.push('!' + path.join(baseDirectory, ignorePath))
+  })
+  project.addSourceFilesAtPaths(globPattern)
 
   // Loop through all source files to log them
   console.log(
@@ -91,31 +95,9 @@ export async function runNitrogen({
         moduleName = module.getName()
 
         // Find out if it extends HybridObject
-        const heritageClauses = module.getHeritageClauses()
-        const platformSpecs = heritageClauses.map((clause) => {
-          const types = clause.getTypeNodes()
-          for (const type of types) {
-            const typeName = type.getText()
-            if (!typeName.startsWith('HybridObject')) {
-              continue
-            }
-            const genericArguments = type.getTypeArguments()
-            const platformSpecsArgument = genericArguments[0]
-            if (
-              genericArguments.length !== 1 ||
-              platformSpecsArgument == null
-            ) {
-              throw new Error(
-                `${moduleName} does not properly extend HybridObject<T> - ${typeName} does not have a single generic type argument for platform spec languages.`
-              )
-            }
-            return getPlatformSpec(moduleName, platformSpecsArgument)
-          }
-          return undefined
-        })
-        const platformSpec = platformSpecs.find((s) => s != null)
+        const platformSpec = getHybridObjectPlatforms(module)
         if (platformSpec == null) {
-          // Skip this interface if it doesn't extend HybridObject
+          // It does not extend HybridObject, continue..
           continue
         }
 
@@ -181,6 +163,7 @@ export async function runNitrogen({
             `        ❌  Failed to generate spec for ${moduleName}! ${message}`
           )
         )
+        process.exitCode = 1
       }
     }
 
@@ -193,23 +176,24 @@ export async function runNitrogen({
     }
   }
 
+  // Autolinking
   Logger.info(`⛓️   Setting up build configs for autolinking...`)
+  const iosFiles = createIOSAutolinking()
+  const androidFiles = createAndroidAutolinking(writtenFiles)
 
-  // iOS Podspec (Autolinking)
-  const buildSetupFiles = [
-    createSwiftUmbrellaHeader(),
-    ...createSwiftCxxBridge(),
-    createPodspecRubyExtension(),
-    createCMakeExtension(writtenFiles),
-    createGradleExtension(),
-  ]
-  for (const file of buildSetupFiles) {
+  const autolinkingFiles = [iosFiles, androidFiles]
+  for (const autolinking of autolinkingFiles) {
     Logger.info(
-      `    ${chalk.dim(file.platform)}: Creating ${file.platform} autolinking build setup...`
+      `    Creating autolinking build setup for ${chalk.dim(autolinking.platform)}...`
     )
-    const basePath = path.join(outputDirectory, file.platform)
-    const actualPath = await writeFile(basePath, file as unknown as SourceFile)
-    filesAfter.push(actualPath)
+    for (const file of autolinking.sourceFiles) {
+      const basePath = path.join(outputDirectory, file.platform)
+      const actualPath = await writeFile(
+        basePath,
+        file as unknown as SourceFile
+      )
+      filesAfter.push(actualPath)
+    }
   }
 
   return {

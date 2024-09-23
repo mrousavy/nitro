@@ -116,5 +116,5 @@ try {
 
 ## Swift Errors
 
-Due to a Swift compiler bug, Swift Hybrid Objects can currently not throw errors. Instead, they will crash the app.
+Due to a Swift compiler bug, Swift Hybrid Objects can currently not throw errors. Instead, they will raise a `fatalError(..)` which can only be seen if the app is running in Xcode (debugger).
 This should be fixed in the next Xcode version.

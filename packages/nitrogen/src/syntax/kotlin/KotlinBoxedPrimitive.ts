@@ -1,5 +1,3 @@
-import { ArrayType } from '../types/ArrayType.js'
-import { getTypeAs } from '../types/getTypeAs.js'
 import type { Type } from '../types/Type.js'
 
 /**
@@ -18,23 +16,4 @@ export function getKotlinBoxedPrimitiveType(type: Type): string {
     default:
       throw new Error(`Type ${type.kind} is not a primitive!`)
   }
-}
-
-export function isPrimitive(type: Type): boolean {
-  switch (type.kind) {
-    case 'number':
-    case 'boolean':
-    case 'bigint':
-    case 'void':
-    case 'null':
-      return true
-    default:
-      return false
-  }
-}
-
-export function isArrayOfPrimitives(type: Type): boolean {
-  if (type.kind !== 'array') return false
-  const array = getTypeAs(type, ArrayType)
-  return isPrimitive(array.itemType)
 }

@@ -48,6 +48,7 @@ void HybridObjectRegistry::registerHybridObjectConstructor(const std::string& hy
 
 void HybridObjectRegistry::unregisterHybridObjectConstructor(const std::string& hybridObjectName) {
   Logger::log(LogLevel::Info, TAG, "Unregistering HybridObject \"%s\"...", hybridObjectName.c_str());
+  auto& map = HybridObjectRegistry::getRegistry();
   map.erase(hybridObjectName);
 }
 

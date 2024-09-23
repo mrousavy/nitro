@@ -22,7 +22,7 @@ jobs:
           fetch-depth: 0
           ref: ${{ github.event.pull_request.head.ref }}
       - run: |
-          bun install
+          bun install --frozen-lockfile
           git add bun.lockb
           cd example
           bun pods
