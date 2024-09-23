@@ -3,30 +3,26 @@ import { TurboModuleRegistry } from 'react-native'
 import type { UnsafeObject } from 'react-native/Libraries/Types/CodegenTypes'
 import { ModuleNotFoundError } from './ModuleNotFoundError'
 
-// This TurboModule is *not* codegen'd.
-// It's handwritten, because otherwise the app's CMakeLists wants to build it.
-// Instead, we want to build it ourselves and have full control over the CMakeLists.
-export interface NativeNitroSpec extends TurboModule {
+export interface Spec extends TurboModule {
   // Set up
   install(): void
   // Hybrid Objects stuff
-  createHybridObject(name: string, args?: UnsafeObject): UnsafeObject
+  createHybridObject(name: string): UnsafeObject
   hasHybridObject(name: string): boolean
   getAllHybridObjectNames(): string[]
   // JSI Helpers
   hasNativeState(obj: UnsafeObject): boolean
   removeNativeState(obj: UnsafeObject): void
-  buildType: 'debug' | 'release'
+  getBuildType(): 'debug' | 'release'
   box(obj: UnsafeObject): UnsafeObject
 }
 
-let turboModule: NativeNitroSpec | undefined
-export function getNativeNitroModules(): NativeNitroSpec {
+let turboModule: Spec | undefined
+export function getNativeNitroModules(): Spec {
   if (turboModule == null) {
     try {
       // 1. Get (and initialize) the C++ TurboModule
-      turboModule =
-        TurboModuleRegistry.getEnforcing<NativeNitroSpec>('NitroModulesCxx')
+      turboModule = TurboModuleRegistry.getEnforcing<Spec>('NitroModulesCxx')
 
       // 2. Install Dispatcher and required bindings into the Runtime
       turboModule.install()

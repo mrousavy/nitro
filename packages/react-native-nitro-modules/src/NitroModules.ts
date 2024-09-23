@@ -1,4 +1,4 @@
-import { getNativeNitroModules } from './NitroModulesTurboModule'
+import { getNativeNitroModules } from './NativeNitroModules'
 import type { HybridObject } from './HybridObject'
 
 /**
@@ -76,7 +76,7 @@ export const NitroModules = {
    */
   get buildType(): 'debug' | 'release' {
     const nitro = getNativeNitroModules()
-    return nitro.buildType
+    return nitro.getBuildType()
   },
   /**
    * Boxes the given {@linkcode hybridObject} into a {@linkcode BoxedHybridObject<T>}, which can
