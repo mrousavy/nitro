@@ -1,34 +1,8 @@
 package com.margelo.nitro.core
 
-/**
- * Represents a Variant type that holds one of the specified types.
- * In Kotlin, variants between 2 and 9 distinct types are supported.
- */
-sealed class Variant<out T> {
-    data class Variant2<A, B>(val value: Either2<A, B>) : Variant<Either2<A, B>>()
-    data class Variant3<A, B, C>(val value: Either3<A, B, C>) : Variant<Either3<A, B, C>>()
-    data class Variant4<A, B, C, D>(val value: Either4<A, B, C, D>) : Variant<Either4<A, B, C, D>>()
-    data class Variant5<A, B, C, D, E>(val value: Either5<A, B, C, D, E>) : Variant<Either5<A, B, C, D, E>>()
-    data class Variant6<A, B, C, D, E, F>(val value: Either6<A, B, C, D, E, F>) : Variant<Either6<A, B, C, D, E, F>>()
-    data class Variant7<A, B, C, D, E, F, G>(val value: Either7<A, B, C, D, E, F, G>) : Variant<Either7<A, B, C, D, E, F, G>>()
-    data class Variant8<A, B, C, D, E, F, G, H>(val value: Either8<A, B, C, D, E, F, G, H>) : Variant<Either8<A, B, C, D, E, F, G, H>>()
-    data class Variant9<A, B, C, D, E, F, G, H, I>(val value: Either9<A, B, C, D, E, F, G, H, I>) : Variant<Either9<A, B, C, D, E, F, G, H, I>>()
-
-    inline fun <reified A> get(): A? = when (this) {
-        is Variant2<*, *> -> value.getAs<A>()
-        is Variant3<*, *, *> -> value.getAs<A>()
-        is Variant4<*, *, *, *> -> value.getAs<A>()
-        is Variant5<*, *, *, *, *> -> value.getAs<A>()
-        is Variant6<*, *, *, *, *, *> -> value.getAs<A>()
-        is Variant7<*, *, *, *, *, *, *> -> value.getAs<A>()
-        is Variant8<*, *, *, *, *, *, *, *> -> value.getAs<A>()
-        is Variant9<*, *, *, *, *, *, *, *, *> -> value.getAs<A>()
-    }
-}
-
-sealed class Either2<out A, out B> {
-    data class First<A>(val value: A) : Either2<A, Nothing>()
-    data class Second<B>(val value: B) : Either2<Nothing, B>()
+sealed class Variant2<out A, out B> {
+    data class First<A>(val value: A) : Variant2<A, Nothing>()
+    data class Second<B>(val value: B) : Variant2<Nothing, B>()
 
     inline fun <reified T> getAs(): T? = when (this) {
         is First -> value as? T
@@ -36,10 +10,10 @@ sealed class Either2<out A, out B> {
     }
 }
 
-sealed class Either3<out A, out B, out C> {
-    data class First<A>(val value: A) : Either3<A, Nothing, Nothing>()
-    data class Second<B>(val value: B) : Either3<Nothing, B, Nothing>()
-    data class Third<C>(val value: C) : Either3<Nothing, Nothing, C>()
+sealed class Variant3<out A, out B, out C> {
+    data class First<A>(val value: A) : Variant3<A, Nothing, Nothing>()
+    data class Second<B>(val value: B) : Variant3<Nothing, B, Nothing>()
+    data class Third<C>(val value: C) : Variant3<Nothing, Nothing, C>()
 
     inline fun <reified T> getAs(): T? = when (this) {
         is First -> value as? T
@@ -48,11 +22,11 @@ sealed class Either3<out A, out B, out C> {
     }
 }
 
-sealed class Either4<out A, out B, out C, out D> {
-    data class First<A>(val value: A) : Either4<A, Nothing, Nothing, Nothing>()
-    data class Second<B>(val value: B) : Either4<Nothing, B, Nothing, Nothing>()
-    data class Third<C>(val value: C) : Either4<Nothing, Nothing, C, Nothing>()
-    data class Fourth<D>(val value: D) : Either4<Nothing, Nothing, Nothing, D>()
+sealed class Variant4<out A, out B, out C, out D> {
+    data class First<A>(val value: A) : Variant4<A, Nothing, Nothing, Nothing>()
+    data class Second<B>(val value: B) : Variant4<Nothing, B, Nothing, Nothing>()
+    data class Third<C>(val value: C) : Variant4<Nothing, Nothing, C, Nothing>()
+    data class Fourth<D>(val value: D) : Variant4<Nothing, Nothing, Nothing, D>()
 
     inline fun <reified T> getAs(): T? = when (this) {
         is First -> value as? T
@@ -62,12 +36,12 @@ sealed class Either4<out A, out B, out C, out D> {
     }
 }
 
-sealed class Either5<out A, out B, out C, out D, out E> {
-    data class First<A>(val value: A) : Either5<A, Nothing, Nothing, Nothing, Nothing>()
-    data class Second<B>(val value: B) : Either5<Nothing, B, Nothing, Nothing, Nothing>()
-    data class Third<C>(val value: C) : Either5<Nothing, Nothing, C, Nothing, Nothing>()
-    data class Fourth<D>(val value: D) : Either5<Nothing, Nothing, Nothing, D, Nothing>()
-    data class Fifth<E>(val value: E) : Either5<Nothing, Nothing, Nothing, Nothing, E>()
+sealed class Variant5<out A, out B, out C, out D, out E> {
+    data class First<A>(val value: A) : Variant5<A, Nothing, Nothing, Nothing, Nothing>()
+    data class Second<B>(val value: B) : Variant5<Nothing, B, Nothing, Nothing, Nothing>()
+    data class Third<C>(val value: C) : Variant5<Nothing, Nothing, C, Nothing, Nothing>()
+    data class Fourth<D>(val value: D) : Variant5<Nothing, Nothing, Nothing, D, Nothing>()
+    data class Fifth<E>(val value: E) : Variant5<Nothing, Nothing, Nothing, Nothing, E>()
 
     inline fun <reified T> getAs(): T? = when (this) {
         is First -> value as? T
@@ -78,13 +52,13 @@ sealed class Either5<out A, out B, out C, out D, out E> {
     }
 }
 
-sealed class Either6<out A, out B, out C, out D, out E, out F> {
-    data class First<A>(val value: A) : Either6<A, Nothing, Nothing, Nothing, Nothing, Nothing>()
-    data class Second<B>(val value: B) : Either6<Nothing, B, Nothing, Nothing, Nothing, Nothing>()
-    data class Third<C>(val value: C) : Either6<Nothing, Nothing, C, Nothing, Nothing, Nothing>()
-    data class Fourth<D>(val value: D) : Either6<Nothing, Nothing, Nothing, D, Nothing, Nothing>()
-    data class Fifth<E>(val value: E) : Either6<Nothing, Nothing, Nothing, Nothing, E, Nothing>()
-    data class Sixth<F>(val value: F) : Either6<Nothing, Nothing, Nothing, Nothing, Nothing, F>()
+sealed class Variant6<out A, out B, out C, out D, out E, out F> {
+    data class First<A>(val value: A) : Variant6<A, Nothing, Nothing, Nothing, Nothing, Nothing>()
+    data class Second<B>(val value: B) : Variant6<Nothing, B, Nothing, Nothing, Nothing, Nothing>()
+    data class Third<C>(val value: C) : Variant6<Nothing, Nothing, C, Nothing, Nothing, Nothing>()
+    data class Fourth<D>(val value: D) : Variant6<Nothing, Nothing, Nothing, D, Nothing, Nothing>()
+    data class Fifth<E>(val value: E) : Variant6<Nothing, Nothing, Nothing, Nothing, E, Nothing>()
+    data class Sixth<F>(val value: F) : Variant6<Nothing, Nothing, Nothing, Nothing, Nothing, F>()
 
     inline fun <reified T> getAs(): T? = when (this) {
         is First -> value as? T
@@ -96,14 +70,14 @@ sealed class Either6<out A, out B, out C, out D, out E, out F> {
     }
 }
 
-sealed class Either7<out A, out B, out C, out D, out E, out F, out G> {
-  data class First<A>(val value: A) : Either7<A, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing>()
-  data class Second<B>(val value: B) : Either7<Nothing, B, Nothing, Nothing, Nothing, Nothing, Nothing>()
-  data class Third<C>(val value: C) : Either7<Nothing, Nothing, C, Nothing, Nothing, Nothing, Nothing>()
-  data class Fourth<D>(val value: D) : Either7<Nothing, Nothing, Nothing, D, Nothing, Nothing, Nothing>()
-  data class Fifth<E>(val value: E) : Either7<Nothing, Nothing, Nothing, Nothing, E, Nothing, Nothing>()
-  data class Sixth<F>(val value: F) : Either7<Nothing, Nothing, Nothing, Nothing, Nothing, F, Nothing>()
-  data class Seventh<G>(val value: G) : Either7<Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, G>()
+sealed class Variant7<out A, out B, out C, out D, out E, out F, out G> {
+  data class First<A>(val value: A) : Variant7<A, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing>()
+  data class Second<B>(val value: B) : Variant7<Nothing, B, Nothing, Nothing, Nothing, Nothing, Nothing>()
+  data class Third<C>(val value: C) : Variant7<Nothing, Nothing, C, Nothing, Nothing, Nothing, Nothing>()
+  data class Fourth<D>(val value: D) : Variant7<Nothing, Nothing, Nothing, D, Nothing, Nothing, Nothing>()
+  data class Fifth<E>(val value: E) : Variant7<Nothing, Nothing, Nothing, Nothing, E, Nothing, Nothing>()
+  data class Sixth<F>(val value: F) : Variant7<Nothing, Nothing, Nothing, Nothing, Nothing, F, Nothing>()
+  data class Seventh<G>(val value: G) : Variant7<Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, G>()
 
   inline fun <reified T> getAs(): T? = when (this) {
       is First -> value as? T
@@ -116,15 +90,15 @@ sealed class Either7<out A, out B, out C, out D, out E, out F, out G> {
   }
 }
 
-sealed class Either8<out A, out B, out C, out D, out E, out F, out G, out H> {
-  data class First<A>(val value: A) : Either8<A, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing>()
-  data class Second<B>(val value: B) : Either8<Nothing, B, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing>()
-  data class Third<C>(val value: C) : Either8<Nothing, Nothing, C, Nothing, Nothing, Nothing, Nothing, Nothing>()
-  data class Fourth<D>(val value: D) : Either8<Nothing, Nothing, Nothing, D, Nothing, Nothing, Nothing, Nothing>()
-  data class Fifth<E>(val value: E) : Either8<Nothing, Nothing, Nothing, Nothing, E, Nothing, Nothing, Nothing>()
-  data class Sixth<F>(val value: F) : Either8<Nothing, Nothing, Nothing, Nothing, Nothing, F, Nothing, Nothing>()
-  data class Seventh<G>(val value: G) : Either8<Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, G, Nothing>()
-  data class Eighth<H>(val value: H) : Either8<Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, H>()
+sealed class Variant8<out A, out B, out C, out D, out E, out F, out G, out H> {
+  data class First<A>(val value: A) : Variant8<A, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing>()
+  data class Second<B>(val value: B) : Variant8<Nothing, B, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing>()
+  data class Third<C>(val value: C) : Variant8<Nothing, Nothing, C, Nothing, Nothing, Nothing, Nothing, Nothing>()
+  data class Fourth<D>(val value: D) : Variant8<Nothing, Nothing, Nothing, D, Nothing, Nothing, Nothing, Nothing>()
+  data class Fifth<E>(val value: E) : Variant8<Nothing, Nothing, Nothing, Nothing, E, Nothing, Nothing, Nothing>()
+  data class Sixth<F>(val value: F) : Variant8<Nothing, Nothing, Nothing, Nothing, Nothing, F, Nothing, Nothing>()
+  data class Seventh<G>(val value: G) : Variant8<Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, G, Nothing>()
+  data class Eighth<H>(val value: H) : Variant8<Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, H>()
 
   inline fun <reified T> getAs(): T? = when (this) {
       is First -> value as? T
@@ -138,16 +112,16 @@ sealed class Either8<out A, out B, out C, out D, out E, out F, out G, out H> {
   }
 }
 
-sealed class Either9<out A, out B, out C, out D, out E, out F, out G, out H, out I> {
-  data class First<A>(val value: A) : Either9<A, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing>()
-  data class Second<B>(val value: B) : Either9<Nothing, B, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing>()
-  data class Third<C>(val value: C) : Either9<Nothing, Nothing, C, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing>()
-  data class Fourth<D>(val value: D) : Either9<Nothing, Nothing, Nothing, D, Nothing, Nothing, Nothing, Nothing, Nothing>()
-  data class Fifth<E>(val value: E) : Either9<Nothing, Nothing, Nothing, Nothing, E, Nothing, Nothing, Nothing, Nothing>()
-  data class Sixth<F>(val value: F) : Either9<Nothing, Nothing, Nothing, Nothing, Nothing, F, Nothing, Nothing, Nothing>()
-  data class Seventh<G>(val value: G) : Either9<Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, G, Nothing, Nothing>()
-  data class Eighth<H>(val value: H) : Either9<Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, H, Nothing>()
-  data class Ninth<I>(val value: I) : Either9<Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, I>()
+sealed class Variant9<out A, out B, out C, out D, out E, out F, out G, out H, out I> {
+  data class First<A>(val value: A) : Variant9<A, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing>()
+  data class Second<B>(val value: B) : Variant9<Nothing, B, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing>()
+  data class Third<C>(val value: C) : Variant9<Nothing, Nothing, C, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing>()
+  data class Fourth<D>(val value: D) : Variant9<Nothing, Nothing, Nothing, D, Nothing, Nothing, Nothing, Nothing, Nothing>()
+  data class Fifth<E>(val value: E) : Variant9<Nothing, Nothing, Nothing, Nothing, E, Nothing, Nothing, Nothing, Nothing>()
+  data class Sixth<F>(val value: F) : Variant9<Nothing, Nothing, Nothing, Nothing, Nothing, F, Nothing, Nothing, Nothing>()
+  data class Seventh<G>(val value: G) : Variant9<Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, G, Nothing, Nothing>()
+  data class Eighth<H>(val value: H) : Variant9<Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, H, Nothing>()
+  data class Ninth<I>(val value: I) : Variant9<Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, I>()
 
   inline fun <reified T> getAs(): T? = when (this) {
       is First -> value as? T

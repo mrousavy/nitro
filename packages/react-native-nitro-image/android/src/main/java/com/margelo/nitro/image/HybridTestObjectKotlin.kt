@@ -5,10 +5,8 @@ import com.margelo.nitro.core.AnyMap
 import com.margelo.nitro.core.AnyValue
 import com.margelo.nitro.core.ArrayBuffer
 import com.margelo.nitro.core.Promise
+import com.margelo.nitro.core.Variant2
 import kotlinx.coroutines.delay
-import java.nio.ByteBuffer
-import kotlin.concurrent.thread
-
 
 class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
     override var numberValue: Double = 0.0
@@ -20,9 +18,7 @@ class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
     override var optionalString: String? = null
     override val thisObject: HybridTestObjectSwiftKotlinSpec
         get() = this
-    override var someVariantFirst:
-        get() = TODO("Not yet implemented")
-        set(value) {}
+    override var someVariantFirst: Variant2<String, Double> = Variant2.First("Hello world!")
 
     override fun simpleFunc() {
         // do nothing
