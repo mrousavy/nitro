@@ -7,8 +7,8 @@
 
 #pragma once
 
-#include <ReactCommon/TurboModule.h>
 #include <ReactCodegen/NitroModulesJSI.h>
+#include <ReactCommon/TurboModule.h>
 
 namespace facebook::react {
 
@@ -23,19 +23,19 @@ public:
 public:
   // Setup
   void install(jsi::Runtime& runtime);
-  jsi::String getBuildType(jsi::Runtime &rt);
-  
+  jsi::String getBuildType(jsi::Runtime& rt);
+
   // Creating Hybrid Objects
-  jsi::Object createHybridObject(jsi::Runtime &rt, jsi::String name);
-  bool hasHybridObject(jsi::Runtime &rt, jsi::String name);
-  jsi::Array getAllHybridObjectNames(jsi::Runtime &rt);
-  
+  jsi::Object createHybridObject(jsi::Runtime& rt, jsi::String name);
+  bool hasHybridObject(jsi::Runtime& rt, jsi::String name);
+  jsi::Array getAllHybridObjectNames(jsi::Runtime& rt);
+
   // Boxing
-  jsi::Object box(jsi::Runtime &rt, jsi::Object obj);
-  
+  jsi::Object box(jsi::Runtime& rt, jsi::Object obj);
+
   // NativeState Helpers
-  bool hasNativeState(jsi::Runtime &rt, jsi::Object obj);
-  void removeNativeState(jsi::Runtime &rt, jsi::Object obj);
+  bool hasNativeState(jsi::Runtime& rt, jsi::Object obj);
+  void removeNativeState(jsi::Runtime& rt, jsi::Object obj);
 
 public:
   constexpr static auto kModuleName = "NitroModulesCxx";

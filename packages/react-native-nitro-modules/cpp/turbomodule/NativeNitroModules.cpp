@@ -31,9 +31,9 @@ void NativeNitroModules::install(jsi::Runtime& runtime) {
 
 jsi::String NativeNitroModules::getBuildType(jsi::Runtime& runtime) {
 #ifdef NITRO_DEBUG
-    return jsi::String::createFromAscii(runtime, "debug");
+  return jsi::String::createFromAscii(runtime, "debug");
 #else
-    return jsi::String::createFromAscii(runtime, "release");
+  return jsi::String::createFromAscii(runtime, "release");
 #endif
 }
 
