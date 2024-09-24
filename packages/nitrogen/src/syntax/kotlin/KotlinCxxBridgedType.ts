@@ -281,7 +281,7 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
               const bridge = new KotlinCxxBridgedType(v)
               return bridge.getTypeCode('c++', true)
             })
-            return `JVariant${variant.variants.length}<${variants.join(', ')}>`
+            return `JVariant<${variants.join(', ')}>`
           default:
             return this.type.getCode(language)
         }
@@ -380,9 +380,12 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
       case 'variant': {
         switch (language) {
           case 'c++':
-            return `[=]() -> ${this.asJniReferenceType('alias')} { throw std::runtime_error("Cannot convert C++ variant to Kotlin/JNI variant yet!"); }()`
-          // const variant = getTypeAs(this.type, VariantType)
-          // return `JVariant${variant.variants.length}::create(${parameterName})`
+            const variant = getTypeAs(this.type, VariantType)
+            const variants = variant.variants.map((v) => {
+              const bridge = new KotlinCxxBridgedType(v)
+              return bridge.getTypeCode('c++', true)
+            })
+            return `JVariant<${variants.join(', ')}>::create(${parameterName})`
           default:
             return parameterName
         }
