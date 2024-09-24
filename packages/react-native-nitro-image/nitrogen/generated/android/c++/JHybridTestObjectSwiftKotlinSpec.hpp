@@ -52,6 +52,8 @@ namespace margelo::nitro::image {
     void setStringOrNull(const std::optional<std::string>& stringOrNull) override;
     std::optional<std::string> getOptionalString() override;
     void setOptionalString(const std::optional<std::string>& optionalString) override;
+    std::variant<std::string, double> getSomeVariantFirst() override;
+    void setSomeVariantFirst(const std::variant<std::string, double>& someVariantFirst) override;
     std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec> getThisObject() override;
 
   public:

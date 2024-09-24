@@ -134,9 +134,8 @@ export interface TestObjectSwiftKotlin
   tryMiddleParam(num: number, boo: boolean | undefined, str: string): string
   tryOptionalEnum(value?: Powertrain): Powertrain | undefined
 
-  // TODO: Variants are not yet supported in Swift/Kotlin!
   // Variants
-  // someVariant: number | string
+  someVariantFirst: number | string
   // passVariant(
   //   either: number | string | number[] | string[] | boolean
   // ): number | string

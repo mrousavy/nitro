@@ -6,9 +6,6 @@ import com.margelo.nitro.core.AnyValue
 import com.margelo.nitro.core.ArrayBuffer
 import com.margelo.nitro.core.Promise
 import kotlinx.coroutines.delay
-import java.nio.ByteBuffer
-import kotlin.concurrent.thread
-
 
 class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
     override var numberValue: Double = 0.0
@@ -20,6 +17,7 @@ class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
     override var optionalString: String? = null
     override val thisObject: HybridTestObjectSwiftKotlinSpec
         get() = this
+    override var someVariantFirst: Variant_String_Double = Variant_String_Double.create(55.05)
 
     override fun simpleFunc() {
         // do nothing
