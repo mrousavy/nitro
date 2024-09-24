@@ -19,6 +19,15 @@ namespace margelo::nitro::image {
   struct JVariant_String_Double final: public jni::JavaClass<JVariant_String_Double> {
   public:
     static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Variant_String_Double;";
+
+    static jni::local_ref<JVariant_String_Double> create(jni::alias_ref<jni::JString> value) {
+      static const auto method = javaClassStatic()->getStaticMethod<JVariant_String_Double(jni::alias_ref<jni::JString>)>("create");
+      return method(javaClassStatic(), value);
+    }
+    static jni::local_ref<JVariant_String_Double> create(double value) {
+      static const auto method = javaClassStatic()->getStaticMethod<JVariant_String_Double(double)>("create");
+      return method(javaClassStatic(), value);
+    }
   };
 
 } // namespace margelo::nitro::image

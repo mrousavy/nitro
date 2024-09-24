@@ -30,11 +30,9 @@ sealed class Variant_String_Double {
     get() = this is SomeDouble
 
   companion object {
-    fun create(value: String): Variant_String_Double {
-      return SomeString(value)
-    }
-    fun create(value: Double): Variant_String_Double {
-      return SomeDouble(value)
-    }
+    @JvmStatic
+    fun create(value: String): Variant_String_Double = SomeString(value)
+    @JvmStatic
+    fun create(value: Double): Variant_String_Double = SomeDouble(value)
   }
 }

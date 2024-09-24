@@ -4,6 +4,7 @@ import { createFileMetadataString } from '../helpers.js'
 import type { SourceFile } from '../SourceFile.js'
 import type { Type } from '../types/Type.js'
 import type { VariantType } from '../types/VariantType.js'
+import { KotlinCxxBridgedType } from './KotlinCxxBridgedType.js'
 
 function getVariantInnerName(variantType: Type): string {
   return `Some${variantType.getCode('kotlin')}`
@@ -38,9 +39,8 @@ val is${v.getCode('kotlin')}: Boolean
   const createFunctions = variant.variants.map((v) => {
     const innerName = getVariantInnerName(v)
     return `
-fun create(value: ${v.getCode('kotlin')}): ${kotlinName} {
-  return ${innerName}(value)
-}
+@JvmStatic
+fun create(value: ${v.getCode('kotlin')}): ${kotlinName} = ${innerName}(value)
     `.trim()
   })
   const code = `
@@ -74,6 +74,15 @@ sealed class ${kotlinName} {
     'c++/jni',
     kotlinName
   )
+  const cppCreateFuncs = variant.variants.map((v) => {
+    const bridge = new KotlinCxxBridgedType(v)
+    return `
+static jni::local_ref<J${kotlinName}> create(${bridge.asJniReferenceType('alias')} value) {
+  static const auto method = javaClassStatic()->getStaticMethod<J${kotlinName}(${bridge.asJniReferenceType('alias')})>("create");
+  return method(javaClassStatic(), value);
+}
+    `.trim()
+  })
   const fbjniCode = `
 ${createFileMetadataString(`J${kotlinName}.hpp`)}
 
@@ -91,6 +100,8 @@ namespace ${cxxNamespace} {
   struct J${kotlinName} final: public jni::JavaClass<J${kotlinName}> {
   public:
     static auto constexpr kJavaDescriptor = "L${jniClassDescriptor};";
+
+    ${indent(cppCreateFuncs.join('\n'), '    ')}
   };
 
 } // namespace ${cxxNamespace}
