@@ -93,11 +93,17 @@ public:
       static const std::string descriptor = std::string(className) + "$" + std::string(innerClassName) + ";";
       return descriptor.c_str();
     }();
+    using Base = jni::JavaClass<JTypeClass<Index>, JVariant<Ts...>>;
+    using Base::self;
 
-    using T = std::tuple_element_t<Index, std::tuple<Ts...>>;
+    using T = std::tuple_element_t<Index - 1, std::tuple<Ts...>>;
     T getValue() {
       static const auto method = JTypeClass::javaClassStatic()->getMethod<T()>("getValue");
-      return method(this->self());
+      return method(self());
+    }
+
+    static jni::local_ref<JTypeClass<Index>> create(jni::alias_ref<T> arg) {
+        return Base::newInstance(arg);
     }
   };
 
@@ -109,7 +115,8 @@ public:
    */
   template <typename T>
   static jni::local_ref<JVariant<Ts...>> create(T value) {
-    return JClassForType<T>::newInstance(value);
+    using Inner = JClassForType<T>;
+    return Inner::create(value);
   }
 
   /**
