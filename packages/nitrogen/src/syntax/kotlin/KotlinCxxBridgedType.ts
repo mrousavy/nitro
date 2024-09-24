@@ -389,7 +389,7 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
           case 'c++':
             const variant = getTypeAs(this.type, VariantType)
             const name = getVariantName(variant)
-            return `J${name}::create(${parameterName})`
+            return `J${name}::fromCpp(${parameterName})`
           default:
             return parameterName
         }
@@ -559,9 +559,7 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
       case 'variant': {
         switch (language) {
           case 'c++':
-            const variant = getTypeAs(this.type, VariantType)
-            const name = getVariantName(variant)
-            return `J${name}::getVariant(${parameterName})`
+            return `${parameterName}->toCpp()`
           default:
             return parameterName
         }

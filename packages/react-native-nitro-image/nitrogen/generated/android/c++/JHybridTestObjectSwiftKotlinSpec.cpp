@@ -128,11 +128,11 @@ namespace margelo::nitro::image {
   std::variant<std::string, double> JHybridTestObjectSwiftKotlinSpec::getSomeVariantFirst() {
     static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JVariant_String_Double>()>("getSomeVariantFirst");
     auto result = method(_javaPart);
-    return JVariant_String_Double::getVariant(result);
+    return result->toCpp();
   }
   void JHybridTestObjectSwiftKotlinSpec::setSomeVariantFirst(const std::variant<std::string, double>& someVariantFirst) {
     static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<JVariant_String_Double> /* someVariantFirst */)>("setSomeVariantFirst");
-    method(_javaPart, JVariant_String_Double::create(someVariantFirst));
+    method(_javaPart, JVariant_String_Double::fromCpp(someVariantFirst));
   }
   std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec> JHybridTestObjectSwiftKotlinSpec::getThisObject() {
     static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JHybridTestObjectSwiftKotlinSpec::javaobject>()>("getThisObject");

@@ -99,8 +99,8 @@ static jni::local_ref<J${kotlinName}> create(${bridge.asJniReferenceType('alias'
     const innerName = getVariantInnerName(v)
     const bridge = new KotlinCxxBridgedType(v)
     return `
-if (kotlinVariant->isInstanceOf(${innerName}::javaClassStatic())) {
-  auto jniValue = jni::static_ref_cast<${innerName}>(kotlinVariant)->get();
+if (isInstanceOf(${innerName}::javaClassStatic())) {
+  auto jniValue = static_cast<${innerName}*>(this)->get();
   return ${bridge.parseFromKotlinToCpp('jniValue', 'c++')};
 }
   `.trim()
@@ -147,19 +147,19 @@ namespace ${cxxNamespace} {
 
     ${indent(cppCreateFuncs.join('\n'), '    ')}
 
-    static jni::local_ref<J${kotlinName}> create(${toReferenceType(variant.getCode('c++'))} variant) {
+    static jni::local_ref<J${kotlinName}> fromCpp(${toReferenceType(variant.getCode('c++'))} variant) {
       switch (variant.index()) {
         ${indent(variantCases.join('\n'), '        ')}
         default: throw std::runtime_error("Variant holds unknown index! (" + std::to_string(variant.index()) + ")");
       }
     }
 
-    static ${variant.getCode('c++')} getVariant(jni::alias_ref<J${kotlinName}> kotlinVariant);
+    ${variant.getCode('c++')} toCpp();
   };
 
   ${indent(cppInnerClasses.join('\n\n'), '  ')}
 
-  ${variant.getCode('c++')} J${kotlinName}::getVariant(jni::alias_ref<J${kotlinName}> kotlinVariant) {
+  ${variant.getCode('c++')} J${kotlinName}::toCpp() {
     ${indent(cppGetIfs.join(' else '), '    ')}
     throw std::runtime_error("Variant is unknown Kotlin instance!");
   }

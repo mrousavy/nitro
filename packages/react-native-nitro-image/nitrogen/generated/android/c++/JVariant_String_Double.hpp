@@ -33,7 +33,7 @@ namespace margelo::nitro::image {
       return method(javaClassStatic(), value);
     }
 
-    static jni::local_ref<JVariant_String_Double> create(const std::variant<std::string, double>& variant) {
+    static jni::local_ref<JVariant_String_Double> fromCpp(const std::variant<std::string, double>& variant) {
       switch (variant.index()) {
         case 0: return create(jni::make_jstring(std::get<0>(variant)));
         case 1: return create(std::get<1>(variant));
@@ -41,7 +41,7 @@ namespace margelo::nitro::image {
       }
     }
 
-    static std::variant<std::string, double> getVariant(jni::alias_ref<JVariant_String_Double> kotlinVariant);
+    std::variant<std::string, double> toCpp();
   };
 
   class SomeString: public jni::JavaClass<SomeString, JVariant_String_Double> {
@@ -64,12 +64,12 @@ namespace margelo::nitro::image {
     }
   };
 
-  std::variant<std::string, double> JVariant_String_Double::getVariant(jni::alias_ref<JVariant_String_Double> kotlinVariant) {
-    if (kotlinVariant->isInstanceOf(SomeString::javaClassStatic())) {
-      auto jniValue = jni::static_ref_cast<SomeString>(kotlinVariant)->get();
+  std::variant<std::string, double> JVariant_String_Double::toCpp() {
+    if (isInstanceOf(SomeString::javaClassStatic())) {
+      auto jniValue = static_cast<SomeString*>(this)->get();
       return jniValue->toStdString();
-    } else if (kotlinVariant->isInstanceOf(SomeDouble::javaClassStatic())) {
-      auto jniValue = jni::static_ref_cast<SomeDouble>(kotlinVariant)->get();
+    } else if (isInstanceOf(SomeDouble::javaClassStatic())) {
+      auto jniValue = static_cast<SomeDouble*>(this)->get();
       return jniValue;
     }
     throw std::runtime_error("Variant is unknown Kotlin instance!");
