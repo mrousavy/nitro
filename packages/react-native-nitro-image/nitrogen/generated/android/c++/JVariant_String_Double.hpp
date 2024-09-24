@@ -14,10 +14,13 @@ namespace margelo::nitro::image {
 
   using namespace facebook;
 
+  class SomeString;
+  class SomeDouble;
+
   /**
    * The C++ JNI bridge between the C++ std::variant and the Java class "Variant_String_Double".
    */
-  struct JVariant_String_Double final: public jni::JavaClass<JVariant_String_Double> {
+  class JVariant_String_Double: public jni::JavaClass<JVariant_String_Double> {
   public:
     static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Variant_String_Double;";
 
@@ -40,6 +43,39 @@ namespace margelo::nitro::image {
           throw std::runtime_error("Variant holds unknown index! (" + std::to_string(variant.index()) + ")");
       }
     }
+
+    static std::variant<std::string, double> getVariant(jni::alias_ref<JVariant_String_Double> kotlinVariant);
   };
+
+  class SomeString: public jni::JavaClass<SomeString, JVariant_String_Double> {
+  public:
+    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/JVariant_String_Double$SomeString;";
+  
+    jni::local_ref<jni::JString> get() {
+      static const auto field = javaClassStatic()->getField<jni::JString>("value");
+      return getFieldValue(field);
+    }
+  };
+  
+  class SomeDouble: public jni::JavaClass<SomeDouble, JVariant_String_Double> {
+  public:
+    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/JVariant_String_Double$SomeDouble;";
+  
+    double get() {
+      static const auto field = javaClassStatic()->getField<double>("value");
+      return getFieldValue(field);
+    }
+  };
+
+  std::variant<std::string, double> JVariant_String_Double::getVariant(jni::alias_ref<JVariant_String_Double> kotlinVariant) {
+    if (kotlinVariant->isInstanceOf(SomeString::javaClassStatic())) {
+      auto jniValue = jni::static_ref_cast<SomeString>(kotlinVariant)->get();
+      return jniValue->toStdString();
+    } else if (kotlinVariant->isInstanceOf(SomeDouble::javaClassStatic())) {
+      auto jniValue = jni::static_ref_cast<SomeDouble>(kotlinVariant)->get();
+      return jniValue;
+    }
+    throw std::runtime_error("Variant is unknown Kotlin instance!");
+  }
 
 } // namespace margelo::nitro::image

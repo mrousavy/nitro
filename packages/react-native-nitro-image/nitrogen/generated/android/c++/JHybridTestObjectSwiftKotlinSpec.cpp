@@ -128,7 +128,7 @@ namespace margelo::nitro::image {
   std::variant<std::string, double> JHybridTestObjectSwiftKotlinSpec::getSomeVariantFirst() {
     static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JVariant_String_Double>()>("getSomeVariantFirst");
     auto result = method(_javaPart);
-    return [=]() -> std::variant<std::string, double> { throw std::runtime_error("Cannot convert Kotlin variant to C++ variant yet!"); }();
+    return JVariant_String_Double::getVariant(result);
   }
   void JHybridTestObjectSwiftKotlinSpec::setSomeVariantFirst(const std::variant<std::string, double>& someVariantFirst) {
     static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<JVariant_String_Double> /* someVariantFirst */)>("setSomeVariantFirst");

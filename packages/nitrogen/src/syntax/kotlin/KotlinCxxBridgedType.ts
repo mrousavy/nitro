@@ -559,7 +559,9 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
       case 'variant': {
         switch (language) {
           case 'c++':
-            return `[=]() -> ${this.type.getCode('c++')} { throw std::runtime_error("Cannot convert Kotlin variant to C++ variant yet!"); }()`
+            const variant = getTypeAs(this.type, VariantType)
+            const name = getVariantName(variant)
+            return `J${name}::getVariant(${parameterName})`
           default:
             return parameterName
         }

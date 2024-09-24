@@ -94,6 +94,39 @@ case ${i}:
   return create(${bridge.parseFromCppToKotlin(`std::get<${i}>(variant)`, 'c++')});
     `.trim()
   })
+  const cppInnerClassesForwardDecl = variant.variants.map((v) => {
+    const innerName = getVariantInnerName(v)
+    return `class ${innerName};`
+  })
+  const cppGetIfs = variant.variants.map((v) => {
+    const innerName = getVariantInnerName(v)
+    const bridge = new KotlinCxxBridgedType(v)
+    return `
+if (kotlinVariant->isInstanceOf(${innerName}::javaClassStatic())) {
+  auto jniValue = jni::static_ref_cast<${innerName}>(kotlinVariant)->get();
+  return ${bridge.parseFromKotlinToCpp('jniValue', 'c++')};
+}
+  `.trim()
+  })
+  const cppInnerClasses = variant.variants.map((v) => {
+    const bridge = new KotlinCxxBridgedType(v)
+    const innerName = getVariantInnerName(v)
+    const descriptor = NitroConfig.getAndroidPackage(
+      'c++/jni',
+      `J${kotlinName}$${innerName}`
+    )
+    return `
+class ${innerName}: public jni::JavaClass<${innerName}, J${kotlinName}> {
+public:
+  static auto constexpr kJavaDescriptor = "L${descriptor};";
+
+  ${bridge.asJniReferenceType('local')} get() {
+    static const auto field = javaClassStatic()->getField<${bridge.getTypeCode('c++')}>("value");
+    return getFieldValue(field);
+  }
+};
+    `.trim()
+  })
   const fbjniCode = `
 ${createFileMetadataString(`J${kotlinName}.hpp`)}
 
@@ -106,10 +139,12 @@ namespace ${cxxNamespace} {
 
   using namespace facebook;
 
+  ${indent(cppInnerClassesForwardDecl.join('\n'), '  ')}
+
   /**
    * The C++ JNI bridge between the C++ std::variant and the Java class "${kotlinName}".
    */
-  struct J${kotlinName} final: public jni::JavaClass<J${kotlinName}> {
+  class J${kotlinName}: public jni::JavaClass<J${kotlinName}> {
   public:
     static auto constexpr kJavaDescriptor = "L${jniClassDescriptor};";
 
@@ -122,7 +157,16 @@ namespace ${cxxNamespace} {
           throw std::runtime_error("Variant holds unknown index! (" + std::to_string(variant.index()) + ")");
       }
     }
+
+    static ${variant.getCode('c++')} getVariant(jni::alias_ref<J${kotlinName}> kotlinVariant);
   };
+
+  ${indent(cppInnerClasses.join('\n\n'), '  ')}
+
+  ${variant.getCode('c++')} J${kotlinName}::getVariant(jni::alias_ref<J${kotlinName}> kotlinVariant) {
+    ${indent(cppGetIfs.join(' else '), '    ')}
+    throw std::runtime_error("Variant is unknown Kotlin instance!");
+  }
 
 } // namespace ${cxxNamespace}
   `.trim()
