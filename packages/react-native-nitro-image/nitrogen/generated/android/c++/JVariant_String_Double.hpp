@@ -49,7 +49,7 @@ namespace margelo::nitro::image {
 
   class SomeString: public jni::JavaClass<SomeString, JVariant_String_Double> {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/JVariant_String_Double$SomeString;";
+    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Variant_String_Double$SomeString;";
   
     jni::local_ref<jni::JString> get() {
       static const auto field = javaClassStatic()->getField<jni::JString>("value");
@@ -59,7 +59,7 @@ namespace margelo::nitro::image {
   
   class SomeDouble: public jni::JavaClass<SomeDouble, JVariant_String_Double> {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/JVariant_String_Double$SomeDouble;";
+    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Variant_String_Double$SomeDouble;";
   
     double get() {
       static const auto field = javaClassStatic()->getField<double>("value");

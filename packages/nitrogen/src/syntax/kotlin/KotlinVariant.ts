@@ -113,7 +113,7 @@ if (kotlinVariant->isInstanceOf(${innerName}::javaClassStatic())) {
     const innerName = getVariantInnerName(v)
     const descriptor = NitroConfig.getAndroidPackage(
       'c++/jni',
-      `J${kotlinName}$${innerName}`
+      `${kotlinName}$${innerName}`
     )
     return `
 class ${innerName}: public jni::JavaClass<${innerName}, J${kotlinName}> {

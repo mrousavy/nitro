@@ -5,7 +5,6 @@ import com.margelo.nitro.core.AnyMap
 import com.margelo.nitro.core.AnyValue
 import com.margelo.nitro.core.ArrayBuffer
 import com.margelo.nitro.core.Promise
-import com.margelo.nitro.core.Variant2
 import kotlinx.coroutines.delay
 
 class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
@@ -18,7 +17,7 @@ class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
     override var optionalString: String? = null
     override val thisObject: HybridTestObjectSwiftKotlinSpec
         get() = this
-    override var someVariantFirst: Variant2<String, Double> = Variant2.First("Hello world!")
+    override var someVariantFirst: Variant_String_Double = Variant_String_Double.create(55.05)
 
     override fun simpleFunc() {
         // do nothing
