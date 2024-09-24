@@ -8,6 +8,7 @@
 #pragma once
 
 #include <fbjni/fbjni.h>
+#include <type_traits>
 
 namespace margelo::nitro {
 
@@ -16,42 +17,48 @@ using namespace facebook;
 template <typename A, typename B>
 class JVariant2 : public jni::JavaClass<JVariant2<A, B>> {
 public:
-  static constexpr auto kJavaDescriptor = "Lcom/example/Variant2;"; // Adjust the descriptor to your package.
+  static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/Variant2;";
+  using jni::JavaClass<JVariant2<A, B>>::self;
+
+  template<typename T>
+  bool is() {
+      if constexpr (std::is_same_v<T, A>) {
+          return jni::isObjectRefType(self(), JFirst::javaClassStatic());
+      } else if constexpr (std::is_same_v<T, B>) {
+          return jni::isObjectRefType(self(), JSecond::javaClassStatic());
+      } else {
+          static_assert("Type " + std::string(typeid(T).name()) + " is not part of this variant! "
+                                                                  "(" + std::string(typeid(decltype(this)).name()) + ")");
+      }
+  }
+
+    class JFirst : public jni::JavaClass<JFirst, JVariant2<A, jobject>> {
+    public:
+        static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/Variant2$First;";
+
+        static jni::local_ref<JFirst> create(A value) {
+            return JFirst::newInstance(value);
+        }
+
+        A getValue() {
+            static const auto method = JFirst::javaClassStatic()->getMethod<A()>("getValue");
+            return method(this->self());
+        }
+    };
+    class JSecond : public jni::JavaClass<JSecond, JVariant2<jobject, B>> {
+    public:
+        static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/Variant2$Second;";
+
+        static jni::local_ref<JSecond> create(B value) {
+            return JSecond::newInstance(value);
+        }
+
+        B getValue() {
+            static const auto method = JSecond::javaClassStatic()->getMethod<B()>("getValue");
+            return method(this->self());
+        }
+    };
 };
-template <typename A>
-class JVariant2_First : public jni::JavaClass<JVariant2_First<A>, JVariant2<A, jobject>> {
-public:
-  static constexpr auto kJavaDescriptor = "Lcom/example/Variant2$First;";
 
-  static jni::local_ref<JVariant2_First<A>> create(A value) {
-    return JVariant2_First<A>::newInstance(value);
-  }
-
-  A getValue() {
-    static const auto method = JVariant2_First<A>::javaClassStatic()->getMethod<A()>("getValue");
-    return method(this->self());
-  }
-};
-template <typename B>
-class JVariant2_Second : public jni::JavaClass<JVariant2_Second<B>, JVariant2<jobject, B>> {
-public:
-  static constexpr auto kJavaDescriptor = "Lcom/example/Variant2$Second;";
-
-  static jni::local_ref<JVariant2_Second<B>> create(B value) {
-    return JVariant2_Second<B>::newInstance(value);
-  }
-
-  B getValue() {
-    static const auto method = JVariant2_Second<B>::javaClassStatic()->getMethod<B()>("getValue");
-    return method(this->self());
-  }
-};
-
-template <typename T>
-T getAs(jobject variant) {
-  static const auto method = jni::findClassStatic("com/example/Variant2")->getMethod<jni::local_ref<jobject>()>("getAs");
-  auto result = method(variant);
-  return jni::dynamic_ref_cast<T>(result);
-}
 
 } // namespace margelo::nitro
