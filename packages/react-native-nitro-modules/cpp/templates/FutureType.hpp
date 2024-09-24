@@ -1,5 +1,5 @@
 //
-//  BorrowingReference.hpp
+//  FutureType.hpp
 //  NitroModules
 //
 //  Created by Marc Rousavy on 21.06.24.
