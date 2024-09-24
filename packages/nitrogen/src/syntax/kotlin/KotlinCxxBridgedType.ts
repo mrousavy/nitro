@@ -18,7 +18,7 @@ import { getKotlinBoxedPrimitiveType } from './KotlinBoxedPrimitive.js'
 import { createKotlinEnum } from './KotlinEnum.js'
 import { createKotlinFunction } from './KotlinFunction.js'
 import { createKotlinStruct } from './KotlinStruct.js'
-import { createKotlinVariant } from './KotlinVariant.js'
+import { createKotlinVariant, getVariantName } from './KotlinVariant.js'
 
 export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
   readonly type: Type
@@ -92,10 +92,12 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
         })
         break
       case 'variant':
+        const variantType = getTypeAs(this.type, VariantType)
+        const variantName = getVariantName(variantType)
         imports.push({
           language: 'c++',
-          name: 'NitroModules/JVariant.hpp',
-          space: 'system',
+          name: `J${variantName}.hpp`,
+          space: 'user',
         })
         break
       case 'hybrid-object': {
@@ -280,11 +282,13 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
             return this.type.getCode(language)
         }
       case 'variant': {
+        const variant = getTypeAs(this.type, VariantType)
+        const name = getVariantName(variant)
         switch (language) {
           case 'c++':
-            const variant = getTypeAs(this.type, VariantType)
-            const variants = variant.variants.map((v) => v.getCode('kotlin'))
-            return `Variant_` + variants.join('_')
+            return `J${name}`
+          case 'kotlin':
+            return name
           default:
             return this.type.getCode(language)
         }
@@ -384,8 +388,8 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
         switch (language) {
           case 'c++':
             const variant = getTypeAs(this.type, VariantType)
-            const variants = variant.variants.map((v) => v.getCode('kotlin'))
-            return `Variant_` + variants.join('_')
+            const name = getVariantName(variant)
+            return `J${name}::create(${parameterName})`
           default:
             return parameterName
         }

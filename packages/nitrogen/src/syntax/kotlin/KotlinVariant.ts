@@ -1,10 +1,15 @@
 import { NitroConfig } from '../../config/NitroConfig.js'
 import { indent } from '../../utils.js'
-import { createFileMetadataString } from '../helpers.js'
+import { createFileMetadataString, toReferenceType } from '../helpers.js'
 import type { SourceFile } from '../SourceFile.js'
 import type { Type } from '../types/Type.js'
 import type { VariantType } from '../types/VariantType.js'
 import { KotlinCxxBridgedType } from './KotlinCxxBridgedType.js'
+
+export function getVariantName(variant: VariantType): string {
+  const variants = variant.variants.map((v) => v.getCode('kotlin'))
+  return `Variant_` + variants.join('_')
+}
 
 function getVariantInnerName(variantType: Type): string {
   return `Some${variantType.getCode('kotlin')}`
@@ -12,8 +17,7 @@ function getVariantInnerName(variantType: Type): string {
 
 export function createKotlinVariant(variant: VariantType): SourceFile[] {
   const jsName = variant.variants.map((v) => v.getCode('kotlin')).join('|')
-  const kotlinName =
-    `Variant_` + variant.variants.map((v) => v.getCode('kotlin')).join('_')
+  const kotlinName = getVariantName(variant)
 
   const innerClasses = variant.variants.map((v) => {
     const innerName = getVariantInnerName(v)
@@ -83,12 +87,20 @@ static jni::local_ref<J${kotlinName}> create(${bridge.asJniReferenceType('alias'
 }
     `.trim()
   })
+  const variantCases = variant.variants.map((v, i) => {
+    const bridge = new KotlinCxxBridgedType(v)
+    return `
+case ${i}:
+  return create(${bridge.parseFromCppToKotlin(`std::get<${i}>(variant)`, 'c++')});
+    `.trim()
+  })
   const fbjniCode = `
 ${createFileMetadataString(`J${kotlinName}.hpp`)}
 
 #pragma once
 
 #include <fbjni/fbjni.h>
+#include <variant>
 
 namespace ${cxxNamespace} {
 
@@ -102,6 +114,14 @@ namespace ${cxxNamespace} {
     static auto constexpr kJavaDescriptor = "L${jniClassDescriptor};";
 
     ${indent(cppCreateFuncs.join('\n'), '    ')}
+
+    static jni::local_ref<J${kotlinName}> create(${toReferenceType(variant.getCode('c++'))} variant) {
+      switch (variant.index()) {
+        ${indent(variantCases.join('\n'), '        ')}
+        default:
+          throw std::runtime_error("Variant holds unknown index! (" + std::to_string(variant.index()) + ")");
+      }
+    }
   };
 
 } // namespace ${cxxNamespace}
