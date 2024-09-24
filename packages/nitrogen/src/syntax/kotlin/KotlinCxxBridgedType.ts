@@ -18,6 +18,7 @@ import { getKotlinBoxedPrimitiveType } from './KotlinBoxedPrimitive.js'
 import { createKotlinEnum } from './KotlinEnum.js'
 import { createKotlinFunction } from './KotlinFunction.js'
 import { createKotlinStruct } from './KotlinStruct.js'
+import { createKotlinVariant } from './KotlinVariant.js'
 
 export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
   readonly type: Type
@@ -141,6 +142,11 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
         const structType = getTypeAs(this.type, StructType)
         const structFiles = createKotlinStruct(structType)
         files.push(...structFiles)
+        break
+      case 'variant':
+        const variantType = getTypeAs(this.type, VariantType)
+        const variantFiles = createKotlinVariant(variantType)
+        files.push(...variantFiles)
         break
       case 'function':
         const functionType = getTypeAs(this.type, FunctionType)
@@ -277,11 +283,8 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
         switch (language) {
           case 'c++':
             const variant = getTypeAs(this.type, VariantType)
-            const variants = variant.variants.map((v) => {
-              const bridge = new KotlinCxxBridgedType(v)
-              return bridge.getTypeCode('c++', true)
-            })
-            return `JVariant<${variants.join(', ')}>`
+            const variants = variant.variants.map((v) => v.getCode('kotlin'))
+            return `Variant_` + variants.join('_')
           default:
             return this.type.getCode(language)
         }
@@ -381,11 +384,8 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
         switch (language) {
           case 'c++':
             const variant = getTypeAs(this.type, VariantType)
-            const variants = variant.variants.map((v) => {
-              const bridge = new KotlinCxxBridgedType(v)
-              return bridge.getTypeCode('c++', true)
-            })
-            return `JVariant<${variants.join(', ')}>::create(${parameterName})`
+            const variants = variant.variants.map((v) => v.getCode('kotlin'))
+            return `Variant_` + variants.join('_')
           default:
             return parameterName
         }

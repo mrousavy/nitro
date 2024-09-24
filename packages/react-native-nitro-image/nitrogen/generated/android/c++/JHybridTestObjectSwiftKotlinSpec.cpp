@@ -126,13 +126,13 @@ namespace margelo::nitro::image {
     method(_javaPart, optionalString.has_value() ? jni::make_jstring(optionalString.value()) : nullptr);
   }
   std::variant<std::string, double> JHybridTestObjectSwiftKotlinSpec::getSomeVariantFirst() {
-    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JVariant<jni::JString, jni::JDouble>>()>("getSomeVariantFirst");
+    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<Variant_String_Double>()>("getSomeVariantFirst");
     auto result = method(_javaPart);
     return [=]() -> std::variant<std::string, double> { throw std::runtime_error("Cannot convert Kotlin variant to C++ variant yet!"); }();
   }
   void JHybridTestObjectSwiftKotlinSpec::setSomeVariantFirst(const std::variant<std::string, double>& someVariantFirst) {
-    static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<JVariant<jni::JString, jni::JDouble>> /* someVariantFirst */)>("setSomeVariantFirst");
-    method(_javaPart, JVariant<jni::JString, jni::JDouble>::create(someVariantFirst));
+    static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<Variant_String_Double> /* someVariantFirst */)>("setSomeVariantFirst");
+    method(_javaPart, Variant_String_Double);
   }
   std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec> JHybridTestObjectSwiftKotlinSpec::getThisObject() {
     static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JHybridTestObjectSwiftKotlinSpec::javaobject>()>("getThisObject");
