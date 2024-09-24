@@ -35,12 +35,9 @@ namespace margelo::nitro::image {
 
     static jni::local_ref<JVariant_String_Double> create(const std::variant<std::string, double>& variant) {
       switch (variant.index()) {
-        case 0:
-          return create(jni::make_jstring(std::get<0>(variant)));
-        case 1:
-          return create(std::get<1>(variant));
-        default:
-          throw std::runtime_error("Variant holds unknown index! (" + std::to_string(variant.index()) + ")");
+        case 0: return create(jni::make_jstring(std::get<0>(variant)));
+        case 1: return create(std::get<1>(variant));
+        default: throw std::runtime_error("Variant holds unknown index! (" + std::to_string(variant.index()) + ")");
       }
     }
 

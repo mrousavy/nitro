@@ -89,10 +89,7 @@ static jni::local_ref<J${kotlinName}> create(${bridge.asJniReferenceType('alias'
   })
   const variantCases = variant.variants.map((v, i) => {
     const bridge = new KotlinCxxBridgedType(v)
-    return `
-case ${i}:
-  return create(${bridge.parseFromCppToKotlin(`std::get<${i}>(variant)`, 'c++')});
-    `.trim()
+    return `case ${i}: return create(${bridge.parseFromCppToKotlin(`std::get<${i}>(variant)`, 'c++')});`
   })
   const cppInnerClassesForwardDecl = variant.variants.map((v) => {
     const innerName = getVariantInnerName(v)
@@ -153,8 +150,7 @@ namespace ${cxxNamespace} {
     static jni::local_ref<J${kotlinName}> create(${toReferenceType(variant.getCode('c++'))} variant) {
       switch (variant.index()) {
         ${indent(variantCases.join('\n'), '        ')}
-        default:
-          throw std::runtime_error("Variant holds unknown index! (" + std::to_string(variant.index()) + ")");
+        default: throw std::runtime_error("Variant holds unknown index! (" + std::to_string(variant.index()) + ")");
       }
     }
 
