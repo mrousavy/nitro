@@ -9,7 +9,7 @@ import { indent } from '../../utils.js'
 type ObjcFile = Omit<SourceFile, 'language'> & { language: 'objective-c++' }
 type SwiftFile = Omit<SourceFile, 'language'> & { language: 'swift' }
 
-export function createHybridObjectIntializer(): [ObjcFile, SwiftFile] {
+export function createHybridObjectIntializer(): [ObjcFile, SwiftFile] | [] {
   const autolinkingClassName = `${NitroConfig.getIosModuleName()}Autolinking`
   const umbrellaHeaderName = `${NitroConfig.getIosModuleName()}-Swift-Cxx-Umbrella.hpp`
 
@@ -43,6 +43,11 @@ export function createHybridObjectIntializer(): [ObjcFile, SwiftFile] {
       cppRegistrations.push(cppCode)
       swiftFunctions.push(swiftFunction)
     }
+  }
+
+  if (cppRegistrations.length === 0) {
+    // Nothing to autolink!
+    return []
   }
 
   const umbrellaImport = containsSwiftObjects
