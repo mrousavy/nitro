@@ -1,5 +1,6 @@
 #include "Dispatcher.hpp"
 #include "JSIHelpers.hpp"
+#include "NitroDefines.hpp"
 #include "NitroLogger.hpp"
 
 namespace margelo::nitro {
@@ -41,8 +42,8 @@ std::shared_ptr<Dispatcher> Dispatcher::getRuntimeGlobalDispatcher(jsi::Runtime&
 }
 
 jsi::Value Dispatcher::getRuntimeGlobalDispatcherHolder(jsi::Runtime& runtime) {
-#ifndef NDEBUG
-  if (!runtime.global().hasProperty(runtime, GLOBAL_DISPATCHER_HOLDER_NAME)) {
+#ifdef NITRO_DEBUG
+  if (!runtime.global().hasProperty(runtime, GLOBAL_DISPATCHER_HOLDER_NAME)) [[unlikely]] {
     throw std::runtime_error("Failed to get current Dispatcher - the global Dispatcher "
                              "holder (global." +
                              std::string(GLOBAL_DISPATCHER_HOLDER_NAME) +

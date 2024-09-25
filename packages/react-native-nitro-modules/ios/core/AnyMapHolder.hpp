@@ -88,4 +88,12 @@ inline std::vector<std::string> getAnyObjectKeys(const AnyObject& object) {
   return keys;
 }
 
+inline AnyValue getAnyObjectValue(const AnyObject& object, const std::string& key) {
+  auto item = object.find(key);
+  if (item == object.end()) {
+    throw std::runtime_error("Couldn't find " + key + " in AnyObject!");
+  }
+  return item->second;
+}
+
 } // namespace margelo::nitro

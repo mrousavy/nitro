@@ -13,10 +13,12 @@ import { PromiseType } from '../types/PromiseType.js'
 import { RecordType } from '../types/RecordType.js'
 import { StructType } from '../types/StructType.js'
 import type { Type } from '../types/Type.js'
+import { VariantType } from '../types/VariantType.js'
 import { getKotlinBoxedPrimitiveType } from './KotlinBoxedPrimitive.js'
 import { createKotlinEnum } from './KotlinEnum.js'
 import { createKotlinFunction } from './KotlinFunction.js'
 import { createKotlinStruct } from './KotlinStruct.js'
+import { createKotlinVariant, getVariantName } from './KotlinVariant.js'
 
 export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
   readonly type: Type
@@ -89,6 +91,15 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
           space: 'system',
         })
         break
+      case 'variant':
+        const variantType = getTypeAs(this.type, VariantType)
+        const variantName = getVariantName(variantType)
+        imports.push({
+          language: 'c++',
+          name: `J${variantName}.hpp`,
+          space: 'user',
+        })
+        break
       case 'hybrid-object': {
         const hybridObjectType = getTypeAs(this.type, HybridObjectType)
         const name = getHybridObjectName(hybridObjectType.hybridObjectName)
@@ -134,6 +145,11 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
         const structFiles = createKotlinStruct(structType)
         files.push(...structFiles)
         break
+      case 'variant':
+        const variantType = getTypeAs(this.type, VariantType)
+        const variantFiles = createKotlinVariant(variantType)
+        files.push(...variantFiles)
+        break
       case 'function':
         const functionType = getTypeAs(this.type, FunctionType)
         const funcFiles = createKotlinFunction(functionType)
@@ -168,8 +184,20 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
     }
   }
 
-  getTypeCode(language: 'kotlin' | 'c++'): string {
+  getTypeCode(language: 'kotlin' | 'c++', isBoxed = false): string {
     switch (this.type.kind) {
+      case 'number':
+      case 'bigint':
+      case 'boolean':
+        if (isBoxed) {
+          return getKotlinBoxedPrimitiveType(this.type)
+        } else {
+          if (this.type.kind === 'boolean' && language === 'c++') {
+            // JNI does not use `bool`, so it is a jboolean instead.
+            return 'jboolean'
+          }
+          return this.type.getCode(language)
+        }
       case 'array':
         switch (language) {
           case 'c++':
@@ -253,6 +281,18 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
           default:
             return this.type.getCode(language)
         }
+      case 'variant': {
+        const variant = getTypeAs(this.type, VariantType)
+        const name = getVariantName(variant)
+        switch (language) {
+          case 'c++':
+            return `J${name}`
+          case 'kotlin':
+            return name
+          default:
+            return this.type.getCode(language)
+        }
+      }
       case 'promise':
         switch (language) {
           case 'c++':
@@ -340,6 +380,16 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
           case 'c++':
             const struct = getTypeAs(this.type, StructType)
             return `J${struct.structName}::fromCpp(${parameterName})`
+          default:
+            return parameterName
+        }
+      }
+      case 'variant': {
+        switch (language) {
+          case 'c++':
+            const variant = getTypeAs(this.type, VariantType)
+            const name = getVariantName(variant)
+            return `J${name}::fromCpp(${parameterName})`
           default:
             return parameterName
         }
@@ -506,6 +556,14 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
             return parameterName
         }
       }
+      case 'variant': {
+        switch (language) {
+          case 'c++':
+            return `${parameterName}->toCpp()`
+          default:
+            return parameterName
+        }
+      }
       case 'hybrid-object': {
         switch (language) {
           case 'c++':
@@ -624,7 +682,7 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
             if (resultingType.hasType) {
               // it's a Promise<T>
               resolveBody = `
-auto result = jni::static_ref_cast<${resultingType.getTypeCode('c++')}>(boxedResult);
+auto result = jni::static_ref_cast<${resultingType.getTypeCode('c++', true)}>(boxedResult);
 promise->set_value(${resultingType.parseFromKotlinToCpp('result', 'c++', true)});
           `.trim()
             } else {

@@ -1,6 +1,6 @@
 //
 //  TypeInfo.hpp
-//  Pods
+//  Nitro
 //
 //  Created by Marc Rousavy on 17.07.24.
 //

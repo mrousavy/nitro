@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include "NitroDefines.hpp"
 #include <cstdarg>
 #include <cstdio>
 #include <iostream>
@@ -22,7 +23,7 @@ private:
 public:
   template <typename... Args>
   static void log(LogLevel level, const char* tag, const char* format, Args... args) {
-#ifndef NDEBUG
+#ifdef NITRO_DEBUG
     // 1. Make sure args can be passed to sprintf(..)
     static_assert(all_are_trivially_copyable<Args...>(), "All arguments passed to Logger::log(..) must be trivially copyable! "
                                                          "Did you try to pass a complex type, like std::string?");

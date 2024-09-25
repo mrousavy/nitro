@@ -16,8 +16,7 @@ using namespace facebook;
 // The base C++-based TurboModule. This is the entry point where all nitro modules get initialized.
 class NativeNitroModules : public TurboModule {
 public:
-  NativeNitroModules(std::shared_ptr<CallInvoker> jsInvoker);
-  ~NativeNitroModules();
+  explicit NativeNitroModules(std::shared_ptr<CallInvoker> jsInvoker);
 
 public:
   jsi::Value get(jsi::Runtime& runtime, const jsi::PropNameID& propName) override;
@@ -25,7 +24,7 @@ public:
   // Setup
   void install(jsi::Runtime& runtime);
   // Hybrid Objects stuff
-  jsi::Value createHybridObject(jsi::Runtime& runtime, const jsi::String& hybridObjectName, const std::optional<jsi::Object>& args);
+  jsi::Value createHybridObject(jsi::Runtime& runtime, const jsi::String& hybridObjectName);
   jsi::Value hasHybridObject(jsi::Runtime& runtime, const jsi::String& hybridObjectName);
   jsi::Value getAllHybridObjectNames(jsi::Runtime& runtime);
 

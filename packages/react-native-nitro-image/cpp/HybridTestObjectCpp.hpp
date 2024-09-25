@@ -1,5 +1,5 @@
 //
-//  HybridTestObject.hpp
+//  HybridTestObjectCpp.hpp
 //  NitroImage
 //
 //  Created by Marc Rousavy on 30.07.24.
@@ -7,16 +7,16 @@
 
 #pragma once
 
-#include "HybridTestObjectSpec.hpp"
+#include "HybridTestObjectCppSpec.hpp"
 #include <jsi/jsi.h>
 
 namespace margelo::nitro::image {
 
 using namespace facebook;
 
-class HybridTestObject : public HybridTestObjectSpec {
+class HybridTestObjectCpp : public HybridTestObjectCppSpec {
 public:
-  HybridTestObject() : HybridObject(TAG) {}
+  HybridTestObjectCpp() : HybridObject(TAG) {}
 
 private:
   double _number;
@@ -53,13 +53,11 @@ public:
   void setStringOrNull(const std::optional<std::string>& stringOrNull) override;
   std::optional<std::string> getOptionalString() override;
   void setOptionalString(const std::optional<std::string>& optionalString) override;
-  double getValueThatWillThrowOnAccess() override;
-  void setValueThatWillThrowOnAccess(double valueThatWillThrowOnAccess) override;
   std::variant<std::string, double> getSomeVariant() override;
   void setSomeVariant(const std::variant<std::string, double>& variant) override;
   std::tuple<double, std::string> getSomeTuple() override;
   void setSomeTuple(const std::tuple<double, std::string>& tuple) override;
-  std::shared_ptr<HybridTestObjectSpec> getSelf() override;
+  std::shared_ptr<HybridTestObjectCppSpec> getThisObject() override;
 
 public:
   // Methods
@@ -72,13 +70,14 @@ public:
   double funcThatThrows() override;
   std::string tryOptionalParams(double num, bool boo, const std::optional<std::string>& str) override;
   std::string tryMiddleParam(double num, std::optional<bool> boo, const std::string& str) override;
+  std::optional<Powertrain> tryOptionalEnum(std::optional<Powertrain> value) override;
   std::variant<std::string, double>
   passVariant(const std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>>& either) override;
 
   std::variant<bool, OldEnum> getVariantEnum(const std::variant<bool, OldEnum>& variant) override;
   std::variant<Person, Car> getVariantObjects(const std::variant<Person, Car>& variant) override;
-  std::variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectSpec>, Person>
-  getVariantHybrid(const std::variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectSpec>, Person>& variant) override;
+  std::variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>, Person>
+  getVariantHybrid(const std::variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>, Person>& variant) override;
   std::variant<std::tuple<double, double>, std::tuple<double, double, double>>
   getVariantTuple(const std::variant<std::tuple<double, double>, std::tuple<double, double, double>>& variant) override;
 
@@ -88,6 +87,7 @@ public:
   std::future<int64_t> calculateFibonacciAsync(double value) override;
   std::future<void> wait(double seconds) override;
   void callCallback(const std::function<void()>& callback) override;
+  void callWithOptional(std::optional<double> value, const std::function<void(std::optional<double> /* maybe */)>& callback) override;
   void getValueFromJSCallback(const std::function<std::future<double>()>& getValue) override;
   std::future<double> getValueFromJSCallbackAndWait(const std::function<std::future<double>()>& getValue) override;
   void callAll(const std::function<void()>& first, const std::function<void()>& second, const std::function<void()>& third) override;
@@ -99,16 +99,17 @@ public:
   std::shared_ptr<ArrayBuffer> createArrayBuffer() override;
   double getBufferLastItem(const std::shared_ptr<ArrayBuffer>& buffer) override;
   void setAllValuesTo(const std::shared_ptr<ArrayBuffer>& buffer, double value) override;
-  std::shared_ptr<HybridTestObjectSpec> newTestObject() override;
+  std::shared_ptr<HybridTestObjectCppSpec> newTestObject() override;
 
   // Raw JSI functions
   jsi::Value rawJsiFunc(jsi::Runtime& runtime, const jsi::Value& thisValue, const jsi::Value* args, size_t count);
 
   void loadHybridMethods() override {
     // call base protoype
-    HybridTestObjectSpec::loadHybridMethods();
+    HybridTestObjectCppSpec::loadHybridMethods();
     // register all methods we override here
-    registerHybrids(this, [](Prototype& prototype) { prototype.registerRawHybridMethod("rawJsiFunc", 0, &HybridTestObject::rawJsiFunc); });
+    registerHybrids(this,
+                    [](Prototype& prototype) { prototype.registerRawHybridMethod("rawJsiFunc", 0, &HybridTestObjectCpp::rawJsiFunc); });
   }
 };
 

@@ -80,6 +80,8 @@ class ArrayBuffer {
      * Create a new **non-owning-** `ArrayBuffer` that holds foreign data, potentially coming from JS.
      */
     @Suppress("unused")
+    @Keep
+    @DoNotStrip
     private constructor(hybridData: HybridData) {
         mHybridData = hybridData
     }
@@ -94,6 +96,14 @@ class ArrayBuffer {
     private external fun getBufferSize(): Int
 
     companion object {
+        /**
+         * Allocate a new `ArrayBuffer` with the given [size].
+         */
+        fun allocate(size: Int): ArrayBuffer {
+            val buffer = ByteBuffer.allocateDirect(size)
+            return ArrayBuffer(buffer)
+        }
+
         /**
          * Copy the given `ArrayBuffer` into a new **owning** `ArrayBuffer`.
          */

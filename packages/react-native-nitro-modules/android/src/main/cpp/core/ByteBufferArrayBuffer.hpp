@@ -21,7 +21,7 @@ using namespace facebook;
 class ByteBufferArrayBuffer final : public ArrayBuffer {
 public:
   explicit ByteBufferArrayBuffer(const jni::alias_ref<jni::JByteBuffer>& byteBuffer) : _byteBuffer(jni::make_global(byteBuffer)) {
-    _byteBuffer->order(jni::JByteOrder::bigEndian());
+    _byteBuffer->order(jni::JByteOrder::nativeOrder());
   }
 
 public:
@@ -36,7 +36,7 @@ public:
   }
 
 public:
-  [[nodiscard]] jni::alias_ref<jni::JByteBuffer> getBuffer() const {
+  [[nodiscard]] const jni::global_ref<jni::JByteBuffer>& getBuffer() const {
     return _byteBuffer;
   }
 

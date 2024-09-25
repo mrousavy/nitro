@@ -136,7 +136,6 @@ protected:
 private:
   static constexpr auto TAG = "HybridObject";
   const char* _name = TAG;
-  int _instanceId = 1;
   std::unordered_map<jsi::Runtime*, OwningReference<jsi::WeakObject>> _objectCache;
 };
 

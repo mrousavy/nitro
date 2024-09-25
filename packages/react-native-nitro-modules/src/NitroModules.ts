@@ -1,11 +1,16 @@
-import { getNativeNitroModules } from './NativeNitroModules'
+import { getNativeNitroModules } from './NitroModulesTurboModule'
 import type { HybridObject } from './HybridObject'
 
-// TODO: Do we wanna support such constructors?
-// @ts-expect-error
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-type ExtractConstructors<T> = {
-  [K in keyof T as K extends `constructor` ? `create` : never]: T[K]
+/**
+ * Represents a boxed {@linkcode HybridObject} that can later be unboxed again.
+ * This is implemented as a `jsi::HostObject`.
+ */
+export interface BoxedHybridObject<T extends HybridObject> {
+  /**
+   * Unboxes the {@linkcode HybridObject}.
+   * This can be called from a different Runtime than the one it was boxed in.
+   */
+  unbox(): T
 }
 
 /**
@@ -64,5 +69,40 @@ export const NitroModules = {
   removeNativeState(object: object): void {
     const nitro = getNativeNitroModules()
     nitro.removeNativeState(object)
+  },
+  /**
+   * Gets the current build type configuration as defined in the `NITRO_DEBUG`
+   * preprocessor flag.
+   */
+  get buildType(): 'debug' | 'release' {
+    const nitro = getNativeNitroModules()
+    return nitro.buildType
+  },
+  /**
+   * Boxes the given {@linkcode hybridObject} into a {@linkcode BoxedHybridObject<T>}, which can
+   * later be unboxed in a separate Runtime.
+   *
+   * While Nitro is runtime-agnostic and all `HybridObject`s can be used from a any Runtime,
+   * some threading/worklet libraries (like [react-native-worklets-core](https://github.com/margelo/react-native-worklets-core))
+   * do not yet support copying over `HybridObject`s as they use newer JSI APIs like `jsi::NativeState`.
+   *
+   * While those APIs are not yet available, you can still use every Nitro Hybrid Object in a separate
+   * Runtime/Worklet context by just boxing it yourself:
+   *
+   * @example
+   * ```ts
+   * const something = NitroModules.createHybridObject<Something>('Something')
+   * const boxed = NitroModules.box(something)
+   * const context = Worklets.createContext('DummyContext')
+   * context.runAsync(() => {
+   *   'worklet'
+   *   const unboxed = boxed.unbox()
+   *   console.log(unboxed.name) // --> "Something"
+   * })
+   * ```
+   */
+  box<T extends HybridObject>(hybridObject: T): BoxedHybridObject<T> {
+    const nitro = getNativeNitroModules()
+    return nitro.box(hybridObject) as BoxedHybridObject<T>
   },
 }

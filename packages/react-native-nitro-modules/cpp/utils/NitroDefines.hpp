@@ -1,12 +1,25 @@
 //
 //  NitroDefines.hpp
-//  Pods
+//  Nitro
 //
 //  Created by Marc Rousavy on 29.07.24.
 //
 
 #ifndef NitroDefines_h
 #define NitroDefines_h
+
+// Sets whether to use debug or optimized production build flags
+#ifdef DEBUG
+#define NITRO_DEBUG
+#endif
+#ifdef NDEBUG
+#undef NITRO_DEBUG
+#endif
+#ifdef ANDROID
+#ifndef NDEBUG
+#define NITRO_DEBUG
+#endif
+#endif
 
 // Helper to find out if a C++ compiler attribute is available
 #ifdef __has_attribute

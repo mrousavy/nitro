@@ -98,8 +98,8 @@ These are all the types Nitro supports out of the box:
   <tr>
     <td><code>A | B | ...</code></td>
     <td><code>std::variant&lt;A, B, ...&gt;</code></td>
-    <td><code>Variant_A_B</code> 🟡  (<a href="https://github.com/mrousavy/nitro/issues/39">#39</a>)</td>
-    <td>❌</td>
+    <td><code>Variant_A_B_C</code></td>
+    <td><code>Variant_A_B_C</code></td>
   </tr>
   <tr>
     <td><code>Promise&lt;T&gt;</code></td>
@@ -128,7 +128,7 @@ These are all the types Nitro supports out of the box:
   <tr>
     <td><code>object</code></td>
     <td><code>std::shared_ptr&lt;<a href="https://github.com/mrousavy/nitro/blob/main/packages/react-native-nitro-modules/cpp/core/AnyMap.hpp">AnyMap</a>&gt;</code></td>
-    <td><code><a href="https://github.com/mrousavy/nitro/blob/main/packages/react-native-nitro-modules/ios/core/AnyMapHolder.swift">AnyMapHolder</a></code> 🟡  (<a href="https://github.com/mrousavy/nitro/issues/57">#57</a>)</td>
+    <td><code><a href="https://github.com/mrousavy/nitro/blob/main/packages/react-native-nitro-modules/ios/core/AnyMapHolder.swift">AnyMapHolder</a></code></td>
     <td><code><a href="https://github.com/mrousavy/nitro/blob/main/packages/react-native-nitro-modules/android/src/main/java/com/margelo/nitro/core/AnyMap.kt">AnyMap</a></code></td>
   </tr>
   <tr>

@@ -1,5 +1,6 @@
 import {
-  HybridTestObject,
+  type TestObjectCpp,
+  type TestObjectSwiftKotlin,
   OldEnum,
   type Car,
   type Person,
@@ -80,17 +81,19 @@ function timeoutedPromise<T>(
   })
 }
 
-export function getTests(): TestRunner[] {
+export function getTests(
+  testObject: TestObjectCpp | TestObjectSwiftKotlin
+): TestRunner[] {
   return [
     // Basic prototype tests
     createTest('HybridObject.prototype is valid', () =>
-      it(() => Object.getPrototypeOf(HybridTestObject))
+      it(() => Object.getPrototypeOf(testObject))
         .didNotThrow()
         .didReturn('object')
         .toContain('simpleFunc')
     ),
     createTest('HybridObject.prototype.prototype is valid', () =>
-      it(() => Object.getPrototypeOf(Object.getPrototypeOf(HybridTestObject)))
+      it(() => Object.getPrototypeOf(Object.getPrototypeOf(testObject)))
         .didNotThrow()
         .didReturn('object')
         .toContain('toString')
@@ -100,24 +103,20 @@ export function getTests(): TestRunner[] {
       it(
         () =>
           // eslint-disable-next-line no-self-compare
-          HybridTestObject.newTestObject() === HybridTestObject.newTestObject()
+          testObject.newTestObject() === testObject.newTestObject()
       )
         .didNotThrow()
         .equals(false)
     ),
     createTest('Two HybridObjects are not equal (a.equals(b))', () =>
-      it(() =>
-        HybridTestObject.newTestObject().equals(
-          HybridTestObject.newTestObject()
-        )
-      )
+      it(() => testObject.newTestObject().equals(testObject.newTestObject()))
         .didNotThrow()
         .equals(false)
     ),
     createTest("Two HybridObjects's prototypse are equal", () =>
       it(() => {
-        const objA = HybridTestObject.newTestObject()
-        const objB = HybridTestObject.newTestObject()
+        const objA = testObject.newTestObject()
+        const objB = testObject.newTestObject()
         return Object.getPrototypeOf(objA) === Object.getPrototypeOf(objB)
       })
         .didNotThrow()
@@ -126,96 +125,117 @@ export function getTests(): TestRunner[] {
 
     // Test Primitives (getters & setters)
     createTest('set numberValue to 13', () =>
-      it(() => (HybridTestObject.numberValue = 13)).didNotThrow()
+      it(() => (testObject.numberValue = 13)).didNotThrow()
     ),
     createTest('get numberValue (== 13)', () =>
-      it(() => HybridTestObject.numberValue)
+      it(() => {
+        testObject.numberValue = 14
+        return testObject.numberValue
+      })
         .didNotThrow()
-        .equals(13)
+        .equals(14)
     ),
     createTest('set boolValue to true', () =>
-      it(() => (HybridTestObject.boolValue = true)).didNotThrow()
+      it(() => (testObject.boolValue = true)).didNotThrow()
     ),
     createTest('get boolValue (== true)', () =>
-      it(() => HybridTestObject.boolValue)
+      it(() => {
+        testObject.boolValue = true
+        return testObject.boolValue
+      })
         .didNotThrow()
         .equals(true)
     ),
     createTest("set stringValue to 'hello!'", () =>
-      it(() => (HybridTestObject.stringValue = 'hello!')).didNotThrow()
+      it(() => (testObject.stringValue = 'hello!')).didNotThrow()
     ),
     createTest("get stringValue (== 'hello!')", () =>
-      it(() => HybridTestObject.stringValue)
+      it(() => {
+        testObject.stringValue = 'hello!'
+        return testObject.stringValue
+      })
         .didNotThrow()
         .equals('hello!')
     ),
     createTest('set bigintValue to 7362572367826385n', () =>
-      it(() => (HybridTestObject.bigintValue = 7362572367826385n)).didNotThrow()
+      it(() => (testObject.bigintValue = 7362572367826385n)).didNotThrow()
     ),
     createTest('get bigintValue (== 7362572367826385n)', () =>
-      it(() => HybridTestObject.bigintValue)
+      it(() => {
+        testObject.bigintValue = 7362572367826385n
+        return testObject.bigintValue
+      })
         .didNotThrow()
         .equals(7362572367826385n)
     ),
     createTest('set stringOrUndefined to string, then undefined', () =>
       it(() => {
-        HybridTestObject.stringOrUndefined = 'hello'
-        HybridTestObject.stringOrUndefined = undefined
+        testObject.stringOrUndefined = 'hello'
+        testObject.stringOrUndefined = undefined
       }).didNotThrow()
     ),
     createTest('get stringOrUndefined (== undefined)', () =>
-      it(() => HybridTestObject.stringOrUndefined)
+      it(() => {
+        testObject.stringOrUndefined = undefined
+        return testObject.stringOrUndefined
+      })
         .didNotThrow()
         .equals(undefined)
     ),
     createTest('set stringOrNull to string, then undefined', () =>
       it(() => {
-        HybridTestObject.stringOrNull = 'hello'
-        HybridTestObject.stringOrNull = null
+        testObject.stringOrNull = 'hello'
+        testObject.stringOrNull = null
       }).didNotThrow()
     ),
     createTest('get stringOrNull (== undefined)', () =>
-      it(() => HybridTestObject.stringOrNull)
+      it(() => {
+        testObject.stringOrNull = null
+        return testObject.stringOrNull
+      })
         .didNotThrow()
         .equals(null)
     ),
     createTest('set optionalString to string, then undefined', () =>
       it(() => {
-        HybridTestObject.optionalString = 'hello'
-        HybridTestObject.optionalString = undefined
+        testObject.optionalString = 'hello'
+        testObject.optionalString = undefined
       }).didNotThrow()
     ),
     createTest('get optionalString (== undefined)', () =>
-      it(() => HybridTestObject.optionalString)
+      it(() => {
+        testObject.optionalString = undefined
+        return testObject.optionalString
+      })
         .didNotThrow()
         .equals(undefined)
     ),
 
     // Test basic functions
     createTest('addNumbers(5, 13) = 18', () =>
-      it(() => HybridTestObject.addNumbers(5, 13))
+      it(() => testObject.addNumbers(5, 13))
         .didNotThrow()
         .equals(18)
     ),
     createTest('addStrings("hello ", "world") = "hello world"', () =>
-      it(() => HybridTestObject.addStrings('hello ', 'world'))
+      it(() => testObject.addStrings('hello ', 'world'))
         .didNotThrow()
         .equals('hello world')
     ),
     createTest('simpleFunc()', () =>
-      it(() => HybridTestObject.simpleFunc())
+      it(() => testObject.simpleFunc())
         .didNotThrow()
         .didReturn('undefined')
     ),
     createTest('multipleArguments(...)', () =>
-      it(() => HybridTestObject.multipleArguments(13, 'hello!', true))
+      it(() => testObject.multipleArguments(13, 'hello!', true))
         .didNotThrow()
         .didReturn('undefined')
     ),
 
     // Test Maps
     createTest('createMap()', () =>
-      it(() => HybridTestObject.createMap())
+      it(() => testObject.createMap())
         .didNotThrow()
         .didReturn('object')
         .toContain('object')
@@ -227,48 +247,68 @@ export function getTests(): TestRunner[] {
         .toContain('number')
     ),
     createTest('createMap().array', () =>
-      it(() => HybridTestObject.createMap().array)
+      it(() => testObject.createMap().array)
         .didNotThrow()
         .didReturn('object')
+        .equals([
+          testObject.numberValue,
+          testObject.boolValue,
+          testObject.stringValue,
+          testObject.bigintValue,
+        ])
     ),
     createTest('createMap().object', () =>
-      it(() => HybridTestObject.createMap().object)
+      it(() => testObject.createMap().object)
         .didNotThrow()
         .didReturn('object')
+        .equals({
+          array: [
+            testObject.numberValue,
+            testObject.boolValue,
+            testObject.stringValue,
+            testObject.bigintValue,
+            [
+              testObject.numberValue,
+              testObject.boolValue,
+              testObject.stringValue,
+              testObject.bigintValue,
+            ],
+          ],
+          bigint: testObject.bigintValue,
+          bool: testObject.boolValue,
+          string: testObject.stringValue,
+          number: testObject.numberValue,
+          null: null,
+        })
     ),
-    createTest('mapRoundtrip(...)', () =>
-      it(() => HybridTestObject.mapRoundtrip(HybridTestObject.createMap()))
+    createTest('mapRoundtrip(...)', () => {
+      const map = testObject.createMap()
+      return it(() => testObject.mapRoundtrip(map))
         .didNotThrow()
-        .equals(HybridTestObject.createMap())
-    ),
+        .equals(map)
+    }),
 
     // Test errors
-    createTest('get valueThatWillThrowOnAccess', () =>
-      it(() => HybridTestObject.valueThatWillThrowOnAccess).didThrow()
-    ),
-    createTest('set valueThatWillThrowOnAccess', () =>
-      it(() => (HybridTestObject.valueThatWillThrowOnAccess = 55)).didThrow()
-    ),
     createTest('funcThatThrows()', () =>
-      it(() => HybridTestObject.funcThatThrows()).didThrow()
+      it(() => testObject.funcThatThrows()).didThrow()
     ),
 
     // Optional parameters
     createTest('tryOptionalParams(...) omitted', () =>
-      it(() => HybridTestObject.tryOptionalParams(13, true))
+      it(() => testObject.tryOptionalParams(13, true))
         .didNotThrow()
         .didReturn('string')
         .equals('value omitted!')
     ),
     createTest('tryOptionalParams(...) provided', () =>
-      it(() => HybridTestObject.tryOptionalParams(13, true, 'hello'))
+      it(() => testObject.tryOptionalParams(13, true, 'hello'))
         .didNotThrow()
         .didReturn('string')
         .equals('hello')
     ),
     createTest('tryOptionalParams(...) one-too-many', () =>
       it(() =>
-        HybridTestObject.tryOptionalParams(
+        testObject.tryOptionalParams(
           13,
           true,
           'hello',
@@ -280,193 +320,233 @@ export function getTests(): TestRunner[] {
     createTest('tryOptionalParams(...) one-too-few', () =>
       it(() =>
         // @ts-expect-error
-        HybridTestObject.tryOptionalParams(13)
+        testObject.tryOptionalParams(13)
       ).didThrow()
     ),
     createTest('tryMiddleParam(...)', () =>
-      it(() => HybridTestObject.tryMiddleParam(13, undefined, 'hello!'))
+      it(() => testObject.tryMiddleParam(13, undefined, 'hello!'))
         .didNotThrow()
         .equals('hello!')
     ),
     createTest('tryMiddleParam(...)', () =>
-      it(() => HybridTestObject.tryMiddleParam(13, true, 'passed'))
+      it(() => testObject.tryMiddleParam(13, true, 'passed'))
         .didNotThrow()
         .equals('passed')
     ),
+    createTest('tryOptionalEnum(...)', () =>
+      it(() => testObject.tryOptionalEnum('gas'))
+        .didNotThrow()
+        .equals('gas')
+    ),
+    createTest('tryOptionalEnum(...)', () =>
+      it(() => testObject.tryOptionalEnum(undefined))
+        .didNotThrow()
+        .equals(undefined)
+    ),
 
     // Variants tests
-    createTest('set someVariant to 55', () =>
-      it(() => (HybridTestObject.someVariant = 55)).didNotThrow()
-    ),
-    createTest('get someVariant (== 55)', () =>
-      it(() => HybridTestObject.someVariant).equals(55)
-    ),
-    createTest("set someVariant to 'some-string'", () =>
-      it(() => (HybridTestObject.someVariant = 'some-string')).didNotThrow()
-    ),
-    createTest("get someVariant (== 'some-string')", () =>
-      it(() => HybridTestObject.someVariant).equals('some-string')
-    ),
-    createTest('set someVariant to false', () =>
-      it(
-        () =>
-          // @ts-expect-error
-          (HybridTestObject.someVariant = false)
-      ).didThrow()
-    ),
-    createTest('passVariant(...) holds something else ([1,2,3])', () =>
-      it(() => HybridTestObject.passVariant([1, 2, 3]))
-        .didNotThrow()
-        .equals('holds something else!')
-    ),
-    createTest('passVariant(...) holds string(hello!)', () =>
-      it(() => HybridTestObject.passVariant('hello!'))
-        .didNotThrow()
-        .equals('hello!')
-    ),
-    createTest('passVariant(...) holds number (5)', () =>
-      it(() => HybridTestObject.passVariant(5))
-        .didNotThrow()
-        .equals(5)
-    ),
-    createTest('passVariant(...) wrong type ({})', () =>
-      it(() =>
-        HybridTestObject.passVariant(
-          // @ts-expect-error
-          {}
-        )
-      ).didThrow()
-    ),
-
-    // Complex variants tests
-    createTest('getVariantEnum(...) converts enum', () =>
-      it(() => HybridTestObject.getVariantEnum(OldEnum.THIRD))
-        .didNotThrow()
-        .equals(OldEnum.THIRD)
-    ),
-    createTest('getVariantEnum(...) converts boolean', () =>
-      it(() => HybridTestObject.getVariantEnum(true))
-        .didNotThrow()
-        .equals(true)
-    ),
-    createTest('getVariantEnum(...) throws at wrong type (string)', () =>
-      // @ts-expect-error
-      it(() => HybridTestObject.getVariantEnum('string')).didThrow()
-    ),
-    createTest('getVariantObjects(...) converts Person', () =>
-      it(() => HybridTestObject.getVariantObjects(TEST_PERSON))
-        .didNotThrow()
-        .equals(TEST_PERSON)
-    ),
-    createTest('getVariantObjects(...) converts Car', () =>
-      it(() => HybridTestObject.getVariantObjects(TEST_CAR))
-        .didNotThrow()
-        .equals(TEST_CAR)
-    ),
-    createTest('getVariantObjects(...) converts Car (+ person)', () =>
-      it(() =>
-        HybridTestObject.getVariantObjects({ ...TEST_CAR, driver: TEST_PERSON })
-      )
-        .didNotThrow()
-        .equals({ ...TEST_CAR, driver: TEST_PERSON })
-    ),
-    createTest('getVariantObjects(...) throws at wrong type (string)', () =>
-      // @ts-expect-error
-      it(() => HybridTestObject.getVariantObjects('some-string')).didThrow()
-    ),
-    createTest(
-      'getVariantObjects(...) throws at wrong type (wrong object)',
-      () =>
-        it(() =>
-          // @ts-expect-error
-          HybridTestObject.getVariantObjects({ someValue: 55 })
-        ).didThrow()
-    ),
-    createTest('getVariantHybrid(...) converts Hybrid', () =>
-      it(() => HybridTestObject.getVariantHybrid(HybridTestObject))
-        .didNotThrow()
-        // @ts-expect-error
-        .toContain('getVariantHybrid')
-    ),
-    createTest('getVariantHybrid(...) converts Person', () =>
-      it(() => HybridTestObject.getVariantHybrid(TEST_PERSON))
-        .didNotThrow()
-        .equals(TEST_PERSON)
-    ),
-    createTest('getVariantHybrid(...) throws at wrong type (string)', () =>
-      // @ts-expect-error
-      it(() => HybridTestObject.getVariantHybrid('some-string')).didThrow()
-    ),
-    createTest(
-      'getVariantHybrid(...) throws at wrong type (wrong object)',
-      () =>
-        it(() =>
-          // @ts-expect-error
-          HybridTestObject.getVariantHybrid({ someValue: 55 })
-        ).didThrow()
-    ),
-    createTest('getVariantTuple(...) converts Float2', () =>
-      it(() => HybridTestObject.getVariantTuple([10, 20]))
-        .didNotThrow()
-        .equals([10, 20])
-    ),
-    createTest('getVariantTuple(...) converts Float3', () =>
-      it(() => HybridTestObject.getVariantTuple([10, 20, 30]))
-        .didNotThrow()
-        .equals([10, 20, 30])
-    ),
-    createTest('getVariantTuple(...) throws at wrong size (4 items)', () =>
-      it(() =>
-        // @ts-expect-error
-        HybridTestObject.getVariantTuple([10, 20, 30, 40, 50])
-      ).didThrow()
-    ),
-    createTest('getVariantTuple(...) throws at wrong type (string)', () =>
-      // @ts-expect-error
-      it(() => HybridTestObject.getVariantTuple('hello')).didThrow()
-    ),
-    createTest('getVariantTuple(...) throws at wrong type (string[])', () =>
-      // @ts-expect-error
-      it(() => HybridTestObject.getVariantTuple(['hello', 'world'])).didThrow()
-    ),
+    ...('someVariant' in testObject
+      ? [
+          createTest('set someVariant to 55', () =>
+            it(() => (testObject.someVariant = 55)).didNotThrow()
+          ),
+          createTest('get someVariant (== 55)', () =>
+            it(() => {
+              testObject.someVariant = 55
+              return testObject.someVariant
+            }).equals(55)
+          ),
+          createTest("set someVariant to 'some-string'", () =>
+            it(() => (testObject.someVariant = 'some-string')).didNotThrow()
+          ),
+          createTest("get someVariant (== 'some-string')", () =>
+            it(() => {
+              testObject.someVariant = 'some-string'
+              return testObject.someVariant
+            }).equals('some-string')
+          ),
+          createTest('set someVariant to false', () =>
+            it(
+              () =>
+                // @ts-expect-error
+                (testObject.someVariant = false)
+            ).didThrow()
+          ),
+          createTest('passVariant(...) holds something else ([1,2,3])', () =>
+            it(() => testObject.passVariant([1, 2, 3]))
+              .didNotThrow()
+              .equals('holds something else!')
+          ),
+          createTest('passVariant(...) holds string(hello!)', () =>
+            it(() => testObject.passVariant('hello!'))
+              .didNotThrow()
+              .equals('hello!')
+          ),
+          createTest('passVariant(...) holds number (5)', () =>
+            it(() => testObject.passVariant(5))
+              .didNotThrow()
+              .equals(5)
+          ),
+          createTest('passVariant(...) wrong type ({})', () =>
+            it(() =>
+              testObject.passVariant(
+                // @ts-expect-error
+                {}
+              )
+            ).didThrow()
+          ),
+          // Complex variants tests
+          createTest('getVariantEnum(...) converts enum', () =>
+            it(() => testObject.getVariantEnum(OldEnum.THIRD))
+              .didNotThrow()
+              .equals(OldEnum.THIRD)
+          ),
+          createTest('getVariantEnum(...) converts boolean', () =>
+            it(() => testObject.getVariantEnum(true))
+              .didNotThrow()
+              .equals(true)
+          ),
+          createTest('getVariantEnum(...) throws at wrong type (string)', () =>
+            // @ts-expect-error
+            it(() => testObject.getVariantEnum('string')).didThrow()
+          ),
+          createTest('getVariantObjects(...) converts Person', () =>
+            it(() => testObject.getVariantObjects(TEST_PERSON))
+              .didNotThrow()
+              .equals(TEST_PERSON)
+          ),
+          createTest('getVariantObjects(...) converts Car', () =>
+            it(() => testObject.getVariantObjects(TEST_CAR))
+              .didNotThrow()
+              .equals(TEST_CAR)
+          ),
+          createTest('getVariantObjects(...) converts Car (+ person)', () =>
+            it(() =>
+              testObject.getVariantObjects({ ...TEST_CAR, driver: TEST_PERSON })
+            )
+              .didNotThrow()
+              .equals({ ...TEST_CAR, driver: TEST_PERSON })
+          ),
+          createTest(
+            'getVariantObjects(...) throws at wrong type (string)',
+            () =>
+              // @ts-expect-error
+              it(() => testObject.getVariantObjects('some-string')).didThrow()
+          ),
+          createTest(
+            'getVariantObjects(...) throws at wrong type (wrong object)',
+            () =>
+              it(() =>
+                // @ts-expect-error
+                testObject.getVariantObjects({ someValue: 55 })
+              ).didThrow()
+          ),
+          createTest('getVariantHybrid(...) converts Hybrid', () =>
+            it(() => testObject.getVariantHybrid(testObject))
+              .didNotThrow()
+              // @ts-expect-error
+              .toContain('getVariantHybrid')
+          ),
+          createTest('getVariantHybrid(...) converts Person', () =>
+            it(() => testObject.getVariantHybrid(TEST_PERSON))
+              .didNotThrow()
+              .equals(TEST_PERSON)
+          ),
+          createTest(
+            'getVariantHybrid(...) throws at wrong type (string)',
+            () =>
+              // @ts-expect-error
+              it(() => testObject.getVariantHybrid('some-string')).didThrow()
+          ),
+          createTest(
+            'getVariantHybrid(...) throws at wrong type (wrong object)',
+            () =>
+              it(() =>
+                // @ts-expect-error
+                testObject.getVariantHybrid({ someValue: 55 })
+              ).didThrow()
+          ),
+          createTest('getVariantTuple(...) converts Float2', () =>
+            it(() => testObject.getVariantTuple([10, 20]))
+              .didNotThrow()
+              .equals([10, 20])
+          ),
+          createTest('getVariantTuple(...) converts Float3', () =>
+            it(() => testObject.getVariantTuple([10, 20, 30]))
+              .didNotThrow()
+              .equals([10, 20, 30])
+          ),
+          createTest(
+            'getVariantTuple(...) throws at wrong size (4 items)',
+            () =>
+              it(() =>
+                // @ts-expect-error
+                testObject.getVariantTuple([10, 20, 30, 40, 50])
+              ).didThrow()
+          ),
+          createTest('getVariantTuple(...) throws at wrong type (string)', () =>
+            // @ts-expect-error
+            it(() => testObject.getVariantTuple('hello')).didThrow()
+          ),
+          createTest(
+            'getVariantTuple(...) throws at wrong type (string[])',
+            () =>
+              it(() =>
+                // @ts-expect-error
+                testObject.getVariantTuple(['hello', 'world'])
+              ).didThrow()
+          ),
+        ]
+      : [
+          // Swift/Kotlin test object does not have variants yet.
+        ]),
 
     // Tuples Tests
-    createTest("set someTuple to [55, 'hello']", () =>
-      it(() => (HybridTestObject.someTuple = [55, 'hello'])).didNotThrow()
-    ),
-    createTest("get someTuple (== [55, 'hello'])", () =>
-      it(() => HybridTestObject.someTuple).equals([55, 'hello'])
-    ),
-    createTest('flip([10, 20, 30])', () =>
-      it(() => HybridTestObject.flip([10, 20, 30]))
-        .didNotThrow()
-        .equals([30, 20, 10])
-    ),
-    createTest('flip([10, 20]) throws', () =>
-      it(() =>
-        HybridTestObject.flip(
-          // @ts-expect-error
-          [10, 20]
-        )
-      ).didThrow()
-    ),
-    createTest('passTuple(...)', () =>
-      it(() => HybridTestObject.passTuple([13, 'hello', true]))
-        .didNotThrow()
-        .equals([13, 'hello', true])
-    ),
+    ...('someTuple' in testObject
+      ? [
+          createTest("set someTuple to [55, 'hello']", () =>
+            it(() => (testObject.someTuple = [55, 'hello'])).didNotThrow()
+          ),
+          createTest("get someTuple (== [55, 'hello'])", () =>
+            it(() => {
+              testObject.someTuple = [55, 'hello']
+              return testObject.someTuple
+            }).equals([55, 'hello'])
+          ),
+          createTest('flip([10, 20, 30])', () =>
+            it(() => testObject.flip([10, 20, 30]))
+              .didNotThrow()
+              .equals([30, 20, 10])
+          ),
+          createTest('flip([10, 20]) throws', () =>
+            it(() =>
+              testObject.flip(
+                // @ts-expect-error
+                [10, 20]
+              )
+            ).didThrow()
+          ),
+          createTest('passTuple(...)', () =>
+            it(() => testObject.passTuple([13, 'hello', true]))
+              .didNotThrow()
+              .equals([13, 'hello', true])
+          ),
+        ]
+      : [
+          // Swift/Kotlin Test Object does not have tuples yet!
+        ]),
 
     // Promises
     createTest('wait', async () =>
-      (await it(() => HybridTestObject.wait(0.1))).didNotThrow()
+      (await it(() => testObject.wait(0.1))).didNotThrow()
     ),
     createTest('calculateFibonacciSync(5)', async () =>
-      it(() => HybridTestObject.calculateFibonacciSync(10))
+      it(() => testObject.calculateFibonacciSync(10))
         .didNotThrow()
         .equals(55n)
     ),
     createTest('calculateFibonacciAsync(5)', async () =>
-      (await it(() => HybridTestObject.calculateFibonacciAsync(10)))
+      (await it(() => testObject.calculateFibonacciAsync(10)))
         .didNotThrow()
         .equals(55n)
     ),
@@ -476,7 +556,7 @@ export function getTests(): TestRunner[] {
       (
         await it<boolean>(async () => {
           return timeoutedPromise((complete) => {
-            HybridTestObject.callCallback(() => {
+            testObject.callCallback(() => {
               complete(true)
             })
           })
@@ -485,25 +565,73 @@ export function getTests(): TestRunner[] {
         .didNotThrow()
         .equals(true)
     ),
-    createTest('getValueFromJSCallback(...)', async () =>
+    createTest('callWithOptional(undefined)', async () =>
       (
-        await it(async () => {
+        await it<number | undefined>(async () => {
           return timeoutedPromise((complete) => {
-            HybridTestObject.getValueFromJSCallback(() => {
-              complete(true)
-              return 55
+            testObject.callWithOptional(undefined, (val) => {
+              complete(val)
             })
           })
         })
       )
         .didNotThrow()
-        .equals(true)
+        .equals(undefined)
     ),
-    createTest('getValueFromJSCallbackAndWait(...)', async () =>
-      (await it(() => HybridTestObject.getValueFromJSCallbackAndWait(() => 73)))
+    createTest('callWithOptional(433)', async () =>
+      (
+        await it<number | undefined>(async () => {
+          return timeoutedPromise((complete) => {
+            testObject.callWithOptional(433, (val) => {
+              complete(val)
+            })
+          })
+        })
+      )
         .didNotThrow()
-        .equals(73)
+        .equals(433)
     ),
+    ...('getValueFromJSCallback' in testObject
+      ? [
+          createTest('getValueFromJSCallback(...)', async () =>
+            (
+              await it(async () => {
+                return timeoutedPromise((complete) => {
+                  testObject.getValueFromJSCallback(() => {
+                    complete(true)
+                    return 55
+                  })
+                })
+              })
+            )
+              .didNotThrow()
+              .equals(true)
+          ),
+          createTest('getValueFromJSCallbackAndWait(...)', async () =>
+            (await it(() => testObject.getValueFromJSCallbackAndWait(() => 73)))
+              .didNotThrow()
+              .equals(73)
+          ),
+          createTest('getValueFromJsCallback(...)', async () =>
+            (
+              await it(async () => {
+                let value: string | undefined
+                await testObject.getValueFromJsCallback(
+                  () => 'hello',
+                  (val) => {
+                    value = val
+                  }
+                )
+                return value
+              })
+            )
+              .didNotThrow()
+              .equals('hello')
+          ),
+        ]
+      : [
+          // Swift/Kotlin Test Object does not support JS callbacks _that return a value_ yet!
+        ]),
     createTest('callAll(...)', async () =>
       (
         await it(async () => {
@@ -513,33 +641,17 @@ export function getTests(): TestRunner[] {
               calledCount++
               if (calledCount === 3) complete(calledCount)
             }
-            HybridTestObject.callAll(func, func, func)
+            testObject.callAll(func, func, func)
           })
         })
       )
         .didNotThrow()
         .equals(3)
     ),
-    createTest('getValueFromJsCallback(...)', async () =>
-      (
-        await it(async () => {
-          let value: string | undefined
-          await HybridTestObject.getValueFromJsCallback(
-            () => 'hello',
-            (val) => {
-              value = val
-            }
-          )
-          return value
-        })
-      )
-        .didNotThrow()
-        .equals('hello')
-    ),
 
     // Objects
     createTest('getCar()', () =>
-      it(() => HybridTestObject.getCar())
+      it(() => testObject.getCar())
         .didNotThrow()
         .didReturn('object')
         .toContain('year')
@@ -551,7 +663,7 @@ export function getTests(): TestRunner[] {
     ),
     createTest('isCarElectric(...)', () =>
       it(() =>
-        HybridTestObject.isCarElectric({
+        testObject.isCarElectric({
           make: 'Lamborghini',
           year: 2018,
           model: 'Huracan Performante',
@@ -564,7 +676,7 @@ export function getTests(): TestRunner[] {
     ),
     createTest('getDriver(...) with no driver', () =>
       it(() =>
-        HybridTestObject.getDriver({
+        testObject.getDriver({
           make: 'Lamborghini',
           year: 2018,
           model: 'Huracan Performante',
@@ -577,7 +689,7 @@ export function getTests(): TestRunner[] {
     ),
     createTest('getDriver(...) with driver', () =>
       it(() =>
-        HybridTestObject.getDriver({
+        testObject.getDriver({
           make: 'Lamborghini',
           year: 2018,
           model: 'Huracan Performante',
@@ -592,7 +704,7 @@ export function getTests(): TestRunner[] {
 
     // Hybrid Object Tests
     createTest('get self', () =>
-      it(() => HybridTestObject.self)
+      it(() => testObject.thisObject)
         .didNotThrow()
         .didReturn('object')
         .toContain('bigintValue')
@@ -600,7 +712,7 @@ export function getTests(): TestRunner[] {
         .toContain('stringValue')
     ),
     createTest('newTestObject()', () =>
-      it(() => HybridTestObject.newTestObject())
+      it(() => testObject.newTestObject())
         .didNotThrow()
         .didReturn('object')
         .toContain('bigintValue')
@@ -610,14 +722,14 @@ export function getTests(): TestRunner[] {
 
     // ArrayBuffers
     createTest('createArrayBuffer()', () =>
-      it(() => HybridTestObject.createArrayBuffer())
+      it(() => testObject.createArrayBuffer())
         .didNotThrow()
         .didReturn('object')
     ),
     createTest('getBufferLastItem(...) == 5', () =>
       it(() => {
         const buffer = new Uint8Array([13, 20, 55])
-        return HybridTestObject.getBufferLastItem(buffer.buffer)
+        return testObject.getBufferLastItem(buffer.buffer)
       })
         .didNotThrow()
         .equals(55)
@@ -625,7 +737,7 @@ export function getTests(): TestRunner[] {
     createTest('setAllValuesTo(...)', () =>
       it(() => {
         const buffer = new Uint8Array(30)
-        HybridTestObject.setAllValuesTo(buffer.buffer, 55)
+        testObject.setAllValuesTo(buffer.buffer, 55)
         return buffer.every((v) => v === 55)
       })
         .didNotThrow()
@@ -634,49 +746,54 @@ export function getTests(): TestRunner[] {
 
     // Base HybridObject inherited methods
     createTest('.toString()', () =>
-      it(() => HybridTestObject.toString())
+      it(() => testObject.toString())
         .didNotThrow()
         .didReturn('string')
-        .equals('[HybridObject TestObject]')
+        .equals(`[HybridObject ${testObject.name}]`)
     ),
     createTest('.name', () =>
-      it(() => HybridTestObject.name)
+      it(() => testObject.name)
         .didNotThrow()
         .didReturn('string')
-        .equals('TestObject')
     ),
     createTest('.equals(...) == true', () =>
-      it(() => HybridTestObject.equals(HybridTestObject))
+      it(() => testObject.equals(testObject))
         .didNotThrow()
         .equals(true)
     ),
     createTest('.equals(.self) == true', () =>
-      it(() => HybridTestObject.equals(HybridTestObject.self))
+      it(() => testObject.equals(testObject.thisObject))
         .didNotThrow()
         .equals(true)
     ),
     createTest('.self == .self', () =>
       // eslint-disable-next-line no-self-compare
-      it(() => HybridTestObject.self === HybridTestObject.self)
+      it(() => testObject.thisObject === testObject.thisObject)
         .didNotThrow()
         .equals(true)
     ),
     createTest('.equals(newTestObject()) == false', () =>
-      it(() => HybridTestObject.equals(HybridTestObject.newTestObject()))
+      it(() => testObject.equals(testObject.newTestObject()))
         .didNotThrow()
         .equals(false)
     ),
     createTest('Object.keys(...)', () =>
-      it(() => Object.keys(HybridTestObject))
+      it(() => Object.keys(testObject))
         .didNotThrow()
         .didReturn('object')
         .toBeArray()
     ),
-    createTest('Call Raw JSI Func', () =>
-      // @ts-expect-error
-      it(() => HybridTestObject.rawJsiFunc(55, false, 'hello', { obj: true }))
-        .didNotThrow()
-        .equals([55, false, 'hello', { obj: true }])
-    ),
+    ...('rawJsiFunc' in testObject
+      ? [
+          createTest('Call Raw JSI Func', () =>
+            // @ts-expect-error
+            it(() => testObject.rawJsiFunc(55, false, 'hello', { obj: true }))
+              .didNotThrow()
+              .equals([55, false, 'hello', { obj: true }])
+          ),
+        ]
+      : [
+          // Swift/Kotlin Test Objects don't have raw JSI functions!
+        ]),
   ]
 }

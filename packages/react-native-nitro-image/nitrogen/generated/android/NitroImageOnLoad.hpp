@@ -6,6 +6,7 @@
 ///
 
 #include <jni.h>
+#include <NitroModules/NitroDefines.hpp>
 
 namespace margelo::nitro::image {
 

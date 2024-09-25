@@ -1,4 +1,4 @@
-package com.margelo.nitro.image;
+package com.margelo.nitro.<<androidNamespace>>;
 
 import android.util.Log;
 
@@ -21,14 +21,14 @@ public class <<androidCxxLibName>>Package extends TurboReactPackage {
     return null;
   }
 
-  public <<androidCxxLibName>>Package() {
-    // TODO: Register Hybrid Objects here
-  }
-
   @Override
   public ReactModuleInfoProvider getReactModuleInfoProvider() {
     return () -> {
         return new HashMap<>();
     };
+  }
+
+  static {
+    System.loadLibrary("<<androidCxxLibName>>");
   }
 }

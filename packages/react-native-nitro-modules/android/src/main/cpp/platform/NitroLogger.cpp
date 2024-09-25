@@ -6,6 +6,7 @@
 //
 
 #include "NitroLogger.hpp"
+#include "NitroDefines.hpp"
 #include <android/log.h>
 
 namespace margelo::nitro {
@@ -26,7 +27,7 @@ int levelToAndroidLevel(LogLevel level) {
 }
 
 void Logger::nativeLog(LogLevel level, const char* tag, const std::string& message) {
-#ifndef NDEBUG
+#ifdef NITRO_DEBUG
   int logLevel = levelToAndroidLevel(level);
   std::string combinedTag = "Nitro." + std::string(tag);
   __android_log_print(logLevel, combinedTag.c_str(), "%s", message.c_str());

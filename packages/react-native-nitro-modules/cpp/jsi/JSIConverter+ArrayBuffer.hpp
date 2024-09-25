@@ -18,6 +18,7 @@ struct JSIConverter;
 #include "ArrayBuffer.hpp"
 #include "IsSharedPtrTo.hpp"
 #include "JSICache.hpp"
+#include "NitroDefines.hpp"
 #include <jsi/jsi.h>
 #include <memory>
 #include <type_traits>
@@ -30,9 +31,16 @@ using namespace facebook;
 template <typename T>
 struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_v<T, jsi::MutableBuffer>>> final {
   static inline std::shared_ptr<ArrayBuffer> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
-    jsi::Object object = arg.asObject(runtime);
+#ifdef NITRO_DEBUG
+    if (!arg.isObject()) [[unlikely]] {
+      throw std::runtime_error("Value \"" + arg.toString(runtime).utf8(runtime) +
+                               "\" is not an ArrayBuffer - "
+                               "in fact, it's not even an object!");
+    }
+#endif
 
-#ifndef NDEBUG
+    jsi::Object object = arg.asObject(runtime);
+#ifdef NITRO_DEBUG
     if (!object.isArrayBuffer(runtime)) [[unlikely]] {
       throw std::runtime_error("Object \"" + arg.toString(runtime).utf8(runtime) +
                                "\" is not an ArrayBuffer! "

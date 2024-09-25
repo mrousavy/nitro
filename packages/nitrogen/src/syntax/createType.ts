@@ -176,7 +176,8 @@ export function createType(type: TSMorphType, isOptional: boolean): Type {
       const parameters = callSignature.getParameters().map((p) => {
         const declaration = p.getValueDeclarationOrThrow()
         const parameterType = p.getTypeAtLocation(declaration)
-        return createNamedType(p.getName(), parameterType, p.isOptional())
+        const isNullable = parameterType.isNullable() || p.isOptional()
+        return createNamedType(p.getName(), parameterType, isNullable)
       })
       return new FunctionType(returnType, parameters)
     } else if (isPromise(type)) {
@@ -208,11 +209,18 @@ export function createType(type: TSMorphType, isOptional: boolean): Type {
       )
       return new EnumType(typename, enumDeclaration)
     } else if (type.isUnion()) {
-      // It is some kind of union - either full of strings (then it's an enum, or different types, then it's a Variant)
-      const isEnumUnion = type.getUnionTypes().every((t) => t.isStringLiteral())
+      // It is some kind of union;
+      // - of string literals (then it's an enum)
+      // - of type `T | undefined` (then it's just optional `T`)
+      // - of different types (then it's a variant `A | B | C`)
+      const types = type.getUnionTypes()
+      const nonNullTypes = types.filter(
+        (t) => !t.isNull() && !t.isUndefined() && !t.isVoid()
+      )
+      const isEnumUnion = nonNullTypes.every((t) => t.isStringLiteral())
       if (isEnumUnion) {
         // It consists only of string literaly - that means it's describing an enum!
-        const symbol = type.getAliasSymbol()
+        const symbol = type.getNonNullableType().getAliasSymbol()
         if (symbol == null) {
           // If there is no alias, it is an inline union instead of a separate type declaration!
           throw new Error(
@@ -232,7 +240,7 @@ export function createType(type: TSMorphType, isOptional: boolean): Type {
         variants = removeDuplicates(variants)
 
         if (variants.length === 1) {
-          // It's just one type with undefined/null varians - so we treat it like a simple optional.
+          // It's just one type with undefined/null variant(s) - so we treat it like a simple optional.
           return variants[0]!
         }
 

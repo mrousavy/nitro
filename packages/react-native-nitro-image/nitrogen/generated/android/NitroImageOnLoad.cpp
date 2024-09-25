@@ -14,10 +14,11 @@
 #include "JHybridImageSpec.hpp"
 #include "JFunc_void_std__string.hpp"
 #include "JHybridImageFactorySpec.hpp"
-#include "JHybridKotlinTestObjectSpec.hpp"
-#include "JFunc_void_Person.hpp"
+#include "JHybridTestObjectSwiftKotlinSpec.hpp"
+#include "JFunc_void.hpp"
+#include "JFunc_void_std__optional_double_.hpp"
 #include <NitroModules/JNISharedPtr.hpp>
-#include "HybridTestObject.hpp"
+#include "HybridTestObjectCpp.hpp"
 
 namespace margelo::nitro::image {
 
@@ -31,39 +32,53 @@ int initialize(JavaVM* vm) {
     margelo::nitro::image::JHybridImageSpec::registerNatives();
     margelo::nitro::image::JFunc_void_std__string::registerNatives();
     margelo::nitro::image::JHybridImageFactorySpec::registerNatives();
-    margelo::nitro::image::JHybridKotlinTestObjectSpec::registerNatives();
-    margelo::nitro::image::JFunc_void_Person::registerNatives();
+    margelo::nitro::image::JHybridTestObjectSwiftKotlinSpec::registerNatives();
+    margelo::nitro::image::JFunc_void::registerNatives();
+    margelo::nitro::image::JFunc_void::registerNatives();
+    margelo::nitro::image::JFunc_void::registerNatives();
+    margelo::nitro::image::JFunc_void::registerNatives();
+    margelo::nitro::image::JFunc_void_std__optional_double_::registerNatives();
 
     // Register Nitro Hybrid Objects
     HybridObjectRegistry::registerHybridObjectConstructor(
       "ImageFactory",
       []() -> std::shared_ptr<HybridObject> {
-        static auto javaClass = jni::findClassLocal("com/margelo/nitro/image/ImageFactory");
+        static auto javaClass = jni::findClassStatic("com/margelo/nitro/image/ImageFactory");
         static auto defaultConstructor = javaClass->getConstructor<JHybridImageFactorySpec::javaobject()>();
     
         auto instance = javaClass->newObject(defaultConstructor);
+    #ifdef NITRO_DEBUG
+        if (instance == nullptr) [[unlikely]] {
+          throw std::runtime_error("Failed to create an instance of \"JHybridImageFactorySpec\" - the constructor returned null!");
+        }
+    #endif
         auto globalRef = jni::make_global(instance);
         return JNISharedPtr::make_shared_from_jni<JHybridImageFactorySpec>(globalRef);
       }
     );
     HybridObjectRegistry::registerHybridObjectConstructor(
-      "TestObject",
+      "TestObjectCpp",
       []() -> std::shared_ptr<HybridObject> {
-        static_assert(std::is_default_constructible_v<HybridTestObject>,
-                      "The HybridObject \"HybridTestObject\" is not default-constructible! "
+        static_assert(std::is_default_constructible_v<HybridTestObjectCpp>,
+                      "The HybridObject \"HybridTestObjectCpp\" is not default-constructible! "
                       "Create a public constructor that takes zero arguments to be able to autolink this HybridObject.");
-        return std::make_shared<HybridTestObject>();
+        return std::make_shared<HybridTestObjectCpp>();
       }
     );
     HybridObjectRegistry::registerHybridObjectConstructor(
-      "KotlinTestObject",
+      "TestObjectSwiftKotlin",
       []() -> std::shared_ptr<HybridObject> {
-        static auto javaClass = jni::findClassLocal("com/margelo/nitro/image/KotlinTestObject");
-        static auto defaultConstructor = javaClass->getConstructor<JHybridKotlinTestObjectSpec::javaobject()>();
+        static auto javaClass = jni::findClassStatic("com/margelo/nitro/image/HybridTestObjectKotlin");
+        static auto defaultConstructor = javaClass->getConstructor<JHybridTestObjectSwiftKotlinSpec::javaobject()>();
     
         auto instance = javaClass->newObject(defaultConstructor);
+    #ifdef NITRO_DEBUG
+        if (instance == nullptr) [[unlikely]] {
+          throw std::runtime_error("Failed to create an instance of \"JHybridTestObjectSwiftKotlinSpec\" - the constructor returned null!");
+        }
+    #endif
         auto globalRef = jni::make_global(instance);
-        return JNISharedPtr::make_shared_from_jni<JHybridKotlinTestObjectSpec>(globalRef);
+        return JNISharedPtr::make_shared_from_jni<JHybridTestObjectSwiftKotlinSpec>(globalRef);
       }
     );
   });

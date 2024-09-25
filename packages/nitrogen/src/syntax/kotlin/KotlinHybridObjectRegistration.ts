@@ -38,10 +38,15 @@ export function createJNIHybridObjectRegistration({
 HybridObjectRegistry::registerHybridObjectConstructor(
   "${hybridObjectName}",
   []() -> std::shared_ptr<HybridObject> {
-    static auto javaClass = jni::findClassLocal("${jniNamespace}");
+    static auto javaClass = jni::findClassStatic("${jniNamespace}");
     static auto defaultConstructor = javaClass->getConstructor<${JHybridTSpec}::javaobject()>();
 
     auto instance = javaClass->newObject(defaultConstructor);
+#ifdef NITRO_DEBUG
+    if (instance == nullptr) [[unlikely]] {
+      throw std::runtime_error("Failed to create an instance of \\"${JHybridTSpec}\\" - the constructor returned null!");
+    }
+#endif
     auto globalRef = jni::make_global(instance);
     return JNISharedPtr::make_shared_from_jni<${JHybridTSpec}>(globalRef);
   }

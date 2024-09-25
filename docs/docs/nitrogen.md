@@ -105,7 +105,7 @@ Nitrogen parses all TypeScript files that end in `.nitro.ts`.
 For example, let's create `Math.nitro.ts`:
 
 ```ts title="Math.nitro.ts"
-interface Math extends HybridObject {
+interface Math extends HybridObject<{ ios: 'swift', android: 'kotlin' }> {
   add(a: number, b: number): number
 }
 ```
@@ -203,6 +203,11 @@ To implement `Math` now, you just need to implement the spec:
   <TabItem value="swift" label="Swift" default>
     ```swift title="HybridMath.swift"
     class HybridMath : HybridMathSpec {
+      var hybridContext = margelo.nitro.HybridContext()
+      var memorySize: Int {
+        return getSizeOf(self)
+      }
+
       public func add(a: Double, b: Double) throws -> Double {
         return a + b
       }
@@ -212,6 +217,9 @@ To implement `Math` now, you just need to implement the spec:
   <TabItem value="kotlin" label="Kotlin">
     ```kotlin title="HybridMath.kt"
     class HybridMath : HybridMathSpec() {
+      override val memorySize: Long
+        get() = 0L
+
       override fun add(a: Double, b: Double): Double {
         return a + b
       }
@@ -273,7 +281,7 @@ In your `nitro.json`, register `HybridMath` in the `"autolinking"` section:
 
 Make sure `HybridMath` is default-constructible and scoped inside the correct namespace/package/file, then run Nitrogen.
 
-#### 5.1. Initialize Android (C*+)
+#### 5.1. Initialize Android (C++)
 
 For Android, you also need to explicitly call `initialize()` in your JNI OnLoad function (most of the time this is inside `cpp-adapter.cpp`):
 

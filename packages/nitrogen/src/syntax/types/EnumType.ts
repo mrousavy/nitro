@@ -50,24 +50,27 @@ export class EnumType implements Type {
     } else {
       // It's a TS union '..' | '..'
       this.jsType = 'union'
-      this.enumMembers = declaration.getUnionTypes().map((t, i) => {
-        if (t.isStringLiteral()) {
-          const literalValue = t.getLiteralValueOrThrow()
-          if (typeof literalValue !== 'string')
+      this.enumMembers = declaration
+        .getNonNullableType()
+        .getUnionTypes()
+        .map((t, i) => {
+          if (t.isStringLiteral()) {
+            const literalValue = t.getLiteralValueOrThrow()
+            if (typeof literalValue !== 'string')
+              throw new Error(
+                `${enumName}: Value "${literalValue}" is not a string - it is ${typeof literalValue}!`
+              )
+            return {
+              name: escapeCppName(literalValue).toUpperCase(),
+              value: i,
+              stringValue: literalValue,
+            }
+          } else {
             throw new Error(
-              `${enumName}: Value "${literalValue}" is not a string - it is ${typeof literalValue}!`
+              `${enumName}: Value "${t.getText()}" is not a string literal - it cannot be represented in a C++ enum!`
             )
-          return {
-            name: escapeCppName(literalValue).toUpperCase(),
-            value: i,
-            stringValue: literalValue,
           }
-        } else {
-          throw new Error(
-            `${enumName}: Value "${t.getText()}" is not a string literal - it cannot be represented in a C++ enum!`
-          )
-        }
-      })
+        })
       this.declarationFile = createCppUnion(enumName, this.enumMembers)
     }
   }
