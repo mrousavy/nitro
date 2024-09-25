@@ -175,12 +175,12 @@ private:
     if (!value.isObject()) [[unlikely]] {
       throw jsi::JSError(runtime, "Cannot " + getHybridFuncDebugInfo<THybrid>(funcKind, funcName) +
                                       " - `this` is not bound! Suggestions:\n"
-                                      "- Did you accidentally destructure the `HybridObject` (`const { " +
+                                      "- Did you accidentally destructure the `HybridObject`? (`const { " +
                                       funcName +
-                                      " } = ...`) and lose a reference to the original object?\n"
+                                      " } = ...`)\n"
                                       "- Did you call `dispose()` on the `HybridObject` before?"
                                       "- Did you accidentally call `" +
-                                      funcName + "` on the prototype directly?\n");
+                                      funcName + "` on the prototype directly?");
     }
 #endif
     jsi::Object object = value.getObject(runtime);
@@ -190,12 +190,12 @@ private:
     if (!object.hasNativeState(runtime)) [[unlikely]] {
       throw jsi::JSError(runtime, "Cannot " + getHybridFuncDebugInfo<THybrid>(funcKind, funcName) +
                                       " - `this` does not have a NativeState! Suggestions:\n"
-                                      "- Did you accidentally destructure the `HybridObject` (`const { " +
+                                      "- Did you accidentally destructure the `HybridObject`? (`const { " +
                                       funcName +
-                                      " } = ...`) and lose a reference to the original object?\n"
+                                      " } = ...`)\n"
                                       "- Did you call `dispose()` on the `HybridObject` before?"
                                       "- Did you accidentally call `" +
-                                      funcName + "` on the prototype directly?\n");
+                                      funcName + "` on the prototype directly?");
     }
 #endif
 
