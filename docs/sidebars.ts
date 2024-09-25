@@ -19,6 +19,7 @@ const sidebars: SidebarsConfig = {
     'using-nitro-in-your-app',
     'using-nitro-in-a-library',
     'configuration-nitro-json',
+    'sync-vs-async',
     {
       type: 'category',
       label: 'Types',
