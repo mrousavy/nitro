@@ -14,8 +14,7 @@
 }
 
 [data-theme='dark'] .heroBanner {
-  background-color: #183f58;
-  background: color(display-p3 0.0941 0.2471 0.3451);
+  background: #171e31;
 }
 
 .heroLogo {
@@ -42,7 +41,7 @@
 
 [data-theme='dark'] .heroButton {
   color: #e0e0e0;
-  border-color: #00000090;
+  border-color: #0000005e;
   background: #ff4c7c;
   background: color(display-p3 0.8431 0.3294 0.4863);
 }

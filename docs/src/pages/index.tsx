@@ -3,20 +3,28 @@ import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
 import HomepageFeatures from '@site/src/components/HomepageFeatures';
-
+import ThemedImage from '@theme/ThemedImage';
 import styles from './index.module.css';
+import useBaseUrl from '@docusaurus/useBaseUrl';
 
 const Icon = require('@site/static/img/nos.png').default;
-const Logo = require('@site/static/img/logo.svg').default;
 
 function HomepageHeader() {
   const { siteConfig } = useDocusaurusContext();
+
   return (
     <header className={clsx('', styles.heroBanner)}>
       <div className={styles.heroContainer}>
         <div className={styles.heroContentContainer}>
           <img className={styles.heroIcon} src={Icon} />
-          <Logo className={styles.heroLogo} />
+          <ThemedImage
+            className={styles.heroLogo}
+            alt="Nitrous Logo"
+            sources={{
+              light: useBaseUrl('/img/logo.svg'),
+              dark: useBaseUrl('/img/logo-dark.svg'),
+            }}
+          />
           <p className="hero__subtitle">{siteConfig.tagline}</p>
 
           <Link to="/docs/what-is-nitro" className={styles.heroButton}>

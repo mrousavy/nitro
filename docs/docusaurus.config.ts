@@ -80,6 +80,7 @@ const config: Config = {
       logo: {
         alt: 'Nitrous Logo',
         src: 'img/logo.svg',
+        srcDark: 'img/logo-dark.svg',
         height: 32,
         width: 160,
       },
