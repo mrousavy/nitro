@@ -11,48 +11,50 @@ type FeatureItem = {
 const FeatureList: FeatureItem[] = [
   {
     title: 'Mindblowingly Fast',
-    imageSource: require('@site/static/img/graphic-rocket.png').default,
+    imageSource: require('@site/static/img/lightning-bolt.png').default,
     description: (
       <>
-        Nitro Modules are built ontop of a highly optimized JSI foundation
-        that handles caching and property lookup really well.
-        Nitro's communication layer is incredibly efficient and lightweight in memory!
+        Nitro Modules are built ontop of a highly optimized JSI foundation that
+        handles caching and property lookup really well. Nitro's communication
+        layer is incredibly efficient and lightweight in memory!
       </>
     ),
   },
   {
     title: 'Statically Typed',
-    imageSource: require('@site/static/img/graphic-ladder.png').default,
+    imageSource: require('@site/static/img/dna.png').default,
     description: (
       <>
-        Nitro's code-generator ("Nitrogen") statically generates <b>type-safe</b> C++/Swift/Kotlin
-        types from your TypeScript interfaces.
+        Nitro's code-generator ("Nitrogen") statically generates{' '}
+        <b>type-safe</b> C++/Swift/Kotlin types from your TypeScript interfaces.
         This way you'll never pass wrong types, nulls or undefined again!
       </>
     ),
   },
   {
     title: 'Powerful and Flexible',
-    imageSource: require('@site/static/img/graphic-spring.png').default,
+    imageSource: require('@site/static/img/spring.png').default,
     description: (
       <>
-        Similar to pure JavaScript objects, a "HybridObject" in Nitro can
-        work with almost <b>all JavaScript types</b> such as primitives, typed- or untyped-
-        objects, arrays and even variants or other native objects.
+        Similar to pure JavaScript objects, a "HybridObject" in Nitro can work
+        with almost <b>all JavaScript types</b> such as primitives, typed- or
+        untyped- objects, arrays and even variants or other native objects.
       </>
     ),
   },
 ];
 
-function Feature({title, imageSource, description}: FeatureItem) {
+function Feature({ title, imageSource, description }: FeatureItem) {
   return (
     <div className={clsx('col col--4')}>
       <div className="text--center">
         <img src={imageSource} className={styles.featureSvg} />
       </div>
       <div className="text--center padding-horiz--md">
-        <Heading as="h3">{title}</Heading>
-        <p>{description}</p>
+        <Heading as="h3" className={styles.title}>
+          {title}
+        </Heading>
+        <p className={styles.description}>{description}</p>
       </div>
     </div>
   );

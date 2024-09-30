@@ -1,10 +1,11 @@
-import {themes as prismThemes} from 'prism-react-renderer';
-import type {Config} from '@docusaurus/types';
+import { themes as prismThemes } from 'prism-react-renderer';
+import type { Config } from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 
 const config: Config = {
   title: 'Nitro Modules',
-  tagline: 'A framework to build mindblowingly fast native modules with type-safe statically compiled JS bindings.',
+  tagline:
+    'A framework to build mindblowingly fast native modules with type-safe statically compiled JS bindings.',
   favicon: 'img/favicon.ico',
 
   // Set the production url of your site here
@@ -18,7 +19,6 @@ const config: Config = {
   projectName: 'nitro',
   deploymentBranch: 'gh-pages',
   trailingSlash: false,
-
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
 
@@ -55,37 +55,55 @@ const config: Config = {
       minHeadingLevel: 2,
       maxHeadingLevel: 5,
     },
+    headTags: [
+      {
+        tagName: 'link',
+        attributes: {
+          rel: 'stylesheet',
+          href: 'https://api.fontshare.com/css?f[]=clash-display@500&display=swap',
+        },
+      },
+      {
+        tagName: 'link',
+        attributes: {
+          rel: 'stylesheet',
+          href: 'https://api.fontshare.com/css?f[]=satoshi@500,600,700&display=swap',
+        },
+      },
+    ],
     colorMode: {
       defaultMode: 'light',
       disableSwitch: false,
       respectPrefersColorScheme: true,
     },
     navbar: {
-      title: 'Nitro',
       logo: {
         alt: 'Nitrous Logo',
-        src: 'img/nos.png',
+        src: 'img/logo.svg',
+        srcDark: 'img/logo-dark.svg',
+        height: 32,
+        width: 160,
       },
       items: [
         {
           type: 'docSidebar',
           sidebarId: 'docs',
-          position: 'left',
+          position: 'right',
           label: 'Docs',
         },
         {
           type: 'doc',
           docId: 'for-users',
-          position: 'left',
-          label: 'Installation',
-        },
-        {
-          type: 'search',
           position: 'right',
+          label: 'Installation',
         },
         {
           href: 'https://github.com/mrousavy/nitro',
           label: 'GitHub',
+          position: 'right',
+        },
+        {
+          type: 'search',
           position: 'right',
         },
       ],
@@ -105,7 +123,7 @@ const config: Config = {
       ignorePatterns: ['/tags/**'],
       filename: 'sitemap.xml',
       createSitemapItems: async (params) => {
-        const {defaultCreateSitemapItems, ...rest} = params;
+        const { defaultCreateSitemapItems, ...rest } = params;
         const items = await defaultCreateSitemapItems(rest);
         return items.filter((item) => !item.url.includes('/page/'));
       },
@@ -153,27 +171,29 @@ const config: Config = {
     metadata: [
       {
         name: 'author',
-        content: 'Marc Rousavy'
+        content: 'Marc Rousavy',
       },
       {
         name: 'keywords',
-        content: 'react, native, nitro, modules, react-native, native, turbo, expo, documentation, coding, docs, guides, marc, rousavy, mrousavy'
+        content:
+          'react, native, nitro, modules, react-native, native, turbo, expo, documentation, coding, docs, guides, marc, rousavy, mrousavy',
       },
       {
         name: 'og:title',
-        content: 'Nitro Documentation'
+        content: 'Nitro Documentation',
       },
       {
         name: 'og:type',
-        content: 'application'
+        content: 'application',
       },
       {
         name: 'og:description',
-        content: 'A framework to build mindblowingly fast native modules with type-safe statically compiled JS bindings.'
+        content:
+          'A framework to build mindblowingly fast native modules with type-safe statically compiled JS bindings.',
       },
       {
         name: 'og:image',
-        content: '/img/social-card.png'
+        content: '/img/social-card.png',
       },
     ],
     prism: {
@@ -192,15 +212,15 @@ const config: Config = {
         {
           className: 'theme-code-block-highlighted-line',
           line: 'highlight-next-line',
-          block: {start: 'highlight-start', end: 'highlight-end'},
+          block: { start: 'highlight-start', end: 'highlight-end' },
         },
         {
           className: 'code-block-diff-add-line',
-          line: 'diff-add'
+          line: 'diff-add',
         },
         {
           className: 'code-block-diff-remove-line',
-          line: 'diff-remove'
+          line: 'diff-remove',
         },
         {
           className: 'code-block-error-line',
