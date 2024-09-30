@@ -11,7 +11,7 @@
   --ifm-background-color: #f0f9ff;
 
   /* Primary colors */
-  --ifm-color-primary: #1c91df;
+  --ifm-color-primary: #1c7ab3;
   --ifm-color-primary-dark: #1560c4;
   --ifm-color-primary-darker: #124ca1;
   --ifm-color-primary-darkest: #0f3b7e;
@@ -27,6 +27,9 @@
   /* Code diff */
   --code-diff-add: #c8f2c299;
   --code-diff-remove: #fcd4d499;
+
+  /* Table of Contents */
+  --ifm-toc-link-color: #232a3f;
 }
 
 /* Dark theme */
@@ -38,7 +41,7 @@
   --ifm-color-accent: #ff6b6b;
 
   /* Primary colors */
-  --ifm-color-primary: #3399ff;
+  --ifm-color-primary: #59b3ef;
   --ifm-color-primary-dark: #2e89e0;
   --ifm-color-primary-darker: #2877c7;
   --ifm-color-primary-darkest: #2064a8;
@@ -52,11 +55,14 @@
   --docusaurus-highlighted-code-line-bg: rgba(255, 255, 255, 0.1);
 
   /* Menu and code */
-  --ifm-menu-color-active: #3399ff;
+  --ifm-menu-color-active: #59b3ef;
 
   /* Code diff */
   --code-diff-add: #81c78466;
   --code-diff-remove: #e5737366;
+
+  /* Table of Contents */
+  --ifm-toc-link-color: #bdcedb;
 }
 
 /* Footer styles */
@@ -102,12 +108,16 @@
 }
 
 .navbar a {
+  color: #232a3f;
   font-family: 'Satoshi', sans-serif;
   font-weight: 700;
 }
 
 [data-theme='dark'] .navbar a {
   color: #e0e0e0;
+}
+[data-theme='dark'] .navbar a:hover {
+  color: #59b3ef;
 }
 
 /* Hero section styles */
@@ -260,7 +270,7 @@ h3 {
 [data-theme='dark'] .menu__link:hover,
 [data-theme='dark'] .menu__list-item-collapsible:hover {
   background-color: #4596d00e;
-  color: #3399ff;
+  color: #59b3ef;
 }
 
 .menu__link--active:not(.menu__link--sublist) {
@@ -411,4 +421,62 @@ pre {
 }
 .DocSearch-Button-Keys {
   display: none !important;
+}
+
+/* Table Styles */
+table {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+}
+
+table th,
+table td {
+  border: 2px solid #4e5b79;
+  border-width: 0 0 2px 2px;
+}
+
+table tr:first-child > * {
+  border-top-width: 2px;
+}
+
+table * > :last-child {
+  border-right-width: 2px;
+}
+
+/* Apply rounded corners to the outer corners only */
+table tr:first-child > :first-child {
+  border-top-left-radius: 10px;
+}
+table tr:first-child > :last-child {
+  border-top-right-radius: 10px;
+}
+table tr:last-child > :first-child {
+  border-bottom-left-radius: 10px;
+}
+table tr:last-child > :last-child {
+  border-bottom-right-radius: 10px;
+}
+
+[data-theme='dark'] table th,
+[data-theme='dark'] table td {
+  border-color: #4e5b79;
+}
+
+table tr:nth-child(even) {
+  background-color: #d0e8f7; /* Light gray for even rows */
+}
+[data-theme='dark'] table tr:nth-child(even) {
+  background-color: #212941; /* Darker gray for even rows in dark mode */
+}
+
+/* Table of Contents */
+[data-theme='dark'] .table-of-contents > a {
+  color: #bdcedb !important;
+}
+.table-of-contents__left-border {
+  border-left: 2px solid #232a3f;
+}
+[data-theme='dark'] .table-of-contents__left-border {
+  border-left: 2px solid #4e5b79;
 }
