@@ -332,6 +332,44 @@ public final class HybridTestObjectSwiftKotlinSpecCxx {
   }
   
   @inline(__always)
+  public func passVariant(either: bridge.std__variant_std__string__double__bool__std__vector_double___std__vector_std__string__) -> bridge.std__variant_std__string__double_ {
+    do {
+      let result = try self.implementation.passVariant(either: { () -> Variant_String_Double_Bool__Double___String_ in
+        switch either.index() {
+          case 0:
+            let actual = bridge.get_std__variant_std__string__double__bool__std__vector_double___std__vector_std__string___0(either)
+            return .someString(String(actual))
+          case 1:
+            let actual = bridge.get_std__variant_std__string__double__bool__std__vector_double___std__vector_std__string___1(either)
+            return .someDouble(actual)
+          case 2:
+            let actual = bridge.get_std__variant_std__string__double__bool__std__vector_double___std__vector_std__string___2(either)
+            return .someBool(actual)
+          case 3:
+            let actual = bridge.get_std__variant_std__string__double__bool__std__vector_double___std__vector_std__string___3(either)
+            return .some_Double_(actual.map({ val in val }))
+          case 4:
+            let actual = bridge.get_std__variant_std__string__double__bool__std__vector_double___std__vector_std__string___4(either)
+            return .some_String_(actual.map({ val in String(val) }))
+          default:
+            fatalError("Variant can never have index \(either.index())!")
+        }
+      }())
+      return { () -> bridge.std__variant_std__string__double_ in
+        switch result {
+          case .someString(let value):
+            return bridge.create_std__variant_std__string__double_(std.string(value))
+          case .someDouble(let value):
+            return bridge.create_std__variant_std__string__double_(value)
+        }
+      }()
+    } catch {
+      let message = "\(error.localizedDescription)"
+      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
+    }
+  }
+  
+  @inline(__always)
   public func calculateFibonacciSync(value: Double) -> Int64 {
     do {
       let result = try self.implementation.calculateFibonacciSync(value: value)

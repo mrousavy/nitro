@@ -136,9 +136,9 @@ export interface TestObjectSwiftKotlin
 
   // Variants
   someVariantFirst: number | string
-  // passVariant(
-  //   either: number | string | number[] | string[] | boolean
-  // ): number | string
+  passVariant(
+    either: number | string | number[] | string[] | boolean
+  ): number | string
 
   // TODO: Variants are not yet supported in Swift/Kotlin!
   // Complex variants

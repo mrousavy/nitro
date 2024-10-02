@@ -1,5 +1,5 @@
 import type { Language } from '../../getPlatformSpecs.js'
-import { isNotDuplicate } from '../helpers.js'
+import { escapeCppName, isNotDuplicate } from '../helpers.js'
 import { type SourceFile, type SourceImport } from '../SourceFile.js'
 import type { Type, TypeKind } from './Type.js'
 
@@ -19,6 +19,13 @@ export class VariantType implements Type {
     return 'variant'
   }
 
+  getSpecializationName(language: 'swift' | 'kotlin'): string {
+    const typeNames = this.variants
+      .map((v) => escapeCppName(v.getCode(language)))
+      .filter(isNotDuplicate)
+    return `Variant_${typeNames.join('_')}`
+  }
+
   getCode(language: Language): string {
     const types = this.variants
       .map((v) => v.getCode(language))
@@ -28,9 +35,9 @@ export class VariantType implements Type {
       case 'c++':
         return `std::variant<${types.join(', ')}>`
       case 'swift':
-        return `Variant_${types.join('_')}`
+        return this.getSpecializationName('swift')
       case 'kotlin':
-        return `Variant_${types.join('_')}`
+        return this.getSpecializationName('kotlin')
       default:
         throw new Error(
           `Language ${language} is not yet supported for VariantType!`

@@ -1,6 +1,10 @@
 import { NitroConfig } from '../../config/NitroConfig.js'
 import { indent } from '../../utils.js'
-import { createFileMetadataString, toReferenceType } from '../helpers.js'
+import {
+  createFileMetadataString,
+  escapeCppName,
+  toReferenceType,
+} from '../helpers.js'
 import type { SourceFile } from '../SourceFile.js'
 import type { Type } from '../types/Type.js'
 import type { VariantType } from '../types/VariantType.js'
@@ -12,7 +16,7 @@ export function getVariantName(variant: VariantType): string {
 }
 
 function getVariantInnerName(variantType: Type): string {
-  return `Some${variantType.getCode('kotlin')}`
+  return `Some${escapeCppName(variantType.getCode('kotlin'))}`
 }
 
 export function createKotlinVariant(variant: VariantType): SourceFile[] {

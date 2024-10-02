@@ -50,6 +50,7 @@ public protocol HybridTestObjectSwiftKotlinSpec: HybridObjectSpec {
   func tryOptionalParams(num: Double, boo: Bool, str: String?) throws -> String
   func tryMiddleParam(num: Double, boo: Bool?, str: String) throws -> String
   func tryOptionalEnum(value: Powertrain?) throws -> Powertrain?
+  func passVariant(either: Variant_String_Double_Bool__Double___String_) throws -> Variant_String_Double
   func calculateFibonacciSync(value: Double) throws -> Int64
   func calculateFibonacciAsync(value: Double) throws -> Promise<Int64>
   func wait(seconds: Double) throws -> Promise<Void>

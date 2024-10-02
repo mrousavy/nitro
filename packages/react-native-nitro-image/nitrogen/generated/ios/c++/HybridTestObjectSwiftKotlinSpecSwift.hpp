@@ -37,6 +37,7 @@ namespace NitroModules { class ArrayBufferHolder; }
 #include "HybridTestObjectSwiftKotlinSpecSwift.hpp"
 #include <NitroModules/AnyMap.hpp>
 #include "Powertrain.hpp"
+#include <vector>
 #include <future>
 #include <NitroModules/PromiseHolder.hpp>
 #include <functional>
@@ -180,6 +181,10 @@ namespace margelo::nitro::image {
     }
     inline std::optional<Powertrain> tryOptionalEnum(std::optional<Powertrain> value) override {
       auto __result = _swiftPart.tryOptionalEnum(value);
+      return __result;
+    }
+    inline std::variant<std::string, double> passVariant(const std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>>& either) override {
+      auto __result = _swiftPart.passVariant(either);
       return __result;
     }
     inline int64_t calculateFibonacciSync(double value) override {
