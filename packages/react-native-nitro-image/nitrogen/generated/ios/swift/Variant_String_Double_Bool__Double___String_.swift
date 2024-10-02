@@ -10,7 +10,7 @@
  * JS type: `string | number | boolean | array | array`
  */
 @frozen
-public enum Variant_String_Double_Bool__Double___String_ {
+public indirect enum Variant_String_Double_Bool__Double___String_ {
   case someString(String)
   case someDouble(Double)
   case someBool(Bool)

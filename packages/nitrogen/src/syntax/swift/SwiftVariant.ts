@@ -34,7 +34,7 @@ ${createFileMetadataString(`${typename}.swift`)}
  * JS type: \`${jsSignature}\`
  */
 @frozen
-public enum ${typename} {
+public indirect enum ${typename} {
   ${indent(cases, '  ')}
 }
   `.trim()

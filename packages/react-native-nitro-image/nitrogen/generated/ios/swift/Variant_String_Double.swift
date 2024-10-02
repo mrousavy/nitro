@@ -10,7 +10,7 @@
  * JS type: `string | number`
  */
 @frozen
-public enum Variant_String_Double {
+public indirect enum Variant_String_Double {
   case someString(String)
   case someDouble(Double)
 }
