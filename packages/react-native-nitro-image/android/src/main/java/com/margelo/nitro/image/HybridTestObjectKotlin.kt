@@ -17,7 +17,7 @@ class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
     override var optionalString: String? = null
     override val thisObject: HybridTestObjectSwiftKotlinSpec
         get() = this
-    override var someVariantFirst: Variant_String_Double = Variant_String_Double.create(55.05)
+    override var someVariant: Variant_String_Double = Variant_String_Double.create(55.05)
 
     override fun simpleFunc() {
         // do nothing

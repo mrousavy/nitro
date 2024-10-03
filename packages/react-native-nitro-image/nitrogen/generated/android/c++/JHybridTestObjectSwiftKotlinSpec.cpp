@@ -20,14 +20,14 @@ namespace margelo::nitro::image { struct Person; }
 // Forward declaration of `ArrayBuffer` to properly resolve imports.
 namespace NitroModules { class ArrayBuffer; }
 
-#include <string>
-#include <optional>
-#include <variant>
-#include "JVariant_String_Double.hpp"
 #include <memory>
 #include "HybridTestObjectSwiftKotlinSpec.hpp"
 #include "JHybridTestObjectSwiftKotlinSpec.hpp"
 #include <NitroModules/JNISharedPtr.hpp>
+#include <string>
+#include <optional>
+#include <variant>
+#include "JVariant_String_Double.hpp"
 #include <NitroModules/AnyMap.hpp>
 #include <NitroModules/JAnyMap.hpp>
 #include "Powertrain.hpp"
@@ -62,6 +62,11 @@ namespace margelo::nitro::image {
   }
 
   // Properties
+  std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec> JHybridTestObjectSwiftKotlinSpec::getThisObject() {
+    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JHybridTestObjectSwiftKotlinSpec::javaobject>()>("getThisObject");
+    auto result = method(_javaPart);
+    return JNISharedPtr::make_shared_from_jni<JHybridTestObjectSwiftKotlinSpec>(jni::make_global(result));
+  }
   double JHybridTestObjectSwiftKotlinSpec::getNumberValue() {
     static const auto method = _javaPart->getClass()->getMethod<double()>("getNumberValue");
     auto result = method(_javaPart);
@@ -125,22 +130,22 @@ namespace margelo::nitro::image {
     static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<jni::JString> /* optionalString */)>("setOptionalString");
     method(_javaPart, optionalString.has_value() ? jni::make_jstring(optionalString.value()) : nullptr);
   }
-  std::variant<std::string, double> JHybridTestObjectSwiftKotlinSpec::getSomeVariantFirst() {
-    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JVariant_String_Double>()>("getSomeVariantFirst");
+  std::variant<std::string, double> JHybridTestObjectSwiftKotlinSpec::getSomeVariant() {
+    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JVariant_String_Double>()>("getSomeVariant");
     auto result = method(_javaPart);
     return result->toCpp();
   }
-  void JHybridTestObjectSwiftKotlinSpec::setSomeVariantFirst(const std::variant<std::string, double>& someVariantFirst) {
-    static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<JVariant_String_Double> /* someVariantFirst */)>("setSomeVariantFirst");
-    method(_javaPart, JVariant_String_Double::fromCpp(someVariantFirst));
-  }
-  std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec> JHybridTestObjectSwiftKotlinSpec::getThisObject() {
-    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JHybridTestObjectSwiftKotlinSpec::javaobject>()>("getThisObject");
-    auto result = method(_javaPart);
-    return JNISharedPtr::make_shared_from_jni<JHybridTestObjectSwiftKotlinSpec>(jni::make_global(result));
+  void JHybridTestObjectSwiftKotlinSpec::setSomeVariant(const std::variant<std::string, double>& someVariant) {
+    static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<JVariant_String_Double> /* someVariant */)>("setSomeVariant");
+    method(_javaPart, JVariant_String_Double::fromCpp(someVariant));
   }
 
   // Methods
+  std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec> JHybridTestObjectSwiftKotlinSpec::newTestObject() {
+    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JHybridTestObjectSwiftKotlinSpec::javaobject>()>("newTestObject");
+    auto result = method(_javaPart);
+    return JNISharedPtr::make_shared_from_jni<JHybridTestObjectSwiftKotlinSpec>(jni::make_global(result));
+  }
   void JHybridTestObjectSwiftKotlinSpec::simpleFunc() {
     static const auto method = _javaPart->getClass()->getMethod<void()>("simpleFunc");
     method(_javaPart);
@@ -265,11 +270,6 @@ namespace margelo::nitro::image {
   void JHybridTestObjectSwiftKotlinSpec::setAllValuesTo(const std::shared_ptr<ArrayBuffer>& buffer, double value) {
     static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<JArrayBuffer::javaobject> /* buffer */, double /* value */)>("setAllValuesTo");
     method(_javaPart, JArrayBuffer::wrap(buffer), value);
-  }
-  std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec> JHybridTestObjectSwiftKotlinSpec::newTestObject() {
-    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JHybridTestObjectSwiftKotlinSpec::javaobject>()>("newTestObject");
-    auto result = method(_javaPart);
-    return JNISharedPtr::make_shared_from_jni<JHybridTestObjectSwiftKotlinSpec>(jni::make_global(result));
   }
 
 } // namespace margelo::nitro::image

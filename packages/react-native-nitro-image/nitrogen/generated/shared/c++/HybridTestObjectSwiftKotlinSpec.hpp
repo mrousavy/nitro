@@ -26,11 +26,11 @@ namespace margelo::nitro::image { struct Person; }
 // Forward declaration of `ArrayBuffer` to properly resolve imports.
 namespace NitroModules { class ArrayBuffer; }
 
+#include <memory>
+#include "HybridTestObjectSwiftKotlinSpec.hpp"
 #include <string>
 #include <optional>
 #include <variant>
-#include <memory>
-#include "HybridTestObjectSwiftKotlinSpec.hpp"
 #include <NitroModules/AnyMap.hpp>
 #include "Powertrain.hpp"
 #include <future>
@@ -63,6 +63,7 @@ namespace margelo::nitro::image {
 
     public:
       // Properties
+      virtual std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec> getThisObject() = 0;
       virtual double getNumberValue() = 0;
       virtual void setNumberValue(double numberValue) = 0;
       virtual bool getBoolValue() = 0;
@@ -77,12 +78,12 @@ namespace margelo::nitro::image {
       virtual void setStringOrNull(const std::optional<std::string>& stringOrNull) = 0;
       virtual std::optional<std::string> getOptionalString() = 0;
       virtual void setOptionalString(const std::optional<std::string>& optionalString) = 0;
-      virtual std::variant<std::string, double> getSomeVariantFirst() = 0;
-      virtual void setSomeVariantFirst(const std::variant<std::string, double>& someVariantFirst) = 0;
-      virtual std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec> getThisObject() = 0;
+      virtual std::variant<std::string, double> getSomeVariant() = 0;
+      virtual void setSomeVariant(const std::variant<std::string, double>& someVariant) = 0;
 
     public:
       // Methods
+      virtual std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec> newTestObject() = 0;
       virtual void simpleFunc() = 0;
       virtual double addNumbers(double a, double b) = 0;
       virtual std::string addStrings(const std::string& a, const std::string& b) = 0;
@@ -105,7 +106,6 @@ namespace margelo::nitro::image {
       virtual std::shared_ptr<ArrayBuffer> createArrayBuffer() = 0;
       virtual double getBufferLastItem(const std::shared_ptr<ArrayBuffer>& buffer) = 0;
       virtual void setAllValuesTo(const std::shared_ptr<ArrayBuffer>& buffer, double value) = 0;
-      virtual std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec> newTestObject() = 0;
 
     protected:
       // Hybrid Setup

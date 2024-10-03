@@ -35,6 +35,10 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   // Properties
   @get:DoNotStrip
   @get:Keep
+  abstract val thisObject: HybridTestObjectSwiftKotlinSpec
+  
+  @get:DoNotStrip
+  @get:Keep
   @set:DoNotStrip
   @set:Keep
   abstract var numberValue: Double
@@ -79,13 +83,13 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   @get:Keep
   @set:DoNotStrip
   @set:Keep
-  abstract var someVariantFirst: Variant_String_Double
-  
-  @get:DoNotStrip
-  @get:Keep
-  abstract val thisObject: HybridTestObjectSwiftKotlinSpec
+  abstract var someVariant: Variant_String_Double
 
   // Methods
+  @DoNotStrip
+  @Keep
+  abstract fun newTestObject(): HybridTestObjectSwiftKotlinSpec
+  
   @DoNotStrip
   @Keep
   abstract fun simpleFunc(): Unit
@@ -194,10 +198,6 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   @DoNotStrip
   @Keep
   abstract fun setAllValuesTo(buffer: ArrayBuffer, value: Double): Unit
-  
-  @DoNotStrip
-  @Keep
-  abstract fun newTestObject(): HybridTestObjectSwiftKotlinSpec
 
   private external fun initHybrid(): HybridData
 

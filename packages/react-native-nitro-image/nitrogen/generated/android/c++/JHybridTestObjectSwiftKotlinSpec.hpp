@@ -38,6 +38,7 @@ namespace margelo::nitro::image {
 
   public:
     // Properties
+    std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec> getThisObject() override;
     double getNumberValue() override;
     void setNumberValue(double numberValue) override;
     bool getBoolValue() override;
@@ -52,12 +53,12 @@ namespace margelo::nitro::image {
     void setStringOrNull(const std::optional<std::string>& stringOrNull) override;
     std::optional<std::string> getOptionalString() override;
     void setOptionalString(const std::optional<std::string>& optionalString) override;
-    std::variant<std::string, double> getSomeVariantFirst() override;
-    void setSomeVariantFirst(const std::variant<std::string, double>& someVariantFirst) override;
-    std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec> getThisObject() override;
+    std::variant<std::string, double> getSomeVariant() override;
+    void setSomeVariant(const std::variant<std::string, double>& someVariant) override;
 
   public:
     // Methods
+    std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec> newTestObject() override;
     void simpleFunc() override;
     double addNumbers(double a, double b) override;
     std::string addStrings(const std::string& a, const std::string& b) override;
@@ -80,7 +81,6 @@ namespace margelo::nitro::image {
     std::shared_ptr<ArrayBuffer> createArrayBuffer() override;
     double getBufferLastItem(const std::shared_ptr<ArrayBuffer>& buffer) override;
     void setAllValuesTo(const std::shared_ptr<ArrayBuffer>& buffer, double value) override;
-    std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec> newTestObject() override;
 
   private:
     friend HybridBase;

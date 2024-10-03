@@ -14,6 +14,9 @@ namespace margelo::nitro::image {
     HybridObject::loadHybridMethods();
     // load custom methods/properties
     registerHybrids(this, [](Prototype& prototype) {
+      prototype.registerHybridGetter("someTuple", &HybridTestObjectCppSpec::getSomeTuple);
+      prototype.registerHybridSetter("someTuple", &HybridTestObjectCppSpec::setSomeTuple);
+      prototype.registerHybridGetter("thisObject", &HybridTestObjectCppSpec::getThisObject);
       prototype.registerHybridGetter("numberValue", &HybridTestObjectCppSpec::getNumberValue);
       prototype.registerHybridSetter("numberValue", &HybridTestObjectCppSpec::setNumberValue);
       prototype.registerHybridGetter("boolValue", &HybridTestObjectCppSpec::getBoolValue);
@@ -30,9 +33,16 @@ namespace margelo::nitro::image {
       prototype.registerHybridSetter("optionalString", &HybridTestObjectCppSpec::setOptionalString);
       prototype.registerHybridGetter("someVariant", &HybridTestObjectCppSpec::getSomeVariant);
       prototype.registerHybridSetter("someVariant", &HybridTestObjectCppSpec::setSomeVariant);
-      prototype.registerHybridGetter("someTuple", &HybridTestObjectCppSpec::getSomeTuple);
-      prototype.registerHybridSetter("someTuple", &HybridTestObjectCppSpec::setSomeTuple);
-      prototype.registerHybridGetter("thisObject", &HybridTestObjectCppSpec::getThisObject);
+      prototype.registerHybridMethod("passVariant", &HybridTestObjectCppSpec::passVariant);
+      prototype.registerHybridMethod("getVariantEnum", &HybridTestObjectCppSpec::getVariantEnum);
+      prototype.registerHybridMethod("getVariantObjects", &HybridTestObjectCppSpec::getVariantObjects);
+      prototype.registerHybridMethod("getVariantHybrid", &HybridTestObjectCppSpec::getVariantHybrid);
+      prototype.registerHybridMethod("getVariantTuple", &HybridTestObjectCppSpec::getVariantTuple);
+      prototype.registerHybridMethod("flip", &HybridTestObjectCppSpec::flip);
+      prototype.registerHybridMethod("passTuple", &HybridTestObjectCppSpec::passTuple);
+      prototype.registerHybridMethod("getValueFromJSCallbackAndWait", &HybridTestObjectCppSpec::getValueFromJSCallbackAndWait);
+      prototype.registerHybridMethod("getValueFromJsCallback", &HybridTestObjectCppSpec::getValueFromJsCallback);
+      prototype.registerHybridMethod("newTestObject", &HybridTestObjectCppSpec::newTestObject);
       prototype.registerHybridMethod("simpleFunc", &HybridTestObjectCppSpec::simpleFunc);
       prototype.registerHybridMethod("addNumbers", &HybridTestObjectCppSpec::addNumbers);
       prototype.registerHybridMethod("addStrings", &HybridTestObjectCppSpec::addStrings);
@@ -43,29 +53,18 @@ namespace margelo::nitro::image {
       prototype.registerHybridMethod("tryOptionalParams", &HybridTestObjectCppSpec::tryOptionalParams);
       prototype.registerHybridMethod("tryMiddleParam", &HybridTestObjectCppSpec::tryMiddleParam);
       prototype.registerHybridMethod("tryOptionalEnum", &HybridTestObjectCppSpec::tryOptionalEnum);
-      prototype.registerHybridMethod("passVariant", &HybridTestObjectCppSpec::passVariant);
-      prototype.registerHybridMethod("getVariantEnum", &HybridTestObjectCppSpec::getVariantEnum);
-      prototype.registerHybridMethod("getVariantObjects", &HybridTestObjectCppSpec::getVariantObjects);
-      prototype.registerHybridMethod("getVariantHybrid", &HybridTestObjectCppSpec::getVariantHybrid);
-      prototype.registerHybridMethod("getVariantTuple", &HybridTestObjectCppSpec::getVariantTuple);
-      prototype.registerHybridMethod("flip", &HybridTestObjectCppSpec::flip);
-      prototype.registerHybridMethod("passTuple", &HybridTestObjectCppSpec::passTuple);
       prototype.registerHybridMethod("calculateFibonacciSync", &HybridTestObjectCppSpec::calculateFibonacciSync);
       prototype.registerHybridMethod("calculateFibonacciAsync", &HybridTestObjectCppSpec::calculateFibonacciAsync);
       prototype.registerHybridMethod("wait", &HybridTestObjectCppSpec::wait);
       prototype.registerHybridMethod("callCallback", &HybridTestObjectCppSpec::callCallback);
-      prototype.registerHybridMethod("getValueFromJSCallback", &HybridTestObjectCppSpec::getValueFromJSCallback);
-      prototype.registerHybridMethod("callWithOptional", &HybridTestObjectCppSpec::callWithOptional);
-      prototype.registerHybridMethod("getValueFromJSCallbackAndWait", &HybridTestObjectCppSpec::getValueFromJSCallbackAndWait);
       prototype.registerHybridMethod("callAll", &HybridTestObjectCppSpec::callAll);
-      prototype.registerHybridMethod("getValueFromJsCallback", &HybridTestObjectCppSpec::getValueFromJsCallback);
+      prototype.registerHybridMethod("callWithOptional", &HybridTestObjectCppSpec::callWithOptional);
       prototype.registerHybridMethod("getCar", &HybridTestObjectCppSpec::getCar);
       prototype.registerHybridMethod("isCarElectric", &HybridTestObjectCppSpec::isCarElectric);
       prototype.registerHybridMethod("getDriver", &HybridTestObjectCppSpec::getDriver);
       prototype.registerHybridMethod("createArrayBuffer", &HybridTestObjectCppSpec::createArrayBuffer);
       prototype.registerHybridMethod("getBufferLastItem", &HybridTestObjectCppSpec::getBufferLastItem);
       prototype.registerHybridMethod("setAllValuesTo", &HybridTestObjectCppSpec::setAllValuesTo);
-      prototype.registerHybridMethod("newTestObject", &HybridTestObjectCppSpec::newTestObject);
     });
   }
 
