@@ -3,8 +3,8 @@ import type { CodeNode } from './CodeNode.js'
 import { capitalizeName } from '../utils.js'
 import { type SourceFile, type SourceImport } from './SourceFile.js'
 import type { Language } from '../getPlatformSpecs.js'
-import type { NamedType } from './types/Type.js'
-import { createNamedType } from './createType.js'
+import type { Type } from './types/Type.js'
+import { createType } from './createType.js'
 import { Method } from './Method.js'
 import { VoidType } from './types/VoidType.js'
 import { Parameter } from './Parameter.js'
@@ -45,12 +45,12 @@ export interface PropertyModifiers {
 
 export class Property implements CodeNode {
   readonly name: string
-  readonly type: NamedType
+  readonly type: Type
   readonly isReadonly: boolean
 
-  constructor(name: string, type: NamedType, isReadonly: boolean)
+  constructor(name: string, type: Type, isReadonly: boolean)
   constructor(prop: PropertySignature)
-  constructor(...args: [PropertySignature] | [string, NamedType, boolean]) {
+  constructor(...args: [PropertySignature] | [string, Type, boolean]) {
     if (typeof args[0] === 'string') {
       if (args.length !== 3) throw new Error('Missing argument for type!')
       const [name, type, isReadonly] = args
@@ -63,7 +63,7 @@ export class Property implements CodeNode {
       this.isReadonly = prop.hasModifier(ts.SyntaxKind.ReadonlyKeyword)
       const type = prop.getTypeNodeOrThrow().getType()
       const isOptional = prop.hasQuestionToken() || type.isNullable()
-      this.type = createNamedType(this.name, type, isOptional)
+      this.type = createType(type, isOptional)
     }
   }
 

@@ -345,33 +345,35 @@ export function getTests(
     ),
 
     // Variants tests
-    ...('someVariant' in testObject
+    createTest('set someVariant to 55', () =>
+      it(() => (testObject.someVariant = 55)).didNotThrow()
+    ),
+    createTest('get someVariant (== 55)', () =>
+      it(() => {
+        testObject.someVariant = 55
+        return testObject.someVariant
+      }).equals(55)
+    ),
+    createTest("set someVariant to 'some-string'", () =>
+      it(() => (testObject.someVariant = 'some-string')).didNotThrow()
+    ),
+    createTest("get someVariant (== 'some-string')", () =>
+      it(() => {
+        testObject.someVariant = 'some-string'
+        return testObject.someVariant
+      }).equals('some-string')
+    ),
+    createTest('set someVariant to false', () =>
+      it(
+        () =>
+          // @ts-expect-error
+          (testObject.someVariant = false)
+      ).didThrow()
+    ),
+
+    // More complex variants...
+    ...('passVariant' in testObject
       ? [
-          createTest('set someVariant to 55', () =>
-            it(() => (testObject.someVariant = 55)).didNotThrow()
-          ),
-          createTest('get someVariant (== 55)', () =>
-            it(() => {
-              testObject.someVariant = 55
-              return testObject.someVariant
-            }).equals(55)
-          ),
-          createTest("set someVariant to 'some-string'", () =>
-            it(() => (testObject.someVariant = 'some-string')).didNotThrow()
-          ),
-          createTest("get someVariant (== 'some-string')", () =>
-            it(() => {
-              testObject.someVariant = 'some-string'
-              return testObject.someVariant
-            }).equals('some-string')
-          ),
-          createTest('set someVariant to false', () =>
-            it(
-              () =>
-                // @ts-expect-error
-                (testObject.someVariant = false)
-            ).didThrow()
-          ),
           createTest('passVariant(...) holds something else ([1,2,3])', () =>
             it(() => testObject.passVariant([1, 2, 3]))
               .didNotThrow()
@@ -591,27 +593,8 @@ export function getTests(
         .didNotThrow()
         .equals(433)
     ),
-    ...('getValueFromJSCallback' in testObject
+    ...('getValueFromJsCallback' in testObject
       ? [
-          createTest('getValueFromJSCallback(...)', async () =>
-            (
-              await it(async () => {
-                return timeoutedPromise((complete) => {
-                  testObject.getValueFromJSCallback(() => {
-                    complete(true)
-                    return 55
-                  })
-                })
-              })
-            )
-              .didNotThrow()
-              .equals(true)
-          ),
-          createTest('getValueFromJSCallbackAndWait(...)', async () =>
-            (await it(() => testObject.getValueFromJSCallbackAndWait(() => 73)))
-              .didNotThrow()
-              .equals(73)
-          ),
           createTest('getValueFromJsCallback(...)', async () =>
             (
               await it(async () => {
@@ -627,6 +610,11 @@ export function getTests(
             )
               .didNotThrow()
               .equals('hello')
+          ),
+          createTest('getValueFromJSCallbackAndWait(...)', async () =>
+            (await it(() => testObject.getValueFromJSCallbackAndWait(() => 73)))
+              .didNotThrow()
+              .equals(73)
           ),
         ]
       : [

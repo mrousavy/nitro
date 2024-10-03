@@ -33,9 +33,12 @@ namespace margelo::nitro::image {
   /**
    * An abstract base class for `Image`
    * Inherit this class to create instances of `HybridImageSpec` in C++.
+   * You must explicitly call `HybridObject`'s constructor yourself, because it is virtual.
    * @example
    * ```cpp
    * class HybridImage: public HybridImageSpec {
+   * public:
+   *   HybridImage(...): HybridObject(TAG) { ... }
    *   // ...
    * };
    * ```

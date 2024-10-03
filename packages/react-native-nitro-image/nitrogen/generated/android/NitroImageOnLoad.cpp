@@ -19,6 +19,8 @@
 #include "JFunc_void_std__optional_double_.hpp"
 #include <NitroModules/JNISharedPtr.hpp>
 #include "HybridTestObjectCpp.hpp"
+#include "HybridBase.hpp"
+#include "HybridChild.hpp"
 
 namespace margelo::nitro::image {
 
@@ -79,6 +81,24 @@ int initialize(JavaVM* vm) {
     #endif
         auto globalRef = jni::make_global(instance);
         return JNISharedPtr::make_shared_from_jni<JHybridTestObjectSwiftKotlinSpec>(globalRef);
+      }
+    );
+    HybridObjectRegistry::registerHybridObjectConstructor(
+      "Base",
+      []() -> std::shared_ptr<HybridObject> {
+        static_assert(std::is_default_constructible_v<HybridBase>,
+                      "The HybridObject \"HybridBase\" is not default-constructible! "
+                      "Create a public constructor that takes zero arguments to be able to autolink this HybridObject.");
+        return std::make_shared<HybridBase>();
+      }
+    );
+    HybridObjectRegistry::registerHybridObjectConstructor(
+      "Child",
+      []() -> std::shared_ptr<HybridObject> {
+        static_assert(std::is_default_constructible_v<HybridChild>,
+                      "The HybridObject \"HybridChild\" is not default-constructible! "
+                      "Create a public constructor that takes zero arguments to be able to autolink this HybridObject.");
+        return std::make_shared<HybridChild>();
       }
     );
   });

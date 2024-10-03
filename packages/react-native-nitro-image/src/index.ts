@@ -1,6 +1,8 @@
 import { NitroModules } from 'react-native-nitro-modules'
 import type { ImageFactory } from './specs/ImageFactory.nitro'
 import {
+  type Base,
+  type Child,
   type TestObjectCpp,
   type TestObjectSwiftKotlin,
 } from './specs/TestObject.nitro'
@@ -28,3 +30,6 @@ export const HybridTestObjectSwiftKotlin =
   NitroModules.createHybridObject<TestObjectSwiftKotlin>(
     'TestObjectSwiftKotlin'
   )
+
+export const HybridBase = NitroModules.createHybridObject<Base>('Base')
+export const HybridChild = NitroModules.createHybridObject<Child>('Child')

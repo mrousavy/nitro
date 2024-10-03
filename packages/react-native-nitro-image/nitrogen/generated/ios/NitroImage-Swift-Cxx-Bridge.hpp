@@ -103,14 +103,6 @@ namespace margelo::nitro::image::bridge::swift {
   }
   
   /**
-   * Specialized version of `std::optional<std::string>`.
-   */
-  using std__optional_std__string_ = std::optional<std::string>;
-  inline std::optional<std::string> create_std__optional_std__string_(const std::string& value) {
-    return std::optional<std::string>(value);
-  }
-  
-  /**
    * Wrapper struct for `std::variant<std::string, double>`.
    * std::variant cannot be used in Swift because of a Swift bug.
    * Not even specializing it works. So we create a wrapper struct.
@@ -136,30 +128,6 @@ namespace margelo::nitro::image::bridge::swift {
   }
   inline double get_std__variant_std__string__double__1(const std__variant_std__string__double_& variantWrapper) {
     return std::get<1>(variantWrapper.variant);
-  }
-  
-  /**
-   * Specialized version of `std::tuple<double, std::string>`.
-   */
-  using std__tuple_double__std__string_ = std::tuple<double, std::string>;
-  inline std::tuple<double, std::string> create_std__tuple_double__std__string_(double arg0, const std::string& arg1) {
-    return std::tuple<double, std::string> { arg0, arg1 };
-  }
-  
-  /**
-   * Specialized version of `std::optional<bool>`.
-   */
-  using std__optional_bool_ = std::optional<bool>;
-  inline std::optional<bool> create_std__optional_bool_(const bool& value) {
-    return std::optional<bool>(value);
-  }
-  
-  /**
-   * Specialized version of `std::optional<Powertrain>`.
-   */
-  using std__optional_Powertrain_ = std::optional<Powertrain>;
-  inline std::optional<Powertrain> create_std__optional_Powertrain_(const Powertrain& value) {
-    return std::optional<Powertrain>(value);
   }
   
   /**
@@ -265,58 +233,58 @@ namespace margelo::nitro::image::bridge::swift {
   }
   
   /**
-   * Wrapper struct for `std::variant<Person, Car>`.
+   * Wrapper struct for `std::variant<Car, Person>`.
    * std::variant cannot be used in Swift because of a Swift bug.
    * Not even specializing it works. So we create a wrapper struct.
    */
-  struct std__variant_Person__Car_ {
-    std::variant<Person, Car> variant;
-    std__variant_Person__Car_(std::variant<Person, Car> variant): variant(variant) { }
-    operator std::variant<Person, Car>() const {
+  struct std__variant_Car__Person_ {
+    std::variant<Car, Person> variant;
+    std__variant_Car__Person_(std::variant<Car, Person> variant): variant(variant) { }
+    operator std::variant<Car, Person>() const {
       return variant;
     }
     inline size_t index() const {
       return variant.index();
     }
   };
-  inline std__variant_Person__Car_ create_std__variant_Person__Car_(const Person& value) {
-    return std__variant_Person__Car_(value);
+  inline std__variant_Car__Person_ create_std__variant_Car__Person_(const Car& value) {
+    return std__variant_Car__Person_(value);
   }
-  inline std__variant_Person__Car_ create_std__variant_Person__Car_(const Car& value) {
-    return std__variant_Person__Car_(value);
+  inline std__variant_Car__Person_ create_std__variant_Car__Person_(const Person& value) {
+    return std__variant_Car__Person_(value);
   }
-  inline Person get_std__variant_Person__Car__0(const std__variant_Person__Car_& variantWrapper) {
+  inline Car get_std__variant_Car__Person__0(const std__variant_Car__Person_& variantWrapper) {
     return std::get<0>(variantWrapper.variant);
   }
-  inline Car get_std__variant_Person__Car__1(const std__variant_Person__Car_& variantWrapper) {
+  inline Person get_std__variant_Car__Person__1(const std__variant_Car__Person_& variantWrapper) {
     return std::get<1>(variantWrapper.variant);
   }
   
   /**
-   * Wrapper struct for `std::variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>, Person>`.
+   * Wrapper struct for `std::variant<Person, std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>>`.
    * std::variant cannot be used in Swift because of a Swift bug.
    * Not even specializing it works. So we create a wrapper struct.
    */
-  struct std__variant_std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec___Person_ {
-    std::variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>, Person> variant;
-    std__variant_std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec___Person_(std::variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>, Person> variant): variant(variant) { }
-    operator std::variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>, Person>() const {
+  struct std__variant_Person__std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec__ {
+    std::variant<Person, std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>> variant;
+    std__variant_Person__std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec__(std::variant<Person, std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>> variant): variant(variant) { }
+    operator std::variant<Person, std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>>() const {
       return variant;
     }
     inline size_t index() const {
       return variant.index();
     }
   };
-  inline std__variant_std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec___Person_ create_std__variant_std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec___Person_(const std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>& value) {
-    return std__variant_std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec___Person_(value);
+  inline std__variant_Person__std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec__ create_std__variant_Person__std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec__(const Person& value) {
+    return std__variant_Person__std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec__(value);
   }
-  inline std__variant_std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec___Person_ create_std__variant_std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec___Person_(const Person& value) {
-    return std__variant_std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec___Person_(value);
+  inline std__variant_Person__std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec__ create_std__variant_Person__std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec__(const std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>& value) {
+    return std__variant_Person__std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec__(value);
   }
-  inline std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec> get_std__variant_std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec___Person__0(const std__variant_std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec___Person_& variantWrapper) {
+  inline Person get_std__variant_Person__std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec___0(const std__variant_Person__std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec__& variantWrapper) {
     return std::get<0>(variantWrapper.variant);
   }
-  inline Person get_std__variant_std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec___Person__1(const std__variant_std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec___Person_& variantWrapper) {
+  inline std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec> get_std__variant_Person__std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec___1(const std__variant_Person__std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec__& variantWrapper) {
     return std::get<1>(variantWrapper.variant);
   }
   
@@ -365,6 +333,14 @@ namespace margelo::nitro::image::bridge::swift {
   }
   
   /**
+   * Specialized version of `std::tuple<double, std::string>`.
+   */
+  using std__tuple_double__std__string_ = std::tuple<double, std::string>;
+  inline std::tuple<double, std::string> create_std__tuple_double__std__string_(double arg0, const std::string& arg1) {
+    return std::tuple<double, std::string> { arg0, arg1 };
+  }
+  
+  /**
    * Specialized version of `std::tuple<double, std::string, bool>`.
    */
   using std__tuple_double__std__string__bool_ = std::tuple<double, std::string, bool>;
@@ -373,47 +349,11 @@ namespace margelo::nitro::image::bridge::swift {
   }
   
   /**
-   * Specialized version of `PromiseHolder<int64_t>`.
+   * Specialized version of `PromiseHolder<double>`.
    */
-  using PromiseHolder_int64_t_ = PromiseHolder<int64_t>;
-  inline PromiseHolder<int64_t> create_PromiseHolder_int64_t_() {
-    return PromiseHolder<int64_t>();
-  }
-  
-  /**
-   * Specialized version of `PromiseHolder<void>`.
-   */
-  using PromiseHolder_void_ = PromiseHolder<void>;
-  inline PromiseHolder<void> create_PromiseHolder_void_() {
-    return PromiseHolder<void>();
-  }
-  
-  /**
-   * Specialized version of `std::function<void()>`.
-   */
-  using Func_void = std::function<void()>;
-  /**
-   * Wrapper class for a `std::function<void()>`, this can be used from Swift.
-   */
-  class Func_void_Wrapper {
-  public:
-    explicit Func_void_Wrapper(const std::function<void()>& func): function(func) {}
-    explicit Func_void_Wrapper(std::function<void()>&& func): function(std::move(func)) {}
-  
-    void call() const {
-      function();
-    }
-  
-    std::function<void()> function;
-  };
-  inline Func_void create_Func_void(void* closureHolder, void(*call)(void* /* closureHolder */), void(*destroy)(void*)) {
-    std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
-    return Func_void([sharedClosureHolder, call]() -> void {
-      call(sharedClosureHolder.get());
-    });
-  }
-  inline std::shared_ptr<Func_void_Wrapper> share_Func_void(const Func_void& value) {
-    return std::make_shared<Func_void_Wrapper>(value);
+  using PromiseHolder_double_ = PromiseHolder<double>;
+  inline PromiseHolder<double> create_PromiseHolder_double_() {
+    return PromiseHolder<double>();
   }
   
   /**
@@ -447,47 +387,11 @@ namespace margelo::nitro::image::bridge::swift {
   }
   
   /**
-   * Specialized version of `PromiseHolder<double>`.
+   * Specialized version of `PromiseHolder<void>`.
    */
-  using PromiseHolder_double_ = PromiseHolder<double>;
-  inline PromiseHolder<double> create_PromiseHolder_double_() {
-    return PromiseHolder<double>();
-  }
-  
-  /**
-   * Specialized version of `std::optional<double>`.
-   */
-  using std__optional_double_ = std::optional<double>;
-  inline std::optional<double> create_std__optional_double_(const double& value) {
-    return std::optional<double>(value);
-  }
-  
-  /**
-   * Specialized version of `std::function<void(std::optional<double>)>`.
-   */
-  using Func_void_std__optional_double_ = std::function<void(std::optional<double> /* maybe */)>;
-  /**
-   * Wrapper class for a `std::function<void(std::optional<double> / * maybe * /)>`, this can be used from Swift.
-   */
-  class Func_void_std__optional_double__Wrapper {
-  public:
-    explicit Func_void_std__optional_double__Wrapper(const std::function<void(std::optional<double> /* maybe */)>& func): function(func) {}
-    explicit Func_void_std__optional_double__Wrapper(std::function<void(std::optional<double> /* maybe */)>&& func): function(std::move(func)) {}
-  
-    void call(std::optional<double> maybe) const {
-      function(maybe);
-    }
-  
-    std::function<void(std::optional<double> /* maybe */)> function;
-  };
-  inline Func_void_std__optional_double_ create_Func_void_std__optional_double_(void* closureHolder, void(*call)(void* /* closureHolder */, std::optional<double>), void(*destroy)(void*)) {
-    std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
-    return Func_void_std__optional_double_([sharedClosureHolder, call](std::optional<double> maybe) -> void {
-      call(sharedClosureHolder.get(), maybe);
-    });
-  }
-  inline std::shared_ptr<Func_void_std__optional_double__Wrapper> share_Func_void_std__optional_double_(const Func_void_std__optional_double_& value) {
-    return std::make_shared<Func_void_std__optional_double__Wrapper>(value);
+  using PromiseHolder_void_ = PromiseHolder<void>;
+  inline PromiseHolder<void> create_PromiseHolder_void_() {
+    return PromiseHolder<void>();
   }
   
   /**
@@ -526,6 +430,102 @@ namespace margelo::nitro::image::bridge::swift {
   using PromiseHolder_std__string_ = PromiseHolder<std::string>;
   inline PromiseHolder<std::string> create_PromiseHolder_std__string_() {
     return PromiseHolder<std::string>();
+  }
+  
+  /**
+   * Specialized version of `std::optional<std::string>`.
+   */
+  using std__optional_std__string_ = std::optional<std::string>;
+  inline std::optional<std::string> create_std__optional_std__string_(const std::string& value) {
+    return std::optional<std::string>(value);
+  }
+  
+  /**
+   * Specialized version of `std::optional<bool>`.
+   */
+  using std__optional_bool_ = std::optional<bool>;
+  inline std::optional<bool> create_std__optional_bool_(const bool& value) {
+    return std::optional<bool>(value);
+  }
+  
+  /**
+   * Specialized version of `std::optional<Powertrain>`.
+   */
+  using std__optional_Powertrain_ = std::optional<Powertrain>;
+  inline std::optional<Powertrain> create_std__optional_Powertrain_(const Powertrain& value) {
+    return std::optional<Powertrain>(value);
+  }
+  
+  /**
+   * Specialized version of `PromiseHolder<int64_t>`.
+   */
+  using PromiseHolder_int64_t_ = PromiseHolder<int64_t>;
+  inline PromiseHolder<int64_t> create_PromiseHolder_int64_t_() {
+    return PromiseHolder<int64_t>();
+  }
+  
+  /**
+   * Specialized version of `std::function<void()>`.
+   */
+  using Func_void = std::function<void()>;
+  /**
+   * Wrapper class for a `std::function<void()>`, this can be used from Swift.
+   */
+  class Func_void_Wrapper {
+  public:
+    explicit Func_void_Wrapper(const std::function<void()>& func): function(func) {}
+    explicit Func_void_Wrapper(std::function<void()>&& func): function(std::move(func)) {}
+  
+    void call() const {
+      function();
+    }
+  
+    std::function<void()> function;
+  };
+  inline Func_void create_Func_void(void* closureHolder, void(*call)(void* /* closureHolder */), void(*destroy)(void*)) {
+    std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
+    return Func_void([sharedClosureHolder, call]() -> void {
+      call(sharedClosureHolder.get());
+    });
+  }
+  inline std::shared_ptr<Func_void_Wrapper> share_Func_void(const Func_void& value) {
+    return std::make_shared<Func_void_Wrapper>(value);
+  }
+  
+  /**
+   * Specialized version of `std::optional<double>`.
+   */
+  using std__optional_double_ = std::optional<double>;
+  inline std::optional<double> create_std__optional_double_(const double& value) {
+    return std::optional<double>(value);
+  }
+  
+  /**
+   * Specialized version of `std::function<void(std::optional<double>)>`.
+   */
+  using Func_void_std__optional_double_ = std::function<void(std::optional<double> /* maybe */)>;
+  /**
+   * Wrapper class for a `std::function<void(std::optional<double> / * maybe * /)>`, this can be used from Swift.
+   */
+  class Func_void_std__optional_double__Wrapper {
+  public:
+    explicit Func_void_std__optional_double__Wrapper(const std::function<void(std::optional<double> /* maybe */)>& func): function(func) {}
+    explicit Func_void_std__optional_double__Wrapper(std::function<void(std::optional<double> /* maybe */)>&& func): function(std::move(func)) {}
+  
+    void call(std::optional<double> maybe) const {
+      function(maybe);
+    }
+  
+    std::function<void(std::optional<double> /* maybe */)> function;
+  };
+  inline Func_void_std__optional_double_ create_Func_void_std__optional_double_(void* closureHolder, void(*call)(void* /* closureHolder */, std::optional<double>), void(*destroy)(void*)) {
+    std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
+    return Func_void_std__optional_double_([sharedClosureHolder, call](std::optional<double> maybe) -> void {
+      call(sharedClosureHolder.get(), maybe);
+    });
+  }
+  inline std::shared_ptr<Func_void_std__optional_double__Wrapper> share_Func_void_std__optional_double_(const Func_void_std__optional_double_& value) {
+    return std::make_shared<Func_void_std__optional_double__Wrapper>(value);
   }
 
 } // namespace margelo::nitro::image::bridge::swift

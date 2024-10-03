@@ -59,6 +59,13 @@ public final class HybridTestObjectSwiftKotlinSpecCxx {
   }
 
   // Properties
+  public var thisObject: HybridTestObjectSwiftKotlinSpecCxx {
+    @inline(__always)
+    get {
+      return self.implementation.thisObject.createCxxBridge()
+    }
+  }
+  
   public var numberValue: Double {
     @inline(__always)
     get {
@@ -172,11 +179,11 @@ public final class HybridTestObjectSwiftKotlinSpecCxx {
     }
   }
   
-  public var someVariantFirst: bridge.std__variant_std__string__double_ {
+  public var someVariant: bridge.std__variant_std__string__double_ {
     @inline(__always)
     get {
       return { () -> bridge.std__variant_std__string__double_ in
-        switch self.implementation.someVariantFirst {
+        switch self.implementation.someVariant {
           case .someString(let value):
             return bridge.create_std__variant_std__string__double_(std.string(value))
           case .someDouble(let value):
@@ -186,7 +193,7 @@ public final class HybridTestObjectSwiftKotlinSpecCxx {
     }
     @inline(__always)
     set {
-      self.implementation.someVariantFirst = { () -> Variant_String_Double in
+      self.implementation.someVariant = { () -> Variant_String_Double in
         switch newValue.index() {
           case 0:
             let actual = bridge.get_std__variant_std__string__double__0(newValue)
@@ -200,15 +207,19 @@ public final class HybridTestObjectSwiftKotlinSpecCxx {
       }()
     }
   }
-  
-  public var thisObject: HybridTestObjectSwiftKotlinSpecCxx {
-    @inline(__always)
-    get {
-      return self.implementation.thisObject.createCxxBridge()
-    }
-  }
 
   // Methods
+  @inline(__always)
+  public func newTestObject() -> HybridTestObjectSwiftKotlinSpecCxx {
+    do {
+      let result = try self.implementation.newTestObject()
+      return result.createCxxBridge()
+    } catch {
+      let message = "\(error.localizedDescription)"
+      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
+    }
+  }
+  
   @inline(__always)
   public func simpleFunc() -> Void {
     do {
@@ -506,17 +517,6 @@ public final class HybridTestObjectSwiftKotlinSpecCxx {
     do {
       try self.implementation.setAllValuesTo(buffer: buffer, value: value)
       return 
-    } catch {
-      let message = "\(error.localizedDescription)"
-      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
-    }
-  }
-  
-  @inline(__always)
-  public func newTestObject() -> HybridTestObjectSwiftKotlinSpecCxx {
-    do {
-      let result = try self.implementation.newTestObject()
-      return result.createCxxBridge()
     } catch {
       let message = "\(error.localizedDescription)"
       fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")

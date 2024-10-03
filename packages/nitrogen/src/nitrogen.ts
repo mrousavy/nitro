@@ -119,7 +119,7 @@ export async function runNitrogen({
         const allFiles = platforms
           .flatMap((p) => {
             const language = platformSpec[p]!
-            return generatePlatformFiles(module, language)
+            return generatePlatformFiles(module.getType(), language)
           })
           .filter(filterDuplicateFiles)
         // Group the files by platform ({ ios: [], android: [], shared: [] })

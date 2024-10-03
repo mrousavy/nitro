@@ -20,6 +20,11 @@ import { getInterfaceProperties } from './getInterfaceProperties.js'
 import { VariantType } from './types/VariantType.js'
 import { MapType } from './types/MapType.js'
 import { TupleType } from './types/TupleType.js'
+import {
+  extendsHybridObject,
+  isDirectlyHybridObject,
+} from '../getPlatformSpecs.js'
+import { HybridObjectBaseType } from './types/HybridObjectBaseType.js'
 
 function isSymbol(type: TSMorphType, symbolName: string): boolean {
   const symbol = type.getSymbol()
@@ -246,21 +251,18 @@ export function createType(type: TSMorphType, isOptional: boolean): Type {
 
         return new VariantType(variants)
       }
-    } else if (type.isInterface()) {
-      // It references another interface/type, either a simple struct, or another HybridObject
+    } else if (extendsHybridObject(type, true)) {
+      // It is another HybridObject being referenced!
       const typename = type.getSymbolOrThrow().getEscapedName()
-
-      const isHybridObject = type
-        .getBaseTypes()
-        .some((t) => t.getText().includes('HybridObject'))
-      if (isHybridObject) {
-        // It is another HybridObject being referenced!
-        return new HybridObjectType(typename)
-      } else {
-        // It is a simple struct being referenced.
-        const properties = getInterfaceProperties(type)
-        return new StructType(typename, properties)
-      }
+      return new HybridObjectType(typename)
+    } else if (isDirectlyHybridObject(type)) {
+      // It is a HybridObject directly/literally. Base type
+      return new HybridObjectBaseType()
+    } else if (type.isInterface()) {
+      // It is a simple struct being referenced.
+      const typename = type.getSymbolOrThrow().getEscapedName()
+      const properties = getInterfaceProperties(type)
+      return new StructType(typename, properties)
     } else if (type.isObject()) {
       throw new Error(
         `Anonymous objects cannot be represented in C++! Extract "${type.getText()}" to a separate interface/type declaration.`

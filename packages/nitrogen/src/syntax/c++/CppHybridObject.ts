@@ -5,6 +5,7 @@ import type { HybridObjectSpec } from '../HybridObjectSpec.js'
 import { includeHeader, includeNitroHeader } from './includeNitroHeader.js'
 import { NitroConfig } from '../../config/NitroConfig.js'
 import { getHybridObjectName } from '../getHybridObjectName.js'
+import { HybridObjectType } from '../types/HybridObjectType.js'
 
 export function createCppHybridObject(spec: HybridObjectSpec): SourceFile[] {
   // Extra includes
@@ -26,6 +27,17 @@ export function createCppHybridObject(spec: HybridObjectSpec): SourceFile[] {
   const cxxNamespace = NitroConfig.getCxxNamespace('c++')
   const name = getHybridObjectName(spec.name)
 
+  const bases = ['public virtual HybridObject']
+  for (const base of spec.baseTypes) {
+    const hybridObject = new HybridObjectType(base.name)
+    bases.push(`public virtual ${getHybridObjectName(base.name).HybridTSpec}`)
+    const imports = hybridObject.getRequiredImports()
+    cppForwardDeclarations.push(
+      ...imports.map((i) => i.forwardDeclaration).filter((f) => f != null)
+    )
+    cppExtraIncludes.push(...imports.map((i) => includeHeader(i)))
+  }
+
   // Generate the full header / code
   const cppHeaderCode = `
 ${createFileMetadataString(`${name.HybridTSpec}.hpp`)}
@@ -45,14 +57,17 @@ namespace ${cxxNamespace} {
   /**
    * An abstract base class for \`${spec.name}\`
    * Inherit this class to create instances of \`${name.HybridTSpec}\` in C++.
+   * You must explicitly call \`HybridObject\`'s constructor yourself, because it is virtual.
    * @example
    * \`\`\`cpp
    * class ${name.HybridT}: public ${name.HybridTSpec} {
+   * public:
+   *   ${name.HybridT}(...): HybridObject(TAG) { ... }
    *   // ...
    * };
    * \`\`\`
    */
-  class ${name.HybridTSpec}: public virtual HybridObject {
+  class ${name.HybridTSpec}: ${bases.join(', ')} {
     public:
       // Constructor
       explicit ${name.HybridTSpec}(): HybridObject(TAG) { }
@@ -101,6 +116,14 @@ namespace ${cxxNamespace} {
     )
   }
 
+  const basePrototypeRegistrations = ['HybridObject::loadHybridMethods();']
+  for (const base of spec.baseTypes) {
+    const hybridObjectName = getHybridObjectName(base.name)
+    basePrototypeRegistrations.push(
+      `${hybridObjectName.HybridTSpec}::loadHybridMethods();`
+    )
+  }
+
   const cppBodyCode = `
 ${createFileMetadataString(`${name.HybridTSpec}.cpp`)}
 
@@ -110,7 +133,7 @@ namespace ${cxxNamespace} {
 
   void ${name.HybridTSpec}::loadHybridMethods() {
     // load base methods/properties
-    HybridObject::loadHybridMethods();
+    ${indent(basePrototypeRegistrations.join('\n'), '    ')}
     // load custom methods/properties
     registerHybrids(this, [](Prototype& prototype) {
       ${indent(registrations.join('\n'), '      ')}

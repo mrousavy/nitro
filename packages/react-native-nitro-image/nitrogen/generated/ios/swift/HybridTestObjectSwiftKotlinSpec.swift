@@ -29,6 +29,7 @@ import NitroModules
  */
 public protocol HybridTestObjectSwiftKotlinSpec: HybridObjectSpec {
   // Properties
+  var thisObject: HybridTestObjectSwiftKotlinSpec { get }
   var numberValue: Double { get set }
   var boolValue: Bool { get set }
   var stringValue: String { get set }
@@ -36,10 +37,10 @@ public protocol HybridTestObjectSwiftKotlinSpec: HybridObjectSpec {
   var stringOrUndefined: String? { get set }
   var stringOrNull: String? { get set }
   var optionalString: String? { get set }
-  var someVariantFirst: Variant_String_Double { get set }
-  var thisObject: HybridTestObjectSwiftKotlinSpec { get }
+  var someVariant: Variant_String_Double { get set }
 
   // Methods
+  func newTestObject() throws -> HybridTestObjectSwiftKotlinSpec
   func simpleFunc() throws -> Void
   func addNumbers(a: Double, b: Double) throws -> Double
   func addStrings(a: String, b: String) throws -> String
@@ -62,7 +63,6 @@ public protocol HybridTestObjectSwiftKotlinSpec: HybridObjectSpec {
   func createArrayBuffer() throws -> ArrayBufferHolder
   func getBufferLastItem(buffer: ArrayBufferHolder) throws -> Double
   func setAllValuesTo(buffer: ArrayBufferHolder, value: Double) throws -> Void
-  func newTestObject() throws -> HybridTestObjectSwiftKotlinSpec
 }
 
 public extension HybridTestObjectSwiftKotlinSpec {

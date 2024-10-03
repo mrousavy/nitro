@@ -31,6 +31,8 @@ target_sources(
   ../nitrogen/generated/shared/c++/HybridImageFactorySpec.cpp
   ../nitrogen/generated/shared/c++/HybridTestObjectCppSpec.cpp
   ../nitrogen/generated/shared/c++/HybridTestObjectSwiftKotlinSpec.cpp
+  ../nitrogen/generated/shared/c++/HybridBaseSpec.cpp
+  ../nitrogen/generated/shared/c++/HybridChildSpec.cpp
   # Android-specific Nitrogen C++ sources
   ../nitrogen/generated/android/c++/JHybridImageSpec.cpp
   ../nitrogen/generated/android/c++/JHybridImageFactorySpec.cpp

@@ -1,24 +1,29 @@
-import { type InterfaceDeclaration, type MethodSignature } from 'ts-morph'
+import { Node, Type } from 'ts-morph'
 import type { SourceFile } from './syntax/SourceFile.js'
 import { createCppHybridObject } from './syntax/c++/CppHybridObject.js'
-import type { Language } from './getPlatformSpecs.js'
+import {
+  extendsHybridObject,
+  isDirectlyHybridObject,
+  type Language,
+} from './getPlatformSpecs.js'
 import type { HybridObjectSpec } from './syntax/HybridObjectSpec.js'
 import { Property } from './syntax/Property.js'
 import { Method } from './syntax/Method.js'
 import { createSwiftHybridObject } from './syntax/swift/SwiftHybridObject.js'
 import { createKotlinHybridObject } from './syntax/kotlin/KotlinHybridObject.js'
 import { createType } from './syntax/createType.js'
+import { Parameter } from './syntax/Parameter.js'
 
 export function generatePlatformFiles(
-  declaration: InterfaceDeclaration,
+  interfaceType: Type,
   language: Language
 ): SourceFile[] {
-  const spec = getHybridObjectSpec(declaration, language)
+  const spec = getHybridObjectSpec(interfaceType, language)
 
   // TODO: We currently just call this so the HybridObject itself is a "known type".
   // This causes the Swift Umbrella header to properly forward-declare it.
   // Without this, only Hybrid Objects that are actually used in public APIs will be forward-declared.
-  createType(declaration.getType(), false)
+  createType(interfaceType, false)
 
   switch (language) {
     case 'c++':
@@ -32,20 +37,81 @@ export function generatePlatformFiles(
   }
 }
 
-function getHybridObjectSpec(
-  declaration: InterfaceDeclaration,
-  language: Language
-): HybridObjectSpec {
-  const interfaceName = declaration.getSymbolOrThrow().getEscapedName()
+function getHybridObjectSpec(type: Type, language: Language): HybridObjectSpec {
+  const symbol = type.getSymbolOrThrow()
+  const name = symbol.getEscapedName()
 
-  const properties = declaration.getProperties()
-  const methods = declaration.getMethods()
-  assertNoDuplicateFunctions(methods)
+  const properties: Property[] = []
+  const methods: Method[] = []
+  for (const prop of type.getProperties()) {
+    const declarations = prop.getDeclarations()
+    if (declarations.length > 1) {
+      throw new Error(
+        `${name}: Function overloading is not supported! (In "${prop.getName()}")`
+      )
+    }
+    let declaration = declarations[0]
+    if (declaration == null) {
+      throw new Error(
+        `${name}: Property "${prop.getName()}" does not have a type declaration!`
+      )
+    }
+
+    const parent = declaration.getParentOrThrow().getType()
+
+    if (parent === type) {
+      // it's an own property. declared literally here. fine.
+    } else if (
+      extendsHybridObject(parent, true) ||
+      isDirectlyHybridObject(parent)
+    ) {
+      // it's coming from a base class that is already a HybridObject. We can grab this via inheritance.
+      // don't generate this property natively.
+      continue
+    } else {
+      // it's coming from any TypeScript type that is not a HybridObject.
+      // Maybe just a literal interface, then we copy over the props.
+    }
+
+    if (Node.isPropertySignature(declaration)) {
+      const t = declaration.getType()
+      if (t.getCallSignatures().length > 0) {
+        // It's a function, but a prop! Use method signature.
+        throw new Error(
+          `${name}: Property "${prop.getName()}" is a function property. Use method syntax instead! (\`${prop.getName()}: () => void\` -> \`${prop.getName()}(): void\`)`
+        )
+      }
+      const propType = createType(t, prop.isOptional() || t.isNullable())
+      properties.push(
+        new Property(prop.getName(), propType, declaration.isReadonly())
+      )
+    } else if (Node.isMethodSignature(declaration)) {
+      const returnType = declaration.getReturnType()
+      const methodReturnType = createType(returnType, returnType.isNullable())
+      const methodParameters = declaration
+        .getParameters()
+        .map((p) => new Parameter(p))
+      methods.push(
+        new Method(prop.getName(), methodReturnType, methodParameters)
+      )
+    } else {
+      throw new Error(
+        `${name}: Property "${prop.getName()}" is neither a property, nor a method!`
+      )
+    }
+  }
+
+  const bases = type
+    .getBaseTypes()
+    .filter((t) => extendsHybridObject(t, false))
+    .map((t) => getHybridObjectSpec(t, language))
+
   const spec: HybridObjectSpec = {
     language: language,
-    name: interfaceName,
-    properties: properties.map((p) => new Property(p)),
-    methods: methods.map((m) => new Method(m)),
+    name: name,
+    properties: properties,
+    methods: methods,
+    baseTypes: bases,
   }
   return spec
 }
@@ -69,27 +135,4 @@ function generateKotlinFiles(spec: HybridObjectSpec): SourceFile[] {
   // 2. Generate Kotlin specific files and potentially a C++ binding layer
   const kotlinFiles = createKotlinHybridObject(spec)
   return [...cppFiles, ...kotlinFiles]
-}
-
-function getDuplicates<T>(array: T[]): T[] {
-  const duplicates = new Set<T>()
-  for (let i = 0; i < array.length; i++) {
-    const item = array[i]!
-    if (array.indexOf(item, i + 1) !== -1) {
-      duplicates.add(item)
-    }
-  }
-  return [...duplicates]
-}
-
-function assertNoDuplicateFunctions(functions: MethodSignature[]): void {
-  const duplicates = getDuplicates(functions.map((f) => f.getName()))
-  for (const duplicate of duplicates) {
-    const duplicateSignatures = functions
-      .filter((f) => f.getName() === duplicate)
-      .map((f) => `\`${f.getText()}\``)
-    throw new Error(
-      `Function overloading is not supported! (In ${duplicateSignatures.join(' vs ')})`
-    )
-  }
 }

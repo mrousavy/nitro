@@ -1,6 +1,6 @@
 import type { PlatformSpec } from 'react-native-nitro-modules'
-import type { InterfaceDeclaration, TypeNode } from 'ts-morph'
-import { ts, Symbol } from 'ts-morph'
+import type { InterfaceDeclaration, Type } from 'ts-morph'
+import { Symbol } from 'ts-morph'
 
 export type Platform = keyof Required<PlatformSpec>
 export type Language = Required<PlatformSpec>[keyof PlatformSpec]
@@ -46,12 +46,12 @@ function isValidLanguageForPlatform(
 
 function getPlatformSpec(
   moduleName: string,
-  platformSpecs: TypeNode<ts.TypeNode>
+  platformSpecs: Type
 ): PlatformSpec {
   const result: PlatformSpec = {}
 
   // Properties (ios, android)
-  const properties = platformSpecs.getType().getProperties()
+  const properties = platformSpecs.getProperties()
   for (const property of properties) {
     // Property name (ios, android)
     const platform = property.getName()
@@ -89,30 +89,69 @@ function getPlatformSpec(
   return result
 }
 
-export function getHybridObjectPlatforms(
-  module: InterfaceDeclaration
-): PlatformSpec | undefined {
-  const heritageClauses = module.getHeritageClauses()
+export function isDirectlyHybridObject(type: Type): boolean {
+  const symbol = type.getSymbol() ?? type.getAliasSymbol()
+  if (symbol?.getName() === 'HybridObject') {
+    return true
+  }
+  return false
+}
 
-  for (const clause of heritageClauses) {
-    const types = clause.getTypeNodes()
-    for (const type of types) {
-      const typename = type.getText()
-      if (typename.startsWith('HybridObject<')) {
-        // It extends HybridObject<...>
-        const genericArguments = type.getTypeArguments()
-        const platformSpecsArgument = genericArguments[0]
-        if (platformSpecsArgument == null) {
-          throw new Error(
-            `${module.getName()} does not properly extend HybridObject<T>! ${typename} does not have a single generic type argument for platform spec languages!`
-          )
-        }
-        return getPlatformSpec(module.getName(), platformSpecsArgument)
-      } else if (typename === 'HybridObject') {
-        // It extends HybridObject with default type arguments
-        return { android: 'c++', ios: 'c++' }
+export function extendsHybridObject(type: Type, recursive: boolean): boolean {
+  for (const base of type.getBaseTypes()) {
+    const isHybrid = isDirectlyHybridObject(base)
+    if (isHybrid) {
+      return true
+    }
+    if (recursive) {
+      const baseExtends = extendsHybridObject(base, recursive)
+      if (baseExtends) {
+        return true
       }
     }
   }
+  return false
+}
+
+function findHybridObjectBase(type: Type): Type | undefined {
+  for (const base of type.getBaseTypes()) {
+    const symbol = base.getSymbol() ?? base.getAliasSymbol()
+    if (symbol?.getName() === 'HybridObject') {
+      return base
+    }
+    const baseBase = findHybridObjectBase(base)
+    if (baseBase != null) {
+      return baseBase
+    }
+  }
   return undefined
+}
+
+/**
+ * If the given interface ({@linkcode module}) extends `HybridObject`,
+ * this method returns the platforms it exists on.
+ * If it doesn't extend `HybridObject`, this returns `undefined`.
+ */
+export function getHybridObjectPlatforms(
+  module: InterfaceDeclaration
+): PlatformSpec | undefined {
+  const base = findHybridObjectBase(module.getType())
+  if (base == null) {
+    // this type does not extend `HybridObject`.
+    return undefined
+  }
+
+  const genericArguments = base.getTypeArguments()
+  if (genericArguments.length === 0) {
+    // it uses `HybridObject` without generic arguments. This defaults to C++
+    return { android: 'c++', ios: 'c++' }
+  }
+  const platformSpecsArgument = genericArguments[0]
+  if (platformSpecsArgument == null) {
+    throw new Error(
+      `${module.getName()} does not properly extend HybridObject<T>! ${base.getText()} does not have a single generic type argument for platform spec languages!`
+    )
+  }
+
+  return getPlatformSpec(module.getName(), platformSpecsArgument)
 }

@@ -75,9 +75,9 @@ public:
   passVariant(const std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>>& either) override;
 
   std::variant<bool, OldEnum> getVariantEnum(const std::variant<bool, OldEnum>& variant) override;
-  std::variant<Person, Car> getVariantObjects(const std::variant<Person, Car>& variant) override;
-  std::variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>, Person>
-  getVariantHybrid(const std::variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>, Person>& variant) override;
+  std::variant<Car, Person> getVariantObjects(const std::variant<Car, Person>& variant) override;
+  std::variant<Person, std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>>
+  getVariantHybrid(const std::variant<Person, std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>>& variant) override;
   std::variant<std::tuple<double, double>, std::tuple<double, double, double>>
   getVariantTuple(const std::variant<std::tuple<double, double>, std::tuple<double, double, double>>& variant) override;
 
@@ -88,7 +88,6 @@ public:
   std::future<void> wait(double seconds) override;
   void callCallback(const std::function<void()>& callback) override;
   void callWithOptional(std::optional<double> value, const std::function<void(std::optional<double> /* maybe */)>& callback) override;
-  void getValueFromJSCallback(const std::function<std::future<double>()>& getValue) override;
   std::future<double> getValueFromJSCallbackAndWait(const std::function<std::future<double>()>& getValue) override;
   void callAll(const std::function<void()>& first, const std::function<void()>& second, const std::function<void()>& third) override;
   std::future<void> getValueFromJsCallback(const std::function<std::future<std::string>()>& callback,

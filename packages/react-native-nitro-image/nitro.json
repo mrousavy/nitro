@@ -18,6 +18,12 @@
     "TestObjectSwiftKotlin": {
       "swift": "HybridTestObjectSwift",
       "kotlin": "HybridTestObjectKotlin"
+    },
+    "Base": {
+      "cpp": "HybridBase"
+    },
+    "Child": {
+      "cpp": "HybridChild"
     }
   },
   "ignorePaths": ["node_modules"]
