@@ -120,7 +120,8 @@ export interface TestObjectSwiftKotlin
   newTestObject(): TestObjectSwiftKotlin
 }
 
-export interface Base extends HybridObject<{ ios: 'swift' }> {
+export interface Base
+  extends HybridObject<{ ios: 'swift'; android: 'kotlin' }> {
   readonly baseValue: number
 }
 

@@ -11,18 +11,21 @@
 #include <fbjni/fbjni.h>
 #include "HybridImageFactorySpec.hpp"
 
+
+
+
 namespace margelo::nitro::image {
 
   using namespace facebook;
 
-  class JHybridImageFactorySpec final: public jni::HybridClass<JHybridImageFactorySpec, JHybridObject>,
-                                       public HybridImageFactorySpec {
+  class JHybridImageFactorySpec: public jni::HybridClass<JHybridImageFactorySpec, JHybridObject>,
+                                 public virtual HybridImageFactorySpec {
   public:
     static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/HybridImageFactorySpec;";
     static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis);
     static void registerNatives();
 
-  private:
+  protected:
     // C++ constructor (called from Java via `initHybrid()`)
     explicit JHybridImageFactorySpec(jni::alias_ref<jhybridobject> jThis) :
       HybridObject(HybridImageFactorySpec::TAG),

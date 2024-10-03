@@ -37,6 +37,8 @@ target_sources(
   ../nitrogen/generated/android/c++/JHybridImageSpec.cpp
   ../nitrogen/generated/android/c++/JHybridImageFactorySpec.cpp
   ../nitrogen/generated/android/c++/JHybridTestObjectSwiftKotlinSpec.cpp
+  ../nitrogen/generated/android/c++/JHybridBaseSpec.cpp
+  ../nitrogen/generated/android/c++/JHybridChildSpec.cpp
 )
 
 # Add all libraries required by the generated specs

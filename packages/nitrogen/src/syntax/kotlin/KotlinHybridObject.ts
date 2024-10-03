@@ -23,6 +23,17 @@ export function createKotlinHybridObject(spec: HybridObjectSpec): SourceFile[] {
   const javaPackage = NitroConfig.getAndroidPackage('java/kotlin')
   const cppLibName = NitroConfig.getAndroidCxxLibName()
 
+  let kotlinBase = 'HybridObject'
+  if (spec.baseTypes.length > 0) {
+    if (spec.baseTypes.length > 1) {
+      throw new Error(
+        `${name.T}: Inheriting from multiple HybridObject bases is not yet supported in Kotlin!`
+      )
+    }
+    const base = spec.baseTypes[0]!.name
+    kotlinBase = getHybridObjectName(base).HybridTSpec
+  }
+
   // 1. Create Kotlin abstract class definition
   const abstractClassCode = `
 ${createFileMetadataString(`${name.HybridTSpec}.kt`)}
@@ -42,16 +53,21 @@ import com.margelo.nitro.core.*
 @DoNotStrip
 @Keep
 @Suppress("RedundantSuppression", "KotlinJniMissingFunction", "PropertyName", "RedundantUnitReturnType", "unused")
-abstract class ${name.HybridTSpec}: HybridObject() {
-  protected val TAG = "${name.HybridTSpec}"
-
+abstract class ${name.HybridTSpec}: ${kotlinBase}() {
   @DoNotStrip
-  val mHybridData: HybridData = initHybrid()
+  private var mHybridData: HybridData = initHybrid()
 
   init {
     // Pass this \`HybridData\` through to it's base class,
     // to represent inheritance to JHybridObject on C++ side
     super.updateNative(mHybridData)
+  }
+
+  /**
+   * Call from a child class to initialize HybridData with a child.
+   */
+  override fun updateNative(hybridData: HybridData) {
+    mHybridData = hybridData
   }
 
   // Properties

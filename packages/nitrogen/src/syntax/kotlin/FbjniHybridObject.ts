@@ -1,5 +1,6 @@
 import { NitroConfig } from '../../config/NitroConfig.js'
 import { createIndentation, indent } from '../../utils.js'
+import { getForwardDeclaration } from '../c++/getForwardDeclaration.js'
 import { includeHeader } from '../c++/includeNitroHeader.js'
 import { getAllTypes } from '../getAllTypes.js'
 import { getHybridObjectName } from '../getHybridObjectName.js'
@@ -7,16 +8,27 @@ import { createFileMetadataString, isNotDuplicate } from '../helpers.js'
 import type { HybridObjectSpec } from '../HybridObjectSpec.js'
 import { Method } from '../Method.js'
 import type { Property } from '../Property.js'
-import type { SourceFile } from '../SourceFile.js'
+import type { SourceFile, SourceImport } from '../SourceFile.js'
 import { addJNINativeRegistration } from './JNINativeRegistrations.js'
 import { KotlinCxxBridgedType } from './KotlinCxxBridgedType.js'
 
 export function createFbjniHybridObject(spec: HybridObjectSpec): SourceFile[] {
   const name = getHybridObjectName(spec.name)
-  const propertiesDecl = spec.properties
+
+  // Because we cache JNI methods as `static` inside our method bodies,
+  // we need to re-create the method bodies per inherited class.
+  // This way `Child`'s statically cached `someMethod()` JNI reference
+  // is not the same as `Base`'s statically cached `someMethod()` JNI reference.
+  const properties = [
+    ...spec.properties,
+    ...spec.baseTypes.flatMap((b) => b.properties),
+  ]
+  const methods = [...spec.methods, ...spec.baseTypes.flatMap((b) => b.methods)]
+
+  const propertiesDecl = properties
     .map((p) => p.getCode('c++', { override: true }))
     .join('\n')
-  const methodsDecl = spec.methods
+  const methodsDecl = methods
     .map((p) => p.getCode('c++', { override: true }))
     .join('\n')
   const jniClassDescriptor = NitroConfig.getAndroidPackage(
@@ -25,6 +37,32 @@ export function createFbjniHybridObject(spec: HybridObjectSpec): SourceFile[] {
   )
   const cxxNamespace = NitroConfig.getCxxNamespace('c++')
   const spaces = createIndentation(name.JHybridTSpec.length)
+
+  let cppBase = 'JHybridObject'
+  if (spec.baseTypes.length > 0) {
+    if (spec.baseTypes.length > 1) {
+      throw new Error(
+        `${name.T}: Inheriting from multiple HybridObject bases is not yet supported on Kotlin!`
+      )
+    }
+    cppBase = getHybridObjectName(spec.baseTypes[0]!.name).JHybridTSpec
+  }
+  const cppImports: SourceImport[] = []
+  const cppConstructorCalls = [`HybridObject(${name.HybridTSpec}::TAG)`]
+  for (const base of spec.baseTypes) {
+    const { JHybridTSpec } = getHybridObjectName(base.name)
+    cppConstructorCalls.push('HybridBase(jThis)')
+    cppImports.push({
+      language: 'c++',
+      name: `${JHybridTSpec}.hpp`,
+      space: 'user',
+      forwardDeclaration: getForwardDeclaration(
+        'class',
+        JHybridTSpec,
+        NitroConfig.getCxxNamespace('c++')
+      ),
+    })
+  }
 
   const cppHeaderCode = `
 ${createFileMetadataString(`${name.HybridTSpec}.hpp`)}
@@ -35,21 +73,27 @@ ${createFileMetadataString(`${name.HybridTSpec}.hpp`)}
 #include <fbjni/fbjni.h>
 #include "${name.HybridTSpec}.hpp"
 
+${cppImports
+  .map((i) => i.forwardDeclaration)
+  .filter((f) => f != null)
+  .join('\n')}
+${cppImports.map((i) => includeHeader(i)).join('\n')}
+
 namespace ${cxxNamespace} {
 
   using namespace facebook;
 
-  class ${name.JHybridTSpec} final: public jni::HybridClass<${name.JHybridTSpec}, JHybridObject>,
-${spaces}                public ${name.HybridTSpec} {
+  class ${name.JHybridTSpec}: public jni::HybridClass<${name.JHybridTSpec}, ${cppBase}>,
+${spaces}          public virtual ${name.HybridTSpec} {
   public:
     static auto constexpr kJavaDescriptor = "L${jniClassDescriptor};";
     static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis);
     static void registerNatives();
 
-  private:
+  protected:
     // C++ constructor (called from Java via \`initHybrid()\`)
     explicit ${name.JHybridTSpec}(jni::alias_ref<jhybridobject> jThis) :
-      HybridObject(${name.HybridTSpec}::TAG),
+      ${indent(cppConstructorCalls.join(',\n'), '      ')},
       _javaPart(jni::make_global(jThis)) {}
 
   public:
@@ -88,10 +132,10 @@ ${spaces}                public ${name.HybridTSpec} {
     },
   })
 
-  const propertiesImpl = spec.properties
+  const propertiesImpl = properties
     .map((m) => getFbjniPropertyForwardImplementation(spec, m))
     .join('\n')
-  const methodsImpl = spec.methods
+  const methodsImpl = methods
     .map((m) => getFbjniMethodForwardImplementation(spec, m))
     .join('\n')
   const allTypes = getAllTypes(spec)
