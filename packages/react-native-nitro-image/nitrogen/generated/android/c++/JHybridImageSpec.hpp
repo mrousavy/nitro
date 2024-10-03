@@ -11,12 +11,15 @@
 #include <fbjni/fbjni.h>
 #include "HybridImageSpec.hpp"
 
+
+
+
 namespace margelo::nitro::image {
 
   using namespace facebook;
 
-  class JHybridImageSpec final: public jni::HybridClass<JHybridImageSpec, JHybridObject>,
-                                public HybridImageSpec {
+  class JHybridImageSpec: public jni::HybridClass<JHybridImageSpec, JHybridObject>,
+                          public virtual HybridImageSpec {
   public:
     static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/HybridImageSpec;";
     static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis);

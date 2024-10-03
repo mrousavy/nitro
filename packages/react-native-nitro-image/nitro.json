@@ -20,10 +20,12 @@
       "kotlin": "HybridTestObjectKotlin"
     },
     "Base": {
-      "swift": "HybridBase"
+      "swift": "HybridBase",
+      "kotlin": "HybridBase"
     },
     "Child": {
-      "swift": "HybridChild"
+      "swift": "HybridChild",
+      "kotlin": "HybridChild"
     }
   },
   "ignorePaths": ["node_modules"]

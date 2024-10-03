@@ -11,12 +11,15 @@
 #include <fbjni/fbjni.h>
 #include "HybridTestObjectSwiftKotlinSpec.hpp"
 
+
+
+
 namespace margelo::nitro::image {
 
   using namespace facebook;
 
-  class JHybridTestObjectSwiftKotlinSpec final: public jni::HybridClass<JHybridTestObjectSwiftKotlinSpec, JHybridObject>,
-                                                public HybridTestObjectSwiftKotlinSpec {
+  class JHybridTestObjectSwiftKotlinSpec: public jni::HybridClass<JHybridTestObjectSwiftKotlinSpec, JHybridObject>,
+                                          public virtual HybridTestObjectSwiftKotlinSpec {
   public:
     static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/HybridTestObjectSwiftKotlinSpec;";
     static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis);

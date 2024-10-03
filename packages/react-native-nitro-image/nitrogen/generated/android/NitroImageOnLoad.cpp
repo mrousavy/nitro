@@ -17,6 +17,8 @@
 #include "JHybridTestObjectSwiftKotlinSpec.hpp"
 #include "JFunc_void.hpp"
 #include "JFunc_void_std__optional_double_.hpp"
+#include "JHybridBaseSpec.hpp"
+#include "JHybridChildSpec.hpp"
 #include <NitroModules/JNISharedPtr.hpp>
 #include "HybridTestObjectCpp.hpp"
 
@@ -38,6 +40,8 @@ int initialize(JavaVM* vm) {
     margelo::nitro::image::JFunc_void::registerNatives();
     margelo::nitro::image::JFunc_void::registerNatives();
     margelo::nitro::image::JFunc_void_std__optional_double_::registerNatives();
+    margelo::nitro::image::JHybridBaseSpec::registerNatives();
+    margelo::nitro::image::JHybridChildSpec::registerNatives();
 
     // Register Nitro Hybrid Objects
     HybridObjectRegistry::registerHybridObjectConstructor(
@@ -79,6 +83,38 @@ int initialize(JavaVM* vm) {
     #endif
         auto globalRef = jni::make_global(instance);
         return JNISharedPtr::make_shared_from_jni<JHybridTestObjectSwiftKotlinSpec>(globalRef);
+      }
+    );
+    HybridObjectRegistry::registerHybridObjectConstructor(
+      "Base",
+      []() -> std::shared_ptr<HybridObject> {
+        static auto javaClass = jni::findClassStatic("com/margelo/nitro/image/HybridBase");
+        static auto defaultConstructor = javaClass->getConstructor<JHybridBaseSpec::javaobject()>();
+    
+        auto instance = javaClass->newObject(defaultConstructor);
+    #ifdef NITRO_DEBUG
+        if (instance == nullptr) [[unlikely]] {
+          throw std::runtime_error("Failed to create an instance of \"JHybridBaseSpec\" - the constructor returned null!");
+        }
+    #endif
+        auto globalRef = jni::make_global(instance);
+        return JNISharedPtr::make_shared_from_jni<JHybridBaseSpec>(globalRef);
+      }
+    );
+    HybridObjectRegistry::registerHybridObjectConstructor(
+      "Child",
+      []() -> std::shared_ptr<HybridObject> {
+        static auto javaClass = jni::findClassStatic("com/margelo/nitro/image/HybridChild");
+        static auto defaultConstructor = javaClass->getConstructor<JHybridChildSpec::javaobject()>();
+    
+        auto instance = javaClass->newObject(defaultConstructor);
+    #ifdef NITRO_DEBUG
+        if (instance == nullptr) [[unlikely]] {
+          throw std::runtime_error("Failed to create an instance of \"JHybridChildSpec\" - the constructor returned null!");
+        }
+    #endif
+        auto globalRef = jni::make_global(instance);
+        return JNISharedPtr::make_shared_from_jni<JHybridChildSpec>(globalRef);
       }
     );
   });

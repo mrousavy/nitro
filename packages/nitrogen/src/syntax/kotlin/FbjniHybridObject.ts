@@ -1,5 +1,6 @@
 import { NitroConfig } from '../../config/NitroConfig.js'
 import { createIndentation, indent } from '../../utils.js'
+import { getForwardDeclaration } from '../c++/getForwardDeclaration.js'
 import { includeHeader } from '../c++/includeNitroHeader.js'
 import { getAllTypes } from '../getAllTypes.js'
 import { getHybridObjectName } from '../getHybridObjectName.js'
@@ -7,7 +8,7 @@ import { createFileMetadataString, isNotDuplicate } from '../helpers.js'
 import type { HybridObjectSpec } from '../HybridObjectSpec.js'
 import { Method } from '../Method.js'
 import type { Property } from '../Property.js'
-import type { SourceFile } from '../SourceFile.js'
+import type { SourceFile, SourceImport } from '../SourceFile.js'
 import { addJNINativeRegistration } from './JNINativeRegistrations.js'
 import { KotlinCxxBridgedType } from './KotlinCxxBridgedType.js'
 
@@ -26,6 +27,30 @@ export function createFbjniHybridObject(spec: HybridObjectSpec): SourceFile[] {
   const cxxNamespace = NitroConfig.getCxxNamespace('c++')
   const spaces = createIndentation(name.JHybridTSpec.length)
 
+  let cppBase = 'JHybridObject'
+  if (spec.baseTypes.length > 0) {
+    if (spec.baseTypes.length > 1) {
+      throw new Error(
+        `${name.T}: Inheriting from multiple HybridObject bases is not yet supported on Kotlin!`
+      )
+    }
+    cppBase = getHybridObjectName(spec.baseTypes[0]!.name).JHybridTSpec
+  }
+  const cppImports: SourceImport[] = []
+  for (const base of spec.baseTypes) {
+    const { JHybridTSpec } = getHybridObjectName(base.name)
+    cppImports.push({
+      language: 'c++',
+      name: `${JHybridTSpec}.hpp`,
+      space: 'user',
+      forwardDeclaration: getForwardDeclaration(
+        'class',
+        JHybridTSpec,
+        NitroConfig.getCxxNamespace('c++')
+      ),
+    })
+  }
+
   const cppHeaderCode = `
 ${createFileMetadataString(`${name.HybridTSpec}.hpp`)}
 
@@ -35,12 +60,18 @@ ${createFileMetadataString(`${name.HybridTSpec}.hpp`)}
 #include <fbjni/fbjni.h>
 #include "${name.HybridTSpec}.hpp"
 
+${cppImports
+  .map((i) => i.forwardDeclaration)
+  .filter((f) => f != null)
+  .join('\n')}
+${cppImports.map((i) => includeHeader(i)).join('\n')}
+
 namespace ${cxxNamespace} {
 
   using namespace facebook;
 
-  class ${name.JHybridTSpec} final: public jni::HybridClass<${name.JHybridTSpec}, JHybridObject>,
-${spaces}                public ${name.HybridTSpec} {
+  class ${name.JHybridTSpec}: public jni::HybridClass<${name.JHybridTSpec}, ${cppBase}>,
+${spaces}          public virtual ${name.HybridTSpec} {
   public:
     static auto constexpr kJavaDescriptor = "L${jniClassDescriptor};";
     static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis);
