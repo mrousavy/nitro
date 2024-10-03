@@ -251,21 +251,18 @@ export function createType(type: TSMorphType, isOptional: boolean): Type {
 
         return new VariantType(variants)
       }
-    } else if (type.isInterface()) {
-      // It references another interface/type, either a simple struct, or another HybridObject
+    } else if (extendsHybridObject(type)) {
+      // It is another HybridObject being referenced!
       const typename = type.getSymbolOrThrow().getEscapedName()
-
-      if (isDirectlyHybridObject(type)) {
-        // It is a HybridObject directly/literally. Base type
-        return new HybridObjectBaseType()
-      } else if (extendsHybridObject(type)) {
-        // It is another HybridObject being referenced!
-        return new HybridObjectType(typename)
-      } else {
-        // It is a simple struct being referenced.
-        const properties = getInterfaceProperties(type)
-        return new StructType(typename, properties)
-      }
+      return new HybridObjectType(typename)
+    } else if (isDirectlyHybridObject(type)) {
+      // It is a HybridObject directly/literally. Base type
+      return new HybridObjectBaseType()
+    } else if (type.isInterface()) {
+      // It is a simple struct being referenced.
+      const typename = type.getSymbolOrThrow().getEscapedName()
+      const properties = getInterfaceProperties(type)
+      return new StructType(typename, properties)
     } else if (type.isObject()) {
       throw new Error(
         `Anonymous objects cannot be represented in C++! Extract "${type.getText()}" to a separate interface/type declaration.`

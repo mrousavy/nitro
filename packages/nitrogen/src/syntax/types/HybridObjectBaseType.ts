@@ -17,18 +17,11 @@ export class HybridObjectBaseType implements Type {
 
   getCode(language: Language): string {
     switch (language) {
-      case 'c++': {
+      case 'c++':
         return `std::shared_ptr<HybridObject>`
-      }
-      case 'swift': {
-        return `HybridObjectSpec`
-      }
-      case 'kotlin': {
-        return `HybridObject`
-      }
       default:
         throw new Error(
-          `Language ${language} is not yet supported for HybridObjectBaseType!`
+          `The base type \`HybridObject\` cannot be used directly in ${language} yet. Use a specific derived class of \`HybridObject\` instead!`
         )
     }
   }
