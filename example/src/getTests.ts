@@ -797,6 +797,21 @@ export function getTests(
         .toContain('childValue')
         .toContain('baseValue')
     ),
+    createTest('createBase() has name "Base"', () =>
+      it(() => testObject.createBase().name)
+        .didNotThrow()
+        .equals('Base')
+    ),
+    createTest('createChild() has name "Child"', () =>
+      it(() => testObject.createChild().name)
+        .didNotThrow()
+        .equals('Child')
+    ),
+    createTest('createBaseActualChild() has name "Child"', () =>
+      it(() => testObject.createBaseActualChild().name)
+        .didNotThrow()
+        .equals('Child')
+    ),
     createTest('createBaseActualChild() works', () =>
       it(() => testObject.createBaseActualChild())
         .didNotThrow()
