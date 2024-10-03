@@ -1,7 +1,11 @@
 import { Node, Type } from 'ts-morph'
 import type { SourceFile } from './syntax/SourceFile.js'
 import { createCppHybridObject } from './syntax/c++/CppHybridObject.js'
-import { type Language } from './getPlatformSpecs.js'
+import {
+  extendsHybridObject,
+  isDirectlyHybridObject,
+  type Language,
+} from './getPlatformSpecs.js'
 import type { HybridObjectSpec } from './syntax/HybridObjectSpec.js'
 import { Property } from './syntax/Property.js'
 import { Method } from './syntax/Method.js'
@@ -53,10 +57,17 @@ function getHybridObjectSpec(type: Type, language: Language): HybridObjectSpec {
       )
     }
 
-    const isOwnProperty = declaration.getParent()?.getType() === type
-    if (!isOwnProperty) {
-      // skip properties that are inherited by the parent (e.g. HybridObject.dispose())
+    const parent = declaration.getParentOrThrow().getType()
+
+    if (parent === type) {
+      // it's an own property. declared literally here. fine.
+    } else if (extendsHybridObject(parent) || isDirectlyHybridObject(parent)) {
+      // it's coming from a base class that is already a HybridObject. We can grab this via inheritance.
+      // don't generate this property natively.
       continue
+    } else {
+      // it's coming from any TypeScript type that is not a HybridObject.
+      // Maybe just a literal interface, then we copy over the props.
     }
 
     if (Node.isPropertySignature(declaration)) {
