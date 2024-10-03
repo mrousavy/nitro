@@ -89,6 +89,10 @@ function getPlatformSpec(
   return result
 }
 
+export function findHybridObjectBases(type: Type): Type[] {
+  return type.getBaseTypes().filter((b) => extendsHybridObject(b))
+}
+
 export function extendsHybridObject(type: Type): boolean {
   for (const base of type.getBaseTypes()) {
     const symbol = base.getSymbol() ?? base.getAliasSymbol()

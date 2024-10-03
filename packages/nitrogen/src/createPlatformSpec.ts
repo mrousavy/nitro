@@ -1,7 +1,7 @@
-import { type InterfaceDeclaration, type MethodSignature } from 'ts-morph'
+import { Node, Type, type InterfaceDeclaration } from 'ts-morph'
 import type { SourceFile } from './syntax/SourceFile.js'
 import { createCppHybridObject } from './syntax/c++/CppHybridObject.js'
-import type { Language } from './getPlatformSpecs.js'
+import { type Language } from './getPlatformSpecs.js'
 import type { HybridObjectSpec } from './syntax/HybridObjectSpec.js'
 import { Property } from './syntax/Property.js'
 import { Method } from './syntax/Method.js'
@@ -13,7 +13,7 @@ export function generatePlatformFiles(
   declaration: InterfaceDeclaration,
   language: Language
 ): SourceFile[] {
-  const spec = getHybridObjectSpec(declaration, language)
+  const spec = getHybridObjectSpec(declaration.getType(), language)
 
   // TODO: We currently just call this so the HybridObject itself is a "known type".
   // This causes the Swift Umbrella header to properly forward-declare it.
@@ -32,20 +32,52 @@ export function generatePlatformFiles(
   }
 }
 
-function getHybridObjectSpec(
-  declaration: InterfaceDeclaration,
-  language: Language
-): HybridObjectSpec {
-  const interfaceName = declaration.getSymbolOrThrow().getEscapedName()
+function getHybridObjectSpec(type: Type, language: Language): HybridObjectSpec {
+  const symbol = type.getSymbolOrThrow()
+  const name = symbol.getEscapedName()
 
-  const properties = declaration.getProperties()
-  const methods = declaration.getMethods()
-  assertNoDuplicateFunctions(methods)
+  const properties: Property[] = []
+  const methods: Method[] = []
+  for (const prop of type.getApparentProperties()) {
+    const declarations = prop.getDeclarations()
+    if (declarations.length > 1) {
+      throw new Error(
+        `${name}: Function overloading is not supported! (In "${prop.getName()}")`
+      )
+    }
+    let declaration = declarations[0]
+    if (declaration == null) {
+      throw new Error(
+        `${name}: Property "${prop.getName()}" does not have a type declaration!`
+      )
+    }
+    if (Node.isPropertySignature(declaration)) {
+      const t = declaration.getType()
+      const propType = createType(t, prop.isOptional() || t.isNullable())
+      properties.push(
+        new Property(prop.getName(), propType, declaration.isReadonly())
+      )
+    } else if (Node.isMethodSignature(declaration)) {
+      // const returnType = declaration.getReturnType()
+      // const methodReturnType = createType(returnType, returnType.isNullable())
+      // const methodParameters = declaration
+      //   .getParameters()
+      //   .map((p) => new Parameter(p))
+      // methods.push(
+      //   new Method(prop.getName(), methodReturnType, methodParameters)
+      // )
+    } else {
+      throw new Error(
+        `${name}: Property "${prop.getName()}" is neither a property, nor a method!`
+      )
+    }
+  }
   const spec: HybridObjectSpec = {
     language: language,
-    name: interfaceName,
-    properties: properties.map((p) => new Property(p)),
-    methods: methods.map((m) => new Method(m)),
+    name: name,
+    properties: properties,
+    methods: methods,
+    // baseTypes: findHybridObjectBases(declaration.getType()),
   }
   return spec
 }
@@ -69,27 +101,4 @@ function generateKotlinFiles(spec: HybridObjectSpec): SourceFile[] {
   // 2. Generate Kotlin specific files and potentially a C++ binding layer
   const kotlinFiles = createKotlinHybridObject(spec)
   return [...cppFiles, ...kotlinFiles]
-}
-
-function getDuplicates<T>(array: T[]): T[] {
-  const duplicates = new Set<T>()
-  for (let i = 0; i < array.length; i++) {
-    const item = array[i]!
-    if (array.indexOf(item, i + 1) !== -1) {
-      duplicates.add(item)
-    }
-  }
-  return [...duplicates]
-}
-
-function assertNoDuplicateFunctions(functions: MethodSignature[]): void {
-  const duplicates = getDuplicates(functions.map((f) => f.getName()))
-  for (const duplicate of duplicates) {
-    const duplicateSignatures = functions
-      .filter((f) => f.getName() === duplicate)
-      .map((f) => `\`${f.getText()}\``)
-    throw new Error(
-      `Function overloading is not supported! (In ${duplicateSignatures.join(' vs ')})`
-    )
-  }
 }
