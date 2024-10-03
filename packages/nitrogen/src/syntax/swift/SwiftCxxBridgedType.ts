@@ -321,7 +321,7 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
         const name = getTypeHybridObjectName(this.type)
         switch (language) {
           case 'c++':
-            return `std::static_pointer_cast<${name.HybridTSpecSwift}>(${cppParameterName})->getSwiftPart()`
+            return `std::dynamic_pointer_cast<${name.HybridTSpecSwift}>(${cppParameterName})->getSwiftPart()`
           case 'swift':
             return `${cppParameterName}.get${name.HybridTSpec}()`
           default:
