@@ -30,7 +30,7 @@ export function createCppHybridObject(spec: HybridObjectSpec): SourceFile[] {
   const bases = ['public virtual HybridObject']
   for (const base of spec.baseTypes) {
     const hybridObject = new HybridObjectType(base.name)
-    bases.push(`public ${getHybridObjectName(base.name).HybridTSpec}`)
+    bases.push(`public virtual ${getHybridObjectName(base.name).HybridTSpec}`)
     const imports = hybridObject.getRequiredImports()
     cppForwardDeclarations.push(
       ...imports.map((i) => i.forwardDeclaration).filter((f) => f != null)
@@ -116,6 +116,14 @@ namespace ${cxxNamespace} {
     )
   }
 
+  const basePrototypeRegistrations = ['HybridObject::loadHybridMethods();']
+  for (const base of spec.baseTypes) {
+    const hybridObjectName = getHybridObjectName(base.name)
+    basePrototypeRegistrations.push(
+      `${hybridObjectName.HybridTSpec}::loadHybridMethods();`
+    )
+  }
+
   const cppBodyCode = `
 ${createFileMetadataString(`${name.HybridTSpec}.cpp`)}
 
@@ -125,7 +133,7 @@ namespace ${cxxNamespace} {
 
   void ${name.HybridTSpec}::loadHybridMethods() {
     // load base methods/properties
-    HybridObject::loadHybridMethods();
+    ${indent(basePrototypeRegistrations.join('\n'), '    ')}
     // load custom methods/properties
     registerHybrids(this, [](Prototype& prototype) {
       ${indent(registrations.join('\n'), '      ')}

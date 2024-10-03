@@ -119,3 +119,11 @@ export interface TestObjectSwiftKotlin
   readonly thisObject: TestObjectSwiftKotlin
   newTestObject(): TestObjectSwiftKotlin
 }
+
+export interface Base extends HybridObject<{ ios: 'c++'; android: 'c++' }> {
+  readonly baseValue: number
+}
+
+export interface Child extends Base {
+  readonly childValue: number
+}
