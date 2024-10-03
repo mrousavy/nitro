@@ -165,12 +165,12 @@ std::variant<bool, OldEnum> HybridTestObjectCpp::getVariantEnum(const std::varia
   return variant;
 }
 
-std::variant<Person, Car> HybridTestObjectCpp::getVariantObjects(const std::variant<Person, Car>& variant) {
+std::variant<Car, Person> HybridTestObjectCpp::getVariantObjects(const std::variant<Car, Person>& variant) {
   return variant;
 }
 
-std::variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>, Person> HybridTestObjectCpp::getVariantHybrid(
-    const std::variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>, Person>& variant) {
+std::variant<Person, std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>> HybridTestObjectCpp::getVariantHybrid(
+    const std::variant<Person, std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>>& variant) {
   return variant;
 }
 
@@ -192,7 +192,7 @@ int64_t HybridTestObjectCpp::calculateFibonacciSync(double value) {
 }
 
 std::future<int64_t> HybridTestObjectCpp::calculateFibonacciAsync(double value) {
-  return std::async(std::launch::async, [=]() -> int64_t { return this->calculateFibonacci(value); });
+  return std::async(std::launch::async, [this, value]() -> int64_t { return this->calculateFibonacci(value); });
 }
 
 std::future<void> HybridTestObjectCpp::wait(double seconds) {
@@ -209,13 +209,6 @@ void HybridTestObjectCpp::callCallback(const std::function<void()>& callback) {
 void HybridTestObjectCpp::callWithOptional(std::optional<double> value,
                                            const std::function<void(std::optional<double> /* maybe */)>& callback) {
   callback(value);
-}
-
-void HybridTestObjectCpp::getValueFromJSCallback(const std::function<std::future<double>()>& getValue) {
-  ThreadPool::getSharedPool()->run([=]() {
-    std::future<double> future = getValue();
-    future.wait();
-  });
 }
 
 std::future<double> HybridTestObjectCpp::getValueFromJSCallbackAndWait(const std::function<std::future<double>()>& getValue) {
