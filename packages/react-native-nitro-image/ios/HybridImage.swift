@@ -9,31 +9,6 @@ import Foundation
 import UIKit
 import NitroModules
 
-class HybridBase : HybridBaseSpec {
-  var baseValue: Double {
-    return 10
-  }
-  
-  var hybridContext = margelo.nitro.HybridContext()
-  
-  var memorySize: Int { return 0 }
-  
-  
-}
-class HybridChild : HybridChildSpec {
-  var baseValue: Double {
-    return 10
-  }
-  var childValue: Double {
-    return 20
-  }
-  
-  var hybridContext = margelo.nitro.HybridContext()
-  
-  var memorySize: Int { return 0 }
-  
-}
-
 /**
  * Implement `HybridImageSpec` so we can expose this Swift class to JS.
  */
