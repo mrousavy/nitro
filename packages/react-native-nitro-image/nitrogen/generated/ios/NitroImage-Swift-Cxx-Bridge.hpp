@@ -32,7 +32,6 @@ namespace margelo::nitro::image { enum class Powertrain; }
 #if __has_include("HybridBaseSpec.hpp")
  #include "HybridBaseSpec.hpp"
 #endif
-
 #if __has_include("HybridTestObjectCppSpec.hpp")
  #include "HybridTestObjectCppSpec.hpp"
 #endif
@@ -541,5 +540,6 @@ namespace margelo::nitro::image::bridge::swift {
    */
   using std__optional_std__shared_ptr_margelo__nitro__image__HybridBaseSpec__ = std::optional<std::shared_ptr<margelo::nitro::image::HybridBaseSpec>>;
 
+  std::optional<std::shared_ptr<margelo::nitro::image::HybridBaseSpec>> create_std__optional_std__shared_ptr_margelo__nitro__image__HybridBaseSpec__(HybridBaseSpecSwift value);
 
 } // namespace margelo::nitro::image::bridge::swift
