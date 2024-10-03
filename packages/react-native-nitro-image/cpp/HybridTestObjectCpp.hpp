@@ -26,6 +26,7 @@ private:
   std::optional<std::string> _optionalString;
   std::variant<std::string, double> _variant;
   std::tuple<double, std::string> _tuple;
+  std::optional<std::shared_ptr<HybridBaseSpec>> _base;
 
 private:
   static inline uint64_t calculateFibonacci(int count) noexcept {
@@ -43,6 +44,8 @@ public:
   void setNumberValue(double numberValue) override;
   bool getBoolValue() override;
   void setBoolValue(bool boolValue) override;
+  std::optional<std::shared_ptr<HybridBaseSpec>> getBase() override;
+  void setBase(const std::optional<std::shared_ptr<HybridBaseSpec>>& base) override;
   std::string getStringValue() override;
   void setStringValue(const std::string& stringValue) override;
   int64_t getBigintValue() override;

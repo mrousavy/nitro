@@ -88,6 +88,11 @@ interface SharedTestObjectProps {
   bounceBase(base: Base): Base
   bounceChildBase(child: Child): Base
   castBase(base: Base): Child
+
+  // Hybrid Objects edge cases
+  base?: Base
+  // someCallbackProp: (base: Base) => void
+  // someOptionalCallbackProp?: (base: Base) => void
 }
 
 export interface TestObjectCpp

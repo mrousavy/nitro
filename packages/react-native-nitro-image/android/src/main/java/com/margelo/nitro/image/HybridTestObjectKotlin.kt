@@ -20,6 +20,7 @@ class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
     override val thisObject: HybridTestObjectSwiftKotlinSpec
         get() = this
     override var someVariant: Variant_String_Double = Variant_String_Double.create(55.05)
+    override var base: HybridBaseSpec? = null
 
     override fun simpleFunc() {
         // do nothing

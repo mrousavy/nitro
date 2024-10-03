@@ -15,6 +15,8 @@
 
 // Forward declaration of `HybridTestObjectCppSpec` to properly resolve imports.
 namespace margelo::nitro::image { class HybridTestObjectCppSpec; }
+// Forward declaration of `HybridBaseSpec` to properly resolve imports.
+namespace margelo::nitro::image { class HybridBaseSpec; }
 // Forward declaration of `OldEnum` to properly resolve imports.
 namespace margelo::nitro::image { enum class OldEnum; }
 // Forward declaration of `Car` to properly resolve imports.
@@ -29,8 +31,6 @@ namespace margelo::nitro::image { enum class Powertrain; }
 namespace NitroModules { class ArrayBuffer; }
 // Forward declaration of `HybridChildSpec` to properly resolve imports.
 namespace margelo::nitro::image { class HybridChildSpec; }
-// Forward declaration of `HybridBaseSpec` to properly resolve imports.
-namespace margelo::nitro::image { class HybridBaseSpec; }
 
 #include <tuple>
 #include <string>
@@ -38,6 +38,7 @@ namespace margelo::nitro::image { class HybridBaseSpec; }
 #include "HybridTestObjectCppSpec.hpp"
 #include <optional>
 #include <variant>
+#include "HybridBaseSpec.hpp"
 #include <vector>
 #include "OldEnum.hpp"
 #include "Car.hpp"
@@ -48,7 +49,6 @@ namespace margelo::nitro::image { class HybridBaseSpec; }
 #include "Powertrain.hpp"
 #include <NitroModules/ArrayBuffer.hpp>
 #include "HybridChildSpec.hpp"
-#include "HybridBaseSpec.hpp"
 
 namespace margelo::nitro::image {
 
@@ -96,6 +96,8 @@ namespace margelo::nitro::image {
       virtual void setOptionalString(const std::optional<std::string>& optionalString) = 0;
       virtual std::variant<std::string, double> getSomeVariant() = 0;
       virtual void setSomeVariant(const std::variant<std::string, double>& someVariant) = 0;
+      virtual std::optional<std::shared_ptr<margelo::nitro::image::HybridBaseSpec>> getBase() = 0;
+      virtual void setBase(const std::optional<std::shared_ptr<margelo::nitro::image::HybridBaseSpec>>& base) = 0;
 
     public:
       // Methods

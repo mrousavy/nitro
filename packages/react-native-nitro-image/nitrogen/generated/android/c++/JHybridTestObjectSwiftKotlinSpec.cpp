@@ -9,6 +9,8 @@
 
 // Forward declaration of `HybridTestObjectSwiftKotlinSpec` to properly resolve imports.
 namespace margelo::nitro::image { class HybridTestObjectSwiftKotlinSpec; }
+// Forward declaration of `HybridBaseSpec` to properly resolve imports.
+namespace margelo::nitro::image { class HybridBaseSpec; }
 // Forward declaration of `AnyMap` to properly resolve imports.
 namespace NitroModules { class AnyMap; }
 // Forward declaration of `Powertrain` to properly resolve imports.
@@ -21,8 +23,6 @@ namespace margelo::nitro::image { struct Person; }
 namespace NitroModules { class ArrayBuffer; }
 // Forward declaration of `HybridChildSpec` to properly resolve imports.
 namespace margelo::nitro::image { class HybridChildSpec; }
-// Forward declaration of `HybridBaseSpec` to properly resolve imports.
-namespace margelo::nitro::image { class HybridBaseSpec; }
 
 #include <memory>
 #include "HybridTestObjectSwiftKotlinSpec.hpp"
@@ -32,6 +32,8 @@ namespace margelo::nitro::image { class HybridBaseSpec; }
 #include <optional>
 #include <variant>
 #include "JVariant_String_Double.hpp"
+#include "HybridBaseSpec.hpp"
+#include "JHybridBaseSpec.hpp"
 #include <NitroModules/AnyMap.hpp>
 #include <NitroModules/JAnyMap.hpp>
 #include "Powertrain.hpp"
@@ -46,8 +48,6 @@ namespace margelo::nitro::image { class HybridBaseSpec; }
 #include <NitroModules/JArrayBuffer.hpp>
 #include "HybridChildSpec.hpp"
 #include "JHybridChildSpec.hpp"
-#include "HybridBaseSpec.hpp"
-#include "JHybridBaseSpec.hpp"
 #include <functional>
 #include "JFunc_void.hpp"
 #include "JFunc_void_std__optional_double_.hpp"
@@ -146,6 +146,15 @@ namespace margelo::nitro::image {
   void JHybridTestObjectSwiftKotlinSpec::setSomeVariant(const std::variant<std::string, double>& someVariant) {
     static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<JVariant_String_Double> /* someVariant */)>("setSomeVariant");
     method(_javaPart, JVariant_String_Double::fromCpp(someVariant));
+  }
+  std::optional<std::shared_ptr<margelo::nitro::image::HybridBaseSpec>> JHybridTestObjectSwiftKotlinSpec::getBase() {
+    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JHybridBaseSpec::javaobject>()>("getBase");
+    auto result = method(_javaPart);
+    return result != nullptr ? std::make_optional(JNISharedPtr::make_shared_from_jni<JHybridBaseSpec>(jni::make_global(result))) : std::nullopt;
+  }
+  void JHybridTestObjectSwiftKotlinSpec::setBase(const std::optional<std::shared_ptr<margelo::nitro::image::HybridBaseSpec>>& base) {
+    static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<JHybridBaseSpec::javaobject> /* base */)>("setBase");
+    method(_javaPart, base.has_value() ? std::dynamic_pointer_cast<JHybridBaseSpec>(base.value())->getJavaPart() : nullptr);
   }
 
   // Methods

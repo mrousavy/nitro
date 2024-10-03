@@ -16,6 +16,10 @@ namespace NitroImage { class HybridTestObjectSwiftKotlinSpecCxx; }
 namespace margelo::nitro::image { class HybridTestObjectSwiftKotlinSpec; }
 // Forward declaration of `HybridTestObjectSwiftKotlinSpecSwift` to properly resolve imports.
 namespace margelo::nitro::image { class HybridTestObjectSwiftKotlinSpecSwift; }
+// Forward declaration of `HybridBaseSpec` to properly resolve imports.
+namespace margelo::nitro::image { class HybridBaseSpec; }
+// Forward declaration of `HybridBaseSpecSwift` to properly resolve imports.
+namespace margelo::nitro::image { class HybridBaseSpecSwift; }
 // Forward declaration of `AnyMap` to properly resolve imports.
 namespace NitroModules { class AnyMap; }
 // Forward declaration of `Powertrain` to properly resolve imports.
@@ -32,10 +36,6 @@ namespace NitroModules { class ArrayBufferHolder; }
 namespace margelo::nitro::image { class HybridChildSpec; }
 // Forward declaration of `HybridChildSpecSwift` to properly resolve imports.
 namespace margelo::nitro::image { class HybridChildSpecSwift; }
-// Forward declaration of `HybridBaseSpec` to properly resolve imports.
-namespace margelo::nitro::image { class HybridBaseSpec; }
-// Forward declaration of `HybridBaseSpecSwift` to properly resolve imports.
-namespace margelo::nitro::image { class HybridBaseSpecSwift; }
 
 #include <memory>
 #include "HybridTestObjectSwiftKotlinSpec.hpp"
@@ -43,6 +43,8 @@ namespace margelo::nitro::image { class HybridBaseSpecSwift; }
 #include <string>
 #include <optional>
 #include <variant>
+#include "HybridBaseSpec.hpp"
+#include "HybridBaseSpecSwift.hpp"
 #include <NitroModules/AnyMap.hpp>
 #include "Powertrain.hpp"
 #include <future>
@@ -54,8 +56,6 @@ namespace margelo::nitro::image { class HybridBaseSpecSwift; }
 #include <NitroModules/ArrayBufferHolder.hpp>
 #include "HybridChildSpec.hpp"
 #include "HybridChildSpecSwift.hpp"
-#include "HybridBaseSpec.hpp"
-#include "HybridBaseSpecSwift.hpp"
 
 #if __has_include(<NitroModules/HybridContext.hpp>)
 #include <NitroModules/HybridContext.hpp>
@@ -152,6 +152,13 @@ namespace margelo::nitro::image {
     }
     inline void setSomeVariant(const std::variant<std::string, double>& someVariant) noexcept override {
       _swiftPart.setSomeVariant(someVariant);
+    }
+    inline std::optional<std::shared_ptr<margelo::nitro::image::HybridBaseSpec>> getBase() noexcept override {
+      auto result = _swiftPart.getBase();
+      return result;
+    }
+    inline void setBase(const std::optional<std::shared_ptr<margelo::nitro::image::HybridBaseSpec>>& base) noexcept override {
+      _swiftPart.setBase(base);
     }
 
   public:

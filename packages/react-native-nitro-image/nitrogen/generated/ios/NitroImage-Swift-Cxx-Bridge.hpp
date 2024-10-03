@@ -10,6 +10,10 @@
 // Forward declarations of C++ defined types
 // Forward declaration of `Car` to properly resolve imports.
 namespace margelo::nitro::image { struct Car; }
+// Forward declaration of `HybridBaseSpecSwift` to properly resolve imports.
+namespace margelo::nitro::image { class HybridBaseSpecSwift; }
+// Forward declaration of `HybridBaseSpec` to properly resolve imports.
+namespace margelo::nitro::image { class HybridBaseSpec; }
 // Forward declaration of `HybridTestObjectCppSpecSwift` to properly resolve imports.
 namespace margelo::nitro::image { class HybridTestObjectCppSpecSwift; }
 // Forward declaration of `HybridTestObjectCppSpec` to properly resolve imports.
@@ -25,6 +29,10 @@ namespace margelo::nitro::image { enum class Powertrain; }
 #if __has_include("Car.hpp")
  #include "Car.hpp"
 #endif
+#if __has_include("HybridBaseSpec.hpp")
+ #include "HybridBaseSpec.hpp"
+#endif
+
 #if __has_include("HybridTestObjectCppSpec.hpp")
  #include "HybridTestObjectCppSpec.hpp"
 #endif
@@ -527,5 +535,11 @@ namespace margelo::nitro::image::bridge::swift {
   inline std::shared_ptr<Func_void_std__optional_double__Wrapper> share_Func_void_std__optional_double_(const Func_void_std__optional_double_& value) {
     return std::make_shared<Func_void_std__optional_double__Wrapper>(value);
   }
+  
+  /**
+   * Specialized version of `std::optional<std::shared_ptr<margelo::nitro::image::HybridBaseSpec>>`.
+   */
+  using std__optional_std__shared_ptr_margelo__nitro__image__HybridBaseSpec__ = std::optional<std::shared_ptr<margelo::nitro::image::HybridBaseSpec>>;
+
 
 } // namespace margelo::nitro::image::bridge::swift
