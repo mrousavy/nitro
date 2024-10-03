@@ -4,12 +4,16 @@ import androidx.annotation.Keep
 import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
 
+interface ExtendableHybridClass {
+    fun updateNative(hybridData: HybridData)
+}
+
 /**
  * A base class for all Kotlin-based HybridObjects.
  */
 @Keep
 @DoNotStrip
-abstract class HybridObject {
+abstract class HybridObject: ExtendableHybridClass {
     /**
      * Get the memory size of the Kotlin instance (plus any external heap allocations),
      * in bytes.
@@ -41,7 +45,7 @@ abstract class HybridObject {
      * Must be called in the constructor of a subclass of `HybridObject`, to initialize the C++
      * `JHybridObject` with a subclass of it.
      */
-    protected fun updateNative(hybridData: HybridData) {
+    override fun updateNative(hybridData: HybridData) {
         mHybridData = hybridData
     }
 }

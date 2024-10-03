@@ -21,13 +21,22 @@ import com.margelo.nitro.core.*
 @Keep
 @Suppress("RedundantSuppression", "KotlinJniMissingFunction", "PropertyName", "RedundantUnitReturnType", "unused")
 abstract class HybridBaseSpec: HybridObject() {
+  protected val TAG = "HybridBaseSpec"
+
   @DoNotStrip
-  val mHybridData: HybridData = initHybrid()
+  private var mHybridData: HybridData = initHybrid()
 
   init {
     // Pass this `HybridData` through to it's base class,
     // to represent inheritance to JHybridObject on C++ side
     super.updateNative(mHybridData)
+  }
+
+  /**
+   * Call from a child class to initialize HybridData with a child.
+   */
+  override fun updateNative(hybridData: HybridData) {
+    mHybridData = hybridData
   }
 
   // Properties

@@ -37,8 +37,10 @@ export function createFbjniHybridObject(spec: HybridObjectSpec): SourceFile[] {
     cppBase = getHybridObjectName(spec.baseTypes[0]!.name).JHybridTSpec
   }
   const cppImports: SourceImport[] = []
+  const cppConstructorCalls = [`HybridObject(${name.HybridTSpec}::TAG)`]
   for (const base of spec.baseTypes) {
     const { JHybridTSpec } = getHybridObjectName(base.name)
+    cppConstructorCalls.push('HybridBase(jThis)')
     cppImports.push({
       language: 'c++',
       name: `${JHybridTSpec}.hpp`,
@@ -77,10 +79,10 @@ ${spaces}          public virtual ${name.HybridTSpec} {
     static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis);
     static void registerNatives();
 
-  private:
+  protected:
     // C++ constructor (called from Java via \`initHybrid()\`)
     explicit ${name.JHybridTSpec}(jni::alias_ref<jhybridobject> jThis) :
-      HybridObject(${name.HybridTSpec}::TAG),
+      ${indent(cppConstructorCalls.join(',\n'), '      ')},
       _javaPart(jni::make_global(jThis)) {}
 
   public:

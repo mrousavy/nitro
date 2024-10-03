@@ -25,7 +25,7 @@ namespace margelo::nitro::image {
     static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis);
     static void registerNatives();
 
-  private:
+  protected:
     // C++ constructor (called from Java via `initHybrid()`)
     explicit JHybridImageSpec(jni::alias_ref<jhybridobject> jThis) :
       HybridObject(HybridImageSpec::TAG),
