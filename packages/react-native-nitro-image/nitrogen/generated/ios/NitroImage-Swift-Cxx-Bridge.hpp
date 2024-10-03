@@ -111,6 +111,22 @@ namespace margelo::nitro::image::bridge::swift {
   }
   
   /**
+   * Specialized version of `std::optional<bool>`.
+   */
+  using std__optional_bool_ = std::optional<bool>;
+  inline std::optional<bool> create_std__optional_bool_(const bool& value) {
+    return std::optional<bool>(value);
+  }
+  
+  /**
+   * Specialized version of `std::optional<Powertrain>`.
+   */
+  using std__optional_Powertrain_ = std::optional<Powertrain>;
+  inline std::optional<Powertrain> create_std__optional_Powertrain_(const Powertrain& value) {
+    return std::optional<Powertrain>(value);
+  }
+  
+  /**
    * Wrapper struct for `std::variant<std::string, double>`.
    * std::variant cannot be used in Swift because of a Swift bug.
    * Not even specializing it works. So we create a wrapper struct.
@@ -136,30 +152,6 @@ namespace margelo::nitro::image::bridge::swift {
   }
   inline double get_std__variant_std__string__double__1(const std__variant_std__string__double_& variantWrapper) {
     return std::get<1>(variantWrapper.variant);
-  }
-  
-  /**
-   * Specialized version of `std::tuple<double, std::string>`.
-   */
-  using std__tuple_double__std__string_ = std::tuple<double, std::string>;
-  inline std::tuple<double, std::string> create_std__tuple_double__std__string_(double arg0, const std::string& arg1) {
-    return std::tuple<double, std::string> { arg0, arg1 };
-  }
-  
-  /**
-   * Specialized version of `std::optional<bool>`.
-   */
-  using std__optional_bool_ = std::optional<bool>;
-  inline std::optional<bool> create_std__optional_bool_(const bool& value) {
-    return std::optional<bool>(value);
-  }
-  
-  /**
-   * Specialized version of `std::optional<Powertrain>`.
-   */
-  using std__optional_Powertrain_ = std::optional<Powertrain>;
-  inline std::optional<Powertrain> create_std__optional_Powertrain_(const Powertrain& value) {
-    return std::optional<Powertrain>(value);
   }
   
   /**
@@ -265,58 +257,58 @@ namespace margelo::nitro::image::bridge::swift {
   }
   
   /**
-   * Wrapper struct for `std::variant<Person, Car>`.
+   * Wrapper struct for `std::variant<Car, Person>`.
    * std::variant cannot be used in Swift because of a Swift bug.
    * Not even specializing it works. So we create a wrapper struct.
    */
-  struct std__variant_Person__Car_ {
-    std::variant<Person, Car> variant;
-    std__variant_Person__Car_(std::variant<Person, Car> variant): variant(variant) { }
-    operator std::variant<Person, Car>() const {
+  struct std__variant_Car__Person_ {
+    std::variant<Car, Person> variant;
+    std__variant_Car__Person_(std::variant<Car, Person> variant): variant(variant) { }
+    operator std::variant<Car, Person>() const {
       return variant;
     }
     inline size_t index() const {
       return variant.index();
     }
   };
-  inline std__variant_Person__Car_ create_std__variant_Person__Car_(const Person& value) {
-    return std__variant_Person__Car_(value);
+  inline std__variant_Car__Person_ create_std__variant_Car__Person_(const Car& value) {
+    return std__variant_Car__Person_(value);
   }
-  inline std__variant_Person__Car_ create_std__variant_Person__Car_(const Car& value) {
-    return std__variant_Person__Car_(value);
+  inline std__variant_Car__Person_ create_std__variant_Car__Person_(const Person& value) {
+    return std__variant_Car__Person_(value);
   }
-  inline Person get_std__variant_Person__Car__0(const std__variant_Person__Car_& variantWrapper) {
+  inline Car get_std__variant_Car__Person__0(const std__variant_Car__Person_& variantWrapper) {
     return std::get<0>(variantWrapper.variant);
   }
-  inline Car get_std__variant_Person__Car__1(const std__variant_Person__Car_& variantWrapper) {
+  inline Person get_std__variant_Car__Person__1(const std__variant_Car__Person_& variantWrapper) {
     return std::get<1>(variantWrapper.variant);
   }
   
   /**
-   * Wrapper struct for `std::variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>, Person>`.
+   * Wrapper struct for `std::variant<Person, std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>>`.
    * std::variant cannot be used in Swift because of a Swift bug.
    * Not even specializing it works. So we create a wrapper struct.
    */
-  struct std__variant_std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec___Person_ {
-    std::variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>, Person> variant;
-    std__variant_std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec___Person_(std::variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>, Person> variant): variant(variant) { }
-    operator std::variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>, Person>() const {
+  struct std__variant_Person__std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec__ {
+    std::variant<Person, std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>> variant;
+    std__variant_Person__std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec__(std::variant<Person, std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>> variant): variant(variant) { }
+    operator std::variant<Person, std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>>() const {
       return variant;
     }
     inline size_t index() const {
       return variant.index();
     }
   };
-  inline std__variant_std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec___Person_ create_std__variant_std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec___Person_(const std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>& value) {
-    return std__variant_std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec___Person_(value);
+  inline std__variant_Person__std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec__ create_std__variant_Person__std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec__(const Person& value) {
+    return std__variant_Person__std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec__(value);
   }
-  inline std__variant_std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec___Person_ create_std__variant_std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec___Person_(const Person& value) {
-    return std__variant_std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec___Person_(value);
+  inline std__variant_Person__std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec__ create_std__variant_Person__std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec__(const std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>& value) {
+    return std__variant_Person__std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec__(value);
   }
-  inline std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec> get_std__variant_std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec___Person__0(const std__variant_std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec___Person_& variantWrapper) {
+  inline Person get_std__variant_Person__std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec___0(const std__variant_Person__std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec__& variantWrapper) {
     return std::get<0>(variantWrapper.variant);
   }
-  inline Person get_std__variant_std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec___Person__1(const std__variant_std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec___Person_& variantWrapper) {
+  inline std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec> get_std__variant_Person__std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec___1(const std__variant_Person__std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec__& variantWrapper) {
     return std::get<1>(variantWrapper.variant);
   }
   
@@ -362,6 +354,14 @@ namespace margelo::nitro::image::bridge::swift {
   }
   inline std::tuple<double, double, double> get_std__variant_std__tuple_double__double___std__tuple_double__double__double___1(const std__variant_std__tuple_double__double___std__tuple_double__double__double__& variantWrapper) {
     return std::get<1>(variantWrapper.variant);
+  }
+  
+  /**
+   * Specialized version of `std::tuple<double, std::string>`.
+   */
+  using std__tuple_double__std__string_ = std::tuple<double, std::string>;
+  inline std::tuple<double, std::string> create_std__tuple_double__std__string_(double arg0, const std::string& arg1) {
+    return std::tuple<double, std::string> { arg0, arg1 };
   }
   
   /**

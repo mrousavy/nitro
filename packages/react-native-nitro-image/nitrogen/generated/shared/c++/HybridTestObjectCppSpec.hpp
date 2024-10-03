@@ -21,10 +21,10 @@ namespace NitroModules { class AnyMap; }
 namespace margelo::nitro::image { enum class Powertrain; }
 // Forward declaration of `OldEnum` to properly resolve imports.
 namespace margelo::nitro::image { enum class OldEnum; }
-// Forward declaration of `Person` to properly resolve imports.
-namespace margelo::nitro::image { struct Person; }
 // Forward declaration of `Car` to properly resolve imports.
 namespace margelo::nitro::image { struct Car; }
+// Forward declaration of `Person` to properly resolve imports.
+namespace margelo::nitro::image { struct Person; }
 // Forward declaration of `ArrayBuffer` to properly resolve imports.
 namespace NitroModules { class ArrayBuffer; }
 
@@ -38,8 +38,8 @@ namespace NitroModules { class ArrayBuffer; }
 #include "Powertrain.hpp"
 #include <vector>
 #include "OldEnum.hpp"
-#include "Person.hpp"
 #include "Car.hpp"
+#include "Person.hpp"
 #include <future>
 #include <functional>
 #include <NitroModules/ArrayBuffer.hpp>
@@ -102,8 +102,8 @@ namespace margelo::nitro::image {
       virtual std::optional<Powertrain> tryOptionalEnum(std::optional<Powertrain> value) = 0;
       virtual std::variant<std::string, double> passVariant(const std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>>& either) = 0;
       virtual std::variant<bool, OldEnum> getVariantEnum(const std::variant<bool, OldEnum>& variant) = 0;
-      virtual std::variant<Person, Car> getVariantObjects(const std::variant<Person, Car>& variant) = 0;
-      virtual std::variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>, Person> getVariantHybrid(const std::variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>, Person>& variant) = 0;
+      virtual std::variant<Car, Person> getVariantObjects(const std::variant<Car, Person>& variant) = 0;
+      virtual std::variant<Person, std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>> getVariantHybrid(const std::variant<Person, std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>>& variant) = 0;
       virtual std::variant<std::tuple<double, double>, std::tuple<double, double, double>> getVariantTuple(const std::variant<std::tuple<double, double>, std::tuple<double, double, double>>& variant) = 0;
       virtual std::tuple<double, double, double> flip(const std::tuple<double, double, double>& tuple) = 0;
       virtual std::tuple<double, std::string, bool> passTuple(const std::tuple<double, std::string, bool>& tuple) = 0;

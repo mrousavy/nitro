@@ -52,6 +52,13 @@ function getHybridObjectSpec(type: Type, language: Language): HybridObjectSpec {
         `${name}: Property "${prop.getName()}" does not have a type declaration!`
       )
     }
+
+    const isOwnProperty = declaration.getParent()?.getType() === type
+    if (!isOwnProperty) {
+      // skip properties that are inherited by the parent (e.g. HybridObject.dispose())
+      continue
+    }
+
     if (Node.isPropertySignature(declaration)) {
       const t = declaration.getType()
       const propType = createType(t, prop.isOptional() || t.isNullable())
