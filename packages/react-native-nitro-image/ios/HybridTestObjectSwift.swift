@@ -9,6 +9,17 @@ import Foundation
 import NitroModules
 
 class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
+  func passVariant(either: Variant_String_Double_Bool__Double___String_) throws -> Variant_String_Double {
+    switch either {
+    case let .someDouble(double):
+      return .someDouble(double)
+    case let .someString(string):
+      return .someString(string)
+    default:
+      return .someString("different value")
+    }
+  }
+  
   var someVariantFirst: Variant_String_Double = .someDouble(55)
   
   var numberValue: Double = 0.0

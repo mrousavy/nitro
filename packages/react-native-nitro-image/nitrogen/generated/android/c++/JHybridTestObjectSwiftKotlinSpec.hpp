@@ -68,6 +68,7 @@ namespace margelo::nitro::image {
     std::string tryOptionalParams(double num, bool boo, const std::optional<std::string>& str) override;
     std::string tryMiddleParam(double num, std::optional<bool> boo, const std::string& str) override;
     std::optional<Powertrain> tryOptionalEnum(std::optional<Powertrain> value) override;
+    std::variant<std::string, double> passVariant(const std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>>& either) override;
     int64_t calculateFibonacciSync(double value) override;
     std::future<int64_t> calculateFibonacciAsync(double value) override;
     std::future<void> wait(double seconds) override;

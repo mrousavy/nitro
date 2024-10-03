@@ -13,7 +13,7 @@ export function getSwiftVariantTypename(variant: VariantType): string {
 
 export function getSwiftVariantCaseName(type: Type): string {
   const code = type.getCode('swift')
-  return `some${capitalizeName(code)}`
+  return `some${capitalizeName(escapeCppName(code))}`
 }
 
 export function createSwiftVariant(variant: VariantType): SourceFile {
@@ -34,7 +34,7 @@ ${createFileMetadataString(`${typename}.swift`)}
  * JS type: \`${jsSignature}\`
  */
 @frozen
-public enum ${typename} {
+public indirect enum ${typename} {
   ${indent(cases, '  ')}
 }
   `.trim()
