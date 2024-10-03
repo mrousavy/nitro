@@ -61,6 +61,12 @@ function getHybridObjectSpec(type: Type, language: Language): HybridObjectSpec {
 
     if (Node.isPropertySignature(declaration)) {
       const t = declaration.getType()
+      if (t.getCallSignatures().length > 0) {
+        // It's a function, but a prop! Use method signature.
+        throw new Error(
+          `${name}: Property "${prop.getName()}" is a function property. Use method syntax instead! (\`${prop.getName()}: () => void\` -> \`${prop.getName()}(): void\`)`
+        )
+      }
       const propType = createType(t, prop.isOptional() || t.isNullable())
       properties.push(
         new Property(prop.getName(), propType, declaration.isReadonly())
