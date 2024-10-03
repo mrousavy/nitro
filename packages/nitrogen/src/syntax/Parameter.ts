@@ -4,8 +4,8 @@ import { escapeCppName, toReferenceType } from './helpers.js'
 import type { Language } from '../getPlatformSpecs.js'
 import { type SourceFile, type SourceImport } from './SourceFile.js'
 import type { NamedType, Type } from './types/Type.js'
-import { createNamedType } from './createType.js'
 import { NamedWrappingType } from './types/NamedWrappingType.js'
+import { createNamedType } from './createType.js'
 
 export class Parameter implements CodeNode {
   readonly type: NamedType
@@ -23,10 +23,10 @@ export class Parameter implements CodeNode {
       // constructor(...) #2
       const [param] = args
       const name = param.getSymbolOrThrow().getEscapedName()
-      const type = param.getTypeNodeOrThrow().getType()
+      const type = param.getType()
       const isOptional =
         param.hasQuestionToken() || param.isOptional() || type.isNullable()
-      this.type = createNamedType(name, param.getType(), isOptional)
+      this.type = createNamedType(name, type, isOptional)
     }
   }
 

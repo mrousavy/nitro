@@ -89,14 +89,22 @@ function getPlatformSpec(
   return result
 }
 
+export function isDirectlyHybridObject(type: Type): boolean {
+  const symbol = type.getSymbol() ?? type.getAliasSymbol()
+  if (symbol?.getName() === 'HybridObject') {
+    return true
+  }
+  return false
+}
+
 export function findHybridObjectBases(type: Type): Type[] {
   return type.getBaseTypes().filter((b) => extendsHybridObject(b))
 }
 
 export function extendsHybridObject(type: Type): boolean {
   for (const base of type.getBaseTypes()) {
-    const symbol = base.getSymbol() ?? base.getAliasSymbol()
-    if (symbol?.getName() === 'HybridObject') {
+    const isHybrid = isDirectlyHybridObject(base)
+    if (isHybrid) {
       return true
     }
     const baseExtends = extendsHybridObject(base)

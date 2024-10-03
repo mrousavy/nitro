@@ -20,7 +20,10 @@ import { getInterfaceProperties } from './getInterfaceProperties.js'
 import { VariantType } from './types/VariantType.js'
 import { MapType } from './types/MapType.js'
 import { TupleType } from './types/TupleType.js'
-import { extendsHybridObject } from '../getPlatformSpecs.js'
+import {
+  extendsHybridObject,
+  isDirectlyHybridObject,
+} from '../getPlatformSpecs.js'
 
 function isSymbol(type: TSMorphType, symbolName: string): boolean {
   const symbol = type.getSymbol()
@@ -251,10 +254,15 @@ export function createType(type: TSMorphType, isOptional: boolean): Type {
       // It references another interface/type, either a simple struct, or another HybridObject
       const typename = type.getSymbolOrThrow().getEscapedName()
 
-      const isHybridObject = extendsHybridObject(type)
-      if (isHybridObject) {
+      const isAnyHybridObject = extendsHybridObject(type)
+      if (isAnyHybridObject) {
         // It is another HybridObject being referenced!
         return new HybridObjectType(typename)
+      }
+      const isHybridObject = isDirectlyHybridObject(type)
+      if (isHybridObject) {
+        // It is a HybridObject directly
+        return new HybridObjectType('HybridObject')
       } else {
         // It is a simple struct being referenced.
         const properties = getInterfaceProperties(type)

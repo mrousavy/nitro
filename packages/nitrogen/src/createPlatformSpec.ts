@@ -8,6 +8,7 @@ import { Method } from './syntax/Method.js'
 import { createSwiftHybridObject } from './syntax/swift/SwiftHybridObject.js'
 import { createKotlinHybridObject } from './syntax/kotlin/KotlinHybridObject.js'
 import { createType } from './syntax/createType.js'
+import { Parameter } from './syntax/Parameter.js'
 
 export function generatePlatformFiles(
   declaration: InterfaceDeclaration,
@@ -38,7 +39,7 @@ function getHybridObjectSpec(type: Type, language: Language): HybridObjectSpec {
 
   const properties: Property[] = []
   const methods: Method[] = []
-  for (const prop of type.getApparentProperties()) {
+  for (const prop of type.getProperties()) {
     const declarations = prop.getDeclarations()
     if (declarations.length > 1) {
       throw new Error(
@@ -58,14 +59,14 @@ function getHybridObjectSpec(type: Type, language: Language): HybridObjectSpec {
         new Property(prop.getName(), propType, declaration.isReadonly())
       )
     } else if (Node.isMethodSignature(declaration)) {
-      // const returnType = declaration.getReturnType()
-      // const methodReturnType = createType(returnType, returnType.isNullable())
-      // const methodParameters = declaration
-      //   .getParameters()
-      //   .map((p) => new Parameter(p))
-      // methods.push(
-      //   new Method(prop.getName(), methodReturnType, methodParameters)
-      // )
+      const returnType = declaration.getReturnType()
+      const methodReturnType = createType(returnType, returnType.isNullable())
+      const methodParameters = declaration
+        .getParameters()
+        .map((p) => new Parameter(p))
+      methods.push(
+        new Method(prop.getName(), methodReturnType, methodParameters)
+      )
     } else {
       throw new Error(
         `${name}: Property "${prop.getName()}" is neither a property, nor a method!`
