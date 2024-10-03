@@ -54,7 +54,7 @@ namespace margelo::nitro::image {
   }
   std::shared_ptr<margelo::nitro::image::HybridImageSpec> JHybridImageFactorySpec::bounceBack(const std::shared_ptr<margelo::nitro::image::HybridImageSpec>& image) {
     static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JHybridImageSpec::javaobject>(jni::alias_ref<JHybridImageSpec::javaobject> /* image */)>("bounceBack");
-    auto result = method(_javaPart, std::static_pointer_cast<JHybridImageSpec>(image)->getJavaPart());
+    auto result = method(_javaPart, std::dynamic_pointer_cast<JHybridImageSpec>(image)->getJavaPart());
     return JNISharedPtr::make_shared_from_jni<JHybridImageSpec>(jni::make_global(result));
   }
 

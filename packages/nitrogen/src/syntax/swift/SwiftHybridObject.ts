@@ -11,6 +11,12 @@ export function createSwiftHybridObject(spec: HybridObjectSpec): SourceFile[] {
   const properties = spec.properties.map((p) => p.getCode('swift')).join('\n')
   const methods = spec.methods.map((p) => p.getCode('swift')).join('\n')
 
+  const baseClasses = ['HybridObjectSpec']
+  for (const base of spec.baseTypes) {
+    const baseName = getHybridObjectName(base.name)
+    baseClasses.push(baseName.HybridTSpec)
+  }
+
   const protocolCode = `
 ${createFileMetadataString(`${protocolName}.swift`)}
 
@@ -36,7 +42,7 @@ import NitroModules
  * }
  * \`\`\`
  */
-public protocol ${protocolName}: HybridObjectSpec {
+public protocol ${protocolName}: ${baseClasses.join(', ')} {
   // Properties
   ${indent(properties, '  ')}
 

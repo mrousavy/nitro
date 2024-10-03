@@ -65,7 +65,7 @@ namespace margelo::nitro::image {
    * the future, HybridTestObjectSwiftKotlinSpecCxx can directly inherit from the C++ class HybridTestObjectSwiftKotlinSpec
    * to simplify the whole structure and memory management.
    */
-  class HybridTestObjectSwiftKotlinSpecSwift final: public HybridTestObjectSwiftKotlinSpec {
+  class HybridTestObjectSwiftKotlinSpecSwift: public virtual HybridTestObjectSwiftKotlinSpec {
   public:
     // Constructor from a Swift instance
     explicit HybridTestObjectSwiftKotlinSpecSwift(const NitroImage::HybridTestObjectSwiftKotlinSpecCxx& swiftPart):

@@ -37,6 +37,12 @@ export function createSwiftHybridObjectCxxBridge(
     .map((m) => getMethodForwardImplementation(m))
     .join('\n\n')
 
+  const baseClasses = spec.baseTypes.map((base) => {
+    const baseName = getHybridObjectName(base.name)
+    return baseName.HybridTSpecCxx
+  })
+  const hasBase = baseClasses.length > 0
+
   const swiftCxxWrapperCode = `
 ${createFileMetadataString(`${name.HybridTSpecCxx}.swift`)}
 
@@ -52,7 +58,7 @@ import NitroModules
  * - Other HybridObjects need to be wrapped/unwrapped from the Swift TCxx wrapper
  * - Throwing methods need to be wrapped with a Result<T, Error> type, as exceptions cannot be propagated to C++
  */
-public final class ${name.HybridTSpecCxx} {
+${hasBase ? `public class ${name.HybridTSpecCxx} : ${baseClasses.join(', ')}` : `public class ${name.HybridTSpecCxx}`} {
   /**
    * The Swift <> C++ bridge's namespace (\`${NitroConfig.getCxxNamespace('c++', 'bridge', 'swift')}\`)
    * from \`${moduleName}-Swift-Cxx-Bridge.hpp\`.
@@ -63,7 +69,15 @@ public final class ${name.HybridTSpecCxx} {
   /**
    * Holds an instance of the \`${name.HybridTSpec}\` Swift protocol.
    */
-  private(set) var implementation: ${name.HybridTSpec}
+  private var implementation: ${name.HybridTSpec}
+
+  /**
+   * Get the actual \`${name.HybridTSpec}\` instance this class wraps.
+   */
+  @inline(__always)
+  public func get${name.HybridTSpec}() -> ${name.HybridTSpec} {
+    return implementation
+  }
 
   /**
    * Create a new \`${name.HybridTSpecCxx}\` that wraps the given \`${name.HybridTSpec}\`.
@@ -71,12 +85,13 @@ public final class ${name.HybridTSpecCxx} {
    */
   public init(_ implementation: ${name.HybridTSpec}) {
     self.implementation = implementation
+    ${hasBase ? 'super.init(implementation)' : ''}
   }
 
   /**
    * Contains a (weak) reference to the C++ HybridObject to cache it.
    */
-  public var hybridContext: margelo.nitro.HybridContext {
+  public ${hasBase ? 'override var' : 'var'} hybridContext: margelo.nitro.HybridContext {
     get {
       return self.implementation.hybridContext
     }
@@ -89,7 +104,7 @@ public final class ${name.HybridTSpecCxx} {
    * Get the memory size of the Swift class (plus size of any other allocations)
    * so the JS VM can properly track it and garbage-collect the JS object if needed.
    */
-  public var memorySize: Int {
+  public ${hasBase ? 'override var' : 'var'} memorySize: Int {
     return self.implementation.memorySize
   }
 
@@ -174,7 +189,28 @@ _swiftPart.${m.name}(${params});
       return [bridgedReturn, ...bridgedParams]
     }),
   ]
+  const cxxNamespace = NitroConfig.getCxxNamespace('c++')
+  const iosModuleName = NitroConfig.getIosModuleName()
   const extraImports = allBridgedTypes.flatMap((b) => b.getRequiredImports())
+
+  const cppBaseClasses = [`public virtual ${name.HybridTSpec}`]
+  const cppBaseCtorCalls = [`HybridObject(${name.HybridTSpec}::TAG)`]
+  for (const base of spec.baseTypes) {
+    const baseName = getHybridObjectName(base.name)
+    cppBaseClasses.push(`public virtual ${baseName.HybridTSpecSwift}`)
+    cppBaseCtorCalls.push(`${baseName.HybridTSpecSwift}(swiftPart)`)
+    extraImports.push({
+      language: 'c++',
+      name: `${baseName.HybridTSpecSwift}.hpp`,
+      space: 'user',
+      forwardDeclaration: getForwardDeclaration(
+        'class',
+        baseName.HybridTSpecSwift,
+        cxxNamespace
+      ),
+    })
+  }
+
   const extraForwardDeclarations = extraImports
     .map((i) => i.forwardDeclaration)
     .filter((v) => v != null)
@@ -182,8 +218,6 @@ _swiftPart.${m.name}(${params});
   const extraIncludes = extraImports
     .map((i) => includeHeader(i))
     .filter(isNotDuplicate)
-  const cxxNamespace = NitroConfig.getCxxNamespace('c++')
-  const iosModuleName = NitroConfig.getIosModuleName()
 
   // TODO: Remove forward declaration once Swift fixes the wrong order in generated -Swift.h headers!
   const cppHybridObjectCode = `
@@ -215,11 +249,11 @@ namespace ${cxxNamespace} {
    * the future, ${name.HybridTSpecCxx} can directly inherit from the C++ class ${name.HybridTSpec}
    * to simplify the whole structure and memory management.
    */
-  class ${name.HybridTSpecSwift} final: public ${name.HybridTSpec} {
+  class ${name.HybridTSpecSwift}: ${cppBaseClasses.join(', ')} {
   public:
     // Constructor from a Swift instance
     explicit ${name.HybridTSpecSwift}(const ${iosModuleName}::${name.HybridTSpecCxx}& swiftPart):
-      HybridObject(${name.HybridTSpec}::TAG),
+      ${indent(cppBaseCtorCalls.join(',\n'), '      ')},
       _swiftPart(swiftPart) { }
 
   public:

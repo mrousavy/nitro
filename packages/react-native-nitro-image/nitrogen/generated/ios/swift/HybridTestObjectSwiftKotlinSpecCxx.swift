@@ -17,7 +17,7 @@ import NitroModules
  * - Other HybridObjects need to be wrapped/unwrapped from the Swift TCxx wrapper
  * - Throwing methods need to be wrapped with a Result<T, Error> type, as exceptions cannot be propagated to C++
  */
-public final class HybridTestObjectSwiftKotlinSpecCxx {
+public class HybridTestObjectSwiftKotlinSpecCxx {
   /**
    * The Swift <> C++ bridge's namespace (`margelo::nitro::image::bridge::swift`)
    * from `NitroImage-Swift-Cxx-Bridge.hpp`.
@@ -28,7 +28,15 @@ public final class HybridTestObjectSwiftKotlinSpecCxx {
   /**
    * Holds an instance of the `HybridTestObjectSwiftKotlinSpec` Swift protocol.
    */
-  private(set) var implementation: HybridTestObjectSwiftKotlinSpec
+  private var implementation: HybridTestObjectSwiftKotlinSpec
+
+  /**
+   * Get the actual `HybridTestObjectSwiftKotlinSpec` instance this class wraps.
+   */
+  @inline(__always)
+  public func getHybridTestObjectSwiftKotlinSpec() -> HybridTestObjectSwiftKotlinSpec {
+    return implementation
+  }
 
   /**
    * Create a new `HybridTestObjectSwiftKotlinSpecCxx` that wraps the given `HybridTestObjectSwiftKotlinSpec`.
@@ -36,6 +44,7 @@ public final class HybridTestObjectSwiftKotlinSpecCxx {
    */
   public init(_ implementation: HybridTestObjectSwiftKotlinSpec) {
     self.implementation = implementation
+    
   }
 
   /**

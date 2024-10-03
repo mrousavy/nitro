@@ -21,6 +21,7 @@ import { NitroModules } from 'react-native-nitro-modules'
 
 logPrototypeChain(HybridChild)
 console.log(HybridChild.baseValue)
+console.log(HybridChild.childValue)
 
 logPrototypeChain(HybridTestObjectCpp)
 
