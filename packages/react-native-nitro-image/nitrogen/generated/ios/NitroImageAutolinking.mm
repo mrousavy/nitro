@@ -13,8 +13,8 @@
 #include "HybridImageFactorySpecSwift.hpp"
 #include "HybridTestObjectCpp.hpp"
 #include "HybridTestObjectSwiftKotlinSpecSwift.hpp"
-#include "HybridBase.hpp"
-#include "HybridChild.hpp"
+#include "HybridBaseSpecSwift.hpp"
+#include "HybridChildSpecSwift.hpp"
 
 @interface NitroImageAutolinking : NSObject
 @end
@@ -51,19 +51,15 @@
   HybridObjectRegistry::registerHybridObjectConstructor(
     "Base",
     []() -> std::shared_ptr<HybridObject> {
-      static_assert(std::is_default_constructible_v<HybridBase>,
-                    "The HybridObject \"HybridBase\" is not default-constructible! "
-                    "Create a public constructor that takes zero arguments to be able to autolink this HybridObject.");
-      return std::make_shared<HybridBase>();
+      auto swiftPart = NitroImage::NitroImageAutolinking::createBase();
+      return std::make_shared<HybridBaseSpecSwift>(swiftPart);
     }
   );
   HybridObjectRegistry::registerHybridObjectConstructor(
     "Child",
     []() -> std::shared_ptr<HybridObject> {
-      static_assert(std::is_default_constructible_v<HybridChild>,
-                    "The HybridObject \"HybridChild\" is not default-constructible! "
-                    "Create a public constructor that takes zero arguments to be able to autolink this HybridObject.");
-      return std::make_shared<HybridChild>();
+      auto swiftPart = NitroImage::NitroImageAutolinking::createChild();
+      return std::make_shared<HybridChildSpecSwift>(swiftPart);
     }
   );
 }

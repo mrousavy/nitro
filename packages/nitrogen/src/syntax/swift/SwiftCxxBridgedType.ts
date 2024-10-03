@@ -318,12 +318,12 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
             throw new Error(`Invalid language! ${language}`)
         }
       case 'hybrid-object':
+        const name = getTypeHybridObjectName(this.type)
         switch (language) {
           case 'c++':
-            const name = getTypeHybridObjectName(this.type)
             return `std::static_pointer_cast<${name.HybridTSpecSwift}>(${cppParameterName})->getSwiftPart()`
           case 'swift':
-            return `${cppParameterName}.implementation`
+            return `${cppParameterName}.get${name.HybridTSpec}()`
           default:
             throw new Error(`Invalid language! ${language}`)
         }

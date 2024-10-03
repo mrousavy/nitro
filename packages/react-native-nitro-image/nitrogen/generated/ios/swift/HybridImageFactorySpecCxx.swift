@@ -17,7 +17,7 @@ import NitroModules
  * - Other HybridObjects need to be wrapped/unwrapped from the Swift TCxx wrapper
  * - Throwing methods need to be wrapped with a Result<T, Error> type, as exceptions cannot be propagated to C++
  */
-public final class HybridImageFactorySpecCxx {
+public class HybridImageFactorySpecCxx {
   /**
    * The Swift <> C++ bridge's namespace (`margelo::nitro::image::bridge::swift`)
    * from `NitroImage-Swift-Cxx-Bridge.hpp`.
@@ -28,7 +28,15 @@ public final class HybridImageFactorySpecCxx {
   /**
    * Holds an instance of the `HybridImageFactorySpec` Swift protocol.
    */
-  private(set) var implementation: HybridImageFactorySpec
+  private var implementation: HybridImageFactorySpec
+
+  /**
+   * Get the actual `HybridImageFactorySpec` instance this class wraps.
+   */
+  @inline(__always)
+  public func getHybridImageFactorySpec() -> HybridImageFactorySpec {
+    return implementation
+  }
 
   /**
    * Create a new `HybridImageFactorySpecCxx` that wraps the given `HybridImageFactorySpec`.
@@ -36,6 +44,7 @@ public final class HybridImageFactorySpecCxx {
    */
   public init(_ implementation: HybridImageFactorySpec) {
     self.implementation = implementation
+    
   }
 
   /**
@@ -98,7 +107,7 @@ public final class HybridImageFactorySpecCxx {
   @inline(__always)
   public func bounceBack(image: HybridImageSpecCxx) -> HybridImageSpecCxx {
     do {
-      let result = try self.implementation.bounceBack(image: image.implementation)
+      let result = try self.implementation.bounceBack(image: image.getHybridImageSpec())
       return result.createCxxBridge()
     } catch {
       let message = "\(error.localizedDescription)"

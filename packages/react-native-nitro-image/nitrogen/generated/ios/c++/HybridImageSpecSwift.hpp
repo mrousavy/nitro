@@ -45,7 +45,7 @@ namespace margelo::nitro::image {
    * the future, HybridImageSpecCxx can directly inherit from the C++ class HybridImageSpec
    * to simplify the whole structure and memory management.
    */
-  class HybridImageSpecSwift final: public HybridImageSpec {
+  class HybridImageSpecSwift: public HybridImageSpec {
   public:
     // Constructor from a Swift instance
     explicit HybridImageSpecSwift(const NitroImage::HybridImageSpecCxx& swiftPart):
