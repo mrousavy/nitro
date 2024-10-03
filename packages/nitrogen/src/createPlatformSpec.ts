@@ -1,4 +1,4 @@
-import { Node, Type, type InterfaceDeclaration } from 'ts-morph'
+import { Node, Type } from 'ts-morph'
 import type { SourceFile } from './syntax/SourceFile.js'
 import { createCppHybridObject } from './syntax/c++/CppHybridObject.js'
 import { type Language } from './getPlatformSpecs.js'
@@ -11,15 +11,15 @@ import { createType } from './syntax/createType.js'
 import { Parameter } from './syntax/Parameter.js'
 
 export function generatePlatformFiles(
-  declaration: InterfaceDeclaration,
+  interfaceType: Type,
   language: Language
 ): SourceFile[] {
-  const spec = getHybridObjectSpec(declaration.getType(), language)
+  const spec = getHybridObjectSpec(interfaceType, language)
 
   // TODO: We currently just call this so the HybridObject itself is a "known type".
   // This causes the Swift Umbrella header to properly forward-declare it.
   // Without this, only Hybrid Objects that are actually used in public APIs will be forward-declared.
-  createType(declaration.getType(), false)
+  createType(interfaceType, false)
 
   switch (language) {
     case 'c++':
