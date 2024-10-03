@@ -119,22 +119,22 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
     }
   }
   
-  public var stringOrUndefined: bridge.std__optional_std__string_ {
+  public var stringOrUndefined: std.string? {
     @inline(__always)
     get {
-      return { () -> bridge.std__optional_std__string_ in
-        if let actualValue = self.implementation.stringOrUndefined {
-          return bridge.create_std__optional_std__string_(std.string(actualValue))
+      return { () -> std.string? in
+        if let __actualValue = self.implementation.stringOrUndefined {
+          return std.string(__actualValue)
         } else {
-          return .init()
+          return nil
         }
       }()
     }
     @inline(__always)
     set {
-      self.implementation.stringOrUndefined = { () -> String? in
-        if let actualValue = newValue.value {
-          return String(actualValue)
+      self.implementation.stringOrUndefined = { () -> std.string? in
+        if let __actualValue = newValue {
+          return String(__actualValue)
         } else {
           return nil
         }
@@ -142,22 +142,22 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
     }
   }
   
-  public var stringOrNull: bridge.std__optional_std__string_ {
+  public var stringOrNull: std.string? {
     @inline(__always)
     get {
-      return { () -> bridge.std__optional_std__string_ in
-        if let actualValue = self.implementation.stringOrNull {
-          return bridge.create_std__optional_std__string_(std.string(actualValue))
+      return { () -> std.string? in
+        if let __actualValue = self.implementation.stringOrNull {
+          return std.string(__actualValue)
         } else {
-          return .init()
+          return nil
         }
       }()
     }
     @inline(__always)
     set {
-      self.implementation.stringOrNull = { () -> String? in
-        if let actualValue = newValue.value {
-          return String(actualValue)
+      self.implementation.stringOrNull = { () -> std.string? in
+        if let __actualValue = newValue {
+          return String(__actualValue)
         } else {
           return nil
         }
@@ -165,22 +165,22 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
     }
   }
   
-  public var optionalString: bridge.std__optional_std__string_ {
+  public var optionalString: std.string? {
     @inline(__always)
     get {
-      return { () -> bridge.std__optional_std__string_ in
-        if let actualValue = self.implementation.optionalString {
-          return bridge.create_std__optional_std__string_(std.string(actualValue))
+      return { () -> std.string? in
+        if let __actualValue = self.implementation.optionalString {
+          return std.string(__actualValue)
         } else {
-          return .init()
+          return nil
         }
       }()
     }
     @inline(__always)
     set {
-      self.implementation.optionalString = { () -> String? in
-        if let actualValue = newValue.value {
-          return String(actualValue)
+      self.implementation.optionalString = { () -> std.string? in
+        if let __actualValue = newValue {
+          return String(__actualValue)
         } else {
           return nil
         }
@@ -220,11 +220,23 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
   public var base: HybridBaseSpecCxx? {
     @inline(__always)
     get {
-      return self.implementation.base?.createCxxBridge()
+      return { () -> HybridBaseSpecCxx? in
+        if let __actualValue = self.implementation.base {
+          return __actualValue.createCxxBridge()
+        } else {
+          return nil
+        }
+      }()
     }
     @inline(__always)
     set {
-      self.implementation.base = newValue?.getHybridBaseSpec()
+      self.implementation.base = { () -> HybridBaseSpecCxx? in
+        if let __actualValue = newValue {
+          return __actualValue.getHybridBaseSpec()
+        } else {
+          return nil
+        }
+      }()
     }
   }
 
@@ -318,11 +330,11 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
   }
   
   @inline(__always)
-  public func tryOptionalParams(num: Double, boo: Bool, str: bridge.std__optional_std__string_) -> std.string {
+  public func tryOptionalParams(num: Double, boo: Bool, str: std.string?) -> std.string {
     do {
-      let result = try self.implementation.tryOptionalParams(num: num, boo: boo, str: { () -> String? in
-        if let actualValue = str.value {
-          return String(actualValue)
+      let result = try self.implementation.tryOptionalParams(num: num, boo: boo, str: { () -> std.string? in
+        if let __actualValue = str {
+          return String(__actualValue)
         } else {
           return nil
         }
@@ -335,9 +347,15 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
   }
   
   @inline(__always)
-  public func tryMiddleParam(num: Double, boo: bridge.std__optional_bool_, str: std.string) -> std.string {
+  public func tryMiddleParam(num: Double, boo: Bool?, str: std.string) -> std.string {
     do {
-      let result = try self.implementation.tryMiddleParam(num: num, boo: boo.value, str: String(str))
+      let result = try self.implementation.tryMiddleParam(num: num, boo: { () -> Bool? in
+        if let __actualValue = boo {
+          return __actualValue
+        } else {
+          return nil
+        }
+      }(), str: String(str))
       return std.string(result)
     } catch {
       let message = "\(error.localizedDescription)"
@@ -346,14 +364,20 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
   }
   
   @inline(__always)
-  public func tryOptionalEnum(value: bridge.std__optional_Powertrain_) -> bridge.std__optional_Powertrain_ {
+  public func tryOptionalEnum(value: Int32?) -> Int32? {
     do {
-      let result = try self.implementation.tryOptionalEnum(value: value.value)
-      return { () -> bridge.std__optional_Powertrain_ in
-        if let actualValue = result {
-          return bridge.create_std__optional_Powertrain_(actualValue)
+      let result = try self.implementation.tryOptionalEnum(value: { () -> Int32? in
+        if let __actualValue = value {
+          return __actualValue
         } else {
-          return .init()
+          return nil
+        }
+      }())
+      return { () -> Int32? in
+        if let __actualValue = result {
+          return __actualValue
+        } else {
+          return nil
         }
       }()
     } catch {
@@ -450,16 +474,22 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
   }
   
   @inline(__always)
-  public func callWithOptional(value: bridge.std__optional_double_, callback: bridge.Func_void_std__optional_double_) -> Void {
+  public func callWithOptional(value: Double?, callback: bridge.Func_void_std__optional_double_) -> Void {
     do {
-      try self.implementation.callWithOptional(value: value.value, callback: { () -> ((Double?) -> Void) in
+      try self.implementation.callWithOptional(value: { () -> Double? in
+        if let __actualValue = value {
+          return __actualValue
+        } else {
+          return nil
+        }
+      }(), callback: { () -> ((Double?) -> Void) in
         let shared = bridge.share_Func_void_std__optional_double_(callback)
         return { (maybe: Double?) -> Void in
-          shared.pointee.call({ () -> bridge.std__optional_double_ in
-          if let actualValue = maybe {
-            return bridge.create_std__optional_double_(actualValue)
+          shared.pointee.call({ () -> Double? in
+          if let __actualValue = maybe {
+            return __actualValue
           } else {
-            return .init()
+            return nil
           }
         }())
         }
@@ -494,14 +524,14 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
   }
   
   @inline(__always)
-  public func getDriver(car: Car) -> bridge.std__optional_Person_ {
+  public func getDriver(car: Car) -> Person? {
     do {
       let result = try self.implementation.getDriver(car: car)
-      return { () -> bridge.std__optional_Person_ in
-        if let actualValue = result {
-          return bridge.create_std__optional_Person_(actualValue)
+      return { () -> Person? in
+        if let __actualValue = result {
+          return __actualValue
         } else {
-          return .init()
+          return nil
         }
       }()
     } catch {

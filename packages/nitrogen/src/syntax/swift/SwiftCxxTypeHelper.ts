@@ -4,7 +4,6 @@ import { VariantType } from '../types/VariantType.js'
 import { ArrayType } from '../types/ArrayType.js'
 import { FunctionType } from '../types/FunctionType.js'
 import { getTypeAs } from '../types/getTypeAs.js'
-import { OptionalType } from '../types/OptionalType.js'
 import { RecordType } from '../types/RecordType.js'
 import type { Type } from '../types/Type.js'
 import { TupleType } from '../types/TupleType.js'
@@ -22,8 +21,6 @@ export interface SwiftCxxHelper {
 
 export function createSwiftCxxHelpers(type: Type): SwiftCxxHelper | undefined {
   switch (type.kind) {
-    case 'optional':
-      return createCxxOptionalSwiftHelper(getTypeAs(type, OptionalType))
     case 'array':
       return createCxxVectorSwiftHelper(getTypeAs(type, ArrayType))
     case 'record':
@@ -38,37 +35,6 @@ export function createSwiftCxxHelpers(type: Type): SwiftCxxHelper | undefined {
       return createCxxPromiseSwiftHelper(getTypeAs(type, PromiseType))
     default:
       return undefined
-  }
-}
-
-/**
- * Creates a C++ `create_optional<T>(value)` function that can be called from Swift.
- */
-function createCxxOptionalSwiftHelper(type: OptionalType): SwiftCxxHelper {
-  const actualType = type.getCode('c++')
-  const bridgedType = new SwiftCxxBridgedType(type)
-  const name = escapeCppName(actualType)
-  return {
-    cxxType: actualType,
-    funcName: `create_${name}`,
-    specializationName: name,
-    requiredIncludes: [
-      {
-        name: 'optional',
-        space: 'system',
-        language: 'c++',
-      },
-      ...bridgedType.getRequiredImports(),
-    ],
-    cxxCode: `
-/**
- * Specialized version of \`${escapeComments(actualType)}\`.
- */
-using ${name} = ${actualType};
-inline ${actualType} create_${name}(const ${type.wrappingType.getCode('c++')}& value) {
-  return ${actualType}(value);
-}
-    `.trim(),
   }
 }
 

@@ -10,10 +10,6 @@
 // Forward declarations of C++ defined types
 // Forward declaration of `Car` to properly resolve imports.
 namespace margelo::nitro::image { struct Car; }
-// Forward declaration of `HybridBaseSpecSwift` to properly resolve imports.
-namespace margelo::nitro::image { class HybridBaseSpecSwift; }
-// Forward declaration of `HybridBaseSpec` to properly resolve imports.
-namespace margelo::nitro::image { class HybridBaseSpec; }
 // Forward declaration of `HybridTestObjectCppSpecSwift` to properly resolve imports.
 namespace margelo::nitro::image { class HybridTestObjectCppSpecSwift; }
 // Forward declaration of `HybridTestObjectCppSpec` to properly resolve imports.
@@ -25,14 +21,9 @@ namespace margelo::nitro::image { struct Person; }
 // Forward declaration of `Powertrain` to properly resolve imports.
 namespace margelo::nitro::image { enum class Powertrain; }
 
-namespace NitroImage { class HybridBaseSpecCxx; }
-
 // Include C++ defined types
 #if __has_include("Car.hpp")
  #include "Car.hpp"
-#endif
-#if __has_include("HybridBaseSpec.hpp")
- #include "HybridBaseSpec.hpp"
 #endif
 #if __has_include("HybridTestObjectCppSpec.hpp")
  #include "HybridTestObjectCppSpec.hpp"
@@ -231,14 +222,6 @@ namespace margelo::nitro::image::bridge::swift {
   }
   inline OldEnum get_std__variant_bool__OldEnum__1(const std__variant_bool__OldEnum_& variantWrapper) {
     return std::get<1>(variantWrapper.variant);
-  }
-  
-  /**
-   * Specialized version of `std::optional<Person>`.
-   */
-  using std__optional_Person_ = std::optional<Person>;
-  inline std::optional<Person> create_std__optional_Person_(const Person& value) {
-    return std::optional<Person>(value);
   }
   
   /**
@@ -442,30 +425,6 @@ namespace margelo::nitro::image::bridge::swift {
   }
   
   /**
-   * Specialized version of `std::optional<std::string>`.
-   */
-  using std__optional_std__string_ = std::optional<std::string>;
-  inline std::optional<std::string> create_std__optional_std__string_(const std::string& value) {
-    return std::optional<std::string>(value);
-  }
-  
-  /**
-   * Specialized version of `std::optional<bool>`.
-   */
-  using std__optional_bool_ = std::optional<bool>;
-  inline std::optional<bool> create_std__optional_bool_(const bool& value) {
-    return std::optional<bool>(value);
-  }
-  
-  /**
-   * Specialized version of `std::optional<Powertrain>`.
-   */
-  using std__optional_Powertrain_ = std::optional<Powertrain>;
-  inline std::optional<Powertrain> create_std__optional_Powertrain_(const Powertrain& value) {
-    return std::optional<Powertrain>(value);
-  }
-  
-  /**
    * Specialized version of `PromiseHolder<int64_t>`.
    */
   using PromiseHolder_int64_t_ = PromiseHolder<int64_t>;
@@ -502,14 +461,6 @@ namespace margelo::nitro::image::bridge::swift {
   }
   
   /**
-   * Specialized version of `std::optional<double>`.
-   */
-  using std__optional_double_ = std::optional<double>;
-  inline std::optional<double> create_std__optional_double_(const double& value) {
-    return std::optional<double>(value);
-  }
-  
-  /**
    * Specialized version of `std::function<void(std::optional<double>)>`.
    */
   using Func_void_std__optional_double_ = std::function<void(std::optional<double> /* maybe */)>;
@@ -521,29 +472,33 @@ namespace margelo::nitro::image::bridge::swift {
     explicit Func_void_std__optional_double__Wrapper(const std::function<void(std::optional<double> /* maybe */)>& func): function(func) {}
     explicit Func_void_std__optional_double__Wrapper(std::function<void(std::optional<double> /* maybe */)>&& func): function(std::move(func)) {}
   
-    void call(std::optional<double> maybe) const {
-      function(maybe);
+    void call(swift::Optional<double> maybe) const {
+      function([&]() -> std::optional<double> {
+        if (maybe.isSome()) {
+          auto __actualValue = maybe.get();
+          return __actualValue;
+        } else {
+          return std::nullopt;
+        }
+      }());
     }
   
     std::function<void(std::optional<double> /* maybe */)> function;
   };
-  inline Func_void_std__optional_double_ create_Func_void_std__optional_double_(void* closureHolder, void(*call)(void* /* closureHolder */, std::optional<double>), void(*destroy)(void*)) {
+  inline Func_void_std__optional_double_ create_Func_void_std__optional_double_(void* closureHolder, void(*call)(void* /* closureHolder */, swift::Optional<double>), void(*destroy)(void*)) {
     std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
     return Func_void_std__optional_double_([sharedClosureHolder, call](std::optional<double> maybe) -> void {
-      call(sharedClosureHolder.get(), maybe);
+      call(sharedClosureHolder.get(), [&]() -> swift::Optional<double> {
+        if (maybe != nullptr) {
+          return swift::Optional<double>::some(maybe);
+        } else {
+          return swift::Optional<double>::none();
+        }
+      }());
     });
   }
   inline std::shared_ptr<Func_void_std__optional_double__Wrapper> share_Func_void_std__optional_double_(const Func_void_std__optional_double_& value) {
     return std::make_shared<Func_void_std__optional_double__Wrapper>(value);
   }
-  
-  /**
-   * Specialized version of `std::optional<std::shared_ptr<margelo::nitro::image::HybridBaseSpec>>`.
-   */
-  using std__optional_std__shared_ptr_margelo__nitro__image__HybridBaseSpec__ = std::optional<std::shared_ptr<margelo::nitro::image::HybridBaseSpec>>;
-
-void create_hybridbasespec(const NitroImage::HybridBaseSpecCxx& swiftPart);
-
-  std::optional<std::shared_ptr<margelo::nitro::image::HybridBaseSpec>> create_std__optional_std__shared_ptr_margelo__nitro__image__HybridBaseSpec__(std::shared_ptr<HybridBaseSpec> value);
 
 } // namespace margelo::nitro::image::bridge::swift

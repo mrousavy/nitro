@@ -19,11 +19,11 @@ public extension Car {
    * Create a new instance of `Car`.
    */
   init(year: Double, make: String, model: String, power: Double, powertrain: Powertrain, driver: Person?) {
-    self.init(year, std.string(make), std.string(model), power, powertrain, { () -> bridge.std__optional_Person_ in
-      if let actualValue = driver {
-        return bridge.create_std__optional_Person_(actualValue)
+    self.init(year, std.string(make), std.string(model), power, powertrain, { () -> Person? in
+      if let __actualValue = driver {
+        return __actualValue
       } else {
-        return .init()
+        return nil
       }
     }())
   }
@@ -87,8 +87,8 @@ public extension Car {
     @inline(__always)
     get {
       return { () -> Person? in
-        if let actualValue = self.__driver.value {
-          return actualValue
+        if let __actualValue = self.__driver {
+          return __actualValue
         } else {
           return nil
         }
@@ -96,11 +96,11 @@ public extension Car {
     }
     @inline(__always)
     set {
-      self.__driver = { () -> bridge.std__optional_Person_ in
-        if let actualValue = newValue {
-          return bridge.create_std__optional_Person_(actualValue)
+      self.__driver = { () -> Person? in
+        if let __actualValue = newValue {
+          return __actualValue
         } else {
-          return .init()
+          return nil
         }
       }()
     }

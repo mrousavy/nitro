@@ -6,24 +6,3 @@
 ///
 
 #include "NitroImage-Swift-Cxx-Bridge.hpp"
-
-#if __has_include("HybridBaseSpecSwift.hpp")
- #include "HybridBaseSpecSwift.hpp"
-#endif
-#include <NitroModules/HybridContext.hpp>
-
-namespace margelo::nitro::image::bridge::swift {
-
-void create_hybridbasespec(NitroImage::HybridBaseSpecCxx swiftPart) {
-  
-}
-
-std::shared_ptr<HybridBaseSpec> create_hybridbasesp2ec(NitroImage::HybridBaseSpecCxx swiftPart) {
-  return HybridContext::getOrCreate<HybridBaseSpecSwift>(swiftPart);
-}
-
-std::optional<std::shared_ptr<margelo::nitro::image::HybridBaseSpec>> create_std__optional_std__shared_ptr_margelo__nitro__image__HybridBaseSpec__(std::shared_ptr<margelo::nitro::image::HybridBaseSpec> value) {
-  return value;
-}
-
-}

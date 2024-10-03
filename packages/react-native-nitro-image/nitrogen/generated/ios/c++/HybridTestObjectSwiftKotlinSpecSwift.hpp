@@ -127,24 +127,63 @@ namespace margelo::nitro::image {
     }
     inline std::optional<std::string> getStringOrUndefined() noexcept override {
       auto result = _swiftPart.getStringOrUndefined();
-      return result;
+      return [&]() -> std::optional<std::string> {
+        if (result.isSome()) {
+          auto __actualValue = result.get();
+          return __actualValue;
+        } else {
+          return std::nullopt;
+        }
+      }();
     }
     inline void setStringOrUndefined(const std::optional<std::string>& stringOrUndefined) noexcept override {
-      _swiftPart.setStringOrUndefined(stringOrUndefined);
+      _swiftPart.setStringOrUndefined([&]() -> swift::Optional<std::string> {
+        if (stringOrUndefined != nullptr) {
+          return swift::Optional<std::string>::some(stringOrUndefined);
+        } else {
+          return swift::Optional<std::string>::none();
+        }
+      }());
     }
     inline std::optional<std::string> getStringOrNull() noexcept override {
       auto result = _swiftPart.getStringOrNull();
-      return result;
+      return [&]() -> std::optional<std::string> {
+        if (result.isSome()) {
+          auto __actualValue = result.get();
+          return __actualValue;
+        } else {
+          return std::nullopt;
+        }
+      }();
     }
     inline void setStringOrNull(const std::optional<std::string>& stringOrNull) noexcept override {
-      _swiftPart.setStringOrNull(stringOrNull);
+      _swiftPart.setStringOrNull([&]() -> swift::Optional<std::string> {
+        if (stringOrNull != nullptr) {
+          return swift::Optional<std::string>::some(stringOrNull);
+        } else {
+          return swift::Optional<std::string>::none();
+        }
+      }());
     }
     inline std::optional<std::string> getOptionalString() noexcept override {
       auto result = _swiftPart.getOptionalString();
-      return result;
+      return [&]() -> std::optional<std::string> {
+        if (result.isSome()) {
+          auto __actualValue = result.get();
+          return __actualValue;
+        } else {
+          return std::nullopt;
+        }
+      }();
     }
     inline void setOptionalString(const std::optional<std::string>& optionalString) noexcept override {
-      _swiftPart.setOptionalString(optionalString);
+      _swiftPart.setOptionalString([&]() -> swift::Optional<std::string> {
+        if (optionalString != nullptr) {
+          return swift::Optional<std::string>::some(optionalString);
+        } else {
+          return swift::Optional<std::string>::none();
+        }
+      }());
     }
     inline std::variant<std::string, double> getSomeVariant() noexcept override {
       auto result = _swiftPart.getSomeVariant();
@@ -155,21 +194,23 @@ namespace margelo::nitro::image {
     }
     inline std::optional<std::shared_ptr<margelo::nitro::image::HybridBaseSpec>> getBase() noexcept override {
       auto result = _swiftPart.getBase();
-      if (result.isSome()) {
-        auto swiftPart = result.get();
-        return HybridContext::getOrCreate<HybridBaseSpecSwift>(swiftPart);
-      } else {
-        return std::nullopt;
-      }
+      return [&]() -> std::optional<std::shared_ptr<margelo::nitro::image::HybridBaseSpec>> {
+        if (result.isSome()) {
+          auto __actualValue = result.get();
+          return HybridContext::getOrCreate<HybridBaseSpecSwift>(__actualValue);
+        } else {
+          return std::nullopt;
+        }
+      }();
     }
     inline void setBase(const std::optional<std::shared_ptr<margelo::nitro::image::HybridBaseSpec>>& base) noexcept override {
-      if (base != nullptr) {
-        auto swiftWrapper = std::dynamic_pointer_cast<HybridBaseSpecSwift>(base.value());
-        auto swiftPart = swiftWrapper->getSwiftPart();
-        _swiftPart.setBase(swift::Optional<NitroImage::HybridBaseSpecCxx>::some(swiftPart));
-      } else {
-        _swiftPart.setBase(swift::Optional<NitroImage::HybridBaseSpecCxx>::none());
-      }
+      _swiftPart.setBase([&]() -> swift::Optional<std::shared_ptr<HybridBaseSpecSwift>> {
+        if (base != nullptr) {
+          return swift::Optional<std::shared_ptr<HybridBaseSpecSwift>>::some(std::dynamic_pointer_cast<HybridBaseSpecSwift>(base)->getSwiftPart());
+        } else {
+          return swift::Optional<std::shared_ptr<HybridBaseSpecSwift>>::none();
+        }
+      }());
     }
 
   public:
@@ -205,16 +246,41 @@ namespace margelo::nitro::image {
       return __result;
     }
     inline std::string tryOptionalParams(double num, bool boo, const std::optional<std::string>& str) override {
-      auto __result = _swiftPart.tryOptionalParams(std::forward<decltype(num)>(num), std::forward<decltype(boo)>(boo), str);
+      auto __result = _swiftPart.tryOptionalParams(std::forward<decltype(num)>(num), std::forward<decltype(boo)>(boo), [&]() -> swift::Optional<std::string> {
+        if (str != nullptr) {
+          return swift::Optional<std::string>::some(str);
+        } else {
+          return swift::Optional<std::string>::none();
+        }
+      }());
       return __result;
     }
     inline std::string tryMiddleParam(double num, std::optional<bool> boo, const std::string& str) override {
-      auto __result = _swiftPart.tryMiddleParam(std::forward<decltype(num)>(num), boo, str);
+      auto __result = _swiftPart.tryMiddleParam(std::forward<decltype(num)>(num), [&]() -> swift::Optional<bool> {
+        if (boo != nullptr) {
+          return swift::Optional<bool>::some(boo);
+        } else {
+          return swift::Optional<bool>::none();
+        }
+      }(), str);
       return __result;
     }
     inline std::optional<Powertrain> tryOptionalEnum(std::optional<Powertrain> value) override {
-      auto __result = _swiftPart.tryOptionalEnum(value);
-      return __result;
+      auto __result = _swiftPart.tryOptionalEnum([&]() -> swift::Optional<int> {
+        if (value != nullptr) {
+          return swift::Optional<Powertrain>::some(value);
+        } else {
+          return swift::Optional<Powertrain>::none();
+        }
+      }());
+      return [&]() -> std::optional<Powertrain> {
+        if (__result.isSome()) {
+          auto __actualValue = __result.get();
+          return __actualValue;
+        } else {
+          return std::nullopt;
+        }
+      }();
     }
     inline int64_t calculateFibonacciSync(double value) override {
       auto __result = _swiftPart.calculateFibonacciSync(std::forward<decltype(value)>(value));
@@ -235,7 +301,13 @@ namespace margelo::nitro::image {
       _swiftPart.callAll(first, second, third);
     }
     inline void callWithOptional(std::optional<double> value, const std::function<void(std::optional<double> /* maybe */)>& callback) override {
-      _swiftPart.callWithOptional(value, callback);
+      _swiftPart.callWithOptional([&]() -> swift::Optional<double> {
+        if (value != nullptr) {
+          return swift::Optional<double>::some(value);
+        } else {
+          return swift::Optional<double>::none();
+        }
+      }(), callback);
     }
     inline Car getCar() override {
       auto __result = _swiftPart.getCar();
@@ -247,7 +319,14 @@ namespace margelo::nitro::image {
     }
     inline std::optional<Person> getDriver(const Car& car) override {
       auto __result = _swiftPart.getDriver(car);
-      return __result;
+      return [&]() -> std::optional<Person> {
+        if (__result.isSome()) {
+          auto __actualValue = __result.get();
+          return __actualValue;
+        } else {
+          return std::nullopt;
+        }
+      }();
     }
     inline std::shared_ptr<ArrayBuffer> createArrayBuffer() override {
       auto __result = _swiftPart.createArrayBuffer();

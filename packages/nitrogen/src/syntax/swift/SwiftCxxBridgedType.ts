@@ -241,7 +241,18 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
             return this.type.getCode(language)
         }
       }
-      case 'optional':
+      case 'optional': {
+        const optional = getTypeAs(this.type, OptionalType)
+        const wrappingType = new SwiftCxxBridgedType(optional.wrappingType)
+        switch (language) {
+          case 'swift':
+            return `${wrappingType.getTypeCode(language)}?`
+          case 'c++':
+            return `swift::Optional<${wrappingType.getTypeCode(language)}>`
+          default:
+            return this.type.getCode(language)
+        }
+      }
       case 'array':
       case 'function':
       case 'variant':
@@ -358,18 +369,25 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
         const wrapping = new SwiftCxxBridgedType(optional.wrappingType, true)
         switch (language) {
           case 'swift':
-            if (!wrapping.needsSpecialHandling) {
-              return `${cppParameterName}.value`
-            }
             return `
-{ () -> ${optional.getCode('swift')} in
-  if let actualValue = ${cppParameterName}.value {
-    return ${indent(wrapping.parseFromCppToSwift('actualValue', language), '    ')}
+{ () -> ${this.getTypeCode(language)} in
+  if let __actualValue = ${cppParameterName} {
+    return ${indent(wrapping.parseFromCppToSwift('__actualValue', language), '    ')}
   } else {
     return nil
   }
 }()
   `.trim()
+          case 'c++':
+            return `
+[&]() -> ${this.getTypeCode(language)} {
+  if (${cppParameterName} != nullptr) {
+    return swift::Optional<${wrapping.getTypeCode(language)}>::some(${wrapping.parseFromCppToSwift(cppParameterName, language)});
+  } else {
+    return swift::Optional<${wrapping.getTypeCode(language)}>::none();
+  }
+}()
+    `.trim()
           default:
             return cppParameterName
         }
@@ -536,19 +554,28 @@ case ${i}:
       case 'optional': {
         const optional = getTypeAs(this.type, OptionalType)
         const wrapping = new SwiftCxxBridgedType(optional.wrappingType, true)
-        const bridge = this.getBridgeOrThrow()
-        const makeFunc = `bridge.${bridge.funcName}`
         switch (language) {
           case 'swift':
             return `
-{ () -> bridge.${bridge.specializationName} in
-  if let actualValue = ${swiftParameterName} {
-    return ${makeFunc}(${indent(wrapping.parseFromSwiftToCpp('actualValue', language), '    ')})
+{ () -> ${this.getTypeCode(language)} in
+  if let __actualValue = ${swiftParameterName} {
+    return ${indent(wrapping.parseFromSwiftToCpp('__actualValue', language), '    ')}
   } else {
-    return .init()
+    return nil
   }
 }()
   `.trim()
+          case 'c++':
+            return `
+[&]() -> ${optional.getCode(language)} {
+  if (${swiftParameterName}.isSome()) {
+    auto __actualValue = ${swiftParameterName}.get();
+    return ${indent(wrapping.parseFromSwiftToCpp('__actualValue', language), '    ')};
+  } else {
+    return std::nullopt;
+  }
+}()
+`.trim()
           default:
             return swiftParameterName
         }
