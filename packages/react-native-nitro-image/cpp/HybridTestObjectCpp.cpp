@@ -314,7 +314,6 @@ std::shared_ptr<HybridBaseSpec> HybridTestObjectCpp::createBaseActualChild() {
   return std::make_shared<HybridChild>();
 }
 
-
 std::shared_ptr<HybridChildSpec> HybridTestObjectCpp::bounceChild(const std::shared_ptr<HybridChildSpec>& child) {
   return child;
 }
