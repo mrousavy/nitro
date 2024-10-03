@@ -217,28 +217,14 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
     }
   }
   
-  public var base: bridge.std__optional_std__shared_ptr_margelo__nitro__image__HybridBaseSpec__ {
+  public var base: HybridBaseSpecCxx? {
     @inline(__always)
     get {
-      return { () -> bridge.std__optional_std__shared_ptr_margelo__nitro__image__HybridBaseSpec__ in
-        if let actualValue = self.implementation.base {
-          return .init()
-          // TODO: return bridge.create_std__optional_std__shared_ptr_margelo__nitro__image__HybridBaseSpec__(actualValue.createCxxBridge())
-        } else {
-          return .init()
-        }
-      }()
+      return self.implementation.base?.createCxxBridge()
     }
     @inline(__always)
     set {
-      self.implementation.base = { () -> HybridBaseSpec? in
-        if let actualValue = newValue.value {
-          // TODO: return actualValue.getHybridBaseSpec()
-          return nil
-        } else {
-          return nil
-        }
-      }()
+      self.implementation.base = newValue?.getHybridBaseSpec()
     }
   }
 

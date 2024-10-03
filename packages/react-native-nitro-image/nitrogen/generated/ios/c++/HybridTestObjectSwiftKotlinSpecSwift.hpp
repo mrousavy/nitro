@@ -155,10 +155,21 @@ namespace margelo::nitro::image {
     }
     inline std::optional<std::shared_ptr<margelo::nitro::image::HybridBaseSpec>> getBase() noexcept override {
       auto result = _swiftPart.getBase();
-      return result;
+      if (result.isSome()) {
+        auto swiftPart = result.get();
+        return HybridContext::getOrCreate<HybridBaseSpecSwift>(swiftPart);
+      } else {
+        return std::nullopt;
+      }
     }
     inline void setBase(const std::optional<std::shared_ptr<margelo::nitro::image::HybridBaseSpec>>& base) noexcept override {
-      _swiftPart.setBase(base);
+      if (base != nullptr) {
+        auto swiftWrapper = std::dynamic_pointer_cast<HybridBaseSpecSwift>(base.value());
+        auto swiftPart = swiftWrapper->getSwiftPart();
+        _swiftPart.setBase(swift::Optional<NitroImage::HybridBaseSpecCxx>::some(swiftPart));
+      } else {
+        _swiftPart.setBase(swift::Optional<NitroImage::HybridBaseSpecCxx>::none());
+      }
     }
 
   public:
