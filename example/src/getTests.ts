@@ -783,5 +783,85 @@ export function getTests(
       : [
           // Swift/Kotlin Test Objects don't have raw JSI functions!
         ]),
+
+    createTest('createBase() works', () =>
+      it(() => testObject.createBase())
+        .didNotThrow()
+        .didReturn('object')
+        .toContain('baseValue')
+    ),
+    createTest('createChild() works', () =>
+      it(() => testObject.createChild())
+        .didNotThrow()
+        .didReturn('object')
+        .toContain('childValue')
+        .toContain('baseValue')
+    ),
+    createTest('createBaseActualChild() works', () =>
+      it(() => testObject.createBaseActualChild())
+        .didNotThrow()
+        .didReturn('object')
+        .toContain('baseValue')
+    ),
+    createTest('createBaseActualChild() is actually a child', () =>
+      it(() => testObject.createBaseActualChild())
+        .didNotThrow()
+        .didReturn('object')
+        // @ts-expect-error
+        .toContain('childValue')
+        .toContain('baseValue')
+    ),
+    createTest('bounceChild(Child) ===', () =>
+      it(() => {
+        const child = testObject.createChild()
+        const bounced = testObject.bounceChild(child)
+        return bounced === child
+      })
+        .didNotThrow()
+        .equals(true)
+    ),
+    createTest('bounceBase(Base) ===', () =>
+      it(() => {
+        const base = testObject.createBase()
+        const bounced = testObject.bounceBase(base)
+        return bounced === base
+      })
+        .didNotThrow()
+        .equals(true)
+    ),
+    createTest('bounceBase(Child) ===', () =>
+      it(() => {
+        const child = testObject.createChild()
+        const bounced = testObject.bounceBase(child)
+        return bounced === child
+      })
+        .didNotThrow()
+        .equals(true)
+    ),
+    createTest('bounceChild(Base) throws', () =>
+      it(() => {
+        const child = testObject.createBase()
+        // @ts-expect-error
+        testObject.bounceChild(child)
+      }).didThrow()
+    ),
+    createTest('bounceChildBase(Child) ===', () =>
+      it(() => {
+        const child = testObject.createChild()
+        const bounced = testObject.bounceChildBase(child)
+        return bounced === child
+      })
+        .didNotThrow()
+        .equals(true)
+    ),
+    createTest('castBase(Child) works', () =>
+      it(() => {
+        const child = testObject.createChild()
+        const bounced = testObject.castBase(child)
+        return bounced === child
+      })
+        .didNotThrow()
+        .equals(true)
+    ),
   ]
 }
