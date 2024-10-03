@@ -6,6 +6,8 @@ import android.os.Looper
 import android.util.Log
 
 class Image(val bitmap: Bitmap): HybridImageSpec() {
+    private val TAG = "Image"
+
     override val size: ImageSize
         get() {
             return ImageSize(bitmap.width.toDouble(), bitmap.height.toDouble())

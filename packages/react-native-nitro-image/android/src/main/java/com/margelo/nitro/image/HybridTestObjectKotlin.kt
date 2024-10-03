@@ -8,6 +8,8 @@ import com.margelo.nitro.core.Promise
 import kotlinx.coroutines.delay
 
 class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
+    private val TAG = "HybridTestObjectKotlin"
+
     override var numberValue: Double = 0.0
     override var boolValue: Boolean = false
     override var stringValue: String = ""
