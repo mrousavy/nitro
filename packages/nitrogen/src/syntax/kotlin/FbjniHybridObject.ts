@@ -14,10 +14,21 @@ import { KotlinCxxBridgedType } from './KotlinCxxBridgedType.js'
 
 export function createFbjniHybridObject(spec: HybridObjectSpec): SourceFile[] {
   const name = getHybridObjectName(spec.name)
-  const propertiesDecl = spec.properties
+
+  // Because we cache JNI methods as `static` inside our method bodies,
+  // we need to re-create the method bodies per inherited class.
+  // This way `Child`'s statically cached `someMethod()` JNI reference
+  // is not the same as `Base`'s statically cached `someMethod()` JNI reference.
+  const properties = [
+    ...spec.properties,
+    ...spec.baseTypes.flatMap((b) => b.properties),
+  ]
+  const methods = [...spec.methods, ...spec.baseTypes.flatMap((b) => b.methods)]
+
+  const propertiesDecl = properties
     .map((p) => p.getCode('c++', { override: true }))
     .join('\n')
-  const methodsDecl = spec.methods
+  const methodsDecl = methods
     .map((p) => p.getCode('c++', { override: true }))
     .join('\n')
   const jniClassDescriptor = NitroConfig.getAndroidPackage(
@@ -121,10 +132,10 @@ ${spaces}          public virtual ${name.HybridTSpec} {
     },
   })
 
-  const propertiesImpl = spec.properties
+  const propertiesImpl = properties
     .map((m) => getFbjniPropertyForwardImplementation(spec, m))
     .join('\n')
-  const methodsImpl = spec.methods
+  const methodsImpl = methods
     .map((m) => getFbjniMethodForwardImplementation(spec, m))
     .join('\n')
   const allTypes = getAllTypes(spec)

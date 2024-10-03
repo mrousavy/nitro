@@ -12,6 +12,7 @@ import {
   HybridTestObjectCpp,
   HybridTestObjectSwiftKotlin,
   HybridChild,
+  HybridBase,
 } from 'react-native-nitro-image'
 import { getTests, type TestRunner } from '../getTests'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -20,6 +21,7 @@ import SegmentedControl from '@react-native-segmented-control/segmented-control'
 import { NitroModules } from 'react-native-nitro-modules'
 
 logPrototypeChain(HybridChild)
+console.log(HybridBase.baseValue)
 console.log(HybridChild.baseValue)
 console.log(HybridChild.childValue)
 

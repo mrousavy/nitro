@@ -44,6 +44,7 @@ namespace margelo::nitro::image {
   public:
     // Properties
     double getChildValue() override;
+    double getBaseValue() override;
 
   public:
     // Methods
