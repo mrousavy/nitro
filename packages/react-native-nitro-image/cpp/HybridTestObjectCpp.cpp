@@ -11,6 +11,9 @@
 #include <chrono>
 #include <thread>
 
+#include "HybridBase.hpp"
+#include "HybridChild.hpp"
+
 namespace margelo::nitro::image {
 
 // Properties
@@ -297,6 +300,39 @@ jsi::Value HybridTestObjectCpp::rawJsiFunc(jsi::Runtime& runtime, const jsi::Val
     array.setValueAtIndex(runtime, i, jsi::Value(runtime, args[i]));
   }
   return array;
+}
+
+std::shared_ptr<HybridBaseSpec> HybridTestObjectCpp::createBase() {
+  return std::make_shared<HybridBase>();
+}
+
+std::shared_ptr<HybridChildSpec> HybridTestObjectCpp::createChild() {
+  return std::make_shared<HybridChild>();
+}
+
+std::shared_ptr<HybridBaseSpec> HybridTestObjectCpp::createBaseActualChild() {
+  return std::make_shared<HybridChild>();
+}
+
+
+std::shared_ptr<HybridChildSpec> HybridTestObjectCpp::bounceChild(const std::shared_ptr<HybridChildSpec>& child) {
+  return child;
+}
+
+std::shared_ptr<HybridBaseSpec> HybridTestObjectCpp::bounceBase(const std::shared_ptr<HybridBaseSpec>& base) {
+  return base;
+}
+
+std::shared_ptr<HybridBaseSpec> HybridTestObjectCpp::bounceChildBase(const std::shared_ptr<HybridChildSpec>& child) {
+  return child;
+}
+
+std::shared_ptr<HybridChildSpec> HybridTestObjectCpp::castBase(const std::shared_ptr<HybridBaseSpec>& base) {
+  auto child = std::dynamic_pointer_cast<HybridChildSpec>(base);
+  if (child == nullptr) {
+    throw std::runtime_error("Cannot cast Base to Child!");
+  }
+  return child;
 }
 
 } // namespace margelo::nitro::image

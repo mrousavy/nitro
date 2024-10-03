@@ -9,6 +9,37 @@ import Foundation
 import NitroModules
 
 class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
+  func createChild() throws -> any HybridChildSpec {
+    return HybridChild()
+  }
+  
+  func createBase() throws -> any HybridBaseSpec {
+    return HybridBase()
+  }
+  
+  func createBaseActualChild() throws -> any HybridBaseSpec {
+    return HybridChild()
+  }
+  
+  func bounceChild(child: any HybridChildSpec) throws -> any HybridChildSpec {
+    return child
+  }
+  
+  func bounceBase(base: any HybridBaseSpec) throws -> any HybridBaseSpec {
+    return base
+  }
+  
+  func bounceChildBase(child: any HybridChildSpec) throws -> any HybridBaseSpec {
+    return child
+  }
+  
+  func castBase(base: any HybridBaseSpec) throws -> any HybridChildSpec {
+    guard let child = base as? HybridChildSpec else {
+      throw RuntimeError.error(withMessage: "Cannot cast Base to Child!")
+    }
+    return child
+  }
+  
   var someVariant: Variant_String_Double = .someDouble(55)
 
   var numberValue: Double = 0.0

@@ -99,6 +99,14 @@ public:
   double getBufferLastItem(const std::shared_ptr<ArrayBuffer>& buffer) override;
   void setAllValuesTo(const std::shared_ptr<ArrayBuffer>& buffer, double value) override;
   std::shared_ptr<HybridTestObjectCppSpec> newTestObject() override;
+  
+  std::shared_ptr<HybridBaseSpec> createBase() override;
+  std::shared_ptr<HybridChildSpec> createChild() override;
+  std::shared_ptr<HybridBaseSpec> createBaseActualChild() override;
+  std::shared_ptr<margelo::nitro::image::HybridChildSpec> bounceChild(const std::shared_ptr<margelo::nitro::image::HybridChildSpec>& child) override;
+  std::shared_ptr<margelo::nitro::image::HybridBaseSpec> bounceBase(const std::shared_ptr<margelo::nitro::image::HybridBaseSpec>& base) override;
+  std::shared_ptr<margelo::nitro::image::HybridBaseSpec> bounceChildBase(const std::shared_ptr<margelo::nitro::image::HybridChildSpec>& child) override;
+  std::shared_ptr<margelo::nitro::image::HybridChildSpec> castBase(const std::shared_ptr<margelo::nitro::image::HybridBaseSpec>& base) override;
 
   // Raw JSI functions
   jsi::Value rawJsiFunc(jsi::Runtime& runtime, const jsi::Value& thisValue, const jsi::Value* args, size_t count);

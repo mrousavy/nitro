@@ -27,6 +27,10 @@ namespace NitroModules { class AnyMap; }
 namespace margelo::nitro::image { enum class Powertrain; }
 // Forward declaration of `ArrayBuffer` to properly resolve imports.
 namespace NitroModules { class ArrayBuffer; }
+// Forward declaration of `HybridChildSpec` to properly resolve imports.
+namespace margelo::nitro::image { class HybridChildSpec; }
+// Forward declaration of `HybridBaseSpec` to properly resolve imports.
+namespace margelo::nitro::image { class HybridBaseSpec; }
 
 #include <tuple>
 #include <string>
@@ -43,6 +47,8 @@ namespace NitroModules { class ArrayBuffer; }
 #include <NitroModules/AnyMap.hpp>
 #include "Powertrain.hpp"
 #include <NitroModules/ArrayBuffer.hpp>
+#include "HybridChildSpec.hpp"
+#include "HybridBaseSpec.hpp"
 
 namespace margelo::nitro::image {
 
@@ -125,6 +131,13 @@ namespace margelo::nitro::image {
       virtual std::shared_ptr<ArrayBuffer> createArrayBuffer() = 0;
       virtual double getBufferLastItem(const std::shared_ptr<ArrayBuffer>& buffer) = 0;
       virtual void setAllValuesTo(const std::shared_ptr<ArrayBuffer>& buffer, double value) = 0;
+      virtual std::shared_ptr<margelo::nitro::image::HybridChildSpec> createChild() = 0;
+      virtual std::shared_ptr<margelo::nitro::image::HybridBaseSpec> createBase() = 0;
+      virtual std::shared_ptr<margelo::nitro::image::HybridBaseSpec> createBaseActualChild() = 0;
+      virtual std::shared_ptr<margelo::nitro::image::HybridChildSpec> bounceChild(const std::shared_ptr<margelo::nitro::image::HybridChildSpec>& child) = 0;
+      virtual std::shared_ptr<margelo::nitro::image::HybridBaseSpec> bounceBase(const std::shared_ptr<margelo::nitro::image::HybridBaseSpec>& base) = 0;
+      virtual std::shared_ptr<margelo::nitro::image::HybridBaseSpec> bounceChildBase(const std::shared_ptr<margelo::nitro::image::HybridChildSpec>& child) = 0;
+      virtual std::shared_ptr<margelo::nitro::image::HybridChildSpec> castBase(const std::shared_ptr<margelo::nitro::image::HybridBaseSpec>& base) = 0;
 
     protected:
       // Hybrid Setup

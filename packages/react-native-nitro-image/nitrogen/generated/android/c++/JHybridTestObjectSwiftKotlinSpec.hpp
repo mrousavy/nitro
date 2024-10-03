@@ -84,6 +84,13 @@ namespace margelo::nitro::image {
     std::shared_ptr<ArrayBuffer> createArrayBuffer() override;
     double getBufferLastItem(const std::shared_ptr<ArrayBuffer>& buffer) override;
     void setAllValuesTo(const std::shared_ptr<ArrayBuffer>& buffer, double value) override;
+    std::shared_ptr<margelo::nitro::image::HybridChildSpec> createChild() override;
+    std::shared_ptr<margelo::nitro::image::HybridBaseSpec> createBase() override;
+    std::shared_ptr<margelo::nitro::image::HybridBaseSpec> createBaseActualChild() override;
+    std::shared_ptr<margelo::nitro::image::HybridChildSpec> bounceChild(const std::shared_ptr<margelo::nitro::image::HybridChildSpec>& child) override;
+    std::shared_ptr<margelo::nitro::image::HybridBaseSpec> bounceBase(const std::shared_ptr<margelo::nitro::image::HybridBaseSpec>& base) override;
+    std::shared_ptr<margelo::nitro::image::HybridBaseSpec> bounceChildBase(const std::shared_ptr<margelo::nitro::image::HybridChildSpec>& child) override;
+    std::shared_ptr<margelo::nitro::image::HybridChildSpec> castBase(const std::shared_ptr<margelo::nitro::image::HybridBaseSpec>& base) override;
 
   private:
     friend HybridBase;

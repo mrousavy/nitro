@@ -54,6 +54,13 @@ namespace margelo::nitro::image {
       prototype.registerHybridMethod("createArrayBuffer", &HybridTestObjectSwiftKotlinSpec::createArrayBuffer);
       prototype.registerHybridMethod("getBufferLastItem", &HybridTestObjectSwiftKotlinSpec::getBufferLastItem);
       prototype.registerHybridMethod("setAllValuesTo", &HybridTestObjectSwiftKotlinSpec::setAllValuesTo);
+      prototype.registerHybridMethod("createChild", &HybridTestObjectSwiftKotlinSpec::createChild);
+      prototype.registerHybridMethod("createBase", &HybridTestObjectSwiftKotlinSpec::createBase);
+      prototype.registerHybridMethod("createBaseActualChild", &HybridTestObjectSwiftKotlinSpec::createBaseActualChild);
+      prototype.registerHybridMethod("bounceChild", &HybridTestObjectSwiftKotlinSpec::bounceChild);
+      prototype.registerHybridMethod("bounceBase", &HybridTestObjectSwiftKotlinSpec::bounceBase);
+      prototype.registerHybridMethod("bounceChildBase", &HybridTestObjectSwiftKotlinSpec::bounceChildBase);
+      prototype.registerHybridMethod("castBase", &HybridTestObjectSwiftKotlinSpec::castBase);
     });
   }
 
