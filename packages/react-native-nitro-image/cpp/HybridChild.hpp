@@ -7,8 +7,8 @@
 
 #pragma once
 
-#include "HybridChildSpec.hpp"
 #include "HybridBase.hpp"
+#include "HybridChildSpec.hpp"
 
 namespace margelo::nitro::image {
 
@@ -19,7 +19,6 @@ public:
   explicit HybridChild() : HybridObject(HybridChildSpec::TAG) {}
 
 public:
-  
   double getChildValue() override {
     return 30;
   }
