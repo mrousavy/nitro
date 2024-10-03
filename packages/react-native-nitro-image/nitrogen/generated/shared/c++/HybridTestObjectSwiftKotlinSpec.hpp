@@ -46,9 +46,12 @@ namespace margelo::nitro::image {
   /**
    * An abstract base class for `TestObjectSwiftKotlin`
    * Inherit this class to create instances of `HybridTestObjectSwiftKotlinSpec` in C++.
+   * You must explicitly call `HybridObject`'s constructor yourself, because it is virtual.
    * @example
    * ```cpp
    * class HybridTestObjectSwiftKotlin: public HybridTestObjectSwiftKotlinSpec {
+   * public:
+   *   HybridTestObjectSwiftKotlin(...): HybridObject(TAG) { ... }
    *   // ...
    * };
    * ```

@@ -26,6 +26,11 @@ export function createCppHybridObject(spec: HybridObjectSpec): SourceFile[] {
   const cxxNamespace = NitroConfig.getCxxNamespace('c++')
   const name = getHybridObjectName(spec.name)
 
+  const bases = ['public virtual HybridObject']
+  for (const base of spec.baseTypes) {
+    bases.push(`public ${base.name}`)
+  }
+
   // Generate the full header / code
   const cppHeaderCode = `
 ${createFileMetadataString(`${name.HybridTSpec}.hpp`)}
@@ -45,14 +50,17 @@ namespace ${cxxNamespace} {
   /**
    * An abstract base class for \`${spec.name}\`
    * Inherit this class to create instances of \`${name.HybridTSpec}\` in C++.
+   * You must explicitly call \`HybridObject\`'s constructor yourself, because it is virtual.
    * @example
    * \`\`\`cpp
    * class ${name.HybridT}: public ${name.HybridTSpec} {
+   * public:
+   *   ${name.HybridT}(...): HybridObject(TAG) { ... }
    *   // ...
    * };
    * \`\`\`
    */
-  class ${name.HybridTSpec}: public virtual HybridObject {
+  class ${name.HybridTSpec}: ${bases.join(', ')} {
     public:
       // Constructor
       explicit ${name.HybridTSpec}(): HybridObject(TAG) { }
