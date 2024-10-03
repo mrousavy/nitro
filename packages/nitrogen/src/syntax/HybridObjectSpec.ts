@@ -7,4 +7,5 @@ export interface HybridObjectSpec {
   language: Language
   properties: Property[]
   methods: Method[]
+  baseTypes: HybridObjectSpec[]
 }

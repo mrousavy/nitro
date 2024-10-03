@@ -97,19 +97,17 @@ export function isDirectlyHybridObject(type: Type): boolean {
   return false
 }
 
-export function findHybridObjectBases(type: Type): Type[] {
-  return type.getBaseTypes().filter((b) => extendsHybridObject(b))
-}
-
-export function extendsHybridObject(type: Type): boolean {
+export function extendsHybridObject(type: Type, recursive: boolean): boolean {
   for (const base of type.getBaseTypes()) {
     const isHybrid = isDirectlyHybridObject(base)
     if (isHybrid) {
       return true
     }
-    const baseExtends = extendsHybridObject(base)
-    if (baseExtends) {
-      return true
+    if (recursive) {
+      const baseExtends = extendsHybridObject(base, recursive)
+      if (baseExtends) {
+        return true
+      }
     }
   }
   return false

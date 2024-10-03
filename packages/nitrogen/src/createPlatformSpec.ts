@@ -61,7 +61,10 @@ function getHybridObjectSpec(type: Type, language: Language): HybridObjectSpec {
 
     if (parent === type) {
       // it's an own property. declared literally here. fine.
-    } else if (extendsHybridObject(parent) || isDirectlyHybridObject(parent)) {
+    } else if (
+      extendsHybridObject(parent, false) ||
+      isDirectlyHybridObject(parent)
+    ) {
       // it's coming from a base class that is already a HybridObject. We can grab this via inheritance.
       // don't generate this property natively.
       continue
@@ -97,12 +100,18 @@ function getHybridObjectSpec(type: Type, language: Language): HybridObjectSpec {
       )
     }
   }
+
+  const bases = type
+    .getBaseTypes()
+    .filter((t) => extendsHybridObject(t, false))
+    .map((t) => getHybridObjectSpec(t, language))
+
   const spec: HybridObjectSpec = {
     language: language,
     name: name,
     properties: properties,
     methods: methods,
-    // baseTypes: findHybridObjectBases(declaration.getType()),
+    baseTypes: bases,
   }
   return spec
 }
