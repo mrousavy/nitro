@@ -24,6 +24,7 @@ import {
   extendsHybridObject,
   isDirectlyHybridObject,
 } from '../getPlatformSpecs.js'
+import { HybridObjectBaseType } from './types/HybridObjectBaseType.js'
 
 function isSymbol(type: TSMorphType, symbolName: string): boolean {
   const symbol = type.getSymbol()
@@ -254,15 +255,12 @@ export function createType(type: TSMorphType, isOptional: boolean): Type {
       // It references another interface/type, either a simple struct, or another HybridObject
       const typename = type.getSymbolOrThrow().getEscapedName()
 
-      const isAnyHybridObject = extendsHybridObject(type)
-      if (isAnyHybridObject) {
+      if (isDirectlyHybridObject(type)) {
+        // It is a HybridObject directly/literally. Base type
+        return new HybridObjectBaseType()
+      } else if (extendsHybridObject(type)) {
         // It is another HybridObject being referenced!
         return new HybridObjectType(typename)
-      }
-      const isHybridObject = isDirectlyHybridObject(type)
-      if (isHybridObject) {
-        // It is a HybridObject directly
-        return new HybridObjectType('HybridObject')
       } else {
         // It is a simple struct being referenced.
         const properties = getInterfaceProperties(type)
