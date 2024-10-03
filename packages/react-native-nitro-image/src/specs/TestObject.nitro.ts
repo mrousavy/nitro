@@ -79,6 +79,15 @@ interface SharedTestObjectProps {
   createArrayBuffer(): ArrayBuffer
   getBufferLastItem(buffer: ArrayBuffer): number
   setAllValuesTo(buffer: ArrayBuffer, value: number): void
+
+  // Inheritance
+  createChild(): Child
+  createBase(): Base
+  createBaseActualChild(): Base
+  bounceChild(child: Child): Child
+  bounceBase(base: Base): Base
+  bounceChildBase(child: Child): Base
+  castBase(base: Base): Child
 }
 
 export interface TestObjectCpp

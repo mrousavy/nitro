@@ -63,6 +63,13 @@ public protocol HybridTestObjectSwiftKotlinSpec: HybridObjectSpec {
   func createArrayBuffer() throws -> ArrayBufferHolder
   func getBufferLastItem(buffer: ArrayBufferHolder) throws -> Double
   func setAllValuesTo(buffer: ArrayBufferHolder, value: Double) throws -> Void
+  func createChild() throws -> HybridChildSpec
+  func createBase() throws -> HybridBaseSpec
+  func createBaseActualChild() throws -> HybridBaseSpec
+  func bounceChild(child: HybridChildSpec) throws -> HybridChildSpec
+  func bounceBase(base: HybridBaseSpec) throws -> HybridBaseSpec
+  func bounceChildBase(child: HybridChildSpec) throws -> HybridBaseSpec
+  func castBase(base: HybridBaseSpec) throws -> HybridChildSpec
 }
 
 public extension HybridTestObjectSwiftKotlinSpec {

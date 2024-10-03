@@ -203,6 +203,34 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   @DoNotStrip
   @Keep
   abstract fun setAllValuesTo(buffer: ArrayBuffer, value: Double): Unit
+  
+  @DoNotStrip
+  @Keep
+  abstract fun createChild(): HybridChildSpec
+  
+  @DoNotStrip
+  @Keep
+  abstract fun createBase(): HybridBaseSpec
+  
+  @DoNotStrip
+  @Keep
+  abstract fun createBaseActualChild(): HybridBaseSpec
+  
+  @DoNotStrip
+  @Keep
+  abstract fun bounceChild(child: HybridChildSpec): HybridChildSpec
+  
+  @DoNotStrip
+  @Keep
+  abstract fun bounceBase(base: HybridBaseSpec): HybridBaseSpec
+  
+  @DoNotStrip
+  @Keep
+  abstract fun bounceChildBase(child: HybridChildSpec): HybridBaseSpec
+  
+  @DoNotStrip
+  @Keep
+  abstract fun castBase(base: HybridBaseSpec): HybridChildSpec
 
   private external fun initHybrid(): HybridData
 

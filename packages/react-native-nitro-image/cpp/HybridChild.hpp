@@ -19,6 +19,9 @@ public:
   explicit HybridChild() : HybridObject(HybridChildSpec::TAG) {}
 
 public:
+  double getBaseValue() override {
+    return 20;
+  }
   double getChildValue() override {
     return 30;
   }

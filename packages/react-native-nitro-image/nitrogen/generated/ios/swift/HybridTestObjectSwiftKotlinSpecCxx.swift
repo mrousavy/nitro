@@ -531,4 +531,81 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
       fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
     }
   }
+  
+  @inline(__always)
+  public func createChild() -> HybridChildSpecCxx {
+    do {
+      let result = try self.implementation.createChild()
+      return result.createCxxBridge()
+    } catch {
+      let message = "\(error.localizedDescription)"
+      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
+    }
+  }
+  
+  @inline(__always)
+  public func createBase() -> HybridBaseSpecCxx {
+    do {
+      let result = try self.implementation.createBase()
+      return result.createCxxBridge()
+    } catch {
+      let message = "\(error.localizedDescription)"
+      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
+    }
+  }
+  
+  @inline(__always)
+  public func createBaseActualChild() -> HybridBaseSpecCxx {
+    do {
+      let result = try self.implementation.createBaseActualChild()
+      return result.createCxxBridge()
+    } catch {
+      let message = "\(error.localizedDescription)"
+      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
+    }
+  }
+  
+  @inline(__always)
+  public func bounceChild(child: HybridChildSpecCxx) -> HybridChildSpecCxx {
+    do {
+      let result = try self.implementation.bounceChild(child: child.getHybridChildSpec())
+      return result.createCxxBridge()
+    } catch {
+      let message = "\(error.localizedDescription)"
+      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
+    }
+  }
+  
+  @inline(__always)
+  public func bounceBase(base: HybridBaseSpecCxx) -> HybridBaseSpecCxx {
+    do {
+      let result = try self.implementation.bounceBase(base: base.getHybridBaseSpec())
+      return result.createCxxBridge()
+    } catch {
+      let message = "\(error.localizedDescription)"
+      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
+    }
+  }
+  
+  @inline(__always)
+  public func bounceChildBase(child: HybridChildSpecCxx) -> HybridBaseSpecCxx {
+    do {
+      let result = try self.implementation.bounceChildBase(child: child.getHybridChildSpec())
+      return result.createCxxBridge()
+    } catch {
+      let message = "\(error.localizedDescription)"
+      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
+    }
+  }
+  
+  @inline(__always)
+  public func castBase(base: HybridBaseSpecCxx) -> HybridChildSpecCxx {
+    do {
+      let result = try self.implementation.castBase(base: base.getHybridBaseSpec())
+      return result.createCxxBridge()
+    } catch {
+      let message = "\(error.localizedDescription)"
+      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
+    }
+  }
 }

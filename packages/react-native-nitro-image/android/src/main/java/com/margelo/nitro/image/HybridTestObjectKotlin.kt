@@ -146,6 +146,37 @@ class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
         }
     }
 
+    override fun createChild(): HybridChildSpec {
+        return HybridChild()
+    }
+
+    override fun createBase(): HybridBaseSpec {
+        return HybridBase()
+    }
+
+    override fun createBaseActualChild(): HybridBaseSpec {
+        return HybridChild()
+    }
+
+    override fun bounceChild(child: HybridChildSpec): HybridChildSpec {
+        return child
+    }
+
+    override fun bounceBase(base: HybridBaseSpec): HybridBaseSpec {
+        return base
+    }
+
+    override fun bounceChildBase(child: HybridChildSpec): HybridBaseSpec {
+        return child
+    }
+
+    override fun castBase(base: HybridBaseSpec): HybridChildSpec {
+        if (base !is HybridChildSpec) {
+            throw Error("Cannot cast Base to Child!")
+        }
+        return base
+    }
+
     override fun newTestObject(): HybridTestObjectSwiftKotlinSpec {
         return HybridTestObjectKotlin()
     }

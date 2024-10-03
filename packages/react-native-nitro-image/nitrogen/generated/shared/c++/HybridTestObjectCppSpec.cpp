@@ -65,6 +65,13 @@ namespace margelo::nitro::image {
       prototype.registerHybridMethod("createArrayBuffer", &HybridTestObjectCppSpec::createArrayBuffer);
       prototype.registerHybridMethod("getBufferLastItem", &HybridTestObjectCppSpec::getBufferLastItem);
       prototype.registerHybridMethod("setAllValuesTo", &HybridTestObjectCppSpec::setAllValuesTo);
+      prototype.registerHybridMethod("createChild", &HybridTestObjectCppSpec::createChild);
+      prototype.registerHybridMethod("createBase", &HybridTestObjectCppSpec::createBase);
+      prototype.registerHybridMethod("createBaseActualChild", &HybridTestObjectCppSpec::createBaseActualChild);
+      prototype.registerHybridMethod("bounceChild", &HybridTestObjectCppSpec::bounceChild);
+      prototype.registerHybridMethod("bounceBase", &HybridTestObjectCppSpec::bounceBase);
+      prototype.registerHybridMethod("bounceChildBase", &HybridTestObjectCppSpec::bounceChildBase);
+      prototype.registerHybridMethod("castBase", &HybridTestObjectCppSpec::castBase);
     });
   }
 
