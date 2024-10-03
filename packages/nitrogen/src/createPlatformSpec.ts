@@ -62,7 +62,7 @@ function getHybridObjectSpec(type: Type, language: Language): HybridObjectSpec {
     if (parent === type) {
       // it's an own property. declared literally here. fine.
     } else if (
-      extendsHybridObject(parent, false) ||
+      extendsHybridObject(parent, true) ||
       isDirectlyHybridObject(parent)
     ) {
       // it's coming from a base class that is already a HybridObject. We can grab this via inheritance.

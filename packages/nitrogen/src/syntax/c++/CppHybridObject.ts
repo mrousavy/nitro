@@ -5,6 +5,7 @@ import type { HybridObjectSpec } from '../HybridObjectSpec.js'
 import { includeHeader, includeNitroHeader } from './includeNitroHeader.js'
 import { NitroConfig } from '../../config/NitroConfig.js'
 import { getHybridObjectName } from '../getHybridObjectName.js'
+import { HybridObjectType } from '../types/HybridObjectType.js'
 
 export function createCppHybridObject(spec: HybridObjectSpec): SourceFile[] {
   // Extra includes
@@ -28,7 +29,13 @@ export function createCppHybridObject(spec: HybridObjectSpec): SourceFile[] {
 
   const bases = ['public virtual HybridObject']
   for (const base of spec.baseTypes) {
-    bases.push(`public ${base.name}`)
+    const hybridObject = new HybridObjectType(base.name)
+    bases.push(`public ${getHybridObjectName(base.name).HybridTSpec}`)
+    const imports = hybridObject.getRequiredImports()
+    cppForwardDeclarations.push(
+      ...imports.map((i) => i.forwardDeclaration).filter((f) => f != null)
+    )
+    cppExtraIncludes.push(...imports.map((i) => includeHeader(i)))
   }
 
   // Generate the full header / code

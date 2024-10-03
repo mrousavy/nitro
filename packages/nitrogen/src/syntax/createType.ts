@@ -251,7 +251,7 @@ export function createType(type: TSMorphType, isOptional: boolean): Type {
 
         return new VariantType(variants)
       }
-    } else if (extendsHybridObject(type, false)) {
+    } else if (extendsHybridObject(type, true)) {
       // It is another HybridObject being referenced!
       const typename = type.getSymbolOrThrow().getEscapedName()
       return new HybridObjectType(typename)
