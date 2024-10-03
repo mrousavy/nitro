@@ -21,8 +21,6 @@ import com.margelo.nitro.core.*
 @Keep
 @Suppress("RedundantSuppression", "KotlinJniMissingFunction", "PropertyName", "RedundantUnitReturnType", "unused")
 abstract class HybridImageFactorySpec: HybridObject() {
-  protected val TAG = "HybridImageFactorySpec"
-
   @DoNotStrip
   private var mHybridData: HybridData = initHybrid()
 

@@ -21,8 +21,6 @@ import com.margelo.nitro.core.*
 @Keep
 @Suppress("RedundantSuppression", "KotlinJniMissingFunction", "PropertyName", "RedundantUnitReturnType", "unused")
 abstract class HybridBaseSpec: HybridObject() {
-  protected val TAG = "HybridBaseSpec"
-
   @DoNotStrip
   private var mHybridData: HybridData = initHybrid()
 

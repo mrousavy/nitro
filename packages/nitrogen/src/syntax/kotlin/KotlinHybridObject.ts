@@ -54,8 +54,6 @@ import com.margelo.nitro.core.*
 @Keep
 @Suppress("RedundantSuppression", "KotlinJniMissingFunction", "PropertyName", "RedundantUnitReturnType", "unused")
 abstract class ${name.HybridTSpec}: ${kotlinBase}() {
-  protected val TAG = "${name.HybridTSpec}"
-
   @DoNotStrip
   private var mHybridData: HybridData = initHybrid()
 

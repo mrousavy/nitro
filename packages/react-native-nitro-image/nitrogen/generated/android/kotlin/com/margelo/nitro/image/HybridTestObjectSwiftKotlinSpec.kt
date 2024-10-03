@@ -21,8 +21,6 @@ import com.margelo.nitro.core.*
 @Keep
 @Suppress("RedundantSuppression", "KotlinJniMissingFunction", "PropertyName", "RedundantUnitReturnType", "unused")
 abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
-  protected val TAG = "HybridTestObjectSwiftKotlinSpec"
-
   @DoNotStrip
   private var mHybridData: HybridData = initHybrid()
 
