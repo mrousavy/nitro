@@ -95,7 +95,7 @@ ${hasBase ? `public class ${name.HybridTSpecCxx} : ${baseClasses.join(', ')}` : 
     @inline(__always)
     get {
       return self.implementation.hybridContext
-      }
+    }
     @inline(__always)
     set {
       self.implementation.hybridContext = newValue
