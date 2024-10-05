@@ -27,7 +27,7 @@ import NitroModules
  * }
  * ```
  */
-public protocol HybridTestObjectSwiftKotlinSpec: HybridObjectSpec {
+public protocol HybridTestObjectSwiftKotlinSpec: AnyObject, HybridObjectSpec {
   // Properties
   var thisObject: HybridTestObjectSwiftKotlinSpec { get }
   var numberValue: Double { get set }
