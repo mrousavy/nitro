@@ -85,16 +85,18 @@ ${hasBase ? `public class ${name.HybridTSpecCxx} : ${baseClasses.join(', ')}` : 
    */
   public init(_ implementation: ${name.HybridTSpec}) {
     self.implementation = implementation
-    ${hasBase ? 'super.init(implementation)' : ''}
+    ${hasBase ? 'super.init(implementation)' : '/* no base class */'}
   }
 
   /**
    * Contains a (weak) reference to the C++ HybridObject to cache it.
    */
   public ${hasBase ? 'override var' : 'var'} hybridContext: margelo.nitro.HybridContext {
+    @inline(__always)
     get {
       return self.implementation.hybridContext
-    }
+      }
+    @inline(__always)
     set {
       self.implementation.hybridContext = newValue
     }
@@ -104,6 +106,7 @@ ${hasBase ? `public class ${name.HybridTSpecCxx} : ${baseClasses.join(', ')}` : 
    * Get the memory size of the Swift class (plus size of any other allocations)
    * so the JS VM can properly track it and garbage-collect the JS object if needed.
    */
+  @inline(__always)
   public ${hasBase ? 'override var' : 'var'} memorySize: Int {
     return self.implementation.memorySize
   }

@@ -44,16 +44,18 @@ public class HybridImageSpecCxx {
    */
   public init(_ implementation: HybridImageSpec) {
     self.implementation = implementation
-    
+    /* no base class */
   }
 
   /**
    * Contains a (weak) reference to the C++ HybridObject to cache it.
    */
   public var hybridContext: margelo.nitro.HybridContext {
+    @inline(__always)
     get {
       return self.implementation.hybridContext
-    }
+      }
+    @inline(__always)
     set {
       self.implementation.hybridContext = newValue
     }
@@ -63,6 +65,7 @@ public class HybridImageSpecCxx {
    * Get the memory size of the Swift class (plus size of any other allocations)
    * so the JS VM can properly track it and garbage-collect the JS object if needed.
    */
+  @inline(__always)
   public var memorySize: Int {
     return self.implementation.memorySize
   }
