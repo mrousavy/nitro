@@ -7,8 +7,8 @@ on:
     paths:
       - '.github/workflows/build-android.yml'
       - 'example/android/**'
-      - 'packages/react-native-nitro-image/nitrogen/shared/**'
-      - 'packages/react-native-nitro-image/nitrogen/android/**'
+      - '**/nitrogen/generated/shared/**'
+      - '**/nitrogen/generated/android/**'
       - 'packages/react-native-nitro-image/cpp/**'
       - 'packages/react-native-nitro-image/android/**'
       - 'packages/react-native-nitro-modules/cpp/**'
@@ -20,8 +20,8 @@ on:
     paths:
       - '.github/workflows/build-android.yml'
       - 'example/android/**'
-      - 'packages/react-native-nitro-image/nitrogen/shared/**'
-      - 'packages/react-native-nitro-image/nitrogen/android/**'
+      - '**/nitrogen/generated/shared/**'
+      - '**/nitrogen/generated/android/**'
       - 'packages/react-native-nitro-image/cpp/**'
       - 'packages/react-native-nitro-image/android/**'
       - 'packages/react-native-nitro-modules/cpp/**'

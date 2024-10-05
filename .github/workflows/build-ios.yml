@@ -7,8 +7,8 @@ on:
     paths:
       - '.github/workflows/build-ios.yml'
       - 'example/ios/**'
-      - 'packages/react-native-nitro-image/nitrogen/shared/**'
-      - 'packages/react-native-nitro-image/nitrogen/ios/**'
+      - '**/nitrogen/generated/shared/**'
+      - '**/nitrogen/generated/ios/**'
       - 'packages/react-native-nitro-image/cpp/**'
       - 'packages/react-native-nitro-image/ios/**'
       - 'packages/react-native-nitro-modules/cpp/**'
@@ -21,8 +21,8 @@ on:
     paths:
       - '.github/workflows/build-ios.yml'
       - 'example/ios/**'
-      - 'packages/react-native-nitro-image/nitrogen/shared/**'
-      - 'packages/react-native-nitro-image/nitrogen/ios/**'
+      - '**/nitrogen/generated/shared/**'
+      - '**/nitrogen/generated/ios/**'
       - 'packages/react-native-nitro-image/cpp/**'
       - 'packages/react-native-nitro-image/ios/**'
       - 'packages/react-native-nitro-modules/cpp/**'
