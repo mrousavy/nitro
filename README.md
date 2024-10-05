@@ -1,4 +1,4 @@
-<a href="https://margelo.io">
+<a href="https://margelo.com">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="./docs/static/img/banner-nitro-modules-dark.png" />
     <source media="(prefers-color-scheme: light)" srcset="./docs/static/img/banner-nitro-modules-light.png" />
