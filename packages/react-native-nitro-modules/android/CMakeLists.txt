@@ -24,6 +24,7 @@ include_directories(
   ../cpp/core
   ../cpp/jsi
   ../cpp/platform
+  ../cpp/proxy
   ../cpp/registry
   ../cpp/prototype
   ../cpp/test-object
