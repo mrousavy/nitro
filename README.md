@@ -24,7 +24,7 @@ cd ios && pod install
 
 ## Documentation
 
-- [**Nitro** docs 📚](https://mrousavy.github.io/nitro/)
+- [**Nitro** docs 📚](https://nitro.margelo.com)
 - [**Community Discord** 💬](https://discord.gg/6CSHz2qAvA)
 - [**nitrogen**/README.md](./packages/nitrogen/README.md)
 - [**react-native-nitro-modules**/README.md](./packages/react-native-nitro-modules/README.md)

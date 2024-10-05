@@ -23,4 +23,4 @@ npm i nitro-codegen -D
 
 ## Usage
 
-See the [Nitrogen documentation](https://mrousavy.github.io/nitro/docs/nitrogen) for more information.
+See the [Nitrogen documentation](https://nitro.margelo.com/docs/nitrogen) for more information.

@@ -9,15 +9,14 @@ const config: Config = {
   favicon: 'img/favicon.ico',
 
   // Set the production url of your site here
-  url: 'https://mrousavy.github.io',
+  url: 'https://nitro.margelo.com',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: '/nitro/',
+  baseUrl: '/',
 
   // GitHub pages deployment config.
   organizationName: 'mrousavy',
   projectName: 'nitro',
-  deploymentBranch: 'gh-pages',
   trailingSlash: false,
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
