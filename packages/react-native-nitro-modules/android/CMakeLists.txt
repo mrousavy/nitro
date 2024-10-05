@@ -22,9 +22,9 @@ add_library(NitroModules SHARED
 include_directories(
   # Shared C++ includes
   ../cpp/core
+  ../cpp/entrypoint
   ../cpp/jsi
   ../cpp/platform
-  ../cpp/proxy
   ../cpp/registry
   ../cpp/prototype
   ../cpp/test-object
