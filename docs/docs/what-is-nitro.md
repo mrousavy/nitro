@@ -36,6 +36,13 @@ class HybridMath : HybridMathSpec {
 </div>
 </div>
 
+This Hybrid Object can then be accessed directly from JS:
+
+```ts
+const math = NitroModules.createHybridObject<Math>('Math')
+const result = math.add(5, 7)
+```
+
 ## Performance
 
 Nitro is all about **performance**. [This benchmark](https://github.com/mrousavy/NitroBenchmarks) compares the total execution time when calling a single native method 100.000 times:

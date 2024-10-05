@@ -38,7 +38,7 @@ class HybridMath : HybridMathSpec {
 
 ## Working with Hybrid Objects
 
-Hybrid Objects can be created using `createHybridObject(...)` if they have been registered on the native side:
+Hybrid Objects can be instantiated from JS using `createHybridObject(...)`:
 
 ```ts
 const math = NitroModules.createHybridObject<Math>("Math")
