@@ -10,7 +10,7 @@
 #include "HybridTestObjectSwiftKotlinSpec.hpp"
 
 // Forward declaration of `HybridTestObjectSwiftKotlinSpecCxx` to properly resolve imports.
-namespace NitroImage { class HybridTestObjectSwiftKotlinSpecCxx; }
+namespace NitroImage { struct HybridTestObjectSwiftKotlinSpecCxx; }
 
 // Forward declaration of `HybridTestObjectSwiftKotlinSpec` to properly resolve imports.
 namespace margelo::nitro::image { class HybridTestObjectSwiftKotlinSpec; }

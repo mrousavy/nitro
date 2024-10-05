@@ -10,7 +10,7 @@
 #include "HybridChildSpec.hpp"
 
 // Forward declaration of `HybridChildSpecCxx` to properly resolve imports.
-namespace NitroImage { class HybridChildSpecCxx; }
+namespace NitroImage { struct HybridChildSpecCxx; }
 
 // Forward declaration of `HybridBaseSpecSwift` to properly resolve imports.
 namespace margelo::nitro::image { class HybridBaseSpecSwift; }

@@ -10,7 +10,7 @@
 #include "HybridBaseSpec.hpp"
 
 // Forward declaration of `HybridBaseSpecCxx` to properly resolve imports.
-namespace NitroImage { class HybridBaseSpecCxx; }
+namespace NitroImage { struct HybridBaseSpecCxx; }
 
 
 

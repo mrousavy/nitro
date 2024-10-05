@@ -10,7 +10,7 @@
 #include "HybridImageSpec.hpp"
 
 // Forward declaration of `HybridImageSpecCxx` to properly resolve imports.
-namespace NitroImage { class HybridImageSpecCxx; }
+namespace NitroImage { struct HybridImageSpecCxx; }
 
 // Forward declaration of `ImageSize` to properly resolve imports.
 namespace margelo::nitro::image { struct ImageSize; }
