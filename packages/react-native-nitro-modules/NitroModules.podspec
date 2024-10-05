@@ -32,6 +32,7 @@ Pod::Spec.new do |s|
     "cpp/core/ArrayBuffer.hpp",
     "cpp/core/HybridObject.hpp",
     "cpp/entrypoint/HybridNitroModulesProxy.hpp",
+    "cpp/entrypoint/InstallNitro.hpp",
     "cpp/registry/HybridObjectRegistry.hpp",
     "cpp/jsi/JSIConverter.hpp",
     "cpp/threading/Dispatcher.hpp",
