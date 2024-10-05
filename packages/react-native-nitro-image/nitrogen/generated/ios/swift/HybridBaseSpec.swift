@@ -27,7 +27,7 @@ import NitroModules
  * }
  * ```
  */
-public protocol HybridBaseSpec: HybridObjectSpec {
+public protocol HybridBaseSpec: AnyObject, HybridObjectSpec {
   // Properties
   var baseValue: Double { get }
 

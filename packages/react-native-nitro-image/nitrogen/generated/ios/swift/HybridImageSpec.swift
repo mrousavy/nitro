@@ -27,7 +27,7 @@ import NitroModules
  * }
  * ```
  */
-public protocol HybridImageSpec: HybridObjectSpec {
+public protocol HybridImageSpec: AnyObject, HybridObjectSpec {
   // Properties
   var size: ImageSize { get }
   var pixelFormat: PixelFormat { get }

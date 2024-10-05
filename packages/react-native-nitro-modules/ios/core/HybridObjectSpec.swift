@@ -10,7 +10,7 @@ import Foundation
 /**
  * A base protocol for all Swift-based Hybrid Objects.
  */
-public protocol HybridObjectSpec {
+public protocol HybridObjectSpec: AnyObject {
   /**
    * Holds the C++ HybridObject and it's context.
    * Use the default initializer in your implementation, C++ will set and get this value.

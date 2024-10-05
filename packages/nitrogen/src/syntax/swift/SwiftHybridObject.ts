@@ -42,7 +42,7 @@ import NitroModules
  * }
  * \`\`\`
  */
-public protocol ${protocolName}: ${baseClasses.join(', ')} {
+public protocol ${protocolName}: AnyObject, ${baseClasses.join(', ')} {
   // Properties
   ${indent(properties, '  ')}
 

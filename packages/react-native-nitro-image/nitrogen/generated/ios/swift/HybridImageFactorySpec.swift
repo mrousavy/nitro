@@ -27,7 +27,7 @@ import NitroModules
  * }
  * ```
  */
-public protocol HybridImageFactorySpec: HybridObjectSpec {
+public protocol HybridImageFactorySpec: AnyObject, HybridObjectSpec {
   // Properties
   
 
