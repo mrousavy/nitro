@@ -149,7 +149,7 @@
     ]
   },
   "codegenConfig": {
-    "name": "react-native-nitro-modules",
+    "name": "NitroModulesSpec",
     "type": "modules",
     "jsSrcsDir": "./src",
     "android": {
