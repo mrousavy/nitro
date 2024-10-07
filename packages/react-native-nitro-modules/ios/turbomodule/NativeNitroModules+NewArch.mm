@@ -15,12 +15,12 @@
 #import <ReactCommon/CallInvoker.h>
 #import <ReactCommon/RCTTurboModuleWithJSIBindings.h>
 
+using namespace facebook;
+using namespace margelo;
+
 // Make NativeNitroModules comply to RCTTurboModuleWithJSIBindings
 @interface NativeNitroModules () <RCTTurboModuleWithJSIBindings>
 @end
-
-using namespace facebook;
-using namespace margelo;
 
 /**
  * NativeNitroModules implementation for the new architecture.
