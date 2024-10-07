@@ -37,7 +37,7 @@ namespace margelo::nitro::image {
       switch (variant.index()) {
         case 0: return create(jni::make_jstring(std::get<0>(variant)));
         case 1: return create(std::get<1>(variant));
-        default: throw std::runtime_error("Variant holds unknown index! (" + std::to_string(variant.index()) + ")");
+        default: throw std::invalid_argument("Variant holds unknown index! (" + std::to_string(variant.index()) + ")");
       }
     }
 
@@ -72,7 +72,7 @@ namespace margelo::nitro::image {
       auto jniValue = static_cast<SomeDouble*>(this)->get();
       return jniValue;
     }
-    throw std::runtime_error("Variant is unknown Kotlin instance!");
+    throw std::invalid_argument("Variant is unknown Kotlin instance!");
   }
 
 } // namespace margelo::nitro::image

@@ -50,7 +50,7 @@ namespace margelo::nitro {
         case hashString("gas"): return Powertrain::GAS;
         case hashString("hybrid"): return Powertrain::HYBRID;
         default: [[unlikely]]
-          throw std::runtime_error("Cannot convert \"" + unionValue + "\" to enum Powertrain - invalid value!");
+          throw std::invalid_argument("Cannot convert \"" + unionValue + "\" to enum Powertrain - invalid value!");
       }
     }
     static inline jsi::Value toJSI(jsi::Runtime& runtime, Powertrain arg) {
@@ -59,7 +59,7 @@ namespace margelo::nitro {
         case Powertrain::GAS: return JSIConverter<std::string>::toJSI(runtime, "gas");
         case Powertrain::HYBRID: return JSIConverter<std::string>::toJSI(runtime, "hybrid");
         default: [[unlikely]]
-          throw std::runtime_error("Cannot convert Powertrain to JS - invalid value: "
+          throw std::invalid_argument("Cannot convert Powertrain to JS - invalid value: "
                                     + std::to_string(static_cast<int>(arg)) + "!");
       }
     }
