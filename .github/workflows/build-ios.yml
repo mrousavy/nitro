@@ -33,8 +33,8 @@ on:
       - '**/nitro.json'
 
 jobs:
-  build:
-    name: Build iOS Example App
+  build_new:
+    name: Build iOS Example App (new architecture)
     runs-on: macOS-latest
     steps:
       - uses: actions/checkout@v4
@@ -42,6 +42,56 @@ jobs:
 
       - name: Install npm dependencies (bun)
         run: bun install --frozen-lockfile
+
+      - name: Restore buildcache
+        uses: mikehardy/buildcache-action@v2
+        continue-on-error: true
+
+      - name: Setup Ruby (bundle)
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.7.2
+          bundler-cache: true
+          working-directory: example/ios
+
+      - name: Install xcpretty
+        run: gem install xcpretty
+
+      - name: Restore Pods cache
+        uses: actions/cache@v4
+        with:
+          path: example/ios/Pods
+          key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock', '**/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pods-
+      - name: Install Pods
+        working-directory: example/ios
+        run: pod install
+      - name: Build App
+        working-directory: example/ios
+        run: "set -o pipefail && xcodebuild \
+          CC=clang CPLUSPLUS=clang++ LD=clang LDPLUSPLUS=clang++ \
+          -derivedDataPath build -UseModernBuildSystem=YES \
+          -workspace NitroExample.xcworkspace \
+          -scheme NitroExample \
+          -sdk iphonesimulator \
+          -configuration Debug \
+          -destination 'platform=iOS Simulator,name=iPhone 15' \
+          build \
+          CODE_SIGNING_ALLOWED=NO | xcpretty"
+
+  build_old:
+    name: Build iOS Example App (old architecture)
+    runs-on: macOS-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+
+      - name: Install npm dependencies (bun)
+        run: bun install --frozen-lockfile
+
+      - name: Disable new architecture in Podfile
+        run: sed -i "s/ENV['RCT_NEW_ARCH_ENABLED'] = '1'/ENV['RCT_NEW_ARCH_ENABLED'] = '0'/"" example/ios/Podfile
 
       - name: Restore buildcache
         uses: mikehardy/buildcache-action@v2
