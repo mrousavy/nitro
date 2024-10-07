@@ -48,7 +48,7 @@ namespace margelo::nitro {
         case hashString("jpg"): return ImageFormat::JPG;
         case hashString("png"): return ImageFormat::PNG;
         default: [[unlikely]]
-          throw std::runtime_error("Cannot convert \"" + unionValue + "\" to enum ImageFormat - invalid value!");
+          throw std::invalid_argument("Cannot convert \"" + unionValue + "\" to enum ImageFormat - invalid value!");
       }
     }
     static inline jsi::Value toJSI(jsi::Runtime& runtime, ImageFormat arg) {
@@ -56,7 +56,7 @@ namespace margelo::nitro {
         case ImageFormat::JPG: return JSIConverter<std::string>::toJSI(runtime, "jpg");
         case ImageFormat::PNG: return JSIConverter<std::string>::toJSI(runtime, "png");
         default: [[unlikely]]
-          throw std::runtime_error("Cannot convert ImageFormat to JS - invalid value: "
+          throw std::invalid_argument("Cannot convert ImageFormat to JS - invalid value: "
                                     + std::to_string(static_cast<int>(arg)) + "!");
       }
     }

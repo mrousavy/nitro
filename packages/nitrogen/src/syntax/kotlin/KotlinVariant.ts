@@ -150,7 +150,7 @@ namespace ${cxxNamespace} {
     static jni::local_ref<J${kotlinName}> fromCpp(${toReferenceType(variant.getCode('c++'))} variant) {
       switch (variant.index()) {
         ${indent(variantCases.join('\n'), '        ')}
-        default: throw std::runtime_error("Variant holds unknown index! (" + std::to_string(variant.index()) + ")");
+        default: throw std::invalid_argument("Variant holds unknown index! (" + std::to_string(variant.index()) + ")");
       }
     }
 
@@ -161,7 +161,7 @@ namespace ${cxxNamespace} {
 
   ${variant.getCode('c++')} J${kotlinName}::toCpp() {
     ${indent(cppGetIfs.join(' else '), '    ')}
-    throw std::runtime_error("Variant is unknown Kotlin instance!");
+    throw std::invalid_argument("Variant is unknown Kotlin instance!");
   }
 
 } // namespace ${cxxNamespace}

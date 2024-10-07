@@ -34,6 +34,7 @@ struct JSIConverter<std::future<TResult>> final {
   static inline std::future<TResult> fromJSI(jsi::Runtime&, const jsi::Value&) {
     throw std::runtime_error("Promise cannot be converted to a native type - it needs to be awaited first!");
   }
+
   static inline jsi::Value toJSI(jsi::Runtime& runtime, std::future<TResult>&& arg) {
     auto sharedFuture = std::make_shared<std::future<TResult>>(std::move(arg));
     std::shared_ptr<Dispatcher> strongDispatcher = Dispatcher::getRuntimeGlobalDispatcher(runtime);

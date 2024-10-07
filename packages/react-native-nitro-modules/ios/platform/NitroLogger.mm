@@ -22,7 +22,7 @@ const char* levelToString(LogLevel level) {
     case LogLevel::Error:
       return "ERROR";
     default:
-      throw std::runtime_error("Invalid LogLevel!");
+      throw std::invalid_argument("Invalid LogLevel!");
   }
 }
 

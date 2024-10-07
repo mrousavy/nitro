@@ -57,9 +57,12 @@ RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(install) {
     // 5. Install Nitro
     nitro::install(*runtime, dispatcher);
     return nil;
-  } catch (std::runtime_error& error) {
+  } catch (std::exception& error) {
     // ?. Any C++ error occurred (probably in nitro::install()?)
     return [NSString stringWithCString:error.what() encoding:kCFStringEncodingUTF8];
+  } catch (...) {
+    // ?. Any non-std error occured (probably in ObjC code)
+    return @"Unknown non-std error occurred while installing Nitro!";
   }
 }
 

@@ -29,8 +29,8 @@ struct JSIConverter<std::tuple<Types...>> final {
     jsi::Array array = object.asArray(runtime);
     if (array.size(runtime) != sizeof...(Types)) [[unlikely]] {
       std::string types = TypeInfo::getFriendlyTypenames<Types...>();
-      throw std::runtime_error("The given JS Array has " + std::to_string(array.size(runtime)) + " items, but std::tuple<" + types +
-                               "> expects " + std::to_string(sizeof...(Types)) + " items.");
+      throw std::length_error("The given JS Array has " + std::to_string(array.size(runtime)) + " items, but std::tuple<" + types +
+                              "> expects " + std::to_string(sizeof...(Types)) + " items.");
     }
 
     return copyArrayItemsToTuple(runtime, array, std::index_sequence_for<Types...>{});
