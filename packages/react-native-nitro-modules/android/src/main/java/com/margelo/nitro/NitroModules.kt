@@ -5,10 +5,13 @@ import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactMethod
+import com.facebook.react.common.annotations.FrameworkAPI
+import com.facebook.react.turbomodule.core.CallInvokerHolderImpl
 import com.facebook.react.turbomodule.core.interfaces.CallInvokerHolder
 
 @DoNotStrip
 @Keep
+@OptIn(FrameworkAPI::class)
 @Suppress("KotlinJniMissingFunction")
 class NitroModules internal constructor(val context: ReactApplicationContext) : NitroModulesSpec(context) {
     private val mHybridData: HybridData
@@ -30,7 +33,7 @@ class NitroModules internal constructor(val context: ReactApplicationContext) : 
                 ?: return "ReactApplicationContext.javaScriptContextHolder is null!"
 
             // 2. Get CallInvokerHolder
-            val callInvokerHolder = context.jsCallInvokerHolder
+            val callInvokerHolder = context.jsCallInvokerHolder as? CallInvokerHolderImpl
                 ?: return "ReactApplicationContext.jsCallInvokerHolder is null!"
 
             // 3. Install Nitro
@@ -44,7 +47,7 @@ class NitroModules internal constructor(val context: ReactApplicationContext) : 
     }
 
     private external fun initHybrid(): HybridData
-    private external fun install(jsRuntimePointer: Long, callInvokerHolder: CallInvokerHolder)
+    private external fun install(jsRuntimePointer: Long, callInvokerHolder: CallInvokerHolderImpl)
 
     companion object {
         /**

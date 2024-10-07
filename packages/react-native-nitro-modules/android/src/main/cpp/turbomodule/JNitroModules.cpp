@@ -8,14 +8,14 @@
 
 namespace margelo::nitro {
 
-JNitroModules::JNitroModules() {}
+JNitroModules::JNitroModules() = default;
 
-jni::local_ref<JNitroModules::jhybriddata> JNitroModules::initHybrid(jni::alias_ref<JNitroModules::jhybridobject> javaThis) {
+jni::local_ref<JNitroModules::jhybriddata> JNitroModules::initHybrid(jni::alias_ref<JNitroModules::jhybridobject>) {
   return makeCxxInstance();
 }
 
 void JNitroModules::install(jlong runtimePointer, jni::alias_ref<react::CallInvokerHolder::javaobject> callInvokerHolder) {
-  jsi::Runtime* runtime = reinterpret_cast<jsi::Runtime*>(runtimePointer);
+  auto runtime = reinterpret_cast<jsi::Runtime*>(runtimePointer);
   if (runtime == nullptr) {
     throw std::runtime_error("jsi::Runtime was null!");
   }
