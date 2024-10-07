@@ -32,20 +32,6 @@ function getFrameworkType(): 'react-native' | 'expo' | 'expo-go' {
 
 export class ModuleNotFoundError extends Error {
   constructor(cause?: unknown) {
-    // TurboModule not found, something went wrong!
-    if (global.__turboModuleProxy == null) {
-      // TurboModules are not available/new arch is not enabled.
-      const message =
-        'Failed to get NitroModules: NitroModules require the new architecture to be enabled!'
-      const suggestions: string[] = []
-      suggestions.push(
-        'Enable the new architecture in your app to use NitroModules. (See https://github.com/reactwg/react-native-new-architecture/blob/main/docs/enable-apps.md)'
-      )
-      const error = messageWithSuggestions(message, suggestions)
-      super(error, { cause: cause })
-      return
-    }
-
     const framework = getFrameworkType()
     if (framework === 'expo-go') {
       super(
@@ -55,17 +41,15 @@ export class ModuleNotFoundError extends Error {
     }
 
     const message =
-      'Failed to get NitroModules: The native "NitroModules" TurboModule could not be found.'
+      'Failed to get NitroModules: The native "NitroModules" Turbo/Native-Module could not be found.'
     const suggestions: string[] = []
     suggestions.push(
       'Make sure react-native-nitro-modules/NitroModules is correctly autolinked (run `npx react-native config` to verify)'
     )
     suggestions.push(
-      'Make sure you enabled the new architecture (TurboModules) and CodeGen properly generated the "NativeNitroModules"/NitroModulesCxx specs. See https://github.com/reactwg/react-native-new-architecture/blob/main/docs/enable-apps.md'
+      'Make sure you enabled the new architecture (TurboModules) and CodeGen properly generated the "NativeNitroModules"/NitroModules specs. See https://github.com/reactwg/react-native-new-architecture/blob/main/docs/enable-apps.md'
     )
-    suggestions.push(
-      'Make sure you are using react-native 0.74.0 or higher, because NitroModules are built with C++ TurboModules.'
-    )
+    suggestions.push('Make sure you are using react-native 0.74.0 or higher.')
     suggestions.push('Make sure you rebuilt the app.')
     if (framework === 'expo') {
       suggestions.push('Make sure you ran `expo prebuild`.')

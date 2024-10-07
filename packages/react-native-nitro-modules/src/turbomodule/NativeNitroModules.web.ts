@@ -5,3 +5,7 @@ export function getNativeNitroModules(): never {
     `Native NitroModules are not available on ${Platform.OS}! Make sure you're not calling getNativeNitroModules() in a ${Platform.OS} (.${Platform.OS}.ts) environment.`
   )
 }
+
+export function isRuntimeAlive(): boolean {
+  return false
+}
