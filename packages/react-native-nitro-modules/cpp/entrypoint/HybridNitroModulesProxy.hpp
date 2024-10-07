@@ -7,8 +7,8 @@
 
 #pragma once
 
-#include "HybridObject.hpp"
 #include "BoxedHybridObject.hpp"
+#include "HybridObject.hpp"
 #include <memory>
 #include <string>
 
@@ -22,25 +22,25 @@ namespace margelo::nitro {
  * 3. Pass the object from `.toObject()` it to JS (either install in global, or return somehow)
  * 4. From JS, you can access methods on this HybridObject to create all other HybridObjects.
  */
-class HybridNitroModulesProxy: public HybridObject {
+class HybridNitroModulesProxy : public HybridObject {
 public:
-  explicit HybridNitroModulesProxy(): HybridObject(TAG) { }
-  
+  explicit HybridNitroModulesProxy() : HybridObject(TAG) {}
+
 public:
   void loadHybridMethods() override;
-  
+
 public:
   // Hybrid Object Registry
   std::shared_ptr<HybridObject> createHybridObject(const std::string& name);
   bool hasHybridObject(const std::string& name);
   std::vector<std::string> getAllHybridObjectNames();
-  
+
   // Helpers
   std::shared_ptr<BoxedHybridObject> box(const std::shared_ptr<HybridObject>& hybridObject);
-  
+
   // Build Info
   std::string getBuildType();
-  
+
 private:
   static constexpr auto TAG = "NitroModulesProxy";
 };

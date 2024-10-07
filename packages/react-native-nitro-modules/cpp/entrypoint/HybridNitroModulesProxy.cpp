@@ -13,14 +13,14 @@ namespace margelo::nitro {
 
 void HybridNitroModulesProxy::loadHybridMethods() {
   HybridObject::loadHybridMethods();
-  
+
   registerHybrids(this, [](Prototype& prototype) {
     prototype.registerHybridMethod("createHybridObject", &HybridNitroModulesProxy::createHybridObject);
     prototype.registerHybridMethod("hasHybridObject", &HybridNitroModulesProxy::hasHybridObject);
     prototype.registerHybridMethod("getAllHybridObjectNames", &HybridNitroModulesProxy::getAllHybridObjectNames);
-    
+
     prototype.registerHybridMethod("box", &HybridNitroModulesProxy::box);
-    
+
     prototype.registerHybridGetter("buildType", &HybridNitroModulesProxy::getBuildType);
   });
 }
@@ -40,15 +40,15 @@ std::vector<std::string> HybridNitroModulesProxy::getAllHybridObjectNames() {
 
 // Helpers
 std::shared_ptr<BoxedHybridObject> HybridNitroModulesProxy::box(const std::shared_ptr<HybridObject>& hybridObject) {
-    return std::make_shared<BoxedHybridObject>(hybridObject);
+  return std::make_shared<BoxedHybridObject>(hybridObject);
 }
 
 // Build Info
 std::string HybridNitroModulesProxy::getBuildType() {
 #ifdef NITRO_DEBUG
-    return "debug";
+  return "debug";
 #else
-    return "release";
+  return "release";
 #endif
 }
 

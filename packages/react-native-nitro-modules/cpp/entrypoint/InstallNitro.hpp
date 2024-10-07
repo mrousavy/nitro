@@ -7,9 +7,9 @@
 
 #pragma once
 
-#include <memory>
-#include <jsi/jsi.h>
 #include "Dispatcher.hpp"
+#include <jsi/jsi.h>
+#include <memory>
 
 namespace margelo::nitro {
 
