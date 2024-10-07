@@ -43,9 +43,8 @@ jobs:
       - name: Install npm dependencies (bun)
         run: bun install --frozen-lockfile
 
-      - name: Restore buildcache
-        uses: mikehardy/buildcache-action@v2
-        continue-on-error: true
+      - name: Restore ccache
+        uses: hendrikmuhs/ccache-action@v1.2
 
       - name: Setup Ruby (bundle)
         uses: ruby/setup-ruby@v1
