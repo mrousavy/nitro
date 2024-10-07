@@ -22,6 +22,7 @@ add_library(NitroModules SHARED
 include_directories(
   # Shared C++ includes
   ../cpp/core
+  ../cpp/entrypoint
   ../cpp/jsi
   ../cpp/platform
   ../cpp/registry
@@ -34,6 +35,7 @@ include_directories(
   # Android-specific C++ includes
   src/main/cpp/core
   src/main/cpp/registry
+  src/main/cpp/turbomodule
   src/main/cpp/platform
   src/main/cpp/utils
 )
@@ -51,4 +53,5 @@ target_link_libraries(
         fbjni::fbjni                              # <-- Facebook C++ JNI helpers
         ReactAndroid::jsi                         # <-- RN: JSI
         ReactAndroid::react_nativemodule_core     # <-- RN: TurboModules Core
+        ReactAndroid::turbomodulejsijni           # <-- RN: TurboModules utils (e.g. CallInvokerHolder)
 )

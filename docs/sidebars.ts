@@ -43,6 +43,7 @@ const sidebars: SidebarsConfig = {
     'performance-tips',
     'view-components',
     'worklets',
+    'entry-point',
     'comparison',
     'for-users',
   ],
