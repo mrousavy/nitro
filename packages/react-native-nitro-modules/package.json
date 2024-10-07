@@ -147,5 +147,13 @@
         }
       ]
     ]
+  },
+  "codegenConfig": {
+    "name": "react-native-nitro-modules",
+    "type": "modules",
+    "jsSrcsDir": "./src",
+    "android": {
+      "javaPackageName": "com.margelo.nitro"
+    }
   }
 }
