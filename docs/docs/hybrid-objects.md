@@ -75,7 +75,7 @@ graph TD;
 
 ## Base Methods
 
-Every Hybrid Object has base methods and properties:
+Every Hybrid Object has base methods and properties, like `name`, `toString()` and `equals(..)`:
 
 ```ts
 const math = NitroModules.createHybridObject<Math>("Math")
@@ -88,7 +88,7 @@ console.log(math.equals(anotherMath)) // true
 
 ### `dispose()`
 
-Every Hybrid Object has a `dispose()` method.
+Additionally, every Hybrid Object has a `dispose()` method.
 Usually, you should not need to manually dispose Hybrid Objects as the JS garbage collector will delete any unused objects anyways.
 Also, most Hybrid Objects in Nitro are just statically exported singletons, in which case they should never be deleted throughout the app's lifetime.
 
