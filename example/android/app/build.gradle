@@ -75,7 +75,7 @@ def jscFlavor = 'org.webkit:android-jsc:+'
 def isNewArchitectureEnabled() {
   return rootProject.hasProperty("newArchEnabled") && rootProject.getProperty("newArchEnabled") == "true"
 }
-logger.info("Building with newArchEnabled = ${isNewArchitectureEnabled()}...")
+logger.warn("Building with newArchEnabled = ${isNewArchitectureEnabled()}...")
 
 android {
     ndkVersion rootProject.ext.ndkVersion

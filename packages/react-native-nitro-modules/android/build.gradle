@@ -33,7 +33,7 @@ def getExtOrIntegerDefault(name) {
   return rootProject.ext.has(name) ? rootProject.ext.get(name) : (project.properties["Nitro_" + name]).toInteger()
 }
 
-logger.info("[NitroModules] Your app is boosted by nitro modules! 🔥")
+logger.warn("[NitroModules] Your app is boosted by nitro modules! 🔥")
 
 android {
   namespace "com.margelo.nitro"
