@@ -61,17 +61,6 @@ interface ImageFactory extends HybridObject {
 }
 ```
 
-Each instance of a Hybrid Object reflects it's actual native memory size, so the JavaScript runtime can garbage-collect unused objects more efficiently.
-Additionally, Hybrid Objects have proper JavaScript prototypes, which are shared between all instances of the same type:
-
-<div align="center">
-```mermaid
-graph TD;
-  obj["{} (0 props)"]-->HybridObject["HybridObject (4 props)"]-->HybridMathSpec["HybridMathSpec (2 props)"]
-  HybridMathSpec-->Math["const math"]
-```
-</div>
-
 ## Base Methods
 
 Every Hybrid Object has base methods and properties:
@@ -99,6 +88,63 @@ const onFrameListener = (frame: Frame) => {
   doSomeProcessing(frame)
   frame.dispose()
 }
+```
+
+## Inheritance
+
+As the name suggests, Hybrid Objects are object-oriented, meaning they have full support for inheritance and abstraction.
+A Hybrid Object can either inherit from other Hybrid Objects, or satisfy a common interface.
+
+### Inherit from other Hybrid Objects
+
+Each Hybrid Object has a proper JavaScript prototype chain, created automatically and lazily.
+When a Hybrid Object inherits from another Hybrid Object, it extends the prototype chain:
+
+<div className="side-by-side-container">
+  <div className="side-by-side-block" style={{ flex: 2 }}>
+  <div>
+  ```ts
+  interface Media extends HybridObject {
+    readonly width: number
+    readonly height: number
+    saveToFile(): Promise<void>
+  }
+
+  type ImageFormat = 'jpg' | 'png'
+  interface Image extends HybridObject, Media {
+    readonly format: ImageFormat
+  }
+
+  const image1 = NitroModules.createHybridObject<Image>('Image')
+  const image2 = NitroModules.createHybridObject<Image>('Image')
+  ```
+  </div>
+  </div>
+
+  <div align="center" className="side-by-side-block">
+  ```mermaid
+  graph TD;
+    HybridObject["HybridObject (4 props)"]-->HybridMediaSpec["Media (3 props)"]
+    HybridMediaSpec-->HybridImageSpec["Image (1 prop)"]
+    HybridImageSpec-->Image1["const image1"]
+    HybridImageSpec-->Image2["const image2"]
+  ```
+  </div>
+</div>
+
+### Inherit from a common interface
+
+With Nitrogen, you can define a common TypeScript interface that multiple Hybrid Objects inherit from.
+This non-HybridObject interface (`Media`) will not be a separate type on the native side, but all Hybrid Objects that extend from it will satisfy the TypeScript type:
+
+```ts
+interface Media {
+  readonly width: number
+  readonly height: number
+}
+
+interface Image extends HybridObject, Media {}
+interface Video extends HybridObject, Media {}
 ```
 
 ## Implementation
