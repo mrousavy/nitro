@@ -6,6 +6,8 @@
 #include "CallInvokerDispatcher.hpp"
 #include "InstallNitro.hpp"
 
+#include <exception>
+
 namespace margelo::nitro {
 
 JNitroModules::JNitroModules() = default;
@@ -17,15 +19,15 @@ jni::local_ref<JNitroModules::jhybriddata> JNitroModules::initHybrid(jni::alias_
 void JNitroModules::install(jlong runtimePointer, jni::alias_ref<react::CallInvokerHolder::javaobject> callInvokerHolder) {
   auto runtime = reinterpret_cast<jsi::Runtime*>(runtimePointer);
   if (runtime == nullptr) {
-    throw std::runtime_error("jsi::Runtime was null!");
+    throw std::invalid_argument("jsi::Runtime was null!");
   }
 
   if (callInvokerHolder == nullptr) {
-    throw std::runtime_error("CallInvokerHolder was null!");
+    throw std::invalid_argument("CallInvokerHolder was null!");
   }
   auto callInvoker = callInvokerHolder->cthis()->getCallInvoker();
   if (callInvoker == nullptr) {
-    throw std::runtime_error("CallInvoker was null!");
+    throw std::invalid_argument("CallInvoker was null!");
   }
 
   auto dispatcher = std::make_shared<CallInvokerDispatcher>(callInvoker);

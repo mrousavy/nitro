@@ -121,7 +121,7 @@ switch (${cppValueName}) {
   ${indent(cases.join('\n'), '  ')}
   default:
     std::string stringValue = std::to_string(static_cast<int>(${cppValueName}));
-    throw std::runtime_error("Invalid enum value (" + stringValue + "!");
+    throw std::invalid_argument("Invalid enum value (" + stringValue + "!");
 }
   `.trim()
 }
