@@ -9,8 +9,8 @@
 
 #ifdef RCT_NEW_ARCH_ENABLED
 
-#import "InstallNitro.hpp"
 #import "CallInvokerDispatcher.hpp"
+#import "InstallNitro.hpp"
 
 #import <ReactCommon/CallInvoker.h>
 #import <ReactCommon/RCTTurboModuleWithJSIBindings.h>
@@ -32,22 +32,22 @@ using namespace margelo;
 }
 RCT_EXPORT_MODULE(NitroModules)
 
-- (void)installJSIBindingsWithRuntime:(jsi::Runtime &)runtime {
+- (void)installJSIBindingsWithRuntime:(jsi::Runtime&)runtime {
   // 1. Get CallInvoker we cached statically
   auto callInvoker = _callInvoker.lock();
   if (callInvoker == nullptr) {
     throw std::runtime_error("Cannot install global.NitroModulesProxy - CallInvoker was null!");
   }
-    
+
   // 2. Wrap CallInvoker as Dispatcher
   auto dispatcher = std::make_shared<nitro::CallInvokerDispatcher>(callInvoker);
-  
+
   // 3. Install Nitro
   nitro::install(runtime, dispatcher);
   _didInstall = true;
 }
 
-- (NSString*) install {
+- (NSString*)install {
   if (_didInstall) {
     // installJSIBindingsWithRuntime ran successfully.
     return nil;
