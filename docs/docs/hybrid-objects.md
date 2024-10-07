@@ -109,8 +109,10 @@ When a Hybrid Object inherits from another Hybrid Object, it extends the prototy
     readonly height: number
     saveToFile(): Promise<void>
   }
+
+  type ImageFormat = 'jpg' | 'png'
   interface Image extends HybridObject, Media {
-    readonly format: 'jpg' | 'png'
+    readonly format: ImageFormat
   }
 
   const image1 = NitroModules.createHybridObject<Image>('Image')
