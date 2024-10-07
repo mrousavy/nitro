@@ -68,7 +68,8 @@ Additionally, Hybrid Objects have proper JavaScript prototypes, which are shared
 ```mermaid
 graph TD;
   obj["{} (0 props)"]-->HybridObject["HybridObject (4 props)"]-->HybridMathSpec["HybridMathSpec (2 props)"]
-  HybridMathSpec-->Math["const math"]
+  HybridMathSpec-->Math1["const math1"]
+  HybridMathSpec-->Math2["const math2"]
 ```
 </div>
 
