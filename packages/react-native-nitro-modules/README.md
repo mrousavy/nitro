@@ -203,7 +203,7 @@ The following C++ / JS types are supported out of the box:
     <td>..any <code><a href="./src/HybridObject.ts">HybridObject</a></code></td>
     <td><code>std::shared_ptr&lt;<a href="./cpp/core/HybridObject.hpp">HybridObject</a>&gt;</code></td>
     <td><code><a href="./ios/core/HybridObjectSpec.swift">HybridObjectSpec</a></code></td>
-    <td><code><a href="./android/core/HybridObject.kt">HybridObject</a></code></td>
+    <td><code><a href="./android/src/main/java/com/margelo/nitro/core/HybridObject.kt">HybridObject</a></code></td>
   </tr>
   <tr>
     <td>..any <code>interface</code></td>

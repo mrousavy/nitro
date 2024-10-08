@@ -141,7 +141,7 @@ These are all the types Nitro supports out of the box:
     <td>..any <code><a href="https://github.com/mrousavy/nitro/blob/main/packages/react-native-nitro-modules/src/HybridObject.ts">HybridObject</a></code></td>
     <td><code>std::shared_ptr&lt;<a href="https://github.com/mrousavy/nitro/blob/main/packages/react-native-nitro-modules/cpp/core/HybridObject.hpp">HybridObject</a>&gt;</code></td>
     <td><code><a href="https://github.com/mrousavy/nitro/blob/main/packages/react-native-nitro-modules/ios/core/HybridObjectSpec.swift">HybridObjectSpec</a></code></td>
-    <td><code><a href="https://github.com/mrousavy/nitro/blob/main/packages/react-native-nitro-modules/android/core/HybridObject.kt">HybridObject</a></code></td>
+    <td><code><a href="https://github.com/mrousavy/nitro/blob/main/packages/react-native-nitro-modules/android/src/main/java/com/margelo/nitro/core/HybridObject.kt">HybridObject</a></code></td>
   </tr>
   <tr>
     <td>..any <code>interface</code></td>
