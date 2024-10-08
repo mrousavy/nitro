@@ -41,5 +41,5 @@ An untyped map represents a JSON-like structure with a value that can either be 
 
 :::tip
 While untyped maps are implemented efficiently, Nitro cannot sufficiently optimize the object as keys and value-types are not known in advance.
-If possible, **avoid untyped maps** and use [strongly typed objects](#custom-types-any-t) instead.
+If possible, **avoid untyped maps** and use [strongly typed objects](custom-types) instead.
 :::
