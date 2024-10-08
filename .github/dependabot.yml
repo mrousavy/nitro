@@ -20,6 +20,13 @@ updates:
       - "kotlin"
   - package-ecosystem: "npm"
     directories:
+      - "/docs/"
+    schedule:
+      interval: "daily"
+    labels:
+      - "dependencies"
+  - package-ecosystem: "npm"
+    directories:
       - "/packages/react-native-nitro-modules/"
       - "/packages/react-native-nitro-image/"
       - "/example/"
