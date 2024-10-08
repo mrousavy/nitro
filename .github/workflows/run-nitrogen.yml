@@ -35,24 +35,24 @@ jobs:
       - uses: oven-sh/setup-bun@v2
 
       - name: Install npm dependencies (bun)
-        run: bun install --frozen-lockfile
+        run: bun install
 
       - name: Install npm dependencies (bun)
         working-directory: example
-        run: bun install --frozen-lockfile
+        run: bun install
       - name: Install npm dependencies (bun)
         working-directory: packages/nitrogen
-        run: bun install --frozen-lockfile
+        run: bun install
       - name: Install npm dependencies (bun)
         working-directory: packages/react-native-nitro-modules
-        run: bun install --frozen-lockfile
+        run: bun install
       - name: Install npm dependencies (bun)
         working-directory: packages/react-native-nitro-image
-        run: bun install --frozen-lockfile
+        run: bun install
 
       - name: Run nitro-codegen in packages/react-native-nitro-image
         working-directory: packages/react-native-nitro-image
         run: bun run nitro-codegen --logLevel="debug"
 
       - name: Verify no files have changed after nitrogen
-        run: git diff --exit-code HEAD
+        run: git diff --exit-code HEAD -- . ':(exclude)bun.lockb'

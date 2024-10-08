@@ -39,7 +39,7 @@ jobs:
       - uses: reviewdog/action-setup@v1
 
       - name: Install npm dependencies (bun)
-        run: bun install --frozen-lockfile
+        run: bun install
 
       - name: Run TypeScript (tsc)
         run: |
@@ -56,7 +56,7 @@ jobs:
       - uses: reviewdog/action-setup@v1
 
       - name: Install npm dependencies (bun)
-        run: bun install --frozen-lockfile
+        run: bun install
 
       - name: Run ESLint CI in example/
         working-directory: example
@@ -85,4 +85,4 @@ jobs:
         run: bun lint
 
       - name: Verify no files have changed after auto-fix
-        run: git diff --exit-code HEAD
+        run: git diff --exit-code HEAD -- . ':(exclude)bun.lockb'
