@@ -17,7 +17,7 @@ const config: Config = {
   // GitHub pages deployment config.
   organizationName: 'mrousavy',
   projectName: 'nitro',
-  trailingSlash: false,
+  trailingSlash: undefined,
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
 
