@@ -30,7 +30,7 @@
     "@react-native/typescript-config": "^0.75.2",
     "@types/deep-equal": "^1.0.4",
     "babel-plugin-module-resolver": "^5.0.2",
-    "del-cli": "^5.1.0",
+    "del-cli": "^6.0.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint": "^8.57.0",
     "eslint-plugin-prettier": "^5.2.1",
