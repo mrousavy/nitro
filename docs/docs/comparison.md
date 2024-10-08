@@ -7,7 +7,7 @@ Nitro is not the only one of it's kind. There's multiple ways to build native mo
 
 - Nitro Modules
 - [Turbo Modules](#turbo-modules)
-- [Legacy Native Modules](#turbo-modules)
+- [Legacy Native Modules](#legacy-native-modules)
 - [Expo Modules](#expo-modules)
 
 ## Benchmarks
