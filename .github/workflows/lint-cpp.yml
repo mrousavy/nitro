@@ -38,7 +38,7 @@ jobs:
       - uses: oven-sh/setup-bun@v2
 
       - name: Install npm dependencies (bun)
-        run: bun install --frozen-lockfile
+        run: bun install
 
       - name: Run clang-format style check
         uses: jidicula/clang-format-action@v4.13.0
