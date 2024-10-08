@@ -114,6 +114,10 @@ const config: Config = {
       contextualSearch: true,
       searchPagePath: false,
       insights: false,
+      replaceSearchResultPathname: {
+        from: '/nitro/',
+        to: '/'
+      }
     },
     sitemap: {
       lastmod: 'date',
