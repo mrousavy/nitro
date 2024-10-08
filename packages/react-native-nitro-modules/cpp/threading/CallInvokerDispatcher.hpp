@@ -5,6 +5,9 @@
 #pragma once
 
 #include "Dispatcher.hpp"
+
+// This is react-native specific
+#if __has_include(<ReactCommon/CallInvoker.h>)
 #include <ReactCommon/CallInvoker.h>
 
 namespace margelo::nitro {
@@ -31,3 +34,5 @@ private:
 };
 
 } // namespace margelo::nitro
+
+#endif
