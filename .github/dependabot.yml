@@ -4,7 +4,7 @@ updates:
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "weekly"
+      interval: "daily"
     labels:
       - "dependencies"
   - package-ecosystem: "gradle"
@@ -13,7 +13,7 @@ updates:
       - "/packages/react-native-nitro-image/android/"
       - "/example/android/"
     schedule:
-      interval: "weekly"
+      interval: "daily"
     labels:
       - "nitro-core"
       - "dependencies"
@@ -31,7 +31,7 @@ updates:
       - "/packages/react-native-nitro-image/"
       - "/example/"
     schedule:
-      interval: "weekly"
+      interval: "daily"
     labels:
       - "nitro-core"
       - "dependencies"
@@ -40,7 +40,7 @@ updates:
     directories:
       - "/packages/nitrogen/"
     schedule:
-      interval: "weekly"
+      interval: "daily"
     labels:
       - "nitrogen"
       - "dependencies"
