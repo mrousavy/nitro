@@ -179,7 +179,7 @@ const config: Config = {
       {
         name: 'keywords',
         content:
-          'react, native, nitro, modules, react-native, native, turbo, expo, documentation, coding, docs, guides, marc, rousavy, mrousavy',
+          'react, native, nitro, modules, react-native, native, turbo, expo, documentation, fast, hybrid, hybrid-object, objects, nitrogen, coding, docs, guides, marc, rousavy, mrousavy',
       },
       {
         name: 'og:title',
