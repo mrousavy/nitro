@@ -39,7 +39,7 @@ jobs:
       - uses: oven-sh/setup-bun@v2
 
       - name: Install npm dependencies (bun)
-        run: bun install --frozen-lockfile
+        run: bun install
 
       - name: Setup JDK 17
         uses: actions/setup-java@v4
@@ -73,7 +73,7 @@ jobs:
       - uses: oven-sh/setup-bun@v2
 
       - name: Install npm dependencies (bun)
-        run: bun install --frozen-lockfile
+        run: bun install
 
       - name: Disable new architecture in gradle.properties
         run: sed -i "s/newArchEnabled=true/newArchEnabled=false/g" example/android/gradle.properties

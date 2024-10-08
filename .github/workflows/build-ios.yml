@@ -41,7 +41,7 @@ jobs:
       - uses: oven-sh/setup-bun@v2
 
       - name: Install npm dependencies (bun)
-        run: bun install --frozen-lockfile
+        run: bun install
 
       - name: Restore ccache
         uses: hendrikmuhs/ccache-action@v1.2
@@ -87,7 +87,7 @@ jobs:
       - uses: oven-sh/setup-bun@v2
 
       - name: Install npm dependencies (bun)
-        run: bun install --frozen-lockfile
+        run: bun install
 
       - name: Disable new architecture in Podfile
         run: sed -i "" "s/ENV\['RCT_NEW_ARCH_ENABLED'\] = '1'/ENV['RCT_NEW_ARCH_ENABLED'] = '0'/g" example/ios/Podfile
