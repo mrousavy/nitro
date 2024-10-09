@@ -18,7 +18,7 @@ To actually use Nitro, you need to create [Hybrid Objects](hybrid-objects) - eit
 
 ## 3. Register Hybrid Objects
 
-Each Hybrid Object you want to initialize from JS has to be registered in Nitro - either by autolinking them with Nitrogen (see [Configuration (Autolinking)](configuration-nitro-json)), or by manually registering the constructors in the [`HybridObjectRegistry`](https://github.com/mrousavy/nitro/blob/main/packages/react-native-nitro-modules/cpp/registry/HybridObjectRegistry.hpp).
+Each Hybrid Object you want to initialize from JS has to be registered in Nitro - either by autolinking them with Nitrogen (see [Configuration (Autolinking)](configuration-nitro-json#autolinking)), or by manually registering the constructors in the [`HybridObjectRegistry`](https://github.com/mrousavy/nitro/blob/main/packages/react-native-nitro-modules/cpp/registry/HybridObjectRegistry.hpp).
 
 ## 4. Use your Hybrid Objects in JS
 
