@@ -6,7 +6,7 @@ const config: Config = {
   title: 'Nitro Modules',
   tagline:
     'A framework to build mindblowingly fast native modules with type-safe statically compiled JS bindings.',
-  favicon: 'img/favicon.ico',
+  favicon: '/img/favicon.ico',
 
   // Set the production url of your site here
   url: 'https://nitro.margelo.com',
