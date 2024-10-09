@@ -18,7 +18,7 @@ To actually use Nitro, you need to create [Hybrid Objects](hybrid-objects) - eit
 
 ## 3. Register Hybrid Objects
 
-Each Hybrid Object you want to initialize from JS has to be registered in Nitro - either by autolinking them with Nitrogen (see [Configuration (Autolinking)](configuration-nitro-json)), or by manually registering the constructors in the [`HybridObjectRegistry`](https://github.com/mrousavy/nitro/blob/main/packages/react-native-nitro-modules/cpp/registry/HybridObjectRegistry.hpp).
+Each Hybrid Object you want to initialize from JS has to be registered in Nitro - either by autolinking them with Nitrogen (see [Configuration (Autolinking)](configuration-nitro-json#autolinking)), or by manually registering the constructors in the [`HybridObjectRegistry`](https://github.com/mrousavy/nitro/blob/main/packages/react-native-nitro-modules/cpp/registry/HybridObjectRegistry.hpp).
 
 ## 4. Use your Hybrid Objects in JS
 
@@ -32,3 +32,16 @@ interface Math extends HybridObject {
 const math = NitroModules.createHybridObject<Math>("Math")
 const value = math.add(5, 7) // --> 12
 ```
+
+## 5. Run it
+
+To test the library you just created, you now need to set up an example app for it.
+There's multiple different ways to set up a react-native app nowadays, either via Expo, RN CLI, or bare brownfield iOS/Android apps.
+
+For example, to create a new Expo app, run `create-expo-app`:
+
+```sh
+npx create-expo-app@latest
+```
+
+Then add the Nitro Module you created in step 1 as a local library (aka _linking it_), and run it.
