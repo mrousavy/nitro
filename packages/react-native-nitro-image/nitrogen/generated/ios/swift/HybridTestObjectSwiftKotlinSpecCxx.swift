@@ -219,6 +219,17 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
       }()
     }
   }
+  
+  public var base: HybridBaseSpecCxx? {
+    @inline(__always)
+    get {
+      return self.implementation.base?.createCxxBridge()
+    }
+    @inline(__always)
+    set {
+      self.implementation.base = newValue?.getHybridBaseSpec()
+    }
+  }
 
   // Methods
   @inline(__always)

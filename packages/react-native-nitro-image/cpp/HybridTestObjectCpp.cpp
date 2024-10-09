@@ -93,6 +93,14 @@ std::shared_ptr<HybridTestObjectCppSpec> HybridTestObjectCpp::getThisObject() {
   return shared<HybridTestObjectCppSpec>();
 }
 
+void HybridTestObjectCpp::setBase(const std::optional<std::shared_ptr<HybridBaseSpec>> &base) {
+  _base = base;
+}
+
+std::optional<std::shared_ptr<HybridBaseSpec>> HybridTestObjectCpp::getBase() {
+  return _base;
+}
+
 // Methods
 double HybridTestObjectCpp::addNumbers(double a, double b) {
   return a + b;

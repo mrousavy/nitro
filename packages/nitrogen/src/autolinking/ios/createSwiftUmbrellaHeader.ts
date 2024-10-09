@@ -44,9 +44,6 @@ ${forwardDeclarations.sort().join('\n')}
 // Include C++ defined types
 ${includes.sort().join('\n')}
 
-// C++ helpers for Swift
-#include "${moduleName}-Swift-Cxx-Bridge.hpp"
-
 // Common C++ types used in Swift
 #include <NitroModules/ArrayBufferHolder.hpp>
 #include <NitroModules/AnyMapHolder.hpp>
@@ -55,6 +52,9 @@ ${includes.sort().join('\n')}
 
 // Forward declarations of Swift defined types
 ${swiftForwardDeclares.sort().join('\n')}
+
+// C++ helpers for Swift
+#include "${moduleName}-Swift-Cxx-Bridge.hpp"
 
 // Include Swift defined types
 #if __has_include("${moduleName}-Swift.h")

@@ -58,6 +58,8 @@ namespace margelo::nitro::image {
     void setOptionalString(const std::optional<std::string>& optionalString) override;
     std::variant<std::string, double> getSomeVariant() override;
     void setSomeVariant(const std::variant<std::string, double>& someVariant) override;
+    std::optional<std::shared_ptr<margelo::nitro::image::HybridBaseSpec>> getBase() override;
+    void setBase(const std::optional<std::shared_ptr<margelo::nitro::image::HybridBaseSpec>>& base) override;
 
   public:
     // Methods

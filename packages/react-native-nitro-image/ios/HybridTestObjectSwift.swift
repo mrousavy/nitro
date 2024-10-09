@@ -9,6 +9,8 @@ import Foundation
 import NitroModules
 
 class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
+  var base: HybridBaseSpec? = nil
+  
   func createChild() throws -> any HybridChildSpec {
     return HybridChild()
   }

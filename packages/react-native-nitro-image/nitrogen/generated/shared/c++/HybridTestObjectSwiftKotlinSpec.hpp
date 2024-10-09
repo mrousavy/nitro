@@ -15,6 +15,8 @@
 
 // Forward declaration of `HybridTestObjectSwiftKotlinSpec` to properly resolve imports.
 namespace margelo::nitro::image { class HybridTestObjectSwiftKotlinSpec; }
+// Forward declaration of `HybridBaseSpec` to properly resolve imports.
+namespace margelo::nitro::image { class HybridBaseSpec; }
 // Forward declaration of `AnyMap` to properly resolve imports.
 namespace NitroModules { class AnyMap; }
 // Forward declaration of `Powertrain` to properly resolve imports.
@@ -27,14 +29,13 @@ namespace margelo::nitro::image { struct Person; }
 namespace NitroModules { class ArrayBuffer; }
 // Forward declaration of `HybridChildSpec` to properly resolve imports.
 namespace margelo::nitro::image { class HybridChildSpec; }
-// Forward declaration of `HybridBaseSpec` to properly resolve imports.
-namespace margelo::nitro::image { class HybridBaseSpec; }
 
 #include <memory>
 #include "HybridTestObjectSwiftKotlinSpec.hpp"
 #include <string>
 #include <optional>
 #include <variant>
+#include "HybridBaseSpec.hpp"
 #include <NitroModules/AnyMap.hpp>
 #include "Powertrain.hpp"
 #include <future>
@@ -43,7 +44,6 @@ namespace margelo::nitro::image { class HybridBaseSpec; }
 #include "Person.hpp"
 #include <NitroModules/ArrayBuffer.hpp>
 #include "HybridChildSpec.hpp"
-#include "HybridBaseSpec.hpp"
 
 namespace margelo::nitro::image {
 
@@ -89,6 +89,8 @@ namespace margelo::nitro::image {
       virtual void setOptionalString(const std::optional<std::string>& optionalString) = 0;
       virtual std::variant<std::string, double> getSomeVariant() = 0;
       virtual void setSomeVariant(const std::variant<std::string, double>& someVariant) = 0;
+      virtual std::optional<std::shared_ptr<margelo::nitro::image::HybridBaseSpec>> getBase() = 0;
+      virtual void setBase(const std::optional<std::shared_ptr<margelo::nitro::image::HybridBaseSpec>>& base) = 0;
 
     public:
       // Methods

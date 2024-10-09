@@ -64,9 +64,6 @@ namespace margelo::nitro::image { enum class Powertrain; }
 #include <variant>
 #include <vector>
 
-// C++ helpers for Swift
-#include "NitroImage-Swift-Cxx-Bridge.hpp"
-
 // Common C++ types used in Swift
 #include <NitroModules/ArrayBufferHolder.hpp>
 #include <NitroModules/AnyMapHolder.hpp>
@@ -86,6 +83,9 @@ namespace NitroImage { class HybridImageSpecCxx; }
 namespace NitroImage { class HybridTestObjectCppSpecCxx; }
 // Forward declaration of `HybridTestObjectSwiftKotlinSpecCxx` to properly resolve imports.
 namespace NitroImage { class HybridTestObjectSwiftKotlinSpecCxx; }
+
+// C++ helpers for Swift
+#include "NitroImage-Swift-Cxx-Bridge.hpp"
 
 // Include Swift defined types
 #if __has_include("NitroImage-Swift.h")
