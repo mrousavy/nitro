@@ -69,6 +69,14 @@ jobs:
       - name: Install Pods
         working-directory: example/ios
         run: pod install
+
+      - name: Restore Xcode build cache
+        uses: actions/cache@v4
+        with:
+          path: example/ios/build
+          key: ${{ runner.os }}-buildcache-${{ hashFiles('**/Podfile.lock', '**/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-buildcache-
       - name: Build App
         working-directory: example/ios
         run: "set -o pipefail && xcodebuild \
@@ -119,6 +127,14 @@ jobs:
       - name: Install Pods
         working-directory: example/ios
         run: pod install
+
+      - name: Restore Xcode build cache
+        uses: actions/cache@v4
+        with:
+          path: example/ios/build
+          key: ${{ runner.os }}-buildcache-${{ hashFiles('**/Podfile.lock', '**/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-buildcache-
       - name: Build App
         working-directory: example/ios
         run: "set -o pipefail && xcodebuild \
