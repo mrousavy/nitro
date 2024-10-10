@@ -392,8 +392,8 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
 ({ () -> ${actualType} in
   var __array: ${actualType} = []
   __array.reserveCapacity(${cppParameterName}.count)
-  for __i in 0...${cppParameterName}.count {
-    __array.append(${indent(wrapping.parseFromCppToSwift(`${cppParameterName}[__i]`, 'swift'), '    ')})
+  for __item in ${cppParameterName} {
+    __array.append(${indent(wrapping.parseFromCppToSwift('__item', 'swift'), '    ')})
   }
   return __array
 }())`.trim()
