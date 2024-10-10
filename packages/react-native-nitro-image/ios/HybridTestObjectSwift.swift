@@ -54,11 +54,11 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
     callback(value)
   }
 
-  func bounceStrings(array: [String]): [String] {
+  func bounceStrings(array: [String]) throws -> [String] {
     return array
   }
 
-  func bounceNumbers(array: [Double]): [Double] {
+  func bounceNumbers(array: [Double]) throws -> [Double] {
     return array
   }
 
