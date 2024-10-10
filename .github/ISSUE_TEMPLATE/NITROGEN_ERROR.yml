@@ -1,0 +1,72 @@
+name: 💅 Nitrogen error
+description: File a bug report that occurred when running nitrogen
+labels: [nitrogen]
+body:
+  - type: textarea
+    attributes:
+      label: What happened?
+      description: Explain what exactly happened and what steps you took.
+      placeholder: I created my spec, and nitrogen says it cannot find any specs.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Nitrogen CLI logs (with `--logLevel="debug"`)
+      description: Share the full logs that appear in the console when running nitrogen with the `--logLevel="debug"` flag.
+      render: tsx
+      placeholder: >
+        $ npx nitro-codegen --logLevel="debug"
+
+        🔧  Loading nitro.json config...
+
+        🚀  Nitrogen runs at ~/Projects/react-native-nitro/packages/...
+
+            🔍  Nitrogen found 3 specs in ./src/specs
+
+        ⏳  Parsing Math.nitro.ts...
+
+        ...
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Nitro Specs (`.nitro.ts`)
+      description: Share your Nitro specs (`.nitro.ts` files), ideally stripped down to the core problem so I can reproduce this myself locally.
+      render: ts
+      placeholder: >
+        interface Math extends HybridObject {
+          // ...
+        }
+    validations:
+  - type: input
+    attributes:
+      label: Nitro Modules Version
+      description: Which version of react-native-nitro-modules are you using?
+      placeholder: ex. 0.11.0
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: Nitrogen Version
+      description: Which version of nitro-codegen are you using?
+      placeholder: ex. 0.11.0
+    validations:
+      required: true
+  - type: dropdown
+    attributes:
+      label: Operating system
+      description: Select your operating system that you are trying to build on.
+      multiple: true
+      options:
+        - MacOS
+        - Windows
+        - Linux
+    validations:
+      required: true
+  - type: checkboxes
+    attributes:
+      label: Additional information
+      description: Please check all the boxes that apply
+      options:
+        - label: I searched for [similar issues in this repository](https://github.com/mrousavy/nitro/issues) and found none.
+          required: true
