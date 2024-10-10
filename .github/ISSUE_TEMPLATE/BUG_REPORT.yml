@@ -1,0 +1,91 @@
+name: 🐛 Bug Report
+description: File a bug report
+title: "🐛 "
+body:
+  - type: textarea
+    attributes:
+      label: What's happening?
+      description: Explain what you are trying to do and what happened instead. Be as precise as possible, I can't help you if I don't understand your issue.
+      placeholder: I wanted to create a HybridObject, but it crashed at runtime with the error message: "Cannot default-construct HybridObject".
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Reproduceable Code
+      description: >
+        Share a small reproduceable code snippet here (or the entire file if necessary).
+        Most importantly, share your native code (your HybridObjects), and ideally also the .nitro.ts specs, as well as the generated protocols/interfaces.
+      render: tsx
+      placeholder: >
+        class HybridMath: HybridMathSpec {
+          var hybridContext = margelo.nitro.HybridContext()
+          var memorySize: Int { return 0 }
+        }
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Relevant log output
+      description: >
+        Paste any relevant **native log output** (Xcode Logs/Android Studio Logcat) here.
+        This will be automatically formatted into code, so no need for backticks.
+
+        * For iOS, run the project through Xcode and copy the logs from the log window.
+
+        * For Android, either open the project through Android Studio and paste the logs from the logcat window, or run `adb logcat` in terminal.
+      render: shell
+      placeholder: >
+        09:03:46 I ReactNativeJS: Running "NitroExampleApp" with {"rootTag":11}
+
+        09:03:47 I Nitro: Registering HybridObject "Math"...
+
+        09:03:47 I Nitro: Successfully registered HybridObject "Math"!
+        ...
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: Device
+      description: >
+        Which device are you seeing this Problem on?
+        Mention the full name of the phone, as well as the operating system and version.
+        If you have tested this on multiple devices (ex. Android and iOS) then mention all of those devices (comma separated)
+      placeholder: ex. iPhone 11 Pro (iOS 14.3)
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: Nitro Modules Version
+      description: Which version of react-native-nitro-modules are you using?
+      placeholder: ex. 0.11.0
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: Nitrogen Version
+      description: Which version of nitro-codegen are you using? (if you are using it!)
+      placeholder: ex. 0.11.0
+    validations:
+      required: false
+  - type: dropdown
+    attributes:
+      label: Can you reproduce this issue in the Nitro Example app here?
+      description: >
+        Try to build the example app (`example/`) and see if the issue is reproduceable here.
+        **Note:** If you don't try this in the example app, I most likely won't help you with your issue.
+      options:
+        - I didn't try (⚠️ your issue might get ignored & closed if you don't try this)
+        - Yes, I can reproduce the same issue in the Example app here
+        - No, I cannot reproduce the issue in the Example app
+      default: 0
+    validations:
+      required: true
+  - type: checkboxes
+    attributes:
+      label: Additional information
+      description: Please check all the boxes that apply
+      options:
+        - label: I am using Expo
+        - label: I am using Nitrogen (nitro-codegen)
+        - label: I searched for [similar issues in this repository](https://github.com/mrousavy/nitro/issues) and found none.
+          required: true
