@@ -330,7 +330,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
   @inline(__always)
   public func bounceEnums(array: bridge.std__vector_Powertrain_) -> bridge.std__vector_Powertrain_ {
     do {
-      let __result = try self.__implementation.bounceEnums(array: array.map({ __item in margelo.nitro.image.Powertrain(rawValue: __item)! }))
+      let __result = try self.__implementation.bounceEnums(array: array.map({ __item in __item }))
       return { () -> bridge.std__vector_Powertrain_ in
         var __vector = bridge.create_std__vector_Powertrain_(__result.count)
         for __item in __result {
