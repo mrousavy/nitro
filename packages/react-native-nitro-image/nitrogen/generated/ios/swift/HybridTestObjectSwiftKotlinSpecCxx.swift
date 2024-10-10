@@ -281,8 +281,9 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
     do {
       let __result = try self.__implementation.bounceStrings(array: ({
         var __array: [String] = []
+        __array.reserveCapacity(array.count)
         for __i in 0...array.count {
-          __array[__i] = String(array[__i])
+          __array.append(String(array[__i]))
         }
         return __array
       }()))
@@ -304,8 +305,9 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
     do {
       let __result = try self.__implementation.bounceNumbers(array: ({
         var __array: [Double] = []
+        __array.reserveCapacity(array.count)
         for __i in 0...array.count {
-          __array[__i] = array[__i]
+          __array.append(array[__i])
         }
         return __array
       }()))
@@ -327,8 +329,9 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
     do {
       let __result = try self.__implementation.bounceStructs(array: ({
         var __array: [Person] = []
+        __array.reserveCapacity(array.count)
         for __i in 0...array.count {
-          __array[__i] = array[__i]
+          __array.append(array[__i])
         }
         return __array
       }()))
@@ -350,8 +353,9 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
     do {
       let __result = try self.__implementation.bounceEnums(array: ({
         var __array: [Powertrain] = []
+        __array.reserveCapacity(array.count)
         for __i in 0...array.count {
-          __array[__i] = array[__i]
+          __array.append(array[__i])
         }
         return __array
       }()))
@@ -373,8 +377,9 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
     do {
       try self.__implementation.complexEnumCallback(array: ({
         var __array: [Powertrain] = []
+        __array.reserveCapacity(array.count)
         for __i in 0...array.count {
-          __array[__i] = array[__i]
+          __array.append(array[__i])
         }
         return __array
       }()), callback: { () -> (([Powertrain]) -> Void) in
