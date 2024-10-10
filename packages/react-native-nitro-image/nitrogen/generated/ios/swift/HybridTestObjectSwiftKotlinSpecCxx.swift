@@ -280,7 +280,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
   public func bounceStrings(array: bridge.std__vector_std__string_) -> bridge.std__vector_std__string_ {
     do {
       let __result = try self.__implementation.bounceStrings(array: ({
-        var __array: [std.string] = []
+        var __array: [String] = []
         for __i in 0...array.count {
           __array[__i] = String(array[__i])
         }

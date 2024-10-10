@@ -389,7 +389,7 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
           case 'swift':
             return `
 ({
-  var __array: [${wrapping.getTypeCode('swift')}] = []
+  var __array: ${this.type.getCode('swift')} = []
   for __i in 0...${cppParameterName}.count {
     __array[__i] = ${indent(wrapping.parseFromCppToSwift(`${cppParameterName}[__i]`, 'swift'), '    ')}
   }
