@@ -502,9 +502,9 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
 [&]() {
   size_t __size = ${parameterName}.size();
   jni::local_ref<${arrayType}> __array = ${arrayType}::newArray(__size);
-  for (size_t i = 0; i < __size; i++) {
-    const auto& element = ${parameterName}[i];
-    __array->setElement(i, *${bridge.parseFromCppToKotlin('element', 'c++')});
+  for (size_t __i = 0; __i < __size; __i++) {
+    const auto& element = ${parameterName}[__i];
+    __array->setElement(__i, *${bridge.parseFromCppToKotlin('element', 'c++')});
   }
   return __array;
 }()
@@ -663,8 +663,8 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
   size_t __size = ${parameterName}->size();
   std::vector<${itemType}> __vector;
   __vector.reserve(__size);
-  for (size_t i = 0; i < __size; i++) {
-    auto __element = ${parameterName}->getElement(i);
+  for (size_t __i = 0; __i < __size; __i++) {
+    auto __element = ${parameterName}->getElement(__i);
     __vector.push_back(${bridge.parseFromKotlinToCpp('__element', 'c++')});
   }
   return __vector;
