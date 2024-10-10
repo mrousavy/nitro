@@ -43,6 +43,7 @@ namespace margelo::nitro::image { class HybridBaseSpecSwift; }
 #include <string>
 #include <optional>
 #include <variant>
+#include <vector>
 #include <NitroModules/AnyMap.hpp>
 #include "Powertrain.hpp"
 #include <future>
@@ -173,6 +174,14 @@ namespace margelo::nitro::image {
     }
     inline void multipleArguments(double num, const std::string& str, bool boo) override {
       _swiftPart.multipleArguments(std::forward<decltype(num)>(num), str, std::forward<decltype(boo)>(boo));
+    }
+    inline std::vector<std::string> bounceStrings(const std::vector<std::string>& array) override {
+      auto __result = _swiftPart.bounceStrings(array);
+      return __result;
+    }
+    inline std::vector<double> bounceNumbers(const std::vector<double>& array) override {
+      auto __result = _swiftPart.bounceNumbers(array);
+      return __result;
     }
     inline std::shared_ptr<AnyMap> createMap() override {
       auto __result = _swiftPart.createMap();

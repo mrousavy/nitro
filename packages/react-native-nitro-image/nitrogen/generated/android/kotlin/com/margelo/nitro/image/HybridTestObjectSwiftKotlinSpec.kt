@@ -113,6 +113,14 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
+  abstract fun bounceStrings(array: Array<String>): Array<String>
+  
+  @DoNotStrip
+  @Keep
+  abstract fun bounceNumbers(array: DoubleArray): DoubleArray
+  
+  @DoNotStrip
+  @Keep
   abstract fun createMap(): AnyMap
   
   @DoNotStrip

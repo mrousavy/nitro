@@ -32,6 +32,7 @@ namespace margelo::nitro::image { class HybridBaseSpec; }
 #include <optional>
 #include <variant>
 #include "JVariant_String_Double.hpp"
+#include <vector>
 #include <NitroModules/AnyMap.hpp>
 #include <NitroModules/JAnyMap.hpp>
 #include "Powertrain.hpp"
@@ -171,6 +172,44 @@ namespace margelo::nitro::image {
   void JHybridTestObjectSwiftKotlinSpec::multipleArguments(double num, const std::string& str, bool boo) {
     static const auto method = _javaPart->getClass()->getMethod<void(double /* num */, jni::alias_ref<jni::JString> /* str */, jboolean /* boo */)>("multipleArguments");
     method(_javaPart, num, jni::make_jstring(str), boo);
+  }
+  std::vector<std::string> JHybridTestObjectSwiftKotlinSpec::bounceStrings(const std::vector<std::string>& array) {
+    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<jni::JArrayClass<jni::JString>>(jni::alias_ref<jni::JArrayClass<jni::JString>> /* array */)>("bounceStrings");
+    auto __result = method(_javaPart, [&]() {
+      size_t __size = array.size();
+      jni::local_ref<jni::JArrayClass<jni::JString>> __array = jni::JArrayClass<jni::JString>::newArray(__size);
+      for (size_t i = 0; i < __size; i++) {
+        const auto& element = array[i];
+        __array->setElement(i, *jni::make_jstring(element));
+      }
+      return __array;
+    }());
+    return [&]() {
+      size_t __size = __result->size();
+      std::vector<std::string> __vector;
+      __vector.reserve(__size);
+      for (size_t i = 0; i < __size; i++) {
+        auto __element = __result->getElement(i);
+        __vector.push_back(__element->toStdString());
+      }
+      return __vector;
+    }();
+  }
+  std::vector<double> JHybridTestObjectSwiftKotlinSpec::bounceNumbers(const std::vector<double>& array) {
+    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<jni::JArrayDouble>(jni::alias_ref<jni::JArrayDouble> /* array */)>("bounceNumbers");
+    auto __result = method(_javaPart, [&]() {
+      size_t __size = array.size();
+      jni::local_ref<jni::JArrayDouble> __array = jni::JArrayDouble::newArray(__size);
+      __array->setRegion(0, __size, array.data());
+      return __array;
+    }());
+    return [&]() {
+      size_t __size = __result->size();
+      std::vector<double> __vector;
+      __vector.reserve(__size);
+      __result->getRegion(0, __size, __vector.data());
+      return __vector;
+    }();
   }
   std::shared_ptr<AnyMap> JHybridTestObjectSwiftKotlinSpec::createMap() {
     static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JAnyMap::javaobject>()>("createMap");
