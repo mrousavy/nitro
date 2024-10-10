@@ -49,14 +49,6 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
 
   get needsSpecialHandling(): boolean {
     switch (this.type.kind) {
-      case 'enum':
-        // Enums cannot be referenced from C++ <-> Swift bi-directionally,
-        // so we just pass the underlying raw value (int32), and cast from Int <-> Enum.
-        if (this.isBridgingToDirectCppTarget) {
-          // ...unless we bridge directly to a C++ target. Then we don't need special conversion.
-          return false
-        }
-        return true
       case 'hybrid-object':
         // Swift HybridObjects need to be wrapped in our own *Cxx Swift classes.
         // We wrap/unwrap them if needed.
@@ -210,18 +202,6 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
 
   getTypeCode(language: 'swift' | 'c++'): string {
     switch (this.type.kind) {
-      case 'enum':
-        if (this.isBridgingToDirectCppTarget) {
-          return this.type.getCode('swift')
-        }
-        switch (language) {
-          case 'c++':
-            return 'int'
-          case 'swift':
-            return 'Int32'
-          default:
-            throw new Error(`Invalid language! ${language}`)
-        }
       case 'hybrid-object': {
         const name = getTypeHybridObjectName(this.type)
         switch (language) {
@@ -300,23 +280,6 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
     language: 'swift' | 'c++'
   ): string {
     switch (this.type.kind) {
-      case 'enum':
-        if (this.isBridgingToDirectCppTarget) {
-          return cppParameterName
-        }
-        const enumType = getTypeAs(this.type, EnumType)
-        switch (language) {
-          case 'c++':
-            return `static_cast<int>(${cppParameterName})`
-          case 'swift':
-            const fullName = NitroConfig.getCxxNamespace(
-              'swift',
-              enumType.enumName
-            )
-            return `${fullName}(rawValue: ${cppParameterName})!`
-          default:
-            throw new Error(`Invalid language! ${language}`)
-        }
       case 'hybrid-object':
         const name = getTypeHybridObjectName(this.type)
         switch (language) {
@@ -511,18 +474,6 @@ case ${i}:
     language: 'swift' | 'c++'
   ): string {
     switch (this.type.kind) {
-      case 'enum':
-        if (this.isBridgingToDirectCppTarget) {
-          return swiftParameterName
-        }
-        switch (language) {
-          case 'c++':
-            return `static_cast<${this.type.getCode('c++')}>(${swiftParameterName})`
-          case 'swift':
-            return `${swiftParameterName}.rawValue`
-          default:
-            throw new Error(`Invalid language! ${language}`)
-        }
       case 'hybrid-object':
         const name = getTypeHybridObjectName(this.type)
         switch (language) {

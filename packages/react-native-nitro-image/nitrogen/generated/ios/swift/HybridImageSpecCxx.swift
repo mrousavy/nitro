@@ -78,10 +78,10 @@ public class HybridImageSpecCxx {
     }
   }
   
-  public var pixelFormat: Int32 {
+  public var pixelFormat: PixelFormat {
     @inline(__always)
     get {
-      return self.__implementation.pixelFormat.rawValue
+      return self.__implementation.pixelFormat
     }
   }
   
@@ -98,9 +98,9 @@ public class HybridImageSpecCxx {
 
   // Methods
   @inline(__always)
-  public func toArrayBuffer(format: Int32) -> Double {
+  public func toArrayBuffer(format: ImageFormat) -> Double {
     do {
-      let __result = try self.__implementation.toArrayBuffer(format: margelo.nitro.image.ImageFormat(rawValue: format)!)
+      let __result = try self.__implementation.toArrayBuffer(format: format)
       return __result
     } catch {
       let message = "\(error.localizedDescription)"

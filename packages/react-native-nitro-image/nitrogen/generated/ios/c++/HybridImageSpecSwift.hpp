@@ -69,8 +69,7 @@ namespace margelo::nitro::image {
       return __result;
     }
     inline PixelFormat getPixelFormat() noexcept override {
-      auto __result = _swiftPart.getPixelFormat();
-      return static_cast<PixelFormat>(__result);
+      return _swiftPart.getPixelFormat();
     }
     inline double getSomeSettableProp() noexcept override {
       return _swiftPart.getSomeSettableProp();
@@ -82,7 +81,7 @@ namespace margelo::nitro::image {
   public:
     // Methods
     inline double toArrayBuffer(ImageFormat format) override {
-      auto __result = _swiftPart.toArrayBuffer(static_cast<int>(format));
+      auto __result = _swiftPart.toArrayBuffer(std::forward<decltype(format)>(format));
       return __result;
     }
     inline void saveToFile(const std::string& path, const std::function<void(const std::string& /* path */)>& onFinished) override {
