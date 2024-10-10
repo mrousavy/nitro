@@ -129,6 +129,17 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
+  abstract fun complexEnumCallback(array: Array<Powertrain>, callback: (array: Array<Powertrain>) -> Unit): Unit
+  
+  @DoNotStrip
+  @Keep
+  private fun complexEnumCallback(array: Array<Powertrain>, callback: Func_void_std__vector_Powertrain_): Unit {
+    val __result = complexEnumCallback(array, callback.toLambda())
+    return __result
+  }
+  
+  @DoNotStrip
+  @Keep
   abstract fun createMap(): AnyMap
   
   @DoNotStrip

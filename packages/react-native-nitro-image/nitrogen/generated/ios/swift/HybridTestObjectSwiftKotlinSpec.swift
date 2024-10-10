@@ -49,6 +49,7 @@ public protocol HybridTestObjectSwiftKotlinSpec: AnyObject, HybridObjectSpec {
   func bounceNumbers(array: [Double]) throws -> [Double]
   func bounceStructs(array: [Person]) throws -> [Person]
   func bounceEnums(array: [Powertrain]) throws -> [Powertrain]
+  func complexEnumCallback(array: [Powertrain], callback: @escaping ((_ array: [Powertrain]) -> Void)) throws -> Void
   func createMap() throws -> AnyMapHolder
   func mapRoundtrip(map: AnyMapHolder) throws -> AnyMapHolder
   func funcThatThrows() throws -> Double

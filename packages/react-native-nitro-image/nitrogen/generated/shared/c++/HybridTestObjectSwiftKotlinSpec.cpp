@@ -40,6 +40,7 @@ namespace margelo::nitro::image {
       prototype.registerHybridMethod("bounceNumbers", &HybridTestObjectSwiftKotlinSpec::bounceNumbers);
       prototype.registerHybridMethod("bounceStructs", &HybridTestObjectSwiftKotlinSpec::bounceStructs);
       prototype.registerHybridMethod("bounceEnums", &HybridTestObjectSwiftKotlinSpec::bounceEnums);
+      prototype.registerHybridMethod("complexEnumCallback", &HybridTestObjectSwiftKotlinSpec::complexEnumCallback);
       prototype.registerHybridMethod("createMap", &HybridTestObjectSwiftKotlinSpec::createMap);
       prototype.registerHybridMethod("mapRoundtrip", &HybridTestObjectSwiftKotlinSpec::mapRoundtrip);
       prototype.registerHybridMethod("funcThatThrows", &HybridTestObjectSwiftKotlinSpec::funcThatThrows);

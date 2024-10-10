@@ -70,6 +70,7 @@ namespace margelo::nitro::image {
     std::vector<double> bounceNumbers(const std::vector<double>& array) override;
     std::vector<Person> bounceStructs(const std::vector<Person>& array) override;
     std::vector<Powertrain> bounceEnums(const std::vector<Powertrain>& array) override;
+    void complexEnumCallback(const std::vector<Powertrain>& array, const std::function<void(const std::vector<Powertrain>& /* array */)>& callback) override;
     std::shared_ptr<AnyMap> createMap() override;
     std::shared_ptr<AnyMap> mapRoundtrip(const std::shared_ptr<AnyMap>& map) override;
     double funcThatThrows() override;

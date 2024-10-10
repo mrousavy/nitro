@@ -50,6 +50,7 @@ namespace margelo::nitro::image { class HybridBaseSpec; }
 #include "HybridBaseSpec.hpp"
 #include "JHybridBaseSpec.hpp"
 #include <functional>
+#include "JFunc_void_std__vector_Powertrain_.hpp"
 #include "JFunc_void.hpp"
 #include "JFunc_void_std__optional_double_.hpp"
 
@@ -254,6 +255,18 @@ namespace margelo::nitro::image {
       }
       return __vector;
     }();
+  }
+  void JHybridTestObjectSwiftKotlinSpec::complexEnumCallback(const std::vector<Powertrain>& array, const std::function<void(const std::vector<Powertrain>& /* array */)>& callback) {
+    static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<jni::JArrayClass<JPowertrain>> /* array */, jni::alias_ref<JFunc_void_std__vector_Powertrain_::javaobject> /* callback */)>("complexEnumCallback");
+    method(_javaPart, [&]() {
+      size_t __size = array.size();
+      jni::local_ref<jni::JArrayClass<JPowertrain>> __array = jni::JArrayClass<JPowertrain>::newArray(__size);
+      for (size_t __i = 0; __i < __size; __i++) {
+        const auto& __element = array[__i];
+        __array->setElement(__i, *JPowertrain::fromCpp(__element));
+      }
+      return __array;
+    }(), JFunc_void_std__vector_Powertrain_::fromCpp(callback));
   }
   std::shared_ptr<AnyMap> JHybridTestObjectSwiftKotlinSpec::createMap() {
     static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JAnyMap::javaobject>()>("createMap");

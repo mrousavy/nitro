@@ -70,6 +70,10 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
     return array
   }
 
+  func complexEnumCallback(array: [Powertrain], callback: @escaping ((_ array: [Powertrain]) -> Void)) throws -> Void {
+    callback(array)
+  }
+
   func createMap() throws -> AnyMapHolder {
     let map = AnyMapHolder()
     map.setDouble(key: "number", value: numberValue)

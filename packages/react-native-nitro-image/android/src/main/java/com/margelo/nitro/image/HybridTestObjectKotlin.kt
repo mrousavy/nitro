@@ -53,6 +53,10 @@ class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
         return array
     }
 
+    override fun complexEnumCallback(array: Array<Powertrain>, callback: (array: Array<Powertrain>) -> Unit) {
+        callback(array)
+    }
+
     override fun createMap(): AnyMap {
         val map = AnyMap()
         map.setDouble("number", numberValue)

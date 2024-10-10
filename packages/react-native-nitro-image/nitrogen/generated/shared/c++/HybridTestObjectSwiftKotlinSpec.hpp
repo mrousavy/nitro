@@ -38,9 +38,9 @@ namespace margelo::nitro::image { class HybridBaseSpec; }
 #include <vector>
 #include "Person.hpp"
 #include "Powertrain.hpp"
+#include <functional>
 #include <NitroModules/AnyMap.hpp>
 #include <future>
-#include <functional>
 #include "Car.hpp"
 #include <NitroModules/ArrayBuffer.hpp>
 #include "HybridChildSpec.hpp"
@@ -102,6 +102,7 @@ namespace margelo::nitro::image {
       virtual std::vector<double> bounceNumbers(const std::vector<double>& array) = 0;
       virtual std::vector<Person> bounceStructs(const std::vector<Person>& array) = 0;
       virtual std::vector<Powertrain> bounceEnums(const std::vector<Powertrain>& array) = 0;
+      virtual void complexEnumCallback(const std::vector<Powertrain>& array, const std::function<void(const std::vector<Powertrain>& /* array */)>& callback) = 0;
       virtual std::shared_ptr<AnyMap> createMap() = 0;
       virtual std::shared_ptr<AnyMap> mapRoundtrip(const std::shared_ptr<AnyMap>& map) = 0;
       virtual double funcThatThrows() = 0;

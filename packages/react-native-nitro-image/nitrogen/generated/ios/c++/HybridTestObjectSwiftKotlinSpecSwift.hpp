@@ -46,10 +46,10 @@ namespace margelo::nitro::image { class HybridBaseSpecSwift; }
 #include <vector>
 #include "Person.hpp"
 #include "Powertrain.hpp"
+#include <functional>
 #include <NitroModules/AnyMap.hpp>
 #include <future>
 #include <NitroModules/PromiseHolder.hpp>
-#include <functional>
 #include "Car.hpp"
 #include <NitroModules/ArrayBuffer.hpp>
 #include <NitroModules/ArrayBufferHolder.hpp>
@@ -190,6 +190,9 @@ namespace margelo::nitro::image {
     inline std::vector<Powertrain> bounceEnums(const std::vector<Powertrain>& array) override {
       auto __result = _swiftPart.bounceEnums(array);
       return __result;
+    }
+    inline void complexEnumCallback(const std::vector<Powertrain>& array, const std::function<void(const std::vector<Powertrain>& /* array */)>& callback) override {
+      _swiftPart.complexEnumCallback(array, callback);
     }
     inline std::shared_ptr<AnyMap> createMap() override {
       auto __result = _swiftPart.createMap();
