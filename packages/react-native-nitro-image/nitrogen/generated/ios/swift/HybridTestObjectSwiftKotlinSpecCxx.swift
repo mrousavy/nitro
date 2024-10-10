@@ -279,13 +279,13 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
   @inline(__always)
   public func bounceStrings(array: bridge.std__vector_std__string_) -> bridge.std__vector_std__string_ {
     do {
-      let result = try self.implementation.bounceStrings(array: array.map({ val in String(val) }))
+      let __result = try self.__implementation.bounceStrings(array: array.map({ __item in String(__item) }))
       return { () -> bridge.std__vector_std__string_ in
-        var vector = bridge.create_std__vector_std__string_(result.count)
-        for item in result {
-          vector.push_back(std.string(item))
+        var __vector = bridge.create_std__vector_std__string_(__result.count)
+        for __item in __result {
+          __vector.push_back(std.string(__item))
         }
-        return vector
+        return __vector
       }()
     } catch {
       let message = "\(error.localizedDescription)"
@@ -296,13 +296,13 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
   @inline(__always)
   public func bounceNumbers(array: bridge.std__vector_double_) -> bridge.std__vector_double_ {
     do {
-      let result = try self.implementation.bounceNumbers(array: array.map({ val in val }))
+      let __result = try self.__implementation.bounceNumbers(array: array.map({ __item in __item }))
       return { () -> bridge.std__vector_double_ in
-        var vector = bridge.create_std__vector_double_(result.count)
-        for item in result {
-          vector.push_back(item)
+        var __vector = bridge.create_std__vector_double_(__result.count)
+        for __item in __result {
+          __vector.push_back(__item)
         }
-        return vector
+        return __vector
       }()
     } catch {
       let message = "\(error.localizedDescription)"
