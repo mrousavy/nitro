@@ -385,11 +385,12 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
       case 'array': {
         const array = getTypeAs(this.type, ArrayType)
         const wrapping = new SwiftCxxBridgedType(array.itemType, true)
+        const actualType = this.type.getCode(language)
         switch (language) {
           case 'swift':
             return `
-({
-  var __array: ${this.type.getCode('swift')} = []
+({ () -> ${actualType} in
+  var __array: ${actualType} = []
   __array.reserveCapacity(${cppParameterName}.count)
   for __i in 0...${cppParameterName}.count {
     __array.append(${indent(wrapping.parseFromCppToSwift(`${cppParameterName}[__i]`, 'swift'), '    ')})

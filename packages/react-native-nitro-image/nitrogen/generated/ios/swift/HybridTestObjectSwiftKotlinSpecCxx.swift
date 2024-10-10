@@ -279,7 +279,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
   @inline(__always)
   public func bounceStrings(array: bridge.std__vector_std__string_) -> bridge.std__vector_std__string_ {
     do {
-      let __result = try self.__implementation.bounceStrings(array: ({
+      let __result = try self.__implementation.bounceStrings(array: ({ () -> [String] in
         var __array: [String] = []
         __array.reserveCapacity(array.count)
         for __i in 0...array.count {
@@ -303,7 +303,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
   @inline(__always)
   public func bounceNumbers(array: bridge.std__vector_double_) -> bridge.std__vector_double_ {
     do {
-      let __result = try self.__implementation.bounceNumbers(array: ({
+      let __result = try self.__implementation.bounceNumbers(array: ({ () -> [Double] in
         var __array: [Double] = []
         __array.reserveCapacity(array.count)
         for __i in 0...array.count {
@@ -327,7 +327,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
   @inline(__always)
   public func bounceStructs(array: bridge.std__vector_Person_) -> bridge.std__vector_Person_ {
     do {
-      let __result = try self.__implementation.bounceStructs(array: ({
+      let __result = try self.__implementation.bounceStructs(array: ({ () -> [Person] in
         var __array: [Person] = []
         __array.reserveCapacity(array.count)
         for __i in 0...array.count {
@@ -351,7 +351,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
   @inline(__always)
   public func bounceEnums(array: bridge.std__vector_Powertrain_) -> bridge.std__vector_Powertrain_ {
     do {
-      let __result = try self.__implementation.bounceEnums(array: ({
+      let __result = try self.__implementation.bounceEnums(array: ({ () -> [Powertrain] in
         var __array: [Powertrain] = []
         __array.reserveCapacity(array.count)
         for __i in 0...array.count {
@@ -375,7 +375,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
   @inline(__always)
   public func complexEnumCallback(array: bridge.std__vector_Powertrain_, callback: bridge.Func_void_std__vector_Powertrain_) -> Void {
     do {
-      try self.__implementation.complexEnumCallback(array: ({
+      try self.__implementation.complexEnumCallback(array: ({ () -> [Powertrain] in
         var __array: [Powertrain] = []
         __array.reserveCapacity(array.count)
         for __i in 0...array.count {
