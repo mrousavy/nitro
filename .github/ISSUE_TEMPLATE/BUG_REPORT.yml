@@ -6,7 +6,7 @@ body:
     attributes:
       label: What's happening?
       description: Explain what you are trying to do and what happened instead. Be as precise as possible, I can't help you if I don't understand your issue.
-      placeholder: I wanted to create a HybridObject, but it crashed at runtime with the error message\: "Cannot default-construct HybridObject".
+      placeholder: I wanted to create a HybridObject, but it crashed at runtime with the error message\: 'Cannot default-construct HybridObject'.
     validations:
       required: true
   - type: textarea
