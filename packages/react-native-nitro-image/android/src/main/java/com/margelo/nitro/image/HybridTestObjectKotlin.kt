@@ -37,11 +37,11 @@ class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
         Log.i(TAG, "Arguments received! num: $num | str: $str | boo: $boo")
     }
 
-    override fun bounceStrings(array: Array<String>) {
+    override fun bounceStrings(array: Array<String>): Array<String> {
         return array
     }
 
-    override fun bounceNumbers(array: Array<Double>) {
+    override fun bounceNumbers(array: DoubleArray): DoubleArray {
         return array
     }
 
