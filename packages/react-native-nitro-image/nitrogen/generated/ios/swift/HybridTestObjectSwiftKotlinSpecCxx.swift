@@ -282,8 +282,8 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
       let __result = try self.__implementation.bounceStrings(array: ({ () -> [String] in
         var __array: [String] = []
         __array.reserveCapacity(array.count)
-        for __i in 0...array.count {
-          __array.append(String(array[__i]))
+        for __item in array {
+          __array.append(String(__item))
         }
         return __array
       }()))
@@ -306,8 +306,8 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
       let __result = try self.__implementation.bounceNumbers(array: ({ () -> [Double] in
         var __array: [Double] = []
         __array.reserveCapacity(array.count)
-        for __i in 0...array.count {
-          __array.append(array[__i])
+        for __item in array {
+          __array.append(__item)
         }
         return __array
       }()))
@@ -330,8 +330,8 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
       let __result = try self.__implementation.bounceStructs(array: ({ () -> [Person] in
         var __array: [Person] = []
         __array.reserveCapacity(array.count)
-        for __i in 0...array.count {
-          __array.append(array[__i])
+        for __item in array {
+          __array.append(__item)
         }
         return __array
       }()))
@@ -354,8 +354,8 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
       let __result = try self.__implementation.bounceEnums(array: ({ () -> [Powertrain] in
         var __array: [Powertrain] = []
         __array.reserveCapacity(array.count)
-        for __i in 0...array.count {
-          __array.append(array[__i])
+        for __item in array {
+          __array.append(__item)
         }
         return __array
       }()))
@@ -378,8 +378,8 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
       try self.__implementation.complexEnumCallback(array: ({ () -> [Powertrain] in
         var __array: [Powertrain] = []
         __array.reserveCapacity(array.count)
-        for __i in 0...array.count {
-          __array.append(array[__i])
+        for __item in array {
+          __array.append(__item)
         }
         return __array
       }()), callback: { () -> (([Powertrain]) -> Void) in
