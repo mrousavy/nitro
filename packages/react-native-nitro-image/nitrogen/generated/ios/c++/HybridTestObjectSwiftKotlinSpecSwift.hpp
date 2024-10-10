@@ -16,14 +16,14 @@ namespace NitroImage { class HybridTestObjectSwiftKotlinSpecCxx; }
 namespace margelo::nitro::image { class HybridTestObjectSwiftKotlinSpec; }
 // Forward declaration of `HybridTestObjectSwiftKotlinSpecSwift` to properly resolve imports.
 namespace margelo::nitro::image { class HybridTestObjectSwiftKotlinSpecSwift; }
-// Forward declaration of `AnyMap` to properly resolve imports.
-namespace NitroModules { class AnyMap; }
-// Forward declaration of `Powertrain` to properly resolve imports.
-namespace margelo::nitro::image { enum class Powertrain; }
-// Forward declaration of `Car` to properly resolve imports.
-namespace margelo::nitro::image { struct Car; }
 // Forward declaration of `Person` to properly resolve imports.
 namespace margelo::nitro::image { struct Person; }
+// Forward declaration of `Powertrain` to properly resolve imports.
+namespace margelo::nitro::image { enum class Powertrain; }
+// Forward declaration of `AnyMap` to properly resolve imports.
+namespace NitroModules { class AnyMap; }
+// Forward declaration of `Car` to properly resolve imports.
+namespace margelo::nitro::image { struct Car; }
 // Forward declaration of `ArrayBuffer` to properly resolve imports.
 namespace NitroModules { class ArrayBuffer; }
 // Forward declaration of `ArrayBufferHolder` to properly resolve imports.
@@ -44,13 +44,13 @@ namespace margelo::nitro::image { class HybridBaseSpecSwift; }
 #include <optional>
 #include <variant>
 #include <vector>
-#include <NitroModules/AnyMap.hpp>
+#include "Person.hpp"
 #include "Powertrain.hpp"
+#include <functional>
+#include <NitroModules/AnyMap.hpp>
 #include <future>
 #include <NitroModules/PromiseHolder.hpp>
-#include <functional>
 #include "Car.hpp"
-#include "Person.hpp"
 #include <NitroModules/ArrayBuffer.hpp>
 #include <NitroModules/ArrayBufferHolder.hpp>
 #include "HybridChildSpec.hpp"
@@ -182,6 +182,17 @@ namespace margelo::nitro::image {
     inline std::vector<double> bounceNumbers(const std::vector<double>& array) override {
       auto __result = _swiftPart.bounceNumbers(array);
       return __result;
+    }
+    inline std::vector<Person> bounceStructs(const std::vector<Person>& array) override {
+      auto __result = _swiftPart.bounceStructs(array);
+      return __result;
+    }
+    inline std::vector<Powertrain> bounceEnums(const std::vector<Powertrain>& array) override {
+      auto __result = _swiftPart.bounceEnums(array);
+      return __result;
+    }
+    inline void complexEnumCallback(const std::vector<Powertrain>& array, const std::function<void(const std::vector<Powertrain>& /* array */)>& callback) override {
+      _swiftPart.complexEnumCallback(array, callback);
     }
     inline std::shared_ptr<AnyMap> createMap() override {
       auto __result = _swiftPart.createMap();

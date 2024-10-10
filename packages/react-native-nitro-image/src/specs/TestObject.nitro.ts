@@ -45,6 +45,12 @@ interface SharedTestObjectProps {
   // Arrays
   bounceStrings(array: string[]): string[]
   bounceNumbers(array: number[]): number[]
+  bounceStructs(array: Person[]): Person[]
+  bounceEnums(array: Powertrain[]): Powertrain[]
+  complexEnumCallback(
+    array: Powertrain[],
+    callback: (array: Powertrain[]) => void
+  ): void
 
   // Maps
   createMap(): AnyMap

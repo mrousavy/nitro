@@ -4,6 +4,7 @@ import {
   OldEnum,
   type Car,
   type Person,
+  type Powertrain,
 } from 'react-native-nitro-image'
 import type { State } from './Testers'
 import { it } from './Testers'
@@ -245,6 +246,40 @@ export function getTests(
         .didNotThrow()
         .didReturn('object')
         .equals(['hello', 'world', '!'])
+    ),
+    createTest('bounceEnums(...) equals', () =>
+      it(() => testObject.bounceEnums(['gas', 'hybrid']))
+        .didNotThrow()
+        .didReturn('object')
+        .equals(['gas', 'hybrid'])
+    ),
+    createTest('bounceStructs(...) equals', () =>
+      it(() =>
+        testObject.bounceStructs([
+          { age: 24, name: 'Marc' },
+          { age: 5, name: 'Ben' },
+        ])
+      )
+        .didNotThrow()
+        .didReturn('object')
+        .equals([
+          { age: 24, name: 'Marc' },
+          { age: 5, name: 'Ben' },
+        ])
+    ),
+
+    createTest('complexEnumCallback(...)', async () =>
+      (
+        await it<Powertrain[]>(async () => {
+          return timeoutedPromise((complete) => {
+            testObject.complexEnumCallback(['gas', 'electric'], (result) => {
+              complete(result)
+            })
+          })
+        })
+      )
+        .didNotThrow()
+        .equals(['gas', 'electric'])
     ),
 
     // Test Maps

@@ -311,6 +311,62 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
   }
   
   @inline(__always)
+  public func bounceStructs(array: bridge.std__vector_Person_) -> bridge.std__vector_Person_ {
+    do {
+      let __result = try self.__implementation.bounceStructs(array: array.map({ __item in __item }))
+      return { () -> bridge.std__vector_Person_ in
+        var __vector = bridge.create_std__vector_Person_(__result.count)
+        for __item in __result {
+          __vector.push_back(__item)
+        }
+        return __vector
+      }()
+    } catch {
+      let message = "\(error.localizedDescription)"
+      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
+    }
+  }
+  
+  @inline(__always)
+  public func bounceEnums(array: bridge.std__vector_Powertrain_) -> bridge.std__vector_Powertrain_ {
+    do {
+      let __result = try self.__implementation.bounceEnums(array: array.map({ __item in __item }))
+      return { () -> bridge.std__vector_Powertrain_ in
+        var __vector = bridge.create_std__vector_Powertrain_(__result.count)
+        for __item in __result {
+          __vector.push_back(__item)
+        }
+        return __vector
+      }()
+    } catch {
+      let message = "\(error.localizedDescription)"
+      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
+    }
+  }
+  
+  @inline(__always)
+  public func complexEnumCallback(array: bridge.std__vector_Powertrain_, callback: bridge.Func_void_std__vector_Powertrain_) -> Void {
+    do {
+      try self.__implementation.complexEnumCallback(array: array.map({ __item in __item }), callback: { () -> (([Powertrain]) -> Void) in
+        let __sharedClosure = bridge.share_Func_void_std__vector_Powertrain_(callback)
+        return { (__array: [Powertrain]) -> Void in
+          __sharedClosure.pointee.call({ () -> bridge.std__vector_Powertrain_ in
+          var __vector = bridge.create_std__vector_Powertrain_(__array.count)
+          for __item in __array {
+            __vector.push_back(__item)
+          }
+          return __vector
+        }())
+        }
+      }())
+      return 
+    } catch {
+      let message = "\(error.localizedDescription)"
+      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
+    }
+  }
+  
+  @inline(__always)
   public func createMap() -> margelo.nitro.TSharedMap {
     do {
       let __result = try self.__implementation.createMap()

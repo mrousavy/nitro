@@ -63,7 +63,7 @@ class ${name} {
   const cppParams = functionType.parameters.map((p) => {
     const bridge = new KotlinCxxBridgedType(p)
     const type = bridge.asJniReferenceType('alias')
-    return `const ${type}& ${p.escapedName}`
+    return `${type} ${p.escapedName}`
   })
   const paramsForward = functionType.parameters.map((p) => {
     const bridge = new KotlinCxxBridgedType(p)

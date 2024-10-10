@@ -384,7 +384,7 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
       }
       case 'array': {
         const array = getTypeAs(this.type, ArrayType)
-        const wrapping = new SwiftCxxBridgedType(array.itemType)
+        const wrapping = new SwiftCxxBridgedType(array.itemType, true)
         switch (language) {
           case 'swift':
             return `${cppParameterName}.map({ __item in ${wrapping.parseFromCppToSwift('__item', 'swift')} })`.trim()
@@ -616,7 +616,7 @@ case ${i}:
         const bridge = this.getBridgeOrThrow()
         const makeFunc = `bridge.${bridge.funcName}`
         const array = getTypeAs(this.type, ArrayType)
-        const wrapping = new SwiftCxxBridgedType(array.itemType)
+        const wrapping = new SwiftCxxBridgedType(array.itemType, true)
         switch (language) {
           case 'swift':
             return `

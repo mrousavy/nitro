@@ -28,7 +28,7 @@ namespace margelo::nitro::image {
     }
 
   public:
-    void call(const jni::alias_ref<jni::JString>& path) {
+    void call(jni::alias_ref<jni::JString> path) {
       return _func(path->toStdString());
     }
 

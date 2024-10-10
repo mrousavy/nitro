@@ -15,6 +15,7 @@
 #include "JFunc_void_std__string.hpp"
 #include "JHybridImageFactorySpec.hpp"
 #include "JHybridTestObjectSwiftKotlinSpec.hpp"
+#include "JFunc_void_std__vector_Powertrain_.hpp"
 #include "JFunc_void.hpp"
 #include "JFunc_void_std__optional_double_.hpp"
 #include "JHybridBaseSpec.hpp"
@@ -35,6 +36,7 @@ int initialize(JavaVM* vm) {
     margelo::nitro::image::JFunc_void_std__string::registerNatives();
     margelo::nitro::image::JHybridImageFactorySpec::registerNatives();
     margelo::nitro::image::JHybridTestObjectSwiftKotlinSpec::registerNatives();
+    margelo::nitro::image::JFunc_void_std__vector_Powertrain_::registerNatives();
     margelo::nitro::image::JFunc_void::registerNatives();
     margelo::nitro::image::JFunc_void::registerNatives();
     margelo::nitro::image::JFunc_void::registerNatives();

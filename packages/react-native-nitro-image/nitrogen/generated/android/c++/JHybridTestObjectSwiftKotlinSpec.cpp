@@ -9,14 +9,14 @@
 
 // Forward declaration of `HybridTestObjectSwiftKotlinSpec` to properly resolve imports.
 namespace margelo::nitro::image { class HybridTestObjectSwiftKotlinSpec; }
-// Forward declaration of `AnyMap` to properly resolve imports.
-namespace NitroModules { class AnyMap; }
-// Forward declaration of `Powertrain` to properly resolve imports.
-namespace margelo::nitro::image { enum class Powertrain; }
-// Forward declaration of `Car` to properly resolve imports.
-namespace margelo::nitro::image { struct Car; }
 // Forward declaration of `Person` to properly resolve imports.
 namespace margelo::nitro::image { struct Person; }
+// Forward declaration of `Powertrain` to properly resolve imports.
+namespace margelo::nitro::image { enum class Powertrain; }
+// Forward declaration of `AnyMap` to properly resolve imports.
+namespace NitroModules { class AnyMap; }
+// Forward declaration of `Car` to properly resolve imports.
+namespace margelo::nitro::image { struct Car; }
 // Forward declaration of `ArrayBuffer` to properly resolve imports.
 namespace NitroModules { class ArrayBuffer; }
 // Forward declaration of `HybridChildSpec` to properly resolve imports.
@@ -33,16 +33,16 @@ namespace margelo::nitro::image { class HybridBaseSpec; }
 #include <variant>
 #include "JVariant_String_Double.hpp"
 #include <vector>
-#include <NitroModules/AnyMap.hpp>
-#include <NitroModules/JAnyMap.hpp>
+#include "Person.hpp"
+#include "JPerson.hpp"
 #include "Powertrain.hpp"
 #include "JPowertrain.hpp"
+#include <NitroModules/AnyMap.hpp>
+#include <NitroModules/JAnyMap.hpp>
 #include <future>
 #include <NitroModules/JPromise.hpp>
 #include "Car.hpp"
 #include "JCar.hpp"
-#include "Person.hpp"
-#include "JPerson.hpp"
 #include <NitroModules/ArrayBuffer.hpp>
 #include <NitroModules/JArrayBuffer.hpp>
 #include "HybridChildSpec.hpp"
@@ -50,6 +50,7 @@ namespace margelo::nitro::image { class HybridBaseSpec; }
 #include "HybridBaseSpec.hpp"
 #include "JHybridBaseSpec.hpp"
 #include <functional>
+#include "JFunc_void_std__vector_Powertrain_.hpp"
 #include "JFunc_void.hpp"
 #include "JFunc_void_std__optional_double_.hpp"
 
@@ -210,6 +211,62 @@ namespace margelo::nitro::image {
       __result->getRegion(0, __size, __vector.data());
       return __vector;
     }();
+  }
+  std::vector<Person> JHybridTestObjectSwiftKotlinSpec::bounceStructs(const std::vector<Person>& array) {
+    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<jni::JArrayClass<JPerson>>(jni::alias_ref<jni::JArrayClass<JPerson>> /* array */)>("bounceStructs");
+    auto __result = method(_javaPart, [&]() {
+      size_t __size = array.size();
+      jni::local_ref<jni::JArrayClass<JPerson>> __array = jni::JArrayClass<JPerson>::newArray(__size);
+      for (size_t __i = 0; __i < __size; __i++) {
+        const auto& __element = array[__i];
+        __array->setElement(__i, *JPerson::fromCpp(__element));
+      }
+      return __array;
+    }());
+    return [&]() {
+      size_t __size = __result->size();
+      std::vector<Person> __vector;
+      __vector.reserve(__size);
+      for (size_t __i = 0; __i < __size; __i++) {
+        auto __element = __result->getElement(__i);
+        __vector.push_back(__element->toCpp());
+      }
+      return __vector;
+    }();
+  }
+  std::vector<Powertrain> JHybridTestObjectSwiftKotlinSpec::bounceEnums(const std::vector<Powertrain>& array) {
+    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<jni::JArrayClass<JPowertrain>>(jni::alias_ref<jni::JArrayClass<JPowertrain>> /* array */)>("bounceEnums");
+    auto __result = method(_javaPart, [&]() {
+      size_t __size = array.size();
+      jni::local_ref<jni::JArrayClass<JPowertrain>> __array = jni::JArrayClass<JPowertrain>::newArray(__size);
+      for (size_t __i = 0; __i < __size; __i++) {
+        const auto& __element = array[__i];
+        __array->setElement(__i, *JPowertrain::fromCpp(__element));
+      }
+      return __array;
+    }());
+    return [&]() {
+      size_t __size = __result->size();
+      std::vector<Powertrain> __vector;
+      __vector.reserve(__size);
+      for (size_t __i = 0; __i < __size; __i++) {
+        auto __element = __result->getElement(__i);
+        __vector.push_back(__element->toCpp());
+      }
+      return __vector;
+    }();
+  }
+  void JHybridTestObjectSwiftKotlinSpec::complexEnumCallback(const std::vector<Powertrain>& array, const std::function<void(const std::vector<Powertrain>& /* array */)>& callback) {
+    static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<jni::JArrayClass<JPowertrain>> /* array */, jni::alias_ref<JFunc_void_std__vector_Powertrain_::javaobject> /* callback */)>("complexEnumCallback");
+    method(_javaPart, [&]() {
+      size_t __size = array.size();
+      jni::local_ref<jni::JArrayClass<JPowertrain>> __array = jni::JArrayClass<JPowertrain>::newArray(__size);
+      for (size_t __i = 0; __i < __size; __i++) {
+        const auto& __element = array[__i];
+        __array->setElement(__i, *JPowertrain::fromCpp(__element));
+      }
+      return __array;
+    }(), JFunc_void_std__vector_Powertrain_::fromCpp(callback));
   }
   std::shared_ptr<AnyMap> JHybridTestObjectSwiftKotlinSpec::createMap() {
     static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JAnyMap::javaobject>()>("createMap");

@@ -441,6 +441,54 @@ namespace margelo::nitro::image::bridge::swift {
   }
   
   /**
+   * Specialized version of `std::vector<Person>`.
+   */
+  using std__vector_Person_ = std::vector<Person>;
+  inline std::vector<Person> create_std__vector_Person_(size_t size) {
+    std::vector<Person> vector;
+    vector.reserve(size);
+    return vector;
+  }
+  
+  /**
+   * Specialized version of `std::vector<Powertrain>`.
+   */
+  using std__vector_Powertrain_ = std::vector<Powertrain>;
+  inline std::vector<Powertrain> create_std__vector_Powertrain_(size_t size) {
+    std::vector<Powertrain> vector;
+    vector.reserve(size);
+    return vector;
+  }
+  
+  /**
+   * Specialized version of `std::function<void(const std::vector<Powertrain>&)>`.
+   */
+  using Func_void_std__vector_Powertrain_ = std::function<void(const std::vector<Powertrain>& /* array */)>;
+  /**
+   * Wrapper class for a `std::function<void(const std::vector<Powertrain>& / * array * /)>`, this can be used from Swift.
+   */
+  class Func_void_std__vector_Powertrain__Wrapper {
+  public:
+    explicit Func_void_std__vector_Powertrain__Wrapper(const std::function<void(const std::vector<Powertrain>& /* array */)>& func): function(func) {}
+    explicit Func_void_std__vector_Powertrain__Wrapper(std::function<void(const std::vector<Powertrain>& /* array */)>&& func): function(std::move(func)) {}
+  
+    void call(std::vector<Powertrain> array) const {
+      function(array);
+    }
+  
+    std::function<void(const std::vector<Powertrain>& /* array */)> function;
+  };
+  inline Func_void_std__vector_Powertrain_ create_Func_void_std__vector_Powertrain_(void* closureHolder, void(*call)(void* /* closureHolder */, std::vector<Powertrain>), void(*destroy)(void*)) {
+    std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
+    return Func_void_std__vector_Powertrain_([sharedClosureHolder, call](const std::vector<Powertrain>& array) -> void {
+      call(sharedClosureHolder.get(), array);
+    });
+  }
+  inline std::shared_ptr<Func_void_std__vector_Powertrain__Wrapper> share_Func_void_std__vector_Powertrain_(const Func_void_std__vector_Powertrain_& value) {
+    return std::make_shared<Func_void_std__vector_Powertrain__Wrapper>(value);
+  }
+  
+  /**
    * Specialized version of `std::optional<bool>`.
    */
   using std__optional_bool_ = std::optional<bool>;
