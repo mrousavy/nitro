@@ -30,7 +30,7 @@ namespace margelo::nitro::image {
     }
 
   public:
-    void call(const jni::alias_ref<jni::JArrayClass<JPowertrain>>& array) {
+    void call(jni::alias_ref<jni::JArrayClass<JPowertrain>> array) {
       return _func([&]() {
         size_t __size = array->size();
         std::vector<Powertrain> __vector;
