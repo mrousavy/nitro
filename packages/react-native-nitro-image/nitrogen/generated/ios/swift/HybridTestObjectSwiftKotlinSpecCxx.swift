@@ -126,8 +126,8 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
     @inline(__always)
     get {
       return { () -> bridge.std__optional_std__string_ in
-        if let actualValue = self.implementation.stringOrUndefined {
-          return bridge.create_std__optional_std__string_(std.string(actualValue))
+        if let __unwrappedValue = self.implementation.stringOrUndefined {
+          return bridge.create_std__optional_std__string_(std.string(__unwrappedValue))
         } else {
           return .init()
         }
@@ -136,8 +136,8 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
     @inline(__always)
     set {
       self.implementation.stringOrUndefined = { () -> String? in
-        if let actualValue = newValue.value {
-          return String(actualValue)
+        if let __unwrapped = newValue.value {
+          return String(__unwrapped)
         } else {
           return nil
         }
@@ -149,8 +149,8 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
     @inline(__always)
     get {
       return { () -> bridge.std__optional_std__string_ in
-        if let actualValue = self.implementation.stringOrNull {
-          return bridge.create_std__optional_std__string_(std.string(actualValue))
+        if let __unwrappedValue = self.implementation.stringOrNull {
+          return bridge.create_std__optional_std__string_(std.string(__unwrappedValue))
         } else {
           return .init()
         }
@@ -159,8 +159,8 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
     @inline(__always)
     set {
       self.implementation.stringOrNull = { () -> String? in
-        if let actualValue = newValue.value {
-          return String(actualValue)
+        if let __unwrapped = newValue.value {
+          return String(__unwrapped)
         } else {
           return nil
         }
@@ -172,8 +172,8 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
     @inline(__always)
     get {
       return { () -> bridge.std__optional_std__string_ in
-        if let actualValue = self.implementation.optionalString {
-          return bridge.create_std__optional_std__string_(std.string(actualValue))
+        if let __unwrappedValue = self.implementation.optionalString {
+          return bridge.create_std__optional_std__string_(std.string(__unwrappedValue))
         } else {
           return .init()
         }
@@ -182,8 +182,8 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
     @inline(__always)
     set {
       self.implementation.optionalString = { () -> String? in
-        if let actualValue = newValue.value {
-          return String(actualValue)
+        if let __unwrapped = newValue.value {
+          return String(__unwrapped)
         } else {
           return nil
         }
@@ -196,10 +196,10 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
     get {
       return { () -> bridge.std__variant_std__string__double_ in
         switch self.implementation.someVariant {
-          case .someString(let value):
-            return bridge.create_std__variant_std__string__double_(std.string(value))
-          case .someDouble(let value):
-            return bridge.create_std__variant_std__string__double_(value)
+          case .someString(let __value):
+            return bridge.create_std__variant_std__string__double_(std.string(__value))
+          case .someDouble(let __value):
+            return bridge.create_std__variant_std__string__double_(__value)
         }
       }()
     }
@@ -208,11 +208,11 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
       self.implementation.someVariant = { () -> Variant_String_Double in
         switch newValue.index() {
           case 0:
-            let actual = bridge.get_std__variant_std__string__double__0(newValue)
-            return .someString(String(actual))
+            let __actual = bridge.get_std__variant_std__string__double__0(newValue)
+            return .someString(String(__actual))
           case 1:
-            let actual = bridge.get_std__variant_std__string__double__1(newValue)
-            return .someDouble(actual)
+            let __actual = bridge.get_std__variant_std__string__double__1(newValue)
+            return .someDouble(__actual)
           default:
             fatalError("Variant can never have index \(newValue.index())!")
         }
@@ -313,8 +313,8 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
   public func tryOptionalParams(num: Double, boo: Bool, str: bridge.std__optional_std__string_) -> std.string {
     do {
       let result = try self.implementation.tryOptionalParams(num: num, boo: boo, str: { () -> String? in
-        if let actualValue = str.value {
-          return String(actualValue)
+        if let __unwrapped = str.value {
+          return String(__unwrapped)
         } else {
           return nil
         }
@@ -342,8 +342,8 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
     do {
       let result = try self.implementation.tryOptionalEnum(value: value.value)
       return { () -> bridge.std__optional_Powertrain_ in
-        if let actualValue = result {
-          return bridge.create_std__optional_Powertrain_(actualValue)
+        if let __unwrappedValue = result {
+          return bridge.create_std__optional_Powertrain_(__unwrappedValue)
         } else {
           return .init()
         }
@@ -370,11 +370,11 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
     do {
       let result = try self.implementation.calculateFibonacciAsync(value: value)
       return { () -> bridge.PromiseHolder_int64_t_ in
-        let promiseHolder = bridge.create_PromiseHolder_int64_t_()
+        let __promiseHolder = bridge.create_PromiseHolder_int64_t_()
         result
-          .then({ __result in promiseHolder.resolve(__result) })
-          .catch({ __error in promiseHolder.reject(std.string(String(describing: __error))) })
-        return promiseHolder
+          .then({ __result in __promiseHolder.resolve(__result) })
+          .catch({ __error in __promiseHolder.reject(std.string(String(describing: __error))) })
+        return __promiseHolder
       }()
     } catch {
       let message = "\(error.localizedDescription)"
@@ -387,11 +387,11 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
     do {
       let result = try self.implementation.wait(seconds: seconds)
       return { () -> bridge.PromiseHolder_void_ in
-        let promiseHolder = bridge.create_PromiseHolder_void_()
+        let __promiseHolder = bridge.create_PromiseHolder_void_()
         result
-          .then({ __result in promiseHolder.resolve() })
-          .catch({ __error in promiseHolder.reject(std.string(String(describing: __error))) })
-        return promiseHolder
+          .then({ __result in __promiseHolder.resolve() })
+          .catch({ __error in __promiseHolder.reject(std.string(String(describing: __error))) })
+        return __promiseHolder
       }()
     } catch {
       let message = "\(error.localizedDescription)"
@@ -403,9 +403,9 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
   public func callCallback(callback: bridge.Func_void) -> Void {
     do {
       try self.implementation.callCallback(callback: { () -> (() -> Void) in
-        let shared = bridge.share_Func_void(callback)
+        let __sharedClosure = bridge.share_Func_void(callback)
         return { () -> Void in
-          shared.pointee.call()
+          __sharedClosure.pointee.call()
         }
       }())
       return 
@@ -419,19 +419,19 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
   public func callAll(first: bridge.Func_void, second: bridge.Func_void, third: bridge.Func_void) -> Void {
     do {
       try self.implementation.callAll(first: { () -> (() -> Void) in
-        let shared = bridge.share_Func_void(first)
+        let __sharedClosure = bridge.share_Func_void(first)
         return { () -> Void in
-          shared.pointee.call()
+          __sharedClosure.pointee.call()
         }
       }(), second: { () -> (() -> Void) in
-        let shared = bridge.share_Func_void(second)
+        let __sharedClosure = bridge.share_Func_void(second)
         return { () -> Void in
-          shared.pointee.call()
+          __sharedClosure.pointee.call()
         }
       }(), third: { () -> (() -> Void) in
-        let shared = bridge.share_Func_void(third)
+        let __sharedClosure = bridge.share_Func_void(third)
         return { () -> Void in
-          shared.pointee.call()
+          __sharedClosure.pointee.call()
         }
       }())
       return 
@@ -445,11 +445,11 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
   public func callWithOptional(value: bridge.std__optional_double_, callback: bridge.Func_void_std__optional_double_) -> Void {
     do {
       try self.implementation.callWithOptional(value: value.value, callback: { () -> ((Double?) -> Void) in
-        let shared = bridge.share_Func_void_std__optional_double_(callback)
-        return { (maybe: Double?) -> Void in
-          shared.pointee.call({ () -> bridge.std__optional_double_ in
-          if let actualValue = maybe {
-            return bridge.create_std__optional_double_(actualValue)
+        let __sharedClosure = bridge.share_Func_void_std__optional_double_(callback)
+        return { (__maybe: Double?) -> Void in
+          __sharedClosure.pointee.call({ () -> bridge.std__optional_double_ in
+          if let __unwrappedValue = __maybe {
+            return bridge.create_std__optional_double_(__unwrappedValue)
           } else {
             return .init()
           }
@@ -490,8 +490,8 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
     do {
       let result = try self.implementation.getDriver(car: car)
       return { () -> bridge.std__optional_Person_ in
-        if let actualValue = result {
-          return bridge.create_std__optional_Person_(actualValue)
+        if let __unwrappedValue = result {
+          return bridge.create_std__optional_Person_(__unwrappedValue)
         } else {
           return .init()
         }

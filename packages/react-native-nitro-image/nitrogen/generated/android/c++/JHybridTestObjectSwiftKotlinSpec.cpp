@@ -211,31 +211,31 @@ namespace margelo::nitro::image {
     static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JPromise::javaobject>(double /* value */)>("calculateFibonacciAsync");
     auto result = method(_javaPart, value);
     return [&]() {
-      auto promise = std::make_shared<std::promise<int64_t>>();
-      result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& boxedResult) {
-        auto result = jni::static_ref_cast<jni::JLong>(boxedResult);
-        promise->set_value(result->value());
+      auto __promise = std::make_shared<std::promise<int64_t>>();
+      result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
+        auto __result = jni::static_ref_cast<jni::JLong>(__boxedResult);
+        __promise->set_value(__result->value());
       });
-      result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JString>& message) {
-        std::runtime_error error(message->toStdString());
-        promise->set_exception(std::make_exception_ptr(error));
+      result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JString>& __message) {
+        std::runtime_error __error(__message->toStdString());
+        __promise->set_exception(std::make_exception_ptr(__error));
       });
-      return promise->get_future();
+      return __promise->get_future();
     }();
   }
   std::future<void> JHybridTestObjectSwiftKotlinSpec::wait(double seconds) {
     static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JPromise::javaobject>(double /* seconds */)>("wait");
     auto result = method(_javaPart, seconds);
     return [&]() {
-      auto promise = std::make_shared<std::promise<void>>();
-      result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& boxedResult) {
-        promise->set_value();
+      auto __promise = std::make_shared<std::promise<void>>();
+      result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
+        __promise->set_value();
       });
-      result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JString>& message) {
-        std::runtime_error error(message->toStdString());
-        promise->set_exception(std::make_exception_ptr(error));
+      result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JString>& __message) {
+        std::runtime_error __error(__message->toStdString());
+        __promise->set_exception(std::make_exception_ptr(__error));
       });
-      return promise->get_future();
+      return __promise->get_future();
     }();
   }
   void JHybridTestObjectSwiftKotlinSpec::callCallback(const std::function<void()>& callback) {
