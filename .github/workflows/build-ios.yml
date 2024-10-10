@@ -32,6 +32,9 @@ on:
       - '**/react-native.config.js'
       - '**/nitro.json'
 
+env:
+  USE_CCACHE: 1
+
 jobs:
   build_new:
     name: Build iOS Example App (new architecture)
