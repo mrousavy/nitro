@@ -34,7 +34,7 @@ public class HybridBaseSpecCxx {
    * Get the actual `HybridBaseSpec` instance this class wraps.
    */
   @inline(__always)
-  public func getHybridBaseSpec() -> some HybridBaseSpec {
+  public func getHybridBaseSpec() -> any HybridBaseSpec {
     return __implementation
   }
 

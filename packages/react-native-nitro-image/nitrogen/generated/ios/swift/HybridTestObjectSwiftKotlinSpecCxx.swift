@@ -34,7 +34,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
    * Get the actual `HybridTestObjectSwiftKotlinSpec` instance this class wraps.
    */
   @inline(__always)
-  public func getHybridTestObjectSwiftKotlinSpec() -> some HybridTestObjectSwiftKotlinSpec {
+  public func getHybridTestObjectSwiftKotlinSpec() -> any HybridTestObjectSwiftKotlinSpec {
     return __implementation
   }
 

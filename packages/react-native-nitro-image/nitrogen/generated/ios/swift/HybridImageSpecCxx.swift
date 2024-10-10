@@ -34,7 +34,7 @@ public class HybridImageSpecCxx {
    * Get the actual `HybridImageSpec` instance this class wraps.
    */
   @inline(__always)
-  public func getHybridImageSpec() -> some HybridImageSpec {
+  public func getHybridImageSpec() -> any HybridImageSpec {
     return __implementation
   }
 

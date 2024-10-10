@@ -34,7 +34,7 @@ public class HybridChildSpecCxx : HybridBaseSpecCxx {
    * Get the actual `HybridChildSpec` instance this class wraps.
    */
   @inline(__always)
-  public func getHybridChildSpec() -> some HybridChildSpec {
+  public func getHybridChildSpec() -> any HybridChildSpec {
     return __implementation
   }
 

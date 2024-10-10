@@ -75,7 +75,7 @@ ${hasBase ? `public class ${name.HybridTSpecCxx} : ${baseClasses.join(', ')}` : 
    * Get the actual \`${name.HybridTSpec}\` instance this class wraps.
    */
   @inline(__always)
-  public func get${name.HybridTSpec}() -> some ${name.HybridTSpec} {
+  public func get${name.HybridTSpec}() -> any ${name.HybridTSpec} {
     return __implementation
   }
 

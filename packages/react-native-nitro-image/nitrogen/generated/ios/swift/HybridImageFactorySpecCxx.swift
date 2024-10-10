@@ -34,7 +34,7 @@ public class HybridImageFactorySpecCxx {
    * Get the actual `HybridImageFactorySpec` instance this class wraps.
    */
   @inline(__always)
-  public func getHybridImageFactorySpec() -> some HybridImageFactorySpec {
+  public func getHybridImageFactorySpec() -> any HybridImageFactorySpec {
     return __implementation
   }
 
