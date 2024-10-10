@@ -28,14 +28,14 @@ public class HybridImageFactorySpecCxx {
   /**
    * Holds an instance of the `HybridImageFactorySpec` Swift protocol.
    */
-  private var implementation: HybridImageFactorySpec
+  private var __implementation: HybridImageFactorySpec
 
   /**
    * Get the actual `HybridImageFactorySpec` instance this class wraps.
    */
   @inline(__always)
   public func getHybridImageFactorySpec() -> HybridImageFactorySpec {
-    return implementation
+    return __implementation
   }
 
   /**
@@ -43,7 +43,7 @@ public class HybridImageFactorySpecCxx {
    * All properties and methods bridge to C++ types.
    */
   public init(_ implementation: HybridImageFactorySpec) {
-    self.implementation = implementation
+    self.__implementation = implementation
     /* no base class */
   }
 
@@ -53,11 +53,11 @@ public class HybridImageFactorySpecCxx {
   public var hybridContext: margelo.nitro.HybridContext {
     @inline(__always)
     get {
-      return self.implementation.hybridContext
+      return self.__implementation.hybridContext
     }
     @inline(__always)
     set {
-      self.implementation.hybridContext = newValue
+      self.__implementation.hybridContext = newValue
     }
   }
 
@@ -67,7 +67,7 @@ public class HybridImageFactorySpecCxx {
    */
   @inline(__always)
   public var memorySize: Int {
-    return self.implementation.memorySize
+    return self.__implementation.memorySize
   }
 
   // Properties
@@ -77,8 +77,8 @@ public class HybridImageFactorySpecCxx {
   @inline(__always)
   public func loadImageFromFile(path: std.string) -> HybridImageSpecCxx {
     do {
-      let result = try self.implementation.loadImageFromFile(path: String(path))
-      return result.createCxxBridge()
+      let __result = try self.__implementation.loadImageFromFile(path: String(path))
+      return __result.createCxxBridge()
     } catch {
       let message = "\(error.localizedDescription)"
       fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
@@ -88,8 +88,8 @@ public class HybridImageFactorySpecCxx {
   @inline(__always)
   public func loadImageFromURL(path: std.string) -> HybridImageSpecCxx {
     do {
-      let result = try self.implementation.loadImageFromURL(path: String(path))
-      return result.createCxxBridge()
+      let __result = try self.__implementation.loadImageFromURL(path: String(path))
+      return __result.createCxxBridge()
     } catch {
       let message = "\(error.localizedDescription)"
       fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
@@ -99,8 +99,8 @@ public class HybridImageFactorySpecCxx {
   @inline(__always)
   public func loadImageFromSystemName(path: std.string) -> HybridImageSpecCxx {
     do {
-      let result = try self.implementation.loadImageFromSystemName(path: String(path))
-      return result.createCxxBridge()
+      let __result = try self.__implementation.loadImageFromSystemName(path: String(path))
+      return __result.createCxxBridge()
     } catch {
       let message = "\(error.localizedDescription)"
       fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
@@ -110,8 +110,8 @@ public class HybridImageFactorySpecCxx {
   @inline(__always)
   public func bounceBack(image: HybridImageSpecCxx) -> HybridImageSpecCxx {
     do {
-      let result = try self.implementation.bounceBack(image: image.getHybridImageSpec())
-      return result.createCxxBridge()
+      let __result = try self.__implementation.bounceBack(image: image.getHybridImageSpec())
+      return __result.createCxxBridge()
     } catch {
       let message = "\(error.localizedDescription)"
       fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")

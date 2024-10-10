@@ -64,8 +64,8 @@ abstract class HybridImageSpec: HybridObject() {
   @DoNotStrip
   @Keep
   private fun saveToFile(path: String, onFinished: Func_void_std__string): Unit {
-    val result = saveToFile(path, onFinished.toLambda())
-    return result
+    val __result = saveToFile(path, onFinished.toLambda())
+    return __result
   }
 
   private external fun initHybrid(): HybridData

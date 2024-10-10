@@ -232,8 +232,8 @@ function getFbjniMethodForwardImplementation(
     // return something - we need to parse it
     body = `
 static const auto method = _javaPart->getClass()->getMethod<${cxxSignature}>("${method.name}");
-auto result = method(${paramsForward.join(', ')});
-return ${returnJNI.parse('result', 'kotlin', 'c++', 'c++')};
+auto __result = method(${paramsForward.join(', ')});
+return ${returnJNI.parse('__result', 'kotlin', 'c++', 'c++')};
     `
   } else {
     // void method. no return

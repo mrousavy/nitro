@@ -154,8 +154,8 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   @DoNotStrip
   @Keep
   private fun callCallback(callback: Func_void): Unit {
-    val result = callCallback(callback.toLambda())
-    return result
+    val __result = callCallback(callback.toLambda())
+    return __result
   }
   
   @DoNotStrip
@@ -165,8 +165,8 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   @DoNotStrip
   @Keep
   private fun callAll(first: Func_void, second: Func_void, third: Func_void): Unit {
-    val result = callAll(first.toLambda(), second.toLambda(), third.toLambda())
-    return result
+    val __result = callAll(first.toLambda(), second.toLambda(), third.toLambda())
+    return __result
   }
   
   @DoNotStrip
@@ -176,8 +176,8 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   @DoNotStrip
   @Keep
   private fun callWithOptional(value: Double?, callback: Func_void_std__optional_double_): Unit {
-    val result = callWithOptional(value, callback.toLambda())
-    return result
+    val __result = callWithOptional(value, callback.toLambda())
+    return __result
   }
   
   @DoNotStrip

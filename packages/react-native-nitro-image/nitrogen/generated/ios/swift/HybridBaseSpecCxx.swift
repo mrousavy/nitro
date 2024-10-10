@@ -28,14 +28,14 @@ public class HybridBaseSpecCxx {
   /**
    * Holds an instance of the `HybridBaseSpec` Swift protocol.
    */
-  private var implementation: HybridBaseSpec
+  private var __implementation: HybridBaseSpec
 
   /**
    * Get the actual `HybridBaseSpec` instance this class wraps.
    */
   @inline(__always)
   public func getHybridBaseSpec() -> HybridBaseSpec {
-    return implementation
+    return __implementation
   }
 
   /**
@@ -43,7 +43,7 @@ public class HybridBaseSpecCxx {
    * All properties and methods bridge to C++ types.
    */
   public init(_ implementation: HybridBaseSpec) {
-    self.implementation = implementation
+    self.__implementation = implementation
     /* no base class */
   }
 
@@ -53,11 +53,11 @@ public class HybridBaseSpecCxx {
   public var hybridContext: margelo.nitro.HybridContext {
     @inline(__always)
     get {
-      return self.implementation.hybridContext
+      return self.__implementation.hybridContext
     }
     @inline(__always)
     set {
-      self.implementation.hybridContext = newValue
+      self.__implementation.hybridContext = newValue
     }
   }
 
@@ -67,14 +67,14 @@ public class HybridBaseSpecCxx {
    */
   @inline(__always)
   public var memorySize: Int {
-    return self.implementation.memorySize
+    return self.__implementation.memorySize
   }
 
   // Properties
   public var baseValue: Double {
     @inline(__always)
     get {
-      return self.implementation.baseValue
+      return self.__implementation.baseValue
     }
   }
 

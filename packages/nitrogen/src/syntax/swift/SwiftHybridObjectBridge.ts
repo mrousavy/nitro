@@ -69,14 +69,14 @@ ${hasBase ? `public class ${name.HybridTSpecCxx} : ${baseClasses.join(', ')}` : 
   /**
    * Holds an instance of the \`${name.HybridTSpec}\` Swift protocol.
    */
-  private var implementation: ${name.HybridTSpec}
+  private var __implementation: ${name.HybridTSpec}
 
   /**
    * Get the actual \`${name.HybridTSpec}\` instance this class wraps.
    */
   @inline(__always)
   public func get${name.HybridTSpec}() -> ${name.HybridTSpec} {
-    return implementation
+    return __implementation
   }
 
   /**
@@ -84,7 +84,7 @@ ${hasBase ? `public class ${name.HybridTSpecCxx} : ${baseClasses.join(', ')}` : 
    * All properties and methods bridge to C++ types.
    */
   public init(_ implementation: ${name.HybridTSpec}) {
-    self.implementation = implementation
+    self.__implementation = implementation
     ${hasBase ? 'super.init(implementation)' : '/* no base class */'}
   }
 
@@ -94,11 +94,11 @@ ${hasBase ? `public class ${name.HybridTSpecCxx} : ${baseClasses.join(', ')}` : 
   public ${hasBase ? 'override var' : 'var'} hybridContext: margelo.nitro.HybridContext {
     @inline(__always)
     get {
-      return self.implementation.hybridContext
+      return self.__implementation.hybridContext
     }
     @inline(__always)
     set {
-      self.implementation.hybridContext = newValue
+      self.__implementation.hybridContext = newValue
     }
   }
 
@@ -108,7 +108,7 @@ ${hasBase ? `public class ${name.HybridTSpecCxx} : ${baseClasses.join(', ')}` : 
    */
   @inline(__always)
   public ${hasBase ? 'override var' : 'var'} memorySize: Int {
-    return self.implementation.memorySize
+    return self.__implementation.memorySize
   }
 
   // Properties
@@ -128,8 +128,8 @@ ${hasBase ? `public class ${name.HybridTSpecCxx} : ${baseClasses.join(', ')}` : 
       if (bridged.needsSpecialHandling) {
         // we need custom C++ -> Swift conversion code
         getter = `
-auto result = _swiftPart.${p.cppGetterName}();
-return ${bridged.parseFromSwiftToCpp('result', 'c++')};
+auto __result = _swiftPart.${p.cppGetterName}();
+return ${bridged.parseFromSwiftToCpp('__result', 'c++')};
 `
         setter = `_swiftPart.${p.cppSetterName}(${bridged.parseFromCppToSwift(p.name, 'c++')});`
       } else {
@@ -321,7 +321,7 @@ namespace ${cxxNamespace} {
 function getPropertyForwardImplementation(property: Property): string {
   const bridgedType = new SwiftCxxBridgedType(property.type)
   const convertToCpp = bridgedType.parseFromSwiftToCpp(
-    `self.implementation.${property.name}`,
+    `self.__implementation.${property.name}`,
     'swift'
   )
   const convertFromCpp = bridgedType.parseFromCppToSwift('newValue', 'swift')
@@ -334,7 +334,7 @@ get {
   const setter = `
 @inline(__always)
 set {
-  self.implementation.${property.name} = ${indent(convertFromCpp, '  ')}
+  self.__implementation.${property.name} = ${indent(convertFromCpp, '  ')}
 }
   `.trim()
 
@@ -361,16 +361,15 @@ function getMethodForwardImplementation(method: Method): string {
     const bridgedType = new SwiftCxxBridgedType(p.type)
     return `${p.name}: ${bridgedType.parseFromCppToSwift(p.name, 'swift')}`
   })
-  const resultValue = returnType.hasType ? `let result = ` : ''
+  const resultValue = returnType.hasType ? `let __result = ` : ''
   const returnValue = returnType.hasType
-    ? `${returnType.parseFromSwiftToCpp('result', 'swift')}`
+    ? `${returnType.parseFromSwiftToCpp('__result', 'swift')}`
     : ''
-  // TODO: Use @inlinable or @inline(__always)?
   return `
 @inline(__always)
 public func ${method.name}(${params.join(', ')}) -> ${returnType.getTypeCode('swift')} {
   do {
-    ${resultValue}try self.implementation.${method.name}(${indent(passParams.join(', '), '    ')})
+    ${resultValue}try self.__implementation.${method.name}(${indent(passParams.join(', '), '    ')})
     return ${indent(returnValue, '    ')}
   } catch {
     let message = "\\(error.localizedDescription)"
