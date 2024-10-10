@@ -24,11 +24,6 @@ export class StructType implements Type {
         `Struct name cannot start with two underscores (__) as this is reserved syntax for Nitrogen! (In ${this.structName})`
       )
     }
-    if (this.properties.length === 0) {
-      throw new Error(
-        `Empty structs are not supported in Nitrogen! Add at least one property to ${this.structName}.`
-      )
-    }
   }
 
   get canBePassedByReference(): boolean {

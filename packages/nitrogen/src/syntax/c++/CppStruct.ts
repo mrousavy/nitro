@@ -10,6 +10,7 @@ export function createCppStruct(
   properties: NamedType[]
 ): FileWithReferencedTypes {
   // Get C++ code for all struct members
+  const hasProperties = properties.length > 0
   const cppStructProps = properties
     .map((p) => `${p.getCode('c++')} ${p.escapedName}     SWIFT_PRIVATE;`)
     .join('\n')
@@ -71,10 +72,10 @@ namespace ${cxxNamespace} {
    */
   struct ${typename} {
   public:
-    ${indent(cppStructProps, '    ')}
+    ${hasProperties ? indent(cppStructProps, '    ') : '/* empty struct */'}
 
   public:
-    explicit ${typename}(${cppConstructorParams}): ${cppInitializerParams} {}
+    ${hasProperties ? `explicit ${typename}(${cppConstructorParams}): ${cppInitializerParams} {}` : `${typename}() = default;`}
   };
 
 } // namespace ${cxxNamespace}
