@@ -233,6 +233,20 @@ export function getTests(
         .didReturn('undefined')
     ),
 
+    // Arrays
+    createTest('bounceNumbers(...) equals', () =>
+      it(() => testObject.bounceNumbers([1, 2, 13, 42]))
+        .didNotThrow()
+        .didReturn('object')
+        .equals([1, 2, 13, 42])
+    ),
+    createTest('bounceStrings(...) equals', () =>
+      it(() => testObject.bounceStrings(['hello', 'world', '!']))
+        .didNotThrow()
+        .didReturn('object')
+        .equals(['hello', 'world', '!'])
+    ),
+
     // Test Maps
     createTest('createMap()', () =>
       it(() => testObject.createMap())
