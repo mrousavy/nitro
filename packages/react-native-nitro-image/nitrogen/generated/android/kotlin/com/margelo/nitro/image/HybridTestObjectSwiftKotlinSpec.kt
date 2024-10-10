@@ -121,6 +121,14 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
+  abstract fun bounceStructs(array: Array<Person>): Array<Person>
+  
+  @DoNotStrip
+  @Keep
+  abstract fun bounceEnums(array: Array<Powertrain>): Array<Powertrain>
+  
+  @DoNotStrip
+  @Keep
   abstract fun createMap(): AnyMap
   
   @DoNotStrip

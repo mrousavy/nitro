@@ -47,6 +47,8 @@ public protocol HybridTestObjectSwiftKotlinSpec: AnyObject, HybridObjectSpec {
   func multipleArguments(num: Double, str: String, boo: Bool) throws -> Void
   func bounceStrings(array: [String]) throws -> [String]
   func bounceNumbers(array: [Double]) throws -> [Double]
+  func bounceStructs(array: [Person]) throws -> [Person]
+  func bounceEnums(array: [Powertrain]) throws -> [Powertrain]
   func createMap() throws -> AnyMapHolder
   func mapRoundtrip(map: AnyMapHolder) throws -> AnyMapHolder
   func funcThatThrows() throws -> Double

@@ -15,14 +15,14 @@
 
 // Forward declaration of `HybridTestObjectSwiftKotlinSpec` to properly resolve imports.
 namespace margelo::nitro::image { class HybridTestObjectSwiftKotlinSpec; }
-// Forward declaration of `AnyMap` to properly resolve imports.
-namespace NitroModules { class AnyMap; }
-// Forward declaration of `Powertrain` to properly resolve imports.
-namespace margelo::nitro::image { enum class Powertrain; }
-// Forward declaration of `Car` to properly resolve imports.
-namespace margelo::nitro::image { struct Car; }
 // Forward declaration of `Person` to properly resolve imports.
 namespace margelo::nitro::image { struct Person; }
+// Forward declaration of `Powertrain` to properly resolve imports.
+namespace margelo::nitro::image { enum class Powertrain; }
+// Forward declaration of `AnyMap` to properly resolve imports.
+namespace NitroModules { class AnyMap; }
+// Forward declaration of `Car` to properly resolve imports.
+namespace margelo::nitro::image { struct Car; }
 // Forward declaration of `ArrayBuffer` to properly resolve imports.
 namespace NitroModules { class ArrayBuffer; }
 // Forward declaration of `HybridChildSpec` to properly resolve imports.
@@ -36,12 +36,12 @@ namespace margelo::nitro::image { class HybridBaseSpec; }
 #include <optional>
 #include <variant>
 #include <vector>
-#include <NitroModules/AnyMap.hpp>
+#include "Person.hpp"
 #include "Powertrain.hpp"
+#include <NitroModules/AnyMap.hpp>
 #include <future>
 #include <functional>
 #include "Car.hpp"
-#include "Person.hpp"
 #include <NitroModules/ArrayBuffer.hpp>
 #include "HybridChildSpec.hpp"
 #include "HybridBaseSpec.hpp"
@@ -100,6 +100,8 @@ namespace margelo::nitro::image {
       virtual void multipleArguments(double num, const std::string& str, bool boo) = 0;
       virtual std::vector<std::string> bounceStrings(const std::vector<std::string>& array) = 0;
       virtual std::vector<double> bounceNumbers(const std::vector<double>& array) = 0;
+      virtual std::vector<Person> bounceStructs(const std::vector<Person>& array) = 0;
+      virtual std::vector<Powertrain> bounceEnums(const std::vector<Powertrain>& array) = 0;
       virtual std::shared_ptr<AnyMap> createMap() = 0;
       virtual std::shared_ptr<AnyMap> mapRoundtrip(const std::shared_ptr<AnyMap>& map) = 0;
       virtual double funcThatThrows() = 0;

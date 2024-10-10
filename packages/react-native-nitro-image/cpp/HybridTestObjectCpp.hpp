@@ -76,6 +76,8 @@ public:
 
   std::vector<std::string> bounceStrings(const std::vector<std::string>& array) override;
   std::vector<double> bounceNumbers(const std::vector<double>& array) override;
+  std::vector<Person> bounceStructs(const std::vector<Person>& array) override;
+  std::vector<Powertrain> bounceEnums(const std::vector<Powertrain>& array) override;
 
   std::variant<bool, OldEnum> getVariantEnum(const std::variant<bool, OldEnum>& variant) override;
   std::variant<Car, Person> getVariantObjects(const std::variant<Car, Person>& variant) override;

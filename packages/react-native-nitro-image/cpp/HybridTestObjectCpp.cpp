@@ -118,6 +118,14 @@ std::vector<double> HybridTestObjectCpp::bounceNumbers(const std::vector<double>
   return array;
 }
 
+std::vector<Person> HybridTestObjectCpp::bounceStructs(const std::vector<Person>& array) {
+  return array;
+}
+
+std::vector<Powertrain> HybridTestObjectCpp::bounceEnums(const std::vector<Powertrain>& array) {
+  return array;
+}
+
 std::shared_ptr<AnyMap> HybridTestObjectCpp::createMap() {
   auto map = AnyMap::make();
   map->setDouble("number", getNumberValue());

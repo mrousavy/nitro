@@ -45,6 +45,14 @@ class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
         return array
     }
 
+    override fun bounceStructs(array: Array<Person>): Array<Person> {
+        return array
+    }
+
+    override fun bounceEnums(array: Array<Powertrain>): Array<Powertrain> {
+        return array
+    }
+
     override fun createMap(): AnyMap {
         val map = AnyMap()
         map.setDouble("number", numberValue)

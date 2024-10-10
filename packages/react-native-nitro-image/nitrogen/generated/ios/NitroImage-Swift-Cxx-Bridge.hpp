@@ -441,6 +441,26 @@ namespace margelo::nitro::image::bridge::swift {
   }
   
   /**
+   * Specialized version of `std::vector<Person>`.
+   */
+  using std__vector_Person_ = std::vector<Person>;
+  inline std::vector<Person> create_std__vector_Person_(size_t size) {
+    std::vector<Person> vector;
+    vector.reserve(size);
+    return vector;
+  }
+  
+  /**
+   * Specialized version of `std::vector<Powertrain>`.
+   */
+  using std__vector_Powertrain_ = std::vector<Powertrain>;
+  inline std::vector<Powertrain> create_std__vector_Powertrain_(size_t size) {
+    std::vector<Powertrain> vector;
+    vector.reserve(size);
+    return vector;
+  }
+  
+  /**
    * Specialized version of `std::optional<bool>`.
    */
   using std__optional_bool_ = std::optional<bool>;

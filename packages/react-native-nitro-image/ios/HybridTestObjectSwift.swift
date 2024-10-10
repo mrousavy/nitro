@@ -62,6 +62,14 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
     return array
   }
 
+  func bounceStructs(array: [Person]) throws -> [Person] {
+    return array
+  }
+
+  func bounceEnums(array: [Powertrain]) throws -> [Powertrain] {
+    return array
+  }
+
   func createMap() throws -> AnyMapHolder {
     let map = AnyMapHolder()
     map.setDouble(key: "number", value: numberValue)
