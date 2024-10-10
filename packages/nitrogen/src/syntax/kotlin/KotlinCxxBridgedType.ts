@@ -456,16 +456,19 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
             const record = getTypeAs(this.type, RecordType)
             const key = new KotlinCxxBridgedType(record.keyType)
             const value = new KotlinCxxBridgedType(record.valueType)
-            const parseKey = key.parseFromCppToKotlin('entry.first', 'c++')
-            const parseValue = value.parseFromCppToKotlin('entry.second', 'c++')
+            const parseKey = key.parseFromCppToKotlin('__entry.first', 'c++')
+            const parseValue = value.parseFromCppToKotlin(
+              '__entry.second',
+              'c++'
+            )
             const javaMapType = `jni::JHashMap<${key.getTypeCode('c++')}, ${value.getTypeCode('c++')}>`
             return `
 [&]() {
-  auto map = ${javaMapType}::create(${parameterName}.size());
-  for (const auto& entry : ${parameterName}) {
-    map->put(${indent(parseKey, '    ')}, ${indent(parseValue, '    ')});
+  auto __map = ${javaMapType}::create(${parameterName}.size());
+  for (const auto& __entry : ${parameterName}) {
+    __map->put(${indent(parseKey, '    ')}, ${indent(parseValue, '    ')});
   }
-  return map;
+  return __map;
 }()
             `.trim()
           default:
@@ -486,10 +489,10 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
                 // no need to iterate through the entire array.
                 return `
 [&]() {
-  size_t size = ${parameterName}.size();
-  jni::local_ref<${arrayType}> array = ${arrayType}::newArray(size);
-  array->setRegion(0, size, ${parameterName}.data());
-  return array;
+  size_t __size = ${parameterName}.size();
+  jni::local_ref<${arrayType}> __array = ${arrayType}::newArray(__size);
+  __array->setRegion(0, __size, ${parameterName}.data());
+  return __array;
 }()
 `.trim()
               }
@@ -497,13 +500,13 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
                 // other arrays need to loop through
                 return `
 [&]() {
-  size_t size = ${parameterName}.size();
-  jni::local_ref<${arrayType}> array = ${arrayType}::newArray(size);
-  for (size_t i = 0; i < size; i++) {
+  size_t __size = ${parameterName}.size();
+  jni::local_ref<${arrayType}> __array = ${arrayType}::newArray(__size);
+  for (size_t i = 0; i < __size; i++) {
     const auto& element = ${parameterName}[i];
-    array->setElement(i, *${bridge.parseFromCppToKotlin('element', 'c++')});
+    __array->setElement(i, *${bridge.parseFromCppToKotlin('element', 'c++')});
   }
-  return array;
+  return __array;
 }()
             `.trim()
               }
@@ -611,17 +614,20 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
             const record = getTypeAs(this.type, RecordType)
             const key = new KotlinCxxBridgedType(record.keyType)
             const value = new KotlinCxxBridgedType(record.valueType)
-            const parseKey = key.parseFromKotlinToCpp('entry.first', 'c++')
-            const parseValue = value.parseFromKotlinToCpp('entry.second', 'c++')
+            const parseKey = key.parseFromKotlinToCpp('__entry.first', 'c++')
+            const parseValue = value.parseFromKotlinToCpp(
+              '__entry.second',
+              'c++'
+            )
             const cxxType = this.type.getCode('c++')
             return `
 [&]() {
-  ${cxxType} map;
-  map.reserve(${parameterName}->size());
-  for (const auto& entry : *${parameterName}) {
-    map.emplace(${indent(parseKey, '    ')}, ${indent(parseValue, '    ')});
+  ${cxxType} __map;
+  __map.reserve(${parameterName}->size());
+  for (const auto& __entry : *${parameterName}) {
+    __map.emplace(${indent(parseKey, '    ')}, ${indent(parseValue, '    ')});
   }
-  return map;
+  return __map;
 }()
             `.trim()
           default:
@@ -642,11 +648,11 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
                 // which we can use to construct the vector directly instead of looping through it.
                 return `
 [&]() {
-  size_t size = ${parameterName}->size();
-  std::vector<${itemType}> vector;
-  vector.reserve(size);
-  ${parameterName}->getRegion(0, size, vector.data());
-  return vector;
+  size_t __size = ${parameterName}->size();
+  std::vector<${itemType}> __vector;
+  __vector.reserve(__size);
+  ${parameterName}->getRegion(0, __size, __vector.data());
+  return __vector;
 }()
 `.trim()
               }
@@ -654,14 +660,14 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
                 // other arrays need to loop through
                 return `
 [&]() {
-  size_t size = ${parameterName}->size();
-  std::vector<${itemType}> vector;
-  vector.reserve(size);
-  for (size_t i = 0; i < size; i++) {
-    auto element = ${parameterName}->getElement(i);
-    vector.push_back(${bridge.parseFromKotlinToCpp('element', 'c++')});
+  size_t __size = ${parameterName}->size();
+  std::vector<${itemType}> __vector;
+  __vector.reserve(__size);
+  for (size_t i = 0; i < __size; i++) {
+    auto __element = ${parameterName}->getElement(i);
+    __vector.push_back(${bridge.parseFromKotlinToCpp('__element', 'c++')});
   }
-  return vector;
+  return __vector;
 }()
             `.trim()
               }
@@ -682,26 +688,26 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
             if (resultingType.hasType) {
               // it's a Promise<T>
               resolveBody = `
-auto result = jni::static_ref_cast<${resultingType.getTypeCode('c++', true)}>(boxedResult);
-promise->set_value(${resultingType.parseFromKotlinToCpp('result', 'c++', true)});
+auto __result = jni::static_ref_cast<${resultingType.getTypeCode('c++', true)}>(__boxedResult);
+__promise->set_value(${resultingType.parseFromKotlinToCpp('__result', 'c++', true)});
           `.trim()
             } else {
               // it's a Promise<void>
               resolveBody = `
-promise->set_value();
+__promise->set_value();
           `.trim()
             }
             return `
 [&]() {
-  auto promise = std::make_shared<std::promise<${actualCppType}>>();
-  ${parameterName}->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& boxedResult) {
+  auto __promise = std::make_shared<std::promise<${actualCppType}>>();
+  ${parameterName}->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
     ${indent(resolveBody, '    ')}
   });
-  ${parameterName}->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JString>& message) {
-    std::runtime_error error(message->toStdString());
-    promise->set_exception(std::make_exception_ptr(error));
+  ${parameterName}->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JString>& __message) {
+    std::runtime_error __error(__message->toStdString());
+    __promise->set_exception(std::make_exception_ptr(__error));
   });
-  return promise->get_future();
+  return __promise->get_future();
 }()
         `.trim()
           default:
