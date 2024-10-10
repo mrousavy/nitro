@@ -65,6 +65,15 @@ export class Property implements CodeNode {
       const isOptional = prop.hasQuestionToken() || type.isNullable()
       this.type = createType(type, isOptional)
     }
+    if (this.name.startsWith('__')) {
+      throw new Error(
+        `Property names are not allowed to start with two underscores (__)! (In ${this.jsSignature})`
+      )
+    }
+  }
+
+  get jsSignature(): string {
+    return `${this.name}: ${this.type.kind}`
   }
 
   getExtraFiles(): SourceFile[] {

@@ -73,6 +73,11 @@ export class EnumType implements Type {
         })
       this.declarationFile = createCppUnion(enumName, this.enumMembers)
     }
+    if (this.enumName.startsWith('__')) {
+      throw new Error(
+        `Enum name cannot start with two underscores (__) as this is reserved syntax for Nitrogen! (In ${this.enumName}: ${this.enumMembers.map((m) => m.name).join(' | ')})`
+      )
+    }
   }
 
   get canBePassedByReference(): boolean {

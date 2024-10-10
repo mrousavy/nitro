@@ -28,6 +28,15 @@ export class Parameter implements CodeNode {
         param.hasQuestionToken() || param.isOptional() || type.isNullable()
       this.type = createNamedType(name, type, isOptional)
     }
+    if (this.type.name.startsWith('__')) {
+      throw new Error(
+        `Parameter names are not allowed to start with two underscores (__)! (In ${this.jsSignature})`
+      )
+    }
+  }
+
+  get jsSignature(): string {
+    return `${this.type.name}: ${this.type.kind}`
   }
 
   get name(): string {

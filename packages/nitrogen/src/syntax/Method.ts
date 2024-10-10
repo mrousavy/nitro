@@ -62,6 +62,17 @@ export class Method implements CodeNode {
       this.returnType = createType(returnType, returnType.isNullable())
       this.parameters = method.getParameters().map((p) => new Parameter(p))
     }
+    if (this.name.startsWith('__')) {
+      throw new Error(
+        `Method names are not allowed to start with two underscores (__)! (In ${this.jsSignature})`
+      )
+    }
+  }
+
+  get jsSignature(): string {
+    const returnType = this.returnType.kind
+    const params = this.parameters.map((p) => `${p.name}: ${p.type.kind}`)
+    return `${this.name}(${params.join(', ')}): ${returnType}`
   }
 
   getCode(
