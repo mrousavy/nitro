@@ -28,13 +28,13 @@ public class HybridBaseSpecCxx {
   /**
    * Holds an instance of the `HybridBaseSpec` Swift protocol.
    */
-  private var __implementation: any HybridBaseSpec
+  private var __implementation: some HybridBaseSpec
 
   /**
    * Get the actual `HybridBaseSpec` instance this class wraps.
    */
   @inline(__always)
-  public func getHybridBaseSpec() -> any HybridBaseSpec {
+  public func getHybridBaseSpec() -> some HybridBaseSpec {
     return __implementation
   }
 
@@ -42,7 +42,7 @@ public class HybridBaseSpecCxx {
    * Create a new `HybridBaseSpecCxx` that wraps the given `HybridBaseSpec`.
    * All properties and methods bridge to C++ types.
    */
-  public init(_ implementation: any HybridBaseSpec) {
+  public init(_ implementation: some HybridBaseSpec) {
     self.__implementation = implementation
     /* no base class */
   }

@@ -28,13 +28,13 @@ public class HybridImageSpecCxx {
   /**
    * Holds an instance of the `HybridImageSpec` Swift protocol.
    */
-  private var __implementation: any HybridImageSpec
+  private var __implementation: some HybridImageSpec
 
   /**
    * Get the actual `HybridImageSpec` instance this class wraps.
    */
   @inline(__always)
-  public func getHybridImageSpec() -> any HybridImageSpec {
+  public func getHybridImageSpec() -> some HybridImageSpec {
     return __implementation
   }
 
@@ -42,7 +42,7 @@ public class HybridImageSpecCxx {
    * Create a new `HybridImageSpecCxx` that wraps the given `HybridImageSpec`.
    * All properties and methods bridge to C++ types.
    */
-  public init(_ implementation: any HybridImageSpec) {
+  public init(_ implementation: some HybridImageSpec) {
     self.__implementation = implementation
     /* no base class */
   }

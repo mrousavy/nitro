@@ -36,7 +36,7 @@ export class HybridObjectType implements Type {
         return `std::shared_ptr<${fullName}>`
       }
       case 'swift': {
-        return `any ${name.HybridTSpec}`
+        return `some ${name.HybridTSpec}`
       }
       case 'kotlin': {
         return name.HybridTSpec
