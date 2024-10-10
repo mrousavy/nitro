@@ -1,6 +1,6 @@
 name: 🐛 Bug Report
-description: File a bug report
-title: "🐛 "
+description: File a bug report for Nitro Modules core
+labels: [nitro-core]
 body:
   - type: textarea
     attributes:
