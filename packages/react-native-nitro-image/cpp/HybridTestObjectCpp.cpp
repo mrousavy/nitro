@@ -126,7 +126,8 @@ std::vector<Powertrain> HybridTestObjectCpp::bounceEnums(const std::vector<Power
   return array;
 }
 
-void HybridTestObjectCpp::complexEnumCallback(const std::vector<Powertrain>& array, const std::function<void(const std::vector<Powertrain>& /* array */)>& callback) {
+void HybridTestObjectCpp::complexEnumCallback(const std::vector<Powertrain>& array,
+                                              const std::function<void(const std::vector<Powertrain>& /* array */)>& callback) {
   callback(array);
 }
 

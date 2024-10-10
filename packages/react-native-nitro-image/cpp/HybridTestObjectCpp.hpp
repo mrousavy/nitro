@@ -78,7 +78,8 @@ public:
   std::vector<double> bounceNumbers(const std::vector<double>& array) override;
   std::vector<Person> bounceStructs(const std::vector<Person>& array) override;
   std::vector<Powertrain> bounceEnums(const std::vector<Powertrain>& array) override;
-  void complexEnumCallback(const std::vector<Powertrain>& array, const std::function<void(const std::vector<Powertrain>& /* array */)>& callback) override;
+  void complexEnumCallback(const std::vector<Powertrain>& array,
+                           const std::function<void(const std::vector<Powertrain>& /* array */)>& callback) override;
 
   std::variant<bool, OldEnum> getVariantEnum(const std::variant<bool, OldEnum>& variant) override;
   std::variant<Car, Person> getVariantObjects(const std::variant<Car, Person>& variant) override;
