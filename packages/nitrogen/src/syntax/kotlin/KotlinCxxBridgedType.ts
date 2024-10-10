@@ -503,8 +503,8 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
   size_t __size = ${parameterName}.size();
   jni::local_ref<${arrayType}> __array = ${arrayType}::newArray(__size);
   for (size_t __i = 0; __i < __size; __i++) {
-    const auto& element = ${parameterName}[__i];
-    __array->setElement(__i, *${bridge.parseFromCppToKotlin('element', 'c++')});
+    const auto& __element = ${parameterName}[__i];
+    __array->setElement(__i, *${bridge.parseFromCppToKotlin('__element', 'c++')});
   }
   return __array;
 }()
