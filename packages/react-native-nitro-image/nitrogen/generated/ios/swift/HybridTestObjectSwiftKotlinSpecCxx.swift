@@ -28,7 +28,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
   /**
    * Holds an instance of the `HybridTestObjectSwiftKotlinSpec` Swift protocol.
    */
-  private var __implementation: some HybridTestObjectSwiftKotlinSpec
+  private var __implementation: any HybridTestObjectSwiftKotlinSpec
 
   /**
    * Get the actual `HybridTestObjectSwiftKotlinSpec` instance this class wraps.

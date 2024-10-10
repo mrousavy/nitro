@@ -28,7 +28,7 @@ public class HybridBaseSpecCxx {
   /**
    * Holds an instance of the `HybridBaseSpec` Swift protocol.
    */
-  private var __implementation: some HybridBaseSpec
+  private var __implementation: any HybridBaseSpec
 
   /**
    * Get the actual `HybridBaseSpec` instance this class wraps.

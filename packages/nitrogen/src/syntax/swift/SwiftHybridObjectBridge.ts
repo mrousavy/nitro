@@ -69,7 +69,7 @@ ${hasBase ? `public class ${name.HybridTSpecCxx} : ${baseClasses.join(', ')}` : 
   /**
    * Holds an instance of the \`${name.HybridTSpec}\` Swift protocol.
    */
-  private var __implementation: some ${name.HybridTSpec}
+  private var __implementation: any ${name.HybridTSpec}
 
   /**
    * Get the actual \`${name.HybridTSpec}\` instance this class wraps.

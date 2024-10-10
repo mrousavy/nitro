@@ -28,7 +28,7 @@ public class HybridImageFactorySpecCxx {
   /**
    * Holds an instance of the `HybridImageFactorySpec` Swift protocol.
    */
-  private var __implementation: some HybridImageFactorySpec
+  private var __implementation: any HybridImageFactorySpec
 
   /**
    * Get the actual `HybridImageFactorySpec` instance this class wraps.
