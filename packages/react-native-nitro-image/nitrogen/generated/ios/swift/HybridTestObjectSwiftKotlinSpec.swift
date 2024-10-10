@@ -45,6 +45,8 @@ public protocol HybridTestObjectSwiftKotlinSpec: AnyObject, HybridObjectSpec {
   func addNumbers(a: Double, b: Double) throws -> Double
   func addStrings(a: String, b: String) throws -> String
   func multipleArguments(num: Double, str: String, boo: Bool) throws -> Void
+  func bounceStrings(array: [String]) throws -> [String]
+  func bounceNumbers(array: [Double]) throws -> [Double]
   func createMap() throws -> AnyMapHolder
   func mapRoundtrip(map: AnyMapHolder) throws -> AnyMapHolder
   func funcThatThrows() throws -> Double

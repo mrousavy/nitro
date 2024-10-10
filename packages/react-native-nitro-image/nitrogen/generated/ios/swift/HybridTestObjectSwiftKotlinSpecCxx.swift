@@ -277,6 +277,40 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
   }
   
   @inline(__always)
+  public func bounceStrings(array: bridge.std__vector_std__string_) -> bridge.std__vector_std__string_ {
+    do {
+      let result = try self.implementation.bounceStrings(array: array.map({ val in String(val) }))
+      return { () -> bridge.std__vector_std__string_ in
+        var vector = bridge.create_std__vector_std__string_(result.count)
+        for item in result {
+          vector.push_back(std.string(item))
+        }
+        return vector
+      }()
+    } catch {
+      let message = "\(error.localizedDescription)"
+      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
+    }
+  }
+  
+  @inline(__always)
+  public func bounceNumbers(array: bridge.std__vector_double_) -> bridge.std__vector_double_ {
+    do {
+      let result = try self.implementation.bounceNumbers(array: array.map({ val in val }))
+      return { () -> bridge.std__vector_double_ in
+        var vector = bridge.create_std__vector_double_(result.count)
+        for item in result {
+          vector.push_back(item)
+        }
+        return vector
+      }()
+    } catch {
+      let message = "\(error.localizedDescription)"
+      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
+    }
+  }
+  
+  @inline(__always)
   public func createMap() -> margelo.nitro.TSharedMap {
     do {
       let __result = try self.__implementation.createMap()

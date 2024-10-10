@@ -42,6 +42,10 @@ interface SharedTestObjectProps {
   addStrings(a: string, b: string): string
   multipleArguments(num: number, str: string, boo: boolean): void
 
+  // Arrays
+  bounceStrings(array: string[]): string[]
+  bounceNumbers(array: number[]): number[]
+
   // Maps
   createMap(): AnyMap
   mapRoundtrip(map: AnyMap): AnyMap

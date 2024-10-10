@@ -74,6 +74,9 @@ public:
   std::variant<std::string, double>
   passVariant(const std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>>& either) override;
 
+  std::vector<std::string> bounceStrings(const std::vector<std::string>& array) override;
+  std::vector<double> bounceNumbers(const std::vector<double>& array) override;
+
   std::variant<bool, OldEnum> getVariantEnum(const std::variant<bool, OldEnum>& variant) override;
   std::variant<Car, Person> getVariantObjects(const std::variant<Car, Person>& variant) override;
   std::variant<Person, std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>>
