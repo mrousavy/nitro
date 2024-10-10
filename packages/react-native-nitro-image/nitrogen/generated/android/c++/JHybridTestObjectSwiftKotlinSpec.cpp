@@ -178,9 +178,9 @@ namespace margelo::nitro::image {
     auto __result = method(_javaPart, [&]() {
       size_t __size = array.size();
       jni::local_ref<jni::JArrayClass<jni::JString>> __array = jni::JArrayClass<jni::JString>::newArray(__size);
-      for (size_t i = 0; i < __size; i++) {
-        const auto& element = array[i];
-        __array->setElement(i, *jni::make_jstring(element));
+      for (size_t __i = 0; __i < __size; __i++) {
+        const auto& __element = array[__i];
+        __array->setElement(__i, *jni::make_jstring(__element));
       }
       return __array;
     }());
@@ -188,8 +188,8 @@ namespace margelo::nitro::image {
       size_t __size = __result->size();
       std::vector<std::string> __vector;
       __vector.reserve(__size);
-      for (size_t i = 0; i < __size; i++) {
-        auto __element = __result->getElement(i);
+      for (size_t __i = 0; __i < __size; __i++) {
+        auto __element = __result->getElement(__i);
         __vector.push_back(__element->toStdString());
       }
       return __vector;
