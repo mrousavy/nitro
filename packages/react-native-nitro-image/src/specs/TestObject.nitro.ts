@@ -26,6 +26,8 @@ export interface Person {
   age: number
 }
 
+interface EmptyStruct {}
+
 interface SharedTestObjectProps {
   // Test Primitives
   numberValue: number
@@ -125,6 +127,9 @@ export interface TestObjectCpp
     callback: () => string,
     andThenCall: (valueFromJs: string) => void
   ): Promise<void>
+
+  // Weird things
+  createEmptyStruct(): EmptyStruct
 
   // Other HybridObjects
   readonly thisObject: TestObjectCpp

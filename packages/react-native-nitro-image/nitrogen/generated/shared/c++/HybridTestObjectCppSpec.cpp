@@ -42,6 +42,7 @@ namespace margelo::nitro::image {
       prototype.registerHybridMethod("passTuple", &HybridTestObjectCppSpec::passTuple);
       prototype.registerHybridMethod("getValueFromJSCallbackAndWait", &HybridTestObjectCppSpec::getValueFromJSCallbackAndWait);
       prototype.registerHybridMethod("getValueFromJsCallback", &HybridTestObjectCppSpec::getValueFromJsCallback);
+      prototype.registerHybridMethod("createEmptyStruct", &HybridTestObjectCppSpec::createEmptyStruct);
       prototype.registerHybridMethod("newTestObject", &HybridTestObjectCppSpec::newTestObject);
       prototype.registerHybridMethod("simpleFunc", &HybridTestObjectCppSpec::simpleFunc);
       prototype.registerHybridMethod("addNumbers", &HybridTestObjectCppSpec::addNumbers);

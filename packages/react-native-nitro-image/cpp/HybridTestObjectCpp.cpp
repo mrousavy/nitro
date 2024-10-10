@@ -347,6 +347,10 @@ std::shared_ptr<HybridBaseSpec> HybridTestObjectCpp::bounceChildBase(const std::
   return child;
 }
 
+EmptyStruct HybridTestObjectCpp::createEmptyStruct() {
+  return EmptyStruct{};
+}
+
 std::shared_ptr<HybridChildSpec> HybridTestObjectCpp::castBase(const std::shared_ptr<HybridBaseSpec>& base) {
   auto child = std::dynamic_pointer_cast<HybridChildSpec>(base);
   if (child == nullptr) {

@@ -119,6 +119,8 @@ public:
   std::shared_ptr<margelo::nitro::image::HybridChildSpec>
   castBase(const std::shared_ptr<margelo::nitro::image::HybridBaseSpec>& base) override;
 
+  EmptyStruct createEmptyStruct() override;
+
   // Raw JSI functions
   jsi::Value rawJsiFunc(jsi::Runtime& runtime, const jsi::Value& thisValue, const jsi::Value* args, size_t count);
 

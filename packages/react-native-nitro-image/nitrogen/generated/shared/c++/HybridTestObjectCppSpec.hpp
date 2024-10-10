@@ -21,6 +21,8 @@ namespace margelo::nitro::image { enum class OldEnum; }
 namespace margelo::nitro::image { struct Car; }
 // Forward declaration of `Person` to properly resolve imports.
 namespace margelo::nitro::image { struct Person; }
+// Forward declaration of `EmptyStruct` to properly resolve imports.
+namespace margelo::nitro::image { struct EmptyStruct; }
 // Forward declaration of `Powertrain` to properly resolve imports.
 namespace margelo::nitro::image { enum class Powertrain; }
 // Forward declaration of `AnyMap` to properly resolve imports.
@@ -44,6 +46,7 @@ namespace margelo::nitro::image { class HybridBaseSpec; }
 #include "Person.hpp"
 #include <future>
 #include <functional>
+#include "EmptyStruct.hpp"
 #include "Powertrain.hpp"
 #include <NitroModules/AnyMap.hpp>
 #include <NitroModules/ArrayBuffer.hpp>
@@ -108,6 +111,7 @@ namespace margelo::nitro::image {
       virtual std::tuple<double, std::string, bool> passTuple(const std::tuple<double, std::string, bool>& tuple) = 0;
       virtual std::future<double> getValueFromJSCallbackAndWait(const std::function<std::future<double>()>& getValue) = 0;
       virtual std::future<void> getValueFromJsCallback(const std::function<std::future<std::string>()>& callback, const std::function<void(const std::string& /* valueFromJs */)>& andThenCall) = 0;
+      virtual EmptyStruct createEmptyStruct() = 0;
       virtual std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec> newTestObject() = 0;
       virtual void simpleFunc() = 0;
       virtual double addNumbers(double a, double b) = 0;
