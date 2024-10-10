@@ -28,13 +28,13 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
   /**
    * Holds an instance of the `HybridTestObjectSwiftKotlinSpec` Swift protocol.
    */
-  private var __implementation: HybridTestObjectSwiftKotlinSpec
+  private var __implementation: any HybridTestObjectSwiftKotlinSpec
 
   /**
    * Get the actual `HybridTestObjectSwiftKotlinSpec` instance this class wraps.
    */
   @inline(__always)
-  public func getHybridTestObjectSwiftKotlinSpec() -> HybridTestObjectSwiftKotlinSpec {
+  public func getHybridTestObjectSwiftKotlinSpec() -> any HybridTestObjectSwiftKotlinSpec {
     return __implementation
   }
 
@@ -42,7 +42,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
    * Create a new `HybridTestObjectSwiftKotlinSpecCxx` that wraps the given `HybridTestObjectSwiftKotlinSpec`.
    * All properties and methods bridge to C++ types.
    */
-  public init(_ implementation: HybridTestObjectSwiftKotlinSpec) {
+  public init(_ implementation: any HybridTestObjectSwiftKotlinSpec) {
     self.__implementation = implementation
     /* no base class */
   }

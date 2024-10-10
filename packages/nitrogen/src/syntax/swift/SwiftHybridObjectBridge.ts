@@ -69,13 +69,13 @@ ${hasBase ? `public class ${name.HybridTSpecCxx} : ${baseClasses.join(', ')}` : 
   /**
    * Holds an instance of the \`${name.HybridTSpec}\` Swift protocol.
    */
-  private var __implementation: ${name.HybridTSpec}
+  private var __implementation: any ${name.HybridTSpec}
 
   /**
    * Get the actual \`${name.HybridTSpec}\` instance this class wraps.
    */
   @inline(__always)
-  public func get${name.HybridTSpec}() -> ${name.HybridTSpec} {
+  public func get${name.HybridTSpec}() -> any ${name.HybridTSpec} {
     return __implementation
   }
 
@@ -83,7 +83,7 @@ ${hasBase ? `public class ${name.HybridTSpecCxx} : ${baseClasses.join(', ')}` : 
    * Create a new \`${name.HybridTSpecCxx}\` that wraps the given \`${name.HybridTSpec}\`.
    * All properties and methods bridge to C++ types.
    */
-  public init(_ implementation: ${name.HybridTSpec}) {
+  public init(_ implementation: any ${name.HybridTSpec}) {
     self.__implementation = implementation
     ${hasBase ? 'super.init(implementation)' : '/* no base class */'}
   }
