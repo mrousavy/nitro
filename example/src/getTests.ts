@@ -4,6 +4,7 @@ import {
   OldEnum,
   type Car,
   type Person,
+  type Powertrain,
 } from 'react-native-nitro-image'
 import type { State } from './Testers'
 import { it } from './Testers'
@@ -265,6 +266,20 @@ export function getTests(
           { age: 24, name: 'Marc' },
           { age: 5, name: 'Ben' },
         ])
+    ),
+
+    createTest('complexEnumCallback(...)', async () =>
+      (
+        await it<Powertrain[]>(async () => {
+          return timeoutedPromise((complete) => {
+            testObject.complexEnumCallback(['gas', 'electric'], (result) => {
+              complete(result)
+            })
+          })
+        })
+      )
+        .didNotThrow()
+        .equals(['gas', 'electric'])
     ),
 
     // Test Maps
