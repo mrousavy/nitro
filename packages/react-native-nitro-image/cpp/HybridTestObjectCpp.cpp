@@ -110,7 +110,6 @@ void HybridTestObjectCpp::multipleArguments(double num, const std::string& str, 
   Logger::log(LogLevel::Info, TAG, "Arguments received! num: %f | str: %s | boo: %i", num, str.c_str(), boo);
 }
 
-
 std::vector<std::string> HybridTestObjectCpp::bounceStrings(const std::vector<std::string>& array) {
   return array;
 }
