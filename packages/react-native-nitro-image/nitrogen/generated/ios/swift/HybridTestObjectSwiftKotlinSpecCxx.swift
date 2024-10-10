@@ -279,7 +279,13 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
   @inline(__always)
   public func bounceStrings(array: bridge.std__vector_std__string_) -> bridge.std__vector_std__string_ {
     do {
-      let __result = try self.__implementation.bounceStrings(array: array.map({ __item in String(__item) }))
+      let __result = try self.__implementation.bounceStrings(array: ({
+        var __array: [std.string] = []
+        for __i in 0...array.count {
+          __array[__i] = String(array[__i])
+        }
+        return __array
+      }()))
       return { () -> bridge.std__vector_std__string_ in
         var __vector = bridge.create_std__vector_std__string_(__result.count)
         for __item in __result {
@@ -296,7 +302,13 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
   @inline(__always)
   public func bounceNumbers(array: bridge.std__vector_double_) -> bridge.std__vector_double_ {
     do {
-      let __result = try self.__implementation.bounceNumbers(array: array.map({ __item in __item }))
+      let __result = try self.__implementation.bounceNumbers(array: ({
+        var __array: [Double] = []
+        for __i in 0...array.count {
+          __array[__i] = array[__i]
+        }
+        return __array
+      }()))
       return { () -> bridge.std__vector_double_ in
         var __vector = bridge.create_std__vector_double_(__result.count)
         for __item in __result {
@@ -313,7 +325,13 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
   @inline(__always)
   public func bounceStructs(array: bridge.std__vector_Person_) -> bridge.std__vector_Person_ {
     do {
-      let __result = try self.__implementation.bounceStructs(array: array.map({ __item in __item }))
+      let __result = try self.__implementation.bounceStructs(array: ({
+        var __array: [Person] = []
+        for __i in 0...array.count {
+          __array[__i] = array[__i]
+        }
+        return __array
+      }()))
       return { () -> bridge.std__vector_Person_ in
         var __vector = bridge.create_std__vector_Person_(__result.count)
         for __item in __result {
@@ -330,7 +348,13 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
   @inline(__always)
   public func bounceEnums(array: bridge.std__vector_Powertrain_) -> bridge.std__vector_Powertrain_ {
     do {
-      let __result = try self.__implementation.bounceEnums(array: array.map({ __item in __item }))
+      let __result = try self.__implementation.bounceEnums(array: ({
+        var __array: [Powertrain] = []
+        for __i in 0...array.count {
+          __array[__i] = array[__i]
+        }
+        return __array
+      }()))
       return { () -> bridge.std__vector_Powertrain_ in
         var __vector = bridge.create_std__vector_Powertrain_(__result.count)
         for __item in __result {
@@ -347,7 +371,13 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
   @inline(__always)
   public func complexEnumCallback(array: bridge.std__vector_Powertrain_, callback: bridge.Func_void_std__vector_Powertrain_) -> Void {
     do {
-      try self.__implementation.complexEnumCallback(array: array.map({ __item in __item }), callback: { () -> (([Powertrain]) -> Void) in
+      try self.__implementation.complexEnumCallback(array: ({
+        var __array: [Powertrain] = []
+        for __i in 0...array.count {
+          __array[__i] = array[__i]
+        }
+        return __array
+      }()), callback: { () -> (([Powertrain]) -> Void) in
         let __sharedClosure = bridge.share_Func_void_std__vector_Powertrain_(callback)
         return { (__array: [Powertrain]) -> Void in
           __sharedClosure.pointee.call({ () -> bridge.std__vector_Powertrain_ in

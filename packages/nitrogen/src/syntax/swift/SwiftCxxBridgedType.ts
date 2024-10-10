@@ -387,7 +387,14 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
         const wrapping = new SwiftCxxBridgedType(array.itemType, true)
         switch (language) {
           case 'swift':
-            return `${cppParameterName}.map({ __item in ${wrapping.parseFromCppToSwift('__item', 'swift')} })`.trim()
+            return `
+({
+  var __array: [${wrapping.getTypeCode('swift')}] = []
+  for __i in 0...${cppParameterName}.count {
+    __array[__i] = ${indent(wrapping.parseFromCppToSwift(`${cppParameterName}[__i]`, 'swift'), '    ')}
+  }
+  return __array
+}())`.trim()
           default:
             return cppParameterName
         }
