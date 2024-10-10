@@ -246,6 +246,26 @@ export function getTests(
         .didReturn('object')
         .equals(['hello', 'world', '!'])
     ),
+    createTest('bounceEnums(...) equals', () =>
+      it(() => testObject.bounceEnums(['gas', 'hybrid']))
+        .didNotThrow()
+        .didReturn('object')
+        .equals(['gas', 'hybrid'])
+    ),
+    createTest('bounceStructs(...) equals', () =>
+      it(() =>
+        testObject.bounceStructs([
+          { age: 24, name: 'Marc' },
+          { age: 5, name: 'Ben' },
+        ])
+      )
+        .didNotThrow()
+        .didReturn('object')
+        .equals([
+          { age: 24, name: 'Marc' },
+          { age: 5, name: 'Ben' },
+        ])
+    ),
 
     // Test Maps
     createTest('createMap()', () =>
