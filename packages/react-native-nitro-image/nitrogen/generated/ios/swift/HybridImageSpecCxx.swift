@@ -28,14 +28,14 @@ public class HybridImageSpecCxx {
   /**
    * Holds an instance of the `HybridImageSpec` Swift protocol.
    */
-  private var implementation: HybridImageSpec
+  private var __implementation: HybridImageSpec
 
   /**
    * Get the actual `HybridImageSpec` instance this class wraps.
    */
   @inline(__always)
   public func getHybridImageSpec() -> HybridImageSpec {
-    return implementation
+    return __implementation
   }
 
   /**
@@ -43,7 +43,7 @@ public class HybridImageSpecCxx {
    * All properties and methods bridge to C++ types.
    */
   public init(_ implementation: HybridImageSpec) {
-    self.implementation = implementation
+    self.__implementation = implementation
     /* no base class */
   }
 
@@ -53,11 +53,11 @@ public class HybridImageSpecCxx {
   public var hybridContext: margelo.nitro.HybridContext {
     @inline(__always)
     get {
-      return self.implementation.hybridContext
+      return self.__implementation.hybridContext
     }
     @inline(__always)
     set {
-      self.implementation.hybridContext = newValue
+      self.__implementation.hybridContext = newValue
     }
   }
 
@@ -67,32 +67,32 @@ public class HybridImageSpecCxx {
    */
   @inline(__always)
   public var memorySize: Int {
-    return self.implementation.memorySize
+    return self.__implementation.memorySize
   }
 
   // Properties
   public var size: ImageSize {
     @inline(__always)
     get {
-      return self.implementation.size
+      return self.__implementation.size
     }
   }
   
   public var pixelFormat: Int32 {
     @inline(__always)
     get {
-      return self.implementation.pixelFormat.rawValue
+      return self.__implementation.pixelFormat.rawValue
     }
   }
   
   public var someSettableProp: Double {
     @inline(__always)
     get {
-      return self.implementation.someSettableProp
+      return self.__implementation.someSettableProp
     }
     @inline(__always)
     set {
-      self.implementation.someSettableProp = newValue
+      self.__implementation.someSettableProp = newValue
     }
   }
 
@@ -100,8 +100,8 @@ public class HybridImageSpecCxx {
   @inline(__always)
   public func toArrayBuffer(format: Int32) -> Double {
     do {
-      let result = try self.implementation.toArrayBuffer(format: margelo.nitro.image.ImageFormat(rawValue: format)!)
-      return result
+      let __result = try self.__implementation.toArrayBuffer(format: margelo.nitro.image.ImageFormat(rawValue: format)!)
+      return __result
     } catch {
       let message = "\(error.localizedDescription)"
       fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
@@ -111,10 +111,10 @@ public class HybridImageSpecCxx {
   @inline(__always)
   public func saveToFile(path: std.string, onFinished: bridge.Func_void_std__string) -> Void {
     do {
-      try self.implementation.saveToFile(path: String(path), onFinished: { () -> ((String) -> Void) in
-        let shared = bridge.share_Func_void_std__string(onFinished)
-        return { (path: String) -> Void in
-          shared.pointee.call(std.string(path))
+      try self.__implementation.saveToFile(path: String(path), onFinished: { () -> ((String) -> Void) in
+        let __sharedClosure = bridge.share_Func_void_std__string(onFinished)
+        return { (__path: String) -> Void in
+          __sharedClosure.pointee.call(std.string(__path))
         }
       }())
       return 

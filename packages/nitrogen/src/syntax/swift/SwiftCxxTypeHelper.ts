@@ -192,8 +192,8 @@ function createCxxFunctionSwiftHelper(type: FunctionType): SwiftCxxHelper {
   let callCppFuncBody: string
   if (returnBridge.hasType) {
     callCppFuncBody = `
-    auto result = function(${indent(callParamsForward.join(', '), '    ')});
-    return ${indent(returnBridge.parseFromCppToSwift('result', 'c++'), '    ')};
+    auto __result = function(${indent(callParamsForward.join(', '), '    ')});
+    return ${indent(returnBridge.parseFromCppToSwift('__result', 'c++'), '    ')};
     `.trim()
   } else {
     callCppFuncBody = `function(${indent(callParamsForward.join(', '), '    ')});`
@@ -202,8 +202,8 @@ function createCxxFunctionSwiftHelper(type: FunctionType): SwiftCxxHelper {
   let callSwiftFuncBody: string
   if (returnBridge.hasType) {
     callSwiftFuncBody = `
-    auto result = call(${indent(paramsForward.join(', '), '    ')});
-    return ${indent(returnBridge.parseFromSwiftToCpp('result', 'c++'), '    ')};
+    auto __result = call(${indent(paramsForward.join(', '), '    ')});
+    return ${indent(returnBridge.parseFromSwiftToCpp('__result', 'c++'), '    ')};
     `.trim()
   } else {
     callSwiftFuncBody = `call(${indent(paramsForward.join(', '), '    ')});`

@@ -369,7 +369,7 @@ namespace margelo::nitro::image::bridge::swift {
     explicit Func_std__future_double__Wrapper(std::function<std::future<double>()>&& func): function(std::move(func)) {}
   
     PromiseHolder<double> call() const {
-      auto result = function();
+      auto __result = function();
       return []() -> PromiseHolder<double> { throw std::runtime_error("Promise<..> cannot be converted to Swift yet!"); }();
     }
   
@@ -378,8 +378,8 @@ namespace margelo::nitro::image::bridge::swift {
   inline Func_std__future_double_ create_Func_std__future_double_(void* closureHolder, PromiseHolder<double>(*call)(void* /* closureHolder */), void(*destroy)(void*)) {
     std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
     return Func_std__future_double_([sharedClosureHolder, call]() -> std::future<double> {
-      auto result = call(sharedClosureHolder.get());
-      return result.getFuture();
+      auto __result = call(sharedClosureHolder.get());
+      return __result.getFuture();
     });
   }
   inline std::shared_ptr<Func_std__future_double__Wrapper> share_Func_std__future_double_(const Func_std__future_double_& value) {
@@ -407,7 +407,7 @@ namespace margelo::nitro::image::bridge::swift {
     explicit Func_std__future_std__string__Wrapper(std::function<std::future<std::string>()>&& func): function(std::move(func)) {}
   
     PromiseHolder<std::string> call() const {
-      auto result = function();
+      auto __result = function();
       return []() -> PromiseHolder<std::string> { throw std::runtime_error("Promise<..> cannot be converted to Swift yet!"); }();
     }
   
@@ -416,8 +416,8 @@ namespace margelo::nitro::image::bridge::swift {
   inline Func_std__future_std__string_ create_Func_std__future_std__string_(void* closureHolder, PromiseHolder<std::string>(*call)(void* /* closureHolder */), void(*destroy)(void*)) {
     std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
     return Func_std__future_std__string_([sharedClosureHolder, call]() -> std::future<std::string> {
-      auto result = call(sharedClosureHolder.get());
-      return result.getFuture();
+      auto __result = call(sharedClosureHolder.get());
+      return __result.getFuture();
     });
   }
   inline std::shared_ptr<Func_std__future_std__string__Wrapper> share_Func_std__future_std__string_(const Func_std__future_std__string_& value) {

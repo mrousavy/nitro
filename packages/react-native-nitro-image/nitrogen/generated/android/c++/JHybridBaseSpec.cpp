@@ -31,8 +31,8 @@ namespace margelo::nitro::image {
   // Properties
   double JHybridBaseSpec::getBaseValue() {
     static const auto method = _javaPart->getClass()->getMethod<double()>("getBaseValue");
-    auto result = method(_javaPart);
-    return result;
+    auto __result = method(_javaPart);
+    return __result;
   }
 
   // Methods

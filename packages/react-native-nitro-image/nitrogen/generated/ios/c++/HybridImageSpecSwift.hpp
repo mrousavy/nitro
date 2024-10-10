@@ -65,12 +65,12 @@ namespace margelo::nitro::image {
   public:
     // Properties
     inline ImageSize getSize() noexcept override {
-      auto result = _swiftPart.getSize();
-      return result;
+      auto __result = _swiftPart.getSize();
+      return __result;
     }
     inline PixelFormat getPixelFormat() noexcept override {
-      auto result = _swiftPart.getPixelFormat();
-      return static_cast<PixelFormat>(result);
+      auto __result = _swiftPart.getPixelFormat();
+      return static_cast<PixelFormat>(__result);
     }
     inline double getSomeSettableProp() noexcept override {
       return _swiftPart.getSomeSettableProp();

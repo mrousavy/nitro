@@ -363,8 +363,8 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
             }
             return `
 { () -> ${optional.getCode('swift')} in
-  if let actualValue = ${cppParameterName}.value {
-    return ${indent(wrapping.parseFromCppToSwift('actualValue', language), '    ')}
+  if let __unwrapped = ${cppParameterName}.value {
+    return ${indent(wrapping.parseFromCppToSwift('__unwrapped', language), '    ')}
   } else {
     return nil
   }
@@ -387,7 +387,7 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
         const wrapping = new SwiftCxxBridgedType(array.itemType)
         switch (language) {
           case 'swift':
-            return `${cppParameterName}.map({ val in ${wrapping.parseFromCppToSwift('val', 'swift')} })`.trim()
+            return `${cppParameterName}.map({ __item in ${wrapping.parseFromCppToSwift('__item', 'swift')} })`.trim()
           default:
             return cppParameterName
         }
@@ -410,13 +410,13 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
           case 'swift':
             return `
 { () -> ${record.getCode('swift')} in
-  var dictionary = ${record.getCode('swift')}(minimumCapacity: ${cppParameterName}.size())
-  let keys = ${getKeysFunc}(${cppParameterName})
-  for key in keys {
-    let value = ${cppParameterName}[key]!
-    dictionary[${wrappingKey.parseFromCppToSwift('key', 'swift')}] = ${wrappingValue.parseFromCppToSwift('value', 'swift')}
+  var __dictionary = ${record.getCode('swift')}(minimumCapacity: ${cppParameterName}.size())
+  let __keys = ${getKeysFunc}(${cppParameterName})
+  for __key in __keys {
+    let __value = ${cppParameterName}[__key]!
+    __dictionary[${wrappingKey.parseFromCppToSwift('__key', 'swift')}] = ${wrappingValue.parseFromCppToSwift('__value', 'swift')}
   }
-  return dictionary
+  return __dictionary
 }()`.trim()
           default:
             return cppParameterName
@@ -440,8 +440,8 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
             const caseName = getSwiftVariantCaseName(t)
             return `
 case ${i}:
-  let actual = ${getFunc}(${cppParameterName})
-  return .${caseName}(${indent(wrapping.parseFromCppToSwift('actual', 'swift'), '  ')})`.trim()
+  let __actual = ${getFunc}(${cppParameterName})
+  return .${caseName}(${indent(wrapping.parseFromCppToSwift('__actual', 'swift'), '  ')})`.trim()
           })
           .join('\n')
         switch (language) {
@@ -465,31 +465,31 @@ case ${i}:
             const swiftClosureType = funcType.getCode('swift', false)
             const bridge = this.getBridgeOrThrow()
             const paramsSignature = funcType.parameters.map(
-              (p) => `${p.escapedName}: ${p.getCode('swift')}`
+              (p) => `__${p.escapedName}: ${p.getCode('swift')}`
             )
             const returnType = funcType.returnType.getCode('swift')
             const signature = `(${paramsSignature.join(', ')}) -> ${returnType}`
             const paramsForward = funcType.parameters.map((p) => {
               const bridged = new SwiftCxxBridgedType(p)
-              return bridged.parseFromSwiftToCpp(p.escapedName, 'swift')
+              return bridged.parseFromSwiftToCpp(`__${p.escapedName}`, 'swift')
             })
 
             if (funcType.returnType.kind === 'void') {
               return `
 { () -> ${swiftClosureType} in
-  let shared = bridge.share_${bridge.specializationName}(${cppParameterName})
+  let __sharedClosure = bridge.share_${bridge.specializationName}(${cppParameterName})
   return { ${signature} in
-    shared.pointee.call(${indent(paramsForward.join(', '), '  ')})
+    __sharedClosure.pointee.call(${indent(paramsForward.join(', '), '  ')})
   }
 }()`.trim()
             } else {
               const resultBridged = new SwiftCxxBridgedType(funcType.returnType)
               return `
 { () -> ${swiftClosureType} in
-  let shared = bridge.share_${bridge.specializationName}(${cppParameterName})
+  let __sharedClosure = bridge.share_${bridge.specializationName}(${cppParameterName})
   return { ${signature} in
-    let result = shared.pointee.call(${paramsForward.join(', ')})
-    return ${indent(resultBridged.parseFromSwiftToCpp('result', 'swift'), '  ')}
+    let __result = __sharedClosure.pointee.call(${paramsForward.join(', ')})
+    return ${indent(resultBridged.parseFromSwiftToCpp('__result', 'swift'), '  ')}
   }
 }()`.trim()
             }
@@ -542,8 +542,8 @@ case ${i}:
           case 'swift':
             return `
 { () -> bridge.${bridge.specializationName} in
-  if let actualValue = ${swiftParameterName} {
-    return ${makeFunc}(${indent(wrapping.parseFromSwiftToCpp('actualValue', language), '    ')})
+  if let __unwrappedValue = ${swiftParameterName} {
+    return ${makeFunc}(${indent(wrapping.parseFromSwiftToCpp('__unwrappedValue', language), '    ')})
   } else {
     return .init()
   }
@@ -602,11 +602,11 @@ case ${i}:
                 : resolvingType.parseFromSwiftToCpp('__result', 'swift')
             return `
 { () -> bridge.${bridge.specializationName} in
-  let promiseHolder = ${makePromise}()
+  let __promiseHolder = ${makePromise}()
   ${swiftParameterName}
-    .then({ __result in promiseHolder.resolve(${arg}) })
-    .catch({ __error in promiseHolder.reject(std.string(String(describing: __error))) })
-  return promiseHolder
+    .then({ __result in __promiseHolder.resolve(${arg}) })
+    .catch({ __error in __promiseHolder.reject(std.string(String(describing: __error))) })
+  return __promiseHolder
 }()`.trim()
           default:
             return swiftParameterName
@@ -621,11 +621,11 @@ case ${i}:
           case 'swift':
             return `
 { () -> bridge.${bridge.specializationName} in
-  var vector = ${makeFunc}(${swiftParameterName}.count)
-  for item in ${swiftParameterName} {
-    vector.push_back(${indent(wrapping.parseFromSwiftToCpp('item', language), '    ')})
+  var __vector = ${makeFunc}(${swiftParameterName}.count)
+  for __item in ${swiftParameterName} {
+    __vector.push_back(${indent(wrapping.parseFromSwiftToCpp('__item', language), '    ')})
   }
-  return vector
+  return __vector
 }()`.trim()
           default:
             return swiftParameterName
@@ -657,8 +657,8 @@ case ${i}:
               .map((t) => {
                 const caseName = getSwiftVariantCaseName(t)
                 const wrapping = new SwiftCxxBridgedType(t)
-                const parse = wrapping.parseFromSwiftToCpp('value', 'swift')
-                return `case .${caseName}(let value):\n  return bridge.${bridge.funcName}(${parse})`
+                const parse = wrapping.parseFromSwiftToCpp('__value', 'swift')
+                return `case .${caseName}(let __value):\n  return bridge.${bridge.funcName}(${parse})`
               })
               .join('\n')
             return `
@@ -681,11 +681,11 @@ case ${i}:
           case 'swift':
             return `
 { () -> bridge.${bridge.specializationName} in
-  var map = ${createMap}(${swiftParameterName}.count)
-  for (k, v) in ${swiftParameterName} {
-    map[${indent(wrappingKey.parseFromSwiftToCpp('k', 'swift'), '    ')}] = ${indent(wrappingValue.parseFromSwiftToCpp('v', 'swift'), '    ')}
+  var __map = ${createMap}(${swiftParameterName}.count)
+  for (__k, __v) in ${swiftParameterName} {
+    __map[${indent(wrappingKey.parseFromSwiftToCpp('__k', 'swift'), '    ')}] = ${indent(wrappingValue.parseFromSwiftToCpp('__v', 'swift'), '    ')}
   }
-  return map
+  return __map
 }()`.trim()
           default:
             return swiftParameterName
@@ -699,20 +699,23 @@ case ${i}:
             const cFuncParamsForward = func.parameters
               .map((p) => {
                 const bridged = new SwiftCxxBridgedType(p)
-                return bridged.parseFromCppToSwift(p.escapedName, 'swift')
+                return bridged.parseFromCppToSwift(
+                  `__${p.escapedName}`,
+                  'swift'
+                )
               })
               .join(', ')
             const paramsSignature = func.parameters
-              .map((p) => `_ ${p.escapedName}: ${p.getCode('swift')}`)
+              .map((p) => `_ __${p.escapedName}: ${p.getCode('swift')}`)
               .join(', ')
             const paramsForward = func.parameters
-              .map((p) => p.escapedName)
+              .map((p) => `__${p.escapedName}`)
               .join(', ')
             const cFuncParamsSignature = [
-              'closureHolder: UnsafeMutableRawPointer?',
+              '__closureHolder: UnsafeMutableRawPointer?',
               ...func.parameters.map((p) => {
                 const bridged = new SwiftCxxBridgedType(p)
-                return `${p.escapedName}: ${bridged.getTypeCode('swift')}`
+                return `__${p.escapedName}: ${bridged.getTypeCode('swift')}`
               }),
             ].join(', ')
             const createFunc = `bridge.${bridge.funcName}`
@@ -728,16 +731,16 @@ case ${i}:
     }
   }
 
-  let closureHolder = Unmanaged.passRetained(ClosureHolder(wrappingClosure: ${swiftParameterName})).toOpaque()
-  func callClosure(${cFuncParamsSignature}) -> Void {
-    let closure = Unmanaged<ClosureHolder>.fromOpaque(closureHolder!).takeUnretainedValue()
+  let __closureHolder = Unmanaged.passRetained(ClosureHolder(wrappingClosure: ${swiftParameterName})).toOpaque()
+  func __callClosure(${cFuncParamsSignature}) -> Void {
+    let closure = Unmanaged<ClosureHolder>.fromOpaque(__closureHolder!).takeUnretainedValue()
     closure.invoke(${indent(cFuncParamsForward, '    ')})
   }
-  func destroyClosure(_ closureHolder: UnsafeMutableRawPointer?) -> Void {
-    Unmanaged<ClosureHolder>.fromOpaque(closureHolder!).release()
+  func __destroyClosure(_ __closureHolder: UnsafeMutableRawPointer?) -> Void {
+    Unmanaged<ClosureHolder>.fromOpaque(__closureHolder!).release()
   }
 
-  return ${createFunc}(closureHolder, callClosure, destroyClosure)
+  return ${createFunc}(__closureHolder, __callClosure, __destroyClosure)
 }()
   `.trim()
           }

@@ -139,14 +139,17 @@ function getMethodForwardImplementation(method: Method): string {
       const bridge = new KotlinCxxBridgedType(p.type)
       return bridge.parseFromCppToKotlin(p.name, 'kotlin')
     })
-    const returnForward = bridgedReturn.parseFromKotlinToCpp('result', 'kotlin')
+    const returnForward = bridgedReturn.parseFromKotlinToCpp(
+      '__result',
+      'kotlin'
+    )
     return `
 ${code}
 
 @DoNotStrip
 @Keep
 private fun ${method.name}(${paramsSignature.join(', ')}): ${bridgedReturn.getTypeCode('kotlin')} {
-  val result = ${method.name}(${paramsForward.join(', ')})
+  val __result = ${method.name}(${paramsForward.join(', ')})
   return ${returnForward}
 }
     `.trim()

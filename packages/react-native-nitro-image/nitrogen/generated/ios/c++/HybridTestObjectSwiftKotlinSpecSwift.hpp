@@ -97,8 +97,8 @@ namespace margelo::nitro::image {
   public:
     // Properties
     inline std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec> getThisObject() noexcept override {
-      auto result = _swiftPart.getThisObject();
-      return HybridContext::getOrCreate<HybridTestObjectSwiftKotlinSpecSwift>(result);
+      auto __result = _swiftPart.getThisObject();
+      return HybridContext::getOrCreate<HybridTestObjectSwiftKotlinSpecSwift>(__result);
     }
     inline double getNumberValue() noexcept override {
       return _swiftPart.getNumberValue();
@@ -113,8 +113,8 @@ namespace margelo::nitro::image {
       _swiftPart.setBoolValue(std::forward<decltype(boolValue)>(boolValue));
     }
     inline std::string getStringValue() noexcept override {
-      auto result = _swiftPart.getStringValue();
-      return result;
+      auto __result = _swiftPart.getStringValue();
+      return __result;
     }
     inline void setStringValue(const std::string& stringValue) noexcept override {
       _swiftPart.setStringValue(stringValue);
@@ -126,29 +126,29 @@ namespace margelo::nitro::image {
       _swiftPart.setBigintValue(std::forward<decltype(bigintValue)>(bigintValue));
     }
     inline std::optional<std::string> getStringOrUndefined() noexcept override {
-      auto result = _swiftPart.getStringOrUndefined();
-      return result;
+      auto __result = _swiftPart.getStringOrUndefined();
+      return __result;
     }
     inline void setStringOrUndefined(const std::optional<std::string>& stringOrUndefined) noexcept override {
       _swiftPart.setStringOrUndefined(stringOrUndefined);
     }
     inline std::optional<std::string> getStringOrNull() noexcept override {
-      auto result = _swiftPart.getStringOrNull();
-      return result;
+      auto __result = _swiftPart.getStringOrNull();
+      return __result;
     }
     inline void setStringOrNull(const std::optional<std::string>& stringOrNull) noexcept override {
       _swiftPart.setStringOrNull(stringOrNull);
     }
     inline std::optional<std::string> getOptionalString() noexcept override {
-      auto result = _swiftPart.getOptionalString();
-      return result;
+      auto __result = _swiftPart.getOptionalString();
+      return __result;
     }
     inline void setOptionalString(const std::optional<std::string>& optionalString) noexcept override {
       _swiftPart.setOptionalString(optionalString);
     }
     inline std::variant<std::string, double> getSomeVariant() noexcept override {
-      auto result = _swiftPart.getSomeVariant();
-      return result;
+      auto __result = _swiftPart.getSomeVariant();
+      return __result;
     }
     inline void setSomeVariant(const std::variant<std::string, double>& someVariant) noexcept override {
       _swiftPart.setSomeVariant(someVariant);
