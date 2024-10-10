@@ -66,21 +66,37 @@ jobs:
           key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock', '**/Gemfile.lock') }}
           restore-keys: |
             ${{ runner.os }}-pods-
+
       - name: Install Pods
         working-directory: example/ios
         run: pod install
+
+      - name: Setup ccache symlinks
+        run: |
+          mkdir -p ccache_bin
+          ln -s "$(which ccache)" ccache_bin/clang
+          ln -s "$(which ccache)" ccache_bin/clang++
+          echo "${PWD}/ccache_bin" >> $GITHUB_PATH
+
       - name: Build App
         working-directory: example/ios
-        run: "set -o pipefail && xcodebuild \
-          CC=clang CPLUSPLUS=clang++ LD=clang LDPLUSPLUS=clang++ \
-          -derivedDataPath build -UseModernBuildSystem=YES \
-          -workspace NitroExample.xcworkspace \
-          -scheme NitroExample \
-          -sdk iphonesimulator \
-          -configuration Debug \
-          -destination 'platform=iOS Simulator,name=iPhone 15' \
-          build \
-          CODE_SIGNING_ALLOWED=NO | xcpretty"
+        run: |
+          set -o pipefail
+          xcodebuild \
+            -derivedDataPath build \
+            -UseModernBuildSystem=YES \
+            -workspace NitroExample.xcworkspace \
+            -scheme NitroExample \
+            -sdk iphonesimulator \
+            -configuration Debug \
+            -destination 'platform=iOS Simulator,name=iPhone 15' \
+            build \
+            CODE_SIGNING_ALLOWED=NO | xcpretty
+
+      - name: Save ccache
+        uses: hendrikmuhs/ccache-action@v1.2
+        with:
+          save: true
 
   build_old:
     name: Build iOS Example App (old architecture)
