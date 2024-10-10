@@ -616,7 +616,7 @@ case ${i}:
         const bridge = this.getBridgeOrThrow()
         const makeFunc = `bridge.${bridge.funcName}`
         const array = getTypeAs(this.type, ArrayType)
-        const wrapping = new SwiftCxxBridgedType(array.itemType)
+        const wrapping = new SwiftCxxBridgedType(array.itemType, true)
         switch (language) {
           case 'swift':
             return `

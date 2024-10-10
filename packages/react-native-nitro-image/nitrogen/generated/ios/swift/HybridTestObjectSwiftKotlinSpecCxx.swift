@@ -334,7 +334,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
       return { () -> bridge.std__vector_Powertrain_ in
         var __vector = bridge.create_std__vector_Powertrain_(__result.count)
         for __item in __result {
-          __vector.push_back(__item.rawValue)
+          __vector.push_back(__item)
         }
         return __vector
       }()
@@ -353,7 +353,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
           __sharedClosure.pointee.call({ () -> bridge.std__vector_Powertrain_ in
           var __vector = bridge.create_std__vector_Powertrain_(__array.count)
           for __item in __array {
-            __vector.push_back(__item.rawValue)
+            __vector.push_back(__item)
           }
           return __vector
         }())
