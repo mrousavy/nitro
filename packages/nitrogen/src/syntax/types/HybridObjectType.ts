@@ -10,6 +10,12 @@ export class HybridObjectType implements Type {
 
   constructor(hybridObjectName: string) {
     this.hybridObjectName = hybridObjectName
+
+    if (this.hybridObjectName.startsWith('__')) {
+      throw new Error(
+        `HybridObject name cannot start with two underscores (__)! (In ${this.hybridObjectName})`
+      )
+    }
   }
 
   get canBePassedByReference(): boolean {

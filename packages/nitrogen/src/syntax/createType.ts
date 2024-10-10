@@ -103,6 +103,11 @@ export function createNamedType(
   type: TSMorphType,
   isOptional: boolean
 ) {
+  if (name.startsWith('__')) {
+    throw new Error(
+      `Name cannot start with two underscores (__) as this is reserved syntax for Nitrogen! (In ${type.getText()})`
+    )
+  }
   return new NamedWrappingType(name, createType(type, isOptional))
 }
 
