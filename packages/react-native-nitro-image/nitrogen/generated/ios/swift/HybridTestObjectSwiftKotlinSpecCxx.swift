@@ -42,7 +42,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
    * Create a new `HybridTestObjectSwiftKotlinSpecCxx` that wraps the given `HybridTestObjectSwiftKotlinSpec`.
    * All properties and methods bridge to C++ types.
    */
-  public init(_ implementation: any HybridTestObjectSwiftKotlinSpec) {
+  public init(_ implementation: some HybridTestObjectSwiftKotlinSpec) {
     self.__implementation = implementation
     /* no base class */
   }
