@@ -12,20 +12,8 @@ This guide helps you troubleshoot issues in Nitro and should give you enough con
 
 First, make sure you meet the minimum requirements for Nitro:
 
-<Tabs groupId="platform">
-  <TabItem value="ios" label="iOS" default>
-
-  - react-native 0.75 or higher (because Nitro uses `jsi::WeakObject` and `jsi::NativeState`)
-  - Xcode 16 or higher
-  - Swift 6 or higher (in Xcode 16)
-
-  </TabItem>
-  <TabItem value="android" label="Android">
-
-  - react-native 0.75 or higher (because Nitro uses `jsi::WeakObject` and `jsi::NativeState`)
-
-  </TabItem>
-</Tabs>
+- **react-native 0.75** or above
+- **Xcode 16** or above
 
 ## Build error
 
