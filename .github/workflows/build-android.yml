@@ -58,7 +58,7 @@ jobs:
             ${{ runner.os }}-gradle-
       - name: Run Gradle Build for example/android/
         working-directory: example/android
-        run: ./gradlew assembleDebug --no-daemon --build-cache
+        run: ./gradlew assembleRelease --no-daemon --build-cache
 
       # Gradle cache doesn't like daemons
       - name: Stop Gradle Daemon
@@ -95,7 +95,7 @@ jobs:
             ${{ runner.os }}-gradle-
       - name: Run Gradle Build for example/android/
         working-directory: example/android
-        run: ./gradlew assembleDebug --no-daemon --build-cache
+        run: ./gradlew assembleRelease --no-daemon --build-cache
 
       # Gradle cache doesn't like daemons
       - name: Stop Gradle Daemon
