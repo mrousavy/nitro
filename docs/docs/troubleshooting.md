@@ -8,26 +8,28 @@ import TabItem from '@theme/TabItem';
 
 This guide helps you troubleshoot issues in Nitro and should give you enough context to open a well-formed issue, even if you're not a native developer.
 
-## Build error
+## Minimum requirements
 
-If your app fails to build after installing Nitro or a library powered by Nitro, make sure to check you meet the minimum requirements:
+First, make sure you meet the minimum requirements for Nitro:
 
 <Tabs groupId="platform">
   <TabItem value="ios" label="iOS" default>
 
-  - react-native 0.75 or later (because Nitro uses `jsi::WeakObject` and `jsi::NativeState`)
-  - Xcode 16
-  - Swift 6 (in Xcode 16)
+  - react-native 0.75 or higher (because Nitro uses `jsi::WeakObject` and `jsi::NativeState`)
+  - Xcode 16 or higher
+  - Swift 6 or higher (in Xcode 16)
 
   </TabItem>
   <TabItem value="android" label="Android">
 
-  - react-native 0.75 or later (because Nitro uses `jsi::WeakObject` and `jsi::NativeState`)
+  - react-native 0.75 or higher (because Nitro uses `jsi::WeakObject` and `jsi::NativeState`)
 
   </TabItem>
 </Tabs>
 
-If your app still doesn't build, make sure to post full build logs:
+## Build error
+
+If your app fails to build after installing Nitro or a library powered by Nitro, make sure to post full build logs:
 
 <Tabs groupId="platform">
   <TabItem value="ios" label="iOS" default>
@@ -54,7 +56,43 @@ If your app still doesn't build, make sure to post full build logs:
   </TabItem>
   <TabItem value="android" label="Android">
 
-  - react-native 0.75 or later (because Nitro uses `jsi::WeakObject` and `jsi::NativeState`)
+  1. Build the app with Android Studio.
+  2. When the build fails in Android Studio, open the "Build" tab from within the bottom left sidebar:
+
+      <img alt="Build tab in Android Studio" src="/img/troubleshoot-android-1.png" />
+
+  3. Find the top-most entry in the Build window (which contains full unfiltered logs) and click it:
+
+      <img alt="Build tab in Android Studio" src="/img/troubleshoot-android-2.png" />
+
+  4. Copy those full logs and paste them in the GitHub issue (or serve via pastebin). Make sure they actually contain the **error** message and not just something like "BUILD FAILED in 7s" (which is what most people post):
+
+      <img alt="Build logs in Android Studio" src="/img/troubleshoot-android-3.png" />
+
+  </TabItem>
+</Tabs>
+
+## Runtime error
+
+If your app crashes at runtime, make sure to inspect the native logs.
+
+<Tabs groupId="platform">
+  <TabItem value="ios" label="iOS" default>
+
+  1. Run your app through Xcode
+  2. If the app hits an unhandled error, it should pause in Xcode. Share the line it stopped in, and also the call-stack (stacktrace) on the left side.
+  3. If the app didn't pause, then it might have been a handled error - in this case just check the Xcode logs at the bottom:
+
+      <img alt="Bottom of runtime logs" src="/img/troubleshoot-xcode-logs.png" />
+
+  </TabItem>
+  <TabItem value="android" label="Android">
+
+  1. Run your app through Android Studio by using the Debug button (🪲)
+  2. If the app hits an unhandled error, it should pause in Android Studio. Share the line it stopped in, and also the call-stack (stacktrace) on the bottom window.
+  3. If the app didn't pause, then it might have been a handled error - in this case just check the Android Logcat logs at the bottom:
+
+      <img alt="Bottom of runtime logs" src="/img/troubleshoot-android-logs.png" />
 
   </TabItem>
 </Tabs>
