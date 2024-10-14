@@ -42,7 +42,7 @@ public class HybridImageFactorySpecCxx {
    * Create a new `HybridImageFactorySpecCxx` that wraps the given `HybridImageFactorySpec`.
    * All properties and methods bridge to C++ types.
    */
-  public init(_ implementation: any HybridImageFactorySpec) {
+  public init(_ implementation: some HybridImageFactorySpec) {
     self.__implementation = implementation
     /* no base class */
   }
