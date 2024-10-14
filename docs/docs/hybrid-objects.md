@@ -90,63 +90,6 @@ const onFrameListener = (frame: Frame) => {
 }
 ```
 
-## Inheritance
-
-As the name suggests, Hybrid Objects are object-oriented, meaning they have full support for inheritance and abstraction.
-A Hybrid Object can either inherit from other Hybrid Objects, or satisfy a common interface.
-
-### Inherit from other Hybrid Objects
-
-Each Hybrid Object has a proper JavaScript prototype chain, created automatically and lazily.
-When a Hybrid Object inherits from another Hybrid Object, it extends the prototype chain:
-
-<div className="side-by-side-container">
-  <div className="side-by-side-block" style={{ flex: 2 }}>
-  <div>
-  ```ts
-  interface Media extends HybridObject {
-    readonly width: number
-    readonly height: number
-    saveToFile(): Promise<void>
-  }
-
-  type ImageFormat = 'jpg' | 'png'
-  interface Image extends HybridObject, Media {
-    readonly format: ImageFormat
-  }
-
-  const image1 = NitroModules.createHybridObject<Image>('Image')
-  const image2 = NitroModules.createHybridObject<Image>('Image')
-  ```
-  </div>
-  </div>
-
-  <div align="center" className="side-by-side-block">
-  ```mermaid
-  graph TD;
-    HybridObject["HybridObject (4 props)"]-->HybridMediaSpec["Media (3 props)"]
-    HybridMediaSpec-->HybridImageSpec["Image (1 prop)"]
-    HybridImageSpec-->Image1["const image1"]
-    HybridImageSpec-->Image2["const image2"]
-  ```
-  </div>
-</div>
-
-### Inherit from a common interface
-
-With Nitrogen, you can define a common TypeScript interface that multiple Hybrid Objects inherit from.
-This non-HybridObject interface (`Media`) will not be a separate type on the native side, but all Hybrid Objects that extend from it will satisfy the TypeScript type:
-
-```ts
-interface Media {
-  readonly width: number
-  readonly height: number
-}
-
-interface Image extends HybridObject, Media {}
-interface Video extends HybridObject, Media {}
-```
-
 ## Implementation
 
 Hybrid Objects can be implemented in C++, Swift or Kotlin:
@@ -263,6 +206,116 @@ Hybrid Objects can be implemented in C++, Swift or Kotlin:
   </TabItem>
 </Tabs>
 
+## Inheritance
+
+As the name suggests, Hybrid Objects are object-oriented, meaning they have full support for inheritance and abstraction.
+A Hybrid Object can either inherit from other Hybrid Objects, or satisfy a common interface.
+
+<Tabs groupId="nitrogen-or-not">
+  <TabItem value="nitrogen" label="With Nitrogen ✨" default>
+
+  ### Inherit from other Hybrid Objects
+
+  Each Hybrid Object has a proper JavaScript prototype chain, created automatically and lazily.
+  When a Hybrid Object inherits from another Hybrid Object, it extends the prototype chain:
+
+  <div className="side-by-side-container">
+    <div className="side-by-side-block" style={{ flex: 2 }}>
+    <div>
+    ```ts
+    interface Media extends HybridObject {
+      readonly width: number
+      readonly height: number
+      saveToFile(): Promise<void>
+    }
+
+    type ImageFormat = 'jpg' | 'png'
+    interface Image extends HybridObject, Media {
+      readonly format: ImageFormat
+    }
+
+    const image1 = NitroModules.createHybridObject<Image>('Image')
+    const image2 = NitroModules.createHybridObject<Image>('Image')
+    ```
+    </div>
+    </div>
+
+    <div align="center" className="side-by-side-block">
+    ```mermaid
+    graph TD;
+      HybridObject["HybridObject (4 props)"]-->HybridMediaSpec["Media (3 props)"]
+      HybridMediaSpec-->HybridImageSpec["Image (1 prop)"]
+      HybridImageSpec-->Image1["const image1"]
+      HybridImageSpec-->Image2["const image2"]
+    ```
+    </div>
+  </div>
+
+  ### Inherit from a common interface
+
+  With Nitrogen, you can define a common TypeScript interface that multiple Hybrid Objects inherit from.
+  This non-HybridObject interface (`Media`) will not be a separate type on the native side, but all Hybrid Objects that extend from it will satisfy the TypeScript type:
+
+  ```ts
+  interface Media {
+    readonly width: number
+    readonly height: number
+  }
+
+  interface Image extends HybridObject, Media {}
+  interface Video extends HybridObject, Media {}
+  ```
+
+  </TabItem>
+  <TabItem value="manually" label="Manually">
+
+  ### Inherit from other Hybrid Objects
+
+  In C++, inheriting from a Hybrid Object is as simple as extending it, and adding the prototype in `loadHybridMethods()`:
+
+  ```cpp title="HybridMath.hpp"
+  class HybridImage: public HybridMedia {
+  public:
+    // Image specific methods
+    ImageFormat getFormat();
+
+    void loadHybridMethods() override {
+      // register base prototype
+      HybridMedia::loadHybridMethods();
+      // register all methods we add here
+      registerHybrids(this, [](Prototype& prototype) {
+        prototype.registerHybridGetter("format", &HybridImage::getFormat);
+      });
+    }
+  };
+  ```
+
+  ### Override base methods/properties
+
+  In a C++ Hybrid Object, you can also override base methods and properties, even with different types:
+
+  ```cpp title="HybridMath.hpp"
+  class HybridImage: public HybridMedia {
+  public:
+    // Image specific methods
+    std::string getSize();
+
+    void loadHybridMethods() override {
+      // register base protoype
+      HybridMedia::loadHybridMethods();
+      // HybridMedia already has .width, but it's a number.
+      // We override it to be a string in HybridImage.
+      registerHybrids(this, [](Prototype& prototype) {
+        prototype.registerHybridGetter("width", &HybridImage::getSize);
+      });
+    }
+  }
+  ```
+
+  The HybridImage's prototype's prototype (= HybridMedia's prototype) will still contain the original method/property.
+  </TabItem>
+</Tabs>
+
 ## Memory Size (`memorySize`)
 
 Since it's implementation is in native code, the JavaScript runtime does not know the actual memory size of a Hybrid Object.
@@ -283,29 +336,6 @@ Any unused `Image` objects can now be deleted sooner by the JS garbage collector
 :::tip
 It is safe to return `0` here, but recommended to somewhat closely estimate the actual size of native object if possible.
 :::
-
-## Overriding or adding methods/properties
-
-In a C++ Hybrid Object you can override or add methods and properties by overriding the `loadHybridMethods()` method, and calling `registerHybrids(...)`:
-
-```cpp title="HybridMath.hpp"
-class HybridMath: HybridMathSpec {
-public:
-  std::string sayHello();
-
-  void loadHybridMethods() override {
-    // register base protoype
-    HybridMathSpec::loadHybridMethods();
-    // register all methods we override here
-    registerHybrids(this, [](Prototype& prototype) {
-      prototype.registerHybridMethod("sayHello", &HybridMath::sayHello);
-    });
-  }
-}
-```
-
-If a method or property is added that already exists in a base class it will be overridden - similar to how a JS class can override methods/properties from it's base class.
-The prototype's prototype will still contain the original method/property.
 
 ### Raw JSI methods
 
