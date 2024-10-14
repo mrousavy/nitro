@@ -46,6 +46,7 @@ const sidebars: SidebarsConfig = {
     'entry-point',
     'comparison',
     'for-users',
+    'troubleshooting',
   ],
 };
 
