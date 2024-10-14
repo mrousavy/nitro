@@ -33,7 +33,7 @@ class JSICacheReference;
  * This will allow you to access the `jsi::Value` as long as the `OwningLock` is alive,
  * and `JSICache` will hold any garbage collection calls until the `OwningLock` is destroyed.
  */
-class JSICache final : public jsi::NTativeState {
+class JSICache final : public jsi::NativeState {
 public:
   ~JSICache();
 
