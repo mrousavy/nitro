@@ -66,5 +66,7 @@ body:
       label: Additional information
       description: Please check all the boxes that apply
       options:
+        - label: I have read and followed the [Troubleshooting Guide](https://nitro.margelo.com/troubleshooting).
+          required: true
         - label: I searched for [similar issues in this repository](https://github.com/mrousavy/nitro/issues) and found none.
           required: true
