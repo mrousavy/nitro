@@ -28,13 +28,18 @@ export function createSwiftCxxBridge(): SourceFile[] {
     })
     .filter((b) => b != null)
     .filter(filterDuplicateHelperBridges)
-  const helperFunctions = bridges
-    .map((b) => b.cxxCode)
+  const helperFunctionsHeader = bridges
+    .map((b) => b.header.cxxCode)
+    .filter(isNotDuplicate)
+    .join('\n\n')
+  const helperFunctionsImplementation = bridges
+    .map((b) => b.implementation?.cxxCode)
+    .filter((f) => f != null)
     .filter(isNotDuplicate)
     .join('\n\n')
 
   const requiredImports = bridges.flatMap((b) => b.requiredIncludes)
-  const includes = requiredImports
+  const allIncludes = requiredImports
     .map((i) => includeHeader(i, false))
     .filter(isNotDuplicate)
   const forwardDeclarations = requiredImports
@@ -54,8 +59,8 @@ ${createFileMetadataString(`${bridgeName}.hpp`)}
 // Forward declarations of C++ defined types
 ${forwardDeclarations.sort().join('\n')}
 
-// Include C++ defined types
-${includes.sort().join('\n')}
+// Include C++ defined types that cannot be forward-declared
+${allIncludes.sort().join('\n')}
 
 /**
  * Contains specialized versions of C++ templated types so they can be accessed from Swift,
@@ -63,7 +68,7 @@ ${includes.sort().join('\n')}
  */
 namespace ${namespace} {
 
-  ${indent(helperFunctions, '  ')}
+  ${indent(helperFunctionsHeader, '  ')}
 
 } // namespace ${namespace}
 `
@@ -72,6 +77,12 @@ namespace ${namespace} {
 ${createFileMetadataString(`${bridgeName}.cpp`)}
 
 #include "${bridgeName}.hpp"
+
+namespace ${namespace} {
+
+  ${indent(helperFunctionsImplementation, '  ')}
+
+} // namespace ${namespace}
 `
 
   const files: SourceFile[] = []
