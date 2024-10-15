@@ -7,6 +7,9 @@
 
 #include "HybridImageFactorySpecSwift.hpp"
 
+// Include Swift types (especially the HybridImageFactorySpecSwift Swift class)
+#include "NitroImage-Swift-Cxx-Umbrella.hpp"
+
 namespace margelo::nitro::image {
 
 HybridImageFactorySpecSwift::HybridImageFactorySpecSwift(const NitroImage::HybridImageFactorySpecCxx& swiftPart):

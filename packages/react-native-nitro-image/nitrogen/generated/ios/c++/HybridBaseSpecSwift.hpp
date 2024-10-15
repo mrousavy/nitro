@@ -23,8 +23,6 @@ namespace NitroImage { class HybridBaseSpecCxx; }
 #error NitroModules cannot be found! Are you sure you installed NitroModules properly?
 #endif
 
-#include "NitroImage-Swift-Cxx-Umbrella.hpp"
-
 namespace margelo::nitro::image {
 
   /**

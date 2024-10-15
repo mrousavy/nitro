@@ -258,8 +258,6 @@ ${extraIncludes.join('\n')}
 
 ${includeNitroHeader('HybridContext.hpp')}
 
-#include "${iosModuleName}-Swift-Cxx-Umbrella.hpp"
-
 namespace ${cxxNamespace} {
 
   /**
@@ -303,6 +301,9 @@ namespace ${cxxNamespace} {
 ${createFileMetadataString(`${name.HybridTSpecSwift}.cpp`)}
 
 #include "${name.HybridTSpecSwift}.hpp"
+
+// Include Swift types (especially the ${name.HybridTSpecSwift} Swift class)
+#include "${iosModuleName}-Swift-Cxx-Umbrella.hpp"
 
 namespace ${cxxNamespace} {
 

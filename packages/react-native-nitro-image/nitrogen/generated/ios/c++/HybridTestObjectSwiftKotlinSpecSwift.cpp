@@ -7,6 +7,9 @@
 
 #include "HybridTestObjectSwiftKotlinSpecSwift.hpp"
 
+// Include Swift types (especially the HybridTestObjectSwiftKotlinSpecSwift Swift class)
+#include "NitroImage-Swift-Cxx-Umbrella.hpp"
+
 namespace margelo::nitro::image {
 
 HybridTestObjectSwiftKotlinSpecSwift::HybridTestObjectSwiftKotlinSpecSwift(const NitroImage::HybridTestObjectSwiftKotlinSpecCxx& swiftPart):
