@@ -46,7 +46,7 @@ export function createSwiftCxxHelpers(type: Type): SwiftCxxHelper | undefined {
  */
 function createCxxOptionalSwiftHelper(type: OptionalType): SwiftCxxHelper {
   const actualType = type.getCode('c++')
-  const bridgedType = new SwiftCxxBridgedType(type)
+  const wrappedBridge = new SwiftCxxBridgedType(type.wrappingType, true)
   const name = escapeCppName(actualType)
   return {
     cxxType: actualType,
@@ -58,15 +58,15 @@ function createCxxOptionalSwiftHelper(type: OptionalType): SwiftCxxHelper {
         space: 'system',
         language: 'c++',
       },
-      ...bridgedType.getRequiredImports(),
+      ...wrappedBridge.getRequiredImports(),
     ],
     cxxCode: `
 /**
  * Specialized version of \`${escapeComments(actualType)}\`.
  */
 using ${name} = ${actualType};
-inline ${actualType} create_${name}(const ${type.wrappingType.getCode('c++')}& value) {
-  return ${actualType}(value);
+inline ${actualType} create_${name}(const ${wrappedBridge.getTypeCode('c++')}& value) {
+  return ${actualType}(${indent(wrappedBridge.parseFromSwiftToCpp('value', 'c++'), '    ')});
 }
     `.trim(),
   }
