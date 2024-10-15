@@ -13,7 +13,8 @@ import { PromiseType } from '../types/PromiseType.js'
 import { SwiftCxxBridgedType } from './SwiftCxxBridgedType.js'
 
 export interface SwiftCxxHelper {
-  cxxCode: string
+  cxxHeaderCode: string
+  cxxImplementationCode: string
   funcName: string
   specializationName: string
   cxxType: string
@@ -60,12 +61,15 @@ function createCxxOptionalSwiftHelper(type: OptionalType): SwiftCxxHelper {
       },
       ...wrappedBridge.getRequiredImports(),
     ],
-    cxxCode: `
+    cxxHeaderCode: `
 /**
  * Specialized version of \`${escapeComments(actualType)}\`.
  */
 using ${name} = ${actualType};
-inline ${actualType} create_${name}(const ${wrappedBridge.getTypeCode('c++')}& value) {
+${actualType} create_${name}(const ${wrappedBridge.getTypeCode('c++')}& value);
+    `.trim(),
+    cxxImplementationCode: `
+${actualType} create_${name}(const ${wrappedBridge.getTypeCode('c++')}& value) {
   return ${actualType}(${indent(wrappedBridge.parseFromSwiftToCpp('value', 'c++'), '    ')});
 }
     `.trim(),
@@ -91,12 +95,15 @@ function createCxxVectorSwiftHelper(type: ArrayType): SwiftCxxHelper {
       },
       ...bridgedType.getRequiredImports(),
     ],
-    cxxCode: `
+    cxxHeaderCode: `
 /**
  * Specialized version of \`${escapeComments(actualType)}\`.
  */
 using ${name} = ${actualType};
-inline ${actualType} create_${name}(size_t size) {
+${actualType} create_${name}(size_t size);
+    `.trim(),
+    cxxImplementationCode: `
+${actualType} create_${name}(size_t size) {
   ${actualType} vector;
   vector.reserve(size);
   return vector;
@@ -125,17 +132,21 @@ function createCxxUnorderedMapSwiftHelper(type: RecordType): SwiftCxxHelper {
       },
       ...bridgedType.getRequiredImports(),
     ],
-    cxxCode: `
+    cxxHeaderCode: `
 /**
  * Specialized version of \`${escapeComments(actualType)}\`.
  */
 using ${name} = ${actualType};
-inline ${actualType} create_${name}(size_t size) {
+${actualType} create_${name}(size_t size);
+std::vector<${keyType}> get_${name}_keys(const ${name}& map);
+    `.trim(),
+    cxxImplementationCode: `
+${actualType} create_${name}(size_t size) {
   ${actualType} map;
   map.reserve(size);
   return map;
 }
-inline std::vector<${keyType}> get_${name}_keys(const ${name}& map) {
+std::vector<${keyType}> get_${name}_keys(const ${name}& map) {
   std::vector<${keyType}> keys;
   keys.reserve(map.size());
   for (const auto& entry : map) {
@@ -230,7 +241,7 @@ function createCxxFunctionSwiftHelper(type: FunctionType): SwiftCxxHelper {
       },
       ...bridgedType.getRequiredImports(),
     ],
-    cxxCode: `
+    cxxHeaderCode: `
 /**
  * Specialized version of \`${type.getCode('c++', false)}\`.
  */
@@ -240,22 +251,27 @@ using ${name} = ${actualType};
  */
 class ${wrapperName} {
 public:
-  explicit ${wrapperName}(const ${actualType}& func): function(func) {}
-  explicit ${wrapperName}(${actualType}&& func): function(std::move(func)) {}
-
-  ${callFuncReturnType} call(${callCppFuncParamsSignature.join(', ')}) const {
-    ${callCppFuncBody}
-  }
-
+  explicit ${wrapperName}(const ${actualType}& func);
+  explicit ${wrapperName}(${actualType}&& func);
+  ${callFuncReturnType} call(${callCppFuncParamsSignature.join(', ')}) const;
   ${actualType} function;
 };
-inline ${name} create_${name}(void* NONNULL closureHolder, ${functionPointerParam}, void(* NONNULL destroy)(void* NONNULL)) {
+${name} create_${name}(void* NONNULL closureHolder, ${functionPointerParam}, void(* NONNULL destroy)(void* NONNULL));
+std::shared_ptr<${wrapperName}> share_${name}(const ${name}& value);
+    `.trim(),
+    cxxImplementationCode: `
+${wrapperName}::${wrapperName}(const ${actualType}& func): function(func) {}
+${wrapperName}::${wrapperName}(${actualType}&& func): function(std::move(func)) {}
+${callFuncReturnType} ${wrapperName}::call(${callCppFuncParamsSignature.join(', ')}) const {
+  ${callCppFuncBody}
+}
+${name} create_${name}(void* NONNULL closureHolder, ${functionPointerParam}, void(* NONNULL destroy)(void* NONNULL)) {
   std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
   return ${name}([sharedClosureHolder, call](${paramsSignature.join(', ')}) -> ${type.returnType.getCode('c++')} {
     ${callSwiftFuncBody}
   });
 }
-inline std::shared_ptr<${wrapperName}> share_${name}(const ${name}& value) {
+std::shared_ptr<${wrapperName}> share_${name}(const ${name}& value) {
   return std::make_shared<${wrapperName}>(value);
 }
     `.trim(),
@@ -269,27 +285,31 @@ function createCxxVariantSwiftHelper(type: VariantType): SwiftCxxHelper {
   const actualType = type.getCode('c++')
   const bridgedType = new SwiftCxxBridgedType(type)
   const name = escapeCppName(actualType)
-  const createFunctions = type.variants
-    .map((t) => {
-      const param = t.canBePassedByReference
-        ? toReferenceType(t.getCode('c++'))
-        : t.getCode('c++')
-      return `
-inline ${name} create_${name}(${param} value) {
+  const createFunctions = type.variants.map((t) => {
+    const param = t.canBePassedByReference
+      ? toReferenceType(t.getCode('c++'))
+      : t.getCode('c++')
+    return {
+      cxxHeaderCode: `${name} create_${name}(${param} value);`.trim(),
+      cxxImplementationCode: `
+${name} create_${name}(${param} value) {
   return ${name}(value);
 }
-      `.trim()
-    })
-    .join('\n')
-  const getFunctions = type.variants
-    .map((t, i) => {
-      return `
-inline ${t.getCode('c++')} get_${name}_${i}(const ${name}& variantWrapper) {
+      `.trim(),
+    }
+  })
+  const getFunctions = type.variants.map((t, i) => {
+    return {
+      cxxHeaderCode: `
+${t.getCode('c++')} get_${name}_${i}(const ${name}& variantWrapper);
+      `.trim(),
+      cxxImplementationCode: `
+${t.getCode('c++')} get_${name}_${i}(const ${name}& variantWrapper) {
   return std::get<${i}>(variantWrapper.variant);
 }
-      `.trim()
-    })
-    .join('\n')
+      `.trim(),
+    }
+  })
   return {
     cxxType: actualType,
     funcName: `create_${name}`,
@@ -302,7 +322,7 @@ inline ${t.getCode('c++')} get_${name}_${i}(const ${name}& variantWrapper) {
       },
       ...bridgedType.getRequiredImports(),
     ],
-    cxxCode: `
+    cxxHeaderCode: `
 /**
  * Wrapper struct for \`${escapeComments(actualType)}\`.
  * std::variant cannot be used in Swift because of a Swift bug.
@@ -310,17 +330,24 @@ inline ${t.getCode('c++')} get_${name}_${i}(const ${name}& variantWrapper) {
  */
 struct ${name} {
   ${actualType} variant;
-  ${name}(${actualType} variant): variant(variant) { }
-  operator ${actualType}() const {
-    return variant;
-  }
-  inline size_t index() const {
-    return variant.index();
-  }
+  ${name}(${actualType} variant);
+  operator ${actualType}() const;
+  size_t index() const;
 };
-${createFunctions}
-${getFunctions}
+${createFunctions.map((f) => f.cxxHeaderCode).join('\n')}
+${getFunctions.map((f) => f.cxxHeaderCode).join('\n')}
       `.trim(),
+    cxxImplementationCode: `
+${name}::${name}(${actualType} variant): variant(variant) { }
+${name}::operator ${actualType}() const {
+  return variant;
+}
+size_t ${name}::index() const {
+  return variant.index();
+}
+${createFunctions.map((f) => f.cxxImplementationCode).join('\n')}
+${getFunctions.map((f) => f.cxxImplementationCode).join('\n')}
+        `.trim(),
   }
 }
 
@@ -350,15 +377,18 @@ function createCxxTupleSwiftHelper(type: TupleType): SwiftCxxHelper {
       },
       ...bridgedType.getRequiredImports(),
     ],
-    cxxCode: `
+    cxxHeaderCode: `
 /**
  * Specialized version of \`${escapeComments(actualType)}\`.
  */
 using ${name} = ${actualType};
-inline ${actualType} create_${name}(${typesSignature}) {
+${actualType} create_${name}(${typesSignature});
+     `.trim(),
+    cxxImplementationCode: `
+${actualType} create_${name}(${typesSignature}) {
   return ${actualType} { ${typesForward} };
 }
-     `.trim(),
+      `.trim(),
   }
 }
 
@@ -382,14 +412,17 @@ function createCxxPromiseSwiftHelper(type: PromiseType): SwiftCxxHelper {
       },
       ...bridgedType.getRequiredImports(),
     ],
-    cxxCode: `
+    cxxHeaderCode: `
 /**
  * Specialized version of \`${escapeComments(actualType)}\`.
  */
 using ${name} = ${actualType};
-inline ${actualType} create_${name}() {
+${actualType} create_${name}();
+     `.trim(),
+    cxxImplementationCode: `
+${actualType} create_${name}() {
   return ${actualType}();
 }
-     `.trim(),
+      `.trim(),
   }
 }

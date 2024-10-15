@@ -18,6 +18,7 @@ const SWIFT_BRIDGE_NAMESPACE = ['bridge', 'swift']
 export function createSwiftCxxBridge(): SourceFile[] {
   const moduleName = NitroConfig.getIosModuleName()
   const bridgeName = `${moduleName}-Swift-Cxx-Bridge`
+  const umbrellaHeaderName = `${NitroConfig.getIosModuleName()}-Swift-Cxx-Umbrella.hpp`
 
   const types = getAllKnownTypes().map((t) => new SwiftCxxBridgedType(t))
 
@@ -31,8 +32,12 @@ export function createSwiftCxxBridge(): SourceFile[] {
     })
     .filter((b) => b != null)
     .filter(filterDuplicateHelperBridges)
-  const helperFunctions = bridges
-    .map((b) => b.cxxCode)
+  const headerHelperFunctions = bridges
+    .map((b) => `// pragma MARK: ${b.cxxType}\n${b.cxxHeaderCode}`)
+    .filter(isNotDuplicate)
+    .join('\n\n')
+  const implementationHelperFunctions = bridges
+    .map((b) => `// pragma MARK: ${b.cxxType}\n${b.cxxImplementationCode}`)
     .filter(isNotDuplicate)
     .join('\n\n')
 
@@ -68,15 +73,23 @@ ${includes.sort().join('\n')}
  */
 namespace ${namespace} {
 
-  ${indent(helperFunctions, '  ')}
+  ${indent(headerHelperFunctions, '  ')}
 
 } // namespace ${namespace}
+
+#include "${umbrellaHeaderName}"
 `
 
   const source = `
 ${createFileMetadataString(`${bridgeName}.cpp`)}
 
 #include "${bridgeName}.hpp"
+
+namespace ${namespace} {
+
+  ${indent(implementationHelperFunctions, '  ')}
+
+} // namespace ${namespace}
 `
 
   const files: SourceFile[] = []
