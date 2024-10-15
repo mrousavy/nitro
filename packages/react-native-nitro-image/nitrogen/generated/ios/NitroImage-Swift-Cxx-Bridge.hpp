@@ -160,10 +160,10 @@ namespace margelo::nitro::image::bridge::swift {
   OldEnum get_std__variant_bool__OldEnum__1(const std__variant_bool__OldEnum_& variantWrapper);
   
   /**
-     * Specialized version of `std::optional<Person>`.
-     */
-    using std__optional_Person_ = std::optional<Person>;
-    std::optional<Person> create_std__optional_Person_(const Person& value);
+   * Specialized version of `std::optional<Person>`.
+   */
+  using std__optional_Person_ = std::optional<Person>;
+  std::optional<Person> create_std__optional_Person_(const Person& value);
   
   /**
    * Wrapper struct for `std::variant<Car, Person>`.
@@ -294,10 +294,10 @@ namespace margelo::nitro::image::bridge::swift {
   PromiseHolder<std::string> create_PromiseHolder_std__string_();
   
   /**
-     * Specialized version of `std::optional<std::string>`.
-     */
-    using std__optional_std__string_ = std::optional<std::string>;
-    std::optional<std::string> create_std__optional_std__string_(const std::string& value);
+   * Specialized version of `std::optional<std::string>`.
+   */
+  using std__optional_std__string_ = std::optional<std::string>;
+  std::optional<std::string> create_std__optional_std__string_(const std::string& value);
   
   /**
    * Specialized version of `std::vector<Person>`.
@@ -331,16 +331,16 @@ namespace margelo::nitro::image::bridge::swift {
   std::shared_ptr<Func_void_std__vector_Powertrain__Wrapper> share_Func_void_std__vector_Powertrain_(const Func_void_std__vector_Powertrain_& value);
   
   /**
-     * Specialized version of `std::optional<bool>`.
-     */
-    using std__optional_bool_ = std::optional<bool>;
-    std::optional<bool> create_std__optional_bool_(const bool& value);
+   * Specialized version of `std::optional<bool>`.
+   */
+  using std__optional_bool_ = std::optional<bool>;
+  std::optional<bool> create_std__optional_bool_(const bool& value);
   
   /**
-     * Specialized version of `std::optional<Powertrain>`.
-     */
-    using std__optional_Powertrain_ = std::optional<Powertrain>;
-    std::optional<Powertrain> create_std__optional_Powertrain_(const Powertrain& value);
+   * Specialized version of `std::optional<Powertrain>`.
+   */
+  using std__optional_Powertrain_ = std::optional<Powertrain>;
+  std::optional<Powertrain> create_std__optional_Powertrain_(const Powertrain& value);
   
   /**
    * Specialized version of `PromiseHolder<int64_t>`.
@@ -368,10 +368,10 @@ namespace margelo::nitro::image::bridge::swift {
   std::shared_ptr<Func_void_Wrapper> share_Func_void(const Func_void& value);
   
   /**
-     * Specialized version of `std::optional<double>`.
-     */
-    using std__optional_double_ = std::optional<double>;
-    std::optional<double> create_std__optional_double_(const double& value);
+   * Specialized version of `std::optional<double>`.
+   */
+  using std__optional_double_ = std::optional<double>;
+  std::optional<double> create_std__optional_double_(const double& value);
   
   /**
    * Specialized version of `std::function<void(std::optional<double>)>`.

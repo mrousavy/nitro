@@ -85,11 +85,11 @@ function createCxxOptionalSwiftHelper(type: OptionalType): SwiftCxxHelper {
     specializationName: name,
     header: {
       cxxCode: `
-  /**
-   * Specialized version of \`${escapeComments(actualType)}\`.
-   */
-  using ${name} = ${actualType};
-  ${actualType} create_${name}(const ${type.wrappingType.getCode('c++')}& value);
+/**
+ * Specialized version of \`${escapeComments(actualType)}\`.
+ */
+using ${name} = ${actualType};
+${actualType} create_${name}(const ${type.wrappingType.getCode('c++')}& value);
       `.trim(),
     },
     implementation: {
@@ -245,8 +245,8 @@ function createCxxFunctionSwiftHelper(type: FunctionType): SwiftCxxHelper {
   let callCppFuncBody: string
   if (returnBridge.hasType) {
     callCppFuncBody = `
-    auto __result = function(${indent(callParamsForward.join(', '), '    ')});
-    return ${indent(returnBridge.parseFromCppToSwift('__result', 'c++'), '    ')};
+auto __result = function(${indent(callParamsForward.join(', '), '    ')});
+return ${indent(returnBridge.parseFromCppToSwift('__result', 'c++'), '    ')};
     `.trim()
   } else {
     callCppFuncBody = `function(${indent(callParamsForward.join(', '), '    ')});`
@@ -255,8 +255,8 @@ function createCxxFunctionSwiftHelper(type: FunctionType): SwiftCxxHelper {
   let callSwiftFuncBody: string
   if (returnBridge.hasType) {
     callSwiftFuncBody = `
-    auto __result = call(${indent(paramsForward.join(', '), '    ')});
-    return ${indent(returnBridge.parseFromSwiftToCpp('__result', 'c++'), '    ')};
+auto __result = call(${indent(paramsForward.join(', '), '    ')});
+return ${indent(returnBridge.parseFromSwiftToCpp('__result', 'c++'), '    ')};
     `.trim()
   } else {
     callSwiftFuncBody = `call(${indent(paramsForward.join(', '), '    ')});`
@@ -311,7 +311,7 @@ ${wrapperName}::${wrapperName}(const ${actualType}& func): function(func) {}
 ${wrapperName}::${wrapperName}(${actualType}&& func): function(std::move(func)) {}
 
 ${callFuncReturnType} ${wrapperName}::call(${callCppFuncParamsSignature.join(', ')}) const {
-  ${callCppFuncBody}
+  ${indent(callCppFuncBody, '  ')}
 }
 ${name} create_${name}(void* closureHolder, ${functionPointerParam}, void(*destroy)(void*)) {
   std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
