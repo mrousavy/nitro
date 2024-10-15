@@ -16,6 +16,7 @@ const sidebars: SidebarsConfig = {
     'nitro-modules',
     'hybrid-objects',
     'nitrogen',
+    'minimum-requirements',
     'using-nitro-in-your-app',
     'using-nitro-in-a-library',
     'configuration-nitro-json',
