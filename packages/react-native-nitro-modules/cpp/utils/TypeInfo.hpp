@@ -11,6 +11,7 @@
 #include <sstream>
 #include <string>
 #include <type_traits>
+#include <typeindex>
 
 #if __has_include(<cxxabi.h>)
 #include <cxxabi.h>
@@ -38,12 +39,8 @@ public:
     return std::regex_replace(original, re, replacement);
   }
 
-  /**
-   * Get a friendly name of the type `T` (if possible, demangled)
-   */
-  template <typename T>
-  static inline std::string getFriendlyTypename() {
-    std::string name = typeid(T).name();
+  static inline std::string demangleName(const std::string& typeName, bool removeNamespace = false) {
+    std::string name = typeName;
 #if __has_include(<cxxabi.h>)
     int status = 0;
     char* demangled_name = abi::__cxa_demangle(name.c_str(), NULL, NULL, &status);
@@ -64,11 +61,36 @@ public:
         name,
         R"(std::__1::unordered_map<([^,]+), ([^>]+), std::__1::hash<\1>, std::__1::equal_to<\1>, std::__1::allocator<std::__1::pair<const \1, \2>>>)",
         "std::unordered_map<$1, $2>");
-    name = replaceRegex(name, R"(std::__1::unordered_set<([^>]+), std::__1::hash<\1>, std::__1::equal_to<\1>, std::__1::allocator<\1>>)",
-                        "std::unordered_set<$1>");
-    name = replaceRegex(name, R"(std::__1::list<([^>]+), std::__1::allocator<\1>>)", "std::list<$1>");
+
+    if (removeNamespace) [[unlikely]] {
+      name = replaceRegex(name, R"((\w+::)+)", "");
+    }
 
     return name;
+  }
+
+  /**
+   * Get a friendly name of the given `type_info` (if possible, demangled)
+   */
+  static inline std::string getFriendlyTypename(const std::type_info& type, bool removeNamespace = false) {
+    std::string typeName = type.name();
+    return demangleName(typeName, removeNamespace);
+  }
+
+  /**
+   * Get a friendly name of the given `type_index` (if possible, demangled)
+   */
+  static inline std::string getFriendlyTypename(const std::type_index& typeIndex, bool removeNamespace = false) {
+    std::string typeName = typeIndex.name();
+    return demangleName(typeName, removeNamespace);
+  }
+
+  /**
+   * Get a friendly name of the type `T` (if possible, demangled)
+   */
+  template <typename T>
+  static inline std::string getFriendlyTypename(bool removeNamespace = false) {
+    return getFriendlyTypename(typeid(T), removeNamespace);
   }
 
   /**
