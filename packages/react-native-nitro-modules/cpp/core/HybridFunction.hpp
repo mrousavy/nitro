@@ -224,7 +224,7 @@ private:
   template <typename THybrid>
   static inline std::string getHybridFuncFullName(FunctionKind kind, const std::string& registrationName,
                                                   THybrid* hybridInstance = nullptr) {
-    std::string typeName = hybridInstance != nullptr ? hybridInstance->getName() : TypeInfo::getFriendlyTypenameNoNamespace<THybrid>();
+    std::string typeName = hybridInstance != nullptr ? hybridInstance->getName() : TypeInfo::getFriendlyTypename<THybrid>(true);
     switch (kind) {
       case FunctionKind::METHOD:
         return typeName + "." + registrationName + "(...)";
