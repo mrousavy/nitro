@@ -12,19 +12,19 @@ namespace margelo::nitro::image {
 HybridChildSpecSwift::HybridChildSpecSwift(const NitroImage::HybridChildSpecCxx& swiftPart):
   HybridObject(HybridChildSpec::TAG),
       HybridBaseSpecSwift(swiftPart),
-  _swiftPart(swiftPart) { }
+  _swiftPart(std::make_unique<NitroImage::HybridChildSpecCxx>(swiftPart)) { }
 
 NitroImage::HybridChildSpecCxx HybridChildSpecSwift::getSwiftPart() noexcept {
-  return _swiftPart;
+  return *_swiftPart;
 }
 
 size_t HybridChildSpecSwift::getExternalMemorySize() noexcept {
-  return _swiftPart.getMemorySize();
+  return _swiftPart->getMemorySize();
 }
 
 // Properties
 double HybridChildSpecSwift::getChildValue() noexcept {
-  return _swiftPart.getChildValue();
+  return _swiftPart->getChildValue();
 }
 
 // Methods

@@ -11,207 +11,207 @@ namespace margelo::nitro::image {
 
 HybridTestObjectSwiftKotlinSpecSwift::HybridTestObjectSwiftKotlinSpecSwift(const NitroImage::HybridTestObjectSwiftKotlinSpecCxx& swiftPart):
   HybridObject(HybridTestObjectSwiftKotlinSpec::TAG),
-  _swiftPart(swiftPart) { }
+  _swiftPart(std::make_unique<NitroImage::HybridTestObjectSwiftKotlinSpecCxx>(swiftPart)) { }
 
 NitroImage::HybridTestObjectSwiftKotlinSpecCxx HybridTestObjectSwiftKotlinSpecSwift::getSwiftPart() noexcept {
-  return _swiftPart;
+  return *_swiftPart;
 }
 
 size_t HybridTestObjectSwiftKotlinSpecSwift::getExternalMemorySize() noexcept {
-  return _swiftPart.getMemorySize();
+  return _swiftPart->getMemorySize();
 }
 
 // Properties
 std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec> HybridTestObjectSwiftKotlinSpecSwift::getThisObject() noexcept {
-  auto __result = _swiftPart.getThisObject();
+  auto __result = _swiftPart->getThisObject();
   return HybridContext::getOrCreate<HybridTestObjectSwiftKotlinSpecSwift>(__result);
 }
 double HybridTestObjectSwiftKotlinSpecSwift::getNumberValue() noexcept {
-  return _swiftPart.getNumberValue();
+  return _swiftPart->getNumberValue();
 }
 void HybridTestObjectSwiftKotlinSpecSwift::setNumberValue(double numberValue) noexcept {
-  _swiftPart.setNumberValue(std::forward<decltype(numberValue)>(numberValue));
+  _swiftPart->setNumberValue(std::forward<decltype(numberValue)>(numberValue));
 }
 bool HybridTestObjectSwiftKotlinSpecSwift::getBoolValue() noexcept {
-  return _swiftPart.getBoolValue();
+  return _swiftPart->getBoolValue();
 }
 void HybridTestObjectSwiftKotlinSpecSwift::setBoolValue(bool boolValue) noexcept {
-  _swiftPart.setBoolValue(std::forward<decltype(boolValue)>(boolValue));
+  _swiftPart->setBoolValue(std::forward<decltype(boolValue)>(boolValue));
 }
 std::string HybridTestObjectSwiftKotlinSpecSwift::getStringValue() noexcept {
-  auto __result = _swiftPart.getStringValue();
+  auto __result = _swiftPart->getStringValue();
   return __result;
 }
 void HybridTestObjectSwiftKotlinSpecSwift::setStringValue(const std::string& stringValue) noexcept {
-  _swiftPart.setStringValue(stringValue);
+  _swiftPart->setStringValue(stringValue);
 }
 int64_t HybridTestObjectSwiftKotlinSpecSwift::getBigintValue() noexcept {
-  return _swiftPart.getBigintValue();
+  return _swiftPart->getBigintValue();
 }
 void HybridTestObjectSwiftKotlinSpecSwift::setBigintValue(int64_t bigintValue) noexcept {
-  _swiftPart.setBigintValue(std::forward<decltype(bigintValue)>(bigintValue));
+  _swiftPart->setBigintValue(std::forward<decltype(bigintValue)>(bigintValue));
 }
 std::optional<std::string> HybridTestObjectSwiftKotlinSpecSwift::getStringOrUndefined() noexcept {
-  auto __result = _swiftPart.getStringOrUndefined();
+  auto __result = _swiftPart->getStringOrUndefined();
   return __result;
 }
 void HybridTestObjectSwiftKotlinSpecSwift::setStringOrUndefined(const std::optional<std::string>& stringOrUndefined) noexcept {
-  _swiftPart.setStringOrUndefined(stringOrUndefined);
+  _swiftPart->setStringOrUndefined(stringOrUndefined);
 }
 std::optional<std::string> HybridTestObjectSwiftKotlinSpecSwift::getStringOrNull() noexcept {
-  auto __result = _swiftPart.getStringOrNull();
+  auto __result = _swiftPart->getStringOrNull();
   return __result;
 }
 void HybridTestObjectSwiftKotlinSpecSwift::setStringOrNull(const std::optional<std::string>& stringOrNull) noexcept {
-  _swiftPart.setStringOrNull(stringOrNull);
+  _swiftPart->setStringOrNull(stringOrNull);
 }
 std::optional<std::string> HybridTestObjectSwiftKotlinSpecSwift::getOptionalString() noexcept {
-  auto __result = _swiftPart.getOptionalString();
+  auto __result = _swiftPart->getOptionalString();
   return __result;
 }
 void HybridTestObjectSwiftKotlinSpecSwift::setOptionalString(const std::optional<std::string>& optionalString) noexcept {
-  _swiftPart.setOptionalString(optionalString);
+  _swiftPart->setOptionalString(optionalString);
 }
 std::variant<std::string, double> HybridTestObjectSwiftKotlinSpecSwift::getSomeVariant() noexcept {
-  auto __result = _swiftPart.getSomeVariant();
+  auto __result = _swiftPart->getSomeVariant();
   return __result;
 }
 void HybridTestObjectSwiftKotlinSpecSwift::setSomeVariant(const std::variant<std::string, double>& someVariant) noexcept {
-  _swiftPart.setSomeVariant(someVariant);
+  _swiftPart->setSomeVariant(someVariant);
 }
 
 // Methods
 std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec> HybridTestObjectSwiftKotlinSpecSwift::newTestObject() {
-  auto __result = _swiftPart.newTestObject();
+  auto __result = _swiftPart->newTestObject();
   return HybridContext::getOrCreate<HybridTestObjectSwiftKotlinSpecSwift>(__result);
 }
 void HybridTestObjectSwiftKotlinSpecSwift::simpleFunc() {
-  _swiftPart.simpleFunc();
+  _swiftPart->simpleFunc();
 }
 double HybridTestObjectSwiftKotlinSpecSwift::addNumbers(double a, double b) {
-  auto __result = _swiftPart.addNumbers(std::forward<decltype(a)>(a), std::forward<decltype(b)>(b));
+  auto __result = _swiftPart->addNumbers(std::forward<decltype(a)>(a), std::forward<decltype(b)>(b));
   return __result;
 }
 std::string HybridTestObjectSwiftKotlinSpecSwift::addStrings(const std::string& a, const std::string& b) {
-  auto __result = _swiftPart.addStrings(a, b);
+  auto __result = _swiftPart->addStrings(a, b);
   return __result;
 }
 void HybridTestObjectSwiftKotlinSpecSwift::multipleArguments(double num, const std::string& str, bool boo) {
-  _swiftPart.multipleArguments(std::forward<decltype(num)>(num), str, std::forward<decltype(boo)>(boo));
+  _swiftPart->multipleArguments(std::forward<decltype(num)>(num), str, std::forward<decltype(boo)>(boo));
 }
 std::vector<std::string> HybridTestObjectSwiftKotlinSpecSwift::bounceStrings(const std::vector<std::string>& array) {
-  auto __result = _swiftPart.bounceStrings(array);
+  auto __result = _swiftPart->bounceStrings(array);
   return __result;
 }
 std::vector<double> HybridTestObjectSwiftKotlinSpecSwift::bounceNumbers(const std::vector<double>& array) {
-  auto __result = _swiftPart.bounceNumbers(array);
+  auto __result = _swiftPart->bounceNumbers(array);
   return __result;
 }
 std::vector<Person> HybridTestObjectSwiftKotlinSpecSwift::bounceStructs(const std::vector<Person>& array) {
-  auto __result = _swiftPart.bounceStructs(array);
+  auto __result = _swiftPart->bounceStructs(array);
   return __result;
 }
 std::vector<Powertrain> HybridTestObjectSwiftKotlinSpecSwift::bounceEnums(const std::vector<Powertrain>& array) {
-  auto __result = _swiftPart.bounceEnums(array);
+  auto __result = _swiftPart->bounceEnums(array);
   return __result;
 }
 void HybridTestObjectSwiftKotlinSpecSwift::complexEnumCallback(const std::vector<Powertrain>& array, const std::function<void(const std::vector<Powertrain>& /* array */)>& callback) {
-  _swiftPart.complexEnumCallback(array, callback);
+  _swiftPart->complexEnumCallback(array, callback);
 }
 std::shared_ptr<AnyMap> HybridTestObjectSwiftKotlinSpecSwift::createMap() {
-  auto __result = _swiftPart.createMap();
+  auto __result = _swiftPart->createMap();
   return __result;
 }
 std::shared_ptr<AnyMap> HybridTestObjectSwiftKotlinSpecSwift::mapRoundtrip(const std::shared_ptr<AnyMap>& map) {
-  auto __result = _swiftPart.mapRoundtrip(map);
+  auto __result = _swiftPart->mapRoundtrip(map);
   return __result;
 }
 double HybridTestObjectSwiftKotlinSpecSwift::funcThatThrows() {
-  auto __result = _swiftPart.funcThatThrows();
+  auto __result = _swiftPart->funcThatThrows();
   return __result;
 }
 std::string HybridTestObjectSwiftKotlinSpecSwift::tryOptionalParams(double num, bool boo, const std::optional<std::string>& str) {
-  auto __result = _swiftPart.tryOptionalParams(std::forward<decltype(num)>(num), std::forward<decltype(boo)>(boo), str);
+  auto __result = _swiftPart->tryOptionalParams(std::forward<decltype(num)>(num), std::forward<decltype(boo)>(boo), str);
   return __result;
 }
 std::string HybridTestObjectSwiftKotlinSpecSwift::tryMiddleParam(double num, std::optional<bool> boo, const std::string& str) {
-  auto __result = _swiftPart.tryMiddleParam(std::forward<decltype(num)>(num), boo, str);
+  auto __result = _swiftPart->tryMiddleParam(std::forward<decltype(num)>(num), boo, str);
   return __result;
 }
 std::optional<Powertrain> HybridTestObjectSwiftKotlinSpecSwift::tryOptionalEnum(std::optional<Powertrain> value) {
-  auto __result = _swiftPart.tryOptionalEnum(value);
+  auto __result = _swiftPart->tryOptionalEnum(value);
   return __result;
 }
 int64_t HybridTestObjectSwiftKotlinSpecSwift::calculateFibonacciSync(double value) {
-  auto __result = _swiftPart.calculateFibonacciSync(std::forward<decltype(value)>(value));
+  auto __result = _swiftPart->calculateFibonacciSync(std::forward<decltype(value)>(value));
   return __result;
 }
 std::future<int64_t> HybridTestObjectSwiftKotlinSpecSwift::calculateFibonacciAsync(double value) {
-  auto __result = _swiftPart.calculateFibonacciAsync(std::forward<decltype(value)>(value));
+  auto __result = _swiftPart->calculateFibonacciAsync(std::forward<decltype(value)>(value));
   return __result.getFuture();
 }
 std::future<void> HybridTestObjectSwiftKotlinSpecSwift::wait(double seconds) {
-  auto __result = _swiftPart.wait(std::forward<decltype(seconds)>(seconds));
+  auto __result = _swiftPart->wait(std::forward<decltype(seconds)>(seconds));
   return __result.getFuture();
 }
 void HybridTestObjectSwiftKotlinSpecSwift::callCallback(const std::function<void()>& callback) {
-  _swiftPart.callCallback(callback);
+  _swiftPart->callCallback(callback);
 }
 void HybridTestObjectSwiftKotlinSpecSwift::callAll(const std::function<void()>& first, const std::function<void()>& second, const std::function<void()>& third) {
-  _swiftPart.callAll(first, second, third);
+  _swiftPart->callAll(first, second, third);
 }
 void HybridTestObjectSwiftKotlinSpecSwift::callWithOptional(std::optional<double> value, const std::function<void(std::optional<double> /* maybe */)>& callback) {
-  _swiftPart.callWithOptional(value, callback);
+  _swiftPart->callWithOptional(value, callback);
 }
 Car HybridTestObjectSwiftKotlinSpecSwift::getCar() {
-  auto __result = _swiftPart.getCar();
+  auto __result = _swiftPart->getCar();
   return __result;
 }
 bool HybridTestObjectSwiftKotlinSpecSwift::isCarElectric(const Car& car) {
-  auto __result = _swiftPart.isCarElectric(car);
+  auto __result = _swiftPart->isCarElectric(car);
   return __result;
 }
 std::optional<Person> HybridTestObjectSwiftKotlinSpecSwift::getDriver(const Car& car) {
-  auto __result = _swiftPart.getDriver(car);
+  auto __result = _swiftPart->getDriver(car);
   return __result;
 }
 std::shared_ptr<ArrayBuffer> HybridTestObjectSwiftKotlinSpecSwift::createArrayBuffer() {
-  auto __result = _swiftPart.createArrayBuffer();
+  auto __result = _swiftPart->createArrayBuffer();
   return __result.getArrayBuffer();
 }
 double HybridTestObjectSwiftKotlinSpecSwift::getBufferLastItem(const std::shared_ptr<ArrayBuffer>& buffer) {
-  auto __result = _swiftPart.getBufferLastItem(ArrayBufferHolder(buffer));
+  auto __result = _swiftPart->getBufferLastItem(ArrayBufferHolder(buffer));
   return __result;
 }
 void HybridTestObjectSwiftKotlinSpecSwift::setAllValuesTo(const std::shared_ptr<ArrayBuffer>& buffer, double value) {
-  _swiftPart.setAllValuesTo(ArrayBufferHolder(buffer), std::forward<decltype(value)>(value));
+  _swiftPart->setAllValuesTo(ArrayBufferHolder(buffer), std::forward<decltype(value)>(value));
 }
 std::shared_ptr<margelo::nitro::image::HybridChildSpec> HybridTestObjectSwiftKotlinSpecSwift::createChild() {
-  auto __result = _swiftPart.createChild();
+  auto __result = _swiftPart->createChild();
   return HybridContext::getOrCreate<HybridChildSpecSwift>(__result);
 }
 std::shared_ptr<margelo::nitro::image::HybridBaseSpec> HybridTestObjectSwiftKotlinSpecSwift::createBase() {
-  auto __result = _swiftPart.createBase();
+  auto __result = _swiftPart->createBase();
   return HybridContext::getOrCreate<HybridBaseSpecSwift>(__result);
 }
 std::shared_ptr<margelo::nitro::image::HybridBaseSpec> HybridTestObjectSwiftKotlinSpecSwift::createBaseActualChild() {
-  auto __result = _swiftPart.createBaseActualChild();
+  auto __result = _swiftPart->createBaseActualChild();
   return HybridContext::getOrCreate<HybridBaseSpecSwift>(__result);
 }
 std::shared_ptr<margelo::nitro::image::HybridChildSpec> HybridTestObjectSwiftKotlinSpecSwift::bounceChild(const std::shared_ptr<margelo::nitro::image::HybridChildSpec>& child) {
-  auto __result = _swiftPart.bounceChild(std::dynamic_pointer_cast<HybridChildSpecSwift>(child)->getSwiftPart());
+  auto __result = _swiftPart->bounceChild(std::dynamic_pointer_cast<HybridChildSpecSwift>(child)->getSwiftPart());
   return HybridContext::getOrCreate<HybridChildSpecSwift>(__result);
 }
 std::shared_ptr<margelo::nitro::image::HybridBaseSpec> HybridTestObjectSwiftKotlinSpecSwift::bounceBase(const std::shared_ptr<margelo::nitro::image::HybridBaseSpec>& base) {
-  auto __result = _swiftPart.bounceBase(std::dynamic_pointer_cast<HybridBaseSpecSwift>(base)->getSwiftPart());
+  auto __result = _swiftPart->bounceBase(std::dynamic_pointer_cast<HybridBaseSpecSwift>(base)->getSwiftPart());
   return HybridContext::getOrCreate<HybridBaseSpecSwift>(__result);
 }
 std::shared_ptr<margelo::nitro::image::HybridBaseSpec> HybridTestObjectSwiftKotlinSpecSwift::bounceChildBase(const std::shared_ptr<margelo::nitro::image::HybridChildSpec>& child) {
-  auto __result = _swiftPart.bounceChildBase(std::dynamic_pointer_cast<HybridChildSpecSwift>(child)->getSwiftPart());
+  auto __result = _swiftPart->bounceChildBase(std::dynamic_pointer_cast<HybridChildSpecSwift>(child)->getSwiftPart());
   return HybridContext::getOrCreate<HybridBaseSpecSwift>(__result);
 }
 std::shared_ptr<margelo::nitro::image::HybridChildSpec> HybridTestObjectSwiftKotlinSpecSwift::castBase(const std::shared_ptr<margelo::nitro::image::HybridBaseSpec>& base) {
-  auto __result = _swiftPart.castBase(std::dynamic_pointer_cast<HybridBaseSpecSwift>(base)->getSwiftPart());
+  auto __result = _swiftPart->castBase(std::dynamic_pointer_cast<HybridBaseSpecSwift>(base)->getSwiftPart());
   return HybridContext::getOrCreate<HybridChildSpecSwift>(__result);
 }
 

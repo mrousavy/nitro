@@ -8,6 +8,7 @@
 #pragma once
 
 #include "HybridImageFactorySpec.hpp"
+#include <memory>
 
 // Forward declaration of `HybridImageFactorySpecCxx` to properly resolve imports.
 namespace NitroImage { class HybridImageFactorySpecCxx; }
@@ -67,7 +68,7 @@ namespace margelo::nitro::image {
     std::shared_ptr<margelo::nitro::image::HybridImageSpec> bounceBack(const std::shared_ptr<margelo::nitro::image::HybridImageSpec>& image) override;
 
   private:
-    NitroImage::HybridImageFactorySpecCxx _swiftPart;
+    std::unique_ptr<NitroImage::HybridImageFactorySpecCxx> _swiftPart;
   };
 
 } // namespace margelo::nitro::image

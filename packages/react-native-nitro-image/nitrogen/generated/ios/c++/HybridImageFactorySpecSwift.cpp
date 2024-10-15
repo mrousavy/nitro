@@ -11,14 +11,14 @@ namespace margelo::nitro::image {
 
 HybridImageFactorySpecSwift::HybridImageFactorySpecSwift(const NitroImage::HybridImageFactorySpecCxx& swiftPart):
   HybridObject(HybridImageFactorySpec::TAG),
-  _swiftPart(swiftPart) { }
+  _swiftPart(std::make_unique<NitroImage::HybridImageFactorySpecCxx>(swiftPart)) { }
 
 NitroImage::HybridImageFactorySpecCxx HybridImageFactorySpecSwift::getSwiftPart() noexcept {
-  return _swiftPart;
+  return *_swiftPart;
 }
 
 size_t HybridImageFactorySpecSwift::getExternalMemorySize() noexcept {
-  return _swiftPart.getMemorySize();
+  return _swiftPart->getMemorySize();
 }
 
 // Properties
@@ -26,19 +26,19 @@ size_t HybridImageFactorySpecSwift::getExternalMemorySize() noexcept {
 
 // Methods
 std::shared_ptr<margelo::nitro::image::HybridImageSpec> HybridImageFactorySpecSwift::loadImageFromFile(const std::string& path) {
-  auto __result = _swiftPart.loadImageFromFile(path);
+  auto __result = _swiftPart->loadImageFromFile(path);
   return HybridContext::getOrCreate<HybridImageSpecSwift>(__result);
 }
 std::shared_ptr<margelo::nitro::image::HybridImageSpec> HybridImageFactorySpecSwift::loadImageFromURL(const std::string& path) {
-  auto __result = _swiftPart.loadImageFromURL(path);
+  auto __result = _swiftPart->loadImageFromURL(path);
   return HybridContext::getOrCreate<HybridImageSpecSwift>(__result);
 }
 std::shared_ptr<margelo::nitro::image::HybridImageSpec> HybridImageFactorySpecSwift::loadImageFromSystemName(const std::string& path) {
-  auto __result = _swiftPart.loadImageFromSystemName(path);
+  auto __result = _swiftPart->loadImageFromSystemName(path);
   return HybridContext::getOrCreate<HybridImageSpecSwift>(__result);
 }
 std::shared_ptr<margelo::nitro::image::HybridImageSpec> HybridImageFactorySpecSwift::bounceBack(const std::shared_ptr<margelo::nitro::image::HybridImageSpec>& image) {
-  auto __result = _swiftPart.bounceBack(std::dynamic_pointer_cast<HybridImageSpecSwift>(image)->getSwiftPart());
+  auto __result = _swiftPart->bounceBack(std::dynamic_pointer_cast<HybridImageSpecSwift>(image)->getSwiftPart());
   return HybridContext::getOrCreate<HybridImageSpecSwift>(__result);
 }
 

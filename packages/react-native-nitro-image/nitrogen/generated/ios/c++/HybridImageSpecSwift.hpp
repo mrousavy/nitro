@@ -8,6 +8,7 @@
 #pragma once
 
 #include "HybridImageSpec.hpp"
+#include <memory>
 
 // Forward declaration of `HybridImageSpecCxx` to properly resolve imports.
 namespace NitroImage { class HybridImageSpecCxx; }
@@ -71,7 +72,7 @@ namespace margelo::nitro::image {
     void saveToFile(const std::string& path, const std::function<void(const std::string& /* path */)>& onFinished) override;
 
   private:
-    NitroImage::HybridImageSpecCxx _swiftPart;
+    std::unique_ptr<NitroImage::HybridImageSpecCxx> _swiftPart;
   };
 
 } // namespace margelo::nitro::image

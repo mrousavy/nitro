@@ -8,6 +8,7 @@
 #pragma once
 
 #include "HybridTestObjectSwiftKotlinSpec.hpp"
+#include <memory>
 
 // Forward declaration of `HybridTestObjectSwiftKotlinSpecCxx` to properly resolve imports.
 namespace NitroImage { class HybridTestObjectSwiftKotlinSpecCxx; }
@@ -150,7 +151,7 @@ namespace margelo::nitro::image {
     std::shared_ptr<margelo::nitro::image::HybridChildSpec> castBase(const std::shared_ptr<margelo::nitro::image::HybridBaseSpec>& base) override;
 
   private:
-    NitroImage::HybridTestObjectSwiftKotlinSpecCxx _swiftPart;
+    std::unique_ptr<NitroImage::HybridTestObjectSwiftKotlinSpecCxx> _swiftPart;
   };
 
 } // namespace margelo::nitro::image
