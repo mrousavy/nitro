@@ -335,7 +335,7 @@ namespace margelo::nitro::image::bridge::swift {
     return std::optional<double>(value);
   }
   
-  // pragma MARK: `std::function<void(std::optional<double> /* maybe */)>`
+  // pragma MARK: std::function<void(std::optional<double> /* maybe */)>
   Func_void_std__optional_double__Wrapper::Func_void_std__optional_double__Wrapper(const std::function<void(std::optional<double> /* maybe */)>& func): function(func) {}
   Func_void_std__optional_double__Wrapper::Func_void_std__optional_double__Wrapper(std::function<void(std::optional<double> /* maybe */)>&& func): function(std::move(func)) {}
   void Func_void_std__optional_double__Wrapper::call(std::optional<double> maybe) const {
