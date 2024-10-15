@@ -66,7 +66,12 @@ public:
         "std::unordered_map<$1, $2>");
 
     if (removeNamespace) [[unlikely]] {
-      name = replaceRegex(name, R"((\w+::)+)", "");
+      // replace `argelo::nitro::HybridObject` -> `HybridObject`
+      size_t lastColon = name.rfind(':');
+      if (lastColon != std::string::npos) {
+        // Type contains a namespace - remove it
+        name = name.substr(lastColon + 1);
+      }
     }
 
     return name;
