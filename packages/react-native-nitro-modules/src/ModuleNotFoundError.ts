@@ -49,7 +49,7 @@ export class ModuleNotFoundError extends Error {
     suggestions.push(
       'Make sure you enabled the new architecture (TurboModules) and CodeGen properly generated the "NativeNitroModules"/NitroModules specs. See https://github.com/reactwg/react-native-new-architecture/blob/main/docs/enable-apps.md'
     )
-    suggestions.push('Make sure you are using react-native 0.74.0 or higher.')
+    suggestions.push('Make sure you are using react-native 0.75.0 or higher.')
     suggestions.push('Make sure you rebuilt the app.')
     if (framework === 'expo') {
       suggestions.push('Make sure you ran `expo prebuild`.')
