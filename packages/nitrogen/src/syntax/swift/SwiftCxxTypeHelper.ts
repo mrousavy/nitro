@@ -249,7 +249,7 @@ public:
 
   ${actualType} function;
 };
-inline ${name} create_${name}(void* closureHolder, ${functionPointerParam}, void(*destroy)(void*)) {
+inline ${name} create_${name}(void* _Nonnull closureHolder, ${functionPointerParam}, void(*destroy)(void*)) {
   std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
   return ${name}([sharedClosureHolder, call](${paramsSignature.join(', ')}) -> ${type.returnType.getCode('c++')} {
     ${callSwiftFuncBody}
