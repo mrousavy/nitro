@@ -7,12 +7,12 @@
 
 #pragma once
 
+#include "NitroDefines.hpp"
 #include <regex>
 #include <sstream>
 #include <string>
 #include <type_traits>
 #include <typeindex>
-#include "NitroDefines.hpp"
 
 #if __has_include(<cxxabi.h>)
 #include <cxxabi.h>
