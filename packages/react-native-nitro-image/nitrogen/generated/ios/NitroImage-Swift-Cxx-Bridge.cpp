@@ -11,7 +11,6 @@ namespace margelo::nitro::image::bridge::swift {
 
   Func_void_std__string_Wrapper::Func_void_std__string_Wrapper(const std::function<void(const std::string& /* path */)>& func): function(func) {}
   Func_void_std__string_Wrapper::Func_void_std__string_Wrapper(std::function<void(const std::string& /* path */)>&& func): function(std::move(func)) {}
-  
   void Func_void_std__string_Wrapper::call(std::string path) const {
     function(path);
   }
@@ -201,7 +200,6 @@ namespace margelo::nitro::image::bridge::swift {
   
   Func_std__future_double__Wrapper::Func_std__future_double__Wrapper(const std::function<std::future<double>()>& func): function(func) {}
   Func_std__future_double__Wrapper::Func_std__future_double__Wrapper(std::function<std::future<double>()>&& func): function(std::move(func)) {}
-  
   PromiseHolder<double> Func_std__future_double__Wrapper::call() const {
     auto __result = function();
     return []() -> PromiseHolder<double> { throw std::runtime_error("Promise<..> cannot be converted to Swift yet!"); }();
@@ -223,7 +221,6 @@ namespace margelo::nitro::image::bridge::swift {
   
   Func_std__future_std__string__Wrapper::Func_std__future_std__string__Wrapper(const std::function<std::future<std::string>()>& func): function(func) {}
   Func_std__future_std__string__Wrapper::Func_std__future_std__string__Wrapper(std::function<std::future<std::string>()>&& func): function(std::move(func)) {}
-  
   PromiseHolder<std::string> Func_std__future_std__string__Wrapper::call() const {
     auto __result = function();
     return []() -> PromiseHolder<std::string> { throw std::runtime_error("Promise<..> cannot be converted to Swift yet!"); }();
@@ -261,7 +258,6 @@ namespace margelo::nitro::image::bridge::swift {
   
   Func_void_std__vector_Powertrain__Wrapper::Func_void_std__vector_Powertrain__Wrapper(const std::function<void(const std::vector<Powertrain>& /* array */)>& func): function(func) {}
   Func_void_std__vector_Powertrain__Wrapper::Func_void_std__vector_Powertrain__Wrapper(std::function<void(const std::vector<Powertrain>& /* array */)>&& func): function(std::move(func)) {}
-  
   void Func_void_std__vector_Powertrain__Wrapper::call(std::vector<Powertrain> array) const {
     function(array);
   }
@@ -289,7 +285,6 @@ namespace margelo::nitro::image::bridge::swift {
   
   Func_void_Wrapper::Func_void_Wrapper(const std::function<void()>& func): function(func) {}
   Func_void_Wrapper::Func_void_Wrapper(std::function<void()>&& func): function(std::move(func)) {}
-  
   void Func_void_Wrapper::call() const {
     function();
   }
@@ -309,7 +304,6 @@ namespace margelo::nitro::image::bridge::swift {
   
   Func_void_std__optional_double__Wrapper::Func_void_std__optional_double__Wrapper(const std::function<void(std::optional<double> /* maybe */)>& func): function(func) {}
   Func_void_std__optional_double__Wrapper::Func_void_std__optional_double__Wrapper(std::function<void(std::optional<double> /* maybe */)>&& func): function(std::move(func)) {}
-  
   void Func_void_std__optional_double__Wrapper::call(std::optional<double> maybe) const {
     function(maybe);
   }

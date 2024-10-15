@@ -298,7 +298,6 @@ public:
   explicit ${wrapperName}(${actualType}&& func);
 
   ${callFuncReturnType} call(${callCppFuncParamsSignature.join(', ')}) const;
-
   ${actualType} function;
 };
 ${name} create_${name}(void* closureHolder, ${functionPointerParam}, void(*destroy)(void*));
@@ -309,7 +308,6 @@ std::shared_ptr<${wrapperName}> share_${name}(const ${name}& value);
       cxxCode: `
 ${wrapperName}::${wrapperName}(const ${actualType}& func): function(func) {}
 ${wrapperName}::${wrapperName}(${actualType}&& func): function(std::move(func)) {}
-
 ${callFuncReturnType} ${wrapperName}::call(${callCppFuncParamsSignature.join(', ')}) const {
   ${indent(callCppFuncBody, '  ')}
 }

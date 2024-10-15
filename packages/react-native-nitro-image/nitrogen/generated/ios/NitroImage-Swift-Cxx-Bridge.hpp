@@ -87,7 +87,6 @@ namespace margelo::nitro::image::bridge::swift {
     explicit Func_void_std__string_Wrapper(std::function<void(const std::string& /* path */)>&& func);
   
     void call(std::string path) const;
-  
     std::function<void(const std::string& /* path */)> function;
   };
   Func_void_std__string create_Func_void_std__string(void* closureHolder, void(*call)(void* /* closureHolder */, std::string), void(*destroy)(void*));
@@ -256,7 +255,6 @@ namespace margelo::nitro::image::bridge::swift {
     explicit Func_std__future_double__Wrapper(std::function<std::future<double>()>&& func);
   
     PromiseHolder<double> call() const;
-  
     std::function<std::future<double>()> function;
   };
   Func_std__future_double_ create_Func_std__future_double_(void* closureHolder, PromiseHolder<double>(*call)(void* /* closureHolder */), void(*destroy)(void*));
@@ -281,7 +279,6 @@ namespace margelo::nitro::image::bridge::swift {
     explicit Func_std__future_std__string__Wrapper(std::function<std::future<std::string>()>&& func);
   
     PromiseHolder<std::string> call() const;
-  
     std::function<std::future<std::string>()> function;
   };
   Func_std__future_std__string_ create_Func_std__future_std__string_(void* closureHolder, PromiseHolder<std::string>(*call)(void* /* closureHolder */), void(*destroy)(void*));
@@ -324,7 +321,6 @@ namespace margelo::nitro::image::bridge::swift {
     explicit Func_void_std__vector_Powertrain__Wrapper(std::function<void(const std::vector<Powertrain>& /* array */)>&& func);
   
     void call(std::vector<Powertrain> array) const;
-  
     std::function<void(const std::vector<Powertrain>& /* array */)> function;
   };
   Func_void_std__vector_Powertrain_ create_Func_void_std__vector_Powertrain_(void* closureHolder, void(*call)(void* /* closureHolder */, std::vector<Powertrain>), void(*destroy)(void*));
@@ -361,7 +357,6 @@ namespace margelo::nitro::image::bridge::swift {
     explicit Func_void_Wrapper(std::function<void()>&& func);
   
     void call() const;
-  
     std::function<void()> function;
   };
   Func_void create_Func_void(void* closureHolder, void(*call)(void* /* closureHolder */), void(*destroy)(void*));
@@ -386,7 +381,6 @@ namespace margelo::nitro::image::bridge::swift {
     explicit Func_void_std__optional_double__Wrapper(std::function<void(std::optional<double> /* maybe */)>&& func);
   
     void call(std::optional<double> maybe) const;
-  
     std::function<void(std::optional<double> /* maybe */)> function;
   };
   Func_void_std__optional_double_ create_Func_void_std__optional_double_(void* closureHolder, void(*call)(void* /* closureHolder */, std::optional<double>), void(*destroy)(void*));
