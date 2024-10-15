@@ -66,7 +66,7 @@ public:
         "std::unordered_map<$1, $2>");
 
     if (removeNamespace) [[unlikely]] {
-      // replace `argelo::nitro::HybridObject` -> `HybridObject`
+      // replace `margelo::nitro::HybridObject` -> `HybridObject`
       size_t lastColon = name.rfind(':');
       if (lastColon != std::string::npos) {
         // Type contains a namespace - remove it
