@@ -29,8 +29,8 @@ namespace margelo::nitro::image::bridge::swift {
     return variant;
   }
   size_t std__variant_std__string__double_::index() const {
-      return variant.index();
-    }
+    return variant.index();
+  }
   std__variant_std__string__double_ create_std__variant_std__string__double_(const std::string& value) {
     return std__variant_std__string__double_(value);
   }
@@ -61,8 +61,8 @@ namespace margelo::nitro::image::bridge::swift {
     return variant;
   }
   size_t std__variant_std__string__double__bool__std__vector_double___std__vector_std__string__::index() const {
-      return variant.index();
-    }
+    return variant.index();
+  }
   std__variant_std__string__double__bool__std__vector_double___std__vector_std__string__ create_std__variant_std__string__double__bool__std__vector_double___std__vector_std__string__(const std::string& value) {
     return std__variant_std__string__double__bool__std__vector_double___std__vector_std__string__(value);
   }
@@ -99,8 +99,8 @@ namespace margelo::nitro::image::bridge::swift {
     return variant;
   }
   size_t std__variant_bool__OldEnum_::index() const {
-      return variant.index();
-    }
+    return variant.index();
+  }
   std__variant_bool__OldEnum_ create_std__variant_bool__OldEnum_(bool value) {
     return std__variant_bool__OldEnum_(value);
   }
@@ -123,8 +123,8 @@ namespace margelo::nitro::image::bridge::swift {
     return variant;
   }
   size_t std__variant_Car__Person_::index() const {
-      return variant.index();
-    }
+    return variant.index();
+  }
   std__variant_Car__Person_ create_std__variant_Car__Person_(const Car& value) {
     return std__variant_Car__Person_(value);
   }
@@ -143,8 +143,8 @@ namespace margelo::nitro::image::bridge::swift {
     return variant;
   }
   size_t std__variant_Person__std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec__::index() const {
-      return variant.index();
-    }
+    return variant.index();
+  }
   std__variant_Person__std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec__ create_std__variant_Person__std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec__(const Person& value) {
     return std__variant_Person__std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec__(value);
   }
@@ -171,8 +171,8 @@ namespace margelo::nitro::image::bridge::swift {
     return variant;
   }
   size_t std__variant_std__tuple_double__double___std__tuple_double__double__double__::index() const {
-      return variant.index();
-    }
+    return variant.index();
+  }
   std__variant_std__tuple_double__double___std__tuple_double__double__double__ create_std__variant_std__tuple_double__double___std__tuple_double__double__double__(const std::tuple<double, double>& value) {
     return std__variant_std__tuple_double__double___std__tuple_double__double__double__(value);
   }

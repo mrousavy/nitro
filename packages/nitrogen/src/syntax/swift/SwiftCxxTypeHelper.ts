@@ -391,8 +391,8 @@ ${name}::operator ${actualType}() const {
   return variant;
 }
 size_t ${name}::index() const {
-    return variant.index();
-  }
+  return variant.index();
+}
 ${createFunctions.map((f) => f.cxxImplementationCode).join('\n')}
 ${getFunctions.map((f) => f.cxxImplementationCode).join('\n')}
       `.trim(),
