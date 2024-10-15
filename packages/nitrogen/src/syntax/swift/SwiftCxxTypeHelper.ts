@@ -316,7 +316,7 @@ ${callFuncReturnType} ${wrapperName}::call(${callCppFuncParamsSignature.join(', 
 ${name} create_${name}(void* closureHolder, ${functionPointerParam}, void(*destroy)(void*)) {
   std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
   return ${name}([sharedClosureHolder, call](${paramsSignature.join(', ')}) -> ${type.returnType.getCode('c++')} {
-    ${callSwiftFuncBody}
+    ${indent(callSwiftFuncBody, '    ')}
   });
 }
 std::shared_ptr<${wrapperName}> share_${name}(const ${name}& value) {

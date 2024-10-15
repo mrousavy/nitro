@@ -210,7 +210,7 @@ namespace margelo::nitro::image::bridge::swift {
     std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
     return Func_std__future_double_([sharedClosureHolder, call]() -> std::future<double> {
       auto __result = call(sharedClosureHolder.get());
-  return __result.getFuture();
+      return __result.getFuture();
     });
   }
   std::shared_ptr<Func_std__future_double__Wrapper> share_Func_std__future_double_(const Func_std__future_double_& value) {
@@ -232,7 +232,7 @@ namespace margelo::nitro::image::bridge::swift {
     std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
     return Func_std__future_std__string_([sharedClosureHolder, call]() -> std::future<std::string> {
       auto __result = call(sharedClosureHolder.get());
-  return __result.getFuture();
+      return __result.getFuture();
     });
   }
   std::shared_ptr<Func_std__future_std__string__Wrapper> share_Func_std__future_std__string_(const Func_std__future_std__string_& value) {
