@@ -60,10 +60,10 @@ namespace margelo::nitro::image {
 
   public:
     // Properties
-    ImageSize getSize() noexcept;
-    PixelFormat getPixelFormat() noexcept;
-    double getSomeSettableProp() noexcept;
-    void setSomeSettableProp(double someSettableProp) noexcept;
+    ImageSize getSize() noexcept override;
+    PixelFormat getPixelFormat() noexcept override;
+    double getSomeSettableProp() noexcept override;
+    void setSomeSettableProp(double someSettableProp) noexcept override;
 
   public:
     // Methods

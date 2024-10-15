@@ -93,23 +93,23 @@ namespace margelo::nitro::image {
 
   public:
     // Properties
-    std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec> getThisObject() noexcept;
-    double getNumberValue() noexcept;
-    void setNumberValue(double numberValue) noexcept;
-    bool getBoolValue() noexcept;
-    void setBoolValue(bool boolValue) noexcept;
-    std::string getStringValue() noexcept;
-    void setStringValue(const std::string& stringValue) noexcept;
-    int64_t getBigintValue() noexcept;
-    void setBigintValue(int64_t bigintValue) noexcept;
-    std::optional<std::string> getStringOrUndefined() noexcept;
-    void setStringOrUndefined(const std::optional<std::string>& stringOrUndefined) noexcept;
-    std::optional<std::string> getStringOrNull() noexcept;
-    void setStringOrNull(const std::optional<std::string>& stringOrNull) noexcept;
-    std::optional<std::string> getOptionalString() noexcept;
-    void setOptionalString(const std::optional<std::string>& optionalString) noexcept;
-    std::variant<std::string, double> getSomeVariant() noexcept;
-    void setSomeVariant(const std::variant<std::string, double>& someVariant) noexcept;
+    std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec> getThisObject() noexcept override;
+    double getNumberValue() noexcept override;
+    void setNumberValue(double numberValue) noexcept override;
+    bool getBoolValue() noexcept override;
+    void setBoolValue(bool boolValue) noexcept override;
+    std::string getStringValue() noexcept override;
+    void setStringValue(const std::string& stringValue) noexcept override;
+    int64_t getBigintValue() noexcept override;
+    void setBigintValue(int64_t bigintValue) noexcept override;
+    std::optional<std::string> getStringOrUndefined() noexcept override;
+    void setStringOrUndefined(const std::optional<std::string>& stringOrUndefined) noexcept override;
+    std::optional<std::string> getStringOrNull() noexcept override;
+    void setStringOrNull(const std::optional<std::string>& stringOrNull) noexcept override;
+    std::optional<std::string> getOptionalString() noexcept override;
+    void setOptionalString(const std::optional<std::string>& optionalString) noexcept override;
+    std::variant<std::string, double> getSomeVariant() noexcept override;
+    void setSomeVariant(const std::variant<std::string, double>& someVariant) noexcept override;
 
   public:
     // Methods

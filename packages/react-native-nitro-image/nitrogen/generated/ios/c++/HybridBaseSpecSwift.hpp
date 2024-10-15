@@ -51,7 +51,7 @@ namespace margelo::nitro::image {
 
   public:
     // Properties
-    double getBaseValue() noexcept;
+    double getBaseValue() noexcept override;
 
   public:
     // Methods

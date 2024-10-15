@@ -122,6 +122,7 @@ ${hasBase ? `public class ${name.HybridTSpecCxx} : ${baseClasses.join(', ')}` : 
   const cppPropertiesHeader = spec.properties
     .map((p) =>
       p.getCode('c++', {
+        override: true,
         noexcept: true,
       })
     )
