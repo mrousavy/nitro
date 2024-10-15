@@ -73,6 +73,14 @@ void HybridTestObjectCpp::setOptionalString(const std::optional<std::string>& op
   _optionalString = optionalString;
 }
 
+std::optional<std::vector<std::string>> HybridTestObjectCpp::getOptionalArray() {
+  return _optionalArray;
+}
+
+void HybridTestObjectCpp::setOptionalArray(const std::optional<std::vector<std::string>>& optionalArray) {
+  _optionalArray = optionalArray;
+}
+
 std::variant<std::string, double> HybridTestObjectCpp::getSomeVariant() {
   return _variant;
 }

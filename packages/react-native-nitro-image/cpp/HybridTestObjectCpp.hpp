@@ -26,6 +26,7 @@ private:
   std::optional<std::string> _optionalString;
   std::variant<std::string, double> _variant;
   std::tuple<double, std::string> _tuple;
+  std::optional<std::vector<std::string>> _optionalArray;
 
 private:
   static inline uint64_t calculateFibonacci(int count) noexcept {
@@ -53,6 +54,8 @@ public:
   void setStringOrNull(const std::optional<std::string>& stringOrNull) override;
   std::optional<std::string> getOptionalString() override;
   void setOptionalString(const std::optional<std::string>& optionalString) override;
+  std::optional<std::vector<std::string>> getOptionalArray() override;
+  void setOptionalArray(const std::optional<std::vector<std::string>>& optionalArray) override;
   std::variant<std::string, double> getSomeVariant() override;
   void setSomeVariant(const std::variant<std::string, double>& variant) override;
   std::tuple<double, std::string> getSomeTuple() override;

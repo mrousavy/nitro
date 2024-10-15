@@ -441,6 +441,14 @@ namespace margelo::nitro::image::bridge::swift {
   }
   
   /**
+   * Specialized version of `std::optional<std::vector<std::string>>`.
+   */
+  using std__optional_std__vector_std__string__ = std::optional<std::vector<std::string>>;
+  inline std::optional<std::vector<std::string>> create_std__optional_std__vector_std__string__(const std::vector<std::string>& value) {
+    return std::optional<std::vector<std::string>>(value);
+  }
+  
+  /**
    * Specialized version of `std::vector<Person>`.
    */
   using std__vector_Person_ = std::vector<Person>;

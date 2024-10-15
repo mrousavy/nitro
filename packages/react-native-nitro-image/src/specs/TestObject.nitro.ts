@@ -35,6 +35,7 @@ interface SharedTestObjectProps {
   stringOrUndefined: string | undefined
   stringOrNull: string | null
   optionalString?: string
+  optionalArray?: string[]
 
   // Basic function tests
   simpleFunc(): void

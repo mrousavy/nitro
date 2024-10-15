@@ -42,8 +42,8 @@ namespace margelo::nitro::image { class HybridBaseSpecSwift; }
 #include "HybridTestObjectSwiftKotlinSpecSwift.hpp"
 #include <string>
 #include <optional>
-#include <variant>
 #include <vector>
+#include <variant>
 #include "Person.hpp"
 #include "Powertrain.hpp"
 #include <functional>
@@ -146,6 +146,13 @@ namespace margelo::nitro::image {
     }
     inline void setOptionalString(const std::optional<std::string>& optionalString) noexcept override {
       _swiftPart.setOptionalString(optionalString);
+    }
+    inline std::optional<std::vector<std::string>> getOptionalArray() noexcept override {
+      auto __result = _swiftPart.getOptionalArray();
+      return __result;
+    }
+    inline void setOptionalArray(const std::optional<std::vector<std::string>>& optionalArray) noexcept override {
+      _swiftPart.setOptionalArray(optionalArray);
     }
     inline std::variant<std::string, double> getSomeVariant() noexcept override {
       auto __result = _swiftPart.getSomeVariant();

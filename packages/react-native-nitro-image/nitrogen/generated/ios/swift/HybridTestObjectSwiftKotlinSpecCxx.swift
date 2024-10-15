@@ -191,6 +191,35 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
     }
   }
   
+  public var optionalArray: bridge.std__optional_std__vector_std__string__ {
+    @inline(__always)
+    get {
+      return { () -> bridge.std__optional_std__vector_std__string__ in
+        if let __unwrappedValue = self.__implementation.optionalArray {
+          return bridge.create_std__optional_std__vector_std__string__({ () -> bridge.std__vector_std__string_ in
+            var __vector = bridge.create_std__vector_std__string_(__unwrappedValue.count)
+            for __item in __unwrappedValue {
+              __vector.push_back(std.string(__item))
+            }
+            return __vector
+          }())
+        } else {
+          return .init()
+        }
+      }()
+    }
+    @inline(__always)
+    set {
+      self.__implementation.optionalArray = { () -> [String]? in
+        if let __unwrapped = newValue.value {
+          return __unwrapped.map({ __item in String(__item) })
+        } else {
+          return nil
+        }
+      }()
+    }
+  }
+  
   public var someVariant: bridge.std__variant_std__string__double_ {
     @inline(__always)
     get {

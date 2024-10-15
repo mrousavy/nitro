@@ -9,6 +9,8 @@ import Foundation
 import NitroModules
 
 class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
+  var optionalArray: [String]? = []
+  
   var hybridContext: margelo.nitro.HybridContext = .init()
   var memorySize: Int {
     return 0
