@@ -32,10 +32,10 @@ public protocol HybridImageFactorySpec: AnyObject, HybridObjectSpec {
   
 
   // Methods
-  func loadImageFromFile(path: String) throws -> any HybridImageSpec
-  func loadImageFromURL(path: String) throws -> any HybridImageSpec
-  func loadImageFromSystemName(path: String) throws -> any HybridImageSpec
-  func bounceBack(image: any HybridImageSpec) throws -> any HybridImageSpec
+  func loadImageFromFile(path: String) throws -> (any HybridImageSpec)
+  func loadImageFromURL(path: String) throws -> (any HybridImageSpec)
+  func loadImageFromSystemName(path: String) throws -> (any HybridImageSpec)
+  func bounceBack(image: (any HybridImageSpec)) throws -> (any HybridImageSpec)
 }
 
 public extension HybridImageFactorySpec {

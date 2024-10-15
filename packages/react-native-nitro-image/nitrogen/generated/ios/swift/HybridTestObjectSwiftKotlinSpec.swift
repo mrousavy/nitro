@@ -29,7 +29,7 @@ import NitroModules
  */
 public protocol HybridTestObjectSwiftKotlinSpec: AnyObject, HybridObjectSpec {
   // Properties
-  var thisObject: any HybridTestObjectSwiftKotlinSpec { get }
+  var thisObject: (any HybridTestObjectSwiftKotlinSpec) { get }
   var numberValue: Double { get set }
   var boolValue: Bool { get set }
   var stringValue: String { get set }
@@ -40,7 +40,7 @@ public protocol HybridTestObjectSwiftKotlinSpec: AnyObject, HybridObjectSpec {
   var someVariant: Variant_String_Double { get set }
 
   // Methods
-  func newTestObject() throws -> any HybridTestObjectSwiftKotlinSpec
+  func newTestObject() throws -> (any HybridTestObjectSwiftKotlinSpec)
   func simpleFunc() throws -> Void
   func addNumbers(a: Double, b: Double) throws -> Double
   func addStrings(a: String, b: String) throws -> String
@@ -68,13 +68,13 @@ public protocol HybridTestObjectSwiftKotlinSpec: AnyObject, HybridObjectSpec {
   func createArrayBuffer() throws -> ArrayBufferHolder
   func getBufferLastItem(buffer: ArrayBufferHolder) throws -> Double
   func setAllValuesTo(buffer: ArrayBufferHolder, value: Double) throws -> Void
-  func createChild() throws -> any HybridChildSpec
-  func createBase() throws -> any HybridBaseSpec
-  func createBaseActualChild() throws -> any HybridBaseSpec
-  func bounceChild(child: any HybridChildSpec) throws -> any HybridChildSpec
-  func bounceBase(base: any HybridBaseSpec) throws -> any HybridBaseSpec
-  func bounceChildBase(child: any HybridChildSpec) throws -> any HybridBaseSpec
-  func castBase(base: any HybridBaseSpec) throws -> any HybridChildSpec
+  func createChild() throws -> (any HybridChildSpec)
+  func createBase() throws -> (any HybridBaseSpec)
+  func createBaseActualChild() throws -> (any HybridBaseSpec)
+  func bounceChild(child: (any HybridChildSpec)) throws -> (any HybridChildSpec)
+  func bounceBase(base: (any HybridBaseSpec)) throws -> (any HybridBaseSpec)
+  func bounceChildBase(child: (any HybridChildSpec)) throws -> (any HybridBaseSpec)
+  func castBase(base: (any HybridBaseSpec)) throws -> (any HybridChildSpec)
 }
 
 public extension HybridTestObjectSwiftKotlinSpec {
