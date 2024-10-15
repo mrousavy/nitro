@@ -12,6 +12,10 @@ import type { SourceFile } from '../../syntax/SourceFile.js'
 import { getReferencedTypes } from '../../syntax/getReferencedTypes.js'
 import { SwiftCxxBridgedType } from '../../syntax/swift/SwiftCxxBridgedType.js'
 import { filterDuplicateHelperBridges, indent } from '../../utils.js'
+import { getTypeAs } from '../../syntax/types/getTypeAs.js'
+import { HybridObjectType } from '../../syntax/types/HybridObjectType.js'
+import { getForwardDeclaration } from '../../syntax/c++/getForwardDeclaration.js'
+import { getHybridObjectName } from '../../syntax/getHybridObjectName.js'
 
 const SWIFT_BRIDGE_NAMESPACE = ['bridge', 'swift']
 
@@ -43,7 +47,7 @@ export function createSwiftCxxBridge(): SourceFile[] {
 
   const requiredImports = bridges.flatMap((b) => b.requiredIncludes)
   const includes = requiredImports
-    .map((i) => includeHeader(i, false))
+    .map((i) => includeHeader(i, i.space === 'system'))
     .filter(isNotDuplicate)
   const forwardDeclarations = requiredImports
     .map((i) => i.forwardDeclaration)
@@ -54,6 +58,16 @@ export function createSwiftCxxBridge(): SourceFile[] {
     ...SWIFT_BRIDGE_NAMESPACE
   )
 
+  const forwardDeclaredSwiftTypes = types
+    .filter((t) => t.type.kind === 'hybrid-object')
+    .map((t) => {
+      const hybridObject = getTypeAs(t.type, HybridObjectType)
+      const { HybridTSpecCxx } = getHybridObjectName(
+        hybridObject.hybridObjectName
+      )
+      return getForwardDeclaration('class', HybridTSpecCxx, moduleName)
+    })
+
   const header = `
 ${createFileMetadataString(`${bridgeName}.hpp`)}
 
@@ -63,6 +77,9 @@ ${includeNitroHeader('NitroDefines.hpp')}
 
 // Forward declarations of C++ defined types
 ${forwardDeclarations.sort().join('\n')}
+
+// Forward declarations of Swift defined types
+${forwardDeclaredSwiftTypes.sort().join('\n')}
 
 // Include C++ defined types
 ${includes.sort().join('\n')}
@@ -77,7 +94,14 @@ namespace ${namespace} {
 
 } // namespace ${namespace}
 
+${
+  forwardDeclaredSwiftTypes.length > 0
+    ? `
+// Include the Swift umbrella header to fill in the forward-declared types from above
 #include "${umbrellaHeaderName}"
+`.trim()
+    : ''
+}
 `
 
   const source = `

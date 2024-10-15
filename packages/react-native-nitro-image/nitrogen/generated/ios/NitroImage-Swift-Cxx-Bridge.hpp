@@ -27,6 +27,20 @@ namespace margelo::nitro::image { struct Person; }
 // Forward declaration of `Powertrain` to properly resolve imports.
 namespace margelo::nitro::image { enum class Powertrain; }
 
+// Forward declarations of Swift defined types
+// Forward declaration of `HybridBaseSpecCxx` to properly resolve imports.
+namespace NitroImage { class HybridBaseSpecCxx; }
+// Forward declaration of `HybridChildSpecCxx` to properly resolve imports.
+namespace NitroImage { class HybridChildSpecCxx; }
+// Forward declaration of `HybridImageFactorySpecCxx` to properly resolve imports.
+namespace NitroImage { class HybridImageFactorySpecCxx; }
+// Forward declaration of `HybridImageSpecCxx` to properly resolve imports.
+namespace NitroImage { class HybridImageSpecCxx; }
+// Forward declaration of `HybridTestObjectCppSpecCxx` to properly resolve imports.
+namespace NitroImage { class HybridTestObjectCppSpecCxx; }
+// Forward declaration of `HybridTestObjectSwiftKotlinSpecCxx` to properly resolve imports.
+namespace NitroImage { class HybridTestObjectSwiftKotlinSpecCxx; }
+
 // Include C++ defined types
 #if __has_include("Car.hpp")
  #include "Car.hpp"
@@ -46,33 +60,15 @@ namespace margelo::nitro::image { enum class Powertrain; }
 #if __has_include("Powertrain.hpp")
  #include "Powertrain.hpp"
 #endif
-#if __has_include(<NitroModules/PromiseHolder.hpp>)
- #include <NitroModules/PromiseHolder.hpp>
-#endif
-#if __has_include(<functional>)
- #include <functional>
-#endif
-#if __has_include(<future>)
- #include <future>
-#endif
-#if __has_include(<memory>)
- #include <memory>
-#endif
-#if __has_include(<optional>)
- #include <optional>
-#endif
-#if __has_include(<string>)
- #include <string>
-#endif
-#if __has_include(<tuple>)
- #include <tuple>
-#endif
-#if __has_include(<variant>)
- #include <variant>
-#endif
-#if __has_include(<vector>)
- #include <vector>
-#endif
+#include <NitroModules/PromiseHolder.hpp>
+#include <functional>
+#include <future>
+#include <memory>
+#include <optional>
+#include <string>
+#include <tuple>
+#include <variant>
+#include <vector>
 
 /**
  * Contains specialized versions of C++ templated types so they can be accessed from Swift,
@@ -424,4 +420,5 @@ namespace margelo::nitro::image::bridge::swift {
 
 } // namespace margelo::nitro::image::bridge::swift
 
+// Include the Swift umbrella header to fill in the forward-declared types from above
 #include "NitroImage-Swift-Cxx-Umbrella.hpp"
