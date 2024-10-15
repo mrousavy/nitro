@@ -48,46 +48,27 @@ namespace margelo::nitro::image {
   class HybridImageSpecSwift: public virtual HybridImageSpec {
   public:
     // Constructor from a Swift instance
-    explicit HybridImageSpecSwift(const NitroImage::HybridImageSpecCxx& swiftPart):
-      HybridObject(HybridImageSpec::TAG),
-      _swiftPart(swiftPart) { }
+    explicit HybridImageSpecSwift(const NitroImage::HybridImageSpecCxx& swiftPart);
 
   public:
     // Get the Swift part
-    inline NitroImage::HybridImageSpecCxx getSwiftPart() noexcept { return _swiftPart; }
+    NitroImage::HybridImageSpecCxx getSwiftPart() noexcept;
 
   public:
     // Get memory pressure
-    inline size_t getExternalMemorySize() noexcept override {
-      return _swiftPart.getMemorySize();
-    }
+    size_t getExternalMemorySize() noexcept override;
 
   public:
     // Properties
-    inline ImageSize getSize() noexcept override {
-      auto __result = _swiftPart.getSize();
-      return __result;
-    }
-    inline PixelFormat getPixelFormat() noexcept override {
-      auto __result = _swiftPart.getPixelFormat();
-      return static_cast<PixelFormat>(__result);
-    }
-    inline double getSomeSettableProp() noexcept override {
-      return _swiftPart.getSomeSettableProp();
-    }
-    inline void setSomeSettableProp(double someSettableProp) noexcept override {
-      _swiftPart.setSomeSettableProp(std::forward<decltype(someSettableProp)>(someSettableProp));
-    }
+    ImageSize getSize() noexcept;
+    PixelFormat getPixelFormat() noexcept;
+    double getSomeSettableProp() noexcept;
+    void setSomeSettableProp(double someSettableProp) noexcept;
 
   public:
     // Methods
-    inline double toArrayBuffer(ImageFormat format) override {
-      auto __result = _swiftPart.toArrayBuffer(static_cast<int>(format));
-      return __result;
-    }
-    inline void saveToFile(const std::string& path, const std::function<void(const std::string& /* path */)>& onFinished) override {
-      _swiftPart.saveToFile(path, onFinished);
-    }
+    double toArrayBuffer(ImageFormat format) override;
+    void saveToFile(const std::string& path, const std::function<void(const std::string& /* path */)>& onFinished) override;
 
   private:
     NitroImage::HybridImageSpecCxx _swiftPart;

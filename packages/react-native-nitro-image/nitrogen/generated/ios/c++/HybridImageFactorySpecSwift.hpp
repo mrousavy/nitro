@@ -45,19 +45,15 @@ namespace margelo::nitro::image {
   class HybridImageFactorySpecSwift: public virtual HybridImageFactorySpec {
   public:
     // Constructor from a Swift instance
-    explicit HybridImageFactorySpecSwift(const NitroImage::HybridImageFactorySpecCxx& swiftPart):
-      HybridObject(HybridImageFactorySpec::TAG),
-      _swiftPart(swiftPart) { }
+    explicit HybridImageFactorySpecSwift(const NitroImage::HybridImageFactorySpecCxx& swiftPart);
 
   public:
     // Get the Swift part
-    inline NitroImage::HybridImageFactorySpecCxx getSwiftPart() noexcept { return _swiftPart; }
+    NitroImage::HybridImageFactorySpecCxx getSwiftPart() noexcept;
 
   public:
     // Get memory pressure
-    inline size_t getExternalMemorySize() noexcept override {
-      return _swiftPart.getMemorySize();
-    }
+    size_t getExternalMemorySize() noexcept override;
 
   public:
     // Properties
@@ -65,22 +61,10 @@ namespace margelo::nitro::image {
 
   public:
     // Methods
-    inline std::shared_ptr<margelo::nitro::image::HybridImageSpec> loadImageFromFile(const std::string& path) override {
-      auto __result = _swiftPart.loadImageFromFile(path);
-      return HybridContext::getOrCreate<HybridImageSpecSwift>(__result);
-    }
-    inline std::shared_ptr<margelo::nitro::image::HybridImageSpec> loadImageFromURL(const std::string& path) override {
-      auto __result = _swiftPart.loadImageFromURL(path);
-      return HybridContext::getOrCreate<HybridImageSpecSwift>(__result);
-    }
-    inline std::shared_ptr<margelo::nitro::image::HybridImageSpec> loadImageFromSystemName(const std::string& path) override {
-      auto __result = _swiftPart.loadImageFromSystemName(path);
-      return HybridContext::getOrCreate<HybridImageSpecSwift>(__result);
-    }
-    inline std::shared_ptr<margelo::nitro::image::HybridImageSpec> bounceBack(const std::shared_ptr<margelo::nitro::image::HybridImageSpec>& image) override {
-      auto __result = _swiftPart.bounceBack(std::dynamic_pointer_cast<HybridImageSpecSwift>(image)->getSwiftPart());
-      return HybridContext::getOrCreate<HybridImageSpecSwift>(__result);
-    }
+    std::shared_ptr<margelo::nitro::image::HybridImageSpec> loadImageFromFile(const std::string& path) override;
+    std::shared_ptr<margelo::nitro::image::HybridImageSpec> loadImageFromURL(const std::string& path) override;
+    std::shared_ptr<margelo::nitro::image::HybridImageSpec> loadImageFromSystemName(const std::string& path) override;
+    std::shared_ptr<margelo::nitro::image::HybridImageSpec> bounceBack(const std::shared_ptr<margelo::nitro::image::HybridImageSpec>& image) override;
 
   private:
     NitroImage::HybridImageFactorySpecCxx _swiftPart;

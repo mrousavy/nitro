@@ -119,7 +119,14 @@ ${hasBase ? `public class ${name.HybridTSpecCxx} : ${baseClasses.join(', ')}` : 
 }
   `
 
-  const cppProperties = spec.properties
+  const cppPropertiesHeader = spec.properties
+    .map((p) =>
+      p.getCode('c++', {
+        noexcept: true,
+      })
+    )
+    .join('\n')
+  const cppPropertiesImplementation = spec.properties
     .map((p) => {
       const bridged = new SwiftCxxBridgedType(p.type)
       let getter: string
@@ -139,7 +146,7 @@ return ${bridged.parseFromSwiftToCpp('__result', 'c++')};
       }
       return p.getCode(
         'c++',
-        { inline: true, override: true, noexcept: true },
+        { noexcept: true, classDefinitionName: name.HybridTSpecSwift },
         {
           getter: getter.trim(),
           setter: setter.trim(),
@@ -148,7 +155,14 @@ return ${bridged.parseFromSwiftToCpp('__result', 'c++')};
     })
     .join('\n')
 
-  const cppMethods = spec.methods
+  const cppMethodsHeader = spec.methods
+    .map((m) =>
+      m.getCode('c++', {
+        override: true,
+      })
+    )
+    .join('\n')
+  const cppMethodsImplementation = spec.methods
     .map((m) => {
       const params = m.parameters
         .map((p) => {
@@ -178,7 +192,11 @@ _swiftPart.${m.name}(${params});
         `.trim()
       }
 
-      return m.getCode('c++', { inline: true, override: true }, body)
+      return m.getCode(
+        'c++',
+        { classDefinitionName: name.HybridTSpecSwift },
+        body
+      )
     })
     .join('\n')
 
@@ -255,27 +273,23 @@ namespace ${cxxNamespace} {
   class ${name.HybridTSpecSwift}: ${cppBaseClasses.join(', ')} {
   public:
     // Constructor from a Swift instance
-    explicit ${name.HybridTSpecSwift}(const ${iosModuleName}::${name.HybridTSpecCxx}& swiftPart):
-      ${indent(cppBaseCtorCalls.join(',\n'), '      ')},
-      _swiftPart(swiftPart) { }
+    explicit ${name.HybridTSpecSwift}(const ${iosModuleName}::${name.HybridTSpecCxx}& swiftPart);
 
   public:
     // Get the Swift part
-    inline ${iosModuleName}::${name.HybridTSpecCxx} getSwiftPart() noexcept { return _swiftPart; }
+    ${iosModuleName}::${name.HybridTSpecCxx} getSwiftPart() noexcept;
 
   public:
     // Get memory pressure
-    inline size_t getExternalMemorySize() noexcept override {
-      return _swiftPart.getMemorySize();
-    }
+    size_t getExternalMemorySize() noexcept override;
 
   public:
     // Properties
-    ${indent(cppProperties, '    ')}
+    ${indent(cppPropertiesHeader, '    ')}
 
   public:
     // Methods
-    ${indent(cppMethods, '    ')}
+    ${indent(cppMethodsHeader, '    ')}
 
   private:
     ${iosModuleName}::${name.HybridTSpecCxx} _swiftPart;
@@ -289,6 +303,25 @@ ${createFileMetadataString(`${name.HybridTSpecSwift}.cpp`)}
 #include "${name.HybridTSpecSwift}.hpp"
 
 namespace ${cxxNamespace} {
+
+${name.HybridTSpecSwift}::${name.HybridTSpecSwift}(const ${iosModuleName}::${name.HybridTSpecCxx}& swiftPart):
+  ${indent(cppBaseCtorCalls.join(',\n'), '      ')},
+  _swiftPart(swiftPart) { }
+
+${iosModuleName}::${name.HybridTSpecCxx} ${name.HybridTSpecSwift}::getSwiftPart() noexcept {
+  return _swiftPart;
+}
+
+size_t ${name.HybridTSpecSwift}::getExternalMemorySize() noexcept {
+  return _swiftPart.getMemorySize();
+}
+
+// Properties
+${cppPropertiesImplementation}
+
+// Methods
+${cppMethodsImplementation}
+
 } // namespace ${cxxNamespace}
   `
 

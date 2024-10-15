@@ -8,4 +8,42 @@
 #include "HybridImageSpecSwift.hpp"
 
 namespace margelo::nitro::image {
+
+HybridImageSpecSwift::HybridImageSpecSwift(const NitroImage::HybridImageSpecCxx& swiftPart):
+  HybridObject(HybridImageSpec::TAG),
+  _swiftPart(swiftPart) { }
+
+NitroImage::HybridImageSpecCxx HybridImageSpecSwift::getSwiftPart() noexcept {
+  return _swiftPart;
+}
+
+size_t HybridImageSpecSwift::getExternalMemorySize() noexcept {
+  return _swiftPart.getMemorySize();
+}
+
+// Properties
+ImageSize HybridImageSpecSwift::getSize() noexcept {
+  auto __result = _swiftPart.getSize();
+  return __result;
+}
+PixelFormat HybridImageSpecSwift::getPixelFormat() noexcept {
+  auto __result = _swiftPart.getPixelFormat();
+  return static_cast<PixelFormat>(__result);
+}
+double HybridImageSpecSwift::getSomeSettableProp() noexcept {
+  return _swiftPart.getSomeSettableProp();
+}
+void HybridImageSpecSwift::setSomeSettableProp(double someSettableProp) noexcept {
+  _swiftPart.setSomeSettableProp(std::forward<decltype(someSettableProp)>(someSettableProp));
+}
+
+// Methods
+double HybridImageSpecSwift::toArrayBuffer(ImageFormat format) {
+  auto __result = _swiftPart.toArrayBuffer(static_cast<int>(format));
+  return __result;
+}
+void HybridImageSpecSwift::saveToFile(const std::string& path, const std::function<void(const std::string& /* path */)>& onFinished) {
+  _swiftPart.saveToFile(path, onFinished);
+}
+
 } // namespace margelo::nitro::image

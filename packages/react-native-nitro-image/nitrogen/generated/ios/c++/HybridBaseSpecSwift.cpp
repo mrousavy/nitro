@@ -8,4 +8,25 @@
 #include "HybridBaseSpecSwift.hpp"
 
 namespace margelo::nitro::image {
+
+HybridBaseSpecSwift::HybridBaseSpecSwift(const NitroImage::HybridBaseSpecCxx& swiftPart):
+  HybridObject(HybridBaseSpec::TAG),
+  _swiftPart(swiftPart) { }
+
+NitroImage::HybridBaseSpecCxx HybridBaseSpecSwift::getSwiftPart() noexcept {
+  return _swiftPart;
+}
+
+size_t HybridBaseSpecSwift::getExternalMemorySize() noexcept {
+  return _swiftPart.getMemorySize();
+}
+
+// Properties
+double HybridBaseSpecSwift::getBaseValue() noexcept {
+  return _swiftPart.getBaseValue();
+}
+
+// Methods
+
+
 } // namespace margelo::nitro::image

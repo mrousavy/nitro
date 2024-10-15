@@ -40,26 +40,19 @@ namespace margelo::nitro::image {
   class HybridChildSpecSwift: public virtual HybridChildSpec, public virtual HybridBaseSpecSwift {
   public:
     // Constructor from a Swift instance
-    explicit HybridChildSpecSwift(const NitroImage::HybridChildSpecCxx& swiftPart):
-      HybridObject(HybridChildSpec::TAG),
-      HybridBaseSpecSwift(swiftPart),
-      _swiftPart(swiftPart) { }
+    explicit HybridChildSpecSwift(const NitroImage::HybridChildSpecCxx& swiftPart);
 
   public:
     // Get the Swift part
-    inline NitroImage::HybridChildSpecCxx getSwiftPart() noexcept { return _swiftPart; }
+    NitroImage::HybridChildSpecCxx getSwiftPart() noexcept;
 
   public:
     // Get memory pressure
-    inline size_t getExternalMemorySize() noexcept override {
-      return _swiftPart.getMemorySize();
-    }
+    size_t getExternalMemorySize() noexcept override;
 
   public:
     // Properties
-    inline double getChildValue() noexcept override {
-      return _swiftPart.getChildValue();
-    }
+    double getChildValue() noexcept;
 
   public:
     // Methods
