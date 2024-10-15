@@ -7,6 +7,12 @@
 
 #pragma once
 
+#if __has_include(<NitroModules/NitroDefines.hpp>)
+#include <NitroModules/NitroDefines.hpp>
+#else
+#error NitroModules cannot be found! Are you sure you installed NitroModules properly?
+#endif
+
 // Forward declarations of C++ defined types
 // Forward declaration of `Car` to properly resolve imports.
 namespace margelo::nitro::image { struct Car; }
@@ -92,7 +98,7 @@ namespace margelo::nitro::image::bridge::swift {
   
     std::function<void(const std::string& /* path */)> function;
   };
-  inline Func_void_std__string create_Func_void_std__string(void* _Nonnull closureHolder, void(*call)(void* /* closureHolder */, std::string), void(*destroy)(void*)) {
+  inline Func_void_std__string create_Func_void_std__string(void* NONNULL closureHolder, void(* NONNULL call)(void* NONNULL /* closureHolder */, std::string), void(* NONNULL destroy)(void* NONNULL)) {
     std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
     return Func_void_std__string([sharedClosureHolder, call](const std::string& path) -> void {
       call(sharedClosureHolder.get(), path);
@@ -375,7 +381,7 @@ namespace margelo::nitro::image::bridge::swift {
   
     std::function<std::future<double>()> function;
   };
-  inline Func_std__future_double_ create_Func_std__future_double_(void* _Nonnull closureHolder, PromiseHolder<double>(*call)(void* /* closureHolder */), void(*destroy)(void*)) {
+  inline Func_std__future_double_ create_Func_std__future_double_(void* NONNULL closureHolder, PromiseHolder<double>(* NONNULL call)(void* NONNULL /* closureHolder */), void(* NONNULL destroy)(void* NONNULL)) {
     std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
     return Func_std__future_double_([sharedClosureHolder, call]() -> std::future<double> {
       auto __result = call(sharedClosureHolder.get());
@@ -413,7 +419,7 @@ namespace margelo::nitro::image::bridge::swift {
   
     std::function<std::future<std::string>()> function;
   };
-  inline Func_std__future_std__string_ create_Func_std__future_std__string_(void* _Nonnull closureHolder, PromiseHolder<std::string>(*call)(void* /* closureHolder */), void(*destroy)(void*)) {
+  inline Func_std__future_std__string_ create_Func_std__future_std__string_(void* NONNULL closureHolder, PromiseHolder<std::string>(* NONNULL call)(void* NONNULL /* closureHolder */), void(* NONNULL destroy)(void* NONNULL)) {
     std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
     return Func_std__future_std__string_([sharedClosureHolder, call]() -> std::future<std::string> {
       auto __result = call(sharedClosureHolder.get());
@@ -486,7 +492,7 @@ namespace margelo::nitro::image::bridge::swift {
   
     std::function<void(const std::vector<Powertrain>& /* array */)> function;
   };
-  inline Func_void_std__vector_Powertrain_ create_Func_void_std__vector_Powertrain_(void* _Nonnull closureHolder, void(*call)(void* /* closureHolder */, std::vector<Powertrain>), void(*destroy)(void*)) {
+  inline Func_void_std__vector_Powertrain_ create_Func_void_std__vector_Powertrain_(void* NONNULL closureHolder, void(* NONNULL call)(void* NONNULL /* closureHolder */, std::vector<Powertrain>), void(* NONNULL destroy)(void* NONNULL)) {
     std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
     return Func_void_std__vector_Powertrain_([sharedClosureHolder, call](const std::vector<Powertrain>& array) -> void {
       call(sharedClosureHolder.get(), array);
@@ -538,7 +544,7 @@ namespace margelo::nitro::image::bridge::swift {
   
     std::function<void()> function;
   };
-  inline Func_void create_Func_void(void* _Nonnull closureHolder, void(*call)(void* /* closureHolder */), void(*destroy)(void*)) {
+  inline Func_void create_Func_void(void* NONNULL closureHolder, void(* NONNULL call)(void* NONNULL /* closureHolder */), void(* NONNULL destroy)(void* NONNULL)) {
     std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
     return Func_void([sharedClosureHolder, call]() -> void {
       call(sharedClosureHolder.get());
@@ -574,7 +580,7 @@ namespace margelo::nitro::image::bridge::swift {
   
     std::function<void(std::optional<double> /* maybe */)> function;
   };
-  inline Func_void_std__optional_double_ create_Func_void_std__optional_double_(void* _Nonnull closureHolder, void(*call)(void* /* closureHolder */, std::optional<double>), void(*destroy)(void*)) {
+  inline Func_void_std__optional_double_ create_Func_void_std__optional_double_(void* NONNULL closureHolder, void(* NONNULL call)(void* NONNULL /* closureHolder */, std::optional<double>), void(* NONNULL destroy)(void* NONNULL)) {
     std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
     return Func_void_std__optional_double_([sharedClosureHolder, call](std::optional<double> maybe) -> void {
       call(sharedClosureHolder.get(), maybe);
