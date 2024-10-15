@@ -12,6 +12,7 @@
 #include <string>
 #include <type_traits>
 #include <typeindex>
+#include "NitroDefines.hpp"
 
 #if __has_include(<cxxabi.h>)
 #include <cxxabi.h>
@@ -40,6 +41,8 @@ public:
   }
 
   static inline std::string demangleName(const std::string& typeName, bool removeNamespace = false) {
+#ifdef NITRO_DEBUG
+    // In debug, we demangle the name using Cxx ABI and prettify it.
     std::string name = typeName;
 #if __has_include(<cxxabi.h>)
     int status = 0;
@@ -67,6 +70,10 @@ public:
     }
 
     return name;
+#else
+    // In release, we don't do any of that. Just return the ugly name.
+    return typeName;
+#endif
   }
 
   /**
