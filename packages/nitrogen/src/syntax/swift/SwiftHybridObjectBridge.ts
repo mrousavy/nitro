@@ -9,6 +9,7 @@ import { getHybridObjectName } from '../getHybridObjectName.js'
 import { getForwardDeclaration } from '../c++/getForwardDeclaration.js'
 import { NitroConfig } from '../../config/NitroConfig.js'
 import { includeHeader, includeNitroHeader } from '../c++/includeNitroHeader.js'
+import { getUmbrellaHeaderName } from '../../autolinking/ios/createSwiftUmbrellaHeader.js'
 
 export const BRIDGE_NAMESPACE = NitroConfig.getCxxNamespace(
   'swift',
@@ -238,7 +239,7 @@ ${extraIncludes.join('\n')}
 
 ${includeNitroHeader('HybridContext.hpp')}
 
-#include "${iosModuleName}-Swift-Cxx-Umbrella.hpp"
+#include "${getUmbrellaHeaderName()}"
 
 namespace ${cxxNamespace} {
 

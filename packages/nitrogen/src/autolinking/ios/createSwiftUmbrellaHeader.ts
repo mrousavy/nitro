@@ -11,9 +11,14 @@ import type { SourceFile } from '../../syntax/SourceFile.js'
 import { getTypeAs } from '../../syntax/types/getTypeAs.js'
 import { HybridObjectType } from '../../syntax/types/HybridObjectType.js'
 
+export function getUmbrellaHeaderName(): string {
+  const moduleName = NitroConfig.getIosModuleName()
+  return `${moduleName}-Swift-Cxx-Umbrella.hpp`
+}
+
 export function createSwiftUmbrellaHeader(): SourceFile {
   const moduleName = NitroConfig.getIosModuleName()
-  const filename = `${moduleName}-Swift-Cxx-Umbrella.hpp`
+  const filename = getUmbrellaHeaderName()
 
   const types = getAllKnownTypes()
 
