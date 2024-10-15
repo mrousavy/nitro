@@ -179,13 +179,13 @@ function createCxxFunctionSwiftHelper(type: FunctionType): SwiftCxxHelper {
   ]
   const callFuncReturnType = returnBridge.getTypeCode('c++')
   const callFuncParams = [
-    'void* /* closureHolder */',
+    'void* NONNULL /* closureHolder */',
     ...type.parameters.map((p) => {
       const bridge = new SwiftCxxBridgedType(p)
       return bridge.getTypeCode('c++')
     }),
   ]
-  const functionPointerParam = `${callFuncReturnType}(*call)(${callFuncParams.join(', ')})`
+  const functionPointerParam = `${callFuncReturnType}(* NONNULL call)(${callFuncParams.join(', ')})`
   const name = type.specializationName
   const wrapperName = `${name}_Wrapper`
 
@@ -249,7 +249,7 @@ public:
 
   ${actualType} function;
 };
-inline ${name} create_${name}(void* _Nonnull closureHolder, ${functionPointerParam}, void(*destroy)(void*)) {
+inline ${name} create_${name}(void* NONNULL closureHolder, ${functionPointerParam}, void(* NONNULL destroy)(void* NONNULL)) {
   std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
   return ${name}([sharedClosureHolder, call](${paramsSignature.join(', ')}) -> ${type.returnType.getCode('c++')} {
     ${callSwiftFuncBody}
