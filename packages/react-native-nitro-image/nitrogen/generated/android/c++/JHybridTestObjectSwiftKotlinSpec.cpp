@@ -30,9 +30,9 @@ namespace margelo::nitro::image { class HybridBaseSpec; }
 #include <NitroModules/JNISharedPtr.hpp>
 #include <string>
 #include <optional>
+#include <vector>
 #include <variant>
 #include "JVariant_String_Double.hpp"
-#include <vector>
 #include "Person.hpp"
 #include "JPerson.hpp"
 #include "Powertrain.hpp"
@@ -139,6 +139,32 @@ namespace margelo::nitro::image {
   void JHybridTestObjectSwiftKotlinSpec::setOptionalString(const std::optional<std::string>& optionalString) {
     static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<jni::JString> /* optionalString */)>("setOptionalString");
     method(_javaPart, optionalString.has_value() ? jni::make_jstring(optionalString.value()) : nullptr);
+  }
+  std::optional<std::vector<std::string>> JHybridTestObjectSwiftKotlinSpec::getOptionalArray() {
+    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<jni::JArrayClass<jni::JString>>()>("getOptionalArray");
+    auto __result = method(_javaPart);
+    return __result != nullptr ? std::make_optional([&]() {
+      size_t __size = __result->size();
+      std::vector<std::string> __vector;
+      __vector.reserve(__size);
+      for (size_t __i = 0; __i < __size; __i++) {
+        auto __element = __result->getElement(__i);
+        __vector.push_back(__element->toStdString());
+      }
+      return __vector;
+    }()) : std::nullopt;
+  }
+  void JHybridTestObjectSwiftKotlinSpec::setOptionalArray(const std::optional<std::vector<std::string>>& optionalArray) {
+    static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<jni::JArrayClass<jni::JString>> /* optionalArray */)>("setOptionalArray");
+    method(_javaPart, optionalArray.has_value() ? [&]() {
+      size_t __size = optionalArray.value().size();
+      jni::local_ref<jni::JArrayClass<jni::JString>> __array = jni::JArrayClass<jni::JString>::newArray(__size);
+      for (size_t __i = 0; __i < __size; __i++) {
+        const auto& __element = optionalArray.value()[__i];
+        __array->setElement(__i, *jni::make_jstring(__element));
+      }
+      return __array;
+    }() : nullptr);
   }
   std::variant<std::string, double> JHybridTestObjectSwiftKotlinSpec::getSomeVariant() {
     static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JVariant_String_Double>()>("getSomeVariant");

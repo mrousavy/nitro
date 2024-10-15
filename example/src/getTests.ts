@@ -211,6 +211,22 @@ export function getTests(
         .didNotThrow()
         .equals(undefined)
     ),
+    createTest('get optionalArray (== undefined)', () =>
+      it(() => {
+        testObject.optionalArray = undefined
+        return testObject.optionalArray
+      })
+        .didNotThrow()
+        .equals(undefined)
+    ),
+    createTest('get optionalArray (== ["hello", "world"])', () =>
+      it(() => {
+        testObject.optionalArray = ['hello', 'world']
+        return testObject.optionalArray
+      })
+        .didNotThrow()
+        .equals(['hello', 'world'])
+    ),
 
     // Test basic functions
     createTest('addNumbers(5, 13) = 18', () =>

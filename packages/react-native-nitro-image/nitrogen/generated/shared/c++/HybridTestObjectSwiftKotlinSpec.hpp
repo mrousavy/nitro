@@ -34,8 +34,8 @@ namespace margelo::nitro::image { class HybridBaseSpec; }
 #include "HybridTestObjectSwiftKotlinSpec.hpp"
 #include <string>
 #include <optional>
-#include <variant>
 #include <vector>
+#include <variant>
 #include "Person.hpp"
 #include "Powertrain.hpp"
 #include <functional>
@@ -88,6 +88,8 @@ namespace margelo::nitro::image {
       virtual void setStringOrNull(const std::optional<std::string>& stringOrNull) = 0;
       virtual std::optional<std::string> getOptionalString() = 0;
       virtual void setOptionalString(const std::optional<std::string>& optionalString) = 0;
+      virtual std::optional<std::vector<std::string>> getOptionalArray() = 0;
+      virtual void setOptionalArray(const std::optional<std::vector<std::string>>& optionalArray) = 0;
       virtual std::variant<std::string, double> getSomeVariant() = 0;
       virtual void setSomeVariant(const std::variant<std::string, double>& someVariant) = 0;
 

@@ -56,6 +56,8 @@ namespace margelo::nitro::image {
     void setStringOrNull(const std::optional<std::string>& stringOrNull) override;
     std::optional<std::string> getOptionalString() override;
     void setOptionalString(const std::optional<std::string>& optionalString) override;
+    std::optional<std::vector<std::string>> getOptionalArray() override;
+    void setOptionalArray(const std::optional<std::vector<std::string>>& optionalArray) override;
     std::variant<std::string, double> getSomeVariant() override;
     void setSomeVariant(const std::variant<std::string, double>& someVariant) override;
 

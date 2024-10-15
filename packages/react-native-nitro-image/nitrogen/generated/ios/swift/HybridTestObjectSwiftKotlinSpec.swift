@@ -37,6 +37,7 @@ public protocol HybridTestObjectSwiftKotlinSpec: AnyObject, HybridObjectSpec {
   var stringOrUndefined: String? { get set }
   var stringOrNull: String? { get set }
   var optionalString: String? { get set }
+  var optionalArray: [String]? { get set }
   var someVariant: Variant_String_Double { get set }
 
   // Methods
