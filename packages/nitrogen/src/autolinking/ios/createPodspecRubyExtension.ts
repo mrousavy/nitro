@@ -59,6 +59,8 @@ def add_nitrogen_files(spec)
     "CLANG_CXX_LANGUAGE_STANDARD" => "c++20",
     # Enables C++ <-> Swift interop (by default it's only C)
     "SWIFT_OBJC_INTEROP_MODE" => "objcxx",
+    # Enables stricter modular headers
+    "DEFINES_MODULE" => "YES",
   })
 end
   `.trim()
