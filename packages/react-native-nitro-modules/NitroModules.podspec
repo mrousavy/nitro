@@ -51,6 +51,8 @@ Pod::Spec.new do |s|
     "CLANG_CXX_LANGUAGE_STANDARD" => "c++20",
     # Enables C++ <-> Swift interop (by default it's only C)
     "SWIFT_OBJC_INTEROP_MODE" => "objcxx",
+    # Enables stricter modular headers
+    "DEFINES_MODULE" => "YES",
   }
 
   install_modules_dependencies(s)
