@@ -6,7 +6,7 @@ import TabItem from '@theme/TabItem';
 
 # Minimum Requirements
 
-Nitro is a new and modern Framework, and is built upon newer APIs like `jsi::NativeState`.
+Nitro is a Framework built on top of newer APIs like `jsi::NativeState`.
 To use Nitro, make sure your app meets the minimum requirements:
 
 <Tabs groupId="platform">
