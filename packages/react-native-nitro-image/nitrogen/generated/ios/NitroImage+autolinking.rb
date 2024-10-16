@@ -24,7 +24,7 @@ def add_nitrogen_files(spec)
 
   spec.dependency "NitroModules"
 
-  current_source_files = spec.attributes_hash['source_files'] || []
+  current_source_files = Array(spec.attributes_hash['source_files'])
   spec.source_files = current_source_files + [
     # Generated cross-platform specs
     "nitrogen/generated/shared/**/*.{h,hpp,c,cpp,swift}",
@@ -32,7 +32,7 @@ def add_nitrogen_files(spec)
     "nitrogen/generated/ios/**/*.{h,hpp,c,cpp,mm,swift}",
   ]
 
-  current_public_header_files = spec.attributes_hash['public_header_files'] || []
+  current_public_header_files = Array(spec.attributes_hash['public_header_files'])
   spec.public_header_files = current_public_header_files + [
     # Generated specs
     "nitrogen/generated/shared/**/*.{h,hpp}",
@@ -40,7 +40,7 @@ def add_nitrogen_files(spec)
     "nitrogen/generated/ios/NitroImage-Swift-Cxx-Bridge.hpp"
   ]
 
-  current_private_header_files = spec.attributes_hash['private_header_files'] || []
+  current_private_header_files = Array(spec.attributes_hash['private_header_files'])
   spec.private_header_files = current_private_header_files + [
     # iOS specific specs
     "nitrogen/generated/ios/c++/**/*.{h,hpp}",
