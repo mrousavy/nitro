@@ -15,7 +15,7 @@ import NitroModules
  */
 public final class HybridTestObjectSwiftKotlinSpecCxxUnsafe {
   /**
-   * Casts a HybridTestObjectSwiftKotlinSpecCxx instance to a retained unsafe raw pointer.
+   * Casts a `HybridTestObjectSwiftKotlinSpecCxx` instance to a retained unsafe raw pointer.
    * This acquires one additional strong reference on the object!
    */
   public static func toUnsafe(_ instance: HybridTestObjectSwiftKotlinSpecCxx) -> UnsafeMutableRawPointer {
@@ -23,7 +23,7 @@ public final class HybridTestObjectSwiftKotlinSpecCxxUnsafe {
   }
 
   /**
-   * Casts an unsafe pointer to a HybridTestObjectSwiftKotlinSpecCxx.
+   * Casts an unsafe pointer to a `HybridTestObjectSwiftKotlinSpecCxx`.
    * The pointer has to be a retained opaque `Unmanaged<HybridTestObjectSwiftKotlinSpecCxx>`.
    * This removes one strong reference from the object!
    */

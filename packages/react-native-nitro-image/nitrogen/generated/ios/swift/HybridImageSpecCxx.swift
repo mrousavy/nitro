@@ -15,7 +15,7 @@ import NitroModules
  */
 public final class HybridImageSpecCxxUnsafe {
   /**
-   * Casts a HybridImageSpecCxx instance to a retained unsafe raw pointer.
+   * Casts a `HybridImageSpecCxx` instance to a retained unsafe raw pointer.
    * This acquires one additional strong reference on the object!
    */
   public static func toUnsafe(_ instance: HybridImageSpecCxx) -> UnsafeMutableRawPointer {
@@ -23,7 +23,7 @@ public final class HybridImageSpecCxxUnsafe {
   }
 
   /**
-   * Casts an unsafe pointer to a HybridImageSpecCxx.
+   * Casts an unsafe pointer to a `HybridImageSpecCxx`.
    * The pointer has to be a retained opaque `Unmanaged<HybridImageSpecCxx>`.
    * This removes one strong reference from the object!
    */
