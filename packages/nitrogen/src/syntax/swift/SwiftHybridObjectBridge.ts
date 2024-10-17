@@ -50,6 +50,11 @@ ${createFileMetadataString(`${name.HybridTSpecCxx}.swift`)}
 import Foundation
 import NitroModules
 
+/**
+ * Helper class for converting instances of \`${name.HybridTSpecCxx}\` from- and to unsafe pointers.
+ * This is useful to pass Swift classes to C++, without having to strongly type the C++ function signature.
+ * The actual Swift type can be included in the .cpp file, without having to forward-declare anything in .hpp.
+ */
 public final class ${name.HybridTSpecCxx}Unsafe {
   /**
    * Casts a ${name.HybridTSpecCxx} instance to a retained unsafe raw pointer.
