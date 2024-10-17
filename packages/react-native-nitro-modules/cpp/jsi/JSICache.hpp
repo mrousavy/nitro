@@ -84,22 +84,22 @@ public:
 public:
   OwningReference<jsi::Object> makeShared(jsi::Object&& value) {
     OwningReference<jsi::Object> owning(new jsi::Object(std::move(value)));
-    _strongCache->_objectCache.push_back(owning.weak());
+    _strongCache->_objectCache.emplace_back(owning.weak());
     return owning;
   }
   OwningReference<jsi::Function> makeShared(jsi::Function&& value) {
     OwningReference<jsi::Function> owning(new jsi::Function(std::move(value)));
-    _strongCache->_functionCache.push_back(owning.weak());
+    _strongCache->_functionCache.emplace_back(owning.weak());
     return owning;
   }
   OwningReference<jsi::WeakObject> makeShared(jsi::WeakObject&& value) {
     OwningReference<jsi::WeakObject> owning(new jsi::WeakObject(std::move(value)));
-    _strongCache->_weakObjectCache.push_back(owning.weak());
+    _strongCache->_weakObjectCache.emplace_back(owning.weak());
     return owning;
   }
   OwningReference<jsi::ArrayBuffer> makeShared(jsi::ArrayBuffer&& value) {
     OwningReference<jsi::ArrayBuffer> owning(new jsi::ArrayBuffer(std::move(value)));
-    _strongCache->_arrayBufferCache.push_back(owning.weak());
+    _strongCache->_arrayBufferCache.emplace_back(owning.weak());
     return owning;
   }
 

@@ -24,7 +24,7 @@ std::vector<std::string> HybridObjectRegistry::getAllHybridObjectNames() {
   std::vector<std::string> keys;
   keys.reserve(getRegistry().size());
   for (const auto& entry : getRegistry()) {
-    keys.push_back(entry.first);
+    keys.emplace_back(entry.first);
   }
   return keys;
 }

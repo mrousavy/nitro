@@ -83,7 +83,7 @@ inline std::vector<std::string> getAnyObjectKeys(const AnyObject& object) {
   std::vector<std::string> keys;
   keys.reserve(object.size());
   for (const auto& entry : object) {
-    keys.push_back(entry.first);
+    keys.emplace_back(entry.first);
   }
   return keys;
 }

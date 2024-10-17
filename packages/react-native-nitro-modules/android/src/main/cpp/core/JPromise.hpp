@@ -51,7 +51,7 @@ public:
       onResolved(_result);
     } else {
       // Promise is not yet resolved, put the listener in our queue.
-      _onResolvedListeners.push_back(std::move(onResolved));
+      _onResolvedListeners.emplace_back(std::move(onResolved));
     }
   }
   void addOnRejectedListener(OnRejectedFunc&& onRejected) {
@@ -60,7 +60,7 @@ public:
       onRejected(_error);
     } else {
       // Promise is not yet rejected, put the listener in our queue.
-      _onRejectedListeners.push_back(std::move(onRejected));
+      _onRejectedListeners.emplace_back(std::move(onRejected));
     }
   }
 
