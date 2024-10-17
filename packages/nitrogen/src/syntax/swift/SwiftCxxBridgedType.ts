@@ -318,7 +318,7 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
             return `
 { () -> ${name.HybridTSpec} in
   let id = ${getFunc}(${cppParameterName})
-  let instance = ${name.HybridTSpecCxx}.__getById(id)
+  let instance = ${name.HybridTSpecCxx}.__get${name.HybridTSpecCxx}ById(id)
   return instance.get${name.HybridTSpec}()
 }()`.trim()
           default:
@@ -532,7 +532,7 @@ case ${i}:
             return `
 { () -> bridge.${bridge.specializationName} in
   let __cxxWrapped = ${name.HybridTSpecCxx}(${swiftParameterName})
-  let __swiftReferenceId = ${name.HybridTSpecCxx}.__put(instance: __cxxWrapped)
+  let __swiftReferenceId = ${name.HybridTSpecCxx}.__put${name.HybridTSpecCxx}(__cxxWrapped)
   return ${makeFunc}(__swiftReferenceId)
 }()`.trim()
           default:

@@ -28,14 +28,14 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
   private static var __instances: [Int : HybridTestObjectSwiftKotlinSpecCxx] = [:]
   private static var __counter: Int = 0
 
-  public static func __put(instance: HybridTestObjectSwiftKotlinSpecCxx) -> Int {
+  public static func __putHybridTestObjectSwiftKotlinSpecCxx(_ instance: HybridTestObjectSwiftKotlinSpecCxx) -> Int {
     let id = __counter
     __counter += 1
     __instances[id] = instance
     return id
   }
 
-  public static func __getById(_ instanceId: Int) -> HybridTestObjectSwiftKotlinSpecCxx {
+  public static func __getHybridTestObjectSwiftKotlinSpecCxxById(_ instanceId: Int) -> HybridTestObjectSwiftKotlinSpecCxx {
     let instance = __instances[instanceId]!
     __instances.removeValue(forKey: instanceId)
     return instance
@@ -92,7 +92,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
     get {
       return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_ in
         let __cxxWrapped = HybridTestObjectSwiftKotlinSpecCxx(self.__implementation.thisObject)
-        let __swiftReferenceId = HybridTestObjectSwiftKotlinSpecCxx.__put(instance: __cxxWrapped)
+        let __swiftReferenceId = HybridTestObjectSwiftKotlinSpecCxx.__putHybridTestObjectSwiftKotlinSpecCxx(__cxxWrapped)
         return bridge.create_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_(__swiftReferenceId)
       }()
     }
@@ -276,7 +276,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
       let __result = try self.__implementation.newTestObject()
       return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_ in
         let __cxxWrapped = HybridTestObjectSwiftKotlinSpecCxx(__result)
-        let __swiftReferenceId = HybridTestObjectSwiftKotlinSpecCxx.__put(instance: __cxxWrapped)
+        let __swiftReferenceId = HybridTestObjectSwiftKotlinSpecCxx.__putHybridTestObjectSwiftKotlinSpecCxx(__cxxWrapped)
         return bridge.create_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_(__swiftReferenceId)
       }()
     } catch {
@@ -684,7 +684,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
       let __result = try self.__implementation.createChild()
       return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridChildSpec_ in
         let __cxxWrapped = HybridChildSpecCxx(__result)
-        let __swiftReferenceId = HybridChildSpecCxx.__put(instance: __cxxWrapped)
+        let __swiftReferenceId = HybridChildSpecCxx.__putHybridChildSpecCxx(__cxxWrapped)
         return bridge.create_std__shared_ptr_margelo__nitro__image__HybridChildSpec_(__swiftReferenceId)
       }()
     } catch {
@@ -699,7 +699,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
       let __result = try self.__implementation.createBase()
       return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridBaseSpec_ in
         let __cxxWrapped = HybridBaseSpecCxx(__result)
-        let __swiftReferenceId = HybridBaseSpecCxx.__put(instance: __cxxWrapped)
+        let __swiftReferenceId = HybridBaseSpecCxx.__putHybridBaseSpecCxx(__cxxWrapped)
         return bridge.create_std__shared_ptr_margelo__nitro__image__HybridBaseSpec_(__swiftReferenceId)
       }()
     } catch {
@@ -714,7 +714,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
       let __result = try self.__implementation.createBaseActualChild()
       return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridBaseSpec_ in
         let __cxxWrapped = HybridBaseSpecCxx(__result)
-        let __swiftReferenceId = HybridBaseSpecCxx.__put(instance: __cxxWrapped)
+        let __swiftReferenceId = HybridBaseSpecCxx.__putHybridBaseSpecCxx(__cxxWrapped)
         return bridge.create_std__shared_ptr_margelo__nitro__image__HybridBaseSpec_(__swiftReferenceId)
       }()
     } catch {
@@ -728,12 +728,12 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
     do {
       let __result = try self.__implementation.bounceChild(child: { () -> HybridChildSpec in
         let id = bridge.get_std__shared_ptr_margelo__nitro__image__HybridChildSpec_(child)
-        let instance = HybridChildSpecCxx.__getById(id)
+        let instance = HybridChildSpecCxx.__getHybridChildSpecCxxById(id)
         return instance.getHybridChildSpec()
       }())
       return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridChildSpec_ in
         let __cxxWrapped = HybridChildSpecCxx(__result)
-        let __swiftReferenceId = HybridChildSpecCxx.__put(instance: __cxxWrapped)
+        let __swiftReferenceId = HybridChildSpecCxx.__putHybridChildSpecCxx(__cxxWrapped)
         return bridge.create_std__shared_ptr_margelo__nitro__image__HybridChildSpec_(__swiftReferenceId)
       }()
     } catch {
@@ -747,12 +747,12 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
     do {
       let __result = try self.__implementation.bounceBase(base: { () -> HybridBaseSpec in
         let id = bridge.get_std__shared_ptr_margelo__nitro__image__HybridBaseSpec_(base)
-        let instance = HybridBaseSpecCxx.__getById(id)
+        let instance = HybridBaseSpecCxx.__getHybridBaseSpecCxxById(id)
         return instance.getHybridBaseSpec()
       }())
       return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridBaseSpec_ in
         let __cxxWrapped = HybridBaseSpecCxx(__result)
-        let __swiftReferenceId = HybridBaseSpecCxx.__put(instance: __cxxWrapped)
+        let __swiftReferenceId = HybridBaseSpecCxx.__putHybridBaseSpecCxx(__cxxWrapped)
         return bridge.create_std__shared_ptr_margelo__nitro__image__HybridBaseSpec_(__swiftReferenceId)
       }()
     } catch {
@@ -766,12 +766,12 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
     do {
       let __result = try self.__implementation.bounceChildBase(child: { () -> HybridChildSpec in
         let id = bridge.get_std__shared_ptr_margelo__nitro__image__HybridChildSpec_(child)
-        let instance = HybridChildSpecCxx.__getById(id)
+        let instance = HybridChildSpecCxx.__getHybridChildSpecCxxById(id)
         return instance.getHybridChildSpec()
       }())
       return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridBaseSpec_ in
         let __cxxWrapped = HybridBaseSpecCxx(__result)
-        let __swiftReferenceId = HybridBaseSpecCxx.__put(instance: __cxxWrapped)
+        let __swiftReferenceId = HybridBaseSpecCxx.__putHybridBaseSpecCxx(__cxxWrapped)
         return bridge.create_std__shared_ptr_margelo__nitro__image__HybridBaseSpec_(__swiftReferenceId)
       }()
     } catch {
@@ -785,12 +785,12 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
     do {
       let __result = try self.__implementation.castBase(base: { () -> HybridBaseSpec in
         let id = bridge.get_std__shared_ptr_margelo__nitro__image__HybridBaseSpec_(base)
-        let instance = HybridBaseSpecCxx.__getById(id)
+        let instance = HybridBaseSpecCxx.__getHybridBaseSpecCxxById(id)
         return instance.getHybridBaseSpec()
       }())
       return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridChildSpec_ in
         let __cxxWrapped = HybridChildSpecCxx(__result)
-        let __swiftReferenceId = HybridChildSpecCxx.__put(instance: __cxxWrapped)
+        let __swiftReferenceId = HybridChildSpecCxx.__putHybridChildSpecCxx(__cxxWrapped)
         return bridge.create_std__shared_ptr_margelo__nitro__image__HybridChildSpec_(__swiftReferenceId)
       }()
     } catch {

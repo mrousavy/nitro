@@ -28,14 +28,14 @@ public class HybridImageFactorySpecCxx {
   private static var __instances: [Int : HybridImageFactorySpecCxx] = [:]
   private static var __counter: Int = 0
 
-  public static func __put(instance: HybridImageFactorySpecCxx) -> Int {
+  public static func __putHybridImageFactorySpecCxx(_ instance: HybridImageFactorySpecCxx) -> Int {
     let id = __counter
     __counter += 1
     __instances[id] = instance
     return id
   }
 
-  public static func __getById(_ instanceId: Int) -> HybridImageFactorySpecCxx {
+  public static func __getHybridImageFactorySpecCxxById(_ instanceId: Int) -> HybridImageFactorySpecCxx {
     let instance = __instances[instanceId]!
     __instances.removeValue(forKey: instanceId)
     return instance
@@ -96,7 +96,7 @@ public class HybridImageFactorySpecCxx {
       let __result = try self.__implementation.loadImageFromFile(path: String(path))
       return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridImageSpec_ in
         let __cxxWrapped = HybridImageSpecCxx(__result)
-        let __swiftReferenceId = HybridImageSpecCxx.__put(instance: __cxxWrapped)
+        let __swiftReferenceId = HybridImageSpecCxx.__putHybridImageSpecCxx(__cxxWrapped)
         return bridge.create_std__shared_ptr_margelo__nitro__image__HybridImageSpec_(__swiftReferenceId)
       }()
     } catch {
@@ -111,7 +111,7 @@ public class HybridImageFactorySpecCxx {
       let __result = try self.__implementation.loadImageFromURL(path: String(path))
       return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridImageSpec_ in
         let __cxxWrapped = HybridImageSpecCxx(__result)
-        let __swiftReferenceId = HybridImageSpecCxx.__put(instance: __cxxWrapped)
+        let __swiftReferenceId = HybridImageSpecCxx.__putHybridImageSpecCxx(__cxxWrapped)
         return bridge.create_std__shared_ptr_margelo__nitro__image__HybridImageSpec_(__swiftReferenceId)
       }()
     } catch {
@@ -126,7 +126,7 @@ public class HybridImageFactorySpecCxx {
       let __result = try self.__implementation.loadImageFromSystemName(path: String(path))
       return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridImageSpec_ in
         let __cxxWrapped = HybridImageSpecCxx(__result)
-        let __swiftReferenceId = HybridImageSpecCxx.__put(instance: __cxxWrapped)
+        let __swiftReferenceId = HybridImageSpecCxx.__putHybridImageSpecCxx(__cxxWrapped)
         return bridge.create_std__shared_ptr_margelo__nitro__image__HybridImageSpec_(__swiftReferenceId)
       }()
     } catch {
@@ -140,12 +140,12 @@ public class HybridImageFactorySpecCxx {
     do {
       let __result = try self.__implementation.bounceBack(image: { () -> HybridImageSpec in
         let id = bridge.get_std__shared_ptr_margelo__nitro__image__HybridImageSpec_(image)
-        let instance = HybridImageSpecCxx.__getById(id)
+        let instance = HybridImageSpecCxx.__getHybridImageSpecCxxById(id)
         return instance.getHybridImageSpec()
       }())
       return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridImageSpec_ in
         let __cxxWrapped = HybridImageSpecCxx(__result)
-        let __swiftReferenceId = HybridImageSpecCxx.__put(instance: __cxxWrapped)
+        let __swiftReferenceId = HybridImageSpecCxx.__putHybridImageSpecCxx(__cxxWrapped)
         return bridge.create_std__shared_ptr_margelo__nitro__image__HybridImageSpec_(__swiftReferenceId)
       }()
     } catch {
