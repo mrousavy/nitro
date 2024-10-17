@@ -223,7 +223,7 @@ inline std::vector<${keyType}> get_${name}_keys(const ${name}& map) {
   std::vector<${keyType}> keys;
   keys.reserve(map.size());
   for (const auto& entry : map) {
-    keys.emplace_back(entry.first);
+    keys.push_back(entry.first);
   }
   return keys;
 }

@@ -258,7 +258,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
           return bridge.create_std__optional_std__vector_std__string__({ () -> bridge.std__vector_std__string_ in
             var __vector = bridge.create_std__vector_std__string_(__unwrappedValue.count)
             for __item in __unwrappedValue {
-              __vector.emplace_back(std.string(__item))
+              __vector.push_back(std.string(__item))
             }
             return __vector
           }())
@@ -375,7 +375,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
       return { () -> bridge.std__vector_std__string_ in
         var __vector = bridge.create_std__vector_std__string_(__result.count)
         for __item in __result {
-          __vector.emplace_back(std.string(__item))
+          __vector.push_back(std.string(__item))
         }
         return __vector
       }()
@@ -392,7 +392,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
       return { () -> bridge.std__vector_double_ in
         var __vector = bridge.create_std__vector_double_(__result.count)
         for __item in __result {
-          __vector.emplace_back(__item)
+          __vector.push_back(__item)
         }
         return __vector
       }()
@@ -409,7 +409,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
       return { () -> bridge.std__vector_Person_ in
         var __vector = bridge.create_std__vector_Person_(__result.count)
         for __item in __result {
-          __vector.emplace_back(__item)
+          __vector.push_back(__item)
         }
         return __vector
       }()
@@ -426,7 +426,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
       return { () -> bridge.std__vector_Powertrain_ in
         var __vector = bridge.create_std__vector_Powertrain_(__result.count)
         for __item in __result {
-          __vector.emplace_back(__item)
+          __vector.push_back(__item)
         }
         return __vector
       }()
@@ -445,7 +445,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
           __sharedClosure.pointee.call({ () -> bridge.std__vector_Powertrain_ in
           var __vector = bridge.create_std__vector_Powertrain_(__array.count)
           for __item in __array {
-            __vector.emplace_back(__item)
+            __vector.push_back(__item)
           }
           return __vector
         }())

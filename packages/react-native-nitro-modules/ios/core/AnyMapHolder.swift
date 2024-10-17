@@ -303,7 +303,7 @@ extension margelo.nitro.AnyArray {
     var vector = margelo.nitro.AnyArray()
     vector.reserve(array.count)
     for value in array {
-      vector.emplace_back(margelo.nitro.AnyValue.create(value))
+      vector.push_back(margelo.nitro.AnyValue.create(value))
     }
     return vector
   }

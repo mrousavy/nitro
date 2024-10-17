@@ -611,7 +611,7 @@ case ${i}:
 { () -> bridge.${bridge.specializationName} in
   var __vector = ${makeFunc}(${swiftParameterName}.count)
   for __item in ${swiftParameterName} {
-    __vector.emplace_back(${indent(wrapping.parseFromSwiftToCpp('__item', language), '    ')})
+    __vector.push_back(${indent(wrapping.parseFromSwiftToCpp('__item', language), '    ')})
   }
   return __vector
 }()`.trim()
