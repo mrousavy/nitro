@@ -79,6 +79,7 @@ export function createSwiftCxxBridge(): SourceFile[] {
       )
       return getForwardDeclaration('class', HybridTSpecCxx, moduleName)
     })
+    .filter(isNotDuplicate)
 
   const header = `
 ${createFileMetadataString(`${bridgeName}.hpp`)}

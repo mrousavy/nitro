@@ -120,21 +120,7 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
   getRequiredImports(): SourceImport[] {
     const imports = this.type.getRequiredImports()
 
-    if (this.type.kind === 'hybrid-object') {
-      // Use SwiftCxx wrapper of the HybridObject type
-      const name = getTypeHybridObjectName(this.type)
-      const namespace = NitroConfig.getCxxNamespace('c++')
-      imports.push({
-        name: `${name.HybridTSpecSwift}.hpp`,
-        forwardDeclaration: getForwardDeclaration(
-          'class',
-          name.HybridTSpecSwift,
-          namespace
-        ),
-        language: 'c++',
-        space: 'user',
-      })
-    } else if (this.type.kind === 'array-buffer') {
+    if (this.type.kind === 'array-buffer') {
       imports.push({
         name: 'NitroModules/ArrayBufferHolder.hpp',
         forwardDeclaration: getForwardDeclaration(
