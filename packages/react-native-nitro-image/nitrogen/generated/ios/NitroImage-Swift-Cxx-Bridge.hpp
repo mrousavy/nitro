@@ -18,8 +18,6 @@
 namespace margelo::nitro::image { class HybridBaseSpec; }
 // Forward declaration of `HybridChildSpec` to properly resolve imports.
 namespace margelo::nitro::image { class HybridChildSpec; }
-// Forward declaration of `HybridContext` to properly resolve imports.
-namespace margelo::nitro { class HybridContext; }
 // Forward declaration of `HybridImageFactorySpec` to properly resolve imports.
 namespace margelo::nitro::image { class HybridImageFactorySpec; }
 // Forward declaration of `HybridImageSpec` to properly resolve imports.
@@ -44,28 +42,13 @@ namespace NitroImage { class HybridImageSpecCxx; }
 namespace NitroImage { class HybridTestObjectSwiftKotlinSpecCxx; }
 
 // Include C++ defined types
-#if __has_include("HybridBaseSpec.hpp")
- #include "HybridBaseSpec.hpp"
-#endif
-#if __has_include("HybridChildSpec.hpp")
- #include "HybridChildSpec.hpp"
-#endif
-#if __has_include("HybridImageFactorySpec.hpp")
- #include "HybridImageFactorySpec.hpp"
-#endif
-#if __has_include("HybridImageSpec.hpp")
- #include "HybridImageSpec.hpp"
-#endif
-#if __has_include("HybridTestObjectSwiftKotlinSpec.hpp")
- #include "HybridTestObjectSwiftKotlinSpec.hpp"
-#endif
-#if __has_include("Person.hpp")
- #include "Person.hpp"
-#endif
-#if __has_include("Powertrain.hpp")
- #include "Powertrain.hpp"
-#endif
-#include <NitroModules/HybridContext.hpp>
+#include "HybridBaseSpec.hpp"
+#include "HybridChildSpec.hpp"
+#include "HybridImageFactorySpec.hpp"
+#include "HybridImageSpec.hpp"
+#include "HybridTestObjectSwiftKotlinSpec.hpp"
+#include "Person.hpp"
+#include "Powertrain.hpp"
 #include <NitroModules/PromiseHolder.hpp>
 #include <functional>
 #include <future>

@@ -6,13 +6,15 @@
 ///
 
 #include "NitroImage-Swift-Cxx-Bridge.hpp"
-#include "NitroImage-Swift-Cxx-Umbrella.hpp"
 
+// Include C++ implementation defined types
 #include "HybridBaseSpecSwift.hpp"
 #include "HybridChildSpecSwift.hpp"
-#include "HybridImageSpecSwift.hpp"
 #include "HybridImageFactorySpecSwift.hpp"
+#include "HybridImageSpecSwift.hpp"
 #include "HybridTestObjectSwiftKotlinSpecSwift.hpp"
+#include "NitroImage-Swift-Cxx-Umbrella.hpp"
+#include <NitroModules/HybridContext.hpp>
 
 namespace margelo::nitro::image::bridge::swift {
 

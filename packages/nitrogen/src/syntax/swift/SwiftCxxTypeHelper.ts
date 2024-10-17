@@ -15,14 +15,20 @@ import { HybridObjectType } from '../types/HybridObjectType.js'
 import { getHybridObjectName } from '../getHybridObjectName.js'
 import { NitroConfig } from '../../config/NitroConfig.js'
 import { getForwardDeclaration } from '../c++/getForwardDeclaration.js'
+import { getUmbrellaHeaderName } from '../../autolinking/ios/createSwiftUmbrellaHeader.js'
 
 export interface SwiftCxxHelper {
-  cxxHeaderCode: string
-  cxxImplementationCode: string
+  cxxHeader: {
+    code: string
+    requiredIncludes: SourceImport[]
+  }
+  cxxImplementation?: {
+    code: string
+    requiredIncludes: SourceImport[]
+  }
   funcName: string
   specializationName: string
   cxxType: string
-  requiredIncludes: SourceImport[]
 }
 
 export function createSwiftCxxHelpers(type: Type): SwiftCxxHelper | undefined {
@@ -66,20 +72,8 @@ function createCxxHybridObjectSwiftHelper(
     cxxType: actualType,
     funcName: `create_${name}`,
     specializationName: name,
-    requiredIncludes: [
-      {
-        language: 'c++',
-        name: 'NitroModules/HybridContext.hpp',
-        space: 'system',
-        forwardDeclaration: getForwardDeclaration(
-          'class',
-          'HybridContext',
-          'margelo::nitro'
-        ),
-      },
-      ...type.getRequiredImports(),
-    ],
-    cxxHeaderCode: `
+    cxxHeader: {
+      code: `
 /**
  * Specialized version of \`${escapeComments(actualType)}\`.
  */
@@ -87,7 +81,10 @@ using ${name} = ${actualType};
 ${actualType} create_${name}(size_t swiftReferenceId);
 size_t get_${name}(${name} cppType);
     `.trim(),
-    cxxImplementationCode: `
+      requiredIncludes: type.getRequiredImports(),
+    },
+    cxxImplementation: {
+      code: `
 ${actualType} create_${name}(size_t swiftReferenceId) {
   ${swiftPartType} swiftPart = ${swiftPartType}ReferenceHolder::getById(swiftReferenceId);
   return HybridContext::getOrCreate<${swiftWrappingType}>(swiftPart);
@@ -103,6 +100,31 @@ size_t get_${name}(${name} cppType) {
   return ${swiftPartType}ReferenceHolder::put(swiftPart);
 }
     `.trim(),
+      requiredIncludes: [
+        {
+          language: 'c++',
+          name: 'NitroModules/HybridContext.hpp',
+          space: 'system',
+          forwardDeclaration: getForwardDeclaration(
+            'class',
+            'HybridContext',
+            'margelo::nitro'
+          ),
+        },
+        {
+          language: 'c++',
+          // Hybrid Object Swift C++ class wrapper
+          name: `${HybridTSpecSwift}.hpp`,
+          space: 'user',
+        },
+        {
+          language: 'c++',
+          // Swift umbrella header
+          name: getUmbrellaHeaderName(),
+          space: 'user',
+        },
+      ],
+    },
   }
 }
 
@@ -117,26 +139,31 @@ function createCxxOptionalSwiftHelper(type: OptionalType): SwiftCxxHelper {
     cxxType: actualType,
     funcName: `create_${name}`,
     specializationName: name,
-    requiredIncludes: [
-      {
-        name: 'optional',
-        space: 'system',
-        language: 'c++',
-      },
-      ...wrappedBridge.getRequiredImports(),
-    ],
-    cxxHeaderCode: `
+    cxxHeader: {
+      code: `
 /**
  * Specialized version of \`${escapeComments(actualType)}\`.
  */
 using ${name} = ${actualType};
 ${actualType} create_${name}(const ${wrappedBridge.getTypeCode('c++')}& value);
     `.trim(),
-    cxxImplementationCode: `
+      requiredIncludes: [
+        {
+          name: 'optional',
+          space: 'system',
+          language: 'c++',
+        },
+        ...wrappedBridge.getRequiredImports(),
+      ],
+    },
+    cxxImplementation: {
+      code: `
 ${actualType} create_${name}(const ${wrappedBridge.getTypeCode('c++')}& value) {
   return ${actualType}(${indent(wrappedBridge.parseFromSwiftToCpp('value', 'c++'), '    ')});
 }
     `.trim(),
+      requiredIncludes: [],
+    },
   }
 }
 
@@ -151,28 +178,33 @@ function createCxxVectorSwiftHelper(type: ArrayType): SwiftCxxHelper {
     cxxType: actualType,
     funcName: `create_${name}`,
     specializationName: name,
-    requiredIncludes: [
-      {
-        name: 'vector',
-        space: 'system',
-        language: 'c++',
-      },
-      ...bridgedType.getRequiredImports(),
-    ],
-    cxxHeaderCode: `
+    cxxHeader: {
+      code: `
 /**
  * Specialized version of \`${escapeComments(actualType)}\`.
  */
 using ${name} = ${actualType};
 ${actualType} create_${name}(size_t size);
     `.trim(),
-    cxxImplementationCode: `
+      requiredIncludes: [
+        {
+          name: 'vector',
+          space: 'system',
+          language: 'c++',
+        },
+        ...bridgedType.getRequiredImports(),
+      ],
+    },
+    cxxImplementation: {
+      code: `
 ${actualType} create_${name}(size_t size) {
   ${actualType} vector;
   vector.reserve(size);
   return vector;
 }
-    `.trim(),
+      `.trim(),
+      requiredIncludes: [],
+    },
   }
 }
 
@@ -188,23 +220,26 @@ function createCxxUnorderedMapSwiftHelper(type: RecordType): SwiftCxxHelper {
     cxxType: actualType,
     funcName: `create_${name}`,
     specializationName: name,
-    requiredIncludes: [
-      {
-        name: 'unordered_map',
-        space: 'system',
-        language: 'c++',
-      },
-      ...bridgedType.getRequiredImports(),
-    ],
-    cxxHeaderCode: `
+    cxxHeader: {
+      code: `
 /**
  * Specialized version of \`${escapeComments(actualType)}\`.
  */
 using ${name} = ${actualType};
 ${actualType} create_${name}(size_t size);
 std::vector<${keyType}> get_${name}_keys(const ${name}& map);
-    `.trim(),
-    cxxImplementationCode: `
+      `.trim(),
+      requiredIncludes: [
+        {
+          name: 'unordered_map',
+          space: 'system',
+          language: 'c++',
+        },
+        ...bridgedType.getRequiredImports(),
+      ],
+    },
+    cxxImplementation: {
+      code: `
 ${actualType} create_${name}(size_t size) {
   ${actualType} map;
   map.reserve(size);
@@ -219,6 +254,8 @@ std::vector<${keyType}> get_${name}_keys(const ${name}& map) {
   return keys;
 }
     `.trim(),
+      requiredIncludes: [],
+    },
   }
 }
 
@@ -292,20 +329,8 @@ function createCxxFunctionSwiftHelper(type: FunctionType): SwiftCxxHelper {
     cxxType: actualType,
     funcName: `create_${name}`,
     specializationName: name,
-    requiredIncludes: [
-      {
-        name: 'functional',
-        space: 'system',
-        language: 'c++',
-      },
-      {
-        name: 'memory',
-        space: 'system',
-        language: 'c++',
-      },
-      ...bridgedType.getRequiredImports(),
-    ],
-    cxxHeaderCode: `
+    cxxHeader: {
+      code: `
 /**
  * Specialized version of \`${type.getCode('c++', false)}\`.
  */
@@ -323,7 +348,22 @@ public:
 ${name} create_${name}(void* NONNULL closureHolder, ${functionPointerParam}, void(* NONNULL destroy)(void* NONNULL));
 std::shared_ptr<${wrapperName}> share_${name}(const ${name}& value);
     `.trim(),
-    cxxImplementationCode: `
+      requiredIncludes: [
+        {
+          name: 'functional',
+          space: 'system',
+          language: 'c++',
+        },
+        {
+          name: 'memory',
+          space: 'system',
+          language: 'c++',
+        },
+        ...bridgedType.getRequiredImports(),
+      ],
+    },
+    cxxImplementation: {
+      code: `
 ${wrapperName}::${wrapperName}(const ${actualType}& func): function(func) {}
 ${wrapperName}::${wrapperName}(${actualType}&& func): function(std::move(func)) {}
 ${callFuncReturnType} ${wrapperName}::call(${callCppFuncParamsSignature.join(', ')}) const {
@@ -339,6 +379,8 @@ std::shared_ptr<${wrapperName}> share_${name}(const ${name}& value) {
   return std::make_shared<${wrapperName}>(value);
 }
     `.trim(),
+      requiredIncludes: [],
+    },
   }
 }
 
@@ -378,15 +420,8 @@ ${t.getCode('c++')} get_${name}_${i}(const ${name}& variantWrapper) {
     cxxType: actualType,
     funcName: `create_${name}`,
     specializationName: name,
-    requiredIncludes: [
-      {
-        name: 'variant',
-        space: 'system',
-        language: 'c++',
-      },
-      ...bridgedType.getRequiredImports(),
-    ],
-    cxxHeaderCode: `
+    cxxHeader: {
+      code: `
 /**
  * Wrapper struct for \`${escapeComments(actualType)}\`.
  * std::variant cannot be used in Swift because of a Swift bug.
@@ -400,8 +435,19 @@ struct ${name} {
 };
 ${createFunctions.map((f) => f.cxxHeaderCode).join('\n')}
 ${getFunctions.map((f) => f.cxxHeaderCode).join('\n')}
-      `.trim(),
-    cxxImplementationCode: `
+        `.trim(),
+
+      requiredIncludes: [
+        {
+          name: 'variant',
+          space: 'system',
+          language: 'c++',
+        },
+        ...bridgedType.getRequiredImports(),
+      ],
+    },
+    cxxImplementation: {
+      code: `
 ${name}::${name}(${actualType} variant): variant(variant) { }
 ${name}::operator ${actualType}() const {
   return variant;
@@ -412,6 +458,8 @@ size_t ${name}::index() const {
 ${createFunctions.map((f) => f.cxxImplementationCode).join('\n')}
 ${getFunctions.map((f) => f.cxxImplementationCode).join('\n')}
         `.trim(),
+      requiredIncludes: [],
+    },
   }
 }
 
@@ -433,26 +481,31 @@ function createCxxTupleSwiftHelper(type: TupleType): SwiftCxxHelper {
     cxxType: actualType,
     funcName: `create_${name}`,
     specializationName: name,
-    requiredIncludes: [
-      {
-        name: 'tuple',
-        space: 'system',
-        language: 'c++',
-      },
-      ...bridgedType.getRequiredImports(),
-    ],
-    cxxHeaderCode: `
+    cxxHeader: {
+      code: `
 /**
  * Specialized version of \`${escapeComments(actualType)}\`.
  */
 using ${name} = ${actualType};
 ${actualType} create_${name}(${typesSignature});
      `.trim(),
-    cxxImplementationCode: `
+      requiredIncludes: [
+        {
+          name: 'tuple',
+          space: 'system',
+          language: 'c++',
+        },
+        ...bridgedType.getRequiredImports(),
+      ],
+    },
+    cxxImplementation: {
+      code: `
 ${actualType} create_${name}(${typesSignature}) {
   return ${actualType} { ${typesForward} };
 }
       `.trim(),
+      requiredIncludes: [],
+    },
   }
 }
 
@@ -468,25 +521,30 @@ function createCxxPromiseSwiftHelper(type: PromiseType): SwiftCxxHelper {
     cxxType: actualType,
     funcName: `create_${name}`,
     specializationName: name,
-    requiredIncludes: [
-      {
-        name: 'NitroModules/PromiseHolder.hpp',
-        space: 'system',
-        language: 'c++',
-      },
-      ...bridgedType.getRequiredImports(),
-    ],
-    cxxHeaderCode: `
+    cxxHeader: {
+      code: `
 /**
  * Specialized version of \`${escapeComments(actualType)}\`.
  */
 using ${name} = ${actualType};
 ${actualType} create_${name}();
-     `.trim(),
-    cxxImplementationCode: `
+       `.trim(),
+      requiredIncludes: [
+        {
+          name: 'NitroModules/PromiseHolder.hpp',
+          space: 'system',
+          language: 'c++',
+        },
+        ...bridgedType.getRequiredImports(),
+      ],
+    },
+    cxxImplementation: {
+      code: `
 ${actualType} create_${name}() {
   return ${actualType}();
 }
       `.trim(),
+      requiredIncludes: [],
+    },
   }
 }

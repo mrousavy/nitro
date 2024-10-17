@@ -16,14 +16,12 @@ import { getTypeAs } from '../../syntax/types/getTypeAs.js'
 import { HybridObjectType } from '../../syntax/types/HybridObjectType.js'
 import { getForwardDeclaration } from '../../syntax/c++/getForwardDeclaration.js'
 import { getHybridObjectName } from '../../syntax/getHybridObjectName.js'
-import { getUmbrellaHeaderName } from './createSwiftUmbrellaHeader.js'
 
 const SWIFT_BRIDGE_NAMESPACE = ['bridge', 'swift']
 
 export function createSwiftCxxBridge(): SourceFile[] {
   const moduleName = NitroConfig.getIosModuleName()
   const bridgeName = `${moduleName}-Swift-Cxx-Bridge`
-  const umbrellaHeader = getUmbrellaHeaderName()
 
   const types = getAllKnownTypes('swift').map((t) => new SwiftCxxBridgedType(t))
 
@@ -38,22 +36,35 @@ export function createSwiftCxxBridge(): SourceFile[] {
     .filter((b) => b != null)
     .filter(filterDuplicateHelperBridges)
   const headerHelperFunctions = bridges
-    .map((b) => `// pragma MARK: ${b.cxxType}\n${b.cxxHeaderCode}`)
+    .map((b) => `// pragma MARK: ${b.cxxType}\n${b.cxxHeader.code}`)
     .filter(isNotDuplicate)
     .join('\n\n')
   const implementationHelperFunctions = bridges
-    .map((b) => `// pragma MARK: ${b.cxxType}\n${b.cxxImplementationCode}`)
+    .map((b) => {
+      if (b.cxxImplementation == null) return undefined
+      else return `// pragma MARK: ${b.cxxType}\n${b.cxxImplementation.code}`
+    })
+    .filter((c) => c != null)
     .filter(isNotDuplicate)
     .join('\n\n')
 
-  const requiredImports = bridges.flatMap((b) => b.requiredIncludes)
-  const includes = requiredImports
-    .map((i) => includeHeader(i, i.space === 'system'))
+  const requiredImportsHeader = bridges.flatMap(
+    (b) => b.cxxHeader.requiredIncludes
+  )
+  const includesHeader = requiredImportsHeader
+    .map((i) => includeHeader(i, true))
     .filter(isNotDuplicate)
-  const forwardDeclarations = requiredImports
+  const forwardDeclarationsHeader = requiredImportsHeader
     .map((i) => i.forwardDeclaration)
     .filter((f) => f != null)
     .filter(isNotDuplicate)
+
+  const includesImplementation = bridges
+    .flatMap((b) => b.cxxImplementation?.requiredIncludes)
+    .filter((i) => i != null)
+    .map((i) => includeHeader(i, true))
+    .filter(isNotDuplicate)
+
   const namespace = NitroConfig.getCxxNamespace(
     'c++',
     ...SWIFT_BRIDGE_NAMESPACE
@@ -77,13 +88,13 @@ ${createFileMetadataString(`${bridgeName}.hpp`)}
 ${includeNitroHeader('NitroDefines.hpp')}
 
 // Forward declarations of C++ defined types
-${forwardDeclarations.sort().join('\n')}
+${forwardDeclarationsHeader.sort().join('\n')}
 
 // Forward declarations of Swift defined types
 ${forwardDeclaredSwiftTypes.sort().join('\n')}
 
 // Include C++ defined types
-${includes.sort().join('\n')}
+${includesHeader.sort().join('\n')}
 
 /**
  * Contains specialized versions of C++ templated types so they can be accessed from Swift,
@@ -100,7 +111,9 @@ namespace ${namespace} {
 ${createFileMetadataString(`${bridgeName}.cpp`)}
 
 #include "${bridgeName}.hpp"
-#include "${umbrellaHeader}"
+
+// Include C++ implementation defined types
+${includesImplementation.sort().join('\n')}
 
 namespace ${namespace} {
 
