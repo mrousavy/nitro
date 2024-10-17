@@ -74,13 +74,13 @@ namespace margelo::nitro::image::bridge::swift {
    */
   class Func_void_std__string_Wrapper {
   public:
-    explicit Func_void_std__string_Wrapper(const std::function<void(const std::string& /* path */)>& func): function(func) {}
-    explicit Func_void_std__string_Wrapper(std::function<void(const std::string& /* path */)>&& func): function(std::move(func)) {}
+    explicit Func_void_std__string_Wrapper(const std::function<void(const std::string& /* path */)>& func): _function(func) {}
+    explicit Func_void_std__string_Wrapper(std::function<void(const std::string& /* path */)>&& func): _function(std::move(func)) {}
     inline void call(std::string path) const {
-      function(path);
+      _function(path);
     }
   private:
-    std::function<void(const std::string& /* path */)> function;
+    std::function<void(const std::string& /* path */)> _function;
   };
   inline Func_void_std__string create_Func_void_std__string(void* NONNULL closureHolder, void(* NONNULL call)(void* NONNULL /* closureHolder */, std::string), void(* NONNULL destroy)(void* NONNULL)) {
     std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
@@ -197,13 +197,13 @@ namespace margelo::nitro::image::bridge::swift {
    */
   class Func_void_std__vector_Powertrain__Wrapper {
   public:
-    explicit Func_void_std__vector_Powertrain__Wrapper(const std::function<void(const std::vector<Powertrain>& /* array */)>& func): function(func) {}
-    explicit Func_void_std__vector_Powertrain__Wrapper(std::function<void(const std::vector<Powertrain>& /* array */)>&& func): function(std::move(func)) {}
+    explicit Func_void_std__vector_Powertrain__Wrapper(const std::function<void(const std::vector<Powertrain>& /* array */)>& func): _function(func) {}
+    explicit Func_void_std__vector_Powertrain__Wrapper(std::function<void(const std::vector<Powertrain>& /* array */)>&& func): _function(std::move(func)) {}
     inline void call(std::vector<Powertrain> array) const {
-      function(array);
+      _function(array);
     }
   private:
-    std::function<void(const std::vector<Powertrain>& /* array */)> function;
+    std::function<void(const std::vector<Powertrain>& /* array */)> _function;
   };
   inline Func_void_std__vector_Powertrain_ create_Func_void_std__vector_Powertrain_(void* NONNULL closureHolder, void(* NONNULL call)(void* NONNULL /* closureHolder */, std::vector<Powertrain>), void(* NONNULL destroy)(void* NONNULL)) {
     std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
@@ -290,13 +290,13 @@ namespace margelo::nitro::image::bridge::swift {
    */
   class Func_void_Wrapper {
   public:
-    explicit Func_void_Wrapper(const std::function<void()>& func): function(func) {}
-    explicit Func_void_Wrapper(std::function<void()>&& func): function(std::move(func)) {}
+    explicit Func_void_Wrapper(const std::function<void()>& func): _function(func) {}
+    explicit Func_void_Wrapper(std::function<void()>&& func): _function(std::move(func)) {}
     inline void call() const {
-      function();
+      _function();
     }
   private:
-    std::function<void()> function;
+    std::function<void()> _function;
   };
   inline Func_void create_Func_void(void* NONNULL closureHolder, void(* NONNULL call)(void* NONNULL /* closureHolder */), void(* NONNULL destroy)(void* NONNULL)) {
     std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
@@ -327,13 +327,13 @@ namespace margelo::nitro::image::bridge::swift {
    */
   class Func_void_std__optional_double__Wrapper {
   public:
-    explicit Func_void_std__optional_double__Wrapper(const std::function<void(std::optional<double> /* maybe */)>& func): function(func) {}
-    explicit Func_void_std__optional_double__Wrapper(std::function<void(std::optional<double> /* maybe */)>&& func): function(std::move(func)) {}
+    explicit Func_void_std__optional_double__Wrapper(const std::function<void(std::optional<double> /* maybe */)>& func): _function(func) {}
+    explicit Func_void_std__optional_double__Wrapper(std::function<void(std::optional<double> /* maybe */)>&& func): _function(std::move(func)) {}
     inline void call(std::optional<double> maybe) const {
-      function(maybe);
+      _function(maybe);
     }
   private:
-    std::function<void(std::optional<double> /* maybe */)> function;
+    std::function<void(std::optional<double> /* maybe */)> _function;
   };
   inline Func_void_std__optional_double_ create_Func_void_std__optional_double_(void* NONNULL closureHolder, void(* NONNULL call)(void* NONNULL /* closureHolder */, std::optional<double>), void(* NONNULL destroy)(void* NONNULL)) {
     std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
