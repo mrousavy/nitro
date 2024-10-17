@@ -96,7 +96,7 @@ size_t get_${name}(${name} cppType) {
   std::shared_ptr<${swiftWrappingType}> swiftWrapper = std::dynamic_pointer_cast<${swiftWrappingType}>(cppType);
 #ifdef NITRO_DEBUG
   if (swiftWrapper == nullptr) [[unlikely]] {
-    throw std::runtime_error("Class \\"${name}\\" is not implemented in Swift!");
+    throw std::runtime_error("Class \\"${actualType}\\" is not implemented in Swift!");
   }
 #endif
   ${swiftPartType} swiftPart = swiftWrapper->getSwiftPart();
