@@ -234,12 +234,7 @@ namespace margelo::nitro::image::bridge::swift {
   Person get_std__variant_Car__Person__1(const std__variant_Car__Person_& variantWrapper);
   
   // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>
-  /**
-   * Specialized version of `std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>`.
-   */
-  using std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec_ = std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>;
-  std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec> create_std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec_(size_t swiftReferenceId);
-  size_t get_std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec_(std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec_ cppType);
+
   
   // pragma MARK: std::variant<Person, std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>>
   /**

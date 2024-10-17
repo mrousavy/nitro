@@ -312,8 +312,6 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
         const getFunc = `bridge.get_${bridge.specializationName}`
         const name = getTypeHybridObjectName(this.type)
         switch (language) {
-          case 'c++':
-            return cppParameterName
           case 'swift':
             return `
 { () -> ${name.HybridTSpec} in
@@ -322,7 +320,7 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
   return instance.get${name.HybridTSpec}()
 }()`.trim()
           default:
-            throw new Error(`Invalid language! ${language}`)
+            return cppParameterName
         }
       }
       case 'array-buffer': {
@@ -526,8 +524,6 @@ case ${i}:
         const name = getTypeHybridObjectName(this.type)
         const makeFunc = `bridge.${bridge.funcName}`
         switch (language) {
-          case 'c++':
-            return `HybridContext::getOrCreate<${name.HybridTSpecSwift}>(${swiftParameterName})`
           case 'swift':
             return `
 { () -> bridge.${bridge.specializationName} in
@@ -536,7 +532,7 @@ case ${i}:
   return ${makeFunc}(__swiftReferenceId)
 }()`.trim()
           default:
-            throw new Error(`Invalid language! ${language}`)
+            return swiftParameterName
         }
       }
       case 'optional': {

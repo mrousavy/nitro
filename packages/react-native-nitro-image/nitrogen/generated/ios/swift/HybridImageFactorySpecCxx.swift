@@ -87,7 +87,7 @@ public class HybridImageFactorySpecCxx {
   }
 
   // Properties
-
+  
 
   // Methods
   @inline(__always)
@@ -104,7 +104,7 @@ public class HybridImageFactorySpecCxx {
       fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
     }
   }
-
+  
   @inline(__always)
   public func loadImageFromURL(path: std.string) -> bridge.std__shared_ptr_margelo__nitro__image__HybridImageSpec_ {
     do {
@@ -119,7 +119,7 @@ public class HybridImageFactorySpecCxx {
       fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
     }
   }
-
+  
   @inline(__always)
   public func loadImageFromSystemName(path: std.string) -> bridge.std__shared_ptr_margelo__nitro__image__HybridImageSpec_ {
     do {
@@ -134,7 +134,7 @@ public class HybridImageFactorySpecCxx {
       fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
     }
   }
-
+  
   @inline(__always)
   public func bounceBack(image: bridge.std__shared_ptr_margelo__nitro__image__HybridImageSpec_) -> bridge.std__shared_ptr_margelo__nitro__image__HybridImageSpec_ {
     do {

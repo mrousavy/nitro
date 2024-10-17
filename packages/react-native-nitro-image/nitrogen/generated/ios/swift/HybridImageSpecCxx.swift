@@ -93,14 +93,14 @@ public class HybridImageSpecCxx {
       return self.__implementation.size
     }
   }
-
+  
   public var pixelFormat: Int32 {
     @inline(__always)
     get {
       return self.__implementation.pixelFormat.rawValue
     }
   }
-
+  
   public var someSettableProp: Double {
     @inline(__always)
     get {
@@ -123,7 +123,7 @@ public class HybridImageSpecCxx {
       fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
     }
   }
-
+  
   @inline(__always)
   public func saveToFile(path: std.string, onFinished: bridge.Func_void_std__string) -> Void {
     do {
@@ -133,7 +133,7 @@ public class HybridImageSpecCxx {
           __sharedClosure.pointee.call(std.string(__path))
         }
       }())
-      return
+      return 
     } catch {
       let message = "\(error.localizedDescription)"
       fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")

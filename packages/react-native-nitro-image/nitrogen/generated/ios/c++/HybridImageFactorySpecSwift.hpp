@@ -67,19 +67,19 @@ namespace margelo::nitro::image {
     // Methods
     inline std::shared_ptr<margelo::nitro::image::HybridImageSpec> loadImageFromFile(const std::string& path) override {
       auto __result = _swiftPart.loadImageFromFile(path);
-      return HybridContext::getOrCreate<HybridImageSpecSwift>(__result);
+      return __result;
     }
     inline std::shared_ptr<margelo::nitro::image::HybridImageSpec> loadImageFromURL(const std::string& path) override {
       auto __result = _swiftPart.loadImageFromURL(path);
-      return HybridContext::getOrCreate<HybridImageSpecSwift>(__result);
+      return __result;
     }
     inline std::shared_ptr<margelo::nitro::image::HybridImageSpec> loadImageFromSystemName(const std::string& path) override {
       auto __result = _swiftPart.loadImageFromSystemName(path);
-      return HybridContext::getOrCreate<HybridImageSpecSwift>(__result);
+      return __result;
     }
     inline std::shared_ptr<margelo::nitro::image::HybridImageSpec> bounceBack(const std::shared_ptr<margelo::nitro::image::HybridImageSpec>& image) override {
       auto __result = _swiftPart.bounceBack(image);
-      return HybridContext::getOrCreate<HybridImageSpecSwift>(__result);
+      return __result;
     }
 
   private:

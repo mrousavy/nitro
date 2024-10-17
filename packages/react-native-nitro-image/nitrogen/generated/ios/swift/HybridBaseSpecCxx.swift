@@ -95,5 +95,5 @@ public class HybridBaseSpecCxx {
   }
 
   // Methods
-
+  
 }
