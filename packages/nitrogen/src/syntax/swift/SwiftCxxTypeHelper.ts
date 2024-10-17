@@ -319,7 +319,7 @@ using ${name} = ${actualType};
 /**
  * Wrapper class for a \`${escapeComments(actualType)}\`, this can be used from Swift.
  */
-class ${wrapperName} {
+class ${wrapperName} final {
 public:
   explicit ${wrapperName}(const ${actualType}& func): _function(func) {}
   explicit ${wrapperName}(${actualType}&& func): _function(std::move(func)) {}

@@ -72,7 +72,7 @@ namespace margelo::nitro::image::bridge::swift {
   /**
    * Wrapper class for a `std::function<void(const std::string& / * path * /)>`, this can be used from Swift.
    */
-  class Func_void_std__string_Wrapper {
+  class Func_void_std__string_Wrapper final {
   public:
     explicit Func_void_std__string_Wrapper(const std::function<void(const std::string& /* path */)>& func): _function(func) {}
     explicit Func_void_std__string_Wrapper(std::function<void(const std::string& /* path */)>&& func): _function(std::move(func)) {}
@@ -195,7 +195,7 @@ namespace margelo::nitro::image::bridge::swift {
   /**
    * Wrapper class for a `std::function<void(const std::vector<Powertrain>& / * array * /)>`, this can be used from Swift.
    */
-  class Func_void_std__vector_Powertrain__Wrapper {
+  class Func_void_std__vector_Powertrain__Wrapper final {
   public:
     explicit Func_void_std__vector_Powertrain__Wrapper(const std::function<void(const std::vector<Powertrain>& /* array */)>& func): _function(func) {}
     explicit Func_void_std__vector_Powertrain__Wrapper(std::function<void(const std::vector<Powertrain>& /* array */)>&& func): _function(std::move(func)) {}
@@ -288,7 +288,7 @@ namespace margelo::nitro::image::bridge::swift {
   /**
    * Wrapper class for a `std::function<void()>`, this can be used from Swift.
    */
-  class Func_void_Wrapper {
+  class Func_void_Wrapper final {
   public:
     explicit Func_void_Wrapper(const std::function<void()>& func): _function(func) {}
     explicit Func_void_Wrapper(std::function<void()>&& func): _function(std::move(func)) {}
@@ -325,7 +325,7 @@ namespace margelo::nitro::image::bridge::swift {
   /**
    * Wrapper class for a `std::function<void(std::optional<double> / * maybe * /)>`, this can be used from Swift.
    */
-  class Func_void_std__optional_double__Wrapper {
+  class Func_void_std__optional_double__Wrapper final {
   public:
     explicit Func_void_std__optional_double__Wrapper(const std::function<void(std::optional<double> /* maybe */)>& func): _function(func) {}
     explicit Func_void_std__optional_double__Wrapper(std::function<void(std::optional<double> /* maybe */)>&& func): _function(std::move(func)) {}
