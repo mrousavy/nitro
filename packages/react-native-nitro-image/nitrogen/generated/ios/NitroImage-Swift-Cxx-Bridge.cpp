@@ -8,12 +8,6 @@
 #include "NitroImage-Swift-Cxx-Bridge.hpp"
 #include "NitroImage-Swift-Cxx-Umbrella.hpp"
 
-#include "HybridBaseSpecSwift.hpp"
-#include "HybridChildSpecSwift.hpp"
-#include "HybridImageFactorySpecSwift.hpp"
-#include "HybridImageSpecSwift.hpp"
-#include "HybridTestObjectSwiftKotlinSpecSwift.hpp"
-
 namespace margelo::nitro::image::bridge::swift {
 
   // pragma MARK: std::function<void(const std::string& /* path */)>
@@ -186,6 +180,20 @@ namespace margelo::nitro::image::bridge::swift {
   }
   
   // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>
+  std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec> create_std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec_(size_t swiftReferenceId) {
+    NitroImage::HybridTestObjectCppSpecCxx swiftPart = NitroImage::HybridTestObjectCppSpecCxx::getHybridTestObjectCppSpecCxxById(swiftReferenceId);
+    return HybridContext::getOrCreate<margelo::nitro::image::HybridTestObjectCppSpecSwift>(swiftPart);
+  }
+  size_t get_std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec_(std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec_ cppType) {
+    std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpecSwift> swiftWrapper = std::dynamic_pointer_cast<margelo::nitro::image::HybridTestObjectCppSpecSwift>(cppType);
+  #ifdef NITRO_DEBUG
+    if (swiftWrapper == nullptr) [[unlikely]] {
+      throw std::runtime_error("Class \"std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec_\" is not implemented in Swift!");
+    }
+  #endif
+    NitroImage::HybridTestObjectCppSpecCxx swiftPart = swiftWrapper->getSwiftPart();
+    return NitroImage::HybridTestObjectCppSpecCxx::putHybridTestObjectCppSpecCxx(swiftPart);
+  }
   
   // pragma MARK: std::variant<Person, std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>>
   std__variant_Person__std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec__::std__variant_Person__std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec__(std::variant<Person, std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>> variant): variant(variant) { }

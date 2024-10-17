@@ -37,15 +37,3 @@ public protocol HybridImageFactorySpec: AnyObject, HybridObjectSpec {
   func loadImageFromSystemName(path: String) throws -> (any HybridImageSpec)
   func bounceBack(image: (any HybridImageSpec)) throws -> (any HybridImageSpec)
 }
-
-public extension HybridImageFactorySpec {
-  /**
-   * Create a new instance of HybridImageFactorySpecCxx for the given HybridImageFactorySpec.
-   *
-   * Instances of HybridImageFactorySpecCxx can be accessed from C++, and contain
-   * additional required bridging code for C++ <> Swift interop.
-   */
-  func createCxxBridge() -> HybridImageFactorySpecCxx {
-    return HybridImageFactorySpecCxx(self)
-  }
-}

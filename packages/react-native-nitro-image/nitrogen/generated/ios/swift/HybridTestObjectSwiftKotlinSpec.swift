@@ -77,15 +77,3 @@ public protocol HybridTestObjectSwiftKotlinSpec: AnyObject, HybridObjectSpec {
   func bounceChildBase(child: (any HybridChildSpec)) throws -> (any HybridBaseSpec)
   func castBase(base: (any HybridBaseSpec)) throws -> (any HybridChildSpec)
 }
-
-public extension HybridTestObjectSwiftKotlinSpec {
-  /**
-   * Create a new instance of HybridTestObjectSwiftKotlinSpecCxx for the given HybridTestObjectSwiftKotlinSpec.
-   *
-   * Instances of HybridTestObjectSwiftKotlinSpecCxx can be accessed from C++, and contain
-   * additional required bridging code for C++ <> Swift interop.
-   */
-  func createCxxBridge() -> HybridTestObjectSwiftKotlinSpecCxx {
-    return HybridTestObjectSwiftKotlinSpecCxx(self)
-  }
-}
