@@ -80,6 +80,8 @@ namespace margelo::nitro::image {
       virtual std::tuple<double, std::string> getSomeTuple() = 0;
       virtual void setSomeTuple(const std::tuple<double, std::string>& someTuple) = 0;
       virtual std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec> getThisObject() = 0;
+      virtual std::optional<std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>> getOptionalHybrid() = 0;
+      virtual void setOptionalHybrid(const std::optional<std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>>& optionalHybrid) = 0;
       virtual double getNumberValue() = 0;
       virtual void setNumberValue(double numberValue) = 0;
       virtual bool getBoolValue() = 0;

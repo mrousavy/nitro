@@ -20,7 +20,7 @@ export function createSwiftUmbrellaHeader(): SourceFile {
   const moduleName = NitroConfig.getIosModuleName()
   const filename = getUmbrellaHeaderName()
 
-  const types = getAllKnownTypes()
+  const types = getAllKnownTypes('swift')
 
   const swiftForwardDeclares = types
     .filter((t) => t.kind === 'hybrid-object')

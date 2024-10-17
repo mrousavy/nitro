@@ -23,6 +23,7 @@ import { TupleType } from './types/TupleType.js'
 import {
   extendsHybridObject,
   isDirectlyHybridObject,
+  type Language,
 } from '../getPlatformSpecs.js'
 import { HybridObjectBaseType } from './types/HybridObjectBaseType.js'
 
@@ -99,6 +100,7 @@ function getArguments<N extends number>(
 }
 
 export function createNamedType(
+  language: Language,
   name: string,
   type: TSMorphType,
   isOptional: boolean
@@ -108,7 +110,7 @@ export function createNamedType(
       `Name cannot start with two underscores (__) as this is reserved syntax for Nitrogen! (In ${type.getText()})`
     )
   }
-  return new NamedWrappingType(name, createType(type, isOptional))
+  return new NamedWrappingType(name, createType(language, type, isOptional))
 }
 
 export function createVoidType(): Type {
@@ -116,13 +118,25 @@ export function createVoidType(): Type {
 }
 
 // Caches complex types (types that have a symbol)
-const knownTypes = new Map<string, Type>()
+type TypeId = string
+const knownTypes: Record<Language, Map<TypeId, Type>> = {
+  'c++': new Map<TypeId, Type>(),
+  'swift': new Map<TypeId, Type>(),
+  'kotlin': new Map<TypeId, Type>(),
+}
 
 /**
  * Get a list of all currently known complex types.
  */
-export function getAllKnownTypes(): Type[] {
-  return Array.from(knownTypes.values())
+export function getAllKnownTypes(language?: Language): Type[] {
+  if (language != null) {
+    // Get types for the given language
+    return Array.from(knownTypes[language].values())
+  } else {
+    // Get types for all languages alltogether
+    const allMaps = Object.values(knownTypes)
+    return allMaps.flatMap((m) => Array.from(m.values()))
+  }
 }
 
 function getTypeId(type: TSMorphType, isOptional: boolean): string {
@@ -138,10 +152,14 @@ function getTypeId(type: TSMorphType, isOptional: boolean): string {
 /**
  * Create a new type (or return it from cache if it is already known)
  */
-export function createType(type: TSMorphType, isOptional: boolean): Type {
+export function createType(
+  language: Language,
+  type: TSMorphType,
+  isOptional: boolean
+): Type {
   const key = getTypeId(type, isOptional)
-  if (key != null && knownTypes.has(key)) {
-    const known = knownTypes.get(key)!
+  if (key != null && knownTypes[language].has(key)) {
+    const known = knownTypes[language].get(key)!
     if (isOptional === known instanceof OptionalType) {
       return known
     }
@@ -149,7 +167,7 @@ export function createType(type: TSMorphType, isOptional: boolean): Type {
 
   const get = () => {
     if (isOptional) {
-      const wrapping = createType(type, false)
+      const wrapping = createType(language, type, false)
       return new OptionalType(wrapping)
     }
 
@@ -160,7 +178,7 @@ export function createType(type: TSMorphType, isOptional: boolean): Type {
     } else if (type.isNumber() || type.isNumberLiteral()) {
       if (type.isEnumLiteral()) {
         // enum literals are technically just numbers - but we treat them differently in C++.
-        return createType(type.getBaseTypeOfLiteralType(), isOptional)
+        return createType(language, type.getBaseTypeOfLiteralType(), isOptional)
       }
       return new NumberType()
     } else if (type.isString()) {
@@ -171,29 +189,34 @@ export function createType(type: TSMorphType, isOptional: boolean): Type {
       return new VoidType()
     } else if (type.isArray()) {
       const arrayElementType = type.getArrayElementTypeOrThrow()
-      const elementType = createType(arrayElementType, false)
+      const elementType = createType(language, arrayElementType, false)
       return new ArrayType(elementType)
     } else if (type.isTuple()) {
       const itemTypes = type
         .getTupleElements()
-        .map((t) => createType(t, t.isNullable()))
+        .map((t) => createType(language, t, t.isNullable()))
       return new TupleType(itemTypes)
     } else if (type.getCallSignatures().length > 0) {
       // It's a function!
       const callSignature = getFunctionCallSignature(type)
       const funcReturnType = callSignature.getReturnType()
-      const returnType = createType(funcReturnType, funcReturnType.isNullable())
+      const returnType = createType(
+        language,
+        funcReturnType,
+        funcReturnType.isNullable()
+      )
       const parameters = callSignature.getParameters().map((p) => {
         const declaration = p.getValueDeclarationOrThrow()
         const parameterType = p.getTypeAtLocation(declaration)
         const isNullable = parameterType.isNullable() || p.isOptional()
-        return createNamedType(p.getName(), parameterType, isNullable)
+        return createNamedType(language, p.getName(), parameterType, isNullable)
       })
       return new FunctionType(returnType, parameters)
     } else if (isPromise(type)) {
       // It's a Promise!
       const [promiseResolvingType] = getArguments(type, 'Promise', 1)
       const resolvingType = createType(
+        language,
         promiseResolvingType,
         promiseResolvingType.isNullable()
       )
@@ -201,8 +224,8 @@ export function createType(type: TSMorphType, isOptional: boolean): Type {
     } else if (isRecord(type)) {
       // Record<K, V> -> unordered_map<K, V>
       const [keyTypeT, valueTypeT] = getArguments(type, 'Record', 2)
-      const keyType = createType(keyTypeT, false)
-      const valueType = createType(valueTypeT, false)
+      const keyType = createType(language, keyTypeT, false)
+      const valueType = createType(language, valueTypeT, false)
       return new RecordType(keyType, valueType)
     } else if (isArrayBuffer(type)) {
       // ArrayBuffer
@@ -246,7 +269,7 @@ export function createType(type: TSMorphType, isOptional: boolean): Type {
           .getUnionTypes()
           // Filter out any nulls or undefineds, as those are already treated as `isOptional`.
           .filter((t) => !t.isNull() && !t.isUndefined() && !t.isVoid())
-          .map((t) => createType(t, false))
+          .map((t) => createType(language, t, false))
         variants = removeDuplicates(variants)
 
         if (variants.length === 1) {
@@ -259,14 +282,14 @@ export function createType(type: TSMorphType, isOptional: boolean): Type {
     } else if (extendsHybridObject(type, true)) {
       // It is another HybridObject being referenced!
       const typename = type.getSymbolOrThrow().getEscapedName()
-      return new HybridObjectType(typename)
+      return new HybridObjectType(typename, language)
     } else if (isDirectlyHybridObject(type)) {
       // It is a HybridObject directly/literally. Base type
       return new HybridObjectBaseType()
     } else if (type.isInterface()) {
       // It is a simple struct being referenced.
       const typename = type.getSymbolOrThrow().getEscapedName()
-      const properties = getInterfaceProperties(type)
+      const properties = getInterfaceProperties(language, type)
       return new StructType(typename, properties)
     } else if (type.isObject()) {
       throw new Error(
@@ -285,7 +308,7 @@ export function createType(type: TSMorphType, isOptional: boolean): Type {
 
   const result = get()
   if (key != null) {
-    knownTypes.set(key, result)
+    knownTypes[language].set(key, result)
   }
   return result
 }

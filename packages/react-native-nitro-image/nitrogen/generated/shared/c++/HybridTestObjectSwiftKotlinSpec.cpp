@@ -15,6 +15,8 @@ namespace margelo::nitro::image {
     // load custom methods/properties
     registerHybrids(this, [](Prototype& prototype) {
       prototype.registerHybridGetter("thisObject", &HybridTestObjectSwiftKotlinSpec::getThisObject);
+      prototype.registerHybridGetter("optionalHybrid", &HybridTestObjectSwiftKotlinSpec::getOptionalHybrid);
+      prototype.registerHybridSetter("optionalHybrid", &HybridTestObjectSwiftKotlinSpec::setOptionalHybrid);
       prototype.registerHybridGetter("numberValue", &HybridTestObjectSwiftKotlinSpec::getNumberValue);
       prototype.registerHybridSetter("numberValue", &HybridTestObjectSwiftKotlinSpec::setNumberValue);
       prototype.registerHybridGetter("boolValue", &HybridTestObjectSwiftKotlinSpec::getBoolValue);

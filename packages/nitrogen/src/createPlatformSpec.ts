@@ -23,7 +23,7 @@ export function generatePlatformFiles(
   // TODO: We currently just call this so the HybridObject itself is a "known type".
   // This causes the Swift Umbrella header to properly forward-declare it.
   // Without this, only Hybrid Objects that are actually used in public APIs will be forward-declared.
-  createType(interfaceType, false)
+  createType(language, interfaceType, false)
 
   switch (language) {
     case 'c++':
@@ -75,16 +75,24 @@ function getHybridObjectSpec(type: Type, language: Language): HybridObjectSpec {
 
     if (Node.isPropertySignature(declaration)) {
       const t = declaration.getType()
-      const propType = createType(t, prop.isOptional() || t.isNullable())
+      const propType = createType(
+        language,
+        t,
+        prop.isOptional() || t.isNullable()
+      )
       properties.push(
         new Property(prop.getName(), propType, declaration.isReadonly())
       )
     } else if (Node.isMethodSignature(declaration)) {
       const returnType = declaration.getReturnType()
-      const methodReturnType = createType(returnType, returnType.isNullable())
+      const methodReturnType = createType(
+        language,
+        returnType,
+        returnType.isNullable()
+      )
       const methodParameters = declaration
         .getParameters()
-        .map((p) => new Parameter(p))
+        .map((p) => new Parameter(p, language))
       methods.push(
         new Method(prop.getName(), methodReturnType, methodParameters)
       )

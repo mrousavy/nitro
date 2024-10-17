@@ -7,9 +7,11 @@ import type { Type, TypeKind } from './Type.js'
 
 export class HybridObjectType implements Type {
   readonly hybridObjectName: string
+  readonly implementationLanguage: Language
 
-  constructor(hybridObjectName: string) {
+  constructor(hybridObjectName: string, implementationLanguage: Language) {
     this.hybridObjectName = hybridObjectName
+    this.implementationLanguage = implementationLanguage
 
     if (this.hybridObjectName.startsWith('__')) {
       throw new Error(

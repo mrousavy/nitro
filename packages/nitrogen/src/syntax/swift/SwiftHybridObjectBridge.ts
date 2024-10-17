@@ -51,6 +51,28 @@ import Foundation
 import NitroModules
 
 /**
+ * Holds instances of ${name.HybridTSpecCxx} and stores them under Integer IDs.
+ * Those Integer IDs can be used in C++ to box the Swift type to prevent cyclic includes.
+ */
+public final class ${name.HybridTSpecCxx}ReferenceHolder {
+  private static var instances: [Int : ${name.HybridTSpecCxx}] = [:]
+  private static var counter: Int = 0
+
+  public static func put(_ instance: ${name.HybridTSpecCxx}) -> Int {
+    let id = counter
+    counter += 1
+    instances[id] = instance
+    return id
+  }
+
+  public static func getById(_ instanceId: Int) -> ${name.HybridTSpecCxx} {
+    let instance = instances[instanceId]!
+    instances.removeValue(forKey: instanceId)
+    return instance
+  }
+}
+
+/**
  * A class implementation that bridges ${name.HybridTSpec} over to C++.
  * In C++, we cannot use Swift protocols - so we need to wrap it in a class to make it strongly defined.
  *
@@ -73,20 +95,20 @@ ${hasBase ? `public class ${name.HybridTSpecCxx} : ${baseClasses.join(', ')}` : 
   private var __implementation: any ${name.HybridTSpec}
 
   /**
-   * Get the actual \`${name.HybridTSpec}\` instance this class wraps.
-   */
-  @inline(__always)
-  public func get${name.HybridTSpec}() -> any ${name.HybridTSpec} {
-    return __implementation
-  }
-
-  /**
    * Create a new \`${name.HybridTSpecCxx}\` that wraps the given \`${name.HybridTSpec}\`.
    * All properties and methods bridge to C++ types.
    */
   public init(_ implementation: some ${name.HybridTSpec}) {
     self.__implementation = implementation
     ${hasBase ? 'super.init(implementation)' : '/* no base class */'}
+  }
+
+  /**
+   * Get the actual \`${name.HybridTSpec}\` instance this class wraps.
+   */
+  @inline(__always)
+  public func get${name.HybridTSpec}() -> any ${name.HybridTSpec} {
+    return __implementation
   }
 
   /**
@@ -373,8 +395,8 @@ public func ${method.name}(${params.join(', ')}) -> ${returnType.getTypeCode('sw
     ${resultValue}try self.__implementation.${method.name}(${indent(passParams.join(', '), '    ')})
     return ${indent(returnValue, '    ')}
   } catch {
-    let message = "\\(error.localizedDescription)"
-    fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \\(message))")
+    let __message = "\\(error.localizedDescription)"
+    fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \\(__message))")
   }
 }
   `.trim()

@@ -9,6 +9,28 @@ import Foundation
 import NitroModules
 
 /**
+ * Holds instances of HybridChildSpecCxx and stores them under Integer IDs.
+ * Those Integer IDs can be used in C++ to box the Swift type to prevent cyclic includes.
+ */
+public final class HybridChildSpecCxxReferenceHolder {
+  private static var instances: [Int : HybridChildSpecCxx] = [:]
+  private static var counter: Int = 0
+
+  public static func put(_ instance: HybridChildSpecCxx) -> Int {
+    let id = counter
+    counter += 1
+    instances[id] = instance
+    return id
+  }
+
+  public static func getById(_ instanceId: Int) -> HybridChildSpecCxx {
+    let instance = instances[instanceId]!
+    instances.removeValue(forKey: instanceId)
+    return instance
+  }
+}
+
+/**
  * A class implementation that bridges HybridChildSpec over to C++.
  * In C++, we cannot use Swift protocols - so we need to wrap it in a class to make it strongly defined.
  *
@@ -31,20 +53,20 @@ public class HybridChildSpecCxx : HybridBaseSpecCxx {
   private var __implementation: any HybridChildSpec
 
   /**
-   * Get the actual `HybridChildSpec` instance this class wraps.
-   */
-  @inline(__always)
-  public func getHybridChildSpec() -> any HybridChildSpec {
-    return __implementation
-  }
-
-  /**
    * Create a new `HybridChildSpecCxx` that wraps the given `HybridChildSpec`.
    * All properties and methods bridge to C++ types.
    */
   public init(_ implementation: some HybridChildSpec) {
     self.__implementation = implementation
     super.init(implementation)
+  }
+
+  /**
+   * Get the actual `HybridChildSpec` instance this class wraps.
+   */
+  @inline(__always)
+  public func getHybridChildSpec() -> any HybridChildSpec {
+    return __implementation
   }
 
   /**
