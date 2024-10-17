@@ -55,8 +55,8 @@ public static func create${hybridObjectName}() -> ${bridge.getTypeCode('swift')}
 HybridObjectRegistry::registerHybridObjectConstructor(
   "${hybridObjectName}",
   []() -> std::shared_ptr<HybridObject> {
-    auto swiftPart = ${swiftNamespace}::${autolinkingClassName}::create${hybridObjectName}();
-    return std::make_shared<${HybridTSpecSwift}>(swiftPart);
+    ${type.getCode('c++')} hybridObject = ${swiftNamespace}::${autolinkingClassName}::create${hybridObjectName}();
+    return hybridObject;
   }
 );
       `.trim(),
