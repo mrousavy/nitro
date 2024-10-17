@@ -1,5 +1,5 @@
 import type { TestObjectCpp } from 'react-native-nitro-image'
-import { NitroModules } from 'react-native-nitro-modules'
+import { getHybridObjectConstructor } from 'react-native-nitro-modules'
 
 /**
  * Create a new instance of `TestObjectCpp`.
@@ -8,42 +8,8 @@ import { NitroModules } from 'react-native-nitro-modules'
  * const testObject = new NewTestObjectCpp()
  * ```
  */
-export const NewTestObjectCpp = (() => {
-  const instance =
-    NitroModules.createHybridObject<TestObjectCpp>('TestObjectCpp')
-  const prototype = Object.getPrototypeOf(instance)
-  if (NewTestObjectCpp.prototype !== prototype) {
-    NewTestObjectCpp.prototype = prototype
-    NewTestObjectCpp.prototypeInitialized = true
-  }
-  return instance
-}) as unknown as { new (): TestObjectCpp } & { prototypeInitialized?: boolean }
-
-// Configure lazy prototype. If `instanceof` is called before a `NewTestObjectCpp`
-// has been created, we just lazy-create a new `TestObjectCpp` instance to set the proto.
-NewTestObjectCpp.prototypeInitialized = false
-NewTestObjectCpp[Symbol.hasInstance] = (instance) => {
-  if (!NewTestObjectCpp.prototypeInitialized) {
-    // User didn't call `new NewTestObjectCpp()` yet, so we don't
-    // know the prototype yet. Just create one temp object to find
-    // out the prototype.
-    const tempInstance = NitroModules.createHybridObject('TestObjectCpp')
-    NewTestObjectCpp.prototype = Object.getPrototypeOf(tempInstance)
-    NewTestObjectCpp.prototypeInitialized = true
-  }
-  // Loop through the prototype chain of the value
-  // we're testing for to see if it is a direct instance
-  // of `TestObjectCpp`, or a derivative of it.
-  let proto = Object.getPrototypeOf(instance)
-  while (proto != null) {
-    if (proto === NewTestObjectCpp.prototype) {
-      return true
-    }
-    proto = Object.getPrototypeOf(proto)
-  }
-  // No prototype overlap.
-  return false
-}
+export const NewTestObjectCpp =
+  getHybridObjectConstructor<TestObjectCpp>('TestObjectCpp')
 
 // --------------------------------------------------------
 // Some tests for the prototype stuff
