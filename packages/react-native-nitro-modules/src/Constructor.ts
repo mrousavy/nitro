@@ -39,28 +39,30 @@ export function getHybridObjectConstructor<T extends HybridObject>(
   // Configure lazy prototype. If `instanceof` is called before a `T`
   // has been created, we just lazy-create a new `T` instance to set the proto.
   constructorFunc.prototypeInitialized = false
-  constructorFunc[Symbol.hasInstance] = (instance) => {
-    if (!constructorFunc.prototypeInitialized) {
-      // User didn't call `new T()` yet, so we don't
-      // know the prototype yet. Just create one temp object to find
-      // out the prototype.
-      const tempInstance = NitroModules.createHybridObject<T>(name)
-      constructorFunc.prototype = Object.getPrototypeOf(tempInstance)
-      constructorFunc.prototypeInitialized = true
-    }
-    // Loop through the prototype chain of the value
-    // we're testing for to see if it is a direct instance
-    // of `T`, or a derivative of it.
-    let proto = Object.getPrototypeOf(instance)
-    while (proto != null) {
-      if (proto === constructorFunc.prototype) {
-        return true
+  Object.defineProperty(constructorFunc, Symbol.hasInstance, {
+    value: (instance: unknown) => {
+      if (!constructorFunc.prototypeInitialized) {
+        // User didn't call `new T()` yet, so we don't
+        // know the prototype yet. Just create one temp object to find
+        // out the prototype.
+        const tempInstance = NitroModules.createHybridObject<T>(name)
+        constructorFunc.prototype = Object.getPrototypeOf(tempInstance)
+        constructorFunc.prototypeInitialized = true
       }
-      proto = Object.getPrototypeOf(proto)
-    }
-    // No prototype overlap.
-    return false
-  }
+      // Loop through the prototype chain of the value
+      // we're testing for to see if it is a direct instance
+      // of `T`, or a derivative of it.
+      let proto = Object.getPrototypeOf(instance)
+      while (proto != null) {
+        if (proto === constructorFunc.prototype) {
+          return true
+        }
+        proto = Object.getPrototypeOf(proto)
+      }
+      // No prototype overlap.
+      return false
+    },
+  })
 
   cache.set(name, constructorFunc)
   return constructorFunc
