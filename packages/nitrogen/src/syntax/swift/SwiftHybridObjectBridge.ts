@@ -389,8 +389,8 @@ public func ${method.name}(${params.join(', ')}) -> ${returnType.getTypeCode('sw
     ${resultValue}try self.__implementation.${method.name}(${indent(passParams.join(', '), '    ')})
     return ${indent(returnValue, '    ')}
   } catch {
-    let message = "\\(error.localizedDescription)"
-    fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \\(message))")
+    let __message = "\\(error.localizedDescription)"
+    fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \\(__message))")
   }
 }
   `.trim()
