@@ -15,7 +15,6 @@ void HybridNitroModulesProxy::loadHybridMethods() {
   HybridObject::loadHybridMethods();
 
   registerHybrids(this, [](Prototype& prototype) {
-    prototype.registerRawHybridMethod("getHybridObjectConstructor", 1, &HybridNitroModulesProxy::getHybridObjectConstructor);
     prototype.registerHybridMethod("createHybridObject", &HybridNitroModulesProxy::createHybridObject);
     prototype.registerHybridMethod("hasHybridObject", &HybridNitroModulesProxy::hasHybridObject);
     prototype.registerHybridMethod("getAllHybridObjectNames", &HybridNitroModulesProxy::getAllHybridObjectNames);
@@ -27,13 +26,6 @@ void HybridNitroModulesProxy::loadHybridMethods() {
 }
 
 // Hybrid Object Registry
-jsi::Value HybridNitroModulesProxy::getHybridObjectConstructor(jsi::Runtime& runtime,
-                                                               const jsi::Value& thisValue,
-                                                               const jsi::Value* args,
-                                                               size_t count) {
-  HybridObjectRegistry::
-}
-
 std::shared_ptr<HybridObject> HybridNitroModulesProxy::createHybridObject(const std::string& name) {
   return HybridObjectRegistry::createHybridObject(name);
 }

@@ -20,30 +20,6 @@ export interface NitroModulesProxy extends HybridObject {
    */
   createHybridObject<T extends HybridObject>(name: string): T
   /**
-   * Gets the constructor function used to create new instances
-   * of the `HybridObject` {@linkcode T}.
-   *
-   * {@linkcode T} has to be registered beforehand under the name {@linkcode name}
-   * in the native Nitro Modules `HybridObjectRegistry`.
-   *
-   * The returned constructor function can be used with the JS `new` operator
-   * to create a new instance of the `HybridObject` {@linkcode T}.
-   *
-   * It also has the correct prototype, which is useful for the `instanceof` operator.
-   * @param name The name of the `HybridObject` under which it was registered at.
-   * @throws an Error if {@linkcode T} has not been registered under the name {@linkcode name}.
-   * @example
-   * ```ts
-   * const HybridImage = NitroModules.getHybridObjectConstructor<Image>('Image')
-   * const image1 = new HybridImage()
-   * const image2 = new HybridImage()
-   * const isImage = image1 instanceof HybridImage
-   * ```
-   */
-  getHybridObjectConstructor<T extends HybridObject>(
-    name: string
-  ): { new (): T }
-  /**
    * Returns whether a HybridObject under the given {@linkcode name} is registered, or not.
    */
   hasHybridObject(name: string): boolean
