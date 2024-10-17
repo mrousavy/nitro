@@ -50,6 +50,10 @@ ${createFileMetadataString(`${name.HybridTSpecCxx}.swift`)}
 import Foundation
 import NitroModules
 
+/**
+ * Holds instances of ${name.HybridTSpecCxx} and stores them under Integer IDs.
+ * Those Integer IDs can be used in C++ to box the Swift type to prevent cyclic includes.
+ */
 public final class ${name.HybridTSpecCxx}ReferenceHolder {
   private static var __instances: [Int : ${name.HybridTSpecCxx}] = [:]
   private static var __counter: Int = 0
