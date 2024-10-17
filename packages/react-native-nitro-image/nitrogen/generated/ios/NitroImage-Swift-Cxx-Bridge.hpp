@@ -111,49 +111,71 @@ namespace margelo::nitro::image::bridge::swift {
    * Specialized version of `std::optional<std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>>`.
    */
   using std__optional_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec__ = std::optional<std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>>;
-  std::optional<std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>> create_std__optional_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec__(const std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>& value);
+  inline std::optional<std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>> create_std__optional_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec__(const std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>& value) {
+    return std::optional<std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>>(value);
+  }
   
   // pragma MARK: std::optional<std::string>
   /**
    * Specialized version of `std::optional<std::string>`.
    */
   using std__optional_std__string_ = std::optional<std::string>;
-  std::optional<std::string> create_std__optional_std__string_(const std::string& value);
+  inline std::optional<std::string> create_std__optional_std__string_(const std::string& value) {
+    return std::optional<std::string>(value);
+  }
   
   // pragma MARK: std::vector<std::string>
   /**
    * Specialized version of `std::vector<std::string>`.
    */
   using std__vector_std__string_ = std::vector<std::string>;
-  std::vector<std::string> create_std__vector_std__string_(size_t size);
+  inline std::vector<std::string> create_std__vector_std__string_(size_t size) {
+    std::vector<std::string> vector;
+    vector.reserve(size);
+    return vector;
+  }
   
   // pragma MARK: std::optional<std::vector<std::string>>
   /**
    * Specialized version of `std::optional<std::vector<std::string>>`.
    */
   using std__optional_std__vector_std__string__ = std::optional<std::vector<std::string>>;
-  std::optional<std::vector<std::string>> create_std__optional_std__vector_std__string__(const std::vector<std::string>& value);
+  inline std::optional<std::vector<std::string>> create_std__optional_std__vector_std__string__(const std::vector<std::string>& value) {
+    return std::optional<std::vector<std::string>>(value);
+  }
   
   // pragma MARK: std::vector<double>
   /**
    * Specialized version of `std::vector<double>`.
    */
   using std__vector_double_ = std::vector<double>;
-  std::vector<double> create_std__vector_double_(size_t size);
+  inline std::vector<double> create_std__vector_double_(size_t size) {
+    std::vector<double> vector;
+    vector.reserve(size);
+    return vector;
+  }
   
   // pragma MARK: std::vector<Person>
   /**
    * Specialized version of `std::vector<Person>`.
    */
   using std__vector_Person_ = std::vector<Person>;
-  std::vector<Person> create_std__vector_Person_(size_t size);
+  inline std::vector<Person> create_std__vector_Person_(size_t size) {
+    std::vector<Person> vector;
+    vector.reserve(size);
+    return vector;
+  }
   
   // pragma MARK: std::vector<Powertrain>
   /**
    * Specialized version of `std::vector<Powertrain>`.
    */
   using std__vector_Powertrain_ = std::vector<Powertrain>;
-  std::vector<Powertrain> create_std__vector_Powertrain_(size_t size);
+  inline std::vector<Powertrain> create_std__vector_Powertrain_(size_t size) {
+    std::vector<Powertrain> vector;
+    vector.reserve(size);
+    return vector;
+  }
   
   // pragma MARK: std::function<void(const std::vector<Powertrain>& /* array */)>
   /**
@@ -178,14 +200,18 @@ namespace margelo::nitro::image::bridge::swift {
    * Specialized version of `std::optional<bool>`.
    */
   using std__optional_bool_ = std::optional<bool>;
-  std::optional<bool> create_std__optional_bool_(const bool& value);
+  inline std::optional<bool> create_std__optional_bool_(const bool& value) {
+    return std::optional<bool>(value);
+  }
   
   // pragma MARK: std::optional<Powertrain>
   /**
    * Specialized version of `std::optional<Powertrain>`.
    */
   using std__optional_Powertrain_ = std::optional<Powertrain>;
-  std::optional<Powertrain> create_std__optional_Powertrain_(const Powertrain& value);
+  inline std::optional<Powertrain> create_std__optional_Powertrain_(const Powertrain& value) {
+    return std::optional<Powertrain>(value);
+  }
   
   // pragma MARK: std::variant<std::string, double>
   /**
@@ -195,28 +221,44 @@ namespace margelo::nitro::image::bridge::swift {
    */
   struct std__variant_std__string__double_ {
     std::variant<std::string, double> variant;
-    std__variant_std__string__double_(std::variant<std::string, double> variant);
-    operator std::variant<std::string, double>() const;
-    size_t index() const;
+    std__variant_std__string__double_(std::variant<std::string, double> variant): variant(variant) { }
+    operator std::variant<std::string, double>() const {
+      return variant;
+    }
+    inline size_t index() const {
+      return variant.index();
+    }
   };
-  std__variant_std__string__double_ create_std__variant_std__string__double_(const std::string& value);
-  std__variant_std__string__double_ create_std__variant_std__string__double_(double value);
-  std::string get_std__variant_std__string__double__0(const std__variant_std__string__double_& variantWrapper);
-  double get_std__variant_std__string__double__1(const std__variant_std__string__double_& variantWrapper);
+  inline std__variant_std__string__double_ create_std__variant_std__string__double_(const std::string& value) {
+    return std__variant_std__string__double_(value);
+  }
+  inline std__variant_std__string__double_ create_std__variant_std__string__double_(double value) {
+    return std__variant_std__string__double_(value);
+  }
+  inline std::string get_std__variant_std__string__double__0(const std__variant_std__string__double_& variantWrapper) {
+    return std::get<0>(variantWrapper.variant);
+  }
+  inline double get_std__variant_std__string__double__1(const std__variant_std__string__double_& variantWrapper) {
+    return std::get<1>(variantWrapper.variant);
+  }
   
   // pragma MARK: PromiseHolder<int64_t>
   /**
    * Specialized version of `PromiseHolder<int64_t>`.
    */
   using PromiseHolder_int64_t_ = PromiseHolder<int64_t>;
-  PromiseHolder<int64_t> create_PromiseHolder_int64_t_();
+  inline PromiseHolder<int64_t> create_PromiseHolder_int64_t_() {
+    return PromiseHolder<int64_t>();
+  }
   
   // pragma MARK: PromiseHolder<void>
   /**
    * Specialized version of `PromiseHolder<void>`.
    */
   using PromiseHolder_void_ = PromiseHolder<void>;
-  PromiseHolder<void> create_PromiseHolder_void_();
+  inline PromiseHolder<void> create_PromiseHolder_void_() {
+    return PromiseHolder<void>();
+  }
   
   // pragma MARK: std::function<void()>
   /**
@@ -241,7 +283,9 @@ namespace margelo::nitro::image::bridge::swift {
    * Specialized version of `std::optional<double>`.
    */
   using std__optional_double_ = std::optional<double>;
-  std::optional<double> create_std__optional_double_(const double& value);
+  inline std::optional<double> create_std__optional_double_(const double& value) {
+    return std::optional<double>(value);
+  }
   
   // pragma MARK: std::function<void(std::optional<double> /* maybe */)>
   /**
@@ -266,7 +310,9 @@ namespace margelo::nitro::image::bridge::swift {
    * Specialized version of `std::optional<Person>`.
    */
   using std__optional_Person_ = std::optional<Person>;
-  std::optional<Person> create_std__optional_Person_(const Person& value);
+  inline std::optional<Person> create_std__optional_Person_(const Person& value) {
+    return std::optional<Person>(value);
+  }
   
   // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridChildSpec>
   /**
