@@ -13,6 +13,7 @@ import {
   HybridTestObjectSwiftKotlin,
   HybridChild,
   HybridBase,
+  TestObjectCpp,
 } from 'react-native-nitro-image'
 import { getTests, type TestRunner } from '../getTests'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -26,6 +27,12 @@ console.log(HybridChild.baseValue)
 console.log(HybridChild.childValue)
 
 logPrototypeChain(HybridTestObjectCpp)
+
+const NewTestObjectCpp =
+  NitroModules.getHybridObjectConstructorFunction<TestObjectCpp>(
+    'TestObjectCpp'
+  )
+const x = new NewTestObjectCpp()
 
 interface TestState {
   runner: TestRunner
