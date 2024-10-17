@@ -8,20 +8,24 @@
 import Foundation
 import NitroModules
 
+/**
+ * Holds instances of HybridChildSpecCxx and stores them under Integer IDs.
+ * Those Integer IDs can be used in C++ to box the Swift type to prevent cyclic includes.
+ */
 public final class HybridChildSpecCxxReferenceHolder {
-  private static var __instances: [Int : HybridChildSpecCxx] = [:]
-  private static var __counter: Int = 0
+  private static var instances: [Int : HybridChildSpecCxx] = [:]
+  private static var counter: Int = 0
 
   public static func put(_ instance: HybridChildSpecCxx) -> Int {
-    let id = __counter
-    __counter += 1
-    __instances[id] = instance
+    let id = counter
+    counter += 1
+    instances[id] = instance
     return id
   }
 
   public static func getById(_ instanceId: Int) -> HybridChildSpecCxx {
-    let instance = __instances[instanceId]!
-    __instances.removeValue(forKey: instanceId)
+    let instance = instances[instanceId]!
+    instances.removeValue(forKey: instanceId)
     return instance
   }
 }

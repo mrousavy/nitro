@@ -1,10 +1,8 @@
-import { ts, type PropertySignature } from 'ts-morph'
 import type { CodeNode } from './CodeNode.js'
 import { capitalizeName } from '../utils.js'
 import { type SourceFile, type SourceImport } from './SourceFile.js'
 import type { Language } from '../getPlatformSpecs.js'
 import type { Type } from './types/Type.js'
-import { createType } from './createType.js'
 import { Method } from './Method.js'
 import { VoidType } from './types/VoidType.js'
 import { Parameter } from './Parameter.js'
@@ -48,23 +46,10 @@ export class Property implements CodeNode {
   readonly type: Type
   readonly isReadonly: boolean
 
-  constructor(name: string, type: Type, isReadonly: boolean)
-  constructor(prop: PropertySignature)
-  constructor(...args: [PropertySignature] | [string, Type, boolean]) {
-    if (typeof args[0] === 'string') {
-      if (args.length !== 3) throw new Error('Missing argument for type!')
-      const [name, type, isReadonly] = args
-      this.name = name
-      this.type = type
-      this.isReadonly = isReadonly
-    } else {
-      const [prop] = args
-      this.name = prop.getSymbolOrThrow().getEscapedName()
-      this.isReadonly = prop.hasModifier(ts.SyntaxKind.ReadonlyKeyword)
-      const type = prop.getTypeNodeOrThrow().getType()
-      const isOptional = prop.hasQuestionToken() || type.isNullable()
-      this.type = createType(type, isOptional)
-    }
+  constructor(name: string, type: Type, isReadonly: boolean) {
+    this.name = name
+    this.type = type
+    this.isReadonly = isReadonly
     if (this.name.startsWith('__')) {
       throw new Error(
         `Property names are not allowed to start with two underscores (__)! (In ${this.jsSignature})`
