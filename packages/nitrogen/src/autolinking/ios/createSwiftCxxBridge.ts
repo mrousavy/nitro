@@ -22,7 +22,6 @@ const SWIFT_BRIDGE_NAMESPACE = ['bridge', 'swift']
 export function createSwiftCxxBridge(): SourceFile[] {
   const moduleName = NitroConfig.getIosModuleName()
   const bridgeName = `${moduleName}-Swift-Cxx-Bridge`
-  const umbrellaHeaderName = `${NitroConfig.getIosModuleName()}-Swift-Cxx-Umbrella.hpp`
 
   const types = getAllKnownTypes().map((t) => new SwiftCxxBridgedType(t))
 
@@ -93,15 +92,6 @@ namespace ${namespace} {
   ${indent(headerHelperFunctions, '  ')}
 
 } // namespace ${namespace}
-
-${
-  forwardDeclaredSwiftTypes.length > 0
-    ? `
-// Include the Swift umbrella header to fill in the forward-declared types from above
-#include "${umbrellaHeaderName}"
-`.trim()
-    : ''
-}
 `
 
   const source = `

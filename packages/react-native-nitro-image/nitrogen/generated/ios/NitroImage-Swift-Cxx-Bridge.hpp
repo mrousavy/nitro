@@ -419,6 +419,3 @@ namespace margelo::nitro::image::bridge::swift {
   std::shared_ptr<Func_void_std__optional_double__Wrapper> share_Func_void_std__optional_double_(const Func_void_std__optional_double_& value);
 
 } // namespace margelo::nitro::image::bridge::swift
-
-// Include the Swift umbrella header to fill in the forward-declared types from above
-#include "NitroImage-Swift-Cxx-Umbrella.hpp"
