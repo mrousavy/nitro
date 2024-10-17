@@ -8,6 +8,24 @@
 import Foundation
 import NitroModules
 
+public struct HybridImageSpecCxxReferenceHolder {
+  private static var __instances: [Int : HybridImageSpecCxx] = [:]
+  private static var __counter: Int = 0
+
+  public static func put(_ instance: HybridImageSpecCxx) -> Int {
+    let id = __counter
+    __counter += 1
+    __instances[id] = instance
+    return id
+  }
+
+  public static func getById(_ instanceId: Int) -> HybridImageSpecCxx {
+    let instance = __instances[instanceId]!
+    __instances.removeValue(forKey: instanceId)
+    return instance
+  }
+}
+
 /**
  * A class implementation that bridges HybridImageSpec over to C++.
  * In C++, we cannot use Swift protocols - so we need to wrap it in a class to make it strongly defined.
@@ -24,22 +42,6 @@ public class HybridImageSpecCxx {
    * This contains specialized C++ templates, and C++ helper functions that can be accessed from Swift.
    */
   public typealias bridge = margelo.nitro.image.bridge.swift
-
-  private static var __instances: [Int : HybridImageSpecCxx] = [:]
-  private static var __counter: Int = 0
-
-  public static func putHybridImageSpecCxx(_ instance: HybridImageSpecCxx) -> Int {
-    let id = __counter
-    __counter += 1
-    __instances[id] = instance
-    return id
-  }
-
-  public static func getHybridImageSpecCxxById(_ instanceId: Int) -> HybridImageSpecCxx {
-    let instance = __instances[instanceId]!
-    __instances.removeValue(forKey: instanceId)
-    return instance
-  }
 
   /**
    * Holds an instance of the `HybridImageSpec` Swift protocol.
@@ -119,8 +121,8 @@ public class HybridImageSpecCxx {
       let __result = try self.__implementation.toArrayBuffer(format: margelo.nitro.image.ImageFormat(rawValue: format)!)
       return __result
     } catch {
-      let message = "\(error.localizedDescription)"
-      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
+      let __message = "\(error.localizedDescription)"
+      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(__message))")
     }
   }
   
@@ -135,8 +137,8 @@ public class HybridImageSpecCxx {
       }())
       return 
     } catch {
-      let message = "\(error.localizedDescription)"
-      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
+      let __message = "\(error.localizedDescription)"
+      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(__message))")
     }
   }
 }

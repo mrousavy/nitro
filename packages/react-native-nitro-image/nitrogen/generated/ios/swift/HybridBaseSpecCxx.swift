@@ -8,6 +8,24 @@
 import Foundation
 import NitroModules
 
+public struct HybridBaseSpecCxxReferenceHolder {
+  private static var __instances: [Int : HybridBaseSpecCxx] = [:]
+  private static var __counter: Int = 0
+
+  public static func put(_ instance: HybridBaseSpecCxx) -> Int {
+    let id = __counter
+    __counter += 1
+    __instances[id] = instance
+    return id
+  }
+
+  public static func getById(_ instanceId: Int) -> HybridBaseSpecCxx {
+    let instance = __instances[instanceId]!
+    __instances.removeValue(forKey: instanceId)
+    return instance
+  }
+}
+
 /**
  * A class implementation that bridges HybridBaseSpec over to C++.
  * In C++, we cannot use Swift protocols - so we need to wrap it in a class to make it strongly defined.
@@ -24,22 +42,6 @@ public class HybridBaseSpecCxx {
    * This contains specialized C++ templates, and C++ helper functions that can be accessed from Swift.
    */
   public typealias bridge = margelo.nitro.image.bridge.swift
-
-  private static var __instances: [Int : HybridBaseSpecCxx] = [:]
-  private static var __counter: Int = 0
-
-  public static func putHybridBaseSpecCxx(_ instance: HybridBaseSpecCxx) -> Int {
-    let id = __counter
-    __counter += 1
-    __instances[id] = instance
-    return id
-  }
-
-  public static func getHybridBaseSpecCxxById(_ instanceId: Int) -> HybridBaseSpecCxx {
-    let instance = __instances[instanceId]!
-    __instances.removeValue(forKey: instanceId)
-    return instance
-  }
 
   /**
    * Holds an instance of the `HybridBaseSpec` Swift protocol.

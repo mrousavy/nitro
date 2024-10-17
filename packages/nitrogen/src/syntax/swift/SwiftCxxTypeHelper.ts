@@ -89,7 +89,7 @@ size_t get_${name}(${name} cppType);
     `.trim(),
     cxxImplementationCode: `
 ${actualType} create_${name}(size_t swiftReferenceId) {
-  ${swiftPartType} swiftPart = ${swiftPartType}::get${HybridTSpecCxx}ById(swiftReferenceId);
+  ${swiftPartType} swiftPart = ${swiftPartType}ReferenceHolder::getById(swiftReferenceId);
   return HybridContext::getOrCreate<${swiftWrappingType}>(swiftPart);
 }
 size_t get_${name}(${name} cppType) {
@@ -100,7 +100,7 @@ size_t get_${name}(${name} cppType) {
   }
 #endif
   ${swiftPartType} swiftPart = swiftWrapper->getSwiftPart();
-  return ${swiftPartType}::put${HybridTSpecCxx}(swiftPart);
+  return ${swiftPartType}ReferenceHolder::put(swiftPart);
 }
     `.trim(),
   }

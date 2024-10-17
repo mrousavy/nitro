@@ -50,6 +50,24 @@ ${createFileMetadataString(`${name.HybridTSpecCxx}.swift`)}
 import Foundation
 import NitroModules
 
+public struct ${name.HybridTSpecCxx}ReferenceHolder {
+  private static var __instances: [Int : ${name.HybridTSpecCxx}] = [:]
+  private static var __counter: Int = 0
+
+  public static func put(_ instance: ${name.HybridTSpecCxx}) -> Int {
+    let id = __counter
+    __counter += 1
+    __instances[id] = instance
+    return id
+  }
+
+  public static func getById(_ instanceId: Int) -> ${name.HybridTSpecCxx} {
+    let instance = __instances[instanceId]!
+    __instances.removeValue(forKey: instanceId)
+    return instance
+  }
+}
+
 /**
  * A class implementation that bridges ${name.HybridTSpec} over to C++.
  * In C++, we cannot use Swift protocols - so we need to wrap it in a class to make it strongly defined.
@@ -66,22 +84,6 @@ ${hasBase ? `public class ${name.HybridTSpecCxx} : ${baseClasses.join(', ')}` : 
    * This contains specialized C++ templates, and C++ helper functions that can be accessed from Swift.
    */
   public typealias bridge = ${BRIDGE_NAMESPACE}
-
-  private static var __instances: [Int : ${name.HybridTSpecCxx}] = [:]
-  private static var __counter: Int = 0
-
-  public static func put${name.HybridTSpecCxx}(_ instance: ${name.HybridTSpecCxx}) -> Int {
-    let id = __counter
-    __counter += 1
-    __instances[id] = instance
-    return id
-  }
-
-  public static func get${name.HybridTSpecCxx}ById(_ instanceId: Int) -> ${name.HybridTSpecCxx} {
-    let instance = __instances[instanceId]!
-    __instances.removeValue(forKey: instanceId)
-    return instance
-  }
 
   /**
    * Holds an instance of the \`${name.HybridTSpec}\` Swift protocol.

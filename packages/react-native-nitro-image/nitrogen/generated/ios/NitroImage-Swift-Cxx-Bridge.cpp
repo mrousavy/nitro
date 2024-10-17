@@ -34,7 +34,7 @@ namespace margelo::nitro::image::bridge::swift {
   
   // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridImageSpec>
   std::shared_ptr<margelo::nitro::image::HybridImageSpec> create_std__shared_ptr_margelo__nitro__image__HybridImageSpec_(size_t swiftReferenceId) {
-    NitroImage::HybridImageSpecCxx swiftPart = NitroImage::HybridImageSpecCxx::getHybridImageSpecCxxById(swiftReferenceId);
+    NitroImage::HybridImageSpecCxx swiftPart = NitroImage::HybridImageSpecCxxReferenceHolder::getById(swiftReferenceId);
     return HybridContext::getOrCreate<margelo::nitro::image::HybridImageSpecSwift>(swiftPart);
   }
   size_t get_std__shared_ptr_margelo__nitro__image__HybridImageSpec_(std__shared_ptr_margelo__nitro__image__HybridImageSpec_ cppType) {
@@ -45,12 +45,12 @@ namespace margelo::nitro::image::bridge::swift {
     }
   #endif
     NitroImage::HybridImageSpecCxx swiftPart = swiftWrapper->getSwiftPart();
-    return NitroImage::HybridImageSpecCxx::putHybridImageSpecCxx(swiftPart);
+    return NitroImage::HybridImageSpecCxxReferenceHolder::put(swiftPart);
   }
   
   // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridImageFactorySpec>
   std::shared_ptr<margelo::nitro::image::HybridImageFactorySpec> create_std__shared_ptr_margelo__nitro__image__HybridImageFactorySpec_(size_t swiftReferenceId) {
-    NitroImage::HybridImageFactorySpecCxx swiftPart = NitroImage::HybridImageFactorySpecCxx::getHybridImageFactorySpecCxxById(swiftReferenceId);
+    NitroImage::HybridImageFactorySpecCxx swiftPart = NitroImage::HybridImageFactorySpecCxxReferenceHolder::getById(swiftReferenceId);
     return HybridContext::getOrCreate<margelo::nitro::image::HybridImageFactorySpecSwift>(swiftPart);
   }
   size_t get_std__shared_ptr_margelo__nitro__image__HybridImageFactorySpec_(std__shared_ptr_margelo__nitro__image__HybridImageFactorySpec_ cppType) {
@@ -61,7 +61,7 @@ namespace margelo::nitro::image::bridge::swift {
     }
   #endif
     NitroImage::HybridImageFactorySpecCxx swiftPart = swiftWrapper->getSwiftPart();
-    return NitroImage::HybridImageFactorySpecCxx::putHybridImageFactorySpecCxx(swiftPart);
+    return NitroImage::HybridImageFactorySpecCxxReferenceHolder::put(swiftPart);
   }
   
   // pragma MARK: std::variant<std::string, double>
@@ -392,7 +392,7 @@ namespace margelo::nitro::image::bridge::swift {
   
   // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridChildSpec>
   std::shared_ptr<margelo::nitro::image::HybridChildSpec> create_std__shared_ptr_margelo__nitro__image__HybridChildSpec_(size_t swiftReferenceId) {
-    NitroImage::HybridChildSpecCxx swiftPart = NitroImage::HybridChildSpecCxx::getHybridChildSpecCxxById(swiftReferenceId);
+    NitroImage::HybridChildSpecCxx swiftPart = NitroImage::HybridChildSpecCxxReferenceHolder::getById(swiftReferenceId);
     return HybridContext::getOrCreate<margelo::nitro::image::HybridChildSpecSwift>(swiftPart);
   }
   size_t get_std__shared_ptr_margelo__nitro__image__HybridChildSpec_(std__shared_ptr_margelo__nitro__image__HybridChildSpec_ cppType) {
@@ -403,12 +403,12 @@ namespace margelo::nitro::image::bridge::swift {
     }
   #endif
     NitroImage::HybridChildSpecCxx swiftPart = swiftWrapper->getSwiftPart();
-    return NitroImage::HybridChildSpecCxx::putHybridChildSpecCxx(swiftPart);
+    return NitroImage::HybridChildSpecCxxReferenceHolder::put(swiftPart);
   }
   
   // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridBaseSpec>
   std::shared_ptr<margelo::nitro::image::HybridBaseSpec> create_std__shared_ptr_margelo__nitro__image__HybridBaseSpec_(size_t swiftReferenceId) {
-    NitroImage::HybridBaseSpecCxx swiftPart = NitroImage::HybridBaseSpecCxx::getHybridBaseSpecCxxById(swiftReferenceId);
+    NitroImage::HybridBaseSpecCxx swiftPart = NitroImage::HybridBaseSpecCxxReferenceHolder::getById(swiftReferenceId);
     return HybridContext::getOrCreate<margelo::nitro::image::HybridBaseSpecSwift>(swiftPart);
   }
   size_t get_std__shared_ptr_margelo__nitro__image__HybridBaseSpec_(std__shared_ptr_margelo__nitro__image__HybridBaseSpec_ cppType) {
@@ -419,12 +419,12 @@ namespace margelo::nitro::image::bridge::swift {
     }
   #endif
     NitroImage::HybridBaseSpecCxx swiftPart = swiftWrapper->getSwiftPart();
-    return NitroImage::HybridBaseSpecCxx::putHybridBaseSpecCxx(swiftPart);
+    return NitroImage::HybridBaseSpecCxxReferenceHolder::put(swiftPart);
   }
   
   // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>
   std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec> create_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_(size_t swiftReferenceId) {
-    NitroImage::HybridTestObjectSwiftKotlinSpecCxx swiftPart = NitroImage::HybridTestObjectSwiftKotlinSpecCxx::getHybridTestObjectSwiftKotlinSpecCxxById(swiftReferenceId);
+    NitroImage::HybridTestObjectSwiftKotlinSpecCxx swiftPart = NitroImage::HybridTestObjectSwiftKotlinSpecCxxReferenceHolder::getById(swiftReferenceId);
     return HybridContext::getOrCreate<margelo::nitro::image::HybridTestObjectSwiftKotlinSpecSwift>(swiftPart);
   }
   size_t get_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_(std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_ cppType) {
@@ -435,7 +435,7 @@ namespace margelo::nitro::image::bridge::swift {
     }
   #endif
     NitroImage::HybridTestObjectSwiftKotlinSpecCxx swiftPart = swiftWrapper->getSwiftPart();
-    return NitroImage::HybridTestObjectSwiftKotlinSpecCxx::putHybridTestObjectSwiftKotlinSpecCxx(swiftPart);
+    return NitroImage::HybridTestObjectSwiftKotlinSpecCxxReferenceHolder::put(swiftPart);
   }
 
 } // namespace margelo::nitro::image::bridge::swift
