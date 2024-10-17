@@ -31,10 +31,10 @@ namespace margelo::nitro::image::bridge::swift {
   std::shared_ptr<Func_void_std__string_Wrapper> share_Func_void_std__string(const Func_void_std__string& value) {
     return std::make_shared<Func_void_std__string_Wrapper>(value);
   }
-  
+
   // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridImageSpec>
   std::shared_ptr<margelo::nitro::image::HybridImageSpec> create_std__shared_ptr_margelo__nitro__image__HybridImageSpec_(size_t swiftReferenceId) {
-    NitroImage::HybridImageSpecCxx swiftPart = NitroImage::HybridImageSpecCxx::__getHybridImageSpecCxxById(swiftReferenceId);
+    NitroImage::HybridImageSpecCxx swiftPart = NitroImage::HybridImageSpecCxx::getHybridImageSpecCxxById(swiftReferenceId);
     return HybridContext::getOrCreate<margelo::nitro::image::HybridImageSpecSwift>(swiftPart);
   }
   size_t get_std__shared_ptr_margelo__nitro__image__HybridImageSpec_(std__shared_ptr_margelo__nitro__image__HybridImageSpec_ cppType) {
@@ -45,12 +45,12 @@ namespace margelo::nitro::image::bridge::swift {
     }
   #endif
     NitroImage::HybridImageSpecCxx swiftPart = swiftWrapper->getSwiftPart();
-    return NitroImage::HybridImageSpecCxx::__putHybridImageSpecCxx(swiftPart);
+    return NitroImage::HybridImageSpecCxx::putHybridImageSpecCxx(swiftPart);
   }
-  
+
   // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridImageFactorySpec>
   std::shared_ptr<margelo::nitro::image::HybridImageFactorySpec> create_std__shared_ptr_margelo__nitro__image__HybridImageFactorySpec_(size_t swiftReferenceId) {
-    NitroImage::HybridImageFactorySpecCxx swiftPart = NitroImage::HybridImageFactorySpecCxx::__getHybridImageFactorySpecCxxById(swiftReferenceId);
+    NitroImage::HybridImageFactorySpecCxx swiftPart = NitroImage::HybridImageFactorySpecCxx::getHybridImageFactorySpecCxxById(swiftReferenceId);
     return HybridContext::getOrCreate<margelo::nitro::image::HybridImageFactorySpecSwift>(swiftPart);
   }
   size_t get_std__shared_ptr_margelo__nitro__image__HybridImageFactorySpec_(std__shared_ptr_margelo__nitro__image__HybridImageFactorySpec_ cppType) {
@@ -61,9 +61,9 @@ namespace margelo::nitro::image::bridge::swift {
     }
   #endif
     NitroImage::HybridImageFactorySpecCxx swiftPart = swiftWrapper->getSwiftPart();
-    return NitroImage::HybridImageFactorySpecCxx::__putHybridImageFactorySpecCxx(swiftPart);
+    return NitroImage::HybridImageFactorySpecCxx::putHybridImageFactorySpecCxx(swiftPart);
   }
-  
+
   // pragma MARK: std::variant<std::string, double>
   std__variant_std__string__double_::std__variant_std__string__double_(std::variant<std::string, double> variant): variant(variant) { }
   std__variant_std__string__double_::operator std::variant<std::string, double>() const {
@@ -84,21 +84,21 @@ namespace margelo::nitro::image::bridge::swift {
   double get_std__variant_std__string__double__1(const std__variant_std__string__double_& variantWrapper) {
     return std::get<1>(variantWrapper.variant);
   }
-  
+
   // pragma MARK: std::vector<double>
   std::vector<double> create_std__vector_double_(size_t size) {
     std::vector<double> vector;
     vector.reserve(size);
     return vector;
   }
-  
+
   // pragma MARK: std::vector<std::string>
   std::vector<std::string> create_std__vector_std__string_(size_t size) {
     std::vector<std::string> vector;
     vector.reserve(size);
     return vector;
   }
-  
+
   // pragma MARK: std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>>
   std__variant_std__string__double__bool__std__vector_double___std__vector_std__string__::std__variant_std__string__double__bool__std__vector_double___std__vector_std__string__(std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>> variant): variant(variant) { }
   std__variant_std__string__double__bool__std__vector_double___std__vector_std__string__::operator std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>>() const {
@@ -137,7 +137,7 @@ namespace margelo::nitro::image::bridge::swift {
   std::vector<std::string> get_std__variant_std__string__double__bool__std__vector_double___std__vector_std__string___4(const std__variant_std__string__double__bool__std__vector_double___std__vector_std__string__& variantWrapper) {
     return std::get<4>(variantWrapper.variant);
   }
-  
+
   // pragma MARK: std::variant<bool, OldEnum>
   std__variant_bool__OldEnum_::std__variant_bool__OldEnum_(std::variant<bool, OldEnum> variant): variant(variant) { }
   std__variant_bool__OldEnum_::operator std::variant<bool, OldEnum>() const {
@@ -158,12 +158,12 @@ namespace margelo::nitro::image::bridge::swift {
   OldEnum get_std__variant_bool__OldEnum__1(const std__variant_bool__OldEnum_& variantWrapper) {
     return std::get<1>(variantWrapper.variant);
   }
-  
+
   // pragma MARK: std::optional<Person>
   std::optional<Person> create_std__optional_Person_(const Person& value) {
     return std::optional<Person>(value);
   }
-  
+
   // pragma MARK: std::variant<Car, Person>
   std__variant_Car__Person_::std__variant_Car__Person_(std::variant<Car, Person> variant): variant(variant) { }
   std__variant_Car__Person_::operator std::variant<Car, Person>() const {
@@ -184,10 +184,10 @@ namespace margelo::nitro::image::bridge::swift {
   Person get_std__variant_Car__Person__1(const std__variant_Car__Person_& variantWrapper) {
     return std::get<1>(variantWrapper.variant);
   }
-  
+
   // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>
   std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec> create_std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec_(size_t swiftReferenceId) {
-    NitroImage::HybridTestObjectCppSpecCxx swiftPart = NitroImage::HybridTestObjectCppSpecCxx::__getHybridTestObjectCppSpecCxxById(swiftReferenceId);
+    NitroImage::HybridTestObjectCppSpecCxx swiftPart = NitroImage::HybridTestObjectCppSpecCxx::getHybridTestObjectCppSpecCxxById(swiftReferenceId);
     return HybridContext::getOrCreate<margelo::nitro::image::HybridTestObjectCppSpecSwift>(swiftPart);
   }
   size_t get_std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec_(std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec_ cppType) {
@@ -198,9 +198,9 @@ namespace margelo::nitro::image::bridge::swift {
     }
   #endif
     NitroImage::HybridTestObjectCppSpecCxx swiftPart = swiftWrapper->getSwiftPart();
-    return NitroImage::HybridTestObjectCppSpecCxx::__putHybridTestObjectCppSpecCxx(swiftPart);
+    return NitroImage::HybridTestObjectCppSpecCxx::putHybridTestObjectCppSpecCxx(swiftPart);
   }
-  
+
   // pragma MARK: std::variant<Person, std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>>
   std__variant_Person__std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec__::std__variant_Person__std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec__(std::variant<Person, std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>> variant): variant(variant) { }
   std__variant_Person__std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec__::operator std::variant<Person, std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>>() const {
@@ -221,17 +221,17 @@ namespace margelo::nitro::image::bridge::swift {
   std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec> get_std__variant_Person__std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec___1(const std__variant_Person__std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec__& variantWrapper) {
     return std::get<1>(variantWrapper.variant);
   }
-  
+
   // pragma MARK: std::tuple<double, double>
   std::tuple<double, double> create_std__tuple_double__double_(double arg0, double arg1) {
     return std::tuple<double, double> { arg0, arg1 };
   }
-  
+
   // pragma MARK: std::tuple<double, double, double>
   std::tuple<double, double, double> create_std__tuple_double__double__double_(double arg0, double arg1, double arg2) {
     return std::tuple<double, double, double> { arg0, arg1, arg2 };
   }
-  
+
   // pragma MARK: std::variant<std::tuple<double, double>, std::tuple<double, double, double>>
   std__variant_std__tuple_double__double___std__tuple_double__double__double__::std__variant_std__tuple_double__double___std__tuple_double__double__double__(std::variant<std::tuple<double, double>, std::tuple<double, double, double>> variant): variant(variant) { }
   std__variant_std__tuple_double__double___std__tuple_double__double__double__::operator std::variant<std::tuple<double, double>, std::tuple<double, double, double>>() const {
@@ -252,22 +252,22 @@ namespace margelo::nitro::image::bridge::swift {
   std::tuple<double, double, double> get_std__variant_std__tuple_double__double___std__tuple_double__double__double___1(const std__variant_std__tuple_double__double___std__tuple_double__double__double__& variantWrapper) {
     return std::get<1>(variantWrapper.variant);
   }
-  
+
   // pragma MARK: std::tuple<double, std::string>
   std::tuple<double, std::string> create_std__tuple_double__std__string_(double arg0, const std::string& arg1) {
     return std::tuple<double, std::string> { arg0, arg1 };
   }
-  
+
   // pragma MARK: std::tuple<double, std::string, bool>
   std::tuple<double, std::string, bool> create_std__tuple_double__std__string__bool_(double arg0, const std::string& arg1, bool arg2) {
     return std::tuple<double, std::string, bool> { arg0, arg1, arg2 };
   }
-  
+
   // pragma MARK: PromiseHolder<double>
   PromiseHolder<double> create_PromiseHolder_double_() {
     return PromiseHolder<double>();
   }
-  
+
   // pragma MARK: std::function<std::future<double>()>
   Func_std__future_double__Wrapper::Func_std__future_double__Wrapper(const std::function<std::future<double>()>& func): function(func) {}
   Func_std__future_double__Wrapper::Func_std__future_double__Wrapper(std::function<std::future<double>()>&& func): function(std::move(func)) {}
@@ -285,12 +285,12 @@ namespace margelo::nitro::image::bridge::swift {
   std::shared_ptr<Func_std__future_double__Wrapper> share_Func_std__future_double_(const Func_std__future_double_& value) {
     return std::make_shared<Func_std__future_double__Wrapper>(value);
   }
-  
+
   // pragma MARK: PromiseHolder<void>
   PromiseHolder<void> create_PromiseHolder_void_() {
     return PromiseHolder<void>();
   }
-  
+
   // pragma MARK: std::function<std::future<std::string>()>
   Func_std__future_std__string__Wrapper::Func_std__future_std__string__Wrapper(const std::function<std::future<std::string>()>& func): function(func) {}
   Func_std__future_std__string__Wrapper::Func_std__future_std__string__Wrapper(std::function<std::future<std::string>()>&& func): function(std::move(func)) {}
@@ -308,36 +308,36 @@ namespace margelo::nitro::image::bridge::swift {
   std::shared_ptr<Func_std__future_std__string__Wrapper> share_Func_std__future_std__string_(const Func_std__future_std__string_& value) {
     return std::make_shared<Func_std__future_std__string__Wrapper>(value);
   }
-  
+
   // pragma MARK: PromiseHolder<std::string>
   PromiseHolder<std::string> create_PromiseHolder_std__string_() {
     return PromiseHolder<std::string>();
   }
-  
+
   // pragma MARK: std::optional<std::string>
   std::optional<std::string> create_std__optional_std__string_(const std::string& value) {
     return std::optional<std::string>(value);
   }
-  
+
   // pragma MARK: std::optional<std::vector<std::string>>
   std::optional<std::vector<std::string>> create_std__optional_std__vector_std__string__(const std::vector<std::string>& value) {
     return std::optional<std::vector<std::string>>(value);
   }
-  
+
   // pragma MARK: std::vector<Person>
   std::vector<Person> create_std__vector_Person_(size_t size) {
     std::vector<Person> vector;
     vector.reserve(size);
     return vector;
   }
-  
+
   // pragma MARK: std::vector<Powertrain>
   std::vector<Powertrain> create_std__vector_Powertrain_(size_t size) {
     std::vector<Powertrain> vector;
     vector.reserve(size);
     return vector;
   }
-  
+
   // pragma MARK: std::function<void(const std::vector<Powertrain>& /* array */)>
   Func_void_std__vector_Powertrain__Wrapper::Func_void_std__vector_Powertrain__Wrapper(const std::function<void(const std::vector<Powertrain>& /* array */)>& func): function(func) {}
   Func_void_std__vector_Powertrain__Wrapper::Func_void_std__vector_Powertrain__Wrapper(std::function<void(const std::vector<Powertrain>& /* array */)>&& func): function(std::move(func)) {}
@@ -353,22 +353,22 @@ namespace margelo::nitro::image::bridge::swift {
   std::shared_ptr<Func_void_std__vector_Powertrain__Wrapper> share_Func_void_std__vector_Powertrain_(const Func_void_std__vector_Powertrain_& value) {
     return std::make_shared<Func_void_std__vector_Powertrain__Wrapper>(value);
   }
-  
+
   // pragma MARK: std::optional<bool>
   std::optional<bool> create_std__optional_bool_(const bool& value) {
     return std::optional<bool>(value);
   }
-  
+
   // pragma MARK: std::optional<Powertrain>
   std::optional<Powertrain> create_std__optional_Powertrain_(const Powertrain& value) {
     return std::optional<Powertrain>(value);
   }
-  
+
   // pragma MARK: PromiseHolder<int64_t>
   PromiseHolder<int64_t> create_PromiseHolder_int64_t_() {
     return PromiseHolder<int64_t>();
   }
-  
+
   // pragma MARK: std::function<void()>
   Func_void_Wrapper::Func_void_Wrapper(const std::function<void()>& func): function(func) {}
   Func_void_Wrapper::Func_void_Wrapper(std::function<void()>&& func): function(std::move(func)) {}
@@ -384,12 +384,12 @@ namespace margelo::nitro::image::bridge::swift {
   std::shared_ptr<Func_void_Wrapper> share_Func_void(const Func_void& value) {
     return std::make_shared<Func_void_Wrapper>(value);
   }
-  
+
   // pragma MARK: std::optional<double>
   std::optional<double> create_std__optional_double_(const double& value) {
     return std::optional<double>(value);
   }
-  
+
   // pragma MARK: std::function<void(std::optional<double> /* maybe */)>
   Func_void_std__optional_double__Wrapper::Func_void_std__optional_double__Wrapper(const std::function<void(std::optional<double> /* maybe */)>& func): function(func) {}
   Func_void_std__optional_double__Wrapper::Func_void_std__optional_double__Wrapper(std::function<void(std::optional<double> /* maybe */)>&& func): function(std::move(func)) {}
@@ -405,10 +405,10 @@ namespace margelo::nitro::image::bridge::swift {
   std::shared_ptr<Func_void_std__optional_double__Wrapper> share_Func_void_std__optional_double_(const Func_void_std__optional_double_& value) {
     return std::make_shared<Func_void_std__optional_double__Wrapper>(value);
   }
-  
+
   // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridChildSpec>
   std::shared_ptr<margelo::nitro::image::HybridChildSpec> create_std__shared_ptr_margelo__nitro__image__HybridChildSpec_(size_t swiftReferenceId) {
-    NitroImage::HybridChildSpecCxx swiftPart = NitroImage::HybridChildSpecCxx::__getHybridChildSpecCxxById(swiftReferenceId);
+    NitroImage::HybridChildSpecCxx swiftPart = NitroImage::HybridChildSpecCxx::getHybridChildSpecCxxById(swiftReferenceId);
     return HybridContext::getOrCreate<margelo::nitro::image::HybridChildSpecSwift>(swiftPart);
   }
   size_t get_std__shared_ptr_margelo__nitro__image__HybridChildSpec_(std__shared_ptr_margelo__nitro__image__HybridChildSpec_ cppType) {
@@ -419,12 +419,12 @@ namespace margelo::nitro::image::bridge::swift {
     }
   #endif
     NitroImage::HybridChildSpecCxx swiftPart = swiftWrapper->getSwiftPart();
-    return NitroImage::HybridChildSpecCxx::__putHybridChildSpecCxx(swiftPart);
+    return NitroImage::HybridChildSpecCxx::putHybridChildSpecCxx(swiftPart);
   }
-  
+
   // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridBaseSpec>
   std::shared_ptr<margelo::nitro::image::HybridBaseSpec> create_std__shared_ptr_margelo__nitro__image__HybridBaseSpec_(size_t swiftReferenceId) {
-    NitroImage::HybridBaseSpecCxx swiftPart = NitroImage::HybridBaseSpecCxx::__getHybridBaseSpecCxxById(swiftReferenceId);
+    NitroImage::HybridBaseSpecCxx swiftPart = NitroImage::HybridBaseSpecCxx::getHybridBaseSpecCxxById(swiftReferenceId);
     return HybridContext::getOrCreate<margelo::nitro::image::HybridBaseSpecSwift>(swiftPart);
   }
   size_t get_std__shared_ptr_margelo__nitro__image__HybridBaseSpec_(std__shared_ptr_margelo__nitro__image__HybridBaseSpec_ cppType) {
@@ -435,12 +435,12 @@ namespace margelo::nitro::image::bridge::swift {
     }
   #endif
     NitroImage::HybridBaseSpecCxx swiftPart = swiftWrapper->getSwiftPart();
-    return NitroImage::HybridBaseSpecCxx::__putHybridBaseSpecCxx(swiftPart);
+    return NitroImage::HybridBaseSpecCxx::putHybridBaseSpecCxx(swiftPart);
   }
-  
+
   // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>
   std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec> create_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_(size_t swiftReferenceId) {
-    NitroImage::HybridTestObjectSwiftKotlinSpecCxx swiftPart = NitroImage::HybridTestObjectSwiftKotlinSpecCxx::__getHybridTestObjectSwiftKotlinSpecCxxById(swiftReferenceId);
+    NitroImage::HybridTestObjectSwiftKotlinSpecCxx swiftPart = NitroImage::HybridTestObjectSwiftKotlinSpecCxx::getHybridTestObjectSwiftKotlinSpecCxxById(swiftReferenceId);
     return HybridContext::getOrCreate<margelo::nitro::image::HybridTestObjectSwiftKotlinSpecSwift>(swiftPart);
   }
   size_t get_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_(std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_ cppType) {
@@ -451,7 +451,7 @@ namespace margelo::nitro::image::bridge::swift {
     }
   #endif
     NitroImage::HybridTestObjectSwiftKotlinSpecCxx swiftPart = swiftWrapper->getSwiftPart();
-    return NitroImage::HybridTestObjectSwiftKotlinSpecCxx::__putHybridTestObjectSwiftKotlinSpecCxx(swiftPart);
+    return NitroImage::HybridTestObjectSwiftKotlinSpecCxx::putHybridTestObjectSwiftKotlinSpecCxx(swiftPart);
   }
 
 } // namespace margelo::nitro::image::bridge::swift

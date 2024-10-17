@@ -70,14 +70,14 @@ ${hasBase ? `public class ${name.HybridTSpecCxx} : ${baseClasses.join(', ')}` : 
   private static var __instances: [Int : ${name.HybridTSpecCxx}] = [:]
   private static var __counter: Int = 0
 
-  public static func __put${name.HybridTSpecCxx}(_ instance: ${name.HybridTSpecCxx}) -> Int {
+  public static func put${name.HybridTSpecCxx}(_ instance: ${name.HybridTSpecCxx}) -> Int {
     let id = __counter
     __counter += 1
     __instances[id] = instance
     return id
   }
 
-  public static func __get${name.HybridTSpecCxx}ById(_ instanceId: Int) -> ${name.HybridTSpecCxx} {
+  public static func get${name.HybridTSpecCxx}ById(_ instanceId: Int) -> ${name.HybridTSpecCxx} {
     let instance = __instances[instanceId]!
     __instances.removeValue(forKey: instanceId)
     return instance

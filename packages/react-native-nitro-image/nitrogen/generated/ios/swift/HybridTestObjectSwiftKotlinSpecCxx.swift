@@ -28,14 +28,14 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
   private static var __instances: [Int : HybridTestObjectSwiftKotlinSpecCxx] = [:]
   private static var __counter: Int = 0
 
-  public static func __putHybridTestObjectSwiftKotlinSpecCxx(_ instance: HybridTestObjectSwiftKotlinSpecCxx) -> Int {
+  public static func putHybridTestObjectSwiftKotlinSpecCxx(_ instance: HybridTestObjectSwiftKotlinSpecCxx) -> Int {
     let id = __counter
     __counter += 1
     __instances[id] = instance
     return id
   }
 
-  public static func __getHybridTestObjectSwiftKotlinSpecCxxById(_ instanceId: Int) -> HybridTestObjectSwiftKotlinSpecCxx {
+  public static func getHybridTestObjectSwiftKotlinSpecCxxById(_ instanceId: Int) -> HybridTestObjectSwiftKotlinSpecCxx {
     let instance = __instances[instanceId]!
     __instances.removeValue(forKey: instanceId)
     return instance
@@ -92,12 +92,12 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
     get {
       return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_ in
         let __cxxWrapped = HybridTestObjectSwiftKotlinSpecCxx(self.__implementation.thisObject)
-        let __swiftReferenceId = HybridTestObjectSwiftKotlinSpecCxx.__putHybridTestObjectSwiftKotlinSpecCxx(__cxxWrapped)
+        let __swiftReferenceId = HybridTestObjectSwiftKotlinSpecCxx.putHybridTestObjectSwiftKotlinSpecCxx(__cxxWrapped)
         return bridge.create_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_(__swiftReferenceId)
       }()
     }
   }
-  
+
   public var numberValue: Double {
     @inline(__always)
     get {
@@ -108,7 +108,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
       self.__implementation.numberValue = newValue
     }
   }
-  
+
   public var boolValue: Bool {
     @inline(__always)
     get {
@@ -119,7 +119,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
       self.__implementation.boolValue = newValue
     }
   }
-  
+
   public var stringValue: std.string {
     @inline(__always)
     get {
@@ -130,7 +130,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
       self.__implementation.stringValue = String(newValue)
     }
   }
-  
+
   public var bigintValue: Int64 {
     @inline(__always)
     get {
@@ -141,7 +141,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
       self.__implementation.bigintValue = newValue
     }
   }
-  
+
   public var stringOrUndefined: bridge.std__optional_std__string_ {
     @inline(__always)
     get {
@@ -164,7 +164,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
       }()
     }
   }
-  
+
   public var stringOrNull: bridge.std__optional_std__string_ {
     @inline(__always)
     get {
@@ -187,7 +187,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
       }()
     }
   }
-  
+
   public var optionalString: bridge.std__optional_std__string_ {
     @inline(__always)
     get {
@@ -210,7 +210,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
       }()
     }
   }
-  
+
   public var optionalArray: bridge.std__optional_std__vector_std__string__ {
     @inline(__always)
     get {
@@ -239,7 +239,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
       }()
     }
   }
-  
+
   public var someVariant: bridge.std__variant_std__string__double_ {
     @inline(__always)
     get {
@@ -276,7 +276,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
       let __result = try self.__implementation.newTestObject()
       return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_ in
         let __cxxWrapped = HybridTestObjectSwiftKotlinSpecCxx(__result)
-        let __swiftReferenceId = HybridTestObjectSwiftKotlinSpecCxx.__putHybridTestObjectSwiftKotlinSpecCxx(__cxxWrapped)
+        let __swiftReferenceId = HybridTestObjectSwiftKotlinSpecCxx.putHybridTestObjectSwiftKotlinSpecCxx(__cxxWrapped)
         return bridge.create_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_(__swiftReferenceId)
       }()
     } catch {
@@ -284,18 +284,18 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
       fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
     }
   }
-  
+
   @inline(__always)
   public func simpleFunc() -> Void {
     do {
       try self.__implementation.simpleFunc()
-      return 
+      return
     } catch {
       let message = "\(error.localizedDescription)"
       fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
     }
   }
-  
+
   @inline(__always)
   public func addNumbers(a: Double, b: Double) -> Double {
     do {
@@ -306,7 +306,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
       fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
     }
   }
-  
+
   @inline(__always)
   public func addStrings(a: std.string, b: std.string) -> std.string {
     do {
@@ -317,18 +317,18 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
       fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
     }
   }
-  
+
   @inline(__always)
   public func multipleArguments(num: Double, str: std.string, boo: Bool) -> Void {
     do {
       try self.__implementation.multipleArguments(num: num, str: String(str), boo: boo)
-      return 
+      return
     } catch {
       let message = "\(error.localizedDescription)"
       fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
     }
   }
-  
+
   @inline(__always)
   public func bounceStrings(array: bridge.std__vector_std__string_) -> bridge.std__vector_std__string_ {
     do {
@@ -345,7 +345,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
       fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
     }
   }
-  
+
   @inline(__always)
   public func bounceNumbers(array: bridge.std__vector_double_) -> bridge.std__vector_double_ {
     do {
@@ -362,7 +362,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
       fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
     }
   }
-  
+
   @inline(__always)
   public func bounceStructs(array: bridge.std__vector_Person_) -> bridge.std__vector_Person_ {
     do {
@@ -379,7 +379,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
       fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
     }
   }
-  
+
   @inline(__always)
   public func bounceEnums(array: bridge.std__vector_Powertrain_) -> bridge.std__vector_Powertrain_ {
     do {
@@ -396,7 +396,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
       fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
     }
   }
-  
+
   @inline(__always)
   public func complexEnumCallback(array: bridge.std__vector_Powertrain_, callback: bridge.Func_void_std__vector_Powertrain_) -> Void {
     do {
@@ -412,13 +412,13 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
         }())
         }
       }())
-      return 
+      return
     } catch {
       let message = "\(error.localizedDescription)"
       fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
     }
   }
-  
+
   @inline(__always)
   public func createMap() -> margelo.nitro.TSharedMap {
     do {
@@ -429,7 +429,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
       fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
     }
   }
-  
+
   @inline(__always)
   public func mapRoundtrip(map: margelo.nitro.TSharedMap) -> margelo.nitro.TSharedMap {
     do {
@@ -440,7 +440,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
       fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
     }
   }
-  
+
   @inline(__always)
   public func funcThatThrows() -> Double {
     do {
@@ -451,7 +451,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
       fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
     }
   }
-  
+
   @inline(__always)
   public func tryOptionalParams(num: Double, boo: Bool, str: bridge.std__optional_std__string_) -> std.string {
     do {
@@ -468,7 +468,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
       fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
     }
   }
-  
+
   @inline(__always)
   public func tryMiddleParam(num: Double, boo: bridge.std__optional_bool_, str: std.string) -> std.string {
     do {
@@ -479,7 +479,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
       fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
     }
   }
-  
+
   @inline(__always)
   public func tryOptionalEnum(value: bridge.std__optional_Powertrain_) -> bridge.std__optional_Powertrain_ {
     do {
@@ -496,7 +496,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
       fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
     }
   }
-  
+
   @inline(__always)
   public func calculateFibonacciSync(value: Double) -> Int64 {
     do {
@@ -507,7 +507,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
       fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
     }
   }
-  
+
   @inline(__always)
   public func calculateFibonacciAsync(value: Double) -> bridge.PromiseHolder_int64_t_ {
     do {
@@ -524,7 +524,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
       fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
     }
   }
-  
+
   @inline(__always)
   public func wait(seconds: Double) -> bridge.PromiseHolder_void_ {
     do {
@@ -541,7 +541,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
       fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
     }
   }
-  
+
   @inline(__always)
   public func callCallback(callback: bridge.Func_void) -> Void {
     do {
@@ -551,13 +551,13 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
           __sharedClosure.pointee.call()
         }
       }())
-      return 
+      return
     } catch {
       let message = "\(error.localizedDescription)"
       fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
     }
   }
-  
+
   @inline(__always)
   public func callAll(first: bridge.Func_void, second: bridge.Func_void, third: bridge.Func_void) -> Void {
     do {
@@ -577,13 +577,13 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
           __sharedClosure.pointee.call()
         }
       }())
-      return 
+      return
     } catch {
       let message = "\(error.localizedDescription)"
       fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
     }
   }
-  
+
   @inline(__always)
   public func callWithOptional(value: bridge.std__optional_double_, callback: bridge.Func_void_std__optional_double_) -> Void {
     do {
@@ -599,13 +599,13 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
         }())
         }
       }())
-      return 
+      return
     } catch {
       let message = "\(error.localizedDescription)"
       fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
     }
   }
-  
+
   @inline(__always)
   public func getCar() -> Car {
     do {
@@ -616,7 +616,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
       fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
     }
   }
-  
+
   @inline(__always)
   public func isCarElectric(car: Car) -> Bool {
     do {
@@ -627,7 +627,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
       fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
     }
   }
-  
+
   @inline(__always)
   public func getDriver(car: Car) -> bridge.std__optional_Person_ {
     do {
@@ -644,7 +644,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
       fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
     }
   }
-  
+
   @inline(__always)
   public func createArrayBuffer() -> ArrayBufferHolder {
     do {
@@ -655,7 +655,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
       fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
     }
   }
-  
+
   @inline(__always)
   public func getBufferLastItem(buffer: ArrayBufferHolder) -> Double {
     do {
@@ -666,25 +666,25 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
       fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
     }
   }
-  
+
   @inline(__always)
   public func setAllValuesTo(buffer: ArrayBufferHolder, value: Double) -> Void {
     do {
       try self.__implementation.setAllValuesTo(buffer: buffer, value: value)
-      return 
+      return
     } catch {
       let message = "\(error.localizedDescription)"
       fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
     }
   }
-  
+
   @inline(__always)
   public func createChild() -> bridge.std__shared_ptr_margelo__nitro__image__HybridChildSpec_ {
     do {
       let __result = try self.__implementation.createChild()
       return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridChildSpec_ in
         let __cxxWrapped = HybridChildSpecCxx(__result)
-        let __swiftReferenceId = HybridChildSpecCxx.__putHybridChildSpecCxx(__cxxWrapped)
+        let __swiftReferenceId = HybridChildSpecCxx.putHybridChildSpecCxx(__cxxWrapped)
         return bridge.create_std__shared_ptr_margelo__nitro__image__HybridChildSpec_(__swiftReferenceId)
       }()
     } catch {
@@ -692,14 +692,14 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
       fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
     }
   }
-  
+
   @inline(__always)
   public func createBase() -> bridge.std__shared_ptr_margelo__nitro__image__HybridBaseSpec_ {
     do {
       let __result = try self.__implementation.createBase()
       return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridBaseSpec_ in
         let __cxxWrapped = HybridBaseSpecCxx(__result)
-        let __swiftReferenceId = HybridBaseSpecCxx.__putHybridBaseSpecCxx(__cxxWrapped)
+        let __swiftReferenceId = HybridBaseSpecCxx.putHybridBaseSpecCxx(__cxxWrapped)
         return bridge.create_std__shared_ptr_margelo__nitro__image__HybridBaseSpec_(__swiftReferenceId)
       }()
     } catch {
@@ -707,14 +707,14 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
       fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
     }
   }
-  
+
   @inline(__always)
   public func createBaseActualChild() -> bridge.std__shared_ptr_margelo__nitro__image__HybridBaseSpec_ {
     do {
       let __result = try self.__implementation.createBaseActualChild()
       return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridBaseSpec_ in
         let __cxxWrapped = HybridBaseSpecCxx(__result)
-        let __swiftReferenceId = HybridBaseSpecCxx.__putHybridBaseSpecCxx(__cxxWrapped)
+        let __swiftReferenceId = HybridBaseSpecCxx.putHybridBaseSpecCxx(__cxxWrapped)
         return bridge.create_std__shared_ptr_margelo__nitro__image__HybridBaseSpec_(__swiftReferenceId)
       }()
     } catch {
@@ -722,18 +722,18 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
       fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
     }
   }
-  
+
   @inline(__always)
   public func bounceChild(child: bridge.std__shared_ptr_margelo__nitro__image__HybridChildSpec_) -> bridge.std__shared_ptr_margelo__nitro__image__HybridChildSpec_ {
     do {
       let __result = try self.__implementation.bounceChild(child: { () -> HybridChildSpec in
         let id = bridge.get_std__shared_ptr_margelo__nitro__image__HybridChildSpec_(child)
-        let instance = HybridChildSpecCxx.__getHybridChildSpecCxxById(id)
+        let instance = HybridChildSpecCxx.getHybridChildSpecCxxById(id)
         return instance.getHybridChildSpec()
       }())
       return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridChildSpec_ in
         let __cxxWrapped = HybridChildSpecCxx(__result)
-        let __swiftReferenceId = HybridChildSpecCxx.__putHybridChildSpecCxx(__cxxWrapped)
+        let __swiftReferenceId = HybridChildSpecCxx.putHybridChildSpecCxx(__cxxWrapped)
         return bridge.create_std__shared_ptr_margelo__nitro__image__HybridChildSpec_(__swiftReferenceId)
       }()
     } catch {
@@ -741,18 +741,18 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
       fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
     }
   }
-  
+
   @inline(__always)
   public func bounceBase(base: bridge.std__shared_ptr_margelo__nitro__image__HybridBaseSpec_) -> bridge.std__shared_ptr_margelo__nitro__image__HybridBaseSpec_ {
     do {
       let __result = try self.__implementation.bounceBase(base: { () -> HybridBaseSpec in
         let id = bridge.get_std__shared_ptr_margelo__nitro__image__HybridBaseSpec_(base)
-        let instance = HybridBaseSpecCxx.__getHybridBaseSpecCxxById(id)
+        let instance = HybridBaseSpecCxx.getHybridBaseSpecCxxById(id)
         return instance.getHybridBaseSpec()
       }())
       return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridBaseSpec_ in
         let __cxxWrapped = HybridBaseSpecCxx(__result)
-        let __swiftReferenceId = HybridBaseSpecCxx.__putHybridBaseSpecCxx(__cxxWrapped)
+        let __swiftReferenceId = HybridBaseSpecCxx.putHybridBaseSpecCxx(__cxxWrapped)
         return bridge.create_std__shared_ptr_margelo__nitro__image__HybridBaseSpec_(__swiftReferenceId)
       }()
     } catch {
@@ -760,18 +760,18 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
       fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
     }
   }
-  
+
   @inline(__always)
   public func bounceChildBase(child: bridge.std__shared_ptr_margelo__nitro__image__HybridChildSpec_) -> bridge.std__shared_ptr_margelo__nitro__image__HybridBaseSpec_ {
     do {
       let __result = try self.__implementation.bounceChildBase(child: { () -> HybridChildSpec in
         let id = bridge.get_std__shared_ptr_margelo__nitro__image__HybridChildSpec_(child)
-        let instance = HybridChildSpecCxx.__getHybridChildSpecCxxById(id)
+        let instance = HybridChildSpecCxx.getHybridChildSpecCxxById(id)
         return instance.getHybridChildSpec()
       }())
       return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridBaseSpec_ in
         let __cxxWrapped = HybridBaseSpecCxx(__result)
-        let __swiftReferenceId = HybridBaseSpecCxx.__putHybridBaseSpecCxx(__cxxWrapped)
+        let __swiftReferenceId = HybridBaseSpecCxx.putHybridBaseSpecCxx(__cxxWrapped)
         return bridge.create_std__shared_ptr_margelo__nitro__image__HybridBaseSpec_(__swiftReferenceId)
       }()
     } catch {
@@ -779,18 +779,18 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
       fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
     }
   }
-  
+
   @inline(__always)
   public func castBase(base: bridge.std__shared_ptr_margelo__nitro__image__HybridBaseSpec_) -> bridge.std__shared_ptr_margelo__nitro__image__HybridChildSpec_ {
     do {
       let __result = try self.__implementation.castBase(base: { () -> HybridBaseSpec in
         let id = bridge.get_std__shared_ptr_margelo__nitro__image__HybridBaseSpec_(base)
-        let instance = HybridBaseSpecCxx.__getHybridBaseSpecCxxById(id)
+        let instance = HybridBaseSpecCxx.getHybridBaseSpecCxxById(id)
         return instance.getHybridBaseSpec()
       }())
       return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridChildSpec_ in
         let __cxxWrapped = HybridChildSpecCxx(__result)
-        let __swiftReferenceId = HybridChildSpecCxx.__putHybridChildSpecCxx(__cxxWrapped)
+        let __swiftReferenceId = HybridChildSpecCxx.putHybridChildSpecCxx(__cxxWrapped)
         return bridge.create_std__shared_ptr_margelo__nitro__image__HybridChildSpec_(__swiftReferenceId)
       }()
     } catch {

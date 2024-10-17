@@ -28,14 +28,14 @@ public class HybridBaseSpecCxx {
   private static var __instances: [Int : HybridBaseSpecCxx] = [:]
   private static var __counter: Int = 0
 
-  public static func __putHybridBaseSpecCxx(_ instance: HybridBaseSpecCxx) -> Int {
+  public static func putHybridBaseSpecCxx(_ instance: HybridBaseSpecCxx) -> Int {
     let id = __counter
     __counter += 1
     __instances[id] = instance
     return id
   }
 
-  public static func __getHybridBaseSpecCxxById(_ instanceId: Int) -> HybridBaseSpecCxx {
+  public static func getHybridBaseSpecCxxById(_ instanceId: Int) -> HybridBaseSpecCxx {
     let instance = __instances[instanceId]!
     __instances.removeValue(forKey: instanceId)
     return instance
@@ -95,5 +95,5 @@ public class HybridBaseSpecCxx {
   }
 
   // Methods
-  
+
 }
