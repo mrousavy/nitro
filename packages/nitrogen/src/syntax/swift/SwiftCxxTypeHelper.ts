@@ -56,7 +56,7 @@ function createCxxHybridObjectSwiftHelper(
 ): SwiftCxxHelper {
   const actualType = type.getCode('c++')
   const modulename = NitroConfig.getIosModuleName()
-  const { HybridTSpecCxx, HybridTSpecSwift } = getHybridObjectName(
+  const { HybridTSpecCxx, HybridTSpecSwift, HybridTSpec } = getHybridObjectName(
     type.hybridObjectName
   )
   const swiftWrappingType = NitroConfig.getCxxNamespace('c++', HybridTSpecSwift)
@@ -96,7 +96,7 @@ size_t get_${name}(${name} cppType) {
   std::shared_ptr<${swiftWrappingType}> swiftWrapper = std::dynamic_pointer_cast<${swiftWrappingType}>(cppType);
 #ifdef NITRO_DEBUG
   if (swiftWrapper == nullptr) [[unlikely]] {
-    throw std::runtime_error("Class \\"${actualType}\\" is not implemented in Swift!");
+    throw std::runtime_error("Class \\"${HybridTSpec}\\" is not implemented in Swift!");
   }
 #endif
   ${swiftPartType} swiftPart = swiftWrapper->getSwiftPart();
