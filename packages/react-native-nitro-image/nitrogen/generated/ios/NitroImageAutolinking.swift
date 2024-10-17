@@ -19,8 +19,8 @@ public final class NitroImageAutolinking {
     let hybridObject = HybridImageFactory()
     return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridImageFactorySpec_ in
       let __cxxWrapped = HybridImageFactorySpecCxx(hybridObject)
-      let __swiftReferenceId = HybridImageFactorySpecCxxReferenceHolder.put(__cxxWrapped)
-      return bridge.create_std__shared_ptr_margelo__nitro__image__HybridImageFactorySpec_(__swiftReferenceId)
+      let __pointer = HybridImageFactorySpecCxxUnsafe.toUnsafe(__cxxWrapped)
+      return bridge.create_std__shared_ptr_margelo__nitro__image__HybridImageFactorySpec_(__pointer)
     }()
   }
   
@@ -35,8 +35,8 @@ public final class NitroImageAutolinking {
     let hybridObject = HybridTestObjectSwift()
     return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_ in
       let __cxxWrapped = HybridTestObjectSwiftKotlinSpecCxx(hybridObject)
-      let __swiftReferenceId = HybridTestObjectSwiftKotlinSpecCxxReferenceHolder.put(__cxxWrapped)
-      return bridge.create_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_(__swiftReferenceId)
+      let __pointer = HybridTestObjectSwiftKotlinSpecCxxUnsafe.toUnsafe(__cxxWrapped)
+      return bridge.create_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_(__pointer)
     }()
   }
   
@@ -51,8 +51,8 @@ public final class NitroImageAutolinking {
     let hybridObject = HybridBase()
     return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridBaseSpec_ in
       let __cxxWrapped = HybridBaseSpecCxx(hybridObject)
-      let __swiftReferenceId = HybridBaseSpecCxxReferenceHolder.put(__cxxWrapped)
-      return bridge.create_std__shared_ptr_margelo__nitro__image__HybridBaseSpec_(__swiftReferenceId)
+      let __pointer = HybridBaseSpecCxxUnsafe.toUnsafe(__cxxWrapped)
+      return bridge.create_std__shared_ptr_margelo__nitro__image__HybridBaseSpec_(__pointer)
     }()
   }
   
@@ -67,8 +67,8 @@ public final class NitroImageAutolinking {
     let hybridObject = HybridChild()
     return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridChildSpec_ in
       let __cxxWrapped = HybridChildSpecCxx(hybridObject)
-      let __swiftReferenceId = HybridChildSpecCxxReferenceHolder.put(__cxxWrapped)
-      return bridge.create_std__shared_ptr_margelo__nitro__image__HybridChildSpec_(__swiftReferenceId)
+      let __pointer = HybridChildSpecCxxUnsafe.toUnsafe(__cxxWrapped)
+      return bridge.create_std__shared_ptr_margelo__nitro__image__HybridChildSpec_(__pointer)
     }()
   }
 }

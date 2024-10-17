@@ -78,18 +78,18 @@ function createCxxHybridObjectSwiftHelper(
  * Specialized version of \`${escapeComments(actualType)}\`.
  */
 using ${name} = ${actualType};
-${actualType} create_${name}(size_t swiftReferenceId);
-size_t get_${name}(${name} cppType);
+${actualType} create_${name}(void* NONNULL swiftUnsafePointer);
+void* NONNULL get_${name}(${name} cppType);
     `.trim(),
       requiredIncludes: type.getRequiredImports(),
     },
     cxxImplementation: {
       code: `
-${actualType} create_${name}(size_t swiftReferenceId) {
-  ${swiftPartType} swiftPart = ${swiftPartType}ReferenceHolder::getById(swiftReferenceId);
+${actualType} create_${name}(void* NONNULL swiftUnsafePointer) {
+  ${swiftPartType} swiftPart = ${swiftPartType}Unsafe::fromUnsafe(swiftUnsafePointer);
   return HybridContext::getOrCreate<${swiftWrappingType}>(swiftPart);
 }
-size_t get_${name}(${name} cppType) {
+void* NONNULL get_${name}(${name} cppType) {
   std::shared_ptr<${swiftWrappingType}> swiftWrapper = std::dynamic_pointer_cast<${swiftWrappingType}>(cppType);
 #ifdef NITRO_DEBUG
   if (swiftWrapper == nullptr) [[unlikely]] {
@@ -97,7 +97,7 @@ size_t get_${name}(${name} cppType) {
   }
 #endif
   ${swiftPartType} swiftPart = swiftWrapper->getSwiftPart();
-  return ${swiftPartType}ReferenceHolder::put(swiftPart);
+  return ${swiftPartType}Unsafe::toUnsafe(swiftPart);
 }
     `.trim(),
       requiredIncludes: [

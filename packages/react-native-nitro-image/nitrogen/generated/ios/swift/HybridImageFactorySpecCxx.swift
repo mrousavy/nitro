@@ -8,25 +8,22 @@
 import Foundation
 import NitroModules
 
-/**
- * Holds instances of HybridImageFactorySpecCxx and stores them under Integer IDs.
- * Those Integer IDs can be used in C++ to box the Swift type to prevent cyclic includes.
- */
-public final class HybridImageFactorySpecCxxReferenceHolder {
-  private static var instances: [Int : HybridImageFactorySpecCxx] = [:]
-  private static var counter: Int = 0
-
-  public static func put(_ instance: HybridImageFactorySpecCxx) -> Int {
-    let id = counter
-    counter += 1
-    instances[id] = instance
-    return id
+public final class HybridImageFactorySpecCxxUnsafe {
+  /**
+   * Casts a HybridImageFactorySpecCxx instance to a retained unsafe raw pointer.
+   * This acquires one additional strong reference on the object!
+   */
+  public static func toUnsafe(_ instance: HybridImageFactorySpecCxx) -> UnsafeMutableRawPointer {
+    return Unmanaged.passRetained(instance).toOpaque()
   }
 
-  public static func getById(_ instanceId: Int) -> HybridImageFactorySpecCxx {
-    let instance = instances[instanceId]!
-    instances.removeValue(forKey: instanceId)
-    return instance
+  /**
+   * Casts an unsafe pointer to a HybridImageFactorySpecCxx.
+   * The pointer has to be a retained opaque `Unmanaged<HybridImageFactorySpecCxx>`.
+   * This removes one strong reference from the object!
+   */
+  public static func fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> HybridImageFactorySpecCxx {
+    return Unmanaged<HybridImageFactorySpecCxx>.fromOpaque(pointer).takeRetainedValue()
   }
 }
 
@@ -102,8 +99,8 @@ public class HybridImageFactorySpecCxx {
       let __result = try self.__implementation.loadImageFromFile(path: String(path))
       return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridImageSpec_ in
         let __cxxWrapped = HybridImageSpecCxx(__result)
-        let __swiftReferenceId = HybridImageSpecCxxReferenceHolder.put(__cxxWrapped)
-        return bridge.create_std__shared_ptr_margelo__nitro__image__HybridImageSpec_(__swiftReferenceId)
+        let __pointer = HybridImageSpecCxxUnsafe.toUnsafe(__cxxWrapped)
+        return bridge.create_std__shared_ptr_margelo__nitro__image__HybridImageSpec_(__pointer)
       }()
     } catch {
       let __message = "\(error.localizedDescription)"
@@ -117,8 +114,8 @@ public class HybridImageFactorySpecCxx {
       let __result = try self.__implementation.loadImageFromURL(path: String(path))
       return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridImageSpec_ in
         let __cxxWrapped = HybridImageSpecCxx(__result)
-        let __swiftReferenceId = HybridImageSpecCxxReferenceHolder.put(__cxxWrapped)
-        return bridge.create_std__shared_ptr_margelo__nitro__image__HybridImageSpec_(__swiftReferenceId)
+        let __pointer = HybridImageSpecCxxUnsafe.toUnsafe(__cxxWrapped)
+        return bridge.create_std__shared_ptr_margelo__nitro__image__HybridImageSpec_(__pointer)
       }()
     } catch {
       let __message = "\(error.localizedDescription)"
@@ -132,8 +129,8 @@ public class HybridImageFactorySpecCxx {
       let __result = try self.__implementation.loadImageFromSystemName(path: String(path))
       return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridImageSpec_ in
         let __cxxWrapped = HybridImageSpecCxx(__result)
-        let __swiftReferenceId = HybridImageSpecCxxReferenceHolder.put(__cxxWrapped)
-        return bridge.create_std__shared_ptr_margelo__nitro__image__HybridImageSpec_(__swiftReferenceId)
+        let __pointer = HybridImageSpecCxxUnsafe.toUnsafe(__cxxWrapped)
+        return bridge.create_std__shared_ptr_margelo__nitro__image__HybridImageSpec_(__pointer)
       }()
     } catch {
       let __message = "\(error.localizedDescription)"
@@ -145,14 +142,14 @@ public class HybridImageFactorySpecCxx {
   public func bounceBack(image: bridge.std__shared_ptr_margelo__nitro__image__HybridImageSpec_) -> bridge.std__shared_ptr_margelo__nitro__image__HybridImageSpec_ {
     do {
       let __result = try self.__implementation.bounceBack(image: { () -> HybridImageSpec in
-        let __instanceId = bridge.get_std__shared_ptr_margelo__nitro__image__HybridImageSpec_(image)
-        let __instance = HybridImageSpecCxxReferenceHolder.getById(__instanceId)
+        let __unsafePointer = bridge.get_std__shared_ptr_margelo__nitro__image__HybridImageSpec_(image)
+        let __instance = HybridImageSpecCxxUnsafe.fromUnsafe(__unsafePointer)
         return __instance.getHybridImageSpec()
       }())
       return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridImageSpec_ in
         let __cxxWrapped = HybridImageSpecCxx(__result)
-        let __swiftReferenceId = HybridImageSpecCxxReferenceHolder.put(__cxxWrapped)
-        return bridge.create_std__shared_ptr_margelo__nitro__image__HybridImageSpec_(__swiftReferenceId)
+        let __pointer = HybridImageSpecCxxUnsafe.toUnsafe(__cxxWrapped)
+        return bridge.create_std__shared_ptr_margelo__nitro__image__HybridImageSpec_(__pointer)
       }()
     } catch {
       let __message = "\(error.localizedDescription)"

@@ -8,25 +8,22 @@
 import Foundation
 import NitroModules
 
-/**
- * Holds instances of HybridBaseSpecCxx and stores them under Integer IDs.
- * Those Integer IDs can be used in C++ to box the Swift type to prevent cyclic includes.
- */
-public final class HybridBaseSpecCxxReferenceHolder {
-  private static var instances: [Int : HybridBaseSpecCxx] = [:]
-  private static var counter: Int = 0
-
-  public static func put(_ instance: HybridBaseSpecCxx) -> Int {
-    let id = counter
-    counter += 1
-    instances[id] = instance
-    return id
+public final class HybridBaseSpecCxxUnsafe {
+  /**
+   * Casts a HybridBaseSpecCxx instance to a retained unsafe raw pointer.
+   * This acquires one additional strong reference on the object!
+   */
+  public static func toUnsafe(_ instance: HybridBaseSpecCxx) -> UnsafeMutableRawPointer {
+    return Unmanaged.passRetained(instance).toOpaque()
   }
 
-  public static func getById(_ instanceId: Int) -> HybridBaseSpecCxx {
-    let instance = instances[instanceId]!
-    instances.removeValue(forKey: instanceId)
-    return instance
+  /**
+   * Casts an unsafe pointer to a HybridBaseSpecCxx.
+   * The pointer has to be a retained opaque `Unmanaged<HybridBaseSpecCxx>`.
+   * This removes one strong reference from the object!
+   */
+  public static func fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> HybridBaseSpecCxx {
+    return Unmanaged<HybridBaseSpecCxx>.fromOpaque(pointer).takeRetainedValue()
   }
 }
 
