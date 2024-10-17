@@ -28,7 +28,8 @@
   HybridObjectRegistry::registerHybridObjectConstructor(
     "ImageFactory",
     []() -> std::shared_ptr<HybridObject> {
-      return NitroImage::NitroImageAutolinking::createImageFactory();
+      std::shared_ptr<margelo::nitro::image::HybridImageFactorySpec> hybridObject = NitroImage::NitroImageAutolinking::createImageFactory();
+      return hybridObject;
     }
   );
   HybridObjectRegistry::registerHybridObjectConstructor(
@@ -43,19 +44,22 @@
   HybridObjectRegistry::registerHybridObjectConstructor(
     "TestObjectSwiftKotlin",
     []() -> std::shared_ptr<HybridObject> {
-      return NitroImage::NitroImageAutolinking::createTestObjectSwiftKotlin();
+      std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec> hybridObject = NitroImage::NitroImageAutolinking::createTestObjectSwiftKotlin();
+      return hybridObject;
     }
   );
   HybridObjectRegistry::registerHybridObjectConstructor(
     "Base",
     []() -> std::shared_ptr<HybridObject> {
-      return NitroImage::NitroImageAutolinking::createBase();
+      std::shared_ptr<margelo::nitro::image::HybridBaseSpec> hybridObject = NitroImage::NitroImageAutolinking::createBase();
+      return hybridObject;
     }
   );
   HybridObjectRegistry::registerHybridObjectConstructor(
     "Child",
     []() -> std::shared_ptr<HybridObject> {
-      return NitroImage::NitroImageAutolinking::createChild();
+      std::shared_ptr<margelo::nitro::image::HybridChildSpec> hybridObject = NitroImage::NitroImageAutolinking::createChild();
+      return hybridObject;
     }
   );
 }
