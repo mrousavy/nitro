@@ -22,16 +22,12 @@ namespace margelo::nitro::image { class HybridChildSpec; }
 namespace margelo::nitro::image { class HybridImageFactorySpec; }
 // Forward declaration of `HybridImageSpec` to properly resolve imports.
 namespace margelo::nitro::image { class HybridImageSpec; }
-// Forward declaration of `HybridTestObjectCppSpec` to properly resolve imports.
-namespace margelo::nitro::image { class HybridTestObjectCppSpec; }
 // Forward declaration of `HybridTestObjectSwiftKotlinSpec` to properly resolve imports.
 namespace margelo::nitro::image { class HybridTestObjectSwiftKotlinSpec; }
 // Forward declaration of `ImageFormat` to properly resolve imports.
 namespace margelo::nitro::image { enum class ImageFormat; }
 // Forward declaration of `ImageSize` to properly resolve imports.
 namespace margelo::nitro::image { struct ImageSize; }
-// Forward declaration of `OldEnum` to properly resolve imports.
-namespace margelo::nitro::image { enum class OldEnum; }
 // Forward declaration of `Person` to properly resolve imports.
 namespace margelo::nitro::image { struct Person; }
 // Forward declaration of `PixelFormat` to properly resolve imports.
@@ -45,11 +41,9 @@ namespace margelo::nitro::image { enum class Powertrain; }
 #include "HybridChildSpec.hpp"
 #include "HybridImageFactorySpec.hpp"
 #include "HybridImageSpec.hpp"
-#include "HybridTestObjectCppSpec.hpp"
 #include "HybridTestObjectSwiftKotlinSpec.hpp"
 #include "ImageFormat.hpp"
 #include "ImageSize.hpp"
-#include "OldEnum.hpp"
 #include "Person.hpp"
 #include "PixelFormat.hpp"
 #include "Powertrain.hpp"
@@ -60,7 +54,6 @@ namespace margelo::nitro::image { enum class Powertrain; }
 #include <memory>
 #include <optional>
 #include <string>
-#include <tuple>
 #include <variant>
 #include <vector>
 
@@ -82,8 +75,6 @@ namespace NitroImage { class HybridChildSpecCxx; }
 namespace NitroImage { class HybridImageFactorySpecCxx; }
 // Forward declaration of `HybridImageSpecCxx` to properly resolve imports.
 namespace NitroImage { class HybridImageSpecCxx; }
-// Forward declaration of `HybridTestObjectCppSpecCxx` to properly resolve imports.
-namespace NitroImage { class HybridTestObjectCppSpecCxx; }
 // Forward declaration of `HybridTestObjectSwiftKotlinSpecCxx` to properly resolve imports.
 namespace NitroImage { class HybridTestObjectSwiftKotlinSpecCxx; }
 

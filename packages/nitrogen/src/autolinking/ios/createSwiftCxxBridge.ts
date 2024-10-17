@@ -25,7 +25,7 @@ export function createSwiftCxxBridge(): SourceFile[] {
   const bridgeName = `${moduleName}-Swift-Cxx-Bridge`
   const umbrellaHeader = getUmbrellaHeaderName()
 
-  const types = getAllKnownTypes().map((t) => new SwiftCxxBridgedType(t))
+  const types = getAllKnownTypes('swift').map((t) => new SwiftCxxBridgedType(t))
 
   const bridges = types
     .flatMap((t) => {

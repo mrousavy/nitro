@@ -118,13 +118,25 @@ export function createVoidType(): Type {
 }
 
 // Caches complex types (types that have a symbol)
-const knownTypes = new Map<string, Type>()
+type TypeId = string
+const knownTypes: Record<Language, Map<TypeId, Type>> = {
+  'c++': new Map<TypeId, Type>(),
+  'swift': new Map<TypeId, Type>(),
+  'kotlin': new Map<TypeId, Type>(),
+}
 
 /**
  * Get a list of all currently known complex types.
  */
-export function getAllKnownTypes(): Type[] {
-  return Array.from(knownTypes.values())
+export function getAllKnownTypes(language?: Language): Type[] {
+  if (language != null) {
+    // Get types for the given language
+    return Array.from(knownTypes[language].values())
+  } else {
+    // Get types for all languages alltogether
+    const allMaps = Object.values(knownTypes)
+    return allMaps.flatMap((m) => Array.from(m.values()))
+  }
 }
 
 function getTypeId(type: TSMorphType, isOptional: boolean): string {
@@ -146,8 +158,8 @@ export function createType(
   isOptional: boolean
 ): Type {
   const key = getTypeId(type, isOptional)
-  if (key != null && knownTypes.has(key)) {
-    const known = knownTypes.get(key)!
+  if (key != null && knownTypes[language].has(key)) {
+    const known = knownTypes[language].get(key)!
     if (isOptional === known instanceof OptionalType) {
       return known
     }
@@ -296,7 +308,7 @@ export function createType(
 
   const result = get()
   if (key != null) {
-    knownTypes.set(key, result)
+    knownTypes[language].set(key, result)
   }
   return result
 }
