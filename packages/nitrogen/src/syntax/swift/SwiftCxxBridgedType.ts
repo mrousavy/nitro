@@ -222,17 +222,6 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
           default:
             throw new Error(`Invalid language! ${language}`)
         }
-      case 'hybrid-object': {
-        const name = getTypeHybridObjectName(this.type)
-        switch (language) {
-          case 'c++':
-            return `std::shared_ptr<${name.HybridTSpecSwift}>`
-          case 'swift':
-            return name.HybridTSpecCxx
-          default:
-            throw new Error(`Invalid language! ${language}`)
-        }
-      }
       case 'map': {
         switch (language) {
           case 'swift':
@@ -241,6 +230,7 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
             return this.type.getCode(language)
         }
       }
+      case 'hybrid-object':
       case 'optional':
       case 'array':
       case 'function':
@@ -317,16 +307,24 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
           default:
             throw new Error(`Invalid language! ${language}`)
         }
-      case 'hybrid-object':
+      case 'hybrid-object': {
+        const bridge = this.getBridgeOrThrow()
+        const getFunc = `bridge.get_${bridge.specializationName}`
         const name = getTypeHybridObjectName(this.type)
         switch (language) {
           case 'c++':
-            return `std::dynamic_pointer_cast<${name.HybridTSpecSwift}>(${cppParameterName})->getSwiftPart()`
+            return cppParameterName
           case 'swift':
-            return `${cppParameterName}.get${name.HybridTSpec}()`
+            return `
+{ () -> ${name.HybridTSpec} in
+  let id = ${getFunc}(${cppParameterName})
+  let instance = ${name.HybridTSpecCxx}.__getById(id)
+  return instance.get${name.HybridTSpec}()
+}()`.trim()
           default:
             throw new Error(`Invalid language! ${language}`)
         }
+      }
       case 'array-buffer': {
         switch (language) {
           case 'swift':
@@ -523,16 +521,24 @@ case ${i}:
           default:
             throw new Error(`Invalid language! ${language}`)
         }
-      case 'hybrid-object':
+      case 'hybrid-object': {
+        const bridge = this.getBridgeOrThrow()
         const name = getTypeHybridObjectName(this.type)
+        const makeFunc = `bridge.${bridge.funcName}`
         switch (language) {
           case 'c++':
             return `HybridContext::getOrCreate<${name.HybridTSpecSwift}>(${swiftParameterName})`
           case 'swift':
-            return `${swiftParameterName}.createCxxBridge()`
+            return `
+{ () -> bridge.${bridge.specializationName} in
+  let __cxxWrapped = ${name.HybridTSpecCxx}(${swiftParameterName})
+  let __swiftReferenceId = ${name.HybridTSpecCxx}.__put(instance: __cxxWrapped)
+  return ${makeFunc}(__swiftReferenceId)
+}()`.trim()
           default:
             throw new Error(`Invalid language! ${language}`)
         }
+      }
       case 'optional': {
         const optional = getTypeAs(this.type, OptionalType)
         const wrapping = new SwiftCxxBridgedType(optional.wrappingType, true)

@@ -25,18 +25,26 @@ public class HybridBaseSpecCxx {
    */
   public typealias bridge = margelo.nitro.image.bridge.swift
 
+  private static var __instances: [Int : HybridBaseSpecCxx] = [:]
+  private static var __counter: Int = 0
+
+  public static func __put(instance: HybridBaseSpecCxx) -> Int {
+    let id = __counter
+    __counter += 1
+    __instances[id] = instance
+    return id
+  }
+
+  public static func __getById(_ instanceId: Int) -> HybridBaseSpecCxx {
+    let instance = __instances[instanceId]!
+    __instances.removeValue(forKey: instanceId)
+    return instance
+  }
+
   /**
    * Holds an instance of the `HybridBaseSpec` Swift protocol.
    */
   private var __implementation: any HybridBaseSpec
-
-  /**
-   * Get the actual `HybridBaseSpec` instance this class wraps.
-   */
-  @inline(__always)
-  public func getHybridBaseSpec() -> any HybridBaseSpec {
-    return __implementation
-  }
 
   /**
    * Create a new `HybridBaseSpecCxx` that wraps the given `HybridBaseSpec`.
@@ -45,6 +53,14 @@ public class HybridBaseSpecCxx {
   public init(_ implementation: some HybridBaseSpec) {
     self.__implementation = implementation
     /* no base class */
+  }
+
+  /**
+   * Get the actual `HybridBaseSpec` instance this class wraps.
+   */
+  @inline(__always)
+  public func getHybridBaseSpec() -> any HybridBaseSpec {
+    return __implementation
   }
 
   /**

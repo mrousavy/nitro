@@ -67,18 +67,26 @@ ${hasBase ? `public class ${name.HybridTSpecCxx} : ${baseClasses.join(', ')}` : 
    */
   public typealias bridge = ${BRIDGE_NAMESPACE}
 
+  private static var __instances: [Int : ${name.HybridTSpecCxx}] = [:]
+  private static var __counter: Int = 0
+
+  public static func __put(instance: ${name.HybridTSpecCxx}) -> Int {
+    let id = __counter
+    __counter += 1
+    __instances[id] = instance
+    return id
+  }
+
+  public static func __getById(_ instanceId: Int) -> ${name.HybridTSpecCxx} {
+    let instance = __instances[instanceId]!
+    __instances.removeValue(forKey: instanceId)
+    return instance
+  }
+
   /**
    * Holds an instance of the \`${name.HybridTSpec}\` Swift protocol.
    */
   private var __implementation: any ${name.HybridTSpec}
-
-  /**
-   * Get the actual \`${name.HybridTSpec}\` instance this class wraps.
-   */
-  @inline(__always)
-  public func get${name.HybridTSpec}() -> any ${name.HybridTSpec} {
-    return __implementation
-  }
 
   /**
    * Create a new \`${name.HybridTSpecCxx}\` that wraps the given \`${name.HybridTSpec}\`.
@@ -87,6 +95,14 @@ ${hasBase ? `public class ${name.HybridTSpecCxx} : ${baseClasses.join(', ')}` : 
   public init(_ implementation: some ${name.HybridTSpec}) {
     self.__implementation = implementation
     ${hasBase ? 'super.init(implementation)' : '/* no base class */'}
+  }
+
+  /**
+   * Get the actual \`${name.HybridTSpec}\` instance this class wraps.
+   */
+  @inline(__always)
+  public func get${name.HybridTSpec}() -> any ${name.HybridTSpec} {
+    return __implementation
   }
 
   /**

@@ -11,6 +11,10 @@ import { TupleType } from '../types/TupleType.js'
 import { escapeComments, indent } from '../../utils.js'
 import { PromiseType } from '../types/PromiseType.js'
 import { SwiftCxxBridgedType } from './SwiftCxxBridgedType.js'
+import { HybridObjectType } from '../types/HybridObjectType.js'
+import { getHybridObjectName } from '../getHybridObjectName.js'
+import { NitroConfig } from '../../config/NitroConfig.js'
+import { getForwardDeclaration } from '../c++/getForwardDeclaration.js'
 
 export interface SwiftCxxHelper {
   cxxHeaderCode: string
@@ -23,6 +27,8 @@ export interface SwiftCxxHelper {
 
 export function createSwiftCxxHelpers(type: Type): SwiftCxxHelper | undefined {
   switch (type.kind) {
+    case 'hybrid-object':
+      return createCxxHybridObjectSwiftHelper(getTypeAs(type, HybridObjectType))
     case 'optional':
       return createCxxOptionalSwiftHelper(getTypeAs(type, OptionalType))
     case 'array':
@@ -39,6 +45,64 @@ export function createSwiftCxxHelpers(type: Type): SwiftCxxHelper | undefined {
       return createCxxPromiseSwiftHelper(getTypeAs(type, PromiseType))
     default:
       return undefined
+  }
+}
+
+/**
+ * Creates a C++ `create_HybridTSpecSwift(value)` function that can be called from Swift.
+ */
+function createCxxHybridObjectSwiftHelper(
+  type: HybridObjectType
+): SwiftCxxHelper {
+  const actualType = type.getCode('c++')
+  const modulename = NitroConfig.getIosModuleName()
+  const { HybridTSpecCxx, HybridTSpecSwift } = getHybridObjectName(
+    type.hybridObjectName
+  )
+  const swiftWrappingType = NitroConfig.getCxxNamespace('c++', HybridTSpecSwift)
+  const swiftPartType = `${modulename}::${HybridTSpecCxx}`
+  const name = escapeCppName(actualType)
+  return {
+    cxxType: actualType,
+    funcName: `create_${name}`,
+    specializationName: name,
+    requiredIncludes: [
+      {
+        language: 'c++',
+        name: 'NitroModules/HybridContext.hpp',
+        space: 'system',
+        forwardDeclaration: getForwardDeclaration(
+          'class',
+          'HybridContext',
+          'margelo::nitro'
+        ),
+      },
+      ...type.getRequiredImports(),
+    ],
+    cxxHeaderCode: `
+/**
+ * Specialized version of \`${escapeComments(actualType)}\`.
+ */
+using ${name} = ${actualType};
+${actualType} create_${name}(size_t swiftReferenceId);
+size_t get_${name}(${name} cppType);
+    `.trim(),
+    cxxImplementationCode: `
+${actualType} create_${name}(size_t swiftReferenceId) {
+  ${swiftPartType} swiftPart = ${swiftPartType}::__getById(swiftReferenceId);
+  return HybridContext::getOrCreate<${swiftWrappingType}>(swiftPart);
+}
+size_t get_${name}(${name} cppType) {
+  std::shared_ptr<${swiftWrappingType}> swiftWrapper = std::dynamic_pointer_cast<${swiftWrappingType}>(cppType);
+#ifdef NITRO_DEBUG
+  if (swiftWrapper == nullptr) [[unlikely]] {
+    throw std::runtime_error("Class \\"${name}\\" is not implemented in Swift!");
+  }
+#endif
+  ${swiftPartType} swiftPart = swiftWrapper->getSwiftPart();
+  return ${swiftPartType}::__put(swiftPart);
+}
+    `.trim(),
   }
 }
 

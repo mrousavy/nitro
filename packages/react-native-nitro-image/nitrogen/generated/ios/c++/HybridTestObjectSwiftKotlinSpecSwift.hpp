@@ -282,19 +282,19 @@ namespace margelo::nitro::image {
       return HybridContext::getOrCreate<HybridBaseSpecSwift>(__result);
     }
     inline std::shared_ptr<margelo::nitro::image::HybridChildSpec> bounceChild(const std::shared_ptr<margelo::nitro::image::HybridChildSpec>& child) override {
-      auto __result = _swiftPart.bounceChild(std::dynamic_pointer_cast<HybridChildSpecSwift>(child)->getSwiftPart());
+      auto __result = _swiftPart.bounceChild(child);
       return HybridContext::getOrCreate<HybridChildSpecSwift>(__result);
     }
     inline std::shared_ptr<margelo::nitro::image::HybridBaseSpec> bounceBase(const std::shared_ptr<margelo::nitro::image::HybridBaseSpec>& base) override {
-      auto __result = _swiftPart.bounceBase(std::dynamic_pointer_cast<HybridBaseSpecSwift>(base)->getSwiftPart());
+      auto __result = _swiftPart.bounceBase(base);
       return HybridContext::getOrCreate<HybridBaseSpecSwift>(__result);
     }
     inline std::shared_ptr<margelo::nitro::image::HybridBaseSpec> bounceChildBase(const std::shared_ptr<margelo::nitro::image::HybridChildSpec>& child) override {
-      auto __result = _swiftPart.bounceChildBase(std::dynamic_pointer_cast<HybridChildSpecSwift>(child)->getSwiftPart());
+      auto __result = _swiftPart.bounceChildBase(child);
       return HybridContext::getOrCreate<HybridBaseSpecSwift>(__result);
     }
     inline std::shared_ptr<margelo::nitro::image::HybridChildSpec> castBase(const std::shared_ptr<margelo::nitro::image::HybridBaseSpec>& base) override {
-      auto __result = _swiftPart.castBase(std::dynamic_pointer_cast<HybridBaseSpecSwift>(base)->getSwiftPart());
+      auto __result = _swiftPart.castBase(base);
       return HybridContext::getOrCreate<HybridChildSpecSwift>(__result);
     }
 

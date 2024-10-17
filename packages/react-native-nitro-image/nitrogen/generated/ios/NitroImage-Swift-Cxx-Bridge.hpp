@@ -16,10 +16,22 @@
 // Forward declarations of C++ defined types
 // Forward declaration of `Car` to properly resolve imports.
 namespace margelo::nitro::image { struct Car; }
+// Forward declaration of `HybridBaseSpec` to properly resolve imports.
+namespace margelo::nitro::image { class HybridBaseSpec; }
+// Forward declaration of `HybridChildSpec` to properly resolve imports.
+namespace margelo::nitro::image { class HybridChildSpec; }
+// Forward declaration of `HybridContext` to properly resolve imports.
+namespace margelo::nitro { class HybridContext; }
+// Forward declaration of `HybridImageFactorySpec` to properly resolve imports.
+namespace margelo::nitro::image { class HybridImageFactorySpec; }
+// Forward declaration of `HybridImageSpec` to properly resolve imports.
+namespace margelo::nitro::image { class HybridImageSpec; }
 // Forward declaration of `HybridTestObjectCppSpecSwift` to properly resolve imports.
 namespace margelo::nitro::image { class HybridTestObjectCppSpecSwift; }
 // Forward declaration of `HybridTestObjectCppSpec` to properly resolve imports.
 namespace margelo::nitro::image { class HybridTestObjectCppSpec; }
+// Forward declaration of `HybridTestObjectSwiftKotlinSpec` to properly resolve imports.
+namespace margelo::nitro::image { class HybridTestObjectSwiftKotlinSpec; }
 // Forward declaration of `OldEnum` to properly resolve imports.
 namespace margelo::nitro::image { enum class OldEnum; }
 // Forward declaration of `Person` to properly resolve imports.
@@ -45,11 +57,26 @@ namespace NitroImage { class HybridTestObjectSwiftKotlinSpecCxx; }
 #if __has_include("Car.hpp")
  #include "Car.hpp"
 #endif
+#if __has_include("HybridBaseSpec.hpp")
+ #include "HybridBaseSpec.hpp"
+#endif
+#if __has_include("HybridChildSpec.hpp")
+ #include "HybridChildSpec.hpp"
+#endif
+#if __has_include("HybridImageFactorySpec.hpp")
+ #include "HybridImageFactorySpec.hpp"
+#endif
+#if __has_include("HybridImageSpec.hpp")
+ #include "HybridImageSpec.hpp"
+#endif
 #if __has_include("HybridTestObjectCppSpec.hpp")
  #include "HybridTestObjectCppSpec.hpp"
 #endif
 #if __has_include("HybridTestObjectCppSpecSwift.hpp")
  #include "HybridTestObjectCppSpecSwift.hpp"
+#endif
+#if __has_include("HybridTestObjectSwiftKotlinSpec.hpp")
+ #include "HybridTestObjectSwiftKotlinSpec.hpp"
 #endif
 #if __has_include("OldEnum.hpp")
  #include "OldEnum.hpp"
@@ -60,6 +87,7 @@ namespace NitroImage { class HybridTestObjectSwiftKotlinSpecCxx; }
 #if __has_include("Powertrain.hpp")
  #include "Powertrain.hpp"
 #endif
+#include <NitroModules/HybridContext.hpp>
 #include <NitroModules/PromiseHolder.hpp>
 #include <functional>
 #include <future>
@@ -93,6 +121,22 @@ namespace margelo::nitro::image::bridge::swift {
   };
   Func_void_std__string create_Func_void_std__string(void* NONNULL closureHolder, void(* NONNULL call)(void* NONNULL /* closureHolder */, std::string), void(* NONNULL destroy)(void* NONNULL));
   std::shared_ptr<Func_void_std__string_Wrapper> share_Func_void_std__string(const Func_void_std__string& value);
+  
+  // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridImageSpec>
+  /**
+   * Specialized version of `std::shared_ptr<margelo::nitro::image::HybridImageSpec>`.
+   */
+  using std__shared_ptr_margelo__nitro__image__HybridImageSpec_ = std::shared_ptr<margelo::nitro::image::HybridImageSpec>;
+  std::shared_ptr<margelo::nitro::image::HybridImageSpec> create_std__shared_ptr_margelo__nitro__image__HybridImageSpec_(size_t swiftReferenceId);
+  size_t get_std__shared_ptr_margelo__nitro__image__HybridImageSpec_(std__shared_ptr_margelo__nitro__image__HybridImageSpec_ cppType);
+  
+  // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridImageFactorySpec>
+  /**
+   * Specialized version of `std::shared_ptr<margelo::nitro::image::HybridImageFactorySpec>`.
+   */
+  using std__shared_ptr_margelo__nitro__image__HybridImageFactorySpec_ = std::shared_ptr<margelo::nitro::image::HybridImageFactorySpec>;
+  std::shared_ptr<margelo::nitro::image::HybridImageFactorySpec> create_std__shared_ptr_margelo__nitro__image__HybridImageFactorySpec_(size_t swiftReferenceId);
+  size_t get_std__shared_ptr_margelo__nitro__image__HybridImageFactorySpec_(std__shared_ptr_margelo__nitro__image__HybridImageFactorySpec_ cppType);
   
   // pragma MARK: std::variant<std::string, double>
   /**
@@ -188,6 +232,14 @@ namespace margelo::nitro::image::bridge::swift {
   std__variant_Car__Person_ create_std__variant_Car__Person_(const Person& value);
   Car get_std__variant_Car__Person__0(const std__variant_Car__Person_& variantWrapper);
   Person get_std__variant_Car__Person__1(const std__variant_Car__Person_& variantWrapper);
+  
+  // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>
+  /**
+   * Specialized version of `std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>`.
+   */
+  using std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec_ = std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>;
+  std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec> create_std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec_(size_t swiftReferenceId);
+  size_t get_std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec_(std__shared_ptr_margelo__nitro__image__HybridTestObjectCppSpec_ cppType);
   
   // pragma MARK: std::variant<Person, std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>>
   /**
@@ -417,5 +469,29 @@ namespace margelo::nitro::image::bridge::swift {
   };
   Func_void_std__optional_double_ create_Func_void_std__optional_double_(void* NONNULL closureHolder, void(* NONNULL call)(void* NONNULL /* closureHolder */, std::optional<double>), void(* NONNULL destroy)(void* NONNULL));
   std::shared_ptr<Func_void_std__optional_double__Wrapper> share_Func_void_std__optional_double_(const Func_void_std__optional_double_& value);
+  
+  // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridChildSpec>
+  /**
+   * Specialized version of `std::shared_ptr<margelo::nitro::image::HybridChildSpec>`.
+   */
+  using std__shared_ptr_margelo__nitro__image__HybridChildSpec_ = std::shared_ptr<margelo::nitro::image::HybridChildSpec>;
+  std::shared_ptr<margelo::nitro::image::HybridChildSpec> create_std__shared_ptr_margelo__nitro__image__HybridChildSpec_(size_t swiftReferenceId);
+  size_t get_std__shared_ptr_margelo__nitro__image__HybridChildSpec_(std__shared_ptr_margelo__nitro__image__HybridChildSpec_ cppType);
+  
+  // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridBaseSpec>
+  /**
+   * Specialized version of `std::shared_ptr<margelo::nitro::image::HybridBaseSpec>`.
+   */
+  using std__shared_ptr_margelo__nitro__image__HybridBaseSpec_ = std::shared_ptr<margelo::nitro::image::HybridBaseSpec>;
+  std::shared_ptr<margelo::nitro::image::HybridBaseSpec> create_std__shared_ptr_margelo__nitro__image__HybridBaseSpec_(size_t swiftReferenceId);
+  size_t get_std__shared_ptr_margelo__nitro__image__HybridBaseSpec_(std__shared_ptr_margelo__nitro__image__HybridBaseSpec_ cppType);
+  
+  // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>
+  /**
+   * Specialized version of `std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>`.
+   */
+  using std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_ = std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>;
+  std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec> create_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_(size_t swiftReferenceId);
+  size_t get_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_(std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_ cppType);
 
 } // namespace margelo::nitro::image::bridge::swift

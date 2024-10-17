@@ -16,12 +16,14 @@ import { getTypeAs } from '../../syntax/types/getTypeAs.js'
 import { HybridObjectType } from '../../syntax/types/HybridObjectType.js'
 import { getForwardDeclaration } from '../../syntax/c++/getForwardDeclaration.js'
 import { getHybridObjectName } from '../../syntax/getHybridObjectName.js'
+import { getUmbrellaHeaderName } from './createSwiftUmbrellaHeader.js'
 
 const SWIFT_BRIDGE_NAMESPACE = ['bridge', 'swift']
 
 export function createSwiftCxxBridge(): SourceFile[] {
   const moduleName = NitroConfig.getIosModuleName()
   const bridgeName = `${moduleName}-Swift-Cxx-Bridge`
+  const umbrellaHeader = getUmbrellaHeaderName()
 
   const types = getAllKnownTypes().map((t) => new SwiftCxxBridgedType(t))
 
@@ -98,6 +100,7 @@ namespace ${namespace} {
 ${createFileMetadataString(`${bridgeName}.cpp`)}
 
 #include "${bridgeName}.hpp"
+#include "${umbrellaHeader}"
 
 namespace ${namespace} {
 
