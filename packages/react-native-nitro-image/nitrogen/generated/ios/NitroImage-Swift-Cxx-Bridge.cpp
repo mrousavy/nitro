@@ -18,22 +18,6 @@
 
 namespace margelo::nitro::image::bridge::swift {
 
-  // pragma MARK: std::function<void(const std::string& /* path */)>
-  Func_void_std__string_Wrapper::Func_void_std__string_Wrapper(const std::function<void(const std::string& /* path */)>& func): function(func) {}
-  Func_void_std__string_Wrapper::Func_void_std__string_Wrapper(std::function<void(const std::string& /* path */)>&& func): function(std::move(func)) {}
-  void Func_void_std__string_Wrapper::call(std::string path) const {
-    function(path);
-  }
-  Func_void_std__string create_Func_void_std__string(void* NONNULL closureHolder, void(* NONNULL call)(void* NONNULL /* closureHolder */, std::string), void(* NONNULL destroy)(void* NONNULL)) {
-    std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
-    return Func_void_std__string([sharedClosureHolder, call](const std::string& path) -> void {
-      call(sharedClosureHolder.get(), path);
-    });
-  }
-  std::shared_ptr<Func_void_std__string_Wrapper> share_Func_void_std__string(const Func_void_std__string& value) {
-    return std::make_shared<Func_void_std__string_Wrapper>(value);
-  }
-  
   // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridImageSpec>
   std::shared_ptr<margelo::nitro::image::HybridImageSpec> create_std__shared_ptr_margelo__nitro__image__HybridImageSpec_(size_t swiftReferenceId) {
     NitroImage::HybridImageSpecCxx swiftPart = NitroImage::HybridImageSpecCxxReferenceHolder::getById(swiftReferenceId);
@@ -80,54 +64,6 @@ namespace margelo::nitro::image::bridge::swift {
   #endif
     NitroImage::HybridTestObjectSwiftKotlinSpecCxx swiftPart = swiftWrapper->getSwiftPart();
     return NitroImage::HybridTestObjectSwiftKotlinSpecCxxReferenceHolder::put(swiftPart);
-  }
-  
-  // pragma MARK: std::function<void(const std::vector<Powertrain>& /* array */)>
-  Func_void_std__vector_Powertrain__Wrapper::Func_void_std__vector_Powertrain__Wrapper(const std::function<void(const std::vector<Powertrain>& /* array */)>& func): function(func) {}
-  Func_void_std__vector_Powertrain__Wrapper::Func_void_std__vector_Powertrain__Wrapper(std::function<void(const std::vector<Powertrain>& /* array */)>&& func): function(std::move(func)) {}
-  void Func_void_std__vector_Powertrain__Wrapper::call(std::vector<Powertrain> array) const {
-    function(array);
-  }
-  Func_void_std__vector_Powertrain_ create_Func_void_std__vector_Powertrain_(void* NONNULL closureHolder, void(* NONNULL call)(void* NONNULL /* closureHolder */, std::vector<Powertrain>), void(* NONNULL destroy)(void* NONNULL)) {
-    std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
-    return Func_void_std__vector_Powertrain_([sharedClosureHolder, call](const std::vector<Powertrain>& array) -> void {
-      call(sharedClosureHolder.get(), array);
-    });
-  }
-  std::shared_ptr<Func_void_std__vector_Powertrain__Wrapper> share_Func_void_std__vector_Powertrain_(const Func_void_std__vector_Powertrain_& value) {
-    return std::make_shared<Func_void_std__vector_Powertrain__Wrapper>(value);
-  }
-  
-  // pragma MARK: std::function<void()>
-  Func_void_Wrapper::Func_void_Wrapper(const std::function<void()>& func): function(func) {}
-  Func_void_Wrapper::Func_void_Wrapper(std::function<void()>&& func): function(std::move(func)) {}
-  void Func_void_Wrapper::call() const {
-    function();
-  }
-  Func_void create_Func_void(void* NONNULL closureHolder, void(* NONNULL call)(void* NONNULL /* closureHolder */), void(* NONNULL destroy)(void* NONNULL)) {
-    std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
-    return Func_void([sharedClosureHolder, call]() -> void {
-      call(sharedClosureHolder.get());
-    });
-  }
-  std::shared_ptr<Func_void_Wrapper> share_Func_void(const Func_void& value) {
-    return std::make_shared<Func_void_Wrapper>(value);
-  }
-  
-  // pragma MARK: std::function<void(std::optional<double> /* maybe */)>
-  Func_void_std__optional_double__Wrapper::Func_void_std__optional_double__Wrapper(const std::function<void(std::optional<double> /* maybe */)>& func): function(func) {}
-  Func_void_std__optional_double__Wrapper::Func_void_std__optional_double__Wrapper(std::function<void(std::optional<double> /* maybe */)>&& func): function(std::move(func)) {}
-  void Func_void_std__optional_double__Wrapper::call(std::optional<double> maybe) const {
-    function(maybe);
-  }
-  Func_void_std__optional_double_ create_Func_void_std__optional_double_(void* NONNULL closureHolder, void(* NONNULL call)(void* NONNULL /* closureHolder */, std::optional<double>), void(* NONNULL destroy)(void* NONNULL)) {
-    std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
-    return Func_void_std__optional_double_([sharedClosureHolder, call](std::optional<double> maybe) -> void {
-      call(sharedClosureHolder.get(), maybe);
-    });
-  }
-  std::shared_ptr<Func_void_std__optional_double__Wrapper> share_Func_void_std__optional_double_(const Func_void_std__optional_double_& value) {
-    return std::make_shared<Func_void_std__optional_double__Wrapper>(value);
   }
   
   // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridChildSpec>

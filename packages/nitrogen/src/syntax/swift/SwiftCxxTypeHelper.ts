@@ -321,13 +321,23 @@ using ${name} = ${actualType};
  */
 class ${wrapperName} {
 public:
-  explicit ${wrapperName}(const ${actualType}& func);
-  explicit ${wrapperName}(${actualType}&& func);
-  ${callFuncReturnType} call(${callCppFuncParamsSignature.join(', ')}) const;
+  explicit ${wrapperName}(const ${actualType}& func): function(func) {}
+  explicit ${wrapperName}(${actualType}&& func): function(std::move(func)) {}
+  inline ${callFuncReturnType} call(${callCppFuncParamsSignature.join(', ')}) const {
+    ${indent(callCppFuncBody, '    ')}
+  }
+private:
   ${actualType} function;
 };
-${name} create_${name}(void* NONNULL closureHolder, ${functionPointerParam}, void(* NONNULL destroy)(void* NONNULL));
-std::shared_ptr<${wrapperName}> share_${name}(const ${name}& value);
+inline ${name} create_${name}(void* NONNULL closureHolder, ${functionPointerParam}, void(* NONNULL destroy)(void* NONNULL)) {
+  std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
+  return ${name}([sharedClosureHolder, call](${paramsSignature.join(', ')}) -> ${type.returnType.getCode('c++')} {
+    ${indent(callSwiftFuncBody, '    ')}
+  });
+}
+inline std::shared_ptr<${wrapperName}> share_${name}(const ${name}& value) {
+  return std::make_shared<${wrapperName}>(value);
+}
     `.trim(),
       requiredIncludes: [
         {
@@ -342,25 +352,6 @@ std::shared_ptr<${wrapperName}> share_${name}(const ${name}& value);
         },
         ...bridgedType.getRequiredImports(),
       ],
-    },
-    cxxImplementation: {
-      code: `
-${wrapperName}::${wrapperName}(const ${actualType}& func): function(func) {}
-${wrapperName}::${wrapperName}(${actualType}&& func): function(std::move(func)) {}
-${callFuncReturnType} ${wrapperName}::call(${callCppFuncParamsSignature.join(', ')}) const {
-  ${indent(callCppFuncBody, '    ')}
-}
-${name} create_${name}(void* NONNULL closureHolder, ${functionPointerParam}, void(* NONNULL destroy)(void* NONNULL)) {
-  std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
-  return ${name}([sharedClosureHolder, call](${paramsSignature.join(', ')}) -> ${type.returnType.getCode('c++')} {
-    ${indent(callSwiftFuncBody, '    ')}
-  });
-}
-std::shared_ptr<${wrapperName}> share_${name}(const ${name}& value) {
-  return std::make_shared<${wrapperName}>(value);
-}
-    `.trim(),
-      requiredIncludes: [],
     },
   }
 }
