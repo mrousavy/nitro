@@ -81,12 +81,12 @@ void HybridTestObjectCpp::setOptionalArray(const std::optional<std::vector<std::
   _optionalArray = optionalArray;
 }
 
-std::optional<std::shared_ptr<HybridTestObjectCppSpec>> HybridTestObjectCpp::getMaybeHybrid() {
+std::optional<std::shared_ptr<HybridTestObjectCppSpec>> HybridTestObjectCpp::getOptionalHybrid() {
   return _optionalHybrid;
 }
 
-void HybridTestObjectCpp::setMaybeHybrid(std::optional<std::shared_ptr<HybridTestObjectCppSpec>> maybeHybrid) {
-  _optionalHybrid = maybeHybrid;
+void HybridTestObjectCpp::setOptionalHybrid(const std::optional<std::shared_ptr<HybridTestObjectCppSpec>>& optionalHybrid) {
+  _optionalHybrid = optionalHybrid;
 }
 
 std::variant<std::string, double> HybridTestObjectCpp::getSomeVariant() {

@@ -62,8 +62,8 @@ public:
   std::tuple<double, std::string> getSomeTuple() override;
   void setSomeTuple(const std::tuple<double, std::string>& tuple) override;
   std::shared_ptr<HybridTestObjectCppSpec> getThisObject() override;
-  std::optional<std::shared_ptr<HybridTestObjectCppSpec>> getMaybeHybrid() override;
-  void setMaybeHybrid(std::optional<std::shared_ptr<HybridTestObjectCppSpec>> maybeHybrid) override;
+  std::optional<std::shared_ptr<HybridTestObjectCppSpec>> getOptionalHybrid() override;
+  void setOptionalHybrid(const std::optional<std::shared_ptr<HybridTestObjectCppSpec>>& optionalHybrid) override;
 
 public:
   // Methods
