@@ -32,8 +32,8 @@ namespace margelo::nitro::image { class HybridBaseSpec; }
 
 #include <memory>
 #include "HybridTestObjectSwiftKotlinSpec.hpp"
-#include <string>
 #include <optional>
+#include <string>
 #include <vector>
 #include <variant>
 #include "Person.hpp"
@@ -74,6 +74,8 @@ namespace margelo::nitro::image {
     public:
       // Properties
       virtual std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec> getThisObject() = 0;
+      virtual std::optional<std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>> getOptionalHybrid() = 0;
+      virtual void setOptionalHybrid(const std::optional<std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>>& optionalHybrid) = 0;
       virtual double getNumberValue() = 0;
       virtual void setNumberValue(double numberValue) = 0;
       virtual bool getBoolValue() = 0;

@@ -90,6 +90,13 @@ export class State<T> {
     }
     return this
   }
+
+  cleanup(func: () => void): State<T> {
+    setTimeout(() => {
+      func()
+    }, 1000)
+    return this
+  }
 }
 
 export function it<T>(action: () => Promise<T>): Promise<State<T>>

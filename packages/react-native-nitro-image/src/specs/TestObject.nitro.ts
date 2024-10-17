@@ -130,6 +130,7 @@ export interface TestObjectCpp
   // Other HybridObjects
   readonly thisObject: TestObjectCpp
   newTestObject(): TestObjectCpp
+  optionalHybrid?: TestObjectCpp
 }
 
 export interface TestObjectSwiftKotlin
@@ -138,6 +139,7 @@ export interface TestObjectSwiftKotlin
   // Other HybridObjects
   readonly thisObject: TestObjectSwiftKotlin
   newTestObject(): TestObjectSwiftKotlin
+  optionalHybrid?: TestObjectSwiftKotlin
 }
 
 export interface Base

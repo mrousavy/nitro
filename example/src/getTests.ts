@@ -227,6 +227,27 @@ export function getTests(
         .didNotThrow()
         .equals(['hello', 'world'])
     ),
+    createTest('get optionalHybrid (== undefined)', () =>
+      it(() => {
+        testObject.optionalHybrid = undefined
+        return testObject.optionalHybrid
+      })
+        .didNotThrow()
+        .didReturn('undefined')
+    ),
+    createTest('get optionalHybrid (== self)', () =>
+      it(() => {
+        testObject.optionalHybrid = testObject
+        return testObject.optionalHybrid
+      })
+        .didNotThrow()
+        .didReturn('object')
+        // @ts-expect-error
+        .equals(testObject.optionalHybrid)
+        .cleanup(() => {
+          testObject.optionalHybrid = undefined
+        })
+    ),
 
     // Test basic functions
     createTest('addNumbers(5, 13) = 18', () =>

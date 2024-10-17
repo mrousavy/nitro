@@ -82,6 +82,11 @@ namespace margelo::nitro::image::bridge::swift {
     return NitroImage::HybridTestObjectSwiftKotlinSpecCxxReferenceHolder::put(swiftPart);
   }
   
+  // pragma MARK: std::optional<std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>>
+  std::optional<std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>> create_std__optional_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec__(const std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>& value) {
+    return std::optional<std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>>(value);
+  }
+  
   // pragma MARK: std::optional<std::string>
   std::optional<std::string> create_std__optional_std__string_(const std::string& value) {
     return std::optional<std::string>(value);

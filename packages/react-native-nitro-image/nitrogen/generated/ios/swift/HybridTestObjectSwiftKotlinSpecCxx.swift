@@ -104,6 +104,37 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
     }
   }
   
+  public var optionalHybrid: bridge.std__optional_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec__ {
+    @inline(__always)
+    get {
+      return { () -> bridge.std__optional_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec__ in
+        if let __unwrappedValue = self.__implementation.optionalHybrid {
+          return bridge.create_std__optional_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec__({ () -> bridge.std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_ in
+            let __cxxWrapped = HybridTestObjectSwiftKotlinSpecCxx(__unwrappedValue)
+            let __swiftReferenceId = HybridTestObjectSwiftKotlinSpecCxxReferenceHolder.put(__cxxWrapped)
+            return bridge.create_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_(__swiftReferenceId)
+          }())
+        } else {
+          return .init()
+        }
+      }()
+    }
+    @inline(__always)
+    set {
+      self.__implementation.optionalHybrid = { () -> (any HybridTestObjectSwiftKotlinSpec)? in
+        if let __unwrapped = newValue.value {
+          return { () -> HybridTestObjectSwiftKotlinSpec in
+            let __instanceId = bridge.get_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_(__unwrapped)
+            let __instance = HybridTestObjectSwiftKotlinSpecCxxReferenceHolder.getById(__instanceId)
+            return __instance.getHybridTestObjectSwiftKotlinSpec()
+          }()
+        } else {
+          return nil
+        }
+      }()
+    }
+  }
+  
   public var numberValue: Double {
     @inline(__always)
     get {

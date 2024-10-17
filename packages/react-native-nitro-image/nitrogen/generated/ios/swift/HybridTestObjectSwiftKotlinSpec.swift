@@ -30,6 +30,7 @@ import NitroModules
 public protocol HybridTestObjectSwiftKotlinSpec: AnyObject, HybridObjectSpec {
   // Properties
   var thisObject: (any HybridTestObjectSwiftKotlinSpec) { get }
+  var optionalHybrid: (any HybridTestObjectSwiftKotlinSpec)? { get set }
   var numberValue: Double { get set }
   var boolValue: Bool { get set }
   var stringValue: String { get set }

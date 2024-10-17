@@ -14,8 +14,6 @@ namespace NitroImage { class HybridTestObjectSwiftKotlinSpecCxx; }
 
 // Forward declaration of `HybridTestObjectSwiftKotlinSpec` to properly resolve imports.
 namespace margelo::nitro::image { class HybridTestObjectSwiftKotlinSpec; }
-// Forward declaration of `HybridTestObjectSwiftKotlinSpecSwift` to properly resolve imports.
-namespace margelo::nitro::image { class HybridTestObjectSwiftKotlinSpecSwift; }
 // Forward declaration of `Person` to properly resolve imports.
 namespace margelo::nitro::image { struct Person; }
 // Forward declaration of `Powertrain` to properly resolve imports.
@@ -30,18 +28,13 @@ namespace NitroModules { class ArrayBuffer; }
 namespace NitroModules { class ArrayBufferHolder; }
 // Forward declaration of `HybridChildSpec` to properly resolve imports.
 namespace margelo::nitro::image { class HybridChildSpec; }
-// Forward declaration of `HybridChildSpecSwift` to properly resolve imports.
-namespace margelo::nitro::image { class HybridChildSpecSwift; }
 // Forward declaration of `HybridBaseSpec` to properly resolve imports.
 namespace margelo::nitro::image { class HybridBaseSpec; }
-// Forward declaration of `HybridBaseSpecSwift` to properly resolve imports.
-namespace margelo::nitro::image { class HybridBaseSpecSwift; }
 
 #include <memory>
 #include "HybridTestObjectSwiftKotlinSpec.hpp"
-#include "HybridTestObjectSwiftKotlinSpecSwift.hpp"
-#include <string>
 #include <optional>
+#include <string>
 #include <vector>
 #include <variant>
 #include "Person.hpp"
@@ -54,9 +47,7 @@ namespace margelo::nitro::image { class HybridBaseSpecSwift; }
 #include <NitroModules/ArrayBuffer.hpp>
 #include <NitroModules/ArrayBufferHolder.hpp>
 #include "HybridChildSpec.hpp"
-#include "HybridChildSpecSwift.hpp"
 #include "HybridBaseSpec.hpp"
-#include "HybridBaseSpecSwift.hpp"
 
 #if __has_include(<NitroModules/HybridContext.hpp>)
 #include <NitroModules/HybridContext.hpp>
@@ -100,6 +91,13 @@ namespace margelo::nitro::image {
     inline std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec> getThisObject() noexcept override {
       auto __result = _swiftPart.getThisObject();
       return __result;
+    }
+    inline std::optional<std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>> getOptionalHybrid() noexcept override {
+      auto __result = _swiftPart.getOptionalHybrid();
+      return __result;
+    }
+    inline void setOptionalHybrid(const std::optional<std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>>& optionalHybrid) noexcept override {
+      _swiftPart.setOptionalHybrid(optionalHybrid);
     }
     inline double getNumberValue() noexcept override {
       return _swiftPart.getNumberValue();
