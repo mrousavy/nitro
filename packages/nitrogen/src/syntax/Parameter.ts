@@ -11,22 +11,25 @@ export class Parameter implements CodeNode {
   readonly type: NamedType
 
   constructor(name: string, type: Type)
-  constructor(parameter: ParameterDeclaration)
-  constructor(...args: [ParameterDeclaration] | [string, Type]) {
-    if (typeof args[0] === 'string') {
+  constructor(parameter: ParameterDeclaration, language: Language)
+  constructor(...args: [string, Type] | [ParameterDeclaration, Language]) {
+    if (typeof args[0] === 'string' && typeof args[1] === 'object') {
       // constructor(...) #1
       if (args.length !== 2)
         throw new Error(`Missing arguments for new Parameter(...) overload #1!`)
       const [name, type] = args
       this.type = new NamedWrappingType(name, type)
-    } else {
+    } else if (typeof args[0] === 'object' && typeof args[1] === 'string') {
       // constructor(...) #2
-      const [param] = args
+      const [param, language] = args
       const name = param.getSymbolOrThrow().getEscapedName()
       const type = param.getType()
       const isOptional =
         param.hasQuestionToken() || param.isOptional() || type.isNullable()
-      this.type = createNamedType(name, type, isOptional)
+      this.type = createNamedType(language, name, type, isOptional)
+    } else {
+      // constructor(...)???
+      throw new Error(`Invalid constructor! Arguments: ${args}`)
     }
     if (this.type.name.startsWith('__')) {
       throw new Error(

@@ -9,12 +9,12 @@ import Foundation
 import NitroModules
 
 class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
-  var optionalArray: [String]? = []
-  
   var hybridContext: margelo.nitro.HybridContext = .init()
   var memorySize: Int {
     return 0
   }
+  
+  var optionalArray: [String]? = []
 
   var someVariant: Variant_String_Double = .someDouble(55)
 
@@ -31,6 +31,8 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
   var stringOrNull: String? = nil
 
   var optionalString: String? = nil
+  
+  var optionalHybrid: (any HybridTestObjectSwiftKotlinSpec)? = nil
 
   func simpleFunc() throws {
     // do nothing

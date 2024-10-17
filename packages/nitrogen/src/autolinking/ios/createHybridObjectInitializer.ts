@@ -3,15 +3,17 @@ import { createCppHybridObjectRegistration } from '../../syntax/c++/CppHybridObj
 import { includeHeader } from '../../syntax/c++/includeNitroHeader.js'
 import { createFileMetadataString } from '../../syntax/helpers.js'
 import type { SourceFile, SourceImport } from '../../syntax/SourceFile.js'
+import { BRIDGE_NAMESPACE } from '../../syntax/swift/SwiftHybridObjectBridge.js'
 import { createSwiftHybridObjectRegistration } from '../../syntax/swift/SwiftHybridObjectRegistration.js'
 import { indent } from '../../utils.js'
+import { getUmbrellaHeaderName } from './createSwiftUmbrellaHeader.js'
 
 type ObjcFile = Omit<SourceFile, 'language'> & { language: 'objective-c++' }
 type SwiftFile = Omit<SourceFile, 'language'> & { language: 'swift' }
 
 export function createHybridObjectIntializer(): [ObjcFile, SwiftFile] | [] {
   const autolinkingClassName = `${NitroConfig.getIosModuleName()}Autolinking`
-  const umbrellaHeaderName = `${NitroConfig.getIosModuleName()}-Swift-Cxx-Umbrella.hpp`
+  const umbrellaHeaderName = getUmbrellaHeaderName()
 
   const autolinkedHybridObjects = NitroConfig.getAutolinkedHybridObjects()
 
@@ -84,6 +86,8 @@ ${imports}
 ${createFileMetadataString(`${autolinkingClassName}.swift`)}
 
 public final class ${autolinkingClassName} {
+  public typealias bridge = ${BRIDGE_NAMESPACE}
+
   ${indent(swiftFunctions.join('\n\n'), '  ')}
 }
   `.trim()

@@ -34,15 +34,3 @@ public protocol HybridBaseSpec: AnyObject, HybridObjectSpec {
   // Methods
   
 }
-
-public extension HybridBaseSpec {
-  /**
-   * Create a new instance of HybridBaseSpecCxx for the given HybridBaseSpec.
-   *
-   * Instances of HybridBaseSpecCxx can be accessed from C++, and contain
-   * additional required bridging code for C++ <> Swift interop.
-   */
-  func createCxxBridge() -> HybridBaseSpecCxx {
-    return HybridBaseSpecCxx(self)
-  }
-}

@@ -42,6 +42,8 @@ namespace margelo::nitro::image {
   public:
     // Properties
     std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec> getThisObject() override;
+    std::optional<std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>> getOptionalHybrid() override;
+    void setOptionalHybrid(const std::optional<std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>>& optionalHybrid) override;
     double getNumberValue() override;
     void setNumberValue(double numberValue) override;
     bool getBoolValue() override;

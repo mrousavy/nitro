@@ -9,6 +9,28 @@ import Foundation
 import NitroModules
 
 /**
+ * Holds instances of HybridImageFactorySpecCxx and stores them under Integer IDs.
+ * Those Integer IDs can be used in C++ to box the Swift type to prevent cyclic includes.
+ */
+public final class HybridImageFactorySpecCxxReferenceHolder {
+  private static var instances: [Int : HybridImageFactorySpecCxx] = [:]
+  private static var counter: Int = 0
+
+  public static func put(_ instance: HybridImageFactorySpecCxx) -> Int {
+    let id = counter
+    counter += 1
+    instances[id] = instance
+    return id
+  }
+
+  public static func getById(_ instanceId: Int) -> HybridImageFactorySpecCxx {
+    let instance = instances[instanceId]!
+    instances.removeValue(forKey: instanceId)
+    return instance
+  }
+}
+
+/**
  * A class implementation that bridges HybridImageFactorySpec over to C++.
  * In C++, we cannot use Swift protocols - so we need to wrap it in a class to make it strongly defined.
  *
@@ -31,20 +53,20 @@ public class HybridImageFactorySpecCxx {
   private var __implementation: any HybridImageFactorySpec
 
   /**
-   * Get the actual `HybridImageFactorySpec` instance this class wraps.
-   */
-  @inline(__always)
-  public func getHybridImageFactorySpec() -> any HybridImageFactorySpec {
-    return __implementation
-  }
-
-  /**
    * Create a new `HybridImageFactorySpecCxx` that wraps the given `HybridImageFactorySpec`.
    * All properties and methods bridge to C++ types.
    */
   public init(_ implementation: some HybridImageFactorySpec) {
     self.__implementation = implementation
     /* no base class */
+  }
+
+  /**
+   * Get the actual `HybridImageFactorySpec` instance this class wraps.
+   */
+  @inline(__always)
+  public func getHybridImageFactorySpec() -> any HybridImageFactorySpec {
+    return __implementation
   }
 
   /**
@@ -75,46 +97,66 @@ public class HybridImageFactorySpecCxx {
 
   // Methods
   @inline(__always)
-  public func loadImageFromFile(path: std.string) -> HybridImageSpecCxx {
+  public func loadImageFromFile(path: std.string) -> bridge.std__shared_ptr_margelo__nitro__image__HybridImageSpec_ {
     do {
       let __result = try self.__implementation.loadImageFromFile(path: String(path))
-      return __result.createCxxBridge()
+      return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridImageSpec_ in
+        let __cxxWrapped = HybridImageSpecCxx(__result)
+        let __swiftReferenceId = HybridImageSpecCxxReferenceHolder.put(__cxxWrapped)
+        return bridge.create_std__shared_ptr_margelo__nitro__image__HybridImageSpec_(__swiftReferenceId)
+      }()
     } catch {
-      let message = "\(error.localizedDescription)"
-      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
+      let __message = "\(error.localizedDescription)"
+      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(__message))")
     }
   }
   
   @inline(__always)
-  public func loadImageFromURL(path: std.string) -> HybridImageSpecCxx {
+  public func loadImageFromURL(path: std.string) -> bridge.std__shared_ptr_margelo__nitro__image__HybridImageSpec_ {
     do {
       let __result = try self.__implementation.loadImageFromURL(path: String(path))
-      return __result.createCxxBridge()
+      return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridImageSpec_ in
+        let __cxxWrapped = HybridImageSpecCxx(__result)
+        let __swiftReferenceId = HybridImageSpecCxxReferenceHolder.put(__cxxWrapped)
+        return bridge.create_std__shared_ptr_margelo__nitro__image__HybridImageSpec_(__swiftReferenceId)
+      }()
     } catch {
-      let message = "\(error.localizedDescription)"
-      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
+      let __message = "\(error.localizedDescription)"
+      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(__message))")
     }
   }
   
   @inline(__always)
-  public func loadImageFromSystemName(path: std.string) -> HybridImageSpecCxx {
+  public func loadImageFromSystemName(path: std.string) -> bridge.std__shared_ptr_margelo__nitro__image__HybridImageSpec_ {
     do {
       let __result = try self.__implementation.loadImageFromSystemName(path: String(path))
-      return __result.createCxxBridge()
+      return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridImageSpec_ in
+        let __cxxWrapped = HybridImageSpecCxx(__result)
+        let __swiftReferenceId = HybridImageSpecCxxReferenceHolder.put(__cxxWrapped)
+        return bridge.create_std__shared_ptr_margelo__nitro__image__HybridImageSpec_(__swiftReferenceId)
+      }()
     } catch {
-      let message = "\(error.localizedDescription)"
-      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
+      let __message = "\(error.localizedDescription)"
+      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(__message))")
     }
   }
   
   @inline(__always)
-  public func bounceBack(image: HybridImageSpecCxx) -> HybridImageSpecCxx {
+  public func bounceBack(image: bridge.std__shared_ptr_margelo__nitro__image__HybridImageSpec_) -> bridge.std__shared_ptr_margelo__nitro__image__HybridImageSpec_ {
     do {
-      let __result = try self.__implementation.bounceBack(image: image.getHybridImageSpec())
-      return __result.createCxxBridge()
+      let __result = try self.__implementation.bounceBack(image: { () -> HybridImageSpec in
+        let __instanceId = bridge.get_std__shared_ptr_margelo__nitro__image__HybridImageSpec_(image)
+        let __instance = HybridImageSpecCxxReferenceHolder.getById(__instanceId)
+        return __instance.getHybridImageSpec()
+      }())
+      return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridImageSpec_ in
+        let __cxxWrapped = HybridImageSpecCxx(__result)
+        let __swiftReferenceId = HybridImageSpecCxxReferenceHolder.put(__cxxWrapped)
+        return bridge.create_std__shared_ptr_margelo__nitro__image__HybridImageSpec_(__swiftReferenceId)
+      }()
     } catch {
-      let message = "\(error.localizedDescription)"
-      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(message))")
+      let __message = "\(error.localizedDescription)"
+      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(__message))")
     }
   }
 }

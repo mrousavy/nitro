@@ -30,6 +30,7 @@ import NitroModules
 public protocol HybridTestObjectSwiftKotlinSpec: AnyObject, HybridObjectSpec {
   // Properties
   var thisObject: (any HybridTestObjectSwiftKotlinSpec) { get }
+  var optionalHybrid: (any HybridTestObjectSwiftKotlinSpec)? { get set }
   var numberValue: Double { get set }
   var boolValue: Bool { get set }
   var stringValue: String { get set }
@@ -76,16 +77,4 @@ public protocol HybridTestObjectSwiftKotlinSpec: AnyObject, HybridObjectSpec {
   func bounceBase(base: (any HybridBaseSpec)) throws -> (any HybridBaseSpec)
   func bounceChildBase(child: (any HybridChildSpec)) throws -> (any HybridBaseSpec)
   func castBase(base: (any HybridBaseSpec)) throws -> (any HybridChildSpec)
-}
-
-public extension HybridTestObjectSwiftKotlinSpec {
-  /**
-   * Create a new instance of HybridTestObjectSwiftKotlinSpecCxx for the given HybridTestObjectSwiftKotlinSpec.
-   *
-   * Instances of HybridTestObjectSwiftKotlinSpecCxx can be accessed from C++, and contain
-   * additional required bridging code for C++ <> Swift interop.
-   */
-  func createCxxBridge() -> HybridTestObjectSwiftKotlinSpecCxx {
-    return HybridTestObjectSwiftKotlinSpecCxx(self)
-  }
 }

@@ -28,8 +28,8 @@ namespace margelo::nitro::image { class HybridBaseSpec; }
 #include "HybridTestObjectSwiftKotlinSpec.hpp"
 #include "JHybridTestObjectSwiftKotlinSpec.hpp"
 #include <NitroModules/JNISharedPtr.hpp>
-#include <string>
 #include <optional>
+#include <string>
 #include <vector>
 #include <variant>
 #include "JVariant_String_Double.hpp"
@@ -76,6 +76,15 @@ namespace margelo::nitro::image {
     static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JHybridTestObjectSwiftKotlinSpec::javaobject>()>("getThisObject");
     auto __result = method(_javaPart);
     return JNISharedPtr::make_shared_from_jni<JHybridTestObjectSwiftKotlinSpec>(jni::make_global(__result));
+  }
+  std::optional<std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>> JHybridTestObjectSwiftKotlinSpec::getOptionalHybrid() {
+    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JHybridTestObjectSwiftKotlinSpec::javaobject>()>("getOptionalHybrid");
+    auto __result = method(_javaPart);
+    return __result != nullptr ? std::make_optional(JNISharedPtr::make_shared_from_jni<JHybridTestObjectSwiftKotlinSpec>(jni::make_global(__result))) : std::nullopt;
+  }
+  void JHybridTestObjectSwiftKotlinSpec::setOptionalHybrid(const std::optional<std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>>& optionalHybrid) {
+    static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<JHybridTestObjectSwiftKotlinSpec::javaobject> /* optionalHybrid */)>("setOptionalHybrid");
+    method(_javaPart, optionalHybrid.has_value() ? std::dynamic_pointer_cast<JHybridTestObjectSwiftKotlinSpec>(optionalHybrid.value())->getJavaPart() : nullptr);
   }
   double JHybridTestObjectSwiftKotlinSpec::getNumberValue() {
     static const auto method = _javaPart->getClass()->getMethod<double()>("getNumberValue");

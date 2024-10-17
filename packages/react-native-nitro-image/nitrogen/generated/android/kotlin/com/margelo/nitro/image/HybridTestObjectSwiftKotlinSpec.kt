@@ -46,6 +46,12 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   @get:Keep
   @set:DoNotStrip
   @set:Keep
+  abstract var optionalHybrid: HybridTestObjectSwiftKotlinSpec?
+  
+  @get:DoNotStrip
+  @get:Keep
+  @set:DoNotStrip
+  @set:Keep
   abstract var numberValue: Double
   
   @get:DoNotStrip

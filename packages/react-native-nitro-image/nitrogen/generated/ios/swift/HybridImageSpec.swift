@@ -37,15 +37,3 @@ public protocol HybridImageSpec: AnyObject, HybridObjectSpec {
   func toArrayBuffer(format: ImageFormat) throws -> Double
   func saveToFile(path: String, onFinished: @escaping ((_ path: String) -> Void)) throws -> Void
 }
-
-public extension HybridImageSpec {
-  /**
-   * Create a new instance of HybridImageSpecCxx for the given HybridImageSpec.
-   *
-   * Instances of HybridImageSpecCxx can be accessed from C++, and contain
-   * additional required bridging code for C++ <> Swift interop.
-   */
-  func createCxxBridge() -> HybridImageSpecCxx {
-    return HybridImageSpecCxx(self)
-  }
-}

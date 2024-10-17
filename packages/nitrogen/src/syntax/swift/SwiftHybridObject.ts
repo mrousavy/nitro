@@ -49,18 +49,6 @@ public protocol ${protocolName}: AnyObject, ${baseClasses.join(', ')} {
   // Methods
   ${indent(methods, '  ')}
 }
-
-public extension ${protocolName} {
-  /**
-   * Create a new instance of ${name.HybridTSpecCxx} for the given ${protocolName}.
-   *
-   * Instances of ${name.HybridTSpecCxx} can be accessed from C++, and contain
-   * additional required bridging code for C++ <> Swift interop.
-   */
-  func createCxxBridge() -> ${name.HybridTSpecCxx} {
-    return ${name.HybridTSpecCxx}(self)
-  }
-}
   `
 
   const swiftBridge = createSwiftHybridObjectCxxBridge(spec)
