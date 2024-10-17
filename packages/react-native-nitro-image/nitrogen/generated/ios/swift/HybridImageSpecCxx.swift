@@ -8,7 +8,7 @@
 import Foundation
 import NitroModules
 
-public struct HybridImageSpecCxxReferenceHolder {
+public final class HybridImageSpecCxxReferenceHolder {
   private static var __instances: [Int : HybridImageSpecCxx] = [:]
   private static var __counter: Int = 0
 

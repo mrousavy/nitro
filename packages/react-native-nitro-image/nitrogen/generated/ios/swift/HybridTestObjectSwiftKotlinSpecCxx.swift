@@ -8,7 +8,7 @@
 import Foundation
 import NitroModules
 
-public struct HybridTestObjectSwiftKotlinSpecCxxReferenceHolder {
+public final class HybridTestObjectSwiftKotlinSpecCxxReferenceHolder {
   private static var __instances: [Int : HybridTestObjectSwiftKotlinSpecCxx] = [:]
   private static var __counter: Int = 0
 

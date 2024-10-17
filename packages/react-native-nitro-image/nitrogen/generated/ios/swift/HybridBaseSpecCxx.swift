@@ -8,7 +8,7 @@
 import Foundation
 import NitroModules
 
-public struct HybridBaseSpecCxxReferenceHolder {
+public final class HybridBaseSpecCxxReferenceHolder {
   private static var __instances: [Int : HybridBaseSpecCxx] = [:]
   private static var __counter: Int = 0
 

@@ -50,7 +50,7 @@ ${createFileMetadataString(`${name.HybridTSpecCxx}.swift`)}
 import Foundation
 import NitroModules
 
-public struct ${name.HybridTSpecCxx}ReferenceHolder {
+public final class ${name.HybridTSpecCxx}ReferenceHolder {
   private static var __instances: [Int : ${name.HybridTSpecCxx}] = [:]
   private static var __counter: Int = 0
 
