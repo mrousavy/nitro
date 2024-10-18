@@ -20,12 +20,7 @@ First, create your view using Turbo Modules (Fabric) or Expo Modules. Let's buil
 
 ```tsx title="App.tsx"
 function App() {
-  return (
-    <NitroImage
-      image={someImage}
-      opacity={0.5}
-    />
-  )
+  return <NitroImage image={someImage} opacity={0.5} />;
 }
 ```
 
@@ -34,10 +29,10 @@ This can not be handled by Turbo-/Expo-Modules, so we cannot simply pass the pro
 
 ```ts
 interface NativeProps extends ViewProps {
-  opacity: number
-  image: Image
-// code-error
-//       ^ Error: `Image` is not supported by Turbo-/Expo-Modules!
+  opacity: number;
+  image: Image;
+  // code-error
+  //       ^ Error: `Image` is not supported by Turbo-/Expo-Modules!
 }
 ```
 
@@ -46,12 +41,12 @@ For this, we'll only create one prop for our view which will be used to connect 
 
 ```ts
 interface NativeProps extends ViewProps {
-// diff-remove
-  opacity: number
-// diff-remove
-  image: Image
-// diff-add
-  nitroId: number
+  // diff-remove
+  opacity: number;
+  // diff-remove
+  image: Image;
+  // diff-add
+  nitroId: number;
 }
 ```
 
@@ -64,7 +59,7 @@ Make sure the view can be mounted on screen, and `nitroId` properly updates the 
 
 ```tsx
 function App() {
-  return <NitroImage nitroId={13} />
+  return <NitroImage nitroId={13} />;
 }
 ```
 
@@ -89,6 +84,21 @@ To allow your Nitro Hybrid Object to find the Turbo-/Expo-View, we need to throw
 It is up to the developer on how to handle this most efficiently, but here's an example:
 
 <Tabs groupId="native-platform-language">
+  <TabItem value="swift" label="Swift" default>
+    ```swift
+    class NitroImageView : UIView {
+
+      static var globalViewsMap: NSMapTable<NSNumber, NitroImageView> = NSMapTable(keyOptions: .strongMemory, valueOptions: .weakMemory)
+
+      @objc var nitroId: NSNumber = -1 {
+        didSet {
+            NitroImageView.globalViewsMap.setObject(self, forKey: nitroId)
+        }
+      }
+    }
+    ```
+
+  </TabItem>
   <TabItem value="objc" label="iOS (Objective-C)" default>
     ```objc
     @implementation NitroImageView
@@ -109,6 +119,7 @@ It is up to the developer on how to handle this most efficiently, but here's an 
 
     @end
     ```
+
   </TabItem>
   <TabItem value="kotlin" label="Android (Kotlin)">
     ```kotlin
@@ -120,13 +131,13 @@ It is up to the developer on how to handle this most efficiently, but here's an 
 
       // Override `nitroId` setter to throw `this` into global map
       fun setNitroId(nitroId: Double) {
-        globalViewsMap.put(nitroId, WeakReference(this))
+        globalViewsMap[nitroId] = WeakReference(view)
       }
     }
     ```
+
   </TabItem>
 </Tabs>
-
 
 ### 5. Create a custom view manager with Nitro
 
@@ -138,8 +149,8 @@ export interface Image extends HybridObject {
 }
 
 export interface NitroImageViewManager extends HybridObject {
-  image: Image
-  opacity: number
+  image: Image;
+  opacity: number;
 }
 ```
 
@@ -149,41 +160,65 @@ Now implement `NitroImageViewManager` in Swift and Kotlin, and assume it has to 
   <TabItem value="swift" label="iOS (Swift)" default>
     ```swift
     class HybridNitroImageViewManager: HybridNitroImageViewManagerSpec {
-      private let view: NitroImageView
-      init(withView view: NitroImageView) {
-        self.view = view
+      public var hybridContext = margelo.nitro.HybridContext()
+      public var memorySize: Int {
+        return getSizeOf(self)
+      }
+      private var nitroId: Double? = nil
+      private weak var view: NitroImageView? {
+        get {
+            guard let viewId = self.nitroId else {
+                return nil
+            }
+            return NitroImageView.globalViewsMap.object(forKey: NSNumber(value: viewId))
+        }
       }
 
       var image: Image {
         get { return view.image }
         set { view.image = newValue }
       }
+
       var opacity: Double {
         get { return view.opacity }
         set { view.opacity = newValue }
       }
+
+      func setNitroId(nitroId: Double) {
+        self.nitroId = nitroId
+      }
     }
     ```
+
   </TabItem>
   <TabItem value="kotlin" label="Android (Kotlin)">
     ```kotlin
     class HybridNitroImageViewManager: HybridNitroImageViewManagerSpec() {
-      private val view: NitroImageView
-      constructor(view: NitroImageView) {
-        this.view = view
-      }
+      private var nitroId: Double? = null
+
+      private var view: WeakReference<NitroImageView>? = null
+        get() {
+          return nitroId.let {
+            return NitroImageView.globalViewsMap[it]?.get()
+          }
+        }
 
       override var image: Image
         get() = view.image
         set(newValue) = view.image = newValue
+
       override var opacity: Double {
         get() = view.opacity
         set(newValue) = view.opacity = newValue
+
+      fun setNitroId(nitroId: Double?) {
+        this.nitroId = nitroId
+      }
     }
     ```
+
   </TabItem>
 </Tabs>
-
 
 ### 6. Connect the Nitro view manager to the native View
 
@@ -191,7 +226,7 @@ To actually create instances of `HybridNitroImageViewManager`, we need to first 
 
 ```ts
 export interface NitroImageViewManagerRegistry extends HybridObject {
-  createViewManager(nitroId: number): NitroImageViewManager
+  createViewManager(nitroId: number): NitroImageViewManager;
 }
 ```
 
@@ -202,8 +237,9 @@ export interface NitroImageViewManagerRegistry extends HybridObject {
     ```swift
     class HybridNitroImageViewManagerRegistry: HybridNitroImageViewManagerRegistrySpec {
       func createViewManager(nitroId: Double) -> NitroImageViewManagerSpec {
-        let view = NitroImage.globalViewsMap.object(forKey: nitroId)
-        return HybridNitroImageViewManager(withView: view)
+        let viewManager = HybridNitroImageViewManager()
+        viewManager.setNitroId(nitroId: nitroId)
+        return viewManager
       }
     }
     ```
@@ -212,8 +248,9 @@ export interface NitroImageViewManagerRegistry extends HybridObject {
     ```kotlin
     class HybridNitroImageViewManagerRegistry: HybridNitroImageViewManagerRegistrySpec() {
       fun createViewManager(nitroId: Double): NitroImageViewManagerSpec {
-        val view = NitroImage.globalViewsMap.get(nitroId)
-        return HybridNitroImageViewManager(view.value)
+        val viewManager = HybridNitroImageViewManager()
+        viewManager.setNitroId(nitroId)
+        return viewManager
       }
     }
     ```
@@ -233,10 +270,10 @@ export function NitroImage(props: NitroImageProps) {
   const nitroId = useMemo(() => nitroIdCounter++, [])
   const nitroViewManager = useRef<NitroViewManager>(null)
 
-  useEffect(() => {
+  useEffect(()=>{
     // Create a View Manager for the respective View (looked up via `nitroId`)
     nitroViewManager.current = NitroViewManagerFactory.createViewManager(nitroId)
-  }, [nitroId])
+  },[nitroId])
 
   useEffect(() => {
     // Update props through Nitro - this natively sets them on the view as well.
