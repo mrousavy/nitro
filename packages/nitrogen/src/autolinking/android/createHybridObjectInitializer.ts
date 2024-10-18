@@ -12,7 +12,7 @@ import { indent } from '../../utils.js'
 
 export function createHybridObjectIntializer(): SourceFile[] {
   const cxxNamespace = NitroConfig.getCxxNamespace('c++')
-  const autolinkingClassName = `${NitroConfig.getIosModuleName()}OnLoad`
+  const autolinkingClassName = `${NitroConfig.getAndroidCxxLibName()}OnLoad`
 
   const jniRegistrations = getJNINativeRegistrations().map(
     (r) => `${r.namespace}::${r.className}::registerNatives();`
