@@ -139,7 +139,7 @@ const config: Config = {
           items: [
             {
               label: 'Discord',
-              href: 'https://discord.gg/6CSHz2qAvA',
+              href: 'https://margelo.com/discord',
             },
             {
               label: 'Twitter',

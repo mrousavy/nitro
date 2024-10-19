@@ -12,6 +12,10 @@ This guide helps you troubleshoot issues in Nitro and should give you enough con
 
 First, make sure you meet the [minimum requirements](minimum-requirements) for Nitro.
 
+## Ask for help
+
+If you want to ask for help, join our [Margelo Community Discord](https://margelo.com/discord).
+
 ## Build error
 
 If your app fails to build after installing Nitro or a library powered by Nitro, make sure to post full build logs:
