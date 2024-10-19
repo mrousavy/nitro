@@ -665,7 +665,7 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
   __vector.reserve(__size);
   for (size_t __i = 0; __i < __size; __i++) {
     auto __element = ${parameterName}->getElement(__i);
-    __vector.push_back(${bridge.parseFromKotlinToCpp('__element', 'c++')});
+    __vector.emplace_back(${bridge.parseFromKotlinToCpp('__element', 'c++')});
   }
   return __vector;
 }()
