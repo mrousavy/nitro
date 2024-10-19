@@ -1,17 +1,25 @@
 import { type HybridObject, type AnyMap } from 'react-native-nitro-modules'
 
+// Tuples become `std::tuple<...>` in C++.
+// In contrast to arrays, they are length-checked, and can have different types inside them.
 export type Float2 = [number, number]
 export type Float3 = [number, number, number]
 export type TestTuple = [number, string, boolean]
 
+// A discriminating string union becomes an `enum` in C++.
+// This one is string-backed.
 export type Powertrain = 'electric' | 'gas' | 'hybrid'
 
+// A classic TypeScript enum also becomes an `enum` in C++.
+// This one is number-backed.
 export enum OldEnum {
   FIRST,
   SECOND,
   THIRD,
 }
 
+// A plain interface that does not inherit from `HybridObject` becomes a `struct` in C++.
+// They can only have properties (get + set). No methods or native state.
 export interface Car {
   year: number
   make: string
@@ -21,11 +29,15 @@ export interface Car {
   driver?: Person
 }
 
-export interface Person {
+// A `type T = { ... }` declaration is the same as a `interface T { ... }` - it's a `struct` in C++.
+export type Person = {
   name: string
   age: number
 }
 
+// This is an `interface` we're going to use as a base in both of our `HybridObject`s later.
+// In this case, the `HybridObject`s will just flatten out and copy over all properties here.
+// There is no separate type for `SharedTestObjectProps` on the native side.
 interface SharedTestObjectProps {
   // Test Primitives
   numberValue: number
@@ -101,6 +113,9 @@ interface SharedTestObjectProps {
   castBase(base: Base): Child
 }
 
+// This is a C++-based `HybridObject`.
+// Since it inherited from the `SharedTestObjectProps` interface,
+// it will be flattened out and every property/method will be added here.
 export interface TestObjectCpp
   extends HybridObject<{ ios: 'c++' }>,
     SharedTestObjectProps {
@@ -133,6 +148,9 @@ export interface TestObjectCpp
   optionalHybrid?: TestObjectCpp
 }
 
+// This is a Swift/Kotlin-based `HybridObject`.
+// Since it inherited from the `SharedTestObjectProps` interface,
+// it will be flattened out and every property/method will be added here.
 export interface TestObjectSwiftKotlin
   extends HybridObject<{ ios: 'swift'; android: 'kotlin' }>,
     SharedTestObjectProps {
@@ -142,11 +160,15 @@ export interface TestObjectSwiftKotlin
   optionalHybrid?: TestObjectSwiftKotlin
 }
 
+// This is a simple `HybridObject` with just one value.
 export interface Base
   extends HybridObject<{ ios: 'swift'; android: 'kotlin' }> {
   readonly baseValue: number
 }
 
+// This is a `HybridObject` that actually inherits from a different `HybridObject`.
+// This will set up an inheritance chain on the native side.
+// The native `Child` Swift/Kotlin class will inherit from the `Base` Swift/Kotlin class.
 export interface Child extends Base {
   readonly childValue: number
 }

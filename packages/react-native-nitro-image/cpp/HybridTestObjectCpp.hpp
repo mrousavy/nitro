@@ -89,8 +89,8 @@ public:
 
   std::variant<bool, OldEnum> getVariantEnum(const std::variant<bool, OldEnum>& variant) override;
   std::variant<Car, Person> getVariantObjects(const std::variant<Car, Person>& variant) override;
-  std::variant<Person, std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>>
-  getVariantHybrid(const std::variant<Person, std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>>& variant) override;
+  std::variant<std::shared_ptr<HybridTestObjectCppSpec>, Person>
+  getVariantHybrid(const std::variant<std::shared_ptr<HybridTestObjectCppSpec>, Person>& variant) override;
   std::variant<std::tuple<double, double>, std::tuple<double, double, double>>
   getVariantTuple(const std::variant<std::tuple<double, double>, std::tuple<double, double, double>>& variant) override;
 
@@ -116,14 +116,10 @@ public:
   std::shared_ptr<HybridBaseSpec> createBase() override;
   std::shared_ptr<HybridChildSpec> createChild() override;
   std::shared_ptr<HybridBaseSpec> createBaseActualChild() override;
-  std::shared_ptr<margelo::nitro::image::HybridChildSpec>
-  bounceChild(const std::shared_ptr<margelo::nitro::image::HybridChildSpec>& child) override;
-  std::shared_ptr<margelo::nitro::image::HybridBaseSpec>
-  bounceBase(const std::shared_ptr<margelo::nitro::image::HybridBaseSpec>& base) override;
-  std::shared_ptr<margelo::nitro::image::HybridBaseSpec>
-  bounceChildBase(const std::shared_ptr<margelo::nitro::image::HybridChildSpec>& child) override;
-  std::shared_ptr<margelo::nitro::image::HybridChildSpec>
-  castBase(const std::shared_ptr<margelo::nitro::image::HybridBaseSpec>& base) override;
+  std::shared_ptr<HybridChildSpec> bounceChild(const std::shared_ptr<HybridChildSpec>& child) override;
+  std::shared_ptr<HybridBaseSpec> bounceBase(const std::shared_ptr<HybridBaseSpec>& base) override;
+  std::shared_ptr<HybridBaseSpec> bounceChildBase(const std::shared_ptr<HybridChildSpec>& child) override;
+  std::shared_ptr<HybridChildSpec> castBase(const std::shared_ptr<HybridBaseSpec>& base) override;
 
   // Raw JSI functions
   jsi::Value rawJsiFunc(jsi::Runtime& runtime, const jsi::Value& thisValue, const jsi::Value* args, size_t count);

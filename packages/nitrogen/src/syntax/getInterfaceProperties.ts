@@ -5,7 +5,7 @@ import type { Language } from '../getPlatformSpecs.js'
 
 export function getInterfaceProperties(
   language: Language,
-  interfaceType: Type<ts.InterfaceType>
+  interfaceType: Type<ts.ObjectType>
 ): NamedType[] {
   return interfaceType.getProperties().map((prop) => {
     const declaration = prop.getValueDeclarationOrThrow()
