@@ -287,14 +287,25 @@ export function createType(
       // It is a HybridObject directly/literally. Base type
       return new HybridObjectBaseType()
     } else if (type.isInterface()) {
-      // It is a simple struct being referenced.
-      const typename = type.getSymbolOrThrow().getEscapedName()
+      // It is an `interface T { ... }`, which is a `struct`
+      const typename = type.getSymbolOrThrow().getName()
       const properties = getInterfaceProperties(language, type)
       return new StructType(typename, properties)
     } else if (type.isObject()) {
-      throw new Error(
-        `Anonymous objects cannot be represented in C++! Extract "${type.getText()}" to a separate interface/type declaration.`
-      )
+      // It is an object. If it has a symbol/name, it is a `type T = ...` declaration, so a `struct`.
+      // Otherwise, it is an anonymous/inline object, which cannot be represented in native.
+      const symbol = type.getAliasSymbol()
+      if (symbol != null) {
+        // it has a `type T = ...` declaration
+        const typename = symbol.getName()
+        const properties = getInterfaceProperties(language, type)
+        return new StructType(typename, properties)
+      } else {
+        // It's an anonymous object (`{ ... }`)
+        throw new Error(
+          `Anonymous objects cannot be represented in C++! Extract "${type.getText()}" to a separate interface/type declaration.`
+        )
+      }
     } else if (type.isStringLiteral()) {
       throw new Error(
         `String literal ${type.getText()} cannot be represented in C++ because it is ambiguous between a string and a discriminating union enum.`
