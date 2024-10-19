@@ -209,8 +209,8 @@ std::variant<Car, Person> HybridTestObjectCpp::getVariantObjects(const std::vari
   return variant;
 }
 
-std::variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>, Person> HybridTestObjectCpp::getVariantHybrid(
-    const std::variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>, Person>& variant) {
+std::variant<std::shared_ptr<HybridTestObjectCppSpec>, Person>
+HybridTestObjectCpp::getVariantHybrid(const std::variant<std::shared_ptr<HybridTestObjectCppSpec>, Person>& variant) {
   return variant;
 }
 
