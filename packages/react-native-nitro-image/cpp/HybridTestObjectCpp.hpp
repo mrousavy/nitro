@@ -89,8 +89,8 @@ public:
 
   std::variant<bool, OldEnum> getVariantEnum(const std::variant<bool, OldEnum>& variant) override;
   std::variant<Car, Person> getVariantObjects(const std::variant<Car, Person>& variant) override;
-  std::variant<Person, std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>>
-  getVariantHybrid(const std::variant<Person, std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>>& variant) override;
+  std::variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>, Person>
+  getVariantHybrid(const std::variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>, Person>& variant) override;
   std::variant<std::tuple<double, double>, std::tuple<double, double, double>>
   getVariantTuple(const std::variant<std::tuple<double, double>, std::tuple<double, double, double>>& variant) override;
 
