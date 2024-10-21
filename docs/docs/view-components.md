@@ -89,7 +89,7 @@ To allow your Nitro Hybrid Object to find the Turbo-/Expo-View, we need to throw
 It is up to the developer on how to handle this most efficiently, but here's an example:
 
 <Tabs groupId="native-platform-language">
-  <TabItem value="swift" label="Swift" default>
+  <TabItem value="swift" label="iOS (Swift)" default>
     ```swift
     class NitroImageView : UIView {
 
