@@ -5,8 +5,11 @@
 //  Created by Marc Rousavy on 14.07.24.
 //
 
+#pragma once
+
 #include <sstream>
 #include <string>
+#include <thread>
 
 namespace margelo::nitro {
 
