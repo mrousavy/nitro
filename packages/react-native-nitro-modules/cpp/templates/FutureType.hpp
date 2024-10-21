@@ -13,9 +13,9 @@
 namespace margelo::nitro {
 
 // Gets the `T` in `std::future<T>`.
-template <typename T>
+template <typename T, typename = void>
 struct future_type {
-  using type = void;
+  static_assert(!std::is_same_v<T, T>, "Type T is not an std::future!");
 };
 template <typename T>
 struct future_type<std::future<T>> {
@@ -24,5 +24,8 @@ struct future_type<std::future<T>> {
 
 template <typename T>
 using future_type_v = typename future_type<std::remove_reference_t<T>>::type;
+
+template <typename T>
+using is_future_v = std::is_same_v<T, std::future<typename T::type>>;
 
 } // namespace margelo::nitro

@@ -16,10 +16,16 @@ struct JSIConverter;
 
 #include "Dispatcher.hpp"
 #include "FutureType.hpp"
+#include "IsFuture.hpp"
 #include "JSICache.hpp"
+#include "NitroDefines.hpp"
+#include "ThreadUtils.hpp"
+#include "TypeInfo.hpp"
 #include <functional>
 #include <future>
 #include <jsi/jsi.h>
+#include <sstream>
+#include <thread>
 
 namespace margelo::nitro {
 
@@ -29,7 +35,7 @@ using namespace facebook;
 template <typename ReturnType, typename... Args>
 struct JSIConverter<std::function<ReturnType(Args...)>> final {
   // std::future<T> -> T
-  using ResultingType = future_type_v<ReturnType>;
+  using ResultingType = is_future<ReturnType> ? future_type_v<ReturnType> : ReturnType;
 
   static inline std::function<ReturnType(Args...)> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
     // Make function global - it'll be managed by the Runtime's memory, and we only have a weak_ref to it.
@@ -37,35 +43,62 @@ struct JSIConverter<std::function<ReturnType(Args...)>> final {
     jsi::Function function = arg.asObject(runtime).asFunction(runtime);
     OwningReference<jsi::Function> sharedFunction = cache.makeShared(std::move(function));
 
-    std::shared_ptr<Dispatcher> strongDispatcher = Dispatcher::getRuntimeGlobalDispatcher(runtime);
-    std::weak_ptr<Dispatcher> weakDispatcher = strongDispatcher;
+    if constexpr (is_future_v<ReturnType>) {
+      // It's a normal ("async") callback. We schedule the call from any Thread, and it resolves later.
+      std::shared_ptr<Dispatcher> strongDispatcher = Dispatcher::getRuntimeGlobalDispatcher(runtime);
+      std::weak_ptr<Dispatcher> weakDispatcher = strongDispatcher;
 
-    // Create a C++ function that can be called by the consumer.
-    // This will call the jsi::Function if it is still alive.
-    return [&runtime, weakDispatcher, sharedFunction = std::move(sharedFunction)](Args... args) -> ReturnType {
-      // Try to get the JS Dispatcher if the Runtime is still alive
-      std::shared_ptr<Dispatcher> dispatcher = weakDispatcher.lock();
-      if (!dispatcher) {
-        if constexpr (std::is_void_v<ResultingType>) {
-          Logger::log(LogLevel::Error, "JSIConverter",
-                      "Tried calling void(..) function, but the JS Dispatcher has already been deleted by JS!");
-          return;
-        } else {
-          throw std::runtime_error("Cannot call the given Function - the JS Dispatcher has already been destroyed by the JS Runtime!");
+      // Create a C++ function that can be called by the consumer.
+      // This will call the jsi::Function if it is still alive.
+      return [&runtime, weakDispatcher, sharedFunction = std::move(sharedFunction)](Args... args) -> ReturnType {
+        // Try to get the JS Dispatcher if the Runtime is still alive
+        std::shared_ptr<Dispatcher> dispatcher = weakDispatcher.lock();
+        if (!dispatcher) {
+          if constexpr (std::is_void_v<ResultingType>) {
+            Logger::log(LogLevel::Error, "JSIConverter",
+                        "Tried calling void(..) function, but the JS Dispatcher has already been deleted by JS!");
+            return;
+          } else {
+            throw std::runtime_error("Cannot call the given Function - the JS Dispatcher has already been destroyed by the JS Runtime!");
+          }
         }
-      }
 
-      if constexpr (std::is_void_v<ResultingType>) {
-        dispatcher->runAsync([&runtime, sharedFunction = std::move(sharedFunction), ... args = std::move(args)]() {
-          callJSFunction(runtime, sharedFunction, args...);
-        });
-      } else {
-        return dispatcher->runAsyncAwaitable<ResultingType>(
-            [&runtime, sharedFunction = std::move(sharedFunction), ... args = std::move(args)]() -> ResultingType {
-              return callJSFunction(runtime, sharedFunction, args...);
-            });
-      }
-    };
+        if constexpr (std::is_void_v<ResultingType>) {
+          dispatcher->runAsync([&runtime, sharedFunction = std::move(sharedFunction), ... args = std::move(args)]() {
+            // Call the actual JS function, we are guaranteed to be on the JS Thread here.
+            callJSFunction(runtime, sharedFunction, args...);
+          });
+        } else {
+          return dispatcher->runAsyncAwaitable<ResultingType>(
+              [&runtime, sharedFunction = std::move(sharedFunction), ... args = std::move(args)]() -> ResultingType {
+                // Call the actual JS function, we are guaranteed to be on the JS Thread here.
+                return callJSFunction(runtime, sharedFunction, args...);
+              });
+        }
+      };
+    } else {
+      // It's a sync callback. We assume the caller always calls it from the JS Thread.
+      std::thread::id originalId = std::this_thread::get_id();
+      return [&runtime, originalId = std::move(originalId), sharedFunction = std::move(sharedFunction)](Args... args) -> ReturnType {
+        std::thread::id callerId = std::this_thread::get_id();
+        if (originalId != callerId) [[unlikely]] {
+          std::string originalIdString = ThreadUtils::threadIdToString(originalId);
+          std::string callerIdString = ThreadUtils::threadIdToString(callerId);
+          std::string asyncSignature = "std::future<" + TypeInfo::getFriendlyTypenames<ReturnType>(true) + ">(" +
+                                       TypeInfo::getFriendlyTypenames<Args...>(true) + ")";
+          std::string syncSignature =
+              TypeInfo::getFriendlyTypenames<ReturnType>(true) + "(" + TypeInfo::getFriendlyTypenames<Args...>(true) + ")";
+          throw std::runtime_error("Cannot call sync callback from a different Thread (ID: " + callerIdString +
+                                   ") than the Thread it was created on (ID: " + originalIdString +
+                                   ", JS Thread)! "
+                                   "If you want to call this callback from a different Thread, use async callbacks (" +
+                                   asyncSignature + ") instead of sync callbacks (" + syncSignature + ")!");
+        }
+
+        // Call the actual JS function, we are guaranteed to be on the JS Thread here.
+        return callJSFunction(runtime, sharedFunction, args...);
+      };
+    }
   }
 
   static inline jsi::Value toJSI(jsi::Runtime& runtime, const std::function<ReturnType(Args...)>& function) {
