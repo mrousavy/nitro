@@ -9,7 +9,7 @@
 {
   "cxxNamespace": ["<<cxxNamespace>>"],
   "ios": {
-    "iosModulename": "<<iosModulename>>"
+    "iosModuleName": "<<iosModuleName>>"
   },
   "android": {
     "androidNamespace": ["<<androidNamespace>>"],
@@ -47,17 +47,17 @@ The `cxxNamespace` is the C++ namespace that all C++ specs will be generated in.
 
 Settings specifically for the iOS platform.
 
-### `iosModulename`
+### `iosModuleName`
 
-The `iosModulename` represents the name of the [clang module](https://clang.llvm.org/docs/Modules.html) that will be emitted by the Swift compiler.
-When this Nitro Module is a CocoaPod, this is the same thing as the `<<iosModulename>>.podspec`'s name:
+The `iosModuleName` represents the name of the [clang module](https://clang.llvm.org/docs/Modules.html) that will be emitted by the Swift compiler.
+When this Nitro Module is a CocoaPod, this is the same thing as the `<<iosModuleName>>.podspec`'s name:
 
 <div className="side-by-side-container">
   <div className="side-by-side-block">
   ```json
   {
     "ios": {
-      "iosModulename": "NitroMath"
+      "iosModuleName": "NitroMath"
     }
   }
   ```

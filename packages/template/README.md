@@ -31,7 +31,7 @@ Contribute a change to this template to update it for newer React Native version
 - [`src/`](src): The TypeScript codebase. This defines all HybridObjects and loads them at runtime.
   - [`specs/`](src/specs): All HybridObject types. Nitrogen will run on all `*.nitro.ts` files.
 - [`nitro.json`](nitro.json): The configuration file for nitrogen. This will define all native namespaces, as well as the library name.
-- [`<<iosModulename>>.podspec`](<<iosModulename>>.podspec): The iOS podspec build file to build the iOS code. This contains three important pieces:
+- [`<<iosModuleName>>.podspec`](<<iosModuleName>>.podspec): The iOS podspec build file to build the iOS code. This contains three important pieces:
   1. Specifies the Pod's name. This must be identical to the name specified in `nitro.json`.
   2. Adds all of your `.swift` or `.cpp` files (implementations).
   3. Adds all Nitrogen files (`add_nitrogen_files(s)`)

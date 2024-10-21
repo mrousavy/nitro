@@ -43,7 +43,7 @@ export const NitroConfig = {
    * @example `NitroImage`
    */
   getIosModuleName(): string {
-    return getUserConfig().ios.iosModulename
+    return getUserConfig().ios.iosModuleName
   },
 
   /**
