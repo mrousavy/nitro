@@ -24,7 +24,6 @@ struct JSIConverter;
 #include <functional>
 #include <future>
 #include <jsi/jsi.h>
-#include <sstream>
 #include <thread>
 
 namespace margelo::nitro {
@@ -35,7 +34,7 @@ using namespace facebook;
 template <typename ReturnType, typename... Args>
 struct JSIConverter<std::function<ReturnType(Args...)>> final {
   // std::future<T> -> T
-  using ResultingType = is_future<ReturnType> ? future_type_v<ReturnType> : ReturnType;
+  using ResultingType = future_type_v<ReturnType>;
 
   static inline std::function<ReturnType(Args...)> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
     // Make function global - it'll be managed by the Runtime's memory, and we only have a weak_ref to it.
@@ -43,6 +42,7 @@ struct JSIConverter<std::function<ReturnType(Args...)>> final {
     jsi::Function function = arg.asObject(runtime).asFunction(runtime);
     OwningReference<jsi::Function> sharedFunction = cache.makeShared(std::move(function));
 
+    // Check if we have an async callback (scheduled on JS Thread), or a sync one (can only be called on JS Thread, immediately)
     if constexpr (is_future_v<ReturnType>) {
       // It's a normal ("async") callback. We schedule the call from any Thread, and it resolves later.
       std::shared_ptr<Dispatcher> strongDispatcher = Dispatcher::getRuntimeGlobalDispatcher(runtime);
@@ -79,6 +79,7 @@ struct JSIConverter<std::function<ReturnType(Args...)>> final {
     } else {
       // It's a sync callback. We assume the caller always calls it from the JS Thread.
       std::thread::id originalId = std::this_thread::get_id();
+
       return [&runtime, originalId = std::move(originalId), sharedFunction = std::move(sharedFunction)](Args... args) -> ReturnType {
         std::thread::id callerId = std::this_thread::get_id();
         if (originalId != callerId) [[unlikely]] {
