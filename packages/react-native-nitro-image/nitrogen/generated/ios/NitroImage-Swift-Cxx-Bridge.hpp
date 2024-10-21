@@ -7,12 +7,6 @@
 
 #pragma once
 
-#if __has_include(<NitroModules/NitroDefines.hpp>)
-#include <NitroModules/NitroDefines.hpp>
-#else
-#error NitroModules cannot be found! Are you sure you installed NitroModules properly?
-#endif
-
 // Forward declarations of C++ defined types
 // Forward declaration of `HybridBaseSpec` to properly resolve imports.
 namespace margelo::nitro::image { class HybridBaseSpec; }
@@ -91,7 +85,7 @@ namespace margelo::nitro::image::bridge::swift {
   inline std::shared_ptr<Func_void_std__string_Wrapper> share_Func_void_std__string(const Func_void_std__string& value) {
     return std::make_shared<Func_void_std__string_Wrapper>(value);
   }
-
+  
   // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridImageSpec>
   /**
    * Specialized version of `std::shared_ptr<margelo::nitro::image::HybridImageSpec>`.
@@ -99,7 +93,7 @@ namespace margelo::nitro::image::bridge::swift {
   using std__shared_ptr_margelo__nitro__image__HybridImageSpec_ = std::shared_ptr<margelo::nitro::image::HybridImageSpec>;
   std::shared_ptr<margelo::nitro::image::HybridImageSpec> create_std__shared_ptr_margelo__nitro__image__HybridImageSpec_(void* _Nonnull swiftUnsafePointer);
   void* _Nonnull get_std__shared_ptr_margelo__nitro__image__HybridImageSpec_(std__shared_ptr_margelo__nitro__image__HybridImageSpec_ cppType);
-
+  
   // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridImageFactorySpec>
   /**
    * Specialized version of `std::shared_ptr<margelo::nitro::image::HybridImageFactorySpec>`.
@@ -107,7 +101,7 @@ namespace margelo::nitro::image::bridge::swift {
   using std__shared_ptr_margelo__nitro__image__HybridImageFactorySpec_ = std::shared_ptr<margelo::nitro::image::HybridImageFactorySpec>;
   std::shared_ptr<margelo::nitro::image::HybridImageFactorySpec> create_std__shared_ptr_margelo__nitro__image__HybridImageFactorySpec_(void* _Nonnull swiftUnsafePointer);
   void* _Nonnull get_std__shared_ptr_margelo__nitro__image__HybridImageFactorySpec_(std__shared_ptr_margelo__nitro__image__HybridImageFactorySpec_ cppType);
-
+  
   // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>
   /**
    * Specialized version of `std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>`.
@@ -115,7 +109,7 @@ namespace margelo::nitro::image::bridge::swift {
   using std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_ = std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>;
   std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec> create_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_(void* _Nonnull swiftUnsafePointer);
   void* _Nonnull get_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_(std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_ cppType);
-
+  
   // pragma MARK: std::optional<std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>>
   /**
    * Specialized version of `std::optional<std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>>`.
@@ -124,7 +118,7 @@ namespace margelo::nitro::image::bridge::swift {
   inline std::optional<std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>> create_std__optional_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec__(const std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>& value) {
     return std::optional<std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>>(value);
   }
-
+  
   // pragma MARK: std::optional<std::string>
   /**
    * Specialized version of `std::optional<std::string>`.
@@ -133,7 +127,7 @@ namespace margelo::nitro::image::bridge::swift {
   inline std::optional<std::string> create_std__optional_std__string_(const std::string& value) {
     return std::optional<std::string>(value);
   }
-
+  
   // pragma MARK: std::vector<std::string>
   /**
    * Specialized version of `std::vector<std::string>`.
@@ -144,7 +138,7 @@ namespace margelo::nitro::image::bridge::swift {
     vector.reserve(size);
     return vector;
   }
-
+  
   // pragma MARK: std::optional<std::vector<std::string>>
   /**
    * Specialized version of `std::optional<std::vector<std::string>>`.
@@ -153,7 +147,7 @@ namespace margelo::nitro::image::bridge::swift {
   inline std::optional<std::vector<std::string>> create_std__optional_std__vector_std__string__(const std::vector<std::string>& value) {
     return std::optional<std::vector<std::string>>(value);
   }
-
+  
   // pragma MARK: std::vector<double>
   /**
    * Specialized version of `std::vector<double>`.
@@ -164,7 +158,7 @@ namespace margelo::nitro::image::bridge::swift {
     vector.reserve(size);
     return vector;
   }
-
+  
   // pragma MARK: std::vector<Person>
   /**
    * Specialized version of `std::vector<Person>`.
@@ -175,7 +169,7 @@ namespace margelo::nitro::image::bridge::swift {
     vector.reserve(size);
     return vector;
   }
-
+  
   // pragma MARK: std::vector<Powertrain>
   /**
    * Specialized version of `std::vector<Powertrain>`.
@@ -186,7 +180,7 @@ namespace margelo::nitro::image::bridge::swift {
     vector.reserve(size);
     return vector;
   }
-
+  
   // pragma MARK: std::function<void(const std::vector<Powertrain>& /* array */)>
   /**
    * Specialized version of `std::function<void(const std::vector<Powertrain>&)>`.
@@ -214,7 +208,7 @@ namespace margelo::nitro::image::bridge::swift {
   inline std::shared_ptr<Func_void_std__vector_Powertrain__Wrapper> share_Func_void_std__vector_Powertrain_(const Func_void_std__vector_Powertrain_& value) {
     return std::make_shared<Func_void_std__vector_Powertrain__Wrapper>(value);
   }
-
+  
   // pragma MARK: std::optional<bool>
   /**
    * Specialized version of `std::optional<bool>`.
@@ -223,7 +217,7 @@ namespace margelo::nitro::image::bridge::swift {
   inline std::optional<bool> create_std__optional_bool_(const bool& value) {
     return std::optional<bool>(value);
   }
-
+  
   // pragma MARK: std::optional<Powertrain>
   /**
    * Specialized version of `std::optional<Powertrain>`.
@@ -232,7 +226,7 @@ namespace margelo::nitro::image::bridge::swift {
   inline std::optional<Powertrain> create_std__optional_Powertrain_(const Powertrain& value) {
     return std::optional<Powertrain>(value);
   }
-
+  
   // pragma MARK: std::variant<std::string, double>
   /**
    * Wrapper struct for `std::variant<std::string, double>`.
@@ -261,7 +255,7 @@ namespace margelo::nitro::image::bridge::swift {
   inline double get_std__variant_std__string__double__1(const std__variant_std__string__double_& variantWrapper) {
     return std::get<1>(variantWrapper.variant);
   }
-
+  
   // pragma MARK: PromiseHolder<int64_t>
   /**
    * Specialized version of `PromiseHolder<int64_t>`.
@@ -270,7 +264,7 @@ namespace margelo::nitro::image::bridge::swift {
   inline PromiseHolder<int64_t> create_PromiseHolder_int64_t_() {
     return PromiseHolder<int64_t>();
   }
-
+  
   // pragma MARK: PromiseHolder<void>
   /**
    * Specialized version of `PromiseHolder<void>`.
@@ -279,7 +273,7 @@ namespace margelo::nitro::image::bridge::swift {
   inline PromiseHolder<void> create_PromiseHolder_void_() {
     return PromiseHolder<void>();
   }
-
+  
   // pragma MARK: std::function<void()>
   /**
    * Specialized version of `std::function<void()>`.
@@ -307,7 +301,7 @@ namespace margelo::nitro::image::bridge::swift {
   inline std::shared_ptr<Func_void_Wrapper> share_Func_void(const Func_void& value) {
     return std::make_shared<Func_void_Wrapper>(value);
   }
-
+  
   // pragma MARK: std::optional<double>
   /**
    * Specialized version of `std::optional<double>`.
@@ -316,7 +310,7 @@ namespace margelo::nitro::image::bridge::swift {
   inline std::optional<double> create_std__optional_double_(const double& value) {
     return std::optional<double>(value);
   }
-
+  
   // pragma MARK: std::function<void(std::optional<double> /* maybe */)>
   /**
    * Specialized version of `std::function<void(std::optional<double>)>`.
@@ -344,7 +338,7 @@ namespace margelo::nitro::image::bridge::swift {
   inline std::shared_ptr<Func_void_std__optional_double__Wrapper> share_Func_void_std__optional_double_(const Func_void_std__optional_double_& value) {
     return std::make_shared<Func_void_std__optional_double__Wrapper>(value);
   }
-
+  
   // pragma MARK: std::optional<Person>
   /**
    * Specialized version of `std::optional<Person>`.
@@ -353,7 +347,7 @@ namespace margelo::nitro::image::bridge::swift {
   inline std::optional<Person> create_std__optional_Person_(const Person& value) {
     return std::optional<Person>(value);
   }
-
+  
   // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridChildSpec>
   /**
    * Specialized version of `std::shared_ptr<margelo::nitro::image::HybridChildSpec>`.
@@ -361,7 +355,7 @@ namespace margelo::nitro::image::bridge::swift {
   using std__shared_ptr_margelo__nitro__image__HybridChildSpec_ = std::shared_ptr<margelo::nitro::image::HybridChildSpec>;
   std::shared_ptr<margelo::nitro::image::HybridChildSpec> create_std__shared_ptr_margelo__nitro__image__HybridChildSpec_(void* _Nonnull swiftUnsafePointer);
   void* _Nonnull get_std__shared_ptr_margelo__nitro__image__HybridChildSpec_(std__shared_ptr_margelo__nitro__image__HybridChildSpec_ cppType);
-
+  
   // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridBaseSpec>
   /**
    * Specialized version of `std::shared_ptr<margelo::nitro::image::HybridBaseSpec>`.
