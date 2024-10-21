@@ -26,7 +26,7 @@ export const NitroUserConfigSchema = z.object({
      * If you are using CocoaPods, this should be the Pod name defined in the `.podspec`.
      * @example `NitroImage`
      */
-    iosModulename: z.string().regex(safeNamePattern),
+    iosModuleName: z.string().regex(safeNamePattern),
   }),
   /**
    * Android specific options.
@@ -85,7 +85,7 @@ export function writeUserConfigFile(
     },
     cxxNamespace: [moduleName.toLowerCase()],
     ios: {
-      iosModulename: `Nitro${capitalizeName(moduleName)}`,
+      iosModuleName: `Nitro${capitalizeName(moduleName)}`,
     },
     autolinking: {},
   }

@@ -1,7 +1,7 @@
 {
   "cxxNamespace": ["image"],
   "ios": {
-    "iosModulename": "NitroImage"
+    "iosModuleName": "NitroImage"
   },
   "android": {
     "androidNamespace": ["image"],

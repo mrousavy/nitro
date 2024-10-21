@@ -84,7 +84,7 @@ Create a `nitro.json` file in the root directory of your Nitro Module (next to `
 {
   "cxxNamespace": ["math"],
   "ios": {
-    "iosModulename": "NitroMath"
+    "iosModuleName": "NitroMath"
   },
   "android": {
     "androidNamespace": ["math"],
