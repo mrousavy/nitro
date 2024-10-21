@@ -55,6 +55,14 @@ export function createHybridObjectIntializer(): [ObjcFile, SwiftFile] | [] {
   const umbrellaImport = containsSwiftObjects
     ? `#import "${umbrellaHeaderName}"`
     : ''
+
+  const swiftBridgeAdditionalHeader =
+    NitroConfig.getSwiftBridgeAdditionalHeader()
+  const additionalSwiftBridgeImport = containsSwiftObjects
+    ? swiftBridgeAdditionalHeader !== undefined
+      ? `#import "${NitroConfig.getSwiftBridgeAdditionalHeader()}"`
+      : ''
+    : ''
   const imports = cppImports.map((i) => includeHeader(i, true)).join('\n')
 
   const objcCode = `
@@ -62,6 +70,7 @@ ${createFileMetadataString(`${autolinkingClassName}.mm`)}
 
 #import <Foundation/Foundation.h>
 #import <NitroModules/HybridObjectRegistry.hpp>
+${additionalSwiftBridgeImport}
 ${umbrellaImport}
 #import <type_traits>
 

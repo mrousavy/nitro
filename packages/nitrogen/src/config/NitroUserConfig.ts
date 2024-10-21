@@ -27,6 +27,15 @@ export const NitroUserConfigSchema = z.object({
      * @example `NitroImage`
      */
     iosModuleName: z.string().regex(safeNamePattern),
+
+    /**
+     * Represents an header that will be included before the Swift bridge header import in the Autolinking generated file.
+     *
+     * This can be useful to add imports before the xcode generated swift header to fix build errors.
+     *
+     * @example `NitroImageSwiftBridge.h`
+     */
+    swiftBridgeAdditionalHeader: z.string().optional(),
   }),
   /**
    * Android specific options.

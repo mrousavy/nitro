@@ -46,6 +46,10 @@ export const NitroConfig = {
     return getUserConfig().ios.iosModuleName
   },
 
+  getSwiftBridgeAdditionalHeader(): string | undefined {
+    return getUserConfig().ios.swiftBridgeAdditionalHeader
+  },
+
   /**
    * Represents the C++ namespace of the module that will be generated.
    * This can have multiple sub-namespaces, and is always relative to `margelo::nitro`.

@@ -7,6 +7,7 @@
 
 #import <Foundation/Foundation.h>
 #import <NitroModules/HybridObjectRegistry.hpp>
+
 #import "NitroImage-Swift-Cxx-Umbrella.hpp"
 #import <type_traits>
 
