@@ -78,18 +78,18 @@ function createCxxHybridObjectSwiftHelper(
  * Specialized version of \`${escapeComments(actualType)}\`.
  */
 using ${name} = ${actualType};
-${actualType} create_${name}(void* NONNULL swiftUnsafePointer);
-void* NONNULL get_${name}(${name} cppType);
+${actualType} create_${name}(void* _Nonnull swiftUnsafePointer);
+void* _Nonnull get_${name}(${name} cppType);
     `.trim(),
       requiredIncludes: type.getRequiredImports(),
     },
     cxxImplementation: {
       code: `
-${actualType} create_${name}(void* NONNULL swiftUnsafePointer) {
+${actualType} create_${name}(void* _Nonnull swiftUnsafePointer) {
   ${swiftPartType} swiftPart = ${swiftPartType}Unsafe::fromUnsafe(swiftUnsafePointer);
   return HybridContext::getOrCreate<${swiftWrappingType}>(swiftPart);
 }
-void* NONNULL get_${name}(${name} cppType) {
+void* _Nonnull get_${name}(${name} cppType) {
   std::shared_ptr<${swiftWrappingType}> swiftWrapper = std::dynamic_pointer_cast<${swiftWrappingType}>(cppType);
 #ifdef NITRO_DEBUG
   if (swiftWrapper == nullptr) [[unlikely]] {
@@ -272,13 +272,13 @@ function createCxxFunctionSwiftHelper(type: FunctionType): SwiftCxxHelper {
   ]
   const callFuncReturnType = returnBridge.getTypeCode('c++')
   const callFuncParams = [
-    'void* NONNULL /* closureHolder */',
+    'void* _Nonnull /* closureHolder */',
     ...type.parameters.map((p) => {
       const bridge = new SwiftCxxBridgedType(p)
       return bridge.getTypeCode('c++')
     }),
   ]
-  const functionPointerParam = `${callFuncReturnType}(* NONNULL call)(${callFuncParams.join(', ')})`
+  const functionPointerParam = `${callFuncReturnType}(* _Nonnull call)(${callFuncParams.join(', ')})`
   const name = type.specializationName
   const wrapperName = `${name}_Wrapper`
 
@@ -329,7 +329,7 @@ public:
 private:
   ${actualType} _function;
 };
-inline ${name} create_${name}(void* NONNULL closureHolder, ${functionPointerParam}, void(* NONNULL destroy)(void* NONNULL)) {
+inline ${name} create_${name}(void* _Nonnull closureHolder, ${functionPointerParam}, void(* _Nonnull destroy)(void* _Nonnull)) {
   std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
   return ${name}([sharedClosureHolder, call](${paramsSignature.join(', ')}) -> ${type.returnType.getCode('c++')} {
     ${indent(callSwiftFuncBody, '    ')}

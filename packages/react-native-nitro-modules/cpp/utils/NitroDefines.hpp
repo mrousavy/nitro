@@ -48,12 +48,4 @@
 #define CLOSED_ENUM
 #endif
 
-#ifdef __APPLE__
-#define NONNULL _Nonnull
-#define NULLABLE _Nullable
-#else
-#define NONNULL
-#define NULLABLE
-#endif
-
 #endif /* NitroDefines_h */

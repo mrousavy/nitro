@@ -1,8 +1,5 @@
 import { NitroConfig } from '../../config/NitroConfig.js'
-import {
-  includeHeader,
-  includeNitroHeader,
-} from '../../syntax/c++/includeNitroHeader.js'
+import { includeHeader } from '../../syntax/c++/includeNitroHeader.js'
 import { getAllKnownTypes } from '../../syntax/createType.js'
 import {
   createFileMetadataString,
@@ -85,8 +82,6 @@ export function createSwiftCxxBridge(): SourceFile[] {
 ${createFileMetadataString(`${bridgeName}.hpp`)}
 
 #pragma once
-
-${includeNitroHeader('NitroDefines.hpp')}
 
 // Forward declarations of C++ defined types
 ${forwardDeclarationsHeader.sort().join('\n')}
