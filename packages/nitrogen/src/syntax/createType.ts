@@ -26,6 +26,7 @@ import {
   type Language,
 } from '../getPlatformSpecs.js'
 import { HybridObjectBaseType } from './types/HybridObjectBaseType.js'
+import { isSyncCallback } from './isSyncCallback.js'
 
 function isSymbol(type: TSMorphType, symbolName: string): boolean {
   const symbol = type.getSymbol()
@@ -211,7 +212,8 @@ export function createType(
         const isNullable = parameterType.isNullable() || p.isOptional()
         return createNamedType(language, p.getName(), parameterType, isNullable)
       })
-      return new FunctionType(returnType, parameters)
+      const isSync = isSyncCallback(type)
+      return new FunctionType(returnType, parameters, isSync)
     } else if (isPromise(type)) {
       // It's a Promise!
       const [promiseResolvingType] = getArguments(type, 'Promise', 1)
