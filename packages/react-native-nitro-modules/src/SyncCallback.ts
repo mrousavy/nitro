@@ -14,4 +14,4 @@
  * }
  * ```
  */
-export type SyncCallback<T extends Function> = T
+export type SyncCallback<T extends Function> = T & { __syncCallback?: true }
