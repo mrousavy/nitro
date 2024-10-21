@@ -103,7 +103,7 @@ It is up to the developer on how to handle this most efficiently, but here's an 
     }
     ```
   </TabItem>
-  <TabItem value="objc" label="iOS (Objective-C)" default>
+  <TabItem value="objc" label="iOS (Objective-C)">
     ```objc
     @implementation NitroImageView
 
