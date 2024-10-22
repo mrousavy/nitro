@@ -7,12 +7,6 @@
 
 #pragma once
 
-#if __has_include(<NitroModules/NitroDefines.hpp>)
-#include <NitroModules/NitroDefines.hpp>
-#else
-#error NitroModules cannot be found! Are you sure you installed NitroModules properly?
-#endif
-
 // Forward declarations of C++ defined types
 // Forward declaration of `HybridBaseSpec` to properly resolve imports.
 namespace margelo::nitro::image { class HybridBaseSpec; }
@@ -82,7 +76,7 @@ namespace margelo::nitro::image::bridge::swift {
   private:
     std::function<void(const std::string& /* path */)> _function;
   };
-  inline Func_void_std__string create_Func_void_std__string(void* NONNULL closureHolder, void(* NONNULL call)(void* NONNULL /* closureHolder */, std::string), void(* NONNULL destroy)(void* NONNULL)) {
+  inline Func_void_std__string create_Func_void_std__string(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */, std::string), void(* _Nonnull destroy)(void* _Nonnull)) {
     std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
     return Func_void_std__string([sharedClosureHolder, call](const std::string& path) -> void {
       call(sharedClosureHolder.get(), path);
@@ -97,24 +91,24 @@ namespace margelo::nitro::image::bridge::swift {
    * Specialized version of `std::shared_ptr<margelo::nitro::image::HybridImageSpec>`.
    */
   using std__shared_ptr_margelo__nitro__image__HybridImageSpec_ = std::shared_ptr<margelo::nitro::image::HybridImageSpec>;
-  std::shared_ptr<margelo::nitro::image::HybridImageSpec> create_std__shared_ptr_margelo__nitro__image__HybridImageSpec_(void* NONNULL swiftUnsafePointer);
-  void* NONNULL get_std__shared_ptr_margelo__nitro__image__HybridImageSpec_(std__shared_ptr_margelo__nitro__image__HybridImageSpec_ cppType);
+  std::shared_ptr<margelo::nitro::image::HybridImageSpec> create_std__shared_ptr_margelo__nitro__image__HybridImageSpec_(void* _Nonnull swiftUnsafePointer);
+  void* _Nonnull get_std__shared_ptr_margelo__nitro__image__HybridImageSpec_(std__shared_ptr_margelo__nitro__image__HybridImageSpec_ cppType);
   
   // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridImageFactorySpec>
   /**
    * Specialized version of `std::shared_ptr<margelo::nitro::image::HybridImageFactorySpec>`.
    */
   using std__shared_ptr_margelo__nitro__image__HybridImageFactorySpec_ = std::shared_ptr<margelo::nitro::image::HybridImageFactorySpec>;
-  std::shared_ptr<margelo::nitro::image::HybridImageFactorySpec> create_std__shared_ptr_margelo__nitro__image__HybridImageFactorySpec_(void* NONNULL swiftUnsafePointer);
-  void* NONNULL get_std__shared_ptr_margelo__nitro__image__HybridImageFactorySpec_(std__shared_ptr_margelo__nitro__image__HybridImageFactorySpec_ cppType);
+  std::shared_ptr<margelo::nitro::image::HybridImageFactorySpec> create_std__shared_ptr_margelo__nitro__image__HybridImageFactorySpec_(void* _Nonnull swiftUnsafePointer);
+  void* _Nonnull get_std__shared_ptr_margelo__nitro__image__HybridImageFactorySpec_(std__shared_ptr_margelo__nitro__image__HybridImageFactorySpec_ cppType);
   
   // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>
   /**
    * Specialized version of `std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>`.
    */
   using std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_ = std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>;
-  std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec> create_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_(void* NONNULL swiftUnsafePointer);
-  void* NONNULL get_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_(std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_ cppType);
+  std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec> create_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_(void* _Nonnull swiftUnsafePointer);
+  void* _Nonnull get_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_(std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_ cppType);
   
   // pragma MARK: std::optional<std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>>
   /**
@@ -214,7 +208,7 @@ namespace margelo::nitro::image::bridge::swift {
   private:
     std::function<void(const std::vector<Powertrain>& /* array */)> _function;
   };
-  inline Func_void_std__vector_Powertrain_ create_Func_void_std__vector_Powertrain_(void* NONNULL closureHolder, void(* NONNULL call)(void* NONNULL /* closureHolder */, std::vector<Powertrain>), void(* NONNULL destroy)(void* NONNULL)) {
+  inline Func_void_std__vector_Powertrain_ create_Func_void_std__vector_Powertrain_(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */, std::vector<Powertrain>), void(* _Nonnull destroy)(void* _Nonnull)) {
     std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
     return Func_void_std__vector_Powertrain_([sharedClosureHolder, call](const std::vector<Powertrain>& array) -> void {
       call(sharedClosureHolder.get(), array);
@@ -298,7 +292,7 @@ namespace margelo::nitro::image::bridge::swift {
   private:
     std::function<void()> _function;
   };
-  inline Func_void create_Func_void(void* NONNULL closureHolder, void(* NONNULL call)(void* NONNULL /* closureHolder */), void(* NONNULL destroy)(void* NONNULL)) {
+  inline Func_void create_Func_void(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */), void(* _Nonnull destroy)(void* _Nonnull)) {
     std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
     return Func_void([sharedClosureHolder, call]() -> void {
       call(sharedClosureHolder.get());
@@ -335,7 +329,7 @@ namespace margelo::nitro::image::bridge::swift {
   private:
     std::function<void(std::optional<double> /* maybe */)> _function;
   };
-  inline Func_void_std__optional_double_ create_Func_void_std__optional_double_(void* NONNULL closureHolder, void(* NONNULL call)(void* NONNULL /* closureHolder */, std::optional<double>), void(* NONNULL destroy)(void* NONNULL)) {
+  inline Func_void_std__optional_double_ create_Func_void_std__optional_double_(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */, std::optional<double>), void(* _Nonnull destroy)(void* _Nonnull)) {
     std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
     return Func_void_std__optional_double_([sharedClosureHolder, call](std::optional<double> maybe) -> void {
       call(sharedClosureHolder.get(), maybe);
@@ -359,15 +353,15 @@ namespace margelo::nitro::image::bridge::swift {
    * Specialized version of `std::shared_ptr<margelo::nitro::image::HybridChildSpec>`.
    */
   using std__shared_ptr_margelo__nitro__image__HybridChildSpec_ = std::shared_ptr<margelo::nitro::image::HybridChildSpec>;
-  std::shared_ptr<margelo::nitro::image::HybridChildSpec> create_std__shared_ptr_margelo__nitro__image__HybridChildSpec_(void* NONNULL swiftUnsafePointer);
-  void* NONNULL get_std__shared_ptr_margelo__nitro__image__HybridChildSpec_(std__shared_ptr_margelo__nitro__image__HybridChildSpec_ cppType);
+  std::shared_ptr<margelo::nitro::image::HybridChildSpec> create_std__shared_ptr_margelo__nitro__image__HybridChildSpec_(void* _Nonnull swiftUnsafePointer);
+  void* _Nonnull get_std__shared_ptr_margelo__nitro__image__HybridChildSpec_(std__shared_ptr_margelo__nitro__image__HybridChildSpec_ cppType);
   
   // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridBaseSpec>
   /**
    * Specialized version of `std::shared_ptr<margelo::nitro::image::HybridBaseSpec>`.
    */
   using std__shared_ptr_margelo__nitro__image__HybridBaseSpec_ = std::shared_ptr<margelo::nitro::image::HybridBaseSpec>;
-  std::shared_ptr<margelo::nitro::image::HybridBaseSpec> create_std__shared_ptr_margelo__nitro__image__HybridBaseSpec_(void* NONNULL swiftUnsafePointer);
-  void* NONNULL get_std__shared_ptr_margelo__nitro__image__HybridBaseSpec_(std__shared_ptr_margelo__nitro__image__HybridBaseSpec_ cppType);
+  std::shared_ptr<margelo::nitro::image::HybridBaseSpec> create_std__shared_ptr_margelo__nitro__image__HybridBaseSpec_(void* _Nonnull swiftUnsafePointer);
+  void* _Nonnull get_std__shared_ptr_margelo__nitro__image__HybridBaseSpec_(std__shared_ptr_margelo__nitro__image__HybridBaseSpec_ cppType);
 
 } // namespace margelo::nitro::image::bridge::swift
