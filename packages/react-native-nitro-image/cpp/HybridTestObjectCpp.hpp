@@ -28,6 +28,7 @@ private:
   std::tuple<double, std::string> _tuple;
   std::optional<std::vector<std::string>> _optionalArray;
   std::optional<std::shared_ptr<HybridTestObjectCppSpec>> _optionalHybrid;
+  std::optional<Powertrain> _optionalEnum;
 
 private:
   static inline uint64_t calculateFibonacci(int count) noexcept {
@@ -64,6 +65,8 @@ public:
   std::shared_ptr<HybridTestObjectCppSpec> getThisObject() override;
   std::optional<std::shared_ptr<HybridTestObjectCppSpec>> getOptionalHybrid() override;
   void setOptionalHybrid(const std::optional<std::shared_ptr<HybridTestObjectCppSpec>>& optionalHybrid) override;
+  std::optional<Powertrain> getOptionalEnum() override;
+  void setOptionalEnum(std::optional<Powertrain> optionalEnum) override;
 
 public:
   // Methods

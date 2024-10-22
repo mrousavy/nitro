@@ -22,6 +22,7 @@ class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
         get() = this
     override var someVariant: Variant_String_Double = Variant_String_Double.create(55.05)
     override var optionalArray: Array<String>? = null
+    override var optionalEnum: Powertrain? = null
 
     override fun simpleFunc() {
         // do nothing

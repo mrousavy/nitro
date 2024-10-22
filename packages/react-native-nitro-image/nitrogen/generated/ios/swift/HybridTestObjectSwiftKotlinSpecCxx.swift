@@ -279,6 +279,23 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
     }
   }
   
+  public var optionalEnum: bridge.std__optional_Powertrain_ {
+    @inline(__always)
+    get {
+      return { () -> bridge.std__optional_Powertrain_ in
+        if let __unwrappedValue = self.__implementation.optionalEnum {
+          return bridge.create_std__optional_Powertrain_(__unwrappedValue)
+        } else {
+          return .init()
+        }
+      }()
+    }
+    @inline(__always)
+    set {
+      self.__implementation.optionalEnum = newValue.value
+    }
+  }
+  
   public var someVariant: bridge.std__variant_std__string__double_ {
     @inline(__always)
     get {

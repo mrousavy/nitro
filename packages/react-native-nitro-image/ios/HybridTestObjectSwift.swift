@@ -33,6 +33,8 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
   var optionalString: String? = nil
   
   var optionalHybrid: (any HybridTestObjectSwiftKotlinSpec)? = nil
+  
+  var optionalEnum: Powertrain? = nil
 
   func simpleFunc() throws {
     // do nothing

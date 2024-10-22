@@ -14,10 +14,10 @@ namespace NitroImage { class HybridTestObjectSwiftKotlinSpecCxx; }
 
 // Forward declaration of `HybridTestObjectSwiftKotlinSpec` to properly resolve imports.
 namespace margelo::nitro::image { class HybridTestObjectSwiftKotlinSpec; }
-// Forward declaration of `Person` to properly resolve imports.
-namespace margelo::nitro::image { struct Person; }
 // Forward declaration of `Powertrain` to properly resolve imports.
 namespace margelo::nitro::image { enum class Powertrain; }
+// Forward declaration of `Person` to properly resolve imports.
+namespace margelo::nitro::image { struct Person; }
 // Forward declaration of `AnyMap` to properly resolve imports.
 namespace NitroModules { class AnyMap; }
 // Forward declaration of `Car` to properly resolve imports.
@@ -36,9 +36,9 @@ namespace margelo::nitro::image { class HybridBaseSpec; }
 #include <optional>
 #include <string>
 #include <vector>
+#include "Powertrain.hpp"
 #include <variant>
 #include "Person.hpp"
-#include "Powertrain.hpp"
 #include <functional>
 #include <NitroModules/AnyMap.hpp>
 #include <future>
@@ -151,6 +151,13 @@ namespace margelo::nitro::image {
     }
     inline void setOptionalArray(const std::optional<std::vector<std::string>>& optionalArray) noexcept override {
       _swiftPart.setOptionalArray(optionalArray);
+    }
+    inline std::optional<Powertrain> getOptionalEnum() noexcept override {
+      auto __result = _swiftPart.getOptionalEnum();
+      return __result;
+    }
+    inline void setOptionalEnum(std::optional<Powertrain> optionalEnum) noexcept override {
+      _swiftPart.setOptionalEnum(optionalEnum);
     }
     inline std::variant<std::string, double> getSomeVariant() noexcept override {
       auto __result = _swiftPart.getSomeVariant();

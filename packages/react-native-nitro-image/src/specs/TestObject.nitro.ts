@@ -48,6 +48,7 @@ interface SharedTestObjectProps {
   stringOrNull: string | null
   optionalString?: string
   optionalArray?: string[]
+  optionalEnum?: Powertrain
 
   // Basic function tests
   simpleFunc(): void
