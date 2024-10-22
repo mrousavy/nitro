@@ -248,6 +248,23 @@ export function getTests(
           testObject.optionalHybrid = undefined
         })
     ),
+    createTest('get optionalEnum (== undefined)', () =>
+      it(() => {
+        testObject.optionalEnum = undefined
+        return testObject.optionalEnum
+      })
+        .didNotThrow()
+        .didReturn('undefined')
+    ),
+    createTest('get optionalEnum (== self)', () =>
+      it(() => {
+        testObject.optionalEnum = 'gas'
+        return testObject.optionalEnum
+      })
+        .didNotThrow()
+        .didReturn('string')
+        .equals('gas')
+    ),
 
     // Test basic functions
     createTest('addNumbers(5, 13) = 18', () =>

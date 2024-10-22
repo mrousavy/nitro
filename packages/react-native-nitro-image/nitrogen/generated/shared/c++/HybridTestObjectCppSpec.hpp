@@ -15,14 +15,14 @@
 
 // Forward declaration of `HybridTestObjectCppSpec` to properly resolve imports.
 namespace margelo::nitro::image { class HybridTestObjectCppSpec; }
+// Forward declaration of `Powertrain` to properly resolve imports.
+namespace margelo::nitro::image { enum class Powertrain; }
 // Forward declaration of `OldEnum` to properly resolve imports.
 namespace margelo::nitro::image { enum class OldEnum; }
 // Forward declaration of `Car` to properly resolve imports.
 namespace margelo::nitro::image { struct Car; }
 // Forward declaration of `Person` to properly resolve imports.
 namespace margelo::nitro::image { struct Person; }
-// Forward declaration of `Powertrain` to properly resolve imports.
-namespace margelo::nitro::image { enum class Powertrain; }
 // Forward declaration of `AnyMap` to properly resolve imports.
 namespace NitroModules { class AnyMap; }
 // Forward declaration of `ArrayBuffer` to properly resolve imports.
@@ -38,13 +38,13 @@ namespace margelo::nitro::image { class HybridBaseSpec; }
 #include "HybridTestObjectCppSpec.hpp"
 #include <optional>
 #include <vector>
+#include "Powertrain.hpp"
 #include <variant>
 #include "OldEnum.hpp"
 #include "Car.hpp"
 #include "Person.hpp"
 #include <future>
 #include <functional>
-#include "Powertrain.hpp"
 #include <NitroModules/AnyMap.hpp>
 #include <NitroModules/ArrayBuffer.hpp>
 #include "HybridChildSpec.hpp"
@@ -98,6 +98,8 @@ namespace margelo::nitro::image {
       virtual void setOptionalString(const std::optional<std::string>& optionalString) = 0;
       virtual std::optional<std::vector<std::string>> getOptionalArray() = 0;
       virtual void setOptionalArray(const std::optional<std::vector<std::string>>& optionalArray) = 0;
+      virtual std::optional<Powertrain> getOptionalEnum() = 0;
+      virtual void setOptionalEnum(std::optional<Powertrain> optionalEnum) = 0;
       virtual std::variant<std::string, double> getSomeVariant() = 0;
       virtual void setSomeVariant(const std::variant<std::string, double>& someVariant) = 0;
 

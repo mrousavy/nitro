@@ -9,10 +9,10 @@
 
 // Forward declaration of `HybridTestObjectSwiftKotlinSpec` to properly resolve imports.
 namespace margelo::nitro::image { class HybridTestObjectSwiftKotlinSpec; }
-// Forward declaration of `Person` to properly resolve imports.
-namespace margelo::nitro::image { struct Person; }
 // Forward declaration of `Powertrain` to properly resolve imports.
 namespace margelo::nitro::image { enum class Powertrain; }
+// Forward declaration of `Person` to properly resolve imports.
+namespace margelo::nitro::image { struct Person; }
 // Forward declaration of `AnyMap` to properly resolve imports.
 namespace NitroModules { class AnyMap; }
 // Forward declaration of `Car` to properly resolve imports.
@@ -31,12 +31,12 @@ namespace margelo::nitro::image { class HybridBaseSpec; }
 #include <optional>
 #include <string>
 #include <vector>
+#include "Powertrain.hpp"
+#include "JPowertrain.hpp"
 #include <variant>
 #include "JVariant_String_Double.hpp"
 #include "Person.hpp"
 #include "JPerson.hpp"
-#include "Powertrain.hpp"
-#include "JPowertrain.hpp"
 #include <NitroModules/AnyMap.hpp>
 #include <NitroModules/JAnyMap.hpp>
 #include <future>
@@ -174,6 +174,15 @@ namespace margelo::nitro::image {
       }
       return __array;
     }() : nullptr);
+  }
+  std::optional<Powertrain> JHybridTestObjectSwiftKotlinSpec::getOptionalEnum() {
+    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JPowertrain>()>("getOptionalEnum");
+    auto __result = method(_javaPart);
+    return __result != nullptr ? std::make_optional(__result->toCpp()) : std::nullopt;
+  }
+  void JHybridTestObjectSwiftKotlinSpec::setOptionalEnum(std::optional<Powertrain> optionalEnum) {
+    static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<JPowertrain> /* optionalEnum */)>("setOptionalEnum");
+    method(_javaPart, optionalEnum.has_value() ? JPowertrain::fromCpp(optionalEnum.value()) : nullptr);
   }
   std::variant<std::string, double> JHybridTestObjectSwiftKotlinSpec::getSomeVariant() {
     static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JVariant_String_Double>()>("getSomeVariant");

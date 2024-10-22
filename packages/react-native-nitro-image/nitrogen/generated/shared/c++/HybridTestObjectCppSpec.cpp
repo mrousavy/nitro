@@ -35,6 +35,8 @@ namespace margelo::nitro::image {
       prototype.registerHybridSetter("optionalString", &HybridTestObjectCppSpec::setOptionalString);
       prototype.registerHybridGetter("optionalArray", &HybridTestObjectCppSpec::getOptionalArray);
       prototype.registerHybridSetter("optionalArray", &HybridTestObjectCppSpec::setOptionalArray);
+      prototype.registerHybridGetter("optionalEnum", &HybridTestObjectCppSpec::getOptionalEnum);
+      prototype.registerHybridSetter("optionalEnum", &HybridTestObjectCppSpec::setOptionalEnum);
       prototype.registerHybridGetter("someVariant", &HybridTestObjectCppSpec::getSomeVariant);
       prototype.registerHybridSetter("someVariant", &HybridTestObjectCppSpec::setSomeVariant);
       prototype.registerHybridMethod("passVariant", &HybridTestObjectCppSpec::passVariant);

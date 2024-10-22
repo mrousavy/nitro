@@ -109,6 +109,14 @@ std::shared_ptr<HybridTestObjectCppSpec> HybridTestObjectCpp::getThisObject() {
   return shared<HybridTestObjectCppSpec>();
 }
 
+std::optional<Powertrain> HybridTestObjectCpp::getOptionalEnum() {
+  return _optionalEnum;
+}
+
+void HybridTestObjectCpp::setOptionalEnum(std::optional<Powertrain> optionalEnum) {
+  _optionalEnum = optionalEnum;
+}
+
 // Methods
 double HybridTestObjectCpp::addNumbers(double a, double b) {
   return a + b;

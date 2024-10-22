@@ -154,6 +154,15 @@ namespace margelo::nitro::image::bridge::swift {
     return std::optional<std::vector<std::string>>(value);
   }
   
+  // pragma MARK: std::optional<Powertrain>
+  /**
+   * Specialized version of `std::optional<Powertrain>`.
+   */
+  using std__optional_Powertrain_ = std::optional<Powertrain>;
+  inline std::optional<Powertrain> create_std__optional_Powertrain_(const Powertrain& value) {
+    return std::optional<Powertrain>(value);
+  }
+  
   // pragma MARK: std::vector<double>
   /**
    * Specialized version of `std::vector<double>`.
@@ -222,15 +231,6 @@ namespace margelo::nitro::image::bridge::swift {
   using std__optional_bool_ = std::optional<bool>;
   inline std::optional<bool> create_std__optional_bool_(const bool& value) {
     return std::optional<bool>(value);
-  }
-  
-  // pragma MARK: std::optional<Powertrain>
-  /**
-   * Specialized version of `std::optional<Powertrain>`.
-   */
-  using std__optional_Powertrain_ = std::optional<Powertrain>;
-  inline std::optional<Powertrain> create_std__optional_Powertrain_(const Powertrain& value) {
-    return std::optional<Powertrain>(value);
   }
   
   // pragma MARK: std::variant<std::string, double>
