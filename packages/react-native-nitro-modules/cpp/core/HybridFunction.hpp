@@ -150,7 +150,7 @@ private:
   template <typename Derived, typename ReturnType, typename... Args, size_t... Is>
   static inline jsi::Value callMethod(Derived* obj, ReturnType (Derived::*method)(Args...), jsi::Runtime& runtime, const jsi::Value* args,
                                       size_t argsSize, std::index_sequence<Is...>) {
-    jsi::Value defaultValue;
+    static const jsi::Value defaultValue;
 
     if constexpr (std::is_void_v<ReturnType>) {
       // It's a void method.
