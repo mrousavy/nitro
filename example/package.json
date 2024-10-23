@@ -27,7 +27,7 @@
     "@babel/runtime": "^7.25.4",
     "@react-native/babel-preset": "^0.75.2",
     "@react-native/metro-config": "^0.75.2",
-    "@react-native/typescript-config": "^0.75.2",
+    "@react-native/typescript-config": "^0.76.0",
     "@types/deep-equal": "^1.0.4",
     "babel-plugin-module-resolver": "^5.0.2",
     "eslint-config-prettier": "^9.1.0",
