@@ -18,14 +18,14 @@ public extension Car {
   /**
    * Create a new instance of `Car`.
    */
-  init(year: Double, make: String, model: String, power: Double, powertrain: Powertrain, driver: Person?) {
+  init(year: Double, make: String, model: String, power: Double, powertrain: Powertrain, driver: Person?, isFast: Bool) {
     self.init(year, std.string(make), std.string(model), power, powertrain, { () -> bridge.std__optional_Person_ in
       if let __unwrappedValue = driver {
         return bridge.create_std__optional_Person_(__unwrappedValue)
       } else {
         return .init()
       }
-    }())
+    }(), isFast)
   }
 
   var year: Double {
@@ -103,6 +103,17 @@ public extension Car {
           return .init()
         }
       }()
+    }
+  }
+  
+  var isFast: Bool {
+    @inline(__always)
+    get {
+      return self.__isFast
+    }
+    @inline(__always)
+    set {
+      self.__isFast = newValue
     }
   }
 }

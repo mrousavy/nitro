@@ -13,7 +13,7 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
   var memorySize: Int {
     return 0
   }
-  
+
   var optionalArray: [String]? = []
 
   var someVariant: Variant_String_Double = .someDouble(55)
@@ -31,9 +31,9 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
   var stringOrNull: String? = nil
 
   var optionalString: String? = nil
-  
+
   var optionalHybrid: (any HybridTestObjectSwiftKotlinSpec)? = nil
-  
+
   var optionalEnum: Powertrain? = nil
 
   func simpleFunc() throws {
@@ -169,7 +169,7 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
   }
 
   func getCar() throws -> Car {
-    return Car(year: 2018, make: "Lamborghini", model: "Huracán", power: 640, powertrain: .gas, driver: nil)
+    return Car(year: 2018, make: "Lamborghini", model: "Huracán", power: 640, powertrain: .gas, driver: nil, isFast: true)
   }
 
   func isCarElectric(car: Car) throws -> Bool {
