@@ -98,7 +98,7 @@ namespace margelo::nitro::image {
   bool JHybridTestObjectSwiftKotlinSpec::getBoolValue() {
     static const auto method = _javaPart->getClass()->getMethod<jboolean()>("getBoolValue");
     auto __result = method(_javaPart);
-    return __result;
+    return static_cast<bool>(__result);
   }
   void JHybridTestObjectSwiftKotlinSpec::setBoolValue(bool boolValue) {
     static const auto method = _javaPart->getClass()->getMethod<void(jboolean /* boolValue */)>("setBoolValue");
@@ -398,7 +398,7 @@ namespace margelo::nitro::image {
   bool JHybridTestObjectSwiftKotlinSpec::isCarElectric(const Car& car) {
     static const auto method = _javaPart->getClass()->getMethod<jboolean(jni::alias_ref<JCar> /* car */)>("isCarElectric");
     auto __result = method(_javaPart, JCar::fromCpp(car));
-    return __result;
+    return static_cast<bool>(__result);
   }
   std::optional<Person> JHybridTestObjectSwiftKotlinSpec::getDriver(const Car& car) {
     static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JPerson>(jni::alias_ref<JCar> /* car */)>("getDriver");

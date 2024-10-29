@@ -36,6 +36,7 @@ const TEST_CAR: Car = {
   power: 640,
   powertrain: 'gas',
   driver: undefined, // <-- value needs to be explicitly set, to equal it with native's std::optional<..>
+  isFast: true,
 }
 
 function createTest<T>(
@@ -760,6 +761,7 @@ export function getTests(
           model: 'Huracan Performante',
           power: 640,
           powertrain: 'gas',
+          isFast: true,
         })
       )
         .didNotThrow()
@@ -773,6 +775,7 @@ export function getTests(
           model: 'Huracan Performante',
           power: 640,
           powertrain: 'gas',
+          isFast: true,
         })
       )
         .didNotThrow()
@@ -787,6 +790,7 @@ export function getTests(
           power: 640,
           powertrain: 'gas',
           driver: { age: 24, name: 'marc' },
+          isFast: true,
         })
       )
         .didNotThrow()

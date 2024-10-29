@@ -47,13 +47,16 @@ namespace margelo::nitro::image {
       jni::local_ref<JPowertrain> powertrain = this->getFieldValue(fieldPowertrain);
       static const auto fieldDriver = clazz->getField<JPerson>("driver");
       jni::local_ref<JPerson> driver = this->getFieldValue(fieldDriver);
+      static const auto fieldIsFast = clazz->getField<jboolean>("isFast");
+      jboolean isFast = this->getFieldValue(fieldIsFast);
       return Car(
         year,
         make->toStdString(),
         model->toStdString(),
         power,
         powertrain->toCpp(),
-        driver != nullptr ? std::make_optional(driver->toCpp()) : std::nullopt
+        driver != nullptr ? std::make_optional(driver->toCpp()) : std::nullopt,
+        static_cast<bool>(isFast)
       );
     }
 
@@ -69,7 +72,8 @@ namespace margelo::nitro::image {
         jni::make_jstring(value.model),
         value.power,
         JPowertrain::fromCpp(value.powertrain),
-        value.driver.has_value() ? JPerson::fromCpp(value.driver.value()) : nullptr
+        value.driver.has_value() ? JPerson::fromCpp(value.driver.value()) : nullptr,
+        value.isFast
       );
     }
   };

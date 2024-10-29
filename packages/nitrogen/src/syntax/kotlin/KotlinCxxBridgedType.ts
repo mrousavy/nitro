@@ -537,6 +537,10 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
               // unbox an object (JDouble) to a primitive (double)
               return `${parameterName}->value()`
             } else {
+              if (this.type.kind === 'boolean') {
+                // jboolean =/= bool (it's a char in Java)
+                return `static_cast<bool>(${parameterName})`
+              }
               return parameterName
             }
           default:
