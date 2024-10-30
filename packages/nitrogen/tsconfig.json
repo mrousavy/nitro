@@ -1,30 +1,8 @@
 {
-  "include": [
-    "src"
-  ],
+  "extends": "../../config/tsconfig.json",
+  "include": ["src"],
   "compilerOptions": {
-    "composite": true,
-    "outDir": "lib",
     "rootDir": "src",
-    "allowUnreachableCode": false,
-    "allowUnusedLabels": false,
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "lib": ["esnext"],
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
-    "noEmit": false,
-    "noFallthroughCasesInSwitch": true,
-    "noImplicitReturns": true,
-    "noImplicitUseStrict": false,
-    "noStrictGenericChecks": false,
-    "noUncheckedIndexedAccess": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "resolveJsonModule": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "target": "ES2017",
-    "verbatimModuleSyntax": true
+    "outDir": "lib"
   }
 }

@@ -5,25 +5,38 @@
   "version": "0.13.0",
   "repository": "https://github.com/mrousavy/nitro.git",
   "author": "Marc Rousavy <me@mrousavy.com> (https://github.com/mrousavy)",
-  "scripts": {
-    "check-all": "./scripts/clang-format.sh",
-    "bootstrap": "bun --filter=\"**\" install && bun tsc && bun --filter=\"react-native-nitro-example\" pods",
-    "typescript": "bun --filter=\"**\" typescript",
-    "release": "release-it",
-    "clean": "rm -rf packages/**/tsconfig.tsbuildinfo packages/**/node_modules packages/**/lib"
-  },
   "workspaces": [
-    "packages/react-native-nitro-modules",
-    "packages/nitrogen",
-    "packages/react-native-nitro-image",
+    "packages/*",
     "example",
     "docs"
   ],
+  "scripts": {
+    "modules": "bun --cwd package/react-native-nitro-modules",
+    "nitrogen": "bun --cwd package/nitrogen",
+    "image": "bun --cwd package/react-native-nitro-image",
+    "example": "bun --cwd example",
+    "bootstrap": "bun --filter=\"**\" install && bun tsc && bun example pods",
+    "check-all": "./scripts/clang-format.sh",
+    "typecheck": "bun --filter=\"**\" typescript",
+    "clean": "rm -rf packages/**/tsconfig.tsbuildinfo packages/**/node_modules packages/**/lib",
+    "lint": "bun --filter=\"**\" lint",
+    "release": "bun modules prepare && bun nitrogen prepare && release-it"
+  },
   "devDependencies": {
-    "@release-it/conventional-changelog": "^8.0.1",
-    "@release-it/bumper": "^6.0.1",
+    "@eslint/js": "^9.10.0",
     "@jamesacarr/eslint-formatter-github-actions": "^0.2.0",
-    "release-it": "^17.6.0"
+    "@react-native/eslint-config": "0.75.2",
+    "@release-it-plugins/workspaces": "^4.2.0",
+    "@release-it/bumper": "^6.0.1",
+    "@release-it/conventional-changelog": "^8.0.2",
+    "@tsconfig/react-native": "^2.0.2",
+    "@types/eslint__js": "^8.42.3",
+    "@types/jest": "^29.5.13",
+    "eslint": "8.57.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "prettier": "^3.3.3",
+    "release-it": "^17.10.0",
+    "typescript-eslint": "^8.6.0"
   },
   "release-it": {
     "npm": {
@@ -38,6 +51,26 @@
       "release": true
     },
     "plugins": {
+      "@release-it/bumper": {
+        "out": [
+          {
+            "file": "packages/react-native-nitro-modules/package.json",
+            "path": "version"
+          },
+          {
+            "file": "packages/nitrogen/package.json",
+            "path": "version"
+          },
+          {
+            "file": "packages/react-native-nitro-image/package.json",
+            "path": "version"
+          },
+          {
+            "file": "example/package.json",
+            "path": "version"
+          }
+        ]
+      },
       "@release-it/conventional-changelog": {
         "preset": {
           "name": "conventionalcommits",
