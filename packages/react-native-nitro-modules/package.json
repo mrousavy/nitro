@@ -54,7 +54,8 @@
     "registry": "https://registry.npmjs.org/"
   },
   "scripts": {
-    "prepare": "rm -rf lib && bun typecheck && bob build",
+    "build": "rm -rf lib && bun typecheck && bob build",
+    "prepare": "bun build",
     "postinstall": "tsc || exit 0;",
     "typescript": "tsc",
     "typecheck": "tsc --noEmit",

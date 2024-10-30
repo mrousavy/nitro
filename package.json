@@ -15,7 +15,7 @@
     "nitrogen": "bun --cwd packages/nitrogen",
     "image": "bun --cwd packages/react-native-nitro-image",
     "example": "bun --cwd example",
-    "bootstrap": "bun --filter=\"**\" install && bun typecheck && bun example pods",
+    "bootstrap": "bun install && bun typecheck && bun example pods",
     "check-all": "./scripts/clang-format.sh",
     "typescript": "bun --filter=\"**\" typescript",
     "typecheck": "bun --filter=\"**\" typecheck",
