@@ -2,6 +2,7 @@
   "name": "react-native-nitro-template",
   "version": "0.0.1",
   "description": "A template for Nitro Modules.",
+  "private": true,
   "main": "lib/index",
   "module": "lib/index",
   "types": "lib/index.d.ts",
