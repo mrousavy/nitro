@@ -6,7 +6,6 @@
   "include": ["src"],
   "compilerOptions": {
     "rootDir": "src",
-    "outDir": "lib",
     "jsx": "react"
   }
 }
