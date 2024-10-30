@@ -1,5 +1,5 @@
 //
-//  FutureType.hpp
+//  IsFuture.hpp
 //  NitroModules
 //
 //  Created by Marc Rousavy on 21.06.24.
@@ -12,17 +12,13 @@
 
 namespace margelo::nitro {
 
-// Gets the `T` in `std::future<T>`.
+// Gets whether type T is a future
 template <typename T>
-struct future_type {
-  using type = T;
-};
+struct is_future : std::false_type {};
 template <typename T>
-struct future_type<std::future<T>> {
-  using type = T;
-};
+struct is_future<std::future<T>> : std::true_type {};
 
 template <typename T>
-using future_type_v = typename future_type<std::remove_reference_t<T>>::type;
+inline constexpr bool is_future_v = is_future<T>::value;
 
 } // namespace margelo::nitro

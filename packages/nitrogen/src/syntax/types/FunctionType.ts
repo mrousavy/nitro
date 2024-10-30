@@ -8,16 +8,18 @@ import type { NamedType, Type, TypeKind } from './Type.js'
 export class FunctionType implements Type {
   readonly returnType: Type
   readonly parameters: NamedType[]
+  readonly isSync: boolean
 
-  constructor(returnType: Type, parameters: NamedType[]) {
-    if (returnType.kind === 'void') {
-      // void callbacks are async, but we don't care about the result.
+  constructor(returnType: Type, parameters: NamedType[], isSync: boolean) {
+    if (isSync) {
+      // synchronous functions just return their value immediately.
       this.returnType = returnType
     } else {
-      // non-void callbacks are async and need to be awaited to get the result from JS.
+      // asynchronous functions are scheduled on the JS Thread and need to be awaited to get the result from JS.
       this.returnType = new PromiseType(returnType)
     }
     this.parameters = parameters
+    this.isSync = isSync
   }
 
   get specializationName(): string {
