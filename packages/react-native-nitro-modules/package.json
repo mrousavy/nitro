@@ -2,9 +2,9 @@
   "name": "react-native-nitro-modules",
   "version": "0.13.0",
   "description": "Insanely fast native C++, Swift or Kotlin modules with a statically compiled binding layer to JSI.",
-  "main": "lib/index",
-  "module": "lib/index",
-  "types": "lib/index.d.ts",
+  "main": "lib/commonjs/index",
+  "module": "lib/module/index",
+  "types": "lib/typescript/index.d.ts",
   "react-native": "src/index",
   "source": "src/index",
   "files": [
@@ -54,7 +54,7 @@
     "registry": "https://registry.npmjs.org/"
   },
   "scripts": {
-    "prepare": "rm -rf lib && bun typescript && bob build",
+    "prepare": "rm -rf lib && bun typecheck && bob build",
     "postinstall": "tsc || exit 0;",
     "typescript": "tsc",
     "typecheck": "tsc --noEmit",
@@ -109,7 +109,7 @@
       [
         "typescript",
         {
-          "tsc": "../node_modules/.bin/tsc"
+          "tsc": "../../node_modules/.bin/tsc"
         }
       ]
     ]
