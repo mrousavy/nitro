@@ -17,6 +17,7 @@
     "example": "bun --cwd example",
     "bootstrap": "bun --filter=\"**\" install && bun tsc && bun example pods",
     "check-all": "./scripts/clang-format.sh",
+    "typescript": "bun --filter=\"**\" typescript",
     "typecheck": "bun --filter=\"**\" typecheck",
     "lint": "bun --filter=\"**\" lint",
     "clean": "rm -rf packages/**/tsconfig.tsbuildinfo packages/**/node_modules packages/**/lib",
@@ -36,6 +37,7 @@
     "eslint-plugin-prettier": "^5.2.1",
     "prettier": "^3.3.3",
     "release-it": "^17.10.0",
+    "typescript": "^5.6.2",
     "typescript-eslint": "^8.6.0"
   },
   "release-it": {
