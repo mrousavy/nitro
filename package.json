@@ -11,15 +11,15 @@
     "docs"
   ],
   "scripts": {
-    "modules": "bun --cwd package/react-native-nitro-modules",
-    "nitrogen": "bun --cwd package/nitrogen",
-    "image": "bun --cwd package/react-native-nitro-image",
+    "modules": "bun --cwd packages/react-native-nitro-modules",
+    "nitrogen": "bun --cwd packages/nitrogen",
+    "image": "bun --cwd packages/react-native-nitro-image",
     "example": "bun --cwd example",
     "bootstrap": "bun --filter=\"**\" install && bun tsc && bun example pods",
     "check-all": "./scripts/clang-format.sh",
     "typescript": "bun --filter=\"**\" typescript",
     "typecheck": "bun --filter=\"**\" typecheck",
-    "lint": "bun --filter=\"**\" lint",
+    "lint": "bun modules lint && bun nitrogen lint && bun image lint && bun example lint",
     "clean": "rm -rf packages/**/tsconfig.tsbuildinfo packages/**/node_modules packages/**/lib",
     "release": "bun modules prepare && bun nitrogen prepare && release-it"
   },
