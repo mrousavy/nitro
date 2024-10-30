@@ -9,6 +9,7 @@ import {
 import type { State } from './Testers'
 import { it } from './Testers'
 import { stringify } from './utils'
+import { getHybridObjectConstructor } from 'react-native-nitro-modules'
 
 type TestResult =
   | {
@@ -960,6 +961,57 @@ export function getTests(
         const child = testObject.createChild()
         const bounced = testObject.castBase(child)
         return bounced === child
+      })
+        .didNotThrow()
+        .equals(true)
+    ),
+    createTest('new T() works', () =>
+      it(() => {
+        const HybridTestObjectCpp =
+          getHybridObjectConstructor<TestObjectCpp>('TestObjectCpp')
+        const instance = new HybridTestObjectCpp()
+        return instance
+      })
+        .didNotThrow()
+        .toContain('boolValue')
+    ),
+    createTest('new T() instanceof works', () =>
+      it(() => {
+        const HybridTestObjectCpp =
+          getHybridObjectConstructor<TestObjectCpp>('TestObjectCpp')
+        const instance = new HybridTestObjectCpp()
+        return instance instanceof HybridTestObjectCpp
+      })
+        .didNotThrow()
+        .equals(true)
+    ),
+    createTest('{} instanceof works', () =>
+      it(() => {
+        const HybridTestObjectCpp =
+          getHybridObjectConstructor<TestObjectCpp>('TestObjectCpp')
+        return {} instanceof HybridTestObjectCpp
+      })
+        .didNotThrow()
+        .equals(false)
+    ),
+    createTest('new T() =/= new T()', () =>
+      it(() => {
+        const HybridTestObjectCpp =
+          getHybridObjectConstructor<TestObjectCpp>('TestObjectCpp')
+        const a = new HybridTestObjectCpp()
+        const b = new HybridTestObjectCpp()
+        return a === b
+      })
+        .didNotThrow()
+        .equals(false)
+    ),
+    createTest('new T() a == a', () =>
+      it(() => {
+        const HybridTestObjectCpp =
+          getHybridObjectConstructor<TestObjectCpp>('TestObjectCpp')
+        const a = new HybridTestObjectCpp()
+        // eslint-disable-next-line no-self-compare
+        return a === a
       })
         .didNotThrow()
         .equals(true)

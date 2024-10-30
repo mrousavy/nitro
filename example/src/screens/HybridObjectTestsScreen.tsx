@@ -19,7 +19,6 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { logPrototypeChain } from '../logPrototypeChain'
 import SegmentedControl from '@react-native-segmented-control/segmented-control'
 import { NitroModules } from 'react-native-nitro-modules'
-import { NewTestObjectCpp } from '../NewTestObjectCpp'
 
 logPrototypeChain(HybridChild)
 console.log(HybridBase.baseValue)
@@ -27,8 +26,6 @@ console.log(HybridChild.baseValue)
 console.log(HybridChild.childValue)
 
 logPrototypeChain(HybridTestObjectCpp)
-
-console.log(new NewTestObjectCpp())
 
 interface TestState {
   runner: TestRunner
