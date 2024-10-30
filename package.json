@@ -56,11 +56,16 @@
       "@release-it/bumper": {
         "out": [
           {
-            "file": "packages/react-native-nitro-modules/package.json",
-            "path": "version"
+            "file": "packages/nitrogen/package.json",
+            "path": "dependencies.react-native-nitro-modules",
+            "prefix": "^"
           },
           {
             "file": "packages/nitrogen/package.json",
+            "path": "version"
+          },
+          {
+            "file": "packages/react-native-nitro-modules/package.json",
             "path": "version"
           },
           {
