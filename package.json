@@ -17,9 +17,9 @@
     "example": "bun --cwd example",
     "bootstrap": "bun --filter=\"**\" install && bun tsc && bun example pods",
     "check-all": "./scripts/clang-format.sh",
-    "typecheck": "bun --filter=\"**\" typescript",
-    "clean": "rm -rf packages/**/tsconfig.tsbuildinfo packages/**/node_modules packages/**/lib",
+    "typecheck": "bun --filter=\"**\" typecheck",
     "lint": "bun --filter=\"**\" lint",
+    "clean": "rm -rf packages/**/tsconfig.tsbuildinfo packages/**/node_modules packages/**/lib",
     "release": "bun modules prepare && bun nitrogen prepare && release-it"
   },
   "devDependencies": {

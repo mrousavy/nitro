@@ -12,12 +12,10 @@
   ],
   "compilerOptions": {
     "composite": true,
-    "outDir": "lib",
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "jsx": "react",
     "lib": ["ESNext"],
     "module": "ESNext",
     "moduleResolution": "node",

@@ -3,6 +3,8 @@
   "include": ["src"],
   "compilerOptions": {
     "rootDir": "src",
-    "outDir": "lib"
+    "outDir": "lib",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext"
   }
 }
