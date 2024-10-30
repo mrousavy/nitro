@@ -27,6 +27,7 @@
   },
   "scripts": {
     "start": "tsc && node lib/index.js",
+    "prepare": "bun typescript",
     "postinstall": "tsc || exit 0;",
     "typescript": "tsc",
     "typecheck": "tsc --noEmit",
