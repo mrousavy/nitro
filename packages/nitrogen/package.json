@@ -32,7 +32,8 @@
     "typescript": "tsc",
     "typecheck": "tsc --noEmit",
     "lint": "eslint \"**/*.{js,ts,tsx}\" --fix",
-    "lint-ci": "eslint \"**/*.{js,ts,tsx}\" -f @jamesacarr/github-actions"
+    "lint-ci": "eslint \"**/*.{js,ts,tsx}\" -f @jamesacarr/github-actions",
+    "release": "release-it"
   },
   "dependencies": {
     "chalk": "^5.3.0",
@@ -51,6 +52,17 @@
     "git": false,
     "github": {
       "release": false
+    },
+    "plugins": {
+      "@release-it/bumper": {
+        "out": {
+          "file": "package.json",
+          "path": [
+            "dependencies.react-native-nitro-modules"
+          ],
+          "prefix": "^"
+        }
+      }
     }
   }
 }

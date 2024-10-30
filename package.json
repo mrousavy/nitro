@@ -2,11 +2,14 @@
   "name": "react-native-nitro",
   "packageManager": "bun@1.1.21",
   "private": true,
-  "version": "0.13.0",
+  "version": "0.14.0",
   "repository": "https://github.com/mrousavy/nitro.git",
   "author": "Marc Rousavy <me@mrousavy.com> (https://github.com/mrousavy)",
   "workspaces": [
-    "packages/*",
+    "packages/react-native-nitro-modules",
+    "packages/nitrogen",
+    "packages/nitro-image",
+    "packages/template",
     "example",
     "docs"
   ],
@@ -21,7 +24,7 @@
     "typecheck": "bun --filter=\"**\" typecheck",
     "lint": "bun modules lint && bun nitrogen lint && bun image lint && bun example lint",
     "clean": "rm -rf packages/**/tsconfig.tsbuildinfo packages/**/node_modules packages/**/lib",
-    "release": "bun run --cwd packages/react-native-nitro-modules build && bun run --cwd packages/nitrogen build  && release-it"
+    "release": "bun run --cwd packages/react-native-nitro-modules build && bun run --cwd packages/nitrogen build && release-it --workspaces"
   },
   "devDependencies": {
     "@eslint/js": "^9.10.0",
@@ -55,19 +58,6 @@
     "plugins": {
       "@release-it/bumper": {
         "out": [
-          {
-            "file": "packages/nitrogen/package.json",
-            "path": "dependencies.react-native-nitro-modules",
-            "prefix": "^"
-          },
-          {
-            "file": "packages/nitrogen/package.json",
-            "path": "version"
-          },
-          {
-            "file": "packages/react-native-nitro-modules/package.json",
-            "path": "version"
-          },
           {
             "file": "packages/react-native-nitro-image/package.json",
             "path": "version"
