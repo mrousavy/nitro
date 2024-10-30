@@ -1,5 +1,5 @@
 {
-  "extends": "@tsconfig/react-native/tsconfig.json",
+  "include": ["!*"],
   "exclude": [
     "**/node_modules",
     "**/lib",

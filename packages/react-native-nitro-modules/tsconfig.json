@@ -1,5 +1,8 @@
 {
-  "extends": "../../config/tsconfig.json",
+  "extends": [
+    "@tsconfig/react-native/tsconfig.json",
+    "../../config/tsconfig.json"
+  ],
   "include": ["src"],
   "compilerOptions": {
     "rootDir": "src",
