@@ -29,18 +29,18 @@
     "@react-native-community/cli-platform-android": "^15.0.0",
     "@react-native-community/cli-platform-ios": "^15.0.0",
     "@react-native/babel-preset": "^0.76.1",
+    "@react-native/eslint-config": "^0.76.1",
     "@react-native/metro-config": "^0.76.1",
     "@react-native/typescript-config": "^0.76.1",
     "@types/deep-equal": "^1.0.4",
     "babel-plugin-module-resolver": "^5.0.2",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint": "^8.57.0",
+    "eslint": "^8.19.0",
     "eslint-plugin-prettier": "^5.2.1",
     "nitro-codegen": "*",
-    "prettier": "^3.3.3",
+    "prettier": "2.8.8",
     "react-native-nitro-image": "*",
     "react-native-nitro-modules": "*",
-    "typescript": "^5.5.4"
+    "typescript": "5.0.4"
   },
   "engines": {
     "node": ">=18"
