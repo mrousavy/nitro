@@ -43,7 +43,7 @@
     "registry": "https://registry.npmjs.org/"
   },
   "scripts": {
-    "postinstall": "tsc || exit 0;",
+    "postinstall": "bun typescript || exit 0;",
     "test": "jest",
     "typescript": "tsc",
     "typecheck": "tsc --noEmit",

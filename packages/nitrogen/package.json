@@ -26,9 +26,9 @@
     "registry": "https://registry.npmjs.org/"
   },
   "scripts": {
+    "postinstall": "bun typescript || exit 0;",
     "start": "tsc && node lib/index.js",
-    "prepare": "bun typescript",
-    "postinstall": "tsc || exit 0;",
+    "build": "bun typescript",
     "typescript": "tsc",
     "typecheck": "tsc --noEmit",
     "lint": "eslint \"**/*.{js,ts,tsx}\" --fix",
