@@ -8,7 +8,7 @@
   "workspaces": [
     "packages/react-native-nitro-modules",
     "packages/nitrogen",
-    "packages/nitro-image",
+    "packages/react-native-nitro-image",
     "packages/template",
     "example",
     "docs"
