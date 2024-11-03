@@ -31,7 +31,7 @@
     "lint": "eslint \"**/*.{js,ts,tsx}\" --fix",
     "lint-ci": "eslint \"**/*.{js,ts,tsx}\" -f @jamesacarr/github-actions",
     "typescript": "tsc --noEmit false",
-    "specs": "bun run --filter=\"**\" typescript && bun nitro-codegen --logLevel=\"debug\""
+    "specs": "typescript && bun nitro-codegen --logLevel=\"debug\""
   },
   "keywords": [
     "react-native",
