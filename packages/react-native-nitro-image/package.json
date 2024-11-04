@@ -60,8 +60,7 @@
     "nitro-codegen": "*",
     "react": "^18.3.1",
     "react-native": "^0.75.2",
-    "react-native-nitro-modules": "*",
-    "typescript": "*"
+    "react-native-nitro-modules": "*"
   },
   "peerDependencies": {
     "react": "*",
