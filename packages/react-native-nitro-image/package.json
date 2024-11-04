@@ -50,6 +50,7 @@
     "lint": "eslint \"**/*.{js,ts,tsx}\" --fix",
     "lint-ci": "eslint \"**/*.{js,ts,tsx}\" -f @jamesacarr/github-actions",
     "specs": "bun typescript && bun nitro-codegen --logLevel=\"debug\"",
+    "specs-ci": "bun nitro-codegen --logLevel=\"debug\"",
     "clean": "rm -rf android/build node_modules/**/android/build lib"
   },
   "devDependencies": {

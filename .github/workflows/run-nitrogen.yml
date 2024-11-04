@@ -52,7 +52,7 @@ jobs:
 
       - name: Run nitro-codegen in packages/react-native-nitro-image
         working-directory: packages/react-native-nitro-image
-        run: bun run nitro-codegen --logLevel="debug"
+        run: bun specs-ci
 
       - name: Verify no files have changed after nitrogen
         run: git diff --exit-code HEAD -- . ':(exclude)bun.lockb'
