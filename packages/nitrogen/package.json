@@ -27,7 +27,7 @@
   },
   "scripts": {
     "postinstall": "bun build || exit 0;",
-    "build": "bunx tsc",
+    "build": "bun tsc",
     "start": "tsc && node lib/index.js",
     "typecheck": "tsc --noEmit",
     "lint": "eslint \"**/*.{js,ts,tsx}\" --fix",
