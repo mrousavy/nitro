@@ -64,7 +64,8 @@
   },
   "peerDependencies": {
     "react": "*",
-    "react-native": "*"
+    "react-native": "*",
+    "react-native-nitro-modules": "*"
   },
   "jest": {
     "preset": "react-native",
