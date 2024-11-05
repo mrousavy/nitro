@@ -37,6 +37,9 @@ jobs:
       - name: Install npm dependencies (bun)
         run: bun install
 
+      - name: Build all packages
+        run: bun install
+
       - name: Run nitro-codegen in packages/react-native-nitro-image
         working-directory: packages/react-native-nitro-image
         run: bun specs-ci
