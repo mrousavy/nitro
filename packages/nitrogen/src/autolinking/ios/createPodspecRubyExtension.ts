@@ -27,7 +27,7 @@ ${createFileMetadataString(`${name}+autolinking.rb`, '#')}
 # \`\`\`
 
 def add_nitrogen_files(spec)
-  Pod::UI.puts "[NitroModules] Adding ${name} specs..."
+  Pod::UI.puts "[NitroModules] ${name} is boosted by nitro! 🔥"
 
   spec.dependency "NitroModules"
 
