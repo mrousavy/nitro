@@ -1,7 +1,17 @@
 module.exports = {
   root: true,
   extends: ['@react-native', 'plugin:prettier/recommended'],
-  ignorePatterns: ['**/node_modules', '**/lib'],
+  ignorePatterns: [
+    '**/node_modules',
+    '**/lib',
+    '**/.eslintrc.js',
+    '**/.prettierrc.js',
+    '**/jest.config.js',
+    '**/babel.config.js',
+    '**/metro.config.js',
+    '**/react-native.config.js',
+    '**/tsconfig.json'
+  ],
   plugins: ['prettier'],
   parserOptions: {
     project: true,
