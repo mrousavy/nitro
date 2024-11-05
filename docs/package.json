@@ -19,17 +19,17 @@
     "@docusaurus/plugin-sitemap": "^3.6.0",
     "@docusaurus/preset-classic": "^3.6.0",
     "@docusaurus/theme-mermaid": "^3.6.0",
-    "@mdx-js/react": "^3.0.0",
-    "clsx": "^2.0.0",
-    "prism-react-renderer": "^2.3.0",
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0"
+    "@mdx-js/react": "^3.1.0",
+    "clsx": "^2.1.1",
+    "prism-react-renderer": "^2.4.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
     "@docusaurus/module-type-aliases": "^3.6.0",
     "@docusaurus/tsconfig": "^3.6.0",
     "@docusaurus/types": "^3.6.0",
-    "typescript": "~5.6.2"
+    "typescript": "^5.6.3"
   },
   "browserslist": {
     "production": [
