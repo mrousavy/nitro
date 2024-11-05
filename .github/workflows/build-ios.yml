@@ -38,7 +38,7 @@ env:
 jobs:
   build_new:
     name: Build iOS Example App (new architecture)
-    runs-on: macOS-latest
+    runs-on: macOS-15
     steps:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2
@@ -81,7 +81,7 @@ jobs:
 
   build_old:
     name: Build iOS Example App (old architecture)
-    runs-on: macOS-latest
+    runs-on: macOS-15
     steps:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2
