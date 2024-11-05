@@ -56,9 +56,6 @@ jobs:
           bundler-cache: true
           working-directory: example/ios
 
-      - name: Install xcpretty
-        run: gem install xcpretty
-
       - name: Restore Pods cache
         uses: actions/cache@v4
         with:
@@ -80,7 +77,7 @@ jobs:
           -configuration Debug \
           -destination 'platform=iOS Simulator,name=iPhone 15' \
           build \
-          CODE_SIGNING_ALLOWED=NO | xcpretty"
+          CODE_SIGNING_ALLOWED=NO"
 
   build_old:
     name: Build iOS Example App (old architecture)
@@ -106,9 +103,6 @@ jobs:
           bundler-cache: true
           working-directory: example/ios
 
-      - name: Install xcpretty
-        run: gem install xcpretty
-
       - name: Restore Pods cache
         uses: actions/cache@v4
         with:
@@ -130,4 +124,4 @@ jobs:
           -configuration Debug \
           -destination 'platform=iOS Simulator,name=iPhone 15' \
           build \
-          CODE_SIGNING_ALLOWED=NO | xcpretty"
+          CODE_SIGNING_ALLOWED=NO"
