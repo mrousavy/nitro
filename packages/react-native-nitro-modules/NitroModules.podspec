@@ -2,7 +2,7 @@ require "json"
 
 package = JSON.parse(File.read(File.join(__dir__, "package.json")))
 
-Pod::UI.puts "[NitroModules] Your app is boosted by nitro modules! 🔥"
+Pod::UI.puts "[NitroModules] 🔥 Your app is boosted by nitro modules!"
 
 Pod::Spec.new do |s|
   s.name         = "NitroModules"

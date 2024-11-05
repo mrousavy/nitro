@@ -38,7 +38,7 @@ env:
 jobs:
   build_new:
     name: Build iOS Example App (new architecture)
-    runs-on: macOS-latest
+    runs-on: macOS-15
     steps:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2
@@ -55,9 +55,6 @@ jobs:
           ruby-version: 2.7.2
           bundler-cache: true
           working-directory: example/ios
-
-      - name: Install xcpretty
-        run: gem install xcpretty
 
       - name: Restore Pods cache
         uses: actions/cache@v4
@@ -78,13 +75,13 @@ jobs:
           -scheme NitroExample \
           -sdk iphonesimulator \
           -configuration Debug \
-          -destination 'platform=iOS Simulator,name=iPhone 15' \
+          -destination 'platform=iOS Simulator,name=iPhone 16' \
           build \
-          CODE_SIGNING_ALLOWED=NO | xcpretty"
+          CODE_SIGNING_ALLOWED=NO"
 
   build_old:
     name: Build iOS Example App (old architecture)
-    runs-on: macOS-latest
+    runs-on: macOS-15
     steps:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2
@@ -106,9 +103,6 @@ jobs:
           bundler-cache: true
           working-directory: example/ios
 
-      - name: Install xcpretty
-        run: gem install xcpretty
-
       - name: Restore Pods cache
         uses: actions/cache@v4
         with:
@@ -128,6 +122,6 @@ jobs:
           -scheme NitroExample \
           -sdk iphonesimulator \
           -configuration Debug \
-          -destination 'platform=iOS Simulator,name=iPhone 15' \
+          -destination 'platform=iOS Simulator,name=iPhone 16' \
           build \
-          CODE_SIGNING_ALLOWED=NO | xcpretty"
+          CODE_SIGNING_ALLOWED=NO"
