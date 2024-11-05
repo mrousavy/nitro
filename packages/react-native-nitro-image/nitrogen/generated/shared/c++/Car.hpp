@@ -41,10 +41,10 @@ namespace margelo::nitro::image {
     double power     SWIFT_PRIVATE;
     Powertrain powertrain     SWIFT_PRIVATE;
     std::optional<Person> driver     SWIFT_PRIVATE;
-    bool isFast     SWIFT_PRIVATE;
+    std::optional<bool> isFast     SWIFT_PRIVATE;
 
   public:
-    explicit Car(double year, std::string make, std::string model, double power, Powertrain powertrain, std::optional<Person> driver, bool isFast): year(year), make(make), model(model), power(power), powertrain(powertrain), driver(driver), isFast(isFast) {}
+    explicit Car(double year, std::string make, std::string model, double power, Powertrain powertrain, std::optional<Person> driver, std::optional<bool> isFast): year(year), make(make), model(model), power(power), powertrain(powertrain), driver(driver), isFast(isFast) {}
   };
 
 } // namespace margelo::nitro::image
@@ -65,7 +65,7 @@ namespace margelo::nitro {
         JSIConverter<double>::fromJSI(runtime, obj.getProperty(runtime, "power")),
         JSIConverter<Powertrain>::fromJSI(runtime, obj.getProperty(runtime, "powertrain")),
         JSIConverter<std::optional<Person>>::fromJSI(runtime, obj.getProperty(runtime, "driver")),
-        JSIConverter<bool>::fromJSI(runtime, obj.getProperty(runtime, "isFast"))
+        JSIConverter<std::optional<bool>>::fromJSI(runtime, obj.getProperty(runtime, "isFast"))
       );
     }
     static inline jsi::Value toJSI(jsi::Runtime& runtime, const Car& arg) {
@@ -76,7 +76,7 @@ namespace margelo::nitro {
       obj.setProperty(runtime, "power", JSIConverter<double>::toJSI(runtime, arg.power));
       obj.setProperty(runtime, "powertrain", JSIConverter<Powertrain>::toJSI(runtime, arg.powertrain));
       obj.setProperty(runtime, "driver", JSIConverter<std::optional<Person>>::toJSI(runtime, arg.driver));
-      obj.setProperty(runtime, "isFast", JSIConverter<bool>::toJSI(runtime, arg.isFast));
+      obj.setProperty(runtime, "isFast", JSIConverter<std::optional<bool>>::toJSI(runtime, arg.isFast));
       return obj;
     }
     static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
@@ -90,7 +90,7 @@ namespace margelo::nitro {
       if (!JSIConverter<double>::canConvert(runtime, obj.getProperty(runtime, "power"))) return false;
       if (!JSIConverter<Powertrain>::canConvert(runtime, obj.getProperty(runtime, "powertrain"))) return false;
       if (!JSIConverter<std::optional<Person>>::canConvert(runtime, obj.getProperty(runtime, "driver"))) return false;
-      if (!JSIConverter<bool>::canConvert(runtime, obj.getProperty(runtime, "isFast"))) return false;
+      if (!JSIConverter<std::optional<bool>>::canConvert(runtime, obj.getProperty(runtime, "isFast"))) return false;
       return true;
     }
   };

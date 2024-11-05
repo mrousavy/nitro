@@ -533,16 +533,19 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
       case 'bigint':
         switch (language) {
           case 'c++':
+            let code: string
             if (isBoxed) {
               // unbox an object (JDouble) to a primitive (double)
-              return `${parameterName}->value()`
+              code = `${parameterName}->value()`
             } else {
-              if (this.type.kind === 'boolean') {
-                // jboolean =/= bool (it's a char in Java)
-                return `static_cast<bool>(${parameterName})`
-              }
-              return parameterName
+              // it's just the primitive type directly
+              code = parameterName
             }
+            if (this.type.kind === 'boolean') {
+              // jboolean =/= bool (it's a char in Java)
+              code = `static_cast<bool>(${code})`
+            }
+            return code
           default:
             return parameterName
         }

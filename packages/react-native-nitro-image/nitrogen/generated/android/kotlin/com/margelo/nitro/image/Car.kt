@@ -22,5 +22,5 @@ data class Car(
   val power: Double,
   val powertrain: Powertrain,
   val driver: Person?,
-  val isFast: Boolean
+  val isFast: Boolean?
 )
