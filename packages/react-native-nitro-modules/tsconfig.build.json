@@ -6,9 +6,6 @@
   "include": ["src"],
   "compilerOptions": {
     "rootDir": "src",
-    "outDir": "lib",
-    "types": ["node"],
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext"
+    "jsx": "react"
   }
 }

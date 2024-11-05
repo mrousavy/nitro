@@ -23,7 +23,7 @@ export function stringify(value: unknown): string {
           if (string !== '[object Object]') return string
         }
         return `{ ${value} ${Object.keys(value).join(', ')} }`
-      } catch (e) {
+      } catch {
         // toString() threw - maybe because we accessed it on a prototype.
         return `{ [Object] ${Object.keys(value).join(', ')} }`
       }

@@ -3,6 +3,7 @@ import { stringify } from './utils'
 
 export type Must = 'equals' | 'throws'
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const _someType = typeof false
 export type JSType = typeof _someType
 

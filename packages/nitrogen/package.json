@@ -12,15 +12,6 @@
     "README.md"
   ],
   "bin": "./lib/index.js",
-  "scripts": {
-    "start": "tsc && node lib/index.js",
-    "postinstall": "tsc || exit 0;",
-    "typecheck": "tsc --noEmit",
-    "lint": "eslint \"**/*.{js,ts,tsx}\" --fix",
-    "lint-ci": "eslint \"**/*.{js,ts,tsx}\" -f @jamesacarr/github-actions",
-    "release": "tsc && release-it",
-    "typescript": "tsc --noEmit false"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/mrousavy/nitro.git"
@@ -34,14 +25,14 @@
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },
-  "devDependencies": {
-    "@release-it/bumper": "^6.0.1",
-    "eslint": "^8.57.0",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-prettier": "^5.2.1",
-    "prettier": "^3.3.3",
-    "release-it": "^17.6.0",
-    "typescript": "^5.5.4"
+  "scripts": {
+    "postinstall": "bun build || exit 0;",
+    "build": "bun tsc",
+    "start": "tsc && node lib/index.js",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint \"**/*.{js,ts,tsx}\" --fix",
+    "lint-ci": "eslint \"**/*.{js,ts,tsx}\" -f @jamesacarr/github-actions",
+    "release": "release-it"
   },
   "dependencies": {
     "chalk": "^5.3.0",
@@ -49,6 +40,9 @@
     "ts-morph": "^24.0.0",
     "yargs": "^17.7.2",
     "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^22.8.4"
   },
   "release-it": {
     "npm": {
@@ -63,44 +57,11 @@
         "out": {
           "file": "package.json",
           "path": [
-            "react-native-nitro-modules"
-          ]
+            "dependencies.react-native-nitro-modules"
+          ],
+          "prefix": "^"
         }
       }
     }
-  },
-  "eslintConfig": {
-    "root": true,
-    "extends": [
-      "@react-native",
-      "prettier"
-    ],
-    "plugins": [
-      "prettier"
-    ],
-    "rules": {
-      "prettier/prettier": [
-        "warn",
-        {
-          "quoteProps": "consistent",
-          "singleQuote": true,
-          "tabWidth": 2,
-          "trailingComma": "es5",
-          "useTabs": false
-        }
-      ]
-    }
-  },
-  "eslintIgnore": [
-    "node_modules/",
-    "lib/"
-  ],
-  "prettier": {
-    "quoteProps": "consistent",
-    "singleQuote": true,
-    "tabWidth": 2,
-    "trailingComma": "es5",
-    "useTabs": false,
-    "semi": false
   }
 }

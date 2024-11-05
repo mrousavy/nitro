@@ -1,6 +1,6 @@
 {
   "name": "react-native-nitro-image",
-  "version": "0.0.3",
+  "version": "0.14.1",
   "description": "A fast in-memory Image object built with Nitro Modules.",
   "main": "lib/index",
   "module": "lib/index",
@@ -24,16 +24,6 @@
     "*.podspec",
     "README.md"
   ],
-  "scripts": {
-    "postinstall": "tsc || exit 0;",
-    "test": "jest",
-    "typecheck": "tsc --noEmit",
-    "clean": "rm -rf android/build node_modules/**/android/build lib",
-    "lint": "eslint \"**/*.{js,ts,tsx}\" --fix",
-    "lint-ci": "eslint \"**/*.{js,ts,tsx}\" -f @jamesacarr/github-actions",
-    "typescript": "tsc --noEmit false",
-    "specs": "bun run --filter=\"**\" typescript && bun nitro-codegen --logLevel=\"debug\""
-  },
   "keywords": [
     "react-native",
     "nitro",
@@ -52,24 +42,30 @@
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },
+  "scripts": {
+    "postinstall": "bun build || exit 0;",
+    "build": "bun tsc",
+    "test": "jest",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint \"**/*.{js,ts,tsx}\" --fix",
+    "lint-ci": "eslint \"**/*.{js,ts,tsx}\" -f @jamesacarr/github-actions",
+    "specs": "bun tsc --noEmit false && bun run nitro-codegen --logLevel=\"debug\"",
+    "specs-ci": "bun run nitro-codegen --logLevel=\"debug\"",
+    "clean": "rm -rf android/build node_modules/**/android/build lib"
+  },
   "devDependencies": {
-    "@react-native/eslint-config": "^0.75.2",
     "@types/jest": "^29.5.12",
     "@types/react": "^18.3.4",
-    "eslint": "^8.57.0",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-prettier": "^5.2.1",
     "jest": "^29.7.0",
     "nitro-codegen": "*",
-    "prettier": "^3.3.3",
     "react": "^18.3.1",
     "react-native": "^0.75.2",
-    "react-native-nitro-modules": "*",
-    "typescript": "^5.5.4"
+    "react-native-nitro-modules": "*"
   },
   "peerDependencies": {
     "react": "*",
-    "react-native": "*"
+    "react-native": "*",
+    "react-native-nitro-modules": "*"
   },
   "jest": {
     "preset": "react-native",
@@ -77,37 +73,5 @@
       "<rootDir>/example/node_modules",
       "<rootDir>/lib/"
     ]
-  },
-  "eslintConfig": {
-    "root": true,
-    "extends": [
-      "@react-native",
-      "prettier"
-    ],
-    "plugins": ["prettier"],
-    "rules": {
-      "prettier/prettier": [
-        "warn",
-        {
-          "quoteProps": "consistent",
-          "singleQuote": true,
-          "tabWidth": 2,
-          "trailingComma": "es5",
-          "useTabs": false
-        }
-      ]
-    }
-  },
-  "eslintIgnore": [
-    "node_modules/",
-    "lib/"
-  ],
-  "prettier": {
-    "quoteProps": "consistent",
-    "singleQuote": true,
-    "tabWidth": 2,
-    "trailingComma": "es5",
-    "useTabs": false,
-    "semi": false
   }
 }

@@ -42,7 +42,7 @@ declare global {
 }
 
 export function isRuntimeAlive() {
-  const cache = global.__nitroModulesJSICache
-  const dispatcher = global.__nitroDispatcher
+  const cache = globalThis.__nitroModulesJSICache
+  const dispatcher = globalThis.__nitroDispatcher
   return cache != null && dispatcher != null
 }

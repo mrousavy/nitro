@@ -5,25 +5,45 @@
   "version": "0.14.1",
   "repository": "https://github.com/mrousavy/nitro.git",
   "author": "Marc Rousavy <me@mrousavy.com> (https://github.com/mrousavy)",
-  "scripts": {
-    "check-all": "./scripts/clang-format.sh",
-    "bootstrap": "bun --filter=\"**\" install && bun tsc && bun --filter=\"react-native-nitro-example\" pods",
-    "typescript": "bun --filter=\"**\" typescript",
-    "release": "release-it",
-    "clean": "rm -rf packages/**/tsconfig.tsbuildinfo packages/**/node_modules packages/**/lib"
-  },
   "workspaces": [
     "packages/react-native-nitro-modules",
     "packages/nitrogen",
     "packages/react-native-nitro-image",
+    "packages/template",
     "example",
     "docs"
   ],
+  "scripts": {
+    "build": "bun run --cwd packages/react-native-nitro-modules build && bun run --cwd packages/nitrogen build && bun run --cwd packages/react-native-nitro-image build",
+    "bootstrap": "bun install && bun run build && bun example pods",
+    "typecheck": "bun --filter=\"**\" typecheck",
+    "lint": "bun nitro lint && bun nitrogen lint && bun image lint && bun example lint",
+    "lint-cpp": "./scripts/clang-format.sh",
+    "clean": "rm -rf packages/**/tsconfig.tsbuildinfo packages/**/node_modules packages/**/lib",
+    "release": "release-it --workspaces",
+    "nitro": "bun --cwd packages/react-native-nitro-modules",
+    "nitrogen": "bun --cwd packages/nitrogen",
+    "image": "bun --cwd packages/react-native-nitro-image",
+    "example": "bun --cwd example"
+  },
   "devDependencies": {
-    "@release-it/conventional-changelog": "^8.0.1",
-    "@release-it/bumper": "^6.0.1",
+    "@eslint/js": "^9.10.0",
     "@jamesacarr/eslint-formatter-github-actions": "^0.2.0",
-    "release-it": "^17.6.0"
+    "@react-native/eslint-config": "0.75.2",
+    "@release-it-plugins/workspaces": "^4.2.0",
+    "@release-it/bumper": "^6.0.1",
+    "@release-it/conventional-changelog": "^8.0.2",
+    "@tsconfig/react-native": "^2.0.2",
+    "@types/eslint__js": "^8.42.3",
+    "@types/jest": "^29.5.13",
+    "@typescript-eslint/eslint-plugin": "^8.13.0",
+    "@typescript-eslint/parser": "^8.13.0",
+    "eslint": "8.57.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "prettier": "^3.3.3",
+    "release-it": "^17.10.0",
+    "typescript": "^5.6.2",
+    "typescript-eslint": "^8.13.0"
   },
   "release-it": {
     "npm": {
@@ -37,7 +57,24 @@
     "github": {
       "release": true
     },
+    "hooks": {
+      "before:init": "bun typecheck && bun lint",
+      "before:bump": "bun example pods",
+      "after:bump": "bun run build"
+    },
     "plugins": {
+      "@release-it/bumper": {
+        "out": [
+          {
+            "file": "packages/react-native-nitro-image/package.json",
+            "path": "version"
+          },
+          {
+            "file": "example/package.json",
+            "path": "version"
+          }
+        ]
+      },
       "@release-it/conventional-changelog": {
         "preset": {
           "name": "conventionalcommits",

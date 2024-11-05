@@ -37,22 +37,12 @@ jobs:
       - name: Install npm dependencies (bun)
         run: bun install
 
-      - name: Install npm dependencies (bun)
-        working-directory: example
-        run: bun install
-      - name: Install npm dependencies (bun)
-        working-directory: packages/nitrogen
-        run: bun install
-      - name: Install npm dependencies (bun)
-        working-directory: packages/react-native-nitro-modules
-        run: bun install
-      - name: Install npm dependencies (bun)
-        working-directory: packages/react-native-nitro-image
-        run: bun install
+      - name: Build all packages
+        run: bun run build
 
       - name: Run nitro-codegen in packages/react-native-nitro-image
         working-directory: packages/react-native-nitro-image
-        run: bun run nitro-codegen --logLevel="debug"
+        run: bun i && bun specs-ci
 
       - name: Verify no files have changed after nitrogen
         run: git diff --exit-code HEAD -- . ':(exclude)bun.lockb'
