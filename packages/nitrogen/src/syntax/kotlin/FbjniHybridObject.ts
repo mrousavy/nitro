@@ -97,6 +97,14 @@ ${spaces}          public virtual ${name.HybridTSpec} {
       _javaPart(jni::make_global(jThis)) {}
 
   public:
+    virtual ~${name.JHybridTSpec}() {
+      // Hermes GC can destroy JS objects on an arbitrary Thread which might not be
+      // connected to the JNI environment. To make sure fbjni can properly destroy
+      // the Java method, we connect to a JNI environment first.
+      jni::ThreadScope::WithClassLoader([&] { _javaPart.reset(); });
+    }
+
+  public:
     size_t getExternalMemorySize() noexcept override;
 
   public:

@@ -31,17 +31,6 @@ public:
   }
 
 public:
-  ~JPromise() {
-    // Hermes GC can destroy JS objects on an arbitrary Thread which might not be
-    // connected to the JNI environment. To make sure fbjni can properly destroy
-    // the Java method, we connect to a JNI environment first.
-    jni::ThreadScope::WithClassLoader([&] {
-      _result.reset();
-      _error.reset();
-    });
-  }
-
-public:
   void resolve(jni::alias_ref<jni::JObject> result) {
     _result = jni::make_global(result);
     for (const auto& onResolved : _onResolvedListeners) {
