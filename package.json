@@ -15,7 +15,6 @@
   ],
   "scripts": {
     "build": "bun run --cwd packages/react-native-nitro-modules build && bun run --cwd packages/nitrogen build && bun run --cwd packages/react-native-nitro-image build",
-    "bootstrap": "bun install && bun run build && bun example pods",
     "typecheck": "bun --filter=\"**\" typecheck",
     "lint": "bun nitro lint && bun nitrogen lint && bun image lint && bun example lint",
     "lint-cpp": "./scripts/clang-format.sh",

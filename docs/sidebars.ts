@@ -48,6 +48,7 @@ const sidebars: SidebarsConfig = {
     'comparison',
     'for-users',
     'troubleshooting',
+    'contributing',
   ],
 };
 
