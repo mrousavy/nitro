@@ -18,14 +18,20 @@ public extension Car {
   /**
    * Create a new instance of `Car`.
    */
-  init(year: Double, make: String, model: String, power: Double, powertrain: Powertrain, driver: Person?, isFast: Bool) {
+  init(year: Double, make: String, model: String, power: Double, powertrain: Powertrain, driver: Person?, isFast: Bool?) {
     self.init(year, std.string(make), std.string(model), power, powertrain, { () -> bridge.std__optional_Person_ in
       if let __unwrappedValue = driver {
         return bridge.create_std__optional_Person_(__unwrappedValue)
       } else {
         return .init()
       }
-    }(), isFast)
+    }(), { () -> bridge.std__optional_bool_ in
+      if let __unwrappedValue = isFast {
+        return bridge.create_std__optional_bool_(__unwrappedValue)
+      } else {
+        return .init()
+      }
+    }())
   }
 
   var year: Double {
@@ -106,14 +112,20 @@ public extension Car {
     }
   }
   
-  var isFast: Bool {
+  var isFast: Bool? {
     @inline(__always)
     get {
-      return self.__isFast
+      return self.__isFast.value
     }
     @inline(__always)
     set {
-      self.__isFast = newValue
+      self.__isFast = { () -> bridge.std__optional_bool_ in
+        if let __unwrappedValue = newValue {
+          return bridge.create_std__optional_bool_(__unwrappedValue)
+        } else {
+          return .init()
+        }
+      }()
     }
   }
 }
