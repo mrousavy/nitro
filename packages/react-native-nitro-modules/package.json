@@ -54,9 +54,8 @@
     "registry": "https://registry.npmjs.org/"
   },
   "scripts": {
-    "postinstall": "bun typescript || exit 0;",
+    "postinstall": "bun build || exit 0;",
     "build": "rm -rf lib && bun typecheck && bob build",
-    "typescript": "tsc",
     "typecheck": "tsc --noEmit",
     "lint": "eslint \"**/*.{js,ts,tsx}\" --fix",
     "lint-ci": "eslint \"**/*.{js,ts,tsx}\" -f @jamesacarr/github-actions",

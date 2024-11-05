@@ -14,17 +14,18 @@
     "docs"
   ],
   "scripts": {
-    "modules": "bun --cwd packages/react-native-nitro-modules",
-    "nitrogen": "bun --cwd packages/nitrogen",
-    "image": "bun --cwd packages/react-native-nitro-image",
-    "example": "bun --cwd example",
-    "bootstrap": "bun install && bun typecheck && bun example pods",
+    "postinstall": "bun bootstrap",
+    "build": "bun run --cwd packages/react-native-nitro-modules build && bun run --cwd packages/nitrogen build && bun run --cwd packages/react-native-nitro-image build",
+    "bootstrap": "bun run build && bun example pods",
     "check-all": "./scripts/clang-format.sh",
-    "typescript": "bun --filter=\"**\" typescript",
     "typecheck": "bun --filter=\"**\" typecheck",
     "lint": "bun modules lint && bun nitrogen lint && bun image lint && bun example lint",
     "clean": "rm -rf packages/**/tsconfig.tsbuildinfo packages/**/node_modules packages/**/lib",
-    "release": "bun run --cwd packages/react-native-nitro-modules build && bun run --cwd packages/nitrogen build && release-it --workspaces"
+    "release": "bun run build && release-it --workspaces",
+    "modules": "bun --cwd packages/react-native-nitro-modules",
+    "nitrogen": "bun --cwd packages/nitrogen",
+    "image": "bun --cwd packages/react-native-nitro-image",
+    "example": "bun --cwd example"
   },
   "devDependencies": {
     "@eslint/js": "^9.10.0",

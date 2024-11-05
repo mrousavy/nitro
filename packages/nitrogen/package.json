@@ -26,10 +26,9 @@
     "registry": "https://registry.npmjs.org/"
   },
   "scripts": {
-    "postinstall": "bun typescript || exit 0;",
+    "postinstall": "bun build || exit 0;",
+    "build": "bunx tsc",
     "start": "tsc && node lib/index.js",
-    "build": "bun typescript",
-    "typescript": "tsc",
     "typecheck": "tsc --noEmit",
     "lint": "eslint \"**/*.{js,ts,tsx}\" --fix",
     "lint-ci": "eslint \"**/*.{js,ts,tsx}\" -f @jamesacarr/github-actions",
