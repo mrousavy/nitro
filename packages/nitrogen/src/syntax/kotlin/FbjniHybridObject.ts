@@ -98,9 +98,7 @@ ${spaces}          public virtual ${name.HybridTSpec} {
 
   public:
     virtual ~${name.JHybridTSpec}() {
-      // Hermes GC can destroy JS objects on an arbitrary Thread which might not be
-      // connected to the JNI environment. To make sure fbjni can properly destroy
-      // the Java method, we connect to a JNI environment first.
+      // Hermes GC can destroy JS objects on a non-JNI Thread.
       jni::ThreadScope::WithClassLoader([&] { _javaPart.reset(); });
     }
 
