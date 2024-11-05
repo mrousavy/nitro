@@ -54,12 +54,12 @@
     "clean": "rm -rf android/build node_modules/**/android/build lib"
   },
   "devDependencies": {
-    "@types/jest": "^29.5.12",
-    "@types/react": "^18.3.4",
-    "jest": "^29.7.0",
+    "@types/jest": "*",
+    "@types/react": "*",
+    "jest": "*",
     "nitro-codegen": "*",
-    "react": "^18.3.1",
-    "react-native": "^0.75.2",
+    "react": "*",
+    "react-native": "*",
     "react-native-nitro-modules": "*"
   },
   "peerDependencies": {
