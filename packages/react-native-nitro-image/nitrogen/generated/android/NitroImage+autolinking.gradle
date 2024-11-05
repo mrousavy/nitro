@@ -13,8 +13,6 @@
 /// apply from: '../nitrogen/generated/android/NitroImage+autolinking.gradle'
 /// ```
 
-logger.warn("[NitroModules] 🔥 NitroImage is boosted by nitro!")
-
 android {
   sourceSets {
     main {
