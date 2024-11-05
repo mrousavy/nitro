@@ -12,7 +12,8 @@ module.exports = {
     '**/react-native.config.js',
     '**/tsconfig.json'
   ],
-  plugins: ['prettier'],
+  plugins: ['@typescript-eslint', 'prettier'],
+  parser: '@typescript-eslint/parser',
   parserOptions: {
     project: true,
     tsconfigRootDir: __dirname,
