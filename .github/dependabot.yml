@@ -25,6 +25,10 @@ updates:
       interval: "daily"
     labels:
       - "dependencies"
+    groups:
+      docusauris:
+        patterns:
+          - "@docusaurus/*"
   - package-ecosystem: "npm"
     directories:
       - "/packages/react-native-nitro-modules/"
