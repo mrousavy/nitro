@@ -24,6 +24,13 @@ public:
     _byteBuffer->order(jni::JByteOrder::nativeOrder());
   }
 
+  ~ByteBufferArrayBuffer() {
+    // Hermes GC can destroy JS objects on an arbitrary Thread which might not be
+    // connected to the JNI environment. To make sure fbjni can properly destroy
+    // the Java method, we connect to a JNI environment first.
+    jni::ThreadScope::WithClassLoader([&] { _byteBuffer.reset(); });
+  }
+
 public:
   [[nodiscard]] uint8_t* data() override {
     return _byteBuffer->getDirectBytes();
