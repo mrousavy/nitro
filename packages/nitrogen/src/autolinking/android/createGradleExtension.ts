@@ -20,7 +20,7 @@ ${createFileMetadataString(`${name}+autolinking.gradle`)}
 /// apply from: '../nitrogen/generated/android/${name}+autolinking.gradle'
 /// \`\`\`
 
-logger.warn("[NitroModules] ${name} is boosted by nitro! 🔥")
+logger.warn("[NitroModules] 🔥 ${name} is boosted by nitro!")
 
 android {
   sourceSets {
