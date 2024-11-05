@@ -3,10 +3,8 @@
     "@tsconfig/react-native/tsconfig.json",
     "../config/tsconfig.json"
   ],
-  "include": ["src"],
+  "include": ["src", "index.js"],
   "compilerOptions": {
-    "rootDir": "src",
-    "outDir": "lib",
     "jsx": "react"
   }
 }
