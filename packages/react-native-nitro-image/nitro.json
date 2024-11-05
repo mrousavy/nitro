@@ -1,10 +1,14 @@
 {
-  "cxxNamespace": ["image"],
+  "cxxNamespace": [
+    "image"
+  ],
   "ios": {
     "iosModuleName": "NitroImage"
   },
   "android": {
-    "androidNamespace": ["image"],
+    "androidNamespace": [
+      "image"
+    ],
     "androidCxxLibName": "NitroImage"
   },
   "autolinking": {
@@ -27,6 +31,5 @@
       "swift": "HybridChild",
       "kotlin": "HybridChild"
     }
-  },
-  "ignorePaths": ["node_modules"]
+  }
 }
