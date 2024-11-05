@@ -14,7 +14,6 @@
     "docs"
   ],
   "scripts": {
-    "postinstall": "bun bootstrap",
     "build": "bun run --cwd packages/react-native-nitro-modules build && bun run --cwd packages/nitrogen build && bun run --cwd packages/react-native-nitro-image build",
     "bootstrap": "bun run build && bun example pods",
     "check-all": "./scripts/clang-format.sh",
