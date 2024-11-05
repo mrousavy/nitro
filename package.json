@@ -58,8 +58,9 @@
       "release": true
     },
     "hooks": {
-      "after:bump": "bun run build",
-      "before:git:release": "bun example pods"
+      "before:init": "bun typecheck && bun lint",
+      "before:bump": "bun example pods",
+      "after:bump": "bun run build"
     },
     "plugins": {
       "@release-it/bumper": {
