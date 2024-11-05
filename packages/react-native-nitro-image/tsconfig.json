@@ -5,6 +5,9 @@
   ],
   "include": ["src"],
   "compilerOptions": {
+    "paths": {
+      "react-native-nitro-modules": ["../react-native-nitro-modules"]
+    },
     "rootDir": "src",
     "outDir": "lib",
     "jsx": "react"
