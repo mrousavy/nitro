@@ -20,7 +20,7 @@
     "typecheck": "bun --filter=\"**\" typecheck",
     "lint": "bun modules lint && bun nitrogen lint && bun image lint && bun example lint",
     "clean": "rm -rf packages/**/tsconfig.tsbuildinfo packages/**/node_modules packages/**/lib",
-    "release": "bun run build && release-it --workspaces",
+    "release": "release-it --workspaces",
     "modules": "bun --cwd packages/react-native-nitro-modules",
     "nitrogen": "bun --cwd packages/nitrogen",
     "image": "bun --cwd packages/react-native-nitro-image",
@@ -56,6 +56,10 @@
     },
     "github": {
       "release": true
+    },
+    "hooks": {
+      "after:bump": "bun run build",
+      "before:git:release": "bun example pods"
     },
     "plugins": {
       "@release-it/bumper": {
