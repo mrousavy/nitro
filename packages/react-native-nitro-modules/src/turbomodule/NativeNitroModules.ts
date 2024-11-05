@@ -11,6 +11,7 @@ interface Spec extends TurboModule {
    */
   install(): string | undefined
 }
+
 // 1. Get (and initialize) the TurboModule
 let turboModule: Spec | undefined
 try {
