@@ -3,7 +3,7 @@ module.exports = {
   extends: "../../config/.eslintrc.js",
   parserOptions: {
     tsconfigRootDir: __dirname,
-    project: ["./tsconfig.json"],
+    project: true,
     ecmaFeatures: {
       jsx: false,
     },
