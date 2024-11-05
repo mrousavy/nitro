@@ -56,7 +56,7 @@ namespace margelo::nitro::image {
         power,
         powertrain->toCpp(),
         driver != nullptr ? std::make_optional(driver->toCpp()) : std::nullopt,
-        isFast != nullptr ? std::make_optional(isFast->value()) : std::nullopt
+        isFast != nullptr ? std::make_optional(static_cast<bool>(isFast->value())) : std::nullopt
       );
     }
 
