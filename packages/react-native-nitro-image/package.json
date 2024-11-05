@@ -49,7 +49,7 @@
     "typecheck": "tsc --noEmit",
     "lint": "eslint \"**/*.{js,ts,tsx}\" --fix",
     "lint-ci": "eslint \"**/*.{js,ts,tsx}\" -f @jamesacarr/github-actions",
-    "specs": "bun typecheck && bunx nitro-codegen --logLevel=\"debug\"",
+    "specs": "bun tsc --noEmit false && bunx nitro-codegen --logLevel=\"debug\"",
     "specs-ci": "bunx nitro-codegen --logLevel=\"debug\"",
     "clean": "rm -rf android/build node_modules/**/android/build lib"
   },
