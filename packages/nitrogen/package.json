@@ -54,6 +54,15 @@
     },
     "hooks": {
       "before:bump": "bun run build"
+    },
+    "plugins": {
+      "@release-it/bumper": {
+        "out": {
+          "file": "package.json",
+          "path": "dependencies.react-native-nitro-modules",
+          "versionPrefix": "^"
+        }
+      }
     }
   }
 }

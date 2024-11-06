@@ -100,15 +100,6 @@
     },
     "hooks": {
       "before:bump": "bun run build"
-    },
-    "plugins": {
-      "@release-it/bumper": {
-        "out": {
-          "file": "../nitrogen/package.json",
-          "path": "dependencies.react-native-nitro-modules",
-          "versionPrefix": "^"
-        }
-      }
     }
   },
   "react-native-builder-bob": {
