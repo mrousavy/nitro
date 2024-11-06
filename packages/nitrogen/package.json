@@ -53,7 +53,7 @@
       "release": false
     },
     "hooks": {
-      "before:bump": "bun run build"
+      "after:bump": "bun run build"
     },
     "plugins": {
       "@release-it/bumper": {

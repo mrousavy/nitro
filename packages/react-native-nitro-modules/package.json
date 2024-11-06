@@ -99,7 +99,7 @@
       "release": false
     },
     "hooks": {
-      "before:bump": "bun run build"
+      "after:bump": "bun run build"
     }
   },
   "react-native-builder-bob": {
