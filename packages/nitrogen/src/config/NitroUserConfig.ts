@@ -6,6 +6,12 @@ import { promises as fs } from 'fs'
 // Namespaces and package names in C++/Java will be matched with a regex.
 const safeNamePattern = /^[a-zA-Z_][a-zA-Z0-9_]*$/
 
+const isNotReservedKeyword = (val: string) =>
+  ['core', 'nitro', 'NitroModules'].includes(val)
+const isReservedKeywordError = {
+  message: `This value is reserved and cannot be used!`,
+}
+
 export const NitroUserConfigSchema = z.object({
   /**
    * Represents the C++ namespace of the module that will be generated.
@@ -13,7 +19,14 @@ export const NitroUserConfigSchema = z.object({
    * This can have multiple sub-namespaces, and is always relative to `margelo::nitro`.
    * @example `['image']` -> `margelo::nitro::image`
    */
-  cxxNamespace: z.array(z.string().regex(safeNamePattern)).min(1),
+  cxxNamespace: z
+    .array(
+      z
+        .string()
+        .regex(safeNamePattern)
+        .refine(isNotReservedKeyword, isReservedKeywordError)
+    )
+    .min(1),
   /**
    * iOS specific options.
    */
@@ -26,7 +39,10 @@ export const NitroUserConfigSchema = z.object({
      * If you are using CocoaPods, this should be the Pod name defined in the `.podspec`.
      * @example `NitroImage`
      */
-    iosModuleName: z.string().regex(safeNamePattern),
+    iosModuleName: z
+      .string()
+      .regex(safeNamePattern)
+      .refine(isNotReservedKeyword, isReservedKeywordError),
   }),
   /**
    * Android specific options.
@@ -38,14 +54,24 @@ export const NitroUserConfigSchema = z.object({
      * This can have multiple sub-namespaces, and is always relative to `com.margelo.nitro`.
      * @example `['image']` -> `com.margelo.nitro.image`
      */
-    androidNamespace: z.array(z.string().regex(safeNamePattern)).min(1),
+    androidNamespace: z
+      .array(
+        z
+          .string()
+          .regex(safeNamePattern)
+          .refine(isNotReservedKeyword, isReservedKeywordError)
+      )
+      .min(1),
 
     /**
      * Returns the name of the Android C++ library (aka name in CMakeLists.txt `add_library(..)`).
      * This will be loaded via `System.loadLibrary(...)`.
      * @example `NitroImage`
      */
-    androidCxxLibName: z.string().regex(safeNamePattern),
+    androidCxxLibName: z
+      .string()
+      .regex(safeNamePattern)
+      .refine(isNotReservedKeyword, isReservedKeywordError),
   }),
   /**
    * Configures the code that gets generated for autolinking (registering)
