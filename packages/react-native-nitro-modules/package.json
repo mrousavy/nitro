@@ -1,5 +1,5 @@
 {
-  "name": "chrispader-release-experiment-nitro-modules",
+  "name": "react-native-nitro-modules",
   "version": "0.14.1",
   "description": "Insanely fast native C++, Swift or Kotlin modules with a statically compiled binding layer to JSI.",
   "main": "lib/commonjs/index",
