@@ -19,7 +19,7 @@
     "lint": "bun nitro lint && bun nitrogen lint && bun image lint && bun example lint",
     "lint-cpp": "./scripts/clang-format.sh",
     "clean": "rm -rf packages/**/tsconfig.tsbuildinfo packages/**/node_modules packages/**/lib",
-    "release": "release-it --workspaces",
+    "release": "release-it",
     "nitro": "bun --cwd packages/react-native-nitro-modules",
     "nitrogen": "bun --cwd packages/nitrogen",
     "image": "bun --cwd packages/react-native-nitro-image",
@@ -36,8 +36,6 @@
     "@types/eslint__js": "^8.42.3",
     "@types/jest": "^29.5.13",
     "@types/react": "^18.3.4",
-    "@typescript-eslint/eslint-plugin": "^8.13.0",
-    "@typescript-eslint/parser": "^8.13.0",
     "eslint": "8.57.0",
     "eslint-plugin-prettier": "^5.2.1",
     "jest": "^29.7.0",
@@ -45,7 +43,7 @@
     "react": "^18.3.1",
     "react-native": "^0.76.1",
     "release-it": "^17.10.0",
-    "typescript": "^5.6.2",
+    "typescript": "~5.5.4",
     "typescript-eslint": "^8.13.0"
   },
   "release-it": {
@@ -62,8 +60,8 @@
     },
     "hooks": {
       "before:init": "bun typecheck && bun lint",
-      "before:bump": "bun example pods",
-      "after:bump": "bun run build"
+      "after:bump": "bun nitro release ${version} --ci && bun nitrogen release ${version} --ci",
+      "before:release": "bun run --cwd packages/react-native-nitro-image build && bun example pods"
     },
     "plugins": {
       "@release-it/bumper": {

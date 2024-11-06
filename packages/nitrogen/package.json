@@ -52,14 +52,15 @@
     "github": {
       "release": false
     },
+    "hooks": {
+      "after:bump": "bun run build"
+    },
     "plugins": {
       "@release-it/bumper": {
         "out": {
           "file": "package.json",
-          "path": [
-            "dependencies.react-native-nitro-modules"
-          ],
-          "prefix": "^"
+          "path": "dependencies.react-native-nitro-modules",
+          "versionPrefix": "^"
         }
       }
     }

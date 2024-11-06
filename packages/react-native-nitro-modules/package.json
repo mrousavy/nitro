@@ -98,7 +98,9 @@
     "github": {
       "release": false
     },
-    "plugins": {}
+    "hooks": {
+      "after:bump": "bun run build"
+    }
   },
   "react-native-builder-bob": {
     "source": "src",
