@@ -105,10 +105,8 @@
       "@release-it/bumper": {
         "out": {
           "file": "../nitrogen/package.json",
-          "path": [
-            "dependencies.react-native-nitro-modules"
-          ],
-          "prefix": "^"
+          "path": "dependencies.react-native-nitro-modules",
+          "versionPrefix": "^"
         }
       }
     }
