@@ -19,7 +19,7 @@
     "lint": "bun nitro lint && bun nitrogen lint && bun image lint && bun example lint",
     "lint-cpp": "./scripts/clang-format.sh",
     "clean": "rm -rf packages/**/tsconfig.tsbuildinfo packages/**/node_modules packages/**/lib",
-    "release": "release-it --workspaces",
+    "release": "release-it --dry-run",
     "nitro": "bun --cwd packages/react-native-nitro-modules",
     "nitrogen": "bun --cwd packages/nitrogen",
     "image": "bun --cwd packages/react-native-nitro-image",

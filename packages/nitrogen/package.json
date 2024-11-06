@@ -1,5 +1,5 @@
 {
-  "name": "nitro-codegen",
+  "name": "chrispader-release-experiment-nitrogen",
   "version": "0.14.1",
   "description": "The code-generator for react-native-nitro-modules.",
   "main": "lib/index",
