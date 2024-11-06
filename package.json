@@ -28,7 +28,7 @@
   "devDependencies": {
     "@eslint/js": "^9.10.0",
     "@jamesacarr/eslint-formatter-github-actions": "^0.2.0",
-    "@react-native/eslint-config": "0.75.2",
+    "@react-native/eslint-config": "0.76.1",
     "@release-it-plugins/workspaces": "^4.2.0",
     "@release-it/bumper": "^6.0.1",
     "@release-it/conventional-changelog": "^8.0.2",
