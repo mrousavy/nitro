@@ -98,7 +98,20 @@
     "github": {
       "release": false
     },
-    "plugins": {}
+    "hooks": {
+      "before:bump": "bun run build"
+    },
+    "plugins": {
+      "@release-it/bumper": {
+        "out": {
+          "file": "../nitrogen/package.json",
+          "path": [
+            "dependencies.react-native-nitro-modules"
+          ],
+          "prefix": "^"
+        }
+      }
+    }
   },
   "react-native-builder-bob": {
     "source": "src",
