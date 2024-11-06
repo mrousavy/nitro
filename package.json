@@ -62,7 +62,7 @@
     },
     "hooks": {
       "before:init": "bun typecheck && bun lint",
-      "after:bump": "bun nitro release && bun nitrogen release",
+      "after:bump": "bun nitro release ${version} && bun nitrogen release ${version}",
       "before:release": "bun run --cwd packages/react-native-nitro-image build && bun example pods"
     },
     "plugins": {
