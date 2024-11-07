@@ -20,6 +20,7 @@
     "lint-cpp": "./scripts/clang-format.sh",
     "clean": "rm -rf packages/**/tsconfig.tsbuildinfo packages/**/node_modules packages/**/lib",
     "release": "./scripts/release.sh",
+    "docs": "bun --cwd docs",
     "nitro": "bun --cwd packages/react-native-nitro-modules",
     "nitrogen": "bun --cwd packages/nitrogen",
     "image": "bun --cwd packages/react-native-nitro-image",
