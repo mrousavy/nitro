@@ -38,9 +38,12 @@ jobs:
       - run: |
           bun install
           git add bun.lockb
+
           cd example
+          bundle install
           bun pods
           git add ios/Podfile.lock
+
           cd ..
           git config --global user.name 'dependabot[bot]'
           git config --global user.email 'dependabot[bot]@users.noreply.github.com'
