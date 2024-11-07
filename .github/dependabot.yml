@@ -47,6 +47,12 @@ updates:
       rncli:
         patterns:
           - "@react-native-community/cli*"
+      babel:
+        patterns:
+          - "@babel/*"
+      rn:
+        patterns:
+          - "@react-native/*"
 
   - package-ecosystem: "npm"
     directories:
