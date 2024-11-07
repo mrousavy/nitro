@@ -10,7 +10,7 @@ on:
     paths:
       - ".github/workflows/update-lockfiles.yml"
       - "package.json"
-      - "example/package.json"
+      - "**/package.json"
 
 permissions:
   contents: write
