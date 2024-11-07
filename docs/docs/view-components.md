@@ -292,6 +292,6 @@ While this works and is pretty extensible, there are a few trade-offs with this 
 
 1. This is pretty verbose. When Nitro gets first-class support for view components, this will be much simpler.
 2. This is updating props synchronously on the JS Thread. You can implement your own batching and thread-dispatching on the native side though.
-3. This does not go through React's prop updater. This means stuff like Reanimated will likely not work, as it was built ontop of `setNativeProps`.
+3. This does not go through React's prop updater. This means stuff like Reanimated will likely not work, as it was built on top of `setNativeProps`.
 
 With that said; just know what you are doing. Then you're good.

@@ -14,7 +14,7 @@ const FeatureList: FeatureItem[] = [
     imageSource: require('@site/static/img/lightning-bolt.png').default,
     description: (
       <>
-        Nitro Modules are built ontop of a highly optimized JSI foundation that
+        Nitro Modules are built on top of a highly optimized JSI foundation that
         handles caching and property lookup really well. Nitro's communication
         layer is incredibly efficient and lightweight in memory!
       </>

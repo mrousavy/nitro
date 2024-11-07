@@ -8,7 +8,7 @@
 
 <br />
 
-**Nitrogen** is a code-generator that takes TypeScript interfaces and generates C++, Swift and Kotlin code and native bindings built ontop of the [**react-native-nitro-modules**](../react-native-nitro-modules/) core APIs.
+**Nitrogen** is a code-generator that takes TypeScript interfaces and generates C++, Swift and Kotlin code and native bindings built on top of the [**react-native-nitro-modules**](../react-native-nitro-modules/) core APIs.
 
 ## Installation
 

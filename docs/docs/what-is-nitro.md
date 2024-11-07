@@ -72,7 +72,7 @@ Note: These benchmarks only compare native method throughput in extreme cases, a
 
 ### Lightweight layer
 
-While Nitro is built ontop of JSI, the layer is very lightweight and efficient.
+While Nitro is built on top of JSI, the layer is very lightweight and efficient.
 Many things like type-checking is compile-time only, and built with C++ templates or `constexpr` which introduces zero runtime overhead.
 
 ### Direct Swift &lt;&gt; C++ interop
@@ -82,7 +82,7 @@ Nitro is built using the new [Swift &lt;&gt; C++ interop](https://www.swift.org/
 
 ### Uses `jsi::NativeState`
 
-Hybrid Objects in Nitro are built ontop of `jsi::NativeState`, which is more efficient than `jsi::HostObject`. Such objects have proper native prototypes, and their native memory size is known, which allows the garbage collector to properly clean up unused objects.
+Hybrid Objects in Nitro are built on top of `jsi::NativeState`, which is more efficient than `jsi::HostObject`. Such objects have proper native prototypes, and their native memory size is known, which allows the garbage collector to properly clean up unused objects.
 
 ## Type Safety
 
@@ -147,7 +147,7 @@ This is somewhat similar to how other frameworks (like Turbo-Modules) implement 
 
 ## Modern Languages
 
-Nitro is a modern framework, built ontop of modern languages like Swift and Kotlin.
+Nitro is a modern framework, built on top of modern languages like Swift and Kotlin.
 It has first-class support for modern language features.
 
 ### Swift
