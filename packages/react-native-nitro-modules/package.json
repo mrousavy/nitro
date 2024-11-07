@@ -37,8 +37,7 @@
     "jsi",
     "turbo",
     "scaffold",
-    "template",
-    "views"
+    "template"
   ],
   "repository": {
     "type": "git",
