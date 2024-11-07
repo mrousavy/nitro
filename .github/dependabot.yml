@@ -7,6 +7,7 @@ updates:
       interval: "daily"
     labels:
       - "dependencies"
+
   - package-ecosystem: "gradle"
     directories:
       - "/packages/react-native-nitro-modules/android/"
@@ -18,6 +19,7 @@ updates:
       - "nitro-core"
       - "dependencies"
       - "kotlin"
+
   - package-ecosystem: "npm"
     directories:
       - "/docs/"
@@ -26,9 +28,10 @@ updates:
     labels:
       - "dependencies"
     groups:
-      docusauris:
+      docusaurus:
         patterns:
           - "@docusaurus/*"
+
   - package-ecosystem: "npm"
     directories:
       - "/packages/react-native-nitro-modules/"
@@ -40,6 +43,11 @@ updates:
       - "nitro-core"
       - "dependencies"
       - "typescript"
+    groups:
+      rncli:
+        patterns:
+          - "@react-native-community/cli*"
+
   - package-ecosystem: "npm"
     directories:
       - "/packages/nitrogen/"
