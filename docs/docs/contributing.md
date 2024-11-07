@@ -74,6 +74,7 @@ If you want to work on the iOS codebase, you also need to install the Pods:
 
 ```sh
 cd example
+bundle install
 bun pods
 ```
 
