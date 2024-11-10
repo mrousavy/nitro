@@ -11,6 +11,7 @@
     "src",
     "react-native.config.js",
     "lib",
+    "nitrogen",
     "android/build.gradle",
     "android/gradle.properties",
     "android/CMakeLists.txt",
