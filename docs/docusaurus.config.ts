@@ -3,6 +3,10 @@ import type { Config } from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 
 const config: Config = {
+  future: {
+    experimental_faster: true,
+  },
+
   title: 'Nitro Modules',
   tagline:
     'A framework to build mindblowingly fast native modules with type-safe statically compiled JS bindings.',
