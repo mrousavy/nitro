@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include "NitroDefines.hpp"
 #include <fbjni/fbjni.h>
 
 namespace margelo::nitro {
@@ -55,7 +56,13 @@ public:
 public:
   jni::local_ref<T> create() const {
     // Calls the class's default constructor
-    return _javaClass->newObject(_defaultConstructor);
+    auto instance = _javaClass->newObject(_defaultConstructor);
+#ifdef NITRO_DEBUG
+    if (instance == nullptr) [[unlikely]] {
+      throw std::runtime_error("Failed to create an instance of \"JHybridTestObjectSwiftKotlinSpec\" - the constructor returned null!");
+    }
+#endif
+    return instance;
   }
 
 private:

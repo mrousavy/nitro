@@ -52,11 +52,6 @@ int initialize(JavaVM* vm) {
       []() -> std::shared_ptr<HybridObject> {
         static AutolinkedHybridObject<JHybridImageFactorySpec::javaobject> object("com/margelo/nitro/image/ImageFactory");
         auto instance = object.create();
-    #ifdef NITRO_DEBUG
-        if (instance == nullptr) [[unlikely]] {
-          throw std::runtime_error("Failed to create an instance of \"JHybridImageFactorySpec\" - the constructor returned null!");
-        }
-    #endif
         auto globalRef = jni::make_global(instance);
         return JNISharedPtr::make_shared_from_jni<JHybridImageFactorySpec>(globalRef);
       }
@@ -75,11 +70,6 @@ int initialize(JavaVM* vm) {
       []() -> std::shared_ptr<HybridObject> {
         static AutolinkedHybridObject<JHybridTestObjectSwiftKotlinSpec::javaobject> object("com/margelo/nitro/image/HybridTestObjectKotlin");
         auto instance = object.create();
-    #ifdef NITRO_DEBUG
-        if (instance == nullptr) [[unlikely]] {
-          throw std::runtime_error("Failed to create an instance of \"JHybridTestObjectSwiftKotlinSpec\" - the constructor returned null!");
-        }
-    #endif
         auto globalRef = jni::make_global(instance);
         return JNISharedPtr::make_shared_from_jni<JHybridTestObjectSwiftKotlinSpec>(globalRef);
       }
@@ -89,11 +79,6 @@ int initialize(JavaVM* vm) {
       []() -> std::shared_ptr<HybridObject> {
         static AutolinkedHybridObject<JHybridBaseSpec::javaobject> object("com/margelo/nitro/image/HybridBase");
         auto instance = object.create();
-    #ifdef NITRO_DEBUG
-        if (instance == nullptr) [[unlikely]] {
-          throw std::runtime_error("Failed to create an instance of \"JHybridBaseSpec\" - the constructor returned null!");
-        }
-    #endif
         auto globalRef = jni::make_global(instance);
         return JNISharedPtr::make_shared_from_jni<JHybridBaseSpec>(globalRef);
       }
@@ -103,11 +88,6 @@ int initialize(JavaVM* vm) {
       []() -> std::shared_ptr<HybridObject> {
         static AutolinkedHybridObject<JHybridChildSpec::javaobject> object("com/margelo/nitro/image/HybridChild");
         auto instance = object.create();
-    #ifdef NITRO_DEBUG
-        if (instance == nullptr) [[unlikely]] {
-          throw std::runtime_error("Failed to create an instance of \"JHybridChildSpec\" - the constructor returned null!");
-        }
-    #endif
         auto globalRef = jni::make_global(instance);
         return JNISharedPtr::make_shared_from_jni<JHybridChildSpec>(globalRef);
       }
