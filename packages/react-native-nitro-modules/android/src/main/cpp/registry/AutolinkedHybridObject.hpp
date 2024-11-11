@@ -25,7 +25,7 @@ public:
     } catch (const jni::JniException& exc) [[unlikely]] {
       std::string message = exc.what();
       std::string descriptor = javaClassDescriptor;
-      std::string className = getClassName(descriptor);
+      std::string className = findClassName(descriptor);
       if (message.find("ClassNotFoundException")) {
         // Java class cannot be found
         throw std::runtime_error(
@@ -66,7 +66,7 @@ public:
   }
 
 private:
-  static std::string getClassName(const std::string& jniDescriptor) {
+  static std::string findClassName(const std::string& jniDescriptor) {
     size_t lastSlash = jniDescriptor.rfind('/');
     return jniDescriptor.substr(lastSlash + 1);
   }
