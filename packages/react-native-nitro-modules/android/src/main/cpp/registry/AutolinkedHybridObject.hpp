@@ -22,7 +22,7 @@ public:
       // Find JNI class and default constructor
       _javaClass = jni::findClassStatic(javaClassDescriptor);
       _defaultConstructor = _javaClass->getConstructor<typename T()>();
-    } catch (const jni::JniException& exc) [[unlikely]] {
+    } catch (const jni::JniException& exc) {
       std::string message = exc.what();
       std::string descriptor = javaClassDescriptor;
       std::string className = findClassName(descriptor);
