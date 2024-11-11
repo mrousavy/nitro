@@ -44,7 +44,7 @@ HybridObjectRegistry::registerHybridObjectConstructor(
   []() -> std::shared_ptr<HybridObject> {
     static jni::alias_ref<jni::JClass> javaClass;
     static jni::JConstructor<${JHybridTSpec}::javaobject()> defaultConstructor;
-    static bool isInitialized;
+    static bool isInitialized = false;
     try {
       if (!isInitialized) {
         javaClass = jni::findClassStatic("${jniNamespace}");
@@ -54,14 +54,14 @@ HybridObjectRegistry::registerHybridObjectConstructor(
     } catch (const jni::JniException& exc) {
       std::string message = exc.what();
       if (message.find("ClassNotFoundException")) {
-        throw std::runtime_error("Couldn't find class \\"${javaNamespace}\\"!\\n"
+        throw std::runtime_error("Couldn't find class \`${javaNamespace}\`!\\n"
                                  "- Make sure the class exists in the specified namespace.\\n"
-                                 "- Make sure the class is not stripped. If you are using ProGuard, add @Keep and @DoNotStrip annotations to ${jniClassName}.");
+                                 "- Make sure the class is not stripped. If you are using ProGuard, add \`@Keep\` and \`@DoNotStrip\` annotations to ${jniClassName}.");
       } else if (message.find("NoSuchMethodError")) {
         throw std::runtime_error("Couldn't find ${jniClassName}'s default constructor!\\n"
                                  "- If you don't have one, make sure to add a constructor that takes zero arguments (= default constructor).\\n"
                                  "- If you need arguments to create instances of ${jniClassName}, create a separate HybridObject that acts as a factory for this HybridObject to create instances of it with parameters.\\n"
-                                 "- If you already have a default constructor, make sure it is not being stripped. If you are using ProGuard, add @Keep and @DoNotStrip annotations to the default constructor.");
+                                 "- If you already have a default constructor, make sure it is not being stripped. If you are using ProGuard, add \`@Keep\` and \`@DoNotStrip\` annotations to the default constructor.");
       } else {
         throw;
       }

@@ -51,7 +51,7 @@ int initialize(JavaVM* vm) {
       []() -> std::shared_ptr<HybridObject> {
         static jni::alias_ref<jni::JClass> javaClass;
         static jni::JConstructor<JHybridImageFactorySpec::javaobject()> defaultConstructor;
-        static bool isInitialized;
+        static bool isInitialized = false;
         try {
           if (!isInitialized) {
             javaClass = jni::findClassStatic("com/margelo/nitro/image/ImageFactory");
@@ -61,14 +61,14 @@ int initialize(JavaVM* vm) {
         } catch (const jni::JniException& exc) {
           std::string message = exc.what();
           if (message.find("ClassNotFoundException")) {
-            throw std::runtime_error("Couldn't find class \"com.margelo.nitro.image.ImageFactory\"!\n"
+            throw std::runtime_error("Couldn't find class `com.margelo.nitro.image.ImageFactory`!\n"
                                      "- Make sure the class exists in the specified namespace.\n"
-                                     "- Make sure the class is not stripped. If you are using ProGuard, add @Keep and @DoNotStrip annotations to ImageFactory.");
+                                     "- Make sure the class is not stripped. If you are using ProGuard, add `@Keep` and `@DoNotStrip` annotations to ImageFactory.");
           } else if (message.find("NoSuchMethodError")) {
             throw std::runtime_error("Couldn't find ImageFactory's default constructor!\n"
                                      "- If you don't have one, make sure to add a constructor that takes zero arguments (= default constructor).\n"
                                      "- If you need arguments to create instances of ImageFactory, create a separate HybridObject that acts as a factory for this HybridObject to create instances of it with parameters.\n"
-                                     "- If you already have a default constructor, make sure it is not being stripped. If you are using ProGuard, add @Keep and @DoNotStrip annotations to the default constructor.");
+                                     "- If you already have a default constructor, make sure it is not being stripped. If you are using ProGuard, add `@Keep` and `@DoNotStrip` annotations to the default constructor.");
           } else {
             throw;
           }
@@ -98,7 +98,7 @@ int initialize(JavaVM* vm) {
       []() -> std::shared_ptr<HybridObject> {
         static jni::alias_ref<jni::JClass> javaClass;
         static jni::JConstructor<JHybridTestObjectSwiftKotlinSpec::javaobject()> defaultConstructor;
-        static bool isInitialized;
+        static bool isInitialized = false;
         try {
           if (!isInitialized) {
             javaClass = jni::findClassStatic("com/margelo/nitro/image/HybridTestObjectKotlin");
@@ -108,14 +108,14 @@ int initialize(JavaVM* vm) {
         } catch (const jni::JniException& exc) {
           std::string message = exc.what();
           if (message.find("ClassNotFoundException")) {
-            throw std::runtime_error("Couldn't find class \"com.margelo.nitro.image.HybridTestObjectKotlin\"!\n"
+            throw std::runtime_error("Couldn't find class `com.margelo.nitro.image.HybridTestObjectKotlin`!\n"
                                      "- Make sure the class exists in the specified namespace.\n"
-                                     "- Make sure the class is not stripped. If you are using ProGuard, add @Keep and @DoNotStrip annotations to HybridTestObjectKotlin.");
+                                     "- Make sure the class is not stripped. If you are using ProGuard, add `@Keep` and `@DoNotStrip` annotations to HybridTestObjectKotlin.");
           } else if (message.find("NoSuchMethodError")) {
             throw std::runtime_error("Couldn't find HybridTestObjectKotlin's default constructor!\n"
                                      "- If you don't have one, make sure to add a constructor that takes zero arguments (= default constructor).\n"
                                      "- If you need arguments to create instances of HybridTestObjectKotlin, create a separate HybridObject that acts as a factory for this HybridObject to create instances of it with parameters.\n"
-                                     "- If you already have a default constructor, make sure it is not being stripped. If you are using ProGuard, add @Keep and @DoNotStrip annotations to the default constructor.");
+                                     "- If you already have a default constructor, make sure it is not being stripped. If you are using ProGuard, add `@Keep` and `@DoNotStrip` annotations to the default constructor.");
           } else {
             throw;
           }
@@ -136,7 +136,7 @@ int initialize(JavaVM* vm) {
       []() -> std::shared_ptr<HybridObject> {
         static jni::alias_ref<jni::JClass> javaClass;
         static jni::JConstructor<JHybridBaseSpec::javaobject()> defaultConstructor;
-        static bool isInitialized;
+        static bool isInitialized = false;
         try {
           if (!isInitialized) {
             javaClass = jni::findClassStatic("com/margelo/nitro/image/HybridBase");
@@ -146,14 +146,14 @@ int initialize(JavaVM* vm) {
         } catch (const jni::JniException& exc) {
           std::string message = exc.what();
           if (message.find("ClassNotFoundException")) {
-            throw std::runtime_error("Couldn't find class \"com.margelo.nitro.image.HybridBase\"!\n"
+            throw std::runtime_error("Couldn't find class `com.margelo.nitro.image.HybridBase`!\n"
                                      "- Make sure the class exists in the specified namespace.\n"
-                                     "- Make sure the class is not stripped. If you are using ProGuard, add @Keep and @DoNotStrip annotations to HybridBase.");
+                                     "- Make sure the class is not stripped. If you are using ProGuard, add `@Keep` and `@DoNotStrip` annotations to HybridBase.");
           } else if (message.find("NoSuchMethodError")) {
             throw std::runtime_error("Couldn't find HybridBase's default constructor!\n"
                                      "- If you don't have one, make sure to add a constructor that takes zero arguments (= default constructor).\n"
                                      "- If you need arguments to create instances of HybridBase, create a separate HybridObject that acts as a factory for this HybridObject to create instances of it with parameters.\n"
-                                     "- If you already have a default constructor, make sure it is not being stripped. If you are using ProGuard, add @Keep and @DoNotStrip annotations to the default constructor.");
+                                     "- If you already have a default constructor, make sure it is not being stripped. If you are using ProGuard, add `@Keep` and `@DoNotStrip` annotations to the default constructor.");
           } else {
             throw;
           }
@@ -174,7 +174,7 @@ int initialize(JavaVM* vm) {
       []() -> std::shared_ptr<HybridObject> {
         static jni::alias_ref<jni::JClass> javaClass;
         static jni::JConstructor<JHybridChildSpec::javaobject()> defaultConstructor;
-        static bool isInitialized;
+        static bool isInitialized = false;
         try {
           if (!isInitialized) {
             javaClass = jni::findClassStatic("com/margelo/nitro/image/HybridChild");
@@ -184,14 +184,14 @@ int initialize(JavaVM* vm) {
         } catch (const jni::JniException& exc) {
           std::string message = exc.what();
           if (message.find("ClassNotFoundException")) {
-            throw std::runtime_error("Couldn't find class \"com.margelo.nitro.image.HybridChild\"!\n"
+            throw std::runtime_error("Couldn't find class `com.margelo.nitro.image.HybridChild`!\n"
                                      "- Make sure the class exists in the specified namespace.\n"
-                                     "- Make sure the class is not stripped. If you are using ProGuard, add @Keep and @DoNotStrip annotations to HybridChild.");
+                                     "- Make sure the class is not stripped. If you are using ProGuard, add `@Keep` and `@DoNotStrip` annotations to HybridChild.");
           } else if (message.find("NoSuchMethodError")) {
             throw std::runtime_error("Couldn't find HybridChild's default constructor!\n"
                                      "- If you don't have one, make sure to add a constructor that takes zero arguments (= default constructor).\n"
                                      "- If you need arguments to create instances of HybridChild, create a separate HybridObject that acts as a factory for this HybridObject to create instances of it with parameters.\n"
-                                     "- If you already have a default constructor, make sure it is not being stripped. If you are using ProGuard, add @Keep and @DoNotStrip annotations to the default constructor.");
+                                     "- If you already have a default constructor, make sure it is not being stripped. If you are using ProGuard, add `@Keep` and `@DoNotStrip` annotations to the default constructor.");
           } else {
             throw;
           }
