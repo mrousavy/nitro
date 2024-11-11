@@ -66,7 +66,7 @@ int initialize(JavaVM* vm) {
                                      "- Make sure the class is not stripped. If you are using ProGuard, add `@Keep` and `@DoNotStrip` annotations to ImageFactory.");
           } else if (message.find("NoSuchMethodError")) {
             throw std::runtime_error("Couldn't find ImageFactory's default constructor!\n"
-                                     "- If you don't have one, make sure to add a constructor that takes zero arguments (= default constructor).\n"
+                                     "- If you want to autolink ImageFactory, add a default constructor that takes zero arguments.\n"
                                      "- If you need arguments to create instances of ImageFactory, create a separate HybridObject that acts as a factory for this HybridObject to create instances of it with parameters.\n"
                                      "- If you already have a default constructor, make sure it is not being stripped. If you are using ProGuard, add `@Keep` and `@DoNotStrip` annotations to the default constructor.");
           } else {
@@ -113,7 +113,7 @@ int initialize(JavaVM* vm) {
                                      "- Make sure the class is not stripped. If you are using ProGuard, add `@Keep` and `@DoNotStrip` annotations to HybridTestObjectKotlin.");
           } else if (message.find("NoSuchMethodError")) {
             throw std::runtime_error("Couldn't find HybridTestObjectKotlin's default constructor!\n"
-                                     "- If you don't have one, make sure to add a constructor that takes zero arguments (= default constructor).\n"
+                                     "- If you want to autolink HybridTestObjectKotlin, add a default constructor that takes zero arguments.\n"
                                      "- If you need arguments to create instances of HybridTestObjectKotlin, create a separate HybridObject that acts as a factory for this HybridObject to create instances of it with parameters.\n"
                                      "- If you already have a default constructor, make sure it is not being stripped. If you are using ProGuard, add `@Keep` and `@DoNotStrip` annotations to the default constructor.");
           } else {
@@ -151,7 +151,7 @@ int initialize(JavaVM* vm) {
                                      "- Make sure the class is not stripped. If you are using ProGuard, add `@Keep` and `@DoNotStrip` annotations to HybridBase.");
           } else if (message.find("NoSuchMethodError")) {
             throw std::runtime_error("Couldn't find HybridBase's default constructor!\n"
-                                     "- If you don't have one, make sure to add a constructor that takes zero arguments (= default constructor).\n"
+                                     "- If you want to autolink HybridBase, add a default constructor that takes zero arguments.\n"
                                      "- If you need arguments to create instances of HybridBase, create a separate HybridObject that acts as a factory for this HybridObject to create instances of it with parameters.\n"
                                      "- If you already have a default constructor, make sure it is not being stripped. If you are using ProGuard, add `@Keep` and `@DoNotStrip` annotations to the default constructor.");
           } else {
@@ -189,7 +189,7 @@ int initialize(JavaVM* vm) {
                                      "- Make sure the class is not stripped. If you are using ProGuard, add `@Keep` and `@DoNotStrip` annotations to HybridChild.");
           } else if (message.find("NoSuchMethodError")) {
             throw std::runtime_error("Couldn't find HybridChild's default constructor!\n"
-                                     "- If you don't have one, make sure to add a constructor that takes zero arguments (= default constructor).\n"
+                                     "- If you want to autolink HybridChild, add a default constructor that takes zero arguments.\n"
                                      "- If you need arguments to create instances of HybridChild, create a separate HybridObject that acts as a factory for this HybridObject to create instances of it with parameters.\n"
                                      "- If you already have a default constructor, make sure it is not being stripped. If you are using ProGuard, add `@Keep` and `@DoNotStrip` annotations to the default constructor.");
           } else {
