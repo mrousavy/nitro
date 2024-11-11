@@ -49,8 +49,24 @@ int initialize(JavaVM* vm) {
     HybridObjectRegistry::registerHybridObjectConstructor(
       "ImageFactory",
       []() -> std::shared_ptr<HybridObject> {
-        static auto javaClass = jni::findClassStatic("com/margelo/nitro/image/ImageFactory");
-        static auto defaultConstructor = javaClass->getConstructor<JHybridImageFactorySpec::javaobject()>();
+        static jni::alias_ref<jni::JClass> javaClass;
+        static jni::JConstructor<JHybridImageFactorySpec::javaobject()> defaultConstructor;
+        try {
+          if (javaClass == nullptr) {
+            javaClass = jni::findClassStatic("com/margelo/nitro/image/ImageFactory");
+            defaultConstructor = javaClass->getConstructor<JHybridImageFactorySpec::javaobject()>();
+          }
+        } catch (const jni::JniException& exc) {
+          std::string message = exc.what();
+          if (message.find("ClassNotFoundException")) {
+            throw std::runtime_error("Couldn't find class \"com.margelo.nitro.image.ImageFactory\"!
+    "
+                                     "- Make sure the class exists in the specified namespace.
+    "
+                                     "- Make sure the class is not stripped. If you are using ProGuard, add @Keep and @DoNotStrip annotations to ImageFactory.");
+          }
+          throw;
+        }
     
         auto instance = javaClass->newObject(defaultConstructor);
     #ifdef NITRO_DEBUG
@@ -74,8 +90,24 @@ int initialize(JavaVM* vm) {
     HybridObjectRegistry::registerHybridObjectConstructor(
       "TestObjectSwiftKotlin",
       []() -> std::shared_ptr<HybridObject> {
-        static auto javaClass = jni::findClassStatic("com/margelo/nitro/image/HybridTestObjectKotlin");
-        static auto defaultConstructor = javaClass->getConstructor<JHybridTestObjectSwiftKotlinSpec::javaobject()>();
+        static jni::alias_ref<jni::JClass> javaClass;
+        static jni::JConstructor<JHybridTestObjectSwiftKotlinSpec::javaobject()> defaultConstructor;
+        try {
+          if (javaClass == nullptr) {
+            javaClass = jni::findClassStatic("com/margelo/nitro/image/HybridTestObjectKotlin");
+            defaultConstructor = javaClass->getConstructor<JHybridTestObjectSwiftKotlinSpec::javaobject()>();
+          }
+        } catch (const jni::JniException& exc) {
+          std::string message = exc.what();
+          if (message.find("ClassNotFoundException")) {
+            throw std::runtime_error("Couldn't find class \"com.margelo.nitro.image.HybridTestObjectKotlin\"!
+    "
+                                     "- Make sure the class exists in the specified namespace.
+    "
+                                     "- Make sure the class is not stripped. If you are using ProGuard, add @Keep and @DoNotStrip annotations to HybridTestObjectKotlin.");
+          }
+          throw;
+        }
     
         auto instance = javaClass->newObject(defaultConstructor);
     #ifdef NITRO_DEBUG
@@ -90,8 +122,24 @@ int initialize(JavaVM* vm) {
     HybridObjectRegistry::registerHybridObjectConstructor(
       "Base",
       []() -> std::shared_ptr<HybridObject> {
-        static auto javaClass = jni::findClassStatic("com/margelo/nitro/image/HybridBase");
-        static auto defaultConstructor = javaClass->getConstructor<JHybridBaseSpec::javaobject()>();
+        static jni::alias_ref<jni::JClass> javaClass;
+        static jni::JConstructor<JHybridBaseSpec::javaobject()> defaultConstructor;
+        try {
+          if (javaClass == nullptr) {
+            javaClass = jni::findClassStatic("com/margelo/nitro/image/HybridBase");
+            defaultConstructor = javaClass->getConstructor<JHybridBaseSpec::javaobject()>();
+          }
+        } catch (const jni::JniException& exc) {
+          std::string message = exc.what();
+          if (message.find("ClassNotFoundException")) {
+            throw std::runtime_error("Couldn't find class \"com.margelo.nitro.image.HybridBase\"!
+    "
+                                     "- Make sure the class exists in the specified namespace.
+    "
+                                     "- Make sure the class is not stripped. If you are using ProGuard, add @Keep and @DoNotStrip annotations to HybridBase.");
+          }
+          throw;
+        }
     
         auto instance = javaClass->newObject(defaultConstructor);
     #ifdef NITRO_DEBUG
@@ -106,8 +154,24 @@ int initialize(JavaVM* vm) {
     HybridObjectRegistry::registerHybridObjectConstructor(
       "Child",
       []() -> std::shared_ptr<HybridObject> {
-        static auto javaClass = jni::findClassStatic("com/margelo/nitro/image/HybridChild");
-        static auto defaultConstructor = javaClass->getConstructor<JHybridChildSpec::javaobject()>();
+        static jni::alias_ref<jni::JClass> javaClass;
+        static jni::JConstructor<JHybridChildSpec::javaobject()> defaultConstructor;
+        try {
+          if (javaClass == nullptr) {
+            javaClass = jni::findClassStatic("com/margelo/nitro/image/HybridChild");
+            defaultConstructor = javaClass->getConstructor<JHybridChildSpec::javaobject()>();
+          }
+        } catch (const jni::JniException& exc) {
+          std::string message = exc.what();
+          if (message.find("ClassNotFoundException")) {
+            throw std::runtime_error("Couldn't find class \"com.margelo.nitro.image.HybridChild\"!
+    "
+                                     "- Make sure the class exists in the specified namespace.
+    "
+                                     "- Make sure the class is not stripped. If you are using ProGuard, add @Keep and @DoNotStrip annotations to HybridChild.");
+          }
+          throw;
+        }
     
         auto instance = javaClass->newObject(defaultConstructor);
     #ifdef NITRO_DEBUG

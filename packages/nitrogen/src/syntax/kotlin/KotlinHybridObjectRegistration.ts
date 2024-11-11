@@ -24,6 +24,10 @@ export function createJNIHybridObjectRegistration({
 }: Props): JNIHybridObjectRegistration {
   const { JHybridTSpec } = getHybridObjectName(hybridObjectName)
   const jniNamespace = NitroConfig.getAndroidPackage('c++/jni', jniClassName)
+  const javaNamespace = NitroConfig.getAndroidPackage(
+    'java/kotlin',
+    jniClassName
+  )
 
   return {
     requiredImports: [
@@ -38,8 +42,22 @@ export function createJNIHybridObjectRegistration({
 HybridObjectRegistry::registerHybridObjectConstructor(
   "${hybridObjectName}",
   []() -> std::shared_ptr<HybridObject> {
-    static auto javaClass = jni::findClassStatic("${jniNamespace}");
-    static auto defaultConstructor = javaClass->getConstructor<${JHybridTSpec}::javaobject()>();
+    static jni::alias_ref<jni::JClass> javaClass;
+    static jni::JConstructor<${JHybridTSpec}::javaobject()> defaultConstructor;
+    try {
+      if (javaClass == nullptr) {
+        javaClass = jni::findClassStatic("${jniNamespace}");
+        defaultConstructor = javaClass->getConstructor<${JHybridTSpec}::javaobject()>();
+      }
+    } catch (const jni::JniException& exc) {
+      std::string message = exc.what();
+      if (message.find("ClassNotFoundException")) {
+        throw std::runtime_error("Couldn't find class \\"${javaNamespace}\\"!\n"
+                                 "- Make sure the class exists in the specified namespace.\n"
+                                 "- Make sure the class is not stripped. If you are using ProGuard, add @Keep and @DoNotStrip annotations to ${jniClassName}.");
+      }
+      throw;
+    }
 
     auto instance = javaClass->newObject(defaultConstructor);
 #ifdef NITRO_DEBUG
