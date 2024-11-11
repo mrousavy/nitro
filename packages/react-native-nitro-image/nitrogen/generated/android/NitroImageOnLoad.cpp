@@ -21,6 +21,7 @@
 #include "JHybridBaseSpec.hpp"
 #include "JHybridChildSpec.hpp"
 #include <NitroModules/JNISharedPtr.hpp>
+#include <NitroModules/AutolinkedHybridObject.hpp>
 #include "HybridTestObjectCpp.hpp"
 
 namespace margelo::nitro::image {
@@ -49,32 +50,8 @@ int initialize(JavaVM* vm) {
     HybridObjectRegistry::registerHybridObjectConstructor(
       "ImageFactory",
       []() -> std::shared_ptr<HybridObject> {
-        static jni::alias_ref<jni::JClass> javaClass;
-        static jni::JConstructor<JHybridImageFactorySpec::javaobject()> defaultConstructor;
-        static bool isInitialized = false;
-        try {
-          if (!isInitialized) {
-            javaClass = jni::findClassStatic("com/margelo/nitro/image/ImageFactory");
-            defaultConstructor = javaClass->getConstructor<JHybridImageFactorySpec::javaobject()>();
-            isInitialized = true;
-          }
-        } catch (const jni::JniException& exc) {
-          std::string message = exc.what();
-          if (message.find("ClassNotFoundException")) {
-            throw std::runtime_error("Couldn't find class `com.margelo.nitro.image.ImageFactory`!\n"
-                                     "- Make sure the class exists in the specified namespace.\n"
-                                     "- Make sure the class is not stripped. If you are using ProGuard, add `@Keep` and `@DoNotStrip` annotations to ImageFactory.");
-          } else if (message.find("NoSuchMethodError")) {
-            throw std::runtime_error("Couldn't find ImageFactory's default constructor!\n"
-                                     "- If you want to autolink ImageFactory, add a default constructor that takes zero arguments.\n"
-                                     "- If you need arguments to create instances of ImageFactory, create a separate HybridObject that acts as a factory for this HybridObject to create instances of it with parameters.\n"
-                                     "- If you already have a default constructor, make sure it is not being stripped. If you are using ProGuard, add `@Keep` and `@DoNotStrip` annotations to the default constructor.");
-          } else {
-            throw;
-          }
-        }
-    
-        auto instance = javaClass->newObject(defaultConstructor);
+        static AutolinkedHybridObject<JHybridImageFactorySpec::javaobject> object("com/margelo/nitro/image/ImageFactory");
+        auto instance = object->create();
     #ifdef NITRO_DEBUG
         if (instance == nullptr) [[unlikely]] {
           throw std::runtime_error("Failed to create an instance of \"JHybridImageFactorySpec\" - the constructor returned null!");
@@ -96,32 +73,8 @@ int initialize(JavaVM* vm) {
     HybridObjectRegistry::registerHybridObjectConstructor(
       "TestObjectSwiftKotlin",
       []() -> std::shared_ptr<HybridObject> {
-        static jni::alias_ref<jni::JClass> javaClass;
-        static jni::JConstructor<JHybridTestObjectSwiftKotlinSpec::javaobject()> defaultConstructor;
-        static bool isInitialized = false;
-        try {
-          if (!isInitialized) {
-            javaClass = jni::findClassStatic("com/margelo/nitro/image/HybridTestObjectKotlin");
-            defaultConstructor = javaClass->getConstructor<JHybridTestObjectSwiftKotlinSpec::javaobject()>();
-            isInitialized = true;
-          }
-        } catch (const jni::JniException& exc) {
-          std::string message = exc.what();
-          if (message.find("ClassNotFoundException")) {
-            throw std::runtime_error("Couldn't find class `com.margelo.nitro.image.HybridTestObjectKotlin`!\n"
-                                     "- Make sure the class exists in the specified namespace.\n"
-                                     "- Make sure the class is not stripped. If you are using ProGuard, add `@Keep` and `@DoNotStrip` annotations to HybridTestObjectKotlin.");
-          } else if (message.find("NoSuchMethodError")) {
-            throw std::runtime_error("Couldn't find HybridTestObjectKotlin's default constructor!\n"
-                                     "- If you want to autolink HybridTestObjectKotlin, add a default constructor that takes zero arguments.\n"
-                                     "- If you need arguments to create instances of HybridTestObjectKotlin, create a separate HybridObject that acts as a factory for this HybridObject to create instances of it with parameters.\n"
-                                     "- If you already have a default constructor, make sure it is not being stripped. If you are using ProGuard, add `@Keep` and `@DoNotStrip` annotations to the default constructor.");
-          } else {
-            throw;
-          }
-        }
-    
-        auto instance = javaClass->newObject(defaultConstructor);
+        static AutolinkedHybridObject<JHybridTestObjectSwiftKotlinSpec::javaobject> object("com/margelo/nitro/image/HybridTestObjectKotlin");
+        auto instance = object->create();
     #ifdef NITRO_DEBUG
         if (instance == nullptr) [[unlikely]] {
           throw std::runtime_error("Failed to create an instance of \"JHybridTestObjectSwiftKotlinSpec\" - the constructor returned null!");
@@ -134,32 +87,8 @@ int initialize(JavaVM* vm) {
     HybridObjectRegistry::registerHybridObjectConstructor(
       "Base",
       []() -> std::shared_ptr<HybridObject> {
-        static jni::alias_ref<jni::JClass> javaClass;
-        static jni::JConstructor<JHybridBaseSpec::javaobject()> defaultConstructor;
-        static bool isInitialized = false;
-        try {
-          if (!isInitialized) {
-            javaClass = jni::findClassStatic("com/margelo/nitro/image/HybridBase");
-            defaultConstructor = javaClass->getConstructor<JHybridBaseSpec::javaobject()>();
-            isInitialized = true;
-          }
-        } catch (const jni::JniException& exc) {
-          std::string message = exc.what();
-          if (message.find("ClassNotFoundException")) {
-            throw std::runtime_error("Couldn't find class `com.margelo.nitro.image.HybridBase`!\n"
-                                     "- Make sure the class exists in the specified namespace.\n"
-                                     "- Make sure the class is not stripped. If you are using ProGuard, add `@Keep` and `@DoNotStrip` annotations to HybridBase.");
-          } else if (message.find("NoSuchMethodError")) {
-            throw std::runtime_error("Couldn't find HybridBase's default constructor!\n"
-                                     "- If you want to autolink HybridBase, add a default constructor that takes zero arguments.\n"
-                                     "- If you need arguments to create instances of HybridBase, create a separate HybridObject that acts as a factory for this HybridObject to create instances of it with parameters.\n"
-                                     "- If you already have a default constructor, make sure it is not being stripped. If you are using ProGuard, add `@Keep` and `@DoNotStrip` annotations to the default constructor.");
-          } else {
-            throw;
-          }
-        }
-    
-        auto instance = javaClass->newObject(defaultConstructor);
+        static AutolinkedHybridObject<JHybridBaseSpec::javaobject> object("com/margelo/nitro/image/HybridBase");
+        auto instance = object->create();
     #ifdef NITRO_DEBUG
         if (instance == nullptr) [[unlikely]] {
           throw std::runtime_error("Failed to create an instance of \"JHybridBaseSpec\" - the constructor returned null!");
@@ -172,32 +101,8 @@ int initialize(JavaVM* vm) {
     HybridObjectRegistry::registerHybridObjectConstructor(
       "Child",
       []() -> std::shared_ptr<HybridObject> {
-        static jni::alias_ref<jni::JClass> javaClass;
-        static jni::JConstructor<JHybridChildSpec::javaobject()> defaultConstructor;
-        static bool isInitialized = false;
-        try {
-          if (!isInitialized) {
-            javaClass = jni::findClassStatic("com/margelo/nitro/image/HybridChild");
-            defaultConstructor = javaClass->getConstructor<JHybridChildSpec::javaobject()>();
-            isInitialized = true;
-          }
-        } catch (const jni::JniException& exc) {
-          std::string message = exc.what();
-          if (message.find("ClassNotFoundException")) {
-            throw std::runtime_error("Couldn't find class `com.margelo.nitro.image.HybridChild`!\n"
-                                     "- Make sure the class exists in the specified namespace.\n"
-                                     "- Make sure the class is not stripped. If you are using ProGuard, add `@Keep` and `@DoNotStrip` annotations to HybridChild.");
-          } else if (message.find("NoSuchMethodError")) {
-            throw std::runtime_error("Couldn't find HybridChild's default constructor!\n"
-                                     "- If you want to autolink HybridChild, add a default constructor that takes zero arguments.\n"
-                                     "- If you need arguments to create instances of HybridChild, create a separate HybridObject that acts as a factory for this HybridObject to create instances of it with parameters.\n"
-                                     "- If you already have a default constructor, make sure it is not being stripped. If you are using ProGuard, add `@Keep` and `@DoNotStrip` annotations to the default constructor.");
-          } else {
-            throw;
-          }
-        }
-    
-        auto instance = javaClass->newObject(defaultConstructor);
+        static AutolinkedHybridObject<JHybridChildSpec::javaobject> object("com/margelo/nitro/image/HybridChild");
+        auto instance = object->create();
     #ifdef NITRO_DEBUG
         if (instance == nullptr) [[unlikely]] {
           throw std::runtime_error("Failed to create an instance of \"JHybridChildSpec\" - the constructor returned null!");
