@@ -1,12 +1,16 @@
 package com.margelo.nitro.image
 
 import android.util.Log
+import androidx.annotation.Keep
+import com.facebook.proguard.annotations.DoNotStrip
 import com.margelo.nitro.core.AnyMap
 import com.margelo.nitro.core.AnyValue
 import com.margelo.nitro.core.ArrayBuffer
 import com.margelo.nitro.core.Promise
 import kotlinx.coroutines.delay
 
+@Keep
+@DoNotStrip
 class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
     private val TAG = "HybridTestObjectKotlin"
 
