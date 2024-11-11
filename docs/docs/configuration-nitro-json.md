@@ -93,7 +93,7 @@ In most cases, you should keep this in sync with the `namespace` specified in yo
   ```
   </div>
   <div className="side-by-side-block">
-  ```kt
+  ```kotlin
   package com.margelo.nitro.image
 
   // ...

@@ -319,7 +319,7 @@ The `NitroMathPackage` will be initialized by React Native's own autolinking sys
 
 Inside `MainApplication.kt`, add:
 
-```kt
+```kotlin
 class MainApplication {
   // ...
   companion object {
@@ -332,6 +332,10 @@ class MainApplication {
 
 </TabItem>
 </Tabs>
+
+#### 5.3. (Optional) ProGuard
+
+If you are using ProGuard on Android, make sure to add a `@DoNotStrip` annotation above your `HybridMath` class (and constructor) so Nitro can construct it from C++ in release builds.
 
 ### 6. Initialize the Hybrid Objects
 
