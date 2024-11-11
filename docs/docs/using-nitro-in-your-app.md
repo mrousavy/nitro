@@ -103,6 +103,8 @@ After installing Nitro, you can start creating your [Hybrid Objects](hybrid-obje
   Now it's time to create your first spec. Let's create `Math.nitro.ts`:
 
   ```ts title="Math.nitro.ts"
+  import type { HybridObject } from 'react-native-nitro-modules'
+
   interface Math extends HybridObject<{ ios: 'swift', android: 'kotlin' }> {
     readonly pi: number
     add(a: number, b: number): number
