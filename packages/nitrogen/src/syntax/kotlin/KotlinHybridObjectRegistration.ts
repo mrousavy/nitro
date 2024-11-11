@@ -44,7 +44,7 @@ HybridObjectRegistry::registerHybridObjectConstructor(
   "${hybridObjectName}",
   []() -> std::shared_ptr<HybridObject> {
     static AutolinkedHybridObject<${JHybridTSpec}::javaobject> object("${jniNamespace}");
-    auto instance = object->create();
+    auto instance = object.create();
 #ifdef NITRO_DEBUG
     if (instance == nullptr) [[unlikely]] {
       throw std::runtime_error("Failed to create an instance of \\"${JHybridTSpec}\\" - the constructor returned null!");
