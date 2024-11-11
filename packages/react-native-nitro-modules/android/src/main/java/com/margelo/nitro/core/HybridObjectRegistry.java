@@ -1,5 +1,7 @@
 package com.margelo.nitro.core;
 
+import androidx.annotation.Keep;
+import com.facebook.proguard.annotations.DoNotStrip;
 import com.margelo.nitro.JNIOnLoad;
 
 /**
@@ -7,6 +9,8 @@ import com.margelo.nitro.JNIOnLoad;
  * This will be used to initialize them from JS using `NitroModules.createHybridObject<T>(name)`.
  * @noinspection JavaJniMissingFunction
  */
+@Keep
+@DoNotStrip
 public class HybridObjectRegistry {
     static {
         JNIOnLoad.initializeNativeNitro();

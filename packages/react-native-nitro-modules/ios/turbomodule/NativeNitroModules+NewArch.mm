@@ -1,6 +1,6 @@
 //
 //  NativeNitroModules+NewArch.mm
-//  DoubleConversion
+//  react-native-nitro
 //
 //  Created by Marc Rousavy on 21.06.24.
 //

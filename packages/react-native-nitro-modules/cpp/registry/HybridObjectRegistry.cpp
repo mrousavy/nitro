@@ -1,6 +1,6 @@
 //
 //  HybridObjectRegistry.cpp
-//  DoubleConversion
+//  react-native-nitro
 //
 //  Created by Marc Rousavy on 22.07.24.
 //
