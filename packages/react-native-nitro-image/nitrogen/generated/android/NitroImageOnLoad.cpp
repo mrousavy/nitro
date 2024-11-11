@@ -21,7 +21,7 @@
 #include "JHybridBaseSpec.hpp"
 #include "JHybridChildSpec.hpp"
 #include <NitroModules/JNISharedPtr.hpp>
-#include <NitroModules/AutolinkedHybridObject.hpp>
+#include <NitroModules/DefaultConstructableObject.hpp>
 #include "HybridTestObjectCpp.hpp"
 
 namespace margelo::nitro::image {
@@ -50,7 +50,7 @@ int initialize(JavaVM* vm) {
     HybridObjectRegistry::registerHybridObjectConstructor(
       "ImageFactory",
       []() -> std::shared_ptr<HybridObject> {
-        static AutolinkedHybridObject<JHybridImageFactorySpec::javaobject> object("com/margelo/nitro/image/ImageFactory");
+        static DefaultConstructableObject<JHybridImageFactorySpec::javaobject> object("com/margelo/nitro/image/ImageFactory");
         auto instance = object.create();
         auto globalRef = jni::make_global(instance);
         return JNISharedPtr::make_shared_from_jni<JHybridImageFactorySpec>(globalRef);
@@ -68,7 +68,7 @@ int initialize(JavaVM* vm) {
     HybridObjectRegistry::registerHybridObjectConstructor(
       "TestObjectSwiftKotlin",
       []() -> std::shared_ptr<HybridObject> {
-        static AutolinkedHybridObject<JHybridTestObjectSwiftKotlinSpec::javaobject> object("com/margelo/nitro/image/HybridTestObjectKotlin");
+        static DefaultConstructableObject<JHybridTestObjectSwiftKotlinSpec::javaobject> object("com/margelo/nitro/image/HybridTestObjectKotlin");
         auto instance = object.create();
         auto globalRef = jni::make_global(instance);
         return JNISharedPtr::make_shared_from_jni<JHybridTestObjectSwiftKotlinSpec>(globalRef);
@@ -77,7 +77,7 @@ int initialize(JavaVM* vm) {
     HybridObjectRegistry::registerHybridObjectConstructor(
       "Base",
       []() -> std::shared_ptr<HybridObject> {
-        static AutolinkedHybridObject<JHybridBaseSpec::javaobject> object("com/margelo/nitro/image/HybridBase");
+        static DefaultConstructableObject<JHybridBaseSpec::javaobject> object("com/margelo/nitro/image/HybridBase");
         auto instance = object.create();
         auto globalRef = jni::make_global(instance);
         return JNISharedPtr::make_shared_from_jni<JHybridBaseSpec>(globalRef);
@@ -86,7 +86,7 @@ int initialize(JavaVM* vm) {
     HybridObjectRegistry::registerHybridObjectConstructor(
       "Child",
       []() -> std::shared_ptr<HybridObject> {
-        static AutolinkedHybridObject<JHybridChildSpec::javaobject> object("com/margelo/nitro/image/HybridChild");
+        static DefaultConstructableObject<JHybridChildSpec::javaobject> object("com/margelo/nitro/image/HybridChild");
         auto instance = object.create();
         auto globalRef = jni::make_global(instance);
         return JNISharedPtr::make_shared_from_jni<JHybridChildSpec>(globalRef);

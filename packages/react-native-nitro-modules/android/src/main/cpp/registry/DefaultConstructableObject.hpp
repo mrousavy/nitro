@@ -1,5 +1,5 @@
 //
-//  AutolinkedHybridObject.hpp
+//  DefaultConstructableObject.hpp
 //  react-native-nitro
 //
 //  Created by Marc Rousavy on 11.11.24.
@@ -15,9 +15,9 @@ namespace margelo::nitro {
 using namespace facebook;
 
 template <typename T>
-class AutolinkedHybridObject {
+class DefaultConstructableObject {
 public:
-  explicit AutolinkedHybridObject(const char* javaClassDescriptor) {
+  explicit DefaultConstructableObject(const char* javaClassDescriptor) {
     try {
       // Find JNI class and default constructor
       _javaClass = jni::findClassStatic(javaClassDescriptor);

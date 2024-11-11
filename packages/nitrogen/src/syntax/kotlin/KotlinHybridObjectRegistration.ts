@@ -34,7 +34,7 @@ export function createJNIHybridObjectRegistration({
         space: 'system',
       },
       {
-        name: 'NitroModules/AutolinkedHybridObject.hpp',
+        name: 'NitroModules/DefaultConstructableObject.hpp',
         language: 'c++',
         space: 'system',
       },
@@ -43,7 +43,7 @@ export function createJNIHybridObjectRegistration({
 HybridObjectRegistry::registerHybridObjectConstructor(
   "${hybridObjectName}",
   []() -> std::shared_ptr<HybridObject> {
-    static AutolinkedHybridObject<${JHybridTSpec}::javaobject> object("${jniNamespace}");
+    static DefaultConstructableObject<${JHybridTSpec}::javaobject> object("${jniNamespace}");
     auto instance = object.create();
     auto globalRef = jni::make_global(instance);
     return JNISharedPtr::make_shared_from_jni<${JHybridTSpec}>(globalRef);
