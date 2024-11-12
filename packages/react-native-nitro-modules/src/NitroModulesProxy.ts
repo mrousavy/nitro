@@ -58,4 +58,9 @@ export interface NitroModulesProxy extends HybridObject {
    * ```
    */
   box<T extends HybridObject>(obj: T): BoxedHybridObject<T>
+
+  /**
+   * Returns whether the given {@linkcode object} has NativeState or not.
+   */
+  hasNativeState(object: unknown): boolean
 }
