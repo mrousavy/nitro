@@ -17,33 +17,6 @@ The nitro repo is a Bun monorepo, and is set up like this:
   - `/react-native-nitro-image/`: An example Nitro Module library that contains a lot of test code.
   - `/template/`: A template for a Nitro Module library.
 
-## Reproduce something in the Nitro Example app
-
-With most issue reports, it is required to reproduce the issue in the Nitro example app (`example/`).
-Whether it's a build error, a nitrogen error, or a runtime error, there needs to be a way to reproduce it here.
-Usually, you can reproduce issues like this:
-
-1. Fork the repository
-2. Change the code to reproduce the issue
-3. Create a PR to the **nitro** repository which demonstrates the issue
-
-### Reproduce a build error
-
-If you encounter a build error, compare your setup to the setup in `example/`.
-For example, if you have a different setting in your `Podfile`, try changing it here in Nitro `example/` as well to see if it builds here. Submit a PR with the change required to make it fail, and see if the CI fails to build.
-
-### Reproduce a nitrogen bug
-
-The Nitro `example/` app uses a Nitro Module (`packages/react-native-nitro-image/`) which acts as an example contains a lot of test code, like `src/specs/TestObject.nitro.ts` ([link](https://github.com/mrousavy/nitro/blob/main/packages/react-native-nitro-image/src/specs/TestObject.nitro.ts)). If you change something in `TestObject.nitro.ts`, make sure to run nitrogen:
-
-```sh
-bun image specs
-```
-
-### Reproduce a runtime error
-
-Submit a PR to the nitro repository that demonstrates this runtime error or crash in the Nitro `example/` app.
-
 ## Run Nitro Example
 
 ### 1. Set up your development environment
@@ -94,6 +67,33 @@ After installing all dependencies, you can run the React Native app in `example/
     3. Click Run
   </TabItem>
 </Tabs>
+
+## Reproduce something in the Nitro Example app
+
+With most issue reports, it is required to reproduce the issue in the Nitro example app (`example/`).
+Whether it's a build error, a nitrogen error, or a runtime error, there needs to be a way to reproduce it here.
+Usually, you can reproduce issues like this:
+
+1. Fork the repository
+2. Change the code to reproduce the issue
+3. Create a PR to the **nitro** repository which demonstrates the issue
+
+### Reproduce a build error
+
+If you encounter a build error, compare your setup to the setup in `example/`.
+For example, if you have a different setting in your `Podfile`, try changing it here in Nitro `example/` as well to see if it builds here. Submit a PR with the change required to make it fail, and see if the CI fails to build.
+
+### Reproduce a nitrogen bug
+
+The Nitro `example/` app uses a Nitro Module (`packages/react-native-nitro-image/`) which acts as an example contains a lot of test code, like `src/specs/TestObject.nitro.ts` ([link](https://github.com/mrousavy/nitro/blob/main/packages/react-native-nitro-image/src/specs/TestObject.nitro.ts)). If you change something in `TestObject.nitro.ts`, make sure to run nitrogen:
+
+```sh
+bun image specs
+```
+
+### Reproduce a runtime error
+
+Submit a PR to the nitro repository that demonstrates this runtime error or crash in the Nitro `example/` app.
 
 ## Run Nitro Docs
 
