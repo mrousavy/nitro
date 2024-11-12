@@ -40,7 +40,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ github.event.release.upload_url }}
-          asset_path: example/android/app/build/outputs/apk/debug/app-release.apk
+          asset_path: example/android/app/build/outputs/apk/release/app-release.apk
           asset_name: "NitroExample-v${{ github.event.release.tag_name }}.apk"
           asset_content_type: application/vnd.android.package-archive
 
