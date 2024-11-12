@@ -25,6 +25,7 @@ struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_v<T, jsi::NativeState>>
   using TPointee = typename T::element_type;
 
   static inline T fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+#ifdef NITRO_DEBUG
     if (!arg.isObject()) [[unlikely]] {
       if (arg.isUndefined()) [[unlikely]] {
         throw jsi::JSError(runtime, invalidTypeErrorMessage("undefined", "It is undefined!"));
@@ -33,8 +34,10 @@ struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_v<T, jsi::NativeState>>
         throw jsi::JSError(runtime, invalidTypeErrorMessage(stringRepresentation, "It is not an object!"));
       }
     }
+#endif
     jsi::Object object = arg.asObject(runtime);
 
+#ifdef NITRO_DEBUG
     if (!object.hasNativeState<TPointee>(runtime)) [[unlikely]] {
       if (!object.hasNativeState(runtime)) [[unlikely]] {
         std::string stringRepresentation = arg.toString(runtime).utf8(runtime);
@@ -44,6 +47,7 @@ struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_v<T, jsi::NativeState>>
         throw jsi::JSError(runtime, invalidTypeErrorMessage(stringRepresentation, "It has a different NativeState<T>!"));
       }
     }
+#endif
     std::shared_ptr<jsi::NativeState> nativeState = object.getNativeState(runtime);
     return std::dynamic_pointer_cast<TPointee>(nativeState);
   }

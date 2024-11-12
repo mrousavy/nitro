@@ -18,9 +18,11 @@ void JHybridObjectRegistry::registerHybridObjectConstructor(jni::alias_ref<jni::
   HybridObjectRegistry::registerHybridObjectConstructor(hybridObjectName, [=]() -> std::shared_ptr<HybridObject> {
     // 1. Call the Java initializer function
     jni::local_ref<JHybridObject::javaobject> hybridObject = sharedInitializer->call();
+#ifdef NITRO_DEBUG
     if (hybridObject == nullptr) [[unlikely]] {
       throw std::runtime_error("Failed to create HybridObject \"" + hybridObjectName + "\" - the constructor returned null!");
     }
+#endif
 
     // 2. Make the resulting HybridObject a global (shared) reference
     jni::global_ref<JHybridObject::javaobject> globalHybridObject = jni::make_global(hybridObject);

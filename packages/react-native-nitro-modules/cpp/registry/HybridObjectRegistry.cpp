@@ -32,6 +32,7 @@ std::vector<std::string> HybridObjectRegistry::getAllHybridObjectNames() {
 void HybridObjectRegistry::registerHybridObjectConstructor(const std::string& hybridObjectName, HybridObjectConstructorFn&& constructorFn) {
   Logger::log(LogLevel::Info, TAG, "Registering HybridObject \"%s\"...", hybridObjectName.c_str());
   auto& map = HybridObjectRegistry::getRegistry();
+#ifdef NITRO_DEBUG
   if (map.contains(hybridObjectName)) [[unlikely]] {
     auto message =
         "HybridObject \"" + std::string(hybridObjectName) +
@@ -41,6 +42,7 @@ void HybridObjectRegistry::registerHybridObjectConstructor(const std::string& hy
         "- If you just registered your own HybridObject, maybe you accidentally called `registerHybridObjectConstructor(...)` twice?";
     throw std::runtime_error(message);
   }
+#endif
   map.insert({hybridObjectName, std::move(constructorFn)});
   Logger::log(LogLevel::Info, TAG, "Successfully registered HybridObject \"%s\"!", hybridObjectName.c_str());
 }

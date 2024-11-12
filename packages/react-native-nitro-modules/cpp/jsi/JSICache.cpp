@@ -47,9 +47,11 @@ JSICacheReference JSICache::getOrCreateCache(jsi::Runtime& runtime) {
     Logger::log(LogLevel::Warning, TAG, "JSICache was created, but it is no longer strong!");
   }
 
+#ifdef NITRO_DEBUG
   if (runtime.global().hasProperty(runtime, CACHE_PROP_NAME)) [[unlikely]] {
     throw std::runtime_error("The Runtime \"" + getRuntimeId(runtime) + "\" already has a global cache! (\"" + CACHE_PROP_NAME + "\")");
   }
+#endif
 
   // Cache doesn't exist yet.
   Logger::log(LogLevel::Info, TAG, "Creating new JSICache<T> for runtime %s..", getRuntimeId(runtime).c_str());

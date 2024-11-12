@@ -171,6 +171,7 @@ private:
   static inline std::shared_ptr<THybrid> getHybridObjectNativeState(jsi::Runtime& runtime, const jsi::Value& value, FunctionKind funcKind,
                                                                     const std::string& funcName) {
     // 1. Convert jsi::Value to jsi::Object
+#ifdef NITRO_DEBUG
     if (!value.isObject()) [[unlikely]] {
       throw jsi::JSError(runtime, "Cannot " + getHybridFuncDebugInfo<THybrid>(funcKind, funcName) +
                                       " - `this` is not bound! Suggestions:\n"
@@ -181,6 +182,7 @@ private:
                                       "- Did you accidentally call `" +
                                       funcName + "` on the prototype directly?");
     }
+#endif
     jsi::Object object = value.getObject(runtime);
 
     // 2. Check if it even has any kind of `NativeState`
