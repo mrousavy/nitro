@@ -1,5 +1,10 @@
 import { NitroModules } from 'react-native-nitro-modules'
 
+export function isNativeFunction(func: Function): boolean {
+  // a pretty dumb check to see if a function is a native function (jsi::HostFunction).
+  return func.toString().includes('[native code]')
+}
+
 export function stringify(value: unknown): string {
   if (value == null) {
     return 'null'
@@ -19,20 +24,25 @@ export function stringify(value: unknown): string {
       if (value instanceof Error) {
         return `${value.name}: ${value.message}`
       }
+      if (Array.isArray(value)) {
+        const items = value.map((v) => stringify(v))
+        return `[${items.join(', ')}]`
+      }
       try {
         if ('toString' in value) {
-          if (Object.hasOwn(value, 'toString')) {
-            // It is some kind of Object that has a toString() method directly.
-            const string = value.toString()
-            if (string !== '[object Object]') return string
-          } else {
-            // It is some kind of Object that has a toString() method somewhere in the prototype chain..
-            // It is _likely_ that this method requires NativeState
+          if (isNativeFunction(value.toString)) {
+            // It is a native jsi::HostFunction. Since we log Prototypes,
+            // it is likely that we need a HybridObject (NativeState) to call it.
             if (NitroModules.hasNativeState(value)) {
-              // If we have NativeState, toString() will likely work.
+              // We have NativeState - we can call it!
               const string = value.toString()
               if (string !== '[object Object]') return string
+            } else {
+              // We don't have NativeState - we cannot safely call toString()..
             }
+          } else {
+            const string = value.toString()
+            if (string !== '[object Object]') return string
           }
         }
       } catch {
