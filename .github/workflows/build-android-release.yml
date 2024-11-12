@@ -2,7 +2,7 @@ name: Build Android (Release)
 
 on:
   release:
-    types: [published]
+    types: [published, edited]
 
 jobs:
   build_release:
