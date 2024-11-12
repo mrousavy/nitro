@@ -56,7 +56,7 @@ We build fast and beautiful apps. Contact us at [margelo.com](https://margelo.co
 
 ## Contributing
 
-See the [contributing guide](CONTRIBUTING.md) to learn how to contribute to the repository and the development workflow.
+See the [contributing guide](https://nitro.margelo.com/docs/contributing) to learn how to contribute to the repository and the development workflow.
 
 ## License
 
