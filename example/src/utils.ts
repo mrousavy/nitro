@@ -37,6 +37,7 @@ export function stringify(value: unknown): string {
         }
       } catch {
         // toString() threw - maybe because we accessed it on a prototype.
+        console.warn(`Failed to stringify [${typeof value}]!`)
       }
       return `{ [Object] ${Object.keys(value).join(', ')} }`
     default:
