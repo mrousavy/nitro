@@ -57,11 +57,9 @@ public:
   jni::local_ref<T> create() const {
     // Calls the class's default constructor
     auto instance = _javaClass->newObject(_defaultConstructor);
-#ifdef NITRO_DEBUG
     if (instance == nullptr) [[unlikely]] {
       throw std::runtime_error("Failed to create an instance of \"JHybridTestObjectSwiftKotlinSpec\" - the constructor returned null!");
     }
-#endif
     return instance;
   }
 

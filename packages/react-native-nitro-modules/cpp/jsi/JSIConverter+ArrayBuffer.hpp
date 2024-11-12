@@ -31,22 +31,18 @@ using namespace facebook;
 template <typename T>
 struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_v<T, jsi::MutableBuffer>>> final {
   static inline std::shared_ptr<ArrayBuffer> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
-#ifdef NITRO_DEBUG
     if (!arg.isObject()) [[unlikely]] {
       throw std::invalid_argument("Value \"" + arg.toString(runtime).utf8(runtime) +
                                   "\" is not an ArrayBuffer - "
                                   "in fact, it's not even an object!");
     }
-#endif
 
     jsi::Object object = arg.asObject(runtime);
-#ifdef NITRO_DEBUG
     if (!object.isArrayBuffer(runtime)) [[unlikely]] {
       throw std::invalid_argument("Object \"" + arg.toString(runtime).utf8(runtime) +
                                   "\" is not an ArrayBuffer! "
                                   "Are you maybe passing a TypedArray (e.g. Uint8Array)? Try to pass it's `.buffer` value.");
     }
-#endif
 
     JSICacheReference cache = JSICache::getOrCreateCache(runtime);
     auto borrowingArrayBuffer = cache.makeShared(object.getArrayBuffer(runtime));
