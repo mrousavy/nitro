@@ -656,8 +656,7 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
                 return `
 [&]() {
   size_t __size = ${parameterName}->size();
-  std::vector<${itemType}> __vector;
-  __vector.reserve(__size);
+  std::vector<${itemType}> __vector(__size);
   ${parameterName}->getRegion(0, __size, __vector.data());
   return __vector;
 }()

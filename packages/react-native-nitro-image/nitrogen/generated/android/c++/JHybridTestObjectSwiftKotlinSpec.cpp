@@ -250,8 +250,7 @@ namespace margelo::nitro::image {
     }());
     return [&]() {
       size_t __size = __result->size();
-      std::vector<double> __vector;
-      __vector.reserve(__size);
+      std::vector<double> __vector(__size);
       __result->getRegion(0, __size, __vector.data());
       return __vector;
     }();
