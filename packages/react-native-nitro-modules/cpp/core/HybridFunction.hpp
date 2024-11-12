@@ -186,7 +186,6 @@ private:
     jsi::Object object = value.getObject(runtime);
 
     // 2. Check if it even has any kind of `NativeState`
-#ifdef NITRO_DEBUG
     if (!object.hasNativeState(runtime)) [[unlikely]] {
       throw jsi::JSError(runtime, "Cannot " + getHybridFuncDebugInfo<THybrid>(funcKind, funcName) +
                                       " - `this` does not have a NativeState! Suggestions:\n"
@@ -197,7 +196,6 @@ private:
                                       "- Did you accidentally call `" +
                                       funcName + "` on the prototype directly?");
     }
-#endif
 
     // 3. Get `NativeState` from the jsi::Object and check if it is non-null
     std::shared_ptr<jsi::NativeState> nativeState = object.getNativeState(runtime);
