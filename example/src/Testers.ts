@@ -68,7 +68,10 @@ export class State<T> {
   toContain(key: keyof T): State<T> {
     if (
       this.result != null &&
-      (this.result[key] != null ||
+      (Object.hasOwn(this.result, key) ||
+        this.result[key] != null ||
+        // @ts-expect-error maybe a TypeScript bug? It's an object, so it's safe
+        (typeof key === 'object' && key in this.result) ||
         Object.keys(this.result).includes(key as string))
     ) {
       this.onPassed()

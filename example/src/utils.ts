@@ -1,3 +1,5 @@
+import { NitroModules } from 'react-native-nitro-modules'
+
 export function stringify(value: unknown): string {
   if (value == null) {
     return 'null'
@@ -19,14 +21,24 @@ export function stringify(value: unknown): string {
       }
       try {
         if ('toString' in value) {
-          const string = value.toString()
-          if (string !== '[object Object]') return string
+          if (Object.hasOwn(value, 'toString')) {
+            // It is some kind of Object that has a toString() method directly.
+            const string = value.toString()
+            if (string !== '[object Object]') return string
+          } else {
+            // It is some kind of Object that has a toString() method somewhere in the prototype chain..
+            // It is _likely_ that this method requires NativeState
+            if (NitroModules.hasNativeState(value)) {
+              // If we have NativeState, toString() will likely work.
+              const string = value.toString()
+              if (string !== '[object Object]') return string
+            }
+          }
         }
-        return `{ ${value} ${Object.keys(value).join(', ')} }`
       } catch {
         // toString() threw - maybe because we accessed it on a prototype.
-        return `{ [Object] ${Object.keys(value).join(', ')} }`
       }
+      return `{ [Object] ${Object.keys(value).join(', ')} }`
     default:
       return `${value}`
   }

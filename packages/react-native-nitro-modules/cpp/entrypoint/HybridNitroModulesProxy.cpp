@@ -21,6 +21,8 @@ void HybridNitroModulesProxy::loadHybridMethods() {
 
     prototype.registerHybridMethod("box", &HybridNitroModulesProxy::box);
 
+    prototype.registerRawHybridMethod("hasNativeState", 1, &HybridNitroModulesProxy::hasNativeState);
+
     prototype.registerHybridGetter("buildType", &HybridNitroModulesProxy::getBuildType);
   });
 }
@@ -41,6 +43,13 @@ std::vector<std::string> HybridNitroModulesProxy::getAllHybridObjectNames() {
 // Helpers
 std::shared_ptr<BoxedHybridObject> HybridNitroModulesProxy::box(const std::shared_ptr<HybridObject>& hybridObject) {
   return std::make_shared<BoxedHybridObject>(hybridObject);
+}
+
+jsi::Value HybridNitroModulesProxy::hasNativeState(jsi::Runtime& runtime, const jsi::Value&, const jsi::Value* args, size_t size) {
+  if (size != 1 || !args[0].isObject()) {
+    return false;
+  }
+  return args[0].getObject(runtime).hasNativeState(runtime);
 }
 
 // Build Info
