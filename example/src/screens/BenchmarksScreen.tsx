@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 /* eslint-disable no-lone-blocks */
 import * as React from 'react'
 
@@ -130,7 +131,7 @@ export function BenchmarksScreen() {
       </View>
 
       <View style={styles.resultContainer}>
-        {results != null && (
+        {results != null ? (
           <View style={styles.chartsContainer}>
             <View style={styles.turboResults}>
               <Text style={styles.title}>Turbo Modules</Text>
@@ -187,6 +188,11 @@ export function BenchmarksScreen() {
               </Text>
             </View>
           </View>
+        ) : (
+          <Text numberOfLines={5} style={styles.text}>
+            Press <Text style={styles.bold}>Run</Text> to call{' '}
+            <Text style={styles.bold}>addNumbers(...)</Text> {ITERATIONS} times.
+          </Text>
         )}
       </View>
 
