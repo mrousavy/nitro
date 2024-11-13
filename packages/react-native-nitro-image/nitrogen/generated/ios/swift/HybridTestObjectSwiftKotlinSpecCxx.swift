@@ -735,6 +735,23 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
   }
   
   @inline(__always)
+  public func createArrayBufferAsync() -> bridge.PromiseHolder_std__shared_ptr_ArrayBuffer__ {
+    do {
+      let __result = try self.__implementation.createArrayBufferAsync()
+      return { () -> bridge.PromiseHolder_std__shared_ptr_ArrayBuffer__ in
+        let __promiseHolder = bridge.create_PromiseHolder_std__shared_ptr_ArrayBuffer__()
+        __result
+          .then({ __result in __promiseHolder.resolve(__result.getArrayBuffer()) })
+          .catch({ __error in __promiseHolder.reject(std.string(String(describing: __error))) })
+        return __promiseHolder
+      }()
+    } catch {
+      let __message = "\(error.localizedDescription)"
+      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(__message))")
+    }
+  }
+  
+  @inline(__always)
   public func createChild() -> bridge.std__shared_ptr_margelo__nitro__image__HybridChildSpec_ {
     do {
       let __result = try self.__implementation.createChild()

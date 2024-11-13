@@ -251,6 +251,10 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
+  abstract fun createArrayBufferAsync(): Promise<ArrayBuffer>
+  
+  @DoNotStrip
+  @Keep
   abstract fun createChild(): HybridChildSpec
   
   @DoNotStrip

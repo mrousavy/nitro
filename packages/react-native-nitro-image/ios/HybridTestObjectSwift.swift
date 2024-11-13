@@ -184,6 +184,10 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
     return .allocate(size: 1024 * 1024 * 10) // 10 MB
   }
 
+  func createArrayBufferAsync() throws -> Promise<ArrayBufferHolder> {
+    return Promise.async { try self.createArrayBuffer() }
+  }
+
   func getBufferLastItem(buffer: ArrayBufferHolder) throws -> Double {
     let lastBytePointer = buffer.data.advanced(by: buffer.size - 1)
     let lastByte = lastBytePointer.load(as: UInt8.self)

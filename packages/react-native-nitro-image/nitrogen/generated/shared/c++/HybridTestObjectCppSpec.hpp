@@ -142,6 +142,7 @@ namespace margelo::nitro::image {
       virtual std::shared_ptr<ArrayBuffer> createArrayBuffer() = 0;
       virtual double getBufferLastItem(const std::shared_ptr<ArrayBuffer>& buffer) = 0;
       virtual void setAllValuesTo(const std::shared_ptr<ArrayBuffer>& buffer, double value) = 0;
+      virtual std::future<std::shared_ptr<ArrayBuffer>> createArrayBufferAsync() = 0;
       virtual std::shared_ptr<margelo::nitro::image::HybridChildSpec> createChild() = 0;
       virtual std::shared_ptr<margelo::nitro::image::HybridBaseSpec> createBase() = 0;
       virtual std::shared_ptr<margelo::nitro::image::HybridBaseSpec> createBaseActualChild() = 0;

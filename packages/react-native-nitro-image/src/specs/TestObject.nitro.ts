@@ -104,6 +104,7 @@ interface SharedTestObjectProps {
   createArrayBuffer(): ArrayBuffer
   getBufferLastItem(buffer: ArrayBuffer): number
   setAllValuesTo(buffer: ArrayBuffer, value: number): void
+  createArrayBufferAsync(): Promise<ArrayBuffer>
 
   // Inheritance
   createChild(): Child

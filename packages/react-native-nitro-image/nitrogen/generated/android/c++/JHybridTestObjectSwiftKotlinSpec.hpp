@@ -101,6 +101,7 @@ namespace margelo::nitro::image {
     std::shared_ptr<ArrayBuffer> createArrayBuffer() override;
     double getBufferLastItem(const std::shared_ptr<ArrayBuffer>& buffer) override;
     void setAllValuesTo(const std::shared_ptr<ArrayBuffer>& buffer, double value) override;
+    std::future<std::shared_ptr<ArrayBuffer>> createArrayBufferAsync() override;
     std::shared_ptr<margelo::nitro::image::HybridChildSpec> createChild() override;
     std::shared_ptr<margelo::nitro::image::HybridBaseSpec> createBase() override;
     std::shared_ptr<margelo::nitro::image::HybridBaseSpec> createBaseActualChild() override;

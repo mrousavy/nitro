@@ -158,6 +158,10 @@ class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
         return ArrayBuffer.allocate(1024 * 1024 * 10) // 10 MB
     }
 
+    override fun createArrayBufferAsync(): Promise<ArrayBuffer> {
+        return Promise.async { createArrayBuffer() }
+    }
+
     override fun getBufferLastItem(buffer: ArrayBuffer): Double {
         val byteBuffer = buffer.getBuffer(false)
         val lastItem = byteBuffer[buffer.size - 1]

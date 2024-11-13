@@ -274,6 +274,10 @@ namespace margelo::nitro::image {
     inline void setAllValuesTo(const std::shared_ptr<ArrayBuffer>& buffer, double value) override {
       _swiftPart.setAllValuesTo(ArrayBufferHolder(buffer), std::forward<decltype(value)>(value));
     }
+    inline std::future<std::shared_ptr<ArrayBuffer>> createArrayBufferAsync() override {
+      auto __result = _swiftPart.createArrayBufferAsync();
+      return __result.getFuture();
+    }
     inline std::shared_ptr<margelo::nitro::image::HybridChildSpec> createChild() override {
       auto __result = _swiftPart.createChild();
       return __result;

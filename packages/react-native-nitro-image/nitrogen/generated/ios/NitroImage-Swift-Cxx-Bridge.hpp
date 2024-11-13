@@ -8,6 +8,10 @@
 #pragma once
 
 // Forward declarations of C++ defined types
+// Forward declaration of `ArrayBufferHolder` to properly resolve imports.
+namespace NitroModules { class ArrayBufferHolder; }
+// Forward declaration of `ArrayBuffer` to properly resolve imports.
+namespace NitroModules { class ArrayBuffer; }
 // Forward declaration of `HybridBaseSpec` to properly resolve imports.
 namespace margelo::nitro::image { class HybridBaseSpec; }
 // Forward declaration of `HybridChildSpec` to properly resolve imports.
@@ -43,6 +47,8 @@ namespace NitroImage { class HybridTestObjectSwiftKotlinSpecCxx; }
 #include "HybridTestObjectSwiftKotlinSpec.hpp"
 #include "Person.hpp"
 #include "Powertrain.hpp"
+#include <NitroModules/ArrayBuffer.hpp>
+#include <NitroModules/ArrayBufferHolder.hpp>
 #include <NitroModules/PromiseHolder.hpp>
 #include <functional>
 #include <future>
@@ -346,6 +352,15 @@ namespace margelo::nitro::image::bridge::swift {
   using std__optional_Person_ = std::optional<Person>;
   inline std::optional<Person> create_std__optional_Person_(const Person& value) {
     return std::optional<Person>(value);
+  }
+  
+  // pragma MARK: PromiseHolder<std::shared_ptr<ArrayBuffer>>
+  /**
+   * Specialized version of `PromiseHolder<std::shared_ptr<ArrayBuffer>>`.
+   */
+  using PromiseHolder_std__shared_ptr_ArrayBuffer__ = PromiseHolder<std::shared_ptr<ArrayBuffer>>;
+  inline PromiseHolder<std::shared_ptr<ArrayBuffer>> create_PromiseHolder_std__shared_ptr_ArrayBuffer__() {
+    return PromiseHolder<std::shared_ptr<ArrayBuffer>>();
   }
   
   // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridChildSpec>
