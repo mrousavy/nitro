@@ -418,6 +418,22 @@ namespace margelo::nitro::image {
     static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<JArrayBuffer::javaobject> /* buffer */, double /* value */)>("setAllValuesTo");
     method(_javaPart, JArrayBuffer::wrap(buffer), value);
   }
+  std::future<std::shared_ptr<ArrayBuffer>> JHybridTestObjectSwiftKotlinSpec::createArrayBufferAsync() {
+    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JPromise::javaobject>()>("createArrayBufferAsync");
+    auto __result = method(_javaPart);
+    return [&]() {
+      auto __promise = std::make_shared<std::promise<std::shared_ptr<ArrayBuffer>>>();
+      __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
+        auto __result = jni::static_ref_cast<JArrayBuffer::javaobject>(__boxedResult);
+        __promise->set_value(__result->cthis()->getArrayBuffer());
+      });
+      __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JString>& __message) {
+        std::runtime_error __error(__message->toStdString());
+        __promise->set_exception(std::make_exception_ptr(__error));
+      });
+      return __promise->get_future();
+    }();
+  }
   std::shared_ptr<margelo::nitro::image::HybridChildSpec> JHybridTestObjectSwiftKotlinSpec::createChild() {
     static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JHybridChildSpec::javaobject>()>("createChild");
     auto __result = method(_javaPart);

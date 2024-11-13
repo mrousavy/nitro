@@ -71,6 +71,7 @@ public protocol HybridTestObjectSwiftKotlinSpec: AnyObject, HybridObjectSpec {
   func createArrayBuffer() throws -> ArrayBufferHolder
   func getBufferLastItem(buffer: ArrayBufferHolder) throws -> Double
   func setAllValuesTo(buffer: ArrayBufferHolder, value: Double) throws -> Void
+  func createArrayBufferAsync() throws -> Promise<ArrayBufferHolder>
   func createChild() throws -> (any HybridChildSpec)
   func createBase() throws -> (any HybridBaseSpec)
   func createBaseActualChild() throws -> (any HybridBaseSpec)
