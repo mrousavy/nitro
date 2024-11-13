@@ -79,7 +79,7 @@ async function runBenchmarks(): Promise<BenchmarksResult> {
   )
   return {
     nitroExecutionTimeMs: nitroEnd - nitroStart,
-    turboExecutionTimeMs: (turboEnd - turboStart) * 10,
+    turboExecutionTimeMs: turboEnd - turboStart,
     numberOfIterations: ITERATIONS,
     turboResult: turboResult,
     nitroResult: nitroResult,

@@ -12,7 +12,7 @@
 RCT_EXPORT_MODULE()
 
 - (NSNumber*)addNumbers:(double)a b:(double)b {
-  NSNumber *result = [[NSNumber alloc] initWithInteger:a+b];
+  NSNumber* result = [[NSNumber alloc] initWithDouble:a + b];
   return result;
 }
 
