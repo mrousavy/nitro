@@ -15,10 +15,11 @@ import {
   HybridBase,
 } from 'react-native-nitro-image'
 import { getTests, type TestRunner } from '../getTests'
-import { SafeAreaView } from 'react-native-safe-area-context'
 import { logPrototypeChain } from '../logPrototypeChain'
 import SegmentedControl from '@react-native-segmented-control/segmented-control'
 import { NitroModules } from 'react-native-nitro-modules'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { useColors } from '../useColors'
 
 logPrototypeChain(HybridChild)
 console.log(HybridBase.baseValue)
@@ -36,11 +37,22 @@ interface TestState {
 interface TestCaseProps {
   test: TestState
   onRunPressed: () => void
+  isOdd: boolean
 }
 
-function TestCase({ test, onRunPressed }: TestCaseProps): React.ReactElement {
+function TestCase({
+  test,
+  onRunPressed,
+  isOdd,
+}: TestCaseProps): React.ReactElement {
+  const colors = useColors()
   return (
-    <View style={styles.testCase}>
+    <View
+      style={[
+        styles.testCase,
+        { backgroundColor: isOdd ? colors.oddBackground : colors.background },
+      ]}
+    >
       <View style={styles.testBox}>
         <Text style={styles.testName}>{test.runner.name}</Text>
         <View style={styles.smallVSpacer} />
@@ -55,6 +67,8 @@ function TestCase({ test, onRunPressed }: TestCaseProps): React.ReactElement {
 }
 
 export function HybridObjectTestsScreen() {
+  const safeArea = useSafeAreaInsets()
+  const colors = useColors()
   const [selectedIndex, setSelectedIndex] = React.useState(0)
   const selectedObject = [HybridTestObjectCpp, HybridTestObjectSwiftKotlin][
     selectedIndex
@@ -141,7 +155,7 @@ export function HybridObjectTestsScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={[styles.container, { paddingTop: safeArea.top }]}>
       <Text style={styles.header}>HybridObject Tests</Text>
       <View style={styles.topControls}>
         <SegmentedControl
@@ -162,16 +176,17 @@ export function HybridObjectTestsScreen() {
             key={`test-${i}`}
             test={t}
             onRunPressed={() => runTest(t)}
+            isOdd={i % 2 === 0}
           />
         ))}
       </ScrollView>
 
-      <View style={styles.bottomView}>
+      <View style={[styles.bottomView, { backgroundColor: colors.background }]}>
         <Text>{status}</Text>
-        <View style={styles.smallVSpacer} />
+        <View style={styles.flex} />
         <Button title="Run all tests" onPress={runAllTests} />
       </View>
-    </SafeAreaView>
+    </View>
   )
 }
 
@@ -184,11 +199,8 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    paddingVertical: 10,
   },
-  scrollContent: {
-    paddingHorizontal: 15,
-  },
+  scrollContent: {},
   topControls: {
     marginHorizontal: 15,
     marginBottom: 10,
@@ -213,6 +225,7 @@ const styles = StyleSheet.create({
   },
   testCase: {
     width: '100%',
+    paddingHorizontal: 15,
     borderBottomWidth: StyleSheet.hairlineWidth,
     paddingVertical: 10,
     flexDirection: 'row',
@@ -235,8 +248,24 @@ const styles = StyleSheet.create({
   },
   flex: { flex: 1 },
   bottomView: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
+    borderTopRightRadius: 15,
+    borderTopLeftRadius: 15,
+    elevation: 15,
+    shadowColor: 'black',
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
+    shadowRadius: 7,
+    shadowOpacity: 0.4,
+
     paddingHorizontal: 15,
-    paddingTop: 15,
+    paddingVertical: 9,
     alignItems: 'center',
+    flexDirection: 'row',
   },
 })

@@ -15,6 +15,7 @@
 		7699B88040F8A987B510C191 /* libPods-NitroExample-NitroExampleTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-NitroExample-NitroExampleTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		B5425A16F500085048F53261 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = A98DCE138B16911E2CF8DB85 /* PrivacyInfo.xcprivacy */; };
+		B88F64252CE4CF530079E862 /* MGLExampleTurboModule.mm in Sources */ = {isa = PBXBuildFile; fileRef = B88F64242CE4CF4F0079E862 /* MGLExampleTurboModule.mm */; };
 		B8D0C54B2C2357CE0037DD32 /* DummyFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8D0C54A2C2357CE0037DD32 /* DummyFile.swift */; };
 /* End PBXBuildFile section */
 
@@ -47,6 +48,8 @@
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = NitroExample/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-NitroExample-NitroExampleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NitroExample-NitroExampleTests.release.xcconfig"; path = "Target Support Files/Pods-NitroExample-NitroExampleTests/Pods-NitroExample-NitroExampleTests.release.xcconfig"; sourceTree = "<group>"; };
 		A98DCE138B16911E2CF8DB85 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = NitroExample/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		B88F64232CE4CF480079E862 /* MGLExampleTurboModule.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MGLExampleTurboModule.h; sourceTree = "<group>"; };
+		B88F64242CE4CF4F0079E862 /* MGLExampleTurboModule.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MGLExampleTurboModule.mm; sourceTree = "<group>"; };
 		B8D0C5492C2357CE0037DD32 /* NitroExample-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NitroExample-Bridging-Header.h"; sourceTree = "<group>"; };
 		B8D0C54A2C2357CE0037DD32 /* DummyFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DummyFile.swift; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
@@ -92,6 +95,7 @@
 		13B07FAE1A68108700A75B9A /* NitroExample */ = {
 			isa = PBXGroup;
 			children = (
+				B88F64222CE4CF3F0079E862 /* Example Turbo Module */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
@@ -145,6 +149,15 @@
 				00E356EE1AD99517003FC87E /* NitroExampleTests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		B88F64222CE4CF3F0079E862 /* Example Turbo Module */ = {
+			isa = PBXGroup;
+			children = (
+				B88F64242CE4CF4F0079E862 /* MGLExampleTurboModule.mm */,
+				B88F64232CE4CF480079E862 /* MGLExampleTurboModule.h */,
+			);
+			path = "Example Turbo Module";
 			sourceTree = "<group>";
 		};
 		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
@@ -406,6 +419,7 @@
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
 				B8D0C54B2C2357CE0037DD32 /* DummyFile.swift in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				B88F64252CE4CF530079E862 /* MGLExampleTurboModule.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
