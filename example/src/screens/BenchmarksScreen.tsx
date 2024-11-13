@@ -1,3 +1,4 @@
+/* eslint-disable no-lone-blocks */
 import * as React from 'react'
 
 import {
@@ -14,6 +15,7 @@ import { NitroModules } from 'react-native-nitro-modules'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useColors } from '../useColors'
 import { HybridTestObjectCpp } from 'react-native-nitro-image'
+import { ExampleTurboModule } from '../turbo-module/ExampleTurboModule'
 
 declare global {
   var performance: {
@@ -47,21 +49,30 @@ async function waitForGc(): Promise<void> {
 const ITERATIONS = 100_000
 async function runBenchmarks(): Promise<BenchmarksResult> {
   console.log(`Running benchmarks ${ITERATIONS}x...`)
+
   await waitForGc()
-
-  let nitroResult = 0
-  const nitroStart = performance.now()
-  for (let i = 0; i < ITERATIONS; i++) {
-    nitroResult = HybridTestObjectCpp.addNumbers(3, 5)
+  let nitroResult = 0,
+    nitroStart = 0,
+    nitroEnd = 0
+  {
+    nitroStart = performance.now()
+    for (let i = 0; i < ITERATIONS; i++) {
+      nitroResult = HybridTestObjectCpp.addNumbers(3, 5)
+    }
+    nitroEnd = performance.now()
   }
-  const nitroEnd = performance.now()
 
-  let turboResult = 0
-  const turboStart = performance.now()
-  for (let i = 0; i < ITERATIONS; i++) {
-    turboResult = HybridTestObjectCpp.addNumbers(3, 5)
+  await waitForGc()
+  let turboResult = 0,
+    turboStart = 0,
+    turboEnd = 0
+  {
+    turboStart = performance.now()
+    for (let i = 0; i < ITERATIONS; i++) {
+      turboResult = ExampleTurboModule.addNumbers(3, 5)
+    }
+    turboEnd = performance.now()
   }
-  const turboEnd = performance.now()
 
   console.log(
     `Benchmarks finished! Nitro: ${(nitroEnd - nitroStart).toFixed(2)}ms | Turbo: ${(turboEnd - turboStart).toFixed(2)}ms`
