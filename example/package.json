@@ -51,7 +51,7 @@
     "type": "modules",
     "jsSrcsDir": "src",
     "android": {
-      "javaPackageName": "com.nitro.example"
+      "javaPackageName": "com.nitroexample.exampleturbomodule"
     }
   }
 }
