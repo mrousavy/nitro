@@ -68,6 +68,7 @@ function TestCase({
 
 export function HybridObjectTestsScreen() {
   const safeArea = useSafeAreaInsets()
+  const colors = useColors()
   const [selectedIndex, setSelectedIndex] = React.useState(0)
   const selectedObject = [HybridTestObjectCpp, HybridTestObjectSwiftKotlin][
     selectedIndex
@@ -180,9 +181,9 @@ export function HybridObjectTestsScreen() {
         ))}
       </ScrollView>
 
-      <View style={styles.bottomView}>
+      <View style={[styles.bottomView, { backgroundColor: colors.background }]}>
         <Text>{status}</Text>
-        <View style={styles.smallVSpacer} />
+        <View style={styles.flex} />
         <Button title="Run all tests" onPress={runAllTests} />
       </View>
     </View>
@@ -247,8 +248,24 @@ const styles = StyleSheet.create({
   },
   flex: { flex: 1 },
   bottomView: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
+    borderTopRightRadius: 15,
+    borderTopLeftRadius: 15,
+    elevation: 3,
+    shadowColor: 'black',
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
+    shadowRadius: 7,
+    shadowOpacity: 0.4,
+
     paddingHorizontal: 15,
-    paddingTop: 15,
+    paddingVertical: 9,
     alignItems: 'center',
+    flexDirection: 'row',
   },
 })
