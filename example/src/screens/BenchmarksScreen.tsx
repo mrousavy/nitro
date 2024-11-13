@@ -96,6 +96,12 @@ export function BenchmarksScreen() {
   const nitroWidth = React.useRef(new Animated.Value(0)).current
   const turboWidth = React.useRef(new Animated.Value(0)).current
 
+  const factor = React.useMemo(() => {
+    if (results == null) return 0
+    const f = results.turboExecutionTimeMs / results.nitroExecutionTimeMs
+    return Math.round(f * 10) / 10
+  }, [results])
+
   const run = async () => {
     nitroWidth.setValue(0)
     turboWidth.setValue(0)
@@ -181,16 +187,8 @@ export function BenchmarksScreen() {
                 <Text style={styles.bold}>
                   {results.nitroExecutionTimeMs.toFixed(2)}ms
                 </Text>
-                {'      '}(
-                <Text style={styles.bold}>
-                  {Math.round(
-                    (results.turboExecutionTimeMs /
-                      results.nitroExecutionTimeMs) *
-                      10
-                  ) / 10}
-                  x
-                </Text>{' '}
-                faster!)
+                {'      '}(<Text style={styles.bold}>{factor}x</Text>{' '}
+                {factor > 1 ? 'faster' : 'slower'}!)
               </Text>
             </View>
           </View>
