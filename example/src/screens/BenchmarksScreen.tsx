@@ -133,6 +133,12 @@ export function BenchmarksScreen() {
       <View style={styles.resultContainer}>
         {results != null ? (
           <View style={styles.chartsContainer}>
+            <Text style={styles.text}>
+              Calling <Text style={styles.bold}>addNumbers(...)</Text>{' '}
+              <Text style={styles.bold}>{ITERATIONS}</Text>x:
+            </Text>
+            <View style={styles.largeVSpacer} />
+
             <View style={styles.turboResults}>
               <Text style={styles.title}>Turbo Modules</Text>
               <View style={styles.smallVSpacer} />
@@ -298,7 +304,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     borderTopRightRadius: 15,
     borderTopLeftRadius: 15,
-    elevation: 3,
+    elevation: 15,
     shadowColor: 'black',
     shadowOffset: {
       width: 0,
