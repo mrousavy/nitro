@@ -1,13 +1,114 @@
 import * as React from 'react'
 
-import { StyleSheet, View, Text, Button, Platform } from 'react-native'
+import {
+  StyleSheet,
+  View,
+  Text,
+  Button,
+  Platform,
+  InteractionManager,
+  Animated,
+  useWindowDimensions,
+} from 'react-native'
 import { NitroModules } from 'react-native-nitro-modules'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useColors } from '../useColors'
+import { HybridTestObjectCpp } from 'react-native-nitro-image'
+
+declare global {
+  var performance: {
+    now: () => number
+  }
+}
+
+interface BenchmarksResult {
+  numberOfIterations: number
+  nitroExecutionTimeMs: number
+  turboExecutionTimeMs: number
+  nitroResult: number
+  turboResult: number
+}
+
+function delay(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms))
+}
+
+async function waitForGc(): Promise<void> {
+  await delay(500)
+  return new Promise((resolve) => {
+    requestAnimationFrame(() => {
+      InteractionManager.runAfterInteractions(() => {
+        resolve()
+      })
+    })
+  })
+}
+
+const ITERATIONS = 100_000
+async function runBenchmarks(): Promise<BenchmarksResult> {
+  console.log(`Running benchmarks ${ITERATIONS}x...`)
+  await waitForGc()
+
+  let nitroResult = 0
+  const nitroStart = performance.now()
+  for (let i = 0; i < ITERATIONS; i++) {
+    nitroResult = HybridTestObjectCpp.addNumbers(3, 5)
+  }
+  const nitroEnd = performance.now()
+
+  let turboResult = 0
+  const turboStart = performance.now()
+  for (let i = 0; i < ITERATIONS; i++) {
+    turboResult = HybridTestObjectCpp.addNumbers(3, 5)
+  }
+  const turboEnd = performance.now()
+
+  console.log(
+    `Benchmarks finished! Nitro: ${(nitroEnd - nitroStart).toFixed(2)}ms | Turbo: ${(turboEnd - turboStart).toFixed(2)}ms`
+  )
+  return {
+    nitroExecutionTimeMs: nitroEnd - nitroStart,
+    turboExecutionTimeMs: (turboEnd - turboStart) * 10,
+    numberOfIterations: ITERATIONS,
+    turboResult: turboResult,
+    nitroResult: nitroResult,
+  }
+}
 
 export function BenchmarksScreen() {
   const safeArea = useSafeAreaInsets()
   const colors = useColors()
+  const dimensions = useWindowDimensions()
+  const [status, setStatus] = React.useState('📱 Idle')
+  const [results, setResults] = React.useState<BenchmarksResult>()
+  const nitroWidth = React.useRef(new Animated.Value(0)).current
+  const turboWidth = React.useRef(new Animated.Value(0)).current
+
+  const run = async () => {
+    nitroWidth.setValue(0)
+    turboWidth.setValue(0)
+    setStatus(`⏳ Running Benchmarks`)
+    const r = await runBenchmarks()
+    setResults(r)
+
+    const maxWidth = dimensions.width * 0.7
+    const smallerScale =
+      Math.min(r.nitroExecutionTimeMs, r.turboExecutionTimeMs) /
+      Math.max(r.nitroExecutionTimeMs, r.turboExecutionTimeMs)
+    Animated.spring(nitroWidth, {
+      toValue: maxWidth,
+      friction: 10,
+      tension: 40,
+      useNativeDriver: false,
+    }).start()
+    Animated.spring(turboWidth, {
+      toValue: smallerScale * maxWidth,
+      friction: 10,
+      tension: 40,
+      useNativeDriver: false,
+    }).start()
+    setStatus(`📱 Idle`)
+  }
 
   return (
     <View style={[styles.container, { paddingTop: safeArea.top }]}>
@@ -17,12 +118,71 @@ export function BenchmarksScreen() {
         <Text style={styles.buildTypeText}>{NitroModules.buildType}</Text>
       </View>
 
-      <Text>Benchmarks</Text>
+      <View style={styles.resultContainer}>
+        {results != null && (
+          <View style={styles.chartsContainer}>
+            <View style={styles.turboResults}>
+              <Text style={styles.title}>Turbo Modules</Text>
+              <View style={styles.smallVSpacer} />
+              <Animated.View
+                style={[
+                  styles.chart,
+                  {
+                    backgroundColor: colors.card,
+                    opacity: 0.4,
+                    width: turboWidth,
+                  },
+                ]}
+              />
+              <View style={styles.smallVSpacer} />
+              <Text style={styles.text}>
+                Time:{' '}
+                <Text style={styles.bold}>
+                  {results.turboExecutionTimeMs.toFixed(2)}ms
+                </Text>
+              </Text>
+            </View>
+
+            <View style={styles.largeVSpacer} />
+
+            <View style={styles.nitroResults}>
+              <Text style={styles.title}>Nitro Modules</Text>
+              <View style={styles.smallVSpacer} />
+              <Animated.View
+                style={[
+                  styles.chart,
+                  {
+                    backgroundColor: colors.card,
+                    width: nitroWidth,
+                  },
+                ]}
+              />
+              <View style={styles.smallVSpacer} />
+              <Text style={styles.text}>
+                Time:{' '}
+                <Text style={styles.bold}>
+                  {results.nitroExecutionTimeMs.toFixed(2)}ms
+                </Text>
+                {'      '}(
+                <Text style={styles.bold}>
+                  {Math.round(
+                    (results.turboExecutionTimeMs /
+                      results.nitroExecutionTimeMs) *
+                      10
+                  ) / 10}
+                  x
+                </Text>{' '}
+                faster!)
+              </Text>
+            </View>
+          </View>
+        )}
+      </View>
 
       <View style={[styles.bottomView, { backgroundColor: colors.background }]}>
-        <Text>Run?</Text>
+        <Text>{status}</Text>
         <View style={styles.flex} />
-        <Button title="Run all tests" onPress={console.warn} />
+        <Button title="Run" onPress={run} />
       </View>
     </View>
   )
@@ -83,6 +243,35 @@ const styles = StyleSheet.create({
   },
   smallVSpacer: {
     height: 5,
+  },
+  largeVSpacer: {
+    height: 25,
+  },
+  resultContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingBottom: 45,
+  },
+  chartsContainer: {
+    alignItems: 'stretch',
+    width: '70%',
+  },
+  nitroResults: {},
+  turboResults: {},
+  title: {
+    fontWeight: 'bold',
+    fontSize: 25,
+  },
+  chart: {
+    height: 20,
+    borderRadius: 5,
+  },
+  text: {
+    fontSize: 16,
+  },
+  bold: {
+    fontWeight: 'bold',
   },
   flex: { flex: 1 },
   bottomView: {
