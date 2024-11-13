@@ -101,6 +101,11 @@ const config: Config = {
           label: 'Installation',
         },
         {
+          href: 'https://github.com/mrousavy/nitro/releases/latest',
+          label: 'Latest Release',
+          position: 'right',
+        },
+        {
           href: 'https://github.com/mrousavy/nitro',
           label: 'GitHub',
           position: 'right',
