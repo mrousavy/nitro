@@ -741,7 +741,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
       return { () -> bridge.PromiseHolder_std__shared_ptr_ArrayBuffer__ in
         let __promiseHolder = bridge.create_PromiseHolder_std__shared_ptr_ArrayBuffer__()
         __result
-          .then({ __result in __promiseHolder.resolve(__result.getArrayBuffer()) })
+          .then({ __result in __promiseHolder.resolve(__result) })
           .catch({ __error in __promiseHolder.reject(std.string(String(describing: __error))) })
         return __promiseHolder
       }()
