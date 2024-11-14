@@ -3,10 +3,6 @@ import type { Config } from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 
 const config: Config = {
-  future: {
-    experimental_faster: true,
-  },
-
   title: 'Nitro Modules',
   tagline:
     'A framework to build mindblowingly fast native modules with type-safe statically compiled JS bindings.',
@@ -33,6 +29,10 @@ const config: Config = {
     locales: ['en'],
   },
 
+  future: {
+    experimental_faster: true,
+  },
+
   presets: [
     [
       'classic',
@@ -45,6 +45,12 @@ const config: Config = {
           customCss: './src/css/custom.css',
         },
       } satisfies Preset.Options,
+    ],
+  ],
+  plugins: [
+    [
+      'vercel-analytics',
+      { },
     ],
   ],
 
@@ -99,6 +105,11 @@ const config: Config = {
           docId: 'for-users',
           position: 'right',
           label: 'Installation',
+        },
+        {
+          href: 'https://github.com/mrousavy/nitro/releases/latest',
+          label: 'Latest Release',
+          position: 'right',
         },
         {
           href: 'https://github.com/mrousavy/nitro',

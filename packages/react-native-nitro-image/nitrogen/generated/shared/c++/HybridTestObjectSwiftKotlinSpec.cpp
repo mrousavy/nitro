@@ -65,6 +65,7 @@ namespace margelo::nitro::image {
       prototype.registerHybridMethod("createArrayBuffer", &HybridTestObjectSwiftKotlinSpec::createArrayBuffer);
       prototype.registerHybridMethod("getBufferLastItem", &HybridTestObjectSwiftKotlinSpec::getBufferLastItem);
       prototype.registerHybridMethod("setAllValuesTo", &HybridTestObjectSwiftKotlinSpec::setAllValuesTo);
+      prototype.registerHybridMethod("createArrayBufferAsync", &HybridTestObjectSwiftKotlinSpec::createArrayBufferAsync);
       prototype.registerHybridMethod("createChild", &HybridTestObjectSwiftKotlinSpec::createChild);
       prototype.registerHybridMethod("createBase", &HybridTestObjectSwiftKotlinSpec::createBase);
       prototype.registerHybridMethod("createBaseActualChild", &HybridTestObjectSwiftKotlinSpec::createBaseActualChild);

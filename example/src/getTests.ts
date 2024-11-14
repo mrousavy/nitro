@@ -839,6 +839,11 @@ export function getTests(
         .didNotThrow()
         .equals(true)
     ),
+    createTest('createArrayBuffer()', async () =>
+      (await it(() => testObject.createArrayBufferAsync()))
+        .didNotThrow()
+        .didReturn('object')
+    ),
 
     // Base HybridObject inherited methods
     createTest('.toString()', () =>

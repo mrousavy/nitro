@@ -1,6 +1,6 @@
 {
   "name": "react-native-nitro-example",
-  "version": "0.16.1",
+  "version": "0.16.2",
   "private": true,
   "scripts": {
     "start": "react-native start",
@@ -18,10 +18,13 @@
   },
   "dependencies": {
     "@react-native-segmented-control/segmented-control": "^2.5.2",
+    "@react-navigation/bottom-tabs": "^7.0.1",
+    "@react-navigation/native": "^7.0.0",
     "deep-equal": "^2.2.3",
     "react": "*",
     "react-native": "^0.76.1",
-    "react-native-safe-area-context": "^4.14.0"
+    "react-native-safe-area-context": "^4.14.0",
+    "react-native-screens": "^4.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
@@ -42,5 +45,13 @@
   },
   "engines": {
     "node": ">=18"
+  },
+  "codegenConfig": {
+    "name": "ExampleTurboModule",
+    "type": "modules",
+    "jsSrcsDir": "src",
+    "android": {
+      "javaPackageName": "com.nitroexample.exampleturbomodule"
+    }
   }
 }

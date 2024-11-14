@@ -114,6 +114,7 @@ public:
   std::shared_ptr<ArrayBuffer> createArrayBuffer() override;
   double getBufferLastItem(const std::shared_ptr<ArrayBuffer>& buffer) override;
   void setAllValuesTo(const std::shared_ptr<ArrayBuffer>& buffer, double value) override;
+  std::future<std::shared_ptr<ArrayBuffer>> createArrayBufferAsync() override;
   std::shared_ptr<HybridTestObjectCppSpec> newTestObject() override;
 
   std::shared_ptr<HybridBaseSpec> createBase() override;

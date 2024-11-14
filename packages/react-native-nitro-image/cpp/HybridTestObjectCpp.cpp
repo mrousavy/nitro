@@ -335,6 +335,10 @@ void HybridTestObjectCpp::setAllValuesTo(const std::shared_ptr<ArrayBuffer>& buf
   }
 }
 
+std::future<std::shared_ptr<ArrayBuffer>> HybridTestObjectCpp::createArrayBufferAsync() {
+  return std::async(std::launch::async, [this]() -> std::shared_ptr<ArrayBuffer> { return this->createArrayBuffer(); });
+}
+
 std::shared_ptr<HybridTestObjectCppSpec> HybridTestObjectCpp::newTestObject() {
   return std::make_shared<HybridTestObjectCpp>();
 }
