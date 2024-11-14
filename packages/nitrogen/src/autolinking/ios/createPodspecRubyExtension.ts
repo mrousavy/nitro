@@ -62,7 +62,7 @@ def add_nitrogen_files(spec)
     # Enables stricter modular headers
     "DEFINES_MODULE" => "YES",
 		# Update Search Paths
-		"HEADER_SEARCH_PATHS" => '"\${PODS_CONFIGURATION_BUILD_DIR}/\${SWIFT_MODULE_NAME}/\${SWIFT_MODULE_NAME}.framework/Headers"',
+		"USER_HEADER_SEARCH_PATHS" => '"\${PODS_CONFIGURATION_BUILD_DIR}/\${SWIFT_MODULE_NAME}/\${SWIFT_MODULE_NAME}.framework/Headers"',
 		"GCC_PREPROCESSOR_DEFINITIONS" => "FOLLY_NO_CONFIG=1 FOLLY_CFG_NO_COROUTINES=1"
   })
 end
