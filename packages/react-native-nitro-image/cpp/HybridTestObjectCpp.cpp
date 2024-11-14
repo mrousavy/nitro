@@ -7,7 +7,7 @@
 
 #include "HybridTestObjectCpp.hpp"
 #include <NitroModules/AnyMap.hpp>
-#include <NitroModules/NitroLogger.hpp>
+
 #include <chrono>
 #include <thread>
 
