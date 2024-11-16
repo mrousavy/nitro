@@ -108,6 +108,7 @@ public:
   void callAll(const std::function<void()>& first, const std::function<void()>& second, const std::function<void()>& third) override;
   std::future<void> getValueFromJsCallback(const std::function<std::future<std::string>()>& callback,
                                            const std::function<void(const std::string& /* valueFromJs */)>& andThenCall) override;
+  std::future<void> promiseThrows() override;
   Car getCar() override;
   bool isCarElectric(const Car& car) override;
   std::optional<Person> getDriver(const Car& car) override;

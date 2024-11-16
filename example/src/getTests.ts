@@ -657,6 +657,9 @@ export function getTests(
         .didNotThrow()
         .equals(55n)
     ),
+    createTest('promiseThrows() throws', async () =>
+      (await it(() => testObject.promiseThrows())).didThrow()
+    ),
 
     // Callbacks
     createTest('callCallback(...)', async () =>
