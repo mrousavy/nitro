@@ -44,7 +44,7 @@ class Promise<T> {
    * Rejects the Promise with the given error.
    * Any `onRejected` listeners will be invoked.
    */
-  fun reject(error: Error) {
+  fun reject(error: Throwable) {
     nativeReject(error.toString())
   }
 
@@ -71,7 +71,7 @@ class Promise<T> {
         try {
           val result = run()
           promise.resolve(result)
-        } catch (e: Error) {
+        } catch (e: Throwable) {
           promise.reject(e)
         }
       }
@@ -91,7 +91,7 @@ class Promise<T> {
         try {
           val result = run()
           promise.resolve(result)
-        } catch (e: Error) {
+        } catch (e: Throwable) {
           promise.reject(e)
         }
       }
@@ -108,7 +108,7 @@ class Promise<T> {
     /**
      * Creates a new Promise that is already rejected with the given error.
      */
-    fun <T> rejected(error: Error): Promise<T> {
+    fun <T> rejected(error: Throwable): Promise<T> {
       return Promise<T>().apply { reject(error) }
     }
   }
