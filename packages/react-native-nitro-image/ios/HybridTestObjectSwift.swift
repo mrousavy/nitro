@@ -164,7 +164,7 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
 
   func promiseThrows() throws -> Promise<Void> {
     return Promise.async {
-      throw RuntimeError(withMessage: "Promise throws :)")
+      throw RuntimeError.error(withMessage: "Promise throws :)")
     }
   }
 
