@@ -17,6 +17,50 @@ Once the callback is no longer used, it will be safely deleted from memory.
     In TypeScript, a callback is represented as an anonymous function:
 
     ```ts
+    interface Server extends HybridObject {
+      start(onNewUserJoined: (user: User) => void): void
+    }
+    ```
+  </TabItem>
+  <TabItem value="cpp" label="C++">
+    In C++, a callback is represented as a function:
+
+    ```cpp
+    void start(std::function<void(User)> onNewUserJoined) {
+      onNewUserJoined(user);
+    }
+    ```
+  </TabItem>
+  <TabItem value="swift" label="Swift">
+    In Swift, a callback is represented as a closure:
+
+    ```swift
+    func start(onNewUserJoined: (User) -> Void) {
+      onNewUserJoined(user)
+    }
+    ```
+  </TabItem>
+  <TabItem value="kotlin" label="Kotlin">
+    In Kotlin, a callback is represented as a lambda:
+
+    ```kotlin
+    fun start(onNewUserJoined: (User) -> Unit) {
+      onNewUserJoined(user)
+    }
+    ```
+  </TabItem>
+</Tabs>
+
+## Events
+
+Since callbacks can be safely kept in memory for longer and called multiple times, Nitro does not have a special type for an "event".
+It is simply a function you store in memory and call later, just like in a normal JS class. ✨
+
+<Tabs>
+  <TabItem value="ts" label="TypeScript" default>
+    In TypeScript, a callback is represented as an anonymous function:
+
+    ```ts
     type Orientation = "portrait" | "landscape"
     interface DeviceInfo extends HybridObject {
       listenToOrientation(onChanged: (o: Orientation) => void): void
@@ -74,9 +118,6 @@ Once the callback is no longer used, it will be safely deleted from memory.
     ```
   </TabItem>
 </Tabs>
-
-Since callbacks can be safely kept in memory for longer and called multiple times, Nitro does not have a special type for an "event".
-It is simply a function you store in memory and call later. ✨
 
 ## Callbacks that return a value (`(...) => T`)
 

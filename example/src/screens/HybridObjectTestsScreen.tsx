@@ -40,6 +40,13 @@ interface TestCaseProps {
   isOdd: boolean
 }
 
+const PLATFORM_LANGUAGE =
+  Platform.select({
+    android: 'Kotlin',
+    ios: 'Swift',
+    macos: 'Swift',
+  }) ?? '???'
+
 function TestCase({
   test,
   onRunPressed,
@@ -160,7 +167,7 @@ export function HybridObjectTestsScreen() {
       <View style={styles.topControls}>
         <SegmentedControl
           style={styles.segmentedControl}
-          values={['C++', 'Swift/Kotlin']}
+          values={['C++', PLATFORM_LANGUAGE]}
           selectedIndex={selectedIndex}
           onChange={({ nativeEvent: { selectedSegmentIndex } }) => {
             setSelectedIndex(selectedSegmentIndex)
