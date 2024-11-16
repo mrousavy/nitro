@@ -128,6 +128,12 @@ class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
         return Promise.async { delay(seconds.toLong() * 1000) }
     }
 
+    override fun promiseThrows(): Promise<Unit> {
+        return Promise.async {
+            throw Error("Promise throws :)")
+        }
+    }
+
     override fun callCallback(callback: () -> Unit) {
         callback()
     }

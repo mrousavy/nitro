@@ -599,6 +599,23 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
   }
   
   @inline(__always)
+  public func promiseThrows() -> bridge.PromiseHolder_void_ {
+    do {
+      let __result = try self.__implementation.promiseThrows()
+      return { () -> bridge.PromiseHolder_void_ in
+        let __promiseHolder = bridge.create_PromiseHolder_void_()
+        __result
+          .then({ __result in __promiseHolder.resolve() })
+          .catch({ __error in __promiseHolder.reject(std.string(String(describing: __error))) })
+        return __promiseHolder
+      }()
+    } catch {
+      let __message = "\(error.localizedDescription)"
+      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(__message))")
+    }
+  }
+  
+  @inline(__always)
   public func callCallback(callback: bridge.Func_void) -> Void {
     do {
       try self.__implementation.callCallback(callback: { () -> (() -> Void) in

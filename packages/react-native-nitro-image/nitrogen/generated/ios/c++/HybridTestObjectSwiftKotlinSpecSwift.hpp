@@ -242,6 +242,10 @@ namespace margelo::nitro::image {
       auto __result = _swiftPart.wait(std::forward<decltype(seconds)>(seconds));
       return __result.getFuture();
     }
+    inline std::future<void> promiseThrows() override {
+      auto __result = _swiftPart.promiseThrows();
+      return __result.getFuture();
+    }
     inline void callCallback(const std::function<void()>& callback) override {
       _swiftPart.callCallback(callback);
     }

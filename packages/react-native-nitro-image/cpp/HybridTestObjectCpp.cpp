@@ -268,6 +268,12 @@ std::future<double> HybridTestObjectCpp::getValueFromJSCallbackAndWait(const std
   });
 }
 
+std::future<void> HybridTestObjectCpp::promiseThrows() {
+  return std::async(std::launch::async, [=]() {
+    throw std::runtime_error("Promise throws :)");
+  });
+}
+
 void HybridTestObjectCpp::callAll(const std::function<void()>& first, const std::function<void()>& second,
                                   const std::function<void()>& third) {
   first();
