@@ -58,8 +58,8 @@ namespace ${cxxNamespace} {
     [[maybe_unused]]
     ${enumType.enumName} toCpp() const {
       static const auto clazz = javaClassStatic();
-      static const auto fieldOrdinal = clazz->getField<int>("ordinal");
-      int ordinal = this->getFieldValue(fieldOrdinal);
+      static const auto ordinalMethod = clazz->getMethod<int()>("ordinal");
+      int ordinal = ordinalMethod(self());
       return static_cast<${enumType.enumName}>(ordinal);
     }
 
