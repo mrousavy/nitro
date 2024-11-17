@@ -11,7 +11,9 @@
     "src",
     "README.md"
   ],
-  "bin": "./lib/index.js",
+  "bin": {
+    "nitrogen": "./lib/index.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/mrousavy/nitro.git"

@@ -119,22 +119,22 @@ Now run nitrogen:
 <Tabs groupId="package-manager">
   <TabItem value="npm" label="npm" default>
     ```sh
-    npm run nitro-codegen
+    npx nitrogen
     ```
   </TabItem>
   <TabItem value="yarn" label="yarn">
     ```sh
-    yarn nitro-codegen
+    yarn nitrogen
     ```
   </TabItem>
   <TabItem value="pnpm" label="pnpm">
     ```sh
-    pnpm nitro-codegen
+    pnpm exec nitrogen
     ```
   </TabItem>
   <TabItem value="bun" label="bun">
     ```sh
-    bun nitro-codegen
+    bunx nitrogen
     ```
   </TabItem>
 </Tabs>
