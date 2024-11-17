@@ -5,7 +5,8 @@ package = JSON.parse(File.read(File.join(__dir__, "package.json")))
 # Use GCC_PREPROCESSOR_DEFINITIONS to build static linking
 $gcc_shared_flags = "$(inherited) FOLLY_NO_CONFIG FOLLY_CFG_NO_COROUTINES"
 gcc_flags = ''
-if ENV['USE_FRAMEWORKS']
+$use_frameworks = ENV['USE_FRAMEWORKS']
+if $use_frameworks
 	gcc_flags = $gcc_shared_flags
 end
 
@@ -37,5 +38,4 @@ Pod::Spec.new do |s|
   add_nitrogen_files(s)
 
   install_modules_dependencies(s)
-
 end

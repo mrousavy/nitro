@@ -8,15 +8,15 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* NitroExampleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* NitroExampleTests.m */; };
-		01757407FF049E0023D7955E /* Pods_NitroExample_NitroExampleTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BE5DF485D8CAB6C8773BE91 /* Pods_NitroExample_NitroExampleTests.framework */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		A18D4F22EF2C034477FE9FAA /* Pods_NitroExample_NitroExampleTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B4FFCC272759AA2EBE3320A /* Pods_NitroExample_NitroExampleTests.framework */; };
 		B5425A16F500085048F53261 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = A98DCE138B16911E2CF8DB85 /* PrivacyInfo.xcprivacy */; };
 		B88F64252CE4CF530079E862 /* MGLExampleTurboModule.mm in Sources */ = {isa = PBXBuildFile; fileRef = B88F64242CE4CF4F0079E862 /* MGLExampleTurboModule.mm */; };
 		B8D0C54B2C2357CE0037DD32 /* DummyFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8D0C54A2C2357CE0037DD32 /* DummyFile.swift */; };
-		F2544A8F0C122F8245AD5AD8 /* Pods_NitroExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C539D17BB778B4DCB7C51624 /* Pods_NitroExample.framework */; };
+		C6DC0FF819339E2560783CFE /* Pods_NitroExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 35B7EE466D435600DB8BBD7E /* Pods_NitroExample.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,18 +40,18 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = NitroExample/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = NitroExample/main.m; sourceTree = "<group>"; };
 		13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = PrivacyInfo.xcprivacy; path = NitroExample/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		35B7EE466D435600DB8BBD7E /* Pods_NitroExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NitroExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B4392A12AC88292D35C810B /* Pods-NitroExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NitroExample.debug.xcconfig"; path = "Target Support Files/Pods-NitroExample/Pods-NitroExample.debug.xcconfig"; sourceTree = "<group>"; };
 		5709B34CF0A7D63546082F79 /* Pods-NitroExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NitroExample.release.xcconfig"; path = "Target Support Files/Pods-NitroExample/Pods-NitroExample.release.xcconfig"; sourceTree = "<group>"; };
 		5B7EB9410499542E8C5724F5 /* Pods-NitroExample-NitroExampleTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NitroExample-NitroExampleTests.debug.xcconfig"; path = "Target Support Files/Pods-NitroExample-NitroExampleTests/Pods-NitroExample-NitroExampleTests.debug.xcconfig"; sourceTree = "<group>"; };
-		5BE5DF485D8CAB6C8773BE91 /* Pods_NitroExample_NitroExampleTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NitroExample_NitroExampleTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = NitroExample/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-NitroExample-NitroExampleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NitroExample-NitroExampleTests.release.xcconfig"; path = "Target Support Files/Pods-NitroExample-NitroExampleTests/Pods-NitroExample-NitroExampleTests.release.xcconfig"; sourceTree = "<group>"; };
+		9B4FFCC272759AA2EBE3320A /* Pods_NitroExample_NitroExampleTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NitroExample_NitroExampleTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A98DCE138B16911E2CF8DB85 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = NitroExample/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		B88F64232CE4CF480079E862 /* MGLExampleTurboModule.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MGLExampleTurboModule.h; sourceTree = "<group>"; };
 		B88F64242CE4CF4F0079E862 /* MGLExampleTurboModule.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MGLExampleTurboModule.mm; sourceTree = "<group>"; };
 		B8D0C5492C2357CE0037DD32 /* NitroExample-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NitroExample-Bridging-Header.h"; sourceTree = "<group>"; };
 		B8D0C54A2C2357CE0037DD32 /* DummyFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DummyFile.swift; sourceTree = "<group>"; };
-		C539D17BB778B4DCB7C51624 /* Pods_NitroExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NitroExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -60,7 +60,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				01757407FF049E0023D7955E /* Pods_NitroExample_NitroExampleTests.framework in Frameworks */,
+				A18D4F22EF2C034477FE9FAA /* Pods_NitroExample_NitroExampleTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -68,7 +68,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F2544A8F0C122F8245AD5AD8 /* Pods_NitroExample.framework in Frameworks */,
+				C6DC0FF819339E2560783CFE /* Pods_NitroExample.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -114,8 +114,8 @@
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				C539D17BB778B4DCB7C51624 /* Pods_NitroExample.framework */,
-				5BE5DF485D8CAB6C8773BE91 /* Pods_NitroExample_NitroExampleTests.framework */,
+				35B7EE466D435600DB8BBD7E /* Pods_NitroExample.framework */,
+				9B4FFCC272759AA2EBE3320A /* Pods_NitroExample_NitroExampleTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
