@@ -60,10 +60,7 @@ def add_nitrogen_files(spec)
     # Enables C++ <-> Swift interop (by default it's only C)
     "SWIFT_OBJC_INTEROP_MODE" => "objcxx",
     # Enables stricter modular headers
-    "DEFINES_MODULE" => "YES",
-		# Update Search Paths
-		"USER_HEADER_SEARCH_PATHS" => '"\${PODS_CONFIGURATION_BUILD_DIR}/\${SWIFT_MODULE_NAME}/\${SWIFT_MODULE_NAME}.framework/Headers"',
-		"GCC_PREPROCESSOR_DEFINITIONS" => "FOLLY_NO_CONFIG=1 FOLLY_CFG_NO_COROUTINES=1"
+    "DEFINES_MODULE" => "YES"
   })
 end
   `.trim()

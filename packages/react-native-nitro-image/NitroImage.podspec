@@ -2,6 +2,13 @@ require "json"
 
 package = JSON.parse(File.read(File.join(__dir__, "package.json")))
 
+# Use GCC_PREPROCESSOR_DEFINITIONS to build static linking
+$gcc_shared_flags = "$(inherited) FOLLY_NO_CONFIG FOLLY_CFG_NO_COROUTINES"
+gcc_flags = ''
+if ENV['USE_FRAMEWORKS']
+	gcc_flags = $gcc_shared_flags
+end
+
 Pod::Spec.new do |s|
   s.name         = "NitroImage"
   s.version      = package["version"]
@@ -22,8 +29,13 @@ Pod::Spec.new do |s|
     "cpp/**/*.{hpp,cpp}",
   ]
 
-  load 'nitrogen/generated/ios/NitroImage+autolinking.rb'
+	s.pod_target_xcconfig = {
+		"GCC_PREPROCESSOR_DEFINITIONS" => gcc_flags
+	}
+
+	load 'nitrogen/generated/ios/NitroImage+autolinking.rb'
   add_nitrogen_files(s)
 
   install_modules_dependencies(s)
+
 end

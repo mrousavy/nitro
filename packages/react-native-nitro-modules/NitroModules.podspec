@@ -4,16 +4,24 @@ package = JSON.parse(File.read(File.join(__dir__, "package.json")))
 
 Pod::UI.puts "[NitroModules] 🔥 Your app is boosted by nitro modules!"
 
-Pod::Spec.new do |s|
-  s.name         = "NitroModules"
-  s.version      = package["version"]
-  s.summary      = package["description"]
-  s.homepage     = package["homepage"]
-  s.license      = package["license"]
-  s.authors      = package["author"]
+#
+$gcc_shared_flags = "$(inherited) FOLLY_NO_CONFIG FOLLY_CFG_NO_COROUTINES"
+gcc_flags = ''
+if ENV['USE_FRAMEWORKS']
+	gcc_flags = $gcc_shared_flags
+end
 
-  s.platforms    = { :ios => min_ios_version_supported, :visionos => 1.0 }
-  s.source       = { :git => "https://github.com/mrousavy/nitro.git", :tag => "#{s.version}" }
+
+Pod::Spec.new do |s|
+  s.name         			= "NitroModules"
+  s.version      			= package["version"]
+  s.summary      			= package["description"]
+  s.homepage     			= package["homepage"]
+  s.license      			= package["license"]
+  s.authors      			= package["author"]
+
+  s.platforms    			= { :ios => min_ios_version_supported, :visionos => 1.0 }
+  s.source       			= { :git => "https://github.com/mrousavy/nitro.git", :tag => "#{s.version}" }
 
   # VisionCamera Core C++ bindings
   s.source_files = [
@@ -53,8 +61,7 @@ Pod::Spec.new do |s|
     "SWIFT_OBJC_INTEROP_MODE" => "objcxx",
     # Enables stricter modular headers
     "DEFINES_MODULE" => "YES",
-		# Enables static library,
-		"GCC_PREPROCESSOR_DEFINITIONS" => "$(inherited) FOLLY_NO_CONFIG FOLLY_CFG_NO_COROUTINES"
+		"GCC_PREPROCESSOR_DEFINITIONS" => gcc_flags
   }
 
   install_modules_dependencies(s)
