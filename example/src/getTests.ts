@@ -660,6 +660,26 @@ export function getTests(
     createTest('promiseThrows() throws', async () =>
       (await it(() => testObject.promiseThrows())).didThrow()
     ),
+    createTest('twoPromises', async () =>
+      (
+        await it(async () => {
+          let fooResolved: boolean | undefined
+          let barResolvedBeforeFoo: boolean | undefined
+          const foo = async () => {
+            await testObject.wait(2)
+            fooResolved = true
+          }
+          const bar = async () => {
+            await testObject.createArrayBufferAsync()
+            barResolvedBeforeFoo = !fooResolved
+          }
+          await Promise.all([foo(), bar()])
+          return barResolvedBeforeFoo
+        })
+      )
+        .didNotThrow()
+        .equals(true)
+    ),
 
     // Callbacks
     createTest('callCallback(...)', async () =>
