@@ -162,6 +162,12 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
     }
   }
 
+  func promiseThrows() throws -> Promise<Void> {
+    return Promise.async {
+      throw RuntimeError.error(withMessage: "Promise throws :)")
+    }
+  }
+
   func callAll(first: @escaping (() -> Void), second: @escaping (() -> Void), third: @escaping (() -> Void)) throws {
     first()
     second()

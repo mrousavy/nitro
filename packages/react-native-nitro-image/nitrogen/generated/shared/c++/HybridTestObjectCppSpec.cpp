@@ -67,6 +67,7 @@ namespace margelo::nitro::image {
       prototype.registerHybridMethod("calculateFibonacciSync", &HybridTestObjectCppSpec::calculateFibonacciSync);
       prototype.registerHybridMethod("calculateFibonacciAsync", &HybridTestObjectCppSpec::calculateFibonacciAsync);
       prototype.registerHybridMethod("wait", &HybridTestObjectCppSpec::wait);
+      prototype.registerHybridMethod("promiseThrows", &HybridTestObjectCppSpec::promiseThrows);
       prototype.registerHybridMethod("callCallback", &HybridTestObjectCppSpec::callCallback);
       prototype.registerHybridMethod("callAll", &HybridTestObjectCppSpec::callAll);
       prototype.registerHybridMethod("callWithOptional", &HybridTestObjectCppSpec::callWithOptional);
