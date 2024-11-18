@@ -660,6 +660,20 @@ export function getTests(
     createTest('promiseThrows() throws', async () =>
       (await it(() => testObject.promiseThrows())).didThrow()
     ),
+    createTest('twoPromises can run in parallel', async () =>
+      (
+        await it(async () => {
+          const start = performance.now()
+          // 2s + 2s = ~4s in serial, ~2s in parallel
+          await Promise.all([testObject.wait(2), testObject.wait(2)])
+          const end = performance.now()
+          const didRunInParallel = (end - start) < 4000
+          return didRunInParallel
+        })
+      )
+        .didNotThrow()
+        .equals(true)
+    ),
 
     // Callbacks
     createTest('callCallback(...)', async () =>
