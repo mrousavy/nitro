@@ -11,16 +11,22 @@
 
 namespace margelo::nitro {
 
-ThreadPool::ThreadPool(const char* name, size_t initialThreadCount) : _isAlive(true), _name(name) {
-  Logger::log(LogLevel::Info, TAG, "Creating ThreadPool \"%s\" with %i initial threads...", name, initialThreadCount);
+ThreadPool::ThreadPool(const char* name, size_t initialThreadsCount, size_t maxThreadsCount)
+    : _isAlive(true), _name(name), _threadCountLimit(maxThreadsCount) {
+  Logger::log(LogLevel::Info, TAG, "Creating ThreadPool \"%s\" with %i initial threads (max: %i)...", name, initialThreadsCount,
+              maxThreadsCount);
 
-  for (size_t i = 0; i < initialThreadCount; i++) {
+  for (size_t i = 0; i < initialThreadsCount; i++) {
     addThread();
   }
 }
 
 void ThreadPool::addThread() {
   std::unique_lock<std::mutex> lock(_queueMutex);
+  if (!_isAlive) {
+    return;
+  }
+
   size_t i = ++_threadCount;
   Logger::log(LogLevel::Info, TAG, "Adding Thread %i to ThreadPool \"%s\"...", i, _name);
 
@@ -52,10 +58,11 @@ void ThreadPool::addThread() {
 }
 
 void ThreadPool::run(std::function<void()>&& task) {
-  // If we have more than one task queued, we might want to spawn a new Thread.
-  if (!_tasks.empty()) {
+  // If there are tasks still waiting to be finished, just start a new Thread.
+  if (!_tasks.empty() && _threadCount < _threadCountLimit) {
     addThread();
   }
+  // New scope because of RAII lock
   {
     // lock on the mutex - we want to emplace the task back in the queue
     std::unique_lock<std::mutex> lock(_queueMutex);
@@ -85,7 +92,7 @@ ThreadPool::~ThreadPool() {
 }
 
 ThreadPool& ThreadPool::shared() {
-  static ThreadPool shared("nitro-thread", 3);
+  static ThreadPool shared("nitro-thread", 3, 10);
   return shared;
 }
 
