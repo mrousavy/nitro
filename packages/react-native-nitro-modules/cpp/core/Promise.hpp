@@ -125,6 +125,28 @@ public:
       _onRejectedListeners.push_back(std::move(onRejected));
     }
   }
+  
+public:
+  /**
+   * Get the result of the Promise if it has been resolved.
+   * If the Promise is not resolved, this will throw.
+   */
+  inline const TResult& getResult() const {
+    if (!isResolved()) {
+      throw std::runtime_error("Cannot get result when Promise is not yet resolved!");
+    }
+    return std::get<TResult>(_result);
+  }
+  /**
+   * Get the error of the Promise if it has been rejected.
+   * If the Promise is not rejected, this will throw.
+   */
+  inline const TResult& getError() const {
+    if (!isRejected()) {
+      throw std::runtime_error("Cannot get error when Promise is not yet rejected!");
+    }
+    return std::get<TError>(_result);
+  }
 
 public:
   /**

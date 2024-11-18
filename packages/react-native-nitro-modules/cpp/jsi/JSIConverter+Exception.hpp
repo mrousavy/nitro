@@ -30,11 +30,8 @@ struct JSIConverter<std::exception> final {
     return std::runtime_error(name + ": " + message);
   }
   static inline jsi::Value toJSI(jsi::Runtime& runtime, const std::exception& exception) {
-    jsi::Object object(runtime);
-    std::string typeName = TypeInfo::getFriendlyTypename(typeid(exception));
-    object.setProperty(runtime, "name", jsi::String::createFromUtf8(runtime, typeName));
-    object.setProperty(runtime, "message", jsi::String::createFromUtf8(runtime, exception.what()));
-    return object;
+    jsi::JSError error(runtime, exception.what());
+    return jsi::Value(runtime, error.value());
   }
   static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
     if (!value.isObject()) {
