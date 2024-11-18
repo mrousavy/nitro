@@ -16,7 +16,6 @@ struct JSIConverter;
 
 #include "Dispatcher.hpp"
 #include "Promise.hpp"
-#include "TypeInfo.hpp"
 #include <exception>
 #include <jsi/jsi.h>
 #include <memory>
