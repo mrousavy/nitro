@@ -667,7 +667,7 @@ export function getTests(
           // 2s + 2s = ~4s in serial, ~2s in parallel
           await Promise.all([testObject.wait(2), testObject.wait(2)])
           const end = performance.now()
-          const didRunInParallel = (end - start) < 4000
+          const didRunInParallel = end - start < 4000
           return didRunInParallel
         })
       )
