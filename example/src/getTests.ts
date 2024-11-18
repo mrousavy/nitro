@@ -664,10 +664,10 @@ export function getTests(
       (
         await it(async () => {
           const start = performance.now()
-          // 2s + 2s = ~4s in serial, ~2s in parallel
-          await Promise.all([testObject.wait(2), testObject.wait(2)])
+          // 0.5s + 0.5s = ~1s in serial, ~0.5s in parallel
+          await Promise.all([testObject.wait(0.5), testObject.wait(0.5)])
           const end = performance.now()
-          const didRunInParallel = end - start < 4000
+          const didRunInParallel = end - start < 1000
           return didRunInParallel
         })
       )
