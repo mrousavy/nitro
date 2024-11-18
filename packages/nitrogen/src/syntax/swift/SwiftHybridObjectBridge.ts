@@ -22,7 +22,7 @@ export const BRIDGE_NAMESPACE = NitroConfig.getCxxNamespace(
  * We need this because not all Swift types are accessible in C++, and vice versa.
  *
  * For example, Enums need to be converted to Int32 (because of a Swift compiler bug),
- * std::future<..> has to be converted to a Promise<..>, exceptions have to be handled
+ * C++ Promise<..> has to be converted to a Swift Promise<..>, exceptions have to be handled
  * via custom Result types, etc..
  */
 export function createSwiftHybridObjectCxxBridge(

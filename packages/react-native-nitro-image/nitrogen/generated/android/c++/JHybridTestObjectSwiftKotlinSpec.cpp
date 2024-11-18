@@ -39,7 +39,7 @@ namespace margelo::nitro::image { class HybridBaseSpec; }
 #include "JPerson.hpp"
 #include <NitroModules/AnyMap.hpp>
 #include <NitroModules/JAnyMap.hpp>
-#include <future>
+#include <NitroModules/Promise.hpp>
 #include <NitroModules/JPromise.hpp>
 #include "Car.hpp"
 #include "JCar.hpp"
@@ -346,7 +346,7 @@ namespace margelo::nitro::image {
     auto __result = method(_javaPart, value);
     return __result;
   }
-  std::future<int64_t> JHybridTestObjectSwiftKotlinSpec::calculateFibonacciAsync(double value) {
+  std::shared_ptr<Promise<int64_t>> JHybridTestObjectSwiftKotlinSpec::calculateFibonacciAsync(double value) {
     static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JPromise::javaobject>(double /* value */)>("calculateFibonacciAsync");
     auto __result = method(_javaPart, value);
     return [&]() {
@@ -362,7 +362,7 @@ namespace margelo::nitro::image {
       return __promise->get_future();
     }();
   }
-  std::future<void> JHybridTestObjectSwiftKotlinSpec::wait(double seconds) {
+  std::shared_ptr<Promise<void>> JHybridTestObjectSwiftKotlinSpec::wait(double seconds) {
     static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JPromise::javaobject>(double /* seconds */)>("wait");
     auto __result = method(_javaPart, seconds);
     return [&]() {
@@ -377,7 +377,7 @@ namespace margelo::nitro::image {
       return __promise->get_future();
     }();
   }
-  std::future<void> JHybridTestObjectSwiftKotlinSpec::promiseThrows() {
+  std::shared_ptr<Promise<void>> JHybridTestObjectSwiftKotlinSpec::promiseThrows() {
     static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JPromise::javaobject>()>("promiseThrows");
     auto __result = method(_javaPart);
     return [&]() {
@@ -433,7 +433,7 @@ namespace margelo::nitro::image {
     static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<JArrayBuffer::javaobject> /* buffer */, double /* value */)>("setAllValuesTo");
     method(_javaPart, JArrayBuffer::wrap(buffer), value);
   }
-  std::future<std::shared_ptr<ArrayBuffer>> JHybridTestObjectSwiftKotlinSpec::createArrayBufferAsync() {
+  std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>> JHybridTestObjectSwiftKotlinSpec::createArrayBufferAsync() {
     static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JPromise::javaobject>()>("createArrayBufferAsync");
     auto __result = method(_javaPart);
     return [&]() {

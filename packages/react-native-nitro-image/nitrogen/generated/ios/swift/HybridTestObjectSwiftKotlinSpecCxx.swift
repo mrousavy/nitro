@@ -565,15 +565,15 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
   }
   
   @inline(__always)
-  public func calculateFibonacciAsync(value: Double) -> bridge.PromiseHolder_int64_t_ {
+  public func calculateFibonacciAsync(value: Double) -> bridge.std__shared_ptr_Promise_int64_t__ {
     do {
       let __result = try self.__implementation.calculateFibonacciAsync(value: value)
-      return { () -> bridge.PromiseHolder_int64_t_ in
-        let __promiseHolder = bridge.create_PromiseHolder_int64_t_()
+      return { () -> bridge.std__shared_ptr_Promise_int64_t__ in
+        let __promise = bridge.create_std__shared_ptr_Promise_int64_t__()
         __result
-          .then({ __result in __promiseHolder.resolve(__result) })
-          .catch({ __error in __promiseHolder.reject(std.string(String(describing: __error))) })
-        return __promiseHolder
+          .then({ __result in __promise.pointee.resolve(__result) })
+          .catch({ __error in __promise.pointee.reject(std.string(String(describing: __error))) })
+        return __promise
       }()
     } catch {
       let __message = "\(error.localizedDescription)"
@@ -582,15 +582,15 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
   }
   
   @inline(__always)
-  public func wait(seconds: Double) -> bridge.PromiseHolder_void_ {
+  public func wait(seconds: Double) -> bridge.std__shared_ptr_Promise_void__ {
     do {
       let __result = try self.__implementation.wait(seconds: seconds)
-      return { () -> bridge.PromiseHolder_void_ in
-        let __promiseHolder = bridge.create_PromiseHolder_void_()
+      return { () -> bridge.std__shared_ptr_Promise_void__ in
+        let __promise = bridge.create_std__shared_ptr_Promise_void__()
         __result
-          .then({ __result in __promiseHolder.resolve() })
-          .catch({ __error in __promiseHolder.reject(std.string(String(describing: __error))) })
-        return __promiseHolder
+          .then({ __result in __promise.pointee.resolve() })
+          .catch({ __error in __promise.pointee.reject(std.string(String(describing: __error))) })
+        return __promise
       }()
     } catch {
       let __message = "\(error.localizedDescription)"
@@ -599,15 +599,15 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
   }
   
   @inline(__always)
-  public func promiseThrows() -> bridge.PromiseHolder_void_ {
+  public func promiseThrows() -> bridge.std__shared_ptr_Promise_void__ {
     do {
       let __result = try self.__implementation.promiseThrows()
-      return { () -> bridge.PromiseHolder_void_ in
-        let __promiseHolder = bridge.create_PromiseHolder_void_()
+      return { () -> bridge.std__shared_ptr_Promise_void__ in
+        let __promise = bridge.create_std__shared_ptr_Promise_void__()
         __result
-          .then({ __result in __promiseHolder.resolve() })
-          .catch({ __error in __promiseHolder.reject(std.string(String(describing: __error))) })
-        return __promiseHolder
+          .then({ __result in __promise.pointee.resolve() })
+          .catch({ __error in __promise.pointee.reject(std.string(String(describing: __error))) })
+        return __promise
       }()
     } catch {
       let __message = "\(error.localizedDescription)"
@@ -752,15 +752,15 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
   }
   
   @inline(__always)
-  public func createArrayBufferAsync() -> bridge.PromiseHolder_std__shared_ptr_ArrayBuffer__ {
+  public func createArrayBufferAsync() -> bridge.std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___ {
     do {
       let __result = try self.__implementation.createArrayBufferAsync()
-      return { () -> bridge.PromiseHolder_std__shared_ptr_ArrayBuffer__ in
-        let __promiseHolder = bridge.create_PromiseHolder_std__shared_ptr_ArrayBuffer__()
+      return { () -> bridge.std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___ in
+        let __promise = bridge.create_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___()
         __result
-          .then({ __result in __promiseHolder.resolve(__result.getArrayBuffer()) })
-          .catch({ __error in __promiseHolder.reject(std.string(String(describing: __error))) })
-        return __promiseHolder
+          .then({ __result in __promise.pointee.resolve(__result.getArrayBuffer()) })
+          .catch({ __error in __promise.pointee.reject(std.string(String(describing: __error))) })
+        return __promise
       }()
     } catch {
       let __message = "\(error.localizedDescription)"

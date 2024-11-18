@@ -90,9 +90,9 @@ namespace margelo::nitro::image {
     std::string tryMiddleParam(double num, std::optional<bool> boo, const std::string& str) override;
     std::optional<Powertrain> tryOptionalEnum(std::optional<Powertrain> value) override;
     int64_t calculateFibonacciSync(double value) override;
-    std::future<int64_t> calculateFibonacciAsync(double value) override;
-    std::future<void> wait(double seconds) override;
-    std::future<void> promiseThrows() override;
+    std::shared_ptr<Promise<int64_t>> calculateFibonacciAsync(double value) override;
+    std::shared_ptr<Promise<void>> wait(double seconds) override;
+    std::shared_ptr<Promise<void>> promiseThrows() override;
     void callCallback(const std::function<void()>& callback) override;
     void callAll(const std::function<void()>& first, const std::function<void()>& second, const std::function<void()>& third) override;
     void callWithOptional(std::optional<double> value, const std::function<void(std::optional<double> /* maybe */)>& callback) override;
@@ -102,7 +102,7 @@ namespace margelo::nitro::image {
     std::shared_ptr<ArrayBuffer> createArrayBuffer() override;
     double getBufferLastItem(const std::shared_ptr<ArrayBuffer>& buffer) override;
     void setAllValuesTo(const std::shared_ptr<ArrayBuffer>& buffer, double value) override;
-    std::future<std::shared_ptr<ArrayBuffer>> createArrayBufferAsync() override;
+    std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>> createArrayBufferAsync() override;
     std::shared_ptr<margelo::nitro::image::HybridChildSpec> createChild() override;
     std::shared_ptr<margelo::nitro::image::HybridBaseSpec> createBase() override;
     std::shared_ptr<margelo::nitro::image::HybridBaseSpec> createBaseActualChild() override;

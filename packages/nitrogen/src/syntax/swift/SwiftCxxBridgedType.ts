@@ -92,7 +92,7 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
         }
         return true
       case 'promise':
-        // PromiseHolder<T> <> std::shared_ptr<std::promise<T>>
+        // Promise<T> <> Promise<T>
         return true
       case 'map':
         // AnyMapHolder <> AnyMap
@@ -133,7 +133,7 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
       })
     } else if (this.type.kind === 'promise') {
       imports.push({
-        name: 'NitroModules/PromiseHolder.hpp',
+        name: 'NitroModules/Promise.hpp',
         language: 'c++',
         space: 'system',
       })
@@ -593,11 +593,11 @@ case ${i}:
                 : resolvingType.parseFromSwiftToCpp('__result', 'swift')
             return `
 { () -> bridge.${bridge.specializationName} in
-  let __promiseHolder = ${makePromise}()
+  let __promise = ${makePromise}()
   ${swiftParameterName}
-    .then({ __result in __promiseHolder.resolve(${arg}) })
-    .catch({ __error in __promiseHolder.reject(std.string(String(describing: __error))) })
-  return __promiseHolder
+    .then({ __result in __promise.pointee.resolve(${arg}) })
+    .catch({ __error in __promise.pointee.reject(std.string(String(describing: __error))) })
+  return __promise
 }()`.trim()
           default:
             return swiftParameterName

@@ -90,8 +90,8 @@ Promises can also be rejected using error throwing syntax on the native side:
   <TabItem value="c++" label="C++">
     ```cpp title="HybridMath.hpp"
     class HybridMath: public HybridMathSpec {
-      std::future<double> add(double a, double b) override {
-        return std::async(std::launch::async, [=]() -> double {
+      Promise<double> add(double a, double b) override {
+        return Promise<double>::async([=]() -> double {
           if (a < 0 || b < 0) {
             throw std::runtime_error("Value cannot be negative!");
           }

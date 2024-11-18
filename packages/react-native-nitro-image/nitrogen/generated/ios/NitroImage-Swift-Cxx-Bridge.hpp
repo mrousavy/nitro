@@ -49,9 +49,8 @@ namespace NitroImage { class HybridTestObjectSwiftKotlinSpecCxx; }
 #include "Powertrain.hpp"
 #include <NitroModules/ArrayBuffer.hpp>
 #include <NitroModules/ArrayBufferHolder.hpp>
-#include <NitroModules/PromiseHolder.hpp>
+#include <NitroModules/Promise.hpp>
 #include <functional>
-#include <future>
 #include <memory>
 #include <optional>
 #include <string>
@@ -262,22 +261,22 @@ namespace margelo::nitro::image::bridge::swift {
     return std::get<1>(variantWrapper.variant);
   }
   
-  // pragma MARK: PromiseHolder<int64_t>
+  // pragma MARK: std::shared_ptr<Promise<int64_t>>
   /**
-   * Specialized version of `PromiseHolder<int64_t>`.
+   * Specialized version of `std::shared_ptr<Promise<int64_t>>`.
    */
-  using PromiseHolder_int64_t_ = PromiseHolder<int64_t>;
-  inline PromiseHolder<int64_t> create_PromiseHolder_int64_t_() {
-    return PromiseHolder<int64_t>();
+  using std__shared_ptr_Promise_int64_t__ = std::shared_ptr<Promise<int64_t>>;
+  inline std::shared_ptr<Promise<int64_t>> create_std__shared_ptr_Promise_int64_t__() {
+    return std::make_shared<Promise<int64_t>>();
   }
   
-  // pragma MARK: PromiseHolder<void>
+  // pragma MARK: std::shared_ptr<Promise<void>>
   /**
-   * Specialized version of `PromiseHolder<void>`.
+   * Specialized version of `std::shared_ptr<Promise<void>>`.
    */
-  using PromiseHolder_void_ = PromiseHolder<void>;
-  inline PromiseHolder<void> create_PromiseHolder_void_() {
-    return PromiseHolder<void>();
+  using std__shared_ptr_Promise_void__ = std::shared_ptr<Promise<void>>;
+  inline std::shared_ptr<Promise<void>> create_std__shared_ptr_Promise_void__() {
+    return std::make_shared<Promise<void>>();
   }
   
   // pragma MARK: std::function<void()>
@@ -354,13 +353,13 @@ namespace margelo::nitro::image::bridge::swift {
     return std::optional<Person>(value);
   }
   
-  // pragma MARK: PromiseHolder<std::shared_ptr<ArrayBuffer>>
+  // pragma MARK: std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>
   /**
-   * Specialized version of `PromiseHolder<std::shared_ptr<ArrayBuffer>>`.
+   * Specialized version of `std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>`.
    */
-  using PromiseHolder_std__shared_ptr_ArrayBuffer__ = PromiseHolder<std::shared_ptr<ArrayBuffer>>;
-  inline PromiseHolder<std::shared_ptr<ArrayBuffer>> create_PromiseHolder_std__shared_ptr_ArrayBuffer__() {
-    return PromiseHolder<std::shared_ptr<ArrayBuffer>>();
+  using std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___ = std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>;
+  inline std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>> create_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___() {
+    return std::make_shared<Promise<std::shared_ptr<ArrayBuffer>>>();
   }
   
   // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridChildSpec>

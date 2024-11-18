@@ -171,7 +171,7 @@ The following C++ / JS types are supported out of the box:
   </tr>
   <tr>
     <td><code>Promise&lt;T&gt;</code></td>
-    <td><code>std::future&lt;T&gt;</code></td>
+    <td><code><a href="./cpp/core/Promise.hpp">Promise&lt;T&gt;</a></code></td>
     <td><code><a href="./ios/core/Promise.swift">Promise&lt;T&gt;</a></code></td>
     <td><code><a href="./android/src/main/java/com/margelo/nitro/core/Promise.kt">Promise&lt;T&gt;</a></code></td>
   </tr>
@@ -183,7 +183,7 @@ The following C++ / JS types are supported out of the box:
   </tr>
   <tr>
     <td><code>(T...) =&gt; R</code></td>
-    <td><code>std::function&lt;std::future&lt;R&gt; (T...)&gt;</code></td>
+    <td><code>std::function&lt;Promise&lt;R&gt; (T...)&gt;</code></td>
     <td>❌</td>
     <td>❌</td>
   </tr>

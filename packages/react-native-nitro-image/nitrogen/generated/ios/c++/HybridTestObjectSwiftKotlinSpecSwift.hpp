@@ -41,8 +41,7 @@ namespace margelo::nitro::image { class HybridBaseSpec; }
 #include "Person.hpp"
 #include <functional>
 #include <NitroModules/AnyMap.hpp>
-#include <future>
-#include <NitroModules/PromiseHolder.hpp>
+#include <NitroModules/Promise.hpp>
 #include "Car.hpp"
 #include <NitroModules/ArrayBuffer.hpp>
 #include <NitroModules/ArrayBufferHolder.hpp>
@@ -234,15 +233,15 @@ namespace margelo::nitro::image {
       auto __result = _swiftPart.calculateFibonacciSync(std::forward<decltype(value)>(value));
       return __result;
     }
-    inline std::future<int64_t> calculateFibonacciAsync(double value) override {
+    inline std::shared_ptr<Promise<int64_t>> calculateFibonacciAsync(double value) override {
       auto __result = _swiftPart.calculateFibonacciAsync(std::forward<decltype(value)>(value));
       return __result.getFuture();
     }
-    inline std::future<void> wait(double seconds) override {
+    inline std::shared_ptr<Promise<void>> wait(double seconds) override {
       auto __result = _swiftPart.wait(std::forward<decltype(seconds)>(seconds));
       return __result.getFuture();
     }
-    inline std::future<void> promiseThrows() override {
+    inline std::shared_ptr<Promise<void>> promiseThrows() override {
       auto __result = _swiftPart.promiseThrows();
       return __result.getFuture();
     }
@@ -278,7 +277,7 @@ namespace margelo::nitro::image {
     inline void setAllValuesTo(const std::shared_ptr<ArrayBuffer>& buffer, double value) override {
       _swiftPart.setAllValuesTo(ArrayBufferHolder(buffer), std::forward<decltype(value)>(value));
     }
-    inline std::future<std::shared_ptr<ArrayBuffer>> createArrayBufferAsync() override {
+    inline std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>> createArrayBufferAsync() override {
       auto __result = _swiftPart.createArrayBufferAsync();
       return __result.getFuture();
     }
