@@ -8,6 +8,7 @@
 #include <memory>
 #include <variant>
 #include <exception>
+#include <future>
 #include "ThreadPool.hpp"
 
 namespace margelo::nitro {
@@ -40,13 +41,37 @@ public:
     auto promise = std::make_shared<Promise>();
     ThreadPool::getSharedPool()->run([run = std::move(run), promise]() {
       try {
-        TResult result = run();
-        promise->resolve(std::move(result));
+        // Run the code, then resolve.
+        if constexpr (std::is_void_v<TResult>) {
+          // It's void.
+          run();
+          promise->resolve();
+        } else {
+          // It's a type.
+          TResult result = run();
+          promise->resolve(std::move(result));
+        }
       } catch (const TError& exception) {
+        // It threw an std::exception.
         promise->reject(exception);
+      } catch (...) {
+        // It threw a different error.
+        std::string name = TypeInfo::getCurrentExceptionName();
+        promise->reject(std::runtime_error("Unknown non-std error! Name: " + name));
       }
     });
     return promise;
+  }
+  
+  /**
+   * Creates a Promise and awaits the given future on a background Thread.
+   * Once the future resolves or rejects, the Promise resolves or rejects.
+   */
+  static std::shared_ptr<Promise> awaitFuture(std::future<TResult>&& future) {
+    return async([future = std::move(future)]() -> TResult {
+      future.wait();
+      return future.get();
+    });
   }
   
   /**
