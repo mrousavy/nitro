@@ -29,6 +29,7 @@ private:
   std::optional<std::vector<std::string>> _optionalArray;
   std::optional<std::shared_ptr<HybridTestObjectCppSpec>> _optionalHybrid;
   std::optional<Powertrain> _optionalEnum;
+  std::optional<OldEnum> _optionalOldEnum;
 
 private:
   static inline uint64_t calculateFibonacci(int count) noexcept {
