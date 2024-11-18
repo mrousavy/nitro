@@ -72,7 +72,7 @@ ThreadPool::~ThreadPool() {
 }
 
 ThreadPool& ThreadPool::shared() {
-  static ThreadPool shared("nitro-thread", 3);
+  static ThreadPool shared("nitro-thread", 10);
   return shared;
 }
 
