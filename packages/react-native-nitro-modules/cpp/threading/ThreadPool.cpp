@@ -23,6 +23,10 @@ ThreadPool::ThreadPool(const char* name, size_t initialThreadsCount, size_t maxT
 
 void ThreadPool::addThread() {
   std::unique_lock<std::mutex> lock(_queueMutex);
+  if (!_isAlive) {
+    return;
+  }
+
   size_t i = ++_threadCount;
   Logger::log(LogLevel::Info, TAG, "Adding Thread %i to ThreadPool \"%s\"...", i, _name);
 
