@@ -121,7 +121,7 @@ std::optional<OldEnum> HybridTestObjectCpp::getOptionalOldEnum() {
   return _optionalOldEnum;
 }
 
-void HybridTestObjectCpp::setOptionalEnum(std::optional<OldEnum> optionalOldEnum) {
+void HybridTestObjectCpp::setOptionalOldEnum(std::optional<OldEnum> optionalOldEnum) {
   _optionalOldEnum = optionalOldEnum;
 }
 
