@@ -660,21 +660,15 @@ export function getTests(
     createTest('promiseThrows() throws', async () =>
       (await it(() => testObject.promiseThrows())).didThrow()
     ),
-    createTest('twoPromises', async () =>
+    createTest('twoPromises can run in parallel', async () =>
       (
         await it(async () => {
-          let fooResolved: boolean | undefined
-          let barResolvedBeforeFoo: boolean | undefined
-          const foo = async () => {
-            await testObject.wait(2)
-            fooResolved = true
-          }
-          const bar = async () => {
-            await testObject.createArrayBufferAsync()
-            barResolvedBeforeFoo = !fooResolved
-          }
-          await Promise.all([foo(), bar()])
-          return barResolvedBeforeFoo
+          const start = performance.now()
+          // 2s + 2s = ~4s in serial, ~2s in parallel
+          await Promise.all([testObject.wait(2), testObject.wait(2)])
+          const end = performance.now()
+          const didRunInParallel = (end - start) < 4000
+          return didRunInParallel
         })
       )
         .didNotThrow()
