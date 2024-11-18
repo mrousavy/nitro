@@ -63,9 +63,7 @@ public:
    */
   static std::shared_ptr<Promise> awaitFuture(std::future<TResult>&& future) {
     auto sharedFuture = std::make_shared<std::future<TResult>>(std::move(future));
-    return async([sharedFuture = std::move(sharedFuture)]() {
-      return sharedFuture->get();
-    });
+    return async([sharedFuture = std::move(sharedFuture)]() { return sharedFuture->get(); });
   }
 
   /**
