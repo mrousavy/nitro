@@ -17,9 +17,9 @@ struct JSIConverter;
 #include "Dispatcher.hpp"
 #include "Promise.hpp"
 #include "TypeInfo.hpp"
+#include <exception>
 #include <jsi/jsi.h>
 #include <memory>
-#include <exception>
 
 namespace margelo::nitro {
 
@@ -36,9 +36,7 @@ struct JSIConverter<std::shared_ptr<Promise<TResult>>> final {
     if (promise->isPending()) {
       // Get Promise ctor from global
       jsi::Function promiseCtor = runtime.global().getPropertyAsFunction(runtime, "Promise");
-      jsi::HostFunctionType executor = [promise](jsi::Runtime& runtime,
-                                                 const jsi::Value& thisValue,
-                                                 const jsi::Value* arguments,
+      jsi::HostFunctionType executor = [promise](jsi::Runtime& runtime, const jsi::Value& thisValue, const jsi::Value* arguments,
                                                  size_t count) -> jsi::Value {
         // Add resolver listener
         if constexpr (std::is_void_v<TResult>) {
@@ -57,10 +55,8 @@ struct JSIConverter<std::shared_ptr<Promise<TResult>>> final {
         return jsi::Value::undefined();
       };
       // Call `Promise` constructor (aka create promise), and pass `executor` function
-      return promiseCtor.callAsConstructor(runtime, jsi::Function::createFromHostFunction(runtime,
-                                                                                          jsi::PropNameID::forUtf8(runtime, "executor"),
-                                                                                          2,
-                                                                                          executor));
+      return promiseCtor.callAsConstructor(
+          runtime, jsi::Function::createFromHostFunction(runtime, jsi::PropNameID::forUtf8(runtime, "executor"), 2, executor));
     } else if (promise->isResolved()) {
       // Promise is already resolved - just return immediately
       jsi::Object promiseObject = runtime.global().getPropertyAsObject(runtime, "Promise");

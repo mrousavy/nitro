@@ -12,16 +12,16 @@ struct JSIConverter;
 
 #include "JSIConverter.hpp"
 
-#include <jsi/jsi.h>
-#include <exception>
 #include "TypeInfo.hpp"
+#include <exception>
+#include <jsi/jsi.h>
 
 namespace margelo::nitro {
 
 using namespace facebook;
 
 // std::exception <> Error
-template<>
+template <>
 struct JSIConverter<std::exception> final {
   static inline std::exception fromJSI(jsi::Runtime& runtime, const jsi::Value& error) {
     jsi::Object object = error.asObject(runtime);

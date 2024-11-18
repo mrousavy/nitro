@@ -23,7 +23,7 @@ void ThreadPool::addThread() {
   std::unique_lock<std::mutex> lock(_queueMutex);
   size_t i = ++_threadCount;
   Logger::log(LogLevel::Info, TAG, "Adding Thread %i to ThreadPool \"%s\"...", i, _name);
-  
+
   std::string threadName = std::string(_name) + "-" + std::to_string(i);
   _workers.emplace_back([this, threadName] {
     // Set the Thread's name

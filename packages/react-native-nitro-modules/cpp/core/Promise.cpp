@@ -7,7 +7,4 @@
 
 #include "Promise.hpp"
 
-namespace margelo::nitro {
-
-
-} // namespace margelo::nitro
+namespace margelo::nitro {} // namespace margelo::nitro

@@ -4,19 +4,19 @@
 
 #pragma once
 
+#include "ThreadPool.hpp"
+#include "TypeInfo.hpp"
+#include <exception>
+#include <future>
 #include <jsi/jsi.h>
 #include <memory>
 #include <variant>
-#include <exception>
-#include <future>
-#include "ThreadPool.hpp"
-#include "TypeInfo.hpp"
 
 namespace margelo::nitro {
 
 using namespace facebook;
 
-template<typename TResult, typename TError = std::exception>
+template <typename TResult, typename TError = std::exception>
 class Promise final {
 public:
   using OnResolvedFunc = std::function<void(const TResult&)>;
@@ -33,7 +33,7 @@ public:
    * or rejected with `resolve(..)` or `reject(..)`.
    */
   Promise() {}
-  
+
 public:
   /**
    * Creates a Promise that runs the given function `run` on a separate Thread pool.
@@ -56,7 +56,7 @@ public:
     });
     return promise;
   }
-  
+
   /**
    * Creates a Promise and awaits the given future on a background Thread.
    * Once the future resolves or rejects, the Promise resolves or rejects.
@@ -68,7 +68,7 @@ public:
       return sharedFuture.get();
     });
   }
-  
+
   /**
    * Creates an immediately resolved Promise.
    */
@@ -145,7 +145,7 @@ public:
       _onRejectedListeners.push_back(std::move(onRejected));
     }
   }
-  
+
 public:
   /**
    * Get the result of the Promise if it has been resolved.
@@ -194,9 +194,8 @@ private:
   std::vector<OnRejectedFunc> _onRejectedListeners;
 };
 
-
 // Specialization for void
-template<typename TError>
+template <typename TError>
 class Promise<void, TError> final {
 public:
   using OnResolvedFunc = std::function<void()>;
@@ -206,7 +205,7 @@ public:
   Promise(const Promise&) = delete;
   Promise(Promise&&) = default;
   Promise() {}
-  
+
 public:
   static std::shared_ptr<Promise> async(std::function<void()>&& run) {
     auto promise = std::make_shared<Promise>();
@@ -226,7 +225,7 @@ public:
     });
     return promise;
   }
-  
+
   static std::shared_ptr<Promise> awaitFuture(std::future<void>&& future) {
     std::shared_future<void> sharedFuture(std::move(future));
     return async([sharedFuture = std::move(sharedFuture)]() {
@@ -234,7 +233,7 @@ public:
       sharedFuture.get();
     });
   }
-  
+
   static std::shared_ptr<Promise> resolved() {
     auto promise = std::make_shared<Promise>();
     promise->resolve();
@@ -245,7 +244,7 @@ public:
     promise->reject(std::move(error));
     return promise;
   }
-  
+
 public:
   void resolve() {
     _isResolved = true;
@@ -282,7 +281,7 @@ public:
       _onRejectedListeners.push_back(std::move(onRejected));
     }
   }
-  
+
 public:
   inline const TError& getError() {
     if (!isRejected()) {

@@ -35,7 +35,7 @@ public:
    * It will run once a worker is available.
    */
   void run(std::function<void()>&& task);
- 
+
 private:
   void addThread();
 
