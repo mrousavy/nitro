@@ -11,38 +11,51 @@
 
 namespace margelo::nitro {
 
-ThreadPool::ThreadPool(const char* name, size_t numThreads) : _isAlive(true), _name(name) {
-  Logger::log(LogLevel::Info, TAG, "Creating ThreadPool \"%s\" with %i threads...", name, numThreads);
+ThreadPool::ThreadPool(const char* name, size_t initialThreadCount) : _isAlive(true), _name(name) {
+  Logger::log(LogLevel::Info, TAG, "Creating ThreadPool \"%s\" with %i initial threads...", name, initialThreadCount);
 
-  for (size_t i = 0; i < numThreads; ++i) {
-    std::string threadName = std::string(name) + "-" + std::to_string(i + 1);
-    _workers.emplace_back([this, threadName] {
-      // Set the Thread's name
-      ThreadUtils::setThreadName(threadName);
-
-      // Start the run-loop
-      while (true) {
-        std::function<void()> task;
-        {
-          // Lock on the mutex so only one Worker receives the condition signal at a time
-          std::unique_lock<std::mutex> lock(_queueMutex);
-          this->_condition.wait(lock, [this] { return !_isAlive || !_tasks.empty(); });
-          if (!_isAlive && _tasks.empty()) {
-            // ThreadPool is dead - stop run-loop.
-            return;
-          }
-          // Schedule the oldest task
-          task = std::move(_tasks.front());
-          _tasks.pop();
-        }
-        // Run it (outside of the mutex so others can run in parallel)
-        task();
-      }
-    });
+  for (size_t i = 0; i < initialThreadCount; i++) {
+    addThread();
   }
 }
 
+void ThreadPool::addThread() {
+  std::unique_lock<std::mutex> lock(_queueMutex);
+  size_t i = ++_threadCount;
+  Logger::log(LogLevel::Info, TAG, "Adding Thread %i to ThreadPool \"%s\"...", i, _name);
+
+  std::string threadName = std::string(_name) + "-" + std::to_string(i);
+  _workers.emplace_back([this, threadName] {
+    // Set the Thread's name
+    ThreadUtils::setThreadName(threadName);
+
+    // Start the run-loop
+    while (true) {
+      std::function<void()> task;
+      {
+        // Lock on the mutex so only one Worker receives the condition signal at a time
+        std::unique_lock<std::mutex> lock(_queueMutex);
+        this->_condition.wait(lock, [this] { return !_isAlive || !_tasks.empty(); });
+        if (!_isAlive && _tasks.empty()) {
+          // ThreadPool is dead - stop run-loop.
+          return;
+        }
+        // Schedule the oldest task
+        task = std::move(_tasks.front());
+        _tasks.pop();
+      }
+      // Run it (outside of the mutex so others can run in parallel)
+      task();
+    }
+  });
+  _condition.notify_all();
+}
+
 void ThreadPool::run(std::function<void()>&& task) {
+  // If we have more than one task queued, we might want to spawn a new Thread.
+  if (!_tasks.empty()) {
+    addThread();
+  }
   {
     // lock on the mutex - we want to emplace the task back in the queue
     std::unique_lock<std::mutex> lock(_queueMutex);
@@ -71,13 +84,8 @@ ThreadPool::~ThreadPool() {
   }
 }
 
-std::shared_ptr<ThreadPool> ThreadPool::getSharedPool() {
-  static std::shared_ptr<ThreadPool> shared;
-  if (shared == nullptr) {
-    int availableThreads = std::thread::hardware_concurrency();
-    auto numThreads = std::min(availableThreads, 3);
-    shared = std::make_shared<ThreadPool>("nitro-thread", numThreads);
-  }
+ThreadPool& ThreadPool::shared() {
+  static ThreadPool shared("nitro-thread", 3);
   return shared;
 }
 
