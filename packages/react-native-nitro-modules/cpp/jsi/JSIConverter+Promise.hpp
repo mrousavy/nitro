@@ -8,8 +8,6 @@
 namespace margelo::nitro {
 class Dispatcher;
 
-class JSPromise;
-
 template <typename T, typename Enable>
 struct JSIConverter;
 } // namespace margelo::nitro
@@ -17,10 +15,8 @@ struct JSIConverter;
 #include "JSIConverter.hpp"
 
 #include "Dispatcher.hpp"
-#include "JSPromise.hpp"
-#include "ThreadPool.hpp"
+#include "Promise.hpp"
 #include "TypeInfo.hpp"
-#include <future>
 #include <jsi/jsi.h>
 #include <memory>
 
@@ -28,17 +24,34 @@ namespace margelo::nitro {
 
 using namespace facebook;
 
-// std::future<T> <> Promise<T>
+// Promise<T, std::exception> <> Promise<T>
 template <typename TResult>
-struct JSIConverter<std::future<TResult>> final {
-  static inline std::future<TResult> fromJSI(jsi::Runtime&, const jsi::Value&) {
+struct JSIConverter<std::shared_ptr<Promise<TResult>>> final {
+  static inline std::shared_ptr<Promise<TResult>> fromJSI(jsi::Runtime&, const jsi::Value&) {
     throw std::runtime_error("Promise cannot be converted to a native type - it needs to be awaited first!");
   }
 
-  static inline jsi::Value toJSI(jsi::Runtime& runtime, std::future<TResult>&& arg) {
-    auto sharedFuture = std::make_shared<std::future<TResult>>(std::move(arg));
+  static inline jsi::Value toJSI(jsi::Runtime& runtime, std::shared_ptr<Promise<TResult>>& promise) {
     std::shared_ptr<Dispatcher> strongDispatcher = Dispatcher::getRuntimeGlobalDispatcher(runtime);
     std::weak_ptr<Dispatcher> weakDispatcher = strongDispatcher;
+
+    // Get Promise ctor from global
+    jsi::Function promiseCtor = runtime.global().getPropertyAsFunction(runtime, "Promise");
+    jsi::HostFunctionType promiseCallback = [run = std::move(run)](jsi::Runtime& runtime,
+                                                                   const jsi::Value& thisValue,
+                                                                   const jsi::Value* arguments,
+                                                                   size_t count) -> jsi::Value {
+      // Get resolver and rejecter
+      auto resolver = JSIConverter<std::function<void(TResult)>>::fromJSI(runtime, arguments[0]);
+      auto rejecter = JSIConverter<std::function<void(std::exception)>>::fromJSI(runtime, arguments[1]);
+      // Create `Promise` type that wraps the JSI callbacks
+      auto promise = std::make_shared<JSPromise>(runtime, std::move(resolver), std::move(rejecter));
+      // Call `run` callback
+      run(runtime, promise);
+
+      return jsi::Value::undefined();
+    };
+    return promiseCtor.callAsConstructor(runtime, jsi::Function::createFromHostFunction promiseCallback);
 
     return JSPromise::createPromise(runtime, [sharedFuture, weakDispatcher](jsi::Runtime& runtime, std::shared_ptr<JSPromise> promise) {
       // Spawn new async thread to synchronously wait for the `future<T>` to complete

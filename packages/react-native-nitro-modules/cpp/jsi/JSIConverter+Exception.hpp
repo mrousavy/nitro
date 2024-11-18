@@ -14,25 +14,34 @@ struct JSIConverter;
 
 #include <jsi/jsi.h>
 #include <exception>
+#include "TypeInfo.hpp"
 
 namespace margelo::nitro {
 
 using namespace facebook;
 
 // std::exception <> Error
+template<>
 struct JSIConverter<std::exception> final {
   static inline std::exception fromJSI(jsi::Runtime& runtime, const jsi::Value& error) {
-    // TODO: To exception
+    jsi::Object object = error.asObject(runtime);
+    std::string name = object.getProperty(runtime, "name").asString(runtime).utf8(runtime);
+    std::string message = object.getProperty(runtime, "message").asString(runtime).utf8(runtime);
+    return std::runtime_error(name + ": " + message);
   }
   static inline jsi::Value toJSI(jsi::Runtime& runtime, const std::exception& exception) {
-    // TODO: From exception
+    jsi::Object object(runtime);
+    std::string typeName = TypeInfo::getFriendlyTypename(typeid(exception));
+    object.setProperty(runtime, "name", jsi::String::createFromUtf8(runtime, typeName));
+    object.setProperty(runtime, "message", jsi::String::createFromUtf8(runtime, exception.what()));
+    return object;
   }
   static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
     if (!value.isObject()) {
       return false;
     }
     jsi::Object object = value.getObject(runtime);
-    return object.hasProperty(runtime, "message");
+    return object.hasProperty(runtime, "name") && object.hasProperty(runtime, "message");
   }
 };
 
