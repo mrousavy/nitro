@@ -239,12 +239,12 @@ int64_t HybridTestObjectCpp::calculateFibonacciSync(double value) {
   return calculateFibonacci(value);
 }
 
-std::future<int64_t> HybridTestObjectCpp::calculateFibonacciAsync(double value) {
-  return std::async(std::launch::async, [this, value]() -> int64_t { return this->calculateFibonacci(value); });
+Promise<int64_t> HybridTestObjectCpp::calculateFibonacciAsync(double value) {
+  return Promise<int64_t>::async([this, value]() -> int64_t { return this->calculateFibonacci(value); });
 }
 
-std::future<void> HybridTestObjectCpp::wait(double seconds) {
-  return std::async(std::launch::async, [=]() {
+Promise<void> HybridTestObjectCpp::wait(double seconds) {
+  return Promise<void>::async([=]() {
     std::chrono::nanoseconds nanoseconds(static_cast<int64_t>(seconds * 1'000'000'000));
     std::this_thread::sleep_for(nanoseconds);
   });
@@ -259,17 +259,17 @@ void HybridTestObjectCpp::callWithOptional(std::optional<double> value,
   callback(value);
 }
 
-std::future<double> HybridTestObjectCpp::getValueFromJSCallbackAndWait(const std::function<std::future<double>()>& getValue) {
-  return std::async(std::launch::async, [=]() -> double {
-    std::future<double> future = getValue();
+Promise<double> HybridTestObjectCpp::getValueFromJSCallbackAndWait(const std::function<Promise<double>()>& getValue) {
+  return Promise<double>::async([=]() -> double {
+    Promise<double> future = getValue();
     future.wait();
     double value = future.get();
     return value;
   });
 }
 
-std::future<void> HybridTestObjectCpp::promiseThrows() {
-  return std::async(std::launch::async, [=]() { throw std::runtime_error("Promise throws :)"); });
+Promise<void> HybridTestObjectCpp::promiseThrows() {
+  return Promise<void>::async([=]() { throw std::runtime_error("Promise throws :)"); });
 }
 
 void HybridTestObjectCpp::callAll(const std::function<void()>& first, const std::function<void()>& second,
@@ -279,11 +279,10 @@ void HybridTestObjectCpp::callAll(const std::function<void()>& first, const std:
   third();
 }
 
-std::future<void>
-HybridTestObjectCpp::getValueFromJsCallback(const std::function<std::future<std::string>()>& callback,
-                                            const std::function<void(const std::string& /* valueFromJs */)>& andThenCall) {
-  return std::async(std::launch::async, [=]() {
-    std::future<std::string> future = callback();
+Promise<void> HybridTestObjectCpp::getValueFromJsCallback(const std::function<Promise<std::string>()>& callback,
+                                                          const std::function<void(const std::string& /* valueFromJs */)>& andThenCall) {
+  return Promise<void>::async([=]() {
+    Promise<std::string> future = callback();
     std::string jsValue = future.get();
     andThenCall(jsValue);
   });
@@ -339,8 +338,8 @@ void HybridTestObjectCpp::setAllValuesTo(const std::shared_ptr<ArrayBuffer>& buf
   }
 }
 
-std::future<std::shared_ptr<ArrayBuffer>> HybridTestObjectCpp::createArrayBufferAsync() {
-  return std::async(std::launch::async, [this]() -> std::shared_ptr<ArrayBuffer> { return this->createArrayBuffer(); });
+Promise<std::shared_ptr<ArrayBuffer>> HybridTestObjectCpp::createArrayBufferAsync() {
+  return Promise<std::shared_ptr<ArrayBuffer>>::async([this]() -> std::shared_ptr<ArrayBuffer> { return this->createArrayBuffer(); });
 }
 
 std::shared_ptr<HybridTestObjectCppSpec> HybridTestObjectCpp::newTestObject() {
