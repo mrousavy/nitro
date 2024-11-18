@@ -71,13 +71,8 @@ ThreadPool::~ThreadPool() {
   }
 }
 
-std::shared_ptr<ThreadPool> ThreadPool::getSharedPool() {
-  static std::shared_ptr<ThreadPool> shared;
-  if (shared == nullptr) {
-    int availableThreads = std::thread::hardware_concurrency();
-    auto numThreads = std::min(availableThreads, 3);
-    shared = std::make_shared<ThreadPool>("nitro-thread", numThreads);
-  }
+ThreadPool& ThreadPool::shared() {
+  static ThreadPool shared("nitro-thread", 3);
   return shared;
 }
 

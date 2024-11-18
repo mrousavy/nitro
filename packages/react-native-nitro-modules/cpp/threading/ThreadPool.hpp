@@ -26,6 +26,8 @@ public:
    */
   explicit ThreadPool(const char* const name, size_t numThreads);
   ~ThreadPool();
+  ThreadPool(const ThreadPool&) = delete;
+  ThreadPool(ThreadPool&&) = delete;
 
   /**
    * Schedules the given task asynchronously on the ThreadPool.
@@ -38,7 +40,7 @@ public:
    * Get a static singleton instance - a shared ThreadPool.
    * The shared ThreadPool has 3 threads.
    */
-  static std::shared_ptr<ThreadPool> getSharedPool();
+  static ThreadPool& shared();
 
 private:
   std::vector<std::thread> _workers;

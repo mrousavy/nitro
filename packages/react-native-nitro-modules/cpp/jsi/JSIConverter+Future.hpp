@@ -42,8 +42,7 @@ struct JSIConverter<std::future<TResult>> final {
 
     return JSPromise::createPromise(runtime, [sharedFuture, weakDispatcher](jsi::Runtime& runtime, std::shared_ptr<JSPromise> promise) {
       // Spawn new async thread to synchronously wait for the `future<T>` to complete
-      std::shared_ptr<ThreadPool> pool = ThreadPool::getSharedPool();
-      pool->run([promise, &runtime, weakDispatcher, sharedFuture]() {
+      ThreadPool::shared().run([promise, &runtime, weakDispatcher, sharedFuture]() {
         // synchronously wait until the `future<T>` completes. we are running on a background task here.
         sharedFuture->wait();
 

@@ -40,7 +40,7 @@ public:
    */
   static std::shared_ptr<Promise> async(std::function<TResult()>&& run) {
     auto promise = std::make_shared<Promise>();
-    ThreadPool::getSharedPool()->run([run = std::move(run), promise]() {
+    ThreadPool::shared().run([run = std::move(run), promise]() {
       try {
         // Run the code, then resolve.
         if constexpr (std::is_void_v<TResult>) {
