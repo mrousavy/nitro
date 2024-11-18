@@ -184,6 +184,7 @@ struct JSIConverter<std::string> final {
 #include "JSIConverter+AnyMap.hpp"
 #include "JSIConverter+ArrayBuffer.hpp"
 #include "JSIConverter+Exception.hpp"
+#include "JSIConverter+Future.hpp"
 #include "JSIConverter+Function.hpp"
 #include "JSIConverter+HostObject.hpp"
 #include "JSIConverter+HybridObject.hpp"

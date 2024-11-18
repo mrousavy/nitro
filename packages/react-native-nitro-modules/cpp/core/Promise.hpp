@@ -10,6 +10,7 @@
 #include <exception>
 #include <future>
 #include "ThreadPool.hpp"
+#include "TypeInfo.hpp"
 
 namespace margelo::nitro {
 
