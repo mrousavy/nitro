@@ -267,6 +267,23 @@ export function getTests(
         .didReturn('string')
         .equals('gas')
     ),
+    createTest('get optionalOldEnum (== undefined)', () =>
+      it(() => {
+        testObject.optionalOldEnum = undefined
+        return testObject.optionalOldEnum
+      })
+        .didNotThrow()
+        .didReturn('undefined')
+    ),
+    createTest('get optionalOldEnum (== self)', () =>
+      it(() => {
+        testObject.optionalOldEnum = OldEnum.SECOND
+        return testObject.optionalOldEnum
+      })
+        .didNotThrow()
+        .didReturn(typeof OldEnum.SECOND)
+        .equals(OldEnum.SECOND)
+    ),
 
     // Test basic functions
     createTest('addNumbers(5, 13) = 18', () =>

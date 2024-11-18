@@ -67,6 +67,8 @@ public:
   void setOptionalHybrid(const std::optional<std::shared_ptr<HybridTestObjectCppSpec>>& optionalHybrid) override;
   std::optional<Powertrain> getOptionalEnum() override;
   void setOptionalEnum(std::optional<Powertrain> optionalEnum) override;
+  std::optional<OldEnum> getOptionalOldEnum() override;
+  void setOptionalOldEnum(std::optional<OldEnum> optionalOldEnum) override;
 
 public:
   // Methods

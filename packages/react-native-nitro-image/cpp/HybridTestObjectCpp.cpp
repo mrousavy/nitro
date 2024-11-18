@@ -117,6 +117,14 @@ void HybridTestObjectCpp::setOptionalEnum(std::optional<Powertrain> optionalEnum
   _optionalEnum = optionalEnum;
 }
 
+std::optional<OldEnum> HybridTestObjectCpp::getOptionalOldEnum() {
+  return _optionalOldEnum;
+}
+
+void HybridTestObjectCpp::setOptionalEnum(std::optional<OldEnum> optionalOldEnum) {
+  _optionalOldEnum = optionalOldEnum;
+}
+
 // Methods
 double HybridTestObjectCpp::addNumbers(double a, double b) {
   return a + b;
