@@ -40,11 +40,18 @@ struct JSIConverter<std::shared_ptr<Promise<TResult>>> final {
                                                  const jsi::Value& thisValue,
                                                  const jsi::Value* arguments,
                                                  size_t count) -> jsi::Value {
-        // Get resolver and rejecter from params (as safe nitro JS callbacks)
-        auto resolver = JSIConverter<std::function<void(TResult)>>::fromJSI(runtime, arguments[0]);
+        // Add resolver listener
+        if constexpr (std::is_void_v<TResult>) {
+          // It's resolving to void.
+          auto resolver = JSIConverter<std::function<void()>>::fromJSI(runtime, arguments[0]);
+          promise->addOnResolvedListener(std::move(resolver));
+        } else {
+          // It's a type.
+          auto resolver = JSIConverter<std::function<void(TResult)>>::fromJSI(runtime, arguments[0]);
+          promise->addOnResolvedListener(std::move(resolver));
+        }
+        // Add rejecter listener
         auto rejecter = JSIConverter<std::function<void(std::exception)>>::fromJSI(runtime, arguments[1]);
-        // Add listeners to `Promise`
-        promise->addOnResolvedListener(std::move(resolver));
         promise->addOnRejectedListener(std::move(rejecter));
 
         return jsi::Value::undefined();
@@ -58,8 +65,14 @@ struct JSIConverter<std::shared_ptr<Promise<TResult>>> final {
       // Promise is already resolved - just return immediately
       jsi::Object promiseObject = runtime.global().getPropertyAsObject(runtime, "Promise");
       jsi::Function createResolvedPromise = promiseObject.getPropertyAsFunction(runtime, "resolve");
-      jsi::Value result = JSIConverter<TResult>::toJSI(runtime, promise->getResult());
-      return createResolvedPromise.call(runtime, std::move(result));
+      if constexpr (std::is_void_v<TResult>) {
+        // It's resolving to void.
+        return createResolvedPromise.call(runtime);
+      } else {
+        // It's resolving to a type.
+        jsi::Value result = JSIConverter<TResult>::toJSI(runtime, promise->getResult());
+        return createResolvedPromise.call(runtime, std::move(result));
+      }
     } else if (promise->isRejected()) {
       // Promise is already rejected - just return immediately
       jsi::Object promiseObject = runtime.global().getPropertyAsObject(runtime, "Promise");
