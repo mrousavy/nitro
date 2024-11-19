@@ -27,9 +27,11 @@ template <typename TResult>
 struct JSIConverter<std::shared_ptr<Promise<TResult>>> final {
   static inline std::shared_ptr<Promise<TResult>> fromJSI(jsi::Runtime& runtime, const jsi::Value& value) {
     auto object = value.asObject(runtime);
-      auto thenFn = JSIConverter<std::function<void(std::function<void(TResult)>)>>::fromJSI(runtime, object.getPropertyAsFunction(runtime, "then"));
-      auto catchFn = JSIConverter<std::function<void(std::function<void(std::exception)>)>>::fromJSI(runtime, object.getPropertyAsFunction(runtime, "catch"));
-    auto promise = std::make_shared<Promise<TResult>>();
+    auto thenFn =
+        JSIConverter<std::function<void(std::function<void(TResult)>)>>::fromJSI(runtime, object.getPropertyAsFunction(runtime, "then"));
+    auto catchFn = JSIConverter<std::function<void(std::function<void(std::exception)>)>>::fromJSI(
+        runtime, object.getPropertyAsFunction(runtime, "catch"));
+    auto promise = Promise<TResult>::create();
     return promise;
   }
 
