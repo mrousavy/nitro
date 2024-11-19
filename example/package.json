@@ -1,6 +1,6 @@
 {
   "name": "react-native-nitro-example",
-  "version": "0.16.2",
+  "version": "0.17.0",
   "private": true,
   "scripts": {
     "start": "react-native start",
