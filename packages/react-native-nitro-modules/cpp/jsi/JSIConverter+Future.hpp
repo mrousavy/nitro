@@ -23,7 +23,6 @@ namespace margelo::nitro {
 using namespace facebook;
 
 // std::future<T> <> Promise<T>
-[[deprecated("Use JSIConverter<std::shared_ptr<Promise<T>>> instead.")]]
 template <typename TResult>
 struct JSIConverter<std::future<TResult>> final {
   [[deprecated("Use JSIConverter<std::shared_ptr<Promise<T>>> instead.")]]
