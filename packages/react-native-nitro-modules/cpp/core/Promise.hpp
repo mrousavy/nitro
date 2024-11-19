@@ -134,6 +134,15 @@ public:
       _onResolvedListeners.push_back(std::move(onResolved));
     }
   }
+  void addOnResolvedListener(const OnResolvedFunc& onResolved) {
+    if (std::holds_alternative<TResult>(_result)) {
+      // Promise is already resolved! Call the callback immediately
+      onResolved(std::get<TResult>(_result));
+    } else {
+      // Promise is not yet resolved, put the listener in our queue.
+      _onResolvedListeners.push_back(onResolved);
+    }
+  }
   /**
    * Add a listener that will be called when the Promise gets rejected.
    * If the Promise is already rejected, the listener will be immediately called.
@@ -145,6 +154,15 @@ public:
     } else {
       // Promise is not yet rejected, put the listener in our queue.
       _onRejectedListeners.push_back(std::move(onRejected));
+    }
+  }
+  void addOnRejectedListener(const OnRejectedFunc& onRejected) {
+    if (std::holds_alternative<TError>(_result)) {
+      // Promise is already rejected! Call the callback immediately
+      onRejected(std::get<TError>(_result));
+    } else {
+      // Promise is not yet rejected, put the listener in our queue.
+      _onRejectedListeners.push_back(onRejected);
     }
   }
 
@@ -281,12 +299,27 @@ public:
       _onResolvedListeners.push_back(std::move(onResolved));
     }
   }
+  void addOnResolvedListener(const OnResolvedFunc& onResolved) {
+    if (_isResolved) {
+      onResolved();
+    } else {
+      _onResolvedListeners.push_back(onResolved);
+    }
+  }
   void addOnRejectedListener(OnRejectedFunc&& onRejected) {
     if (_error.has_value()) {
       onRejected(_error.value());
     } else {
       // Promise is not yet rejected, put the listener in our queue.
       _onRejectedListeners.push_back(std::move(onRejected));
+    }
+  }
+  void addOnRejectedListener(const OnRejectedFunc& onRejected) {
+    if (_error.has_value()) {
+      onRejected(_error.value());
+    } else {
+      // Promise is not yet rejected, put the listener in our queue.
+      _onRejectedListeners.push_back(onRejected);
     }
   }
 
