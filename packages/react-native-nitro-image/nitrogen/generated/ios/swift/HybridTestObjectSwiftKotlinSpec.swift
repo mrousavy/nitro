@@ -40,6 +40,7 @@ public protocol HybridTestObjectSwiftKotlinSpec: AnyObject, HybridObjectSpec {
   var optionalString: String? { get set }
   var optionalArray: [String]? { get set }
   var optionalEnum: Powertrain? { get set }
+  var optionalOldEnum: OldEnum? { get set }
   var someVariant: Variant_String_Double { get set }
 
   // Methods

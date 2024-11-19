@@ -28,6 +28,8 @@ namespace margelo::nitro::image { class HybridTestObjectSwiftKotlinSpec; }
 namespace margelo::nitro::image { enum class ImageFormat; }
 // Forward declaration of `ImageSize` to properly resolve imports.
 namespace margelo::nitro::image { struct ImageSize; }
+// Forward declaration of `OldEnum` to properly resolve imports.
+namespace margelo::nitro::image { enum class OldEnum; }
 // Forward declaration of `Person` to properly resolve imports.
 namespace margelo::nitro::image { struct Person; }
 // Forward declaration of `PixelFormat` to properly resolve imports.
@@ -44,6 +46,7 @@ namespace margelo::nitro::image { enum class Powertrain; }
 #include "HybridTestObjectSwiftKotlinSpec.hpp"
 #include "ImageFormat.hpp"
 #include "ImageSize.hpp"
+#include "OldEnum.hpp"
 #include "Person.hpp"
 #include "PixelFormat.hpp"
 #include "Powertrain.hpp"

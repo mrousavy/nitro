@@ -50,6 +50,7 @@ interface SharedTestObjectProps {
   optionalString?: string
   optionalArray?: string[]
   optionalEnum?: Powertrain
+  optionalOldEnum?: OldEnum
 
   // Basic function tests
   simpleFunc(): void
