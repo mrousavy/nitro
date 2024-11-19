@@ -28,14 +28,14 @@ import kotlin.coroutines.suspendCoroutine
 class Promise<T> {
   @Keep
   @DoNotStrip
-  fun interface OnResolvedCallback<T> {
+  private fun interface OnResolvedCallback {
     @Keep
     @DoNotStrip
     fun onResolved(result: java.lang.Object?)
   }
   @Keep
   @DoNotStrip
-  fun interface OnRejectedCallback {
+  private fun interface OnRejectedCallback {
     @Keep
     @DoNotStrip
     fun onRejected(error: Throwable)
@@ -79,9 +79,10 @@ class Promise<T> {
    * Add a continuation listener to this `Promise<T>`.
    * Once the `Promise<T>` resolves, the [listener] will be called.
    */
-  fun then(listener: OnResolvedCallback<T>): Promise<T> {
+  fun then(listener: (result: T) -> Unit): Promise<T> {
     addOnResolvedListener { result ->
-      listener.onResolved(result)
+      @Suppress("UNCHECKED_CAST")
+      listener(result as T)
     }
     return this
   }
@@ -103,18 +104,15 @@ class Promise<T> {
    */
   suspend fun await(): T {
     return suspendCoroutine { continuation ->
-      addOnResolvedListener { result ->
-        @Suppress("UNCHECKED_CAST")
-        continuation.resume(result as T)
-      }
-      addOnRejectedListener { error -> continuation.resumeWithException(error) }
+      then { result -> continuation.resume(result) }
+      catch { error -> continuation.resumeWithException(error) }
     }
   }
 
   // C++ functions
   private external fun nativeResolve(result: Any)
   private external fun nativeReject(error: Throwable)
-  private external fun addOnResolvedListener(callback: OnResolvedCallback<T>)
+  private external fun addOnResolvedListener(callback: OnResolvedCallback)
   private external fun addOnRejectedListener(callback: OnRejectedCallback)
   private external fun initHybrid(): HybridData
 
