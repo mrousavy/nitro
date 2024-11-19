@@ -143,6 +143,15 @@ public:
       _onResolvedListeners.push_back(onResolved);
     }
   }
+  void addOnResolvedListenerCopy(const std::function<void(TResult)>& onResolved) {
+    if (std::holds_alternative<TResult>(_result)) {
+      // Promise is already resolved! Call the callback immediately
+      onResolved(std::get<TResult>(_result));
+    } else {
+      // Promise is not yet resolved, put the listener in our queue.
+      _onResolvedListeners.push_back(onResolved);
+    }
+  }
   
   /**
    * Add a listener that will be called when the Promise gets rejected.
