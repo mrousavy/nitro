@@ -103,22 +103,23 @@ public:
   std::tuple<double, double, double> flip(const std::tuple<double, double, double>& tuple) override;
   std::tuple<double, std::string, bool> passTuple(const std::tuple<double, std::string, bool>& tuple) override;
   int64_t calculateFibonacciSync(double value) override;
-  std::future<int64_t> calculateFibonacciAsync(double value) override;
-  std::future<void> wait(double seconds) override;
+  std::shared_ptr<Promise<int64_t>> calculateFibonacciAsync(double value) override;
+  std::shared_ptr<Promise<void>> wait(double seconds) override;
   void callCallback(const std::function<void()>& callback) override;
   void callWithOptional(std::optional<double> value, const std::function<void(std::optional<double> /* maybe */)>& callback) override;
-  std::future<double> getValueFromJSCallbackAndWait(const std::function<std::future<double>()>& getValue) override;
+  std::shared_ptr<Promise<double>> getValueFromJSCallbackAndWait(const std::function<std::future<double>()>& getValue) override;
   void callAll(const std::function<void()>& first, const std::function<void()>& second, const std::function<void()>& third) override;
-  std::future<void> getValueFromJsCallback(const std::function<std::future<std::string>()>& callback,
-                                           const std::function<void(const std::string& /* valueFromJs */)>& andThenCall) override;
-  std::future<void> promiseThrows() override;
+  std::shared_ptr<Promise<void>>
+  getValueFromJsCallback(const std::function<std::future<std::string>()>& callback,
+                         const std::function<void(const std::string& /* valueFromJs */)>& andThenCall) override;
+  std::shared_ptr<Promise<void>> promiseThrows() override;
   Car getCar() override;
   bool isCarElectric(const Car& car) override;
   std::optional<Person> getDriver(const Car& car) override;
   std::shared_ptr<ArrayBuffer> createArrayBuffer() override;
   double getBufferLastItem(const std::shared_ptr<ArrayBuffer>& buffer) override;
   void setAllValuesTo(const std::shared_ptr<ArrayBuffer>& buffer, double value) override;
-  std::future<std::shared_ptr<ArrayBuffer>> createArrayBufferAsync() override;
+  std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>> createArrayBufferAsync() override;
   std::shared_ptr<HybridTestObjectCppSpec> newTestObject() override;
 
   std::shared_ptr<HybridBaseSpec> createBase() override;

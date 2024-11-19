@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include "Promise.hpp"
 #include <fbjni/fbjni.h>
 
 namespace margelo::nitro {
@@ -65,7 +66,7 @@ public:
   }
 
 private:
-  JPromise() {}
+  JPromise() = default;
 
 private:
   friend HybridBase;

@@ -4,9 +4,11 @@ import type { Type, TypeKind } from './Type.js'
 
 export class PromiseType implements Type {
   readonly resultingType: Type
+  readonly enableNewPromise: boolean
 
-  constructor(resultingType: Type) {
+  constructor(resultingType: Type, enableNewPromise: boolean = true) {
     this.resultingType = resultingType
+    this.enableNewPromise = enableNewPromise
   }
 
   get canBePassedByReference(): boolean {
@@ -21,7 +23,11 @@ export class PromiseType implements Type {
     const resultingCode = this.resultingType.getCode(language)
     switch (language) {
       case 'c++':
-        return `std::future<${resultingCode}>`
+        if (this.enableNewPromise) {
+          return `std::shared_ptr<Promise<${resultingCode}>>`
+        } else {
+          return `std::future<${resultingCode}>`
+        }
       case 'swift':
         return `Promise<${resultingCode}>`
       case 'kotlin':
@@ -39,7 +45,7 @@ export class PromiseType implements Type {
     return [
       {
         language: 'c++',
-        name: 'future',
+        name: 'NitroModules/Promise.hpp',
         space: 'system',
       },
       ...this.resultingType.getRequiredImports(),

@@ -29,7 +29,7 @@ struct JSIConverter<std::shared_ptr<Promise<TResult>>> final {
     throw std::runtime_error("Promise cannot be converted to a native type - it needs to be awaited first!");
   }
 
-  static inline jsi::Value toJSI(jsi::Runtime& runtime, std::shared_ptr<Promise<TResult>>& promise) {
+  static inline jsi::Value toJSI(jsi::Runtime& runtime, const std::shared_ptr<Promise<TResult>>& promise) {
     if (promise->isPending()) {
       // Get Promise ctor from global
       jsi::Function promiseCtor = runtime.global().getPropertyAsFunction(runtime, "Promise");
