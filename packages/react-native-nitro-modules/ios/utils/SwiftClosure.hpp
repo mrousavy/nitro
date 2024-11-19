@@ -58,6 +58,10 @@ public:
   const std::function<void()>& getFunction() {
     return _function;
   }
+  
+  std::function<void()> getFunctionCopy() {
+    return _function;
+  }
 };
 
 } // namespace margelo::nitro
