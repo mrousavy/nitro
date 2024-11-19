@@ -152,7 +152,7 @@ public:
       _onResolvedListeners.push_back(onResolved);
     }
   }
-  
+
   /**
    * Add a listener that will be called when the Promise gets rejected.
    * If the Promise is already rejected, the listener will be immediately called.
