@@ -462,7 +462,7 @@ namespace margelo::nitro::image {
     auto __result = method(_javaPart, [&]() {
       jni::local_ref<JPromise::javaobject> __promise = JPromise::create();
       promise->addOnResolvedListener([=]() {
-        __promise->cthis()->resolve(nullptr);
+        __promise->cthis()->resolve(JUnit::instance());
       });
       promise->addOnRejectedListener([=](const std::exception& __error) {
         auto __jniError = jni::JCppException::create(__error);

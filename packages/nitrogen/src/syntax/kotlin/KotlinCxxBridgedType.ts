@@ -100,6 +100,16 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
           space: 'user',
         })
         break
+      case 'promise':
+        const promise = getTypeAs(this.type, PromiseType)
+        if (promise.resultingType.kind === 'void') {
+          imports.push({
+            language: 'c++',
+            name: 'NitroModules/JUnit.hpp',
+            space: 'system',
+          })
+        }
+        break
       case 'hybrid-object': {
         const hybridObjectType = getTypeAs(this.type, HybridObjectType)
         const name = getHybridObjectName(hybridObjectType.hybridObjectName)
@@ -528,7 +538,7 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
 [&]() {
   jni::local_ref<JPromise::javaobject> __promise = JPromise::create();
   ${parameterName}->addOnResolvedListener([=]() {
-    __promise->cthis()->resolve(nullptr);
+    __promise->cthis()->resolve(JUnit::instance());
   });
   ${parameterName}->addOnRejectedListener([=](const std::exception& __error) {
     auto __jniError = jni::JCppException::create(__error);
