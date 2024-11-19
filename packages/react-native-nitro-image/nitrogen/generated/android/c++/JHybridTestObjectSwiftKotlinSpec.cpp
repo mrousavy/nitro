@@ -363,46 +363,46 @@ namespace margelo::nitro::image {
     static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JPromise::javaobject>(double /* value */)>("calculateFibonacciAsync");
     auto __result = method(_javaPart, value);
     return [&]() {
-      auto __promise = std::make_shared<std::promise<int64_t>>();
+      auto __promise = std::make_shared<Promise<int64_t>>();
       __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
         auto __result = jni::static_ref_cast<jni::JLong>(__boxedResult);
-        __promise->set_value(__result->value());
+        __promise->resolve(__result->value());
       });
       __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JString>& __message) {
         std::runtime_error __error(__message->toStdString());
-        __promise->set_exception(std::make_exception_ptr(__error));
+        __promise->reject(__error);
       });
-      return __promise->get_future();
+      return __promise;
     }();
   }
   std::shared_ptr<Promise<void>> JHybridTestObjectSwiftKotlinSpec::wait(double seconds) {
     static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JPromise::javaobject>(double /* seconds */)>("wait");
     auto __result = method(_javaPart, seconds);
     return [&]() {
-      auto __promise = std::make_shared<std::promise<void>>();
+      auto __promise = std::make_shared<Promise<void>>();
       __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
-        __promise->set_value();
+        __promise->resolve();
       });
       __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JString>& __message) {
         std::runtime_error __error(__message->toStdString());
-        __promise->set_exception(std::make_exception_ptr(__error));
+        __promise->reject(__error);
       });
-      return __promise->get_future();
+      return __promise;
     }();
   }
   std::shared_ptr<Promise<void>> JHybridTestObjectSwiftKotlinSpec::promiseThrows() {
     static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JPromise::javaobject>()>("promiseThrows");
     auto __result = method(_javaPart);
     return [&]() {
-      auto __promise = std::make_shared<std::promise<void>>();
+      auto __promise = std::make_shared<Promise<void>>();
       __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
-        __promise->set_value();
+        __promise->resolve();
       });
       __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JString>& __message) {
         std::runtime_error __error(__message->toStdString());
-        __promise->set_exception(std::make_exception_ptr(__error));
+        __promise->reject(__error);
       });
-      return __promise->get_future();
+      return __promise;
     }();
   }
   void JHybridTestObjectSwiftKotlinSpec::callCallback(const std::function<void()>& callback) {
@@ -450,16 +450,16 @@ namespace margelo::nitro::image {
     static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JPromise::javaobject>()>("createArrayBufferAsync");
     auto __result = method(_javaPart);
     return [&]() {
-      auto __promise = std::make_shared<std::promise<std::shared_ptr<ArrayBuffer>>>();
+      auto __promise = std::make_shared<Promise<std::shared_ptr<ArrayBuffer>>>();
       __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
         auto __result = jni::static_ref_cast<JArrayBuffer::javaobject>(__boxedResult);
-        __promise->set_value(__result->cthis()->getArrayBuffer());
+        __promise->resolve(__result->cthis()->getArrayBuffer());
       });
       __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JString>& __message) {
         std::runtime_error __error(__message->toStdString());
-        __promise->set_exception(std::make_exception_ptr(__error));
+        __promise->reject(__error);
       });
-      return __promise->get_future();
+      return __promise;
     }();
   }
   std::shared_ptr<margelo::nitro::image::HybridChildSpec> JHybridTestObjectSwiftKotlinSpec::createChild() {
