@@ -119,9 +119,6 @@ public:
       onRejected(std::get<TError>(_result));
     }
   }
-  void reject(std::string message) {
-    reject(std::runtime_error(message));
-  }
 
 public:
   /**
