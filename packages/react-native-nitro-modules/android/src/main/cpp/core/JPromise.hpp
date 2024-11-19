@@ -17,7 +17,7 @@ using namespace facebook;
 
 struct JOnResolvedCallback : public jni::JavaClass<JOnResolvedCallback> {
   static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/core/Promise$OnResolvedCallback;";
-  void onResolved(jni::alias_ref<jni::JObject> result) const {
+  void onResolved(const jni::alias_ref<jni::JObject>& result) const {
     static const auto method = javaClassLocal()->getMethod<void(jni::alias_ref<jni::JObject>)>("onResolved");
     method(self(), result);
   }
@@ -25,7 +25,7 @@ struct JOnResolvedCallback : public jni::JavaClass<JOnResolvedCallback> {
 
 struct JOnRejectedCallback : public jni::JavaClass<JOnRejectedCallback> {
   static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/core/Promise$OnRejectedCallback;";
-  void onRejected(jni::alias_ref<jni::JThrowable> error) const {
+  void onRejected(const jni::alias_ref<jni::JThrowable>& error) const {
     static const auto method = javaClassLocal()->getMethod<void(jni::alias_ref<jni::JThrowable>)>("onRejected");
     method(self(), error);
   }
@@ -103,7 +103,7 @@ private:
     } else {
       // Promise is not yet resolved, put the listener in our queue.
       auto sharedCallback = jni::make_global(callback);
-      _onResolvedListeners.push_back([=](const auto& result) { sharedCallback->onResolved(result); });
+      _onResolvedListeners.emplace_back([=](const auto& result) { sharedCallback->onResolved(result); });
     }
   }
   void addOnRejectedListenerJava(jni::alias_ref<JOnRejectedCallback> callback) {
@@ -114,7 +114,7 @@ private:
     } else {
       // Promise is not yet rejected, put the listener in our queue.
       auto sharedCallback = jni::make_global(callback);
-      _onRejectedListeners.push_back([=](const auto& error) { sharedCallback->onRejected(error); });
+      _onRejectedListeners.emplace_back([=](const auto& error) { sharedCallback->onRejected(error); });
     }
   }
 
