@@ -92,7 +92,7 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
         }
         return true
       case 'promise':
-        // PromiseHolder<T> <> std::shared_ptr<std::promise<T>>
+        // Promise<T> <> std::shared_ptr<Promise<T>>
         return true
       case 'map':
         // AnyMapHolder <> AnyMap
@@ -595,7 +595,7 @@ case ${i}:
         )
         switch (language) {
           case 'c++':
-            return `${swiftParameterName}.getFuture()`
+            return swiftParameterName
           case 'swift':
             const arg =
               promise.resultingType.kind === 'void'
@@ -605,8 +605,8 @@ case ${i}:
 { () -> bridge.${bridge.specializationName} in
   let __promiseHolder = ${makePromise}()
   ${swiftParameterName}
-    .then({ __result in __promiseHolder.resolve(${arg}) })
-    .catch({ __error in __promiseHolder.reject(std.string(String(describing: __error))) })
+    .then({ __result in __promiseHolder.pointee.resolve(${arg}) })
+    .catch({ __error in __promiseHolder.pointee.reject(std.string(String(describing: __error))) })
   return __promiseHolder
 }()`.trim()
           default:

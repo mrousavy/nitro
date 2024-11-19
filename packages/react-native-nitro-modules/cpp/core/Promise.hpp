@@ -114,6 +114,9 @@ public:
       onRejected(std::get<TError>(_result));
     }
   }
+  void reject(std::string message) {
+    reject(std::runtime_error(message));
+  }
 
 public:
   /**
@@ -260,6 +263,9 @@ public:
     for (const auto& onRejected : _onRejectedListeners) {
       onRejected(_error.value());
     }
+  }
+  void reject(std::string message) {
+    reject(std::runtime_error(message));
   }
 
 public:

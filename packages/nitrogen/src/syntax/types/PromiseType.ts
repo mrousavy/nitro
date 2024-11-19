@@ -21,7 +21,7 @@ export class PromiseType implements Type {
     const resultingCode = this.resultingType.getCode(language)
     switch (language) {
       case 'c++':
-        return `std::future<${resultingCode}>`
+        return `std::shared_ptr<Promise<${resultingCode}>>`
       case 'swift':
         return `Promise<${resultingCode}>`
       case 'kotlin':
@@ -39,7 +39,7 @@ export class PromiseType implements Type {
     return [
       {
         language: 'c++',
-        name: 'future',
+        name: 'NitroModules/Promise.hpp',
         space: 'system',
       },
       ...this.resultingType.getRequiredImports(),

@@ -463,7 +463,7 @@ inline ${actualType} create_${name}(${typesSignature}) {
 function createCxxPromiseSwiftHelper(type: PromiseType): SwiftCxxHelper {
   const resultingType = type.resultingType.getCode('c++')
   const bridgedType = new SwiftCxxBridgedType(type)
-  const actualType = `PromiseHolder<${resultingType}>`
+  const actualType = `std::shared_ptr<Promise<${resultingType}>>`
   const name = escapeCppName(actualType)
   return {
     cxxType: actualType,
@@ -476,12 +476,12 @@ function createCxxPromiseSwiftHelper(type: PromiseType): SwiftCxxHelper {
  */
 using ${name} = ${actualType};
 inline ${actualType} create_${name}() {
-  return ${actualType}();
+  return std::make_shared<Promise<${resultingType}>>();
 }
        `.trim(),
       requiredIncludes: [
         {
-          name: 'NitroModules/PromiseHolder.hpp',
+          name: 'memory',
           space: 'system',
           language: 'c++',
         },
