@@ -14,6 +14,7 @@ struct JSIConverter;
 
 #include <exception>
 #include <jsi/jsi.h>
+#include "GetExceptionStacktrace.hpp"
 
 namespace margelo::nitro {
 
@@ -29,7 +30,8 @@ struct JSIConverter<std::exception> final {
     return std::runtime_error(name + ": " + message);
   }
   static inline jsi::Value toJSI(jsi::Runtime& runtime, const std::exception& exception) {
-    jsi::JSError error(runtime, exception.what());
+    std::string stacktrace = getExceptionStacktrace(exception);
+    jsi::JSError error(runtime, exception.what(), stacktrace);
     return jsi::Value(runtime, error.value());
   }
   static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {

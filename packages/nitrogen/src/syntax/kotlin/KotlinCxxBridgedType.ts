@@ -83,6 +83,11 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
           name: 'NitroModules/JPromise.hpp',
           space: 'system',
         })
+        imports.push({
+          language: 'c++',
+          name: 'NitroModules/ExceptionWithStacktrace.hpp',
+          space: 'system',
+        })
         break
       case 'map':
         imports.push({
@@ -709,9 +714,11 @@ __promise->resolve();
   ${parameterName}->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
     ${indent(resolveBody, '    ')}
   });
-  ${parameterName}->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JString>& __message) {
-    std::runtime_error __error(__message->toStdString());
-    __promise->reject(__error);
+  ${parameterName}->cthis()->addOnRejectedListener([=](jni::alias_ref<jni::JThrowable> __error) {
+    jni::local_ref<jni::JString> __message = __error->getMessage();
+    jni::local_ref<jni::JString> __stacktrace = __error->getStackTrace();
+    ExceptionWithStacktrace __exception(__message->toStdString(), __stacktrace->toStdString());
+    __promise->reject(__exception);
   });
   return __promise;
 }()

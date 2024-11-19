@@ -21,7 +21,7 @@ class JPromise final : public jni::HybridClass<JPromise> {
 public:
   static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/core/Promise;";
   using OnResolvedFunc = std::function<void(jni::alias_ref<jni::JObject>)>;
-  using OnRejectedFunc = std::function<void(jni::alias_ref<jni::JString>)>;
+  using OnRejectedFunc = std::function<void(jni::alias_ref<jni::JThrowable>)>;
 
 public:
   /**
@@ -38,7 +38,7 @@ public:
       onResolved(_result);
     }
   }
-  void reject(jni::alias_ref<jni::JString> error) {
+  void reject(jni::alias_ref<jni::JThrowable> error) {
     _error = jni::make_global(error);
     for (const auto& onRejected : _onRejectedListeners) {
       onRejected(_error);
@@ -72,7 +72,7 @@ private:
   friend HybridBase;
   using HybridBase::HybridBase;
   jni::global_ref<jni::JObject> _result;
-  jni::global_ref<jni::JString> _error;
+  jni::global_ref<jni::JThrowable> _error;
   std::vector<OnResolvedFunc> _onResolvedListeners;
   std::vector<OnRejectedFunc> _onRejectedListeners;
 

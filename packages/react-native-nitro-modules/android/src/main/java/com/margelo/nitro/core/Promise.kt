@@ -45,12 +45,12 @@ class Promise<T> {
    * Any `onRejected` listeners will be invoked.
    */
   fun reject(error: Throwable) {
-    nativeReject(error.toString())
+    nativeReject(error)
   }
 
   // C++ functions
   private external fun nativeResolve(result: Any)
-  private external fun nativeReject(error: String)
+  private external fun nativeReject(error: Throwable)
   private external fun initHybrid(): HybridData
 
   companion object {
