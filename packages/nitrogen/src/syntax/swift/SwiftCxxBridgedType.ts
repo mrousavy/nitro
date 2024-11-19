@@ -755,7 +755,7 @@ case ${i}:
               .map((p) => `__${p.escapedName}`)
               .join(', ')
             const cFuncParamsSignature = [
-              '__closureHolder: UnsafeMutableRawPointer?',
+              '__closureHolder: UnsafeMutableRawPointer',
               ...func.parameters.map((p) => {
                 const bridged = new SwiftCxxBridgedType(p)
                 return `__${p.escapedName}: ${bridged.getTypeCode('swift')}`
@@ -776,11 +776,11 @@ case ${i}:
 
   let __closureHolder = Unmanaged.passRetained(ClosureHolder(wrappingClosure: ${swiftParameterName})).toOpaque()
   func __callClosure(${cFuncParamsSignature}) -> Void {
-    let closure = Unmanaged<ClosureHolder>.fromOpaque(__closureHolder!).takeUnretainedValue()
+    let closure = Unmanaged<ClosureHolder>.fromOpaque(__closureHolder).takeUnretainedValue()
     closure.invoke(${indent(cFuncParamsForward, '    ')})
   }
-  func __destroyClosure(_ __closureHolder: UnsafeMutableRawPointer?) -> Void {
-    Unmanaged<ClosureHolder>.fromOpaque(__closureHolder!).release()
+  func __destroyClosure(_ __closureHolder: UnsafeMutableRawPointer) -> Void {
+    Unmanaged<ClosureHolder>.fromOpaque(__closureHolder).release()
   }
 
   return ${createFunc}(__closureHolder, __callClosure, __destroyClosure)
