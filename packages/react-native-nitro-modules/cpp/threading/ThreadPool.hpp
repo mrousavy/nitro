@@ -25,7 +25,7 @@ public:
    * Create a new ThreadPool with the given number of minimum workers/threads.
    * The Thread Pool can expand on the fly if it is busy.
    */
-  explicit ThreadPool(const char* const name, size_t initialThreadCount);
+  explicit ThreadPool(const char* const name, size_t initialThreadsCount, size_t maxThreadsCount);
   ~ThreadPool();
   ThreadPool(const ThreadPool&) = delete;
   ThreadPool(ThreadPool&&) = delete;
@@ -37,6 +37,10 @@ public:
   void run(std::function<void()>&& task);
 
 private:
+  /**
+   * Adds a new Thread to the current Thread Pool.
+   * This grows the size by one, and potentially starts work sooner if other Threads are busy.
+   */
   void addThread();
 
 public:
@@ -53,6 +57,7 @@ private:
   std::condition_variable _condition;
   std::atomic<bool> _isAlive;
   std::atomic<size_t> _threadCount;
+  size_t _threadCountLimit;
   const char* _name;
   static constexpr auto TAG = "ThreadPool";
 };

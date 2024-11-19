@@ -17,6 +17,8 @@
 namespace margelo::nitro::image { class HybridTestObjectSwiftKotlinSpec; }
 // Forward declaration of `Powertrain` to properly resolve imports.
 namespace margelo::nitro::image { enum class Powertrain; }
+// Forward declaration of `OldEnum` to properly resolve imports.
+namespace margelo::nitro::image { enum class OldEnum; }
 // Forward declaration of `Person` to properly resolve imports.
 namespace margelo::nitro::image { struct Person; }
 // Forward declaration of `AnyMap` to properly resolve imports.
@@ -36,6 +38,7 @@ namespace margelo::nitro::image { class HybridBaseSpec; }
 #include <string>
 #include <vector>
 #include "Powertrain.hpp"
+#include "OldEnum.hpp"
 #include <variant>
 #include "Person.hpp"
 #include <functional>
@@ -94,6 +97,8 @@ namespace margelo::nitro::image {
       virtual void setOptionalArray(const std::optional<std::vector<std::string>>& optionalArray) = 0;
       virtual std::optional<Powertrain> getOptionalEnum() = 0;
       virtual void setOptionalEnum(std::optional<Powertrain> optionalEnum) = 0;
+      virtual std::optional<OldEnum> getOptionalOldEnum() = 0;
+      virtual void setOptionalOldEnum(std::optional<OldEnum> optionalOldEnum) = 0;
       virtual std::variant<std::string, double> getSomeVariant() = 0;
       virtual void setSomeVariant(const std::variant<std::string, double>& someVariant) = 0;
 

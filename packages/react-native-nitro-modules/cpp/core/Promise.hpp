@@ -32,7 +32,7 @@ public:
    * Creates a new pending Promise that has to be resolved
    * or rejected with `resolve(..)` or `reject(..)`.
    */
-  Promise() {}
+  Promise() = default;
 
 public:
   /**
@@ -62,11 +62,8 @@ public:
    * Once the future resolves or rejects, the Promise resolves or rejects.
    */
   static std::shared_ptr<Promise> awaitFuture(std::future<TResult>&& future) {
-    std::shared_future<TResult> sharedFuture(std::move(future));
-    return async([sharedFuture = std::move(sharedFuture)]() {
-      sharedFuture.wait();
-      return sharedFuture.get();
-    });
+    auto sharedFuture = std::make_shared<std::future<TResult>>(std::move(future));
+    return async([sharedFuture = std::move(sharedFuture)]() { return sharedFuture->get(); });
   }
 
   /**
@@ -172,18 +169,21 @@ public:
   /**
    * Gets whether this Promise has been successfuly resolved with a result, or not.
    */
+  [[nodiscard]]
   inline bool isResolved() const noexcept {
     return std::holds_alternative<TResult>(_result);
   }
   /**
    * Gets whether this Promise has been rejected with an error, or not.
    */
+  [[nodiscard]]
   inline bool isRejected() const noexcept {
     return std::holds_alternative<TError>(_result);
   }
   /**
    * Gets whether this Promise has not yet been resolved nor rejected.
    */
+  [[nodiscard]]
   inline bool isPending() const noexcept {
     return std::holds_alternative<std::monostate>(_result);
   }
@@ -204,7 +204,7 @@ public:
 public:
   Promise(const Promise&) = delete;
   Promise(Promise&&) = default;
-  Promise() {}
+  Promise() = default;
 
 public:
   static std::shared_ptr<Promise> async(std::function<void()>&& run) {
@@ -227,11 +227,8 @@ public:
   }
 
   static std::shared_ptr<Promise> awaitFuture(std::future<void>&& future) {
-    std::shared_future<void> sharedFuture(std::move(future));
-    return async([sharedFuture = std::move(sharedFuture)]() {
-      sharedFuture.wait();
-      sharedFuture.get();
-    });
+    auto sharedFuture = std::make_shared<std::future<void>>(std::move(future));
+    return async([sharedFuture = std::move(sharedFuture)]() { sharedFuture->get(); });
   }
 
   static std::shared_ptr<Promise> resolved() {
@@ -291,18 +288,21 @@ public:
   }
 
 public:
+  [[nodiscard]]
   inline bool isResolved() const noexcept {
     return _isResolved;
   }
+  [[nodiscard]]
   inline bool isRejected() const noexcept {
     return _error.has_value();
   }
+  [[nodiscard]]
   inline bool isPending() const noexcept {
     return !isResolved() && !isRejected();
   }
 
 private:
-  bool _isResolved;
+  bool _isResolved = false;
   std::optional<TError> _error;
   std::vector<OnResolvedFunc> _onResolvedListeners;
   std::vector<OnRejectedFunc> _onRejectedListeners;
