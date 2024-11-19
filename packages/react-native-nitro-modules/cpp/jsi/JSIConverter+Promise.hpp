@@ -25,8 +25,12 @@ using namespace facebook;
 // Promise<T, std::exception> <> Promise<T>
 template <typename TResult>
 struct JSIConverter<std::shared_ptr<Promise<TResult>>> final {
-  static inline std::shared_ptr<Promise<TResult>> fromJSI(jsi::Runtime&, const jsi::Value&) {
-    throw std::runtime_error("Promise cannot be converted to a native type - it needs to be awaited first!");
+  static inline std::shared_ptr<Promise<TResult>> fromJSI(jsi::Runtime& runtime, const jsi::Value& value) {
+    auto object = value.asObject(runtime);
+      auto thenFn = JSIConverter<std::function<void(std::function<void(TResult)>)>>::fromJSI(runtime, object.getPropertyAsFunction(runtime, "then"));
+      auto catchFn = JSIConverter<std::function<void(std::function<void(std::exception)>)>>::fromJSI(runtime, object.getPropertyAsFunction(runtime, "catch"));
+    auto promise = std::make_shared<Promise<TResult>>();
+    return promise;
   }
 
   static inline jsi::Value toJSI(jsi::Runtime& runtime, const std::shared_ptr<Promise<TResult>>& promise) {
