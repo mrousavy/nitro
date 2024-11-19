@@ -102,7 +102,7 @@ class Promise<T> {
   suspend fun await(): T {
     return suspendCoroutine { continuation ->
       addOnResolvedListener { result -> continuation.resume(result) }
-      addOnRejectedListener { error -> continuation.resumeWithException(Error(error)) }
+      addOnRejectedListener { error -> continuation.resumeWithException(error) }
     }
   }
 
