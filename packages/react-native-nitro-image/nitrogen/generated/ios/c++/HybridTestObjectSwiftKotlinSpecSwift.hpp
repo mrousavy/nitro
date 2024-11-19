@@ -45,7 +45,6 @@ namespace margelo::nitro::image { class HybridBaseSpec; }
 #include <functional>
 #include <NitroModules/AnyMap.hpp>
 #include <NitroModules/Promise.hpp>
-#include <NitroModules/PromiseHolder.hpp>
 #include "Car.hpp"
 #include <NitroModules/ArrayBuffer.hpp>
 #include <NitroModules/ArrayBufferHolder.hpp>

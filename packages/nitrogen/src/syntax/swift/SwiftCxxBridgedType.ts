@@ -131,12 +131,6 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
         language: 'c++',
         space: 'system',
       })
-    } else if (this.type.kind === 'promise') {
-      imports.push({
-        name: 'NitroModules/PromiseHolder.hpp',
-        language: 'c++',
-        space: 'system',
-      })
     }
 
     // Recursively look into referenced types (e.g. the `T` of a `optional<T>`, or `T` of a `T[]`)
@@ -603,11 +597,11 @@ case ${i}:
                 : resolvingType.parseFromSwiftToCpp('__result', 'swift')
             return `
 { () -> bridge.${bridge.specializationName} in
-  let __promiseHolder = ${makePromise}()
+  let __promise = ${makePromise}()
   ${swiftParameterName}
-    .then({ __result in __promiseHolder.pointee.resolve(${arg}) })
-    .catch({ __error in __promiseHolder.pointee.reject(std.string(String(describing: __error))) })
-  return __promiseHolder
+    .then({ __result in __promise.pointee.resolve(${arg}) })
+    .catch({ __error in __promise.pointee.reject(std.string(String(describing: __error))) })
+  return __promise
 }()`.trim()
           default:
             return swiftParameterName

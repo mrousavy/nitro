@@ -458,7 +458,7 @@ inline ${actualType} create_${name}(${typesSignature}) {
 }
 
 /**
- * Creates a C++ `create_promise_T()` function that can be called from Swift to create a `PromiseHolder`.
+ * Creates a C++ `create_promise_T()` function that can be called from Swift to create a `std::shared_ptr<Promise<T>>`.
  */
 function createCxxPromiseSwiftHelper(type: PromiseType): SwiftCxxHelper {
   const resultingType = type.resultingType.getCode('c++')

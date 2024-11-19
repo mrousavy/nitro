@@ -53,7 +53,6 @@ namespace NitroImage { class HybridTestObjectSwiftKotlinSpecCxx; }
 #include <NitroModules/ArrayBuffer.hpp>
 #include <NitroModules/ArrayBufferHolder.hpp>
 #include <NitroModules/Promise.hpp>
-#include <NitroModules/PromiseHolder.hpp>
 #include <functional>
 #include <memory>
 #include <optional>

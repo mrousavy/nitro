@@ -586,11 +586,11 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
     do {
       let __result = try self.__implementation.calculateFibonacciAsync(value: value)
       return { () -> bridge.std__shared_ptr_Promise_int64_t__ in
-        let __promiseHolder = bridge.create_std__shared_ptr_Promise_int64_t__()
+        let __promise = bridge.create_std__shared_ptr_Promise_int64_t__()
         __result
-          .then({ __result in __promiseHolder.pointee.resolve(__result) })
-          .catch({ __error in __promiseHolder.pointee.reject(std.string(String(describing: __error))) })
-        return __promiseHolder
+          .then({ __result in __promise.pointee.resolve(__result) })
+          .catch({ __error in __promise.pointee.reject(std.string(String(describing: __error))) })
+        return __promise
       }()
     } catch {
       let __message = "\(error.localizedDescription)"
@@ -603,11 +603,11 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
     do {
       let __result = try self.__implementation.wait(seconds: seconds)
       return { () -> bridge.std__shared_ptr_Promise_void__ in
-        let __promiseHolder = bridge.create_std__shared_ptr_Promise_void__()
+        let __promise = bridge.create_std__shared_ptr_Promise_void__()
         __result
-          .then({ __result in __promiseHolder.pointee.resolve() })
-          .catch({ __error in __promiseHolder.pointee.reject(std.string(String(describing: __error))) })
-        return __promiseHolder
+          .then({ __result in __promise.pointee.resolve() })
+          .catch({ __error in __promise.pointee.reject(std.string(String(describing: __error))) })
+        return __promise
       }()
     } catch {
       let __message = "\(error.localizedDescription)"
@@ -620,11 +620,11 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
     do {
       let __result = try self.__implementation.promiseThrows()
       return { () -> bridge.std__shared_ptr_Promise_void__ in
-        let __promiseHolder = bridge.create_std__shared_ptr_Promise_void__()
+        let __promise = bridge.create_std__shared_ptr_Promise_void__()
         __result
-          .then({ __result in __promiseHolder.pointee.resolve() })
-          .catch({ __error in __promiseHolder.pointee.reject(std.string(String(describing: __error))) })
-        return __promiseHolder
+          .then({ __result in __promise.pointee.resolve() })
+          .catch({ __error in __promise.pointee.reject(std.string(String(describing: __error))) })
+        return __promise
       }()
     } catch {
       let __message = "\(error.localizedDescription)"
@@ -773,11 +773,11 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
     do {
       let __result = try self.__implementation.createArrayBufferAsync()
       return { () -> bridge.std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___ in
-        let __promiseHolder = bridge.create_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___()
+        let __promise = bridge.create_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___()
         __result
-          .then({ __result in __promiseHolder.pointee.resolve(__result.getArrayBuffer()) })
-          .catch({ __error in __promiseHolder.pointee.reject(std.string(String(describing: __error))) })
-        return __promiseHolder
+          .then({ __result in __promise.pointee.resolve(__result.getArrayBuffer()) })
+          .catch({ __error in __promise.pointee.reject(std.string(String(describing: __error))) })
+        return __promise
       }()
     } catch {
       let __message = "\(error.localizedDescription)"
