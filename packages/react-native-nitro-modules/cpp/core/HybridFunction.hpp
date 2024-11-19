@@ -16,6 +16,7 @@ struct JSIConverter;
 #include "JSIConverter.hpp"
 #include "NitroDefines.hpp"
 #include "TypeInfo.hpp"
+#include <exception>
 #include <functional>
 #include <jsi/jsi.h>
 #include <memory>
