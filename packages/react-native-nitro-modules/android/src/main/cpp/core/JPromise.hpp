@@ -9,6 +9,7 @@
 
 #include "Promise.hpp"
 #include <fbjni/fbjni.h>
+#include <mutex>
 
 namespace margelo::nitro {
 
@@ -57,12 +58,14 @@ public:
 
 public:
   void resolve(jni::alias_ref<jni::JObject> result) {
+    std::unique_lock lock(_mutex);
     _result = jni::make_global(result);
     for (const auto& onResolved : _onResolvedListeners) {
       onResolved(_result);
     }
   }
   void reject(jni::alias_ref<jni::JThrowable> error) {
+    std::unique_lock lock(_mutex);
     _error = jni::make_global(error);
     for (const auto& onRejected : _onRejectedListeners) {
       onRejected(_error);
@@ -71,6 +74,7 @@ public:
 
 public:
   void addOnResolvedListener(OnResolvedFunc&& onResolved) {
+    std::unique_lock lock(_mutex);
     if (_result != nullptr) {
       // Promise is already resolved! Call the callback immediately
       onResolved(_result);
@@ -80,6 +84,7 @@ public:
     }
   }
   void addOnRejectedListener(OnRejectedFunc&& onRejected) {
+    std::unique_lock lock(_mutex);
     if (_error != nullptr) {
       // Promise is already rejected! Call the callback immediately
       onRejected(_error);
@@ -91,6 +96,7 @@ public:
 
 private:
   void addOnResolvedListenerJava(jni::alias_ref<JOnResolvedCallback> callback) {
+    std::unique_lock lock(_mutex);
     if (_result != nullptr) {
       // Promise is already resolved! Call the callback immediately
       callback->onResolved(_result);
@@ -101,6 +107,7 @@ private:
     }
   }
   void addOnRejectedListenerJava(jni::alias_ref<JOnRejectedCallback> callback) {
+    std::unique_lock lock(_mutex);
     if (_error != nullptr) {
       // Promise is already rejected! Call the callback immediately
       callback->onRejected(_error);
@@ -121,6 +128,7 @@ private:
   jni::global_ref<jni::JThrowable> _error;
   std::vector<OnResolvedFunc> _onResolvedListeners;
   std::vector<OnRejectedFunc> _onRejectedListeners;
+  std::mutex _mutex;
 
 public:
   static void registerNatives() {
