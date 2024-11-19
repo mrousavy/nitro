@@ -344,6 +344,7 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
             if (wrapping.type.kind === 'enum') {
               const enumType = getTypeAs(wrapping.type, EnumType)
               if (enumType.jsType === 'enum') {
+                // TODO: Remove this hack once Swift fixes this shit.
                 // A JS enum is implemented as a number/int based enum.
                 // For some reason, those break in Swift. I have no idea why.
                 return `${cppParameterName}.has_value() ? ${cppParameterName}.pointee : nil`
