@@ -169,6 +169,13 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
       throw RuntimeError.error(withMessage: "Promise throws :)")
     }
   }
+  
+  func awaitPromise(promise: Promise<Double>) throws -> Promise<Double> {
+    return .async {
+      let result = try await promise.await()
+      return result
+    }
+  }
 
   func callAll(first: @escaping (() -> Void), second: @escaping (() -> Void), third: @escaping (() -> Void)) throws {
     first()
