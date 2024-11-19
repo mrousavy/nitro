@@ -5,7 +5,6 @@ import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlin.concurrent.thread
 import kotlin.coroutines.resume
@@ -26,21 +25,6 @@ import kotlin.coroutines.suspendCoroutine
 @Keep
 @DoNotStrip
 class Promise<T> {
-  @Keep
-  @DoNotStrip
-  private fun interface OnResolvedCallback {
-    @Keep
-    @DoNotStrip
-    fun onResolved(result: java.lang.Object?)
-  }
-  @Keep
-  @DoNotStrip
-  private fun interface OnRejectedCallback {
-    @Keep
-    @DoNotStrip
-    fun onRejected(error: Throwable)
-  }
-
   @Keep
   @DoNotStrip
   private val mHybridData: HybridData
@@ -80,9 +64,10 @@ class Promise<T> {
    * Once the `Promise<T>` resolves, the [listener] will be called.
    */
   fun then(listener: (result: T) -> Unit): Promise<T> {
-    addOnResolvedListener { result ->
+    addOnResolvedListener { boxedResult ->
       @Suppress("UNCHECKED_CAST")
-      listener(result as T)
+      val result = boxedResult as? T ?: throw Error("Failed to cast Object to T!")
+      listener(result)
     }
     return this
   }
@@ -115,6 +100,24 @@ class Promise<T> {
   private external fun addOnResolvedListener(callback: OnResolvedCallback)
   private external fun addOnRejectedListener(callback: OnRejectedCallback)
   private external fun initHybrid(): HybridData
+
+  // Nested callbacks - need to be JavaClasses so we can access them with JNI
+  @Keep
+  @DoNotStrip
+  private fun interface OnResolvedCallback {
+    @Suppress("unused")
+    @Keep
+    @DoNotStrip
+    fun onResolved(result: Any)
+  }
+  @Keep
+  @DoNotStrip
+  private fun interface OnRejectedCallback {
+    @Suppress("unused")
+    @Keep
+    @DoNotStrip
+    fun onRejected(error: Throwable)
+  }
 
   companion object {
     private val defaultScope = CoroutineScope(Dispatchers.Default)
