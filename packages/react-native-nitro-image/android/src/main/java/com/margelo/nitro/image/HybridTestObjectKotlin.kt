@@ -135,6 +135,26 @@ class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
         }
     }
 
+    override fun awaitAndGetPromise(promise: Promise<Double>): Promise<Double> {
+        return Promise.async {
+            val result = promise.await()
+            return@async result
+        }
+    }
+
+    override fun awaitAndGetComplexPromise(promise: Promise<Car>): Promise<Car> {
+        return Promise.async {
+            val result = promise.await()
+            return@async result
+        }
+    }
+
+    override fun awaitPromise(promise: Promise<Unit>): Promise<Unit> {
+        return Promise.async {
+            promise.await()
+        }
+    }
+
     override fun callCallback(callback: () -> Unit) {
         callback()
     }

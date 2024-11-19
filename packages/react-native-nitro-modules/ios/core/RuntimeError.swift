@@ -14,4 +14,22 @@ import Foundation
  */
 public enum RuntimeError: Error {
   case error(withMessage: String)
+  
+  /**
+   * Creates a new `RuntimeError` from the given C++ `std::exception`.
+   */
+  public static func from(cppError: std.exception) -> RuntimeError {
+    let message = margelo.nitro.get_exception_message(cppError)
+    return .error(withMessage: String(message))
+  }
+}
+
+public extension Error {
+  /**
+   * Converts this `Error` to a C++ `std::exception`.
+   */
+  func toCpp() -> std.exception {
+    let message = String(describing: self)
+    return margelo.nitro.make_exception(std.string(message))
+  }
 }

@@ -112,7 +112,9 @@ public:
   std::shared_ptr<Promise<void>>
   getValueFromJsCallback(const std::function<std::future<std::string>()>& callback,
                          const std::function<void(const std::string& /* valueFromJs */)>& andThenCall) override;
-  std::shared_ptr<Promise<double>> awaitPromise(const std::shared_ptr<Promise<double>>& promise) override;
+  std::shared_ptr<Promise<double>> awaitAndGetPromise(const std::shared_ptr<Promise<double>>& promise) override;
+  std::shared_ptr<Promise<Car>> awaitAndGetComplexPromise(const std::shared_ptr<Promise<Car>>& promise) override;
+  std::shared_ptr<Promise<void>> awaitPromise(const std::shared_ptr<Promise<void>>& promise) override;
   std::shared_ptr<Promise<void>> promiseThrows() override;
   Car getCar() override;
   bool isCarElectric(const Car& car) override;

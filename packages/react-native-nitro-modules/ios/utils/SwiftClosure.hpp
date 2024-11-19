@@ -55,7 +55,11 @@ public:
   /**
    * Gets the underlying `std::function`.
    */
-  const std::function<void()>& getFunction() {
+  const std::function<void()>& getFunction() const {
+    return _function;
+  }
+
+  std::function<void()> getFunctionCopy() const {
     return _function;
   }
 };

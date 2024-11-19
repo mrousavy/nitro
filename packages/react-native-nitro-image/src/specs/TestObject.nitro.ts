@@ -89,6 +89,11 @@ interface SharedTestObjectProps {
   wait(seconds: number): Promise<void>
   promiseThrows(): Promise<void>
 
+  // Complex Promises
+  awaitAndGetPromise(promise: Promise<number>): Promise<number>
+  awaitAndGetComplexPromise(promise: Promise<Car>): Promise<Car>
+  awaitPromise(promise: Promise<void>): Promise<void>
+
   // Callbacks
   callCallback(callback: () => void): void
   callAll(first: () => void, second: () => void, third: () => void): void
@@ -146,9 +151,6 @@ export interface TestObjectCpp
     callback: () => string,
     andThenCall: (valueFromJs: string) => void
   ): Promise<void>
-
-  // Complex Promise tests
-  awaitPromise(promise: Promise<number>): Promise<number>
 
   // Other HybridObjects
   readonly thisObject: TestObjectCpp

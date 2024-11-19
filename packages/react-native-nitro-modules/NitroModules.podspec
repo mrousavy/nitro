@@ -43,6 +43,7 @@ Pod::Spec.new do |s|
     "ios/core/ArrayBufferHolder.hpp",
     "ios/core/AnyMapHolder.hpp",
     "ios/core/HybridContext.hpp",
+    "ios/utils/RuntimeError.hpp",
     "ios/utils/SwiftClosure.hpp",
   ]
 
