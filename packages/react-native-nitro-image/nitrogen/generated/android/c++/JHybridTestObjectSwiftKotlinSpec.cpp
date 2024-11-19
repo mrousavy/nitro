@@ -461,8 +461,8 @@ namespace margelo::nitro::image {
     static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JPromise::javaobject>(jni::alias_ref<JPromise::javaobject> /* promise */)>("awaitPromise");
     auto __result = method(_javaPart, [&]() {
       jni::local_ref<JPromise::javaobject> __promise = JPromise::create();
-      promise->addOnResolvedListener([=](const void& __result) {
-        __promise->cthis()->resolve(__result);
+      promise->addOnResolvedListener([=]() {
+        __promise->cthis()->resolve();
       });
       promise->addOnRejectedListener([=](const std::exception& __error) {
         auto __jniError = jni::JCppException::create(__error);

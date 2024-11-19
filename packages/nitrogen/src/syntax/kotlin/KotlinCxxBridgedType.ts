@@ -522,7 +522,24 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
             const promise = getTypeAs(this.type, PromiseType)
             const resolvingType = promise.resultingType.getCode('c++')
             const bridge = new KotlinCxxBridgedType(promise.resultingType)
-            return `
+            if (promise.resultingType.kind === 'void') {
+              // void: resolve()
+              return `
+[&]() {
+  jni::local_ref<JPromise::javaobject> __promise = JPromise::create();
+  ${parameterName}->addOnResolvedListener([=]() {
+    __promise->cthis()->resolve();
+  });
+  ${parameterName}->addOnRejectedListener([=](const std::exception& __error) {
+    auto __jniError = jni::JCppException::create(__error);
+    __promise->cthis()->reject(__jniError);
+  });
+  return __promise;
+}()
+`.trim()
+            } else {
+              // T: resolve(T)
+              return `
 [&]() {
   jni::local_ref<JPromise::javaobject> __promise = JPromise::create();
   ${parameterName}->addOnResolvedListener([=](const ${resolvingType}& __result) {
@@ -534,7 +551,8 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
   });
   return __promise;
 }()
-            `.trim()
+`.trim()
+            }
           }
           default:
             return parameterName
