@@ -7,6 +7,7 @@ export type TypeKind =
   | 'bigint'
   | 'boolean'
   | 'enum'
+  | 'error'
   | 'function'
   | 'hybrid-object'
   | 'hybrid-object-base'
