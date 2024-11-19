@@ -76,6 +76,11 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
           name: 'NitroModules/JArrayBuffer.hpp',
           space: 'system',
         })
+        imports.push({
+          language: 'c++',
+          name: 'NitroModules/JUnit.hpp',
+          space: 'system',
+        })
         break
       case 'promise':
         imports.push({
@@ -528,7 +533,7 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
 [&]() {
   jni::local_ref<JPromise::javaobject> __promise = JPromise::create();
   ${parameterName}->addOnResolvedListener([=]() {
-    __promise->cthis()->resolve(nullptr);
+    __promise->cthis()->resolve(JUnit::instance());
   });
   ${parameterName}->addOnRejectedListener([=](const std::exception& __error) {
     auto __jniError = jni::JCppException::create(__error);
