@@ -23,11 +23,11 @@ This allows your native code to perform heavy-, long-running tasks in parallel, 
     ```
   </TabItem>
   <TabItem value="cpp" label="C++">
-    In C++, a `Promise<T>` is represented as an `std::future<T>`. For example, create one with [`std::async`](https://en.cppreference.com/w/cpp/thread/async):
+    In C++, a `Promise<T>` can be created via Nitro's [`Promise<T>`](https://github.com/mrousavy/nitro/blob/main/packages/react-native-nitro-modules/cpp/core/Promise.hpp) type - for example, to use an asynchronous Thread pool:
 
     ```cpp
-    std::future<double> fibonacci(double n) {
-      return std::async(std::launch::async, [=]() -> double {
+    Promise<double> fibonacci(double n) {
+      return Promise::async([=]() -> double {
         // This runs on a separate Thread!
         return calculateFibonacciSequence(n);
       });
