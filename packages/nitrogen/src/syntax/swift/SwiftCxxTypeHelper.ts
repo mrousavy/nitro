@@ -6,7 +6,7 @@ import { FunctionType } from '../types/FunctionType.js'
 import { getTypeAs } from '../types/getTypeAs.js'
 import { OptionalType } from '../types/OptionalType.js'
 import { RecordType } from '../types/RecordType.js'
-import type { Type } from '../types/Type.js'
+import type { NamedType, Type } from '../types/Type.js'
 import { TupleType } from '../types/TupleType.js'
 import { escapeComments, indent } from '../../utils.js'
 import { PromiseType } from '../types/PromiseType.js'
@@ -476,9 +476,11 @@ function createCxxPromiseSwiftHelper(type: PromiseType): SwiftCxxHelper {
   const bridgedType = new SwiftCxxBridgedType(type)
   const actualType = `std::shared_ptr<Promise<${resultingType}>>`
 
-  const resolveFunction = new FunctionType(new VoidType(), [
-    new NamedWrappingType('result', type.resultingType),
-  ])
+  const resolverArgs: NamedType[] = []
+  if (type.resultingType.kind !== 'void') {
+    resolverArgs.push(new NamedWrappingType('result', type.resultingType))
+  }
+  const resolveFunction = new FunctionType(new VoidType(), resolverArgs)
   const rejectFunction = new FunctionType(new VoidType(), [
     new NamedWrappingType('error', new ErrorType()),
   ])

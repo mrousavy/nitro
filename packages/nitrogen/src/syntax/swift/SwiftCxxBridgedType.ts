@@ -27,6 +27,9 @@ import {
 import { createSwiftEnumBridge } from './SwiftEnum.js'
 import { createSwiftStructBridge } from './SwiftStruct.js'
 import { createSwiftVariant, getSwiftVariantCaseName } from './SwiftVariant.js'
+import { VoidType } from '../types/VoidType.js'
+import { NamedWrappingType } from '../types/NamedWrappingType.js'
+import { ErrorType } from '../types/ErrorType.js'
 
 // TODO: Remove enum bridge once Swift fixes bidirectional enums crashing the `-Swift.h` header.
 
@@ -323,9 +326,54 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
         }
       }
       case 'promise': {
+        const promise = getTypeAs(this.type, PromiseType)
         switch (language) {
-          case 'c++':
-            return `[]() -> ${this.getTypeCode('c++')} { throw std::runtime_error("Promise<..> cannot be converted to Swift yet!"); }()`
+          case 'swift': {
+            const resolvingTypeBridge = new SwiftCxxBridgedType(
+              promise.resultingType
+            )
+            if (promise.resultingType.kind === 'void') {
+              // It's void - resolve()
+              const rejecterFunc = new FunctionType(new VoidType(), [
+                new NamedWrappingType('error', new ErrorType()),
+              ])
+              const rejecterFuncBridge = new SwiftCxxBridgedType(rejecterFunc)
+              return `
+  { () -> ${promise.getCode('swift')} in
+    let __promise = ${promise.getCode('swift')}()
+    let __rejecter = { (__error: std.exception) in
+      __promise.reject(withError: RuntimeError.from(cppError: __error))
+    }
+    let __resolverCpp = SwiftClosure { __promise.resolve() }
+    let __rejecterCpp = ${indent(rejecterFuncBridge.parseFromSwiftToCpp('__rejecter', 'swift'), '  ')}
+    // TODO: Listeners
+    return __promise
+  }()`.trim()
+            } else {
+              // It's resolving to a type - resolve(T)
+              const resolverFunc = new FunctionType(new VoidType(), [
+                new NamedWrappingType('result', promise.resultingType),
+              ])
+              const rejecterFunc = new FunctionType(new VoidType(), [
+                new NamedWrappingType('error', new ErrorType()),
+              ])
+              const resolverFuncBridge = new SwiftCxxBridgedType(resolverFunc)
+              const rejecterFuncBridge = new SwiftCxxBridgedType(rejecterFunc)
+              return `
+  { () -> ${promise.getCode('swift')} in
+    let __promise = ${promise.getCode('swift')}()
+    let __resolver = { (__result: ${resolvingTypeBridge.getTypeCode('swift')}) in
+      __promise.resolve(withResult: ${indent(resolvingTypeBridge.parseFromCppToSwift('__result', 'swift'), '    ')})
+    }
+    let __rejecter = { (__error: std.exception) in
+      __promise.reject(withError: RuntimeError.from(cppError: __error))
+    }
+    let __resolverCpp = ${indent(resolverFuncBridge.parseFromSwiftToCpp('__resolver', 'swift'), '  ')}
+    let __rejecterCpp = ${indent(rejecterFuncBridge.parseFromSwiftToCpp('__rejecter', 'swift'), '  ')}
+    return __promise
+  }()`.trim()
+            }
+          }
           default:
             return cppParameterName
         }
