@@ -10,6 +10,7 @@ import type { State } from './Testers'
 import { it } from './Testers'
 import { stringify } from './utils'
 import { getHybridObjectConstructor } from 'react-native-nitro-modules'
+import { InteractionManager } from 'react-native'
 
 type TestResult =
   | {
@@ -71,9 +72,15 @@ function timeoutedPromise<T>(
 ): Promise<T> {
   return new Promise((resolve, reject) => {
     let didResolve = false
-    setTimeout(() => {
-      if (!didResolve) reject(new Error(`Timeouted!`))
-    }, 500)
+    InteractionManager.runAfterInteractions(() => {
+      requestAnimationFrame(() => {
+        setImmediate(() => {
+          setTimeout(() => {
+            if (!didResolve) reject(new Error(`Timeouted!`))
+          }, 1500)
+        })
+      })
+    })
     try {
       run((value) => {
         if (didResolve) {
@@ -699,14 +706,15 @@ export function getTests(
     createTest('JS Promise can be awaited on native side', async () =>
       (
         await it(() => {
-          return timeoutedPromise(async () => {
-            let resolve: (value: number) => void = () => {}
+          return timeoutedPromise(async (complete) => {
+            let resolve = (_: number) => {}
             const promise = new Promise<number>((r) => {
               resolve = r
             })
-            const newPromise = testObject.awaitPromise(promise)
-            resolve(55)
-            return await newPromise
+            const nativePromise = testObject.awaitPromise(promise)
+            resolve(5)
+            const result = await nativePromise
+            complete(result)
           })
         })
       )
