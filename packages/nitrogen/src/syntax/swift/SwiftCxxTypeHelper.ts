@@ -481,6 +481,11 @@ inline ${actualType} create_${name}() {
        `.trim(),
       requiredIncludes: [
         {
+          name: 'NitroModules/Promise.hpp',
+          space: 'system',
+          language: 'c++',
+        },
+        {
           name: 'memory',
           space: 'system',
           language: 'c++',
