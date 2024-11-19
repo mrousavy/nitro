@@ -12,7 +12,7 @@
 namespace margelo::nitro {
 
 ThreadPool::ThreadPool(const char* name, size_t initialThreadsCount, size_t maxThreadsCount)
-    : _isAlive(true), _name(name), _threadCountLimit(maxThreadsCount) {
+    : _isAlive(true), _threadCountLimit(maxThreadsCount), _name(name) {
   Logger::log(LogLevel::Info, TAG, "Creating ThreadPool \"%s\" with %i initial threads (max: %i)...", name, initialThreadsCount,
               maxThreadsCount);
 
