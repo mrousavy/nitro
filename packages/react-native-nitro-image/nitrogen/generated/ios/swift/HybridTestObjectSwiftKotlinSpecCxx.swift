@@ -589,7 +589,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
         let __promise = bridge.create_std__shared_ptr_Promise_int64_t__()
         __result
           .then({ __result in __promise.pointee.resolve(__result) })
-          .catch({ __error in __promise.pointee.reject(std.string(String(describing: __error))) })
+          .catch({ __error in __promise.pointee.reject(__error.toCpp()) })
         return __promise
       }()
     } catch {
@@ -606,7 +606,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
         let __promise = bridge.create_std__shared_ptr_Promise_void__()
         __result
           .then({ __result in __promise.pointee.resolve() })
-          .catch({ __error in __promise.pointee.reject(std.string(String(describing: __error))) })
+          .catch({ __error in __promise.pointee.reject(__error.toCpp()) })
         return __promise
       }()
     } catch {
@@ -623,7 +623,200 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
         let __promise = bridge.create_std__shared_ptr_Promise_void__()
         __result
           .then({ __result in __promise.pointee.resolve() })
-          .catch({ __error in __promise.pointee.reject(std.string(String(describing: __error))) })
+          .catch({ __error in __promise.pointee.reject(__error.toCpp()) })
+        return __promise
+      }()
+    } catch {
+      let __message = "\(error.localizedDescription)"
+      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(__message))")
+    }
+  }
+  
+  @inline(__always)
+  public func awaitAndGetPromise(promise: bridge.std__shared_ptr_Promise_double__) -> bridge.std__shared_ptr_Promise_double__ {
+    do {
+      let __result = try self.__implementation.awaitAndGetPromise(promise: { () -> Promise<Double> in
+        let __promise = Promise<Double>()
+        let __resolver = { (__result: Double) in
+          __promise.resolve(withResult: __result)
+        }
+        let __rejecter = { (__error: std.exception) in
+          __promise.reject(withError: RuntimeError.from(cppError: __error))
+        }
+        let __resolverCpp = { () -> bridge.Func_void_double in
+          class ClosureHolder {
+            let closure: ((_ result: Double) -> Void)
+            init(wrappingClosure closure: @escaping ((_ result: Double) -> Void)) {
+              self.closure = closure
+            }
+            func invoke(_ __result: Double) {
+              self.closure(__result)
+            }
+          }
+        
+          let __closureHolder = Unmanaged.passRetained(ClosureHolder(wrappingClosure: __resolver)).toOpaque()
+          func __callClosure(__closureHolder: UnsafeMutableRawPointer, __result: Double) -> Void {
+            let closure = Unmanaged<ClosureHolder>.fromOpaque(__closureHolder).takeUnretainedValue()
+            closure.invoke(__result)
+          }
+          func __destroyClosure(_ __closureHolder: UnsafeMutableRawPointer) -> Void {
+            Unmanaged<ClosureHolder>.fromOpaque(__closureHolder).release()
+          }
+        
+          return bridge.create_Func_void_double(__closureHolder, __callClosure, __destroyClosure)
+        }()
+        let __rejecterCpp = { () -> bridge.Func_void_std__exception in
+          class ClosureHolder {
+            let closure: ((_ error: std.exception) -> Void)
+            init(wrappingClosure closure: @escaping ((_ error: std.exception) -> Void)) {
+              self.closure = closure
+            }
+            func invoke(_ __error: std.exception) {
+              self.closure(__error)
+            }
+          }
+        
+          let __closureHolder = Unmanaged.passRetained(ClosureHolder(wrappingClosure: __rejecter)).toOpaque()
+          func __callClosure(__closureHolder: UnsafeMutableRawPointer, __error: std.exception) -> Void {
+            let closure = Unmanaged<ClosureHolder>.fromOpaque(__closureHolder).takeUnretainedValue()
+            closure.invoke(__error)
+          }
+          func __destroyClosure(_ __closureHolder: UnsafeMutableRawPointer) -> Void {
+            Unmanaged<ClosureHolder>.fromOpaque(__closureHolder).release()
+          }
+        
+          return bridge.create_Func_void_std__exception(__closureHolder, __callClosure, __destroyClosure)
+        }()
+        promise.pointee.addOnResolvedListenerCopy(__resolverCpp)
+        promise.pointee.addOnRejectedListener(__rejecterCpp)
+        return __promise
+      }())
+      return { () -> bridge.std__shared_ptr_Promise_double__ in
+        let __promise = bridge.create_std__shared_ptr_Promise_double__()
+        __result
+          .then({ __result in __promise.pointee.resolve(__result) })
+          .catch({ __error in __promise.pointee.reject(__error.toCpp()) })
+        return __promise
+      }()
+    } catch {
+      let __message = "\(error.localizedDescription)"
+      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(__message))")
+    }
+  }
+  
+  @inline(__always)
+  public func awaitAndGetComplexPromise(promise: bridge.std__shared_ptr_Promise_Car__) -> bridge.std__shared_ptr_Promise_Car__ {
+    do {
+      let __result = try self.__implementation.awaitAndGetComplexPromise(promise: { () -> Promise<Car> in
+        let __promise = Promise<Car>()
+        let __resolver = { (__result: Car) in
+          __promise.resolve(withResult: __result)
+        }
+        let __rejecter = { (__error: std.exception) in
+          __promise.reject(withError: RuntimeError.from(cppError: __error))
+        }
+        let __resolverCpp = { () -> bridge.Func_void_Car in
+          class ClosureHolder {
+            let closure: ((_ result: Car) -> Void)
+            init(wrappingClosure closure: @escaping ((_ result: Car) -> Void)) {
+              self.closure = closure
+            }
+            func invoke(_ __result: Car) {
+              self.closure(__result)
+            }
+          }
+        
+          let __closureHolder = Unmanaged.passRetained(ClosureHolder(wrappingClosure: __resolver)).toOpaque()
+          func __callClosure(__closureHolder: UnsafeMutableRawPointer, __result: Car) -> Void {
+            let closure = Unmanaged<ClosureHolder>.fromOpaque(__closureHolder).takeUnretainedValue()
+            closure.invoke(__result)
+          }
+          func __destroyClosure(_ __closureHolder: UnsafeMutableRawPointer) -> Void {
+            Unmanaged<ClosureHolder>.fromOpaque(__closureHolder).release()
+          }
+        
+          return bridge.create_Func_void_Car(__closureHolder, __callClosure, __destroyClosure)
+        }()
+        let __rejecterCpp = { () -> bridge.Func_void_std__exception in
+          class ClosureHolder {
+            let closure: ((_ error: std.exception) -> Void)
+            init(wrappingClosure closure: @escaping ((_ error: std.exception) -> Void)) {
+              self.closure = closure
+            }
+            func invoke(_ __error: std.exception) {
+              self.closure(__error)
+            }
+          }
+        
+          let __closureHolder = Unmanaged.passRetained(ClosureHolder(wrappingClosure: __rejecter)).toOpaque()
+          func __callClosure(__closureHolder: UnsafeMutableRawPointer, __error: std.exception) -> Void {
+            let closure = Unmanaged<ClosureHolder>.fromOpaque(__closureHolder).takeUnretainedValue()
+            closure.invoke(__error)
+          }
+          func __destroyClosure(_ __closureHolder: UnsafeMutableRawPointer) -> Void {
+            Unmanaged<ClosureHolder>.fromOpaque(__closureHolder).release()
+          }
+        
+          return bridge.create_Func_void_std__exception(__closureHolder, __callClosure, __destroyClosure)
+        }()
+        promise.pointee.addOnResolvedListener(__resolverCpp)
+        promise.pointee.addOnRejectedListener(__rejecterCpp)
+        return __promise
+      }())
+      return { () -> bridge.std__shared_ptr_Promise_Car__ in
+        let __promise = bridge.create_std__shared_ptr_Promise_Car__()
+        __result
+          .then({ __result in __promise.pointee.resolve(__result) })
+          .catch({ __error in __promise.pointee.reject(__error.toCpp()) })
+        return __promise
+      }()
+    } catch {
+      let __message = "\(error.localizedDescription)"
+      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(__message))")
+    }
+  }
+  
+  @inline(__always)
+  public func awaitPromise(promise: bridge.std__shared_ptr_Promise_void__) -> bridge.std__shared_ptr_Promise_void__ {
+    do {
+      let __result = try self.__implementation.awaitPromise(promise: { () -> Promise<Void> in
+        let __promise = Promise<Void>()
+        let __resolver = SwiftClosure { __promise.resolve(withResult: ()) }
+        let __rejecter = { (__error: std.exception) in
+          __promise.reject(withError: RuntimeError.from(cppError: __error))
+        }
+        let __resolverCpp = __resolver.getFunctionCopy()
+        let __rejecterCpp = { () -> bridge.Func_void_std__exception in
+          class ClosureHolder {
+            let closure: ((_ error: std.exception) -> Void)
+            init(wrappingClosure closure: @escaping ((_ error: std.exception) -> Void)) {
+              self.closure = closure
+            }
+            func invoke(_ __error: std.exception) {
+              self.closure(__error)
+            }
+          }
+        
+          let __closureHolder = Unmanaged.passRetained(ClosureHolder(wrappingClosure: __rejecter)).toOpaque()
+          func __callClosure(__closureHolder: UnsafeMutableRawPointer, __error: std.exception) -> Void {
+            let closure = Unmanaged<ClosureHolder>.fromOpaque(__closureHolder).takeUnretainedValue()
+            closure.invoke(__error)
+          }
+          func __destroyClosure(_ __closureHolder: UnsafeMutableRawPointer) -> Void {
+            Unmanaged<ClosureHolder>.fromOpaque(__closureHolder).release()
+          }
+        
+          return bridge.create_Func_void_std__exception(__closureHolder, __callClosure, __destroyClosure)
+        }()
+        promise.pointee.addOnResolvedListener(__resolverCpp)
+        promise.pointee.addOnRejectedListener(__rejecterCpp)
+        return __promise
+      }())
+      return { () -> bridge.std__shared_ptr_Promise_void__ in
+        let __promise = bridge.create_std__shared_ptr_Promise_void__()
+        __result
+          .then({ __result in __promise.pointee.resolve() })
+          .catch({ __error in __promise.pointee.reject(__error.toCpp()) })
         return __promise
       }()
     } catch {
@@ -776,7 +969,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
         let __promise = bridge.create_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___()
         __result
           .then({ __result in __promise.pointee.resolve(__result.getArrayBuffer()) })
-          .catch({ __error in __promise.pointee.reject(std.string(String(describing: __error))) })
+          .catch({ __error in __promise.pointee.reject(__error.toCpp()) })
         return __promise
       }()
     } catch {

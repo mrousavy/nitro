@@ -8,6 +8,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlin.concurrent.thread
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
 
 /**
  * Represents a Promise that can be passed to JS.
@@ -23,17 +26,41 @@ import kotlin.concurrent.thread
 @Keep
 @DoNotStrip
 class Promise<T> {
+  @Keep
+  @DoNotStrip
+  fun interface OnResolvedCallback<T> {
+    @Keep
+    @DoNotStrip
+    fun onResolved(result: T)
+  }
+  @Keep
+  @DoNotStrip
+  fun interface OnRejectedCallback {
+    @Keep
+    @DoNotStrip
+    fun onRejected(error: Throwable)
+  }
+
+  @Keep
+  @DoNotStrip
   private val mHybridData: HybridData
 
   /**
    * Creates a new Promise with fully manual control over the `resolve(..)`/`reject(..)` functions
    */
-  init {
+  constructor() {
     mHybridData = initHybrid()
   }
 
+  @Suppress("unused")
+  @Keep
+  @DoNotStrip
+  private constructor(hybridData: HybridData) {
+    mHybridData = hybridData
+  }
+
   /**
-   * Resolves the Promise with the given result.
+   * Resolves the Promise with the given [result].
    * Any `onResolved` listeners will be invoked.
    */
   fun resolve(result: T) {
@@ -41,16 +68,49 @@ class Promise<T> {
   }
 
   /**
-   * Rejects the Promise with the given error.
+   * Rejects the Promise with the given [error].
    * Any `onRejected` listeners will be invoked.
    */
   fun reject(error: Throwable) {
-    nativeReject(error.toString())
+    nativeReject(error)
+  }
+
+  /**
+   * Add a continuation listener to this `Promise<T>`.
+   * Once the `Promise<T>` resolves, the [listener] will be called.
+   */
+  fun then(listener: OnResolvedCallback<T>): Promise<T> {
+    addOnResolvedListener(listener)
+    return this
+  }
+
+  /**
+   * Add an error continuation listener to this `Promise<T>`.
+   * Once the `Promise<T>` rejects, the [listener] will be called with the error.
+   */
+  fun catch(listener: OnRejectedCallback): Promise<T> {
+    addOnRejectedListener(listener)
+    return this
+  }
+
+  /**
+   * Asynchronously await the result of the Promise.
+   * If the Promise is already resolved/rejected, this will continue immediately,
+   * otherwise it will asynchronously wait for a result or throw on a rejection.
+   * This function can only be used from a coroutine context.
+   */
+  suspend fun await(): T {
+    return suspendCoroutine { continuation ->
+      addOnResolvedListener { result -> continuation.resume(result) }
+      addOnRejectedListener { error -> continuation.resumeWithException(error) }
+    }
   }
 
   // C++ functions
   private external fun nativeResolve(result: Any)
-  private external fun nativeReject(error: String)
+  private external fun nativeReject(error: Throwable)
+  private external fun addOnResolvedListener(callback: OnResolvedCallback<T>)
+  private external fun addOnRejectedListener(callback: OnRejectedCallback)
   private external fun initHybrid(): HybridData
 
   companion object {
