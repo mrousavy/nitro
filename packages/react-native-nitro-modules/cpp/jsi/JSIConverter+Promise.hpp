@@ -31,7 +31,7 @@ struct JSIConverter<std::shared_ptr<Promise<TResult>>> final {
     auto thenCallback = [&]() {
       if constexpr (std::is_void_v<TResult>) {
         // void: resolve()
-        return JSIConverter<std::function<void()>>::toJSI(runtime, [=]() { promise->resolve(); });
+        return JSIConverter<std::function<void(std::monostate)>>::toJSI(runtime, [=](std::monostate) { promise->resolve(); });
       } else {
         // T: resolve(T)
         return JSIConverter<std::function<void(TResult)>>::toJSI(runtime, [=](const TResult& result) { promise->resolve(result); });
