@@ -109,8 +109,9 @@ public:
   void callWithOptional(std::optional<double> value, const std::function<void(std::optional<double> /* maybe */)>& callback) override;
   std::shared_ptr<Promise<double>> getValueFromJSCallbackAndWait(const std::function<std::future<double>()>& getValue) override;
   void callAll(const std::function<void()>& first, const std::function<void()>& second, const std::function<void()>& third) override;
-  std::shared_ptr<Promise<void>> getValueFromJsCallback(const std::function<std::future<std::string>()>& callback,
-                                                        const std::function<void(const std::string& /* valueFromJs */)>& andThenCall) override;
+  std::shared_ptr<Promise<void>>
+  getValueFromJsCallback(const std::function<std::future<std::string>()>& callback,
+                         const std::function<void(const std::string& /* valueFromJs */)>& andThenCall) override;
   std::shared_ptr<Promise<void>> promiseThrows() override;
   Car getCar() override;
   bool isCarElectric(const Car& car) override;
