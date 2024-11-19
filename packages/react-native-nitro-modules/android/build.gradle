@@ -48,13 +48,13 @@ android {
 
     externalNativeBuild {
       cmake {
-        cppFlags "-frtti -fexceptions -Wall"
+        cppFlags "-frtti -fexceptions -Wall -Wextra -fstack-protector-all"
         arguments "-DANDROID_STL=c++_shared"
         abiFilters (*reactNativeArchitectures())
 
         buildTypes {
           debug {
-            cppFlags "-O0 -fstack-protector-all"
+            cppFlags "-O1 -g"
           }
           release {
             cppFlags "-O2"
