@@ -476,7 +476,7 @@ function createCxxPromiseSwiftHelper(type: PromiseType): SwiftCxxHelper {
  */
 using ${name} = ${actualType};
 inline ${actualType} create_${name}() {
-  return std::make_shared<Promise<${resultingType}>>();
+  return Promise<${resultingType}>::create();
 }
        `.trim(),
       requiredIncludes: [

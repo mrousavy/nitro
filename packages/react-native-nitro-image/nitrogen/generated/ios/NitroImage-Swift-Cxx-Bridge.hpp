@@ -279,7 +279,7 @@ namespace margelo::nitro::image::bridge::swift {
    */
   using std__shared_ptr_Promise_int64_t__ = std::shared_ptr<Promise<int64_t>>;
   inline std::shared_ptr<Promise<int64_t>> create_std__shared_ptr_Promise_int64_t__() {
-    return std::make_shared<Promise<int64_t>>();
+    return Promise<int64_t>::create();
   }
   
   // pragma MARK: std::shared_ptr<Promise<void>>
@@ -288,7 +288,7 @@ namespace margelo::nitro::image::bridge::swift {
    */
   using std__shared_ptr_Promise_void__ = std::shared_ptr<Promise<void>>;
   inline std::shared_ptr<Promise<void>> create_std__shared_ptr_Promise_void__() {
-    return std::make_shared<Promise<void>>();
+    return Promise<void>::create();
   }
   
   // pragma MARK: std::function<void()>
@@ -371,7 +371,7 @@ namespace margelo::nitro::image::bridge::swift {
    */
   using std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___ = std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>;
   inline std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>> create_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___() {
-    return std::make_shared<Promise<std::shared_ptr<ArrayBuffer>>>();
+    return Promise<std::shared_ptr<ArrayBuffer>>::create();
   }
   
   // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridChildSpec>

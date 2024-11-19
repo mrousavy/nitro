@@ -28,18 +28,23 @@ public:
   // Promise can be moved.
   Promise(Promise&&) = default;
 
-  /**
-   * Creates a new pending Promise that has to be resolved
-   * or rejected with `resolve(..)` or `reject(..)`.
-   */
+private:
   Promise() = default;
 
 public:
   /**
+   * Creates a new pending Promise that has to be resolved
+   * or rejected with `resolve(..)` or `reject(..)`.
+   */
+  static std::shared_ptr<Promise> create() {
+    return std::shared_ptr<Promise>(new Promise());
+  }
+
+  /**
    * Creates a Promise that runs the given function `run` on a separate Thread pool.
    */
   static std::shared_ptr<Promise> async(std::function<TResult()>&& run) {
-    auto promise = std::make_shared<Promise>();
+    auto promise = create();
     ThreadPool::shared().run([run = std::move(run), promise]() {
       try {
         // Run the code, then resolve.
@@ -70,7 +75,7 @@ public:
    * Creates an immediately resolved Promise.
    */
   static std::shared_ptr<Promise> resolved(TResult&& result) {
-    auto promise = std::make_shared<Promise>();
+    auto promise = create();
     promise->resolve(std::move(result));
     return promise;
   }
@@ -78,7 +83,7 @@ public:
    * Creates an immediately rejected Promise.
    */
   static std::shared_ptr<Promise> rejected(TError&& error) {
-    auto promise = std::make_shared<Promise>();
+    auto promise = create();
     promise->reject(std::move(error));
     return promise;
   }
@@ -207,11 +212,17 @@ public:
 public:
   Promise(const Promise&) = delete;
   Promise(Promise&&) = default;
+
+private:
   Promise() = default;
 
 public:
+  static std::shared_ptr<Promise> create() {
+    return std::shared_ptr<Promise>(new Promise());
+  }
+
   static std::shared_ptr<Promise> async(std::function<void()>&& run) {
-    auto promise = std::make_shared<Promise>();
+    auto promise = create();
     ThreadPool::shared().run([run = std::move(run), promise]() {
       try {
         // Run the code, then resolve.
@@ -235,12 +246,12 @@ public:
   }
 
   static std::shared_ptr<Promise> resolved() {
-    auto promise = std::make_shared<Promise>();
+    auto promise = create();
     promise->resolve();
     return promise;
   }
   static std::shared_ptr<Promise> rejected(TError&& error) {
-    auto promise = std::make_shared<Promise>();
+    auto promise = create();
     promise->reject(std::move(error));
     return promise;
   }
