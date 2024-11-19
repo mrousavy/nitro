@@ -147,6 +147,9 @@ export interface TestObjectCpp
     andThenCall: (valueFromJs: string) => void
   ): Promise<void>
 
+  // Complex Promise tests
+  awaitPromise(promise: Promise<number>): Promise<number>
+
   // Other HybridObjects
   readonly thisObject: TestObjectCpp
   newTestObject(): TestObjectCpp

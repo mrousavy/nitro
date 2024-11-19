@@ -691,6 +691,23 @@ export function getTests(
         .didNotThrow()
         .equals(true)
     ),
+    createTest('JS Promise can be awaited on native side', async () =>
+      (
+        await it(() => {
+          return timeoutedPromise(async () => {
+            let resolve: (value: number) => void = () => {}
+            const promise = new Promise<number>((r) => {
+              resolve = r
+            })
+            const newPromise = testObject.awaitPromise(promise)
+            resolve(55)
+            return await newPromise
+          })
+        })
+      )
+        .didNotThrow()
+        .equals(true)
+    ),
 
     // Callbacks
     createTest('callCallback(...)', async () =>
