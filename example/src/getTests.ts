@@ -703,7 +703,7 @@ export function getTests(
         .didNotThrow()
         .equals(true)
     ),
-    createTest('JS Promise can be awaited on native side', async () =>
+    createTest('JS Promise<number> can be awaited on native side', async () =>
       (
         await it(() => {
           return timeoutedPromise(async (complete) => {
@@ -711,7 +711,7 @@ export function getTests(
             const promise = new Promise<number>((r) => {
               resolve = r
             })
-            const nativePromise = testObject.awaitPromise(promise)
+            const nativePromise = testObject.awaitAndGetPromise(promise)
             resolve(5)
             const result = await nativePromise
             complete(result)
@@ -720,6 +720,42 @@ export function getTests(
       )
         .didNotThrow()
         .equals(5)
+    ),
+    createTest('JS Promise<Car> can be awaited on native side', async () =>
+      (
+        await it(() => {
+          return timeoutedPromise(async (complete) => {
+            let resolve = (_: Car) => {}
+            const promise = new Promise<Car>((r) => {
+              resolve = r
+            })
+            const nativePromise = testObject.awaitAndGetComplexPromise(promise)
+            resolve(TEST_CAR)
+            const result = await nativePromise
+            complete(result)
+          })
+        })
+      )
+        .didNotThrow()
+        .equals(TEST_CAR)
+    ),
+    createTest('JS Promise<void> can be awaited on native side', async () =>
+      (
+        await it(() => {
+          return timeoutedPromise(async (complete) => {
+            let resolve = () => {}
+            const promise = new Promise<void>((r) => {
+              resolve = r
+            })
+            const nativePromise = testObject.awaitPromise(promise)
+            resolve()
+            const result = await nativePromise
+            complete(result)
+          })
+        })
+      )
+        .didNotThrow()
+        .equals(undefined)
     ),
 
     // Callbacks
