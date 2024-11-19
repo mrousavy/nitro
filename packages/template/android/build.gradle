@@ -47,9 +47,18 @@ android {
 
     externalNativeBuild {
       cmake {
-        cppFlags "-O2 -frtti -fexceptions -Wall -fstack-protector-all"
+        cppFlags "-frtti -fexceptions -Wall"
         arguments "-DANDROID_STL=c++_shared"
         abiFilters (*reactNativeArchitectures())
+
+        buildTypes {
+          debug {
+            cppFlags "-O0 -fstack-protector-all"
+          }
+          release {
+            cppFlags "-O2"
+          }
+        }
       }
     }
   }
@@ -88,7 +97,7 @@ android {
 
   buildTypes {
     release {
-      minifyEnabled false
+      minifyEnabled true
     }
   }
 
