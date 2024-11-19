@@ -26,12 +26,16 @@ using namespace facebook;
 template <typename TResult>
 struct JSIConverter<std::shared_ptr<Promise<TResult>>> final {
   static inline std::shared_ptr<Promise<TResult>> fromJSI(jsi::Runtime& runtime, const jsi::Value& value) {
+    // Get JS Promise and .then and .catch functions
     auto object = value.asObject(runtime);
-    auto thenFn =
-        JSIConverter<std::function<void(std::function<void(TResult)>)>>::fromJSI(runtime, object.getPropertyAsFunction(runtime, "then"));
-    auto catchFn = JSIConverter<std::function<void(std::function<void(std::exception)>)>>::fromJSI(
-        runtime, object.getPropertyAsFunction(runtime, "catch"));
+    auto thenFn = JSIConverter<std::function<void(std::function<void(TResult)>)>>::fromJSI(runtime, object.getProperty(runtime, "then"));
+    auto catchFn =
+        JSIConverter<std::function<void(std::function<void(std::exception)>)>>::fromJSI(runtime, object.getProperty(runtime, "catch"));
+
+    // Create new Promise and chain .then & .catch
     auto promise = Promise<TResult>::create();
+    thenFn([=](const TResult& result) { promise->resolve(result); });
+    catchFn([=](const std::exception& exception) { promise->reject(exception); });
     return promise;
   }
 
