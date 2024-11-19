@@ -22,10 +22,13 @@ namespace margelo::nitro {
 class ThreadPool final {
 public:
   /**
-   * Create a new ThreadPool with the given number of fixed workers/threads.
+   * Create a new ThreadPool with the given number of minimum workers/threads.
+   * The Thread Pool can expand on the fly if it is busy.
    */
-  explicit ThreadPool(const char* const name, size_t numThreads);
+  explicit ThreadPool(const char* const name, size_t initialThreadsCount, size_t maxThreadsCount);
   ~ThreadPool();
+  ThreadPool(const ThreadPool&) = delete;
+  ThreadPool(ThreadPool&&) = delete;
 
   /**
    * Schedules the given task asynchronously on the ThreadPool.
@@ -33,12 +36,19 @@ public:
    */
   void run(std::function<void()>&& task);
 
+private:
+  /**
+   * Adds a new Thread to the current Thread Pool.
+   * This grows the size by one, and potentially starts work sooner if other Threads are busy.
+   */
+  void addThread();
+
 public:
   /**
    * Get a static singleton instance - a shared ThreadPool.
    * The shared ThreadPool has 3 threads.
    */
-  static std::shared_ptr<ThreadPool> getSharedPool();
+  static ThreadPool& shared();
 
 private:
   std::vector<std::thread> _workers;
@@ -46,6 +56,8 @@ private:
   std::mutex _queueMutex;
   std::condition_variable _condition;
   std::atomic<bool> _isAlive;
+  std::atomic<size_t> _threadCount;
+  size_t _threadCountLimit;
   const char* _name;
   static constexpr auto TAG = "ThreadPool";
 };

@@ -39,11 +39,11 @@ namespace margelo::nitro::image { class HybridBaseSpec; }
 #include <optional>
 #include <vector>
 #include "Powertrain.hpp"
-#include <variant>
 #include "OldEnum.hpp"
+#include <variant>
 #include "Car.hpp"
 #include "Person.hpp"
-#include <future>
+#include <NitroModules/Promise.hpp>
 #include <functional>
 #include <NitroModules/AnyMap.hpp>
 #include <NitroModules/ArrayBuffer.hpp>
@@ -100,6 +100,8 @@ namespace margelo::nitro::image {
       virtual void setOptionalArray(const std::optional<std::vector<std::string>>& optionalArray) = 0;
       virtual std::optional<Powertrain> getOptionalEnum() = 0;
       virtual void setOptionalEnum(std::optional<Powertrain> optionalEnum) = 0;
+      virtual std::optional<OldEnum> getOptionalOldEnum() = 0;
+      virtual void setOptionalOldEnum(std::optional<OldEnum> optionalOldEnum) = 0;
       virtual std::variant<std::string, double> getSomeVariant() = 0;
       virtual void setSomeVariant(const std::variant<std::string, double>& someVariant) = 0;
 
@@ -112,8 +114,8 @@ namespace margelo::nitro::image {
       virtual std::variant<std::tuple<double, double>, std::tuple<double, double, double>> getVariantTuple(const std::variant<std::tuple<double, double>, std::tuple<double, double, double>>& variant) = 0;
       virtual std::tuple<double, double, double> flip(const std::tuple<double, double, double>& tuple) = 0;
       virtual std::tuple<double, std::string, bool> passTuple(const std::tuple<double, std::string, bool>& tuple) = 0;
-      virtual std::future<double> getValueFromJSCallbackAndWait(const std::function<std::future<double>()>& getValue) = 0;
-      virtual std::future<void> getValueFromJsCallback(const std::function<std::future<std::string>()>& callback, const std::function<void(const std::string& /* valueFromJs */)>& andThenCall) = 0;
+      virtual std::shared_ptr<Promise<double>> getValueFromJSCallbackAndWait(const std::function<std::future<double>()>& getValue) = 0;
+      virtual std::shared_ptr<Promise<void>> getValueFromJsCallback(const std::function<std::future<std::string>()>& callback, const std::function<void(const std::string& /* valueFromJs */)>& andThenCall) = 0;
       virtual std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec> newTestObject() = 0;
       virtual void simpleFunc() = 0;
       virtual double addNumbers(double a, double b) = 0;
@@ -131,9 +133,9 @@ namespace margelo::nitro::image {
       virtual std::string tryMiddleParam(double num, std::optional<bool> boo, const std::string& str) = 0;
       virtual std::optional<Powertrain> tryOptionalEnum(std::optional<Powertrain> value) = 0;
       virtual int64_t calculateFibonacciSync(double value) = 0;
-      virtual std::future<int64_t> calculateFibonacciAsync(double value) = 0;
-      virtual std::future<void> wait(double seconds) = 0;
-      virtual std::future<void> promiseThrows() = 0;
+      virtual std::shared_ptr<Promise<int64_t>> calculateFibonacciAsync(double value) = 0;
+      virtual std::shared_ptr<Promise<void>> wait(double seconds) = 0;
+      virtual std::shared_ptr<Promise<void>> promiseThrows() = 0;
       virtual void callCallback(const std::function<void()>& callback) = 0;
       virtual void callAll(const std::function<void()>& first, const std::function<void()>& second, const std::function<void()>& third) = 0;
       virtual void callWithOptional(std::optional<double> value, const std::function<void(std::optional<double> /* maybe */)>& callback) = 0;
@@ -143,7 +145,7 @@ namespace margelo::nitro::image {
       virtual std::shared_ptr<ArrayBuffer> createArrayBuffer() = 0;
       virtual double getBufferLastItem(const std::shared_ptr<ArrayBuffer>& buffer) = 0;
       virtual void setAllValuesTo(const std::shared_ptr<ArrayBuffer>& buffer, double value) = 0;
-      virtual std::future<std::shared_ptr<ArrayBuffer>> createArrayBufferAsync() = 0;
+      virtual std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>> createArrayBufferAsync() = 0;
       virtual std::shared_ptr<margelo::nitro::image::HybridChildSpec> createChild() = 0;
       virtual std::shared_ptr<margelo::nitro::image::HybridBaseSpec> createBase() = 0;
       virtual std::shared_ptr<margelo::nitro::image::HybridBaseSpec> createBaseActualChild() = 0;

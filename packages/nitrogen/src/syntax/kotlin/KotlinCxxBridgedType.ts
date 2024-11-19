@@ -695,25 +695,25 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
               // it's a Promise<T>
               resolveBody = `
 auto __result = jni::static_ref_cast<${resultingType.getTypeCode('c++', true)}>(__boxedResult);
-__promise->set_value(${resultingType.parseFromKotlinToCpp('__result', 'c++', true)});
+__promise->resolve(${resultingType.parseFromKotlinToCpp('__result', 'c++', true)});
           `.trim()
             } else {
               // it's a Promise<void>
               resolveBody = `
-__promise->set_value();
+__promise->resolve();
           `.trim()
             }
             return `
 [&]() {
-  auto __promise = std::make_shared<std::promise<${actualCppType}>>();
+  auto __promise = std::make_shared<Promise<${actualCppType}>>();
   ${parameterName}->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
     ${indent(resolveBody, '    ')}
   });
   ${parameterName}->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JString>& __message) {
     std::runtime_error __error(__message->toStdString());
-    __promise->set_exception(std::make_exception_ptr(__error));
+    __promise->reject(std::move(__error));
   });
-  return __promise->get_future();
+  return __promise;
 }()
         `.trim()
           default:

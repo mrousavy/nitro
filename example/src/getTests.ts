@@ -267,6 +267,23 @@ export function getTests(
         .didReturn('string')
         .equals('gas')
     ),
+    createTest('get optionalOldEnum (== undefined)', () =>
+      it(() => {
+        testObject.optionalOldEnum = undefined
+        return testObject.optionalOldEnum
+      })
+        .didNotThrow()
+        .didReturn('undefined')
+    ),
+    createTest('get optionalOldEnum (== self)', () =>
+      it(() => {
+        testObject.optionalOldEnum = OldEnum.SECOND
+        return testObject.optionalOldEnum
+      })
+        .didNotThrow()
+        .didReturn(typeof OldEnum.SECOND)
+        .equals(OldEnum.SECOND)
+    ),
 
     // Test basic functions
     createTest('addNumbers(5, 13) = 18', () =>
@@ -659,6 +676,20 @@ export function getTests(
     ),
     createTest('promiseThrows() throws', async () =>
       (await it(() => testObject.promiseThrows())).didThrow()
+    ),
+    createTest('twoPromises can run in parallel', async () =>
+      (
+        await it(async () => {
+          const start = performance.now()
+          // 0.5s + 0.5s = ~1s in serial, ~0.5s in parallel
+          await Promise.all([testObject.wait(0.5), testObject.wait(0.5)])
+          const end = performance.now()
+          const didRunInParallel = end - start < 1000
+          return didRunInParallel
+        })
+      )
+        .didNotThrow()
+        .equals(true)
     ),
 
     // Callbacks

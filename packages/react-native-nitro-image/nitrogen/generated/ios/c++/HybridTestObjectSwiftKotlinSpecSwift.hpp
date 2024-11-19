@@ -16,6 +16,8 @@ namespace NitroImage { class HybridTestObjectSwiftKotlinSpecCxx; }
 namespace margelo::nitro::image { class HybridTestObjectSwiftKotlinSpec; }
 // Forward declaration of `Powertrain` to properly resolve imports.
 namespace margelo::nitro::image { enum class Powertrain; }
+// Forward declaration of `OldEnum` to properly resolve imports.
+namespace margelo::nitro::image { enum class OldEnum; }
 // Forward declaration of `Person` to properly resolve imports.
 namespace margelo::nitro::image { struct Person; }
 // Forward declaration of `AnyMap` to properly resolve imports.
@@ -37,12 +39,12 @@ namespace margelo::nitro::image { class HybridBaseSpec; }
 #include <string>
 #include <vector>
 #include "Powertrain.hpp"
+#include "OldEnum.hpp"
 #include <variant>
 #include "Person.hpp"
 #include <functional>
 #include <NitroModules/AnyMap.hpp>
-#include <future>
-#include <NitroModules/PromiseHolder.hpp>
+#include <NitroModules/Promise.hpp>
 #include "Car.hpp"
 #include <NitroModules/ArrayBuffer.hpp>
 #include <NitroModules/ArrayBufferHolder.hpp>
@@ -159,6 +161,13 @@ namespace margelo::nitro::image {
     inline void setOptionalEnum(std::optional<Powertrain> optionalEnum) noexcept override {
       _swiftPart.setOptionalEnum(optionalEnum);
     }
+    inline std::optional<OldEnum> getOptionalOldEnum() noexcept override {
+      auto __result = _swiftPart.getOptionalOldEnum();
+      return __result;
+    }
+    inline void setOptionalOldEnum(std::optional<OldEnum> optionalOldEnum) noexcept override {
+      _swiftPart.setOptionalOldEnum(optionalOldEnum);
+    }
     inline std::variant<std::string, double> getSomeVariant() noexcept override {
       auto __result = _swiftPart.getSomeVariant();
       return __result;
@@ -234,17 +243,17 @@ namespace margelo::nitro::image {
       auto __result = _swiftPart.calculateFibonacciSync(std::forward<decltype(value)>(value));
       return __result;
     }
-    inline std::future<int64_t> calculateFibonacciAsync(double value) override {
+    inline std::shared_ptr<Promise<int64_t>> calculateFibonacciAsync(double value) override {
       auto __result = _swiftPart.calculateFibonacciAsync(std::forward<decltype(value)>(value));
-      return __result.getFuture();
+      return __result;
     }
-    inline std::future<void> wait(double seconds) override {
+    inline std::shared_ptr<Promise<void>> wait(double seconds) override {
       auto __result = _swiftPart.wait(std::forward<decltype(seconds)>(seconds));
-      return __result.getFuture();
+      return __result;
     }
-    inline std::future<void> promiseThrows() override {
+    inline std::shared_ptr<Promise<void>> promiseThrows() override {
       auto __result = _swiftPart.promiseThrows();
-      return __result.getFuture();
+      return __result;
     }
     inline void callCallback(const std::function<void()>& callback) override {
       _swiftPart.callCallback(callback);
@@ -278,9 +287,9 @@ namespace margelo::nitro::image {
     inline void setAllValuesTo(const std::shared_ptr<ArrayBuffer>& buffer, double value) override {
       _swiftPart.setAllValuesTo(ArrayBufferHolder(buffer), std::forward<decltype(value)>(value));
     }
-    inline std::future<std::shared_ptr<ArrayBuffer>> createArrayBufferAsync() override {
+    inline std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>> createArrayBufferAsync() override {
       auto __result = _swiftPart.createArrayBufferAsync();
-      return __result.getFuture();
+      return __result;
     }
     inline std::shared_ptr<margelo::nitro::image::HybridChildSpec> createChild() override {
       auto __result = _swiftPart.createChild();

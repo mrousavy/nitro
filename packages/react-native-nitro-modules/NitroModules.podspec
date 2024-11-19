@@ -39,6 +39,7 @@ Pod::Spec.new do |s|
     "cpp/core/AnyMap.hpp",
     "cpp/core/ArrayBuffer.hpp",
     "cpp/core/HybridObject.hpp",
+    "cpp/core/Promise.hpp",
     "cpp/entrypoint/HybridNitroModulesProxy.hpp",
     "cpp/entrypoint/InstallNitro.hpp",
     "cpp/registry/HybridObjectRegistry.hpp",
@@ -48,7 +49,6 @@ Pod::Spec.new do |s|
     "cpp/utils/NitroDefines.hpp",
     # Public iOS-specific headers that will be exposed in modulemap (for Swift)
     "ios/core/ArrayBufferHolder.hpp",
-    "ios/core/PromiseHolder.hpp",
     "ios/core/AnyMapHolder.hpp",
     "ios/core/HybridContext.hpp",
     "ios/utils/SwiftClosure.hpp",

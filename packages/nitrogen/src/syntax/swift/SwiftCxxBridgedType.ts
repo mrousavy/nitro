@@ -92,7 +92,7 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
         }
         return true
       case 'promise':
-        // PromiseHolder<T> <> std::shared_ptr<std::promise<T>>
+        // Promise<T> <> std::shared_ptr<Promise<T>>
         return true
       case 'map':
         // AnyMapHolder <> AnyMap
@@ -128,12 +128,6 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
           'ArrayBufferHolder',
           'NitroModules'
         ),
-        language: 'c++',
-        space: 'system',
-      })
-    } else if (this.type.kind === 'promise') {
-      imports.push({
-        name: 'NitroModules/PromiseHolder.hpp',
         language: 'c++',
         space: 'system',
       })
@@ -276,7 +270,7 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
     language: 'swift' | 'c++'
   ): string {
     switch (this.type.kind) {
-      case 'enum':
+      case 'enum': {
         if (this.isBridgingToDirectCppTarget) {
           return cppParameterName
         }
@@ -293,6 +287,7 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
           default:
             throw new Error(`Invalid language! ${language}`)
         }
+      }
       case 'hybrid-object': {
         const bridge = this.getBridgeOrThrow()
         const getFunc = `bridge.get_${bridge.specializationName}`
@@ -340,6 +335,15 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
         const wrapping = new SwiftCxxBridgedType(optional.wrappingType, true)
         switch (language) {
           case 'swift':
+            if (wrapping.type.kind === 'enum') {
+              const enumType = getTypeAs(wrapping.type, EnumType)
+              if (enumType.jsType === 'enum') {
+                // TODO: Remove this hack once Swift fixes this shit.
+                // A JS enum is implemented as a number/int based enum.
+                // For some reason, those break in Swift. I have no idea why.
+                return `${cppParameterName}.has_value() ? ${cppParameterName}.pointee : nil`
+              }
+            }
             if (!wrapping.needsSpecialHandling) {
               return `${cppParameterName}.value`
             }
@@ -585,7 +589,7 @@ case ${i}:
         )
         switch (language) {
           case 'c++':
-            return `${swiftParameterName}.getFuture()`
+            return swiftParameterName
           case 'swift':
             const arg =
               promise.resultingType.kind === 'void'
@@ -593,11 +597,11 @@ case ${i}:
                 : resolvingType.parseFromSwiftToCpp('__result', 'swift')
             return `
 { () -> bridge.${bridge.specializationName} in
-  let __promiseHolder = ${makePromise}()
+  let __promise = ${makePromise}()
   ${swiftParameterName}
-    .then({ __result in __promiseHolder.resolve(${arg}) })
-    .catch({ __error in __promiseHolder.reject(std.string(String(describing: __error))) })
-  return __promiseHolder
+    .then({ __result in __promise.pointee.resolve(${arg}) })
+    .catch({ __error in __promise.pointee.reject(std.string(String(describing: __error))) })
+  return __promise
 }()`.trim()
           default:
             return swiftParameterName

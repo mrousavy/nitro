@@ -6,9 +6,6 @@
 
 // Forward declare a few of the common types that might have cyclic includes.
 namespace margelo::nitro {
-class Dispatcher;
-
-class JSPromise;
 
 template <typename T, typename Enable>
 struct JSIConverter;
@@ -16,11 +13,8 @@ struct JSIConverter;
 
 #include "JSIConverter.hpp"
 
-#include "Dispatcher.hpp"
-#include "JSPromise.hpp"
-#include "ThreadPool.hpp"
-#include "TypeInfo.hpp"
-#include <future>
+#include "Promise.hpp"
+#include <exception>
 #include <jsi/jsi.h>
 #include <memory>
 
@@ -28,66 +22,63 @@ namespace margelo::nitro {
 
 using namespace facebook;
 
-// std::future<T> <> Promise<T>
+// Promise<T, std::exception> <> Promise<T>
 template <typename TResult>
-struct JSIConverter<std::future<TResult>> final {
-  static inline std::future<TResult> fromJSI(jsi::Runtime&, const jsi::Value&) {
+struct JSIConverter<std::shared_ptr<Promise<TResult>>> final {
+  static inline std::shared_ptr<Promise<TResult>> fromJSI(jsi::Runtime&, const jsi::Value&) {
     throw std::runtime_error("Promise cannot be converted to a native type - it needs to be awaited first!");
   }
 
-  static inline jsi::Value toJSI(jsi::Runtime& runtime, std::future<TResult>&& arg) {
-    auto sharedFuture = std::make_shared<std::future<TResult>>(std::move(arg));
-    std::shared_ptr<Dispatcher> strongDispatcher = Dispatcher::getRuntimeGlobalDispatcher(runtime);
-    std::weak_ptr<Dispatcher> weakDispatcher = strongDispatcher;
-
-    return JSPromise::createPromise(runtime, [sharedFuture, weakDispatcher](jsi::Runtime& runtime, std::shared_ptr<JSPromise> promise) {
-      // Spawn new async thread to synchronously wait for the `future<T>` to complete
-      std::shared_ptr<ThreadPool> pool = ThreadPool::getSharedPool();
-      pool->run([promise, &runtime, weakDispatcher, sharedFuture]() {
-        // synchronously wait until the `future<T>` completes. we are running on a background task here.
-        sharedFuture->wait();
-
-        // the async function completed successfully, get a JS Dispatcher so we can resolve on JS Thread
-        std::shared_ptr<Dispatcher> dispatcher = weakDispatcher.lock();
-        if (!dispatcher) {
-          Logger::log(LogLevel::Error, "JSIConverter",
-                      "Tried resolving Promise on JS Thread, but the `Dispatcher` has already been destroyed!");
-          return;
+  static inline jsi::Value toJSI(jsi::Runtime& runtime, const std::shared_ptr<Promise<TResult>>& promise) {
+    if (promise->isPending()) {
+      // Get Promise ctor from global
+      jsi::Function promiseCtor = runtime.global().getPropertyAsFunction(runtime, "Promise");
+      jsi::HostFunctionType executor = [promise](jsi::Runtime& runtime, const jsi::Value& thisValue, const jsi::Value* arguments,
+                                                 size_t count) -> jsi::Value {
+        // Add resolver listener
+        if constexpr (std::is_void_v<TResult>) {
+          // It's resolving to void.
+          auto resolver = JSIConverter<std::function<void()>>::fromJSI(runtime, arguments[0]);
+          promise->addOnResolvedListener(std::move(resolver));
+        } else {
+          // It's a type.
+          auto resolver = JSIConverter<std::function<void(TResult)>>::fromJSI(runtime, arguments[0]);
+          promise->addOnResolvedListener(std::move(resolver));
         }
+        // Add rejecter listener
+        auto rejecter = JSIConverter<std::function<void(std::exception)>>::fromJSI(runtime, arguments[1]);
+        promise->addOnRejectedListener(std::move(rejecter));
 
-        dispatcher->runAsync([&runtime, promise, sharedFuture]() mutable {
-          try {
-            if constexpr (std::is_void_v<TResult>) {
-              // it's returning void, just return undefined to JS
-              sharedFuture->get();
-              promise->resolve(runtime, jsi::Value::undefined());
-            } else {
-              // it's returning a custom type, convert it to a jsi::Value
-              TResult result = sharedFuture->get();
-              jsi::Value jsResult = JSIConverter<TResult>::toJSI(runtime, std::forward<TResult>(result));
-              promise->resolve(runtime, std::move(jsResult));
-            }
-          } catch (const std::exception& exception) {
-            // the async function threw an error, reject the promise on JS Thread
-            std::string what = exception.what();
-            promise->reject(runtime, what);
-          } catch (...) {
-            // the async function threw a non-std error, try getting it
-            std::string name = TypeInfo::getCurrentExceptionName();
-            promise->reject(runtime, "Unknown non-std exception: " + name);
-          }
-
-          // This lambda owns the promise shared pointer, and we need to call its
-          // destructor on the correct thread here - otherwise it might be called
-          // from the waiterThread.
-          promise = nullptr;
-        });
-      });
-    });
+        return jsi::Value::undefined();
+      };
+      // Call `Promise` constructor (aka create promise), and pass `executor` function
+      return promiseCtor.callAsConstructor(
+          runtime, jsi::Function::createFromHostFunction(runtime, jsi::PropNameID::forUtf8(runtime, "executor"), 2, executor));
+    } else if (promise->isResolved()) {
+      // Promise is already resolved - just return immediately
+      jsi::Object promiseObject = runtime.global().getPropertyAsObject(runtime, "Promise");
+      jsi::Function createResolvedPromise = promiseObject.getPropertyAsFunction(runtime, "resolve");
+      if constexpr (std::is_void_v<TResult>) {
+        // It's resolving to void.
+        return createResolvedPromise.call(runtime);
+      } else {
+        // It's resolving to a type.
+        jsi::Value result = JSIConverter<TResult>::toJSI(runtime, promise->getResult());
+        return createResolvedPromise.call(runtime, std::move(result));
+      }
+    } else if (promise->isRejected()) {
+      // Promise is already rejected - just return immediately
+      jsi::Object promiseObject = runtime.global().getPropertyAsObject(runtime, "Promise");
+      jsi::Function createRejectedPromise = promiseObject.getPropertyAsFunction(runtime, "reject");
+      jsi::Value error = JSIConverter<std::exception>::toJSI(runtime, promise->getError());
+      return createRejectedPromise.call(runtime, std::move(error));
+    } else {
+      throw std::runtime_error("Promise has invalid state!");
+    }
   }
 
   static inline bool canConvert(jsi::Runtime&, const jsi::Value&) {
-    throw std::runtime_error("jsi::Value of type Promise cannot be converted to std::future yet!");
+    throw std::runtime_error("jsi::Value of type Promise cannot be converted to Promise<> yet!");
   }
 };
 
