@@ -528,7 +528,7 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
 [&]() {
   jni::local_ref<JPromise::javaobject> __promise = JPromise::create();
   ${parameterName}->addOnResolvedListener([=]() {
-    __promise->cthis()->resolve();
+    __promise->cthis()->resolve(nullptr);
   });
   ${parameterName}->addOnRejectedListener([=](const std::exception& __error) {
     auto __jniError = jni::JCppException::create(__error);
