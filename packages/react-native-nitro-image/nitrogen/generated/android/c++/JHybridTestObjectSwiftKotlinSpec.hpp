@@ -68,6 +68,8 @@ namespace margelo::nitro::image {
     void setOptionalArray(const std::optional<std::vector<std::string>>& optionalArray) override;
     std::optional<Powertrain> getOptionalEnum() override;
     void setOptionalEnum(std::optional<Powertrain> optionalEnum) override;
+    std::optional<OldEnum> getOptionalOldEnum() override;
+    void setOptionalOldEnum(std::optional<OldEnum> optionalOldEnum) override;
     std::variant<std::string, double> getSomeVariant() override;
     void setSomeVariant(const std::variant<std::string, double>& someVariant) override;
 

@@ -22,6 +22,8 @@ namespace margelo::nitro::image { class HybridImageFactorySpec; }
 namespace margelo::nitro::image { class HybridImageSpec; }
 // Forward declaration of `HybridTestObjectSwiftKotlinSpec` to properly resolve imports.
 namespace margelo::nitro::image { class HybridTestObjectSwiftKotlinSpec; }
+// Forward declaration of `OldEnum` to properly resolve imports.
+namespace margelo::nitro::image { enum class OldEnum; }
 // Forward declaration of `Person` to properly resolve imports.
 namespace margelo::nitro::image { struct Person; }
 // Forward declaration of `Powertrain` to properly resolve imports.
@@ -45,6 +47,7 @@ namespace NitroImage { class HybridTestObjectSwiftKotlinSpecCxx; }
 #include "HybridImageFactorySpec.hpp"
 #include "HybridImageSpec.hpp"
 #include "HybridTestObjectSwiftKotlinSpec.hpp"
+#include "OldEnum.hpp"
 #include "Person.hpp"
 #include "Powertrain.hpp"
 #include <NitroModules/ArrayBuffer.hpp>
@@ -161,6 +164,15 @@ namespace margelo::nitro::image::bridge::swift {
   using std__optional_Powertrain_ = std::optional<Powertrain>;
   inline std::optional<Powertrain> create_std__optional_Powertrain_(const Powertrain& value) {
     return std::optional<Powertrain>(value);
+  }
+  
+  // pragma MARK: std::optional<OldEnum>
+  /**
+   * Specialized version of `std::optional<OldEnum>`.
+   */
+  using std__optional_OldEnum_ = std::optional<OldEnum>;
+  inline std::optional<OldEnum> create_std__optional_OldEnum_(const OldEnum& value) {
+    return std::optional<OldEnum>(value);
   }
   
   // pragma MARK: std::vector<double>
