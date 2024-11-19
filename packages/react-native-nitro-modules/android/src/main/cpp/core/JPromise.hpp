@@ -16,20 +16,19 @@ using namespace facebook;
 
 struct JOnResolvedCallback : public jni::JavaClass<JOnResolvedCallback> {
   static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/core/Promise$OnResolvedCallback;";
-    void onResolved(jni::alias_ref<jni::JObject> result) const {
-        static const auto method = javaClassLocal()->getMethod<void(jni::alias_ref<jni::JObject>)>("onResolved");
-        method(self(), result);
-    }
+  void onResolved(jni::alias_ref<jni::JObject> result) const {
+    static const auto method = javaClassLocal()->getMethod<void(jni::alias_ref<jni::JObject>)>("onResolved");
+    method(self(), result);
+  }
 };
 
 struct JOnRejectedCallback : public jni::JavaClass<JOnRejectedCallback> {
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/core/Promise$OnRejectedCallback;";
-    void onRejected(jni::alias_ref<jni::JString> error) const {
-        static const auto method = javaClassLocal()->getMethod<void(jni::alias_ref<jni::JString>)>("onRejected");
-        method(self(), error);
-    }
+  static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/core/Promise$OnRejectedCallback;";
+  void onRejected(jni::alias_ref<jni::JString> error) const {
+    static const auto method = javaClassLocal()->getMethod<void(jni::alias_ref<jni::JString>)>("onRejected");
+    method(self(), error);
+  }
 };
-
 
 /**
  * Represents a Promise implemented in Java.
@@ -70,30 +69,27 @@ public:
     }
   }
 
-    void addOnResolvedListenerJava(jni::alias_ref<JOnResolvedCallback> callback) {
-        if (_result != nullptr) {
-            // Promise is already resolved! Call the callback immediately
-            callback->onResolved(_result);
-        } else {
-            // Promise is not yet resolved, put the listener in our queue.
-            auto sharedCallback = jni::make_global(callback);
-            _onResolvedListeners.push_back([=](const jni::alias_ref<jni::JObject>& result) {
-                sharedCallback->onResolved(result);
-            });
-        }
+public:
+  void addOnResolvedListenerJava(jni::alias_ref<JOnResolvedCallback> callback) {
+    if (_result != nullptr) {
+      // Promise is already resolved! Call the callback immediately
+      callback->onResolved(_result);
+    } else {
+      // Promise is not yet resolved, put the listener in our queue.
+      auto sharedCallback = jni::make_global(callback);
+      _onResolvedListeners.push_back([=](const jni::alias_ref<jni::JObject>& result) { sharedCallback->onResolved(result); });
     }
-    void addOnRejectedListenerJava(jni::alias_ref<JOnRejectedCallback> callback) {
-        if (_error != nullptr) {
-            // Promise is already rejected! Call the callback immediately
-            callback->onRejected(_error);
-        } else {
-            // Promise is not yet rejected, put the listener in our queue.
-            auto sharedCallback = jni::make_global(callback);
-            _onRejectedListeners.push_back([=](const jni::alias_ref<jni::JString>& error) {
-                sharedCallback->onRejected(error);
-            });
-        }
+  }
+  void addOnRejectedListenerJava(jni::alias_ref<JOnRejectedCallback> callback) {
+    if (_error != nullptr) {
+      // Promise is already rejected! Call the callback immediately
+      callback->onRejected(_error);
+    } else {
+      // Promise is not yet rejected, put the listener in our queue.
+      auto sharedCallback = jni::make_global(callback);
+      _onRejectedListeners.push_back([=](const jni::alias_ref<jni::JString>& error) { sharedCallback->onRejected(error); });
     }
+  }
 
 public:
   void addOnResolvedListener(OnResolvedFunc&& onResolved) {
@@ -132,8 +128,8 @@ public:
         makeNativeMethod("initHybrid", JPromise::initHybrid),
         makeNativeMethod("nativeResolve", JPromise::resolve),
         makeNativeMethod("nativeReject", JPromise::reject),
-        makeNativeMethod("nativeAddOnResolvedListener", JPromise::addOnResolvedListenerJava),
-        makeNativeMethod("nativeAddOnRejectedListener", JPromise::addOnRejectedListenerJava),
+        makeNativeMethod("addOnResolvedListener", JPromise::addOnResolvedListenerJava),
+        makeNativeMethod("addOnRejectedListener", JPromise::addOnRejectedListenerJava),
     });
   }
 };
