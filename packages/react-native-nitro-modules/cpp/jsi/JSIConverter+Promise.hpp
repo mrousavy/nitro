@@ -26,16 +26,20 @@ using namespace facebook;
 template <typename TResult>
 struct JSIConverter<std::shared_ptr<Promise<TResult>>> final {
   static inline std::shared_ptr<Promise<TResult>> fromJSI(jsi::Runtime& runtime, const jsi::Value& value) {
-    // Get JS Promise and .then and .catch functions
-    auto object = value.asObject(runtime);
-    auto thenFn = JSIConverter<std::function<void(std::function<void(TResult)>)>>::fromJSI(runtime, object.getProperty(runtime, "then"));
-    auto catchFn =
-        JSIConverter<std::function<void(std::function<void(std::exception)>)>>::fromJSI(runtime, object.getProperty(runtime, "catch"));
-
-    // Create new Promise and chain .then & .catch
+    // Create new Promise and prepare onResolved / onRejected callbacks
     auto promise = Promise<TResult>::create();
-    thenFn([=](const TResult& result) { promise->resolve(result); });
-    catchFn([=](const std::exception& exception) { promise->reject(exception); });
+    auto thenCallback = JSIConverter<std::function<void(TResult)>>::toJSI(runtime, [=](const TResult& result) {
+      promise->resolve(result);
+    });
+    auto catchCallback = JSIConverter<std::function<void(std::exception)>>::toJSI(runtime, [=](const std::exception& exception) {
+      promise->reject(exception);
+    });
+
+    // Chain .then listeners on JS Promise (onResolved and onRejected)
+    jsi::Object jsPromise = value.asObject(runtime);
+    jsi::Function thenFn = jsPromise.getPropertyAsFunction(runtime, "then");
+    thenFn.callWithThis(runtime, jsPromise, thenCallback, catchCallback);
+
     return promise;
   }
 
