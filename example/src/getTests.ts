@@ -74,13 +74,18 @@ function timeoutedPromise<T>(
     setTimeout(() => {
       if (!didResolve) reject(new Error(`Timeouted!`))
     }, 500)
-    run((value) => {
-      if (didResolve) {
-        throw new Error(`Promise was already rejected!`)
-      }
+    try {
+      run((value) => {
+        if (didResolve) {
+          throw new Error(`Promise was already rejected!`)
+        }
+        didResolve = true
+        resolve(value)
+      })
+    } catch (e) {
       didResolve = true
-      resolve(value)
-    })
+      reject(e)
+    }
   })
 }
 
@@ -706,7 +711,7 @@ export function getTests(
         })
       )
         .didNotThrow()
-        .equals(true)
+        .equals(5)
     ),
 
     // Callbacks
