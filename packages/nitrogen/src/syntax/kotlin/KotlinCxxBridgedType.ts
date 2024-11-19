@@ -529,7 +529,8 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
     __promise->cthis()->resolve(${indent(bridge.parseFromCppToKotlin('__result', 'c++', true), '    ')});
   });
   ${parameterName}->addOnRejectedListener([=](const std::exception& __error) {
-    __promise->cthis()->reject(jni::make_jstring(__error.what()));
+    auto __jniError = jni::JCppException::create(__error);
+    __promise->cthis()->reject(__jniError);
   });
   return __promise;
 }()
@@ -732,9 +733,9 @@ __promise->resolve();
   ${parameterName}->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
     ${indent(resolveBody, '    ')}
   });
-  ${parameterName}->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JString>& __message) {
-    std::runtime_error __error(__message->toStdString());
-    __promise->reject(std::move(__error));
+  ${parameterName}->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {
+    jni::JniException __jniError(__throwable);
+    __promise->reject(std::move(__jniError));
   });
   return __promise;
 }()

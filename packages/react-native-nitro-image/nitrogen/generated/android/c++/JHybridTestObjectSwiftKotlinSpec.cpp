@@ -368,9 +368,9 @@ namespace margelo::nitro::image {
         auto __result = jni::static_ref_cast<jni::JLong>(__boxedResult);
         __promise->resolve(__result->value());
       });
-      __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JString>& __message) {
-        std::runtime_error __error(__message->toStdString());
-        __promise->reject(std::move(__error));
+      __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {
+        jni::JniException __jniError(__throwable);
+        __promise->reject(std::move(__jniError));
       });
       return __promise;
     }();
@@ -383,9 +383,9 @@ namespace margelo::nitro::image {
       __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
         __promise->resolve();
       });
-      __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JString>& __message) {
-        std::runtime_error __error(__message->toStdString());
-        __promise->reject(std::move(__error));
+      __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {
+        jni::JniException __jniError(__throwable);
+        __promise->reject(std::move(__jniError));
       });
       return __promise;
     }();
@@ -398,9 +398,9 @@ namespace margelo::nitro::image {
       __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
         __promise->resolve();
       });
-      __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JString>& __message) {
-        std::runtime_error __error(__message->toStdString());
-        __promise->reject(std::move(__error));
+      __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {
+        jni::JniException __jniError(__throwable);
+        __promise->reject(std::move(__jniError));
       });
       return __promise;
     }();
@@ -413,7 +413,8 @@ namespace margelo::nitro::image {
         __promise->cthis()->resolve(jni::JDouble::valueOf(__result));
       });
       promise->addOnRejectedListener([=](const std::exception& __error) {
-        __promise->cthis()->reject(jni::make_jstring(__error.what()));
+        auto __jniError = jni::JCppException::create(__error);
+        __promise->cthis()->reject(__jniError);
       });
       return __promise;
     }());
@@ -423,9 +424,9 @@ namespace margelo::nitro::image {
         auto __result = jni::static_ref_cast<jni::JDouble>(__boxedResult);
         __promise->resolve(__result->value());
       });
-      __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JString>& __message) {
-        std::runtime_error __error(__message->toStdString());
-        __promise->reject(std::move(__error));
+      __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {
+        jni::JniException __jniError(__throwable);
+        __promise->reject(std::move(__jniError));
       });
       return __promise;
     }();
@@ -480,9 +481,9 @@ namespace margelo::nitro::image {
         auto __result = jni::static_ref_cast<JArrayBuffer::javaobject>(__boxedResult);
         __promise->resolve(__result->cthis()->getArrayBuffer());
       });
-      __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JString>& __message) {
-        std::runtime_error __error(__message->toStdString());
-        __promise->reject(std::move(__error));
+      __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {
+        jni::JniException __jniError(__throwable);
+        __promise->reject(std::move(__jniError));
       });
       return __promise;
     }();

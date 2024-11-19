@@ -38,7 +38,7 @@ class Promise<T> {
   fun interface OnRejectedCallback {
     @Keep
     @DoNotStrip
-    fun onRejected(error: String)
+    fun onRejected(error: Throwable)
   }
 
   @Keep
@@ -72,7 +72,7 @@ class Promise<T> {
    * Any `onRejected` listeners will be invoked.
    */
   fun reject(error: Throwable) {
-    nativeReject(error.toString())
+    nativeReject(error)
   }
 
   /**
@@ -108,7 +108,7 @@ class Promise<T> {
 
   // C++ functions
   private external fun nativeResolve(result: Any)
-  private external fun nativeReject(error: String)
+  private external fun nativeReject(error: Throwable)
   private external fun addOnResolvedListener(callback: OnResolvedCallback<T>)
   private external fun addOnRejectedListener(callback: OnRejectedCallback)
   private external fun initHybrid(): HybridData
