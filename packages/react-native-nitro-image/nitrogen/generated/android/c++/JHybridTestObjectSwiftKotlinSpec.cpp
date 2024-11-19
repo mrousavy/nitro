@@ -370,7 +370,7 @@ namespace margelo::nitro::image {
       });
       __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JString>& __message) {
         std::runtime_error __error(__message->toStdString());
-        __promise->reject(__error);
+        __promise->reject(std::move(__error));
       });
       return __promise;
     }();
@@ -385,7 +385,7 @@ namespace margelo::nitro::image {
       });
       __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JString>& __message) {
         std::runtime_error __error(__message->toStdString());
-        __promise->reject(__error);
+        __promise->reject(std::move(__error));
       });
       return __promise;
     }();
@@ -400,7 +400,7 @@ namespace margelo::nitro::image {
       });
       __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JString>& __message) {
         std::runtime_error __error(__message->toStdString());
-        __promise->reject(__error);
+        __promise->reject(std::move(__error));
       });
       return __promise;
     }();
@@ -457,7 +457,7 @@ namespace margelo::nitro::image {
       });
       __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JString>& __message) {
         std::runtime_error __error(__message->toStdString());
-        __promise->reject(__error);
+        __promise->reject(std::move(__error));
       });
       return __promise;
     }();

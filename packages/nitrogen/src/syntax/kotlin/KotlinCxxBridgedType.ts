@@ -711,7 +711,7 @@ __promise->resolve();
   });
   ${parameterName}->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JString>& __message) {
     std::runtime_error __error(__message->toStdString());
-    __promise->reject(__error);
+    __promise->reject(std::move(__error));
   });
   return __promise;
 }()
