@@ -172,7 +172,7 @@ public:
 
 public:
   /**
-   * Gets whether this Promise has been successfuly resolved with a result, or not.
+   * Gets whether this Promise has been successfully resolved with a result, or not.
    */
   [[nodiscard]]
   inline bool isResolved() const noexcept {
