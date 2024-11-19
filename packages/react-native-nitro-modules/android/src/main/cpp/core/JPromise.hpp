@@ -7,8 +7,8 @@
 
 #pragma once
 
-#include <fbjni/fbjni.h>
 #include "Promise.hpp"
+#include <fbjni/fbjni.h>
 
 namespace margelo::nitro {
 
