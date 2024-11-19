@@ -85,3 +85,10 @@ lib/
 
 # TypeScript
 tsconfig.tsbuildinfo
+
+# Windows/Visual Studio
+msbuild.binlog
+packages/*/windows/Generated Files/
+packages/*/windows/obj/
+packages/*/windows/x64/
+packages/*/windows/packages.lock.json
