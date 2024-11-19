@@ -339,16 +339,16 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
               ])
               const rejecterFuncBridge = new SwiftCxxBridgedType(rejecterFunc)
               return `
-  { () -> ${promise.getCode('swift')} in
-    let __promise = ${promise.getCode('swift')}()
-    let __rejecter = { (__error: std.exception) in
-      __promise.reject(withError: RuntimeError.from(cppError: __error))
-    }
-    let __resolverCpp = SwiftClosure { __promise.resolve() }
-    let __rejecterCpp = ${indent(rejecterFuncBridge.parseFromSwiftToCpp('__rejecter', 'swift'), '  ')}
-    // TODO: Listeners
-    return __promise
-  }()`.trim()
+{ () -> ${promise.getCode('swift')} in
+  let __promise = ${promise.getCode('swift')}()
+  let __rejecter = { (__error: std.exception) in
+    __promise.reject(withError: RuntimeError.from(cppError: __error))
+  }
+  let __resolverCpp = SwiftClosure { __promise.resolve() }
+  let __rejecterCpp = ${indent(rejecterFuncBridge.parseFromSwiftToCpp('__rejecter', 'swift'), '  ')}
+  // TODO: Listeners
+  return __promise
+}()`.trim()
             } else {
               // It's resolving to a type - resolve(T)
               const resolverFunc = new FunctionType(new VoidType(), [
@@ -360,18 +360,19 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
               const resolverFuncBridge = new SwiftCxxBridgedType(resolverFunc)
               const rejecterFuncBridge = new SwiftCxxBridgedType(rejecterFunc)
               return `
-  { () -> ${promise.getCode('swift')} in
-    let __promise = ${promise.getCode('swift')}()
-    let __resolver = { (__result: ${resolvingTypeBridge.getTypeCode('swift')}) in
-      __promise.resolve(withResult: ${indent(resolvingTypeBridge.parseFromCppToSwift('__result', 'swift'), '    ')})
-    }
-    let __rejecter = { (__error: std.exception) in
-      __promise.reject(withError: RuntimeError.from(cppError: __error))
-    }
-    let __resolverCpp = ${indent(resolverFuncBridge.parseFromSwiftToCpp('__resolver', 'swift'), '  ')}
-    let __rejecterCpp = ${indent(rejecterFuncBridge.parseFromSwiftToCpp('__rejecter', 'swift'), '  ')}
-    return __promise
-  }()`.trim()
+{ () -> ${promise.getCode('swift')} in
+  let __promise = ${promise.getCode('swift')}()
+  let __resolver = { (__result: ${resolvingTypeBridge.getTypeCode('swift')}) in
+    __promise.resolve(withResult: ${indent(resolvingTypeBridge.parseFromCppToSwift('__result', 'swift'), '    ')})
+  }
+  let __rejecter = { (__error: std.exception) in
+    __promise.reject(withError: RuntimeError.from(cppError: __error))
+  }
+  let __resolverCpp = ${indent(resolverFuncBridge.parseFromSwiftToCpp('__resolver', 'swift'), '  ')}
+  let __rejecterCpp = ${indent(rejecterFuncBridge.parseFromSwiftToCpp('__rejecter', 'swift'), '  ')}
+  // TODO: Listeners
+  return __promise
+}()`.trim()
             }
           }
           default:

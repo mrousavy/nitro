@@ -636,14 +636,14 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
   public func awaitPromise(promise: bridge.std__shared_ptr_Promise_double__) -> bridge.std__shared_ptr_Promise_double__ {
     do {
       let __result = try self.__implementation.awaitPromise(promise: { () -> Promise<Double> in
-          let __promise = Promise<Double>()
-          let __resolver = { (__result: Double) in
-            __promise.resolve(withResult: __result)
-          }
-          let __rejecter = { (__error: std.exception) in
-            __promise.reject(withError: RuntimeError.from(cppError: __error))
-          }
-          let __resolverCpp = { () -> bridge.Func_void_double in
+        let __promise = Promise<Double>()
+        let __resolver = { (__result: Double) in
+          __promise.resolve(withResult: __result)
+        }
+        let __rejecter = { (__error: std.exception) in
+          __promise.reject(withError: RuntimeError.from(cppError: __error))
+        }
+        let __resolverCpp = { () -> bridge.Func_void_double in
           class ClosureHolder {
             let closure: ((_ result: Double) -> Void)
             init(wrappingClosure closure: @escaping ((_ result: Double) -> Void)) {
@@ -665,7 +665,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
         
           return bridge.create_Func_void_double(__closureHolder, __callClosure, __destroyClosure)
         }()
-          let __rejecterCpp = { () -> bridge.Func_void_std__exception in
+        let __rejecterCpp = { () -> bridge.Func_void_std__exception in
           class ClosureHolder {
             let closure: ((_ error: std.exception) -> Void)
             init(wrappingClosure closure: @escaping ((_ error: std.exception) -> Void)) {
@@ -687,8 +687,10 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
         
           return bridge.create_Func_void_std__exception(__closureHolder, __callClosure, __destroyClosure)
         }()
-          return __promise
-        }())
+        promise.pointee.addOnResolvedListener(__resolverCpp)
+        //promise.pointee.addOnRejectedListener(__rejecterCpp)
+        return __promise
+      }())
       return { () -> bridge.std__shared_ptr_Promise_double__ in
         let __promise = bridge.create_std__shared_ptr_Promise_double__()
         __result
