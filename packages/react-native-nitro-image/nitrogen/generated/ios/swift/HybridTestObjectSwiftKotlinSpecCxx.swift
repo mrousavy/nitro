@@ -309,7 +309,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
     }
     @inline(__always)
     set {
-      self.__implementation.optionalOldEnum = newValue.value
+      self.__implementation.optionalOldEnum = newValue.has_value() ? newValue.pointee : nil
     }
   }
   

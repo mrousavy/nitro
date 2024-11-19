@@ -276,7 +276,7 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
     language: 'swift' | 'c++'
   ): string {
     switch (this.type.kind) {
-      case 'enum':
+      case 'enum': {
         if (this.isBridgingToDirectCppTarget) {
           return cppParameterName
         }
@@ -293,6 +293,7 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
           default:
             throw new Error(`Invalid language! ${language}`)
         }
+      }
       case 'hybrid-object': {
         const bridge = this.getBridgeOrThrow()
         const getFunc = `bridge.get_${bridge.specializationName}`
@@ -340,6 +341,14 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
         const wrapping = new SwiftCxxBridgedType(optional.wrappingType, true)
         switch (language) {
           case 'swift':
+            if (wrapping.type.kind === 'enum') {
+              const enumType = getTypeAs(wrapping.type, EnumType)
+              if (enumType.jsType === 'enum') {
+                // A JS enum is implemented as a number/int based enum.
+                // For some reason, those break in Swift. I have no idea why.
+                return `${cppParameterName}.has_value() ? ${cppParameterName}.pointee : nil`
+              }
+            }
             if (!wrapping.needsSpecialHandling) {
               return `${cppParameterName}.value`
             }
