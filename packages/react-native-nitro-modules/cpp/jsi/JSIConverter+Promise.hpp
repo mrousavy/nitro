@@ -28,12 +28,10 @@ struct JSIConverter<std::shared_ptr<Promise<TResult>>> final {
   static inline std::shared_ptr<Promise<TResult>> fromJSI(jsi::Runtime& runtime, const jsi::Value& value) {
     // Create new Promise and prepare onResolved / onRejected callbacks
     auto promise = Promise<TResult>::create();
-    auto thenCallback = JSIConverter<std::function<void(TResult)>>::toJSI(runtime, [=](const TResult& result) {
-      promise->resolve(result);
-    });
-    auto catchCallback = JSIConverter<std::function<void(std::exception)>>::toJSI(runtime, [=](const std::exception& exception) {
-      promise->reject(exception);
-    });
+    auto thenCallback =
+        JSIConverter<std::function<void(TResult)>>::toJSI(runtime, [=](const TResult& result) { promise->resolve(result); });
+    auto catchCallback = JSIConverter<std::function<void(std::exception)>>::toJSI(
+        runtime, [=](const std::exception& exception) { promise->reject(exception); });
 
     // Chain .then listeners on JS Promise (onResolved and onRejected)
     jsi::Object jsPromise = value.asObject(runtime);
