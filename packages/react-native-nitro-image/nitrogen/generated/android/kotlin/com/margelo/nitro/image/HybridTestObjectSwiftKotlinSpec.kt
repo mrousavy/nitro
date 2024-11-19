@@ -204,7 +204,15 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
-  abstract fun awaitPromise(promise: Promise<Double>): Promise<Double>
+  abstract fun awaitAndGetPromise(promise: Promise<Double>): Promise<Double>
+  
+  @DoNotStrip
+  @Keep
+  abstract fun awaitAndGetComplexPromise(promise: Promise<Car>): Promise<Car>
+  
+  @DoNotStrip
+  @Keep
+  abstract fun awaitPromise(promise: Promise<Unit>): Promise<Unit>
   
   @DoNotStrip
   @Keep

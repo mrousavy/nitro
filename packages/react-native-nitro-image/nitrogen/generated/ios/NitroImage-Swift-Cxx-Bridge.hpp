@@ -12,6 +12,8 @@
 namespace NitroModules { class ArrayBufferHolder; }
 // Forward declaration of `ArrayBuffer` to properly resolve imports.
 namespace NitroModules { class ArrayBuffer; }
+// Forward declaration of `Car` to properly resolve imports.
+namespace margelo::nitro::image { struct Car; }
 // Forward declaration of `HybridBaseSpec` to properly resolve imports.
 namespace margelo::nitro::image { class HybridBaseSpec; }
 // Forward declaration of `HybridChildSpec` to properly resolve imports.
@@ -42,6 +44,7 @@ namespace NitroImage { class HybridImageSpecCxx; }
 namespace NitroImage { class HybridTestObjectSwiftKotlinSpecCxx; }
 
 // Include C++ defined types
+#include "Car.hpp"
 #include "HybridBaseSpec.hpp"
 #include "HybridChildSpec.hpp"
 #include "HybridImageFactorySpec.hpp"
@@ -413,6 +416,52 @@ namespace margelo::nitro::image::bridge::swift {
     return std::make_shared<Func_void_double_Wrapper>(value);
   }
   
+  // pragma MARK: std::optional<Person>
+  /**
+   * Specialized version of `std::optional<Person>`.
+   */
+  using std__optional_Person_ = std::optional<Person>;
+  inline std::optional<Person> create_std__optional_Person_(const Person& value) {
+    return std::optional<Person>(value);
+  }
+  
+  // pragma MARK: std::shared_ptr<Promise<Car>>
+  /**
+   * Specialized version of `std::shared_ptr<Promise<Car>>`.
+   */
+  using std__shared_ptr_Promise_Car__ = std::shared_ptr<Promise<Car>>;
+  inline std::shared_ptr<Promise<Car>> create_std__shared_ptr_Promise_Car__() {
+    return Promise<Car>::create();
+  }
+  
+  // pragma MARK: std::function<void(const Car& /* result */)>
+  /**
+   * Specialized version of `std::function<void(const Car&)>`.
+   */
+  using Func_void_Car = std::function<void(const Car& /* result */)>;
+  /**
+   * Wrapper class for a `std::function<void(const Car& / * result * /)>`, this can be used from Swift.
+   */
+  class Func_void_Car_Wrapper final {
+  public:
+    explicit Func_void_Car_Wrapper(const std::function<void(const Car& /* result */)>& func): _function(func) {}
+    explicit Func_void_Car_Wrapper(std::function<void(const Car& /* result */)>&& func): _function(std::move(func)) {}
+    inline void call(Car result) const {
+      _function(result);
+    }
+  private:
+    std::function<void(const Car& /* result */)> _function;
+  };
+  inline Func_void_Car create_Func_void_Car(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */, Car), void(* _Nonnull destroy)(void* _Nonnull)) {
+    std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
+    return Func_void_Car([sharedClosureHolder, call](const Car& result) -> void {
+      call(sharedClosureHolder.get(), result);
+    });
+  }
+  inline std::shared_ptr<Func_void_Car_Wrapper> share_Func_void_Car(const Func_void_Car& value) {
+    return std::make_shared<Func_void_Car_Wrapper>(value);
+  }
+  
   // pragma MARK: std::optional<double>
   /**
    * Specialized version of `std::optional<double>`.
@@ -448,15 +497,6 @@ namespace margelo::nitro::image::bridge::swift {
   }
   inline std::shared_ptr<Func_void_std__optional_double__Wrapper> share_Func_void_std__optional_double_(const Func_void_std__optional_double_& value) {
     return std::make_shared<Func_void_std__optional_double__Wrapper>(value);
-  }
-  
-  // pragma MARK: std::optional<Person>
-  /**
-   * Specialized version of `std::optional<Person>`.
-   */
-  using std__optional_Person_ = std::optional<Person>;
-  inline std::optional<Person> create_std__optional_Person_(const Person& value) {
-    return std::optional<Person>(value);
   }
   
   // pragma MARK: std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>

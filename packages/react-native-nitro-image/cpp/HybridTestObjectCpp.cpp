@@ -13,6 +13,7 @@
 
 #include "HybridBase.hpp"
 #include "HybridChild.hpp"
+#include <type_traits>
 
 namespace margelo::nitro::image {
 
@@ -276,9 +277,23 @@ std::shared_ptr<Promise<double>> HybridTestObjectCpp::getValueFromJSCallbackAndW
   });
 }
 
-std::shared_ptr<Promise<double>> HybridTestObjectCpp::awaitPromise(const std::shared_ptr<Promise<double>>& promise) {
+std::shared_ptr<Promise<double>> HybridTestObjectCpp::awaitAndGetPromise(const std::shared_ptr<Promise<double>>& promise) {
   auto newPromise = Promise<double>::create();
   promise->addOnResolvedListener([=](double result) { newPromise->resolve(result); });
+  promise->addOnRejectedListener([=](const std::exception& error) { newPromise->reject(error); });
+  return newPromise;
+}
+
+std::shared_ptr<Promise<Car>> HybridTestObjectCpp::awaitAndGetComplexPromise(const std::shared_ptr<Promise<Car>>& promise) {
+  auto newPromise = Promise<Car>::create();
+  promise->addOnResolvedListener([=](const Car& result) { newPromise->resolve(result); });
+  promise->addOnRejectedListener([=](const std::exception& error) { newPromise->reject(error); });
+  return newPromise;
+}
+
+std::shared_ptr<Promise<void>> HybridTestObjectCpp::awaitPromise(const std::shared_ptr<Promise<void>>& promise) {
+  auto newPromise = Promise<void>::create();
+  promise->addOnResolvedListener([=]() { newPromise->resolve(); });
   promise->addOnRejectedListener([=](const std::exception& error) { newPromise->reject(error); });
   return newPromise;
 }

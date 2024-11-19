@@ -170,10 +170,21 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
     }
   }
   
-  func awaitPromise(promise: Promise<Double>) throws -> Promise<Double> {
+  func awaitAndGetPromise(promise: Promise<Double>) throws -> Promise<Double> {
     return .async {
       let result = try await promise.await()
       return result
+    }
+  }
+  func awaitAndGetComplexPromise(promise: Promise<Car>) throws -> Promise<Car> {
+    return .async {
+      let result = try await promise.await()
+      return result
+    }
+  }
+  func awaitPromise(promise: Promise<Void>) throws -> Promise<Void> {
+    return .async {
+      try await promise.await()
     }
   }
 

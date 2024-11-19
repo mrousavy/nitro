@@ -64,7 +64,9 @@ public protocol HybridTestObjectSwiftKotlinSpec: AnyObject, HybridObjectSpec {
   func calculateFibonacciAsync(value: Double) throws -> Promise<Int64>
   func wait(seconds: Double) throws -> Promise<Void>
   func promiseThrows() throws -> Promise<Void>
-  func awaitPromise(promise: Promise<Double>) throws -> Promise<Double>
+  func awaitAndGetPromise(promise: Promise<Double>) throws -> Promise<Double>
+  func awaitAndGetComplexPromise(promise: Promise<Car>) throws -> Promise<Car>
+  func awaitPromise(promise: Promise<Void>) throws -> Promise<Void>
   func callCallback(callback: @escaping (() -> Void)) throws -> Void
   func callAll(first: @escaping (() -> Void), second: @escaping (() -> Void), third: @escaping (() -> Void)) throws -> Void
   func callWithOptional(value: Double?, callback: @escaping ((_ maybe: Double?) -> Void)) throws -> Void

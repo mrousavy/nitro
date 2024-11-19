@@ -255,7 +255,15 @@ namespace margelo::nitro::image {
       auto __result = _swiftPart.promiseThrows();
       return __result;
     }
-    inline std::shared_ptr<Promise<double>> awaitPromise(const std::shared_ptr<Promise<double>>& promise) override {
+    inline std::shared_ptr<Promise<double>> awaitAndGetPromise(const std::shared_ptr<Promise<double>>& promise) override {
+      auto __result = _swiftPart.awaitAndGetPromise(promise);
+      return __result;
+    }
+    inline std::shared_ptr<Promise<Car>> awaitAndGetComplexPromise(const std::shared_ptr<Promise<Car>>& promise) override {
+      auto __result = _swiftPart.awaitAndGetComplexPromise(promise);
+      return __result;
+    }
+    inline std::shared_ptr<Promise<void>> awaitPromise(const std::shared_ptr<Promise<void>>& promise) override {
       auto __result = _swiftPart.awaitPromise(promise);
       return __result;
     }

@@ -341,7 +341,7 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
               return `
 { () -> ${promise.getCode('swift')} in
   let __promise = ${promise.getCode('swift')}()
-  let __resolver = SwiftClosure { __promise.resolve() }
+  let __resolver = SwiftClosure { __promise.resolve(withResult: ()) }
   let __rejecter = { (__error: std.exception) in
     __promise.reject(withError: RuntimeError.from(cppError: __error))
   }
