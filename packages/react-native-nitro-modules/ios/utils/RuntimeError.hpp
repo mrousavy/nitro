@@ -16,4 +16,8 @@ static inline std::exception make_exception(const std::string& message) {
   return std::runtime_error(message);
 }
 
+static inline std::string get_exception_message(const std::exception& exception) {
+  return exception.what();
+}
+
 } // namespace margelo::nitro
