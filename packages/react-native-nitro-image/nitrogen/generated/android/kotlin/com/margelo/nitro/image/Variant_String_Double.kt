@@ -15,9 +15,9 @@ import com.facebook.proguard.annotations.DoNotStrip
 @DoNotStrip
 sealed class Variant_String_Double {
   @DoNotStrip
-  data class SomeString(val value: String): Variant_String_Double()
+  data class SomeString(@DoNotStrip val value: String): Variant_String_Double()
   @DoNotStrip
-  data class SomeDouble(val value: Double): Variant_String_Double()
+  data class SomeDouble(@DoNotStrip val value: Double): Variant_String_Double()
 
   inline fun <reified T> getAs(): T? = when (this) {
     is SomeString -> value as? T
@@ -31,8 +31,10 @@ sealed class Variant_String_Double {
 
   companion object {
     @JvmStatic
+    @DoNotStrip
     fun create(value: String): Variant_String_Double = SomeString(value)
     @JvmStatic
+    @DoNotStrip
     fun create(value: Double): Variant_String_Double = SomeDouble(value)
   }
 }
