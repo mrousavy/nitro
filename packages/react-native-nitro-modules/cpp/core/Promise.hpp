@@ -275,9 +275,6 @@ public:
       onRejected(_error.value());
     }
   }
-  void reject(std::string message) {
-    reject(std::runtime_error(message));
-  }
 
 public:
   void addOnResolvedListener(OnResolvedFunc&& onResolved) {
