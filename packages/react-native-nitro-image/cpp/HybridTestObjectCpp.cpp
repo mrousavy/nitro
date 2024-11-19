@@ -276,6 +276,13 @@ std::shared_ptr<Promise<double>> HybridTestObjectCpp::getValueFromJSCallbackAndW
   });
 }
 
+std::shared_ptr<Promise<double>> HybridTestObjectCpp::awaitPromise(const std::shared_ptr<Promise<double>>& promise) {
+  auto newPromise = Promise<double>::create();
+  promise->addOnResolvedListener([=](auto result) { newPromise->resolve(result); });
+  promise->addOnRejectedListener([=](auto error) { newPromise->reject(error); });
+  return newPromise;
+}
+
 std::shared_ptr<Promise<void>> HybridTestObjectCpp::promiseThrows() {
   return Promise<void>::async([=]() { throw std::runtime_error("Promise throws :)"); });
 }

@@ -363,7 +363,7 @@ namespace margelo::nitro::image {
     static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JPromise::javaobject>(double /* value */)>("calculateFibonacciAsync");
     auto __result = method(_javaPart, value);
     return [&]() {
-      auto __promise = std::make_shared<Promise<int64_t>>();
+      auto __promise = Promise<int64_t>::create();
       __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
         auto __result = jni::static_ref_cast<jni::JLong>(__boxedResult);
         __promise->resolve(__result->value());
@@ -379,7 +379,7 @@ namespace margelo::nitro::image {
     static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JPromise::javaobject>(double /* seconds */)>("wait");
     auto __result = method(_javaPart, seconds);
     return [&]() {
-      auto __promise = std::make_shared<Promise<void>>();
+      auto __promise = Promise<void>::create();
       __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
         __promise->resolve();
       });
@@ -394,7 +394,7 @@ namespace margelo::nitro::image {
     static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JPromise::javaobject>()>("promiseThrows");
     auto __result = method(_javaPart);
     return [&]() {
-      auto __promise = std::make_shared<Promise<void>>();
+      auto __promise = Promise<void>::create();
       __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
         __promise->resolve();
       });
@@ -450,7 +450,7 @@ namespace margelo::nitro::image {
     static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JPromise::javaobject>()>("createArrayBufferAsync");
     auto __result = method(_javaPart);
     return [&]() {
-      auto __promise = std::make_shared<Promise<std::shared_ptr<ArrayBuffer>>>();
+      auto __promise = Promise<std::shared_ptr<ArrayBuffer>>::create();
       __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
         auto __result = jni::static_ref_cast<JArrayBuffer::javaobject>(__boxedResult);
         __promise->resolve(__result->cthis()->getArrayBuffer());

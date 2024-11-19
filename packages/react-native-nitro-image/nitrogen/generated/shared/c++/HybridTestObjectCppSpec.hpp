@@ -116,6 +116,7 @@ namespace margelo::nitro::image {
       virtual std::tuple<double, std::string, bool> passTuple(const std::tuple<double, std::string, bool>& tuple) = 0;
       virtual std::shared_ptr<Promise<double>> getValueFromJSCallbackAndWait(const std::function<std::future<double>()>& getValue) = 0;
       virtual std::shared_ptr<Promise<void>> getValueFromJsCallback(const std::function<std::future<std::string>()>& callback, const std::function<void(const std::string& /* valueFromJs */)>& andThenCall) = 0;
+      virtual std::shared_ptr<Promise<double>> awaitPromise(const std::shared_ptr<Promise<double>>& promise) = 0;
       virtual std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec> newTestObject() = 0;
       virtual void simpleFunc() = 0;
       virtual double addNumbers(double a, double b) = 0;

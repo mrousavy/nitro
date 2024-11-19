@@ -10,6 +10,7 @@ import type { State } from './Testers'
 import { it } from './Testers'
 import { stringify } from './utils'
 import { getHybridObjectConstructor } from 'react-native-nitro-modules'
+import { InteractionManager } from 'react-native'
 
 type TestResult =
   | {
@@ -69,18 +70,29 @@ function createTest<T>(
 function timeoutedPromise<T>(
   run: (complete: (value: T) => void) => void | Promise<void>
 ): Promise<T> {
-  return new Promise((resolve, reject) => {
+  return new Promise(async (resolve, reject) => {
     let didResolve = false
-    setTimeout(() => {
-      if (!didResolve) reject(new Error(`Timeouted!`))
-    }, 500)
-    run((value) => {
-      if (didResolve) {
-        throw new Error(`Promise was already rejected!`)
-      }
-      didResolve = true
-      resolve(value)
+    InteractionManager.runAfterInteractions(() => {
+      requestAnimationFrame(() => {
+        setImmediate(() => {
+          setTimeout(() => {
+            if (!didResolve) reject(new Error(`Timeouted!`))
+          }, 1500)
+        })
+      })
     })
+    try {
+      await run((value) => {
+        if (didResolve) {
+          throw new Error(`Promise was already rejected!`)
+        }
+        didResolve = true
+        resolve(value)
+      })
+    } catch (e) {
+      didResolve = true
+      reject(e)
+    }
   })
 }
 
@@ -690,6 +702,24 @@ export function getTests(
       )
         .didNotThrow()
         .equals(true)
+    ),
+    createTest('JS Promise can be awaited on native side', async () =>
+      (
+        await it(() => {
+          return timeoutedPromise(async (complete) => {
+            let resolve = (_: number) => {}
+            const promise = new Promise<number>((r) => {
+              resolve = r
+            })
+            const nativePromise = testObject.awaitPromise(promise)
+            resolve(5)
+            const result = await nativePromise
+            complete(result)
+          })
+        })
+      )
+        .didNotThrow()
+        .equals(5)
     ),
 
     // Callbacks

@@ -705,7 +705,7 @@ __promise->resolve();
             }
             return `
 [&]() {
-  auto __promise = std::make_shared<Promise<${actualCppType}>>();
+  auto __promise = Promise<${actualCppType}>::create();
   ${parameterName}->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
     ${indent(resolveBody, '    ')}
   });

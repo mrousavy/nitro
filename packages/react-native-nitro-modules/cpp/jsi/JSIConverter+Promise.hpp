@@ -25,8 +25,20 @@ using namespace facebook;
 // Promise<T, std::exception> <> Promise<T>
 template <typename TResult>
 struct JSIConverter<std::shared_ptr<Promise<TResult>>> final {
-  static inline std::shared_ptr<Promise<TResult>> fromJSI(jsi::Runtime&, const jsi::Value&) {
-    throw std::runtime_error("Promise cannot be converted to a native type - it needs to be awaited first!");
+  static inline std::shared_ptr<Promise<TResult>> fromJSI(jsi::Runtime& runtime, const jsi::Value& value) {
+    // Create new Promise and prepare onResolved / onRejected callbacks
+    auto promise = Promise<TResult>::create();
+    auto thenCallback =
+        JSIConverter<std::function<void(TResult)>>::toJSI(runtime, [=](const TResult& result) { promise->resolve(result); });
+    auto catchCallback = JSIConverter<std::function<void(std::exception)>>::toJSI(
+        runtime, [=](const std::exception& exception) { promise->reject(exception); });
+
+    // Chain .then listeners on JS Promise (onResolved and onRejected)
+    jsi::Object jsPromise = value.asObject(runtime);
+    jsi::Function thenFn = jsPromise.getPropertyAsFunction(runtime, "then");
+    thenFn.callWithThis(runtime, jsPromise, thenCallback, catchCallback);
+
+    return promise;
   }
 
   static inline jsi::Value toJSI(jsi::Runtime& runtime, const std::shared_ptr<Promise<TResult>>& promise) {
@@ -77,8 +89,12 @@ struct JSIConverter<std::shared_ptr<Promise<TResult>>> final {
     }
   }
 
-  static inline bool canConvert(jsi::Runtime&, const jsi::Value&) {
-    throw std::runtime_error("jsi::Value of type Promise cannot be converted to Promise<> yet!");
+  static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
+    if (!value.isObject()) {
+      return false;
+    }
+    jsi::Object object = value.getObject(runtime);
+    return object.hasProperty(runtime, "then");
   }
 };
 
