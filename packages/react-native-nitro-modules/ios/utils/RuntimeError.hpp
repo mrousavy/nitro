@@ -5,12 +5,14 @@
 //  Created by Marc Rousavy on 19.11.24.
 //
 
+#pragma once
+
 #include <exception>
 #include <string>
 
 namespace margelo::nitro {
 
-std::exception make_exception(const std::string& message) {
+static inline std::exception make_exception(const std::string& message) {
   return std::runtime_error(message);
 }
 
