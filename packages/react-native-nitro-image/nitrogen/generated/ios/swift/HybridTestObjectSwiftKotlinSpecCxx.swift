@@ -589,7 +589,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
         let __promise = bridge.create_std__shared_ptr_Promise_int64_t__()
         __result
           .then({ __result in __promise.pointee.resolve(__result) })
-          .catch({ __error in __promise.pointee.reject(std.string(String(describing: __error))) })
+          .catch({ __error in __promise.pointee.reject(__error.toCpp()) })
         return __promise
       }()
     } catch {
@@ -606,7 +606,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
         let __promise = bridge.create_std__shared_ptr_Promise_void__()
         __result
           .then({ __result in __promise.pointee.resolve() })
-          .catch({ __error in __promise.pointee.reject(std.string(String(describing: __error))) })
+          .catch({ __error in __promise.pointee.reject(__error.toCpp()) })
         return __promise
       }()
     } catch {
@@ -623,7 +623,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
         let __promise = bridge.create_std__shared_ptr_Promise_void__()
         __result
           .then({ __result in __promise.pointee.resolve() })
-          .catch({ __error in __promise.pointee.reject(std.string(String(describing: __error))) })
+          .catch({ __error in __promise.pointee.reject(__error.toCpp()) })
         return __promise
       }()
     } catch {
@@ -640,7 +640,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
         let __promise = bridge.create_std__shared_ptr_Promise_double__()
         __result
           .then({ __result in __promise.pointee.resolve(__result) })
-          .catch({ __error in __promise.pointee.reject(std.string(String(describing: __error))) })
+          .catch({ __error in __promise.pointee.reject(__error.toCpp()) })
         return __promise
       }()
     } catch {
@@ -793,7 +793,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
         let __promise = bridge.create_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___()
         __result
           .then({ __result in __promise.pointee.resolve(__result.getArrayBuffer()) })
-          .catch({ __error in __promise.pointee.reject(std.string(String(describing: __error))) })
+          .catch({ __error in __promise.pointee.reject(__error.toCpp()) })
         return __promise
       }()
     } catch {

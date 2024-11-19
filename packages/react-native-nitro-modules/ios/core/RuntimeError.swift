@@ -15,3 +15,13 @@ import Foundation
 public enum RuntimeError: Error {
   case error(withMessage: String)
 }
+
+public extension Error {
+  /**
+   * Converts this `Error` to a C++ `std::exception`.
+   */
+  func toCpp() -> std.exception {
+    let message = String(describing: self)
+    return margelo.nitro.make_exception(std.string(message))
+  }
+}

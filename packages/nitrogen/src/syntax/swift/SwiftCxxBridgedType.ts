@@ -600,7 +600,7 @@ case ${i}:
   let __promise = ${makePromise}()
   ${swiftParameterName}
     .then({ __result in __promise.pointee.resolve(${arg}) })
-    .catch({ __error in __promise.pointee.reject(std.string(String(describing: __error))) })
+    .catch({ __error in __promise.pointee.reject(__error.toCpp()) })
   return __promise
 }()`.trim()
           default:
