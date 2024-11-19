@@ -89,8 +89,12 @@ struct JSIConverter<std::shared_ptr<Promise<TResult>>> final {
     }
   }
 
-  static inline bool canConvert(jsi::Runtime&, const jsi::Value&) {
-    throw std::runtime_error("jsi::Value of type Promise cannot be converted to Promise<> yet!");
+  static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
+    if (!value.isObject()) {
+      return false;
+    }
+    jsi::Object object = value.getObject(runtime);
+    return object.hasProperty(runtime, "then");
   }
 };
 
