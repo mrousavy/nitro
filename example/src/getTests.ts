@@ -1002,9 +1002,15 @@ export function getTests(
     ),
     createTest('bounceChild(Base) throws', () =>
       it(() => {
-        const child = testObject.createBase()
-        // @ts-expect-error
-        testObject.bounceChild(child)
+        if (__DEV__) {
+          const child = testObject.createBase()
+          // @ts-expect-error
+          testObject.bounceChild(child)
+        } else {
+          throw new Error(
+            `This only throws in __DEV__ - in release it is optimized away and would crash. :)`
+          )
+        }
       }).didThrow()
     ),
     createTest('bounceChildBase(Child) ===', () =>
