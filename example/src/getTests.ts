@@ -70,7 +70,7 @@ function createTest<T>(
 function timeoutedPromise<T>(
   run: (complete: (value: T) => void) => void | Promise<void>
 ): Promise<T> {
-  return new Promise((resolve, reject) => {
+  return new Promise(async (resolve, reject) => {
     let didResolve = false
     InteractionManager.runAfterInteractions(() => {
       requestAnimationFrame(() => {
@@ -82,7 +82,7 @@ function timeoutedPromise<T>(
       })
     })
     try {
-      run((value) => {
+      await run((value) => {
         if (didResolve) {
           throw new Error(`Promise was already rejected!`)
         }
