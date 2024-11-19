@@ -136,6 +136,13 @@ class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
     }
 
     override fun awaitPromise(promise: Promise<Double>): Promise<Double> {
+        val newPromise = Promise<Double>()
+        promise.addOnResolvedListener { result ->
+            newPromise.resolve(result)
+        }
+        promise.addOnRejectedListener { error ->
+            newPromise.reject(Error(error))
+        }
         return promise
     }
 

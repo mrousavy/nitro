@@ -25,6 +25,21 @@ import kotlin.concurrent.thread
 class Promise<T> {
   @Keep
   @DoNotStrip
+  fun interface OnResolvedCallback<T> {
+    @Keep
+    @DoNotStrip
+    fun onResolved(result: T)
+  }
+  @Keep
+  @DoNotStrip
+  fun interface OnRejectedCallback {
+    @Keep
+    @DoNotStrip
+    fun onRejected(error: String)
+  }
+
+  @Keep
+  @DoNotStrip
   private val mHybridData: HybridData
 
   /**
@@ -34,6 +49,7 @@ class Promise<T> {
     mHybridData = initHybrid()
   }
 
+  @Suppress("unused")
   @Keep
   @DoNotStrip
   private constructor(hybridData: HybridData) {
@@ -56,9 +72,19 @@ class Promise<T> {
     nativeReject(error.toString())
   }
 
+  fun addOnResolvedListener(listener: OnResolvedCallback<T>) {
+    nativeAddOnResolvedListener(listener)
+  }
+
+  fun addOnRejectedListener(listener: OnRejectedCallback) {
+    nativeAddOnRejectedListener(listener)
+  }
+
   // C++ functions
   private external fun nativeResolve(result: Any)
   private external fun nativeReject(error: String)
+  private external fun nativeAddOnResolvedListener(callback: OnResolvedCallback<T>)
+  private external fun nativeAddOnRejectedListener(callback: OnRejectedCallback)
   private external fun initHybrid(): HybridData
 
   companion object {
