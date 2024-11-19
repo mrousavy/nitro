@@ -13,7 +13,6 @@
 
 #include "HybridBase.hpp"
 #include "HybridChild.hpp"
-#include <type_traits>
 
 namespace margelo::nitro::image {
 
