@@ -88,6 +88,7 @@ interface SharedTestObjectProps {
   calculateFibonacciAsync(value: number): Promise<bigint>
   wait(seconds: number): Promise<void>
   promiseThrows(): Promise<void>
+  awaitPromise(promise: Promise<number>): Promise<number>
 
   // Callbacks
   callCallback(callback: () => void): void
@@ -146,9 +147,6 @@ export interface TestObjectCpp
     callback: () => string,
     andThenCall: (valueFromJs: string) => void
   ): Promise<void>
-
-  // Complex Promise tests
-  awaitPromise(promise: Promise<number>): Promise<number>
 
   // Other HybridObjects
   readonly thisObject: TestObjectCpp

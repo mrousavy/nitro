@@ -405,6 +405,31 @@ namespace margelo::nitro::image {
       return __promise;
     }();
   }
+  std::shared_ptr<Promise<double>> JHybridTestObjectSwiftKotlinSpec::awaitPromise(const std::shared_ptr<Promise<double>>& promise) {
+    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JPromise::javaobject>(jni::alias_ref<JPromise::javaobject> /* promise */)>("awaitPromise");
+    auto __result = method(_javaPart, [&]() {
+      jni::local_ref<JPromise::javaobject> __promise = JPromise::create();
+      promise->addOnResolvedListener([=](const double& __result) {
+        __promise->cthis()->resolve(jni::JDouble::valueOf(__result));
+      });
+      promise->addOnRejectedListener([=](const std::exception& __error) {
+        __promise->cthis()->reject(jni::make_jstring(__error.what()));
+      });
+      return __promise;
+    }());
+    return [&]() {
+      auto __promise = Promise<double>::create();
+      __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
+        auto __result = jni::static_ref_cast<jni::JDouble>(__boxedResult);
+        __promise->resolve(__result->value());
+      });
+      __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JString>& __message) {
+        std::runtime_error __error(__message->toStdString());
+        __promise->reject(std::move(__error));
+      });
+      return __promise;
+    }();
+  }
   void JHybridTestObjectSwiftKotlinSpec::callCallback(const std::function<void()>& callback) {
     static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<JFunc_void::javaobject> /* callback */)>("callCallback");
     method(_javaPart, JFunc_void::fromCpp(callback));

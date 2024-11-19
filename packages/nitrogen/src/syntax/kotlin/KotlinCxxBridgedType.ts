@@ -516,6 +516,29 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
             return parameterName
         }
       }
+      case 'promise': {
+        switch (language) {
+          case 'c++': {
+            const promise = getTypeAs(this.type, PromiseType)
+            const resolvingType = promise.resultingType.getCode('c++')
+            const bridge = new KotlinCxxBridgedType(promise.resultingType)
+            return `
+[&]() {
+  jni::local_ref<JPromise::javaobject> __promise = JPromise::create();
+  ${parameterName}->addOnResolvedListener([=](const ${resolvingType}& __result) {
+    __promise->cthis()->resolve(${indent(bridge.parseFromCppToKotlin('__result', 'c++', true), '    ')});
+  });
+  ${parameterName}->addOnRejectedListener([=](const std::exception& __error) {
+    __promise->cthis()->reject(jni::make_jstring(__error.what()));
+  });
+  return __promise;
+}()
+            `.trim()
+          }
+          default:
+            return parameterName
+        }
+      }
       default:
         // no need to parse anything, just return as is
         return parameterName

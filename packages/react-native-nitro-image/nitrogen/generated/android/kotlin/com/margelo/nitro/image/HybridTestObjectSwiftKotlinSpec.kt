@@ -204,6 +204,10 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
+  abstract fun awaitPromise(promise: Promise<Double>): Promise<Double>
+  
+  @DoNotStrip
+  @Keep
   abstract fun callCallback(callback: () -> Unit): Unit
   
   @DoNotStrip

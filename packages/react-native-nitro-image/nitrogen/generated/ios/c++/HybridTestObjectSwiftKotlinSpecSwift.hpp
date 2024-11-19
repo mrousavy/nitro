@@ -255,6 +255,10 @@ namespace margelo::nitro::image {
       auto __result = _swiftPart.promiseThrows();
       return __result;
     }
+    inline std::shared_ptr<Promise<double>> awaitPromise(const std::shared_ptr<Promise<double>>& promise) override {
+      auto __result = _swiftPart.awaitPromise([]() -> std::shared_ptr<Promise<double>> { throw std::runtime_error("Promise<..> cannot be converted to Swift yet!"); }());
+      return __result;
+    }
     inline void callCallback(const std::function<void()>& callback) override {
       _swiftPart.callCallback(callback);
     }

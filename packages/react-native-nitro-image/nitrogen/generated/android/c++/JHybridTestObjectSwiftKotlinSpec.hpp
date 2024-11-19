@@ -95,6 +95,7 @@ namespace margelo::nitro::image {
     std::shared_ptr<Promise<int64_t>> calculateFibonacciAsync(double value) override;
     std::shared_ptr<Promise<void>> wait(double seconds) override;
     std::shared_ptr<Promise<void>> promiseThrows() override;
+    std::shared_ptr<Promise<double>> awaitPromise(const std::shared_ptr<Promise<double>>& promise) override;
     void callCallback(const std::function<void()>& callback) override;
     void callAll(const std::function<void()>& first, const std::function<void()>& second, const std::function<void()>& third) override;
     void callWithOptional(std::optional<double> value, const std::function<void(std::optional<double> /* maybe */)>& callback) override;

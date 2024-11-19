@@ -633,6 +633,23 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
   }
   
   @inline(__always)
+  public func awaitPromise(promise: bridge.std__shared_ptr_Promise_double__) -> bridge.std__shared_ptr_Promise_double__ {
+    do {
+      let __result = try self.__implementation.awaitPromise(promise: promise)
+      return { () -> bridge.std__shared_ptr_Promise_double__ in
+        let __promise = bridge.create_std__shared_ptr_Promise_double__()
+        __result
+          .then({ __result in __promise.pointee.resolve(__result) })
+          .catch({ __error in __promise.pointee.reject(std.string(String(describing: __error))) })
+        return __promise
+      }()
+    } catch {
+      let __message = "\(error.localizedDescription)"
+      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(__message))")
+    }
+  }
+  
+  @inline(__always)
   public func callCallback(callback: bridge.Func_void) -> Void {
     do {
       try self.__implementation.callCallback(callback: { () -> (() -> Void) in

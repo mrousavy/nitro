@@ -23,12 +23,20 @@ public:
   using OnResolvedFunc = std::function<void(jni::alias_ref<jni::JObject>)>;
   using OnRejectedFunc = std::function<void(jni::alias_ref<jni::JString>)>;
 
-public:
+private:
   /**
    * Create a new, still unresolved `JPromise` from Java.
    */
   static jni::local_ref<JPromise::jhybriddata> initHybrid(jni::alias_ref<jhybridobject>) {
     return makeCxxInstance();
+  }
+
+public:
+  /**
+   * Create a new, still unresolved `JPromise` from C++.
+   */
+  static jni::local_ref<JPromise::javaobject> create() {
+    return newObjectCxxArgs();
   }
 
 public:

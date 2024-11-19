@@ -135,6 +135,10 @@ class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
         }
     }
 
+    override fun awaitPromise(promise: Promise<Double>): Promise<Double> {
+        return promise
+    }
+
     override fun callCallback(callback: () -> Unit) {
         callback()
     }

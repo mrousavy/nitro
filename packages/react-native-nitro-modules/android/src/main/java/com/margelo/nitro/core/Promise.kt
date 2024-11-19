@@ -23,13 +23,21 @@ import kotlin.concurrent.thread
 @Keep
 @DoNotStrip
 class Promise<T> {
+  @Keep
+  @DoNotStrip
   private val mHybridData: HybridData
 
   /**
    * Creates a new Promise with fully manual control over the `resolve(..)`/`reject(..)` functions
    */
-  init {
+  constructor() {
     mHybridData = initHybrid()
+  }
+
+  @Keep
+  @DoNotStrip
+  private constructor(hybridData: HybridData) {
+    mHybridData = hybridData
   }
 
   /**
