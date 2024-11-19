@@ -341,12 +341,14 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
               return `
 { () -> ${promise.getCode('swift')} in
   let __promise = ${promise.getCode('swift')}()
+  let __resolver = SwiftClosure { __promise.resolve() }
   let __rejecter = { (__error: std.exception) in
     __promise.reject(withError: RuntimeError.from(cppError: __error))
   }
-  let __resolverCpp = SwiftClosure { __promise.resolve() }
+  let __resolverCpp = __resolver.getFunctionCopy()
   let __rejecterCpp = ${indent(rejecterFuncBridge.parseFromSwiftToCpp('__rejecter', 'swift'), '  ')}
-  // TODO: Listeners
+  ${cppParameterName}.pointee.addOnResolvedListener(__resolverCpp)
+  ${cppParameterName}.pointee.addOnRejectedListener(__rejecterCpp)
   return __promise
 }()`.trim()
             } else {
@@ -370,7 +372,8 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
   }
   let __resolverCpp = ${indent(resolverFuncBridge.parseFromSwiftToCpp('__resolver', 'swift'), '  ')}
   let __rejecterCpp = ${indent(rejecterFuncBridge.parseFromSwiftToCpp('__rejecter', 'swift'), '  ')}
-  // TODO: Listeners
+  ${cppParameterName}.pointee.addOnResolvedListener(__resolverCpp)
+  ${cppParameterName}.pointee.addOnRejectedListener(__rejecterCpp)
   return __promise
 }()`.trim()
             }
