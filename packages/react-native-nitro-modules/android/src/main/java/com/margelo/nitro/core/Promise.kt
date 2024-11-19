@@ -31,7 +31,7 @@ class Promise<T> {
   fun interface OnResolvedCallback<T> {
     @Keep
     @DoNotStrip
-    fun onResolved(result: T)
+    fun onResolved(result: java.lang.Object?)
   }
   @Keep
   @DoNotStrip
@@ -80,7 +80,9 @@ class Promise<T> {
    * Once the `Promise<T>` resolves, the [listener] will be called.
    */
   fun then(listener: OnResolvedCallback<T>): Promise<T> {
-    addOnResolvedListener(listener)
+    addOnResolvedListener { result ->
+      listener.onResolved(result)
+    }
     return this
   }
 
@@ -88,7 +90,7 @@ class Promise<T> {
    * Add an error continuation listener to this `Promise<T>`.
    * Once the `Promise<T>` rejects, the [listener] will be called with the error.
    */
-  fun catch(listener: OnRejectedCallback): Promise<T> {
+  fun catch(listener: (throwable: Throwable) -> Unit): Promise<T> {
     addOnRejectedListener(listener)
     return this
   }
@@ -101,7 +103,10 @@ class Promise<T> {
    */
   suspend fun await(): T {
     return suspendCoroutine { continuation ->
-      addOnResolvedListener { result -> continuation.resume(result) }
+      addOnResolvedListener { result ->
+        @Suppress("UNCHECKED_CAST")
+        continuation.resume(result as T)
+      }
       addOnRejectedListener { error -> continuation.resumeWithException(error) }
     }
   }
