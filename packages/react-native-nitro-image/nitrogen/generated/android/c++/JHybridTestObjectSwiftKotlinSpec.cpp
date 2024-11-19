@@ -49,6 +49,7 @@ namespace margelo::nitro::image { class HybridBaseSpec; }
 #include "JCar.hpp"
 #include <NitroModules/ArrayBuffer.hpp>
 #include <NitroModules/JArrayBuffer.hpp>
+#include <NitroModules/JUnit.hpp>
 #include "HybridChildSpec.hpp"
 #include "JHybridChildSpec.hpp"
 #include "HybridBaseSpec.hpp"
