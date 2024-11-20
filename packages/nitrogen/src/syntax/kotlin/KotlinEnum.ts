@@ -21,7 +21,11 @@ import com.facebook.proguard.annotations.DoNotStrip
 @DoNotStrip
 @Keep
 enum class ${enumType.enumName} {
-  ${indent(members.join(',\n'), '  ')}
+  ${indent(members.join(',\n'), '  ')};
+
+  @DoNotStrip
+  @Keep
+  private val _ordinal = ordinal
 }
   `.trim()
 
@@ -58,7 +62,7 @@ namespace ${cxxNamespace} {
     [[maybe_unused]]
     ${enumType.enumName} toCpp() const {
       static const auto clazz = javaClassStatic();
-      static const auto fieldOrdinal = clazz->getField<int>("ordinal");
+      static const auto fieldOrdinal = clazz->getField<int>("_ordinal");
       int ordinal = this->getFieldValue(fieldOrdinal);
       return static_cast<${enumType.enumName}>(ordinal);
     }

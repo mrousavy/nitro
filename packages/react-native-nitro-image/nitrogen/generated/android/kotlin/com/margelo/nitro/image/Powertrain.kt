@@ -18,5 +18,9 @@ import com.facebook.proguard.annotations.DoNotStrip
 enum class Powertrain {
   ELECTRIC,
   GAS,
-  HYBRID
+  HYBRID;
+
+  @DoNotStrip
+  @Keep
+  private val _ordinal = ordinal
 }
