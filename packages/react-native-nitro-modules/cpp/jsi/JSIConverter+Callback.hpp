@@ -55,7 +55,8 @@ struct JSIConverter<std::shared_ptr<Callback<ReturnType, Args...>>> final {
       }
       return callHybridFunction(function, runtime, args, std::index_sequence_for<Args...>{});
     };
-    return jsi::Function::createFromHostFunction(runtime, jsi::PropNameID::forUtf8(runtime, "hostFunction"), sizeof...(Args), jsFunction);
+    return jsi::Function::createFromHostFunction(runtime, jsi::PropNameID::forUtf8(runtime, function.getName()), sizeof...(Args),
+                                                 jsFunction);
   }
 
   static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
