@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include "AssertPromiseState.hpp"
+#include "NitroDefines.hpp"
 #include "ThreadPool.hpp"
 #include "TypeInfo.hpp"
 #include <exception>
@@ -97,6 +99,9 @@ public:
    */
   void resolve(TResult&& result) {
     std::unique_lock lock(*_mutex);
+#ifdef NITRO_DEBUG
+    assertPromiseState(*this, PromiseTask::WANTS_TO_RESOLVE);
+#endif
     _result = std::move(result);
     for (const auto& onResolved : _onResolvedListeners) {
       onResolved(std::get<TResult>(_result));
@@ -104,6 +109,9 @@ public:
   }
   void resolve(const TResult& result) {
     std::unique_lock lock(*_mutex);
+#ifdef NITRO_DEBUG
+    assertPromiseState(*this, PromiseTask::WANTS_TO_RESOLVE);
+#endif
     _result = result;
     for (const auto& onResolved : _onResolvedListeners) {
       onResolved(std::get<TResult>(_result));
@@ -114,6 +122,9 @@ public:
    */
   void reject(TError&& exception) {
     std::unique_lock lock(*_mutex);
+#ifdef NITRO_DEBUG
+    assertPromiseState(*this, PromiseTask::WANTS_TO_REJECT);
+#endif
     _result = std::move(exception);
     for (const auto& onRejected : _onRejectedListeners) {
       onRejected(std::get<TError>(_result));
@@ -121,6 +132,9 @@ public:
   }
   void reject(const TError& exception) {
     std::unique_lock lock(*_mutex);
+#ifdef NITRO_DEBUG
+    assertPromiseState(*this, PromiseTask::WANTS_TO_REJECT);
+#endif
     _result = exception;
     for (const auto& onRejected : _onRejectedListeners) {
       onRejected(std::get<TError>(_result));
@@ -299,6 +313,9 @@ public:
 public:
   void resolve() {
     std::unique_lock lock(*_mutex);
+#ifdef NITRO_DEBUG
+    assertPromiseState(*this, PromiseTask::WANTS_TO_RESOLVE);
+#endif
     _isResolved = true;
     for (const auto& onResolved : _onResolvedListeners) {
       onResolved();
@@ -306,6 +323,9 @@ public:
   }
   void reject(TError&& exception) {
     std::unique_lock lock(*_mutex);
+#ifdef NITRO_DEBUG
+    assertPromiseState(*this, PromiseTask::WANTS_TO_REJECT);
+#endif
     _error = std::move(exception);
     for (const auto& onRejected : _onRejectedListeners) {
       onRejected(_error.value());
@@ -313,6 +333,9 @@ public:
   }
   void reject(const TError& exception) {
     std::unique_lock lock(*_mutex);
+#ifdef NITRO_DEBUG
+    assertPromiseState(*this, PromiseTask::WANTS_TO_REJECT);
+#endif
     _error = exception;
     for (const auto& onRejected : _onRejectedListeners) {
       onRejected(_error.value());
