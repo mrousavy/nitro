@@ -190,6 +190,17 @@ public:
 
 public:
   /**
+   * Gets an awaitable `std::future<T>` for this `Promise<T>`.
+   */
+  std::future<TResult> await() {
+    auto promise = std::make_shared<std::promise<TResult>>();
+    addOnResolvedListener([promise](const TResult& result) { promise->set_value(result); });
+    addOnRejectedListener([promise](const TError& error) { promise->set_exception(std::make_exception_ptr(error)); });
+    return promise->get_future();
+  }
+
+public:
+  /**
    * Get the result of the Promise if it has been resolved.
    * If the Promise is not resolved, this will throw.
    */
@@ -353,6 +364,14 @@ public:
       // Promise is not yet rejected, put the listener in our queue.
       _onRejectedListeners.push_back(onRejected);
     }
+  }
+
+public:
+  std::future<void> await() {
+    auto promise = std::make_shared<std::promise<void>>();
+    addOnResolvedListener([promise]() { promise->set_value(); });
+    addOnRejectedListener([promise](const TError& error) { promise->set_exception(std::make_exception_ptr(error)); });
+    return promise->get_future();
   }
 
 public:
