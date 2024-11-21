@@ -20,6 +20,11 @@ namespace margelo::nitro {
 
 using namespace facebook;
 
+/**
+ * Represents a callable JS function.
+ * This can be either called synchronously (must be on the same Thread), or asynchronously (default).
+ * If calling asynchronously, the result can either be awaited (`Promise<T>`), or ignored (`void`).
+ */
 template <typename TReturn, typename... TArgs>
 class Callback : public std::enable_shared_from_this<Callback<TReturn, TArgs...>> {
 private:
