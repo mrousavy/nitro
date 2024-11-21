@@ -10,6 +10,7 @@ import type { State } from './Testers'
 import { it } from './Testers'
 import { stringify } from './utils'
 import { getHybridObjectConstructor } from 'react-native-nitro-modules'
+import { InteractionManager } from 'react-native'
 
 type TestResult =
   | {
@@ -69,18 +70,29 @@ function createTest<T>(
 function timeoutedPromise<T>(
   run: (complete: (value: T) => void) => void | Promise<void>
 ): Promise<T> {
-  return new Promise((resolve, reject) => {
+  return new Promise(async (resolve, reject) => {
     let didResolve = false
-    setTimeout(() => {
-      if (!didResolve) reject(new Error(`Timeouted!`))
-    }, 500)
-    run((value) => {
-      if (didResolve) {
-        throw new Error(`Promise was already rejected!`)
-      }
-      didResolve = true
-      resolve(value)
+    InteractionManager.runAfterInteractions(() => {
+      requestAnimationFrame(() => {
+        setImmediate(() => {
+          setTimeout(() => {
+            if (!didResolve) reject(new Error(`Timeouted!`))
+          }, 1500)
+        })
+      })
     })
+    try {
+      await run((value) => {
+        if (didResolve) {
+          throw new Error(`Promise was already rejected!`)
+        }
+        didResolve = true
+        resolve(value)
+      })
+    } catch (e) {
+      didResolve = true
+      reject(e)
+    }
   })
 }
 
@@ -691,6 +703,60 @@ export function getTests(
         .didNotThrow()
         .equals(true)
     ),
+    createTest('JS Promise<number> can be awaited on native side', async () =>
+      (
+        await it(() => {
+          return timeoutedPromise(async (complete) => {
+            let resolve = (_: number) => {}
+            const promise = new Promise<number>((r) => {
+              resolve = r
+            })
+            const nativePromise = testObject.awaitAndGetPromise(promise)
+            resolve(5)
+            const result = await nativePromise
+            complete(result)
+          })
+        })
+      )
+        .didNotThrow()
+        .equals(5)
+    ),
+    createTest('JS Promise<Car> can be awaited on native side', async () =>
+      (
+        await it(() => {
+          return timeoutedPromise(async (complete) => {
+            let resolve = (_: Car) => {}
+            const promise = new Promise<Car>((r) => {
+              resolve = r
+            })
+            const nativePromise = testObject.awaitAndGetComplexPromise(promise)
+            resolve(TEST_CAR)
+            const result = await nativePromise
+            complete(result)
+          })
+        })
+      )
+        .didNotThrow()
+        .equals(TEST_CAR)
+    ),
+    createTest('JS Promise<void> can be awaited on native side', async () =>
+      (
+        await it(() => {
+          return timeoutedPromise(async (complete) => {
+            let resolve = () => {}
+            const promise = new Promise<void>((r) => {
+              resolve = r
+            })
+            const nativePromise = testObject.awaitPromise(promise)
+            resolve()
+            const result = await nativePromise
+            complete(result)
+          })
+        })
+      )
+        .didNotThrow()
+        .equals(undefined)
+    ),
 
     // Callbacks
     createTest('callCallback(...)', async () =>
@@ -1002,9 +1068,15 @@ export function getTests(
     ),
     createTest('bounceChild(Base) throws', () =>
       it(() => {
-        const child = testObject.createBase()
-        // @ts-expect-error
-        testObject.bounceChild(child)
+        if (__DEV__) {
+          const child = testObject.createBase()
+          // @ts-expect-error
+          testObject.bounceChild(child)
+        } else {
+          throw new Error(
+            `This only throws in __DEV__ - in release it is optimized away and would crash. :)`
+          )
+        }
       }).didThrow()
     ),
     createTest('bounceChildBase(Child) ===', () =>

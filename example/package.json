@@ -1,6 +1,6 @@
 {
   "name": "react-native-nitro-example",
-  "version": "0.16.2",
+  "version": "0.17.0",
   "private": true,
   "scripts": {
     "start": "react-native start",
@@ -24,7 +24,9 @@
     "react": "*",
     "react-native": "^0.76.1",
     "react-native-safe-area-context": "^4.14.0",
-    "react-native-screens": "^4.0.0"
+    "react-native-screens": "^4.0.0",
+    "react-native-nitro-image": "*",
+    "react-native-nitro-modules": "*"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
@@ -39,9 +41,7 @@
     "@react-native/typescript-config": "0.76.2",
     "@types/deep-equal": "^1.0.4",
     "babel-plugin-module-resolver": "^5.0.2",
-    "nitro-codegen": "*",
-    "react-native-nitro-image": "*",
-    "react-native-nitro-modules": "*"
+    "nitro-codegen": "*"
   },
   "engines": {
     "node": ">=18"

@@ -67,6 +67,7 @@ namespace margelo::nitro::image { enum class Powertrain; }
 #include <NitroModules/ArrayBufferHolder.hpp>
 #include <NitroModules/AnyMapHolder.hpp>
 #include <NitroModules/HybridContext.hpp>
+#include <NitroModules/RuntimeError.hpp>
 
 // Forward declarations of Swift defined types
 // Forward declaration of `HybridBaseSpecCxx` to properly resolve imports.

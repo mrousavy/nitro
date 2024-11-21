@@ -56,14 +56,12 @@ struct JSIConverter<std::function<ReturnType(Args...)>> final {
       }
 
       if constexpr (std::is_void_v<ResultingType>) {
-        dispatcher->runAsync([&runtime, sharedFunction = std::move(sharedFunction), ... args = std::move(args)]() {
-          callJSFunction(runtime, sharedFunction, args...);
-        });
+        dispatcher->runAsync(
+            [&runtime, sharedFunction, ... args = std::move(args)]() { callJSFunction(runtime, sharedFunction, args...); });
       } else {
-        return dispatcher->runAsyncAwaitable<ResultingType>(
-            [&runtime, sharedFunction = std::move(sharedFunction), ... args = std::move(args)]() -> ResultingType {
-              return callJSFunction(runtime, sharedFunction, args...);
-            });
+        return dispatcher->runAsyncAwaitable<ResultingType>([&runtime, sharedFunction, ... args = std::move(args)]() -> ResultingType {
+          return callJSFunction(runtime, sharedFunction, args...);
+        });
       }
     };
   }
