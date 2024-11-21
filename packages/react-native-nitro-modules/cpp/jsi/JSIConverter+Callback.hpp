@@ -40,13 +40,13 @@ struct JSIConverter<Callback<ReturnType(Args...)>> final {
 
 #ifdef NITRO_DEBUG
     std::string functionName = function.getProperty(runtime, "name").getString(runtime).utf8(runtime);
-    return Callback<ReturnType, Args...>::create(&runtime, sharedFunction, strongDispatcher, functionName);
+    return JSCallback<ReturnType(Args...)>(&runtime, sharedFunction, strongDispatcher, functionName);
 #else
-    return Callback<ReturnType, Args...>::create(&runtime, sharedFunction, strongDispatcher);
+    return JSCallback<ReturnType(Args...)>(&runtime, sharedFunction, strongDispatcher);
 #endif
   }
 
-  static inline jsi::Value toJSI(jsi::Runtime& runtime, const Callback<ReturnType, Args...>& function) {
+  static inline jsi::Value toJSI(jsi::Runtime& runtime, const Callback<ReturnType(Args...)>& function) {
     jsi::HostFunctionType jsFunction = [function](jsi::Runtime& runtime, const jsi::Value& thisValue, const jsi::Value* args,
                                                   size_t count) -> jsi::Value {
       if (count != sizeof...(Args)) [[unlikely]] {
@@ -69,8 +69,8 @@ struct JSIConverter<Callback<ReturnType(Args...)>> final {
 
 private:
   template <size_t... Is>
-  static inline jsi::Value callHybridFunction(const Callback<ReturnType, Args...>& function, jsi::Runtime& runtime,
-                                              const jsi::Value* args, std::index_sequence<Is...>) {
+  static inline jsi::Value callHybridFunction(const Callback<ReturnType(Args...)>& function, jsi::Runtime& runtime, const jsi::Value* args,
+                                              std::index_sequence<Is...>) {
     if constexpr (std::is_void_v<ReturnType>) {
       // it is a void function (will return undefined in JS)
       function.callSync(JSIConverter<std::decay_t<Args>>::fromJSI(runtime, args[Is])...);

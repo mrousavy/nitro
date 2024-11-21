@@ -27,26 +27,114 @@ using namespace facebook;
  */
 template <typename Signature>
 class Callback;
-
 template <typename TReturn, typename... TArgs>
 class Callback<TReturn(TArgs...)> {
 public:
+  /**
+   * Calls this `Callback<...>` synchronously.
+   * This must be called on the same Thread that the underlying JS Function was created on,
+   * so the JS Thread.
+   * This is only guarded in debug.
+   */
+  virtual TReturn callSync(TArgs... args) const = 0;
+  /**
+   * Calls this `Callback<...>` asynchronously, and await it's completion/result.
+   * This can be called on any Thread, and will schedule a call to the proper JS Thread.
+   */
+  virtual std::shared_ptr<Promise<TReturn>> callAsync(TArgs... args) const = 0;
+  /**
+   * Calls this `Callback<...>` asynchronously, and await it's completion/result.
+   * This can be called on any Thread, and will schedule a call to the proper JS Thread.
+   */
+  virtual std::shared_ptr<void> callAsyncAndForget(TArgs... args) const = 0;
+
+public:
+  using AsyncReturnType = std::conditional_t<std::is_void_v<TReturn>,
+                                             /* async with no result */ void,
+                                             /* async with a result */ std::shared_ptr<Promise<TReturn>>>;
+  /**
+   * Calls this `Callback<...>` asynchronously.
+   * If it's return type is `void`, this is like a shoot-and-forget.
+   * If it's return type is non-void, this returns an awaitable `Promise<T>` holding the result.
+   */
+  virtual AsyncReturnType operator()(TArgs... args) const = 0;
+
+public:
+  /**
+   * Gets this `Callback<...>`'s name.
+   */
+  virtual std::string getName() const noexcept = 0;
+};
+
+/**
+ * Represents a native Callback.
+ * Native Callbacks are assumed to be thread-safe, and therefore are assumed to always be synchronously callable.
+ */
+template <typename Signature>
+class NativeCallback;
+template <typename TReturn, typename... TArgs>
+class NativeCallback<TReturn(TArgs...)> : public Callback<TReturn(TArgs...)> {
+public:
+  explicit NativeCallback(std::function<TReturn(TArgs...)>&& func) : _function(std::move(func)) {}
+  explicit NativeCallback(const std::function<TReturn(TArgs...)>& func) : _function(func) {}
+
+public:
+  TReturn callSync(TArgs... args) const override {
+    return _function(std::move(args)...);
+  }
+  std::shared_ptr<Promise<TReturn>> callAsync(TArgs... args) const override {
+    TReturn result = callSync(std::move(args)...);
+    return Promise<TReturn>::resolved(std::move(result));
+  }
+  std::shared_ptr<void> callAsyncAndForget(TArgs... args) const override {
+    _function(std::move(args)...);
+  }
+
+public:
+  auto operator()(TArgs... args) const override {
+    if constexpr (std::is_void_v<TReturn>) {
+      callSync(std::move(args)...);
+    } else {
+      return callSync(std::move(args)...);
+    }
+  }
+
+public:
+  std::string getName() const noexcept override {
+    return "nativeFunction";
+  }
+
+private:
+  std::shared_ptr<Dispatcher> _dispatcher;
+  std::function<TReturn(TArgs...)> _function;
+};
+
+/**
+ * Represents a JS Callback.
+ * JS Callbacks are assumed to not be thread-safe, and must therefore always have a `Dispatcher`.
+ * Users can optionally call JS Callbacks synchronously, but must do that on the JS Thread.
+ */
+template <typename Signature>
+class JSCallback;
+template <typename TReturn, typename... TArgs>
+class JSCallback<TReturn(TArgs...)> : public Callback<TReturn(TArgs...)> {
+public:
 #ifdef NITRO_DEBUG
   /**
-   * Create a new `Callback<...>` with the given Runtime, Function and Dispatcher.
+   * Create a new `JSCallback<...>` with the given Runtime, Function and Dispatcher.
    * The functionName can represent a debug-information for the function.
    */
-  explicit Callback(jsi::Runtime* runtime, OwningReference<jsi::Function>&& function, const std::shared_ptr<Dispatcher>& dispatcher,
-                    const std::string& functionName) {
+  explicit JSCallback(jsi::Runtime* runtime, OwningReference<jsi::Function>&& function, const std::shared_ptr<Dispatcher>& dispatcher,
+                      const std::string& functionName) {
     _dispatcher = dispatcher;
     _callable =
         std::make_shared<Callable>(runtime, std::move(function), std::this_thread::get_id(), ThreadUtils::getThreadName(), functionName);
   }
 #else
   /**
-   * Create a new `Callback<...>` with the given Runtime, Function and Dispatcher.
+   * Create a new `JSCallback<...>` with the given Runtime, Function and Dispatcher.
    */
-  explicit Callback(jsi::Runtime* runtime, OwningReference<jsi::Function>&& function, const std::shared_ptr<Dispatcher>& dispatcher) {
+  explicit JSCallback(jsi::Runtime* runtime, OwningReference<jsi::Function>&& function, const std::shared_ptr<Dispatcher>& dispatcher) {
     _dispatcher = dispatcher;
     _callable = std::make_shared<Callable>(runtime, std::move(function));
   }
@@ -59,7 +147,7 @@ public:
    * so the JS Thread.
    * This is only guarded in debug.
    */
-  TReturn callSync(TArgs... args) {
+  TReturn callSync(TArgs... args) const override {
     return _callable->call(std::move(args)...);
   }
 
@@ -67,7 +155,7 @@ public:
    * Calls this `Callback<...>` asynchronously, and await it's completion/result.
    * This can be called on any Thread, and will schedule a call to the proper JS Thread.
    */
-  std::shared_ptr<Promise<TReturn>> callAsync(TArgs... args) {
+  std::shared_ptr<Promise<TReturn>> callAsync(TArgs... args) const override {
     std::shared_ptr<Promise<TReturn>> promise = Promise<TReturn>::create();
     _dispatcher->runAsync([promise, callable = _callable, ... args = std::move(args)]() {
       try {
@@ -88,7 +176,7 @@ public:
    * you don't need to wait for the callback's completion.
    * This can be called on any Thread, and will schedule a call to the proper JS Thread.
    */
-  std::shared_ptr<void> callAsyncAndForget(TArgs... args) {
+  std::shared_ptr<void> callAsyncAndForget(TArgs... args) const override {
     _dispatcher->runAsync([callable = _callable, ... args = std::move(args)]() { callable->call(std::move(args)...); });
   }
 
@@ -98,7 +186,7 @@ public:
    * If it's return type is `void`, this is like a shoot-and-forget.
    * If it's return type is non-void, this returns an awaitable `Promise<T>` holding the result.
    */
-  inline auto operator()(TArgs... args) {
+  inline auto operator()(TArgs... args) const override {
     if constexpr (std::is_void_v<TReturn>) {
       return callAsyncAndForget(std::move(args)...);
     } else {
@@ -110,7 +198,7 @@ public:
   /**
    * Gets this `Callback<...>`'s name.
    */
-  std::string getName() const noexcept {
+  std::string getName() const noexcept override {
 #ifdef NITRO_DEBUG
     if constexpr (sizeof...(TArgs) > 0) {
       return _callable->getName() + "(...)";
@@ -145,7 +233,7 @@ public:
     }
 
   public:
-    TReturn call(TArgs... args) {
+    TReturn call(TArgs... args) const {
 #ifdef NITRO_DEBUG
       if (_originalThreadId != std::this_thread::get_id()) [[unlikely]] {
         // Tried to call a sync function on a different Thread!
