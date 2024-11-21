@@ -11,7 +11,7 @@ class JSICache;
 template <typename T, typename Enable>
 struct JSIConverter;
 
-template <typename TReturn, typename... TArgs>
+template <typename Signature>
 class Callback;
 } // namespace margelo::nitro
 
@@ -29,8 +29,8 @@ using namespace facebook;
 
 // [](Args...) -> T {} <> (Args...) => T
 template <typename ReturnType, typename... Args>
-struct JSIConverter<std::shared_ptr<Callback<ReturnType, Args...>>> final {
-  static inline std::shared_ptr<Callback<ReturnType, Args...>> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+struct JSIConverter<Callback<ReturnType(Args...)>> final {
+  static inline Callback<ReturnType(Args...)> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
     // Make function global - it'll be managed by the Runtime's memory, and we only have a weak_ref to it.
     auto cache = JSICache::getOrCreateCache(runtime);
     jsi::Function function = arg.asObject(runtime).asFunction(runtime);
@@ -46,7 +46,7 @@ struct JSIConverter<std::shared_ptr<Callback<ReturnType, Args...>>> final {
 #endif
   }
 
-  static inline jsi::Value toJSI(jsi::Runtime& runtime, const std::shared_ptr<Callback<ReturnType, Args...>>& function) {
+  static inline jsi::Value toJSI(jsi::Runtime& runtime, const Callback<ReturnType, Args...>& function) {
     jsi::HostFunctionType jsFunction = [function](jsi::Runtime& runtime, const jsi::Value& thisValue, const jsi::Value* args,
                                                   size_t count) -> jsi::Value {
       if (count != sizeof...(Args)) [[unlikely]] {
@@ -69,15 +69,15 @@ struct JSIConverter<std::shared_ptr<Callback<ReturnType, Args...>>> final {
 
 private:
   template <size_t... Is>
-  static inline jsi::Value callHybridFunction(const std::shared_ptr<Callback<ReturnType, Args...>>& function, jsi::Runtime& runtime,
+  static inline jsi::Value callHybridFunction(const Callback<ReturnType, Args...>& function, jsi::Runtime& runtime,
                                               const jsi::Value* args, std::index_sequence<Is...>) {
     if constexpr (std::is_void_v<ReturnType>) {
       // it is a void function (will return undefined in JS)
-      function->callSync(JSIConverter<std::decay_t<Args>>::fromJSI(runtime, args[Is])...);
+      function.callSync(JSIConverter<std::decay_t<Args>>::fromJSI(runtime, args[Is])...);
       return jsi::Value::undefined();
     } else {
       // it is a custom type, parse it to a JS value
-      ReturnType result = function->callSync(JSIConverter<std::decay_t<Args>>::fromJSI(runtime, args[Is])...);
+      ReturnType result = function.callSync(JSIConverter<std::decay_t<Args>>::fromJSI(runtime, args[Is])...);
       return JSIConverter<ReturnType>::toJSI(runtime, std::forward<ReturnType>(result));
     }
   }
