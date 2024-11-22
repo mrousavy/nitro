@@ -205,9 +205,9 @@ public:
    * Gets an awaitable `std::future<T>` for this `Promise<T>`.
    */
   std::future<TResult> await() {
-    auto promise = std::make_shared<std::promise<void>>();
-    Callback<void(const TResult&)> onResolved(CallableNativeFunction<void(const TResult&)>::create(
-        [promise](const TResult& result) { promise->set_value(std::forward<TResult>(result)); }));
+    auto promise = std::make_shared<std::promise<TResult>>();
+    Callback<void(const TResult&)> onResolved(
+        CallableNativeFunction<void(const TResult&)>::create([promise](const TResult& result) { promise->set_value(result); }));
     Callback<void(const std::exception_ptr&)> onRejected(CallableNativeFunction<void(const std::exception_ptr& error)>::create(
         [promise](const std::exception_ptr& error) { promise->set_exception(error); }));
     addOnResolvedListener(std::move(onResolved));
