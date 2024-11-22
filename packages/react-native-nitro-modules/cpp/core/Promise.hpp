@@ -32,7 +32,11 @@ using namespace facebook;
 template <typename TResult>
 class Promise final {
 public:
-  using OnResolvedFunc = std::function<void(const TResult&)>;
+  using ResultingType =
+      typename std::conditional_t<std::is_trivially_copyable<TResult>::value && sizeof(TResult) <= sizeof(void*), TResult, const TResult&>;
+
+public:
+  using OnResolvedFunc = std::function<void(ResultingType)>;
   using OnRejectedFunc = std::function<void(const std::exception_ptr&)>;
 
 public:
@@ -174,16 +178,6 @@ public:
       _onResolvedListeners.push_back(std::move(onResolved));
     }
   }
-  void addOnResolvedListener(const std::function<void(TResult)>& onResolved) {
-    std::unique_lock lock(*_mutex);
-    if (std::holds_alternative<TResult>(_result)) {
-      // Promise is already resolved! Call the callback immediately
-      onResolved(std::get<TResult>(_result));
-    } else {
-      // Promise is not yet resolved, put the listener in our queue.
-      _onResolvedListeners.push_back([onResolved = std::move(onResolved)](const TResult& result) { onResolved(result); });
-    }
-  }
 
   /**
    * Add a listener that will be called when the Promise gets rejected.
@@ -216,7 +210,7 @@ public:
    */
   std::future<TResult> await() {
     auto promise = std::make_shared<std::promise<TResult>>();
-    addOnResolvedListener([promise](const TResult& result) { promise->set_value(result); });
+    addOnResolvedListener([promise](ResultingType result) { promise->set_value(result); });
     addOnRejectedListener([promise](const std::exception_ptr& error) { promise->set_exception(error); });
     return promise->get_future();
   }

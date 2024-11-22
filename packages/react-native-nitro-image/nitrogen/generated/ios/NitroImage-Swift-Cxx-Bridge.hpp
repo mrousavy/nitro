@@ -377,14 +377,14 @@ namespace margelo::nitro::image::bridge::swift {
   /**
    * Specialized version of `Callback<void(double)>`.
    */
-  using Callback_void_double = Callback<void(const double&)>;
-  class SwiftCallback_void_double: public Callable<void(const double& result)> {
+  using Callback_void_double = Callback<void(double)>;
+  class SwiftCallback_void_double: public Callable<void(double result)> {
   public:
     SwiftCallback_void_double(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */, double), void(* _Nonnull destroy)(void* _Nonnull)) {
       _callFunc = call;
       _closureHolder = std::shared_ptr<void>(closureHolder, destroy);
     }
-    void callSync(const double& result) const override {
+    void callSync(double result) const override {
       _callFunc(_closureHolder.get(), result);
     }
     bool isThreadSafe() const override { return true; }
@@ -395,7 +395,7 @@ namespace margelo::nitro::image::bridge::swift {
   };
   inline Callback_void_double create_Callback_void_double(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */, double), void(* _Nonnull destroy)(void* _Nonnull)) {
     auto callable = std::make_shared<SwiftCallback_void_double>(closureHolder, call, destroy);
-    return Callback<void(const double&)>(callable);
+    return Callback<void(double)>(callable);
   }
   
   // pragma MARK: std::optional<Person>

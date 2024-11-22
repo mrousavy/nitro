@@ -89,7 +89,7 @@ public:
   [[nodiscard]] virtual std::string getName() const {
     return _callable->getName();
   }
-  
+
 public:
   /**
    * Converts this `Callback<R(Args...)>` to a `std::function<R(Args...)>`
