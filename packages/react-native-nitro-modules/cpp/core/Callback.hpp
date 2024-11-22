@@ -61,16 +61,20 @@ public:
    * If it's return type is `void`, this is like a shoot-and-forget.
    * If it's return type is non-void, this returns an awaitable `Promise<T>` holding the result.
    */
-  virtual AsyncReturnType operator()(TArgs... args) const {
-    throw std::runtime_error("operator() is not implemented!");
+  AsyncReturnType operator()(TArgs... args) const {
+    if constexpr (std::is_void_v<TReturn>) {
+      callAsyncAndForget(std::forward<TArgs>(args)...);
+    } else {
+      return callAsync(std::forward<TArgs>(args)...);
+    }
   };
 
 public:
   /**
    * Gets this `Callback<...>`'s name.
    */
-  virtual std::string getName() const noexcept {
-    throw std::runtime_error("getName() is not implemented!");
+  virtual std::string getName() const {
+    return "anonymous";
   }
 };
 
