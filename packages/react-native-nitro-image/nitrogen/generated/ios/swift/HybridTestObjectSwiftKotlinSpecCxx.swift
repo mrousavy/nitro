@@ -476,12 +476,12 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
       try self.__implementation.complexEnumCallback(array: array.map({ __item in __item }), callback: { () -> (([Powertrain]) -> Void) in
         return { (__array: [Powertrain]) -> Void in
           callback({ () -> bridge.std__vector_Powertrain_ in
-          var __vector = bridge.create_std__vector_Powertrain_(__array.count)
-          for __item in __array {
-            __vector.push_back(__item)
-          }
-          return __vector
-        }())
+            var __vector = bridge.create_std__vector_Powertrain_(__array.count)
+            for __item in __array {
+              __vector.push_back(__item)
+            }
+            return __vector
+          }())
         }
       }())
       return 
@@ -868,12 +868,12 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
       try self.__implementation.callWithOptional(value: value.value, callback: { () -> ((Double?) -> Void) in
         return { (__maybe: Double?) -> Void in
           callback({ () -> bridge.std__optional_double_ in
-          if let __unwrappedValue = __maybe {
-            return bridge.create_std__optional_double_(__unwrappedValue)
-          } else {
-            return .init()
-          }
-        }())
+            if let __unwrappedValue = __maybe {
+              return bridge.create_std__optional_double_(__unwrappedValue)
+            } else {
+              return .init()
+            }
+          }())
         }
       }())
       return 

@@ -519,7 +519,7 @@ case ${i}:
               return `
 { () -> ${swiftClosureType} in
   return { ${signature} in
-    ${cppParameterName}(${indent(paramsForward.join(', '), '  ')})
+    ${cppParameterName}(${indent(paramsForward.join(', '), '    ')})
   }
 }()`.trim()
             } else {
