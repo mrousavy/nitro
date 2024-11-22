@@ -128,7 +128,6 @@ public:
 
   public:
     TReturn call(TArgs... args) const {
-      Logger::log(LogLevel::Info, "Callback", "Being called...");
 #ifdef NITRO_DEBUG
       if (_originalThreadId != std::this_thread::get_id()) [[unlikely]] {
         // Tried to call a sync function on a different Thread!
@@ -137,12 +136,9 @@ public:
             " - it is not the same Thread it was created on! If you want to call this function asynchronously, use callAsync() instead.");
       }
 #endif
-      Logger::log(LogLevel::Info, "Callback", "thread is ok...");
 
       OwningLock<jsi::Function> lock = _function.lock();
-      Logger::log(LogLevel::Info, "Callback", "function is locked...");
       if (_function == nullptr) [[unlikely]] {
-        Logger::log(LogLevel::Info, "Callback", "func is dead!...");
         if constexpr (std::is_void_v<TReturn>) {
           // runtime has already been deleted. since this returns void, we can just ignore it being deleted.
           Logger::log(LogLevel::Error, "Callback", "Failed to call function `%s` - the JS Runtime has already been destroyed!",
@@ -155,11 +151,9 @@ public:
       }
 
       if constexpr (std::is_void_v<TReturn>) {
-        Logger::log(LogLevel::Info, "Callback", "calling void...");
         // Just call void function :)
         _function->call(*_runtime, JSIConverter<std::decay_t<TArgs>>::toJSI(*_runtime, args)...);
       } else {
-        Logger::log(LogLevel::Info, "Callback", "calling T...");
         // Call function, and convert result
         jsi::Value result = _function->call(*_runtime, JSIConverter<std::decay_t<TArgs>>::toJSI(*_runtime, args)...);
         return JSIConverter<TReturn>::fromJSI(*_runtime, result);
