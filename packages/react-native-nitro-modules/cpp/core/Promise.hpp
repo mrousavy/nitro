@@ -123,7 +123,11 @@ public:
 #ifdef NITRO_DEBUG
     assertPromiseState(*this, PromiseTask::WANTS_TO_REJECT);
 #endif
-    _result = std::make_exception_ptr(std::move(exception));
+    if constexpr (std::is_same_v<Error, std::exception_ptr>) {
+      _result = std::move(exception);
+    } else {
+      _result = std::make_exception_ptr(std::move(exception));
+    }
     const std::exception_ptr& error = std::get<std::exception_ptr>(_result);
     for (const auto& onRejected : _onRejectedListeners) {
       onRejected(error);
@@ -334,7 +338,11 @@ public:
 #ifdef NITRO_DEBUG
     assertPromiseState(*this, PromiseTask::WANTS_TO_REJECT);
 #endif
-    _error = std::make_exception_ptr(std::move(exception));
+    if constexpr (std::is_same_v<Error, std::exception_ptr>) {
+      _error = std::move(exception);
+    } else {
+      _error = std::make_exception_ptr(std::move(exception));
+    }
     for (const auto& onRejected : _onRejectedListeners) {
       onRejected(_error);
     }
