@@ -20,6 +20,7 @@ class Promise;
 #include <functional>
 #include <jsi/jsi.h>
 #include <memory>
+#include "CallbackCapture.hpp"
 
 namespace margelo::nitro {
 
@@ -55,14 +56,14 @@ public:
 
   std::shared_ptr<Promise<TReturn>> callAsync(TArgs... args) const override {
     std::shared_ptr<Promise<TReturn>> promise = Promise<TReturn>::create();
-    _dispatcher->runAsync([promise, callable = _callable, ... args = std::move(args)]() {
+    _dispatcher->runAsync([promise, callable = _callable, ...capturedArgs = captureArgument(std::forward<TArgs>(args))]() {
       try {
         // Call function synchronously now that we are on the right Thread
         if constexpr (std::is_void_v<TReturn>) {
-          callable->call(std::move(args)...);
+          callable->call(getArgument(std::move(capturedArgs))...);
           promise->resolve();
         } else {
-          TReturn result = callable->call(std::move(args)...);
+          TReturn result = callable->call(getArgument(std::move(capturedArgs))...);
           promise->resolve(std::move(result));
         }
       } catch (const std::exception& error) {
@@ -74,16 +75,13 @@ public:
   }
 
   void callAsyncAndForget(TArgs... args) const override {
-    _dispatcher->runAsync([callable = _callable, ... args = std::move(args)]() { callable->call(std::move(args)...); });
-  }
-
-public:
-  inline Callback<TReturn(TArgs...)>::AsyncReturnType operator()(TArgs... args) const override {
-    if constexpr (std::is_void_v<TReturn>) {
-      return callAsyncAndForget(std::move(args)...);
-    } else {
-      return callAsync(std::move(args)...);
+    if constexpr (sizeof...(TArgs) == 1 && (std::is_same_v<const std::exception&, TArgs> && ...)) {
+      Logger::log(LogLevel::Info, "Callback", "Run2222ning %s", args.what()...);
     }
+    _dispatcher->runAsync([callable = _callable, ...capturedArgs = captureArgument(std::forward<TArgs>(args))]() {
+      // Call actual JS function
+      callable->call(getArgument(std::move(capturedArgs))...);
+    });
   }
 
 public:
