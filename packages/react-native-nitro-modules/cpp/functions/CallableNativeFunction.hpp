@@ -17,10 +17,10 @@ namespace margelo::nitro {
 template <typename Signature>
 class CallableNativeFunction;
 template <typename R, typename... Args>
-class CallableNativeFunction<R(Args...)>: public Callable<R(Args...)> {
+class CallableNativeFunction<R(Args...)> : public Callable<R(Args...)> {
 private:
-  explicit CallableNativeFunction(std::function<R(Args...)>&& function): _function(std::move(function)) {}
-  explicit CallableNativeFunction(const std::function<R(Args...)>& function): _function(function) {}
+  explicit CallableNativeFunction(std::function<R(Args...)>&& function) : _function(std::move(function)) {}
+  explicit CallableNativeFunction(const std::function<R(Args...)>& function) : _function(function) {}
 
 public:
   std::shared_ptr<CallableNativeFunction<R(Args...)>> create(std::function<R(Args...)>&& function) {

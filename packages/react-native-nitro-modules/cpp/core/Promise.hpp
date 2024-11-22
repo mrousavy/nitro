@@ -12,10 +12,10 @@ class Promise;
 } // namespace margelo::nitro
 
 #include "AssertPromiseState.hpp"
+#include "Callback.hpp"
 #include "NitroDefines.hpp"
 #include "ThreadPool.hpp"
 #include "TypeInfo.hpp"
-#include "Callback.hpp"
 #include <exception>
 #include <future>
 #include <jsi/jsi.h>
@@ -109,7 +109,7 @@ public:
 #endif
     _result = std::move(result);
     for (const auto& onResolved : _onResolvedListeners) {
-      onResolved->call(std::get<TResult>(_result));
+      onResolved(std::get<TResult>(_result));
     }
   }
   void resolve(const TResult& result) {
@@ -119,7 +119,7 @@ public:
 #endif
     _result = result;
     for (const auto& onResolved : _onResolvedListeners) {
-      onResolved->call(std::get<TResult>(_result));
+      onResolved(std::get<TResult>(_result));
     }
   }
   /**
@@ -132,7 +132,7 @@ public:
 #endif
     _result = exception;
     for (const auto& onRejected : _onRejectedListeners) {
-      onRejected->call(exception);
+      onRejected(exception);
     }
   }
   void reject(const std::exception& exception) {
@@ -143,7 +143,7 @@ public:
     _result = std::make_exception_ptr(exception);
     const std::exception_ptr& error = std::get<std::exception_ptr>(_result);
     for (const auto& onRejected : _onRejectedListeners) {
-      onRejected->call(error);
+      onRejected(error);
     }
   }
 
@@ -156,7 +156,7 @@ public:
     std::unique_lock lock(*_mutex);
     if (std::holds_alternative<TResult>(_result)) {
       // Promise is already resolved! Call the callback immediately
-      onResolved.call(std::get<TResult>(_result));
+      onResolved(std::get<TResult>(_result));
     } else {
       // Promise is not yet resolved, put the listener in our queue.
       _onResolvedListeners.push_back(onResolved);
@@ -171,7 +171,7 @@ public:
     std::unique_lock lock(*_mutex);
     if (std::holds_alternative<std::exception_ptr>(_result)) {
       // Promise is already rejected! Call the callback immediately
-      onRejected.call(std::get<std::exception_ptr>(_result));
+      onRejected(std::get<std::exception_ptr>(_result));
     } else {
       // Promise is not yet rejected, put the listener in our queue.
       _onRejectedListeners.push_back(onRejected);

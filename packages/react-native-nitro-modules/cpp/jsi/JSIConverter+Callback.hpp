@@ -14,9 +14,9 @@ struct JSIConverter;
 
 #include "JSIConverter.hpp"
 
-#include "Dispatcher.hpp"
-#include "Callback.hpp"
 #include "CallableJSFunction.hpp"
+#include "Callback.hpp"
+#include "Dispatcher.hpp"
 #include "JSICache.hpp"
 #include "NitroDefines.hpp"
 #include <functional>

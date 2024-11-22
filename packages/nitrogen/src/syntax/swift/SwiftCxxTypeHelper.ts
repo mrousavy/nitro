@@ -252,7 +252,7 @@ inline std::vector<${keyType}> get_${name}_keys(const ${name}& map) {
  * Creates a C++ `Callback_XXXXX` specialization that can be used from Swift. (Callback)
  */
 function createCxxCallbackSwiftHelper(type: FunctionType): SwiftCxxHelper {
-  const actualType = type.getCode('c++')
+  const actualType = type.getCode('c++', false)
   const bridgedType = new SwiftCxxBridgedType(type)
   const returnBridge = new SwiftCxxBridgedType(type.returnType)
   const returnType = type.returnType.getCode('c++')

@@ -5,6 +5,7 @@
 #pragma once
 
 #include "Callable.hpp"
+#include "Dispatcher.hpp"
 #include "Promise.hpp"
 #include <memory>
 
@@ -18,11 +19,11 @@ namespace margelo::nitro {
 template <typename Signature>
 class CallableJSFunction;
 template <typename R, typename... Args>
-class CallableJSFunction<R(Args...)>: public Callable<R(Args...)>, public std::enable_shared_from_this<CallableJSFunction<R(Args...)>> {
+class CallableJSFunction<R(Args...)> : public Callable<R(Args...)>, public std::enable_shared_from_this<CallableJSFunction<R(Args...)>> {
 private:
 #ifdef NITRO_DEBUG
-  explicit CallableJSFunction(jsi::Runtime* runtime, OwningReference<jsi::Function>&& function, const std::shared_ptr<Dispatcher>& dispatcher,
-                              const std::string& functionName) {
+  explicit CallableJSFunction(jsi::Runtime* runtime, OwningReference<jsi::Function>&& function,
+                              const std::shared_ptr<Dispatcher>& dispatcher, const std::string& functionName) {
     _runtime = runtime;
     _function = std::move(function);
     _dispatcher = dispatcher;
@@ -31,7 +32,8 @@ private:
     _originalThreadName = ThreadUtils::getThreadName();
   }
 #else
-  explicit CallableJSFunction(jsi::Runtime* runtime, OwningReference<jsi::Function>&& function, const std::shared_ptr<Dispatcher>& dispatcher) {
+  explicit CallableJSFunction(jsi::Runtime* runtime, OwningReference<jsi::Function>&& function,
+                              const std::shared_ptr<Dispatcher>& dispatcher) {
     _runtime = runtime;
     _function = std::move(function);
     _dispatcher = dispatcher;
@@ -40,12 +42,13 @@ private:
 
 #ifdef NITRO_DEBUG
 public:
-  std::shared_ptr<CallableJSFunction<R(Args...)>> create(jsi::Runtime* runtime, OwningReference<jsi::Function>&& function, const std::shared_ptr<Dispatcher>& dispatcher,
-                                                        const std::string& functionName) {
+  std::shared_ptr<CallableJSFunction<R(Args...)>> create(jsi::Runtime* runtime, OwningReference<jsi::Function>&& function,
+                                                         const std::shared_ptr<Dispatcher>& dispatcher, const std::string& functionName) {
     return std::shared_ptr<CallableJSFunction<R(Args...)>>(new CallableJSFunction(runtime, std::move(function), dispatcher, functionName));
   }
 #else
-  std::shared_ptr<CallableJSFunction<R(Args...)>> create(jsi::Runtime* runtime, OwningReference<jsi::Function>&& function, const std::shared_ptr<Dispatcher>& dispatcher) {
+  std::shared_ptr<CallableJSFunction<R(Args...)>> create(jsi::Runtime* runtime, OwningReference<jsi::Function>&& function,
+                                                         const std::shared_ptr<Dispatcher>& dispatcher) {
     return std::shared_ptr<CallableJSFunction<R(Args...)>>(new CallableJSFunction(runtime, std::move(function), dispatcher));
   }
 #endif

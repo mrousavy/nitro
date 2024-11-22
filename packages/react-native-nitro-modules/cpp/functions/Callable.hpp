@@ -15,7 +15,6 @@ class Promise;
 
 #include <functional>
 #include <memory>
-#include "Promise.hpp"
 
 namespace margelo::nitro {
 
@@ -56,7 +55,13 @@ public:
    */
   virtual std::shared_ptr<Promise<R>> callAsyncAwait(Args... args) const {
     if (isThreadSafe()) {
-      callSync(std::forward<Args>(args)...);
+      if constexpr (std::is_void_v<R>) {
+        callSync(std::forward<Args>(args)...);
+        return Promise<R>::resolved();
+      } else {
+        R result = callSync(std::forward<Args>(args)...);
+        return Promise<R>::resolved(std::move(result));
+      }
     } else {
       throw std::runtime_error(getDebugName() + " is not thread-safe and doesn't have an implementation for callAsyncAwait(...)!");
     }
@@ -101,7 +106,7 @@ public:
   [[nodiscard]] virtual std::string getName() const {
     return "anonymous";
   }
-  
+
 private:
   static std::string getDebugName() {
     return std::string("Callback<") + TypeInfo::getFriendlyTypename<R>() + "(" + TypeInfo::getFriendlyTypenames<Args...>() + ")>";
@@ -109,3 +114,5 @@ private:
 };
 
 } // namespace margelo::nitro
+
+#include "Promise.hpp"

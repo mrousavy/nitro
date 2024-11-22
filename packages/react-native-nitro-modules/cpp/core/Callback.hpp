@@ -15,7 +15,6 @@ class Promise;
 
 #include <functional>
 #include <memory>
-#include "Callable.hpp"
 
 namespace margelo::nitro {
 
@@ -29,8 +28,8 @@ class Callback;
 template <typename R, typename... Args>
 class Callback<R(Args...)> final {
 public:
-  explicit Callback(const std::shared_ptr<Callable<R(Args...)>>& callable): _callable(callable) {}
-  explicit Callback(std::shared_ptr<Callable<R(Args...)>>&& callable): _callable(std::move(callable)) {}
+  explicit Callback(const std::shared_ptr<Callable<R(Args...)>>& callable) : _callable(callable) {}
+  explicit Callback(std::shared_ptr<Callable<R(Args...)>>&& callable) : _callable(std::move(callable)) {}
 
 public:
   /**
@@ -90,9 +89,11 @@ public:
   [[nodiscard]] virtual std::string getName() const {
     return _callable->getName();
   }
-  
+
 private:
   std::shared_ptr<Callable<R(Args...)>> _callable;
 };
 
 } // namespace margelo::nitro
+
+#include "Callable.hpp"
