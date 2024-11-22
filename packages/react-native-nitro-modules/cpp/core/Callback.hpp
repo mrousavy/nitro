@@ -5,7 +5,7 @@
 #pragma once
 
 namespace margelo::nitro {
-template<typename TResult, typename TError>
+template <typename TResult, typename TError>
 class Promise;
 } // namespace margelo::nitro
 
@@ -69,7 +69,7 @@ public:
   /**
    * Gets this `Callback<...>`'s name.
    */
-  virtual std::string getName() const noexcept  {
+  virtual std::string getName() const noexcept {
     throw std::runtime_error("getName() is not implemented!");
   }
 };
@@ -102,7 +102,7 @@ public:
   void callAsyncAndForget(TArgs... args) const override {
     _function(std::move(args)...);
   }
-  
+
 public:
   const std::function<TReturn(TArgs...)>& getFunction() const override {
     return _function;

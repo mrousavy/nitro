@@ -18,8 +18,8 @@ class Callback;
 
 #include "JSIConverter.hpp"
 
-#include "Promise.hpp"
 #include "Callback.hpp"
+#include "Promise.hpp"
 #include <exception>
 #include <jsi/jsi.h>
 #include <memory>

@@ -5,7 +5,7 @@
 #pragma once
 
 namespace margelo::nitro {
-template<typename TResult, typename TError>
+template <typename TResult, typename TError>
 class Promise;
 } // namespace margelo::nitro
 
@@ -76,7 +76,7 @@ public:
   void callAsyncAndForget(TArgs... args) const override {
     _dispatcher->runAsync([callable = _callable, ... args = std::move(args)]() { callable->call(std::move(args)...); });
   }
-  
+
 public:
   inline Callback<TReturn(TArgs...)>::AsyncReturnType operator()(TArgs... args) const override {
     if constexpr (std::is_void_v<TReturn>) {
@@ -118,9 +118,12 @@ public:
 
   public:
 #ifdef NITRO_DEBUG
-    explicit Callable(jsi::Runtime* runtime, OwningReference<jsi::Function>&& function, const std::string& functionName): _runtime(runtime), _function(std::move(function)), _originalThreadId(std::this_thread::get_id()), _originalThreadName(ThreadUtils::getThreadName()), _functionName(functionName)  { }
+    explicit Callable(jsi::Runtime* runtime, OwningReference<jsi::Function>&& function, const std::string& functionName)
+        : _runtime(runtime), _function(std::move(function)), _originalThreadId(std::this_thread::get_id()),
+          _originalThreadName(ThreadUtils::getThreadName()), _functionName(functionName) {}
 #else
-    explicit Callable(jsi::Runtime* runtime, OwningReference<jsi::Function>&& function, const std::string& functionName): _runtime(runtime), _function(std::move(function)), _functionName(functionName)  { }
+    explicit Callable(jsi::Runtime* runtime, OwningReference<jsi::Function>&& function, const std::string& functionName)
+        : _runtime(runtime), _function(std::move(function)), _functionName(functionName) {}
 #endif
 
   public:
@@ -147,8 +150,8 @@ public:
         Logger::log(LogLevel::Info, "Callback", "func is dead!...");
         if constexpr (std::is_void_v<TReturn>) {
           // runtime has already been deleted. since this returns void, we can just ignore it being deleted.
-          Logger::log(LogLevel::Error, "Callback",
-                      "Failed to call function `%s` - the JS Runtime has already been destroyed!", getName().c_str());
+          Logger::log(LogLevel::Error, "Callback", "Failed to call function `%s` - the JS Runtime has already been destroyed!",
+                      getName().c_str());
           return;
         } else {
           // runtime has already been deleted, but we are expecting a return value - throw an error in this case.

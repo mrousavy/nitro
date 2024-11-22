@@ -262,8 +262,7 @@ void HybridTestObjectCpp::callCallback(const Callback<void()>& callback) {
   callback();
 }
 
-void HybridTestObjectCpp::callWithOptional(std::optional<double> value,
-                                           const Callback<void(std::optional<double> /* maybe */)>& callback) {
+void HybridTestObjectCpp::callWithOptional(std::optional<double> value, const Callback<void(std::optional<double> /* maybe */)>& callback) {
   callback(value);
 }
 
@@ -297,8 +296,7 @@ std::shared_ptr<Promise<void>> HybridTestObjectCpp::promiseThrows() {
   return Promise<void>::async([=]() { throw std::runtime_error("Promise throws :)"); });
 }
 
-void HybridTestObjectCpp::callAll(const Callback<void()>& first, const Callback<void()>& second,
-                                  const Callback<void()>& third) {
+void HybridTestObjectCpp::callAll(const Callback<void()>& first, const Callback<void()>& second, const Callback<void()>& third) {
   first();
   second();
   third();
@@ -309,9 +307,7 @@ HybridTestObjectCpp::getValueFromJsCallback(const Callback<std::string()>& callb
                                             const Callback<void(const std::string& /* valueFromJs */)>& andThenCall) {
   return Promise<void>::async([=]() {
     std::shared_ptr<Promise<std::string>> promise = callback.callAsync();
-    promise->addOnResolvedListener([andThenCall](const std::string& result) {
-      andThenCall.callAsyncAndForget(result);
-    });
+    promise->addOnResolvedListener([andThenCall](const std::string& result) { andThenCall.callAsyncAndForget(result); });
   });
 }
 

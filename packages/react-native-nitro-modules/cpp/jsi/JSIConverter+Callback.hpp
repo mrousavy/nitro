@@ -19,8 +19,8 @@ class JSCallback;
 
 #include "JSIConverter.hpp"
 
-#include "JSCallback.hpp"
 #include "Callback.hpp"
+#include "JSCallback.hpp"
 #include "JSICache.hpp"
 #include "NitroDefines.hpp"
 #include <functional>

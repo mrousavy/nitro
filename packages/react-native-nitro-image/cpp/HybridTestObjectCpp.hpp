@@ -109,9 +109,8 @@ public:
   void callWithOptional(std::optional<double> value, const Callback<void(std::optional<double> /* maybe */)>& callback) override;
   std::shared_ptr<Promise<double>> getValueFromJSCallbackAndWait(const Callback<double()>& getValue) override;
   void callAll(const Callback<void()>& first, const Callback<void()>& second, const Callback<void()>& third) override;
-  std::shared_ptr<Promise<void>>
-  getValueFromJsCallback(const Callback<std::string()>& callback,
-                         const Callback<void(const std::string& /* valueFromJs */)>& andThenCall) override;
+  std::shared_ptr<Promise<void>> getValueFromJsCallback(const Callback<std::string()>& callback,
+                                                        const Callback<void(const std::string& /* valueFromJs */)>& andThenCall) override;
   std::shared_ptr<Promise<double>> awaitAndGetPromise(const std::shared_ptr<Promise<double>>& promise) override;
   std::shared_ptr<Promise<Car>> awaitAndGetComplexPromise(const std::shared_ptr<Promise<Car>>& promise) override;
   std::shared_ptr<Promise<void>> awaitPromise(const std::shared_ptr<Promise<void>>& promise) override;
