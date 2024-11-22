@@ -89,7 +89,7 @@ struct JSIConverter<std::shared_ptr<Promise<TResult>>> final {
       // Promise is already rejected - just return immediately
       jsi::Object promiseObject = runtime.global().getPropertyAsObject(runtime, "Promise");
       jsi::Function createRejectedPromise = promiseObject.getPropertyAsFunction(runtime, "reject");
-      jsi::Value error = JSIConverter<std::exception>::toJSI(runtime, promise->getError());
+      jsi::Value error = JSIConverter<std::exception_ptr>::toJSI(runtime, promise->getError());
       return createRejectedPromise.call(runtime, std::move(error));
     } else {
       throw std::runtime_error("Promise has invalid state!");
