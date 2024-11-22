@@ -424,7 +424,9 @@ export function getTests(
 
     // Test errors
     createTest('funcThatThrows()', () =>
-      it(() => testObject.funcThatThrows()).didThrow()
+      it(() => testObject.funcThatThrows()).didThrow(
+        `Error: ${testObject.name}.funcThatThrows(...): This function will only work after sacrificing seven lambs!`
+      )
     ),
 
     // Optional parameters
@@ -449,13 +451,17 @@ export function getTests(
           // @ts-expect-error
           'too many args!'
         )
-      ).didThrow()
+      ).didThrow(
+        `Error: \`${testObject.name}.tryOptionalParams(...)\` expected between 2 and 3 arguments, but received 4!`
+      )
     ),
     createTest('tryOptionalParams(...) one-too-few', () =>
       it(() =>
         // @ts-expect-error
         testObject.tryOptionalParams(13)
-      ).didThrow()
+      ).didThrow(
+        `Error: \`${testObject.name}.tryOptionalParams(...)\` expected between 2 and 3 arguments, but received 1!`
+      )
     ),
     createTest('tryMiddleParam(...)', () =>
       it(() => testObject.tryMiddleParam(13, undefined, 'hello!'))
@@ -502,7 +508,9 @@ export function getTests(
         () =>
           // @ts-expect-error
           (testObject.someVariant = false)
-      ).didThrow()
+      ).didThrow(
+        `Error: ${testObject.name}.someVariant: Cannot convert "false" to any type in variant<std::string, double>!`
+      )
     ),
 
     // More complex variants...
@@ -544,7 +552,9 @@ export function getTests(
           ),
           createTest('getVariantEnum(...) throws at wrong type (string)', () =>
             // @ts-expect-error
-            it(() => testObject.getVariantEnum('string')).didThrow()
+            it(() => testObject.getVariantEnum('string')).didThrow(
+              `Error: ${testObject.name}.getVariantEnum(...): Cannot convert "string" to any type in variant<bool, margelo::nitro::image::OldEnum>!`
+            )
           ),
           createTest('getVariantObjects(...) converts Person', () =>
             it(() => testObject.getVariantObjects(TEST_PERSON))
@@ -567,7 +577,9 @@ export function getTests(
             'getVariantObjects(...) throws at wrong type (string)',
             () =>
               // @ts-expect-error
-              it(() => testObject.getVariantObjects('some-string')).didThrow()
+              it(() => testObject.getVariantObjects('some-string')).didThrow(
+                `Error: ${testObject.name}.getVariantObjects(...): Cannot convert "some-string" to any type in variant<margelo::nitro::image::Car, margelo::nitro::image::Person>!`
+              )
           ),
           createTest(
             'getVariantObjects(...) throws at wrong type (wrong object)',
@@ -575,7 +587,9 @@ export function getTests(
               it(() =>
                 // @ts-expect-error
                 testObject.getVariantObjects({ someValue: 55 })
-              ).didThrow()
+              ).didThrow(
+                `Error: ${testObject.name}.getVariantObjects(...): Cannot convert "[object Object]" to any type in variant<margelo::nitro::image::Car, margelo::nitro::image::Person>!`
+              )
           ),
           createTest('getVariantHybrid(...) converts Hybrid', () =>
             it(() => testObject.getVariantHybrid(testObject))
@@ -592,7 +606,9 @@ export function getTests(
             'getVariantHybrid(...) throws at wrong type (string)',
             () =>
               // @ts-expect-error
-              it(() => testObject.getVariantHybrid('some-string')).didThrow()
+              it(() => testObject.getVariantHybrid('some-string')).didThrow(
+                `Error: ${testObject.name}.getVariantHybrid(...): Cannot convert "some-string" to any type in variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>, margelo::nitro::image::Person>!`
+              )
           ),
           createTest(
             'getVariantHybrid(...) throws at wrong type (wrong object)',
@@ -600,7 +616,9 @@ export function getTests(
               it(() =>
                 // @ts-expect-error
                 testObject.getVariantHybrid({ someValue: 55 })
-              ).didThrow()
+              ).didThrow(
+                `Error: ${testObject.name}.getVariantHybrid(...): Cannot convert "[object Object]" to any type in variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>, margelo::nitro::image::Person>!`
+              )
           ),
           createTest('getVariantTuple(...) converts Float2', () =>
             it(() => testObject.getVariantTuple([10, 20]))
@@ -660,7 +678,9 @@ export function getTests(
                 // @ts-expect-error
                 [10, 20]
               )
-            ).didThrow()
+            ).didThrow(
+              `Error: ${testObject.name}.flip(...): The given JS Array has 2 items, but std::tuple<double, double, double> expects 3 items.`
+            )
           ),
           createTest('passTuple(...)', () =>
             it(() => testObject.passTuple([13, 'hello', true]))
@@ -687,7 +707,9 @@ export function getTests(
         .equals(55n)
     ),
     createTest('promiseThrows() throws', async () =>
-      (await it(() => testObject.promiseThrows())).didThrow()
+      (await it(() => testObject.promiseThrows())).didThrow(
+        'Error: Promise throws :)'
+      )
     ),
     createTest('twoPromises can run in parallel', async () =>
       (
@@ -1073,6 +1095,7 @@ export function getTests(
           // @ts-expect-error
           testObject.bounceChild(child)
         } else {
+          // This only throws in __DEV__ - in release it is optimized away and would crash. :)
           throw new Error(
             `This only throws in __DEV__ - in release it is optimized away and would crash. :)`
           )

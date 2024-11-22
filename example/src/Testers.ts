@@ -21,13 +21,19 @@ export class State<T> {
     throw new Error(reason)
   }
 
-  didThrow(): State<T> {
+  didThrow(message?: string): State<T> {
     if (this.errorThrown == null) {
       this.onFailed(
         `Expected test to throw an error, but no error was thrown! Instead it returned a result: ${stringify(this.result)}`
       )
     } else {
-      this.onPassed()
+      if (message == null || stringify(this.errorThrown) === message) {
+        this.onPassed()
+      } else {
+        this.onFailed(
+          `Expected test to throw "${message}", but it threw a different error: "${stringify(this.errorThrown)}"`
+        )
+      }
     }
     return this
   }

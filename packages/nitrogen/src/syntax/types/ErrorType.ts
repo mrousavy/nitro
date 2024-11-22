@@ -16,9 +16,9 @@ export class ErrorType implements Type {
   getCode(language: Language): string {
     switch (language) {
       case 'c++':
-        return `std::exception`
+        return `std::exception_ptr`
       case 'swift':
-        return `std.exception`
+        return `std.exception_ptr`
       case 'kotlin':
         return `Throwable`
       default:
