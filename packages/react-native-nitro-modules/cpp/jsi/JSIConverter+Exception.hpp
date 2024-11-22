@@ -19,18 +19,27 @@ namespace margelo::nitro {
 
 using namespace facebook;
 
-// std::exception <> Error
+// std::exception_ptr <> Error
 template <>
-struct JSIConverter<std::exception> final {
-  static inline std::exception fromJSI(jsi::Runtime& runtime, const jsi::Value& error) {
+struct JSIConverter<std::exception_ptr> final {
+  static inline std::exception_ptr fromJSI(jsi::Runtime& runtime, const jsi::Value& error) {
     jsi::Object object = error.asObject(runtime);
     std::string name = object.getProperty(runtime, "name").asString(runtime).utf8(runtime);
     std::string message = object.getProperty(runtime, "message").asString(runtime).utf8(runtime);
-    return std::runtime_error(name + ": " + message);
+    return std::make_exception_ptr(std::runtime_error(name + ": " + message));
   }
   static inline jsi::Value toJSI(jsi::Runtime& runtime, const std::exception_ptr& exception) {
-    jsi::JSError error(runtime, exception.what());
-    return jsi::Value(runtime, error.value());
+    try {
+      std::rethrow_exception(exception);
+    } catch (const std::exception& e) {
+      jsi::JSError error(runtime, e.what());
+      return jsi::Value(runtime, error.value());
+    } catch (...) {
+      // Some unknown exception was thrown - maybe an Objective-C error?
+      std::string errorName = TypeInfo::getCurrentExceptionName();
+      jsi::JSError error(runtime, "Unknown " + errorName + " error.");
+      return jsi::Value(runtime, error.value());
+    }
   }
   static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
     if (!value.isObject()) {
