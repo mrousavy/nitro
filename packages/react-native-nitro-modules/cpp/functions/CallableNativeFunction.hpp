@@ -23,10 +23,10 @@ private:
   explicit CallableNativeFunction(const std::function<R(Args...)>& function) : _function(function) {}
 
 public:
-  std::shared_ptr<CallableNativeFunction<R(Args...)>> create(std::function<R(Args...)>&& function) {
+  static std::shared_ptr<CallableNativeFunction<R(Args...)>> create(std::function<R(Args...)>&& function) {
     return std::shared_ptr<CallableNativeFunction<R(Args...)>>(new CallableNativeFunction(std::move(function)));
   }
-  std::shared_ptr<CallableNativeFunction<R(Args...)>> create(const std::function<R(Args...)>& function) {
+  static std::shared_ptr<CallableNativeFunction<R(Args...)>> create(const std::function<R(Args...)>& function) {
     return std::shared_ptr<CallableNativeFunction<R(Args...)>>(new CallableNativeFunction(function));
   }
 
@@ -35,26 +35,16 @@ public:
     return _function(std::forward<Args>(args)...);
   }
 
-  void callAsync(Args... args) const override {
-    callSync(std::forward<Args>(args)...);
-  }
-
-  std::shared_ptr<Promise<R>> callAsyncAwait(Args... args) const override {
-    if constexpr (std::is_void_v<R>) {
-      self->callSync(std::move(args)...);
-      return Promise::resolved();
-    } else {
-      R result = self->callSync(std::move(args)...);
-      return Promise::resolved(std::move(result));
-    }
-  }
-
 public:
   const std::function<R(Args...)>& getFunction() const {
     return _function;
   }
 
 public:
+  [[nodiscard]] virtual bool isThreadSafe() const override {
+    return true;
+  }
+
   [[nodiscard]] std::string getName() const noexcept override {
     return "nativeFunction";
   }

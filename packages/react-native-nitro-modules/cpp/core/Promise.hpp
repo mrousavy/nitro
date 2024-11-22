@@ -12,6 +12,7 @@ class Promise;
 } // namespace margelo::nitro
 
 #include "AssertPromiseState.hpp"
+#include "CallableNativeFunction.hpp"
 #include "Callback.hpp"
 #include "NitroDefines.hpp"
 #include "ThreadPool.hpp"
@@ -21,6 +22,7 @@ class Promise;
 #include <jsi/jsi.h>
 #include <memory>
 #include <mutex>
+#include <type_traits>
 #include <variant>
 
 namespace margelo::nitro {
@@ -183,9 +185,13 @@ public:
    * Gets an awaitable `std::future<T>` for this `Promise<T>`.
    */
   std::future<TResult> await() {
-    auto promise = std::make_shared<std::promise<TResult>>();
-    addOnResolvedListener([promise](const TResult& result) { promise->set_value(result); });
-    addOnRejectedListener([promise](const std::exception_ptr& error) { promise->set_exception(error); });
+    auto promise = std::make_shared<std::promise<void>>();
+    Callback<void(const TResult&)> onResolved(CallableNativeFunction<void(const TResult&)>::create(
+        [promise](const TResult& result) { promise->set_value(std::forward<TResult>(result)); }));
+    Callback<void(const std::exception_ptr&)> onRejected(CallableNativeFunction<void(const std::exception_ptr& error)>::create(
+        [promise](const std::exception_ptr& error) { promise->set_exception(error); }));
+    addOnResolvedListener(std::move(onResolved));
+    addOnRejectedListener(std::move(onRejected));
     return promise->get_future();
   }
 
@@ -235,7 +241,7 @@ public:
   }
 
 private:
-  std::variant<std::monostate, TResult, std::exception_ptr> _result;
+  std::variant<std::monostate /* pending */, TResult /* resolved */, std::exception_ptr /* rejected */> _result;
   std::vector<OnResolvedFunc> _onResolvedListeners;
   std::vector<OnRejectedFunc> _onRejectedListeners;
   std::unique_ptr<std::mutex> _mutex;
@@ -245,8 +251,8 @@ private:
 template <>
 class Promise<void> final {
 public:
-  using OnResolvedFunc = std::function<void()>;
-  using OnRejectedFunc = std::function<void(const std::exception_ptr&)>;
+  using OnResolvedFunc = Callback<void()>;
+  using OnRejectedFunc = Callback<void(const std::exception_ptr&)>;
 
 public:
   Promise(const Promise&) = delete;
@@ -270,7 +276,7 @@ public:
         run();
         promise->resolve();
       } catch (...) {
-        // It threw an std::exception.
+        // It threw, reject it.
         promise->reject(std::current_exception());
       }
     });
@@ -365,8 +371,11 @@ public:
 public:
   std::future<void> await() {
     auto promise = std::make_shared<std::promise<void>>();
-    addOnResolvedListener([promise]() { promise->set_value(); });
-    addOnRejectedListener([promise](const std::exception_ptr& error) { promise->set_exception(error); });
+    Callback<void()> onResolved(CallableNativeFunction<void()>::create([promise]() { promise->set_value(); }));
+    Callback<void(const std::exception_ptr&)> onRejected(CallableNativeFunction<void(const std::exception_ptr&)>::create(
+        [promise](const std::exception_ptr& error) { promise->set_exception(error); }));
+    addOnResolvedListener(std::move(onResolved));
+    addOnRejectedListener(std::move(onRejected));
     return promise->get_future();
   }
 
