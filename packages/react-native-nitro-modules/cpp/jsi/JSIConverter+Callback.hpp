@@ -30,7 +30,7 @@ using namespace facebook;
 // [](Args...) -> T {} <> (Args...) => T
 template <typename ReturnType, typename... Args>
 struct JSIConverter<Callback<ReturnType(Args...)>> final {
-  static inline Callback<ReturnType(Args...)> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+  static inline JSCallback<ReturnType(Args...)> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
     // Make function global - it'll be managed by the Runtime's memory, and we only have a weak_ref to it.
     auto cache = JSICache::getOrCreateCache(runtime);
     jsi::Function function = arg.asObject(runtime).asFunction(runtime);
@@ -39,10 +39,10 @@ struct JSIConverter<Callback<ReturnType(Args...)>> final {
     std::shared_ptr<Dispatcher> strongDispatcher = Dispatcher::getRuntimeGlobalDispatcher(runtime);
 
 #ifdef NITRO_DEBUG
-    std::string functionName = function.getProperty(runtime, "name").getString(runtime).utf8(runtime);
-    return JSCallback<ReturnType(Args...)>(&runtime, sharedFunction, strongDispatcher, functionName);
+    std::string functionName = "dummy"; // function.getProperty(runtime, "name").getString(runtime).utf8(runtime);
+    return JSCallback<ReturnType(Args...)>(&runtime, std::move(sharedFunction), strongDispatcher, functionName);
 #else
-    return JSCallback<ReturnType(Args...)>(&runtime, sharedFunction, strongDispatcher);
+    return JSCallback<ReturnType(Args...)>(&runtime, std::move(sharedFunction), strongDispatcher);
 #endif
   }
 

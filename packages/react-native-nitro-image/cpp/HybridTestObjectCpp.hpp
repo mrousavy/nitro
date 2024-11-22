@@ -91,7 +91,7 @@ public:
   std::vector<Person> bounceStructs(const std::vector<Person>& array) override;
   std::vector<Powertrain> bounceEnums(const std::vector<Powertrain>& array) override;
   void complexEnumCallback(const std::vector<Powertrain>& array,
-                           const std::function<void(const std::vector<Powertrain>& /* array */)>& callback) override;
+                           const Callback<void(const std::vector<Powertrain>& /* array */)>& callback) override;
 
   std::variant<bool, OldEnum> getVariantEnum(const std::variant<bool, OldEnum>& variant) override;
   std::variant<Car, Person> getVariantObjects(const std::variant<Car, Person>& variant) override;
@@ -105,13 +105,13 @@ public:
   int64_t calculateFibonacciSync(double value) override;
   std::shared_ptr<Promise<int64_t>> calculateFibonacciAsync(double value) override;
   std::shared_ptr<Promise<void>> wait(double seconds) override;
-  void callCallback(const std::function<void()>& callback) override;
-  void callWithOptional(std::optional<double> value, const std::function<void(std::optional<double> /* maybe */)>& callback) override;
-  std::shared_ptr<Promise<double>> getValueFromJSCallbackAndWait(const std::function<std::future<double>()>& getValue) override;
-  void callAll(const std::function<void()>& first, const std::function<void()>& second, const std::function<void()>& third) override;
+  void callCallback(const Callback<void()>& callback) override;
+  void callWithOptional(std::optional<double> value, const Callback<void(std::optional<double> /* maybe */)>& callback) override;
+  std::shared_ptr<Promise<double>> getValueFromJSCallbackAndWait(const Callback<double()>& getValue) override;
+  void callAll(const Callback<void()>& first, const Callback<void()>& second, const Callback<void()>& third) override;
   std::shared_ptr<Promise<void>>
-  getValueFromJsCallback(const std::function<std::future<std::string>()>& callback,
-                         const std::function<void(const std::string& /* valueFromJs */)>& andThenCall) override;
+  getValueFromJsCallback(const Callback<std::string()>& callback,
+                         const Callback<void(const std::string& /* valueFromJs */)>& andThenCall) override;
   std::shared_ptr<Promise<double>> awaitAndGetPromise(const std::shared_ptr<Promise<double>>& promise) override;
   std::shared_ptr<Promise<Car>> awaitAndGetComplexPromise(const std::shared_ptr<Promise<Car>>& promise) override;
   std::shared_ptr<Promise<void>> awaitPromise(const std::shared_ptr<Promise<void>>& promise) override;

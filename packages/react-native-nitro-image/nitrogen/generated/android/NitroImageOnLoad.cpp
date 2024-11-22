@@ -12,12 +12,12 @@
 #include <NitroModules/HybridObjectRegistry.hpp>
 
 #include "JHybridImageSpec.hpp"
-#include "JFunc_void_std__string.hpp"
+#include "JCallback_void_std__string.hpp"
 #include "JHybridImageFactorySpec.hpp"
 #include "JHybridTestObjectSwiftKotlinSpec.hpp"
-#include "JFunc_void_std__vector_Powertrain_.hpp"
-#include "JFunc_void.hpp"
-#include "JFunc_void_std__optional_double_.hpp"
+#include "JCallback_void_std__vector_Powertrain_.hpp"
+#include "JCallback_void.hpp"
+#include "JCallback_void_std__optional_double_.hpp"
 #include "JHybridBaseSpec.hpp"
 #include "JHybridChildSpec.hpp"
 #include <NitroModules/JNISharedPtr.hpp>
@@ -34,15 +34,15 @@ int initialize(JavaVM* vm) {
   return facebook::jni::initialize(vm, [] {
     // Register native JNI methods
     margelo::nitro::image::JHybridImageSpec::registerNatives();
-    margelo::nitro::image::JFunc_void_std__string::registerNatives();
+    margelo::nitro::image::JCallback_void_std__string::registerNatives();
     margelo::nitro::image::JHybridImageFactorySpec::registerNatives();
     margelo::nitro::image::JHybridTestObjectSwiftKotlinSpec::registerNatives();
-    margelo::nitro::image::JFunc_void_std__vector_Powertrain_::registerNatives();
-    margelo::nitro::image::JFunc_void::registerNatives();
-    margelo::nitro::image::JFunc_void::registerNatives();
-    margelo::nitro::image::JFunc_void::registerNatives();
-    margelo::nitro::image::JFunc_void::registerNatives();
-    margelo::nitro::image::JFunc_void_std__optional_double_::registerNatives();
+    margelo::nitro::image::JCallback_void_std__vector_Powertrain_::registerNatives();
+    margelo::nitro::image::JCallback_void::registerNatives();
+    margelo::nitro::image::JCallback_void::registerNatives();
+    margelo::nitro::image::JCallback_void::registerNatives();
+    margelo::nitro::image::JCallback_void::registerNatives();
+    margelo::nitro::image::JCallback_void_std__optional_double_::registerNatives();
     margelo::nitro::image::JHybridBaseSpec::registerNatives();
     margelo::nitro::image::JHybridChildSpec::registerNatives();
 

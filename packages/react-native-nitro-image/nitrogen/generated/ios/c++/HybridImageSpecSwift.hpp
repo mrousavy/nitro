@@ -23,7 +23,7 @@ namespace margelo::nitro::image { enum class ImageFormat; }
 #include "PixelFormat.hpp"
 #include "ImageFormat.hpp"
 #include <string>
-#include <functional>
+#include <NitroModules/Callback.hpp>
 
 #if __has_include(<NitroModules/HybridContext.hpp>)
 #include <NitroModules/HybridContext.hpp>
@@ -85,7 +85,7 @@ namespace margelo::nitro::image {
       auto __result = _swiftPart.toArrayBuffer(static_cast<int>(format));
       return __result;
     }
-    inline void saveToFile(const std::string& path, const std::function<void(const std::string& /* path */)>& onFinished) override {
+    inline void saveToFile(const std::string& path, const Callback<void(const std::string& /* path */)>& onFinished) override {
       _swiftPart.saveToFile(path, onFinished);
     }
 

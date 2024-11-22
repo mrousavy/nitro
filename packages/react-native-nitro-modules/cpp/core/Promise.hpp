@@ -58,10 +58,6 @@ public:
       } catch (const TError& exception) {
         // It threw an std::exception.
         promise->reject(exception);
-      } catch (...) {
-        // It threw a different error.
-        std::string name = TypeInfo::getCurrentExceptionName();
-        promise->reject(std::runtime_error("Unknown non-std error! Name: " + name));
       }
     });
     return promise;
@@ -296,10 +292,6 @@ public:
       } catch (const TError& exception) {
         // It threw an std::exception.
         promise->reject(exception);
-      } catch (...) {
-        // It threw a different error.
-        std::string name = TypeInfo::getCurrentExceptionName();
-        promise->reject(std::runtime_error("Unknown non-std error! Name: " + name));
       }
     });
     return promise;
