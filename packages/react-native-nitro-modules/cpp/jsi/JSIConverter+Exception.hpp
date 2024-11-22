@@ -28,7 +28,7 @@ struct JSIConverter<std::exception> final {
     std::string message = object.getProperty(runtime, "message").asString(runtime).utf8(runtime);
     return std::runtime_error(name + ": " + message);
   }
-  static inline jsi::Value toJSI(jsi::Runtime& runtime, const std::exception& exception) {
+  static inline jsi::Value toJSI(jsi::Runtime& runtime, const std::exception_ptr& exception) {
     jsi::JSError error(runtime, exception.what());
     return jsi::Value(runtime, error.value());
   }
