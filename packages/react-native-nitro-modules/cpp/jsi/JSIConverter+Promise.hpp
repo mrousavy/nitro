@@ -71,8 +71,8 @@ struct JSIConverter<std::shared_ptr<Promise<TResult>>> final {
           promise->addOnResolvedListener(std::move(resolver));
         }
         // Add rejecter listener
-        promise->addOnRejectedListener(std::move(rejecter));
         auto rejecter = JSIConverter<Callback<void(const std::exception&)>>::fromJSI(runtime, arguments[1]);
+        promise->addOnRejectedListener(std::move(rejecter));
 
         return jsi::Value::undefined();
       };
