@@ -21,8 +21,8 @@ namespace margelo::nitro {
 
 enum PromiseTask { WANTS_TO_RESOLVE, WANTS_TO_REJECT };
 
-template <typename TResult, typename TError>
-void assertPromiseState(Promise<TResult, TError>& promise, PromiseTask task) {
+template <typename TResult>
+void assertPromiseState(Promise<TResult>& promise, PromiseTask task) {
   if (!promise.isPending()) [[unlikely]] {
     std::string taskString = task == WANTS_TO_RESOLVE ? "resolve" : "reject";
     std::string state = promise.isResolved() ? "resolved" : "rejected";

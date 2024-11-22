@@ -24,18 +24,6 @@ struct TypeInfo final {
 public:
   TypeInfo() = delete;
 
-  /**
-   * Get the name of the currently thrown exception
-   */
-  static inline std::string getCurrentExceptionName() {
-#if __has_include(<cxxabi.h>)
-    std::string name = __cxxabiv1::__cxa_current_exception_type()->name();
-    return demangleName(name);
-#else
-    return "<unknown>";
-#endif
-  }
-
   static inline std::string replaceRegex(const std::string& original, const std::string& pattern, const std::string& replacement) {
     std::regex re(pattern);
     return std::regex_replace(original, re, replacement);
@@ -112,6 +100,18 @@ public:
     ((stream << TypeInfo::getFriendlyTypename<Types>(removeNamespace) << ", "), ...);
     std::string string = stream.str();
     return string.substr(0, string.length() - 2);
+  }
+
+  /**
+   * Get the name of the currently thrown exception
+   */
+  static inline std::string getCurrentExceptionName() {
+#if __has_include(<cxxabi.h>)
+    std::string name = __cxxabiv1::__cxa_current_exception_type()->name();
+    return demangleName(name);
+#else
+    return "<unknown>";
+#endif
   }
 };
 

@@ -83,9 +83,9 @@ public:
   /**
    * Creates an immediately rejected Promise.
    */
-  static std::shared_ptr<Promise> rejected(TError&& error) {
+  static std::shared_ptr<Promise> rejected(const std::exception_ptr& error) {
     auto promise = create();
-    promise->reject(std::move(error));
+    promise->reject(error);
     return promise;
   }
 
@@ -121,7 +121,7 @@ public:
 #ifdef NITRO_DEBUG
     assertPromiseState(*this, PromiseTask::WANTS_TO_REJECT);
 #endif
-    _result = std::make_exception_ptr(exception));
+    _result = std::make_exception_ptr(exception);
     for (const auto& onRejected : _onRejectedListeners) {
       onRejected(std::get<std::exception_ptr>(_result));
     }
