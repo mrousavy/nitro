@@ -4,10 +4,16 @@
 
 #pragma once
 
+namespace margelo::nitro {
+template<typename Signature>
+class Callback;
+} // namespace margelo::nitro
+
 #include "AssertPromiseState.hpp"
 #include "NitroDefines.hpp"
 #include "ThreadPool.hpp"
 #include "TypeInfo.hpp"
+#include "Callback.hpp"
 #include <exception>
 #include <future>
 #include <jsi/jsi.h>
@@ -265,8 +271,8 @@ private:
 template <typename TError>
 class Promise<void, TError> final {
 public:
-  using OnResolvedFunc = std::function<void()>;
-  using OnRejectedFunc = std::function<void(const TError&)>;
+  using OnResolvedFunc = Callback<void()>;
+  using OnRejectedFunc = Callback<void(const TError&)>;
 
 public:
   Promise(const Promise&) = delete;

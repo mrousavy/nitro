@@ -13,10 +13,13 @@ struct JSIConverter;
 
 template <typename Signature>
 class Callback;
+template <typename Signature>
+class JSCallback;
 } // namespace margelo::nitro
 
 #include "JSIConverter.hpp"
 
+#include "JSCallback.hpp"
 #include "Callback.hpp"
 #include "JSICache.hpp"
 #include "NitroDefines.hpp"

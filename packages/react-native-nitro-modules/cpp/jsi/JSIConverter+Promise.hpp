@@ -6,14 +6,20 @@
 
 // Forward declare a few of the common types that might have cyclic includes.
 namespace margelo::nitro {
-
 template <typename T, typename Enable>
 struct JSIConverter;
+
+template <typename Result, typename Error>
+class Promise;
+
+template <typename Signature>
+class Callback;
 } // namespace margelo::nitro
 
 #include "JSIConverter.hpp"
 
 #include "Promise.hpp"
+#include "Callback.hpp"
 #include <exception>
 #include <jsi/jsi.h>
 #include <memory>
@@ -57,15 +63,15 @@ struct JSIConverter<std::shared_ptr<Promise<TResult>>> final {
         // Add resolver listener
         if constexpr (std::is_void_v<TResult>) {
           // It's resolving to void.
-          auto resolver = JSIConverter<std::function<void()>>::fromJSI(runtime, arguments[0]);
+          auto resolver = JSIConverter<Callback<void()>>::fromJSI(runtime, arguments[0]);
           promise->addOnResolvedListener(std::move(resolver));
         } else {
           // It's a type.
-          auto resolver = JSIConverter<std::function<void(TResult)>>::fromJSI(runtime, arguments[0]);
+          auto resolver = JSIConverter<Callback<void(TResult)>>::fromJSI(runtime, arguments[0]);
           promise->addOnResolvedListener(std::move(resolver));
         }
         // Add rejecter listener
-        auto rejecter = JSIConverter<std::function<void(std::exception)>>::fromJSI(runtime, arguments[1]);
+        auto rejecter = JSIConverter<Callback<void(std::exception)>>::fromJSI(runtime, arguments[1]);
         promise->addOnRejectedListener(std::move(rejecter));
 
         return jsi::Value::undefined();
