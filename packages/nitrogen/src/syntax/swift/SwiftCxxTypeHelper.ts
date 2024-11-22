@@ -255,6 +255,7 @@ function createCxxCallbackSwiftHelper(type: FunctionType): SwiftCxxHelper {
   const actualType = type.getCode('c++')
   const bridgedType = new SwiftCxxBridgedType(type)
   const returnBridge = new SwiftCxxBridgedType(type.returnType)
+  const returnType = type.returnType.getCode('c++')
   const paramsSignature = type.parameters.map((p) => {
     if (p.canBePassedByReference) {
       return `${toReferenceType(p.getCode('c++'))} ${p.escapedName}`
@@ -262,6 +263,7 @@ function createCxxCallbackSwiftHelper(type: FunctionType): SwiftCxxHelper {
       return `${p.getCode('c++')} ${p.escapedName}`
     }
   })
+  const baseClass = `Callback<${returnType}(${paramsSignature.join(', ')})>`
   const paramsForward = [
     '_closureHolder.get()',
     ...type.parameters.map((p) => {
@@ -291,7 +293,7 @@ return ${returnBridge.parseFromSwiftToCpp('__result', 'c++')};
 
   return {
     cxxType: actualType,
-    funcName: `Swift${name}.init`,
+    funcName: `create_${name}`,
     specializationName: name,
     cxxHeader: {
       code: `
@@ -299,7 +301,7 @@ return ${returnBridge.parseFromSwiftToCpp('__result', 'c++')};
  * Specialized version of \`${type.getCode('c++', false)}\`.
  */
 using ${name} = ${actualType};
-class Swift${name}: public ${actualType} {
+class Swift${name}: public ${baseClass} {
 public:
   Swift${name}(void* _Nonnull closureHolder, ${callFuncReturnType}(* _Nonnull call)(${callFuncParams.join(', ')}), void(* _Nonnull destroy)(void* _Nonnull)) {
     _callFunc = call;
@@ -318,10 +320,18 @@ private:
   std::shared_ptr<void> _closureHolder;
   ${callFuncReturnType}(* _Nonnull _callFunc)(${callFuncParams.join(', ')});
 };
+${name} create_${name}(void* _Nonnull closureHolder, ${callFuncReturnType}(* _Nonnull call)(${callFuncParams.join(', ')}), void(* _Nonnull destroy)(void* _Nonnull)) {
+  return std::make_shared<Swift${name}>(closureHolder, call, destroy);
+}
     `.trim(),
       requiredIncludes: [
         {
           name: 'memory',
+          space: 'system',
+          language: 'c++',
+        },
+        {
+          name: 'NitroModules/Callback.hpp',
           space: 'system',
           language: 'c++',
         },

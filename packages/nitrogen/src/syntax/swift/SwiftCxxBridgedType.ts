@@ -768,7 +768,7 @@ case ${i}:
             ].join(', ')
             const createFunc = `bridge.${bridge.funcName}`
             return `
-{ () -> bridge.Swift${bridge.specializationName} in
+{ () -> bridge.${bridge.specializationName} in
   class ClosureHolder {
     let closure: ${func.getCode('swift')}
     init(wrappingClosure closure: @escaping ${func.getCode('swift')}) {

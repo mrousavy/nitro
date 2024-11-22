@@ -23,7 +23,7 @@ namespace margelo::nitro::image {
    */
   struct JCallback_void_std__optional_double_ final: public jni::HybridClass<JCallback_void_std__optional_double_> {
   public:
-    static jni::local_ref<JCallback_void_std__optional_double_::javaobject> fromCpp(const Callback<void(std::optional<double> /* maybe */)>& func) {
+    static jni::local_ref<JCallback_void_std__optional_double_::javaobject> fromCpp(const std::shared_ptr<Callback<void(std::optional<double> /* maybe */)>>& func) {
       return JCallback_void_std__optional_double_::newObjectCxxArgs(func);
     }
 
@@ -39,11 +39,11 @@ namespace margelo::nitro::image {
     }
 
   private:
-    explicit JCallback_void_std__optional_double_(const Callback<void(std::optional<double> /* maybe */)>& func): _func(func) { }
+    explicit JCallback_void_std__optional_double_(const std::shared_ptr<Callback<void(std::optional<double> /* maybe */)>>& func): _func(func) { }
 
   private:
     friend HybridBase;
-    Callback<void(std::optional<double> /* maybe */)> _func;
+    std::shared_ptr<Callback<void(std::optional<double> /* maybe */)>> _func;
   };
 
 } // namespace margelo::nitro::image

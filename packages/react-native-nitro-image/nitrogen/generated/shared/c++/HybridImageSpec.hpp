@@ -61,7 +61,7 @@ namespace margelo::nitro::image {
     public:
       // Methods
       virtual double toArrayBuffer(ImageFormat format) = 0;
-      virtual void saveToFile(const std::string& path, const Callback<void(const std::string& /* path */)>& onFinished) = 0;
+      virtual void saveToFile(const std::string& path, const std::shared_ptr<Callback<void(const std::string& /* path */)>>& onFinished) = 0;
 
     protected:
       // Hybrid Setup

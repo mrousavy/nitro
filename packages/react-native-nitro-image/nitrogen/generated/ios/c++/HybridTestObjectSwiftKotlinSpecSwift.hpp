@@ -212,7 +212,7 @@ namespace margelo::nitro::image {
       auto __result = _swiftPart.bounceEnums(array);
       return __result;
     }
-    inline void complexEnumCallback(const std::vector<Powertrain>& array, const Callback<void(const std::vector<Powertrain>& /* array */)>& callback) override {
+    inline void complexEnumCallback(const std::vector<Powertrain>& array, const std::shared_ptr<Callback<void(const std::vector<Powertrain>& /* array */)>>& callback) override {
       _swiftPart.complexEnumCallback(array, callback);
     }
     inline std::shared_ptr<AnyMap> createMap() override {
@@ -267,13 +267,13 @@ namespace margelo::nitro::image {
       auto __result = _swiftPart.awaitPromise(promise);
       return __result;
     }
-    inline void callCallback(const Callback<void()>& callback) override {
+    inline void callCallback(const std::shared_ptr<Callback<void()>>& callback) override {
       _swiftPart.callCallback(callback);
     }
-    inline void callAll(const Callback<void()>& first, const Callback<void()>& second, const Callback<void()>& third) override {
+    inline void callAll(const std::shared_ptr<Callback<void()>>& first, const std::shared_ptr<Callback<void()>>& second, const std::shared_ptr<Callback<void()>>& third) override {
       _swiftPart.callAll(first, second, third);
     }
-    inline void callWithOptional(std::optional<double> value, const Callback<void(std::optional<double> /* maybe */)>& callback) override {
+    inline void callWithOptional(std::optional<double> value, const std::shared_ptr<Callback<void(std::optional<double> /* maybe */)>>& callback) override {
       _swiftPart.callWithOptional(value, callback);
     }
     inline Car getCar() override {

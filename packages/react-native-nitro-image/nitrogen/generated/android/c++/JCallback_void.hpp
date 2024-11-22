@@ -22,7 +22,7 @@ namespace margelo::nitro::image {
    */
   struct JCallback_void final: public jni::HybridClass<JCallback_void> {
   public:
-    static jni::local_ref<JCallback_void::javaobject> fromCpp(const Callback<void()>& func) {
+    static jni::local_ref<JCallback_void::javaobject> fromCpp(const std::shared_ptr<Callback<void()>>& func) {
       return JCallback_void::newObjectCxxArgs(func);
     }
 
@@ -38,11 +38,11 @@ namespace margelo::nitro::image {
     }
 
   private:
-    explicit JCallback_void(const Callback<void()>& func): _func(func) { }
+    explicit JCallback_void(const std::shared_ptr<Callback<void()>>& func): _func(func) { }
 
   private:
     friend HybridBase;
-    Callback<void()> _func;
+    std::shared_ptr<Callback<void()>> _func;
   };
 
 } // namespace margelo::nitro::image

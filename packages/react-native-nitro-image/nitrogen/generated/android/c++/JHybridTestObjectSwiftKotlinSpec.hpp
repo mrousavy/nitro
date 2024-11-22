@@ -84,7 +84,7 @@ namespace margelo::nitro::image {
     std::vector<double> bounceNumbers(const std::vector<double>& array) override;
     std::vector<Person> bounceStructs(const std::vector<Person>& array) override;
     std::vector<Powertrain> bounceEnums(const std::vector<Powertrain>& array) override;
-    void complexEnumCallback(const std::vector<Powertrain>& array, const Callback<void(const std::vector<Powertrain>& /* array */)>& callback) override;
+    void complexEnumCallback(const std::vector<Powertrain>& array, const std::shared_ptr<Callback<void(const std::vector<Powertrain>& /* array */)>>& callback) override;
     std::shared_ptr<AnyMap> createMap() override;
     std::shared_ptr<AnyMap> mapRoundtrip(const std::shared_ptr<AnyMap>& map) override;
     double funcThatThrows() override;
@@ -98,9 +98,9 @@ namespace margelo::nitro::image {
     std::shared_ptr<Promise<double>> awaitAndGetPromise(const std::shared_ptr<Promise<double>>& promise) override;
     std::shared_ptr<Promise<Car>> awaitAndGetComplexPromise(const std::shared_ptr<Promise<Car>>& promise) override;
     std::shared_ptr<Promise<void>> awaitPromise(const std::shared_ptr<Promise<void>>& promise) override;
-    void callCallback(const Callback<void()>& callback) override;
-    void callAll(const Callback<void()>& first, const Callback<void()>& second, const Callback<void()>& third) override;
-    void callWithOptional(std::optional<double> value, const Callback<void(std::optional<double> /* maybe */)>& callback) override;
+    void callCallback(const std::shared_ptr<Callback<void()>>& callback) override;
+    void callAll(const std::shared_ptr<Callback<void()>>& first, const std::shared_ptr<Callback<void()>>& second, const std::shared_ptr<Callback<void()>>& third) override;
+    void callWithOptional(std::optional<double> value, const std::shared_ptr<Callback<void(std::optional<double> /* maybe */)>>& callback) override;
     Car getCar() override;
     bool isCarElectric(const Car& car) override;
     std::optional<Person> getDriver(const Car& car) override;
