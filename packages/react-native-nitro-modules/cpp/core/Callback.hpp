@@ -92,33 +92,24 @@ public:
 
 public:
   TReturn callSync(TArgs... args) const override {
-    return _function(std::move(args)...);
+    return _function(std::forward<TArgs>(args)...);
   }
   std::shared_ptr<Promise<TReturn>> callAsync(TArgs... args) const override {
     if constexpr (std::is_void_v<TReturn>) {
-      callSync(std::move(args)...);
+      callSync(std::forward<TArgs>(args)...);
       return Promise<void>::resolved();
     } else {
-      TReturn result = callSync(std::move(args)...);
+      TReturn result = callSync(std::forward<TArgs>(args)...);
       return Promise<TReturn>::resolved(std::move(result));
     }
   }
   void callAsyncAndForget(TArgs... args) const override {
-    _function(std::move(args)...);
+    _function(std::forward<TArgs>(args)...);
   }
 
 public:
   const std::function<TReturn(TArgs...)>& getFunction() const override {
     return _function;
-  }
-
-public:
-  inline Callback<TReturn(TArgs...)>::AsyncReturnType operator()(TArgs... args) const override {
-    if constexpr (std::is_void_v<TReturn>) {
-      callSync(std::move(args)...);
-    } else {
-      return callSync(std::move(args)...);
-    }
   }
 
 public:

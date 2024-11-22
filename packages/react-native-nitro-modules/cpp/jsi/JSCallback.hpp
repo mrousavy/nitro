@@ -50,7 +50,7 @@ public:
 
 public:
   TReturn callSync(TArgs... args) const override {
-    return _callable->call(std::move(args)...);
+    return _callable->call(std::forward<TArgs>(args)...);
   }
 
   std::shared_ptr<Promise<TReturn>> callAsync(TArgs... args) const override {
