@@ -41,14 +41,14 @@ public:
    * Calls this `Callback<...>` asynchronously, and await it's completion/result.
    * This can be called on any Thread, and will schedule a call to the proper JS Thread.
    */
-  virtual std::shared_ptr<Promise<TReturn>> callAsync(TArgs... args) const  {
+  virtual std::shared_ptr<Promise<TReturn>> callAsync(TArgs... args) const {
     throw std::runtime_error("callAsync(..) is not implemented!");
   }
   /**
    * Calls this `Callback<...>` asynchronously, and await it's completion/result.
    * This can be called on any Thread, and will schedule a call to the proper JS Thread.
    */
-  virtual void callAsyncAndForget(TArgs... args) const  {
+  virtual void callAsyncAndForget(TArgs... args) const {
     throw std::runtime_error("callAsyncAndForget(..) is not implemented!");
   }
 
@@ -101,6 +101,11 @@ public:
   }
   void callAsyncAndForget(TArgs... args) const override {
     _function(std::move(args)...);
+  }
+  
+public:
+  const std::function<TReturn(TArgs...)>& getFunction() const override {
+    return _function;
   }
 
 public:

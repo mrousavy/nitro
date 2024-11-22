@@ -74,16 +74,20 @@ namespace margelo::nitro::image::bridge::swift {
   /**
    * Specialized version of `Callback<void(const std::string&)>`.
    */
-  class CapturingCallback_void_std__string: public Callback<void(const std::string& /* path */)> {
+  using Callback_void_std__string = Callback<void(const std::string& /* path */)>;
+  class SwiftCallback_void_std__string: public Callback<void(const std::string& /* path */)> {
   public:
-    CapturingCallback_void_std__string(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */, std::string), void(* _Nonnull destroy)(void* _Nonnull)) {
+    SwiftCallback_void_std__string(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */, std::string), void(* _Nonnull destroy)(void* _Nonnull)) {
       _callFunc = call;
       _closureHolder = std::shared_ptr<void>(closureHolder, destroy);
     }
-  
-  public:
     void callSync(const std::string& path) const override {
       _callFunc(_closureHolder.get(), path);
+    }
+    std::function<void(const std::string& path)> toFunction() const {
+      return [_closureHolder = _closureHolder, _callFunc = _callFunc](const std::string& path) -> void {
+        return _callFunc(_closureHolder.get(), path);
+      };
     }
   
   private:
@@ -208,16 +212,20 @@ namespace margelo::nitro::image::bridge::swift {
   /**
    * Specialized version of `Callback<void(const std::vector<Powertrain>&)>`.
    */
-  class CapturingCallback_void_std__vector_Powertrain_: public Callback<void(const std::vector<Powertrain>& /* array */)> {
+  using Callback_void_std__vector_Powertrain_ = Callback<void(const std::vector<Powertrain>& /* array */)>;
+  class SwiftCallback_void_std__vector_Powertrain_: public Callback<void(const std::vector<Powertrain>& /* array */)> {
   public:
-    CapturingCallback_void_std__vector_Powertrain_(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */, std::vector<Powertrain>), void(* _Nonnull destroy)(void* _Nonnull)) {
+    SwiftCallback_void_std__vector_Powertrain_(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */, std::vector<Powertrain>), void(* _Nonnull destroy)(void* _Nonnull)) {
       _callFunc = call;
       _closureHolder = std::shared_ptr<void>(closureHolder, destroy);
     }
-  
-  public:
     void callSync(const std::vector<Powertrain>& array) const override {
       _callFunc(_closureHolder.get(), array);
+    }
+    std::function<void(const std::vector<Powertrain>& array)> toFunction() const {
+      return [_closureHolder = _closureHolder, _callFunc = _callFunc](const std::vector<Powertrain>& array) -> void {
+        return _callFunc(_closureHolder.get(), array);
+      };
     }
   
   private:
@@ -276,16 +284,20 @@ namespace margelo::nitro::image::bridge::swift {
   /**
    * Specialized version of `Callback<void(int64_t)>`.
    */
-  class CapturingCallback_void_int64_t: public Callback<void(int64_t /* result */)> {
+  using Callback_void_int64_t = Callback<void(int64_t /* result */)>;
+  class SwiftCallback_void_int64_t: public Callback<void(int64_t /* result */)> {
   public:
-    CapturingCallback_void_int64_t(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */, int64_t), void(* _Nonnull destroy)(void* _Nonnull)) {
+    SwiftCallback_void_int64_t(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */, int64_t), void(* _Nonnull destroy)(void* _Nonnull)) {
       _callFunc = call;
       _closureHolder = std::shared_ptr<void>(closureHolder, destroy);
     }
-  
-  public:
     void callSync(int64_t result) const override {
       _callFunc(_closureHolder.get(), result);
+    }
+    std::function<void(int64_t result)> toFunction() const {
+      return [_closureHolder = _closureHolder, _callFunc = _callFunc](int64_t result) -> void {
+        return _callFunc(_closureHolder.get(), result);
+      };
     }
   
   private:
@@ -297,16 +309,20 @@ namespace margelo::nitro::image::bridge::swift {
   /**
    * Specialized version of `Callback<void(const std::exception&)>`.
    */
-  class CapturingCallback_void_std__exception: public Callback<void(const std::exception& /* error */)> {
+  using Callback_void_std__exception = Callback<void(const std::exception& /* error */)>;
+  class SwiftCallback_void_std__exception: public Callback<void(const std::exception& /* error */)> {
   public:
-    CapturingCallback_void_std__exception(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */, std::exception), void(* _Nonnull destroy)(void* _Nonnull)) {
+    SwiftCallback_void_std__exception(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */, std::exception), void(* _Nonnull destroy)(void* _Nonnull)) {
       _callFunc = call;
       _closureHolder = std::shared_ptr<void>(closureHolder, destroy);
     }
-  
-  public:
     void callSync(const std::exception& error) const override {
       _callFunc(_closureHolder.get(), error);
+    }
+    std::function<void(const std::exception& error)> toFunction() const {
+      return [_closureHolder = _closureHolder, _callFunc = _callFunc](const std::exception& error) -> void {
+        return _callFunc(_closureHolder.get(), error);
+      };
     }
   
   private:
@@ -327,16 +343,20 @@ namespace margelo::nitro::image::bridge::swift {
   /**
    * Specialized version of `Callback<void()>`.
    */
-  class CapturingCallback_void: public Callback<void()> {
+  using Callback_void = Callback<void()>;
+  class SwiftCallback_void: public Callback<void()> {
   public:
-    CapturingCallback_void(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */), void(* _Nonnull destroy)(void* _Nonnull)) {
+    SwiftCallback_void(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */), void(* _Nonnull destroy)(void* _Nonnull)) {
       _callFunc = call;
       _closureHolder = std::shared_ptr<void>(closureHolder, destroy);
     }
-  
-  public:
     void callSync() const override {
       _callFunc(_closureHolder.get());
+    }
+    std::function<void()> toFunction() const {
+      return [_closureHolder = _closureHolder, _callFunc = _callFunc]() -> void {
+        return _callFunc(_closureHolder.get());
+      };
     }
   
   private:
@@ -357,16 +377,20 @@ namespace margelo::nitro::image::bridge::swift {
   /**
    * Specialized version of `Callback<void(double)>`.
    */
-  class CapturingCallback_void_double: public Callback<void(double /* result */)> {
+  using Callback_void_double = Callback<void(double /* result */)>;
+  class SwiftCallback_void_double: public Callback<void(double /* result */)> {
   public:
-    CapturingCallback_void_double(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */, double), void(* _Nonnull destroy)(void* _Nonnull)) {
+    SwiftCallback_void_double(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */, double), void(* _Nonnull destroy)(void* _Nonnull)) {
       _callFunc = call;
       _closureHolder = std::shared_ptr<void>(closureHolder, destroy);
     }
-  
-  public:
     void callSync(double result) const override {
       _callFunc(_closureHolder.get(), result);
+    }
+    std::function<void(double result)> toFunction() const {
+      return [_closureHolder = _closureHolder, _callFunc = _callFunc](double result) -> void {
+        return _callFunc(_closureHolder.get(), result);
+      };
     }
   
   private:
@@ -396,16 +420,20 @@ namespace margelo::nitro::image::bridge::swift {
   /**
    * Specialized version of `Callback<void(const Car&)>`.
    */
-  class CapturingCallback_void_Car: public Callback<void(const Car& /* result */)> {
+  using Callback_void_Car = Callback<void(const Car& /* result */)>;
+  class SwiftCallback_void_Car: public Callback<void(const Car& /* result */)> {
   public:
-    CapturingCallback_void_Car(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */, Car), void(* _Nonnull destroy)(void* _Nonnull)) {
+    SwiftCallback_void_Car(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */, Car), void(* _Nonnull destroy)(void* _Nonnull)) {
       _callFunc = call;
       _closureHolder = std::shared_ptr<void>(closureHolder, destroy);
     }
-  
-  public:
     void callSync(const Car& result) const override {
       _callFunc(_closureHolder.get(), result);
+    }
+    std::function<void(const Car& result)> toFunction() const {
+      return [_closureHolder = _closureHolder, _callFunc = _callFunc](const Car& result) -> void {
+        return _callFunc(_closureHolder.get(), result);
+      };
     }
   
   private:
@@ -426,16 +454,20 @@ namespace margelo::nitro::image::bridge::swift {
   /**
    * Specialized version of `Callback<void(std::optional<double>)>`.
    */
-  class CapturingCallback_void_std__optional_double_: public Callback<void(std::optional<double> /* maybe */)> {
+  using Callback_void_std__optional_double_ = Callback<void(std::optional<double> /* maybe */)>;
+  class SwiftCallback_void_std__optional_double_: public Callback<void(std::optional<double> /* maybe */)> {
   public:
-    CapturingCallback_void_std__optional_double_(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */, std::optional<double>), void(* _Nonnull destroy)(void* _Nonnull)) {
+    SwiftCallback_void_std__optional_double_(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */, std::optional<double>), void(* _Nonnull destroy)(void* _Nonnull)) {
       _callFunc = call;
       _closureHolder = std::shared_ptr<void>(closureHolder, destroy);
     }
-  
-  public:
     void callSync(std::optional<double> maybe) const override {
       _callFunc(_closureHolder.get(), maybe);
+    }
+    std::function<void(std::optional<double> maybe)> toFunction() const {
+      return [_closureHolder = _closureHolder, _callFunc = _callFunc](std::optional<double> maybe) -> void {
+        return _callFunc(_closureHolder.get(), maybe);
+      };
     }
   
   private:
@@ -456,16 +488,20 @@ namespace margelo::nitro::image::bridge::swift {
   /**
    * Specialized version of `Callback<void(const std::shared_ptr<ArrayBuffer>&)>`.
    */
-  class CapturingCallback_void_std__shared_ptr_ArrayBuffer_: public Callback<void(const std::shared_ptr<ArrayBuffer>& /* result */)> {
+  using Callback_void_std__shared_ptr_ArrayBuffer_ = Callback<void(const std::shared_ptr<ArrayBuffer>& /* result */)>;
+  class SwiftCallback_void_std__shared_ptr_ArrayBuffer_: public Callback<void(const std::shared_ptr<ArrayBuffer>& /* result */)> {
   public:
-    CapturingCallback_void_std__shared_ptr_ArrayBuffer_(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */, ArrayBufferHolder), void(* _Nonnull destroy)(void* _Nonnull)) {
+    SwiftCallback_void_std__shared_ptr_ArrayBuffer_(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */, ArrayBufferHolder), void(* _Nonnull destroy)(void* _Nonnull)) {
       _callFunc = call;
       _closureHolder = std::shared_ptr<void>(closureHolder, destroy);
     }
-  
-  public:
     void callSync(const std::shared_ptr<ArrayBuffer>& result) const override {
       _callFunc(_closureHolder.get(), ArrayBufferHolder(result));
+    }
+    std::function<void(const std::shared_ptr<ArrayBuffer>& result)> toFunction() const {
+      return [_closureHolder = _closureHolder, _callFunc = _callFunc](const std::shared_ptr<ArrayBuffer>& result) -> void {
+        return _callFunc(_closureHolder.get(), ArrayBufferHolder(result));
+      };
     }
   
   private:

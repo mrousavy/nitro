@@ -277,8 +277,7 @@ function createCxxCallbackSwiftHelper(type: FunctionType): SwiftCxxHelper {
       return bridge.getTypeCode('c++')
     }),
   ]
-  const functionPointerParam = `${callFuncReturnType}(* _Nonnull call)(${callFuncParams.join(', ')})`
-  const name = 'Capturing' + type.specializationName
+  const name = type.specializationName
 
   let callSwiftFuncBody: string
   if (returnBridge.hasType) {
@@ -292,23 +291,27 @@ return ${returnBridge.parseFromSwiftToCpp('__result', 'c++')};
 
   return {
     cxxType: actualType,
-    funcName: `${name}.init`,
+    funcName: `Swift${name}.init`,
     specializationName: name,
     cxxHeader: {
       code: `
 /**
  * Specialized version of \`${type.getCode('c++', false)}\`.
  */
-class ${name}: public ${actualType} {
+using ${name} = ${actualType};
+class Swift${name}: public ${actualType} {
 public:
-  ${name}(void* _Nonnull closureHolder, ${functionPointerParam}, void(* _Nonnull destroy)(void* _Nonnull)) {
+  Swift${name}(void* _Nonnull closureHolder, ${callFuncReturnType}(* _Nonnull call)(${callFuncParams.join(', ')}), void(* _Nonnull destroy)(void* _Nonnull)) {
     _callFunc = call;
     _closureHolder = std::shared_ptr<void>(closureHolder, destroy);
   }
-
-public:
   ${type.returnType.getCode('c++')} callSync(${paramsSignature.join(', ')}) const override {
     ${indent(callSwiftFuncBody, '    ')}
+  }
+  std::function<${type.returnType.getCode('c++')}(${paramsSignature.join(', ')})> toFunction() const {
+    return [_closureHolder = _closureHolder, _callFunc = _callFunc](${paramsSignature.join(', ')}) -> ${type.returnType.getCode('c++')} {
+      return ${indent(callSwiftFuncBody, '    ')}
+    };
   }
 
 private:

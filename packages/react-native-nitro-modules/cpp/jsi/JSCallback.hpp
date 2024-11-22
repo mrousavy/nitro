@@ -36,19 +36,12 @@ template <typename TReturn, typename... TArgs>
 class JSCallback<TReturn(TArgs...)> : public Callback<TReturn(TArgs...)> {
 public:
 #ifdef NITRO_DEBUG
-  /**
-   * Create a new `JSCallback<...>` with the given Runtime, Function and Dispatcher.
-   * The functionName can represent a debug-information for the function.
-   */
   explicit JSCallback(jsi::Runtime* runtime, OwningReference<jsi::Function>&& function, const std::shared_ptr<Dispatcher>& dispatcher,
                       const std::string& functionName) {
     _dispatcher = dispatcher;
     _callable = std::make_shared<Callable>(runtime, std::move(function), functionName);
   }
 #else
-  /**
-   * Create a new `JSCallback<...>` with the given Runtime, Function and Dispatcher.
-   */
   explicit JSCallback(jsi::Runtime* runtime, OwningReference<jsi::Function>&& function, const std::shared_ptr<Dispatcher>& dispatcher) {
     _dispatcher = dispatcher;
     _callable = std::make_shared<Callable>(runtime, std::move(function));
@@ -56,20 +49,10 @@ public:
 #endif
 
 public:
-  /**
-   * Calls this `Callback<...>` synchronously.
-   * This must be called on the same Thread that the underlying JS Function was created on,
-   * so the JS Thread.
-   * This is only guarded in debug.
-   */
   TReturn callSync(TArgs... args) const override {
     return _callable->call(std::move(args)...);
   }
 
-  /**
-   * Calls this `Callback<...>` asynchronously, and await it's completion/result.
-   * This can be called on any Thread, and will schedule a call to the proper JS Thread.
-   */
   std::shared_ptr<Promise<TReturn>> callAsync(TArgs... args) const override {
     std::shared_ptr<Promise<TReturn>> promise = Promise<TReturn>::create();
     _dispatcher->runAsync([promise, callable = _callable, ... args = std::move(args)]() {
@@ -90,22 +73,11 @@ public:
     return promise;
   }
 
-  /**
-   * Calls this `Callback<...>` asynchronously, but doesn't await it's completion.
-   * This is like a shoot-and-forget version of `callAsync(...)`, and slightly more efficient if
-   * you don't need to wait for the callback's completion.
-   * This can be called on any Thread, and will schedule a call to the proper JS Thread.
-   */
   void callAsyncAndForget(TArgs... args) const override {
     _dispatcher->runAsync([callable = _callable, ... args = std::move(args)]() { callable->call(std::move(args)...); });
   }
-
+  
 public:
-  /**
-   * Calls this `Callback<...>` asynchronously.
-   * If it's return type is `void`, this is like a shoot-and-forget.
-   * If it's return type is non-void, this returns an awaitable `Promise<T>` holding the result.
-   */
   inline Callback<TReturn(TArgs...)>::AsyncReturnType operator()(TArgs... args) const override {
     if constexpr (std::is_void_v<TReturn>) {
       return callAsyncAndForget(std::move(args)...);
@@ -115,9 +87,6 @@ public:
   }
 
 public:
-  /**
-   * Gets this `Callback<...>`'s name.
-   */
   std::string getName() const noexcept override {
 #ifdef NITRO_DEBUG
     if constexpr (sizeof...(TArgs) > 0) {

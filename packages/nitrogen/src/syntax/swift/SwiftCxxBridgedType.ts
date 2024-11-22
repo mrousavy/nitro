@@ -348,7 +348,7 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
   let __resolverCpp = __resolver.getFunctionCopy()
   let __rejecterCpp = ${indent(rejecterFuncBridge.parseFromSwiftToCpp('__rejecter', 'swift'), '  ')}
   ${cppParameterName}.pointee.addOnResolvedListener(__resolverCpp)
-  ${cppParameterName}.pointee.addOnRejectedListener(__rejecterCpp)
+  ${cppParameterName}.pointee.addOnRejectedListener(__rejecterCpp.toFunction())
   return __promise
 }()`.trim()
             } else {
@@ -376,8 +376,8 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
   }
   let __resolverCpp = ${indent(resolverFuncBridge.parseFromSwiftToCpp('__resolver', 'swift'), '  ')}
   let __rejecterCpp = ${indent(rejecterFuncBridge.parseFromSwiftToCpp('__rejecter', 'swift'), '  ')}
-  ${cppParameterName}.pointee.${addResolverName}(__resolverCpp)
-  ${cppParameterName}.pointee.addOnRejectedListener(__rejecterCpp)
+  ${cppParameterName}.pointee.${addResolverName}(__resolverCpp.toFunction())
+  ${cppParameterName}.pointee.addOnRejectedListener(__rejecterCpp.toFunction())
   return __promise
 }()`.trim()
             }
@@ -768,7 +768,7 @@ case ${i}:
             ].join(', ')
             const createFunc = `bridge.${bridge.funcName}`
             return `
-{ () -> bridge.${bridge.specializationName} in
+{ () -> bridge.Swift${bridge.specializationName} in
   class ClosureHolder {
     let closure: ${func.getCode('swift')}
     init(wrappingClosure closure: @escaping ${func.getCode('swift')}) {
