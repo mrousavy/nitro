@@ -38,7 +38,8 @@ struct JSIConverter<std::exception_ptr> final {
     } catch (...) {
       // Some unknown exception was thrown - maybe an Objective-C error?
       std::string errorName = TypeInfo::getCurrentExceptionName();
-      throw jsi::JSError(runtime, "unknown " + errorName + " error.");
+      jsi::JSError error(runtime, "unknown " + errorName + " error.");
+      return jsi::Value(runtime, error.value());
     }
   }
   static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {

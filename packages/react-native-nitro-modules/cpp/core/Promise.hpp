@@ -123,7 +123,7 @@ public:
 #ifdef NITRO_DEBUG
     assertPromiseState(*this, PromiseTask::WANTS_TO_REJECT);
 #endif
-    if constexpr (std::is_same_v<Error, std::exception_ptr>) {
+    if constexpr (std::is_same_v<std::decay_t<Error>, std::exception_ptr>) {
       _result = std::move(exception);
     } else {
       _result = std::make_exception_ptr(std::move(exception));
@@ -133,14 +133,20 @@ public:
       onRejected(error);
     }
   }
-  void reject(const std::exception_ptr& exceptionPointer) {
+  template <typename Error>
+  void reject(const Error& exception) {
     std::unique_lock lock(*_mutex);
 #ifdef NITRO_DEBUG
     assertPromiseState(*this, PromiseTask::WANTS_TO_REJECT);
 #endif
-    _result = exceptionPointer;
+    if constexpr (std::is_same_v<std::decay_t<Error>, std::exception_ptr>) {
+      _result = exception;
+    } else {
+      _result = std::make_exception_ptr(exception);
+    }
+    const std::exception_ptr& error = std::get<std::exception_ptr>(_result);
     for (const auto& onRejected : _onRejectedListeners) {
-      onRejected(exceptionPointer);
+      onRejected(error);
     }
   }
 
@@ -338,7 +344,7 @@ public:
 #ifdef NITRO_DEBUG
     assertPromiseState(*this, PromiseTask::WANTS_TO_REJECT);
 #endif
-    if constexpr (std::is_same_v<Error, std::exception_ptr>) {
+    if constexpr (std::is_same_v<std::decay_t<Error>, std::exception_ptr>) {
       _error = std::move(exception);
     } else {
       _error = std::make_exception_ptr(std::move(exception));
@@ -347,14 +353,19 @@ public:
       onRejected(_error);
     }
   }
-  void reject(const std::exception_ptr& exception) {
+  template <typename Error>
+  void reject(const Error& exception) {
     std::unique_lock lock(*_mutex);
 #ifdef NITRO_DEBUG
     assertPromiseState(*this, PromiseTask::WANTS_TO_REJECT);
 #endif
-    _error = exception;
+    if constexpr (std::is_same_v<std::decay_t<Error>, std::exception_ptr>) {
+      _error = exception;
+    } else {
+      _error = std::make_exception_ptr(exception);
+    }
     for (const auto& onRejected : _onRejectedListeners) {
-      onRejected(exception);
+      onRejected(_error);
     }
   }
 
