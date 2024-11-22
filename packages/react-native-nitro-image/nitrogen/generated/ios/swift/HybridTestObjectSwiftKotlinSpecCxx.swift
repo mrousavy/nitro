@@ -686,7 +686,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
         
           return bridge.create_Callback_void_std__exception_ptr(__closureHolder, __callClosure, __destroyClosure)
         }()
-        promise.pointee.addOnResolvedListener(__resolverCpp)
+        promise.pointee.addOnResolvedListenerCopy(__resolverCpp)
         promise.pointee.addOnRejectedListener(__rejecterCpp)
         return __promise
       }())
@@ -780,11 +780,34 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
     do {
       let __result = try self.__implementation.awaitPromise(promise: { () -> Promise<Void> in
         let __promise = Promise<Void>()
-        let __resolver = SwiftClosure { __promise.resolve(withResult: ()) }
+        let __resolver = { () in
+          __promise.resolve(withResult: ())
+        }
         let __rejecter = { (__error: std.exception_ptr) in
           __promise.reject(withError: RuntimeError.from(cppError: __error))
         }
-        let __resolverCpp = __resolver.getFunctionCopy()
+        let __resolverCpp = { () -> bridge.Callback_void in
+          class ClosureHolder {
+            let closure: (() -> Void)
+            init(wrappingClosure closure: @escaping (() -> Void)) {
+              self.closure = closure
+            }
+            func invoke() {
+              self.closure()
+            }
+          }
+        
+          let __closureHolder = Unmanaged.passRetained(ClosureHolder(wrappingClosure: __resolver)).toOpaque()
+          func __callClosure(__closureHolder: UnsafeMutableRawPointer) -> Void {
+            let closure = Unmanaged<ClosureHolder>.fromOpaque(__closureHolder).takeUnretainedValue()
+            closure.invoke()
+          }
+          func __destroyClosure(_ __closureHolder: UnsafeMutableRawPointer) -> Void {
+            Unmanaged<ClosureHolder>.fromOpaque(__closureHolder).release()
+          }
+        
+          return bridge.create_Callback_void(__closureHolder, __callClosure, __destroyClosure)
+        }()
         let __rejecterCpp = { () -> bridge.Callback_void_std__exception_ptr in
           class ClosureHolder {
             let closure: ((_ error: std.exception_ptr) -> Void)

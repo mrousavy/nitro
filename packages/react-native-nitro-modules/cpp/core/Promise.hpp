@@ -164,6 +164,21 @@ public:
       _onResolvedListeners.push_back(onResolved);
     }
   }
+  void addOnResolvedListenerCopy(const OnResolvedFunc& onResolved) {
+    std::unique_lock lock(*_mutex);
+    if (std::holds_alternative<TResult>(_result)) {
+      // Promise is already resolved! Call the callback immediately
+      onResolved(std::get<TResult>(_result));
+    } else {
+      // Promise is not yet resolved, put the listener in our queue.
+      _onResolvedListeners.push_back(onResolved);
+    }
+  }
+  void addOnResolvedListener(std::function<void(TResult)>&& func) {
+    auto callable = CallableNativeFunction<void(const TResult&)>::create(std::move(func));
+    Callback<void(const TResult&)> onResolved(callable);
+    return addOnResolvedListener(onResolved);
+  }
 
   /**
    * Add a listener that will be called when the Promise gets rejected.
@@ -178,6 +193,11 @@ public:
       // Promise is not yet rejected, put the listener in our queue.
       _onRejectedListeners.push_back(onRejected);
     }
+  }
+  void addOnRejectedListener(std::function<void(const std::exception_ptr&)>&& func) {
+    auto callable = CallableNativeFunction<void(const std::exception_ptr&)>::create(std::move(func));
+    Callback<void(const std::exception_ptr&)> onRejected(callable);
+    return addOnRejectedListener(onRejected);
   }
 
 public:
@@ -349,6 +369,12 @@ public:
       _onResolvedListeners.push_back(onResolved);
     }
   }
+  void addOnRejectedListener(std::function<void()>&& func) {
+    auto callable = CallableNativeFunction<void()>::create(std::move(func));
+    Callback<void()> onRejected(callable);
+    return addOnResolvedListener(onRejected);
+  }
+
   void addOnRejectedListener(OnRejectedFunc&& onRejected) {
     std::unique_lock lock(*_mutex);
     if (_error) {
@@ -366,6 +392,11 @@ public:
       // Promise is not yet rejected, put the listener in our queue.
       _onRejectedListeners.push_back(onRejected);
     }
+  }
+  void addOnRejectedListener(std::function<void(const std::exception_ptr&)>&& func) {
+    auto callable = CallableNativeFunction<void(const std::exception_ptr&)>::create(std::move(func));
+    Callback<void(const std::exception_ptr&)> onRejected(callable);
+    return addOnRejectedListener(onRejected);
   }
 
 public:

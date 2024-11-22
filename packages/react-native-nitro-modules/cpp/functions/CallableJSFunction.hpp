@@ -42,13 +42,14 @@ private:
 
 #ifdef NITRO_DEBUG
 public:
-  std::shared_ptr<CallableJSFunction<R(Args...)>> create(jsi::Runtime* runtime, OwningReference<jsi::Function>&& function,
-                                                         const std::shared_ptr<Dispatcher>& dispatcher, const std::string& functionName) {
+  static std::shared_ptr<CallableJSFunction<R(Args...)>> create(jsi::Runtime* runtime, OwningReference<jsi::Function>&& function,
+                                                                const std::shared_ptr<Dispatcher>& dispatcher,
+                                                                const std::string& functionName) {
     return std::shared_ptr<CallableJSFunction<R(Args...)>>(new CallableJSFunction(runtime, std::move(function), dispatcher, functionName));
   }
 #else
-  std::shared_ptr<CallableJSFunction<R(Args...)>> create(jsi::Runtime* runtime, OwningReference<jsi::Function>&& function,
-                                                         const std::shared_ptr<Dispatcher>& dispatcher) {
+  static std::shared_ptr<CallableJSFunction<R(Args...)>> create(jsi::Runtime* runtime, OwningReference<jsi::Function>&& function,
+                                                                const std::shared_ptr<Dispatcher>& dispatcher) {
     return std::shared_ptr<CallableJSFunction<R(Args...)>>(new CallableJSFunction(runtime, std::move(function), dispatcher));
   }
 #endif
@@ -87,7 +88,15 @@ public:
     }
   }
 
-  std::shared_ptr<Promise<R>> callAsync(Args... args) const override {
+  void callAsync(Args... args) const override {
+    auto self = this->shared_from_this();
+    _dispatcher->runAsync([self, ... args = std::move(args)]() {
+      // Call actual JS function
+      self->callSync(std::move(args)...);
+    });
+  }
+
+  std::shared_ptr<Promise<R>> callAsyncAwait(Args... args) const override {
     std::shared_ptr<Promise<R>> promise = Promise<R>::create();
     auto self = this->shared_from_this();
     _dispatcher->runAsync([promise, self, ... args = std::move(args)]() {
@@ -106,14 +115,6 @@ public:
       }
     });
     return promise;
-  }
-
-  void callAsyncAndForget(Args... args) const override {
-    auto self = this->shared_from_this();
-    _dispatcher->runAsync([self, ... args = std::move(args)]() {
-      // Call actual JS function
-      self->callSync(std::move(args)...);
-    });
   }
 
 public:
