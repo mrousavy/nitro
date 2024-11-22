@@ -86,7 +86,7 @@ public:
   template <typename Error>
   static std::shared_ptr<Promise> rejected(Error&& error) {
     auto promise = create();
-    promise->reject(std::move(error));
+    promise->reject(std::forward<Error>(error));
     return promise;
   }
 
@@ -124,9 +124,9 @@ public:
     assertPromiseState(*this, PromiseTask::WANTS_TO_REJECT);
 #endif
     if constexpr (std::is_same_v<std::decay_t<Error>, std::exception_ptr>) {
-      _result = std::move(exception);
+      _result = std::forward<Error>(exception);
     } else {
-      _result = std::make_exception_ptr(std::move(exception));
+      _result = std::make_exception_ptr(std::forward<Error>(exception));
     }
     const std::exception_ptr& error = std::get<std::exception_ptr>(_result);
     for (const auto& onRejected : _onRejectedListeners) {
@@ -323,7 +323,7 @@ public:
   template <typename Error>
   static std::shared_ptr<Promise> rejected(Error&& error) {
     auto promise = create();
-    promise->reject(std::move(error));
+    promise->reject(std::forward<Error>(error));
     return promise;
   }
 
@@ -345,9 +345,9 @@ public:
     assertPromiseState(*this, PromiseTask::WANTS_TO_REJECT);
 #endif
     if constexpr (std::is_same_v<std::decay_t<Error>, std::exception_ptr>) {
-      _error = std::move(exception);
+      _error = std::forward<Error>(exception);
     } else {
-      _error = std::make_exception_ptr(std::move(exception));
+      _error = std::make_exception_ptr(std::forward<Error>(exception));
     }
     for (const auto& onRejected : _onRejectedListeners) {
       onRejected(_error);
