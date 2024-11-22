@@ -23,6 +23,7 @@ include_directories(
   # Shared C++ includes
   ../cpp/core
   ../cpp/entrypoint
+  ../cpp/functions
   ../cpp/jsi
   ../cpp/platform
   ../cpp/registry

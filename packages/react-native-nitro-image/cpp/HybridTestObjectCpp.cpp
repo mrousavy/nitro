@@ -159,7 +159,7 @@ std::vector<Powertrain> HybridTestObjectCpp::bounceEnums(const std::vector<Power
 }
 
 void HybridTestObjectCpp::complexEnumCallback(const std::vector<Powertrain>& array,
-                                              const std::function<void(const std::vector<Powertrain>& /* array */)>& callback) {
+                                              const Callback<void(const std::vector<Powertrain>& /* array */)>& callback) {
   callback(array);
 }
 
@@ -258,42 +258,40 @@ std::shared_ptr<Promise<void>> HybridTestObjectCpp::wait(double seconds) {
   });
 }
 
-void HybridTestObjectCpp::callCallback(const std::function<void()>& callback) {
+void HybridTestObjectCpp::callCallback(const Callback<void()>& callback) {
   callback();
 }
 
-void HybridTestObjectCpp::callWithOptional(std::optional<double> value,
-                                           const std::function<void(std::optional<double> /* maybe */)>& callback) {
+void HybridTestObjectCpp::callWithOptional(std::optional<double> value, const Callback<void(std::optional<double> /* maybe */)>& callback) {
   callback(value);
 }
 
-std::shared_ptr<Promise<double>> HybridTestObjectCpp::getValueFromJSCallbackAndWait(const std::function<std::future<double>()>& getValue) {
+std::shared_ptr<Promise<double>> HybridTestObjectCpp::getValueFromJSCallbackAndWait(const Callback<double()>& getValue) {
   return Promise<double>::async([=]() -> double {
-    std::future<double> future = getValue();
-    future.wait();
-    double value = future.get();
-    return value;
+    std::shared_ptr<Promise<double>> promise = getValue();
+    std::future<double> future = promise->await();
+    return future.get();
   });
 }
 
 std::shared_ptr<Promise<double>> HybridTestObjectCpp::awaitAndGetPromise(const std::shared_ptr<Promise<double>>& promise) {
   auto newPromise = Promise<double>::create();
   promise->addOnResolvedListener([=](double result) { newPromise->resolve(result); });
-  promise->addOnRejectedListener([=](const std::exception& error) { newPromise->reject(error); });
+  promise->addOnRejectedListener([=](const std::exception_ptr& error) { newPromise->reject(error); });
   return newPromise;
 }
 
 std::shared_ptr<Promise<Car>> HybridTestObjectCpp::awaitAndGetComplexPromise(const std::shared_ptr<Promise<Car>>& promise) {
   auto newPromise = Promise<Car>::create();
   promise->addOnResolvedListener([=](const Car& result) { newPromise->resolve(result); });
-  promise->addOnRejectedListener([=](const std::exception& error) { newPromise->reject(error); });
+  promise->addOnRejectedListener([=](const std::exception_ptr& error) { newPromise->reject(error); });
   return newPromise;
 }
 
 std::shared_ptr<Promise<void>> HybridTestObjectCpp::awaitPromise(const std::shared_ptr<Promise<void>>& promise) {
   auto newPromise = Promise<void>::create();
   promise->addOnResolvedListener([=]() { newPromise->resolve(); });
-  promise->addOnRejectedListener([=](const std::exception& error) { newPromise->reject(error); });
+  promise->addOnRejectedListener([=](const std::exception_ptr& error) { newPromise->reject(error); });
   return newPromise;
 }
 
@@ -301,20 +299,19 @@ std::shared_ptr<Promise<void>> HybridTestObjectCpp::promiseThrows() {
   return Promise<void>::async([=]() { throw std::runtime_error("Promise throws :)"); });
 }
 
-void HybridTestObjectCpp::callAll(const std::function<void()>& first, const std::function<void()>& second,
-                                  const std::function<void()>& third) {
+void HybridTestObjectCpp::callAll(const Callback<void()>& first, const Callback<void()>& second, const Callback<void()>& third) {
   first();
   second();
   third();
 }
 
 std::shared_ptr<Promise<void>>
-HybridTestObjectCpp::getValueFromJsCallback(const std::function<std::future<std::string>()>& callback,
-                                            const std::function<void(const std::string& /* valueFromJs */)>& andThenCall) {
+HybridTestObjectCpp::getValueFromJsCallback(const Callback<std::string()>& callback,
+                                            const Callback<void(const std::string& /* valueFromJs */)>& andThenCall) {
   return Promise<void>::async([=]() {
-    std::future<std::string> future = callback();
-    std::string jsValue = future.get();
-    andThenCall(jsValue);
+    std::shared_ptr<Promise<std::string>> promise = callback.callAsyncAwait();
+    promise->addOnResolvedListener([andThenCall](const std::string& result) { andThenCall.callAsync(result); });
+    promise->await().wait();
   });
 }
 

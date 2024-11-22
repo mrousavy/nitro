@@ -6,13 +6,20 @@
 
 // Forward declare a few of the common types that might have cyclic includes.
 namespace margelo::nitro {
-
 template <typename T, typename Enable>
 struct JSIConverter;
+
+template <typename T>
+class Promise;
+
+template <typename Signature>
+class Callback;
 } // namespace margelo::nitro
 
 #include "JSIConverter.hpp"
 
+#include "Callback.hpp"
+#include "NitroLogger.hpp"
 #include "Promise.hpp"
 #include <exception>
 #include <jsi/jsi.h>
@@ -22,7 +29,7 @@ namespace margelo::nitro {
 
 using namespace facebook;
 
-// Promise<T, std::exception> <> Promise<T>
+// Promise<T> <> Promise<T>
 template <typename TResult>
 struct JSIConverter<std::shared_ptr<Promise<TResult>>> final {
   static inline std::shared_ptr<Promise<TResult>> fromJSI(jsi::Runtime& runtime, const jsi::Value& value) {
@@ -37,8 +44,8 @@ struct JSIConverter<std::shared_ptr<Promise<TResult>>> final {
         return JSIConverter<std::function<void(TResult)>>::toJSI(runtime, [=](const TResult& result) { promise->resolve(result); });
       }
     }();
-    auto catchCallback = JSIConverter<std::function<void(std::exception)>>::toJSI(
-        runtime, [=](const std::exception& exception) { promise->reject(exception); });
+    auto catchCallback = JSIConverter<std::function<void(const std::exception_ptr&)>>::toJSI(
+        runtime, [=](const std::exception_ptr& exception) { promise->reject(exception); });
 
     // Chain .then listeners on JS Promise (onResolved and onRejected)
     jsi::Object jsPromise = value.asObject(runtime);
@@ -57,16 +64,16 @@ struct JSIConverter<std::shared_ptr<Promise<TResult>>> final {
         // Add resolver listener
         if constexpr (std::is_void_v<TResult>) {
           // It's resolving to void.
-          auto resolver = JSIConverter<std::function<void()>>::fromJSI(runtime, arguments[0]);
+          auto resolver = JSIConverter<Callback<void()>>::fromJSI(runtime, arguments[0]);
           promise->addOnResolvedListener(std::move(resolver));
         } else {
           // It's a type.
-          auto resolver = JSIConverter<std::function<void(TResult)>>::fromJSI(runtime, arguments[0]);
+          auto resolver = JSIConverter<Callback<void(TResult)>>::fromJSI(runtime, arguments[0]);
           promise->addOnResolvedListener(std::move(resolver));
         }
         // Add rejecter listener
-        auto rejecter = JSIConverter<std::function<void(std::exception)>>::fromJSI(runtime, arguments[1]);
-        promise->addOnRejectedListener(std::move(rejecter));
+        auto rejecter = JSIConverter<Callback<void(const std::exception_ptr&)>>::fromJSI(runtime, arguments[1]);
+        promise->addOnRejectedListener(rejecter);
 
         return jsi::Value::undefined();
       };
@@ -89,7 +96,7 @@ struct JSIConverter<std::shared_ptr<Promise<TResult>>> final {
       // Promise is already rejected - just return immediately
       jsi::Object promiseObject = runtime.global().getPropertyAsObject(runtime, "Promise");
       jsi::Function createRejectedPromise = promiseObject.getPropertyAsFunction(runtime, "reject");
-      jsi::Value error = JSIConverter<std::exception>::toJSI(runtime, promise->getError());
+      jsi::Value error = JSIConverter<std::exception_ptr>::toJSI(runtime, promise->getError());
       return createRejectedPromise.call(runtime, std::move(error));
     } else {
       throw std::runtime_error("Promise has invalid state!");

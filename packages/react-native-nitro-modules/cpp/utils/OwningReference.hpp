@@ -34,7 +34,7 @@ public:
 
   explicit OwningReference(T* value)
       : _value(value), _isDeleted(new bool(false)), _strongRefCount(new std::atomic_size_t(1)), _weakRefCount(new std::atomic_size_t(0)),
-        _mutex(new std::mutex()) {}
+        _mutex(new std::recursive_mutex()) {}
 
   OwningReference(const OwningReference& ref)
       : _value(ref._value), _isDeleted(ref._isDeleted), _strongRefCount(ref._strongRefCount), _weakRefCount(ref._weakRefCount),
@@ -229,7 +229,7 @@ private:
   bool* _isDeleted;
   std::atomic_size_t* _strongRefCount;
   std::atomic_size_t* _weakRefCount;
-  std::mutex* _mutex;
+  std::recursive_mutex* _mutex;
 };
 
 } // namespace margelo::nitro

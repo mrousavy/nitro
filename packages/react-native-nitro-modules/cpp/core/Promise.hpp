@@ -4,7 +4,16 @@
 
 #pragma once
 
+namespace margelo::nitro {
+template <typename>
+class Callback;
+template <typename>
+class Promise;
+} // namespace margelo::nitro
+
 #include "AssertPromiseState.hpp"
+#include "CallableNativeFunction.hpp"
+#include "Callback.hpp"
 #include "NitroDefines.hpp"
 #include "ThreadPool.hpp"
 #include "TypeInfo.hpp"
@@ -13,17 +22,22 @@
 #include <jsi/jsi.h>
 #include <memory>
 #include <mutex>
+#include <type_traits>
 #include <variant>
 
 namespace margelo::nitro {
 
 using namespace facebook;
 
-template <typename TResult, typename TError = std::exception>
+template <typename TResult>
 class Promise final {
 public:
-  using OnResolvedFunc = std::function<void(const TResult&)>;
-  using OnRejectedFunc = std::function<void(const TError&)>;
+  using ResultingType =
+      typename std::conditional_t<std::is_trivially_copyable<TResult>::value && sizeof(TResult) <= sizeof(void*), TResult, const TResult&>;
+
+public:
+  using OnResolvedFunc = std::function<void(ResultingType)>;
+  using OnRejectedFunc = std::function<void(const std::exception_ptr&)>;
 
 public:
   // Promise cannot be deleted.
@@ -55,13 +69,9 @@ public:
         // Run the code, then resolve.
         TResult result = run();
         promise->resolve(std::move(result));
-      } catch (const TError& exception) {
-        // It threw an std::exception.
-        promise->reject(exception);
       } catch (...) {
-        // It threw a different error.
-        std::string name = TypeInfo::getCurrentExceptionName();
-        promise->reject(std::runtime_error("Unknown non-std error! Name: " + name));
+        // It threw any kind of exception.
+        promise->reject(std::current_exception());
       }
     });
     return promise;
@@ -87,9 +97,10 @@ public:
   /**
    * Creates an immediately rejected Promise.
    */
-  static std::shared_ptr<Promise> rejected(TError&& error) {
+  template <typename Error>
+  static std::shared_ptr<Promise> rejected(Error&& error) {
     auto promise = create();
-    promise->reject(std::move(error));
+    promise->reject(std::forward<Error>(error));
     return promise;
   }
 
@@ -120,24 +131,25 @@ public:
   /**
    * Rejects this Promise with the given error, and calls any pending listeners.
    */
-  void reject(TError&& exception) {
-    std::unique_lock lock(*_mutex);
-#ifdef NITRO_DEBUG
-    assertPromiseState(*this, PromiseTask::WANTS_TO_REJECT);
-#endif
-    _result = std::move(exception);
-    for (const auto& onRejected : _onRejectedListeners) {
-      onRejected(std::get<TError>(_result));
-    }
-  }
-  void reject(const TError& exception) {
+  void reject(const std::exception_ptr& exception) {
     std::unique_lock lock(*_mutex);
 #ifdef NITRO_DEBUG
     assertPromiseState(*this, PromiseTask::WANTS_TO_REJECT);
 #endif
     _result = exception;
     for (const auto& onRejected : _onRejectedListeners) {
-      onRejected(std::get<TError>(_result));
+      onRejected(exception);
+    }
+  }
+  void reject(const std::exception& exception) {
+    std::unique_lock lock(*_mutex);
+#ifdef NITRO_DEBUG
+    assertPromiseState(*this, PromiseTask::WANTS_TO_REJECT);
+#endif
+    _result = std::make_exception_ptr(exception);
+    const std::exception_ptr& error = std::get<std::exception_ptr>(_result);
+    for (const auto& onRejected : _onRejectedListeners) {
+      onRejected(error);
     }
   }
 
@@ -146,16 +158,6 @@ public:
    * Add a listener that will be called when the Promise gets resolved.
    * If the Promise is already resolved, the listener will be immediately called.
    */
-  void addOnResolvedListener(OnResolvedFunc&& onResolved) {
-    std::unique_lock lock(*_mutex);
-    if (std::holds_alternative<TResult>(_result)) {
-      // Promise is already resolved! Call the callback immediately
-      onResolved(std::get<TResult>(_result));
-    } else {
-      // Promise is not yet resolved, put the listener in our queue.
-      _onResolvedListeners.push_back(std::move(onResolved));
-    }
-  }
   void addOnResolvedListener(const OnResolvedFunc& onResolved) {
     std::unique_lock lock(*_mutex);
     if (std::holds_alternative<TResult>(_result)) {
@@ -166,14 +168,14 @@ public:
       _onResolvedListeners.push_back(onResolved);
     }
   }
-  void addOnResolvedListenerCopy(const std::function<void(TResult)>& onResolved) {
+  void addOnResolvedListener(OnResolvedFunc&& onResolved) {
     std::unique_lock lock(*_mutex);
     if (std::holds_alternative<TResult>(_result)) {
       // Promise is already resolved! Call the callback immediately
       onResolved(std::get<TResult>(_result));
     } else {
       // Promise is not yet resolved, put the listener in our queue.
-      _onResolvedListeners.push_back(onResolved);
+      _onResolvedListeners.push_back(std::move(onResolved));
     }
   }
 
@@ -181,24 +183,24 @@ public:
    * Add a listener that will be called when the Promise gets rejected.
    * If the Promise is already rejected, the listener will be immediately called.
    */
-  void addOnRejectedListener(OnRejectedFunc&& onRejected) {
-    std::unique_lock lock(*_mutex);
-    if (std::holds_alternative<TError>(_result)) {
-      // Promise is already rejected! Call the callback immediately
-      onRejected(std::get<TError>(_result));
-    } else {
-      // Promise is not yet rejected, put the listener in our queue.
-      _onRejectedListeners.push_back(std::move(onRejected));
-    }
-  }
   void addOnRejectedListener(const OnRejectedFunc& onRejected) {
     std::unique_lock lock(*_mutex);
-    if (std::holds_alternative<TError>(_result)) {
+    if (std::holds_alternative<std::exception_ptr>(_result)) {
       // Promise is already rejected! Call the callback immediately
-      onRejected(std::get<TError>(_result));
+      onRejected(std::get<std::exception_ptr>(_result));
     } else {
       // Promise is not yet rejected, put the listener in our queue.
       _onRejectedListeners.push_back(onRejected);
+    }
+  }
+  void addOnRejectedListener(OnRejectedFunc&& onRejected) {
+    std::unique_lock lock(*_mutex);
+    if (std::holds_alternative<std::exception_ptr>(_result)) {
+      // Promise is already rejected! Call the callback immediately
+      onRejected(std::get<std::exception_ptr>(_result));
+    } else {
+      // Promise is not yet rejected, put the listener in our queue.
+      _onRejectedListeners.push_back(std::move(onRejected));
     }
   }
 
@@ -208,8 +210,8 @@ public:
    */
   std::future<TResult> await() {
     auto promise = std::make_shared<std::promise<TResult>>();
-    addOnResolvedListener([promise](const TResult& result) { promise->set_value(result); });
-    addOnRejectedListener([promise](const TError& error) { promise->set_exception(std::make_exception_ptr(error)); });
+    addOnResolvedListener([promise](ResultingType result) { promise->set_value(result); });
+    addOnRejectedListener([promise](const std::exception_ptr& error) { promise->set_exception(error); });
     return promise->get_future();
   }
 
@@ -228,11 +230,11 @@ public:
    * Get the error of the Promise if it has been rejected.
    * If the Promise is not rejected, this will throw.
    */
-  inline const TError& getError() {
+  inline const std::exception_ptr& getError() {
     if (!isRejected()) {
       throw std::runtime_error("Cannot get error when Promise is not yet rejected!");
     }
-    return std::get<TError>(_result);
+    return std::get<std::exception_ptr>(_result);
   }
 
 public:
@@ -248,7 +250,7 @@ public:
    */
   [[nodiscard]]
   inline bool isRejected() const noexcept {
-    return std::holds_alternative<TError>(_result);
+    return std::holds_alternative<std::exception_ptr>(_result);
   }
   /**
    * Gets whether this Promise has not yet been resolved nor rejected.
@@ -259,18 +261,18 @@ public:
   }
 
 private:
-  std::variant<std::monostate, TResult, TError> _result;
+  std::variant<std::monostate /* pending */, TResult /* resolved */, std::exception_ptr /* rejected */> _result;
   std::vector<OnResolvedFunc> _onResolvedListeners;
   std::vector<OnRejectedFunc> _onRejectedListeners;
   std::unique_ptr<std::mutex> _mutex;
 };
 
 // Specialization for void
-template <typename TError>
-class Promise<void, TError> final {
+template <>
+class Promise<void> final {
 public:
   using OnResolvedFunc = std::function<void()>;
-  using OnRejectedFunc = std::function<void(const TError&)>;
+  using OnRejectedFunc = std::function<void(const std::exception_ptr&)>;
 
 public:
   Promise(const Promise&) = delete;
@@ -293,13 +295,9 @@ public:
         // Run the code, then resolve.
         run();
         promise->resolve();
-      } catch (const TError& exception) {
-        // It threw an std::exception.
-        promise->reject(exception);
       } catch (...) {
-        // It threw a different error.
-        std::string name = TypeInfo::getCurrentExceptionName();
-        promise->reject(std::runtime_error("Unknown non-std error! Name: " + name));
+        // It threw, reject it.
+        promise->reject(std::current_exception());
       }
     });
     return promise;
@@ -315,9 +313,10 @@ public:
     promise->resolve();
     return promise;
   }
-  static std::shared_ptr<Promise> rejected(TError&& error) {
+  template <typename Error>
+  static std::shared_ptr<Promise> rejected(Error&& error) {
     auto promise = create();
-    promise->reject(std::move(error));
+    promise->reject(std::forward<Error>(error));
     return promise;
   }
 
@@ -332,36 +331,28 @@ public:
       onResolved();
     }
   }
-  void reject(TError&& exception) {
-    std::unique_lock lock(*_mutex);
-#ifdef NITRO_DEBUG
-    assertPromiseState(*this, PromiseTask::WANTS_TO_REJECT);
-#endif
-    _error = std::move(exception);
-    for (const auto& onRejected : _onRejectedListeners) {
-      onRejected(_error.value());
-    }
-  }
-  void reject(const TError& exception) {
+  void reject(const std::exception_ptr& exception) {
     std::unique_lock lock(*_mutex);
 #ifdef NITRO_DEBUG
     assertPromiseState(*this, PromiseTask::WANTS_TO_REJECT);
 #endif
     _error = exception;
     for (const auto& onRejected : _onRejectedListeners) {
-      onRejected(_error.value());
+      onRejected(exception);
+    }
+  }
+  void reject(const std::exception& exception) {
+    std::unique_lock lock(*_mutex);
+#ifdef NITRO_DEBUG
+    assertPromiseState(*this, PromiseTask::WANTS_TO_REJECT);
+#endif
+    _error = std::make_exception_ptr(exception);
+    for (const auto& onRejected : _onRejectedListeners) {
+      onRejected(_error);
     }
   }
 
 public:
-  void addOnResolvedListener(OnResolvedFunc&& onResolved) {
-    std::unique_lock lock(*_mutex);
-    if (_isResolved) {
-      onResolved();
-    } else {
-      _onResolvedListeners.push_back(std::move(onResolved));
-    }
-  }
   void addOnResolvedListener(const OnResolvedFunc& onResolved) {
     std::unique_lock lock(*_mutex);
     if (_isResolved) {
@@ -370,22 +361,31 @@ public:
       _onResolvedListeners.push_back(onResolved);
     }
   }
-  void addOnRejectedListener(OnRejectedFunc&& onRejected) {
+  void addOnResolvedListener(OnResolvedFunc&& onResolved) {
     std::unique_lock lock(*_mutex);
-    if (_error.has_value()) {
-      onRejected(_error.value());
+    if (_isResolved) {
+      onResolved();
     } else {
-      // Promise is not yet rejected, put the listener in our queue.
-      _onRejectedListeners.push_back(std::move(onRejected));
+      _onResolvedListeners.push_back(std::move(onResolved));
     }
   }
+
   void addOnRejectedListener(const OnRejectedFunc& onRejected) {
     std::unique_lock lock(*_mutex);
-    if (_error.has_value()) {
-      onRejected(_error.value());
+    if (_error) {
+      onRejected(_error);
     } else {
       // Promise is not yet rejected, put the listener in our queue.
       _onRejectedListeners.push_back(onRejected);
+    }
+  }
+  void addOnRejectedListener(OnRejectedFunc&& onRejected) {
+    std::unique_lock lock(*_mutex);
+    if (_error) {
+      onRejected(_error);
+    } else {
+      // Promise is not yet rejected, put the listener in our queue.
+      _onRejectedListeners.push_back(std::move(onRejected));
     }
   }
 
@@ -393,16 +393,16 @@ public:
   std::future<void> await() {
     auto promise = std::make_shared<std::promise<void>>();
     addOnResolvedListener([promise]() { promise->set_value(); });
-    addOnRejectedListener([promise](const TError& error) { promise->set_exception(std::make_exception_ptr(error)); });
+    addOnRejectedListener([promise](const std::exception_ptr& error) { promise->set_exception(error); });
     return promise->get_future();
   }
 
 public:
-  inline const TError& getError() {
+  inline const std::exception_ptr& getError() {
     if (!isRejected()) {
       throw std::runtime_error("Cannot get error when Promise is not yet rejected!");
     }
-    return _error.value();
+    return _error;
   }
 
 public:
@@ -412,7 +412,7 @@ public:
   }
   [[nodiscard]]
   inline bool isRejected() const noexcept {
-    return _error.has_value();
+    return _error != nullptr;
   }
   [[nodiscard]]
   inline bool isPending() const noexcept {
@@ -422,7 +422,7 @@ public:
 private:
   std::unique_ptr<std::mutex> _mutex;
   bool _isResolved = false;
-  std::optional<TError> _error;
+  std::exception_ptr _error;
   std::vector<OnResolvedFunc> _onResolvedListeners;
   std::vector<OnRejectedFunc> _onRejectedListeners;
 };

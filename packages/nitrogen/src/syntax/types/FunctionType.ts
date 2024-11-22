@@ -1,6 +1,5 @@
 import type { Language } from '../../getPlatformSpecs.js'
 import { escapeCppName, toReferenceType } from '../helpers.js'
-import { Parameter } from '../Parameter.js'
 import { type SourceFile, type SourceImport } from '../SourceFile.js'
 import { PromiseType } from './PromiseType.js'
 import type { NamedType, Type, TypeKind } from './Type.js'
@@ -10,19 +9,13 @@ export class FunctionType implements Type {
   readonly parameters: NamedType[]
 
   constructor(returnType: Type, parameters: NamedType[]) {
-    if (returnType.kind === 'void') {
-      // void callbacks are async, but we don't care about the result.
-      this.returnType = returnType
-    } else {
-      // non-void callbacks are async and need to be awaited to get the result from JS.
-      this.returnType = new PromiseType(returnType, false)
-    }
+    this.returnType = returnType
     this.parameters = parameters
   }
 
   get specializationName(): string {
     return (
-      'Func_' +
+      'Callback_' +
       [this.returnType, ...this.parameters]
         .map((p) => escapeCppName(p.getCode('c++')))
         .join('_')
@@ -46,35 +39,10 @@ export class FunctionType implements Type {
     return 'function'
   }
 
-  /**
-   * For a function, get the forward recreation of it:
-   * If variable is called `func`, this would return:
-   * ```cpp
-   * [func = std::move(func)](Params... params) -> ReturnType {
-   *   return func(params...);
-   * }
-   * ```
-   */
-  getForwardRecreationCode(variableName: string, language: Language): string {
-    const returnType = this.returnType.getCode(language)
-    const parameters = this.parameters
-      .map((p) => new Parameter(p.name, p))
-      .map((p) => p.getCode('c++'))
-    const forwardedParameters = this.parameters.map(
-      (p) => `std::forward<decltype(${p.name})>(${p.name})`
-    )
-
-    switch (language) {
-      case 'c++':
-        const closure = `[${variableName} = std::move(${variableName})]`
-        const signature = `(${parameters.join(', ')}) -> ${returnType}`
-        const body = `{ return ${variableName}(${forwardedParameters.join(', ')}); }`
-        return `${closure} ${signature} ${body}`
-      default:
-        throw new Error(
-          `Language ${language} is not yet supported for function forward recreations!`
-        )
-    }
+  get asyncReturnType(): Type {
+    return this.returnType.kind === 'void'
+      ? this.returnType
+      : new PromiseType(this.returnType)
   }
 
   getCppFunctionPointerType(name: string, includeNameInfo = true): string {
@@ -102,7 +70,7 @@ export class FunctionType implements Type {
           })
           .join(', ')
         const returnType = this.returnType.getCode(language)
-        return `std::function<${returnType}(${params})>`
+        return `Callback<${returnType}(${params})>`
       }
       case 'swift': {
         const params = this.parameters
@@ -112,8 +80,8 @@ export class FunctionType implements Type {
             else return p.getCode(language)
           })
           .join(', ')
-        const returnType = this.returnType.getCode(language)
-        return `((${params}) -> ${returnType})`
+        const returnTypeCode = this.asyncReturnType.getCode(language)
+        return `((${params}) -> ${returnTypeCode})`
       }
       case 'kotlin': {
         const params = this.parameters
@@ -123,8 +91,8 @@ export class FunctionType implements Type {
             else return p.getCode(language)
           })
           .join(', ')
-        const returnType = this.returnType.getCode(language)
-        return `(${params}) -> ${returnType}`
+        const returnTypeCode = this.asyncReturnType.getCode(language)
+        return `(${params}) -> ${returnTypeCode}`
       }
       default:
         throw new Error(
@@ -142,7 +110,7 @@ export class FunctionType implements Type {
     return [
       {
         language: 'c++',
-        name: 'functional',
+        name: 'NitroModules/Callback.hpp',
         space: 'system',
       },
       ...this.returnType.getRequiredImports(),

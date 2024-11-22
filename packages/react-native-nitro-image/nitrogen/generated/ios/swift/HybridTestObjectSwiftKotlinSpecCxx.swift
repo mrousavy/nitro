@@ -471,18 +471,17 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
   }
   
   @inline(__always)
-  public func complexEnumCallback(array: bridge.std__vector_Powertrain_, callback: bridge.Func_void_std__vector_Powertrain_) -> Void {
+  public func complexEnumCallback(array: bridge.std__vector_Powertrain_, callback: bridge.Callback_void_std__vector_Powertrain_) -> Void {
     do {
       try self.__implementation.complexEnumCallback(array: array.map({ __item in __item }), callback: { () -> (([Powertrain]) -> Void) in
-        let __sharedClosure = bridge.share_Func_void_std__vector_Powertrain_(callback)
         return { (__array: [Powertrain]) -> Void in
-          __sharedClosure.pointee.call({ () -> bridge.std__vector_Powertrain_ in
-          var __vector = bridge.create_std__vector_Powertrain_(__array.count)
-          for __item in __array {
-            __vector.push_back(__item)
-          }
-          return __vector
-        }())
+          callback({ () -> bridge.std__vector_Powertrain_ in
+            var __vector = bridge.create_std__vector_Powertrain_(__array.count)
+            for __item in __array {
+              __vector.push_back(__item)
+            }
+            return __vector
+          }())
         }
       }())
       return 
@@ -640,10 +639,10 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
         let __resolver = { (__result: Double) in
           __promise.resolve(withResult: __result)
         }
-        let __rejecter = { (__error: std.exception) in
+        let __rejecter = { (__error: std.exception_ptr) in
           __promise.reject(withError: RuntimeError.from(cppError: __error))
         }
-        let __resolverCpp = { () -> bridge.Func_void_double in
+        let __resolverCpp = { () -> bridge.Callback_void_double in
           class ClosureHolder {
             let closure: ((_ result: Double) -> Void)
             init(wrappingClosure closure: @escaping ((_ result: Double) -> Void)) {
@@ -663,21 +662,21 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
             Unmanaged<ClosureHolder>.fromOpaque(__closureHolder).release()
           }
         
-          return bridge.create_Func_void_double(__closureHolder, __callClosure, __destroyClosure)
+          return bridge.create_Callback_void_double(__closureHolder, __callClosure, __destroyClosure)
         }()
-        let __rejecterCpp = { () -> bridge.Func_void_std__exception in
+        let __rejecterCpp = { () -> bridge.Callback_void_std__exception_ptr in
           class ClosureHolder {
-            let closure: ((_ error: std.exception) -> Void)
-            init(wrappingClosure closure: @escaping ((_ error: std.exception) -> Void)) {
+            let closure: ((_ error: std.exception_ptr) -> Void)
+            init(wrappingClosure closure: @escaping ((_ error: std.exception_ptr) -> Void)) {
               self.closure = closure
             }
-            func invoke(_ __error: std.exception) {
+            func invoke(_ __error: std.exception_ptr) {
               self.closure(__error)
             }
           }
         
           let __closureHolder = Unmanaged.passRetained(ClosureHolder(wrappingClosure: __rejecter)).toOpaque()
-          func __callClosure(__closureHolder: UnsafeMutableRawPointer, __error: std.exception) -> Void {
+          func __callClosure(__closureHolder: UnsafeMutableRawPointer, __error: std.exception_ptr) -> Void {
             let closure = Unmanaged<ClosureHolder>.fromOpaque(__closureHolder).takeUnretainedValue()
             closure.invoke(__error)
           }
@@ -685,10 +684,10 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
             Unmanaged<ClosureHolder>.fromOpaque(__closureHolder).release()
           }
         
-          return bridge.create_Func_void_std__exception(__closureHolder, __callClosure, __destroyClosure)
+          return bridge.create_Callback_void_std__exception_ptr(__closureHolder, __callClosure, __destroyClosure)
         }()
-        promise.pointee.addOnResolvedListenerCopy(__resolverCpp)
-        promise.pointee.addOnRejectedListener(__rejecterCpp)
+        promise.pointee.addOnResolvedListener(__resolverCpp.toFunction())
+        promise.pointee.addOnRejectedListener(__rejecterCpp.toFunction())
         return __promise
       }())
       return { () -> bridge.std__shared_ptr_Promise_double__ in
@@ -712,10 +711,10 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
         let __resolver = { (__result: Car) in
           __promise.resolve(withResult: __result)
         }
-        let __rejecter = { (__error: std.exception) in
+        let __rejecter = { (__error: std.exception_ptr) in
           __promise.reject(withError: RuntimeError.from(cppError: __error))
         }
-        let __resolverCpp = { () -> bridge.Func_void_Car in
+        let __resolverCpp = { () -> bridge.Callback_void_Car in
           class ClosureHolder {
             let closure: ((_ result: Car) -> Void)
             init(wrappingClosure closure: @escaping ((_ result: Car) -> Void)) {
@@ -735,21 +734,21 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
             Unmanaged<ClosureHolder>.fromOpaque(__closureHolder).release()
           }
         
-          return bridge.create_Func_void_Car(__closureHolder, __callClosure, __destroyClosure)
+          return bridge.create_Callback_void_Car(__closureHolder, __callClosure, __destroyClosure)
         }()
-        let __rejecterCpp = { () -> bridge.Func_void_std__exception in
+        let __rejecterCpp = { () -> bridge.Callback_void_std__exception_ptr in
           class ClosureHolder {
-            let closure: ((_ error: std.exception) -> Void)
-            init(wrappingClosure closure: @escaping ((_ error: std.exception) -> Void)) {
+            let closure: ((_ error: std.exception_ptr) -> Void)
+            init(wrappingClosure closure: @escaping ((_ error: std.exception_ptr) -> Void)) {
               self.closure = closure
             }
-            func invoke(_ __error: std.exception) {
+            func invoke(_ __error: std.exception_ptr) {
               self.closure(__error)
             }
           }
         
           let __closureHolder = Unmanaged.passRetained(ClosureHolder(wrappingClosure: __rejecter)).toOpaque()
-          func __callClosure(__closureHolder: UnsafeMutableRawPointer, __error: std.exception) -> Void {
+          func __callClosure(__closureHolder: UnsafeMutableRawPointer, __error: std.exception_ptr) -> Void {
             let closure = Unmanaged<ClosureHolder>.fromOpaque(__closureHolder).takeUnretainedValue()
             closure.invoke(__error)
           }
@@ -757,10 +756,10 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
             Unmanaged<ClosureHolder>.fromOpaque(__closureHolder).release()
           }
         
-          return bridge.create_Func_void_std__exception(__closureHolder, __callClosure, __destroyClosure)
+          return bridge.create_Callback_void_std__exception_ptr(__closureHolder, __callClosure, __destroyClosure)
         }()
-        promise.pointee.addOnResolvedListener(__resolverCpp)
-        promise.pointee.addOnRejectedListener(__rejecterCpp)
+        promise.pointee.addOnResolvedListener(__resolverCpp.toFunction())
+        promise.pointee.addOnRejectedListener(__rejecterCpp.toFunction())
         return __promise
       }())
       return { () -> bridge.std__shared_ptr_Promise_Car__ in
@@ -781,24 +780,47 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
     do {
       let __result = try self.__implementation.awaitPromise(promise: { () -> Promise<Void> in
         let __promise = Promise<Void>()
-        let __resolver = SwiftClosure { __promise.resolve(withResult: ()) }
-        let __rejecter = { (__error: std.exception) in
+        let __resolver = { () in
+          __promise.resolve(withResult: ())
+        }
+        let __rejecter = { (__error: std.exception_ptr) in
           __promise.reject(withError: RuntimeError.from(cppError: __error))
         }
-        let __resolverCpp = __resolver.getFunctionCopy()
-        let __rejecterCpp = { () -> bridge.Func_void_std__exception in
+        let __resolverCpp = { () -> bridge.Callback_void in
           class ClosureHolder {
-            let closure: ((_ error: std.exception) -> Void)
-            init(wrappingClosure closure: @escaping ((_ error: std.exception) -> Void)) {
+            let closure: (() -> Void)
+            init(wrappingClosure closure: @escaping (() -> Void)) {
               self.closure = closure
             }
-            func invoke(_ __error: std.exception) {
+            func invoke() {
+              self.closure()
+            }
+          }
+        
+          let __closureHolder = Unmanaged.passRetained(ClosureHolder(wrappingClosure: __resolver)).toOpaque()
+          func __callClosure(__closureHolder: UnsafeMutableRawPointer) -> Void {
+            let closure = Unmanaged<ClosureHolder>.fromOpaque(__closureHolder).takeUnretainedValue()
+            closure.invoke()
+          }
+          func __destroyClosure(_ __closureHolder: UnsafeMutableRawPointer) -> Void {
+            Unmanaged<ClosureHolder>.fromOpaque(__closureHolder).release()
+          }
+        
+          return bridge.create_Callback_void(__closureHolder, __callClosure, __destroyClosure)
+        }()
+        let __rejecterCpp = { () -> bridge.Callback_void_std__exception_ptr in
+          class ClosureHolder {
+            let closure: ((_ error: std.exception_ptr) -> Void)
+            init(wrappingClosure closure: @escaping ((_ error: std.exception_ptr) -> Void)) {
+              self.closure = closure
+            }
+            func invoke(_ __error: std.exception_ptr) {
               self.closure(__error)
             }
           }
         
           let __closureHolder = Unmanaged.passRetained(ClosureHolder(wrappingClosure: __rejecter)).toOpaque()
-          func __callClosure(__closureHolder: UnsafeMutableRawPointer, __error: std.exception) -> Void {
+          func __callClosure(__closureHolder: UnsafeMutableRawPointer, __error: std.exception_ptr) -> Void {
             let closure = Unmanaged<ClosureHolder>.fromOpaque(__closureHolder).takeUnretainedValue()
             closure.invoke(__error)
           }
@@ -806,10 +828,10 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
             Unmanaged<ClosureHolder>.fromOpaque(__closureHolder).release()
           }
         
-          return bridge.create_Func_void_std__exception(__closureHolder, __callClosure, __destroyClosure)
+          return bridge.create_Callback_void_std__exception_ptr(__closureHolder, __callClosure, __destroyClosure)
         }()
-        promise.pointee.addOnResolvedListener(__resolverCpp)
-        promise.pointee.addOnRejectedListener(__rejecterCpp)
+        promise.pointee.addOnResolvedListener(__resolverCpp.toFunction())
+        promise.pointee.addOnRejectedListener(__rejecterCpp.toFunction())
         return __promise
       }())
       return { () -> bridge.std__shared_ptr_Promise_void__ in
@@ -826,12 +848,11 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
   }
   
   @inline(__always)
-  public func callCallback(callback: bridge.Func_void) -> Void {
+  public func callCallback(callback: bridge.Callback_void) -> Void {
     do {
       try self.__implementation.callCallback(callback: { () -> (() -> Void) in
-        let __sharedClosure = bridge.share_Func_void(callback)
         return { () -> Void in
-          __sharedClosure.pointee.call()
+          callback()
         }
       }())
       return 
@@ -842,22 +863,19 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
   }
   
   @inline(__always)
-  public func callAll(first: bridge.Func_void, second: bridge.Func_void, third: bridge.Func_void) -> Void {
+  public func callAll(first: bridge.Callback_void, second: bridge.Callback_void, third: bridge.Callback_void) -> Void {
     do {
       try self.__implementation.callAll(first: { () -> (() -> Void) in
-        let __sharedClosure = bridge.share_Func_void(first)
         return { () -> Void in
-          __sharedClosure.pointee.call()
+          first()
         }
       }(), second: { () -> (() -> Void) in
-        let __sharedClosure = bridge.share_Func_void(second)
         return { () -> Void in
-          __sharedClosure.pointee.call()
+          second()
         }
       }(), third: { () -> (() -> Void) in
-        let __sharedClosure = bridge.share_Func_void(third)
         return { () -> Void in
-          __sharedClosure.pointee.call()
+          third()
         }
       }())
       return 
@@ -868,18 +886,17 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
   }
   
   @inline(__always)
-  public func callWithOptional(value: bridge.std__optional_double_, callback: bridge.Func_void_std__optional_double_) -> Void {
+  public func callWithOptional(value: bridge.std__optional_double_, callback: bridge.Callback_void_std__optional_double_) -> Void {
     do {
       try self.__implementation.callWithOptional(value: value.value, callback: { () -> ((Double?) -> Void) in
-        let __sharedClosure = bridge.share_Func_void_std__optional_double_(callback)
         return { (__maybe: Double?) -> Void in
-          __sharedClosure.pointee.call({ () -> bridge.std__optional_double_ in
-          if let __unwrappedValue = __maybe {
-            return bridge.create_std__optional_double_(__unwrappedValue)
-          } else {
-            return .init()
-          }
-        }())
+          callback({ () -> bridge.std__optional_double_ in
+            if let __unwrappedValue = __maybe {
+              return bridge.create_std__optional_double_(__unwrappedValue)
+            } else {
+              return .init()
+            }
+          }())
         }
       }())
       return 

@@ -44,7 +44,7 @@ namespace margelo::nitro::image { class HybridBaseSpec; }
 #include "Car.hpp"
 #include "Person.hpp"
 #include <NitroModules/Promise.hpp>
-#include <functional>
+#include <NitroModules/Callback.hpp>
 #include <NitroModules/AnyMap.hpp>
 #include <NitroModules/ArrayBuffer.hpp>
 #include "HybridChildSpec.hpp"
@@ -114,8 +114,8 @@ namespace margelo::nitro::image {
       virtual std::variant<std::tuple<double, double>, std::tuple<double, double, double>> getVariantTuple(const std::variant<std::tuple<double, double>, std::tuple<double, double, double>>& variant) = 0;
       virtual std::tuple<double, double, double> flip(const std::tuple<double, double, double>& tuple) = 0;
       virtual std::tuple<double, std::string, bool> passTuple(const std::tuple<double, std::string, bool>& tuple) = 0;
-      virtual std::shared_ptr<Promise<double>> getValueFromJSCallbackAndWait(const std::function<std::future<double>()>& getValue) = 0;
-      virtual std::shared_ptr<Promise<void>> getValueFromJsCallback(const std::function<std::future<std::string>()>& callback, const std::function<void(const std::string& /* valueFromJs */)>& andThenCall) = 0;
+      virtual std::shared_ptr<Promise<double>> getValueFromJSCallbackAndWait(const Callback<double()>& getValue) = 0;
+      virtual std::shared_ptr<Promise<void>> getValueFromJsCallback(const Callback<std::string()>& callback, const Callback<void(const std::string& /* valueFromJs */)>& andThenCall) = 0;
       virtual std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec> newTestObject() = 0;
       virtual void simpleFunc() = 0;
       virtual double addNumbers(double a, double b) = 0;
@@ -125,7 +125,7 @@ namespace margelo::nitro::image {
       virtual std::vector<double> bounceNumbers(const std::vector<double>& array) = 0;
       virtual std::vector<Person> bounceStructs(const std::vector<Person>& array) = 0;
       virtual std::vector<Powertrain> bounceEnums(const std::vector<Powertrain>& array) = 0;
-      virtual void complexEnumCallback(const std::vector<Powertrain>& array, const std::function<void(const std::vector<Powertrain>& /* array */)>& callback) = 0;
+      virtual void complexEnumCallback(const std::vector<Powertrain>& array, const Callback<void(const std::vector<Powertrain>& /* array */)>& callback) = 0;
       virtual std::shared_ptr<AnyMap> createMap() = 0;
       virtual std::shared_ptr<AnyMap> mapRoundtrip(const std::shared_ptr<AnyMap>& map) = 0;
       virtual double funcThatThrows() = 0;
@@ -139,9 +139,9 @@ namespace margelo::nitro::image {
       virtual std::shared_ptr<Promise<double>> awaitAndGetPromise(const std::shared_ptr<Promise<double>>& promise) = 0;
       virtual std::shared_ptr<Promise<Car>> awaitAndGetComplexPromise(const std::shared_ptr<Promise<Car>>& promise) = 0;
       virtual std::shared_ptr<Promise<void>> awaitPromise(const std::shared_ptr<Promise<void>>& promise) = 0;
-      virtual void callCallback(const std::function<void()>& callback) = 0;
-      virtual void callAll(const std::function<void()>& first, const std::function<void()>& second, const std::function<void()>& third) = 0;
-      virtual void callWithOptional(std::optional<double> value, const std::function<void(std::optional<double> /* maybe */)>& callback) = 0;
+      virtual void callCallback(const Callback<void()>& callback) = 0;
+      virtual void callAll(const Callback<void()>& first, const Callback<void()>& second, const Callback<void()>& third) = 0;
+      virtual void callWithOptional(std::optional<double> value, const Callback<void(std::optional<double> /* maybe */)>& callback) = 0;
       virtual Car getCar() = 0;
       virtual bool isCarElectric(const Car& car) = 0;
       virtual std::optional<Person> getDriver(const Car& car) = 0;

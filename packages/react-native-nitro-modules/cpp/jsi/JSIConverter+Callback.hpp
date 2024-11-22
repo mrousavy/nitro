@@ -10,14 +10,13 @@ class JSICache;
 
 template <typename T, typename Enable>
 struct JSIConverter;
-
-template <typename Signature>
-class Callback;
 } // namespace margelo::nitro
 
 #include "JSIConverter.hpp"
 
+#include "CallableJSFunction.hpp"
 #include "Callback.hpp"
+#include "Dispatcher.hpp"
 #include "JSICache.hpp"
 #include "NitroDefines.hpp"
 #include <functional>
@@ -33,17 +32,19 @@ struct JSIConverter<Callback<ReturnType(Args...)>> final {
   static inline Callback<ReturnType(Args...)> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
     // Make function global - it'll be managed by the Runtime's memory, and we only have a weak_ref to it.
     auto cache = JSICache::getOrCreateCache(runtime);
-    jsi::Function function = arg.asObject(runtime).asFunction(runtime);
+    jsi::Object object = arg.asObject(runtime);
+    jsi::Function function = object.asFunction(runtime);
     OwningReference<jsi::Function> sharedFunction = cache.makeShared(std::move(function));
 
-    std::shared_ptr<Dispatcher> strongDispatcher = Dispatcher::getRuntimeGlobalDispatcher(runtime);
+    std::shared_ptr<Dispatcher> dispatcher = Dispatcher::getRuntimeGlobalDispatcher(runtime);
 
 #ifdef NITRO_DEBUG
-    std::string functionName = function.getProperty(runtime, "name").getString(runtime).utf8(runtime);
-    return JSCallback<ReturnType(Args...)>(&runtime, sharedFunction, strongDispatcher, functionName);
+    std::string functionName = object.getProperty(runtime, "name").getString(runtime).utf8(runtime);
+    auto callable = CallableJSFunction<ReturnType(Args...)>::create(&runtime, std::move(sharedFunction), dispatcher, functionName);
 #else
-    return JSCallback<ReturnType(Args...)>(&runtime, sharedFunction, strongDispatcher);
+    auto callable = CallableJSFunction<ReturnType(Args...)>::create(&runtime, std::move(sharedFunction), dispatcher);
 #endif
+    return Callback<ReturnType(Args...)>(callable);
   }
 
   static inline jsi::Value toJSI(jsi::Runtime& runtime, const Callback<ReturnType(Args...)>& function) {
@@ -55,7 +56,7 @@ struct JSIConverter<Callback<ReturnType(Args...)>> final {
       }
       return callHybridFunction(function, runtime, args, std::index_sequence_for<Args...>{});
     };
-    return jsi::Function::createFromHostFunction(runtime, jsi::PropNameID::forUtf8(runtime, function.getName()), sizeof...(Args),
+    return jsi::Function::createFromHostFunction(runtime, jsi::PropNameID::forUtf8(runtime, function->getName()), sizeof...(Args),
                                                  jsFunction);
   }
 
