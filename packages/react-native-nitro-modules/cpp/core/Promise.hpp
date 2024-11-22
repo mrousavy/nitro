@@ -117,33 +117,22 @@ public:
   /**
    * Rejects this Promise with the given error, and calls any pending listeners.
    */
-  template <typename Error>
-  void reject(Error&& exception) {
+  void reject(const std::exception_ptr& exception) {
     std::unique_lock lock(*_mutex);
 #ifdef NITRO_DEBUG
     assertPromiseState(*this, PromiseTask::WANTS_TO_REJECT);
 #endif
-    if constexpr (std::is_same_v<std::decay_t<Error>, std::exception_ptr>) {
-      _result = std::forward<Error>(exception);
-    } else {
-      _result = std::make_exception_ptr(std::forward<Error>(exception));
-    }
-    const std::exception_ptr& error = std::get<std::exception_ptr>(_result);
+    _result = exception;
     for (const auto& onRejected : _onRejectedListeners) {
-      onRejected(error);
+      onRejected(exception);
     }
   }
-  template <typename Error>
-  void reject(const Error& exception) {
+  void reject(const std::exception& exception) {
     std::unique_lock lock(*_mutex);
 #ifdef NITRO_DEBUG
     assertPromiseState(*this, PromiseTask::WANTS_TO_REJECT);
 #endif
-    if constexpr (std::is_same_v<std::decay_t<Error>, std::exception_ptr>) {
-      _result = exception;
-    } else {
-      _result = std::make_exception_ptr(exception);
-    }
+    _result = std::make_exception_ptr(exception);
     const std::exception_ptr& error = std::get<std::exception_ptr>(_result);
     for (const auto& onRejected : _onRejectedListeners) {
       onRejected(error);
@@ -338,32 +327,22 @@ public:
       onResolved();
     }
   }
-  template <typename Error>
-  void reject(Error&& exception) {
+  void reject(const std::exception_ptr& exception) {
     std::unique_lock lock(*_mutex);
 #ifdef NITRO_DEBUG
     assertPromiseState(*this, PromiseTask::WANTS_TO_REJECT);
 #endif
-    if constexpr (std::is_same_v<std::decay_t<Error>, std::exception_ptr>) {
-      _error = std::forward<Error>(exception);
-    } else {
-      _error = std::make_exception_ptr(std::forward<Error>(exception));
-    }
+    _error = exception;
     for (const auto& onRejected : _onRejectedListeners) {
-      onRejected(_error);
+      onRejected(exception);
     }
   }
-  template <typename Error>
-  void reject(const Error& exception) {
+  void reject(const std::exception& exception) {
     std::unique_lock lock(*_mutex);
 #ifdef NITRO_DEBUG
     assertPromiseState(*this, PromiseTask::WANTS_TO_REJECT);
 #endif
-    if constexpr (std::is_same_v<std::decay_t<Error>, std::exception_ptr>) {
-      _error = exception;
-    } else {
-      _error = std::make_exception_ptr(exception);
-    }
+    _error = std::make_exception_ptr(exception);
     for (const auto& onRejected : _onRejectedListeners) {
       onRejected(_error);
     }
