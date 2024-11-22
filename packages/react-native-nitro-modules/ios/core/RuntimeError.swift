@@ -12,8 +12,15 @@ import Foundation
  *
  * Throw this error in Nitro Modules to provide clear and concise error messages to JS.
  */
-public enum RuntimeError: Error {
+@frozen
+public enum RuntimeError: Error, CustomStringConvertible {
   case error(withMessage: String)
+
+  public var description: String {
+    switch self {
+      case .error(let message): return message
+    }
+  }
 
   /**
    * Creates a new `RuntimeError` from the given C++ `std::exception`.
