@@ -111,7 +111,7 @@ private:
   bool* _isDeleted;
   std::atomic_size_t* _strongRefCount;
   std::atomic_size_t* _weakRefCount;
-  std::mutex* _mutex;
+  std::recursive_mutex* _mutex;
 };
 
 } // namespace margelo::nitro
