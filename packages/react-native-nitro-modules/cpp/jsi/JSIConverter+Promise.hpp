@@ -37,7 +37,7 @@ struct JSIConverter<std::shared_ptr<Promise<TResult>>> final {
         return JSIConverter<std::function<void(TResult)>>::toJSI(runtime, [=](const TResult& result) { promise->resolve(result); });
       }
     }();
-    auto catchCallback = JSIConverter<std::function<void(std::exception)>>::toJSI(
+    auto catchCallback = JSIConverter<std::function<void(std::exception_ptr)>>::toJSI(
         runtime, [=](const std::exception_ptr& exception) { promise->reject(exception); });
 
     // Chain .then listeners on JS Promise (onResolved and onRejected)
