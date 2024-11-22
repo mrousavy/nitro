@@ -27,9 +27,10 @@ public:
   /**
    * Get the name of the currently thrown exception
    */
-  static inline const char* getCurrentExceptionName() {
+  static inline std::string getCurrentExceptionName() {
 #if __has_include(<cxxabi.h>)
-    return __cxxabiv1::__cxa_current_exception_type()->name();
+    std::string name = __cxxabiv1::__cxa_current_exception_type()->name();
+    return demangleName(name);
 #else
     return "<unknown>";
 #endif
