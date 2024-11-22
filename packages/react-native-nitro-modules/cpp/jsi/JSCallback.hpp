@@ -10,7 +10,6 @@ class Promise;
 } // namespace margelo::nitro
 
 #include "Callback.hpp"
-#include "CallbackCapture.hpp"
 #include "Dispatcher.hpp"
 #include "JSIConverter.hpp"
 #include "NitroDefines.hpp"
@@ -21,6 +20,7 @@ class Promise;
 #include <functional>
 #include <jsi/jsi.h>
 #include <memory>
+#include <utility>
 
 namespace margelo::nitro {
 
@@ -56,14 +56,14 @@ public:
 
   std::shared_ptr<Promise<TReturn>> callAsync(TArgs... args) const override {
     std::shared_ptr<Promise<TReturn>> promise = Promise<TReturn>::create();
-    _dispatcher->runAsync([promise, callable = _callable, ... capturedArgs = captureArgument(std::forward<TArgs>(args))]() {
+    _dispatcher->runAsync([promise, callable = _callable, ... args = std::move(args)]() {
       try {
         // Call function synchronously now that we are on the right Thread
         if constexpr (std::is_void_v<TReturn>) {
-          callable->call(getArgument(std::move(capturedArgs))...);
+          callable->call(std::move(args)...);
           promise->resolve();
         } else {
-          TReturn result = callable->call(getArgument(std::move(capturedArgs))...);
+          TReturn result = callable->call(std::move(args)...);
           promise->resolve(std::move(result));
         }
       } catch (const std::exception& error) {
@@ -75,14 +75,14 @@ public:
   }
 
   void callAsyncAndForget(TArgs... args) const override {
-    _dispatcher->runAsync([callable = _callable, ... capturedArgs = captureArgument(std::forward<TArgs>(args))]() {
+    _dispatcher->runAsync([callable = _callable, ... args = std::move(args)]() {
       // Call actual JS function
-      callable->call(getArgument(std::move(capturedArgs))...);
+      callable->call(std::move(args)...);
     });
   }
 
 public:
-  std::string getName() const noexcept override {
+  [[nodiscard]] std::string getName() const noexcept override {
 #ifdef NITRO_DEBUG
     if constexpr (sizeof...(TArgs) > 0) {
       return _callable->getName() + "(...)";
@@ -113,16 +113,16 @@ public:
 
   public:
 #ifdef NITRO_DEBUG
-    explicit Callable(jsi::Runtime* runtime, OwningReference<jsi::Function>&& function, const std::string& functionName)
+    explicit Callable(jsi::Runtime* runtime, OwningReference<jsi::Function>&& function, std::string functionName)
         : _runtime(runtime), _function(std::move(function)), _originalThreadId(std::this_thread::get_id()),
-          _originalThreadName(ThreadUtils::getThreadName()), _functionName(functionName) {}
+          _originalThreadName(ThreadUtils::getThreadName()), _functionName(std::move(functionName)) {}
 #else
     explicit Callable(jsi::Runtime* runtime, OwningReference<jsi::Function>&& function, const std::string& functionName)
         : _runtime(runtime), _function(std::move(function)), _functionName(functionName) {}
 #endif
 
   public:
-    std::string getName() const noexcept {
+    [[nodiscard]] std::string getName() const noexcept {
       return _functionName;
     }
 

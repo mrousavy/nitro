@@ -73,7 +73,7 @@ public:
   /**
    * Gets this `Callback<...>`'s name.
    */
-  virtual std::string getName() const {
+  [[nodiscard]] virtual std::string getName() const {
     return "anonymous";
   }
 };
@@ -113,7 +113,7 @@ public:
   }
 
 public:
-  std::string getName() const noexcept override {
+  [[nodiscard]] std::string getName() const noexcept override {
     return "nativeFunction";
   }
 
