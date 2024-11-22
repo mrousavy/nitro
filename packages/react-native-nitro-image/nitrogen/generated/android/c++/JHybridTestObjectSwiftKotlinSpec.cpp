@@ -413,7 +413,7 @@ namespace margelo::nitro::image {
       promise->addOnResolvedListener([=](const double& __result) {
         __promise->cthis()->resolve(jni::JDouble::valueOf(__result));
       });
-      promise->addOnRejectedListener([=](const std::exception& __error) {
+      promise->addOnRejectedListener([=](const std::exception_ptr& __error) {
         auto __jniError = jni::JCppException::create(__error);
         __promise->cthis()->reject(__jniError);
       });
@@ -439,7 +439,7 @@ namespace margelo::nitro::image {
       promise->addOnResolvedListener([=](const Car& __result) {
         __promise->cthis()->resolve(JCar::fromCpp(__result));
       });
-      promise->addOnRejectedListener([=](const std::exception& __error) {
+      promise->addOnRejectedListener([=](const std::exception_ptr& __error) {
         auto __jniError = jni::JCppException::create(__error);
         __promise->cthis()->reject(__jniError);
       });
@@ -465,7 +465,7 @@ namespace margelo::nitro::image {
       promise->addOnResolvedListener([=]() {
         __promise->cthis()->resolve(JUnit::instance());
       });
-      promise->addOnRejectedListener([=](const std::exception& __error) {
+      promise->addOnRejectedListener([=](const std::exception_ptr& __error) {
         auto __jniError = jni::JCppException::create(__error);
         __promise->cthis()->reject(__jniError);
       });

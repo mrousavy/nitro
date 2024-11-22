@@ -108,6 +108,11 @@ public:
         std::string funcName = getHybridFuncFullName<THybrid>(kind, name, hybridInstance.get());
         std::string message = exception.what();
         throw jsi::JSError(runtime, funcName + ": " + message);
+      } catch (...) {
+        // Some unknown exception was thrown - add method name information and re-throw as `JSError`.
+        std::string funcName = getHybridFuncFullName<THybrid>(kind, name, hybridInstance.get());
+        std::string errorName = TypeInfo::getCurrentExceptionName();
+        throw jsi::JSError(runtime, "`" + funcName + "` threw an unknown " + errorName + " error.");
       }
     };
 

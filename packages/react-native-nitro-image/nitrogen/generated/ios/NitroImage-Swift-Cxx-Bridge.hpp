@@ -305,29 +305,29 @@ namespace margelo::nitro::image::bridge::swift {
     void(* _Nonnull _callFunc)(void* _Nonnull /* closureHolder */, int64_t);
   };
   
-  // pragma MARK: Callback<void(const std::exception& /* error */)>
+  // pragma MARK: Callback<void(const std::exception_ptr& /* error */)>
   /**
-   * Specialized version of `Callback<void(const std::exception&)>`.
+   * Specialized version of `Callback<void(const std::exception_ptr&)>`.
    */
-  using Callback_void_std__exception = Callback<void(const std::exception& /* error */)>;
-  class SwiftCallback_void_std__exception: public Callback<void(const std::exception& /* error */)> {
+  using Callback_void_std__exception_ptr = Callback<void(const std::exception_ptr& /* error */)>;
+  class SwiftCallback_void_std__exception_ptr: public Callback<void(const std::exception_ptr& /* error */)> {
   public:
-    SwiftCallback_void_std__exception(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */, std::exception), void(* _Nonnull destroy)(void* _Nonnull)) {
+    SwiftCallback_void_std__exception_ptr(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */, std::exception_ptr), void(* _Nonnull destroy)(void* _Nonnull)) {
       _callFunc = call;
       _closureHolder = std::shared_ptr<void>(closureHolder, destroy);
     }
-    void callSync(const std::exception& error) const override {
+    void callSync(const std::exception_ptr& error) const override {
       _callFunc(_closureHolder.get(), error);
     }
-    std::function<void(const std::exception& error)> toFunction() const {
-      return [_closureHolder = _closureHolder, _callFunc = _callFunc](const std::exception& error) -> void {
+    std::function<void(const std::exception_ptr& error)> toFunction() const {
+      return [_closureHolder = _closureHolder, _callFunc = _callFunc](const std::exception_ptr& error) -> void {
         return _callFunc(_closureHolder.get(), error);
       };
     }
   
   private:
     std::shared_ptr<void> _closureHolder;
-    void(* _Nonnull _callFunc)(void* _Nonnull /* closureHolder */, std::exception);
+    void(* _Nonnull _callFunc)(void* _Nonnull /* closureHolder */, std::exception_ptr);
   };
   
   // pragma MARK: std::shared_ptr<Promise<void>>

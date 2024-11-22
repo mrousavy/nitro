@@ -5,7 +5,7 @@
 #pragma once
 
 namespace margelo::nitro {
-template <typename TResult, typename TError>
+template <typename T>
 class Promise;
 } // namespace margelo::nitro
 
