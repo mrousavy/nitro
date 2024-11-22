@@ -758,7 +758,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
         
           return bridge.create_Callback_void_std__exception_ptr(__closureHolder, __callClosure, __destroyClosure)
         }()
-        promise.pointee.addOnResolvedListener(__resolverCpp.pointee.toFunction())
+        promise.pointee.addOnResolvedListener(__resolverCpp.toFunction())
         promise.pointee.addOnRejectedListener(__rejecterCpp.toFunction())
         return __promise
       }())

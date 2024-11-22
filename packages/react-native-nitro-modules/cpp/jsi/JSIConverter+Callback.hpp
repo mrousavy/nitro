@@ -10,17 +10,13 @@ class JSICache;
 
 template <typename T, typename Enable>
 struct JSIConverter;
-
-template <typename Signature>
-class Callback;
-template <typename Signature>
-class JSCallback;
 } // namespace margelo::nitro
 
 #include "JSIConverter.hpp"
 
+#include "Dispatcher.hpp"
 #include "Callback.hpp"
-#include "JSCallback.hpp"
+#include "CallableJSFunction.hpp"
 #include "JSICache.hpp"
 #include "NitroDefines.hpp"
 #include <functional>
@@ -32,8 +28,8 @@ using namespace facebook;
 
 // [](Args...) -> T {} <> (Args...) => T
 template <typename ReturnType, typename... Args>
-struct JSIConverter<std::shared_ptr<Callback<ReturnType(Args...)>>> final {
-  static inline std::shared_ptr<Callback<ReturnType(Args...)>> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+struct JSIConverter<Callback<ReturnType(Args...)>> final {
+  static inline Callback<ReturnType(Args...)> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
     // Make function global - it'll be managed by the Runtime's memory, and we only have a weak_ref to it.
     auto cache = JSICache::getOrCreateCache(runtime);
     jsi::Object object = arg.asObject(runtime);
@@ -44,18 +40,14 @@ struct JSIConverter<std::shared_ptr<Callback<ReturnType(Args...)>>> final {
 
 #ifdef NITRO_DEBUG
     std::string functionName = object.getProperty(runtime, "name").getString(runtime).utf8(runtime);
-    return JSCallback<ReturnType(Args...)>::create(&runtime, std::move(sharedFunction), dispatcher, functionName);
+    auto callable = CallableJSFunction<ReturnType(Args...)>::create(&runtime, std::move(sharedFunction), dispatcher, functionName);
 #else
-    return JSCallback<ReturnType(Args...)>::create(&runtime, std::move(sharedFunction), dispatcher);
+    auto callable = CallableJSFunction<ReturnType(Args...)>::create(&runtime, std::move(sharedFunction), dispatcher);
 #endif
+    return Callback<ReturnType(Args...)>(callable);
   }
 
-  static inline jsi::Value toJSI(jsi::Runtime& runtime, const std::shared_ptr<Callback<ReturnType(Args...)>>& function) {
-#ifdef NITRO_DEBUG
-    if (function == nullptr) [[unlikely]] {
-      throw std::runtime_error("Cannot convert Callback<...> to JS - it is a nullptr!");
-    }
-#endif
+  static inline jsi::Value toJSI(jsi::Runtime& runtime, const Callback<ReturnType(Args...)>& function) {
     jsi::HostFunctionType jsFunction = [function](jsi::Runtime& runtime, const jsi::Value& thisValue, const jsi::Value* args,
                                                   size_t count) -> jsi::Value {
       if (count != sizeof...(Args)) [[unlikely]] {
@@ -78,15 +70,15 @@ struct JSIConverter<std::shared_ptr<Callback<ReturnType(Args...)>>> final {
 
 private:
   template <size_t... Is>
-  static inline jsi::Value callHybridFunction(const std::shared_ptr<Callback<ReturnType(Args...)>>& function, jsi::Runtime& runtime, const jsi::Value* args,
+  static inline jsi::Value callHybridFunction(const Callback<ReturnType(Args...)>& function, jsi::Runtime& runtime, const jsi::Value* args,
                                               std::index_sequence<Is...>) {
     if constexpr (std::is_void_v<ReturnType>) {
       // it is a void function (will return undefined in JS)
-      function->callSync(JSIConverter<std::decay_t<Args>>::fromJSI(runtime, args[Is])...);
+      function.callSync(JSIConverter<std::decay_t<Args>>::fromJSI(runtime, args[Is])...);
       return jsi::Value::undefined();
     } else {
       // it is a custom type, parse it to a JS value
-      ReturnType result = function->callSync(JSIConverter<std::decay_t<Args>>::fromJSI(runtime, args[Is])...);
+      ReturnType result = function.callSync(JSIConverter<std::decay_t<Args>>::fromJSI(runtime, args[Is])...);
       return JSIConverter<ReturnType>::toJSI(runtime, std::forward<ReturnType>(result));
     }
   }

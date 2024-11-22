@@ -4,10 +4,18 @@
 
 #pragma once
 
+namespace margelo::nitro {
+template <typename>
+class Callback;
+template <typename>
+class Promise;
+} // namespace margelo::nitro
+
 #include "AssertPromiseState.hpp"
 #include "NitroDefines.hpp"
 #include "ThreadPool.hpp"
 #include "TypeInfo.hpp"
+#include "Callback.hpp"
 #include <exception>
 #include <future>
 #include <jsi/jsi.h>
@@ -22,8 +30,8 @@ using namespace facebook;
 template <typename TResult>
 class Promise final {
 public:
-  using OnResolvedFunc = std::function<void(const TResult&)>;
-  using OnRejectedFunc = std::function<void(const std::exception_ptr&)>;
+  using OnResolvedFunc = Callback<void(const TResult&)>;
+  using OnRejectedFunc = Callback<void(const std::exception_ptr&)>;
 
 public:
   // Promise cannot be deleted.
@@ -101,7 +109,7 @@ public:
 #endif
     _result = std::move(result);
     for (const auto& onResolved : _onResolvedListeners) {
-      onResolved(std::get<TResult>(_result));
+      onResolved->call(std::get<TResult>(_result));
     }
   }
   void resolve(const TResult& result) {
@@ -111,7 +119,7 @@ public:
 #endif
     _result = result;
     for (const auto& onResolved : _onResolvedListeners) {
-      onResolved(std::get<TResult>(_result));
+      onResolved->call(std::get<TResult>(_result));
     }
   }
   /**
@@ -124,7 +132,7 @@ public:
 #endif
     _result = exception;
     for (const auto& onRejected : _onRejectedListeners) {
-      onRejected(exception);
+      onRejected->call(exception);
     }
   }
   void reject(const std::exception& exception) {
@@ -135,7 +143,7 @@ public:
     _result = std::make_exception_ptr(exception);
     const std::exception_ptr& error = std::get<std::exception_ptr>(_result);
     for (const auto& onRejected : _onRejectedListeners) {
-      onRejected(error);
+      onRejected->call(error);
     }
   }
 
@@ -144,31 +152,11 @@ public:
    * Add a listener that will be called when the Promise gets resolved.
    * If the Promise is already resolved, the listener will be immediately called.
    */
-  void addOnResolvedListener(OnResolvedFunc&& onResolved) {
-    std::unique_lock lock(*_mutex);
-    if (std::holds_alternative<TResult>(_result)) {
-      // Promise is already resolved! Call the callback immediately
-      onResolved(std::get<TResult>(_result));
-    } else {
-      // Promise is not yet resolved, put the listener in our queue.
-      _onResolvedListeners.push_back(std::move(onResolved));
-    }
-  }
   void addOnResolvedListener(const OnResolvedFunc& onResolved) {
     std::unique_lock lock(*_mutex);
     if (std::holds_alternative<TResult>(_result)) {
       // Promise is already resolved! Call the callback immediately
-      onResolved(std::get<TResult>(_result));
-    } else {
-      // Promise is not yet resolved, put the listener in our queue.
-      _onResolvedListeners.push_back(onResolved);
-    }
-  }
-  void addOnResolvedListenerCopy(const std::function<void(TResult)>& onResolved) {
-    std::unique_lock lock(*_mutex);
-    if (std::holds_alternative<TResult>(_result)) {
-      // Promise is already resolved! Call the callback immediately
-      onResolved(std::get<TResult>(_result));
+      onResolved.call(std::get<TResult>(_result));
     } else {
       // Promise is not yet resolved, put the listener in our queue.
       _onResolvedListeners.push_back(onResolved);
@@ -179,21 +167,11 @@ public:
    * Add a listener that will be called when the Promise gets rejected.
    * If the Promise is already rejected, the listener will be immediately called.
    */
-  void addOnRejectedListener(OnRejectedFunc&& onRejected) {
-    std::unique_lock lock(*_mutex);
-    if (std::holds_alternative<std::exception_ptr>(_result)) {
-      // Promise is already rejected! Call the callback immediately
-      onRejected(std::get<std::exception_ptr>(_result));
-    } else {
-      // Promise is not yet rejected, put the listener in our queue.
-      _onRejectedListeners.push_back(std::move(onRejected));
-    }
-  }
   void addOnRejectedListener(const OnRejectedFunc& onRejected) {
     std::unique_lock lock(*_mutex);
     if (std::holds_alternative<std::exception_ptr>(_result)) {
       // Promise is already rejected! Call the callback immediately
-      onRejected(std::get<std::exception_ptr>(_result));
+      onRejected.call(std::get<std::exception_ptr>(_result));
     } else {
       // Promise is not yet rejected, put the listener in our queue.
       _onRejectedListeners.push_back(onRejected);

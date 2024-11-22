@@ -70,12 +70,12 @@ namespace NitroImage { class HybridTestObjectSwiftKotlinSpecCxx; }
  */
 namespace margelo::nitro::image::bridge::swift {
 
-  // pragma MARK: std::shared_ptr<Callback<void(const std::string& /* path */)>>
+  // pragma MARK: Callback<void(const std::string& /* path */)>
   /**
-   * Specialized version of `std::shared_ptr<Callback<void(const std::string&)>>`.
+   * Specialized version of `Callback<void(const std::string&)>`.
    */
-  using Callback_void_std__string = std::shared_ptr<Callback<void(const std::string& /* path */)>>;
-  class SwiftCallback_void_std__string: public Callback<void(const std::string& path)> {
+  using Callback_void_std__string = Callback<void(const std::string& /* path */)>;
+  class SwiftCallback_void_std__string: public Callable<void(const std::string& path)> {
   public:
     SwiftCallback_void_std__string(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */, std::string), void(* _Nonnull destroy)(void* _Nonnull)) {
       _callFunc = call;
@@ -84,18 +84,15 @@ namespace margelo::nitro::image::bridge::swift {
     void callSync(const std::string& path) const override {
       _callFunc(_closureHolder.get(), path);
     }
-    std::function<void(const std::string& path)> toFunction() const {
-      return [_closureHolder = _closureHolder, _callFunc = _callFunc](const std::string& path) -> void {
-        return _callFunc(_closureHolder.get(), path);
-      };
-    }
+    bool isThreadSafe() const override { return true; }
   
   private:
     std::shared_ptr<void> _closureHolder;
     void(* _Nonnull _callFunc)(void* _Nonnull /* closureHolder */, std::string);
   };
   Callback_void_std__string create_Callback_void_std__string(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */, std::string), void(* _Nonnull destroy)(void* _Nonnull)) {
-    return std::make_shared<SwiftCallback_void_std__string>(closureHolder, call, destroy);
+    auto callable = std::make_shared<SwiftCallback_void_std__string>(closureHolder, call, destroy);
+    return Callback<void(const std::string& /* path */)>(callable);
   }
   
   // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridImageSpec>
@@ -211,12 +208,12 @@ namespace margelo::nitro::image::bridge::swift {
     return vector;
   }
   
-  // pragma MARK: std::shared_ptr<Callback<void(const std::vector<Powertrain>& /* array */)>>
+  // pragma MARK: Callback<void(const std::vector<Powertrain>& /* array */)>
   /**
-   * Specialized version of `std::shared_ptr<Callback<void(const std::vector<Powertrain>&)>>`.
+   * Specialized version of `Callback<void(const std::vector<Powertrain>&)>`.
    */
-  using Callback_void_std__vector_Powertrain_ = std::shared_ptr<Callback<void(const std::vector<Powertrain>& /* array */)>>;
-  class SwiftCallback_void_std__vector_Powertrain_: public Callback<void(const std::vector<Powertrain>& array)> {
+  using Callback_void_std__vector_Powertrain_ = Callback<void(const std::vector<Powertrain>& /* array */)>;
+  class SwiftCallback_void_std__vector_Powertrain_: public Callable<void(const std::vector<Powertrain>& array)> {
   public:
     SwiftCallback_void_std__vector_Powertrain_(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */, std::vector<Powertrain>), void(* _Nonnull destroy)(void* _Nonnull)) {
       _callFunc = call;
@@ -225,18 +222,15 @@ namespace margelo::nitro::image::bridge::swift {
     void callSync(const std::vector<Powertrain>& array) const override {
       _callFunc(_closureHolder.get(), array);
     }
-    std::function<void(const std::vector<Powertrain>& array)> toFunction() const {
-      return [_closureHolder = _closureHolder, _callFunc = _callFunc](const std::vector<Powertrain>& array) -> void {
-        return _callFunc(_closureHolder.get(), array);
-      };
-    }
+    bool isThreadSafe() const override { return true; }
   
   private:
     std::shared_ptr<void> _closureHolder;
     void(* _Nonnull _callFunc)(void* _Nonnull /* closureHolder */, std::vector<Powertrain>);
   };
   Callback_void_std__vector_Powertrain_ create_Callback_void_std__vector_Powertrain_(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */, std::vector<Powertrain>), void(* _Nonnull destroy)(void* _Nonnull)) {
-    return std::make_shared<SwiftCallback_void_std__vector_Powertrain_>(closureHolder, call, destroy);
+    auto callable = std::make_shared<SwiftCallback_void_std__vector_Powertrain_>(closureHolder, call, destroy);
+    return Callback<void(const std::vector<Powertrain>& /* array */)>(callable);
   }
   
   // pragma MARK: std::optional<bool>
@@ -286,12 +280,12 @@ namespace margelo::nitro::image::bridge::swift {
     return Promise<int64_t>::create();
   }
   
-  // pragma MARK: std::shared_ptr<Callback<void(int64_t /* result */)>>
+  // pragma MARK: Callback<void(int64_t /* result */)>
   /**
-   * Specialized version of `std::shared_ptr<Callback<void(int64_t)>>`.
+   * Specialized version of `Callback<void(int64_t)>`.
    */
-  using Callback_void_int64_t = std::shared_ptr<Callback<void(int64_t /* result */)>>;
-  class SwiftCallback_void_int64_t: public Callback<void(int64_t result)> {
+  using Callback_void_int64_t = Callback<void(int64_t /* result */)>;
+  class SwiftCallback_void_int64_t: public Callable<void(int64_t result)> {
   public:
     SwiftCallback_void_int64_t(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */, int64_t), void(* _Nonnull destroy)(void* _Nonnull)) {
       _callFunc = call;
@@ -300,26 +294,23 @@ namespace margelo::nitro::image::bridge::swift {
     void callSync(int64_t result) const override {
       _callFunc(_closureHolder.get(), result);
     }
-    std::function<void(int64_t result)> toFunction() const {
-      return [_closureHolder = _closureHolder, _callFunc = _callFunc](int64_t result) -> void {
-        return _callFunc(_closureHolder.get(), result);
-      };
-    }
+    bool isThreadSafe() const override { return true; }
   
   private:
     std::shared_ptr<void> _closureHolder;
     void(* _Nonnull _callFunc)(void* _Nonnull /* closureHolder */, int64_t);
   };
   Callback_void_int64_t create_Callback_void_int64_t(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */, int64_t), void(* _Nonnull destroy)(void* _Nonnull)) {
-    return std::make_shared<SwiftCallback_void_int64_t>(closureHolder, call, destroy);
+    auto callable = std::make_shared<SwiftCallback_void_int64_t>(closureHolder, call, destroy);
+    return Callback<void(int64_t /* result */)>(callable);
   }
   
-  // pragma MARK: std::shared_ptr<Callback<void(const std::exception_ptr& /* error */)>>
+  // pragma MARK: Callback<void(const std::exception_ptr& /* error */)>
   /**
-   * Specialized version of `std::shared_ptr<Callback<void(const std::exception_ptr&)>>`.
+   * Specialized version of `Callback<void(const std::exception_ptr&)>`.
    */
-  using Callback_void_std__exception_ptr = std::shared_ptr<Callback<void(const std::exception_ptr& /* error */)>>;
-  class SwiftCallback_void_std__exception_ptr: public Callback<void(const std::exception_ptr& error)> {
+  using Callback_void_std__exception_ptr = Callback<void(const std::exception_ptr& /* error */)>;
+  class SwiftCallback_void_std__exception_ptr: public Callable<void(const std::exception_ptr& error)> {
   public:
     SwiftCallback_void_std__exception_ptr(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */, std::exception_ptr), void(* _Nonnull destroy)(void* _Nonnull)) {
       _callFunc = call;
@@ -328,18 +319,15 @@ namespace margelo::nitro::image::bridge::swift {
     void callSync(const std::exception_ptr& error) const override {
       _callFunc(_closureHolder.get(), error);
     }
-    std::function<void(const std::exception_ptr& error)> toFunction() const {
-      return [_closureHolder = _closureHolder, _callFunc = _callFunc](const std::exception_ptr& error) -> void {
-        return _callFunc(_closureHolder.get(), error);
-      };
-    }
+    bool isThreadSafe() const override { return true; }
   
   private:
     std::shared_ptr<void> _closureHolder;
     void(* _Nonnull _callFunc)(void* _Nonnull /* closureHolder */, std::exception_ptr);
   };
   Callback_void_std__exception_ptr create_Callback_void_std__exception_ptr(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */, std::exception_ptr), void(* _Nonnull destroy)(void* _Nonnull)) {
-    return std::make_shared<SwiftCallback_void_std__exception_ptr>(closureHolder, call, destroy);
+    auto callable = std::make_shared<SwiftCallback_void_std__exception_ptr>(closureHolder, call, destroy);
+    return Callback<void(const std::exception_ptr& /* error */)>(callable);
   }
   
   // pragma MARK: std::shared_ptr<Promise<void>>
@@ -351,12 +339,12 @@ namespace margelo::nitro::image::bridge::swift {
     return Promise<void>::create();
   }
   
-  // pragma MARK: std::shared_ptr<Callback<void()>>
+  // pragma MARK: Callback<void()>
   /**
-   * Specialized version of `std::shared_ptr<Callback<void()>>`.
+   * Specialized version of `Callback<void()>`.
    */
-  using Callback_void = std::shared_ptr<Callback<void()>>;
-  class SwiftCallback_void: public Callback<void()> {
+  using Callback_void = Callback<void()>;
+  class SwiftCallback_void: public Callable<void()> {
   public:
     SwiftCallback_void(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */), void(* _Nonnull destroy)(void* _Nonnull)) {
       _callFunc = call;
@@ -365,18 +353,15 @@ namespace margelo::nitro::image::bridge::swift {
     void callSync() const override {
       _callFunc(_closureHolder.get());
     }
-    std::function<void()> toFunction() const {
-      return [_closureHolder = _closureHolder, _callFunc = _callFunc]() -> void {
-        return _callFunc(_closureHolder.get());
-      };
-    }
+    bool isThreadSafe() const override { return true; }
   
   private:
     std::shared_ptr<void> _closureHolder;
     void(* _Nonnull _callFunc)(void* _Nonnull /* closureHolder */);
   };
   Callback_void create_Callback_void(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */), void(* _Nonnull destroy)(void* _Nonnull)) {
-    return std::make_shared<SwiftCallback_void>(closureHolder, call, destroy);
+    auto callable = std::make_shared<SwiftCallback_void>(closureHolder, call, destroy);
+    return Callback<void()>(callable);
   }
   
   // pragma MARK: std::shared_ptr<Promise<double>>
@@ -388,12 +373,12 @@ namespace margelo::nitro::image::bridge::swift {
     return Promise<double>::create();
   }
   
-  // pragma MARK: std::shared_ptr<Callback<void(double /* result */)>>
+  // pragma MARK: Callback<void(double /* result */)>
   /**
-   * Specialized version of `std::shared_ptr<Callback<void(double)>>`.
+   * Specialized version of `Callback<void(double)>`.
    */
-  using Callback_void_double = std::shared_ptr<Callback<void(double /* result */)>>;
-  class SwiftCallback_void_double: public Callback<void(double result)> {
+  using Callback_void_double = Callback<void(double /* result */)>;
+  class SwiftCallback_void_double: public Callable<void(double result)> {
   public:
     SwiftCallback_void_double(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */, double), void(* _Nonnull destroy)(void* _Nonnull)) {
       _callFunc = call;
@@ -402,18 +387,15 @@ namespace margelo::nitro::image::bridge::swift {
     void callSync(double result) const override {
       _callFunc(_closureHolder.get(), result);
     }
-    std::function<void(double result)> toFunction() const {
-      return [_closureHolder = _closureHolder, _callFunc = _callFunc](double result) -> void {
-        return _callFunc(_closureHolder.get(), result);
-      };
-    }
+    bool isThreadSafe() const override { return true; }
   
   private:
     std::shared_ptr<void> _closureHolder;
     void(* _Nonnull _callFunc)(void* _Nonnull /* closureHolder */, double);
   };
   Callback_void_double create_Callback_void_double(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */, double), void(* _Nonnull destroy)(void* _Nonnull)) {
-    return std::make_shared<SwiftCallback_void_double>(closureHolder, call, destroy);
+    auto callable = std::make_shared<SwiftCallback_void_double>(closureHolder, call, destroy);
+    return Callback<void(double /* result */)>(callable);
   }
   
   // pragma MARK: std::optional<Person>
@@ -434,12 +416,12 @@ namespace margelo::nitro::image::bridge::swift {
     return Promise<Car>::create();
   }
   
-  // pragma MARK: std::shared_ptr<Callback<void(const Car& /* result */)>>
+  // pragma MARK: Callback<void(const Car& /* result */)>
   /**
-   * Specialized version of `std::shared_ptr<Callback<void(const Car&)>>`.
+   * Specialized version of `Callback<void(const Car&)>`.
    */
-  using Callback_void_Car = std::shared_ptr<Callback<void(const Car& /* result */)>>;
-  class SwiftCallback_void_Car: public Callback<void(const Car& result)> {
+  using Callback_void_Car = Callback<void(const Car& /* result */)>;
+  class SwiftCallback_void_Car: public Callable<void(const Car& result)> {
   public:
     SwiftCallback_void_Car(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */, Car), void(* _Nonnull destroy)(void* _Nonnull)) {
       _callFunc = call;
@@ -448,18 +430,15 @@ namespace margelo::nitro::image::bridge::swift {
     void callSync(const Car& result) const override {
       _callFunc(_closureHolder.get(), result);
     }
-    std::function<void(const Car& result)> toFunction() const {
-      return [_closureHolder = _closureHolder, _callFunc = _callFunc](const Car& result) -> void {
-        return _callFunc(_closureHolder.get(), result);
-      };
-    }
+    bool isThreadSafe() const override { return true; }
   
   private:
     std::shared_ptr<void> _closureHolder;
     void(* _Nonnull _callFunc)(void* _Nonnull /* closureHolder */, Car);
   };
   Callback_void_Car create_Callback_void_Car(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */, Car), void(* _Nonnull destroy)(void* _Nonnull)) {
-    return std::make_shared<SwiftCallback_void_Car>(closureHolder, call, destroy);
+    auto callable = std::make_shared<SwiftCallback_void_Car>(closureHolder, call, destroy);
+    return Callback<void(const Car& /* result */)>(callable);
   }
   
   // pragma MARK: std::optional<double>
@@ -471,12 +450,12 @@ namespace margelo::nitro::image::bridge::swift {
     return std::optional<double>(value);
   }
   
-  // pragma MARK: std::shared_ptr<Callback<void(std::optional<double> /* maybe */)>>
+  // pragma MARK: Callback<void(std::optional<double> /* maybe */)>
   /**
-   * Specialized version of `std::shared_ptr<Callback<void(std::optional<double>)>>`.
+   * Specialized version of `Callback<void(std::optional<double>)>`.
    */
-  using Callback_void_std__optional_double_ = std::shared_ptr<Callback<void(std::optional<double> /* maybe */)>>;
-  class SwiftCallback_void_std__optional_double_: public Callback<void(std::optional<double> maybe)> {
+  using Callback_void_std__optional_double_ = Callback<void(std::optional<double> /* maybe */)>;
+  class SwiftCallback_void_std__optional_double_: public Callable<void(std::optional<double> maybe)> {
   public:
     SwiftCallback_void_std__optional_double_(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */, std::optional<double>), void(* _Nonnull destroy)(void* _Nonnull)) {
       _callFunc = call;
@@ -485,18 +464,15 @@ namespace margelo::nitro::image::bridge::swift {
     void callSync(std::optional<double> maybe) const override {
       _callFunc(_closureHolder.get(), maybe);
     }
-    std::function<void(std::optional<double> maybe)> toFunction() const {
-      return [_closureHolder = _closureHolder, _callFunc = _callFunc](std::optional<double> maybe) -> void {
-        return _callFunc(_closureHolder.get(), maybe);
-      };
-    }
+    bool isThreadSafe() const override { return true; }
   
   private:
     std::shared_ptr<void> _closureHolder;
     void(* _Nonnull _callFunc)(void* _Nonnull /* closureHolder */, std::optional<double>);
   };
   Callback_void_std__optional_double_ create_Callback_void_std__optional_double_(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */, std::optional<double>), void(* _Nonnull destroy)(void* _Nonnull)) {
-    return std::make_shared<SwiftCallback_void_std__optional_double_>(closureHolder, call, destroy);
+    auto callable = std::make_shared<SwiftCallback_void_std__optional_double_>(closureHolder, call, destroy);
+    return Callback<void(std::optional<double> /* maybe */)>(callable);
   }
   
   // pragma MARK: std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>
@@ -508,12 +484,12 @@ namespace margelo::nitro::image::bridge::swift {
     return Promise<std::shared_ptr<ArrayBuffer>>::create();
   }
   
-  // pragma MARK: std::shared_ptr<Callback<void(const std::shared_ptr<ArrayBuffer>& /* result */)>>
+  // pragma MARK: Callback<void(const std::shared_ptr<ArrayBuffer>& /* result */)>
   /**
-   * Specialized version of `std::shared_ptr<Callback<void(const std::shared_ptr<ArrayBuffer>&)>>`.
+   * Specialized version of `Callback<void(const std::shared_ptr<ArrayBuffer>&)>`.
    */
-  using Callback_void_std__shared_ptr_ArrayBuffer_ = std::shared_ptr<Callback<void(const std::shared_ptr<ArrayBuffer>& /* result */)>>;
-  class SwiftCallback_void_std__shared_ptr_ArrayBuffer_: public Callback<void(const std::shared_ptr<ArrayBuffer>& result)> {
+  using Callback_void_std__shared_ptr_ArrayBuffer_ = Callback<void(const std::shared_ptr<ArrayBuffer>& /* result */)>;
+  class SwiftCallback_void_std__shared_ptr_ArrayBuffer_: public Callable<void(const std::shared_ptr<ArrayBuffer>& result)> {
   public:
     SwiftCallback_void_std__shared_ptr_ArrayBuffer_(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */, ArrayBufferHolder), void(* _Nonnull destroy)(void* _Nonnull)) {
       _callFunc = call;
@@ -522,18 +498,15 @@ namespace margelo::nitro::image::bridge::swift {
     void callSync(const std::shared_ptr<ArrayBuffer>& result) const override {
       _callFunc(_closureHolder.get(), ArrayBufferHolder(result));
     }
-    std::function<void(const std::shared_ptr<ArrayBuffer>& result)> toFunction() const {
-      return [_closureHolder = _closureHolder, _callFunc = _callFunc](const std::shared_ptr<ArrayBuffer>& result) -> void {
-        return _callFunc(_closureHolder.get(), ArrayBufferHolder(result));
-      };
-    }
+    bool isThreadSafe() const override { return true; }
   
   private:
     std::shared_ptr<void> _closureHolder;
     void(* _Nonnull _callFunc)(void* _Nonnull /* closureHolder */, ArrayBufferHolder);
   };
   Callback_void_std__shared_ptr_ArrayBuffer_ create_Callback_void_std__shared_ptr_ArrayBuffer_(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */, ArrayBufferHolder), void(* _Nonnull destroy)(void* _Nonnull)) {
-    return std::make_shared<SwiftCallback_void_std__shared_ptr_ArrayBuffer_>(closureHolder, call, destroy);
+    auto callable = std::make_shared<SwiftCallback_void_std__shared_ptr_ArrayBuffer_>(closureHolder, call, destroy);
+    return Callback<void(const std::shared_ptr<ArrayBuffer>& /* result */)>(callable);
   }
   
   // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridChildSpec>

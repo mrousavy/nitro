@@ -70,7 +70,7 @@ export class FunctionType implements Type {
           })
           .join(', ')
         const returnType = this.returnType.getCode(language)
-        return `std::shared_ptr<Callback<${returnType}(${params})>>`
+        return `Callback<${returnType}(${params})>`
       }
       case 'swift': {
         const params = this.parameters

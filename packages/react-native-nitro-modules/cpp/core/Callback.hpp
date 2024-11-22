@@ -5,13 +5,17 @@
 #pragma once
 
 namespace margelo::nitro {
+template <typename Signature>
+class Callback;
+template <typename Signature>
+class Callable;
 template <typename T>
 class Promise;
 } // namespace margelo::nitro
 
-#include "Promise.hpp"
 #include <functional>
 #include <memory>
+#include "Callable.hpp"
 
 namespace margelo::nitro {
 
@@ -22,103 +26,73 @@ namespace margelo::nitro {
  */
 template <typename Signature>
 class Callback;
-template <typename TReturn, typename... TArgs>
-class Callback<TReturn(TArgs...)> {
+template <typename R, typename... Args>
+class Callback<R(Args...)> final {
 public:
-  virtual ~Callback() = default;
+  explicit Callback(const std::shared_ptr<Callable<R(Args...)>>& callable): _callable(callable) {}
+  explicit Callback(std::shared_ptr<Callable<R(Args...)>>&& callable): _callable(std::move(callable)) {}
 
 public:
   /**
    * Calls this `Callback<...>` synchronously.
-   * This must be called on the same Thread that the underlying JS Function was created on,
-   * so the JS Thread.
+   * If this `Callback<...>` is holding a JS Function, `callSync(...)` must be
+   * called on the same Thread that the underlying JS Function was created on.
    * This is only guarded in debug.
    */
-  virtual TReturn callSync(TArgs... args) const {
-    throw std::runtime_error("callSync(..) is not implemented!");
+  R callSync(Args... args) const {
+    return _callable->callSync(std::forward<Args>(args)...);
+  }
+  /**
+   * Calls this `Callback<...>` asynchronously, and ignores it's completion/result.
+   * This can be called on any Thread.
+   */
+  void callAsync(Args... args) const {
+    return _callable->callAsync(std::forward<Args>(args)...);
   }
   /**
    * Calls this `Callback<...>` asynchronously, and await it's completion/result.
-   * This can be called on any Thread, and will schedule a call to the proper JS Thread.
+   * This can be called on any Thread.
    */
-  virtual std::shared_ptr<Promise<TReturn>> callAsync(TArgs... args) const {
-    throw std::runtime_error("callAsync(..) is not implemented!");
-  }
-  /**
-   * Calls this `Callback<...>` asynchronously, and await it's completion/result.
-   * This can be called on any Thread, and will schedule a call to the proper JS Thread.
-   */
-  virtual void callAsyncAndForget(TArgs... args) const {
-    throw std::runtime_error("callAsyncAndForget(..) is not implemented!");
+  std::shared_ptr<Promise<R>> callAsyncAwait(Args... args) const {
+    return _callable->callAsyncAwait(std::forward<Args>(args)...);
   }
 
 public:
-  using AsyncReturnType = std::conditional_t<std::is_void_v<TReturn>,
+  using AsyncReturnType = std::conditional_t<std::is_void_v<R>,
                                              /* async with no result */ void,
-                                             /* async with a result */ std::shared_ptr<Promise<TReturn>>>;
+                                             /* async with a result */ std::shared_ptr<Promise<R>>>;
   /**
    * Calls this `Callback<...>` asynchronously.
    * If it's return type is `void`, this is like a shoot-and-forget.
    * If it's return type is non-void, this returns an awaitable `Promise<T>` holding the result.
    */
-  AsyncReturnType operator()(TArgs... args) const {
-    if constexpr (std::is_void_v<TReturn>) {
-      callAsyncAndForget(std::forward<TArgs>(args)...);
+  AsyncReturnType operator()(Args... args) const {
+    if constexpr (std::is_void_v<R>) {
+      callAsync(std::forward<Args>(args)...);
     } else {
-      return callAsync(std::forward<TArgs>(args)...);
+      return callAsyncAwait(std::forward<Args>(args)...);
     }
   };
 
 public:
   /**
+   * Returns whether this `Callback<T>` is thread-safe, or not.
+   * * If it is thread-safe, you can safely call `callSync(..)` from any thread.
+   * * If it is NOT thread-safe, you must call `callSync(..)` on the thread this
+   *   callback was created on, or use `callAsync(..)`/`callAsyncAwaitable(..)` instead.
+   */
+  [[nodiscard]] bool isThreadSafe() const {
+    return _callable->isThreadSafe();
+  }
+  /**
    * Gets this `Callback<...>`'s name.
    */
   [[nodiscard]] virtual std::string getName() const {
-    return "anonymous";
+    return _callable->getName();
   }
-};
-
-/**
- * Represents a native Callback.
- * Native Callbacks are assumed to be thread-safe, and therefore are assumed to always be synchronously callable.
- */
-template <typename Signature>
-class NativeCallback;
-template <typename TReturn, typename... TArgs>
-class NativeCallback<TReturn(TArgs...)> : public Callback<TReturn(TArgs...)> {
-public:
-  explicit NativeCallback(std::function<TReturn(TArgs...)>&& func) : _function(std::move(func)) {}
-  explicit NativeCallback(const std::function<TReturn(TArgs...)>& func) : _function(func) {}
-
-public:
-  TReturn callSync(TArgs... args) const override {
-    return _function(std::forward<TArgs>(args)...);
-  }
-  std::shared_ptr<Promise<TReturn>> callAsync(TArgs... args) const override {
-    if constexpr (std::is_void_v<TReturn>) {
-      callSync(std::forward<TArgs>(args)...);
-      return Promise<void>::resolved();
-    } else {
-      TReturn result = callSync(std::forward<TArgs>(args)...);
-      return Promise<TReturn>::resolved(std::move(result));
-    }
-  }
-  void callAsyncAndForget(TArgs... args) const override {
-    _function(std::forward<TArgs>(args)...);
-  }
-
-public:
-  const std::function<TReturn(TArgs...)>& getFunction() const override {
-    return _function;
-  }
-
-public:
-  [[nodiscard]] std::string getName() const noexcept override {
-    return "nativeFunction";
-  }
-
+  
 private:
-  std::function<TReturn(TArgs...)> _function;
+  std::shared_ptr<Callable<R(Args...)>> _callable;
 };
 
 } // namespace margelo::nitro

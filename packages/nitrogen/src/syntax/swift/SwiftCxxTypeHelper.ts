@@ -263,7 +263,7 @@ function createCxxCallbackSwiftHelper(type: FunctionType): SwiftCxxHelper {
       return `${p.getCode('c++')} ${p.escapedName}`
     }
   })
-  const baseClass = `Callback<${returnType}(${paramsSignature.join(', ')})>`
+  const baseClass = `Callable<${returnType}(${paramsSignature.join(', ')})>`
   const paramsForward = [
     '_closureHolder.get()',
     ...type.parameters.map((p) => {
@@ -310,18 +310,15 @@ public:
   ${type.returnType.getCode('c++')} callSync(${paramsSignature.join(', ')}) const override {
     ${indent(callSwiftFuncBody, '    ')}
   }
-  std::function<${type.returnType.getCode('c++')}(${paramsSignature.join(', ')})> toFunction() const {
-    return [_closureHolder = _closureHolder, _callFunc = _callFunc](${paramsSignature.join(', ')}) -> ${type.returnType.getCode('c++')} {
-      return ${indent(callSwiftFuncBody, '    ')}
-    };
-  }
+  bool isThreadSafe() const override { return true; }
 
 private:
   std::shared_ptr<void> _closureHolder;
   ${callFuncReturnType}(* _Nonnull _callFunc)(${callFuncParams.join(', ')});
 };
 ${name} create_${name}(void* _Nonnull closureHolder, ${callFuncReturnType}(* _Nonnull call)(${callFuncParams.join(', ')}), void(* _Nonnull destroy)(void* _Nonnull)) {
-  return std::make_shared<Swift${name}>(closureHolder, call, destroy);
+  auto callable = std::make_shared<Swift${name}>(closureHolder, call, destroy);
+  return ${actualType}(callable);
 }
     `.trim(),
       requiredIncludes: [

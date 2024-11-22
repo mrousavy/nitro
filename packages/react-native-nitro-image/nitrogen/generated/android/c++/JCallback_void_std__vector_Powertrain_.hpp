@@ -25,7 +25,7 @@ namespace margelo::nitro::image {
    */
   struct JCallback_void_std__vector_Powertrain_ final: public jni::HybridClass<JCallback_void_std__vector_Powertrain_> {
   public:
-    static jni::local_ref<JCallback_void_std__vector_Powertrain_::javaobject> fromCpp(const std::shared_ptr<Callback<void(const std::vector<Powertrain>& /* array */)>>& func) {
+    static jni::local_ref<JCallback_void_std__vector_Powertrain_::javaobject> fromCpp(const Callback<void(const std::vector<Powertrain>& /* array */)>& func) {
       return JCallback_void_std__vector_Powertrain_::newObjectCxxArgs(func);
     }
 
@@ -50,11 +50,11 @@ namespace margelo::nitro::image {
     }
 
   private:
-    explicit JCallback_void_std__vector_Powertrain_(const std::shared_ptr<Callback<void(const std::vector<Powertrain>& /* array */)>>& func): _func(func) { }
+    explicit JCallback_void_std__vector_Powertrain_(const Callback<void(const std::vector<Powertrain>& /* array */)>& func): _func(func) { }
 
   private:
     friend HybridBase;
-    std::shared_ptr<Callback<void(const std::vector<Powertrain>& /* array */)>> _func;
+    Callback<void(const std::vector<Powertrain>& /* array */)> _func;
   };
 
 } // namespace margelo::nitro::image
