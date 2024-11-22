@@ -75,9 +75,6 @@ public:
   }
 
   void callAsyncAndForget(TArgs... args) const override {
-    if constexpr (sizeof...(TArgs) == 1 && (std::is_same_v<const std::exception&, TArgs> && ...)) {
-      Logger::log(LogLevel::Info, "Callback", "Run2222ning %s", args.what()...);
-    }
     _dispatcher->runAsync([callable = _callable, ...capturedArgs = captureArgument(std::forward<TArgs>(args))]() {
       // Call actual JS function
       callable->call(getArgument(std::move(capturedArgs))...);
