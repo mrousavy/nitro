@@ -118,6 +118,10 @@ public:
   }
 
 public:
+  [[nodiscard]] bool isThreadSafe() const noexcept override {
+    return false;
+  }
+
   [[nodiscard]] std::string getName() const noexcept override {
 #ifdef NITRO_DEBUG
     return _functionName;

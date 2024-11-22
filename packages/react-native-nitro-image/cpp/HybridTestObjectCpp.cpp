@@ -306,8 +306,8 @@ std::shared_ptr<Promise<void>>
 HybridTestObjectCpp::getValueFromJsCallback(const Callback<std::string()>& callback,
                                             const Callback<void(const std::string& /* valueFromJs */)>& andThenCall) {
   return Promise<void>::async([=]() {
-    std::shared_ptr<Promise<std::string>> promise = callback.callAsync();
-    promise->addOnResolvedListener([andThenCall](const std::string& result) { andThenCall.callAsyncAndForget(result); });
+    std::shared_ptr<Promise<std::string>> promise = callback.callAsyncAwait();
+    promise->addOnResolvedListener([andThenCall](const std::string& result) { andThenCall.callAsync(result); });
   });
 }
 

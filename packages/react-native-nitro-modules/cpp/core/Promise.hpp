@@ -369,7 +369,7 @@ public:
       _onResolvedListeners.push_back(onResolved);
     }
   }
-  void addOnRejectedListener(std::function<void()>&& func) {
+  void addOnResolvedListener(std::function<void()>&& func) {
     auto callable = CallableNativeFunction<void()>::create(std::move(func));
     Callback<void()> onRejected(callable);
     return addOnResolvedListener(onRejected);

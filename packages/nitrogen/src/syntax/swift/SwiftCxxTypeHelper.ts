@@ -316,7 +316,7 @@ private:
   std::shared_ptr<void> _closureHolder;
   ${callFuncReturnType}(* _Nonnull _callFunc)(${callFuncParams.join(', ')});
 };
-${name} create_${name}(void* _Nonnull closureHolder, ${callFuncReturnType}(* _Nonnull call)(${callFuncParams.join(', ')}), void(* _Nonnull destroy)(void* _Nonnull)) {
+inline ${name} create_${name}(void* _Nonnull closureHolder, ${callFuncReturnType}(* _Nonnull call)(${callFuncParams.join(', ')}), void(* _Nonnull destroy)(void* _Nonnull)) {
   auto callable = std::make_shared<Swift${name}>(closureHolder, call, destroy);
   return ${actualType}(callable);
 }

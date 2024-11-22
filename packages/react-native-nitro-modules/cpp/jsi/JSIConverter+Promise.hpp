@@ -64,15 +64,15 @@ struct JSIConverter<std::shared_ptr<Promise<TResult>>> final {
         // Add resolver listener
         if constexpr (std::is_void_v<TResult>) {
           // It's resolving to void.
-          auto resolver = JSIConverter<std::shared_ptr<Callback<void()>>>::fromJSI(runtime, arguments[0]);
+          auto resolver = JSIConverter<Callback<void()>>::fromJSI(runtime, arguments[0]);
           promise->addOnResolvedListener(std::move(resolver));
         } else {
           // It's a type.
-          auto resolver = JSIConverter<std::shared_ptr<Callback<void(TResult)>>>::fromJSI(runtime, arguments[0]);
+          auto resolver = JSIConverter<Callback<void(TResult)>>::fromJSI(runtime, arguments[0]);
           promise->addOnResolvedListener(std::move(resolver));
         }
         // Add rejecter listener
-        auto rejecter = JSIConverter<std::shared_ptr<Callback<void(const std::exception_ptr&)>>>::fromJSI(runtime, arguments[1]);
+        auto rejecter = JSIConverter<Callback<void(const std::exception_ptr&)>>::fromJSI(runtime, arguments[1]);
         promise->addOnRejectedListener(rejecter);
 
         return jsi::Value::undefined();
