@@ -19,8 +19,8 @@ class Callback;
 #include "JSIConverter.hpp"
 
 #include "Callback.hpp"
-#include "Promise.hpp"
 #include "NitroLogger.hpp"
+#include "Promise.hpp"
 #include <exception>
 #include <jsi/jsi.h>
 #include <memory>
@@ -73,9 +73,8 @@ struct JSIConverter<std::shared_ptr<Promise<TResult>>> final {
         }
         // Add rejecter listener
         auto rejecter = JSIConverter<Callback<void(const std::exception_ptr&)>>::fromJSI(runtime, arguments[1]);
-        promise->addOnRejectedListener([rejecter = std::move(rejecter)](const std::exception_ptr& exception) {
-          rejecter.callAsyncAndForget(exception);
-        });
+        promise->addOnRejectedListener(
+            [rejecter = std::move(rejecter)](const std::exception_ptr& exception) { rejecter.callAsyncAndForget(exception); });
 
         return jsi::Value::undefined();
       };

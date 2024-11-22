@@ -12,8 +12,8 @@ struct JSIConverter;
 
 #include "JSIConverter.hpp"
 
-#include <exception>
 #include "NitroLogger.hpp"
+#include <exception>
 #include <jsi/jsi.h>
 
 namespace margelo::nitro {
@@ -36,10 +36,10 @@ struct JSIConverter<std::exception_ptr> final {
       jsi::JSError error(runtime, e.what());
       return jsi::Value(runtime, error.value());
     } catch (...) {
-       // Some unknown exception was thrown - maybe an Objective-C error?
-       std::string errorName = TypeInfo::getCurrentExceptionName();
-       throw jsi::JSError(runtime, "unknown " + errorName + " error.");
-     }
+      // Some unknown exception was thrown - maybe an Objective-C error?
+      std::string errorName = TypeInfo::getCurrentExceptionName();
+      throw jsi::JSError(runtime, "unknown " + errorName + " error.");
+    }
   }
   static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
     if (!value.isObject()) {

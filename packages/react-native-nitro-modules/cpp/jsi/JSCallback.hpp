@@ -10,6 +10,7 @@ class Promise;
 } // namespace margelo::nitro
 
 #include "Callback.hpp"
+#include "CallbackCapture.hpp"
 #include "Dispatcher.hpp"
 #include "JSIConverter.hpp"
 #include "NitroDefines.hpp"
@@ -20,7 +21,6 @@ class Promise;
 #include <functional>
 #include <jsi/jsi.h>
 #include <memory>
-#include "CallbackCapture.hpp"
 
 namespace margelo::nitro {
 
@@ -56,7 +56,7 @@ public:
 
   std::shared_ptr<Promise<TReturn>> callAsync(TArgs... args) const override {
     std::shared_ptr<Promise<TReturn>> promise = Promise<TReturn>::create();
-    _dispatcher->runAsync([promise, callable = _callable, ...capturedArgs = captureArgument(std::forward<TArgs>(args))]() {
+    _dispatcher->runAsync([promise, callable = _callable, ... capturedArgs = captureArgument(std::forward<TArgs>(args))]() {
       try {
         // Call function synchronously now that we are on the right Thread
         if constexpr (std::is_void_v<TReturn>) {
@@ -75,7 +75,7 @@ public:
   }
 
   void callAsyncAndForget(TArgs... args) const override {
-    _dispatcher->runAsync([callable = _callable, ...capturedArgs = captureArgument(std::forward<TArgs>(args))]() {
+    _dispatcher->runAsync([callable = _callable, ... capturedArgs = captureArgument(std::forward<TArgs>(args))]() {
       // Call actual JS function
       callable->call(getArgument(std::move(capturedArgs))...);
     });

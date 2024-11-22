@@ -4,10 +4,10 @@
 
 #pragma once
 
+#include "IsSpecializationOf.hpp"
 #include <functional>
 #include <memory>
 #include <type_traits>
-#include "IsSpecializationOf.hpp"
 
 namespace margelo::nitro {
 
@@ -51,7 +51,6 @@ private:
   std::unique_ptr<T> _pointer;
 };
 
-
 template <typename T>
 constexpr bool is_polymorphic_v = std::is_polymorphic_v<std::decay_t<T>>;
 
@@ -80,7 +79,8 @@ auto getArgument(T&& arg) -> decltype(auto) {
   if constexpr (std::is_pointer_v<std::decay_t<T>>) {
     // Dereference raw pointers
     return *arg;
-  } else if constexpr (is_specialization_of_v<CapturedValue, std::decay_t<T>> || is_specialization_of_v<CapturedUniqueValue, std::decay_t<T>>) {
+  } else if constexpr (is_specialization_of_v<CapturedValue, std::decay_t<T>> ||
+                       is_specialization_of_v<CapturedUniqueValue, std::decay_t<T>>) {
     // Dereference CapturedValue
     return arg.unwrap();
   } else {
