@@ -32,8 +32,8 @@ using namespace facebook;
 template <typename TResult>
 class Promise final {
 public:
-  using OnResolvedFunc = Callback<void(const TResult&)>;
-  using OnRejectedFunc = Callback<void(const std::exception_ptr&)>;
+  using OnResolvedFunc = std::function<void(const TResult&)>;
+  using OnRejectedFunc = std::function<void(const std::exception_ptr&)>;
 
 public:
   // Promise cannot be deleted.
@@ -164,20 +164,25 @@ public:
       _onResolvedListeners.push_back(onResolved);
     }
   }
-  void addOnResolvedListenerCopy(const OnResolvedFunc& onResolved) {
+  void addOnResolvedListener(OnResolvedFunc&& onResolved) {
     std::unique_lock lock(*_mutex);
     if (std::holds_alternative<TResult>(_result)) {
       // Promise is already resolved! Call the callback immediately
       onResolved(std::get<TResult>(_result));
     } else {
       // Promise is not yet resolved, put the listener in our queue.
-      _onResolvedListeners.push_back(onResolved);
+      _onResolvedListeners.push_back(std::move(onResolved));
     }
   }
-  void addOnResolvedListener(std::function<void(TResult)>&& func) {
-    auto callable = CallableNativeFunction<void(const TResult&)>::create(std::move(func));
-    Callback<void(const TResult&)> onResolved(callable);
-    return addOnResolvedListener(onResolved);
+  void addOnResolvedListener(const std::function<void(TResult)>& onResolved) {
+    std::unique_lock lock(*_mutex);
+    if (std::holds_alternative<TResult>(_result)) {
+      // Promise is already resolved! Call the callback immediately
+      onResolved(std::get<TResult>(_result));
+    } else {
+      // Promise is not yet resolved, put the listener in our queue.
+      _onResolvedListeners.push_back([onResolved = std::move(onResolved)](const TResult& result) { onResolved(result); });
+    }
   }
 
   /**
@@ -194,10 +199,15 @@ public:
       _onRejectedListeners.push_back(onRejected);
     }
   }
-  void addOnRejectedListener(std::function<void(const std::exception_ptr&)>&& func) {
-    auto callable = CallableNativeFunction<void(const std::exception_ptr&)>::create(std::move(func));
-    Callback<void(const std::exception_ptr&)> onRejected(callable);
-    return addOnRejectedListener(onRejected);
+  void addOnRejectedListener(OnRejectedFunc&& onRejected) {
+    std::unique_lock lock(*_mutex);
+    if (std::holds_alternative<std::exception_ptr>(_result)) {
+      // Promise is already rejected! Call the callback immediately
+      onRejected(std::get<std::exception_ptr>(_result));
+    } else {
+      // Promise is not yet rejected, put the listener in our queue.
+      _onRejectedListeners.push_back(std::move(onRejected));
+    }
   }
 
 public:
@@ -206,12 +216,8 @@ public:
    */
   std::future<TResult> await() {
     auto promise = std::make_shared<std::promise<TResult>>();
-    Callback<void(const TResult&)> onResolved(
-        CallableNativeFunction<void(const TResult&)>::create([promise](const TResult& result) { promise->set_value(result); }));
-    Callback<void(const std::exception_ptr&)> onRejected(CallableNativeFunction<void(const std::exception_ptr& error)>::create(
-        [promise](const std::exception_ptr& error) { promise->set_exception(error); }));
-    addOnResolvedListener(std::move(onResolved));
-    addOnRejectedListener(std::move(onRejected));
+    addOnResolvedListener([promise](const TResult& result) { promise->set_value(result); });
+    addOnRejectedListener([promise](const std::exception_ptr& error) { promise->set_exception(error); });
     return promise->get_future();
   }
 
@@ -271,8 +277,8 @@ private:
 template <>
 class Promise<void> final {
 public:
-  using OnResolvedFunc = Callback<void()>;
-  using OnRejectedFunc = Callback<void(const std::exception_ptr&)>;
+  using OnResolvedFunc = std::function<void()>;
+  using OnRejectedFunc = std::function<void(const std::exception_ptr&)>;
 
 public:
   Promise(const Promise&) = delete;
@@ -353,14 +359,6 @@ public:
   }
 
 public:
-  void addOnResolvedListener(OnResolvedFunc&& onResolved) {
-    std::unique_lock lock(*_mutex);
-    if (_isResolved) {
-      onResolved();
-    } else {
-      _onResolvedListeners.push_back(std::move(onResolved));
-    }
-  }
   void addOnResolvedListener(const OnResolvedFunc& onResolved) {
     std::unique_lock lock(*_mutex);
     if (_isResolved) {
@@ -369,21 +367,15 @@ public:
       _onResolvedListeners.push_back(onResolved);
     }
   }
-  void addOnResolvedListener(std::function<void()>&& func) {
-    auto callable = CallableNativeFunction<void()>::create(std::move(func));
-    Callback<void()> onRejected(callable);
-    return addOnResolvedListener(onRejected);
-  }
-
-  void addOnRejectedListener(OnRejectedFunc&& onRejected) {
+  void addOnResolvedListener(OnResolvedFunc&& onResolved) {
     std::unique_lock lock(*_mutex);
-    if (_error) {
-      onRejected(_error);
+    if (_isResolved) {
+      onResolved();
     } else {
-      // Promise is not yet rejected, put the listener in our queue.
-      _onRejectedListeners.push_back(std::move(onRejected));
+      _onResolvedListeners.push_back(std::move(onResolved));
     }
   }
+
   void addOnRejectedListener(const OnRejectedFunc& onRejected) {
     std::unique_lock lock(*_mutex);
     if (_error) {
@@ -393,20 +385,21 @@ public:
       _onRejectedListeners.push_back(onRejected);
     }
   }
-  void addOnRejectedListener(std::function<void(const std::exception_ptr&)>&& func) {
-    auto callable = CallableNativeFunction<void(const std::exception_ptr&)>::create(std::move(func));
-    Callback<void(const std::exception_ptr&)> onRejected(callable);
-    return addOnRejectedListener(onRejected);
+  void addOnRejectedListener(OnRejectedFunc&& onRejected) {
+    std::unique_lock lock(*_mutex);
+    if (_error) {
+      onRejected(_error);
+    } else {
+      // Promise is not yet rejected, put the listener in our queue.
+      _onRejectedListeners.push_back(std::move(onRejected));
+    }
   }
 
 public:
   std::future<void> await() {
     auto promise = std::make_shared<std::promise<void>>();
-    Callback<void()> onResolved(CallableNativeFunction<void()>::create([promise]() { promise->set_value(); }));
-    Callback<void(const std::exception_ptr&)> onRejected(CallableNativeFunction<void(const std::exception_ptr&)>::create(
-        [promise](const std::exception_ptr& error) { promise->set_exception(error); }));
-    addOnResolvedListener(std::move(onResolved));
-    addOnRejectedListener(std::move(onRejected));
+    addOnResolvedListener([promise]() { promise->set_value(); });
+    addOnRejectedListener([promise](const std::exception_ptr& error) { promise->set_exception(error); });
     return promise->get_future();
   }
 

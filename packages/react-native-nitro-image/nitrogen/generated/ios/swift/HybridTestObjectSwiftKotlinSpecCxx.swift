@@ -686,8 +686,8 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
         
           return bridge.create_Callback_void_std__exception_ptr(__closureHolder, __callClosure, __destroyClosure)
         }()
-        promise.pointee.addOnResolvedListenerCopy(__resolverCpp)
-        promise.pointee.addOnRejectedListener(__rejecterCpp)
+        promise.pointee.addOnResolvedListener(__resolverCpp.toFunction())
+        promise.pointee.addOnRejectedListener(__rejecterCpp.toFunction())
         return __promise
       }())
       return { () -> bridge.std__shared_ptr_Promise_double__ in
@@ -758,8 +758,8 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
         
           return bridge.create_Callback_void_std__exception_ptr(__closureHolder, __callClosure, __destroyClosure)
         }()
-        promise.pointee.addOnResolvedListener(__resolverCpp)
-        promise.pointee.addOnRejectedListener(__rejecterCpp)
+        promise.pointee.addOnResolvedListener(__resolverCpp.toFunction())
+        promise.pointee.addOnRejectedListener(__rejecterCpp.toFunction())
         return __promise
       }())
       return { () -> bridge.std__shared_ptr_Promise_Car__ in
@@ -830,8 +830,8 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
         
           return bridge.create_Callback_void_std__exception_ptr(__closureHolder, __callClosure, __destroyClosure)
         }()
-        promise.pointee.addOnResolvedListener(__resolverCpp)
-        promise.pointee.addOnRejectedListener(__rejecterCpp)
+        promise.pointee.addOnResolvedListener(__resolverCpp.toFunction())
+        promise.pointee.addOnRejectedListener(__rejecterCpp.toFunction())
         return __promise
       }())
       return { () -> bridge.std__shared_ptr_Promise_void__ in

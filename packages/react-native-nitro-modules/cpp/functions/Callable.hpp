@@ -28,6 +28,7 @@ class Callable;
 template <typename R, typename... Args>
 class Callable<R(Args...)> {
 public:
+  explicit Callable() = default;
   virtual ~Callable() = default;
   Callable(const Callable&) = delete;
   Callable(Callable&&) = delete;

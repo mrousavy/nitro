@@ -89,6 +89,14 @@ public:
   [[nodiscard]] virtual std::string getName() const {
     return _callable->getName();
   }
+  
+public:
+  /**
+   * Converts this `Callback<R(Args...)>` to a `std::function<R(Args...)>`
+   */
+  std::function<R(Args...)> toFunction() const {
+    return *this;
+  }
 
 private:
   std::shared_ptr<Callable<R(Args...)>> _callable;
