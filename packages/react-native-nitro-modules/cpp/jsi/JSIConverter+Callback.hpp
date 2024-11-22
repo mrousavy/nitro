@@ -36,16 +36,17 @@ struct JSIConverter<Callback<ReturnType(Args...)>> final {
   static inline JSCallback<ReturnType(Args...)> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
     // Make function global - it'll be managed by the Runtime's memory, and we only have a weak_ref to it.
     auto cache = JSICache::getOrCreateCache(runtime);
-    jsi::Function function = arg.asObject(runtime).asFunction(runtime);
+    jsi::Object object = arg.asObject(runtime);
+    jsi::Function function = object.asFunction(runtime);
     OwningReference<jsi::Function> sharedFunction = cache.makeShared(std::move(function));
 
-    std::shared_ptr<Dispatcher> strongDispatcher = Dispatcher::getRuntimeGlobalDispatcher(runtime);
+    std::shared_ptr<Dispatcher> dispatcher = Dispatcher::getRuntimeGlobalDispatcher(runtime);
 
 #ifdef NITRO_DEBUG
-    std::string functionName = "dummy"; // function.getProperty(runtime, "name").getString(runtime).utf8(runtime);
-    return JSCallback<ReturnType(Args...)>(&runtime, std::move(sharedFunction), strongDispatcher, functionName);
+    std::string functionName = object.getProperty(runtime, "name").getString(runtime).utf8(runtime);
+    return JSCallback<ReturnType(Args...)>(&runtime, std::move(sharedFunction), dispatcher, functionName);
 #else
-    return JSCallback<ReturnType(Args...)>(&runtime, std::move(sharedFunction), strongDispatcher);
+    return JSCallback<ReturnType(Args...)>(&runtime, std::move(sharedFunction), dispatcher);
 #endif
   }
 
