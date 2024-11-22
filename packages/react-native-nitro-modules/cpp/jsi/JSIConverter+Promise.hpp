@@ -43,7 +43,7 @@ struct JSIConverter<std::shared_ptr<Promise<TResult>>> final {
         return JSIConverter<std::function<void(TResult)>>::toJSI(runtime, [=](const TResult& result) { promise->resolve(result); });
       }
     }();
-    auto catchCallback = JSIConverter<std::function<void(std::exception)>>::toJSI(
+    auto catchCallback = JSIConverter<std::function<void(const std::exception&)>>::toJSI(
         runtime, [=](const std::exception& exception) { promise->reject(exception); });
 
     // Chain .then listeners on JS Promise (onResolved and onRejected)
@@ -71,8 +71,8 @@ struct JSIConverter<std::shared_ptr<Promise<TResult>>> final {
           promise->addOnResolvedListener(std::move(resolver));
         }
         // Add rejecter listener
-        auto rejecter = JSIConverter<Callback<void(std::exception)>>::fromJSI(runtime, arguments[1]);
         promise->addOnRejectedListener(std::move(rejecter));
+        auto rejecter = JSIConverter<Callback<void(const std::exception&)>>::fromJSI(runtime, arguments[1]);
 
         return jsi::Value::undefined();
       };

@@ -133,7 +133,7 @@ public:
 #endif
     _result = exception;
     for (const auto& onRejected : _onRejectedListeners) {
-      onRejected(std::get<TError>(_result));
+      onRejected(exception);
     }
   }
 
@@ -341,7 +341,7 @@ public:
 #endif
     _error = exception;
     for (const auto& onRejected : _onRejectedListeners) {
-      onRejected(_error.value());
+      onRejected(exception);
     }
   }
 
