@@ -85,16 +85,16 @@ namespace margelo::nitro::image::bridge::swift {
       _callFunc(_closureHolder.get(), path);
     }
     bool isThreadSafe() const override { return true; }
-
+  
   private:
     std::shared_ptr<void> _closureHolder;
     void(* _Nonnull _callFunc)(void* _Nonnull /* closureHolder */, std::string);
   };
-  Callback_void_std__string create_Callback_void_std__string(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */, std::string), void(* _Nonnull destroy)(void* _Nonnull)) {
+  inline Callback_void_std__string create_Callback_void_std__string(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */, std::string), void(* _Nonnull destroy)(void* _Nonnull)) {
     auto callable = std::make_shared<SwiftCallback_void_std__string>(closureHolder, call, destroy);
     return Callback<void(const std::string&)>(callable);
   }
-
+  
   // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridImageSpec>
   /**
    * Specialized version of `std::shared_ptr<margelo::nitro::image::HybridImageSpec>`.
@@ -102,7 +102,7 @@ namespace margelo::nitro::image::bridge::swift {
   using std__shared_ptr_margelo__nitro__image__HybridImageSpec_ = std::shared_ptr<margelo::nitro::image::HybridImageSpec>;
   std::shared_ptr<margelo::nitro::image::HybridImageSpec> create_std__shared_ptr_margelo__nitro__image__HybridImageSpec_(void* _Nonnull swiftUnsafePointer);
   void* _Nonnull get_std__shared_ptr_margelo__nitro__image__HybridImageSpec_(std__shared_ptr_margelo__nitro__image__HybridImageSpec_ cppType);
-
+  
   // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridImageFactorySpec>
   /**
    * Specialized version of `std::shared_ptr<margelo::nitro::image::HybridImageFactorySpec>`.
@@ -110,7 +110,7 @@ namespace margelo::nitro::image::bridge::swift {
   using std__shared_ptr_margelo__nitro__image__HybridImageFactorySpec_ = std::shared_ptr<margelo::nitro::image::HybridImageFactorySpec>;
   std::shared_ptr<margelo::nitro::image::HybridImageFactorySpec> create_std__shared_ptr_margelo__nitro__image__HybridImageFactorySpec_(void* _Nonnull swiftUnsafePointer);
   void* _Nonnull get_std__shared_ptr_margelo__nitro__image__HybridImageFactorySpec_(std__shared_ptr_margelo__nitro__image__HybridImageFactorySpec_ cppType);
-
+  
   // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>
   /**
    * Specialized version of `std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>`.
@@ -118,7 +118,7 @@ namespace margelo::nitro::image::bridge::swift {
   using std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_ = std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>;
   std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec> create_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_(void* _Nonnull swiftUnsafePointer);
   void* _Nonnull get_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_(std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_ cppType);
-
+  
   // pragma MARK: std::optional<std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>>
   /**
    * Specialized version of `std::optional<std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>>`.
@@ -127,7 +127,7 @@ namespace margelo::nitro::image::bridge::swift {
   inline std::optional<std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>> create_std__optional_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec__(const std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>& value) {
     return std::optional<std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>>(value);
   }
-
+  
   // pragma MARK: std::optional<std::string>
   /**
    * Specialized version of `std::optional<std::string>`.
@@ -136,7 +136,7 @@ namespace margelo::nitro::image::bridge::swift {
   inline std::optional<std::string> create_std__optional_std__string_(const std::string& value) {
     return std::optional<std::string>(value);
   }
-
+  
   // pragma MARK: std::vector<std::string>
   /**
    * Specialized version of `std::vector<std::string>`.
@@ -147,7 +147,7 @@ namespace margelo::nitro::image::bridge::swift {
     vector.reserve(size);
     return vector;
   }
-
+  
   // pragma MARK: std::optional<std::vector<std::string>>
   /**
    * Specialized version of `std::optional<std::vector<std::string>>`.
@@ -156,7 +156,7 @@ namespace margelo::nitro::image::bridge::swift {
   inline std::optional<std::vector<std::string>> create_std__optional_std__vector_std__string__(const std::vector<std::string>& value) {
     return std::optional<std::vector<std::string>>(value);
   }
-
+  
   // pragma MARK: std::optional<Powertrain>
   /**
    * Specialized version of `std::optional<Powertrain>`.
@@ -165,7 +165,7 @@ namespace margelo::nitro::image::bridge::swift {
   inline std::optional<Powertrain> create_std__optional_Powertrain_(const Powertrain& value) {
     return std::optional<Powertrain>(value);
   }
-
+  
   // pragma MARK: std::optional<OldEnum>
   /**
    * Specialized version of `std::optional<OldEnum>`.
@@ -174,7 +174,7 @@ namespace margelo::nitro::image::bridge::swift {
   inline std::optional<OldEnum> create_std__optional_OldEnum_(const OldEnum& value) {
     return std::optional<OldEnum>(value);
   }
-
+  
   // pragma MARK: std::vector<double>
   /**
    * Specialized version of `std::vector<double>`.
@@ -185,7 +185,7 @@ namespace margelo::nitro::image::bridge::swift {
     vector.reserve(size);
     return vector;
   }
-
+  
   // pragma MARK: std::vector<Person>
   /**
    * Specialized version of `std::vector<Person>`.
@@ -196,7 +196,7 @@ namespace margelo::nitro::image::bridge::swift {
     vector.reserve(size);
     return vector;
   }
-
+  
   // pragma MARK: std::vector<Powertrain>
   /**
    * Specialized version of `std::vector<Powertrain>`.
@@ -207,7 +207,7 @@ namespace margelo::nitro::image::bridge::swift {
     vector.reserve(size);
     return vector;
   }
-
+  
   // pragma MARK: Callback<void(const std::vector<Powertrain>&)>
   /**
    * Specialized version of `Callback<void(const std::vector<Powertrain>&)>`.
@@ -223,16 +223,16 @@ namespace margelo::nitro::image::bridge::swift {
       _callFunc(_closureHolder.get(), array);
     }
     bool isThreadSafe() const override { return true; }
-
+  
   private:
     std::shared_ptr<void> _closureHolder;
     void(* _Nonnull _callFunc)(void* _Nonnull /* closureHolder */, std::vector<Powertrain>);
   };
-  Callback_void_std__vector_Powertrain_ create_Callback_void_std__vector_Powertrain_(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */, std::vector<Powertrain>), void(* _Nonnull destroy)(void* _Nonnull)) {
+  inline Callback_void_std__vector_Powertrain_ create_Callback_void_std__vector_Powertrain_(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */, std::vector<Powertrain>), void(* _Nonnull destroy)(void* _Nonnull)) {
     auto callable = std::make_shared<SwiftCallback_void_std__vector_Powertrain_>(closureHolder, call, destroy);
     return Callback<void(const std::vector<Powertrain>&)>(callable);
   }
-
+  
   // pragma MARK: std::optional<bool>
   /**
    * Specialized version of `std::optional<bool>`.
@@ -241,7 +241,7 @@ namespace margelo::nitro::image::bridge::swift {
   inline std::optional<bool> create_std__optional_bool_(const bool& value) {
     return std::optional<bool>(value);
   }
-
+  
   // pragma MARK: std::variant<std::string, double>
   /**
    * Wrapper struct for `std::variant<std::string, double>`.
@@ -270,7 +270,7 @@ namespace margelo::nitro::image::bridge::swift {
   inline double get_std__variant_std__string__double__1(const std__variant_std__string__double_& variantWrapper) {
     return std::get<1>(variantWrapper.variant);
   }
-
+  
   // pragma MARK: std::shared_ptr<Promise<int64_t>>
   /**
    * Specialized version of `std::shared_ptr<Promise<int64_t>>`.
@@ -279,7 +279,7 @@ namespace margelo::nitro::image::bridge::swift {
   inline std::shared_ptr<Promise<int64_t>> create_std__shared_ptr_Promise_int64_t__() {
     return Promise<int64_t>::create();
   }
-
+  
   // pragma MARK: Callback<void(int64_t)>
   /**
    * Specialized version of `Callback<void(int64_t)>`.
@@ -295,7 +295,7 @@ namespace margelo::nitro::image::bridge::swift {
       _callFunc(_closureHolder.get(), result);
     }
     bool isThreadSafe() const override { return true; }
-
+  
   private:
     std::shared_ptr<void> _closureHolder;
     void(* _Nonnull _callFunc)(void* _Nonnull /* closureHolder */, int64_t);
@@ -304,7 +304,7 @@ namespace margelo::nitro::image::bridge::swift {
     auto callable = std::make_shared<SwiftCallback_void_int64_t>(closureHolder, call, destroy);
     return Callback<void(int64_t)>(callable);
   }
-
+  
   // pragma MARK: Callback<void(const std::exception_ptr&)>
   /**
    * Specialized version of `Callback<void(const std::exception_ptr&)>`.
@@ -320,16 +320,16 @@ namespace margelo::nitro::image::bridge::swift {
       _callFunc(_closureHolder.get(), error);
     }
     bool isThreadSafe() const override { return true; }
-
+  
   private:
     std::shared_ptr<void> _closureHolder;
     void(* _Nonnull _callFunc)(void* _Nonnull /* closureHolder */, std::exception_ptr);
   };
-  Callback_void_std__exception_ptr create_Callback_void_std__exception_ptr(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */, std::exception_ptr), void(* _Nonnull destroy)(void* _Nonnull)) {
+  inline Callback_void_std__exception_ptr create_Callback_void_std__exception_ptr(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */, std::exception_ptr), void(* _Nonnull destroy)(void* _Nonnull)) {
     auto callable = std::make_shared<SwiftCallback_void_std__exception_ptr>(closureHolder, call, destroy);
     return Callback<void(const std::exception_ptr&)>(callable);
   }
-
+  
   // pragma MARK: std::shared_ptr<Promise<void>>
   /**
    * Specialized version of `std::shared_ptr<Promise<void>>`.
@@ -338,7 +338,7 @@ namespace margelo::nitro::image::bridge::swift {
   inline std::shared_ptr<Promise<void>> create_std__shared_ptr_Promise_void__() {
     return Promise<void>::create();
   }
-
+  
   // pragma MARK: Callback<void()>
   /**
    * Specialized version of `Callback<void()>`.
@@ -354,16 +354,16 @@ namespace margelo::nitro::image::bridge::swift {
       _callFunc(_closureHolder.get());
     }
     bool isThreadSafe() const override { return true; }
-
+  
   private:
     std::shared_ptr<void> _closureHolder;
     void(* _Nonnull _callFunc)(void* _Nonnull /* closureHolder */);
   };
-  Callback_void create_Callback_void(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */), void(* _Nonnull destroy)(void* _Nonnull)) {
+  inline Callback_void create_Callback_void(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */), void(* _Nonnull destroy)(void* _Nonnull)) {
     auto callable = std::make_shared<SwiftCallback_void>(closureHolder, call, destroy);
     return Callback<void()>(callable);
   }
-
+  
   // pragma MARK: std::shared_ptr<Promise<double>>
   /**
    * Specialized version of `std::shared_ptr<Promise<double>>`.
@@ -372,32 +372,32 @@ namespace margelo::nitro::image::bridge::swift {
   inline std::shared_ptr<Promise<double>> create_std__shared_ptr_Promise_double__() {
     return Promise<double>::create();
   }
-
+  
   // pragma MARK: Callback<void(double)>
   /**
    * Specialized version of `Callback<void(double)>`.
    */
-  using Callback_void_double = Callback<void(const double&)>;
-  class SwiftCallback_void_double: public Callable<void(const double& result)> {
+  using Callback_void_double = Callback<void(double)>;
+  class SwiftCallback_void_double: public Callable<void(double result)> {
   public:
     SwiftCallback_void_double(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */, double), void(* _Nonnull destroy)(void* _Nonnull)) {
       _callFunc = call;
       _closureHolder = std::shared_ptr<void>(closureHolder, destroy);
     }
-    void callSync(const double& result) const override {
+    void callSync(double result) const override {
       _callFunc(_closureHolder.get(), result);
     }
     bool isThreadSafe() const override { return true; }
-
+  
   private:
     std::shared_ptr<void> _closureHolder;
     void(* _Nonnull _callFunc)(void* _Nonnull /* closureHolder */, double);
   };
-  Callback_void_double create_Callback_void_double(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */, double), void(* _Nonnull destroy)(void* _Nonnull)) {
+  inline Callback_void_double create_Callback_void_double(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */, double), void(* _Nonnull destroy)(void* _Nonnull)) {
     auto callable = std::make_shared<SwiftCallback_void_double>(closureHolder, call, destroy);
-    return Callback<void(const double&)>(callable);
+    return Callback<void(double)>(callable);
   }
-
+  
   // pragma MARK: std::optional<Person>
   /**
    * Specialized version of `std::optional<Person>`.
@@ -406,7 +406,7 @@ namespace margelo::nitro::image::bridge::swift {
   inline std::optional<Person> create_std__optional_Person_(const Person& value) {
     return std::optional<Person>(value);
   }
-
+  
   // pragma MARK: std::shared_ptr<Promise<Car>>
   /**
    * Specialized version of `std::shared_ptr<Promise<Car>>`.
@@ -415,7 +415,7 @@ namespace margelo::nitro::image::bridge::swift {
   inline std::shared_ptr<Promise<Car>> create_std__shared_ptr_Promise_Car__() {
     return Promise<Car>::create();
   }
-
+  
   // pragma MARK: Callback<void(const Car&)>
   /**
    * Specialized version of `Callback<void(const Car&)>`.
@@ -431,16 +431,16 @@ namespace margelo::nitro::image::bridge::swift {
       _callFunc(_closureHolder.get(), result);
     }
     bool isThreadSafe() const override { return true; }
-
+  
   private:
     std::shared_ptr<void> _closureHolder;
     void(* _Nonnull _callFunc)(void* _Nonnull /* closureHolder */, Car);
   };
-  Callback_void_Car create_Callback_void_Car(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */, Car), void(* _Nonnull destroy)(void* _Nonnull)) {
+  inline Callback_void_Car create_Callback_void_Car(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */, Car), void(* _Nonnull destroy)(void* _Nonnull)) {
     auto callable = std::make_shared<SwiftCallback_void_Car>(closureHolder, call, destroy);
     return Callback<void(const Car&)>(callable);
   }
-
+  
   // pragma MARK: std::optional<double>
   /**
    * Specialized version of `std::optional<double>`.
@@ -449,7 +449,7 @@ namespace margelo::nitro::image::bridge::swift {
   inline std::optional<double> create_std__optional_double_(const double& value) {
     return std::optional<double>(value);
   }
-
+  
   // pragma MARK: Callback<void(std::optional<double>)>
   /**
    * Specialized version of `Callback<void(std::optional<double>)>`.
@@ -465,16 +465,16 @@ namespace margelo::nitro::image::bridge::swift {
       _callFunc(_closureHolder.get(), maybe);
     }
     bool isThreadSafe() const override { return true; }
-
+  
   private:
     std::shared_ptr<void> _closureHolder;
     void(* _Nonnull _callFunc)(void* _Nonnull /* closureHolder */, std::optional<double>);
   };
-  Callback_void_std__optional_double_ create_Callback_void_std__optional_double_(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */, std::optional<double>), void(* _Nonnull destroy)(void* _Nonnull)) {
+  inline Callback_void_std__optional_double_ create_Callback_void_std__optional_double_(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */, std::optional<double>), void(* _Nonnull destroy)(void* _Nonnull)) {
     auto callable = std::make_shared<SwiftCallback_void_std__optional_double_>(closureHolder, call, destroy);
     return Callback<void(std::optional<double>)>(callable);
   }
-
+  
   // pragma MARK: std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>
   /**
    * Specialized version of `std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>`.
@@ -483,7 +483,7 @@ namespace margelo::nitro::image::bridge::swift {
   inline std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>> create_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___() {
     return Promise<std::shared_ptr<ArrayBuffer>>::create();
   }
-
+  
   // pragma MARK: Callback<void(const std::shared_ptr<ArrayBuffer>&)>
   /**
    * Specialized version of `Callback<void(const std::shared_ptr<ArrayBuffer>&)>`.
@@ -499,16 +499,16 @@ namespace margelo::nitro::image::bridge::swift {
       _callFunc(_closureHolder.get(), ArrayBufferHolder(result));
     }
     bool isThreadSafe() const override { return true; }
-
+  
   private:
     std::shared_ptr<void> _closureHolder;
     void(* _Nonnull _callFunc)(void* _Nonnull /* closureHolder */, ArrayBufferHolder);
   };
-  Callback_void_std__shared_ptr_ArrayBuffer_ create_Callback_void_std__shared_ptr_ArrayBuffer_(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */, ArrayBufferHolder), void(* _Nonnull destroy)(void* _Nonnull)) {
+  inline Callback_void_std__shared_ptr_ArrayBuffer_ create_Callback_void_std__shared_ptr_ArrayBuffer_(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */, ArrayBufferHolder), void(* _Nonnull destroy)(void* _Nonnull)) {
     auto callable = std::make_shared<SwiftCallback_void_std__shared_ptr_ArrayBuffer_>(closureHolder, call, destroy);
     return Callback<void(const std::shared_ptr<ArrayBuffer>&)>(callable);
   }
-
+  
   // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridChildSpec>
   /**
    * Specialized version of `std::shared_ptr<margelo::nitro::image::HybridChildSpec>`.
@@ -516,7 +516,7 @@ namespace margelo::nitro::image::bridge::swift {
   using std__shared_ptr_margelo__nitro__image__HybridChildSpec_ = std::shared_ptr<margelo::nitro::image::HybridChildSpec>;
   std::shared_ptr<margelo::nitro::image::HybridChildSpec> create_std__shared_ptr_margelo__nitro__image__HybridChildSpec_(void* _Nonnull swiftUnsafePointer);
   void* _Nonnull get_std__shared_ptr_margelo__nitro__image__HybridChildSpec_(std__shared_ptr_margelo__nitro__image__HybridChildSpec_ cppType);
-
+  
   // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridBaseSpec>
   /**
    * Specialized version of `std::shared_ptr<margelo::nitro::image::HybridBaseSpec>`.
