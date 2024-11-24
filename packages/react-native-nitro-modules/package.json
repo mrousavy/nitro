@@ -28,6 +28,8 @@
     "ios",
     "android",
     "visionOS",
+    "tvOS",
+    "macOS",
     "cpp",
     "framework",
     "react",
