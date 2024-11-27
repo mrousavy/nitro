@@ -207,7 +207,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  scrollContent: {},
+  scrollContent: {
+    paddingBottom: 65,
+  },
   topControls: {
     marginHorizontal: 15,
     marginBottom: 10,
