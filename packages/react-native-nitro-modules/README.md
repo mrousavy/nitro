@@ -182,6 +182,12 @@ The following C++ / JS types are supported out of the box:
     <td>❌</td>
   </tr>
   <tr>
+    <td><code>Error</code></td>
+    <td><code>std::exception_ptr</code></td>
+    <td><code>Error</code></td>
+    <td><code>Throwable</code></td>
+  </tr>
+  <tr>
     <td><code>Promise&lt;T&gt;</code></td>
     <td><code>std::shared_ptr&lt;<a href="./cpp/core/Promise.hpp">Promise&lt;T&gt;</a>&gt;</code></td>
     <td><code><a href="./ios/core/Promise.swift">Promise&lt;T&gt;</a></code></td>

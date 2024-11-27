@@ -120,6 +120,12 @@ These are all the types Nitro supports out of the box:
     <td><code>Map&lt;String, T&gt;</code></td>
   </tr>
   <tr>
+    <td><code>Error</code></td>
+    <td><code>std::exception_ptr</code></td>
+    <td><code>Error</code></td>
+    <td><code>Throwable</code></td>
+  </tr>
+  <tr>
     <td><code>Promise&lt;T&gt;</code></td>
     <td><code>std::shared_ptr&lt;<a href="https://github.com/mrousavy/nitro/blob/main/packages/react-native-nitro-modules/cpp/core/Promise.hpp">Promise&lt;T&gt;</a>&gt;</code></td>
     <td><code><a href="https://github.com/mrousavy/nitro/blob/main/packages/react-native-nitro-modules/ios/core/Promise.swift">Promise&lt;T&gt;</a></code></td>
