@@ -37,8 +37,8 @@ struct JSIConverter<std::shared_ptr<Promise<TResult>>> final {
         return JSIConverter<std::function<void(TResult)>>::toJSI(runtime, [=](const TResult& result) { promise->resolve(result); });
       }
     }();
-    auto catchCallback = JSIConverter<std::function<void(std::exception)>>::toJSI(
-        runtime, [=](const std::exception& exception) { promise->reject(exception); });
+    auto catchCallback = JSIConverter<std::function<void(std::exception_ptr)>>::toJSI(
+        runtime, [=](const std::exception_ptr& exception) { promise->reject(exception); });
 
     // Chain .then listeners on JS Promise (onResolved and onRejected)
     jsi::Object jsPromise = value.asObject(runtime);
@@ -65,7 +65,7 @@ struct JSIConverter<std::shared_ptr<Promise<TResult>>> final {
           promise->addOnResolvedListener(std::move(resolver));
         }
         // Add rejecter listener
-        auto rejecter = JSIConverter<std::function<void(std::exception)>>::fromJSI(runtime, arguments[1]);
+        auto rejecter = JSIConverter<std::function<void(std::exception_ptr)>>::fromJSI(runtime, arguments[1]);
         promise->addOnRejectedListener(std::move(rejecter));
 
         return jsi::Value::undefined();
@@ -89,7 +89,7 @@ struct JSIConverter<std::shared_ptr<Promise<TResult>>> final {
       // Promise is already rejected - just return immediately
       jsi::Object promiseObject = runtime.global().getPropertyAsObject(runtime, "Promise");
       jsi::Function createRejectedPromise = promiseObject.getPropertyAsFunction(runtime, "reject");
-      jsi::Value error = JSIConverter<std::exception>::toJSI(runtime, promise->getError());
+      jsi::Value error = JSIConverter<std::exception_ptr>::toJSI(runtime, promise->getError());
       return createRejectedPromise.call(runtime, std::move(error));
     } else {
       throw std::runtime_error("Promise has invalid state!");
