@@ -177,7 +177,7 @@ export function HybridObjectTestsScreen() {
         <Text style={styles.buildTypeText}>{NitroModules.buildType}</Text>
       </View>
 
-      <ScrollView contentContainerStyle={styles.scrollContent}>
+      <ScrollView>
         {tests.map((t, i) => (
           <TestCase
             key={`test-${i}`}
@@ -207,7 +207,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  scrollContent: {},
   topControls: {
     marginHorizontal: 15,
     marginBottom: 10,
@@ -255,10 +254,6 @@ const styles = StyleSheet.create({
   },
   flex: { flex: 1 },
   bottomView: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    bottom: 0,
     borderTopRightRadius: 15,
     borderTopLeftRadius: 15,
     elevation: 15,
