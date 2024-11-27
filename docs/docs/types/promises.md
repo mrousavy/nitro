@@ -27,7 +27,7 @@ This allows your native code to perform heavy-, long-running tasks in parallel, 
 
     ```cpp
     Promise<double> fibonacci(double n) {
-      return Promise::async([=]() -> double {
+      return Promise<double>::async([=]() -> double {
         // This runs on a separate Thread!
         return calculateFibonacciSequence(n);
       });

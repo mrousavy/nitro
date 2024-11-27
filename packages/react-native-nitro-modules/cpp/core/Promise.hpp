@@ -26,7 +26,7 @@ public:
   using OnRejectedFunc = std::function<void(const std::exception_ptr&)>;
 
 public:
-  // Promise cannot be deleted.
+  // Promise cannot be copied.
   Promise(const Promise&) = delete;
   // Promise can be moved.
   Promise(Promise&&) = default;
