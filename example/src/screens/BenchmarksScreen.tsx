@@ -296,10 +296,6 @@ const styles = StyleSheet.create({
   },
   flex: { flex: 1 },
   bottomView: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    bottom: 0,
     borderTopRightRadius: 15,
     borderTopLeftRadius: 15,
     elevation: 15,
