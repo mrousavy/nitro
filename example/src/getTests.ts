@@ -428,6 +428,14 @@ export function getTests(
         `Error: ${testObject.name}.funcThatThrows(...): This function will only work after sacrificing seven lambs!`
       )
     ),
+    createTest('funcThatThrows()', () =>
+      it(() => {
+        const error = new Error('rethrowing a JS error from native!')
+        testObject.throwError(error)
+      }).didThrow(
+        `Error: ${testObject.name}.funcThatThrows(...): rethrowing a JS error from native!`
+      )
+    ),
 
     // Optional parameters
     createTest('tryOptionalParams(...) omitted', () =>
