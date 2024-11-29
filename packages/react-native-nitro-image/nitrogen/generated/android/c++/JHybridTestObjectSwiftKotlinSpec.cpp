@@ -342,8 +342,8 @@ namespace margelo::nitro::image {
     return __result;
   }
   void JHybridTestObjectSwiftKotlinSpec::throwError(const std::exception_ptr& error) {
-    static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<std::exception_ptr> /* error */)>("throwError");
-    method(_javaPart, error);
+    static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<jni::JThrowable> /* error */)>("throwError");
+    method(_javaPart, jni::getJavaExceptionForCppException(error));
   }
   std::string JHybridTestObjectSwiftKotlinSpec::tryOptionalParams(double num, bool boo, const std::optional<std::string>& str) {
     static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<jni::JString>(double /* num */, jboolean /* boo */, jni::alias_ref<jni::JString> /* str */)>("tryOptionalParams");
