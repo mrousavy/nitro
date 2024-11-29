@@ -433,7 +433,7 @@ export function getTests(
         const error = new Error('rethrowing a JS error from native!')
         testObject.throwError(error)
       }).didThrow(
-        `Error: ${testObject.name}.throwError(...): rethrowing a JS error from native!`
+        `Error: ${testObject.name}.throwError(...): Error: rethrowing a JS error from native!`
       )
     ),
 
