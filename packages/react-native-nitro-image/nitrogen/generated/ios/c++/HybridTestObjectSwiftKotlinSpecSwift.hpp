@@ -229,7 +229,7 @@ namespace margelo::nitro::image {
       return __result;
     }
     inline void throwError(const std::exception_ptr& error) override {
-      _swiftPart.throwError(std::forward<decltype(error)>(error));
+      _swiftPart.throwError(error);
     }
     inline std::string tryOptionalParams(double num, bool boo, const std::optional<std::string>& str) override {
       auto __result = _swiftPart.tryOptionalParams(std::forward<decltype(num)>(num), std::forward<decltype(boo)>(boo), str);
