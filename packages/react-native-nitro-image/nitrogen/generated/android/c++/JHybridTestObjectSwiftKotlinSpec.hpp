@@ -88,6 +88,7 @@ namespace margelo::nitro::image {
     std::shared_ptr<AnyMap> createMap() override;
     std::shared_ptr<AnyMap> mapRoundtrip(const std::shared_ptr<AnyMap>& map) override;
     double funcThatThrows() override;
+    void throwError(const std::exception_ptr& error) override;
     std::string tryOptionalParams(double num, bool boo, const std::optional<std::string>& str) override;
     std::string tryMiddleParam(double num, std::optional<bool> boo, const std::string& str) override;
     std::optional<Powertrain> tryOptionalEnum(std::optional<Powertrain> value) override;

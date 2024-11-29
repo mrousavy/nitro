@@ -190,6 +190,10 @@ double HybridTestObjectCpp::funcThatThrows() {
   throw std::runtime_error("This function will only work after sacrificing seven lambs!");
 }
 
+void HybridTestObjectCpp::throwError(const std::exception_ptr& error) {
+  std::rethrow_exception(error);
+}
+
 std::string HybridTestObjectCpp::tryOptionalParams(double num, bool boo, const std::optional<std::string>& str) {
   if (str.has_value()) {
     return str.value();

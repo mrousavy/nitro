@@ -526,6 +526,17 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
   }
   
   @inline(__always)
+  public func throwError(error: std.exception_ptr) -> Void {
+    do {
+      try self.__implementation.throwError(error: error)
+      return 
+    } catch {
+      let __message = "\(error.localizedDescription)"
+      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(__message))")
+    }
+  }
+  
+  @inline(__always)
   public func tryOptionalParams(num: Double, boo: Bool, str: bridge.std__optional_std__string_) -> std.string {
     do {
       let __result = try self.__implementation.tryOptionalParams(num: num, boo: boo, str: { () -> String? in
