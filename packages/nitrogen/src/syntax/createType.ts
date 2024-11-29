@@ -26,6 +26,7 @@ import {
   type Language,
 } from '../getPlatformSpecs.js'
 import { HybridObjectBaseType } from './types/HybridObjectBaseType.js'
+import { ErrorType } from './types/ErrorType.js'
 
 function isSymbol(type: TSMorphType, symbolName: string): boolean {
   const symbol = type.getSymbol()
@@ -53,6 +54,10 @@ function isArrayBuffer(type: TSMorphType): boolean {
 
 function isMap(type: TSMorphType): boolean {
   return isSymbol(type, 'AnyMap')
+}
+
+function isError(type: TSMorphType): boolean {
+  return isSymbol(type, 'Error')
 }
 
 function getFunctionCallSignature(func: TSMorphType): Signature {
@@ -233,6 +238,9 @@ export function createType(
     } else if (isMap(type)) {
       // Map
       return new MapType()
+    } else if (isError(type)) {
+      // Error
+      return new ErrorType()
     } else if (type.isEnum()) {
       // It is an enum. We need to generate a C++ declaration for the enum
       const typename = type.getSymbolOrThrow().getEscapedName()
