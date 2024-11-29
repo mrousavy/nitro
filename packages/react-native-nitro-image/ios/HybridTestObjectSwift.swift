@@ -120,6 +120,11 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
     return 55
   }
 
+  func throwError(error: Error) throws -> Void {
+    // TODO: Swift functions can not throw yet! Errors are not propagated up to C++.
+    // throw error
+  }
+
   func tryOptionalParams(num: Double, boo: Bool, str: String?) throws -> String {
     if let str {
       return str
@@ -169,7 +174,7 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
       throw RuntimeError.error(withMessage: "Promise throws :)")
     }
   }
-  
+
   func awaitAndGetPromise(promise: Promise<Double>) throws -> Promise<Double> {
     return .async {
       let result = try await promise.await()

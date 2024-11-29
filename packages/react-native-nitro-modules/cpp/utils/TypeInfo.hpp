@@ -35,11 +35,16 @@ public:
     std::string name = typeName;
 #if __has_include(<cxxabi.h>)
     int status = 0;
-    char* demangled_name = abi::__cxa_demangle(name.c_str(), NULL, NULL, &status);
+    char* demangled_name = abi::__cxa_demangle(name.c_str(), nullptr, nullptr, &status);
     if (demangled_name != nullptr) {
       name = demangled_name;
       std::free(demangled_name);
     }
+#endif
+
+#ifdef ANDROID
+    // std::__ndk1 -> std::__1
+    name = replaceRegex(name, R"(std::__ndk1)", "std::__1");
 #endif
 
     // Make a few edge-cases nicer.

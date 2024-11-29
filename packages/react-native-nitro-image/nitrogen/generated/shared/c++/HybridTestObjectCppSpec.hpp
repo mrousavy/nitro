@@ -46,6 +46,7 @@ namespace margelo::nitro::image { class HybridBaseSpec; }
 #include <NitroModules/Promise.hpp>
 #include <functional>
 #include <NitroModules/AnyMap.hpp>
+#include <exception>
 #include <NitroModules/ArrayBuffer.hpp>
 #include "HybridChildSpec.hpp"
 #include "HybridBaseSpec.hpp"
@@ -129,6 +130,7 @@ namespace margelo::nitro::image {
       virtual std::shared_ptr<AnyMap> createMap() = 0;
       virtual std::shared_ptr<AnyMap> mapRoundtrip(const std::shared_ptr<AnyMap>& map) = 0;
       virtual double funcThatThrows() = 0;
+      virtual void throwError(const std::exception_ptr& error) = 0;
       virtual std::string tryOptionalParams(double num, bool boo, const std::optional<std::string>& str) = 0;
       virtual std::string tryMiddleParam(double num, std::optional<bool> boo, const std::string& str) = 0;
       virtual std::optional<Powertrain> tryOptionalEnum(std::optional<Powertrain> value) = 0;

@@ -18,7 +18,7 @@ export class ErrorType implements Type {
       case 'c++':
         return `std::exception_ptr`
       case 'swift':
-        return `std.exception_ptr`
+        return `Error`
       case 'kotlin':
         return `Throwable`
       default:

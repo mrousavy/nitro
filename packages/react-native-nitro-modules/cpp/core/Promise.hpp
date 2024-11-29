@@ -117,14 +117,7 @@ public:
    * Rejects this Promise with the given error, and calls any pending listeners.
    */
   void reject(const std::exception& exception) {
-    std::unique_lock lock(*_mutex);
-#ifdef NITRO_DEBUG
-    assertPromiseState(*this, PromiseTask::WANTS_TO_REJECT);
-#endif
-    _state = std::make_exception_ptr(exception);
-    for (const auto& onRejected : _onRejectedListeners) {
-      onRejected(std::get<std::exception_ptr>(_state));
-    }
+    reject(std::make_exception_ptr(exception));
   }
   void reject(const std::exception_ptr& exception) {
     std::unique_lock lock(*_mutex);
@@ -325,14 +318,7 @@ public:
     }
   }
   void reject(const std::exception& exception) {
-    std::unique_lock lock(*_mutex);
-#ifdef NITRO_DEBUG
-    assertPromiseState(*this, PromiseTask::WANTS_TO_REJECT);
-#endif
-    _error = std::make_exception_ptr(exception);
-    for (const auto& onRejected : _onRejectedListeners) {
-      onRejected(_error.value());
-    }
+    reject(std::make_exception_ptr(exception));
   }
   void reject(const std::exception_ptr& exception) {
     std::unique_lock lock(*_mutex);

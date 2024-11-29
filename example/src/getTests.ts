@@ -415,7 +415,7 @@ export function getTests(
           null: null,
         })
     ),
-    createTest('mapRoundtrip(...)', () => {
+    createTest('mapRoundtrip(...) works', () => {
       const map = testObject.createMap()
       return it(() => testObject.mapRoundtrip(map))
         .didNotThrow()
@@ -423,9 +423,17 @@ export function getTests(
     }),
 
     // Test errors
-    createTest('funcThatThrows()', () =>
+    createTest('funcThatThrows() throws', () =>
       it(() => testObject.funcThatThrows()).didThrow(
         `Error: ${testObject.name}.funcThatThrows(...): This function will only work after sacrificing seven lambs!`
+      )
+    ),
+    createTest('throwError(error) throws same message from JS', () =>
+      it(() => {
+        const error = new Error('rethrowing a JS error from native!')
+        testObject.throwError(error)
+      }).didThrow(
+        `Error: ${testObject.name}.throwError(...): Error: rethrowing a JS error from native!`
       )
     ),
 

@@ -332,6 +332,13 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
             return this.type.getCode(language)
         }
       }
+      case 'error':
+        switch (language) {
+          case 'c++':
+            return 'jni::JThrowable'
+          default:
+            return this.type.getCode(language)
+        }
       default:
         return this.type.getCode(language)
     }
@@ -563,6 +570,13 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
             return parameterName
         }
       }
+      case 'error':
+        switch (language) {
+          case 'c++':
+            return `jni::getJavaExceptionForCppException(${parameterName})`
+          default:
+            return parameterName
+        }
       default:
         // no need to parse anything, just return as is
         return parameterName
@@ -767,6 +781,13 @@ __promise->resolve();
             return parameterName
         }
       }
+      case 'error':
+        switch (language) {
+          case 'c++':
+            return `jni::JniException(${parameterName})`
+          default:
+            return parameterName
+        }
       default:
         // no need to parse anything, just return as is
         return parameterName

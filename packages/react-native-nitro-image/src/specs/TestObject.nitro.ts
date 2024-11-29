@@ -74,6 +74,7 @@ interface SharedTestObjectProps {
 
   // Errors
   funcThatThrows(): number
+  throwError(error: Error): void
 
   // Optional parameters
   tryOptionalParams(num: number, boo: boolean, str?: string): string

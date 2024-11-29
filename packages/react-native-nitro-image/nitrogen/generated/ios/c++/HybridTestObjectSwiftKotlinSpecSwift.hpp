@@ -44,6 +44,7 @@ namespace margelo::nitro::image { class HybridBaseSpec; }
 #include "Person.hpp"
 #include <functional>
 #include <NitroModules/AnyMap.hpp>
+#include <exception>
 #include <NitroModules/Promise.hpp>
 #include "Car.hpp"
 #include <NitroModules/ArrayBuffer.hpp>
@@ -226,6 +227,9 @@ namespace margelo::nitro::image {
     inline double funcThatThrows() override {
       auto __result = _swiftPart.funcThatThrows();
       return __result;
+    }
+    inline void throwError(const std::exception_ptr& error) override {
+      _swiftPart.throwError(error);
     }
     inline std::string tryOptionalParams(double num, bool boo, const std::optional<std::string>& str) override {
       auto __result = _swiftPart.tryOptionalParams(std::forward<decltype(num)>(num), std::forward<decltype(boo)>(boo), str);
