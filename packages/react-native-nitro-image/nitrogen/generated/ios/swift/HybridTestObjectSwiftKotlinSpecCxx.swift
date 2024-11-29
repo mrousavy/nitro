@@ -651,8 +651,8 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
         let __resolver = { (__result: Double) in
           __promise.resolve(withResult: __result)
         }
-        let __rejecter = { (__error: std.exception_ptr) in
-          __promise.reject(withError: RuntimeError.from(cppError: __error))
+        let __rejecter = { (__error: Error) in
+          __promise.reject(withError: __error)
         }
         let __resolverCpp = { () -> bridge.Func_void_double in
           class ClosureHolder {
@@ -723,8 +723,8 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
         let __resolver = { (__result: Car) in
           __promise.resolve(withResult: __result)
         }
-        let __rejecter = { (__error: std.exception_ptr) in
-          __promise.reject(withError: RuntimeError.from(cppError: __error))
+        let __rejecter = { (__error: Error) in
+          __promise.reject(withError: __error)
         }
         let __resolverCpp = { () -> bridge.Func_void_Car in
           class ClosureHolder {
@@ -793,8 +793,8 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
       let __result = try self.__implementation.awaitPromise(promise: { () -> Promise<Void> in
         let __promise = Promise<Void>()
         let __resolver = SwiftClosure { __promise.resolve(withResult: ()) }
-        let __rejecter = { (__error: std.exception_ptr) in
-          __promise.reject(withError: RuntimeError.from(cppError: __error))
+        let __rejecter = { (__error: Error) in
+          __promise.reject(withError: __error)
         }
         let __resolverCpp = __resolver.getFunctionCopy()
         let __rejecterCpp = { () -> bridge.Func_void_std__exception_ptr in

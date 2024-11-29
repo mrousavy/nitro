@@ -354,8 +354,8 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
 { () -> ${promise.getCode('swift')} in
   let __promise = ${promise.getCode('swift')}()
   let __resolver = SwiftClosure { __promise.resolve(withResult: ()) }
-  let __rejecter = { (__error: std.exception_ptr) in
-    __promise.reject(withError: RuntimeError.from(cppError: __error))
+  let __rejecter = { (__error: Error) in
+    __promise.reject(withError: __error)
   }
   let __resolverCpp = __resolver.getFunctionCopy()
   let __rejecterCpp = ${indent(rejecterFuncBridge.parseFromSwiftToCpp('__rejecter', 'swift'), '  ')}
@@ -383,8 +383,8 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
   let __resolver = { (__result: ${resolvingTypeBridge.getTypeCode('swift')}) in
     __promise.resolve(withResult: ${indent(resolvingTypeBridge.parseFromCppToSwift('__result', 'swift'), '    ')})
   }
-  let __rejecter = { (__error: std.exception_ptr) in
-    __promise.reject(withError: RuntimeError.from(cppError: __error))
+  let __rejecter = { (__error: Error) in
+    __promise.reject(withError: __error)
   }
   let __resolverCpp = ${indent(resolverFuncBridge.parseFromSwiftToCpp('__resolver', 'swift'), '  ')}
   let __rejecterCpp = ${indent(rejecterFuncBridge.parseFromSwiftToCpp('__rejecter', 'swift'), '  ')}
