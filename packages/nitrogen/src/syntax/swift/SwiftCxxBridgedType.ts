@@ -97,6 +97,9 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
       case 'promise':
         // Promise<T> <> std::shared_ptr<Promise<T>>
         return true
+      case 'error':
+        // Error <> std.exception_ptr
+        return true
       case 'map':
         // AnyMapHolder <> AnyMap
         return true
@@ -247,6 +250,15 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
             throw new Error(`Invalid language! ${language}`)
         }
       }
+      case 'error':
+        switch (language) {
+          case 'c++':
+            return 'std::exception_ptr'
+          case 'swift':
+            return 'std.exception_ptr'
+          default:
+            throw new Error(`Invalid language! ${language}`)
+        }
       default:
         // No workaround - just return normal type
         return this.type.getCode(language)
@@ -342,8 +354,8 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
 { () -> ${promise.getCode('swift')} in
   let __promise = ${promise.getCode('swift')}()
   let __resolver = SwiftClosure { __promise.resolve(withResult: ()) }
-  let __rejecter = { (__error: std.exception_ptr) in
-    __promise.reject(withError: RuntimeError.from(cppError: __error))
+  let __rejecter = { (__error: Error) in
+    __promise.reject(withError: __error)
   }
   let __resolverCpp = __resolver.getFunctionCopy()
   let __rejecterCpp = ${indent(rejecterFuncBridge.parseFromSwiftToCpp('__rejecter', 'swift'), '  ')}
@@ -371,8 +383,8 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
   let __resolver = { (__result: ${resolvingTypeBridge.getTypeCode('swift')}) in
     __promise.resolve(withResult: ${indent(resolvingTypeBridge.parseFromCppToSwift('__result', 'swift'), '    ')})
   }
-  let __rejecter = { (__error: std.exception_ptr) in
-    __promise.reject(withError: RuntimeError.from(cppError: __error))
+  let __rejecter = { (__error: Error) in
+    __promise.reject(withError: __error)
   }
   let __resolverCpp = ${indent(resolverFuncBridge.parseFromSwiftToCpp('__resolver', 'swift'), '  ')}
   let __rejecterCpp = ${indent(rejecterFuncBridge.parseFromSwiftToCpp('__rejecter', 'swift'), '  ')}
@@ -539,6 +551,13 @@ case ${i}:
             return cppParameterName
         }
       }
+      case 'error':
+        switch (language) {
+          case 'swift':
+            return `RuntimeError.from(cppError: ${cppParameterName})`
+          default:
+            return cppParameterName
+        }
       case 'void':
         // When type is void, don't return anything
         return ''
@@ -799,6 +818,13 @@ case ${i}:
             return swiftParameterName
         }
       }
+      case 'error':
+        switch (language) {
+          case 'swift':
+            return `${swiftParameterName}.toCpp()`
+          default:
+            return swiftParameterName
+        }
       case 'void':
         // When type is void, don't return anything
         return ''

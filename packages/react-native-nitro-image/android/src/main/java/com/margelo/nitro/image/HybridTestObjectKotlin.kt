@@ -93,6 +93,10 @@ class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
         throw Error("This function will only work after sacrificing seven lambs!")
     }
 
+    override fun throwError(error: Throwable): Unit {
+        throw error
+    }
+
     override fun tryOptionalParams(num: Double, boo: Boolean, str: String?): String {
         return str ?: "value omitted!"
     }

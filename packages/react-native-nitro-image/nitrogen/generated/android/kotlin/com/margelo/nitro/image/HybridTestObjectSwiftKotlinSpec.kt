@@ -176,6 +176,10 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
+  abstract fun throwError(error: Throwable): Unit
+  
+  @DoNotStrip
+  @Keep
   abstract fun tryOptionalParams(num: Double, boo: Boolean, str: String?): String
   
   @DoNotStrip
