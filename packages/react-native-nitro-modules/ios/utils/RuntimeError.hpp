@@ -9,6 +9,7 @@
 
 #include <exception>
 #include <string>
+#include "TypeInfo.hpp"
 
 namespace margelo::nitro {
 
