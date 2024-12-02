@@ -376,7 +376,7 @@ namespace margelo::nitro::image {
       });
       __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {
         jni::JniException __jniError(__throwable);
-        __promise->reject(std::move(__jniError));
+        __promise->reject(std::make_exception_ptr(__jniError));
       });
       return __promise;
     }();
@@ -391,7 +391,7 @@ namespace margelo::nitro::image {
       });
       __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {
         jni::JniException __jniError(__throwable);
-        __promise->reject(std::move(__jniError));
+        __promise->reject(std::make_exception_ptr(__jniError));
       });
       return __promise;
     }();
@@ -406,7 +406,7 @@ namespace margelo::nitro::image {
       });
       __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {
         jni::JniException __jniError(__throwable);
-        __promise->reject(std::move(__jniError));
+        __promise->reject(std::make_exception_ptr(__jniError));
       });
       return __promise;
     }();
@@ -432,7 +432,7 @@ namespace margelo::nitro::image {
       });
       __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {
         jni::JniException __jniError(__throwable);
-        __promise->reject(std::move(__jniError));
+        __promise->reject(std::make_exception_ptr(__jniError));
       });
       return __promise;
     }();
@@ -458,7 +458,7 @@ namespace margelo::nitro::image {
       });
       __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {
         jni::JniException __jniError(__throwable);
-        __promise->reject(std::move(__jniError));
+        __promise->reject(std::make_exception_ptr(__jniError));
       });
       return __promise;
     }();
@@ -483,7 +483,7 @@ namespace margelo::nitro::image {
       });
       __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {
         jni::JniException __jniError(__throwable);
-        __promise->reject(std::move(__jniError));
+        __promise->reject(std::make_exception_ptr(__jniError));
       });
       return __promise;
     }();
@@ -540,7 +540,7 @@ namespace margelo::nitro::image {
       });
       __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {
         jni::JniException __jniError(__throwable);
-        __promise->reject(std::move(__jniError));
+        __promise->reject(std::make_exception_ptr(__jniError));
       });
       return __promise;
     }();
