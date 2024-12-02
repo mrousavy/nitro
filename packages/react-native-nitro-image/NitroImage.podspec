@@ -9,10 +9,10 @@ Pod::Spec.new do |s|
   s.homepage     = package["homepage"]
   s.license      = package["license"]
   s.authors      = package["author"]
-
   s.platforms    = { :ios => min_ios_version_supported, :visionos => 1.0 }
   s.source       = { :git => "https://github.com/mrousavy/nitro.git", :tag => "#{s.version}" }
 
+  s.compiler_flags = get_folly_config()[:compiler_flags]
   s.source_files = [
     # Implementation (Swift)
     "ios/**/*.{swift}",
