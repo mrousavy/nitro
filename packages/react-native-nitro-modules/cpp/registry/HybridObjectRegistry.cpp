@@ -73,7 +73,7 @@ std::shared_ptr<HybridObject> HybridObjectRegistry::createHybridObject(const std
 
 #ifdef NITRO_DEBUG
   if (instance == nullptr) [[unlikely]] {
-    throw std::runtime_error("Failed to create HybridObject \"" + hybridObjectName + "\" - The constructor returned a nullptr!");
+    throw std::runtime_error("Failed to create HybridObject \"" + hybridObjectName + "\" - The constructor returned null!");
   }
   if (instance->getName() != hybridObjectName) [[unlikely]] {
     throw std::runtime_error("HybridObject's name (\"" + instance->getName() +

@@ -55,7 +55,7 @@ struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_v<T, jsi::NativeState>>
   static inline jsi::Value toJSI(jsi::Runtime& runtime, const T& arg) {
     if (arg == nullptr) [[unlikely]] {
       std::string typeName = TypeInfo::getFriendlyTypename<TPointee>();
-      throw jsi::JSError(runtime, "Cannot convert nullptr to NativeState<" + typeName + ">!");
+      throw jsi::JSError(runtime, "Cannot convert `nullptr` to NativeState<" + typeName + ">!");
     }
 
     if constexpr (std::is_base_of_v<HybridObject, TPointee>) {
