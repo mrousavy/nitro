@@ -118,7 +118,7 @@ public:
    */
   void reject(const std::exception_ptr& exception) {
     if (exception == nullptr) [[unlikely]] {
-      throw std::runtime_error("Cannot reject Promise with a nullptr exception_ptr!");
+      throw std::runtime_error("Cannot reject Promise with a null exception_ptr!");
     }
 
     std::unique_lock lock(*_mutex);
@@ -320,7 +320,7 @@ public:
   }
   void reject(const std::exception_ptr& exception) {
     if (exception == nullptr) [[unlikely]] {
-      throw std::runtime_error("Cannot reject Promise with a nullptr exception_ptr!");
+      throw std::runtime_error("Cannot reject Promise with a null exception_ptr!");
     }
 
     std::unique_lock lock(*_mutex);
@@ -392,7 +392,7 @@ public:
   }
   [[nodiscard]]
   inline bool isRejected() const noexcept {
-    return _error;
+    return _error != nullptr;
   }
   [[nodiscard]]
   inline bool isPending() const noexcept {

@@ -205,7 +205,7 @@ private:
 #ifdef NITRO_DEBUG
     if (nativeState == nullptr) [[unlikely]] {
       throw jsi::JSError(runtime, "Cannot " + getHybridFuncDebugInfo<THybrid>(funcKind, funcName) +
-                                      " - `this`'s `NativeState` is `nullptr`, "
+                                      " - `this`'s `NativeState` is `null`, "
                                       "did you accidentally call `dispose()` on this object?");
     }
 #endif

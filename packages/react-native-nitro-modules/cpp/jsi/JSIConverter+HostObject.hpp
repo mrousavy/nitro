@@ -49,7 +49,7 @@ struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_v<T, jsi::HostObject>>>
   static inline jsi::Value toJSI(jsi::Runtime& runtime, const T& arg) {
     if (arg == nullptr) [[unlikely]] {
       std::string typeName = TypeInfo::getFriendlyTypename<TPointee>();
-      throw jsi::JSError(runtime, "Cannot convert nullptr to HostObject<" + typeName + ">!");
+      throw jsi::JSError(runtime, "Cannot convert `nullptr` to HostObject<" + typeName + ">!");
     }
 
     return jsi::Object::createFromHostObject(runtime, arg);
