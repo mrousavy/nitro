@@ -22,6 +22,11 @@ Pod::Spec.new do |s|
     "cpp/**/*.{hpp,cpp}",
   ]
 
+  s.pod_target_xcconfig = {
+    # C++ compiler flags, mainly for folly.
+    "GCC_PREPROCESSOR_DEFINITIONS" => "$(inherited) FOLLY_NO_CONFIG FOLLY_CFG_NO_COROUTINES"
+  }
+
   load 'nitrogen/generated/ios/NitroImage+autolinking.rb'
   add_nitrogen_files(s)
 

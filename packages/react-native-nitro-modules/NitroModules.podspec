@@ -19,8 +19,6 @@ Pod::Spec.new do |s|
     :tvos => 13.4,
   }
 
-  # Folly compiler flags come from react_native_pods.rb
-  s.compiler_flags = get_folly_config()[:compiler_flags]
   s.source_files = [
     # Shared C++ codebase
     "cpp/**/*.{h,hpp}",
@@ -41,6 +39,7 @@ Pod::Spec.new do |s|
     "cpp/entrypoint/InstallNitro.hpp",
     "cpp/registry/HybridObjectRegistry.hpp",
     "cpp/jsi/JSIConverter.hpp",
+    "cpp/platform/NitroLogger.hpp",
     "cpp/threading/Dispatcher.hpp",
     "cpp/utils/NitroHash.hpp",
     "cpp/utils/NitroDefines.hpp",
@@ -58,7 +57,9 @@ Pod::Spec.new do |s|
     # Enables C++ <-> Swift interop (by default it's only C)
     "SWIFT_OBJC_INTEROP_MODE" => "objcxx",
     # Enables stricter modular headers
-    "DEFINES_MODULE" => "YES"
+    "DEFINES_MODULE" => "YES",
+    # C++ compiler flags, mainly for folly.
+    "GCC_PREPROCESSOR_DEFINITIONS" => "$(inherited) FOLLY_NO_CONFIG FOLLY_CFG_NO_COROUTINES"
   }
 
   s.dependency 'React-jsi'
