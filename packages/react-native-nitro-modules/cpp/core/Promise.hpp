@@ -116,9 +116,6 @@ public:
   /**
    * Rejects this Promise with the given error, and calls any pending listeners.
    */
-  void reject(const std::exception& exception) {
-    reject(std::make_exception_ptr(exception));
-  }
   void reject(const std::exception_ptr& exception) {
     std::unique_lock lock(*_mutex);
 #ifdef NITRO_DEBUG
@@ -316,9 +313,6 @@ public:
     for (const auto& onResolved : _onResolvedListeners) {
       onResolved();
     }
-  }
-  void reject(const std::exception& exception) {
-    reject(std::make_exception_ptr(exception));
   }
   void reject(const std::exception_ptr& exception) {
     std::unique_lock lock(*_mutex);
