@@ -351,7 +351,7 @@ double HybridTestObjectCpp::getBufferLastItem(const std::shared_ptr<ArrayBuffer>
   }
   uint8_t* data = buffer->data();
   if (data == nullptr) {
-    throw std::runtime_error("ArrayBuffer's data is nullptr!");
+    throw std::runtime_error("ArrayBuffer's data is null!");
   }
   uint8_t lastItem = data[size - 1];
   return static_cast<double>(lastItem);
@@ -364,7 +364,7 @@ void HybridTestObjectCpp::setAllValuesTo(const std::shared_ptr<ArrayBuffer>& buf
   }
   uint8_t* data = buffer->data();
   if (data == nullptr) {
-    throw std::runtime_error("ArrayBuffer's data is nullptr!");
+    throw std::runtime_error("ArrayBuffer's data is null!");
   }
 
   for (size_t i = 0; i < size; i++) {
