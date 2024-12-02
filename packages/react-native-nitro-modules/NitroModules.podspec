@@ -4,6 +4,13 @@ package = JSON.parse(File.read(File.join(__dir__, "package.json")))
 
 Pod::UI.puts "[NitroModules] 🔥 Your app is boosted by nitro modules!"
 
+gcc_flags = '$(inherited)'
+if ENV['USE_FRAMEWORKS']
+  # If building with USE_FRAMEWORKS, folly seems to spazz out.
+  # We "fix" this by disabling folly configs.
+  gcc_flags << ' FOLLY_NO_CONFIG FOLLY_CFG_NO_COROUTINES'
+end
+
 Pod::Spec.new do |s|
   s.name         = "NitroModules"
   s.version      = package["version"]
@@ -12,7 +19,7 @@ Pod::Spec.new do |s|
   s.license      = package["license"]
   s.authors      = package["author"]
 
-  s.platforms    = { 
+  s.platforms    = {
     :ios => min_ios_version_supported,
     :visionos => 1.0,
     :macos => 10.13,
@@ -59,6 +66,8 @@ Pod::Spec.new do |s|
     "SWIFT_OBJC_INTEROP_MODE" => "objcxx",
     # Enables stricter modular headers
     "DEFINES_MODULE" => "YES",
+    # Custom C++ compiler flags
+    "GCC_PREPROCESSOR_DEFINITIONS" => gcc_flags
   }
 
   install_modules_dependencies(s)
