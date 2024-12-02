@@ -7,9 +7,9 @@
 
 #pragma once
 
+#include "TypeInfo.hpp"
 #include <exception>
 #include <string>
-#include "TypeInfo.hpp"
 
 namespace margelo::nitro {
 
