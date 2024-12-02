@@ -30,6 +30,10 @@ struct JSIConverter<std::exception_ptr> final {
     return std::make_exception_ptr(std::runtime_error(name + ": " + message));
   }
   static inline jsi::Value toJSI(jsi::Runtime& runtime, const std::exception_ptr& exception) {
+    if (exception == nullptr) [[unlikely]] {
+      throw std::runtime_error("Cannot convert an empty exception_ptr to a JS Error!");
+    }
+
     try {
       std::rethrow_exception(exception);
     } catch (const std::exception& e) {

@@ -117,6 +117,10 @@ public:
    * Rejects this Promise with the given error, and calls any pending listeners.
    */
   void reject(const std::exception_ptr& exception) {
+    if (exception == nullptr) [[unlikely]] {
+      throw std::runtime_error("Cannot reject Promise with a nullptr exception_ptr!");
+    }
+
     std::unique_lock lock(*_mutex);
 #ifdef NITRO_DEBUG
     assertPromiseState(*this, PromiseTask::WANTS_TO_REJECT);
@@ -315,6 +319,10 @@ public:
     }
   }
   void reject(const std::exception_ptr& exception) {
+    if (exception == nullptr) [[unlikely]] {
+      throw std::runtime_error("Cannot reject Promise with a nullptr exception_ptr!");
+    }
+
     std::unique_lock lock(*_mutex);
 #ifdef NITRO_DEBUG
     assertPromiseState(*this, PromiseTask::WANTS_TO_REJECT);
@@ -344,8 +352,8 @@ public:
   }
   void addOnRejectedListener(OnRejectedFunc&& onRejected) {
     std::unique_lock lock(*_mutex);
-    if (_error.has_value()) {
-      onRejected(_error.value());
+    if (_error) {
+      onRejected(_error);
     } else {
       // Promise is not yet rejected, put the listener in our queue.
       _onRejectedListeners.push_back(std::move(onRejected));
@@ -353,8 +361,8 @@ public:
   }
   void addOnRejectedListener(const OnRejectedFunc& onRejected) {
     std::unique_lock lock(*_mutex);
-    if (_error.has_value()) {
-      onRejected(_error.value());
+    if (_error) {
+      onRejected(_error);
     } else {
       // Promise is not yet rejected, put the listener in our queue.
       _onRejectedListeners.push_back(onRejected);
@@ -374,7 +382,7 @@ public:
     if (!isRejected()) {
       throw std::runtime_error("Cannot get error when Promise is not yet rejected!");
     }
-    return _error.value();
+    return _error;
   }
 
 public:
@@ -384,7 +392,7 @@ public:
   }
   [[nodiscard]]
   inline bool isRejected() const noexcept {
-    return _error.has_value();
+    return _error;
   }
   [[nodiscard]]
   inline bool isPending() const noexcept {
@@ -394,7 +402,7 @@ public:
 private:
   std::unique_ptr<std::mutex> _mutex;
   bool _isResolved = false;
-  std::optional<std::exception_ptr> _error;
+  std::exception_ptr _error;
   std::vector<OnResolvedFunc> _onResolvedListeners;
   std::vector<OnRejectedFunc> _onRejectedListeners;
 };
