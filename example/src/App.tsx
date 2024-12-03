@@ -6,6 +6,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { useColors } from './useColors'
 import { Image } from 'react-native'
 import { BenchmarksScreen } from './screens/BenchmarksScreen'
+import { CustomViewScreen } from './screens/CustomViewScreen'
 
 const dna = require('./img/dna.png')
 const rocket = require('./img/rocket.png')
@@ -49,6 +50,13 @@ export default function App() {
                 style={{ width: size * 1.4, height: size * 1.4 }}
               />
             ),
+          }}
+        />
+        <Tabs.Screen
+          name="Custom View"
+          component={CustomViewScreen}
+          options={{
+            tabBarLabel: 'Custom View',
           }}
         />
       </Tabs.Navigator>
