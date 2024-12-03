@@ -12,7 +12,7 @@
     "lint": "eslint \"**/*.{js,ts,tsx}\" --fix",
     "lint-ci": "eslint \"**/*.{js,ts,tsx}\" -f @jamesacarr/github-actions",
     "bundle-install": "bundle install",
-    "pods": "cd ios && bundle exec pod install && rm -rf .xcode.env.local",
+    "pods": "cd ios && bundle exec pod install",
     "build:android": "cd android && ./gradlew assembleDebug --no-daemon --console=plain -PreactNativeArchitectures=arm64-v8a",
     "build:ios": "cd ios && xcodebuild -workspace NitroExample.xcworkspace -scheme NitroExample -configuration Debug -sdk iphonesimulator CC=clang CPLUSPLUS=clang++ LD=clang LDPLUSPLUS=clang++ GCC_OPTIMIZATION_LEVEL=0 GCC_PRECOMPILE_PREFIX_HEADER=YES ASSETCATALOG_COMPILER_OPTIMIZATION=time DEBUG_INFORMATION_FORMAT=dwarf COMPILER_INDEX_STORE_ENABLE=NO"
   },
@@ -22,7 +22,7 @@
     "@react-navigation/native": "^7.0.0",
     "deep-equal": "^2.2.3",
     "react": "*",
-    "react-native": "^0.76.1",
+    "react-native": "^0.76.3",
     "react-native-safe-area-context": "^4.14.0",
     "react-native-screens": "^4.0.0",
     "react-native-nitro-image": "*",
