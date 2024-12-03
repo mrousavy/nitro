@@ -307,7 +307,7 @@ Then, to make sure `JNI_OnLoad` is called, you need to load the C++ library some
 Inside `NitroMathPackage.java`, add:
 
 ```java
-public class NitroMathPackage extends TurboReactPackage {
+public class NitroMathPackage extends BaseReactPackage {
   // ...
   static {
     System.loadLibrary("NitroMath");
