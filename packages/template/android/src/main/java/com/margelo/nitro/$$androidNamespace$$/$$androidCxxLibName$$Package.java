@@ -1,4 +1,4 @@
-package com.margelo.nitro.<<androidNamespace>>;
+package com.margelo.nitro.$$androidNamespace$$;
 
 import android.util.Log;
 
@@ -14,7 +14,7 @@ import com.margelo.nitro.core.HybridObjectRegistry;
 import java.util.HashMap;
 import java.util.function.Supplier;
 
-public class <<androidCxxLibName>>Package extends TurboReactPackage {
+public class $$androidCxxLibName$$Package extends TurboReactPackage {
   @Nullable
   @Override
   public NativeModule getModule(String name, ReactApplicationContext reactContext) {
@@ -29,6 +29,6 @@ public class <<androidCxxLibName>>Package extends TurboReactPackage {
   }
 
   static {
-    System.loadLibrary("<<androidCxxLibName>>");
+    System.loadLibrary("$$androidCxxLibName$$");
   }
 }
