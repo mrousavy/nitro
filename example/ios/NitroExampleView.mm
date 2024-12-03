@@ -21,6 +21,11 @@ public:
   CustomViewProps() = default;
   CustomViewProps(const PropsParserContext& context, const CustomViewProps &sourceProps, const RawProps &rawProps): ViewProps(context, sourceProps, rawProps) {
     if (rawProps.isEmpty()) {
+      // There is some code path in RawPropsParser.cpp where we expect to collect all possible keys (prop names) upfront
+      // during the init phase. Calling this .at() method while the rawProps is empty, will cause this prop value to be indexed …
+      // Otherwise we'd get a crash when trying to access it later.
+      // We should really also try to merge the PR i have for providing alternative RawProps parser !!
+      rawProps.at("nativeProp", nullptr, nullptr);
       return;
     }
 
