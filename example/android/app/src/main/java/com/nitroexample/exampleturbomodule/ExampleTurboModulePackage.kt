@@ -19,10 +19,10 @@ class ExampleTurboModulePackage: BaseReactPackage() {
             ExampleTurboModuleModule.NAME to ReactModuleInfo(
                 ExampleTurboModuleModule.NAME,
                 ExampleTurboModuleModule.NAME,
-                _canOverrideExistingModule = false,
-                _needsEagerInit = false,
-                isCxxModule = false,
-                isTurboModule = isTurboModule
+                /* canOverrideExistingModule */ false,
+                /* needsEagerInit */ false,
+                /* isCxxModule */ false,
+                /* isTurboModule */ true
             )
         )
     }

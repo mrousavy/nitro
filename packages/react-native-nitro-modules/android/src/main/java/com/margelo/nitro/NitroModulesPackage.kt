@@ -22,10 +22,10 @@ class NitroModulesPackage : BaseReactPackage() {
             moduleInfos[NitroModules.NAME] = ReactModuleInfo(
                 NitroModules.NAME,
                 NitroModules.NAME,
-                _canOverrideExistingModule = false,
-                _needsEagerInit = false,
-                isCxxModule = false,
-                isTurboModule = isTurboModule
+                /* canOverrideExistingModule */ false,
+                /* needsEagerInit */ false,
+                /* isCxxModule */ false,
+                /* isTurboModule */ isTurboModule
             )
             moduleInfos
         }
