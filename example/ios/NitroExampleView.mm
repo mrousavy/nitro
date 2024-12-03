@@ -30,8 +30,12 @@ public:
     }
 
     const RawValue* raw = rawProps.at("nativeProp", nullptr, nullptr);
+    // Option 1:
     const auto& [runtime, value] = raw->experimental_getJsiValuePair();
     nativeProp = value.asString(*runtime).utf8(*runtime);
+    
+    // Option 2: This uses the cast function in RawValue.h
+    nativeProp = (std::string)*raw;
   }
 
   std::string nativeProp;
