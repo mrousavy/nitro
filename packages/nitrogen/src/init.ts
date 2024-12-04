@@ -50,8 +50,16 @@ export async function initNewNitroModule(
   await replaceTemplate(modulePath, `packageDescription`, moduleName)
 
   Logger.info(
-    `🎉 Created Nitro Module "${chalk.bold(moduleName)}" in ${chalk.underline(prettifyDirectory(directory))}!\n` +
-      `  - To test your module in an app, create a new React Native app somewhere (e.g. in ${chalk.underline(`./${moduleName}/example`)}) and add ${chalk.bold(moduleName)} as a local dependency.`
+    `🎉 Created Nitro Module "${chalk.bold(moduleName)}" in ${chalk.underline(prettifyDirectory(directory))}!`
+  )
+  Logger.info(
+    `👉 To install dependencies, use your package manager of choice (e.g. ${chalk.bold('npm install')})`
+  )
+  Logger.info(
+    `👉 To create your first Hybrid Object, add a ${chalk.underline(`*.nitro.ts`)} file, declare a TypeScript interface that extends ${chalk.bold('HybridObject<...>')}, and run ${chalk.bold('npx nitro-codegen')}.`
+  )
+  Logger.info(
+    `👉 To test your module in an app, create a new React Native app somewhere (e.g. in ${chalk.underline(`./${moduleName}/example`)}) and add ${chalk.bold(moduleName)} as a local dependency.`
   )
 }
 
