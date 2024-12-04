@@ -44,22 +44,22 @@ export async function initNewNitroModule(
 
   await replaceTemplateStringsInDirectory(
     modulePath,
-    `$$cxxNamespace$$`,
+    `cxxNamespace`,
     cxxNamespace
   )
   await replaceTemplateStringsInDirectory(
     modulePath,
-    `$$androidNamespace$$`,
+    `androidNamespace`,
     cxxNamespace
   )
   await replaceTemplateStringsInDirectory(
     modulePath,
-    `$$androidCxxLibName$$`,
+    `androidCxxLibName`,
     camelCaseName
   )
   await replaceTemplateStringsInDirectory(
     modulePath,
-    `$$iosModuleName$$`,
+    `iosModuleName`,
     camelCaseName
   )
 
@@ -115,14 +115,15 @@ async function downloadGitHubFolder(
     await fs.mkdir(outputPath, { recursive: true })
     await copyFolder(sourcePath, outputPath)
 
-    Logger.debug(
-      `🗑️  Removing temporary folder ${chalk.underline(prettifyDirectory(tempDir))}...`
-    )
-
     return outputPath
   } finally {
     // change dir back to original
     process.chdir(initialDir)
+
+    Logger.debug(
+      `🗑️  Removing temporary folder ${chalk.underline(prettifyDirectory(tempDir))}...`
+    )
+    await fs.rm(tempDir, { recursive: true, force: true })
   }
 }
 
