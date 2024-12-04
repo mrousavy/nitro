@@ -84,6 +84,7 @@ After installing Nitro, you can start creating your [Hybrid Objects](hybrid-obje
 
   ```json
   {
+    "$schema": "https://nitro.margelo.com/nitro.schema.json",
     "cxxNamespace": ["example"],
     "ios": {
       "iosModuleName": "NitroExample"

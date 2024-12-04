@@ -82,6 +82,7 @@ Create a `nitro.json` file in the root directory of your Nitro Module (next to `
 
 ```json title="nitro.json"
 {
+  "$schema": "https://nitro.margelo.com/nitro.schema.json",
   "cxxNamespace": ["math"],
   "ios": {
     "iosModuleName": "NitroMath"
