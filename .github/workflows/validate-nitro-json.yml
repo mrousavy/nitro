@@ -24,4 +24,4 @@ jobs:
         uses: dsanders11/json-schema-validate-action
         with:
           schema: ./docs/static/nitro.schema.json
-          files: **/nitro.json
+          files: "**/nitro.json"
