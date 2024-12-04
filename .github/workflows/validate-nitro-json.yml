@@ -9,7 +9,7 @@ on:
       - '**/*.json'
   pull_request:
     paths:
-      - '.github/workflows/lint-cpp.yml'
+      - '.github/workflows/validate-nitro-json.yml'
       - '**/*.json'
 
 jobs:
