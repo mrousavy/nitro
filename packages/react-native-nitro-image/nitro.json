@@ -7,7 +7,7 @@
     "iosModuleName": "NitroImage"
   },
   "android": {
-    "androidNamespace": [
+    "androidNamespace2": [
       "image"
     ],
     "androidCxxLibName": "NitroImage"
