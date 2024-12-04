@@ -72,7 +72,8 @@
     "jest": "*",
     "react": "*",
     "react-native": "*",
-    "react-native-builder-bob": "^0.33.1"
+    "react-native-builder-bob": "^0.33.1",
+    "typescript": "~5.5.4"
   },
   "peerDependencies": {
     "react": "*",
@@ -115,7 +116,6 @@
       [
         "typescript",
         {
-          "tsc": "../../node_modules/.bin/tsc",
           "project": "tsconfig.build.json"
         }
       ]
