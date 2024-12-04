@@ -164,7 +164,7 @@ namespace margelo::nitro::image {
       __vector.reserve(__size);
       for (size_t __i = 0; __i < __size; __i++) {
         auto __element = __result->getElement(__i);
-        __vector.push_back(__element->toStdString());
+        __vector.emplace_back(__element->toStdString());
       }
       return __vector;
     }()) : std::nullopt;
@@ -250,7 +250,7 @@ namespace margelo::nitro::image {
       __vector.reserve(__size);
       for (size_t __i = 0; __i < __size; __i++) {
         auto __element = __result->getElement(__i);
-        __vector.push_back(__element->toStdString());
+        __vector.emplace_back(__element->toStdString());
       }
       return __vector;
     }();
@@ -287,7 +287,7 @@ namespace margelo::nitro::image {
       __vector.reserve(__size);
       for (size_t __i = 0; __i < __size; __i++) {
         auto __element = __result->getElement(__i);
-        __vector.push_back(__element->toCpp());
+        __vector.emplace_back(__element->toCpp());
       }
       return __vector;
     }();
@@ -309,7 +309,7 @@ namespace margelo::nitro::image {
       __vector.reserve(__size);
       for (size_t __i = 0; __i < __size; __i++) {
         auto __element = __result->getElement(__i);
-        __vector.push_back(__element->toCpp());
+        __vector.emplace_back(__element->toCpp());
       }
       return __vector;
     }();
