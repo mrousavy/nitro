@@ -1,6 +1,7 @@
 import path from 'path'
 import { prettifyDirectory } from './prettifyDirectory.js'
 import fs from 'fs/promises'
+import { existsSync } from 'fs'
 
 export async function initNewNitroModule(
   baseDirectory: string,
@@ -11,8 +12,7 @@ export async function initNewNitroModule(
   )
 
   const directory = path.join(baseDirectory, moduleName)
-  const stat = await fs.stat(directory)
-  if (stat.isDirectory()) {
+  if (existsSync(directory)) {
     throw new Error(
       `A folder named "${moduleName}" already exists in the directory ${prettifyDirectory(baseDirectory)}!`
     )
