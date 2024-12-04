@@ -1,4 +1,5 @@
 {
+  "$schema": "../../nitro.schema.json",
   "cxxNamespace": ["<<cxxNamespace>>"],
   "ios": {
     "iosModuleName": "<<iosModuleName>>"
