@@ -1,0 +1,27 @@
+name: Validate nitro.json
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/validate-nitro-json.yml'
+      - '**/*.json'
+  pull_request:
+    paths:
+      - '.github/workflows/lint-cpp.yml'
+      - '**/*.json'
+
+jobs:
+  validate-github-actions-workflows:
+    name: Validate GitHub Actions workflows
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate nitro.json
+        uses: dsanders11/json-schema-validate-action
+        with:
+          schema: ./docs/static/nitro.schema.json
+          files: **/nitro.json
