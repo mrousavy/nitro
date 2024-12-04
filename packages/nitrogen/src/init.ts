@@ -33,7 +33,7 @@ export async function initNewNitroModule(
     'packages/template',
     directory
   )
-  Logger.info(`🏗️ Constructing template...`)
+  Logger.info(`🏗️  Constructing template...`)
 
   const cleanLibraryName = moduleName.replace('react-native-', '')
   const cxxNamespace = cleanLibraryName.replaceAll('-', '')
@@ -64,7 +64,7 @@ export async function initNewNitroModule(
   )
 
   Logger.info(
-    `🎉 Created Nitro Module "${moduleName}" in ${prettifyDirectory(directory)}!\n` +
+    `🎉 Created Nitro Module "${chalk.bold(moduleName)}" in ${chalk.underline(prettifyDirectory(directory))}!\n` +
       `  - To test your module in an app, create a new React Native app somewhere (e.g. in ${chalk.underline(`./${moduleName}/example`)}) and add ${chalk.bold(moduleName)} as a local dependency.`
   )
 }
