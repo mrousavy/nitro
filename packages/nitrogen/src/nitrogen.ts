@@ -2,7 +2,7 @@ import { Project } from 'ts-morph'
 import { getHybridObjectPlatforms, type Platform } from './getPlatformSpecs.js'
 import { generatePlatformFiles } from './createPlatformSpec.js'
 import path from 'path'
-import { prettifyDirectory } from './getCurrentDir.js'
+import { prettifyDirectory } from './prettifyDirectory.js'
 import {
   capitalizeName,
   errorToString,
