@@ -3,7 +3,7 @@
 import yargs from 'yargs/yargs'
 import { hideBin } from 'yargs/helpers'
 import chalk from 'chalk'
-import { prettifyDirectory } from './getCurrentDir.js'
+import { prettifyDirectory } from './prettifyDirectory.js'
 import { writeUserConfigFile } from './config/NitroUserConfig.js'
 import { getFiles } from './getFiles.js'
 import { runNitrogen } from './nitrogen.js'
