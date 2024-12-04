@@ -26,7 +26,7 @@ export async function initNewNitroModule(
 
   await fs.mkdir(directory)
 
-  await downloadGitHubFolder(
+  const modulePath = await downloadGitHubFolder(
     'mrousavy',
     'nitro',
     ref,
@@ -35,8 +35,37 @@ export async function initNewNitroModule(
   )
   Logger.info(`🏗️ Constructing template...`)
 
+  const cleanLibraryName = moduleName.replace('react-native-', '')
+  const cxxNamespace = cleanLibraryName.replaceAll('-', '')
+  const camelCaseName = cleanLibraryName
+    .split('-')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join('')
+
+  await replaceTemplateStringsInDirectory(
+    modulePath,
+    `$$cxxNamespace$$`,
+    cxxNamespace
+  )
+  await replaceTemplateStringsInDirectory(
+    modulePath,
+    `$$androidNamespace$$`,
+    cxxNamespace
+  )
+  await replaceTemplateStringsInDirectory(
+    modulePath,
+    `$$androidCxxLibName$$`,
+    camelCaseName
+  )
+  await replaceTemplateStringsInDirectory(
+    modulePath,
+    `$$iosModuleName$$`,
+    camelCaseName
+  )
+
   Logger.info(
-    `🎉 Created Nitro Module "${moduleName}" in ${prettifyDirectory(directory)}!`
+    `🎉 Created Nitro Module "${moduleName}" in ${prettifyDirectory(directory)}!\n` +
+      `  - To test your module in an app, create a new React Native app somewhere (e.g. in ${chalk.underline(`./${moduleName}/example`)}) and add ${chalk.bold(moduleName)} as a local dependency.`
   )
 }
 
@@ -55,7 +84,7 @@ async function downloadGitHubFolder(
   branch: string,
   folder: string,
   outputPath: string
-): Promise<void> {
+): Promise<string> {
   if (!isGitInstalled()) {
     console.error(
       `❌ ${chalk.bold('git')} is not installed or available in the current path! Make sure to install ${chalk.bold('git')} and try again.`
@@ -89,6 +118,8 @@ async function downloadGitHubFolder(
     Logger.debug(
       `🗑️  Removing temporary folder ${chalk.underline(prettifyDirectory(tempDir))}...`
     )
+
+    return outputPath
   } finally {
     // change dir back to original
     process.chdir(initialDir)
@@ -107,4 +138,51 @@ async function copyFolder(src: string, dest: string) {
       await fs.copyFile(srcPath, destPath)
     }
   }
+}
+
+async function replaceTemplateStringsInDirectory(
+  dir: string,
+  templateName: string,
+  replacementValue: string
+): Promise<void> {
+  const replaceInFile = async (filePath: string) => {
+    const content = await fs.readFile(filePath, 'utf8')
+    const updatedContent = content.replaceAll(
+      `$$${templateName}$$`,
+      replacementValue
+    )
+    if (content !== updatedContent) {
+      await fs.writeFile(filePath, updatedContent, 'utf8')
+    }
+  }
+
+  const replaceInName = (name: string) => {
+    return name.replaceAll(`$$${templateName}$$`, replacementValue)
+  }
+
+  const processDirectory = async (currentDir: string) => {
+    const entries = await fs.readdir(currentDir, { withFileTypes: true })
+
+    for (const entry of entries) {
+      const oldPath = path.join(currentDir, entry.name)
+      const updatedName = replaceInName(entry.name)
+      const newPath = path.join(currentDir, updatedName)
+
+      if (oldPath !== newPath) {
+        await fs.rename(oldPath, newPath)
+      }
+
+      if (entry.isDirectory()) {
+        await processDirectory(newPath)
+      } else if (entry.isFile()) {
+        await replaceInFile(newPath)
+      }
+    }
+  }
+
+  if (!existsSync(dir)) {
+    throw new Error(`The directory "${dir}" does not exist.`)
+  }
+
+  await processDirectory(dir)
 }
