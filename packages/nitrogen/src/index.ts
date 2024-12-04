@@ -9,6 +9,7 @@ import { getFiles } from './getFiles.js'
 import { runNitrogen } from './nitrogen.js'
 import { promises as fs } from 'fs'
 import { isValidLogLevel, setLogLevel } from './Logger.js'
+import { initNewNitroModule } from './init.js'
 
 const commandName = 'nitro-codegen'
 
@@ -63,19 +64,21 @@ await yargs(hideBin(process.argv))
   .command(
     'init <moduleName>',
     `Usage: ${chalk.bold(`${commandName} init <moduleName> [options]`)}\n` +
-      `Generate a ${chalk.underline('nitro.json')} config file in the current directory.`,
+      `Create a new Nitro Module.`,
     (y) =>
-      y.positional('moduleName', {
-        type: 'string',
-        description: 'The name of the Nitro module that will be created.',
-        demandOption: true,
-      }),
+      y
+        .positional('moduleName', {
+          type: 'string',
+          description: 'The name of the Nitro Module that will be created.',
+          demandOption: true,
+        })
+        .option('path', {
+          type: 'string',
+          description: `A custom path to create the new Nitro Module in - instead of the current working directory.`,
+          default: process.cwd(),
+        }),
     async (argv) => {
-      console.log(
-        `⚙️ Creating ${chalk.underline('nitro.json')} for Nitro Module "${argv.moduleName}"...`
-      )
-      await writeUserConfigFile(argv.moduleName, process.cwd())
-      console.log(`🎉 Created Nitro Module "${argv.moduleName}"!`)
+      await initNewNitroModule(argv.path, argv.moduleName)
     }
   )
   .usage(
