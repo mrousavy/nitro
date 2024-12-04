@@ -37,10 +37,13 @@ export async function initNewNitroModule(
 
   const cleanLibraryName = moduleName.replace('react-native-', '')
   const cxxNamespace = cleanLibraryName.replaceAll('-', '')
-  const camelCaseName = cleanLibraryName
+  let camelCaseName = cleanLibraryName
     .split('-')
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
     .join('')
+  if (!camelCaseName.startsWith('Nitro')) {
+    camelCaseName = 'Nitro' + camelCaseName
+  }
 
   await replaceTemplate(modulePath, `cxxNamespace`, cxxNamespace)
   await replaceTemplate(modulePath, `androidNamespace`, cxxNamespace)
