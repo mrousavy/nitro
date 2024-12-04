@@ -42,26 +42,12 @@ export async function initNewNitroModule(
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
     .join('')
 
-  await replaceTemplateStringsInDirectory(
-    modulePath,
-    `cxxNamespace`,
-    cxxNamespace
-  )
-  await replaceTemplateStringsInDirectory(
-    modulePath,
-    `androidNamespace`,
-    cxxNamespace
-  )
-  await replaceTemplateStringsInDirectory(
-    modulePath,
-    `androidCxxLibName`,
-    camelCaseName
-  )
-  await replaceTemplateStringsInDirectory(
-    modulePath,
-    `iosModuleName`,
-    camelCaseName
-  )
+  await replaceTemplate(modulePath, `cxxNamespace`, cxxNamespace)
+  await replaceTemplate(modulePath, `androidNamespace`, cxxNamespace)
+  await replaceTemplate(modulePath, `androidCxxLibName`, camelCaseName)
+  await replaceTemplate(modulePath, `iosModuleName`, camelCaseName)
+  await replaceTemplate(modulePath, `packageName`, moduleName)
+  await replaceTemplate(modulePath, `packageDescription`, moduleName)
 
   Logger.info(
     `🎉 Created Nitro Module "${chalk.bold(moduleName)}" in ${chalk.underline(prettifyDirectory(directory))}!\n` +
@@ -141,7 +127,7 @@ async function copyFolder(src: string, dest: string) {
   }
 }
 
-async function replaceTemplateStringsInDirectory(
+async function replaceTemplate(
   dir: string,
   templateName: string,
   replacementValue: string
