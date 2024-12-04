@@ -1,0 +1,79 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Nitro Modules Configuration",
+    "type": "object",
+    "required": ["cxxNamespace", "ios", "android", "ignorePaths"],
+    "properties": {
+      "cxxNamespace": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "minItems": 1,
+        "description": "Required: C++ namespace array"
+      },
+      "ios": {
+        "type": "object",
+        "required": ["iosModuleName"],
+        "properties": {
+          "iosModuleName": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "description": "Required: iOS configuration"
+      },
+      "android": {
+        "type": "object",
+        "required": ["androidNamespace", "androidCxxLibName"],
+        "properties": {
+          "androidNamespace": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1
+          },
+          "androidCxxLibName": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "description": "Required: Android configuration"
+      },
+      "autolinking": {
+        "type": "object",
+        "description": "Optional: Autolinking configuration",
+        "patternProperties": {
+          "^.*$": {
+            "type": "object",
+            "oneOf": [
+              {
+                "properties": {
+                  "cpp": { "type": "string" }
+                },
+                "additionalProperties": false,
+                "required": ["cpp"]
+              },
+              {
+                "properties": {
+                  "swift": { "type": "string" },
+                  "kotlin": { "type": "string" }
+                },
+                "minProperties": 1,
+                "additionalProperties": false
+              }
+            ]
+          }
+        }
+      },
+      "ignorePaths": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "description": "Required: Paths to ignore"
+      }
+    }
+  }
+  
