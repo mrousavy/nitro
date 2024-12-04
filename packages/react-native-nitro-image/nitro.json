@@ -1,4 +1,5 @@
 {
+  "$schema":"../../nitro.schema.json",
   "cxxNamespace": ["image"],
   "ios": {
     "iosModuleName": "NitroImage"
