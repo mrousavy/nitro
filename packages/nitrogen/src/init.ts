@@ -103,7 +103,7 @@ async function downloadGitHubFolder(
     process.chdir(tempDir)
 
     Logger.debug(`⏳ Checking out ${chalk.underline(folder)}...`)
-    execSync(`git sparse-checkout set ${folder} --quiet`)
+    execSync(`git sparse-checkout set ${folder}`)
 
     Logger.debug(
       `📁 Copying files from ${chalk.underline(`${prettyOutputPath}/${tempPath}`)} to ${chalk.underline(prettyOutputPath)}...`
