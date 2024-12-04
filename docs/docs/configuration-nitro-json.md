@@ -7,6 +7,7 @@
 
 ```json
 {
+  "$schema": "https://nitro.margelo.com/nitro.schema.json",
   "cxxNamespace": ["<<cxxNamespace>>"],
   "ios": {
     "iosModuleName": "<<iosModuleName>>"
