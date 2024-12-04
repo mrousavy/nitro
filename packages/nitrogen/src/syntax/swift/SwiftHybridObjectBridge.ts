@@ -11,11 +11,9 @@ import { NitroConfig } from '../../config/NitroConfig.js'
 import { includeHeader, includeNitroHeader } from '../c++/includeNitroHeader.js'
 import { getUmbrellaHeaderName } from '../../autolinking/ios/createSwiftUmbrellaHeader.js'
 
-export const BRIDGE_NAMESPACE = NitroConfig.getCxxNamespace(
-  'swift',
-  'bridge',
-  'swift'
-)
+export function getBridgeNamespace() {
+  return NitroConfig.getCxxNamespace('swift', 'bridge', 'swift')
+}
 
 /**
  * Creates a Swift class that bridges Swift over to C++.
@@ -89,7 +87,7 @@ ${hasBase ? `public class ${name.HybridTSpecCxx} : ${baseClasses.join(', ')}` : 
    * from \`${moduleName}-Swift-Cxx-Bridge.hpp\`.
    * This contains specialized C++ templates, and C++ helper functions that can be accessed from Swift.
    */
-  public typealias bridge = ${BRIDGE_NAMESPACE}
+  public typealias bridge = ${getBridgeNamespace()}
 
   /**
    * Holds an instance of the \`${name.HybridTSpec}\` Swift protocol.

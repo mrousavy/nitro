@@ -1,0 +1,35 @@
+name: Test Nitrogen init command
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/run-nitrogen.yml'
+      - '**/*.lockb'
+      - '**/package.json'
+      - 'packages/nitrogen/**'
+  pull_request:
+    paths:
+      - '.github/workflows/run-nitrogen.yml'
+      - '**/*.lockb'
+      - '**/package.json'
+      - 'packages/nitrogen/**'
+
+jobs:
+  lint:
+    name: Run Nitrogen init command
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+
+      - name: Install npm dependencies (bun)
+        run: bun install
+
+      - name: Build all packages
+        run: bun run build
+
+      - name: Run nitro-codegen init in packages/nitrogen
+        working-directory: packages/nitrogen
+        run: bun i && bun run nitro-codegen init react-native-math

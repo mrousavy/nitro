@@ -1,16 +1,16 @@
 {
   "$schema": "https://nitro.margelo.com/nitro.schema.json",
   "cxxNamespace": [
-    "<<cxxNamespace>>"
+    "$$cxxNamespace$$"
   ],
   "ios": {
-    "iosModuleName": "<<iosModuleName>>"
+    "iosModuleName": "$$iosModuleName$$"
   },
   "android": {
     "androidNamespace": [
-      "<<androidNamespace>>"
+      "$$androidNamespace$$"
     ],
-    "androidCxxLibName": "<<androidCxxLibName>>"
+    "androidCxxLibName": "$$androidCxxLibName$$"
   },
   "autolinking": {},
   "ignorePaths": [
