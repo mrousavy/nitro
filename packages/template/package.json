@@ -1,7 +1,7 @@
 {
-  "name": "react-native-nitro-template",
+  "name": "$$packageName$$",
   "version": "0.0.1",
-  "description": "A template for Nitro Modules.",
+  "description": "$$packageDescription$$",
   "main": "lib/index",
   "module": "lib/index",
   "types": "lib/index.d.ts",
