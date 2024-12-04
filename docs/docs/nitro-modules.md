@@ -29,13 +29,13 @@ cp -R /tmp/nitro/packages/template my-new-library
 
 ### 2. Replace all placeholders
 
-You need to replace all `<<*>>` placeholders and filenames for each value in `nitro.json`. For example, `<<iosModuleName>>` can be replaced with `NitroMath`:
+You need to replace all `$$*$$` placeholders and filenames for each value in `nitro.json`. For example, `$$iosModuleName$$` can be replaced with `NitroMath`:
 
 ```ruby title="NitroMath.podspec"
 ...
 Pod::Spec.new do |s|
 // diff-remove
-  s.name         = "<<iosModuleName>>"
+  s.name         = "$$iosModuleName$$"
 // diff-add
   s.name         = "NitroMath"
 ...
