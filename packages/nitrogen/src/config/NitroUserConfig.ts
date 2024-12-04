@@ -64,7 +64,7 @@ export const NitroUserConfigSchema = z.object({
       .min(1),
 
     /**
-     * Returns the name of the Android C++ library (aka name in CMakeLists.txt `add_library(..)`).
+     * Represents the name of the Android C++ library (aka name in CMakeLists.txt `add_library(..)`).
      * This will be loaded via `System.loadLibrary(...)`.
      * @example `NitroImage`
      */
