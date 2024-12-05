@@ -79,7 +79,7 @@ export async function runNitrogen({
     process.exit()
   }
 
-  let platforms: Platform[] = []
+  const usedPlatforms: Platform[] = []
   const filesAfter: string[] = []
   const writtenFiles: SourceFile[] = []
 
@@ -103,7 +103,7 @@ export async function runNitrogen({
           continue
         }
 
-        platforms = Object.keys(platformSpec) as Platform[]
+        const platforms = Object.keys(platformSpec) as Platform[]
 
         if (platforms.length === 0) {
           console.warn(
@@ -121,6 +121,7 @@ export async function runNitrogen({
         // Create all files and throw it into a big list
         const allFiles = platforms
           .flatMap((p) => {
+            usedPlatforms.push(p)
             const language = platformSpec[p]!
             return generatePlatformFiles(module.getType(), language)
           })
@@ -184,10 +185,10 @@ export async function runNitrogen({
 
   const autolinkingFiles: Autolinking[] = []
 
-  if (platforms.includes('ios')) {
+  if (usedPlatforms.includes('ios')) {
     autolinkingFiles.push(createIOSAutolinking())
   }
-  if (platforms.includes('android')) {
+  if (usedPlatforms.includes('android')) {
     autolinkingFiles.push(createAndroidAutolinking(writtenFiles))
   }
 
