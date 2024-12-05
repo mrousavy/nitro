@@ -41,6 +41,7 @@ public:
 
   // Build Info
   std::string getBuildType();
+  std::string getVersion();
 
 private:
   static constexpr auto TAG = "NitroModulesProxy";
