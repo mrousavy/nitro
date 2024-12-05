@@ -16,6 +16,7 @@ import { Logger } from './Logger.js'
 import { NitroConfig } from './config/NitroConfig.js'
 import { createIOSAutolinking } from './autolinking/createIOSAutolinking.js'
 import { createAndroidAutolinking } from './autolinking/createAndroidAutolinking.js'
+import type { Autolinking } from './autolinking/Autolinking.js'
 
 interface NitrogenOptions {
   baseDirectory: string
@@ -78,6 +79,7 @@ export async function runNitrogen({
     process.exit()
   }
 
+  let platforms: Platform[] = []
   const filesAfter: string[] = []
   const writtenFiles: SourceFile[] = []
 
@@ -101,7 +103,8 @@ export async function runNitrogen({
           continue
         }
 
-        const platforms = Object.keys(platformSpec) as Platform[]
+        platforms = Object.keys(platformSpec) as Platform[]
+
         if (platforms.length === 0) {
           console.warn(
             `⚠️   ${moduleName} does not declare any platforms in HybridObject<T> - nothing can be generated.`
@@ -178,10 +181,16 @@ export async function runNitrogen({
 
   // Autolinking
   Logger.info(`⛓️   Setting up build configs for autolinking...`)
-  const iosFiles = createIOSAutolinking()
-  const androidFiles = createAndroidAutolinking(writtenFiles)
 
-  const autolinkingFiles = [iosFiles, androidFiles]
+  const autolinkingFiles: Autolinking[] = []
+
+  if (platforms.includes('ios')) {
+    autolinkingFiles.push(createIOSAutolinking())
+  }
+  if (platforms.includes('android')) {
+    autolinkingFiles.push(createAndroidAutolinking(writtenFiles))
+  }
+
   for (const autolinking of autolinkingFiles) {
     Logger.info(
       `    Creating autolinking build setup for ${chalk.dim(autolinking.platform)}...`
