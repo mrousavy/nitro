@@ -59,7 +59,7 @@
   "scripts": {
     "postinstall": "bun build || exit 0;",
     "write-native-version": "version=$(node -p \"require('./package.json').version\") && sed -i '' \"s/#define NITRO_VERSION \\\".*\\\"/#define NITRO_VERSION \\\"$version\\\"/\" ./cpp/utils/NitroDefines.hpp",
-    "postversion": "write-native-version",
+    "postversion": "bun run write-native-version",
     "build": "rm -rf lib && bun typecheck && bob build",
     "typecheck": "tsc --noEmit",
     "lint": "eslint \"**/*.{js,ts,tsx}\" --fix",
