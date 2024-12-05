@@ -1,15 +1,15 @@
 package com.nitroexample.exampleturbomodule
 
-import com.facebook.react.TurboReactPackage
+import com.facebook.react.BaseReactPackage
 import com.facebook.react.bridge.NativeModule
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.module.model.ReactModuleInfo
 import com.facebook.react.module.model.ReactModuleInfoProvider
 
-class ExampleTurboModulePackage: TurboReactPackage() {
-    override fun getModule(name: String, context: ReactApplicationContext): NativeModule? {
+class ExampleTurboModulePackage: BaseReactPackage() {
+    override fun getModule(name: String, reactContext: ReactApplicationContext): NativeModule? {
         if (name == ExampleTurboModuleModule.NAME) {
-            return ExampleTurboModuleModule(context)
+            return ExampleTurboModuleModule(reactContext)
         } else {
             return null
         }
@@ -19,11 +19,10 @@ class ExampleTurboModulePackage: TurboReactPackage() {
             ExampleTurboModuleModule.NAME to ReactModuleInfo(
                 ExampleTurboModuleModule.NAME,
                 ExampleTurboModuleModule.NAME,
-                false, // canOverrideExistingModule
-                false, // needsEagerInit
-                true, // hasConstants
-                false, // isCxxModule
-                true // isTurboModule
+                /* canOverrideExistingModule */ false,
+                /* needsEagerInit */ false,
+                /* isCxxModule */ false,
+                /* isTurboModule */ true
             )
         )
     }
