@@ -1,6 +1,7 @@
 import React from 'react'
 import { Button, View } from 'react-native'
 import { CustomView } from '../components/CustomView'
+import { HybridTestObjectCpp } from 'react-native-nitro-image'
 
 export function CustomViewScreen() {
   const [state, setState] = React.useState(0)
@@ -15,7 +16,7 @@ export function CustomViewScreen() {
       }}
     >
       <CustomView
-        nativeProp={state.toString()}
+        nativeProp={HybridTestObjectCpp}
         style={{
           width: 200,
           height: 200,
