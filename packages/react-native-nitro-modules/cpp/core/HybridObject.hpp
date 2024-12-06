@@ -38,11 +38,11 @@ public:
   /**
    * HybridObjects cannot be copied.
    */
-  HybridObject(const HybridObject& copy) = default;
+  HybridObject(const HybridObject& copy) = delete;
   /**
    * HybridObjects cannot be moved.
    */
-  HybridObject(HybridObject&& move) = default;
+  HybridObject(HybridObject&& move) = delete;
   /**
    * HybridObjects cannot be default-constructed!
    */

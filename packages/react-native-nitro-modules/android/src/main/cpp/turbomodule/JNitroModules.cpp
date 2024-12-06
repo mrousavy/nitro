@@ -10,8 +10,6 @@
 
 namespace margelo::nitro {
 
-JNitroModules::JNitroModules() = default;
-
 jni::local_ref<JNitroModules::jhybriddata> JNitroModules::initHybrid(jni::alias_ref<JNitroModules::jhybridobject>) {
   return makeCxxInstance();
 }
