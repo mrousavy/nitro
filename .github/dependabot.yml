@@ -31,6 +31,9 @@ updates:
       docusaurus:
         patterns:
           - "@docusaurus/*"
+      react:
+        patterns:
+          - "react*"
 
   - package-ecosystem: "npm"
     directories:
