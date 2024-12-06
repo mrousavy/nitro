@@ -25,17 +25,24 @@ export function createConstant<T extends HybridObject>(
 ): void {
   let prototype = hybridObject
   do {
+    // 1. Get the prototype of the current value
+    prototype = Object.getPrototypeOf(prototype)
+    // 2. See if the prototype itself actually declares the property we want to constantify
     if (Object.hasOwn(prototype, property)) {
+      // 3. If it declares that property, we get the actual value through the HybridObject
+      const actual = hybridObject[property]
+      // 4. Now we overwrite the native getter with the cached JS value to "constantify" it
       Object.defineProperty(prototype, property, {
-        value: hybridObject[property],
+        value: actual,
         writable: false,
         enumerable: true,
         configurable: false,
       })
+      // 5. break the loop
       return
     }
-    prototype = Object.getPrototypeOf(prototype)
   } while (prototype != null)
+  // ??. Property does not exist anywhere in the prototype chain!
   throw new Error(
     `Property "${String(property)}" does not exist on any of ${hybridObject.name}'s prototypes!`
   )
