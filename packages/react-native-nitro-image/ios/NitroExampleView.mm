@@ -16,17 +16,7 @@
 
 // for prop conversion
 #import <react/renderer/core/propsConversions.h>
- 
-// extend prop conversion
-//namespace facebook::react {
-//inline void fromRawValue(
-//    const PropsParserContext& context,
-//    const RawValue& rawValue,
-//    std::shared_ptr<margelo::nitro::HybridObject>& result) {
-//  const auto& [runtime, value] = rawValue.experimental_getJsiValuePair();
-//  result = value.asObject(*runtime).getNativeState<margelo::nitro::HybridObject>(*runtime);
-//}
-//} // namespace facebook::react
+
 
 using namespace facebook;
 using namespace facebook::react;
@@ -38,9 +28,6 @@ public:
   CustomViewProps() = default;
   CustomViewProps(const PropsParserContext& context, const CustomViewProps& sourceProps, const RawProps& rawProps)
       : ViewProps(context, sourceProps, rawProps) {
-
-//    nativeProp = convertRawProp(context, sourceProps, rawProps);
-
         if (rawProps.isEmpty()) {
           // There is some code path in RawPropsParser.cpp where we expect to collect all possible keys (prop names) upfront
           // during the init phase. Calling this .at() method while the rawProps is empty, will cause this prop value to be indexed …
@@ -57,7 +44,7 @@ public:
         auto test = prop;
   }
 
-//  std::shared_ptr<margelo::nitro::HybridObject> nativeProp;
+  std::shared_ptr<HybridTestObjectCppSpec> nativeProp;
 };
 
 class CustomViewState {
