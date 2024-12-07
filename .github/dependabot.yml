@@ -53,9 +53,10 @@ updates:
       babel:
         patterns:
           - "@babel/*"
-      rn:
+      react-native:
         patterns:
           - "@react-native/*"
+          - "react-native"
 
   - package-ecosystem: "npm"
     directories:
