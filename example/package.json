@@ -23,7 +23,7 @@
     "deep-equal": "^2.2.3",
     "react": "*",
     "react-native": "^0.76.1",
-    "react-native-safe-area-context": "^4.14.0",
+    "react-native-safe-area-context": "^5.0.0",
     "react-native-screens": "^4.0.0",
     "react-native-nitro-image": "*",
     "react-native-nitro-modules": "*"
