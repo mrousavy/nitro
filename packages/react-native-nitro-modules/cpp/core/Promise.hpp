@@ -68,7 +68,7 @@ public:
    * Once the future resolves or rejects, the Promise resolves or rejects.
    */
   static std::shared_ptr<Promise> awaitFuture(std::future<TResult>&& future) {
-    return async([future = std::move(future)]() { return future.get(); });
+    return async([future = std::move(future)]() mutable { return future.get(); });
   }
 
   /**
@@ -291,7 +291,7 @@ public:
   }
 
   static std::shared_ptr<Promise> awaitFuture(std::future<void>&& future) {
-    return async([future = std::move(future)]() { future.get(); });
+    return async([future = std::move(future)]() mutable { future.get(); });
   }
 
   static std::shared_ptr<Promise> resolved() {
