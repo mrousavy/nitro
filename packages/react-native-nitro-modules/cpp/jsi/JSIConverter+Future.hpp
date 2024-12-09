@@ -26,8 +26,9 @@ using namespace facebook;
 template <typename TResult>
 struct JSIConverter<std::future<TResult>> final {
   [[deprecated("Use JSIConverter<std::shared_ptr<Promise<T>>> instead.")]]
-  static inline std::future<TResult> fromJSI(jsi::Runtime&, const jsi::Value&) {
-    throw std::runtime_error("Promise cannot be converted to a native type - it needs to be awaited first!");
+  static inline std::future<TResult> fromJSI(jsi::Runtime& runtime, const jsi::Value& value) {
+    auto promise = JSIConverter<std::shared_ptr<Promise<TResult>>>::fromJSI(runtime, value);
+    return promise->await();
   }
 
   [[deprecated("Use JSIConverter<std::shared_ptr<Promise<T>>> instead.")]]
@@ -37,8 +38,8 @@ struct JSIConverter<std::future<TResult>> final {
   }
 
   [[deprecated("Use JSIConverter<std::shared_ptr<Promise<T>>> instead.")]]
-  static inline bool canConvert(jsi::Runtime&, const jsi::Value&) {
-    throw std::runtime_error("jsi::Value of type Promise cannot be converted to std::future yet!");
+  static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
+    return JSIConverter<std::shared_ptr<Promise<TResult>>>::canConvert(runtime, value);
   }
 };
 
