@@ -131,7 +131,7 @@ protected:
     vector.reserve(size);
     for (size_t i = 0; i < size; i++) {
       auto anyValue = value->getElement(i);
-      vector.push_back(anyValue->cthis()->getValue());
+      vector.emplace_back(anyValue->cthis()->getValue());
     }
     _map->setArray(key, vector);
   }
