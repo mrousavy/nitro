@@ -291,8 +291,7 @@ public:
   }
 
   static std::shared_ptr<Promise> awaitFuture(std::future<void>&& future) {
-    auto sharedFuture = std::make_shared<std::future<void>>(std::move(future));
-    return async([sharedFuture = std::move(sharedFuture)]() { sharedFuture->get(); });
+    return async([future = std::move(future)]() { future.get(); });
   }
 
   static std::shared_ptr<Promise> resolved() {
