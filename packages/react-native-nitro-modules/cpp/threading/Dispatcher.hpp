@@ -47,7 +47,7 @@ public:
   template <typename T>
   std::shared_ptr<Promise<T>> runAsyncAwaitable(std::function<T()>&& function) {
     // 1. Create Promise that can be shared between this and dispatcher thread
-    auto promise = std::make_shared<Promise<T>>();
+    auto promise = Promise<T>::create();
 
     runAsync([function = std::move(function), promise]() {
       try {
