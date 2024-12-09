@@ -115,8 +115,8 @@ namespace margelo::nitro::image {
       virtual std::variant<std::tuple<double, double>, std::tuple<double, double, double>> getVariantTuple(const std::variant<std::tuple<double, double>, std::tuple<double, double, double>>& variant) = 0;
       virtual std::tuple<double, double, double> flip(const std::tuple<double, double, double>& tuple) = 0;
       virtual std::tuple<double, std::string, bool> passTuple(const std::tuple<double, std::string, bool>& tuple) = 0;
-      virtual std::shared_ptr<Promise<double>> getValueFromJSCallbackAndWait(const std::function<std::future<double>()>& getValue) = 0;
-      virtual std::shared_ptr<Promise<void>> getValueFromJsCallback(const std::function<std::future<std::string>()>& callback, const std::function<void(const std::string& /* valueFromJs */)>& andThenCall) = 0;
+      virtual std::shared_ptr<Promise<double>> getValueFromJSCallbackAndWait(const std::function<std::shared_ptr<Promise<double>>()>& getValue) = 0;
+      virtual std::shared_ptr<Promise<void>> getValueFromJsCallback(const std::function<std::shared_ptr<Promise<std::string>>()>& callback, const std::function<void(const std::string& /* valueFromJs */)>& andThenCall) = 0;
       virtual std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec> newTestObject() = 0;
       virtual void simpleFunc() = 0;
       virtual double addNumbers(double a, double b) = 0;
