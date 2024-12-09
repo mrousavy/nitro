@@ -15,7 +15,7 @@ export class FunctionType implements Type {
       this.returnType = returnType
     } else {
       // non-void callbacks are async and need to be awaited to get the result from JS.
-      this.returnType = new PromiseType(returnType, false)
+      this.returnType = new PromiseType(returnType)
     }
     this.parameters = parameters
   }
