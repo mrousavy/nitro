@@ -4,11 +4,11 @@
 
 #pragma once
 
+#include "Promise.hpp"
 #include <functional>
 #include <jsi/jsi.h>
 #include <queue>
 #include <unordered_map>
-#include "Promise.hpp"
 
 namespace margelo::nitro {
 
