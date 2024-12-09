@@ -271,7 +271,8 @@ void HybridTestObjectCpp::callWithOptional(std::optional<double> value,
   callback(value);
 }
 
-std::shared_ptr<Promise<double>> HybridTestObjectCpp::getValueFromJSCallbackAndWait(const std::function<std::shared_ptr<Promise<double>>()>& getValue) {
+std::shared_ptr<Promise<double>>
+HybridTestObjectCpp::getValueFromJSCallbackAndWait(const std::function<std::shared_ptr<Promise<double>>()>& getValue) {
   return Promise<double>::async([=]() -> double {
     std::shared_ptr<Promise<double>> promise = getValue();
     std::future<double> future = promise->await();

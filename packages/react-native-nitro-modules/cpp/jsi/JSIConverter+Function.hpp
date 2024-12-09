@@ -15,8 +15,8 @@ struct JSIConverter;
 #include "JSIConverter.hpp"
 
 #include "Dispatcher.hpp"
-#include "PromiseType.hpp"
 #include "JSICache.hpp"
+#include "PromiseType.hpp"
 #include <functional>
 #include <jsi/jsi.h>
 
