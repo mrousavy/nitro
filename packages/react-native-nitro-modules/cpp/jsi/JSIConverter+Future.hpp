@@ -26,8 +26,8 @@ using namespace facebook;
 template <typename TResult>
 struct JSIConverter<std::future<TResult>> final {
   [[deprecated("Use JSIConverter<std::shared_ptr<Promise<T>>> instead.")]]
-  static inline std::future<TResult> fromJSI(jsi::Runtime&, const jsi::Value&) {
-    auto promise = JSIConverter<std::shared_ptr<Promise<TResult>>>::fromJSI(runtime, promise);
+  static inline std::future<TResult> fromJSI(jsi::Runtime& runtime, const jsi::Value& value) {
+    auto promise = JSIConverter<std::shared_ptr<Promise<TResult>>>::fromJSI(runtime, value);
     return promise->await();
   }
 
@@ -38,8 +38,8 @@ struct JSIConverter<std::future<TResult>> final {
   }
 
   [[deprecated("Use JSIConverter<std::shared_ptr<Promise<T>>> instead.")]]
-  static inline bool canConvert(jsi::Runtime&, const jsi::Value&) {
-    return JSIConverter<std::shared_ptr<Promise<TResult>>>::canConvert(runtime, promise);
+  static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
+    return JSIConverter<std::shared_ptr<Promise<TResult>>>::canConvert(runtime, value);
   }
 };
 
