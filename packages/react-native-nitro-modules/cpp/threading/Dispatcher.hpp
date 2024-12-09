@@ -5,10 +5,10 @@
 #pragma once
 
 #include <functional>
-#include <future>
 #include <jsi/jsi.h>
 #include <queue>
 #include <unordered_map>
+#include "Promise.hpp"
 
 namespace margelo::nitro {
 
@@ -42,13 +42,12 @@ public:
 
   /**
    * Run the given function asynchronously on the Thread this Dispatcher is managing,
-   * and return a future that will hold the result of the function.
+   * and return a `Promise<T>` that will hold the result of the function.
    */
   template <typename T>
-  std::future<T> runAsyncAwaitable(std::function<T()>&& function) {
+  std::shared_ptr<Promise<T>> runAsyncAwaitable(std::function<T()>&& function) {
     // 1. Create Promise that can be shared between this and dispatcher thread
-    auto promise = std::make_shared<std::promise<T>>();
-    std::future<T> future = promise->get_future();
+    auto promise = std::make_shared<Promise<T>>();
 
     runAsync([function = std::move(function), promise]() {
       try {
@@ -56,21 +55,21 @@ public:
           // 4. Call the actual function on the new Thread
           function();
           // 5.a. Resolve the Promise if we succeeded
-          promise->set_value();
+          promise->resolve();
         } else {
           // 4. Call the actual function on the new Thread
           T result = function();
           // 5.a. Resolve the Promise if we succeeded
-          promise->set_value(std::move(result));
+          promise->resolve(std::move(result));
         }
       } catch (...) {
         // 5.b. Reject the Promise if the call failed
-        promise->set_exception(std::current_exception());
+        promise->reject(std::current_exception());
       }
     });
 
-    // 3. Return an open future that gets resolved later by the dispatcher Thread
-    return future;
+    // 3. Return an open `Promise<T>` that gets resolved later by the dispatcher Thread
+    return promise;
   }
 
 private:
