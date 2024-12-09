@@ -27,7 +27,8 @@ template <typename TResult>
 struct JSIConverter<std::future<TResult>> final {
   [[deprecated("Use JSIConverter<std::shared_ptr<Promise<T>>> instead.")]]
   static inline std::future<TResult> fromJSI(jsi::Runtime&, const jsi::Value&) {
-    throw std::runtime_error("Promise cannot be converted to a native type - it needs to be awaited first!");
+    auto promise = JSIConverter<std::shared_ptr<Promise<TResult>>>::fromJSI(runtime, promise);
+    return promise->await();
   }
 
   [[deprecated("Use JSIConverter<std::shared_ptr<Promise<T>>> instead.")]]
@@ -38,7 +39,7 @@ struct JSIConverter<std::future<TResult>> final {
 
   [[deprecated("Use JSIConverter<std::shared_ptr<Promise<T>>> instead.")]]
   static inline bool canConvert(jsi::Runtime&, const jsi::Value&) {
-    throw std::runtime_error("jsi::Value of type Promise cannot be converted to std::future yet!");
+    return JSIConverter<std::shared_ptr<Promise<TResult>>>::canConvert(runtime, promise);
   }
 };
 
