@@ -108,10 +108,10 @@ public:
   std::shared_ptr<Promise<void>> wait(double seconds) override;
   void callCallback(const std::function<void()>& callback) override;
   void callWithOptional(std::optional<double> value, const std::function<void(std::optional<double> /* maybe */)>& callback) override;
-  std::shared_ptr<Promise<double>> getValueFromJSCallbackAndWait(const std::function<std::future<double>()>& getValue) override;
+  std::shared_ptr<Promise<double>> getValueFromJSCallbackAndWait(const std::function<std::shared_ptr<Promise<double>>()>& getValue) override;
   void callAll(const std::function<void()>& first, const std::function<void()>& second, const std::function<void()>& third) override;
   std::shared_ptr<Promise<void>>
-  getValueFromJsCallback(const std::function<std::future<std::string>()>& callback,
+  getValueFromJsCallback(const std::function<std::shared_ptr<Promise<std::string>>()>& callback,
                          const std::function<void(const std::string& /* valueFromJs */)>& andThenCall) override;
   std::shared_ptr<Promise<double>> awaitAndGetPromise(const std::shared_ptr<Promise<double>>& promise) override;
   std::shared_ptr<Promise<Car>> awaitAndGetComplexPromise(const std::shared_ptr<Promise<Car>>& promise) override;

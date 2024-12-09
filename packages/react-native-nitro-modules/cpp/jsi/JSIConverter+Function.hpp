@@ -15,10 +15,9 @@ struct JSIConverter;
 #include "JSIConverter.hpp"
 
 #include "Dispatcher.hpp"
-#include "FutureType.hpp"
+#include "PromiseType.hpp"
 #include "JSICache.hpp"
 #include <functional>
-#include <future>
 #include <jsi/jsi.h>
 
 namespace margelo::nitro {
@@ -28,8 +27,8 @@ using namespace facebook;
 // [](Args...) -> T {} <> (Args...) => T
 template <typename ReturnType, typename... Args>
 struct JSIConverter<std::function<ReturnType(Args...)>> final {
-  // std::future<T> -> T
-  using ResultingType = future_type_v<ReturnType>;
+  // Promise<T> -> T
+  using ResultingType = promise_type_v<ReturnType>;
 
   static inline std::function<ReturnType(Args...)> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
     // Make function global - it'll be managed by the Runtime's memory, and we only have a weak_ref to it.
