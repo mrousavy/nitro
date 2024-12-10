@@ -9,8 +9,7 @@
     "packages/react-native-nitro-modules",
     "packages/nitrogen",
     "packages/react-native-nitro-image",
-    "example",
-    "docs"
+    "example"
   ],
   "scripts": {
     "build": "bun run --cwd packages/react-native-nitro-modules build && bun run --cwd packages/nitrogen build && bun run --cwd packages/react-native-nitro-image build",
