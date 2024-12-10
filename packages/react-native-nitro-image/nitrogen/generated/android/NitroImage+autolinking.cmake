@@ -39,6 +39,8 @@ target_sources(
   ../nitrogen/generated/android/c++/JHybridTestObjectSwiftKotlinSpec.cpp
   ../nitrogen/generated/android/c++/JHybridBaseSpec.cpp
   ../nitrogen/generated/android/c++/JHybridChildSpec.cpp
+  # Component Descriptors
+#  ../nitrogen/generated/android/c++/CustomComponentDescriptor.cpp
 )
 
 # Add all libraries required by the generated specs
@@ -66,3 +68,20 @@ else()
         ReactAndroid::react_nativemodule_core     # <-- RN: TurboModules Core
     )
 endif()
+
+# From node_modules/react-native/ReactAndroid/cmake-utils/folly-flags.cmake
+# Used in node_modules/react-native/ReactAndroid/cmake-utils/ReactNative-application.cmake
+target_compile_definitions(
+        NitroImage
+        PRIVATE
+        -DFOLLY_NO_CONFIG=1
+        -DFOLLY_HAVE_CLOCK_GETTIME=1
+        -DFOLLY_USE_LIBCPP=1
+        -DFOLLY_CFG_NO_COROUTINES=1
+        -DFOLLY_MOBILE=1
+        -DFOLLY_HAVE_RECVMMSG=1
+        -DFOLLY_HAVE_PTHREAD=1
+        # Once we target android-23 above, we can comment
+        # the following line. NDK uses GNU style stderror_r() after API 23.
+        -DFOLLY_HAVE_XSI_STRERROR_R=1
+)
