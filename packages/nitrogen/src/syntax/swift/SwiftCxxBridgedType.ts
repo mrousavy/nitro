@@ -543,7 +543,7 @@ case ${i}:
   let __sharedClosure = bridge.share_${bridge.specializationName}(${cppParameterName})
   return { ${signature} in
     let __result = __sharedClosure.pointee.call(${paramsForward.join(', ')})
-    return ${indent(resultBridged.parseFromSwiftToCpp('__result', 'swift'), '  ')}
+    return ${indent(resultBridged.parseFromCppToSwift('__result', 'swift'), '    ')}
   }
 }()`.trim()
             }
