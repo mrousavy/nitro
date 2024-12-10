@@ -341,9 +341,6 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
         const promise = getTypeAs(this.type, PromiseType)
         switch (language) {
           case 'swift': {
-            const resolvingTypeBridge = new SwiftCxxBridgedType(
-              promise.resultingType
-            )
             if (promise.resultingType.kind === 'void') {
               // It's void - resolve()
               const rejecterFunc = new FunctionType(new VoidType(), [
@@ -380,8 +377,8 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
               return `
 { () -> ${promise.getCode('swift')} in
   let __promise = ${promise.getCode('swift')}()
-  let __resolver = { (__result: ${resolvingTypeBridge.getTypeCode('swift')}) in
-    __promise.resolve(withResult: ${indent(resolvingTypeBridge.parseFromCppToSwift('__result', 'swift'), '    ')})
+  let __resolver = { (__result: ${promise.resultingType.getCode('swift')}) in
+    __promise.resolve(withResult: __result)
   }
   let __rejecter = { (__error: Error) in
     __promise.reject(withError: __error)
