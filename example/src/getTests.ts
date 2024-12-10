@@ -128,7 +128,7 @@ export function getTests(
         .didNotThrow()
         .equals(false)
     ),
-    createTest("Two HybridObjects's prototypse are equal", () =>
+    createTest("Two HybridObjects's prototypes are equal", () =>
       it(() => {
         const objA = testObject.newTestObject()
         const objB = testObject.newTestObject()
