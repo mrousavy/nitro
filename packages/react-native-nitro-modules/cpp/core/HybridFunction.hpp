@@ -108,19 +108,16 @@ public:
         std::string funcName = getHybridFuncFullName<THybrid>(kind, name, hybridInstance.get());
         std::string message = exception.what();
         throw jsi::JSError(runtime, funcName + ": " + message);
-#ifdef ANDROID
-        // Workaround for https://github.com/mrousavy/nitro/issues/382
-      } catch (const std::runtime_error& exception) {
-        // Some exception was thrown - add method name information and re-throw as `JSError`.
-        std::string funcName = getHybridFuncFullName<THybrid>(kind, name, hybridInstance.get());
-        std::string message = exception.what();
-        throw jsi::JSError(runtime, funcName + ": " + message);
-#endif
       } catch (...) {
+#ifdef RETHROW_ALL_ERRORS
+        // Some unknown exception was thrown - we cannot get the message, so just re-throw it and let the parent handle it.
+        throw;
+#else
         // Some unknown exception was thrown - add method name information and re-throw as `JSError`.
         std::string funcName = getHybridFuncFullName<THybrid>(kind, name, hybridInstance.get());
         std::string errorName = TypeInfo::getCurrentExceptionName();
         throw jsi::JSError(runtime, "`" + funcName + "` threw an unknown " + errorName + " error.");
+#endif
       }
     };
 
