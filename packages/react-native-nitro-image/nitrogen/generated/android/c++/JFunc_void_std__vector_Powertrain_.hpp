@@ -31,16 +31,16 @@ namespace margelo::nitro::image {
 
   public:
     void call(jni::alias_ref<jni::JArrayClass<JPowertrain>> array) {
-      return _func([&]() {
-        size_t __size = array->size();
-        std::vector<Powertrain> __vector;
-        __vector.reserve(__size);
-        for (size_t __i = 0; __i < __size; __i++) {
-          auto __element = array->getElement(__i);
-          __vector.push_back(__element->toCpp());
-        }
-        return __vector;
-      }());
+      _func([&]() {
+              size_t __size = array->size();
+              std::vector<Powertrain> __vector;
+              __vector.reserve(__size);
+              for (size_t __i = 0; __i < __size; __i++) {
+                auto __element = array->getElement(__i);
+                __vector.push_back(__element->toCpp());
+              }
+              return __vector;
+            }());
     }
 
   public:

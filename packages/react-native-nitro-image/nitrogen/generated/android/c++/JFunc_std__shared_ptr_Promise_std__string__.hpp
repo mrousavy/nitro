@@ -30,8 +30,19 @@ namespace margelo::nitro::image {
     }
 
   public:
-    std::shared_ptr<Promise<std::string>> call() {
-      return _func();
+    jni::local_ref<JPromise::javaobject> call() {
+      std::shared_ptr<Promise<std::string>> __result = _func();
+      return [&]() {
+        jni::local_ref<JPromise::javaobject> __promise = JPromise::create();
+        __result->addOnResolvedListener([=](const std::string& __result) {
+          __promise->cthis()->resolve(jni::make_jstring(__result));
+        });
+        __result->addOnRejectedListener([=](const std::exception_ptr& __error) {
+          auto __jniError = jni::getJavaExceptionForCppException(__error);
+          __promise->cthis()->reject(__jniError);
+        });
+        return __promise;
+      }();
     }
 
   public:

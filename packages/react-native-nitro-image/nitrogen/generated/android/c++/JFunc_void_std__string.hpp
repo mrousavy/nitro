@@ -29,7 +29,7 @@ namespace margelo::nitro::image {
 
   public:
     void call(jni::alias_ref<jni::JString> valueFromJs) {
-      return _func(valueFromJs->toStdString());
+      _func(valueFromJs->toStdString());
     }
 
   public:
