@@ -24,6 +24,14 @@
 #endif
 #endif
 
+// Configures whether we should rethrow all errors in a catch-all block
+// to let the parent error handler (e.g. in Hermes::Function::call) handle the error instead.
+// This is due to a bug where on Android the RTTI of std::exception is not forward-propagated
+// See: https://github.com/mrousavy/nitro/issues/382
+#ifdef ANDROID
+#define RETHROW_ALL_ERRORS
+#endif
+
 // Helper to find out if a C++ compiler attribute is available
 #ifdef __has_attribute
 #define _CXX_INTEROP_HAS_ATTRIBUTE(x) __has_attribute(x)
