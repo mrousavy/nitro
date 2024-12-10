@@ -103,6 +103,13 @@ interface SharedTestObjectProps {
     callback: (maybe: number | undefined) => void
   ): void
 
+  // Callbacks that return values
+  getValueFromJSCallbackAndWait(getValue: () => number): Promise<number>
+  getValueFromJsCallback(
+    callback: () => string,
+    andThenCall: (valueFromJs: string) => void
+  ): Promise<void>
+
   // Objects
   getCar(): Car
   isCarElectric(car: Car): boolean
@@ -145,13 +152,6 @@ export interface TestObjectCpp
   someTuple: [number, string]
   flip(tuple: Float3): Float3
   passTuple(tuple: TestTuple): [number, string, boolean]
-
-  // Callbacks that return values
-  getValueFromJSCallbackAndWait(getValue: () => number): Promise<number>
-  getValueFromJsCallback(
-    callback: () => string,
-    andThenCall: (valueFromJs: string) => void
-  ): Promise<void>
 
   // Other HybridObjects
   readonly thisObject: TestObjectCpp

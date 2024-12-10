@@ -499,6 +499,75 @@ namespace margelo::nitro::image::bridge::swift {
     return std::make_shared<Func_void_std__optional_double__Wrapper>(value);
   }
   
+  // pragma MARK: std::function<std::shared_ptr<Promise<double>>()>
+  /**
+   * Specialized version of `std::function<std::shared_ptr<Promise<double>>()>`.
+   */
+  using Func_std__shared_ptr_Promise_double__ = std::function<std::shared_ptr<Promise<double>>()>;
+  /**
+   * Wrapper class for a `std::function<std::shared_ptr<Promise<double>>()>`, this can be used from Swift.
+   */
+  class Func_std__shared_ptr_Promise_double___Wrapper final {
+  public:
+    explicit Func_std__shared_ptr_Promise_double___Wrapper(const std::function<std::shared_ptr<Promise<double>>()>& func): _function(func) {}
+    explicit Func_std__shared_ptr_Promise_double___Wrapper(std::function<std::shared_ptr<Promise<double>>()>&& func): _function(std::move(func)) {}
+    inline std::shared_ptr<Promise<double>> call() const {
+      auto __result = _function();
+      return __result;
+    }
+  private:
+    std::function<std::shared_ptr<Promise<double>>()> _function;
+  };
+  inline Func_std__shared_ptr_Promise_double__ create_Func_std__shared_ptr_Promise_double__(void* _Nonnull closureHolder, std::shared_ptr<Promise<double>>(* _Nonnull call)(void* _Nonnull /* closureHolder */), void(* _Nonnull destroy)(void* _Nonnull)) {
+    std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
+    return Func_std__shared_ptr_Promise_double__([sharedClosureHolder, call]() -> std::shared_ptr<Promise<double>> {
+      auto __result = call(sharedClosureHolder.get());
+      return __result;
+    });
+  }
+  inline std::shared_ptr<Func_std__shared_ptr_Promise_double___Wrapper> share_Func_std__shared_ptr_Promise_double__(const Func_std__shared_ptr_Promise_double__& value) {
+    return std::make_shared<Func_std__shared_ptr_Promise_double___Wrapper>(value);
+  }
+  
+  // pragma MARK: std::function<std::shared_ptr<Promise<std::string>>()>
+  /**
+   * Specialized version of `std::function<std::shared_ptr<Promise<std::string>>()>`.
+   */
+  using Func_std__shared_ptr_Promise_std__string__ = std::function<std::shared_ptr<Promise<std::string>>()>;
+  /**
+   * Wrapper class for a `std::function<std::shared_ptr<Promise<std::string>>()>`, this can be used from Swift.
+   */
+  class Func_std__shared_ptr_Promise_std__string___Wrapper final {
+  public:
+    explicit Func_std__shared_ptr_Promise_std__string___Wrapper(const std::function<std::shared_ptr<Promise<std::string>>()>& func): _function(func) {}
+    explicit Func_std__shared_ptr_Promise_std__string___Wrapper(std::function<std::shared_ptr<Promise<std::string>>()>&& func): _function(std::move(func)) {}
+    inline std::shared_ptr<Promise<std::string>> call() const {
+      auto __result = _function();
+      return __result;
+    }
+  private:
+    std::function<std::shared_ptr<Promise<std::string>>()> _function;
+  };
+  inline Func_std__shared_ptr_Promise_std__string__ create_Func_std__shared_ptr_Promise_std__string__(void* _Nonnull closureHolder, std::shared_ptr<Promise<std::string>>(* _Nonnull call)(void* _Nonnull /* closureHolder */), void(* _Nonnull destroy)(void* _Nonnull)) {
+    std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
+    return Func_std__shared_ptr_Promise_std__string__([sharedClosureHolder, call]() -> std::shared_ptr<Promise<std::string>> {
+      auto __result = call(sharedClosureHolder.get());
+      return __result;
+    });
+  }
+  inline std::shared_ptr<Func_std__shared_ptr_Promise_std__string___Wrapper> share_Func_std__shared_ptr_Promise_std__string__(const Func_std__shared_ptr_Promise_std__string__& value) {
+    return std::make_shared<Func_std__shared_ptr_Promise_std__string___Wrapper>(value);
+  }
+  
+  // pragma MARK: std::shared_ptr<Promise<std::string>>
+  /**
+   * Specialized version of `std::shared_ptr<Promise<std::string>>`.
+   */
+  using std__shared_ptr_Promise_std__string__ = std::shared_ptr<Promise<std::string>>;
+  inline std::shared_ptr<Promise<std::string>> create_std__shared_ptr_Promise_std__string__() {
+    return Promise<std::string>::create();
+  }
+  
   // pragma MARK: std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>
   /**
    * Specialized version of `std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>`.

@@ -538,7 +538,8 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
               // void: resolve()
               return `
 [&]() {
-  jni::local_ref<JPromise::javaobject> __promise = JPromise::create();
+  jni::local_ref<JPromise::javaobject> __localPromise = JPromise::create();
+  jni::global_ref<JPromise::javaobject> __promise = jni::make_global(__localPromise);
   ${parameterName}->addOnResolvedListener([=]() {
     __promise->cthis()->resolve(JUnit::instance());
   });
@@ -546,14 +547,15 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
     auto __jniError = jni::getJavaExceptionForCppException(__error);
     __promise->cthis()->reject(__jniError);
   });
-  return __promise;
+  return __localPromise;
 }()
 `.trim()
             } else {
               // T: resolve(T)
               return `
 [&]() {
-  jni::local_ref<JPromise::javaobject> __promise = JPromise::create();
+  jni::local_ref<JPromise::javaobject> __localPromise = JPromise::create();
+  jni::global_ref<JPromise::javaobject> __promise = jni::make_global(__localPromise);
   ${parameterName}->addOnResolvedListener([=](const ${resolvingType}& __result) {
     __promise->cthis()->resolve(${indent(bridge.parseFromCppToKotlin('__result', 'c++', true), '    ')});
   });
@@ -561,7 +563,7 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
     auto __jniError = jni::getJavaExceptionForCppException(__error);
     __promise->cthis()->reject(__jniError);
   });
-  return __promise;
+  return __localPromise;
 }()
 `.trim()
             }

@@ -280,6 +280,14 @@ namespace margelo::nitro::image {
     inline void callWithOptional(std::optional<double> value, const std::function<void(std::optional<double> /* maybe */)>& callback) override {
       _swiftPart.callWithOptional(value, callback);
     }
+    inline std::shared_ptr<Promise<double>> getValueFromJSCallbackAndWait(const std::function<std::shared_ptr<Promise<double>>()>& getValue) override {
+      auto __result = _swiftPart.getValueFromJSCallbackAndWait(getValue);
+      return __result;
+    }
+    inline std::shared_ptr<Promise<void>> getValueFromJsCallback(const std::function<std::shared_ptr<Promise<std::string>>()>& callback, const std::function<void(const std::string& /* valueFromJs */)>& andThenCall) override {
+      auto __result = _swiftPart.getValueFromJsCallback(callback, andThenCall);
+      return __result;
+    }
     inline Car getCar() override {
       auto __result = _swiftPart.getCar();
       return __result;
