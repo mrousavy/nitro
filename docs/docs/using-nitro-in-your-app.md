@@ -113,7 +113,7 @@ After installing Nitro, you can start creating your [Hybrid Objects](hybrid-obje
   And now let's run Nitrogen:
 
   ```sh
-  npm run nitro-codegen
+  npx nitro-codegen
   ```
 
   :::warning
