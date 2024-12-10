@@ -120,7 +120,7 @@ Now run nitrogen:
 <Tabs groupId="package-manager">
   <TabItem value="npm" label="npm" default>
     ```sh
-    npm run nitro-codegen
+    npx nitro-codegen
     ```
   </TabItem>
   <TabItem value="yarn" label="yarn">
