@@ -32,7 +32,8 @@ namespace margelo::nitro::image {
     jni::local_ref<JPromise::javaobject> call() {
       std::shared_ptr<Promise<double>> __result = _func();
       return [&]() {
-        jni::local_ref<JPromise::javaobject> __promise = JPromise::create();
+        jni::local_ref<JPromise::javaobject> __localPromise = JPromise::create();
+        jni::global_ref<JPromise::javaobject> __promise = jni::make_global(__localPromise);
         __result->addOnResolvedListener([=](const double& __result) {
           __promise->cthis()->resolve(jni::JDouble::valueOf(__result));
         });
@@ -40,7 +41,7 @@ namespace margelo::nitro::image {
           auto __jniError = jni::getJavaExceptionForCppException(__error);
           __promise->cthis()->reject(__jniError);
         });
-        return __promise;
+        return __localPromise;
       }();
     }
 
