@@ -61,6 +61,21 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
   func callWithOptional(value: Double?, callback: @escaping ((_ maybe: Double?) -> Void)) throws -> Void {
     callback(value)
   }
+  
+  func getValueFromJSCallbackAndWait(getValue: @escaping (() -> Promise<Double>)) throws -> Promise<Double> {
+    return .async {
+      let jsResult = try await getValue().await()
+      return jsResult
+    }
+  }
+  
+  func getValueFromJsCallback(callback: @escaping (() -> Promise<String>), andThenCall: @escaping ((_ valueFromJs: String) -> Void)) throws -> Promise<Void> {
+    return .async {
+      let jsResult = try await callback().await()
+      andThenCall(jsResult)
+    }
+  }
+
 
   func bounceStrings(array: [String]) throws -> [String] {
     return array

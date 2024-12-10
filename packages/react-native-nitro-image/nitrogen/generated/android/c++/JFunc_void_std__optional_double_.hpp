@@ -29,7 +29,7 @@ namespace margelo::nitro::image {
 
   public:
     void call(jni::alias_ref<jni::JDouble> maybe) {
-      return _func(maybe != nullptr ? std::make_optional(maybe->value()) : std::nullopt);
+      _func(maybe != nullptr ? std::make_optional(maybe->value()) : std::nullopt);
     }
 
   public:

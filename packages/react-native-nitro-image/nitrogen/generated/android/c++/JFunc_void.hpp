@@ -28,7 +28,7 @@ namespace margelo::nitro::image {
 
   public:
     void call() {
-      return _func();
+      _func();
     }
 
   public:
