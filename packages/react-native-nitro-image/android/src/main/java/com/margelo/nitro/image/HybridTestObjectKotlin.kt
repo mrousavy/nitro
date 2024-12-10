@@ -167,6 +167,20 @@ class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
         callback(value)
     }
 
+    override fun getValueFromJSCallbackAndWait(getValue: (() -> Promise<Double>)) throws -> Promise<Double> {
+        return Promise.async {
+            val jsResult = getValue().await()
+            return jsResult
+        }
+    }
+
+    override fun getValueFromJsCallback(callback: (() -> Promise<String>), andThenCall: ((_ valueFromJs: String) -> Void)) throws -> Promise<Void> {
+        return Promise.async {
+            val jsResult = callback().await()
+            andThenCall(jsResult)
+        }
+    }
+
     override fun callAll(first: () -> Unit, second: () -> Unit, third: () -> Unit) {
         first()
         second()

@@ -901,6 +901,69 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
   }
   
   @inline(__always)
+  public func getValueFromJSCallbackAndWait(getValue: bridge.Func_std__shared_ptr_Promise_double__) -> bridge.std__shared_ptr_Promise_double__ {
+    do {
+      let __result = try self.__implementation.getValueFromJSCallbackAndWait(getValue: { () -> (() -> Promise<Double>) in
+        let __sharedClosure = bridge.share_Func_std__shared_ptr_Promise_double__(getValue)
+        return { () -> Promise<Double> in
+          let __result = __sharedClosure.pointee.call()
+          return { () -> bridge.std__shared_ptr_Promise_double__ in
+          let __promise = bridge.create_std__shared_ptr_Promise_double__()
+          __result
+            .then({ __result in __promise.pointee.resolve(__result) })
+            .catch({ __error in __promise.pointee.reject(__error.toCpp()) })
+          return __promise
+        }()
+        }
+      }())
+      return { () -> bridge.std__shared_ptr_Promise_double__ in
+        let __promise = bridge.create_std__shared_ptr_Promise_double__()
+        __result
+          .then({ __result in __promise.pointee.resolve(__result) })
+          .catch({ __error in __promise.pointee.reject(__error.toCpp()) })
+        return __promise
+      }()
+    } catch {
+      let __message = "\(error.localizedDescription)"
+      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(__message))")
+    }
+  }
+  
+  @inline(__always)
+  public func getValueFromJsCallback(callback: bridge.Func_std__shared_ptr_Promise_std__string__, andThenCall: bridge.Func_void_std__string) -> bridge.std__shared_ptr_Promise_void__ {
+    do {
+      let __result = try self.__implementation.getValueFromJsCallback(callback: { () -> (() -> Promise<String>) in
+        let __sharedClosure = bridge.share_Func_std__shared_ptr_Promise_std__string__(callback)
+        return { () -> Promise<String> in
+          let __result = __sharedClosure.pointee.call()
+          return { () -> bridge.std__shared_ptr_Promise_std__string__ in
+          let __promise = bridge.create_std__shared_ptr_Promise_std__string__()
+          __result
+            .then({ __result in __promise.pointee.resolve(std.string(__result)) })
+            .catch({ __error in __promise.pointee.reject(__error.toCpp()) })
+          return __promise
+        }()
+        }
+      }(), andThenCall: { () -> ((String) -> Void) in
+        let __sharedClosure = bridge.share_Func_void_std__string(andThenCall)
+        return { (__valueFromJs: String) -> Void in
+          __sharedClosure.pointee.call(std.string(__valueFromJs))
+        }
+      }())
+      return { () -> bridge.std__shared_ptr_Promise_void__ in
+        let __promise = bridge.create_std__shared_ptr_Promise_void__()
+        __result
+          .then({ __result in __promise.pointee.resolve() })
+          .catch({ __error in __promise.pointee.reject(__error.toCpp()) })
+        return __promise
+      }()
+    } catch {
+      let __message = "\(error.localizedDescription)"
+      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(__message))")
+    }
+  }
+  
+  @inline(__always)
   public func getCar() -> Car {
     do {
       let __result = try self.__implementation.getCar()

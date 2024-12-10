@@ -253,6 +253,28 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
+  abstract fun getValueFromJSCallbackAndWait(getValue: () -> Promise<Double>): Promise<Double>
+  
+  @DoNotStrip
+  @Keep
+  private fun getValueFromJSCallbackAndWait(getValue: Func_std__shared_ptr_Promise_double__): Promise<Double> {
+    val __result = getValueFromJSCallbackAndWait(getValue.toLambda())
+    return __result
+  }
+  
+  @DoNotStrip
+  @Keep
+  abstract fun getValueFromJsCallback(callback: () -> Promise<String>, andThenCall: (valueFromJs: String) -> Unit): Promise<Unit>
+  
+  @DoNotStrip
+  @Keep
+  private fun getValueFromJsCallback(callback: Func_std__shared_ptr_Promise_std__string__, andThenCall: Func_void_std__string): Promise<Unit> {
+    val __result = getValueFromJsCallback(callback.toLambda(), andThenCall.toLambda())
+    return __result
+  }
+  
+  @DoNotStrip
+  @Keep
   abstract fun getCar(): Car
   
   @DoNotStrip
