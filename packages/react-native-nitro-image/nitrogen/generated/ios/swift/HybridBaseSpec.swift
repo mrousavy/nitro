@@ -11,26 +11,18 @@ import NitroModules
 /**
  * A Swift protocol representing the Base HybridObject.
  * Implement this protocol to create Swift-based instances of Base.
- *
- * When implementing this protocol, make sure to initialize `hybridContext` - example:
- * ```
- * public class HybridBase : HybridBaseSpec {
- *   // Initialize HybridContext
- *   var hybridContext = margelo.nitro.HybridContext()
- *
- *   // Return size of the instance to inform JS GC about memory pressure
- *   var memorySize: Int {
- *     return getSizeOf(self)
- *   }
- *
- *   // ...
- * }
- * ```
  */
-public protocol HybridBaseSpec: AnyObject, HybridObjectSpec {
+public protocol HybridBaseSpec_protocol: AnyObject {
   // Properties
   var baseValue: Double { get }
 
   // Methods
   
 }
+
+public class HybridBaseSpec_base: HybridObjectSpec {
+  public var hybridContext = margelo.nitro.HybridContext()
+  public var memorySize: Int { return 0 }
+}
+
+public typealias HybridBaseSpec = HybridBaseSpec_protocol & HybridBaseSpec_base
