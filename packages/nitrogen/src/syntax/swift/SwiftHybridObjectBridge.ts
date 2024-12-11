@@ -98,7 +98,7 @@ ${hasBase ? `public class ${name.HybridTSpecCxx} : ${baseClasses.join(', ')}` : 
    * Create a new \`${name.HybridTSpecCxx}\` that wraps the given \`${name.HybridTSpec}\`.
    * All properties and methods bridge to C++ types.
    */
-  public init(_ implementation: some ${name.HybridTSpec}) {
+  public init(_ implementation: ${name.HybridTSpec}) {
     self.__implementation = implementation
     ${hasBase ? 'super.init(implementation)' : '/* no base class */'}
   }

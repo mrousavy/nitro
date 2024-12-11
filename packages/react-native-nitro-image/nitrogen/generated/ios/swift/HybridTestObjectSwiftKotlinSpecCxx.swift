@@ -58,7 +58,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
    * Create a new `HybridTestObjectSwiftKotlinSpecCxx` that wraps the given `HybridTestObjectSwiftKotlinSpec`.
    * All properties and methods bridge to C++ types.
    */
-  public init(_ implementation: some HybridTestObjectSwiftKotlinSpec) {
+  public init(_ implementation: HybridTestObjectSwiftKotlinSpec) {
     self.__implementation = implementation
     /* no base class */
   }
@@ -99,7 +99,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
     @inline(__always)
     get {
       return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_ in
-        let __cxxWrapped = HybridTestObjectSwiftKotlinSpecCxx(self.__implementation.thisObject)
+        let __cxxWrapped = self.__implementation.thisObject.createCxxPart(self.__implementation.thisObject)
         let __pointer = HybridTestObjectSwiftKotlinSpecCxxUnsafe.toUnsafe(__cxxWrapped)
         return bridge.create_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_(__pointer)
       }()
@@ -112,7 +112,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
       return { () -> bridge.std__optional_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec__ in
         if let __unwrappedValue = self.__implementation.optionalHybrid {
           return bridge.create_std__optional_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec__({ () -> bridge.std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_ in
-            let __cxxWrapped = HybridTestObjectSwiftKotlinSpecCxx(__unwrappedValue)
+            let __cxxWrapped = __unwrappedValue.createCxxPart(__unwrappedValue)
             let __pointer = HybridTestObjectSwiftKotlinSpecCxxUnsafe.toUnsafe(__cxxWrapped)
             return bridge.create_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_(__pointer)
           }())
@@ -348,7 +348,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
     do {
       let __result = try self.__implementation.newTestObject()
       return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_ in
-        let __cxxWrapped = HybridTestObjectSwiftKotlinSpecCxx(__result)
+        let __cxxWrapped = __result.createCxxPart(__result)
         let __pointer = HybridTestObjectSwiftKotlinSpecCxxUnsafe.toUnsafe(__cxxWrapped)
         return bridge.create_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_(__pointer)
       }()
@@ -1155,7 +1155,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
     do {
       let __result = try self.__implementation.createChild()
       return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridChildSpec_ in
-        let __cxxWrapped = HybridChildSpecCxx(__result)
+        let __cxxWrapped = __result.createCxxPart(__result)
         let __pointer = HybridChildSpecCxxUnsafe.toUnsafe(__cxxWrapped)
         return bridge.create_std__shared_ptr_margelo__nitro__image__HybridChildSpec_(__pointer)
       }()
@@ -1170,7 +1170,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
     do {
       let __result = try self.__implementation.createBase()
       return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridBaseSpec_ in
-        let __cxxWrapped = HybridBaseSpecCxx(__result)
+        let __cxxWrapped = __result.createCxxPart(__result)
         let __pointer = HybridBaseSpecCxxUnsafe.toUnsafe(__cxxWrapped)
         return bridge.create_std__shared_ptr_margelo__nitro__image__HybridBaseSpec_(__pointer)
       }()
@@ -1185,7 +1185,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
     do {
       let __result = try self.__implementation.createBaseActualChild()
       return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridBaseSpec_ in
-        let __cxxWrapped = HybridBaseSpecCxx(__result)
+        let __cxxWrapped = __result.createCxxPart(__result)
         let __pointer = HybridBaseSpecCxxUnsafe.toUnsafe(__cxxWrapped)
         return bridge.create_std__shared_ptr_margelo__nitro__image__HybridBaseSpec_(__pointer)
       }()
@@ -1204,7 +1204,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
         return __instance.getHybridChildSpec()
       }())
       return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridChildSpec_ in
-        let __cxxWrapped = HybridChildSpecCxx(__result)
+        let __cxxWrapped = __result.createCxxPart(__result)
         let __pointer = HybridChildSpecCxxUnsafe.toUnsafe(__cxxWrapped)
         return bridge.create_std__shared_ptr_margelo__nitro__image__HybridChildSpec_(__pointer)
       }()
@@ -1223,7 +1223,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
         return __instance.getHybridBaseSpec()
       }())
       return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridBaseSpec_ in
-        let __cxxWrapped = HybridBaseSpecCxx(__result)
+        let __cxxWrapped = __result.createCxxPart(__result)
         let __pointer = HybridBaseSpecCxxUnsafe.toUnsafe(__cxxWrapped)
         return bridge.create_std__shared_ptr_margelo__nitro__image__HybridBaseSpec_(__pointer)
       }()
@@ -1242,7 +1242,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
         return __instance.getHybridChildSpec()
       }())
       return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridBaseSpec_ in
-        let __cxxWrapped = HybridBaseSpecCxx(__result)
+        let __cxxWrapped = __result.createCxxPart(__result)
         let __pointer = HybridBaseSpecCxxUnsafe.toUnsafe(__cxxWrapped)
         return bridge.create_std__shared_ptr_margelo__nitro__image__HybridBaseSpec_(__pointer)
       }()
@@ -1261,7 +1261,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
         return __instance.getHybridBaseSpec()
       }())
       return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridChildSpec_ in
-        let __cxxWrapped = HybridChildSpecCxx(__result)
+        let __cxxWrapped = __result.createCxxPart(__result)
         let __pointer = HybridChildSpecCxxUnsafe.toUnsafe(__cxxWrapped)
         return bridge.create_std__shared_ptr_margelo__nitro__image__HybridChildSpec_(__pointer)
       }()

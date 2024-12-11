@@ -21,7 +21,9 @@ public protocol HybridChildSpec_protocol: AnyObject, HybridBaseSpec_protocol {
 }
 
 public class HybridChildSpec_base: HybridBaseSpec_base {
-  
+  public override func createCxxPart(_ instance: HybridBaseSpec) -> HybridChildSpecCxx {
+    return HybridChildSpecCxx(instance as! HybridChildSpec)
+  }
 }
 
 public typealias HybridChildSpec = HybridChildSpec_protocol & HybridChildSpec_base

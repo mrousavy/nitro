@@ -589,7 +589,7 @@ case ${i}:
           case 'swift':
             return `
 { () -> bridge.${bridge.specializationName} in
-  let __cxxWrapped = ${name.HybridTSpecCxx}(${swiftParameterName})
+  let __cxxWrapped = ${swiftParameterName}.createCxxPart(${swiftParameterName})
   let __pointer = ${name.HybridTSpecCxx}Unsafe.toUnsafe(__cxxWrapped)
   return ${makeFunc}(__pointer)
 }()`.trim()

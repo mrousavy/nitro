@@ -58,7 +58,7 @@ public class HybridImageFactorySpecCxx {
    * Create a new `HybridImageFactorySpecCxx` that wraps the given `HybridImageFactorySpec`.
    * All properties and methods bridge to C++ types.
    */
-  public init(_ implementation: some HybridImageFactorySpec) {
+  public init(_ implementation: HybridImageFactorySpec) {
     self.__implementation = implementation
     /* no base class */
   }
@@ -103,7 +103,7 @@ public class HybridImageFactorySpecCxx {
     do {
       let __result = try self.__implementation.loadImageFromFile(path: String(path))
       return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridImageSpec_ in
-        let __cxxWrapped = HybridImageSpecCxx(__result)
+        let __cxxWrapped = __result.createCxxPart(__result)
         let __pointer = HybridImageSpecCxxUnsafe.toUnsafe(__cxxWrapped)
         return bridge.create_std__shared_ptr_margelo__nitro__image__HybridImageSpec_(__pointer)
       }()
@@ -118,7 +118,7 @@ public class HybridImageFactorySpecCxx {
     do {
       let __result = try self.__implementation.loadImageFromURL(path: String(path))
       return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridImageSpec_ in
-        let __cxxWrapped = HybridImageSpecCxx(__result)
+        let __cxxWrapped = __result.createCxxPart(__result)
         let __pointer = HybridImageSpecCxxUnsafe.toUnsafe(__cxxWrapped)
         return bridge.create_std__shared_ptr_margelo__nitro__image__HybridImageSpec_(__pointer)
       }()
@@ -133,7 +133,7 @@ public class HybridImageFactorySpecCxx {
     do {
       let __result = try self.__implementation.loadImageFromSystemName(path: String(path))
       return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridImageSpec_ in
-        let __cxxWrapped = HybridImageSpecCxx(__result)
+        let __cxxWrapped = __result.createCxxPart(__result)
         let __pointer = HybridImageSpecCxxUnsafe.toUnsafe(__cxxWrapped)
         return bridge.create_std__shared_ptr_margelo__nitro__image__HybridImageSpec_(__pointer)
       }()
@@ -152,7 +152,7 @@ public class HybridImageFactorySpecCxx {
         return __instance.getHybridImageSpec()
       }())
       return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridImageSpec_ in
-        let __cxxWrapped = HybridImageSpecCxx(__result)
+        let __cxxWrapped = __result.createCxxPart(__result)
         let __pointer = HybridImageSpecCxxUnsafe.toUnsafe(__cxxWrapped)
         return bridge.create_std__shared_ptr_margelo__nitro__image__HybridImageSpec_(__pointer)
       }()
