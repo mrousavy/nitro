@@ -22,7 +22,7 @@ public protocol HybridBaseSpec_protocol: AnyObject {
 
 public class HybridBaseSpec_base: HybridObjectSpec {
   public var hybridContext = margelo.nitro.HybridContext()
-  public var memorySize: Int { return 0 }
+  public var memorySize: Int { return getSizeOf(self) }
 }
 
 public typealias HybridBaseSpec = HybridBaseSpec_protocol & HybridBaseSpec_base

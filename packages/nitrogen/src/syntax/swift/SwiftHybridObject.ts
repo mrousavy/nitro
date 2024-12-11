@@ -24,7 +24,7 @@ export function createSwiftHybridObject(spec: HybridObjectSpec): SourceFile[] {
     // It doesn't have a base class - implement hybridContext
     classBaseClasses.push('HybridObjectSpec')
     baseMembers.push(`public var hybridContext = margelo.nitro.HybridContext()`)
-    baseMembers.push(`public var memorySize: Int { return 0 }`)
+    baseMembers.push(`public var memorySize: Int { return getSizeOf(self) }`)
   }
 
   const protocolCode = `

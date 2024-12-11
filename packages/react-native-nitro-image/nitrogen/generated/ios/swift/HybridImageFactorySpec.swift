@@ -25,7 +25,7 @@ public protocol HybridImageFactorySpec_protocol: AnyObject {
 
 public class HybridImageFactorySpec_base: HybridObjectSpec {
   public var hybridContext = margelo.nitro.HybridContext()
-  public var memorySize: Int { return 0 }
+  public var memorySize: Int { return getSizeOf(self) }
 }
 
 public typealias HybridImageFactorySpec = HybridImageFactorySpec_protocol & HybridImageFactorySpec_base
