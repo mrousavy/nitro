@@ -8,11 +8,6 @@
 import Foundation
 
 class HybridBase : HybridBaseSpec {
-  var hybridContext = margelo.nitro.HybridContext()
-  var memorySize: Int {
-    return getSizeOf(self)
-  }
-
   var baseValue: Double {
     return 10
   }

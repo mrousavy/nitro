@@ -788,7 +788,7 @@ case ${i}:
             const createFunc = `bridge.${bridge.funcName}`
             return `
 { () -> bridge.${bridge.specializationName} in
-  class ClosureHolder {
+  final class ClosureHolder {
     let closure: ${func.getCode('swift')}
     init(wrappingClosure closure: @escaping ${func.getCode('swift')}) {
       self.closure = closure
