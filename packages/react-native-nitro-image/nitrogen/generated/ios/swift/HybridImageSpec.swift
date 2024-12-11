@@ -11,23 +11,8 @@ import NitroModules
 /**
  * A Swift protocol representing the Image HybridObject.
  * Implement this protocol to create Swift-based instances of Image.
- *
- * When implementing this protocol, make sure to initialize `hybridContext` - example:
- * ```
- * public class HybridImage : HybridImageSpec {
- *   // Initialize HybridContext
- *   var hybridContext = margelo.nitro.HybridContext()
- *
- *   // Return size of the instance to inform JS GC about memory pressure
- *   var memorySize: Int {
- *     return getSizeOf(self)
- *   }
- *
- *   // ...
- * }
- * ```
  */
-public protocol HybridImageSpec: AnyObject, HybridObjectSpec {
+public protocol HybridImageSpec_protocol: AnyObject {
   // Properties
   var size: ImageSize { get }
   var pixelFormat: PixelFormat { get }
@@ -37,3 +22,10 @@ public protocol HybridImageSpec: AnyObject, HybridObjectSpec {
   func toArrayBuffer(format: ImageFormat) throws -> Double
   func saveToFile(path: String, onFinished: @escaping ((_ path: String) -> Void)) throws -> Void
 }
+
+public class HybridImageSpec_base: HybridObjectSpec {
+  public var hybridContext = margelo.nitro.HybridContext()
+  public var memorySize: Int { return 0 }
+}
+
+public typealias HybridImageSpec = HybridImageSpec_protocol & HybridImageSpec_base
