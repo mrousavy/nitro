@@ -58,7 +58,7 @@ public class HybridBaseSpecCxx {
    * Create a new `HybridBaseSpecCxx` that wraps the given `HybridBaseSpec`.
    * All properties and methods bridge to C++ types.
    */
-  public init(_ implementation: some HybridBaseSpec) {
+  public init(_ implementation: HybridBaseSpec) {
     self.__implementation = implementation
     /* no base class */
   }

@@ -23,6 +23,9 @@ public protocol HybridBaseSpec_protocol: AnyObject {
 public class HybridBaseSpec_base: HybridObjectSpec {
   public var hybridContext = margelo.nitro.HybridContext()
   public var memorySize: Int { return getSizeOf(self) }
+  public func createCxxPart(_ instance: HybridBaseSpec) -> HybridBaseSpecCxx {
+    return HybridBaseSpecCxx(instance)
+  }
 }
 
 public typealias HybridBaseSpec = HybridBaseSpec_protocol & HybridBaseSpec_base

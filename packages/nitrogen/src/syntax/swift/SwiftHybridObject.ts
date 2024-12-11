@@ -25,6 +25,23 @@ export function createSwiftHybridObject(spec: HybridObjectSpec): SourceFile[] {
     classBaseClasses.push('HybridObjectSpec')
     baseMembers.push(`public var hybridContext = margelo.nitro.HybridContext()`)
     baseMembers.push(`public var memorySize: Int { return getSizeOf(self) }`)
+    baseMembers.push(
+      `
+public func createCxxPart(_ instance: ${protocolName}) -> ${protocolName}Cxx {
+  return ${protocolName}Cxx(instance)
+}`.trim()
+    )
+  } else {
+    const baseHybrid = spec.baseTypes.find((b) => b.baseTypes.length === 0)
+    if (baseHybrid == null)
+      throw new Error(`Can't find base class of ${spec.name}!`)
+    let baseInstance = getHybridObjectName(baseHybrid.name).HybridTSpec
+    baseMembers.push(
+      `
+public override func createCxxPart(_ instance: ${baseInstance}) -> ${protocolName}Cxx {
+  return ${protocolName}Cxx(instance as! ${protocolName})
+}`.trim()
+    )
   }
 
   const protocolCode = `
