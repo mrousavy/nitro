@@ -39,8 +39,9 @@ target_sources(
   ../nitrogen/generated/android/c++/JHybridTestObjectSwiftKotlinSpec.cpp
   ../nitrogen/generated/android/c++/JHybridBaseSpec.cpp
   ../nitrogen/generated/android/c++/JHybridChildSpec.cpp
-  # Component Descriptors
-#  ../nitrogen/generated/android/c++/CustomComponentDescriptor.cpp
+  # Utility
+  ../nitrogen/generated/android/c++/JValueFromStateWrapper.cpp
+  ../nitrogen/generated/android/c++/CustomComponentDescriptor.cpp
 )
 
 # Add all libraries required by the generated specs
