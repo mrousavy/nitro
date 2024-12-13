@@ -5,6 +5,7 @@
 
 #include <fbjni/fbjni.h>
 #include <react/fabric/StateWrapperImpl.h>
+#include "JHybridTestObjectSwiftKotlinSpec.hpp"
 
 namespace margelo::nitro::image {
 
@@ -16,7 +17,7 @@ struct JValueFromStateWrapper : jni::HybridClass<JValueFromStateWrapper> {
 
   static void registerNatives();
 
-  static jni::local_ref<jni::JObject> valueFromStateWrapper(jni::alias_ref<jni::JClass>,
+  static jni::local_ref<JHybridTestObjectSwiftKotlinSpec::javaobject> valueFromStateWrapper(jni::alias_ref<jni::JClass>,
                                                             jni::alias_ref<StateWrapperImpl::javaobject> stateWrapperRef);
 };
 

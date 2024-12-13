@@ -11,7 +11,8 @@
 #include <react/renderer/core/PropsParserContext.h>
 #include <react/renderer/core/StateData.h>
 
-#include "HybridTestObjectCppSpec.hpp"
+//#include "HybridTestObjectCppSpec.hpp"
+#include "HybridTestObjectSwiftKotlinSpec.hpp"
 
 namespace facebook::react {
 using namespace margelo::nitro;
@@ -30,12 +31,12 @@ public:
 
     // Option 1: Manually cast it
     const auto& [runtime, value] = (std::pair<jsi::Runtime*, const jsi::Value&>)*rawValue;
-    std::shared_ptr<HybridTestObjectCppSpec> prop =
-        margelo::nitro::JSIConverter<std::shared_ptr<HybridTestObjectCppSpec>>::fromJSI(*runtime, value);
+    std::shared_ptr<HybridTestObjectSwiftKotlinSpec> prop =
+        margelo::nitro::JSIConverter<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>>::fromJSI(*runtime, value);
     nativeProp = prop;
   }
 
-  std::shared_ptr<HybridTestObjectCppSpec> nativeProp = nullptr;
+  std::shared_ptr<HybridTestObjectSwiftKotlinSpec> nativeProp = nullptr;
 };
 
 // Use StateData to retain native jsi values on android
@@ -44,7 +45,7 @@ struct JSI_EXPORT CustomStateData final {
 
   //    CustomStateData() = default;
 
-  std::shared_ptr<HybridTestObjectCppSpec> nativeProp = nullptr;
+  std::shared_ptr<HybridTestObjectSwiftKotlinSpec> nativeProp = nullptr;
 
 #ifdef ANDROID
 

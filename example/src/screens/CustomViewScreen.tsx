@@ -1,10 +1,20 @@
 import React from 'react'
 import { Button, View } from 'react-native'
 import { CustomView } from '../components/CustomView'
-import { HybridTestObjectCpp } from 'react-native-nitro-image'
+import { type TestObjectSwiftKotlin } from 'react-native-nitro-image'
+import { NitroModules } from 'react-native-nitro-modules'
+
+function makeObject() {
+  const obj = NitroModules.createHybridObject<TestObjectSwiftKotlin>(
+    'TestObjectSwiftKotlin'
+  )
+  obj.bigintValue = BigInt(Math.random() * 1000000000000000000 + '')
+  console.log('makeObject', obj)
+  return obj
+}
 
 export function CustomViewScreen() {
-  const [state, setState] = React.useState(0)
+  const [state, setState] = React.useState(makeObject)
 
   return (
     <View
@@ -16,14 +26,14 @@ export function CustomViewScreen() {
       }}
     >
       <CustomView
-        nativeProp={HybridTestObjectCpp}
+        nativeProp={state}
         style={{
           width: 200,
           height: 200,
           backgroundColor: 'red',
         }}
       />
-      <Button title="Increment" onPress={() => setState(state + 1)} />
+      <Button title="Increment" onPress={() => setState(makeObject())} />
     </View>
   )
 }

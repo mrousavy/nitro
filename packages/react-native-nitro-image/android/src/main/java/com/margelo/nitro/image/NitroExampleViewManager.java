@@ -33,9 +33,8 @@ public class NitroExampleViewManager extends SimpleViewManager<View> {
 
         // TODO: i am sure there is a way to make this casting a bit better
 //        HybridTestObjectKotlin nativeProp = ValueFromStateWrapper.getNativeProp(stateWrapper, "nativeProp", HybridTestObjectKotlin.class);
-        Object nativeProp = ValueFromStateWrapper.valueFromStateWrapper(stateWrapperImpl);
-        HybridTestObjectKotlin casted = (HybridTestObjectKotlin) nativeProp;
-        long value = casted.getBigintValue();
+        HybridTestObjectSwiftKotlinSpec nativeProp = ValueFromStateWrapper.valueFromStateWrapper(stateWrapperImpl);
+        long value = nativeProp.getBigintValue();
         Log.d("NitroExampleViewManager", "Value from state: " + value);
 
         // TODO: @Marc - here we could call a method that the user has to implement for the prop update
