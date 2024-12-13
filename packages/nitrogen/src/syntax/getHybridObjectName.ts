@@ -23,12 +23,6 @@ export interface HybridObjectName {
    */
   HybridTSpecCxx: string
   /**
-   * The name of the Swift class that converts unsafe instances (`void*`) of
-   * {@linkcode HybridTSpec} over to C++.
-   * @example "HybridImage_cxx_unsafe"
-   */
-  HybridTSpecCxxUnsafe: string
-  /**
    * The name of the C++ class that actually bridges to the Java Hybrid Object.
    * @example "JHybridImage"
    */
@@ -48,7 +42,6 @@ export function getHybridObjectName(
     HybridT: `Hybrid${hybridObjectName}`,
     HybridTSpec: `Hybrid${hybridObjectName}Spec`,
     HybridTSpecCxx: `Hybrid${hybridObjectName}Spec_cxx`,
-    HybridTSpecCxxUnsafe: `Hybrid${hybridObjectName}Spec_cxx_unsafe`,
     JHybridTSpec: `JHybrid${hybridObjectName}Spec`,
     HybridTSpecSwift: `Hybrid${hybridObjectName}SpecSwift`,
   }

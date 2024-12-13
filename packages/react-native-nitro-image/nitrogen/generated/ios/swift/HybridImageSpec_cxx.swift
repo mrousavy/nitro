@@ -9,30 +9,6 @@ import Foundation
 import NitroModules
 
 /**
- * Helper class for converting instances of `HybridImageSpec_cxx` from- and to unsafe pointers.
- * This is useful to pass Swift classes to C++, without having to strongly type the C++ function signature.
- * The actual Swift type can be included in the .cpp file, without having to forward-declare anything in .hpp.
- */
-public final class HybridImageSpec_cxx_unsafe {
-  /**
-   * Casts a `HybridImageSpec_cxx` instance to a retained unsafe raw pointer.
-   * This acquires one additional strong reference on the object!
-   */
-  public static func toUnsafe(_ instance: HybridImageSpec_cxx) -> UnsafeMutableRawPointer {
-    return Unmanaged.passRetained(instance).toOpaque()
-  }
-
-  /**
-   * Casts an unsafe pointer to a `HybridImageSpec_cxx`.
-   * The pointer has to be a retained opaque `Unmanaged<HybridImageSpec_cxx>`.
-   * This removes one strong reference from the object!
-   */
-  public static func fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> HybridImageSpec_cxx {
-    return Unmanaged<HybridImageSpec_cxx>.fromOpaque(pointer).takeRetainedValue()
-  }
-}
-
-/**
  * A class implementation that bridges HybridImageSpec over to C++.
  * In C++, we cannot use Swift protocols - so we need to wrap it in a class to make it strongly defined.
  *
@@ -69,6 +45,23 @@ public class HybridImageSpec_cxx {
   @inline(__always)
   public func getHybridImageSpec() -> any HybridImageSpec {
     return __implementation
+  }
+
+  /**
+   * Casts this instance to a retained unsafe raw pointer.
+   * This acquires one additional strong reference on the object!
+   */
+  public func toUnsafe() -> UnsafeMutableRawPointer {
+    return Unmanaged.passRetained(self).toOpaque()
+  }
+
+  /**
+   * Casts an unsafe pointer to a `HybridImageSpec_cxx`.
+   * The pointer has to be a retained opaque `Unmanaged<HybridImageSpec_cxx>`.
+   * This removes one strong reference from the object!
+   */
+  public static func fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> HybridImageSpec_cxx {
+    return Unmanaged<HybridImageSpec_cxx>.fromOpaque(pointer).takeRetainedValue()
   }
 
   /**

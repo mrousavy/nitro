@@ -9,30 +9,6 @@ import Foundation
 import NitroModules
 
 /**
- * Helper class for converting instances of `HybridImageFactorySpec_cxx` from- and to unsafe pointers.
- * This is useful to pass Swift classes to C++, without having to strongly type the C++ function signature.
- * The actual Swift type can be included in the .cpp file, without having to forward-declare anything in .hpp.
- */
-public final class HybridImageFactorySpec_cxx_unsafe {
-  /**
-   * Casts a `HybridImageFactorySpec_cxx` instance to a retained unsafe raw pointer.
-   * This acquires one additional strong reference on the object!
-   */
-  public static func toUnsafe(_ instance: HybridImageFactorySpec_cxx) -> UnsafeMutableRawPointer {
-    return Unmanaged.passRetained(instance).toOpaque()
-  }
-
-  /**
-   * Casts an unsafe pointer to a `HybridImageFactorySpec_cxx`.
-   * The pointer has to be a retained opaque `Unmanaged<HybridImageFactorySpec_cxx>`.
-   * This removes one strong reference from the object!
-   */
-  public static func fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> HybridImageFactorySpec_cxx {
-    return Unmanaged<HybridImageFactorySpec_cxx>.fromOpaque(pointer).takeRetainedValue()
-  }
-}
-
-/**
  * A class implementation that bridges HybridImageFactorySpec over to C++.
  * In C++, we cannot use Swift protocols - so we need to wrap it in a class to make it strongly defined.
  *
@@ -72,6 +48,23 @@ public class HybridImageFactorySpec_cxx {
   }
 
   /**
+   * Casts this instance to a retained unsafe raw pointer.
+   * This acquires one additional strong reference on the object!
+   */
+  public func toUnsafe() -> UnsafeMutableRawPointer {
+    return Unmanaged.passRetained(self).toOpaque()
+  }
+
+  /**
+   * Casts an unsafe pointer to a `HybridImageFactorySpec_cxx`.
+   * The pointer has to be a retained opaque `Unmanaged<HybridImageFactorySpec_cxx>`.
+   * This removes one strong reference from the object!
+   */
+  public static func fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> HybridImageFactorySpec_cxx {
+    return Unmanaged<HybridImageFactorySpec_cxx>.fromOpaque(pointer).takeRetainedValue()
+  }
+
+  /**
    * Contains a (weak) reference to the C++ HybridObject to cache it.
    */
   public var hybridContext: margelo.nitro.HybridContext {
@@ -104,7 +97,7 @@ public class HybridImageFactorySpec_cxx {
       let __result = try self.__implementation.loadImageFromFile(path: String(path))
       return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridImageSpec_ in
         let __cxxWrapped = HybridImageSpec_cxx(__result)
-        let __pointer = HybridImageSpec_cxx_unsafe.toUnsafe(__cxxWrapped)
+        let __pointer = __cxxWrapped.toUnsafe()
         return bridge.create_std__shared_ptr_margelo__nitro__image__HybridImageSpec_(__pointer)
       }()
     } catch {
@@ -119,7 +112,7 @@ public class HybridImageFactorySpec_cxx {
       let __result = try self.__implementation.loadImageFromURL(path: String(path))
       return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridImageSpec_ in
         let __cxxWrapped = HybridImageSpec_cxx(__result)
-        let __pointer = HybridImageSpec_cxx_unsafe.toUnsafe(__cxxWrapped)
+        let __pointer = __cxxWrapped.toUnsafe()
         return bridge.create_std__shared_ptr_margelo__nitro__image__HybridImageSpec_(__pointer)
       }()
     } catch {
@@ -134,7 +127,7 @@ public class HybridImageFactorySpec_cxx {
       let __result = try self.__implementation.loadImageFromSystemName(path: String(path))
       return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridImageSpec_ in
         let __cxxWrapped = HybridImageSpec_cxx(__result)
-        let __pointer = HybridImageSpec_cxx_unsafe.toUnsafe(__cxxWrapped)
+        let __pointer = __cxxWrapped.toUnsafe()
         return bridge.create_std__shared_ptr_margelo__nitro__image__HybridImageSpec_(__pointer)
       }()
     } catch {
@@ -148,12 +141,12 @@ public class HybridImageFactorySpec_cxx {
     do {
       let __result = try self.__implementation.bounceBack(image: { () -> HybridImageSpec in
         let __unsafePointer = bridge.get_std__shared_ptr_margelo__nitro__image__HybridImageSpec_(image)
-        let __instance = HybridImageSpec_cxx_unsafe.fromUnsafe(__unsafePointer)
+        let __instance = HybridImageSpec_cxx.fromUnsafe(__unsafePointer)
         return __instance.getHybridImageSpec()
       }())
       return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridImageSpec_ in
         let __cxxWrapped = HybridImageSpec_cxx(__result)
-        let __pointer = HybridImageSpec_cxx_unsafe.toUnsafe(__cxxWrapped)
+        let __pointer = __cxxWrapped.toUnsafe()
         return bridge.create_std__shared_ptr_margelo__nitro__image__HybridImageSpec_(__pointer)
       }()
     } catch {

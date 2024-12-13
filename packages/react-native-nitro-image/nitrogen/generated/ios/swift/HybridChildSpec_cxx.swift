@@ -9,30 +9,6 @@ import Foundation
 import NitroModules
 
 /**
- * Helper class for converting instances of `HybridChildSpec_cxx` from- and to unsafe pointers.
- * This is useful to pass Swift classes to C++, without having to strongly type the C++ function signature.
- * The actual Swift type can be included in the .cpp file, without having to forward-declare anything in .hpp.
- */
-public final class HybridChildSpec_cxx_unsafe {
-  /**
-   * Casts a `HybridChildSpec_cxx` instance to a retained unsafe raw pointer.
-   * This acquires one additional strong reference on the object!
-   */
-  public static func toUnsafe(_ instance: HybridChildSpec_cxx) -> UnsafeMutableRawPointer {
-    return Unmanaged.passRetained(instance).toOpaque()
-  }
-
-  /**
-   * Casts an unsafe pointer to a `HybridChildSpec_cxx`.
-   * The pointer has to be a retained opaque `Unmanaged<HybridChildSpec_cxx>`.
-   * This removes one strong reference from the object!
-   */
-  public static func fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> HybridChildSpec_cxx {
-    return Unmanaged<HybridChildSpec_cxx>.fromOpaque(pointer).takeRetainedValue()
-  }
-}
-
-/**
  * A class implementation that bridges HybridChildSpec over to C++.
  * In C++, we cannot use Swift protocols - so we need to wrap it in a class to make it strongly defined.
  *
@@ -69,6 +45,23 @@ public class HybridChildSpec_cxx : HybridBaseSpec_cxx {
   @inline(__always)
   public func getHybridChildSpec() -> any HybridChildSpec {
     return __implementation
+  }
+
+  /**
+   * Casts this instance to a retained unsafe raw pointer.
+   * This acquires one additional strong reference on the object!
+   */
+  public func toUnsafe() -> UnsafeMutableRawPointer {
+    return Unmanaged.passRetained(self).toOpaque()
+  }
+
+  /**
+   * Casts an unsafe pointer to a `HybridChildSpec_cxx`.
+   * The pointer has to be a retained opaque `Unmanaged<HybridChildSpec_cxx>`.
+   * This removes one strong reference from the object!
+   */
+  public static func fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> HybridChildSpec_cxx {
+    return Unmanaged<HybridChildSpec_cxx>.fromOpaque(pointer).takeRetainedValue()
   }
 
   /**
