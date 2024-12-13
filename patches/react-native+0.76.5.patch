@@ -1,3 +1,84 @@
+diff --git a/node_modules/react-native/ReactAndroid/build.gradle.kts b/node_modules/react-native/ReactAndroid/build.gradle.kts
+index 52acc4c..8ab4cd0 100644
+--- a/node_modules/react-native/ReactAndroid/build.gradle.kts
++++ b/node_modules/react-native/ReactAndroid/build.gradle.kts
+@@ -96,7 +96,7 @@ val preparePrefab by
+                       // jsiinpsector
+                       Pair("../ReactCommon/jsinspector-modern/", "jsinspector-modern/"),
+                       // mapbufferjni
+-                      Pair("src/main/jni/react/mapbuffer", "react/mapbuffer/"),
++                      Pair("src/main/jni/react/mapbuffer", ""),
+                       // turbomodulejsijni
+                       Pair("src/main/jni/react/turbomodule", ""),
+                       // react_codegen_rncore
+diff --git a/node_modules/react-native/ReactAndroid/src/main/jni/react/fabric/StateWrapperImpl.cpp b/node_modules/react-native/ReactAndroid/src/main/jni/react/fabric/StateWrapperImpl.cpp
+index 6ea03ff..0351565 100644
+--- a/node_modules/react-native/ReactAndroid/src/main/jni/react/fabric/StateWrapperImpl.cpp
++++ b/node_modules/react-native/ReactAndroid/src/main/jni/react/fabric/StateWrapperImpl.cpp
+@@ -88,6 +88,14 @@ void StateWrapperImpl::setState(std::shared_ptr<const State> state) {
+   }
+ }
+ 
++const State& StateWrapperImpl::getState() const {
++    if (ReactNativeFeatureFlags::fixMissedFabricStateUpdatesOnAndroid()) {
++      return *state_;
++    } else {
++      return *weakState_.lock();
++    }
++}
++
+ void StateWrapperImpl::registerNatives() {
+   registerHybrid({
+       makeNativeMethod("initHybrid", StateWrapperImpl::initHybrid),
+diff --git a/node_modules/react-native/ReactAndroid/src/main/jni/react/fabric/StateWrapperImpl.h b/node_modules/react-native/ReactAndroid/src/main/jni/react/fabric/StateWrapperImpl.h
+index 542f78c..c0eec6a 100644
+--- a/node_modules/react-native/ReactAndroid/src/main/jni/react/fabric/StateWrapperImpl.h
++++ b/node_modules/react-native/ReactAndroid/src/main/jni/react/fabric/StateWrapperImpl.h
+@@ -29,6 +29,7 @@ class StateWrapperImpl : public jni::HybridClass<StateWrapperImpl> {
+   jni::local_ref<ReadableNativeMap::jhybridobject> getStateDataImpl();
+   void updateStateImpl(NativeMap* map);
+   void setState(std::shared_ptr<const State> state);
++  const State& getState() const;
+ 
+  private:
+   jni::alias_ref<StateWrapperImpl::jhybriddata> jhybridobject_;
+diff --git a/node_modules/react-native/ReactCommon/jsi/jsi/JSIDynamic.cpp b/node_modules/react-native/ReactCommon/jsi/jsi/JSIDynamic.cpp
+index 5a2d38d..a0904ca 100644
+--- a/node_modules/react-native/ReactCommon/jsi/jsi/JSIDynamic.cpp
++++ b/node_modules/react-native/ReactCommon/jsi/jsi/JSIDynamic.cpp
+@@ -192,8 +192,17 @@ folly::dynamic dynamicFromValue(
+         // The JSC conversion uses JSON.stringify, which substitutes
+         // null for a function, so we do the same here.  Just dropping
+         // the pair might also work, but would require more testing.
+-        if (prop.isObject() && prop.getObject(runtime).isFunction(runtime)) {
+-          prop = Value::null();
++        if (prop.isObject()) {
++            Object obj = prop.getObject(runtime);
++            if (obj.isFunction(runtime)) {
++                prop = Value::null();
++            }
++            if (obj.hasNativeState(runtime)) {
++                // Quick workaround for nitro for now, this will be handled more accurately
++                // using the filter function once this pr has landed:
++                //  https://github.com/facebook/react-native/pull/48202
++                continue;
++            }
+         }
+         props.emplace_back(std::move(nameStr), std::move(prop));
+         top.dyn->insert(props.back().first, nullptr);
+diff --git a/node_modules/react-native/ReactCommon/react/renderer/components/unimplementedview/UnimplementedViewComponentDescriptor.cpp b/node_modules/react-native/ReactCommon/react/renderer/components/unimplementedview/UnimplementedViewComponentDescriptor.cpp
+index 7b42990..7ab61cc 100644
+--- a/node_modules/react-native/ReactCommon/react/renderer/components/unimplementedview/UnimplementedViewComponentDescriptor.cpp
++++ b/node_modules/react-native/ReactCommon/react/renderer/components/unimplementedview/UnimplementedViewComponentDescriptor.cpp
+@@ -29,7 +29,7 @@ Props::Shared UnimplementedViewComponentDescriptor::cloneProps(
+   // We have to clone `Props` object one more time to make sure that we have
+   // an unshared (and non-`const`) copy of it which we can mutate.
+   RawProps emptyRawProps{};
+-  emptyRawProps.parse(rawPropsParser_);
++  emptyRawProps.parse(*rawPropsParser_);
+   auto unimplementedViewProps = std::make_shared<UnimplementedViewProps>(
+       context,
+       static_cast<const UnimplementedViewProps&>(*clonedProps),
 diff --git a/node_modules/react-native/ReactCommon/react/renderer/core/ComponentDescriptor.cpp b/node_modules/react-native/ReactCommon/react/renderer/core/ComponentDescriptor.cpp
 index ca23205..c5beaac 100644
 --- a/node_modules/react-native/ReactCommon/react/renderer/core/ComponentDescriptor.cpp
