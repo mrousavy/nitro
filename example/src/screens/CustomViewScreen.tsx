@@ -33,7 +33,12 @@ export function CustomViewScreen() {
           backgroundColor: 'red',
         }}
       />
-      <Button title="Increment" onPress={() => setState(makeObject())} />
+      <Button
+        title="Increment"
+        onPress={() => {
+          setState(makeObject())
+        }}
+      />
     </View>
   )
 }

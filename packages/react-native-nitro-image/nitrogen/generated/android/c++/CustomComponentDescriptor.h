@@ -11,7 +11,7 @@
 #include <react/renderer/core/PropsParserContext.h>
 #include <react/renderer/core/StateData.h>
 
-//#include "HybridTestObjectCppSpec.hpp"
+// #include "HybridTestObjectCppSpec.hpp"
 #include "HybridTestObjectSwiftKotlinSpec.hpp"
 
 namespace facebook::react {
@@ -73,23 +73,7 @@ class ComponentShadowNode : public ConcreteViewShadowNode<CustomViewComponentNam
 
 public:
   ComponentShadowNode(const ShadowNodeFragment& fragment, const ShadowNodeFamily::Shared& family, ShadowNodeTraits traits)
-      : ConcreteViewShadowNode(fragment, family, traits) {
-    // ==== Flow needed for android ====
-    // We store the props in a state wrapper. There is no way to convert back
-    // to the underlying c++ props from java, as these have been converted to folly::dynamic very early on.
-    // However state wrapper is a fbjni Hybrid which we can use to pass data back and forth between java and c++.
-
-    // Cast to our prop type
-    const auto& props = *std::static_pointer_cast<CustomViewProps const>(fragment.props);
-
-    // Update our props
-    // TODO: does that really work on every prop update?
-    CustomStateData stateData{};
-    stateData.nativeProp = props.nativeProp;
-
-    // Update our state to reflect our props state
-    setStateData(std::move(stateData));
-  }
+      : ConcreteViewShadowNode(fragment, family, traits) {}
 
   ComponentShadowNode(const ShadowNode& sourceShadowNode, const ShadowNodeFragment& fragment)
       : ConcreteViewShadowNode(sourceShadowNode, fragment) {}
@@ -100,5 +84,22 @@ public:
   CustomViewComponentDescriptor(const ComponentDescriptorParameters& parameters)
       // Construct a new RawPropsParser to which we pass true which enables JSI prop parsing
       : ConcreteComponentDescriptor(parameters, std::make_unique<RawPropsParser>(true)) {}
+
+  void adopt(facebook::react::ShadowNode& shadowNode) const override {
+    // Called immediately after `ShadowNode` is created, cloned or in progress
+    // So here is the best place to pass our props to the state:
+    auto& concreteShadowNode = dynamic_cast<ComponentShadowNode&>(shadowNode);
+    const auto& props = concreteShadowNode.getConcreteProps();
+
+    CustomStateData stateData{};
+    stateData.nativeProp = props.nativeProp; // Note: we might as well just store the whole props object here?
+
+    // ==== Flow needed for android ====
+    // We store the props in a state wrapper. There is no way to convert back
+    // to the underlying c++ props from java, as these have been converted to folly::dynamic very early on.
+    // However state wrapper is a fbjni Hybrid which we can use to pass data back and forth between java and c++.
+    concreteShadowNode.setStateData(std::move(stateData));
+  }
 };
+
 } // namespace facebook::react
