@@ -60,7 +60,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
    * The pointer has to be a retained opaque `Unmanaged<HybridTestObjectSwiftKotlinSpec_cxx>`.
    * This removes one strong reference from the object!
    */
-  public static func fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> HybridTestObjectSwiftKotlinSpec_cxx {
+  public class func fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> HybridTestObjectSwiftKotlinSpec_cxx {
     return Unmanaged<HybridTestObjectSwiftKotlinSpec_cxx>.fromOpaque(pointer).takeRetainedValue()
   }
 

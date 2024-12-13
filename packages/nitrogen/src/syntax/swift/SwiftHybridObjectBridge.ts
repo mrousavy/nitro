@@ -91,7 +91,7 @@ ${hasBase ? `public class ${name.HybridTSpecCxx} : ${baseClasses.join(', ')}` : 
    * Casts this instance to a retained unsafe raw pointer.
    * This acquires one additional strong reference on the object!
    */
-  public func toUnsafe() -> UnsafeMutableRawPointer {
+  public ${hasBase ? 'override func' : 'func'} toUnsafe() -> UnsafeMutableRawPointer {
     return Unmanaged.passRetained(self).toOpaque()
   }
 
@@ -100,7 +100,7 @@ ${hasBase ? `public class ${name.HybridTSpecCxx} : ${baseClasses.join(', ')}` : 
    * The pointer has to be a retained opaque \`Unmanaged<${name.HybridTSpecCxx}>\`.
    * This removes one strong reference from the object!
    */
-  public static func fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> ${name.HybridTSpecCxx} {
+  public ${hasBase ? 'override class func' : 'class func'} fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> ${name.HybridTSpecCxx} {
     return Unmanaged<${name.HybridTSpecCxx}>.fromOpaque(pointer).takeRetainedValue()
   }
 

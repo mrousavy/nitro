@@ -60,7 +60,7 @@ public class HybridImageSpec_cxx {
    * The pointer has to be a retained opaque `Unmanaged<HybridImageSpec_cxx>`.
    * This removes one strong reference from the object!
    */
-  public static func fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> HybridImageSpec_cxx {
+  public class func fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> HybridImageSpec_cxx {
     return Unmanaged<HybridImageSpec_cxx>.fromOpaque(pointer).takeRetainedValue()
   }
 

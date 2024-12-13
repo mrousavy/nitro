@@ -51,7 +51,7 @@ public class HybridChildSpec_cxx : HybridBaseSpec_cxx {
    * Casts this instance to a retained unsafe raw pointer.
    * This acquires one additional strong reference on the object!
    */
-  public func toUnsafe() -> UnsafeMutableRawPointer {
+  public override func toUnsafe() -> UnsafeMutableRawPointer {
     return Unmanaged.passRetained(self).toOpaque()
   }
 
@@ -60,7 +60,7 @@ public class HybridChildSpec_cxx : HybridBaseSpec_cxx {
    * The pointer has to be a retained opaque `Unmanaged<HybridChildSpec_cxx>`.
    * This removes one strong reference from the object!
    */
-  public static func fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> HybridChildSpec_cxx {
+  public override class func fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> HybridChildSpec_cxx {
     return Unmanaged<HybridChildSpec_cxx>.fromOpaque(pointer).takeRetainedValue()
   }
 
