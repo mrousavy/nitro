@@ -8,10 +8,7 @@
 import Foundation
 import NitroModules
 
-/**
- * A Swift protocol representing the Image HybridObject.
- * Implement this protocol to create Swift-based instances of Image.
- */
+/// See ``HybridImageSpec``
 public protocol HybridImageSpec_protocol: AnyObject {
   // Properties
   var size: ImageSize { get }
@@ -23,9 +20,19 @@ public protocol HybridImageSpec_protocol: AnyObject {
   func saveToFile(path: String, onFinished: @escaping ((_ path: String) -> Void)) throws -> Void
 }
 
+/// See ``HybridImageSpec``
 public class HybridImageSpec_base: HybridObjectSpec {
   public var hybridContext = margelo.nitro.HybridContext()
   public var memorySize: Int { return getSizeOf(self) }
 }
 
+/**
+ * A Swift base-protocol representing the Image HybridObject.
+ * Implement this protocol to create Swift-based instances of Image.
+ * ```swift
+ * class HybridImage : HybridImageSpec {
+ *   // ...
+ * }
+ * ```
+ */
 public typealias HybridImageSpec = HybridImageSpec_protocol & HybridImageSpec_base

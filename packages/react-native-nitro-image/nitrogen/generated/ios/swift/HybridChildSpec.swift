@@ -8,10 +8,7 @@
 import Foundation
 import NitroModules
 
-/**
- * A Swift protocol representing the Child HybridObject.
- * Implement this protocol to create Swift-based instances of Child.
- */
+/// See ``HybridChildSpec``
 public protocol HybridChildSpec_protocol: AnyObject, HybridBaseSpec_protocol {
   // Properties
   var childValue: Double { get }
@@ -20,8 +17,18 @@ public protocol HybridChildSpec_protocol: AnyObject, HybridBaseSpec_protocol {
   
 }
 
+/// See ``HybridChildSpec``
 public class HybridChildSpec_base: HybridBaseSpec_base {
   
 }
 
+/**
+ * A Swift base-protocol representing the Child HybridObject.
+ * Implement this protocol to create Swift-based instances of Child.
+ * ```swift
+ * class HybridChild : HybridChildSpec {
+ *   // ...
+ * }
+ * ```
+ */
 public typealias HybridChildSpec = HybridChildSpec_protocol & HybridChildSpec_base

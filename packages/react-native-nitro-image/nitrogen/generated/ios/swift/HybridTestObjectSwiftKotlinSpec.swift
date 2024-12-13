@@ -8,10 +8,7 @@
 import Foundation
 import NitroModules
 
-/**
- * A Swift protocol representing the TestObjectSwiftKotlin HybridObject.
- * Implement this protocol to create Swift-based instances of TestObjectSwiftKotlin.
- */
+/// See ``HybridTestObjectSwiftKotlinSpec``
 public protocol HybridTestObjectSwiftKotlinSpec_protocol: AnyObject {
   // Properties
   var thisObject: (any HybridTestObjectSwiftKotlinSpec) { get }
@@ -74,9 +71,19 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: AnyObject {
   func castBase(base: (any HybridBaseSpec)) throws -> (any HybridChildSpec)
 }
 
+/// See ``HybridTestObjectSwiftKotlinSpec``
 public class HybridTestObjectSwiftKotlinSpec_base: HybridObjectSpec {
   public var hybridContext = margelo.nitro.HybridContext()
   public var memorySize: Int { return getSizeOf(self) }
 }
 
+/**
+ * A Swift base-protocol representing the TestObjectSwiftKotlin HybridObject.
+ * Implement this protocol to create Swift-based instances of TestObjectSwiftKotlin.
+ * ```swift
+ * class HybridTestObjectSwiftKotlin : HybridTestObjectSwiftKotlinSpec {
+ *   // ...
+ * }
+ * ```
+ */
 public typealias HybridTestObjectSwiftKotlinSpec = HybridTestObjectSwiftKotlinSpec_protocol & HybridTestObjectSwiftKotlinSpec_base

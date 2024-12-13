@@ -33,10 +33,7 @@ ${createFileMetadataString(`${protocolName}.swift`)}
 import Foundation
 import NitroModules
 
-/**
- * A Swift protocol representing the ${spec.name} HybridObject.
- * Implement this protocol to create Swift-based instances of ${spec.name}.
- */
+/// See \`\`${protocolName}\`\`
 public protocol ${protocolName}_protocol: ${protocolBaseClasses.join(', ')} {
   // Properties
   ${indent(properties, '  ')}
@@ -45,10 +42,20 @@ public protocol ${protocolName}_protocol: ${protocolBaseClasses.join(', ')} {
   ${indent(methods, '  ')}
 }
 
+/// See \`\`${protocolName}\`\`
 public class ${protocolName}_base: ${classBaseClasses.join(', ')} {
   ${indent(baseMembers.join('\n'), '  ')}
 }
 
+/**
+ * A Swift base-protocol representing the ${spec.name} HybridObject.
+ * Implement this protocol to create Swift-based instances of ${spec.name}.
+ * \`\`\`swift
+ * class ${name.HybridT} : ${protocolName} {
+ *   // ...
+ * }
+ * \`\`\`
+ */
 public typealias ${protocolName} = ${protocolName}_protocol & ${protocolName}_base
   `
 
