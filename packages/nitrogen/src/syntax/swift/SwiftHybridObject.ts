@@ -44,7 +44,7 @@ public protocol ${protocolName}_protocol: ${protocolBaseClasses.join(', ')} {
 
 /// See \`\`${protocolName}\`\`
 public class ${protocolName}_base: ${classBaseClasses.join(', ')} {
-  ${indent(baseMembers.join('\n'), '  ')}
+  ${baseMembers.length > 0 ? indent(baseMembers.join('\n'), '  ') : `/* inherited */`}
 }
 
 /**

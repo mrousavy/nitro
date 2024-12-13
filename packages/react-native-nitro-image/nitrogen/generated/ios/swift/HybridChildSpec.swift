@@ -19,7 +19,7 @@ public protocol HybridChildSpec_protocol: AnyObject, HybridBaseSpec_protocol {
 
 /// See ``HybridChildSpec``
 public class HybridChildSpec_base: HybridBaseSpec_base {
-  
+  /* inherited */
 }
 
 /**
