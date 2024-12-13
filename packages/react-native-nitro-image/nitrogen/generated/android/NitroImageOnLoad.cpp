@@ -26,6 +26,12 @@
 #include <NitroModules/DefaultConstructableObject.hpp>
 #include "HybridTestObjectCpp.hpp"
 
+// For Components:
+#include <react/fabric/CoreComponentsRegistry.h>
+#include <react/renderer/core/ConcreteComponentDescriptor.h>
+#include "CustomComponentDescriptor.h"
+#include "JValueFromStateWrapper.h"
+
 namespace margelo::nitro::image {
 
 int initialize(JavaVM* vm) {
@@ -50,6 +56,7 @@ int initialize(JavaVM* vm) {
     margelo::nitro::image::JFunc_void_std__string::registerNatives();
     margelo::nitro::image::JHybridBaseSpec::registerNatives();
     margelo::nitro::image::JHybridChildSpec::registerNatives();
+    margelo::nitro::image::JValueFromStateWrapper::registerNatives();
 
     // Register Nitro Hybrid Objects
     HybridObjectRegistry::registerHybridObjectConstructor(
@@ -97,6 +104,11 @@ int initialize(JavaVM* vm) {
         return JNISharedPtr::make_shared_from_jni<JHybridChildSpec>(globalRef);
       }
     );
+
+    // Register view components
+    auto provider = concreteComponentDescriptorProvider<CustomViewComponentDescriptor>();
+    auto providerRegistry = facebook::react::CoreComponentsRegistry::sharedProviderRegistry();
+    providerRegistry->add(provider);
   });
 }
 
