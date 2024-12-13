@@ -5,7 +5,7 @@ import { Parameter } from '../Parameter.js'
 import type { FileWithReferencedTypes } from '../SourceFile.js'
 import { StructType } from '../types/StructType.js'
 import { SwiftCxxBridgedType } from './SwiftCxxBridgedType.js'
-import { BRIDGE_NAMESPACE } from './SwiftHybridObjectBridge.js'
+import { getBridgeNamespace } from './SwiftHybridObjectBridge.js'
 
 export function createSwiftStructBridge(
   struct: StructType
@@ -42,7 +42,7 @@ import NitroModules
 public typealias ${struct.structName} = ${fullName}
 
 public extension ${struct.structName} {
-  private typealias bridge = ${BRIDGE_NAMESPACE}
+  private typealias bridge = ${getBridgeNamespace()}
 
   ${indent(init, '  ')}
 

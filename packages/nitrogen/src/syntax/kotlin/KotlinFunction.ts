@@ -60,7 +60,8 @@ class ${name} {
 }
   `.trim()
 
-  const cppReturnType = functionType.returnType.getCode('c++')
+  const bridgedReturn = new KotlinCxxBridgedType(functionType.returnType)
+
   const cppParams = functionType.parameters.map((p) => {
     const bridge = new KotlinCxxBridgedType(p)
     const type = bridge.asJniReferenceType('alias')
@@ -73,6 +74,17 @@ class ${name} {
   const jniClassDescriptor = NitroConfig.getAndroidPackage('c++/jni', name)
   const cxxNamespace = NitroConfig.getCxxNamespace('c++')
   const typename = functionType.getCode('c++')
+  let callBody: string
+  if (functionType.returnType.kind === 'void') {
+    // It returns void
+    callBody = `_func(${indent(paramsForward.join(', '), '      ')});`
+  } else {
+    // It returns a type!
+    callBody = `
+${functionType.returnType.getCode('c++')} __result = _func(${indent(paramsForward.join(', '), '      ')});
+return ${bridgedReturn.parseFromCppToKotlin('__result', 'c++')};
+`.trim()
+  }
 
   const bridged = new KotlinCxxBridgedType(functionType)
   const imports = bridged
@@ -105,8 +117,8 @@ namespace ${cxxNamespace} {
     }
 
   public:
-    ${cppReturnType} call(${cppParams.join(', ')}) {
-      return _func(${indent(paramsForward.join(', '), '      ')});
+    ${bridgedReturn.asJniReferenceType('local')} call(${cppParams.join(', ')}) {
+      ${indent(callBody, '      ')}
     }
 
   public:

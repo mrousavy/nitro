@@ -2,7 +2,7 @@ import { Project } from 'ts-morph'
 import { getHybridObjectPlatforms, type Platform } from './getPlatformSpecs.js'
 import { generatePlatformFiles } from './createPlatformSpec.js'
 import path from 'path'
-import { prettifyDirectory } from './getCurrentDir.js'
+import { prettifyDirectory } from './prettifyDirectory.js'
 import {
   capitalizeName,
   errorToString,
@@ -16,6 +16,7 @@ import { Logger } from './Logger.js'
 import { NitroConfig } from './config/NitroConfig.js'
 import { createIOSAutolinking } from './autolinking/createIOSAutolinking.js'
 import { createAndroidAutolinking } from './autolinking/createAndroidAutolinking.js'
+import type { Autolinking } from './autolinking/Autolinking.js'
 
 interface NitrogenOptions {
   baseDirectory: string
@@ -78,6 +79,7 @@ export async function runNitrogen({
     process.exit()
   }
 
+  const usedPlatforms: Platform[] = []
   const filesAfter: string[] = []
   const writtenFiles: SourceFile[] = []
 
@@ -102,6 +104,7 @@ export async function runNitrogen({
         }
 
         const platforms = Object.keys(platformSpec) as Platform[]
+
         if (platforms.length === 0) {
           console.warn(
             `⚠️   ${moduleName} does not declare any platforms in HybridObject<T> - nothing can be generated.`
@@ -118,6 +121,7 @@ export async function runNitrogen({
         // Create all files and throw it into a big list
         const allFiles = platforms
           .flatMap((p) => {
+            usedPlatforms.push(p)
             const language = platformSpec[p]!
             return generatePlatformFiles(module.getType(), language)
           })
@@ -178,10 +182,16 @@ export async function runNitrogen({
 
   // Autolinking
   Logger.info(`⛓️   Setting up build configs for autolinking...`)
-  const iosFiles = createIOSAutolinking()
-  const androidFiles = createAndroidAutolinking(writtenFiles)
 
-  const autolinkingFiles = [iosFiles, androidFiles]
+  const autolinkingFiles: Autolinking[] = []
+
+  if (usedPlatforms.includes('ios')) {
+    autolinkingFiles.push(createIOSAutolinking())
+  }
+  if (usedPlatforms.includes('android')) {
+    autolinkingFiles.push(createAndroidAutolinking(writtenFiles))
+  }
+
   for (const autolinking of autolinkingFiles) {
     Logger.info(
       `    Creating autolinking build setup for ${chalk.dim(autolinking.platform)}...`

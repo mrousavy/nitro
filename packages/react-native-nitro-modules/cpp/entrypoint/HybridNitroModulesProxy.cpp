@@ -24,6 +24,7 @@ void HybridNitroModulesProxy::loadHybridMethods() {
     prototype.registerRawHybridMethod("hasNativeState", 1, &HybridNitroModulesProxy::hasNativeState);
 
     prototype.registerHybridGetter("buildType", &HybridNitroModulesProxy::getBuildType);
+    prototype.registerHybridGetter("version", &HybridNitroModulesProxy::getVersion);
   });
 }
 
@@ -59,6 +60,10 @@ std::string HybridNitroModulesProxy::getBuildType() {
 #else
   return "release";
 #endif
+}
+
+std::string HybridNitroModulesProxy::getVersion() {
+  return NITRO_VERSION;
 }
 
 } // namespace margelo::nitro

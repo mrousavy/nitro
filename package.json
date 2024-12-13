@@ -2,14 +2,13 @@
   "name": "react-native-nitro",
   "packageManager": "bun@1.1.21",
   "private": true,
-  "version": "0.18.1",
+  "version": "0.18.2",
   "repository": "https://github.com/mrousavy/nitro.git",
   "author": "Marc Rousavy <me@mrousavy.com> (https://github.com/mrousavy)",
   "workspaces": [
     "packages/react-native-nitro-modules",
     "packages/nitrogen",
     "packages/react-native-nitro-image",
-    "packages/template",
     "example",
     "docs"
   ],
@@ -29,7 +28,7 @@
   "devDependencies": {
     "@eslint/js": "^9.10.0",
     "@jamesacarr/eslint-formatter-github-actions": "^0.2.0",
-    "@react-native/eslint-config": "0.76.1",
+    "@react-native/eslint-config": "0.76.5",
     "@release-it-plugins/workspaces": "^4.2.0",
     "@release-it/bumper": "^6.0.1",
     "@release-it/conventional-changelog": "^8.0.2",
@@ -41,8 +40,8 @@
     "eslint-plugin-prettier": "^5.2.1",
     "jest": "^29.7.0",
     "prettier": "^3.3.3",
-    "react": "^18.3.1",
-    "react-native": "^0.76.3",
+    "react": "18.3.1",
+    "react-native": "0.76.5",
     "release-it": "^17.10.0",
     "typescript": "~5.5.4",
     "typescript-eslint": "^8.13.0"

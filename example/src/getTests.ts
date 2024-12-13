@@ -128,7 +128,7 @@ export function getTests(
         .didNotThrow()
         .equals(false)
     ),
-    createTest("Two HybridObjects's prototypse are equal", () =>
+    createTest("Two HybridObjects's prototypes are equal", () =>
       it(() => {
         const objA = testObject.newTestObject()
         const objB = testObject.newTestObject()
@@ -828,33 +828,27 @@ export function getTests(
         .didNotThrow()
         .equals(433)
     ),
-    ...('getValueFromJsCallback' in testObject
-      ? [
-          createTest('getValueFromJsCallback(...)', async () =>
-            (
-              await it(async () => {
-                let value: string | undefined
-                await testObject.getValueFromJsCallback(
-                  () => 'hello',
-                  (val) => {
-                    value = val
-                  }
-                )
-                return value
-              })
-            )
-              .didNotThrow()
-              .equals('hello')
-          ),
-          createTest('getValueFromJSCallbackAndWait(...)', async () =>
-            (await it(() => testObject.getValueFromJSCallbackAndWait(() => 73)))
-              .didNotThrow()
-              .equals(73)
-          ),
-        ]
-      : [
-          // Swift/Kotlin Test Object does not support JS callbacks _that return a value_ yet!
-        ]),
+    createTest('getValueFromJsCallback(...)', async () =>
+      (
+        await it(async () => {
+          let value: string | undefined
+          await testObject.getValueFromJsCallback(
+            () => 'hello',
+            (val) => {
+              value = val
+            }
+          )
+          return value
+        })
+      )
+        .didNotThrow()
+        .equals('hello')
+    ),
+    createTest('getValueFromJSCallbackAndWait(...)', async () =>
+      (await it(() => testObject.getValueFromJSCallbackAndWait(() => 73)))
+        .didNotThrow()
+        .equals(73)
+    ),
     createTest('callAll(...)', async () =>
       (
         await it(async () => {

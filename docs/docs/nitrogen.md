@@ -82,6 +82,7 @@ Create a `nitro.json` file in the root directory of your Nitro Module (next to `
 
 ```json title="nitro.json"
 {
+  "$schema": "https://nitro.margelo.com/nitro.schema.json",
   "cxxNamespace": ["math"],
   "ios": {
     "iosModuleName": "NitroMath"
@@ -119,7 +120,7 @@ Now run nitrogen:
 <Tabs groupId="package-manager">
   <TabItem value="npm" label="npm" default>
     ```sh
-    npm run nitro-codegen
+    npx nitro-codegen
     ```
   </TabItem>
   <TabItem value="yarn" label="yarn">

@@ -7,16 +7,17 @@
 
 ```json
 {
-  "cxxNamespace": ["<<cxxNamespace>>"],
+  "$schema": "https://nitro.margelo.com/nitro.schema.json",
+  "cxxNamespace": ["$$cxxNamespace$$"],
   "ios": {
-    "iosModuleName": "<<iosModuleName>>"
+    "iosModuleName": "$$iosModuleName$$"
   },
   "android": {
-    "androidNamespace": ["<<androidNamespace>>"],
-    "androidCxxLibName": "<<androidCxxLibName>>"
+    "androidNamespace": ["$$androidNamespace$$"],
+    "androidCxxLibName": "$$androidCxxLibName$$"
   },
   "autolinking": {},
-  "ignorePaths": ["node_modules"]
+  "ignorePaths": ["**/node_modules"]
 }
 ```
 
@@ -50,7 +51,7 @@ Settings specifically for the iOS platform.
 ### `iosModuleName`
 
 The `iosModuleName` represents the name of the [clang module](https://clang.llvm.org/docs/Modules.html) that will be emitted by the Swift compiler.
-When this Nitro Module is a CocoaPod, this is the same thing as the `<<iosModuleName>>.podspec`'s name:
+When this Nitro Module is a CocoaPod, this is the same thing as the `$$iosModuleName$$.podspec`'s name:
 
 <div className="side-by-side-container">
   <div className="side-by-side-block">

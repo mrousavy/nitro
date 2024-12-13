@@ -1,6 +1,6 @@
 {
   "name": "react-native-nitro-image",
-  "version": "0.18.1",
+  "version": "0.18.2",
   "description": "A fast in-memory Image object built with Nitro Modules.",
   "main": "lib/index",
   "module": "lib/index",
@@ -59,8 +59,8 @@
     "@types/react": "*",
     "jest": "*",
     "nitro-codegen": "*",
-    "react": "*",
-    "react-native": "*",
+    "react": "18.3.1",
+    "react-native": "0.76.5",
     "react-native-nitro-modules": "*"
   },
   "peerDependencies": {

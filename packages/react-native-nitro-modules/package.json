@@ -1,6 +1,6 @@
 {
   "name": "react-native-nitro-modules",
-  "version": "0.18.1",
+  "version": "0.18.2",
   "description": "Insanely fast native C++, Swift or Kotlin modules with a statically compiled binding layer to JSI.",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -58,6 +58,8 @@
   },
   "scripts": {
     "postinstall": "bun build || exit 0;",
+    "write-native-version": "version=$(node -p \"require('./package.json').version\") && sed -i '' \"s/#define NITRO_VERSION \\\".*\\\"/#define NITRO_VERSION \\\"$version\\\"/\" ./cpp/utils/NitroDefines.hpp",
+    "postversion": "bun run write-native-version",
     "build": "rm -rf lib && bun typecheck && bob build",
     "typecheck": "tsc --noEmit",
     "lint": "eslint \"**/*.{js,ts,tsx}\" --fix",
@@ -70,9 +72,9 @@
     "@types/jest": "*",
     "@types/react": "*",
     "jest": "*",
-    "react": "*",
-    "react-native": "*",
-    "react-native-builder-bob": "^0.33.1"
+    "react": "18.3.1",
+    "react-native": "0.76.5",
+    "react-native-builder-bob": "^0.35.0"
   },
   "peerDependencies": {
     "react": "*",
