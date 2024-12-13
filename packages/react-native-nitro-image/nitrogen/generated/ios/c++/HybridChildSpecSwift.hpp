@@ -9,8 +9,8 @@
 
 #include "HybridChildSpec.hpp"
 
-// Forward declaration of `HybridChildSpecCxx` to properly resolve imports.
-namespace NitroImage { class HybridChildSpecCxx; }
+// Forward declaration of `HybridChildSpec_cxx` to properly resolve imports.
+namespace NitroImage { class HybridChildSpec_cxx; }
 
 // Forward declaration of `HybridBaseSpecSwift` to properly resolve imports.
 namespace margelo::nitro::image { class HybridBaseSpecSwift; }
@@ -28,26 +28,26 @@ namespace margelo::nitro::image { class HybridBaseSpecSwift; }
 namespace margelo::nitro::image {
 
   /**
-   * The C++ part of HybridChildSpecCxx.swift.
+   * The C++ part of HybridChildSpec_cxx.swift.
    *
-   * HybridChildSpecSwift (C++) accesses HybridChildSpecCxx (Swift), and might
+   * HybridChildSpecSwift (C++) accesses HybridChildSpec_cxx (Swift), and might
    * contain some additional bridging code for C++ <> Swift interop.
    *
    * Since this obviously introduces an overhead, I hope at some point in
-   * the future, HybridChildSpecCxx can directly inherit from the C++ class HybridChildSpec
+   * the future, HybridChildSpec_cxx can directly inherit from the C++ class HybridChildSpec
    * to simplify the whole structure and memory management.
    */
   class HybridChildSpecSwift: public virtual HybridChildSpec, public virtual HybridBaseSpecSwift {
   public:
     // Constructor from a Swift instance
-    explicit HybridChildSpecSwift(const NitroImage::HybridChildSpecCxx& swiftPart):
+    explicit HybridChildSpecSwift(const NitroImage::HybridChildSpec_cxx& swiftPart):
       HybridObject(HybridChildSpec::TAG),
       HybridBaseSpecSwift(swiftPart),
       _swiftPart(swiftPart) { }
 
   public:
     // Get the Swift part
-    inline NitroImage::HybridChildSpecCxx getSwiftPart() noexcept { return _swiftPart; }
+    inline NitroImage::HybridChildSpec_cxx getSwiftPart() noexcept { return _swiftPart; }
 
   public:
     // Get memory pressure
@@ -66,7 +66,7 @@ namespace margelo::nitro::image {
     
 
   private:
-    NitroImage::HybridChildSpecCxx _swiftPart;
+    NitroImage::HybridChildSpec_cxx _swiftPart;
   };
 
 } // namespace margelo::nitro::image

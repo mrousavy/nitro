@@ -53,7 +53,7 @@ import NitroModules
  * This is useful to pass Swift classes to C++, without having to strongly type the C++ function signature.
  * The actual Swift type can be included in the .cpp file, without having to forward-declare anything in .hpp.
  */
-public final class ${name.HybridTSpecCxx}Unsafe {
+public final class ${name.HybridTSpecCxxUnsafe} {
   /**
    * Casts a \`${name.HybridTSpecCxx}\` instance to a retained unsafe raw pointer.
    * This acquires one additional strong reference on the object!
