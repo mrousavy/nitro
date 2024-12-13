@@ -21,15 +21,10 @@ include_directories(
 )
 
 find_library(LOG_LIB log)
-find_package(fbjni REQUIRED CONFIG) # <-- Used for communication between Java <-> C++
-find_package(ReactAndroid REQUIRED CONFIG) # <-- Used to set up React Native bindings (e.g. CallInvoker/TurboModule)
 
 # Link all libraries together
 target_link_libraries(
         ${PACKAGE_NAME}
         ${LOG_LIB}
-        fbjni::fbjni                              # <-- Facebook C++ JNI helpers
-        ReactAndroid::jsi                         # <-- RN: JSI
-        ReactAndroid::reactnative
         android                                   # <-- Android core
 )
