@@ -23,7 +23,7 @@ public:
   CustomViewProps() = default;
 
   CustomViewProps(const PropsParserContext& context, const CustomViewProps& sourceProps, const RawProps& rawProps)
-      : ViewProps(context, sourceProps, rawProps) {
+      : ViewProps(context, sourceProps, rawProps, filterObjectKeys) {
     const RawValue* rawValue = rawProps.at("nativeProp", nullptr, nullptr);
     if (rawValue == nullptr) {
       return;
@@ -37,6 +37,15 @@ public:
   }
 
   std::shared_ptr<HybridTestObjectSwiftKotlinSpec> nativeProp = nullptr;
+
+private:
+    static bool filterObjectKeys(const std::string& propName) {
+        if (propName == "nativeProp") {
+            return true;
+        }
+
+        return false;
+    }
 };
 
 // Use StateData to retain native jsi values on android
