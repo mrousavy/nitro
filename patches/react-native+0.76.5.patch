@@ -43,7 +43,7 @@ index 542f78c..c0eec6a 100644
   private:
    jni::alias_ref<StateWrapperImpl::jhybriddata> jhybridobject_;
 diff --git a/node_modules/react-native/ReactCommon/jsi/jsi/JSIDynamic.cpp b/node_modules/react-native/ReactCommon/jsi/jsi/JSIDynamic.cpp
-index 5a2d38d..a0904ca 100644
+index 5a2d38d..637c425 100644
 --- a/node_modules/react-native/ReactCommon/jsi/jsi/JSIDynamic.cpp
 +++ b/node_modules/react-native/ReactCommon/jsi/jsi/JSIDynamic.cpp
 @@ -192,8 +192,17 @@ folly::dynamic dynamicFromValue(
@@ -57,12 +57,12 @@ index 5a2d38d..a0904ca 100644
 +            if (obj.isFunction(runtime)) {
 +                prop = Value::null();
 +            }
-+            if (obj.hasNativeState(runtime)) {
-+                // Quick workaround for nitro for now, this will be handled more accurately
-+                // using the filter function once this pr has landed:
-+                //  https://github.com/facebook/react-native/pull/48202
-+                continue;
-+            }
++//            if (obj.hasNativeState(runtime)) {
++//                // Quick workaround for nitro for now, this will be handled more accurately
++//                // using the filter function once this pr has landed:
++//                //  https://github.com/facebook/react-native/pull/48202
++//                continue;
++//            }
          }
          props.emplace_back(std::move(nameStr), std::move(prop));
          top.dyn->insert(props.back().first, nullptr);
@@ -79,6 +79,99 @@ index 7b42990..7ab61cc 100644
    auto unimplementedViewProps = std::make_shared<UnimplementedViewProps>(
        context,
        static_cast<const UnimplementedViewProps&>(*clonedProps),
+diff --git a/node_modules/react-native/ReactCommon/react/renderer/components/view/BaseViewProps.cpp b/node_modules/react-native/ReactCommon/react/renderer/components/view/BaseViewProps.cpp
+index 4047aeb..ee624ff 100644
+--- a/node_modules/react-native/ReactCommon/react/renderer/components/view/BaseViewProps.cpp
++++ b/node_modules/react-native/ReactCommon/react/renderer/components/view/BaseViewProps.cpp
+@@ -53,8 +53,9 @@ std::array<float, 3> getTranslateForTransformOrigin(
+ BaseViewProps::BaseViewProps(
+     const PropsParserContext& context,
+     const BaseViewProps& sourceProps,
+-    const RawProps& rawProps)
+-    : YogaStylableProps(context, sourceProps, rawProps),
++    const RawProps& rawProps,
++    const std::function<bool(const std::string&)>& filterObjectKeys)
++      : YogaStylableProps(context, sourceProps, rawProps, filterObjectKeys),
+       AccessibilityProps(context, sourceProps, rawProps),
+       opacity(
+           CoreFeatures::enablePropIteratorSetter ? sourceProps.opacity
+diff --git a/node_modules/react-native/ReactCommon/react/renderer/components/view/BaseViewProps.h b/node_modules/react-native/ReactCommon/react/renderer/components/view/BaseViewProps.h
+index edc0155..9adc4fb 100644
+--- a/node_modules/react-native/ReactCommon/react/renderer/components/view/BaseViewProps.h
++++ b/node_modules/react-native/ReactCommon/react/renderer/components/view/BaseViewProps.h
+@@ -31,7 +31,9 @@ class BaseViewProps : public YogaStylableProps, public AccessibilityProps {
+   BaseViewProps(
+       const PropsParserContext& context,
+       const BaseViewProps& sourceProps,
+-      const RawProps& rawProps);
++      const RawProps& rawProps,
++      const std::function<bool(const std::string&)>& filterObjectKeys =
++        nullptr);
+ 
+   void setProp(
+       const PropsParserContext& context,
+diff --git a/node_modules/react-native/ReactCommon/react/renderer/components/view/YogaStylableProps.cpp b/node_modules/react-native/ReactCommon/react/renderer/components/view/YogaStylableProps.cpp
+index 508e3ae..314f3c4 100644
+--- a/node_modules/react-native/ReactCommon/react/renderer/components/view/YogaStylableProps.cpp
++++ b/node_modules/react-native/ReactCommon/react/renderer/components/view/YogaStylableProps.cpp
+@@ -19,9 +19,10 @@ namespace facebook::react {
+ YogaStylableProps::YogaStylableProps(
+     const PropsParserContext& context,
+     const YogaStylableProps& sourceProps,
+-    const RawProps& rawProps)
++    const RawProps& rawProps,
++    const std::function<bool(const std::string&)>& filterObjectKeys)
+     : Props() {
+-  initialize(context, sourceProps, rawProps);
++    initialize(context, sourceProps, rawProps, filterObjectKeys);
+ 
+   yogaStyle.setDirection(convertRawProp(
+       context,
+diff --git a/node_modules/react-native/ReactCommon/react/renderer/components/view/YogaStylableProps.h b/node_modules/react-native/ReactCommon/react/renderer/components/view/YogaStylableProps.h
+index ef120f4..2e6defe 100644
+--- a/node_modules/react-native/ReactCommon/react/renderer/components/view/YogaStylableProps.h
++++ b/node_modules/react-native/ReactCommon/react/renderer/components/view/YogaStylableProps.h
+@@ -21,7 +21,9 @@ class YogaStylableProps : public Props {
+   YogaStylableProps(
+       const PropsParserContext& context,
+       const YogaStylableProps& sourceProps,
+-      const RawProps& rawProps);
++      const RawProps& rawProps,
++      const std::function<bool(const std::string&)>& filterObjectKeys =
++        nullptr);
+ 
+   void setProp(
+       const PropsParserContext& context,
+diff --git a/node_modules/react-native/ReactCommon/react/renderer/components/view/platform/android/react/renderer/components/view/HostPlatformViewProps.cpp b/node_modules/react-native/ReactCommon/react/renderer/components/view/platform/android/react/renderer/components/view/HostPlatformViewProps.cpp
+index 021268b..6dc5f16 100644
+--- a/node_modules/react-native/ReactCommon/react/renderer/components/view/platform/android/react/renderer/components/view/HostPlatformViewProps.cpp
++++ b/node_modules/react-native/ReactCommon/react/renderer/components/view/platform/android/react/renderer/components/view/HostPlatformViewProps.cpp
+@@ -20,8 +20,9 @@ namespace facebook::react {
+ HostPlatformViewProps::HostPlatformViewProps(
+     const PropsParserContext& context,
+     const HostPlatformViewProps& sourceProps,
+-    const RawProps& rawProps)
+-    : BaseViewProps(context, sourceProps, rawProps),
++    const RawProps& rawProps,
++    const std::function<bool(const std::string&)>& filterObjectKeys)
++        : BaseViewProps(context, sourceProps, rawProps, filterObjectKeys),
+       elevation(
+           CoreFeatures::enablePropIteratorSetter ? sourceProps.elevation
+                                                  : convertRawProp(
+diff --git a/node_modules/react-native/ReactCommon/react/renderer/components/view/platform/android/react/renderer/components/view/HostPlatformViewProps.h b/node_modules/react-native/ReactCommon/react/renderer/components/view/platform/android/react/renderer/components/view/HostPlatformViewProps.h
+index 89325ab..b8b2f66 100644
+--- a/node_modules/react-native/ReactCommon/react/renderer/components/view/platform/android/react/renderer/components/view/HostPlatformViewProps.h
++++ b/node_modules/react-native/ReactCommon/react/renderer/components/view/platform/android/react/renderer/components/view/HostPlatformViewProps.h
+@@ -26,7 +26,8 @@ class HostPlatformViewProps : public BaseViewProps {
+   HostPlatformViewProps(
+       const PropsParserContext& context,
+       const HostPlatformViewProps& sourceProps,
+-      const RawProps& rawProps);
++      const RawProps& rawProps,
++      const std::function<bool(const std::string&)>& filterObjectKeys = nullptr);
+ 
+   void setProp(
+       const PropsParserContext& context,
 diff --git a/node_modules/react-native/ReactCommon/react/renderer/core/ComponentDescriptor.cpp b/node_modules/react-native/ReactCommon/react/renderer/core/ComponentDescriptor.cpp
 index ca23205..c5beaac 100644
 --- a/node_modules/react-native/ReactCommon/react/renderer/core/ComponentDescriptor.cpp
@@ -177,6 +270,129 @@ index 5405660..b2930ee 100644
  
      // Use the new-style iterator
      // Note that we just check if `Props` has this flag set, no matter
+diff --git a/node_modules/react-native/ReactCommon/react/renderer/core/Props.cpp b/node_modules/react-native/ReactCommon/react/renderer/core/Props.cpp
+index df133e8..05cc3c0 100644
+--- a/node_modules/react-native/ReactCommon/react/renderer/core/Props.cpp
++++ b/node_modules/react-native/ReactCommon/react/renderer/core/Props.cpp
+@@ -16,19 +16,21 @@ namespace facebook::react {
+ Props::Props(
+     const PropsParserContext& context,
+     const Props& sourceProps,
+-    const RawProps& rawProps) {
+-  initialize(context, sourceProps, rawProps);
++    const RawProps& rawProps,
++    const std::function<bool(const std::string&)>& filterObjectKeys) {
++  initialize(context, sourceProps, rawProps, filterObjectKeys);
+ }
+ 
+ void Props::initialize(
+     const PropsParserContext& context,
+     const Props& sourceProps,
+-    const RawProps& rawProps) {
++    const RawProps& rawProps,
++    const std::function<bool(const std::string&)>& filterObjectKeys) {
+   nativeId = CoreFeatures::enablePropIteratorSetter
+       ? sourceProps.nativeId
+       : convertRawProp(context, rawProps, "nativeID", sourceProps.nativeId, {});
+ #ifdef ANDROID
+-  this->rawProps = (folly::dynamic)rawProps;
++  this->rawProps = rawProps.toDynamic(filterObjectKeys);
+ #endif
+ }
+ 
+diff --git a/node_modules/react-native/ReactCommon/react/renderer/core/Props.h b/node_modules/react-native/ReactCommon/react/renderer/core/Props.h
+index 144cc8a..d8c1b45 100644
+--- a/node_modules/react-native/ReactCommon/react/renderer/core/Props.h
++++ b/node_modules/react-native/ReactCommon/react/renderer/core/Props.h
+@@ -33,7 +33,8 @@ class Props : public virtual Sealable, public virtual DebugStringConvertible {
+   Props(
+       const PropsParserContext& context,
+       const Props& sourceProps,
+-      const RawProps& rawProps);
++      const RawProps& rawProps,
++      const std::function<bool(const std::string&)>& filterObjectKeys = nullptr);
+   virtual ~Props() = default;
+ 
+   Props(const Props& other) = delete;
+@@ -71,7 +72,8 @@ class Props : public virtual Sealable, public virtual DebugStringConvertible {
+   void initialize(
+       const PropsParserContext& context,
+       const Props& sourceProps,
+-      const RawProps& rawProps);
++      const RawProps& rawProps,
++      const std::function<bool(const std::string&)>& filterObjectKeys = nullptr);
+ };
+ 
+ } // namespace facebook::react
+diff --git a/node_modules/react-native/ReactCommon/react/renderer/core/RawProps.cpp b/node_modules/react-native/ReactCommon/react/renderer/core/RawProps.cpp
+index 06226c5..0b983f7 100644
+--- a/node_modules/react-native/ReactCommon/react/renderer/core/RawProps.cpp
++++ b/node_modules/react-native/ReactCommon/react/renderer/core/RawProps.cpp
+@@ -167,18 +167,38 @@ void RawProps::parse(const RawPropsParser& parser) noexcept {
+   parser.preparse(*this);
+ }
+ 
++RawProps::operator folly::dynamic() const {
++    return toDynamic();
++}
++
+ /*
+  * Deprecated. Do not use.
+  * The support for explicit conversion to `folly::dynamic` is deprecated and
+  * will be removed as soon Android implementation does not need it.
+  */
+-RawProps::operator folly::dynamic() const noexcept {
++folly::dynamic RawProps::toDynamic(
++        const std::function<bool(const std::string&)>& filterObjectKeys) const {
+   switch (mode_) {
+     case Mode::Empty:
+       return folly::dynamic::object();
+-    case Mode::JSI:
+-      return jsi::dynamicFromValue(
+-          *runtime_, value_, ignoreYogaStyleProps_ ? isYogaStyleProp : nullptr);
++      case Mode::JSI: {
++          if (ignoreYogaStyleProps_ || filterObjectKeys != nullptr) {
++              // We need to filter props
++              return jsi::dynamicFromValue(
++                      *runtime_, value_, [&](const std::string& key) {
++                          if (ignoreYogaStyleProps_ && isYogaStyleProp(key)) {
++                              return true;
++                          }
++                          if (filterObjectKeys) {
++                              return filterObjectKeys(key);
++                          }
++                          return false;
++                      });
++          } else {
++              // We don't need to filter, just include all props by default
++              return jsi::dynamicFromValue(*runtime_, value_, nullptr);
++          }
++      }
+     case Mode::Dynamic:
+       return dynamic_;
+   }
+diff --git a/node_modules/react-native/ReactCommon/react/renderer/core/RawProps.h b/node_modules/react-native/ReactCommon/react/renderer/core/RawProps.h
+index b7716be..537a0c6 100644
+--- a/node_modules/react-native/ReactCommon/react/renderer/core/RawProps.h
++++ b/node_modules/react-native/ReactCommon/react/renderer/core/RawProps.h
+@@ -71,7 +71,16 @@ class RawProps final {
+    * The support for explicit conversion to `folly::dynamic` is deprecated and
+    * will be removed as soon Android implementation does not need it.
+    */
+-  explicit operator folly::dynamic() const noexcept;
++  explicit operator folly::dynamic() const;
++
++  /*
++   * Deprecated. Do not use.
++   * The support for explicit conversion to `folly::dynamic` is deprecated and
++   * will be removed as soon Android implementation does not need it.
++   */
++    folly::dynamic toDynamic(
++            const std::function<bool(const std::string&)>& filterObjectKeys =
++            nullptr) const;
+ 
+   /*
+    * Once called, Yoga style props will be filtered out during conversion to
 diff --git a/node_modules/react-native/ReactCommon/react/renderer/core/RawPropsParser.cpp b/node_modules/react-native/ReactCommon/react/renderer/core/RawPropsParser.cpp
 index 122956d..9b09bf7 100644
 --- a/node_modules/react-native/ReactCommon/react/renderer/core/RawPropsParser.cpp
