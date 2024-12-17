@@ -52,7 +52,15 @@ export function createSwiftHybridObjectCxxBridge(
   const bridge = bridgedType.getRequiredBridge()
   if (bridge == null) throw new Error(`HybridObject Type should have a bridge!`)
 
-  const cppWeakPtrName = escapeCppName(hybridObject.getCode('c++', true))
+  const weakifyBridge = bridge.dependencies.find((d) =>
+    d.funcName.startsWith('weakify')
+  )
+  if (weakifyBridge == null)
+    throw new Error(
+      `HybridObject ${spec.name} does not have a weakify_..() bridge!`
+    )
+
+  const cppWeakPtrName = escapeCppName(hybridObject.getCode('c++', 'weak'))
 
   const baseGetCxxPartOverrides = spec.baseTypes.map((base) => {
     const baseHybridObject = new HybridObjectType(base)
@@ -117,6 +125,7 @@ ${hasBase ? `public class ${name.HybridTSpecCxx} : ${baseClasses.join(', ')}` : 
    */
   public init(_ implementation: any ${name.HybridTSpec}) {
     self.__implementation = implementation
+    self.__cxxPart = .init()
     ${hasBase ? 'super.init(implementation)' : '/* no base class */'}
   }
 
@@ -155,7 +164,7 @@ ${hasBase ? `public class ${name.HybridTSpecCxx} : ${baseClasses.join(', ')}` : 
       return cachedCxxPart
     } else {
       let newCxxPart = bridge.${bridge.funcName}(self.toUnsafe())
-      __cxxPart = newCxxPart
+      __cxxPart = bridge.${weakifyBridge.funcName}(newCxxPart)
       return newCxxPart
     }
   }

@@ -41,6 +41,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
    */
   public init(_ implementation: any HybridTestObjectSwiftKotlinSpec) {
     self.__implementation = implementation
+    self.__cxxPart = .init()
     /* no base class */
   }
 
@@ -79,7 +80,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       return cachedCxxPart
     } else {
       let newCxxPart = bridge.create_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_(self.toUnsafe())
-      __cxxPart = newCxxPart
+      __cxxPart = bridge.weakify_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_(newCxxPart)
       return newCxxPart
     }
   }

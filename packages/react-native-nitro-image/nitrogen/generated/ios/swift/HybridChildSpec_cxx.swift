@@ -41,6 +41,7 @@ public class HybridChildSpec_cxx : HybridBaseSpec_cxx {
    */
   public init(_ implementation: any HybridChildSpec) {
     self.__implementation = implementation
+    self.__cxxPart = .init()
     super.init(implementation)
   }
 
@@ -79,7 +80,7 @@ public class HybridChildSpec_cxx : HybridBaseSpec_cxx {
       return cachedCxxPart
     } else {
       let newCxxPart = bridge.create_std__shared_ptr_margelo__nitro__image__HybridChildSpec_(self.toUnsafe())
-      __cxxPart = newCxxPart
+      __cxxPart = bridge.weakify_std__shared_ptr_margelo__nitro__image__HybridChildSpec_(newCxxPart)
       return newCxxPart
     }
   }

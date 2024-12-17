@@ -151,7 +151,7 @@ inline ${cppBaseType} ${funcName}(${cppChildType} child) { return child; }
 }
 
 function createCxxWeakPtrHelper(type: HybridObjectType): SwiftCxxHelper {
-  const actualType = type.getCode('c++', true)
+  const actualType = type.getCode('c++', 'weak')
   const specializationName = escapeCppName(actualType)
   const funcName = `weakify_${escapeCppName(type.getCode('c++'))}`
   return {
@@ -161,6 +161,7 @@ function createCxxWeakPtrHelper(type: HybridObjectType): SwiftCxxHelper {
     cxxHeader: {
       code: `
 using ${specializationName} = ${actualType};
+inline ${specializationName} ${funcName}(const ${type.getCode('c++', 'strong')}& strong) { return strong; }
 `.trim(),
       requiredIncludes: [],
     },

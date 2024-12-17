@@ -41,6 +41,7 @@ public class HybridImageSpec_cxx {
    */
   public init(_ implementation: any HybridImageSpec) {
     self.__implementation = implementation
+    self.__cxxPart = .init()
     /* no base class */
   }
 
@@ -79,7 +80,7 @@ public class HybridImageSpec_cxx {
       return cachedCxxPart
     } else {
       let newCxxPart = bridge.create_std__shared_ptr_margelo__nitro__image__HybridImageSpec_(self.toUnsafe())
-      __cxxPart = newCxxPart
+      __cxxPart = bridge.weakify_std__shared_ptr_margelo__nitro__image__HybridImageSpec_(newCxxPart)
       return newCxxPart
     }
   }
