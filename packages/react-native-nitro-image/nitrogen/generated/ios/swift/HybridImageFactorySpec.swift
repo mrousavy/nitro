@@ -8,26 +8,8 @@
 import Foundation
 import NitroModules
 
-/**
- * A Swift protocol representing the ImageFactory HybridObject.
- * Implement this protocol to create Swift-based instances of ImageFactory.
- *
- * When implementing this protocol, make sure to initialize `hybridContext` - example:
- * ```
- * public class HybridImageFactory : HybridImageFactorySpec {
- *   // Initialize HybridContext
- *   var hybridContext = margelo.nitro.HybridContext()
- *
- *   // Return size of the instance to inform JS GC about memory pressure
- *   var memorySize: Int {
- *     return getSizeOf(self)
- *   }
- *
- *   // ...
- * }
- * ```
- */
-public protocol HybridImageFactorySpec: AnyObject, HybridObjectSpec {
+/// See ``HybridImageFactorySpec``
+public protocol HybridImageFactorySpec_protocol: AnyObject {
   // Properties
   
 
@@ -37,3 +19,20 @@ public protocol HybridImageFactorySpec: AnyObject, HybridObjectSpec {
   func loadImageFromSystemName(path: String) throws -> (any HybridImageSpec)
   func bounceBack(image: (any HybridImageSpec)) throws -> (any HybridImageSpec)
 }
+
+/// See ``HybridImageFactorySpec``
+public class HybridImageFactorySpec_base: HybridObjectSpec {
+  public var hybridContext = margelo.nitro.HybridContext()
+  public var memorySize: Int { return getSizeOf(self) }
+}
+
+/**
+ * A Swift base-protocol representing the ImageFactory HybridObject.
+ * Implement this protocol to create Swift-based instances of ImageFactory.
+ * ```swift
+ * class HybridImageFactory : HybridImageFactorySpec {
+ *   // ...
+ * }
+ * ```
+ */
+public typealias HybridImageFactorySpec = HybridImageFactorySpec_protocol & HybridImageFactorySpec_base

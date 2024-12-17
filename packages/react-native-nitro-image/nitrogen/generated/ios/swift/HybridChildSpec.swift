@@ -8,29 +8,27 @@
 import Foundation
 import NitroModules
 
-/**
- * A Swift protocol representing the Child HybridObject.
- * Implement this protocol to create Swift-based instances of Child.
- *
- * When implementing this protocol, make sure to initialize `hybridContext` - example:
- * ```
- * public class HybridChild : HybridChildSpec {
- *   // Initialize HybridContext
- *   var hybridContext = margelo.nitro.HybridContext()
- *
- *   // Return size of the instance to inform JS GC about memory pressure
- *   var memorySize: Int {
- *     return getSizeOf(self)
- *   }
- *
- *   // ...
- * }
- * ```
- */
-public protocol HybridChildSpec: AnyObject, HybridObjectSpec, HybridBaseSpec {
+/// See ``HybridChildSpec``
+public protocol HybridChildSpec_protocol: AnyObject, HybridBaseSpec_protocol {
   // Properties
   var childValue: Double { get }
 
   // Methods
   
 }
+
+/// See ``HybridChildSpec``
+public class HybridChildSpec_base: HybridBaseSpec_base {
+  /* inherited */
+}
+
+/**
+ * A Swift base-protocol representing the Child HybridObject.
+ * Implement this protocol to create Swift-based instances of Child.
+ * ```swift
+ * class HybridChild : HybridChildSpec {
+ *   // ...
+ * }
+ * ```
+ */
+public typealias HybridChildSpec = HybridChildSpec_protocol & HybridChildSpec_base
