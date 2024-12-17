@@ -71,16 +71,16 @@ namespace margelo::nitro::image { enum class Powertrain; }
 #include <NitroModules/RuntimeError.hpp>
 
 // Forward declarations of Swift defined types
-// Forward declaration of `HybridBaseSpecCxx` to properly resolve imports.
-namespace NitroImage { class HybridBaseSpecCxx; }
-// Forward declaration of `HybridChildSpecCxx` to properly resolve imports.
-namespace NitroImage { class HybridChildSpecCxx; }
-// Forward declaration of `HybridImageFactorySpecCxx` to properly resolve imports.
-namespace NitroImage { class HybridImageFactorySpecCxx; }
-// Forward declaration of `HybridImageSpecCxx` to properly resolve imports.
-namespace NitroImage { class HybridImageSpecCxx; }
-// Forward declaration of `HybridTestObjectSwiftKotlinSpecCxx` to properly resolve imports.
-namespace NitroImage { class HybridTestObjectSwiftKotlinSpecCxx; }
+// Forward declaration of `HybridBaseSpec_cxx` to properly resolve imports.
+namespace NitroImage { class HybridBaseSpec_cxx; }
+// Forward declaration of `HybridChildSpec_cxx` to properly resolve imports.
+namespace NitroImage { class HybridChildSpec_cxx; }
+// Forward declaration of `HybridImageFactorySpec_cxx` to properly resolve imports.
+namespace NitroImage { class HybridImageFactorySpec_cxx; }
+// Forward declaration of `HybridImageSpec_cxx` to properly resolve imports.
+namespace NitroImage { class HybridImageSpec_cxx; }
+// Forward declaration of `HybridTestObjectSwiftKotlinSpec_cxx` to properly resolve imports.
+namespace NitroImage { class HybridTestObjectSwiftKotlinSpec_cxx; }
 
 // Include Swift defined types
 #if __has_include("NitroImage-Swift.h")

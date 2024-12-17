@@ -9,8 +9,8 @@
 
 #include "HybridBaseSpec.hpp"
 
-// Forward declaration of `HybridBaseSpecCxx` to properly resolve imports.
-namespace NitroImage { class HybridBaseSpecCxx; }
+// Forward declaration of `HybridBaseSpec_cxx` to properly resolve imports.
+namespace NitroImage { class HybridBaseSpec_cxx; }
 
 
 
@@ -27,25 +27,25 @@ namespace NitroImage { class HybridBaseSpecCxx; }
 namespace margelo::nitro::image {
 
   /**
-   * The C++ part of HybridBaseSpecCxx.swift.
+   * The C++ part of HybridBaseSpec_cxx.swift.
    *
-   * HybridBaseSpecSwift (C++) accesses HybridBaseSpecCxx (Swift), and might
+   * HybridBaseSpecSwift (C++) accesses HybridBaseSpec_cxx (Swift), and might
    * contain some additional bridging code for C++ <> Swift interop.
    *
    * Since this obviously introduces an overhead, I hope at some point in
-   * the future, HybridBaseSpecCxx can directly inherit from the C++ class HybridBaseSpec
+   * the future, HybridBaseSpec_cxx can directly inherit from the C++ class HybridBaseSpec
    * to simplify the whole structure and memory management.
    */
   class HybridBaseSpecSwift: public virtual HybridBaseSpec {
   public:
     // Constructor from a Swift instance
-    explicit HybridBaseSpecSwift(const NitroImage::HybridBaseSpecCxx& swiftPart):
+    explicit HybridBaseSpecSwift(const NitroImage::HybridBaseSpec_cxx& swiftPart):
       HybridObject(HybridBaseSpec::TAG),
       _swiftPart(swiftPart) { }
 
   public:
     // Get the Swift part
-    inline NitroImage::HybridBaseSpecCxx getSwiftPart() noexcept { return _swiftPart; }
+    inline NitroImage::HybridBaseSpec_cxx getSwiftPart() noexcept { return _swiftPart; }
 
   public:
     // Get memory pressure
@@ -64,7 +64,7 @@ namespace margelo::nitro::image {
     
 
   private:
-    NitroImage::HybridBaseSpecCxx _swiftPart;
+    NitroImage::HybridBaseSpec_cxx _swiftPart;
   };
 
 } // namespace margelo::nitro::image

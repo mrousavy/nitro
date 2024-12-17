@@ -9,8 +9,8 @@
 
 #include "HybridImageSpec.hpp"
 
-// Forward declaration of `HybridImageSpecCxx` to properly resolve imports.
-namespace NitroImage { class HybridImageSpecCxx; }
+// Forward declaration of `HybridImageSpec_cxx` to properly resolve imports.
+namespace NitroImage { class HybridImageSpec_cxx; }
 
 // Forward declaration of `ImageSize` to properly resolve imports.
 namespace margelo::nitro::image { struct ImageSize; }
@@ -36,25 +36,25 @@ namespace margelo::nitro::image { enum class ImageFormat; }
 namespace margelo::nitro::image {
 
   /**
-   * The C++ part of HybridImageSpecCxx.swift.
+   * The C++ part of HybridImageSpec_cxx.swift.
    *
-   * HybridImageSpecSwift (C++) accesses HybridImageSpecCxx (Swift), and might
+   * HybridImageSpecSwift (C++) accesses HybridImageSpec_cxx (Swift), and might
    * contain some additional bridging code for C++ <> Swift interop.
    *
    * Since this obviously introduces an overhead, I hope at some point in
-   * the future, HybridImageSpecCxx can directly inherit from the C++ class HybridImageSpec
+   * the future, HybridImageSpec_cxx can directly inherit from the C++ class HybridImageSpec
    * to simplify the whole structure and memory management.
    */
   class HybridImageSpecSwift: public virtual HybridImageSpec {
   public:
     // Constructor from a Swift instance
-    explicit HybridImageSpecSwift(const NitroImage::HybridImageSpecCxx& swiftPart):
+    explicit HybridImageSpecSwift(const NitroImage::HybridImageSpec_cxx& swiftPart):
       HybridObject(HybridImageSpec::TAG),
       _swiftPart(swiftPart) { }
 
   public:
     // Get the Swift part
-    inline NitroImage::HybridImageSpecCxx getSwiftPart() noexcept { return _swiftPart; }
+    inline NitroImage::HybridImageSpec_cxx getSwiftPart() noexcept { return _swiftPart; }
 
   public:
     // Get memory pressure
@@ -90,7 +90,7 @@ namespace margelo::nitro::image {
     }
 
   private:
-    NitroImage::HybridImageSpecCxx _swiftPart;
+    NitroImage::HybridImageSpec_cxx _swiftPart;
   };
 
 } // namespace margelo::nitro::image
