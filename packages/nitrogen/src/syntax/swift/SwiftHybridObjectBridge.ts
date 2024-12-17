@@ -104,7 +104,7 @@ ${hasBase ? `public class ${name.HybridTSpecCxx} : ${baseClasses.join(', ')}` : 
    * Gets (or creates) the C++ part of this Hybrid Object.
    * The C++ part is a \`${bridge.cxxType}\`.
    */
-  public ${hasBase ? 'override func' : 'func'} getCxxPart() -> bridge.${bridge.specializationName} {
+  public func getCxxPart() -> bridge.${bridge.specializationName} {
     return bridge.${bridge.funcName}(self.toUnsafe())
   }
 
