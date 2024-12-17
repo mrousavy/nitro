@@ -14,7 +14,7 @@ public protocol HybridBaseSpec_protocol: AnyObject {
   var baseValue: Double { get }
 
   // Methods
-
+  
 }
 
 /// See ``HybridBaseSpec``
