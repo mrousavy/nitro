@@ -23,6 +23,11 @@ public protocol HybridImageFactorySpec_protocol: AnyObject {
 /// See ``HybridImageFactorySpec``
 public class HybridImageFactorySpec_base: HybridObjectSpec {
   public func getCxxWrapper() -> HybridImageFactorySpec_cxx {
+  #if DEBUG
+    guard self is HybridImageFactorySpec else {
+      fatalError("`self` is not a `HybridImageFactorySpec`! Did you accidentally inherit from `HybridImageFactorySpec_base` instead of `HybridImageFactorySpec`?")
+    }
+  #endif
     return HybridImageFactorySpec_cxx(self as! HybridImageFactorySpec)
   }
   public var hybridContext = margelo.nitro.HybridContext()

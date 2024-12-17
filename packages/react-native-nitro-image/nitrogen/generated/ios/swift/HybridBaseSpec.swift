@@ -20,6 +20,11 @@ public protocol HybridBaseSpec_protocol: AnyObject {
 /// See ``HybridBaseSpec``
 public class HybridBaseSpec_base: HybridObjectSpec {
   public func getCxxWrapper() -> HybridBaseSpec_cxx {
+  #if DEBUG
+    guard self is HybridBaseSpec else {
+      fatalError("`self` is not a `HybridBaseSpec`! Did you accidentally inherit from `HybridBaseSpec_base` instead of `HybridBaseSpec`?")
+    }
+  #endif
     return HybridBaseSpec_cxx(self as! HybridBaseSpec)
   }
   public var hybridContext = margelo.nitro.HybridContext()
