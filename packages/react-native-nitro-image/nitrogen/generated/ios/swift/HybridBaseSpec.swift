@@ -34,7 +34,6 @@ public class HybridBaseSpec_base: HybridObjectSpec {
       return cxxWrapper
     }
   }
-  public var hybridContext = margelo.nitro.HybridContext()
   public var memorySize: Int { return getSizeOf(self) }
 }
 

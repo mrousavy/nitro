@@ -12,17 +12,6 @@ import Foundation
  */
 public protocol HybridObjectSpec: AnyObject {
   /**
-   * Holds the C++ HybridObject and it's context.
-   * Use the default initializer in your implementation, C++ will set and get this value.
-   *
-   * @example
-   * ```swift
-   * var hybridContext = margelo.nitro.HybridContext()
-   * ```
-   */
-  var hybridContext: margelo.nitro.HybridContext { get set }
-
-  /**
    * Get the memory size of the Swift instance (plus any external heap allocations),
    * in bytes.
    *

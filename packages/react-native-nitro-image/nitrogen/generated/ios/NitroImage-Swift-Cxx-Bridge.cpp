@@ -14,14 +14,13 @@
 #include "HybridImageSpecSwift.hpp"
 #include "HybridTestObjectSwiftKotlinSpecSwift.hpp"
 #include "NitroImage-Swift-Cxx-Umbrella.hpp"
-#include <NitroModules/HybridContext.hpp>
 
 namespace margelo::nitro::image::bridge::swift {
 
   // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridImageSpec>
   std::shared_ptr<margelo::nitro::image::HybridImageSpec> create_std__shared_ptr_margelo__nitro__image__HybridImageSpec_(void* _Nonnull swiftUnsafePointer) {
     NitroImage::HybridImageSpec_cxx swiftPart = NitroImage::HybridImageSpec_cxx::fromUnsafe(swiftUnsafePointer);
-    return HybridContext::getOrCreate<margelo::nitro::image::HybridImageSpecSwift>(swiftPart);
+    return std::make_shared<margelo::nitro::image::HybridImageSpecSwift>(swiftPart);
   }
   void* _Nonnull get_std__shared_ptr_margelo__nitro__image__HybridImageSpec_(std__shared_ptr_margelo__nitro__image__HybridImageSpec_ cppType) {
     std::shared_ptr<margelo::nitro::image::HybridImageSpecSwift> swiftWrapper = std::dynamic_pointer_cast<margelo::nitro::image::HybridImageSpecSwift>(cppType);
@@ -37,7 +36,7 @@ namespace margelo::nitro::image::bridge::swift {
   // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridImageFactorySpec>
   std::shared_ptr<margelo::nitro::image::HybridImageFactorySpec> create_std__shared_ptr_margelo__nitro__image__HybridImageFactorySpec_(void* _Nonnull swiftUnsafePointer) {
     NitroImage::HybridImageFactorySpec_cxx swiftPart = NitroImage::HybridImageFactorySpec_cxx::fromUnsafe(swiftUnsafePointer);
-    return HybridContext::getOrCreate<margelo::nitro::image::HybridImageFactorySpecSwift>(swiftPart);
+    return std::make_shared<margelo::nitro::image::HybridImageFactorySpecSwift>(swiftPart);
   }
   void* _Nonnull get_std__shared_ptr_margelo__nitro__image__HybridImageFactorySpec_(std__shared_ptr_margelo__nitro__image__HybridImageFactorySpec_ cppType) {
     std::shared_ptr<margelo::nitro::image::HybridImageFactorySpecSwift> swiftWrapper = std::dynamic_pointer_cast<margelo::nitro::image::HybridImageFactorySpecSwift>(cppType);
@@ -53,7 +52,7 @@ namespace margelo::nitro::image::bridge::swift {
   // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>
   std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec> create_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_(void* _Nonnull swiftUnsafePointer) {
     NitroImage::HybridTestObjectSwiftKotlinSpec_cxx swiftPart = NitroImage::HybridTestObjectSwiftKotlinSpec_cxx::fromUnsafe(swiftUnsafePointer);
-    return HybridContext::getOrCreate<margelo::nitro::image::HybridTestObjectSwiftKotlinSpecSwift>(swiftPart);
+    return std::make_shared<margelo::nitro::image::HybridTestObjectSwiftKotlinSpecSwift>(swiftPart);
   }
   void* _Nonnull get_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_(std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_ cppType) {
     std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpecSwift> swiftWrapper = std::dynamic_pointer_cast<margelo::nitro::image::HybridTestObjectSwiftKotlinSpecSwift>(cppType);
@@ -69,7 +68,7 @@ namespace margelo::nitro::image::bridge::swift {
   // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridBaseSpec>
   std::shared_ptr<margelo::nitro::image::HybridBaseSpec> create_std__shared_ptr_margelo__nitro__image__HybridBaseSpec_(void* _Nonnull swiftUnsafePointer) {
     NitroImage::HybridBaseSpec_cxx swiftPart = NitroImage::HybridBaseSpec_cxx::fromUnsafe(swiftUnsafePointer);
-    return HybridContext::getOrCreate<margelo::nitro::image::HybridBaseSpecSwift>(swiftPart);
+    return std::make_shared<margelo::nitro::image::HybridBaseSpecSwift>(swiftPart);
   }
   void* _Nonnull get_std__shared_ptr_margelo__nitro__image__HybridBaseSpec_(std__shared_ptr_margelo__nitro__image__HybridBaseSpec_ cppType) {
     std::shared_ptr<margelo::nitro::image::HybridBaseSpecSwift> swiftWrapper = std::dynamic_pointer_cast<margelo::nitro::image::HybridBaseSpecSwift>(cppType);
@@ -85,7 +84,7 @@ namespace margelo::nitro::image::bridge::swift {
   // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridChildSpec>
   std::shared_ptr<margelo::nitro::image::HybridChildSpec> create_std__shared_ptr_margelo__nitro__image__HybridChildSpec_(void* _Nonnull swiftUnsafePointer) {
     NitroImage::HybridChildSpec_cxx swiftPart = NitroImage::HybridChildSpec_cxx::fromUnsafe(swiftUnsafePointer);
-    return HybridContext::getOrCreate<margelo::nitro::image::HybridChildSpecSwift>(swiftPart);
+    return std::make_shared<margelo::nitro::image::HybridChildSpecSwift>(swiftPart);
   }
   void* _Nonnull get_std__shared_ptr_margelo__nitro__image__HybridChildSpec_(std__shared_ptr_margelo__nitro__image__HybridChildSpec_ cppType) {
     std::shared_ptr<margelo::nitro::image::HybridChildSpecSwift> swiftWrapper = std::dynamic_pointer_cast<margelo::nitro::image::HybridChildSpecSwift>(cppType);
