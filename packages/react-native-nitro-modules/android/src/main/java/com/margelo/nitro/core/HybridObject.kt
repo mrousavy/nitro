@@ -26,7 +26,7 @@ abstract class HybridObject: ExtendableHybridClass {
      * val memorySize: ULong
      *   get() {
      *     val imageSize = this.bitmap.bytesPerRow * this.bitmap.height
-     *     return getSizeOf(this) + imageSize
+     *     return imageSize
      *   }
      * ```
      */
