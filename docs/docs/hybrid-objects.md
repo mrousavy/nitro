@@ -112,9 +112,8 @@ Hybrid Objects can be implemented in C++, Swift or Kotlin:
     <TabItem value="swift" label="Swift" default>
       ```swift title="HybridMath.swift"
       class HybridMath : HybridMathSpec {
-        public var hybridContext = margelo.nitro.HybridContext()
-        public var memorySize: Int {
-          return getSizeOf(self)
+        public override var memorySize: Int {
+          return 0
         }
 
         public var pi: Double {
