@@ -9,8 +9,8 @@
 
 #include "HybridTestObjectSwiftKotlinSpec.hpp"
 
-// Forward declaration of `HybridTestObjectSwiftKotlinSpecCxx` to properly resolve imports.
-namespace NitroImage { class HybridTestObjectSwiftKotlinSpecCxx; }
+// Forward declaration of `HybridTestObjectSwiftKotlinSpec_cxx` to properly resolve imports.
+namespace NitroImage { class HybridTestObjectSwiftKotlinSpec_cxx; }
 
 // Forward declaration of `HybridTestObjectSwiftKotlinSpec` to properly resolve imports.
 namespace margelo::nitro::image { class HybridTestObjectSwiftKotlinSpec; }
@@ -63,25 +63,25 @@ namespace margelo::nitro::image { class HybridBaseSpec; }
 namespace margelo::nitro::image {
 
   /**
-   * The C++ part of HybridTestObjectSwiftKotlinSpecCxx.swift.
+   * The C++ part of HybridTestObjectSwiftKotlinSpec_cxx.swift.
    *
-   * HybridTestObjectSwiftKotlinSpecSwift (C++) accesses HybridTestObjectSwiftKotlinSpecCxx (Swift), and might
+   * HybridTestObjectSwiftKotlinSpecSwift (C++) accesses HybridTestObjectSwiftKotlinSpec_cxx (Swift), and might
    * contain some additional bridging code for C++ <> Swift interop.
    *
    * Since this obviously introduces an overhead, I hope at some point in
-   * the future, HybridTestObjectSwiftKotlinSpecCxx can directly inherit from the C++ class HybridTestObjectSwiftKotlinSpec
+   * the future, HybridTestObjectSwiftKotlinSpec_cxx can directly inherit from the C++ class HybridTestObjectSwiftKotlinSpec
    * to simplify the whole structure and memory management.
    */
   class HybridTestObjectSwiftKotlinSpecSwift: public virtual HybridTestObjectSwiftKotlinSpec {
   public:
     // Constructor from a Swift instance
-    explicit HybridTestObjectSwiftKotlinSpecSwift(const NitroImage::HybridTestObjectSwiftKotlinSpecCxx& swiftPart):
+    explicit HybridTestObjectSwiftKotlinSpecSwift(const NitroImage::HybridTestObjectSwiftKotlinSpec_cxx& swiftPart):
       HybridObject(HybridTestObjectSwiftKotlinSpec::TAG),
       _swiftPart(swiftPart) { }
 
   public:
     // Get the Swift part
-    inline NitroImage::HybridTestObjectSwiftKotlinSpecCxx getSwiftPart() noexcept { return _swiftPart; }
+    inline NitroImage::HybridTestObjectSwiftKotlinSpec_cxx getSwiftPart() noexcept { return _swiftPart; }
 
   public:
     // Get memory pressure
@@ -345,7 +345,7 @@ namespace margelo::nitro::image {
     }
 
   private:
-    NitroImage::HybridTestObjectSwiftKotlinSpecCxx _swiftPart;
+    NitroImage::HybridTestObjectSwiftKotlinSpec_cxx _swiftPart;
   };
 
 } // namespace margelo::nitro::image

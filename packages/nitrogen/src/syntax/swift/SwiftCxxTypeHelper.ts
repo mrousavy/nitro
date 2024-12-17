@@ -90,7 +90,7 @@ void* _Nonnull get_${name}(${name} cppType);
     cxxImplementation: {
       code: `
 ${actualType} create_${name}(void* _Nonnull swiftUnsafePointer) {
-  ${swiftPartType} swiftPart = ${swiftPartType}Unsafe::fromUnsafe(swiftUnsafePointer);
+  ${swiftPartType} swiftPart = ${swiftPartType}::fromUnsafe(swiftUnsafePointer);
   return HybridContext::getOrCreate<${swiftWrappingType}>(swiftPart);
 }
 void* _Nonnull get_${name}(${name} cppType) {
@@ -101,7 +101,7 @@ void* _Nonnull get_${name}(${name} cppType) {
   }
 #endif
   ${swiftPartType} swiftPart = swiftWrapper->getSwiftPart();
-  return ${swiftPartType}Unsafe::toUnsafe(swiftPart);
+  return swiftPart.toUnsafe();
 }
     `.trim(),
       requiredIncludes: [
