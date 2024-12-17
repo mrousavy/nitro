@@ -82,8 +82,6 @@ export class State<T> {
     ) {
       this.onPassed()
     } else {
-      console.log(this.result)
-      console.log(this.result?.toString?.())
       this.onFailed(
         `Expected "${stringify(this.result)}" (${typeof this.result}) to contain ${String(key)}, but it didn't! Keys: ${Object.keys(this.result as any)}`
       )
