@@ -19,10 +19,30 @@ export function createSwiftHybridObject(spec: HybridObjectSpec): SourceFile[] {
     classBaseClasses.push(`${baseName.HybridTSpec}_base`)
   }
 
+  const hasBaseClass = classBaseClasses.length > 0
   const baseMembers: string[] = []
-  if (classBaseClasses.length === 0) {
+  baseMembers.push(`private weak var cxxWrapper: ${name.HybridTSpecCxx}? = nil`)
+  baseMembers.push(
+    `
+public ${hasBaseClass ? 'override func' : 'func'} getCxxWrapper() -> ${name.HybridTSpecCxx} {
+#if DEBUG
+  guard self is ${name.HybridTSpec} else {
+    fatalError("\`self\` is not a \`${name.HybridTSpec}\`! Did you accidentally inherit from \`${name.HybridTSpec}_base\` instead of \`${name.HybridTSpec}\`?")
+  }
+#endif
+  if let cxxWrapper = self.cxxWrapper {
+    return cxxWrapper
+  } else {
+    let cxxWrapper = ${name.HybridTSpecCxx}(self as! ${name.HybridTSpec})
+    self.cxxWrapper = cxxWrapper
+    return cxxWrapper
+  }
+}`.trim()
+  )
+  if (!hasBaseClass) {
     // It doesn't have a base class - implement hybridContext
     classBaseClasses.push('HybridObjectSpec')
+
     baseMembers.push(`public var hybridContext = margelo.nitro.HybridContext()`)
     baseMembers.push(`public var memorySize: Int { return getSizeOf(self) }`)
   }

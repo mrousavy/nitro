@@ -19,7 +19,21 @@ public protocol HybridChildSpec_protocol: AnyObject, HybridBaseSpec_protocol {
 
 /// See ``HybridChildSpec``
 public class HybridChildSpec_base: HybridBaseSpec_base {
-  /* inherited */
+  private weak var cxxWrapper: HybridChildSpec_cxx? = nil
+  public override func getCxxWrapper() -> HybridChildSpec_cxx {
+  #if DEBUG
+    guard self is HybridChildSpec else {
+      fatalError("`self` is not a `HybridChildSpec`! Did you accidentally inherit from `HybridChildSpec_base` instead of `HybridChildSpec`?")
+    }
+  #endif
+    if let cxxWrapper = self.cxxWrapper {
+      return cxxWrapper
+    } else {
+      let cxxWrapper = HybridChildSpec_cxx(self as! HybridChildSpec)
+      self.cxxWrapper = cxxWrapper
+      return cxxWrapper
+    }
+  }
 }
 
 /**

@@ -34,7 +34,7 @@ public class HybridImageFactorySpec_cxx {
    * Create a new `HybridImageFactorySpec_cxx` that wraps the given `HybridImageFactorySpec`.
    * All properties and methods bridge to C++ types.
    */
-  public init(_ implementation: some HybridImageFactorySpec) {
+  public init(_ implementation: any HybridImageFactorySpec) {
     self.__implementation = implementation
     /* no base class */
   }
@@ -63,6 +63,16 @@ public class HybridImageFactorySpec_cxx {
   public class func fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> HybridImageFactorySpec_cxx {
     return Unmanaged<HybridImageFactorySpec_cxx>.fromOpaque(pointer).takeRetainedValue()
   }
+
+  /**
+   * Gets (or creates) the C++ part of this Hybrid Object.
+   * The C++ part is a `std::shared_ptr<margelo::nitro::image::HybridImageFactorySpec>`.
+   */
+  public func getCxxPart() -> bridge.std__shared_ptr_margelo__nitro__image__HybridImageFactorySpec_ {
+    return bridge.create_std__shared_ptr_margelo__nitro__image__HybridImageFactorySpec_(self.toUnsafe())
+  }
+
+  
 
   /**
    * Contains a (weak) reference to the C++ HybridObject to cache it.
@@ -96,9 +106,8 @@ public class HybridImageFactorySpec_cxx {
     do {
       let __result = try self.__implementation.loadImageFromFile(path: String(path))
       return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridImageSpec_ in
-        let __cxxWrapped = HybridImageSpec_cxx(__result)
-        let __pointer = __cxxWrapped.toUnsafe()
-        return bridge.create_std__shared_ptr_margelo__nitro__image__HybridImageSpec_(__pointer)
+        let __cxxWrapped = __result.getCxxWrapper()
+        return __cxxWrapped.getCxxPart()
       }()
     } catch {
       let __message = "\(error.localizedDescription)"
@@ -111,9 +120,8 @@ public class HybridImageFactorySpec_cxx {
     do {
       let __result = try self.__implementation.loadImageFromURL(path: String(path))
       return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridImageSpec_ in
-        let __cxxWrapped = HybridImageSpec_cxx(__result)
-        let __pointer = __cxxWrapped.toUnsafe()
-        return bridge.create_std__shared_ptr_margelo__nitro__image__HybridImageSpec_(__pointer)
+        let __cxxWrapped = __result.getCxxWrapper()
+        return __cxxWrapped.getCxxPart()
       }()
     } catch {
       let __message = "\(error.localizedDescription)"
@@ -126,9 +134,8 @@ public class HybridImageFactorySpec_cxx {
     do {
       let __result = try self.__implementation.loadImageFromSystemName(path: String(path))
       return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridImageSpec_ in
-        let __cxxWrapped = HybridImageSpec_cxx(__result)
-        let __pointer = __cxxWrapped.toUnsafe()
-        return bridge.create_std__shared_ptr_margelo__nitro__image__HybridImageSpec_(__pointer)
+        let __cxxWrapped = __result.getCxxWrapper()
+        return __cxxWrapped.getCxxPart()
       }()
     } catch {
       let __message = "\(error.localizedDescription)"
@@ -145,9 +152,8 @@ public class HybridImageFactorySpec_cxx {
         return __instance.getHybridImageSpec()
       }())
       return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridImageSpec_ in
-        let __cxxWrapped = HybridImageSpec_cxx(__result)
-        let __pointer = __cxxWrapped.toUnsafe()
-        return bridge.create_std__shared_ptr_margelo__nitro__image__HybridImageSpec_(__pointer)
+        let __cxxWrapped = __result.getCxxWrapper()
+        return __cxxWrapped.getCxxPart()
       }()
     } catch {
       let __message = "\(error.localizedDescription)"

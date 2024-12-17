@@ -31,7 +31,7 @@ export function createSwiftHybridObjectRegistration({
   const { HybridTSpecCxx, HybridTSpecSwift, HybridTSpec } =
     getHybridObjectName(hybridObjectName)
 
-  const type = new HybridObjectType(hybridObjectName, 'swift')
+  const type = new HybridObjectType(hybridObjectName, 'swift', [])
   const bridge = new SwiftCxxBridgedType(type)
 
   return {
