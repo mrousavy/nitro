@@ -26,7 +26,7 @@ class HybridImage : HybridImageSpec {
    * can efficiently garbage collect it when needed.
    */
   public override var memorySize: Int {
-    return getSizeOf(self) + uiImage.memorySize
+    return uiImage.memorySize
   }
 
   /**

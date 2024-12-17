@@ -37,7 +37,7 @@ public class HybridImageSpec_base: HybridObjectSpec {
       return cxxWrapper
     }
   }
-  public var memorySize: Int { return getSizeOf(self) }
+  public var memorySize: Int { return 0 }
 }
 
 /**

@@ -177,7 +177,7 @@ ${hasBase ? `public class ${name.HybridTSpecCxx} : ${baseClasses.join(', ')}` : 
    */
   @inline(__always)
   public ${hasBase ? 'override var' : 'var'} memorySize: Int {
-    return self.__implementation.memorySize
+    return MemoryHelper.getSizeOf(self.__implementation) + self.__implementation.memorySize
   }
 
   // Properties
