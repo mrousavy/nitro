@@ -14,7 +14,6 @@ import { SwiftCxxBridgedType } from './SwiftCxxBridgedType.js'
 import { HybridObjectType } from '../types/HybridObjectType.js'
 import { getHybridObjectName } from '../getHybridObjectName.js'
 import { NitroConfig } from '../../config/NitroConfig.js'
-import { getForwardDeclaration } from '../c++/getForwardDeclaration.js'
 import { getUmbrellaHeaderName } from '../../autolinking/ios/createSwiftUmbrellaHeader.js'
 import { VoidType } from '../types/VoidType.js'
 import { NamedWrappingType } from '../types/NamedWrappingType.js'
@@ -96,7 +95,7 @@ void* _Nonnull get_${name}(${name} cppType);
       code: `
 ${actualType} create_${name}(void* _Nonnull swiftUnsafePointer) {
   ${swiftPartType} swiftPart = ${swiftPartType}::fromUnsafe(swiftUnsafePointer);
-  return HybridContext::getOrCreate<${swiftWrappingType}>(swiftPart);
+  return std::make_shared<${swiftWrappingType}>(swiftPart);
 }
 void* _Nonnull get_${name}(${name} cppType) {
   std::shared_ptr<${swiftWrappingType}> swiftWrapper = std::dynamic_pointer_cast<${swiftWrappingType}>(cppType);
@@ -112,16 +111,6 @@ void* _Nonnull get_${name}(${name} cppType) {
       requiredIncludes: [
         {
           language: 'c++',
-          name: 'NitroModules/HybridContext.hpp',
-          space: 'system',
-          forwardDeclaration: getForwardDeclaration(
-            'class',
-            'HybridContext',
-            'margelo::nitro'
-          ),
-        },
-        {
-          language: 'c++',
           // Hybrid Object Swift C++ class wrapper
           name: `${HybridTSpecSwift}.hpp`,
           space: 'user',
@@ -134,7 +123,7 @@ void* _Nonnull get_${name}(${name} cppType) {
         },
       ],
     },
-    dependencies: [...upcastHelpers],
+    dependencies: [...upcastHelpers, createCxxWeakPtrHelper(type)],
   }
 }
 
@@ -154,6 +143,24 @@ function createCxxUpcastHelper(
     cxxHeader: {
       code: `
 inline ${cppBaseType} ${funcName}(${cppChildType} child) { return child; }
+`.trim(),
+      requiredIncludes: [],
+    },
+    dependencies: [],
+  }
+}
+
+function createCxxWeakPtrHelper(type: HybridObjectType): SwiftCxxHelper {
+  const actualType = type.getCode('c++', true)
+  const specializationName = escapeCppName(actualType)
+  const funcName = `weakify_${escapeCppName(type.getCode('c++'))}`
+  return {
+    cxxType: actualType,
+    funcName: funcName,
+    specializationName: specializationName,
+    cxxHeader: {
+      code: `
+using ${specializationName} = ${actualType};
 `.trim(),
       requiredIncludes: [],
     },

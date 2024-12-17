@@ -12,7 +12,7 @@ import type { SourceFile } from '../SourceFile.js'
 import { getHybridObjectName } from '../getHybridObjectName.js'
 import { getForwardDeclaration } from '../c++/getForwardDeclaration.js'
 import { NitroConfig } from '../../config/NitroConfig.js'
-import { includeHeader, includeNitroHeader } from '../c++/includeNitroHeader.js'
+import { includeHeader } from '../c++/includeNitroHeader.js'
 import { getUmbrellaHeaderName } from '../../autolinking/ios/createSwiftUmbrellaHeader.js'
 import { HybridObjectType } from '../types/HybridObjectType.js'
 
@@ -47,9 +47,12 @@ export function createSwiftHybridObjectCxxBridge(
   })
   const hasBase = baseClasses.length > 0
 
-  const bridgedType = new SwiftCxxBridgedType(new HybridObjectType(spec))
+  const hybridObject = new HybridObjectType(spec)
+  const bridgedType = new SwiftCxxBridgedType(hybridObject)
   const bridge = bridgedType.getRequiredBridge()
   if (bridge == null) throw new Error(`HybridObject Type should have a bridge!`)
+
+  const cppWeakPtrName = escapeCppName(hybridObject.getCode('c++', true))
 
   const baseGetCxxPartOverrides = spec.baseTypes.map((base) => {
     const baseHybridObject = new HybridObjectType(base)
@@ -70,7 +73,7 @@ export function createSwiftHybridObjectCxxBridge(
 
     return `
 public override func getCxxPart() -> bridge.${baseBridge.specializationName} {
-  let ownCxxPart = bridge.${bridge.funcName}(self.toUnsafe())
+  let ownCxxPart: bridge.${bridge.specializationName} = getCxxPart()
   return bridge.${upcastBridge.funcName}(ownCxxPart)
 }`.trim()
   })
@@ -102,6 +105,11 @@ ${hasBase ? `public class ${name.HybridTSpecCxx} : ${baseClasses.join(', ')}` : 
    * Holds an instance of the \`${name.HybridTSpec}\` Swift protocol.
    */
   private var __implementation: any ${name.HybridTSpec}
+
+  /**
+   * Holds a weak pointer to the C++ class that wraps the Swift class.
+   */
+  private var __cxxPart: bridge.${cppWeakPtrName}
 
   /**
    * Create a new \`${name.HybridTSpecCxx}\` that wraps the given \`${name.HybridTSpec}\`.
@@ -142,24 +150,17 @@ ${hasBase ? `public class ${name.HybridTSpecCxx} : ${baseClasses.join(', ')}` : 
    * The C++ part is a \`${bridge.cxxType}\`.
    */
   public func getCxxPart() -> bridge.${bridge.specializationName} {
-    return bridge.${bridge.funcName}(self.toUnsafe())
+    let cachedCxxPart = self.__cxxPart.lock()
+    if cachedCxxPart.__convertToBool() {
+      return cachedCxxPart
+    } else {
+      let newCxxPart = bridge.${bridge.funcName}(self.toUnsafe())
+      __cxxPart = newCxxPart
+      return newCxxPart
+    }
   }
 
   ${indent(baseGetCxxPartOverrides.join('\n'), '  ')}
-
-  /**
-   * Contains a (weak) reference to the C++ HybridObject to cache it.
-   */
-  public ${hasBase ? 'override var' : 'var'} hybridContext: margelo.nitro.HybridContext {
-    @inline(__always)
-    get {
-      return self.__implementation.hybridContext
-    }
-    @inline(__always)
-    set {
-      self.__implementation.hybridContext = newValue
-    }
-  }
 
   /**
    * Get the memory size of the Swift class (plus size of any other allocations)
@@ -294,8 +295,6 @@ ${getForwardDeclaration('class', name.HybridTSpecCxx, iosModuleName)}
 ${extraForwardDeclarations.join('\n')}
 
 ${extraIncludes.join('\n')}
-
-${includeNitroHeader('HybridContext.hpp')}
 
 #include "${getUmbrellaHeaderName()}"
 

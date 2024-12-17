@@ -31,6 +31,11 @@ public class HybridBaseSpec_cxx {
   private var __implementation: any HybridBaseSpec
 
   /**
+   * Holds a weak pointer to the C++ class that wraps the Swift class.
+   */
+  private var __cxxPart: bridge.std__weak_ptr_margelo__nitro__image__HybridBaseSpec_
+
+  /**
    * Create a new `HybridBaseSpec_cxx` that wraps the given `HybridBaseSpec`.
    * All properties and methods bridge to C++ types.
    */
@@ -69,24 +74,17 @@ public class HybridBaseSpec_cxx {
    * The C++ part is a `std::shared_ptr<margelo::nitro::image::HybridBaseSpec>`.
    */
   public func getCxxPart() -> bridge.std__shared_ptr_margelo__nitro__image__HybridBaseSpec_ {
-    return bridge.create_std__shared_ptr_margelo__nitro__image__HybridBaseSpec_(self.toUnsafe())
+    let cachedCxxPart = self.__cxxPart.lock()
+    if cachedCxxPart.__convertToBool() {
+      return cachedCxxPart
+    } else {
+      let newCxxPart = bridge.create_std__shared_ptr_margelo__nitro__image__HybridBaseSpec_(self.toUnsafe())
+      __cxxPart = newCxxPart
+      return newCxxPart
+    }
   }
 
   
-
-  /**
-   * Contains a (weak) reference to the C++ HybridObject to cache it.
-   */
-  public var hybridContext: margelo.nitro.HybridContext {
-    @inline(__always)
-    get {
-      return self.__implementation.hybridContext
-    }
-    @inline(__always)
-    set {
-      self.__implementation.hybridContext = newValue
-    }
-  }
 
   /**
    * Get the memory size of the Swift class (plus size of any other allocations)
