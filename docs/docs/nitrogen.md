@@ -206,9 +206,8 @@ To implement `Math` now, you just need to implement the spec:
   <TabItem value="swift" label="Swift" default>
     ```swift title="HybridMath.swift"
     class HybridMath : HybridMathSpec {
-      var hybridContext = margelo.nitro.HybridContext()
-      var memorySize: Int {
-        return getSizeOf(self)
+      public override var memorySize: Int {
+        return 0
       }
 
       public func add(a: Double, b: Double) throws -> Double {
