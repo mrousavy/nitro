@@ -18,8 +18,7 @@ body:
       render: tsx
       placeholder: >
         class HybridMath: HybridMathSpec {
-          var hybridContext = margelo.nitro.HybridContext()
-          var memorySize: Int { return 0 }
+          ...
         }
     validations:
       required: true
