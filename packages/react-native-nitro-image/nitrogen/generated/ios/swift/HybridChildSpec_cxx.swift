@@ -108,5 +108,5 @@ public class HybridChildSpec_cxx : HybridBaseSpec_cxx {
   }
 
   // Methods
-  
+
 }
