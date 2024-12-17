@@ -605,14 +605,6 @@ namespace margelo::nitro::image::bridge::swift {
     return std::make_shared<Func_void_std__shared_ptr_ArrayBuffer__Wrapper>(value);
   }
   
-  // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridChildSpec>
-  /**
-   * Specialized version of `std::shared_ptr<margelo::nitro::image::HybridChildSpec>`.
-   */
-  using std__shared_ptr_margelo__nitro__image__HybridChildSpec_ = std::shared_ptr<margelo::nitro::image::HybridChildSpec>;
-  std::shared_ptr<margelo::nitro::image::HybridChildSpec> create_std__shared_ptr_margelo__nitro__image__HybridChildSpec_(void* _Nonnull swiftUnsafePointer);
-  void* _Nonnull get_std__shared_ptr_margelo__nitro__image__HybridChildSpec_(std__shared_ptr_margelo__nitro__image__HybridChildSpec_ cppType);
-  
   // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridBaseSpec>
   /**
    * Specialized version of `std::shared_ptr<margelo::nitro::image::HybridBaseSpec>`.
@@ -620,5 +612,13 @@ namespace margelo::nitro::image::bridge::swift {
   using std__shared_ptr_margelo__nitro__image__HybridBaseSpec_ = std::shared_ptr<margelo::nitro::image::HybridBaseSpec>;
   std::shared_ptr<margelo::nitro::image::HybridBaseSpec> create_std__shared_ptr_margelo__nitro__image__HybridBaseSpec_(void* _Nonnull swiftUnsafePointer);
   void* _Nonnull get_std__shared_ptr_margelo__nitro__image__HybridBaseSpec_(std__shared_ptr_margelo__nitro__image__HybridBaseSpec_ cppType);
+  
+  // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridChildSpec>
+  /**
+   * Specialized version of `std::shared_ptr<margelo::nitro::image::HybridChildSpec>`.
+   */
+  using std__shared_ptr_margelo__nitro__image__HybridChildSpec_ = std::shared_ptr<margelo::nitro::image::HybridChildSpec>;
+  std::shared_ptr<margelo::nitro::image::HybridChildSpec> create_std__shared_ptr_margelo__nitro__image__HybridChildSpec_(void* _Nonnull swiftUnsafePointer);
+  void* _Nonnull get_std__shared_ptr_margelo__nitro__image__HybridChildSpec_(std__shared_ptr_margelo__nitro__image__HybridChildSpec_ cppType);
 
 } // namespace margelo::nitro::image::bridge::swift
