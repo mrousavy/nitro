@@ -28,3 +28,10 @@ public protocol HybridObjectSpec: AnyObject {
    */
   var memorySize: Int { get }
 }
+
+public extension HybridObjectSpec {
+  @available(*, deprecated, message: "getSizeOf(...) will now be default-computed. Please remove getSizeOf() from your code.")
+  func getSizeOf<T: AnyObject>(_ instance: T) -> Int {
+    return 0
+  }
+}
