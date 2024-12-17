@@ -22,13 +22,20 @@ public protocol HybridImageSpec_protocol: AnyObject {
 
 /// See ``HybridImageSpec``
 public class HybridImageSpec_base: HybridObjectSpec {
+  private weak var cxxWrapper: HybridImageSpec_cxx? = nil
   public func getCxxWrapper() -> HybridImageSpec_cxx {
   #if DEBUG
     guard self is HybridImageSpec else {
       fatalError("`self` is not a `HybridImageSpec`! Did you accidentally inherit from `HybridImageSpec_base` instead of `HybridImageSpec`?")
     }
   #endif
-    return HybridImageSpec_cxx(self as! HybridImageSpec)
+    if let cxxWrapper = self.cxxWrapper {
+      return cxxWrapper
+    } else {
+      let cxxWrapper = HybridImageSpec_cxx(self as! HybridImageSpec)
+      self.cxxWrapper = cxxWrapper
+      return cxxWrapper
+    }
   }
   public var hybridContext = margelo.nitro.HybridContext()
   public var memorySize: Int { return getSizeOf(self) }

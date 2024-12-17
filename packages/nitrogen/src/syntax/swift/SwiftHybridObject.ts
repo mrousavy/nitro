@@ -21,6 +21,7 @@ export function createSwiftHybridObject(spec: HybridObjectSpec): SourceFile[] {
 
   const hasBaseClass = classBaseClasses.length > 0
   const baseMembers: string[] = []
+  baseMembers.push(`private weak var cxxWrapper: ${name.HybridTSpecCxx}? = nil`)
   baseMembers.push(
     `
 public ${hasBaseClass ? 'override func' : 'func'} getCxxWrapper() -> ${name.HybridTSpecCxx} {
@@ -29,7 +30,13 @@ public ${hasBaseClass ? 'override func' : 'func'} getCxxWrapper() -> ${name.Hybr
     fatalError("\`self\` is not a \`${name.HybridTSpec}\`! Did you accidentally inherit from \`${name.HybridTSpec}_base\` instead of \`${name.HybridTSpec}\`?")
   }
 #endif
-  return ${name.HybridTSpecCxx}(self as! ${name.HybridTSpec})
+  if let cxxWrapper = self.cxxWrapper {
+    return cxxWrapper
+  } else {
+    let cxxWrapper = ${name.HybridTSpecCxx}(self as! ${name.HybridTSpec})
+    self.cxxWrapper = cxxWrapper
+    return cxxWrapper
+  }
 }`.trim()
   )
   if (!hasBaseClass) {
