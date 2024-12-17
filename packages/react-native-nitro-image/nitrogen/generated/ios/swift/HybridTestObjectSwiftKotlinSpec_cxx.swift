@@ -34,7 +34,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
    * Create a new `HybridTestObjectSwiftKotlinSpec_cxx` that wraps the given `HybridTestObjectSwiftKotlinSpec`.
    * All properties and methods bridge to C++ types.
    */
-  public init(_ implementation: some HybridTestObjectSwiftKotlinSpec) {
+  public init(_ implementation: any HybridTestObjectSwiftKotlinSpec) {
     self.__implementation = implementation
     /* no base class */
   }
@@ -65,6 +65,16 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   }
 
   /**
+   * Gets (or creates) the C++ part of this Hybrid Object.
+   * The C++ part is a `std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>`.
+   */
+  public func getCxxPart() -> bridge.std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_ {
+    return bridge.create_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_(self.toUnsafe())
+  }
+
+  
+
+  /**
    * Contains a (weak) reference to the C++ HybridObject to cache it.
    */
   public var hybridContext: margelo.nitro.HybridContext {
@@ -92,9 +102,8 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
     @inline(__always)
     get {
       return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_ in
-        let __cxxWrapped = HybridTestObjectSwiftKotlinSpec_cxx(self.__implementation.thisObject)
-        let __pointer = __cxxWrapped.toUnsafe()
-        return bridge.create_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_(__pointer)
+        let __cxxWrapped = self.__implementation.thisObject.getCxxWrapper()
+        return __cxxWrapped.getCxxPart()
       }()
     }
   }
@@ -105,9 +114,8 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       return { () -> bridge.std__optional_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec__ in
         if let __unwrappedValue = self.__implementation.optionalHybrid {
           return bridge.create_std__optional_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec__({ () -> bridge.std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_ in
-            let __cxxWrapped = HybridTestObjectSwiftKotlinSpec_cxx(__unwrappedValue)
-            let __pointer = __cxxWrapped.toUnsafe()
-            return bridge.create_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_(__pointer)
+            let __cxxWrapped = __unwrappedValue.getCxxWrapper()
+            return __cxxWrapped.getCxxPart()
           }())
         } else {
           return .init()
@@ -341,9 +349,8 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
     do {
       let __result = try self.__implementation.newTestObject()
       return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_ in
-        let __cxxWrapped = HybridTestObjectSwiftKotlinSpec_cxx(__result)
-        let __pointer = __cxxWrapped.toUnsafe()
-        return bridge.create_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_(__pointer)
+        let __cxxWrapped = __result.getCxxWrapper()
+        return __cxxWrapped.getCxxPart()
       }()
     } catch {
       let __message = "\(error.localizedDescription)"
@@ -1148,9 +1155,8 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
     do {
       let __result = try self.__implementation.createChild()
       return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridChildSpec_ in
-        let __cxxWrapped = HybridChildSpec_cxx(__result)
-        let __pointer = __cxxWrapped.toUnsafe()
-        return bridge.create_std__shared_ptr_margelo__nitro__image__HybridChildSpec_(__pointer)
+        let __cxxWrapped = __result.getCxxWrapper()
+        return __cxxWrapped.getCxxPart()
       }()
     } catch {
       let __message = "\(error.localizedDescription)"
@@ -1163,9 +1169,8 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
     do {
       let __result = try self.__implementation.createBase()
       return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridBaseSpec_ in
-        let __cxxWrapped = HybridBaseSpec_cxx(__result)
-        let __pointer = __cxxWrapped.toUnsafe()
-        return bridge.create_std__shared_ptr_margelo__nitro__image__HybridBaseSpec_(__pointer)
+        let __cxxWrapped = __result.getCxxWrapper()
+        return __cxxWrapped.getCxxPart()
       }()
     } catch {
       let __message = "\(error.localizedDescription)"
@@ -1178,9 +1183,8 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
     do {
       let __result = try self.__implementation.createBaseActualChild()
       return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridBaseSpec_ in
-        let __cxxWrapped = HybridBaseSpec_cxx(__result)
-        let __pointer = __cxxWrapped.toUnsafe()
-        return bridge.create_std__shared_ptr_margelo__nitro__image__HybridBaseSpec_(__pointer)
+        let __cxxWrapped = __result.getCxxWrapper()
+        return __cxxWrapped.getCxxPart()
       }()
     } catch {
       let __message = "\(error.localizedDescription)"
@@ -1197,9 +1201,8 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
         return __instance.getHybridChildSpec()
       }())
       return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridChildSpec_ in
-        let __cxxWrapped = HybridChildSpec_cxx(__result)
-        let __pointer = __cxxWrapped.toUnsafe()
-        return bridge.create_std__shared_ptr_margelo__nitro__image__HybridChildSpec_(__pointer)
+        let __cxxWrapped = __result.getCxxWrapper()
+        return __cxxWrapped.getCxxPart()
       }()
     } catch {
       let __message = "\(error.localizedDescription)"
@@ -1216,9 +1219,8 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
         return __instance.getHybridBaseSpec()
       }())
       return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridBaseSpec_ in
-        let __cxxWrapped = HybridBaseSpec_cxx(__result)
-        let __pointer = __cxxWrapped.toUnsafe()
-        return bridge.create_std__shared_ptr_margelo__nitro__image__HybridBaseSpec_(__pointer)
+        let __cxxWrapped = __result.getCxxWrapper()
+        return __cxxWrapped.getCxxPart()
       }()
     } catch {
       let __message = "\(error.localizedDescription)"
@@ -1235,9 +1237,8 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
         return __instance.getHybridChildSpec()
       }())
       return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridBaseSpec_ in
-        let __cxxWrapped = HybridBaseSpec_cxx(__result)
-        let __pointer = __cxxWrapped.toUnsafe()
-        return bridge.create_std__shared_ptr_margelo__nitro__image__HybridBaseSpec_(__pointer)
+        let __cxxWrapped = __result.getCxxWrapper()
+        return __cxxWrapped.getCxxPart()
       }()
     } catch {
       let __message = "\(error.localizedDescription)"
@@ -1254,9 +1255,8 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
         return __instance.getHybridBaseSpec()
       }())
       return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridChildSpec_ in
-        let __cxxWrapped = HybridChildSpec_cxx(__result)
-        let __pointer = __cxxWrapped.toUnsafe()
-        return bridge.create_std__shared_ptr_margelo__nitro__image__HybridChildSpec_(__pointer)
+        let __cxxWrapped = __result.getCxxWrapper()
+        return __cxxWrapped.getCxxPart()
       }()
     } catch {
       let __message = "\(error.localizedDescription)"

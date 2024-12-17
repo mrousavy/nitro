@@ -3,13 +3,18 @@ import { SwiftCxxBridgedType } from './SwiftCxxBridgedType.js'
 import type { Property } from '../Property.js'
 import { indent } from '../../utils.js'
 import type { Method } from '../Method.js'
-import { createFileMetadataString, isNotDuplicate } from '../helpers.js'
+import {
+  createFileMetadataString,
+  escapeCppName,
+  isNotDuplicate,
+} from '../helpers.js'
 import type { SourceFile } from '../SourceFile.js'
 import { getHybridObjectName } from '../getHybridObjectName.js'
 import { getForwardDeclaration } from '../c++/getForwardDeclaration.js'
 import { NitroConfig } from '../../config/NitroConfig.js'
 import { includeHeader, includeNitroHeader } from '../c++/includeNitroHeader.js'
 import { getUmbrellaHeaderName } from '../../autolinking/ios/createSwiftUmbrellaHeader.js'
+import { HybridObjectType } from '../types/HybridObjectType.js'
 
 export function getBridgeNamespace() {
   return NitroConfig.getCxxNamespace('swift', 'bridge', 'swift')
@@ -41,6 +46,34 @@ export function createSwiftHybridObjectCxxBridge(
     return baseName.HybridTSpecCxx
   })
   const hasBase = baseClasses.length > 0
+
+  const bridgedType = new SwiftCxxBridgedType(new HybridObjectType(spec))
+  const bridge = bridgedType.getRequiredBridge()
+  if (bridge == null) throw new Error(`HybridObject Type should have a bridge!`)
+
+  const baseGetCxxPartOverrides = spec.baseTypes.map((base) => {
+    const baseHybridObject = new HybridObjectType(base)
+    const bridgedBase = new SwiftCxxBridgedType(baseHybridObject)
+    const baseBridge = bridgedBase.getRequiredBridge()
+    if (baseBridge == null)
+      throw new Error(`HybridObject ${base.name}'s bridge cannot be null!`)
+
+    const upcastBridge = bridge.dependencies.find(
+      (b) =>
+        b.funcName.includes(escapeCppName(spec.name)) &&
+        b.funcName.includes(escapeCppName(base.name))
+    )
+    if (upcastBridge == null)
+      throw new Error(
+        `HybridObject ${spec.name}'s upcast-bridge cannot be found! ${JSON.stringify(baseBridge)}`
+      )
+
+    return `
+public override func getCxxPart() -> bridge.${baseBridge.specializationName} {
+  let ownCxxPart = bridge.${bridge.funcName}(self.toUnsafe())
+  return bridge.${upcastBridge.funcName}(ownCxxPart)
+}`.trim()
+  })
 
   const swiftCxxWrapperCode = `
 ${createFileMetadataString(`${name.HybridTSpecCxx}.swift`)}
@@ -74,7 +107,7 @@ ${hasBase ? `public class ${name.HybridTSpecCxx} : ${baseClasses.join(', ')}` : 
    * Create a new \`${name.HybridTSpecCxx}\` that wraps the given \`${name.HybridTSpec}\`.
    * All properties and methods bridge to C++ types.
    */
-  public init(_ implementation: some ${name.HybridTSpec}) {
+  public init(_ implementation: any ${name.HybridTSpec}) {
     self.__implementation = implementation
     ${hasBase ? 'super.init(implementation)' : '/* no base class */'}
   }
@@ -103,6 +136,16 @@ ${hasBase ? `public class ${name.HybridTSpecCxx} : ${baseClasses.join(', ')}` : 
   public ${hasBase ? 'override class func' : 'class func'} fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> ${name.HybridTSpecCxx} {
     return Unmanaged<${name.HybridTSpecCxx}>.fromOpaque(pointer).takeRetainedValue()
   }
+
+  /**
+   * Gets (or creates) the C++ part of this Hybrid Object.
+   * The C++ part is a \`${bridge.cxxType}\`.
+   */
+  public func getCxxPart() -> bridge.${bridge.specializationName} {
+    return bridge.${bridge.funcName}(self.toUnsafe())
+  }
+
+  ${indent(baseGetCxxPartOverrides.join('\n'), '  ')}
 
   /**
    * Contains a (weak) reference to the C++ HybridObject to cache it.

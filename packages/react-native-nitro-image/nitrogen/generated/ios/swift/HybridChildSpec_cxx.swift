@@ -34,7 +34,7 @@ public class HybridChildSpec_cxx : HybridBaseSpec_cxx {
    * Create a new `HybridChildSpec_cxx` that wraps the given `HybridChildSpec`.
    * All properties and methods bridge to C++ types.
    */
-  public init(_ implementation: some HybridChildSpec) {
+  public init(_ implementation: any HybridChildSpec) {
     self.__implementation = implementation
     super.init(implementation)
   }
@@ -62,6 +62,19 @@ public class HybridChildSpec_cxx : HybridBaseSpec_cxx {
    */
   public override class func fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> HybridChildSpec_cxx {
     return Unmanaged<HybridChildSpec_cxx>.fromOpaque(pointer).takeRetainedValue()
+  }
+
+  /**
+   * Gets (or creates) the C++ part of this Hybrid Object.
+   * The C++ part is a `std::shared_ptr<margelo::nitro::image::HybridChildSpec>`.
+   */
+  public func getCxxPart() -> bridge.std__shared_ptr_margelo__nitro__image__HybridChildSpec_ {
+    return bridge.create_std__shared_ptr_margelo__nitro__image__HybridChildSpec_(self.toUnsafe())
+  }
+
+  public override func getCxxPart() -> bridge.std__shared_ptr_margelo__nitro__image__HybridBaseSpec_ {
+    let ownCxxPart = bridge.create_std__shared_ptr_margelo__nitro__image__HybridChildSpec_(self.toUnsafe())
+    return bridge.upcast_Child_to_Base(ownCxxPart)
   }
 
   /**

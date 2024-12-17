@@ -2,16 +2,43 @@ import { NitroConfig } from '../../config/NitroConfig.js'
 import type { Language } from '../../getPlatformSpecs.js'
 import { getForwardDeclaration } from '../c++/getForwardDeclaration.js'
 import { getHybridObjectName } from '../getHybridObjectName.js'
+import type { HybridObjectSpec } from '../HybridObjectSpec.js'
 import type { SourceFile, SourceImport } from '../SourceFile.js'
 import type { Type, TypeKind } from './Type.js'
 
 export class HybridObjectType implements Type {
   readonly hybridObjectName: string
   readonly implementationLanguage: Language
+  readonly baseTypes: HybridObjectType[]
 
-  constructor(hybridObjectName: string, implementationLanguage: Language) {
-    this.hybridObjectName = hybridObjectName
-    this.implementationLanguage = implementationLanguage
+  constructor(
+    hybridObjectName: string,
+    implementationLanguage: Language,
+    baseTypes: HybridObjectType[]
+  )
+  constructor(spec: HybridObjectSpec)
+  constructor(
+    ...args:
+      | [
+          hybridObjectName: string,
+          implementationLanguage: Language,
+          baseTypes: HybridObjectType[],
+        ]
+      | [HybridObjectSpec]
+  ) {
+    if (args.length === 1) {
+      const [spec] = args
+
+      this.hybridObjectName = spec.name
+      this.implementationLanguage = spec.language
+      this.baseTypes = spec.baseTypes.map((b) => new HybridObjectType(b))
+    } else {
+      const [hybridObjectName, implementationLanguage, baseTypes] = args
+
+      this.hybridObjectName = hybridObjectName
+      this.implementationLanguage = implementationLanguage
+      this.baseTypes = baseTypes
+    }
 
     if (this.hybridObjectName.startsWith('__')) {
       throw new Error(

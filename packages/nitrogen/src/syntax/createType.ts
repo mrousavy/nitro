@@ -290,7 +290,12 @@ export function createType(
     } else if (extendsHybridObject(type, true)) {
       // It is another HybridObject being referenced!
       const typename = type.getSymbolOrThrow().getEscapedName()
-      return new HybridObjectType(typename, language)
+      const baseTypes = type
+        .getBaseTypes()
+        .filter((t) => extendsHybridObject(t, true))
+        .map((b) => createType(language, b, false))
+      const baseHybrids = baseTypes.filter((b) => b instanceof HybridObjectType)
+      return new HybridObjectType(typename, language, baseHybrids)
     } else if (isDirectlyHybridObject(type)) {
       // It is a HybridObject directly/literally. Base type
       return new HybridObjectBaseType()

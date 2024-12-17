@@ -19,6 +19,21 @@ public protocol HybridBaseSpec_protocol: AnyObject {
 
 /// See ``HybridBaseSpec``
 public class HybridBaseSpec_base: HybridObjectSpec {
+  private weak var cxxWrapper: HybridBaseSpec_cxx? = nil
+  public func getCxxWrapper() -> HybridBaseSpec_cxx {
+  #if DEBUG
+    guard self is HybridBaseSpec else {
+      fatalError("`self` is not a `HybridBaseSpec`! Did you accidentally inherit from `HybridBaseSpec_base` instead of `HybridBaseSpec`?")
+    }
+  #endif
+    if let cxxWrapper = self.cxxWrapper {
+      return cxxWrapper
+    } else {
+      let cxxWrapper = HybridBaseSpec_cxx(self as! HybridBaseSpec)
+      self.cxxWrapper = cxxWrapper
+      return cxxWrapper
+    }
+  }
   public var hybridContext = margelo.nitro.HybridContext()
   public var memorySize: Int { return getSizeOf(self) }
 }

@@ -73,6 +73,21 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: AnyObject {
 
 /// See ``HybridTestObjectSwiftKotlinSpec``
 public class HybridTestObjectSwiftKotlinSpec_base: HybridObjectSpec {
+  private weak var cxxWrapper: HybridTestObjectSwiftKotlinSpec_cxx? = nil
+  public func getCxxWrapper() -> HybridTestObjectSwiftKotlinSpec_cxx {
+  #if DEBUG
+    guard self is HybridTestObjectSwiftKotlinSpec else {
+      fatalError("`self` is not a `HybridTestObjectSwiftKotlinSpec`! Did you accidentally inherit from `HybridTestObjectSwiftKotlinSpec_base` instead of `HybridTestObjectSwiftKotlinSpec`?")
+    }
+  #endif
+    if let cxxWrapper = self.cxxWrapper {
+      return cxxWrapper
+    } else {
+      let cxxWrapper = HybridTestObjectSwiftKotlinSpec_cxx(self as! HybridTestObjectSwiftKotlinSpec)
+      self.cxxWrapper = cxxWrapper
+      return cxxWrapper
+    }
+  }
   public var hybridContext = margelo.nitro.HybridContext()
   public var memorySize: Int { return getSizeOf(self) }
 }
