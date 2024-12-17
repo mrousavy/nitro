@@ -144,15 +144,16 @@ function createCxxUpcastHelper(
 ): SwiftCxxHelper {
   const cppBaseType = baseType.getCode('c++')
   const cppChildType = childType.getCode('c++')
-  const specializationName = escapeCppName(`${cppChildType}_to_${cppBaseType}`)
+  const funcName = escapeCppName(
+    `upcast_${childType.hybridObjectName}_to_${baseType.hybridObjectName}`
+  )
   return {
     cxxType: cppBaseType,
-    funcName: 'upcast',
-    specializationName: specializationName,
+    funcName: funcName,
+    specializationName: funcName,
     cxxHeader: {
       code: `
-using ${specializationName} = ${cppBaseType};
-inline ${specializationName} upcast(${cppChildType} child) { return child; }
+inline ${cppBaseType} ${funcName}(${cppChildType} child) { return child; }
 `.trim(),
       requiredIncludes: [],
     },

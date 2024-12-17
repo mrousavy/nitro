@@ -3,7 +3,11 @@ import { SwiftCxxBridgedType } from './SwiftCxxBridgedType.js'
 import type { Property } from '../Property.js'
 import { indent } from '../../utils.js'
 import type { Method } from '../Method.js'
-import { createFileMetadataString, isNotDuplicate } from '../helpers.js'
+import {
+  createFileMetadataString,
+  escapeCppName,
+  isNotDuplicate,
+} from '../helpers.js'
 import type { SourceFile } from '../SourceFile.js'
 import { getHybridObjectName } from '../getHybridObjectName.js'
 import { getForwardDeclaration } from '../c++/getForwardDeclaration.js'
@@ -53,10 +57,21 @@ export function createSwiftHybridObjectCxxBridge(
     const baseBridge = bridgedBase.getRequiredBridge()
     if (baseBridge == null)
       throw new Error(`HybridObject ${base.name}'s bridge cannot be null!`)
+
+    const upcastBridge = bridge.dependencies.find(
+      (b) =>
+        b.funcName.includes(escapeCppName(spec.name)) &&
+        b.funcName.includes(escapeCppName(base.name))
+    )
+    if (upcastBridge == null)
+      throw new Error(
+        `HybridObject ${spec.name}'s upcast-bridge cannot be found! ${JSON.stringify(baseBridge)}`
+      )
+
     return `
 public override func getCxxPart() -> bridge.${baseBridge.specializationName} {
   let ownCxxPart = bridge.${bridge.funcName}(self.toUnsafe())
-  return bridge.upcast(ownCxxPart)
+  return bridge.${upcastBridge.funcName}(ownCxxPart)
 }`.trim()
   })
 
