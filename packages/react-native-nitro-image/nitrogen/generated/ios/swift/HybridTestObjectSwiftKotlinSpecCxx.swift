@@ -655,7 +655,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
           __promise.reject(withError: __error)
         }
         let __resolverCpp = { () -> bridge.Func_void_double in
-          class ClosureHolder {
+          final class ClosureHolder {
             let closure: ((_ result: Double) -> Void)
             init(wrappingClosure closure: @escaping ((_ result: Double) -> Void)) {
               self.closure = closure
@@ -677,7 +677,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
           return bridge.create_Func_void_double(__closureHolder, __callClosure, __destroyClosure)
         }()
         let __rejecterCpp = { () -> bridge.Func_void_std__exception_ptr in
-          class ClosureHolder {
+          final class ClosureHolder {
             let closure: ((_ error: Error) -> Void)
             init(wrappingClosure closure: @escaping ((_ error: Error) -> Void)) {
               self.closure = closure
@@ -727,7 +727,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
           __promise.reject(withError: __error)
         }
         let __resolverCpp = { () -> bridge.Func_void_Car in
-          class ClosureHolder {
+          final class ClosureHolder {
             let closure: ((_ result: Car) -> Void)
             init(wrappingClosure closure: @escaping ((_ result: Car) -> Void)) {
               self.closure = closure
@@ -749,7 +749,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
           return bridge.create_Func_void_Car(__closureHolder, __callClosure, __destroyClosure)
         }()
         let __rejecterCpp = { () -> bridge.Func_void_std__exception_ptr in
-          class ClosureHolder {
+          final class ClosureHolder {
             let closure: ((_ error: Error) -> Void)
             init(wrappingClosure closure: @escaping ((_ error: Error) -> Void)) {
               self.closure = closure
@@ -798,7 +798,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
         }
         let __resolverCpp = __resolver.getFunctionCopy()
         let __rejecterCpp = { () -> bridge.Func_void_std__exception_ptr in
-          class ClosureHolder {
+          final class ClosureHolder {
             let closure: ((_ error: Error) -> Void)
             init(wrappingClosure closure: @escaping ((_ error: Error) -> Void)) {
               self.closure = closure
@@ -916,7 +916,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
               __promise.reject(withError: __error)
             }
             let __resolverCpp = { () -> bridge.Func_void_double in
-              class ClosureHolder {
+              final class ClosureHolder {
                 let closure: ((_ result: Double) -> Void)
                 init(wrappingClosure closure: @escaping ((_ result: Double) -> Void)) {
                   self.closure = closure
@@ -938,7 +938,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
               return bridge.create_Func_void_double(__closureHolder, __callClosure, __destroyClosure)
             }()
             let __rejecterCpp = { () -> bridge.Func_void_std__exception_ptr in
-              class ClosureHolder {
+              final class ClosureHolder {
                 let closure: ((_ error: Error) -> Void)
                 init(wrappingClosure closure: @escaping ((_ error: Error) -> Void)) {
                   self.closure = closure
@@ -994,7 +994,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
               __promise.reject(withError: __error)
             }
             let __resolverCpp = { () -> bridge.Func_void_std__string in
-              class ClosureHolder {
+              final class ClosureHolder {
                 let closure: ((_ result: String) -> Void)
                 init(wrappingClosure closure: @escaping ((_ result: String) -> Void)) {
                   self.closure = closure
@@ -1016,7 +1016,7 @@ public class HybridTestObjectSwiftKotlinSpecCxx {
               return bridge.create_Func_void_std__string(__closureHolder, __callClosure, __destroyClosure)
             }()
             let __rejecterCpp = { () -> bridge.Func_void_std__exception_ptr in
-              class ClosureHolder {
+              final class ClosureHolder {
                 let closure: ((_ error: Error) -> Void)
                 init(wrappingClosure closure: @escaping ((_ error: Error) -> Void)) {
                   self.closure = closure
