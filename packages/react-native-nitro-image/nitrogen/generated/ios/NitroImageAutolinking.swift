@@ -19,8 +19,7 @@ public final class NitroImageAutolinking {
     let hybridObject = HybridImageFactory()
     return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridImageFactorySpec_ in
       let __cxxWrapped = HybridImageFactorySpec_cxx(hybridObject)
-      let __pointer = __cxxWrapped.toUnsafe()
-      return bridge.create_std__shared_ptr_margelo__nitro__image__HybridImageFactorySpec_(__pointer)
+      return __cxxWrapped.getCxxPart()
     }()
   }
   
@@ -35,8 +34,7 @@ public final class NitroImageAutolinking {
     let hybridObject = HybridTestObjectSwift()
     return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_ in
       let __cxxWrapped = HybridTestObjectSwiftKotlinSpec_cxx(hybridObject)
-      let __pointer = __cxxWrapped.toUnsafe()
-      return bridge.create_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_(__pointer)
+      return __cxxWrapped.getCxxPart()
     }()
   }
   
@@ -51,8 +49,7 @@ public final class NitroImageAutolinking {
     let hybridObject = HybridBase()
     return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridBaseSpec_ in
       let __cxxWrapped = HybridBaseSpec_cxx(hybridObject)
-      let __pointer = __cxxWrapped.toUnsafe()
-      return bridge.create_std__shared_ptr_margelo__nitro__image__HybridBaseSpec_(__pointer)
+      return __cxxWrapped.getCxxPart()
     }()
   }
   
@@ -67,8 +64,7 @@ public final class NitroImageAutolinking {
     let hybridObject = HybridChild()
     return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridChildSpec_ in
       let __cxxWrapped = HybridChildSpec_cxx(hybridObject)
-      let __pointer = __cxxWrapped.toUnsafe()
-      return bridge.create_std__shared_ptr_margelo__nitro__image__HybridChildSpec_(__pointer)
+      return __cxxWrapped.getCxxPart()
     }()
   }
 }

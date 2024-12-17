@@ -56,6 +56,14 @@ public class HybridBaseSpec_cxx {
   }
 
   /**
+   * Gets (or creates) the C++ part of this Hybrid Object.
+   * The C++ part is a `std::shared_ptr<margelo::nitro::image::HybridBaseSpec>`.
+   */
+  public func getCxxPart() -> bridge.std__shared_ptr_margelo__nitro__image__HybridBaseSpec_ {
+    return bridge.create_std__shared_ptr_margelo__nitro__image__HybridBaseSpec_(self.toUnsafe())
+  }
+
+  /**
    * Casts an unsafe pointer to a `HybridBaseSpec_cxx`.
    * The pointer has to be a retained opaque `Unmanaged<HybridBaseSpec_cxx>`.
    * This removes one strong reference from the object!

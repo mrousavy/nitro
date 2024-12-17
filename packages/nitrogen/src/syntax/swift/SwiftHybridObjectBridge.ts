@@ -10,6 +10,7 @@ import { getForwardDeclaration } from '../c++/getForwardDeclaration.js'
 import { NitroConfig } from '../../config/NitroConfig.js'
 import { includeHeader, includeNitroHeader } from '../c++/includeNitroHeader.js'
 import { getUmbrellaHeaderName } from '../../autolinking/ios/createSwiftUmbrellaHeader.js'
+import { HybridObjectType } from '../types/HybridObjectType.js'
 
 export function getBridgeNamespace() {
   return NitroConfig.getCxxNamespace('swift', 'bridge', 'swift')
@@ -41,6 +42,10 @@ export function createSwiftHybridObjectCxxBridge(
     return baseName.HybridTSpecCxx
   })
   const hasBase = baseClasses.length > 0
+
+  const bridgedType = new SwiftCxxBridgedType(new HybridObjectType(spec.name, spec.language))
+  const bridge = bridgedType.getRequiredBridge()
+  if ( bridge == null) throw new Error(`HybridObject Type should have a bridge!`)
 
   const swiftCxxWrapperCode = `
 ${createFileMetadataString(`${name.HybridTSpecCxx}.swift`)}
@@ -93,6 +98,14 @@ ${hasBase ? `public class ${name.HybridTSpecCxx} : ${baseClasses.join(', ')}` : 
    */
   public ${hasBase ? 'override func' : 'func'} toUnsafe() -> UnsafeMutableRawPointer {
     return Unmanaged.passRetained(self).toOpaque()
+  }
+
+  /**
+   * Gets (or creates) the C++ part of this Hybrid Object.
+   * The C++ part is a \`${bridge.cxxType}\`.
+   */
+  public ${hasBase ? 'override func' : 'func'} getCxxPart() -> bridge.${bridge.specializationName} {
+    return bridge.${bridge.funcName}(self.toUnsafe())
   }
 
   /**

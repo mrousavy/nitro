@@ -584,14 +584,12 @@ case ${i}:
       case 'hybrid-object': {
         const bridge = this.getBridgeOrThrow()
         const name = getTypeHybridObjectName(this.type)
-        const makeFunc = `bridge.${bridge.funcName}`
         switch (language) {
           case 'swift':
             return `
 { () -> bridge.${bridge.specializationName} in
   let __cxxWrapped = ${name.HybridTSpecCxx}(${swiftParameterName})
-  let __pointer = __cxxWrapped.toUnsafe()
-  return ${makeFunc}(__pointer)
+  return __cxxWrapped.getCxxPart()
 }()`.trim()
           default:
             return swiftParameterName
