@@ -72,6 +72,11 @@ public class HybridChildSpec_cxx : HybridBaseSpec_cxx {
     return bridge.create_std__shared_ptr_margelo__nitro__image__HybridChildSpec_(self.toUnsafe())
   }
 
+  public override func getCxxPart() -> bridge.std__shared_ptr_margelo__nitro__image__HybridBaseSpec_ {
+    let ownCxxPart = bridge.create_std__shared_ptr_margelo__nitro__image__HybridChildSpec_(self.toUnsafe())
+    return bridge.upcast(ownCxxPart)
+  }
+
   /**
    * Contains a (weak) reference to the C++ HybridObject to cache it.
    */

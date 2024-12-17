@@ -72,6 +72,8 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
     return bridge.create_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_(self.toUnsafe())
   }
 
+  
+
   /**
    * Contains a (weak) reference to the C++ HybridObject to cache it.
    */

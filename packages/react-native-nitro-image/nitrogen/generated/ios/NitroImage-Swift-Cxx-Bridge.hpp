@@ -620,5 +620,9 @@ namespace margelo::nitro::image::bridge::swift {
   using std__shared_ptr_margelo__nitro__image__HybridChildSpec_ = std::shared_ptr<margelo::nitro::image::HybridChildSpec>;
   std::shared_ptr<margelo::nitro::image::HybridChildSpec> create_std__shared_ptr_margelo__nitro__image__HybridChildSpec_(void* _Nonnull swiftUnsafePointer);
   void* _Nonnull get_std__shared_ptr_margelo__nitro__image__HybridChildSpec_(std__shared_ptr_margelo__nitro__image__HybridChildSpec_ cppType);
+  
+  // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridBaseSpec>
+  using std__shared_ptr_margelo__nitro__image__HybridChildSpec__to_std__shared_ptr_margelo__nitro__image__HybridBaseSpec_ = std::shared_ptr<margelo::nitro::image::HybridBaseSpec>;
+  inline std__shared_ptr_margelo__nitro__image__HybridChildSpec__to_std__shared_ptr_margelo__nitro__image__HybridBaseSpec_ upcast(std::shared_ptr<margelo::nitro::image::HybridChildSpec> child) { return child; }
 
 } // namespace margelo::nitro::image::bridge::swift

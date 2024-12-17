@@ -72,6 +72,11 @@ function createCxxHybridObjectSwiftHelper(
   const swiftWrappingType = NitroConfig.getCxxNamespace('c++', HybridTSpecSwift)
   const swiftPartType = `${modulename}::${HybridTSpecCxx}`
   const name = escapeCppName(actualType)
+
+  const upcastHelpers = type.baseTypes.map((base) =>
+    createCxxUpcastHelper(base, type)
+  )
+
   return {
     cxxType: actualType,
     funcName: `create_${name}`,
@@ -128,6 +133,28 @@ void* _Nonnull get_${name}(${name} cppType) {
           space: 'user',
         },
       ],
+    },
+    dependencies: [...upcastHelpers],
+  }
+}
+
+function createCxxUpcastHelper(
+  baseType: HybridObjectType,
+  childType: HybridObjectType
+): SwiftCxxHelper {
+  const cppBaseType = baseType.getCode('c++')
+  const cppChildType = childType.getCode('c++')
+  const specializationName = escapeCppName(`${cppChildType}_to_${cppBaseType}`)
+  return {
+    cxxType: cppBaseType,
+    funcName: 'upcast',
+    specializationName: specializationName,
+    cxxHeader: {
+      code: `
+using ${specializationName} = ${cppBaseType};
+inline ${specializationName} upcast(${cppChildType} child) { return child; }
+`.trim(),
+      requiredIncludes: [],
     },
     dependencies: [],
   }

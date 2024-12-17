@@ -47,6 +47,19 @@ export function createSwiftHybridObjectCxxBridge(
   const bridge = bridgedType.getRequiredBridge()
   if (bridge == null) throw new Error(`HybridObject Type should have a bridge!`)
 
+  const baseGetCxxPartOverrides = spec.baseTypes.map((base) => {
+    const baseHybridObject = new HybridObjectType(base)
+    const bridgedBase = new SwiftCxxBridgedType(baseHybridObject)
+    const baseBridge = bridgedBase.getRequiredBridge()
+    if (baseBridge == null)
+      throw new Error(`HybridObject ${base.name}'s bridge cannot be null!`)
+    return `
+public override func getCxxPart() -> bridge.${baseBridge.specializationName} {
+  let ownCxxPart = bridge.${bridge.funcName}(self.toUnsafe())
+  return bridge.upcast(ownCxxPart)
+}`.trim()
+  })
+
   const swiftCxxWrapperCode = `
 ${createFileMetadataString(`${name.HybridTSpecCxx}.swift`)}
 
@@ -116,6 +129,8 @@ ${hasBase ? `public class ${name.HybridTSpecCxx} : ${baseClasses.join(', ')}` : 
   public func getCxxPart() -> bridge.${bridge.specializationName} {
     return bridge.${bridge.funcName}(self.toUnsafe())
   }
+
+  ${indent(baseGetCxxPartOverrides.join('\n'), '  ')}
 
   /**
    * Contains a (weak) reference to the C++ HybridObject to cache it.

@@ -72,6 +72,8 @@ public class HybridImageSpec_cxx {
     return bridge.create_std__shared_ptr_margelo__nitro__image__HybridImageSpec_(self.toUnsafe())
   }
 
+  
+
   /**
    * Contains a (weak) reference to the C++ HybridObject to cache it.
    */
