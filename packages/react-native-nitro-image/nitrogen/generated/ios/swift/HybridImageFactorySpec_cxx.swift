@@ -31,11 +31,17 @@ public class HybridImageFactorySpec_cxx {
   private var __implementation: any HybridImageFactorySpec
 
   /**
+   * Holds a weak pointer to the C++ class that wraps the Swift class.
+   */
+  private var __cxxPart: bridge.std__weak_ptr_margelo__nitro__image__HybridImageFactorySpec_
+
+  /**
    * Create a new `HybridImageFactorySpec_cxx` that wraps the given `HybridImageFactorySpec`.
    * All properties and methods bridge to C++ types.
    */
   public init(_ implementation: any HybridImageFactorySpec) {
     self.__implementation = implementation
+    self.__cxxPart = .init()
     /* no base class */
   }
 
@@ -69,24 +75,17 @@ public class HybridImageFactorySpec_cxx {
    * The C++ part is a `std::shared_ptr<margelo::nitro::image::HybridImageFactorySpec>`.
    */
   public func getCxxPart() -> bridge.std__shared_ptr_margelo__nitro__image__HybridImageFactorySpec_ {
-    return bridge.create_std__shared_ptr_margelo__nitro__image__HybridImageFactorySpec_(self.toUnsafe())
+    let cachedCxxPart = self.__cxxPart.lock()
+    if cachedCxxPart.__convertToBool() {
+      return cachedCxxPart
+    } else {
+      let newCxxPart = bridge.create_std__shared_ptr_margelo__nitro__image__HybridImageFactorySpec_(self.toUnsafe())
+      __cxxPart = bridge.weakify_std__shared_ptr_margelo__nitro__image__HybridImageFactorySpec_(newCxxPart)
+      return newCxxPart
+    }
   }
 
   
-
-  /**
-   * Contains a (weak) reference to the C++ HybridObject to cache it.
-   */
-  public var hybridContext: margelo.nitro.HybridContext {
-    @inline(__always)
-    get {
-      return self.__implementation.hybridContext
-    }
-    @inline(__always)
-    set {
-      self.__implementation.hybridContext = newValue
-    }
-  }
 
   /**
    * Get the memory size of the Swift class (plus size of any other allocations)

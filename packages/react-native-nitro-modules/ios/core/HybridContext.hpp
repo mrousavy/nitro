@@ -24,7 +24,8 @@ namespace margelo::nitro {
  * This can be used in remote implementations, e.g. in a Swift implementation
  * to properly (weak-)reference the `HybridObject` instead of re-creating it each time.
  */
-struct HybridContext final {
+struct [[deprecated("Update Nitrogen and re-generate your specs.")]]
+HybridContext final {
 public:
   std::weak_ptr<HybridObject> cppPart;
 

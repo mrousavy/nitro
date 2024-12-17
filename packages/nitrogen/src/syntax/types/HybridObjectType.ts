@@ -56,13 +56,17 @@ export class HybridObjectType implements Type {
     return 'hybrid-object'
   }
 
-  getCode(language: Language): string {
+  getCode(language: Language, mode: 'strong' | 'weak' = 'strong'): string {
     const name = getHybridObjectName(this.hybridObjectName)
 
     switch (language) {
       case 'c++': {
         const fullName = NitroConfig.getCxxNamespace('c++', name.HybridTSpec)
-        return `std::shared_ptr<${fullName}>`
+        if (mode === 'strong') {
+          return `std::shared_ptr<${fullName}>`
+        } else {
+          return `std::weak_ptr<${fullName}>`
+        }
       }
       case 'swift': {
         return `(any ${name.HybridTSpec})`
