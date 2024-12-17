@@ -43,9 +43,11 @@ export function createSwiftHybridObjectCxxBridge(
   })
   const hasBase = baseClasses.length > 0
 
-  const bridgedType = new SwiftCxxBridgedType(new HybridObjectType(spec.name, spec.language))
+  const bridgedType = new SwiftCxxBridgedType(
+    new HybridObjectType(spec.name, spec.language)
+  )
   const bridge = bridgedType.getRequiredBridge()
-  if ( bridge == null) throw new Error(`HybridObject Type should have a bridge!`)
+  if (bridge == null) throw new Error(`HybridObject Type should have a bridge!`)
 
   const swiftCxxWrapperCode = `
 ${createFileMetadataString(`${name.HybridTSpecCxx}.swift`)}
