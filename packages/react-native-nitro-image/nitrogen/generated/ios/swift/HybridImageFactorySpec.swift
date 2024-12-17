@@ -22,6 +22,9 @@ public protocol HybridImageFactorySpec_protocol: AnyObject {
 
 /// See ``HybridImageFactorySpec``
 public class HybridImageFactorySpec_base: HybridObjectSpec {
+  public func getCxxWrapper() -> HybridImageFactorySpec_cxx {
+    return HybridImageFactorySpec_cxx(self as! HybridImageFactorySpec)
+  }
   public var hybridContext = margelo.nitro.HybridContext()
   public var memorySize: Int { return getSizeOf(self) }
 }

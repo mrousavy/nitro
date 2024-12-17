@@ -583,12 +583,11 @@ case ${i}:
         }
       case 'hybrid-object': {
         const bridge = this.getBridgeOrThrow()
-        const name = getTypeHybridObjectName(this.type)
         switch (language) {
           case 'swift':
             return `
 { () -> bridge.${bridge.specializationName} in
-  let __cxxWrapped = ${name.HybridTSpecCxx}(${swiftParameterName})
+  let __cxxWrapped = ${swiftParameterName}.getCxxWrapper()
   return __cxxWrapped.getCxxPart()
 }()`.trim()
           default:

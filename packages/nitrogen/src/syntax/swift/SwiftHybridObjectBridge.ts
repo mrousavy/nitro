@@ -81,7 +81,7 @@ ${hasBase ? `public class ${name.HybridTSpecCxx} : ${baseClasses.join(', ')}` : 
    * Create a new \`${name.HybridTSpecCxx}\` that wraps the given \`${name.HybridTSpec}\`.
    * All properties and methods bridge to C++ types.
    */
-  public init(_ implementation: some ${name.HybridTSpec}) {
+  public init(_ implementation: any ${name.HybridTSpec}) {
     self.__implementation = implementation
     ${hasBase ? 'super.init(implementation)' : '/* no base class */'}
   }
@@ -103,20 +103,20 @@ ${hasBase ? `public class ${name.HybridTSpecCxx} : ${baseClasses.join(', ')}` : 
   }
 
   /**
-   * Gets (or creates) the C++ part of this Hybrid Object.
-   * The C++ part is a \`${bridge.cxxType}\`.
-   */
-  public func getCxxPart() -> bridge.${bridge.specializationName} {
-    return bridge.${bridge.funcName}(self.toUnsafe())
-  }
-
-  /**
    * Casts an unsafe pointer to a \`${name.HybridTSpecCxx}\`.
    * The pointer has to be a retained opaque \`Unmanaged<${name.HybridTSpecCxx}>\`.
    * This removes one strong reference from the object!
    */
   public ${hasBase ? 'override class func' : 'class func'} fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> ${name.HybridTSpecCxx} {
     return Unmanaged<${name.HybridTSpecCxx}>.fromOpaque(pointer).takeRetainedValue()
+  }
+
+  /**
+   * Gets (or creates) the C++ part of this Hybrid Object.
+   * The C++ part is a \`${bridge.cxxType}\`.
+   */
+  public func getCxxPart() -> bridge.${bridge.specializationName} {
+    return bridge.${bridge.funcName}(self.toUnsafe())
   }
 
   /**

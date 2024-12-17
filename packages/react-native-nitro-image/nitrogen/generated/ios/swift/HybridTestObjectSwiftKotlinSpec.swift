@@ -73,6 +73,9 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: AnyObject {
 
 /// See ``HybridTestObjectSwiftKotlinSpec``
 public class HybridTestObjectSwiftKotlinSpec_base: HybridObjectSpec {
+  public func getCxxWrapper() -> HybridTestObjectSwiftKotlinSpec_cxx {
+    return HybridTestObjectSwiftKotlinSpec_cxx(self as! HybridTestObjectSwiftKotlinSpec)
+  }
   public var hybridContext = margelo.nitro.HybridContext()
   public var memorySize: Int { return getSizeOf(self) }
 }
