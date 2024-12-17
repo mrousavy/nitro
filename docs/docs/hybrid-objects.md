@@ -325,7 +325,7 @@ class HybridImage : HybridImageSpec {
   private var cgImage: CGImage
   public var memorySize: Int {
     let imageSize = cgImage.width * cgImage.height * cgImage.bytesPerPixel
-    return getSizeOf(self) + imageSize
+    return imageSize
   }
 }
 ```

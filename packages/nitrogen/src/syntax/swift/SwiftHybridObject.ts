@@ -42,7 +42,7 @@ public ${hasBaseClass ? 'override func' : 'func'} getCxxWrapper() -> ${name.Hybr
   if (!hasBaseClass) {
     // It doesn't have a base class - implement the `HybridObjectSpec` base protocol
     classBaseClasses.push('HybridObjectSpec')
-    baseMembers.push(`public var memorySize: Int { return getSizeOf(self) }`)
+    baseMembers.push(`public var memorySize: Int { return 0 }`)
   }
 
   const protocolCode = `

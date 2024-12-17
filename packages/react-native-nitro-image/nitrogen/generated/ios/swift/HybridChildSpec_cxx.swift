@@ -96,7 +96,7 @@ public class HybridChildSpec_cxx : HybridBaseSpec_cxx {
    */
   @inline(__always)
   public override var memorySize: Int {
-    return self.__implementation.memorySize
+    return MemoryHelper.getSizeOf(self.__implementation) + self.__implementation.memorySize
   }
 
   // Properties

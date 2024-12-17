@@ -22,7 +22,7 @@ public protocol HybridObjectSpec: AnyObject {
    * ```swift
    * var memorySize: Int {
    *   let imageSize = self.uiImage.bytesPerRow * self.uiImage.height
-   *   return getSizeOf(self) + imageSize
+   *   return imageSize
    * }
    * ```
    */
@@ -30,12 +30,8 @@ public protocol HybridObjectSpec: AnyObject {
 }
 
 public extension HybridObjectSpec {
-  /**
-   * Get the memory size of the given instance.
-   * This only accounts for stack allocated member variables,
-   * not for externally allocated heap allocations like images or buffers.
-   */
+  @available(*, deprecated, message: "getSizeOf(...) will now be default-computed. Please remove getSizeOf() from your code.")
   func getSizeOf<T: AnyObject>(_ instance: T) -> Int {
-    return malloc_size(Unmanaged.passUnretained(instance).toOpaque())
+    return 0
   }
 }
