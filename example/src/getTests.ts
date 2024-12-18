@@ -428,8 +428,10 @@ export function getTests(
         `Error: ${testObject.name}.funcThatThrows(...): This function will only work after sacrificing seven lambs!`
       )
     ),
-    createTest('funcThatThrowsBeforePromise() throws', () =>
-      it(() => testObject.funcThatThrowsBeforePromise()).didThrow(
+    createTest('funcThatThrowsBeforePromise() throws', async () =>
+      (
+        await it(async () => await testObject.funcThatThrowsBeforePromise())
+      ).didThrow(
         `Error: ${testObject.name}.funcThatThrowsBeforePromise(...): This function will only work after sacrificing eight lambs!`
       )
     ),
