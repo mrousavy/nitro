@@ -93,7 +93,7 @@ class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
         throw Error("This function will only work after sacrificing seven lambs!")
     }
 
-    override fun funcThatThrowsBeforePromise(): Promise<Void> {
+    override fun funcThatThrowsBeforePromise(): Promise<Unit> {
         throw Error("This function will only work after sacrificing eight lambs!")
     }
 
