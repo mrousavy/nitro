@@ -8,6 +8,8 @@
 #pragma once
 
 // Forward declarations of C++ defined types
+// Forward declaration of `AnyMap` to properly resolve imports.
+namespace NitroModules { class AnyMap; }
 // Forward declaration of `ArrayBufferHolder` to properly resolve imports.
 namespace NitroModules { class ArrayBufferHolder; }
 // Forward declaration of `ArrayBuffer` to properly resolve imports.
@@ -53,10 +55,12 @@ namespace NitroImage { class HybridTestObjectSwiftKotlinSpec_cxx; }
 #include "OldEnum.hpp"
 #include "Person.hpp"
 #include "Powertrain.hpp"
+#include <NitroModules/AnyMap.hpp>
 #include <NitroModules/ArrayBuffer.hpp>
 #include <NitroModules/ArrayBufferHolder.hpp>
 #include <NitroModules/Promise.hpp>
 #include <exception>
+#include <expected>
 #include <functional>
 #include <memory>
 #include <optional>
@@ -110,6 +114,16 @@ namespace margelo::nitro::image::bridge::swift {
   using std__weak_ptr_margelo__nitro__image__HybridImageSpec_ = std::weak_ptr<margelo::nitro::image::HybridImageSpec>;
   inline std__weak_ptr_margelo__nitro__image__HybridImageSpec_ weakify_std__shared_ptr_margelo__nitro__image__HybridImageSpec_(const std::shared_ptr<margelo::nitro::image::HybridImageSpec>& strong) { return strong; }
   
+  // pragma MARK: std::expected<double, std::exception_ptr>
+  using std__expected_double__std__exception_ptr_ = std::expected<double, std::exception_ptr>;
+  inline std__expected_double__std__exception_ptr_ create_std__expected_double__std__exception_ptr_(double value) { return value; }
+  inline std__expected_double__std__exception_ptr_ create_std__expected_double__std__exception_ptr_(std::exception_ptr error) { return std::unexpected(error); }
+  
+  // pragma MARK: std::expected<void, std::exception_ptr>
+  using std__expected_void__std__exception_ptr_ = std::expected<void, std::exception_ptr>;
+  inline std__expected_void__std__exception_ptr_ create_std__expected_void__std__exception_ptr_() { return {}; }
+  inline std__expected_void__std__exception_ptr_ create_std__expected_void__std__exception_ptr_(std::exception_ptr error) { return std::unexpected(error); }
+  
   // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridImageFactorySpec>
   /**
    * Specialized version of `std::shared_ptr<margelo::nitro::image::HybridImageFactorySpec>`.
@@ -121,6 +135,11 @@ namespace margelo::nitro::image::bridge::swift {
   // pragma MARK: std::weak_ptr<margelo::nitro::image::HybridImageFactorySpec>
   using std__weak_ptr_margelo__nitro__image__HybridImageFactorySpec_ = std::weak_ptr<margelo::nitro::image::HybridImageFactorySpec>;
   inline std__weak_ptr_margelo__nitro__image__HybridImageFactorySpec_ weakify_std__shared_ptr_margelo__nitro__image__HybridImageFactorySpec_(const std::shared_ptr<margelo::nitro::image::HybridImageFactorySpec>& strong) { return strong; }
+  
+  // pragma MARK: std::expected<std::shared_ptr<margelo::nitro::image::HybridImageSpec>, std::exception_ptr>
+  using std__expected_std__shared_ptr_margelo__nitro__image__HybridImageSpec___std__exception_ptr_ = std::expected<std::shared_ptr<margelo::nitro::image::HybridImageSpec>, std::exception_ptr>;
+  inline std__expected_std__shared_ptr_margelo__nitro__image__HybridImageSpec___std__exception_ptr_ create_std__expected_std__shared_ptr_margelo__nitro__image__HybridImageSpec___std__exception_ptr_(std::shared_ptr<margelo::nitro::image::HybridImageSpec> value) { return value; }
+  inline std__expected_std__shared_ptr_margelo__nitro__image__HybridImageSpec___std__exception_ptr_ create_std__expected_std__shared_ptr_margelo__nitro__image__HybridImageSpec___std__exception_ptr_(std::exception_ptr error) { return std::unexpected(error); }
   
   // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>
   /**
@@ -643,5 +662,105 @@ namespace margelo::nitro::image::bridge::swift {
   // pragma MARK: std::weak_ptr<margelo::nitro::image::HybridChildSpec>
   using std__weak_ptr_margelo__nitro__image__HybridChildSpec_ = std::weak_ptr<margelo::nitro::image::HybridChildSpec>;
   inline std__weak_ptr_margelo__nitro__image__HybridChildSpec_ weakify_std__shared_ptr_margelo__nitro__image__HybridChildSpec_(const std::shared_ptr<margelo::nitro::image::HybridChildSpec>& strong) { return strong; }
+  
+  // pragma MARK: std::expected<std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>, std::exception_ptr>
+  using std__expected_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec___std__exception_ptr_ = std::expected<std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>, std::exception_ptr>;
+  inline std__expected_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec___std__exception_ptr_ create_std__expected_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec___std__exception_ptr_(std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec> value) { return value; }
+  inline std__expected_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec___std__exception_ptr_ create_std__expected_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec___std__exception_ptr_(std::exception_ptr error) { return std::unexpected(error); }
+  
+  // pragma MARK: std::expected<std::string, std::exception_ptr>
+  using std__expected_std__string__std__exception_ptr_ = std::expected<std::string, std::exception_ptr>;
+  inline std__expected_std__string__std__exception_ptr_ create_std__expected_std__string__std__exception_ptr_(std::string value) { return value; }
+  inline std__expected_std__string__std__exception_ptr_ create_std__expected_std__string__std__exception_ptr_(std::exception_ptr error) { return std::unexpected(error); }
+  
+  // pragma MARK: std::expected<std::vector<std::string>, std::exception_ptr>
+  using std__expected_std__vector_std__string___std__exception_ptr_ = std::expected<std::vector<std::string>, std::exception_ptr>;
+  inline std__expected_std__vector_std__string___std__exception_ptr_ create_std__expected_std__vector_std__string___std__exception_ptr_(std::vector<std::string> value) { return value; }
+  inline std__expected_std__vector_std__string___std__exception_ptr_ create_std__expected_std__vector_std__string___std__exception_ptr_(std::exception_ptr error) { return std::unexpected(error); }
+  
+  // pragma MARK: std::expected<std::vector<double>, std::exception_ptr>
+  using std__expected_std__vector_double___std__exception_ptr_ = std::expected<std::vector<double>, std::exception_ptr>;
+  inline std__expected_std__vector_double___std__exception_ptr_ create_std__expected_std__vector_double___std__exception_ptr_(std::vector<double> value) { return value; }
+  inline std__expected_std__vector_double___std__exception_ptr_ create_std__expected_std__vector_double___std__exception_ptr_(std::exception_ptr error) { return std::unexpected(error); }
+  
+  // pragma MARK: std::expected<std::vector<Person>, std::exception_ptr>
+  using std__expected_std__vector_Person___std__exception_ptr_ = std::expected<std::vector<Person>, std::exception_ptr>;
+  inline std__expected_std__vector_Person___std__exception_ptr_ create_std__expected_std__vector_Person___std__exception_ptr_(std::vector<Person> value) { return value; }
+  inline std__expected_std__vector_Person___std__exception_ptr_ create_std__expected_std__vector_Person___std__exception_ptr_(std::exception_ptr error) { return std::unexpected(error); }
+  
+  // pragma MARK: std::expected<std::vector<Powertrain>, std::exception_ptr>
+  using std__expected_std__vector_Powertrain___std__exception_ptr_ = std::expected<std::vector<Powertrain>, std::exception_ptr>;
+  inline std__expected_std__vector_Powertrain___std__exception_ptr_ create_std__expected_std__vector_Powertrain___std__exception_ptr_(std::vector<Powertrain> value) { return value; }
+  inline std__expected_std__vector_Powertrain___std__exception_ptr_ create_std__expected_std__vector_Powertrain___std__exception_ptr_(std::exception_ptr error) { return std::unexpected(error); }
+  
+  // pragma MARK: std::expected<std::shared_ptr<AnyMap>, std::exception_ptr>
+  using std__expected_std__shared_ptr_AnyMap___std__exception_ptr_ = std::expected<std::shared_ptr<AnyMap>, std::exception_ptr>;
+  inline std__expected_std__shared_ptr_AnyMap___std__exception_ptr_ create_std__expected_std__shared_ptr_AnyMap___std__exception_ptr_(std::shared_ptr<AnyMap> value) { return value; }
+  inline std__expected_std__shared_ptr_AnyMap___std__exception_ptr_ create_std__expected_std__shared_ptr_AnyMap___std__exception_ptr_(std::exception_ptr error) { return std::unexpected(error); }
+  
+  // pragma MARK: std::expected<std::optional<Powertrain>, std::exception_ptr>
+  using std__expected_std__optional_Powertrain___std__exception_ptr_ = std::expected<std::optional<Powertrain>, std::exception_ptr>;
+  inline std__expected_std__optional_Powertrain___std__exception_ptr_ create_std__expected_std__optional_Powertrain___std__exception_ptr_(std::optional<Powertrain> value) { return value; }
+  inline std__expected_std__optional_Powertrain___std__exception_ptr_ create_std__expected_std__optional_Powertrain___std__exception_ptr_(std::exception_ptr error) { return std::unexpected(error); }
+  
+  // pragma MARK: std::expected<int64_t, std::exception_ptr>
+  using std__expected_int64_t__std__exception_ptr_ = std::expected<int64_t, std::exception_ptr>;
+  inline std__expected_int64_t__std__exception_ptr_ create_std__expected_int64_t__std__exception_ptr_(int64_t value) { return value; }
+  inline std__expected_int64_t__std__exception_ptr_ create_std__expected_int64_t__std__exception_ptr_(std::exception_ptr error) { return std::unexpected(error); }
+  
+  // pragma MARK: std::expected<std::shared_ptr<Promise<int64_t>>, std::exception_ptr>
+  using std__expected_std__shared_ptr_Promise_int64_t____std__exception_ptr_ = std::expected<std::shared_ptr<Promise<int64_t>>, std::exception_ptr>;
+  inline std__expected_std__shared_ptr_Promise_int64_t____std__exception_ptr_ create_std__expected_std__shared_ptr_Promise_int64_t____std__exception_ptr_(std::shared_ptr<Promise<int64_t>> value) { return value; }
+  inline std__expected_std__shared_ptr_Promise_int64_t____std__exception_ptr_ create_std__expected_std__shared_ptr_Promise_int64_t____std__exception_ptr_(std::exception_ptr error) { return std::unexpected(error); }
+  
+  // pragma MARK: std::expected<std::shared_ptr<Promise<void>>, std::exception_ptr>
+  using std__expected_std__shared_ptr_Promise_void____std__exception_ptr_ = std::expected<std::shared_ptr<Promise<void>>, std::exception_ptr>;
+  inline std__expected_std__shared_ptr_Promise_void____std__exception_ptr_ create_std__expected_std__shared_ptr_Promise_void____std__exception_ptr_(std::shared_ptr<Promise<void>> value) { return value; }
+  inline std__expected_std__shared_ptr_Promise_void____std__exception_ptr_ create_std__expected_std__shared_ptr_Promise_void____std__exception_ptr_(std::exception_ptr error) { return std::unexpected(error); }
+  
+  // pragma MARK: std::expected<std::shared_ptr<Promise<double>>, std::exception_ptr>
+  using std__expected_std__shared_ptr_Promise_double____std__exception_ptr_ = std::expected<std::shared_ptr<Promise<double>>, std::exception_ptr>;
+  inline std__expected_std__shared_ptr_Promise_double____std__exception_ptr_ create_std__expected_std__shared_ptr_Promise_double____std__exception_ptr_(std::shared_ptr<Promise<double>> value) { return value; }
+  inline std__expected_std__shared_ptr_Promise_double____std__exception_ptr_ create_std__expected_std__shared_ptr_Promise_double____std__exception_ptr_(std::exception_ptr error) { return std::unexpected(error); }
+  
+  // pragma MARK: std::expected<std::shared_ptr<Promise<Car>>, std::exception_ptr>
+  using std__expected_std__shared_ptr_Promise_Car____std__exception_ptr_ = std::expected<std::shared_ptr<Promise<Car>>, std::exception_ptr>;
+  inline std__expected_std__shared_ptr_Promise_Car____std__exception_ptr_ create_std__expected_std__shared_ptr_Promise_Car____std__exception_ptr_(std::shared_ptr<Promise<Car>> value) { return value; }
+  inline std__expected_std__shared_ptr_Promise_Car____std__exception_ptr_ create_std__expected_std__shared_ptr_Promise_Car____std__exception_ptr_(std::exception_ptr error) { return std::unexpected(error); }
+  
+  // pragma MARK: std::expected<Car, std::exception_ptr>
+  using std__expected_Car__std__exception_ptr_ = std::expected<Car, std::exception_ptr>;
+  inline std__expected_Car__std__exception_ptr_ create_std__expected_Car__std__exception_ptr_(Car value) { return value; }
+  inline std__expected_Car__std__exception_ptr_ create_std__expected_Car__std__exception_ptr_(std::exception_ptr error) { return std::unexpected(error); }
+  
+  // pragma MARK: std::expected<bool, std::exception_ptr>
+  using std__expected_bool__std__exception_ptr_ = std::expected<bool, std::exception_ptr>;
+  inline std__expected_bool__std__exception_ptr_ create_std__expected_bool__std__exception_ptr_(bool value) { return value; }
+  inline std__expected_bool__std__exception_ptr_ create_std__expected_bool__std__exception_ptr_(std::exception_ptr error) { return std::unexpected(error); }
+  
+  // pragma MARK: std::expected<std::optional<Person>, std::exception_ptr>
+  using std__expected_std__optional_Person___std__exception_ptr_ = std::expected<std::optional<Person>, std::exception_ptr>;
+  inline std__expected_std__optional_Person___std__exception_ptr_ create_std__expected_std__optional_Person___std__exception_ptr_(std::optional<Person> value) { return value; }
+  inline std__expected_std__optional_Person___std__exception_ptr_ create_std__expected_std__optional_Person___std__exception_ptr_(std::exception_ptr error) { return std::unexpected(error); }
+  
+  // pragma MARK: std::expected<std::shared_ptr<ArrayBuffer>, std::exception_ptr>
+  using std__expected_std__shared_ptr_ArrayBuffer___std__exception_ptr_ = std::expected<std::shared_ptr<ArrayBuffer>, std::exception_ptr>;
+  inline std__expected_std__shared_ptr_ArrayBuffer___std__exception_ptr_ create_std__expected_std__shared_ptr_ArrayBuffer___std__exception_ptr_(std::shared_ptr<ArrayBuffer> value) { return value; }
+  inline std__expected_std__shared_ptr_ArrayBuffer___std__exception_ptr_ create_std__expected_std__shared_ptr_ArrayBuffer___std__exception_ptr_(std::exception_ptr error) { return std::unexpected(error); }
+  
+  // pragma MARK: std::expected<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>, std::exception_ptr>
+  using std__expected_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____std__exception_ptr_ = std::expected<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>, std::exception_ptr>;
+  inline std__expected_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____std__exception_ptr_ create_std__expected_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____std__exception_ptr_(std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>> value) { return value; }
+  inline std__expected_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____std__exception_ptr_ create_std__expected_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____std__exception_ptr_(std::exception_ptr error) { return std::unexpected(error); }
+  
+  // pragma MARK: std::expected<std::shared_ptr<margelo::nitro::image::HybridChildSpec>, std::exception_ptr>
+  using std__expected_std__shared_ptr_margelo__nitro__image__HybridChildSpec___std__exception_ptr_ = std::expected<std::shared_ptr<margelo::nitro::image::HybridChildSpec>, std::exception_ptr>;
+  inline std__expected_std__shared_ptr_margelo__nitro__image__HybridChildSpec___std__exception_ptr_ create_std__expected_std__shared_ptr_margelo__nitro__image__HybridChildSpec___std__exception_ptr_(std::shared_ptr<margelo::nitro::image::HybridChildSpec> value) { return value; }
+  inline std__expected_std__shared_ptr_margelo__nitro__image__HybridChildSpec___std__exception_ptr_ create_std__expected_std__shared_ptr_margelo__nitro__image__HybridChildSpec___std__exception_ptr_(std::exception_ptr error) { return std::unexpected(error); }
+  
+  // pragma MARK: std::expected<std::shared_ptr<margelo::nitro::image::HybridBaseSpec>, std::exception_ptr>
+  using std__expected_std__shared_ptr_margelo__nitro__image__HybridBaseSpec___std__exception_ptr_ = std::expected<std::shared_ptr<margelo::nitro::image::HybridBaseSpec>, std::exception_ptr>;
+  inline std__expected_std__shared_ptr_margelo__nitro__image__HybridBaseSpec___std__exception_ptr_ create_std__expected_std__shared_ptr_margelo__nitro__image__HybridBaseSpec___std__exception_ptr_(std::shared_ptr<margelo::nitro::image::HybridBaseSpec> value) { return value; }
+  inline std__expected_std__shared_ptr_margelo__nitro__image__HybridBaseSpec___std__exception_ptr_ create_std__expected_std__shared_ptr_margelo__nitro__image__HybridBaseSpec___std__exception_ptr_(std::exception_ptr error) { return std::unexpected(error); }
 
 } // namespace margelo::nitro::image::bridge::swift

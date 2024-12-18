@@ -124,18 +124,18 @@ public class HybridImageSpec_cxx {
 
   // Methods
   @inline(__always)
-  public func toArrayBuffer(format: Int32) -> Double {
+  public func toArrayBuffer(format: Int32) -> bridge.std__expected_double__std__exception_ptr_ {
     do {
       let __result = try self.__implementation.toArrayBuffer(format: margelo.nitro.image.ImageFormat(rawValue: format)!)
-      return __result
+      let __resultCpp = __result
+      return bridge.create_std__expected_double__std__exception_ptr_(__resultCpp)
     } catch {
-      let __message = "\(error.localizedDescription)"
-      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(__message))")
+      return bridge.create_std__expected_double__std__exception_ptr_(error)
     }
   }
   
   @inline(__always)
-  public func saveToFile(path: std.string, onFinished: bridge.Func_void_std__string) -> Void {
+  public func saveToFile(path: std.string, onFinished: bridge.Func_void_std__string) -> bridge.std__expected_void__std__exception_ptr_ {
     do {
       try self.__implementation.saveToFile(path: String(path), onFinished: { () -> ((String) -> Void) in
         let __sharedClosure = bridge.share_Func_void_std__string(onFinished)
@@ -143,10 +143,8 @@ public class HybridImageSpec_cxx {
           __sharedClosure.pointee.call(std.string(__path))
         }
       }())
-      return 
     } catch {
-      let __message = "\(error.localizedDescription)"
-      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(__message))")
+      return bridge.create_std__expected_void__std__exception_ptr_(error)
     }
   }
 }

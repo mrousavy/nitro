@@ -523,12 +523,12 @@ function createCxxResultWrapperSwiftHelper(
   if (type.result.kind === 'void') {
     functions.push(
       `inline ${name} ${funcName}() { return {}; }`,
-      `inline ${name} ${funcName}(${type.error.getCode('c++')} error) { return error; }`
+      `inline ${name} ${funcName}(${type.error.getCode('c++')} error) { return std::unexpected(error); }`
     )
   } else {
     functions.push(
       `inline ${name} ${funcName}(${type.result.getCode('c++')} value) { return value; }`,
-      `inline ${name} ${funcName}(${type.error.getCode('c++')} error) { return error; }`
+      `inline ${name} ${funcName}(${type.error.getCode('c++')} error) { return std::unexpected(error); }`
     )
   }
 

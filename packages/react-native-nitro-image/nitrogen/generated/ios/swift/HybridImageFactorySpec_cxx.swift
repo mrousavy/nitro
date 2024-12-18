@@ -101,62 +101,62 @@ public class HybridImageFactorySpec_cxx {
 
   // Methods
   @inline(__always)
-  public func loadImageFromFile(path: std.string) -> bridge.std__shared_ptr_margelo__nitro__image__HybridImageSpec_ {
+  public func loadImageFromFile(path: std.string) -> bridge.std__expected_std__shared_ptr_margelo__nitro__image__HybridImageSpec___std__exception_ptr_ {
     do {
       let __result = try self.__implementation.loadImageFromFile(path: String(path))
-      return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridImageSpec_ in
+      let __resultCpp = { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridImageSpec_ in
         let __cxxWrapped = __result.getCxxWrapper()
         return __cxxWrapped.getCxxPart()
       }()
+      return bridge.create_std__expected_std__shared_ptr_margelo__nitro__image__HybridImageSpec___std__exception_ptr_(__resultCpp)
     } catch {
-      let __message = "\(error.localizedDescription)"
-      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(__message))")
+      return bridge.create_std__expected_std__shared_ptr_margelo__nitro__image__HybridImageSpec___std__exception_ptr_(error)
     }
   }
   
   @inline(__always)
-  public func loadImageFromURL(path: std.string) -> bridge.std__shared_ptr_margelo__nitro__image__HybridImageSpec_ {
+  public func loadImageFromURL(path: std.string) -> bridge.std__expected_std__shared_ptr_margelo__nitro__image__HybridImageSpec___std__exception_ptr_ {
     do {
       let __result = try self.__implementation.loadImageFromURL(path: String(path))
-      return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridImageSpec_ in
+      let __resultCpp = { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridImageSpec_ in
         let __cxxWrapped = __result.getCxxWrapper()
         return __cxxWrapped.getCxxPart()
       }()
+      return bridge.create_std__expected_std__shared_ptr_margelo__nitro__image__HybridImageSpec___std__exception_ptr_(__resultCpp)
     } catch {
-      let __message = "\(error.localizedDescription)"
-      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(__message))")
+      return bridge.create_std__expected_std__shared_ptr_margelo__nitro__image__HybridImageSpec___std__exception_ptr_(error)
     }
   }
   
   @inline(__always)
-  public func loadImageFromSystemName(path: std.string) -> bridge.std__shared_ptr_margelo__nitro__image__HybridImageSpec_ {
+  public func loadImageFromSystemName(path: std.string) -> bridge.std__expected_std__shared_ptr_margelo__nitro__image__HybridImageSpec___std__exception_ptr_ {
     do {
       let __result = try self.__implementation.loadImageFromSystemName(path: String(path))
-      return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridImageSpec_ in
+      let __resultCpp = { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridImageSpec_ in
         let __cxxWrapped = __result.getCxxWrapper()
         return __cxxWrapped.getCxxPart()
       }()
+      return bridge.create_std__expected_std__shared_ptr_margelo__nitro__image__HybridImageSpec___std__exception_ptr_(__resultCpp)
     } catch {
-      let __message = "\(error.localizedDescription)"
-      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(__message))")
+      return bridge.create_std__expected_std__shared_ptr_margelo__nitro__image__HybridImageSpec___std__exception_ptr_(error)
     }
   }
   
   @inline(__always)
-  public func bounceBack(image: bridge.std__shared_ptr_margelo__nitro__image__HybridImageSpec_) -> bridge.std__shared_ptr_margelo__nitro__image__HybridImageSpec_ {
+  public func bounceBack(image: bridge.std__shared_ptr_margelo__nitro__image__HybridImageSpec_) -> bridge.std__expected_std__shared_ptr_margelo__nitro__image__HybridImageSpec___std__exception_ptr_ {
     do {
       let __result = try self.__implementation.bounceBack(image: { () -> HybridImageSpec in
         let __unsafePointer = bridge.get_std__shared_ptr_margelo__nitro__image__HybridImageSpec_(image)
         let __instance = HybridImageSpec_cxx.fromUnsafe(__unsafePointer)
         return __instance.getHybridImageSpec()
       }())
-      return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridImageSpec_ in
+      let __resultCpp = { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridImageSpec_ in
         let __cxxWrapped = __result.getCxxWrapper()
         return __cxxWrapped.getCxxPart()
       }()
+      return bridge.create_std__expected_std__shared_ptr_margelo__nitro__image__HybridImageSpec___std__exception_ptr_(__resultCpp)
     } catch {
-      let __message = "\(error.localizedDescription)"
-      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(__message))")
+      return bridge.create_std__expected_std__shared_ptr_margelo__nitro__image__HybridImageSpec___std__exception_ptr_(error)
     }
   }
 }
