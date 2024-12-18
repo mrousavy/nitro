@@ -125,14 +125,11 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
   }
 
   func funcThatThrows() throws -> Double {
-    // TODO: Swift functions can not throw yet! Errors are not propagated up to C++.
-    // throw RuntimeError.error(withMessage: "This function will only work after sacrificing seven lambs!")
-    return 55
+    throw RuntimeError.error(withMessage: "This function will only work after sacrificing seven lambs!")
   }
 
   func throwError(error: Error) throws -> Void {
-    // TODO: Swift functions can not throw yet! Errors are not propagated up to C++.
-    // throw error
+    throw error
   }
 
   func tryOptionalParams(num: Double, boo: Bool, str: String?) throws -> String {
