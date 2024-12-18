@@ -52,6 +52,7 @@ namespace margelo::nitro::image {
       prototype.registerHybridMethod("createMap", &HybridTestObjectSwiftKotlinSpec::createMap);
       prototype.registerHybridMethod("mapRoundtrip", &HybridTestObjectSwiftKotlinSpec::mapRoundtrip);
       prototype.registerHybridMethod("funcThatThrows", &HybridTestObjectSwiftKotlinSpec::funcThatThrows);
+      prototype.registerHybridMethod("funcThatThrowsBeforePromise", &HybridTestObjectSwiftKotlinSpec::funcThatThrowsBeforePromise);
       prototype.registerHybridMethod("throwError", &HybridTestObjectSwiftKotlinSpec::throwError);
       prototype.registerHybridMethod("tryOptionalParams", &HybridTestObjectSwiftKotlinSpec::tryOptionalParams);
       prototype.registerHybridMethod("tryMiddleParam", &HybridTestObjectSwiftKotlinSpec::tryMiddleParam);

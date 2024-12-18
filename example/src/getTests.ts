@@ -428,6 +428,11 @@ export function getTests(
         `Error: ${testObject.name}.funcThatThrows(...): This function will only work after sacrificing seven lambs!`
       )
     ),
+    createTest('funcThatThrowsBeforePromise() throws', () =>
+      it(() => testObject.funcThatThrowsBeforePromise()).didThrow(
+        `Error: ${testObject.name}.funcThatThrowsBeforePromise(...): This function will only work after sacrificing eight lambs!`
+      )
+    ),
     createTest('throwError(error) throws same message from JS', () =>
       it(() => {
         const error = new Error('rethrowing a JS error from native!')

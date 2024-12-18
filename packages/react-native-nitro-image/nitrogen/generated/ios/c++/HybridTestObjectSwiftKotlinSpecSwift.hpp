@@ -44,8 +44,8 @@ namespace margelo::nitro::image { class HybridBaseSpec; }
 #include "Person.hpp"
 #include <functional>
 #include <NitroModules/AnyMap.hpp>
-#include <exception>
 #include <NitroModules/Promise.hpp>
+#include <exception>
 #include "Car.hpp"
 #include <NitroModules/ArrayBuffer.hpp>
 #include <NitroModules/ArrayBufferHolder.hpp>
@@ -265,6 +265,14 @@ namespace margelo::nitro::image {
     }
     inline double funcThatThrows() override {
       auto __result = _swiftPart.funcThatThrows();
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline std::shared_ptr<Promise<void>> funcThatThrowsBeforePromise() override {
+      auto __result = _swiftPart.funcThatThrowsBeforePromise();
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
