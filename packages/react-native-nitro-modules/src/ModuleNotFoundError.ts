@@ -68,6 +68,10 @@ export class ModuleNotFoundError extends Error {
         throw new Error(`NitroModules are not yet supported on ${Platform.OS}!`)
     }
 
+    if (cause instanceof Error) {
+      suggestions.push(`Cause: ${cause.message}`)
+    }
+
     const error = messageWithSuggestions(message, suggestions)
     super(error, { cause: cause })
   }
