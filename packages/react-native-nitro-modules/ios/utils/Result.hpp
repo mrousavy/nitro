@@ -1,10 +1,3 @@
-//
-//  Result.hpp
-//  NitroModules
-//
-//  Created by Marc Rousavy on 18.12.24.
-//
-
 #pragma once
 
 #include <exception>
@@ -14,221 +7,187 @@
 
 namespace margelo::nitro {
 
-template <class T>
+template <typename T>
 class Result {
 public:
-  static Result withValue(const T& v) {
-    Result r;
-    r._constructValue(v);
-    return r;
-  }
-
-  static Result withValue(T&& v) {
-    Result r;
-    r._constructValue(std::move(v));
-    return r;
-  }
-
-  static Result withError(std::exception_ptr e) {
-    Result r;
-    r._constructError(std::move(e));
-    return r;
-  }
-
-  Result() noexcept : _hasValue(false) {}
-
-  Result(const Result& other) {
-    if (other._hasValue) {
-      _constructValue(other.value());
+  // Constructors
+  Result(const Result& other) : _hasError(other._hasError) {
+    if (_hasError) {
+      new (&_error) std::exception_ptr(other._error);
     } else {
-      _constructError(other.error());
+      new (&_storage) T(other.value());
     }
   }
 
-  Result(Result&& other) noexcept(std::is_nothrow_move_constructible<T>::value) {
-    if (other._hasValue) {
-      _constructValue(std::move(other._value));
+  Result(Result&& other) noexcept(std::is_nothrow_move_constructible<T>::value) : _hasError(other._hasError) {
+    if (_hasError) {
+      new (&_error) std::exception_ptr(std::move(other._error));
     } else {
-      _constructError(std::move(other._error));
+      new (&_storage) T(std::move(other.value()));
     }
+  }
+
+  ~Result() {
+    destroy();
   }
 
   Result& operator=(const Result& other) {
-    if (this != &other) {
-      _destroy();
-      if (other._hasValue) {
-        _constructValue(other.value());
-      } else {
-        _constructError(other.error());
-      }
+    if (this == &other)
+      return *this;
+    destroy();
+    _hasError = other._hasError;
+    if (_hasError) {
+      new (&_error) std::exception_ptr(other._error);
+    } else {
+      new (&_storage) T(other.value());
     }
     return *this;
   }
 
   Result& operator=(Result&& other) noexcept(std::is_nothrow_move_constructible<T>::value) {
-    if (this != &other) {
-      _destroy();
-      if (other._hasValue) {
-        _constructValue(std::move(other._value));
-      } else {
-        _constructError(std::move(other._error));
-      }
+    if (this == &other)
+      return *this;
+    destroy();
+    _hasError = other._hasError;
+    if (_hasError) {
+      new (&_error) std::exception_ptr(std::move(other._error));
+    } else {
+      new (&_storage) T(std::move(other.value()));
     }
     return *this;
   }
 
-  ~Result() {
-    _destroy();
+  // Static factories
+  static Result withValue(const T& value) {
+    return Result(value);
   }
 
+  static Result withValue(T&& value) {
+    return Result(std::move(value));
+  }
+
+  static Result withError(std::exception_ptr eptr) {
+    return Result(eptr);
+  }
+
+  // Accessors
   bool hasValue() const noexcept {
-    return _hasValue;
-  }
-  explicit operator bool() const noexcept {
-    return hasValue();
+    return !_hasError;
   }
 
-  T& value() & {
-    return _value;
+  bool hasError() const noexcept {
+    return _hasError;
   }
 
-  const T& value() const& {
-    return _value;
+  const T& value() const {
+    if (_hasError) {
+      std::rethrow_exception(_error);
+    }
+    return *reinterpret_cast<const T*>(&_storage);
   }
 
-  T&& value() && {
-    return std::move(_value);
+  T& value() {
+    if (_hasError) {
+      std::rethrow_exception(_error);
+    }
+    return *reinterpret_cast<T*>(&_storage);
   }
 
-  const std::exception_ptr& error() const& {
+  std::exception_ptr error() const {
+    if (!_hasError) {
+      return std::exception_ptr();
+    }
     return _error;
   }
 
-  std::exception_ptr&& error() && {
-    return std::move(_error);
+private:
+  // Private constructors
+  explicit Result(const T& value) : _hasError(false) {
+    new (&_storage) T(value);
+  }
+
+  explicit Result(T&& value) : _hasError(false) {
+    new (&_storage) T(std::move(value));
+  }
+
+  explicit Result(std::exception_ptr eptr) : _hasError(true) {
+    new (&_error) std::exception_ptr(eptr);
+  }
+
+  void destroy() {
+    if (_hasError) {
+      reinterpret_cast<std::exception_ptr*>(&_error)->~exception_ptr();
+    } else {
+      reinterpret_cast<T*>(&_storage)->~T();
+    }
   }
 
 private:
-  bool _hasValue;
+  bool _hasError;
   union {
-    T _value;
+    typename std::aligned_storage<sizeof(T), alignof(T)>::type _storage;
     std::exception_ptr _error;
   };
-
-  template <class... Args>
-  void _constructValue(Args&&... args) {
-    ::new (static_cast<void*>(&_value)) T(std::forward<Args>(args)...);
-    _hasValue = true;
-  }
-
-  void _constructError(std::exception_ptr e) {
-    ::new (static_cast<void*>(&_error)) std::exception_ptr(std::move(e));
-    _hasValue = false;
-  }
-
-  void _destroy() noexcept {
-    if (_hasValue) {
-      _value.~T();
-    } else {
-      _error.~exception_ptr();
-    }
-  }
 };
 
+// Specialization for void
 template <>
 class Result<void> {
 public:
-  static Result withValue() {
-    Result r;
-    r._hasValue = true;
-    return r;
-  }
+  // Constructors
+  Result(const Result& other) : _hasError(other._hasError), _error(other._error) {}
 
-  static Result withError(std::exception_ptr e) {
-    Result r;
-    r._constructError(std::move(e));
-    return r;
-  }
-
-  Result() noexcept : _hasValue(false) {}
-
-  Result(const Result& other) {
-    if (other._hasValue) {
-      _hasValue = true;
-    } else {
-      _constructError(other.error());
-    }
-  }
-
-  Result(Result&& other) noexcept {
-    if (other._hasValue) {
-      _hasValue = true;
-    } else {
-      _constructError(std::move(other._error));
-    }
-  }
+  Result(Result&& other) noexcept : _hasError(other._hasError), _error(std::move(other._error)) {}
 
   Result& operator=(const Result& other) {
-    if (this != &other) {
-      _destroy();
-      if (other._hasValue) {
-        _hasValue = true;
-      } else {
-        _constructError(other.error());
-      }
+    if (this == &other)
+      return *this;
+    _hasError = other._hasError;
+    if (_hasError) {
+      _error = other._error;
     }
     return *this;
   }
 
   Result& operator=(Result&& other) noexcept {
-    if (this != &other) {
-      _destroy();
-      if (other._hasValue) {
-        _hasValue = true;
-      } else {
-        _constructError(std::move(other._error));
-      }
+    if (this == &other)
+      return *this;
+    _hasError = other._hasError;
+    if (_hasError) {
+      _error = std::move(other._error);
     }
     return *this;
   }
 
-  ~Result() {
-    _destroy();
+  // Static factories
+  static Result withValue() {
+    return Result();
+  }
+
+  static Result withError(std::exception_ptr eptr) {
+    return Result(eptr);
   }
 
   bool hasValue() const noexcept {
-    return _hasValue;
-  }
-  explicit operator bool() const noexcept {
-    return hasValue();
+    return !_hasError;
   }
 
-  void value() const {
-    // Nothing to return, but ensure we have value
+  bool hasError() const noexcept {
+    return _hasError;
   }
 
-  const std::exception_ptr& error() const& {
+  std::exception_ptr error() const {
+    assert(_hasError && "Result<void> does not hold an error!");
     return _error;
   }
 
-  std::exception_ptr&& error() && {
-    return std::move(_error);
-  }
+private:
+  explicit Result() : _hasError(false), _error(nullptr) {}
+  explicit Result(std::exception_ptr error) : _hasError(true), _error(error) {}
 
 private:
-  bool _hasValue;
+  bool _hasError;
   std::exception_ptr _error;
-
-  void _constructError(std::exception_ptr e) {
-    ::new (static_cast<void*>(&_error)) std::exception_ptr(std::move(e));
-    _hasValue = false;
-  }
-
-  void _destroy() noexcept {
-    if (!_hasValue) {
-      _error.~exception_ptr();
-    }
-  }
 };
 
 } // namespace margelo::nitro

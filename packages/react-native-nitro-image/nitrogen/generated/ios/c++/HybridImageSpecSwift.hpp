@@ -77,7 +77,7 @@ namespace margelo::nitro::image {
     // Methods
     inline double toArrayBuffer(ImageFormat format) override {
       auto __result = _swiftPart.toArrayBuffer(static_cast<int>(format));
-      if (!__result.hasValue()) [[unlikely]] {
+      if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
       auto __value = std::move(__result.value());
@@ -85,7 +85,7 @@ namespace margelo::nitro::image {
     }
     inline void saveToFile(const std::string& path, const std::function<void(const std::string& /* path */)>& onFinished) override {
       auto __result = _swiftPart.saveToFile(path, onFinished);
-      if (!__result.hasValue()) [[unlikely]] {
+      if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
     }

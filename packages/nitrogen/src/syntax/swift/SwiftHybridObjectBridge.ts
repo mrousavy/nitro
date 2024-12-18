@@ -240,7 +240,7 @@ return ${bridged.parseFromSwiftToCpp('__result', 'c++')};
         // func returns something
         body = `
 auto __result = _swiftPart.${m.name}(${params});
-if (!__result.hasValue()) [[unlikely]] {
+if (__result.hasError()) [[unlikely]] {
   std::rethrow_exception(__result.error());
 }
 auto __value = std::move(__result.value());
@@ -250,7 +250,7 @@ return ${bridgedReturnType.parseFromSwiftToCpp('__value', 'c++')};
         // void func
         body = `
 auto __result = _swiftPart.${m.name}(${params});
-if (!__result.hasValue()) [[unlikely]] {
+if (__result.hasError()) [[unlikely]] {
   std::rethrow_exception(__result.error());
 }
         `.trim()
