@@ -7,6 +7,12 @@
 
 namespace margelo::nitro {
 
+// TODO: Remove this whole Result wrapping system once Swift errors can be caught in C++.
+//       See https://github.com/swiftlang/swift/issues/75290
+
+/**
+ * Represents a Result from a function. It's either a value (`T`), or an error (`std::exception_ptr`).
+ */
 template <typename T>
 class Result {
 public:
@@ -80,23 +86,17 @@ public:
   }
 
   const T& value() const {
-    if (_hasError) {
-      std::rethrow_exception(_error);
-    }
+    assert(!_hasError && "Result<T> does not hold a value!");
     return *reinterpret_cast<const T*>(&_storage);
   }
 
   T& value() {
-    if (_hasError) {
-      std::rethrow_exception(_error);
-    }
+    assert(!_hasError && "Result<T> does not hold a value!");
     return *reinterpret_cast<T*>(&_storage);
   }
 
   std::exception_ptr error() const {
-    if (!_hasError) {
-      return std::exception_ptr();
-    }
+    assert(_hasError && "Result<T> does not hold an error!");
     return _error;
   }
 
