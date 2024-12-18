@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.9.0)
 
 set (PACKAGE_NAME NitroImage)
 set (CMAKE_VERBOSE_MAKEFILE ON)
-set (CMAKE_CXX_STANDARD 20)
+set (CMAKE_CXX_STANDARD 23)
 
 # Define C++ library and add all sources
 add_library(${PACKAGE_NAME} SHARED

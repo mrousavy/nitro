@@ -2,7 +2,7 @@ project(NitroModules)
 cmake_minimum_required(VERSION 3.9.0)
 
 set (CMAKE_VERBOSE_MAKEFILE ON)
-set (CMAKE_CXX_STANDARD 20)
+set (CMAKE_CXX_STANDARD 23)
 
 # Find all C++ files (shared and platform specifics)
 file(GLOB_RECURSE shared_files RELATIVE ${CMAKE_SOURCE_DIR}
