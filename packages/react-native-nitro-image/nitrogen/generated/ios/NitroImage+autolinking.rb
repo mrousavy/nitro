@@ -48,8 +48,8 @@ def add_nitrogen_files(spec)
 
   current_pod_target_xcconfig = spec.attributes_hash['pod_target_xcconfig'] || {}
   spec.pod_target_xcconfig = current_pod_target_xcconfig.merge({
-    # Use C++ 23
-    "CLANG_CXX_LANGUAGE_STANDARD" => "c++23",
+    # Use C++ 20
+    "CLANG_CXX_LANGUAGE_STANDARD" => "c++20",
     # Enables C++ <-> Swift interop (by default it's only C)
     "SWIFT_OBJC_INTEROP_MODE" => "objcxx",
     # Enables stricter modular headers
