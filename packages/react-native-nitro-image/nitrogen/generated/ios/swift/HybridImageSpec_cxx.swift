@@ -144,6 +144,7 @@ public class HybridImageSpec_cxx {
           __sharedClosure.pointee.call(std.string(__path))
         }
       }())
+      return bridge.create_Result_void_()
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
       return bridge.create_Result_void_(__exceptionPtr)

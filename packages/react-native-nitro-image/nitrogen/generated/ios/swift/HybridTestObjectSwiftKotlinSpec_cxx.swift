@@ -362,6 +362,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   public func simpleFunc() -> bridge.Result_void_ {
     do {
       try self.__implementation.simpleFunc()
+      return bridge.create_Result_void_()
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
       return bridge.create_Result_void_(__exceptionPtr)
@@ -396,6 +397,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   public func multipleArguments(num: Double, str: std.string, boo: Bool) -> bridge.Result_void_ {
     do {
       try self.__implementation.multipleArguments(num: num, str: String(str), boo: boo)
+      return bridge.create_Result_void_()
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
       return bridge.create_Result_void_(__exceptionPtr)
@@ -489,6 +491,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
         }())
         }
       }())
+      return bridge.create_Result_void_()
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
       return bridge.create_Result_void_(__exceptionPtr)
@@ -535,6 +538,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   public func throwError(error: std.exception_ptr) -> bridge.Result_void_ {
     do {
       try self.__implementation.throwError(error: RuntimeError.from(cppError: error))
+      return bridge.create_Result_void_()
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
       return bridge.create_Result_void_(__exceptionPtr)
@@ -860,6 +864,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
           __sharedClosure.pointee.call()
         }
       }())
+      return bridge.create_Result_void_()
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
       return bridge.create_Result_void_(__exceptionPtr)
@@ -885,6 +890,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
           __sharedClosure.pointee.call()
         }
       }())
+      return bridge.create_Result_void_()
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
       return bridge.create_Result_void_(__exceptionPtr)
@@ -906,6 +912,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
         }())
         }
       }())
+      return bridge.create_Result_void_()
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
       return bridge.create_Result_void_(__exceptionPtr)
@@ -1145,6 +1152,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   public func setAllValuesTo(buffer: ArrayBufferHolder, value: Double) -> bridge.Result_void_ {
     do {
       try self.__implementation.setAllValuesTo(buffer: buffer, value: value)
+      return bridge.create_Result_void_()
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
       return bridge.create_Result_void_(__exceptionPtr)

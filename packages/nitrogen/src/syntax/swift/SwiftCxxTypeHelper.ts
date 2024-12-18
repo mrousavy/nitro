@@ -522,21 +522,21 @@ function createCxxResultWrapperSwiftHelper(
   const functions: string[] = []
   if (type.result.kind === 'void') {
     functions.push(
-      `inline ${name} ${funcName}() { return Result::withValue(); }`,
-      `inline ${name} ${funcName}(const ${type.error.getCode('c++')}& error) { return Result::withError(error); }`
+      `inline ${name} ${funcName}() { return ${actualType}::withValue(); }`,
+      `inline ${name} ${funcName}(const ${type.error.getCode('c++')}& error) { return ${actualType}::withError(error); }`
     )
   } else {
     if (type.result.canBePassedByReference) {
       functions.push(
-        `inline ${name} ${funcName}(const ${type.result.getCode('c++')}& value) { return Result::withValue(value); }`
+        `inline ${name} ${funcName}(const ${type.result.getCode('c++')}& value) { return ${actualType}::withValue(value); }`
       )
     } else {
       functions.push(
-        `inline ${name} ${funcName}(${type.result.getCode('c++')} value) { return Result::withValue(std::move(value)); }`
+        `inline ${name} ${funcName}(${type.result.getCode('c++')} value) { return ${actualType}::withValue(std::move(value)); }`
       )
     }
     functions.push(
-      `inline ${name} ${funcName}(const ${type.error.getCode('c++')}& error) { return Result::withError(error); }`
+      `inline ${name} ${funcName}(const ${type.error.getCode('c++')}& error) { return ${actualType}::withError(error); }`
     )
   }
 
