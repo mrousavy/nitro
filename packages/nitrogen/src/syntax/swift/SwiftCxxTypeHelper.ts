@@ -18,6 +18,7 @@ import { getUmbrellaHeaderName } from '../../autolinking/ios/createSwiftUmbrella
 import { VoidType } from '../types/VoidType.js'
 import { NamedWrappingType } from '../types/NamedWrappingType.js'
 import { ErrorType } from '../types/ErrorType.js'
+import { ResultWrappingType } from '../types/ResultWrappingType.js'
 
 export interface SwiftCxxHelper {
   cxxHeader: {
@@ -52,6 +53,10 @@ export function createSwiftCxxHelpers(type: Type): SwiftCxxHelper | undefined {
       return createCxxTupleSwiftHelper(getTypeAs(type, TupleType))
     case 'promise':
       return createCxxPromiseSwiftHelper(getTypeAs(type, PromiseType))
+    case 'result-wrapper':
+      return createCxxResultWrapperSwiftHelper(
+        getTypeAs(type, ResultWrappingType)
+      )
     default:
       return undefined
   }
@@ -499,6 +504,44 @@ inline ${actualType} create_${name}(${typesSignature}) {
         },
         ...bridgedType.getRequiredImports(),
       ],
+    },
+    dependencies: [],
+  }
+}
+
+/**
+ * Create a C++ `create_result` function that can be called from Swift to create a `std::expected<T>`.
+ */
+function createCxxResultWrapperSwiftHelper(
+  type: ResultWrappingType
+): SwiftCxxHelper {
+  const actualType = type.getCode('c++')
+  const name = escapeCppName(type.getCode('c++'))
+  const funcName = `create_${name}`
+
+  const functions: string[] = []
+  if (type.result.kind === 'void') {
+    functions.push(
+      `inline ${name} ${funcName}() { return {}; }`,
+      `inline ${name} ${funcName}(${type.error.getCode('c++')} error) { return error; }`
+    )
+  } else {
+    functions.push(
+      `inline ${name} ${funcName}}(${type.result.getCode('c++')} value) { return value; }`,
+      `inline ${name} ${funcName}(${type.error.getCode('c++')} error) { return error; }`
+    )
+  }
+
+  return {
+    cxxType: actualType,
+    specializationName: name,
+    funcName: funcName,
+    cxxHeader: {
+      code: `
+using ${name} = ${actualType};
+${functions.join('\n')}
+      `.trim(),
+      requiredIncludes: type.getRequiredImports(),
     },
     dependencies: [],
   }
