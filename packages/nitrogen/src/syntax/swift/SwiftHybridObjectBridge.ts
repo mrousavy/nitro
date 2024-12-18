@@ -456,8 +456,10 @@ let __resultCpp = ${returnType.parseFromSwiftToCpp('__result', 'swift')}
 return bridge.${resultBridge.funcName}(__resultCpp)
 `.trim()
   } else {
-    body =
-      `try self.__implementation.${method.name}(${passParams.join(', ')})`.trim()
+    body = `
+try self.__implementation.${method.name}(${passParams.join(', ')})
+return bridge.${resultBridge.funcName}()
+`.trim()
   }
 
   return `
