@@ -154,6 +154,18 @@ function getTypeId(type: TSMorphType, isOptional: boolean): string {
   return key
 }
 
+export function addKnownType(
+  key: string,
+  type: Type,
+  language: Language
+): void {
+  if (knownTypes[language].has(key)) {
+    // type is already known
+    return
+  }
+  knownTypes[language].set(key, type)
+}
+
 /**
  * Create a new type (or return it from cache if it is already known)
  */

@@ -39,6 +39,7 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: AnyObject {
   func createMap() throws -> AnyMapHolder
   func mapRoundtrip(map: AnyMapHolder) throws -> AnyMapHolder
   func funcThatThrows() throws -> Double
+  func funcThatThrowsBeforePromise() throws -> Promise<Void>
   func throwError(error: Error) throws -> Void
   func tryOptionalParams(num: Double, boo: Bool, str: String?) throws -> String
   func tryMiddleParam(num: Double, boo: Bool?, str: String) throws -> String

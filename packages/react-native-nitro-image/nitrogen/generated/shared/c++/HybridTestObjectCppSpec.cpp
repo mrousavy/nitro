@@ -61,6 +61,7 @@ namespace margelo::nitro::image {
       prototype.registerHybridMethod("createMap", &HybridTestObjectCppSpec::createMap);
       prototype.registerHybridMethod("mapRoundtrip", &HybridTestObjectCppSpec::mapRoundtrip);
       prototype.registerHybridMethod("funcThatThrows", &HybridTestObjectCppSpec::funcThatThrows);
+      prototype.registerHybridMethod("funcThatThrowsBeforePromise", &HybridTestObjectCppSpec::funcThatThrowsBeforePromise);
       prototype.registerHybridMethod("throwError", &HybridTestObjectCppSpec::throwError);
       prototype.registerHybridMethod("tryOptionalParams", &HybridTestObjectCppSpec::tryOptionalParams);
       prototype.registerHybridMethod("tryMiddleParam", &HybridTestObjectCppSpec::tryMiddleParam);

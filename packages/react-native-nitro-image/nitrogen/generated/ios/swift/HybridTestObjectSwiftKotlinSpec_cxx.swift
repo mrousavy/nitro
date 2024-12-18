@@ -344,133 +344,140 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
 
   // Methods
   @inline(__always)
-  public func newTestObject() -> bridge.std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_ {
+  public func newTestObject() -> bridge.Result_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec__ {
     do {
       let __result = try self.__implementation.newTestObject()
-      return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_ in
+      let __resultCpp = { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_ in
         let __cxxWrapped = __result.getCxxWrapper()
         return __cxxWrapped.getCxxPart()
       }()
-    } catch {
-      let __message = "\(error.localizedDescription)"
-      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(__message))")
+      return bridge.create_Result_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec__(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec__(__exceptionPtr)
     }
   }
   
   @inline(__always)
-  public func simpleFunc() -> Void {
+  public func simpleFunc() -> bridge.Result_void_ {
     do {
       try self.__implementation.simpleFunc()
-      return 
-    } catch {
-      let __message = "\(error.localizedDescription)"
-      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(__message))")
+      return bridge.create_Result_void_()
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_void_(__exceptionPtr)
     }
   }
   
   @inline(__always)
-  public func addNumbers(a: Double, b: Double) -> Double {
+  public func addNumbers(a: Double, b: Double) -> bridge.Result_double_ {
     do {
       let __result = try self.__implementation.addNumbers(a: a, b: b)
-      return __result
-    } catch {
-      let __message = "\(error.localizedDescription)"
-      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(__message))")
+      let __resultCpp = __result
+      return bridge.create_Result_double_(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_double_(__exceptionPtr)
     }
   }
   
   @inline(__always)
-  public func addStrings(a: std.string, b: std.string) -> std.string {
+  public func addStrings(a: std.string, b: std.string) -> bridge.Result_std__string_ {
     do {
       let __result = try self.__implementation.addStrings(a: String(a), b: String(b))
-      return std.string(__result)
-    } catch {
-      let __message = "\(error.localizedDescription)"
-      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(__message))")
+      let __resultCpp = std.string(__result)
+      return bridge.create_Result_std__string_(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__string_(__exceptionPtr)
     }
   }
   
   @inline(__always)
-  public func multipleArguments(num: Double, str: std.string, boo: Bool) -> Void {
+  public func multipleArguments(num: Double, str: std.string, boo: Bool) -> bridge.Result_void_ {
     do {
       try self.__implementation.multipleArguments(num: num, str: String(str), boo: boo)
-      return 
-    } catch {
-      let __message = "\(error.localizedDescription)"
-      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(__message))")
+      return bridge.create_Result_void_()
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_void_(__exceptionPtr)
     }
   }
   
   @inline(__always)
-  public func bounceStrings(array: bridge.std__vector_std__string_) -> bridge.std__vector_std__string_ {
+  public func bounceStrings(array: bridge.std__vector_std__string_) -> bridge.Result_std__vector_std__string__ {
     do {
       let __result = try self.__implementation.bounceStrings(array: array.map({ __item in String(__item) }))
-      return { () -> bridge.std__vector_std__string_ in
+      let __resultCpp = { () -> bridge.std__vector_std__string_ in
         var __vector = bridge.create_std__vector_std__string_(__result.count)
         for __item in __result {
           __vector.push_back(std.string(__item))
         }
         return __vector
       }()
-    } catch {
-      let __message = "\(error.localizedDescription)"
-      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(__message))")
+      return bridge.create_Result_std__vector_std__string__(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__vector_std__string__(__exceptionPtr)
     }
   }
   
   @inline(__always)
-  public func bounceNumbers(array: bridge.std__vector_double_) -> bridge.std__vector_double_ {
+  public func bounceNumbers(array: bridge.std__vector_double_) -> bridge.Result_std__vector_double__ {
     do {
       let __result = try self.__implementation.bounceNumbers(array: array.map({ __item in __item }))
-      return { () -> bridge.std__vector_double_ in
+      let __resultCpp = { () -> bridge.std__vector_double_ in
         var __vector = bridge.create_std__vector_double_(__result.count)
         for __item in __result {
           __vector.push_back(__item)
         }
         return __vector
       }()
-    } catch {
-      let __message = "\(error.localizedDescription)"
-      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(__message))")
+      return bridge.create_Result_std__vector_double__(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__vector_double__(__exceptionPtr)
     }
   }
   
   @inline(__always)
-  public func bounceStructs(array: bridge.std__vector_Person_) -> bridge.std__vector_Person_ {
+  public func bounceStructs(array: bridge.std__vector_Person_) -> bridge.Result_std__vector_Person__ {
     do {
       let __result = try self.__implementation.bounceStructs(array: array.map({ __item in __item }))
-      return { () -> bridge.std__vector_Person_ in
+      let __resultCpp = { () -> bridge.std__vector_Person_ in
         var __vector = bridge.create_std__vector_Person_(__result.count)
         for __item in __result {
           __vector.push_back(__item)
         }
         return __vector
       }()
-    } catch {
-      let __message = "\(error.localizedDescription)"
-      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(__message))")
+      return bridge.create_Result_std__vector_Person__(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__vector_Person__(__exceptionPtr)
     }
   }
   
   @inline(__always)
-  public func bounceEnums(array: bridge.std__vector_Powertrain_) -> bridge.std__vector_Powertrain_ {
+  public func bounceEnums(array: bridge.std__vector_Powertrain_) -> bridge.Result_std__vector_Powertrain__ {
     do {
       let __result = try self.__implementation.bounceEnums(array: array.map({ __item in __item }))
-      return { () -> bridge.std__vector_Powertrain_ in
+      let __resultCpp = { () -> bridge.std__vector_Powertrain_ in
         var __vector = bridge.create_std__vector_Powertrain_(__result.count)
         for __item in __result {
           __vector.push_back(__item)
         }
         return __vector
       }()
-    } catch {
-      let __message = "\(error.localizedDescription)"
-      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(__message))")
+      return bridge.create_Result_std__vector_Powertrain__(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__vector_Powertrain__(__exceptionPtr)
     }
   }
   
   @inline(__always)
-  public func complexEnumCallback(array: bridge.std__vector_Powertrain_, callback: bridge.Func_void_std__vector_Powertrain_) -> Void {
+  public func complexEnumCallback(array: bridge.std__vector_Powertrain_, callback: bridge.Func_void_std__vector_Powertrain_) -> bridge.Result_void_ {
     do {
       try self.__implementation.complexEnumCallback(array: array.map({ __item in __item }), callback: { () -> (([Powertrain]) -> Void) in
         let __sharedClosure = bridge.share_Func_void_std__vector_Powertrain_(callback)
@@ -484,59 +491,80 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
         }())
         }
       }())
-      return 
-    } catch {
-      let __message = "\(error.localizedDescription)"
-      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(__message))")
+      return bridge.create_Result_void_()
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_void_(__exceptionPtr)
     }
   }
   
   @inline(__always)
-  public func createMap() -> margelo.nitro.TSharedMap {
+  public func createMap() -> bridge.Result_std__shared_ptr_AnyMap__ {
     do {
       let __result = try self.__implementation.createMap()
-      return __result.cppPart
-    } catch {
-      let __message = "\(error.localizedDescription)"
-      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(__message))")
+      let __resultCpp = __result.cppPart
+      return bridge.create_Result_std__shared_ptr_AnyMap__(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__shared_ptr_AnyMap__(__exceptionPtr)
     }
   }
   
   @inline(__always)
-  public func mapRoundtrip(map: margelo.nitro.TSharedMap) -> margelo.nitro.TSharedMap {
+  public func mapRoundtrip(map: margelo.nitro.TSharedMap) -> bridge.Result_std__shared_ptr_AnyMap__ {
     do {
       let __result = try self.__implementation.mapRoundtrip(map: AnyMapHolder(withCppPart: map))
-      return __result.cppPart
-    } catch {
-      let __message = "\(error.localizedDescription)"
-      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(__message))")
+      let __resultCpp = __result.cppPart
+      return bridge.create_Result_std__shared_ptr_AnyMap__(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__shared_ptr_AnyMap__(__exceptionPtr)
     }
   }
   
   @inline(__always)
-  public func funcThatThrows() -> Double {
+  public func funcThatThrows() -> bridge.Result_double_ {
     do {
       let __result = try self.__implementation.funcThatThrows()
-      return __result
-    } catch {
-      let __message = "\(error.localizedDescription)"
-      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(__message))")
+      let __resultCpp = __result
+      return bridge.create_Result_double_(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_double_(__exceptionPtr)
     }
   }
   
   @inline(__always)
-  public func throwError(error: std.exception_ptr) -> Void {
+  public func funcThatThrowsBeforePromise() -> bridge.Result_std__shared_ptr_Promise_void___ {
+    do {
+      let __result = try self.__implementation.funcThatThrowsBeforePromise()
+      let __resultCpp = { () -> bridge.std__shared_ptr_Promise_void__ in
+        let __promise = bridge.create_std__shared_ptr_Promise_void__()
+        __result
+          .then({ __result in __promise.pointee.resolve() })
+          .catch({ __error in __promise.pointee.reject(__error.toCpp()) })
+        return __promise
+      }()
+      return bridge.create_Result_std__shared_ptr_Promise_void___(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__shared_ptr_Promise_void___(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
+  public func throwError(error: std.exception_ptr) -> bridge.Result_void_ {
     do {
       try self.__implementation.throwError(error: RuntimeError.from(cppError: error))
-      return 
-    } catch {
-      let __message = "\(error.localizedDescription)"
-      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(__message))")
+      return bridge.create_Result_void_()
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_void_(__exceptionPtr)
     }
   }
   
   @inline(__always)
-  public func tryOptionalParams(num: Double, boo: Bool, str: bridge.std__optional_std__string_) -> std.string {
+  public func tryOptionalParams(num: Double, boo: Bool, str: bridge.std__optional_std__string_) -> bridge.Result_std__string_ {
     do {
       let __result = try self.__implementation.tryOptionalParams(num: num, boo: boo, str: { () -> String? in
         if let __unwrapped = str.value {
@@ -545,105 +573,112 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
           return nil
         }
       }())
-      return std.string(__result)
-    } catch {
-      let __message = "\(error.localizedDescription)"
-      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(__message))")
+      let __resultCpp = std.string(__result)
+      return bridge.create_Result_std__string_(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__string_(__exceptionPtr)
     }
   }
   
   @inline(__always)
-  public func tryMiddleParam(num: Double, boo: bridge.std__optional_bool_, str: std.string) -> std.string {
+  public func tryMiddleParam(num: Double, boo: bridge.std__optional_bool_, str: std.string) -> bridge.Result_std__string_ {
     do {
       let __result = try self.__implementation.tryMiddleParam(num: num, boo: boo.value, str: String(str))
-      return std.string(__result)
-    } catch {
-      let __message = "\(error.localizedDescription)"
-      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(__message))")
+      let __resultCpp = std.string(__result)
+      return bridge.create_Result_std__string_(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__string_(__exceptionPtr)
     }
   }
   
   @inline(__always)
-  public func tryOptionalEnum(value: bridge.std__optional_Powertrain_) -> bridge.std__optional_Powertrain_ {
+  public func tryOptionalEnum(value: bridge.std__optional_Powertrain_) -> bridge.Result_std__optional_Powertrain__ {
     do {
       let __result = try self.__implementation.tryOptionalEnum(value: value.value)
-      return { () -> bridge.std__optional_Powertrain_ in
+      let __resultCpp = { () -> bridge.std__optional_Powertrain_ in
         if let __unwrappedValue = __result {
           return bridge.create_std__optional_Powertrain_(__unwrappedValue)
         } else {
           return .init()
         }
       }()
-    } catch {
-      let __message = "\(error.localizedDescription)"
-      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(__message))")
+      return bridge.create_Result_std__optional_Powertrain__(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__optional_Powertrain__(__exceptionPtr)
     }
   }
   
   @inline(__always)
-  public func calculateFibonacciSync(value: Double) -> Int64 {
+  public func calculateFibonacciSync(value: Double) -> bridge.Result_int64_t_ {
     do {
       let __result = try self.__implementation.calculateFibonacciSync(value: value)
-      return __result
-    } catch {
-      let __message = "\(error.localizedDescription)"
-      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(__message))")
+      let __resultCpp = __result
+      return bridge.create_Result_int64_t_(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_int64_t_(__exceptionPtr)
     }
   }
   
   @inline(__always)
-  public func calculateFibonacciAsync(value: Double) -> bridge.std__shared_ptr_Promise_int64_t__ {
+  public func calculateFibonacciAsync(value: Double) -> bridge.Result_std__shared_ptr_Promise_int64_t___ {
     do {
       let __result = try self.__implementation.calculateFibonacciAsync(value: value)
-      return { () -> bridge.std__shared_ptr_Promise_int64_t__ in
+      let __resultCpp = { () -> bridge.std__shared_ptr_Promise_int64_t__ in
         let __promise = bridge.create_std__shared_ptr_Promise_int64_t__()
         __result
           .then({ __result in __promise.pointee.resolve(__result) })
           .catch({ __error in __promise.pointee.reject(__error.toCpp()) })
         return __promise
       }()
-    } catch {
-      let __message = "\(error.localizedDescription)"
-      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(__message))")
+      return bridge.create_Result_std__shared_ptr_Promise_int64_t___(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__shared_ptr_Promise_int64_t___(__exceptionPtr)
     }
   }
   
   @inline(__always)
-  public func wait(seconds: Double) -> bridge.std__shared_ptr_Promise_void__ {
+  public func wait(seconds: Double) -> bridge.Result_std__shared_ptr_Promise_void___ {
     do {
       let __result = try self.__implementation.wait(seconds: seconds)
-      return { () -> bridge.std__shared_ptr_Promise_void__ in
+      let __resultCpp = { () -> bridge.std__shared_ptr_Promise_void__ in
         let __promise = bridge.create_std__shared_ptr_Promise_void__()
         __result
           .then({ __result in __promise.pointee.resolve() })
           .catch({ __error in __promise.pointee.reject(__error.toCpp()) })
         return __promise
       }()
-    } catch {
-      let __message = "\(error.localizedDescription)"
-      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(__message))")
+      return bridge.create_Result_std__shared_ptr_Promise_void___(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__shared_ptr_Promise_void___(__exceptionPtr)
     }
   }
   
   @inline(__always)
-  public func promiseThrows() -> bridge.std__shared_ptr_Promise_void__ {
+  public func promiseThrows() -> bridge.Result_std__shared_ptr_Promise_void___ {
     do {
       let __result = try self.__implementation.promiseThrows()
-      return { () -> bridge.std__shared_ptr_Promise_void__ in
+      let __resultCpp = { () -> bridge.std__shared_ptr_Promise_void__ in
         let __promise = bridge.create_std__shared_ptr_Promise_void__()
         __result
           .then({ __result in __promise.pointee.resolve() })
           .catch({ __error in __promise.pointee.reject(__error.toCpp()) })
         return __promise
       }()
-    } catch {
-      let __message = "\(error.localizedDescription)"
-      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(__message))")
+      return bridge.create_Result_std__shared_ptr_Promise_void___(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__shared_ptr_Promise_void___(__exceptionPtr)
     }
   }
   
   @inline(__always)
-  public func awaitAndGetPromise(promise: bridge.std__shared_ptr_Promise_double__) -> bridge.std__shared_ptr_Promise_double__ {
+  public func awaitAndGetPromise(promise: bridge.std__shared_ptr_Promise_double__) -> bridge.Result_std__shared_ptr_Promise_double___ {
     do {
       let __result = try self.__implementation.awaitAndGetPromise(promise: { () -> Promise<Double> in
         let __promise = Promise<Double>()
@@ -701,21 +736,22 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
         promise.pointee.addOnRejectedListener(__rejecterCpp)
         return __promise
       }())
-      return { () -> bridge.std__shared_ptr_Promise_double__ in
+      let __resultCpp = { () -> bridge.std__shared_ptr_Promise_double__ in
         let __promise = bridge.create_std__shared_ptr_Promise_double__()
         __result
           .then({ __result in __promise.pointee.resolve(__result) })
           .catch({ __error in __promise.pointee.reject(__error.toCpp()) })
         return __promise
       }()
-    } catch {
-      let __message = "\(error.localizedDescription)"
-      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(__message))")
+      return bridge.create_Result_std__shared_ptr_Promise_double___(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__shared_ptr_Promise_double___(__exceptionPtr)
     }
   }
   
   @inline(__always)
-  public func awaitAndGetComplexPromise(promise: bridge.std__shared_ptr_Promise_Car__) -> bridge.std__shared_ptr_Promise_Car__ {
+  public func awaitAndGetComplexPromise(promise: bridge.std__shared_ptr_Promise_Car__) -> bridge.Result_std__shared_ptr_Promise_Car___ {
     do {
       let __result = try self.__implementation.awaitAndGetComplexPromise(promise: { () -> Promise<Car> in
         let __promise = Promise<Car>()
@@ -773,21 +809,22 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
         promise.pointee.addOnRejectedListener(__rejecterCpp)
         return __promise
       }())
-      return { () -> bridge.std__shared_ptr_Promise_Car__ in
+      let __resultCpp = { () -> bridge.std__shared_ptr_Promise_Car__ in
         let __promise = bridge.create_std__shared_ptr_Promise_Car__()
         __result
           .then({ __result in __promise.pointee.resolve(__result) })
           .catch({ __error in __promise.pointee.reject(__error.toCpp()) })
         return __promise
       }()
-    } catch {
-      let __message = "\(error.localizedDescription)"
-      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(__message))")
+      return bridge.create_Result_std__shared_ptr_Promise_Car___(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__shared_ptr_Promise_Car___(__exceptionPtr)
     }
   }
   
   @inline(__always)
-  public func awaitPromise(promise: bridge.std__shared_ptr_Promise_void__) -> bridge.std__shared_ptr_Promise_void__ {
+  public func awaitPromise(promise: bridge.std__shared_ptr_Promise_void__) -> bridge.Result_std__shared_ptr_Promise_void___ {
     do {
       let __result = try self.__implementation.awaitPromise(promise: { () -> Promise<Void> in
         let __promise = Promise<Void>()
@@ -822,21 +859,22 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
         promise.pointee.addOnRejectedListener(__rejecterCpp)
         return __promise
       }())
-      return { () -> bridge.std__shared_ptr_Promise_void__ in
+      let __resultCpp = { () -> bridge.std__shared_ptr_Promise_void__ in
         let __promise = bridge.create_std__shared_ptr_Promise_void__()
         __result
           .then({ __result in __promise.pointee.resolve() })
           .catch({ __error in __promise.pointee.reject(__error.toCpp()) })
         return __promise
       }()
-    } catch {
-      let __message = "\(error.localizedDescription)"
-      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(__message))")
+      return bridge.create_Result_std__shared_ptr_Promise_void___(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__shared_ptr_Promise_void___(__exceptionPtr)
     }
   }
   
   @inline(__always)
-  public func callCallback(callback: bridge.Func_void) -> Void {
+  public func callCallback(callback: bridge.Func_void) -> bridge.Result_void_ {
     do {
       try self.__implementation.callCallback(callback: { () -> (() -> Void) in
         let __sharedClosure = bridge.share_Func_void(callback)
@@ -844,15 +882,15 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
           __sharedClosure.pointee.call()
         }
       }())
-      return 
-    } catch {
-      let __message = "\(error.localizedDescription)"
-      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(__message))")
+      return bridge.create_Result_void_()
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_void_(__exceptionPtr)
     }
   }
   
   @inline(__always)
-  public func callAll(first: bridge.Func_void, second: bridge.Func_void, third: bridge.Func_void) -> Void {
+  public func callAll(first: bridge.Func_void, second: bridge.Func_void, third: bridge.Func_void) -> bridge.Result_void_ {
     do {
       try self.__implementation.callAll(first: { () -> (() -> Void) in
         let __sharedClosure = bridge.share_Func_void(first)
@@ -870,15 +908,15 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
           __sharedClosure.pointee.call()
         }
       }())
-      return 
-    } catch {
-      let __message = "\(error.localizedDescription)"
-      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(__message))")
+      return bridge.create_Result_void_()
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_void_(__exceptionPtr)
     }
   }
   
   @inline(__always)
-  public func callWithOptional(value: bridge.std__optional_double_, callback: bridge.Func_void_std__optional_double_) -> Void {
+  public func callWithOptional(value: bridge.std__optional_double_, callback: bridge.Func_void_std__optional_double_) -> bridge.Result_void_ {
     do {
       try self.__implementation.callWithOptional(value: value.value, callback: { () -> ((Double?) -> Void) in
         let __sharedClosure = bridge.share_Func_void_std__optional_double_(callback)
@@ -892,15 +930,15 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
         }())
         }
       }())
-      return 
-    } catch {
-      let __message = "\(error.localizedDescription)"
-      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(__message))")
+      return bridge.create_Result_void_()
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_void_(__exceptionPtr)
     }
   }
   
   @inline(__always)
-  public func getValueFromJSCallbackAndWait(getValue: bridge.Func_std__shared_ptr_Promise_double__) -> bridge.std__shared_ptr_Promise_double__ {
+  public func getValueFromJSCallbackAndWait(getValue: bridge.Func_std__shared_ptr_Promise_double__) -> bridge.Result_std__shared_ptr_Promise_double___ {
     do {
       let __result = try self.__implementation.getValueFromJSCallbackAndWait(getValue: { () -> (() -> Promise<Double>) in
         let __sharedClosure = bridge.share_Func_std__shared_ptr_Promise_double__(getValue)
@@ -964,21 +1002,22 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
           }()
         }
       }())
-      return { () -> bridge.std__shared_ptr_Promise_double__ in
+      let __resultCpp = { () -> bridge.std__shared_ptr_Promise_double__ in
         let __promise = bridge.create_std__shared_ptr_Promise_double__()
         __result
           .then({ __result in __promise.pointee.resolve(__result) })
           .catch({ __error in __promise.pointee.reject(__error.toCpp()) })
         return __promise
       }()
-    } catch {
-      let __message = "\(error.localizedDescription)"
-      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(__message))")
+      return bridge.create_Result_std__shared_ptr_Promise_double___(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__shared_ptr_Promise_double___(__exceptionPtr)
     }
   }
   
   @inline(__always)
-  public func getValueFromJsCallback(callback: bridge.Func_std__shared_ptr_Promise_std__string__, andThenCall: bridge.Func_void_std__string) -> bridge.std__shared_ptr_Promise_void__ {
+  public func getValueFromJsCallback(callback: bridge.Func_std__shared_ptr_Promise_std__string__, andThenCall: bridge.Func_void_std__string) -> bridge.Result_std__shared_ptr_Promise_void___ {
     do {
       let __result = try self.__implementation.getValueFromJsCallback(callback: { () -> (() -> Promise<String>) in
         let __sharedClosure = bridge.share_Func_std__shared_ptr_Promise_std__string__(callback)
@@ -1047,219 +1086,233 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
           __sharedClosure.pointee.call(std.string(__valueFromJs))
         }
       }())
-      return { () -> bridge.std__shared_ptr_Promise_void__ in
+      let __resultCpp = { () -> bridge.std__shared_ptr_Promise_void__ in
         let __promise = bridge.create_std__shared_ptr_Promise_void__()
         __result
           .then({ __result in __promise.pointee.resolve() })
           .catch({ __error in __promise.pointee.reject(__error.toCpp()) })
         return __promise
       }()
-    } catch {
-      let __message = "\(error.localizedDescription)"
-      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(__message))")
+      return bridge.create_Result_std__shared_ptr_Promise_void___(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__shared_ptr_Promise_void___(__exceptionPtr)
     }
   }
   
   @inline(__always)
-  public func getCar() -> Car {
+  public func getCar() -> bridge.Result_Car_ {
     do {
       let __result = try self.__implementation.getCar()
-      return __result
-    } catch {
-      let __message = "\(error.localizedDescription)"
-      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(__message))")
+      let __resultCpp = __result
+      return bridge.create_Result_Car_(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_Car_(__exceptionPtr)
     }
   }
   
   @inline(__always)
-  public func isCarElectric(car: Car) -> Bool {
+  public func isCarElectric(car: Car) -> bridge.Result_bool_ {
     do {
       let __result = try self.__implementation.isCarElectric(car: car)
-      return __result
-    } catch {
-      let __message = "\(error.localizedDescription)"
-      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(__message))")
+      let __resultCpp = __result
+      return bridge.create_Result_bool_(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_bool_(__exceptionPtr)
     }
   }
   
   @inline(__always)
-  public func getDriver(car: Car) -> bridge.std__optional_Person_ {
+  public func getDriver(car: Car) -> bridge.Result_std__optional_Person__ {
     do {
       let __result = try self.__implementation.getDriver(car: car)
-      return { () -> bridge.std__optional_Person_ in
+      let __resultCpp = { () -> bridge.std__optional_Person_ in
         if let __unwrappedValue = __result {
           return bridge.create_std__optional_Person_(__unwrappedValue)
         } else {
           return .init()
         }
       }()
-    } catch {
-      let __message = "\(error.localizedDescription)"
-      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(__message))")
+      return bridge.create_Result_std__optional_Person__(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__optional_Person__(__exceptionPtr)
     }
   }
   
   @inline(__always)
-  public func createArrayBuffer() -> ArrayBufferHolder {
+  public func createArrayBuffer() -> bridge.Result_std__shared_ptr_ArrayBuffer__ {
     do {
       let __result = try self.__implementation.createArrayBuffer()
-      return __result
-    } catch {
-      let __message = "\(error.localizedDescription)"
-      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(__message))")
+      let __resultCpp = __result.getArrayBuffer()
+      return bridge.create_Result_std__shared_ptr_ArrayBuffer__(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__shared_ptr_ArrayBuffer__(__exceptionPtr)
     }
   }
   
   @inline(__always)
-  public func getBufferLastItem(buffer: ArrayBufferHolder) -> Double {
+  public func getBufferLastItem(buffer: ArrayBufferHolder) -> bridge.Result_double_ {
     do {
       let __result = try self.__implementation.getBufferLastItem(buffer: buffer)
-      return __result
-    } catch {
-      let __message = "\(error.localizedDescription)"
-      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(__message))")
+      let __resultCpp = __result
+      return bridge.create_Result_double_(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_double_(__exceptionPtr)
     }
   }
   
   @inline(__always)
-  public func setAllValuesTo(buffer: ArrayBufferHolder, value: Double) -> Void {
+  public func setAllValuesTo(buffer: ArrayBufferHolder, value: Double) -> bridge.Result_void_ {
     do {
       try self.__implementation.setAllValuesTo(buffer: buffer, value: value)
-      return 
-    } catch {
-      let __message = "\(error.localizedDescription)"
-      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(__message))")
+      return bridge.create_Result_void_()
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_void_(__exceptionPtr)
     }
   }
   
   @inline(__always)
-  public func createArrayBufferAsync() -> bridge.std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___ {
+  public func createArrayBufferAsync() -> bridge.Result_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer____ {
     do {
       let __result = try self.__implementation.createArrayBufferAsync()
-      return { () -> bridge.std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___ in
+      let __resultCpp = { () -> bridge.std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___ in
         let __promise = bridge.create_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___()
         __result
           .then({ __result in __promise.pointee.resolve(__result.getArrayBuffer()) })
           .catch({ __error in __promise.pointee.reject(__error.toCpp()) })
         return __promise
       }()
-    } catch {
-      let __message = "\(error.localizedDescription)"
-      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(__message))")
+      return bridge.create_Result_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer____(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer____(__exceptionPtr)
     }
   }
   
   @inline(__always)
-  public func createChild() -> bridge.std__shared_ptr_margelo__nitro__image__HybridChildSpec_ {
+  public func createChild() -> bridge.Result_std__shared_ptr_margelo__nitro__image__HybridChildSpec__ {
     do {
       let __result = try self.__implementation.createChild()
-      return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridChildSpec_ in
+      let __resultCpp = { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridChildSpec_ in
         let __cxxWrapped = __result.getCxxWrapper()
         return __cxxWrapped.getCxxPart()
       }()
-    } catch {
-      let __message = "\(error.localizedDescription)"
-      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(__message))")
+      return bridge.create_Result_std__shared_ptr_margelo__nitro__image__HybridChildSpec__(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__shared_ptr_margelo__nitro__image__HybridChildSpec__(__exceptionPtr)
     }
   }
   
   @inline(__always)
-  public func createBase() -> bridge.std__shared_ptr_margelo__nitro__image__HybridBaseSpec_ {
+  public func createBase() -> bridge.Result_std__shared_ptr_margelo__nitro__image__HybridBaseSpec__ {
     do {
       let __result = try self.__implementation.createBase()
-      return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridBaseSpec_ in
+      let __resultCpp = { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridBaseSpec_ in
         let __cxxWrapped = __result.getCxxWrapper()
         return __cxxWrapped.getCxxPart()
       }()
-    } catch {
-      let __message = "\(error.localizedDescription)"
-      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(__message))")
+      return bridge.create_Result_std__shared_ptr_margelo__nitro__image__HybridBaseSpec__(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__shared_ptr_margelo__nitro__image__HybridBaseSpec__(__exceptionPtr)
     }
   }
   
   @inline(__always)
-  public func createBaseActualChild() -> bridge.std__shared_ptr_margelo__nitro__image__HybridBaseSpec_ {
+  public func createBaseActualChild() -> bridge.Result_std__shared_ptr_margelo__nitro__image__HybridBaseSpec__ {
     do {
       let __result = try self.__implementation.createBaseActualChild()
-      return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridBaseSpec_ in
+      let __resultCpp = { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridBaseSpec_ in
         let __cxxWrapped = __result.getCxxWrapper()
         return __cxxWrapped.getCxxPart()
       }()
-    } catch {
-      let __message = "\(error.localizedDescription)"
-      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(__message))")
+      return bridge.create_Result_std__shared_ptr_margelo__nitro__image__HybridBaseSpec__(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__shared_ptr_margelo__nitro__image__HybridBaseSpec__(__exceptionPtr)
     }
   }
   
   @inline(__always)
-  public func bounceChild(child: bridge.std__shared_ptr_margelo__nitro__image__HybridChildSpec_) -> bridge.std__shared_ptr_margelo__nitro__image__HybridChildSpec_ {
+  public func bounceChild(child: bridge.std__shared_ptr_margelo__nitro__image__HybridChildSpec_) -> bridge.Result_std__shared_ptr_margelo__nitro__image__HybridChildSpec__ {
     do {
       let __result = try self.__implementation.bounceChild(child: { () -> HybridChildSpec in
         let __unsafePointer = bridge.get_std__shared_ptr_margelo__nitro__image__HybridChildSpec_(child)
         let __instance = HybridChildSpec_cxx.fromUnsafe(__unsafePointer)
         return __instance.getHybridChildSpec()
       }())
-      return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridChildSpec_ in
+      let __resultCpp = { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridChildSpec_ in
         let __cxxWrapped = __result.getCxxWrapper()
         return __cxxWrapped.getCxxPart()
       }()
-    } catch {
-      let __message = "\(error.localizedDescription)"
-      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(__message))")
+      return bridge.create_Result_std__shared_ptr_margelo__nitro__image__HybridChildSpec__(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__shared_ptr_margelo__nitro__image__HybridChildSpec__(__exceptionPtr)
     }
   }
   
   @inline(__always)
-  public func bounceBase(base: bridge.std__shared_ptr_margelo__nitro__image__HybridBaseSpec_) -> bridge.std__shared_ptr_margelo__nitro__image__HybridBaseSpec_ {
+  public func bounceBase(base: bridge.std__shared_ptr_margelo__nitro__image__HybridBaseSpec_) -> bridge.Result_std__shared_ptr_margelo__nitro__image__HybridBaseSpec__ {
     do {
       let __result = try self.__implementation.bounceBase(base: { () -> HybridBaseSpec in
         let __unsafePointer = bridge.get_std__shared_ptr_margelo__nitro__image__HybridBaseSpec_(base)
         let __instance = HybridBaseSpec_cxx.fromUnsafe(__unsafePointer)
         return __instance.getHybridBaseSpec()
       }())
-      return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridBaseSpec_ in
+      let __resultCpp = { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridBaseSpec_ in
         let __cxxWrapped = __result.getCxxWrapper()
         return __cxxWrapped.getCxxPart()
       }()
-    } catch {
-      let __message = "\(error.localizedDescription)"
-      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(__message))")
+      return bridge.create_Result_std__shared_ptr_margelo__nitro__image__HybridBaseSpec__(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__shared_ptr_margelo__nitro__image__HybridBaseSpec__(__exceptionPtr)
     }
   }
   
   @inline(__always)
-  public func bounceChildBase(child: bridge.std__shared_ptr_margelo__nitro__image__HybridChildSpec_) -> bridge.std__shared_ptr_margelo__nitro__image__HybridBaseSpec_ {
+  public func bounceChildBase(child: bridge.std__shared_ptr_margelo__nitro__image__HybridChildSpec_) -> bridge.Result_std__shared_ptr_margelo__nitro__image__HybridBaseSpec__ {
     do {
       let __result = try self.__implementation.bounceChildBase(child: { () -> HybridChildSpec in
         let __unsafePointer = bridge.get_std__shared_ptr_margelo__nitro__image__HybridChildSpec_(child)
         let __instance = HybridChildSpec_cxx.fromUnsafe(__unsafePointer)
         return __instance.getHybridChildSpec()
       }())
-      return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridBaseSpec_ in
+      let __resultCpp = { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridBaseSpec_ in
         let __cxxWrapped = __result.getCxxWrapper()
         return __cxxWrapped.getCxxPart()
       }()
-    } catch {
-      let __message = "\(error.localizedDescription)"
-      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(__message))")
+      return bridge.create_Result_std__shared_ptr_margelo__nitro__image__HybridBaseSpec__(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__shared_ptr_margelo__nitro__image__HybridBaseSpec__(__exceptionPtr)
     }
   }
   
   @inline(__always)
-  public func castBase(base: bridge.std__shared_ptr_margelo__nitro__image__HybridBaseSpec_) -> bridge.std__shared_ptr_margelo__nitro__image__HybridChildSpec_ {
+  public func castBase(base: bridge.std__shared_ptr_margelo__nitro__image__HybridBaseSpec_) -> bridge.Result_std__shared_ptr_margelo__nitro__image__HybridChildSpec__ {
     do {
       let __result = try self.__implementation.castBase(base: { () -> HybridBaseSpec in
         let __unsafePointer = bridge.get_std__shared_ptr_margelo__nitro__image__HybridBaseSpec_(base)
         let __instance = HybridBaseSpec_cxx.fromUnsafe(__unsafePointer)
         return __instance.getHybridBaseSpec()
       }())
-      return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridChildSpec_ in
+      let __resultCpp = { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridChildSpec_ in
         let __cxxWrapped = __result.getCxxWrapper()
         return __cxxWrapped.getCxxPart()
       }()
-    } catch {
-      let __message = "\(error.localizedDescription)"
-      fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \(__message))")
+      return bridge.create_Result_std__shared_ptr_margelo__nitro__image__HybridChildSpec__(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__shared_ptr_margelo__nitro__image__HybridChildSpec__(__exceptionPtr)
     }
   }
 }
