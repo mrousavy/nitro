@@ -23,7 +23,7 @@ export class ResultWrappingType implements Type {
   getCode(language: Language): string {
     switch (language) {
       case 'c++':
-        return `std::expected<${this.result.getCode(language)}, ${this.error.getCode(language)}>`
+        return `Result<${this.result.getCode(language)}>`
       case 'swift':
         return this.result.getCode(language)
       default:
@@ -39,7 +39,7 @@ export class ResultWrappingType implements Type {
     return [
       {
         language: 'c++',
-        name: 'expected',
+        name: 'NitroModules/Result.hpp',
         space: 'system',
       },
       ...this.result.getRequiredImports(),

@@ -101,49 +101,52 @@ public class HybridImageFactorySpec_cxx {
 
   // Methods
   @inline(__always)
-  public func loadImageFromFile(path: std.string) -> bridge.std__expected_std__shared_ptr_margelo__nitro__image__HybridImageSpec___std__exception_ptr_ {
+  public func loadImageFromFile(path: std.string) -> bridge.Result_std__shared_ptr_margelo__nitro__image__HybridImageSpec__ {
     do {
       let __result = try self.__implementation.loadImageFromFile(path: String(path))
       let __resultCpp = { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridImageSpec_ in
         let __cxxWrapped = __result.getCxxWrapper()
         return __cxxWrapped.getCxxPart()
       }()
-      return bridge.create_std__expected_std__shared_ptr_margelo__nitro__image__HybridImageSpec___std__exception_ptr_(__resultCpp)
-    } catch {
-      return bridge.create_std__expected_std__shared_ptr_margelo__nitro__image__HybridImageSpec___std__exception_ptr_(error)
+      return bridge.create_Result_std__shared_ptr_margelo__nitro__image__HybridImageSpec__(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__shared_ptr_margelo__nitro__image__HybridImageSpec__(__exceptionPtr)
     }
   }
   
   @inline(__always)
-  public func loadImageFromURL(path: std.string) -> bridge.std__expected_std__shared_ptr_margelo__nitro__image__HybridImageSpec___std__exception_ptr_ {
+  public func loadImageFromURL(path: std.string) -> bridge.Result_std__shared_ptr_margelo__nitro__image__HybridImageSpec__ {
     do {
       let __result = try self.__implementation.loadImageFromURL(path: String(path))
       let __resultCpp = { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridImageSpec_ in
         let __cxxWrapped = __result.getCxxWrapper()
         return __cxxWrapped.getCxxPart()
       }()
-      return bridge.create_std__expected_std__shared_ptr_margelo__nitro__image__HybridImageSpec___std__exception_ptr_(__resultCpp)
-    } catch {
-      return bridge.create_std__expected_std__shared_ptr_margelo__nitro__image__HybridImageSpec___std__exception_ptr_(error)
+      return bridge.create_Result_std__shared_ptr_margelo__nitro__image__HybridImageSpec__(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__shared_ptr_margelo__nitro__image__HybridImageSpec__(__exceptionPtr)
     }
   }
   
   @inline(__always)
-  public func loadImageFromSystemName(path: std.string) -> bridge.std__expected_std__shared_ptr_margelo__nitro__image__HybridImageSpec___std__exception_ptr_ {
+  public func loadImageFromSystemName(path: std.string) -> bridge.Result_std__shared_ptr_margelo__nitro__image__HybridImageSpec__ {
     do {
       let __result = try self.__implementation.loadImageFromSystemName(path: String(path))
       let __resultCpp = { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridImageSpec_ in
         let __cxxWrapped = __result.getCxxWrapper()
         return __cxxWrapped.getCxxPart()
       }()
-      return bridge.create_std__expected_std__shared_ptr_margelo__nitro__image__HybridImageSpec___std__exception_ptr_(__resultCpp)
-    } catch {
-      return bridge.create_std__expected_std__shared_ptr_margelo__nitro__image__HybridImageSpec___std__exception_ptr_(error)
+      return bridge.create_Result_std__shared_ptr_margelo__nitro__image__HybridImageSpec__(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__shared_ptr_margelo__nitro__image__HybridImageSpec__(__exceptionPtr)
     }
   }
   
   @inline(__always)
-  public func bounceBack(image: bridge.std__shared_ptr_margelo__nitro__image__HybridImageSpec_) -> bridge.std__expected_std__shared_ptr_margelo__nitro__image__HybridImageSpec___std__exception_ptr_ {
+  public func bounceBack(image: bridge.std__shared_ptr_margelo__nitro__image__HybridImageSpec_) -> bridge.Result_std__shared_ptr_margelo__nitro__image__HybridImageSpec__ {
     do {
       let __result = try self.__implementation.bounceBack(image: { () -> HybridImageSpec in
         let __unsafePointer = bridge.get_std__shared_ptr_margelo__nitro__image__HybridImageSpec_(image)
@@ -154,9 +157,10 @@ public class HybridImageFactorySpec_cxx {
         let __cxxWrapped = __result.getCxxWrapper()
         return __cxxWrapped.getCxxPart()
       }()
-      return bridge.create_std__expected_std__shared_ptr_margelo__nitro__image__HybridImageSpec___std__exception_ptr_(__resultCpp)
-    } catch {
-      return bridge.create_std__expected_std__shared_ptr_margelo__nitro__image__HybridImageSpec___std__exception_ptr_(error)
+      return bridge.create_Result_std__shared_ptr_margelo__nitro__image__HybridImageSpec__(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__shared_ptr_margelo__nitro__image__HybridImageSpec__(__exceptionPtr)
     }
   }
 }

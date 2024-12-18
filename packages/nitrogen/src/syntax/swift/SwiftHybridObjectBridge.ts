@@ -240,7 +240,7 @@ return ${bridged.parseFromSwiftToCpp('__result', 'c++')};
         // func returns something
         body = `
 auto __result = _swiftPart.${m.name}(${params});
-if (!__result.has_value()) [[unlikely]] {
+if (!__result.hasValue()) [[unlikely]] {
   std::rethrow_exception(__result.error());
 }
 auto __value = std::move(__result.value());
@@ -250,7 +250,7 @@ return ${bridgedReturnType.parseFromSwiftToCpp('__value', 'c++')};
         // void func
         body = `
 auto __result = _swiftPart.${m.name}(${params});
-if (!__result.has_value()) [[unlikely]] {
+if (!__result.hasValue()) [[unlikely]] {
   std::rethrow_exception(__result.error());
 }
         `.trim()
@@ -437,6 +437,7 @@ function getMethodForwardImplementation(method: Method): string {
     throw new Error(
       `Result type (${bridgedResultType.getTypeCode('c++')}) does not have a bridge!`
     )
+  const bridgedErrorType = new SwiftCxxBridgedType(resultType.error)
 
   const returnType = new SwiftCxxBridgedType(method.returnType)
   const params = method.parameters.map((p) => {
@@ -464,8 +465,9 @@ return bridge.${resultBridge.funcName}(__resultCpp)
 public func ${method.name}(${params.join(', ')}) -> ${bridgedResultType.getTypeCode('swift')} {
   do {
     ${indent(body, '    ')}
-  } catch {
-    return bridge.${resultBridge.funcName}(error)
+  } catch (let __error) {
+    let __exceptionPtr = ${indent(bridgedErrorType.parseFromSwiftToCpp('__error', 'swift'), '    ')}
+    return bridge.${resultBridge.funcName}(__exceptionPtr)
   }
 }
   `.trim()

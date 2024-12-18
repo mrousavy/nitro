@@ -58,7 +58,7 @@ namespace margelo::nitro::image {
     // Methods
     inline std::shared_ptr<margelo::nitro::image::HybridImageSpec> loadImageFromFile(const std::string& path) override {
       auto __result = _swiftPart.loadImageFromFile(path);
-      if (!__result.has_value()) [[unlikely]] {
+      if (!__result.hasValue()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
       auto __value = std::move(__result.value());
@@ -66,7 +66,7 @@ namespace margelo::nitro::image {
     }
     inline std::shared_ptr<margelo::nitro::image::HybridImageSpec> loadImageFromURL(const std::string& path) override {
       auto __result = _swiftPart.loadImageFromURL(path);
-      if (!__result.has_value()) [[unlikely]] {
+      if (!__result.hasValue()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
       auto __value = std::move(__result.value());
@@ -74,7 +74,7 @@ namespace margelo::nitro::image {
     }
     inline std::shared_ptr<margelo::nitro::image::HybridImageSpec> loadImageFromSystemName(const std::string& path) override {
       auto __result = _swiftPart.loadImageFromSystemName(path);
-      if (!__result.has_value()) [[unlikely]] {
+      if (!__result.hasValue()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
       auto __value = std::move(__result.value());
@@ -82,7 +82,7 @@ namespace margelo::nitro::image {
     }
     inline std::shared_ptr<margelo::nitro::image::HybridImageSpec> bounceBack(const std::shared_ptr<margelo::nitro::image::HybridImageSpec>& image) override {
       auto __result = _swiftPart.bounceBack(image);
-      if (!__result.has_value()) [[unlikely]] {
+      if (!__result.hasValue()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
       auto __value = std::move(__result.value());

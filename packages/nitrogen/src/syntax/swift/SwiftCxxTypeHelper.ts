@@ -510,7 +510,7 @@ inline ${actualType} create_${name}(${typesSignature}) {
 }
 
 /**
- * Create a C++ `create_result` function that can be called from Swift to create a `std::expected<T>`.
+ * Create a C++ `create_result` function that can be called from Swift to create a `Result<T>`.
  */
 function createCxxResultWrapperSwiftHelper(
   type: ResultWrappingType
@@ -522,13 +522,21 @@ function createCxxResultWrapperSwiftHelper(
   const functions: string[] = []
   if (type.result.kind === 'void') {
     functions.push(
-      `inline ${name} ${funcName}() { return {}; }`,
-      `inline ${name} ${funcName}(${type.error.getCode('c++')} error) { return std::unexpected(error); }`
+      `inline ${name} ${funcName}() { return Result::withValue(); }`,
+      `inline ${name} ${funcName}(const ${type.error.getCode('c++')}& error) { return Result::withError(error); }`
     )
   } else {
+    if (type.result.canBePassedByReference) {
+      functions.push(
+        `inline ${name} ${funcName}(const ${type.result.getCode('c++')}& value) { return Result::withValue(value); }`
+      )
+    } else {
+      functions.push(
+        `inline ${name} ${funcName}(${type.result.getCode('c++')} value) { return Result::withValue(std::move(value)); }`
+      )
+    }
     functions.push(
-      `inline ${name} ${funcName}(${type.result.getCode('c++')} value) { return value; }`,
-      `inline ${name} ${funcName}(${type.error.getCode('c++')} error) { return std::unexpected(error); }`
+      `inline ${name} ${funcName}(const ${type.error.getCode('c++')}& error) { return Result::withError(error); }`
     )
   }
 

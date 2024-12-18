@@ -104,7 +104,7 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
         // AnyMapHolder <> AnyMap
         return true
       case 'result-wrapper':
-        // std::expected<T> <> T
+        // Result<T> <> T
         return true
       default:
         return false

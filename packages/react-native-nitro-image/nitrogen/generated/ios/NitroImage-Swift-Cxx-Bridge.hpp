@@ -59,8 +59,8 @@ namespace NitroImage { class HybridTestObjectSwiftKotlinSpec_cxx; }
 #include <NitroModules/ArrayBuffer.hpp>
 #include <NitroModules/ArrayBufferHolder.hpp>
 #include <NitroModules/Promise.hpp>
+#include <NitroModules/Result.hpp>
 #include <exception>
-#include <expected>
 #include <functional>
 #include <memory>
 #include <optional>
@@ -114,15 +114,15 @@ namespace margelo::nitro::image::bridge::swift {
   using std__weak_ptr_margelo__nitro__image__HybridImageSpec_ = std::weak_ptr<margelo::nitro::image::HybridImageSpec>;
   inline std__weak_ptr_margelo__nitro__image__HybridImageSpec_ weakify_std__shared_ptr_margelo__nitro__image__HybridImageSpec_(const std::shared_ptr<margelo::nitro::image::HybridImageSpec>& strong) { return strong; }
   
-  // pragma MARK: std::expected<double, std::exception_ptr>
-  using std__expected_double__std__exception_ptr_ = std::expected<double, std::exception_ptr>;
-  inline std__expected_double__std__exception_ptr_ create_std__expected_double__std__exception_ptr_(double value) { return value; }
-  inline std__expected_double__std__exception_ptr_ create_std__expected_double__std__exception_ptr_(std::exception_ptr error) { return std::unexpected(error); }
+  // pragma MARK: Result<double>
+  using Result_double_ = Result<double>;
+  inline Result_double_ create_Result_double_(double value) { return Result::withValue(std::move(value)); }
+  inline Result_double_ create_Result_double_(const std::exception_ptr& error) { return Result::withError(error); }
   
-  // pragma MARK: std::expected<void, std::exception_ptr>
-  using std__expected_void__std__exception_ptr_ = std::expected<void, std::exception_ptr>;
-  inline std__expected_void__std__exception_ptr_ create_std__expected_void__std__exception_ptr_() { return {}; }
-  inline std__expected_void__std__exception_ptr_ create_std__expected_void__std__exception_ptr_(std::exception_ptr error) { return std::unexpected(error); }
+  // pragma MARK: Result<void>
+  using Result_void_ = Result<void>;
+  inline Result_void_ create_Result_void_() { return Result::withValue(); }
+  inline Result_void_ create_Result_void_(const std::exception_ptr& error) { return Result::withError(error); }
   
   // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridImageFactorySpec>
   /**
@@ -136,10 +136,10 @@ namespace margelo::nitro::image::bridge::swift {
   using std__weak_ptr_margelo__nitro__image__HybridImageFactorySpec_ = std::weak_ptr<margelo::nitro::image::HybridImageFactorySpec>;
   inline std__weak_ptr_margelo__nitro__image__HybridImageFactorySpec_ weakify_std__shared_ptr_margelo__nitro__image__HybridImageFactorySpec_(const std::shared_ptr<margelo::nitro::image::HybridImageFactorySpec>& strong) { return strong; }
   
-  // pragma MARK: std::expected<std::shared_ptr<margelo::nitro::image::HybridImageSpec>, std::exception_ptr>
-  using std__expected_std__shared_ptr_margelo__nitro__image__HybridImageSpec___std__exception_ptr_ = std::expected<std::shared_ptr<margelo::nitro::image::HybridImageSpec>, std::exception_ptr>;
-  inline std__expected_std__shared_ptr_margelo__nitro__image__HybridImageSpec___std__exception_ptr_ create_std__expected_std__shared_ptr_margelo__nitro__image__HybridImageSpec___std__exception_ptr_(std::shared_ptr<margelo::nitro::image::HybridImageSpec> value) { return value; }
-  inline std__expected_std__shared_ptr_margelo__nitro__image__HybridImageSpec___std__exception_ptr_ create_std__expected_std__shared_ptr_margelo__nitro__image__HybridImageSpec___std__exception_ptr_(std::exception_ptr error) { return std::unexpected(error); }
+  // pragma MARK: Result<std::shared_ptr<margelo::nitro::image::HybridImageSpec>>
+  using Result_std__shared_ptr_margelo__nitro__image__HybridImageSpec__ = Result<std::shared_ptr<margelo::nitro::image::HybridImageSpec>>;
+  inline Result_std__shared_ptr_margelo__nitro__image__HybridImageSpec__ create_Result_std__shared_ptr_margelo__nitro__image__HybridImageSpec__(const std::shared_ptr<margelo::nitro::image::HybridImageSpec>& value) { return Result::withValue(value); }
+  inline Result_std__shared_ptr_margelo__nitro__image__HybridImageSpec__ create_Result_std__shared_ptr_margelo__nitro__image__HybridImageSpec__(const std::exception_ptr& error) { return Result::withError(error); }
   
   // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>
   /**
@@ -663,104 +663,104 @@ namespace margelo::nitro::image::bridge::swift {
   using std__weak_ptr_margelo__nitro__image__HybridChildSpec_ = std::weak_ptr<margelo::nitro::image::HybridChildSpec>;
   inline std__weak_ptr_margelo__nitro__image__HybridChildSpec_ weakify_std__shared_ptr_margelo__nitro__image__HybridChildSpec_(const std::shared_ptr<margelo::nitro::image::HybridChildSpec>& strong) { return strong; }
   
-  // pragma MARK: std::expected<std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>, std::exception_ptr>
-  using std__expected_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec___std__exception_ptr_ = std::expected<std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>, std::exception_ptr>;
-  inline std__expected_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec___std__exception_ptr_ create_std__expected_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec___std__exception_ptr_(std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec> value) { return value; }
-  inline std__expected_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec___std__exception_ptr_ create_std__expected_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec___std__exception_ptr_(std::exception_ptr error) { return std::unexpected(error); }
+  // pragma MARK: Result<std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>>
+  using Result_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec__ = Result<std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>>;
+  inline Result_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec__ create_Result_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec__(const std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>& value) { return Result::withValue(value); }
+  inline Result_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec__ create_Result_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec__(const std::exception_ptr& error) { return Result::withError(error); }
   
-  // pragma MARK: std::expected<std::string, std::exception_ptr>
-  using std__expected_std__string__std__exception_ptr_ = std::expected<std::string, std::exception_ptr>;
-  inline std__expected_std__string__std__exception_ptr_ create_std__expected_std__string__std__exception_ptr_(std::string value) { return value; }
-  inline std__expected_std__string__std__exception_ptr_ create_std__expected_std__string__std__exception_ptr_(std::exception_ptr error) { return std::unexpected(error); }
+  // pragma MARK: Result<std::string>
+  using Result_std__string_ = Result<std::string>;
+  inline Result_std__string_ create_Result_std__string_(const std::string& value) { return Result::withValue(value); }
+  inline Result_std__string_ create_Result_std__string_(const std::exception_ptr& error) { return Result::withError(error); }
   
-  // pragma MARK: std::expected<std::vector<std::string>, std::exception_ptr>
-  using std__expected_std__vector_std__string___std__exception_ptr_ = std::expected<std::vector<std::string>, std::exception_ptr>;
-  inline std__expected_std__vector_std__string___std__exception_ptr_ create_std__expected_std__vector_std__string___std__exception_ptr_(std::vector<std::string> value) { return value; }
-  inline std__expected_std__vector_std__string___std__exception_ptr_ create_std__expected_std__vector_std__string___std__exception_ptr_(std::exception_ptr error) { return std::unexpected(error); }
+  // pragma MARK: Result<std::vector<std::string>>
+  using Result_std__vector_std__string__ = Result<std::vector<std::string>>;
+  inline Result_std__vector_std__string__ create_Result_std__vector_std__string__(const std::vector<std::string>& value) { return Result::withValue(value); }
+  inline Result_std__vector_std__string__ create_Result_std__vector_std__string__(const std::exception_ptr& error) { return Result::withError(error); }
   
-  // pragma MARK: std::expected<std::vector<double>, std::exception_ptr>
-  using std__expected_std__vector_double___std__exception_ptr_ = std::expected<std::vector<double>, std::exception_ptr>;
-  inline std__expected_std__vector_double___std__exception_ptr_ create_std__expected_std__vector_double___std__exception_ptr_(std::vector<double> value) { return value; }
-  inline std__expected_std__vector_double___std__exception_ptr_ create_std__expected_std__vector_double___std__exception_ptr_(std::exception_ptr error) { return std::unexpected(error); }
+  // pragma MARK: Result<std::vector<double>>
+  using Result_std__vector_double__ = Result<std::vector<double>>;
+  inline Result_std__vector_double__ create_Result_std__vector_double__(const std::vector<double>& value) { return Result::withValue(value); }
+  inline Result_std__vector_double__ create_Result_std__vector_double__(const std::exception_ptr& error) { return Result::withError(error); }
   
-  // pragma MARK: std::expected<std::vector<Person>, std::exception_ptr>
-  using std__expected_std__vector_Person___std__exception_ptr_ = std::expected<std::vector<Person>, std::exception_ptr>;
-  inline std__expected_std__vector_Person___std__exception_ptr_ create_std__expected_std__vector_Person___std__exception_ptr_(std::vector<Person> value) { return value; }
-  inline std__expected_std__vector_Person___std__exception_ptr_ create_std__expected_std__vector_Person___std__exception_ptr_(std::exception_ptr error) { return std::unexpected(error); }
+  // pragma MARK: Result<std::vector<Person>>
+  using Result_std__vector_Person__ = Result<std::vector<Person>>;
+  inline Result_std__vector_Person__ create_Result_std__vector_Person__(const std::vector<Person>& value) { return Result::withValue(value); }
+  inline Result_std__vector_Person__ create_Result_std__vector_Person__(const std::exception_ptr& error) { return Result::withError(error); }
   
-  // pragma MARK: std::expected<std::vector<Powertrain>, std::exception_ptr>
-  using std__expected_std__vector_Powertrain___std__exception_ptr_ = std::expected<std::vector<Powertrain>, std::exception_ptr>;
-  inline std__expected_std__vector_Powertrain___std__exception_ptr_ create_std__expected_std__vector_Powertrain___std__exception_ptr_(std::vector<Powertrain> value) { return value; }
-  inline std__expected_std__vector_Powertrain___std__exception_ptr_ create_std__expected_std__vector_Powertrain___std__exception_ptr_(std::exception_ptr error) { return std::unexpected(error); }
+  // pragma MARK: Result<std::vector<Powertrain>>
+  using Result_std__vector_Powertrain__ = Result<std::vector<Powertrain>>;
+  inline Result_std__vector_Powertrain__ create_Result_std__vector_Powertrain__(const std::vector<Powertrain>& value) { return Result::withValue(value); }
+  inline Result_std__vector_Powertrain__ create_Result_std__vector_Powertrain__(const std::exception_ptr& error) { return Result::withError(error); }
   
-  // pragma MARK: std::expected<std::shared_ptr<AnyMap>, std::exception_ptr>
-  using std__expected_std__shared_ptr_AnyMap___std__exception_ptr_ = std::expected<std::shared_ptr<AnyMap>, std::exception_ptr>;
-  inline std__expected_std__shared_ptr_AnyMap___std__exception_ptr_ create_std__expected_std__shared_ptr_AnyMap___std__exception_ptr_(std::shared_ptr<AnyMap> value) { return value; }
-  inline std__expected_std__shared_ptr_AnyMap___std__exception_ptr_ create_std__expected_std__shared_ptr_AnyMap___std__exception_ptr_(std::exception_ptr error) { return std::unexpected(error); }
+  // pragma MARK: Result<std::shared_ptr<AnyMap>>
+  using Result_std__shared_ptr_AnyMap__ = Result<std::shared_ptr<AnyMap>>;
+  inline Result_std__shared_ptr_AnyMap__ create_Result_std__shared_ptr_AnyMap__(const std::shared_ptr<AnyMap>& value) { return Result::withValue(value); }
+  inline Result_std__shared_ptr_AnyMap__ create_Result_std__shared_ptr_AnyMap__(const std::exception_ptr& error) { return Result::withError(error); }
   
-  // pragma MARK: std::expected<std::optional<Powertrain>, std::exception_ptr>
-  using std__expected_std__optional_Powertrain___std__exception_ptr_ = std::expected<std::optional<Powertrain>, std::exception_ptr>;
-  inline std__expected_std__optional_Powertrain___std__exception_ptr_ create_std__expected_std__optional_Powertrain___std__exception_ptr_(std::optional<Powertrain> value) { return value; }
-  inline std__expected_std__optional_Powertrain___std__exception_ptr_ create_std__expected_std__optional_Powertrain___std__exception_ptr_(std::exception_ptr error) { return std::unexpected(error); }
+  // pragma MARK: Result<std::optional<Powertrain>>
+  using Result_std__optional_Powertrain__ = Result<std::optional<Powertrain>>;
+  inline Result_std__optional_Powertrain__ create_Result_std__optional_Powertrain__(std::optional<Powertrain> value) { return Result::withValue(std::move(value)); }
+  inline Result_std__optional_Powertrain__ create_Result_std__optional_Powertrain__(const std::exception_ptr& error) { return Result::withError(error); }
   
-  // pragma MARK: std::expected<int64_t, std::exception_ptr>
-  using std__expected_int64_t__std__exception_ptr_ = std::expected<int64_t, std::exception_ptr>;
-  inline std__expected_int64_t__std__exception_ptr_ create_std__expected_int64_t__std__exception_ptr_(int64_t value) { return value; }
-  inline std__expected_int64_t__std__exception_ptr_ create_std__expected_int64_t__std__exception_ptr_(std::exception_ptr error) { return std::unexpected(error); }
+  // pragma MARK: Result<int64_t>
+  using Result_int64_t_ = Result<int64_t>;
+  inline Result_int64_t_ create_Result_int64_t_(int64_t value) { return Result::withValue(std::move(value)); }
+  inline Result_int64_t_ create_Result_int64_t_(const std::exception_ptr& error) { return Result::withError(error); }
   
-  // pragma MARK: std::expected<std::shared_ptr<Promise<int64_t>>, std::exception_ptr>
-  using std__expected_std__shared_ptr_Promise_int64_t____std__exception_ptr_ = std::expected<std::shared_ptr<Promise<int64_t>>, std::exception_ptr>;
-  inline std__expected_std__shared_ptr_Promise_int64_t____std__exception_ptr_ create_std__expected_std__shared_ptr_Promise_int64_t____std__exception_ptr_(std::shared_ptr<Promise<int64_t>> value) { return value; }
-  inline std__expected_std__shared_ptr_Promise_int64_t____std__exception_ptr_ create_std__expected_std__shared_ptr_Promise_int64_t____std__exception_ptr_(std::exception_ptr error) { return std::unexpected(error); }
+  // pragma MARK: Result<std::shared_ptr<Promise<int64_t>>>
+  using Result_std__shared_ptr_Promise_int64_t___ = Result<std::shared_ptr<Promise<int64_t>>>;
+  inline Result_std__shared_ptr_Promise_int64_t___ create_Result_std__shared_ptr_Promise_int64_t___(const std::shared_ptr<Promise<int64_t>>& value) { return Result::withValue(value); }
+  inline Result_std__shared_ptr_Promise_int64_t___ create_Result_std__shared_ptr_Promise_int64_t___(const std::exception_ptr& error) { return Result::withError(error); }
   
-  // pragma MARK: std::expected<std::shared_ptr<Promise<void>>, std::exception_ptr>
-  using std__expected_std__shared_ptr_Promise_void____std__exception_ptr_ = std::expected<std::shared_ptr<Promise<void>>, std::exception_ptr>;
-  inline std__expected_std__shared_ptr_Promise_void____std__exception_ptr_ create_std__expected_std__shared_ptr_Promise_void____std__exception_ptr_(std::shared_ptr<Promise<void>> value) { return value; }
-  inline std__expected_std__shared_ptr_Promise_void____std__exception_ptr_ create_std__expected_std__shared_ptr_Promise_void____std__exception_ptr_(std::exception_ptr error) { return std::unexpected(error); }
+  // pragma MARK: Result<std::shared_ptr<Promise<void>>>
+  using Result_std__shared_ptr_Promise_void___ = Result<std::shared_ptr<Promise<void>>>;
+  inline Result_std__shared_ptr_Promise_void___ create_Result_std__shared_ptr_Promise_void___(const std::shared_ptr<Promise<void>>& value) { return Result::withValue(value); }
+  inline Result_std__shared_ptr_Promise_void___ create_Result_std__shared_ptr_Promise_void___(const std::exception_ptr& error) { return Result::withError(error); }
   
-  // pragma MARK: std::expected<std::shared_ptr<Promise<double>>, std::exception_ptr>
-  using std__expected_std__shared_ptr_Promise_double____std__exception_ptr_ = std::expected<std::shared_ptr<Promise<double>>, std::exception_ptr>;
-  inline std__expected_std__shared_ptr_Promise_double____std__exception_ptr_ create_std__expected_std__shared_ptr_Promise_double____std__exception_ptr_(std::shared_ptr<Promise<double>> value) { return value; }
-  inline std__expected_std__shared_ptr_Promise_double____std__exception_ptr_ create_std__expected_std__shared_ptr_Promise_double____std__exception_ptr_(std::exception_ptr error) { return std::unexpected(error); }
+  // pragma MARK: Result<std::shared_ptr<Promise<double>>>
+  using Result_std__shared_ptr_Promise_double___ = Result<std::shared_ptr<Promise<double>>>;
+  inline Result_std__shared_ptr_Promise_double___ create_Result_std__shared_ptr_Promise_double___(const std::shared_ptr<Promise<double>>& value) { return Result::withValue(value); }
+  inline Result_std__shared_ptr_Promise_double___ create_Result_std__shared_ptr_Promise_double___(const std::exception_ptr& error) { return Result::withError(error); }
   
-  // pragma MARK: std::expected<std::shared_ptr<Promise<Car>>, std::exception_ptr>
-  using std__expected_std__shared_ptr_Promise_Car____std__exception_ptr_ = std::expected<std::shared_ptr<Promise<Car>>, std::exception_ptr>;
-  inline std__expected_std__shared_ptr_Promise_Car____std__exception_ptr_ create_std__expected_std__shared_ptr_Promise_Car____std__exception_ptr_(std::shared_ptr<Promise<Car>> value) { return value; }
-  inline std__expected_std__shared_ptr_Promise_Car____std__exception_ptr_ create_std__expected_std__shared_ptr_Promise_Car____std__exception_ptr_(std::exception_ptr error) { return std::unexpected(error); }
+  // pragma MARK: Result<std::shared_ptr<Promise<Car>>>
+  using Result_std__shared_ptr_Promise_Car___ = Result<std::shared_ptr<Promise<Car>>>;
+  inline Result_std__shared_ptr_Promise_Car___ create_Result_std__shared_ptr_Promise_Car___(const std::shared_ptr<Promise<Car>>& value) { return Result::withValue(value); }
+  inline Result_std__shared_ptr_Promise_Car___ create_Result_std__shared_ptr_Promise_Car___(const std::exception_ptr& error) { return Result::withError(error); }
   
-  // pragma MARK: std::expected<Car, std::exception_ptr>
-  using std__expected_Car__std__exception_ptr_ = std::expected<Car, std::exception_ptr>;
-  inline std__expected_Car__std__exception_ptr_ create_std__expected_Car__std__exception_ptr_(Car value) { return value; }
-  inline std__expected_Car__std__exception_ptr_ create_std__expected_Car__std__exception_ptr_(std::exception_ptr error) { return std::unexpected(error); }
+  // pragma MARK: Result<Car>
+  using Result_Car_ = Result<Car>;
+  inline Result_Car_ create_Result_Car_(const Car& value) { return Result::withValue(value); }
+  inline Result_Car_ create_Result_Car_(const std::exception_ptr& error) { return Result::withError(error); }
   
-  // pragma MARK: std::expected<bool, std::exception_ptr>
-  using std__expected_bool__std__exception_ptr_ = std::expected<bool, std::exception_ptr>;
-  inline std__expected_bool__std__exception_ptr_ create_std__expected_bool__std__exception_ptr_(bool value) { return value; }
-  inline std__expected_bool__std__exception_ptr_ create_std__expected_bool__std__exception_ptr_(std::exception_ptr error) { return std::unexpected(error); }
+  // pragma MARK: Result<bool>
+  using Result_bool_ = Result<bool>;
+  inline Result_bool_ create_Result_bool_(bool value) { return Result::withValue(std::move(value)); }
+  inline Result_bool_ create_Result_bool_(const std::exception_ptr& error) { return Result::withError(error); }
   
-  // pragma MARK: std::expected<std::optional<Person>, std::exception_ptr>
-  using std__expected_std__optional_Person___std__exception_ptr_ = std::expected<std::optional<Person>, std::exception_ptr>;
-  inline std__expected_std__optional_Person___std__exception_ptr_ create_std__expected_std__optional_Person___std__exception_ptr_(std::optional<Person> value) { return value; }
-  inline std__expected_std__optional_Person___std__exception_ptr_ create_std__expected_std__optional_Person___std__exception_ptr_(std::exception_ptr error) { return std::unexpected(error); }
+  // pragma MARK: Result<std::optional<Person>>
+  using Result_std__optional_Person__ = Result<std::optional<Person>>;
+  inline Result_std__optional_Person__ create_Result_std__optional_Person__(const std::optional<Person>& value) { return Result::withValue(value); }
+  inline Result_std__optional_Person__ create_Result_std__optional_Person__(const std::exception_ptr& error) { return Result::withError(error); }
   
-  // pragma MARK: std::expected<std::shared_ptr<ArrayBuffer>, std::exception_ptr>
-  using std__expected_std__shared_ptr_ArrayBuffer___std__exception_ptr_ = std::expected<std::shared_ptr<ArrayBuffer>, std::exception_ptr>;
-  inline std__expected_std__shared_ptr_ArrayBuffer___std__exception_ptr_ create_std__expected_std__shared_ptr_ArrayBuffer___std__exception_ptr_(std::shared_ptr<ArrayBuffer> value) { return value; }
-  inline std__expected_std__shared_ptr_ArrayBuffer___std__exception_ptr_ create_std__expected_std__shared_ptr_ArrayBuffer___std__exception_ptr_(std::exception_ptr error) { return std::unexpected(error); }
+  // pragma MARK: Result<std::shared_ptr<ArrayBuffer>>
+  using Result_std__shared_ptr_ArrayBuffer__ = Result<std::shared_ptr<ArrayBuffer>>;
+  inline Result_std__shared_ptr_ArrayBuffer__ create_Result_std__shared_ptr_ArrayBuffer__(const std::shared_ptr<ArrayBuffer>& value) { return Result::withValue(value); }
+  inline Result_std__shared_ptr_ArrayBuffer__ create_Result_std__shared_ptr_ArrayBuffer__(const std::exception_ptr& error) { return Result::withError(error); }
   
-  // pragma MARK: std::expected<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>, std::exception_ptr>
-  using std__expected_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____std__exception_ptr_ = std::expected<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>, std::exception_ptr>;
-  inline std__expected_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____std__exception_ptr_ create_std__expected_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____std__exception_ptr_(std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>> value) { return value; }
-  inline std__expected_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____std__exception_ptr_ create_std__expected_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____std__exception_ptr_(std::exception_ptr error) { return std::unexpected(error); }
+  // pragma MARK: Result<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>>
+  using Result_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer____ = Result<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>>;
+  inline Result_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer____ create_Result_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer____(const std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>& value) { return Result::withValue(value); }
+  inline Result_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer____ create_Result_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer____(const std::exception_ptr& error) { return Result::withError(error); }
   
-  // pragma MARK: std::expected<std::shared_ptr<margelo::nitro::image::HybridChildSpec>, std::exception_ptr>
-  using std__expected_std__shared_ptr_margelo__nitro__image__HybridChildSpec___std__exception_ptr_ = std::expected<std::shared_ptr<margelo::nitro::image::HybridChildSpec>, std::exception_ptr>;
-  inline std__expected_std__shared_ptr_margelo__nitro__image__HybridChildSpec___std__exception_ptr_ create_std__expected_std__shared_ptr_margelo__nitro__image__HybridChildSpec___std__exception_ptr_(std::shared_ptr<margelo::nitro::image::HybridChildSpec> value) { return value; }
-  inline std__expected_std__shared_ptr_margelo__nitro__image__HybridChildSpec___std__exception_ptr_ create_std__expected_std__shared_ptr_margelo__nitro__image__HybridChildSpec___std__exception_ptr_(std::exception_ptr error) { return std::unexpected(error); }
+  // pragma MARK: Result<std::shared_ptr<margelo::nitro::image::HybridChildSpec>>
+  using Result_std__shared_ptr_margelo__nitro__image__HybridChildSpec__ = Result<std::shared_ptr<margelo::nitro::image::HybridChildSpec>>;
+  inline Result_std__shared_ptr_margelo__nitro__image__HybridChildSpec__ create_Result_std__shared_ptr_margelo__nitro__image__HybridChildSpec__(const std::shared_ptr<margelo::nitro::image::HybridChildSpec>& value) { return Result::withValue(value); }
+  inline Result_std__shared_ptr_margelo__nitro__image__HybridChildSpec__ create_Result_std__shared_ptr_margelo__nitro__image__HybridChildSpec__(const std::exception_ptr& error) { return Result::withError(error); }
   
-  // pragma MARK: std::expected<std::shared_ptr<margelo::nitro::image::HybridBaseSpec>, std::exception_ptr>
-  using std__expected_std__shared_ptr_margelo__nitro__image__HybridBaseSpec___std__exception_ptr_ = std::expected<std::shared_ptr<margelo::nitro::image::HybridBaseSpec>, std::exception_ptr>;
-  inline std__expected_std__shared_ptr_margelo__nitro__image__HybridBaseSpec___std__exception_ptr_ create_std__expected_std__shared_ptr_margelo__nitro__image__HybridBaseSpec___std__exception_ptr_(std::shared_ptr<margelo::nitro::image::HybridBaseSpec> value) { return value; }
-  inline std__expected_std__shared_ptr_margelo__nitro__image__HybridBaseSpec___std__exception_ptr_ create_std__expected_std__shared_ptr_margelo__nitro__image__HybridBaseSpec___std__exception_ptr_(std::exception_ptr error) { return std::unexpected(error); }
+  // pragma MARK: Result<std::shared_ptr<margelo::nitro::image::HybridBaseSpec>>
+  using Result_std__shared_ptr_margelo__nitro__image__HybridBaseSpec__ = Result<std::shared_ptr<margelo::nitro::image::HybridBaseSpec>>;
+  inline Result_std__shared_ptr_margelo__nitro__image__HybridBaseSpec__ create_Result_std__shared_ptr_margelo__nitro__image__HybridBaseSpec__(const std::shared_ptr<margelo::nitro::image::HybridBaseSpec>& value) { return Result::withValue(value); }
+  inline Result_std__shared_ptr_margelo__nitro__image__HybridBaseSpec__ create_Result_std__shared_ptr_margelo__nitro__image__HybridBaseSpec__(const std::exception_ptr& error) { return Result::withError(error); }
 
 } // namespace margelo::nitro::image::bridge::swift
