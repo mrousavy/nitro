@@ -1128,7 +1128,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   public func createArrayBuffer() -> bridge.Result_std__shared_ptr_ArrayBuffer__ {
     do {
       let __result = try self.__implementation.createArrayBuffer()
-      let __resultCpp = __result
+      let __resultCpp = __result.getArrayBuffer()
       return bridge.create_Result_std__shared_ptr_ArrayBuffer__(__resultCpp)
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
