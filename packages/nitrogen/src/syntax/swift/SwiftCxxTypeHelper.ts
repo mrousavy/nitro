@@ -529,7 +529,7 @@ inline ${name} ${funcName}() {
     )
   } else {
     const typeParam = type.result.canBePassedByReference
-      ? `const ${type.result.getCode('c++')}& value`
+      ? `const ${type.result.getCode('c++')}&`
       : type.result.getCode('c++')
     functions.push(
       `

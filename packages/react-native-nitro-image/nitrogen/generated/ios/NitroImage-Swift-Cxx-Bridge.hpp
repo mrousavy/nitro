@@ -142,7 +142,7 @@ namespace margelo::nitro::image::bridge::swift {
   
   // pragma MARK: Result<std::shared_ptr<margelo::nitro::image::HybridImageSpec>>
   using Result_std__shared_ptr_margelo__nitro__image__HybridImageSpec__ = Result<std::shared_ptr<margelo::nitro::image::HybridImageSpec>>;
-  inline Result_std__shared_ptr_margelo__nitro__image__HybridImageSpec__ create_Result_std__shared_ptr_margelo__nitro__image__HybridImageSpec__(const std::shared_ptr<margelo::nitro::image::HybridImageSpec>& value value) {
+  inline Result_std__shared_ptr_margelo__nitro__image__HybridImageSpec__ create_Result_std__shared_ptr_margelo__nitro__image__HybridImageSpec__(const std::shared_ptr<margelo::nitro::image::HybridImageSpec>& value) {
     return Result<std::shared_ptr<margelo::nitro::image::HybridImageSpec>>::withValue(value);
   }
   inline Result_std__shared_ptr_margelo__nitro__image__HybridImageSpec__ create_Result_std__shared_ptr_margelo__nitro__image__HybridImageSpec__(const std::exception_ptr& error) { return Result<std::shared_ptr<margelo::nitro::image::HybridImageSpec>>::withError(error); }
@@ -671,49 +671,49 @@ namespace margelo::nitro::image::bridge::swift {
   
   // pragma MARK: Result<std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>>
   using Result_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec__ = Result<std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>>;
-  inline Result_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec__ create_Result_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec__(const std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>& value value) {
+  inline Result_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec__ create_Result_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec__(const std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>& value) {
     return Result<std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>>::withValue(value);
   }
   inline Result_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec__ create_Result_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec__(const std::exception_ptr& error) { return Result<std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>>::withError(error); }
   
   // pragma MARK: Result<std::string>
   using Result_std__string_ = Result<std::string>;
-  inline Result_std__string_ create_Result_std__string_(const std::string& value value) {
+  inline Result_std__string_ create_Result_std__string_(const std::string& value) {
     return Result<std::string>::withValue(value);
   }
   inline Result_std__string_ create_Result_std__string_(const std::exception_ptr& error) { return Result<std::string>::withError(error); }
   
   // pragma MARK: Result<std::vector<std::string>>
   using Result_std__vector_std__string__ = Result<std::vector<std::string>>;
-  inline Result_std__vector_std__string__ create_Result_std__vector_std__string__(const std::vector<std::string>& value value) {
+  inline Result_std__vector_std__string__ create_Result_std__vector_std__string__(const std::vector<std::string>& value) {
     return Result<std::vector<std::string>>::withValue(value);
   }
   inline Result_std__vector_std__string__ create_Result_std__vector_std__string__(const std::exception_ptr& error) { return Result<std::vector<std::string>>::withError(error); }
   
   // pragma MARK: Result<std::vector<double>>
   using Result_std__vector_double__ = Result<std::vector<double>>;
-  inline Result_std__vector_double__ create_Result_std__vector_double__(const std::vector<double>& value value) {
+  inline Result_std__vector_double__ create_Result_std__vector_double__(const std::vector<double>& value) {
     return Result<std::vector<double>>::withValue(value);
   }
   inline Result_std__vector_double__ create_Result_std__vector_double__(const std::exception_ptr& error) { return Result<std::vector<double>>::withError(error); }
   
   // pragma MARK: Result<std::vector<Person>>
   using Result_std__vector_Person__ = Result<std::vector<Person>>;
-  inline Result_std__vector_Person__ create_Result_std__vector_Person__(const std::vector<Person>& value value) {
+  inline Result_std__vector_Person__ create_Result_std__vector_Person__(const std::vector<Person>& value) {
     return Result<std::vector<Person>>::withValue(value);
   }
   inline Result_std__vector_Person__ create_Result_std__vector_Person__(const std::exception_ptr& error) { return Result<std::vector<Person>>::withError(error); }
   
   // pragma MARK: Result<std::vector<Powertrain>>
   using Result_std__vector_Powertrain__ = Result<std::vector<Powertrain>>;
-  inline Result_std__vector_Powertrain__ create_Result_std__vector_Powertrain__(const std::vector<Powertrain>& value value) {
+  inline Result_std__vector_Powertrain__ create_Result_std__vector_Powertrain__(const std::vector<Powertrain>& value) {
     return Result<std::vector<Powertrain>>::withValue(value);
   }
   inline Result_std__vector_Powertrain__ create_Result_std__vector_Powertrain__(const std::exception_ptr& error) { return Result<std::vector<Powertrain>>::withError(error); }
   
   // pragma MARK: Result<std::shared_ptr<AnyMap>>
   using Result_std__shared_ptr_AnyMap__ = Result<std::shared_ptr<AnyMap>>;
-  inline Result_std__shared_ptr_AnyMap__ create_Result_std__shared_ptr_AnyMap__(const std::shared_ptr<AnyMap>& value value) {
+  inline Result_std__shared_ptr_AnyMap__ create_Result_std__shared_ptr_AnyMap__(const std::shared_ptr<AnyMap>& value) {
     return Result<std::shared_ptr<AnyMap>>::withValue(value);
   }
   inline Result_std__shared_ptr_AnyMap__ create_Result_std__shared_ptr_AnyMap__(const std::exception_ptr& error) { return Result<std::shared_ptr<AnyMap>>::withError(error); }
@@ -734,35 +734,35 @@ namespace margelo::nitro::image::bridge::swift {
   
   // pragma MARK: Result<std::shared_ptr<Promise<int64_t>>>
   using Result_std__shared_ptr_Promise_int64_t___ = Result<std::shared_ptr<Promise<int64_t>>>;
-  inline Result_std__shared_ptr_Promise_int64_t___ create_Result_std__shared_ptr_Promise_int64_t___(const std::shared_ptr<Promise<int64_t>>& value value) {
+  inline Result_std__shared_ptr_Promise_int64_t___ create_Result_std__shared_ptr_Promise_int64_t___(const std::shared_ptr<Promise<int64_t>>& value) {
     return Result<std::shared_ptr<Promise<int64_t>>>::withValue(value);
   }
   inline Result_std__shared_ptr_Promise_int64_t___ create_Result_std__shared_ptr_Promise_int64_t___(const std::exception_ptr& error) { return Result<std::shared_ptr<Promise<int64_t>>>::withError(error); }
   
   // pragma MARK: Result<std::shared_ptr<Promise<void>>>
   using Result_std__shared_ptr_Promise_void___ = Result<std::shared_ptr<Promise<void>>>;
-  inline Result_std__shared_ptr_Promise_void___ create_Result_std__shared_ptr_Promise_void___(const std::shared_ptr<Promise<void>>& value value) {
+  inline Result_std__shared_ptr_Promise_void___ create_Result_std__shared_ptr_Promise_void___(const std::shared_ptr<Promise<void>>& value) {
     return Result<std::shared_ptr<Promise<void>>>::withValue(value);
   }
   inline Result_std__shared_ptr_Promise_void___ create_Result_std__shared_ptr_Promise_void___(const std::exception_ptr& error) { return Result<std::shared_ptr<Promise<void>>>::withError(error); }
   
   // pragma MARK: Result<std::shared_ptr<Promise<double>>>
   using Result_std__shared_ptr_Promise_double___ = Result<std::shared_ptr<Promise<double>>>;
-  inline Result_std__shared_ptr_Promise_double___ create_Result_std__shared_ptr_Promise_double___(const std::shared_ptr<Promise<double>>& value value) {
+  inline Result_std__shared_ptr_Promise_double___ create_Result_std__shared_ptr_Promise_double___(const std::shared_ptr<Promise<double>>& value) {
     return Result<std::shared_ptr<Promise<double>>>::withValue(value);
   }
   inline Result_std__shared_ptr_Promise_double___ create_Result_std__shared_ptr_Promise_double___(const std::exception_ptr& error) { return Result<std::shared_ptr<Promise<double>>>::withError(error); }
   
   // pragma MARK: Result<std::shared_ptr<Promise<Car>>>
   using Result_std__shared_ptr_Promise_Car___ = Result<std::shared_ptr<Promise<Car>>>;
-  inline Result_std__shared_ptr_Promise_Car___ create_Result_std__shared_ptr_Promise_Car___(const std::shared_ptr<Promise<Car>>& value value) {
+  inline Result_std__shared_ptr_Promise_Car___ create_Result_std__shared_ptr_Promise_Car___(const std::shared_ptr<Promise<Car>>& value) {
     return Result<std::shared_ptr<Promise<Car>>>::withValue(value);
   }
   inline Result_std__shared_ptr_Promise_Car___ create_Result_std__shared_ptr_Promise_Car___(const std::exception_ptr& error) { return Result<std::shared_ptr<Promise<Car>>>::withError(error); }
   
   // pragma MARK: Result<Car>
   using Result_Car_ = Result<Car>;
-  inline Result_Car_ create_Result_Car_(const Car& value value) {
+  inline Result_Car_ create_Result_Car_(const Car& value) {
     return Result<Car>::withValue(value);
   }
   inline Result_Car_ create_Result_Car_(const std::exception_ptr& error) { return Result<Car>::withError(error); }
@@ -776,35 +776,35 @@ namespace margelo::nitro::image::bridge::swift {
   
   // pragma MARK: Result<std::optional<Person>>
   using Result_std__optional_Person__ = Result<std::optional<Person>>;
-  inline Result_std__optional_Person__ create_Result_std__optional_Person__(const std::optional<Person>& value value) {
+  inline Result_std__optional_Person__ create_Result_std__optional_Person__(const std::optional<Person>& value) {
     return Result<std::optional<Person>>::withValue(value);
   }
   inline Result_std__optional_Person__ create_Result_std__optional_Person__(const std::exception_ptr& error) { return Result<std::optional<Person>>::withError(error); }
   
   // pragma MARK: Result<std::shared_ptr<ArrayBuffer>>
   using Result_std__shared_ptr_ArrayBuffer__ = Result<std::shared_ptr<ArrayBuffer>>;
-  inline Result_std__shared_ptr_ArrayBuffer__ create_Result_std__shared_ptr_ArrayBuffer__(const std::shared_ptr<ArrayBuffer>& value value) {
+  inline Result_std__shared_ptr_ArrayBuffer__ create_Result_std__shared_ptr_ArrayBuffer__(const std::shared_ptr<ArrayBuffer>& value) {
     return Result<std::shared_ptr<ArrayBuffer>>::withValue(value);
   }
   inline Result_std__shared_ptr_ArrayBuffer__ create_Result_std__shared_ptr_ArrayBuffer__(const std::exception_ptr& error) { return Result<std::shared_ptr<ArrayBuffer>>::withError(error); }
   
   // pragma MARK: Result<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>>
   using Result_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer____ = Result<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>>;
-  inline Result_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer____ create_Result_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer____(const std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>& value value) {
+  inline Result_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer____ create_Result_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer____(const std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>& value) {
     return Result<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>>::withValue(value);
   }
   inline Result_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer____ create_Result_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer____(const std::exception_ptr& error) { return Result<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>>::withError(error); }
   
   // pragma MARK: Result<std::shared_ptr<margelo::nitro::image::HybridChildSpec>>
   using Result_std__shared_ptr_margelo__nitro__image__HybridChildSpec__ = Result<std::shared_ptr<margelo::nitro::image::HybridChildSpec>>;
-  inline Result_std__shared_ptr_margelo__nitro__image__HybridChildSpec__ create_Result_std__shared_ptr_margelo__nitro__image__HybridChildSpec__(const std::shared_ptr<margelo::nitro::image::HybridChildSpec>& value value) {
+  inline Result_std__shared_ptr_margelo__nitro__image__HybridChildSpec__ create_Result_std__shared_ptr_margelo__nitro__image__HybridChildSpec__(const std::shared_ptr<margelo::nitro::image::HybridChildSpec>& value) {
     return Result<std::shared_ptr<margelo::nitro::image::HybridChildSpec>>::withValue(value);
   }
   inline Result_std__shared_ptr_margelo__nitro__image__HybridChildSpec__ create_Result_std__shared_ptr_margelo__nitro__image__HybridChildSpec__(const std::exception_ptr& error) { return Result<std::shared_ptr<margelo::nitro::image::HybridChildSpec>>::withError(error); }
   
   // pragma MARK: Result<std::shared_ptr<margelo::nitro::image::HybridBaseSpec>>
   using Result_std__shared_ptr_margelo__nitro__image__HybridBaseSpec__ = Result<std::shared_ptr<margelo::nitro::image::HybridBaseSpec>>;
-  inline Result_std__shared_ptr_margelo__nitro__image__HybridBaseSpec__ create_Result_std__shared_ptr_margelo__nitro__image__HybridBaseSpec__(const std::shared_ptr<margelo::nitro::image::HybridBaseSpec>& value value) {
+  inline Result_std__shared_ptr_margelo__nitro__image__HybridBaseSpec__ create_Result_std__shared_ptr_margelo__nitro__image__HybridBaseSpec__(const std::shared_ptr<margelo::nitro::image::HybridBaseSpec>& value) {
     return Result<std::shared_ptr<margelo::nitro::image::HybridBaseSpec>>::withValue(value);
   }
   inline Result_std__shared_ptr_margelo__nitro__image__HybridBaseSpec__ create_Result_std__shared_ptr_margelo__nitro__image__HybridBaseSpec__(const std::exception_ptr& error) { return Result<std::shared_ptr<margelo::nitro::image::HybridBaseSpec>>::withError(error); }
