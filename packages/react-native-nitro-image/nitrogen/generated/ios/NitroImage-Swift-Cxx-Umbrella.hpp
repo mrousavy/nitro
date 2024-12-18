@@ -53,6 +53,7 @@ namespace margelo::nitro::image { enum class Powertrain; }
 #include <NitroModules/AnyMap.hpp>
 #include <NitroModules/ArrayBuffer.hpp>
 #include <NitroModules/Promise.hpp>
+#include <NitroModules/Result.hpp>
 #include <exception>
 #include <functional>
 #include <memory>

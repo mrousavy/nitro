@@ -21,6 +21,7 @@ export type TypeKind =
   | 'struct'
   | 'tuple'
   | 'variant'
+  | 'result-wrapper'
   | 'void'
 
 /**

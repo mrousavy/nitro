@@ -15,6 +15,8 @@ import { NitroConfig } from '../../config/NitroConfig.js'
 import { includeHeader } from '../c++/includeNitroHeader.js'
 import { getUmbrellaHeaderName } from '../../autolinking/ios/createSwiftUmbrellaHeader.js'
 import { HybridObjectType } from '../types/HybridObjectType.js'
+import { addKnownType } from '../createType.js'
+import { ResultWrappingType } from '../types/ResultWrappingType.js'
 
 export function getBridgeNamespace() {
   return NitroConfig.getCxxNamespace('swift', 'bridge', 'swift')
@@ -231,19 +233,26 @@ return ${bridged.parseFromSwiftToCpp('__result', 'c++')};
           }
         })
         .join(', ')
-      const bridgedReturnType = new SwiftCxxBridgedType(m.returnType)
+      const bridgedReturnType = new SwiftCxxBridgedType(m.returnType, true)
       const hasResult = m.returnType.kind !== 'void'
       let body: string
       if (hasResult) {
         // func returns something
         body = `
 auto __result = _swiftPart.${m.name}(${params});
-return ${bridgedReturnType.parseFromSwiftToCpp('__result', 'c++')};
+if (__result.hasError()) [[unlikely]] {
+  std::rethrow_exception(__result.error());
+}
+auto __value = std::move(__result.value());
+return ${bridgedReturnType.parseFromSwiftToCpp('__value', 'c++')};
         `.trim()
       } else {
         // void func
         body = `
-_swiftPart.${m.name}(${params});
+auto __result = _swiftPart.${m.name}(${params});
+if (__result.hasError()) [[unlikely]] {
+  std::rethrow_exception(__result.error());
+}
         `.trim()
       }
 
@@ -419,7 +428,18 @@ public var ${property.name}: ${bridgedType.getTypeCode('swift')} {
 }
 
 function getMethodForwardImplementation(method: Method): string {
-  const returnType = new SwiftCxxBridgedType(method.returnType)
+  // wrapped return in a std::expected
+  const resultType = new ResultWrappingType(method.returnType)
+  addKnownType(`expected_${resultType.getCode('c++')}`, resultType, 'swift')
+  const bridgedResultType = new SwiftCxxBridgedType(resultType, true)
+  const resultBridge = bridgedResultType.getRequiredBridge()
+  if (resultBridge == null)
+    throw new Error(
+      `Result type (${bridgedResultType.getTypeCode('c++')}) does not have a bridge!`
+    )
+  const bridgedErrorType = new SwiftCxxBridgedType(resultType.error, true)
+
+  const returnType = new SwiftCxxBridgedType(method.returnType, true)
   const params = method.parameters.map((p) => {
     const bridgedType = new SwiftCxxBridgedType(p.type)
     return `${p.name}: ${bridgedType.getTypeCode('swift')}`
@@ -428,19 +448,28 @@ function getMethodForwardImplementation(method: Method): string {
     const bridgedType = new SwiftCxxBridgedType(p.type)
     return `${p.name}: ${bridgedType.parseFromCppToSwift(p.name, 'swift')}`
   })
-  const resultValue = returnType.hasType ? `let __result = ` : ''
-  const returnValue = returnType.hasType
-    ? `${returnType.parseFromSwiftToCpp('__result', 'swift')}`
-    : ''
+  let body: string
+  if (returnType.hasType) {
+    body = `
+let __result = try self.__implementation.${method.name}(${passParams.join(', ')})
+let __resultCpp = ${returnType.parseFromSwiftToCpp('__result', 'swift')}
+return bridge.${resultBridge.funcName}(__resultCpp)
+`.trim()
+  } else {
+    body = `
+try self.__implementation.${method.name}(${passParams.join(', ')})
+return bridge.${resultBridge.funcName}()
+`.trim()
+  }
+
   return `
 @inline(__always)
-public func ${method.name}(${params.join(', ')}) -> ${returnType.getTypeCode('swift')} {
+public func ${method.name}(${params.join(', ')}) -> ${bridgedResultType.getTypeCode('swift')} {
   do {
-    ${resultValue}try self.__implementation.${method.name}(${indent(passParams.join(', '), '    ')})
-    return ${indent(returnValue, '    ')}
-  } catch {
-    let __message = "\\(error.localizedDescription)"
-    fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \\(__message))")
+    ${indent(body, '    ')}
+  } catch (let __error) {
+    let __exceptionPtr = ${indent(bridgedErrorType.parseFromSwiftToCpp('__error', 'swift'), '    ')}
+    return bridge.${resultBridge.funcName}(__exceptionPtr)
   }
 }
   `.trim()

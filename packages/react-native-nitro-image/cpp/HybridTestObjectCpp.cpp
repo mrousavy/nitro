@@ -190,6 +190,10 @@ double HybridTestObjectCpp::funcThatThrows() {
   throw std::runtime_error("This function will only work after sacrificing seven lambs!");
 }
 
+std::shared_ptr<Promise<void>> HybridTestObjectCpp::funcThatThrowsBeforePromise() {
+  throw std::runtime_error("This function will only work after sacrificing eight lambs!");
+}
+
 void HybridTestObjectCpp::throwError(const std::exception_ptr& error) {
   std::rethrow_exception(error);
 }

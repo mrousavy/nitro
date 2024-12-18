@@ -56,14 +56,14 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
   func callWithOptional(value: Double?, callback: @escaping ((_ maybe: Double?) -> Void)) throws -> Void {
     callback(value)
   }
-  
+
   func getValueFromJSCallbackAndWait(getValue: @escaping (() -> Promise<Double>)) throws -> Promise<Double> {
     return .async {
       let jsResult = try await getValue().await()
       return jsResult
     }
   }
-  
+
   func getValueFromJsCallback(callback: @escaping (() -> Promise<String>), andThenCall: @escaping ((_ valueFromJs: String) -> Void)) throws -> Promise<Void> {
     return .async {
       let jsResult = try await callback().await()
@@ -125,14 +125,15 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
   }
 
   func funcThatThrows() throws -> Double {
-    // TODO: Swift functions can not throw yet! Errors are not propagated up to C++.
-    // throw RuntimeError.error(withMessage: "This function will only work after sacrificing seven lambs!")
-    return 55
+    throw RuntimeError.error(withMessage: "This function will only work after sacrificing seven lambs!")
+  }
+
+  func funcThatThrowsBeforePromise() throws -> Promise<Void> {
+    throw RuntimeError.error(withMessage: "This function will only work after sacrificing eight lambs!")
   }
 
   func throwError(error: Error) throws -> Void {
-    // TODO: Swift functions can not throw yet! Errors are not propagated up to C++.
-    // throw error
+    throw error
   }
 
   func tryOptionalParams(num: Double, boo: Bool, str: String?) throws -> String {

@@ -103,6 +103,9 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
       case 'map':
         // AnyMapHolder <> AnyMap
         return true
+      case 'result-wrapper':
+        // Result<T> <> T
+        return true
       default:
         return false
     }
@@ -223,6 +226,7 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
       case 'variant':
       case 'tuple':
       case 'record':
+      case 'result-wrapper':
       case 'promise': {
         const bridge = this.getBridgeOrThrow()
         switch (language) {

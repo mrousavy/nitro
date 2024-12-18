@@ -176,6 +176,10 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
+  abstract fun funcThatThrowsBeforePromise(): Promise<Unit>
+  
+  @DoNotStrip
+  @Keep
   abstract fun throwError(error: Throwable): Unit
   
   @DoNotStrip
