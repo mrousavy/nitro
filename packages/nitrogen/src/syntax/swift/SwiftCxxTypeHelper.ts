@@ -522,23 +522,25 @@ function createCxxResultWrapperSwiftHelper(
   const functions: string[] = []
   if (type.result.kind === 'void') {
     functions.push(
-      `inline ${name} ${funcName}() { return ${actualType}::withValue(); }`,
-      `inline ${name} ${funcName}(const ${type.error.getCode('c++')}& error) { return ${actualType}::withError(error); }`
+      `
+inline ${name} ${funcName}() {
+  return ${actualType}::withValue();
+}`.trim()
     )
   } else {
-    if (type.result.canBePassedByReference) {
-      functions.push(
-        `inline ${name} ${funcName}(const ${type.result.getCode('c++')}& value) { return ${actualType}::withValue(value); }`
-      )
-    } else {
-      functions.push(
-        `inline ${name} ${funcName}(${type.result.getCode('c++')} value) { return ${actualType}::withValue(std::move(value)); }`
-      )
-    }
+    const typeParam = type.result.canBePassedByReference
+      ? `const ${type.result.getCode('c++')}& value`
+      : type.result.getCode('c++')
     functions.push(
-      `inline ${name} ${funcName}(const ${type.error.getCode('c++')}& error) { return ${actualType}::withError(error); }`
+      `
+inline ${name} ${funcName}(${typeParam} value) {
+  return ${actualType}::withValue(${type.result.canBePassedByReference ? 'value' : 'std::move(value)'});
+}`.trim()
     )
   }
+  functions.push(
+    `inline ${name} ${funcName}(const ${type.error.getCode('c++')}& error) { return ${actualType}::withError(error); }`
+  )
 
   return {
     cxxType: actualType,
