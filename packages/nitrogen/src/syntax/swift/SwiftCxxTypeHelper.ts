@@ -539,7 +539,10 @@ inline ${name} ${funcName}(${typeParam} value) {
     )
   }
   functions.push(
-    `inline ${name} ${funcName}(const ${type.error.getCode('c++')}& error) { return ${actualType}::withError(error); }`
+    `
+inline ${name} ${funcName}(const ${type.error.getCode('c++')}& error) {
+  return ${actualType}::withError(error);
+}`.trim()
   )
 
   return {
