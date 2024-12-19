@@ -60,6 +60,7 @@ namespace margelo::nitro::image { class HybridBaseSpec; }
 #include "JFunc_void.hpp"
 #include "JFunc_void_std__optional_double_.hpp"
 #include "JFunc_std__shared_ptr_Promise_double__.hpp"
+#include "JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_double____.hpp"
 #include "JFunc_std__shared_ptr_Promise_std__string__.hpp"
 #include "JFunc_void_std__string.hpp"
 
@@ -524,6 +525,22 @@ namespace margelo::nitro::image {
   std::shared_ptr<Promise<double>> JHybridTestObjectSwiftKotlinSpec::callSumUpNTimes(const std::function<std::shared_ptr<Promise<double>>()>& callback, double n) {
     static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JPromise::javaobject>(jni::alias_ref<JFunc_std__shared_ptr_Promise_double__::javaobject> /* callback */, double /* n */)>("callSumUpNTimes");
     auto __result = method(_javaPart, JFunc_std__shared_ptr_Promise_double__::fromCpp(callback), n);
+    return [&]() {
+      auto __promise = Promise<double>::create();
+      __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
+        auto __result = jni::static_ref_cast<jni::JDouble>(__boxedResult);
+        __promise->resolve(__result->value());
+      });
+      __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {
+        jni::JniException __jniError(__throwable);
+        __promise->reject(std::make_exception_ptr(__jniError));
+      });
+      return __promise;
+    }();
+  }
+  std::shared_ptr<Promise<double>> JHybridTestObjectSwiftKotlinSpec::callbackAsyncPromise(const std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<double>>>>()>& callback) {
+    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JPromise::javaobject>(jni::alias_ref<JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_double____::javaobject> /* callback */)>("callbackAsyncPromise");
+    auto __result = method(_javaPart, JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_double____::fromCpp(callback));
     return [&]() {
       auto __promise = Promise<double>::create();
       __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
