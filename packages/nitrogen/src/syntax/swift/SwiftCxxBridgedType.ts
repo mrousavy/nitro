@@ -800,10 +800,12 @@ case ${i}:
   }
 
   let __closureHolder = Unmanaged.passRetained(ClosureHolder(wrappingClosure: ${swiftParameterName})).toOpaque()
+  @convention(c)
   func __callClosure(${cFuncParamsSignature}) -> Void {
     let closure = Unmanaged<ClosureHolder>.fromOpaque(__closureHolder).takeUnretainedValue()
     closure.invoke(${indent(cFuncParamsForward, '    ')})
   }
+  @convention(c)
   func __destroyClosure(_ __closureHolder: UnsafeMutableRawPointer) -> Void {
     Unmanaged<ClosureHolder>.fromOpaque(__closureHolder).release()
   }
