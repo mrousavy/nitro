@@ -112,6 +112,7 @@ public:
   std::shared_ptr<Promise<double>>
   getValueFromJSCallbackAndWait(const std::function<std::shared_ptr<Promise<double>>()>& getValue) override;
   void callAll(const std::function<void()>& first, const std::function<void()>& second, const std::function<void()>& third) override;
+  std::shared_ptr<Promise<double>> callSumUpNTimes(const std::function<std::shared_ptr<Promise<double>>()>& callback, double n) override;
   std::shared_ptr<Promise<void>>
   getValueFromJsCallback(const std::function<std::shared_ptr<Promise<std::string>>()>& callback,
                          const std::function<void(const std::string& /* valueFromJs */)>& andThenCall) override;

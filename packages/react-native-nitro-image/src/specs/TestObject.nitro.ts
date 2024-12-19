@@ -103,6 +103,7 @@ interface SharedTestObjectProps {
     value: number | undefined,
     callback: (maybe: number | undefined) => void
   ): void
+  callSumUpNTimes(callback: () => number, n: number): Promise<number>
 
   // Callbacks that return values
   getValueFromJSCallbackAndWait(getValue: () => number): Promise<number>

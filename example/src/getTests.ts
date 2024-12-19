@@ -872,6 +872,11 @@ export function getTests(
         .didNotThrow()
         .equals(3)
     ),
+    createTest('callSumUpNTimes(...)', async () =>
+      (await it(async () => await testObject.callSumUpNTimes(() => 7, 5)))
+        .didNotThrow()
+        .equals(7 * 5 /* = 35 */)
+    ),
 
     // Objects
     createTest('getCar()', () =>
