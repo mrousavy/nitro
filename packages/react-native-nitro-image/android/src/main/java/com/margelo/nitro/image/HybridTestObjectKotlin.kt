@@ -202,6 +202,14 @@ class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
         }
     }
 
+  override fun callbackAsyncPromise(callback: () -> Promise<Promise<Double>>): Promise<Double> {
+    return Promise.async {
+      val promise = callback().await()
+      val result = promise.await()
+      return@async result
+    }
+  }
+
     override fun getCar(): Car {
         return Car(2018.0, "Lamborghini", "Huracán", 640.0, Powertrain.GAS, null, true)
     }
