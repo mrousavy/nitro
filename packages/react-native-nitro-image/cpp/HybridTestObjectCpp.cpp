@@ -289,6 +289,17 @@ std::shared_ptr<Promise<double>> HybridTestObjectCpp::callSumUpNTimes(const std:
 }
 
 std::shared_ptr<Promise<double>>
+HybridTestObjectCpp::callbackAsyncPromise(const std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<double>>>>()>& callback) {
+  return Promise<double>::async([=]() {
+    std::future<std::shared_ptr<Promise<double>>> future = callback()->await();
+    std::shared_ptr<Promise<double>> promise = future.get();
+    std::future<double> innerFuture = promise->await();
+    double innerResult = innerFuture.get();
+    return innerResult;
+  });
+}
+
+std::shared_ptr<Promise<double>>
 HybridTestObjectCpp::getValueFromJSCallbackAndWait(const std::function<std::shared_ptr<Promise<double>>()>& getValue) {
   return Promise<double>::async([=]() -> double {
     std::shared_ptr<Promise<double>> promise = getValue();
