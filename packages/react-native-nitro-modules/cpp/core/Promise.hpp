@@ -253,7 +253,7 @@ private:
   std::vector<OnResolvedFunc> _onResolvedListeners;
   std::vector<OnRejectedFunc> _onRejectedListeners;
   std::unique_ptr<std::mutex> _mutex;
-};
+} SWIFT_UNSAFE_REFERENCE;
 
 // Specialization for void
 template <>
@@ -405,6 +405,6 @@ private:
   std::exception_ptr _error;
   std::vector<OnResolvedFunc> _onResolvedListeners;
   std::vector<OnRejectedFunc> _onRejectedListeners;
-};
+} SWIFT_UNSAFE_REFERENCE;
 
 } // namespace margelo::nitro

@@ -10,6 +10,7 @@
 #include <unordered_map>
 #include <variant>
 #include <vector>
+#include "NitroDefines.hpp"
 
 namespace margelo::nitro {
 
@@ -199,6 +200,6 @@ public:
 
 private:
   std::unordered_map<std::string, AnyValue> _map;
-};
+} SWIFT_UNSAFE_REFERENCE;
 
 } // namespace margelo::nitro
