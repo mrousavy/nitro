@@ -280,7 +280,7 @@ std::shared_ptr<Promise<double>> HybridTestObjectCpp::callSumUpNTimes(const std:
   return Promise<double>::async([=]() {
     double result = 0;
     for (size_t i = 0; i < n; i++) {
-      std::future<double> future = callback().await();
+      std::future<double> future = callback()->await();
       double current = future.get();
       result += current;
     }
