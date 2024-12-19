@@ -21,14 +21,14 @@ namespace margelo::nitro {
  */
 struct SwiftClosure final {
 public:
-  using CallFn = void(void*);
-  using DeleteFn = void(void*);
+  using CallFn = void(void* _Nonnull);
+  using DeleteFn = void(void* _Nonnull);
 
 private:
   std::function<void()> _function;
 
 public:
-  explicit SwiftClosure(void* context, CallFn* call, DeleteFn* destroy) {
+  explicit SwiftClosure(void* _Nonnull context, CallFn* _Nonnull call, DeleteFn* _Nonnull destroy) {
     // Create a std::shared_ptr of the `void* context` which calls `destroy`
     // once no references of it exist anymore.
     // Since the std::function captures this std::shared_ptr, it can now be
