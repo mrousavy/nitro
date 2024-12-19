@@ -328,17 +328,16 @@ function createCxxFunctionSwiftHelper(type: FunctionType): SwiftCxxHelper {
     }),
   ]
   const functionPointerParam = `${callFuncReturnType}(* _Nonnull call)(${callFuncParams.join(', ')})`
-  const name = type.specializationName
-  const wrapperName = `${name}_Wrapper`
+  const wrapperName = `${type.specializationName}_Wrapper`
 
   let callCppFuncBody: string
   if (returnBridge.hasType) {
     callCppFuncBody = `
-auto __result = *_function(${callParamsForward.join(', ')});
+auto __result = _function->operator()(${callParamsForward.join(', ')});
 return ${returnBridge.parseFromCppToSwift('__result', 'c++')};
     `.trim()
   } else {
-    callCppFuncBody = `*_function(${callParamsForward.join(', ')});`
+    callCppFuncBody = `_function->operator()(${callParamsForward.join(', ')});`
   }
 
   let callSwiftFuncBody: string
@@ -357,14 +356,10 @@ return ${returnBridge.parseFromSwiftToCpp('__result', 'c++')};
 
   return {
     cxxType: actualType,
-    funcName: `create_${name}`,
-    specializationName: name,
+    funcName: `create_${wrapperName}`,
+    specializationName: wrapperName,
     cxxHeader: {
       code: `
-/**
- * Specialized version of \`${type.getCode('c++', false)}\`.
- */
-using ${name} = ${actualType};
 /**
  * Wrapper class for a \`${escapeComments(actualType)}\`, this can be used from Swift.
  */
@@ -375,12 +370,15 @@ public:
   inline ${callFuncReturnType} call(${callCppFuncParamsSignature.join(', ')}) const {
     ${indent(callCppFuncBody, '    ')}
   }
+  inline ${actualType} getFunction() const {
+    return *_function;
+  }
 private:
   std::shared_ptr<${actualType}> _function;
 };
-inline ${name} create_${name}(void* _Nonnull closureHolder, ${functionPointerParam}, void(* _Nonnull destroy)(void* _Nonnull)) {
+inline ${wrapperName} create_${wrapperName}(void* _Nonnull closureHolder, ${functionPointerParam}, void(* _Nonnull destroy)(void* _Nonnull)) {
   std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
-  return ${name}([sharedClosureHolder = std::move(sharedClosureHolder), call](${paramsSignature.join(', ')}) -> ${type.returnType.getCode('c++')} {
+  return ${wrapperName}([sharedClosureHolder = std::move(sharedClosureHolder), call](${paramsSignature.join(', ')}) -> ${type.returnType.getCode('c++')} {
     ${indent(callSwiftFuncBody, '    ')}
   });
 }

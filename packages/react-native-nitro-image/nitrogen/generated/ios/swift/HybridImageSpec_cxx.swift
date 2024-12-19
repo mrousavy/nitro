@@ -136,7 +136,7 @@ public class HybridImageSpec_cxx {
   }
   
   @inline(__always)
-  public func saveToFile(path: std.string, onFinished: bridge.Func_void_std__string) -> bridge.Result_void_ {
+  public func saveToFile(path: std.string, onFinished: bridge.Func_void_std__string_Wrapper) -> bridge.Result_void_ {
     do {
       try self.__implementation.saveToFile(path: String(path), onFinished: { () -> ((String) -> Void) in
         return { (__path: String) -> Void in
