@@ -855,12 +855,14 @@ export function getTests(
         .didNotThrow()
         .equals('hello')
     ),
-    createTest('getValueFromJSCallbackAndWait(...)', async () =>
-      (await it(() => testObject.getValueFromJSCallbackAndWait(() => 73)))
-        .didNotThrow()
-        .equals(73)
+    createTest(
+      'Single callback can be called and awaited: getValueFromJSCallbackAndWait(...)',
+      async () =>
+        (await it(() => testObject.getValueFromJSCallbackAndWait(() => 73)))
+          .didNotThrow()
+          .equals(73)
     ),
-    createTest('callAll(...)', async () =>
+    createTest('Multiple callbacks are all called: callAll(...)', async () =>
       (
         await it(async () => {
           return timeoutedPromise((complete) => {
@@ -876,23 +878,27 @@ export function getTests(
         .didNotThrow()
         .equals(3)
     ),
-    createTest('callSumUpNTimes(...)', async () =>
-      (await it(async () => await testObject.callSumUpNTimes(() => 7, 5)))
-        .didNotThrow()
-        .equals(7 * 5 /* = 35 */)
+    createTest(
+      'Callback can be called multiple times: callSumUpNTimes(...)',
+      async () =>
+        (await it(async () => await testObject.callSumUpNTimes(() => 7, 5)))
+          .didNotThrow()
+          .equals(7 * 5 /* = 35 */)
     ),
-    createTest('callbackAsyncPromise(...)', async () =>
-      (
-        await it(async () => {
-          return timeoutedPromise(() =>
-            testObject.callbackAsyncPromise(async () => {
-              return 13
-            })
-          )
-        })
-      )
-        .didNotThrow()
-        .equals(13)
+    createTest(
+      'Async callback can be awaited and returned on native side: callbackAsyncPromise(...)',
+      async () =>
+        (
+          await it(async () => {
+            return timeoutedPromise(() =>
+              testObject.callbackAsyncPromise(async () => {
+                return 13
+              })
+            )
+          })
+        )
+          .didNotThrow()
+          .equals(13)
     ),
 
     // Objects
