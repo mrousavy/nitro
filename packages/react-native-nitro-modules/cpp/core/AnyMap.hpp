@@ -4,13 +4,13 @@
 
 #pragma once
 
+#include "NitroDefines.hpp"
 #include <map>
 #include <memory>
 #include <string>
 #include <unordered_map>
 #include <variant>
 #include <vector>
-#include "NitroDefines.hpp"
 
 namespace margelo::nitro {
 
