@@ -334,11 +334,11 @@ function createCxxFunctionSwiftHelper(type: FunctionType): SwiftCxxHelper {
   let callCppFuncBody: string
   if (returnBridge.hasType) {
     callCppFuncBody = `
-auto __result = _function(${callParamsForward.join(', ')});
+auto __result = *_function(${callParamsForward.join(', ')});
 return ${returnBridge.parseFromCppToSwift('__result', 'c++')};
     `.trim()
   } else {
-    callCppFuncBody = `_function(${callParamsForward.join(', ')});`
+    callCppFuncBody = `*_function(${callParamsForward.join(', ')});`
   }
 
   let callSwiftFuncBody: string
@@ -370,22 +370,19 @@ using ${name} = ${actualType};
  */
 class ${wrapperName} final {
 public:
-  explicit ${wrapperName}(const ${actualType}& func): _function(func) {}
-  explicit ${wrapperName}(${actualType}&& func): _function(std::move(func)) {}
+  explicit ${wrapperName}(const ${actualType}& func): _function(std::make_shared<${actualType}>(func)) {}
+  explicit ${wrapperName}(${actualType}&& func): _function(std::make_shared<${actualType}>(std::move(func))) {}
   inline ${callFuncReturnType} call(${callCppFuncParamsSignature.join(', ')}) const {
     ${indent(callCppFuncBody, '    ')}
   }
 private:
-  ${actualType} _function;
+  std::shared_ptr<${actualType}> _function;
 };
 inline ${name} create_${name}(void* _Nonnull closureHolder, ${functionPointerParam}, void(* _Nonnull destroy)(void* _Nonnull)) {
   std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
   return ${name}([sharedClosureHolder = std::move(sharedClosureHolder), call](${paramsSignature.join(', ')}) -> ${type.returnType.getCode('c++')} {
     ${indent(callSwiftFuncBody, '    ')}
   });
-}
-inline std::shared_ptr<${wrapperName}> share_${name}(const ${name}& value) {
-  return std::make_shared<${wrapperName}>(value);
 }
     `.trim(),
       requiredIncludes: [

@@ -518,7 +518,6 @@ case ${i}:
         switch (language) {
           case 'swift':
             const swiftClosureType = funcType.getCode('swift', false)
-            const bridge = this.getBridgeOrThrow()
             const paramsSignature = funcType.parameters.map(
               (p) => `__${p.escapedName}: ${p.getCode('swift')}`
             )
@@ -532,18 +531,16 @@ case ${i}:
             if (funcType.returnType.kind === 'void') {
               return `
 { () -> ${swiftClosureType} in
-  let __sharedClosure = bridge.share_${bridge.specializationName}(${cppParameterName})
   return { ${signature} in
-    __sharedClosure.pointee.call(${indent(paramsForward.join(', '), '  ')})
+    ${cppParameterName}.call(${indent(paramsForward.join(', '), '  ')})
   }
 }()`.trim()
             } else {
               const resultBridged = new SwiftCxxBridgedType(funcType.returnType)
               return `
 { () -> ${swiftClosureType} in
-  let __sharedClosure = bridge.share_${bridge.specializationName}(${cppParameterName})
   return { ${signature} in
-    let __result = __sharedClosure.pointee.call(${paramsForward.join(', ')})
+    let __result = ${cppParameterName}.call(${paramsForward.join(', ')})
     return ${indent(resultBridged.parseFromCppToSwift('__result', 'swift'), '    ')}
   }
 }()`.trim()
