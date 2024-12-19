@@ -37,7 +37,7 @@ public:
     std::shared_ptr<void> sharedContext(context, destroy);
     // Create a std::function that captures `sharedContext`.
     // Once it gets destroyed, `destroy()` gets called.
-    _function = [sharedContext, call]() {
+    _function = [sharedContext = std::move(sharedContext), call]() {
       // Call the actual Swift closure.
       call(sharedContext.get());
     };
