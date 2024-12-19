@@ -41,6 +41,7 @@
 #if __has_include(<swift/bridging>)
 // Swift's bridging header defines those things
 #include <swift/bridging>
+#define SWIFT_PRIVATE __attribute__((swift_private))
 #else
 // If we don't have Swift bridging header, those macros do nothing
 #define SWIFT_NAME(_name)
