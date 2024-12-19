@@ -257,6 +257,17 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
+  abstract fun callSumUpNTimes(callback: () -> Promise<Double>, n: Double): Promise<Double>
+  
+  @DoNotStrip
+  @Keep
+  private fun callSumUpNTimes(callback: Func_std__shared_ptr_Promise_double__, n: Double): Promise<Double> {
+    val __result = callSumUpNTimes(callback.toLambda(), n)
+    return __result
+  }
+  
+  @DoNotStrip
+  @Keep
   abstract fun getValueFromJSCallbackAndWait(getValue: () -> Promise<Double>): Promise<Double>
   
   @DoNotStrip

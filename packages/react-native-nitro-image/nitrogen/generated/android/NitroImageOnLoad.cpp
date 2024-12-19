@@ -46,6 +46,7 @@ int initialize(JavaVM* vm) {
     margelo::nitro::image::JFunc_void::registerNatives();
     margelo::nitro::image::JFunc_void_std__optional_double_::registerNatives();
     margelo::nitro::image::JFunc_std__shared_ptr_Promise_double__::registerNatives();
+    margelo::nitro::image::JFunc_std__shared_ptr_Promise_double__::registerNatives();
     margelo::nitro::image::JFunc_std__shared_ptr_Promise_std__string__::registerNatives();
     margelo::nitro::image::JFunc_void_std__string::registerNatives();
     margelo::nitro::image::JHybridBaseSpec::registerNatives();

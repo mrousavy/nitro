@@ -275,6 +275,19 @@ void HybridTestObjectCpp::callWithOptional(std::optional<double> value,
   callback(value);
 }
 
+std::shared_ptr<Promise<double>> HybridTestObjectCpp::callSumUpNTimes(const std::function<std::shared_ptr<Promise<double>>()>& callback,
+                                                                      double n) {
+  return Promise<double>::async([=]() {
+    double result = 0;
+    for (size_t i = 0; i < n; i++) {
+      std::future<double> future = callback()->await();
+      double current = future.get();
+      result += current;
+    }
+    return result;
+  });
+}
+
 std::shared_ptr<Promise<double>>
 HybridTestObjectCpp::getValueFromJSCallbackAndWait(const std::function<std::shared_ptr<Promise<double>>()>& getValue) {
   return Promise<double>::async([=]() -> double {
