@@ -41,7 +41,7 @@ struct JSIConverter<std::function<ReturnType(Args...)>> final {
 
     // Create a C++ function that can be called by the consumer.
     // This will call the jsi::Function if it is still alive.
-    return [&runtime, weakDispatcher, sharedFunction = std::move(sharedFunction)](Args... args) -> ReturnType {
+    return [&runtime, weakDispatcher = std::move(weakDispatcher), sharedFunction = std::move(sharedFunction)](Args... args) -> ReturnType {
       // Try to get the JS Dispatcher if the Runtime is still alive
       std::shared_ptr<Dispatcher> dispatcher = weakDispatcher.lock();
       if (!dispatcher) {
@@ -55,26 +55,34 @@ struct JSIConverter<std::function<ReturnType(Args...)>> final {
       }
 
       if constexpr (std::is_void_v<ResultingType>) {
-        dispatcher->runAsync(
-            [&runtime, sharedFunction, ... args = std::move(args)]() { callJSFunction(runtime, sharedFunction, args...); });
-      } else {
-        return dispatcher->runAsyncAwaitable<ResultingType>([&runtime, sharedFunction, ... args = std::move(args)]() -> ResultingType {
-          return callJSFunction(runtime, sharedFunction, args...);
+        dispatcher->runAsync([&runtime, sharedFunction = std::move(sharedFunction), ... args = std::move(args)]() {
+          callJSFunction(runtime, sharedFunction, args...);
         });
+      } else {
+        return dispatcher->runAsyncAwaitable<ResultingType>(
+            [&runtime, sharedFunction = std::move(sharedFunction), ... args = std::move(args)]() -> ResultingType {
+              return callJSFunction(runtime, sharedFunction, args...);
+            });
       }
     };
   }
 
-  static inline jsi::Value toJSI(jsi::Runtime& runtime, const std::function<ReturnType(Args...)>& function) {
-    jsi::HostFunctionType jsFunction = [function](jsi::Runtime& runtime, const jsi::Value& thisValue, const jsi::Value* args,
-                                                  size_t count) -> jsi::Value {
+  static inline jsi::Value toJSI(jsi::Runtime& runtime, std::function<ReturnType(Args...)>&& function) {
+    jsi::HostFunctionType jsFunction = [function = std::move(function)](jsi::Runtime& runtime, const jsi::Value& thisValue,
+                                                                        const jsi::Value* args, size_t count) -> jsi::Value {
       if (count != sizeof...(Args)) [[unlikely]] {
         throw jsi::JSError(runtime, "Function expected " + std::to_string(sizeof...(Args)) + " arguments, but received " +
                                         std::to_string(count) + "!");
       }
       return callHybridFunction(function, runtime, args, std::index_sequence_for<Args...>{});
     };
-    return jsi::Function::createFromHostFunction(runtime, jsi::PropNameID::forUtf8(runtime, "hostFunction"), sizeof...(Args), jsFunction);
+    return jsi::Function::createFromHostFunction(runtime, jsi::PropNameID::forUtf8(runtime, "hostFunction"), sizeof...(Args),
+                                                 std::move(jsFunction));
+  }
+
+  static inline jsi::Value toJSI(jsi::Runtime& runtime, const std::function<ReturnType(Args...)>& function) {
+    std::function<ReturnType(Args...)> copy = function;
+    return toJSI(runtime, std::move(copy));
   }
 
   static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
