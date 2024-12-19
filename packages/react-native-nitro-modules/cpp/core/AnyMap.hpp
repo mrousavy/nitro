@@ -200,6 +200,6 @@ public:
 
 private:
   std::unordered_map<std::string, AnyValue> _map;
-} SWIFT_UNSAFE_REFERENCE;
+} SWIFT_NONCOPYABLE;
 
 } // namespace margelo::nitro

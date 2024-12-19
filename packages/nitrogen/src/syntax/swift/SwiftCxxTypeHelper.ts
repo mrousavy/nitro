@@ -377,7 +377,7 @@ public:
   }
 private:
   ${actualType} _function;
-} SWIFT_UNSAFE_REFERENCE;
+} SWIFT_NONCOPYABLE;
 inline ${name} create_${name}(void* _Nonnull closureHolder, ${functionPointerParam}, void(* _Nonnull destroy)(void* _Nonnull)) {
   std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
   return ${name}([sharedClosureHolder = std::move(sharedClosureHolder), call](${paramsSignature.join(', ')}) -> ${type.returnType.getCode('c++')} {
