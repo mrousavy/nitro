@@ -72,7 +72,7 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
   }
 
   func callSumUpNTimes(callback: @escaping (() -> Promise<Double>), n: Double) throws -> Promise<Double> {
-    var result = 0
+    var result = 0.0
     return Promise.async {
       for i in 1..n {
         let current = try await callback().await()

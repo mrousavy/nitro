@@ -192,9 +192,9 @@ class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
     }
 
     override fun callSumUpNTimes(callback: () -> Promise<Double>, n: Double): Promise<Double> {
-        var result = 0
+        var result = 0.0
         return Promise.async {
-            for (i in 1..n) {
+            for (i in 1..Int(n)) {
                 val current = callback().await()
                 result += current
             }
