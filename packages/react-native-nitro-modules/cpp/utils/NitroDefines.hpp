@@ -31,24 +31,22 @@
 #define _CXX_INTEROP_HAS_ATTRIBUTE(x) 0
 #endif
 
-#if _CXX_INTEROP_HAS_ATTRIBUTE(swift_attr)
-// Rename Type for Swift
-#define SWIFT_NAME(_name) __attribute__((swift_name(#_name)))
-// Make Swift type private
-#define SWIFT_PRIVATE __attribute__((swift_private))
-// Make getter + setter a computed property
-#define SWIFT_COMPUTED_PROPERTY __attribute__((swift_attr("import_computed_property")))
-#else
-#define SWIFT_NAME(_name)
-#define SWIFT_PRIVATE
-#define SWIFT_COMPUTED_PROPERTY
-#endif
-
 #if _CXX_INTEROP_HAS_ATTRIBUTE(enum_extensibility)
 // Enum is marked as closed/not extensible
 #define CLOSED_ENUM __attribute__((enum_extensibility(closed)))
 #else
 #define CLOSED_ENUM
+#endif
+
+#if __has_include(<swift/bridging>)
+// Swift's bridging header defines those things
+#include <swift/bridging>
+#else
+// If we don't have Swift bridging header, those macros do nothing
+#define SWIFT_NAME(_name)
+#define SWIFT_PRIVATE
+#define SWIFT_COMPUTED_PROPERTY
+#define SWIFT_UNSAFE_REFERENCE
 #endif
 
 #endif /* NitroDefines_h */

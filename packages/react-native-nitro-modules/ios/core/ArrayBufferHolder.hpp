@@ -75,6 +75,6 @@ public:
 
 private:
   std::shared_ptr<ArrayBuffer> _arrayBuffer;
-};
+} SWIFT_UNSAFE_REFERENCE;
 
 } // namespace margelo::nitro
