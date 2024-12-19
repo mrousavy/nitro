@@ -39,16 +39,15 @@ public extension SwiftClosure {
     let context = Unmanaged.passRetained(ClosureWrapper(closure: closure)).toOpaque()
     
     // Create a C-style Function Pointer, which calls the actual Swift closure.
-    let call: @convention(c) (UnsafeMutableRawPointer?) -> Void = { context in
+    func call(context: UnsafeMutableRawPointer) {
       // Unwrap context from void* to closure again. We are assuming that it has not been deleted yet.
-      let closure = Unmanaged<ClosureWrapper>.fromOpaque(context!).takeUnretainedValue()
+      let closure = Unmanaged<ClosureWrapper>.fromOpaque(context).takeUnretainedValue()
       // Call it!
       closure.invoke()
     }
     
     // Create a C-style Function Pointer, which deletes the `ClosureWrapper`.
-    let destroy: @convention(c) (UnsafeMutableRawPointer?) -> Void = { context in
-      guard let context else { return }
+    func destroy(context: UnsafeMutableRawPointer) {
       // Release the void* holding our `ClosureWrapper`
       Unmanaged<ClosureWrapper>.fromOpaque(context).release()
     }

@@ -380,7 +380,7 @@ private:
 };
 inline ${name} create_${name}(void* _Nonnull closureHolder, ${functionPointerParam}, void(* _Nonnull destroy)(void* _Nonnull)) {
   std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
-  return ${name}([sharedClosureHolder, call](${paramsSignature.join(', ')}) -> ${type.returnType.getCode('c++')} {
+  return ${name}([sharedClosureHolder = std::move(sharedClosureHolder), call](${paramsSignature.join(', ')}) -> ${type.returnType.getCode('c++')} {
     ${indent(callSwiftFuncBody, '    ')}
   });
 }
