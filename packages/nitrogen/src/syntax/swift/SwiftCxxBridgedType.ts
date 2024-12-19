@@ -361,7 +361,7 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
   let __resolverCpp = __resolver.getFunctionCopy()
   let __rejecterCpp = ${indent(rejecterFuncBridge.parseFromSwiftToCpp('__rejecter', 'swift'), '  ')}
   ${cppParameterName}.pointee.addOnResolvedListener(__resolverCpp)
-  ${cppParameterName}.pointee.addOnRejectedListener(__rejecterCpp)
+  ${cppParameterName}.pointee.addOnRejectedListener(__rejecterCpp.getFunction())
   return __promise
 }()`.trim()
             } else {
@@ -389,8 +389,8 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
   }
   let __resolverCpp = ${indent(resolverFuncBridge.parseFromSwiftToCpp('__resolver', 'swift'), '  ')}
   let __rejecterCpp = ${indent(rejecterFuncBridge.parseFromSwiftToCpp('__rejecter', 'swift'), '  ')}
-  ${cppParameterName}.pointee.${addResolverName}(__resolverCpp)
-  ${cppParameterName}.pointee.addOnRejectedListener(__rejecterCpp)
+  ${cppParameterName}.pointee.${addResolverName}(__resolverCpp.getFunction())
+  ${cppParameterName}.pointee.addOnRejectedListener(__rejecterCpp.getFunction())
   return __promise
 }()`.trim()
             }
@@ -518,7 +518,6 @@ case ${i}:
         switch (language) {
           case 'swift':
             const swiftClosureType = funcType.getCode('swift', false)
-            const bridge = this.getBridgeOrThrow()
             const paramsSignature = funcType.parameters.map(
               (p) => `__${p.escapedName}: ${p.getCode('swift')}`
             )
@@ -532,22 +531,25 @@ case ${i}:
             if (funcType.returnType.kind === 'void') {
               return `
 { () -> ${swiftClosureType} in
-  let __sharedClosure = bridge.share_${bridge.specializationName}(${cppParameterName})
   return { ${signature} in
-    __sharedClosure.pointee.call(${indent(paramsForward.join(', '), '  ')})
+    ${cppParameterName}.call(${indent(paramsForward.join(', '), '  ')})
   }
 }()`.trim()
             } else {
               const resultBridged = new SwiftCxxBridgedType(funcType.returnType)
               return `
 { () -> ${swiftClosureType} in
-  let __sharedClosure = bridge.share_${bridge.specializationName}(${cppParameterName})
   return { ${signature} in
-    let __result = __sharedClosure.pointee.call(${paramsForward.join(', ')})
+    let __result = ${cppParameterName}.call(${paramsForward.join(', ')})
     return ${indent(resultBridged.parseFromCppToSwift('__result', 'swift'), '    ')}
   }
 }()`.trim()
             }
+          case 'c++': {
+            const bridge = this.getBridgeOrThrow()
+            return `bridge::swift::${bridge.specializationName}(${cppParameterName})`
+          }
+
           default:
             return cppParameterName
         }
