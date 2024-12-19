@@ -48,7 +48,7 @@ public:
 #endif
 
     // Make a few edge-cases nicer.
-    name = replaceRegex(name, R"(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>>)", "std::string");
+    name = replaceRegex(name, R"(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> ?>)", "std::string");
     name = replaceRegex(name, R"(std::__1::vector<([^>]+), std::__1::allocator<\1>>)", "std::vector<$1>");
     name = replaceRegex(name, R"(std::__1::map<([^,]+), ([^>]+), std::__1::less<\1>, std::__1::allocator<std::__1::pair<const \1, \2>>>)",
                         "std::map<$1, $2>");
