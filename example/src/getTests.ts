@@ -68,7 +68,7 @@ function createTest<T>(
 }
 
 function timeoutedPromise<T>(
-  run: (complete: (value: T) => void) => void | Promise<T>
+  run: (complete: (value: T) => void) => void | Promise<void>
 ): Promise<T> {
   return new Promise(async (resolve, reject) => {
     let didResolve = false
@@ -82,17 +82,13 @@ function timeoutedPromise<T>(
       })
     })
     try {
-      const result = await run((value) => {
+      await run((value) => {
         if (didResolve) {
           throw new Error(`Promise was already rejected!`)
         }
         didResolve = true
         resolve(value)
       })
-      if (!didResolve) {
-        didResolve = true
-        resolve(result)
-      }
     } catch (e) {
       didResolve = true
       reject(e)
@@ -890,11 +886,12 @@ export function getTests(
       async () =>
         (
           await it(async () => {
-            return timeoutedPromise(() =>
-              testObject.callbackAsyncPromise(async () => {
+            return timeoutedPromise(async (complete) => {
+              const result = await testObject.callbackAsyncPromise(async () => {
                 return 13
               })
-            )
+              complete(result)
+            })
           })
         )
           .didNotThrow()
