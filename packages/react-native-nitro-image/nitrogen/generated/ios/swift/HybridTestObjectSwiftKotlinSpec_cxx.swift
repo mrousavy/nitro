@@ -700,12 +700,10 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
           }
         
           let __closureHolder = Unmanaged.passRetained(ClosureHolder(wrappingClosure: __resolver)).toOpaque()
-          @convention(c)
           func __callClosure(__closureHolder: UnsafeMutableRawPointer, __result: Double) -> Void {
             let closure = Unmanaged<ClosureHolder>.fromOpaque(__closureHolder).takeUnretainedValue()
             closure.invoke(__result)
           }
-          @convention(c)
           func __destroyClosure(_ __closureHolder: UnsafeMutableRawPointer) -> Void {
             Unmanaged<ClosureHolder>.fromOpaque(__closureHolder).release()
           }
@@ -724,12 +722,10 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
           }
         
           let __closureHolder = Unmanaged.passRetained(ClosureHolder(wrappingClosure: __rejecter)).toOpaque()
-          @convention(c)
           func __callClosure(__closureHolder: UnsafeMutableRawPointer, __error: std.exception_ptr) -> Void {
             let closure = Unmanaged<ClosureHolder>.fromOpaque(__closureHolder).takeUnretainedValue()
             closure.invoke(RuntimeError.from(cppError: __error))
           }
-          @convention(c)
           func __destroyClosure(_ __closureHolder: UnsafeMutableRawPointer) -> Void {
             Unmanaged<ClosureHolder>.fromOpaque(__closureHolder).release()
           }
@@ -777,12 +773,10 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
           }
         
           let __closureHolder = Unmanaged.passRetained(ClosureHolder(wrappingClosure: __resolver)).toOpaque()
-          @convention(c)
           func __callClosure(__closureHolder: UnsafeMutableRawPointer, __result: Car) -> Void {
             let closure = Unmanaged<ClosureHolder>.fromOpaque(__closureHolder).takeUnretainedValue()
             closure.invoke(__result)
           }
-          @convention(c)
           func __destroyClosure(_ __closureHolder: UnsafeMutableRawPointer) -> Void {
             Unmanaged<ClosureHolder>.fromOpaque(__closureHolder).release()
           }
@@ -801,12 +795,10 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
           }
         
           let __closureHolder = Unmanaged.passRetained(ClosureHolder(wrappingClosure: __rejecter)).toOpaque()
-          @convention(c)
           func __callClosure(__closureHolder: UnsafeMutableRawPointer, __error: std.exception_ptr) -> Void {
             let closure = Unmanaged<ClosureHolder>.fromOpaque(__closureHolder).takeUnretainedValue()
             closure.invoke(RuntimeError.from(cppError: __error))
           }
-          @convention(c)
           func __destroyClosure(_ __closureHolder: UnsafeMutableRawPointer) -> Void {
             Unmanaged<ClosureHolder>.fromOpaque(__closureHolder).release()
           }
@@ -853,12 +845,10 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
           }
         
           let __closureHolder = Unmanaged.passRetained(ClosureHolder(wrappingClosure: __rejecter)).toOpaque()
-          @convention(c)
           func __callClosure(__closureHolder: UnsafeMutableRawPointer, __error: std.exception_ptr) -> Void {
             let closure = Unmanaged<ClosureHolder>.fromOpaque(__closureHolder).takeUnretainedValue()
             closure.invoke(RuntimeError.from(cppError: __error))
           }
-          @convention(c)
           func __destroyClosure(_ __closureHolder: UnsafeMutableRawPointer) -> Void {
             Unmanaged<ClosureHolder>.fromOpaque(__closureHolder).release()
           }
@@ -974,12 +964,10 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
               }
             
               let __closureHolder = Unmanaged.passRetained(ClosureHolder(wrappingClosure: __resolver)).toOpaque()
-              @convention(c)
               func __callClosure(__closureHolder: UnsafeMutableRawPointer, __result: Double) -> Void {
                 let closure = Unmanaged<ClosureHolder>.fromOpaque(__closureHolder).takeUnretainedValue()
                 closure.invoke(__result)
               }
-              @convention(c)
               func __destroyClosure(_ __closureHolder: UnsafeMutableRawPointer) -> Void {
                 Unmanaged<ClosureHolder>.fromOpaque(__closureHolder).release()
               }
@@ -998,12 +986,10 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
               }
             
               let __closureHolder = Unmanaged.passRetained(ClosureHolder(wrappingClosure: __rejecter)).toOpaque()
-              @convention(c)
               func __callClosure(__closureHolder: UnsafeMutableRawPointer, __error: std.exception_ptr) -> Void {
                 let closure = Unmanaged<ClosureHolder>.fromOpaque(__closureHolder).takeUnretainedValue()
                 closure.invoke(RuntimeError.from(cppError: __error))
               }
-              @convention(c)
               func __destroyClosure(_ __closureHolder: UnsafeMutableRawPointer) -> Void {
                 Unmanaged<ClosureHolder>.fromOpaque(__closureHolder).release()
               }
@@ -1057,12 +1043,10 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
               }
             
               let __closureHolder = Unmanaged.passRetained(ClosureHolder(wrappingClosure: __resolver)).toOpaque()
-              @convention(c)
               func __callClosure(__closureHolder: UnsafeMutableRawPointer, __result: Double) -> Void {
                 let closure = Unmanaged<ClosureHolder>.fromOpaque(__closureHolder).takeUnretainedValue()
                 closure.invoke(__result)
               }
-              @convention(c)
               func __destroyClosure(_ __closureHolder: UnsafeMutableRawPointer) -> Void {
                 Unmanaged<ClosureHolder>.fromOpaque(__closureHolder).release()
               }
@@ -1081,12 +1065,10 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
               }
             
               let __closureHolder = Unmanaged.passRetained(ClosureHolder(wrappingClosure: __rejecter)).toOpaque()
-              @convention(c)
               func __callClosure(__closureHolder: UnsafeMutableRawPointer, __error: std.exception_ptr) -> Void {
                 let closure = Unmanaged<ClosureHolder>.fromOpaque(__closureHolder).takeUnretainedValue()
                 closure.invoke(RuntimeError.from(cppError: __error))
               }
-              @convention(c)
               func __destroyClosure(_ __closureHolder: UnsafeMutableRawPointer) -> Void {
                 Unmanaged<ClosureHolder>.fromOpaque(__closureHolder).release()
               }
@@ -1140,12 +1122,10 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
               }
             
               let __closureHolder = Unmanaged.passRetained(ClosureHolder(wrappingClosure: __resolver)).toOpaque()
-              @convention(c)
               func __callClosure(__closureHolder: UnsafeMutableRawPointer, __result: std.string) -> Void {
                 let closure = Unmanaged<ClosureHolder>.fromOpaque(__closureHolder).takeUnretainedValue()
                 closure.invoke(String(__result))
               }
-              @convention(c)
               func __destroyClosure(_ __closureHolder: UnsafeMutableRawPointer) -> Void {
                 Unmanaged<ClosureHolder>.fromOpaque(__closureHolder).release()
               }
@@ -1164,12 +1144,10 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
               }
             
               let __closureHolder = Unmanaged.passRetained(ClosureHolder(wrappingClosure: __rejecter)).toOpaque()
-              @convention(c)
               func __callClosure(__closureHolder: UnsafeMutableRawPointer, __error: std.exception_ptr) -> Void {
                 let closure = Unmanaged<ClosureHolder>.fromOpaque(__closureHolder).takeUnretainedValue()
                 closure.invoke(RuntimeError.from(cppError: __error))
               }
-              @convention(c)
               func __destroyClosure(_ __closureHolder: UnsafeMutableRawPointer) -> Void {
                 Unmanaged<ClosureHolder>.fromOpaque(__closureHolder).release()
               }

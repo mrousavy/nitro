@@ -14,11 +14,11 @@ import Foundation
  */
 fileprivate final class ClosureWrapper {
   private let closure: () -> Void
-
+  
   init(closure: @escaping () -> Void) {
     self.closure = closure
   }
-
+  
   func invoke() {
     closure()
   }
@@ -37,23 +37,22 @@ public extension SwiftClosure {
   init(wrappingClosure closure: @escaping () -> Void) {
     // Wrap closure in void*, and increment it's ref count so it stays alive.
     let context = Unmanaged.passRetained(ClosureWrapper(closure: closure)).toOpaque()
-
+    
     // Create a C-style Function Pointer, which calls the actual Swift closure.
-    @convention(c)
-    func call(context: UnsafeMutableRawPointer) {
+    let call: @convention(c) (UnsafeMutableRawPointer?) -> Void = { context in
       // Unwrap context from void* to closure again. We are assuming that it has not been deleted yet.
-      let closure = Unmanaged<ClosureWrapper>.fromOpaque(context).takeUnretainedValue()
+      let closure = Unmanaged<ClosureWrapper>.fromOpaque(context!).takeUnretainedValue()
       // Call it!
       closure.invoke()
     }
-
+    
     // Create a C-style Function Pointer, which deletes the `ClosureWrapper`.
-    @convention(c)
-    func destroy(context: UnsafeMutableRawPointer) {
+    let destroy: @convention(c) (UnsafeMutableRawPointer?) -> Void = { context in
+      guard let context else { return }
       // Release the void* holding our `ClosureWrapper`
       Unmanaged<ClosureWrapper>.fromOpaque(context).release()
     }
-
+    
     self.init(context, call, destroy)
   }
 }
