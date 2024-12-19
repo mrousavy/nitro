@@ -47,7 +47,7 @@
 #define SWIFT_NAME(_name)
 #define SWIFT_PRIVATE
 #define SWIFT_COMPUTED_PROPERTY
-#define SWIFT_UNSAFE_REFERENCE
+#define SWIFT_NONCOPYABLE
 #endif
 
 #endif /* NitroDefines_h */

@@ -8,9 +8,9 @@
 #pragma once
 
 #include "ArrayBuffer.hpp"
+#include "NitroDefines.hpp"
 #include "SwiftClosure.hpp"
 #include <memory>
-#include <swift/bridging>
 
 namespace margelo::nitro {
 
@@ -75,6 +75,6 @@ public:
 
 private:
   std::shared_ptr<ArrayBuffer> _arrayBuffer;
-} SWIFT_UNSAFE_REFERENCE;
+};
 
 } // namespace margelo::nitro
