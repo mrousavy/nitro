@@ -56,6 +56,7 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: AnyObject {
   func callWithOptional(value: Double?, callback: @escaping ((_ maybe: Double?) -> Void)) throws -> Void
   func callSumUpNTimes(callback: @escaping (() -> Promise<Double>), n: Double) throws -> Promise<Double>
   func callbackAsyncPromise(callback: @escaping (() -> Promise<Promise<Double>>)) throws -> Promise<Double>
+  func callbackAsyncPromiseBuffer(callback: @escaping (() -> Promise<Promise<ArrayBufferHolder>>)) throws -> Promise<ArrayBufferHolder>
   func getValueFromJSCallbackAndWait(getValue: @escaping (() -> Promise<Double>)) throws -> Promise<Double>
   func getValueFromJsCallback(callback: @escaping (() -> Promise<String>), andThenCall: @escaping ((_ valueFromJs: String) -> Void)) throws -> Promise<Void>
   func getCar() throws -> Car

@@ -115,6 +115,8 @@ public:
   std::shared_ptr<Promise<double>> callSumUpNTimes(const std::function<std::shared_ptr<Promise<double>>()>& callback, double n) override;
   std::shared_ptr<Promise<double>>
   callbackAsyncPromise(const std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<double>>>>()>& callback) override;
+  std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>> callbackAsyncPromiseBuffer(
+      const std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>>>()>& callback) override;
   std::shared_ptr<Promise<void>>
   getValueFromJsCallback(const std::function<std::shared_ptr<Promise<std::string>>()>& callback,
                          const std::function<void(const std::string& /* valueFromJs */)>& andThenCall) override;

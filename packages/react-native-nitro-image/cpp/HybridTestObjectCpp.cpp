@@ -299,6 +299,17 @@ HybridTestObjectCpp::callbackAsyncPromise(const std::function<std::shared_ptr<Pr
   });
 }
 
+std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>> HybridTestObjectCpp::callbackAsyncPromise(
+    const std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>>>()>& callback) {
+  return Promise<std::shared_ptr<ArrayBuffer>>::async([=]() {
+    std::future<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>> future = callback()->await();
+    std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>> promise = future.get();
+    std::future<std::shared_ptr<ArrayBuffer>> innerFuture = promise->await();
+    std::shared_ptr<ArrayBuffer> innerResult = innerFuture.get();
+    return innerResult;
+  });
+}
+
 std::shared_ptr<Promise<double>>
 HybridTestObjectCpp::getValueFromJSCallbackAndWait(const std::function<std::shared_ptr<Promise<double>>()>& getValue) {
   return Promise<double>::async([=]() -> double {
