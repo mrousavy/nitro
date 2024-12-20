@@ -30,6 +30,7 @@ import { createSwiftVariant, getSwiftVariantCaseName } from './SwiftVariant.js'
 import { VoidType } from '../types/VoidType.js'
 import { NamedWrappingType } from '../types/NamedWrappingType.js'
 import { ErrorType } from '../types/ErrorType.js'
+import { createSwiftFunctionBridge } from './SwiftFunction.js'
 
 // TODO: Remove enum bridge once Swift fixes bidirectional enums crashing the `-Swift.h` header.
 
@@ -176,10 +177,17 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
         files.push(extensionFile)
         break
       }
+      case 'function': {
+        const functionType = getTypeAs(this.type, FunctionType)
+        const extensionFile = createSwiftFunctionBridge(functionType)
+        files.push(extensionFile)
+        break
+      }
       case 'variant': {
         const variant = getTypeAs(this.type, VariantType)
         const file = createSwiftVariant(variant)
         files.push(file)
+        break
       }
     }
 
