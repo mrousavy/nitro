@@ -26,7 +26,7 @@ public enum RuntimeError: Error, CustomStringConvertible {
    * Creates a new `RuntimeError` from the given C++ `std::exception`.
    */
   public static func from(cppError: std.exception_ptr) -> RuntimeError {
-    let message = margelo.nitro.get_exception_message(cppError)
+    let message = margelo.nitro.getExceptionMessage(cppError)
     return .error(withMessage: String(message))
   }
 }
@@ -37,6 +37,6 @@ public extension Error {
    */
   func toCpp() -> std.exception_ptr {
     let message = String(describing: self)
-    return margelo.nitro.make_exception(std.string(message))
+    return margelo.nitro.makeException(std.string(message))
   }
 }

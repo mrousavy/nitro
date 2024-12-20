@@ -351,7 +351,7 @@ namespace margelo::nitro::image {
     auto __result = method(_javaPart);
     return [&]() {
       auto __promise = Promise<void>::create();
-      __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
+      __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& /* unit */) {
         __promise->resolve();
       });
       __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {
@@ -406,7 +406,7 @@ namespace margelo::nitro::image {
     auto __result = method(_javaPart, seconds);
     return [&]() {
       auto __promise = Promise<void>::create();
-      __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
+      __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& /* unit */) {
         __promise->resolve();
       });
       __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {
@@ -421,7 +421,7 @@ namespace margelo::nitro::image {
     auto __result = method(_javaPart);
     return [&]() {
       auto __promise = Promise<void>::create();
-      __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
+      __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& /* unit */) {
         __promise->resolve();
       });
       __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {
@@ -501,7 +501,7 @@ namespace margelo::nitro::image {
     }());
     return [&]() {
       auto __promise = Promise<void>::create();
-      __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
+      __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& /* unit */) {
         __promise->resolve();
       });
       __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {
@@ -592,7 +592,7 @@ namespace margelo::nitro::image {
     auto __result = method(_javaPart, JFunc_std__shared_ptr_Promise_std__string__::fromCpp(callback), JFunc_void_std__string::fromCpp(andThenCall));
     return [&]() {
       auto __promise = Promise<void>::create();
-      __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
+      __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& /* unit */) {
         __promise->resolve();
       });
       __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {

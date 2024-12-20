@@ -52,8 +52,8 @@ struct JSIConverter<std::shared_ptr<Promise<TResult>>> final {
     if (promise->isPending()) {
       // Get Promise ctor from global
       jsi::Function promiseCtor = runtime.global().getPropertyAsFunction(runtime, "Promise");
-      jsi::HostFunctionType executor = [promise](jsi::Runtime& runtime, const jsi::Value& thisValue, const jsi::Value* arguments,
-                                                 size_t count) -> jsi::Value {
+      jsi::HostFunctionType executor = [promise](jsi::Runtime& runtime, const jsi::Value&, const jsi::Value* arguments,
+                                                 size_t) -> jsi::Value {
         // Add resolver listener
         if constexpr (std::is_void_v<TResult>) {
           // It's resolving to void.
