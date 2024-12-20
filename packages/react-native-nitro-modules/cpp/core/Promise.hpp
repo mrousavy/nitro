@@ -33,6 +33,14 @@ private:
   Promise() {}
 
 public:
+  ~Promise() {
+    if (isPending()) [[unlikely]] {
+      std::runtime_error error("Timeouted: Promise was destroyed!");
+      reject(std::make_exception_ptr(std::move(error)));
+    }
+  }
+
+public:
   /**
    * Creates a new pending Promise that has to be resolved
    * or rejected with `resolve(..)` or `reject(..)`.
@@ -257,6 +265,14 @@ public:
 
 private:
   Promise() {}
+
+public:
+  ~Promise() {
+    if (isPending()) [[unlikely]] {
+      std::runtime_error error("Timeouted: Promise was destroyed!");
+      reject(std::make_exception_ptr(std::move(error)));
+    }
+  }
 
 public:
   static std::shared_ptr<Promise> create() {
