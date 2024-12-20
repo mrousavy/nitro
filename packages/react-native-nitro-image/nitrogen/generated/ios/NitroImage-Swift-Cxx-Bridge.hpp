@@ -540,24 +540,17 @@ namespace margelo::nitro::image::bridge::swift {
    */
   class Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double_____Wrapper final {
   public:
-    explicit Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double_____Wrapper(const std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<double>>>>()>& func): _function(func) {}
-    explicit Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double_____Wrapper(std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<double>>>>()>&& func): _function(std::move(func)) {}
+    explicit Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double_____Wrapper(std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<double>>>>()>&& func): _function(std::make_shared<std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<double>>>>()>>(std::move(func))) {}
     inline std::shared_ptr<Promise<std::shared_ptr<Promise<double>>>> call() const {
-      auto __result = _function();
+      auto __result = _function->operator()();
       return __result;
     }
   private:
-    std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<double>>>>()> _function;
+    std::shared_ptr<std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<double>>>>()>> _function;
   };
-  inline Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double____ create_Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double____(void* _Nonnull closureHolder, std::shared_ptr<Promise<std::shared_ptr<Promise<double>>>>(* _Nonnull call)(void* _Nonnull /* closureHolder */), void(* _Nonnull destroy)(void* _Nonnull)) {
-    std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
-    return Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double____([sharedClosureHolder = std::move(sharedClosureHolder), call]() -> std::shared_ptr<Promise<std::shared_ptr<Promise<double>>>> {
-      auto __result = call(sharedClosureHolder.get());
-      return __result;
-    });
-  }
-  inline std::shared_ptr<Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double_____Wrapper> share_Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double____(const Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double____& value) {
-    return std::make_shared<Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double_____Wrapper>(value);
+  Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double____ create_Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double____(void* _Nonnull swiftClosureWrapper);
+  inline Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double_____Wrapper wrap_Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double____(Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double____ value) {
+    return Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double_____Wrapper(std::move(value));
   }
   
   // pragma MARK: std::shared_ptr<Promise<std::shared_ptr<Promise<double>>>>
@@ -567,6 +560,9 @@ namespace margelo::nitro::image::bridge::swift {
   using std__shared_ptr_Promise_std__shared_ptr_Promise_double____ = std::shared_ptr<Promise<std::shared_ptr<Promise<double>>>>;
   inline std::shared_ptr<Promise<std::shared_ptr<Promise<double>>>> create_std__shared_ptr_Promise_std__shared_ptr_Promise_double____() {
     return Promise<std::shared_ptr<Promise<double>>>::create();
+  }
+  inline PromiseHolder<std::shared_ptr<Promise<double>>> wrap_std__shared_ptr_Promise_std__shared_ptr_Promise_double____(std::shared_ptr<Promise<std::shared_ptr<Promise<double>>>> promise) {
+    return PromiseHolder<std::shared_ptr<Promise<double>>>(std::move(promise));
   }
   
   // pragma MARK: std::function<void(const std::shared_ptr<Promise<double>>& /* result */)>
@@ -579,22 +575,16 @@ namespace margelo::nitro::image::bridge::swift {
    */
   class Func_void_std__shared_ptr_Promise_double___Wrapper final {
   public:
-    explicit Func_void_std__shared_ptr_Promise_double___Wrapper(const std::function<void(const std::shared_ptr<Promise<double>>& /* result */)>& func): _function(func) {}
-    explicit Func_void_std__shared_ptr_Promise_double___Wrapper(std::function<void(const std::shared_ptr<Promise<double>>& /* result */)>&& func): _function(std::move(func)) {}
+    explicit Func_void_std__shared_ptr_Promise_double___Wrapper(std::function<void(const std::shared_ptr<Promise<double>>& /* result */)>&& func): _function(std::make_shared<std::function<void(const std::shared_ptr<Promise<double>>& /* result */)>>(std::move(func))) {}
     inline void call(std::shared_ptr<Promise<double>> result) const {
-      _function(result);
+      _function->operator()(result);
     }
   private:
-    std::function<void(const std::shared_ptr<Promise<double>>& /* result */)> _function;
+    std::shared_ptr<std::function<void(const std::shared_ptr<Promise<double>>& /* result */)>> _function;
   };
-  inline Func_void_std__shared_ptr_Promise_double__ create_Func_void_std__shared_ptr_Promise_double__(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */, std::shared_ptr<Promise<double>>), void(* _Nonnull destroy)(void* _Nonnull)) {
-    std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
-    return Func_void_std__shared_ptr_Promise_double__([sharedClosureHolder = std::move(sharedClosureHolder), call](const std::shared_ptr<Promise<double>>& result) -> void {
-      call(sharedClosureHolder.get(), result);
-    });
-  }
-  inline std::shared_ptr<Func_void_std__shared_ptr_Promise_double___Wrapper> share_Func_void_std__shared_ptr_Promise_double__(const Func_void_std__shared_ptr_Promise_double__& value) {
-    return std::make_shared<Func_void_std__shared_ptr_Promise_double___Wrapper>(value);
+  Func_void_std__shared_ptr_Promise_double__ create_Func_void_std__shared_ptr_Promise_double__(void* _Nonnull swiftClosureWrapper);
+  inline Func_void_std__shared_ptr_Promise_double___Wrapper wrap_Func_void_std__shared_ptr_Promise_double__(Func_void_std__shared_ptr_Promise_double__ value) {
+    return Func_void_std__shared_ptr_Promise_double___Wrapper(std::move(value));
   }
   
   // pragma MARK: std::function<std::shared_ptr<Promise<std::string>>()>

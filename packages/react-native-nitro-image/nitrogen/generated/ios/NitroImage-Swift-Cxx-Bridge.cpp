@@ -138,6 +138,23 @@ namespace margelo::nitro::image::bridge::swift {
     };
   }
   
+  // pragma MARK: std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<double>>>>()>
+  Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double____ create_Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double____(void* _Nonnull swiftClosureWrapper) {
+    auto swiftClosure = NitroImage::Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double____::fromUnsafe(swiftClosureWrapper);
+    return [swiftClosure = std::move(swiftClosure)]() mutable -> std::shared_ptr<Promise<std::shared_ptr<Promise<double>>>> {
+      auto __result = swiftClosure.call();
+      return __result;
+    };
+  }
+  
+  // pragma MARK: std::function<void(const std::shared_ptr<Promise<double>>& /* result */)>
+  Func_void_std__shared_ptr_Promise_double__ create_Func_void_std__shared_ptr_Promise_double__(void* _Nonnull swiftClosureWrapper) {
+    auto swiftClosure = NitroImage::Func_void_std__shared_ptr_Promise_double__::fromUnsafe(swiftClosureWrapper);
+    return [swiftClosure = std::move(swiftClosure)](const std::shared_ptr<Promise<double>>& result) mutable -> void {
+      swiftClosure.call(result);
+    };
+  }
+  
   // pragma MARK: std::function<std::shared_ptr<Promise<std::string>>()>
   Func_std__shared_ptr_Promise_std__string__ create_Func_std__shared_ptr_Promise_std__string__(void* _Nonnull swiftClosureWrapper) {
     auto swiftClosure = NitroImage::Func_std__shared_ptr_Promise_std__string__::fromUnsafe(swiftClosureWrapper);
