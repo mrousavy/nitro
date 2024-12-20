@@ -68,8 +68,8 @@ struct JSIConverter<std::function<ReturnType(Args...)>> final {
   }
 
   static inline jsi::Value toJSI(jsi::Runtime& runtime, std::function<ReturnType(Args...)>&& function) {
-    jsi::HostFunctionType jsFunction = [function = std::move(function)](jsi::Runtime& runtime, const jsi::Value& thisValue,
-                                                                        const jsi::Value* args, size_t count) -> jsi::Value {
+    jsi::HostFunctionType jsFunction = [function = std::move(function)](jsi::Runtime& runtime, const jsi::Value&, const jsi::Value* args,
+                                                                        size_t count) -> jsi::Value {
       if (count != sizeof...(Args)) [[unlikely]] {
         throw jsi::JSError(runtime, "Function expected " + std::to_string(sizeof...(Args)) + " arguments, but received " +
                                         std::to_string(count) + "!");

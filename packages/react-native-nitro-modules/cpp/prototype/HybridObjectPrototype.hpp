@@ -79,7 +79,7 @@ protected:
    * **Do not conditionally register hybrid methods, getters or setter!**
    */
   template <typename Derived>
-  inline void registerHybrids(Derived* thisInstance, RegisterFn registerFunc) {
+  inline void registerHybrids(Derived* /* this */, RegisterFn registerFunc) {
     const std::shared_ptr<Prototype>& prototype = _prototypeChain.extendPrototype<Derived>();
 
     if (!prototype->hasHybrids()) {
