@@ -50,7 +50,7 @@ public extension ArrayBufferHolder {
   /**
    * Copy the given `ArrayBufferHolder` into a new **owning** `ArrayBufferHolder`.
    */
-  static func copy(of other: borrowing ArrayBufferHolder) -> ArrayBufferHolder {
+  static func copy(of other: ArrayBufferHolder) -> ArrayBufferHolder {
     let data = UnsafeMutablePointer<UInt8>.allocate(capacity: other.size)
     let pointer = other.data.assumingMemoryBound(to: UInt8.self)
     data.initialize(from: pointer, count: other.size)

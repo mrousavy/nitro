@@ -897,6 +897,25 @@ export function getTests(
           .didNotThrow()
           .equals(13)
     ),
+    createTest(
+      'Async callback can be awaited and returned on native side: callbackAsyncPromiseBuffer(...)',
+      async () =>
+        (
+          await it(async () => {
+            return timeoutedPromise<ArrayBuffer>(async (complete) => {
+              const result = await testObject.callbackAsyncPromiseBuffer(
+                async () => {
+                  return await testObject.createArrayBufferAsync()
+                }
+              )
+              complete(result)
+            })
+          })
+        )
+          .didNotThrow()
+          .didReturn('object')
+          .toContain('byteLength')
+    ),
 
     // Objects
     createTest('getCar()', () =>

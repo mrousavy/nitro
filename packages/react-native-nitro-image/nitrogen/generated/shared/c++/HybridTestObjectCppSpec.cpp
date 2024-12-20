@@ -78,6 +78,7 @@ namespace margelo::nitro::image {
       prototype.registerHybridMethod("callWithOptional", &HybridTestObjectCppSpec::callWithOptional);
       prototype.registerHybridMethod("callSumUpNTimes", &HybridTestObjectCppSpec::callSumUpNTimes);
       prototype.registerHybridMethod("callbackAsyncPromise", &HybridTestObjectCppSpec::callbackAsyncPromise);
+      prototype.registerHybridMethod("callbackAsyncPromiseBuffer", &HybridTestObjectCppSpec::callbackAsyncPromiseBuffer);
       prototype.registerHybridMethod("getValueFromJSCallbackAndWait", &HybridTestObjectCppSpec::getValueFromJSCallbackAndWait);
       prototype.registerHybridMethod("getValueFromJsCallback", &HybridTestObjectCppSpec::getValueFromJsCallback);
       prototype.registerHybridMethod("getCar", &HybridTestObjectCppSpec::getCar);

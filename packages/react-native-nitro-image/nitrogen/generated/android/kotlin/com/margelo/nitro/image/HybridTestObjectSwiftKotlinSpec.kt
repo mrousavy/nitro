@@ -279,6 +279,17 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
+  abstract fun callbackAsyncPromiseBuffer(callback: () -> Promise<Promise<ArrayBuffer>>): Promise<ArrayBuffer>
+  
+  @DoNotStrip
+  @Keep
+  private fun callbackAsyncPromiseBuffer(callback: Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____): Promise<ArrayBuffer> {
+    val __result = callbackAsyncPromiseBuffer(callback.toLambda())
+    return __result
+  }
+  
+  @DoNotStrip
+  @Keep
   abstract fun getValueFromJSCallbackAndWait(getValue: () -> Promise<Double>): Promise<Double>
   
   @DoNotStrip

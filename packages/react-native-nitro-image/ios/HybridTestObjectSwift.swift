@@ -90,6 +90,14 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
     }
   }
 
+  func callbackAsyncPromiseBuffer(callback: @escaping (() -> Promise<Promise<ArrayBufferHolder>>)) throws -> Promise<ArrayBufferHolder> {
+    return Promise.async {
+      let promise = try await callback().await()
+      let result = try await promise.await()
+      return result
+    }
+  }
+
 
   func bounceStrings(array: [String]) throws -> [String] {
     return array
