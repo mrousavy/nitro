@@ -8,7 +8,8 @@
 import NitroModules
 
 /**
- * Represents the JS function `(maybe: optional) => void`, wrappable as a C++ std::function.
+ * Wraps a Swift `((_ maybe: Double?) -> Void)` as a class.
+ * This class can be used from C++, e.g. to wrap the Swift closure as a `std::function`.
  */
 public final class Func_void_std__optional_double_ {
   public typealias bridge = margelo.nitro.image.bridge.swift

@@ -8,7 +8,8 @@
 import NitroModules
 
 /**
- * Represents the JS function `(array: array) => void`, wrappable as a C++ std::function.
+ * Wraps a Swift `((_ array: [Powertrain]) -> Void)` as a class.
+ * This class can be used from C++, e.g. to wrap the Swift closure as a `std::function`.
  */
 public final class Func_void_std__vector_Powertrain_ {
   public typealias bridge = margelo.nitro.image.bridge.swift

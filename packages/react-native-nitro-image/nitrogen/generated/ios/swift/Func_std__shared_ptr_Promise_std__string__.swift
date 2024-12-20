@@ -8,7 +8,8 @@
 import NitroModules
 
 /**
- * Represents the JS function `() => std::shared_ptr<Promise<std::string>>`, wrappable as a C++ std::function.
+ * Wraps a Swift `(() -> Promise<String>)` as a class.
+ * This class can be used from C++, e.g. to wrap the Swift closure as a `std::function`.
  */
 public final class Func_std__shared_ptr_Promise_std__string__ {
   public typealias bridge = margelo.nitro.image.bridge.swift

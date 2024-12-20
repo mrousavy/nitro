@@ -8,7 +8,8 @@
 import NitroModules
 
 /**
- * Represents the JS function `(value: bigint) => void`, wrappable as a C++ std::function.
+ * Wraps a Swift `((_ value: Int64) -> Void)` as a class.
+ * This class can be used from C++, e.g. to wrap the Swift closure as a `std::function`.
  */
 public final class Func_void_int64_t {
   public typealias bridge = margelo.nitro.image.bridge.swift

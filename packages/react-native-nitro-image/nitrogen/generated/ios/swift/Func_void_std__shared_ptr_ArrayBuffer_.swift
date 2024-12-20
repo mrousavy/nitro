@@ -8,7 +8,8 @@
 import NitroModules
 
 /**
- * Represents the JS function `(value: array-buffer) => void`, wrappable as a C++ std::function.
+ * Wraps a Swift `((_ value: ArrayBufferHolder) -> Void)` as a class.
+ * This class can be used from C++, e.g. to wrap the Swift closure as a `std::function`.
  */
 public final class Func_void_std__shared_ptr_ArrayBuffer_ {
   public typealias bridge = margelo.nitro.image.bridge.swift

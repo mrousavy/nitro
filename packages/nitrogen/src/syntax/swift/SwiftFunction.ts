@@ -37,7 +37,8 @@ ${createFileMetadataString(`${swiftClassName}.swift`)}
 import NitroModules
 
 /**
- * Represents the JS function \`${functionType.jsName}\`, wrappable as a C++ std::function.
+ * Wraps a Swift \`${functionType.getCode('swift')}\` as a class.
+ * This class can be used from C++, e.g. to wrap the Swift closure as a \`std::function\`.
  */
 public final class ${swiftClassName} {
   public typealias bridge = ${getBridgeNamespace()}
