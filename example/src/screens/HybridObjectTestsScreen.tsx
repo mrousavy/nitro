@@ -158,7 +158,9 @@ export function HybridObjectTestsScreen() {
   }
 
   const runAllTests = () => {
+    gc()
     tests.forEach((t) => runTest(t))
+    gc()
   }
 
   return (
