@@ -30,6 +30,7 @@ import { createSwiftVariant, getSwiftVariantCaseName } from './SwiftVariant.js'
 import { VoidType } from '../types/VoidType.js'
 import { NamedWrappingType } from '../types/NamedWrappingType.js'
 import { ErrorType } from '../types/ErrorType.js'
+import { createSwiftFunctionBridge } from './SwiftFunction.js'
 
 // TODO: Remove enum bridge once Swift fixes bidirectional enums crashing the `-Swift.h` header.
 
@@ -176,10 +177,24 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
         files.push(extensionFile)
         break
       }
+      case 'function': {
+        const functionType = getTypeAs(this.type, FunctionType)
+        const extensionFile = createSwiftFunctionBridge(functionType)
+        files.push(extensionFile)
+        break
+      }
+      case 'promise': {
+        // Promise needs resolver and rejecter funcs in Swift
+        const promiseType = getTypeAs(this.type, PromiseType)
+        files.push(createSwiftFunctionBridge(promiseType.resolverFunction))
+        files.push(createSwiftFunctionBridge(promiseType.rejecterFunction))
+        break
+      }
       case 'variant': {
         const variant = getTypeAs(this.type, VariantType)
         const file = createSwiftVariant(variant)
         files.push(file)
+        break
       }
     }
 
@@ -345,23 +360,27 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
         const promise = getTypeAs(this.type, PromiseType)
         switch (language) {
           case 'swift': {
+            const bridge = this.getBridgeOrThrow()
             if (promise.resultingType.kind === 'void') {
               // It's void - resolve()
+              const resolverFunc = new FunctionType(new VoidType(), [])
               const rejecterFunc = new FunctionType(new VoidType(), [
                 new NamedWrappingType('error', new ErrorType()),
               ])
+              const resolverFuncBridge = new SwiftCxxBridgedType(resolverFunc)
               const rejecterFuncBridge = new SwiftCxxBridgedType(rejecterFunc)
               return `
 { () -> ${promise.getCode('swift')} in
   let __promise = ${promise.getCode('swift')}()
-  let __resolver = SwiftClosure { __promise.resolve(withResult: ()) }
+  let __resolver = { __promise.resolve(withResult: ()) }
   let __rejecter = { (__error: Error) in
     __promise.reject(withError: __error)
   }
-  let __resolverCpp = __resolver.getFunctionCopy()
+  let __resolverCpp = ${indent(resolverFuncBridge.parseFromSwiftToCpp('__resolver', 'swift'), '  ')}
   let __rejecterCpp = ${indent(rejecterFuncBridge.parseFromSwiftToCpp('__rejecter', 'swift'), '  ')}
-  ${cppParameterName}.addOnResolvedListener(__resolverCpp)
-  ${cppParameterName}.addOnRejectedListener(__rejecterCpp)
+  let __promiseHolder = bridge.wrap_${bridge.specializationName}(${cppParameterName})
+  __promiseHolder.addOnResolvedListener(__resolverCpp)
+  __promiseHolder.addOnRejectedListener(__rejecterCpp)
   return __promise
 }()`.trim()
             } else {
@@ -389,8 +408,9 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
   }
   let __resolverCpp = ${indent(resolverFuncBridge.parseFromSwiftToCpp('__resolver', 'swift'), '  ')}
   let __rejecterCpp = ${indent(rejecterFuncBridge.parseFromSwiftToCpp('__rejecter', 'swift'), '  ')}
-  ${cppParameterName}.${resolverFuncName}(__resolverCpp)
-  ${cppParameterName}.addOnRejectedListener(__rejecterCpp)
+  let __promiseHolder = bridge.wrap_${bridge.specializationName}(${cppParameterName})
+  __promiseHolder.${resolverFuncName}(__resolverCpp)
+  __promiseHolder.addOnRejectedListener(__rejecterCpp)
   return __promise
 }()`.trim()
             }
@@ -532,18 +552,21 @@ case ${i}:
             if (funcType.returnType.kind === 'void') {
               return `
 { () -> ${swiftClosureType} in
-  let __sharedClosure = bridge.share_${bridge.specializationName}(${cppParameterName})
+  let __wrappedFunction = bridge.wrap_${bridge.specializationName}(${cppParameterName})
   return { ${signature} in
-    __sharedClosure.pointee.call(${indent(paramsForward.join(', '), '    ')})
+    __wrappedFunction.call(${indent(paramsForward.join(', '), '    ')})
   }
 }()`.trim()
             } else {
-              const resultBridged = new SwiftCxxBridgedType(funcType.returnType)
+              const resultBridged = new SwiftCxxBridgedType(
+                funcType.returnType,
+                true
+              )
               return `
 { () -> ${swiftClosureType} in
-  let __sharedClosure = bridge.share_${bridge.specializationName}(${cppParameterName})
+  let __wrappedFunction = bridge.wrap_${bridge.specializationName}(${cppParameterName})
   return { ${signature} in
-    let __result = __sharedClosure.pointee.call(${indent(paramsForward.join(', '), '    ')})
+    let __result = __wrappedFunction.call(${indent(paramsForward.join(', '), '    ')})
     return ${indent(resultBridged.parseFromCppToSwift('__result', 'swift'), '    ')}
   }
 }()`.trim()
@@ -661,30 +684,20 @@ case ${i}:
           true
         )
         switch (language) {
-          case 'c++':
-            if (this.isBridgingToDirectCppTarget) {
-              return swiftParameterName
-            } else {
-              return `${swiftParameterName}.getPromise()`
-            }
           case 'swift':
             const arg =
               promise.resultingType.kind === 'void'
                 ? ''
                 : resolvingType.parseFromSwiftToCpp('__result', 'swift')
-            const code = `
+            return `
 { () -> bridge.${bridge.specializationName} in
   let __promise = ${makePromise}()
+  let __promiseHolder = bridge.wrap_${bridge.specializationName}(__promise)
   ${swiftParameterName}
-    .then({ __result in __promise.resolve(${indent(arg, '      ')}) })
-    .catch({ __error in __promise.reject(__error.toCpp()) })
+    .then({ __result in __promiseHolder.resolve(${indent(arg, '      ')}) })
+    .catch({ __error in __promiseHolder.reject(__error.toCpp()) })
   return __promise
 }()`.trim()
-            if (this.isBridgingToDirectCppTarget) {
-              return `${code}.getPromise()`
-            } else {
-              return code
-            }
           default:
             return swiftParameterName
         }
@@ -772,52 +785,11 @@ case ${i}:
         switch (language) {
           case 'swift': {
             const bridge = this.getBridgeOrThrow()
-            const func = getTypeAs(this.type, FunctionType)
-            const cFuncParamsForward = func.parameters
-              .map((p) => {
-                const bridged = new SwiftCxxBridgedType(p)
-                return bridged.parseFromCppToSwift(
-                  `__${p.escapedName}`,
-                  'swift'
-                )
-              })
-              .join(', ')
-            const paramsSignature = func.parameters
-              .map((p) => `_ __${p.escapedName}: ${p.getCode('swift')}`)
-              .join(', ')
-            const paramsForward = func.parameters
-              .map((p) => `__${p.escapedName}`)
-              .join(', ')
-            const cFuncParamsSignature = [
-              '__closureHolder: UnsafeMutableRawPointer',
-              ...func.parameters.map((p) => {
-                const bridged = new SwiftCxxBridgedType(p)
-                return `__${p.escapedName}: ${bridged.getTypeCode('swift')}`
-              }),
-            ].join(', ')
             const createFunc = `bridge.${bridge.funcName}`
             return `
 { () -> bridge.${bridge.specializationName} in
-  final class ClosureHolder {
-    let closure: ${func.getCode('swift')}
-    init(wrappingClosure closure: @escaping ${func.getCode('swift')}) {
-      self.closure = closure
-    }
-    func invoke(${paramsSignature}) {
-      self.closure(${indent(paramsForward, '    ')})
-    }
-  }
-
-  let __closureHolder = Unmanaged.passRetained(ClosureHolder(wrappingClosure: ${swiftParameterName})).toOpaque()
-  func __callClosure(${cFuncParamsSignature}) -> Void {
-    let closure = Unmanaged<ClosureHolder>.fromOpaque(__closureHolder).takeUnretainedValue()
-    closure.invoke(${indent(cFuncParamsForward, '    ')})
-  }
-  func __destroyClosure(_ __closureHolder: UnsafeMutableRawPointer) -> Void {
-    Unmanaged<ClosureHolder>.fromOpaque(__closureHolder).release()
-  }
-
-  return ${createFunc}(__closureHolder, __callClosure, __destroyClosure)
+  let __closureWrapper = ${bridge.specializationName}(${swiftParameterName})
+  return ${createFunc}(__closureWrapper.toUnsafe())
 }()
   `.trim()
           }

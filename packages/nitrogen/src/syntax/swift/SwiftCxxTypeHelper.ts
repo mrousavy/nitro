@@ -303,57 +303,46 @@ function createCxxFunctionSwiftHelper(type: FunctionType): SwiftCxxHelper {
       return `${p.getCode('c++')} ${p.escapedName}`
     }
   })
+  const paramsForward = type.parameters.map((p) => {
+    const bridge = new SwiftCxxBridgedType(p)
+    return bridge.parseFromCppToSwift(p.escapedName, 'c++')
+  })
+  const name = type.specializationName
+  const wrapperName = `${name}_Wrapper`
+  const swiftClassName = `${NitroConfig.getIosModuleName()}::${type.specializationName}`
+
+  const callParamsForward = type.parameters.map((p) => {
+    const bridge = new SwiftCxxBridgedType(p)
+    return bridge.parseFromSwiftToCpp(p.escapedName, 'c++')
+  })
+
+  const callFuncReturnType = returnBridge.getTypeCode('c++')
   const callCppFuncParamsSignature = type.parameters.map((p) => {
     const bridge = new SwiftCxxBridgedType(p)
     const cppType = bridge.getTypeCode('c++')
     return `${cppType} ${p.escapedName}`
   })
-  const callParamsForward = type.parameters.map((p) => {
-    const bridge = new SwiftCxxBridgedType(p)
-    return bridge.parseFromSwiftToCpp(p.escapedName, 'c++')
-  })
-  const paramsForward = [
-    'sharedClosureHolder.get()',
-    ...type.parameters.map((p) => {
-      const bridge = new SwiftCxxBridgedType(p)
-      return bridge.parseFromCppToSwift(p.escapedName, 'c++')
-    }),
-  ]
-  const callFuncReturnType = returnBridge.getTypeCode('c++')
-  const callFuncParams = [
-    'void* _Nonnull /* closureHolder */',
-    ...type.parameters.map((p) => {
-      const bridge = new SwiftCxxBridgedType(p)
-      return bridge.getTypeCode('c++')
-    }),
-  ]
-  const functionPointerParam = `${callFuncReturnType}(* _Nonnull call)(${callFuncParams.join(', ')})`
-  const name = type.specializationName
-  const wrapperName = `${name}_Wrapper`
-
   let callCppFuncBody: string
   if (returnBridge.hasType) {
     callCppFuncBody = `
-auto __result = _function(${callParamsForward.join(', ')});
+auto __result = _function->operator()(${callParamsForward.join(', ')});
 return ${returnBridge.parseFromCppToSwift('__result', 'c++')};
     `.trim()
   } else {
-    callCppFuncBody = `_function(${callParamsForward.join(', ')});`
+    callCppFuncBody = `_function->operator()(${callParamsForward.join(', ')});`
   }
 
-  let callSwiftFuncBody: string
-  if (returnBridge.hasType) {
-    callSwiftFuncBody = `
-auto __result = call(${paramsForward.join(', ')});
+  let body: string
+  if (type.returnType.kind === 'void') {
+    body = `
+swiftClosure.call(${paramsForward.join(', ')});
+`.trim()
+  } else {
+    body = `
+auto __result = swiftClosure.call(${paramsForward.join(', ')});
 return ${returnBridge.parseFromSwiftToCpp('__result', 'c++')};
     `.trim()
-  } else {
-    callSwiftFuncBody = `call(${paramsForward.join(', ')});`
   }
-
-  // TODO: Remove shared_Func_void(...) function that returns a std::shared_ptr<std::function<...>>
-  //       once Swift fixes the bug where a regular std::function cannot be captured.
-  //       https://github.com/swiftlang/swift/issues/76143
 
   return {
     cxxType: actualType,
@@ -370,22 +359,16 @@ using ${name} = ${actualType};
  */
 class ${wrapperName} final {
 public:
-  explicit ${wrapperName}(const ${actualType}& func): _function(func) {}
-  explicit ${wrapperName}(${actualType}&& func): _function(std::move(func)) {}
+  explicit ${wrapperName}(${actualType}&& func): _function(std::make_shared<${actualType}>(std::move(func))) {}
   inline ${callFuncReturnType} call(${callCppFuncParamsSignature.join(', ')}) const {
     ${indent(callCppFuncBody, '    ')}
   }
 private:
-  ${actualType} _function;
-} SWIFT_NONCOPYABLE;
-inline ${name} create_${name}(void* _Nonnull closureHolder, ${functionPointerParam}, void(* _Nonnull destroy)(void* _Nonnull)) {
-  std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
-  return ${name}([sharedClosureHolder = std::move(sharedClosureHolder), call](${paramsSignature.join(', ')}) -> ${type.returnType.getCode('c++')} {
-    ${indent(callSwiftFuncBody, '    ')}
-  });
-}
-inline std::shared_ptr<${wrapperName}> share_${name}(const ${name}& value) {
-  return std::make_shared<${wrapperName}>(value);
+  std::shared_ptr<${actualType}> _function;
+};
+${name} create_${name}(void* _Nonnull swiftClosureWrapper);
+inline ${wrapperName} wrap_${name}(${name} value) {
+  return ${wrapperName}(std::move(value));
 }
     `.trim(),
       requiredIncludes: [
@@ -400,6 +383,24 @@ inline std::shared_ptr<${wrapperName}> share_${name}(const ${name}& value) {
           language: 'c++',
         },
         ...bridgedType.getRequiredImports(),
+      ],
+    },
+    cxxImplementation: {
+      code: `
+${name} create_${name}(void* _Nonnull swiftClosureWrapper) {
+  auto swiftClosure = ${swiftClassName}::fromUnsafe(swiftClosureWrapper);
+  return [swiftClosure = std::move(swiftClosure)](${paramsSignature.join(', ')}) mutable -> ${type.returnType.getCode('c++')} {
+    ${indent(body, '    ')}
+  };
+}
+`.trim(),
+      requiredIncludes: [
+        {
+          language: 'c++',
+          // Swift umbrella header
+          name: getUmbrellaHeaderName(),
+          space: 'user',
+        },
       ],
     },
     dependencies: [],
@@ -566,7 +567,7 @@ ${functions.join('\n')}
 function createCxxPromiseSwiftHelper(type: PromiseType): SwiftCxxHelper {
   const resultingType = type.resultingType.getCode('c++')
   const bridgedType = new SwiftCxxBridgedType(type)
-  const actualType = `PromiseHolder<${resultingType}>`
+  const actualType = `std::shared_ptr<Promise<${resultingType}>>`
 
   const resolverArgs: NamedType[] = []
   if (type.resultingType.kind !== 'void') {
@@ -589,7 +590,10 @@ function createCxxPromiseSwiftHelper(type: PromiseType): SwiftCxxHelper {
  */
 using ${name} = ${actualType};
 inline ${actualType} create_${name}() {
-  return PromiseHolder<${resultingType}>::create();
+  return Promise<${resultingType}>::create();
+}
+inline PromiseHolder<${resultingType}> wrap_${name}(${actualType} promise) {
+  return PromiseHolder<${resultingType}>(std::move(promise));
 }
        `.trim(),
       requiredIncludes: [

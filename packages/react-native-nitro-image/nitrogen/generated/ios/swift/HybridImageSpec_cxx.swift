@@ -139,9 +139,9 @@ public class HybridImageSpec_cxx {
   public func saveToFile(path: std.string, onFinished: bridge.Func_void_std__string) -> bridge.Result_void_ {
     do {
       try self.__implementation.saveToFile(path: String(path), onFinished: { () -> ((String) -> Void) in
-        let __sharedClosure = bridge.share_Func_void_std__string(onFinished)
+        let __wrappedFunction = bridge.wrap_Func_void_std__string(onFinished)
         return { (__path: String) -> Void in
-          __sharedClosure.pointee.call(std.string(__path))
+          __wrappedFunction.call(std.string(__path))
         }
       }())
       return bridge.create_Result_void_()

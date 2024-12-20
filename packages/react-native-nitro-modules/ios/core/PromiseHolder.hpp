@@ -53,11 +53,6 @@ public:
     _promise->addOnRejectedListener([onRejected = std::move(onRejected)](const std::exception_ptr& error) { onRejected(error); });
   }
 
-public:
-  inline std::shared_ptr<Promise<T>> getPromise() const {
-    return _promise;
-  }
-
 private:
   std::shared_ptr<Promise<T>> _promise;
 };
@@ -89,11 +84,6 @@ public:
 
   void addOnRejectedListener(std::function<void(const std::exception_ptr&)> onRejected) const {
     _promise->addOnRejectedListener([onRejected = std::move(onRejected)](const std::exception_ptr& error) { onRejected(error); });
-  }
-
-public:
-  inline std::shared_ptr<Promise<void>> getPromise() const {
-    return _promise;
   }
 
 private:
