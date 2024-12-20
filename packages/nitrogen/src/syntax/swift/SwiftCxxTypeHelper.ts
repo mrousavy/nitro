@@ -533,7 +533,7 @@ ${functions.join('\n')}
 function createCxxPromiseSwiftHelper(type: PromiseType): SwiftCxxHelper {
   const resultingType = type.resultingType.getCode('c++')
   const bridgedType = new SwiftCxxBridgedType(type)
-  const actualType = `PromiseHolder<${resultingType}>`
+  const actualType = `std::shared_ptr<Promise<${resultingType}>>`
 
   const resolverArgs: NamedType[] = []
   if (type.resultingType.kind !== 'void') {
@@ -556,7 +556,10 @@ function createCxxPromiseSwiftHelper(type: PromiseType): SwiftCxxHelper {
  */
 using ${name} = ${actualType};
 inline ${actualType} create_${name}() {
-  return PromiseHolder<${resultingType}>::create();
+  return Promise<${resultingType}>::create();
+}
+inline PromiseHolder<${resultingType}> wrap_${name}(${actualType} promise) {
+  return PromiseHolder<${resultingType}>(std::move(promise));
 }
        `.trim(),
       requiredIncludes: [

@@ -360,6 +360,7 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
         const promise = getTypeAs(this.type, PromiseType)
         switch (language) {
           case 'swift': {
+            const bridge = this.getBridgeOrThrow()
             if (promise.resultingType.kind === 'void') {
               // It's void - resolve()
               const resolverFunc = new FunctionType(new VoidType(), [])
@@ -377,8 +378,9 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
   }
   let __resolverCpp = ${indent(resolverFuncBridge.parseFromSwiftToCpp('__resolver', 'swift'), '  ')}
   let __rejecterCpp = ${indent(rejecterFuncBridge.parseFromSwiftToCpp('__rejecter', 'swift'), '  ')}
-  ${cppParameterName}.addOnResolvedListener(__resolverCpp)
-  ${cppParameterName}.addOnRejectedListener(__rejecterCpp)
+  let __promiseHolder = bridge.wrap_${bridge.specializationName}(${cppParameterName})
+  __promiseHolder.addOnResolvedListener(__resolverCpp)
+  __promiseHolder.addOnRejectedListener(__rejecterCpp)
   return __promise
 }()`.trim()
             } else {
@@ -406,8 +408,9 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
   }
   let __resolverCpp = ${indent(resolverFuncBridge.parseFromSwiftToCpp('__resolver', 'swift'), '  ')}
   let __rejecterCpp = ${indent(rejecterFuncBridge.parseFromSwiftToCpp('__rejecter', 'swift'), '  ')}
-  ${cppParameterName}.${resolverFuncName}(__resolverCpp)
-  ${cppParameterName}.addOnRejectedListener(__rejecterCpp)
+  let __promiseHolder = bridge.wrap_${bridge.specializationName}(${cppParameterName})
+  __promiseHolder.${resolverFuncName}(__resolverCpp)
+  __promiseHolder.addOnRejectedListener(__rejecterCpp)
   return __promise
 }()`.trim()
             }
@@ -692,19 +695,15 @@ case ${i}:
               promise.resultingType.kind === 'void'
                 ? ''
                 : resolvingType.parseFromSwiftToCpp('__result', 'swift')
-            const code = `
+            return `
 { () -> bridge.${bridge.specializationName} in
   let __promise = ${makePromise}()
+  let __promiseHolder = bridge.wrap_${bridge.specializationName}(__promise)
   ${swiftParameterName}
-    .then({ __result in __promise.resolve(${indent(arg, '      ')}) })
-    .catch({ __error in __promise.reject(__error.toCpp()) })
+    .then({ __result in __promiseHolder.resolve(${indent(arg, '      ')}) })
+    .catch({ __error in __promiseHolder.reject(__error.toCpp()) })
   return __promise
 }()`.trim()
-            if (this.isBridgingToDirectCppTarget) {
-              return `${code}.getPromise()`
-            } else {
-              return code
-            }
           default:
             return swiftParameterName
         }

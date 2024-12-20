@@ -247,13 +247,16 @@ namespace margelo::nitro::image::bridge::swift {
     return std::make_shared<Func_void_std__vector_Powertrain_>(std::move(value));
   }
   
-  // pragma MARK: PromiseHolder<void>
+  // pragma MARK: std::shared_ptr<Promise<void>>
   /**
-   * Specialized version of `PromiseHolder<void>`.
+   * Specialized version of `std::shared_ptr<Promise<void>>`.
    */
-  using PromiseHolder_void_ = PromiseHolder<void>;
-  inline PromiseHolder<void> create_PromiseHolder_void_() {
-    return PromiseHolder<void>::create();
+  using std__shared_ptr_Promise_void__ = std::shared_ptr<Promise<void>>;
+  inline std::shared_ptr<Promise<void>> create_std__shared_ptr_Promise_void__() {
+    return Promise<void>::create();
+  }
+  inline PromiseHolder<void> wrap_std__shared_ptr_Promise_void__(std::shared_ptr<Promise<void>> promise) {
+    return PromiseHolder<void>(std::move(promise));
   }
   
   // pragma MARK: std::function<void()>
@@ -314,13 +317,16 @@ namespace margelo::nitro::image::bridge::swift {
     return std::get<1>(variantWrapper.variant);
   }
   
-  // pragma MARK: PromiseHolder<int64_t>
+  // pragma MARK: std::shared_ptr<Promise<int64_t>>
   /**
-   * Specialized version of `PromiseHolder<int64_t>`.
+   * Specialized version of `std::shared_ptr<Promise<int64_t>>`.
    */
-  using PromiseHolder_int64_t_ = PromiseHolder<int64_t>;
-  inline PromiseHolder<int64_t> create_PromiseHolder_int64_t_() {
-    return PromiseHolder<int64_t>::create();
+  using std__shared_ptr_Promise_int64_t__ = std::shared_ptr<Promise<int64_t>>;
+  inline std::shared_ptr<Promise<int64_t>> create_std__shared_ptr_Promise_int64_t__() {
+    return Promise<int64_t>::create();
+  }
+  inline PromiseHolder<int64_t> wrap_std__shared_ptr_Promise_int64_t__(std::shared_ptr<Promise<int64_t>> promise) {
+    return PromiseHolder<int64_t>(std::move(promise));
   }
   
   // pragma MARK: std::function<void(int64_t /* result */)>
@@ -333,13 +339,16 @@ namespace margelo::nitro::image::bridge::swift {
     return std::make_shared<Func_void_int64_t>(std::move(value));
   }
   
-  // pragma MARK: PromiseHolder<double>
+  // pragma MARK: std::shared_ptr<Promise<double>>
   /**
-   * Specialized version of `PromiseHolder<double>`.
+   * Specialized version of `std::shared_ptr<Promise<double>>`.
    */
-  using PromiseHolder_double_ = PromiseHolder<double>;
-  inline PromiseHolder<double> create_PromiseHolder_double_() {
-    return PromiseHolder<double>::create();
+  using std__shared_ptr_Promise_double__ = std::shared_ptr<Promise<double>>;
+  inline std::shared_ptr<Promise<double>> create_std__shared_ptr_Promise_double__() {
+    return Promise<double>::create();
+  }
+  inline PromiseHolder<double> wrap_std__shared_ptr_Promise_double__(std::shared_ptr<Promise<double>> promise) {
+    return PromiseHolder<double>(std::move(promise));
   }
   
   // pragma MARK: std::function<void(double /* result */)>
@@ -361,13 +370,16 @@ namespace margelo::nitro::image::bridge::swift {
     return std::optional<Person>(value);
   }
   
-  // pragma MARK: PromiseHolder<Car>
+  // pragma MARK: std::shared_ptr<Promise<Car>>
   /**
-   * Specialized version of `PromiseHolder<Car>`.
+   * Specialized version of `std::shared_ptr<Promise<Car>>`.
    */
-  using PromiseHolder_Car_ = PromiseHolder<Car>;
-  inline PromiseHolder<Car> create_PromiseHolder_Car_() {
-    return PromiseHolder<Car>::create();
+  using std__shared_ptr_Promise_Car__ = std::shared_ptr<Promise<Car>>;
+  inline std::shared_ptr<Promise<Car>> create_std__shared_ptr_Promise_Car__() {
+    return Promise<Car>::create();
+  }
+  inline PromiseHolder<Car> wrap_std__shared_ptr_Promise_Car__(std::shared_ptr<Promise<Car>> promise) {
+    return PromiseHolder<Car>(std::move(promise));
   }
   
   // pragma MARK: std::function<void(const Car& /* result */)>
@@ -419,22 +431,28 @@ namespace margelo::nitro::image::bridge::swift {
     return std::make_shared<Func_std__shared_ptr_Promise_std__string__>(std::move(value));
   }
   
-  // pragma MARK: PromiseHolder<std::string>
+  // pragma MARK: std::shared_ptr<Promise<std::string>>
   /**
-   * Specialized version of `PromiseHolder<std::string>`.
+   * Specialized version of `std::shared_ptr<Promise<std::string>>`.
    */
-  using PromiseHolder_std__string_ = PromiseHolder<std::string>;
-  inline PromiseHolder<std::string> create_PromiseHolder_std__string_() {
-    return PromiseHolder<std::string>::create();
+  using std__shared_ptr_Promise_std__string__ = std::shared_ptr<Promise<std::string>>;
+  inline std::shared_ptr<Promise<std::string>> create_std__shared_ptr_Promise_std__string__() {
+    return Promise<std::string>::create();
+  }
+  inline PromiseHolder<std::string> wrap_std__shared_ptr_Promise_std__string__(std::shared_ptr<Promise<std::string>> promise) {
+    return PromiseHolder<std::string>(std::move(promise));
   }
   
-  // pragma MARK: PromiseHolder<std::shared_ptr<ArrayBuffer>>
+  // pragma MARK: std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>
   /**
-   * Specialized version of `PromiseHolder<std::shared_ptr<ArrayBuffer>>`.
+   * Specialized version of `std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>`.
    */
-  using PromiseHolder_std__shared_ptr_ArrayBuffer__ = PromiseHolder<std::shared_ptr<ArrayBuffer>>;
-  inline PromiseHolder<std::shared_ptr<ArrayBuffer>> create_PromiseHolder_std__shared_ptr_ArrayBuffer__() {
-    return PromiseHolder<std::shared_ptr<ArrayBuffer>>::create();
+  using std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___ = std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>;
+  inline std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>> create_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___() {
+    return Promise<std::shared_ptr<ArrayBuffer>>::create();
+  }
+  inline PromiseHolder<std::shared_ptr<ArrayBuffer>> wrap_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___(std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>> promise) {
+    return PromiseHolder<std::shared_ptr<ArrayBuffer>>(std::move(promise));
   }
   
   // pragma MARK: std::function<void(const std::shared_ptr<ArrayBuffer>& /* result */)>

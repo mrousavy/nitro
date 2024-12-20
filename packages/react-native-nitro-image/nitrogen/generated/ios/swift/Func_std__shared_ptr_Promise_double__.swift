@@ -19,13 +19,14 @@ public final class Func_std__shared_ptr_Promise_double__ {
     self.closure = closure
   }
 
-  public func call() -> bridge.PromiseHolder_double_ {
+  public func call() -> bridge.std__shared_ptr_Promise_double__ {
     let __result: Promise<Double> = self.closure()
-    return { () -> bridge.PromiseHolder_double_ in
-      let __promise = bridge.create_PromiseHolder_double_()
+    return { () -> bridge.std__shared_ptr_Promise_double__ in
+      let __promise = bridge.create_std__shared_ptr_Promise_double__()
+      let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_double__(__promise)
       __result
-        .then({ __result in __promise.resolve(__result) })
-        .catch({ __error in __promise.reject(__error.toCpp()) })
+        .then({ __result in __promiseHolder.resolve(__result) })
+        .catch({ __error in __promiseHolder.reject(__error.toCpp()) })
       return __promise
     }()
   }
