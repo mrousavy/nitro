@@ -658,7 +658,11 @@ case ${i}:
         )
         switch (language) {
           case 'c++':
-            return `${swiftParameterName}.getPromise()`
+            if (this.isBridgingToDirectCppTarget) {
+              return `${swiftParameterName}.getPromise()`
+            } else {
+              return swiftParameterName
+            }
           case 'swift':
             const arg =
               promise.resultingType.kind === 'void'
@@ -671,7 +675,7 @@ case ${i}:
     .then({ __result in __promise.resolve(${indent(arg, '      ')}) })
     .catch({ __error in __promise.reject(__error.toCpp()) })
   return __promise
-}()`.trim()
+}()${this.isBridgingToDirectCppTarget ? '.getPromise()' : ''}`.trim()
           default:
             return swiftParameterName
         }

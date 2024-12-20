@@ -544,7 +544,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
           .then({ __result in __promise.resolve() })
           .catch({ __error in __promise.reject(__error.toCpp()) })
         return __promise
-      }()
+      }().getPromise()
       return bridge.create_Result_std__shared_ptr_Promise_void___(__resultCpp)
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
@@ -633,7 +633,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
           .then({ __result in __promise.resolve(__result) })
           .catch({ __error in __promise.reject(__error.toCpp()) })
         return __promise
-      }()
+      }().getPromise()
       return bridge.create_Result_std__shared_ptr_Promise_int64_t___(__resultCpp)
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
@@ -651,7 +651,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
           .then({ __result in __promise.resolve() })
           .catch({ __error in __promise.reject(__error.toCpp()) })
         return __promise
-      }()
+      }().getPromise()
       return bridge.create_Result_std__shared_ptr_Promise_void___(__resultCpp)
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
@@ -669,7 +669,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
           .then({ __result in __promise.resolve() })
           .catch({ __error in __promise.reject(__error.toCpp()) })
         return __promise
-      }()
+      }().getPromise()
       return bridge.create_Result_std__shared_ptr_Promise_void___(__resultCpp)
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
@@ -742,7 +742,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
           .then({ __result in __promise.resolve(__result) })
           .catch({ __error in __promise.reject(__error.toCpp()) })
         return __promise
-      }()
+      }().getPromise()
       return bridge.create_Result_std__shared_ptr_Promise_double___(__resultCpp)
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
@@ -815,7 +815,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
           .then({ __result in __promise.resolve(__result) })
           .catch({ __error in __promise.reject(__error.toCpp()) })
         return __promise
-      }()
+      }().getPromise()
       return bridge.create_Result_std__shared_ptr_Promise_Car___(__resultCpp)
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
@@ -865,7 +865,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
           .then({ __result in __promise.resolve() })
           .catch({ __error in __promise.reject(__error.toCpp()) })
         return __promise
-      }()
+      }().getPromise()
       return bridge.create_Result_std__shared_ptr_Promise_void___(__resultCpp)
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
@@ -1008,7 +1008,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
           .then({ __result in __promise.resolve(__result) })
           .catch({ __error in __promise.reject(__error.toCpp()) })
         return __promise
-      }()
+      }().getPromise()
       return bridge.create_Result_std__shared_ptr_Promise_double___(__resultCpp)
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
@@ -1087,7 +1087,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
           .then({ __result in __promise.resolve(__result) })
           .catch({ __error in __promise.reject(__error.toCpp()) })
         return __promise
-      }()
+      }().getPromise()
       return bridge.create_Result_std__shared_ptr_Promise_double___(__resultCpp)
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
@@ -1171,7 +1171,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
           .then({ __result in __promise.resolve() })
           .catch({ __error in __promise.reject(__error.toCpp()) })
         return __promise
-      }()
+      }().getPromise()
       return bridge.create_Result_std__shared_ptr_Promise_void___(__resultCpp)
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
@@ -1266,7 +1266,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
           .then({ __result in __promise.resolve(__result.getArrayBuffer()) })
           .catch({ __error in __promise.reject(__error.toCpp()) })
         return __promise
-      }()
+      }().getPromise()
       return bridge.create_Result_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer____(__resultCpp)
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()

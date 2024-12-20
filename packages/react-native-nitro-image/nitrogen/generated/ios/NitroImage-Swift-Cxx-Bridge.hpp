@@ -566,7 +566,7 @@ namespace margelo::nitro::image::bridge::swift {
     std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
     return Func_std__shared_ptr_Promise_double__([sharedClosureHolder = std::move(sharedClosureHolder), call]() -> std::shared_ptr<Promise<double>> {
       auto __result = call(sharedClosureHolder.get());
-      return __result.getPromise();
+      return __result;
     });
   }
   inline std::shared_ptr<Func_std__shared_ptr_Promise_double___Wrapper> share_Func_std__shared_ptr_Promise_double__(const Func_std__shared_ptr_Promise_double__& value) {
@@ -596,7 +596,7 @@ namespace margelo::nitro::image::bridge::swift {
     std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
     return Func_std__shared_ptr_Promise_std__string__([sharedClosureHolder = std::move(sharedClosureHolder), call]() -> std::shared_ptr<Promise<std::string>> {
       auto __result = call(sharedClosureHolder.get());
-      return __result.getPromise();
+      return __result;
     });
   }
   inline std::shared_ptr<Func_std__shared_ptr_Promise_std__string___Wrapper> share_Func_std__shared_ptr_Promise_std__string__(const Func_std__shared_ptr_Promise_std__string__& value) {
