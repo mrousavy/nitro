@@ -43,14 +43,14 @@ public:
 
 public:
   void addOnResolvedListener(std::function<void(const T&)> onResolved) const {
-    _promise->addOnResolvedListener([=](const T& result) { onResolved(result); });
+    _promise->addOnResolvedListener([onResolved = std::move(onResolved)](const T& result) { onResolved(result); });
   }
   void addOnResolvedListenerCopy(std::function<void(T)> onResolved) const {
-    _promise->addOnResolvedListener([=](const T& result) { onResolved(result); });
+    _promise->addOnResolvedListener([onResolved = std::move(onResolved)](const T& result) { onResolved(result); });
   }
 
-  void addOnRejectedListener(const std::function<void(const std::exception_ptr&)>& onRejected) const {
-    _promise->addOnRejectedListener([=](const std::exception_ptr& error) { onRejected(error); });
+  void addOnRejectedListener(std::function<void(const std::exception_ptr&)> onRejected) const {
+    _promise->addOnRejectedListener([onRejected = std::move(onRejected)](const std::exception_ptr& error) { onRejected(error); });
   }
 
 public:
@@ -84,11 +84,11 @@ public:
 
 public:
   void addOnResolvedListener(std::function<void()> onResolved) const {
-    _promise->addOnResolvedListener([=]() { onResolved(); });
+    _promise->addOnResolvedListener([onResolved = std::move(onResolved)]() { onResolved(); });
   }
 
-  void addOnRejectedListener(const std::function<void(const std::exception_ptr&)>& onRejected) const {
-    _promise->addOnRejectedListener([=](const std::exception_ptr& error) { onRejected(error); });
+  void addOnRejectedListener(std::function<void(const std::exception_ptr&)> onRejected) const {
+    _promise->addOnRejectedListener([onRejected = std::move(onRejected)](const std::exception_ptr& error) { onRejected(error); });
   }
 
 public:
