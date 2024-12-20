@@ -35,8 +35,8 @@ private:
 public:
   ~Promise() {
     if (isPending()) [[unlikely]] {
-      std::runtime_error error("Timeouted: Promise was destroyed!");
-      reject(std::make_exception_ptr(std::move(error)));
+      auto message = std::string("Timeouted: Promise<") + TypeInfo::getFriendlyTypeName<T>() + "> was destroyed!";
+      reject(std::make_exception_ptr(std::runtime_error(message)));
     }
   }
 
@@ -269,7 +269,7 @@ private:
 public:
   ~Promise() {
     if (isPending()) [[unlikely]] {
-      std::runtime_error error("Timeouted: Promise was destroyed!");
+      std::runtime_error error("Timeouted: Promise<void> was destroyed!");
       reject(std::make_exception_ptr(std::move(error)));
     }
   }
