@@ -530,6 +530,63 @@ namespace margelo::nitro::image::bridge::swift {
     return Func_std__shared_ptr_Promise_double___Wrapper(std::move(value));
   }
   
+  // pragma MARK: std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<double>>>>()>
+  /**
+   * Specialized version of `std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<double>>>>()>`.
+   */
+  using Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double____ = std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<double>>>>()>;
+  /**
+   * Wrapper class for a `std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<double>>>>()>`, this can be used from Swift.
+   */
+  class Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double_____Wrapper final {
+  public:
+    explicit Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double_____Wrapper(std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<double>>>>()>&& func): _function(std::make_shared<std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<double>>>>()>>(std::move(func))) {}
+    inline std::shared_ptr<Promise<std::shared_ptr<Promise<double>>>> call() const {
+      auto __result = _function->operator()();
+      return __result;
+    }
+  private:
+    std::shared_ptr<std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<double>>>>()>> _function;
+  };
+  Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double____ create_Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double____(void* _Nonnull swiftClosureWrapper);
+  inline Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double_____Wrapper wrap_Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double____(Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double____ value) {
+    return Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double_____Wrapper(std::move(value));
+  }
+  
+  // pragma MARK: std::shared_ptr<Promise<std::shared_ptr<Promise<double>>>>
+  /**
+   * Specialized version of `std::shared_ptr<Promise<std::shared_ptr<Promise<double>>>>`.
+   */
+  using std__shared_ptr_Promise_std__shared_ptr_Promise_double____ = std::shared_ptr<Promise<std::shared_ptr<Promise<double>>>>;
+  inline std::shared_ptr<Promise<std::shared_ptr<Promise<double>>>> create_std__shared_ptr_Promise_std__shared_ptr_Promise_double____() {
+    return Promise<std::shared_ptr<Promise<double>>>::create();
+  }
+  inline PromiseHolder<std::shared_ptr<Promise<double>>> wrap_std__shared_ptr_Promise_std__shared_ptr_Promise_double____(std::shared_ptr<Promise<std::shared_ptr<Promise<double>>>> promise) {
+    return PromiseHolder<std::shared_ptr<Promise<double>>>(std::move(promise));
+  }
+  
+  // pragma MARK: std::function<void(const std::shared_ptr<Promise<double>>& /* result */)>
+  /**
+   * Specialized version of `std::function<void(const std::shared_ptr<Promise<double>>&)>`.
+   */
+  using Func_void_std__shared_ptr_Promise_double__ = std::function<void(const std::shared_ptr<Promise<double>>& /* result */)>;
+  /**
+   * Wrapper class for a `std::function<void(const std::shared_ptr<Promise<double>>& / * result * /)>`, this can be used from Swift.
+   */
+  class Func_void_std__shared_ptr_Promise_double___Wrapper final {
+  public:
+    explicit Func_void_std__shared_ptr_Promise_double___Wrapper(std::function<void(const std::shared_ptr<Promise<double>>& /* result */)>&& func): _function(std::make_shared<std::function<void(const std::shared_ptr<Promise<double>>& /* result */)>>(std::move(func))) {}
+    inline void call(std::shared_ptr<Promise<double>> result) const {
+      _function->operator()(result);
+    }
+  private:
+    std::shared_ptr<std::function<void(const std::shared_ptr<Promise<double>>& /* result */)>> _function;
+  };
+  Func_void_std__shared_ptr_Promise_double__ create_Func_void_std__shared_ptr_Promise_double__(void* _Nonnull swiftClosureWrapper);
+  inline Func_void_std__shared_ptr_Promise_double___Wrapper wrap_Func_void_std__shared_ptr_Promise_double__(Func_void_std__shared_ptr_Promise_double__ value) {
+    return Func_void_std__shared_ptr_Promise_double___Wrapper(std::move(value));
+  }
+  
   // pragma MARK: std::function<std::shared_ptr<Promise<std::string>>()>
   /**
    * Specialized version of `std::function<std::shared_ptr<Promise<std::string>>()>`.

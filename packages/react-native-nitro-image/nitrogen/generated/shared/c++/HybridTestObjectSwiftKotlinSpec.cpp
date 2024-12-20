@@ -68,6 +68,7 @@ namespace margelo::nitro::image {
       prototype.registerHybridMethod("callAll", &HybridTestObjectSwiftKotlinSpec::callAll);
       prototype.registerHybridMethod("callWithOptional", &HybridTestObjectSwiftKotlinSpec::callWithOptional);
       prototype.registerHybridMethod("callSumUpNTimes", &HybridTestObjectSwiftKotlinSpec::callSumUpNTimes);
+      prototype.registerHybridMethod("callbackAsyncPromise", &HybridTestObjectSwiftKotlinSpec::callbackAsyncPromise);
       prototype.registerHybridMethod("getValueFromJSCallbackAndWait", &HybridTestObjectSwiftKotlinSpec::getValueFromJSCallbackAndWait);
       prototype.registerHybridMethod("getValueFromJsCallback", &HybridTestObjectSwiftKotlinSpec::getValueFromJsCallback);
       prototype.registerHybridMethod("getCar", &HybridTestObjectSwiftKotlinSpec::getCar);
