@@ -355,7 +355,7 @@ inline std::shared_ptr<${name}> share_${name}(${name} value) {
       code: `
 ${name} create_${name}(void* _Nonnull swiftClosureWrapper) {
   auto swiftClosure = ${swiftClassName}::fromUnsafe(swiftClosureWrapper);
-  return [=](${paramsSignature.join(', ')}) -> ${type.returnType.getCode('c++')} {
+  return [swiftClosure = std::move(swiftClosure)](${paramsSignature.join(', ')}) mutable -> ${type.returnType.getCode('c++')} {
     ${indent(body, '    ')}
   };
 }
