@@ -299,7 +299,7 @@ HybridTestObjectCpp::callbackAsyncPromise(const std::function<std::shared_ptr<Pr
   });
 }
 
-std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>> HybridTestObjectCpp::callbackAsyncPromise(
+std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>> HybridTestObjectCpp::callbackAsyncPromiseBuffer(
     const std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>>>()>& callback) {
   return Promise<std::shared_ptr<ArrayBuffer>>::async([=]() {
     std::future<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>> future = callback()->await();
