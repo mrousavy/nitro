@@ -25,6 +25,7 @@ template <typename T>
 class PromiseHolder final {
 public:
   PromiseHolder(const std::shared_ptr<Promise<T>>& promise) : _promise(promise) {}
+  PromiseHolder(std::shared_ptr<Promise<T>>&& promise) : _promise(std::move(promise)) {}
 
 public:
   static PromiseHolder<T> create() {
@@ -65,6 +66,7 @@ template <>
 class PromiseHolder<void> final {
 public:
   PromiseHolder(const std::shared_ptr<Promise<void>>& promise) : _promise(promise) {}
+  PromiseHolder(std::shared_ptr<Promise<void>>&& promise) : _promise(std::move(promise)) {}
 
 public:
   static PromiseHolder<void> create() {
