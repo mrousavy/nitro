@@ -19,6 +19,7 @@ public final class Func_std__shared_ptr_Promise_double__ {
     self.closure = closure
   }
 
+  @inline(__always)
   public func call() -> bridge.std__shared_ptr_Promise_double__ {
     let __result: Promise<Double> = self.closure()
     return { () -> bridge.std__shared_ptr_Promise_double__ in
@@ -35,6 +36,7 @@ public final class Func_std__shared_ptr_Promise_double__ {
    * Casts this instance to a retained unsafe raw pointer.
    * This acquires one additional strong reference on the object!
    */
+  @inline(__always)
   public func toUnsafe() -> UnsafeMutableRawPointer {
     return Unmanaged.passRetained(self).toOpaque()
   }
@@ -44,6 +46,7 @@ public final class Func_std__shared_ptr_Promise_double__ {
    * The pointer has to be a retained opaque `Unmanaged<Func_std__shared_ptr_Promise_double__>`.
    * This removes one strong reference from the object!
    */
+  @inline(__always)
   public static func fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> Func_std__shared_ptr_Promise_double__ {
     return Unmanaged<Func_std__shared_ptr_Promise_double__>.fromOpaque(pointer).takeRetainedValue()
   }

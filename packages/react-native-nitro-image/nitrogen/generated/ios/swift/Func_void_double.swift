@@ -19,6 +19,7 @@ public final class Func_void_double {
     self.closure = closure
   }
 
+  @inline(__always)
   public func call(value: Double) -> Void {
     self.closure(value)
   }
@@ -27,6 +28,7 @@ public final class Func_void_double {
    * Casts this instance to a retained unsafe raw pointer.
    * This acquires one additional strong reference on the object!
    */
+  @inline(__always)
   public func toUnsafe() -> UnsafeMutableRawPointer {
     return Unmanaged.passRetained(self).toOpaque()
   }
@@ -36,6 +38,7 @@ public final class Func_void_double {
    * The pointer has to be a retained opaque `Unmanaged<Func_void_double>`.
    * This removes one strong reference from the object!
    */
+  @inline(__always)
   public static func fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> Func_void_double {
     return Unmanaged<Func_void_double>.fromOpaque(pointer).takeRetainedValue()
   }

@@ -48,6 +48,7 @@ public final class ${swiftClassName} {
     self.closure = closure
   }
 
+  @inline(__always)
   public func call(${argsTypes.join(', ')}) -> ${returnType.getTypeCode('swift')} {
     ${indent(body, '    ')}
   }
@@ -56,6 +57,7 @@ public final class ${swiftClassName} {
    * Casts this instance to a retained unsafe raw pointer.
    * This acquires one additional strong reference on the object!
    */
+  @inline(__always)
   public func toUnsafe() -> UnsafeMutableRawPointer {
     return Unmanaged.passRetained(self).toOpaque()
   }
@@ -65,6 +67,7 @@ public final class ${swiftClassName} {
    * The pointer has to be a retained opaque \`Unmanaged<${swiftClassName}>\`.
    * This removes one strong reference from the object!
    */
+  @inline(__always)
   public static func fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> ${swiftClassName} {
     return Unmanaged<${swiftClassName}>.fromOpaque(pointer).takeRetainedValue()
   }
