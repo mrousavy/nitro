@@ -20,8 +20,7 @@ public final class Func_void_std__vector_Powertrain_ {
   }
 
   public func call(array: bridge.std__vector_Powertrain_) -> Void {
-    let __result: Void = self.closure(array.map({ __item in __item }))
-    return 
+    self.closure(array.map({ __item in __item }))
   }
 
   /**

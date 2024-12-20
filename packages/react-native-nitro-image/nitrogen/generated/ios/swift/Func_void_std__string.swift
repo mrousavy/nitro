@@ -20,8 +20,7 @@ public final class Func_void_std__string {
   }
 
   public func call(valueFromJs: std.string) -> Void {
-    let __result: Void = self.closure(String(valueFromJs))
-    return 
+    self.closure(String(valueFromJs))
   }
 
   /**

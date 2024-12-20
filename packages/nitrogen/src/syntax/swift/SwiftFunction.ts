@@ -19,6 +19,18 @@ export function createSwiftFunctionBridge(
     return bridged.parseFromCppToSwift(p.escapedName, 'swift')
   })
 
+  let body: string
+  if (functionType.returnType.kind === 'void') {
+    body = `
+self.closure(${argsForward.join(', ')})
+    `.trim()
+  } else {
+    body = `
+let __result: ${functionType.returnType.getCode('swift')} = self.closure(${argsForward.join(', ')})
+return ${returnType.parseFromSwiftToCpp('__result', 'swift')}
+    `.trim()
+  }
+
   const code = `
 ${createFileMetadataString(`${swiftClassName}.swift`)}
 
@@ -37,8 +49,7 @@ public final class ${swiftClassName} {
   }
 
   public func call(${argsTypes.join(', ')}) -> ${returnType.getTypeCode('swift')} {
-    let __result: ${functionType.returnType.getCode('swift')} = self.closure(${indent(argsForward.join(', '), '    ')})
-    return ${indent(returnType.parseFromSwiftToCpp('__result', 'swift'), '    ')}
+    ${indent(body, '    ')}
   }
 
   /**

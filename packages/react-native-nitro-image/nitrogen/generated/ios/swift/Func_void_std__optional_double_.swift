@@ -20,8 +20,7 @@ public final class Func_void_std__optional_double_ {
   }
 
   public func call(maybe: bridge.std__optional_double_) -> Void {
-    let __result: Void = self.closure(maybe.value)
-    return 
+    self.closure(maybe.value)
   }
 
   /**

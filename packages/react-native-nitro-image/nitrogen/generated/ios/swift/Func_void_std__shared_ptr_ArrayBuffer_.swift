@@ -20,8 +20,7 @@ public final class Func_void_std__shared_ptr_ArrayBuffer_ {
   }
 
   public func call(value: ArrayBufferHolder) -> Void {
-    let __result: Void = self.closure(value)
-    return 
+    self.closure(value)
   }
 
   /**

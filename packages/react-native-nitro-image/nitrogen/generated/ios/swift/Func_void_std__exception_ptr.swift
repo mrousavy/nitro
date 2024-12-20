@@ -20,8 +20,7 @@ public final class Func_void_std__exception_ptr {
   }
 
   public func call(error: std.exception_ptr) -> Void {
-    let __result: Void = self.closure(RuntimeError.from(cppError: error))
-    return 
+    self.closure(RuntimeError.from(cppError: error))
   }
 
   /**

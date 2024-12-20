@@ -20,8 +20,7 @@ public final class Func_void_int64_t {
   }
 
   public func call(value: Int64) -> Void {
-    let __result: Void = self.closure(value)
-    return 
+    self.closure(value)
   }
 
   /**

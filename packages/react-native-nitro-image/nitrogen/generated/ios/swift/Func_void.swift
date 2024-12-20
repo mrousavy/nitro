@@ -20,8 +20,7 @@ public final class Func_void {
   }
 
   public func call() -> Void {
-    let __result: Void = self.closure()
-    return 
+    self.closure()
   }
 
   /**
