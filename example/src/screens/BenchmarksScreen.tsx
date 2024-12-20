@@ -19,6 +19,7 @@ import { HybridTestObjectCpp } from 'react-native-nitro-image'
 import { ExampleTurboModule } from '../turbo-module/ExampleTurboModule'
 
 declare global {
+  var gc: () => void
   var performance: {
     now: () => number
   }
@@ -37,6 +38,7 @@ function delay(ms: number): Promise<void> {
 }
 
 async function waitForGc(): Promise<void> {
+  gc()
   await delay(500)
   return new Promise((resolve) => {
     requestAnimationFrame(() => {
@@ -75,6 +77,7 @@ async function runBenchmarks(): Promise<BenchmarksResult> {
     turboEnd = performance.now()
   }
 
+  waitForGc()
   console.log(
     `Benchmarks finished! Nitro: ${(nitroEnd - nitroStart).toFixed(2)}ms | Turbo: ${(turboEnd - turboStart).toFixed(2)}ms`
   )
