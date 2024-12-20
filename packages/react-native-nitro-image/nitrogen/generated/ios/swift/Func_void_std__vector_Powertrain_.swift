@@ -5,10 +5,14 @@
 /// Copyright © 2024 Marc Rousavy @ Margelo
 ///
 
+import NitroModules
+
 /**
  * Represents the JS function `(array: array) => void`, wrappable as a C++ std::function.
  */
 public final class Func_void_std__vector_Powertrain_ {
+  public typealias bridge = margelo.nitro.image.bridge.swift
+
   private let closure: ((_ array: [Powertrain]) -> Void)
 
   public init(_ closure: @escaping ((_ array: [Powertrain]) -> Void)) {

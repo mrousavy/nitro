@@ -360,7 +360,14 @@ ${name} create_${name}(void* _Nonnull swiftClosureWrapper) {
   };
 }
 `.trim(),
-      requiredIncludes: [],
+      requiredIncludes: [
+        {
+          language: 'c++',
+          // Swift umbrella header
+          name: getUmbrellaHeaderName(),
+          space: 'user',
+        },
+      ],
     },
     dependencies: [],
   }

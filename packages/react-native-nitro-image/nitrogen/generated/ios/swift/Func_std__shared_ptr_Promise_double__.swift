@@ -5,10 +5,14 @@
 /// Copyright © 2024 Marc Rousavy @ Margelo
 ///
 
+import NitroModules
+
 /**
  * Represents the JS function `() => std::shared_ptr<Promise<double>>`, wrappable as a C++ std::function.
  */
 public final class Func_std__shared_ptr_Promise_double__ {
+  public typealias bridge = margelo.nitro.image.bridge.swift
+
   private let closure: (() -> Promise<Double>)
 
   public init(_ closure: @escaping (() -> Promise<Double>)) {

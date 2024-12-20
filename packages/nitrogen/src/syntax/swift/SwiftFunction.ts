@@ -3,6 +3,7 @@ import { createFileMetadataString } from '../helpers.js'
 import type { SourceFile } from '../SourceFile.js'
 import type { FunctionType } from '../types/FunctionType.js'
 import { SwiftCxxBridgedType } from './SwiftCxxBridgedType.js'
+import { getBridgeNamespace } from './SwiftHybridObjectBridge.js'
 
 export function createSwiftFunctionBridge(
   functionType: FunctionType
@@ -21,10 +22,14 @@ export function createSwiftFunctionBridge(
   const code = `
 ${createFileMetadataString(`${swiftClassName}.swift`)}
 
+import NitroModules
+
 /**
  * Represents the JS function \`${functionType.jsName}\`, wrappable as a C++ std::function.
  */
 public final class ${swiftClassName} {
+  public typealias bridge = ${getBridgeNamespace()}
+
   private let closure: ${functionType.getCode('swift')}
 
   public init(_ closure: @escaping ${functionType.getCode('swift')}) {
