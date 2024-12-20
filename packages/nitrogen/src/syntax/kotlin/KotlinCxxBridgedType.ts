@@ -769,7 +769,7 @@ __promise->resolve();
             return `
 [&]() {
   auto __promise = Promise<${actualCppType}>::create();
-  ${parameterName}->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
+  ${parameterName}->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& ${resultingType.hasType ? '__boxedResult' : '/* unit */'}) {
     ${indent(resolveBody, '    ')}
   });
   ${parameterName}->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {

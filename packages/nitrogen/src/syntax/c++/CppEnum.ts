@@ -59,7 +59,7 @@ namespace margelo::nitro {
       int enumValue = static_cast<int>(arg);
       return JSIConverter<int>::toJSI(runtime, enumValue);
     }
-    static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
+    static inline bool canConvert(jsi::Runtime&, const jsi::Value& value) {
       if (!value.isNumber()) {
         return false;
       }

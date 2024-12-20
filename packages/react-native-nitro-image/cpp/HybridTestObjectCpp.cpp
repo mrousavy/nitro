@@ -198,7 +198,7 @@ void HybridTestObjectCpp::throwError(const std::exception_ptr& error) {
   std::rethrow_exception(error);
 }
 
-std::string HybridTestObjectCpp::tryOptionalParams(double num, bool boo, const std::optional<std::string>& str) {
+std::string HybridTestObjectCpp::tryOptionalParams(double /* num */, bool /* boo */, const std::optional<std::string>& str) {
   if (str.has_value()) {
     return str.value();
   } else {
@@ -206,7 +206,7 @@ std::string HybridTestObjectCpp::tryOptionalParams(double num, bool boo, const s
   }
 }
 
-std::string HybridTestObjectCpp::tryMiddleParam(double num, std::optional<bool> boo, const std::string& str) {
+std::string HybridTestObjectCpp::tryMiddleParam(double /* num */, std::optional<bool> /* boo */, const std::string& str) {
   return str;
 }
 
@@ -422,7 +422,7 @@ std::shared_ptr<HybridTestObjectCppSpec> HybridTestObjectCpp::newTestObject() {
   return std::make_shared<HybridTestObjectCpp>();
 }
 
-jsi::Value HybridTestObjectCpp::rawJsiFunc(jsi::Runtime& runtime, const jsi::Value& thisValue, const jsi::Value* args, size_t count) {
+jsi::Value HybridTestObjectCpp::rawJsiFunc(jsi::Runtime& runtime, const jsi::Value&, const jsi::Value* args, size_t count) {
   jsi::Array array(runtime, count);
   for (size_t i = 0; i < count; i++) {
     array.setValueAtIndex(runtime, i, jsi::Value(runtime, args[i]));
