@@ -756,11 +756,14 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
     do {
       let __result = try self.__implementation.awaitPromise(promise: { () -> Promise<Void> in
         let __promise = Promise<Void>()
-        let __resolver = SwiftClosure { __promise.resolve(withResult: ()) }
+        let __resolver = { __promise.resolve(withResult: ()) }
         let __rejecter = { (__error: Error) in
           __promise.reject(withError: __error)
         }
-        let __resolverCpp = __resolver.getFunctionCopy()
+        let __resolverCpp = { () -> bridge.Func_void in
+          let closureWrapper = Func_void(__resolver)
+          return bridge.create_Func_void(closureWrapper.toUnsafe())
+        }()
         let __rejecterCpp = { () -> bridge.Func_void_std__exception_ptr in
           let closureWrapper = Func_void_std__exception_ptr(__rejecter)
           return bridge.create_Func_void_std__exception_ptr(closureWrapper.toUnsafe())

@@ -362,18 +362,20 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
           case 'swift': {
             if (promise.resultingType.kind === 'void') {
               // It's void - resolve()
+              const resolverFunc = new FunctionType(new VoidType(), [])
               const rejecterFunc = new FunctionType(new VoidType(), [
                 new NamedWrappingType('error', new ErrorType()),
               ])
+              const resolverFuncBridge = new SwiftCxxBridgedType(resolverFunc)
               const rejecterFuncBridge = new SwiftCxxBridgedType(rejecterFunc)
               return `
 { () -> ${promise.getCode('swift')} in
   let __promise = ${promise.getCode('swift')}()
-  let __resolver = SwiftClosure { __promise.resolve(withResult: ()) }
+  let __resolver = { __promise.resolve(withResult: ()) }
   let __rejecter = { (__error: Error) in
     __promise.reject(withError: __error)
   }
-  let __resolverCpp = __resolver.getFunctionCopy()
+  let __resolverCpp = ${indent(resolverFuncBridge.parseFromSwiftToCpp('__resolver', 'swift'), '  ')}
   let __rejecterCpp = ${indent(rejecterFuncBridge.parseFromSwiftToCpp('__rejecter', 'swift'), '  ')}
   ${cppParameterName}.addOnResolvedListener(__resolverCpp)
   ${cppParameterName}.addOnRejectedListener(__rejecterCpp)
@@ -553,7 +555,10 @@ case ${i}:
   }
 }()`.trim()
             } else {
-              const resultBridged = new SwiftCxxBridgedType(funcType.returnType)
+              const resultBridged = new SwiftCxxBridgedType(
+                funcType.returnType,
+                true
+              )
               return `
 { () -> ${swiftClosureType} in
   let __sharedClosure = bridge.share_${bridge.specializationName}(${cppParameterName})
