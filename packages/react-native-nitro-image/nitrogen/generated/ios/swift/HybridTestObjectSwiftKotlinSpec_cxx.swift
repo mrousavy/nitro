@@ -689,12 +689,12 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
           __promise.reject(withError: __error)
         }
         let __resolverCpp = { () -> bridge.Func_void_double in
-          let closureWrapper = Func_void_double(__resolver)
-          return bridge.create_Func_void_double(closureWrapper.toUnsafe())
+          let __closureWrapper = Func_void_double(__resolver)
+          return bridge.create_Func_void_double(__closureWrapper.toUnsafe())
         }()
         let __rejecterCpp = { () -> bridge.Func_void_std__exception_ptr in
-          let closureWrapper = Func_void_std__exception_ptr(__rejecter)
-          return bridge.create_Func_void_std__exception_ptr(closureWrapper.toUnsafe())
+          let __closureWrapper = Func_void_std__exception_ptr(__rejecter)
+          return bridge.create_Func_void_std__exception_ptr(__closureWrapper.toUnsafe())
         }()
         promise.addOnResolvedListenerCopy(__resolverCpp)
         promise.addOnRejectedListener(__rejecterCpp)
@@ -726,12 +726,12 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
           __promise.reject(withError: __error)
         }
         let __resolverCpp = { () -> bridge.Func_void_Car in
-          let closureWrapper = Func_void_Car(__resolver)
-          return bridge.create_Func_void_Car(closureWrapper.toUnsafe())
+          let __closureWrapper = Func_void_Car(__resolver)
+          return bridge.create_Func_void_Car(__closureWrapper.toUnsafe())
         }()
         let __rejecterCpp = { () -> bridge.Func_void_std__exception_ptr in
-          let closureWrapper = Func_void_std__exception_ptr(__rejecter)
-          return bridge.create_Func_void_std__exception_ptr(closureWrapper.toUnsafe())
+          let __closureWrapper = Func_void_std__exception_ptr(__rejecter)
+          return bridge.create_Func_void_std__exception_ptr(__closureWrapper.toUnsafe())
         }()
         promise.addOnResolvedListener(__resolverCpp)
         promise.addOnRejectedListener(__rejecterCpp)
@@ -761,12 +761,12 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
           __promise.reject(withError: __error)
         }
         let __resolverCpp = { () -> bridge.Func_void in
-          let closureWrapper = Func_void(__resolver)
-          return bridge.create_Func_void(closureWrapper.toUnsafe())
+          let __closureWrapper = Func_void(__resolver)
+          return bridge.create_Func_void(__closureWrapper.toUnsafe())
         }()
         let __rejecterCpp = { () -> bridge.Func_void_std__exception_ptr in
-          let closureWrapper = Func_void_std__exception_ptr(__rejecter)
-          return bridge.create_Func_void_std__exception_ptr(closureWrapper.toUnsafe())
+          let __closureWrapper = Func_void_std__exception_ptr(__rejecter)
+          return bridge.create_Func_void_std__exception_ptr(__closureWrapper.toUnsafe())
         }()
         promise.addOnResolvedListener(__resolverCpp)
         promise.addOnRejectedListener(__rejecterCpp)
@@ -866,12 +866,12 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
               __promise.reject(withError: __error)
             }
             let __resolverCpp = { () -> bridge.Func_void_double in
-              let closureWrapper = Func_void_double(__resolver)
-              return bridge.create_Func_void_double(closureWrapper.toUnsafe())
+              let __closureWrapper = Func_void_double(__resolver)
+              return bridge.create_Func_void_double(__closureWrapper.toUnsafe())
             }()
             let __rejecterCpp = { () -> bridge.Func_void_std__exception_ptr in
-              let closureWrapper = Func_void_std__exception_ptr(__rejecter)
-              return bridge.create_Func_void_std__exception_ptr(closureWrapper.toUnsafe())
+              let __closureWrapper = Func_void_std__exception_ptr(__rejecter)
+              return bridge.create_Func_void_std__exception_ptr(__closureWrapper.toUnsafe())
             }()
             __result.addOnResolvedListenerCopy(__resolverCpp)
             __result.addOnRejectedListener(__rejecterCpp)
@@ -909,12 +909,12 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
               __promise.reject(withError: __error)
             }
             let __resolverCpp = { () -> bridge.Func_void_double in
-              let closureWrapper = Func_void_double(__resolver)
-              return bridge.create_Func_void_double(closureWrapper.toUnsafe())
+              let __closureWrapper = Func_void_double(__resolver)
+              return bridge.create_Func_void_double(__closureWrapper.toUnsafe())
             }()
             let __rejecterCpp = { () -> bridge.Func_void_std__exception_ptr in
-              let closureWrapper = Func_void_std__exception_ptr(__rejecter)
-              return bridge.create_Func_void_std__exception_ptr(closureWrapper.toUnsafe())
+              let __closureWrapper = Func_void_std__exception_ptr(__rejecter)
+              return bridge.create_Func_void_std__exception_ptr(__closureWrapper.toUnsafe())
             }()
             __result.addOnResolvedListenerCopy(__resolverCpp)
             __result.addOnRejectedListener(__rejecterCpp)
@@ -952,12 +952,12 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
               __promise.reject(withError: __error)
             }
             let __resolverCpp = { () -> bridge.Func_void_std__string in
-              let closureWrapper = Func_void_std__string(__resolver)
-              return bridge.create_Func_void_std__string(closureWrapper.toUnsafe())
+              let __closureWrapper = Func_void_std__string(__resolver)
+              return bridge.create_Func_void_std__string(__closureWrapper.toUnsafe())
             }()
             let __rejecterCpp = { () -> bridge.Func_void_std__exception_ptr in
-              let closureWrapper = Func_void_std__exception_ptr(__rejecter)
-              return bridge.create_Func_void_std__exception_ptr(closureWrapper.toUnsafe())
+              let __closureWrapper = Func_void_std__exception_ptr(__rejecter)
+              return bridge.create_Func_void_std__exception_ptr(__closureWrapper.toUnsafe())
             }()
             __result.addOnResolvedListener(__resolverCpp)
             __result.addOnRejectedListener(__rejecterCpp)

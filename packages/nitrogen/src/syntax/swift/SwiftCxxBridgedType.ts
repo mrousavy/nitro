@@ -795,8 +795,8 @@ case ${i}:
             const createFunc = `bridge.${bridge.funcName}`
             return `
 { () -> bridge.${bridge.specializationName} in
-  let closureWrapper = ${bridge.specializationName}(${swiftParameterName})
-  return ${createFunc}(closureWrapper.toUnsafe())
+  let __closureWrapper = ${bridge.specializationName}(${swiftParameterName})
+  return ${createFunc}(__closureWrapper.toUnsafe())
 }()
   `.trim()
           }
