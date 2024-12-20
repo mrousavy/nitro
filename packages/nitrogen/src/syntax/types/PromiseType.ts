@@ -1,12 +1,18 @@
 import type { Language } from '../../getPlatformSpecs.js'
 import { type SourceFile, type SourceImport } from '../SourceFile.js'
+import { ErrorType } from './ErrorType.js'
+import { FunctionType } from './FunctionType.js'
+import { NamedWrappingType } from './NamedWrappingType.js'
 import type { Type, TypeKind } from './Type.js'
+import { VoidType } from './VoidType.js'
 
 export class PromiseType implements Type {
   readonly resultingType: Type
+  readonly errorType: Type
 
   constructor(resultingType: Type) {
     this.resultingType = resultingType
+    this.errorType = new ErrorType()
   }
 
   get canBePassedByReference(): boolean {
@@ -15,6 +21,18 @@ export class PromiseType implements Type {
   }
   get kind(): TypeKind {
     return 'promise'
+  }
+
+  get resolverFunction(): FunctionType {
+    return new FunctionType(new VoidType(), [
+      new NamedWrappingType('value', this.resultingType),
+    ])
+  }
+
+  get rejecterFunction(): FunctionType {
+    return new FunctionType(new VoidType(), [
+      new NamedWrappingType('error', this.errorType),
+    ])
   }
 
   getCode(language: Language): string {
