@@ -91,7 +91,7 @@ namespace margelo::nitro::image::bridge::swift {
     }
   private:
     std::function<void(const std::string& /* path */)> _function;
-  };
+  } SWIFT_NONCOPYABLE;
   inline Func_void_std__string create_Func_void_std__string(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */, std::string), void(* _Nonnull destroy)(void* _Nonnull)) {
     std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
     return Func_void_std__string([sharedClosureHolder = std::move(sharedClosureHolder), call](const std::string& path) -> void {
@@ -271,7 +271,7 @@ namespace margelo::nitro::image::bridge::swift {
     }
   private:
     std::function<void(const std::vector<Powertrain>& /* array */)> _function;
-  };
+  } SWIFT_NONCOPYABLE;
   inline Func_void_std__vector_Powertrain_ create_Func_void_std__vector_Powertrain_(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */, std::vector<Powertrain>), void(* _Nonnull destroy)(void* _Nonnull)) {
     std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
     return Func_void_std__vector_Powertrain_([sharedClosureHolder = std::move(sharedClosureHolder), call](const std::vector<Powertrain>& array) -> void {
@@ -308,7 +308,7 @@ namespace margelo::nitro::image::bridge::swift {
     }
   private:
     std::function<void()> _function;
-  };
+  } SWIFT_NONCOPYABLE;
   inline Func_void create_Func_void(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */), void(* _Nonnull destroy)(void* _Nonnull)) {
     std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
     return Func_void([sharedClosureHolder = std::move(sharedClosureHolder), call]() -> void {
@@ -336,7 +336,7 @@ namespace margelo::nitro::image::bridge::swift {
     }
   private:
     std::function<void(const std::exception_ptr& /* error */)> _function;
-  };
+  } SWIFT_NONCOPYABLE;
   inline Func_void_std__exception_ptr create_Func_void_std__exception_ptr(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */, std::exception_ptr), void(* _Nonnull destroy)(void* _Nonnull)) {
     std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
     return Func_void_std__exception_ptr([sharedClosureHolder = std::move(sharedClosureHolder), call](const std::exception_ptr& error) -> void {
@@ -411,7 +411,7 @@ namespace margelo::nitro::image::bridge::swift {
     }
   private:
     std::function<void(int64_t /* result */)> _function;
-  };
+  } SWIFT_NONCOPYABLE;
   inline Func_void_int64_t create_Func_void_int64_t(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */, int64_t), void(* _Nonnull destroy)(void* _Nonnull)) {
     std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
     return Func_void_int64_t([sharedClosureHolder = std::move(sharedClosureHolder), call](int64_t result) -> void {
@@ -448,7 +448,7 @@ namespace margelo::nitro::image::bridge::swift {
     }
   private:
     std::function<void(double /* result */)> _function;
-  };
+  } SWIFT_NONCOPYABLE;
   inline Func_void_double create_Func_void_double(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */, double), void(* _Nonnull destroy)(void* _Nonnull)) {
     std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
     return Func_void_double([sharedClosureHolder = std::move(sharedClosureHolder), call](double result) -> void {
@@ -494,7 +494,7 @@ namespace margelo::nitro::image::bridge::swift {
     }
   private:
     std::function<void(const Car& /* result */)> _function;
-  };
+  } SWIFT_NONCOPYABLE;
   inline Func_void_Car create_Func_void_Car(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */, Car), void(* _Nonnull destroy)(void* _Nonnull)) {
     std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
     return Func_void_Car([sharedClosureHolder = std::move(sharedClosureHolder), call](const Car& result) -> void {
@@ -531,7 +531,7 @@ namespace margelo::nitro::image::bridge::swift {
     }
   private:
     std::function<void(std::optional<double> /* maybe */)> _function;
-  };
+  } SWIFT_NONCOPYABLE;
   inline Func_void_std__optional_double_ create_Func_void_std__optional_double_(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */, std::optional<double>), void(* _Nonnull destroy)(void* _Nonnull)) {
     std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
     return Func_void_std__optional_double_([sharedClosureHolder = std::move(sharedClosureHolder), call](std::optional<double> maybe) -> void {
@@ -560,7 +560,7 @@ namespace margelo::nitro::image::bridge::swift {
     }
   private:
     std::function<std::shared_ptr<Promise<double>>()> _function;
-  };
+  } SWIFT_NONCOPYABLE;
   inline Func_std__shared_ptr_Promise_double__ create_Func_std__shared_ptr_Promise_double__(void* _Nonnull closureHolder, std::shared_ptr<Promise<double>>(* _Nonnull call)(void* _Nonnull /* closureHolder */), void(* _Nonnull destroy)(void* _Nonnull)) {
     std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
     return Func_std__shared_ptr_Promise_double__([sharedClosureHolder = std::move(sharedClosureHolder), call]() -> std::shared_ptr<Promise<double>> {
@@ -590,7 +590,7 @@ namespace margelo::nitro::image::bridge::swift {
     }
   private:
     std::function<std::shared_ptr<Promise<std::string>>()> _function;
-  };
+  } SWIFT_NONCOPYABLE;
   inline Func_std__shared_ptr_Promise_std__string__ create_Func_std__shared_ptr_Promise_std__string__(void* _Nonnull closureHolder, std::shared_ptr<Promise<std::string>>(* _Nonnull call)(void* _Nonnull /* closureHolder */), void(* _Nonnull destroy)(void* _Nonnull)) {
     std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
     return Func_std__shared_ptr_Promise_std__string__([sharedClosureHolder = std::move(sharedClosureHolder), call]() -> std::shared_ptr<Promise<std::string>> {
@@ -637,7 +637,7 @@ namespace margelo::nitro::image::bridge::swift {
     }
   private:
     std::function<void(const std::shared_ptr<ArrayBuffer>& /* result */)> _function;
-  };
+  } SWIFT_NONCOPYABLE;
   inline Func_void_std__shared_ptr_ArrayBuffer_ create_Func_void_std__shared_ptr_ArrayBuffer_(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */, ArrayBufferHolder), void(* _Nonnull destroy)(void* _Nonnull)) {
     std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
     return Func_void_std__shared_ptr_ArrayBuffer_([sharedClosureHolder = std::move(sharedClosureHolder), call](const std::shared_ptr<ArrayBuffer>& result) -> void {
