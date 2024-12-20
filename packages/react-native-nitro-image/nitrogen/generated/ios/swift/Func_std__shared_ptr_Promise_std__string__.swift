@@ -8,7 +8,7 @@
 /**
  * Represents the JS function `() => std::shared_ptr<Promise<std::string>>`, wrappable as a C++ std::function.
  */
-public class Func_std__shared_ptr_Promise_std__string__ final {
+public final class Func_std__shared_ptr_Promise_std__string__ {
   private let closure: (() -> Promise<String>)
 
   public init(_ closure: @escaping (() -> Promise<String>)) {

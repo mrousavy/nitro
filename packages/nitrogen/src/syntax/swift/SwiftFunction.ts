@@ -7,6 +7,7 @@ import { SwiftCxxBridgedType } from './SwiftCxxBridgedType.js'
 export function createSwiftFunctionBridge(
   functionType: FunctionType
 ): SourceFile {
+  const swiftClassName = functionType.specializationName
   const argsTypes = functionType.parameters.map((p) => {
     const bridged = new SwiftCxxBridgedType(p)
     return `${p.escapedName}: ${bridged.getTypeCode('swift')}`
@@ -18,12 +19,12 @@ export function createSwiftFunctionBridge(
   })
 
   const code = `
-${createFileMetadataString(`${functionType.specializationName}.swift`)}
+${createFileMetadataString(`${swiftClassName}.swift`)}
 
 /**
  * Represents the JS function \`${functionType.jsName}\`, wrappable as a C++ std::function.
  */
-public class ${functionType.specializationName} final {
+public final class ${swiftClassName} {
   private let closure: ${functionType.getCode('swift')}
 
   public init(_ closure: @escaping ${functionType.getCode('swift')}) {
@@ -44,12 +45,12 @@ public class ${functionType.specializationName} final {
   }
 
   /**
-   * Casts an unsafe pointer to a \`${functionType.specializationName}\`.
-   * The pointer has to be a retained opaque \`Unmanaged<${functionType.specializationName}>\`.
+   * Casts an unsafe pointer to a \`${swiftClassName}\`.
+   * The pointer has to be a retained opaque \`Unmanaged<${swiftClassName}>\`.
    * This removes one strong reference from the object!
    */
-  public static func fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> ${functionType.specializationName} {
-    return Unmanaged<${functionType.specializationName}>.fromOpaque(pointer).takeRetainedValue()
+  public static func fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> ${swiftClassName} {
+    return Unmanaged<${swiftClassName}>.fromOpaque(pointer).takeRetainedValue()
   }
 }
   `.trim()
@@ -57,7 +58,7 @@ public class ${functionType.specializationName} final {
   return {
     content: code,
     language: 'swift',
-    name: `${functionType.specializationName}.swift`,
+    name: `${swiftClassName}.swift`,
     platform: 'ios',
     subdirectory: [],
   }

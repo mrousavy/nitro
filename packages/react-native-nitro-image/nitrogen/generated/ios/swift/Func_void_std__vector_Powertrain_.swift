@@ -8,7 +8,7 @@
 /**
  * Represents the JS function `(array: array) => void`, wrappable as a C++ std::function.
  */
-public class Func_void_std__vector_Powertrain_ final {
+public final class Func_void_std__vector_Powertrain_ {
   private let closure: ((_ array: [Powertrain]) -> Void)
 
   public init(_ closure: @escaping ((_ array: [Powertrain]) -> Void)) {

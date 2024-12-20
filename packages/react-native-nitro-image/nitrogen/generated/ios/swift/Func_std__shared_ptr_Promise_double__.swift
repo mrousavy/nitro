@@ -8,7 +8,7 @@
 /**
  * Represents the JS function `() => std::shared_ptr<Promise<double>>`, wrappable as a C++ std::function.
  */
-public class Func_std__shared_ptr_Promise_double__ final {
+public final class Func_std__shared_ptr_Promise_double__ {
   private let closure: (() -> Promise<Double>)
 
   public init(_ closure: @escaping (() -> Promise<Double>)) {

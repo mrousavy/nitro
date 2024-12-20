@@ -17,6 +17,14 @@
 
 namespace margelo::nitro::image::bridge::swift {
 
+  // pragma MARK: std::function<void(const std::string& /* path */)>
+  Func_void_std__string create_Func_void_std__string(void* _Nonnull swiftClosureWrapper) {
+    auto swiftClosure = NitroImage::Func_void_std__string::fromUnsafe(swiftClosureWrapper);
+    return [=](const std::string& path) -> void {
+      swiftClosure.call(path);
+    };
+  }
+  
   // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridImageSpec>
   std::shared_ptr<margelo::nitro::image::HybridImageSpec> create_std__shared_ptr_margelo__nitro__image__HybridImageSpec_(void* _Nonnull swiftUnsafePointer) {
     NitroImage::HybridImageSpec_cxx swiftPart = NitroImage::HybridImageSpec_cxx::fromUnsafe(swiftUnsafePointer);
@@ -63,6 +71,88 @@ namespace margelo::nitro::image::bridge::swift {
   #endif
     NitroImage::HybridTestObjectSwiftKotlinSpec_cxx swiftPart = swiftWrapper->getSwiftPart();
     return swiftPart.toUnsafe();
+  }
+  
+  // pragma MARK: std::function<void(const std::vector<Powertrain>& /* array */)>
+  Func_void_std__vector_Powertrain_ create_Func_void_std__vector_Powertrain_(void* _Nonnull swiftClosureWrapper) {
+    auto swiftClosure = NitroImage::Func_void_std__vector_Powertrain_::fromUnsafe(swiftClosureWrapper);
+    return [=](const std::vector<Powertrain>& array) -> void {
+      swiftClosure.call(array);
+    };
+  }
+  
+  // pragma MARK: std::function<void()>
+  Func_void create_Func_void(void* _Nonnull swiftClosureWrapper) {
+    auto swiftClosure = NitroImage::Func_void::fromUnsafe(swiftClosureWrapper);
+    return [=]() -> void {
+      swiftClosure.call();
+    };
+  }
+  
+  // pragma MARK: std::function<void(const std::exception_ptr& /* error */)>
+  Func_void_std__exception_ptr create_Func_void_std__exception_ptr(void* _Nonnull swiftClosureWrapper) {
+    auto swiftClosure = NitroImage::Func_void_std__exception_ptr::fromUnsafe(swiftClosureWrapper);
+    return [=](const std::exception_ptr& error) -> void {
+      swiftClosure.call(error);
+    };
+  }
+  
+  // pragma MARK: std::function<void(int64_t /* result */)>
+  Func_void_int64_t create_Func_void_int64_t(void* _Nonnull swiftClosureWrapper) {
+    auto swiftClosure = NitroImage::Func_void_int64_t::fromUnsafe(swiftClosureWrapper);
+    return [=](int64_t result) -> void {
+      swiftClosure.call(result);
+    };
+  }
+  
+  // pragma MARK: std::function<void(double /* result */)>
+  Func_void_double create_Func_void_double(void* _Nonnull swiftClosureWrapper) {
+    auto swiftClosure = NitroImage::Func_void_double::fromUnsafe(swiftClosureWrapper);
+    return [=](double result) -> void {
+      swiftClosure.call(result);
+    };
+  }
+  
+  // pragma MARK: std::function<void(const Car& /* result */)>
+  Func_void_Car create_Func_void_Car(void* _Nonnull swiftClosureWrapper) {
+    auto swiftClosure = NitroImage::Func_void_Car::fromUnsafe(swiftClosureWrapper);
+    return [=](const Car& result) -> void {
+      swiftClosure.call(result);
+    };
+  }
+  
+  // pragma MARK: std::function<void(std::optional<double> /* maybe */)>
+  Func_void_std__optional_double_ create_Func_void_std__optional_double_(void* _Nonnull swiftClosureWrapper) {
+    auto swiftClosure = NitroImage::Func_void_std__optional_double_::fromUnsafe(swiftClosureWrapper);
+    return [=](std::optional<double> maybe) -> void {
+      swiftClosure.call(maybe);
+    };
+  }
+  
+  // pragma MARK: std::function<std::shared_ptr<Promise<double>>()>
+  Func_std__shared_ptr_Promise_double__ create_Func_std__shared_ptr_Promise_double__(void* _Nonnull swiftClosureWrapper) {
+    auto swiftClosure = NitroImage::Func_std__shared_ptr_Promise_double__::fromUnsafe(swiftClosureWrapper);
+    return [=]() -> std::shared_ptr<Promise<double>> {
+      auto __result = swiftClosure.call();
+      return __result.getPromise();
+    };
+  }
+  
+  // pragma MARK: std::function<std::shared_ptr<Promise<std::string>>()>
+  Func_std__shared_ptr_Promise_std__string__ create_Func_std__shared_ptr_Promise_std__string__(void* _Nonnull swiftClosureWrapper) {
+    auto swiftClosure = NitroImage::Func_std__shared_ptr_Promise_std__string__::fromUnsafe(swiftClosureWrapper);
+    return [=]() -> std::shared_ptr<Promise<std::string>> {
+      auto __result = swiftClosure.call();
+      return __result.getPromise();
+    };
+  }
+  
+  // pragma MARK: std::function<void(const std::shared_ptr<ArrayBuffer>& /* result */)>
+  Func_void_std__shared_ptr_ArrayBuffer_ create_Func_void_std__shared_ptr_ArrayBuffer_(void* _Nonnull swiftClosureWrapper) {
+    auto swiftClosure = NitroImage::Func_void_std__shared_ptr_ArrayBuffer_::fromUnsafe(swiftClosureWrapper);
+    return [=](const std::shared_ptr<ArrayBuffer>& result) -> void {
+      swiftClosure.call(ArrayBufferHolder(result));
+    };
   }
   
   // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridBaseSpec>

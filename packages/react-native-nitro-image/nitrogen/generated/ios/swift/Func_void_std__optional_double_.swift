@@ -8,7 +8,7 @@
 /**
  * Represents the JS function `(maybe: optional) => void`, wrappable as a C++ std::function.
  */
-public class Func_void_std__optional_double_ final {
+public final class Func_void_std__optional_double_ {
   private let closure: ((_ maybe: Double?) -> Void)
 
   public init(_ closure: @escaping ((_ maybe: Double?) -> Void)) {

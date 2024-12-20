@@ -8,7 +8,7 @@
 /**
  * Represents the JS function `(valueFromJs: string) => void`, wrappable as a C++ std::function.
  */
-public class Func_void_std__string final {
+public final class Func_void_std__string {
   private let closure: ((_ valueFromJs: String) -> Void)
 
   public init(_ closure: @escaping ((_ valueFromJs: String) -> Void)) {

@@ -542,7 +542,7 @@ case ${i}:
 { () -> ${swiftClosureType} in
   let __sharedClosure = bridge.share_${bridge.specializationName}(${cppParameterName})
   return { ${signature} in
-    __sharedClosure.pointee.call(${indent(paramsForward.join(', '), '    ')})
+    __sharedClosure.pointee.callAsFunction(${indent(paramsForward.join(', '), '    ')})
   }
 }()`.trim()
             } else {
@@ -551,7 +551,7 @@ case ${i}:
 { () -> ${swiftClosureType} in
   let __sharedClosure = bridge.share_${bridge.specializationName}(${cppParameterName})
   return { ${signature} in
-    let __result = __sharedClosure.pointee.call(${indent(paramsForward.join(', '), '    ')})
+    let __result = __sharedClosure.pointee.callAsFunction(${indent(paramsForward.join(', '), '    ')})
     return ${indent(resultBridged.parseFromCppToSwift('__result', 'swift'), '    ')}
   }
 }()`.trim()
@@ -780,52 +780,11 @@ case ${i}:
         switch (language) {
           case 'swift': {
             const bridge = this.getBridgeOrThrow()
-            const func = getTypeAs(this.type, FunctionType)
-            const cFuncParamsForward = func.parameters
-              .map((p) => {
-                const bridged = new SwiftCxxBridgedType(p)
-                return bridged.parseFromCppToSwift(
-                  `__${p.escapedName}`,
-                  'swift'
-                )
-              })
-              .join(', ')
-            const paramsSignature = func.parameters
-              .map((p) => `_ __${p.escapedName}: ${p.getCode('swift')}`)
-              .join(', ')
-            const paramsForward = func.parameters
-              .map((p) => `__${p.escapedName}`)
-              .join(', ')
-            const cFuncParamsSignature = [
-              '__closureHolder: UnsafeMutableRawPointer',
-              ...func.parameters.map((p) => {
-                const bridged = new SwiftCxxBridgedType(p)
-                return `__${p.escapedName}: ${bridged.getTypeCode('swift')}`
-              }),
-            ].join(', ')
             const createFunc = `bridge.${bridge.funcName}`
             return `
 { () -> bridge.${bridge.specializationName} in
-  final class ClosureHolder {
-    let closure: ${func.getCode('swift')}
-    init(wrappingClosure closure: @escaping ${func.getCode('swift')}) {
-      self.closure = closure
-    }
-    func invoke(${paramsSignature}) {
-      self.closure(${indent(paramsForward, '    ')})
-    }
-  }
-
-  let __closureHolder = Unmanaged.passRetained(ClosureHolder(wrappingClosure: ${swiftParameterName})).toOpaque()
-  func __callClosure(${cFuncParamsSignature}) -> Void {
-    let closure = Unmanaged<ClosureHolder>.fromOpaque(__closureHolder).takeUnretainedValue()
-    closure.invoke(${indent(cFuncParamsForward, '    ')})
-  }
-  func __destroyClosure(_ __closureHolder: UnsafeMutableRawPointer) -> Void {
-    Unmanaged<ClosureHolder>.fromOpaque(__closureHolder).release()
-  }
-
-  return ${createFunc}(__closureHolder, __callClosure, __destroyClosure)
+  let closureWrapper = ${bridge.specializationName}(${swiftParameterName})
+  return ${createFunc}(closureWrapper.toUnsafe())
 }()
   `.trim()
           }
