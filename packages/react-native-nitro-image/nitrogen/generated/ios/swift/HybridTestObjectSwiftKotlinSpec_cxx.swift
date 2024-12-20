@@ -732,7 +732,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
         
           return bridge.create_Func_void_std__exception_ptr(__closureHolder, __callClosure, __destroyClosure)
         }()
-        promise.addOnResolvedListener(__resolverCpp)
+        promise.addOnResolvedListenerCopy(__resolverCpp)
         promise.addOnRejectedListener(__rejecterCpp)
         return __promise
       }())
@@ -996,7 +996,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
             
               return bridge.create_Func_void_std__exception_ptr(__closureHolder, __callClosure, __destroyClosure)
             }()
-            __result.addOnResolvedListener(__resolverCpp)
+            __result.addOnResolvedListenerCopy(__resolverCpp)
             __result.addOnRejectedListener(__rejecterCpp)
             return __promise
           }()
@@ -1075,7 +1075,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
             
               return bridge.create_Func_void_std__exception_ptr(__closureHolder, __callClosure, __destroyClosure)
             }()
-            __result.addOnResolvedListener(__resolverCpp)
+            __result.addOnResolvedListenerCopy(__resolverCpp)
             __result.addOnRejectedListener(__rejecterCpp)
             return __promise
           }()
