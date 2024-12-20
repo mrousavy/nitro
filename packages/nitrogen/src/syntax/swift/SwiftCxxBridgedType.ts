@@ -672,14 +672,19 @@ case ${i}:
               promise.resultingType.kind === 'void'
                 ? ''
                 : resolvingType.parseFromSwiftToCpp('__result', 'swift')
-            return `
+            const code = `
 { () -> bridge.${bridge.specializationName} in
   let __promise = ${makePromise}()
   ${swiftParameterName}
     .then({ __result in __promise.resolve(${indent(arg, '      ')}) })
     .catch({ __error in __promise.reject(__error.toCpp()) })
   return __promise
-}()${this.isBridgingToDirectCppTarget ? '.getPromise()' : ''}`.trim()
+}()`.trim()
+            if (this.isBridgingToDirectCppTarget) {
+              return `${code}.getPromise()`
+            } else {
+              return code
+            }
           default:
             return swiftParameterName
         }
