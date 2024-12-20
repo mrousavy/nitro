@@ -480,9 +480,9 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   public func complexEnumCallback(array: bridge.std__vector_Powertrain_, callback: bridge.Func_void_std__vector_Powertrain_) -> bridge.Result_void_ {
     do {
       try self.__implementation.complexEnumCallback(array: array.map({ __item in __item }), callback: { () -> (([Powertrain]) -> Void) in
-        let __sharedClosure = bridge.share_Func_void_std__vector_Powertrain_(callback)
+        let __wrappedFunction = bridge.wrap_Func_void_std__vector_Powertrain_(callback)
         return { (__array: [Powertrain]) -> Void in
-          __sharedClosure.pointee.callAsFunction({ () -> bridge.std__vector_Powertrain_ in
+          __wrappedFunction.call({ () -> bridge.std__vector_Powertrain_ in
             var __vector = bridge.create_std__vector_Powertrain_(__array.count)
             for __item in __array {
               __vector.push_back(__item)
@@ -800,9 +800,9 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   public func callCallback(callback: bridge.Func_void) -> bridge.Result_void_ {
     do {
       try self.__implementation.callCallback(callback: { () -> (() -> Void) in
-        let __sharedClosure = bridge.share_Func_void(callback)
+        let __wrappedFunction = bridge.wrap_Func_void(callback)
         return { () -> Void in
-          __sharedClosure.pointee.callAsFunction()
+          __wrappedFunction.call()
         }
       }())
       return bridge.create_Result_void_()
@@ -816,19 +816,19 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   public func callAll(first: bridge.Func_void, second: bridge.Func_void, third: bridge.Func_void) -> bridge.Result_void_ {
     do {
       try self.__implementation.callAll(first: { () -> (() -> Void) in
-        let __sharedClosure = bridge.share_Func_void(first)
+        let __wrappedFunction = bridge.wrap_Func_void(first)
         return { () -> Void in
-          __sharedClosure.pointee.callAsFunction()
+          __wrappedFunction.call()
         }
       }(), second: { () -> (() -> Void) in
-        let __sharedClosure = bridge.share_Func_void(second)
+        let __wrappedFunction = bridge.wrap_Func_void(second)
         return { () -> Void in
-          __sharedClosure.pointee.callAsFunction()
+          __wrappedFunction.call()
         }
       }(), third: { () -> (() -> Void) in
-        let __sharedClosure = bridge.share_Func_void(third)
+        let __wrappedFunction = bridge.wrap_Func_void(third)
         return { () -> Void in
-          __sharedClosure.pointee.callAsFunction()
+          __wrappedFunction.call()
         }
       }())
       return bridge.create_Result_void_()
@@ -842,9 +842,9 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   public func callWithOptional(value: bridge.std__optional_double_, callback: bridge.Func_void_std__optional_double_) -> bridge.Result_void_ {
     do {
       try self.__implementation.callWithOptional(value: value.value, callback: { () -> ((Double?) -> Void) in
-        let __sharedClosure = bridge.share_Func_void_std__optional_double_(callback)
+        let __wrappedFunction = bridge.wrap_Func_void_std__optional_double_(callback)
         return { (__maybe: Double?) -> Void in
-          __sharedClosure.pointee.callAsFunction({ () -> bridge.std__optional_double_ in
+          __wrappedFunction.call({ () -> bridge.std__optional_double_ in
             if let __unwrappedValue = __maybe {
               return bridge.create_std__optional_double_(__unwrappedValue)
             } else {
@@ -864,9 +864,9 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   public func callSumUpNTimes(callback: bridge.Func_std__shared_ptr_Promise_double__, n: Double) -> bridge.Result_std__shared_ptr_Promise_double___ {
     do {
       let __result = try self.__implementation.callSumUpNTimes(callback: { () -> (() -> Promise<Double>) in
-        let __sharedClosure = bridge.share_Func_std__shared_ptr_Promise_double__(callback)
+        let __wrappedFunction = bridge.wrap_Func_std__shared_ptr_Promise_double__(callback)
         return { () -> Promise<Double> in
-          let __result = __sharedClosure.pointee.callAsFunction()
+          let __result = __wrappedFunction.call()
           return { () -> Promise<Double> in
             let __promise = Promise<Double>()
             let __resolver = { (__result: Double) in
@@ -909,9 +909,9 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   public func getValueFromJSCallbackAndWait(getValue: bridge.Func_std__shared_ptr_Promise_double__) -> bridge.Result_std__shared_ptr_Promise_double___ {
     do {
       let __result = try self.__implementation.getValueFromJSCallbackAndWait(getValue: { () -> (() -> Promise<Double>) in
-        let __sharedClosure = bridge.share_Func_std__shared_ptr_Promise_double__(getValue)
+        let __wrappedFunction = bridge.wrap_Func_std__shared_ptr_Promise_double__(getValue)
         return { () -> Promise<Double> in
-          let __result = __sharedClosure.pointee.callAsFunction()
+          let __result = __wrappedFunction.call()
           return { () -> Promise<Double> in
             let __promise = Promise<Double>()
             let __resolver = { (__result: Double) in
@@ -954,9 +954,9 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   public func getValueFromJsCallback(callback: bridge.Func_std__shared_ptr_Promise_std__string__, andThenCall: bridge.Func_void_std__string) -> bridge.Result_std__shared_ptr_Promise_void___ {
     do {
       let __result = try self.__implementation.getValueFromJsCallback(callback: { () -> (() -> Promise<String>) in
-        let __sharedClosure = bridge.share_Func_std__shared_ptr_Promise_std__string__(callback)
+        let __wrappedFunction = bridge.wrap_Func_std__shared_ptr_Promise_std__string__(callback)
         return { () -> Promise<String> in
-          let __result = __sharedClosure.pointee.callAsFunction()
+          let __result = __wrappedFunction.call()
           return { () -> Promise<String> in
             let __promise = Promise<String>()
             let __resolver = { (__result: String) in
@@ -980,9 +980,9 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
           }()
         }
       }(), andThenCall: { () -> ((String) -> Void) in
-        let __sharedClosure = bridge.share_Func_void_std__string(andThenCall)
+        let __wrappedFunction = bridge.wrap_Func_void_std__string(andThenCall)
         return { (__valueFromJs: String) -> Void in
-          __sharedClosure.pointee.callAsFunction(std.string(__valueFromJs))
+          __wrappedFunction.call(std.string(__valueFromJs))
         }
       }())
       let __resultCpp = { () -> bridge.std__shared_ptr_Promise_void__ in

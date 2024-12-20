@@ -552,9 +552,9 @@ case ${i}:
             if (funcType.returnType.kind === 'void') {
               return `
 { () -> ${swiftClosureType} in
-  let __sharedClosure = bridge.share_${bridge.specializationName}(${cppParameterName})
+  let __wrappedFunction = bridge.wrap_${bridge.specializationName}(${cppParameterName})
   return { ${signature} in
-    __sharedClosure.pointee.callAsFunction(${indent(paramsForward.join(', '), '    ')})
+    __wrappedFunction.call(${indent(paramsForward.join(', '), '    ')})
   }
 }()`.trim()
             } else {
@@ -564,9 +564,9 @@ case ${i}:
               )
               return `
 { () -> ${swiftClosureType} in
-  let __sharedClosure = bridge.share_${bridge.specializationName}(${cppParameterName})
+  let __wrappedFunction = bridge.wrap_${bridge.specializationName}(${cppParameterName})
   return { ${signature} in
-    let __result = __sharedClosure.pointee.callAsFunction(${indent(paramsForward.join(', '), '    ')})
+    let __result = __wrappedFunction.call(${indent(paramsForward.join(', '), '    ')})
     return ${indent(resultBridged.parseFromCppToSwift('__result', 'swift'), '    ')}
   }
 }()`.trim()

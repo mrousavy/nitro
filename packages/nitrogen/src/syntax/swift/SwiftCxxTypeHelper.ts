@@ -308,7 +308,29 @@ function createCxxFunctionSwiftHelper(type: FunctionType): SwiftCxxHelper {
     return bridge.parseFromCppToSwift(p.escapedName, 'c++')
   })
   const name = type.specializationName
+  const wrapperName = `${name}_Wrapper`
   const swiftClassName = `${NitroConfig.getIosModuleName()}::${type.specializationName}`
+
+  const callParamsForward = type.parameters.map((p) => {
+    const bridge = new SwiftCxxBridgedType(p)
+    return bridge.parseFromSwiftToCpp(p.escapedName, 'c++')
+  })
+
+  const callFuncReturnType = returnBridge.getTypeCode('c++')
+  const callCppFuncParamsSignature = type.parameters.map((p) => {
+    const bridge = new SwiftCxxBridgedType(p)
+    const cppType = bridge.getTypeCode('c++')
+    return `${cppType} ${p.escapedName}`
+  })
+  let callCppFuncBody: string
+  if (returnBridge.hasType) {
+    callCppFuncBody = `
+auto __result = _function->operator()(${callParamsForward.join(', ')});
+return ${returnBridge.parseFromCppToSwift('__result', 'c++')};
+    `.trim()
+  } else {
+    callCppFuncBody = `_function->operator()(${callParamsForward.join(', ')});`
+  }
 
   let body: string
   if (type.returnType.kind === 'void') {
@@ -332,9 +354,21 @@ return ${returnBridge.parseFromSwiftToCpp('__result', 'c++')};
  * Specialized version of \`${type.getCode('c++', false)}\`.
  */
 using ${name} = ${actualType};
+/**
+ * Wrapper class for a \`${escapeComments(actualType)}\`, this can be used from Swift.
+ */
+class ${wrapperName} final {
+public:
+  explicit ${wrapperName}(${actualType}&& func): _function(std::make_shared<${actualType}>(std::move(func))) {}
+  inline ${callFuncReturnType} call(${callCppFuncParamsSignature.join(', ')}) const {
+    ${indent(callCppFuncBody, '    ')}
+  }
+private:
+  std::shared_ptr<${actualType}> _function;
+};
 ${name} create_${name}(void* _Nonnull swiftClosureWrapper);
-inline std::shared_ptr<${name}> share_${name}(${name} value) {
-  return std::make_shared<${name}>(std::move(value));
+inline ${wrapperName} wrap_${name}(${name} value) {
+  return ${wrapperName}(std::move(value));
 }
     `.trim(),
       requiredIncludes: [

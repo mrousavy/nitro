@@ -24,9 +24,13 @@ export class PromiseType implements Type {
   }
 
   get resolverFunction(): FunctionType {
-    return new FunctionType(new VoidType(), [
-      new NamedWrappingType('value', this.resultingType),
-    ])
+    if (this.resultingType.kind === 'void') {
+      return new FunctionType(new VoidType(), [])
+    } else {
+      return new FunctionType(new VoidType(), [
+        new NamedWrappingType('value', this.resultingType),
+      ])
+    }
   }
 
   get rejecterFunction(): FunctionType {
