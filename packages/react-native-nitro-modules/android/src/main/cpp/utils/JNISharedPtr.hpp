@@ -15,7 +15,7 @@ template <typename T>
 struct GlobalRefDeleter {
   explicit GlobalRefDeleter(jni::global_ref<typename T::javaobject> ref) : _ref(ref) {}
 
-  void operator()(T* ptr) {
+  void operator()(T* /* cthis */) {
     if (_ref) {
       _ref.release();
     }

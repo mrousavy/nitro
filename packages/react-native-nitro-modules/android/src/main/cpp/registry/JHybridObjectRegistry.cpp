@@ -12,7 +12,7 @@
 
 namespace margelo::nitro {
 
-void JHybridObjectRegistry::registerHybridObjectConstructor(jni::alias_ref<jni::JClass> clazz, std::string hybridObjectName,
+void JHybridObjectRegistry::registerHybridObjectConstructor(jni::alias_ref<jni::JClass>, std::string hybridObjectName,
                                                             jni::alias_ref<JHybridObjectInitializer> constructorFn) {
   auto sharedInitializer = jni::make_global(constructorFn);
   HybridObjectRegistry::registerHybridObjectConstructor(

@@ -23,7 +23,7 @@ bool HybridObject::equals(std::shared_ptr<HybridObject> other) {
   return this == other.get();
 }
 
-jsi::Value HybridObject::disposeRaw(jsi::Runtime& runtime, const jsi::Value& thisArg, const jsi::Value* args, size_t count) {
+jsi::Value HybridObject::disposeRaw(jsi::Runtime& runtime, const jsi::Value& thisArg, const jsi::Value*, size_t) {
   // 1. Dispose any resources - this might be overridden by child classes to perform manual cleanup.
   dispose();
   // 2. Remove the NativeState from `this`
