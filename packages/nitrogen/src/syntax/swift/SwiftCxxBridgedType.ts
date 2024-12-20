@@ -658,7 +658,7 @@ case ${i}:
         )
         switch (language) {
           case 'c++':
-            return swiftParameterName
+            return `${swiftParameterName}.getPromise()`
           case 'swift':
             const arg =
               promise.resultingType.kind === 'void'

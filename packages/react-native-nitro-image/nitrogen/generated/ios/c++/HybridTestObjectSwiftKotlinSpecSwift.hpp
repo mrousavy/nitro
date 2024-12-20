@@ -277,7 +277,7 @@ namespace margelo::nitro::image {
         std::rethrow_exception(__result.error());
       }
       auto __value = std::move(__result.value());
-      return __value;
+      return __value.getPromise();
     }
     inline void throwError(const std::exception_ptr& error) override {
       auto __result = _swiftPart.throwError(error);
@@ -323,7 +323,7 @@ namespace margelo::nitro::image {
         std::rethrow_exception(__result.error());
       }
       auto __value = std::move(__result.value());
-      return __value;
+      return __value.getPromise();
     }
     inline std::shared_ptr<Promise<void>> wait(double seconds) override {
       auto __result = _swiftPart.wait(std::forward<decltype(seconds)>(seconds));
@@ -331,7 +331,7 @@ namespace margelo::nitro::image {
         std::rethrow_exception(__result.error());
       }
       auto __value = std::move(__result.value());
-      return __value;
+      return __value.getPromise();
     }
     inline std::shared_ptr<Promise<void>> promiseThrows() override {
       auto __result = _swiftPart.promiseThrows();
@@ -339,7 +339,7 @@ namespace margelo::nitro::image {
         std::rethrow_exception(__result.error());
       }
       auto __value = std::move(__result.value());
-      return __value;
+      return __value.getPromise();
     }
     inline std::shared_ptr<Promise<double>> awaitAndGetPromise(const std::shared_ptr<Promise<double>>& promise) override {
       auto __result = _swiftPart.awaitAndGetPromise(promise);
@@ -347,7 +347,7 @@ namespace margelo::nitro::image {
         std::rethrow_exception(__result.error());
       }
       auto __value = std::move(__result.value());
-      return __value;
+      return __value.getPromise();
     }
     inline std::shared_ptr<Promise<Car>> awaitAndGetComplexPromise(const std::shared_ptr<Promise<Car>>& promise) override {
       auto __result = _swiftPart.awaitAndGetComplexPromise(promise);
@@ -355,7 +355,7 @@ namespace margelo::nitro::image {
         std::rethrow_exception(__result.error());
       }
       auto __value = std::move(__result.value());
-      return __value;
+      return __value.getPromise();
     }
     inline std::shared_ptr<Promise<void>> awaitPromise(const std::shared_ptr<Promise<void>>& promise) override {
       auto __result = _swiftPart.awaitPromise(promise);
@@ -363,7 +363,7 @@ namespace margelo::nitro::image {
         std::rethrow_exception(__result.error());
       }
       auto __value = std::move(__result.value());
-      return __value;
+      return __value.getPromise();
     }
     inline void callCallback(const std::function<void()>& callback) override {
       auto __result = _swiftPart.callCallback(callback);
@@ -389,7 +389,7 @@ namespace margelo::nitro::image {
         std::rethrow_exception(__result.error());
       }
       auto __value = std::move(__result.value());
-      return __value;
+      return __value.getPromise();
     }
     inline std::shared_ptr<Promise<double>> getValueFromJSCallbackAndWait(const std::function<std::shared_ptr<Promise<double>>()>& getValue) override {
       auto __result = _swiftPart.getValueFromJSCallbackAndWait(getValue);
@@ -397,7 +397,7 @@ namespace margelo::nitro::image {
         std::rethrow_exception(__result.error());
       }
       auto __value = std::move(__result.value());
-      return __value;
+      return __value.getPromise();
     }
     inline std::shared_ptr<Promise<void>> getValueFromJsCallback(const std::function<std::shared_ptr<Promise<std::string>>()>& callback, const std::function<void(const std::string& /* valueFromJs */)>& andThenCall) override {
       auto __result = _swiftPart.getValueFromJsCallback(callback, andThenCall);
@@ -405,7 +405,7 @@ namespace margelo::nitro::image {
         std::rethrow_exception(__result.error());
       }
       auto __value = std::move(__result.value());
-      return __value;
+      return __value.getPromise();
     }
     inline Car getCar() override {
       auto __result = _swiftPart.getCar();
@@ -459,7 +459,7 @@ namespace margelo::nitro::image {
         std::rethrow_exception(__result.error());
       }
       auto __value = std::move(__result.value());
-      return __value;
+      return __value.getPromise();
     }
     inline std::shared_ptr<margelo::nitro::image::HybridChildSpec> createChild() override {
       auto __result = _swiftPart.createChild();
