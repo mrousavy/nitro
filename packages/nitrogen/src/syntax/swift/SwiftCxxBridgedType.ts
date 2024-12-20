@@ -360,8 +360,8 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
   }
   let __resolverCpp = __resolver.getFunctionCopy()
   let __rejecterCpp = ${indent(rejecterFuncBridge.parseFromSwiftToCpp('__rejecter', 'swift'), '  ')}
-  ${cppParameterName}.pointee.addOnResolvedListener(__resolverCpp)
-  ${cppParameterName}.pointee.addOnRejectedListener(__rejecterCpp)
+  ${cppParameterName}.addOnResolvedListener(__resolverCpp)
+  ${cppParameterName}.addOnRejectedListener(__rejecterCpp)
   return __promise
 }()`.trim()
             } else {
@@ -372,12 +372,12 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
               const rejecterFunc = new FunctionType(new VoidType(), [
                 new NamedWrappingType('error', new ErrorType()),
               ])
-              const addResolverName = promise.resultingType
+              const resolverFuncBridge = new SwiftCxxBridgedType(resolverFunc)
+              const rejecterFuncBridge = new SwiftCxxBridgedType(rejecterFunc)
+              const resolverFuncName = promise.resultingType
                 .canBePassedByReference
                 ? 'addOnResolvedListener'
                 : 'addOnResolvedListenerCopy'
-              const resolverFuncBridge = new SwiftCxxBridgedType(resolverFunc)
-              const rejecterFuncBridge = new SwiftCxxBridgedType(rejecterFunc)
               return `
 { () -> ${promise.getCode('swift')} in
   let __promise = ${promise.getCode('swift')}()
@@ -389,8 +389,8 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
   }
   let __resolverCpp = ${indent(resolverFuncBridge.parseFromSwiftToCpp('__resolver', 'swift'), '  ')}
   let __rejecterCpp = ${indent(rejecterFuncBridge.parseFromSwiftToCpp('__rejecter', 'swift'), '  ')}
-  ${cppParameterName}.pointee.${addResolverName}(__resolverCpp)
-  ${cppParameterName}.pointee.addOnRejectedListener(__rejecterCpp)
+  ${cppParameterName}.${resolverFuncName}(__resolverCpp)
+  ${cppParameterName}.addOnRejectedListener(__rejecterCpp)
   return __promise
 }()`.trim()
             }
@@ -662,20 +662,29 @@ case ${i}:
         )
         switch (language) {
           case 'c++':
-            return swiftParameterName
+            if (this.isBridgingToDirectCppTarget) {
+              return swiftParameterName
+            } else {
+              return `${swiftParameterName}.getPromise()`
+            }
           case 'swift':
             const arg =
               promise.resultingType.kind === 'void'
                 ? ''
                 : resolvingType.parseFromSwiftToCpp('__result', 'swift')
-            return `
+            const code = `
 { () -> bridge.${bridge.specializationName} in
   let __promise = ${makePromise}()
   ${swiftParameterName}
-    .then({ __result in __promise.pointee.resolve(${indent(arg, '      ')}) })
-    .catch({ __error in __promise.pointee.reject(__error.toCpp()) })
+    .then({ __result in __promise.resolve(${indent(arg, '      ')}) })
+    .catch({ __error in __promise.reject(__error.toCpp()) })
   return __promise
 }()`.trim()
+            if (this.isBridgingToDirectCppTarget) {
+              return `${code}.getPromise()`
+            } else {
+              return code
+            }
           default:
             return swiftParameterName
         }

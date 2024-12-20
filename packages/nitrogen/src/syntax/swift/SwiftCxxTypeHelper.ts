@@ -566,7 +566,7 @@ ${functions.join('\n')}
 function createCxxPromiseSwiftHelper(type: PromiseType): SwiftCxxHelper {
   const resultingType = type.resultingType.getCode('c++')
   const bridgedType = new SwiftCxxBridgedType(type)
-  const actualType = `std::shared_ptr<Promise<${resultingType}>>`
+  const actualType = `PromiseHolder<${resultingType}>`
 
   const resolverArgs: NamedType[] = []
   if (type.resultingType.kind !== 'void') {
@@ -589,17 +589,12 @@ function createCxxPromiseSwiftHelper(type: PromiseType): SwiftCxxHelper {
  */
 using ${name} = ${actualType};
 inline ${actualType} create_${name}() {
-  return Promise<${resultingType}>::create();
+  return PromiseHolder<${resultingType}>::create();
 }
        `.trim(),
       requiredIncludes: [
         {
-          name: 'NitroModules/Promise.hpp',
-          space: 'system',
-          language: 'c++',
-        },
-        {
-          name: 'memory',
+          name: 'NitroModules/PromiseHolder.hpp',
           space: 'system',
           language: 'c++',
         },

@@ -17,16 +17,16 @@ import Foundation
  * - `Promise<T>.rejected(withError:)` - Creates a new already rejected Promise.
  * - `Promise<T>()` - Creates a new Promise with fully manual control over the `resolve(..)`/`reject(..)` functions.
  */
-public class Promise<T> {
+public final class Promise<T> {
   private enum State {
     case result(T)
     case error(Error)
   }
-  
+
   private var state: State?
   private var onResolvedListeners: [(T) -> Void] = []
   private var onRejectedListeners: [(Error) -> Void] = []
-  
+
   /**
    * Create a new pending Promise.
    * It can (and must) be resolved **or** rejected later.
@@ -34,13 +34,13 @@ public class Promise<T> {
   public init() {
     state = nil
   }
-  
+
   deinit {
     if state == nil {
       print("⚠️ Promise<\(String(describing: T.self))> got destroyed, but was never resolved or rejected! It is probably left hanging in JS now.")
     }
   }
-  
+
   /**
    * Resolves this `Promise<T>` with the given `T` and notifies all listeners.
    */
@@ -51,7 +51,7 @@ public class Promise<T> {
     state = .result(result)
     onResolvedListeners.forEach { listener in listener(result) }
   }
-  
+
   /**
    * Rejects this `Promise<T>` with the given `Error` and notifies all listeners.
    */
@@ -76,7 +76,7 @@ extension Promise {
     promise.state = .result(result)
     return promise
   }
-  
+
   /**
    * Create a new `Promise<T>` already rejected with the given `Error`.
    */
@@ -85,7 +85,7 @@ extension Promise {
     promise.state = .error(error)
     return promise
   }
-  
+
   /**
    * Create a new `Promise<T>` that runs the given `async` code in a `Task`.
    * This does not necessarily run the code in a different Thread, but supports Swift's `async`/`await`.
@@ -103,7 +103,7 @@ extension Promise {
     }
     return promise
   }
-  
+
   /**
    * Create a new `Promise<T>` that runs the given `run` function on a parallel Thread/`DispatchQueue`.
    */
@@ -142,7 +142,7 @@ extension Promise {
     }
     return self
   }
-  
+
   /**
    * Add an error continuation listener to this `Promise<T>`.
    * Once the `Promise<T>` rejects, the `onRejectedListener` will be called with the error.
