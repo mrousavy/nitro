@@ -483,12 +483,12 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
         let __sharedClosure = bridge.share_Func_void_std__vector_Powertrain_(callback)
         return { (__array: [Powertrain]) -> Void in
           __sharedClosure.pointee.call({ () -> bridge.std__vector_Powertrain_ in
-          var __vector = bridge.create_std__vector_Powertrain_(__array.count)
-          for __item in __array {
-            __vector.push_back(__item)
-          }
-          return __vector
-        }())
+            var __vector = bridge.create_std__vector_Powertrain_(__array.count)
+            for __item in __array {
+              __vector.push_back(__item)
+            }
+            return __vector
+          }())
         }
       }())
       return bridge.create_Result_void_()
@@ -922,12 +922,12 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
         let __sharedClosure = bridge.share_Func_void_std__optional_double_(callback)
         return { (__maybe: Double?) -> Void in
           __sharedClosure.pointee.call({ () -> bridge.std__optional_double_ in
-          if let __unwrappedValue = __maybe {
-            return bridge.create_std__optional_double_(__unwrappedValue)
-          } else {
-            return .init()
-          }
-        }())
+            if let __unwrappedValue = __maybe {
+              return bridge.create_std__optional_double_(__unwrappedValue)
+            } else {
+              return .init()
+            }
+          }())
         }
       }())
       return bridge.create_Result_void_()

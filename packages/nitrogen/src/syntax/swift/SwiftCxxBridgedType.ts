@@ -534,7 +534,7 @@ case ${i}:
 { () -> ${swiftClosureType} in
   let __sharedClosure = bridge.share_${bridge.specializationName}(${cppParameterName})
   return { ${signature} in
-    __sharedClosure.pointee.call(${indent(paramsForward.join(', '), '  ')})
+    __sharedClosure.pointee.call(${indent(paramsForward.join(', '), '    ')})
   }
 }()`.trim()
             } else {
@@ -543,7 +543,7 @@ case ${i}:
 { () -> ${swiftClosureType} in
   let __sharedClosure = bridge.share_${bridge.specializationName}(${cppParameterName})
   return { ${signature} in
-    let __result = __sharedClosure.pointee.call(${paramsForward.join(', ')})
+    let __result = __sharedClosure.pointee.call(${indent(paramsForward.join(', '), '    ')})
     return ${indent(resultBridged.parseFromCppToSwift('__result', 'swift'), '    ')}
   }
 }()`.trim()
