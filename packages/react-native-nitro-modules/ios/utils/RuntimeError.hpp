@@ -13,11 +13,11 @@
 
 namespace margelo::nitro {
 
-static inline std::exception_ptr make_exception(const std::string& message) {
+static inline std::exception_ptr makeException(const std::string& message) {
   return std::make_exception_ptr(std::runtime_error(message));
 }
 
-static inline std::string get_exception_message(const std::exception_ptr& exception) {
+static inline std::string getExceptionMessage(const std::exception_ptr& exception) {
   if (exception == nullptr) [[unlikely]] {
     throw std::runtime_error("Cannot get error message of an empty exception_ptr!");
   }
