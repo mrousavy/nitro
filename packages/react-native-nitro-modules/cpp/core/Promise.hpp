@@ -28,13 +28,9 @@ public:
 public:
   // Promise cannot be copied.
   Promise(const Promise&) = delete;
-  // Promise can be moved.
-  Promise(Promise&&) = default;
 
 private:
-  Promise() {
-    _mutex = std::make_unique<std::mutex>();
-  }
+  Promise() {}
 
 public:
   /**
@@ -94,7 +90,7 @@ public:
    * Resolves this Promise with the given result, and calls any pending listeners.
    */
   void resolve(TResult&& result) {
-    std::unique_lock lock(*_mutex);
+    std::unique_lock lock(_mutex);
 #ifdef NITRO_DEBUG
     assertPromiseState(*this, PromiseTask::WANTS_TO_RESOLVE);
 #endif
@@ -104,7 +100,7 @@ public:
     }
   }
   void resolve(const TResult& result) {
-    std::unique_lock lock(*_mutex);
+    std::unique_lock lock(_mutex);
 #ifdef NITRO_DEBUG
     assertPromiseState(*this, PromiseTask::WANTS_TO_RESOLVE);
 #endif
@@ -121,7 +117,7 @@ public:
       throw std::runtime_error("Cannot reject Promise with a null exception_ptr!");
     }
 
-    std::unique_lock lock(*_mutex);
+    std::unique_lock lock(_mutex);
 #ifdef NITRO_DEBUG
     assertPromiseState(*this, PromiseTask::WANTS_TO_REJECT);
 #endif
@@ -137,7 +133,7 @@ public:
    * If the Promise is already resolved, the listener will be immediately called.
    */
   void addOnResolvedListener(OnResolvedFunc&& onResolved) {
-    std::unique_lock lock(*_mutex);
+    std::unique_lock lock(_mutex);
     if (std::holds_alternative<TResult>(_state)) {
       // Promise is already resolved! Call the callback immediately
       onResolved(std::get<TResult>(_state));
@@ -147,7 +143,7 @@ public:
     }
   }
   void addOnResolvedListener(const OnResolvedFunc& onResolved) {
-    std::unique_lock lock(*_mutex);
+    std::unique_lock lock(_mutex);
     if (std::holds_alternative<TResult>(_state)) {
       // Promise is already resolved! Call the callback immediately
       onResolved(std::get<TResult>(_state));
@@ -162,7 +158,7 @@ public:
    * If the Promise is already rejected, the listener will be immediately called.
    */
   void addOnRejectedListener(OnRejectedFunc&& onRejected) {
-    std::unique_lock lock(*_mutex);
+    std::unique_lock lock(_mutex);
     if (std::holds_alternative<std::exception_ptr>(_state)) {
       // Promise is already rejected! Call the callback immediately
       onRejected(std::get<std::exception_ptr>(_state));
@@ -172,7 +168,7 @@ public:
     }
   }
   void addOnRejectedListener(const OnRejectedFunc& onRejected) {
-    std::unique_lock lock(*_mutex);
+    std::unique_lock lock(_mutex);
     if (std::holds_alternative<std::exception_ptr>(_state)) {
       // Promise is already rejected! Call the callback immediately
       onRejected(std::get<std::exception_ptr>(_state));
@@ -242,7 +238,7 @@ private:
   std::variant<std::monostate, TResult, std::exception_ptr> _state;
   std::vector<OnResolvedFunc> _onResolvedListeners;
   std::vector<OnRejectedFunc> _onRejectedListeners;
-  std::unique_ptr<std::mutex> _mutex;
+  std::mutex _mutex;
 };
 
 // Specialization for void
@@ -254,12 +250,9 @@ public:
 
 public:
   Promise(const Promise&) = delete;
-  Promise(Promise&&) = default;
 
 private:
-  Promise() {
-    _mutex = std::make_unique<std::mutex>();
-  }
+  Promise() {}
 
 public:
   static std::shared_ptr<Promise> create() {
@@ -299,7 +292,7 @@ public:
 
 public:
   void resolve() {
-    std::unique_lock lock(*_mutex);
+    std::unique_lock lock(_mutex);
 #ifdef NITRO_DEBUG
     assertPromiseState(*this, PromiseTask::WANTS_TO_RESOLVE);
 #endif
@@ -313,7 +306,7 @@ public:
       throw std::runtime_error("Cannot reject Promise with a null exception_ptr!");
     }
 
-    std::unique_lock lock(*_mutex);
+    std::unique_lock lock(_mutex);
 #ifdef NITRO_DEBUG
     assertPromiseState(*this, PromiseTask::WANTS_TO_REJECT);
 #endif
@@ -325,7 +318,7 @@ public:
 
 public:
   void addOnResolvedListener(OnResolvedFunc&& onResolved) {
-    std::unique_lock lock(*_mutex);
+    std::unique_lock lock(_mutex);
     if (_isResolved) {
       onResolved();
     } else {
@@ -333,7 +326,7 @@ public:
     }
   }
   void addOnResolvedListener(const OnResolvedFunc& onResolved) {
-    std::unique_lock lock(*_mutex);
+    std::unique_lock lock(_mutex);
     if (_isResolved) {
       onResolved();
     } else {
@@ -341,7 +334,7 @@ public:
     }
   }
   void addOnRejectedListener(OnRejectedFunc&& onRejected) {
-    std::unique_lock lock(*_mutex);
+    std::unique_lock lock(_mutex);
     if (_error) {
       onRejected(_error);
     } else {
@@ -350,7 +343,7 @@ public:
     }
   }
   void addOnRejectedListener(const OnRejectedFunc& onRejected) {
-    std::unique_lock lock(*_mutex);
+    std::unique_lock lock(_mutex);
     if (_error) {
       onRejected(_error);
     } else {
@@ -390,7 +383,7 @@ public:
   }
 
 private:
-  std::unique_ptr<std::mutex> _mutex;
+  std::mutex _mutex;
   bool _isResolved = false;
   std::exception_ptr _error;
   std::vector<OnResolvedFunc> _onResolvedListeners;

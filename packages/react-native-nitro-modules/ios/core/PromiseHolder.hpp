@@ -64,38 +64,38 @@ private:
 template <>
 class PromiseHolder<void> final {
 public:
- PromiseHolder(const std::shared_ptr<Promise<void>>& promise) : _promise(promise) {}
+  PromiseHolder(const std::shared_ptr<Promise<void>>& promise) : _promise(promise) {}
 
 public:
- static PromiseHolder<void> create() {
-   return PromiseHolder<void>(Promise<void>::create());
- }
+  static PromiseHolder<void> create() {
+    return PromiseHolder<void>(Promise<void>::create());
+  }
 
 public:
- void resolve() const {
-   _promise->resolve();
- }
+  void resolve() const {
+    _promise->resolve();
+  }
 
- void reject(const std::exception_ptr& exception) const {
-   _promise->reject(exception);
- }
-
-public:
- void addOnResolvedListener(std::function<void()> onResolved) const {
-   _promise->addOnResolvedListener([=]() { onResolved(); });
- }
-
- void addOnRejectedListener(const std::function<void(const std::exception_ptr&)>& onRejected) const {
-   _promise->addOnRejectedListener([=](const std::exception_ptr& error) { onRejected(error); });
- }
+  void reject(const std::exception_ptr& exception) const {
+    _promise->reject(exception);
+  }
 
 public:
- inline std::shared_ptr<Promise<void>> getPromise() const {
-   return _promise;
- }
+  void addOnResolvedListener(std::function<void()> onResolved) const {
+    _promise->addOnResolvedListener([=]() { onResolved(); });
+  }
+
+  void addOnRejectedListener(const std::function<void(const std::exception_ptr&)>& onRejected) const {
+    _promise->addOnRejectedListener([=](const std::exception_ptr& error) { onRejected(error); });
+  }
+
+public:
+  inline std::shared_ptr<Promise<void>> getPromise() const {
+    return _promise;
+  }
 
 private:
- std::shared_ptr<Promise<void>> _promise;
+  std::shared_ptr<Promise<void>> _promise;
 };
 
 } // namespace margelo::nitro
