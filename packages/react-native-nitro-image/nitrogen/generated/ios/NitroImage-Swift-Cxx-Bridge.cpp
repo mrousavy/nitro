@@ -134,7 +134,7 @@ namespace margelo::nitro::image::bridge::swift {
     auto swiftClosure = NitroImage::Func_std__shared_ptr_Promise_double__::fromUnsafe(swiftClosureWrapper);
     return [swiftClosure = std::move(swiftClosure)]() mutable -> std::shared_ptr<Promise<double>> {
       auto __result = swiftClosure.call();
-      return __result.getPromise();
+      return __result;
     };
   }
   
@@ -143,7 +143,7 @@ namespace margelo::nitro::image::bridge::swift {
     auto swiftClosure = NitroImage::Func_std__shared_ptr_Promise_std__string__::fromUnsafe(swiftClosureWrapper);
     return [swiftClosure = std::move(swiftClosure)]() mutable -> std::shared_ptr<Promise<std::string>> {
       auto __result = swiftClosure.call();
-      return __result.getPromise();
+      return __result;
     };
   }
   

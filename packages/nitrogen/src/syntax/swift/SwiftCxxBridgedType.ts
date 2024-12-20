@@ -684,12 +684,6 @@ case ${i}:
           true
         )
         switch (language) {
-          case 'c++':
-            if (this.isBridgingToDirectCppTarget) {
-              return swiftParameterName
-            } else {
-              return `${swiftParameterName}.getPromise()`
-            }
           case 'swift':
             const arg =
               promise.resultingType.kind === 'void'
