@@ -156,16 +156,6 @@ public:
       _onResolvedListeners.push_back(onResolved);
     }
   }
-  void addOnResolvedListenerCopy(const std::function<void(TResult)>& onResolved) {
-    std::unique_lock lock(*_mutex);
-    if (std::holds_alternative<TResult>(_state)) {
-      // Promise is already resolved! Call the callback immediately
-      onResolved(std::get<TResult>(_state));
-    } else {
-      // Promise is not yet resolved, put the listener in our queue.
-      _onResolvedListeners.push_back(onResolved);
-    }
-  }
 
   /**
    * Add a listener that will be called when the Promise gets rejected.
@@ -253,7 +243,7 @@ private:
   std::vector<OnResolvedFunc> _onResolvedListeners;
   std::vector<OnRejectedFunc> _onRejectedListeners;
   std::unique_ptr<std::mutex> _mutex;
-} SWIFT_NONCOPYABLE;
+};
 
 // Specialization for void
 template <>
@@ -405,6 +395,6 @@ private:
   std::exception_ptr _error;
   std::vector<OnResolvedFunc> _onResolvedListeners;
   std::vector<OnRejectedFunc> _onRejectedListeners;
-} SWIFT_NONCOPYABLE;
+};
 
 } // namespace margelo::nitro
