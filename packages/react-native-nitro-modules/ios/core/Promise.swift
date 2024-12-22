@@ -38,7 +38,7 @@ public final class Promise<T> {
   deinit {
     if state == nil {
       let message = "Timeouted: Promise<\(String(describing: T.self))> was destroyed!"
-      reject(RuntimeError.error(withMessage: message))
+      reject(withError: RuntimeError.error(withMessage: message))
     }
   }
 
