@@ -95,9 +95,6 @@ struct JSIConverter<std::function<ReturnType(Args...)>> final {
 
 private:
   static inline ResultingType callJSFunction(jsi::Runtime& runtime, const OwningReference<jsi::Function>& function, const Args&... args) {
-    // Throw a lock on the OwningReference<T> so we can guarantee safe access (Hermes GC cannot delete it while `lock` is alive)
-    OwningLock<jsi::Function> lock = function.lock();
-
     if (!function) {
       if constexpr (std::is_void_v<ResultingType>) {
         // runtime has already been deleted. since this returns void, we can just ignore it being deleted.
