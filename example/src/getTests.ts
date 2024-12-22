@@ -794,6 +794,23 @@ export function getTests(
         .didNotThrow()
         .equals(undefined)
     ),
+    createTest(
+      'JS Promise<void> that rejects will also reject on native',
+      async () =>
+        (
+          await it(() => {
+            return timeoutedPromise(async () => {
+              let reject = (_: Error) => {}
+              const promise = new Promise<void>((_, r) => {
+                reject = r
+              })
+              const nativePromise = testObject.awaitPromise(promise)
+              reject(new Error(`rejected from JS!`))
+              await nativePromise
+            })
+          })
+        ).didThrow()
+    ),
 
     // Callbacks
     createTest('callCallback(...)', async () =>
