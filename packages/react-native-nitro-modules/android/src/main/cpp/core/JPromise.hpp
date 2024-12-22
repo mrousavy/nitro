@@ -57,6 +57,16 @@ public:
   }
 
 public:
+  ~JPromise() override {
+    if (_result == nullptr && _error == nullptr) [[unlikely]] {
+      jni::ThreadScope::WithClassLoader([&]() {
+        std::runtime_error error("Timeouted: JPromise was destroyed!");
+        this->reject(jni::getJavaExceptionForCppException(std::make_exception_ptr(error)));
+      });
+    }
+  }
+
+public:
   void resolve(jni::alias_ref<jni::JObject> result) {
     std::unique_lock lock(_mutex);
     _result = jni::make_global(result);
