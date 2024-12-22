@@ -37,7 +37,8 @@ public final class Promise<T> {
 
   deinit {
     if state == nil {
-      print("⚠️ Promise<\(String(describing: T.self))> got destroyed, but was never resolved or rejected! It is probably left hanging in JS now.")
+      let message = "Timeouted: Promise<\(String(describing: T.self))> was destroyed!"
+      reject(withError: RuntimeError.error(withMessage: message))
     }
   }
 

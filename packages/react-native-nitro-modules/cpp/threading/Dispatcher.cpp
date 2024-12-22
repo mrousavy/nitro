@@ -1,3 +1,10 @@
+//
+//  Dispatcher.cpp
+//  react-native-nitro
+//
+//  Created by Marc Rousavy on 22.07.24.
+//
+
 #include "Dispatcher.hpp"
 #include "JSIHelpers.hpp"
 #include "NitroDefines.hpp"
