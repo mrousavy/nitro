@@ -933,6 +933,19 @@ export function getTests(
           .didReturn('object')
           .toContain('byteLength')
     ),
+    createTest(
+      'Async callback that throws in JS will rethrow in native',
+      async () =>
+        (
+          await it(async () => {
+            return timeoutedPromise<ArrayBuffer>(async () => {
+              await testObject.callbackAsyncPromise(() => {
+                throw new Error(`throwing in JS!`)
+              })
+            })
+          })
+        ).didThrow()
+    ),
 
     // Objects
     createTest('getCar()', () =>
