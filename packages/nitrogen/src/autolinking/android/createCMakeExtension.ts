@@ -1,5 +1,5 @@
 import { NitroConfig } from '../../config/NitroConfig.js'
-import { indent } from '../../utils.js'
+import { indent, toUnixPath } from '../../utils.js'
 import {
   createFileMetadataString,
   getRelativeDirectory,
@@ -17,13 +17,16 @@ export function createCMakeExtension(files: SourceFile[]): CMakeFile {
   const sharedFiles = files
     .filter((f) => f.platform === 'shared' && isCppFile(f))
     .map((f) => getRelativeDirectory(f))
+    .map((p) => toUnixPath(p))
   const androidFiles = files
     .filter((f) => f.platform === 'android' && isCppFile(f))
     .map((f) => getRelativeDirectory(f))
-  const autolinkingFile = getRelativeDirectoryGenerated(
+    .map((p) => toUnixPath(p))
+  const autolinkingFilePath = getRelativeDirectoryGenerated(
     'android',
     `${name}OnLoad.cpp`
   )
+  const autolinkingFile = toUnixPath(autolinkingFilePath)
 
   const code = `
 ${createFileMetadataString(`${name}+autolinking.cmake`, '#')}

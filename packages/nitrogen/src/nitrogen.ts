@@ -46,7 +46,7 @@ export async function runNitrogen({
   })
 
   const ignorePaths = NitroConfig.getIgnorePaths()
-  const globPattern = [path.join(baseDirectory, '/**/*.nitro.ts')]
+  const globPattern = [path.join(baseDirectory, '**', '*.nitro.ts')]
   ignorePaths.forEach((ignorePath) => {
     globPattern.push('!' + path.join(baseDirectory, ignorePath))
   })
@@ -69,7 +69,7 @@ export async function runNitrogen({
   // If no source files are found, we can exit
   if (project.getSourceFiles().length === 0) {
     const searchDir = prettifyDirectory(
-      path.join(path.resolve(baseDirectory), '**/*.nitro.ts')
+      path.join(path.resolve(baseDirectory), '**', '*.nitro.ts')
     )
     console.log(
       `❌  Nitrogen didn't find any spec files in ${chalk.underline(searchDir)}! ` +
