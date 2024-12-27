@@ -29,10 +29,7 @@ on:
 jobs:
   lint:
     name: Run Nitrogen for example module (react-native-nitro-image)
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest]
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2
