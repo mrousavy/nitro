@@ -50,6 +50,12 @@ export function escapeComments(string: string): string {
     .replace(/\/\//g, '/ /') // Escape single-line comment
 }
 
+const HAS_UNIX_PATHS = path.join('a', 'b').includes('/')
+export function toUnixPath(p: string): string {
+  if (HAS_UNIX_PATHS) return p
+  return p.replaceAll('\\', '/')
+}
+
 function getFullPath(file: SourceFile): string {
   return path.join(
     file.platform,
