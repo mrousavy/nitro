@@ -37,7 +37,7 @@ namespace margelo::nitro::image {
       jni::local_ref<JFunc_void_double::javaobject> onChanged = this->getFieldValue(fieldOnChanged);
       return JsStyleStruct(
         value,
-        onChanged->toCpp()
+        onChanged->cthis()->toCpp()
       );
     }
 
