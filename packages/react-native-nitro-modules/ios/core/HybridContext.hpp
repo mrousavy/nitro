@@ -13,7 +13,7 @@ class HybridObject;
 
 #include "HybridObject.hpp"
 #include "NitroLogger.hpp"
-#include "TypeInfo.hpp"
+#include "NitroTypeInfo.hpp"
 #include <memory>
 
 namespace margelo::nitro {

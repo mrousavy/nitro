@@ -6,7 +6,7 @@
 
 #include "IsSharedPtrTo.hpp"
 #include "NitroDefines.hpp"
-#include "TypeInfo.hpp"
+#include "NitroTypeInfo.hpp"
 #include <jsi/jsi.h>
 #include <type_traits>
 
