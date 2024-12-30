@@ -27,6 +27,8 @@ namespace margelo::nitro::image { struct Person; }
 namespace NitroModules { class AnyMap; }
 // Forward declaration of `ArrayBuffer` to properly resolve imports.
 namespace NitroModules { class ArrayBuffer; }
+// Forward declaration of `JsStyleStruct` to properly resolve imports.
+namespace margelo::nitro::image { struct JsStyleStruct; }
 // Forward declaration of `HybridChildSpec` to properly resolve imports.
 namespace margelo::nitro::image { class HybridChildSpec; }
 // Forward declaration of `HybridBaseSpec` to properly resolve imports.
@@ -48,6 +50,7 @@ namespace margelo::nitro::image { class HybridBaseSpec; }
 #include <NitroModules/Promise.hpp>
 #include <exception>
 #include <NitroModules/ArrayBuffer.hpp>
+#include "JsStyleStruct.hpp"
 #include "HybridChildSpec.hpp"
 #include "HybridBaseSpec.hpp"
 
@@ -151,6 +154,7 @@ namespace margelo::nitro::image {
       virtual Car getCar() = 0;
       virtual bool isCarElectric(const Car& car) = 0;
       virtual std::optional<Person> getDriver(const Car& car) = 0;
+      virtual void jsStyleObjectAsParameters(const JsStyleStruct& params) = 0;
       virtual std::shared_ptr<ArrayBuffer> createArrayBuffer() = 0;
       virtual double getBufferLastItem(const std::shared_ptr<ArrayBuffer>& buffer) = 0;
       virtual void setAllValuesTo(const std::shared_ptr<ArrayBuffer>& buffer, double value) = 0;

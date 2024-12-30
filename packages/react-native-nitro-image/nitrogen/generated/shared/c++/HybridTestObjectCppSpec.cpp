@@ -84,6 +84,7 @@ namespace margelo::nitro::image {
       prototype.registerHybridMethod("getCar", &HybridTestObjectCppSpec::getCar);
       prototype.registerHybridMethod("isCarElectric", &HybridTestObjectCppSpec::isCarElectric);
       prototype.registerHybridMethod("getDriver", &HybridTestObjectCppSpec::getDriver);
+      prototype.registerHybridMethod("jsStyleObjectAsParameters", &HybridTestObjectCppSpec::jsStyleObjectAsParameters);
       prototype.registerHybridMethod("createArrayBuffer", &HybridTestObjectCppSpec::createArrayBuffer);
       prototype.registerHybridMethod("getBufferLastItem", &HybridTestObjectCppSpec::getBufferLastItem);
       prototype.registerHybridMethod("setAllValuesTo", &HybridTestObjectCppSpec::setAllValuesTo);

@@ -75,6 +75,7 @@ namespace margelo::nitro::image {
       prototype.registerHybridMethod("getCar", &HybridTestObjectSwiftKotlinSpec::getCar);
       prototype.registerHybridMethod("isCarElectric", &HybridTestObjectSwiftKotlinSpec::isCarElectric);
       prototype.registerHybridMethod("getDriver", &HybridTestObjectSwiftKotlinSpec::getDriver);
+      prototype.registerHybridMethod("jsStyleObjectAsParameters", &HybridTestObjectSwiftKotlinSpec::jsStyleObjectAsParameters);
       prototype.registerHybridMethod("createArrayBuffer", &HybridTestObjectSwiftKotlinSpec::createArrayBuffer);
       prototype.registerHybridMethod("getBufferLastItem", &HybridTestObjectSwiftKotlinSpec::getBufferLastItem);
       prototype.registerHybridMethod("setAllValuesTo", &HybridTestObjectSwiftKotlinSpec::setAllValuesTo);

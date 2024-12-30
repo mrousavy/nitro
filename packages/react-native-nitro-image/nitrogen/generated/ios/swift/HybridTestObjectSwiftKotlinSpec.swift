@@ -62,6 +62,7 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: AnyObject {
   func getCar() throws -> Car
   func isCarElectric(car: Car) throws -> Bool
   func getDriver(car: Car) throws -> Person?
+  func jsStyleObjectAsParameters(params: JsStyleStruct) throws -> Void
   func createArrayBuffer() throws -> ArrayBufferHolder
   func getBufferLastItem(buffer: ArrayBufferHolder) throws -> Double
   func setAllValuesTo(buffer: ArrayBufferHolder, value: Double) throws -> Void

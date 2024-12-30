@@ -324,6 +324,10 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
+  abstract fun jsStyleObjectAsParameters(params: JsStyleStruct): Unit
+  
+  @DoNotStrip
+  @Keep
   abstract fun createArrayBuffer(): ArrayBuffer
   
   @DoNotStrip
