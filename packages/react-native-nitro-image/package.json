@@ -59,7 +59,7 @@
     "@types/react": "*",
     "jest": "*",
     "nitro-codegen": "*",
-    "react": "18.3.1",
+    "react": "19.0.0",
     "react-native": "0.78.0-nightly-20241230-85bdd7582",
     "react-native-nitro-modules": "*"
   },

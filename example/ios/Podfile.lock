@@ -1351,7 +1351,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - react-native-segmented-control (2.5.2):
+  - react-native-segmented-control (2.5.7):
     - React-Core
   - React-NativeModulesApple (0.78.0-nightly-20241230-85bdd7582):
     - glog
@@ -1640,7 +1640,7 @@ PODS:
     - React-logger (= 0.78.0-nightly-20241230-85bdd7582)
     - React-perflogger (= 0.78.0-nightly-20241230-85bdd7582)
     - React-utils (= 0.78.0-nightly-20241230-85bdd7582)
-  - RNScreens (4.0.0):
+  - RNScreens (4.4.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1661,9 +1661,9 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - RNScreens/common (= 4.0.0)
+    - RNScreens/common (= 4.4.0)
     - Yoga
-  - RNScreens/common (4.0.0):
+  - RNScreens/common (4.4.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1953,7 +1953,7 @@ SPEC CHECKSUMS:
   React-Mapbuffer: 467d62013c13b5264c2fe49d164e7148118a9470
   React-microtasksnativemodule: 297a3a23bcfb60811c1beafc8b3f034b0d989d6d
   react-native-safe-area-context: 11334e31c5f9f7e00d0bd9c26c59aef31ea84aa9
-  react-native-segmented-control: b92809e9111013dfa266e1168ba366d62898d9a4
+  react-native-segmented-control: 44d14c6899ee12de3384517f4fa1cf4a66ae105c
   React-NativeModulesApple: 3e37781144ddc78ef9cbc98f6d79e8b7634aa36b
   React-perflogger: b0ae8ed722549670f2437ccba919f83670bfc80b
   React-performancetimeline: 15949483bd77ae14289006c739dfaaf0f1f90f16
@@ -1982,7 +1982,7 @@ SPEC CHECKSUMS:
   ReactAppDependencyProvider: f0aa4cea7fc492bdf65940b1e874b87f63526126
   ReactCodegen: fb67f53b8b18a11ecb278a5bc92d2c4c76ec857c
   ReactCommon: e63a5d2d9d9aad67ec6b4671fda06a47549b9f3a
-  RNScreens: e4f8d7ba6bb77e41ff78d371cc48e7e7c8befc96
+  RNScreens: 7feff8baab9ec69110bce0011d45cb7e2b38be28
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   Yoga: 0029df159876340a12401a37642e8bc697f0ce8c
 
