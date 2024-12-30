@@ -1,5 +1,11 @@
 import { Project } from 'ts-morph'
-import { getHybridObjectPlatforms, type Platform } from './getPlatformSpecs.js'
+import {
+  extendsHybridObject,
+  extendsHybridView,
+  getHybridObjectPlatforms,
+  getHybridViewPlatforms,
+  type Platform,
+} from './getPlatformSpecs.js'
 import { generatePlatformFiles } from './createPlatformSpec.js'
 import path from 'path'
 import { prettifyDirectory } from './prettifyDirectory.js'
@@ -17,6 +23,7 @@ import { NitroConfig } from './config/NitroConfig.js'
 import { createIOSAutolinking } from './autolinking/createIOSAutolinking.js'
 import { createAndroidAutolinking } from './autolinking/createAndroidAutolinking.js'
 import type { Autolinking } from './autolinking/Autolinking.js'
+import type { PlatformSpec } from 'react-native-nitro-modules'
 
 interface NitrogenOptions {
   baseDirectory: string
@@ -88,44 +95,64 @@ export async function runNitrogen({
 
     const startedWithSpecs = generatedSpecs
 
-    // Find all interfaces in the given file
-    const interfaces = sourceFile.getInterfaces()
-    for (const module of interfaces) {
-      let moduleName = '[Unknown Module]'
+    // Find all interfaces or types in the given file
+    const types = [
+      ...sourceFile.getInterfaces(),
+      ...sourceFile.getTypeAliases(),
+    ]
+    for (const type of types) {
+      console.log('---->', type.getName())
+      // Get name of interface (= our module name)
+      const typeName = type.getName()
       try {
-        // Get name of interface (= our module name)
-        moduleName = module.getName()
+        let allFiles: SourceFile[]
+        let platformSpec: PlatformSpec
+        if (extendsHybridObject(type.getType(), true)) {
+          // Hybrid View
+          const targetPlatforms = getHybridObjectPlatforms(type)
+          if (targetPlatforms == null) {
+            // It does not extend HybridObject, continue..
+            continue
+          }
+          platformSpec = targetPlatforms
 
-        // Find out if it extends HybridObject
-        const platformSpec = getHybridObjectPlatforms(module)
-        if (platformSpec == null) {
-          // It does not extend HybridObject, continue..
-          continue
-        }
+          const platforms = Object.keys(platformSpec) as Platform[]
 
-        const platforms = Object.keys(platformSpec) as Platform[]
+          if (platforms.length === 0) {
+            console.warn(
+              `⚠️   ${typeName} does not declare any platforms in HybridObject<T> - nothing can be generated.`
+            )
+            continue
+          }
 
-        if (platforms.length === 0) {
-          console.warn(
-            `⚠️   ${moduleName} does not declare any platforms in HybridObject<T> - nothing can be generated.`
+          targetSpecs++
+
+          console.log(
+            `    ⚙️   Generating specs for HybridObject "${chalk.bold(typeName)}"...`
           )
+
+          // Create all files and throw it into a big list
+          allFiles = platforms
+            .flatMap((p) => {
+              usedPlatforms.push(p)
+              const language = platformSpec[p]!
+              return generatePlatformFiles(type.getType(), language)
+            })
+            .filter(filterDuplicateFiles)
+        } else if (extendsHybridView(type.getType(), true)) {
+          // Hybrid View Props
+          const targetPlatforms = getHybridViewPlatforms(type)
+          if (targetPlatforms == null) {
+            // It does not extend HybridView, continue..
+            continue
+          }
+          platformSpec = targetPlatforms
+          targetSpecs++
+          allFiles = []
+        } else {
           continue
         }
 
-        targetSpecs++
-
-        console.log(
-          `    ⚙️   Generating specs for HybridObject "${chalk.bold(moduleName)}"...`
-        )
-
-        // Create all files and throw it into a big list
-        const allFiles = platforms
-          .flatMap((p) => {
-            usedPlatforms.push(p)
-            const language = platformSpec[p]!
-            return generatePlatformFiles(module.getType(), language)
-          })
-          .filter(filterDuplicateFiles)
         // Group the files by platform ({ ios: [], android: [], shared: [] })
         const filesPerPlatform = groupByPlatform(allFiles)
         // Loop through each platform one by one so that it has some kind of order (per-platform)
@@ -164,7 +191,7 @@ export async function runNitrogen({
         const message = indent(errorToString(error), '    ')
         console.error(
           chalk.redBright(
-            `        ❌  Failed to generate spec for ${moduleName}! ${message}`
+            `        ❌  Failed to generate spec for ${typeName}! ${message}`
           )
         )
         process.exitCode = 1
