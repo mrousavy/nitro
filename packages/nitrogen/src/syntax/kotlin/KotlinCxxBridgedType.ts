@@ -664,7 +664,7 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
       case 'function': {
         switch (language) {
           case 'c++':
-            return `${parameterName}->cthis()->toCpp()`
+            return `${parameterName}->cthis()->getFunction()`
           default:
             return parameterName
         }

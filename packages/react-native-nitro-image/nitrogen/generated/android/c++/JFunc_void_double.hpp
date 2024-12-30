@@ -32,6 +32,11 @@ namespace margelo::nitro::image {
     }
 
   public:
+    inline const std::function<void(double /* num */)>& getFunction() const {
+      return _func;
+    }
+
+  public:
     static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Func_void_double;";
     static void registerNatives() {
       registerHybrid({makeNativeMethod("call", JFunc_void_double::call)});

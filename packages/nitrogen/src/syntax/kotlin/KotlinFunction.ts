@@ -122,6 +122,11 @@ namespace ${cxxNamespace} {
     }
 
   public:
+    inline const ${typename}& getFunction() const {
+      return _func;
+    }
+
+  public:
     static auto constexpr kJavaDescriptor = "L${jniClassDescriptor};";
     static void registerNatives() {
       registerHybrid({makeNativeMethod("call", J${name}::call)});
