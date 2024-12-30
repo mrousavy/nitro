@@ -249,6 +249,10 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
     return car.driver
   }
 
+  func jsStyleObjectAsParameters(params: JsStyleStruct) throws -> Void {
+    params.onChanged(params.value)
+  }
+
   func createArrayBuffer() throws -> ArrayBufferHolder {
     return .allocate(size: 1024 * 1024 * 10) // 10 MB
   }

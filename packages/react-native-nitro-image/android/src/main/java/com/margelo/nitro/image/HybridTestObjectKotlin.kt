@@ -230,6 +230,10 @@ class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
         return car.driver
     }
 
+    override fun jsStyleObjectAsParameters(params: JsStyleStruct): Unit {
+        params.onChanged(params.value)
+    }
+
     override fun createArrayBuffer(): ArrayBuffer {
         return ArrayBuffer.allocate(1024 * 1024 * 10) // 10 MB
     }
