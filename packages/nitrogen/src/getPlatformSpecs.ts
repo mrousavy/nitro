@@ -1,5 +1,5 @@
 import type { PlatformSpec } from 'react-native-nitro-modules'
-import type { InterfaceDeclaration, Type } from 'ts-morph'
+import type { InterfaceDeclaration, Type, TypeAliasDeclaration } from 'ts-morph'
 import { Symbol } from 'ts-morph'
 
 export type Platform = keyof Required<PlatformSpec>
@@ -97,6 +97,14 @@ export function isDirectlyHybridObject(type: Type): boolean {
   return false
 }
 
+export function isDirectlyHybridView(type: Type): boolean {
+  const symbol = type.getSymbol() ?? type.getAliasSymbol()
+  if (symbol?.getName() === 'HybridView') {
+    return true
+  }
+  return false
+}
+
 export function extendsHybridObject(type: Type, recursive: boolean): boolean {
   for (const base of type.getBaseTypes()) {
     const isHybrid = isDirectlyHybridObject(base)
@@ -105,6 +113,22 @@ export function extendsHybridObject(type: Type, recursive: boolean): boolean {
     }
     if (recursive) {
       const baseExtends = extendsHybridObject(base, recursive)
+      if (baseExtends) {
+        return true
+      }
+    }
+  }
+  return false
+}
+
+export function extendsHybridView(type: Type, recursive: boolean): boolean {
+  for (const base of type.getBaseTypes()) {
+    const isHybrid = isDirectlyHybridView(base)
+    if (isHybrid) {
+      return true
+    }
+    if (recursive) {
+      const baseExtends = extendsHybridView(base, recursive)
       if (baseExtends) {
         return true
       }
@@ -128,14 +152,14 @@ function findHybridObjectBase(type: Type): Type | undefined {
 }
 
 /**
- * If the given interface ({@linkcode module}) extends `HybridObject`,
+ * If the given interface ({@linkcode declaration}) extends `HybridObject`,
  * this method returns the platforms it exists on.
  * If it doesn't extend `HybridObject`, this returns `undefined`.
  */
 export function getHybridObjectPlatforms(
-  module: InterfaceDeclaration
+  declaration: InterfaceDeclaration | TypeAliasDeclaration
 ): PlatformSpec | undefined {
-  const base = findHybridObjectBase(module.getType())
+  const base = findHybridObjectBase(declaration.getType())
   if (base == null) {
     // this type does not extend `HybridObject`.
     return undefined
@@ -149,9 +173,26 @@ export function getHybridObjectPlatforms(
   const platformSpecsArgument = genericArguments[0]
   if (platformSpecsArgument == null) {
     throw new Error(
-      `${module.getName()} does not properly extend HybridObject<T>! ${base.getText()} does not have a single generic type argument for platform spec languages!`
+      `${declaration.getName()} does not properly extend HybridObject<T>! ${base.getText()} does not have a single generic type argument for platform spec languages!`
     )
   }
 
-  return getPlatformSpec(module.getName(), platformSpecsArgument)
+  return getPlatformSpec(declaration.getName(), platformSpecsArgument)
+}
+
+export function getHybridViewPlatforms(
+  view: InterfaceDeclaration | TypeAliasDeclaration
+): PlatformSpec | undefined {
+  const genericArguments = view.getType().getTypeArguments()
+  if (genericArguments.length === 0) {
+    throw new Error(
+      `${view.getName()} does not properly extend HybridView<Props, Methods, Platforms?>!`
+    )
+  }
+  const platformSpecsArgument = genericArguments[2]
+  if (platformSpecsArgument == null) {
+    return { ios: 'swift', android: 'kotlin' }
+  }
+
+  return getPlatformSpec(view.getName(), platformSpecsArgument)
 }
