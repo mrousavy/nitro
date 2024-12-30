@@ -22,6 +22,7 @@
 #include "JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_double____.hpp"
 #include "JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____.hpp"
 #include "JFunc_std__shared_ptr_Promise_std__string__.hpp"
+#include "JFunc_void_double.hpp"
 #include "JHybridBaseSpec.hpp"
 #include "JHybridChildSpec.hpp"
 #include <NitroModules/JNISharedPtr.hpp>
@@ -53,6 +54,7 @@ int initialize(JavaVM* vm) {
     margelo::nitro::image::JFunc_std__shared_ptr_Promise_double__::registerNatives();
     margelo::nitro::image::JFunc_std__shared_ptr_Promise_std__string__::registerNatives();
     margelo::nitro::image::JFunc_void_std__string::registerNatives();
+    margelo::nitro::image::JFunc_void_double::registerNatives();
     margelo::nitro::image::JHybridBaseSpec::registerNatives();
     margelo::nitro::image::JHybridChildSpec::registerNatives();
 

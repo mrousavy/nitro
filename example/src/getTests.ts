@@ -1002,6 +1002,21 @@ export function getTests(
         .didNotThrow()
         .equals({ age: 24, name: 'marc' })
     ),
+    createTest('jsStyleObjectAsParameters()', async () =>
+      (
+        await it(() =>
+          timeoutedPromise<number>((complete) => {
+            testObject.jsStyleObjectAsParameters({
+              value: 55,
+              onChanged: (num) => complete(num),
+            })
+          })
+        )
+      )
+        .didNotThrow()
+        .didReturn('number')
+        .equals(55)
+    ),
 
     // Hybrid Object Tests
     createTest('get self', () =>

@@ -380,6 +380,10 @@ std::optional<Person> HybridTestObjectCpp::getDriver(const Car& car) {
   }
 }
 
+void HybridTestObjectCpp::jsStyleObjectAsParameters(const JsStyleStruct& params) {
+  params.onChanged(params.value);
+}
+
 std::shared_ptr<ArrayBuffer> HybridTestObjectCpp::createArrayBuffer() {
   size_t size = 1024 * 1024 * 10; // 10MB
   uint8_t* buffer = new uint8_t[size];

@@ -36,6 +36,11 @@ export type Person = {
   age: number
 }
 
+interface JsStyleStruct {
+  value: number
+  onChanged: (num: number) => void
+}
+
 // This is an `interface` we're going to use as a base in both of our `HybridObject`s later.
 // In this case, the `HybridObject`s will just flatten out and copy over all properties here.
 // There is no separate type for `SharedTestObjectProps` on the native side.
@@ -120,6 +125,7 @@ interface SharedTestObjectProps {
   getCar(): Car
   isCarElectric(car: Car): boolean
   getDriver(car: Car): Person | undefined
+  jsStyleObjectAsParameters(params: JsStyleStruct): void
 
   // ArrayBuffers
   createArrayBuffer(): ArrayBuffer

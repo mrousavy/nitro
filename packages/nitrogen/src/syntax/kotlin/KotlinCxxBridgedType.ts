@@ -620,8 +620,7 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
             return parameterName
         }
       case 'struct':
-      case 'enum':
-      case 'function': {
+      case 'enum': {
         switch (language) {
           case 'c++':
             return `${parameterName}->toCpp()`
@@ -658,6 +657,14 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
               true
             )
             return `${parameterName} != nullptr ? std::make_optional(${parsed}) : std::nullopt`
+          default:
+            return parameterName
+        }
+      }
+      case 'function': {
+        switch (language) {
+          case 'c++':
+            return `${parameterName}->cthis()->getFunction()`
           default:
             return parameterName
         }

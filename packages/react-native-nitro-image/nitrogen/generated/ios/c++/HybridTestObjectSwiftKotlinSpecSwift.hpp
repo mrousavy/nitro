@@ -28,6 +28,8 @@ namespace margelo::nitro::image { struct Car; }
 namespace NitroModules { class ArrayBuffer; }
 // Forward declaration of `ArrayBufferHolder` to properly resolve imports.
 namespace NitroModules { class ArrayBufferHolder; }
+// Forward declaration of `JsStyleStruct` to properly resolve imports.
+namespace margelo::nitro::image { struct JsStyleStruct; }
 // Forward declaration of `HybridChildSpec` to properly resolve imports.
 namespace margelo::nitro::image { class HybridChildSpec; }
 // Forward declaration of `HybridBaseSpec` to properly resolve imports.
@@ -49,6 +51,7 @@ namespace margelo::nitro::image { class HybridBaseSpec; }
 #include "Car.hpp"
 #include <NitroModules/ArrayBuffer.hpp>
 #include <NitroModules/ArrayBufferHolder.hpp>
+#include "JsStyleStruct.hpp"
 #include "HybridChildSpec.hpp"
 #include "HybridBaseSpec.hpp"
 
@@ -446,6 +449,12 @@ namespace margelo::nitro::image {
       }
       auto __value = std::move(__result.value());
       return __value;
+    }
+    inline void jsStyleObjectAsParameters(const JsStyleStruct& params) override {
+      auto __result = _swiftPart.jsStyleObjectAsParameters(params);
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
     }
     inline std::shared_ptr<ArrayBuffer> createArrayBuffer() override {
       auto __result = _swiftPart.createArrayBuffer();

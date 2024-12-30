@@ -60,6 +60,11 @@ namespace margelo::nitro::image {
     }
 
   public:
+    inline const std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>>>()>& getFunction() const {
+      return _func;
+    }
+
+  public:
     static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____;";
     static void registerNatives() {
       registerHybrid({makeNativeMethod("call", JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____::call)});

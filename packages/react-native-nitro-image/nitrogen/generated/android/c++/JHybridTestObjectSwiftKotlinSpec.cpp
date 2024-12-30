@@ -25,6 +25,8 @@ namespace NitroModules { class ArrayBuffer; }
 namespace margelo::nitro::image { class HybridChildSpec; }
 // Forward declaration of `HybridBaseSpec` to properly resolve imports.
 namespace margelo::nitro::image { class HybridBaseSpec; }
+// Forward declaration of `JsStyleStruct` to properly resolve imports.
+namespace margelo::nitro::image { struct JsStyleStruct; }
 
 #include <memory>
 #include "HybridTestObjectSwiftKotlinSpec.hpp"
@@ -64,6 +66,9 @@ namespace margelo::nitro::image { class HybridBaseSpec; }
 #include "JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____.hpp"
 #include "JFunc_std__shared_ptr_Promise_std__string__.hpp"
 #include "JFunc_void_std__string.hpp"
+#include "JsStyleStruct.hpp"
+#include "JJsStyleStruct.hpp"
+#include "JFunc_void_double.hpp"
 
 namespace margelo::nitro::image {
 
@@ -616,6 +621,10 @@ namespace margelo::nitro::image {
     static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JPerson>(jni::alias_ref<JCar> /* car */)>("getDriver");
     auto __result = method(_javaPart, JCar::fromCpp(car));
     return __result != nullptr ? std::make_optional(__result->toCpp()) : std::nullopt;
+  }
+  void JHybridTestObjectSwiftKotlinSpec::jsStyleObjectAsParameters(const JsStyleStruct& params) {
+    static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<JJsStyleStruct> /* params */)>("jsStyleObjectAsParameters");
+    method(_javaPart, JJsStyleStruct::fromCpp(params));
   }
   std::shared_ptr<ArrayBuffer> JHybridTestObjectSwiftKotlinSpec::createArrayBuffer() {
     static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JArrayBuffer::javaobject>()>("createArrayBuffer");
