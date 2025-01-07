@@ -35,9 +35,9 @@ public:
    * Once the `ArrayBuffer` is no longer in use, the given `deleteFunc` will be called with the given `deleteFuncContext`
    * as an argument. The caller is responsible for deleting `data` once this is called.
    */
-  static ArrayBufferHolder makeBuffer(uint8_t* _Nonnull data, size_t size, SwiftClosure destroy) {
+  static ArrayBufferHolder wrap(uint8_t* _Nonnull data, size_t size, SwiftClosure destroy) {
     std::function<void()> deleteFunc = destroy.getFunction();
-    auto arrayBuffer = ArrayBuffer::makeBuffer(data, size, std::move(deleteFunc));
+    auto arrayBuffer = ArrayBuffer::wrap(data, size, std::move(deleteFunc));
     return ArrayBufferHolder(arrayBuffer);
   }
 
@@ -45,7 +45,7 @@ public:
   /**
    * Gets the raw bytes the underlying `ArrayBuffer` points to.
    */
-  void* _Nonnull getData() const SWIFT_COMPUTED_PROPERTY {
+  uint8_t* _Nonnull getData() const SWIFT_COMPUTED_PROPERTY {
     return _arrayBuffer->data();
   }
   /**

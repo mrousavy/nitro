@@ -107,19 +107,40 @@ class ArrayBuffer {
         /**
          * Copy the given `ArrayBuffer` into a new **owning** `ArrayBuffer`.
          */
-        fun copyOf(other: ArrayBuffer): ArrayBuffer {
-            // 1. Create a new buffer with the same size as the other
-            val newBuffer = ByteBuffer.allocateDirect(other.size)
-            // 2. Prepare the source buffer
-            val originalBuffer = other.getBuffer(false)
-            originalBuffer.rewind()
+        fun copy(other: ArrayBuffer): ArrayBuffer {
+            val byteBuffer = other.getBuffer(false)
+            return copy(byteBuffer)
+        }
+
+        /**
+         * Copy the given `ByteBuffer` into a new **owning** `ArrayBuffer`.
+         */
+        fun copy(byteBuffer: ByteBuffer): ArrayBuffer {
+            // 1. Find out size
+            byteBuffer.rewind()
+            val size = byteBuffer.remaining()
+            // 2. Create a new buffer with the same size as the other
+            val newBuffer = ByteBuffer.allocateDirect(size)
             // 3. Copy over the source buffer into the new buffer
-            newBuffer.put(originalBuffer)
+            newBuffer.put(byteBuffer)
             // 4. Rewind both buffers again to index 0
             newBuffer.rewind()
-            originalBuffer.rewind()
+            byteBuffer.rewind()
             // 5. Create a new `ArrayBuffer`
             return ArrayBuffer(newBuffer)
+        }
+
+        /**
+         * Wrap the given `ByteBuffer` in a new **owning** `ArrayBuffer`.
+         */
+        fun wrap(byteBuffer: ByteBuffer): ArrayBuffer {
+            byteBuffer.rewind()
+            return ArrayBuffer(byteBuffer)
+        }
+
+        @Deprecated("Use copy(...) instead", level = DeprecationLevel.WARNING)
+        fun copyOf(other: ArrayBuffer): ArrayBuffer {
+            return copy(other)
         }
     }
 }
