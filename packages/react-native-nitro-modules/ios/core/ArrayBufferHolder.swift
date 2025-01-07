@@ -46,7 +46,7 @@ public extension ArrayBufferHolder {
     }
     return ArrayBufferHolder.makeBuffer(data, size, deleteFunc)
   }
-
+  
   /**
    * Copy the given `ArrayBufferHolder` into a new **owning** `ArrayBufferHolder`.
    */
@@ -59,5 +59,15 @@ public extension ArrayBufferHolder {
       data.deallocate()
     }
     return ArrayBufferHolder.makeBuffer(data, other.size, deleteFunc)
+  }
+  
+  /**
+   * Copy the given `Data` into a new **owning** `ArrayBufferHolder`.
+   */
+  static func copy(data: Data) throws -> ArrayBufferHolder {
+    let pointer = try UnsafeMutablePointer<UInt8>.init(copyData: data)
+    return .wrap(dataWithoutCopy: pointer, size: data.count) {
+      pointer.deallocate()
+    }
   }
 }
