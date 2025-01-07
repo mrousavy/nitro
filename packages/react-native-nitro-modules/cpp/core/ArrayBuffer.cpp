@@ -17,8 +17,14 @@ using namespace facebook;
 
 // 1. ArrayBuffer
 
-std::shared_ptr<ArrayBuffer> ArrayBuffer::makeBuffer(uint8_t* data, size_t size, DeleteFn&& deleteFunc) {
+std::shared_ptr<ArrayBuffer> ArrayBuffer::wrapBuffer(uint8_t* data, size_t size, DeleteFn&& deleteFunc) {
   return std::make_shared<NativeArrayBuffer>(data, size, std::move(deleteFunc));
+}
+
+std::shared_ptr<ArrayBuffer> ArrayBuffer::copyBuffer(uint8_t* data, size_t size) {
+  uint8_t* copy = new uint8_t[size];
+  std::memcpy(copy, data, size);
+  return ArrayBuffer::wrapBuffer(copy, size, [copy]() { delete[] copy; });
 }
 
 // 2. NativeArrayBuffer
