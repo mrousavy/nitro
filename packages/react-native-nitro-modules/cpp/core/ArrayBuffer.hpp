@@ -10,6 +10,7 @@
 #include "OwningReference.hpp"
 #include <jsi/jsi.h>
 #include <thread>
+#include <vector>
 
 namespace margelo::nitro {
 
@@ -52,7 +53,25 @@ public:
    * Create a new `NativeArrayBuffer` that wraps the given data (without copy) of the given size,
    * and calls `deleteFunc` in which `data` should be deleted.
    */
-  static std::shared_ptr<ArrayBuffer> makeBuffer(uint8_t* data, size_t size, DeleteFn&& deleteFunc);
+  static std::shared_ptr<ArrayBuffer> wrap(uint8_t* data, size_t size, DeleteFn&& deleteFunc);
+  /**
+   * Create a new `NativeArrayBuffer` that copies the given data of the given size
+   * into a newly allocated buffer.
+   */
+  static std::shared_ptr<ArrayBuffer> copy(uint8_t* data, size_t size);
+  /**
+   * Create a new `NativeArrayBuffer` that copies the given `std::vector`.
+   */
+  static std::shared_ptr<ArrayBuffer> copy(std::vector<uint8_t>& data);
+  /**
+   * Create a new `NativeArrayBuffer` that allocates a new buffer of the given size.
+   */
+  static std::shared_ptr<ArrayBuffer> allocate(size_t size);
+
+  [[deprecated("Use wrapBuffer(...) instead.")]]
+  static std::shared_ptr<ArrayBuffer> makeBuffer(uint8_t* data, size_t size, DeleteFn&& deleteFunc) {
+    return ArrayBuffer::wrap(data, size, std::move(deleteFunc));
+  }
 };
 
 /**
