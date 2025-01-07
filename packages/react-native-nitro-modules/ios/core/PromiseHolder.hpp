@@ -1,5 +1,5 @@
 //
-//  ArrayBufferHolder.hpp
+//  PromiseHolder.hpp
 //  react-native-nitro
 //
 //  Created by Marc Rousavy on 14.08.24.
