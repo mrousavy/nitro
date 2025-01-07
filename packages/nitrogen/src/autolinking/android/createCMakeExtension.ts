@@ -5,6 +5,7 @@ import {
   getRelativeDirectory,
   getRelativeDirectoryGenerated,
   isCppFile,
+  isNotDuplicate,
 } from '../../syntax/helpers.js'
 import type { SourceFile } from '../../syntax/SourceFile.js'
 
@@ -18,10 +19,12 @@ export function createCMakeExtension(files: SourceFile[]): CMakeFile {
     .filter((f) => f.platform === 'shared' && isCppFile(f))
     .map((f) => getRelativeDirectory(f))
     .map((p) => toUnixPath(p))
+    .filter(isNotDuplicate)
   const androidFiles = files
     .filter((f) => f.platform === 'android' && isCppFile(f))
     .map((f) => getRelativeDirectory(f))
     .map((p) => toUnixPath(p))
+    .filter(isNotDuplicate)
   const autolinkingFilePath = getRelativeDirectoryGenerated(
     'android',
     `${name}OnLoad.cpp`
