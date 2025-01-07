@@ -65,9 +65,16 @@ public extension ArrayBufferHolder {
    * Copy the given `Data` into a new **owning** `ArrayBufferHolder`.
    */
   static func copy(data: Data) throws -> ArrayBufferHolder {
-    let pointer = try UnsafeMutablePointer<UInt8>.init(copyData: data)
-    return .wrap(dataWithoutCopy: pointer, size: data.count) {
-      pointer.deallocate()
+    // 1. Create new `ArrayBuffer` of same size
+    let size = data.count
+    let arrayBuffer = ArrayBufferHolder.allocate(size: size)
+    // 2. Copy all bytes from `Data` into our new `ArrayBuffer`
+    try data.withUnsafeBytes { rawPointer in
+      guard let baseAddress = rawPointer.baseAddress else {
+        throw RuntimeError.error(withMessage: "Cannot get baseAddress of Data!")
+      }
+      memcpy(arrayBuffer.data, baseAddress, size)
     }
+    return arrayBuffer
   }
 }
