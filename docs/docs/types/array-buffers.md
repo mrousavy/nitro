@@ -85,3 +85,68 @@ It's data can only be safely accessed before the synchronous function returned, 
 
 An `ArrayBuffer` can be accessed from both JS and native, and even from multiple Threads at once, but they are **not thread-safe**.
 To prevent race conditions or garbage-data from being read, make sure to not read from- and write to- the `ArrayBuffer` at the same time.
+
+## Creating Buffers
+
+Buffers can either be created from native (**owning**), or from JS (**non-owning**).
+
+### `NativeArrayBuffer`
+
+On the native side, an **owning** `ArrayBuffer` can either **wrap-**, or **copy-** an existing buffer:
+
+<Tabs>
+  <TabItem value="cpp" label="C++">
+    ```cpp
+    auto myData = new uint8_t*[4096];
+
+    // wrap (no copy)
+    auto wrappingArrayBuffer = ArrayBuffer::wrap(myData, 4096, [=]() {
+      delete[] myData;
+    });
+    // copy
+    auto copiedArrayBuffer = ArrayBuffer::copy(myData, 4096);
+    // new blank buffer
+    auto newArrayBuffer = ArrayBuffer::allocate(4096);
+    ```
+  </TabItem>
+  <TabItem value="swift" label="Swift">
+    ```swift
+    let myData = UnsafeMutablePointer<UInt8>.allocate(capacity: 4096)
+
+    // wrap (no copy)
+    let wrappingArrayBuffer = ArrayBuffer.wrap(dataWithoutCopy: myData,
+                                               size: 4096,
+                                               onDelete: { myData.deallocate() })
+    // copy
+    let copiedArrayBuffer = ArrayBuffer.copy(of: wrappingArrayBuffer)
+    // new blank buffer
+    let newArrayBuffer = ArrayBuffer.allocate(size: 4096)
+    ```
+  </TabItem>
+  <TabItem value="kotlin" label="Kotlin">
+    ```kotlin
+    val myData = ByteBuffer.allocateDirect(4096)
+
+    // wrap (no copy)
+    val wrappingArrayBuffer = ArrayBuffer.wrap(myData)
+
+
+    // copy
+    let copiedArrayBuffer = ArrayBuffer.copy(myData)
+    // new blank buffer
+    val newArrayBuffer = ArrayBuffer.allocate(4096)
+    ```
+  </TabItem>
+</Tabs>
+
+### `JSArrayBuffer`
+
+From JS, a **non-owning** `ArrayBuffer` can be created via the [`ArrayBuffer`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer) web APIs, and viewed or edited using the typed array APIs (e.g. [`Uint8Array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array)).
+
+```ts
+const arrayBuffer = new ArrayBuffer(4096)
+const view = new Uint8Array(arrayBuffer)
+view[0] = 64
+view[1] = 128
+view[2] = 255
+```
