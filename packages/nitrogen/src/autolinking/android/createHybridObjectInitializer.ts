@@ -121,12 +121,5 @@ int initialize(JavaVM* vm) {
       platform: 'android',
       subdirectory: [],
     },
-    {
-      content: '',
-      language: 'kotlin',
-      name: `${autolinkingClassName}.kt`,
-      platform: 'android',
-      subdirectory: [],
-    },
   ]
 }
