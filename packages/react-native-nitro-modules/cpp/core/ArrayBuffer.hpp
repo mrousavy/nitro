@@ -10,6 +10,7 @@
 #include "OwningReference.hpp"
 #include <jsi/jsi.h>
 #include <thread>
+#include <vector>
 
 namespace margelo::nitro {
 
@@ -58,6 +59,10 @@ public:
    * into a newly allocated buffer.
    */
   static std::shared_ptr<ArrayBuffer> copy(uint8_t* data, size_t size);
+  /**
+   * Create a new `NativeArrayBuffer` that copies the given `std::vector`.
+   */
+  static std::shared_ptr<ArrayBuffer> copy(std::vector<uint8_t>& data);
   /**
    * Create a new `NativeArrayBuffer` that allocates a new buffer of the given size.
    */

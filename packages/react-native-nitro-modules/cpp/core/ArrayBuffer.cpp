@@ -27,6 +27,10 @@ std::shared_ptr<ArrayBuffer> ArrayBuffer::copy(uint8_t* data, size_t size) {
   return ArrayBuffer::wrap(copy, size, [=]() { delete[] copy; });
 }
 
+std::shared_ptr<ArrayBuffer> ArrayBuffer::copy(std::vector<uint8_t>& data) {
+  return ArrayBuffer::copy(data.data(), data.size());
+}
+
 std::shared_ptr<ArrayBuffer> ArrayBuffer::allocate(size_t size) {
   uint8_t* data = new uint8_t[size];
   return ArrayBuffer::wrap(data, size, [=]() { delete[] data; });
