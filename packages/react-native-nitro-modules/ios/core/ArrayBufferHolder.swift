@@ -119,3 +119,23 @@ public extension ArrayBufferHolder {
     return arrayBuffer
   }
 }
+
+
+// pragma MARK: Data
+
+public extension ArrayBufferHolder {
+  /**
+   * Wrap this `ArrayBufferHolder` in a `Data` instance, without performing a copy.
+   */
+  func toData() -> Data {
+    // 1. Get the std::shared_ptr<ArrayBuffer>
+    var sharedPointer = self.getArrayBuffer()
+    // 2. Create a Data object WRAPPING our pointer
+    return Data(bytesNoCopy: self.data, count: self.size, deallocator: .custom({ buffer, size in
+      // 3. Capture the std::shared_ptr<ArrayBuffer> in the deallocator lambda so it stays alive.
+      //    As soon as this lambda gets called, the `sharedPointer` gets deleted causing the
+      //    underlying `ArrayBuffer` to be freed.
+      sharedPointer.reset()
+    }))
+  }
+}
