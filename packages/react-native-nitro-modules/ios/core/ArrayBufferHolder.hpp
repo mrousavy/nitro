@@ -45,7 +45,7 @@ public:
   /**
    * Gets the raw bytes the underlying `ArrayBuffer` points to.
    */
-  void* _Nonnull getData() const SWIFT_COMPUTED_PROPERTY {
+  uint8_t* _Nonnull getData() const SWIFT_COMPUTED_PROPERTY {
     return _arrayBuffer->data();
   }
   /**

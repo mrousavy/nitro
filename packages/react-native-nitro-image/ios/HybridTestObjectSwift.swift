@@ -262,9 +262,8 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
   }
 
   func getBufferLastItem(buffer: ArrayBufferHolder) throws -> Double {
-    let lastBytePointer = buffer.data.advanced(by: buffer.size - 1)
-    let lastByte = lastBytePointer.load(as: UInt8.self)
-    return Double(lastByte)
+    let lastByte = buffer.data.advanced(by: buffer.size - 1)
+    return Double(lastByte.pointee)
   }
 
   func setAllValuesTo(buffer: ArrayBufferHolder, value: Double) throws {
