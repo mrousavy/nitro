@@ -23,7 +23,7 @@ abstract class HybridObject: ExtendableHybridClass {
      *
      * @example
      * ```kotlin
-     * val memorySize: ULong
+     * override val memorySize: ULong
      *   get() {
      *     val imageSize = this.bitmap.bytesPerRow * this.bitmap.height
      *     return imageSize
