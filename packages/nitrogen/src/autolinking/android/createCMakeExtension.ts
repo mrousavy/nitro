@@ -1,5 +1,5 @@
 import { NitroConfig } from '../../config/NitroConfig.js'
-import { indent, toUnixPath } from '../../utils.js'
+import { indent, toLowerCamelCase, toUnixPath } from '../../utils.js'
 import {
   createFileMetadataString,
   getRelativeDirectory,
@@ -11,6 +11,12 @@ import type { SourceFile } from '../../syntax/SourceFile.js'
 
 export interface CMakeFile extends Omit<SourceFile, 'language'> {
   language: 'cmake'
+}
+
+export function getBuildingWithGeneratedCmakeDefinition(): string {
+  const moduleName = NitroConfig.getAndroidCxxLibName()
+  const upper = toLowerCamelCase(moduleName).toUpperCase()
+  return `BUILDING_${upper}_WITH_GENERATED_CMAKE_PROJECT`
 }
 
 export function createCMakeExtension(files: SourceFile[]): CMakeFile {
@@ -30,6 +36,7 @@ export function createCMakeExtension(files: SourceFile[]): CMakeFile {
     `${name}OnLoad.cpp`
   )
   const autolinkingFile = toUnixPath(autolinkingFilePath)
+  const buildingWithDefinition = getBuildingWithGeneratedCmakeDefinition()
 
   const code = `
 ${createFileMetadataString(`${name}+autolinking.cmake`, '#')}
@@ -60,6 +67,9 @@ target_sources(
   # Android-specific Nitrogen C++ sources
   ${indent(androidFiles.join('\n'), '  ')}
 )
+
+# Define a flag to check if we are building properly
+add_definitions(-D${buildingWithDefinition})
 
 # Add all libraries required by the generated specs
 find_package(fbjni REQUIRED) # <-- Used for communication between Java <-> C++
