@@ -336,9 +336,19 @@ export function createType(
         `String literal ${type.getText()} cannot be represented in C++ because it is ambiguous between a string and a discriminating union enum.`
       )
     } else {
-      throw new Error(
-        `The TypeScript type "${type.getText()}" cannot be represented in C++!`
-      )
+      if (type.getSymbol() == null) {
+        // There is no declaration for it!
+        // Could be an invalid import, e.g. an alias
+        throw new Error(
+          `The TypeScript type "${type.getText()}" cannot be resolved - is it imported properly? ` +
+            `Make sure to import it properly using fully specified relative or absolute imports, no aliases.`
+        )
+      } else {
+        // A different error
+        throw new Error(
+          `The TypeScript type "${type.getText()}" cannot be represented in C++!`
+        )
+      }
     }
   }
 
