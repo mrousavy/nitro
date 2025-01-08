@@ -11,7 +11,7 @@ import com.margelo.nitro.core.HybridObject
  */
 @Keep
 @DoNotStrip
-abstract class HybridView: HybridObject {
+abstract class HybridView: HybridObject() {
     /**
      * Get the view that this HybridView holds.
      *
