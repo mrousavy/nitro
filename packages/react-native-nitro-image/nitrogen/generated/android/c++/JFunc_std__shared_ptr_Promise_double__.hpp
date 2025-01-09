@@ -50,7 +50,7 @@ namespace margelo::nitro::image {
    */
   struct JFunc_std__shared_ptr_Promise_double___cxx final: public jni::HybridClass<JFunc_std__shared_ptr_Promise_double___cxx, JFunc_std__shared_ptr_Promise_double__> {
   public:
-    static jni::local_ref<JFunc_std__shared_ptr_Promise_double___cxx::javaobject> fromCpp(const std::function<std::shared_ptr<Promise<double>>()>& func) {
+    static jni::local_ref<JFunc_std__shared_ptr_Promise_double__::javaobject> fromCpp(const std::function<std::shared_ptr<Promise<double>>()>& func) {
       return JFunc_std__shared_ptr_Promise_double___cxx::newObjectCxxArgs(func);
     }
 

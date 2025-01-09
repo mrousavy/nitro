@@ -196,7 +196,7 @@ namespace ${cxxNamespace} {
    */
   struct J${name}_cxx final: public jni::HybridClass<J${name}_cxx, J${name}> {
   public:
-    static jni::local_ref<J${name}_cxx::javaobject> fromCpp(const ${typename}& func) {
+    static jni::local_ref<J${name}::javaobject> fromCpp(const ${typename}& func) {
       return J${name}_cxx::newObjectCxxArgs(func);
     }
 

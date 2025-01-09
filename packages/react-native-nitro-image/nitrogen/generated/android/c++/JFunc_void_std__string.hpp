@@ -37,7 +37,7 @@ namespace margelo::nitro::image {
    */
   struct JFunc_void_std__string_cxx final: public jni::HybridClass<JFunc_void_std__string_cxx, JFunc_void_std__string> {
   public:
-    static jni::local_ref<JFunc_void_std__string_cxx::javaobject> fromCpp(const std::function<void(const std::string& /* valueFromJs */)>& func) {
+    static jni::local_ref<JFunc_void_std__string::javaobject> fromCpp(const std::function<void(const std::string& /* valueFromJs */)>& func) {
       return JFunc_void_std__string_cxx::newObjectCxxArgs(func);
     }
 

@@ -36,7 +36,7 @@ namespace margelo::nitro::image {
    */
   struct JFunc_void_double_cxx final: public jni::HybridClass<JFunc_void_double_cxx, JFunc_void_double> {
   public:
-    static jni::local_ref<JFunc_void_double_cxx::javaobject> fromCpp(const std::function<void(double /* num */)>& func) {
+    static jni::local_ref<JFunc_void_double::javaobject> fromCpp(const std::function<void(double /* num */)>& func) {
       return JFunc_void_double_cxx::newObjectCxxArgs(func);
     }
 
