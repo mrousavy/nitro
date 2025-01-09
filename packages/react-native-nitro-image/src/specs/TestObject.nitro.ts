@@ -114,6 +114,7 @@ interface SharedTestObjectProps {
   callbackAsyncPromiseBuffer(
     callback: () => Promise<ArrayBuffer>
   ): Promise<ArrayBuffer>
+  getComplexCallback(): (value: number) => void
 
   // Callbacks that return values
   getValueFromJSCallbackAndWait(getValue: () => number): Promise<number>

@@ -47,6 +47,7 @@ int initialize(JavaVM* vm) {
     margelo::nitro::image::JHybridImageFactorySpec::registerNatives();
     margelo::nitro::image::JHybridTestObjectSwiftKotlinSpec::registerNatives();
     margelo::nitro::image::JFunc_void_double::registerNatives();
+    margelo::nitro::image::JFunc_void_double::registerNatives();
     margelo::nitro::image::JFunc_void_std__vector_Powertrain_::registerNatives();
     margelo::nitro::image::JFunc_void::registerNatives();
     margelo::nitro::image::JFunc_void::registerNatives();

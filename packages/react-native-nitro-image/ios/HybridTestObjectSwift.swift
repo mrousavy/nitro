@@ -100,6 +100,9 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
     }
   }
 
+  func getComplexCallback() throws -> (Double) -> Void {
+    return { value in print("Callback called with \(value).") }
+  }
 
   func bounceStrings(array: [String]) throws -> [String] {
     return array

@@ -120,6 +120,8 @@ public:
   callbackAsyncPromise(const std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<double>>>>()>& callback) override;
   std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>> callbackAsyncPromiseBuffer(
       const std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>>>()>& callback) override;
+  std::function<void(double)> getComplexCallback() override;
+  
   std::shared_ptr<Promise<void>>
   getValueFromJsCallback(const std::function<std::shared_ptr<Promise<std::string>>()>& callback,
                          const std::function<void(const std::string& /* valueFromJs */)>& andThenCall) override;

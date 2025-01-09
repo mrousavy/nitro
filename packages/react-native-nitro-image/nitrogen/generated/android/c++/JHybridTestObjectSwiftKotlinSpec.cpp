@@ -585,6 +585,11 @@ namespace margelo::nitro::image {
       return __promise;
     }();
   }
+  std::function<void(double /* value */)> JHybridTestObjectSwiftKotlinSpec::getComplexCallback() {
+    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JFunc_void_double::javaobject>()>("getComplexCallback");
+    auto __result = method(_javaPart);
+    return __result->cthis()->getFunction();
+  }
   std::shared_ptr<Promise<double>> JHybridTestObjectSwiftKotlinSpec::getValueFromJSCallbackAndWait(const std::function<std::shared_ptr<Promise<double>>()>& getValue) {
     static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JPromise::javaobject>(jni::alias_ref<JFunc_std__shared_ptr_Promise_double__::javaobject> /* getValue */)>("getValueFromJSCallbackAndWait");
     auto __result = method(_javaPart, JFunc_std__shared_ptr_Promise_double__::fromCpp(getValue));

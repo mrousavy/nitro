@@ -219,6 +219,12 @@ class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
     }
   }
 
+  override fun getComplexCallback(): (Double) -> Unit {
+    return { value
+        Log.i(TAG, "Callback called with $value.")
+    }
+  }
+
     override fun getCar(): Car {
         return Car(2018.0, "Lamborghini", "Huracán", 640.0, Powertrain.GAS, null, true)
     }

@@ -875,6 +875,15 @@ namespace margelo::nitro::image::bridge::swift {
     return Result<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>>::withError(error);
   }
   
+  // pragma MARK: Result<std::function<void(double /* value */)>>
+  using Result_std__function_void_double____value______ = Result<std::function<void(double /* value */)>>;
+  inline Result_std__function_void_double____value______ create_Result_std__function_void_double____value______(const std::function<void(double /* value */)>& value) {
+    return Result<std::function<void(double /* value */)>>::withValue(value);
+  }
+  inline Result_std__function_void_double____value______ create_Result_std__function_void_double____value______(const std::exception_ptr& error) {
+    return Result<std::function<void(double /* value */)>>::withError(error);
+  }
+  
   // pragma MARK: Result<Car>
   using Result_Car_ = Result<Car>;
   inline Result_Car_ create_Result_Car_(const Car& value) {
