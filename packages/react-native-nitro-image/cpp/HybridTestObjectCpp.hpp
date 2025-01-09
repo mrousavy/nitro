@@ -30,6 +30,7 @@ private:
   std::optional<std::shared_ptr<HybridTestObjectCppSpec>> _optionalHybrid;
   std::optional<Powertrain> _optionalEnum;
   std::optional<OldEnum> _optionalOldEnum;
+  std::optional<std::function<void(double)>> _optionalCallback;
 
 private:
   static inline uint64_t calculateFibonacci(int count) noexcept {
@@ -70,6 +71,8 @@ public:
   void setOptionalEnum(std::optional<Powertrain> optionalEnum) override;
   std::optional<OldEnum> getOptionalOldEnum() override;
   void setOptionalOldEnum(std::optional<OldEnum> optionalOldEnum) override;
+  std::optional<std::function<void(double)>> getOptionalCallback() override;
+  void setOptionalCallback(const std::optional<std::function<void(double)>>& callback) override;
 
 public:
   // Methods

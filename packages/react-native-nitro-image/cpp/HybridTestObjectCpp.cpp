@@ -125,6 +125,14 @@ void HybridTestObjectCpp::setOptionalOldEnum(std::optional<OldEnum> optionalOldE
   _optionalOldEnum = optionalOldEnum;
 }
 
+std::optional<std::function<void(double)>> HybridTestObjectCpp::getOptionalCallback() {
+  return _optionalCallback;
+}
+
+void HybridTestObjectCpp::setOptionalCallback(const std::optional<std::function<void(double)>>& callback) {
+  _optionalCallback = callback;
+}
+
 // Methods
 double HybridTestObjectCpp::addNumbers(double a, double b) {
   return a + b;
