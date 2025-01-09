@@ -1,7 +1,4 @@
 import { z } from 'zod'
-import { capitalizeName } from '../utils.js'
-import path from 'path'
-import { promises as fs } from 'fs'
 
 // Namespaces and package names in C++/Java will be matched with a regex.
 const safeNamePattern = /^[a-zA-Z_][a-zA-Z0-9_]*$/
@@ -93,28 +90,14 @@ export const NitroUserConfigSchema = z.object({
    * Nitrogen will not look for `.nitro.ts` files in these directories.
    */
   ignorePaths: z.array(z.string()).optional(),
+  /**
+   * Configures whether a `.gitattributes` file will be generated in
+   * the `nitrogen/generated/` directory to mark files as linguist-generated for GitHub.
+   */
+  createGitAttributes: z.boolean().optional().default(true),
 })
 
 /**
  * Represents the structure of a `nitro.json` config file.
  */
 export type NitroUserConfig = z.infer<typeof NitroUserConfigSchema>
-
-export function writeUserConfigFile(
-  moduleName: string,
-  directory: string
-): Promise<void> {
-  const config: NitroUserConfig = {
-    android: {
-      androidCxxLibName: `Nitro${capitalizeName(moduleName)}`,
-      androidNamespace: [moduleName.toLowerCase()],
-    },
-    cxxNamespace: [moduleName.toLowerCase()],
-    ios: {
-      iosModuleName: `Nitro${capitalizeName(moduleName)}`,
-    },
-    autolinking: {},
-  }
-  const dir = path.join(directory, 'nitro.json')
-  return fs.writeFile(dir, JSON.stringify(config, null, 2))
-}

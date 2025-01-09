@@ -17,7 +17,8 @@
     "androidCxxLibName": "$$androidCxxLibName$$"
   },
   "autolinking": {},
-  "ignorePaths": ["**/node_modules"]
+  "ignorePaths": ["**/node_modules"],
+  "createGitAttributes": true
 }
 ```
 
@@ -176,3 +177,7 @@ Here, the Hybrid Object "`Math`" is autolinked to create an instance of `HybridM
 Configures the TypeScript parser to ignore specific given paths when looking for `*.nitro.ts` specs.
 
 By default, this is empty (`[]`), but it can be set to ignore paths like `["node_modules", "lib"]`.
+
+## `createGitAttributes`
+
+Configures whether a `.gitattributes` file will be generated in the `nitrogen/generated/` directory to mark files as [`linguist-generated`](https://docs.github.com/en/repositories/working-with-files/managing-files/customizing-how-changed-files-appear-on-github) for GitHub.
