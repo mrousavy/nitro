@@ -43,24 +43,24 @@ int initialize(JavaVM* vm) {
   return facebook::jni::initialize(vm, [] {
     // Register native JNI methods
     margelo::nitro::image::JHybridImageSpec::registerNatives();
-    margelo::nitro::image::JFunc_void_std__string::registerNatives();
+    margelo::nitro::image::JFunc_void_std__string_cxx::registerNatives();
     margelo::nitro::image::JHybridImageFactorySpec::registerNatives();
     margelo::nitro::image::JHybridTestObjectSwiftKotlinSpec::registerNatives();
-    margelo::nitro::image::JFunc_void_double::registerNatives();
-    margelo::nitro::image::JFunc_void_double::registerNatives();
-    margelo::nitro::image::JFunc_void_std__vector_Powertrain_::registerNatives();
-    margelo::nitro::image::JFunc_void::registerNatives();
-    margelo::nitro::image::JFunc_void::registerNatives();
-    margelo::nitro::image::JFunc_void::registerNatives();
-    margelo::nitro::image::JFunc_void::registerNatives();
-    margelo::nitro::image::JFunc_void_std__optional_double_::registerNatives();
-    margelo::nitro::image::JFunc_std__shared_ptr_Promise_double__::registerNatives();
-    margelo::nitro::image::JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_double____::registerNatives();
-    margelo::nitro::image::JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____::registerNatives();
-    margelo::nitro::image::JFunc_std__shared_ptr_Promise_double__::registerNatives();
-    margelo::nitro::image::JFunc_std__shared_ptr_Promise_std__string__::registerNatives();
-    margelo::nitro::image::JFunc_void_std__string::registerNatives();
-    margelo::nitro::image::JFunc_void_double::registerNatives();
+    margelo::nitro::image::JFunc_void_double_cxx::registerNatives();
+    margelo::nitro::image::JFunc_void_double_cxx::registerNatives();
+    margelo::nitro::image::JFunc_void_std__vector_Powertrain__cxx::registerNatives();
+    margelo::nitro::image::JFunc_void_cxx::registerNatives();
+    margelo::nitro::image::JFunc_void_cxx::registerNatives();
+    margelo::nitro::image::JFunc_void_cxx::registerNatives();
+    margelo::nitro::image::JFunc_void_cxx::registerNatives();
+    margelo::nitro::image::JFunc_void_std__optional_double__cxx::registerNatives();
+    margelo::nitro::image::JFunc_std__shared_ptr_Promise_double___cxx::registerNatives();
+    margelo::nitro::image::JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_double_____cxx::registerNatives();
+    margelo::nitro::image::JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer______cxx::registerNatives();
+    margelo::nitro::image::JFunc_std__shared_ptr_Promise_double___cxx::registerNatives();
+    margelo::nitro::image::JFunc_std__shared_ptr_Promise_std__string___cxx::registerNatives();
+    margelo::nitro::image::JFunc_void_std__string_cxx::registerNatives();
+    margelo::nitro::image::JFunc_void_double_cxx::registerNatives();
     margelo::nitro::image::JHybridBaseSpec::registerNatives();
     margelo::nitro::image::JHybridChildSpec::registerNatives();
 

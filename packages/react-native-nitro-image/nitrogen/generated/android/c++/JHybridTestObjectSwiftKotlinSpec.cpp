@@ -352,7 +352,16 @@ namespace margelo::nitro::image {
       
       static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JFunc_void_double::javaobject>()>("getOptionalCallback_cxx");
       auto __result = method(_javaPart);
-      return __result != nullptr ? std::make_optional(__result->cthis()->getFunction()) : std::nullopt;
+      return __result != nullptr ? std::make_optional([&]() -> std::function<void(double /* value */)> {
+        if (__result->isInstanceOf(JFunc_void_double_cxx::javaClassStatic())) [[likely]] {
+          auto downcast = jni::static_ref_cast<JFunc_void_double_cxx::javaobject>(__result);
+          return downcast->cthis()->getFunction();
+        } else {
+          return [__result](double value) -> void {
+            return __result->invoke(value);
+          };
+        }
+      }()) : std::nullopt;
           
     } catch (const jni::JniException& exc) {
       throw std::runtime_error(exc.what());
@@ -362,7 +371,7 @@ namespace margelo::nitro::image {
     try {
       
       static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<JFunc_void_double::javaobject> /* optionalCallback */)>("setOptionalCallback_cxx");
-      method(_javaPart, optionalCallback.has_value() ? JFunc_void_double::fromCpp(optionalCallback.value()) : nullptr);
+      method(_javaPart, optionalCallback.has_value() ? JFunc_void_double_cxx::fromCpp(optionalCallback.value()) : nullptr);
          
     } catch (const jni::JniException& exc) {
       throw std::runtime_error(exc.what());
@@ -561,7 +570,7 @@ namespace margelo::nitro::image {
           __array->setElement(__i, *JPowertrain::fromCpp(__element));
         }
         return __array;
-      }(), JFunc_void_std__vector_Powertrain_::fromCpp(callback));
+      }(), JFunc_void_std__vector_Powertrain__cxx::fromCpp(callback));
          
     } catch (const jni::JniException& exc) {
       throw std::runtime_error(exc.what());
@@ -841,7 +850,7 @@ namespace margelo::nitro::image {
     try {
       
       static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<JFunc_void::javaobject> /* callback */)>("callCallback_cxx");
-      method(_javaPart, JFunc_void::fromCpp(callback));
+      method(_javaPart, JFunc_void_cxx::fromCpp(callback));
          
     } catch (const jni::JniException& exc) {
       throw std::runtime_error(exc.what());
@@ -851,7 +860,7 @@ namespace margelo::nitro::image {
     try {
       
       static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<JFunc_void::javaobject> /* first */, jni::alias_ref<JFunc_void::javaobject> /* second */, jni::alias_ref<JFunc_void::javaobject> /* third */)>("callAll_cxx");
-      method(_javaPart, JFunc_void::fromCpp(first), JFunc_void::fromCpp(second), JFunc_void::fromCpp(third));
+      method(_javaPart, JFunc_void_cxx::fromCpp(first), JFunc_void_cxx::fromCpp(second), JFunc_void_cxx::fromCpp(third));
          
     } catch (const jni::JniException& exc) {
       throw std::runtime_error(exc.what());
@@ -861,7 +870,7 @@ namespace margelo::nitro::image {
     try {
       
       static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<jni::JDouble> /* value */, jni::alias_ref<JFunc_void_std__optional_double_::javaobject> /* callback */)>("callWithOptional_cxx");
-      method(_javaPart, value.has_value() ? jni::JDouble::valueOf(value.value()) : nullptr, JFunc_void_std__optional_double_::fromCpp(callback));
+      method(_javaPart, value.has_value() ? jni::JDouble::valueOf(value.value()) : nullptr, JFunc_void_std__optional_double__cxx::fromCpp(callback));
          
     } catch (const jni::JniException& exc) {
       throw std::runtime_error(exc.what());
@@ -871,7 +880,7 @@ namespace margelo::nitro::image {
     try {
       
       static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JPromise::javaobject>(jni::alias_ref<JFunc_std__shared_ptr_Promise_double__::javaobject> /* callback */, double /* n */)>("callSumUpNTimes_cxx");
-      auto __result = method(_javaPart, JFunc_std__shared_ptr_Promise_double__::fromCpp(callback), n);
+      auto __result = method(_javaPart, JFunc_std__shared_ptr_Promise_double___cxx::fromCpp(callback), n);
       return [&]() {
         auto __promise = Promise<double>::create();
         __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
@@ -893,7 +902,7 @@ namespace margelo::nitro::image {
     try {
       
       static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JPromise::javaobject>(jni::alias_ref<JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_double____::javaobject> /* callback */)>("callbackAsyncPromise_cxx");
-      auto __result = method(_javaPart, JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_double____::fromCpp(callback));
+      auto __result = method(_javaPart, JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_double_____cxx::fromCpp(callback));
       return [&]() {
         auto __promise = Promise<double>::create();
         __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
@@ -915,7 +924,7 @@ namespace margelo::nitro::image {
     try {
       
       static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JPromise::javaobject>(jni::alias_ref<JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____::javaobject> /* callback */)>("callbackAsyncPromiseBuffer_cxx");
-      auto __result = method(_javaPart, JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____::fromCpp(callback));
+      auto __result = method(_javaPart, JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer______cxx::fromCpp(callback));
       return [&]() {
         auto __promise = Promise<std::shared_ptr<ArrayBuffer>>::create();
         __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
@@ -938,7 +947,16 @@ namespace margelo::nitro::image {
       
       static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JFunc_void_double::javaobject>()>("getComplexCallback_cxx");
       auto __result = method(_javaPart);
-      return __result->cthis()->getFunction();
+      return [&]() -> std::function<void(double /* value */)> {
+        if (__result->isInstanceOf(JFunc_void_double_cxx::javaClassStatic())) [[likely]] {
+          auto downcast = jni::static_ref_cast<JFunc_void_double_cxx::javaobject>(__result);
+          return downcast->cthis()->getFunction();
+        } else {
+          return [__result](double value) -> void {
+            return __result->invoke(value);
+          };
+        }
+      }();
           
     } catch (const jni::JniException& exc) {
       throw std::runtime_error(exc.what());
@@ -948,7 +966,7 @@ namespace margelo::nitro::image {
     try {
       
       static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JPromise::javaobject>(jni::alias_ref<JFunc_std__shared_ptr_Promise_double__::javaobject> /* getValue */)>("getValueFromJSCallbackAndWait_cxx");
-      auto __result = method(_javaPart, JFunc_std__shared_ptr_Promise_double__::fromCpp(getValue));
+      auto __result = method(_javaPart, JFunc_std__shared_ptr_Promise_double___cxx::fromCpp(getValue));
       return [&]() {
         auto __promise = Promise<double>::create();
         __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
@@ -970,7 +988,7 @@ namespace margelo::nitro::image {
     try {
       
       static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JPromise::javaobject>(jni::alias_ref<JFunc_std__shared_ptr_Promise_std__string__::javaobject> /* callback */, jni::alias_ref<JFunc_void_std__string::javaobject> /* andThenCall */)>("getValueFromJsCallback_cxx");
-      auto __result = method(_javaPart, JFunc_std__shared_ptr_Promise_std__string__::fromCpp(callback), JFunc_void_std__string::fromCpp(andThenCall));
+      auto __result = method(_javaPart, JFunc_std__shared_ptr_Promise_std__string___cxx::fromCpp(callback), JFunc_void_std__string_cxx::fromCpp(andThenCall));
       return [&]() {
         auto __promise = Promise<void>::create();
         __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& /* unit */) {

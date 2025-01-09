@@ -118,12 +118,12 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
     @Keep
     @DoNotStrip
     get() {
-      return optionalCallback
+      return optionalCallback?.let { Func_void_double_java(it) }
     }
     @Keep
     @DoNotStrip
     set(value) {
-      optionalCallback = value?.let { it.toLambda() }
+      optionalCallback = value?.let { it /* TODO: Does this work? */ }
     }
   
   @get:DoNotStrip
@@ -174,7 +174,7 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   @DoNotStrip
   @Keep
   private fun complexEnumCallback_cxx(array: Array<Powertrain>, callback: Func_void_std__vector_Powertrain_): Unit {
-    val __result = complexEnumCallback(array, callback.toLambda())
+    val __result = complexEnumCallback(array, callback /* TODO: Does this work? */)
     return __result
   }
   
@@ -243,7 +243,7 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   @DoNotStrip
   @Keep
   private fun callCallback_cxx(callback: Func_void): Unit {
-    val __result = callCallback(callback.toLambda())
+    val __result = callCallback(callback /* TODO: Does this work? */)
     return __result
   }
   
@@ -252,7 +252,7 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   @DoNotStrip
   @Keep
   private fun callAll_cxx(first: Func_void, second: Func_void, third: Func_void): Unit {
-    val __result = callAll(first.toLambda(), second.toLambda(), third.toLambda())
+    val __result = callAll(first /* TODO: Does this work? */, second /* TODO: Does this work? */, third /* TODO: Does this work? */)
     return __result
   }
   
@@ -261,7 +261,7 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   @DoNotStrip
   @Keep
   private fun callWithOptional_cxx(value: Double?, callback: Func_void_std__optional_double_): Unit {
-    val __result = callWithOptional(value, callback.toLambda())
+    val __result = callWithOptional(value, callback /* TODO: Does this work? */)
     return __result
   }
   
@@ -270,7 +270,7 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   @DoNotStrip
   @Keep
   private fun callSumUpNTimes_cxx(callback: Func_std__shared_ptr_Promise_double__, n: Double): Promise<Double> {
-    val __result = callSumUpNTimes(callback.toLambda(), n)
+    val __result = callSumUpNTimes(callback /* TODO: Does this work? */, n)
     return __result
   }
   
@@ -279,7 +279,7 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   @DoNotStrip
   @Keep
   private fun callbackAsyncPromise_cxx(callback: Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double____): Promise<Double> {
-    val __result = callbackAsyncPromise(callback.toLambda())
+    val __result = callbackAsyncPromise(callback /* TODO: Does this work? */)
     return __result
   }
   
@@ -288,7 +288,7 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   @DoNotStrip
   @Keep
   private fun callbackAsyncPromiseBuffer_cxx(callback: Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____): Promise<ArrayBuffer> {
-    val __result = callbackAsyncPromiseBuffer(callback.toLambda())
+    val __result = callbackAsyncPromiseBuffer(callback /* TODO: Does this work? */)
     return __result
   }
   
@@ -298,7 +298,7 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   @Keep
   private fun getComplexCallback_cxx(): Func_void_double {
     val __result = getComplexCallback()
-    throw Error("not yet implemented!")
+    return Func_void_double_java(__result)
   }
   
   abstract fun getValueFromJSCallbackAndWait(getValue: () -> Promise<Double>): Promise<Double>
@@ -306,7 +306,7 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   @DoNotStrip
   @Keep
   private fun getValueFromJSCallbackAndWait_cxx(getValue: Func_std__shared_ptr_Promise_double__): Promise<Double> {
-    val __result = getValueFromJSCallbackAndWait(getValue.toLambda())
+    val __result = getValueFromJSCallbackAndWait(getValue /* TODO: Does this work? */)
     return __result
   }
   
@@ -315,7 +315,7 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   @DoNotStrip
   @Keep
   private fun getValueFromJsCallback_cxx(callback: Func_std__shared_ptr_Promise_std__string__, andThenCall: Func_void_std__string): Promise<Unit> {
-    val __result = getValueFromJsCallback(callback.toLambda(), andThenCall.toLambda())
+    val __result = getValueFromJsCallback(callback /* TODO: Does this work? */, andThenCall /* TODO: Does this work? */)
     return __result
   }
   

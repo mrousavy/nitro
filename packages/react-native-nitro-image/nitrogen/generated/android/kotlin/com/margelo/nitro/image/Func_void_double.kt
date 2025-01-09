@@ -15,12 +15,35 @@ import dalvik.annotation.optimization.FastNative
 
 /**
  * Represents the JavaScript callback `(num: number) => void`.
- * This is implemented in C++, via a `std::function<...>`.
+ * This can be either implemented in C++ (in which case it might be a callback coming from JS),
+ * or in Kotlin/Java (in which case it is a native callback).
  */
 @DoNotStrip
 @Keep
-@Suppress("RedundantSuppression", "ConvertSecondaryConstructorToPrimary", "RedundantUnitReturnType", "KotlinJniMissingFunction", "ClassName", "unused", "LocalVariableName")
-class Func_void_double {
+@Suppress("ClassName", "RedundantUnitReturnType")
+fun interface Func_void_double: (Double) -> Unit {
+  /**
+   * Call the given JS callback.
+   * @throws Throwable if the JS function itself throws an error, or if the JS function/runtime has already been deleted.
+   */
+  @DoNotStrip
+  @Keep
+  override fun invoke(num: Double): Unit
+}
+
+/**
+ * Represents the JavaScript callback `(num: number) => void`.
+ * This is implemented in C++, via a `std::function<...>`.
+ * The callback might be coming from JS.
+ */
+@DoNotStrip
+@Keep
+@Suppress(
+  "KotlinJniMissingFunction", "unused",
+  "RedundantSuppression", "RedundantUnitReturnType",
+  "ConvertSecondaryConstructorToPrimary", "ClassName", "LocalVariableName",
+)
+class Func_void_double_cxx: Func_void_double {
   @DoNotStrip
   @Keep
   private val mHybridData: HybridData
@@ -31,16 +54,22 @@ class Func_void_double {
     mHybridData = hybridData
   }
 
-  /**
-   * Converts this function to a Kotlin Lambda.
-   * This exists purely as syntactic sugar, and has minimal runtime overhead.
-   */
-  fun toLambda(): (num: Double) -> Unit = this::call
-
-  /**
-   * Call the given JS callback.
-   * @throws Throwable if the JS function itself throws an error, or if the JS function/runtime has already been deleted.
-   */
   @FastNative
-  external fun call(num: Double): Unit
+  external override fun invoke(num: Double): Unit
+}
+
+/**
+ * Represents the JavaScript callback `(num: number) => void`.
+ * This is implemented in Java/Kotlin, via a `(Double) -> Unit`.
+ * The callback is always coming from native.
+ */
+@DoNotStrip
+@Keep
+@Suppress("ClassName", "RedundantUnitReturnType", "unused")
+class Func_void_double_java(private val function: (Double) -> Unit): Func_void_double {
+  @DoNotStrip
+  @Keep
+  override fun invoke(num: Double): Unit {
+    return this.function(num)
+  }
 }

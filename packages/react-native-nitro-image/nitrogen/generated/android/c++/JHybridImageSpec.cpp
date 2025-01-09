@@ -102,7 +102,7 @@ namespace margelo::nitro::image {
     try {
       
       static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<jni::JString> /* path */, jni::alias_ref<JFunc_void_std__string::javaobject> /* onFinished */)>("saveToFile_cxx");
-      method(_javaPart, jni::make_jstring(path), JFunc_void_std__string::fromCpp(onFinished));
+      method(_javaPart, jni::make_jstring(path), JFunc_void_std__string_cxx::fromCpp(onFinished));
          
     } catch (const jni::JniException& exc) {
       throw std::runtime_error(exc.what());

@@ -22,17 +22,54 @@ namespace margelo::nitro::image {
   using namespace facebook;
 
   /**
-   * C++ representation of the callback Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____.
-   * This is a Kotlin `() -> Promise<Promise<ArrayBuffer>>`, backed by a `std::function<...>`.
+   * Represents the Java/Kotlin callback `() -> Promise<Promise<ArrayBuffer>>`.
+   * This can be passed around between C++ and Java/Kotlin.
    */
-  struct JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____ final: public jni::HybridClass<JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____> {
+  struct JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____: public jni::JavaClass<JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____> {
   public:
-    static jni::local_ref<JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____::javaobject> fromCpp(const std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>>>()>& func) {
-      return JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____::newObjectCxxArgs(func);
+    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____;";
+
+  public:
+    std::shared_ptr<Promise<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>>> invoke() const {
+      static const auto method = getClass()->getMethod<jni::local_ref<JPromise::javaobject>()>("invoke");
+      auto __result = method(self());
+      return [&]() {
+        auto __promise = Promise<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>>::create();
+        __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
+          auto __result = jni::static_ref_cast<JPromise::javaobject>(__boxedResult);
+          __promise->resolve([&]() {
+            auto __promise = Promise<std::shared_ptr<ArrayBuffer>>::create();
+            __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
+              auto __result = jni::static_ref_cast<JArrayBuffer::javaobject>(__boxedResult);
+              __promise->resolve(__result->cthis()->getArrayBuffer());
+            });
+            __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {
+              jni::JniException __jniError(__throwable);
+              __promise->reject(std::make_exception_ptr(__jniError));
+            });
+            return __promise;
+          }());
+        });
+        __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {
+          jni::JniException __jniError(__throwable);
+          __promise->reject(std::make_exception_ptr(__jniError));
+        });
+        return __promise;
+      }();
+    }
+  };
+
+  /**
+   * An implementation of Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____ that is backed by a C++ implementation (using `std::function<...>`)
+   */
+  struct JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer______cxx final: public jni::HybridClass<JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer______cxx, JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____> {
+  public:
+    static jni::local_ref<JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer______cxx::javaobject> fromCpp(const std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>>>()>& func) {
+      return JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer______cxx::newObjectCxxArgs(func);
     }
 
   public:
-    jni::local_ref<JPromise::javaobject> call() {
+    jni::local_ref<JPromise::javaobject> invoke_cxx() {
       std::shared_ptr<Promise<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>>> __result = _func();
       return [&]() {
         jni::local_ref<JPromise::javaobject> __localPromise = JPromise::create();
@@ -60,18 +97,19 @@ namespace margelo::nitro::image {
     }
 
   public:
+    [[nodiscard]]
     inline const std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>>>()>& getFunction() const {
       return _func;
     }
 
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____;";
+    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer______cxx;";
     static void registerNatives() {
-      registerHybrid({makeNativeMethod("call", JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____::call)});
+      registerHybrid({makeNativeMethod("invoke", JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer______cxx::invoke_cxx)});
     }
 
   private:
-    explicit JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____(const std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>>>()>& func): _func(func) { }
+    explicit JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer______cxx(const std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>>>()>& func): _func(func) { }
 
   private:
     friend HybridBase;

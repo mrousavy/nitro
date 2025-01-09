@@ -101,6 +101,7 @@ namespace ${cxxNamespace} {
      * Convert this Java/Kotlin-based struct to the C++ struct ${structType.structName} by copying all values to C++.
      */
     [[maybe_unused]]
+    [[nodiscard]]
     ${structType.structName} toCpp() const {
       ${indent(jniStructInitializerBody, '      ')}
     }

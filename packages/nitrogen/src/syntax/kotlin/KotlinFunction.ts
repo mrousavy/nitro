@@ -14,7 +14,11 @@ export function createKotlinFunction(functionType: FunctionType): SourceFile[] {
   const kotlinParams = functionType.parameters.map(
     (p) => `${p.escapedName}: ${p.getCode('kotlin')}`
   )
-  const lambdaSignature = `(${kotlinParams.join(', ')}) -> ${kotlinReturnType}`
+  const kotlinParamTypes = functionType.parameters.map((p) =>
+    p.getCode('kotlin')
+  )
+  const kotlinParamsForward = functionType.parameters.map((p) => p.escapedName)
+  const lambdaSignature = `(${kotlinParamTypes.join(', ')}) -> ${kotlinReturnType}`
 
   const kotlinCode = `
 ${createFileMetadataString(`${name}.kt`)}
@@ -29,12 +33,35 @@ import dalvik.annotation.optimization.FastNative
 
 /**
  * Represents the JavaScript callback \`${functionType.jsName}\`.
- * This is implemented in C++, via a \`std::function<...>\`.
+ * This can be either implemented in C++ (in which case it might be a callback coming from JS),
+ * or in Kotlin/Java (in which case it is a native callback).
  */
 @DoNotStrip
 @Keep
-@Suppress("RedundantSuppression", "ConvertSecondaryConstructorToPrimary", "RedundantUnitReturnType", "KotlinJniMissingFunction", "ClassName", "unused", "LocalVariableName")
-class ${name} {
+@Suppress("ClassName", "RedundantUnitReturnType")
+fun interface ${name}: ${lambdaSignature} {
+  /**
+   * Call the given JS callback.
+   * @throws Throwable if the JS function itself throws an error, or if the JS function/runtime has already been deleted.
+   */
+  @DoNotStrip
+  @Keep
+  override fun invoke(${kotlinParams.join(', ')}): ${kotlinReturnType}
+}
+
+/**
+ * Represents the JavaScript callback \`${functionType.jsName}\`.
+ * This is implemented in C++, via a \`std::function<...>\`.
+ * The callback might be coming from JS.
+ */
+@DoNotStrip
+@Keep
+@Suppress(
+  "KotlinJniMissingFunction", "unused",
+  "RedundantSuppression", "RedundantUnitReturnType",
+  "ConvertSecondaryConstructorToPrimary", "ClassName", "LocalVariableName",
+)
+class ${name}_cxx: ${name} {
   @DoNotStrip
   @Keep
   private val mHybridData: HybridData
@@ -45,23 +72,37 @@ class ${name} {
     mHybridData = hybridData
   }
 
-  /**
-   * Converts this function to a Kotlin Lambda.
-   * This exists purely as syntactic sugar, and has minimal runtime overhead.
-   */
-  fun toLambda(): ${lambdaSignature} = this::call
-
-  /**
-   * Call the given JS callback.
-   * @throws Throwable if the JS function itself throws an error, or if the JS function/runtime has already been deleted.
-   */
   @FastNative
-  external fun call(${kotlinParams.join(', ')}): ${kotlinReturnType}
+  external override fun invoke(${kotlinParams.join(', ')}): ${kotlinReturnType}
+}
+
+/**
+ * Represents the JavaScript callback \`${functionType.jsName}\`.
+ * This is implemented in Java/Kotlin, via a \`${lambdaSignature}\`.
+ * The callback is always coming from native.
+ */
+@DoNotStrip
+@Keep
+@Suppress("ClassName", "RedundantUnitReturnType", "unused")
+class ${name}_java(private val function: ${lambdaSignature}): ${name} {
+  @DoNotStrip
+  @Keep
+  override fun invoke(${kotlinParams.join(', ')}): ${kotlinReturnType} {
+    return this.function(${kotlinParamsForward.join(', ')})
+  }
 }
   `.trim()
 
+  const jniInterfaceDescriptor = NitroConfig.getAndroidPackage('c++/jni', name)
+  const jniClassDescriptor = NitroConfig.getAndroidPackage(
+    'c++/jni',
+    `${name}_cxx`
+  )
   const bridgedReturn = new KotlinCxxBridgedType(functionType.returnType)
+  const cxxNamespace = NitroConfig.getCxxNamespace('c++')
+  const typename = functionType.getCode('c++')
 
+  // call() Java -> C++
   const cppParams = functionType.parameters.map((p) => {
     const bridge = new KotlinCxxBridgedType(p)
     const type = bridge.asJniReferenceType('alias')
@@ -71,19 +112,49 @@ class ${name} {
     const bridge = new KotlinCxxBridgedType(p)
     return bridge.parseFromKotlinToCpp(p.escapedName, 'c++', false)
   })
-  const jniClassDescriptor = NitroConfig.getAndroidPackage('c++/jni', name)
-  const cxxNamespace = NitroConfig.getCxxNamespace('c++')
-  const typename = functionType.getCode('c++')
-  let callBody: string
+
+  // call() C++ -> Java
+  const jniParams = functionType.parameters.map((p) => {
+    if (p.canBePassedByReference) {
+      return `const ${p.getCode('c++')}& ${p.escapedName}`
+    } else {
+      return `${p.getCode('c++')} ${p.escapedName}`
+    }
+  })
+  const jniParamsForward = [
+    'self()',
+    ...functionType.parameters.map((p) => {
+      const bridge = new KotlinCxxBridgedType(p)
+      return bridge.parseFromCppToKotlin(p.escapedName, 'c++', false)
+    }),
+  ]
+  const jniSignature = `${bridgedReturn.asJniReferenceType('local')}(${functionType.parameters
+    .map((p) => {
+      const bridge = new KotlinCxxBridgedType(p)
+      return `${bridge.asJniReferenceType('alias')} /* ${p.escapedName} */`
+    })
+    .join(', ')})`
+
+  let cppCallBody: string
+  let jniCallBody: string
   if (functionType.returnType.kind === 'void') {
     // It returns void
-    callBody = `_func(${indent(paramsForward.join(', '), '      ')});`
+    cppCallBody = `_func(${indent(paramsForward.join(', '), '      ')});`
+    jniCallBody = `
+static const auto method = getClass()->getMethod<${jniSignature}>("invoke");
+method(${jniParamsForward.join(', ')});
+    `.trim()
   } else {
     // It returns a type!
-    callBody = `
+    cppCallBody = `
 ${functionType.returnType.getCode('c++')} __result = _func(${indent(paramsForward.join(', '), '      ')});
 return ${bridgedReturn.parseFromCppToKotlin('__result', 'c++')};
 `.trim()
+    jniCallBody = `
+static const auto method = getClass()->getMethod<${jniSignature}>("invoke");
+auto __result = method(${jniParamsForward.join(', ')});
+return ${bridgedReturn.parseFromKotlinToCpp('__result', 'c++', false)};
+    `.trim()
   }
 
   const bridged = new KotlinCxxBridgedType(functionType)
@@ -107,21 +178,35 @@ namespace ${cxxNamespace} {
   using namespace facebook;
 
   /**
-   * C++ representation of the callback ${name}.
-   * This is a Kotlin \`${functionType.getCode('kotlin')}\`, backed by a \`std::function<...>\`.
+   * Represents the Java/Kotlin callback \`${functionType.getCode('kotlin')}\`.
+   * This can be passed around between C++ and Java/Kotlin.
    */
-  struct J${name} final: public jni::HybridClass<J${name}> {
+  struct J${name}: public jni::JavaClass<J${name}> {
   public:
-    static jni::local_ref<J${name}::javaobject> fromCpp(const ${typename}& func) {
-      return J${name}::newObjectCxxArgs(func);
+    static auto constexpr kJavaDescriptor = "L${jniInterfaceDescriptor};";
+
+  public:
+    ${functionType.returnType.getCode('c++')} invoke(${jniParams.join(', ')}) const {
+      ${indent(jniCallBody, '      ')}
+    }
+  };
+
+  /**
+   * An implementation of ${name} that is backed by a C++ implementation (using \`std::function<...>\`)
+   */
+  struct J${name}_cxx final: public jni::HybridClass<J${name}_cxx, J${name}> {
+  public:
+    static jni::local_ref<J${name}_cxx::javaobject> fromCpp(const ${typename}& func) {
+      return J${name}_cxx::newObjectCxxArgs(func);
     }
 
   public:
-    ${bridgedReturn.asJniReferenceType('local')} call(${cppParams.join(', ')}) {
-      ${indent(callBody, '      ')}
+    ${bridgedReturn.asJniReferenceType('local')} invoke_cxx(${cppParams.join(', ')}) {
+      ${indent(cppCallBody, '      ')}
     }
 
   public:
+    [[nodiscard]]
     inline const ${typename}& getFunction() const {
       return _func;
     }
@@ -129,11 +214,11 @@ namespace ${cxxNamespace} {
   public:
     static auto constexpr kJavaDescriptor = "L${jniClassDescriptor};";
     static void registerNatives() {
-      registerHybrid({makeNativeMethod("call", J${name}::call)});
+      registerHybrid({makeNativeMethod("invoke", J${name}_cxx::invoke_cxx)});
     }
 
   private:
-    explicit J${name}(const ${typename}& func): _func(func) { }
+    explicit J${name}_cxx(const ${typename}& func): _func(func) { }
 
   private:
     friend HybridBase;
@@ -146,7 +231,7 @@ namespace ${cxxNamespace} {
   // Make sure we register all native JNI methods on app startup
   addJNINativeRegistration({
     namespace: cxxNamespace,
-    className: `J${name}`,
+    className: `J${name}_cxx`,
     import: {
       name: `J${name}.hpp`,
       space: 'user',

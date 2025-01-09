@@ -60,6 +60,7 @@ namespace ${cxxNamespace} {
      * Convert this Java/Kotlin-based enum to the C++ enum ${enumType.enumName}.
      */
     [[maybe_unused]]
+    [[nodiscard]]
     ${enumType.enumName} toCpp() const {
       static const auto clazz = javaClassStatic();
       static const auto fieldOrdinal = clazz->getField<int>("_ordinal");

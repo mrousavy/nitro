@@ -18,33 +18,48 @@ namespace margelo::nitro::image {
   using namespace facebook;
 
   /**
-   * C++ representation of the callback Func_void_std__string.
-   * This is a Kotlin `(valueFromJs: String) -> Unit`, backed by a `std::function<...>`.
+   * Represents the Java/Kotlin callback `(valueFromJs: String) -> Unit`.
+   * This can be passed around between C++ and Java/Kotlin.
    */
-  struct JFunc_void_std__string final: public jni::HybridClass<JFunc_void_std__string> {
+  struct JFunc_void_std__string: public jni::JavaClass<JFunc_void_std__string> {
   public:
-    static jni::local_ref<JFunc_void_std__string::javaobject> fromCpp(const std::function<void(const std::string& /* valueFromJs */)>& func) {
-      return JFunc_void_std__string::newObjectCxxArgs(func);
+    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Func_void_std__string;";
+
+  public:
+    void invoke(const std::string& valueFromJs) const {
+      static const auto method = getClass()->getMethod<void(jni::alias_ref<jni::JString> /* valueFromJs */)>("invoke");
+      method(self(), jni::make_jstring(valueFromJs));
+    }
+  };
+
+  /**
+   * An implementation of Func_void_std__string that is backed by a C++ implementation (using `std::function<...>`)
+   */
+  struct JFunc_void_std__string_cxx final: public jni::HybridClass<JFunc_void_std__string_cxx, JFunc_void_std__string> {
+  public:
+    static jni::local_ref<JFunc_void_std__string_cxx::javaobject> fromCpp(const std::function<void(const std::string& /* valueFromJs */)>& func) {
+      return JFunc_void_std__string_cxx::newObjectCxxArgs(func);
     }
 
   public:
-    void call(jni::alias_ref<jni::JString> valueFromJs) {
+    void invoke_cxx(jni::alias_ref<jni::JString> valueFromJs) {
       _func(valueFromJs->toStdString());
     }
 
   public:
+    [[nodiscard]]
     inline const std::function<void(const std::string& /* valueFromJs */)>& getFunction() const {
       return _func;
     }
 
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Func_void_std__string;";
+    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Func_void_std__string_cxx;";
     static void registerNatives() {
-      registerHybrid({makeNativeMethod("call", JFunc_void_std__string::call)});
+      registerHybrid({makeNativeMethod("invoke", JFunc_void_std__string_cxx::invoke_cxx)});
     }
 
   private:
-    explicit JFunc_void_std__string(const std::function<void(const std::string& /* valueFromJs */)>& func): _func(func) { }
+    explicit JFunc_void_std__string_cxx(const std::function<void(const std::string& /* valueFromJs */)>& func): _func(func) { }
 
   private:
     friend HybridBase;

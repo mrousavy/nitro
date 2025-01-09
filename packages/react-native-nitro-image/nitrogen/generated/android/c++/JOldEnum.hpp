@@ -26,6 +26,7 @@ namespace margelo::nitro::image {
      * Convert this Java/Kotlin-based enum to the C++ enum OldEnum.
      */
     [[maybe_unused]]
+    [[nodiscard]]
     OldEnum toCpp() const {
       static const auto clazz = javaClassStatic();
       static const auto fieldOrdinal = clazz->getField<int>("_ordinal");

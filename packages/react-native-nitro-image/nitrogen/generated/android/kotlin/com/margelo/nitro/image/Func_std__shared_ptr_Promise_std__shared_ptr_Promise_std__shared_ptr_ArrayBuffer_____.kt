@@ -15,12 +15,35 @@ import dalvik.annotation.optimization.FastNative
 
 /**
  * Represents the JavaScript callback `() => std::shared_ptr<Promise<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>>>`.
- * This is implemented in C++, via a `std::function<...>`.
+ * This can be either implemented in C++ (in which case it might be a callback coming from JS),
+ * or in Kotlin/Java (in which case it is a native callback).
  */
 @DoNotStrip
 @Keep
-@Suppress("RedundantSuppression", "ConvertSecondaryConstructorToPrimary", "RedundantUnitReturnType", "KotlinJniMissingFunction", "ClassName", "unused", "LocalVariableName")
-class Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____ {
+@Suppress("ClassName", "RedundantUnitReturnType")
+fun interface Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____: () -> Promise<Promise<ArrayBuffer>> {
+  /**
+   * Call the given JS callback.
+   * @throws Throwable if the JS function itself throws an error, or if the JS function/runtime has already been deleted.
+   */
+  @DoNotStrip
+  @Keep
+  override fun invoke(): Promise<Promise<ArrayBuffer>>
+}
+
+/**
+ * Represents the JavaScript callback `() => std::shared_ptr<Promise<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>>>`.
+ * This is implemented in C++, via a `std::function<...>`.
+ * The callback might be coming from JS.
+ */
+@DoNotStrip
+@Keep
+@Suppress(
+  "KotlinJniMissingFunction", "unused",
+  "RedundantSuppression", "RedundantUnitReturnType",
+  "ConvertSecondaryConstructorToPrimary", "ClassName", "LocalVariableName",
+)
+class Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer______cxx: Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____ {
   @DoNotStrip
   @Keep
   private val mHybridData: HybridData
@@ -31,16 +54,22 @@ class Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_Array
     mHybridData = hybridData
   }
 
-  /**
-   * Converts this function to a Kotlin Lambda.
-   * This exists purely as syntactic sugar, and has minimal runtime overhead.
-   */
-  fun toLambda(): () -> Promise<Promise<ArrayBuffer>> = this::call
-
-  /**
-   * Call the given JS callback.
-   * @throws Throwable if the JS function itself throws an error, or if the JS function/runtime has already been deleted.
-   */
   @FastNative
-  external fun call(): Promise<Promise<ArrayBuffer>>
+  external override fun invoke(): Promise<Promise<ArrayBuffer>>
+}
+
+/**
+ * Represents the JavaScript callback `() => std::shared_ptr<Promise<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>>>`.
+ * This is implemented in Java/Kotlin, via a `() -> Promise<Promise<ArrayBuffer>>`.
+ * The callback is always coming from native.
+ */
+@DoNotStrip
+@Keep
+@Suppress("ClassName", "RedundantUnitReturnType", "unused")
+class Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer______java(private val function: () -> Promise<Promise<ArrayBuffer>>): Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____ {
+  @DoNotStrip
+  @Keep
+  override fun invoke(): Promise<Promise<ArrayBuffer>> {
+    return this.function()
+  }
 }

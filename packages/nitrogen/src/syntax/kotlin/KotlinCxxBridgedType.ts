@@ -440,9 +440,9 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
         switch (language) {
           case 'c++':
             const func = getTypeAs(this.type, FunctionType)
-            return `J${func.specializationName}::fromCpp(${parameterName})`
+            return `J${func.specializationName}_cxx::fromCpp(${parameterName})`
           case 'kotlin':
-            return `${parameterName}.toLambda()`
+            return `${parameterName} /* TODO: Does this work? */`
           default:
             return parameterName
         }
@@ -690,14 +690,44 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
               true
             )
             return `${parameterName} != nullptr ? std::make_optional(${parsed}) : std::nullopt`
+          case 'kotlin':
+            if (bridge.needsSpecialHandling) {
+              return `${parameterName}?.let { ${bridge.parseFromKotlinToCpp('it', language, isBoxed)} }`
+            } else {
+              return parameterName
+            }
           default:
             return parameterName
         }
       }
       case 'function': {
+        const functionType = getTypeAs(this.type, FunctionType)
         switch (language) {
-          case 'c++':
-            return `${parameterName}->cthis()->getFunction()`
+          case 'c++': {
+            const returnType = functionType.returnType.getCode('c++')
+            const params = functionType.parameters.map(
+              (p) => `${p.getCode('c++')} ${p.escapedName}`
+            )
+            const paramsForward = functionType.parameters.map(
+              (p) => p.escapedName
+            )
+            const jniType = `J${functionType.specializationName}_cxx`
+            return `
+[&]() -> ${functionType.getCode('c++')} {
+  if (${parameterName}->isInstanceOf(${jniType}::javaClassStatic())) [[likely]] {
+    auto downcast = jni::static_ref_cast<${jniType}::javaobject>(${parameterName});
+    return downcast->cthis()->getFunction();
+  } else {
+    return [${parameterName}](${params.join(', ')}) -> ${returnType} {
+      return ${parameterName}->invoke(${paramsForward});
+    };
+  }
+}()
+            `.trim()
+          }
+          case 'kotlin': {
+            return `${functionType.specializationName}_java(${parameterName})`
+          }
           default:
             return parameterName
         }
