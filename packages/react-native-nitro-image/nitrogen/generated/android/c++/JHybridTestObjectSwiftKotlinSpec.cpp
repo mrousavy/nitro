@@ -39,6 +39,8 @@ namespace margelo::nitro::image { struct JsStyleStruct; }
 #include "JPowertrain.hpp"
 #include "OldEnum.hpp"
 #include "JOldEnum.hpp"
+#include <functional>
+#include "JFunc_void_double.hpp"
 #include <variant>
 #include "JVariant_String_Double.hpp"
 #include "Person.hpp"
@@ -56,7 +58,6 @@ namespace margelo::nitro::image { struct JsStyleStruct; }
 #include "JHybridChildSpec.hpp"
 #include "HybridBaseSpec.hpp"
 #include "JHybridBaseSpec.hpp"
-#include <functional>
 #include "JFunc_void_std__vector_Powertrain_.hpp"
 #include <exception>
 #include "JFunc_void.hpp"
@@ -68,7 +69,6 @@ namespace margelo::nitro::image { struct JsStyleStruct; }
 #include "JFunc_void_std__string.hpp"
 #include "JsStyleStruct.hpp"
 #include "JJsStyleStruct.hpp"
-#include "JFunc_void_double.hpp"
 
 namespace margelo::nitro::image {
 
@@ -208,6 +208,15 @@ namespace margelo::nitro::image {
   void JHybridTestObjectSwiftKotlinSpec::setOptionalOldEnum(std::optional<OldEnum> optionalOldEnum) {
     static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<JOldEnum> /* optionalOldEnum */)>("setOptionalOldEnum");
     method(_javaPart, optionalOldEnum.has_value() ? JOldEnum::fromCpp(optionalOldEnum.value()) : nullptr);
+  }
+  std::optional<std::function<void(double /* value */)>> JHybridTestObjectSwiftKotlinSpec::getOptionalCallback() {
+    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JFunc_void_double::javaobject>()>("getOptionalCallback");
+    auto __result = method(_javaPart);
+    return __result != nullptr ? std::make_optional(__result->cthis()->getFunction()) : std::nullopt;
+  }
+  void JHybridTestObjectSwiftKotlinSpec::setOptionalCallback(const std::optional<std::function<void(double /* value */)>>& optionalCallback) {
+    static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<JFunc_void_double::javaobject> /* optionalCallback */)>("setOptionalCallback");
+    method(_javaPart, optionalCallback.has_value() ? JFunc_void_double::fromCpp(optionalCallback.value()) : nullptr);
   }
   std::variant<std::string, double> JHybridTestObjectSwiftKotlinSpec::getSomeVariant() {
     static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JVariant_String_Double>()>("getSomeVariant");

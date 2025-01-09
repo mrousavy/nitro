@@ -28,6 +28,7 @@ class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
     override var optionalArray: Array<String>? = null
     override var optionalEnum: Powertrain? = null
     override var optionalOldEnum: OldEnum? = null
+    override var optionalCallback: ((value: Double) -> Unit)? = null
 
     override fun simpleFunc() {
         // do nothing

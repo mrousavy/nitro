@@ -296,6 +296,20 @@ export function getTests(
         .didReturn(typeof OldEnum.SECOND)
         .equals(OldEnum.SECOND)
     ),
+    createTest('set optionalCallback, then undefined', () =>
+      it(() => {
+        testObject.optionalCallback = () => {}
+        testObject.optionalCallback = undefined
+      }).didNotThrow()
+    ),
+    createTest('get optionalCallback (== self)', () =>
+      it(() => {
+        testObject.optionalCallback = () => {}
+        return testObject.optionalCallback
+      })
+        .didNotThrow()
+        .didReturn('function')
+    ),
 
     // Test basic functions
     createTest('addNumbers(5, 13) = 18', () =>

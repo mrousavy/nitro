@@ -37,6 +37,8 @@ namespace margelo::nitro::image {
       prototype.registerHybridSetter("optionalEnum", &HybridTestObjectSwiftKotlinSpec::setOptionalEnum);
       prototype.registerHybridGetter("optionalOldEnum", &HybridTestObjectSwiftKotlinSpec::getOptionalOldEnum);
       prototype.registerHybridSetter("optionalOldEnum", &HybridTestObjectSwiftKotlinSpec::setOptionalOldEnum);
+      prototype.registerHybridGetter("optionalCallback", &HybridTestObjectSwiftKotlinSpec::getOptionalCallback);
+      prototype.registerHybridSetter("optionalCallback", &HybridTestObjectSwiftKotlinSpec::setOptionalCallback);
       prototype.registerHybridGetter("someVariant", &HybridTestObjectSwiftKotlinSpec::getSomeVariant);
       prototype.registerHybridSetter("someVariant", &HybridTestObjectSwiftKotlinSpec::setSomeVariant);
       prototype.registerHybridMethod("newTestObject", &HybridTestObjectSwiftKotlinSpec::newTestObject);

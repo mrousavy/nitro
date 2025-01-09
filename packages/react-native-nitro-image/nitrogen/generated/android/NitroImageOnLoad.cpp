@@ -19,6 +19,7 @@
 #include "JFunc_void_std__string.hpp"
 #include "JHybridImageFactorySpec.hpp"
 #include "JHybridTestObjectSwiftKotlinSpec.hpp"
+#include "JFunc_void_double.hpp"
 #include "JFunc_void_std__vector_Powertrain_.hpp"
 #include "JFunc_void.hpp"
 #include "JFunc_void_std__optional_double_.hpp"
@@ -26,7 +27,6 @@
 #include "JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_double____.hpp"
 #include "JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____.hpp"
 #include "JFunc_std__shared_ptr_Promise_std__string__.hpp"
-#include "JFunc_void_double.hpp"
 #include "JHybridBaseSpec.hpp"
 #include "JHybridChildSpec.hpp"
 #include <NitroModules/JNISharedPtr.hpp>
@@ -46,6 +46,7 @@ int initialize(JavaVM* vm) {
     margelo::nitro::image::JFunc_void_std__string::registerNatives();
     margelo::nitro::image::JHybridImageFactorySpec::registerNatives();
     margelo::nitro::image::JHybridTestObjectSwiftKotlinSpec::registerNatives();
+    margelo::nitro::image::JFunc_void_double::registerNatives();
     margelo::nitro::image::JFunc_void_std__vector_Powertrain_::registerNatives();
     margelo::nitro::image::JFunc_void::registerNatives();
     margelo::nitro::image::JFunc_void::registerNatives();

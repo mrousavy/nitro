@@ -313,6 +313,37 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
     }
   }
   
+  public var optionalCallback: bridge.std__optional_std__function_void_double____value______ {
+    @inline(__always)
+    get {
+      return { () -> bridge.std__optional_std__function_void_double____value______ in
+        if let __unwrappedValue = self.__implementation.optionalCallback {
+          return bridge.create_std__optional_std__function_void_double____value______({ () -> bridge.Func_void_double in
+            let __closureWrapper = Func_void_double(__unwrappedValue)
+            return bridge.create_Func_void_double(__closureWrapper.toUnsafe())
+          }())
+        } else {
+          return .init()
+        }
+      }()
+    }
+    @inline(__always)
+    set {
+      self.__implementation.optionalCallback = { () -> (((_ value: Double) -> Void))? in
+        if let __unwrapped = newValue.value {
+          return { () -> ((Double) -> Void) in
+            let __wrappedFunction = bridge.wrap_Func_void_double(__unwrapped)
+            return { (__value: Double) -> Void in
+              __wrappedFunction.call(__value)
+            }
+          }()
+        } else {
+          return nil
+        }
+      }()
+    }
+  }
+  
   public var someVariant: bridge.std__variant_std__string__double_ {
     @inline(__always)
     get {

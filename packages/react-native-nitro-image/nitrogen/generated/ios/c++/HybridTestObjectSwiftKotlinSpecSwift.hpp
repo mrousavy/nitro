@@ -42,9 +42,9 @@ namespace margelo::nitro::image { class HybridBaseSpec; }
 #include <vector>
 #include "Powertrain.hpp"
 #include "OldEnum.hpp"
+#include <functional>
 #include <variant>
 #include "Person.hpp"
-#include <functional>
 #include <NitroModules/AnyMap.hpp>
 #include <NitroModules/Promise.hpp>
 #include <exception>
@@ -165,6 +165,13 @@ namespace margelo::nitro::image {
     }
     inline void setOptionalOldEnum(std::optional<OldEnum> optionalOldEnum) noexcept override {
       _swiftPart.setOptionalOldEnum(optionalOldEnum);
+    }
+    inline std::optional<std::function<void(double /* value */)>> getOptionalCallback() noexcept override {
+      auto __result = _swiftPart.getOptionalCallback();
+      return __result;
+    }
+    inline void setOptionalCallback(const std::optional<std::function<void(double /* value */)>>& optionalCallback) noexcept override {
+      _swiftPart.setOptionalCallback(optionalCallback);
     }
     inline std::variant<std::string, double> getSomeVariant() noexcept override {
       auto __result = _swiftPart.getSomeVariant();

@@ -41,9 +41,9 @@ namespace margelo::nitro::image { class HybridBaseSpec; }
 #include <vector>
 #include "Powertrain.hpp"
 #include "OldEnum.hpp"
+#include <functional>
 #include <variant>
 #include "Person.hpp"
-#include <functional>
 #include <NitroModules/AnyMap.hpp>
 #include <NitroModules/Promise.hpp>
 #include <exception>
@@ -103,6 +103,8 @@ namespace margelo::nitro::image {
       virtual void setOptionalEnum(std::optional<Powertrain> optionalEnum) = 0;
       virtual std::optional<OldEnum> getOptionalOldEnum() = 0;
       virtual void setOptionalOldEnum(std::optional<OldEnum> optionalOldEnum) = 0;
+      virtual std::optional<std::function<void(double /* value */)>> getOptionalCallback() = 0;
+      virtual void setOptionalCallback(const std::optional<std::function<void(double /* value */)>>& optionalCallback) = 0;
       virtual std::variant<std::string, double> getSomeVariant() = 0;
       virtual void setSomeVariant(const std::variant<std::string, double>& someVariant) = 0;
 

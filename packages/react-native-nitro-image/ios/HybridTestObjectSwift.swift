@@ -33,6 +33,8 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
 
   var optionalOldEnum: OldEnum? = nil
 
+  var optionalCallback: ((Double) -> Void)? = nil
+
   func simpleFunc() throws {
     // do nothing
   }
