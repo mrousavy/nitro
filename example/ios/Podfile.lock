@@ -7,7 +7,7 @@ PODS:
   - hermes-engine (0.76.5):
     - hermes-engine/Pre-built (= 0.76.5)
   - hermes-engine/Pre-built (0.76.5)
-  - NitroImage (0.20.1):
+  - NitroImage (0.21.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -31,7 +31,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - NitroModules (0.20.1):
+  - NitroModules (0.21.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1888,14 +1888,14 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  boost: 7e761d76ca2ce687f7cc98e698152abd03a18f90
-  DoubleConversion: cb417026b2400c8f53ae97020b2be961b59470cb
+  boost: 1dca942403ed9342f98334bf4c3621f011aa7946
+  DoubleConversion: f16ae600a246532c4020132d54af21d0ddb2a385
   FBLazyVector: 1bf99bb46c6af9a2712592e707347315f23947aa
   fmt: 10c6e61f4be25dc963c36bd73fc7b1705fe975be
-  glog: eb93e2f488219332457c3c4eafd2738ddc7e80b8
+  glog: 08b301085f15bcbb6ff8632a8ebaf239aae04e6a
   hermes-engine: 06a9c6900587420b90accc394199527c64259db4
-  NitroImage: b49db0212f1b50aa976b8cdd97072df904b29102
-  NitroModules: ff8680342cb7008646d8160ff9b30ba74c681c11
+  NitroImage: ff97c5986ea4619abd3d6399b886eac84f5a4b65
+  NitroModules: bbe10b61d6fefce0176ba06e6a34eea92efb7704
   RCT-Folly: bf5c0376ffe4dd2cf438dcf86db385df9fdce648
   RCTDeprecation: fb7d408617e25d7f537940000d766d60149c5fea
   RCTRequired: 9aaf0ffcc1f41f0c671af863970ef25c422a9920
