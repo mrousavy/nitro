@@ -112,16 +112,16 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   @set:Keep
   abstract var optionalOldEnum: OldEnum?
   
-  @get:DoNotStrip
-  @get:Keep
-  @set:DoNotStrip
-  @set:Keep
   abstract var optionalCallback: ((value: Double) -> Unit)?
   
   private var optionalCallback_cxx: ((value: Double) -> Unit)?
+    @Keep
+    @DoNotStrip
     get() {
       return optionalCallback
     }
+    @Keep
+    @DoNotStrip
     set(value) {
       optionalCallback = value
     }
@@ -169,8 +169,6 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   @Keep
   abstract fun bounceEnums(array: Array<Powertrain>): Array<Powertrain>
   
-  @DoNotStrip
-  @Keep
   abstract fun complexEnumCallback(array: Array<Powertrain>, callback: (array: Array<Powertrain>) -> Unit): Unit
   
   @DoNotStrip
@@ -240,8 +238,6 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   @Keep
   abstract fun awaitPromise(promise: Promise<Unit>): Promise<Unit>
   
-  @DoNotStrip
-  @Keep
   abstract fun callCallback(callback: () -> Unit): Unit
   
   @DoNotStrip
@@ -251,8 +247,6 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
     return __result
   }
   
-  @DoNotStrip
-  @Keep
   abstract fun callAll(first: () -> Unit, second: () -> Unit, third: () -> Unit): Unit
   
   @DoNotStrip
@@ -262,8 +256,6 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
     return __result
   }
   
-  @DoNotStrip
-  @Keep
   abstract fun callWithOptional(value: Double?, callback: (maybe: Double?) -> Unit): Unit
   
   @DoNotStrip
@@ -273,8 +265,6 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
     return __result
   }
   
-  @DoNotStrip
-  @Keep
   abstract fun callSumUpNTimes(callback: () -> Promise<Double>, n: Double): Promise<Double>
   
   @DoNotStrip
@@ -284,8 +274,6 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
     return __result
   }
   
-  @DoNotStrip
-  @Keep
   abstract fun callbackAsyncPromise(callback: () -> Promise<Promise<Double>>): Promise<Double>
   
   @DoNotStrip
@@ -295,8 +283,6 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
     return __result
   }
   
-  @DoNotStrip
-  @Keep
   abstract fun callbackAsyncPromiseBuffer(callback: () -> Promise<Promise<ArrayBuffer>>): Promise<ArrayBuffer>
   
   @DoNotStrip
@@ -306,8 +292,6 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
     return __result
   }
   
-  @DoNotStrip
-  @Keep
   abstract fun getComplexCallback(): (value: Double) -> Unit
   
   @DoNotStrip
@@ -317,8 +301,6 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
     throw Error("not yet implemented!")
   }
   
-  @DoNotStrip
-  @Keep
   abstract fun getValueFromJSCallbackAndWait(getValue: () -> Promise<Double>): Promise<Double>
   
   @DoNotStrip
@@ -328,8 +310,6 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
     return __result
   }
   
-  @DoNotStrip
-  @Keep
   abstract fun getValueFromJsCallback(callback: () -> Promise<String>, andThenCall: (valueFromJs: String) -> Unit): Promise<Unit>
   
   @DoNotStrip
@@ -351,8 +331,6 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   @Keep
   abstract fun getDriver(car: Car): Person?
   
-  @DoNotStrip
-  @Keep
   abstract fun jsStyleObjectAsParameters(params: JsStyleStruct): Unit
   
   @DoNotStrip

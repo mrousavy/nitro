@@ -128,7 +128,6 @@ function getMethodForwardImplementation(method: Method): string {
       return bridged.needsSpecialHandling
     })
 
-  const code = method.getCode('kotlin', { doNotStrip: true, virtual: true })
   if (requiresBridge) {
     const paramsSignature = method.parameters.map((p) => {
       const bridge = new KotlinCxxBridgedType(p.type)
@@ -142,6 +141,7 @@ function getMethodForwardImplementation(method: Method): string {
       '__result',
       'kotlin'
     )
+    const code = method.getCode('kotlin', { virtual: true })
     return `
 ${code}
 
@@ -153,21 +153,20 @@ private fun ${method.name}_cxx(${paramsSignature.join(', ')}): ${bridgedReturn.g
 }
     `.trim()
   } else {
+    const code = method.getCode('kotlin', { doNotStrip: true, virtual: true })
     return code
   }
 }
 
 function getPropertyForwardImplementation(property: Property): string {
-  const code = property.getCode('kotlin', { doNotStrip: true, virtual: true })
   const bridged = new KotlinCxxBridgedType(property.type)
   if (bridged.needsSpecialHandling) {
     let keyword = property.isReadonly ? 'val' : 'var'
-    let modifiers: string[] = []
-    modifiers.push('@get:DoNotStrip', '@get:Keep')
-    if (!property.isReadonly) modifiers.push('@set:DoNotStrip', '@set:Keep')
     let lines: string[] = []
     lines.push(
       `
+@Keep
+@DoNotStrip
 get() {
   return ${indent(bridged.parseFromKotlinToCpp(property.name, 'kotlin'), '  ')}
 }
@@ -176,12 +175,15 @@ get() {
     if (!property.isReadonly) {
       lines.push(
         `
+@Keep
+@DoNotStrip
 set(value) {
   ${property.name} = ${indent(bridged.parseFromCppToKotlin('value', 'kotlin'), '  ')}
 }
       `.trim()
       )
     }
+    const code = property.getCode('kotlin', { virtual: true })
     return `
 ${code}
 
@@ -189,6 +191,7 @@ private ${keyword} ${property.name}_cxx: ${bridged.getTypeCode('kotlin')}
   ${indent(lines.join('\n'), '  ')}
     `.trim()
   } else {
+    const code = property.getCode('kotlin', { doNotStrip: true, virtual: true })
     return code
   }
 }

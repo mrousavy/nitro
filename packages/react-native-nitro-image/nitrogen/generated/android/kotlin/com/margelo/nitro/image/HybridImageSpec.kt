@@ -61,8 +61,6 @@ abstract class HybridImageSpec: HybridObject() {
   @Keep
   abstract fun toArrayBuffer(format: ImageFormat): Double
   
-  @DoNotStrip
-  @Keep
   abstract fun saveToFile(path: String, onFinished: (path: String) -> Unit): Unit
   
   @DoNotStrip
