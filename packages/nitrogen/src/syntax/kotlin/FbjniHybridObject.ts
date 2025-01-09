@@ -255,13 +255,6 @@ static const auto method = _javaPart->getClass()->getMethod<${cxxSignature}>("${
 method(${paramsForward.join(', ')});
    `
   }
-  body = `
-try {
-  ${indent(body, '  ')}
-} catch (const jni::JniException& exc) {
-  throw std::runtime_error(exc.what());
-}
-  `.trim()
   const code = method.getCode(
     'c++',
     {
