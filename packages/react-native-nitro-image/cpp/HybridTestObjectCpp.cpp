@@ -319,9 +319,7 @@ std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>> HybridTestObjectCpp::call
 }
 
 std::function<void(double)> HybridTestObjectCpp::getComplexCallback() {
-  return [](double value) {
-    Logger::log(LogLevel::Info, TAG, "Callback called with %f", value);
-  };
+  return [](double value) { Logger::log(LogLevel::Info, TAG, "Callback called with %f", value); };
 }
 
 std::shared_ptr<Promise<double>>
