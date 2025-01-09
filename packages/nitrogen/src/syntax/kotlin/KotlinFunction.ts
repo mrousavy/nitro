@@ -33,7 +33,7 @@ import dalvik.annotation.optimization.FastNative
  */
 @DoNotStrip
 @Keep
-@Suppress("RedundantSuppression", "ConvertSecondaryConstructorToPrimary", "RedundantUnitReturnType", "KotlinJniMissingFunction", "ClassName", "unused")
+@Suppress("RedundantSuppression", "ConvertSecondaryConstructorToPrimary", "RedundantUnitReturnType", "KotlinJniMissingFunction", "ClassName", "unused", "LocalVariableName")
 class ${name} {
   @DoNotStrip
   @Keep

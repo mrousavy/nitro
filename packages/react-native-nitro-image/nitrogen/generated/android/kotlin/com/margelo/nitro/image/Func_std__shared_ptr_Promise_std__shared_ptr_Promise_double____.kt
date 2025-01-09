@@ -19,7 +19,7 @@ import dalvik.annotation.optimization.FastNative
  */
 @DoNotStrip
 @Keep
-@Suppress("RedundantSuppression", "ConvertSecondaryConstructorToPrimary", "RedundantUnitReturnType", "KotlinJniMissingFunction", "ClassName", "unused")
+@Suppress("RedundantSuppression", "ConvertSecondaryConstructorToPrimary", "RedundantUnitReturnType", "KotlinJniMissingFunction", "ClassName", "unused", "LocalVariableName")
 class Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double____ {
   @DoNotStrip
   @Keep

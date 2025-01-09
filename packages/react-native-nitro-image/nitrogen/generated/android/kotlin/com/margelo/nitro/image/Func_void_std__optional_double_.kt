@@ -19,7 +19,7 @@ import dalvik.annotation.optimization.FastNative
  */
 @DoNotStrip
 @Keep
-@Suppress("RedundantSuppression", "ConvertSecondaryConstructorToPrimary", "RedundantUnitReturnType", "KotlinJniMissingFunction", "ClassName", "unused")
+@Suppress("RedundantSuppression", "ConvertSecondaryConstructorToPrimary", "RedundantUnitReturnType", "KotlinJniMissingFunction", "ClassName", "unused", "LocalVariableName")
 class Func_void_std__optional_double_ {
   @DoNotStrip
   @Keep
