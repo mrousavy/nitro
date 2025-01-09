@@ -32,7 +32,8 @@ abstract class HybridObject: ExtendableHybridClass {
      */
     @get:DoNotStrip
     @get:Keep
-    abstract val memorySize: Long
+    open val memorySize: Long
+        get() = 0L
 
     /**
      * Holds the native C++ instance.
