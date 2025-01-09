@@ -94,6 +94,11 @@
         "type": "string"
       },
       "description": "A list of paths relative to the project directory that should be ignored by nitrogen. Nitrogen will not look for `.nitro.ts` files in these directories."
+    },
+    "createGitAttributes": {
+      "type": "boolean",
+      "default": true,
+      "description": "Configures whether a `.gitattributes` file will be generated in the `nitrogen/generated/` directory to mark files as `linguist-generated` for GitHub."
     }
   }
 }

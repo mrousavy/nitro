@@ -35,5 +35,6 @@
   },
   "ignorePaths": [
     "**/node_modules"
-  ]
+  ],
+  "createGitAttributes": false
 }

@@ -17,6 +17,7 @@ import { NitroConfig } from './config/NitroConfig.js'
 import { createIOSAutolinking } from './autolinking/createIOSAutolinking.js'
 import { createAndroidAutolinking } from './autolinking/createAndroidAutolinking.js'
 import type { Autolinking } from './autolinking/Autolinking.js'
+import { createGitAttributes } from './createGitAttributes.js'
 
 interface NitrogenOptions {
   baseDirectory: string
@@ -159,7 +160,7 @@ export async function runNitrogen({
         generatedSpecs++
       } catch (error) {
         const message = indent(errorToString(error), '    ')
-        console.error(
+        Logger.error(
           chalk.redBright(
             `        ❌  Failed to generate spec for ${typeName}! ${message}`
           )
@@ -169,7 +170,7 @@ export async function runNitrogen({
     }
 
     if (generatedSpecs === startedWithSpecs) {
-      console.error(
+      Logger.error(
         chalk.redBright(
           `    ❌  No specs found in ${sourceFile.getBaseName()}!`
         )
@@ -201,6 +202,15 @@ export async function runNitrogen({
       )
       filesAfter.push(actualPath)
     }
+  }
+
+  try {
+    if (NitroConfig.getCreateGitAttributes()) {
+      // write a .gitattributes file
+      await createGitAttributes(outputDirectory)
+    }
+  } catch {
+    Logger.error(`❌ Failed to write ${chalk.dim(`.gitattributes`)}!`)
   }
 
   return {
