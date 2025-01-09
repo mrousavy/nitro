@@ -101,13 +101,22 @@ export async function runNitrogen({
       ...sourceFile.getTypeAliases(),
     ]
     for (const type of types) {
-      console.log('---->', type.getName())
       // Get name of interface (= our module name)
       const typeName = type.getName()
       try {
         let allFiles: SourceFile[]
         let platformSpec: PlatformSpec
-        if (extendsHybridObject(type.getType(), true)) {
+        if (extendsHybridView(type.getType(), true)) {
+          // Hybrid View Props
+          const targetPlatforms = getHybridViewPlatforms(type)
+          if (targetPlatforms == null) {
+            // It does not extend HybridView, continue..
+            continue
+          }
+          platformSpec = targetPlatforms
+          targetSpecs++
+          allFiles = []
+        } else if (extendsHybridObject(type.getType(), true)) {
           // Hybrid View
           const targetPlatforms = getHybridObjectPlatforms(type)
           if (targetPlatforms == null) {
@@ -139,16 +148,6 @@ export async function runNitrogen({
               return generatePlatformFiles(type.getType(), language)
             })
             .filter(filterDuplicateFiles)
-        } else if (extendsHybridView(type.getType(), true)) {
-          // Hybrid View Props
-          const targetPlatforms = getHybridViewPlatforms(type)
-          if (targetPlatforms == null) {
-            // It does not extend HybridView, continue..
-            continue
-          }
-          platformSpec = targetPlatforms
-          targetSpecs++
-          allFiles = []
         } else {
           continue
         }

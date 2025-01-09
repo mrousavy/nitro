@@ -1,15 +1,7 @@
-import type {
-  HybridView,
-  HybridViewMethods,
-  HybridViewProps,
-} from 'react-native-nitro-modules'
+import type { HybridView } from 'react-native-nitro-modules'
 
-export interface TestViewProps extends HybridViewProps {
-  someString: string
+export interface TestView extends HybridView {
+  someProp: string
+  someCallback: (value: number) => void
+  someRefMethod(): number
 }
-
-export interface TestViewMethods extends HybridViewMethods {
-  doSomething(): void
-}
-
-export type TestView = HybridView<TestViewProps, TestViewMethods>

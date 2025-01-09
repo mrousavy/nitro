@@ -166,15 +166,10 @@ export function getHybridObjectPlatforms(
   }
 
   const genericArguments = base.getTypeArguments()
-  if (genericArguments.length === 0) {
-    // it uses `HybridObject` without generic arguments. This defaults to C++
-    return { android: 'c++', ios: 'c++' }
-  }
   const platformSpecsArgument = genericArguments[0]
   if (platformSpecsArgument == null) {
-    throw new Error(
-      `${declaration.getName()} does not properly extend HybridObject<T>! ${base.getText()} does not have a single generic type argument for platform spec languages!`
-    )
+    // it uses `HybridObject` without generic arguments. This defaults to C++
+    return { android: 'c++', ios: 'c++' }
   }
 
   return getPlatformSpec(declaration.getName(), platformSpecsArgument)
@@ -184,13 +179,9 @@ export function getHybridViewPlatforms(
   view: InterfaceDeclaration | TypeAliasDeclaration
 ): PlatformSpec | undefined {
   const genericArguments = view.getType().getTypeArguments()
-  if (genericArguments.length === 0) {
-    throw new Error(
-      `${view.getName()} does not properly extend HybridView<Props, Methods, Platforms?>!`
-    )
-  }
-  const platformSpecsArgument = genericArguments[2]
+  const platformSpecsArgument = genericArguments[0]
   if (platformSpecsArgument == null) {
+    // it uses `HybridObject` without generic arguments. This defaults to platform native languages
     return { ios: 'swift', android: 'kotlin' }
   }
 

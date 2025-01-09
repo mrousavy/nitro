@@ -1,17 +1,12 @@
-interface ViewPlatformSpec {
+import type { HybridObject } from './HybridObject'
+
+/**
+ * Describes the languages this view will be implemented in.
+ */
+export interface ViewPlatformSpec {
   ios?: 'swift'
   android?: 'kotlin'
 }
-
-/**
- * Represents the React props of a Nitro {@linkcode HybridView}.
- */
-export interface HybridViewProps {}
-
-/**
- * Represents the methods of the React `ref` to a Nitro {@linkcode HybridView}.
- */
-export interface HybridViewMethods {}
 
 /**
  * Represents a Nitro `HybridView` which is implemented in a native language
@@ -21,23 +16,22 @@ export interface HybridViewMethods {}
  *
  * All `HybridViews`s have a C++ Fabric View base with a backing Shadow Node.
  *
+ * - TypeScript Properties (`name: Type`) will be React Props
+ * - TypeScript Methods (`name(): Type`) will be Ref Methods
+ *
  * @example
  * ```tsx
- * export interface ImageProps extends HybridViewProps {
- *   source: string
+ * export interface Camera extends HybridView {
+ *   zoom: number
+ *   flash: boolean
+ *   takePhoto(): Image
  * }
- * export interface ImageMethods extends HybridViewMethods {
- *   takeScreenshot(): void
- * }
- * export type ImageView = HybridView<ImageProps, ImageMethods>
  * ```
  */
 export interface HybridView<
-  Props extends HybridViewProps,
-  Methods extends HybridViewMethods = {},
   Platforms extends ViewPlatformSpec = { ios: 'swift'; android: 'kotlin' },
-> {
-  readonly __tag?: HybridView<Props, Methods, Platforms> & never
+> extends HybridObject<Platforms> {
+  /* empty interface for now */
 }
 
 export * from './views/getHostComponent'
