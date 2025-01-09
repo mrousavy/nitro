@@ -88,16 +88,13 @@ export async function runNitrogen({
 
     const startedWithSpecs = generatedSpecs
 
-    // Find all interfaces in the given file
-    const interfaces = sourceFile.getInterfaces()
-    for (const module of interfaces) {
-      let moduleName = '[Unknown Module]'
+    // Find all interfaceDeclarations in the given file
+    const interfaceDeclarations = sourceFile.getInterfaces()
+    for (const declaration of interfaceDeclarations) {
+      let typeName = declaration.getName()
       try {
-        // Get name of interface (= our module name)
-        moduleName = module.getName()
-
         // Find out if it extends HybridObject
-        const platformSpec = getHybridObjectPlatforms(module)
+        const platformSpec = getHybridObjectPlatforms(declaration)
         if (platformSpec == null) {
           // It does not extend HybridObject, continue..
           continue
@@ -107,7 +104,7 @@ export async function runNitrogen({
 
         if (platforms.length === 0) {
           console.warn(
-            `⚠️   ${moduleName} does not declare any platforms in HybridObject<T> - nothing can be generated.`
+            `⚠️   ${typeName} does not declare any platforms in HybridObject<T> - nothing can be generated.`
           )
           continue
         }
@@ -115,7 +112,7 @@ export async function runNitrogen({
         targetSpecs++
 
         console.log(
-          `    ⚙️   Generating specs for HybridObject "${chalk.bold(moduleName)}"...`
+          `    ⚙️   Generating specs for HybridObject "${chalk.bold(typeName)}"...`
         )
 
         // Create all files and throw it into a big list
@@ -123,7 +120,7 @@ export async function runNitrogen({
           .flatMap((p) => {
             usedPlatforms.push(p)
             const language = platformSpec[p]!
-            return generatePlatformFiles(module.getType(), language)
+            return generatePlatformFiles(declaration.getType(), language)
           })
           .filter(filterDuplicateFiles)
         // Group the files by platform ({ ios: [], android: [], shared: [] })
@@ -164,7 +161,7 @@ export async function runNitrogen({
         const message = indent(errorToString(error), '    ')
         console.error(
           chalk.redBright(
-            `        ❌  Failed to generate spec for ${moduleName}! ${message}`
+            `        ❌  Failed to generate spec for ${typeName}! ${message}`
           )
         )
         process.exitCode = 1
