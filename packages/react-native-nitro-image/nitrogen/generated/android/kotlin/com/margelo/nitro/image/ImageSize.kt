@@ -19,4 +19,6 @@ import com.margelo.nitro.core.*
 data class ImageSize(
   val width: Double,
   val height: Double
-)
+) {
+  /* main constructor */
+}

@@ -43,34 +43,70 @@ namespace margelo::nitro::image {
 
   // Properties
   ImageSize JHybridImageSpec::getSize() {
-    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JImageSize>()>("getSize");
-    auto __result = method(_javaPart);
-    return __result->toCpp();
+    try {
+      
+      static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JImageSize>()>("getSize");
+      auto __result = method(_javaPart);
+      return __result->toCpp();
+          
+    } catch (const jni::JniException& exc) {
+      throw std::runtime_error(exc.what());
+    }
   }
   PixelFormat JHybridImageSpec::getPixelFormat() {
-    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JPixelFormat>()>("getPixelFormat");
-    auto __result = method(_javaPart);
-    return __result->toCpp();
+    try {
+      
+      static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JPixelFormat>()>("getPixelFormat");
+      auto __result = method(_javaPart);
+      return __result->toCpp();
+          
+    } catch (const jni::JniException& exc) {
+      throw std::runtime_error(exc.what());
+    }
   }
   double JHybridImageSpec::getSomeSettableProp() {
-    static const auto method = _javaPart->getClass()->getMethod<double()>("getSomeSettableProp");
-    auto __result = method(_javaPart);
-    return __result;
+    try {
+      
+      static const auto method = _javaPart->getClass()->getMethod<double()>("getSomeSettableProp");
+      auto __result = method(_javaPart);
+      return __result;
+          
+    } catch (const jni::JniException& exc) {
+      throw std::runtime_error(exc.what());
+    }
   }
   void JHybridImageSpec::setSomeSettableProp(double someSettableProp) {
-    static const auto method = _javaPart->getClass()->getMethod<void(double /* someSettableProp */)>("setSomeSettableProp");
-    method(_javaPart, someSettableProp);
+    try {
+      
+      static const auto method = _javaPart->getClass()->getMethod<void(double /* someSettableProp */)>("setSomeSettableProp");
+      method(_javaPart, someSettableProp);
+         
+    } catch (const jni::JniException& exc) {
+      throw std::runtime_error(exc.what());
+    }
   }
 
   // Methods
   double JHybridImageSpec::toArrayBuffer(ImageFormat format) {
-    static const auto method = _javaPart->getClass()->getMethod<double(jni::alias_ref<JImageFormat> /* format */)>("toArrayBuffer");
-    auto __result = method(_javaPart, JImageFormat::fromCpp(format));
-    return __result;
+    try {
+      
+      static const auto method = _javaPart->getClass()->getMethod<double(jni::alias_ref<JImageFormat> /* format */)>("toArrayBuffer");
+      auto __result = method(_javaPart, JImageFormat::fromCpp(format));
+      return __result;
+          
+    } catch (const jni::JniException& exc) {
+      throw std::runtime_error(exc.what());
+    }
   }
   void JHybridImageSpec::saveToFile(const std::string& path, const std::function<void(const std::string& /* path */)>& onFinished) {
-    static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<jni::JString> /* path */, jni::alias_ref<JFunc_void_std__string::javaobject> /* onFinished */)>("saveToFile");
-    method(_javaPart, jni::make_jstring(path), JFunc_void_std__string::fromCpp(onFinished));
+    try {
+      
+      static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<jni::JString> /* path */, jni::alias_ref<JFunc_void_std__string::javaobject> /* onFinished */)>("saveToFile_cxx");
+      method(_javaPart, jni::make_jstring(path), JFunc_void_std__string::fromCpp(onFinished));
+         
+    } catch (const jni::JniException& exc) {
+      throw std::runtime_error(exc.what());
+    }
   }
 
 } // namespace margelo::nitro::image

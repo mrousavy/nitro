@@ -19,4 +19,6 @@ import com.margelo.nitro.core.*
 data class Person(
   val name: String,
   val age: Double
-)
+) {
+  /* main constructor */
+}

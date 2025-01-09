@@ -24,4 +24,6 @@ data class Car(
   val powertrain: Powertrain,
   val driver: Person?,
   val isFast: Boolean?
-)
+) {
+  /* main constructor */
+}

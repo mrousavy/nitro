@@ -12,6 +12,29 @@ export function createKotlinStruct(structType: StructType): SourceFile[] {
   const values = structType.properties.map(
     (p) => `val ${p.escapedName}: ${p.getCode('kotlin')}`
   )
+  let secondaryConstructor: string
+  const needsSpecialHandling = structType.properties.some(
+    (p) => new KotlinCxxBridgedType(p).needsSpecialHandling
+  )
+  if (needsSpecialHandling) {
+    const params = structType.properties.map((p) => {
+      const bridged = new KotlinCxxBridgedType(p)
+      return `${p.escapedName}: ${bridged.getTypeCode('kotlin')}`
+    })
+    const paramsForward = structType.properties.map((p) => {
+      const bridged = new KotlinCxxBridgedType(p)
+      return bridged.parseFromCppToKotlin(p.escapedName, 'kotlin', false)
+    })
+    secondaryConstructor = `
+@DoNotStrip
+@Keep
+private constructor(${indent(params.join(', '), 20)})
+             : this(${indent(paramsForward.join(', '), 20)})
+    `.trim()
+  } else {
+    secondaryConstructor = `/* main constructor */`
+  }
+
   const code = `
 ${createFileMetadataString(`${structType.structName}.kt`)}
 
@@ -28,7 +51,9 @@ import com.margelo.nitro.core.*
 @Keep
 data class ${structType.structName}(
   ${indent(values.join(',\n'), '  ')}
-)
+) {
+  ${indent(secondaryConstructor, '  ')}
+}
   `.trim()
 
   const cxxNamespace = NitroConfig.getCxxNamespace('c++')

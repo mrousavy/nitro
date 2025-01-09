@@ -217,6 +217,13 @@ function getFbjniMethodForwardImplementation(
   const name = getHybridObjectName(spec.name)
 
   const returnJNI = new KotlinCxxBridgedType(method.returnType)
+  const requiresBridge =
+    returnJNI.needsSpecialHandling ||
+    method.parameters.some((p) => {
+      const bridged = new KotlinCxxBridgedType(p.type)
+      return bridged.needsSpecialHandling
+    })
+  const methodName = requiresBridge ? `${method.name}_cxx` : method.name
 
   const returnType = returnJNI.asJniReferenceType('local')
   const paramsTypes = method.parameters
@@ -237,17 +244,24 @@ function getFbjniMethodForwardImplementation(
   if (returnJNI.hasType) {
     // return something - we need to parse it
     body = `
-static const auto method = _javaPart->getClass()->getMethod<${cxxSignature}>("${method.name}");
+static const auto method = _javaPart->getClass()->getMethod<${cxxSignature}>("${methodName}");
 auto __result = method(${paramsForward.join(', ')});
 return ${returnJNI.parse('__result', 'kotlin', 'c++', 'c++')};
     `
   } else {
     // void method. no return
     body = `
-static const auto method = _javaPart->getClass()->getMethod<${cxxSignature}>("${method.name}");
+static const auto method = _javaPart->getClass()->getMethod<${cxxSignature}>("${methodName}");
 method(${paramsForward.join(', ')});
    `
   }
+  body = `
+try {
+  ${indent(body, '  ')}
+} catch (const jni::JniException& exc) {
+  throw std::runtime_error(exc.what());
+}
+  `.trim()
   const code = method.getCode(
     'c++',
     {

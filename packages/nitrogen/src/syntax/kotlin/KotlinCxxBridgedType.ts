@@ -37,6 +37,9 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
 
   get needsSpecialHandling(): boolean {
     switch (this.type.kind) {
+      case 'function':
+        // Function needs to be converted from JFunc_... to Lambda
+        return true
       default:
         return false
     }

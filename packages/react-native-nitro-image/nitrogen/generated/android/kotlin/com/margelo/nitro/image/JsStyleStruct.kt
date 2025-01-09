@@ -19,4 +19,9 @@ import com.margelo.nitro.core.*
 data class JsStyleStruct(
   val value: Double,
   val onChanged: (num: Double) -> Unit
-)
+) {
+  @DoNotStrip
+  @Keep
+  private constructor(value: Double, onChanged: Func_void_double)
+               : this(value, onChanged.toLambda())
+}

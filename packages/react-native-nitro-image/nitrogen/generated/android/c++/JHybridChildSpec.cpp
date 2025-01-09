@@ -30,14 +30,26 @@ namespace margelo::nitro::image {
 
   // Properties
   double JHybridChildSpec::getChildValue() {
-    static const auto method = _javaPart->getClass()->getMethod<double()>("getChildValue");
-    auto __result = method(_javaPart);
-    return __result;
+    try {
+      
+      static const auto method = _javaPart->getClass()->getMethod<double()>("getChildValue");
+      auto __result = method(_javaPart);
+      return __result;
+          
+    } catch (const jni::JniException& exc) {
+      throw std::runtime_error(exc.what());
+    }
   }
   double JHybridChildSpec::getBaseValue() {
-    static const auto method = _javaPart->getClass()->getMethod<double()>("getBaseValue");
-    auto __result = method(_javaPart);
-    return __result;
+    try {
+      
+      static const auto method = _javaPart->getClass()->getMethod<double()>("getBaseValue");
+      auto __result = method(_javaPart);
+      return __result;
+          
+    } catch (const jni::JniException& exc) {
+      throw std::runtime_error(exc.what());
+    }
   }
 
   // Methods
