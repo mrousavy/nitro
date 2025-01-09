@@ -104,7 +104,6 @@ export async function runNitrogen({
       // Get name of interface (= our module name)
       const typeName = type.getName()
       try {
-        let allFiles: SourceFile[]
         let platformSpec: PlatformSpec
         if (extendsHybridView(type.getType(), true)) {
           // Hybrid View Props
@@ -114,8 +113,6 @@ export async function runNitrogen({
             continue
           }
           platformSpec = targetPlatforms
-          targetSpecs++
-          allFiles = []
         } else if (extendsHybridObject(type.getType(), true)) {
           // Hybrid View
           const targetPlatforms = getHybridObjectPlatforms(type)
@@ -124,33 +121,33 @@ export async function runNitrogen({
             continue
           }
           platformSpec = targetPlatforms
-
-          const platforms = Object.keys(platformSpec) as Platform[]
-
-          if (platforms.length === 0) {
-            console.warn(
-              `⚠️   ${typeName} does not declare any platforms in HybridObject<T> - nothing can be generated.`
-            )
-            continue
-          }
-
-          targetSpecs++
-
-          console.log(
-            `    ⚙️   Generating specs for HybridObject "${chalk.bold(typeName)}"...`
-          )
-
-          // Create all files and throw it into a big list
-          allFiles = platforms
-            .flatMap((p) => {
-              usedPlatforms.push(p)
-              const language = platformSpec[p]!
-              return generatePlatformFiles(type.getType(), language)
-            })
-            .filter(filterDuplicateFiles)
         } else {
           continue
         }
+
+        const platforms = Object.keys(platformSpec) as Platform[]
+
+        if (platforms.length === 0) {
+          console.warn(
+            `⚠️   ${typeName} does not declare any platforms in HybridObject<T> - nothing can be generated.`
+          )
+          continue
+        }
+
+        targetSpecs++
+
+        console.log(
+          `    ⚙️   Generating specs for HybridObject "${chalk.bold(typeName)}"...`
+        )
+
+        // Create all files and throw it into a big list
+        const allFiles = platforms
+          .flatMap((p) => {
+            usedPlatforms.push(p)
+            const language = platformSpec[p]!
+            return generatePlatformFiles(type.getType(), language)
+          })
+          .filter(filterDuplicateFiles)
 
         // Group the files by platform ({ ios: [], android: [], shared: [] })
         const filesPerPlatform = groupByPlatform(allFiles)
