@@ -300,13 +300,6 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
-  private fun getComplexCallback(): Func_void_double {
-    val __result = getComplexCallback()
-    return __result
-  }
-  
-  @DoNotStrip
-  @Keep
   abstract fun getValueFromJSCallbackAndWait(getValue: () -> Promise<Double>): Promise<Double>
   
   @DoNotStrip
