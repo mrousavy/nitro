@@ -220,7 +220,7 @@ class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
   }
 
   override fun getComplexCallback(): (Double) -> Unit {
-    return { value
+    return { value ->
         Log.i(TAG, "Callback called with $value.")
     }
   }
