@@ -21,7 +21,7 @@ import com.margelo.nitro.core.*
 @Keep
 @Suppress(
   "KotlinJniMissingFunction", "unused",
-  "RedundantSuppression", "RedundantUnitReturnType",
+  "RedundantSuppression", "RedundantUnitReturnType", "SimpleRedundantLet",
   "LocalVariableName", "PropertyName", "PrivatePropertyName", "FunctionName"
 )
 abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
@@ -114,7 +114,7 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   abstract var optionalCallback: ((value: Double) -> Unit)?
   
-  private var optionalCallback_cxx: ((value: Double) -> Unit)?
+  private var optionalCallback_cxx: Func_void_double?
     @Keep
     @DoNotStrip
     get() {
@@ -123,7 +123,7 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
     @Keep
     @DoNotStrip
     set(value) {
-      optionalCallback = value
+      optionalCallback = value?.let { it.toLambda() }
     }
   
   @get:DoNotStrip

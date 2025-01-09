@@ -21,7 +21,7 @@ import com.margelo.nitro.core.*
 @Keep
 @Suppress(
   "KotlinJniMissingFunction", "unused",
-  "RedundantSuppression", "RedundantUnitReturnType",
+  "RedundantSuppression", "RedundantUnitReturnType", "SimpleRedundantLet",
   "LocalVariableName", "PropertyName", "PrivatePropertyName", "FunctionName"
 )
 abstract class HybridChildSpec: HybridBaseSpec() {

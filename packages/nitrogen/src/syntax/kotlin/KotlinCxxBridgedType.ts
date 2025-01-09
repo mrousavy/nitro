@@ -219,9 +219,10 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
           return this.type.getCode(language)
         }
       case 'array':
+        const array = getTypeAs(this.type, ArrayType)
+        const bridgedItem = new KotlinCxxBridgedType(array.itemType)
         switch (language) {
           case 'c++':
-            const array = getTypeAs(this.type, ArrayType)
             switch (array.itemType.kind) {
               case 'number':
                 return 'jni::JArrayDouble'
@@ -230,9 +231,10 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
               case 'bigint':
                 return 'jni::JArrayLong'
               default:
-                const bridged = new KotlinCxxBridgedType(array.itemType)
-                return `jni::JArrayClass<${bridged.getTypeCode(language)}>`
+                return `jni::JArrayClass<${bridgedItem.getTypeCode(language)}>`
             }
+          case 'kotlin':
+            return `Array<${bridgedItem.getTypeCode(language)}>`
           default:
             return this.type.getCode(language)
         }
@@ -328,9 +330,12 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
             return this.type.getCode(language)
         }
       case 'optional': {
+        const optional = getTypeAs(this.type, OptionalType)
+        const bridgedWrappingType = new KotlinCxxBridgedType(
+          optional.wrappingType
+        )
         switch (language) {
           case 'c++':
-            const optional = getTypeAs(this.type, OptionalType)
             switch (optional.wrappingType.kind) {
               // primitives need to be boxed to make them nullable
               case 'number':
@@ -340,9 +345,10 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
                 return boxed
               default:
                 // all other types can be nullable as they are objects.
-                const bridge = new KotlinCxxBridgedType(optional.wrappingType)
-                return bridge.getTypeCode('c++')
+                return bridgedWrappingType.getTypeCode('c++')
             }
+          case 'kotlin':
+            return `${bridgedWrappingType.getTypeCode(language)}?`
           default:
             return this.type.getCode(language)
         }
@@ -457,6 +463,12 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
         switch (language) {
           case 'c++':
             return `${parameterName}.has_value() ? ${bridge.parseFromCppToKotlin(`${parameterName}.value()`, 'c++', true)} : nullptr`
+          case 'kotlin':
+            if (bridge.needsSpecialHandling) {
+              return `${parameterName}?.let { ${bridge.parseFromCppToKotlin('it', language, isBoxed)} }`
+            } else {
+              return parameterName
+            }
           default:
             return parameterName
         }
@@ -503,11 +515,11 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
         }
       }
       case 'array': {
+        const array = getTypeAs(this.type, ArrayType)
+        const arrayType = this.getTypeCode('c++')
+        const bridge = new KotlinCxxBridgedType(array.itemType)
         switch (language) {
           case 'c++': {
-            const array = getTypeAs(this.type, ArrayType)
-            const arrayType = this.getTypeCode('c++')
-            const bridge = new KotlinCxxBridgedType(array.itemType)
             switch (array.itemType.kind) {
               case 'number':
               case 'boolean':
@@ -531,7 +543,7 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
   jni::local_ref<${arrayType}> __array = ${arrayType}::newArray(__size);
   for (size_t __i = 0; __i < __size; __i++) {
     const auto& __element = ${parameterName}[__i];
-    __array->setElement(__i, *${bridge.parseFromCppToKotlin('__element', 'c++')});
+    __array->setElement(__i, *${indent(bridge.parseFromCppToKotlin('__element', 'c++'), '    ')});
   }
   return __array;
 }()
@@ -539,6 +551,12 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
               }
             }
           }
+          case 'kotlin':
+            if (bridge.needsSpecialHandling) {
+              return `${parameterName}.map { ${bridge.parseFromCppToKotlin('it', language, isBoxed)} }`
+            } else {
+              return parameterName
+            }
           default:
             return parameterName
         }
