@@ -69,8 +69,8 @@ namespace margelo::nitro::image {
     return __result;
   }
   void JHybridImageSpec::saveToFile(const std::string& path, const std::function<void(const std::string& /* path */)>& onFinished) {
-    static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<jni::JString> /* path */, jni::alias_ref<JFunc_void_std__string::javaobject> /* onFinished */)>("saveToFile");
-    method(_javaPart, jni::make_jstring(path), JFunc_void_std__string::fromCpp(onFinished));
+    static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<jni::JString> /* path */, jni::alias_ref<JFunc_void_std__string::javaobject> /* onFinished */)>("saveToFile_cxx");
+    method(_javaPart, jni::make_jstring(path), JFunc_void_std__string_cxx::fromCpp(onFinished));
   }
 
 } // namespace margelo::nitro::image

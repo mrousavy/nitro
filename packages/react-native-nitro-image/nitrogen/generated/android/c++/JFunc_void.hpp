@@ -17,33 +17,54 @@ namespace margelo::nitro::image {
   using namespace facebook;
 
   /**
-   * C++ representation of the callback Func_void.
-   * This is a Kotlin `() -> Unit`, backed by a `std::function<...>`.
+   * Represents the Java/Kotlin callback `() -> Unit`.
+   * This can be passed around between C++ and Java/Kotlin.
    */
-  struct JFunc_void final: public jni::HybridClass<JFunc_void> {
+  struct JFunc_void: public jni::JavaClass<JFunc_void> {
+  public:
+    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Func_void;";
+
+  public:
+    /**
+     * Invokes the function this `JFunc_void` instance holds through JNI.
+     */
+    void invoke() const {
+      static const auto method = getClass()->getMethod<void()>("invoke");
+      method(self());
+    }
+  };
+
+  /**
+   * An implementation of Func_void that is backed by a C++ implementation (using `std::function<...>`)
+   */
+  struct JFunc_void_cxx final: public jni::HybridClass<JFunc_void_cxx, JFunc_void> {
   public:
     static jni::local_ref<JFunc_void::javaobject> fromCpp(const std::function<void()>& func) {
-      return JFunc_void::newObjectCxxArgs(func);
+      return JFunc_void_cxx::newObjectCxxArgs(func);
     }
 
   public:
-    void call() {
+    /**
+     * Invokes the C++ `std::function<...>` this `JFunc_void_cxx` instance holds.
+     */
+    void invoke_cxx() {
       _func();
     }
 
   public:
+    [[nodiscard]]
     inline const std::function<void()>& getFunction() const {
       return _func;
     }
 
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Func_void;";
+    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Func_void_cxx;";
     static void registerNatives() {
-      registerHybrid({makeNativeMethod("call", JFunc_void::call)});
+      registerHybrid({makeNativeMethod("invoke", JFunc_void_cxx::invoke_cxx)});
     }
 
   private:
-    explicit JFunc_void(const std::function<void()>& func): _func(func) { }
+    explicit JFunc_void_cxx(const std::function<void()>& func): _func(func) { }
 
   private:
     friend HybridBase;

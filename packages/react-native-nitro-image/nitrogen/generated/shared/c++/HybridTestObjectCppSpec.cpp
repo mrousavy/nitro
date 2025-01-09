@@ -39,6 +39,8 @@ namespace margelo::nitro::image {
       prototype.registerHybridSetter("optionalEnum", &HybridTestObjectCppSpec::setOptionalEnum);
       prototype.registerHybridGetter("optionalOldEnum", &HybridTestObjectCppSpec::getOptionalOldEnum);
       prototype.registerHybridSetter("optionalOldEnum", &HybridTestObjectCppSpec::setOptionalOldEnum);
+      prototype.registerHybridGetter("optionalCallback", &HybridTestObjectCppSpec::getOptionalCallback);
+      prototype.registerHybridSetter("optionalCallback", &HybridTestObjectCppSpec::setOptionalCallback);
       prototype.registerHybridGetter("someVariant", &HybridTestObjectCppSpec::getSomeVariant);
       prototype.registerHybridSetter("someVariant", &HybridTestObjectCppSpec::setSomeVariant);
       prototype.registerHybridMethod("passVariant", &HybridTestObjectCppSpec::passVariant);
@@ -79,6 +81,7 @@ namespace margelo::nitro::image {
       prototype.registerHybridMethod("callSumUpNTimes", &HybridTestObjectCppSpec::callSumUpNTimes);
       prototype.registerHybridMethod("callbackAsyncPromise", &HybridTestObjectCppSpec::callbackAsyncPromise);
       prototype.registerHybridMethod("callbackAsyncPromiseBuffer", &HybridTestObjectCppSpec::callbackAsyncPromiseBuffer);
+      prototype.registerHybridMethod("getComplexCallback", &HybridTestObjectCppSpec::getComplexCallback);
       prototype.registerHybridMethod("getValueFromJSCallbackAndWait", &HybridTestObjectCppSpec::getValueFromJSCallbackAndWait);
       prototype.registerHybridMethod("getValueFromJsCallback", &HybridTestObjectCppSpec::getValueFromJsCallback);
       prototype.registerHybridMethod("getCar", &HybridTestObjectCppSpec::getCar);

@@ -19,7 +19,11 @@ import com.margelo.nitro.core.*
  */
 @DoNotStrip
 @Keep
-@Suppress("RedundantSuppression", "KotlinJniMissingFunction", "PropertyName", "RedundantUnitReturnType", "unused")
+@Suppress(
+  "KotlinJniMissingFunction", "unused",
+  "RedundantSuppression", "RedundantUnitReturnType", "SimpleRedundantLet",
+  "LocalVariableName", "PropertyName", "PrivatePropertyName", "FunctionName"
+)
 abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   @DoNotStrip
   private var mHybridData: HybridData = initHybrid()
@@ -108,6 +112,20 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   @set:Keep
   abstract var optionalOldEnum: OldEnum?
   
+  abstract var optionalCallback: ((value: Double) -> Unit)?
+  
+  private var optionalCallback_cxx: Func_void_double?
+    @Keep
+    @DoNotStrip
+    get() {
+      return optionalCallback?.let { Func_void_double_java(it) }
+    }
+    @Keep
+    @DoNotStrip
+    set(value) {
+      optionalCallback = value?.let { it }
+    }
+  
   @get:DoNotStrip
   @get:Keep
   @set:DoNotStrip
@@ -151,14 +169,12 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   @Keep
   abstract fun bounceEnums(array: Array<Powertrain>): Array<Powertrain>
   
-  @DoNotStrip
-  @Keep
   abstract fun complexEnumCallback(array: Array<Powertrain>, callback: (array: Array<Powertrain>) -> Unit): Unit
   
   @DoNotStrip
   @Keep
-  private fun complexEnumCallback(array: Array<Powertrain>, callback: Func_void_std__vector_Powertrain_): Unit {
-    val __result = complexEnumCallback(array, callback.toLambda())
+  private fun complexEnumCallback_cxx(array: Array<Powertrain>, callback: Func_void_std__vector_Powertrain_): Unit {
+    val __result = complexEnumCallback(array, callback)
     return __result
   }
   
@@ -222,91 +238,84 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   @Keep
   abstract fun awaitPromise(promise: Promise<Unit>): Promise<Unit>
   
-  @DoNotStrip
-  @Keep
   abstract fun callCallback(callback: () -> Unit): Unit
   
   @DoNotStrip
   @Keep
-  private fun callCallback(callback: Func_void): Unit {
-    val __result = callCallback(callback.toLambda())
+  private fun callCallback_cxx(callback: Func_void): Unit {
+    val __result = callCallback(callback)
     return __result
   }
   
-  @DoNotStrip
-  @Keep
   abstract fun callAll(first: () -> Unit, second: () -> Unit, third: () -> Unit): Unit
   
   @DoNotStrip
   @Keep
-  private fun callAll(first: Func_void, second: Func_void, third: Func_void): Unit {
-    val __result = callAll(first.toLambda(), second.toLambda(), third.toLambda())
+  private fun callAll_cxx(first: Func_void, second: Func_void, third: Func_void): Unit {
+    val __result = callAll(first, second, third)
     return __result
   }
   
-  @DoNotStrip
-  @Keep
   abstract fun callWithOptional(value: Double?, callback: (maybe: Double?) -> Unit): Unit
   
   @DoNotStrip
   @Keep
-  private fun callWithOptional(value: Double?, callback: Func_void_std__optional_double_): Unit {
-    val __result = callWithOptional(value, callback.toLambda())
+  private fun callWithOptional_cxx(value: Double?, callback: Func_void_std__optional_double_): Unit {
+    val __result = callWithOptional(value, callback)
     return __result
   }
   
-  @DoNotStrip
-  @Keep
   abstract fun callSumUpNTimes(callback: () -> Promise<Double>, n: Double): Promise<Double>
   
   @DoNotStrip
   @Keep
-  private fun callSumUpNTimes(callback: Func_std__shared_ptr_Promise_double__, n: Double): Promise<Double> {
-    val __result = callSumUpNTimes(callback.toLambda(), n)
+  private fun callSumUpNTimes_cxx(callback: Func_std__shared_ptr_Promise_double__, n: Double): Promise<Double> {
+    val __result = callSumUpNTimes(callback, n)
     return __result
   }
   
-  @DoNotStrip
-  @Keep
   abstract fun callbackAsyncPromise(callback: () -> Promise<Promise<Double>>): Promise<Double>
   
   @DoNotStrip
   @Keep
-  private fun callbackAsyncPromise(callback: Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double____): Promise<Double> {
-    val __result = callbackAsyncPromise(callback.toLambda())
+  private fun callbackAsyncPromise_cxx(callback: Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double____): Promise<Double> {
+    val __result = callbackAsyncPromise(callback)
     return __result
   }
   
-  @DoNotStrip
-  @Keep
   abstract fun callbackAsyncPromiseBuffer(callback: () -> Promise<Promise<ArrayBuffer>>): Promise<ArrayBuffer>
   
   @DoNotStrip
   @Keep
-  private fun callbackAsyncPromiseBuffer(callback: Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____): Promise<ArrayBuffer> {
-    val __result = callbackAsyncPromiseBuffer(callback.toLambda())
+  private fun callbackAsyncPromiseBuffer_cxx(callback: Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____): Promise<ArrayBuffer> {
+    val __result = callbackAsyncPromiseBuffer(callback)
     return __result
   }
   
+  abstract fun getComplexCallback(): (value: Double) -> Unit
+  
   @DoNotStrip
   @Keep
+  private fun getComplexCallback_cxx(): Func_void_double {
+    val __result = getComplexCallback()
+    return Func_void_double_java(__result)
+  }
+  
   abstract fun getValueFromJSCallbackAndWait(getValue: () -> Promise<Double>): Promise<Double>
   
   @DoNotStrip
   @Keep
-  private fun getValueFromJSCallbackAndWait(getValue: Func_std__shared_ptr_Promise_double__): Promise<Double> {
-    val __result = getValueFromJSCallbackAndWait(getValue.toLambda())
+  private fun getValueFromJSCallbackAndWait_cxx(getValue: Func_std__shared_ptr_Promise_double__): Promise<Double> {
+    val __result = getValueFromJSCallbackAndWait(getValue)
     return __result
   }
   
-  @DoNotStrip
-  @Keep
   abstract fun getValueFromJsCallback(callback: () -> Promise<String>, andThenCall: (valueFromJs: String) -> Unit): Promise<Unit>
   
   @DoNotStrip
   @Keep
-  private fun getValueFromJsCallback(callback: Func_std__shared_ptr_Promise_std__string__, andThenCall: Func_void_std__string): Promise<Unit> {
-    val __result = getValueFromJsCallback(callback.toLambda(), andThenCall.toLambda())
+  private fun getValueFromJsCallback_cxx(callback: Func_std__shared_ptr_Promise_std__string__, andThenCall: Func_void_std__string): Promise<Unit> {
+    val __result = getValueFromJsCallback(callback, andThenCall)
     return __result
   }
   
@@ -322,9 +331,14 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   @Keep
   abstract fun getDriver(car: Car): Person?
   
+  abstract fun jsStyleObjectAsParameters(params: JsStyleStruct): Unit
+  
   @DoNotStrip
   @Keep
-  abstract fun jsStyleObjectAsParameters(params: JsStyleStruct): Unit
+  private fun jsStyleObjectAsParameters_cxx(params: JsStyleStruct): Unit {
+    val __result = jsStyleObjectAsParameters(params)
+    return __result
+  }
   
   @DoNotStrip
   @Keep

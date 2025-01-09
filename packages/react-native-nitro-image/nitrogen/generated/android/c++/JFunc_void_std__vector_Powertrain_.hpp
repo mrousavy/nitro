@@ -20,17 +20,45 @@ namespace margelo::nitro::image {
   using namespace facebook;
 
   /**
-   * C++ representation of the callback Func_void_std__vector_Powertrain_.
-   * This is a Kotlin `(array: Array<Powertrain>) -> Unit`, backed by a `std::function<...>`.
+   * Represents the Java/Kotlin callback `(array: Array<Powertrain>) -> Unit`.
+   * This can be passed around between C++ and Java/Kotlin.
    */
-  struct JFunc_void_std__vector_Powertrain_ final: public jni::HybridClass<JFunc_void_std__vector_Powertrain_> {
+  struct JFunc_void_std__vector_Powertrain_: public jni::JavaClass<JFunc_void_std__vector_Powertrain_> {
+  public:
+    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Func_void_std__vector_Powertrain_;";
+
+  public:
+    /**
+     * Invokes the function this `JFunc_void_std__vector_Powertrain_` instance holds through JNI.
+     */
+    void invoke(const std::vector<Powertrain>& array) const {
+      static const auto method = getClass()->getMethod<void(jni::alias_ref<jni::JArrayClass<JPowertrain>> /* array */)>("invoke");
+      method(self(), [&]() {
+        size_t __size = array.size();
+        jni::local_ref<jni::JArrayClass<JPowertrain>> __array = jni::JArrayClass<JPowertrain>::newArray(__size);
+        for (size_t __i = 0; __i < __size; __i++) {
+          const auto& __element = array[__i];
+          __array->setElement(__i, *JPowertrain::fromCpp(__element));
+        }
+        return __array;
+      }());
+    }
+  };
+
+  /**
+   * An implementation of Func_void_std__vector_Powertrain_ that is backed by a C++ implementation (using `std::function<...>`)
+   */
+  struct JFunc_void_std__vector_Powertrain__cxx final: public jni::HybridClass<JFunc_void_std__vector_Powertrain__cxx, JFunc_void_std__vector_Powertrain_> {
   public:
     static jni::local_ref<JFunc_void_std__vector_Powertrain_::javaobject> fromCpp(const std::function<void(const std::vector<Powertrain>& /* array */)>& func) {
-      return JFunc_void_std__vector_Powertrain_::newObjectCxxArgs(func);
+      return JFunc_void_std__vector_Powertrain__cxx::newObjectCxxArgs(func);
     }
 
   public:
-    void call(jni::alias_ref<jni::JArrayClass<JPowertrain>> array) {
+    /**
+     * Invokes the C++ `std::function<...>` this `JFunc_void_std__vector_Powertrain__cxx` instance holds.
+     */
+    void invoke_cxx(jni::alias_ref<jni::JArrayClass<JPowertrain>> array) {
       _func([&]() {
               size_t __size = array->size();
               std::vector<Powertrain> __vector;
@@ -44,18 +72,19 @@ namespace margelo::nitro::image {
     }
 
   public:
+    [[nodiscard]]
     inline const std::function<void(const std::vector<Powertrain>& /* array */)>& getFunction() const {
       return _func;
     }
 
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Func_void_std__vector_Powertrain_;";
+    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Func_void_std__vector_Powertrain__cxx;";
     static void registerNatives() {
-      registerHybrid({makeNativeMethod("call", JFunc_void_std__vector_Powertrain_::call)});
+      registerHybrid({makeNativeMethod("invoke", JFunc_void_std__vector_Powertrain__cxx::invoke_cxx)});
     }
 
   private:
-    explicit JFunc_void_std__vector_Powertrain_(const std::function<void(const std::vector<Powertrain>& /* array */)>& func): _func(func) { }
+    explicit JFunc_void_std__vector_Powertrain__cxx(const std::function<void(const std::vector<Powertrain>& /* array */)>& func): _func(func) { }
 
   private:
     friend HybridBase;

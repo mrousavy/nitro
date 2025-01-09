@@ -56,6 +56,7 @@ interface SharedTestObjectProps {
   optionalArray?: string[]
   optionalEnum?: Powertrain
   optionalOldEnum?: OldEnum
+  optionalCallback?: (value: number) => void
 
   // Basic function tests
   simpleFunc(): void
@@ -113,6 +114,7 @@ interface SharedTestObjectProps {
   callbackAsyncPromiseBuffer(
     callback: () => Promise<ArrayBuffer>
   ): Promise<ArrayBuffer>
+  getComplexCallback(): (value: number) => void
 
   // Callbacks that return values
   getValueFromJSCallbackAndWait(getValue: () => number): Promise<number>

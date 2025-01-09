@@ -33,6 +33,8 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
 
   var optionalOldEnum: OldEnum? = nil
 
+  var optionalCallback: ((Double) -> Void)? = nil
+
   func simpleFunc() throws {
     // do nothing
   }
@@ -98,6 +100,9 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
     }
   }
 
+  func getComplexCallback() throws -> (Double) -> Void {
+    return { value in print("Callback called with \(value).") }
+  }
 
   func bounceStrings(array: [String]) throws -> [String] {
     return array

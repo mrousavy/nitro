@@ -16,7 +16,12 @@ import com.margelo.nitro.core.*
  */
 @DoNotStrip
 @Keep
-data class Person(
-  val name: String,
-  val age: Double
-)
+data class Person
+  @DoNotStrip
+  @Keep
+  constructor(
+    val name: String,
+    val age: Double
+  ) {
+  /* main constructor */
+}

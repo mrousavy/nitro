@@ -216,6 +216,37 @@ namespace margelo::nitro::image::bridge::swift {
     return std::optional<OldEnum>(value);
   }
   
+  // pragma MARK: std::function<void(double /* value */)>
+  /**
+   * Specialized version of `std::function<void(double)>`.
+   */
+  using Func_void_double = std::function<void(double /* value */)>;
+  /**
+   * Wrapper class for a `std::function<void(double / * value * /)>`, this can be used from Swift.
+   */
+  class Func_void_double_Wrapper final {
+  public:
+    explicit Func_void_double_Wrapper(std::function<void(double /* value */)>&& func): _function(std::make_shared<std::function<void(double /* value */)>>(std::move(func))) {}
+    inline void call(double value) const {
+      _function->operator()(value);
+    }
+  private:
+    std::shared_ptr<std::function<void(double /* value */)>> _function;
+  };
+  Func_void_double create_Func_void_double(void* _Nonnull swiftClosureWrapper);
+  inline Func_void_double_Wrapper wrap_Func_void_double(Func_void_double value) {
+    return Func_void_double_Wrapper(std::move(value));
+  }
+  
+  // pragma MARK: std::optional<std::function<void(double /* value */)>>
+  /**
+   * Specialized version of `std::optional<std::function<void(double / * value * /)>>`.
+   */
+  using std__optional_std__function_void_double____value______ = std::optional<std::function<void(double /* value */)>>;
+  inline std::optional<std::function<void(double /* value */)>> create_std__optional_std__function_void_double____value______(const std::function<void(double /* value */)>& value) {
+    return std::optional<std::function<void(double /* value */)>>(value);
+  }
+  
   // pragma MARK: std::vector<double>
   /**
    * Specialized version of `std::vector<double>`.
@@ -409,28 +440,6 @@ namespace margelo::nitro::image::bridge::swift {
   }
   inline PromiseHolder<double> wrap_std__shared_ptr_Promise_double__(std::shared_ptr<Promise<double>> promise) {
     return PromiseHolder<double>(std::move(promise));
-  }
-  
-  // pragma MARK: std::function<void(double /* result */)>
-  /**
-   * Specialized version of `std::function<void(double)>`.
-   */
-  using Func_void_double = std::function<void(double /* result */)>;
-  /**
-   * Wrapper class for a `std::function<void(double / * result * /)>`, this can be used from Swift.
-   */
-  class Func_void_double_Wrapper final {
-  public:
-    explicit Func_void_double_Wrapper(std::function<void(double /* result */)>&& func): _function(std::make_shared<std::function<void(double /* result */)>>(std::move(func))) {}
-    inline void call(double result) const {
-      _function->operator()(result);
-    }
-  private:
-    std::shared_ptr<std::function<void(double /* result */)>> _function;
-  };
-  Func_void_double create_Func_void_double(void* _Nonnull swiftClosureWrapper);
-  inline Func_void_double_Wrapper wrap_Func_void_double(Func_void_double value) {
-    return Func_void_double_Wrapper(std::move(value));
   }
   
   // pragma MARK: std::optional<Person>
@@ -864,6 +873,15 @@ namespace margelo::nitro::image::bridge::swift {
   }
   inline Result_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer____ create_Result_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer____(const std::exception_ptr& error) {
     return Result<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>>::withError(error);
+  }
+  
+  // pragma MARK: Result<std::function<void(double /* value */)>>
+  using Result_std__function_void_double____value______ = Result<std::function<void(double /* value */)>>;
+  inline Result_std__function_void_double____value______ create_Result_std__function_void_double____value______(const std::function<void(double /* value */)>& value) {
+    return Result<std::function<void(double /* value */)>>::withValue(value);
+  }
+  inline Result_std__function_void_double____value______ create_Result_std__function_void_double____value______(const std::exception_ptr& error) {
+    return Result<std::function<void(double /* value */)>>::withError(error);
   }
   
   // pragma MARK: Result<Car>

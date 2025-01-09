@@ -8,15 +8,15 @@
 import NitroModules
 
 /**
- * Wraps a Swift `((_ value: Promise<Double>) -> Void)` as a class.
+ * Wraps a Swift `(_ value: Promise<Double>) -> Void` as a class.
  * This class can be used from C++, e.g. to wrap the Swift closure as a `std::function`.
  */
 public final class Func_void_std__shared_ptr_Promise_double__ {
   public typealias bridge = margelo.nitro.image.bridge.swift
 
-  private let closure: ((_ value: Promise<Double>) -> Void)
+  private let closure: (_ value: Promise<Double>) -> Void
 
-  public init(_ closure: @escaping ((_ value: Promise<Double>) -> Void)) {
+  public init(_ closure: @escaping (_ value: Promise<Double>) -> Void) {
     self.closure = closure
   }
 

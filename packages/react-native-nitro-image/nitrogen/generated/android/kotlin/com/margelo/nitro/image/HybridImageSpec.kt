@@ -19,7 +19,11 @@ import com.margelo.nitro.core.*
  */
 @DoNotStrip
 @Keep
-@Suppress("RedundantSuppression", "KotlinJniMissingFunction", "PropertyName", "RedundantUnitReturnType", "unused")
+@Suppress(
+  "KotlinJniMissingFunction", "unused",
+  "RedundantSuppression", "RedundantUnitReturnType", "SimpleRedundantLet",
+  "LocalVariableName", "PropertyName", "PrivatePropertyName", "FunctionName"
+)
 abstract class HybridImageSpec: HybridObject() {
   @DoNotStrip
   private var mHybridData: HybridData = initHybrid()
@@ -57,14 +61,12 @@ abstract class HybridImageSpec: HybridObject() {
   @Keep
   abstract fun toArrayBuffer(format: ImageFormat): Double
   
-  @DoNotStrip
-  @Keep
   abstract fun saveToFile(path: String, onFinished: (path: String) -> Unit): Unit
   
   @DoNotStrip
   @Keep
-  private fun saveToFile(path: String, onFinished: Func_void_std__string): Unit {
-    val __result = saveToFile(path, onFinished.toLambda())
+  private fun saveToFile_cxx(path: String, onFinished: Func_void_std__string): Unit {
+    val __result = saveToFile(path, onFinished)
     return __result
   }
 

@@ -29,6 +29,7 @@ namespace margelo::nitro::image {
      * Convert this Java/Kotlin-based struct to the C++ struct JsStyleStruct by copying all values to C++.
      */
     [[maybe_unused]]
+    [[nodiscard]]
     JsStyleStruct toCpp() const {
       static const auto clazz = javaClassStatic();
       static const auto fieldValue = clazz->getField<double>("value");
@@ -37,7 +38,16 @@ namespace margelo::nitro::image {
       jni::local_ref<JFunc_void_double::javaobject> onChanged = this->getFieldValue(fieldOnChanged);
       return JsStyleStruct(
         value,
-        onChanged->cthis()->getFunction()
+        [&]() -> std::function<void(double /* num */)> {
+          if (onChanged->isInstanceOf(JFunc_void_double_cxx::javaClassStatic())) [[likely]] {
+            auto downcast = jni::static_ref_cast<JFunc_void_double_cxx::javaobject>(onChanged);
+            return downcast->cthis()->getFunction();
+          } else {
+            return [onChanged](double num) -> void {
+              return onChanged->invoke(num);
+            };
+          }
+        }()
       );
     }
 
@@ -49,7 +59,7 @@ namespace margelo::nitro::image {
     static jni::local_ref<JJsStyleStruct::javaobject> fromCpp(const JsStyleStruct& value) {
       return newInstance(
         value.value,
-        JFunc_void_double::fromCpp(value.onChanged)
+        JFunc_void_double_cxx::fromCpp(value.onChanged)
       );
     }
   };

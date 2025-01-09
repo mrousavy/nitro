@@ -20,17 +20,49 @@ namespace margelo::nitro::image {
   using namespace facebook;
 
   /**
-   * C++ representation of the callback Func_std__shared_ptr_Promise_std__string__.
-   * This is a Kotlin `() -> Promise<String>`, backed by a `std::function<...>`.
+   * Represents the Java/Kotlin callback `() -> Promise<String>`.
+   * This can be passed around between C++ and Java/Kotlin.
    */
-  struct JFunc_std__shared_ptr_Promise_std__string__ final: public jni::HybridClass<JFunc_std__shared_ptr_Promise_std__string__> {
+  struct JFunc_std__shared_ptr_Promise_std__string__: public jni::JavaClass<JFunc_std__shared_ptr_Promise_std__string__> {
+  public:
+    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Func_std__shared_ptr_Promise_std__string__;";
+
+  public:
+    /**
+     * Invokes the function this `JFunc_std__shared_ptr_Promise_std__string__` instance holds through JNI.
+     */
+    std::shared_ptr<Promise<std::string>> invoke() const {
+      static const auto method = getClass()->getMethod<jni::local_ref<JPromise::javaobject>()>("invoke");
+      auto __result = method(self());
+      return [&]() {
+        auto __promise = Promise<std::string>::create();
+        __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
+          auto __result = jni::static_ref_cast<jni::JString>(__boxedResult);
+          __promise->resolve(__result->toStdString());
+        });
+        __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {
+          jni::JniException __jniError(__throwable);
+          __promise->reject(std::make_exception_ptr(__jniError));
+        });
+        return __promise;
+      }();
+    }
+  };
+
+  /**
+   * An implementation of Func_std__shared_ptr_Promise_std__string__ that is backed by a C++ implementation (using `std::function<...>`)
+   */
+  struct JFunc_std__shared_ptr_Promise_std__string___cxx final: public jni::HybridClass<JFunc_std__shared_ptr_Promise_std__string___cxx, JFunc_std__shared_ptr_Promise_std__string__> {
   public:
     static jni::local_ref<JFunc_std__shared_ptr_Promise_std__string__::javaobject> fromCpp(const std::function<std::shared_ptr<Promise<std::string>>()>& func) {
-      return JFunc_std__shared_ptr_Promise_std__string__::newObjectCxxArgs(func);
+      return JFunc_std__shared_ptr_Promise_std__string___cxx::newObjectCxxArgs(func);
     }
 
   public:
-    jni::local_ref<JPromise::javaobject> call() {
+    /**
+     * Invokes the C++ `std::function<...>` this `JFunc_std__shared_ptr_Promise_std__string___cxx` instance holds.
+     */
+    jni::local_ref<JPromise::javaobject> invoke_cxx() {
       std::shared_ptr<Promise<std::string>> __result = _func();
       return [&]() {
         jni::local_ref<JPromise::javaobject> __localPromise = JPromise::create();
@@ -47,18 +79,19 @@ namespace margelo::nitro::image {
     }
 
   public:
+    [[nodiscard]]
     inline const std::function<std::shared_ptr<Promise<std::string>>()>& getFunction() const {
       return _func;
     }
 
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Func_std__shared_ptr_Promise_std__string__;";
+    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Func_std__shared_ptr_Promise_std__string___cxx;";
     static void registerNatives() {
-      registerHybrid({makeNativeMethod("call", JFunc_std__shared_ptr_Promise_std__string__::call)});
+      registerHybrid({makeNativeMethod("invoke", JFunc_std__shared_ptr_Promise_std__string___cxx::invoke_cxx)});
     }
 
   private:
-    explicit JFunc_std__shared_ptr_Promise_std__string__(const std::function<std::shared_ptr<Promise<std::string>>()>& func): _func(func) { }
+    explicit JFunc_std__shared_ptr_Promise_std__string___cxx(const std::function<std::shared_ptr<Promise<std::string>>()>& func): _func(func) { }
 
   private:
     friend HybridBase;

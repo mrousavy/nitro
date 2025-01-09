@@ -12,6 +12,41 @@ export function createKotlinStruct(structType: StructType): SourceFile[] {
   const values = structType.properties.map(
     (p) => `val ${p.escapedName}: ${p.getCode('kotlin')}`
   )
+  let secondaryConstructor: string
+  const needsSpecialHandling = structType.properties.some(
+    (p) => new KotlinCxxBridgedType(p).needsSpecialHandling
+  )
+  if (needsSpecialHandling) {
+    const params = structType.properties.map((p) => {
+      const bridged = new KotlinCxxBridgedType(p)
+      return `${p.escapedName}: ${bridged.getTypeCode('kotlin')}`
+    })
+    const paramsForward = structType.properties.map((p) => {
+      const bridged = new KotlinCxxBridgedType(p)
+      if (bridged.needsSpecialHandling) {
+        // We need special parsing for this type
+        const parsed = bridged.parseFromCppToKotlin(
+          p.escapedName,
+          'kotlin',
+          false
+        )
+        // we explicitly `as`-cast this to avoid ambiguous upcasts/cyclic this() calls.
+        return `${parsed} as ${p.getCode('kotlin')}`
+      } else {
+        return p.escapedName
+      }
+    })
+    secondaryConstructor = `
+@DoNotStrip
+@Keep
+@Suppress("unused")
+private constructor(${indent(params.join(', '), 20)})
+             : this(${indent(paramsForward.join(', '), 20)})
+    `.trim()
+  } else {
+    secondaryConstructor = `/* main constructor */`
+  }
+
   const code = `
 ${createFileMetadataString(`${structType.structName}.kt`)}
 
@@ -26,9 +61,14 @@ import com.margelo.nitro.core.*
  */
 @DoNotStrip
 @Keep
-data class ${structType.structName}(
-  ${indent(values.join(',\n'), '  ')}
-)
+data class ${structType.structName}
+  @DoNotStrip
+  @Keep
+  constructor(
+    ${indent(values.join(',\n'), '    ')}
+  ) {
+  ${indent(secondaryConstructor, '  ')}
+}
   `.trim()
 
   const cxxNamespace = NitroConfig.getCxxNamespace('c++')
@@ -76,6 +116,7 @@ namespace ${cxxNamespace} {
      * Convert this Java/Kotlin-based struct to the C++ struct ${structType.structName} by copying all values to C++.
      */
     [[maybe_unused]]
+    [[nodiscard]]
     ${structType.structName} toCpp() const {
       ${indent(jniStructInitializerBody, '      ')}
     }

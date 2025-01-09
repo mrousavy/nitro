@@ -125,6 +125,14 @@ void HybridTestObjectCpp::setOptionalOldEnum(std::optional<OldEnum> optionalOldE
   _optionalOldEnum = optionalOldEnum;
 }
 
+std::optional<std::function<void(double)>> HybridTestObjectCpp::getOptionalCallback() {
+  return _optionalCallback;
+}
+
+void HybridTestObjectCpp::setOptionalCallback(const std::optional<std::function<void(double)>>& callback) {
+  _optionalCallback = callback;
+}
+
 // Methods
 double HybridTestObjectCpp::addNumbers(double a, double b) {
   return a + b;
@@ -308,6 +316,10 @@ std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>> HybridTestObjectCpp::call
     std::shared_ptr<ArrayBuffer> innerResult = innerFuture.get();
     return innerResult;
   });
+}
+
+std::function<void(double)> HybridTestObjectCpp::getComplexCallback() {
+  return [](double value) { Logger::log(LogLevel::Info, TAG, "Callback called with %f", value); };
 }
 
 std::shared_ptr<Promise<double>>

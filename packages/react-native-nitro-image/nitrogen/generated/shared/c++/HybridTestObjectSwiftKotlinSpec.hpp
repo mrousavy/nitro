@@ -41,9 +41,9 @@ namespace margelo::nitro::image { class HybridBaseSpec; }
 #include <vector>
 #include "Powertrain.hpp"
 #include "OldEnum.hpp"
+#include <functional>
 #include <variant>
 #include "Person.hpp"
-#include <functional>
 #include <NitroModules/AnyMap.hpp>
 #include <NitroModules/Promise.hpp>
 #include <exception>
@@ -103,6 +103,8 @@ namespace margelo::nitro::image {
       virtual void setOptionalEnum(std::optional<Powertrain> optionalEnum) = 0;
       virtual std::optional<OldEnum> getOptionalOldEnum() = 0;
       virtual void setOptionalOldEnum(std::optional<OldEnum> optionalOldEnum) = 0;
+      virtual std::optional<std::function<void(double /* value */)>> getOptionalCallback() = 0;
+      virtual void setOptionalCallback(const std::optional<std::function<void(double /* value */)>>& optionalCallback) = 0;
       virtual std::variant<std::string, double> getSomeVariant() = 0;
       virtual void setSomeVariant(const std::variant<std::string, double>& someVariant) = 0;
 
@@ -139,6 +141,7 @@ namespace margelo::nitro::image {
       virtual std::shared_ptr<Promise<double>> callSumUpNTimes(const std::function<std::shared_ptr<Promise<double>>()>& callback, double n) = 0;
       virtual std::shared_ptr<Promise<double>> callbackAsyncPromise(const std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<double>>>>()>& callback) = 0;
       virtual std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>> callbackAsyncPromiseBuffer(const std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>>>()>& callback) = 0;
+      virtual std::function<void(double /* value */)> getComplexCallback() = 0;
       virtual std::shared_ptr<Promise<double>> getValueFromJSCallbackAndWait(const std::function<std::shared_ptr<Promise<double>>()>& getValue) = 0;
       virtual std::shared_ptr<Promise<void>> getValueFromJsCallback(const std::function<std::shared_ptr<Promise<std::string>>()>& callback, const std::function<void(const std::string& /* valueFromJs */)>& andThenCall) = 0;
       virtual Car getCar() = 0;

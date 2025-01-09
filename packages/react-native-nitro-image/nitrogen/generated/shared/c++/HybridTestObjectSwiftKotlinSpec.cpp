@@ -37,6 +37,8 @@ namespace margelo::nitro::image {
       prototype.registerHybridSetter("optionalEnum", &HybridTestObjectSwiftKotlinSpec::setOptionalEnum);
       prototype.registerHybridGetter("optionalOldEnum", &HybridTestObjectSwiftKotlinSpec::getOptionalOldEnum);
       prototype.registerHybridSetter("optionalOldEnum", &HybridTestObjectSwiftKotlinSpec::setOptionalOldEnum);
+      prototype.registerHybridGetter("optionalCallback", &HybridTestObjectSwiftKotlinSpec::getOptionalCallback);
+      prototype.registerHybridSetter("optionalCallback", &HybridTestObjectSwiftKotlinSpec::setOptionalCallback);
       prototype.registerHybridGetter("someVariant", &HybridTestObjectSwiftKotlinSpec::getSomeVariant);
       prototype.registerHybridSetter("someVariant", &HybridTestObjectSwiftKotlinSpec::setSomeVariant);
       prototype.registerHybridMethod("newTestObject", &HybridTestObjectSwiftKotlinSpec::newTestObject);
@@ -70,6 +72,7 @@ namespace margelo::nitro::image {
       prototype.registerHybridMethod("callSumUpNTimes", &HybridTestObjectSwiftKotlinSpec::callSumUpNTimes);
       prototype.registerHybridMethod("callbackAsyncPromise", &HybridTestObjectSwiftKotlinSpec::callbackAsyncPromise);
       prototype.registerHybridMethod("callbackAsyncPromiseBuffer", &HybridTestObjectSwiftKotlinSpec::callbackAsyncPromiseBuffer);
+      prototype.registerHybridMethod("getComplexCallback", &HybridTestObjectSwiftKotlinSpec::getComplexCallback);
       prototype.registerHybridMethod("getValueFromJSCallbackAndWait", &HybridTestObjectSwiftKotlinSpec::getValueFromJSCallbackAndWait);
       prototype.registerHybridMethod("getValueFromJsCallback", &HybridTestObjectSwiftKotlinSpec::getValueFromJsCallback);
       prototype.registerHybridMethod("getCar", &HybridTestObjectSwiftKotlinSpec::getCar);

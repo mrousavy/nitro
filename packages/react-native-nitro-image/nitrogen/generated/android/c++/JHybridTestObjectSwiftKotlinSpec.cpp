@@ -39,6 +39,8 @@ namespace margelo::nitro::image { struct JsStyleStruct; }
 #include "JPowertrain.hpp"
 #include "OldEnum.hpp"
 #include "JOldEnum.hpp"
+#include <functional>
+#include "JFunc_void_double.hpp"
 #include <variant>
 #include "JVariant_String_Double.hpp"
 #include "Person.hpp"
@@ -56,7 +58,6 @@ namespace margelo::nitro::image { struct JsStyleStruct; }
 #include "JHybridChildSpec.hpp"
 #include "HybridBaseSpec.hpp"
 #include "JHybridBaseSpec.hpp"
-#include <functional>
 #include "JFunc_void_std__vector_Powertrain_.hpp"
 #include <exception>
 #include "JFunc_void.hpp"
@@ -68,7 +69,6 @@ namespace margelo::nitro::image { struct JsStyleStruct; }
 #include "JFunc_void_std__string.hpp"
 #include "JsStyleStruct.hpp"
 #include "JJsStyleStruct.hpp"
-#include "JFunc_void_double.hpp"
 
 namespace margelo::nitro::image {
 
@@ -209,6 +209,24 @@ namespace margelo::nitro::image {
     static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<JOldEnum> /* optionalOldEnum */)>("setOptionalOldEnum");
     method(_javaPart, optionalOldEnum.has_value() ? JOldEnum::fromCpp(optionalOldEnum.value()) : nullptr);
   }
+  std::optional<std::function<void(double /* value */)>> JHybridTestObjectSwiftKotlinSpec::getOptionalCallback() {
+    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JFunc_void_double::javaobject>()>("getOptionalCallback_cxx");
+    auto __result = method(_javaPart);
+    return __result != nullptr ? std::make_optional([&]() -> std::function<void(double /* value */)> {
+      if (__result->isInstanceOf(JFunc_void_double_cxx::javaClassStatic())) [[likely]] {
+        auto downcast = jni::static_ref_cast<JFunc_void_double_cxx::javaobject>(__result);
+        return downcast->cthis()->getFunction();
+      } else {
+        return [__result](double value) -> void {
+          return __result->invoke(value);
+        };
+      }
+    }()) : std::nullopt;
+  }
+  void JHybridTestObjectSwiftKotlinSpec::setOptionalCallback(const std::optional<std::function<void(double /* value */)>>& optionalCallback) {
+    static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<JFunc_void_double::javaobject> /* optionalCallback */)>("setOptionalCallback_cxx");
+    method(_javaPart, optionalCallback.has_value() ? JFunc_void_double_cxx::fromCpp(optionalCallback.value()) : nullptr);
+  }
   std::variant<std::string, double> JHybridTestObjectSwiftKotlinSpec::getSomeVariant() {
     static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JVariant_String_Double>()>("getSomeVariant");
     auto __result = method(_javaPart);
@@ -325,7 +343,7 @@ namespace margelo::nitro::image {
     }();
   }
   void JHybridTestObjectSwiftKotlinSpec::complexEnumCallback(const std::vector<Powertrain>& array, const std::function<void(const std::vector<Powertrain>& /* array */)>& callback) {
-    static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<jni::JArrayClass<JPowertrain>> /* array */, jni::alias_ref<JFunc_void_std__vector_Powertrain_::javaobject> /* callback */)>("complexEnumCallback");
+    static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<jni::JArrayClass<JPowertrain>> /* array */, jni::alias_ref<JFunc_void_std__vector_Powertrain_::javaobject> /* callback */)>("complexEnumCallback_cxx");
     method(_javaPart, [&]() {
       size_t __size = array.size();
       jni::local_ref<jni::JArrayClass<JPowertrain>> __array = jni::JArrayClass<JPowertrain>::newArray(__size);
@@ -334,7 +352,7 @@ namespace margelo::nitro::image {
         __array->setElement(__i, *JPowertrain::fromCpp(__element));
       }
       return __array;
-    }(), JFunc_void_std__vector_Powertrain_::fromCpp(callback));
+    }(), JFunc_void_std__vector_Powertrain__cxx::fromCpp(callback));
   }
   std::shared_ptr<AnyMap> JHybridTestObjectSwiftKotlinSpec::createMap() {
     static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JAnyMap::javaobject>()>("createMap");
@@ -517,20 +535,20 @@ namespace margelo::nitro::image {
     }();
   }
   void JHybridTestObjectSwiftKotlinSpec::callCallback(const std::function<void()>& callback) {
-    static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<JFunc_void::javaobject> /* callback */)>("callCallback");
-    method(_javaPart, JFunc_void::fromCpp(callback));
+    static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<JFunc_void::javaobject> /* callback */)>("callCallback_cxx");
+    method(_javaPart, JFunc_void_cxx::fromCpp(callback));
   }
   void JHybridTestObjectSwiftKotlinSpec::callAll(const std::function<void()>& first, const std::function<void()>& second, const std::function<void()>& third) {
-    static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<JFunc_void::javaobject> /* first */, jni::alias_ref<JFunc_void::javaobject> /* second */, jni::alias_ref<JFunc_void::javaobject> /* third */)>("callAll");
-    method(_javaPart, JFunc_void::fromCpp(first), JFunc_void::fromCpp(second), JFunc_void::fromCpp(third));
+    static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<JFunc_void::javaobject> /* first */, jni::alias_ref<JFunc_void::javaobject> /* second */, jni::alias_ref<JFunc_void::javaobject> /* third */)>("callAll_cxx");
+    method(_javaPart, JFunc_void_cxx::fromCpp(first), JFunc_void_cxx::fromCpp(second), JFunc_void_cxx::fromCpp(third));
   }
   void JHybridTestObjectSwiftKotlinSpec::callWithOptional(std::optional<double> value, const std::function<void(std::optional<double> /* maybe */)>& callback) {
-    static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<jni::JDouble> /* value */, jni::alias_ref<JFunc_void_std__optional_double_::javaobject> /* callback */)>("callWithOptional");
-    method(_javaPart, value.has_value() ? jni::JDouble::valueOf(value.value()) : nullptr, JFunc_void_std__optional_double_::fromCpp(callback));
+    static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<jni::JDouble> /* value */, jni::alias_ref<JFunc_void_std__optional_double_::javaobject> /* callback */)>("callWithOptional_cxx");
+    method(_javaPart, value.has_value() ? jni::JDouble::valueOf(value.value()) : nullptr, JFunc_void_std__optional_double__cxx::fromCpp(callback));
   }
   std::shared_ptr<Promise<double>> JHybridTestObjectSwiftKotlinSpec::callSumUpNTimes(const std::function<std::shared_ptr<Promise<double>>()>& callback, double n) {
-    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JPromise::javaobject>(jni::alias_ref<JFunc_std__shared_ptr_Promise_double__::javaobject> /* callback */, double /* n */)>("callSumUpNTimes");
-    auto __result = method(_javaPart, JFunc_std__shared_ptr_Promise_double__::fromCpp(callback), n);
+    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JPromise::javaobject>(jni::alias_ref<JFunc_std__shared_ptr_Promise_double__::javaobject> /* callback */, double /* n */)>("callSumUpNTimes_cxx");
+    auto __result = method(_javaPart, JFunc_std__shared_ptr_Promise_double___cxx::fromCpp(callback), n);
     return [&]() {
       auto __promise = Promise<double>::create();
       __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
@@ -545,8 +563,8 @@ namespace margelo::nitro::image {
     }();
   }
   std::shared_ptr<Promise<double>> JHybridTestObjectSwiftKotlinSpec::callbackAsyncPromise(const std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<double>>>>()>& callback) {
-    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JPromise::javaobject>(jni::alias_ref<JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_double____::javaobject> /* callback */)>("callbackAsyncPromise");
-    auto __result = method(_javaPart, JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_double____::fromCpp(callback));
+    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JPromise::javaobject>(jni::alias_ref<JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_double____::javaobject> /* callback */)>("callbackAsyncPromise_cxx");
+    auto __result = method(_javaPart, JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_double_____cxx::fromCpp(callback));
     return [&]() {
       auto __promise = Promise<double>::create();
       __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
@@ -561,8 +579,8 @@ namespace margelo::nitro::image {
     }();
   }
   std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>> JHybridTestObjectSwiftKotlinSpec::callbackAsyncPromiseBuffer(const std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>>>()>& callback) {
-    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JPromise::javaobject>(jni::alias_ref<JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____::javaobject> /* callback */)>("callbackAsyncPromiseBuffer");
-    auto __result = method(_javaPart, JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____::fromCpp(callback));
+    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JPromise::javaobject>(jni::alias_ref<JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____::javaobject> /* callback */)>("callbackAsyncPromiseBuffer_cxx");
+    auto __result = method(_javaPart, JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer______cxx::fromCpp(callback));
     return [&]() {
       auto __promise = Promise<std::shared_ptr<ArrayBuffer>>::create();
       __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
@@ -576,9 +594,23 @@ namespace margelo::nitro::image {
       return __promise;
     }();
   }
+  std::function<void(double /* value */)> JHybridTestObjectSwiftKotlinSpec::getComplexCallback() {
+    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JFunc_void_double::javaobject>()>("getComplexCallback_cxx");
+    auto __result = method(_javaPart);
+    return [&]() -> std::function<void(double /* value */)> {
+      if (__result->isInstanceOf(JFunc_void_double_cxx::javaClassStatic())) [[likely]] {
+        auto downcast = jni::static_ref_cast<JFunc_void_double_cxx::javaobject>(__result);
+        return downcast->cthis()->getFunction();
+      } else {
+        return [__result](double value) -> void {
+          return __result->invoke(value);
+        };
+      }
+    }();
+  }
   std::shared_ptr<Promise<double>> JHybridTestObjectSwiftKotlinSpec::getValueFromJSCallbackAndWait(const std::function<std::shared_ptr<Promise<double>>()>& getValue) {
-    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JPromise::javaobject>(jni::alias_ref<JFunc_std__shared_ptr_Promise_double__::javaobject> /* getValue */)>("getValueFromJSCallbackAndWait");
-    auto __result = method(_javaPart, JFunc_std__shared_ptr_Promise_double__::fromCpp(getValue));
+    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JPromise::javaobject>(jni::alias_ref<JFunc_std__shared_ptr_Promise_double__::javaobject> /* getValue */)>("getValueFromJSCallbackAndWait_cxx");
+    auto __result = method(_javaPart, JFunc_std__shared_ptr_Promise_double___cxx::fromCpp(getValue));
     return [&]() {
       auto __promise = Promise<double>::create();
       __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
@@ -593,8 +625,8 @@ namespace margelo::nitro::image {
     }();
   }
   std::shared_ptr<Promise<void>> JHybridTestObjectSwiftKotlinSpec::getValueFromJsCallback(const std::function<std::shared_ptr<Promise<std::string>>()>& callback, const std::function<void(const std::string& /* valueFromJs */)>& andThenCall) {
-    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JPromise::javaobject>(jni::alias_ref<JFunc_std__shared_ptr_Promise_std__string__::javaobject> /* callback */, jni::alias_ref<JFunc_void_std__string::javaobject> /* andThenCall */)>("getValueFromJsCallback");
-    auto __result = method(_javaPart, JFunc_std__shared_ptr_Promise_std__string__::fromCpp(callback), JFunc_void_std__string::fromCpp(andThenCall));
+    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JPromise::javaobject>(jni::alias_ref<JFunc_std__shared_ptr_Promise_std__string__::javaobject> /* callback */, jni::alias_ref<JFunc_void_std__string::javaobject> /* andThenCall */)>("getValueFromJsCallback_cxx");
+    auto __result = method(_javaPart, JFunc_std__shared_ptr_Promise_std__string___cxx::fromCpp(callback), JFunc_void_std__string_cxx::fromCpp(andThenCall));
     return [&]() {
       auto __promise = Promise<void>::create();
       __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& /* unit */) {
@@ -623,7 +655,7 @@ namespace margelo::nitro::image {
     return __result != nullptr ? std::make_optional(__result->toCpp()) : std::nullopt;
   }
   void JHybridTestObjectSwiftKotlinSpec::jsStyleObjectAsParameters(const JsStyleStruct& params) {
-    static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<JJsStyleStruct> /* params */)>("jsStyleObjectAsParameters");
+    static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<JJsStyleStruct> /* params */)>("jsStyleObjectAsParameters_cxx");
     method(_javaPart, JJsStyleStruct::fromCpp(params));
   }
   std::shared_ptr<ArrayBuffer> JHybridTestObjectSwiftKotlinSpec::createArrayBuffer() {

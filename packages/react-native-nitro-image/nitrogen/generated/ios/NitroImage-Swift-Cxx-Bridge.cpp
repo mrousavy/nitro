@@ -73,6 +73,14 @@ namespace margelo::nitro::image::bridge::swift {
     return swiftPart.toUnsafe();
   }
   
+  // pragma MARK: std::function<void(double /* value */)>
+  Func_void_double create_Func_void_double(void* _Nonnull swiftClosureWrapper) {
+    auto swiftClosure = NitroImage::Func_void_double::fromUnsafe(swiftClosureWrapper);
+    return [swiftClosure = std::move(swiftClosure)](double value) mutable -> void {
+      swiftClosure.call(value);
+    };
+  }
+  
   // pragma MARK: std::function<void(const std::vector<Powertrain>& /* array */)>
   Func_void_std__vector_Powertrain_ create_Func_void_std__vector_Powertrain_(void* _Nonnull swiftClosureWrapper) {
     auto swiftClosure = NitroImage::Func_void_std__vector_Powertrain_::fromUnsafe(swiftClosureWrapper);
@@ -101,14 +109,6 @@ namespace margelo::nitro::image::bridge::swift {
   Func_void_int64_t create_Func_void_int64_t(void* _Nonnull swiftClosureWrapper) {
     auto swiftClosure = NitroImage::Func_void_int64_t::fromUnsafe(swiftClosureWrapper);
     return [swiftClosure = std::move(swiftClosure)](int64_t result) mutable -> void {
-      swiftClosure.call(result);
-    };
-  }
-  
-  // pragma MARK: std::function<void(double /* result */)>
-  Func_void_double create_Func_void_double(void* _Nonnull swiftClosureWrapper) {
-    auto swiftClosure = NitroImage::Func_void_double::fromUnsafe(swiftClosureWrapper);
-    return [swiftClosure = std::move(swiftClosure)](double result) mutable -> void {
       swiftClosure.call(result);
     };
   }

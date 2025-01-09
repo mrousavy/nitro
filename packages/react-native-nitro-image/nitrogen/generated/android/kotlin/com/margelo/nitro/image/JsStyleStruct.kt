@@ -16,7 +16,16 @@ import com.margelo.nitro.core.*
  */
 @DoNotStrip
 @Keep
-data class JsStyleStruct(
-  val value: Double,
-  val onChanged: (num: Double) -> Unit
-)
+data class JsStyleStruct
+  @DoNotStrip
+  @Keep
+  constructor(
+    val value: Double,
+    val onChanged: (num: Double) -> Unit
+  ) {
+  @DoNotStrip
+  @Keep
+  @Suppress("unused")
+  private constructor(value: Double, onChanged: Func_void_double)
+               : this(value, onChanged as (num: Double) -> Unit)
+}

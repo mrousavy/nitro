@@ -7,7 +7,6 @@ import type { HybridObjectSpec } from '../HybridObjectSpec.js'
 import { Method } from '../Method.js'
 import { Property } from '../Property.js'
 import type { SourceFile } from '../SourceFile.js'
-import { type Type } from '../types/Type.js'
 import { createFbjniHybridObject } from './FbjniHybridObject.js'
 import { KotlinCxxBridgedType } from './KotlinCxxBridgedType.js'
 
@@ -52,7 +51,11 @@ import com.margelo.nitro.core.*
  */
 @DoNotStrip
 @Keep
-@Suppress("RedundantSuppression", "KotlinJniMissingFunction", "PropertyName", "RedundantUnitReturnType", "unused")
+@Suppress(
+  "KotlinJniMissingFunction", "unused",
+  "RedundantSuppression", "RedundantUnitReturnType", "SimpleRedundantLet",
+  "LocalVariableName", "PropertyName", "PrivatePropertyName", "FunctionName"
+)
 abstract class ${name.HybridTSpec}: ${kotlinBase}() {
   @DoNotStrip
   private var mHybridData: HybridData = initHybrid()
@@ -116,20 +119,15 @@ abstract class ${name.HybridTSpec}: ${kotlinBase}() {
   return files
 }
 
-function requiresSpecialBridging(type: Type): boolean {
-  return (
-    type.getCode('kotlin') !==
-    new KotlinCxxBridgedType(type).getTypeCode('kotlin')
-  )
-}
-
 function getMethodForwardImplementation(method: Method): string {
   const bridgedReturn = new KotlinCxxBridgedType(method.returnType)
   const requiresBridge =
-    requiresSpecialBridging(method.returnType) ||
-    method.parameters.some((p) => requiresSpecialBridging(p.type))
+    bridgedReturn.needsSpecialHandling ||
+    method.parameters.some((p) => {
+      const bridged = new KotlinCxxBridgedType(p.type)
+      return bridged.needsSpecialHandling
+    })
 
-  const code = method.getCode('kotlin', { doNotStrip: true, virtual: true })
   if (requiresBridge) {
     const paramsSignature = method.parameters.map((p) => {
       const bridge = new KotlinCxxBridgedType(p.type)
@@ -143,33 +141,32 @@ function getMethodForwardImplementation(method: Method): string {
       '__result',
       'kotlin'
     )
+    const code = method.getCode('kotlin', { virtual: true })
     return `
 ${code}
 
 @DoNotStrip
 @Keep
-private fun ${method.name}(${paramsSignature.join(', ')}): ${bridgedReturn.getTypeCode('kotlin')} {
+private fun ${method.name}_cxx(${paramsSignature.join(', ')}): ${bridgedReturn.getTypeCode('kotlin')} {
   val __result = ${method.name}(${paramsForward.join(', ')})
   return ${returnForward}
 }
     `.trim()
   } else {
+    const code = method.getCode('kotlin', { doNotStrip: true, virtual: true })
     return code
   }
 }
 
 function getPropertyForwardImplementation(property: Property): string {
-  const code = property.getCode('kotlin', { doNotStrip: true, virtual: true })
-  if (requiresSpecialBridging(property.type)) {
-    const bridged = new KotlinCxxBridgedType(property.type)
-
+  const bridged = new KotlinCxxBridgedType(property.type)
+  if (bridged.needsSpecialHandling) {
     let keyword = property.isReadonly ? 'val' : 'var'
-    let modifiers: string[] = []
-    modifiers.push('@get:DoNotStrip', '@get:Keep')
-    if (!property.isReadonly) modifiers.push('@set:DoNotStrip', '@set:Keep')
     let lines: string[] = []
     lines.push(
       `
+@Keep
+@DoNotStrip
 get() {
   return ${indent(bridged.parseFromKotlinToCpp(property.name, 'kotlin'), '  ')}
 }
@@ -178,19 +175,23 @@ get() {
     if (!property.isReadonly) {
       lines.push(
         `
+@Keep
+@DoNotStrip
 set(value) {
   ${property.name} = ${indent(bridged.parseFromCppToKotlin('value', 'kotlin'), '  ')}
 }
       `.trim()
       )
     }
+    const code = property.getCode('kotlin', { virtual: true })
     return `
 ${code}
 
-private ${keyword} ${property.name}: ${bridged.getTypeCode('kotlin')}
+private ${keyword} ${property.name}_cxx: ${bridged.getTypeCode('kotlin')}
   ${indent(lines.join('\n'), '  ')}
     `.trim()
   } else {
+    const code = property.getCode('kotlin', { doNotStrip: true, virtual: true })
     return code
   }
 }
