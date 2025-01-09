@@ -960,6 +960,11 @@ export function getTests(
           })
         ).didThrow()
     ),
+    createTest('Getting complex callback from native returns a function', () =>
+      it(() => testObject.getComplexCallback())
+        .didNotThrow()
+        .didReturn('function')
+    ),
 
     // Objects
     createTest('getCar()', () =>
