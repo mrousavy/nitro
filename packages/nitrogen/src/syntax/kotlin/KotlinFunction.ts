@@ -186,6 +186,9 @@ namespace ${cxxNamespace} {
     static auto constexpr kJavaDescriptor = "L${jniInterfaceDescriptor};";
 
   public:
+    /**
+     * Invokes the function this \`J${name}\` instance holds through JNI.
+     */
     ${functionType.returnType.getCode('c++')} invoke(${jniParams.join(', ')}) const {
       ${indent(jniCallBody, '      ')}
     }
@@ -201,6 +204,9 @@ namespace ${cxxNamespace} {
     }
 
   public:
+    /**
+     * Invokes the C++ \`std::function<...>\` this \`J${name}_cxx\` instance holds.
+     */
     ${bridgedReturn.asJniReferenceType('local')} invoke_cxx(${cppParams.join(', ')}) {
       ${indent(cppCallBody, '      ')}
     }

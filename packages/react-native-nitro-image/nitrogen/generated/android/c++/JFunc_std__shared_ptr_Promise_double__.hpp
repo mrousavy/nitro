@@ -27,6 +27,9 @@ namespace margelo::nitro::image {
     static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Func_std__shared_ptr_Promise_double__;";
 
   public:
+    /**
+     * Invokes the function this `JFunc_std__shared_ptr_Promise_double__` instance holds through JNI.
+     */
     std::shared_ptr<Promise<double>> invoke() const {
       static const auto method = getClass()->getMethod<jni::local_ref<JPromise::javaobject>()>("invoke");
       auto __result = method(self());
@@ -55,6 +58,9 @@ namespace margelo::nitro::image {
     }
 
   public:
+    /**
+     * Invokes the C++ `std::function<...>` this `JFunc_std__shared_ptr_Promise_double___cxx` instance holds.
+     */
     jni::local_ref<JPromise::javaobject> invoke_cxx() {
       std::shared_ptr<Promise<double>> __result = _func();
       return [&]() {

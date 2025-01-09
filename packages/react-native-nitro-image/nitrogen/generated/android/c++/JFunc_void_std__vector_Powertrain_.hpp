@@ -28,6 +28,9 @@ namespace margelo::nitro::image {
     static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Func_void_std__vector_Powertrain_;";
 
   public:
+    /**
+     * Invokes the function this `JFunc_void_std__vector_Powertrain_` instance holds through JNI.
+     */
     void invoke(const std::vector<Powertrain>& array) const {
       static const auto method = getClass()->getMethod<void(jni::alias_ref<jni::JArrayClass<JPowertrain>> /* array */)>("invoke");
       method(self(), [&]() {
@@ -52,6 +55,9 @@ namespace margelo::nitro::image {
     }
 
   public:
+    /**
+     * Invokes the C++ `std::function<...>` this `JFunc_void_std__vector_Powertrain__cxx` instance holds.
+     */
     void invoke_cxx(jni::alias_ref<jni::JArrayClass<JPowertrain>> array) {
       _func([&]() {
               size_t __size = array->size();

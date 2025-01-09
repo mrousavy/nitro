@@ -25,6 +25,9 @@ namespace margelo::nitro::image {
     static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Func_void_double;";
 
   public:
+    /**
+     * Invokes the function this `JFunc_void_double` instance holds through JNI.
+     */
     void invoke(double num) const {
       static const auto method = getClass()->getMethod<void(double /* num */)>("invoke");
       method(self(), num);
@@ -41,6 +44,9 @@ namespace margelo::nitro::image {
     }
 
   public:
+    /**
+     * Invokes the C++ `std::function<...>` this `JFunc_void_double_cxx` instance holds.
+     */
     void invoke_cxx(double num) {
       _func(num);
     }

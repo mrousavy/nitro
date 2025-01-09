@@ -26,6 +26,9 @@ namespace margelo::nitro::image {
     static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Func_void_std__string;";
 
   public:
+    /**
+     * Invokes the function this `JFunc_void_std__string` instance holds through JNI.
+     */
     void invoke(const std::string& valueFromJs) const {
       static const auto method = getClass()->getMethod<void(jni::alias_ref<jni::JString> /* valueFromJs */)>("invoke");
       method(self(), jni::make_jstring(valueFromJs));
@@ -42,6 +45,9 @@ namespace margelo::nitro::image {
     }
 
   public:
+    /**
+     * Invokes the C++ `std::function<...>` this `JFunc_void_std__string_cxx` instance holds.
+     */
     void invoke_cxx(jni::alias_ref<jni::JString> valueFromJs) {
       _func(valueFromJs->toStdString());
     }

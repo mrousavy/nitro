@@ -26,6 +26,9 @@ namespace margelo::nitro::image {
     static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Func_void_std__optional_double_;";
 
   public:
+    /**
+     * Invokes the function this `JFunc_void_std__optional_double_` instance holds through JNI.
+     */
     void invoke(std::optional<double> maybe) const {
       static const auto method = getClass()->getMethod<void(jni::alias_ref<jni::JDouble> /* maybe */)>("invoke");
       method(self(), maybe.has_value() ? jni::JDouble::valueOf(maybe.value()) : nullptr);
@@ -42,6 +45,9 @@ namespace margelo::nitro::image {
     }
 
   public:
+    /**
+     * Invokes the C++ `std::function<...>` this `JFunc_void_std__optional_double__cxx` instance holds.
+     */
     void invoke_cxx(jni::alias_ref<jni::JDouble> maybe) {
       _func(maybe != nullptr ? std::make_optional(maybe->value()) : std::nullopt);
     }
