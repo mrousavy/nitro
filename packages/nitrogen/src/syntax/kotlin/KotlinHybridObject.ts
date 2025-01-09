@@ -34,6 +34,12 @@ export function createKotlinHybridObject(spec: HybridObjectSpec): SourceFile[] {
     kotlinBase = getHybridObjectName(base).HybridTSpec
   }
 
+  const imports: string[] = []
+  imports.push('import com.margelo.nitro.core.*')
+  if (spec.isHybridView) {
+    imports.push('import com.margelo.nitro.views.*')
+  }
+
   // 1. Create Kotlin abstract class definition
   const abstractClassCode = `
 ${createFileMetadataString(`${name.HybridTSpec}.kt`)}
@@ -44,8 +50,7 @@ import android.util.Log
 import androidx.annotation.Keep
 import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
-import com.margelo.nitro.core.*
-import com.margelo.nitro.views.*
+${imports.join('\n')}
 
 /**
  * A Kotlin class representing the ${spec.name} HybridObject.
