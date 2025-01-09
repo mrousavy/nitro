@@ -41,8 +41,20 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
         // Function needs to be converted from JFunc_... to Lambda
         return true
       default:
-        return false
+        break
     }
+    // check if any types this type references (e.g. underlying optional, array element, ...)
+    // needs special handling. if yes, we need it as well
+    const referencedTypes = getReferencedTypes(this.type)
+      .filter((t) => t !== this.type)
+      .map((t) => new KotlinCxxBridgedType(t))
+    for (const type of referencedTypes) {
+      if (type.needsSpecialHandling) {
+        return true
+      }
+    }
+    // no special handling needed
+    return false
   }
 
   getRequiredImports(): SourceImport[] {

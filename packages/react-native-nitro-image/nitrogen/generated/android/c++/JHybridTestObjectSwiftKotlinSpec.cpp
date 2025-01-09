@@ -350,7 +350,7 @@ namespace margelo::nitro::image {
   std::optional<std::function<void(double /* value */)>> JHybridTestObjectSwiftKotlinSpec::getOptionalCallback() {
     try {
       
-      static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JFunc_void_double::javaobject>()>("getOptionalCallback");
+      static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JFunc_void_double::javaobject>()>("getOptionalCallback_cxx");
       auto __result = method(_javaPart);
       return __result != nullptr ? std::make_optional(__result->cthis()->getFunction()) : std::nullopt;
           
@@ -361,7 +361,7 @@ namespace margelo::nitro::image {
   void JHybridTestObjectSwiftKotlinSpec::setOptionalCallback(const std::optional<std::function<void(double /* value */)>>& optionalCallback) {
     try {
       
-      static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<JFunc_void_double::javaobject> /* optionalCallback */)>("setOptionalCallback");
+      static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<JFunc_void_double::javaobject> /* optionalCallback */)>("setOptionalCallback_cxx");
       method(_javaPart, optionalCallback.has_value() ? JFunc_void_double::fromCpp(optionalCallback.value()) : nullptr);
          
     } catch (const jni::JniException& exc) {
@@ -1023,7 +1023,7 @@ namespace margelo::nitro::image {
   void JHybridTestObjectSwiftKotlinSpec::jsStyleObjectAsParameters(const JsStyleStruct& params) {
     try {
       
-      static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<JJsStyleStruct> /* params */)>("jsStyleObjectAsParameters");
+      static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<JJsStyleStruct> /* params */)>("jsStyleObjectAsParameters_cxx");
       method(_javaPart, JJsStyleStruct::fromCpp(params));
          
     } catch (const jni::JniException& exc) {

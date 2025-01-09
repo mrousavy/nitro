@@ -118,6 +118,14 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   @set:Keep
   abstract var optionalCallback: ((value: Double) -> Unit)?
   
+  private var optionalCallback_cxx: ((value: Double) -> Unit)?
+    get() {
+      return optionalCallback
+    }
+    set(value) {
+      optionalCallback = value
+    }
+  
   @get:DoNotStrip
   @get:Keep
   @set:DoNotStrip
@@ -346,6 +354,13 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   @DoNotStrip
   @Keep
   abstract fun jsStyleObjectAsParameters(params: JsStyleStruct): Unit
+  
+  @DoNotStrip
+  @Keep
+  private fun jsStyleObjectAsParameters_cxx(params: JsStyleStruct): Unit {
+    val __result = jsStyleObjectAsParameters(params)
+    return __result
+  }
   
   @DoNotStrip
   @Keep
