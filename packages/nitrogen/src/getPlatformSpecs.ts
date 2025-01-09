@@ -44,10 +44,7 @@ function isValidLanguageForPlatform(
   return platformLanguages[platform].includes(language)
 }
 
-function getPlatformSpec(
-  moduleName: string,
-  platformSpecs: Type
-): PlatformSpec {
+function getPlatformSpec(typeName: string, platformSpecs: Type): PlatformSpec {
   const result: PlatformSpec = {}
 
   // Properties (ios, android)
@@ -57,7 +54,7 @@ function getPlatformSpec(
     const platform = property.getName()
     if (!isValidPlatform(platform)) {
       console.warn(
-        `    ⚠️   ${moduleName} does not properly extend HybridObject<T> - "${platform}" is not a valid Platform! ` +
+        `    ⚠️   ${typeName} does not properly extend HybridObject<T> - "${platform}" is not a valid Platform! ` +
           `Valid platforms are: [${allPlatforms.join(', ')}]`
       )
       continue
@@ -67,7 +64,7 @@ function getPlatformSpec(
     const language = getLiteralValue(property)
     if (!isValidLanguage(language)) {
       console.warn(
-        `    ⚠️   ${moduleName}: Language ${language} is not a valid language for ${platform}! ` +
+        `    ⚠️   ${typeName}: Language ${language} is not a valid language for ${platform}! ` +
           `Valid languages are: [${platformLanguages[platform].join(', ')}]`
       )
       continue
@@ -76,7 +73,7 @@ function getPlatformSpec(
     // Double-check that language works on this platform (android: kotlin/c++, ios: swift/c++)
     if (!isValidLanguageForPlatform(language, platform)) {
       console.warn(
-        `    ⚠️   ${moduleName}: Language ${language} is not a valid language for ${platform}! ` +
+        `    ⚠️   ${typeName}: Language ${language} is not a valid language for ${platform}! ` +
           `Valid languages are: [${platformLanguages[platform].join(', ')}]`
       )
       continue
@@ -128,30 +125,25 @@ function findHybridObjectBase(type: Type): Type | undefined {
 }
 
 /**
- * If the given interface ({@linkcode module}) extends `HybridObject`,
+ * If the given interface ({@linkcode declaration}) extends `HybridObject`,
  * this method returns the platforms it exists on.
  * If it doesn't extend `HybridObject`, this returns `undefined`.
  */
 export function getHybridObjectPlatforms(
-  module: InterfaceDeclaration
+  declaration: InterfaceDeclaration
 ): PlatformSpec | undefined {
-  const base = findHybridObjectBase(module.getType())
+  const base = findHybridObjectBase(declaration.getType())
   if (base == null) {
     // this type does not extend `HybridObject`.
     return undefined
   }
 
   const genericArguments = base.getTypeArguments()
-  if (genericArguments.length === 0) {
+  const platformSpecsArgument = genericArguments[0]
+  if (platformSpecsArgument == null) {
     // it uses `HybridObject` without generic arguments. This defaults to C++
     return { android: 'c++', ios: 'c++' }
   }
-  const platformSpecsArgument = genericArguments[0]
-  if (platformSpecsArgument == null) {
-    throw new Error(
-      `${module.getName()} does not properly extend HybridObject<T>! ${base.getText()} does not have a single generic type argument for platform spec languages!`
-    )
-  }
 
-  return getPlatformSpec(module.getName(), platformSpecsArgument)
+  return getPlatformSpec(declaration.getName(), platformSpecsArgument)
 }
