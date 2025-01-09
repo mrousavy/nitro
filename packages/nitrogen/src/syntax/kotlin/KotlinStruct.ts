@@ -61,9 +61,12 @@ import com.margelo.nitro.core.*
  */
 @DoNotStrip
 @Keep
-data class ${structType.structName}(
-  ${indent(values.join(',\n'), '  ')}
-) {
+data class ${structType.structName}
+  @DoNotStrip
+  @Keep
+  constructor(
+    ${indent(values.join(',\n'), '    ')}
+  ) {
   ${indent(secondaryConstructor, '  ')}
 }
   `.trim()

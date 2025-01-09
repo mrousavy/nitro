@@ -16,14 +16,17 @@ import com.margelo.nitro.core.*
  */
 @DoNotStrip
 @Keep
-data class Car(
-  val year: Double,
-  val make: String,
-  val model: String,
-  val power: Double,
-  val powertrain: Powertrain,
-  val driver: Person?,
-  val isFast: Boolean?
-) {
+data class Car
+  @DoNotStrip
+  @Keep
+  constructor(
+    val year: Double,
+    val make: String,
+    val model: String,
+    val power: Double,
+    val powertrain: Powertrain,
+    val driver: Person?,
+    val isFast: Boolean?
+  ) {
   /* main constructor */
 }

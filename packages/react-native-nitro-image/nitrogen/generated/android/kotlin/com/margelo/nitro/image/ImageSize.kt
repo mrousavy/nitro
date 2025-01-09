@@ -16,9 +16,12 @@ import com.margelo.nitro.core.*
  */
 @DoNotStrip
 @Keep
-data class ImageSize(
-  val width: Double,
-  val height: Double
-) {
+data class ImageSize
+  @DoNotStrip
+  @Keep
+  constructor(
+    val width: Double,
+    val height: Double
+  ) {
   /* main constructor */
 }
