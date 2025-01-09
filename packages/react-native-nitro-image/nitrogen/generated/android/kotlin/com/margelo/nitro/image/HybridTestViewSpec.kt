@@ -12,6 +12,7 @@ import androidx.annotation.Keep
 import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
 import com.margelo.nitro.core.*
+import com.margelo.nitro.views.*
 
 /**
  * A Kotlin class representing the TestView HybridObject.
@@ -49,14 +50,6 @@ abstract class HybridTestViewSpec: HybridView() {
   @set:DoNotStrip
   @set:Keep
   abstract var someCallback: (value: Double) -> Unit
-  
-  private var someCallback: Func_void_double
-    get() {
-      return someCallback
-    }
-    set(value) {
-      someCallback = value.toLambda()
-    }
 
   // Methods
   @DoNotStrip
