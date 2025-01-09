@@ -4,10 +4,6 @@ import androidx.annotation.Keep
 import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
 
-interface ExtendableHybridClass {
-    fun updateNative(hybridData: HybridData)
-}
-
 /**
  * A base class for all Kotlin-based HybridObjects.
  */
@@ -37,15 +33,14 @@ abstract class HybridObject: ExtendableHybridClass {
     /**
      * Holds the native C++ instance.
      * In `HybridObject`, the C++ instance is a sub-class of `JHybridObject`, such as one of it's specs.
-     * This is `null`, until `updateNative(..)` is called.
      */
-    private var mHybridData: HybridData? = null
+    private var mHybridData: HybridData
 
     /**
-     * Must be called in the constructor of a subclass of `HybridObject`, to initialize the C++
-     * `JHybridObject` with a subclass of it.
+     * Initialize the `HybridObject` with it's C++ counterpart (the fbjni `jni::HybridClass`).
+     * Since `HybridObject` itself is abstract, it's subclass needs to initialize the C++ part.
      */
-    override fun updateNative(hybridData: HybridData) {
+    protected constructor(hybridData: HybridData) {
         mHybridData = hybridData
     }
 }

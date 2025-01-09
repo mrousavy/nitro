@@ -20,20 +20,15 @@ import com.margelo.nitro.core.*
 @DoNotStrip
 @Keep
 @Suppress("RedundantSuppression", "KotlinJniMissingFunction", "PropertyName", "RedundantUnitReturnType", "unused")
-abstract class HybridImageSpec: HybridObject() {
+abstract class HybridImageSpec: HybridObject {
   @DoNotStrip
-  private var mHybridData: HybridData = initHybrid()
+  private var mHybridData: HybridData
 
-  init {
-    // Pass this `HybridData` through to it's base class,
-    // to represent inheritance to JHybridObject on C++ side
-    super.updateNative(mHybridData)
+  public constructor() {
+    mHybridData = initHybrid()
+    super(mHybridData)
   }
-
-  /**
-   * Call from a child class to initialize HybridData with a child.
-   */
-  override fun updateNative(hybridData: HybridData) {
+  protected constructor(hybridData: HybridData): super(hybridData) {
     mHybridData = hybridData
   }
 
