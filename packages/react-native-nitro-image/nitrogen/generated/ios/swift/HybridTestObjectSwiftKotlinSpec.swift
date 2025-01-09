@@ -23,7 +23,7 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: AnyObject {
   var optionalArray: [String]? { get set }
   var optionalEnum: Powertrain? { get set }
   var optionalOldEnum: OldEnum? { get set }
-  var optionalCallback: (((_ value: Double) -> Void))? { get set }
+  var optionalCallback: ((_ value: Double) -> Void)? { get set }
   var someVariant: Variant_String_Double { get set }
 
   // Methods
@@ -36,7 +36,7 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: AnyObject {
   func bounceNumbers(array: [Double]) throws -> [Double]
   func bounceStructs(array: [Person]) throws -> [Person]
   func bounceEnums(array: [Powertrain]) throws -> [Powertrain]
-  func complexEnumCallback(array: [Powertrain], callback: @escaping ((_ array: [Powertrain]) -> Void)) throws -> Void
+  func complexEnumCallback(array: [Powertrain], callback: @escaping (_ array: [Powertrain]) -> Void) throws -> Void
   func createMap() throws -> AnyMapHolder
   func mapRoundtrip(map: AnyMapHolder) throws -> AnyMapHolder
   func funcThatThrows() throws -> Double
@@ -52,14 +52,14 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: AnyObject {
   func awaitAndGetPromise(promise: Promise<Double>) throws -> Promise<Double>
   func awaitAndGetComplexPromise(promise: Promise<Car>) throws -> Promise<Car>
   func awaitPromise(promise: Promise<Void>) throws -> Promise<Void>
-  func callCallback(callback: @escaping (() -> Void)) throws -> Void
-  func callAll(first: @escaping (() -> Void), second: @escaping (() -> Void), third: @escaping (() -> Void)) throws -> Void
-  func callWithOptional(value: Double?, callback: @escaping ((_ maybe: Double?) -> Void)) throws -> Void
-  func callSumUpNTimes(callback: @escaping (() -> Promise<Double>), n: Double) throws -> Promise<Double>
-  func callbackAsyncPromise(callback: @escaping (() -> Promise<Promise<Double>>)) throws -> Promise<Double>
-  func callbackAsyncPromiseBuffer(callback: @escaping (() -> Promise<Promise<ArrayBufferHolder>>)) throws -> Promise<ArrayBufferHolder>
-  func getValueFromJSCallbackAndWait(getValue: @escaping (() -> Promise<Double>)) throws -> Promise<Double>
-  func getValueFromJsCallback(callback: @escaping (() -> Promise<String>), andThenCall: @escaping ((_ valueFromJs: String) -> Void)) throws -> Promise<Void>
+  func callCallback(callback: @escaping () -> Void) throws -> Void
+  func callAll(first: @escaping () -> Void, second: @escaping () -> Void, third: @escaping () -> Void) throws -> Void
+  func callWithOptional(value: Double?, callback: @escaping (_ maybe: Double?) -> Void) throws -> Void
+  func callSumUpNTimes(callback: @escaping () -> Promise<Double>, n: Double) throws -> Promise<Double>
+  func callbackAsyncPromise(callback: @escaping () -> Promise<Promise<Double>>) throws -> Promise<Double>
+  func callbackAsyncPromiseBuffer(callback: @escaping () -> Promise<Promise<ArrayBufferHolder>>) throws -> Promise<ArrayBufferHolder>
+  func getValueFromJSCallbackAndWait(getValue: @escaping () -> Promise<Double>) throws -> Promise<Double>
+  func getValueFromJsCallback(callback: @escaping () -> Promise<String>, andThenCall: @escaping (_ valueFromJs: String) -> Void) throws -> Promise<Void>
   func getCar() throws -> Car
   func isCarElectric(car: Car) throws -> Bool
   func getDriver(car: Car) throws -> Person?

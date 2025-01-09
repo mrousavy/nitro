@@ -8,15 +8,15 @@
 import NitroModules
 
 /**
- * Wraps a Swift `(() -> Promise<Promise<Double>>)` as a class.
+ * Wraps a Swift `() -> Promise<Promise<Double>>` as a class.
  * This class can be used from C++, e.g. to wrap the Swift closure as a `std::function`.
  */
 public final class Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double____ {
   public typealias bridge = margelo.nitro.image.bridge.swift
 
-  private let closure: (() -> Promise<Promise<Double>>)
+  private let closure: () -> Promise<Promise<Double>>
 
-  public init(_ closure: @escaping (() -> Promise<Promise<Double>>)) {
+  public init(_ closure: @escaping () -> Promise<Promise<Double>>) {
     self.closure = closure
   }
 

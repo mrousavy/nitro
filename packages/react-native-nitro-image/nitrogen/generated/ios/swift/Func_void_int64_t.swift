@@ -8,15 +8,15 @@
 import NitroModules
 
 /**
- * Wraps a Swift `((_ value: Int64) -> Void)` as a class.
+ * Wraps a Swift `(_ value: Int64) -> Void` as a class.
  * This class can be used from C++, e.g. to wrap the Swift closure as a `std::function`.
  */
 public final class Func_void_int64_t {
   public typealias bridge = margelo.nitro.image.bridge.swift
 
-  private let closure: ((_ value: Int64) -> Void)
+  private let closure: (_ value: Int64) -> Void
 
-  public init(_ closure: @escaping ((_ value: Int64) -> Void)) {
+  public init(_ closure: @escaping (_ value: Int64) -> Void) {
     self.closure = closure
   }
 

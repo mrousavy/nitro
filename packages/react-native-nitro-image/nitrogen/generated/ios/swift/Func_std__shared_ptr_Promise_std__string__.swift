@@ -8,15 +8,15 @@
 import NitroModules
 
 /**
- * Wraps a Swift `(() -> Promise<String>)` as a class.
+ * Wraps a Swift `() -> Promise<String>` as a class.
  * This class can be used from C++, e.g. to wrap the Swift closure as a `std::function`.
  */
 public final class Func_std__shared_ptr_Promise_std__string__ {
   public typealias bridge = margelo.nitro.image.bridge.swift
 
-  private let closure: (() -> Promise<String>)
+  private let closure: () -> Promise<String>
 
-  public init(_ closure: @escaping (() -> Promise<String>)) {
+  public init(_ closure: @escaping () -> Promise<String>) {
     self.closure = closure
   }
 
