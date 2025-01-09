@@ -23,11 +23,23 @@ export function createKotlinStruct(structType: StructType): SourceFile[] {
     })
     const paramsForward = structType.properties.map((p) => {
       const bridged = new KotlinCxxBridgedType(p)
-      return bridged.parseFromCppToKotlin(p.escapedName, 'kotlin', false)
+      if (bridged.needsSpecialHandling) {
+        // We need special parsing for this type
+        const parsed = bridged.parseFromCppToKotlin(
+          p.escapedName,
+          'kotlin',
+          false
+        )
+        // we explicitly `as`-cast this to avoid ambiguous upcasts/cyclic this() calls.
+        return `${parsed} as ${p.getCode('kotlin')}`
+      } else {
+        return p.escapedName
+      }
     })
     secondaryConstructor = `
 @DoNotStrip
 @Keep
+@Suppress("unused")
 private constructor(${indent(params.join(', '), 20)})
              : this(${indent(paramsForward.join(', '), 20)})
     `.trim()

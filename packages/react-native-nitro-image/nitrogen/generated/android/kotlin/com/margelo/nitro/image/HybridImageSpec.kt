@@ -66,7 +66,7 @@ abstract class HybridImageSpec: HybridObject() {
   @DoNotStrip
   @Keep
   private fun saveToFile_cxx(path: String, onFinished: Func_void_std__string): Unit {
-    val __result = saveToFile(path, onFinished /* TODO: Does this work? */)
+    val __result = saveToFile(path, onFinished)
     return __result
   }
 
