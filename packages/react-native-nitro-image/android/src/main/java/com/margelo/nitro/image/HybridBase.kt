@@ -8,7 +8,4 @@ import com.facebook.proguard.annotations.DoNotStrip
 class HybridBase: HybridBaseSpec() {
     override val baseValue: Double
         get() = 10.0
-
-    override val memorySize: Long
-        get() = 0L
 }

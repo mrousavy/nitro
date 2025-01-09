@@ -298,7 +298,4 @@ class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
     override fun newTestObject(): HybridTestObjectSwiftKotlinSpec {
         return HybridTestObjectKotlin()
     }
-
-    override val memorySize: Long
-        get() = 0L
 }
