@@ -23,7 +23,7 @@ export function createKotlinHybridObject(spec: HybridObjectSpec): SourceFile[] {
   const javaPackage = NitroConfig.getAndroidPackage('java/kotlin')
   const cppLibName = NitroConfig.getAndroidCxxLibName()
 
-  let kotlinBase = 'HybridObject'
+  let kotlinBase = spec.isHybridView ? 'HybridView' : 'HybridObject'
   if (spec.baseTypes.length > 0) {
     if (spec.baseTypes.length > 1) {
       throw new Error(

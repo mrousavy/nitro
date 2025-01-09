@@ -18,21 +18,21 @@ namespace margelo::nitro::image {
 
   /**
    * C++ representation of the callback Func_void_double.
-   * This is a Kotlin `(num: Double) -> Unit`, backed by a `std::function<...>`.
+   * This is a Kotlin `(value: Double) -> Unit`, backed by a `std::function<...>`.
    */
   struct JFunc_void_double final: public jni::HybridClass<JFunc_void_double> {
   public:
-    static jni::local_ref<JFunc_void_double::javaobject> fromCpp(const std::function<void(double /* num */)>& func) {
+    static jni::local_ref<JFunc_void_double::javaobject> fromCpp(const std::function<void(double /* value */)>& func) {
       return JFunc_void_double::newObjectCxxArgs(func);
     }
 
   public:
-    void call(double num) {
-      _func(num);
+    void call(double value) {
+      _func(value);
     }
 
   public:
-    inline const std::function<void(double /* num */)>& getFunction() const {
+    inline const std::function<void(double /* value */)>& getFunction() const {
       return _func;
     }
 
@@ -43,11 +43,11 @@ namespace margelo::nitro::image {
     }
 
   private:
-    explicit JFunc_void_double(const std::function<void(double /* num */)>& func): _func(func) { }
+    explicit JFunc_void_double(const std::function<void(double /* value */)>& func): _func(func) { }
 
   private:
     friend HybridBase;
-    std::function<void(double /* num */)> _func;
+    std::function<void(double /* value */)> _func;
   };
 
 } // namespace margelo::nitro::image

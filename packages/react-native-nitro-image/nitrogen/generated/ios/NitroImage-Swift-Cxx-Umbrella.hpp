@@ -24,6 +24,8 @@ namespace margelo::nitro::image { class HybridImageFactorySpec; }
 namespace margelo::nitro::image { class HybridImageSpec; }
 // Forward declaration of `HybridTestObjectSwiftKotlinSpec` to properly resolve imports.
 namespace margelo::nitro::image { class HybridTestObjectSwiftKotlinSpec; }
+// Forward declaration of `HybridTestViewSpec` to properly resolve imports.
+namespace margelo::nitro::image { class HybridTestViewSpec; }
 // Forward declaration of `ImageFormat` to properly resolve imports.
 namespace margelo::nitro::image { enum class ImageFormat; }
 // Forward declaration of `ImageSize` to properly resolve imports.
@@ -46,6 +48,7 @@ namespace margelo::nitro::image { enum class Powertrain; }
 #include "HybridImageFactorySpec.hpp"
 #include "HybridImageSpec.hpp"
 #include "HybridTestObjectSwiftKotlinSpec.hpp"
+#include "HybridTestViewSpec.hpp"
 #include "ImageFormat.hpp"
 #include "ImageSize.hpp"
 #include "JsStyleStruct.hpp"
@@ -85,6 +88,8 @@ namespace NitroImage { class HybridImageFactorySpec_cxx; }
 namespace NitroImage { class HybridImageSpec_cxx; }
 // Forward declaration of `HybridTestObjectSwiftKotlinSpec_cxx` to properly resolve imports.
 namespace NitroImage { class HybridTestObjectSwiftKotlinSpec_cxx; }
+// Forward declaration of `HybridTestViewSpec_cxx` to properly resolve imports.
+namespace NitroImage { class HybridTestViewSpec_cxx; }
 
 // Include Swift defined types
 #if __has_include("NitroImage-Swift.h")

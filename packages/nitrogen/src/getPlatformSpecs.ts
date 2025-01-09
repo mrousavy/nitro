@@ -91,7 +91,10 @@ function getPlatformSpec(
 
 export function isDirectlyHybridObject(type: Type): boolean {
   const symbol = type.getSymbol() ?? type.getAliasSymbol()
-  if (symbol?.getName() === 'HybridObject') {
+  if (
+    symbol?.getName() === 'HybridObject' ||
+    symbol?.getName() === 'HybridView'
+  ) {
     return true
   }
   return false
