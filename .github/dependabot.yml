@@ -12,6 +12,7 @@ updates:
     directories:
       - "/packages/react-native-nitro-modules/android/"
       - "/packages/react-native-nitro-image/android/"
+      - "/packages/template/android/"
       - "/example/android/"
     schedule:
       interval: "daily"
@@ -39,6 +40,7 @@ updates:
     directories:
       - "/packages/react-native-nitro-modules/"
       - "/packages/react-native-nitro-image/"
+      - "/packages/template/"
       - "/example/"
     schedule:
       interval: "daily"
