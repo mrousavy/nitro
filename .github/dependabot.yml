@@ -59,6 +59,9 @@ updates:
         patterns:
           - "@react-native/*"
           - "react-native"
+      react:
+        patterns:
+          - "react"
 
   - package-ecosystem: "npm"
     directories:
