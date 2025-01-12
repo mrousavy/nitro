@@ -15,7 +15,7 @@ public protocol HybridObjectSpec: AnyObject {
 /**
  * The base class for all Swift-based HybridObjects.
  */
-public class HybridObject: HybridObjectSpec {
+open class HybridObject: HybridObjectSpec {
   /**
    * Get the memory size of any external heap allocations in bytes.
    *
@@ -31,7 +31,7 @@ public class HybridObject: HybridObjectSpec {
    * }
    * ```
    */
-  public var memorySize: Int { return 0 }
+  open var memorySize: Int { return 0 }
 }
 
 public extension HybridObjectSpec {
