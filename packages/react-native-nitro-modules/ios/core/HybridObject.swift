@@ -7,10 +7,15 @@
 
 import Foundation
 
+@available(*, deprecated, message: "HybridObjectSpec (a protocol) has been replaced with HybridObject (a class).")
+public protocol HybridObjectSpec: AnyObject {
+  var memorySize: Int { get }
+}
+
 /**
  * The base class for all Swift-based HybridObjects.
  */
-public class HybridObject {
+public class HybridObject: HybridObjectSpec {
   /**
    * Get the memory size of any external heap allocations in bytes.
    *
@@ -27,11 +32,6 @@ public class HybridObject {
    * ```
    */
   public var memorySize: Int { return 0 }
-}
-
-@available(*, deprecated, message: "HybridObjectSpec (a protocol) has been replaced with HybridObject (a class).")
-public protocol HybridObjectSpec: AnyObject {
-  var memorySize: Int { get }
 }
 
 public extension HybridObjectSpec {
