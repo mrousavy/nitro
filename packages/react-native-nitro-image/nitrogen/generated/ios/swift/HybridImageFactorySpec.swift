@@ -21,7 +21,7 @@ public protocol HybridImageFactorySpec_protocol: AnyObject {
 }
 
 /// See ``HybridImageFactorySpec``
-public class HybridImageFactorySpec_base: HybridObjectSpec {
+public class HybridImageFactorySpec_base: HybridObject {
   private weak var cxxWrapper: HybridImageFactorySpec_cxx? = nil
   public func getCxxWrapper() -> HybridImageFactorySpec_cxx {
   #if DEBUG
@@ -37,7 +37,6 @@ public class HybridImageFactorySpec_base: HybridObjectSpec {
       return cxxWrapper
     }
   }
-  public var memorySize: Int { return 0 }
 }
 
 /**

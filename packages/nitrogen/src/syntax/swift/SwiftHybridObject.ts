@@ -40,9 +40,8 @@ public ${hasBaseClass ? 'override func' : 'func'} getCxxWrapper() -> ${name.Hybr
 }`.trim()
   )
   if (!hasBaseClass) {
-    // It doesn't have a base class - implement the `HybridObjectSpec` base protocol
-    classBaseClasses.push('HybridObjectSpec')
-    baseMembers.push(`public var memorySize: Int { return 0 }`)
+    // It doesn't have a base class - inherit from the `HybridObject` base class
+    classBaseClasses.push('HybridObject')
   }
 
   const protocolCode = `

@@ -1,5 +1,5 @@
 //
-//  HybridObjectSpec.swift
+//  HybridObject.swift
 //  NitroModules
 //
 //  Created by Marc Rousavy on 23.07.24.
@@ -8,24 +8,29 @@
 import Foundation
 
 /**
- * A base protocol for all Swift-based Hybrid Objects.
+ * The base class for all Swift-based HybridObjects.
  */
-public protocol HybridObjectSpec: AnyObject {
+public class HybridObject {
   /**
-   * Get the memory size of the Swift instance (plus any external heap allocations),
-   * in bytes.
+   * Get the memory size of any external heap allocations in bytes.
    *
    * Override this to allow tracking heap allocations such as buffers or images,
    * which will help the JS GC be more efficient in deleting large unused objects.
    *
+   * @default 0
    * @example
    * ```swift
-   * var memorySize: Int {
+   * override public var memorySize: Int {
    *   let imageSize = self.uiImage.bytesPerRow * self.uiImage.height
    *   return imageSize
    * }
    * ```
    */
+  public var memorySize: Int { return 0 }
+}
+
+@available(*, deprecated, message: "HybridObjectSpec (a protocol) has been replaced with HybridObject (a class).")
+public protocol HybridObjectSpec: AnyObject {
   var memorySize: Int { get }
 }
 
