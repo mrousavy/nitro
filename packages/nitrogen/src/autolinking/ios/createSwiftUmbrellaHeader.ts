@@ -59,6 +59,7 @@ ${includes.sort().join('\n')}
 #include <NitroModules/RuntimeError.hpp>
 
 // Forward declarations of Swift defined types
+namespace NitroModules { class HybridObject; }
 ${swiftForwardDeclares.sort().join('\n')}
 
 // Include Swift defined types
