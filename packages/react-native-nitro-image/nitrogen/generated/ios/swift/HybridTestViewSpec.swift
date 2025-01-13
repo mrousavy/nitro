@@ -9,7 +9,7 @@ import Foundation
 import NitroModules
 
 /// See ``HybridTestViewSpec``
-public protocol HybridTestViewSpec_protocol: AnyObject, HybridView {
+public protocol HybridTestViewSpec_protocol: HybridObject, HybridView {
   // Properties
   var someProp: Bool { get set }
   var someCallback: (_ someParam: Double) -> Void { get set }
