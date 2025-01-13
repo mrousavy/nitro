@@ -159,7 +159,9 @@ For example, this was **not possible**:
 ```ts
 interface Camera {
   startRecording(onStatusUpdate: () => void,
+  // code-error
                  onRecordingFailed: () => void,
+  // code-error
                  onRecordingFinished: () => void): Promise<void>
 }
 ```
