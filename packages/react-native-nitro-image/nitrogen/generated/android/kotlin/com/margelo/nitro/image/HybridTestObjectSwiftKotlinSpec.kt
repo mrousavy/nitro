@@ -24,19 +24,22 @@ import com.margelo.nitro.core.*
   "RedundantSuppression", "RedundantUnitReturnType", "SimpleRedundantLet",
   "LocalVariableName", "PropertyName", "PrivatePropertyName", "FunctionName"
 )
-abstract class HybridTestObjectSwiftKotlinSpec: HybridObject {
-  /**
-   * Default-initialize this `HybridTestObjectSwiftKotlinSpec`.
-   * Use this constructor if `HybridTestObjectSwiftKotlinSpec` has no child-classes.
-   */
-  constructor(): super(initHybrid()) { }
+abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
+  @DoNotStrip
+  private var mHybridData: HybridData = initHybrid()
+
+  init {
+    // Pass this `HybridData` through to it's base class,
+    // to represent inheritance to JHybridObject on C++ side
+    super.updateNative(mHybridData)
+  }
 
   /**
-   * Initialize this `HybridTestObjectSwiftKotlinSpec` from a child-class
-   * with a custom `HybridData` being passed upwards.
-   * Use this constructor if `HybridTestObjectSwiftKotlinSpec` is being initialized from a child-class.
+   * Call from a child class to initialize HybridData with a child.
    */
-  protected constructor(hybridData: HybridData): super(hybridData) { }
+  override fun updateNative(hybridData: HybridData) {
+    mHybridData = hybridData
+  }
 
   // Properties
   @get:DoNotStrip
@@ -381,11 +384,10 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject {
   @Keep
   abstract fun castBase(base: HybridBaseSpec): HybridChildSpec
 
+  private external fun initHybrid(): HybridData
+
   companion object {
     private const val TAG = "HybridTestObjectSwiftKotlinSpec"
-    @JvmStatic
-    private external fun initHybrid(): HybridData
-
     init {
       try {
         Log.i(TAG, "Loading NitroImage C++ library...")

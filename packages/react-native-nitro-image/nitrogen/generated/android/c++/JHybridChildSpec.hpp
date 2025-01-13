@@ -23,19 +23,18 @@ namespace margelo::nitro::image {
                           public virtual HybridChildSpec {
   public:
     static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/HybridChildSpec;";
-    static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> javaPart);
+    static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis);
     static void registerNatives();
 
   protected:
     // C++ constructor (called from Java via `initHybrid()`)
-    explicit JHybridChildSpec(jni::alias_ref<jhybridobject> javaPart);
+    explicit JHybridChildSpec(jni::alias_ref<jhybridobject> jThis) :
+      HybridObject(HybridChildSpec::TAG),
+      HybridBase(jThis),
+      _javaPart(jni::make_global(jThis)) {}
 
   public:
-    // JHybridChildSpec cannot be default-constructed from C++.
-    JHybridChildSpec() = delete;
-
-  public:
-    ~JHybridChildSpec() override {
+    virtual ~JHybridChildSpec() {
       // Hermes GC can destroy JS objects on a non-JNI Thread.
       jni::ThreadScope::WithClassLoader([&] { _javaPart.reset(); });
     }

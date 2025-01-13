@@ -22,19 +22,17 @@ namespace margelo::nitro::image {
                                           public virtual HybridTestObjectSwiftKotlinSpec {
   public:
     static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/HybridTestObjectSwiftKotlinSpec;";
-    static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> javaPart);
+    static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis);
     static void registerNatives();
 
   protected:
     // C++ constructor (called from Java via `initHybrid()`)
-    explicit JHybridTestObjectSwiftKotlinSpec(jni::alias_ref<jhybridobject> javaPart);
+    explicit JHybridTestObjectSwiftKotlinSpec(jni::alias_ref<jhybridobject> jThis) :
+      HybridObject(HybridTestObjectSwiftKotlinSpec::TAG),
+      _javaPart(jni::make_global(jThis)) {}
 
   public:
-    // JHybridTestObjectSwiftKotlinSpec cannot be default-constructed from C++.
-    JHybridTestObjectSwiftKotlinSpec() = delete;
-
-  public:
-    ~JHybridTestObjectSwiftKotlinSpec() override {
+    virtual ~JHybridTestObjectSwiftKotlinSpec() {
       // Hermes GC can destroy JS objects on a non-JNI Thread.
       jni::ThreadScope::WithClassLoader([&] { _javaPart.reset(); });
     }
