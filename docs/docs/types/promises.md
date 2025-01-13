@@ -50,7 +50,7 @@ This allows your native code to perform heavy-, long-running tasks in parallel, 
     In C++, a `Promise<T>` can be created via Nitro's [`Promise<T>`](https://github.com/mrousavy/nitro/blob/main/packages/react-native-nitro-modules/cpp/core/Promise.hpp) type - for example, to use an asynchronous Thread pool:
 
     ```cpp
-    Promise<double> fibonacci(double n) {
+    std::shared_ptr<Promise<double>> fibonacci(double n) {
       return Promise<double>::async([=]() -> double {
         // This runs on a separate Thread!
         return calculateFibonacciSequence(n);
