@@ -68,7 +68,7 @@ func saveToFile(image: HybridImage) -> Promise<Void> {
   // code-error
                                      ^ // Error: Cannot return void!
   return Promise.async {
-    data.writeToFile("file://tmp/img.png")
+    try await data.writeToFile("file://tmp/img.png")
   }
 }
 ```
