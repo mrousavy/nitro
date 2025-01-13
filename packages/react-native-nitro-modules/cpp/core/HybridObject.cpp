@@ -9,7 +9,6 @@
 namespace margelo::nitro {
 
 HybridObject::HybridObject(const char* name) : HybridObjectPrototype(), _name(name) {}
-HybridObject::~HybridObject() {}
 
 std::string HybridObject::toString() {
   return "[HybridObject " + std::string(_name) + "]";

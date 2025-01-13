@@ -34,7 +34,7 @@ public:
    * Called when no more references to the given `HybridObject` exist in both C++ and JS.
    * JS might keep references for longer, as it is a garbage collected language.
    */
-  virtual ~HybridObject();
+  ~HybridObject() override = default;
   /**
    * HybridObjects cannot be copied.
    */
