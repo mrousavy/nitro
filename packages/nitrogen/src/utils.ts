@@ -111,5 +111,6 @@ export function getBaseTypes(type: Type): Type[] {
   if (symbol != null) {
     baseTypes.push(...symbol.getDeclaredType().getBaseTypes())
   }
-  return baseTypes.filter(isNotDuplicate)
+  const recursive = baseTypes.flatMap((b) => [b, ...getBaseTypes(b)])
+  return recursive.filter(isNotDuplicate)
 }

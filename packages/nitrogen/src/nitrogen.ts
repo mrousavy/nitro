@@ -61,7 +61,7 @@ export async function runNitrogen({
   project.addSourceFilesAtPaths(globPattern)
 
   // Loop through all source files to log them
-  console.log(
+  Logger.info(
     chalk.reset(
       `🚀  Nitrogen runs at ${chalk.underline(prettifyDirectory(baseDirectory))}`
     )
@@ -69,7 +69,7 @@ export async function runNitrogen({
   for (const dir of project.getDirectories()) {
     const specs = dir.getSourceFiles().length
     const relativePath = prettifyDirectory(dir.getPath())
-    console.log(
+    Logger.info(
       `    🔍  Nitrogen found ${specs} spec${specs === 1 ? '' : 's'} in ${chalk.underline(relativePath)}`
     )
   }
@@ -79,7 +79,7 @@ export async function runNitrogen({
     const searchDir = prettifyDirectory(
       path.join(path.resolve(baseDirectory), '**', '*.nitro.ts')
     )
-    console.log(
+    Logger.error(
       `❌  Nitrogen didn't find any spec files in ${chalk.underline(searchDir)}! ` +
         `To create a Nitro Module, create a TypeScript file with the "${chalk.underline('.nitro.ts')}" suffix ` +
         'and export an interface that extends HybridObject<T>.'
@@ -92,7 +92,7 @@ export async function runNitrogen({
   const writtenFiles: SourceFile[] = []
 
   for (const sourceFile of project.getSourceFiles()) {
-    console.log(`⏳  Parsing ${sourceFile.getBaseName()}...`)
+    Logger.info(`⏳  Parsing ${sourceFile.getBaseName()}...`)
 
     const startedWithSpecs = generatedSpecs
 
@@ -125,7 +125,7 @@ export async function runNitrogen({
         const platforms = Object.keys(platformSpec) as Platform[]
 
         if (platforms.length === 0) {
-          console.warn(
+          Logger.warn(
             `⚠️   ${typeName} does not declare any platforms in HybridObject<T> - nothing can be generated.`
           )
           continue
@@ -133,7 +133,7 @@ export async function runNitrogen({
 
         targetSpecs++
 
-        console.log(
+        Logger.info(
           `    ⚙️   Generating specs for HybridObject "${chalk.bold(typeName)}"...`
         )
 

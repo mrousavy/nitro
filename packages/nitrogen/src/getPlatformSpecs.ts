@@ -125,18 +125,14 @@ export function extendsHybridView(type: Type, recursive: boolean): boolean {
   return extendsType(type, 'HybridView', recursive)
 }
 
-function findHybridObjectBase(type: Type): Type | undefined {
-  for (const base of getBaseTypes(type)) {
-    const symbol = base.getSymbol() ?? base.getAliasSymbol()
-    if (symbol?.getName() === 'HybridObject') {
-      return base
-    }
-    const baseBase = findHybridObjectBase(base)
-    if (baseBase != null) {
-      return baseBase
-    }
-  }
-  return undefined
+export function isAnyHybridSubclass(type: Type): boolean {
+  if (isDirectlyHybridObject(type)) return false
+  if (isDirectlyHybridView(type)) return false
+
+  const isCustomHybrid =
+    extendsHybridObject(type, true) || extendsHybridView(type, true)
+
+  return isCustomHybrid
 }
 
 /**
@@ -147,10 +143,14 @@ function findHybridObjectBase(type: Type): Type | undefined {
 export function getHybridObjectPlatforms(
   declaration: InterfaceDeclaration
 ): PlatformSpec | undefined {
-  const base = findHybridObjectBase(declaration.getType())
+  const base = getBaseTypes(declaration.getType()).find((t) =>
+    isDirectlyHybridObject(t)
+  )
   if (base == null) {
     // this type does not extend `HybridObject`.
-    return undefined
+    throw new Error(
+      `Couldn't find HybridObject<..> base for ${declaration.getName()}! (${declaration.getText()})`
+    )
   }
 
   const genericArguments = base.getTypeArguments()

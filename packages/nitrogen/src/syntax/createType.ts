@@ -21,7 +21,7 @@ import { VariantType } from './types/VariantType.js'
 import { MapType } from './types/MapType.js'
 import { TupleType } from './types/TupleType.js'
 import {
-  extendsHybridObject,
+  isAnyHybridSubclass,
   isDirectlyHybridObject,
   type Language,
 } from '../getPlatformSpecs.js'
@@ -300,11 +300,11 @@ export function createType(
 
         return new VariantType(variants)
       }
-    } else if (extendsHybridObject(type, true)) {
+    } else if (isAnyHybridSubclass(type)) {
       // It is another HybridObject being referenced!
       const typename = type.getSymbolOrThrow().getEscapedName()
       const baseTypes = getBaseTypes(type)
-        .filter((t) => extendsHybridObject(t, true))
+        .filter((t) => isAnyHybridSubclass(t))
         .map((b) => createType(language, b, false))
       const baseHybrids = baseTypes.filter((b) => b instanceof HybridObjectType)
       return new HybridObjectType(typename, language, baseHybrids)
