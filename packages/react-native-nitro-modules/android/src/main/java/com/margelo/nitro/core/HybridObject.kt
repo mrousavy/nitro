@@ -9,7 +9,7 @@ import com.facebook.proguard.annotations.DoNotStrip
  */
 @Keep
 @DoNotStrip
-open class HybridObject: ExtendableHybridClass {
+abstract class HybridObject: ExtendableHybridClass {
     /**
      * Get the memory size of the Kotlin instance (plus any external heap allocations),
      * in bytes.
@@ -31,13 +31,18 @@ open class HybridObject: ExtendableHybridClass {
     open val memorySize: Long
         get() = 0L
 
-    protected open var mHybridData: HybridData
+    /**
+     * Holds the native C++ instance.
+     * In `HybridObject`, the C++ instance is a sub-class of `JHybridObject`, such as one of it's specs.
+     * This is `null`, until `updateNative(..)` is called.
+     */
+    private var mHybridData: HybridData? = null
 
-    protected constructor(hybridData: HybridData) {
-        mHybridData = hybridData
-    }
-
+    /**
+     * Must be called in the constructor of a subclass of `HybridObject`, to initialize the C++
+     * `JHybridObject` with a subclass of it.
+     */
     override fun updateNative(hybridData: HybridData) {
-
+        mHybridData = hybridData
     }
 }

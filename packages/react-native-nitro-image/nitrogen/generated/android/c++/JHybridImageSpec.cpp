@@ -26,22 +26,8 @@ namespace margelo::nitro::image { enum class ImageFormat; }
 
 namespace margelo::nitro::image {
 
-  JHybridImageSpec::JHybridImageSpec(jni::alias_ref<jhybridobject> javaPart):
-    HybridObject(HybridImageSpec::TAG),
-    _javaPart(jni::make_global(javaPart)) {
-#ifdef NITRO_DEBUG
-    if (javaPart == nullptr) [[unlikely]] {
-      throw std::runtime_error("Tried initializing a new C++ instance of `JHybridImageSpec` from Java, "
-                                "but `javaPart` was null!");
-    } else if (!javaPart->isInstanceOf(JHybridImageSpec::javaClassStatic())) [[unlikely]] {
-      throw std::runtime_error("Tried initializing a new C++ instance of `JHybridImageSpec` from Java, "
-                                "but `javaPart` is not an instance of `HybridImageSpec`!");
-    }
-#endif
-  }
-
-  jni::local_ref<JHybridImageSpec::jhybriddata> JHybridImageSpec::initHybrid(jni::alias_ref<jhybridobject> javaPart) {
-    return makeCxxInstance(javaPart);
+  jni::local_ref<JHybridImageSpec::jhybriddata> JHybridImageSpec::initHybrid(jni::alias_ref<jhybridobject> jThis) {
+    return makeCxxInstance(jThis);
   }
 
   void JHybridImageSpec::registerNatives() {

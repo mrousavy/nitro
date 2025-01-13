@@ -56,19 +56,22 @@ import com.margelo.nitro.core.*
   "RedundantSuppression", "RedundantUnitReturnType", "SimpleRedundantLet",
   "LocalVariableName", "PropertyName", "PrivatePropertyName", "FunctionName"
 )
-abstract class ${name.HybridTSpec}: ${kotlinBase} {
-  /**
-   * Default-initialize this \`${name.HybridTSpec}\`.
-   * Use this constructor if \`${name.HybridTSpec}\` has no child-classes.
-   */
-  constructor(): super(initHybrid()) { }
+abstract class ${name.HybridTSpec}: ${kotlinBase}() {
+  @DoNotStrip
+  private var mHybridData: HybridData = initHybrid()
+
+  init {
+    // Pass this \`HybridData\` through to it's base class,
+    // to represent inheritance to JHybridObject on C++ side
+    super.updateNative(mHybridData)
+  }
 
   /**
-   * Initialize this \`${name.HybridTSpec}\` from a child-class
-   * with a custom \`HybridData\` being passed upwards.
-   * Use this constructor if \`${name.HybridTSpec}\` is being initialized from a child-class.
+   * Call from a child class to initialize HybridData with a child.
    */
-  protected constructor(hybridData: HybridData): super(hybridData) { }
+  override fun updateNative(hybridData: HybridData) {
+    mHybridData = hybridData
+  }
 
   // Properties
   ${indent(properties, '  ')}
@@ -76,11 +79,10 @@ abstract class ${name.HybridTSpec}: ${kotlinBase} {
   // Methods
   ${indent(methods, '  ')}
 
+  private external fun initHybrid(): HybridData
+
   companion object {
     private const val TAG = "${name.HybridTSpec}"
-    @JvmStatic
-    private external fun initHybrid(): HybridData
-
     init {
       try {
         Log.i(TAG, "Loading ${cppLibName} C++ library...")
