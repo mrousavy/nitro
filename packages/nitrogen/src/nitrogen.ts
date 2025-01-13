@@ -1,5 +1,11 @@
 import { Project } from 'ts-morph'
-import { getHybridObjectPlatforms, type Platform } from './getPlatformSpecs.js'
+import {
+  extendsHybridObject,
+  extendsHybridView,
+  getHybridObjectPlatforms,
+  getHybridViewPlatforms,
+  type Platform,
+} from './getPlatformSpecs.js'
 import { generatePlatformFiles } from './createPlatformSpec.js'
 import path from 'path'
 import { prettifyDirectory } from './prettifyDirectory.js'
@@ -18,6 +24,7 @@ import { createIOSAutolinking } from './autolinking/createIOSAutolinking.js'
 import { createAndroidAutolinking } from './autolinking/createAndroidAutolinking.js'
 import type { Autolinking } from './autolinking/Autolinking.js'
 import { createGitAttributes } from './createGitAttributes.js'
+import type { PlatformSpec } from 'react-native-nitro-modules'
 
 interface NitrogenOptions {
   baseDirectory: string
@@ -94,10 +101,24 @@ export async function runNitrogen({
     for (const declaration of interfaceDeclarations) {
       let typeName = declaration.getName()
       try {
-        // Find out if it extends HybridObject
-        const platformSpec = getHybridObjectPlatforms(declaration)
-        if (platformSpec == null) {
-          // It does not extend HybridObject, continue..
+        let platformSpec: PlatformSpec
+        if (extendsHybridView(declaration.getType(), true)) {
+          // Hybrid View Props
+          const targetPlatforms = getHybridViewPlatforms(declaration)
+          if (targetPlatforms == null) {
+            // It does not extend HybridView, continue..
+            continue
+          }
+          platformSpec = targetPlatforms
+        } else if (extendsHybridObject(declaration.getType(), true)) {
+          // Hybrid View
+          const targetPlatforms = getHybridObjectPlatforms(declaration)
+          if (targetPlatforms == null) {
+            // It does not extend HybridObject, continue..
+            continue
+          }
+          platformSpec = targetPlatforms
+        } else {
           continue
         }
 

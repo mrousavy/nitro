@@ -3,6 +3,7 @@ import type { SourceFile } from './syntax/SourceFile.js'
 import { createCppHybridObject } from './syntax/c++/CppHybridObject.js'
 import {
   extendsHybridObject,
+  extendsHybridView,
   isDirectlyHybridObject,
   type Language,
 } from './getPlatformSpecs.js'
@@ -107,6 +108,7 @@ function getHybridObjectSpec(type: Type, language: Language): HybridObjectSpec {
     .getBaseTypes()
     .filter((t) => extendsHybridObject(t, false))
     .map((t) => getHybridObjectSpec(t, language))
+  const isHybridView = extendsHybridView(type, true)
 
   const spec: HybridObjectSpec = {
     language: language,
@@ -114,6 +116,7 @@ function getHybridObjectSpec(type: Type, language: Language): HybridObjectSpec {
     properties: properties,
     methods: methods,
     baseTypes: bases,
+    isHybridView: isHybridView,
   }
   return spec
 }

@@ -86,28 +86,42 @@ function getPlatformSpec(typeName: string, platformSpecs: Type): PlatformSpec {
   return result
 }
 
-export function isDirectlyHybridObject(type: Type): boolean {
+function isDirectlyType(type: Type, name: string): boolean {
   const symbol = type.getSymbol() ?? type.getAliasSymbol()
-  if (symbol?.getName() === 'HybridObject') {
+  if (symbol?.getName() === name) {
     return true
   }
   return false
 }
 
-export function extendsHybridObject(type: Type, recursive: boolean): boolean {
+function extendsType(type: Type, name: string, recursive: boolean): boolean {
   for (const base of type.getBaseTypes()) {
-    const isHybrid = isDirectlyHybridObject(base)
+    const isHybrid = isDirectlyType(base, name)
     if (isHybrid) {
       return true
     }
     if (recursive) {
-      const baseExtends = extendsHybridObject(base, recursive)
+      const baseExtends = extendsType(base, name, recursive)
       if (baseExtends) {
         return true
       }
     }
   }
   return false
+}
+
+export function isDirectlyHybridObject(type: Type): boolean {
+  return isDirectlyType(type, 'HybridObject')
+}
+export function isDirectlyHybridView(type: Type): boolean {
+  return isDirectlyType(type, 'HybridView')
+}
+
+export function extendsHybridObject(type: Type, recursive: boolean): boolean {
+  return extendsType(type, 'HybridObject', recursive)
+}
+export function extendsHybridView(type: Type, recursive: boolean): boolean {
+  return extendsType(type, 'HybridView', recursive)
 }
 
 function findHybridObjectBase(type: Type): Type | undefined {
@@ -146,4 +160,17 @@ export function getHybridObjectPlatforms(
   }
 
   return getPlatformSpec(declaration.getName(), platformSpecsArgument)
+}
+
+export function getHybridViewPlatforms(
+  view: InterfaceDeclaration
+): PlatformSpec | undefined {
+  const genericArguments = view.getType().getTypeArguments()
+  const platformSpecsArgument = genericArguments[0]
+  if (platformSpecsArgument == null) {
+    // it uses `HybridObject` without generic arguments. This defaults to platform native languages
+    return { ios: 'swift', android: 'kotlin' }
+  }
+
+  return getPlatformSpec(view.getName(), platformSpecsArgument)
 }
