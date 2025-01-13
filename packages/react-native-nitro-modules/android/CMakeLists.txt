@@ -18,6 +18,12 @@ add_library(NitroModules SHARED
             ${android_files}
 )
 
+# Add C++ flags
+if (HAS_REACT_NATIVE)
+    message(STATUS "Building with React Native v${REACT_NATIVE_VERSION}...")
+    add_compile_definitions(HAS_REACT_NATIVE REACT_NATIVE_VERSION=${REACT_NATIVE_VERSION})
+endif ()
+
 # Specifies a path to native header files.
 include_directories(
   # Shared C++ includes
