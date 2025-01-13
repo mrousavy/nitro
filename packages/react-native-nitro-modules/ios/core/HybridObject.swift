@@ -1,5 +1,5 @@
 //
-//  HybridObjectSpec.swift
+//  HybridObject.swift
 //  NitroModules
 //
 //  Created by Marc Rousavy on 23.07.24.
@@ -10,7 +10,7 @@ import Foundation
 /**
  * A base protocol for all Swift-based Hybrid Objects.
  */
-public protocol HybridObjectSpec: AnyObject {
+public protocol HybridObject: AnyObject {
   /**
    * Get the memory size of the Swift instance (plus any external heap allocations),
    * in bytes.
@@ -28,6 +28,9 @@ public protocol HybridObjectSpec: AnyObject {
    */
   var memorySize: Int { get }
 }
+
+@available(*, deprecated, message: "HybridObjectSpec has been renamed to HybridObject. Update Nitrogen and re-generate your specs.")
+public typealias HybridObjectSpec = HybridObject
 
 public extension HybridObjectSpec {
   @available(*, deprecated, message: "getSizeOf(...) will now be default-computed. Please remove getSizeOf() from your code.")

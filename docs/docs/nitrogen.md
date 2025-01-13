@@ -23,7 +23,7 @@ interface Math extends HybridObject {
 <div className="side-by-side-block">
 
 ```swift title="HybridMathSpec.swift (generated)"
-protocol HybridMathSpec: HybridObjectSpec {
+protocol HybridMathSpec: HybridObject {
   var pi: Double { get }
   func add(a: Double, b: Double) -> Double
 }

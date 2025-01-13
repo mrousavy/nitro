@@ -21,7 +21,7 @@ public protocol HybridImageSpec_protocol: AnyObject {
 }
 
 /// See ``HybridImageSpec``
-public class HybridImageSpec_base: HybridObjectSpec {
+public class HybridImageSpec_base: HybridObject {
   private weak var cxxWrapper: HybridImageSpec_cxx? = nil
   public func getCxxWrapper() -> HybridImageSpec_cxx {
   #if DEBUG

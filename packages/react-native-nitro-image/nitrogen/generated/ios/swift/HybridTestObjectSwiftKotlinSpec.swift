@@ -79,7 +79,7 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: AnyObject {
 }
 
 /// See ``HybridTestObjectSwiftKotlinSpec``
-public class HybridTestObjectSwiftKotlinSpec_base: HybridObjectSpec {
+public class HybridTestObjectSwiftKotlinSpec_base: HybridObject {
   private weak var cxxWrapper: HybridTestObjectSwiftKotlinSpec_cxx? = nil
   public func getCxxWrapper() -> HybridTestObjectSwiftKotlinSpec_cxx {
   #if DEBUG
