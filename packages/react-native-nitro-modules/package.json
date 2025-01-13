@@ -20,6 +20,7 @@
     "cpp/",
     "app.plugin.js",
     "*.podspec",
+    "nitro_pod_utils.rb",
     "README.md"
   ],
   "keywords": [

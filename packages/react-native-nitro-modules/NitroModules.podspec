@@ -1,6 +1,8 @@
 require "json"
+require_relative './nitro_pod_utils'
 
 package = JSON.parse(File.read(File.join(__dir__, "package.json")))
+react_native_version = get_react_native_version()
 
 Pod::UI.puts "[NitroModules] 🔥 Your app is boosted by nitro modules!"
 
@@ -61,7 +63,7 @@ Pod::Spec.new do |s|
     # Enables stricter modular headers
     "DEFINES_MODULE" => "YES",
     # C++ compiler flags, mainly for folly.
-    "GCC_PREPROCESSOR_DEFINITIONS" => "$(inherited) FOLLY_NO_CONFIG FOLLY_CFG_NO_COROUTINES"
+    "GCC_PREPROCESSOR_DEFINITIONS" => "$(inherited) FOLLY_NO_CONFIG FOLLY_CFG_NO_COROUTINES REACT_NATIVE_VERSION=#{react_native_version}"
   }
 
   s.dependency 'React-jsi'
