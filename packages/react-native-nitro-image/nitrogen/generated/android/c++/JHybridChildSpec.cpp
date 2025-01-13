@@ -13,8 +13,23 @@
 
 namespace margelo::nitro::image {
 
-  jni::local_ref<JHybridChildSpec::jhybriddata> JHybridChildSpec::initHybrid(jni::alias_ref<jhybridobject> jThis) {
-    return makeCxxInstance(jThis);
+  JHybridChildSpec::JHybridChildSpec(jni::alias_ref<jhybridobject> javaPart):
+    HybridObject(HybridChildSpec::TAG),
+    HybridBase(javaPart),
+    _javaPart(jni::make_global(javaPart)) {
+#ifdef NITRO_DEBUG
+    if (javaPart == nullptr) [[unlikely]] {
+      throw std::runtime_error("Tried initializing a new C++ instance of `JHybridChildSpec` from Java, "
+                                "but `javaPart` was null!");
+    } else if (!javaPart->isInstanceOf(JHybridChildSpec::javaClassStatic())) [[unlikely]] {
+      throw std::runtime_error("Tried initializing a new C++ instance of `JHybridChildSpec` from Java, "
+                                "but `javaPart` is not an instance of `HybridChildSpec`!");
+    }
+#endif
+  }
+
+  jni::local_ref<JHybridChildSpec::jhybriddata> JHybridChildSpec::initHybrid(jni::alias_ref<jhybridobject> javaPart) {
+    return makeCxxInstance(javaPart);
   }
 
   void JHybridChildSpec::registerNatives() {

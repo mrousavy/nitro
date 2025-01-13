@@ -24,22 +24,19 @@ import com.margelo.nitro.core.*
   "RedundantSuppression", "RedundantUnitReturnType", "SimpleRedundantLet",
   "LocalVariableName", "PropertyName", "PrivatePropertyName", "FunctionName"
 )
-abstract class HybridBaseSpec: HybridObject() {
-  @DoNotStrip
-  private var mHybridData: HybridData = initHybrid()
-
-  init {
-    // Pass this `HybridData` through to it's base class,
-    // to represent inheritance to JHybridObject on C++ side
-    super.updateNative(mHybridData)
-  }
+abstract class HybridBaseSpec: HybridObject {
+  /**
+   * Default-initialize this `HybridBaseSpec`.
+   * Use this constructor if `HybridBaseSpec` has no child-classes.
+   */
+  constructor(): super(initHybrid()) { }
 
   /**
-   * Call from a child class to initialize HybridData with a child.
+   * Initialize this `HybridBaseSpec` from a child-class
+   * with a custom `HybridData` being passed upwards.
+   * Use this constructor if `HybridBaseSpec` is being initialized from a child-class.
    */
-  override fun updateNative(hybridData: HybridData) {
-    mHybridData = hybridData
-  }
+  protected constructor(hybridData: HybridData): super(hybridData) { }
 
   // Properties
   @get:DoNotStrip
@@ -49,10 +46,11 @@ abstract class HybridBaseSpec: HybridObject() {
   // Methods
   
 
-  private external fun initHybrid(): HybridData
-
   companion object {
     private const val TAG = "HybridBaseSpec"
+    @JvmStatic
+    private external fun initHybrid(): HybridData
+
     init {
       try {
         Log.i(TAG, "Loading NitroImage C++ library...")
