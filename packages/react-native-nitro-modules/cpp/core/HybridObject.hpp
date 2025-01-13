@@ -34,7 +34,7 @@ public:
    * Called when no more references to the given `HybridObject` exist in both C++ and JS.
    * JS might keep references for longer, as it is a garbage collected language.
    */
-  virtual ~HybridObject();
+  ~HybridObject() override = default;
   /**
    * HybridObjects cannot be copied.
    */
@@ -80,7 +80,7 @@ public:
    * While two `jsi::Object`s of the same `HybridObject` might not be equal when compared with `==`,
    * they might still be the same `HybridObject` - in this case `equals(other)` will return true.
    */
-  bool equals(std::shared_ptr<HybridObject> other);
+  bool equals(const std::shared_ptr<HybridObject>& other);
   /**
    * Get a string representation of this `HybridObject` - useful for logging or debugging.
    */

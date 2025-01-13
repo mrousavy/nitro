@@ -1,3 +1,5 @@
+import groovy.json.JsonSlurper
+
 buildscript {
   repositories {
     google()
@@ -7,6 +9,28 @@ buildscript {
   dependencies {
     classpath "com.android.tools.build:gradle:8.8.0"
   }
+}
+
+def getReactNativePackagePath() {
+  return file(["node", "--print", "require.resolve('react-native/package.json')"].execute(null, rootDir).text.trim())
+}
+
+def hasReactNative() {
+  def path = getReactNativePackagePath()
+  return path.exists()
+}
+
+def getReactNativeVersion() {
+  logger.info("[NitroModules] Finding react-native package...")
+  def reactNativePackage = getReactNativePackagePath()
+  if (!reactNativePackage.exists()) {
+    throw new GradleException("[NitroModules] Couldn't find react-native path!")
+  }
+  def json = new JsonSlurper().parse(reactNativePackage)
+  def version = json.version
+  def minorVersion = version.tokenize('.')[1].toInteger()
+  logger.info("[NitroModules] Found react-native ${json.version} (${minorVersion}) at ${reactNativePackage}!")
+  return minorVersion
 }
 
 def reactNativeArchitectures() {
@@ -49,7 +73,12 @@ android {
     externalNativeBuild {
       cmake {
         cppFlags "-frtti -fexceptions -Wall -Wextra -fstack-protector-all"
-        arguments "-DANDROID_STL=c++_shared"
+        if (hasReactNative()) {
+          def reactNativeVersion = getReactNativeVersion()
+          arguments "-DANDROID_STL=c++_shared", "-DHAS_REACT_NATIVE=YES", "-DREACT_NATIVE_VERSION=${reactNativeVersion}"
+        } else {
+          arguments "-DANDROID_STL=c++_shared"
+        }
         abiFilters (*reactNativeArchitectures())
 
         buildTypes {
@@ -154,7 +183,7 @@ if (isNewArchitectureEnabled()) {
   }
 }
 
-task prepareHeaders(type: Copy) {
+tasks.register('prepareHeaders', Copy) {
   from fileTree('./src/main/cpp').filter { it.isFile() }
   from fileTree('../cpp/').filter { it.isFile() }
   include "*.hpp"

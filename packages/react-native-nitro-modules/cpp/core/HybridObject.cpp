@@ -9,7 +9,6 @@
 namespace margelo::nitro {
 
 HybridObject::HybridObject(const char* name) : HybridObjectPrototype(), _name(name) {}
-HybridObject::~HybridObject() {}
 
 std::string HybridObject::toString() {
   return "[HybridObject " + std::string(_name) + "]";
@@ -19,7 +18,7 @@ std::string HybridObject::getName() {
   return _name;
 }
 
-bool HybridObject::equals(std::shared_ptr<HybridObject> other) {
+bool HybridObject::equals(const std::shared_ptr<HybridObject>& other) {
   return this == other.get();
 }
 
