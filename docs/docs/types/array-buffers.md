@@ -109,13 +109,13 @@ On the native side, an **owning** `ArrayBuffer` can either **wrap-**, or **copy-
     let myData = UnsafeMutablePointer<UInt8>.allocate(capacity: 4096)
 
     // wrap (no copy)
-    let wrappingArrayBuffer = ArrayBuffer.wrap(dataWithoutCopy: myData,
-                                               size: 4096,
-                                               onDelete: { myData.deallocate() })
+    let wrappingArrayBuffer = ArrayBufferHolder.wrap(dataWithoutCopy: myData,
+                                                     size: 4096,
+                                                     onDelete: { myData.deallocate() })
     // copy
-    let copiedArrayBuffer = ArrayBuffer.copy(of: wrappingArrayBuffer)
+    let copiedArrayBuffer = ArrayBufferHolder.copy(of: wrappingArrayBuffer)
     // new blank buffer
-    let newArrayBuffer = ArrayBuffer.allocate(size: 4096)
+    let newArrayBuffer = ArrayBufferHolder.allocate(size: 4096)
     ```
   </TabItem>
   <TabItem value="kotlin" label="Kotlin">
