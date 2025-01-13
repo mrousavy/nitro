@@ -17,14 +17,6 @@ Optional or nullable values can be declared either by using the questionmark ope
     }
     ```
   </TabItem>
-  <TabItem value="cpp" label="C++">
-    ```cpp
-    class HybridMath: public HybridMathSpec {
-      std::optional<double> a;
-      std::optional<double> b;
-    };
-    ```
-  </TabItem>
   <TabItem value="swift" label="Swift">
     ```swift
     class HybridMath: HybridMathSpec {
@@ -39,6 +31,14 @@ Optional or nullable values can be declared either by using the questionmark ope
       override var a: Double?
       override var b: Double?
     }
+    ```
+  </TabItem>
+  <TabItem value="cpp" label="C++">
+    ```cpp
+    class HybridMath: public HybridMathSpec {
+      std::optional<double> a;
+      std::optional<double> b;
+    };
     ```
   </TabItem>
 </Tabs>

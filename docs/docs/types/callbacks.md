@@ -22,15 +22,6 @@ Once the callback is no longer used, it will be safely deleted from memory.
     }
     ```
   </TabItem>
-  <TabItem value="cpp" label="C++">
-    In C++, a callback is represented as a function:
-
-    ```cpp
-    void start(std::function<void(User)> onNewUserJoined) {
-      onNewUserJoined(user);
-    }
-    ```
-  </TabItem>
   <TabItem value="swift" label="Swift">
     In Swift, a callback is represented as a closure:
 
@@ -46,6 +37,15 @@ Once the callback is no longer used, it will be safely deleted from memory.
     ```kotlin
     fun start(onNewUserJoined: (User) -> Unit) {
       onNewUserJoined(user)
+    }
+    ```
+  </TabItem>
+  <TabItem value="cpp" label="C++">
+    In C++, a callback is represented as a function:
+
+    ```cpp
+    void start(std::function<void(User)> onNewUserJoined) {
+      onNewUserJoined(user);
     }
     ```
   </TabItem>
@@ -70,21 +70,6 @@ It is simply a function you store in memory and call later, just like in a norma
     deviceInfo.listenToOrientation((o) => {
       console.log(`Orientation changed to ${o}!`)
     })
-    ```
-  </TabItem>
-  <TabItem value="cpp" label="C++">
-    In C++, a callback is represented as a function:
-
-    ```cpp
-    void listenToOrientation(std::function<void(Orientation)> onChanged) {
-      this->listeners.push_back(onChanged);
-    }
-
-    void onRotate() {
-      for (const auto& listener: this->listeners) {
-        listener(newOrientation);
-      }
-    }
     ```
   </TabItem>
   <TabItem value="swift" label="Swift">
@@ -113,6 +98,21 @@ It is simply a function you store in memory and call later, just like in a norma
     fun onRotate() {
       for (listener in this.listeners) {
         listener(newOrientation)
+      }
+    }
+    ```
+  </TabItem>
+  <TabItem value="cpp" label="C++">
+    In C++, a callback is represented as a function:
+
+    ```cpp
+    void listenToOrientation(std::function<void(Orientation)> onChanged) {
+      this->listeners.push_back(onChanged);
+    }
+
+    void onRotate() {
+      for (const auto& listener: this->listeners) {
+        listener(newOrientation);
       }
     }
     ```

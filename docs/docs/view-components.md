@@ -159,7 +159,7 @@ export interface NitroImageViewManager extends HybridObject {
 
 Now implement `NitroImageViewManager` in Swift and Kotlin, and assume it has to be created with a valid `NitroImageView` instance:
 
-<Tabs>
+<Tabs groupId="native-platform-language">
   <TabItem value="swift" label="iOS (Swift)" default>
     ```swift
     class HybridNitroImageViewManager: HybridNitroImageViewManagerSpec {
@@ -232,7 +232,7 @@ export interface NitroImageViewManagerRegistry extends HybridObject {
 
 ..which we need to implement in native:
 
-<Tabs>
+<Tabs groupId="native-platform-language">
   <TabItem value="swift" label="iOS (Swift)" default>
     ```swift
     class HybridNitroImageViewManagerRegistry: HybridNitroImageViewManagerRegistrySpec {

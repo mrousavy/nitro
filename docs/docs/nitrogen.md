@@ -228,7 +228,7 @@ To implement `Math` now, you just need to implement the spec:
     }
     ```
   </TabItem>
-  <TabItem value="c++" label="C++">
+  <TabItem value="cpp" label="C++">
     <div className="side-by-side-container">
       <div className="side-by-side-block">
         ```cpp title="HybridMath.hpp"

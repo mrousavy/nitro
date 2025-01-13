@@ -33,7 +33,7 @@ Every method in a [Hybrid Object](hybrid-objects) can throw an error using the l
     }
     ```
   </TabItem>
-  <TabItem value="c++" label="C++">
+  <TabItem value="cpp" label="C++">
     ```cpp title="HybridMath.hpp"
     class HybridMath: public HybridMathSpec {
       double add(double a, double b) override {
@@ -87,7 +87,7 @@ Promises can also be rejected using error throwing syntax on the native side:
     }
     ```
   </TabItem>
-  <TabItem value="c++" label="C++">
+  <TabItem value="cpp" label="C++">
     ```cpp title="HybridMath.hpp"
     class HybridMath: public HybridMathSpec {
       Promise<double> add(double a, double b) override {

@@ -22,18 +22,6 @@ This allows your native code to perform heavy-, long-running tasks in parallel, 
     await math.fibonacci(13)
     ```
   </TabItem>
-  <TabItem value="cpp" label="C++">
-    In C++, a `Promise<T>` can be created via Nitro's [`Promise<T>`](https://github.com/mrousavy/nitro/blob/main/packages/react-native-nitro-modules/cpp/core/Promise.hpp) type - for example, to use an asynchronous Thread pool:
-
-    ```cpp
-    Promise<double> fibonacci(double n) {
-      return Promise<double>::async([=]() -> double {
-        // This runs on a separate Thread!
-        return calculateFibonacciSequence(n);
-      });
-    }
-    ```
-  </TabItem>
   <TabItem value="swift" label="Swift">
     In Swift, a `Promise<T>` can be created via Nitro's [`Promise<T>`](https://github.com/mrousavy/nitro/blob/main/packages/react-native-nitro-modules/ios/core/Promise.swift) type - for example, to use Swift's new async/await syntax:
 
@@ -55,6 +43,18 @@ This allows your native code to perform heavy-, long-running tasks in parallel, 
         // This runs on a separate Thread, and can use suspending coroutine functions!
         return calculateFibonacciSequence(n)
       }
+    }
+    ```
+  </TabItem>
+  <TabItem value="cpp" label="C++">
+    In C++, a `Promise<T>` can be created via Nitro's [`Promise<T>`](https://github.com/mrousavy/nitro/blob/main/packages/react-native-nitro-modules/cpp/core/Promise.hpp) type - for example, to use an asynchronous Thread pool:
+
+    ```cpp
+    Promise<double> fibonacci(double n) {
+      return Promise<double>::async([=]() -> double {
+        // This runs on a separate Thread!
+        return calculateFibonacciSequence(n);
+      });
     }
     ```
   </TabItem>

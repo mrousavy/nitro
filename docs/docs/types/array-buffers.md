@@ -17,13 +17,6 @@ Passing an `ArrayBuffer` from native to JS and back does not involve any copies,
     }
     ```
   </TabItem>
-  <TabItem value="cpp" label="C++">
-    ```cpp
-    class HybridImage: public HybridImageSpec {
-      std::shared_ptr<ArrayBuffer> getData();
-    }
-    ```
-  </TabItem>
   <TabItem value="swift" label="Swift">
     ```swift
     class HybridImage: HybridImageSpec {
@@ -35,6 +28,13 @@ Passing an `ArrayBuffer` from native to JS and back does not involve any copies,
     ```kotlin
     class HybridImage: HybridImageSpec() {
       fun getData(): ArrayBuffer
+    }
+    ```
+  </TabItem>
+  <TabItem value="cpp" label="C++">
+    ```cpp
+    class HybridImage: public HybridImageSpec {
+      std::shared_ptr<ArrayBuffer> getData();
     }
     ```
   </TabItem>
@@ -103,21 +103,7 @@ Buffers can either be created from native (**owning**), or from JS (**non-owning
 
 On the native side, an **owning** `ArrayBuffer` can either **wrap-**, or **copy-** an existing buffer:
 
-<Tabs>
-  <TabItem value="cpp" label="C++">
-    ```cpp
-    auto myData = new uint8_t[4096];
-
-    // wrap (no copy)
-    auto wrappingArrayBuffer = ArrayBuffer::wrap(myData, 4096, [=]() {
-      delete[] myData;
-    });
-    // copy
-    auto copiedArrayBuffer = ArrayBuffer::copy(myData, 4096);
-    // new blank buffer
-    auto newArrayBuffer = ArrayBuffer::allocate(4096);
-    ```
-  </TabItem>
+<Tabs groupId="native-language">
   <TabItem value="swift" label="Swift">
     ```swift
     let myData = UnsafeMutablePointer<UInt8>.allocate(capacity: 4096)
@@ -146,21 +132,27 @@ On the native side, an **owning** `ArrayBuffer` can either **wrap-**, or **copy-
     val newArrayBuffer = ArrayBuffer.allocate(4096)
     ```
   </TabItem>
+  <TabItem value="cpp" label="C++">
+    ```cpp
+    auto myData = new uint8_t[4096];
+
+    // wrap (no copy)
+    auto wrappingArrayBuffer = ArrayBuffer::wrap(myData, 4096, [=]() {
+      delete[] myData;
+    });
+    // copy
+    auto copiedArrayBuffer = ArrayBuffer::copy(myData, 4096);
+    // new blank buffer
+    auto newArrayBuffer = ArrayBuffer::allocate(4096);
+    ```
+  </TabItem>
 </Tabs>
 
 #### Language-native buffer types
 
 ArrayBuffers also provide helper and conversion methods for the language-native conventional buffer types:
 
-<Tabs>
-  <TabItem value="cpp" label="C++">
-    C++ often uses [`std::vector<uint8_t>`](https://en.cppreference.com/w/cpp/container/vector) to represent Data.
-    ```cpp
-    std::vector<uint8_t> data;
-    auto buffer = ArrayBuffer::copy(data);
-    /* convert back to vector would be a copy. */
-    ```
-  </TabItem>
+<Tabs groupId="native-language">
   <TabItem value="swift" label="Swift">
     Swift often uses [`Data`](https://developer.apple.com/documentation/foundation/data) to represent Data.
     ```swift
@@ -175,6 +167,14 @@ ArrayBuffers also provide helper and conversion methods for the language-native 
     val data = ByteBuffer.allocateDirect(1024)
     val buffer = ArrayBuffer.copy(data)
     val dataAgain = buffer.getBuffer(copyIfNeeded = true)
+    ```
+  </TabItem>
+  <TabItem value="cpp" label="C++">
+    C++ often uses [`std::vector<uint8_t>`](https://en.cppreference.com/w/cpp/container/vector) to represent Data.
+    ```cpp
+    std::vector<uint8_t> data;
+    auto buffer = ArrayBuffer::copy(data);
+    /* convert back to vector would be a copy. */
     ```
   </TabItem>
 </Tabs>
