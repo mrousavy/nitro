@@ -75,7 +75,7 @@ android {
         cppFlags "-frtti -fexceptions -Wall -Wextra -fstack-protector-all"
         if (hasReactNative()) {
           def reactNativeVersion = getReactNativeVersion()
-          arguments "-DANDROID_STL=c++_shared", "-DHAS_REACT_NATIVE", "-DREACT_NATIVE_VERSION=${reactNativeVersion}"
+          arguments "-DANDROID_STL=c++_shared", "-DHAS_REACT_NATIVE=YES", "-DREACT_NATIVE_VERSION=${reactNativeVersion}"
         } else {
           arguments "-DANDROID_STL=c++_shared"
         }
