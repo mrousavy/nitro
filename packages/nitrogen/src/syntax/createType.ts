@@ -27,6 +27,7 @@ import {
 } from '../getPlatformSpecs.js'
 import { HybridObjectBaseType } from './types/HybridObjectBaseType.js'
 import { ErrorType } from './types/ErrorType.js'
+import { getBaseTypes } from '../utils.js'
 
 function isSymbol(type: TSMorphType, symbolName: string): boolean {
   const symbol = type.getSymbol()
@@ -302,8 +303,7 @@ export function createType(
     } else if (extendsHybridObject(type, true)) {
       // It is another HybridObject being referenced!
       const typename = type.getSymbolOrThrow().getEscapedName()
-      const baseTypes = type
-        .getBaseTypes()
+      const baseTypes = getBaseTypes(type)
         .filter((t) => extendsHybridObject(t, true))
         .map((b) => createType(language, b, false))
       const baseHybrids = baseTypes.filter((b) => b instanceof HybridObjectType)

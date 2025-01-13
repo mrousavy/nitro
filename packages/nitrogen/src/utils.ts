@@ -1,6 +1,8 @@
 import type { SourceFile } from './syntax/SourceFile.js'
 import path from 'path'
 import type { SwiftCxxHelper } from './syntax/swift/SwiftCxxTypeHelper.js'
+import type { Type } from 'ts-morph'
+import { isNotDuplicate } from './syntax/helpers.js'
 
 export function capitalizeName(name: string): string {
   if (name.length === 0) return name
@@ -101,4 +103,13 @@ export function toLowerCamelCase(string: string): string {
     .map((part) => part.charAt(0).toUpperCase() + part.slice(1).toLowerCase())
 
   return camelCaseString + camelCased.join('')
+}
+
+export function getBaseTypes(type: Type): Type[] {
+  const baseTypes = type.getBaseTypes()
+  const symbol = type.getSymbol()
+  if (symbol != null) {
+    baseTypes.push(...symbol.getDeclaredType().getBaseTypes())
+  }
+  return baseTypes.filter(isNotDuplicate)
 }

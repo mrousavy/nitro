@@ -1,6 +1,7 @@
 import type { PlatformSpec } from 'react-native-nitro-modules'
 import type { InterfaceDeclaration, Type } from 'ts-morph'
 import { Symbol } from 'ts-morph'
+import { getBaseTypes } from './utils.js'
 
 export type Platform = keyof Required<PlatformSpec>
 export type Language = Required<PlatformSpec>[keyof PlatformSpec]
@@ -95,7 +96,7 @@ function isDirectlyType(type: Type, name: string): boolean {
 }
 
 function extendsType(type: Type, name: string, recursive: boolean): boolean {
-  for (const base of type.getBaseTypes()) {
+  for (const base of getBaseTypes(type)) {
     const isHybrid = isDirectlyType(base, name)
     if (isHybrid) {
       return true
@@ -125,7 +126,7 @@ export function extendsHybridView(type: Type, recursive: boolean): boolean {
 }
 
 function findHybridObjectBase(type: Type): Type | undefined {
-  for (const base of type.getBaseTypes()) {
+  for (const base of getBaseTypes(type)) {
     const symbol = base.getSymbol() ?? base.getAliasSymbol()
     if (symbol?.getName() === 'HybridObject') {
       return base
