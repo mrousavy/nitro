@@ -29,6 +29,7 @@
 #include "JFunc_std__shared_ptr_Promise_std__string__.hpp"
 #include "JHybridBaseSpec.hpp"
 #include "JHybridChildSpec.hpp"
+#include "JHybridTestViewSpec.hpp"
 #include <NitroModules/JNISharedPtr.hpp>
 #include <NitroModules/DefaultConstructableObject.hpp>
 #include "HybridTestObjectCpp.hpp"
@@ -63,6 +64,8 @@ int initialize(JavaVM* vm) {
     margelo::nitro::image::JFunc_void_double_cxx::registerNatives();
     margelo::nitro::image::JHybridBaseSpec::registerNatives();
     margelo::nitro::image::JHybridChildSpec::registerNatives();
+    margelo::nitro::image::JHybridTestViewSpec::registerNatives();
+    margelo::nitro::image::JFunc_void_double_cxx::registerNatives();
 
     // Register Nitro Hybrid Objects
     HybridObjectRegistry::registerHybridObjectConstructor(
