@@ -22,17 +22,19 @@ namespace margelo::nitro::image {
                                  public virtual HybridImageFactorySpec {
   public:
     static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/HybridImageFactorySpec;";
-    static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis);
+    static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> javaPart);
     static void registerNatives();
 
   protected:
     // C++ constructor (called from Java via `initHybrid()`)
-    explicit JHybridImageFactorySpec(jni::alias_ref<jhybridobject> jThis) :
-      HybridObject(HybridImageFactorySpec::TAG),
-      _javaPart(jni::make_global(jThis)) {}
+    explicit JHybridImageFactorySpec(jni::alias_ref<jhybridobject> javaPart);
 
   public:
-    virtual ~JHybridImageFactorySpec() {
+    // JHybridImageFactorySpec cannot be default-constructed from C++.
+    JHybridImageFactorySpec() = delete;
+
+  public:
+    ~JHybridImageFactorySpec() override {
       // Hermes GC can destroy JS objects on a non-JNI Thread.
       jni::ThreadScope::WithClassLoader([&] { _javaPart.reset(); });
     }

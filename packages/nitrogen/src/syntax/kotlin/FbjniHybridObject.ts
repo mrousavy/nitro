@@ -51,7 +51,7 @@ export function createFbjniHybridObject(spec: HybridObjectSpec): SourceFile[] {
   const cppConstructorCalls = [`HybridObject(${name.HybridTSpec}::TAG)`]
   for (const base of spec.baseTypes) {
     const { JHybridTSpec } = getHybridObjectName(base.name)
-    cppConstructorCalls.push('HybridBase(jThis)')
+    cppConstructorCalls.push('HybridBase(javaPart)')
     cppImports.push({
       language: 'c++',
       name: `${JHybridTSpec}.hpp`,
@@ -87,17 +87,19 @@ namespace ${cxxNamespace} {
 ${spaces}          public virtual ${name.HybridTSpec} {
   public:
     static auto constexpr kJavaDescriptor = "L${jniClassDescriptor};";
-    static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis);
+    static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> javaPart);
     static void registerNatives();
 
   protected:
     // C++ constructor (called from Java via \`initHybrid()\`)
-    explicit ${name.JHybridTSpec}(jni::alias_ref<jhybridobject> jThis) :
-      ${indent(cppConstructorCalls.join(',\n'), '      ')},
-      _javaPart(jni::make_global(jThis)) {}
+    explicit ${name.JHybridTSpec}(jni::alias_ref<jhybridobject> javaPart);
 
   public:
-    virtual ~${name.JHybridTSpec}() {
+    // ${name.JHybridTSpec} cannot be default-constructed from C++.
+    ${name.JHybridTSpec}() = delete;
+
+  public:
+    ~${name.JHybridTSpec}() override {
       // Hermes GC can destroy JS objects on a non-JNI Thread.
       jni::ThreadScope::WithClassLoader([&] { _javaPart.reset(); });
     }
@@ -168,8 +170,22 @@ ${cppIncludes.join('\n')}
 
 namespace ${cxxNamespace} {
 
-  jni::local_ref<${name.JHybridTSpec}::jhybriddata> ${name.JHybridTSpec}::initHybrid(jni::alias_ref<jhybridobject> jThis) {
-    return makeCxxInstance(jThis);
+  ${name.JHybridTSpec}::${name.JHybridTSpec}(jni::alias_ref<jhybridobject> javaPart):
+    ${indent(cppConstructorCalls.join(',\n'), '    ')},
+    _javaPart(jni::make_global(javaPart)) {
+#ifdef NITRO_DEBUG
+    if (javaPart == nullptr) [[unlikely]] {
+      throw std::runtime_error("Tried initializing a new C++ instance of \`${name.JHybridTSpec}\` from Java, "
+                                "but \`javaPart\` was null!");
+    } else if (!javaPart->isInstanceOf(${name.JHybridTSpec}::javaClassStatic())) [[unlikely]] {
+      throw std::runtime_error("Tried initializing a new C++ instance of \`${name.JHybridTSpec}\` from Java, "
+                                "but \`javaPart\` is not an instance of \`${name.HybridTSpec}\`!");
+    }
+#endif
+  }
+
+  jni::local_ref<${name.JHybridTSpec}::jhybriddata> ${name.JHybridTSpec}::initHybrid(jni::alias_ref<jhybridobject> javaPart) {
+    return makeCxxInstance(javaPart);
   }
 
   void ${name.JHybridTSpec}::registerNatives() {
