@@ -39,6 +39,7 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
    */
   override fun updateNative(hybridData: HybridData) {
     mHybridData = hybridData
+    super.updateNative(hybridData)
   }
 
   // Properties

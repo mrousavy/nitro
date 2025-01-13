@@ -77,6 +77,7 @@ abstract class ${name.HybridTSpec}: ${kotlinBase}() {
    */
   override fun updateNative(hybridData: HybridData) {
     mHybridData = hybridData
+    super.updateNative(hybridData)
   }
 
   // Properties
