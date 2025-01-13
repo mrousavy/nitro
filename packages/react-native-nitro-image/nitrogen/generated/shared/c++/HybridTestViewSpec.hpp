@@ -13,12 +13,9 @@
 #error NitroModules cannot be found! Are you sure you installed NitroModules properly?
 #endif
 
-// Forward declaration of `HybridHybridViewSpec` to properly resolve imports.
-namespace margelo::nitro::image { class HybridHybridViewSpec; }
+
 
 #include <functional>
-#include <memory>
-#include "HybridHybridViewSpec.hpp"
 
 namespace margelo::nitro::image {
 
@@ -37,7 +34,7 @@ namespace margelo::nitro::image {
    * };
    * ```
    */
-  class HybridTestViewSpec: public virtual HybridObject, public virtual HybridHybridViewSpec {
+  class HybridTestViewSpec: public virtual HybridObject {
     public:
       // Constructor
       explicit HybridTestViewSpec(): HybridObject(TAG) { }

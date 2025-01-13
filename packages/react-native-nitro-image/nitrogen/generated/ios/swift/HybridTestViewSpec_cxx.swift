@@ -17,7 +17,7 @@ import NitroModules
  * - Other HybridObjects need to be wrapped/unwrapped from the Swift TCxx wrapper
  * - Throwing methods need to be wrapped with a Result<T, Error> type, as exceptions cannot be propagated to C++
  */
-public class HybridTestViewSpec_cxx : HybridHybridViewSpec_cxx {
+public class HybridTestViewSpec_cxx {
   /**
    * The Swift <> C++ bridge's namespace (`margelo::nitro::image::bridge::swift`)
    * from `NitroImage-Swift-Cxx-Bridge.hpp`.
@@ -42,7 +42,7 @@ public class HybridTestViewSpec_cxx : HybridHybridViewSpec_cxx {
   public init(_ implementation: any HybridTestViewSpec) {
     self.__implementation = implementation
     self.__cxxPart = .init()
-    super.init(implementation)
+    /* no base class */
   }
 
   /**
@@ -57,7 +57,7 @@ public class HybridTestViewSpec_cxx : HybridHybridViewSpec_cxx {
    * Casts this instance to a retained unsafe raw pointer.
    * This acquires one additional strong reference on the object!
    */
-  public override func toUnsafe() -> UnsafeMutableRawPointer {
+  public func toUnsafe() -> UnsafeMutableRawPointer {
     return Unmanaged.passRetained(self).toOpaque()
   }
 
@@ -66,7 +66,7 @@ public class HybridTestViewSpec_cxx : HybridHybridViewSpec_cxx {
    * The pointer has to be a retained opaque `Unmanaged<HybridTestViewSpec_cxx>`.
    * This removes one strong reference from the object!
    */
-  public override class func fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> HybridTestViewSpec_cxx {
+  public class func fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> HybridTestViewSpec_cxx {
     return Unmanaged<HybridTestViewSpec_cxx>.fromOpaque(pointer).takeRetainedValue()
   }
 
@@ -85,17 +85,14 @@ public class HybridTestViewSpec_cxx : HybridHybridViewSpec_cxx {
     }
   }
 
-  public override func getCxxPart() -> bridge.std__shared_ptr_margelo__nitro__image__HybridHybridViewSpec_ {
-    let ownCxxPart: bridge.std__shared_ptr_margelo__nitro__image__HybridTestViewSpec_ = getCxxPart()
-    return bridge.upcast_TestView_to_HybridView(ownCxxPart)
-  }
+  
 
   /**
    * Get the memory size of the Swift class (plus size of any other allocations)
    * so the JS VM can properly track it and garbage-collect the JS object if needed.
    */
   @inline(__always)
-  public override var memorySize: Int {
+  public var memorySize: Int {
     return MemoryHelper.getSizeOf(self.__implementation) + self.__implementation.memorySize
   }
 

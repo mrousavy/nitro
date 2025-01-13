@@ -9,7 +9,7 @@ import Foundation
 import NitroModules
 
 /// See ``HybridTestViewSpec``
-public protocol HybridTestViewSpec_protocol: AnyObject, HybridHybridViewSpec_protocol {
+public protocol HybridTestViewSpec_protocol: AnyObject {
   // Properties
   var someProp: Bool { get set }
   var someCallback: (_ someParam: Double) -> Void { get set }
@@ -19,9 +19,9 @@ public protocol HybridTestViewSpec_protocol: AnyObject, HybridHybridViewSpec_pro
 }
 
 /// See ``HybridTestViewSpec``
-public class HybridTestViewSpec_base: HybridHybridViewSpec_base {
+public class HybridTestViewSpec_base: HybridView {
   private weak var cxxWrapper: HybridTestViewSpec_cxx? = nil
-  public override func getCxxWrapper() -> HybridTestViewSpec_cxx {
+  public func getCxxWrapper() -> HybridTestViewSpec_cxx {
   #if DEBUG
     guard self is HybridTestViewSpec else {
       fatalError("`self` is not a `HybridTestViewSpec`! Did you accidentally inherit from `HybridTestViewSpec_base` instead of `HybridTestViewSpec`?")
@@ -35,6 +35,7 @@ public class HybridTestViewSpec_base: HybridHybridViewSpec_base {
       return cxxWrapper
     }
   }
+  public var memorySize: Int { return 0 }
 }
 
 /**

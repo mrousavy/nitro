@@ -12,7 +12,6 @@ namespace margelo::nitro::image {
   void HybridTestViewSpec::loadHybridMethods() {
     // load base methods/properties
     HybridObject::loadHybridMethods();
-    HybridHybridViewSpec::loadHybridMethods();
     // load custom methods/properties
     registerHybrids(this, [](Prototype& prototype) {
       prototype.registerHybridGetter("someProp", &HybridTestViewSpec::getSomeProp);

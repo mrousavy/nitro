@@ -5,6 +5,7 @@ import {
   extendsHybridObject,
   extendsHybridView,
   isDirectlyHybridObject,
+  isDirectlyHybridView,
   type Language,
 } from './getPlatformSpecs.js'
 import type { HybridObjectSpec } from './syntax/HybridObjectSpec.js'
@@ -106,7 +107,15 @@ function getHybridObjectSpec(type: Type, language: Language): HybridObjectSpec {
   }
 
   const bases = getBaseTypes(type)
-    .filter((t) => extendsHybridObject(t, false))
+    .filter((t) => {
+      if (isDirectlyHybridObject(t)) return false
+      if (isDirectlyHybridView(t)) return false
+
+      const isCustomHybrid =
+        extendsHybridObject(t, false) || extendsHybridView(t, false)
+
+      return isCustomHybrid
+    })
     .map((t) => getHybridObjectSpec(t, language))
   const isHybridView = extendsHybridView(type, true)
 

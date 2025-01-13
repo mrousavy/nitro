@@ -25,7 +25,7 @@ import com.margelo.nitro.views.*
   "RedundantSuppression", "RedundantUnitReturnType", "SimpleRedundantLet",
   "LocalVariableName", "PropertyName", "PrivatePropertyName", "FunctionName"
 )
-abstract class HybridTestViewSpec: HybridHybridViewSpec() {
+abstract class HybridTestViewSpec: HybridView() {
   @DoNotStrip
   private var mHybridData: HybridData = initHybrid()
 

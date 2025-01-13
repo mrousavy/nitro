@@ -11,15 +11,14 @@
 #include <fbjni/fbjni.h>
 #include "HybridTestViewSpec.hpp"
 
-// Forward declaration of `JHybridHybridViewSpec` to properly resolve imports.
-namespace margelo::nitro::image { class JHybridHybridViewSpec; }
-#include "JHybridHybridViewSpec.hpp"
+
+
 
 namespace margelo::nitro::image {
 
   using namespace facebook;
 
-  class JHybridTestViewSpec: public jni::HybridClass<JHybridTestViewSpec, JHybridHybridViewSpec>,
+  class JHybridTestViewSpec: public jni::HybridClass<JHybridTestViewSpec, JHybridObject>,
                              public virtual HybridTestViewSpec {
   public:
     static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/HybridTestViewSpec;";
@@ -30,7 +29,6 @@ namespace margelo::nitro::image {
     // C++ constructor (called from Java via `initHybrid()`)
     explicit JHybridTestViewSpec(jni::alias_ref<jhybridobject> jThis) :
       HybridObject(HybridTestViewSpec::TAG),
-      HybridBase(jThis),
       _javaPart(jni::make_global(jThis)) {}
 
   public:

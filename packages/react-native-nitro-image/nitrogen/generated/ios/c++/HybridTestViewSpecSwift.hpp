@@ -12,11 +12,9 @@
 // Forward declaration of `HybridTestViewSpec_cxx` to properly resolve imports.
 namespace NitroImage { class HybridTestViewSpec_cxx; }
 
-// Forward declaration of `HybridHybridViewSpecSwift` to properly resolve imports.
-namespace margelo::nitro::image { class HybridHybridViewSpecSwift; }
+
 
 #include <functional>
-#include "HybridHybridViewSpecSwift.hpp"
 
 #include "NitroImage-Swift-Cxx-Umbrella.hpp"
 
@@ -32,12 +30,11 @@ namespace margelo::nitro::image {
    * the future, HybridTestViewSpec_cxx can directly inherit from the C++ class HybridTestViewSpec
    * to simplify the whole structure and memory management.
    */
-  class HybridTestViewSpecSwift: public virtual HybridTestViewSpec, public virtual HybridHybridViewSpecSwift {
+  class HybridTestViewSpecSwift: public virtual HybridTestViewSpec {
   public:
     // Constructor from a Swift instance
     explicit HybridTestViewSpecSwift(const NitroImage::HybridTestViewSpec_cxx& swiftPart):
       HybridObject(HybridTestViewSpec::TAG),
-      HybridHybridViewSpecSwift(swiftPart),
       _swiftPart(swiftPart) { }
 
   public:
