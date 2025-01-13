@@ -9,7 +9,7 @@ import Foundation
 import NitroModules
 
 /// See ``HybridTestViewSpec``
-public protocol HybridTestViewSpec_protocol: AnyObject {
+public protocol HybridTestViewSpec_protocol: AnyObject, HybridView {
   // Properties
   var someProp: Bool { get set }
   var someCallback: (_ someParam: Double) -> Void { get set }
@@ -19,7 +19,7 @@ public protocol HybridTestViewSpec_protocol: AnyObject {
 }
 
 /// See ``HybridTestViewSpec``
-public class HybridTestViewSpec_base: HybridView {
+public class HybridTestViewSpec_base: HybridObject {
   private weak var cxxWrapper: HybridTestViewSpec_cxx? = nil
   public func getCxxWrapper() -> HybridTestViewSpec_cxx {
   #if DEBUG

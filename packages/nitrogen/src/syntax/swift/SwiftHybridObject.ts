@@ -18,6 +18,9 @@ export function createSwiftHybridObject(spec: HybridObjectSpec): SourceFile[] {
     protocolBaseClasses.push(`${baseName.HybridTSpec}_protocol`)
     classBaseClasses.push(`${baseName.HybridTSpec}_base`)
   }
+  if (spec.isHybridView) {
+    protocolBaseClasses.push('HybridView')
+  }
 
   const hasBaseClass = classBaseClasses.length > 0
   const baseMembers: string[] = []
