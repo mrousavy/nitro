@@ -106,7 +106,7 @@ On the native side, an **owning** `ArrayBuffer` can either **wrap-**, or **copy-
 <Tabs>
   <TabItem value="cpp" label="C++">
     ```cpp
-    auto myData = new uint8_t*[4096];
+    auto myData = new uint8_t[4096];
 
     // wrap (no copy)
     auto wrappingArrayBuffer = ArrayBuffer::wrap(myData, 4096, [=]() {

@@ -140,7 +140,7 @@ interface Math extends HybridObject {
 func some(getValue: () -> Promise<Double>) {
   Task {
     let promise = getValue()
-    let valueFromJs = promise.await()
+    let valueFromJs = try await promise.await()
   }
 }
 ```
