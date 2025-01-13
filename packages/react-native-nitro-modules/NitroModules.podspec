@@ -2,7 +2,6 @@ require "json"
 require_relative './nitro_pod_utils'
 
 package = JSON.parse(File.read(File.join(__dir__, "package.json")))
-react_native_version = get_react_native_version()
 
 Pod::UI.puts "[NitroModules] 🔥 Your app is boosted by nitro modules!"
 
@@ -55,6 +54,12 @@ Pod::Spec.new do |s|
     "ios/utils/SwiftClosure.hpp",
   ]
 
+  compiler_flags = "$(inherited) FOLLY_NO_CONFIG FOLLY_CFG_NO_COROUTINES"
+  if has_react_native()
+    react_native_version = get_react_native_version()
+    compiler_flags += " HAS_REACT_NATIVE REACT_NATIVE_VERSION=#{react_native_version}"
+  end
+
   s.pod_target_xcconfig = {
     # Use C++ 20
     "CLANG_CXX_LANGUAGE_STANDARD" => "c++20",
@@ -62,11 +67,17 @@ Pod::Spec.new do |s|
     "SWIFT_OBJC_INTEROP_MODE" => "objcxx",
     # Enables stricter modular headers
     "DEFINES_MODULE" => "YES",
-    # C++ compiler flags, mainly for folly.
-    "GCC_PREPROCESSOR_DEFINITIONS" => "$(inherited) FOLLY_NO_CONFIG FOLLY_CFG_NO_COROUTINES REACT_NATIVE_VERSION=#{react_native_version}"
+    # C++ compiler flags, mainly for RN version and folly.
+    "GCC_PREPROCESSOR_DEFINITIONS" => compiler_flags
   }
 
-  s.dependency 'React-jsi'
-  s.dependency 'React-callinvoker'
-  install_modules_dependencies(s)
+  if has_react_native()
+    # Using Nitro in react-native
+    s.dependency 'React-jsi'
+    s.dependency 'React-callinvoker'
+    install_modules_dependencies(s)
+  else
+    # Using Nitro somewhere else (NativeScript? Bare iOS?)
+    raise "Couldn't find react-native - are you trying to use Nitro outside of React Native?"
+  end
 end
