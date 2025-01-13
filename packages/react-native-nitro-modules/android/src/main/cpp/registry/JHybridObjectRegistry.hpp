@@ -21,7 +21,7 @@ public:
 
 public:
   [[deprecated("HybridObjects should be registered from C++ instead. Either autolink them using `nitro.json`, "
-               "or add them manually in HybridObjectRegistry.")]]
+               "or add them manually in the C++ HybridObjectRegistry.")]]
   static void registerHybridObjectConstructor(jni::alias_ref<jni::JClass> clazz, std::string hybridObjectName,
                                               jni::alias_ref<JHybridObjectInitializer> constructorFn);
 
