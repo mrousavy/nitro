@@ -4,10 +4,6 @@ import androidx.annotation.Keep
 import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
 
-interface ExtendableHybridClass {
-    fun updateNative(hybridData: HybridData)
-}
-
 /**
  * A base class for all Kotlin-based HybridObjects.
  */
