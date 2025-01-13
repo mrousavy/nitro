@@ -183,7 +183,7 @@ if (isNewArchitectureEnabled()) {
   }
 }
 
-task prepareHeaders(type: Copy) {
+tasks.register('prepareHeaders', Copy) {
   from fileTree('./src/main/cpp').filter { it.isFile() }
   from fileTree('../cpp/').filter { it.isFile() }
   include "*.hpp"
