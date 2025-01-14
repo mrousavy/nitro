@@ -29,7 +29,7 @@ public protocol HybridObject: AnyObject {
   var memorySize: Int { get }
 }
 
-extension HybridObject {
+public extension HybridObject {
   // By default, this returns `0`.
   var memorySize: Int { return 0 }
 }

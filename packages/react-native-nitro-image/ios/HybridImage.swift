@@ -25,7 +25,7 @@ class HybridImage : HybridImageSpec {
    * Get the memory size of the Swift class, and the `UIImage` we allocated so JS
    * can efficiently garbage collect it when needed.
    */
-  public override var memorySize: Int {
+  public var memorySize: Int {
     return uiImage.memorySize
   }
 
