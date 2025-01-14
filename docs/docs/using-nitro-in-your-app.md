@@ -211,10 +211,6 @@ After installing Nitro, you can start creating your [Hybrid Objects](hybrid-obje
     <TabItem value="swift" label="Swift" default>
       ```swift title="HybridMath.swift"
       class HybridMath : HybridMathSpec {
-        public override var memorySize: Int {
-          return 0
-        }
-
         public var pi: Double {
           return Double.pi
         }
@@ -227,9 +223,6 @@ After installing Nitro, you can start creating your [Hybrid Objects](hybrid-obje
     <TabItem value="kotlin" label="Kotlin">
       ```kotlin title="HybridMath.kt"
       class HybridMath : HybridMathSpec() {
-        override val memorySize: Long
-            get() = 0L
-
         override var pi: Double
           get() = Double.PI
 
