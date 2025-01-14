@@ -112,10 +112,6 @@ Hybrid Objects can be implemented in C++, Swift or Kotlin:
     <TabItem value="swift" label="Swift" default>
       ```swift title="HybridMath.swift"
       class HybridMath : HybridMathSpec {
-        public override var memorySize: Int {
-          return 0
-        }
-
         public var pi: Double {
           return Double.pi
         }
@@ -128,9 +124,6 @@ Hybrid Objects can be implemented in C++, Swift or Kotlin:
     <TabItem value="kotlin" label="Kotlin">
       ```kotlin title="HybridMath.kt"
       class HybridMath : HybridMathSpec() {
-        override val memorySize: Long
-            get() = 0L
-
         override var pi: Double
           get() = Double.PI
 

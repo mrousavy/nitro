@@ -29,6 +29,11 @@ public protocol HybridObject: AnyObject {
   var memorySize: Int { get }
 }
 
+public extension HybridObject {
+  // By default, this returns `0`.
+  var memorySize: Int { return 0 }
+}
+
 @available(*, deprecated, message: "HybridObjectSpec has been renamed to HybridObject. Update Nitrogen and re-generate your specs.")
 public typealias HybridObjectSpec = HybridObject
 

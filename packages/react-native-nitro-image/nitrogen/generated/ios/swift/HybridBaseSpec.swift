@@ -9,7 +9,7 @@ import Foundation
 import NitroModules
 
 /// See ``HybridBaseSpec``
-public protocol HybridBaseSpec_protocol: AnyObject {
+public protocol HybridBaseSpec_protocol: HybridObject {
   // Properties
   var baseValue: Double { get }
 
@@ -18,7 +18,7 @@ public protocol HybridBaseSpec_protocol: AnyObject {
 }
 
 /// See ``HybridBaseSpec``
-public class HybridBaseSpec_base: HybridObject {
+public class HybridBaseSpec_base {
   private weak var cxxWrapper: HybridBaseSpec_cxx? = nil
   public func getCxxWrapper() -> HybridBaseSpec_cxx {
   #if DEBUG
@@ -34,7 +34,6 @@ public class HybridBaseSpec_base: HybridObject {
       return cxxWrapper
     }
   }
-  public var memorySize: Int { return 0 }
 }
 
 /**

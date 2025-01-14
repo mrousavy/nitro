@@ -9,7 +9,7 @@ import Foundation
 import NitroModules
 
 /// See ``HybridTestObjectSwiftKotlinSpec``
-public protocol HybridTestObjectSwiftKotlinSpec_protocol: AnyObject {
+public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
   // Properties
   var thisObject: (any HybridTestObjectSwiftKotlinSpec) { get }
   var optionalHybrid: (any HybridTestObjectSwiftKotlinSpec)? { get set }
@@ -79,7 +79,7 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: AnyObject {
 }
 
 /// See ``HybridTestObjectSwiftKotlinSpec``
-public class HybridTestObjectSwiftKotlinSpec_base: HybridObject {
+public class HybridTestObjectSwiftKotlinSpec_base {
   private weak var cxxWrapper: HybridTestObjectSwiftKotlinSpec_cxx? = nil
   public func getCxxWrapper() -> HybridTestObjectSwiftKotlinSpec_cxx {
   #if DEBUG
@@ -95,7 +95,6 @@ public class HybridTestObjectSwiftKotlinSpec_base: HybridObject {
       return cxxWrapper
     }
   }
-  public var memorySize: Int { return 0 }
 }
 
 /**

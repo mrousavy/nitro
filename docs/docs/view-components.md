@@ -93,7 +93,8 @@ It is up to the developer on how to handle this most efficiently, but here's an 
     ```swift
     class NitroImageView : UIView {
 
-      static var globalViewsMap: NSMapTable<NSNumber, NitroImageView> = NSMapTable(keyOptions: .strongMemory, valueOptions: .weakMemory)
+      static var globalViewsMap: NSMapTable<NSNumber, NitroImageView>
+        = NSMapTable(keyOptions: .strongMemory, valueOptions: .weakMemory)
 
       @objc var nitroId: NSNumber = -1 {
         didSet {
@@ -163,15 +164,10 @@ Now implement `NitroImageViewManager` in Swift and Kotlin, and assume it has to 
   <TabItem value="swift" label="iOS (Swift)" default>
     ```swift
     class HybridNitroImageViewManager: HybridNitroImageViewManagerSpec {
-      public override var memorySize: Int {
-        return 0
-      }
       private var nitroId: Double? = nil
       private var view: NitroImageView? {
         get {
-            guard let viewId = self.nitroId else {
-                return nil
-            }
+            guard let viewId = self.nitroId else { return nil }
             return NitroImageView.globalViewsMap.object(forKey: NSNumber(value: viewId))
         }
       }
@@ -196,10 +192,9 @@ Now implement `NitroImageViewManager` in Swift and Kotlin, and assume it has to 
     ```kotlin
     class HybridNitroImageViewManager: HybridNitroImageViewManagerSpec() {
       private var nitroId: Double? = null
-
       private var view: WeakReference<NitroImageView>? = null
         get() {
-          return nitroId.let {
+          return nitroId?.let {
             return NitroImageView.globalViewsMap[it]?.get()
           }
         }
@@ -208,9 +203,11 @@ Now implement `NitroImageViewManager` in Swift and Kotlin, and assume it has to 
         get() = view.image
         set(newValue) = view.image = newValue
 
+
       override var opacity: Double {
         get() = view.opacity
         set(newValue) = view.opacity = newValue
+
 
       fun setNitroId(nitroId: Double?) {
         this.nitroId = nitroId
