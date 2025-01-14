@@ -19,7 +19,7 @@ public protocol HybridTestViewSpec_protocol: HybridObject, HybridView {
 }
 
 /// See ``HybridTestViewSpec``
-public class HybridTestViewSpec_base: HybridObject {
+public class HybridTestViewSpec_base {
   private weak var cxxWrapper: HybridTestViewSpec_cxx? = nil
   public func getCxxWrapper() -> HybridTestViewSpec_cxx {
   #if DEBUG
@@ -35,7 +35,6 @@ public class HybridTestViewSpec_base: HybridObject {
       return cxxWrapper
     }
   }
-  public var memorySize: Int { return 0 }
 }
 
 /**
