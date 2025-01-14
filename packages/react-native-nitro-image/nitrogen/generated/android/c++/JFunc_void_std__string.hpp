@@ -18,7 +18,7 @@ namespace margelo::nitro::image {
   using namespace facebook;
 
   /**
-   * Represents the Java/Kotlin callback `(path: String) -> Unit`.
+   * Represents the Java/Kotlin callback `(valueFromJs: String) -> Unit`.
    * This can be passed around between C++ and Java/Kotlin.
    */
   struct JFunc_void_std__string: public jni::JavaClass<JFunc_void_std__string> {
@@ -29,9 +29,9 @@ namespace margelo::nitro::image {
     /**
      * Invokes the function this `JFunc_void_std__string` instance holds through JNI.
      */
-    void invoke(const std::string& path) const {
-      static const auto method = getClass()->getMethod<void(jni::alias_ref<jni::JString> /* path */)>("invoke");
-      method(self(), jni::make_jstring(path));
+    void invoke(const std::string& valueFromJs) const {
+      static const auto method = getClass()->getMethod<void(jni::alias_ref<jni::JString> /* valueFromJs */)>("invoke");
+      method(self(), jni::make_jstring(valueFromJs));
     }
   };
 
@@ -40,7 +40,7 @@ namespace margelo::nitro::image {
    */
   struct JFunc_void_std__string_cxx final: public jni::HybridClass<JFunc_void_std__string_cxx, JFunc_void_std__string> {
   public:
-    static jni::local_ref<JFunc_void_std__string::javaobject> fromCpp(const std::function<void(const std::string& /* path */)>& func) {
+    static jni::local_ref<JFunc_void_std__string::javaobject> fromCpp(const std::function<void(const std::string& /* valueFromJs */)>& func) {
       return JFunc_void_std__string_cxx::newObjectCxxArgs(func);
     }
 
@@ -48,13 +48,13 @@ namespace margelo::nitro::image {
     /**
      * Invokes the C++ `std::function<...>` this `JFunc_void_std__string_cxx` instance holds.
      */
-    void invoke_cxx(jni::alias_ref<jni::JString> path) {
-      _func(path->toStdString());
+    void invoke_cxx(jni::alias_ref<jni::JString> valueFromJs) {
+      _func(valueFromJs->toStdString());
     }
 
   public:
     [[nodiscard]]
-    inline const std::function<void(const std::string& /* path */)>& getFunction() const {
+    inline const std::function<void(const std::string& /* valueFromJs */)>& getFunction() const {
       return _func;
     }
 
@@ -65,11 +65,11 @@ namespace margelo::nitro::image {
     }
 
   private:
-    explicit JFunc_void_std__string_cxx(const std::function<void(const std::string& /* path */)>& func): _func(func) { }
+    explicit JFunc_void_std__string_cxx(const std::function<void(const std::string& /* valueFromJs */)>& func): _func(func) { }
 
   private:
     friend HybridBase;
-    std::function<void(const std::string& /* path */)> _func;
+    std::function<void(const std::string& /* valueFromJs */)> _func;
   };
 
 } // namespace margelo::nitro::image

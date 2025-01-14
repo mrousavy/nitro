@@ -34,7 +34,6 @@ public class HybridBaseSpec_base: HybridObject {
       return cxxWrapper
     }
   }
-  public var memorySize: Int { return 0 }
 }
 
 /**

@@ -95,7 +95,6 @@ public class HybridTestObjectSwiftKotlinSpec_base: HybridObject {
       return cxxWrapper
     }
   }
-  public var memorySize: Int { return 0 }
 }
 
 /**
