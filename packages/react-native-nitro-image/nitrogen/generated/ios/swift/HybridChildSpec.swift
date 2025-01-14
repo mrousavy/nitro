@@ -9,7 +9,7 @@ import Foundation
 import NitroModules
 
 /// See ``HybridChildSpec``
-public protocol HybridChildSpec_protocol: AnyObject, HybridBaseSpec_protocol {
+public protocol HybridChildSpec_protocol: HybridObject, HybridBaseSpec_protocol {
   // Properties
   var childValue: Double { get }
 

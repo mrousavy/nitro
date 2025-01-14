@@ -9,7 +9,7 @@ import Foundation
 import NitroModules
 
 /// See ``HybridImageSpec``
-public protocol HybridImageSpec_protocol: AnyObject {
+public protocol HybridImageSpec_protocol: HybridObject {
   // Properties
   var size: ImageSize { get }
   var pixelFormat: PixelFormat { get }
@@ -21,7 +21,7 @@ public protocol HybridImageSpec_protocol: AnyObject {
 }
 
 /// See ``HybridImageSpec``
-public class HybridImageSpec_base: HybridObject {
+public class HybridImageSpec_base {
   private weak var cxxWrapper: HybridImageSpec_cxx? = nil
   public func getCxxWrapper() -> HybridImageSpec_cxx {
   #if DEBUG

@@ -11,7 +11,7 @@ export function createSwiftHybridObject(spec: HybridObjectSpec): SourceFile[] {
   const properties = spec.properties.map((p) => p.getCode('swift')).join('\n')
   const methods = spec.methods.map((p) => p.getCode('swift')).join('\n')
 
-  const protocolBaseClasses = ['AnyObject']
+  const protocolBaseClasses = ['HybridObject']
   const classBaseClasses: string[] = []
   for (const base of spec.baseTypes) {
     const baseName = getHybridObjectName(base.name)
@@ -39,10 +39,6 @@ public ${hasBaseClass ? 'override func' : 'func'} getCxxWrapper() -> ${name.Hybr
   }
 }`.trim()
   )
-  if (!hasBaseClass) {
-    // It doesn't have a base class - implement the `HybridObject` base protocol
-    classBaseClasses.push('HybridObject')
-  }
 
   const protocolCode = `
 ${createFileMetadataString(`${protocolName}.swift`)}
@@ -60,7 +56,7 @@ public protocol ${protocolName}_protocol: ${protocolBaseClasses.join(', ')} {
 }
 
 /// See \`\`${protocolName}\`\`
-public class ${protocolName}_base: ${classBaseClasses.join(', ')} {
+public class ${protocolName}_base${classBaseClasses.length > 0 ? `: ${classBaseClasses.join(',')}` : ''} {
   ${baseMembers.length > 0 ? indent(baseMembers.join('\n'), '  ') : `/* inherited */`}
 }
 
