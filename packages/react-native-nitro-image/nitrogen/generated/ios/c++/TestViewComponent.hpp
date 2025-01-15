@@ -7,9 +7,10 @@
 
 #pragma once
 
-#import <react/renderer/core/PropsParserContext.h>
-#import <react/renderer/components/view/ViewProps.h>
-#import <react/renderer/components/view/ConcreteViewShadowNode.h>
+#include <react/renderer/core/ConcreteComponentDescriptor.h>
+#include <react/renderer/core/PropsParserContext.h>
+#include <react/renderer/components/view/ConcreteViewShadowNode.h>
+#include <react/renderer/components/view/ViewProps.h>
 
 namespace margelo::nitro::image {
 
@@ -19,8 +20,8 @@ namespace margelo::nitro::image {
   public:
     explicit HybridTestViewProps() = default;
     HybridTestViewProps(const react::PropsParserContext& context,
-                      const HybridTestViewProps& sourceProps,
-                      const react::RawProps& rawProps): react::ViewProps(context, sourceProps, rawProps) {
+                        const HybridTestViewProps& sourceProps,
+                        const react::RawProps& rawProps): react::ViewProps(context, sourceProps, rawProps) {
       throw std::runtime_error("not yet implemented!");
     }
   };
@@ -36,7 +37,7 @@ namespace margelo::nitro::image {
   class HybridTestViewComponentDescriptor: public react::ConcreteComponentDescriptor<HybridTestViewShadowNode> {
   public:
     HybridTestViewComponentDescriptor(const react::ComponentDescriptorParameters& parameters)
-      : ConcreteComponentDescriptor(parameters, std::make_unique<RawPropsParser>(/* enable raw JSI props parsing */ true)) {}
+      : ConcreteComponentDescriptor(parameters, std::make_unique<react::RawPropsParser>(/* enable raw JSI props parsing */ true)) {}
   };
 
   // TODO: Actual RCTViewComponentView goes here... or in Swift?

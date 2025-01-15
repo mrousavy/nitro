@@ -3,6 +3,7 @@ import type { HybridObjectSpec } from '../../syntax/HybridObjectSpec.js'
 import { getHybridObjectName } from '../../syntax/getHybridObjectName.js'
 import { createFileMetadataString } from '../../syntax/helpers.js'
 import { NitroConfig } from '../../config/NitroConfig.js'
+import { createIndentation } from '../../utils.js'
 
 export function createSwiftHybridViewManager(
   spec: HybridObjectSpec
@@ -21,9 +22,10 @@ ${createFileMetadataString(`${component}.hpp`)}
 
 #pragma once
 
-#import <react/renderer/core/PropsParserContext.h>
-#import <react/renderer/components/view/ViewProps.h>
-#import <react/renderer/components/view/ConcreteViewShadowNode.h>
+#include <react/renderer/core/ConcreteComponentDescriptor.h>
+#include <react/renderer/core/PropsParserContext.h>
+#include <react/renderer/components/view/ConcreteViewShadowNode.h>
+#include <react/renderer/components/view/ViewProps.h>
 
 namespace ${namespace} {
 
@@ -33,8 +35,8 @@ namespace ${namespace} {
   public:
     explicit ${propsClassName}() = default;
     ${propsClassName}(const react::PropsParserContext& context,
-                      const ${propsClassName}& sourceProps,
-                      const react::RawProps& rawProps): react::ViewProps(context, sourceProps, rawProps) {
+${createIndentation(propsClassName.length)}     const ${propsClassName}& sourceProps,
+${createIndentation(propsClassName.length)}     const react::RawProps& rawProps): react::ViewProps(context, sourceProps, rawProps) {
       throw std::runtime_error("not yet implemented!");
     }
   };
@@ -50,7 +52,7 @@ namespace ${namespace} {
   class ${descriptorClassName}: public react::ConcreteComponentDescriptor<${shadowNodeClassName}> {
   public:
     ${descriptorClassName}(const react::ComponentDescriptorParameters& parameters)
-      : ConcreteComponentDescriptor(parameters, std::make_unique<RawPropsParser>(/* enable raw JSI props parsing */ true)) {}
+      : ConcreteComponentDescriptor(parameters, std::make_unique<react::RawPropsParser>(/* enable raw JSI props parsing */ true)) {}
   };
 
   // TODO: Actual RCTViewComponentView goes here... or in Swift?
