@@ -87,9 +87,12 @@ using namespace ${namespace}::views;
 }
 
 - (void) updateView {
+  // 1. Get Swift part
   ${swiftNamespace}::${HybridTSpecCxx}& swiftPart = _hybridView->getSwiftPart();
+  // 2. Get UIView*
   void* viewUnsafe = swiftPart.getView();
   UIView* view = (__bridge_transfer UIView*) viewUnsafe;
+  // 3. Update RCTViewComponentView's [contentView]
   [self setContentView:view];
 }
 
