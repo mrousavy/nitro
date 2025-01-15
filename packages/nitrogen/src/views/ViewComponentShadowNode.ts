@@ -119,8 +119,8 @@ namespace ${namespace} {
    */
   using ${shadowNodeClassName} = react::ConcreteViewShadowNode<${nameVariable},
         ${shadowIndent}                                 react::ViewEventEmitter,
-        ${shadowIndent}                                 ${stateClassName}>;
         ${shadowIndent}                                 ${propsClassName},
+        ${shadowIndent}                                 ${stateClassName}>;
 
   /**
    * The Component Descriptor for the "${spec.name}" View.
