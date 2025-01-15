@@ -72,15 +72,16 @@ using namespace ${namespace}::views;
   if (self = [super init]) {
     std::shared_ptr<${HybridTSpec}> hybridView = ${getHybridObjectConstructorCall(spec.name)}
     _hybridView = std::dynamic_pointer_cast<${HybridTSpecSwift}>(hybridView);
+    [self updateView];
   }
   return self;
 }
 
-- (UIView*) contentView {
+- (void) updateView {
   ${swiftNamespace}::${HybridTSpecCxx} swiftPart = _hybridView->getSwiftPart();
   void* viewUnsafe = swiftPart.getView();
   UIView* view = (__bridge_transfer UIView*) viewUnsafe;
-  return view;
+  [self setContentView:view];
 }
 
 - (void) updateProps:(const react::Props::Shared&)props

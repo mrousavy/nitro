@@ -88,7 +88,7 @@ namespace ${namespace} {
   /**
    * The name of the actual native View.
    */
-  extern const char ${nameVariable}[] = "${name.HybridT}";
+  extern const char ${nameVariable}[] = "${name.T}";
 
   /**
    * Props for the "${spec.name}" View.

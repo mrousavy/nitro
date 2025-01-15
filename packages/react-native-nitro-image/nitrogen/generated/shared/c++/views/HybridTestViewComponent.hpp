@@ -26,7 +26,7 @@ namespace margelo::nitro::image::views {
   /**
    * The name of the actual native View.
    */
-  extern const char HybridTestViewComponentName[] = "HybridTestView";
+  extern const char HybridTestViewComponentName[] = "TestView";
 
   /**
    * Props for the "TestView" View.
