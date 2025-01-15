@@ -9,7 +9,7 @@ import com.facebook.proguard.annotations.DoNotStrip
  */
 @Keep
 @DoNotStrip
-abstract class HybridObject: ExtendableHybridClass {
+abstract class HybridObject {
     /**
      * Get the memory size of the Kotlin instance (plus any external heap allocations),
      * in bytes.
@@ -41,8 +41,9 @@ abstract class HybridObject: ExtendableHybridClass {
     /**
      * Must be called in the constructor of a subclass of `HybridObject`, to initialize the C++
      * `JHybridObject` with a subclass of it.
+     * If this is not called, an inheritance chain with overridden methods will be lost.
      */
-    override fun updateNative(hybridData: HybridData) {
+    protected open fun updateNative(hybridData: HybridData) {
         mHybridData = hybridData
     }
 }

@@ -38,7 +38,7 @@ abstract class HybridTestViewSpec: HybridView() {
   /**
    * Call from a child class to initialize HybridData with a child.
    */
-  override fun updateNative(hybridData: HybridData) {
+  override protected fun updateNative(hybridData: HybridData) {
     mHybridData = hybridData
     super.updateNative(hybridData)
   }
