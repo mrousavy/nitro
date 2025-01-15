@@ -1,5 +1,5 @@
 //
-//  TypeInfo.hpp
+//  NitroNitroTypeInfo.hpp
 //  Nitro
 //
 //  Created by Marc Rousavy on 17.07.24.

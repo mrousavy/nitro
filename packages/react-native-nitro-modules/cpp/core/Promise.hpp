@@ -7,7 +7,7 @@
 #include "AssertPromiseState.hpp"
 #include "NitroDefines.hpp"
 #include "ThreadPool.hpp"
-#include "TypeInfo.hpp"
+#include "NitroTypeInfo.hpp"
 #include <exception>
 #include <future>
 #include <jsi/jsi.h>

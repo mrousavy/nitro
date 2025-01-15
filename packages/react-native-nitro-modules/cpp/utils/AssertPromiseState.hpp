@@ -13,7 +13,7 @@ class Promise;
 } // namespace margelo::nitro
 
 #include "Promise.hpp"
-#include "TypeInfo.hpp"
+#include "NitroTypeInfo.hpp"
 #include <exception>
 #include <string>
 
