@@ -19,6 +19,7 @@ namespace margelo::nitro::image::views {
 
   @implementation TestViewComponent
   + (void) load {
+    [super load];
     // TODO: Register it!
   }
 

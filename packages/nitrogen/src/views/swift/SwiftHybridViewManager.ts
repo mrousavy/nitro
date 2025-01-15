@@ -31,6 +31,7 @@ namespace ${namespace} {
 
   @implementation ${component}
   + (void) load {
+    [super load];
     // TODO: Register it!
   }
 
