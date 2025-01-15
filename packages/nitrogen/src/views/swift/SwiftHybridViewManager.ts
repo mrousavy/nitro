@@ -42,8 +42,8 @@ using namespace facebook;
   return react::concreteComponentDescriptorProvider<${namespace}::${descriptorClassName}>();
 }
 
-- (void)updateProps:(const facebook::react::Props::Shared&)props
-           oldProps:(const facebook::react::Props::Shared&)oldProps {
+- (void)updateProps:(const react::Props::Shared&)props
+           oldProps:(const react::Props::Shared&)oldProps {
   // TODO: const auto& newViewProps = *std::static_pointer_cast<${namespace}::${propsClassName} const>(props);
 
   [super updateProps:props oldProps:oldProps];

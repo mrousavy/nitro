@@ -29,8 +29,8 @@ using namespace facebook;
   return react::concreteComponentDescriptorProvider<margelo::nitro::image::views::HybridTestViewComponentDescriptor>();
 }
 
-- (void)updateProps:(const facebook::react::Props::Shared&)props
-            oldProps:(const facebook::react::Props::Shared&)oldProps {
+- (void)updateProps:(const react::Props::Shared&)props
+           oldProps:(const react::Props::Shared&)oldProps {
   // TODO: const auto& newViewProps = *std::static_pointer_cast<margelo::nitro::image::views::HybridTestViewProps const>(props);
 
   [super updateProps:props oldProps:oldProps];
