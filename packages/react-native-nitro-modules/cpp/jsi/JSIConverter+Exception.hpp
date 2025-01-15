@@ -12,7 +12,7 @@ struct JSIConverter;
 
 #include "JSIConverter.hpp"
 
-#include "TypeInfo.hpp"
+#include "NitroTypeInfo.hpp"
 #include <exception>
 #include <jsi/jsi.h>
 

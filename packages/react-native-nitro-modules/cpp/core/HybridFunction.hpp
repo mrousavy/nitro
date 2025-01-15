@@ -15,7 +15,7 @@ struct JSIConverter;
 #include "CountTrailingOptionals.hpp"
 #include "JSIConverter.hpp"
 #include "NitroDefines.hpp"
-#include "TypeInfo.hpp"
+#include "NitroTypeInfo.hpp"
 #include <exception>
 #include <functional>
 #include <jsi/jsi.h>
