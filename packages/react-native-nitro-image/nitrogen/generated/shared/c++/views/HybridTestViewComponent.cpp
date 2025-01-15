@@ -16,25 +16,23 @@ namespace margelo::nitro::image::views {
                                            const HybridTestViewProps& sourceProps,
                                            const react::RawProps& rawProps):
     react::ViewProps(context, sourceProps, rawProps, filterObjectKeys),
-    /* someProp */ someProp([&]() -> bool {
+    someProp([&]() -> CachedProp<bool> {
       const react::RawValue* rawValue = rawProps.at("someProp", nullptr, nullptr);
-      if (rawValue == nullptr) { return {}; }
+      if (rawValue == nullptr) return {};
       const auto& [runtime, value] = (std::pair<jsi::Runtime*, const jsi::Value&>)*rawValue;
-      return JSIConverter<bool>::fromJSI(*runtime, value);
+      return CachedProp<bool>::fromRawValue(*runtime, value, sourceProps.someProp);
     }()),
-    /* someCallback */ someCallback([&]() -> std::function<void(double /* someParam */)> {
+    someCallback([&]() -> CachedProp<std::function<void(double /* someParam */)>> {
       const react::RawValue* rawValue = rawProps.at("someCallback", nullptr, nullptr);
-      if (rawValue == nullptr) { return {}; }
+      if (rawValue == nullptr) return {};
       const auto& [runtime, value] = (std::pair<jsi::Runtime*, const jsi::Value&>)*rawValue;
-      return JSIConverter<std::function<void(double /* someParam */)>>::fromJSI(*runtime, value);
-    }()) {
-    // TODO: Instead of eagerly converting each prop, only convert the ones that changed on demand.
-  }
+      return CachedProp<std::function<void(double /* someParam */)>>::fromRawValue(*runtime, value, sourceProps.someCallback);
+    }()) { }
 
   HybridTestViewProps::HybridTestViewProps(const HybridTestViewProps& other):
     react::ViewProps(),
     someProp(other.someProp),
-    someCallback(other.someCallback) {}
+    someCallback(other.someCallback) { }
 
   bool HybridTestViewProps::filterObjectKeys(const std::string& propName) {
     switch (hashString(propName)) {

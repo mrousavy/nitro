@@ -53,7 +53,7 @@ export function createViewComponentShadowNodeFiles(
   const namespace = NitroConfig.getCxxNamespace('c++', 'views')
 
   const properties = spec.properties.map(
-    (p) => `${p.type.getCode('c++')} ${escapeCppName(p.name)};`
+    (p) => `CachedProp<${p.type.getCode('c++')}> ${escapeCppName(p.name)};`
   )
   const cases = spec.properties.map(
     (p) => `case hashString("${p.name}"): return true;`
@@ -74,6 +74,7 @@ ${createFileMetadataString(`${component}.hpp`)}
 #include <optional>
 #include <NitroModules/NitroDefines.hpp>
 #include <NitroModules/NitroHash.hpp>
+#include <NitroModules/CachedProp.hpp>
 #include <react/renderer/core/ConcreteComponentDescriptor.h>
 #include <react/renderer/core/PropsParserContext.h>
 #include <react/renderer/components/view/ConcreteViewShadowNode.h>
@@ -157,13 +158,14 @@ namespace ${namespace} {
   ]
   const propCopyInitializers = ['react::ViewProps()']
   for (const prop of spec.properties) {
+    const type = prop.type.getCode('c++')
     propInitializers.push(
       `
-/* ${prop.name} */ ${escapeCppName(prop.name)}([&]() -> ${prop.type.getCode('c++')} {
+${escapeCppName(prop.name)}([&]() -> CachedProp<${type}> {
   const react::RawValue* rawValue = rawProps.at("${prop.name}", nullptr, nullptr);
-  if (rawValue == nullptr) { return {}; }
+  if (rawValue == nullptr) return {};
   const auto& [runtime, value] = (std::pair<jsi::Runtime*, const jsi::Value&>)*rawValue;
-  return JSIConverter<${prop.type.getCode('c++')}>::fromJSI(*runtime, value);
+  return CachedProp<${type}>::fromRawValue(*runtime, value, sourceProps.${escapeCppName(prop.name)});
 }())`.trim()
     )
     propCopyInitializers.push(
@@ -185,12 +187,10 @@ namespace ${namespace} {
   ${propsClassName}::${propsClassName}(const react::PropsParserContext& context,
   ${ctorIndent}   const ${propsClassName}& sourceProps,
   ${ctorIndent}   const react::RawProps& rawProps):
-    ${indent(propInitializers.join(',\n'), '    ')} {
-    // TODO: Instead of eagerly converting each prop, only convert the ones that changed on demand.
-  }
+    ${indent(propInitializers.join(',\n'), '    ')} { }
 
   ${propsClassName}::${propsClassName}(const ${propsClassName}& other):
-    ${indent(propCopyInitializers.join(',\n'), '    ')} {}
+    ${indent(propCopyInitializers.join(',\n'), '    ')} { }
 
   bool ${propsClassName}::filterObjectKeys(const std::string& propName) {
     switch (hashString(propName)) {

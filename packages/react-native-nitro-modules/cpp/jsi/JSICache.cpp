@@ -28,6 +28,7 @@ JSICache::~JSICache() {
   Logger::log(LogLevel::Info, TAG, "Destroying JSICache...");
   std::unique_lock lock(_mutex);
 
+  destroyReferences(_valueCache);
   destroyReferences(_objectCache);
   destroyReferences(_functionCache);
   destroyReferences(_weakObjectCache);

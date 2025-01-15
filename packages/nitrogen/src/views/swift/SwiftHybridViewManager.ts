@@ -33,10 +33,14 @@ export function createSwiftHybridViewManager(
     )
   }
 
-  const propAssignments = spec.properties.map(
-    (p) =>
-      `swiftPart.${p.cppSetterName}(newViewProps.${escapeCppName(p.name)});`
-  )
+  const propAssignments = spec.properties.map((p) => {
+    const name = escapeCppName(p.name)
+    return `
+if (newViewProps.${name}.isDirty) {
+  swiftPart.${p.cppSetterName}(newViewProps.${name}.value);
+}
+`.trim()
+  })
 
   const mmFile = `
 ${createFileMetadataString(`${component}.mm`)}

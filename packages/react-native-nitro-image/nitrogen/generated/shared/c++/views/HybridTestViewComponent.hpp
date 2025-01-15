@@ -12,6 +12,7 @@
 #include <optional>
 #include <NitroModules/NitroDefines.hpp>
 #include <NitroModules/NitroHash.hpp>
+#include <NitroModules/CachedProp.hpp>
 #include <react/renderer/core/ConcreteComponentDescriptor.h>
 #include <react/renderer/core/PropsParserContext.h>
 #include <react/renderer/components/view/ConcreteViewShadowNode.h>
@@ -40,8 +41,8 @@ namespace margelo::nitro::image::views {
                         const react::RawProps& rawProps);
 
   public:
-    bool someProp;
-    std::function<void(double /* someParam */)> someCallback;
+    CachedProp<bool> someProp;
+    CachedProp<std::function<void(double /* someParam */)>> someCallback;
 
   private:
     static bool filterObjectKeys(const std::string& propName);
