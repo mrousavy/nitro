@@ -8,9 +8,6 @@
 #ifndef NitroDefines_h
 #define NitroDefines_h
 
-#undef REACT_NATIVE_VERSION
-#define REACT_NATIVE_VERSION 78
-
 // Sets the version of the native Nitro core library
 #define NITRO_VERSION "0.21.0"
 
