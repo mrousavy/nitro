@@ -8,13 +8,19 @@
 #if REACT_NATIVE_VERSION >= 78
 
 #import "HybridTestViewComponent.hpp"
+#import <memory>
 #import <react/renderer/componentregistry/ComponentDescriptorProvider.h>
 #import <React/RCTViewComponentView.h>
 #import <React/RCTComponentViewFactory.h>
 #import <React/UIView+ComponentViewProtocol.h>
 #import <UIKit/UIKit.h>
 
+#import "HybridTestViewSpecSwift.hpp"
+#import "NitroImage-Swift-Cxx-Umbrella.hpp"
+
 using namespace facebook;
+using namespace margelo::nitro::image;
+using namespace margelo::nitro::image::views;
 
 /**
  * Represents the React Native View holder for the Nitro "TestView" HybridView.
@@ -22,7 +28,9 @@ using namespace facebook;
 @interface HybridTestViewComponent: RCTViewComponentView
 @end
 
-@implementation HybridTestViewComponent
+@implementation HybridTestViewComponent {
+  std::shared_ptr<HybridTestViewSpecSwift> _hybridView;
+}
 
 + (void) load {
   [super load];
@@ -30,19 +38,25 @@ using namespace facebook;
 }
 
 + (react::ComponentDescriptorProvider) componentDescriptorProvider {
-  return react::concreteComponentDescriptorProvider<margelo::nitro::image::views::HybridTestViewComponentDescriptor>();
+  return react::concreteComponentDescriptorProvider<HybridTestViewComponentDescriptor>();
 }
 
 - (instancetype) init {
   if (self = [super init]) {
-    // TODO: Initialize "HybridTestView" view!
+    std::shared_ptr<HybridTestViewSpec> hybridView = NitroImage::NitroImageAutolinking::createTestView();
+    _hybridView = std::dynamic_pointer_cast<HybridTestViewSpecSwift>(hybridView);
   }
   return self;
 }
 
+- (UIView*) contentView {
+  NitroImage::HybridTestViewSpec_cxx swiftPart = _hybridView->getSwiftPart();
+  return swiftPart.getView();
+}
+
 - (void) updateProps:(const react::Props::Shared&)props
             oldProps:(const react::Props::Shared&)oldProps {
-  // TODO: const auto& newViewProps = *std::static_pointer_cast<margelo::nitro::image::views::HybridTestViewProps const>(props);
+  // TODO: const auto& newViewProps = *std::static_pointer_cast<HybridTestViewProps const>(props);
 
   [super updateProps:props oldProps:oldProps];
 }

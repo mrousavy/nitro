@@ -6,12 +6,19 @@ import {
 } from '../ViewComponentShadowNode.js'
 import { createFileMetadataString } from '../../syntax/helpers.js'
 import { NitroConfig } from '../../config/NitroConfig.js'
+import { getUmbrellaHeaderName } from '../../autolinking/ios/createSwiftUmbrellaHeader.js'
+import { getHybridObjectName } from '../../syntax/getHybridObjectName.js'
+import { getHybridObjectConstructorCall } from '../../syntax/swift/SwiftHybridObjectRegistration.js'
 
 export function createSwiftHybridViewManager(
   spec: HybridObjectSpec
 ): SourceFile[] {
   const cppFiles = createViewComponentShadowNodeFiles(spec)
-  const namespace = NitroConfig.getCxxNamespace('c++', 'views')
+  const namespace = NitroConfig.getCxxNamespace('c++')
+  const swiftNamespace = NitroConfig.getIosModuleName()
+  const { HybridTSpec, HybridTSpecSwift, HybridTSpecCxx } = getHybridObjectName(
+    spec.name
+  )
   const { component, descriptorClassName, propsClassName } =
     getViewComponentNames(spec)
   const autolinking = NitroConfig.getAutolinkedHybridObjects()
@@ -28,13 +35,19 @@ ${createFileMetadataString(`${component}.mm`)}
 #if REACT_NATIVE_VERSION >= 78
 
 #import "${component}.hpp"
+#import <memory>
 #import <react/renderer/componentregistry/ComponentDescriptorProvider.h>
 #import <React/RCTViewComponentView.h>
 #import <React/RCTComponentViewFactory.h>
 #import <React/UIView+ComponentViewProtocol.h>
 #import <UIKit/UIKit.h>
 
+#import "${HybridTSpecSwift}.hpp"
+#import "${getUmbrellaHeaderName()}"
+
 using namespace facebook;
+using namespace ${namespace};
+using namespace ${namespace}::views;
 
 /**
  * Represents the React Native View holder for the Nitro "${spec.name}" HybridView.
@@ -42,7 +55,9 @@ using namespace facebook;
 @interface ${component}: RCTViewComponentView
 @end
 
-@implementation ${component}
+@implementation ${component} {
+  std::shared_ptr<${HybridTSpecSwift}> _hybridView;
+}
 
 + (void) load {
   [super load];
@@ -50,19 +65,25 @@ using namespace facebook;
 }
 
 + (react::ComponentDescriptorProvider) componentDescriptorProvider {
-  return react::concreteComponentDescriptorProvider<${namespace}::${descriptorClassName}>();
+  return react::concreteComponentDescriptorProvider<${descriptorClassName}>();
 }
 
 - (instancetype) init {
   if (self = [super init]) {
-    // TODO: Initialize "${viewImplementation}" view!
+    std::shared_ptr<${HybridTSpec}> hybridView = ${getHybridObjectConstructorCall(spec.name)}
+    _hybridView = std::dynamic_pointer_cast<${HybridTSpecSwift}>(hybridView);
   }
   return self;
 }
 
+- (UIView*) contentView {
+  ${swiftNamespace}::${HybridTSpecCxx} swiftPart = _hybridView->getSwiftPart();
+  return swiftPart.getView();
+}
+
 - (void) updateProps:(const react::Props::Shared&)props
             oldProps:(const react::Props::Shared&)oldProps {
-  // TODO: const auto& newViewProps = *std::static_pointer_cast<${namespace}::${propsClassName} const>(props);
+  // TODO: const auto& newViewProps = *std::static_pointer_cast<${propsClassName} const>(props);
 
   [super updateProps:props oldProps:oldProps];
 }

@@ -7,6 +7,7 @@
 
 import Foundation
 import NitroModules
+import UIKit
 
 /**
  * A class implementation that bridges HybridTestViewSpec over to C++.
@@ -139,4 +140,6 @@ public class HybridTestViewSpec_cxx {
       return bridge.create_Result_bool_(__exceptionPtr)
     }
   }
+  
+  public final func getView() -> UIView { return __implementation.view }
 }

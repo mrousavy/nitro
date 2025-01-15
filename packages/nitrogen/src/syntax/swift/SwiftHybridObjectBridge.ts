@@ -36,18 +36,25 @@ export function createSwiftHybridObjectCxxBridge(
   const name = getHybridObjectName(spec.name)
   const moduleName = NitroConfig.getIosModuleName()
 
-  const propertiesBridge = spec.properties
-    .map((p) => getPropertyForwardImplementation(p))
-    .join('\n\n')
-  const methodsBridge = spec.methods
-    .map((m) => getMethodForwardImplementation(m))
-    .join('\n\n')
+  const propertiesBridge = spec.properties.map((p) =>
+    getPropertyForwardImplementation(p)
+  )
+
+  const methodsBridge = spec.methods.map((m) =>
+    getMethodForwardImplementation(m)
+  )
 
   const baseClasses = spec.baseTypes.map((base) => {
     const baseName = getHybridObjectName(base.name)
     return baseName.HybridTSpecCxx
   })
   const hasBase = baseClasses.length > 0
+
+  if (spec.isHybridView && !hasBase) {
+    methodsBridge.push(
+      `public final func getView() -> UIView { return __implementation.view }`
+    )
+  }
 
   const hybridObject = new HybridObjectType(spec)
   const bridgedType = new SwiftCxxBridgedType(hybridObject)
@@ -88,11 +95,15 @@ public override func getCxxPart() -> bridge.${baseBridge.specializationName} {
 }`.trim()
   })
 
+  const imports = ['import Foundation', 'import NitroModules']
+  if (spec.isHybridView) {
+    imports.push('import UIKit')
+  }
+
   const swiftCxxWrapperCode = `
 ${createFileMetadataString(`${name.HybridTSpecCxx}.swift`)}
 
-import Foundation
-import NitroModules
+${imports.join('\n')}
 
 /**
  * A class implementation that bridges ${name.HybridTSpec} over to C++.
@@ -183,10 +194,10 @@ ${hasBase ? `public class ${name.HybridTSpecCxx} : ${baseClasses.join(', ')}` : 
   }
 
   // Properties
-  ${indent(propertiesBridge, '  ')}
+  ${indent(propertiesBridge.join('\n\n'), '  ')}
 
   // Methods
-  ${indent(methodsBridge, '  ')}
+  ${indent(methodsBridge.join('\n\n'), '  ')}
 }
   `
 
