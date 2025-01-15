@@ -29,6 +29,6 @@ public class NitroImagePackage extends TurboReactPackage {
   }
 
   static {
-    System.loadLibrary("NitroImage");
+    NitroImageOnLoad.initializeNative();
   }
 }

@@ -21,7 +21,6 @@ export function createKotlinHybridObject(spec: HybridObjectSpec): SourceFile[] {
     .join('\n\n')
 
   const javaPackage = NitroConfig.getAndroidPackage('java/kotlin')
-  const cppLibName = NitroConfig.getAndroidCxxLibName()
 
   let kotlinBase = spec.isHybridView ? 'HybridView' : 'HybridObject'
   if (spec.baseTypes.length > 0) {
@@ -91,17 +90,6 @@ abstract class ${name.HybridTSpec}: ${kotlinBase}() {
 
   companion object {
     private const val TAG = "${name.HybridTSpec}"
-    init {
-      try {
-        Log.i(TAG, "Loading ${cppLibName} C++ library...")
-        System.loadLibrary("${cppLibName}")
-        Log.i(TAG, "Successfully loaded ${cppLibName} C++ library!")
-      } catch (e: Error) {
-        Log.e(TAG, "Failed to load ${cppLibName} C++ library! Is it properly installed and linked? " +
-                    "Is the name correct? (see \`CMakeLists.txt\`, at \`add_library(...)\`)", e)
-        throw e
-      }
-    }
   }
 }
   `.trim()
