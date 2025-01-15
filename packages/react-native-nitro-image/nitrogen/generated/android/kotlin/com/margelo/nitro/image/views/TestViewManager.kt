@@ -13,21 +13,33 @@ import com.facebook.react.uimanager.ReactStylesDiffMap
 import com.facebook.react.uimanager.SimpleViewManager
 import com.facebook.react.uimanager.StateWrapper
 import com.facebook.react.uimanager.ThemedReactContext
+import com.margelo.nitro.image.*
 
 /**
  * Represents the React Native `ViewManager` for the "TestView" Nitro HybridView.
  */
 class TestViewManager: SimpleViewManager<View>() {
+  private val views = hashMapOf<View, HybridTestView>()
+
   override fun getName(): String {
     return "TestView"
   }
 
   override fun createViewInstance(reactContext: ThemedReactContext): View {
-    throw Error("Not yet implemented!")
+    val hybridView = HybridTestView()
+    val view = hybridView.view
+    views[view] = hybridView
+    return view
+  }
+
+  override fun onDropViewInstance(view: View) {
+    super.onDropViewInstance(view)
+    views.remove(view)
   }
 
   override fun updateState(view: View, props: ReactStylesDiffMap, stateWrapper: StateWrapper): Any? {
     val stateWrapperImpl = stateWrapper as? StateWrapperImpl ?: throw Error("StateWrapper uses a different implementation!")
+    val hybridView = views[view] ?: throw Error("Couldn't find view $view in local views table!")
     // TODO: Get props from stateWrapperImpl and update them in HybridView
 
     return super.updateState(view, props, stateWrapper)

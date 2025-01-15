@@ -23,21 +23,27 @@ using namespace facebook;
 @end
 
 @implementation TestViewComponent
+
 + (void) load {
   [super load];
   // TODO: Register it!
 }
 
-+ (react::ComponentDescriptorProvider)componentDescriptorProvider {
++ (react::ComponentDescriptorProvider) componentDescriptorProvider {
   return react::concreteComponentDescriptorProvider<margelo::nitro::image::views::HybridTestViewComponentDescriptor>();
 }
 
-- (void)updateProps:(const react::Props::Shared&)props
-           oldProps:(const react::Props::Shared&)oldProps {
+- (instancetype) init {
+  // TODO: Initialize "HybridTestView" view!
+}
+
+- (void) updateProps:(const react::Props::Shared&)props
+            oldProps:(const react::Props::Shared&)oldProps {
   // TODO: const auto& newViewProps = *std::static_pointer_cast<margelo::nitro::image::views::HybridTestViewProps const>(props);
 
   [super updateProps:props oldProps:oldProps];
 }
+
 @end
 
 #endif

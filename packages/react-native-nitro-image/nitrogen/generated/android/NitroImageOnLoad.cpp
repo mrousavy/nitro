@@ -113,6 +113,15 @@ int initialize(JavaVM* vm) {
         return JNISharedPtr::make_shared_from_jni<JHybridChildSpec>(globalRef);
       }
     );
+    HybridObjectRegistry::registerHybridObjectConstructor(
+      "TestView",
+      []() -> std::shared_ptr<HybridObject> {
+        static DefaultConstructableObject<JHybridTestViewSpec::javaobject> object("com/margelo/nitro/image/HybridTestView");
+        auto instance = object.create();
+        auto globalRef = jni::make_global(instance);
+        return JNISharedPtr::make_shared_from_jni<JHybridTestViewSpec>(globalRef);
+      }
+    );
   });
 }
 

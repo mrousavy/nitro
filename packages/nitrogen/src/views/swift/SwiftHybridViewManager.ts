@@ -14,6 +14,13 @@ export function createSwiftHybridViewManager(
   const namespace = NitroConfig.getCxxNamespace('c++', 'views')
   const { component, descriptorClassName, propsClassName } =
     getViewComponentNames(spec)
+  const autolinking = NitroConfig.getAutolinkedHybridObjects()
+  const viewImplementation = autolinking[spec.name]?.swift
+  if (viewImplementation == null) {
+    throw new Error(
+      `Cannot create Swift HybridView ViewManager for ${spec.name} - it is not autolinked in nitro.json!`
+    )
+  }
 
   const mmFile = `
 ${createFileMetadataString(`${component}.mm`)}
@@ -36,21 +43,27 @@ using namespace facebook;
 @end
 
 @implementation ${component}
+
 + (void) load {
   [super load];
   // TODO: Register it!
 }
 
-+ (react::ComponentDescriptorProvider)componentDescriptorProvider {
++ (react::ComponentDescriptorProvider) componentDescriptorProvider {
   return react::concreteComponentDescriptorProvider<${namespace}::${descriptorClassName}>();
 }
 
-- (void)updateProps:(const react::Props::Shared&)props
-           oldProps:(const react::Props::Shared&)oldProps {
+- (instancetype) init {
+  // TODO: Initialize "${viewImplementation}" view!
+}
+
+- (void) updateProps:(const react::Props::Shared&)props
+            oldProps:(const react::Props::Shared&)oldProps {
   // TODO: const auto& newViewProps = *std::static_pointer_cast<${namespace}::${propsClassName} const>(props);
 
   [super updateProps:props oldProps:oldProps];
 }
+
 @end
 
 #endif
