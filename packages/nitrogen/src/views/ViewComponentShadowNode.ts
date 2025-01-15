@@ -12,6 +12,7 @@ interface ViewComponentNames {
   shadowNodeClassName: `${string}ShadowNode`
   descriptorClassName: `${string}ComponentDescriptor`
   component: `${string}Component`
+  manager: `${string}Manager`
 }
 
 export function getViewComponentNames(
@@ -25,6 +26,7 @@ export function getViewComponentNames(
     shadowNodeClassName: `${name.HybridT}ShadowNode`,
     descriptorClassName: `${name.HybridT}ComponentDescriptor`,
     component: `${spec.name}Component`,
+    manager: `${spec.name}Manager`,
   }
 }
 
