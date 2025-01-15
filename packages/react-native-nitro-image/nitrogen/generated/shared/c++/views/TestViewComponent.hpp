@@ -11,6 +11,7 @@
 
 #include "NitroDefines.hpp"
 #include "NitroHash.hpp"
+#include <optional>
 #include <react/renderer/core/ConcreteComponentDescriptor.h>
 #include <react/renderer/core/PropsParserContext.h>
 #include <react/renderer/components/view/ConcreteViewShadowNode.h>
@@ -30,7 +31,7 @@ namespace margelo::nitro::image::views {
   /**
    * Props for the "TestView" View.
    */
-  class HybridTestViewProps: public react::ViewProps {
+  class HybridTestViewProps final: public react::ViewProps {
   public:
     explicit HybridTestViewProps() = default;
     HybridTestViewProps(const react::PropsParserContext& context,
@@ -48,9 +49,16 @@ namespace margelo::nitro::image::views {
   /**
    * State for the "TestView" View.
    */
-  class HybridTestViewState {
+  class HybridTestViewState final {
   public:
     explicit HybridTestViewState() = default;
+
+  public:
+    void setProps(const HybridTestViewProps& props) { _props = props; }
+    const std::optional<HybridTestViewProps>& getProps() const { return _props; }
+
+  private:
+    std::optional<HybridTestViewProps> _props;
   };
 
   /**
@@ -64,7 +72,7 @@ namespace margelo::nitro::image::views {
   /**
    * The Component Descriptor for the "TestView" View.
    */
-  class HybridTestViewComponentDescriptor: public react::ConcreteComponentDescriptor<HybridTestViewShadowNode> {
+  class HybridTestViewComponentDescriptor final: public react::ConcreteComponentDescriptor<HybridTestViewShadowNode> {
   public:
     HybridTestViewComponentDescriptor(const react::ComponentDescriptorParameters& parameters);
 

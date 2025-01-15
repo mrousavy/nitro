@@ -73,6 +73,7 @@ ${createFileMetadataString(`${component}.hpp`)}
 
 #include "NitroDefines.hpp"
 #include "NitroHash.hpp"
+#include <optional>
 #include <react/renderer/core/ConcreteComponentDescriptor.h>
 #include <react/renderer/core/PropsParserContext.h>
 #include <react/renderer/components/view/ConcreteViewShadowNode.h>
@@ -92,7 +93,7 @@ namespace ${namespace} {
   /**
    * Props for the "${spec.name}" View.
    */
-  class ${propsClassName}: public react::ViewProps {
+  class ${propsClassName} final: public react::ViewProps {
   public:
     explicit ${propsClassName}() = default;
     ${propsClassName}(const react::PropsParserContext& context,
@@ -109,9 +110,16 @@ namespace ${namespace} {
   /**
    * State for the "${spec.name}" View.
    */
-  class ${stateClassName} {
+  class ${stateClassName} final {
   public:
     explicit ${stateClassName}() = default;
+
+  public:
+    void setProps(const ${propsClassName}& props) { _props = props; }
+    const std::optional<${propsClassName}>& getProps() const { return _props; }
+
+  private:
+    std::optional<${propsClassName}> _props;
   };
 
   /**
@@ -125,7 +133,7 @@ namespace ${namespace} {
   /**
    * The Component Descriptor for the "${spec.name}" View.
    */
-  class ${descriptorClassName}: public react::ConcreteComponentDescriptor<${shadowNodeClassName}> {
+  class ${descriptorClassName} final: public react::ConcreteComponentDescriptor<${shadowNodeClassName}> {
   public:
     ${descriptorClassName}(const react::ComponentDescriptorParameters& parameters);
 
@@ -189,8 +197,16 @@ namespace ${namespace} {
 
   void ${descriptorClassName}::adopt(react::ShadowNode& shadowNode) const {
     // This is called immediately after \`ShadowNode\` is created, cloned or in progress.
+#ifdef ANDROID
+    // On Android, we need to wrap props in our state, which gets routed through Java and later unwrapped in JNI/C++.
     auto& concreteShadowNode = static_cast<${shadowNodeClassName}&>(shadowNode);
     const ${propsClassName}& props = concreteShadowNode.getConcreteProps();
+    ${stateClassName} state;
+    state.setProps(props);
+    concreteShadowNode.setStateData(std::move(state));
+#else
+    // On iOS, prop updating happens through the updateProps: Obj-C selector.
+#endif
   }
 
 } // namespace ${namespace}

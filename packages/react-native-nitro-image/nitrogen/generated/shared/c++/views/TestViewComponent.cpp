@@ -45,8 +45,16 @@ namespace margelo::nitro::image::views {
 
   void HybridTestViewComponentDescriptor::adopt(react::ShadowNode& shadowNode) const {
     // This is called immediately after `ShadowNode` is created, cloned or in progress.
+#ifdef ANDROID
+    // On Android, we need to wrap props in our state, which gets routed through Java and later unwrapped in JNI/C++.
     auto& concreteShadowNode = static_cast<HybridTestViewShadowNode&>(shadowNode);
     const HybridTestViewProps& props = concreteShadowNode.getConcreteProps();
+    HybridTestViewState state;
+    state.setProps(props);
+    concreteShadowNode.setStateData(std::move(state));
+#else
+    // On iOS, prop updating happens through the updateProps: Obj-C selector.
+#endif
   }
 
 } // namespace margelo::nitro::image::views

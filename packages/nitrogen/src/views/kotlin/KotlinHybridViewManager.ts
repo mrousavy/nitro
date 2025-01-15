@@ -26,7 +26,7 @@ import com.facebook.react.uimanager.SimpleViewManager
 import com.facebook.react.uimanager.StateWrapper
 import com.facebook.react.uimanager.ThemedReactContext
 
-class ${manager} extends SimpleViewManager<View> {
+class ${manager}: SimpleViewManager<View>() {
   override fun getName(): String {
     return "${spec.name}"
   }
