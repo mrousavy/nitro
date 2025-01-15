@@ -6,6 +6,7 @@
 ///
 
 #include "TestViewComponent.hpp"
+#include "JSIConverter.hpp"
 
 #if REACT_NATIVE_VERSION >= 78
 
@@ -13,14 +14,21 @@ namespace margelo::nitro::image::views {
 
   HybridTestViewProps::HybridTestViewProps(const react::PropsParserContext& context,
                                            const HybridTestViewProps& sourceProps,
-                                           const react::RawProps& rawProps): react::ViewProps(context, sourceProps, rawProps, filterObjectKeys) {
-    if (rawProps.isEmpty()) {
-      // TODO: idk? Hanno?
-      return;
-    }
-    const react::RawValue* rawValue = rawProps.at("nativeProp", nullptr, nullptr);
-    const auto& [runtime, value] = (std::pair<jsi::Runtime*, const jsi::Value&>)*rawValue;
-    // TODO: Parse runtime and value
+                                           const react::RawProps& rawProps):
+    react::ViewProps(context, sourceProps, rawProps, filterObjectKeys),
+    /* someProp */ someProp([&](){
+      const react::RawValue* rawValue = rawProps.at("someProp", nullptr, nullptr);
+      if (rawValue == nullptr) { throw std::runtime_error("TestView: Prop \"someProp\" is required and cannot be undefined!"); }
+      const auto& [runtime, value] = (std::pair<jsi::Runtime*, const jsi::Value&>)*rawValue;
+      return JSIConverter<bool>(runtime, value);
+    }()),
+    /* someCallback */ someCallback([&](){
+      const react::RawValue* rawValue = rawProps.at("someCallback", nullptr, nullptr);
+      if (rawValue == nullptr) { throw std::runtime_error("TestView: Prop \"someCallback\" is required and cannot be undefined!"); }
+      const auto& [runtime, value] = (std::pair<jsi::Runtime*, const jsi::Value&>)*rawValue;
+      return JSIConverter<std::function<void(double /* someParam */)>>(runtime, value);
+    }()) {
+    // TODO: Instead of eagerly converting each prop, only convert the ones that changed on demand.
   }
 
   bool HybridTestViewProps::filterObjectKeys(const std::string& propName) {

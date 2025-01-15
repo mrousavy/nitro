@@ -4,6 +4,7 @@ import { createIndentation, indent } from '../utils.js'
 import { createFileMetadataString, escapeCppName } from '../syntax/helpers.js'
 import { NitroConfig } from '../config/NitroConfig.js'
 import { getHybridObjectName } from '../syntax/getHybridObjectName.js'
+import { includeHeader } from '../syntax/c++/includeNitroHeader.js'
 
 interface ViewComponentNames {
   propsClassName: `${string}Props`
@@ -57,6 +58,9 @@ export function createViewComponentShadowNodeFiles(
   const cases = spec.properties.map(
     (p) => `case hashString("${p.name}"): return true;`
   )
+  const includes = spec.properties.flatMap((p) =>
+    p.getRequiredImports().map((i) => includeHeader(i, true))
+  )
 
   // .hpp code
   const componentHeaderCode = `
@@ -72,6 +76,8 @@ ${createFileMetadataString(`${component}.hpp`)}
 #include <react/renderer/core/PropsParserContext.h>
 #include <react/renderer/components/view/ConcreteViewShadowNode.h>
 #include <react/renderer/components/view/ViewProps.h>
+
+${includes.join('\n')}
 
 namespace ${namespace} {
 
@@ -133,11 +139,27 @@ namespace ${namespace} {
 `.trim()
 
   // .cpp code
+  const propInitializers = [
+    'react::ViewProps(context, sourceProps, rawProps, filterObjectKeys)',
+  ]
+  for (const prop of spec.properties) {
+    propInitializers.push(
+      `
+/* ${prop.name} */ ${escapeCppName(prop.name)}([&](){
+  const react::RawValue* rawValue = rawProps.at("${prop.name}", nullptr, nullptr);
+  if (rawValue == nullptr) { ${prop.type.kind === 'optional' ? 'return nullptr;' : `throw std::runtime_error("${spec.name}: Prop \\"${prop.name}\\" is required and cannot be undefined!");`} }
+  const auto& [runtime, value] = (std::pair<jsi::Runtime*, const jsi::Value&>)*rawValue;
+  return JSIConverter<${prop.type.getCode('c++')}>(runtime, value);
+}())`.trim()
+    )
+  }
+
   const ctorIndent = createIndentation(propsClassName.length * 2)
   const componentCode = `
 ${createFileMetadataString(`${component}.cpp`)}
 
 #include "${component}.hpp"
+#include "JSIConverter.hpp"
 
 #if REACT_NATIVE_VERSION >= 78
 
@@ -145,14 +167,9 @@ namespace ${namespace} {
 
   ${propsClassName}::${propsClassName}(const react::PropsParserContext& context,
   ${ctorIndent}   const ${propsClassName}& sourceProps,
-  ${ctorIndent}   const react::RawProps& rawProps): react::ViewProps(context, sourceProps, rawProps, filterObjectKeys) {
-    if (rawProps.isEmpty()) {
-      // TODO: idk? Hanno?
-      return;
-    }
-    const react::RawValue* rawValue = rawProps.at("nativeProp", nullptr, nullptr);
-    const auto& [runtime, value] = (std::pair<jsi::Runtime*, const jsi::Value&>)*rawValue;
-    // TODO: Parse runtime and value
+  ${ctorIndent}   const react::RawProps& rawProps):
+    ${indent(propInitializers.join(',\n'), '    ')} {
+    // TODO: Instead of eagerly converting each prop, only convert the ones that changed on demand.
   }
 
   bool ${propsClassName}::filterObjectKeys(const std::string& propName) {

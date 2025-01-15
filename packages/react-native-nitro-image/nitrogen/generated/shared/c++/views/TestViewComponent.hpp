@@ -16,6 +16,8 @@
 #include <react/renderer/components/view/ConcreteViewShadowNode.h>
 #include <react/renderer/components/view/ViewProps.h>
 
+#include <functional>
+
 namespace margelo::nitro::image::views {
 
   using namespace facebook;
