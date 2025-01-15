@@ -16,7 +16,7 @@
 #include <react/renderer/components/view/ConcreteViewShadowNode.h>
 #include <react/renderer/components/view/ViewProps.h>
 
-namespace margelo::nitro::image {
+namespace margelo::nitro::image::views {
 
   using namespace facebook;
 
@@ -25,9 +25,7 @@ namespace margelo::nitro::image {
     explicit HybridTestViewProps() = default;
     HybridTestViewProps(const react::PropsParserContext& context,
                         const HybridTestViewProps& sourceProps,
-                        const react::RawProps& rawProps): react::ViewProps(context, sourceProps, rawProps) {
-      throw std::runtime_error("not yet implemented!");
-    }
+                        const react::RawProps& rawProps);
   };
 
   class HybridTestViewState {
@@ -35,19 +33,18 @@ namespace margelo::nitro::image {
     explicit HybridTestViewState() = default;
   };
 
-  extern const char HybridTestViewComponentName[] = "HybridTestView";
+  extern const char HybridTestViewComponentName[];
   using HybridTestViewShadowNode = react::ConcreteViewShadowNode<HybridTestViewComponentName, HybridTestViewProps, react::ViewEventEmitter, HybridTestViewState>;
 
   class HybridTestViewComponentDescriptor: public react::ConcreteComponentDescriptor<HybridTestViewShadowNode> {
   public:
-    HybridTestViewComponentDescriptor(const react::ComponentDescriptorParameters& parameters)
-      : ConcreteComponentDescriptor(parameters, std::make_unique<react::RawPropsParser>(/* enable raw JSI props parsing */ true)) {}
+    HybridTestViewComponentDescriptor(const react::ComponentDescriptorParameters& parameters);
   };
 
   // TODO: Actual RCTViewComponentView goes here... or in Swift?
 
-} // namespace margelo::nitro::image
+} // namespace margelo::nitro::image::views
 
 #else
-#warning "View Component 'HybridTestView' will be unavailable in React Native, because it requires React Native 78 or higher."
+  #warning "View Component 'HybridTestView' will be unavailable in React Native, because it requires React Native 78 or higher."
 #endif

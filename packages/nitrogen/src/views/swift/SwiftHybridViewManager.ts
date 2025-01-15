@@ -1,78 +1,62 @@
 import type { SourceFile } from '../../syntax/SourceFile.js'
 import type { HybridObjectSpec } from '../../syntax/HybridObjectSpec.js'
-import { getHybridObjectName } from '../../syntax/getHybridObjectName.js'
+import {
+  createViewComponentShadowNodeFiles,
+  getViewComponentNames,
+} from '../ViewComponentShadowNode.js'
 import { createFileMetadataString } from '../../syntax/helpers.js'
 import { NitroConfig } from '../../config/NitroConfig.js'
-import { createIndentation } from '../../utils.js'
 
 export function createSwiftHybridViewManager(
   spec: HybridObjectSpec
 ): SourceFile[] {
-  const name = getHybridObjectName(spec.name)
-  const propsClassName = `${name.HybridT}Props`
-  const stateClassName = `${name.HybridT}State`
-  const nameVariable = `${name.HybridT}ComponentName`
-  const shadowNodeClassName = `${name.HybridT}ShadowNode`
-  const descriptorClassName = `${name.HybridT}ComponentDescriptor`
-  const component = `${spec.name}Component`
-  const namespace = NitroConfig.getCxxNamespace('c++')
+  const cppFiles = createViewComponentShadowNodeFiles(spec)
+  const namespace = NitroConfig.getCxxNamespace('c++', 'views')
+  const { component, descriptorClassName } = getViewComponentNames(spec)
 
-  const propsCode = `
-${createFileMetadataString(`${component}.hpp`)}
-
-#pragma once
-
-#include "NitroDefines.hpp"
+  const mmFile = `
+${createFileMetadataString(`${component}.mm`)}
 
 #if REACT_NATIVE_VERSION >= 78
 
-#include <react/renderer/core/ConcreteComponentDescriptor.h>
-#include <react/renderer/core/PropsParserContext.h>
-#include <react/renderer/components/view/ConcreteViewShadowNode.h>
-#include <react/renderer/components/view/ViewProps.h>
+#import "${component}.hpp"
+#import <React/RCTComponentViewFactory.h>
+#import <React/UIView+ComponentViewProtocol.h>
+#import <UIKit/UIKit.h>
 
 namespace ${namespace} {
 
-  using namespace facebook;
+  @interface ${component}: RCTViewComponentView
+  @end
 
-  class ${propsClassName}: public react::ViewProps {
-  public:
-    explicit ${propsClassName}() = default;
-    ${propsClassName}(const react::PropsParserContext& context,
-${createIndentation(propsClassName.length)}     const ${propsClassName}& sourceProps,
-${createIndentation(propsClassName.length)}     const react::RawProps& rawProps): react::ViewProps(context, sourceProps, rawProps) {
-      throw std::runtime_error("not yet implemented!");
-    }
-  };
+  @implementation ${component}
+  + (void) load {
+    // TODO: Register it!
+  }
 
-  class ${stateClassName} {
-  public:
-    explicit ${stateClassName}() = default;
-  };
+  + (ComponentDescriptorProvider)componentDescriptorProvider {
+    return concreteComponentDescriptorProvider<${descriptorClassName}>();
+  }
 
-  extern const char ${nameVariable}[] = "${name.HybridT}";
-  using ${shadowNodeClassName} = react::ConcreteViewShadowNode<${nameVariable}, ${propsClassName}, react::ViewEventEmitter, ${stateClassName}>;
+  - (void)updateProps:(const facebook::react::Props::Shared&)props
+             oldProps:(const facebook::react::Props::Shared&)oldProps {
+    // TODO: const auto& newViewProps = *std::static_pointer_cast<CustomViewProps const>(props);
 
-  class ${descriptorClassName}: public react::ConcreteComponentDescriptor<${shadowNodeClassName}> {
-  public:
-    ${descriptorClassName}(const react::ComponentDescriptorParameters& parameters)
-      : ConcreteComponentDescriptor(parameters, std::make_unique<react::RawPropsParser>(/* enable raw JSI props parsing */ true)) {}
-  };
-
-  // TODO: Actual RCTViewComponentView goes here... or in Swift?
+    [super updateProps:props oldProps:oldProps];
+  }
+  @end
 
 } // namespace ${namespace}
 
-#else
-#warning "View Component '${name.HybridT}' will be unavailable in React Native, because it requires React Native 78 or higher."
 #endif
-  `.trim()
+  `
 
   return [
+    ...cppFiles,
     {
-      name: `${component}.hpp`,
-      content: propsCode,
+      content: mmFile,
       language: 'c++',
+      name: `${component}.mm`,
       platform: 'ios',
       subdirectory: ['views'],
     },
