@@ -62,10 +62,9 @@ ${createFileMetadataString(`${component}.hpp`)}
 
 #pragma once
 
-#include "NitroDefines.hpp"
-
 #if REACT_NATIVE_VERSION >= 78
 
+#include "NitroDefines.hpp"
 #include "NitroHash.hpp"
 #include <react/renderer/core/ConcreteComponentDescriptor.h>
 #include <react/renderer/core/PropsParserContext.h>
