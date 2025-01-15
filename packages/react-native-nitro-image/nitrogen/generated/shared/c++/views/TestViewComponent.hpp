@@ -9,9 +9,9 @@
 
 #if REACT_NATIVE_VERSION >= 78
 
-#include "NitroDefines.hpp"
-#include "NitroHash.hpp"
 #include <optional>
+#include <NitroModules/NitroDefines.hpp>
+#include <NitroModules/NitroHash.hpp>
 #include <react/renderer/core/ConcreteComponentDescriptor.h>
 #include <react/renderer/core/PropsParserContext.h>
 #include <react/renderer/components/view/ConcreteViewShadowNode.h>

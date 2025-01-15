@@ -6,7 +6,7 @@
 ///
 
 #include "TestViewComponent.hpp"
-#include "JSIConverter.hpp"
+#include <NitroModules/JSIConverter.hpp>
 
 #if REACT_NATIVE_VERSION >= 78
 

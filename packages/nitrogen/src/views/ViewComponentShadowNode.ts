@@ -71,9 +71,9 @@ ${createFileMetadataString(`${component}.hpp`)}
 
 #if REACT_NATIVE_VERSION >= 78
 
-#include "NitroDefines.hpp"
-#include "NitroHash.hpp"
 #include <optional>
+#include <NitroModules/NitroDefines.hpp>
+#include <NitroModules/NitroHash.hpp>
 #include <react/renderer/core/ConcreteComponentDescriptor.h>
 #include <react/renderer/core/PropsParserContext.h>
 #include <react/renderer/components/view/ConcreteViewShadowNode.h>
@@ -171,7 +171,7 @@ namespace ${namespace} {
 ${createFileMetadataString(`${component}.cpp`)}
 
 #include "${component}.hpp"
-#include "JSIConverter.hpp"
+#include <NitroModules/JSIConverter.hpp>
 
 #if REACT_NATIVE_VERSION >= 78
 
