@@ -149,7 +149,7 @@ namespace ${namespace} {
   const react::RawValue* rawValue = rawProps.at("${prop.name}", nullptr, nullptr);
   if (rawValue == nullptr) { ${prop.type.kind === 'optional' ? 'return nullptr;' : `throw std::runtime_error("${spec.name}: Prop \\"${prop.name}\\" is required and cannot be undefined!");`} }
   const auto& [runtime, value] = (std::pair<jsi::Runtime*, const jsi::Value&>)*rawValue;
-  return JSIConverter<${prop.type.getCode('c++')}>::fromJSI(runtime, value);
+  return JSIConverter<${prop.type.getCode('c++')}>::fromJSI(*runtime, value);
 }())`.trim()
     )
   }

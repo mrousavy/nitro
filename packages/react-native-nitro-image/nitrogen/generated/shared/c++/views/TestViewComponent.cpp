@@ -20,13 +20,13 @@ namespace margelo::nitro::image::views {
       const react::RawValue* rawValue = rawProps.at("someProp", nullptr, nullptr);
       if (rawValue == nullptr) { throw std::runtime_error("TestView: Prop \"someProp\" is required and cannot be undefined!"); }
       const auto& [runtime, value] = (std::pair<jsi::Runtime*, const jsi::Value&>)*rawValue;
-      return JSIConverter<bool>::fromJSI(runtime, value);
+      return JSIConverter<bool>::fromJSI(*runtime, value);
     }()),
     /* someCallback */ someCallback([&](){
       const react::RawValue* rawValue = rawProps.at("someCallback", nullptr, nullptr);
       if (rawValue == nullptr) { throw std::runtime_error("TestView: Prop \"someCallback\" is required and cannot be undefined!"); }
       const auto& [runtime, value] = (std::pair<jsi::Runtime*, const jsi::Value&>)*rawValue;
-      return JSIConverter<std::function<void(double /* someParam */)>>::fromJSI(runtime, value);
+      return JSIConverter<std::function<void(double /* someParam */)>>::fromJSI(*runtime, value);
     }()) {
     // TODO: Instead of eagerly converting each prop, only convert the ones that changed on demand.
   }
