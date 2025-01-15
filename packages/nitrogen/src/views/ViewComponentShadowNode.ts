@@ -26,8 +26,8 @@ export function getViewComponentNames(
     nameVariable: `${name.HybridT}ComponentName`,
     shadowNodeClassName: `${name.HybridT}ShadowNode`,
     descriptorClassName: `${name.HybridT}ComponentDescriptor`,
-    component: `${spec.name}Component`,
-    manager: `${spec.name}Manager`,
+    component: `${name.HybridT}Component`,
+    manager: `${name.HybridT}Manager`,
   }
 }
 

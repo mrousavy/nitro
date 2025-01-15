@@ -8,7 +8,7 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.module.model.ReactModuleInfoProvider;
 import com.facebook.react.TurboReactPackage;
 import com.facebook.react.uimanager.ViewManager;
-import com.margelo.nitro.image.views.TestViewManager;
+import com.margelo.nitro.image.views.HybridTestViewManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,7 +31,7 @@ public class NitroImagePackage extends TurboReactPackage {
   @Override
   public List<ViewManager> createViewManagers(@NonNull ReactApplicationContext reactContext) {
     List<ViewManager> viewManagers = new ArrayList<>();
-    viewManagers.add(new TestViewManager());
+    viewManagers.add(new HybridTestViewManager());
     return viewManagers;
   }
 
