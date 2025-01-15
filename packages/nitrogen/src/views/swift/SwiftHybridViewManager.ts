@@ -74,7 +74,7 @@ ${createIndentation(propsClassName.length)}     const react::RawProps& rawProps)
       content: propsCode,
       language: 'c++',
       platform: 'ios',
-      subdirectory: [],
+      subdirectory: ['views'],
     },
   ]
 }
