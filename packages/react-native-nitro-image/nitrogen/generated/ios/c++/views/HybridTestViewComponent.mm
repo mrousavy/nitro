@@ -26,7 +26,7 @@ using namespace facebook;
 
 + (void) load {
   [super load];
-  // TODO: Register it!
+  [RCTComponentViewFactory.currentComponentViewFactory registerComponentViewClass:[HybridTestViewComponent class]];
 }
 
 + (react::ComponentDescriptorProvider) componentDescriptorProvider {

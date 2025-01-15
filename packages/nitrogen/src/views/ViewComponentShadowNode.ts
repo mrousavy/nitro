@@ -159,9 +159,9 @@ namespace ${namespace} {
   for (const prop of spec.properties) {
     propInitializers.push(
       `
-/* ${prop.name} */ ${escapeCppName(prop.name)}([&](){
+/* ${prop.name} */ ${escapeCppName(prop.name)}([&]() -> ${prop.type.getCode('c++')} {
   const react::RawValue* rawValue = rawProps.at("${prop.name}", nullptr, nullptr);
-  if (rawValue == nullptr) { ${prop.type.kind === 'optional' ? 'return nullptr;' : `throw std::runtime_error("${spec.name}: Prop \\"${prop.name}\\" is required and cannot be undefined!");`} }
+  if (rawValue == nullptr) { return {}; }
   const auto& [runtime, value] = (std::pair<jsi::Runtime*, const jsi::Value&>)*rawValue;
   return JSIConverter<${prop.type.getCode('c++')}>::fromJSI(*runtime, value);
 }())`.trim()

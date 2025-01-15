@@ -16,15 +16,15 @@ namespace margelo::nitro::image::views {
                                            const HybridTestViewProps& sourceProps,
                                            const react::RawProps& rawProps):
     react::ViewProps(context, sourceProps, rawProps, filterObjectKeys),
-    /* someProp */ someProp([&](){
+    /* someProp */ someProp([&]() -> bool {
       const react::RawValue* rawValue = rawProps.at("someProp", nullptr, nullptr);
-      if (rawValue == nullptr) { throw std::runtime_error("TestView: Prop \"someProp\" is required and cannot be undefined!"); }
+      if (rawValue == nullptr) { return {}; }
       const auto& [runtime, value] = (std::pair<jsi::Runtime*, const jsi::Value&>)*rawValue;
       return JSIConverter<bool>::fromJSI(*runtime, value);
     }()),
-    /* someCallback */ someCallback([&](){
+    /* someCallback */ someCallback([&]() -> std::function<void(double /* someParam */)> {
       const react::RawValue* rawValue = rawProps.at("someCallback", nullptr, nullptr);
-      if (rawValue == nullptr) { throw std::runtime_error("TestView: Prop \"someCallback\" is required and cannot be undefined!"); }
+      if (rawValue == nullptr) { return {}; }
       const auto& [runtime, value] = (std::pair<jsi::Runtime*, const jsi::Value&>)*rawValue;
       return JSIConverter<std::function<void(double /* someParam */)>>::fromJSI(*runtime, value);
     }()) {

@@ -46,7 +46,7 @@ using namespace facebook;
 
 + (void) load {
   [super load];
-  // TODO: Register it!
+  [RCTComponentViewFactory.currentComponentViewFactory registerComponentViewClass:[${component} class]];
 }
 
 + (react::ComponentDescriptorProvider) componentDescriptorProvider {
