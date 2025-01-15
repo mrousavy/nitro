@@ -13,7 +13,7 @@ namespace margelo::nitro::image::views {
 
   HybridTestViewProps::HybridTestViewProps(const react::PropsParserContext& context,
                                            const HybridTestViewProps& sourceProps,
-                                           const react::RawProps& rawProps): react::ViewProps(context, sourceProps, rawProps) {
+                                           const react::RawProps& rawProps): react::ViewProps(context, sourceProps, rawProps, filterObjectKeys) {
     if (rawProps.isEmpty()) {
       // TODO: idk? Hanno?
       return;
@@ -23,7 +23,13 @@ namespace margelo::nitro::image::views {
     // TODO: Parse runtime and value
   }
 
-  extern const char HybridTestViewComponentName[] = "HybridTestView";
+  bool HybridTestViewProps::filterObjectKeys(const std::string& propName) {
+    switch (hashString(propName.c_str())) {
+      case hashString("someProp"): return true;
+      case hashString("someCallback"): return true;
+      default: return false;
+    }
+  }
 
   HybridTestViewComponentDescriptor::HybridTestViewComponentDescriptor(const react::ComponentDescriptorParameters& parameters)
     : ConcreteComponentDescriptor(parameters,

@@ -1,7 +1,7 @@
 import type { SourceFile } from '../syntax/SourceFile.js'
 import type { HybridObjectSpec } from '../syntax/HybridObjectSpec.js'
-import { createIndentation } from '../utils.js'
-import { createFileMetadataString } from '../syntax/helpers.js'
+import { createIndentation, indent } from '../utils.js'
+import { createFileMetadataString, escapeCppName } from '../syntax/helpers.js'
 import { NitroConfig } from '../config/NitroConfig.js'
 import { getHybridObjectName } from '../syntax/getHybridObjectName.js'
 
@@ -49,6 +49,13 @@ export function createViewComponentShadowNodeFiles(
 
   const namespace = NitroConfig.getCxxNamespace('c++', 'views')
 
+  const properties = spec.properties.map(
+    (p) => `${p.type.getCode('c++')} ${escapeCppName(p.name)};`
+  )
+  const cases = spec.properties.map(
+    (p) => `case hashString("${p.name}"): return true;`
+  )
+
   // .hpp code
   const componentHeaderCode = `
 ${createFileMetadataString(`${component}.hpp`)}
@@ -59,6 +66,7 @@ ${createFileMetadataString(`${component}.hpp`)}
 
 #if REACT_NATIVE_VERSION >= 78
 
+#include "NitroHash.hpp"
 #include <react/renderer/core/ConcreteComponentDescriptor.h>
 #include <react/renderer/core/PropsParserContext.h>
 #include <react/renderer/components/view/ConcreteViewShadowNode.h>
@@ -68,28 +76,46 @@ namespace ${namespace} {
 
   using namespace facebook;
 
+  /**
+   * The name of the actual native View.
+   */
+  extern const char ${nameVariable}[] = "${name.HybridT}";
+
+  /**
+   * Props for the "${spec.name}" View.
+   */
   class ${propsClassName}: public react::ViewProps {
   public:
     explicit ${propsClassName}() = default;
     ${propsClassName}(const react::PropsParserContext& context,
   ${createIndentation(propsClassName.length)}   const ${propsClassName}& sourceProps,
   ${createIndentation(propsClassName.length)}   const react::RawProps& rawProps);
+
+  public:
+    ${indent(properties.join('\n'), '    ')}
+
+  private:
+    static bool filterObjectKeys(const std::string& propName);
   };
 
+  /**
+   * State for the "${spec.name}" View.
+   */
   class ${stateClassName} {
   public:
     explicit ${stateClassName}() = default;
   };
-
-  extern const char ${nameVariable}[];
   using ${shadowNodeClassName} = react::ConcreteViewShadowNode<${nameVariable}, ${propsClassName}, react::ViewEventEmitter, ${stateClassName}>;
 
+  /**
+   * The Shadow Node descriptor for the "${spec.name}" View.
+   */
   class ${descriptorClassName}: public react::ConcreteComponentDescriptor<${shadowNodeClassName}> {
   public:
     ${descriptorClassName}(const react::ComponentDescriptorParameters& parameters);
   };
 
-  // TODO: Actual RCTViewComponentView goes here... or in Swift?
+  /* The actual view for "${spec.name}" needs to be implemented in platform-specific code. */
 
 } // namespace ${namespace}
 
@@ -111,7 +137,7 @@ namespace ${namespace} {
 
   ${propsClassName}::${propsClassName}(const react::PropsParserContext& context,
   ${ctorIndent}   const ${propsClassName}& sourceProps,
-  ${ctorIndent}   const react::RawProps& rawProps): react::ViewProps(context, sourceProps, rawProps) {
+  ${ctorIndent}   const react::RawProps& rawProps): react::ViewProps(context, sourceProps, rawProps, filterObjectKeys) {
     if (rawProps.isEmpty()) {
       // TODO: idk? Hanno?
       return;
@@ -121,7 +147,12 @@ namespace ${namespace} {
     // TODO: Parse runtime and value
   }
 
-  extern const char ${nameVariable}[] = "${name.HybridT}";
+  bool ${propsClassName}::filterObjectKeys(const std::string& propName) {
+    switch (hashString(propName.c_str())) {
+      ${indent(cases.join('\n'), '      ')}
+      default: return false;
+    }
+  }
 
   ${descriptorClassName}::${descriptorClassName}(const react::ComponentDescriptorParameters& parameters)
     : ConcreteComponentDescriptor(parameters,

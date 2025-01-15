@@ -11,6 +11,7 @@
 
 #if REACT_NATIVE_VERSION >= 78
 
+#include "NitroHash.hpp"
 #include <react/renderer/core/ConcreteComponentDescriptor.h>
 #include <react/renderer/core/PropsParserContext.h>
 #include <react/renderer/components/view/ConcreteViewShadowNode.h>
@@ -20,28 +21,47 @@ namespace margelo::nitro::image::views {
 
   using namespace facebook;
 
+  /**
+   * The name of the actual native View.
+   */
+  extern const char HybridTestViewComponentName[] = "HybridTestView";
+
+  /**
+   * Props for the "TestView" View.
+   */
   class HybridTestViewProps: public react::ViewProps {
   public:
     explicit HybridTestViewProps() = default;
     HybridTestViewProps(const react::PropsParserContext& context,
                         const HybridTestViewProps& sourceProps,
                         const react::RawProps& rawProps);
+
+  public:
+    bool someProp;
+    std::function<void(double /* someParam */)> someCallback;
+
+  private:
+    static bool filterObjectKeys(const std::string& propName);
   };
 
+  /**
+   * State for the "TestView" View.
+   */
   class HybridTestViewState {
   public:
     explicit HybridTestViewState() = default;
   };
-
-  extern const char HybridTestViewComponentName[];
   using HybridTestViewShadowNode = react::ConcreteViewShadowNode<HybridTestViewComponentName, HybridTestViewProps, react::ViewEventEmitter, HybridTestViewState>;
 
+  /**
+   * The Shadow Node descriptor for the "TestView" View.
+   */
   class HybridTestViewComponentDescriptor: public react::ConcreteComponentDescriptor<HybridTestViewShadowNode> {
   public:
     HybridTestViewComponentDescriptor(const react::ComponentDescriptorParameters& parameters);
   };
 
-  // TODO: Actual RCTViewComponentView goes here... or in Swift?
+  /* The actual view for "TestView" needs to be implemented in platform-specific code. */
 
 } // namespace margelo::nitro::image::views
 
