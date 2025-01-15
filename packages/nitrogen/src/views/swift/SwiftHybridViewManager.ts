@@ -22,6 +22,10 @@ ${createFileMetadataString(`${component}.hpp`)}
 
 #pragma once
 
+#include "NitroDefines.hpp"
+
+#if REACT_NATIVE_VERSION >= 78
+
 #include <react/renderer/core/ConcreteComponentDescriptor.h>
 #include <react/renderer/core/PropsParserContext.h>
 #include <react/renderer/components/view/ConcreteViewShadowNode.h>
@@ -58,6 +62,10 @@ ${createIndentation(propsClassName.length)}     const react::RawProps& rawProps)
   // TODO: Actual RCTViewComponentView goes here... or in Swift?
 
 } // namespace ${namespace}
+
+#else
+#warning "View Component '${name.HybridT}' will be unavailable in React Native, because it requires React Native 78 or higher."
+#endif
   `.trim()
 
   return [
