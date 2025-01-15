@@ -3,6 +3,8 @@ import type { SourceFile } from './syntax/SourceFile.js'
 import { createCppHybridObject } from './syntax/c++/CppHybridObject.js'
 import {
   extendsHybridObject,
+  extendsHybridView,
+  isAnyHybridSubclass,
   isDirectlyHybridObject,
   type Language,
 } from './getPlatformSpecs.js'
@@ -13,6 +15,7 @@ import { createSwiftHybridObject } from './syntax/swift/SwiftHybridObject.js'
 import { createKotlinHybridObject } from './syntax/kotlin/KotlinHybridObject.js'
 import { createType } from './syntax/createType.js'
 import { Parameter } from './syntax/Parameter.js'
+import { getBaseTypes } from './utils.js'
 
 export function generatePlatformFiles(
   interfaceType: Type,
@@ -103,10 +106,10 @@ function getHybridObjectSpec(type: Type, language: Language): HybridObjectSpec {
     }
   }
 
-  const bases = type
-    .getBaseTypes()
-    .filter((t) => extendsHybridObject(t, false))
+  const bases = getBaseTypes(type)
+    .filter((t) => isAnyHybridSubclass(t))
     .map((t) => getHybridObjectSpec(t, language))
+  const isHybridView = extendsHybridView(type, true)
 
   const spec: HybridObjectSpec = {
     language: language,
@@ -114,6 +117,7 @@ function getHybridObjectSpec(type: Type, language: Language): HybridObjectSpec {
     properties: properties,
     methods: methods,
     baseTypes: bases,
+    isHybridView: isHybridView,
   }
   return spec
 }

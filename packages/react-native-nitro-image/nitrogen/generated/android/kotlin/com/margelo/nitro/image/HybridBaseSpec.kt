@@ -39,6 +39,7 @@ abstract class HybridBaseSpec: HybridObject() {
    */
   override fun updateNative(hybridData: HybridData) {
     mHybridData = hybridData
+    super.updateNative(hybridData)
   }
 
   // Properties
@@ -53,16 +54,5 @@ abstract class HybridBaseSpec: HybridObject() {
 
   companion object {
     private const val TAG = "HybridBaseSpec"
-    init {
-      try {
-        Log.i(TAG, "Loading NitroImage C++ library...")
-        System.loadLibrary("NitroImage")
-        Log.i(TAG, "Successfully loaded NitroImage C++ library!")
-      } catch (e: Error) {
-        Log.e(TAG, "Failed to load NitroImage C++ library! Is it properly installed and linked? " +
-                    "Is the name correct? (see `CMakeLists.txt`, at `add_library(...)`)", e)
-        throw e
-      }
-    }
   }
 }

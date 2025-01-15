@@ -29,6 +29,7 @@
 #include "JFunc_std__shared_ptr_Promise_std__string__.hpp"
 #include "JHybridBaseSpec.hpp"
 #include "JHybridChildSpec.hpp"
+#include "JHybridTestViewSpec.hpp"
 #include <NitroModules/JNISharedPtr.hpp>
 #include <NitroModules/DefaultConstructableObject.hpp>
 #include "HybridTestObjectCpp.hpp"
@@ -47,22 +48,16 @@ int initialize(JavaVM* vm) {
     margelo::nitro::image::JHybridImageFactorySpec::registerNatives();
     margelo::nitro::image::JHybridTestObjectSwiftKotlinSpec::registerNatives();
     margelo::nitro::image::JFunc_void_double_cxx::registerNatives();
-    margelo::nitro::image::JFunc_void_double_cxx::registerNatives();
     margelo::nitro::image::JFunc_void_std__vector_Powertrain__cxx::registerNatives();
-    margelo::nitro::image::JFunc_void_cxx::registerNatives();
-    margelo::nitro::image::JFunc_void_cxx::registerNatives();
-    margelo::nitro::image::JFunc_void_cxx::registerNatives();
     margelo::nitro::image::JFunc_void_cxx::registerNatives();
     margelo::nitro::image::JFunc_void_std__optional_double__cxx::registerNatives();
     margelo::nitro::image::JFunc_std__shared_ptr_Promise_double___cxx::registerNatives();
     margelo::nitro::image::JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_double_____cxx::registerNatives();
     margelo::nitro::image::JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer______cxx::registerNatives();
-    margelo::nitro::image::JFunc_std__shared_ptr_Promise_double___cxx::registerNatives();
     margelo::nitro::image::JFunc_std__shared_ptr_Promise_std__string___cxx::registerNatives();
-    margelo::nitro::image::JFunc_void_std__string_cxx::registerNatives();
-    margelo::nitro::image::JFunc_void_double_cxx::registerNatives();
     margelo::nitro::image::JHybridBaseSpec::registerNatives();
     margelo::nitro::image::JHybridChildSpec::registerNatives();
+    margelo::nitro::image::JHybridTestViewSpec::registerNatives();
 
     // Register Nitro Hybrid Objects
     HybridObjectRegistry::registerHybridObjectConstructor(
@@ -108,6 +103,15 @@ int initialize(JavaVM* vm) {
         auto instance = object.create();
         auto globalRef = jni::make_global(instance);
         return JNISharedPtr::make_shared_from_jni<JHybridChildSpec>(globalRef);
+      }
+    );
+    HybridObjectRegistry::registerHybridObjectConstructor(
+      "TestView",
+      []() -> std::shared_ptr<HybridObject> {
+        static DefaultConstructableObject<JHybridTestViewSpec::javaobject> object("com/margelo/nitro/image/HybridTestView");
+        auto instance = object.create();
+        auto globalRef = jni::make_global(instance);
+        return JNISharedPtr::make_shared_from_jni<JHybridTestViewSpec>(globalRef);
       }
     );
   });

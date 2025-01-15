@@ -13,11 +13,13 @@ import { getBuildingWithGeneratedCmakeDefinition } from './createCMakeExtension.
 
 export function createHybridObjectIntializer(): SourceFile[] {
   const cxxNamespace = NitroConfig.getCxxNamespace('c++')
+  const cppLibName = NitroConfig.getAndroidCxxLibName()
+  const javaNamespace = NitroConfig.getAndroidPackage('java/kotlin')
   const autolinkingClassName = `${NitroConfig.getAndroidCxxLibName()}OnLoad`
 
-  const jniRegistrations = getJNINativeRegistrations().map(
-    (r) => `${r.namespace}::${r.className}::registerNatives();`
-  )
+  const jniRegistrations = getJNINativeRegistrations()
+    .map((r) => `${r.namespace}::${r.className}::registerNatives();`)
+    .filter(isNotDuplicate)
 
   const autolinkedHybridObjects = NitroConfig.getAutolinkedHybridObjects()
 
@@ -64,7 +66,7 @@ ${createFileMetadataString(`${autolinkingClassName}.hpp`)}
 namespace ${cxxNamespace} {
 
   /**
-   * Initializes the native (C++) part of ${NitroConfig.getAndroidCxxLibName()}, and autolinks all Hybrid Objects.
+   * Initializes the native (C++) part of ${cppLibName}, and autolinks all Hybrid Objects.
    * Call this in your \`JNI_OnLoad\` function (probably inside \`cpp-adapter.cpp\`).
    * Example:
    * \`\`\`cpp (cpp-adapter.cpp)
@@ -110,7 +112,39 @@ int initialize(JavaVM* vm) {
 }
 
 } // namespace ${cxxNamespace}
+  `.trim()
 
+  const kotlinCode = `
+${createFileMetadataString(`${autolinkingClassName}.kt`)}
+
+package ${javaNamespace}
+
+import android.util.Log
+
+internal class ${autolinkingClassName} {
+  companion object {
+    private const val TAG = "${autolinkingClassName}"
+    private var didLoad = false
+    /**
+     * Initializes the native part of "${cppLibName}".
+     * This method is idempotent and can be called more than once.
+     */
+    @JvmStatic
+    fun initializeNative() {
+      if (didLoad) return
+      try {
+        Log.i(TAG, "Loading ${cppLibName} C++ library...")
+        System.loadLibrary("${cppLibName}")
+        Log.i(TAG, "Successfully loaded ${cppLibName} C++ library!")
+        didLoad = true
+      } catch (e: Error) {
+        Log.e(TAG, "Failed to load ${cppLibName} C++ library! Is it properly installed and linked? " +
+                    "Is the name correct? (see \`CMakeLists.txt\`, at \`add_library(...)\`)", e)
+        throw e
+      }
+    }
+  }
+}
   `.trim()
 
   return [
@@ -127,6 +161,13 @@ int initialize(JavaVM* vm) {
       name: `${autolinkingClassName}.cpp`,
       platform: 'android',
       subdirectory: [],
+    },
+    {
+      content: kotlinCode,
+      language: 'kotlin',
+      name: `${autolinkingClassName}.kt`,
+      platform: 'android',
+      subdirectory: ['kotlin', ...javaNamespace.split('.')],
     },
   ]
 }

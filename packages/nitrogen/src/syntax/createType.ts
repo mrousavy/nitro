@@ -21,12 +21,13 @@ import { VariantType } from './types/VariantType.js'
 import { MapType } from './types/MapType.js'
 import { TupleType } from './types/TupleType.js'
 import {
-  extendsHybridObject,
+  isAnyHybridSubclass,
   isDirectlyHybridObject,
   type Language,
 } from '../getPlatformSpecs.js'
 import { HybridObjectBaseType } from './types/HybridObjectBaseType.js'
 import { ErrorType } from './types/ErrorType.js'
+import { getBaseTypes } from '../utils.js'
 
 function isSymbol(type: TSMorphType, symbolName: string): boolean {
   const symbol = type.getSymbol()
@@ -299,12 +300,11 @@ export function createType(
 
         return new VariantType(variants)
       }
-    } else if (extendsHybridObject(type, true)) {
+    } else if (isAnyHybridSubclass(type)) {
       // It is another HybridObject being referenced!
       const typename = type.getSymbolOrThrow().getEscapedName()
-      const baseTypes = type
-        .getBaseTypes()
-        .filter((t) => extendsHybridObject(t, true))
+      const baseTypes = getBaseTypes(type)
+        .filter((t) => isAnyHybridSubclass(t))
         .map((b) => createType(language, b, false))
       const baseHybrids = baseTypes.filter((b) => b instanceof HybridObjectType)
       return new HybridObjectType(typename, language, baseHybrids)

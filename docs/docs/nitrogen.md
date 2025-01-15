@@ -302,7 +302,7 @@ Inside `NitroMathPackage.java`, add:
 public class NitroMathPackage extends TurboReactPackage {
   // ...
   static {
-    System.loadLibrary("NitroMath");
+    NitroMathOnLoad.initializeNative();
   }
 }
 ```
@@ -319,7 +319,7 @@ class MainApplication {
   // ...
   companion object {
     init {
-      System.loadLibrary("NitroMath")
+      NitroMathOnLoad.initializeNative()
     }
   }
 }

@@ -1,4 +1,5 @@
 import { indent } from '../../utils.js'
+import { createSwiftHybridViewManager } from '../../views/swift/SwiftHybridViewManager.js'
 import { getHybridObjectName } from '../getHybridObjectName.js'
 import { createFileMetadataString } from '../helpers.js'
 import type { HybridObjectSpec } from '../HybridObjectSpec.js'
@@ -17,6 +18,9 @@ export function createSwiftHybridObject(spec: HybridObjectSpec): SourceFile[] {
     const baseName = getHybridObjectName(base.name)
     protocolBaseClasses.push(`${baseName.HybridTSpec}_protocol`)
     classBaseClasses.push(`${baseName.HybridTSpec}_base`)
+  }
+  if (spec.isHybridView) {
+    protocolBaseClasses.push('HybridView')
   }
 
   const hasBaseClass = classBaseClasses.length > 0
@@ -83,5 +87,11 @@ public typealias ${protocolName} = ${protocolName}_protocol & ${protocolName}_ba
     platform: 'ios',
   })
   files.push(...swiftBridge)
+
+  if (spec.isHybridView) {
+    const viewFiles = createSwiftHybridViewManager(spec)
+    files.push(...viewFiles)
+  }
+
   return files
 }

@@ -1,5 +1,6 @@
 import { NitroConfig } from '../../config/NitroConfig.js'
 import { indent } from '../../utils.js'
+import { createKotlinHybridViewManager } from '../../views/kotlin/KotlinHybridViewManager.js'
 import { getAllTypes } from '../getAllTypes.js'
 import { getHybridObjectName } from '../getHybridObjectName.js'
 import { createFileMetadataString } from '../helpers.js'
@@ -20,9 +21,8 @@ export function createKotlinHybridObject(spec: HybridObjectSpec): SourceFile[] {
     .join('\n\n')
 
   const javaPackage = NitroConfig.getAndroidPackage('java/kotlin')
-  const cppLibName = NitroConfig.getAndroidCxxLibName()
 
-  let kotlinBase = 'HybridObject'
+  let kotlinBase = spec.isHybridView ? 'HybridView' : 'HybridObject'
   if (spec.baseTypes.length > 0) {
     if (spec.baseTypes.length > 1) {
       throw new Error(
@@ -31,6 +31,12 @@ export function createKotlinHybridObject(spec: HybridObjectSpec): SourceFile[] {
     }
     const base = spec.baseTypes[0]!.name
     kotlinBase = getHybridObjectName(base).HybridTSpec
+  }
+
+  const imports: string[] = []
+  imports.push('import com.margelo.nitro.core.*')
+  if (spec.isHybridView) {
+    imports.push('import com.margelo.nitro.views.*')
   }
 
   // 1. Create Kotlin abstract class definition
@@ -43,7 +49,7 @@ import android.util.Log
 import androidx.annotation.Keep
 import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
-import com.margelo.nitro.core.*
+${imports.join('\n')}
 
 /**
  * A Kotlin class representing the ${spec.name} HybridObject.
@@ -71,6 +77,7 @@ abstract class ${name.HybridTSpec}: ${kotlinBase}() {
    */
   override fun updateNative(hybridData: HybridData) {
     mHybridData = hybridData
+    super.updateNative(hybridData)
   }
 
   // Properties
@@ -83,17 +90,6 @@ abstract class ${name.HybridTSpec}: ${kotlinBase}() {
 
   companion object {
     private const val TAG = "${name.HybridTSpec}"
-    init {
-      try {
-        Log.i(TAG, "Loading ${cppLibName} C++ library...")
-        System.loadLibrary("${cppLibName}")
-        Log.i(TAG, "Successfully loaded ${cppLibName} C++ library!")
-      } catch (e: Error) {
-        Log.e(TAG, "Failed to load ${cppLibName} C++ library! Is it properly installed and linked? " +
-                    "Is the name correct? (see \`CMakeLists.txt\`, at \`add_library(...)\`)", e)
-        throw e
-      }
-    }
   }
 }
   `.trim()
@@ -116,6 +112,12 @@ abstract class ${name.HybridTSpec}: ${kotlinBase}() {
   })
   files.push(...cppFiles)
   files.push(...extraFiles)
+
+  if (spec.isHybridView) {
+    const viewFiles = createKotlinHybridViewManager(spec)
+    files.push(...viewFiles)
+  }
+
   return files
 }
 
