@@ -29,6 +29,9 @@ ${createFileMetadataString(`${component}.mm`)}
 
 using namespace facebook;
 
+/**
+ * Represents the React Native View holder for the Nitro "${spec.name}" HybridView.
+ */
 @interface ${component}: RCTViewComponentView
 @end
 

@@ -26,6 +26,9 @@ import com.facebook.react.uimanager.SimpleViewManager
 import com.facebook.react.uimanager.StateWrapper
 import com.facebook.react.uimanager.ThemedReactContext
 
+/**
+ * Represents the React Native \`ViewManager\` for the "${spec.name}" Nitro HybridView.
+ */
 class ${manager}: SimpleViewManager<View>() {
   override fun getName(): String {
     return "${spec.name}"

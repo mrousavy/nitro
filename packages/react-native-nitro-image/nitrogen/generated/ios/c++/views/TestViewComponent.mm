@@ -16,6 +16,9 @@
 
 using namespace facebook;
 
+/**
+ * Represents the React Native View holder for the Nitro "TestView" HybridView.
+ */
 @interface TestViewComponent: RCTViewComponentView
 @end
 
