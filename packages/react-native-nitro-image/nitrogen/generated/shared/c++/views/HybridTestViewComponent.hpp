@@ -33,7 +33,8 @@ namespace margelo::nitro::image::views {
    */
   class HybridTestViewProps final: public react::ViewProps {
   public:
-    explicit HybridTestViewProps() = default;
+    HybridTestViewProps() = default;
+    HybridTestViewProps(const HybridTestViewProps&);
     HybridTestViewProps(const react::PropsParserContext& context,
                         const HybridTestViewProps& sourceProps,
                         const react::RawProps& rawProps);
@@ -51,10 +52,10 @@ namespace margelo::nitro::image::views {
    */
   class HybridTestViewState final {
   public:
-    explicit HybridTestViewState() = default;
+    HybridTestViewState() = default;
 
   public:
-    void setProps(const HybridTestViewProps& props) { _props = props; }
+    void setProps(HybridTestViewProps&& props) { _props.emplace(props); }
     const std::optional<HybridTestViewProps>& getProps() const { return _props; }
 
   private:
@@ -64,10 +65,10 @@ namespace margelo::nitro::image::views {
   /**
    * The Shadow Node for the "TestView" View.
    */
-  using HybridTestViewShadowNode = react::ConcreteViewShadowNode<HybridTestViewComponentName,
-                                                                 react::ViewEventEmitter,
-                                                                 HybridTestViewProps,
-                                                                 HybridTestViewState>;
+  using HybridTestViewShadowNode = react::ConcreteViewShadowNode<HybridTestViewComponentName /* "HybridTestView" */,
+                                                                 HybridTestViewProps /* custom props */,
+                                                                 react::ViewEventEmitter /* default */,
+                                                                 HybridTestViewState /* custom state */>;
 
   /**
    * The Component Descriptor for the "TestView" View.

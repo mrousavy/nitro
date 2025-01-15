@@ -31,6 +31,11 @@ namespace margelo::nitro::image::views {
     // TODO: Instead of eagerly converting each prop, only convert the ones that changed on demand.
   }
 
+  HybridTestViewProps::HybridTestViewProps(const HybridTestViewProps& other):
+    react::ViewProps(),
+    someProp(other.someProp),
+    someCallback(other.someCallback) {}
+
   bool HybridTestViewProps::filterObjectKeys(const std::string& propName) {
     switch (hashString(propName)) {
       case hashString("someProp"): return true;

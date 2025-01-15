@@ -95,7 +95,8 @@ namespace ${namespace} {
    */
   class ${propsClassName} final: public react::ViewProps {
   public:
-    explicit ${propsClassName}() = default;
+    ${propsClassName}() = default;
+    ${propsClassName}(const ${propsClassName}&);
     ${propsClassName}(const react::PropsParserContext& context,
   ${createIndentation(propsClassName.length)}   const ${propsClassName}& sourceProps,
   ${createIndentation(propsClassName.length)}   const react::RawProps& rawProps);
@@ -112,10 +113,10 @@ namespace ${namespace} {
    */
   class ${stateClassName} final {
   public:
-    explicit ${stateClassName}() = default;
+    ${stateClassName}() = default;
 
   public:
-    void setProps(const ${propsClassName}& props) { _props = props; }
+    void setProps(${propsClassName}&& props) { _props.emplace(props); }
     const std::optional<${propsClassName}>& getProps() const { return _props; }
 
   private:
@@ -125,10 +126,10 @@ namespace ${namespace} {
   /**
    * The Shadow Node for the "${spec.name}" View.
    */
-  using ${shadowNodeClassName} = react::ConcreteViewShadowNode<${nameVariable},
-        ${shadowIndent}                                 react::ViewEventEmitter,
-        ${shadowIndent}                                 ${propsClassName},
-        ${shadowIndent}                                 ${stateClassName}>;
+  using ${shadowNodeClassName} = react::ConcreteViewShadowNode<${nameVariable} /* "${name.HybridT}" */,
+        ${shadowIndent}                                 ${propsClassName} /* custom props */,
+        ${shadowIndent}                                 react::ViewEventEmitter /* default */,
+        ${shadowIndent}                                 ${stateClassName} /* custom state */>;
 
   /**
    * The Component Descriptor for the "${spec.name}" View.
@@ -154,6 +155,7 @@ namespace ${namespace} {
   const propInitializers = [
     'react::ViewProps(context, sourceProps, rawProps, filterObjectKeys)',
   ]
+  const propCopyInitializers = ['react::ViewProps()']
   for (const prop of spec.properties) {
     propInitializers.push(
       `
@@ -163,6 +165,9 @@ namespace ${namespace} {
   const auto& [runtime, value] = (std::pair<jsi::Runtime*, const jsi::Value&>)*rawValue;
   return JSIConverter<${prop.type.getCode('c++')}>::fromJSI(*runtime, value);
 }())`.trim()
+    )
+    propCopyInitializers.push(
+      `${escapeCppName(prop.name)}(other.${escapeCppName(prop.name)})`
     )
   }
 
@@ -183,6 +188,9 @@ namespace ${namespace} {
     ${indent(propInitializers.join(',\n'), '    ')} {
     // TODO: Instead of eagerly converting each prop, only convert the ones that changed on demand.
   }
+
+  ${propsClassName}::${propsClassName}(const ${propsClassName}& other):
+    ${indent(propCopyInitializers.join(',\n'), '    ')} {}
 
   bool ${propsClassName}::filterObjectKeys(const std::string& propName) {
     switch (hashString(propName)) {

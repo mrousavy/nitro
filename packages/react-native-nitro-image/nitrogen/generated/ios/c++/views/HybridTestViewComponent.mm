@@ -34,7 +34,10 @@ using namespace facebook;
 }
 
 - (instancetype) init {
-  // TODO: Initialize "HybridTestView" view!
+  if (self = [super init]) {
+    // TODO: Initialize "HybridTestView" view!
+  }
+  return self;
 }
 
 - (void) updateProps:(const react::Props::Shared&)props

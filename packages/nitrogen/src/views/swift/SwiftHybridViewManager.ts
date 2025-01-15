@@ -54,7 +54,10 @@ using namespace facebook;
 }
 
 - (instancetype) init {
-  // TODO: Initialize "${viewImplementation}" view!
+  if (self = [super init]) {
+    // TODO: Initialize "${viewImplementation}" view!
+  }
+  return self;
 }
 
 - (void) updateProps:(const react::Props::Shared&)props
