@@ -105,14 +105,21 @@ namespace ${namespace} {
   public:
     explicit ${stateClassName}() = default;
   };
+
+  /**
+   * The Shadow Node for the "${spec.name}" View.
+   */
   using ${shadowNodeClassName} = react::ConcreteViewShadowNode<${nameVariable}, ${propsClassName}, react::ViewEventEmitter, ${stateClassName}>;
 
   /**
-   * The Shadow Node descriptor for the "${spec.name}" View.
+   * The Component Descriptor for the "${spec.name}" View.
    */
   class ${descriptorClassName}: public react::ConcreteComponentDescriptor<${shadowNodeClassName}> {
   public:
     ${descriptorClassName}(const react::ComponentDescriptorParameters& parameters);
+
+  public:
+    void adopt(react::ShadowNode& shadowNode) const override;
   };
 
   /* The actual view for "${spec.name}" needs to be implemented in platform-specific code. */
@@ -157,6 +164,12 @@ namespace ${namespace} {
   ${descriptorClassName}::${descriptorClassName}(const react::ComponentDescriptorParameters& parameters)
     : ConcreteComponentDescriptor(parameters,
                                   std::make_unique<react::RawPropsParser>(/* enableJsiParser */ true)) {}
+
+  void ${descriptorClassName}::adopt(react::ShadowNode& shadowNode) const {
+    // This is called immediately after \`ShadowNode\` is created, cloned or in progress.
+    auto& concreteShadowNode = static_cast<${shadowNodeClassName}&>(shadowNode);
+    const ${propsClassName}& props = concreteShadowNode.getConcreteProps();
+  }
 
 } // namespace ${namespace}
 

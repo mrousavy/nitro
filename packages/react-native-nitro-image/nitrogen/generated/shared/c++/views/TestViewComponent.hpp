@@ -51,14 +51,21 @@ namespace margelo::nitro::image::views {
   public:
     explicit HybridTestViewState() = default;
   };
+
+  /**
+   * The Shadow Node for the "TestView" View.
+   */
   using HybridTestViewShadowNode = react::ConcreteViewShadowNode<HybridTestViewComponentName, HybridTestViewProps, react::ViewEventEmitter, HybridTestViewState>;
 
   /**
-   * The Shadow Node descriptor for the "TestView" View.
+   * The Component Descriptor for the "TestView" View.
    */
   class HybridTestViewComponentDescriptor: public react::ConcreteComponentDescriptor<HybridTestViewShadowNode> {
   public:
     HybridTestViewComponentDescriptor(const react::ComponentDescriptorParameters& parameters);
+
+  public:
+    void adopt(react::ShadowNode& shadowNode) const override;
   };
 
   /* The actual view for "TestView" needs to be implemented in platform-specific code. */

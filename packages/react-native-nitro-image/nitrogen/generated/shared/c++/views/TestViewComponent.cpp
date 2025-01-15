@@ -35,6 +35,12 @@ namespace margelo::nitro::image::views {
     : ConcreteComponentDescriptor(parameters,
                                   std::make_unique<react::RawPropsParser>(/* enableJsiParser */ true)) {}
 
+  void HybridTestViewComponentDescriptor::adopt(react::ShadowNode& shadowNode) const {
+    // This is called immediately after `ShadowNode` is created, cloned or in progress.
+    auto& concreteShadowNode = static_cast<HybridTestViewShadowNode&>(shadowNode);
+    const HybridTestViewProps& props = concreteShadowNode.getConcreteProps();
+  }
+
 } // namespace margelo::nitro::image::views
 
 #endif
