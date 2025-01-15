@@ -32,7 +32,7 @@ namespace margelo::nitro::image::views {
   }
 
   bool HybridTestViewProps::filterObjectKeys(const std::string& propName) {
-    switch (hashString(propName.c_str())) {
+    switch (hashString(propName)) {
       case hashString("someProp"): return true;
       case hashString("someCallback"): return true;
       default: return false;

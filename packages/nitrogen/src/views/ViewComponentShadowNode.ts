@@ -173,7 +173,7 @@ namespace ${namespace} {
   }
 
   bool ${propsClassName}::filterObjectKeys(const std::string& propName) {
-    switch (hashString(propName.c_str())) {
+    switch (hashString(propName)) {
       ${indent(cases.join('\n'), '      ')}
       default: return false;
     }

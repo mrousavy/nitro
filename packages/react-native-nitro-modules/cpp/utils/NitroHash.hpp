@@ -9,6 +9,7 @@
 
 #include <cstddef>
 #include <cstdint>
+#include <string>
 
 namespace margelo::nitro {
 
@@ -38,6 +39,10 @@ constexpr uint64_t hashString(const char* str, size_t length) {
 template <size_t N>
 constexpr uint64_t hashString(const char (&str)[N]) {
   return hashString(str, N - 1); // N includes the null terminator, so subtract 1
+}
+
+inline uint64_t hashString(const std::string_view& string) {
+  return hashString(string.c_str(), string.length());
 }
 
 } // namespace margelo::nitro
