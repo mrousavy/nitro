@@ -12,7 +12,8 @@ export function createSwiftHybridViewManager(
 ): SourceFile[] {
   const cppFiles = createViewComponentShadowNodeFiles(spec)
   const namespace = NitroConfig.getCxxNamespace('c++', 'views')
-  const { component, descriptorClassName } = getViewComponentNames(spec)
+  const { component, descriptorClassName, propsClassName } =
+    getViewComponentNames(spec)
 
   const mmFile = `
 ${createFileMetadataString(`${component}.mm`)}
@@ -20,34 +21,34 @@ ${createFileMetadataString(`${component}.mm`)}
 #if REACT_NATIVE_VERSION >= 78
 
 #import "${component}.hpp"
+#import <react/renderer/componentregistry/ComponentDescriptorProvider.h>
+#import <React/RCTViewComponentView.h>
 #import <React/RCTComponentViewFactory.h>
 #import <React/UIView+ComponentViewProtocol.h>
 #import <UIKit/UIKit.h>
 
-namespace ${namespace} {
+using namespace facebook;
 
-  @interface ${component}: RCTViewComponentView
-  @end
+@interface ${component}: RCTViewComponentView
+@end
 
-  @implementation ${component}
-  + (void) load {
-    [super load];
-    // TODO: Register it!
-  }
+@implementation ${component}
++ (void) load {
+  [super load];
+  // TODO: Register it!
+}
 
-  + (ComponentDescriptorProvider)componentDescriptorProvider {
-    return concreteComponentDescriptorProvider<${descriptorClassName}>();
-  }
++ (react::ComponentDescriptorProvider)componentDescriptorProvider {
+  return react::concreteComponentDescriptorProvider<${namespace}::${descriptorClassName}>();
+}
 
-  - (void)updateProps:(const facebook::react::Props::Shared&)props
-             oldProps:(const facebook::react::Props::Shared&)oldProps {
-    // TODO: const auto& newViewProps = *std::static_pointer_cast<CustomViewProps const>(props);
+- (void)updateProps:(const facebook::react::Props::Shared&)props
+           oldProps:(const facebook::react::Props::Shared&)oldProps {
+  // TODO: const auto& newViewProps = *std::static_pointer_cast<${namespace}::${propsClassName} const>(props);
 
-    [super updateProps:props oldProps:oldProps];
-  }
-  @end
-
-} // namespace ${namespace}
+  [super updateProps:props oldProps:oldProps];
+}
+@end
 
 #endif
   `

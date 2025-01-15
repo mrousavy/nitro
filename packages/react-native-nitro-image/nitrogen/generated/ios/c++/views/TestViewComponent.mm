@@ -8,33 +8,33 @@
 #if REACT_NATIVE_VERSION >= 78
 
 #import "TestViewComponent.hpp"
+#import <react/renderer/componentregistry/ComponentDescriptorProvider.h>
+#import <React/RCTViewComponentView.h>
 #import <React/RCTComponentViewFactory.h>
 #import <React/UIView+ComponentViewProtocol.h>
 #import <UIKit/UIKit.h>
 
-namespace margelo::nitro::image::views {
+using namespace facebook;
 
-  @interface TestViewComponent: RCTViewComponentView
-  @end
+@interface TestViewComponent: RCTViewComponentView
+@end
 
-  @implementation TestViewComponent
-  + (void) load {
-    [super load];
-    // TODO: Register it!
-  }
+@implementation TestViewComponent
++ (void) load {
+  [super load];
+  // TODO: Register it!
+}
 
-  + (ComponentDescriptorProvider)componentDescriptorProvider {
-    return concreteComponentDescriptorProvider<HybridTestViewComponentDescriptor>();
-  }
++ (react::ComponentDescriptorProvider)componentDescriptorProvider {
+  return react::concreteComponentDescriptorProvider<margelo::nitro::image::views::HybridTestViewComponentDescriptor>();
+}
 
-  - (void)updateProps:(const facebook::react::Props::Shared&)props
-             oldProps:(const facebook::react::Props::Shared&)oldProps {
-    // TODO: const auto& newViewProps = *std::static_pointer_cast<CustomViewProps const>(props);
+- (void)updateProps:(const facebook::react::Props::Shared&)props
+            oldProps:(const facebook::react::Props::Shared&)oldProps {
+  // TODO: const auto& newViewProps = *std::static_pointer_cast<margelo::nitro::image::views::HybridTestViewProps const>(props);
 
-    [super updateProps:props oldProps:oldProps];
-  }
-  @end
-
-} // namespace margelo::nitro::image::views
+  [super updateProps:props oldProps:oldProps];
+}
+@end
 
 #endif
