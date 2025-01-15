@@ -63,6 +63,7 @@ export function createViewComponentShadowNodeFiles(
   )
 
   // .hpp code
+  const shadowIndent = createIndentation(shadowNodeClassName.length)
   const componentHeaderCode = `
 ${createFileMetadataString(`${component}.hpp`)}
 
@@ -116,7 +117,10 @@ namespace ${namespace} {
   /**
    * The Shadow Node for the "${spec.name}" View.
    */
-  using ${shadowNodeClassName} = react::ConcreteViewShadowNode<${nameVariable}, ${propsClassName}, react::ViewEventEmitter, ${stateClassName}>;
+  using ${shadowNodeClassName} = react::ConcreteViewShadowNode<${nameVariable},
+        ${shadowIndent}                                 react::ViewEventEmitter,
+        ${shadowIndent}                                 ${stateClassName}>;
+        ${shadowIndent}                                 ${propsClassName},
 
   /**
    * The Component Descriptor for the "${spec.name}" View.

@@ -56,7 +56,10 @@ namespace margelo::nitro::image::views {
   /**
    * The Shadow Node for the "TestView" View.
    */
-  using HybridTestViewShadowNode = react::ConcreteViewShadowNode<HybridTestViewComponentName, HybridTestViewProps, react::ViewEventEmitter, HybridTestViewState>;
+  using HybridTestViewShadowNode = react::ConcreteViewShadowNode<HybridTestViewComponentName,
+                                                                 react::ViewEventEmitter,
+                                                                 HybridTestViewState>;
+                                                                 HybridTestViewProps,
 
   /**
    * The Component Descriptor for the "TestView" View.
