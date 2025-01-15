@@ -51,7 +51,9 @@ using namespace margelo::nitro::image::views;
 
 - (UIView*) contentView {
   NitroImage::HybridTestViewSpec_cxx swiftPart = _hybridView->getSwiftPart();
-  return swiftPart.getView();
+  void* viewUnsafe = swiftPart.getView();
+  UIView* view = (__bridge_transfer UIView*) viewUnsafe;
+  return view;
 }
 
 - (void) updateProps:(const react::Props::Shared&)props

@@ -78,7 +78,9 @@ using namespace ${namespace}::views;
 
 - (UIView*) contentView {
   ${swiftNamespace}::${HybridTSpecCxx} swiftPart = _hybridView->getSwiftPart();
-  return swiftPart.getView();
+  void* viewUnsafe = swiftPart.getView();
+  UIView* view = (__bridge_transfer UIView*) viewUnsafe;
+  return view;
 }
 
 - (void) updateProps:(const react::Props::Shared&)props

@@ -7,7 +7,6 @@
 
 import Foundation
 import NitroModules
-import UIKit
 
 /**
  * A class implementation that bridges HybridTestViewSpec over to C++.
@@ -141,5 +140,7 @@ public class HybridTestViewSpec_cxx {
     }
   }
   
-  public final func getView() -> UIView { return __implementation.view }
+  public final func getView() -> UnsafeMutableRawPointer {
+    return Unmanaged.passRetained(__implementation.view).toOpaque()
+  }
 }

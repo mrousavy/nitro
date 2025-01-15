@@ -52,7 +52,11 @@ export function createSwiftHybridObjectCxxBridge(
 
   if (spec.isHybridView && !hasBase) {
     methodsBridge.push(
-      `public final func getView() -> UIView { return __implementation.view }`
+      `
+public final func getView() -> UnsafeMutableRawPointer {
+  return Unmanaged.passRetained(__implementation.view).toOpaque()
+}
+`.trim()
     )
   }
 
@@ -95,15 +99,11 @@ public override func getCxxPart() -> bridge.${baseBridge.specializationName} {
 }`.trim()
   })
 
-  const imports = ['import Foundation', 'import NitroModules']
-  if (spec.isHybridView) {
-    imports.push('import UIKit')
-  }
-
   const swiftCxxWrapperCode = `
 ${createFileMetadataString(`${name.HybridTSpecCxx}.swift`)}
 
-${imports.join('\n')}
+import Foundation
+import NitroModules
 
 /**
  * A class implementation that bridges ${name.HybridTSpec} over to C++.
