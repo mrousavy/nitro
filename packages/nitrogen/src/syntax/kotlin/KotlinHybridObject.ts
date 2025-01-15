@@ -1,5 +1,6 @@
 import { NitroConfig } from '../../config/NitroConfig.js'
 import { indent } from '../../utils.js'
+import { createKotlinHybridViewManager } from '../../views/kotlin/KotlinHybridViewManager.js'
 import { getAllTypes } from '../getAllTypes.js'
 import { getHybridObjectName } from '../getHybridObjectName.js'
 import { createFileMetadataString } from '../helpers.js'
@@ -123,6 +124,12 @@ abstract class ${name.HybridTSpec}: ${kotlinBase}() {
   })
   files.push(...cppFiles)
   files.push(...extraFiles)
+
+  if (spec.isHybridView) {
+    const viewFiles = createKotlinHybridViewManager(spec)
+    files.push(...viewFiles)
+  }
+
   return files
 }
 
