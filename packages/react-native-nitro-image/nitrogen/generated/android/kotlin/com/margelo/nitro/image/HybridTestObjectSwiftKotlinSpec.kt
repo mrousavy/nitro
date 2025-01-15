@@ -7,7 +7,6 @@
 
 package com.margelo.nitro.image
 
-import android.util.Log
 import androidx.annotation.Keep
 import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
