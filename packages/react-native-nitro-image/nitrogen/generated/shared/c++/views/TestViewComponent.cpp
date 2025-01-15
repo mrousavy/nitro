@@ -12,8 +12,8 @@
 namespace margelo::nitro::image::views {
 
   HybridTestViewProps::HybridTestViewProps(const react::PropsParserContext& context,
-                                             const HybridTestViewProps& sourceProps,
-                                             const react::RawProps& rawProps): react::ViewProps(context, sourceProps, rawProps) {
+                                           const HybridTestViewProps& sourceProps,
+                                           const react::RawProps& rawProps): react::ViewProps(context, sourceProps, rawProps) {
     if (rawProps.isEmpty()) {
       // TODO: idk? Hanno?
       return;

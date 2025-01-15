@@ -110,8 +110,8 @@ ${createFileMetadataString(`${component}.cpp`)}
 namespace ${namespace} {
 
   ${propsClassName}::${propsClassName}(const react::PropsParserContext& context,
-  ${ctorIndent}     const ${propsClassName}& sourceProps,
-  ${ctorIndent}     const react::RawProps& rawProps): react::ViewProps(context, sourceProps, rawProps) {
+  ${ctorIndent}   const ${propsClassName}& sourceProps,
+  ${ctorIndent}   const react::RawProps& rawProps): react::ViewProps(context, sourceProps, rawProps) {
     if (rawProps.isEmpty()) {
       // TODO: idk? Hanno?
       return;
