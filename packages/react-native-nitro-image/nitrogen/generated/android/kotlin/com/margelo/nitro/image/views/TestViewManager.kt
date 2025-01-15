@@ -26,7 +26,7 @@ class TestViewManager: SimpleViewManager<View>() {
     throw Error("Not yet implemented!")
   }
 
-  override fun updateState(view: View, props: ReactStylesDiffMap, stateWrapper: StateWrapper): Any {
+  override fun updateState(view: View, props: ReactStylesDiffMap, stateWrapper: StateWrapper): Any? {
     val stateWrapperImpl = stateWrapper as? StateWrapperImpl ?: throw Error("StateWrapper uses a different implementation!")
     // TODO: Get props from stateWrapperImpl and update them in HybridView
 
