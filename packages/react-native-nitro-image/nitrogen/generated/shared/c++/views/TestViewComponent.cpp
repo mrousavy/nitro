@@ -18,12 +18,12 @@ namespace margelo::nitro::image::views {
       // TODO: idk? Hanno?
       return;
     }
-    const RawValue* rawValue = rawProps.at("nativeProp", nullptr, nullptr);
+    const react::RawValue* rawValue = rawProps.at("nativeProp", nullptr, nullptr);
     const auto& [runtime, value] = (std::pair<jsi::Runtime*, const jsi::Value&>)*rawValue;
     // TODO: Parse runtime and value
   }
 
-  HybridTestViewComponentName = "HybridTestView";
+  extern const char HybridTestViewComponentName[] = "HybridTestView";
 
   HybridTestViewComponentDescriptor::HybridTestViewComponentDescriptor(const react::ComponentDescriptorParameters& parameters)
     : ConcreteComponentDescriptor(parameters,

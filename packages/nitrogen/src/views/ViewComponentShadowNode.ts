@@ -116,12 +116,12 @@ namespace ${namespace} {
       // TODO: idk? Hanno?
       return;
     }
-    const RawValue* rawValue = rawProps.at("nativeProp", nullptr, nullptr);
+    const react::RawValue* rawValue = rawProps.at("nativeProp", nullptr, nullptr);
     const auto& [runtime, value] = (std::pair<jsi::Runtime*, const jsi::Value&>)*rawValue;
     // TODO: Parse runtime and value
   }
 
-  ${nameVariable} = "${name.HybridT}";
+  extern const char ${nameVariable}[] = "${name.HybridT}";
 
   ${descriptorClassName}::${descriptorClassName}(const react::ComponentDescriptorParameters& parameters)
     : ConcreteComponentDescriptor(parameters,
