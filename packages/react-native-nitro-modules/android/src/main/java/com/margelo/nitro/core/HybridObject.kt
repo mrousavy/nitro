@@ -9,7 +9,7 @@ import com.facebook.proguard.annotations.DoNotStrip
  */
 @Keep
 @DoNotStrip
-abstract class HybridObject: ExtendableHybridClass {
+abstract class HybridObject {
     /**
      * Get the memory size of the Kotlin instance (plus any external heap allocations),
      * in bytes.
@@ -39,10 +39,14 @@ abstract class HybridObject: ExtendableHybridClass {
     private var mHybridData: HybridData? = null
 
     /**
-     * Must be called in the constructor of a subclass of `HybridObject`, to initialize the C++
-     * `JHybridObject` with a subclass of it.
+     * If `HybridObject` is subclassed, the sub-class needs to create it's own `HybridData`
+     * with a C++ `jni::HybridClass` representing the subclass directly.
+     * Then, that `HybridData` must be passed upwards to `HybridObject` using `updateNative(..)`.
+     *
+     * This must happen for each sub/base class in the whole inheritance chain to ensure
+     * overrides and type-erasure works as expected.
      */
-    override fun updateNative(hybridData: HybridData) {
+    protected open fun updateNative(hybridData: HybridData) {
         mHybridData = hybridData
     }
 }

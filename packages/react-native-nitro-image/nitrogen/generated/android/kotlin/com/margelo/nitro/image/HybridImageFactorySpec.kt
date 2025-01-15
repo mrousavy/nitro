@@ -7,7 +7,6 @@
 
 package com.margelo.nitro.image
 
-import android.util.Log
 import androidx.annotation.Keep
 import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
@@ -29,14 +28,9 @@ abstract class HybridImageFactorySpec: HybridObject() {
   private var mHybridData: HybridData = initHybrid()
 
   init {
-    // Pass this `HybridData` through to it's base class,
-    // to represent inheritance to JHybridObject on C++ side
     super.updateNative(mHybridData)
   }
 
-  /**
-   * Call from a child class to initialize HybridData with a child.
-   */
   override fun updateNative(hybridData: HybridData) {
     mHybridData = hybridData
     super.updateNative(hybridData)
