@@ -12,8 +12,8 @@ template <typename TResult>
 class Promise;
 } // namespace margelo::nitro
 
-#include "Promise.hpp"
 #include "NitroTypeInfo.hpp"
+#include "Promise.hpp"
 #include <exception>
 #include <string>
 
