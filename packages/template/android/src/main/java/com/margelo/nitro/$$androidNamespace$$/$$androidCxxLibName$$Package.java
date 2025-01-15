@@ -29,6 +29,6 @@ public class $$androidCxxLibName$$Package extends TurboReactPackage {
   }
 
   static {
-    System.loadLibrary("$$androidCxxLibName$$");
+    $$androidCxxLibName$$OnLoad.initializeNative();
   }
 }
