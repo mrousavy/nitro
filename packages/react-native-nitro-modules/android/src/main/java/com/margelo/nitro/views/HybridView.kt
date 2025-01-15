@@ -20,19 +20,4 @@ abstract class HybridView: HybridObject() {
     @get:DoNotStrip
     @get:Keep
     abstract val view: View
-
-    /**
-     * Holds the native C++ instance.
-     * In `HybridView`, the C++ instance is a sub-class of `JHybridView`, such as one of it's specs.
-     * This is `null`, until `updateNative(..)` is called.
-     */
-    private var mHybridData: HybridData? = null
-
-    /**
-     * Must be called in the constructor of a subclass of `HybridObject`, to initialize the C++
-     * `JHybridObject` with a subclass of it.
-     */
-    override fun updateNative(hybridData: HybridData) {
-        mHybridData = hybridData
-    }
 }
