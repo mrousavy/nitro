@@ -9,15 +9,21 @@ export function createSwiftHybridViewManager(
 ): SourceFile[] {
   const name = getHybridObjectName(spec.name)
   const propsClassName = `${name.HybridT}Props`
+  const stateClassName = `${name.HybridT}State`
+  const nameVariable = `${name.HybridT}ComponentName`
+  const shadowNodeClassName = `${name.HybridT}ShadowNode`
+  const descriptorClassName = `${name.HybridT}ComponentDescriptor`
+  const component = `${spec.name}Component`
   const namespace = NitroConfig.getCxxNamespace('c++')
 
   const propsCode = `
-${createFileMetadataString(`${name.HybridT}ViewProps.hpp`)}
+${createFileMetadataString(`${component}.hpp`)}
 
 #pragma once
 
 #import <react/renderer/core/PropsParserContext.h>
 #import <react/renderer/components/view/ViewProps.h>
+#import <react/renderer/components/view/ConcreteViewShadowNode.h>
 
 namespace ${namespace} {
 
@@ -28,17 +34,33 @@ namespace ${namespace} {
     explicit ${propsClassName}() = default;
     ${propsClassName}(const react::PropsParserContext& context,
                       const ${propsClassName}& sourceProps,
-                      const react::RawProps& rawProps) {
+                      const react::RawProps& rawProps): react::ViewProps(context, sourceProps, rawProps) {
       throw std::runtime_error("not yet implemented!");
     }
   };
+
+  class ${stateClassName} {
+  public:
+    explicit ${stateClassName}() = default;
+  };
+
+  extern const char ${nameVariable}[] = "${name.HybridT}";
+  using ${shadowNodeClassName} = react::ConcreteViewShadowNode<${nameVariable}, ${propsClassName}, react::ViewEventEmitter, ${stateClassName}>;
+
+  class ${descriptorClassName}: public react::ConcreteComponentDescriptor<${shadowNodeClassName}> {
+  public:
+    ${descriptorClassName}(const react::ComponentDescriptorParameters& parameters)
+      : ConcreteComponentDescriptor(parameters, std::make_unique<RawPropsParser>(/* enable raw JSI props parsing */ true)) {}
+  };
+
+  // TODO: Actual RCTViewComponentView goes here... or in Swift?
 
 } // namespace ${namespace}
   `.trim()
 
   return [
     {
-      name: `${propsClassName}.hpp`,
+      name: `${component}.hpp`,
       content: propsCode,
       language: 'c++',
       platform: 'ios',
