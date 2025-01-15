@@ -32,8 +32,10 @@ public:
   BorrowingReference(const BorrowingReference& ref)
       : _value(ref._value), _isDeleted(ref._isDeleted), _strongRefCount(ref._strongRefCount), _weakRefCount(ref._weakRefCount),
         _mutex(ref._mutex) {
-    // increment ref count after copy
-    (*_weakRefCount)++;
+    if (_weakRefCount != nullptr) {
+      // increment ref count after copy
+      (*_weakRefCount)++;
+    }
   }
 
   BorrowingReference(BorrowingReference&& ref)

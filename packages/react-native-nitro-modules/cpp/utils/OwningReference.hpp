@@ -39,8 +39,10 @@ public:
   OwningReference(const OwningReference& ref)
       : _value(ref._value), _isDeleted(ref._isDeleted), _strongRefCount(ref._strongRefCount), _weakRefCount(ref._weakRefCount),
         _mutex(ref._mutex) {
-    // increment ref count after copy
-    (*_strongRefCount)++;
+    if (_strongRefCount != nullptr) {
+      // increment ref count after copy
+      (*_strongRefCount)++;
+    }
   }
 
   OwningReference(OwningReference&& ref)
