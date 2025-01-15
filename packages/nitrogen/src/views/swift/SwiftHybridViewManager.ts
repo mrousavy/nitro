@@ -4,11 +4,15 @@ import {
   createViewComponentShadowNodeFiles,
   getViewComponentNames,
 } from '../ViewComponentShadowNode.js'
-import { createFileMetadataString } from '../../syntax/helpers.js'
+import {
+  createFileMetadataString,
+  escapeCppName,
+} from '../../syntax/helpers.js'
 import { NitroConfig } from '../../config/NitroConfig.js'
 import { getUmbrellaHeaderName } from '../../autolinking/ios/createSwiftUmbrellaHeader.js'
 import { getHybridObjectName } from '../../syntax/getHybridObjectName.js'
 import { getHybridObjectConstructorCall } from '../../syntax/swift/SwiftHybridObjectRegistration.js'
+import { indent } from '../../utils.js'
 
 export function createSwiftHybridViewManager(
   spec: HybridObjectSpec
@@ -28,6 +32,11 @@ export function createSwiftHybridViewManager(
       `Cannot create Swift HybridView ViewManager for ${spec.name} - it is not autolinked in nitro.json!`
     )
   }
+
+  const propAssignments = spec.properties.map(
+    (p) =>
+      `swiftPart.${p.cppSetterName}(newViewProps.${escapeCppName(p.name)});`
+  )
 
   const mmFile = `
 ${createFileMetadataString(`${component}.mm`)}
@@ -78,7 +87,7 @@ using namespace ${namespace}::views;
 }
 
 - (void) updateView {
-  ${swiftNamespace}::${HybridTSpecCxx} swiftPart = _hybridView->getSwiftPart();
+  ${swiftNamespace}::${HybridTSpecCxx}& swiftPart = _hybridView->getSwiftPart();
   void* viewUnsafe = swiftPart.getView();
   UIView* view = (__bridge_transfer UIView*) viewUnsafe;
   [self setContentView:view];
@@ -86,8 +95,12 @@ using namespace ${namespace}::views;
 
 - (void) updateProps:(const react::Props::Shared&)props
             oldProps:(const react::Props::Shared&)oldProps {
-  // TODO: const auto& newViewProps = *std::static_pointer_cast<${propsClassName} const>(props);
-
+  // 1. Downcast props
+  const auto& newViewProps = *std::static_pointer_cast<${propsClassName} const>(props);
+  ${swiftNamespace}::${HybridTSpecCxx}& swiftPart = _hybridView->getSwiftPart();
+  // 2. Update each prop
+  ${indent(propAssignments.join('\n'), '  ')}
+  // 3. Continue in base class
   [super updateProps:props oldProps:oldProps];
 }
 

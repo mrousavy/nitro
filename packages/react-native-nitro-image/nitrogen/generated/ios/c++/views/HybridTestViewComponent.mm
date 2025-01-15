@@ -51,7 +51,7 @@ using namespace margelo::nitro::image::views;
 }
 
 - (void) updateView {
-  NitroImage::HybridTestViewSpec_cxx swiftPart = _hybridView->getSwiftPart();
+  NitroImage::HybridTestViewSpec_cxx& swiftPart = _hybridView->getSwiftPart();
   void* viewUnsafe = swiftPart.getView();
   UIView* view = (__bridge_transfer UIView*) viewUnsafe;
   [self setContentView:view];
@@ -59,8 +59,13 @@ using namespace margelo::nitro::image::views;
 
 - (void) updateProps:(const react::Props::Shared&)props
             oldProps:(const react::Props::Shared&)oldProps {
-  // TODO: const auto& newViewProps = *std::static_pointer_cast<HybridTestViewProps const>(props);
-
+  // 1. Downcast props
+  const auto& newViewProps = *std::static_pointer_cast<HybridTestViewProps const>(props);
+  NitroImage::HybridTestViewSpec_cxx& swiftPart = _hybridView->getSwiftPart();
+  // 2. Update each prop
+  swiftPart.setSomeProp(newViewProps.someProp);
+  swiftPart.setSomeCallback(newViewProps.someCallback);
+  // 3. Continue in base class
   [super updateProps:props oldProps:oldProps];
 }
 

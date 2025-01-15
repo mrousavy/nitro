@@ -348,7 +348,9 @@ namespace ${cxxNamespace} {
 
   public:
     // Get the Swift part
-    inline ${iosModuleName}::${name.HybridTSpecCxx} getSwiftPart() noexcept { return _swiftPart; }
+    inline ${iosModuleName}::${name.HybridTSpecCxx}& getSwiftPart() noexcept {
+      return _swiftPart;
+    }
 
   public:
     // Get memory pressure

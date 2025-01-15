@@ -109,7 +109,7 @@ void* _Nonnull get_${name}(${name} cppType) {
     throw std::runtime_error("Class \\"${HybridTSpec}\\" is not implemented in Swift!");
   }
 #endif
-  ${swiftPartType} swiftPart = swiftWrapper->getSwiftPart();
+  ${swiftPartType}& swiftPart = swiftWrapper->getSwiftPart();
   return swiftPart.toUnsafe();
 }
     `.trim(),

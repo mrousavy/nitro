@@ -38,7 +38,7 @@ namespace margelo::nitro::image::bridge::swift {
       throw std::runtime_error("Class \"HybridImageSpec\" is not implemented in Swift!");
     }
   #endif
-    NitroImage::HybridImageSpec_cxx swiftPart = swiftWrapper->getSwiftPart();
+    NitroImage::HybridImageSpec_cxx& swiftPart = swiftWrapper->getSwiftPart();
     return swiftPart.toUnsafe();
   }
   
@@ -54,7 +54,7 @@ namespace margelo::nitro::image::bridge::swift {
       throw std::runtime_error("Class \"HybridImageFactorySpec\" is not implemented in Swift!");
     }
   #endif
-    NitroImage::HybridImageFactorySpec_cxx swiftPart = swiftWrapper->getSwiftPart();
+    NitroImage::HybridImageFactorySpec_cxx& swiftPart = swiftWrapper->getSwiftPart();
     return swiftPart.toUnsafe();
   }
   
@@ -70,7 +70,7 @@ namespace margelo::nitro::image::bridge::swift {
       throw std::runtime_error("Class \"HybridTestObjectSwiftKotlinSpec\" is not implemented in Swift!");
     }
   #endif
-    NitroImage::HybridTestObjectSwiftKotlinSpec_cxx swiftPart = swiftWrapper->getSwiftPart();
+    NitroImage::HybridTestObjectSwiftKotlinSpec_cxx& swiftPart = swiftWrapper->getSwiftPart();
     return swiftPart.toUnsafe();
   }
   
@@ -202,7 +202,7 @@ namespace margelo::nitro::image::bridge::swift {
       throw std::runtime_error("Class \"HybridBaseSpec\" is not implemented in Swift!");
     }
   #endif
-    NitroImage::HybridBaseSpec_cxx swiftPart = swiftWrapper->getSwiftPart();
+    NitroImage::HybridBaseSpec_cxx& swiftPart = swiftWrapper->getSwiftPart();
     return swiftPart.toUnsafe();
   }
   
@@ -218,7 +218,7 @@ namespace margelo::nitro::image::bridge::swift {
       throw std::runtime_error("Class \"HybridChildSpec\" is not implemented in Swift!");
     }
   #endif
-    NitroImage::HybridChildSpec_cxx swiftPart = swiftWrapper->getSwiftPart();
+    NitroImage::HybridChildSpec_cxx& swiftPart = swiftWrapper->getSwiftPart();
     return swiftPart.toUnsafe();
   }
   
@@ -234,7 +234,7 @@ namespace margelo::nitro::image::bridge::swift {
       throw std::runtime_error("Class \"HybridTestViewSpec\" is not implemented in Swift!");
     }
   #endif
-    NitroImage::HybridTestViewSpec_cxx swiftPart = swiftWrapper->getSwiftPart();
+    NitroImage::HybridTestViewSpec_cxx& swiftPart = swiftWrapper->getSwiftPart();
     return swiftPart.toUnsafe();
   }
 
