@@ -8,6 +8,7 @@
 #pragma once
 
 #include "BorrowingReference.hpp"
+#include "NitroDefines.hpp"
 #include "OwningLock.hpp"
 #include <atomic>
 #include <cstddef>
@@ -163,10 +164,20 @@ public:
   }
 
   inline T& operator*() const {
+#ifdef NITRO_DEBUG
+    if (!hasValue()) [[unlikely]] {
+      throw std::runtime_error("Tried to dereference (*) nullptr OwningReference<T>!");
+    }
+#endif
     return *_value;
   }
 
   inline T* operator->() const {
+#ifdef NITRO_DEBUG
+    if (!hasValue()) [[unlikely]] {
+      throw std::runtime_error("Tried to dereference (->) nullptr OwningReference<T>!");
+    }
+#endif
     return _value;
   }
 
