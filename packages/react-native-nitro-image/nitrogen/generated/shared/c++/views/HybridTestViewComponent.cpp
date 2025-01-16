@@ -19,7 +19,7 @@ namespace margelo::nitro::image::views {
     someProp([&]() -> CachedProp<bool> {
       try {
         const react::RawValue* rawValue = rawProps.at("someProp", nullptr, nullptr);
-        if (rawValue == nullptr) return {};
+        if (rawValue == nullptr) return sourceProps.someProp;
         const auto& [runtime, value] = (std::pair<jsi::Runtime*, const jsi::Value&>)*rawValue;
         return CachedProp<bool>::fromRawValue(*runtime, value, sourceProps.someProp);
       } catch (const std::exception& exc) {
@@ -29,7 +29,7 @@ namespace margelo::nitro::image::views {
     someCallback([&]() -> CachedProp<std::function<void(double /* someParam */)>> {
       try {
         const react::RawValue* rawValue = rawProps.at("someCallback", nullptr, nullptr);
-        if (rawValue == nullptr) return {};
+        if (rawValue == nullptr) return sourceProps.someCallback;
         const auto& [runtime, value] = (std::pair<jsi::Runtime*, const jsi::Value&>)*rawValue;
         return CachedProp<std::function<void(double /* someParam */)>>::fromRawValue(*runtime, value, sourceProps.someCallback);
       } catch (const std::exception& exc) {

@@ -158,23 +158,22 @@ namespace ${namespace} {
   ]
   const propCopyInitializers = ['react::ViewProps()']
   for (const prop of spec.properties) {
+    const name = escapeCppName(prop.name)
     const type = prop.type.getCode('c++')
     propInitializers.push(
       `
-${escapeCppName(prop.name)}([&]() -> CachedProp<${type}> {
+${name}([&]() -> CachedProp<${type}> {
   try {
     const react::RawValue* rawValue = rawProps.at("${prop.name}", nullptr, nullptr);
-    if (rawValue == nullptr) return {};
+    if (rawValue == nullptr) return sourceProps.${name};
     const auto& [runtime, value] = (std::pair<jsi::Runtime*, const jsi::Value&>)*rawValue;
-    return CachedProp<${type}>::fromRawValue(*runtime, value, sourceProps.${escapeCppName(prop.name)});
+    return CachedProp<${type}>::fromRawValue(*runtime, value, sourceProps.${name});
   } catch (const std::exception& exc) {
     throw std::runtime_error(std::string("${spec.name}.${prop.name}: ") + exc.what());
   }
 }())`.trim()
     )
-    propCopyInitializers.push(
-      `${escapeCppName(prop.name)}(other.${escapeCppName(prop.name)})`
-    )
+    propCopyInitializers.push(`${name}(other.${name})`)
   }
 
   const ctorIndent = createIndentation(propsClassName.length * 2)
