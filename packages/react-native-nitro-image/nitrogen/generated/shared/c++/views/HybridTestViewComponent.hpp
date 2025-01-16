@@ -41,8 +41,8 @@ namespace margelo::nitro::image::views {
                         const react::RawProps& rawProps);
 
   public:
-    CachedProp<bool> someProp;
     CachedProp<std::function<void(double /* someParam */)>> someCallback;
+    CachedProp<bool> someProp;
 
   private:
     static bool filterObjectKeys(const std::string& propName);

@@ -32,8 +32,18 @@ export function getViewComponentNames(
 }
 
 export function createViewComponentShadowNodeFiles(
-  spec: HybridObjectSpec
+  specOriginal: HybridObjectSpec
 ): SourceFile[] {
+  // Due to internal Fabric details, props must be alphabetically sorted.
+  const sortedProps = [...specOriginal.properties].sort((a, b) => {
+    if (a.name < b.name) return -1
+    else if (a.name > b.name) return 1
+    else return 0
+  })
+  const spec: HybridObjectSpec = {
+    ...specOriginal,
+    properties: sortedProps,
+  }
   if (!spec.isHybridView) {
     throw new Error(
       `Cannot create View Component ShadowNode code for ${spec.name} - it's not a HybridView!`

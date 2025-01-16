@@ -16,28 +16,28 @@ namespace margelo::nitro::image::views {
                                            const HybridTestViewProps& sourceProps,
                                            const react::RawProps& rawProps):
     react::ViewProps(context, sourceProps, rawProps, filterObjectKeys),
-    someProp([&]() -> CachedProp<bool> {
-      const react::RawValue* rawValue = rawProps.at("someProp", nullptr, nullptr);
-      if (rawValue == nullptr) return {};
-      const auto& [runtime, value] = (std::pair<jsi::Runtime*, const jsi::Value&>)*rawValue;
-      return CachedProp<bool>::fromRawValue(*runtime, value, sourceProps.someProp);
-    }()),
     someCallback([&]() -> CachedProp<std::function<void(double /* someParam */)>> {
       const react::RawValue* rawValue = rawProps.at("someCallback", nullptr, nullptr);
       if (rawValue == nullptr) return {};
       const auto& [runtime, value] = (std::pair<jsi::Runtime*, const jsi::Value&>)*rawValue;
       return CachedProp<std::function<void(double /* someParam */)>>::fromRawValue(*runtime, value, sourceProps.someCallback);
+    }()),
+    someProp([&]() -> CachedProp<bool> {
+      const react::RawValue* rawValue = rawProps.at("someProp", nullptr, nullptr);
+      if (rawValue == nullptr) return {};
+      const auto& [runtime, value] = (std::pair<jsi::Runtime*, const jsi::Value&>)*rawValue;
+      return CachedProp<bool>::fromRawValue(*runtime, value, sourceProps.someProp);
     }()) { }
 
   HybridTestViewProps::HybridTestViewProps(const HybridTestViewProps& other):
     react::ViewProps(),
-    someProp(other.someProp),
-    someCallback(other.someCallback) { }
+    someCallback(other.someCallback),
+    someProp(other.someProp) { }
 
   bool HybridTestViewProps::filterObjectKeys(const std::string& propName) {
     switch (hashString(propName)) {
-      case hashString("someProp"): return true;
       case hashString("someCallback"): return true;
+      case hashString("someProp"): return true;
       default: return false;
     }
   }
