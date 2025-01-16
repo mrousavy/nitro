@@ -162,10 +162,14 @@ namespace ${namespace} {
     propInitializers.push(
       `
 ${escapeCppName(prop.name)}([&]() -> CachedProp<${type}> {
-  const react::RawValue* rawValue = rawProps.at("${prop.name}", nullptr, nullptr);
-  if (rawValue == nullptr) return {};
-  const auto& [runtime, value] = (std::pair<jsi::Runtime*, const jsi::Value&>)*rawValue;
-  return CachedProp<${type}>::fromRawValue(*runtime, value, sourceProps.${escapeCppName(prop.name)});
+  try {
+    const react::RawValue* rawValue = rawProps.at("${prop.name}", nullptr, nullptr);
+    if (rawValue == nullptr) return {};
+    const auto& [runtime, value] = (std::pair<jsi::Runtime*, const jsi::Value&>)*rawValue;
+    return CachedProp<${type}>::fromRawValue(*runtime, value, sourceProps.${escapeCppName(prop.name)});
+  } catch (const std::exception& exc) {
+    throw std::runtime_error(std::string("${spec.name}.${prop.name}: ") + exc.what());
+  }
 }())`.trim()
     )
     propCopyInitializers.push(
