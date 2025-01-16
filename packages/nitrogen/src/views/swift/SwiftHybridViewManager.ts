@@ -38,6 +38,7 @@ export function createSwiftHybridViewManager(
     return `
 if (newViewProps.${name}.isDirty) {
   swiftPart.${p.cppSetterName}(newViewProps.${name}.value);
+  newViewProps.${name}.isDirty = false;
 }
 `.trim()
   })
@@ -103,7 +104,8 @@ using namespace ${namespace}::views;
 - (void) updateProps:(const react::Props::Shared&)props
             oldProps:(const react::Props::Shared&)oldProps {
   // 1. Downcast props
-  const auto& newViewProps = *std::static_pointer_cast<${propsClassName} const>(props);
+  const auto& newViewPropsConst = *std::static_pointer_cast<${propsClassName} const>(props);
+  auto& newViewProps = const_cast<${propsClassName}&>(newViewPropsConst);
   ${swiftNamespace}::${HybridTSpecCxx}& swiftPart = _hybridView->getSwiftPart();
   // 2. Update each prop
   ${indent(propAssignments.join('\n'), '  ')}
