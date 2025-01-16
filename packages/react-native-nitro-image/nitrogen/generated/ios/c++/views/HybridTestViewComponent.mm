@@ -66,7 +66,10 @@ using namespace margelo::nitro::image::views;
   const auto& newViewPropsConst = *std::static_pointer_cast<HybridTestViewProps const>(props);
   auto& newViewProps = const_cast<HybridTestViewProps&>(newViewPropsConst);
   NitroImage::HybridTestViewSpec_cxx& swiftPart = _hybridView->getSwiftPart();
+
   // 2. Update each prop
+  swiftPart.beforeUpdate();
+
   if (newViewProps.someProp.isDirty) {
     swiftPart.setSomeProp(newViewProps.someProp.value);
     newViewProps.someProp.isDirty = false;
@@ -75,6 +78,9 @@ using namespace margelo::nitro::image::views;
     swiftPart.setSomeCallback(newViewProps.someCallback.value);
     newViewProps.someCallback.isDirty = false;
   }
+
+  swiftPart.afterUpdate();
+
   // 3. Continue in base class
   [super updateProps:props oldProps:oldProps];
 }

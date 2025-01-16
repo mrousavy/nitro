@@ -56,6 +56,16 @@ export function createSwiftHybridObjectCxxBridge(
 public final func getView() -> UnsafeMutableRawPointer {
   return Unmanaged.passRetained(__implementation.view).toOpaque()
 }
+`.trim(),
+      `
+public final func beforeUpdate() {
+  __implementation.beforeUpdate()
+}
+  `.trim(),
+      `
+public final func afterUpdate() {
+  __implementation.afterUpdate()
+}
 `.trim()
     )
   }

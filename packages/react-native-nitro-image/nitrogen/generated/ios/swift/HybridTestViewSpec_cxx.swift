@@ -143,4 +143,12 @@ public class HybridTestViewSpec_cxx {
   public final func getView() -> UnsafeMutableRawPointer {
     return Unmanaged.passRetained(__implementation.view).toOpaque()
   }
+  
+  public final func beforeUpdate() {
+    __implementation.beforeUpdate()
+  }
+  
+  public final func afterUpdate() {
+    __implementation.afterUpdate()
+  }
 }
