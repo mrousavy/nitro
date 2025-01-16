@@ -53,9 +53,11 @@ using namespace margelo::nitro::image::views;
 - (void) updateView {
   // 1. Get Swift part
   NitroImage::HybridTestViewSpec_cxx& swiftPart = _hybridView->getSwiftPart();
+
   // 2. Get UIView*
   void* viewUnsafe = swiftPart.getView();
   UIView* view = (__bridge_transfer UIView*) viewUnsafe;
+
   // 3. Update RCTViewComponentView's [contentView]
   [self setContentView:view];
 }

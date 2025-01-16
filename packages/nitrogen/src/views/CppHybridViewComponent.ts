@@ -5,6 +5,7 @@ import { createFileMetadataString, escapeCppName } from '../syntax/helpers.js'
 import { NitroConfig } from '../config/NitroConfig.js'
 import { getHybridObjectName } from '../syntax/getHybridObjectName.js'
 import { includeHeader } from '../syntax/c++/includeNitroHeader.js'
+import { createHostComponentJs } from './createHostComponentJs.js'
 
 interface ViewComponentNames {
   propsClassName: `${string}Props`
@@ -232,7 +233,7 @@ namespace ${namespace} {
 #endif
 `.trim()
 
-  return [
+  const files: SourceFile[] = [
     {
       name: `${component}.hpp`,
       content: componentHeaderCode,
@@ -248,4 +249,7 @@ namespace ${namespace} {
       subdirectory: ['views'],
     },
   ]
+  const jsFiles = createHostComponentJs(spec)
+  files.push(...(jsFiles as unknown as SourceFile[]))
+  return files
 }
