@@ -40,7 +40,7 @@ export function createViewComponentShadowNodeFiles(
     )
   }
 
-  const name = getHybridObjectName(spec.name)
+  const { T, HybridT } = getHybridObjectName(spec.name)
   const {
     propsClassName,
     stateClassName,
@@ -89,7 +89,7 @@ namespace ${namespace} {
   /**
    * The name of the actual native View.
    */
-  extern const char ${nameVariable}[] = "${name.T}";
+  extern const char ${nameVariable}[] = "${T}";
 
   /**
    * Props for the "${spec.name}" View.
@@ -127,7 +127,7 @@ namespace ${namespace} {
   /**
    * The Shadow Node for the "${spec.name}" View.
    */
-  using ${shadowNodeClassName} = react::ConcreteViewShadowNode<${nameVariable} /* "${name.HybridT}" */,
+  using ${shadowNodeClassName} = react::ConcreteViewShadowNode<${nameVariable} /* "${HybridT}" */,
         ${shadowIndent}                                 ${propsClassName} /* custom props */,
         ${shadowIndent}                                 react::ViewEventEmitter /* default */,
         ${shadowIndent}                                 ${stateClassName} /* custom state */>;
@@ -148,7 +148,7 @@ namespace ${namespace} {
 } // namespace ${namespace}
 
 #else
-  #warning "View Component '${name.HybridT}' will be unavailable in React Native, because it requires React Native 78 or higher."
+  #warning "View Component '${HybridT}' will be unavailable in React Native, because it requires React Native 78 or higher."
 #endif
 `.trim()
 
@@ -181,7 +181,14 @@ ${name}([&]() -> CachedProp<${type}> {
 ${createFileMetadataString(`${component}.cpp`)}
 
 #include "${component}.hpp"
+#include <string>
+#include <exception>
+#include <utility>
 #include <NitroModules/JSIConverter.hpp>
+#include <react/renderer/core/RawValue.h>
+#include <react/renderer/core/ShadowNode.h>
+#include <react/renderer/core/ComponentDescriptor.h>
+#include <react/renderer/components/view/ViewProps.h>
 
 #if REACT_NATIVE_VERSION >= 78
 

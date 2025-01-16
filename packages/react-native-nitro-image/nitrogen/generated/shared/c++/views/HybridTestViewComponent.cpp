@@ -6,7 +6,14 @@
 ///
 
 #include "HybridTestViewComponent.hpp"
+#include <string>
+#include <exception>
+#include <utility>
 #include <NitroModules/JSIConverter.hpp>
+#include <react/renderer/core/RawValue.h>
+#include <react/renderer/core/ShadowNode.h>
+#include <react/renderer/core/ComponentDescriptor.h>
+#include <react/renderer/components/view/ViewProps.h>
 
 #if REACT_NATIVE_VERSION >= 78
 
