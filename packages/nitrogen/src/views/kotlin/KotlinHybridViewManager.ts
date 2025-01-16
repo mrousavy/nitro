@@ -3,7 +3,7 @@ import type { HybridObjectSpec } from '../../syntax/HybridObjectSpec.js'
 import {
   createViewComponentShadowNodeFiles,
   getViewComponentNames,
-} from '../ViewComponentShadowNode.js'
+} from '../CppHybridViewComponent.js'
 import { createFileMetadataString } from '../../syntax/helpers.js'
 import { NitroConfig } from '../../config/NitroConfig.js'
 
