@@ -40,7 +40,7 @@ namespace margelo::nitro::image {
       explicit HybridTestViewSpec(): HybridObject(TAG) { }
 
       // Destructor
-      virtual ~HybridTestViewSpec() { }
+      ~HybridTestViewSpec() override = default;
 
     public:
       // Properties

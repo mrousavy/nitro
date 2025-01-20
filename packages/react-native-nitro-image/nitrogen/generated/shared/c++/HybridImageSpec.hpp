@@ -49,7 +49,7 @@ namespace margelo::nitro::image {
       explicit HybridImageSpec(): HybridObject(TAG) { }
 
       // Destructor
-      virtual ~HybridImageSpec() { }
+      ~HybridImageSpec() override = default;
 
     public:
       // Properties

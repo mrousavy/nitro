@@ -12,6 +12,7 @@
 #include <optional>
 #include <NitroModules/NitroDefines.hpp>
 #include <NitroModules/NitroHash.hpp>
+#include <NitroModules/CachedProp.hpp>
 #include <react/renderer/core/ConcreteComponentDescriptor.h>
 #include <react/renderer/core/PropsParserContext.h>
 #include <react/renderer/components/view/ConcreteViewShadowNode.h>
@@ -26,21 +27,22 @@ namespace margelo::nitro::image::views {
   /**
    * The name of the actual native View.
    */
-  extern const char HybridTestViewComponentName[] = "HybridTestView";
+  extern const char HybridTestViewComponentName[] = "TestView";
 
   /**
    * Props for the "TestView" View.
    */
   class HybridTestViewProps final: public react::ViewProps {
   public:
-    explicit HybridTestViewProps() = default;
+    HybridTestViewProps() = default;
+    HybridTestViewProps(const HybridTestViewProps&);
     HybridTestViewProps(const react::PropsParserContext& context,
                         const HybridTestViewProps& sourceProps,
                         const react::RawProps& rawProps);
 
   public:
-    bool someProp;
-    std::function<void(double /* someParam */)> someCallback;
+    CachedProp<bool> someProp;
+    CachedProp<std::function<void(double /* someParam */)>> someCallback;
 
   private:
     static bool filterObjectKeys(const std::string& propName);
@@ -51,11 +53,22 @@ namespace margelo::nitro::image::views {
    */
   class HybridTestViewState final {
   public:
-    explicit HybridTestViewState() = default;
+    HybridTestViewState() = default;
 
   public:
-    void setProps(const HybridTestViewProps& props) { _props = props; }
+    void setProps(HybridTestViewProps&& props) { _props.emplace(props); }
     const std::optional<HybridTestViewProps>& getProps() const { return _props; }
+
+  public:
+#ifdef ANDROID
+  HybridTestViewState(const CustomStateData& previousState, folly::dynamic data) {}
+  folly::dynamic getDynamic() const {
+    throw std::runtime_error("HybridTestViewState does not support folly!");
+  }
+  react::MapBuffer getMapBuffer() const {
+    throw std::runtime_error("HybridTestViewState does not support MapBuffer!");
+  };
+#endif
 
   private:
     std::optional<HybridTestViewProps> _props;
@@ -64,10 +77,10 @@ namespace margelo::nitro::image::views {
   /**
    * The Shadow Node for the "TestView" View.
    */
-  using HybridTestViewShadowNode = react::ConcreteViewShadowNode<HybridTestViewComponentName,
-                                                                 react::ViewEventEmitter,
-                                                                 HybridTestViewProps,
-                                                                 HybridTestViewState>;
+  using HybridTestViewShadowNode = react::ConcreteViewShadowNode<HybridTestViewComponentName /* "HybridTestView" */,
+                                                                 HybridTestViewProps /* custom props */,
+                                                                 react::ViewEventEmitter /* default */,
+                                                                 HybridTestViewState /* custom state */>;
 
   /**
    * The Component Descriptor for the "TestView" View.

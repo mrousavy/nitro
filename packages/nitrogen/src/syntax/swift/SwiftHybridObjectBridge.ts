@@ -36,18 +36,39 @@ export function createSwiftHybridObjectCxxBridge(
   const name = getHybridObjectName(spec.name)
   const moduleName = NitroConfig.getIosModuleName()
 
-  const propertiesBridge = spec.properties
-    .map((p) => getPropertyForwardImplementation(p))
-    .join('\n\n')
-  const methodsBridge = spec.methods
-    .map((m) => getMethodForwardImplementation(m))
-    .join('\n\n')
+  const propertiesBridge = spec.properties.map((p) =>
+    getPropertyForwardImplementation(p)
+  )
+
+  const methodsBridge = spec.methods.map((m) =>
+    getMethodForwardImplementation(m)
+  )
 
   const baseClasses = spec.baseTypes.map((base) => {
     const baseName = getHybridObjectName(base.name)
     return baseName.HybridTSpecCxx
   })
   const hasBase = baseClasses.length > 0
+
+  if (spec.isHybridView && !hasBase) {
+    methodsBridge.push(
+      `
+public final func getView() -> UnsafeMutableRawPointer {
+  return Unmanaged.passRetained(__implementation.view).toOpaque()
+}
+`.trim(),
+      `
+public final func beforeUpdate() {
+  __implementation.beforeUpdate()
+}
+  `.trim(),
+      `
+public final func afterUpdate() {
+  __implementation.afterUpdate()
+}
+`.trim()
+    )
+  }
 
   const hybridObject = new HybridObjectType(spec)
   const bridgedType = new SwiftCxxBridgedType(hybridObject)
@@ -183,10 +204,10 @@ ${hasBase ? `public class ${name.HybridTSpecCxx} : ${baseClasses.join(', ')}` : 
   }
 
   // Properties
-  ${indent(propertiesBridge, '  ')}
+  ${indent(propertiesBridge.join('\n\n'), '  ')}
 
   // Methods
-  ${indent(methodsBridge, '  ')}
+  ${indent(methodsBridge.join('\n\n'), '  ')}
 }
   `
 
@@ -337,7 +358,9 @@ namespace ${cxxNamespace} {
 
   public:
     // Get the Swift part
-    inline ${iosModuleName}::${name.HybridTSpecCxx} getSwiftPart() noexcept { return _swiftPart; }
+    inline ${iosModuleName}::${name.HybridTSpecCxx}& getSwiftPart() noexcept {
+      return _swiftPart;
+    }
 
   public:
     // Get memory pressure

@@ -77,7 +77,7 @@ namespace margelo::nitro::image {
       explicit HybridTestObjectCppSpec(): HybridObject(TAG) { }
 
       // Destructor
-      virtual ~HybridTestObjectCppSpec() { }
+      ~HybridTestObjectCppSpec() override = default;
 
     public:
       // Properties

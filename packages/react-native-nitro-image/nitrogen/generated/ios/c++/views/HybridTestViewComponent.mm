@@ -8,13 +8,19 @@
 #if REACT_NATIVE_VERSION >= 78
 
 #import "HybridTestViewComponent.hpp"
+#import <memory>
 #import <react/renderer/componentregistry/ComponentDescriptorProvider.h>
 #import <React/RCTViewComponentView.h>
 #import <React/RCTComponentViewFactory.h>
 #import <React/UIView+ComponentViewProtocol.h>
 #import <UIKit/UIKit.h>
 
+#import "HybridTestViewSpecSwift.hpp"
+#import "NitroImage-Swift-Cxx-Umbrella.hpp"
+
 using namespace facebook;
+using namespace margelo::nitro::image;
+using namespace margelo::nitro::image::views;
 
 /**
  * Represents the React Native View holder for the Nitro "TestView" HybridView.
@@ -22,25 +28,62 @@ using namespace facebook;
 @interface HybridTestViewComponent: RCTViewComponentView
 @end
 
-@implementation HybridTestViewComponent
+@implementation HybridTestViewComponent {
+  std::shared_ptr<HybridTestViewSpecSwift> _hybridView;
+}
 
 + (void) load {
   [super load];
-  // TODO: Register it!
+  [RCTComponentViewFactory.currentComponentViewFactory registerComponentViewClass:[HybridTestViewComponent class]];
 }
 
 + (react::ComponentDescriptorProvider) componentDescriptorProvider {
-  return react::concreteComponentDescriptorProvider<margelo::nitro::image::views::HybridTestViewComponentDescriptor>();
+  return react::concreteComponentDescriptorProvider<HybridTestViewComponentDescriptor>();
 }
 
 - (instancetype) init {
-  // TODO: Initialize "HybridTestView" view!
+  if (self = [super init]) {
+    std::shared_ptr<HybridTestViewSpec> hybridView = NitroImage::NitroImageAutolinking::createTestView();
+    _hybridView = std::dynamic_pointer_cast<HybridTestViewSpecSwift>(hybridView);
+    [self updateView];
+  }
+  return self;
+}
+
+- (void) updateView {
+  // 1. Get Swift part
+  NitroImage::HybridTestViewSpec_cxx& swiftPart = _hybridView->getSwiftPart();
+
+  // 2. Get UIView*
+  void* viewUnsafe = swiftPart.getView();
+  UIView* view = (__bridge_transfer UIView*) viewUnsafe;
+
+  // 3. Update RCTViewComponentView's [contentView]
+  [self setContentView:view];
 }
 
 - (void) updateProps:(const react::Props::Shared&)props
             oldProps:(const react::Props::Shared&)oldProps {
-  // TODO: const auto& newViewProps = *std::static_pointer_cast<margelo::nitro::image::views::HybridTestViewProps const>(props);
+  // 1. Downcast props
+  const auto& newViewPropsConst = *std::static_pointer_cast<HybridTestViewProps const>(props);
+  auto& newViewProps = const_cast<HybridTestViewProps&>(newViewPropsConst);
+  NitroImage::HybridTestViewSpec_cxx& swiftPart = _hybridView->getSwiftPart();
 
+  // 2. Update each prop
+  swiftPart.beforeUpdate();
+
+  if (newViewProps.someProp.isDirty) {
+    swiftPart.setSomeProp(newViewProps.someProp.value);
+    newViewProps.someProp.isDirty = false;
+  }
+  if (newViewProps.someCallback.isDirty) {
+    swiftPart.setSomeCallback(newViewProps.someCallback.value);
+    newViewProps.someCallback.isDirty = false;
+  }
+
+  swiftPart.afterUpdate();
+
+  // 3. Continue in base class
   [super updateProps:props oldProps:oldProps];
 }
 

@@ -3,15 +3,26 @@ import type { HybridObjectSpec } from '../../syntax/HybridObjectSpec.js'
 import {
   createViewComponentShadowNodeFiles,
   getViewComponentNames,
-} from '../ViewComponentShadowNode.js'
-import { createFileMetadataString } from '../../syntax/helpers.js'
+} from '../CppHybridViewComponent.js'
+import {
+  createFileMetadataString,
+  escapeCppName,
+} from '../../syntax/helpers.js'
 import { NitroConfig } from '../../config/NitroConfig.js'
+import { getUmbrellaHeaderName } from '../../autolinking/ios/createSwiftUmbrellaHeader.js'
+import { getHybridObjectName } from '../../syntax/getHybridObjectName.js'
+import { getHybridObjectConstructorCall } from '../../syntax/swift/SwiftHybridObjectRegistration.js'
+import { indent } from '../../utils.js'
 
 export function createSwiftHybridViewManager(
   spec: HybridObjectSpec
 ): SourceFile[] {
   const cppFiles = createViewComponentShadowNodeFiles(spec)
-  const namespace = NitroConfig.getCxxNamespace('c++', 'views')
+  const namespace = NitroConfig.getCxxNamespace('c++')
+  const swiftNamespace = NitroConfig.getIosModuleName()
+  const { HybridTSpec, HybridTSpecSwift, HybridTSpecCxx } = getHybridObjectName(
+    spec.name
+  )
   const { component, descriptorClassName, propsClassName } =
     getViewComponentNames(spec)
   const autolinking = NitroConfig.getAutolinkedHybridObjects()
@@ -22,19 +33,35 @@ export function createSwiftHybridViewManager(
     )
   }
 
+  const propAssignments = spec.properties.map((p) => {
+    const name = escapeCppName(p.name)
+    return `
+if (newViewProps.${name}.isDirty) {
+  swiftPart.${p.cppSetterName}(newViewProps.${name}.value);
+  newViewProps.${name}.isDirty = false;
+}
+`.trim()
+  })
+
   const mmFile = `
 ${createFileMetadataString(`${component}.mm`)}
 
 #if REACT_NATIVE_VERSION >= 78
 
 #import "${component}.hpp"
+#import <memory>
 #import <react/renderer/componentregistry/ComponentDescriptorProvider.h>
 #import <React/RCTViewComponentView.h>
 #import <React/RCTComponentViewFactory.h>
 #import <React/UIView+ComponentViewProtocol.h>
 #import <UIKit/UIKit.h>
 
+#import "${HybridTSpecSwift}.hpp"
+#import "${getUmbrellaHeaderName()}"
+
 using namespace facebook;
+using namespace ${namespace};
+using namespace ${namespace}::views;
 
 /**
  * Represents the React Native View holder for the Nitro "${spec.name}" HybridView.
@@ -42,25 +69,55 @@ using namespace facebook;
 @interface ${component}: RCTViewComponentView
 @end
 
-@implementation ${component}
+@implementation ${component} {
+  std::shared_ptr<${HybridTSpecSwift}> _hybridView;
+}
 
 + (void) load {
   [super load];
-  // TODO: Register it!
+  [RCTComponentViewFactory.currentComponentViewFactory registerComponentViewClass:[${component} class]];
 }
 
 + (react::ComponentDescriptorProvider) componentDescriptorProvider {
-  return react::concreteComponentDescriptorProvider<${namespace}::${descriptorClassName}>();
+  return react::concreteComponentDescriptorProvider<${descriptorClassName}>();
 }
 
 - (instancetype) init {
-  // TODO: Initialize "${viewImplementation}" view!
+  if (self = [super init]) {
+    std::shared_ptr<${HybridTSpec}> hybridView = ${getHybridObjectConstructorCall(spec.name)}
+    _hybridView = std::dynamic_pointer_cast<${HybridTSpecSwift}>(hybridView);
+    [self updateView];
+  }
+  return self;
+}
+
+- (void) updateView {
+  // 1. Get Swift part
+  ${swiftNamespace}::${HybridTSpecCxx}& swiftPart = _hybridView->getSwiftPart();
+
+  // 2. Get UIView*
+  void* viewUnsafe = swiftPart.getView();
+  UIView* view = (__bridge_transfer UIView*) viewUnsafe;
+
+  // 3. Update RCTViewComponentView's [contentView]
+  [self setContentView:view];
 }
 
 - (void) updateProps:(const react::Props::Shared&)props
             oldProps:(const react::Props::Shared&)oldProps {
-  // TODO: const auto& newViewProps = *std::static_pointer_cast<${namespace}::${propsClassName} const>(props);
+  // 1. Downcast props
+  const auto& newViewPropsConst = *std::static_pointer_cast<${propsClassName} const>(props);
+  auto& newViewProps = const_cast<${propsClassName}&>(newViewPropsConst);
+  ${swiftNamespace}::${HybridTSpecCxx}& swiftPart = _hybridView->getSwiftPart();
 
+  // 2. Update each prop
+  swiftPart.beforeUpdate();
+
+  ${indent(propAssignments.join('\n'), '  ')}
+
+  swiftPart.afterUpdate();
+
+  // 3. Continue in base class
   [super updateProps:props oldProps:oldProps];
 }
 

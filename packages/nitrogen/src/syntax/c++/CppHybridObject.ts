@@ -73,7 +73,7 @@ namespace ${cxxNamespace} {
       explicit ${name.HybridTSpec}(): HybridObject(TAG) { }
 
       // Destructor
-      virtual ~${name.HybridTSpec}() { }
+      ~${name.HybridTSpec}() override = default;
 
     public:
       // Properties

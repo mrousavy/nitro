@@ -42,7 +42,9 @@ namespace margelo::nitro::image {
 
   public:
     // Get the Swift part
-    inline NitroImage::HybridImageFactorySpec_cxx getSwiftPart() noexcept { return _swiftPart; }
+    inline NitroImage::HybridImageFactorySpec_cxx& getSwiftPart() noexcept {
+      return _swiftPart;
+    }
 
   public:
     // Get memory pressure

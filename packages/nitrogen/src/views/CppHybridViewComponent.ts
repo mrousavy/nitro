@@ -5,6 +5,7 @@ import { createFileMetadataString, escapeCppName } from '../syntax/helpers.js'
 import { NitroConfig } from '../config/NitroConfig.js'
 import { getHybridObjectName } from '../syntax/getHybridObjectName.js'
 import { includeHeader } from '../syntax/c++/includeNitroHeader.js'
+import { createHostComponentJs } from './createHostComponentJs.js'
 
 interface ViewComponentNames {
   propsClassName: `${string}Props`
@@ -40,7 +41,7 @@ export function createViewComponentShadowNodeFiles(
     )
   }
 
-  const name = getHybridObjectName(spec.name)
+  const { T, HybridT } = getHybridObjectName(spec.name)
   const {
     propsClassName,
     stateClassName,
@@ -53,7 +54,7 @@ export function createViewComponentShadowNodeFiles(
   const namespace = NitroConfig.getCxxNamespace('c++', 'views')
 
   const properties = spec.properties.map(
-    (p) => `${p.type.getCode('c++')} ${escapeCppName(p.name)};`
+    (p) => `CachedProp<${p.type.getCode('c++')}> ${escapeCppName(p.name)};`
   )
   const cases = spec.properties.map(
     (p) => `case hashString("${p.name}"): return true;`
@@ -74,6 +75,7 @@ ${createFileMetadataString(`${component}.hpp`)}
 #include <optional>
 #include <NitroModules/NitroDefines.hpp>
 #include <NitroModules/NitroHash.hpp>
+#include <NitroModules/CachedProp.hpp>
 #include <react/renderer/core/ConcreteComponentDescriptor.h>
 #include <react/renderer/core/PropsParserContext.h>
 #include <react/renderer/components/view/ConcreteViewShadowNode.h>
@@ -88,14 +90,15 @@ namespace ${namespace} {
   /**
    * The name of the actual native View.
    */
-  extern const char ${nameVariable}[] = "${name.HybridT}";
+  extern const char ${nameVariable}[] = "${T}";
 
   /**
    * Props for the "${spec.name}" View.
    */
   class ${propsClassName} final: public react::ViewProps {
   public:
-    explicit ${propsClassName}() = default;
+    ${propsClassName}() = default;
+    ${propsClassName}(const ${propsClassName}&);
     ${propsClassName}(const react::PropsParserContext& context,
   ${createIndentation(propsClassName.length)}   const ${propsClassName}& sourceProps,
   ${createIndentation(propsClassName.length)}   const react::RawProps& rawProps);
@@ -112,11 +115,22 @@ namespace ${namespace} {
    */
   class ${stateClassName} final {
   public:
-    explicit ${stateClassName}() = default;
+    ${stateClassName}() = default;
 
   public:
-    void setProps(const ${propsClassName}& props) { _props = props; }
+    void setProps(${propsClassName}&& props) { _props.emplace(props); }
     const std::optional<${propsClassName}>& getProps() const { return _props; }
+
+  public:
+#ifdef ANDROID
+  ${stateClassName}(const CustomStateData& previousState, folly::dynamic data) {}
+  folly::dynamic getDynamic() const {
+    throw std::runtime_error("${stateClassName} does not support folly!");
+  }
+  react::MapBuffer getMapBuffer() const {
+    throw std::runtime_error("${stateClassName} does not support MapBuffer!");
+  };
+#endif
 
   private:
     std::optional<${propsClassName}> _props;
@@ -125,10 +139,10 @@ namespace ${namespace} {
   /**
    * The Shadow Node for the "${spec.name}" View.
    */
-  using ${shadowNodeClassName} = react::ConcreteViewShadowNode<${nameVariable},
-        ${shadowIndent}                                 react::ViewEventEmitter,
-        ${shadowIndent}                                 ${propsClassName},
-        ${shadowIndent}                                 ${stateClassName}>;
+  using ${shadowNodeClassName} = react::ConcreteViewShadowNode<${nameVariable} /* "${HybridT}" */,
+        ${shadowIndent}                                 ${propsClassName} /* custom props */,
+        ${shadowIndent}                                 react::ViewEventEmitter /* default */,
+        ${shadowIndent}                                 ${stateClassName} /* custom state */>;
 
   /**
    * The Component Descriptor for the "${spec.name}" View.
@@ -146,7 +160,7 @@ namespace ${namespace} {
 } // namespace ${namespace}
 
 #else
-  #warning "View Component '${name.HybridT}' will be unavailable in React Native, because it requires React Native 78 or higher."
+  #warning "View Component '${HybridT}' will be unavailable in React Native, because it requires React Native 78 or higher."
 #endif
 `.trim()
 
@@ -154,35 +168,51 @@ namespace ${namespace} {
   const propInitializers = [
     'react::ViewProps(context, sourceProps, rawProps, filterObjectKeys)',
   ]
+  const propCopyInitializers = ['react::ViewProps()']
   for (const prop of spec.properties) {
+    const name = escapeCppName(prop.name)
+    const type = prop.type.getCode('c++')
     propInitializers.push(
       `
-/* ${prop.name} */ ${escapeCppName(prop.name)}([&](){
-  const react::RawValue* rawValue = rawProps.at("${prop.name}", nullptr, nullptr);
-  if (rawValue == nullptr) { ${prop.type.kind === 'optional' ? 'return nullptr;' : `throw std::runtime_error("${spec.name}: Prop \\"${prop.name}\\" is required and cannot be undefined!");`} }
-  const auto& [runtime, value] = (std::pair<jsi::Runtime*, const jsi::Value&>)*rawValue;
-  return JSIConverter<${prop.type.getCode('c++')}>::fromJSI(*runtime, value);
+${name}([&]() -> CachedProp<${type}> {
+  try {
+    const react::RawValue* rawValue = rawProps.at("${prop.name}", nullptr, nullptr);
+    if (rawValue == nullptr) return sourceProps.${name};
+    const auto& [runtime, value] = (std::pair<jsi::Runtime*, const jsi::Value&>)*rawValue;
+    return CachedProp<${type}>::fromRawValue(*runtime, value, sourceProps.${name});
+  } catch (const std::exception& exc) {
+    throw std::runtime_error(std::string("${spec.name}.${prop.name}: ") + exc.what());
+  }
 }())`.trim()
     )
+    propCopyInitializers.push(`${name}(other.${name})`)
   }
 
   const ctorIndent = createIndentation(propsClassName.length * 2)
   const componentCode = `
 ${createFileMetadataString(`${component}.cpp`)}
 
-#include "${component}.hpp"
-#include <NitroModules/JSIConverter.hpp>
-
 #if REACT_NATIVE_VERSION >= 78
+
+#include "${component}.hpp"
+#include <string>
+#include <exception>
+#include <utility>
+#include <NitroModules/JSIConverter.hpp>
+#include <react/renderer/core/RawValue.h>
+#include <react/renderer/core/ShadowNode.h>
+#include <react/renderer/core/ComponentDescriptor.h>
+#include <react/renderer/components/view/ViewProps.h>
 
 namespace ${namespace} {
 
   ${propsClassName}::${propsClassName}(const react::PropsParserContext& context,
   ${ctorIndent}   const ${propsClassName}& sourceProps,
   ${ctorIndent}   const react::RawProps& rawProps):
-    ${indent(propInitializers.join(',\n'), '    ')} {
-    // TODO: Instead of eagerly converting each prop, only convert the ones that changed on demand.
-  }
+    ${indent(propInitializers.join(',\n'), '    ')} { }
+
+  ${propsClassName}::${propsClassName}(const ${propsClassName}& other):
+    ${indent(propCopyInitializers.join(',\n'), '    ')} { }
 
   bool ${propsClassName}::filterObjectKeys(const std::string& propName) {
     switch (hashString(propName)) {
@@ -214,7 +244,7 @@ namespace ${namespace} {
 #endif
 `.trim()
 
-  return [
+  const files: SourceFile[] = [
     {
       name: `${component}.hpp`,
       content: componentHeaderCode,
@@ -230,4 +260,7 @@ namespace ${namespace} {
       subdirectory: ['views'],
     },
   ]
+  const jsFiles = createHostComponentJs(spec)
+  files.push(...(jsFiles as unknown as SourceFile[]))
+  return files
 }

@@ -8,6 +8,7 @@
 #pragma once
 
 #include "BorrowingReference.hpp"
+#include "NitroDefines.hpp"
 #include "OwningLock.hpp"
 #include <atomic>
 #include <cstddef>
@@ -39,8 +40,10 @@ public:
   OwningReference(const OwningReference& ref)
       : _value(ref._value), _isDeleted(ref._isDeleted), _strongRefCount(ref._strongRefCount), _weakRefCount(ref._weakRefCount),
         _mutex(ref._mutex) {
-    // increment ref count after copy
-    (*_strongRefCount)++;
+    if (_strongRefCount != nullptr) {
+      // increment ref count after copy
+      (*_strongRefCount)++;
+    }
   }
 
   OwningReference(OwningReference&& ref)
@@ -161,10 +164,20 @@ public:
   }
 
   inline T& operator*() const {
+#ifdef NITRO_DEBUG
+    if (!hasValue()) [[unlikely]] {
+      throw std::runtime_error("Tried to dereference (*) nullptr OwningReference<T>!");
+    }
+#endif
     return *_value;
   }
 
   inline T* operator->() const {
+#ifdef NITRO_DEBUG
+    if (!hasValue()) [[unlikely]] {
+      throw std::runtime_error("Tried to dereference (->) nullptr OwningReference<T>!");
+    }
+#endif
     return _value;
   }
 

@@ -44,6 +44,7 @@ Pod::Spec.new do |s|
     "cpp/threading/Dispatcher.hpp",
     "cpp/utils/NitroHash.hpp",
     "cpp/utils/NitroDefines.hpp",
+    "cpp/views/CachedProp.hpp",
     # Public iOS-specific headers that will be exposed in modulemap (for Swift)
     "ios/core/ArrayBufferHolder.hpp",
     "ios/core/AnyMapHolder.hpp",

@@ -42,6 +42,7 @@ target_sources(
   ../nitrogen/generated/android/c++/JHybridBaseSpec.cpp
   ../nitrogen/generated/android/c++/JHybridChildSpec.cpp
   ../nitrogen/generated/android/c++/JHybridTestViewSpec.cpp
+  ../nitrogen/generated/android/c++/views/JHybridTestViewStateUpdater.cpp
 )
 
 # Define a flag to check if we are building properly

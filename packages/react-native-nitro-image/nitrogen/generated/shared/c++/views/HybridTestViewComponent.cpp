@@ -5,10 +5,17 @@
 /// Copyright © 2025 Marc Rousavy @ Margelo
 ///
 
-#include "HybridTestViewComponent.hpp"
-#include <NitroModules/JSIConverter.hpp>
-
 #if REACT_NATIVE_VERSION >= 78
+
+#include "HybridTestViewComponent.hpp"
+#include <string>
+#include <exception>
+#include <utility>
+#include <NitroModules/JSIConverter.hpp>
+#include <react/renderer/core/RawValue.h>
+#include <react/renderer/core/ShadowNode.h>
+#include <react/renderer/core/ComponentDescriptor.h>
+#include <react/renderer/components/view/ViewProps.h>
 
 namespace margelo::nitro::image::views {
 
@@ -16,20 +23,31 @@ namespace margelo::nitro::image::views {
                                            const HybridTestViewProps& sourceProps,
                                            const react::RawProps& rawProps):
     react::ViewProps(context, sourceProps, rawProps, filterObjectKeys),
-    /* someProp */ someProp([&](){
-      const react::RawValue* rawValue = rawProps.at("someProp", nullptr, nullptr);
-      if (rawValue == nullptr) { throw std::runtime_error("TestView: Prop \"someProp\" is required and cannot be undefined!"); }
-      const auto& [runtime, value] = (std::pair<jsi::Runtime*, const jsi::Value&>)*rawValue;
-      return JSIConverter<bool>::fromJSI(*runtime, value);
+    someProp([&]() -> CachedProp<bool> {
+      try {
+        const react::RawValue* rawValue = rawProps.at("someProp", nullptr, nullptr);
+        if (rawValue == nullptr) return sourceProps.someProp;
+        const auto& [runtime, value] = (std::pair<jsi::Runtime*, const jsi::Value&>)*rawValue;
+        return CachedProp<bool>::fromRawValue(*runtime, value, sourceProps.someProp);
+      } catch (const std::exception& exc) {
+        throw std::runtime_error(std::string("TestView.someProp: ") + exc.what());
+      }
     }()),
-    /* someCallback */ someCallback([&](){
-      const react::RawValue* rawValue = rawProps.at("someCallback", nullptr, nullptr);
-      if (rawValue == nullptr) { throw std::runtime_error("TestView: Prop \"someCallback\" is required and cannot be undefined!"); }
-      const auto& [runtime, value] = (std::pair<jsi::Runtime*, const jsi::Value&>)*rawValue;
-      return JSIConverter<std::function<void(double /* someParam */)>>::fromJSI(*runtime, value);
-    }()) {
-    // TODO: Instead of eagerly converting each prop, only convert the ones that changed on demand.
-  }
+    someCallback([&]() -> CachedProp<std::function<void(double /* someParam */)>> {
+      try {
+        const react::RawValue* rawValue = rawProps.at("someCallback", nullptr, nullptr);
+        if (rawValue == nullptr) return sourceProps.someCallback;
+        const auto& [runtime, value] = (std::pair<jsi::Runtime*, const jsi::Value&>)*rawValue;
+        return CachedProp<std::function<void(double /* someParam */)>>::fromRawValue(*runtime, value, sourceProps.someCallback);
+      } catch (const std::exception& exc) {
+        throw std::runtime_error(std::string("TestView.someCallback: ") + exc.what());
+      }
+    }()) { }
+
+  HybridTestViewProps::HybridTestViewProps(const HybridTestViewProps& other):
+    react::ViewProps(),
+    someProp(other.someProp),
+    someCallback(other.someCallback) { }
 
   bool HybridTestViewProps::filterObjectKeys(const std::string& propName) {
     switch (hashString(propName)) {

@@ -59,6 +59,7 @@ private:
 
 private:
   std::mutex _mutex;
+  std::vector<BorrowingReference<jsi::Value>> _valueCache;
   std::vector<BorrowingReference<jsi::Object>> _objectCache;
   std::vector<BorrowingReference<jsi::Function>> _functionCache;
   std::vector<BorrowingReference<jsi::WeakObject>> _weakObjectCache;
@@ -82,6 +83,11 @@ public:
   }
 
 public:
+  OwningReference<jsi::Value> makeShared(jsi::Value&& value) {
+    OwningReference<jsi::Value> owning(new jsi::Value(std::move(value)));
+    _strongCache->_valueCache.push_back(owning.weak());
+    return owning;
+  }
   OwningReference<jsi::Object> makeShared(jsi::Object&& value) {
     OwningReference<jsi::Object> owning(new jsi::Object(std::move(value)));
     _strongCache->_objectCache.push_back(owning.weak());

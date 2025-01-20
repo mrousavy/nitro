@@ -1,0 +1,10 @@
+{
+  "uiViewClassName": "TestView",
+  "supportsRawText": false,
+  "bubblingEventTypes": {},
+  "directEventTypes": {},
+  "validAttributes": {
+    "someProp": true,
+    "someCallback": true
+  }
+}

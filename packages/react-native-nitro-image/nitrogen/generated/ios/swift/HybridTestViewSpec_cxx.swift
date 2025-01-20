@@ -139,4 +139,16 @@ public class HybridTestViewSpec_cxx {
       return bridge.create_Result_bool_(__exceptionPtr)
     }
   }
+  
+  public final func getView() -> UnsafeMutableRawPointer {
+    return Unmanaged.passRetained(__implementation.view).toOpaque()
+  }
+  
+  public final func beforeUpdate() {
+    __implementation.beforeUpdate()
+  }
+  
+  public final func afterUpdate() {
+    __implementation.afterUpdate()
+  }
 }

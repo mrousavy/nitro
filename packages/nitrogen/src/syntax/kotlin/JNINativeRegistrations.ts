@@ -4,6 +4,7 @@ export interface JNINativeRegistration {
   namespace: string
   className: string
   import: SourceImport
+  ifGuard?: string
 }
 
 const jniNativeRegistrations: JNINativeRegistration[] = []
