@@ -192,6 +192,7 @@ void J${stateUpdaterName}::updateViewProps(jni::alias_ref<jni::JClass>,
       space: 'user',
       language: 'c++',
     },
+    ifGuard: `REACT_NATIVE_VERSION >= 78`,
   })
 
   return [

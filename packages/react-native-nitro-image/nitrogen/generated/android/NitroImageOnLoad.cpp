@@ -59,7 +59,9 @@ int initialize(JavaVM* vm) {
     margelo::nitro::image::JHybridBaseSpec::registerNatives();
     margelo::nitro::image::JHybridChildSpec::registerNatives();
     margelo::nitro::image::JHybridTestViewSpec::registerNatives();
+    #if REACT_NATIVE_VERSION >= 78
     margelo::nitro::image::views::JHybridTestViewStateUpdater::registerNatives();
+    #endif
 
     // Register Nitro Hybrid Objects
     HybridObjectRegistry::registerHybridObjectConstructor(
