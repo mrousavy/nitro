@@ -76,7 +76,7 @@ namespace margelo::nitro::image {
       explicit HybridTestObjectSwiftKotlinSpec(): HybridObject(TAG) { }
 
       // Destructor
-      virtual ~HybridTestObjectSwiftKotlinSpec() { }
+      ~HybridTestObjectSwiftKotlinSpec() override = default;
 
     public:
       // Properties

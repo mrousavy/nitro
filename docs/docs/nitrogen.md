@@ -176,10 +176,13 @@ All the generated sources (`nitrogen/generated/`) need to be part of your librar
 
   #### iOS
 
-  On iOS, you need to call `add_nitrogen_files(...)` from your library's `.podspec`. Put this **after** any `s.source_files =` calls:
+  On iOS, you need to call `add_nitrogen_files(...)` from your library's `.podspec`. Put this at the very end of your spec declaration:
   ```ruby
-  load 'nitrogen/generated/ios/NitroExample+autolinking.rb'
-  add_nitrogen_files(s)
+  Pod::Spec.new do |s|
+    # ...
+    load 'nitrogen/generated/ios/NitroExample+autolinking.rb'
+    add_nitrogen_files(s)
+  end
   ```
 
   #### Android
