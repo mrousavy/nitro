@@ -38,6 +38,7 @@ include_directories(
   ../cpp/threading
   ../cpp/turbomodule
   ../cpp/utils
+  ../cpp/views
   # Android-specific C++ includes
   src/main/cpp/core
   src/main/cpp/registry

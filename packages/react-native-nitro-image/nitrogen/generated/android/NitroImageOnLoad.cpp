@@ -30,6 +30,7 @@
 #include "JHybridBaseSpec.hpp"
 #include "JHybridChildSpec.hpp"
 #include "JHybridTestViewSpec.hpp"
+#include "JHybridTestViewStateUpdater.hpp"
 #include <NitroModules/JNISharedPtr.hpp>
 #include <NitroModules/DefaultConstructableObject.hpp>
 #include "HybridTestObjectCpp.hpp"
@@ -58,6 +59,7 @@ int initialize(JavaVM* vm) {
     margelo::nitro::image::JHybridBaseSpec::registerNatives();
     margelo::nitro::image::JHybridChildSpec::registerNatives();
     margelo::nitro::image::JHybridTestViewSpec::registerNatives();
+    margelo::nitro::image::views::JHybridTestViewStateUpdater::registerNatives();
 
     // Register Nitro Hybrid Objects
     HybridObjectRegistry::registerHybridObjectConstructor(

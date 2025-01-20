@@ -18,7 +18,7 @@ struct CachedProp {
 public:
   T value;
   OwningReference<jsi::Value> jsiValue;
-  bool isDirty;
+  bool isDirty = false;
 
 public:
   bool equals(jsi::Runtime& runtime, const jsi::Value& other) const {
