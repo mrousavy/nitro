@@ -30,7 +30,7 @@
 #include "JHybridBaseSpec.hpp"
 #include "JHybridChildSpec.hpp"
 #include "JHybridTestViewSpec.hpp"
-#include "JHybridTestViewStateUpdater.hpp"
+#include "views/JHybridTestViewStateUpdater.hpp"
 #include <NitroModules/JNISharedPtr.hpp>
 #include <NitroModules/DefaultConstructableObject.hpp>
 #include "HybridTestObjectCpp.hpp"

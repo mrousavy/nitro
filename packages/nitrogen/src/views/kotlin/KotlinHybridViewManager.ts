@@ -188,7 +188,7 @@ void J${stateUpdaterName}::updateViewProps(jni::alias_ref<jni::JClass>,
     namespace: cxxNamespace,
     className: `J${stateUpdaterName}`,
     import: {
-      name: `J${stateUpdaterName}.hpp`,
+      name: `views/J${stateUpdaterName}.hpp`,
       space: 'user',
       language: 'c++',
     },
