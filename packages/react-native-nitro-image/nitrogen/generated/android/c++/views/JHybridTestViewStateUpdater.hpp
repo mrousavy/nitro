@@ -19,7 +19,7 @@ using namespace facebook;
 
 class JHybridTestViewStateUpdater: jni::HybridClass<JHybridTestViewStateUpdater> {
 public:
-  static constexpr auto kJavaDescriptor = "Lcom.margelo.nitro.image.views.HybridTestViewStateUpdater;";
+  static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/image/views/HybridTestViewStateUpdater;";
 
 public:
   static void updateViewProps(jni::alias_ref<jni::JClass>,

@@ -100,7 +100,7 @@ class ${stateUpdaterName} {
   `.trim()
 
   const updaterJniDescriptor = NitroConfig.getAndroidPackage(
-    'java/kotlin',
+    'c++/jni',
     'views',
     stateUpdaterName
   )
