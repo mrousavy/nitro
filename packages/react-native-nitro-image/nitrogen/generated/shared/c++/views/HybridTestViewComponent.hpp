@@ -56,7 +56,7 @@ namespace margelo::nitro::image::views {
     HybridTestViewState() = default;
 
   public:
-    void setProps(HybridTestViewProps&& props) { _props.emplace(props); }
+    void setProps(HybridTestViewProps&& props) { _props.emplace(std::move(props)); }
     const std::optional<HybridTestViewProps>& getProps() const { return _props; }
 
   public:

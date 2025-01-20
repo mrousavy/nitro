@@ -118,7 +118,7 @@ namespace ${namespace} {
     ${stateClassName}() = default;
 
   public:
-    void setProps(${propsClassName}&& props) { _props.emplace(props); }
+    void setProps(${propsClassName}&& props) { _props.emplace(std::move(props)); }
     const std::optional<${propsClassName}>& getProps() const { return _props; }
 
   public:
