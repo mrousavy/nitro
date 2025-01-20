@@ -192,6 +192,8 @@ ${name}([&]() -> CachedProp<${type}> {
   const componentCode = `
 ${createFileMetadataString(`${component}.cpp`)}
 
+#if REACT_NATIVE_VERSION >= 78
+
 #include "${component}.hpp"
 #include <string>
 #include <exception>
@@ -201,8 +203,6 @@ ${createFileMetadataString(`${component}.cpp`)}
 #include <react/renderer/core/ShadowNode.h>
 #include <react/renderer/core/ComponentDescriptor.h>
 #include <react/renderer/components/view/ViewProps.h>
-
-#if REACT_NATIVE_VERSION >= 78
 
 namespace ${namespace} {
 
