@@ -59,6 +59,17 @@ namespace margelo::nitro::image::views {
     void setProps(HybridTestViewProps&& props) { _props.emplace(props); }
     const std::optional<HybridTestViewProps>& getProps() const { return _props; }
 
+  public:
+#ifdef ANDROID
+  HybridTestViewState(const CustomStateData& previousState, folly::dynamic data) {}
+  folly::dynamic getDynamic() const {
+    throw std::runtime_error("HybridTestViewState does not support folly!");
+  }
+  react::MapBuffer getMapBuffer() const {
+    throw std::runtime_error("HybridTestViewState does not support MapBuffer!");
+  };
+#endif
+
   private:
     std::optional<HybridTestViewProps> _props;
   };

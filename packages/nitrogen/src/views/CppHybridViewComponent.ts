@@ -121,6 +121,17 @@ namespace ${namespace} {
     void setProps(${propsClassName}&& props) { _props.emplace(props); }
     const std::optional<${propsClassName}>& getProps() const { return _props; }
 
+  public:
+#ifdef ANDROID
+  ${stateClassName}(const CustomStateData& previousState, folly::dynamic data) {}
+  folly::dynamic getDynamic() const {
+    throw std::runtime_error("${stateClassName} does not support folly!");
+  }
+  react::MapBuffer getMapBuffer() const {
+    throw std::runtime_error("${stateClassName} does not support MapBuffer!");
+  };
+#endif
+
   private:
     std::optional<${propsClassName}> _props;
   };
