@@ -11,6 +11,9 @@ export * from './specs/TestObject.nitro'
 export * from './specs/Image.nitro'
 export * from './specs/ImageFactory.nitro'
 
+import { car } from '@nitrogen/bla'
+console.log(car)
+
 /**
  * Constructors for creating instances of `Image`.
  */
