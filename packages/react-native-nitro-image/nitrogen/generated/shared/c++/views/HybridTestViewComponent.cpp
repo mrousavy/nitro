@@ -6,12 +6,11 @@
 ///
 
 #include "HybridTestViewComponent.hpp"
-#include <NitroModules/NitroDefines.hpp>
-#if REACT_NATIVE_VERSION_MINOR >= 78
 
 #include <string>
 #include <exception>
 #include <utility>
+#include <NitroModules/NitroDefines.hpp>
 #include <NitroModules/JSIConverter.hpp>
 #include <react/renderer/core/RawValue.h>
 #include <react/renderer/core/ShadowNode.h>
@@ -77,5 +76,3 @@ namespace margelo::nitro::image::views {
   }
 
 } // namespace margelo::nitro::image::views
-
-#endif

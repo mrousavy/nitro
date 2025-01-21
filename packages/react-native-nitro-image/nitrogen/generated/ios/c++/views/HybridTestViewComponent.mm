@@ -6,10 +6,9 @@
 ///
 
 #import "HybridTestViewComponent.hpp"
-#include <NitroModules/NitroDefines.hpp>
-#if REACT_NATIVE_VERSION_MINOR >= 78
 
 #import <memory>
+#import <NitroModules/NitroDefines.hpp>
 #import <react/renderer/componentregistry/ComponentDescriptorProvider.h>
 #import <React/RCTViewComponentView.h>
 #import <React/RCTComponentViewFactory.h>
@@ -89,5 +88,3 @@ using namespace margelo::nitro::image::views;
 }
 
 @end
-
-#endif

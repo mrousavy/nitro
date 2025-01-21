@@ -6,10 +6,8 @@
 ///
 
 #include "JHybridTestViewStateUpdater.hpp"
-#include <NitroModules/NitroDefines.hpp>
-#if REACT_NATIVE_VERSION_MINOR >= 78
-
 #include "views/HybridTestViewComponent.hpp"
+#include <NitroModules/NitroDefines.hpp>
 
 namespace margelo::nitro::image::views {
 
@@ -39,5 +37,3 @@ void JHybridTestViewStateUpdater::updateViewProps(jni::alias_ref<jni::JClass>,
 }
 
 } // namespace margelo::nitro::image::views
-
-#endif

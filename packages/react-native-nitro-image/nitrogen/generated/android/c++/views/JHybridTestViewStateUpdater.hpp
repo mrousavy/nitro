@@ -7,10 +7,8 @@
 
 #pragma once
 
-#include <NitroModules/NitroDefines.hpp>
-#if REACT_NATIVE_VERSION_MINOR >= 78
-
 #include <fbjni/fbjni.h>
+#include <NitroModules/NitroDefines.hpp>
 #include <react/fabric/StateWrapperImpl.h>
 #include "JHybridTestViewSpec.hpp"
 
@@ -36,5 +34,3 @@ public:
 };
 
 } // namespace margelo::nitro::image::views
-
-#endif
