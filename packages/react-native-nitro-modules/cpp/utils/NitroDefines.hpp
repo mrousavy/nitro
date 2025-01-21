@@ -52,14 +52,4 @@
 #define SWIFT_NONCOPYABLE
 #endif
 
-// React Native Support
-#if __has_include(<cxxreact/ReactNativeVersion.h>)
-#include <cxxreact/ReactNativeVersion.h>
-#endif
-#ifndef REACT_NATIVE_VERSION_MINOR
-#define REACT_NATIVE_VERSION_MAJOR 0
-#define REACT_NATIVE_VERSION_MINOR 0
-#define REACT_NATIVE_VERSION_PATCH 0
-#endif
-
 #endif /* NitroDefines_h */

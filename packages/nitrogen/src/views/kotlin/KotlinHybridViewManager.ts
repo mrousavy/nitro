@@ -109,10 +109,8 @@ ${createFileMetadataString(`J${stateUpdaterName}.hpp`)}
 
 #pragma once
 
-#include <NitroModules/NitroDefines.hpp>
-#if REACT_NATIVE_VERSION_MINOR >= 78
-
 #include <fbjni/fbjni.h>
+#include <NitroModules/NitroDefines.hpp>
 #include <react/fabric/StateWrapperImpl.h>
 #include "${JHybridTSpec}.hpp"
 
@@ -138,8 +136,6 @@ public:
 };
 
 } // namespace ${cxxNamespace}
-
-#endif
   `.trim()
 
   const propsUpdaterCalls = spec.properties.map((p) => {
@@ -154,10 +150,8 @@ if (props.${name}.isDirty) {
 ${createFileMetadataString(`J${stateUpdaterName}.cpp`)}
 
 #include "J${stateUpdaterName}.hpp"
-#include <NitroModules/NitroDefines.hpp>
-#if REACT_NATIVE_VERSION_MINOR >= 78
-
 #include "views/${component}.hpp"
+#include <NitroModules/NitroDefines.hpp>
 
 namespace ${cxxNamespace} {
 
@@ -182,8 +176,6 @@ void J${stateUpdaterName}::updateViewProps(jni::alias_ref<jni::JClass>,
 }
 
 } // namespace ${cxxNamespace}
-
-#endif
 `.trim()
 
   addJNINativeRegistration({
@@ -194,7 +186,6 @@ void J${stateUpdaterName}::updateViewProps(jni::alias_ref<jni::JClass>,
       space: 'user',
       language: 'c++',
     },
-    ifGuard: `REACT_NATIVE_VERSION_MINOR >= 78`,
   })
 
   return [
