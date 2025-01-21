@@ -33,9 +33,9 @@ public:
       // jsi::Value hasn't changed - no need to convert it again!
       return oldProp;
     }
-    auto converted = JSIConverter<T>::fromJSI(runtime, value);
-    auto cache = JSICache::getOrCreateCache(runtime);
-    auto cached = cache.makeShared(jsi::Value(runtime, value));
+    T converted = JSIConverter<T>::fromJSI(runtime, value);
+    JSICacheReference cache = JSICache::getOrCreateCache(runtime);
+    OwningReference<jsi::Value> cached = cache.makeShared(jsi::Value(runtime, value));
     return CachedProp<T>(std::move(converted), std::move(cached), /* isDirty */ true);
   }
 };
