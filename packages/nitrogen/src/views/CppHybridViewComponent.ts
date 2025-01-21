@@ -70,10 +70,10 @@ ${createFileMetadataString(`${component}.hpp`)}
 
 #pragma once
 
-#if REACT_NATIVE_VERSION >= 78
+#include <NitroModules/NitroDefines.hpp>
+#if REACT_NATIVE_VERSION_MINOR >= 78
 
 #include <optional>
-#include <NitroModules/NitroDefines.hpp>
 #include <NitroModules/NitroHash.hpp>
 #include <NitroModules/CachedProp.hpp>
 #include <react/renderer/core/ConcreteComponentDescriptor.h>
@@ -160,7 +160,7 @@ namespace ${namespace} {
 } // namespace ${namespace}
 
 #else
-  #warning "View Component '${HybridT}' will be unavailable in React Native, because it requires React Native 78 or higher."
+#warning "View Component '${HybridT}' will be unavailable in React Native, because it requires React Native 78 or higher."
 #endif
 `.trim()
 
@@ -192,9 +192,10 @@ ${name}([&]() -> CachedProp<${type}> {
   const componentCode = `
 ${createFileMetadataString(`${component}.cpp`)}
 
-#if REACT_NATIVE_VERSION >= 78
-
 #include "${component}.hpp"
+#include <NitroModules/NitroDefines.hpp>
+#if REACT_NATIVE_VERSION_MINOR >= 78
+
 #include <string>
 #include <exception>
 #include <utility>

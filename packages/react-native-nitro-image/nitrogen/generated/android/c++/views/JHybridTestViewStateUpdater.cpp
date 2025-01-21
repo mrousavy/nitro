@@ -5,9 +5,10 @@
 /// Copyright © 2025 Marc Rousavy @ Margelo
 ///
 
-#if REACT_NATIVE_VERSION >= 78
-
 #include "JHybridTestViewStateUpdater.hpp"
+#include <NitroModules/NitroDefines.hpp>
+#if REACT_NATIVE_VERSION_MINOR >= 78
+
 #include "views/HybridTestViewComponent.hpp"
 
 namespace margelo::nitro::image::views {

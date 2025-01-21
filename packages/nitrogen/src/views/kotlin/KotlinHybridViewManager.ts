@@ -109,7 +109,8 @@ ${createFileMetadataString(`J${stateUpdaterName}.hpp`)}
 
 #pragma once
 
-#if REACT_NATIVE_VERSION >= 78
+#include <NitroModules/NitroDefines.hpp>
+#if REACT_NATIVE_VERSION_MINOR >= 78
 
 #include <fbjni/fbjni.h>
 #include <react/fabric/StateWrapperImpl.h>
@@ -152,9 +153,10 @@ if (props.${name}.isDirty) {
   const updaterJniCppCode = `
 ${createFileMetadataString(`J${stateUpdaterName}.cpp`)}
 
-#if REACT_NATIVE_VERSION >= 78
-
 #include "J${stateUpdaterName}.hpp"
+#include <NitroModules/NitroDefines.hpp>
+#if REACT_NATIVE_VERSION_MINOR >= 78
+
 #include "views/${component}.hpp"
 
 namespace ${cxxNamespace} {
@@ -192,7 +194,7 @@ void J${stateUpdaterName}::updateViewProps(jni::alias_ref<jni::JClass>,
       space: 'user',
       language: 'c++',
     },
-    ifGuard: `REACT_NATIVE_VERSION >= 78`,
+    ifGuard: `REACT_NATIVE_VERSION_MINOR >= 78`,
   })
 
   return [
