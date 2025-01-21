@@ -4,18 +4,10 @@
     "../../config/tsconfig.json"
   ],
   "baseUrl": ".",
-  "references": [
-    {
-      "path": "./nitrogen/generated/shared/ts/tsconfig.json"
-    }
-  ],
   "include": ["src"],
   "compilerOptions": {
     "rootDir": "src",
     "outDir": "lib",
-    "jsx": "react",
-    "paths": {
-      "@nitrogen/*": ["./nitrogen/generated/shared/ts/*"]
-    }
+    "jsx": "react"
   }
 }

@@ -11,7 +11,7 @@ export * from './specs/TestObject.nitro'
 export * from './specs/Image.nitro'
 export * from './specs/ImageFactory.nitro'
 
-import { car } from '@nitrogen/bla'
+import { car } from '../nitrogen/generated/shared/ts/bla'
 console.log(car)
 
 /**
