@@ -7,10 +7,10 @@
 
 #pragma once
 
-#if REACT_NATIVE_VERSION >= 78
+#include <NitroModules/NitroDefines.hpp>
+#if REACT_NATIVE_VERSION_MINOR >= 78
 
 #include <optional>
-#include <NitroModules/NitroDefines.hpp>
 #include <NitroModules/NitroHash.hpp>
 #include <NitroModules/CachedProp.hpp>
 #include <react/renderer/core/ConcreteComponentDescriptor.h>
@@ -98,5 +98,5 @@ namespace margelo::nitro::image::views {
 } // namespace margelo::nitro::image::views
 
 #else
-  #warning "View Component 'HybridTestView' will be unavailable in React Native, because it requires React Native 78 or higher."
+#warning "View Component 'HybridTestView' will be unavailable in React Native, because it requires React Native 78 or higher."
 #endif

@@ -7,7 +7,8 @@
 
 #pragma once
 
-#if REACT_NATIVE_VERSION >= 78
+#include <NitroModules/NitroDefines.hpp>
+#if REACT_NATIVE_VERSION_MINOR >= 78
 
 #include <fbjni/fbjni.h>
 #include <react/fabric/StateWrapperImpl.h>
