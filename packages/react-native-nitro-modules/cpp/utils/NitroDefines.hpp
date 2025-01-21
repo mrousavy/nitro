@@ -31,6 +31,7 @@
 #define _CXX_INTEROP_HAS_ATTRIBUTE(x) 0
 #endif
 
+// Closed/Final Enums
 #if _CXX_INTEROP_HAS_ATTRIBUTE(enum_extensibility)
 // Enum is marked as closed/not extensible
 #define CLOSED_ENUM __attribute__((enum_extensibility(closed)))
@@ -38,6 +39,7 @@
 #define CLOSED_ENUM
 #endif
 
+// Swift Support
 #if __has_include(<swift/bridging>)
 // Swift's bridging header defines those things
 #include <swift/bridging>
@@ -48,6 +50,16 @@
 #define SWIFT_PRIVATE
 #define SWIFT_COMPUTED_PROPERTY
 #define SWIFT_NONCOPYABLE
+#endif
+
+// React Native Support
+#if __has_include(<cxxreact/ReactNativeVersion.h>)
+#include <cxxreact/ReactNativeVersion.h>
+#endif
+#ifndef REACT_NATIVE_VERSION_MINOR
+#define REACT_NATIVE_VERSION_MAJOR 0
+#define REACT_NATIVE_VERSION_MINOR 0
+#define REACT_NATIVE_VERSION_PATCH 0
 #endif
 
 #endif /* NitroDefines_h */

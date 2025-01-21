@@ -46,9 +46,10 @@ if (newViewProps.${name}.isDirty) {
   const mmFile = `
 ${createFileMetadataString(`${component}.mm`)}
 
-#if REACT_NATIVE_VERSION >= 78
-
 #import "${component}.hpp"
+#include <NitroModules/NitroDefines.hpp>
+#if REACT_NATIVE_VERSION_MINOR >= 78
+
 #import <memory>
 #import <react/renderer/componentregistry/ComponentDescriptorProvider.h>
 #import <React/RCTViewComponentView.h>

@@ -11,6 +11,7 @@
 #include "HybridObject.hpp"
 #include <memory>
 #include <string>
+#include <cxxreact/ReactNativeVersion.h>
 
 namespace margelo::nitro {
 
