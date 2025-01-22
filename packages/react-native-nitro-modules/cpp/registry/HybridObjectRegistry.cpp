@@ -8,6 +8,7 @@
 #include "HybridObjectRegistry.hpp"
 #include "NitroDefines.hpp"
 #include "NitroLogger.hpp"
+#include <numeric>
 
 namespace margelo::nitro {
 
