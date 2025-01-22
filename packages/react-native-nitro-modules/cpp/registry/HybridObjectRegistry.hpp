@@ -44,6 +44,7 @@ public:
 
 private:
   static std::unordered_map<std::string, HybridObjectConstructorFn>& getRegistry();
+  static std::string getAllRegisteredHybridObjectNamesToString();
 
 private:
   static constexpr auto TAG = "HybridObjectRegistry";
