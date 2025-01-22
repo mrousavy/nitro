@@ -69,4 +69,12 @@ export interface NitroModulesProxy extends HybridObject {
    * Returns whether the given {@linkcode object} has NativeState or not.
    */
   hasNativeState(object: unknown): boolean
+
+  /**
+   * Re-calculates `memorySize` of the given {@linkcode HybridObject} and notifies
+   * the JS VM about the newly updated memory footprint.
+   *
+   * This is achieved by just doing a round-trip from JS -> native -> JS.
+   */
+  updateMemorySize(obj: HybridObject): HybridObject
 }

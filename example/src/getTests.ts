@@ -9,7 +9,10 @@ import {
 import type { State } from './Testers'
 import { it } from './Testers'
 import { stringify } from './utils'
-import { getHybridObjectConstructor } from 'react-native-nitro-modules'
+import {
+  getHybridObjectConstructor,
+  NitroModules,
+} from 'react-native-nitro-modules'
 import { InteractionManager } from 'react-native'
 
 type TestResult =
@@ -1284,6 +1287,64 @@ export function getTests(
         const a = new HybridTestObjectCpp()
         // eslint-disable-next-line no-self-compare
         return a === a
+      })
+        .didNotThrow()
+        .equals(true)
+    ),
+    createTest('NitroModules.updateMemorySize(obj) works (roundtrip)', () =>
+      it(() => {
+        NitroModules.updateMemorySize(testObject)
+      }).didNotThrow()
+    ),
+    createTest('NitroModules.buildType holds a string', () =>
+      it(() => {
+        return NitroModules.buildType
+      })
+        .didNotThrow()
+        .didReturn('string')
+    ),
+    createTest('NitroModules.version holds a string', () =>
+      it(() => {
+        return NitroModules.version
+      })
+        .didNotThrow()
+        .didReturn('string')
+    ),
+    createTest('NitroModules.getAllHybridObjectNames() returns an array', () =>
+      it(() => {
+        return NitroModules.getAllHybridObjectNames()
+      })
+        .didNotThrow()
+        .toBeArray()
+    ),
+    createTest('NitroModules.box(testObject) returns an object', () =>
+      it(() => {
+        return NitroModules.box(testObject)
+      })
+        .didNotThrow()
+        .didReturn('object')
+    ),
+    createTest(
+      'NitroModules.box(testObject).unbox() returns the same object',
+      () =>
+        it(() => {
+          const boxed = NitroModules.box(testObject)
+          const original = boxed.unbox()
+          return original === testObject
+        })
+          .didNotThrow()
+          .equals(true)
+    ),
+    createTest('NitroModules.hasHybridObject(testObject.name) to be true', () =>
+      it(() => {
+        return NitroModules.hasHybridObject(testObject.name)
+      })
+        .didNotThrow()
+        .equals(true)
+    ),
+    createTest('NitroModules.hasNativeState(testObject) to be true', () =>
+      it(() => {
+        return NitroModules.hasNativeState(testObject)
       })
         .didNotThrow()
         .equals(true)

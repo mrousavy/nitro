@@ -47,10 +47,12 @@ jsi::Value HybridObject::toObject(jsi::Runtime& runtime) {
   if (cachedObject != _objectCache.end()) {
     // 1.1. We have a WeakObject, try to see if it is still alive
     OwningLock<jsi::WeakObject> lock = cachedObject->second.lock();
-    jsi::Value object = cachedObject->second->lock(runtime);
-    if (!object.isUndefined()) {
-      // 1.2. It is still alive - we can use it instead of creating a new one!
-      return object;
+    jsi::Value value = cachedObject->second->lock(runtime);
+    if (!value.isUndefined()) {
+      // 1.2. It is still alive - we can use it instead of creating a new one! But first, let's update memory-size
+      value.getObject(runtime).setExternalMemoryPressure(runtime, getExternalMemorySize());
+      // 1.3. Return it now
+      return value;
     }
   }
 
