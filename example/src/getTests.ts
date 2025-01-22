@@ -1296,5 +1296,33 @@ export function getTests(
         NitroModules.updateMemorySize(testObject)
       }).didNotThrow()
     ),
+    createTest('NitroModules.buildType holds a string', () =>
+      it(() => {
+        return NitroModules.buildType
+      })
+        .didNotThrow()
+        .didReturn('string')
+    ),
+    createTest('NitroModules.getAllHybridObjectNames() returns an array', () =>
+      it(() => {
+        return NitroModules.getAllHybridObjectNames()
+      })
+        .didNotThrow()
+        .toBeArray()
+    ),
+    createTest('NitroModules.hasHybridObject(testObject.name) to be true', () =>
+      it(() => {
+        return NitroModules.hasHybridObject(testObject.name)
+      })
+        .didNotThrow()
+        .equals(true)
+    ),
+    createTest('NitroModules.hasNativeState(testObject) to be true', () =>
+      it(() => {
+        return NitroModules.hasNativeState(testObject)
+      })
+        .didNotThrow()
+        .equals(true)
+    ),
   ]
 }
