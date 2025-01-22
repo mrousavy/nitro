@@ -7,8 +7,8 @@
 
 #include "HybridNitroModulesProxy.hpp"
 #include "HybridObjectRegistry.hpp"
-#include "NitroDefines.hpp"
 #include "JSIConverter.hpp"
+#include "NitroDefines.hpp"
 
 namespace margelo::nitro {
 
