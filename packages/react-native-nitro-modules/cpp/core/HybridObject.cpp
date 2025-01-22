@@ -50,7 +50,7 @@ jsi::Value HybridObject::toObject(jsi::Runtime& runtime) {
     jsi::Value value = cachedObject->second->lock(runtime);
     if (!value.isUndefined()) {
       // 1.2. It is still alive - we can use it instead of creating a new one! But first, let's update memory-size
-      value.asObject(runtime).setExternalMemoryPressure(runtime, getExternalMemorySize());
+      value.getObject(runtime).setExternalMemoryPressure(runtime, getExternalMemorySize());
       // 1.3. Return it now
       return value;
     }
