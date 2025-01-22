@@ -21,6 +21,7 @@ void HybridNitroModulesProxy::loadHybridMethods() {
     prototype.registerHybridMethod("getAllHybridObjectNames", &HybridNitroModulesProxy::getAllHybridObjectNames);
 
     prototype.registerHybridMethod("box", &HybridNitroModulesProxy::box);
+    prototype.registerHybridMethod("updateMemorySize", &HybridNitroModulesProxy::updateMemorySize);
 
     prototype.registerRawHybridMethod("hasNativeState", 1, &HybridNitroModulesProxy::hasNativeState);
 
