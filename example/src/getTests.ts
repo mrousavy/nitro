@@ -9,7 +9,10 @@ import {
 import type { State } from './Testers'
 import { it } from './Testers'
 import { stringify } from './utils'
-import { getHybridObjectConstructor } from 'react-native-nitro-modules'
+import {
+  getHybridObjectConstructor,
+  NitroModules,
+} from 'react-native-nitro-modules'
 import { InteractionManager } from 'react-native'
 
 type TestResult =
@@ -1287,6 +1290,11 @@ export function getTests(
       })
         .didNotThrow()
         .equals(true)
+    ),
+    createTest('NitroModules.updateMemorySize(obj) works (roundtrip)', () =>
+      it(() => {
+        NitroModules.updateMemorySize(testObject)
+      }).didNotThrow()
     ),
   ]
 }
