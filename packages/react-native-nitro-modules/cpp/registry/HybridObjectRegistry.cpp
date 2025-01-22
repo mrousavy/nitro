@@ -42,7 +42,7 @@ void HybridObjectRegistry::registerHybridObjectConstructor(const std::string& hy
   if (map.contains(hybridObjectName)) [[unlikely]] {
     auto allObjectNames = getAllRegisteredHybridObjectNamesToString();
     auto message =
-        "HybridObject \"" + std::string(hybridObjectName) +
+        "HybridObject \"" + hybridObjectName +
         "\" has already been "
         "registered in the Nitro Modules HybridObjectRegistry! Suggestions:\n"
         "- If you just installed another library, maybe both libraries are using the same name?\n"
