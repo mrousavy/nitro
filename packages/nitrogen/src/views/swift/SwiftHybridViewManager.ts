@@ -11,7 +11,6 @@ import {
 import { NitroConfig } from '../../config/NitroConfig.js'
 import { getUmbrellaHeaderName } from '../../autolinking/ios/createSwiftUmbrellaHeader.js'
 import { getHybridObjectName } from '../../syntax/getHybridObjectName.js'
-import { getHybridObjectConstructorCall } from '../../syntax/swift/SwiftHybridObjectRegistration.js'
 import { indent } from '../../utils.js'
 
 export function createSwiftHybridViewManager(
@@ -20,9 +19,7 @@ export function createSwiftHybridViewManager(
   const cppFiles = createViewComponentShadowNodeFiles(spec)
   const namespace = NitroConfig.getCxxNamespace('c++')
   const swiftNamespace = NitroConfig.getIosModuleName()
-  const { HybridTSpec, HybridTSpecSwift, HybridTSpecCxx } = getHybridObjectName(
-    spec.name
-  )
+  const { HybridTSpecSwift, HybridTSpecCxx } = getHybridObjectName(spec.name)
   const { component, descriptorClassName, propsClassName } =
     getViewComponentNames(spec)
   const autolinking = NitroConfig.getAutolinkedHybridObjects()
@@ -56,6 +53,7 @@ ${createFileMetadataString(`${component}.mm`)}
 #import <React/RCTComponentViewFactory.h>
 #import <React/UIView+ComponentViewProtocol.h>
 #import <UIKit/UIKit.h>
+#import <NitroModules/HybridObjectRegistry.hpp>
 
 #import "${HybridTSpecSwift}.hpp"
 #import "${getUmbrellaHeaderName()}"
@@ -85,8 +83,11 @@ using namespace ${namespace}::views;
 
 - (instancetype) init {
   if (self = [super init]) {
-    std::shared_ptr<${HybridTSpec}> hybridView = ${getHybridObjectConstructorCall(spec.name)}
+    std::shared_ptr<HybridObject> hybridView = HybridObjectRegistry::createHybridObject("${spec.name}");
     _hybridView = std::dynamic_pointer_cast<${HybridTSpecSwift}>(hybridView);
+    if (_hybridView == nullptr) [[unlikely]] {
+      throw std::runtime_error("Failed to create HybridObject \\"${spec.name}\\" - it is not an instance of \`${HybridTSpecSwift}\`!");
+    }
     [self updateView];
   }
   return self;

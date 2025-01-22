@@ -15,6 +15,7 @@
 #import <React/RCTComponentViewFactory.h>
 #import <React/UIView+ComponentViewProtocol.h>
 #import <UIKit/UIKit.h>
+#import <NitroModules/HybridObjectRegistry.hpp>
 
 #import "HybridTestViewSpecSwift.hpp"
 #import "NitroImage-Swift-Cxx-Umbrella.hpp"
@@ -44,8 +45,11 @@ using namespace margelo::nitro::image::views;
 
 - (instancetype) init {
   if (self = [super init]) {
-    std::shared_ptr<HybridTestViewSpec> hybridView = NitroImage::NitroImageAutolinking::createTestView();
+    std::shared_ptr<HybridObject> hybridView = HybridObjectRegistry::createHybridObject("TestView");
     _hybridView = std::dynamic_pointer_cast<HybridTestViewSpecSwift>(hybridView);
+    if (_hybridView == nullptr) [[unlikely]] {
+      throw std::runtime_error("Failed to create HybridObject \"TestView\" - it is not an instance of `HybridTestViewSpecSwift`!");
+    }
     [self updateView];
   }
   return self;
