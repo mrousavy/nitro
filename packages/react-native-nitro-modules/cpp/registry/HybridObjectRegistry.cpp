@@ -67,10 +67,10 @@ std::shared_ptr<HybridObject> HybridObjectRegistry::createHybridObject(const std
   if (fn == map.end()) [[unlikely]] {
     auto allObjectNames = getAllRegisteredHybridObjectNamesToString();
     auto message =
-        "Cannot create an instance of HybridObject \"" + std::string(hybridObjectName) +
+        "Cannot create an instance of HybridObject \"" + hybridObjectName +
         "\" - It has not yet been registered in the Nitro Modules HybridObjectRegistry! Suggestions:\n"
         "- If you use Nitrogen, make sure your `nitro.json` contains `" +
-        std::string(hybridObjectName) +
+        hybridObjectName +
         "` on this platform.\n"
         "- If you use Nitrogen, make sure your library (*Package.java)/app (MainApplication.java) calls "
         "`$$androidCxxLibName$$OnLoad.initializeNative()` somewhere on app-startup.\n"
