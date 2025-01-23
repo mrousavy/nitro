@@ -87,7 +87,9 @@ namespace margelo::nitro::image::views {
     HybridTestViewComponentDescriptor(const react::ComponentDescriptorParameters& parameters);
 
   public:
+#ifdef ANDROID
     void adopt(react::ShadowNode& shadowNode) const override;
+#endif
   };
 
   /* The actual view for "TestView" needs to be implemented in platform-specific code. */

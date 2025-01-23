@@ -150,7 +150,9 @@ namespace ${namespace} {
     ${descriptorClassName}(const react::ComponentDescriptorParameters& parameters);
 
   public:
+#ifdef ANDROID
     void adopt(react::ShadowNode& shadowNode) const override;
+#endif
   };
 
   /* The actual view for "${spec.name}" needs to be implemented in platform-specific code. */
@@ -221,19 +223,17 @@ namespace ${namespace} {
     : ConcreteComponentDescriptor(parameters,
                                   react::RawPropsParser(/* enableJsiParser */ true)) {}
 
+#ifdef ANDROID
   void ${descriptorClassName}::adopt(react::ShadowNode& shadowNode) const {
     // This is called immediately after \`ShadowNode\` is created, cloned or in progress.
-#ifdef ANDROID
     // On Android, we need to wrap props in our state, which gets routed through Java and later unwrapped in JNI/C++.
     auto& concreteShadowNode = dynamic_cast<${shadowNodeClassName}&>(shadowNode);
     const ${propsClassName}& props = concreteShadowNode.getConcreteProps();
     ${stateClassName} state;
     state.setProps(props);
     concreteShadowNode.setStateData(std::move(state));
-#else
-    // On iOS, prop updating happens through the updateProps: Obj-C selector.
-#endif
   }
+#endif
 
 } // namespace ${namespace}
 `.trim()
