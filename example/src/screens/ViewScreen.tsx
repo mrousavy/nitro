@@ -7,15 +7,28 @@ import { useColors } from '../useColors'
 import { TestView } from 'react-native-nitro-image'
 import { useIsFocused } from '@react-navigation/native'
 
+const VIEWS_X = 15
+const VIEWS_Y = 15
+
 export function ViewScreenImpl() {
   const safeArea = useSafeAreaInsets()
   const colors = useColors()
-  const [prop, setProp] = React.useState(false)
+  const [counter, setCounter] = React.useState(0)
   const [isUpdating, setIsUpdating] = React.useState(true)
+  const views = React.useMemo(
+    () =>
+      [...Array(counter)].map((_, i) => (
+        <TestView key={i} style={styles.view} isBlue={i % 2 === 0} />
+      )),
+    [counter]
+  )
 
   React.useEffect(() => {
     if (!isUpdating) return
-    const i = setInterval(() => setProp((p) => !p), 300)
+    const i = setInterval(
+      () => setCounter((c) => (c >= VIEWS_X * VIEWS_Y ? 0 : c + 1)),
+      10
+    )
     return () => clearInterval(i)
   }, [isUpdating])
 
@@ -28,15 +41,15 @@ export function ViewScreenImpl() {
       </View>
 
       <View style={styles.resultContainer}>
-        <View style={[styles.viewContainer]}>
+        <View style={[styles.viewShadow]}>
           <View style={[styles.viewBorder, { borderColor: colors.foreground }]}>
-            <TestView style={styles.view} isBlue={prop} />
+            <View style={styles.viewContainer}>{views}</View>
           </View>
         </View>
       </View>
 
       <View style={[styles.bottomView, { backgroundColor: colors.background }]}>
-        <Text>{isUpdating ? '🔄 Updating props...' : '📱 Idle'}</Text>
+        <Text>{isUpdating ? '🔄 Updating...' : '📱 Idle'}</Text>
         <View style={styles.flex} />
         <Button
           title={isUpdating ? 'Stop Updating' : 'Start Updating'}
@@ -85,7 +98,7 @@ const styles = StyleSheet.create({
     height: 60,
     marginVertical: 20,
   },
-  viewContainer: {
+  viewShadow: {
     width: '80%',
     aspectRatio: 1,
     shadowColor: 'black',
@@ -98,10 +111,16 @@ const styles = StyleSheet.create({
     flex: 1,
     borderWidth: 2,
     borderRadius: 5,
-    overflow: 'hidden',
+  },
+  viewContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
   },
   view: {
-    flex: 1,
+    width: `${100 / VIEWS_X}%`,
+    height: `${100 / VIEWS_Y}%`,
+    marginLeft: -0.0001,
   },
   testCase: {
     width: '100%',
