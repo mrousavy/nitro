@@ -27,7 +27,7 @@ export function ViewScreen() {
       <View style={styles.resultContainer}>
         <View style={[styles.viewContainer]}>
           <View style={[styles.viewBorder, { borderColor: colors.foreground }]}>
-            <TestView style={styles.view} someProp={prop} />
+            <TestView style={styles.view} isBlue={prop} />
           </View>
         </View>
       </View>
