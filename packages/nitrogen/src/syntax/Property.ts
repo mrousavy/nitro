@@ -70,7 +70,11 @@ export class Property implements CodeNode {
   }
 
   get cppGetterName(): string {
-    return `get${capitalizeName(this.name)}`
+    if (this.type.kind === 'boolean' && this.name.startsWith('is')) {
+      return this.name
+    } else {
+      return `get${capitalizeName(this.name)}`
+    }
   }
 
   get cppSetterName(): string {
