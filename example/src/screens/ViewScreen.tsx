@@ -11,11 +11,13 @@ export function ViewScreenImpl() {
   const safeArea = useSafeAreaInsets()
   const colors = useColors()
   const [prop, setProp] = React.useState(false)
+  const [isUpdating, setIsUpdating] = React.useState(true)
 
   React.useEffect(() => {
+    if (!isUpdating) return
     const i = setInterval(() => setProp((p) => !p), 300)
     return () => clearInterval(i)
-  }, [])
+  }, [isUpdating])
 
   return (
     <View style={[styles.container, { paddingTop: safeArea.top }]}>
@@ -34,9 +36,12 @@ export function ViewScreenImpl() {
       </View>
 
       <View style={[styles.bottomView, { backgroundColor: colors.background }]}>
-        <Text>Re-render</Text>
+        <Text>{isUpdating ? '🔄 Updating props...' : '📱 Idle'}</Text>
         <View style={styles.flex} />
-        <Button title="Run" onPress={console.log} />
+        <Button
+          title={isUpdating ? 'Stop Updating' : 'Start Updating'}
+          onPress={() => setIsUpdating((i) => !i)}
+        />
       </View>
     </View>
   )
