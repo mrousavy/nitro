@@ -25,7 +25,7 @@ namespace margelo::nitro::image::views {
   /**
    * The name of the actual native View.
    */
-  extern const char HybridTestViewComponentName[] = "TestView";
+  extern const char HybridTestViewComponentName[];
 
   /**
    * Props for the "TestView" View.
@@ -54,12 +54,12 @@ namespace margelo::nitro::image::views {
     HybridTestViewState() = default;
 
   public:
-    void setProps(HybridTestViewProps&& props) { _props.emplace(props); }
+    void setProps(const HybridTestViewProps& props) { _props.emplace(props); }
     const std::optional<HybridTestViewProps>& getProps() const { return _props; }
 
   public:
 #ifdef ANDROID
-  HybridTestViewState(const CustomStateData& previousState, folly::dynamic data) {}
+  HybridTestViewState(const HybridTestViewState& /* previousState */, folly::dynamic /* data */) {}
   folly::dynamic getDynamic() const {
     throw std::runtime_error("HybridTestViewState does not support folly!");
   }

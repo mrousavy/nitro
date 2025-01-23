@@ -18,10 +18,9 @@ void JHybridTestViewStateUpdater::updateViewProps(jni::alias_ref<jni::JClass>,
                                            jni::alias_ref<JHybridTestViewSpec::javaobject> javaView,
                                            jni::alias_ref<react::StateWrapperImpl::javaobject> stateWrapper) {
   JHybridTestViewSpec* view = javaView->cthis();
-  const react::State& state = stateWrapper->cthis()->getState();
-  // TODO: Can this be a static_cast?
-  const auto& concreteState = dynamic_cast<const ConcreteStateData&>(state);
-  const HybridTestViewState& data = concreteState.getData();
+  std::shared_ptr<const react::State> state = stateWrapper->cthis()->getState();
+  auto concreteState = std::dynamic_pointer_cast<const ConcreteStateData>(state);
+  const HybridTestViewState& data = concreteState->getData();
   const std::optional<HybridTestViewProps>& maybeProps = data.getProps();
   if (!maybeProps.has_value()) {
     // Props aren't set yet!

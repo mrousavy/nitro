@@ -88,7 +88,7 @@ namespace ${namespace} {
   /**
    * The name of the actual native View.
    */
-  extern const char ${nameVariable}[] = "${T}";
+  extern const char ${nameVariable}[];
 
   /**
    * Props for the "${spec.name}" View.
@@ -116,12 +116,12 @@ namespace ${namespace} {
     ${stateClassName}() = default;
 
   public:
-    void setProps(${propsClassName}&& props) { _props.emplace(props); }
+    void setProps(const ${propsClassName}& props) { _props.emplace(props); }
     const std::optional<${propsClassName}>& getProps() const { return _props; }
 
   public:
 #ifdef ANDROID
-  ${stateClassName}(const CustomStateData& previousState, folly::dynamic data) {}
+  ${stateClassName}(const ${stateClassName}& /* previousState */, folly::dynamic /* data */) {}
   folly::dynamic getDynamic() const {
     throw std::runtime_error("${stateClassName} does not support folly!");
   }
@@ -200,6 +200,8 @@ ${createFileMetadataString(`${component}.cpp`)}
 
 namespace ${namespace} {
 
+  extern const char ${nameVariable}[] = "${T}";
+
   ${propsClassName}::${propsClassName}(const react::PropsParserContext& context,
   ${ctorIndent}   const ${propsClassName}& sourceProps,
   ${ctorIndent}   const react::RawProps& rawProps):
@@ -223,7 +225,7 @@ namespace ${namespace} {
     // This is called immediately after \`ShadowNode\` is created, cloned or in progress.
 #ifdef ANDROID
     // On Android, we need to wrap props in our state, which gets routed through Java and later unwrapped in JNI/C++.
-    auto& concreteShadowNode = static_cast<${shadowNodeClassName}&>(shadowNode);
+    auto& concreteShadowNode = dynamic_cast<${shadowNodeClassName}&>(shadowNode);
     const ${propsClassName}& props = concreteShadowNode.getConcreteProps();
     ${stateClassName} state;
     state.setProps(props);

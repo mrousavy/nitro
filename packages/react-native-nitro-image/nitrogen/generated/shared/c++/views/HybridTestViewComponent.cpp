@@ -19,6 +19,8 @@
 
 namespace margelo::nitro::image::views {
 
+  extern const char HybridTestViewComponentName[] = "TestView";
+
   HybridTestViewProps::HybridTestViewProps(const react::PropsParserContext& context,
                                            const HybridTestViewProps& sourceProps,
                                            const react::RawProps& rawProps):
@@ -65,7 +67,7 @@ namespace margelo::nitro::image::views {
     // This is called immediately after `ShadowNode` is created, cloned or in progress.
 #ifdef ANDROID
     // On Android, we need to wrap props in our state, which gets routed through Java and later unwrapped in JNI/C++.
-    auto& concreteShadowNode = static_cast<HybridTestViewShadowNode&>(shadowNode);
+    auto& concreteShadowNode = dynamic_cast<HybridTestViewShadowNode&>(shadowNode);
     const HybridTestViewProps& props = concreteShadowNode.getConcreteProps();
     HybridTestViewState state;
     state.setProps(props);
