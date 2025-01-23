@@ -4,6 +4,7 @@ import { StyleSheet, View, Text, Button, Platform } from 'react-native'
 import { NitroModules } from 'react-native-nitro-modules'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useColors } from '../useColors'
+import { TestView } from 'react-native-nitro-image'
 
 export function ViewScreen() {
   const safeArea = useSafeAreaInsets()
@@ -18,7 +19,11 @@ export function ViewScreen() {
       </View>
 
       <View style={styles.resultContainer}>
-        <Text>Hello!</Text>
+        <View
+          style={[styles.viewContainer, { borderColor: colors.foreground }]}
+        >
+          <TestView someProp={true} />
+        </View>
       </View>
 
       <View style={[styles.bottomView, { backgroundColor: colors.background }]}>
@@ -62,6 +67,12 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     marginVertical: 20,
+  },
+  viewContainer: {
+    width: '80%',
+    height: '80%',
+    borderWidth: 1,
+    borderRadius: 2,
   },
   testCase: {
     width: '100%',
