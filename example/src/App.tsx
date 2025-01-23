@@ -6,6 +6,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { useColors } from './useColors'
 import { Image } from 'react-native'
 import { BenchmarksScreen } from './screens/BenchmarksScreen'
+import { ViewScreen } from './screens/ViewScreen'
 
 const dna = require('./img/dna.png')
 const rocket = require('./img/rocket.png')
@@ -42,6 +43,20 @@ export default function App() {
           component={BenchmarksScreen}
           options={{
             tabBarLabel: 'Benchmarks',
+            tabBarIcon: ({ size, focused }) => (
+              <Image
+                source={rocket}
+                tintColor={focused ? undefined : 'grey'}
+                style={{ width: size * 1.4, height: size * 1.4 }}
+              />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="View"
+          component={ViewScreen}
+          options={{
+            tabBarLabel: 'View',
             tabBarIcon: ({ size, focused }) => (
               <Image
                 source={rocket}
