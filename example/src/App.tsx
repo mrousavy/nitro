@@ -10,6 +10,7 @@ import { ViewScreen } from './screens/ViewScreen'
 
 const dna = require('./img/dna.png')
 const rocket = require('./img/rocket.png')
+const map = require('./img/map.png')
 
 const Tabs = createBottomTabNavigator()
 
@@ -59,9 +60,9 @@ export default function App() {
             tabBarLabel: 'View',
             tabBarIcon: ({ size, focused }) => (
               <Image
-                source={rocket}
+                source={map}
                 tintColor={focused ? undefined : 'grey'}
-                style={{ width: size * 1.4, height: size * 1.4 }}
+                style={{ width: size, height: size }}
               />
             ),
           }}
