@@ -14,7 +14,7 @@ namespace margelo::nitro::image::views {
 using namespace facebook;
 using ConcreteStateData = react::ConcreteState<HybridTestViewState>;
 
-void JHybridTestViewStateUpdater::updateViewProps(jni::alias_ref<jni::JClass>,
+void JHybridTestViewStateUpdater::updateViewProps(jni::alias_ref<jni::JClass> /* class */,
                                            jni::alias_ref<JHybridTestViewSpec::javaobject> javaView,
                                            jni::alias_ref<react::StateWrapperImpl::javaobject> stateWrapper) {
   JHybridTestViewSpec* view = javaView->cthis();

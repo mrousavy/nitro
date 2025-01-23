@@ -16,18 +16,18 @@ namespace margelo::nitro::image::views {
 
 using namespace facebook;
 
-class JHybridTestViewStateUpdater: jni::HybridClass<JHybridTestViewStateUpdater> {
+class JHybridTestViewStateUpdater: public jni::JavaClass<JHybridTestViewStateUpdater> {
 public:
   static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/image/views/HybridTestViewStateUpdater;";
 
 public:
-  static void updateViewProps(jni::alias_ref<jni::JClass>,
+  static void updateViewProps(jni::alias_ref<jni::JClass> /* class */,
                               jni::alias_ref<JHybridTestViewSpec::javaobject> view,
                               jni::alias_ref<react::StateWrapperImpl::javaobject> stateWrapper);
 
 public:
   static void registerNatives() {
-    registerHybrid({
+    javaClassStatic()->registerNatives({
       makeNativeMethod("updateViewProps", JHybridTestViewStateUpdater::updateViewProps),
     });
   }

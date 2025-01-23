@@ -20,7 +20,7 @@ export function createKotlinHybridViewManager(
   const javaSubNamespace = NitroConfig.getAndroidPackage('java/kotlin', 'views')
   const javaNamespace = NitroConfig.getAndroidPackage('java/kotlin')
   const cxxNamespace = NitroConfig.getCxxNamespace('c++', 'views')
-  const { JHybridTSpec } = getHybridObjectName(spec.name)
+  const { JHybridTSpec, HybridTSpec } = getHybridObjectName(spec.name)
   const { manager, stateClassName, component, propsClassName } =
     getViewComponentNames(spec)
   const stateUpdaterName = `${stateClassName}Updater`
@@ -94,7 +94,7 @@ class ${stateUpdaterName} {
      */
     @Suppress("KotlinJniMissingFunction")
     @JvmStatic
-    external fun updateViewProps(view: ${viewImplementation}, state: StateWrapperImpl)
+    external fun updateViewProps(view: ${HybridTSpec}, state: StateWrapperImpl)
   }
 }
   `.trim()
@@ -118,18 +118,18 @@ namespace ${cxxNamespace} {
 
 using namespace facebook;
 
-class J${stateUpdaterName}: jni::HybridClass<J${stateUpdaterName}> {
+class J${stateUpdaterName}: public jni::JavaClass<J${stateUpdaterName}> {
 public:
   static constexpr auto kJavaDescriptor = "L${updaterJniDescriptor};";
 
 public:
-  static void updateViewProps(jni::alias_ref<jni::JClass>,
+  static void updateViewProps(jni::alias_ref<jni::JClass> /* class */,
                               jni::alias_ref<${JHybridTSpec}::javaobject> view,
                               jni::alias_ref<react::StateWrapperImpl::javaobject> stateWrapper);
 
 public:
   static void registerNatives() {
-    registerHybrid({
+    javaClassStatic()->registerNatives({
       makeNativeMethod("updateViewProps", J${stateUpdaterName}::updateViewProps),
     });
   }
@@ -158,7 +158,7 @@ namespace ${cxxNamespace} {
 using namespace facebook;
 using ConcreteStateData = react::ConcreteState<${stateClassName}>;
 
-void J${stateUpdaterName}::updateViewProps(jni::alias_ref<jni::JClass>,
+void J${stateUpdaterName}::updateViewProps(jni::alias_ref<jni::JClass> /* class */,
                                            jni::alias_ref<${JHybridTSpec}::javaobject> javaView,
                                            jni::alias_ref<react::StateWrapperImpl::javaobject> stateWrapper) {
   ${JHybridTSpec}* view = javaView->cthis();
