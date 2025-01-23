@@ -38,7 +38,7 @@ class HybridTestViewManager: SimpleViewManager<View>() {
   }
 
   override fun updateState(view: View, props: ReactStylesDiffMap, stateWrapper: StateWrapper): Any? {
-  // 1. Downcast state
+    // 1. Downcast state
     val stateWrapperImpl = stateWrapper as? StateWrapperImpl ?: throw Error("StateWrapper uses a different implementation!")
     val hybridView = views[view] ?: throw Error("Couldn't find view $view in local views table!")
 
