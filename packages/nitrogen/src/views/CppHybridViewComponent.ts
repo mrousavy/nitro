@@ -70,10 +70,8 @@ ${createFileMetadataString(`${component}.hpp`)}
 
 #pragma once
 
-#include <NitroModules/NitroDefines.hpp>
-#if REACT_NATIVE_VERSION_MINOR >= 78
-
 #include <optional>
+#include <NitroModules/NitroDefines.hpp>
 #include <NitroModules/NitroHash.hpp>
 #include <NitroModules/CachedProp.hpp>
 #include <react/renderer/core/ConcreteComponentDescriptor.h>
@@ -158,10 +156,6 @@ namespace ${namespace} {
   /* The actual view for "${spec.name}" needs to be implemented in platform-specific code. */
 
 } // namespace ${namespace}
-
-#else
-#warning "View Component '${HybridT}' will be unavailable in React Native, because it requires React Native 78 or higher."
-#endif
 `.trim()
 
   // .cpp code
@@ -193,12 +187,11 @@ ${name}([&]() -> CachedProp<${type}> {
 ${createFileMetadataString(`${component}.cpp`)}
 
 #include "${component}.hpp"
-#include <NitroModules/NitroDefines.hpp>
-#if REACT_NATIVE_VERSION_MINOR >= 78
 
 #include <string>
 #include <exception>
 #include <utility>
+#include <NitroModules/NitroDefines.hpp>
 #include <NitroModules/JSIConverter.hpp>
 #include <react/renderer/core/RawValue.h>
 #include <react/renderer/core/ShadowNode.h>
@@ -241,8 +234,6 @@ namespace ${namespace} {
   }
 
 } // namespace ${namespace}
-
-#endif
 `.trim()
 
   const files: SourceFile[] = [

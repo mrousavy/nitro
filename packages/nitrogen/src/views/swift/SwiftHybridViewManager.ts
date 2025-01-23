@@ -47,14 +47,12 @@ if (newViewProps.${name}.isDirty) {
 ${createFileMetadataString(`${component}.mm`)}
 
 #import "${component}.hpp"
-#include <NitroModules/NitroDefines.hpp>
-#if REACT_NATIVE_VERSION_MINOR >= 78
-
 #import <memory>
 #import <react/renderer/componentregistry/ComponentDescriptorProvider.h>
 #import <React/RCTViewComponentView.h>
 #import <React/RCTComponentViewFactory.h>
 #import <React/UIView+ComponentViewProtocol.h>
+#import <NitroModules/NitroDefines.hpp>
 #import <UIKit/UIKit.h>
 
 #import "${HybridTSpecSwift}.hpp"
@@ -123,8 +121,6 @@ using namespace ${namespace}::views;
 }
 
 @end
-
-#endif
   `
 
   return [
