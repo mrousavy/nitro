@@ -172,7 +172,7 @@ ${name}([&]() -> CachedProp<${type}> {
   try {
     const react::RawValue* rawValue = rawProps.at("${prop.name}", nullptr, nullptr);
     if (rawValue == nullptr) return sourceProps.${name};
-    const auto& [runtime, value] = (std::pair<jsi::Runtime*, const jsi::Value&>)*rawValue;
+    const auto& [runtime, value] = (std::pair<jsi::Runtime*, jsi::Value>)*rawValue;
     return CachedProp<${type}>::fromRawValue(*runtime, value, sourceProps.${name});
   } catch (const std::exception& exc) {
     throw std::runtime_error(std::string("${spec.name}.${prop.name}: ") + exc.what());
@@ -217,7 +217,7 @@ namespace ${namespace} {
 
   ${descriptorClassName}::${descriptorClassName}(const react::ComponentDescriptorParameters& parameters)
     : ConcreteComponentDescriptor(parameters,
-                                  std::make_unique<react::RawPropsParser>(/* enableJsiParser */ true)) {}
+                                  react::RawPropsParser(/* enableJsiParser */ true)) {}
 
   void ${descriptorClassName}::adopt(react::ShadowNode& shadowNode) const {
     // This is called immediately after \`ShadowNode\` is created, cloned or in progress.

@@ -27,7 +27,7 @@ namespace margelo::nitro::image::views {
       try {
         const react::RawValue* rawValue = rawProps.at("someProp", nullptr, nullptr);
         if (rawValue == nullptr) return sourceProps.someProp;
-        const auto& [runtime, value] = (std::pair<jsi::Runtime*, const jsi::Value&>)*rawValue;
+        const auto& [runtime, value] = (std::pair<jsi::Runtime*, jsi::Value>)*rawValue;
         return CachedProp<bool>::fromRawValue(*runtime, value, sourceProps.someProp);
       } catch (const std::exception& exc) {
         throw std::runtime_error(std::string("TestView.someProp: ") + exc.what());
@@ -37,7 +37,7 @@ namespace margelo::nitro::image::views {
       try {
         const react::RawValue* rawValue = rawProps.at("someCallback", nullptr, nullptr);
         if (rawValue == nullptr) return sourceProps.someCallback;
-        const auto& [runtime, value] = (std::pair<jsi::Runtime*, const jsi::Value&>)*rawValue;
+        const auto& [runtime, value] = (std::pair<jsi::Runtime*, jsi::Value>)*rawValue;
         return CachedProp<std::function<void(double /* someParam */)>>::fromRawValue(*runtime, value, sourceProps.someCallback);
       } catch (const std::exception& exc) {
         throw std::runtime_error(std::string("TestView.someCallback: ") + exc.what());
@@ -59,7 +59,7 @@ namespace margelo::nitro::image::views {
 
   HybridTestViewComponentDescriptor::HybridTestViewComponentDescriptor(const react::ComponentDescriptorParameters& parameters)
     : ConcreteComponentDescriptor(parameters,
-                                  std::make_unique<react::RawPropsParser>(/* enableJsiParser */ true)) {}
+                                  react::RawPropsParser(/* enableJsiParser */ true)) {}
 
   void HybridTestViewComponentDescriptor::adopt(react::ShadowNode& shadowNode) const {
     // This is called immediately after `ShadowNode` is created, cloned or in progress.
