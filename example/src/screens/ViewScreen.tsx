@@ -25,10 +25,10 @@ export function ViewScreen() {
       </View>
 
       <View style={styles.resultContainer}>
-        <View
-          style={[styles.viewContainer, { borderColor: colors.foreground }]}
-        >
-          <TestView style={styles.view} someProp={prop} />
+        <View style={[styles.viewContainer]}>
+          <View style={[styles.viewBorder, { borderColor: colors.foreground }]}>
+            <TestView style={styles.view} someProp={prop} />
+          </View>
         </View>
       </View>
 
@@ -77,16 +77,19 @@ const styles = StyleSheet.create({
   viewContainer: {
     width: '80%',
     aspectRatio: 1,
-    borderWidth: 2,
-    borderRadius: 5,
     shadowColor: 'black',
     shadowOffset: { width: 1, height: 2 },
     shadowOpacity: 0.4,
     shadowRadius: 5,
+    elevation: 4,
   },
-  view: {
+  viewBorder: {
+    flex: 1,
+    borderWidth: 2,
     borderRadius: 5,
     overflow: 'hidden',
+  },
+  view: {
     flex: 1,
   },
   testCase: {
