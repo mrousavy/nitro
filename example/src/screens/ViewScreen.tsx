@@ -5,8 +5,9 @@ import { NitroModules } from 'react-native-nitro-modules'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useColors } from '../useColors'
 import { TestView } from 'react-native-nitro-image'
+import { useIsFocused } from '@react-navigation/native'
 
-export function ViewScreen() {
+export function ViewScreenImpl() {
   const safeArea = useSafeAreaInsets()
   const colors = useColors()
   const [prop, setProp] = React.useState(false)
@@ -39,6 +40,11 @@ export function ViewScreen() {
       </View>
     </View>
   )
+}
+
+export function ViewScreen() {
+  const isFocused = useIsFocused()
+  return isFocused ? <ViewScreenImpl /> : null
 }
 
 const styles = StyleSheet.create({
