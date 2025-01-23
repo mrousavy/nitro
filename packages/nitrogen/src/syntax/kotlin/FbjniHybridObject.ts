@@ -269,9 +269,9 @@ function getFbjniPropertyForwardImplementation(
   spec: HybridObjectSpec,
   property: Property
 ): string {
-  const methods = property.cppMethods.map((m) =>
-    getFbjniMethodForwardImplementation(spec, m)
-  )
+  const methods = property
+    .getCppMethods('other')
+    .map((m) => getFbjniMethodForwardImplementation(spec, m))
 
   return methods.join('\n')
 }
