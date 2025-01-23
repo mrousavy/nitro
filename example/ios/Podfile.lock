@@ -1257,7 +1257,7 @@ PODS:
     - React-jsiexecutor
     - React-RCTFBReactNativeSpec
     - ReactCommon/turbomodule/core
-  - react-native-safe-area-context (5.0.0):
+  - react-native-safe-area-context (5.1.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1270,8 +1270,8 @@ PODS:
     - React-featureflags
     - React-graphics
     - React-ImageManager
-    - react-native-safe-area-context/common (= 5.0.0)
-    - react-native-safe-area-context/fabric (= 5.0.0)
+    - react-native-safe-area-context/common (= 5.1.0)
+    - react-native-safe-area-context/fabric (= 5.1.0)
     - React-NativeModulesApple
     - React-RCTFabric
     - React-rendererdebug
@@ -1280,7 +1280,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - react-native-safe-area-context/common (5.0.0):
+  - react-native-safe-area-context/common (5.1.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1301,7 +1301,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - react-native-safe-area-context/fabric (5.0.0):
+  - react-native-safe-area-context/fabric (5.1.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1323,7 +1323,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - react-native-segmented-control (2.5.2):
+  - react-native-segmented-control (2.5.7):
     - React-Core
   - React-nativeconfig (0.77.0)
   - React-NativeModulesApple (0.77.0):
@@ -1614,7 +1614,7 @@ PODS:
     - React-logger (= 0.77.0)
     - React-perflogger (= 0.77.0)
     - React-utils (= 0.77.0)
-  - RNScreens (4.0.0):
+  - RNScreens (4.5.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1635,9 +1635,9 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - RNScreens/common (= 4.0.0)
+    - RNScreens/common (= 4.5.0)
     - Yoga
-  - RNScreens/common (4.0.0):
+  - RNScreens/common (4.5.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1925,8 +1925,8 @@ SPEC CHECKSUMS:
   React-logger: 9a0c4e1e41cd640ac49d69aacadab783f7e0096b
   React-Mapbuffer: 6993c785c22a170c02489bc78ed207814cbd700f
   React-microtasksnativemodule: 19230cd0933df6f6dc1336c9a9edc382d62638ae
-  react-native-safe-area-context: 11334e31c5f9f7e00d0bd9c26c59aef31ea84aa9
-  react-native-segmented-control: b92809e9111013dfa266e1168ba366d62898d9a4
+  react-native-safe-area-context: 6b85173d2cee963d5232ac2fd260e8ebd63273dc
+  react-native-segmented-control: 44d14c6899ee12de3384517f4fa1cf4a66ae105c
   React-nativeconfig: cd0fbb40987a9658c24dab5812c14e5522a64929
   React-NativeModulesApple: 45187d13c68d47250a7416b18ff082c7cc07bff7
   React-perflogger: 15a7bcb6c46eae8a981f7add8c9f4172e2372324
@@ -1956,7 +1956,7 @@ SPEC CHECKSUMS:
   ReactAppDependencyProvider: 3d947e9d62f351c06c71497e1be897e6006dc303
   ReactCodegen: 1c18c12cf03b070a53dd6158bdd03ef5a6d45902
   ReactCommon: 6014af4276bb2debc350e2620ef1bd856b4d981c
-  RNScreens: e4f8d7ba6bb77e41ff78d371cc48e7e7c8befc96
+  RNScreens: d0854539b51a53e38b61bcc9fb402439a9c73b26
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   Yoga: c0d8564af14a858f962607cd7306539cb2ace926
 
