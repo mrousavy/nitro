@@ -44,7 +44,7 @@ namespace margelo::nitro::image {
 
     public:
       // Properties
-      virtual bool isBlue() = 0;
+      virtual bool getIsBlue() = 0;
       virtual void setIsBlue(bool isBlue) = 0;
 
     public:

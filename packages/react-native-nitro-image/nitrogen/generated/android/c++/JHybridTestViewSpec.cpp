@@ -29,8 +29,8 @@ namespace margelo::nitro::image {
   }
 
   // Properties
-  bool JHybridTestViewSpec::isBlue() {
-    static const auto method = _javaPart->getClass()->getMethod<jboolean()>("isBlue");
+  bool JHybridTestViewSpec::getIsBlue() {
+    static const auto method = _javaPart->getClass()->getMethod<jboolean()>("getIsBlue");
     auto __result = method(_javaPart);
     return static_cast<bool>(__result);
   }

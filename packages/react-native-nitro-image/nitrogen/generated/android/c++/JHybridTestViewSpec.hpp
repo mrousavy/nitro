@@ -47,7 +47,7 @@ namespace margelo::nitro::image {
 
   public:
     // Properties
-    bool isBlue() override;
+    bool getIsBlue() override;
     void setIsBlue(bool isBlue) override;
 
   public:
