@@ -35,7 +35,7 @@ export function createSwiftHybridViewManager(
 
   const propAssignments = spec.properties.map((p) => {
     const name = escapeCppName(p.name)
-    const setter = p.getCppSetterName('swift')
+    const setter = p.getSetterName('swift')
     return `
 if (newViewProps.${name}.isDirty) {
   swiftPart.${setter}(newViewProps.${name}.value);

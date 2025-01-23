@@ -217,8 +217,8 @@ ${hasBase ? `public class ${name.HybridTSpecCxx} : ${baseClasses.join(', ')}` : 
       let getter: string
       let setter: string
 
-      const getterName = p.getCppGetterName('swift')
-      const setterName = p.getCppSetterName('swift')
+      const getterName = p.getGetterName('swift')
+      const setterName = p.getSetterName('swift')
       if (bridged.needsSpecialHandling) {
         // we need custom C++ -> Swift conversion code
         getter = `

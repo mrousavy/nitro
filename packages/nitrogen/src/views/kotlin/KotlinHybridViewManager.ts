@@ -153,7 +153,7 @@ public:
 
   const propsUpdaterCalls = spec.properties.map((p) => {
     const name = escapeCppName(p.name)
-    const setter = p.getCppSetterName('other')
+    const setter = p.getSetterName('other')
     return `
 if (props.${name}.isDirty) {
   view->${setter}(props.${name}.value);

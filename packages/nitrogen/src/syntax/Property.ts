@@ -71,7 +71,7 @@ export class Property implements CodeNode {
     return this.type.getRequiredImports()
   }
 
-  getCppGetterName(environment: LanguageEnvironment): string {
+  getGetterName(environment: LanguageEnvironment): string {
     if (this.type.kind === 'boolean' && this.name.startsWith('is')) {
       // Boolean accessors where the property starts with "is" are renamed in JVM and Swift
       switch (environment) {
@@ -87,7 +87,7 @@ export class Property implements CodeNode {
     return `get${capitalizeName(this.name)}`
   }
 
-  getCppSetterName(environment: LanguageEnvironment): string {
+  getSetterName(environment: LanguageEnvironment): string {
     if (this.type.kind === 'boolean' && this.name.startsWith('is')) {
       // Boolean accessors where the property starts with "is" are renamed in JVM
       if (environment === 'jvm') {
@@ -100,18 +100,24 @@ export class Property implements CodeNode {
     return `set${capitalizeName(this.name)}`
   }
 
-  getCppMethods(
-    environment: LanguageEnvironment
-  ): [getter: Method] | [getter: Method, setter: Method] {
-    const getter = new Method(this.getCppGetterName(environment), this.type, [])
-    if (this.isReadonly) return [getter]
+  get cppGetter(): Method {
+    return new Method(this.getGetterName('other'), this.type, [])
+  }
+
+  get cppSetter(): Method | undefined {
+    if (this.isReadonly) return undefined
     const parameter = new Parameter(this.name, this.type)
-    const setter = new Method(
-      this.getCppSetterName(environment),
-      new VoidType(),
-      [parameter]
-    )
-    return [getter, setter]
+    return new Method(this.getSetterName('other'), new VoidType(), [parameter])
+  }
+
+  getCppMethods(): [getter: Method] | [getter: Method, setter: Method] {
+    if (this.cppSetter != null) {
+      // get + set
+      return [this.cppGetter, this.cppSetter]
+    } else {
+      // get
+      return [this.cppGetter]
+    }
   }
 
   getCode(
@@ -126,7 +132,7 @@ export class Property implements CodeNode {
 
     switch (language) {
       case 'c++': {
-        const methods = this.getCppMethods('other')
+        const methods = this.getCppMethods()
         const [getter, setter] = methods
         const lines: string[] = []
         lines.push(getter.getCode('c++', modifiers, body?.getter))
