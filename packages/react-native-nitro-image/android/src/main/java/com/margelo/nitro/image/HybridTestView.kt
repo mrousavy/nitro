@@ -1,7 +1,6 @@
 package com.margelo.nitro.image
 
 import android.graphics.Color
-import android.util.Log
 import android.view.View
 import androidx.annotation.Keep
 import com.facebook.proguard.annotations.DoNotStrip
@@ -18,7 +17,6 @@ class HybridTestView: HybridTestViewSpec() {
     override var isBlue: Boolean
         get() = _isBlue
         set(value) {
-            Log.i("HybridView", "Updating _isBlue: $value")
             _isBlue = value
             val color = if (value) Color.BLUE else Color.RED
             view.setBackgroundColor(color)
