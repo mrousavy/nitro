@@ -25,36 +25,24 @@ namespace margelo::nitro::image::views {
                                            const HybridTestViewProps& sourceProps,
                                            const react::RawProps& rawProps):
     react::ViewProps(context, sourceProps, rawProps, filterObjectKeys),
-    someProp([&]() -> CachedProp<bool> {
+    isBlue([&]() -> CachedProp<bool> {
       try {
-        const react::RawValue* rawValue = rawProps.at("someProp", nullptr, nullptr);
-        if (rawValue == nullptr) return sourceProps.someProp;
+        const react::RawValue* rawValue = rawProps.at("isBlue", nullptr, nullptr);
+        if (rawValue == nullptr) return sourceProps.isBlue;
         const auto& [runtime, value] = (std::pair<jsi::Runtime*, jsi::Value>)*rawValue;
-        return CachedProp<bool>::fromRawValue(*runtime, value, sourceProps.someProp);
+        return CachedProp<bool>::fromRawValue(*runtime, value, sourceProps.isBlue);
       } catch (const std::exception& exc) {
-        throw std::runtime_error(std::string("TestView.someProp: ") + exc.what());
-      }
-    }()),
-    someCallback([&]() -> CachedProp<std::function<void(double /* someParam */)>> {
-      try {
-        const react::RawValue* rawValue = rawProps.at("someCallback", nullptr, nullptr);
-        if (rawValue == nullptr) return sourceProps.someCallback;
-        const auto& [runtime, value] = (std::pair<jsi::Runtime*, jsi::Value>)*rawValue;
-        return CachedProp<std::function<void(double /* someParam */)>>::fromRawValue(*runtime, value, sourceProps.someCallback);
-      } catch (const std::exception& exc) {
-        throw std::runtime_error(std::string("TestView.someCallback: ") + exc.what());
+        throw std::runtime_error(std::string("TestView.isBlue: ") + exc.what());
       }
     }()) { }
 
   HybridTestViewProps::HybridTestViewProps(const HybridTestViewProps& other):
     react::ViewProps(),
-    someProp(other.someProp),
-    someCallback(other.someCallback) { }
+    isBlue(other.isBlue) { }
 
   bool HybridTestViewProps::filterObjectKeys(const std::string& propName) {
     switch (hashString(propName)) {
-      case hashString("someProp"): return true;
-      case hashString("someCallback"): return true;
+      case hashString("isBlue"): return true;
       default: return false;
     }
   }

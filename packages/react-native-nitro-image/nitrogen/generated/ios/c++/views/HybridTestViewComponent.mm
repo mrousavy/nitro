@@ -71,13 +71,9 @@ using namespace margelo::nitro::image::views;
   // 2. Update each prop
   swiftPart.beforeUpdate();
 
-  if (newViewProps.someProp.isDirty) {
-    swiftPart.setSomeProp(newViewProps.someProp.value);
-    newViewProps.someProp.isDirty = false;
-  }
-  if (newViewProps.someCallback.isDirty) {
-    swiftPart.setSomeCallback(newViewProps.someCallback.value);
-    newViewProps.someCallback.isDirty = false;
+  if (newViewProps.isBlue.isDirty) {
+    swiftPart.setIsBlue(newViewProps.isBlue.value);
+    newViewProps.isBlue.isDirty = false;
   }
 
   swiftPart.afterUpdate();

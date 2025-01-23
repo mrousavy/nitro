@@ -1,6 +1,7 @@
 package com.margelo.nitro.image
 
 import android.graphics.Color
+import android.util.Log
 import android.view.View
 import androidx.annotation.Keep
 import com.facebook.proguard.annotations.DoNotStrip
@@ -13,19 +14,14 @@ class HybridTestView: HybridTestViewSpec() {
     override val view: View = View(NitroModules.applicationContext)
 
     // Props
-    private var _someProp = false
-    override var someProp: Boolean
-        get() = _someProp
+    private var _isBlue = false
+    override var isBlue: Boolean
+        get() = _isBlue
         set(value) {
-            _someProp = value
-            val color = if (value) Color.RED else Color.BLUE
+            Log.i("HybridView", "Updating _isBlue: $value")
+            _isBlue = value
+            val color = if (value) Color.BLUE else Color.RED
             view.setBackgroundColor(color)
+            view.requestLayout()
         }
-
-    override var someCallback: (someParam: Double) -> Unit = {}
-
-    override fun someFunc(someParam: Double): Boolean {
-        return someProp
-    }
-
 }

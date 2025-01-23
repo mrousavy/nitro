@@ -47,14 +47,12 @@ namespace margelo::nitro::image {
 
   public:
     // Properties
-    bool getSomeProp() override;
-    void setSomeProp(bool someProp) override;
-    std::function<void(double /* someParam */)> getSomeCallback() override;
-    void setSomeCallback(const std::function<void(double /* someParam */)>& someCallback) override;
+    bool getIsBlue() override;
+    void setIsBlue(bool isBlue) override;
 
   public:
     // Methods
-    bool someFunc(double someParam) override;
+    
 
   private:
     friend HybridBase;

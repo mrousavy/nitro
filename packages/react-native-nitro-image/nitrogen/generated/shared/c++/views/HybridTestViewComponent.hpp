@@ -16,7 +16,7 @@
 #include <react/renderer/components/view/ConcreteViewShadowNode.h>
 #include <react/renderer/components/view/ViewProps.h>
 
-#include <functional>
+
 
 namespace margelo::nitro::image::views {
 
@@ -39,8 +39,7 @@ namespace margelo::nitro::image::views {
                         const react::RawProps& rawProps);
 
   public:
-    CachedProp<bool> someProp;
-    CachedProp<std::function<void(double /* someParam */)>> someCallback;
+    CachedProp<bool> isBlue;
 
   private:
     static bool filterObjectKeys(const std::string& propName);

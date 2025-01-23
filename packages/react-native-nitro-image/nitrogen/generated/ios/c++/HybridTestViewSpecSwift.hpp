@@ -14,7 +14,7 @@ namespace NitroImage { class HybridTestViewSpec_cxx; }
 
 
 
-#include <functional>
+
 
 #include "NitroImage-Swift-Cxx-Umbrella.hpp"
 
@@ -51,30 +51,16 @@ namespace margelo::nitro::image {
 
   public:
     // Properties
-    inline bool getSomeProp() noexcept override {
-      return _swiftPart.getSomeProp();
+    inline bool getIsBlue() noexcept override {
+      return _swiftPart.getIsBlue();
     }
-    inline void setSomeProp(bool someProp) noexcept override {
-      _swiftPart.setSomeProp(std::forward<decltype(someProp)>(someProp));
-    }
-    inline std::function<void(double /* someParam */)> getSomeCallback() noexcept override {
-      auto __result = _swiftPart.getSomeCallback();
-      return __result;
-    }
-    inline void setSomeCallback(const std::function<void(double /* someParam */)>& someCallback) noexcept override {
-      _swiftPart.setSomeCallback(someCallback);
+    inline void setIsBlue(bool isBlue) noexcept override {
+      _swiftPart.setIsBlue(std::forward<decltype(isBlue)>(isBlue));
     }
 
   public:
     // Methods
-    inline bool someFunc(double someParam) override {
-      auto __result = _swiftPart.someFunc(std::forward<decltype(someParam)>(someParam));
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
-    }
+    
 
   private:
     NitroImage::HybridTestViewSpec_cxx _swiftPart;

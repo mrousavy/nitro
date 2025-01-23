@@ -27,11 +27,8 @@ void JHybridTestViewStateUpdater::updateViewProps(jni::alias_ref<jni::JClass> /*
     throw std::runtime_error("HybridTestViewState's data doesn't contain any props!");
   }
   const HybridTestViewProps& props = maybeProps.value();
-  if (props.someProp.isDirty) {
-    view->setSomeProp(props.someProp.value);
-  }
-  if (props.someCallback.isDirty) {
-    view->setSomeCallback(props.someCallback.value);
+  if (props.isBlue.isDirty) {
+    view->setIsBlue(props.isBlue.value);
   }
 }
 
