@@ -9,6 +9,12 @@ import { TestView } from 'react-native-nitro-image'
 export function ViewScreen() {
   const safeArea = useSafeAreaInsets()
   const colors = useColors()
+  const [prop, setProp] = React.useState(false)
+
+  React.useEffect(() => {
+    const i = setInterval(() => setProp((p) => !p), 300)
+    return () => clearInterval(i)
+  }, [])
 
   return (
     <View style={[styles.container, { paddingTop: safeArea.top }]}>
@@ -22,7 +28,7 @@ export function ViewScreen() {
         <View
           style={[styles.viewContainer, { borderColor: colors.foreground }]}
         >
-          <TestView style={styles.view} someProp={true} />
+          <TestView style={styles.view} someProp={prop} />
         </View>
       </View>
 
