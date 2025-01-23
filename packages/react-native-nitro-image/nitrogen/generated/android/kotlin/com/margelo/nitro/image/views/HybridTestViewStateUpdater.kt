@@ -10,7 +10,7 @@ package com.margelo.nitro.image.views
 import com.facebook.react.fabric.StateWrapperImpl
 import com.margelo.nitro.image.*
 
-class HybridTestViewStateUpdater {
+internal class HybridTestViewStateUpdater {
   companion object {
     /**
      * Updates the props for [view] through C++.

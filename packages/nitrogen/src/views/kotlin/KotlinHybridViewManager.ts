@@ -95,7 +95,7 @@ package ${javaSubNamespace}
 import com.facebook.react.fabric.StateWrapperImpl
 import ${javaNamespace}.*
 
-class ${stateUpdaterName} {
+internal class ${stateUpdaterName} {
   companion object {
     /**
      * Updates the props for [view] through C++.
