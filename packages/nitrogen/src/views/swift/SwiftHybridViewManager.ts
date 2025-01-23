@@ -37,6 +37,7 @@ export function createSwiftHybridViewManager(
     const name = escapeCppName(p.name)
     const setter = p.getSetterName('swift')
     return `
+// ${p.jsSignature}
 if (newViewProps.${name}.isDirty) {
   swiftPart.${setter}(newViewProps.${name}.value);
   newViewProps.${name}.isDirty = false;
@@ -110,7 +111,7 @@ using namespace ${namespace}::views;
   auto& newViewProps = const_cast<${propsClassName}&>(newViewPropsConst);
   ${swiftNamespace}::${HybridTSpecCxx}& swiftPart = _hybridView->getSwiftPart();
 
-  // 2. Update each prop
+  // 2. Update each prop individually
   swiftPart.beforeUpdate();
 
   ${indent(propAssignments.join('\n'), '  ')}

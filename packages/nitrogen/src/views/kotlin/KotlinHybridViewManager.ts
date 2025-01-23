@@ -73,10 +73,14 @@ class ${manager}: SimpleViewManager<View>() {
   }
 
   override fun updateState(view: View, props: ReactStylesDiffMap, stateWrapper: StateWrapper): Any? {
+  // 1. Downcast state
     val stateWrapperImpl = stateWrapper as? StateWrapperImpl ?: throw Error("StateWrapper uses a different implementation!")
     val hybridView = views[view] ?: throw Error("Couldn't find view $view in local views table!")
 
+    // 2. Update each prop individually
+    hybridView.beforeUpdate()
     ${stateUpdaterName}.updateViewProps(hybridView, stateWrapperImpl)
+    hybridView.afterUpdate()
 
     return super.updateState(view, props, stateWrapper)
   }

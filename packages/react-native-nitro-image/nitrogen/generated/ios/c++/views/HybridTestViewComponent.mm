@@ -68,9 +68,10 @@ using namespace margelo::nitro::image::views;
   auto& newViewProps = const_cast<HybridTestViewProps&>(newViewPropsConst);
   NitroImage::HybridTestViewSpec_cxx& swiftPart = _hybridView->getSwiftPart();
 
-  // 2. Update each prop
+  // 2. Update each prop individually
   swiftPart.beforeUpdate();
 
+  // isBlue: boolean
   if (newViewProps.isBlue.isDirty) {
     swiftPart.setIsBlue(newViewProps.isBlue.value);
     newViewProps.isBlue.isDirty = false;
