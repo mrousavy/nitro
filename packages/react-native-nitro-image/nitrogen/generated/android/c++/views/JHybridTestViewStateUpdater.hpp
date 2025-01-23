@@ -9,8 +9,11 @@
 
 #include <fbjni/fbjni.h>
 #include <react/fabric/StateWrapperImpl.h>
+#include <react/fabric/CoreComponentsRegistry.h>
+#include <react/renderer/core/ConcreteComponentDescriptor.h>
 #include <NitroModules/NitroDefines.hpp>
 #include "JHybridTestViewSpec.hpp"
+#include "views/HybridTestViewComponent.hpp"
 
 namespace margelo::nitro::image::views {
 
@@ -27,9 +30,14 @@ public:
 
 public:
   static void registerNatives() {
+    // Register JNI calls
     javaClassStatic()->registerNatives({
       makeNativeMethod("updateViewProps", JHybridTestViewStateUpdater::updateViewProps),
     });
+    // Register React Native view component descriptor
+    auto provider = react::concreteComponentDescriptorProvider<HybridTestViewComponentDescriptor>();
+    auto providerRegistry = react::CoreComponentsRegistry::sharedProviderRegistry();
+    providerRegistry->add(provider);
   }
 };
 

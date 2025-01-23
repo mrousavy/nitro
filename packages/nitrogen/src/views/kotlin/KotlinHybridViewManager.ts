@@ -21,8 +21,13 @@ export function createKotlinHybridViewManager(
   const javaNamespace = NitroConfig.getAndroidPackage('java/kotlin')
   const cxxNamespace = NitroConfig.getCxxNamespace('c++', 'views')
   const { JHybridTSpec, HybridTSpec } = getHybridObjectName(spec.name)
-  const { manager, stateClassName, component, propsClassName } =
-    getViewComponentNames(spec)
+  const {
+    manager,
+    stateClassName,
+    component,
+    propsClassName,
+    descriptorClassName,
+  } = getViewComponentNames(spec)
   const stateUpdaterName = `${stateClassName}Updater`
   const autolinking = NitroConfig.getAutolinkedHybridObjects()
   const viewImplementation = autolinking[spec.name]?.kotlin
@@ -111,8 +116,11 @@ ${createFileMetadataString(`J${stateUpdaterName}.hpp`)}
 
 #include <fbjni/fbjni.h>
 #include <react/fabric/StateWrapperImpl.h>
+#include <react/fabric/CoreComponentsRegistry.h>
+#include <react/renderer/core/ConcreteComponentDescriptor.h>
 #include <NitroModules/NitroDefines.hpp>
 #include "${JHybridTSpec}.hpp"
+#include "views/${component}.hpp"
 
 namespace ${cxxNamespace} {
 
@@ -129,9 +137,14 @@ public:
 
 public:
   static void registerNatives() {
+    // Register JNI calls
     javaClassStatic()->registerNatives({
       makeNativeMethod("updateViewProps", J${stateUpdaterName}::updateViewProps),
     });
+    // Register React Native view component descriptor
+    auto provider = react::concreteComponentDescriptorProvider<${descriptorClassName}>();
+    auto providerRegistry = react::CoreComponentsRegistry::sharedProviderRegistry();
+    providerRegistry->add(provider);
   }
 };
 
