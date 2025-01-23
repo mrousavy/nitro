@@ -1,4 +1,4 @@
-import { Platform, type HostComponent } from 'react-native'
+import { Platform, type HostComponent, type ViewProps } from 'react-native'
 // @ts-expect-error this unfortunately isn't typed or default-exported.
 import * as NativeComponentRegistry from 'react-native/Libraries/NativeComponent/NativeComponentRegistry'
 
@@ -16,7 +16,7 @@ export interface ViewConfig<Props> {
 export function getHostComponent<Props>(
   name: string,
   getViewConfig: () => ViewConfig<Props>
-): HostComponent<Props> {
+): HostComponent<ViewProps & Props> {
   if (NativeComponentRegistry == null) {
     throw new Error(
       `NativeComponentRegistry is not available on ${Platform.OS}!`
