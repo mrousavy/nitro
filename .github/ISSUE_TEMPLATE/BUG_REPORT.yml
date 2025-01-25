@@ -14,7 +14,7 @@ body:
       label: Reproduceable Code
       description: >
         Share a small reproduceable code snippet here (or the entire file if necessary).
-        Most importantly, share your native code (your HybridObjects), and ideally also the .nitro.ts specs, as well as the generated protocols/interfaces.
+        Most importantly, share your native code (your HybridObjects), and ideally also the .nitro.{ts,tsx} specs, as well as the generated protocols/interfaces.
       render: tsx
       placeholder: >
         class HybridMath: HybridMathSpec {

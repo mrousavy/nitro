@@ -28,8 +28,8 @@ body:
       required: true
   - type: textarea
     attributes:
-      label: Nitro Specs (`.nitro.ts`)
-      description: Share your Nitro specs (`.nitro.ts` files), ideally stripped down to the core problem so I can reproduce this myself locally.
+      label: Nitro Specs (`.nitro.{ts,tsx}`)
+      description: Share your Nitro specs (`.nitro.{ts,tsx}` files), ideally stripped down to the core problem so I can reproduce this myself locally.
       render: ts
       placeholder: >
         interface Math extends HybridObject {

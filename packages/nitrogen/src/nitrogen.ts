@@ -54,7 +54,7 @@ export async function runNitrogen({
   })
 
   const ignorePaths = NitroConfig.getIgnorePaths()
-  const globPattern = [path.join(baseDirectory, '**', '*.nitro.ts')]
+  const globPattern = [path.join(baseDirectory, '**', '*.nitro.{ts,tsx}')]
   ignorePaths.forEach((ignorePath) => {
     globPattern.push('!' + path.join(baseDirectory, ignorePath))
   })
@@ -77,11 +77,11 @@ export async function runNitrogen({
   // If no source files are found, we can exit
   if (project.getSourceFiles().length === 0) {
     const searchDir = prettifyDirectory(
-      path.join(path.resolve(baseDirectory), '**', '*.nitro.ts')
+      path.join(path.resolve(baseDirectory), '**', '*.nitro.{ts,tsx}')
     )
     Logger.error(
       `❌  Nitrogen didn't find any spec files in ${chalk.underline(searchDir)}! ` +
-        `To create a Nitro Module, create a TypeScript file with the "${chalk.underline('.nitro.ts')}" suffix ` +
+        `To create a Nitro Module, create a TypeScript file with the "${chalk.underline('.nitro.{ts,tsx}')}" suffix ` +
         'and export an interface that extends HybridObject<T>.'
     )
     process.exit()

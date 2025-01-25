@@ -33,13 +33,13 @@ await yargs(hideBin(process.argv))
   .command(
     '$0 [basePath]',
     `Usage: ${chalk.bold(`${commandName} <basePath> [options]`)}\n` +
-      `Run the nitro code-generator on all ${chalk.underline('**/*.nitro.ts')} files found ` +
+      `Run the nitro code-generator on all ${chalk.underline('**/*.nitro.{ts,tsx}')} files found ` +
       `in the current directory and generate C++, Swift or Kotlin outputs in ${chalk.underline('./nitrogen/generated')}.`,
     (y) =>
       y
         .positional('basePath', {
           type: 'string',
-          description: `The base path of where Nitrogen will start looking for ${chalk.underline('**/*.nitro.ts')} specs.`,
+          description: `The base path of where Nitrogen will start looking for ${chalk.underline('**/*.nitro.{ts,tsx}')} specs.`,
           default: process.cwd(),
         })
         .option('out', {
@@ -83,7 +83,7 @@ await yargs(hideBin(process.argv))
   .usage(
     `Usage: ${chalk.bold('$0 [options]')}\n` +
       `$0 is a code-generater for Nitro Modules (${chalk.underline('https://github.com/mrousavy/nitro')})\n` +
-      `It converts all TypeScript specs found in ${chalk.underline('**/*.nitro.ts')} to C++, Swift or Kotlin specs.\n` +
+      `It converts all TypeScript specs found in ${chalk.underline('**/*.nitro.{ts,tsx}')} to C++, Swift or Kotlin specs.\n` +
       `Each library/module must have a ${chalk.underline('nitro.json')} configuration file in it's root directory.`
   )
   .help()

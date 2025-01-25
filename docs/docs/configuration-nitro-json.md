@@ -174,7 +174,7 @@ Here, the Hybrid Object "`Math`" is autolinked to create an instance of `HybridM
 
 ## `ignorePaths`
 
-Configures the TypeScript parser to ignore specific given paths when looking for `*.nitro.ts` specs.
+Configures the TypeScript parser to ignore specific given paths when looking for `*.nitro.{ts,tsx}` specs.
 
 By default, this is empty (`[]`), but it can be set to ignore paths like `["node_modules", "lib"]`.
 

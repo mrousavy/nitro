@@ -59,7 +59,7 @@ export async function initNewNitroModule(
     `👉 To install dependencies, use your package manager of choice (e.g. ${chalk.bold('npm install')})`
   )
   Logger.info(
-    `👉 To create your first Hybrid Object, add a ${chalk.underline(`*.nitro.ts`)} file, declare a TypeScript interface that extends ${chalk.bold('HybridObject<...>')}, and run ${chalk.bold('npx nitro-codegen')}.`
+    `👉 To create your first Hybrid Object, add a ${chalk.underline(`*.nitro.{ts,tsx}`)} file, declare a TypeScript interface that extends ${chalk.bold('HybridObject<...>')}, and run ${chalk.bold('npx nitro-codegen')}.`
   )
   Logger.info(
     `👉 To test your module in an app, create a new React Native app somewhere (e.g. in ${chalk.underline(`./${moduleName}/example`)}) and add ${chalk.bold(moduleName)} as a local dependency.`
