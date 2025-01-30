@@ -26,24 +26,7 @@ To create a new Nitro Module, simply run `nitro-codegen init <moduleName>`:
 npx nitro-codegen@latest init react-native-math
 ```
 
-### 2. Set up an example app
-
-After creating a Nitro Module, it's time to set up an example app to test your library:
-
-<Tabs groupId="expo-or-bare">
-  <TabItem value="expo" label="Expo" default>
-  ```sh
-  npx create-expo-app@latest
-  ```
-  </TabItem>
-  <TabItem value="bare" label="Bare RN">
-  ```sh
-  npx @react-native-community/cli@latest init NitroMathExample
-  ```
-  </TabItem>
-</Tabs>
-
-### 3. Implement your Hybrid Objects
+### 2. Implement your Hybrid Objects
 
 Once you set up the library, you can start implementing your Hybrid Objects!
 
@@ -66,6 +49,25 @@ Once you set up the library, you can start implementing your Hybrid Objects!
   </TabItem>
 </Tabs>
 
+### 3. Set up an example app
+
+After creating a Nitro Module, it's time to set up an example app to test your library!
+
+<Tabs groupId="expo-or-bare">
+  <TabItem value="expo" label="Expo" default>
+  ```sh
+  npx create-expo-app@latest
+  ```
+  </TabItem>
+  <TabItem value="bare" label="Bare RN">
+  ```sh
+  npx @react-native-community/cli@latest init NitroMathExample
+  ```
+  </TabItem>
+</Tabs>
+
 :::tip
-In a future version of Nitro, [Nitrogen](nitrogen) will be able to bootstrap a Nitro Module template with a simple command to avoid this manual configuration.
+The Hybrid Objects from your Nitro Module will be registered in the `HybridObjectRegistry`. This registration process needs to be called from somewhere:
+- In React Native, this happens in the `*Package.java` file which calls `.initializeNative()`.
+- If you are not using React Native, you need to manually call `.initializeNative()` in your library's entry point.
 :::
