@@ -255,7 +255,7 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
             const valueType = new KotlinCxxBridgedType(
               recordType.valueType
             ).getTypeCode(language)
-            return `jni::JMap<${keyType}, ${valueType}>`
+            return `jni::JHashMap<${keyType}, ${valueType}>`
           default:
             return this.type.getCode(language)
         }
