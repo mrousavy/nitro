@@ -29,7 +29,7 @@ export class RecordType implements Type {
       case 'swift':
         return `Dictionary<${keyCode}, ${valueCode}>`
       case 'kotlin':
-        return `Map<${keyCode}, ${valueCode}>`
+        return `HashMap<${keyCode}, ${valueCode}>`
       default:
         throw new Error(
           `Language ${language} is not yet supported for RecordType!`
