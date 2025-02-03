@@ -184,6 +184,10 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
     return value
   }
 
+  func bounceMap(map: Dictionary<String, Variant_Double_Bool>) throws -> Dictionary<String, Variant_Double_Bool> {
+    return map
+  }
+
   func calculateFibonacciSync(value: Double) throws -> Int64 {
     let n = Int64(value)
     if n <= 1 {

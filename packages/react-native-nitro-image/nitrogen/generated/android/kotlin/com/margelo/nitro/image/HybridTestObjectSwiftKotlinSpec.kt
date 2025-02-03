@@ -207,6 +207,10 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
+  abstract fun bounceMap(map: Map<String, Variant_Double_Boolean>): Map<String, Variant_Double_Boolean>
+  
+  @DoNotStrip
+  @Keep
   abstract fun calculateFibonacciSync(value: Double): Long
   
   @DoNotStrip

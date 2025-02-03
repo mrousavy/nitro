@@ -43,6 +43,12 @@ const TEST_CAR: Car = {
   driver: undefined, // <-- value needs to be explicitly set, to equal it with native's std::optional<..>
   isFast: true,
 }
+const TEST_MAP: Record<string, number | boolean> = {
+  someKey: 55,
+  some_other_key: 123,
+  a_bool: true,
+  another_bool: false,
+}
 
 function createTest<T>(
   name: string,
@@ -723,6 +729,13 @@ export function getTests(
       : [
           // Swift/Kotlin Test Object does not have tuples yet!
         ]),
+
+    createTest('bounceMap()', () =>
+      it(() => testObject.bounceMap(TEST_MAP))
+        .didNotThrow()
+        .didReturn('object')
+        .equals(TEST_MAP)
+    ),
 
     // Promises
     createTest('wait', async () =>

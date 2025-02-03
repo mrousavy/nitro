@@ -644,6 +644,50 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
+  public func bounceMap(map: bridge.std__unordered_map_std__string__std__variant_double__bool__) -> bridge.Result_std__unordered_map_std__string__std__variant_double__bool___ {
+    do {
+      let __result = try self.__implementation.bounceMap(map: { () -> Dictionary<String, Variant_Double_Bool> in
+        var __dictionary = Dictionary<String, Variant_Double_Bool>(minimumCapacity: map.size())
+        let __keys = bridge.get_std__unordered_map_std__string__std__variant_double__bool___keys(map)
+        for __key in __keys {
+          let __value = map[__key]!
+          __dictionary[String(__key)] = { () -> Variant_Double_Bool in
+        switch __value.index() {
+          case 0:
+            let __actual = bridge.get_std__variant_double__bool__0(__value)
+            return .someDouble(__actual)
+          case 1:
+            let __actual = bridge.get_std__variant_double__bool__1(__value)
+            return .someBool(__actual)
+          default:
+            fatalError("Variant can never have index \(__value.index())!")
+        }
+      }()
+        }
+        return __dictionary
+      }())
+      let __resultCpp = { () -> bridge.std__unordered_map_std__string__std__variant_double__bool__ in
+        var __map = bridge.create_std__unordered_map_std__string__std__variant_double__bool__(__result.count)
+        for (__k, __v) in __result {
+          __map[std.string(__k)] = { () -> bridge.std__variant_double__bool_ in
+            switch __v {
+              case .someDouble(let __value):
+                return bridge.create_std__variant_double__bool_(__value)
+              case .someBool(let __value):
+                return bridge.create_std__variant_double__bool_(__value)
+            }
+          }()
+        }
+        return __map
+      }()
+      return bridge.create_Result_std__unordered_map_std__string__std__variant_double__bool___(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__unordered_map_std__string__std__variant_double__bool___(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
   public func calculateFibonacciSync(value: Double) -> bridge.Result_int64_t_ {
     do {
       let __result = try self.__implementation.calculateFibonacciSync(value: value)
