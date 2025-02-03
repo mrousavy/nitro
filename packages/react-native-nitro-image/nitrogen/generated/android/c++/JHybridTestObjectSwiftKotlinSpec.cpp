@@ -25,6 +25,8 @@ namespace NitroModules { class ArrayBuffer; }
 namespace margelo::nitro::image { class HybridChildSpec; }
 // Forward declaration of `HybridBaseSpec` to properly resolve imports.
 namespace margelo::nitro::image { class HybridBaseSpec; }
+// Forward declaration of `MapWrapper` to properly resolve imports.
+namespace margelo::nitro::image { struct MapWrapper; }
 // Forward declaration of `JsStyleStruct` to properly resolve imports.
 namespace margelo::nitro::image { struct JsStyleStruct; }
 
@@ -47,10 +49,10 @@ namespace margelo::nitro::image { struct JsStyleStruct; }
 #include "JPerson.hpp"
 #include <NitroModules/AnyMap.hpp>
 #include <NitroModules/JAnyMap.hpp>
-#include <NitroModules/Promise.hpp>
-#include <NitroModules/JPromise.hpp>
 #include <unordered_map>
 #include "JVariant_Double_Boolean.hpp"
+#include <NitroModules/Promise.hpp>
+#include <NitroModules/JPromise.hpp>
 #include "Car.hpp"
 #include "JCar.hpp"
 #include <NitroModules/ArrayBuffer.hpp>
@@ -61,6 +63,8 @@ namespace margelo::nitro::image { struct JsStyleStruct; }
 #include "HybridBaseSpec.hpp"
 #include "JHybridBaseSpec.hpp"
 #include "JFunc_void_std__vector_Powertrain_.hpp"
+#include "MapWrapper.hpp"
+#include "JMapWrapper.hpp"
 #include <exception>
 #include "JFunc_void.hpp"
 #include "JFunc_void_std__optional_double_.hpp"
@@ -366,6 +370,36 @@ namespace margelo::nitro::image {
     auto __result = method(_javaPart, JAnyMap::create(map));
     return __result->cthis()->getMap();
   }
+  std::unordered_map<std::string, std::variant<double, bool>> JHybridTestObjectSwiftKotlinSpec::bounceMap(const std::unordered_map<std::string, std::variant<double, bool>>& map) {
+    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<jni::JMap<jni::JString, JVariant_Double_Boolean>>(jni::alias_ref<jni::JMap<jni::JString, JVariant_Double_Boolean>> /* map */)>("bounceMap");
+    auto __result = method(_javaPart, [&]() -> jni::local_ref<jni::JMap<jni::JString, JVariant_Double_Boolean>> {
+      auto __map = jni::JHashMap<jni::JString, JVariant_Double_Boolean>::create(map.size());
+      for (const auto& __entry : map) {
+        __map->put(jni::make_jstring(__entry.first), JVariant_Double_Boolean::fromCpp(__entry.second));
+      }
+      return __map;
+    }());
+    return [&]() {
+      std::unordered_map<std::string, std::variant<double, bool>> __map;
+      __map.reserve(__result->size());
+      for (const auto& __entry : *__result) {
+        __map.emplace(__entry.first->toStdString(), __entry.second->toCpp());
+      }
+      return __map;
+    }();
+  }
+  std::unordered_map<std::string, std::string> JHybridTestObjectSwiftKotlinSpec::extractMap(const MapWrapper& mapWrapper) {
+    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<jni::JMap<jni::JString, jni::JString>>(jni::alias_ref<JMapWrapper> /* mapWrapper */)>("extractMap");
+    auto __result = method(_javaPart, JMapWrapper::fromCpp(mapWrapper));
+    return [&]() {
+      std::unordered_map<std::string, std::string> __map;
+      __map.reserve(__result->size());
+      for (const auto& __entry : *__result) {
+        __map.emplace(__entry.first->toStdString(), __entry.second->toStdString());
+      }
+      return __map;
+    }();
+  }
   double JHybridTestObjectSwiftKotlinSpec::funcThatThrows() {
     static const auto method = _javaPart->getClass()->getMethod<double()>("funcThatThrows");
     auto __result = method(_javaPart);
@@ -404,24 +438,6 @@ namespace margelo::nitro::image {
     static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JPowertrain>(jni::alias_ref<JPowertrain> /* value */)>("tryOptionalEnum");
     auto __result = method(_javaPart, value.has_value() ? JPowertrain::fromCpp(value.value()) : nullptr);
     return __result != nullptr ? std::make_optional(__result->toCpp()) : std::nullopt;
-  }
-  std::unordered_map<std::string, std::variant<double, bool>> JHybridTestObjectSwiftKotlinSpec::bounceMap(const std::unordered_map<std::string, std::variant<double, bool>>& map) {
-    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<jni::JMap<jni::JString, JVariant_Double_Boolean>>(jni::alias_ref<jni::JMap<jni::JString, JVariant_Double_Boolean>> /* map */)>("bounceMap");
-    auto __result = method(_javaPart, [&]() {
-      auto __map = jni::JHashMap<jni::JString, JVariant_Double_Boolean>::create(map.size());
-      for (const auto& __entry : map) {
-        __map->put(jni::make_jstring(__entry.first), JVariant_Double_Boolean::fromCpp(__entry.second));
-      }
-      return __map;
-    }());
-    return [&]() {
-      std::unordered_map<std::string, std::variant<double, bool>> __map;
-      __map.reserve(__result->size());
-      for (const auto& __entry : *__result) {
-        __map.emplace(__entry.first->toStdString(), __entry.second->toCpp());
-      }
-      return __map;
-    }();
   }
   int64_t JHybridTestObjectSwiftKotlinSpec::calculateFibonacciSync(double value) {
     static const auto method = _javaPart->getClass()->getMethod<int64_t(double /* value */)>("calculateFibonacciSync");

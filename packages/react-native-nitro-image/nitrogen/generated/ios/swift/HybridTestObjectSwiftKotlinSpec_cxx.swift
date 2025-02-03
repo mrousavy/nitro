@@ -555,6 +555,69 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
+  public func bounceMap(map: bridge.std__unordered_map_std__string__std__variant_double__bool__) -> bridge.Result_std__unordered_map_std__string__std__variant_double__bool___ {
+    do {
+      let __result = try self.__implementation.bounceMap(map: { () -> Dictionary<String, Variant_Double_Bool> in
+        var __dictionary = Dictionary<String, Variant_Double_Bool>(minimumCapacity: map.size())
+        let __keys = bridge.get_std__unordered_map_std__string__std__variant_double__bool___keys(map)
+        for __key in __keys {
+          let __value = map[__key]!
+          __dictionary[String(__key)] = { () -> Variant_Double_Bool in
+            let __variant = bridge.std__variant_double__bool_(__value)
+            switch __variant.index() {
+              case 0:
+                let __actual = __variant.get_0()
+                return .someDouble(__actual)
+              case 1:
+                let __actual = __variant.get_1()
+                return .someBool(__actual)
+              default:
+                fatalError("Variant can never have index \(__variant.index())!")
+            }
+          }()
+        }
+        return __dictionary
+      }())
+      let __resultCpp = { () -> bridge.std__unordered_map_std__string__std__variant_double__bool__ in
+        var __map = bridge.create_std__unordered_map_std__string__std__variant_double__bool__(__result.count)
+        for (__k, __v) in __result {
+          __map[std.string(__k)] = { () -> bridge.std__variant_double__bool_ in
+            switch __v {
+              case .someDouble(let __value):
+                return bridge.create_std__variant_double__bool_(__value)
+              case .someBool(let __value):
+                return bridge.create_std__variant_double__bool_(__value)
+            }
+          }().variant
+        }
+        return __map
+      }()
+      return bridge.create_Result_std__unordered_map_std__string__std__variant_double__bool___(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__unordered_map_std__string__std__variant_double__bool___(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
+  public func extractMap(mapWrapper: MapWrapper) -> bridge.Result_std__unordered_map_std__string__std__string__ {
+    do {
+      let __result = try self.__implementation.extractMap(mapWrapper: mapWrapper)
+      let __resultCpp = { () -> bridge.std__unordered_map_std__string__std__string_ in
+        var __map = bridge.create_std__unordered_map_std__string__std__string_(__result.count)
+        for (__k, __v) in __result {
+          __map[std.string(__k)] = std.string(__v)
+        }
+        return __map
+      }()
+      return bridge.create_Result_std__unordered_map_std__string__std__string__(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__unordered_map_std__string__std__string__(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
   public func funcThatThrows() -> bridge.Result_double_ {
     do {
       let __result = try self.__implementation.funcThatThrows()
@@ -641,51 +704,6 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
       return bridge.create_Result_std__optional_Powertrain__(__exceptionPtr)
-    }
-  }
-  
-  @inline(__always)
-  public func bounceMap(map: bridge.std__unordered_map_std__string__std__variant_double__bool__) -> bridge.Result_std__unordered_map_std__string__std__variant_double__bool___ {
-    do {
-      let __result = try self.__implementation.bounceMap(map: { () -> Dictionary<String, Variant_Double_Bool> in
-        var __dictionary = Dictionary<String, Variant_Double_Bool>(minimumCapacity: map.size())
-        let __keys = bridge.get_std__unordered_map_std__string__std__variant_double__bool___keys(map)
-        for __key in __keys {
-          let __value = map[__key]!
-          __dictionary[String(__key)] = { () -> Variant_Double_Bool in
-            let __variant = bridge.std__variant_double__bool_(__value)
-            switch __variant.index() {
-              case 0:
-                let __actual = __variant.get_0()
-                return .someDouble(__actual)
-              case 1:
-                let __actual = __variant.get_1()
-                return .someBool(__actual)
-              default:
-                fatalError("Variant can never have index \(__variant.index())!")
-            }
-          }()
-        }
-        return __dictionary
-      }())
-      let __resultCpp = { () -> bridge.std__unordered_map_std__string__std__variant_double__bool__ in
-        var __map = bridge.create_std__unordered_map_std__string__std__variant_double__bool__(__result.count)
-        for (__k, __v) in __result {
-          __map[std.string(__k)] = { () -> bridge.std__variant_double__bool_ in
-            switch __v {
-              case .someDouble(let __value):
-                return bridge.create_std__variant_double__bool_(__value)
-              case .someBool(let __value):
-                return bridge.create_std__variant_double__bool_(__value)
-            }
-          }().variant
-        }
-        return __map
-      }()
-      return bridge.create_Result_std__unordered_map_std__string__std__variant_double__bool___(__resultCpp)
-    } catch (let __error) {
-      let __exceptionPtr = __error.toCpp()
-      return bridge.create_Result_std__unordered_map_std__string__std__variant_double__bool___(__exceptionPtr)
     }
   }
   

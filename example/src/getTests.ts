@@ -49,6 +49,11 @@ const TEST_MAP: Record<string, number | boolean> = {
   a_bool: true,
   another_bool: false,
 }
+const TEST_MAP_2: Record<string, string> = {
+  'someKey': 'someValue',
+  'anotherKey': 'another-value',
+  'third-key': 'thirdValue',
+}
 
 function createTest<T>(
   name: string,
@@ -730,11 +735,17 @@ export function getTests(
           // Swift/Kotlin Test Object does not have tuples yet!
         ]),
 
-    createTest('bounceMap()', () =>
+    createTest('bounceMap(map) === map', () =>
       it(() => testObject.bounceMap(TEST_MAP))
         .didNotThrow()
         .didReturn('object')
         .equals(TEST_MAP)
+    ),
+    createTest('extractMap(mapWrapper) === mapWrapper.map', () =>
+      it(() => testObject.extractMap({ map: TEST_MAP_2 }))
+        .didNotThrow()
+        .didReturn('object')
+        .equals(TEST_MAP_2)
     ),
 
     // Promises

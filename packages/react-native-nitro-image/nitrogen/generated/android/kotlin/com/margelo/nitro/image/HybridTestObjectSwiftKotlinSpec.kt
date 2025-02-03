@@ -183,6 +183,14 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
+  abstract fun bounceMap(map: Map<String, Variant_Double_Boolean>): Map<String, Variant_Double_Boolean>
+  
+  @DoNotStrip
+  @Keep
+  abstract fun extractMap(mapWrapper: MapWrapper): Map<String, String>
+  
+  @DoNotStrip
+  @Keep
   abstract fun funcThatThrows(): Double
   
   @DoNotStrip
@@ -204,10 +212,6 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   @DoNotStrip
   @Keep
   abstract fun tryOptionalEnum(value: Powertrain?): Powertrain?
-  
-  @DoNotStrip
-  @Keep
-  abstract fun bounceMap(map: Map<String, Variant_Double_Boolean>): Map<String, Variant_Double_Boolean>
   
   @DoNotStrip
   @Keep

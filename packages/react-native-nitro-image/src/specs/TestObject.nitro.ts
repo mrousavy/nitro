@@ -41,6 +41,10 @@ interface JsStyleStruct {
   onChanged: (num: number) => void
 }
 
+interface MapWrapper {
+  map: Record<string, string>
+}
+
 // This is an `interface` we're going to use as a base in both of our `HybridObject`s later.
 // In this case, the `HybridObject`s will just flatten out and copy over all properties here.
 // There is no separate type for `SharedTestObjectProps` on the native side.
@@ -78,6 +82,12 @@ interface SharedTestObjectProps {
   createMap(): AnyMap
   mapRoundtrip(map: AnyMap): AnyMap
 
+  // Typed Maps (records)
+  bounceMap(
+    map: Record<string, number | boolean>
+  ): Record<string, number | boolean>
+  extractMap(mapWrapper: MapWrapper): MapWrapper['map']
+
   // Errors
   funcThatThrows(): number
   funcThatThrowsBeforePromise(): Promise<void>
@@ -90,11 +100,6 @@ interface SharedTestObjectProps {
 
   // Variants
   someVariant: number | string
-
-  // Records/Maps
-  bounceMap(
-    map: Record<string, number | boolean>
-  ): Record<string, number | boolean>
 
   // Promises
   calculateFibonacciSync(value: number): bigint

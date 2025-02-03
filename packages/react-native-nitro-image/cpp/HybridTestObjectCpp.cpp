@@ -268,6 +268,10 @@ HybridTestObjectCpp::bounceMap(const std::unordered_map<std::string, std::varian
   return map;
 }
 
+std::unordered_map<std::string, std::string> HybridTestObjectCpp::extractMap(const MapWrapper& mapWrapper) {
+  return mapWrapper.map;
+}
+
 std::shared_ptr<Promise<int64_t>> HybridTestObjectCpp::calculateFibonacciAsync(double value) {
   return Promise<int64_t>::async([this, value]() -> int64_t { return this->calculateFibonacci(value); });
 }

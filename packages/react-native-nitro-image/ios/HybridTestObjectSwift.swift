@@ -188,6 +188,10 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
     return map
   }
 
+  func extractMap(mapWrapper: MapWrapper) throws -> Dictionary<String, String> {
+    return mapWrapper.map
+  }
+
   func calculateFibonacciSync(value: Double) throws -> Int64 {
     let n = Int64(value)
     if n <= 1 {
