@@ -781,7 +781,7 @@ case ${i}:
 { () -> bridge.${bridge.specializationName} in
   var __map = ${createMap}(${swiftParameterName}.count)
   for (__k, __v) in ${swiftParameterName} {
-    bridge.set_${bridge.specializationName}(&__map, ${indent(wrappingKey.parseFromSwiftToCpp('__k', 'swift'), '    ')}, ${indent(wrappingValue.parseFromSwiftToCpp('__v', 'swift'), '    ')})
+    bridge.emplace_${bridge.specializationName}(&__map, ${indent(wrappingKey.parseFromSwiftToCpp('__k', 'swift'), '    ')}, ${indent(wrappingValue.parseFromSwiftToCpp('__v', 'swift'), '    ')})
   }
   return __map
 }()`.trim()

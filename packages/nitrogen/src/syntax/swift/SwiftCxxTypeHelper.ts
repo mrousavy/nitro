@@ -276,7 +276,7 @@ inline std::vector<${keyType}> get_${name}_keys(const ${name}& map) {
   }
   return keys;
 }
-inline void set_${name}(${name}& map, const ${keyType}& key, const ${valueType}& value) {
+inline void emplace_${name}(${name}& map, const ${keyType}& key, const ${valueType}& value) {
   map.emplace(key, value);
 }
       `.trim(),

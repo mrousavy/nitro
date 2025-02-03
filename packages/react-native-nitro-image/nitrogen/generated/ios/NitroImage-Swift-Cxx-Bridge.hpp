@@ -355,7 +355,7 @@ namespace margelo::nitro::image::bridge::swift {
     }
     return keys;
   }
-  inline void set_std__unordered_map_std__string__std__variant_double__bool__(std__unordered_map_std__string__std__variant_double__bool__& map, const std::string& key, const std::variant<double, bool>& value) {
+  inline void emplace_std__unordered_map_std__string__std__variant_double__bool__(std__unordered_map_std__string__std__variant_double__bool__& map, const std::string& key, const std::variant<double, bool>& value) {
     map.emplace(key, value);
   }
   
@@ -377,7 +377,7 @@ namespace margelo::nitro::image::bridge::swift {
     }
     return keys;
   }
-  inline void set_std__unordered_map_std__string__std__string_(std__unordered_map_std__string__std__string_& map, const std::string& key, const std::string& value) {
+  inline void emplace_std__unordered_map_std__string__std__string_(std__unordered_map_std__string__std__string_& map, const std::string& key, const std::string& value) {
     map.emplace(key, value);
   }
   
