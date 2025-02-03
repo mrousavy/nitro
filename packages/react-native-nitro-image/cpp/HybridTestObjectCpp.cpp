@@ -263,7 +263,8 @@ int64_t HybridTestObjectCpp::calculateFibonacciSync(double value) {
   return calculateFibonacci(value);
 }
 
-std::unordered_map<std::string, std::variant<double, bool>> HybridTestObjectCpp::bounceMap(const std::unordered_map<std::string, std::variant<double, bool>>& map) {
+std::unordered_map<std::string, std::variant<double, bool>>
+HybridTestObjectCpp::bounceMap(const std::unordered_map<std::string, std::variant<double, bool>>& map) {
   return map;
 }
 
