@@ -359,15 +359,16 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
     @inline(__always)
     set {
       self.__implementation.someVariant = { () -> Variant_String_Double in
-        switch newValue.index() {
+        let __variant = newValue
+        switch __variant.index() {
           case 0:
-            let __actual = bridge.get_std__variant_std__string__double__0(newValue)
+            let __actual = bridge.get_std__variant_std__string__double__0(__variant)
             return .someString(String(__actual))
           case 1:
-            let __actual = bridge.get_std__variant_std__string__double__1(newValue)
+            let __actual = bridge.get_std__variant_std__string__double__1(__variant)
             return .someDouble(__actual)
           default:
-            fatalError("Variant can never have index \(newValue.index())!")
+            fatalError("Variant can never have index \(__variant.index())!")
         }
       }()
     }
@@ -652,15 +653,16 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
         for __key in __keys {
           let __value = map[__key]!
           __dictionary[String(__key)] = { () -> Variant_Double_Bool in
-            switch __value.index() {
+            let __variant = bridge.std__variant_double__bool_(__value)
+            switch __variant.index() {
               case 0:
-                let __actual = bridge.get_std__variant_double__bool__0(__value)
+                let __actual = bridge.get_std__variant_double__bool__0(__variant)
                 return .someDouble(__actual)
               case 1:
-                let __actual = bridge.get_std__variant_double__bool__1(__value)
+                let __actual = bridge.get_std__variant_double__bool__1(__variant)
                 return .someBool(__actual)
               default:
-                fatalError("Variant can never have index \(__value.index())!")
+                fatalError("Variant can never have index \(__variant.index())!")
             }
           }()
         }
@@ -676,7 +678,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
               case .someBool(let __value):
                 return bridge.create_std__variant_double__bool_(__value)
             }
-          }()
+          }().variant
         }
         return __map
       }()
