@@ -42,7 +42,7 @@ namespace margelo::nitro {
 
   // C++ Powertrain <> JS Powertrain (union)
   template <>
-  struct JSIConverter<Powertrain> {
+  struct JSIConverter<Powertrain> final {
     static inline Powertrain fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       std::string unionValue = JSIConverter<std::string>::fromJSI(runtime, arg);
       switch (hashString(unionValue.c_str(), unionValue.size())) {

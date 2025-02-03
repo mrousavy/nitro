@@ -55,7 +55,7 @@ namespace margelo::nitro {
 
   // C++ Car <> JS Car (object)
   template <>
-  struct JSIConverter<Car> {
+  struct JSIConverter<Car> final {
     static inline Car fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       jsi::Object obj = arg.asObject(runtime);
       return Car(

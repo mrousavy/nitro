@@ -44,7 +44,7 @@ namespace margelo::nitro {
 
   // C++ ImageSize <> JS ImageSize (object)
   template <>
-  struct JSIConverter<ImageSize> {
+  struct JSIConverter<ImageSize> final {
     static inline ImageSize fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       jsi::Object obj = arg.asObject(runtime);
       return ImageSize(

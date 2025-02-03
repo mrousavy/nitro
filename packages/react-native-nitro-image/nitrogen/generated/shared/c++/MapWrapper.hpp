@@ -44,7 +44,7 @@ namespace margelo::nitro {
 
   // C++ MapWrapper <> JS MapWrapper (object)
   template <>
-  struct JSIConverter<MapWrapper> {
+  struct JSIConverter<MapWrapper> final {
     static inline MapWrapper fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       jsi::Object obj = arg.asObject(runtime);
       return MapWrapper(

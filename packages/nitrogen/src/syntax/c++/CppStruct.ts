@@ -85,7 +85,7 @@ namespace margelo::nitro {
 
   // C++ ${typename} <> JS ${typename} (object)
   template <>
-  struct JSIConverter<${typename}> {
+  struct JSIConverter<${typename}> final {
     static inline ${typename} fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       jsi::Object obj = arg.asObject(runtime);
       return ${typename}(

@@ -44,7 +44,7 @@ namespace margelo::nitro {
 
   // C++ JsStyleStruct <> JS JsStyleStruct (object)
   template <>
-  struct JSIConverter<JsStyleStruct> {
+  struct JSIConverter<JsStyleStruct> final {
     static inline JsStyleStruct fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       jsi::Object obj = arg.asObject(runtime);
       return JsStyleStruct(
