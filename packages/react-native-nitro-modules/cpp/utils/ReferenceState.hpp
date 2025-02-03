@@ -26,6 +26,14 @@ struct ReferenceState {
   bool isDeleted;
   std::mutex mutex;
 
+  /**
+   * Decrements the strong ref count by one, and returns whether the value should be deleted.
+   */
+  inline bool decrementStrongRefCount() {
+    size_t oldRefCount = strongRefCount.fetch_sub(1);
+    return oldRefCount <= 1;
+  }
+
   explicit ReferenceState() : strongRefCount(1), weakRefCount(0), isDeleted(false) {}
 };
 

@@ -38,6 +38,7 @@ public:
   }
 
   BorrowingReference(BorrowingReference&& ref) : _value(ref._value), _state(ref._state) {
+    // Remove state from other BorrowingReference after moving since it's now stale data
     ref._value = nullptr;
     ref._state = nullptr;
   }
@@ -83,21 +84,15 @@ public:
 
 private:
   void maybeDestroy() {
-    _state->mutex.lock();
-
     if (_state->strongRefCount == 0 && _state->weakRefCount == 0) {
       // free the full memory if there are no more references at all
       if (!_state->isDeleted) [[unlikely]] {
-        // This should've happened in OwningReference already..
-        delete _value;
-        _state->isDeleted = true;
+        throw std::runtime_error("BorrowingReference<T> encountered a stale _value - OwningReference<T> should've already deleted this!");
       }
-      _state->mutex.unlock();
       delete _state;
+      _state = nullptr;
       return;
     }
-
-    _state->mutex.unlock();
   }
 
 private:

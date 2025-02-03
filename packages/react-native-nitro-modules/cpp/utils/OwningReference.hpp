@@ -54,8 +54,11 @@ public:
 
     if (_state != nullptr) {
       // destroy previous pointer
-      _state->strongRefCount--;
-      maybeDestroy();
+      bool shouldDestroy = _state->decrementStrongRefCount();
+      if (shouldDestroy) {
+        forceDestroyValue();
+      }
+      maybeDestroyState();
     }
 
     _value = ref._value;
@@ -92,8 +95,11 @@ public:
     }
 
     // decrement strong ref count on destroy
-    _state->strongRefCount--;
-    maybeDestroy();
+    bool shouldDestroy = _state->decrementStrongRefCount();
+    if (shouldDestroy) {
+      forceDestroyValue();
+    }
+    maybeDestroyState();
   }
 
 public:
@@ -141,7 +147,7 @@ public:
   void destroy() {
     std::unique_lock lock(_state->mutex);
 
-    forceDestroy();
+    forceDestroyValue();
   }
 
 public:
@@ -168,17 +174,11 @@ public:
   }
 
   inline bool operator==(T* other) const {
-    std::unique_lock lock(_state->mutex);
-
-    if (_state == nullptr || _state->isDeleted) {
-      return other == nullptr;
-    } else {
-      return other == _value;
-    }
+    return _value == other;
   }
 
   inline bool operator!=(T* other) const {
-    return !(this == other);
+    return _value != other;
   }
 
   inline bool operator==(const OwningReference<T>& other) const {
@@ -186,34 +186,26 @@ public:
   }
 
   inline bool operator!=(const OwningReference<T>& other) const {
-    return !(this == other);
+    return _value != other._value;
   }
 
 private:
-  void maybeDestroy() {
-    _state->mutex.lock();
-
-    if (_state->strongRefCount == 0) {
-      // after no strong references exist anymore
-      forceDestroy();
-    }
-
+  void maybeDestroyState() {
     if (_state->strongRefCount == 0 && _state->weakRefCount == 0) {
       // free the full memory if there are no more references at all
-      _state->mutex.unlock();
       delete _state;
+      _state = nullptr;
       return;
     }
-
-    _state->mutex.unlock();
   }
 
-  void forceDestroy() {
-    if (_state->isDeleted) {
+  void forceDestroyValue() {
+    if (_state->isDeleted) [[unlikely]] {
       // it has already been destroyed.
       return;
     }
     delete _value;
+    _value = nullptr;
     _state->isDeleted = true;
   }
 
