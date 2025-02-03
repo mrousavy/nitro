@@ -14,9 +14,6 @@ namespace margelo::nitro::image {
 
   using namespace facebook;
 
-  class SomeString;
-  class SomeDouble;
-
   /**
    * The C++ JNI bridge between the C++ std::variant and the Java class "Variant_String_Double".
    */
@@ -24,52 +21,54 @@ namespace margelo::nitro::image {
   public:
     static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Variant_String_Double;";
 
-    static jni::local_ref<JVariant_String_Double> create(jni::alias_ref<jni::JString> value) {
+    static jni::local_ref<JVariant_String_Double> create_0(jni::alias_ref<jni::JString> value) {
       static const auto method = javaClassStatic()->getStaticMethod<JVariant_String_Double(jni::alias_ref<jni::JString>)>("create");
       return method(javaClassStatic(), value);
     }
-    static jni::local_ref<JVariant_String_Double> create(double value) {
+    static jni::local_ref<JVariant_String_Double> create_1(double value) {
       static const auto method = javaClassStatic()->getStaticMethod<JVariant_String_Double(double)>("create");
       return method(javaClassStatic(), value);
     }
 
     static jni::local_ref<JVariant_String_Double> fromCpp(const std::variant<std::string, double>& variant) {
       switch (variant.index()) {
-        case 0: return create(jni::make_jstring(std::get<0>(variant)));
-        case 1: return create(std::get<1>(variant));
+        case 0: return create_0(jni::make_jstring(std::get<0>(variant)));
+        case 1: return create_1(std::get<1>(variant));
         default: throw std::invalid_argument("Variant holds unknown index! (" + std::to_string(variant.index()) + ")");
       }
     }
 
-    std::variant<std::string, double> toCpp();
+    [[nodiscard]] std::variant<std::string, double> toCpp() const;
   };
 
-  class SomeString: public jni::JavaClass<SomeString, JVariant_String_Double> {
-  public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Variant_String_Double$SomeString;";
-  
-    jni::local_ref<jni::JString> get() {
-      static const auto field = javaClassStatic()->getField<jni::JString>("value");
-      return getFieldValue(field);
-    }
-  };
-  
-  class SomeDouble: public jni::JavaClass<SomeDouble, JVariant_String_Double> {
-  public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Variant_String_Double$SomeDouble;";
-  
-    double get() {
-      static const auto field = javaClassStatic()->getField<double>("value");
-      return getFieldValue(field);
-    }
-  };
+  namespace JVariant_String_Double_impl {
+    class SomeString: public jni::JavaClass<SomeString, JVariant_String_Double> {
+    public:
+      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Variant_String_Double$SomeString;";
+    
+      [[nodiscard]] jni::local_ref<jni::JString> getValue() const {
+        static const auto field = javaClassStatic()->getField<jni::JString>("value");
+        return getFieldValue(field);
+      }
+    };
+    
+    class SomeDouble: public jni::JavaClass<SomeDouble, JVariant_String_Double> {
+    public:
+      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Variant_String_Double$SomeDouble;";
+    
+      [[nodiscard]] double getValue() const {
+        static const auto field = javaClassStatic()->getField<double>("value");
+        return getFieldValue(field);
+      }
+    };
+  } // namespace JVariant_String_Double_impl
 
-  std::variant<std::string, double> JVariant_String_Double::toCpp() {
-    if (isInstanceOf(SomeString::javaClassStatic())) {
-      auto jniValue = static_cast<SomeString*>(this)->get();
+  std::variant<std::string, double> JVariant_String_Double::toCpp() const {
+    if (isInstanceOf(JVariant_String_Double_impl::SomeString::javaClassStatic())) {
+      auto jniValue = static_cast<const JVariant_String_Double_impl::SomeString*>(this)->getValue();
       return jniValue->toStdString();
-    } else if (isInstanceOf(SomeDouble::javaClassStatic())) {
-      auto jniValue = static_cast<SomeDouble*>(this)->get();
+    } else if (isInstanceOf(JVariant_String_Double_impl::SomeDouble::javaClassStatic())) {
+      auto jniValue = static_cast<const JVariant_String_Double_impl::SomeDouble*>(this)->getValue();
       return jniValue;
     }
     throw std::invalid_argument("Variant is unknown Kotlin instance!");

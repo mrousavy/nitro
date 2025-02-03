@@ -14,9 +14,6 @@ namespace margelo::nitro::image {
 
   using namespace facebook;
 
-  class SomeDouble;
-  class SomeBoolean;
-
   /**
    * The C++ JNI bridge between the C++ std::variant and the Java class "Variant_Double_Boolean".
    */
@@ -24,52 +21,54 @@ namespace margelo::nitro::image {
   public:
     static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Variant_Double_Boolean;";
 
-    static jni::local_ref<JVariant_Double_Boolean> create(double value) {
+    static jni::local_ref<JVariant_Double_Boolean> create_0(double value) {
       static const auto method = javaClassStatic()->getStaticMethod<JVariant_Double_Boolean(double)>("create");
       return method(javaClassStatic(), value);
     }
-    static jni::local_ref<JVariant_Double_Boolean> create(jboolean value) {
+    static jni::local_ref<JVariant_Double_Boolean> create_1(jboolean value) {
       static const auto method = javaClassStatic()->getStaticMethod<JVariant_Double_Boolean(jboolean)>("create");
       return method(javaClassStatic(), value);
     }
 
     static jni::local_ref<JVariant_Double_Boolean> fromCpp(const std::variant<double, bool>& variant) {
       switch (variant.index()) {
-        case 0: return create(std::get<0>(variant));
-        case 1: return create(std::get<1>(variant));
+        case 0: return create_0(std::get<0>(variant));
+        case 1: return create_1(std::get<1>(variant));
         default: throw std::invalid_argument("Variant holds unknown index! (" + std::to_string(variant.index()) + ")");
       }
     }
 
-    std::variant<double, bool> toCpp();
+    [[nodiscard]] std::variant<double, bool> toCpp() const;
   };
 
-  class SomeDouble: public jni::JavaClass<SomeDouble, JVariant_Double_Boolean> {
-  public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Variant_Double_Boolean$SomeDouble;";
-  
-    double get() {
-      static const auto field = javaClassStatic()->getField<double>("value");
-      return getFieldValue(field);
-    }
-  };
-  
-  class SomeBoolean: public jni::JavaClass<SomeBoolean, JVariant_Double_Boolean> {
-  public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Variant_Double_Boolean$SomeBoolean;";
-  
-    jboolean get() {
-      static const auto field = javaClassStatic()->getField<jboolean>("value");
-      return getFieldValue(field);
-    }
-  };
+  namespace JVariant_Double_Boolean_impl {
+    class SomeDouble: public jni::JavaClass<SomeDouble, JVariant_Double_Boolean> {
+    public:
+      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Variant_Double_Boolean$SomeDouble;";
+    
+      [[nodiscard]] double getValue() const {
+        static const auto field = javaClassStatic()->getField<double>("value");
+        return getFieldValue(field);
+      }
+    };
+    
+    class SomeBoolean: public jni::JavaClass<SomeBoolean, JVariant_Double_Boolean> {
+    public:
+      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Variant_Double_Boolean$SomeBoolean;";
+    
+      [[nodiscard]] jboolean getValue() const {
+        static const auto field = javaClassStatic()->getField<jboolean>("value");
+        return getFieldValue(field);
+      }
+    };
+  } // namespace JVariant_Double_Boolean_impl
 
-  std::variant<double, bool> JVariant_Double_Boolean::toCpp() {
-    if (isInstanceOf(SomeDouble::javaClassStatic())) {
-      auto jniValue = static_cast<SomeDouble*>(this)->get();
+  std::variant<double, bool> JVariant_Double_Boolean::toCpp() const {
+    if (isInstanceOf(JVariant_Double_Boolean_impl::SomeDouble::javaClassStatic())) {
+      auto jniValue = static_cast<const JVariant_Double_Boolean_impl::SomeDouble*>(this)->getValue();
       return jniValue;
-    } else if (isInstanceOf(SomeBoolean::javaClassStatic())) {
-      auto jniValue = static_cast<SomeBoolean*>(this)->get();
+    } else if (isInstanceOf(JVariant_Double_Boolean_impl::SomeBoolean::javaClassStatic())) {
+      auto jniValue = static_cast<const JVariant_Double_Boolean_impl::SomeBoolean*>(this)->getValue();
       return static_cast<bool>(jniValue);
     }
     throw std::invalid_argument("Variant is unknown Kotlin instance!");
