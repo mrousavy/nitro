@@ -489,7 +489,9 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
   let __keys = ${getKeysFunc}(${cppParameterName})
   for __key in __keys {
     let __value = ${cppParameterName}[__key]!
-    __dictionary[${wrappingKey.parseFromCppToSwift('__key', 'swift')}] = ${wrappingValue.parseFromCppToSwift('__value', 'swift')}
+    let __swiftKey = ${indent(wrappingKey.parseFromCppToSwift('__key', 'swift'), '    ')}
+    let __swiftValue = ${indent(wrappingValue.parseFromCppToSwift('__value', 'swift'), '    ')}
+    __dictionary[__swiftKey] = __swiftValue
   }
   return __dictionary
 }()`.trim()
@@ -773,7 +775,9 @@ case ${i}:
 { () -> bridge.${bridge.specializationName} in
   var __map = ${createMap}(${swiftParameterName}.count)
   for (__k, __v) in ${swiftParameterName} {
-    __map[${indent(wrappingKey.parseFromSwiftToCpp('__k', 'swift'), '    ')}] = ${indent(wrappingValue.parseFromSwiftToCpp('__v', 'swift'), '    ')}
+    let __key = ${indent(wrappingKey.parseFromSwiftToCpp('__k', 'swift'), '    ')}
+    let __value = ${indent(wrappingValue.parseFromSwiftToCpp('__v', 'swift'), '    ')}
+    __map[__key] = __value
   }
   return __map
 }()`.trim()

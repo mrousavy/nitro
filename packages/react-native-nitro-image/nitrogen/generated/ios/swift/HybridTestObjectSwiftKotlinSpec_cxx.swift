@@ -651,25 +651,28 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
         let __keys = bridge.get_std__unordered_map_std__string__std__variant_double__bool___keys(map)
         for __key in __keys {
           let __value = map[__key]!
-          __dictionary[String(__key)] = { () -> Variant_Double_Bool in
-        switch __value.index() {
-          case 0:
-            let __actual = bridge.get_std__variant_double__bool__0(__value)
-            return .someDouble(__actual)
-          case 1:
-            let __actual = bridge.get_std__variant_double__bool__1(__value)
-            return .someBool(__actual)
-          default:
-            fatalError("Variant can never have index \(__value.index())!")
-        }
-      }()
+          let __swiftKey = String(__key)
+          let __swiftValue = { () -> Variant_Double_Bool in
+            switch __value.index() {
+              case 0:
+                let __actual = bridge.get_std__variant_double__bool__0(__value)
+                return .someDouble(__actual)
+              case 1:
+                let __actual = bridge.get_std__variant_double__bool__1(__value)
+                return .someBool(__actual)
+              default:
+                fatalError("Variant can never have index \(__value.index())!")
+            }
+          }()
+          __dictionary[__swiftKey] = __swiftValue
         }
         return __dictionary
       }())
       let __resultCpp = { () -> bridge.std__unordered_map_std__string__std__variant_double__bool__ in
         var __map = bridge.create_std__unordered_map_std__string__std__variant_double__bool__(__result.count)
         for (__k, __v) in __result {
-          __map[std.string(__k)] = { () -> bridge.std__variant_double__bool_ in
+          let __key = std.string(__k)
+          let __value = { () -> bridge.std__variant_double__bool_ in
             switch __v {
               case .someDouble(let __value):
                 return bridge.create_std__variant_double__bool_(__value)
@@ -677,6 +680,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
                 return bridge.create_std__variant_double__bool_(__value)
             }
           }()
+          __map[__key] = __value
         }
         return __map
       }()
