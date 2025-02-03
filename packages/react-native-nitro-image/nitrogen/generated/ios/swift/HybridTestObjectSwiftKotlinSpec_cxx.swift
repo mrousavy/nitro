@@ -581,14 +581,14 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       let __resultCpp = { () -> bridge.std__unordered_map_std__string__std__variant_double__bool__ in
         var __map = bridge.create_std__unordered_map_std__string__std__variant_double__bool__(__result.count)
         for (__k, __v) in __result {
-          __map[std.string(__k)] = { () -> bridge.std__variant_double__bool_ in
+          bridge.set_std__unordered_map_std__string__std__variant_double__bool__(&__map, std.string(__k), { () -> bridge.std__variant_double__bool_ in
             switch __v {
               case .someDouble(let __value):
                 return bridge.create_std__variant_double__bool_(__value)
               case .someBool(let __value):
                 return bridge.create_std__variant_double__bool_(__value)
             }
-          }().variant
+          }().variant)
         }
         return __map
       }()
@@ -606,7 +606,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       let __resultCpp = { () -> bridge.std__unordered_map_std__string__std__string_ in
         var __map = bridge.create_std__unordered_map_std__string__std__string_(__result.count)
         for (__k, __v) in __result {
-          __map[std.string(__k)] = std.string(__v)
+          bridge.set_std__unordered_map_std__string__std__string_(&__map, std.string(__k), std.string(__v))
         }
         return __map
       }()
