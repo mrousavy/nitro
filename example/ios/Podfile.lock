@@ -8,7 +8,7 @@ PODS:
   - hermes-engine (0.78.0-rc.1):
     - hermes-engine/Pre-built (= 0.78.0-rc.1)
   - hermes-engine/Pre-built (0.78.0-rc.1)
-  - NitroImage (0.21.0):
+  - NitroImage (0.22.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -32,7 +32,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - NitroModules (0.21.0):
+  - NitroModules (0.22.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1640,7 +1640,7 @@ PODS:
     - React-logger (= 0.78.0-rc.1)
     - React-perflogger (= 0.78.0-rc.1)
     - React-utils (= 0.78.0-rc.1)
-  - RNScreens (4.5.0):
+  - RNScreens (4.6.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1661,9 +1661,9 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - RNScreens/common (= 4.5.0)
+    - RNScreens/common (= 4.6.0)
     - Yoga
-  - RNScreens/common (4.5.0):
+  - RNScreens/common (4.6.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1920,9 +1920,9 @@ SPEC CHECKSUMS:
   fmt: a40bb5bd0294ea969aaaba240a927bd33d878cdd
   glog: eb93e2f488219332457c3c4eafd2738ddc7e80b8
   hermes-engine: 4f30ac09d90c9ea90f9e912f574c9f8110f0f32a
-  NitroImage: cb07adff64aea1818ad2383d2ebf5f60c0434bdd
-  NitroModules: d057e88f94315f1753def1a4e16f32ca272f7ed5
-  RCT-Folly: 36fe2295e44b10d831836cc0d1daec5f8abcf809
+  NitroImage: 6d73b02dc399a53fbe0cd68cc84ceb13d3694771
+  NitroModules: 31f6e18186607551638f3a3aa68b5c26ccd6b2f1
+  RCT-Folly: e78785aa9ba2ed998ea4151e314036f6c49e6d82
   RCTDeprecation: d26f07b97b34d9e9c93d09b95c3f7f2380f797b4
   RCTRequired: 00b12066335e477c039c631fdd7a6f2b768e573b
   RCTTypeSafety: 51115e55fba96189d1d7dc435bfb56adbf7cc393
@@ -1982,7 +1982,7 @@ SPEC CHECKSUMS:
   ReactAppDependencyProvider: 2d9aac12f04761a5579fcfa73c7a7ec468050c87
   ReactCodegen: 25ed4577cf313c5b86fe98a99e101d2362e65439
   ReactCommon: b757b948cfd3d19d8c6537b9eb5614981d851d0a
-  RNScreens: d0854539b51a53e38b61bcc9fb402439a9c73b26
+  RNScreens: c8c0b69f667891d474ad1229054d514f06778772
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   Yoga: cda4f2f85377668634ca208ecd3b2ef8bb524e1d
 
