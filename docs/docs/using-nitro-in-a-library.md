@@ -25,6 +25,8 @@ Each Hybrid Object you want to initialize from JS has to be registered in Nitro 
 Lastly, you can initialize and use the registered Hybrid Objects from JS. This is what this will ultimately look like:
 
 ```ts
+import type { HybridObject } from 'react-native-nitro-modules'
+
 interface Math extends HybridObject {
   add(a: number, b: number): number
 }
