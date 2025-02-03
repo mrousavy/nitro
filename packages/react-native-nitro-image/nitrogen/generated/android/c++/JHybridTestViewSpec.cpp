@@ -9,8 +9,7 @@
 
 
 
-#include <functional>
-#include "JFunc_void_double.hpp"
+
 
 namespace margelo::nitro::image {
 
@@ -30,39 +29,17 @@ namespace margelo::nitro::image {
   }
 
   // Properties
-  bool JHybridTestViewSpec::getSomeProp() {
-    static const auto method = _javaPart->getClass()->getMethod<jboolean()>("getSomeProp");
+  bool JHybridTestViewSpec::getIsBlue() {
+    static const auto method = _javaPart->getClass()->getMethod<jboolean()>("isBlue");
     auto __result = method(_javaPart);
     return static_cast<bool>(__result);
   }
-  void JHybridTestViewSpec::setSomeProp(bool someProp) {
-    static const auto method = _javaPart->getClass()->getMethod<void(jboolean /* someProp */)>("setSomeProp");
-    method(_javaPart, someProp);
-  }
-  std::function<void(double /* someParam */)> JHybridTestViewSpec::getSomeCallback() {
-    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JFunc_void_double::javaobject>()>("getSomeCallback_cxx");
-    auto __result = method(_javaPart);
-    return [&]() -> std::function<void(double /* someParam */)> {
-      if (__result->isInstanceOf(JFunc_void_double_cxx::javaClassStatic())) [[likely]] {
-        auto downcast = jni::static_ref_cast<JFunc_void_double_cxx::javaobject>(__result);
-        return downcast->cthis()->getFunction();
-      } else {
-        return [__result](double someParam) -> void {
-          return __result->invoke(someParam);
-        };
-      }
-    }();
-  }
-  void JHybridTestViewSpec::setSomeCallback(const std::function<void(double /* someParam */)>& someCallback) {
-    static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<JFunc_void_double::javaobject> /* someCallback */)>("setSomeCallback_cxx");
-    method(_javaPart, JFunc_void_double_cxx::fromCpp(someCallback));
+  void JHybridTestViewSpec::setIsBlue(bool isBlue) {
+    static const auto method = _javaPart->getClass()->getMethod<void(jboolean /* isBlue */)>("setBlue");
+    method(_javaPart, isBlue);
   }
 
   // Methods
-  bool JHybridTestViewSpec::someFunc(double someParam) {
-    static const auto method = _javaPart->getClass()->getMethod<jboolean(double /* someParam */)>("someFunc");
-    auto __result = method(_javaPart, someParam);
-    return static_cast<bool>(__result);
-  }
+  
 
 } // namespace margelo::nitro::image

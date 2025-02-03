@@ -217,17 +217,19 @@ ${hasBase ? `public class ${name.HybridTSpecCxx} : ${baseClasses.join(', ')}` : 
       let getter: string
       let setter: string
 
+      const getterName = p.getGetterName('swift')
+      const setterName = p.getSetterName('swift')
       if (bridged.needsSpecialHandling) {
         // we need custom C++ -> Swift conversion code
         getter = `
-auto __result = _swiftPart.${p.cppGetterName}();
+auto __result = _swiftPart.${getterName}();
 return ${bridged.parseFromSwiftToCpp('__result', 'c++')};
 `
-        setter = `_swiftPart.${p.cppSetterName}(${bridged.parseFromCppToSwift(p.name, 'c++')});`
+        setter = `_swiftPart.${setterName}(${bridged.parseFromCppToSwift(p.name, 'c++')});`
       } else {
         // just forward value directly
-        getter = `return _swiftPart.${p.cppGetterName}();`
-        setter = `_swiftPart.${p.cppSetterName}(std::forward<decltype(${p.name})>(${p.name}));`
+        getter = `return _swiftPart.${getterName}();`
+        setter = `_swiftPart.${setterName}(std::forward<decltype(${p.name})>(${p.name}));`
       }
       return p.getCode(
         'c++',

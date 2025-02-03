@@ -6,9 +6,11 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { useColors } from './useColors'
 import { Image } from 'react-native'
 import { BenchmarksScreen } from './screens/BenchmarksScreen'
+import { ViewScreen } from './screens/ViewScreen'
 
 const dna = require('./img/dna.png')
 const rocket = require('./img/rocket.png')
+const map = require('./img/map.png')
 
 const Tabs = createBottomTabNavigator()
 
@@ -47,6 +49,20 @@ export default function App() {
                 source={rocket}
                 tintColor={focused ? undefined : 'grey'}
                 style={{ width: size * 1.4, height: size * 1.4 }}
+              />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="View"
+          component={ViewScreen}
+          options={{
+            tabBarLabel: 'View',
+            tabBarIcon: ({ size, focused }) => (
+              <Image
+                source={map}
+                tintColor={focused ? undefined : 'grey'}
+                style={{ width: size, height: size }}
               />
             ),
           }}

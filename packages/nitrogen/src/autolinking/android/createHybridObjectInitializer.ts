@@ -18,17 +18,7 @@ export function createHybridObjectIntializer(): SourceFile[] {
   const autolinkingClassName = `${NitroConfig.getAndroidCxxLibName()}OnLoad`
 
   const jniRegistrations = getJNINativeRegistrations()
-    .map((r) => {
-      const code = `${r.namespace}::${r.className}::registerNatives();`
-      if (r.ifGuard != null) {
-        return `
-#if ${r.ifGuard}
-${code}
-#endif`.trim()
-      } else {
-        return code
-      }
-    })
+    .map((r) => `${r.namespace}::${r.className}::registerNatives();`)
     .filter(isNotDuplicate)
 
   const autolinkedHybridObjects = NitroConfig.getAutolinkedHybridObjects()

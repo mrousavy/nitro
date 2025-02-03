@@ -97,49 +97,18 @@ public class HybridTestViewSpec_cxx {
   }
 
   // Properties
-  public final var someProp: Bool {
+  public final var isBlue: Bool {
     @inline(__always)
     get {
-      return self.__implementation.someProp
+      return self.__implementation.isBlue
     }
     @inline(__always)
     set {
-      self.__implementation.someProp = newValue
-    }
-  }
-  
-  public final var someCallback: bridge.Func_void_double {
-    @inline(__always)
-    get {
-      return { () -> bridge.Func_void_double in
-        let __closureWrapper = Func_void_double(self.__implementation.someCallback)
-        return bridge.create_Func_void_double(__closureWrapper.toUnsafe())
-      }()
-    }
-    @inline(__always)
-    set {
-      self.__implementation.someCallback = { () -> (Double) -> Void in
-        let __wrappedFunction = bridge.wrap_Func_void_double(newValue)
-        return { (__someParam: Double) -> Void in
-          __wrappedFunction.call(__someParam)
-        }
-      }()
+      self.__implementation.isBlue = newValue
     }
   }
 
   // Methods
-  @inline(__always)
-  public final func someFunc(someParam: Double) -> bridge.Result_bool_ {
-    do {
-      let __result = try self.__implementation.someFunc(someParam: someParam)
-      let __resultCpp = __result
-      return bridge.create_Result_bool_(__resultCpp)
-    } catch (let __error) {
-      let __exceptionPtr = __error.toCpp()
-      return bridge.create_Result_bool_(__exceptionPtr)
-    }
-  }
-  
   public final func getView() -> UnsafeMutableRawPointer {
     return Unmanaged.passRetained(__implementation.view).toOpaque()
   }

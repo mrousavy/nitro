@@ -59,8 +59,8 @@
     "@types/react": "*",
     "jest": "*",
     "nitro-codegen": "*",
-    "react": "18.3.1",
-    "react-native": "0.77.0",
+    "react": "19.0.0",
+    "react-native": "0.78.0-rc.1",
     "react-native-nitro-modules": "*"
   },
   "peerDependencies": {

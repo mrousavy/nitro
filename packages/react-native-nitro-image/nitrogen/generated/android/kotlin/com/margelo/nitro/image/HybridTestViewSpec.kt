@@ -42,26 +42,10 @@ abstract class HybridTestViewSpec: HybridView() {
   @get:Keep
   @set:DoNotStrip
   @set:Keep
-  abstract var someProp: Boolean
-  
-  abstract var someCallback: (someParam: Double) -> Unit
-  
-  private var someCallback_cxx: Func_void_double
-    @Keep
-    @DoNotStrip
-    get() {
-      return Func_void_double_java(someCallback)
-    }
-    @Keep
-    @DoNotStrip
-    set(value) {
-      someCallback = value
-    }
+  abstract var isBlue: Boolean
 
   // Methods
-  @DoNotStrip
-  @Keep
-  abstract fun someFunc(someParam: Double): Boolean
+  
 
   private external fun initHybrid(): HybridData
 

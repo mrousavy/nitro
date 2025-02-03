@@ -7,10 +7,8 @@
 
 #pragma once
 
-#include <NitroModules/NitroDefines.hpp>
-#if REACT_NATIVE_VERSION_MINOR >= 78
-
 #include <optional>
+#include <NitroModules/NitroDefines.hpp>
 #include <NitroModules/NitroHash.hpp>
 #include <NitroModules/CachedProp.hpp>
 #include <react/renderer/core/ConcreteComponentDescriptor.h>
@@ -18,7 +16,7 @@
 #include <react/renderer/components/view/ConcreteViewShadowNode.h>
 #include <react/renderer/components/view/ViewProps.h>
 
-#include <functional>
+
 
 namespace margelo::nitro::image::views {
 
@@ -27,7 +25,7 @@ namespace margelo::nitro::image::views {
   /**
    * The name of the actual native View.
    */
-  extern const char HybridTestViewComponentName[] = "TestView";
+  extern const char HybridTestViewComponentName[];
 
   /**
    * Props for the "TestView" View.
@@ -41,8 +39,7 @@ namespace margelo::nitro::image::views {
                         const react::RawProps& rawProps);
 
   public:
-    CachedProp<bool> someProp;
-    CachedProp<std::function<void(double /* someParam */)>> someCallback;
+    CachedProp<bool> isBlue;
 
   private:
     static bool filterObjectKeys(const std::string& propName);
@@ -56,12 +53,12 @@ namespace margelo::nitro::image::views {
     HybridTestViewState() = default;
 
   public:
-    void setProps(HybridTestViewProps&& props) { _props.emplace(props); }
+    void setProps(const HybridTestViewProps& props) { _props.emplace(props); }
     const std::optional<HybridTestViewProps>& getProps() const { return _props; }
 
   public:
 #ifdef ANDROID
-  HybridTestViewState(const CustomStateData& previousState, folly::dynamic data) {}
+  HybridTestViewState(const HybridTestViewState& /* previousState */, folly::dynamic /* data */) {}
   folly::dynamic getDynamic() const {
     throw std::runtime_error("HybridTestViewState does not support folly!");
   }
@@ -90,13 +87,11 @@ namespace margelo::nitro::image::views {
     HybridTestViewComponentDescriptor(const react::ComponentDescriptorParameters& parameters);
 
   public:
+#ifdef ANDROID
     void adopt(react::ShadowNode& shadowNode) const override;
+#endif
   };
 
   /* The actual view for "TestView" needs to be implemented in platform-specific code. */
 
 } // namespace margelo::nitro::image::views
-
-#else
-#warning "View Component 'HybridTestView' will be unavailable in React Native, because it requires React Native 78 or higher."
-#endif

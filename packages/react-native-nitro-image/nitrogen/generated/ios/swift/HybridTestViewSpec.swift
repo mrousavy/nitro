@@ -11,11 +11,10 @@ import NitroModules
 /// See ``HybridTestViewSpec``
 public protocol HybridTestViewSpec_protocol: HybridObject, HybridView {
   // Properties
-  var someProp: Bool { get set }
-  var someCallback: (_ someParam: Double) -> Void { get set }
+  var isBlue: Bool { get set }
 
   // Methods
-  func someFunc(someParam: Double) throws -> Bool
+  
 }
 
 /// See ``HybridTestViewSpec``

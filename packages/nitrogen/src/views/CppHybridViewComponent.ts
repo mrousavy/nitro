@@ -70,10 +70,8 @@ ${createFileMetadataString(`${component}.hpp`)}
 
 #pragma once
 
-#include <NitroModules/NitroDefines.hpp>
-#if REACT_NATIVE_VERSION_MINOR >= 78
-
 #include <optional>
+#include <NitroModules/NitroDefines.hpp>
 #include <NitroModules/NitroHash.hpp>
 #include <NitroModules/CachedProp.hpp>
 #include <react/renderer/core/ConcreteComponentDescriptor.h>
@@ -90,7 +88,7 @@ namespace ${namespace} {
   /**
    * The name of the actual native View.
    */
-  extern const char ${nameVariable}[] = "${T}";
+  extern const char ${nameVariable}[];
 
   /**
    * Props for the "${spec.name}" View.
@@ -118,12 +116,12 @@ namespace ${namespace} {
     ${stateClassName}() = default;
 
   public:
-    void setProps(${propsClassName}&& props) { _props.emplace(props); }
+    void setProps(const ${propsClassName}& props) { _props.emplace(props); }
     const std::optional<${propsClassName}>& getProps() const { return _props; }
 
   public:
 #ifdef ANDROID
-  ${stateClassName}(const CustomStateData& previousState, folly::dynamic data) {}
+  ${stateClassName}(const ${stateClassName}& /* previousState */, folly::dynamic /* data */) {}
   folly::dynamic getDynamic() const {
     throw std::runtime_error("${stateClassName} does not support folly!");
   }
@@ -152,16 +150,14 @@ namespace ${namespace} {
     ${descriptorClassName}(const react::ComponentDescriptorParameters& parameters);
 
   public:
+#ifdef ANDROID
     void adopt(react::ShadowNode& shadowNode) const override;
+#endif
   };
 
   /* The actual view for "${spec.name}" needs to be implemented in platform-specific code. */
 
 } // namespace ${namespace}
-
-#else
-#warning "View Component '${HybridT}' will be unavailable in React Native, because it requires React Native 78 or higher."
-#endif
 `.trim()
 
   // .cpp code
@@ -178,7 +174,7 @@ ${name}([&]() -> CachedProp<${type}> {
   try {
     const react::RawValue* rawValue = rawProps.at("${prop.name}", nullptr, nullptr);
     if (rawValue == nullptr) return sourceProps.${name};
-    const auto& [runtime, value] = (std::pair<jsi::Runtime*, const jsi::Value&>)*rawValue;
+    const auto& [runtime, value] = (std::pair<jsi::Runtime*, jsi::Value>)*rawValue;
     return CachedProp<${type}>::fromRawValue(*runtime, value, sourceProps.${name});
   } catch (const std::exception& exc) {
     throw std::runtime_error(std::string("${spec.name}.${prop.name}: ") + exc.what());
@@ -193,12 +189,11 @@ ${name}([&]() -> CachedProp<${type}> {
 ${createFileMetadataString(`${component}.cpp`)}
 
 #include "${component}.hpp"
-#include <NitroModules/NitroDefines.hpp>
-#if REACT_NATIVE_VERSION_MINOR >= 78
 
 #include <string>
 #include <exception>
 #include <utility>
+#include <NitroModules/NitroDefines.hpp>
 #include <NitroModules/JSIConverter.hpp>
 #include <react/renderer/core/RawValue.h>
 #include <react/renderer/core/ShadowNode.h>
@@ -206,6 +201,8 @@ ${createFileMetadataString(`${component}.cpp`)}
 #include <react/renderer/components/view/ViewProps.h>
 
 namespace ${namespace} {
+
+  extern const char ${nameVariable}[] = "${T}";
 
   ${propsClassName}::${propsClassName}(const react::PropsParserContext& context,
   ${ctorIndent}   const ${propsClassName}& sourceProps,
@@ -224,25 +221,21 @@ namespace ${namespace} {
 
   ${descriptorClassName}::${descriptorClassName}(const react::ComponentDescriptorParameters& parameters)
     : ConcreteComponentDescriptor(parameters,
-                                  std::make_unique<react::RawPropsParser>(/* enableJsiParser */ true)) {}
+                                  react::RawPropsParser(/* enableJsiParser */ true)) {}
 
+#ifdef ANDROID
   void ${descriptorClassName}::adopt(react::ShadowNode& shadowNode) const {
     // This is called immediately after \`ShadowNode\` is created, cloned or in progress.
-#ifdef ANDROID
     // On Android, we need to wrap props in our state, which gets routed through Java and later unwrapped in JNI/C++.
-    auto& concreteShadowNode = static_cast<${shadowNodeClassName}&>(shadowNode);
+    auto& concreteShadowNode = dynamic_cast<${shadowNodeClassName}&>(shadowNode);
     const ${propsClassName}& props = concreteShadowNode.getConcreteProps();
     ${stateClassName} state;
     state.setProps(props);
     concreteShadowNode.setStateData(std::move(state));
-#else
-    // On iOS, prop updating happens through the updateProps: Obj-C selector.
-#endif
   }
+#endif
 
 } // namespace ${namespace}
-
-#endif
 `.trim()
 
   const files: SourceFile[] = [
