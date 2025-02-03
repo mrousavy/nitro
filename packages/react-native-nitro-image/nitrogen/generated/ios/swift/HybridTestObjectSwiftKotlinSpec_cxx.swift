@@ -97,7 +97,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   }
 
   // Properties
-  public var thisObject: bridge.std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_ {
+  public final var thisObject: bridge.std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_ {
     @inline(__always)
     get {
       return { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_ in
@@ -107,7 +107,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
     }
   }
   
-  public var optionalHybrid: bridge.std__optional_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec__ {
+  public final var optionalHybrid: bridge.std__optional_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec__ {
     @inline(__always)
     get {
       return { () -> bridge.std__optional_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec__ in
@@ -137,7 +137,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
     }
   }
   
-  public var numberValue: Double {
+  public final var numberValue: Double {
     @inline(__always)
     get {
       return self.__implementation.numberValue
@@ -148,7 +148,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
     }
   }
   
-  public var boolValue: Bool {
+  public final var boolValue: Bool {
     @inline(__always)
     get {
       return self.__implementation.boolValue
@@ -159,7 +159,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
     }
   }
   
-  public var stringValue: std.string {
+  public final var stringValue: std.string {
     @inline(__always)
     get {
       return std.string(self.__implementation.stringValue)
@@ -170,7 +170,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
     }
   }
   
-  public var bigintValue: Int64 {
+  public final var bigintValue: Int64 {
     @inline(__always)
     get {
       return self.__implementation.bigintValue
@@ -181,7 +181,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
     }
   }
   
-  public var stringOrUndefined: bridge.std__optional_std__string_ {
+  public final var stringOrUndefined: bridge.std__optional_std__string_ {
     @inline(__always)
     get {
       return { () -> bridge.std__optional_std__string_ in
@@ -204,7 +204,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
     }
   }
   
-  public var stringOrNull: bridge.std__optional_std__string_ {
+  public final var stringOrNull: bridge.std__optional_std__string_ {
     @inline(__always)
     get {
       return { () -> bridge.std__optional_std__string_ in
@@ -227,7 +227,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
     }
   }
   
-  public var optionalString: bridge.std__optional_std__string_ {
+  public final var optionalString: bridge.std__optional_std__string_ {
     @inline(__always)
     get {
       return { () -> bridge.std__optional_std__string_ in
@@ -250,7 +250,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
     }
   }
   
-  public var optionalArray: bridge.std__optional_std__vector_std__string__ {
+  public final var optionalArray: bridge.std__optional_std__vector_std__string__ {
     @inline(__always)
     get {
       return { () -> bridge.std__optional_std__vector_std__string__ in
@@ -279,7 +279,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
     }
   }
   
-  public var optionalEnum: bridge.std__optional_Powertrain_ {
+  public final var optionalEnum: bridge.std__optional_Powertrain_ {
     @inline(__always)
     get {
       return { () -> bridge.std__optional_Powertrain_ in
@@ -296,7 +296,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
     }
   }
   
-  public var optionalOldEnum: bridge.std__optional_OldEnum_ {
+  public final var optionalOldEnum: bridge.std__optional_OldEnum_ {
     @inline(__always)
     get {
       return { () -> bridge.std__optional_OldEnum_ in
@@ -313,7 +313,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
     }
   }
   
-  public var optionalCallback: bridge.std__optional_std__function_void_double____value______ {
+  public final var optionalCallback: bridge.std__optional_std__function_void_double____value______ {
     @inline(__always)
     get {
       return { () -> bridge.std__optional_std__function_void_double____value______ in
@@ -344,7 +344,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
     }
   }
   
-  public var someVariant: bridge.std__variant_std__string__double_ {
+  public final var someVariant: bridge.std__variant_std__string__double_ {
     @inline(__always)
     get {
       return { () -> bridge.std__variant_std__string__double_ in
@@ -376,7 +376,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
 
   // Methods
   @inline(__always)
-  public func newTestObject() -> bridge.Result_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec__ {
+  public final func newTestObject() -> bridge.Result_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec__ {
     do {
       let __result = try self.__implementation.newTestObject()
       let __resultCpp = { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_ in
@@ -391,7 +391,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public func simpleFunc() -> bridge.Result_void_ {
+  public final func simpleFunc() -> bridge.Result_void_ {
     do {
       try self.__implementation.simpleFunc()
       return bridge.create_Result_void_()
@@ -402,7 +402,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public func addNumbers(a: Double, b: Double) -> bridge.Result_double_ {
+  public final func addNumbers(a: Double, b: Double) -> bridge.Result_double_ {
     do {
       let __result = try self.__implementation.addNumbers(a: a, b: b)
       let __resultCpp = __result
@@ -414,7 +414,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public func addStrings(a: std.string, b: std.string) -> bridge.Result_std__string_ {
+  public final func addStrings(a: std.string, b: std.string) -> bridge.Result_std__string_ {
     do {
       let __result = try self.__implementation.addStrings(a: String(a), b: String(b))
       let __resultCpp = std.string(__result)
@@ -426,7 +426,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public func multipleArguments(num: Double, str: std.string, boo: Bool) -> bridge.Result_void_ {
+  public final func multipleArguments(num: Double, str: std.string, boo: Bool) -> bridge.Result_void_ {
     do {
       try self.__implementation.multipleArguments(num: num, str: String(str), boo: boo)
       return bridge.create_Result_void_()
@@ -437,7 +437,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public func bounceStrings(array: bridge.std__vector_std__string_) -> bridge.Result_std__vector_std__string__ {
+  public final func bounceStrings(array: bridge.std__vector_std__string_) -> bridge.Result_std__vector_std__string__ {
     do {
       let __result = try self.__implementation.bounceStrings(array: array.map({ __item in String(__item) }))
       let __resultCpp = { () -> bridge.std__vector_std__string_ in
@@ -455,7 +455,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public func bounceNumbers(array: bridge.std__vector_double_) -> bridge.Result_std__vector_double__ {
+  public final func bounceNumbers(array: bridge.std__vector_double_) -> bridge.Result_std__vector_double__ {
     do {
       let __result = try self.__implementation.bounceNumbers(array: array.map({ __item in __item }))
       let __resultCpp = { () -> bridge.std__vector_double_ in
@@ -473,7 +473,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public func bounceStructs(array: bridge.std__vector_Person_) -> bridge.Result_std__vector_Person__ {
+  public final func bounceStructs(array: bridge.std__vector_Person_) -> bridge.Result_std__vector_Person__ {
     do {
       let __result = try self.__implementation.bounceStructs(array: array.map({ __item in __item }))
       let __resultCpp = { () -> bridge.std__vector_Person_ in
@@ -491,7 +491,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public func bounceEnums(array: bridge.std__vector_Powertrain_) -> bridge.Result_std__vector_Powertrain__ {
+  public final func bounceEnums(array: bridge.std__vector_Powertrain_) -> bridge.Result_std__vector_Powertrain__ {
     do {
       let __result = try self.__implementation.bounceEnums(array: array.map({ __item in __item }))
       let __resultCpp = { () -> bridge.std__vector_Powertrain_ in
@@ -509,7 +509,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public func complexEnumCallback(array: bridge.std__vector_Powertrain_, callback: bridge.Func_void_std__vector_Powertrain_) -> bridge.Result_void_ {
+  public final func complexEnumCallback(array: bridge.std__vector_Powertrain_, callback: bridge.Func_void_std__vector_Powertrain_) -> bridge.Result_void_ {
     do {
       try self.__implementation.complexEnumCallback(array: array.map({ __item in __item }), callback: { () -> ([Powertrain]) -> Void in
         let __wrappedFunction = bridge.wrap_Func_void_std__vector_Powertrain_(callback)
@@ -531,7 +531,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public func createMap() -> bridge.Result_std__shared_ptr_AnyMap__ {
+  public final func createMap() -> bridge.Result_std__shared_ptr_AnyMap__ {
     do {
       let __result = try self.__implementation.createMap()
       let __resultCpp = __result.cppPart
@@ -543,7 +543,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public func mapRoundtrip(map: margelo.nitro.TSharedMap) -> bridge.Result_std__shared_ptr_AnyMap__ {
+  public final func mapRoundtrip(map: margelo.nitro.TSharedMap) -> bridge.Result_std__shared_ptr_AnyMap__ {
     do {
       let __result = try self.__implementation.mapRoundtrip(map: AnyMapHolder(withCppPart: map))
       let __resultCpp = __result.cppPart
@@ -555,7 +555,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public func bounceMap(map: bridge.std__unordered_map_std__string__std__variant_double__bool__) -> bridge.Result_std__unordered_map_std__string__std__variant_double__bool___ {
+  public final func bounceMap(map: bridge.std__unordered_map_std__string__std__variant_double__bool__) -> bridge.Result_std__unordered_map_std__string__std__variant_double__bool___ {
     do {
       let __result = try self.__implementation.bounceMap(map: { () -> Dictionary<String, Variant_Double_Bool> in
         var __dictionary = Dictionary<String, Variant_Double_Bool>(minimumCapacity: map.size())
@@ -600,7 +600,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public func extractMap(mapWrapper: MapWrapper) -> bridge.Result_std__unordered_map_std__string__std__string__ {
+  public final func extractMap(mapWrapper: MapWrapper) -> bridge.Result_std__unordered_map_std__string__std__string__ {
     do {
       let __result = try self.__implementation.extractMap(mapWrapper: mapWrapper)
       let __resultCpp = { () -> bridge.std__unordered_map_std__string__std__string_ in
@@ -618,7 +618,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public func funcThatThrows() -> bridge.Result_double_ {
+  public final func funcThatThrows() -> bridge.Result_double_ {
     do {
       let __result = try self.__implementation.funcThatThrows()
       let __resultCpp = __result
@@ -630,7 +630,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public func funcThatThrowsBeforePromise() -> bridge.Result_std__shared_ptr_Promise_void___ {
+  public final func funcThatThrowsBeforePromise() -> bridge.Result_std__shared_ptr_Promise_void___ {
     do {
       let __result = try self.__implementation.funcThatThrowsBeforePromise()
       let __resultCpp = { () -> bridge.std__shared_ptr_Promise_void__ in
@@ -649,7 +649,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public func throwError(error: std.exception_ptr) -> bridge.Result_void_ {
+  public final func throwError(error: std.exception_ptr) -> bridge.Result_void_ {
     do {
       try self.__implementation.throwError(error: RuntimeError.from(cppError: error))
       return bridge.create_Result_void_()
@@ -660,7 +660,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public func tryOptionalParams(num: Double, boo: Bool, str: bridge.std__optional_std__string_) -> bridge.Result_std__string_ {
+  public final func tryOptionalParams(num: Double, boo: Bool, str: bridge.std__optional_std__string_) -> bridge.Result_std__string_ {
     do {
       let __result = try self.__implementation.tryOptionalParams(num: num, boo: boo, str: { () -> String? in
         if let __unwrapped = str.value {
@@ -678,7 +678,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public func tryMiddleParam(num: Double, boo: bridge.std__optional_bool_, str: std.string) -> bridge.Result_std__string_ {
+  public final func tryMiddleParam(num: Double, boo: bridge.std__optional_bool_, str: std.string) -> bridge.Result_std__string_ {
     do {
       let __result = try self.__implementation.tryMiddleParam(num: num, boo: boo.value, str: String(str))
       let __resultCpp = std.string(__result)
@@ -690,7 +690,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public func tryOptionalEnum(value: bridge.std__optional_Powertrain_) -> bridge.Result_std__optional_Powertrain__ {
+  public final func tryOptionalEnum(value: bridge.std__optional_Powertrain_) -> bridge.Result_std__optional_Powertrain__ {
     do {
       let __result = try self.__implementation.tryOptionalEnum(value: value.value)
       let __resultCpp = { () -> bridge.std__optional_Powertrain_ in
@@ -708,7 +708,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public func calculateFibonacciSync(value: Double) -> bridge.Result_int64_t_ {
+  public final func calculateFibonacciSync(value: Double) -> bridge.Result_int64_t_ {
     do {
       let __result = try self.__implementation.calculateFibonacciSync(value: value)
       let __resultCpp = __result
@@ -720,7 +720,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public func calculateFibonacciAsync(value: Double) -> bridge.Result_std__shared_ptr_Promise_int64_t___ {
+  public final func calculateFibonacciAsync(value: Double) -> bridge.Result_std__shared_ptr_Promise_int64_t___ {
     do {
       let __result = try self.__implementation.calculateFibonacciAsync(value: value)
       let __resultCpp = { () -> bridge.std__shared_ptr_Promise_int64_t__ in
@@ -739,7 +739,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public func wait(seconds: Double) -> bridge.Result_std__shared_ptr_Promise_void___ {
+  public final func wait(seconds: Double) -> bridge.Result_std__shared_ptr_Promise_void___ {
     do {
       let __result = try self.__implementation.wait(seconds: seconds)
       let __resultCpp = { () -> bridge.std__shared_ptr_Promise_void__ in
@@ -758,7 +758,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public func promiseThrows() -> bridge.Result_std__shared_ptr_Promise_void___ {
+  public final func promiseThrows() -> bridge.Result_std__shared_ptr_Promise_void___ {
     do {
       let __result = try self.__implementation.promiseThrows()
       let __resultCpp = { () -> bridge.std__shared_ptr_Promise_void__ in
@@ -777,7 +777,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public func awaitAndGetPromise(promise: bridge.std__shared_ptr_Promise_double__) -> bridge.Result_std__shared_ptr_Promise_double___ {
+  public final func awaitAndGetPromise(promise: bridge.std__shared_ptr_Promise_double__) -> bridge.Result_std__shared_ptr_Promise_double___ {
     do {
       let __result = try self.__implementation.awaitAndGetPromise(promise: { () -> Promise<Double> in
         let __promise = Promise<Double>()
@@ -816,7 +816,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public func awaitAndGetComplexPromise(promise: bridge.std__shared_ptr_Promise_Car__) -> bridge.Result_std__shared_ptr_Promise_Car___ {
+  public final func awaitAndGetComplexPromise(promise: bridge.std__shared_ptr_Promise_Car__) -> bridge.Result_std__shared_ptr_Promise_Car___ {
     do {
       let __result = try self.__implementation.awaitAndGetComplexPromise(promise: { () -> Promise<Car> in
         let __promise = Promise<Car>()
@@ -855,7 +855,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public func awaitPromise(promise: bridge.std__shared_ptr_Promise_void__) -> bridge.Result_std__shared_ptr_Promise_void___ {
+  public final func awaitPromise(promise: bridge.std__shared_ptr_Promise_void__) -> bridge.Result_std__shared_ptr_Promise_void___ {
     do {
       let __result = try self.__implementation.awaitPromise(promise: { () -> Promise<Void> in
         let __promise = Promise<Void>()
@@ -892,7 +892,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public func callCallback(callback: bridge.Func_void) -> bridge.Result_void_ {
+  public final func callCallback(callback: bridge.Func_void) -> bridge.Result_void_ {
     do {
       try self.__implementation.callCallback(callback: { () -> () -> Void in
         let __wrappedFunction = bridge.wrap_Func_void(callback)
@@ -908,7 +908,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public func callAll(first: bridge.Func_void, second: bridge.Func_void, third: bridge.Func_void) -> bridge.Result_void_ {
+  public final func callAll(first: bridge.Func_void, second: bridge.Func_void, third: bridge.Func_void) -> bridge.Result_void_ {
     do {
       try self.__implementation.callAll(first: { () -> () -> Void in
         let __wrappedFunction = bridge.wrap_Func_void(first)
@@ -934,7 +934,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public func callWithOptional(value: bridge.std__optional_double_, callback: bridge.Func_void_std__optional_double_) -> bridge.Result_void_ {
+  public final func callWithOptional(value: bridge.std__optional_double_, callback: bridge.Func_void_std__optional_double_) -> bridge.Result_void_ {
     do {
       try self.__implementation.callWithOptional(value: value.value, callback: { () -> (Double?) -> Void in
         let __wrappedFunction = bridge.wrap_Func_void_std__optional_double_(callback)
@@ -956,7 +956,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public func callSumUpNTimes(callback: bridge.Func_std__shared_ptr_Promise_double__, n: Double) -> bridge.Result_std__shared_ptr_Promise_double___ {
+  public final func callSumUpNTimes(callback: bridge.Func_std__shared_ptr_Promise_double__, n: Double) -> bridge.Result_std__shared_ptr_Promise_double___ {
     do {
       let __result = try self.__implementation.callSumUpNTimes(callback: { () -> () -> Promise<Double> in
         let __wrappedFunction = bridge.wrap_Func_std__shared_ptr_Promise_double__(callback)
@@ -1001,7 +1001,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public func callbackAsyncPromise(callback: bridge.Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double____) -> bridge.Result_std__shared_ptr_Promise_double___ {
+  public final func callbackAsyncPromise(callback: bridge.Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double____) -> bridge.Result_std__shared_ptr_Promise_double___ {
     do {
       let __result = try self.__implementation.callbackAsyncPromise(callback: { () -> () -> Promise<Promise<Double>> in
         let __wrappedFunction = bridge.wrap_Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double____(callback)
@@ -1046,7 +1046,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public func callbackAsyncPromiseBuffer(callback: bridge.Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____) -> bridge.Result_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer____ {
+  public final func callbackAsyncPromiseBuffer(callback: bridge.Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____) -> bridge.Result_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer____ {
     do {
       let __result = try self.__implementation.callbackAsyncPromiseBuffer(callback: { () -> () -> Promise<Promise<ArrayBufferHolder>> in
         let __wrappedFunction = bridge.wrap_Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____(callback)
@@ -1091,7 +1091,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public func getComplexCallback() -> bridge.Result_std__function_void_double____value______ {
+  public final func getComplexCallback() -> bridge.Result_std__function_void_double____value______ {
     do {
       let __result = try self.__implementation.getComplexCallback()
       let __resultCpp = { () -> bridge.Func_void_double in
@@ -1106,7 +1106,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public func getValueFromJSCallbackAndWait(getValue: bridge.Func_std__shared_ptr_Promise_double__) -> bridge.Result_std__shared_ptr_Promise_double___ {
+  public final func getValueFromJSCallbackAndWait(getValue: bridge.Func_std__shared_ptr_Promise_double__) -> bridge.Result_std__shared_ptr_Promise_double___ {
     do {
       let __result = try self.__implementation.getValueFromJSCallbackAndWait(getValue: { () -> () -> Promise<Double> in
         let __wrappedFunction = bridge.wrap_Func_std__shared_ptr_Promise_double__(getValue)
@@ -1151,7 +1151,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public func getValueFromJsCallback(callback: bridge.Func_std__shared_ptr_Promise_std__string__, andThenCall: bridge.Func_void_std__string) -> bridge.Result_std__shared_ptr_Promise_void___ {
+  public final func getValueFromJsCallback(callback: bridge.Func_std__shared_ptr_Promise_std__string__, andThenCall: bridge.Func_void_std__string) -> bridge.Result_std__shared_ptr_Promise_void___ {
     do {
       let __result = try self.__implementation.getValueFromJsCallback(callback: { () -> () -> Promise<String> in
         let __wrappedFunction = bridge.wrap_Func_std__shared_ptr_Promise_std__string__(callback)
@@ -1201,7 +1201,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public func getCar() -> bridge.Result_Car_ {
+  public final func getCar() -> bridge.Result_Car_ {
     do {
       let __result = try self.__implementation.getCar()
       let __resultCpp = __result
@@ -1213,7 +1213,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public func isCarElectric(car: Car) -> bridge.Result_bool_ {
+  public final func isCarElectric(car: Car) -> bridge.Result_bool_ {
     do {
       let __result = try self.__implementation.isCarElectric(car: car)
       let __resultCpp = __result
@@ -1225,7 +1225,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public func getDriver(car: Car) -> bridge.Result_std__optional_Person__ {
+  public final func getDriver(car: Car) -> bridge.Result_std__optional_Person__ {
     do {
       let __result = try self.__implementation.getDriver(car: car)
       let __resultCpp = { () -> bridge.std__optional_Person_ in
@@ -1243,7 +1243,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public func jsStyleObjectAsParameters(params: JsStyleStruct) -> bridge.Result_void_ {
+  public final func jsStyleObjectAsParameters(params: JsStyleStruct) -> bridge.Result_void_ {
     do {
       try self.__implementation.jsStyleObjectAsParameters(params: params)
       return bridge.create_Result_void_()
@@ -1254,7 +1254,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public func createArrayBuffer() -> bridge.Result_std__shared_ptr_ArrayBuffer__ {
+  public final func createArrayBuffer() -> bridge.Result_std__shared_ptr_ArrayBuffer__ {
     do {
       let __result = try self.__implementation.createArrayBuffer()
       let __resultCpp = __result.getArrayBuffer()
@@ -1266,7 +1266,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public func getBufferLastItem(buffer: ArrayBufferHolder) -> bridge.Result_double_ {
+  public final func getBufferLastItem(buffer: ArrayBufferHolder) -> bridge.Result_double_ {
     do {
       let __result = try self.__implementation.getBufferLastItem(buffer: buffer)
       let __resultCpp = __result
@@ -1278,7 +1278,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public func setAllValuesTo(buffer: ArrayBufferHolder, value: Double) -> bridge.Result_void_ {
+  public final func setAllValuesTo(buffer: ArrayBufferHolder, value: Double) -> bridge.Result_void_ {
     do {
       try self.__implementation.setAllValuesTo(buffer: buffer, value: value)
       return bridge.create_Result_void_()
@@ -1289,7 +1289,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public func createArrayBufferAsync() -> bridge.Result_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer____ {
+  public final func createArrayBufferAsync() -> bridge.Result_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer____ {
     do {
       let __result = try self.__implementation.createArrayBufferAsync()
       let __resultCpp = { () -> bridge.std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___ in
@@ -1308,7 +1308,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public func createChild() -> bridge.Result_std__shared_ptr_margelo__nitro__image__HybridChildSpec__ {
+  public final func createChild() -> bridge.Result_std__shared_ptr_margelo__nitro__image__HybridChildSpec__ {
     do {
       let __result = try self.__implementation.createChild()
       let __resultCpp = { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridChildSpec_ in
@@ -1323,7 +1323,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public func createBase() -> bridge.Result_std__shared_ptr_margelo__nitro__image__HybridBaseSpec__ {
+  public final func createBase() -> bridge.Result_std__shared_ptr_margelo__nitro__image__HybridBaseSpec__ {
     do {
       let __result = try self.__implementation.createBase()
       let __resultCpp = { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridBaseSpec_ in
@@ -1338,7 +1338,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public func createBaseActualChild() -> bridge.Result_std__shared_ptr_margelo__nitro__image__HybridBaseSpec__ {
+  public final func createBaseActualChild() -> bridge.Result_std__shared_ptr_margelo__nitro__image__HybridBaseSpec__ {
     do {
       let __result = try self.__implementation.createBaseActualChild()
       let __resultCpp = { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridBaseSpec_ in
@@ -1353,7 +1353,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public func bounceChild(child: bridge.std__shared_ptr_margelo__nitro__image__HybridChildSpec_) -> bridge.Result_std__shared_ptr_margelo__nitro__image__HybridChildSpec__ {
+  public final func bounceChild(child: bridge.std__shared_ptr_margelo__nitro__image__HybridChildSpec_) -> bridge.Result_std__shared_ptr_margelo__nitro__image__HybridChildSpec__ {
     do {
       let __result = try self.__implementation.bounceChild(child: { () -> HybridChildSpec in
         let __unsafePointer = bridge.get_std__shared_ptr_margelo__nitro__image__HybridChildSpec_(child)
@@ -1372,7 +1372,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public func bounceBase(base: bridge.std__shared_ptr_margelo__nitro__image__HybridBaseSpec_) -> bridge.Result_std__shared_ptr_margelo__nitro__image__HybridBaseSpec__ {
+  public final func bounceBase(base: bridge.std__shared_ptr_margelo__nitro__image__HybridBaseSpec_) -> bridge.Result_std__shared_ptr_margelo__nitro__image__HybridBaseSpec__ {
     do {
       let __result = try self.__implementation.bounceBase(base: { () -> HybridBaseSpec in
         let __unsafePointer = bridge.get_std__shared_ptr_margelo__nitro__image__HybridBaseSpec_(base)
@@ -1391,7 +1391,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public func bounceChildBase(child: bridge.std__shared_ptr_margelo__nitro__image__HybridChildSpec_) -> bridge.Result_std__shared_ptr_margelo__nitro__image__HybridBaseSpec__ {
+  public final func bounceChildBase(child: bridge.std__shared_ptr_margelo__nitro__image__HybridChildSpec_) -> bridge.Result_std__shared_ptr_margelo__nitro__image__HybridBaseSpec__ {
     do {
       let __result = try self.__implementation.bounceChildBase(child: { () -> HybridChildSpec in
         let __unsafePointer = bridge.get_std__shared_ptr_margelo__nitro__image__HybridChildSpec_(child)
@@ -1410,7 +1410,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public func castBase(base: bridge.std__shared_ptr_margelo__nitro__image__HybridBaseSpec_) -> bridge.Result_std__shared_ptr_margelo__nitro__image__HybridChildSpec__ {
+  public final func castBase(base: bridge.std__shared_ptr_margelo__nitro__image__HybridBaseSpec_) -> bridge.Result_std__shared_ptr_margelo__nitro__image__HybridChildSpec__ {
     do {
       let __result = try self.__implementation.castBase(base: { () -> HybridBaseSpec in
         let __unsafePointer = bridge.get_std__shared_ptr_margelo__nitro__image__HybridBaseSpec_(base)

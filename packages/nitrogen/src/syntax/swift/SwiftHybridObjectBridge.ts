@@ -443,7 +443,7 @@ set {
   }
 
   const code = `
-public var ${property.name}: ${bridgedType.getTypeCode('swift')} {
+public final var ${property.name}: ${bridgedType.getTypeCode('swift')} {
   ${indent(body.join('\n'), '  ')}
 }
   `
@@ -487,7 +487,7 @@ return bridge.${resultBridge.funcName}()
 
   return `
 @inline(__always)
-public func ${method.name}(${params.join(', ')}) -> ${bridgedResultType.getTypeCode('swift')} {
+public final func ${method.name}(${params.join(', ')}) -> ${bridgedResultType.getTypeCode('swift')} {
   do {
     ${indent(body, '    ')}
   } catch (let __error) {

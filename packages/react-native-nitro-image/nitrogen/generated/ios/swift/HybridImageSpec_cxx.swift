@@ -97,21 +97,21 @@ public class HybridImageSpec_cxx {
   }
 
   // Properties
-  public var size: ImageSize {
+  public final var size: ImageSize {
     @inline(__always)
     get {
       return self.__implementation.size
     }
   }
   
-  public var pixelFormat: Int32 {
+  public final var pixelFormat: Int32 {
     @inline(__always)
     get {
       return self.__implementation.pixelFormat.rawValue
     }
   }
   
-  public var someSettableProp: Double {
+  public final var someSettableProp: Double {
     @inline(__always)
     get {
       return self.__implementation.someSettableProp
@@ -124,7 +124,7 @@ public class HybridImageSpec_cxx {
 
   // Methods
   @inline(__always)
-  public func toArrayBuffer(format: Int32) -> bridge.Result_double_ {
+  public final func toArrayBuffer(format: Int32) -> bridge.Result_double_ {
     do {
       let __result = try self.__implementation.toArrayBuffer(format: margelo.nitro.image.ImageFormat(rawValue: format)!)
       let __resultCpp = __result
@@ -136,7 +136,7 @@ public class HybridImageSpec_cxx {
   }
   
   @inline(__always)
-  public func saveToFile(path: std.string, onFinished: bridge.Func_void_std__string) -> bridge.Result_void_ {
+  public final func saveToFile(path: std.string, onFinished: bridge.Func_void_std__string) -> bridge.Result_void_ {
     do {
       try self.__implementation.saveToFile(path: String(path), onFinished: { () -> (String) -> Void in
         let __wrappedFunction = bridge.wrap_Func_void_std__string(onFinished)

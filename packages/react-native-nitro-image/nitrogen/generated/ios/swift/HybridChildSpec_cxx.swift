@@ -100,7 +100,7 @@ public class HybridChildSpec_cxx : HybridBaseSpec_cxx {
   }
 
   // Properties
-  public var childValue: Double {
+  public final var childValue: Double {
     @inline(__always)
     get {
       return self.__implementation.childValue

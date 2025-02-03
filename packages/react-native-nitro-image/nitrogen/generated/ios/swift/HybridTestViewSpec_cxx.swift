@@ -97,7 +97,7 @@ public class HybridTestViewSpec_cxx {
   }
 
   // Properties
-  public var someProp: Bool {
+  public final var someProp: Bool {
     @inline(__always)
     get {
       return self.__implementation.someProp
@@ -108,7 +108,7 @@ public class HybridTestViewSpec_cxx {
     }
   }
   
-  public var someCallback: bridge.Func_void_double {
+  public final var someCallback: bridge.Func_void_double {
     @inline(__always)
     get {
       return { () -> bridge.Func_void_double in
@@ -129,7 +129,7 @@ public class HybridTestViewSpec_cxx {
 
   // Methods
   @inline(__always)
-  public func someFunc(someParam: Double) -> bridge.Result_bool_ {
+  public final func someFunc(someParam: Double) -> bridge.Result_bool_ {
     do {
       let __result = try self.__implementation.someFunc(someParam: someParam)
       let __resultCpp = __result
