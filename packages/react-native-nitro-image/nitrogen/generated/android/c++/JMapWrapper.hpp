@@ -53,7 +53,7 @@ namespace margelo::nitro::image {
     [[maybe_unused]]
     static jni::local_ref<JMapWrapper::javaobject> fromCpp(const MapWrapper& value) {
       return newInstance(
-        [&]() {
+        [&]() -> jni::local_ref<jni::JMap<jni::JString, jni::JString>> {
           auto __map = jni::JHashMap<jni::JString, jni::JString>::create(value.map.size());
           for (const auto& __entry : value.map) {
             __map->put(jni::make_jstring(__entry.first), jni::make_jstring(__entry.second));

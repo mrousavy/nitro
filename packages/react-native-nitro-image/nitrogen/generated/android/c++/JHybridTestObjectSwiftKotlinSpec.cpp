@@ -372,7 +372,7 @@ namespace margelo::nitro::image {
   }
   std::unordered_map<std::string, std::variant<double, bool>> JHybridTestObjectSwiftKotlinSpec::bounceMap(const std::unordered_map<std::string, std::variant<double, bool>>& map) {
     static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<jni::JMap<jni::JString, JVariant_Double_Boolean>>(jni::alias_ref<jni::JMap<jni::JString, JVariant_Double_Boolean>> /* map */)>("bounceMap");
-    auto __result = method(_javaPart, [&]() {
+    auto __result = method(_javaPart, [&]() -> jni::local_ref<jni::JMap<jni::JString, JVariant_Double_Boolean>> {
       auto __map = jni::JHashMap<jni::JString, JVariant_Double_Boolean>::create(map.size());
       for (const auto& __entry : map) {
         __map->put(jni::make_jstring(__entry.first), JVariant_Double_Boolean::fromCpp(__entry.second));
