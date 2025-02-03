@@ -34,7 +34,7 @@ template <typename T>
 class OwningLock final {
 public:
   ~OwningLock() {
-    _reference._mutex->unlock();
+    _reference._state->mutex.unlock();
   }
 
   OwningLock() = delete;
@@ -43,7 +43,7 @@ public:
 
 private:
   explicit OwningLock(const OwningReference<T>& reference) : _reference(reference) {
-    _reference._mutex->lock();
+    _reference._state->mutex.lock();
   }
 
 private:

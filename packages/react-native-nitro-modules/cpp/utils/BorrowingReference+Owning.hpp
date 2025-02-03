@@ -14,11 +14,8 @@ namespace margelo::nitro {
 template <typename T>
 BorrowingReference<T>::BorrowingReference(const OwningReference<T>& ref) {
   _value = ref._value;
-  _isDeleted = ref._isDeleted;
-  _strongRefCount = ref._strongRefCount;
-  _weakRefCount = ref._weakRefCount;
-  _mutex = ref._mutex;
-  (*_weakRefCount)++;
+  _state = ref._state;
+  (_state->weakRefCount)++;
 }
 
 template <typename T>
