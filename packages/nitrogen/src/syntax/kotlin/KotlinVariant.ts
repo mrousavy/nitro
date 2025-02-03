@@ -59,6 +59,7 @@ import com.facebook.proguard.annotations.DoNotStrip
 /**
  * Represents the TypeScript variant "${jsName}".
  */
+@Suppress("ClassName")
 @DoNotStrip
 sealed class ${kotlinName} {
   ${indent(innerClasses.join('\n'), '  ')}

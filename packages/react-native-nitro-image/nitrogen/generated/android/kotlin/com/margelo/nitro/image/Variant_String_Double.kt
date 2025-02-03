@@ -12,6 +12,7 @@ import com.facebook.proguard.annotations.DoNotStrip
 /**
  * Represents the TypeScript variant "String|Double".
  */
+@Suppress("ClassName")
 @DoNotStrip
 sealed class Variant_String_Double {
   @DoNotStrip
