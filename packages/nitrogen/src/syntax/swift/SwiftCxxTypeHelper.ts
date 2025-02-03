@@ -252,6 +252,7 @@ function createCxxUnorderedMapSwiftHelper(type: RecordType): SwiftCxxHelper {
   const bridgedType = new SwiftCxxBridgedType(type)
   const name = escapeCppName(actualType)
   const keyType = type.keyType.getCode('c++')
+  const valueType = type.valueType.getCode('c++')
   return {
     cxxType: actualType,
     funcName: `create_${name}`,
@@ -274,6 +275,9 @@ inline std::vector<${keyType}> get_${name}_keys(const ${name}& map) {
     keys.push_back(entry.first);
   }
   return keys;
+}
+inline void emplace_${name}(${name}& map, const ${keyType}& key, const ${valueType}& value) {
+  map.emplace(key, value);
 }
       `.trim(),
       requiredIncludes: [
