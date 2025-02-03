@@ -35,9 +35,6 @@ namespace margelo::nitro {
 template <typename T>
 class BorrowingReference final {
 public:
-  using Pointee = T;
-
-public:
   BorrowingReference() : _value(nullptr), _state(nullptr) {}
 
   explicit BorrowingReference(T* value) : _value(value), _state(new ReferenceState()) {}

@@ -32,6 +32,11 @@ namespace margelo::nitro {
  */
 template <typename T>
 class OwningLock final {
+private:
+  explicit OwningLock(const BorrowingReference<T>& reference) : _reference(reference) {
+    _reference._state->mutex.lock();
+  }
+
 public:
   ~OwningLock() {
     _reference._state->mutex.unlock();
@@ -40,11 +45,6 @@ public:
   OwningLock() = delete;
   OwningLock(const OwningLock&) = delete;
   OwningLock(OwningLock&&) = delete;
-
-private:
-  explicit OwningLock(const BorrowingReference<T>& reference) : _reference(reference) {
-    _reference._state->mutex.lock();
-  }
 
 private:
   BorrowingReference<T> _reference;
