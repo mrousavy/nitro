@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include "ReferenceState.hpp"
 #include <atomic>
 #include <cstddef>
 #include <mutex>
@@ -27,56 +28,48 @@ private:
   explicit BorrowingReference(const OwningReference<T>& ref);
 
 public:
-  BorrowingReference() : _value(nullptr), _isDeleted(nullptr), _strongRefCount(nullptr), _weakRefCount(nullptr), _mutex(nullptr) {}
+  BorrowingReference() : _value(nullptr), _state(nullptr) {}
 
-  BorrowingReference(const BorrowingReference& ref)
-      : _value(ref._value), _isDeleted(ref._isDeleted), _strongRefCount(ref._strongRefCount), _weakRefCount(ref._weakRefCount),
-        _mutex(ref._mutex) {
-    if (_weakRefCount != nullptr) {
+  BorrowingReference(const BorrowingReference& ref) : _value(ref._value), _state(ref._state) {
+    if (_state != nullptr) {
       // increment ref count after copy
-      (*_weakRefCount)++;
+      _state->weakRefCount++;
     }
   }
 
-  BorrowingReference(BorrowingReference&& ref)
-      : _value(ref._value), _isDeleted(ref._isDeleted), _strongRefCount(ref._strongRefCount), _weakRefCount(ref._weakRefCount),
-        _mutex(ref._mutex) {
+  BorrowingReference(BorrowingReference&& ref) : _value(ref._value), _state(ref._state) {
+    // Remove state from other BorrowingReference after moving since it's now stale data
     ref._value = nullptr;
-    ref._isDeleted = nullptr;
-    ref._strongRefCount = nullptr;
-    ref._weakRefCount = nullptr;
+    ref._state = nullptr;
   }
 
   BorrowingReference& operator=(const BorrowingReference& ref) {
     if (this == &ref)
       return *this;
 
-    if (_weakRefCount != nullptr) {
+    if (_state != nullptr) {
       // destroy previous pointer
-      (*_weakRefCount)--;
+      _state->weakRefCount--;
       maybeDestroy();
     }
 
     _value = ref._value;
-    _isDeleted = ref._isDeleted;
-    _strongRefCount = ref._strongRefCount;
-    _weakRefCount = ref._weakRefCount;
-    _mutex = ref._mutex;
-    if (_weakRefCount != nullptr) {
+    _state = ref._state;
+    if (_state != nullptr) {
       // increment new pointer
-      (*_weakRefCount)++;
+      _state->weakRefCount++;
     }
 
     return *this;
   }
 
   ~BorrowingReference() {
-    if (_weakRefCount == nullptr) {
+    if (_state == nullptr) {
       // we are just a dangling nullptr.
       return;
     }
 
-    (*_weakRefCount)--;
+    _state->weakRefCount--;
     maybeDestroy();
   }
 
@@ -91,29 +84,20 @@ public:
 
 private:
   void maybeDestroy() {
-    _mutex->lock();
-
-    if (*_strongRefCount == 0 && *_weakRefCount == 0) {
+    if (_state->strongRefCount == 0 && _state->weakRefCount == 0) {
       // free the full memory if there are no more references at all
-      if (!(*_isDeleted)) {
-        delete _value;
+      if (!_state->isDeleted) [[unlikely]] {
+        throw std::runtime_error("BorrowingReference<T> encountered a stale _value - OwningReference<T> should've already deleted this!");
       }
-      delete _isDeleted;
-      delete _strongRefCount;
-      delete _weakRefCount;
-      _mutex->unlock();
+      delete _state;
+      _state = nullptr;
       return;
     }
-
-    _mutex->unlock();
   }
 
 private:
   T* _value;
-  bool* _isDeleted;
-  std::atomic_size_t* _strongRefCount;
-  std::atomic_size_t* _weakRefCount;
-  std::recursive_mutex* _mutex;
+  ReferenceState* _state;
 };
 
 } // namespace margelo::nitro
