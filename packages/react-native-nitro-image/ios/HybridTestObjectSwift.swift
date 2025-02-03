@@ -188,7 +188,7 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
     return map
   }
 
-  func extractMap(mapWrapper: mapWrapper: MapWrapper) throws -> Dictionary<String, String> {
+  func extractMap(mapWrapper: MapWrapper) throws -> Dictionary<String, String> {
     return mapWrapper.map
   }
 
