@@ -479,8 +479,8 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
         const bridge = this.getBridgeOrThrow()
         const getKeysFunc = `bridge.get_${bridge.specializationName}_keys`
         const record = getTypeAs(this.type, RecordType)
-        const wrappingKey = new SwiftCxxBridgedType(record.keyType)
-        const wrappingValue = new SwiftCxxBridgedType(record.valueType)
+        const wrappingKey = new SwiftCxxBridgedType(record.keyType, true)
+        const wrappingValue = new SwiftCxxBridgedType(record.valueType, true)
         switch (language) {
           case 'swift':
             return `
@@ -489,7 +489,7 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
   let __keys = ${getKeysFunc}(${cppParameterName})
   for __key in __keys {
     let __value = ${cppParameterName}[__key]!
-    __dictionary[${wrappingKey.parseFromCppToSwift('__key', 'swift')}] = ${wrappingValue.parseFromCppToSwift('__value', 'swift')}
+    __dictionary[${indent(wrappingKey.parseFromCppToSwift('__key', 'swift'), '    ')}] = ${indent(wrappingValue.parseFromCppToSwift('__value', 'swift'), '    ')}
   }
   return __dictionary
 }()`.trim()
@@ -508,14 +508,16 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
       case 'variant': {
         const bridge = this.getBridgeOrThrow()
         const variant = getTypeAs(this.type, VariantType)
+        const valueInitialization = this.isBridgingToDirectCppTarget
+          ? `bridge.${bridge.specializationName}(${cppParameterName})`
+          : cppParameterName
         const cases = variant.variants
           .map((t, i) => {
-            const getFunc = `bridge.get_${bridge.specializationName}_${i}`
             const wrapping = new SwiftCxxBridgedType(t)
             const caseName = getSwiftVariantCaseName(t)
             return `
 case ${i}:
-  let __actual = ${getFunc}(${cppParameterName})
+  let __actual = __variant.get_${i}()
   return .${caseName}(${indent(wrapping.parseFromCppToSwift('__actual', 'swift'), '  ')})`.trim()
           })
           .join('\n')
@@ -523,10 +525,11 @@ case ${i}:
           case 'swift':
             return `
 { () -> ${variant.getCode('swift')} in
-  switch ${cppParameterName}.index() {
+  let __variant = ${valueInitialization}
+  switch __variant.index() {
     ${indent(cases, '    ')}
     default:
-      fatalError("Variant can never have index \\(${cppParameterName}.index())!")
+      fatalError("Variant can never have index \\(__variant.index())!")
   }
 }()`.trim()
           default:
@@ -751,12 +754,17 @@ case ${i}:
                 return `case .${caseName}(let __value):\n  return bridge.${bridge.funcName}(${parse})`
               })
               .join('\n')
-            return `
+            let code = `
 { () -> bridge.${bridge.specializationName} in
   switch ${swiftParameterName} {
     ${indent(cases, '    ')}
   }
 }()`.trim()
+            if (this.isBridgingToDirectCppTarget) {
+              // If we bridge directly to a C++ variant, we need to return the .variant of our wrapper type.
+              code += `.variant`
+            }
+            return code
           default:
             return swiftParameterName
         }
@@ -765,8 +773,8 @@ case ${i}:
         const bridge = this.getBridgeOrThrow()
         const createMap = `bridge.${bridge.funcName}`
         const record = getTypeAs(this.type, RecordType)
-        const wrappingKey = new SwiftCxxBridgedType(record.keyType)
-        const wrappingValue = new SwiftCxxBridgedType(record.valueType)
+        const wrappingKey = new SwiftCxxBridgedType(record.keyType, true)
+        const wrappingValue = new SwiftCxxBridgedType(record.valueType, true)
         switch (language) {
           case 'swift':
             return `

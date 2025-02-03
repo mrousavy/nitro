@@ -68,6 +68,7 @@ namespace margelo::nitro::image {
       prototype.registerHybridMethod("tryOptionalParams", &HybridTestObjectCppSpec::tryOptionalParams);
       prototype.registerHybridMethod("tryMiddleParam", &HybridTestObjectCppSpec::tryMiddleParam);
       prototype.registerHybridMethod("tryOptionalEnum", &HybridTestObjectCppSpec::tryOptionalEnum);
+      prototype.registerHybridMethod("bounceMap", &HybridTestObjectCppSpec::bounceMap);
       prototype.registerHybridMethod("calculateFibonacciSync", &HybridTestObjectCppSpec::calculateFibonacciSync);
       prototype.registerHybridMethod("calculateFibonacciAsync", &HybridTestObjectCppSpec::calculateFibonacciAsync);
       prototype.registerHybridMethod("wait", &HybridTestObjectCppSpec::wait);

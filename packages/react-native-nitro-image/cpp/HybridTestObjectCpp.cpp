@@ -263,6 +263,11 @@ int64_t HybridTestObjectCpp::calculateFibonacciSync(double value) {
   return calculateFibonacci(value);
 }
 
+std::unordered_map<std::string, std::variant<double, bool>>
+HybridTestObjectCpp::bounceMap(const std::unordered_map<std::string, std::variant<double, bool>>& map) {
+  return map;
+}
+
 std::shared_ptr<Promise<int64_t>> HybridTestObjectCpp::calculateFibonacciAsync(double value) {
   return Promise<int64_t>::async([this, value]() -> int64_t { return this->calculateFibonacci(value); });
 }

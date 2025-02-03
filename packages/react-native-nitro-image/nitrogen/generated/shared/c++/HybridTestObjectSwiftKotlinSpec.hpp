@@ -47,6 +47,7 @@ namespace margelo::nitro::image { class HybridBaseSpec; }
 #include <NitroModules/AnyMap.hpp>
 #include <NitroModules/Promise.hpp>
 #include <exception>
+#include <unordered_map>
 #include "Car.hpp"
 #include <NitroModules/ArrayBuffer.hpp>
 #include "JsStyleStruct.hpp"
@@ -128,6 +129,7 @@ namespace margelo::nitro::image {
       virtual std::string tryOptionalParams(double num, bool boo, const std::optional<std::string>& str) = 0;
       virtual std::string tryMiddleParam(double num, std::optional<bool> boo, const std::string& str) = 0;
       virtual std::optional<Powertrain> tryOptionalEnum(std::optional<Powertrain> value) = 0;
+      virtual std::unordered_map<std::string, std::variant<double, bool>> bounceMap(const std::unordered_map<std::string, std::variant<double, bool>>& map) = 0;
       virtual int64_t calculateFibonacciSync(double value) = 0;
       virtual std::shared_ptr<Promise<int64_t>> calculateFibonacciAsync(double value) = 0;
       virtual std::shared_ptr<Promise<void>> wait(double seconds) = 0;

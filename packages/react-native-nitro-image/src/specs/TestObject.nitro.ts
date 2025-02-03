@@ -91,6 +91,11 @@ interface SharedTestObjectProps {
   // Variants
   someVariant: number | string
 
+  // Records/Maps
+  bounceMap(
+    map: Record<string, number | boolean>
+  ): Record<string, number | boolean>
+
   // Promises
   calculateFibonacciSync(value: number): bigint
   calculateFibonacciAsync(value: number): Promise<bigint>

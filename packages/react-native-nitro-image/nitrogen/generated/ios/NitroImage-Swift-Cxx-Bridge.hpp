@@ -71,6 +71,7 @@ namespace NitroImage { class HybridTestViewSpec_cxx; }
 #include <memory>
 #include <optional>
 #include <string>
+#include <unordered_map>
 #include <variant>
 #include <vector>
 
@@ -387,6 +388,12 @@ namespace margelo::nitro::image::bridge::swift {
     inline size_t index() const {
       return variant.index();
     }
+    inline std::string get_0() const {
+      return std::get<0>(variant);
+    }
+    inline double get_1() const {
+      return std::get<1>(variant);
+    }
   };
   inline std__variant_std__string__double_ create_std__variant_std__string__double_(const std::string& value) {
     return std__variant_std__string__double_(value);
@@ -394,11 +401,53 @@ namespace margelo::nitro::image::bridge::swift {
   inline std__variant_std__string__double_ create_std__variant_std__string__double_(double value) {
     return std__variant_std__string__double_(value);
   }
-  inline std::string get_std__variant_std__string__double__0(const std__variant_std__string__double_& variantWrapper) {
-    return std::get<0>(variantWrapper.variant);
+  
+  // pragma MARK: std::variant<double, bool>
+  /**
+   * Wrapper struct for `std::variant<double, bool>`.
+   * std::variant cannot be used in Swift because of a Swift bug.
+   * Not even specializing it works. So we create a wrapper struct.
+   */
+  struct std__variant_double__bool_ {
+    std::variant<double, bool> variant;
+    std__variant_double__bool_(std::variant<double, bool> variant): variant(variant) { }
+    operator std::variant<double, bool>() const {
+      return variant;
+    }
+    inline size_t index() const {
+      return variant.index();
+    }
+    inline double get_0() const {
+      return std::get<0>(variant);
+    }
+    inline bool get_1() const {
+      return std::get<1>(variant);
+    }
+  };
+  inline std__variant_double__bool_ create_std__variant_double__bool_(double value) {
+    return std__variant_double__bool_(value);
   }
-  inline double get_std__variant_std__string__double__1(const std__variant_std__string__double_& variantWrapper) {
-    return std::get<1>(variantWrapper.variant);
+  inline std__variant_double__bool_ create_std__variant_double__bool_(bool value) {
+    return std__variant_double__bool_(value);
+  }
+  
+  // pragma MARK: std::unordered_map<std::string, std::variant<double, bool>>
+  /**
+   * Specialized version of `std::unordered_map<std::string, std::variant<double, bool>>`.
+   */
+  using std__unordered_map_std__string__std__variant_double__bool__ = std::unordered_map<std::string, std::variant<double, bool>>;
+  inline std::unordered_map<std::string, std::variant<double, bool>> create_std__unordered_map_std__string__std__variant_double__bool__(size_t size) {
+    std::unordered_map<std::string, std::variant<double, bool>> map;
+    map.reserve(size);
+    return map;
+  }
+  inline std::vector<std::string> get_std__unordered_map_std__string__std__variant_double__bool___keys(const std__unordered_map_std__string__std__variant_double__bool__& map) {
+    std::vector<std::string> keys;
+    keys.reserve(map.size());
+    for (const auto& entry : map) {
+      keys.push_back(entry.first);
+    }
+    return keys;
   }
   
   // pragma MARK: std::shared_ptr<Promise<int64_t>>
@@ -833,6 +882,15 @@ namespace margelo::nitro::image::bridge::swift {
   }
   inline Result_std__optional_Powertrain__ create_Result_std__optional_Powertrain__(const std::exception_ptr& error) {
     return Result<std::optional<Powertrain>>::withError(error);
+  }
+  
+  // pragma MARK: Result<std::unordered_map<std::string, std::variant<double, bool>>>
+  using Result_std__unordered_map_std__string__std__variant_double__bool___ = Result<std::unordered_map<std::string, std::variant<double, bool>>>;
+  inline Result_std__unordered_map_std__string__std__variant_double__bool___ create_Result_std__unordered_map_std__string__std__variant_double__bool___(const std::unordered_map<std::string, std::variant<double, bool>>& value) {
+    return Result<std::unordered_map<std::string, std::variant<double, bool>>>::withValue(value);
+  }
+  inline Result_std__unordered_map_std__string__std__variant_double__bool___ create_Result_std__unordered_map_std__string__std__variant_double__bool___(const std::exception_ptr& error) {
+    return Result<std::unordered_map<std::string, std::variant<double, bool>>>::withError(error);
   }
   
   // pragma MARK: Result<int64_t>

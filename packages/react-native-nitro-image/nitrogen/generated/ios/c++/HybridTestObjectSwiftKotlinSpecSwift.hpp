@@ -48,6 +48,7 @@ namespace margelo::nitro::image { class HybridBaseSpec; }
 #include <NitroModules/AnyMap.hpp>
 #include <NitroModules/Promise.hpp>
 #include <exception>
+#include <unordered_map>
 #include "Car.hpp"
 #include <NitroModules/ArrayBuffer.hpp>
 #include <NitroModules/ArrayBufferHolder.hpp>
@@ -315,6 +316,14 @@ namespace margelo::nitro::image {
     }
     inline std::optional<Powertrain> tryOptionalEnum(std::optional<Powertrain> value) override {
       auto __result = _swiftPart.tryOptionalEnum(value);
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline std::unordered_map<std::string, std::variant<double, bool>> bounceMap(const std::unordered_map<std::string, std::variant<double, bool>>& map) override {
+      auto __result = _swiftPart.bounceMap(map);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }

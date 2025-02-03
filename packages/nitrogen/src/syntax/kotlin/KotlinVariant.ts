@@ -18,6 +18,7 @@ function getVariantInnerName(variantType: Type): string {
 export function createKotlinVariant(variant: VariantType): SourceFile[] {
   const jsName = variant.variants.map((v) => v.getCode('kotlin')).join('|')
   const kotlinName = getVariantName(variant)
+  const namespace = `J${kotlinName}_impl`
 
   const innerClasses = variant.variants.map((v) => {
     const innerName = getVariantInnerName(v)
@@ -58,6 +59,7 @@ import com.facebook.proguard.annotations.DoNotStrip
 /**
  * Represents the TypeScript variant "${jsName}".
  */
+@Suppress("ClassName")
 @DoNotStrip
 sealed class ${kotlinName} {
   ${indent(innerClasses.join('\n'), '  ')}
@@ -79,10 +81,10 @@ sealed class ${kotlinName} {
     'c++/jni',
     kotlinName
   )
-  const cppCreateFuncs = variant.variants.map((v) => {
+  const cppCreateFuncs = variant.variants.map((v, i) => {
     const bridge = new KotlinCxxBridgedType(v)
     return `
-static jni::local_ref<J${kotlinName}> create(${bridge.asJniReferenceType('alias')} value) {
+static jni::local_ref<J${kotlinName}> create_${i}(${bridge.asJniReferenceType('alias')} value) {
   static const auto method = javaClassStatic()->getStaticMethod<J${kotlinName}(${bridge.asJniReferenceType('alias')})>("create");
   return method(javaClassStatic(), value);
 }
@@ -90,18 +92,14 @@ static jni::local_ref<J${kotlinName}> create(${bridge.asJniReferenceType('alias'
   })
   const variantCases = variant.variants.map((v, i) => {
     const bridge = new KotlinCxxBridgedType(v)
-    return `case ${i}: return create(${bridge.parseFromCppToKotlin(`std::get<${i}>(variant)`, 'c++')});`
-  })
-  const cppInnerClassesForwardDecl = variant.variants.map((v) => {
-    const innerName = getVariantInnerName(v)
-    return `class ${innerName};`
+    return `case ${i}: return create_${i}(${bridge.parseFromCppToKotlin(`std::get<${i}>(variant)`, 'c++')});`
   })
   const cppGetIfs = variant.variants.map((v) => {
     const innerName = getVariantInnerName(v)
     const bridge = new KotlinCxxBridgedType(v)
     return `
-if (isInstanceOf(${innerName}::javaClassStatic())) {
-  auto jniValue = static_cast<${innerName}*>(this)->get();
+if (isInstanceOf(${namespace}::${innerName}::javaClassStatic())) {
+  auto jniValue = static_cast<const ${namespace}::${innerName}*>(this)->getValue();
   return ${bridge.parseFromKotlinToCpp('jniValue', 'c++')};
 }
   `.trim()
@@ -118,7 +116,7 @@ class ${innerName}: public jni::JavaClass<${innerName}, J${kotlinName}> {
 public:
   static auto constexpr kJavaDescriptor = "L${descriptor};";
 
-  ${bridge.asJniReferenceType('local')} get() {
+  [[nodiscard]] ${bridge.asJniReferenceType('local')} getValue() const {
     static const auto field = javaClassStatic()->getField<${bridge.getTypeCode('c++')}>("value");
     return getFieldValue(field);
   }
@@ -137,8 +135,6 @@ namespace ${cxxNamespace} {
 
   using namespace facebook;
 
-  ${indent(cppInnerClassesForwardDecl.join('\n'), '  ')}
-
   /**
    * The C++ JNI bridge between the C++ std::variant and the Java class "${kotlinName}".
    */
@@ -155,12 +151,14 @@ namespace ${cxxNamespace} {
       }
     }
 
-    ${variant.getCode('c++')} toCpp();
+    [[nodiscard]] ${variant.getCode('c++')} toCpp() const;
   };
 
-  ${indent(cppInnerClasses.join('\n\n'), '  ')}
+  namespace ${namespace} {
+    ${indent(cppInnerClasses.join('\n\n'), '    ')}
+  } // namespace ${namespace}
 
-  ${variant.getCode('c++')} J${kotlinName}::toCpp() {
+  ${variant.getCode('c++')} J${kotlinName}::toCpp() const {
     ${indent(cppGetIfs.join(' else '), '    ')}
     throw std::invalid_argument("Variant is unknown Kotlin instance!");
   }

@@ -115,6 +115,10 @@ class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
         return value
     }
 
+    override fun bounceMap(map: Map<String, Variant_Double_Boolean>): Map<String, Variant_Double_Boolean> {
+        return map
+    }
+
     override fun calculateFibonacciSync(value: Double): Long {
         val n = value.toInt()
         if (n == 0) return 0L

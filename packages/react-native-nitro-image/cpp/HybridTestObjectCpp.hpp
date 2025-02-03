@@ -107,6 +107,8 @@ public:
 
   std::tuple<double, double, double> flip(const std::tuple<double, double, double>& tuple) override;
   std::tuple<double, std::string, bool> passTuple(const std::tuple<double, std::string, bool>& tuple) override;
+  std::unordered_map<std::string, std::variant<double, bool>>
+  bounceMap(const std::unordered_map<std::string, std::variant<double, bool>>& map) override;
   int64_t calculateFibonacciSync(double value) override;
   std::shared_ptr<Promise<int64_t>> calculateFibonacciAsync(double value) override;
   std::shared_ptr<Promise<void>> wait(double seconds) override;
