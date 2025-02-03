@@ -91,7 +91,6 @@ private:
       }
       delete _state;
       _state = nullptr;
-      return;
     }
   }
 

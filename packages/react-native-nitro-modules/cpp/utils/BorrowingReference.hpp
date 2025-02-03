@@ -130,7 +130,7 @@ public:
    Get whether the `BorrowingReference<T>` is still pointing to a valid value, or not.
    */
   inline bool hasValue() const {
-    return _value != nullptr && _state != nullptr && !_state->isDeleted;
+    return _value != nullptr && !_state->isDeleted;
   }
 
   /**
