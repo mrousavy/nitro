@@ -16,10 +16,10 @@ static constexpr auto CACHE_PROP_NAME = "__nitroModulesJSICache";
 template <typename T>
 inline void destroyReferences(const std::vector<WeakReference<T>>& references) {
   for (auto& func : references) {
-    BorrowingReference<T> owning = func.lock();
-    if (owning) {
+    BorrowingReference<T> reference = func.lock();
+    if (reference) {
       // Destroy all functions that we might still have in cache, some callbacks and Promises may now become invalid.
-      owning.destroy();
+      reference.destroy();
     }
   }
 }

@@ -34,7 +34,7 @@ RCT_EXPORT_MODULE(NitroModules)
 
 - (void)installJSIBindingsWithRuntime:(jsi::Runtime&)runtime {
   // 1. Get CallInvoker we cached statically
-  auto callInvoker = _callInvoker.lock();
+  std::shared_ptr<react::CallInvoker> callInvoker = _callInvoker.lock();
   if (callInvoker == nullptr) {
     throw std::runtime_error("Cannot install global.NitroModulesProxy - CallInvoker was null!");
   }
