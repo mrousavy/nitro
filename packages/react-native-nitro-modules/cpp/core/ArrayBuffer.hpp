@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "OwningReference.hpp"
+#include "BorrowingReference.hpp"
 #include <jsi/jsi.h>
 #include <thread>
 #include <vector>
@@ -122,7 +122,7 @@ private:
  */
 class JSArrayBuffer final : public ArrayBuffer {
 public:
-  explicit JSArrayBuffer(jsi::Runtime* runtime, OwningReference<jsi::ArrayBuffer> jsReference);
+  explicit JSArrayBuffer(jsi::Runtime* runtime, BorrowingReference<jsi::ArrayBuffer> jsReference);
   ~JSArrayBuffer();
 
 public:
@@ -141,7 +141,7 @@ public:
 
 private:
   jsi::Runtime* _runtime;
-  OwningReference<jsi::ArrayBuffer> _jsReference;
+  BorrowingReference<jsi::ArrayBuffer> _jsReference;
   std::thread::id _initialThreadId;
 };
 
