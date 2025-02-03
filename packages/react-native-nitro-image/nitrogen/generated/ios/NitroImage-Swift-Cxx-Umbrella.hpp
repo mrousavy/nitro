@@ -32,6 +32,8 @@ namespace margelo::nitro::image { enum class ImageFormat; }
 namespace margelo::nitro::image { struct ImageSize; }
 // Forward declaration of `JsStyleStruct` to properly resolve imports.
 namespace margelo::nitro::image { struct JsStyleStruct; }
+// Forward declaration of `MapWrapper` to properly resolve imports.
+namespace margelo::nitro::image { struct MapWrapper; }
 // Forward declaration of `OldEnum` to properly resolve imports.
 namespace margelo::nitro::image { enum class OldEnum; }
 // Forward declaration of `Person` to properly resolve imports.
@@ -52,6 +54,7 @@ namespace margelo::nitro::image { enum class Powertrain; }
 #include "ImageFormat.hpp"
 #include "ImageSize.hpp"
 #include "JsStyleStruct.hpp"
+#include "MapWrapper.hpp"
 #include "OldEnum.hpp"
 #include "Person.hpp"
 #include "PixelFormat.hpp"

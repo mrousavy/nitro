@@ -12,8 +12,6 @@
 
 #include "JFunc_void_double.hpp"
 #include <functional>
-#include <string>
-#include <unordered_map>
 
 namespace margelo::nitro::image {
 
@@ -38,8 +36,6 @@ namespace margelo::nitro::image {
       double value = this->getFieldValue(fieldValue);
       static const auto fieldOnChanged = clazz->getField<JFunc_void_double::javaobject>("onChanged");
       jni::local_ref<JFunc_void_double::javaobject> onChanged = this->getFieldValue(fieldOnChanged);
-      static const auto fieldSomeMap = clazz->getField<jni::JMap<jni::JString, jni::JString>>("someMap");
-      jni::local_ref<jni::JMap<jni::JString, jni::JString>> someMap = this->getFieldValue(fieldSomeMap);
       return JsStyleStruct(
         value,
         [&]() -> std::function<void(double /* num */)> {
@@ -51,14 +47,6 @@ namespace margelo::nitro::image {
               return onChanged->invoke(num);
             };
           }
-        }(),
-        [&]() {
-          std::unordered_map<std::string, std::string> __map;
-          __map.reserve(someMap->size());
-          for (const auto& __entry : *someMap) {
-            __map.emplace(__entry.first->toStdString(), __entry.second->toStdString());
-          }
-          return __map;
         }()
       );
     }
@@ -71,14 +59,7 @@ namespace margelo::nitro::image {
     static jni::local_ref<JJsStyleStruct::javaobject> fromCpp(const JsStyleStruct& value) {
       return newInstance(
         value.value,
-        JFunc_void_double_cxx::fromCpp(value.onChanged),
-        [&]() {
-          auto __map = jni::JHashMap<jni::JString, jni::JString>::create(value.someMap.size());
-          for (const auto& __entry : value.someMap) {
-            __map->put(jni::make_jstring(__entry.first), jni::make_jstring(__entry.second));
-          }
-          return __map;
-        }()
+        JFunc_void_double_cxx::fromCpp(value.onChanged)
       );
     }
   };

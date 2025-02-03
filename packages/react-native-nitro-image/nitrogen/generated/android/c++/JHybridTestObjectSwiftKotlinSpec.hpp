@@ -89,13 +89,14 @@ namespace margelo::nitro::image {
     void complexEnumCallback(const std::vector<Powertrain>& array, const std::function<void(const std::vector<Powertrain>& /* array */)>& callback) override;
     std::shared_ptr<AnyMap> createMap() override;
     std::shared_ptr<AnyMap> mapRoundtrip(const std::shared_ptr<AnyMap>& map) override;
+    std::unordered_map<std::string, std::variant<double, bool>> bounceMap(const std::unordered_map<std::string, std::variant<double, bool>>& map) override;
+    std::unordered_map<std::string, std::string> extractMap(const MapWrapper& mapWrapper) override;
     double funcThatThrows() override;
     std::shared_ptr<Promise<void>> funcThatThrowsBeforePromise() override;
     void throwError(const std::exception_ptr& error) override;
     std::string tryOptionalParams(double num, bool boo, const std::optional<std::string>& str) override;
     std::string tryMiddleParam(double num, std::optional<bool> boo, const std::string& str) override;
     std::optional<Powertrain> tryOptionalEnum(std::optional<Powertrain> value) override;
-    std::unordered_map<std::string, std::variant<double, bool>> bounceMap(const std::unordered_map<std::string, std::variant<double, bool>>& map) override;
     int64_t calculateFibonacciSync(double value) override;
     std::shared_ptr<Promise<int64_t>> calculateFibonacciAsync(double value) override;
     std::shared_ptr<Promise<void>> wait(double seconds) override;

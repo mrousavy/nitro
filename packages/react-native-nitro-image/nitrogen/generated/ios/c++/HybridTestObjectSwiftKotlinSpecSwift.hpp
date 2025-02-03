@@ -22,6 +22,8 @@ namespace margelo::nitro::image { enum class OldEnum; }
 namespace margelo::nitro::image { struct Person; }
 // Forward declaration of `AnyMap` to properly resolve imports.
 namespace NitroModules { class AnyMap; }
+// Forward declaration of `MapWrapper` to properly resolve imports.
+namespace margelo::nitro::image { struct MapWrapper; }
 // Forward declaration of `Car` to properly resolve imports.
 namespace margelo::nitro::image { struct Car; }
 // Forward declaration of `ArrayBuffer` to properly resolve imports.
@@ -46,9 +48,10 @@ namespace margelo::nitro::image { class HybridBaseSpec; }
 #include <variant>
 #include "Person.hpp"
 #include <NitroModules/AnyMap.hpp>
+#include <unordered_map>
+#include "MapWrapper.hpp"
 #include <NitroModules/Promise.hpp>
 #include <exception>
-#include <unordered_map>
 #include "Car.hpp"
 #include <NitroModules/ArrayBuffer.hpp>
 #include <NitroModules/ArrayBufferHolder.hpp>
@@ -276,6 +279,22 @@ namespace margelo::nitro::image {
       auto __value = std::move(__result.value());
       return __value;
     }
+    inline std::unordered_map<std::string, std::variant<double, bool>> bounceMap(const std::unordered_map<std::string, std::variant<double, bool>>& map) override {
+      auto __result = _swiftPart.bounceMap(map);
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline std::unordered_map<std::string, std::string> extractMap(const MapWrapper& mapWrapper) override {
+      auto __result = _swiftPart.extractMap(mapWrapper);
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
     inline double funcThatThrows() override {
       auto __result = _swiftPart.funcThatThrows();
       if (__result.hasError()) [[unlikely]] {
@@ -316,14 +335,6 @@ namespace margelo::nitro::image {
     }
     inline std::optional<Powertrain> tryOptionalEnum(std::optional<Powertrain> value) override {
       auto __result = _swiftPart.tryOptionalEnum(value);
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
-    }
-    inline std::unordered_map<std::string, std::variant<double, bool>> bounceMap(const std::unordered_map<std::string, std::variant<double, bool>>& map) override {
-      auto __result = _swiftPart.bounceMap(map);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }

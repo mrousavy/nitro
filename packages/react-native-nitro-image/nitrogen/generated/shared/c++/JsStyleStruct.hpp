@@ -21,8 +21,6 @@
 
 
 #include <functional>
-#include <unordered_map>
-#include <string>
 
 namespace margelo::nitro::image {
 
@@ -33,10 +31,9 @@ namespace margelo::nitro::image {
   public:
     double value     SWIFT_PRIVATE;
     std::function<void(double /* num */)> onChanged     SWIFT_PRIVATE;
-    std::unordered_map<std::string, std::string> someMap     SWIFT_PRIVATE;
 
   public:
-    explicit JsStyleStruct(double value, std::function<void(double /* num */)> onChanged, std::unordered_map<std::string, std::string> someMap): value(value), onChanged(onChanged), someMap(someMap) {}
+    explicit JsStyleStruct(double value, std::function<void(double /* num */)> onChanged): value(value), onChanged(onChanged) {}
   };
 
 } // namespace margelo::nitro::image
@@ -52,15 +49,13 @@ namespace margelo::nitro {
       jsi::Object obj = arg.asObject(runtime);
       return JsStyleStruct(
         JSIConverter<double>::fromJSI(runtime, obj.getProperty(runtime, "value")),
-        JSIConverter<std::function<void(double /* num */)>>::fromJSI(runtime, obj.getProperty(runtime, "onChanged")),
-        JSIConverter<std::unordered_map<std::string, std::string>>::fromJSI(runtime, obj.getProperty(runtime, "someMap"))
+        JSIConverter<std::function<void(double /* num */)>>::fromJSI(runtime, obj.getProperty(runtime, "onChanged"))
       );
     }
     static inline jsi::Value toJSI(jsi::Runtime& runtime, const JsStyleStruct& arg) {
       jsi::Object obj(runtime);
       obj.setProperty(runtime, "value", JSIConverter<double>::toJSI(runtime, arg.value));
       obj.setProperty(runtime, "onChanged", JSIConverter<std::function<void(double /* num */)>>::toJSI(runtime, arg.onChanged));
-      obj.setProperty(runtime, "someMap", JSIConverter<std::unordered_map<std::string, std::string>>::toJSI(runtime, arg.someMap));
       return obj;
     }
     static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
@@ -70,7 +65,6 @@ namespace margelo::nitro {
       jsi::Object obj = value.getObject(runtime);
       if (!JSIConverter<double>::canConvert(runtime, obj.getProperty(runtime, "value"))) return false;
       if (!JSIConverter<std::function<void(double /* num */)>>::canConvert(runtime, obj.getProperty(runtime, "onChanged"))) return false;
-      if (!JSIConverter<std::unordered_map<std::string, std::string>>::canConvert(runtime, obj.getProperty(runtime, "someMap"))) return false;
       return true;
     }
   };

@@ -119,6 +119,10 @@ class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
         return map
     }
 
+    override fun extractMap(mapWrapper: MapWrapper): Map<String, String> {
+        return mapWrapper.map
+    }
+
     override fun calculateFibonacciSync(value: Double): Long {
         val n = value.toInt()
         if (n == 0) return 0L
