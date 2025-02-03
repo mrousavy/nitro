@@ -6,7 +6,7 @@
 
 #include "JSIConverter.hpp"
 #include "NitroDefines.hpp"
-#include "OwningReference.hpp"
+#include "BorrowingReference.hpp"
 #include <jsi/jsi.h>
 
 namespace margelo::nitro {
@@ -17,7 +17,7 @@ template <typename T>
 struct CachedProp {
 public:
   T value;
-  OwningReference<jsi::Value> jsiValue;
+  BorrowingReference<jsi::Value> jsiValue;
   bool isDirty = false;
 
 public:
@@ -35,7 +35,7 @@ public:
     }
     T converted = JSIConverter<T>::fromJSI(runtime, value);
     JSICacheReference cache = JSICache::getOrCreateCache(runtime);
-    OwningReference<jsi::Value> cached = cache.makeShared(jsi::Value(runtime, value));
+    BorrowingReference<jsi::Value> cached = cache.makeShared(jsi::Value(runtime, value));
     return CachedProp<T>(std::move(converted), std::move(cached), /* isDirty */ true);
   }
 };

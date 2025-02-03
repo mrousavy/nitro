@@ -34,7 +34,7 @@ struct JSIConverter<std::function<ReturnType(Args...)>> final {
     // Make function global - it'll be managed by the Runtime's memory, and we only have a weak_ref to it.
     auto cache = JSICache::getOrCreateCache(runtime);
     jsi::Function function = arg.asObject(runtime).asFunction(runtime);
-    OwningReference<jsi::Function> sharedFunction = cache.makeShared(std::move(function));
+    BorrowingReference<jsi::Function> sharedFunction = cache.makeShared(std::move(function));
 
     std::shared_ptr<Dispatcher> strongDispatcher = Dispatcher::getRuntimeGlobalDispatcher(runtime);
     std::weak_ptr<Dispatcher> weakDispatcher = strongDispatcher;
@@ -94,7 +94,7 @@ struct JSIConverter<std::function<ReturnType(Args...)>> final {
   }
 
 private:
-  static inline ResultingType callJSFunction(jsi::Runtime& runtime, const OwningReference<jsi::Function>& function, const Args&... args) {
+  static inline ResultingType callJSFunction(jsi::Runtime& runtime, const BorrowingReference<jsi::Function>& function, const Args&... args) {
     if (!function) {
       if constexpr (std::is_void_v<ResultingType>) {
         // runtime has already been deleted. since this returns void, we can just ignore it being deleted.

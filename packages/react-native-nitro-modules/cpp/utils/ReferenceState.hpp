@@ -13,7 +13,7 @@
 namespace margelo::nitro {
 
 /**
- * Holds state for an `OwningReference` (or `BorrowingReference`).
+ * Holds state for an `BorrowingReference` (or `WeakReference`).
  *
  * The state tracks the amount of strong- and weak- references to any kind of value,
  * including an extra `isDeleted` flag that specifies whether the value has been force-deleted.

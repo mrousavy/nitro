@@ -8,7 +8,7 @@
 #pragma once
 
 #include "HybridFunction.hpp"
-#include "OwningReference.hpp"
+#include "BorrowingReference.hpp"
 #include "Prototype.hpp"
 #include "PrototypeChain.hpp"
 #include <functional>
@@ -46,7 +46,7 @@ public:
 
 private:
   static jsi::Value createPrototype(jsi::Runtime& runtime, const std::shared_ptr<Prototype>& prototype);
-  using PrototypeCache = std::unordered_map<NativeInstanceId, OwningReference<jsi::Object>>;
+  using PrototypeCache = std::unordered_map<NativeInstanceId, BorrowingReference<jsi::Object>>;
   static std::unordered_map<jsi::Runtime*, PrototypeCache> _prototypeCache;
 
 protected:

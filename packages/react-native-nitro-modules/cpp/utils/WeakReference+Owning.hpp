@@ -1,5 +1,5 @@
 //
-//  BorrowingReference+Owning.hpp
+//  WeakReference+Owning.hpp
 //  react-native-nitro
 //
 //  Created by Marc Rousavy on 23.06.24.
@@ -7,27 +7,27 @@
 
 #pragma once
 
-#include "OwningReference.hpp"
+#include "BorrowingReference.hpp"
 
 namespace margelo::nitro {
 
 template <typename T>
-BorrowingReference<T>::BorrowingReference(const OwningReference<T>& ref) {
+WeakReference<T>::WeakReference(const BorrowingReference<T>& ref) {
   _value = ref._value;
   _state = ref._state;
   _state->weakRefCount++;
 }
 
 template <typename T>
-OwningReference<T> BorrowingReference<T>::lock() const {
+BorrowingReference<T> WeakReference<T>::lock() const {
   std::unique_lock lock(_state->mutex);
 
   if (_state->isDeleted) {
     // return nullptr
-    return OwningReference<T>();
+    return BorrowingReference<T>();
   }
 
-  return OwningReference(*this);
+  return BorrowingReference(*this);
 }
 
 } // namespace margelo::nitro
