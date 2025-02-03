@@ -4,9 +4,9 @@
 
 #pragma once
 
+#include "BorrowingReference.hpp"
 #include "JSIConverter.hpp"
 #include "NitroDefines.hpp"
-#include "BorrowingReference.hpp"
 #include <jsi/jsi.h>
 
 namespace margelo::nitro {

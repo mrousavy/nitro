@@ -7,8 +7,8 @@
 
 #pragma once
 
-#include "HybridFunction.hpp"
 #include "BorrowingReference.hpp"
+#include "HybridFunction.hpp"
 #include "Prototype.hpp"
 #include "PrototypeChain.hpp"
 #include <functional>

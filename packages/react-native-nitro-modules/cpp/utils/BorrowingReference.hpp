@@ -7,10 +7,10 @@
 
 #pragma once
 
-#include "WeakReference.hpp"
 #include "NitroDefines.hpp"
 #include "OwningLock.hpp"
 #include "ReferenceState.hpp"
+#include "WeakReference.hpp"
 #include <atomic>
 #include <cstddef>
 #include <mutex>

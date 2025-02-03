@@ -7,9 +7,9 @@
 
 #pragma once
 
-#include "WeakReference.hpp"
-#include "NitroLogger.hpp"
 #include "BorrowingReference.hpp"
+#include "NitroLogger.hpp"
+#include "WeakReference.hpp"
 #include <jsi/jsi.h>
 #include <memory>
 #include <mutex>

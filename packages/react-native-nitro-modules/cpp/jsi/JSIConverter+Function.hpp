@@ -94,7 +94,8 @@ struct JSIConverter<std::function<ReturnType(Args...)>> final {
   }
 
 private:
-  static inline ResultingType callJSFunction(jsi::Runtime& runtime, const BorrowingReference<jsi::Function>& function, const Args&... args) {
+  static inline ResultingType callJSFunction(jsi::Runtime& runtime, const BorrowingReference<jsi::Function>& function,
+                                             const Args&... args) {
     if (!function) {
       if constexpr (std::is_void_v<ResultingType>) {
         // runtime has already been deleted. since this returns void, we can just ignore it being deleted.
