@@ -15,7 +15,7 @@ template <typename T>
 BorrowingReference<T>::BorrowingReference(const OwningReference<T>& ref) {
   _value = ref._value;
   _state = ref._state;
-  (_state->weakRefCount)++;
+  _state->weakRefCount++;
 }
 
 template <typename T>

@@ -48,7 +48,7 @@ public:
 
     if (_state != nullptr) {
       // destroy previous pointer
-      (_state->weakRefCount)--;
+      _state->weakRefCount--;
       maybeDestroy();
     }
 
@@ -56,7 +56,7 @@ public:
     _state = ref._state;
     if (_state != nullptr) {
       // increment new pointer
-      (_state->weakRefCount)++;
+      _state->weakRefCount++;
     }
 
     return *this;
@@ -68,7 +68,7 @@ public:
       return;
     }
 
-    (_state->weakRefCount)--;
+    _state->weakRefCount--;
     maybeDestroy();
   }
 

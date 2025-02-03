@@ -39,7 +39,7 @@ public:
   OwningReference(const OwningReference& ref) : _value(ref._value), _state(ref._state) {
     if (_state != nullptr) {
       // increment ref count after copy
-      (_state->strongRefCount)++;
+      _state->strongRefCount++;
     }
   }
 
@@ -54,7 +54,7 @@ public:
 
     if (_state != nullptr) {
       // destroy previous pointer
-      (_state->strongRefCount)--;
+      _state->strongRefCount--;
       maybeDestroy();
     }
 
@@ -62,7 +62,7 @@ public:
     _state = ref._state;
     if (_state != nullptr) {
       // increment new pointer
-      (_state->strongRefCount)++;
+      _state->strongRefCount++;
     }
 
     return *this;
@@ -71,7 +71,7 @@ public:
 private:
   // BorrowingReference<T> -> OwningReference<T> Lock-constructor
   OwningReference(const BorrowingReference<T>& ref) : _value(ref._value), _state(ref._state) {
-    (_state->strongRefCount)++;
+    _state->strongRefCount++;
   }
 
 private:
@@ -92,7 +92,7 @@ public:
     }
 
     // decrement strong ref count on destroy
-    (_state->strongRefCount)--;
+    _state->strongRefCount--;
     maybeDestroy();
   }
 
