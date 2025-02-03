@@ -362,10 +362,10 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
         let __variant = newValue
         switch __variant.index() {
           case 0:
-            let __actual = bridge.get_std__variant_std__string__double__0(__variant)
+            let __actual = __variant.get_0()
             return .someString(String(__actual))
           case 1:
-            let __actual = bridge.get_std__variant_std__string__double__1(__variant)
+            let __actual = __variant.get_1()
             return .someDouble(__actual)
           default:
             fatalError("Variant can never have index \(__variant.index())!")
@@ -656,10 +656,10 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
             let __variant = bridge.std__variant_double__bool_(__value)
             switch __variant.index() {
               case 0:
-                let __actual = bridge.get_std__variant_double__bool__0(__variant)
+                let __actual = __variant.get_0()
                 return .someDouble(__actual)
               case 1:
-                let __actual = bridge.get_std__variant_double__bool__1(__variant)
+                let __actual = __variant.get_1()
                 return .someBool(__actual)
               default:
                 fatalError("Variant can never have index \(__variant.index())!")

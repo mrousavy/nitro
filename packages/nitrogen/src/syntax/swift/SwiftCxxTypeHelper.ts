@@ -427,8 +427,8 @@ inline ${name} create_${name}(${param} value) {
   })
   const getFunctions = type.variants.map((t, i) => {
     return `
-inline ${t.getCode('c++')} get_${name}_${i}(const ${name}& variantWrapper) {
-  return std::get<${i}>(variantWrapper.variant);
+inline ${t.getCode('c++')} get_${i}() const {
+  return std::get<${i}>(variant);
 }`.trim()
   })
   return {
@@ -451,9 +451,9 @@ struct ${name} {
   inline size_t index() const {
     return variant.index();
   }
+  ${indent(getFunctions.join('\n'), '  ')}
 };
 ${createFunctions.join('\n')}
-${getFunctions.join('\n')}
         `.trim(),
 
       requiredIncludes: [

@@ -513,12 +513,11 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
           : cppParameterName
         const cases = variant.variants
           .map((t, i) => {
-            const getFunc = `bridge.get_${bridge.specializationName}_${i}`
             const wrapping = new SwiftCxxBridgedType(t)
             const caseName = getSwiftVariantCaseName(t)
             return `
 case ${i}:
-  let __actual = ${getFunc}(__variant)
+  let __actual = __variant.get_${i}()
   return .${caseName}(${indent(wrapping.parseFromCppToSwift('__actual', 'swift'), '  ')})`.trim()
           })
           .join('\n')

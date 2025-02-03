@@ -388,18 +388,18 @@ namespace margelo::nitro::image::bridge::swift {
     inline size_t index() const {
       return variant.index();
     }
+    inline std::string get_0() const {
+      return std::get<0>(variant);
+    }
+    inline double get_1() const {
+      return std::get<1>(variant);
+    }
   };
   inline std__variant_std__string__double_ create_std__variant_std__string__double_(const std::string& value) {
     return std__variant_std__string__double_(value);
   }
   inline std__variant_std__string__double_ create_std__variant_std__string__double_(double value) {
     return std__variant_std__string__double_(value);
-  }
-  inline std::string get_std__variant_std__string__double__0(const std__variant_std__string__double_& variantWrapper) {
-    return std::get<0>(variantWrapper.variant);
-  }
-  inline double get_std__variant_std__string__double__1(const std__variant_std__string__double_& variantWrapper) {
-    return std::get<1>(variantWrapper.variant);
   }
   
   // pragma MARK: std::variant<double, bool>
@@ -417,18 +417,18 @@ namespace margelo::nitro::image::bridge::swift {
     inline size_t index() const {
       return variant.index();
     }
+    inline double get_0() const {
+      return std::get<0>(variant);
+    }
+    inline bool get_1() const {
+      return std::get<1>(variant);
+    }
   };
   inline std__variant_double__bool_ create_std__variant_double__bool_(double value) {
     return std__variant_double__bool_(value);
   }
   inline std__variant_double__bool_ create_std__variant_double__bool_(bool value) {
     return std__variant_double__bool_(value);
-  }
-  inline double get_std__variant_double__bool__0(const std__variant_double__bool_& variantWrapper) {
-    return std::get<0>(variantWrapper.variant);
-  }
-  inline bool get_std__variant_double__bool__1(const std__variant_double__bool_& variantWrapper) {
-    return std::get<1>(variantWrapper.variant);
   }
   
   // pragma MARK: std::unordered_map<std::string, std::variant<double, bool>>
