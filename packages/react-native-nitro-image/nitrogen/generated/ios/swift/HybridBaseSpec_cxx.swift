@@ -97,7 +97,7 @@ public class HybridBaseSpec_cxx {
   }
 
   // Properties
-  public var baseValue: Double {
+  public final var baseValue: Double {
     @inline(__always)
     get {
       return self.__implementation.baseValue
