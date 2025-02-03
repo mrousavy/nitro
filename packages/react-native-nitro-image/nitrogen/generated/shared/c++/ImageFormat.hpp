@@ -41,7 +41,7 @@ namespace margelo::nitro {
 
   // C++ ImageFormat <> JS ImageFormat (union)
   template <>
-  struct JSIConverter<ImageFormat> {
+  struct JSIConverter<ImageFormat> final {
     static inline ImageFormat fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       std::string unionValue = JSIConverter<std::string>::fromJSI(runtime, arg);
       switch (hashString(unionValue.c_str(), unionValue.size())) {

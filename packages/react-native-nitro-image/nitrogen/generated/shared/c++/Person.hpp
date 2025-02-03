@@ -44,7 +44,7 @@ namespace margelo::nitro {
 
   // C++ Person <> JS Person (object)
   template <>
-  struct JSIConverter<Person> {
+  struct JSIConverter<Person> final {
     static inline Person fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       jsi::Object obj = arg.asObject(runtime);
       return Person(
