@@ -191,7 +191,7 @@ public:
 
 private:
   void maybeDestroy() {
-    _state->mutex->lock();
+    _state->mutex.lock();
 
     if (_state->strongRefCount == 0) {
       // after no strong references exist anymore
@@ -200,12 +200,12 @@ private:
 
     if (_state->strongRefCount == 0 && _state->weakRefCount == 0) {
       // free the full memory if there are no more references at all
-      _state->mutex->unlock();
+      _state->mutex.unlock();
       delete _state;
       return;
     }
 
-    _state->mutex->unlock();
+    _state->mutex.unlock();
   }
 
   void forceDestroy() {

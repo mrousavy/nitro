@@ -31,7 +31,7 @@ public:
   BorrowingReference() : _value(nullptr), _state(nullptr) {}
 
   BorrowingReference(const BorrowingReference& ref) : _value(ref._value), _state(ref._state) {
-    if (_state->weakRefCount != nullptr) {
+    if (_state != nullptr) {
       // increment ref count after copy
       _state->weakRefCount++;
     }
