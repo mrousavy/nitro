@@ -21,11 +21,12 @@ data class JsStyleStruct
   @Keep
   constructor(
     val value: Double,
-    val onChanged: (num: Double) -> Unit
+    val onChanged: (num: Double) -> Unit,
+    val someMap: Map<String, String>
   ) {
   @DoNotStrip
   @Keep
   @Suppress("unused")
-  private constructor(value: Double, onChanged: Func_void_double)
-               : this(value, onChanged as (num: Double) -> Unit)
+  private constructor(value: Double, onChanged: Func_void_double, someMap: Map<String, String>)
+               : this(value, onChanged as (num: Double) -> Unit, someMap)
 }

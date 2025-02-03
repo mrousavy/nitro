@@ -39,6 +39,7 @@ export type Person = {
 interface JsStyleStruct {
   value: number
   onChanged: (num: number) => void
+  someMap: Record<string, string>
 }
 
 // This is an `interface` we're going to use as a base in both of our `HybridObject`s later.
