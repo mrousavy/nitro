@@ -52,10 +52,7 @@
 #define SWIFT_NONCOPYABLE
 #endif
 
-// React Native Support
-#if __has_include(<cxxreact/ReactNativeVersion.h>)
-#include <cxxreact/ReactNativeVersion.h>
-#endif
+// React Native Support (right now it's only stubbed out)
 #ifndef REACT_NATIVE_VERSION_MINOR
 #define REACT_NATIVE_VERSION_MAJOR 0
 #define REACT_NATIVE_VERSION_MINOR 0
