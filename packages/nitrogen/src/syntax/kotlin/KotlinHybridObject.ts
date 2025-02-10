@@ -143,13 +143,18 @@ ${code}
 
 @DoNotStrip
 @Keep
+@JvmName("${method.name}_cxx")
 private fun ${method.name}_cxx(${paramsSignature.join(', ')}): ${bridgedReturn.getTypeCode('kotlin')} {
   val __result = ${method.name}(${paramsForward.join(', ')})
   return ${returnForward}
 }
     `.trim()
   } else {
-    const code = method.getCode('kotlin', { doNotStrip: true, virtual: true })
+    const code = method.getCode('kotlin', {
+      doNotStrip: true,
+      virtual: true,
+      jvmName: true,
+    })
     return code
   }
 }

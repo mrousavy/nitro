@@ -40,18 +40,22 @@ abstract class HybridImageFactorySpec: HybridObject() {
   
 
   // Methods
+  @JvmName("loadImageFromFile")
   @DoNotStrip
   @Keep
   abstract fun loadImageFromFile(path: String): HybridImageSpec
   
+  @JvmName("loadImageFromURL")
   @DoNotStrip
   @Keep
   abstract fun loadImageFromURL(path: String): HybridImageSpec
   
+  @JvmName("loadImageFromSystemName")
   @DoNotStrip
   @Keep
   abstract fun loadImageFromSystemName(path: String): HybridImageSpec
   
+  @JvmName("bounceBack")
   @DoNotStrip
   @Keep
   abstract fun bounceBack(image: HybridImageSpec): HybridImageSpec

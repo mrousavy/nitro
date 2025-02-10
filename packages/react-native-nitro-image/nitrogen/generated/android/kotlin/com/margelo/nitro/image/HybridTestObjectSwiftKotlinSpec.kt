@@ -128,38 +128,47 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   abstract var someVariant: Variant_String_Double
 
   // Methods
+  @JvmName("newTestObject")
   @DoNotStrip
   @Keep
   abstract fun newTestObject(): HybridTestObjectSwiftKotlinSpec
   
+  @JvmName("simpleFunc")
   @DoNotStrip
   @Keep
   abstract fun simpleFunc(): Unit
   
+  @JvmName("addNumbers")
   @DoNotStrip
   @Keep
   abstract fun addNumbers(a: Double, b: Double): Double
   
+  @JvmName("addStrings")
   @DoNotStrip
   @Keep
   abstract fun addStrings(a: String, b: String): String
   
+  @JvmName("multipleArguments")
   @DoNotStrip
   @Keep
   abstract fun multipleArguments(num: Double, str: String, boo: Boolean): Unit
   
+  @JvmName("bounceStrings")
   @DoNotStrip
   @Keep
   abstract fun bounceStrings(array: Array<String>): Array<String>
   
+  @JvmName("bounceNumbers")
   @DoNotStrip
   @Keep
   abstract fun bounceNumbers(array: DoubleArray): DoubleArray
   
+  @JvmName("bounceStructs")
   @DoNotStrip
   @Keep
   abstract fun bounceStructs(array: Array<Person>): Array<Person>
   
+  @JvmName("bounceEnums")
   @DoNotStrip
   @Keep
   abstract fun bounceEnums(array: Array<Powertrain>): Array<Powertrain>
@@ -168,75 +177,93 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
+  @JvmName("complexEnumCallback_cxx")
   private fun complexEnumCallback_cxx(array: Array<Powertrain>, callback: Func_void_std__vector_Powertrain_): Unit {
     val __result = complexEnumCallback(array, callback)
     return __result
   }
   
+  @JvmName("createMap")
   @DoNotStrip
   @Keep
   abstract fun createMap(): AnyMap
   
+  @JvmName("mapRoundtrip")
   @DoNotStrip
   @Keep
   abstract fun mapRoundtrip(map: AnyMap): AnyMap
   
+  @JvmName("bounceMap")
   @DoNotStrip
   @Keep
   abstract fun bounceMap(map: Map<String, Variant_Double_Boolean>): Map<String, Variant_Double_Boolean>
   
+  @JvmName("extractMap")
   @DoNotStrip
   @Keep
   abstract fun extractMap(mapWrapper: MapWrapper): Map<String, String>
   
+  @JvmName("funcThatThrows")
   @DoNotStrip
   @Keep
   abstract fun funcThatThrows(): Double
   
+  @JvmName("funcThatThrowsBeforePromise")
   @DoNotStrip
   @Keep
   abstract fun funcThatThrowsBeforePromise(): Promise<Unit>
   
+  @JvmName("throwError")
   @DoNotStrip
   @Keep
   abstract fun throwError(error: Throwable): Unit
   
+  @JvmName("tryOptionalParams")
   @DoNotStrip
   @Keep
   abstract fun tryOptionalParams(num: Double, boo: Boolean, str: String?): String
   
+  @JvmName("tryMiddleParam")
   @DoNotStrip
   @Keep
   abstract fun tryMiddleParam(num: Double, boo: Boolean?, str: String): String
   
+  @JvmName("tryOptionalEnum")
   @DoNotStrip
   @Keep
   abstract fun tryOptionalEnum(value: Powertrain?): Powertrain?
   
+  @JvmName("calculateFibonacciSync")
   @DoNotStrip
   @Keep
   abstract fun calculateFibonacciSync(value: Double): Long
   
+  @JvmName("calculateFibonacciAsync")
   @DoNotStrip
   @Keep
   abstract fun calculateFibonacciAsync(value: Double): Promise<Long>
   
+  @JvmName("wait")
   @DoNotStrip
   @Keep
   abstract fun wait(seconds: Double): Promise<Unit>
   
+  @JvmName("promiseThrows")
   @DoNotStrip
   @Keep
   abstract fun promiseThrows(): Promise<Unit>
   
+  @JvmName("awaitAndGetPromise")
   @DoNotStrip
   @Keep
   abstract fun awaitAndGetPromise(promise: Promise<Double>): Promise<Double>
   
+  @JvmName("awaitAndGetComplexPromise")
   @DoNotStrip
   @Keep
   abstract fun awaitAndGetComplexPromise(promise: Promise<Car>): Promise<Car>
   
+  @JvmName("awaitPromise")
   @DoNotStrip
   @Keep
   abstract fun awaitPromise(promise: Promise<Unit>): Promise<Unit>
@@ -245,6 +272,7 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
+  @JvmName("callCallback_cxx")
   private fun callCallback_cxx(callback: Func_void): Unit {
     val __result = callCallback(callback)
     return __result
@@ -254,6 +282,7 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
+  @JvmName("callAll_cxx")
   private fun callAll_cxx(first: Func_void, second: Func_void, third: Func_void): Unit {
     val __result = callAll(first, second, third)
     return __result
@@ -263,6 +292,7 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
+  @JvmName("callWithOptional_cxx")
   private fun callWithOptional_cxx(value: Double?, callback: Func_void_std__optional_double_): Unit {
     val __result = callWithOptional(value, callback)
     return __result
@@ -272,6 +302,7 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
+  @JvmName("callSumUpNTimes_cxx")
   private fun callSumUpNTimes_cxx(callback: Func_std__shared_ptr_Promise_double__, n: Double): Promise<Double> {
     val __result = callSumUpNTimes(callback, n)
     return __result
@@ -281,6 +312,7 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
+  @JvmName("callbackAsyncPromise_cxx")
   private fun callbackAsyncPromise_cxx(callback: Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double____): Promise<Double> {
     val __result = callbackAsyncPromise(callback)
     return __result
@@ -290,6 +322,7 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
+  @JvmName("callbackAsyncPromiseBuffer_cxx")
   private fun callbackAsyncPromiseBuffer_cxx(callback: Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____): Promise<ArrayBuffer> {
     val __result = callbackAsyncPromiseBuffer(callback)
     return __result
@@ -299,6 +332,7 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
+  @JvmName("getComplexCallback_cxx")
   private fun getComplexCallback_cxx(): Func_void_double {
     val __result = getComplexCallback()
     return Func_void_double_java(__result)
@@ -308,6 +342,7 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
+  @JvmName("getValueFromJSCallbackAndWait_cxx")
   private fun getValueFromJSCallbackAndWait_cxx(getValue: Func_std__shared_ptr_Promise_double__): Promise<Double> {
     val __result = getValueFromJSCallbackAndWait(getValue)
     return __result
@@ -317,19 +352,23 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
+  @JvmName("getValueFromJsCallback_cxx")
   private fun getValueFromJsCallback_cxx(callback: Func_std__shared_ptr_Promise_std__string__, andThenCall: Func_void_std__string): Promise<Unit> {
     val __result = getValueFromJsCallback(callback, andThenCall)
     return __result
   }
   
+  @JvmName("getCar")
   @DoNotStrip
   @Keep
   abstract fun getCar(): Car
   
+  @JvmName("isCarElectric")
   @DoNotStrip
   @Keep
   abstract fun isCarElectric(car: Car): Boolean
   
+  @JvmName("getDriver")
   @DoNotStrip
   @Keep
   abstract fun getDriver(car: Car): Person?
@@ -338,51 +377,63 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
+  @JvmName("jsStyleObjectAsParameters_cxx")
   private fun jsStyleObjectAsParameters_cxx(params: JsStyleStruct): Unit {
     val __result = jsStyleObjectAsParameters(params)
     return __result
   }
   
+  @JvmName("createArrayBuffer")
   @DoNotStrip
   @Keep
   abstract fun createArrayBuffer(): ArrayBuffer
   
+  @JvmName("getBufferLastItem")
   @DoNotStrip
   @Keep
   abstract fun getBufferLastItem(buffer: ArrayBuffer): Double
   
+  @JvmName("setAllValuesTo")
   @DoNotStrip
   @Keep
   abstract fun setAllValuesTo(buffer: ArrayBuffer, value: Double): Unit
   
+  @JvmName("createArrayBufferAsync")
   @DoNotStrip
   @Keep
   abstract fun createArrayBufferAsync(): Promise<ArrayBuffer>
   
+  @JvmName("createChild")
   @DoNotStrip
   @Keep
   abstract fun createChild(): HybridChildSpec
   
+  @JvmName("createBase")
   @DoNotStrip
   @Keep
   abstract fun createBase(): HybridBaseSpec
   
+  @JvmName("createBaseActualChild")
   @DoNotStrip
   @Keep
   abstract fun createBaseActualChild(): HybridBaseSpec
   
+  @JvmName("bounceChild")
   @DoNotStrip
   @Keep
   abstract fun bounceChild(child: HybridChildSpec): HybridChildSpec
   
+  @JvmName("bounceBase")
   @DoNotStrip
   @Keep
   abstract fun bounceBase(base: HybridBaseSpec): HybridBaseSpec
   
+  @JvmName("bounceChildBase")
   @DoNotStrip
   @Keep
   abstract fun bounceChildBase(child: HybridChildSpec): HybridBaseSpec
   
+  @JvmName("castBase")
   @DoNotStrip
   @Keep
   abstract fun castBase(base: HybridBaseSpec): HybridChildSpec

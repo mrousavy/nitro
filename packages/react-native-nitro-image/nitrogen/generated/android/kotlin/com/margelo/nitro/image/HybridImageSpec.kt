@@ -52,6 +52,7 @@ abstract class HybridImageSpec: HybridObject() {
   abstract var someSettableProp: Double
 
   // Methods
+  @JvmName("toArrayBuffer")
   @DoNotStrip
   @Keep
   abstract fun toArrayBuffer(format: ImageFormat): Double
@@ -60,6 +61,7 @@ abstract class HybridImageSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
+  @JvmName("saveToFile_cxx")
   private fun saveToFile_cxx(path: String, onFinished: Func_void_std__string): Unit {
     val __result = saveToFile(path, onFinished)
     return __result
