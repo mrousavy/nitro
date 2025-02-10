@@ -59,7 +59,8 @@ ${imports.join('\n')}
 @Suppress(
   "KotlinJniMissingFunction", "unused",
   "RedundantSuppression", "RedundantUnitReturnType", "SimpleRedundantLet",
-  "LocalVariableName", "PropertyName", "PrivatePropertyName", "FunctionName"
+  "LocalVariableName", "PropertyName", "PrivatePropertyName", "FunctionName",
+  "INAPPLICABLE_JVM_NAME"
 )
 abstract class ${name.HybridTSpec}: ${kotlinBase}() {
   @DoNotStrip
