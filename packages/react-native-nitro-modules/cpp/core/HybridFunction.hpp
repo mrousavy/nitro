@@ -8,7 +8,7 @@
 #pragma once
 
 namespace margelo::nitro {
-template <typename T, typename Enable>
+template <typename T>
 struct JSIConverter;
 } // namespace margelo::nitro
 

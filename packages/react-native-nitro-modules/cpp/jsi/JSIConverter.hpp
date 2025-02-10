@@ -6,7 +6,7 @@
 
 // Forward declare a few of the common types that might have cyclic includes.
 namespace margelo::nitro {
-template <typename T, typename Enable>
+template <typename T>
 struct JSIConverter;
 } // namespace margelo::nitro
 
@@ -25,9 +25,10 @@ using namespace facebook;
  * Value types, custom types (HybridObject), and even functions with any number of arguments/types are supported.
  * This type can be extended by just creating a new template for JSIConverter in a header.
  */
-template <typename T, typename Enable = void>
+template <typename T>
 struct JSIConverter final {
   JSIConverter() = delete;
+  ~JSIConverter() = delete;
 
   /**
    * Converts the given `jsi::Value` to type `T`.

@@ -9,7 +9,7 @@ namespace margelo::nitro {
 class ArrayBuffer;
 class JSICache;
 
-template <typename T, typename Enable>
+template <typename T>
 struct JSIConverter;
 } // namespace margelo::nitro
 

@@ -9,7 +9,7 @@ namespace margelo::nitro {
 struct AnyValue;
 class AnyMap;
 
-template <typename T, typename Enable>
+template <typename T>
 struct JSIConverter;
 } // namespace margelo::nitro
 

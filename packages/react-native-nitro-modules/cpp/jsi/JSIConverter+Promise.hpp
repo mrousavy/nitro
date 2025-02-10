@@ -7,7 +7,7 @@
 // Forward declare a few of the common types that might have cyclic includes.
 namespace margelo::nitro {
 
-template <typename T, typename Enable>
+template <typename T>
 struct JSIConverter;
 } // namespace margelo::nitro
 
