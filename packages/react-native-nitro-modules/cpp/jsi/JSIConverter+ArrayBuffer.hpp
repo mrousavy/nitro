@@ -18,6 +18,7 @@ struct JSIConverter;
 #include "ArrayBuffer.hpp"
 #include "IsSharedPtrTo.hpp"
 #include "JSICache.hpp"
+#include "NitroConcepts.hpp"
 #include "NitroDefines.hpp"
 #include <jsi/jsi.h>
 #include <memory>

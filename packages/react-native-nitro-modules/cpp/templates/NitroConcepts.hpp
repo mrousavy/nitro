@@ -7,11 +7,17 @@
 
 #pragma once
 
-#include "HybridObject.hpp"
 #include <concepts>
-#include <jsi.h>
 #include <memory>
 #include <type_traits>
+
+namespace margelo::nitro {
+class HybridObject;
+}
+namespace facebook::jsi {
+class MutableBuffer;
+class HostObject;
+} // namespace facebook::jsi
 
 namespace margelo::nitro {
 
