@@ -30,7 +30,7 @@ public:
   Promise(const Promise&) = delete;
 
 private:
-  Promise() {}
+  Promise() = default;
 
 public:
   ~Promise() {
