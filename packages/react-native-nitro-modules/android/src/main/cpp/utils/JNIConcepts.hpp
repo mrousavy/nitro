@@ -12,10 +12,16 @@ namespace margelo::nitro {
 
 using namespace facebook;
 
-template <typename T>
-concept SomeJavaClass = std::is_base_of_v<jni::JavaClass<T>, T>;
+template <typename Self, typename Base>
+std::true_type test_hybrid_class(jni::HybridClass<Self, Base>*);
+/* no template */
+std::false_type test_hybrid_class(...);
+template<typename T>
+concept SomeHybridClass = decltype(test_hybrid_class(static_cast<T*>(nullptr)))::value;
 
-template <typename T>
-concept SomeHybridClass = std::is_base_of_v<jni::HybridClass<T>, T>;
+template<typename T>
+concept SomeJavaObject = std::is_pointer_v<T> && requires(T t) {
+  { t->getClass() } -> std::convertible_to<jni::alias_ref<jni::JClass>>;
+};
 
 } // namespace margelo::nitro
