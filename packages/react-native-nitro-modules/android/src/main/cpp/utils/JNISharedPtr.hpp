@@ -4,9 +4,9 @@
 
 #pragma once
 
+#include "JNIConcepts.hpp"
 #include <fbjni/fbjni.h>
 #include <memory>
-#include "JNIConcepts.hpp"
 
 namespace margelo::nitro {
 

@@ -14,6 +14,7 @@ struct JSIConverter;
 
 #include "CountTrailingOptionals.hpp"
 #include "JSIConverter.hpp"
+#include "NitroConcepts.hpp"
 #include "NitroDefines.hpp"
 #include "NitroTypeInfo.hpp"
 #include <exception>
@@ -71,7 +72,7 @@ public:
    * and assumes that the object this is called on has a proper `this` configured.
    * The object's `this` needs to be a `NativeState`.
    */
-  template <typename THybrid, typename ReturnType, typename... Args>
+  template <SomeHybridObject THybrid, typename ReturnType, typename... Args>
   static inline HybridFunction createHybridFunction(const std::string& name, ReturnType (THybrid::*method)(Args...), FunctionKind kind) {
     jsi::HostFunctionType hostFunction = [name, method, kind](/* JS Runtime */ jsi::Runtime& runtime,
                                                               /* HybridObject */ const jsi::Value& thisValue,
@@ -132,19 +133,19 @@ public:
    * Unlike `createHybridFunction(...)`, this method does **not** perform any argument parsing or size checking.
    * It is a raw-, untyped JSI method, and the user is expected to manually handle arguments and return values.
    */
-  template <typename Derived>
+  template <SomeHybridObject THybrid>
   static inline HybridFunction createRawHybridFunction(const std::string& name, size_t expectedArgumentsCount,
-                                                       jsi::Value (Derived::*method)(jsi::Runtime& runtime, const jsi::Value& thisArg,
+                                                       jsi::Value (THybrid::*method)(jsi::Runtime& runtime, const jsi::Value& thisArg,
                                                                                      const jsi::Value* args, size_t count)) {
     jsi::HostFunctionType hostFunction = [name, method](/* JS Runtime */ jsi::Runtime& runtime,
                                                         /* HybridObject */ const jsi::Value& thisValue,
                                                         /* JS arguments */ const jsi::Value* args,
                                                         /* argument size */ size_t count) -> jsi::Value {
       // 1. Get actual `HybridObject` instance from `thisValue` (it's stored as `NativeState`)
-      std::shared_ptr<Derived> hybridInstance = getHybridObjectNativeState<Derived>(runtime, thisValue, FunctionKind::METHOD, name);
+      std::shared_ptr<THybrid> hybridInstance = getHybridObjectNativeState<THybrid>(runtime, thisValue, FunctionKind::METHOD, name);
 
       // 2. Call the raw JSI method using raw JSI Values. Exceptions are also expected to be handled by the user.
-      Derived* pointer = hybridInstance.get();
+      THybrid* pointer = hybridInstance.get();
       return (pointer->*method)(runtime, thisValue, args, count);
     };
 
@@ -156,8 +157,8 @@ private:
    * Calls the given method on the given instance with the given `jsi::Value` arguments by converting them to the desired target types.
    * The given method's return value will be converted to a `jsi::Value` again.
    */
-  template <typename Derived, typename ReturnType, typename... Args, size_t... Is>
-  static inline jsi::Value callMethod(Derived* obj, ReturnType (Derived::*method)(Args...), jsi::Runtime& runtime, const jsi::Value* args,
+  template <SomeHybridObject THybrid, typename ReturnType, typename... Args, size_t... Is>
+  static inline jsi::Value callMethod(THybrid* obj, ReturnType (THybrid::*method)(Args...), jsi::Runtime& runtime, const jsi::Value* args,
                                       size_t argsSize, std::index_sequence<Is...>) {
     static const jsi::Value defaultValue;
 
@@ -176,7 +177,7 @@ private:
   /**
    * Get the `NativeState` of the given `value`.
    */
-  template <typename THybrid>
+  template <SomeHybridObject THybrid>
   static inline std::shared_ptr<THybrid> getHybridObjectNativeState(jsi::Runtime& runtime, const jsi::Value& value, FunctionKind funcKind,
                                                                     const std::string& funcName) {
     // 1. Convert jsi::Value to jsi::Object
@@ -230,7 +231,7 @@ private:
   }
 
 private:
-  template <typename THybrid>
+  template <SomeHybridObject THybrid>
   static inline std::string getHybridFuncFullName(FunctionKind kind, const std::string& registrationName,
                                                   THybrid* hybridInstance = nullptr) {
     std::string typeName = hybridInstance != nullptr ? hybridInstance->getName() : TypeInfo::getFriendlyTypename<THybrid>(true);
@@ -242,7 +243,7 @@ private:
         return typeName + "." + registrationName;
     }
   }
-  template <typename THybrid>
+  template <SomeHybridObject THybrid>
   static inline std::string getHybridFuncDebugInfo(FunctionKind kind, const std::string& registrationName,
                                                    THybrid* hybridInstance = nullptr) {
     auto funcName = getHybridFuncFullName<THybrid>(kind, registrationName, hybridInstance);
