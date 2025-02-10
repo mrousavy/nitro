@@ -9,6 +9,7 @@
 
 #include "BorrowingReference.hpp"
 #include "HybridFunction.hpp"
+#include "NitroConcepts.hpp"
 #include "Prototype.hpp"
 #include "PrototypeChain.hpp"
 #include <functional>
@@ -78,9 +79,9 @@ protected:
    * prototype will already be known and cached.
    * **Do not conditionally register hybrid methods, getters or setter!**
    */
-  template <typename Derived>
-  inline void registerHybrids(Derived* /* this */, RegisterFn registerFunc) {
-    const std::shared_ptr<Prototype>& prototype = _prototypeChain.extendPrototype<Derived>();
+  template <SomeHybridObject T>
+  inline void registerHybrids(T* /* this */, RegisterFn registerFunc) {
+    const std::shared_ptr<Prototype>& prototype = _prototypeChain.extendPrototype<T>();
 
     if (!prototype->hasHybrids()) {
       // The `Prototype` does not have any methods or properties registered yet - so do it now

@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include "NitroConcepts.hpp"
 #include "Prototype.hpp"
 
 namespace margelo::nitro {
@@ -40,7 +41,7 @@ public:
    * Extends the Prototype with the given type `Derived`.
    * If the Prototype already extended `Derived`, this returns the current state.
    */
-  template <typename Derived>
+  template <SomeHybridObject Derived>
   inline const std::shared_ptr<Prototype>& extendPrototype() {
     if (_prototype == nullptr) {
       _prototype = Prototype::get(typeid(Derived));
@@ -56,7 +57,7 @@ private:
    * C++ type `Derived`, it will extend it at the bottom and shift the `Prototype` tree
    * up by one.
    */
-  template <typename Derived>
+  template <SomeHybridObject Derived>
   inline const std::shared_ptr<Prototype>& getOrExtendPrototype(const std::shared_ptr<Prototype>& node) {
     if (node->isNativeInstance<Derived>()) {
       // If the Prototype represents the caller type (`Derived`), we work with this Prototype.

@@ -7,12 +7,45 @@
 
 #pragma once
 
+#include "HybridObject.hpp"
 #include <concepts>
+#include <jsi.h>
+#include <memory>
 #include <type_traits>
 
 namespace margelo::nitro {
 
+/**
+ * Any `HybridObject`, or a subclass of it.
+ */
 template <typename T>
 concept SomeHybridObject = std::is_base_of_v<HybridObject, T>;
+
+/**
+ * A `std::shared_ptr` to any `HybridObject`, or a subclass of it.
+ */
+template <typename T>
+concept SomeHybridObjectSharedPtr = requires {
+  typename T::element_type;
+}
+&&std::same_as<T, std::shared_ptr<typename T::element_type>>&& std::is_base_of_v<HybridObject, typename T::element_type>;
+
+/**
+ * A `std::shared_ptr` to any `jsi::HostObject`, or a subclass of it.
+ */
+template <typename T>
+concept SomeHostObjectSharedPtr = requires {
+  typename T::element_type;
+}
+&&std::same_as<T, std::shared_ptr<typename T::element_type>>&& std::is_base_of_v<jsi::HostObject, typename T::element_type>;
+
+/**
+ * A `std::shared_ptr` to a `jsi::MutableBuffer` or a sub-class of it.
+ */
+template <typename T>
+concept SomeMutableBuffer = requires {
+  typename T::element_type;
+}
+&&std::same_as<T, std::shared_ptr<typename T::element_type>>&& std::is_base_of_v<jsi::MutableBuffer, typename T::element_type>;
 
 } // namespace margelo::nitro
