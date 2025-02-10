@@ -13,6 +13,9 @@ namespace margelo::nitro {
 using namespace facebook;
 
 template <typename T>
+concept SomeJavaClass = std::is_base_of_v<jni::JavaClass<T>, T>;
+
+template <typename T>
 concept SomeHybridClass = std::is_base_of_v<jni::HybridClass<T>, T>;
 
 } // namespace margelo::nitro
