@@ -264,13 +264,13 @@ public:
   Promise(const Promise&) = delete;
 
 private:
-  Promise() {}
+  Promise() = default;
 
 public:
   ~Promise() {
     if (isPending()) [[unlikely]] {
       std::runtime_error error("Timeouted: Promise<void> was destroyed!");
-      reject(std::make_exception_ptr(std::move(error)));
+      reject(std::make_exception_ptr(error));
     }
   }
 
