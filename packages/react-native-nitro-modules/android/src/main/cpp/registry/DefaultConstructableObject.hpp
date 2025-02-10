@@ -9,12 +9,12 @@
 
 #include "NitroDefines.hpp"
 #include <fbjni/fbjni.h>
-#include "JNIConcepts.hpp"
 
 namespace margelo::nitro {
 
 using namespace facebook;
 
+// TODO: Use SomeJavaObject concept for this.
 template <typename T>
 class DefaultConstructableObject {
 public:
