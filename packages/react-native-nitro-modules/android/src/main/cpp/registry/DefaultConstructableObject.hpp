@@ -9,19 +9,20 @@
 
 #include "NitroDefines.hpp"
 #include <fbjni/fbjni.h>
+#include "JNIConcepts.hpp"
 
 namespace margelo::nitro {
 
 using namespace facebook;
 
-template <typename T>
+template <SomeHybridClass T>
 class DefaultConstructableObject {
 public:
   explicit DefaultConstructableObject(const char* javaClassDescriptor) {
     try {
       // Find JNI class and default constructor
       _javaClass = jni::findClassStatic(javaClassDescriptor);
-      _defaultConstructor = _javaClass->getConstructor<T()>();
+      _defaultConstructor = _javaClass->getConstructor<typename T::javaobject()>();
     } catch (const jni::JniException& exc) {
       std::string message = exc.what();
       std::string descriptor = javaClassDescriptor;
@@ -54,7 +55,7 @@ public:
   }
 
 public:
-  jni::local_ref<T> create() const {
+  jni::local_ref<typename T::javaobject> create() const {
     // Calls the class's default constructor
     auto instance = _javaClass->newObject(_defaultConstructor);
 #ifdef NITRO_DEBUG
