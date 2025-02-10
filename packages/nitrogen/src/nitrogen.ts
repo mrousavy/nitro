@@ -228,7 +228,8 @@ export async function runNitrogen({
   try {
     if (NitroConfig.getCreateGitAttributes()) {
       // write a .gitattributes file
-      await createGitAttributes(outputDirectory)
+      const file = await createGitAttributes(outputDirectory)
+      filesAfter.push(file)
     }
   } catch {
     Logger.error(`❌ Failed to write ${chalk.dim(`.gitattributes`)}!`)
