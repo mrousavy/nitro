@@ -53,9 +53,9 @@ abstract class HybridImageSpec: HybridObject() {
   abstract var someSettableProp: Double
 
   // Methods
-  @JvmName("toArrayBuffer")
   @DoNotStrip
   @Keep
+  @JvmName("toArrayBuffer")
   abstract fun toArrayBuffer(format: ImageFormat): Double
   
   abstract fun saveToFile(path: String, onFinished: (path: String) -> Unit): Unit

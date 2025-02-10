@@ -129,49 +129,49 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   abstract var someVariant: Variant_String_Double
 
   // Methods
-  @JvmName("newTestObject")
   @DoNotStrip
   @Keep
+  @JvmName("newTestObject")
   abstract fun newTestObject(): HybridTestObjectSwiftKotlinSpec
   
-  @JvmName("simpleFunc")
   @DoNotStrip
   @Keep
+  @JvmName("simpleFunc")
   abstract fun simpleFunc(): Unit
   
-  @JvmName("addNumbers")
   @DoNotStrip
   @Keep
+  @JvmName("addNumbers")
   abstract fun addNumbers(a: Double, b: Double): Double
   
-  @JvmName("addStrings")
   @DoNotStrip
   @Keep
+  @JvmName("addStrings")
   abstract fun addStrings(a: String, b: String): String
   
-  @JvmName("multipleArguments")
   @DoNotStrip
   @Keep
+  @JvmName("multipleArguments")
   abstract fun multipleArguments(num: Double, str: String, boo: Boolean): Unit
   
-  @JvmName("bounceStrings")
   @DoNotStrip
   @Keep
+  @JvmName("bounceStrings")
   abstract fun bounceStrings(array: Array<String>): Array<String>
   
-  @JvmName("bounceNumbers")
   @DoNotStrip
   @Keep
+  @JvmName("bounceNumbers")
   abstract fun bounceNumbers(array: DoubleArray): DoubleArray
   
-  @JvmName("bounceStructs")
   @DoNotStrip
   @Keep
+  @JvmName("bounceStructs")
   abstract fun bounceStructs(array: Array<Person>): Array<Person>
   
-  @JvmName("bounceEnums")
   @DoNotStrip
   @Keep
+  @JvmName("bounceEnums")
   abstract fun bounceEnums(array: Array<Powertrain>): Array<Powertrain>
   
   abstract fun complexEnumCallback(array: Array<Powertrain>, callback: (array: Array<Powertrain>) -> Unit): Unit
@@ -184,89 +184,89 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
     return __result
   }
   
-  @JvmName("createMap")
   @DoNotStrip
   @Keep
+  @JvmName("createMap")
   abstract fun createMap(): AnyMap
   
-  @JvmName("mapRoundtrip")
   @DoNotStrip
   @Keep
+  @JvmName("mapRoundtrip")
   abstract fun mapRoundtrip(map: AnyMap): AnyMap
   
-  @JvmName("bounceMap")
   @DoNotStrip
   @Keep
+  @JvmName("bounceMap")
   abstract fun bounceMap(map: Map<String, Variant_Double_Boolean>): Map<String, Variant_Double_Boolean>
   
-  @JvmName("extractMap")
   @DoNotStrip
   @Keep
+  @JvmName("extractMap")
   abstract fun extractMap(mapWrapper: MapWrapper): Map<String, String>
   
-  @JvmName("funcThatThrows")
   @DoNotStrip
   @Keep
+  @JvmName("funcThatThrows")
   abstract fun funcThatThrows(): Double
   
-  @JvmName("funcThatThrowsBeforePromise")
   @DoNotStrip
   @Keep
+  @JvmName("funcThatThrowsBeforePromise")
   abstract fun funcThatThrowsBeforePromise(): Promise<Unit>
   
-  @JvmName("throwError")
   @DoNotStrip
   @Keep
+  @JvmName("throwError")
   abstract fun throwError(error: Throwable): Unit
   
-  @JvmName("tryOptionalParams")
   @DoNotStrip
   @Keep
+  @JvmName("tryOptionalParams")
   abstract fun tryOptionalParams(num: Double, boo: Boolean, str: String?): String
   
-  @JvmName("tryMiddleParam")
   @DoNotStrip
   @Keep
+  @JvmName("tryMiddleParam")
   abstract fun tryMiddleParam(num: Double, boo: Boolean?, str: String): String
   
-  @JvmName("tryOptionalEnum")
   @DoNotStrip
   @Keep
+  @JvmName("tryOptionalEnum")
   abstract fun tryOptionalEnum(value: Powertrain?): Powertrain?
   
-  @JvmName("calculateFibonacciSync")
   @DoNotStrip
   @Keep
+  @JvmName("calculateFibonacciSync")
   abstract fun calculateFibonacciSync(value: Double): Long
   
-  @JvmName("calculateFibonacciAsync")
   @DoNotStrip
   @Keep
+  @JvmName("calculateFibonacciAsync")
   abstract fun calculateFibonacciAsync(value: Double): Promise<Long>
   
-  @JvmName("wait")
   @DoNotStrip
   @Keep
+  @JvmName("wait")
   abstract fun wait(seconds: Double): Promise<Unit>
   
-  @JvmName("promiseThrows")
   @DoNotStrip
   @Keep
+  @JvmName("promiseThrows")
   abstract fun promiseThrows(): Promise<Unit>
   
-  @JvmName("awaitAndGetPromise")
   @DoNotStrip
   @Keep
+  @JvmName("awaitAndGetPromise")
   abstract fun awaitAndGetPromise(promise: Promise<Double>): Promise<Double>
   
-  @JvmName("awaitAndGetComplexPromise")
   @DoNotStrip
   @Keep
+  @JvmName("awaitAndGetComplexPromise")
   abstract fun awaitAndGetComplexPromise(promise: Promise<Car>): Promise<Car>
   
-  @JvmName("awaitPromise")
   @DoNotStrip
   @Keep
+  @JvmName("awaitPromise")
   abstract fun awaitPromise(promise: Promise<Unit>): Promise<Unit>
   
   abstract fun callCallback(callback: () -> Unit): Unit
@@ -359,19 +359,19 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
     return __result
   }
   
-  @JvmName("getCar")
   @DoNotStrip
   @Keep
+  @JvmName("getCar")
   abstract fun getCar(): Car
   
-  @JvmName("isCarElectric")
   @DoNotStrip
   @Keep
+  @JvmName("isCarElectric")
   abstract fun isCarElectric(car: Car): Boolean
   
-  @JvmName("getDriver")
   @DoNotStrip
   @Keep
+  @JvmName("getDriver")
   abstract fun getDriver(car: Car): Person?
   
   abstract fun jsStyleObjectAsParameters(params: JsStyleStruct): Unit
@@ -384,59 +384,59 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
     return __result
   }
   
-  @JvmName("createArrayBuffer")
   @DoNotStrip
   @Keep
+  @JvmName("createArrayBuffer")
   abstract fun createArrayBuffer(): ArrayBuffer
   
-  @JvmName("getBufferLastItem")
   @DoNotStrip
   @Keep
+  @JvmName("getBufferLastItem")
   abstract fun getBufferLastItem(buffer: ArrayBuffer): Double
   
-  @JvmName("setAllValuesTo")
   @DoNotStrip
   @Keep
+  @JvmName("setAllValuesTo")
   abstract fun setAllValuesTo(buffer: ArrayBuffer, value: Double): Unit
   
-  @JvmName("createArrayBufferAsync")
   @DoNotStrip
   @Keep
+  @JvmName("createArrayBufferAsync")
   abstract fun createArrayBufferAsync(): Promise<ArrayBuffer>
   
-  @JvmName("createChild")
   @DoNotStrip
   @Keep
+  @JvmName("createChild")
   abstract fun createChild(): HybridChildSpec
   
-  @JvmName("createBase")
   @DoNotStrip
   @Keep
+  @JvmName("createBase")
   abstract fun createBase(): HybridBaseSpec
   
-  @JvmName("createBaseActualChild")
   @DoNotStrip
   @Keep
+  @JvmName("createBaseActualChild")
   abstract fun createBaseActualChild(): HybridBaseSpec
   
-  @JvmName("bounceChild")
   @DoNotStrip
   @Keep
+  @JvmName("bounceChild")
   abstract fun bounceChild(child: HybridChildSpec): HybridChildSpec
   
-  @JvmName("bounceBase")
   @DoNotStrip
   @Keep
+  @JvmName("bounceBase")
   abstract fun bounceBase(base: HybridBaseSpec): HybridBaseSpec
   
-  @JvmName("bounceChildBase")
   @DoNotStrip
   @Keep
+  @JvmName("bounceChildBase")
   abstract fun bounceChildBase(child: HybridChildSpec): HybridBaseSpec
   
-  @JvmName("castBase")
   @DoNotStrip
   @Keep
+  @JvmName("castBase")
   abstract fun castBase(base: HybridBaseSpec): HybridChildSpec
 
   private external fun initHybrid(): HybridData

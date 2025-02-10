@@ -60,9 +60,9 @@ abstract class HybridTestViewSpec: HybridView() {
     }
 
   // Methods
-  @JvmName("someFunc")
   @DoNotStrip
   @Keep
+  @JvmName("someFunc")
   abstract fun someFunc(someParam: Double): Boolean
 
   private external fun initHybrid(): HybridData
