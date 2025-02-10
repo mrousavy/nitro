@@ -22,7 +22,8 @@ import com.margelo.nitro.views.*
 @Suppress(
   "KotlinJniMissingFunction", "unused",
   "RedundantSuppression", "RedundantUnitReturnType", "SimpleRedundantLet",
-  "LocalVariableName", "PropertyName", "PrivatePropertyName", "FunctionName"
+  "LocalVariableName", "PropertyName", "PrivatePropertyName", "FunctionName",
+  "INAPPLICABLE_JVM_NAME"
 )
 abstract class HybridTestViewSpec: HybridView() {
   @DoNotStrip
@@ -61,6 +62,7 @@ abstract class HybridTestViewSpec: HybridView() {
   // Methods
   @DoNotStrip
   @Keep
+  @JvmName("someFunc")
   abstract fun someFunc(someParam: Double): Boolean
 
   private external fun initHybrid(): HybridData

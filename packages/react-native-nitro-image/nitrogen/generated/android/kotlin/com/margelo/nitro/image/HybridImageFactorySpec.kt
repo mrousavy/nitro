@@ -21,7 +21,8 @@ import com.margelo.nitro.core.*
 @Suppress(
   "KotlinJniMissingFunction", "unused",
   "RedundantSuppression", "RedundantUnitReturnType", "SimpleRedundantLet",
-  "LocalVariableName", "PropertyName", "PrivatePropertyName", "FunctionName"
+  "LocalVariableName", "PropertyName", "PrivatePropertyName", "FunctionName",
+  "INAPPLICABLE_JVM_NAME"
 )
 abstract class HybridImageFactorySpec: HybridObject() {
   @DoNotStrip
@@ -42,18 +43,22 @@ abstract class HybridImageFactorySpec: HybridObject() {
   // Methods
   @DoNotStrip
   @Keep
+  @JvmName("loadImageFromFile")
   abstract fun loadImageFromFile(path: String): HybridImageSpec
   
   @DoNotStrip
   @Keep
+  @JvmName("loadImageFromURL")
   abstract fun loadImageFromURL(path: String): HybridImageSpec
   
   @DoNotStrip
   @Keep
+  @JvmName("loadImageFromSystemName")
   abstract fun loadImageFromSystemName(path: String): HybridImageSpec
   
   @DoNotStrip
   @Keep
+  @JvmName("bounceBack")
   abstract fun bounceBack(image: HybridImageSpec): HybridImageSpec
 
   private external fun initHybrid(): HybridData
