@@ -2,6 +2,18 @@
 // const pak = require('../package.json');
 
 const { configureProjects } = require("react-native-test-app");
+const { windows } = configureProjects({
+  android: {
+    sourceDir: "android",
+  },
+  ios: {
+    sourceDir: "ios",
+  },
+  windows: {
+    sourceDir: "windows",
+    solutionFile: "windows/NitroExample.sln",
+  },
+});
 
 module.exports = {
   dependencies: {
@@ -15,16 +27,7 @@ module.exports = {
       },
     },
   },
-  project: configureProjects({
-    android: {
-      sourceDir: "android",
-    },
-    ios: {
-      sourceDir: "ios",
-    },
-    windows: {
-      sourceDir: "windows",
-      solutionFile: "windows/NitroExample.sln",
-    },
-  }),
+  project: {
+    windows
+  },
 }
