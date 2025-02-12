@@ -32,6 +32,9 @@ std::vector<std::string> HybridObjectRegistry::getAllHybridObjectNames() {
 
 std::string HybridObjectRegistry::getAllRegisteredHybridObjectNamesToString() {
   std::vector<std::string> names = getAllHybridObjectNames();
+  if (names.empty()) {
+    return "";
+  }
   return std::accumulate(std::next(names.begin()), names.end(), names[0], [](std::string a, std::string b) { return a + ", " + b; });
 }
 
