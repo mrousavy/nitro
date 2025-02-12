@@ -137,6 +137,7 @@ private:
   static constexpr auto TAG = "HybridObject";
   const char* _name = TAG;
   std::unordered_map<jsi::Runtime*, BorrowingReference<jsi::WeakObject>> _objectCache;
+  size_t _lastExternalMemorySize = 0;
 };
 
 } // namespace margelo::nitro

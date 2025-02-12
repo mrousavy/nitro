@@ -50,7 +50,11 @@ jsi::Value HybridObject::toObject(jsi::Runtime& runtime) {
     jsi::Value value = cachedObject->second->lock(runtime);
     if (!value.isUndefined()) {
       // 1.2. It is still alive - we can use it instead of creating a new one! But first, let's update memory-size
-      value.getObject(runtime).setExternalMemoryPressure(runtime, getExternalMemorySize());
+      size_t externalMemorySize = getExternalMemorySize();
+      if (externalMemorySize != _lastExternalMemorySize) {
+        value.getObject(runtime).setExternalMemoryPressure(runtime, getExternalMemorySize());
+        _lastExternalMemorySize = externalMemorySize;
+      }
       // 1.3. Return it now
       return value;
     }
@@ -70,7 +74,9 @@ jsi::Value HybridObject::toObject(jsi::Runtime& runtime) {
   object.setNativeState(runtime, shared_from_this());
 
   // 6. Set memory size so Hermes GC knows about actual memory
-  object.setExternalMemoryPressure(runtime, getExternalMemorySize());
+  size_t externalMemorySize = getExternalMemorySize();
+  object.setExternalMemoryPressure(runtime, externalMemorySize);
+  _lastExternalMemorySize = externalMemorySize;
 
 #ifdef NITRO_DEBUG
   // 7. Assign a private __type property for debugging - this will be used so users know it's not just an empty object.
