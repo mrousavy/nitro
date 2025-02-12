@@ -59,8 +59,7 @@ ${imports.join('\n')}
 @Suppress(
   "KotlinJniMissingFunction", "unused",
   "RedundantSuppression", "RedundantUnitReturnType", "SimpleRedundantLet",
-  "LocalVariableName", "PropertyName", "PrivatePropertyName", "FunctionName",
-  "INAPPLICABLE_JVM_NAME"
+  "LocalVariableName", "PropertyName", "PrivatePropertyName", "FunctionName"
 )
 abstract class ${name.HybridTSpec}: ${kotlinBase}() {
   @DoNotStrip
@@ -144,18 +143,13 @@ ${code}
 
 @DoNotStrip
 @Keep
-@JvmName("${method.name}_cxx")
 private fun ${method.name}_cxx(${paramsSignature.join(', ')}): ${bridgedReturn.getTypeCode('kotlin')} {
   val __result = ${method.name}(${paramsForward.join(', ')})
   return ${returnForward}
 }
     `.trim()
   } else {
-    const code = method.getCode('kotlin', {
-      doNotStrip: true,
-      virtual: true,
-      jvmName: true,
-    })
+    const code = method.getCode('kotlin', { doNotStrip: true, virtual: true })
     return code
   }
 }

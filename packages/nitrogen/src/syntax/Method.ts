@@ -34,12 +34,6 @@ export interface MethodModifiers {
    * it from being stripped from the binary by the Java compiler or ProGuard.
    */
   doNotStrip?: boolean
-  /**
-   * An extra `@JvmName` property.
-   * - If `true`, it's identical to the method name.
-   * - If a `string`, it's a custom passed name.
-   */
-  jvmName?: string | boolean
 }
 
 export class Method implements CodeNode {
@@ -124,13 +118,6 @@ ${signature} {
         if (modifiers?.inline) signature = `inline ${signature}`
         if (modifiers?.override) signature = `override ${signature}`
         if (modifiers?.virtual) signature = `abstract ${signature}`
-        if (modifiers?.jvmName) {
-          const jvmName =
-            typeof modifiers.jvmName === 'string'
-              ? modifiers.jvmName
-              : this.name
-          signature = `@JvmName("${jvmName}")\n${signature}`
-        }
         if (modifiers?.doNotStrip)
           signature = `@DoNotStrip\n@Keep\n${signature}`
 
