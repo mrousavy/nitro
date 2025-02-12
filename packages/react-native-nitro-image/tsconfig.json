@@ -3,6 +3,7 @@
     "@tsconfig/react-native/tsconfig.json",
     "../../config/tsconfig.json"
   ],
+  "baseUrl": ".",
   "include": ["src"],
   "compilerOptions": {
     "rootDir": "src",
