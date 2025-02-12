@@ -52,7 +52,7 @@ jsi::Value HybridObject::toObject(jsi::Runtime& runtime) {
       // 1.2. It is still alive - we can use it instead of creating a new one! But first, let's update memory-size
       size_t externalMemorySize = getExternalMemorySize();
       if (externalMemorySize != _lastExternalMemorySize) {
-        value.getObject(runtime).setExternalMemoryPressure(runtime, getExternalMemorySize());
+        value.getObject(runtime).setExternalMemoryPressure(runtime, externalMemorySize);
         _lastExternalMemorySize = externalMemorySize;
       }
       // 1.3. Return it now
