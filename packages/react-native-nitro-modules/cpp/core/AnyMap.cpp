@@ -4,6 +4,8 @@
 
 #include "AnyMap.hpp"
 
+#include <stdexcept>
+
 namespace margelo::nitro {
 
 // Contains

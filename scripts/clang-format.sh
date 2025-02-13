@@ -5,6 +5,7 @@ CPP_DIRS=(
   "packages/react-native-nitro-modules/android/src/main/cpp"
   "packages/react-native-nitro-modules/cpp"
   "packages/react-native-nitro-modules/ios"
+  "packages/react-native-nitro-modules/windows"
   # react-native-nitro-image
   "packages/react-native-nitro-image/android/src/main/cpp"
   "packages/react-native-nitro-image/cpp"
