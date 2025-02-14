@@ -75,11 +75,18 @@
     "jest": "*",
     "react": "18.3.1",
     "react-native": "0.77.0",
-    "react-native-builder-bob": "^0.35.0"
+    "react-native-builder-bob": "^0.35.0",
+    "react-native-windows": "0.77.1"
   },
   "peerDependencies": {
     "react": "*",
-    "react-native": "*"
+    "react-native": "*",
+    "react-native-windows": "*"
+  },
+  "peerDependenciesMeta": {
+    "react-native-windows": {
+      "optional": true
+    }
   },
   "codegenConfig": {
     "name": "NitroModulesSpec",

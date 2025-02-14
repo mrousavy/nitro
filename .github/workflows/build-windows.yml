@@ -1,0 +1,52 @@
+name: Build Windows
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/build-windows.yml'
+      - 'example/windows/**'
+      - '**/nitrogen/generated/shared/**'
+      - '**/nitrogen/generated/windows/**'
+      - 'packages/react-native-nitro-image/cpp/**'
+      - 'packages/react-native-nitro-image/windows/**'
+      - 'packages/react-native-nitro-modules/cpp/**'
+      - 'packages/react-native-nitro-modules/windows/**'
+      - '**/bun.lockb'
+      - '**/react-native.config.js'
+      - '**/nitro.json'
+  pull_request:
+    paths:
+      - '.github/workflows/build-windows.yml'
+      - 'example/windows/**'
+      - '**/nitrogen/generated/shared/**'
+      - '**/nitrogen/generated/windows/**'
+      - 'packages/react-native-nitro-image/cpp/**'
+      - 'packages/react-native-nitro-image/windows/**'
+      - 'packages/react-native-nitro-modules/cpp/**'
+      - 'packages/react-native-nitro-modules/windows/**'
+      - '**/bun.lockb'
+      - '**/react-native.config.js'
+      - '**/nitro.json'
+
+jobs:
+  build_new:
+    name: Build Windows Example App (new architecture)
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4.1.0
+        with:
+          node-version: "22"
+      - uses: oven-sh/setup-bun@v2
+
+      - name: Install npm dependencies (bun)
+        run: |
+          bun install
+
+      - name: Build App
+        working-directory: example
+        run: |
+          bun run build:windows

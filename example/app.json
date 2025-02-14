@@ -1,4 +1,9 @@
 {
   "name": "NitroExample",
-  "displayName": "NitroExample"
+  "displayName": "NitroExample",
+  "components": [
+    {
+      "appKey": "NitroExample"
+    }
+  ]
 }

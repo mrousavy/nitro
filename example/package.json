@@ -6,6 +6,7 @@
     "start": "react-native start",
     "android": "react-native run-android",
     "ios": "react-native run-ios",
+    "windows": "react-native run-windows",
     "clean": "rm -rf android/build node_modules/**/android/build lib",
     "typescript": "tsc",
     "typecheck": "tsc --noEmit",
@@ -14,7 +15,8 @@
     "bundle-install": "bundle install",
     "pods": "cd ios && bundle exec pod install && rm -rf .xcode.env.local",
     "build:android": "cd android && ./gradlew assembleDebug --no-daemon --console=plain -PreactNativeArchitectures=arm64-v8a",
-    "build:ios": "cd ios && xcodebuild -workspace NitroExample.xcworkspace -scheme NitroExample -configuration Debug -sdk iphonesimulator CC=clang CPLUSPLUS=clang++ LD=clang LDPLUSPLUS=clang++ GCC_OPTIMIZATION_LEVEL=0 GCC_PRECOMPILE_PREFIX_HEADER=YES ASSETCATALOG_COMPILER_OPTIMIZATION=time DEBUG_INFORMATION_FORMAT=dwarf COMPILER_INDEX_STORE_ENABLE=NO"
+    "build:ios": "cd ios && xcodebuild -workspace NitroExample.xcworkspace -scheme NitroExample -configuration Debug -sdk iphonesimulator CC=clang CPLUSPLUS=clang++ LD=clang LDPLUSPLUS=clang++ GCC_OPTIMIZATION_LEVEL=0 GCC_PRECOMPILE_PREFIX_HEADER=YES ASSETCATALOG_COMPILER_OPTIMIZATION=time DEBUG_INFORMATION_FORMAT=dwarf COMPILER_INDEX_STORE_ENABLE=NO",
+    "build:windows": "install-windows-test-app --use-fabric && rnc-cli run-windows --logging --no-packager --no-launch --no-deploy --msbuildprops UseBundle=false --no-telemetry"
   },
   "dependencies": {
     "@react-native-segmented-control/segmented-control": "^2.5.7",
@@ -26,7 +28,8 @@
     "react-native-nitro-image": "*",
     "react-native-nitro-modules": "*",
     "react-native-safe-area-context": "^5.1.0",
-    "react-native-screens": "^4.6.0"
+    "react-native-screens": "^4.6.0",
+    "react-native-windows": "0.77.1"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
@@ -41,7 +44,8 @@
     "@react-native/typescript-config": "0.77.0",
     "@types/deep-equal": "^1.0.4",
     "babel-plugin-module-resolver": "^5.0.2",
-    "nitro-codegen": "*"
+    "nitro-codegen": "*",
+    "react-native-test-app": "^4.1.3"
   },
   "engines": {
     "node": ">=18"
