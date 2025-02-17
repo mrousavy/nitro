@@ -73,7 +73,7 @@
     "@types/jest": "*",
     "@types/react": "*",
     "jest": "*",
-    "react": "18.3.1",
+    "react": "19.0.0",
     "react-native": "0.77.1",
     "react-native-builder-bob": "^0.37.0"
   },
