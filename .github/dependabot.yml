@@ -20,6 +20,10 @@ updates:
       - "nitro-core"
       - "dependencies"
       - "kotlin"
+    groups:
+      agp:
+        patterns:
+          - "com.android.tools.build:gradle"
 
   - package-ecosystem: "npm"
     directories:
