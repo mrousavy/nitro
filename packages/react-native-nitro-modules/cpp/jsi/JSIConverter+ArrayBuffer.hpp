@@ -9,7 +9,7 @@ namespace margelo::nitro {
 class ArrayBuffer;
 class JSICache;
 
-template <typename T, typename Enable>
+template <typename T>
 struct JSIConverter;
 } // namespace margelo::nitro
 
@@ -18,6 +18,7 @@ struct JSIConverter;
 #include "ArrayBuffer.hpp"
 #include "IsSharedPtrTo.hpp"
 #include "JSICache.hpp"
+#include "NitroConcepts.hpp"
 #include "NitroDefines.hpp"
 #include <jsi/jsi.h>
 #include <memory>
@@ -28,8 +29,8 @@ namespace margelo::nitro {
 using namespace facebook;
 
 // MutableBuffer <> ArrayBuffer
-template <typename T>
-struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_v<T, jsi::MutableBuffer>>> final {
+template <SomeMutableBuffer T>
+struct JSIConverter<T> final {
   static inline std::shared_ptr<ArrayBuffer> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
 #ifdef NITRO_DEBUG
     if (!arg.isObject()) [[unlikely]] {

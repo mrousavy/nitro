@@ -8,7 +8,7 @@
 namespace margelo::nitro {
 class JSICache;
 
-template <typename T, typename Enable>
+template <typename T>
 struct JSIConverter;
 } // namespace margelo::nitro
 

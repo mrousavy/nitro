@@ -8,6 +8,7 @@
 #pragma once
 
 #include "HybridFunction.hpp"
+#include "NitroConcepts.hpp"
 #include <memory>
 #include <string>
 #include <typeindex>
@@ -109,8 +110,8 @@ public:
    * registerHybridGetter("foo", &MyObject::getFoo);
    * ```
    */
-  template <typename Derived, typename ReturnType>
-  inline void registerHybridGetter(std::string name, ReturnType (Derived::*method)()) {
+  template <SomeHybridObject T, typename ReturnType>
+  inline void registerHybridGetter(std::string name, ReturnType (T::*method)()) {
     if (_getters.contains(name)) [[unlikely]] {
       throw std::runtime_error("Cannot add Hybrid Property Getter \"" + name + "\" - a getter with that name already exists!");
     }
@@ -128,8 +129,8 @@ public:
    * registerHybridSetter("foo", &MyObject::setFoo);
    * ```
    */
-  template <typename Derived, typename ValueType>
-  inline void registerHybridSetter(std::string name, void (Derived::*method)(ValueType)) {
+  template <SomeHybridObject T, typename ValueType>
+  inline void registerHybridSetter(std::string name, void (T::*method)(ValueType)) {
     if (_setters.contains(name)) [[unlikely]] {
       throw std::runtime_error("Cannot add Hybrid Property Setter \"" + name + "\" - a setter with that name already exists!");
     }
@@ -147,8 +148,8 @@ public:
    * registerHybridMethod("sayHello", &MyObject::sayHello);
    * ```
    */
-  template <typename Derived, typename ReturnType, typename... Args>
-  inline void registerHybridMethod(std::string name, ReturnType (Derived::*method)(Args...)) {
+  template <SomeHybridObject T, typename ReturnType, typename... Args>
+  inline void registerHybridMethod(std::string name, ReturnType (T::*method)(Args...)) {
     if (_getters.contains(name) || _setters.contains(name)) [[unlikely]] {
       throw std::runtime_error("Cannot add Hybrid Method \"" + name + "\" - a property with that name already exists!");
     }
@@ -166,10 +167,10 @@ public:
    * registerRawHybridMethod("sayHello", &MyObject::sayHello);
    * ```
    */
-  template <typename Derived>
+  template <SomeHybridObject T>
   inline void registerRawHybridMethod(std::string name, size_t expectedArgumentsCount,
-                                      jsi::Value (Derived::*method)(jsi::Runtime& runtime, const jsi::Value& thisArg,
-                                                                    const jsi::Value* args, size_t count)) {
+                                      jsi::Value (T::*method)(jsi::Runtime& runtime, const jsi::Value& thisArg, const jsi::Value* args,
+                                                              size_t count)) {
     if (_getters.contains(name) || _setters.contains(name)) [[unlikely]] {
       throw std::runtime_error("Cannot add Hybrid Method \"" + name + "\" - a property with that name already exists!");
     }
