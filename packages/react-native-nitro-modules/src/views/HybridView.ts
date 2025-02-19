@@ -1,3 +1,4 @@
+import type { HostComponent } from 'react-native'
 import type { HybridObject } from '../HybridObject'
 
 /**
@@ -9,29 +10,112 @@ export interface ViewPlatformSpec {
 }
 
 /**
- * Represents a Nitro `HybridView` which is implemented in a native language
- * like Swift or Kotlin.
- *
- * `HybridViews`s use the Nitro Tunnel for efficient, low-overhead JS <-> Native communication.
- *
- * All `HybridViews`s have a C++ Fabric View base with a backing Shadow Node.
- *
- * - TypeScript Properties (`name: Type`) will be React Props
- * - TypeScript Methods (`name(): Type`) will be Ref Methods
- *
+ * Represents props for a Hybrid View.
+ * Such props are implemented on the native side, and can be
+ * set from JS using React props.
  * @example
- * ```tsx
- * export interface Camera extends HybridView {
- *   zoom: number
- *   flash: boolean
- *   takePhoto(): Image
+ * ```ts
+ * // Definition:
+ * type Direction = 'horizontal' | 'vertical'
+ * interface ScrollViewProps extends HybridViewProps {
+ *   direction: Direction
+ * }
+ * export type ScrollView = HybridView<ScrollViewProps>
+ *
+ * // in React:
+ * function App() {
+ *   return <HybridScrollView direction="vertical" />
  * }
  * ```
  */
-export interface HybridView<
-  Platforms extends ViewPlatformSpec = { ios: 'swift'; android: 'kotlin' },
-> extends HybridObject<Platforms> {
-  /* empty interface for now */
+export interface HybridViewProps {
+  /* no default props */
 }
+
+/**
+ * Represents methods for a Hybrid View.
+ * Such methods are implemented on the native side, and can be
+ * called from JS using the `hybridRef`.
+ * @example
+ * ```ts
+ * // Definition:
+ * interface ScrollViewProps extends HybridViewProps { … }
+ * interface ScrollViewMethods extends HybridViewMethods {
+ *   scrollTo(y: number): void
+ * }
+ * export type ScrollView = HybridView<ScrollViewProps, ScrollViewMethods>
+ *
+ * // in React:
+ * function App() {
+ *   const ref = useRef<ScrollView>(null)
+ *   useLayoutEffect(() => {
+ *     ref.current.scrollTo(400)
+ *   }, [])
+ *   return <HybridScrollView hybridRef={ref} />
+ * }
+ * ```
+ */
+export interface HybridViewMethods {}
+
+/**
+ * Represents all default props a Nitro HybridView has.
+ */
+interface DefaultHybridViewProps<Object> {
+  /**
+   * A `ref` to the {@linkcode HybridObject} this Hybrid View is rendering.
+   *
+   * The `hybridRef` property expects a stable Ref object received from `useRef` or `createRef`.
+   * @example
+   * ```ts
+   * function App() {
+   *   const ref = useRef<ScrollView>(null)
+   *   useLayoutEffect(() => {
+   *     ref.current.scrollTo(400)
+   *   }, [])
+   *   return <HybridScrollView hybridRef={ref} />
+   * }
+   * ```
+   */
+  hybridRef?: { current: Object | null }
+}
+
+/**
+ * Represents the {@linkcode HybridObject} this Hybrid View consists of.
+ * Properties and Methods exist as usual.
+ */
+type HybridViewObject<
+  Props extends HybridViewProps,
+  Methods extends HybridViewMethods,
+> = HybridObject & Props & Methods
+
+/**
+ * Represents a Nitro Hybrid View.
+ *
+ * The Hybrid View's implementation is in native iOS or Android, and is backed
+ * by a {@linkcode HybridObject}.
+ *
+ * Each view has {@linkcode HybridViewProps}, and can optionally also
+ * have custom {@linkcode HybridViewMethods}.
+ *
+ * Properties can be set using React props, and methods can be called after obtaining
+ * a reference to the {@linkcode HybridObject} via {@linkcode DefaultHybridViewProps.hybridRef hybridRef}.
+ *
+ * The view can be rendered in React (Native).
+ * @example
+ * ```ts
+ * interface ScrollViewProps extends HybridViewProps { … }
+ * interface ScrollViewMethods extends HybridViewMethods { … }
+ * export type ScrollView = HybridView<ScrollViewProps, ScrollViewMethods>
+ * ```
+ */
+export type HybridView<
+  Props extends HybridViewProps,
+  Methods extends HybridViewMethods,
+  // @ts-expect-error
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  Platforms extends ViewPlatformSpec = { ios: 'swift'; android: 'kotlin' },
+> = HostComponent<
+  Props & DefaultHybridViewProps<HybridViewObject<Props, Methods>>
+>
 
 export * from './getHostComponent'
