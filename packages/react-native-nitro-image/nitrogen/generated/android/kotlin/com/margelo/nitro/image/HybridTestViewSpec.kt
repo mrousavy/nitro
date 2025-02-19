@@ -59,7 +59,9 @@ abstract class HybridTestViewSpec: HybridView() {
     }
 
   // Methods
-  
+  @DoNotStrip
+  @Keep
+  abstract fun someMethod(): Unit
 
   private external fun initHybrid(): HybridData
 

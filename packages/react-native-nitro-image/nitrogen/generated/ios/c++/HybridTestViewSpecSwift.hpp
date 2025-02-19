@@ -67,7 +67,12 @@ namespace margelo::nitro::image {
 
   public:
     // Methods
-    
+    inline void someMethod() override {
+      auto __result = _swiftPart.someMethod();
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+    }
 
   private:
     NitroImage::HybridTestViewSpec_cxx _swiftPart;

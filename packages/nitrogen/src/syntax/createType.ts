@@ -23,6 +23,7 @@ import { TupleType } from './types/TupleType.js'
 import {
   isAnyHybridSubclass,
   isDirectlyHybridObject,
+  isHybridView,
   type Language,
 } from '../getPlatformSpecs.js'
 import { HybridObjectBaseType } from './types/HybridObjectBaseType.js'
@@ -59,6 +60,16 @@ function isMap(type: TSMorphType): boolean {
 
 function isError(type: TSMorphType): boolean {
   return isSymbol(type, 'Error')
+}
+
+function getHybridObjectName(type: TSMorphType): string {
+  const symbol = isHybridView(type) ? type.getAliasSymbol() : type.getSymbol()
+  if (symbol == null) {
+    throw new Error(
+      `Cannot get name of \`${type.getText()}\` - symbol not found!`
+    )
+  }
+  return symbol.getEscapedName()
 }
 
 function getFunctionCallSignature(func: TSMorphType): Signature {
@@ -302,7 +313,7 @@ export function createType(
       }
     } else if (isAnyHybridSubclass(type)) {
       // It is another HybridObject being referenced!
-      const typename = type.getSymbolOrThrow().getEscapedName()
+      const typename = getHybridObjectName(type)
       const baseTypes = getBaseTypes(type)
         .filter((t) => isAnyHybridSubclass(t))
         .map((b) => createType(language, b, false))

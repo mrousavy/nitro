@@ -66,6 +66,9 @@ namespace margelo::nitro::image::views {
   react::Props::Shared HybridTestViewComponentDescriptor::cloneProps(const react::PropsParserContext& context,
                                                                      const react::Props::Shared& props,
                                                                      react::RawProps rawProps) const {
+    // 1. Prepare raw props parser
+    rawProps.parse(rawPropsParser_);
+    // 2. Copy props with Nitro's cached copy constructor
     return HybridTestViewShadowNode::Props(context, /* & */ rawProps, props);
   }
 

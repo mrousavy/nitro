@@ -20,7 +20,11 @@ class HybridTestView: HybridTestViewSpec() {
             _isBlue = value
             val color = if (value) Color.BLUE else Color.RED
             view.setBackgroundColor(color)
-            someCallback()
         }
     override var someCallback: () -> Unit = {}
+
+    // Methods
+    override fun someMethod(): Unit {
+        someCallback()
+    }
 }

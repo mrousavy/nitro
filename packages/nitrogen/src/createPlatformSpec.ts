@@ -3,7 +3,7 @@ import type { SourceFile } from './syntax/SourceFile.js'
 import { createCppHybridObject } from './syntax/c++/CppHybridObject.js'
 import {
   extendsHybridObject,
-  extendsHybridView,
+  isHybridView,
   isAnyHybridSubclass,
   isDirectlyHybridObject,
   type Language,
@@ -41,6 +41,30 @@ export function generatePlatformFiles(
 }
 
 function getHybridObjectSpec(type: Type, language: Language): HybridObjectSpec {
+  if (isHybridView(type)) {
+    const symbol = type.getAliasSymbolOrThrow()
+    const name = symbol.getEscapedName()
+
+    // It's a Hybrid View - the props & methods are passed as type parameters instead of interface body.
+    const [props, methods] = type.getTypeArguments()
+    if (props == null)
+      throw new Error(
+        `Props cannot be null! ${name}<...> (HybridView) requires type arguments.`
+      )
+    const propsSpec = getHybridObjectSpec(props, language)
+    const methodsSpec =
+      methods != null ? getHybridObjectSpec(methods, language) : undefined
+
+    return {
+      baseTypes: [],
+      isHybridView: true,
+      language: language,
+      methods: methodsSpec?.methods ?? [],
+      properties: propsSpec.properties,
+      name: name,
+    }
+  }
+
   const symbol = type.getSymbolOrThrow()
   const name = symbol.getEscapedName()
 
@@ -109,7 +133,6 @@ function getHybridObjectSpec(type: Type, language: Language): HybridObjectSpec {
   const bases = getBaseTypes(type)
     .filter((t) => isAnyHybridSubclass(t))
     .map((t) => getHybridObjectSpec(t, language))
-  const isHybridView = extendsHybridView(type, true)
 
   const spec: HybridObjectSpec = {
     language: language,
@@ -117,7 +140,7 @@ function getHybridObjectSpec(type: Type, language: Language): HybridObjectSpec {
     properties: properties,
     methods: methods,
     baseTypes: bases,
-    isHybridView: isHybridView,
+    isHybridView: isHybridView(type),
   }
   return spec
 }

@@ -54,7 +54,7 @@ namespace margelo::nitro::image {
 
   public:
     // Methods
-    
+    void someMethod() override;
 
   private:
     friend HybridBase;

@@ -1,7 +1,7 @@
 import { Project } from 'ts-morph'
 import {
   extendsHybridObject,
-  extendsHybridView,
+  isHybridView,
   getHybridObjectPlatforms,
   getHybridViewPlatforms,
   type Platform,
@@ -97,12 +97,15 @@ export async function runNitrogen({
     const startedWithSpecs = generatedSpecs
 
     // Find all interfaceDeclarations in the given file
-    const interfaceDeclarations = sourceFile.getInterfaces()
-    for (const declaration of interfaceDeclarations) {
+    const declarations = [
+      ...sourceFile.getInterfaces(),
+      ...sourceFile.getTypeAliases(),
+    ]
+    for (const declaration of declarations) {
       let typeName = declaration.getName()
       try {
         let platformSpec: PlatformSpec
-        if (extendsHybridView(declaration.getType(), true)) {
+        if (isHybridView(declaration.getType())) {
           // Hybrid View Props
           const targetPlatforms = getHybridViewPlatforms(declaration)
           if (targetPlatforms == null) {
