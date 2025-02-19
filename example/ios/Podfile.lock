@@ -1640,7 +1640,7 @@ PODS:
     - React-logger (= 0.78.0)
     - React-perflogger (= 0.78.0)
     - React-utils (= 0.78.0)
-  - RNScreens (4.7.0):
+  - RNScreens (4.9.0-beta.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1661,9 +1661,9 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - RNScreens/common (= 4.7.0)
+    - RNScreens/common (= 4.9.0-beta.0)
     - Yoga
-  - RNScreens/common (4.7.0):
+  - RNScreens/common (4.9.0-beta.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1982,7 +1982,7 @@ SPEC CHECKSUMS:
   ReactAppDependencyProvider: f2e81d80afd71a8058589e19d8a134243fa53f17
   ReactCodegen: 3d49e04e783325efd2ad79ce064d1adc073e3e1b
   ReactCommon: 3d39389f8e2a2157d5c999f8fba57bd1c8f226f0
-  RNScreens: d99a86d28d15e7059de8964c78dd6c8c5647099e
+  RNScreens: e6fdafd9b91fc790c7e4b1e01e8f1d0fdc4d89cb
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   Yoga: 9b7fb56e7b08cde60e2153344fa6afbd88e5d99f
 
