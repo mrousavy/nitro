@@ -22,4 +22,5 @@ class HybridTestView: HybridTestViewSpec() {
             view.setBackgroundColor(color)
             view.requestLayout()
         }
+    override var someCallback: () -> Unit = {}
 }
