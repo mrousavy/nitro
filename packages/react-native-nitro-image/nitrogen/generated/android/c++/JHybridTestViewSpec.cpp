@@ -7,8 +7,11 @@
 
 #include "JHybridTestViewSpec.hpp"
 
+// Forward declaration of `CallbackWrapper` to properly resolve imports.
+namespace margelo::nitro::image { struct CallbackWrapper; }
 
-
+#include "CallbackWrapper.hpp"
+#include "JCallbackWrapper.hpp"
 #include <functional>
 #include "JFunc_void.hpp"
 
@@ -39,23 +42,14 @@ namespace margelo::nitro::image {
     static const auto method = _javaPart->getClass()->getMethod<void(jboolean /* isBlue */)>("setBlue");
     method(_javaPart, isBlue);
   }
-  std::function<void()> JHybridTestViewSpec::getSomeCallback() {
-    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JFunc_void::javaobject>()>("getSomeCallback_cxx");
+  CallbackWrapper JHybridTestViewSpec::getSomeCallback() {
+    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JCallbackWrapper>()>("getSomeCallback_cxx");
     auto __result = method(_javaPart);
-    return [&]() -> std::function<void()> {
-      if (__result->isInstanceOf(JFunc_void_cxx::javaClassStatic())) [[likely]] {
-        auto downcast = jni::static_ref_cast<JFunc_void_cxx::javaobject>(__result);
-        return downcast->cthis()->getFunction();
-      } else {
-        return [__result]() -> void {
-          return __result->invoke();
-        };
-      }
-    }();
+    return __result->toCpp();
   }
-  void JHybridTestViewSpec::setSomeCallback(const std::function<void()>& someCallback) {
-    static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<JFunc_void::javaobject> /* someCallback */)>("setSomeCallback_cxx");
-    method(_javaPart, JFunc_void_cxx::fromCpp(someCallback));
+  void JHybridTestViewSpec::setSomeCallback(const CallbackWrapper& someCallback) {
+    static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<JCallbackWrapper> /* someCallback */)>("setSomeCallback_cxx");
+    method(_javaPart, JCallbackWrapper::fromCpp(someCallback));
   }
 
   // Methods

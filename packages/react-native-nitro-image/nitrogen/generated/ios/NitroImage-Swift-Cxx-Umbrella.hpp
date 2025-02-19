@@ -12,6 +12,8 @@
 namespace NitroModules { class AnyMap; }
 // Forward declaration of `ArrayBuffer` to properly resolve imports.
 namespace NitroModules { class ArrayBuffer; }
+// Forward declaration of `CallbackWrapper` to properly resolve imports.
+namespace margelo::nitro::image { struct CallbackWrapper; }
 // Forward declaration of `Car` to properly resolve imports.
 namespace margelo::nitro::image { struct Car; }
 // Forward declaration of `HybridBaseSpec` to properly resolve imports.
@@ -44,6 +46,7 @@ namespace margelo::nitro::image { enum class PixelFormat; }
 namespace margelo::nitro::image { enum class Powertrain; }
 
 // Include C++ defined types
+#include "CallbackWrapper.hpp"
 #include "Car.hpp"
 #include "HybridBaseSpec.hpp"
 #include "HybridChildSpec.hpp"

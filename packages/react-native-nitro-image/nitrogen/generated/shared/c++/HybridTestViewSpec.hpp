@@ -13,9 +13,10 @@
 #error NitroModules cannot be found! Are you sure you installed NitroModules properly?
 #endif
 
+// Forward declaration of `CallbackWrapper` to properly resolve imports.
+namespace margelo::nitro::image { struct CallbackWrapper; }
 
-
-#include <functional>
+#include "CallbackWrapper.hpp"
 
 namespace margelo::nitro::image {
 
@@ -46,8 +47,8 @@ namespace margelo::nitro::image {
       // Properties
       virtual bool getIsBlue() = 0;
       virtual void setIsBlue(bool isBlue) = 0;
-      virtual std::function<void()> getSomeCallback() = 0;
-      virtual void setSomeCallback(const std::function<void()>& someCallback) = 0;
+      virtual CallbackWrapper getSomeCallback() = 0;
+      virtual void setSomeCallback(const CallbackWrapper& someCallback) = 0;
 
     public:
       // Methods

@@ -16,6 +16,8 @@ class HybridTestView : HybridTestViewSpec {
   var isBlue: Bool = false {
     didSet {
       view.backgroundColor = isBlue ? .systemBlue : .systemRed
+      someCallback.callback()
     }
   }
+  var someCallback: CallbackWrapper = .init(callback: { })
 }

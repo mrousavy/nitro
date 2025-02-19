@@ -44,13 +44,13 @@ abstract class HybridTestViewSpec: HybridView() {
   @set:Keep
   abstract var isBlue: Boolean
   
-  abstract var someCallback: () -> Unit
+  abstract var someCallback: CallbackWrapper
   
-  private var someCallback_cxx: Func_void
+  private var someCallback_cxx: CallbackWrapper
     @Keep
     @DoNotStrip
     get() {
-      return Func_void_java(someCallback)
+      return someCallback
     }
     @Keep
     @DoNotStrip
