@@ -6,12 +6,11 @@
 ///
 
 #include "HybridTestViewComponent.hpp"
-#include <NitroModules/NitroDefines.hpp>
-#if REACT_NATIVE_VERSION_MINOR >= 78
 
 #include <string>
 #include <exception>
 #include <utility>
+#include <NitroModules/NitroDefines.hpp>
 #include <NitroModules/JSIConverter.hpp>
 #include <react/renderer/core/RawValue.h>
 #include <react/renderer/core/ShadowNode.h>
@@ -20,62 +19,48 @@
 
 namespace margelo::nitro::image::views {
 
+  extern const char HybridTestViewComponentName[] = "TestView";
+
   HybridTestViewProps::HybridTestViewProps(const react::PropsParserContext& context,
                                            const HybridTestViewProps& sourceProps,
                                            const react::RawProps& rawProps):
     react::ViewProps(context, sourceProps, rawProps, filterObjectKeys),
-    someProp([&]() -> CachedProp<bool> {
+    isBlue([&]() -> CachedProp<bool> {
       try {
-        const react::RawValue* rawValue = rawProps.at("someProp", nullptr, nullptr);
-        if (rawValue == nullptr) return sourceProps.someProp;
-        const auto& [runtime, value] = (std::pair<jsi::Runtime*, const jsi::Value&>)*rawValue;
-        return CachedProp<bool>::fromRawValue(*runtime, value, sourceProps.someProp);
+        const react::RawValue* rawValue = rawProps.at("isBlue", nullptr, nullptr);
+        if (rawValue == nullptr) return sourceProps.isBlue;
+        const auto& [runtime, value] = (std::pair<jsi::Runtime*, jsi::Value>)*rawValue;
+        return CachedProp<bool>::fromRawValue(*runtime, value, sourceProps.isBlue);
       } catch (const std::exception& exc) {
-        throw std::runtime_error(std::string("TestView.someProp: ") + exc.what());
-      }
-    }()),
-    someCallback([&]() -> CachedProp<std::function<void(double /* someParam */)>> {
-      try {
-        const react::RawValue* rawValue = rawProps.at("someCallback", nullptr, nullptr);
-        if (rawValue == nullptr) return sourceProps.someCallback;
-        const auto& [runtime, value] = (std::pair<jsi::Runtime*, const jsi::Value&>)*rawValue;
-        return CachedProp<std::function<void(double /* someParam */)>>::fromRawValue(*runtime, value, sourceProps.someCallback);
-      } catch (const std::exception& exc) {
-        throw std::runtime_error(std::string("TestView.someCallback: ") + exc.what());
+        throw std::runtime_error(std::string("TestView.isBlue: ") + exc.what());
       }
     }()) { }
 
   HybridTestViewProps::HybridTestViewProps(const HybridTestViewProps& other):
     react::ViewProps(),
-    someProp(other.someProp),
-    someCallback(other.someCallback) { }
+    isBlue(other.isBlue) { }
 
   bool HybridTestViewProps::filterObjectKeys(const std::string& propName) {
     switch (hashString(propName)) {
-      case hashString("someProp"): return true;
-      case hashString("someCallback"): return true;
+      case hashString("isBlue"): return true;
       default: return false;
     }
   }
 
   HybridTestViewComponentDescriptor::HybridTestViewComponentDescriptor(const react::ComponentDescriptorParameters& parameters)
     : ConcreteComponentDescriptor(parameters,
-                                  std::make_unique<react::RawPropsParser>(/* enableJsiParser */ true)) {}
+                                  react::RawPropsParser(/* enableJsiParser */ true)) {}
 
+#ifdef ANDROID
   void HybridTestViewComponentDescriptor::adopt(react::ShadowNode& shadowNode) const {
     // This is called immediately after `ShadowNode` is created, cloned or in progress.
-#ifdef ANDROID
     // On Android, we need to wrap props in our state, which gets routed through Java and later unwrapped in JNI/C++.
-    auto& concreteShadowNode = static_cast<HybridTestViewShadowNode&>(shadowNode);
+    auto& concreteShadowNode = dynamic_cast<HybridTestViewShadowNode&>(shadowNode);
     const HybridTestViewProps& props = concreteShadowNode.getConcreteProps();
     HybridTestViewState state;
     state.setProps(props);
     concreteShadowNode.setStateData(std::move(state));
-#else
-    // On iOS, prop updating happens through the updateProps: Obj-C selector.
-#endif
   }
+#endif
 
 } // namespace margelo::nitro::image::views
-
-#endif

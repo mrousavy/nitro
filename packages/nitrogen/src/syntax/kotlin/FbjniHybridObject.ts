@@ -142,7 +142,7 @@ ${spaces}          public virtual ${name.HybridTSpec} {
     .map((m) => getFbjniPropertyForwardImplementation(spec, m))
     .join('\n')
   const methodsImpl = methods
-    .map((m) => getFbjniMethodForwardImplementation(spec, m))
+    .map((m) => getFbjniMethodForwardImplementation(spec, m, m.name))
     .join('\n')
   const allTypes = getAllTypes(spec)
   const jniImports = allTypes
@@ -212,7 +212,8 @@ namespace ${cxxNamespace} {
 
 function getFbjniMethodForwardImplementation(
   spec: HybridObjectSpec,
-  method: Method
+  method: Method,
+  jniMethodName: string
 ): string {
   const name = getHybridObjectName(spec.name)
 
@@ -223,7 +224,7 @@ function getFbjniMethodForwardImplementation(
       const bridged = new KotlinCxxBridgedType(p.type)
       return bridged.needsSpecialHandling
     })
-  const methodName = requiresBridge ? `${method.name}_cxx` : method.name
+  const methodName = requiresBridge ? `${jniMethodName}_cxx` : jniMethodName
 
   const returnType = returnJNI.asJniReferenceType('local')
   const paramsTypes = method.parameters
@@ -269,9 +270,25 @@ function getFbjniPropertyForwardImplementation(
   spec: HybridObjectSpec,
   property: Property
 ): string {
-  const methods = property.cppMethods.map((m) =>
-    getFbjniMethodForwardImplementation(spec, m)
+  const methods: string[] = []
+
+  // getter
+  const getter = getFbjniMethodForwardImplementation(
+    spec,
+    property.cppGetter,
+    property.getGetterName('jvm')
   )
+  methods.push(getter)
+
+  if (property.cppSetter != null) {
+    // setter
+    const setter = getFbjniMethodForwardImplementation(
+      spec,
+      property.cppSetter,
+      property.getSetterName('jvm')
+    )
+    methods.push(setter)
+  }
 
   return methods.join('\n')
 }

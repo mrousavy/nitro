@@ -35,9 +35,11 @@ export function createSwiftHybridViewManager(
 
   const propAssignments = spec.properties.map((p) => {
     const name = escapeCppName(p.name)
+    const setter = p.getSetterName('swift')
     return `
+// ${p.jsSignature}
 if (newViewProps.${name}.isDirty) {
-  swiftPart.${p.cppSetterName}(newViewProps.${name}.value);
+  swiftPart.${setter}(newViewProps.${name}.value);
   newViewProps.${name}.isDirty = false;
 }
 `.trim()
@@ -47,14 +49,12 @@ if (newViewProps.${name}.isDirty) {
 ${createFileMetadataString(`${component}.mm`)}
 
 #import "${component}.hpp"
-#include <NitroModules/NitroDefines.hpp>
-#if REACT_NATIVE_VERSION_MINOR >= 78
-
 #import <memory>
 #import <react/renderer/componentregistry/ComponentDescriptorProvider.h>
 #import <React/RCTViewComponentView.h>
 #import <React/RCTComponentViewFactory.h>
 #import <React/UIView+ComponentViewProtocol.h>
+#import <NitroModules/NitroDefines.hpp>
 #import <UIKit/UIKit.h>
 
 #import "${HybridTSpecSwift}.hpp"
@@ -111,7 +111,7 @@ using namespace ${namespace}::views;
   auto& newViewProps = const_cast<${propsClassName}&>(newViewPropsConst);
   ${swiftNamespace}::${HybridTSpecCxx}& swiftPart = _hybridView->getSwiftPart();
 
-  // 2. Update each prop
+  // 2. Update each prop individually
   swiftPart.beforeUpdate();
 
   ${indent(propAssignments.join('\n'), '  ')}
@@ -123,8 +123,6 @@ using namespace ${namespace}::views;
 }
 
 @end
-
-#endif
   `
 
   return [

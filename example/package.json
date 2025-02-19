@@ -21,12 +21,12 @@
     "@react-navigation/bottom-tabs": "^7.2.0",
     "@react-navigation/native": "^7.0.14",
     "deep-equal": "^2.2.3",
-    "react": "18.3.1",
-    "react-native": "0.77.1",
+    "react": "19.0.0",
+    "react-native": "0.78.0",
     "react-native-nitro-image": "*",
     "react-native-nitro-modules": "*",
-    "react-native-safe-area-context": "^5.1.0",
-    "react-native-screens": "^4.6.0"
+    "react-native-safe-area-context": "^5.2.0",
+    "react-native-screens": "^4.9.0-beta.0"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
@@ -35,10 +35,10 @@
     "@react-native-community/cli": "16.0.2",
     "@react-native-community/cli-platform-android": "16.0.2",
     "@react-native-community/cli-platform-ios": "16.0.2",
-    "@react-native/babel-preset": "0.77.1",
-    "@react-native/eslint-config": "0.77.1",
-    "@react-native/metro-config": "0.77.1",
-    "@react-native/typescript-config": "0.77.1",
+    "@react-native/babel-preset": "0.78.0",
+    "@react-native/eslint-config": "0.78.0",
+    "@react-native/metro-config": "0.78.0",
+    "@react-native/typescript-config": "0.78.0",
     "@types/deep-equal": "^1.0.4",
     "babel-plugin-module-resolver": "^5.0.2",
     "nitro-codegen": "*"

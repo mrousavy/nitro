@@ -6,14 +6,12 @@
 ///
 
 #import "HybridTestViewComponent.hpp"
-#include <NitroModules/NitroDefines.hpp>
-#if REACT_NATIVE_VERSION_MINOR >= 78
-
 #import <memory>
 #import <react/renderer/componentregistry/ComponentDescriptorProvider.h>
 #import <React/RCTViewComponentView.h>
 #import <React/RCTComponentViewFactory.h>
 #import <React/UIView+ComponentViewProtocol.h>
+#import <NitroModules/NitroDefines.hpp>
 #import <UIKit/UIKit.h>
 
 #import "HybridTestViewSpecSwift.hpp"
@@ -70,16 +68,13 @@ using namespace margelo::nitro::image::views;
   auto& newViewProps = const_cast<HybridTestViewProps&>(newViewPropsConst);
   NitroImage::HybridTestViewSpec_cxx& swiftPart = _hybridView->getSwiftPart();
 
-  // 2. Update each prop
+  // 2. Update each prop individually
   swiftPart.beforeUpdate();
 
-  if (newViewProps.someProp.isDirty) {
-    swiftPart.setSomeProp(newViewProps.someProp.value);
-    newViewProps.someProp.isDirty = false;
-  }
-  if (newViewProps.someCallback.isDirty) {
-    swiftPart.setSomeCallback(newViewProps.someCallback.value);
-    newViewProps.someCallback.isDirty = false;
+  // isBlue: boolean
+  if (newViewProps.isBlue.isDirty) {
+    swiftPart.setIsBlue(newViewProps.isBlue.value);
+    newViewProps.isBlue.isDirty = false;
   }
 
   swiftPart.afterUpdate();
@@ -89,5 +84,3 @@ using namespace margelo::nitro::image::views;
 }
 
 @end
-
-#endif

@@ -15,7 +15,7 @@
 
 
 
-#include <functional>
+
 
 namespace margelo::nitro::image {
 
@@ -44,14 +44,12 @@ namespace margelo::nitro::image {
 
     public:
       // Properties
-      virtual bool getSomeProp() = 0;
-      virtual void setSomeProp(bool someProp) = 0;
-      virtual std::function<void(double /* someParam */)> getSomeCallback() = 0;
-      virtual void setSomeCallback(const std::function<void(double /* someParam */)>& someCallback) = 0;
+      virtual bool getIsBlue() = 0;
+      virtual void setIsBlue(bool isBlue) = 0;
 
     public:
       // Methods
-      virtual bool someFunc(double someParam) = 0;
+      
 
     protected:
       // Hybrid Setup

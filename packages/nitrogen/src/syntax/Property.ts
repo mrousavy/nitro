@@ -12,6 +12,8 @@ export interface PropertyBody {
   setter: string
 }
 
+export type LanguageEnvironment = 'jvm' | 'swift' | 'other'
+
 export interface PropertyModifiers {
   /**
    * The name of the class that defines this C++ property getter/setter method.
@@ -69,20 +71,53 @@ export class Property implements CodeNode {
     return this.type.getRequiredImports()
   }
 
-  get cppGetterName(): string {
+  getGetterName(environment: LanguageEnvironment): string {
+    if (this.type.kind === 'boolean' && this.name.startsWith('is')) {
+      // Boolean accessors where the property starts with "is" are renamed in JVM and Swift
+      switch (environment) {
+        case 'jvm':
+        case 'swift':
+          // isSomething -> isSomething()
+          return this.name
+        default:
+          break
+      }
+    }
+    // isSomething -> getIsSomething()
     return `get${capitalizeName(this.name)}`
   }
 
-  get cppSetterName(): string {
+  getSetterName(environment: LanguageEnvironment): string {
+    if (this.type.kind === 'boolean' && this.name.startsWith('is')) {
+      // Boolean accessors where the property starts with "is" are renamed in JVM
+      if (environment === 'jvm') {
+        // isSomething -> setSomething()
+        const cleanName = this.name.replace('is', '')
+        return `set${capitalizeName(cleanName)}`
+      }
+    }
+    // isSomething -> setIsSomething()
     return `set${capitalizeName(this.name)}`
   }
 
-  get cppMethods(): [getter: Method] | [getter: Method, setter: Method] {
-    const getter = new Method(this.cppGetterName, this.type, [])
-    if (this.isReadonly) return [getter]
+  get cppGetter(): Method {
+    return new Method(this.getGetterName('other'), this.type, [])
+  }
+
+  get cppSetter(): Method | undefined {
+    if (this.isReadonly) return undefined
     const parameter = new Parameter(this.name, this.type)
-    const setter = new Method(this.cppSetterName, new VoidType(), [parameter])
-    return [getter, setter]
+    return new Method(this.getSetterName('other'), new VoidType(), [parameter])
+  }
+
+  getCppMethods(): [getter: Method] | [getter: Method, setter: Method] {
+    if (this.cppSetter != null) {
+      // get + set
+      return [this.cppGetter, this.cppSetter]
+    } else {
+      // get
+      return [this.cppGetter]
+    }
   }
 
   getCode(
@@ -97,7 +132,7 @@ export class Property implements CodeNode {
 
     switch (language) {
       case 'c++': {
-        const methods = this.cppMethods
+        const methods = this.getCppMethods()
         const [getter, setter] = methods
         const lines: string[] = []
         lines.push(getter.getCode('c++', modifiers, body?.getter))

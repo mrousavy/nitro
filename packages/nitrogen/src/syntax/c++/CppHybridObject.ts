@@ -98,14 +98,16 @@ namespace ${cxxNamespace} {
   // Each C++ method needs to be registered in the HybridObject - that's getters, setters and normal methods.
   const registrations: string[] = []
   for (const property of spec.properties) {
+    const getterMethod = property.getGetterName('other')
+    const setterMethod = property.getSetterName('other')
     // getter
     registrations.push(
-      `prototype.registerHybridGetter("${property.name}", &${name.HybridTSpec}::${property.cppGetterName});`
+      `prototype.registerHybridGetter("${property.name}", &${name.HybridTSpec}::${getterMethod});`
     )
     if (!property.isReadonly) {
       // setter
       registrations.push(
-        `prototype.registerHybridSetter("${property.name}", &${name.HybridTSpec}::${property.cppSetterName});`
+        `prototype.registerHybridSetter("${property.name}", &${name.HybridTSpec}::${setterMethod});`
       )
     }
   }

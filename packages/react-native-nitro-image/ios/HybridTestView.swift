@@ -9,12 +9,13 @@ import Foundation
 import UIKit
 
 class HybridTestView : HybridTestViewSpec {
-  var someProp: Bool = false
-  var someCallback: (Double) -> Void = { d in }
-  
+  // UIView
   var view: UIView = UIView()
-  
-  func someFunc(someParam: Double) throws -> Bool {
-    return someProp
+
+  // Props
+  var isBlue: Bool = false {
+    didSet {
+      view.backgroundColor = isBlue ? .systemBlue : .systemRed
+    }
   }
 }

@@ -7,34 +7,38 @@
 
 #pragma once
 
-#include <NitroModules/NitroDefines.hpp>
-#if REACT_NATIVE_VERSION_MINOR >= 78
-
 #include <fbjni/fbjni.h>
 #include <react/fabric/StateWrapperImpl.h>
+#include <react/fabric/CoreComponentsRegistry.h>
+#include <react/renderer/core/ConcreteComponentDescriptor.h>
+#include <NitroModules/NitroDefines.hpp>
 #include "JHybridTestViewSpec.hpp"
+#include "views/HybridTestViewComponent.hpp"
 
 namespace margelo::nitro::image::views {
 
 using namespace facebook;
 
-class JHybridTestViewStateUpdater: jni::HybridClass<JHybridTestViewStateUpdater> {
+class JHybridTestViewStateUpdater: public jni::JavaClass<JHybridTestViewStateUpdater> {
 public:
   static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/image/views/HybridTestViewStateUpdater;";
 
 public:
-  static void updateViewProps(jni::alias_ref<jni::JClass>,
+  static void updateViewProps(jni::alias_ref<jni::JClass> /* class */,
                               jni::alias_ref<JHybridTestViewSpec::javaobject> view,
                               jni::alias_ref<react::StateWrapperImpl::javaobject> stateWrapper);
 
 public:
   static void registerNatives() {
-    registerHybrid({
+    // Register JNI calls
+    javaClassStatic()->registerNatives({
       makeNativeMethod("updateViewProps", JHybridTestViewStateUpdater::updateViewProps),
     });
+    // Register React Native view component descriptor
+    auto provider = react::concreteComponentDescriptorProvider<HybridTestViewComponentDescriptor>();
+    auto providerRegistry = react::CoreComponentsRegistry::sharedProviderRegistry();
+    providerRegistry->add(provider);
   }
 };
 
 } // namespace margelo::nitro::image::views
-
-#endif
