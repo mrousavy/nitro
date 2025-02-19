@@ -110,7 +110,7 @@ type HybridViewObject<
  */
 export type HybridView<
   Props extends HybridViewProps,
-  Methods extends HybridViewMethods,
+  Methods extends HybridViewMethods = {},
   // @ts-expect-error
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   Platforms extends ViewPlatformSpec = { ios: 'swift'; android: 'kotlin' },
