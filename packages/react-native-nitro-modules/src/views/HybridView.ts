@@ -1,4 +1,4 @@
-import type { HostComponent } from 'react-native'
+import type { HostComponent, ViewProps } from 'react-native'
 import type { HybridObject } from '../HybridObject'
 
 /**
@@ -60,7 +60,7 @@ export interface HybridViewMethods {}
 /**
  * Represents all default props a Nitro HybridView has.
  */
-interface DefaultHybridViewProps<Object> {
+interface DefaultHybridViewProps<Object> extends ViewProps {
   /**
    * A `ref` to the {@linkcode HybridObject} this Hybrid View is rendering.
    *

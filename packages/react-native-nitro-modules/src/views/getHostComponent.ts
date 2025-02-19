@@ -1,4 +1,4 @@
-import { Platform, type ViewProps } from 'react-native'
+import { Platform } from 'react-native'
 // @ts-expect-error this unfortunately isn't typed or default-exported.
 import * as NativeComponentRegistry from 'react-native/Libraries/NativeComponent/NativeComponentRegistry'
 import type {
@@ -35,7 +35,7 @@ export function getHostComponent<
 >(
   name: string,
   getViewConfig: () => ViewConfig<Props>
-): HybridView<WrapFunctionsInObjects<Props> & ViewProps, Methods> {
+): HybridView<WrapFunctionsInObjects<Props>, Methods> {
   if (NativeComponentRegistry == null) {
     throw new Error(
       `NativeComponentRegistry is not available on ${Platform.OS}!`
