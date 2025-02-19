@@ -242,6 +242,9 @@ namespace ${namespace} {
   react::Props::Shared ${descriptorClassName}::cloneProps(const react::PropsParserContext& context,
                           ${descriptorIndent}          const react::Props::Shared& props,
                           ${descriptorIndent}          react::RawProps rawProps) const {
+    // 1. Prepare raw props parser
+    rawProps.parse(rawPropsParser_);
+    // 2. Copy props with Nitro's cached copy constructor
     return ${shadowNodeClassName}::Props(context, /* & */ rawProps, props);
   }
 
