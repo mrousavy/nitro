@@ -25,8 +25,8 @@
     "react-native": "0.78.0",
     "react-native-nitro-image": "*",
     "react-native-nitro-modules": "*",
-    "react-native-safe-area-context": "^5.1.0",
-    "react-native-screens": "^4.6.0"
+    "react-native-safe-area-context": "^5.2.0",
+    "react-native-screens": "^4.7.0"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
