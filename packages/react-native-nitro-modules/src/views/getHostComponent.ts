@@ -1,7 +1,11 @@
-import { Platform, type HostComponent, type ViewProps } from 'react-native'
+import { Platform, type ViewProps } from 'react-native'
 // @ts-expect-error this unfortunately isn't typed or default-exported.
 import * as NativeComponentRegistry from 'react-native/Libraries/NativeComponent/NativeComponentRegistry'
-import type { HybridObject } from '../HybridObject'
+import type {
+  HybridView,
+  HybridViewMethods,
+  HybridViewProps,
+} from './HybridView'
 
 export interface ViewConfig<Props> {
   uiViewClassName: string
@@ -20,23 +24,18 @@ type WrapFunctionsInObjects<THybridView> = {
     : THybridView[K]
 }
 
-// A Hybrid View doesn't need the props of it's base.
-type RemoveHybridObjectBase<THybridObjectSub> = Omit<
-  THybridObjectSub,
-  keyof HybridObject
->
-
-type CleanView<THybridView> = WrapFunctionsInObjects<
-  RemoveHybridObjectBase<THybridView>
->
-
 /**
- * Finds and returns a native view (aka {@linkcode HostComponent}) via the given {@linkcode name}.
+ * Finds and returns a native view (aka "HostComponent") via the given {@linkcode name}.
+ *
+ * The view is bridged to a native Hybrid Object using Nitro Views.
  */
-export function getHostComponent<Props>(
+export function getHostComponent<
+  Props extends HybridViewProps,
+  Methods extends HybridViewMethods,
+>(
   name: string,
-  getViewConfig: () => ViewConfig<RemoveHybridObjectBase<Props>>
-): HostComponent<ViewProps & CleanView<Props>> {
+  getViewConfig: () => ViewConfig<Props>
+): HybridView<WrapFunctionsInObjects<Props> & ViewProps, Methods> {
   if (NativeComponentRegistry == null) {
     throw new Error(
       `NativeComponentRegistry is not available on ${Platform.OS}!`
