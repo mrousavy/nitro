@@ -1,6 +1,6 @@
 {
   "name": "react-native-nitro-modules",
-  "version": "0.22.0",
+  "version": "0.22.1",
   "description": "Insanely fast native C++, Swift or Kotlin modules with a statically compiled binding layer to JSI.",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -75,7 +75,7 @@
     "jest": "*",
     "react": "19.0.0",
     "react-native": "0.78.0",
-    "react-native-builder-bob": "^0.35.0"
+    "react-native-builder-bob": "^0.37.0"
   },
   "peerDependencies": {
     "react": "*",

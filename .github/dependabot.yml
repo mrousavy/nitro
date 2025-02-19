@@ -20,8 +20,12 @@ updates:
       - "nitro-core"
       - "dependencies"
       - "kotlin"
+    groups:
+      agp:
+        patterns:
+          - "com.android.tools.build:gradle"
 
-  - package-ecosystem: "npm"
+  - package-ecosystem: "bun"
     directories:
       - "/docs/"
     schedule:
@@ -36,7 +40,7 @@ updates:
         patterns:
           - "react*"
 
-  - package-ecosystem: "npm"
+  - package-ecosystem: "bun"
     directories:
       - "/packages/react-native-nitro-modules/"
       - "/packages/react-native-nitro-image/"
@@ -63,7 +67,7 @@ updates:
         patterns:
           - "react"
 
-  - package-ecosystem: "npm"
+  - package-ecosystem: "bun"
     directories:
       - "/packages/nitrogen/"
     schedule:
