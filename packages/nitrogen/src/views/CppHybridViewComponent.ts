@@ -1,11 +1,13 @@
 import type { SourceFile } from '../syntax/SourceFile.js'
 import type { HybridObjectSpec } from '../syntax/HybridObjectSpec.js'
-import { createIndentation, indent } from '../utils.js'
+import { capitalizeName, createIndentation, indent } from '../utils.js'
 import { createFileMetadataString, escapeCppName } from '../syntax/helpers.js'
 import { NitroConfig } from '../config/NitroConfig.js'
 import { getHybridObjectName } from '../syntax/getHybridObjectName.js'
 import { includeHeader } from '../syntax/c++/includeNitroHeader.js'
 import { createHostComponentJs } from './createHostComponentJs.js'
+import { Logger } from '../Logger.js'
+import chalk from 'chalk'
 
 interface ViewComponentNames {
   propsClassName: `${string}Props`
@@ -39,6 +41,16 @@ export function createViewComponentShadowNodeFiles(
     throw new Error(
       `Cannot create View Component ShadowNode code for ${spec.name} - it's not a HybridView!`
     )
+  }
+  for (const prop of spec.properties) {
+    if (prop.type.kind === 'function') {
+      Logger.warn(
+        `        ⚠️  ${chalk.bold(`${spec.name}.${prop.name}`)} is a function.\n` +
+          `           Due to a react-native limitation, functions have to be wrapped in an extra object,\n` +
+          `           otherwise react-native just converts them to booleans.\n` +
+          `           Example: ${chalk.dim(`interface ${capitalizeName(prop.name)}Wrapper { func: (…) => … }`)}`
+      )
+    }
   }
 
   const { T, HybridT } = getHybridObjectName(spec.name)
