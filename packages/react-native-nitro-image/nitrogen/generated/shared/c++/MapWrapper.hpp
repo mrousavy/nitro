@@ -33,6 +33,7 @@ namespace margelo::nitro::image {
     std::unordered_map<std::string, std::string> map     SWIFT_PRIVATE;
 
   public:
+    MapWrapper() = default;
     explicit MapWrapper(std::unordered_map<std::string, std::string> map): map(map) {}
   };
 

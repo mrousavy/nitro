@@ -44,6 +44,7 @@ namespace margelo::nitro::image {
     std::optional<bool> isFast     SWIFT_PRIVATE;
 
   public:
+    Car() = default;
     explicit Car(double year, std::string make, std::string model, double power, Powertrain powertrain, std::optional<Person> driver, std::optional<bool> isFast): year(year), make(make), model(model), power(power), powertrain(powertrain), driver(driver), isFast(isFast) {}
   };
 
