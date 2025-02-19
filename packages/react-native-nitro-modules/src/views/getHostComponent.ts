@@ -11,12 +11,16 @@ export interface ViewConfig<Props> {
   validAttributes: Record<keyof Props, boolean>
 }
 
+// Due to a React limitation, functions cannot be passed to native directly
+// because RN converts them to booleans (`true`). Nitro knows this and just
+// wraps functions as objects - the original function is stored in `f`.
 type WrapFunctionsInObjects<THybridView> = {
   [K in keyof THybridView]: THybridView[K] extends Function
     ? { f: THybridView[K] }
     : THybridView[K]
 }
 
+// A Hybrid View doesn't need the props of it's base.
 type RemoveHybridObjectBase<THybridObjectSub> = Omit<
   THybridObjectSub,
   keyof HybridObject
