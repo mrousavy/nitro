@@ -20,14 +20,14 @@ namespace margelo::nitro::image { struct Car; }
 namespace margelo::nitro::image { class HybridBaseSpec; }
 // Forward declaration of `HybridChildSpec` to properly resolve imports.
 namespace margelo::nitro::image { class HybridChildSpec; }
-// Forward declaration of `HybridHybridViewSpec` to properly resolve imports.
-namespace margelo::nitro::image { class HybridHybridViewSpec; }
 // Forward declaration of `HybridImageFactorySpec` to properly resolve imports.
 namespace margelo::nitro::image { class HybridImageFactorySpec; }
 // Forward declaration of `HybridImageSpec` to properly resolve imports.
 namespace margelo::nitro::image { class HybridImageSpec; }
 // Forward declaration of `HybridTestObjectSwiftKotlinSpec` to properly resolve imports.
 namespace margelo::nitro::image { class HybridTestObjectSwiftKotlinSpec; }
+// Forward declaration of `HybridTestViewSpec` to properly resolve imports.
+namespace margelo::nitro::image { class HybridTestViewSpec; }
 // Forward declaration of `OldEnum` to properly resolve imports.
 namespace margelo::nitro::image { enum class OldEnum; }
 // Forward declaration of `Person` to properly resolve imports.
@@ -40,23 +40,23 @@ namespace margelo::nitro::image { enum class Powertrain; }
 namespace NitroImage { class HybridBaseSpec_cxx; }
 // Forward declaration of `HybridChildSpec_cxx` to properly resolve imports.
 namespace NitroImage { class HybridChildSpec_cxx; }
-// Forward declaration of `HybridHybridViewSpec_cxx` to properly resolve imports.
-namespace NitroImage { class HybridHybridViewSpec_cxx; }
 // Forward declaration of `HybridImageFactorySpec_cxx` to properly resolve imports.
 namespace NitroImage { class HybridImageFactorySpec_cxx; }
 // Forward declaration of `HybridImageSpec_cxx` to properly resolve imports.
 namespace NitroImage { class HybridImageSpec_cxx; }
 // Forward declaration of `HybridTestObjectSwiftKotlinSpec_cxx` to properly resolve imports.
 namespace NitroImage { class HybridTestObjectSwiftKotlinSpec_cxx; }
+// Forward declaration of `HybridTestViewSpec_cxx` to properly resolve imports.
+namespace NitroImage { class HybridTestViewSpec_cxx; }
 
 // Include C++ defined types
 #include "Car.hpp"
 #include "HybridBaseSpec.hpp"
 #include "HybridChildSpec.hpp"
-#include "HybridHybridViewSpec.hpp"
 #include "HybridImageFactorySpec.hpp"
 #include "HybridImageSpec.hpp"
 #include "HybridTestObjectSwiftKotlinSpec.hpp"
+#include "HybridTestViewSpec.hpp"
 #include "OldEnum.hpp"
 #include "Person.hpp"
 #include "Powertrain.hpp"
@@ -1035,16 +1035,16 @@ namespace margelo::nitro::image::bridge::swift {
     return Result<std::shared_ptr<margelo::nitro::image::HybridBaseSpec>>::withError(error);
   }
   
-  // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridHybridViewSpec>
+  // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridTestViewSpec>
   /**
-   * Specialized version of `std::shared_ptr<margelo::nitro::image::HybridHybridViewSpec>`.
+   * Specialized version of `std::shared_ptr<margelo::nitro::image::HybridTestViewSpec>`.
    */
-  using std__shared_ptr_margelo__nitro__image__HybridHybridViewSpec_ = std::shared_ptr<margelo::nitro::image::HybridHybridViewSpec>;
-  std::shared_ptr<margelo::nitro::image::HybridHybridViewSpec> create_std__shared_ptr_margelo__nitro__image__HybridHybridViewSpec_(void* _Nonnull swiftUnsafePointer);
-  void* _Nonnull get_std__shared_ptr_margelo__nitro__image__HybridHybridViewSpec_(std__shared_ptr_margelo__nitro__image__HybridHybridViewSpec_ cppType);
+  using std__shared_ptr_margelo__nitro__image__HybridTestViewSpec_ = std::shared_ptr<margelo::nitro::image::HybridTestViewSpec>;
+  std::shared_ptr<margelo::nitro::image::HybridTestViewSpec> create_std__shared_ptr_margelo__nitro__image__HybridTestViewSpec_(void* _Nonnull swiftUnsafePointer);
+  void* _Nonnull get_std__shared_ptr_margelo__nitro__image__HybridTestViewSpec_(std__shared_ptr_margelo__nitro__image__HybridTestViewSpec_ cppType);
   
-  // pragma MARK: std::weak_ptr<margelo::nitro::image::HybridHybridViewSpec>
-  using std__weak_ptr_margelo__nitro__image__HybridHybridViewSpec_ = std::weak_ptr<margelo::nitro::image::HybridHybridViewSpec>;
-  inline std__weak_ptr_margelo__nitro__image__HybridHybridViewSpec_ weakify_std__shared_ptr_margelo__nitro__image__HybridHybridViewSpec_(const std::shared_ptr<margelo::nitro::image::HybridHybridViewSpec>& strong) { return strong; }
+  // pragma MARK: std::weak_ptr<margelo::nitro::image::HybridTestViewSpec>
+  using std__weak_ptr_margelo__nitro__image__HybridTestViewSpec_ = std::weak_ptr<margelo::nitro::image::HybridTestViewSpec>;
+  inline std__weak_ptr_margelo__nitro__image__HybridTestViewSpec_ weakify_std__shared_ptr_margelo__nitro__image__HybridTestViewSpec_(const std::shared_ptr<margelo::nitro::image::HybridTestViewSpec>& strong) { return strong; }
 
 } // namespace margelo::nitro::image::bridge::swift
