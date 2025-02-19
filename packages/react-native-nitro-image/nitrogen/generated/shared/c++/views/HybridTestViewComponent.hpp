@@ -88,6 +88,12 @@ namespace margelo::nitro::image::views {
     HybridTestViewComponentDescriptor(const react::ComponentDescriptorParameters& parameters);
 
   public:
+    /**
+     * A faster path for cloning props - reuses the caching logic from `HybridTestViewProps`.
+     */
+    react::Props::Shared cloneProps(const react::PropsParserContext& context,
+                                    const react::Props::Shared& props,
+                                    react::RawProps rawProps) const override;
 #ifdef ANDROID
     void adopt(react::ShadowNode& shadowNode) const override;
 #endif
