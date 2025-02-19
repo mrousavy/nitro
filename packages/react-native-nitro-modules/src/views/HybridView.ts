@@ -108,14 +108,16 @@ type HybridViewObject<
  * export type ScrollView = HybridView<ScrollViewProps, ScrollViewMethods>
  * ```
  */
-export type HybridView<
+export interface HybridView<
   Props extends HybridViewProps,
   Methods extends HybridViewMethods = {},
   // @ts-expect-error
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   Platforms extends ViewPlatformSpec = { ios: 'swift'; android: 'kotlin' },
-> = HostComponent<
-  Props & DefaultHybridViewProps<HybridViewObject<Props, Methods>>
->
+> extends HostComponent<
+    Props & DefaultHybridViewProps<HybridViewObject<Props, Methods>>
+  > {
+  /* no custom properties */
+}
 
 export * from './getHostComponent'

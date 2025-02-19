@@ -59,6 +59,9 @@ namespace margelo::nitro::image {
   }
 
   // Methods
-  
+  void JHybridTestViewSpec::someMethod() {
+    static const auto method = _javaPart->getClass()->getMethod<void()>("someMethod");
+    method(_javaPart);
+  }
 
 } // namespace margelo::nitro::image

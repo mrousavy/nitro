@@ -1,5 +1,5 @@
 import type { PlatformSpec } from 'react-native-nitro-modules'
-import type { InterfaceDeclaration, Type } from 'ts-morph'
+import type { InterfaceDeclaration, Type, TypeAliasDeclaration } from 'ts-morph'
 import { Symbol } from 'ts-morph'
 import { getBaseTypes } from './utils.js'
 
@@ -114,25 +114,25 @@ function extendsType(type: Type, name: string, recursive: boolean): boolean {
 export function isDirectlyHybridObject(type: Type): boolean {
   return isDirectlyType(type, 'HybridObject')
 }
-export function isDirectlyHybridView(type: Type): boolean {
-  return isDirectlyType(type, 'HybridView')
-}
 
 export function extendsHybridObject(type: Type, recursive: boolean): boolean {
   return extendsType(type, 'HybridObject', recursive)
 }
-export function extendsHybridView(type: Type, recursive: boolean): boolean {
-  return extendsType(type, 'HybridView', recursive)
+export function isHybridView(type: Type): boolean {
+  // HybridViews are type aliases for `HybridView`
+  const symbol = type.getSymbol()
+  if (symbol == null) return false
+  return symbol.getName() === 'HybridView'
 }
 
 export function isAnyHybridSubclass(type: Type): boolean {
   if (isDirectlyHybridObject(type)) return false
-  if (isDirectlyHybridView(type)) return false
 
-  const isCustomHybrid =
-    extendsHybridObject(type, true) || extendsHybridView(type, true)
+  if (isHybridView(type)) return true
 
-  return isCustomHybrid
+  if (extendsHybridObject(type, true)) return true
+
+  return false
 }
 
 /**
@@ -141,7 +141,7 @@ export function isAnyHybridSubclass(type: Type): boolean {
  * If it doesn't extend `HybridObject`, this returns `undefined`.
  */
 export function getHybridObjectPlatforms(
-  declaration: InterfaceDeclaration
+  declaration: InterfaceDeclaration | TypeAliasDeclaration
 ): PlatformSpec | undefined {
   const base = getBaseTypes(declaration.getType()).find((t) =>
     isDirectlyHybridObject(t)
@@ -164,10 +164,10 @@ export function getHybridObjectPlatforms(
 }
 
 export function getHybridViewPlatforms(
-  view: InterfaceDeclaration
+  view: InterfaceDeclaration | TypeAliasDeclaration
 ): PlatformSpec | undefined {
   const genericArguments = view.getType().getTypeArguments()
-  const platformSpecsArgument = genericArguments[0]
+  const platformSpecsArgument = genericArguments[2]
   if (platformSpecsArgument == null) {
     // it uses `HybridObject` without generic arguments. This defaults to platform native languages
     return { ios: 'swift', android: 'kotlin' }
