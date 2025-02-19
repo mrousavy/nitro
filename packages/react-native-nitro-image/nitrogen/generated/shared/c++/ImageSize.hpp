@@ -33,6 +33,7 @@ namespace margelo::nitro::image {
     double height     SWIFT_PRIVATE;
 
   public:
+    ImageSize() = default;
     explicit ImageSize(double width, double height): width(width), height(height) {}
   };
 

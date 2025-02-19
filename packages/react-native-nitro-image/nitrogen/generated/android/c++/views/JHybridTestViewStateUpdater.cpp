@@ -30,6 +30,9 @@ void JHybridTestViewStateUpdater::updateViewProps(jni::alias_ref<jni::JClass> /*
   if (props.isBlue.isDirty) {
     view->setIsBlue(props.isBlue.value);
   }
+  if (props.someCallback.isDirty) {
+    view->setSomeCallback(props.someCallback.value);
+  }
 }
 
 } // namespace margelo::nitro::image::views

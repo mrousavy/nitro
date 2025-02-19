@@ -168,6 +168,15 @@ namespace ${namespace} {
   for (const prop of spec.properties) {
     const name = escapeCppName(prop.name)
     const type = prop.type.getCode('c++')
+
+    let valueConversion = `value`
+    if (prop.type.kind === 'function') {
+      // Due to a React limitation, functions cannot be passed to native directly,
+      // because RN converts them to booleans (`true`). Nitro knows this and just
+      // wraps functions as objects - the original function is stored in `f`.
+      valueConversion = `value.asObject(*runtime).getProperty(*runtime, "f")`
+    }
+
     propInitializers.push(
       `
 ${name}([&]() -> CachedProp<${type}> {
@@ -175,7 +184,7 @@ ${name}([&]() -> CachedProp<${type}> {
     const react::RawValue* rawValue = rawProps.at("${prop.name}", nullptr, nullptr);
     if (rawValue == nullptr) return sourceProps.${name};
     const auto& [runtime, value] = (std::pair<jsi::Runtime*, jsi::Value>)*rawValue;
-    return CachedProp<${type}>::fromRawValue(*runtime, value, sourceProps.${name});
+    return CachedProp<${type}>::fromRawValue(*runtime, ${valueConversion}, sourceProps.${name});
   } catch (const std::exception& exc) {
     throw std::runtime_error(std::string("${spec.name}.${prop.name}: ") + exc.what());
   }

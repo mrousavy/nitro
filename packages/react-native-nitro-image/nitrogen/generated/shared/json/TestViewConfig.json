@@ -4,6 +4,7 @@
   "bubblingEventTypes": {},
   "directEventTypes": {},
   "validAttributes": {
-    "isBlue": true
+    "isBlue": true,
+    "someCallback": true
   }
 }

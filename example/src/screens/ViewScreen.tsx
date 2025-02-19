@@ -18,7 +18,12 @@ export function ViewScreenImpl() {
   const views = React.useMemo(
     () =>
       [...Array(counter)].map((_, i) => (
-        <TestView key={i} style={styles.view} isBlue={i % 2 === 0} />
+        <TestView
+          key={i}
+          style={styles.view}
+          isBlue={i % 2 === 0}
+          someCallback={{ f: () => console.log(`Callback called!`) }}
+        />
       )),
     [counter]
   )

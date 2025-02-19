@@ -14,7 +14,7 @@ namespace NitroImage { class HybridTestViewSpec_cxx; }
 
 
 
-
+#include <functional>
 
 #include "NitroImage-Swift-Cxx-Umbrella.hpp"
 
@@ -56,6 +56,13 @@ namespace margelo::nitro::image {
     }
     inline void setIsBlue(bool isBlue) noexcept override {
       _swiftPart.setIsBlue(std::forward<decltype(isBlue)>(isBlue));
+    }
+    inline std::function<void()> getSomeCallback() noexcept override {
+      auto __result = _swiftPart.getSomeCallback();
+      return __result;
+    }
+    inline void setSomeCallback(const std::function<void()>& someCallback) noexcept override {
+      _swiftPart.setSomeCallback(someCallback);
     }
 
   public:

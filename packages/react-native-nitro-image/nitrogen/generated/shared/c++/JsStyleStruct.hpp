@@ -33,6 +33,7 @@ namespace margelo::nitro::image {
     std::function<void(double /* num */)> onChanged     SWIFT_PRIVATE;
 
   public:
+    JsStyleStruct() = default;
     explicit JsStyleStruct(double value, std::function<void(double /* num */)> onChanged): value(value), onChanged(onChanged) {}
   };
 

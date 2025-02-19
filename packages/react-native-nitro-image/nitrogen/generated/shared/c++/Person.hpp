@@ -33,6 +33,7 @@ namespace margelo::nitro::image {
     double age     SWIFT_PRIVATE;
 
   public:
+    Person() = default;
     explicit Person(std::string name, double age): name(name), age(age) {}
   };
 

@@ -34,15 +34,27 @@ namespace margelo::nitro::image::views {
       } catch (const std::exception& exc) {
         throw std::runtime_error(std::string("TestView.isBlue: ") + exc.what());
       }
+    }()),
+    someCallback([&]() -> CachedProp<std::function<void()>> {
+      try {
+        const react::RawValue* rawValue = rawProps.at("someCallback", nullptr, nullptr);
+        if (rawValue == nullptr) return sourceProps.someCallback;
+        const auto& [runtime, value] = (std::pair<jsi::Runtime*, jsi::Value>)*rawValue;
+        return CachedProp<std::function<void()>>::fromRawValue(*runtime, value.asObject(*runtime).getProperty(*runtime, "f"), sourceProps.someCallback);
+      } catch (const std::exception& exc) {
+        throw std::runtime_error(std::string("TestView.someCallback: ") + exc.what());
+      }
     }()) { }
 
   HybridTestViewProps::HybridTestViewProps(const HybridTestViewProps& other):
     react::ViewProps(),
-    isBlue(other.isBlue) { }
+    isBlue(other.isBlue),
+    someCallback(other.someCallback) { }
 
   bool HybridTestViewProps::filterObjectKeys(const std::string& propName) {
     switch (hashString(propName)) {
       case hashString("isBlue"): return true;
+      case hashString("someCallback"): return true;
       default: return false;
     }
   }
