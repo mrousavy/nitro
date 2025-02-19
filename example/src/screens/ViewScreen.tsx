@@ -22,7 +22,7 @@ export function ViewScreenImpl() {
           key={i}
           style={styles.view}
           isBlue={i % 2 === 0}
-          someCallback={() => console.log('Callback called!')}
+          someCallback={{ f: () => console.log(`Callback called!`) }}
         />
       )),
     [counter]

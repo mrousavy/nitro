@@ -1,13 +1,11 @@
 import type { SourceFile } from '../syntax/SourceFile.js'
 import type { HybridObjectSpec } from '../syntax/HybridObjectSpec.js'
-import { capitalizeName, createIndentation, indent } from '../utils.js'
+import { createIndentation, indent } from '../utils.js'
 import { createFileMetadataString, escapeCppName } from '../syntax/helpers.js'
 import { NitroConfig } from '../config/NitroConfig.js'
 import { getHybridObjectName } from '../syntax/getHybridObjectName.js'
 import { includeHeader } from '../syntax/c++/includeNitroHeader.js'
 import { createHostComponentJs } from './createHostComponentJs.js'
-import { Logger } from '../Logger.js'
-import chalk from 'chalk'
 
 interface ViewComponentNames {
   propsClassName: `${string}Props`
@@ -41,16 +39,6 @@ export function createViewComponentShadowNodeFiles(
     throw new Error(
       `Cannot create View Component ShadowNode code for ${spec.name} - it's not a HybridView!`
     )
-  }
-  for (const prop of spec.properties) {
-    if (prop.type.kind === 'function') {
-      Logger.warn(
-        `        ⚠️  ${chalk.bold(`${spec.name}.${prop.name}`)} is a function.\n` +
-          `           Due to a react-native limitation, functions have to be wrapped in an extra object,\n` +
-          `           otherwise react-native just converts them to booleans.\n` +
-          `           Example: ${chalk.dim(`interface ${capitalizeName(prop.name)}Wrapper { func: (…) => … }`)}`
-      )
-    }
   }
 
   const { T, HybridT } = getHybridObjectName(spec.name)
@@ -180,6 +168,15 @@ namespace ${namespace} {
   for (const prop of spec.properties) {
     const name = escapeCppName(prop.name)
     const type = prop.type.getCode('c++')
+
+    let valueConversion = `value`
+    if (prop.type.kind === 'function') {
+      // Due to a React limitation, functions cannot be passed to native directly,
+      // because RN converts them to booleans (`true`). Nitro knows this and just
+      // wraps functions as objects - the original function is stored in `f`.
+      valueConversion = `value.asObject(*runtime).getProperty(*runtime, "f")`
+    }
+
     propInitializers.push(
       `
 ${name}([&]() -> CachedProp<${type}> {
@@ -187,7 +184,7 @@ ${name}([&]() -> CachedProp<${type}> {
     const react::RawValue* rawValue = rawProps.at("${prop.name}", nullptr, nullptr);
     if (rawValue == nullptr) return sourceProps.${name};
     const auto& [runtime, value] = (std::pair<jsi::Runtime*, jsi::Value>)*rawValue;
-    return CachedProp<${type}>::fromRawValue(*runtime, value, sourceProps.${name});
+    return CachedProp<${type}>::fromRawValue(*runtime, ${valueConversion}, sourceProps.${name});
   } catch (const std::exception& exc) {
     throw std::runtime_error(std::string("${spec.name}.${prop.name}: ") + exc.what());
   }

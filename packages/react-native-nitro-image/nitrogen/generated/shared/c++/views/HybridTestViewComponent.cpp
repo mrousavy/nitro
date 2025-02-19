@@ -35,12 +35,12 @@ namespace margelo::nitro::image::views {
         throw std::runtime_error(std::string("TestView.isBlue: ") + exc.what());
       }
     }()),
-    someCallback([&]() -> CachedProp<CallbackWrapper> {
+    someCallback([&]() -> CachedProp<std::function<void()>> {
       try {
         const react::RawValue* rawValue = rawProps.at("someCallback", nullptr, nullptr);
         if (rawValue == nullptr) return sourceProps.someCallback;
         const auto& [runtime, value] = (std::pair<jsi::Runtime*, jsi::Value>)*rawValue;
-        return CachedProp<CallbackWrapper>::fromRawValue(*runtime, value, sourceProps.someCallback);
+        return CachedProp<std::function<void()>>::fromRawValue(*runtime, value.asObject(*runtime).getProperty(*runtime, "f"), sourceProps.someCallback);
       } catch (const std::exception& exc) {
         throw std::runtime_error(std::string("TestView.someCallback: ") + exc.what());
       }

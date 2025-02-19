@@ -76,7 +76,7 @@ using namespace margelo::nitro::image::views;
     swiftPart.setIsBlue(newViewProps.isBlue.value);
     newViewProps.isBlue.isDirty = false;
   }
-  // someCallback: struct
+  // someCallback: function
   if (newViewProps.someCallback.isDirty) {
     swiftPart.setSomeCallback(newViewProps.someCallback.value);
     newViewProps.someCallback.isDirty = false;

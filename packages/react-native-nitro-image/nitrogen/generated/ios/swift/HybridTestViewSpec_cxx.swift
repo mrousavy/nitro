@@ -108,14 +108,22 @@ public class HybridTestViewSpec_cxx {
     }
   }
   
-  public final var someCallback: CallbackWrapper {
+  public final var someCallback: bridge.Func_void {
     @inline(__always)
     get {
-      return self.__implementation.someCallback
+      return { () -> bridge.Func_void in
+        let __closureWrapper = Func_void(self.__implementation.someCallback)
+        return bridge.create_Func_void(__closureWrapper.toUnsafe())
+      }()
     }
     @inline(__always)
     set {
-      self.__implementation.someCallback = newValue
+      self.__implementation.someCallback = { () -> () -> Void in
+        let __wrappedFunction = bridge.wrap_Func_void(newValue)
+        return { () -> Void in
+          __wrappedFunction.call()
+        }
+      }()
     }
   }
 

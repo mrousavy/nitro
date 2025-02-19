@@ -49,8 +49,8 @@ namespace margelo::nitro::image {
     // Properties
     bool getIsBlue() override;
     void setIsBlue(bool isBlue) override;
-    CallbackWrapper getSomeCallback() override;
-    void setSomeCallback(const CallbackWrapper& someCallback) override;
+    std::function<void()> getSomeCallback() override;
+    void setSomeCallback(const std::function<void()>& someCallback) override;
 
   public:
     // Methods

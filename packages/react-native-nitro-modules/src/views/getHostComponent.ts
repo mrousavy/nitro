@@ -11,7 +11,20 @@ export interface ViewConfig<Props> {
   validAttributes: Record<keyof Props, boolean>
 }
 
-type CleanView<THybridView> = Omit<THybridView, keyof HybridObject>
+type WrapFunctionsInObjects<THybridView> = {
+  [K in keyof THybridView]: THybridView[K] extends Function
+    ? { f: THybridView[K] }
+    : THybridView[K]
+}
+
+type RemoveHybridObjectBase<THybridObjectSub> = Omit<
+  THybridObjectSub,
+  keyof HybridObject
+>
+
+type CleanView<THybridView> = WrapFunctionsInObjects<
+  RemoveHybridObjectBase<THybridView>
+>
 
 /**
  * Finds and returns a native view (aka {@linkcode HostComponent}) via the given {@linkcode name}.

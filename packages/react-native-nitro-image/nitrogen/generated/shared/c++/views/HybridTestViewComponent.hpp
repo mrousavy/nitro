@@ -16,7 +16,7 @@
 #include <react/renderer/components/view/ConcreteViewShadowNode.h>
 #include <react/renderer/components/view/ViewProps.h>
 
-#include "CallbackWrapper.hpp"
+#include <functional>
 
 namespace margelo::nitro::image::views {
 
@@ -40,7 +40,7 @@ namespace margelo::nitro::image::views {
 
   public:
     CachedProp<bool> isBlue;
-    CachedProp<CallbackWrapper> someCallback;
+    CachedProp<std::function<void()>> someCallback;
 
   private:
     static bool filterObjectKeys(const std::string& propName);
