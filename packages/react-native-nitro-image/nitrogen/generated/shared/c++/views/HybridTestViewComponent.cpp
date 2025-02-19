@@ -63,6 +63,12 @@ namespace margelo::nitro::image::views {
     : ConcreteComponentDescriptor(parameters,
                                   react::RawPropsParser(/* enableJsiParser */ true)) {}
 
+  react::Props::Shared HybridTestViewComponentDescriptor::cloneProps(const react::PropsParserContext& context,
+                                                                     const react::Props::Shared& props,
+                                                                     react::RawProps rawProps) const {
+    return HybridTestViewShadowNode::Props(context, /* & */ rawProps, props);
+  }
+
 #ifdef ANDROID
   void HybridTestViewComponentDescriptor::adopt(react::ShadowNode& shadowNode) const {
     // This is called immediately after `ShadowNode` is created, cloned or in progress.

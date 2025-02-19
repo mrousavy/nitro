@@ -150,6 +150,12 @@ namespace ${namespace} {
     ${descriptorClassName}(const react::ComponentDescriptorParameters& parameters);
 
   public:
+    /**
+     * A faster path for cloning props - reuses the caching logic from \`${propsClassName}\`.
+     */
+    react::Props::Shared cloneProps(const react::PropsParserContext& context,
+                                    const react::Props::Shared& props,
+                                    react::RawProps rawProps) const override;
 #ifdef ANDROID
     void adopt(react::ShadowNode& shadowNode) const override;
 #endif
@@ -194,6 +200,7 @@ ${name}([&]() -> CachedProp<${type}> {
   }
 
   const ctorIndent = createIndentation(propsClassName.length * 2)
+  const descriptorIndent = createIndentation(descriptorClassName.length)
   const componentCode = `
 ${createFileMetadataString(`${component}.cpp`)}
 
@@ -231,6 +238,12 @@ namespace ${namespace} {
   ${descriptorClassName}::${descriptorClassName}(const react::ComponentDescriptorParameters& parameters)
     : ConcreteComponentDescriptor(parameters,
                                   react::RawPropsParser(/* enableJsiParser */ true)) {}
+
+  react::Props::Shared ${descriptorClassName}::cloneProps(const react::PropsParserContext& context,
+                          ${descriptorIndent}          const react::Props::Shared& props,
+                          ${descriptorIndent}          react::RawProps rawProps) const {
+    return ${shadowNodeClassName}::Props(context, /* & */ rawProps, props);
+  }
 
 #ifdef ANDROID
   void ${descriptorClassName}::adopt(react::ShadowNode& shadowNode) const {

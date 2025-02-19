@@ -33,10 +33,10 @@ type CleanView<THybridView> = WrapFunctionsInObjects<
 /**
  * Finds and returns a native view (aka {@linkcode HostComponent}) via the given {@linkcode name}.
  */
-export function getHostComponent<THybridView>(
+export function getHostComponent<Props>(
   name: string,
-  getViewConfig: () => ViewConfig<CleanView<THybridView>>
-): HostComponent<ViewProps & CleanView<THybridView>> {
+  getViewConfig: () => ViewConfig<RemoveHybridObjectBase<Props>>
+): HostComponent<ViewProps & CleanView<Props>> {
   if (NativeComponentRegistry == null) {
     throw new Error(
       `NativeComponentRegistry is not available on ${Platform.OS}!`
