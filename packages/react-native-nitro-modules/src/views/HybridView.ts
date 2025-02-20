@@ -79,14 +79,12 @@ interface DefaultHybridViewProps<Object> extends ViewProps {
   hybridRef?: { current: Object | null }
 }
 
-/**
- * Represents the {@linkcode HybridObject} this Hybrid View consists of.
- * Properties and Methods exist as usual.
- */
-type HybridViewObject<
-  Props extends HybridViewProps,
-  Methods extends HybridViewMethods,
-> = HybridObject & Props & Methods
+// Due to a React limitation, functions cannot be passed to native directly
+// because RN converts them to booleans (`true`). Nitro knows this and just
+// wraps functions as objects - the original function is stored in `f`.
+type WrapFunctionsInObjects<Props> = {
+  [K in keyof Props]: Props[K] extends Function ? { f: Props[K] } : Props[K]
+}
 
 /**
  * Represents a Nitro Hybrid View.
@@ -114,8 +112,9 @@ export interface HybridView<
   // @ts-expect-error
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   Platforms extends ViewPlatformSpec = { ios: 'swift'; android: 'kotlin' },
+  Object = HybridRef<Props, Methods>,
 > extends HostComponent<
-    Props & DefaultHybridViewProps<HybridViewObject<Props, Methods>>
+    WrapFunctionsInObjects<Props> & DefaultHybridViewProps<Object>
   > {
   /* no custom properties */
 }
@@ -145,4 +144,4 @@ export interface HybridView<
 export type HybridRef<
   Props extends HybridViewProps,
   Methods extends HybridViewMethods = {},
-> = HybridViewObject<Props, Methods>
+> = HybridObject & Props & Methods

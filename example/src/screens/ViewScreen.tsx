@@ -17,6 +17,10 @@ export function ViewScreenImpl() {
   const [isUpdating, setIsUpdating] = React.useState(true)
   const ref = React.useRef<TestViewRef>(null)
 
+  React.useLayoutEffect(() => {
+    ref.current?.someMethod()
+  }, [])
+
   const views = React.useMemo(
     () =>
       [...Array(counter)].map((_, i) => (
