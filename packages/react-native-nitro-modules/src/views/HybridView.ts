@@ -87,6 +87,33 @@ type WrapFunctionsInObjects<Props> = {
 }
 
 /**
+ * The type of a {@linkcode DefaultHybridViewProps.hybridRef hybridRef}.
+ * @example
+ * ```ts
+ * // declaration:
+ * interface ScrollViewProps extends HybridViewProps { … }
+ * interface ScrollViewMethods extends HybridViewMethods {
+ *   scrollTo(y: number): void
+ * }
+ * export type ScrollView = HybridView<ScrollViewProps, ScrollViewMethods>
+ * export type ScrollViewRef = HybridRef<ScrollViewProps, ScrollViewMethods>
+ *
+ * // in react:
+ * function App() {
+ *   const ref = useRef<ScrollViewRef>(null)
+ *   useLayoutEffect(() => {
+ *     ref.current.scrollTo(400)
+ *   }, [])
+ *   return <ScrollView hybridRef={ref} />
+ * }
+ * ```
+ */
+export type HybridRef<
+  Props extends HybridViewProps,
+  Methods extends HybridViewMethods = {},
+> = HybridObject & Props & Methods
+
+/**
  * Represents a Nitro Hybrid View.
  *
  * The Hybrid View's implementation is in native iOS or Android, and is backed
@@ -118,30 +145,3 @@ export interface HybridView<
   > {
   /* no custom properties */
 }
-
-/**
- * The type of a {@linkcode DefaultHybridViewProps.hybridRef hybridRef}.
- * @example
- * ```ts
- * // declaration:
- * interface ScrollViewProps extends HybridViewProps { … }
- * interface ScrollViewMethods extends HybridViewMethods {
- *   scrollTo(y: number): void
- * }
- * export type ScrollView = HybridView<ScrollViewProps, ScrollViewMethods>
- * export type ScrollViewRef = HybridRef<ScrollViewProps, ScrollViewMethods>
- *
- * // in react:
- * function App() {
- *   const ref = useRef<ScrollViewRef>(null)
- *   useLayoutEffect(() => {
- *     ref.current.scrollTo(400)
- *   }, [])
- *   return <ScrollView hybridRef={ref} />
- * }
- * ```
- */
-export type HybridRef<
-  Props extends HybridViewProps,
-  Methods extends HybridViewMethods = {},
-> = HybridObject & Props & Methods

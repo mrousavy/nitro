@@ -4,7 +4,7 @@ import { StyleSheet, View, Text, Button, Platform } from 'react-native'
 import { NitroModules } from 'react-native-nitro-modules'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useColors } from '../useColors'
-import { TestView, type TestViewRef } from 'react-native-nitro-image'
+import { TestView } from 'react-native-nitro-image'
 import { useIsFocused } from '@react-navigation/native'
 
 const VIEWS_X = 15
@@ -15,18 +15,16 @@ export function ViewScreenImpl() {
   const colors = useColors()
   const [counter, setCounter] = React.useState(0)
   const [isUpdating, setIsUpdating] = React.useState(true)
-  const ref = React.useRef<TestViewRef>(null)
-
-  React.useLayoutEffect(() => {
-    ref.current?.someMethod()
-  }, [])
 
   const views = React.useMemo(
     () =>
       [...Array(counter)].map((_, i) => (
         <TestView
           key={i}
-          hybridRef={ref}
+          hybridRef={(ref) => {
+            console.log(`Ref initialized!`)
+            ref.someMethod()
+          }}
           style={styles.view}
           isBlue={i % 2 === 0}
           someCallback={{ f: () => console.log(`Callback called!`) }}
