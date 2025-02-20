@@ -18,10 +18,8 @@ export interface ViewConfig<Props> {
 // Due to a React limitation, functions cannot be passed to native directly
 // because RN converts them to booleans (`true`). Nitro knows this and just
 // wraps functions as objects - the original function is stored in `f`.
-type WrapFunctionsInObjects<THybridView> = {
-  [K in keyof THybridView]: THybridView[K] extends Function
-    ? { f: THybridView[K] }
-    : THybridView[K]
+type WrapFunctionsInObjects<Props> = {
+  [K in keyof Props]: Props[K] extends Function ? { f: Props[K] } : Props[K]
 }
 
 /**
