@@ -236,6 +236,8 @@ To implement `Math` now, you just need to implement the spec:
         ```cpp title="HybridMath.hpp"
         class HybridMath: public HybridMathSpec {
         public:
+          HybridMath(): HybridObject(TAG) {}
+        public:
           double add(double a, double b) override;
         };
         ```
