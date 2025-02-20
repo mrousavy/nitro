@@ -44,17 +44,29 @@ namespace margelo::nitro::image::views {
       } catch (const std::exception& exc) {
         throw std::runtime_error(std::string("TestView.someCallback: ") + exc.what());
       }
+    }()),
+    hybridRef([&]() -> CachedProp<std::function<void(const std::shared_ptr<margelo::nitro::image::HybridTestViewSpec>& /* ref */)>> {
+      try {
+        const react::RawValue* rawValue = rawProps.at("hybridRef", nullptr, nullptr);
+        if (rawValue == nullptr) return sourceProps.hybridRef;
+        const auto& [runtime, value] = (std::pair<jsi::Runtime*, jsi::Value>)*rawValue;
+        return CachedProp<std::function<void(const std::shared_ptr<margelo::nitro::image::HybridTestViewSpec>& /* ref */)>>::fromRawValue(*runtime, value.asObject(*runtime).getProperty(*runtime, "f"), sourceProps.hybridRef);
+      } catch (const std::exception& exc) {
+        throw std::runtime_error(std::string("TestView.hybridRef: ") + exc.what());
+      }
     }()) { }
 
   HybridTestViewProps::HybridTestViewProps(const HybridTestViewProps& other):
     react::ViewProps(),
     isBlue(other.isBlue),
-    someCallback(other.someCallback) { }
+    someCallback(other.someCallback),
+    hybridRef(other.hybridRef) { }
 
   bool HybridTestViewProps::filterObjectKeys(const std::string& propName) {
     switch (hashString(propName)) {
       case hashString("isBlue"): return true;
       case hashString("someCallback"): return true;
+      case hashString("hybridRef"): return true;
       default: return false;
     }
   }

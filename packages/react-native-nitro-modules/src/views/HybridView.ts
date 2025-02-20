@@ -76,7 +76,7 @@ interface DefaultHybridViewProps<Object> extends ViewProps {
    * }
    * ```
    */
-  hybridRef?: { current: Object | null }
+  hybridRef?: (ref: Object) => void
 }
 
 // Due to a React limitation, functions cannot be passed to native directly
