@@ -17,6 +17,10 @@
 #include <react/renderer/components/view/ViewProps.h>
 
 #include <functional>
+#include <optional>
+#include <functional>
+#include <memory>
+#include "HybridTestViewSpec.hpp"
 
 namespace margelo::nitro::image::views {
 
@@ -41,6 +45,7 @@ namespace margelo::nitro::image::views {
   public:
     CachedProp<bool> isBlue;
     CachedProp<std::function<void()>> someCallback;
+    CachedProp<std::optional<std::function<void(const std::shared_ptr<margelo::nitro::image::HybridTestViewSpec>& /* ref */)>>> hybridRef;
 
   private:
     static bool filterObjectKeys(const std::string& propName);

@@ -15,11 +15,18 @@ export function ViewScreenImpl() {
   const colors = useColors()
   const [counter, setCounter] = React.useState(0)
   const [isUpdating, setIsUpdating] = React.useState(true)
+
   const views = React.useMemo(
     () =>
       [...Array(counter)].map((_, i) => (
         <TestView
           key={i}
+          hybridRef={{
+            f: (ref) => {
+              console.log(`Ref initialized!`)
+              ref.someMethod()
+            },
+          }}
           style={styles.view}
           isBlue={i % 2 === 0}
           someCallback={{ f: () => console.log(`Callback called!`) }}

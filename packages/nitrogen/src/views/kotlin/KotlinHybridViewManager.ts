@@ -82,6 +82,7 @@ class ${manager}: SimpleViewManager<View>() {
     ${stateUpdaterName}.updateViewProps(hybridView, stateWrapperImpl)
     hybridView.afterUpdate()
 
+    // 3. Continue in base View props
     return super.updateState(view, props, stateWrapper)
   }
 }
@@ -161,6 +162,7 @@ public:
     return `
 if (props.${name}.isDirty) {
   view->${setter}(props.${name}.value);
+  // TODO: Set isDirty = false
 }
     `.trim()
   })
@@ -170,6 +172,7 @@ ${createFileMetadataString(`J${stateUpdaterName}.cpp`)}
 #include "J${stateUpdaterName}.hpp"
 #include "views/${component}.hpp"
 #include <NitroModules/NitroDefines.hpp>
+#include <NitroModules/JNISharedPtr.hpp>
 
 namespace ${cxxNamespace} {
 
@@ -190,6 +193,17 @@ void J${stateUpdaterName}::updateViewProps(jni::alias_ref<jni::JClass> /* class 
   }
   const ${propsClassName}& props = maybeProps.value();
   ${indent(propsUpdaterCalls.join('\n'), '  ')}
+
+  // Update hybridRef if it changed
+  if (props.hybridRef.isDirty) {
+    // hybridRef changed - call it with new this
+    const auto& maybeFunc = props.hybridRef.value;
+    if (maybeFunc.has_value()) {
+      auto shared = JNISharedPtr::make_shared_from_jni<${JHybridTSpec}>(jni::make_global(javaView));
+      maybeFunc.value()(shared);
+    }
+    // TODO: Set isDirty = false
+  }
 }
 
 } // namespace ${cxxNamespace}

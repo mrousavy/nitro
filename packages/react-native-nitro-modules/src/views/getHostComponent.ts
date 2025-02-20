@@ -15,15 +15,6 @@ export interface ViewConfig<Props> {
   validAttributes: Record<keyof Props, boolean>
 }
 
-// Due to a React limitation, functions cannot be passed to native directly
-// because RN converts them to booleans (`true`). Nitro knows this and just
-// wraps functions as objects - the original function is stored in `f`.
-type WrapFunctionsInObjects<THybridView> = {
-  [K in keyof THybridView]: THybridView[K] extends Function
-    ? { f: THybridView[K] }
-    : THybridView[K]
-}
-
 /**
  * Finds and returns a native view (aka "HostComponent") via the given {@linkcode name}.
  *
@@ -35,7 +26,7 @@ export function getHostComponent<
 >(
   name: string,
   getViewConfig: () => ViewConfig<Props>
-): HybridView<WrapFunctionsInObjects<Props>, Methods> {
+): HybridView<Props, Methods> {
   if (NativeComponentRegistry == null) {
     throw new Error(
       `NativeComponentRegistry is not available on ${Platform.OS}!`

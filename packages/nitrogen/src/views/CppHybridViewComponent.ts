@@ -1,11 +1,21 @@
 import type { SourceFile } from '../syntax/SourceFile.js'
 import type { HybridObjectSpec } from '../syntax/HybridObjectSpec.js'
 import { createIndentation, indent } from '../utils.js'
-import { createFileMetadataString, escapeCppName } from '../syntax/helpers.js'
+import {
+  createFileMetadataString,
+  escapeCppName,
+  isFunction,
+} from '../syntax/helpers.js'
 import { NitroConfig } from '../config/NitroConfig.js'
 import { getHybridObjectName } from '../syntax/getHybridObjectName.js'
 import { includeHeader } from '../syntax/c++/includeNitroHeader.js'
 import { createHostComponentJs } from './createHostComponentJs.js'
+import { Property } from '../syntax/Property.js'
+import { FunctionType } from '../syntax/types/FunctionType.js'
+import { VoidType } from '../syntax/types/VoidType.js'
+import { HybridObjectType } from '../syntax/types/HybridObjectType.js'
+import { NamedWrappingType } from '../syntax/types/NamedWrappingType.js'
+import { OptionalType } from '../syntax/types/OptionalType.js'
 
 interface ViewComponentNames {
   propsClassName: `${string}Props`
@@ -32,6 +42,14 @@ export function getViewComponentNames(
   }
 }
 
+function getHybridRefProperty(spec: HybridObjectSpec): Property {
+  const hybrid = new HybridObjectType(spec)
+  const type = new FunctionType(new VoidType(), [
+    new NamedWrappingType('ref', hybrid),
+  ])
+  return new Property('hybridRef', new OptionalType(type), false)
+}
+
 export function createViewComponentShadowNodeFiles(
   spec: HybridObjectSpec
 ): SourceFile[] {
@@ -53,13 +71,12 @@ export function createViewComponentShadowNodeFiles(
 
   const namespace = NitroConfig.getCxxNamespace('c++', 'views')
 
-  const properties = spec.properties.map(
+  const props = [...spec.properties, getHybridRefProperty(spec)]
+  const properties = props.map(
     (p) => `CachedProp<${p.type.getCode('c++')}> ${escapeCppName(p.name)};`
   )
-  const cases = spec.properties.map(
-    (p) => `case hashString("${p.name}"): return true;`
-  )
-  const includes = spec.properties.flatMap((p) =>
+  const cases = props.map((p) => `case hashString("${p.name}"): return true;`)
+  const includes = props.flatMap((p) =>
     p.getRequiredImports().map((i) => includeHeader(i, true))
   )
 
@@ -171,12 +188,12 @@ namespace ${namespace} {
     'react::ViewProps(context, sourceProps, rawProps, filterObjectKeys)',
   ]
   const propCopyInitializers = ['react::ViewProps()']
-  for (const prop of spec.properties) {
+  for (const prop of props) {
     const name = escapeCppName(prop.name)
     const type = prop.type.getCode('c++')
 
     let valueConversion = `value`
-    if (prop.type.kind === 'function') {
+    if (isFunction(prop.type)) {
       // Due to a React limitation, functions cannot be passed to native directly,
       // because RN converts them to booleans (`true`). Nitro knows this and just
       // wraps functions as objects - the original function is stored in `f`.

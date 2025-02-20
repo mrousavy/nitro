@@ -66,26 +66,53 @@ interface DefaultHybridViewProps<Object> extends ViewProps {
    *
    * The `hybridRef` property expects a stable Ref object received from `useRef` or `createRef`.
    * @example
-   * ```ts
+   * ```jsx
    * function App() {
-   *   const ref = useRef<ScrollView>(null)
-   *   useLayoutEffect(() => {
-   *     ref.current.scrollTo(400)
-   *   }, [])
-   *   return <HybridScrollView hybridRef={ref} />
+   *   return (
+   *     <HybridScrollView
+   *       hybridRef={{ f: (ref) => {
+   *         ref.current.scrollTo(400)
+   *       }
+   *     />
+   *   )
    * }
    * ```
    */
-  hybridRef?: { current: Object | null }
+  hybridRef?: { f: (ref: Object) => void }
+}
+
+// Due to a React limitation, functions cannot be passed to native directly
+// because RN converts them to booleans (`true`). Nitro knows this and just
+// wraps functions as objects - the original function is stored in `f`.
+type WrapFunctionsInObjects<Props> = {
+  [K in keyof Props]: Props[K] extends Function ? { f: Props[K] } : Props[K]
 }
 
 /**
- * Represents the {@linkcode HybridObject} this Hybrid View consists of.
- * Properties and Methods exist as usual.
+ * The type of a {@linkcode DefaultHybridViewProps.hybridRef hybridRef}.
+ * @example
+ * ```ts
+ * // declaration:
+ * interface ScrollViewProps extends HybridViewProps { … }
+ * interface ScrollViewMethods extends HybridViewMethods {
+ *   scrollTo(y: number): void
+ * }
+ * export type ScrollView = HybridView<ScrollViewProps, ScrollViewMethods>
+ * export type ScrollViewRef = HybridRef<ScrollViewProps, ScrollViewMethods>
+ *
+ * // in react:
+ * function App() {
+ *   const ref = useRef<ScrollViewRef>(null)
+ *   useLayoutEffect(() => {
+ *     ref.current.scrollTo(400)
+ *   }, [])
+ *   return <ScrollView hybridRef={ref} />
+ * }
+ * ```
  */
-type HybridViewObject<
+export type HybridRef<
   Props extends HybridViewProps,
-  Methods extends HybridViewMethods,
+  Methods extends HybridViewMethods = {},
 > = HybridObject & Props & Methods
 
 /**
@@ -114,10 +141,9 @@ export interface HybridView<
   // @ts-expect-error
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   Platforms extends ViewPlatformSpec = { ios: 'swift'; android: 'kotlin' },
+  Object = HybridRef<Props, Methods>,
 > extends HostComponent<
-    Props & DefaultHybridViewProps<HybridViewObject<Props, Methods>>
+    WrapFunctionsInObjects<Props> & DefaultHybridViewProps<Object>
   > {
   /* no custom properties */
 }
-
-export * from './getHostComponent'

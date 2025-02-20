@@ -47,6 +47,7 @@ class HybridTestViewManager: SimpleViewManager<View>() {
     HybridTestViewStateUpdater.updateViewProps(hybridView, stateWrapperImpl)
     hybridView.afterUpdate()
 
+    // 3. Continue in base View props
     return super.updateState(view, props, stateWrapper)
   }
 }
