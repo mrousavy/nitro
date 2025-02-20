@@ -228,3 +228,5 @@ function App() {
 ```
 
 > Note: If you're wondering about the `{ f: ... }` syntax, see ["Callbacks have to be wrapped"](#callbacks-have-to-be-wrapped).
+
+The `ref` from within `hybridRef`'s callback is pointing to the `HybridObject` directly - you can also pass this around freely.
