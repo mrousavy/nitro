@@ -66,17 +66,19 @@ interface DefaultHybridViewProps<Object> extends ViewProps {
    *
    * The `hybridRef` property expects a stable Ref object received from `useRef` or `createRef`.
    * @example
-   * ```ts
+   * ```jsx
    * function App() {
-   *   const ref = useRef<ScrollView>(null)
-   *   useLayoutEffect(() => {
-   *     ref.current.scrollTo(400)
-   *   }, [])
-   *   return <HybridScrollView hybridRef={ref} />
+   *   return (
+   *     <HybridScrollView
+   *       hybridRef={{ f: (ref) => {
+   *         ref.current.scrollTo(400)
+   *       }
+   *     />
+   *   )
    * }
    * ```
    */
-  hybridRef?: (ref: Object) => void
+  hybridRef?: { f: (ref: Object) => void }
 }
 
 // Due to a React limitation, functions cannot be passed to native directly

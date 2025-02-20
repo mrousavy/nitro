@@ -1,7 +1,11 @@
 import type { SourceFile } from '../syntax/SourceFile.js'
 import type { HybridObjectSpec } from '../syntax/HybridObjectSpec.js'
 import { createIndentation, indent } from '../utils.js'
-import { createFileMetadataString, escapeCppName } from '../syntax/helpers.js'
+import {
+  createFileMetadataString,
+  escapeCppName,
+  isFunction,
+} from '../syntax/helpers.js'
 import { NitroConfig } from '../config/NitroConfig.js'
 import { getHybridObjectName } from '../syntax/getHybridObjectName.js'
 import { includeHeader } from '../syntax/c++/includeNitroHeader.js'
@@ -11,6 +15,7 @@ import { FunctionType } from '../syntax/types/FunctionType.js'
 import { VoidType } from '../syntax/types/VoidType.js'
 import { HybridObjectType } from '../syntax/types/HybridObjectType.js'
 import { NamedWrappingType } from '../syntax/types/NamedWrappingType.js'
+import { OptionalType } from '../syntax/types/OptionalType.js'
 
 interface ViewComponentNames {
   propsClassName: `${string}Props`
@@ -42,7 +47,7 @@ function getHybridRefProperty(spec: HybridObjectSpec): Property {
   const type = new FunctionType(new VoidType(), [
     new NamedWrappingType('ref', hybrid),
   ])
-  return new Property('hybridRef', type, false)
+  return new Property('hybridRef', new OptionalType(type), false)
 }
 
 export function createViewComponentShadowNodeFiles(
@@ -188,7 +193,7 @@ namespace ${namespace} {
     const type = prop.type.getCode('c++')
 
     let valueConversion = `value`
-    if (prop.type.kind === 'function') {
+    if (isFunction(prop.type)) {
       // Due to a React limitation, functions cannot be passed to native directly,
       // because RN converts them to booleans (`true`). Nitro knows this and just
       // wraps functions as objects - the original function is stored in `f`.

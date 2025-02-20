@@ -33,6 +33,16 @@ void JHybridTestViewStateUpdater::updateViewProps(jni::alias_ref<jni::JClass> /*
   if (props.someCallback.isDirty) {
     view->setSomeCallback(props.someCallback.value);
   }
+
+  // Update hybridRef if it changed
+  if (props.hybridRef.isDirty) {
+    // hybridRef changed - call it with new this
+    const auto& maybeFunc = newViewProps.hybridRef.value;
+    if (maybeFunc.has_value()) {
+      maybeFunc.value()(javaView->cthis());
+    }
+    newViewProps.hybridRef.isDirty = false;
+  }
 }
 
 } // namespace margelo::nitro::image::views

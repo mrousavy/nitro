@@ -82,6 +82,7 @@ class ${manager}: SimpleViewManager<View>() {
     ${stateUpdaterName}.updateViewProps(hybridView, stateWrapperImpl)
     hybridView.afterUpdate()
 
+    // 3. Continue in base View props
     return super.updateState(view, props, stateWrapper)
   }
 }
@@ -190,6 +191,16 @@ void J${stateUpdaterName}::updateViewProps(jni::alias_ref<jni::JClass> /* class 
   }
   const ${propsClassName}& props = maybeProps.value();
   ${indent(propsUpdaterCalls.join('\n'), '  ')}
+
+  // Update hybridRef if it changed
+  if (props.hybridRef.isDirty) {
+    // hybridRef changed - call it with new this
+    const auto& maybeFunc = newViewProps.hybridRef.value;
+    if (maybeFunc.has_value()) {
+      maybeFunc.value()(javaView->cthis());
+    }
+    newViewProps.hybridRef.isDirty = false;
+  }
 }
 
 } // namespace ${cxxNamespace}

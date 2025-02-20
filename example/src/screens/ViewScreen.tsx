@@ -21,9 +21,11 @@ export function ViewScreenImpl() {
       [...Array(counter)].map((_, i) => (
         <TestView
           key={i}
-          hybridRef={(ref) => {
-            console.log(`Ref initialized!`)
-            ref.someMethod()
+          hybridRef={{
+            f: (ref) => {
+              console.log(`Ref initialized!`)
+              ref.someMethod()
+            },
           }}
           style={styles.view}
           isBlue={i % 2 === 0}

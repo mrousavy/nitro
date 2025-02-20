@@ -118,7 +118,17 @@ using namespace ${namespace}::views;
 
   swiftPart.afterUpdate();
 
-  // 3. Continue in base class
+  // 3. Update hybridRef if it changed
+  if (newViewProps.hybridRef.isDirty) {
+    // hybridRef changed - call it with new this
+    const auto& maybeFunc = newViewProps.hybridRef.value;
+    if (maybeFunc.has_value()) {
+      maybeFunc.value()(_hybridView);
+    }
+    newViewProps.hybridRef.isDirty = false;
+  }
+
+  // 4. Continue in base class
   [super updateProps:props oldProps:oldProps];
 }
 
