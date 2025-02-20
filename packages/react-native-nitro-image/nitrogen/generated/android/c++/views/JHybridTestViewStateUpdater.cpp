@@ -8,6 +8,7 @@
 #include "JHybridTestViewStateUpdater.hpp"
 #include "views/HybridTestViewComponent.hpp"
 #include <NitroModules/NitroDefines.hpp>
+#include <NitroModules/JNISharedPtr.hpp>
 
 namespace margelo::nitro::image::views {
 
@@ -29,19 +30,22 @@ void JHybridTestViewStateUpdater::updateViewProps(jni::alias_ref<jni::JClass> /*
   const HybridTestViewProps& props = maybeProps.value();
   if (props.isBlue.isDirty) {
     view->setIsBlue(props.isBlue.value);
+    // TODO: Set isDirty = false
   }
   if (props.someCallback.isDirty) {
     view->setSomeCallback(props.someCallback.value);
+    // TODO: Set isDirty = false
   }
 
   // Update hybridRef if it changed
   if (props.hybridRef.isDirty) {
     // hybridRef changed - call it with new this
-    const auto& maybeFunc = newViewProps.hybridRef.value;
+    const auto& maybeFunc = props.hybridRef.value;
     if (maybeFunc.has_value()) {
-      maybeFunc.value()(javaView->cthis());
+      auto shared = JNISharedPtr::make_shared_from_jni<JHybridTestViewSpec>(jni::make_global(javaView));
+      maybeFunc.value()(shared);
     }
-    newViewProps.hybridRef.isDirty = false;
+    // TODO: Set isDirty = false
   }
 }
 

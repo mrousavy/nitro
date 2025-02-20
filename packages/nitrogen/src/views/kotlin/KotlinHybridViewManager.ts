@@ -162,6 +162,7 @@ public:
     return `
 if (props.${name}.isDirty) {
   view->${setter}(props.${name}.value);
+  // TODO: Set isDirty = false
 }
     `.trim()
   })
@@ -171,6 +172,7 @@ ${createFileMetadataString(`J${stateUpdaterName}.cpp`)}
 #include "J${stateUpdaterName}.hpp"
 #include "views/${component}.hpp"
 #include <NitroModules/NitroDefines.hpp>
+#include <NitroModules/JNISharedPtr.hpp>
 
 namespace ${cxxNamespace} {
 
@@ -195,11 +197,12 @@ void J${stateUpdaterName}::updateViewProps(jni::alias_ref<jni::JClass> /* class 
   // Update hybridRef if it changed
   if (props.hybridRef.isDirty) {
     // hybridRef changed - call it with new this
-    const auto& maybeFunc = newViewProps.hybridRef.value;
+    const auto& maybeFunc = props.hybridRef.value;
     if (maybeFunc.has_value()) {
-      maybeFunc.value()(javaView->cthis());
+      auto shared = JNISharedPtr::make_shared_from_jni<${JHybridTSpec}>(jni::make_global(javaView));
+      maybeFunc.value()(shared);
     }
-    newViewProps.hybridRef.isDirty = false;
+    // TODO: Set isDirty = false
   }
 }
 
