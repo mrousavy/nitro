@@ -17,7 +17,9 @@ Nitro Views require **react-native 0.78.0** or higher.
 
 ## Create a Nitro View
 
-To create a new Nitro View, create a `*.nitro.ts` file:
+### 1. Declaration
+
+To create a new Nitro View, declare it's props and methods in a `*.nitro.ts` file, and export your `HybridView` type:
 
 ```ts title="Camera.nitro.ts"
 import type { HybridView } from 'react-native-nitro-modules'
@@ -29,6 +31,8 @@ export interface CameraMethods { }
 
 export type CameraView = HybridView<CameraProps, CameraMethods>
 ```
+
+### 2. Code Generation
 
 Then, run [nitrogen](nitrogen):
 
@@ -58,6 +62,55 @@ Then, run [nitrogen](nitrogen):
 This will create a C++ ShadowNode, with an iOS (Swift) and Android (Kotlin) interface, just like any other [Hybrid Object](hybrid-objects).
 Additionally, a view config (`CameraViewConfig.json`) will be generated - this is required by Fabric.
 
+### 3. Implementation
+
+Now it's time to implement the View - simply create a new Swift/Kotlin file and extend from `HybridCameraViewSpec`:
+
+<Tabs groupId="native-view-language">
+  <TabItem value="swift" label="Swift" default>
+    ```swift title="HybridCameraView.swift"
+    class HybridCameraView : HybridCameraViewSpec {
+      // Props
+      var isBlue: Bool = false
+
+      // View
+      var view: UIView = UIView()
+    }
+    ```
+  </TabItem>
+  <TabItem value="kotlin" label="Kotlin">
+    ```kotlin title="HybridCameraView.kt"
+    class HybridCameraView : HybridCameraViewSpec() {
+      // Props
+      override var enableFlash: Boolean = false
+
+      // View
+      override val view: View = View(NitroModules.applicationContext)
+    }
+    ```
+  </TabItem>
+</Tabs>
+
+### 4. Autolink
+
+Just like any other Hybrid Object, add the Hybrid View to your `nitro.json`'s autolinking configuration:
+
+```json title="nitro.json"
+{
+  // ...
+  "autolinking": {
+    "CameraView": {
+      "swift": "HybridCameraView",
+      "kotlin": "HybridCameraView"
+    }
+  }
+}
+```
+
+Now run nitrogen again.
+
+### 5. Initialization
+
 Then, to use the view in JavaScript, use `getHostComponent(..)`:
 
 ```ts
@@ -69,6 +122,8 @@ export const Camera = getHostComponent<CameraProps, CameraMethods>(
   () => CameraViewConfig
 )
 ```
+
+### 6. Rendering
 
 And finally, render it:
 
