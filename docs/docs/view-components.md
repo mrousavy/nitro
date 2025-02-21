@@ -6,288 +6,227 @@ import TabItem from '@theme/TabItem';
 
 # View Components
 
-As of today, Nitro does not yet provide first-class support for view components.
-There are ongoing efforts to bring first-class support for view components, which would also go through the Nitro typing system.
-This requires coordination with Meta as this requires APIs to be made public in react-native core.
+Nitro provides first-class support for creating React Native Views.
 
-## Workaround via native
+Such views can be rendered within React Native apps using [Fabric](https://reactnative.dev/architecture/fabric-renderer), and are backed by a C++ ShadowNode.
+The key difference to a Fabric view is that it uses Nitro for prop parsing, which is more lightweight, performant and flexible.
 
-As a temporary workaround, you could create a Hybrid Object that acts as your view manager, which you can then natively access via some sort of global map.
+:::note
+Nitro Views require **react-native 0.78.0** or higher.
+:::
 
-### 1. Create your View (props)
+## Create a Nitro View
 
-First, create your view using Turbo Modules (Fabric) or Expo Modules. Let's build a custom Image component:
+### 1. Declaration
 
-```tsx title="App.tsx"
+To create a new Nitro View, declare it's props and methods in a `*.nitro.ts` file, and export your `HybridView` type:
+
+```ts title="Camera.nitro.ts"
+import type { HybridView } from 'react-native-nitro-modules'
+
+export interface CameraProps {
+  enableFlash: boolean
+}
+export interface CameraMethods { }
+
+export type CameraView = HybridView<CameraProps, CameraMethods>
+```
+
+### 2. Code Generation
+
+Then, run [nitrogen](nitrogen):
+
+<Tabs groupId="package-manager">
+  <TabItem value="npm" label="npm" default>
+    ```sh
+    npx nitro-codegen
+    ```
+  </TabItem>
+  <TabItem value="yarn" label="yarn">
+    ```sh
+    yarn nitro-codegen
+    ```
+  </TabItem>
+  <TabItem value="pnpm" label="pnpm">
+    ```sh
+    pnpm nitro-codegen
+    ```
+  </TabItem>
+  <TabItem value="bun" label="bun">
+    ```sh
+    bun nitro-codegen
+    ```
+  </TabItem>
+</Tabs>
+
+This will create a C++ ShadowNode, with an iOS (Swift) and Android (Kotlin) interface, just like any other [Hybrid Object](hybrid-objects).
+Additionally, a view config (`CameraViewConfig.json`) will be generated - this is required by Fabric.
+
+### 3. Implementation
+
+Now it's time to implement the View - simply create a new Swift/Kotlin file and extend from `HybridCameraViewSpec`:
+
+<Tabs groupId="native-view-language">
+  <TabItem value="swift" label="Swift" default>
+    ```swift title="HybridCameraView.swift"
+    class HybridCameraView : HybridCameraViewSpec {
+      // Props
+      var isBlue: Bool = false
+
+      // View
+      var view: UIView = UIView()
+    }
+    ```
+  </TabItem>
+  <TabItem value="kotlin" label="Kotlin">
+    ```kotlin title="HybridCameraView.kt"
+    class HybridCameraView : HybridCameraViewSpec() {
+      // Props
+      override var enableFlash: Boolean = false
+
+      // View
+      override val view: View = View(NitroModules.applicationContext)
+    }
+    ```
+  </TabItem>
+</Tabs>
+
+### 4. Autolink
+
+Just like any other Hybrid Object, add the Hybrid View to your `nitro.json`'s autolinking configuration:
+
+```json title="nitro.json"
+{
+  // ...
+  "autolinking": {
+    "CameraView": {
+      "swift": "HybridCameraView",
+      "kotlin": "HybridCameraView"
+    }
+  }
+}
+```
+
+Now run nitrogen again.
+
+### 5. Initialization
+
+Then, to use the view in JavaScript, use `getHostComponent(..)`:
+
+```ts
+import { getHostComponent } from 'react-native-nitro-modules'
+import CameraViewConfig from '../nitrogen/generated/shared/json/CameraViewConfig.json'
+
+export const Camera = getHostComponent<CameraProps, CameraMethods>(
+  'Camera',
+  () => CameraViewConfig
+)
+```
+
+### 6. Rendering
+
+And finally, render it:
+
+```jsx
+function App() {
+  return <Camera enableFlash={true} />
+}
+```
+
+## Props
+
+Since every `HybridView` is also a `HybridObject`, you can use any type that Nitro supports as a property - including custom types (`interface`), `ArrayBuffer`, and even other `HybridObject`s!
+
+For example, a custom `<ImageView>` component can be used to render custom `Image` types:
+
+<div className="side-by-side-container">
+<div className="side-by-side-block">
+
+```ts title="Image.nitro.ts"
+export interface Image extends HybridObject {
+  readonly width: number
+  readonly height: number
+  save(): Promise<string>
+}
+```
+
+</div>
+<div className="side-by-side-block">
+
+```ts title="ImageView.nitro.ts"
+import { type Image } from './Image.nitro.ts'
+export interface ImageProps {
+  image: Image
+}
+export type ImageView = HybridView<ImageProps>
+```
+
+</div>
+</div>
+
+Then;
+
+```jsx
+function App() {
+  const image = await loadImage('https://...')
+  return <ImageView image={image} />
+}
+```
+
+### Callbacks have to be wrapped
+
+React Native's renderer uses "events" for callbacks. Each event is registered on the native side, and then dispatched using their internal event dispatcher.
+
+Nitro works differently; every callback is a first-class citizen and can be passed to native directly - using the language native function types (`std::function<void()>`, `() -> Void`, ...).
+
+Due to React Native's design decision, functions cannot be passed directly to the C++ ShadowNode. As a workaround, Nitro requires you to wrap each function in an object, which bypasses React Native's conversion.
+
+So every function (`() => void`) has to be wrapped in an object with one key - `f` - which holds the function: `{ f: () => void }`
+
+```tsx
+export interface CameraProps {
+  onCaptured: (image: Image) => void
+}
+export type CameraView = HybridView<CameraProps>
+
+function App() {
+  // diff-remove
+  return <Camera onCaptured={(i) => console.log(i)} />
+  // diff-add
+  return <Camera onCaptured={{ f: (i) => console.log(i) }} />
+}
+```
+
+## Methods
+
+Since every `HybridView` is also a `HybridObject`, methods can be directly called on the object.
+Assuming our `<Camera>` component has a `takePhoto()` function like so:
+
+```ts
+export interface CameraProps { ... }
+export interface CameraMethods {
+  takePhoto(): Promise<Image>
+}
+
+export type CameraView = HybridView<CameraProps, CameraMethods>
+```
+
+To call the function, you would need to get a reference to the `HybridObject` first using `hybridRef`:
+
+```jsx
 function App() {
   return (
-    <NitroImage
-      image={someImage}
-      opacity={0.5}
+    <Camera
+      hybridRef={{
+        f: (ref) => {
+          const image = ref.takePhoto()
+        }
+      }}
     />
   )
 }
 ```
 
-`opacity` is a number which can be represented using Turbo-/Expo-Modules, but `image` is a custom Hybrid Object from Nitro.
-This can not be handled by Turbo-/Expo-Modules, so we cannot simply pass the props as-is to the native view:
+> Note: If you're wondering about the `{ f: ... }` syntax, see ["Callbacks have to be wrapped"](#callbacks-have-to-be-wrapped).
 
-```ts
-interface NativeProps extends ViewProps {
-  opacity: number
-  image: Image
-// code-error
-//       ^ Error: `Image` is not supported by Turbo-/Expo-Modules!
-}
-```
-
-Instead of declaring props for the view component like usual, we want to route everything through Nitro - which is faster and supports more types.
-For this, we'll only create one prop for our view which will be used to connect the Turbo-/Expo-View with our Nitro View Manager - let's call it `nitroId`:
-
-```ts
-interface NativeProps extends ViewProps {
-// diff-remove
-  opacity: number
-// diff-remove
-  image: Image
-// diff-add
-  nitroId: number
-}
-```
-
-### 2. Implement your view
-
-Now implement your view using Turbo-/Expo-Modules like usual. It only has one React prop: `nitroId`.
-Follow the respective guides to implement this view.
-
-Make sure the view can be mounted on screen, and `nitroId` properly updates the native property:
-
-```tsx
-function App() {
-  return <NitroImage nitroId={13} />
-}
-```
-
-### 3. Generate `nitroId` in JS
-
-In the JS implementation of `<NitroImage>`, we now need to generate unique `nitroId` values per instance:
-
-```tsx title="NitroImage.tsx
-const NativeNitroImageView = /* From Turbo-/Expo- APIs */
-
-let nitroIdCounter = 0
-export function NitroImage() {
-  const nitroId = useMemo(() => nitroIdCounter++, [])
-
-  return <NativeNitroImageView nitroId={nitroId} />
-}
-```
-
-### 4. Register the native view in a global map
-
-To allow your Nitro Hybrid Object to find the Turbo-/Expo-View, we need to throw it into some kind of global map, index by `nitroId`.
-It is up to the developer on how to handle this most efficiently, but here's an example:
-
-<Tabs groupId="native-platform-language">
-  <TabItem value="swift" label="iOS (Swift)" default>
-    ```swift
-    class NitroImageView : UIView {
-
-      static var globalViewsMap: NSMapTable<NSNumber, NitroImageView>
-        = NSMapTable(keyOptions: .strongMemory, valueOptions: .weakMemory)
-
-      @objc var nitroId: NSNumber = -1 {
-        didSet {
-            NitroImageView.globalViewsMap.setObject(self, forKey: nitroId)
-        }
-      }
-    }
-    ```
-  </TabItem>
-  <TabItem value="objc" label="iOS (Objective-C)">
-    ```objc
-    @implementation NitroImageView
-
-    // Global map of nitroId to view instances
-    + (NSMapTable<NSNumber*, NitroImageView*>*) globalViewsMap {
-      static NSMapTable<NSNumber*, NitroImageView*>* _map;
-      if (_map == nil) {
-        _map = [NSMapTable strongToWeakObjectsMapTable];
-      }
-      return _map;
-    }
-
-    // Override `nitroId` setter to throw `self` into global map
-    - (void)setNitroId:(NSNumber*)nitroId {
-      [self.globalViewsMap setObject:self forKey:nitroId];
-    }
-
-    @end
-    ```
-  </TabItem>
-  <TabItem value="kotlin" label="Android (Kotlin)">
-    ```kotlin
-    class NitroImageView {
-      companion object {
-        // Global map of nitroId to view instances
-        val globalViewsMap = HashMap<Double, WeakReference<NitroImageView>>()
-      }
-
-      // Override `nitroId` setter to throw `this` into global map
-      fun setNitroId(nitroId: Double) {
-        globalViewsMap[nitroId] = WeakReference(view)
-      }
-    }
-    ```
-  </TabItem>
-</Tabs>
-
-
-### 5. Create a custom view manager with Nitro
-
-Fasten your seatbelts and get ready for Nitro: We now want a Nitro Hybrid Object that acts as a binding between our JS view, and the actual native Swift/Kotlin view.
-
-```ts title="NitroImageViewManager.nitro.ts"
-export interface Image extends HybridObject {
-  // ...
-}
-
-export interface NitroImageViewManager extends HybridObject {
-  image: Image
-  opacity: number
-}
-```
-
-Now implement `NitroImageViewManager` in Swift and Kotlin, and assume it has to be created with a valid `NitroImageView` instance:
-
-<Tabs groupId="native-platform-language">
-  <TabItem value="swift" label="iOS (Swift)" default>
-    ```swift
-    class HybridNitroImageViewManager: HybridNitroImageViewManagerSpec {
-      private var nitroId: Double? = nil
-      private var view: NitroImageView? {
-        get {
-            guard let viewId = self.nitroId else { return nil }
-            return NitroImageView.globalViewsMap.object(forKey: NSNumber(value: viewId))
-        }
-      }
-
-      var image: Image {
-        get { return view.image }
-        set { view.image = newValue }
-      }
-
-      var opacity: Double {
-        get { return view.opacity }
-        set { view.opacity = newValue }
-      }
-
-      func setNitroId(nitroId: Double) {
-        self.nitroId = nitroId
-      }
-    }
-    ```
-  </TabItem>
-  <TabItem value="kotlin" label="Android (Kotlin)">
-    ```kotlin
-    class HybridNitroImageViewManager: HybridNitroImageViewManagerSpec() {
-      private var nitroId: Double? = null
-      private var view: WeakReference<NitroImageView>? = null
-        get() {
-          return nitroId?.let {
-            return NitroImageView.globalViewsMap[it]?.get()
-          }
-        }
-
-      override var image: Image
-        get() = view.image
-        set(newValue) = view.image = newValue
-
-
-      override var opacity: Double {
-        get() = view.opacity
-        set(newValue) = view.opacity = newValue
-
-
-      fun setNitroId(nitroId: Double?) {
-        this.nitroId = nitroId
-      }
-    }
-    ```
-  </TabItem>
-</Tabs>
-
-### 6. Connect the Nitro view manager to the native View
-
-To actually create instances of `HybridNitroImageViewManager`, we need to first find the view for the given `nitroId`. For that, we created a helper `NitroImageViewManagerRegistry`:
-
-```ts
-export interface NitroImageViewManagerRegistry extends HybridObject {
-  createViewManager(nitroId: number): NitroImageViewManager
-}
-```
-
-..which we need to implement in native:
-
-<Tabs groupId="native-platform-language">
-  <TabItem value="swift" label="iOS (Swift)" default>
-    ```swift
-    class HybridNitroImageViewManagerRegistry: HybridNitroImageViewManagerRegistrySpec {
-      func createViewManager(nitroId: Double) -> NitroImageViewManagerSpec {
-        let viewManager = HybridNitroImageViewManager()
-        viewManager.setNitroId(nitroId: nitroId)
-        return viewManager
-      }
-    }
-    ```
-  </TabItem>
-  <TabItem value="kotlin" label="Android (Kotlin)">
-    ```kotlin
-    class HybridNitroImageViewManagerRegistry: HybridNitroImageViewManagerRegistrySpec() {
-      fun createViewManager(nitroId: Double): NitroImageViewManagerSpec {
-        val viewManager = HybridNitroImageViewManager()
-        viewManager.setNitroId(nitroId)
-        return viewManager
-      }
-    }
-    ```
-  </TabItem>
-</Tabs>
-
-### 7. Use the view manager from JS:
-
-After setting up those bindings, we can now route all our props through Nitro - which makes prop updating faster, and allows for more types!
-
-```tsx title="NitroImage.tsx
-const NativeNitroImageView = /* From Turbo-/Expo- APIs */
-const NitroViewManagerFactory = NitroModules.createHybridObject("NitroViewManagerFactory")
-
-let nitroIdCounter = 0
-export function NitroImage(props: NitroImageProps) {
-  const nitroId = useMemo(() => nitroIdCounter++, [])
-  const nitroViewManager = useRef<NitroViewManager>(null)
-
-  useEffect(() => {
-    // Create a View Manager for the respective View (looked up via `nitroId`)
-    nitroViewManager.current = NitroViewManagerFactory.createViewManager(nitroId)
-  }, [nitroId])
-
-  useEffect(() => {
-    // Update props through Nitro - this natively sets them on the view as well.
-    nitroViewManager.current.image = props.image
-    nitroViewManager.current.opacity = props.opacity
-  }, [props.image, props.opacity])
-
-  return <NativeNitroImageView nitroId={nitroId} />
-}
-```
-
-### Considerations
-
-While this works and is pretty extensible, there are a few trade-offs with this workaround:
-
-1. This is pretty verbose. When Nitro gets first-class support for view components, this will be much simpler.
-2. This is updating props synchronously on the JS Thread. You can implement your own batching and thread-dispatching on the native side though.
-3. This does not go through React's prop updater. This means stuff like Reanimated will likely not work, as it was built on top of `setNativeProps`.
-
-With that said; just know what you are doing. Then you're good.
+The `ref` from within `hybridRef`'s callback is pointing to the `HybridObject` directly - you can also pass this around freely.

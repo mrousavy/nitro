@@ -21,6 +21,7 @@ const sidebars: SidebarsConfig = {
     'using-nitro-in-a-library',
     'configuration-nitro-json',
     'sync-vs-async',
+    'view-components',
     {
       type: 'category',
       label: 'Types',
@@ -42,7 +43,6 @@ const sidebars: SidebarsConfig = {
     },
     'errors',
     'performance-tips',
-    'view-components',
     'worklets',
     'entry-point',
     'comparison',
