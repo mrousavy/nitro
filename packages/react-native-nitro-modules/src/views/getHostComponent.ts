@@ -43,7 +43,11 @@ interface DefaultHybridViewProps<RefType> extends ViewProps {
 // because RN converts them to booleans (`true`). Nitro knows this and just
 // wraps functions as objects - the original function is stored in `f`.
 type WrapFunctionsInObjects<Props> = {
-  [K in keyof Props]: Props[K] extends Function ? { f: Props[K] } : Props[K]
+  [K in keyof Props]: Props[K] extends Function
+    ? { f: Props[K] }
+    : Props[K] extends Function | undefined
+      ? { f: Props[K] }
+      : Props[K]
 }
 
 /**
@@ -59,7 +63,7 @@ export type ReactNativeView<
   Methods extends HybridViewMethods,
 > = HostComponent<
   WrapFunctionsInObjects<
-    DefaultHybridViewProps<HybridView<Props, Methods>> & Props & Methods
+    DefaultHybridViewProps<HybridView<Props, Methods>> & Props
   >
 >
 
