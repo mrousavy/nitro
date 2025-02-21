@@ -1427,4 +1427,20 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       return bridge.create_Result_std__shared_ptr_margelo__nitro__image__HybridChildSpec__(__exceptionPtr)
     }
   }
+  
+  @inline(__always)
+  public final func getIsViewBlue(view: bridge.std__shared_ptr_margelo__nitro__image__HybridTestViewSpec_) -> bridge.Result_bool_ {
+    do {
+      let __result = try self.__implementation.getIsViewBlue(view: { () -> HybridTestViewSpec in
+        let __unsafePointer = bridge.get_std__shared_ptr_margelo__nitro__image__HybridTestViewSpec_(view)
+        let __instance = HybridTestViewSpec_cxx.fromUnsafe(__unsafePointer)
+        return __instance.getHybridTestViewSpec()
+      }())
+      let __resultCpp = __result
+      return bridge.create_Result_bool_(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_bool_(__exceptionPtr)
+    }
+  }
 }

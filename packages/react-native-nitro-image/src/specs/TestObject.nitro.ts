@@ -1,4 +1,5 @@
 import { type HybridObject, type AnyMap } from 'react-native-nitro-modules'
+import type { TestView } from './TestView.nitro'
 
 // Tuples become `std::tuple<...>` in C++.
 // In contrast to arrays, they are length-checked, and can have different types inside them.
@@ -153,6 +154,9 @@ interface SharedTestObjectProps {
   bounceBase(base: Base): Base
   bounceChildBase(child: Child): Base
   castBase(base: Base): Child
+
+  // Views
+  getIsViewBlue(view: TestView): boolean
 }
 
 // This is a C++-based `HybridObject`.

@@ -92,6 +92,7 @@ namespace margelo::nitro::image {
       prototype.registerHybridMethod("bounceBase", &HybridTestObjectSwiftKotlinSpec::bounceBase);
       prototype.registerHybridMethod("bounceChildBase", &HybridTestObjectSwiftKotlinSpec::bounceChildBase);
       prototype.registerHybridMethod("castBase", &HybridTestObjectSwiftKotlinSpec::castBase);
+      prototype.registerHybridMethod("getIsViewBlue", &HybridTestObjectSwiftKotlinSpec::getIsViewBlue);
     });
   }
 

@@ -35,6 +35,8 @@ namespace margelo::nitro::image { struct JsStyleStruct; }
 namespace margelo::nitro::image { class HybridChildSpec; }
 // Forward declaration of `HybridBaseSpec` to properly resolve imports.
 namespace margelo::nitro::image { class HybridBaseSpec; }
+// Forward declaration of `HybridTestViewSpec` to properly resolve imports.
+namespace margelo::nitro::image { class HybridTestViewSpec; }
 
 #include <tuple>
 #include <string>
@@ -57,6 +59,7 @@ namespace margelo::nitro::image { class HybridBaseSpec; }
 #include "JsStyleStruct.hpp"
 #include "HybridChildSpec.hpp"
 #include "HybridBaseSpec.hpp"
+#include "HybridTestViewSpec.hpp"
 
 namespace margelo::nitro::image {
 
@@ -175,6 +178,7 @@ namespace margelo::nitro::image {
       virtual std::shared_ptr<margelo::nitro::image::HybridBaseSpec> bounceBase(const std::shared_ptr<margelo::nitro::image::HybridBaseSpec>& base) = 0;
       virtual std::shared_ptr<margelo::nitro::image::HybridBaseSpec> bounceChildBase(const std::shared_ptr<margelo::nitro::image::HybridChildSpec>& child) = 0;
       virtual std::shared_ptr<margelo::nitro::image::HybridChildSpec> castBase(const std::shared_ptr<margelo::nitro::image::HybridBaseSpec>& base) = 0;
+      virtual bool getIsViewBlue(const std::shared_ptr<margelo::nitro::image::HybridTestViewSpec>& view) = 0;
 
     protected:
       // Hybrid Setup

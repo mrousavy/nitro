@@ -101,6 +101,7 @@ namespace margelo::nitro::image {
       prototype.registerHybridMethod("bounceBase", &HybridTestObjectCppSpec::bounceBase);
       prototype.registerHybridMethod("bounceChildBase", &HybridTestObjectCppSpec::bounceChildBase);
       prototype.registerHybridMethod("castBase", &HybridTestObjectCppSpec::castBase);
+      prototype.registerHybridMethod("getIsViewBlue", &HybridTestObjectCppSpec::getIsViewBlue);
     });
   }
 

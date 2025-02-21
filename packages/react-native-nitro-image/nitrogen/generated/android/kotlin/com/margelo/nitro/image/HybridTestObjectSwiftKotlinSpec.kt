@@ -386,6 +386,10 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   @DoNotStrip
   @Keep
   abstract fun castBase(base: HybridBaseSpec): HybridChildSpec
+  
+  @DoNotStrip
+  @Keep
+  abstract fun getIsViewBlue(view: HybridTestViewSpec): Boolean
 
   private external fun initHybrid(): HybridData
 
