@@ -64,7 +64,7 @@ Additionally, a view config (`CameraViewConfig.json`) will be generated - this i
 
 ### 3. Implementation
 
-Now it's time to implement the View - simply create a new Swift/Kotlin file and extend from `HybridCameraViewSpec`:
+Now it's time to implement the View - simply create a new Swift/Kotlin class/file, extend from `HybridCameraViewSpec` and implement your `.isBlue` property, as well as the common `.view` accessor:
 
 <Tabs groupId="native-view-language">
   <TabItem value="swift" label="Swift" default>
@@ -193,6 +193,10 @@ function App() {
   return <Camera onCaptured={{ f: (i) => console.log(i) }} />
 }
 ```
+
+:::info
+We are working on a fix here: [facebook/react #32119](https://github.com/facebook/react/pull/32119)
+:::
 
 ## Methods
 
