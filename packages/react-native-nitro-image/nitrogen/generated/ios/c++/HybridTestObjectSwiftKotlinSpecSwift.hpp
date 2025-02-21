@@ -36,6 +36,8 @@ namespace margelo::nitro::image { struct JsStyleStruct; }
 namespace margelo::nitro::image { class HybridChildSpec; }
 // Forward declaration of `HybridBaseSpec` to properly resolve imports.
 namespace margelo::nitro::image { class HybridBaseSpec; }
+// Forward declaration of `HybridTestViewSpec` to properly resolve imports.
+namespace margelo::nitro::image { class HybridTestViewSpec; }
 
 #include <memory>
 #include "HybridTestObjectSwiftKotlinSpec.hpp"
@@ -58,6 +60,7 @@ namespace margelo::nitro::image { class HybridBaseSpec; }
 #include "JsStyleStruct.hpp"
 #include "HybridChildSpec.hpp"
 #include "HybridBaseSpec.hpp"
+#include "HybridTestViewSpec.hpp"
 
 #include "NitroImage-Swift-Cxx-Umbrella.hpp"
 
@@ -573,6 +576,14 @@ namespace margelo::nitro::image {
     }
     inline std::shared_ptr<margelo::nitro::image::HybridChildSpec> castBase(const std::shared_ptr<margelo::nitro::image::HybridBaseSpec>& base) override {
       auto __result = _swiftPart.castBase(base);
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline bool getIsViewBlue(const std::shared_ptr<margelo::nitro::image::HybridTestViewSpec>& view) override {
+      auto __result = _swiftPart.getIsViewBlue(view);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }

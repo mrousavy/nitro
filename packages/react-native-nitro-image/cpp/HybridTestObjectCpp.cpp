@@ -487,4 +487,8 @@ std::shared_ptr<HybridChildSpec> HybridTestObjectCpp::castBase(const std::shared
   return child;
 }
 
+bool HybridTestObjectCpp::getIsViewBlue(const std::shared_ptr<HybridTestViewSpec>& view) {
+  return view->getIsBlue();
+}
+
 } // namespace margelo::nitro::image

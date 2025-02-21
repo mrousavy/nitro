@@ -313,4 +313,9 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
     }
     return child
   }
+
+  func getIsViewBlue(view: any HybridTestViewSpec) throws -> Bool {
+    guard let view = view as? HybridTestView else { return false }
+    return view.isBlue
+  }
 }

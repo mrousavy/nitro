@@ -306,4 +306,9 @@ class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
     override fun newTestObject(): HybridTestObjectSwiftKotlinSpec {
         return HybridTestObjectKotlin()
     }
+
+    override fun getIsViewBlue(view: HybridTestViewSpec): Boolean {
+        val cast = view as? HybridTestView ?: return false
+        return cast.isBlue
+    }
 }

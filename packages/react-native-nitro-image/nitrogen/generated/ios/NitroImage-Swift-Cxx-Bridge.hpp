@@ -828,6 +828,18 @@ namespace margelo::nitro::image::bridge::swift {
   using std__weak_ptr_margelo__nitro__image__HybridChildSpec_ = std::weak_ptr<margelo::nitro::image::HybridChildSpec>;
   inline std__weak_ptr_margelo__nitro__image__HybridChildSpec_ weakify_std__shared_ptr_margelo__nitro__image__HybridChildSpec_(const std::shared_ptr<margelo::nitro::image::HybridChildSpec>& strong) { return strong; }
   
+  // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridTestViewSpec>
+  /**
+   * Specialized version of `std::shared_ptr<margelo::nitro::image::HybridTestViewSpec>`.
+   */
+  using std__shared_ptr_margelo__nitro__image__HybridTestViewSpec_ = std::shared_ptr<margelo::nitro::image::HybridTestViewSpec>;
+  std::shared_ptr<margelo::nitro::image::HybridTestViewSpec> create_std__shared_ptr_margelo__nitro__image__HybridTestViewSpec_(void* _Nonnull swiftUnsafePointer);
+  void* _Nonnull get_std__shared_ptr_margelo__nitro__image__HybridTestViewSpec_(std__shared_ptr_margelo__nitro__image__HybridTestViewSpec_ cppType);
+  
+  // pragma MARK: std::weak_ptr<margelo::nitro::image::HybridTestViewSpec>
+  using std__weak_ptr_margelo__nitro__image__HybridTestViewSpec_ = std::weak_ptr<margelo::nitro::image::HybridTestViewSpec>;
+  inline std__weak_ptr_margelo__nitro__image__HybridTestViewSpec_ weakify_std__shared_ptr_margelo__nitro__image__HybridTestViewSpec_(const std::shared_ptr<margelo::nitro::image::HybridTestViewSpec>& strong) { return strong; }
+  
   // pragma MARK: Result<std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>>
   using Result_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec__ = Result<std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>>;
   inline Result_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec__ create_Result_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec__(const std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>& value) {
@@ -1034,17 +1046,5 @@ namespace margelo::nitro::image::bridge::swift {
   inline Result_std__shared_ptr_margelo__nitro__image__HybridBaseSpec__ create_Result_std__shared_ptr_margelo__nitro__image__HybridBaseSpec__(const std::exception_ptr& error) {
     return Result<std::shared_ptr<margelo::nitro::image::HybridBaseSpec>>::withError(error);
   }
-  
-  // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridTestViewSpec>
-  /**
-   * Specialized version of `std::shared_ptr<margelo::nitro::image::HybridTestViewSpec>`.
-   */
-  using std__shared_ptr_margelo__nitro__image__HybridTestViewSpec_ = std::shared_ptr<margelo::nitro::image::HybridTestViewSpec>;
-  std::shared_ptr<margelo::nitro::image::HybridTestViewSpec> create_std__shared_ptr_margelo__nitro__image__HybridTestViewSpec_(void* _Nonnull swiftUnsafePointer);
-  void* _Nonnull get_std__shared_ptr_margelo__nitro__image__HybridTestViewSpec_(std__shared_ptr_margelo__nitro__image__HybridTestViewSpec_ cppType);
-  
-  // pragma MARK: std::weak_ptr<margelo::nitro::image::HybridTestViewSpec>
-  using std__weak_ptr_margelo__nitro__image__HybridTestViewSpec_ = std::weak_ptr<margelo::nitro::image::HybridTestViewSpec>;
-  inline std__weak_ptr_margelo__nitro__image__HybridTestViewSpec_ weakify_std__shared_ptr_margelo__nitro__image__HybridTestViewSpec_(const std::shared_ptr<margelo::nitro::image::HybridTestViewSpec>& strong) { return strong; }
 
 } // namespace margelo::nitro::image::bridge::swift

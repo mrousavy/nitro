@@ -29,6 +29,8 @@ namespace margelo::nitro::image { class HybridBaseSpec; }
 namespace margelo::nitro::image { struct MapWrapper; }
 // Forward declaration of `JsStyleStruct` to properly resolve imports.
 namespace margelo::nitro::image { struct JsStyleStruct; }
+// Forward declaration of `HybridTestViewSpec` to properly resolve imports.
+namespace margelo::nitro::image { class HybridTestViewSpec; }
 
 #include <memory>
 #include "HybridTestObjectSwiftKotlinSpec.hpp"
@@ -75,6 +77,8 @@ namespace margelo::nitro::image { struct JsStyleStruct; }
 #include "JFunc_void_std__string.hpp"
 #include "JsStyleStruct.hpp"
 #include "JJsStyleStruct.hpp"
+#include "HybridTestViewSpec.hpp"
+#include "JHybridTestViewSpec.hpp"
 
 namespace margelo::nitro::image {
 
@@ -758,6 +762,11 @@ namespace margelo::nitro::image {
     static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JHybridChildSpec::javaobject>(jni::alias_ref<JHybridBaseSpec::javaobject> /* base */)>("castBase");
     auto __result = method(_javaPart, std::dynamic_pointer_cast<JHybridBaseSpec>(base)->getJavaPart());
     return JNISharedPtr::make_shared_from_jni<JHybridChildSpec>(jni::make_global(__result));
+  }
+  bool JHybridTestObjectSwiftKotlinSpec::getIsViewBlue(const std::shared_ptr<margelo::nitro::image::HybridTestViewSpec>& view) {
+    static const auto method = _javaPart->getClass()->getMethod<jboolean(jni::alias_ref<JHybridTestViewSpec::javaobject> /* view */)>("getIsViewBlue");
+    auto __result = method(_javaPart, std::dynamic_pointer_cast<JHybridTestViewSpec>(view)->getJavaPart());
+    return static_cast<bool>(__result);
   }
 
 } // namespace margelo::nitro::image
