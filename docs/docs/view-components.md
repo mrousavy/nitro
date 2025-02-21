@@ -12,7 +12,7 @@ Such views can be rendered within React Native apps using [Fabric](https://react
 The key difference to a Fabric view is that it uses Nitro for prop parsing, which is more lightweight, performant and flexible.
 
 :::note
-Nitro Views require **react-native 0.78.0** or higher.
+Nitro Views require **react-native 0.78.0** or higher, and require the new architecture.
 :::
 
 ## Create a Nitro View
@@ -64,7 +64,7 @@ Additionally, a view config (`CameraViewConfig.json`) will be generated - this i
 
 ### 3. Implementation
 
-Now it's time to implement the View - simply create a new Swift/Kotlin file and extend from `HybridCameraViewSpec`:
+Now it's time to implement the View - simply create a new Swift/Kotlin class/file, extend from `HybridCameraViewSpec` and implement your `.isBlue` property, as well as the common `.view` accessor:
 
 <Tabs groupId="native-view-language">
   <TabItem value="swift" label="Swift" default>
@@ -173,13 +173,45 @@ function App() {
 }
 ```
 
+### Threading
+
+Since Nitro bridges props directly to JS, you are responsible for ensuring thread-safety.
+- If props are set normally via React, they will be set on the UI Thread.
+- If the user sets props on the view `hybridRef` (e.g. also if the `HybridView` is passed to a `HybridObject` in native), props _could_ be set on a different Thread, like the JS Thread.
+
+### Before/After update
+
+To batch prop changes, you can override `onBeforeUpdate()` and `onAfterUpdate()` in your views:
+
+<Tabs groupId="native-view-language">
+  <TabItem value="swift" label="Swift" default>
+    ```swift title="HybridCameraView.swift"
+    class HybridCameraView : HybridCameraViewSpec {
+      // View
+      var view: UIView = UIView()
+
+      func onBeforeUpdate() { }
+      func onAfterUpdate() { }
+    }
+    ```
+  </TabItem>
+  <TabItem value="kotlin" label="Kotlin">
+    ```kotlin title="HybridCameraView.kt"
+    class HybridCameraView : HybridCameraViewSpec() {
+      // View
+      override val view: View = View(NitroModules.applicationContext)
+
+      override fun onBeforeUpdate() { }
+      override fun onAfterUpdate() { }
+    }
+    ```
+  </TabItem>
+</Tabs>
+
 ### Callbacks have to be wrapped
 
-React Native's renderer uses "events" for callbacks. Each event is registered on the native side, and then dispatched using their internal event dispatcher.
-
-Nitro works differently; every callback is a first-class citizen and can be passed to native directly - using the language native function types (`std::function<void()>`, `() -> Void`, ...).
-
-Due to React Native's design decision, functions cannot be passed directly to the C++ ShadowNode. As a workaround, Nitro requires you to wrap each function in an object, which bypasses React Native's conversion.
+Whereas Nitro allows passing JS functions to native code directly, React Native core doesn't allow that. Instead, functions are wrapped in an event listener registry, and a simple boolean is passed to the native side.
+Unfortunately React Native's renderer does not allow changing this behaviour, so functions cannot be passed directly to Nitro Views. As a workaround, Nitro requires you to wrap each function in an object, which bypasses React Native's conversion.
 
 So every function (`() => void`) has to be wrapped in an object with one key - `f` - which holds the function: `{ f: () => void }`
 
@@ -196,6 +228,10 @@ function App() {
   return <Camera onCaptured={{ f: (i) => console.log(i) }} />
 }
 ```
+
+:::info
+We are working on a fix here: [facebook/react #32119](https://github.com/facebook/react/pull/32119)
+:::
 
 ## Methods
 
