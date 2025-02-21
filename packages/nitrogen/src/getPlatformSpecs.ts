@@ -127,9 +127,9 @@ export function isHybridViewMethods(type: Type): boolean {
 }
 
 export function isHybridView(type: Type): boolean {
+  // HybridViews are type aliases for `HybridView`, and `Props & Methods` are just intersected together.
   const unionTypes = type.getIntersectionTypes()
   for (const union of unionTypes) {
-    // HybridViews are type aliases for `HybridView`
     const symbol = union.getSymbol()
     if (symbol == null) return false
     return symbol.getName() === 'HybridViewTag'

@@ -47,7 +47,7 @@ function getHybridObjectSpec(type: Type, language: Language): HybridObjectSpec {
     const symbol = type.getAliasSymbolOrThrow()
     const name = symbol.getEscapedName()
 
-    // It's a Hybrid View - the props & methods are passed as type parameters instead of interface body.
+    // It's a Hybrid View - the `Props & Methods` types are just intersected together.
     const unions = type.getIntersectionTypes()
     const props = unions.find((t) => isHybridViewProps(t))
     const methods = unions.find((t) => isHybridViewMethods(t))
