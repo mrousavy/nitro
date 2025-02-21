@@ -173,6 +173,41 @@ function App() {
 }
 ```
 
+### Threading
+
+Since Nitro bridges props directly to JS, you are responsible for ensuring thread-safety.
+- If props are set normally via React, they will be set on the UI Thread.
+- If the user sets props on the view `hybridRef` (e.g. also if the `HybridView` is passed to a `HybridObject` in native), props _could_ be set on a different Thread, like the JS Thread.
+
+### Before/After update
+
+To batch prop changes, you can override `onBeforeUpdate()` and `onAfterUpdate()` in your views:
+
+<Tabs groupId="native-view-language">
+  <TabItem value="swift" label="Swift" default>
+    ```swift title="HybridCameraView.swift"
+    class HybridCameraView : HybridCameraViewSpec {
+      // View
+      var view: UIView = UIView()
+
+      func onBeforeUpdate() { }
+      func onAfterUpdate() { }
+    }
+    ```
+  </TabItem>
+  <TabItem value="kotlin" label="Kotlin">
+    ```kotlin title="HybridCameraView.kt"
+    class HybridCameraView : HybridCameraViewSpec() {
+      // View
+      override val view: View = View(NitroModules.applicationContext)
+
+      override fun onBeforeUpdate() { }
+      override fun onAfterUpdate() { }
+    }
+    ```
+  </TabItem>
+</Tabs>
+
 ### Callbacks have to be wrapped
 
 Whereas Nitro allows passing JS functions to native code directly, React Native core doesn't allow that. Instead, functions are wrapped in an event listener registry, and a simple boolean is passed to the native side.
