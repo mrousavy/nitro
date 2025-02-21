@@ -12,7 +12,7 @@ Such views can be rendered within React Native apps using [Fabric](https://react
 The key difference to a Fabric view is that it uses Nitro for prop parsing, which is more lightweight, performant and flexible.
 
 :::note
-Nitro Views require **react-native 0.78.0** or higher.
+Nitro Views require **react-native 0.78.0** or higher, and require the new architecture.
 :::
 
 ## Create a Nitro View
@@ -175,11 +175,8 @@ function App() {
 
 ### Callbacks have to be wrapped
 
-React Native's renderer uses "events" for callbacks. Each event is registered on the native side, and then dispatched using their internal event dispatcher.
-
-Nitro works differently; every callback is a first-class citizen and can be passed to native directly - using the language native function types (`std::function<void()>`, `() -> Void`, ...).
-
-Due to React Native's design decision, functions cannot be passed directly to the C++ ShadowNode. As a workaround, Nitro requires you to wrap each function in an object, which bypasses React Native's conversion.
+Whereas Nitro allows passing JS functions to native code directly, React Native core doesn't allow that. Instead, functions are wrapped in an event listener registry, and a simple boolean is passed to the native side.
+Unfortunately React Native's renderer does not allow changing this behaviour, so functions cannot be passed directly to Nitro Views. As a workaround, Nitro requires you to wrap each function in an object, which bypasses React Native's conversion.
 
 So every function (`() => void`) has to be wrapped in an object with one key - `f` - which holds the function: `{ f: () => void }`
 
