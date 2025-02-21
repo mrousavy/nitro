@@ -1,4 +1,3 @@
-import type { HostComponent, ViewProps } from 'react-native'
 import type { HybridObject } from '../HybridObject'
 
 /**
@@ -58,37 +57,6 @@ export interface HybridViewProps {
 export interface HybridViewMethods {}
 
 /**
- * Represents all default props a Nitro HybridView has.
- */
-interface DefaultHybridViewProps<Object> extends ViewProps {
-  /**
-   * A `ref` to the {@linkcode HybridObject} this Hybrid View is rendering.
-   *
-   * The `hybridRef` property expects a stable Ref object received from `useRef` or `createRef`.
-   * @example
-   * ```jsx
-   * function App() {
-   *   return (
-   *     <HybridScrollView
-   *       hybridRef={{ f: (ref) => {
-   *         ref.current.scrollTo(400)
-   *       }
-   *     />
-   *   )
-   * }
-   * ```
-   */
-  hybridRef?: { f: (ref: Object) => void }
-}
-
-// Due to a React limitation, functions cannot be passed to native directly
-// because RN converts them to booleans (`true`). Nitro knows this and just
-// wraps functions as objects - the original function is stored in `f`.
-type WrapFunctionsInObjects<Props> = {
-  [K in keyof Props]: Props[K] extends Function ? { f: Props[K] } : Props[K]
-}
-
-/**
  * The type of a {@linkcode DefaultHybridViewProps.hybridRef hybridRef}.
  * @example
  * ```ts
@@ -116,6 +84,11 @@ export type HybridRef<
 > = HybridObject & Props & Methods
 
 /**
+ * This interface acts as a tag for Hybrid Views so nitrogen detects them.
+ */
+interface HybridViewTag extends HybridObject {}
+
+/**
  * Represents a Nitro Hybrid View.
  *
  * The Hybrid View's implementation is in native iOS or Android, and is backed
@@ -135,15 +108,8 @@ export type HybridRef<
  * export type ScrollView = HybridView<ScrollViewProps, ScrollViewMethods>
  * ```
  */
-export interface HybridView<
+export type HybridView<
   Props extends HybridViewProps,
   Methods extends HybridViewMethods = {},
-  // @ts-expect-error
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   Platforms extends ViewPlatformSpec = { ios: 'swift'; android: 'kotlin' },
-  Object = HybridRef<Props, Methods>,
-> extends HostComponent<
-    WrapFunctionsInObjects<Props> & DefaultHybridViewProps<Object>
-  > {
-  /* no custom properties */
-}
+> = HybridViewTag & HybridObject<Platforms> & Props & Methods

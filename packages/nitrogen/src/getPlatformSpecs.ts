@@ -118,11 +118,23 @@ export function isDirectlyHybridObject(type: Type): boolean {
 export function extendsHybridObject(type: Type, recursive: boolean): boolean {
   return extendsType(type, 'HybridObject', recursive)
 }
+
+export function isHybridViewProps(type: Type): boolean {
+  return extendsType(type, 'HybridViewProps', true)
+}
+export function isHybridViewMethods(type: Type): boolean {
+  return extendsType(type, 'HybridViewMethods', true)
+}
+
 export function isHybridView(type: Type): boolean {
-  // HybridViews are type aliases for `HybridView`
-  const symbol = type.getSymbol()
-  if (symbol == null) return false
-  return symbol.getName() === 'HybridView'
+  // HybridViews are type aliases for `HybridView`, and `Props & Methods` are just intersected together.
+  const unionTypes = type.getIntersectionTypes()
+  for (const union of unionTypes) {
+    const symbol = union.getSymbol()
+    if (symbol == null) return false
+    return symbol.getName() === 'HybridViewTag'
+  }
+  return false
 }
 
 export function isAnyHybridSubclass(type: Type): boolean {
