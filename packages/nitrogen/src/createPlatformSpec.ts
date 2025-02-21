@@ -7,6 +7,8 @@ import {
   isAnyHybridSubclass,
   isDirectlyHybridObject,
   type Language,
+  isHybridViewProps,
+  isHybridViewMethods,
 } from './getPlatformSpecs.js'
 import type { HybridObjectSpec } from './syntax/HybridObjectSpec.js'
 import { Property } from './syntax/Property.js'
@@ -46,7 +48,9 @@ function getHybridObjectSpec(type: Type, language: Language): HybridObjectSpec {
     const name = symbol.getEscapedName()
 
     // It's a Hybrid View - the props & methods are passed as type parameters instead of interface body.
-    const [props, methods] = type.getTypeArguments()
+    const unions = type.getIntersectionTypes()
+    const props = unions.find((t) => isHybridViewProps(t))
+    const methods = unions.find((t) => isHybridViewMethods(t))
     if (props == null)
       throw new Error(
         `Props cannot be null! ${name}<...> (HybridView) requires type arguments.`
