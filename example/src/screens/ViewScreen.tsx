@@ -4,7 +4,7 @@ import { StyleSheet, View, Text, Button, Platform } from 'react-native'
 import { NitroModules } from 'react-native-nitro-modules'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useColors } from '../useColors'
-import { TestView } from 'react-native-nitro-image'
+import { HybridTestObjectSwiftKotlin, TestView } from 'react-native-nitro-image'
 import { useIsFocused } from '@react-navigation/native'
 
 const VIEWS_X = 15
@@ -25,6 +25,8 @@ export function ViewScreenImpl() {
             f: (ref) => {
               console.log(`Ref initialized!`)
               ref.someMethod()
+              const isBlue = HybridTestObjectSwiftKotlin.getIsViewBlue(ref)
+              console.log(`Is View blue: ${isBlue}`)
             },
           }}
           style={styles.view}
