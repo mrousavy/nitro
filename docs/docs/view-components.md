@@ -190,8 +190,8 @@ To batch prop changes, you can override `onBeforeUpdate()` and `onAfterUpdate()`
       // View
       var view: UIView = UIView()
 
-      func onBeforeUpdate() { }
-      func onAfterUpdate() { }
+      func beforeUpdate() { }
+      func afterUpdate() { }
     }
     ```
   </TabItem>
@@ -201,8 +201,8 @@ To batch prop changes, you can override `onBeforeUpdate()` and `onAfterUpdate()`
       // View
       override val view: View = View(NitroModules.applicationContext)
 
-      override fun onBeforeUpdate() { }
-      override fun onAfterUpdate() { }
+      override fun beforeUpdate() { }
+      override fun afterUpdate() { }
     }
     ```
   </TabItem>
