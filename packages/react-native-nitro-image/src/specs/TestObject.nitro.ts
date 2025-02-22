@@ -160,7 +160,7 @@ interface SharedTestObjectProps {
   castBase(base: Base): Child
 
   // Sync funcs
-  callbackSync(callback: Sync<() => Child>): void
+  callbackSync(callback: Sync<() => number>): void
 
   // Views
   getIsViewBlue(view: TestView): boolean
