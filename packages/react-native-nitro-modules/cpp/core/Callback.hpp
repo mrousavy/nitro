@@ -22,23 +22,65 @@ namespace margelo::nitro {
 
 using namespace facebook;
 
+template <typename Signature>
+class NativeCallback;
+template <typename Signature>
+class JSCallback;
+
 // ----- Callback base -----
 
 template <typename Signature>
 class Callback;
 
 template <typename R, typename... Args>
-class Callback<R(Args...)> {
+class Callback<R(Args...)> final {
 private:
   using DefaultReturn = std::conditional_t<std::is_void_v<R>, void, Promise<R>>;
 
-public:
-  virtual R callSync(Args... args) const = 0;
-  virtual Promise<R> callAsync(Args... args) const = 0;
-  virtual void callAsyncShootAndForget(Args... args) const = 0;
+  union Data {
+    NativeCallback<R(Args...)> nativeCallback;
+    JSCallback<R(Args...)> jsCallback;
+  };
+
+  Data _data;
+  bool _isNative;
 
 public:
-  auto operator()(Args... args) const final {
+  /**
+   * Create a new Callback that points to a `jsi::Function` - this is thread-confined.
+   */
+  Callback(jsi::Runtime& runtime, const BorrowingReference<jsi::Function>& function, const std::shared_ptr<Dispatcher>& dispatcher)
+      : _data(JSCallback<R(Args...)>(runtime, function, dispatcher)), _isNative(false) {}
+  /**
+   * Create a new Callback that points to a native `std::function<..>` - this can be called from any Thread.
+   */
+  explicit Callback(std::function<R(Args...)>&& func) : _data(NativeCallback<R(Args...)>(std::move(func))), _isNative(true) {}
+
+public:
+  R callSync(Args... args) const {
+    if (_isNative) {
+      return _data.nativeCallback.callSync(std::forward<Args>(args)...);
+    } else {
+      return _data.jsCallback.callSync(std::forward<Args>(args)...);
+    }
+  }
+  Promise<R> callAsync(Args... args) const {
+    if (_isNative) {
+      return _data.nativeCallback.callAsync(std::forward<Args>(args)...);
+    } else {
+      return _data.jsCallback.callAsync(std::forward<Args>(args)...);
+    }
+  }
+  void callAsyncShootAndForget(Args... args) const {
+    if (_isNative) {
+      return _data.nativeCallback.callAsyncShootAndForget(std::forward<Args>(args)...);
+    } else {
+      return _data.jsCallback.callAsyncShootAndForget(std::forward<Args>(args)...);
+    }
+  }
+
+public:
+  auto operator()(Args... args) const {
     if constexpr (std::is_void_v<R>) {
       // Return void. Not need for Promise<T>
       return callAsyncShootAndForget(std::forward<Args>(args)...);
