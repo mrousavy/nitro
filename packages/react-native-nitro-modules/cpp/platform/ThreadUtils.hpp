@@ -8,6 +8,8 @@
 #pragma once
 
 #include <string>
+#include <thread>
+#include <sstream>
 
 namespace margelo::nitro {
 
@@ -20,6 +22,16 @@ public:
    * This is implemented differently on iOS and Android.
    */
   static std::string getThreadName();
+  
+  /**
+   * Converts the given `std::thread::id` to a string.
+   */
+  static std::string idToString(const std::thread::id& id) {
+    std::stringstream stream;
+    stream << id;
+    std::string threadId = stream.str();
+    return "#" + threadId;
+  }
 
   /**
    * Set the current Thread's name.

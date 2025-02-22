@@ -20,10 +20,7 @@ std::string ThreadUtils::getThreadName() {
   }
 
   // Fall back to this_thread ID
-  std::stringstream stream;
-  stream << std::this_thread::get_id();
-  std::string threadId = stream.str();
-  return "Thread #" + threadId;
+  return idToString(std::this_thread::get_id());
 }
 
 void ThreadUtils::setThreadName(const std::string& name) {
