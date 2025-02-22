@@ -9,8 +9,8 @@ export class FunctionType implements Type {
   readonly returnType: Type
   readonly parameters: NamedType[]
 
-  constructor(returnType: Type, parameters: NamedType[]) {
-    if (returnType.kind === 'void') {
+  constructor(returnType: Type, parameters: NamedType[], isSync = false) {
+    if (returnType.kind === 'void' || isSync) {
       // void callbacks are async, but we don't care about the result.
       this.returnType = returnType
     } else {

@@ -387,11 +387,11 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   @Keep
   abstract fun castBase(base: HybridBaseSpec): HybridChildSpec
   
-  abstract fun callbackSync(callback: () -> Promise<Double>): Unit
+  abstract fun callbackSync(callback: () -> Double): Unit
   
   @DoNotStrip
   @Keep
-  private fun callbackSync_cxx(callback: Func_std__shared_ptr_Promise_double__): Unit {
+  private fun callbackSync_cxx(callback: Func_double): Unit {
     val __result = callbackSync(callback)
     return __result
   }

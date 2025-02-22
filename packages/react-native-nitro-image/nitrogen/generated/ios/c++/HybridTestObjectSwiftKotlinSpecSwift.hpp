@@ -582,7 +582,7 @@ namespace margelo::nitro::image {
       auto __value = std::move(__result.value());
       return __value;
     }
-    inline void callbackSync(const std::function<std::shared_ptr<Promise<double>>()>& callback) override {
+    inline void callbackSync(const std::function<double()>& callback) override {
       auto __result = _swiftPart.callbackSync(callback);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());

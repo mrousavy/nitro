@@ -1429,33 +1429,13 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public final func callbackSync(callback: bridge.Func_std__shared_ptr_Promise_double__) -> bridge.Result_void_ {
+  public final func callbackSync(callback: bridge.Func_double) -> bridge.Result_void_ {
     do {
-      try self.__implementation.callbackSync(callback: { () -> () -> Promise<Double> in
-        let __wrappedFunction = bridge.wrap_Func_std__shared_ptr_Promise_double__(callback)
-        return { () -> Promise<Double> in
+      try self.__implementation.callbackSync(callback: { () -> () -> Double in
+        let __wrappedFunction = bridge.wrap_Func_double(callback)
+        return { () -> Double in
           let __result = __wrappedFunction.call()
-          return { () -> Promise<Double> in
-            let __promise = Promise<Double>()
-            let __resolver = { (__result: Double) in
-              __promise.resolve(withResult: __result)
-            }
-            let __rejecter = { (__error: Error) in
-              __promise.reject(withError: __error)
-            }
-            let __resolverCpp = { () -> bridge.Func_void_double in
-              let __closureWrapper = Func_void_double(__resolver)
-              return bridge.create_Func_void_double(__closureWrapper.toUnsafe())
-            }()
-            let __rejecterCpp = { () -> bridge.Func_void_std__exception_ptr in
-              let __closureWrapper = Func_void_std__exception_ptr(__rejecter)
-              return bridge.create_Func_void_std__exception_ptr(__closureWrapper.toUnsafe())
-            }()
-            let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_double__(__result)
-            __promiseHolder.addOnResolvedListenerCopy(__resolverCpp)
-            __promiseHolder.addOnRejectedListener(__rejecterCpp)
-            return __promise
-          }()
+          return __result
         }
       }())
       return bridge.create_Result_void_()
