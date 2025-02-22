@@ -95,27 +95,30 @@ public:
 #endif
 
 public:
-  inline R callSync(Args&&... args) const override {
+  inline R callSync(Args... args) const override {
 #ifdef NITRO_DEBUG
+    // Check whether the callee is actually calling from the same Thread this JSCallback<..> was created on
     if (_threadId != std::this_thread::get_id()) [[unlikely]] {
       std::string typeName = TypeInfo::getFriendlyTypename<JSCallback<R(Args...)>>();
       throw std::runtime_error("Cannot call " + typeName + " on Thread " + ThreadUtils::getThreadName() + " - expected to run on Thread " +
                                _threadName + "! If you want to call this JSCallback on a different Thread, use `callAsync(...)` instead.");
     }
 #endif
+    // Check whether the function is still alive - if the Thread is still alive then the function is usually still alive too.
     if (!_func) [[unlikely]] {
       std::string typeName = TypeInfo::getFriendlyTypename<JSCallback<R(Args...)>>();
       throw std::runtime_error("Cannot call " + typeName + " - the jsi::Function has already been deleted!");
     }
 
+    // Assuming we are on the correct thread, and the function is still alive, we can safely call it now. No need for locking.
     jsi::Value result = _func->call(_runtime, JSIConverter<Args>::toJSI(std::forward<Args>(args))...);
     return JSIConverter<R>::fromJSI(_runtime, result);
   }
   inline Promise<R> callAync(Args... args) const override {
-    return _dispatcher->runAsyncAwaitable([this, args = std::move(args)...]() { return this->callSync(args...); });
+    return _dispatcher->runAsyncAwaitable([this, ... args = std::move(args)]() { return this->callSync(std::forward<Args>(args)...); });
   }
   inline void callAsyncShootAndForget(Args... args) const override {
-    _dispatcher->runAsync([this, args = std::move(args)...]() { this->callSync(args...); });
+    _dispatcher->runAsync([this, ... args = std::move(args)]() { this->callSync(std::forward<Args>(args)...); });
   }
 
 private:
