@@ -329,11 +329,11 @@ function createCxxFunctionSwiftHelper(type: FunctionType): SwiftCxxHelper {
   let callCppFuncBody: string
   if (returnBridge.hasType) {
     callCppFuncBody = `
-auto __result = _function->operator()(${callParamsForward.join(', ')});
+auto __result = _function->callSync(${callParamsForward.join(', ')});
 return ${returnBridge.parseFromCppToSwift('__result', 'c++')};
     `.trim()
   } else {
-    callCppFuncBody = `_function->operator()(${callParamsForward.join(', ')});`
+    callCppFuncBody = `_function->callSync(${callParamsForward.join(', ')});`
   }
 
   let body: string
@@ -393,9 +393,9 @@ inline ${wrapperName} wrap_${name}(${name} value) {
       code: `
 ${name} create_${name}(void* _Nonnull swiftClosureWrapper) {
   auto swiftClosure = ${swiftClassName}::fromUnsafe(swiftClosureWrapper);
-  return [swiftClosure = std::move(swiftClosure)](${paramsSignature.join(', ')}) mutable -> ${type.returnType.getCode('c++')} {
+  return ${name}([swiftClosure = std::move(swiftClosure)](${paramsSignature.join(', ')}) mutable -> ${type.returnType.getCode('c++')} {
     ${indent(body, '    ')}
-  };
+  });
 }
 `.trim(),
       requiredIncludes: [

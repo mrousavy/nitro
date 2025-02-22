@@ -46,7 +46,7 @@ namespace margelo::nitro::image { class HybridTestViewSpec; }
 #include <vector>
 #include "Powertrain.hpp"
 #include "OldEnum.hpp"
-#include <functional>
+#include <NitroModules/Callback.hpp>
 #include <variant>
 #include "Person.hpp"
 #include <NitroModules/AnyMap.hpp>
@@ -175,11 +175,11 @@ namespace margelo::nitro::image {
     inline void setOptionalOldEnum(std::optional<OldEnum> optionalOldEnum) noexcept override {
       _swiftPart.setOptionalOldEnum(optionalOldEnum);
     }
-    inline std::optional<std::function<void(double /* value */)>> getOptionalCallback() noexcept override {
+    inline std::optional<Callback<void(double /* value */)>> getOptionalCallback() noexcept override {
       auto __result = _swiftPart.getOptionalCallback();
       return __result;
     }
-    inline void setOptionalCallback(const std::optional<std::function<void(double /* value */)>>& optionalCallback) noexcept override {
+    inline void setOptionalCallback(const std::optional<Callback<void(double /* value */)>>& optionalCallback) noexcept override {
       _swiftPart.setOptionalCallback(optionalCallback);
     }
     inline std::variant<std::string, double> getSomeVariant() noexcept override {
@@ -260,7 +260,7 @@ namespace margelo::nitro::image {
       auto __value = std::move(__result.value());
       return __value;
     }
-    inline void complexEnumCallback(const std::vector<Powertrain>& array, const std::function<void(const std::vector<Powertrain>& /* array */)>& callback) override {
+    inline void complexEnumCallback(const std::vector<Powertrain>& array, const Callback<void(const std::vector<Powertrain>& /* array */)>& callback) override {
       auto __result = _swiftPart.complexEnumCallback(array, callback);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
@@ -400,25 +400,25 @@ namespace margelo::nitro::image {
       auto __value = std::move(__result.value());
       return __value;
     }
-    inline void callCallback(const std::function<void()>& callback) override {
+    inline void callCallback(const Callback<void()>& callback) override {
       auto __result = _swiftPart.callCallback(callback);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
     }
-    inline void callAll(const std::function<void()>& first, const std::function<void()>& second, const std::function<void()>& third) override {
+    inline void callAll(const Callback<void()>& first, const Callback<void()>& second, const Callback<void()>& third) override {
       auto __result = _swiftPart.callAll(first, second, third);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
     }
-    inline void callWithOptional(std::optional<double> value, const std::function<void(std::optional<double> /* maybe */)>& callback) override {
+    inline void callWithOptional(std::optional<double> value, const Callback<void(std::optional<double> /* maybe */)>& callback) override {
       auto __result = _swiftPart.callWithOptional(value, callback);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
     }
-    inline std::shared_ptr<Promise<double>> callSumUpNTimes(const std::function<std::shared_ptr<Promise<double>>()>& callback, double n) override {
+    inline std::shared_ptr<Promise<double>> callSumUpNTimes(const Callback<double()>& callback, double n) override {
       auto __result = _swiftPart.callSumUpNTimes(callback, std::forward<decltype(n)>(n));
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
@@ -426,7 +426,7 @@ namespace margelo::nitro::image {
       auto __value = std::move(__result.value());
       return __value;
     }
-    inline std::shared_ptr<Promise<double>> callbackAsyncPromise(const std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<double>>>>()>& callback) override {
+    inline std::shared_ptr<Promise<double>> callbackAsyncPromise(const Callback<std::shared_ptr<Promise<double>>()>& callback) override {
       auto __result = _swiftPart.callbackAsyncPromise(callback);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
@@ -434,7 +434,7 @@ namespace margelo::nitro::image {
       auto __value = std::move(__result.value());
       return __value;
     }
-    inline std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>> callbackAsyncPromiseBuffer(const std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>>>()>& callback) override {
+    inline std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>> callbackAsyncPromiseBuffer(const Callback<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>()>& callback) override {
       auto __result = _swiftPart.callbackAsyncPromiseBuffer(callback);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
@@ -442,7 +442,7 @@ namespace margelo::nitro::image {
       auto __value = std::move(__result.value());
       return __value;
     }
-    inline std::function<void(double /* value */)> getComplexCallback() override {
+    inline Callback<void(double /* value */)> getComplexCallback() override {
       auto __result = _swiftPart.getComplexCallback();
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
@@ -450,7 +450,7 @@ namespace margelo::nitro::image {
       auto __value = std::move(__result.value());
       return __value;
     }
-    inline std::shared_ptr<Promise<double>> getValueFromJSCallbackAndWait(const std::function<std::shared_ptr<Promise<double>>()>& getValue) override {
+    inline std::shared_ptr<Promise<double>> getValueFromJSCallbackAndWait(const Callback<double()>& getValue) override {
       auto __result = _swiftPart.getValueFromJSCallbackAndWait(getValue);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
@@ -458,7 +458,7 @@ namespace margelo::nitro::image {
       auto __value = std::move(__result.value());
       return __value;
     }
-    inline std::shared_ptr<Promise<void>> getValueFromJsCallback(const std::function<std::shared_ptr<Promise<std::string>>()>& callback, const std::function<void(const std::string& /* valueFromJs */)>& andThenCall) override {
+    inline std::shared_ptr<Promise<void>> getValueFromJsCallback(const Callback<std::string()>& callback, const Callback<void(const std::string& /* valueFromJs */)>& andThenCall) override {
       auto __result = _swiftPart.getValueFromJsCallback(callback, andThenCall);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());

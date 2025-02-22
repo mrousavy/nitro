@@ -11,7 +11,7 @@
 #include "JsStyleStruct.hpp"
 
 #include "JFunc_void_double.hpp"
-#include <functional>
+#include <NitroModules/Callback.hpp>
 
 namespace margelo::nitro::image {
 
@@ -38,7 +38,7 @@ namespace margelo::nitro::image {
       jni::local_ref<JFunc_void_double::javaobject> onChanged = this->getFieldValue(fieldOnChanged);
       return JsStyleStruct(
         value,
-        [&]() -> std::function<void(double /* num */)> {
+        [&]() -> Callback<void(double /* num */)> {
           if (onChanged->isInstanceOf(JFunc_void_double_cxx::javaClassStatic())) [[likely]] {
             auto downcast = jni::static_ref_cast<JFunc_void_double_cxx::javaobject>(onChanged);
             return downcast->cthis()->getFunction();

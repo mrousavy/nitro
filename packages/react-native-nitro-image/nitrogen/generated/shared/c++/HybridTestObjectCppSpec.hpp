@@ -46,7 +46,7 @@ namespace margelo::nitro::image { class HybridTestViewSpec; }
 #include <vector>
 #include "Powertrain.hpp"
 #include "OldEnum.hpp"
-#include <functional>
+#include <NitroModules/Callback.hpp>
 #include <variant>
 #include "Car.hpp"
 #include "Person.hpp"
@@ -113,8 +113,8 @@ namespace margelo::nitro::image {
       virtual void setOptionalEnum(std::optional<Powertrain> optionalEnum) = 0;
       virtual std::optional<OldEnum> getOptionalOldEnum() = 0;
       virtual void setOptionalOldEnum(std::optional<OldEnum> optionalOldEnum) = 0;
-      virtual std::optional<std::function<void(double /* value */)>> getOptionalCallback() = 0;
-      virtual void setOptionalCallback(const std::optional<std::function<void(double /* value */)>>& optionalCallback) = 0;
+      virtual std::optional<Callback<void(double /* value */)>> getOptionalCallback() = 0;
+      virtual void setOptionalCallback(const std::optional<Callback<void(double /* value */)>>& optionalCallback) = 0;
       virtual std::variant<std::string, double> getSomeVariant() = 0;
       virtual void setSomeVariant(const std::variant<std::string, double>& someVariant) = 0;
 
@@ -136,7 +136,7 @@ namespace margelo::nitro::image {
       virtual std::vector<double> bounceNumbers(const std::vector<double>& array) = 0;
       virtual std::vector<Person> bounceStructs(const std::vector<Person>& array) = 0;
       virtual std::vector<Powertrain> bounceEnums(const std::vector<Powertrain>& array) = 0;
-      virtual void complexEnumCallback(const std::vector<Powertrain>& array, const std::function<void(const std::vector<Powertrain>& /* array */)>& callback) = 0;
+      virtual void complexEnumCallback(const std::vector<Powertrain>& array, const Callback<void(const std::vector<Powertrain>& /* array */)>& callback) = 0;
       virtual std::shared_ptr<AnyMap> createMap() = 0;
       virtual std::shared_ptr<AnyMap> mapRoundtrip(const std::shared_ptr<AnyMap>& map) = 0;
       virtual std::unordered_map<std::string, std::variant<double, bool>> bounceMap(const std::unordered_map<std::string, std::variant<double, bool>>& map) = 0;
@@ -154,15 +154,15 @@ namespace margelo::nitro::image {
       virtual std::shared_ptr<Promise<double>> awaitAndGetPromise(const std::shared_ptr<Promise<double>>& promise) = 0;
       virtual std::shared_ptr<Promise<Car>> awaitAndGetComplexPromise(const std::shared_ptr<Promise<Car>>& promise) = 0;
       virtual std::shared_ptr<Promise<void>> awaitPromise(const std::shared_ptr<Promise<void>>& promise) = 0;
-      virtual void callCallback(const std::function<void()>& callback) = 0;
-      virtual void callAll(const std::function<void()>& first, const std::function<void()>& second, const std::function<void()>& third) = 0;
-      virtual void callWithOptional(std::optional<double> value, const std::function<void(std::optional<double> /* maybe */)>& callback) = 0;
-      virtual std::shared_ptr<Promise<double>> callSumUpNTimes(const std::function<std::shared_ptr<Promise<double>>()>& callback, double n) = 0;
-      virtual std::shared_ptr<Promise<double>> callbackAsyncPromise(const std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<double>>>>()>& callback) = 0;
-      virtual std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>> callbackAsyncPromiseBuffer(const std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>>>()>& callback) = 0;
-      virtual std::function<void(double /* value */)> getComplexCallback() = 0;
-      virtual std::shared_ptr<Promise<double>> getValueFromJSCallbackAndWait(const std::function<std::shared_ptr<Promise<double>>()>& getValue) = 0;
-      virtual std::shared_ptr<Promise<void>> getValueFromJsCallback(const std::function<std::shared_ptr<Promise<std::string>>()>& callback, const std::function<void(const std::string& /* valueFromJs */)>& andThenCall) = 0;
+      virtual void callCallback(const Callback<void()>& callback) = 0;
+      virtual void callAll(const Callback<void()>& first, const Callback<void()>& second, const Callback<void()>& third) = 0;
+      virtual void callWithOptional(std::optional<double> value, const Callback<void(std::optional<double> /* maybe */)>& callback) = 0;
+      virtual std::shared_ptr<Promise<double>> callSumUpNTimes(const Callback<double()>& callback, double n) = 0;
+      virtual std::shared_ptr<Promise<double>> callbackAsyncPromise(const Callback<std::shared_ptr<Promise<double>>()>& callback) = 0;
+      virtual std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>> callbackAsyncPromiseBuffer(const Callback<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>()>& callback) = 0;
+      virtual Callback<void(double /* value */)> getComplexCallback() = 0;
+      virtual std::shared_ptr<Promise<double>> getValueFromJSCallbackAndWait(const Callback<double()>& getValue) = 0;
+      virtual std::shared_ptr<Promise<void>> getValueFromJsCallback(const Callback<std::string()>& callback, const Callback<void(const std::string& /* valueFromJs */)>& andThenCall) = 0;
       virtual Car getCar() = 0;
       virtual bool isCarElectric(const Car& car) = 0;
       virtual std::optional<Person> getDriver(const Car& car) = 0;

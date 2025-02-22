@@ -70,8 +70,8 @@ namespace margelo::nitro::image {
     void setOptionalEnum(std::optional<Powertrain> optionalEnum) override;
     std::optional<OldEnum> getOptionalOldEnum() override;
     void setOptionalOldEnum(std::optional<OldEnum> optionalOldEnum) override;
-    std::optional<std::function<void(double /* value */)>> getOptionalCallback() override;
-    void setOptionalCallback(const std::optional<std::function<void(double /* value */)>>& optionalCallback) override;
+    std::optional<Callback<void(double /* value */)>> getOptionalCallback() override;
+    void setOptionalCallback(const std::optional<Callback<void(double /* value */)>>& optionalCallback) override;
     std::variant<std::string, double> getSomeVariant() override;
     void setSomeVariant(const std::variant<std::string, double>& someVariant) override;
 
@@ -86,7 +86,7 @@ namespace margelo::nitro::image {
     std::vector<double> bounceNumbers(const std::vector<double>& array) override;
     std::vector<Person> bounceStructs(const std::vector<Person>& array) override;
     std::vector<Powertrain> bounceEnums(const std::vector<Powertrain>& array) override;
-    void complexEnumCallback(const std::vector<Powertrain>& array, const std::function<void(const std::vector<Powertrain>& /* array */)>& callback) override;
+    void complexEnumCallback(const std::vector<Powertrain>& array, const Callback<void(const std::vector<Powertrain>& /* array */)>& callback) override;
     std::shared_ptr<AnyMap> createMap() override;
     std::shared_ptr<AnyMap> mapRoundtrip(const std::shared_ptr<AnyMap>& map) override;
     std::unordered_map<std::string, std::variant<double, bool>> bounceMap(const std::unordered_map<std::string, std::variant<double, bool>>& map) override;
@@ -104,15 +104,15 @@ namespace margelo::nitro::image {
     std::shared_ptr<Promise<double>> awaitAndGetPromise(const std::shared_ptr<Promise<double>>& promise) override;
     std::shared_ptr<Promise<Car>> awaitAndGetComplexPromise(const std::shared_ptr<Promise<Car>>& promise) override;
     std::shared_ptr<Promise<void>> awaitPromise(const std::shared_ptr<Promise<void>>& promise) override;
-    void callCallback(const std::function<void()>& callback) override;
-    void callAll(const std::function<void()>& first, const std::function<void()>& second, const std::function<void()>& third) override;
-    void callWithOptional(std::optional<double> value, const std::function<void(std::optional<double> /* maybe */)>& callback) override;
-    std::shared_ptr<Promise<double>> callSumUpNTimes(const std::function<std::shared_ptr<Promise<double>>()>& callback, double n) override;
-    std::shared_ptr<Promise<double>> callbackAsyncPromise(const std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<double>>>>()>& callback) override;
-    std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>> callbackAsyncPromiseBuffer(const std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>>>()>& callback) override;
-    std::function<void(double /* value */)> getComplexCallback() override;
-    std::shared_ptr<Promise<double>> getValueFromJSCallbackAndWait(const std::function<std::shared_ptr<Promise<double>>()>& getValue) override;
-    std::shared_ptr<Promise<void>> getValueFromJsCallback(const std::function<std::shared_ptr<Promise<std::string>>()>& callback, const std::function<void(const std::string& /* valueFromJs */)>& andThenCall) override;
+    void callCallback(const Callback<void()>& callback) override;
+    void callAll(const Callback<void()>& first, const Callback<void()>& second, const Callback<void()>& third) override;
+    void callWithOptional(std::optional<double> value, const Callback<void(std::optional<double> /* maybe */)>& callback) override;
+    std::shared_ptr<Promise<double>> callSumUpNTimes(const Callback<double()>& callback, double n) override;
+    std::shared_ptr<Promise<double>> callbackAsyncPromise(const Callback<std::shared_ptr<Promise<double>>()>& callback) override;
+    std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>> callbackAsyncPromiseBuffer(const Callback<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>()>& callback) override;
+    Callback<void(double /* value */)> getComplexCallback() override;
+    std::shared_ptr<Promise<double>> getValueFromJSCallbackAndWait(const Callback<double()>& getValue) override;
+    std::shared_ptr<Promise<void>> getValueFromJsCallback(const Callback<std::string()>& callback, const Callback<void(const std::string& /* valueFromJs */)>& andThenCall) override;
     Car getCar() override;
     bool isCarElectric(const Car& car) override;
     std::optional<Person> getDriver(const Car& car) override;

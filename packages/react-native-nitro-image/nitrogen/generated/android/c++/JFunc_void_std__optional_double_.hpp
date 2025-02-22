@@ -10,7 +10,7 @@
 #include <fbjni/fbjni.h>
 #include <functional>
 
-#include <functional>
+#include <NitroModules/Callback.hpp>
 #include <optional>
 
 namespace margelo::nitro::image {
@@ -40,7 +40,7 @@ namespace margelo::nitro::image {
    */
   struct JFunc_void_std__optional_double__cxx final: public jni::HybridClass<JFunc_void_std__optional_double__cxx, JFunc_void_std__optional_double_> {
   public:
-    static jni::local_ref<JFunc_void_std__optional_double_::javaobject> fromCpp(const std::function<void(std::optional<double> /* maybe */)>& func) {
+    static jni::local_ref<JFunc_void_std__optional_double_::javaobject> fromCpp(const Callback<void(std::optional<double> /* maybe */)>& func) {
       return JFunc_void_std__optional_double__cxx::newObjectCxxArgs(func);
     }
 
@@ -54,7 +54,7 @@ namespace margelo::nitro::image {
 
   public:
     [[nodiscard]]
-    inline const std::function<void(std::optional<double> /* maybe */)>& getFunction() const {
+    inline const Callback<void(std::optional<double> /* maybe */)>& getFunction() const {
       return _func;
     }
 
@@ -65,11 +65,11 @@ namespace margelo::nitro::image {
     }
 
   private:
-    explicit JFunc_void_std__optional_double__cxx(const std::function<void(std::optional<double> /* maybe */)>& func): _func(func) { }
+    explicit JFunc_void_std__optional_double__cxx(const Callback<void(std::optional<double> /* maybe */)>& func): _func(func) { }
 
   private:
     friend HybridBase;
-    std::function<void(std::optional<double> /* maybe */)> _func;
+    Callback<void(std::optional<double> /* maybe */)> _func;
   };
 
 } // namespace margelo::nitro::image

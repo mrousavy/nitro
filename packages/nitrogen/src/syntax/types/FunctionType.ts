@@ -2,7 +2,6 @@ import type { Language } from '../../getPlatformSpecs.js'
 import { escapeCppName, toReferenceType } from '../helpers.js'
 import { Parameter } from '../Parameter.js'
 import { type SourceFile, type SourceImport } from '../SourceFile.js'
-import { PromiseType } from './PromiseType.js'
 import type { NamedType, Type, TypeKind } from './Type.js'
 
 export class FunctionType implements Type {
@@ -10,13 +9,7 @@ export class FunctionType implements Type {
   readonly parameters: NamedType[]
 
   constructor(returnType: Type, parameters: NamedType[]) {
-    if (returnType.kind === 'void') {
-      // void callbacks are async, but we don't care about the result.
-      this.returnType = returnType
-    } else {
-      // non-void callbacks are async and need to be awaited to get the result from JS.
-      this.returnType = new PromiseType(returnType)
-    }
+    this.returnType = returnType
     this.parameters = parameters
   }
 
@@ -102,7 +95,7 @@ export class FunctionType implements Type {
           })
           .join(', ')
         const returnType = this.returnType.getCode(language)
-        return `std::function<${returnType}(${params})>`
+        return `Callback<${returnType}(${params})>`
       }
       case 'swift': {
         const params = this.parameters
@@ -142,7 +135,7 @@ export class FunctionType implements Type {
     return [
       {
         language: 'c++',
-        name: 'functional',
+        name: 'NitroModules/Callback.hpp',
         space: 'system',
       },
       ...this.returnType.getRequiredImports(),

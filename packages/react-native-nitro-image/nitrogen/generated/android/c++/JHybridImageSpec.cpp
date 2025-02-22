@@ -21,7 +21,7 @@ namespace margelo::nitro::image { enum class ImageFormat; }
 #include "ImageFormat.hpp"
 #include "JImageFormat.hpp"
 #include <string>
-#include <functional>
+#include <NitroModules/Callback.hpp>
 #include "JFunc_void_std__string.hpp"
 
 namespace margelo::nitro::image {
@@ -68,7 +68,7 @@ namespace margelo::nitro::image {
     auto __result = method(_javaPart, JImageFormat::fromCpp(format));
     return __result;
   }
-  void JHybridImageSpec::saveToFile(const std::string& path, const std::function<void(const std::string& /* path */)>& onFinished) {
+  void JHybridImageSpec::saveToFile(const std::string& path, const Callback<void(const std::string& /* path */)>& onFinished) {
     static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<jni::JString> /* path */, jni::alias_ref<JFunc_void_std__string::javaobject> /* onFinished */)>("saveToFile_cxx");
     method(_javaPart, jni::make_jstring(path), JFunc_void_std__string_cxx::fromCpp(onFinished));
   }
