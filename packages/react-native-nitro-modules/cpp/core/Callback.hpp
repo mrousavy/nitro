@@ -27,6 +27,9 @@ class NativeCallback;
 template <typename Signature>
 class JSCallback;
 
+template <typename T>
+class Promise;
+
 // ----- Callback base -----
 
 template <typename Signature>
@@ -38,8 +41,28 @@ private:
   union Data {
     NativeCallback<R(Args...)> nativeCallback;
     JSCallback<R(Args...)> jsCallback;
+
+    Data(const NativeCallback<R(Args...)>& native) : nativeCallback(native) {}
+    Data(const JSCallback<R(Args...)>& js) : jsCallback(js) {}
+
+    static Data copyFrom(const Callback<R(Args...)>& callback) {
+      if (callback._isNative) {
+        return Data(callback._data.nativeCallback);
+      } else {
+        return Data(callback._data.jsCallback);
+      }
+    }
+    static Data moveFrom(Callback<R(Args...)>& callback) {
+      if (callback._isNative) {
+        return Data(std::move(callback._data.nativeCallback));
+      } else {
+        return Data(std::move(callback._data.jsCallback));
+      }
+    }
+    ~Data() { /* caller is responsible for cleaning up NativeCallback/JSCallback */ }
   };
 
+  friend Data;
   Data _data;
   bool _isNative;
 
@@ -56,10 +79,11 @@ public:
   /**
    * Create a new Callback that points to a native `std::function<..>` - this can be called from any Thread.
    */
-  explicit Callback(std::function<R(Args...)>&& func) : _data(NativeCallback<R(Args...)>(std::move(func))), _isNative(true) {}
+  template <typename F>
+  Callback(F&& func) : _data(NativeCallback<R(Args...)>(std::forward<F>(func))), _isNative(true) {}
 
-  Callback(const Callback& other) : _data(other._data), _isNative(other._isNative) {}
-  Callback(Callback&& other) : _data(std::move(other._data)), _isNative(other._isNative) {}
+  Callback(const Callback& other) : _data(Data::copyFrom(other)), _isNative(other._isNative) {}
+  Callback(Callback&& other) : _data(Data::moveFrom(other)), _isNative(other._isNative) {}
 
   ~Callback() {
     if (_isNative) {
@@ -166,8 +190,13 @@ public:
     }
 
     // Assuming we are on the correct thread, and the function is still alive, we can safely call it now. No need for locking.
-    jsi::Value result = _func->call(_runtime, JSIConverter<Args>::toJSI(std::forward<Args>(args))...);
-    return JSIConverter<R>::fromJSI(_runtime, result);
+    jsi::Value result = _func->call(_runtime, jsi::Value::undefined());
+    if constexpr (std::is_void_v<R>) {
+      // it's void
+      return;
+    } else {
+      return JSIConverter<R>::fromJSI(_runtime, result);
+    }
   }
   inline std::shared_ptr<Promise<R>> callAync(Args... args) const {
     return _dispatcher->runAsyncAwaitable([this, ... args = std::move(args)]() { return this->callSync(args...); });
