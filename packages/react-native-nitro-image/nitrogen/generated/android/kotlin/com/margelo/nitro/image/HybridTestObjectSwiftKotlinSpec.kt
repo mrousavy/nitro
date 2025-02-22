@@ -387,6 +387,15 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   @Keep
   abstract fun castBase(base: HybridBaseSpec): HybridChildSpec
   
+  abstract fun callbackSync(callback: () -> Promise<HybridChildSpec>): Unit
+  
+  @DoNotStrip
+  @Keep
+  private fun callbackSync_cxx(callback: Func_std__shared_ptr_Promise_std__shared_ptr_margelo__nitro__image__HybridChildSpec___): Unit {
+    val __result = callbackSync(callback)
+    return __result
+  }
+  
   @DoNotStrip
   @Keep
   abstract fun getIsViewBlue(view: HybridTestViewSpec): Boolean

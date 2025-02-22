@@ -1429,6 +1429,43 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
+  public final func callbackSync(callback: bridge.Func_std__shared_ptr_Promise_std__shared_ptr_margelo__nitro__image__HybridChildSpec___) -> bridge.Result_void_ {
+    do {
+      try self.__implementation.callbackSync(callback: { () -> () -> Promise<(any HybridChildSpec)> in
+        let __wrappedFunction = bridge.wrap_Func_std__shared_ptr_Promise_std__shared_ptr_margelo__nitro__image__HybridChildSpec___(callback)
+        return { () -> Promise<(any HybridChildSpec)> in
+          let __result = __wrappedFunction.call()
+          return { () -> Promise<(any HybridChildSpec)> in
+            let __promise = Promise<(any HybridChildSpec)>()
+            let __resolver = { (__result: (any HybridChildSpec)) in
+              __promise.resolve(withResult: __result)
+            }
+            let __rejecter = { (__error: Error) in
+              __promise.reject(withError: __error)
+            }
+            let __resolverCpp = { () -> bridge.Func_void_std__shared_ptr_margelo__nitro__image__HybridChildSpec_ in
+              let __closureWrapper = Func_void_std__shared_ptr_margelo__nitro__image__HybridChildSpec_(__resolver)
+              return bridge.create_Func_void_std__shared_ptr_margelo__nitro__image__HybridChildSpec_(__closureWrapper.toUnsafe())
+            }()
+            let __rejecterCpp = { () -> bridge.Func_void_std__exception_ptr in
+              let __closureWrapper = Func_void_std__exception_ptr(__rejecter)
+              return bridge.create_Func_void_std__exception_ptr(__closureWrapper.toUnsafe())
+            }()
+            let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_std__shared_ptr_margelo__nitro__image__HybridChildSpec___(__result)
+            __promiseHolder.addOnResolvedListener(__resolverCpp)
+            __promiseHolder.addOnRejectedListener(__rejecterCpp)
+            return __promise
+          }()
+        }
+      }())
+      return bridge.create_Result_void_()
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_void_(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
   public final func getIsViewBlue(view: bridge.std__shared_ptr_margelo__nitro__image__HybridTestViewSpec_) -> bridge.Result_bool_ {
     do {
       let __result = try self.__implementation.getIsViewBlue(view: { () -> HybridTestViewSpec in

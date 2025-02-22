@@ -828,6 +828,63 @@ namespace margelo::nitro::image::bridge::swift {
   using std__weak_ptr_margelo__nitro__image__HybridChildSpec_ = std::weak_ptr<margelo::nitro::image::HybridChildSpec>;
   inline std__weak_ptr_margelo__nitro__image__HybridChildSpec_ weakify_std__shared_ptr_margelo__nitro__image__HybridChildSpec_(const std::shared_ptr<margelo::nitro::image::HybridChildSpec>& strong) { return strong; }
   
+  // pragma MARK: std::function<std::shared_ptr<Promise<std::shared_ptr<margelo::nitro::image::HybridChildSpec>>>()>
+  /**
+   * Specialized version of `std::function<std::shared_ptr<Promise<std::shared_ptr<margelo::nitro::image::HybridChildSpec>>>()>`.
+   */
+  using Func_std__shared_ptr_Promise_std__shared_ptr_margelo__nitro__image__HybridChildSpec___ = std::function<std::shared_ptr<Promise<std::shared_ptr<margelo::nitro::image::HybridChildSpec>>>()>;
+  /**
+   * Wrapper class for a `std::function<std::shared_ptr<Promise<std::shared_ptr<margelo::nitro::image::HybridChildSpec>>>()>`, this can be used from Swift.
+   */
+  class Func_std__shared_ptr_Promise_std__shared_ptr_margelo__nitro__image__HybridChildSpec____Wrapper final {
+  public:
+    explicit Func_std__shared_ptr_Promise_std__shared_ptr_margelo__nitro__image__HybridChildSpec____Wrapper(std::function<std::shared_ptr<Promise<std::shared_ptr<margelo::nitro::image::HybridChildSpec>>>()>&& func): _function(std::make_shared<std::function<std::shared_ptr<Promise<std::shared_ptr<margelo::nitro::image::HybridChildSpec>>>()>>(std::move(func))) {}
+    inline std::shared_ptr<Promise<std::shared_ptr<margelo::nitro::image::HybridChildSpec>>> call() const {
+      auto __result = _function->operator()();
+      return __result;
+    }
+  private:
+    std::shared_ptr<std::function<std::shared_ptr<Promise<std::shared_ptr<margelo::nitro::image::HybridChildSpec>>>()>> _function;
+  };
+  Func_std__shared_ptr_Promise_std__shared_ptr_margelo__nitro__image__HybridChildSpec___ create_Func_std__shared_ptr_Promise_std__shared_ptr_margelo__nitro__image__HybridChildSpec___(void* _Nonnull swiftClosureWrapper);
+  inline Func_std__shared_ptr_Promise_std__shared_ptr_margelo__nitro__image__HybridChildSpec____Wrapper wrap_Func_std__shared_ptr_Promise_std__shared_ptr_margelo__nitro__image__HybridChildSpec___(Func_std__shared_ptr_Promise_std__shared_ptr_margelo__nitro__image__HybridChildSpec___ value) {
+    return Func_std__shared_ptr_Promise_std__shared_ptr_margelo__nitro__image__HybridChildSpec____Wrapper(std::move(value));
+  }
+  
+  // pragma MARK: std::shared_ptr<Promise<std::shared_ptr<margelo::nitro::image::HybridChildSpec>>>
+  /**
+   * Specialized version of `std::shared_ptr<Promise<std::shared_ptr<margelo::nitro::image::HybridChildSpec>>>`.
+   */
+  using std__shared_ptr_Promise_std__shared_ptr_margelo__nitro__image__HybridChildSpec___ = std::shared_ptr<Promise<std::shared_ptr<margelo::nitro::image::HybridChildSpec>>>;
+  inline std::shared_ptr<Promise<std::shared_ptr<margelo::nitro::image::HybridChildSpec>>> create_std__shared_ptr_Promise_std__shared_ptr_margelo__nitro__image__HybridChildSpec___() {
+    return Promise<std::shared_ptr<margelo::nitro::image::HybridChildSpec>>::create();
+  }
+  inline PromiseHolder<std::shared_ptr<margelo::nitro::image::HybridChildSpec>> wrap_std__shared_ptr_Promise_std__shared_ptr_margelo__nitro__image__HybridChildSpec___(std::shared_ptr<Promise<std::shared_ptr<margelo::nitro::image::HybridChildSpec>>> promise) {
+    return PromiseHolder<std::shared_ptr<margelo::nitro::image::HybridChildSpec>>(std::move(promise));
+  }
+  
+  // pragma MARK: std::function<void(const std::shared_ptr<margelo::nitro::image::HybridChildSpec>& /* result */)>
+  /**
+   * Specialized version of `std::function<void(const std::shared_ptr<margelo::nitro::image::HybridChildSpec>&)>`.
+   */
+  using Func_void_std__shared_ptr_margelo__nitro__image__HybridChildSpec_ = std::function<void(const std::shared_ptr<margelo::nitro::image::HybridChildSpec>& /* result */)>;
+  /**
+   * Wrapper class for a `std::function<void(const std::shared_ptr<margelo::nitro::image::HybridChildSpec>& / * result * /)>`, this can be used from Swift.
+   */
+  class Func_void_std__shared_ptr_margelo__nitro__image__HybridChildSpec__Wrapper final {
+  public:
+    explicit Func_void_std__shared_ptr_margelo__nitro__image__HybridChildSpec__Wrapper(std::function<void(const std::shared_ptr<margelo::nitro::image::HybridChildSpec>& /* result */)>&& func): _function(std::make_shared<std::function<void(const std::shared_ptr<margelo::nitro::image::HybridChildSpec>& /* result */)>>(std::move(func))) {}
+    inline void call(std::shared_ptr<margelo::nitro::image::HybridChildSpec> result) const {
+      _function->operator()(result);
+    }
+  private:
+    std::shared_ptr<std::function<void(const std::shared_ptr<margelo::nitro::image::HybridChildSpec>& /* result */)>> _function;
+  };
+  Func_void_std__shared_ptr_margelo__nitro__image__HybridChildSpec_ create_Func_void_std__shared_ptr_margelo__nitro__image__HybridChildSpec_(void* _Nonnull swiftClosureWrapper);
+  inline Func_void_std__shared_ptr_margelo__nitro__image__HybridChildSpec__Wrapper wrap_Func_void_std__shared_ptr_margelo__nitro__image__HybridChildSpec_(Func_void_std__shared_ptr_margelo__nitro__image__HybridChildSpec_ value) {
+    return Func_void_std__shared_ptr_margelo__nitro__image__HybridChildSpec__Wrapper(std::move(value));
+  }
+  
   // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridTestViewSpec>
   /**
    * Specialized version of `std::shared_ptr<margelo::nitro::image::HybridTestViewSpec>`.
