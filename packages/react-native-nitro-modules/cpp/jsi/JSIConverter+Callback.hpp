@@ -8,19 +8,14 @@
 namespace margelo::nitro {
 template <typename Signature>
 class Callback;
-template <typename Signature>
-class NativeCallback;
-template <typename Signature>
-class JSCallback;
 
 template <typename T, typename Enable>
 struct JSIConverter;
+
+class Dispatcher;
 } // namespace margelo::nitro
 
 #include "JSIConverter.hpp"
-
-#include "Callback.hpp"
-#include "JSICache.hpp"
 #include <jsi/jsi.h>
 #include <memory>
 
@@ -31,17 +26,7 @@ using namespace facebook;
 // Callback<R(A...)> <> jsi::Function
 template <typename ReturnType, typename... Args>
 struct JSIConverter<Callback<ReturnType(Args...)>> final {
-  static inline Callback<ReturnType(Args...)> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
-    // 1. Convert arg to jsi::Function
-    jsi::Function function = arg.asObject(runtime).asFunction(runtime);
-    // 2. Make it a BorrowingReference
-    auto cache = JSICache::getOrCreateCache(runtime);
-    auto reference = cache.makeShared(std::move(function));
-    // 3. Get the Dispatcher
-    auto dispatcher = Dispatcher::getRuntimeGlobalDispatcher(runtime);
-    // 4. Create the callback
-    return Callback<ReturnType(Args...)>(runtime, reference, dispatcher);
-  }
+  static inline Callback<ReturnType(Args...)> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg);
 
   static inline jsi::Value toJSI(jsi::Runtime& runtime, const Callback<ReturnType(Args...)>& callback) {
     jsi::HostFunctionType func = [callback](jsi::Runtime& runtime, const jsi::Value& thisArg, const jsi::Value* args,
@@ -58,5 +43,26 @@ struct JSIConverter<Callback<ReturnType(Args...)>> final {
     return object.isFunction(runtime);
   }
 };
+
+} // namespace margelo::nitro
+
+#include "Callback.hpp"
+#include "Dispatcher.hpp"
+#include "JSICache.hpp"
+
+namespace margelo::nitro {
+
+template <typename ReturnType, typename... Args>
+inline Callback<ReturnType(Args...)> JSIConverter<Callback<ReturnType(Args...)>>::fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+  // 1. Convert arg to jsi::Function
+  jsi::Function function = arg.asObject(runtime).asFunction(runtime);
+  // 2. Make it a BorrowingReference
+  auto cache = JSICache::getOrCreateCache(runtime);
+  auto reference = cache.makeShared(std::move(function));
+  // 3. Get the Dispatcher
+  auto dispatcher = Dispatcher::getRuntimeGlobalDispatcher(runtime);
+  // 4. Create the callback
+  return Callback<ReturnType(Args...)>(runtime, reference, dispatcher);
+}
 
 } // namespace margelo::nitro

@@ -4,12 +4,16 @@
 
 #pragma once
 
+namespace margelo::nitro {
+template <typename TResult>
+class Promise;
+
+class Dispatcher;
+} // namespace margelo::nitro
+
 #include "BorrowingReference.hpp"
-#include "Dispatcher.hpp"
-#include "JSIConverter.hpp"
 #include "NitroDefines.hpp"
 #include "NitroTypeInfo.hpp"
-#include "Promise.hpp"
 #include "ThreadPool.hpp"
 #include "ThreadUtils.hpp"
 #include <functional>
@@ -26,9 +30,6 @@ template <typename Signature>
 class NativeCallback;
 template <typename Signature>
 class JSCallback;
-
-template <typename T>
-class Promise;
 
 // ----- Callback base -----
 
@@ -174,36 +175,9 @@ public:
 #endif
 
 public:
-  inline R callSync(Args... args) const {
-#ifdef NITRO_DEBUG
-    // Check whether the callee is actually calling from the same Thread this JSCallback<..> was created on
-    if (_threadId != std::this_thread::get_id()) [[unlikely]] {
-      std::string typeName = TypeInfo::getFriendlyTypename<JSCallback<R(Args...)>>();
-      throw std::runtime_error("Cannot call " + typeName + " on Thread " + ThreadUtils::getThreadName() + " - expected to run on Thread " +
-                               _threadName + "! If you want to call this JSCallback on a different Thread, use `callAsync(...)` instead.");
-    }
-#endif
-    // Check whether the function is still alive - if the Thread is still alive then the function is usually still alive too.
-    if (!_func) [[unlikely]] {
-      std::string typeName = TypeInfo::getFriendlyTypename<JSCallback<R(Args...)>>();
-      throw std::runtime_error("Cannot call " + typeName + " - the jsi::Function has already been deleted!");
-    }
-
-    // Assuming we are on the correct thread, and the function is still alive, we can safely call it now. No need for locking.
-    jsi::Value result = _func->call(_runtime, jsi::Value::undefined());
-    if constexpr (std::is_void_v<R>) {
-      // it's void
-      return;
-    } else {
-      return JSIConverter<R>::fromJSI(_runtime, result);
-    }
-  }
-  inline std::shared_ptr<Promise<R>> callAync(Args... args) const {
-    return _dispatcher->runAsyncAwaitable([this, ... args = std::move(args)]() { return this->callSync(args...); });
-  }
-  inline void callAsyncShootAndForget(Args... args) const {
-    _dispatcher->runAsync([this, ... args = std::move(args)]() { this->callSync(args...); });
-  }
+  R callSync(Args... args) const;
+  std::shared_ptr<Promise<R>> callAync(Args... args) const;
+  void callAsyncShootAndForget(Args... args) const;
 
 private:
   jsi::Runtime& _runtime;
@@ -214,5 +188,48 @@ private:
   std::string _threadName;
 #endif
 };
+
+} // namespace margelo::nitro
+
+#include "Dispatcher.hpp"
+#include "JSIConverter.hpp"
+
+namespace margelo::nitro {
+
+template <typename R, typename... Args>
+R JSCallback<R(Args...)>::callSync(Args... args) const {
+#ifdef NITRO_DEBUG
+  // Check whether the callee is actually calling from the same Thread this JSCallback<..> was created on
+  if (_threadId != std::this_thread::get_id()) [[unlikely]] {
+    std::string typeName = TypeInfo::getFriendlyTypename<JSCallback<R(Args...)>>();
+    throw std::runtime_error("Cannot call " + typeName + " on Thread " + ThreadUtils::getThreadName() + " - expected to run on Thread " +
+                             _threadName + "! If you want to call this JSCallback on a different Thread, use `callAsync(...)` instead.");
+  }
+#endif
+  // Check whether the function is still alive - if the Thread is still alive then the function is usually still alive too.
+  if (!_func) [[unlikely]] {
+    std::string typeName = TypeInfo::getFriendlyTypename<JSCallback<R(Args...)>>();
+    throw std::runtime_error("Cannot call " + typeName + " - the jsi::Function has already been deleted!");
+  }
+
+  // Assuming we are on the correct thread, and the function is still alive, we can safely call it now. No need for locking.
+  jsi::Value result = _func->call(_runtime, jsi::Value::undefined());
+  if constexpr (std::is_void_v<R>) {
+    // it's void
+    return;
+  } else {
+    return JSIConverter<R>::fromJSI(_runtime, result);
+  }
+}
+
+template <typename R, typename... Args>
+std::shared_ptr<Promise<R>> JSCallback<R(Args...)>::callAync(Args... args) const {
+  return _dispatcher->runAsyncAwaitable([this, ... args = std::move(args)]() { return this->callSync(args...); });
+}
+
+template <typename R, typename... Args>
+void JSCallback<R(Args...)>::callAsyncShootAndForget(Args... args) const {
+  _dispatcher->runAsync([this, ... args = std::move(args)]() { this->callSync(args...); });
+}
 
 } // namespace margelo::nitro
