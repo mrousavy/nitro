@@ -35,8 +35,6 @@ class Callback;
 template <typename R, typename... Args>
 class Callback<R(Args...)> final {
 private:
-  using DefaultReturn = std::conditional_t<std::is_void_v<R>, void, Promise<R>>;
-
   union Data {
     NativeCallback<R(Args...)> nativeCallback;
     JSCallback<R(Args...)> jsCallback;
@@ -67,7 +65,7 @@ public:
     if (_isNative) {
       _data.nativeCallback.~NativeCallback<R(Args...)>();
     } else {
-      _data.nativeCallback.~JSCallback<R(Args...)>();
+      _data.jsCallback.~JSCallback<R(Args...)>();
     }
   }
 
@@ -79,7 +77,7 @@ public:
       return _data.jsCallback.callSync(std::forward<Args>(args)...);
     }
   }
-  Promise<R> callAsync(Args... args) const {
+  std::shared_ptr<Promise<R>> callAsync(Args... args) const {
     if (_isNative) {
       return _data.nativeCallback.callAsync(std::forward<Args>(args)...);
     } else {
@@ -121,7 +119,7 @@ public:
   inline R callSync(Args... args) const {
     return _func(std::forward<Args>(args)...);
   }
-  inline Promise<R> callAync(Args... args) const {
+  inline std::shared_ptr<Promise<R>> callAync(Args... args) const {
     return Promise<R>::resolved(_func(std::forward<Args>(args)...));
   }
   inline void callAsyncShootAndForget(Args... args) const {
@@ -171,11 +169,11 @@ public:
     jsi::Value result = _func->call(_runtime, JSIConverter<Args>::toJSI(std::forward<Args>(args))...);
     return JSIConverter<R>::fromJSI(_runtime, result);
   }
-  inline Promise<R> callAync(Args... args) const {
-    return _dispatcher->runAsyncAwaitable([this, ... args = std::move(args)]() { return this->callSync(std::forward<Args>(args)...); });
+  inline std::shared_ptr<Promise<R>> callAync(Args... args) const {
+    return _dispatcher->runAsyncAwaitable([this, ... args = std::move(args)]() { return this->callSync(args...); });
   }
   inline void callAsyncShootAndForget(Args... args) const {
-    _dispatcher->runAsync([this, ... args = std::move(args)]() { this->callSync(std::forward<Args>(args)...); });
+    _dispatcher->runAsync([this, ... args = std::move(args)]() { this->callSync(args...); });
   }
 
 private:

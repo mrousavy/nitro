@@ -31,7 +31,7 @@ using namespace facebook;
 // Callback<R(A...)> <> jsi::Function
 template <typename ReturnType, typename... Args>
 struct JSIConverter<Callback<ReturnType(Args...)>> final {
-  static inline AnyValue fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+  static inline Callback<ReturnType(Args...)> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
     // 1. Convert arg to jsi::Function
     jsi::Function function = arg.asObject(runtime).asFunction(runtime);
     // 2. Make it a BorrowingReference
