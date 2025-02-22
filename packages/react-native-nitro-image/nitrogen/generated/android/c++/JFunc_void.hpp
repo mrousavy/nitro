@@ -10,7 +10,7 @@
 #include <fbjni/fbjni.h>
 #include <functional>
 
-#include <functional>
+#include <NitroModules/Callback.hpp>
 
 namespace margelo::nitro::image {
 
@@ -39,7 +39,7 @@ namespace margelo::nitro::image {
    */
   struct JFunc_void_cxx final: public jni::HybridClass<JFunc_void_cxx, JFunc_void> {
   public:
-    static jni::local_ref<JFunc_void::javaobject> fromCpp(const std::function<void()>& func) {
+    static jni::local_ref<JFunc_void::javaobject> fromCpp(const Callback<void()>& func) {
       return JFunc_void_cxx::newObjectCxxArgs(func);
     }
 
@@ -53,7 +53,7 @@ namespace margelo::nitro::image {
 
   public:
     [[nodiscard]]
-    inline const std::function<void()>& getFunction() const {
+    inline const Callback<void()>& getFunction() const {
       return _func;
     }
 
@@ -64,11 +64,11 @@ namespace margelo::nitro::image {
     }
 
   private:
-    explicit JFunc_void_cxx(const std::function<void()>& func): _func(func) { }
+    explicit JFunc_void_cxx(const Callback<void()>& func): _func(func) { }
 
   private:
     friend HybridBase;
-    std::function<void()> _func;
+    Callback<void()> _func;
   };
 
 } // namespace margelo::nitro::image

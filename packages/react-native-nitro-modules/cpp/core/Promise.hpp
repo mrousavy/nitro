@@ -4,7 +4,13 @@
 
 #pragma once
 
+namespace margelo::nitro {
+template <typename Signature>
+class Callback;
+}
+
 #include "AssertPromiseState.hpp"
+#include "Callback.hpp"
 #include "NitroDefines.hpp"
 #include "NitroTypeInfo.hpp"
 #include "ThreadPool.hpp"
@@ -22,8 +28,8 @@ using namespace facebook;
 template <typename TResult>
 class Promise final {
 public:
-  using OnResolvedFunc = std::function<void(const TResult&)>;
-  using OnRejectedFunc = std::function<void(const std::exception_ptr&)>;
+  using OnResolvedFunc = Callback<void(const TResult&)>;
+  using OnRejectedFunc = Callback<void(const std::exception_ptr&)>;
 
 public:
   // Promise cannot be copied.
@@ -161,7 +167,7 @@ public:
     }
   }
   [[deprecated("Upgrade Nitro to use PromiseHolder<T> instead.")]]
-  void addOnResolvedListenerCopy(const std::function<void(TResult)>& onResolved) {
+  void addOnResolvedListenerCopy(const Callback<void(TResult)>& onResolved) {
     addOnResolvedListener([=](const TResult& value) { onResolved(value); });
   }
 
@@ -257,8 +263,8 @@ private:
 template <>
 class Promise<void> final {
 public:
-  using OnResolvedFunc = std::function<void()>;
-  using OnRejectedFunc = std::function<void(const std::exception_ptr&)>;
+  using OnResolvedFunc = Callback<void()>;
+  using OnRejectedFunc = Callback<void(const std::exception_ptr&)>;
 
 public:
   Promise(const Promise&) = delete;

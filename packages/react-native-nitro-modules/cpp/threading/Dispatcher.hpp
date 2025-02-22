@@ -4,7 +4,11 @@
 
 #pragma once
 
-#include "Promise.hpp"
+namespace margelo::nitro {
+template <typename TResult>
+class Promise;
+}
+
 #include <functional>
 #include <jsi/jsi.h>
 #include <queue>
@@ -45,32 +49,7 @@ public:
    * and return a `Promise<T>` that will hold the result of the function.
    */
   template <typename T>
-  std::shared_ptr<Promise<T>> runAsyncAwaitable(std::function<T()>&& function) {
-    // 1. Create Promise that can be shared between this and dispatcher thread
-    auto promise = Promise<T>::create();
-
-    runAsync([function = std::move(function), promise]() {
-      try {
-        if constexpr (std::is_void_v<T>) {
-          // 4. Call the actual function on the new Thread
-          function();
-          // 5.a. Resolve the Promise if we succeeded
-          promise->resolve();
-        } else {
-          // 4. Call the actual function on the new Thread
-          T result = function();
-          // 5.a. Resolve the Promise if we succeeded
-          promise->resolve(std::move(result));
-        }
-      } catch (...) {
-        // 5.b. Reject the Promise if the call failed
-        promise->reject(std::current_exception());
-      }
-    });
-
-    // 3. Return an open `Promise<T>` that gets resolved later by the dispatcher Thread
-    return promise;
-  }
+  std::shared_ptr<Promise<T>> runAsyncAwaitable(std::function<T()>&& function);
 
 private:
   static std::unordered_map<jsi::Runtime*, std::weak_ptr<Dispatcher>> _globalCache;
@@ -78,5 +57,39 @@ private:
 private:
   static constexpr auto TAG = "Dispatcher";
 };
+
+} // namespace margelo::nitro
+
+#include "Promise.hpp"
+
+namespace margelo::nitro {
+
+template <typename T>
+std::shared_ptr<Promise<T>> Dispatcher::runAsyncAwaitable(std::function<T()>&& function) {
+  // 1. Create Promise that can be shared between this and dispatcher thread
+  auto promise = Promise<T>::create();
+
+  runAsync([function = std::move(function), promise]() {
+    try {
+      if constexpr (std::is_void_v<T>) {
+        // 4. Call the actual function on the new Thread
+        function();
+        // 5.a. Resolve the Promise if we succeeded
+        promise->resolve();
+      } else {
+        // 4. Call the actual function on the new Thread
+        T result = function();
+        // 5.a. Resolve the Promise if we succeeded
+        promise->resolve(std::move(result));
+      }
+    } catch (...) {
+      // 5.b. Reject the Promise if the call failed
+      promise->reject(std::current_exception());
+    }
+  });
+
+  // 3. Return an open `Promise<T>` that gets resolved later by the dispatcher Thread
+  return promise;
+}
 
 } // namespace margelo::nitro

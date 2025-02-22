@@ -10,7 +10,7 @@
 #include <fbjni/fbjni.h>
 #include <functional>
 
-#include <functional>
+#include <NitroModules/Callback.hpp>
 #include <vector>
 #include "Powertrain.hpp"
 #include "JPowertrain.hpp"
@@ -50,7 +50,7 @@ namespace margelo::nitro::image {
    */
   struct JFunc_void_std__vector_Powertrain__cxx final: public jni::HybridClass<JFunc_void_std__vector_Powertrain__cxx, JFunc_void_std__vector_Powertrain_> {
   public:
-    static jni::local_ref<JFunc_void_std__vector_Powertrain_::javaobject> fromCpp(const std::function<void(const std::vector<Powertrain>& /* array */)>& func) {
+    static jni::local_ref<JFunc_void_std__vector_Powertrain_::javaobject> fromCpp(const Callback<void(const std::vector<Powertrain>& /* array */)>& func) {
       return JFunc_void_std__vector_Powertrain__cxx::newObjectCxxArgs(func);
     }
 
@@ -73,7 +73,7 @@ namespace margelo::nitro::image {
 
   public:
     [[nodiscard]]
-    inline const std::function<void(const std::vector<Powertrain>& /* array */)>& getFunction() const {
+    inline const Callback<void(const std::vector<Powertrain>& /* array */)>& getFunction() const {
       return _func;
     }
 
@@ -84,11 +84,11 @@ namespace margelo::nitro::image {
     }
 
   private:
-    explicit JFunc_void_std__vector_Powertrain__cxx(const std::function<void(const std::vector<Powertrain>& /* array */)>& func): _func(func) { }
+    explicit JFunc_void_std__vector_Powertrain__cxx(const Callback<void(const std::vector<Powertrain>& /* array */)>& func): _func(func) { }
 
   private:
     friend HybridBase;
-    std::function<void(const std::vector<Powertrain>& /* array */)> _func;
+    Callback<void(const std::vector<Powertrain>& /* array */)> _func;
   };
 
 } // namespace margelo::nitro::image

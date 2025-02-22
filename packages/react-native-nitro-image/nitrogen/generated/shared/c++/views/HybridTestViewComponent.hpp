@@ -16,9 +16,9 @@
 #include <react/renderer/components/view/ConcreteViewShadowNode.h>
 #include <react/renderer/components/view/ViewProps.h>
 
-#include <functional>
+#include <NitroModules/Callback.hpp>
 #include <optional>
-#include <functional>
+#include <NitroModules/Callback.hpp>
 #include <memory>
 #include "HybridTestViewSpec.hpp"
 
@@ -44,8 +44,8 @@ namespace margelo::nitro::image::views {
 
   public:
     CachedProp<bool> isBlue;
-    CachedProp<std::function<void()>> someCallback;
-    CachedProp<std::optional<std::function<void(const std::shared_ptr<margelo::nitro::image::HybridTestViewSpec>& /* ref */)>>> hybridRef;
+    CachedProp<Callback<void()>> someCallback;
+    CachedProp<std::optional<Callback<void(const std::shared_ptr<margelo::nitro::image::HybridTestViewSpec>& /* ref */)>>> hybridRef;
 
   private:
     static bool filterObjectKeys(const std::string& propName);

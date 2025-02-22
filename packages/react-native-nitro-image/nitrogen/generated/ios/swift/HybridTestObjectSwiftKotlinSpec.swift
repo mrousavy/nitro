@@ -57,12 +57,12 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
   func callCallback(callback: @escaping () -> Void) throws -> Void
   func callAll(first: @escaping () -> Void, second: @escaping () -> Void, third: @escaping () -> Void) throws -> Void
   func callWithOptional(value: Double?, callback: @escaping (_ maybe: Double?) -> Void) throws -> Void
-  func callSumUpNTimes(callback: @escaping () -> Promise<Double>, n: Double) throws -> Promise<Double>
-  func callbackAsyncPromise(callback: @escaping () -> Promise<Promise<Double>>) throws -> Promise<Double>
-  func callbackAsyncPromiseBuffer(callback: @escaping () -> Promise<Promise<ArrayBufferHolder>>) throws -> Promise<ArrayBufferHolder>
+  func callSumUpNTimes(callback: @escaping () -> Double, n: Double) throws -> Promise<Double>
+  func callbackAsyncPromise(callback: @escaping () -> Promise<Double>) throws -> Promise<Double>
+  func callbackAsyncPromiseBuffer(callback: @escaping () -> Promise<ArrayBufferHolder>) throws -> Promise<ArrayBufferHolder>
   func getComplexCallback() throws -> (_ value: Double) -> Void
-  func getValueFromJSCallbackAndWait(getValue: @escaping () -> Promise<Double>) throws -> Promise<Double>
-  func getValueFromJsCallback(callback: @escaping () -> Promise<String>, andThenCall: @escaping (_ valueFromJs: String) -> Void) throws -> Promise<Void>
+  func getValueFromJSCallbackAndWait(getValue: @escaping () -> Double) throws -> Promise<Double>
+  func getValueFromJsCallback(callback: @escaping () -> String, andThenCall: @escaping (_ valueFromJs: String) -> Void) throws -> Promise<Void>
   func getCar() throws -> Car
   func isCarElectric(car: Car) throws -> Bool
   func getDriver(car: Car) throws -> Person?

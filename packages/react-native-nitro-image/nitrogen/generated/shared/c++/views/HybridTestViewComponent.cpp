@@ -35,22 +35,22 @@ namespace margelo::nitro::image::views {
         throw std::runtime_error(std::string("TestView.isBlue: ") + exc.what());
       }
     }()),
-    someCallback([&]() -> CachedProp<std::function<void()>> {
+    someCallback([&]() -> CachedProp<Callback<void()>> {
       try {
         const react::RawValue* rawValue = rawProps.at("someCallback", nullptr, nullptr);
         if (rawValue == nullptr) return sourceProps.someCallback;
         const auto& [runtime, value] = (std::pair<jsi::Runtime*, jsi::Value>)*rawValue;
-        return CachedProp<std::function<void()>>::fromRawValue(*runtime, value.asObject(*runtime).getProperty(*runtime, "f"), sourceProps.someCallback);
+        return CachedProp<Callback<void()>>::fromRawValue(*runtime, value.asObject(*runtime).getProperty(*runtime, "f"), sourceProps.someCallback);
       } catch (const std::exception& exc) {
         throw std::runtime_error(std::string("TestView.someCallback: ") + exc.what());
       }
     }()),
-    hybridRef([&]() -> CachedProp<std::optional<std::function<void(const std::shared_ptr<margelo::nitro::image::HybridTestViewSpec>& /* ref */)>>> {
+    hybridRef([&]() -> CachedProp<std::optional<Callback<void(const std::shared_ptr<margelo::nitro::image::HybridTestViewSpec>& /* ref */)>>> {
       try {
         const react::RawValue* rawValue = rawProps.at("hybridRef", nullptr, nullptr);
         if (rawValue == nullptr) return sourceProps.hybridRef;
         const auto& [runtime, value] = (std::pair<jsi::Runtime*, jsi::Value>)*rawValue;
-        return CachedProp<std::optional<std::function<void(const std::shared_ptr<margelo::nitro::image::HybridTestViewSpec>& /* ref */)>>>::fromRawValue(*runtime, value.asObject(*runtime).getProperty(*runtime, "f"), sourceProps.hybridRef);
+        return CachedProp<std::optional<Callback<void(const std::shared_ptr<margelo::nitro::image::HybridTestViewSpec>& /* ref */)>>>::fromRawValue(*runtime, value.asObject(*runtime).getProperty(*runtime, "f"), sourceProps.hybridRef);
       } catch (const std::exception& exc) {
         throw std::runtime_error(std::string("TestView.hybridRef: ") + exc.what());
       }

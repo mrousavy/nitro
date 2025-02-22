@@ -10,7 +10,7 @@
 #include <fbjni/fbjni.h>
 #include <functional>
 
-#include <functional>
+#include <NitroModules/Callback.hpp>
 
 namespace margelo::nitro::image {
 
@@ -39,7 +39,7 @@ namespace margelo::nitro::image {
    */
   struct JFunc_void_double_cxx final: public jni::HybridClass<JFunc_void_double_cxx, JFunc_void_double> {
   public:
-    static jni::local_ref<JFunc_void_double::javaobject> fromCpp(const std::function<void(double /* num */)>& func) {
+    static jni::local_ref<JFunc_void_double::javaobject> fromCpp(const Callback<void(double /* num */)>& func) {
       return JFunc_void_double_cxx::newObjectCxxArgs(func);
     }
 
@@ -53,7 +53,7 @@ namespace margelo::nitro::image {
 
   public:
     [[nodiscard]]
-    inline const std::function<void(double /* num */)>& getFunction() const {
+    inline const Callback<void(double /* num */)>& getFunction() const {
       return _func;
     }
 
@@ -64,11 +64,11 @@ namespace margelo::nitro::image {
     }
 
   private:
-    explicit JFunc_void_double_cxx(const std::function<void(double /* num */)>& func): _func(func) { }
+    explicit JFunc_void_double_cxx(const Callback<void(double /* num */)>& func): _func(func) { }
 
   private:
     friend HybridBase;
-    std::function<void(double /* num */)> _func;
+    Callback<void(double /* num */)> _func;
   };
 
 } // namespace margelo::nitro::image

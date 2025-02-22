@@ -268,29 +268,29 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
     return __result
   }
   
-  abstract fun callSumUpNTimes(callback: () -> Promise<Double>, n: Double): Promise<Double>
+  abstract fun callSumUpNTimes(callback: () -> Double, n: Double): Promise<Double>
   
   @DoNotStrip
   @Keep
-  private fun callSumUpNTimes_cxx(callback: Func_std__shared_ptr_Promise_double__, n: Double): Promise<Double> {
+  private fun callSumUpNTimes_cxx(callback: Func_double, n: Double): Promise<Double> {
     val __result = callSumUpNTimes(callback, n)
     return __result
   }
   
-  abstract fun callbackAsyncPromise(callback: () -> Promise<Promise<Double>>): Promise<Double>
+  abstract fun callbackAsyncPromise(callback: () -> Promise<Double>): Promise<Double>
   
   @DoNotStrip
   @Keep
-  private fun callbackAsyncPromise_cxx(callback: Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double____): Promise<Double> {
+  private fun callbackAsyncPromise_cxx(callback: Func_std__shared_ptr_Promise_double__): Promise<Double> {
     val __result = callbackAsyncPromise(callback)
     return __result
   }
   
-  abstract fun callbackAsyncPromiseBuffer(callback: () -> Promise<Promise<ArrayBuffer>>): Promise<ArrayBuffer>
+  abstract fun callbackAsyncPromiseBuffer(callback: () -> Promise<ArrayBuffer>): Promise<ArrayBuffer>
   
   @DoNotStrip
   @Keep
-  private fun callbackAsyncPromiseBuffer_cxx(callback: Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____): Promise<ArrayBuffer> {
+  private fun callbackAsyncPromiseBuffer_cxx(callback: Func_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___): Promise<ArrayBuffer> {
     val __result = callbackAsyncPromiseBuffer(callback)
     return __result
   }
@@ -304,20 +304,20 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
     return Func_void_double_java(__result)
   }
   
-  abstract fun getValueFromJSCallbackAndWait(getValue: () -> Promise<Double>): Promise<Double>
+  abstract fun getValueFromJSCallbackAndWait(getValue: () -> Double): Promise<Double>
   
   @DoNotStrip
   @Keep
-  private fun getValueFromJSCallbackAndWait_cxx(getValue: Func_std__shared_ptr_Promise_double__): Promise<Double> {
+  private fun getValueFromJSCallbackAndWait_cxx(getValue: Func_double): Promise<Double> {
     val __result = getValueFromJSCallbackAndWait(getValue)
     return __result
   }
   
-  abstract fun getValueFromJsCallback(callback: () -> Promise<String>, andThenCall: (valueFromJs: String) -> Unit): Promise<Unit>
+  abstract fun getValueFromJsCallback(callback: () -> String, andThenCall: (valueFromJs: String) -> Unit): Promise<Unit>
   
   @DoNotStrip
   @Keep
-  private fun getValueFromJsCallback_cxx(callback: Func_std__shared_ptr_Promise_std__string__, andThenCall: Func_void_std__string): Promise<Unit> {
+  private fun getValueFromJsCallback_cxx(callback: Func_std__string, andThenCall: Func_void_std__string): Promise<Unit> {
     val __result = getValueFromJsCallback(callback, andThenCall)
     return __result
   }

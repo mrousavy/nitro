@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include "Callback.hpp"
 #include "NitroDefines.hpp"
 #include "Promise.hpp"
 #include <exception>
@@ -42,14 +43,14 @@ public:
   }
 
 public:
-  void addOnResolvedListener(std::function<void(const T&)> onResolved) const {
+  void addOnResolvedListener(Callback<void(const T&)> onResolved) const {
     _promise->addOnResolvedListener([onResolved = std::move(onResolved)](const T& result) { onResolved(result); });
   }
-  void addOnResolvedListenerCopy(std::function<void(T)> onResolved) const {
+  void addOnResolvedListenerCopy(Callback<void(T)> onResolved) const {
     _promise->addOnResolvedListener([onResolved = std::move(onResolved)](const T& result) { onResolved(result); });
   }
 
-  void addOnRejectedListener(std::function<void(const std::exception_ptr&)> onRejected) const {
+  void addOnRejectedListener(Callback<void(const std::exception_ptr&)> onRejected) const {
     _promise->addOnRejectedListener([onRejected = std::move(onRejected)](const std::exception_ptr& error) { onRejected(error); });
   }
 
@@ -78,11 +79,11 @@ public:
   }
 
 public:
-  void addOnResolvedListener(std::function<void()> onResolved) const {
+  void addOnResolvedListener(Callback<void()> onResolved) const {
     _promise->addOnResolvedListener([onResolved = std::move(onResolved)]() { onResolved(); });
   }
 
-  void addOnRejectedListener(std::function<void(const std::exception_ptr&)> onRejected) const {
+  void addOnRejectedListener(Callback<void(const std::exception_ptr&)> onRejected) const {
     _promise->addOnRejectedListener([onRejected = std::move(onRejected)](const std::exception_ptr& error) { onRejected(error); });
   }
 

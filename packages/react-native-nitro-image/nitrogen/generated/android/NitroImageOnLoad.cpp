@@ -23,10 +23,10 @@
 #include "JFunc_void_std__vector_Powertrain_.hpp"
 #include "JFunc_void.hpp"
 #include "JFunc_void_std__optional_double_.hpp"
+#include "JFunc_double.hpp"
 #include "JFunc_std__shared_ptr_Promise_double__.hpp"
-#include "JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_double____.hpp"
-#include "JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____.hpp"
-#include "JFunc_std__shared_ptr_Promise_std__string__.hpp"
+#include "JFunc_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___.hpp"
+#include "JFunc_std__string.hpp"
 #include "JHybridBaseSpec.hpp"
 #include "JHybridChildSpec.hpp"
 #include "JHybridTestViewSpec.hpp"
@@ -52,10 +52,10 @@ int initialize(JavaVM* vm) {
     margelo::nitro::image::JFunc_void_std__vector_Powertrain__cxx::registerNatives();
     margelo::nitro::image::JFunc_void_cxx::registerNatives();
     margelo::nitro::image::JFunc_void_std__optional_double__cxx::registerNatives();
+    margelo::nitro::image::JFunc_double_cxx::registerNatives();
     margelo::nitro::image::JFunc_std__shared_ptr_Promise_double___cxx::registerNatives();
-    margelo::nitro::image::JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_double_____cxx::registerNatives();
-    margelo::nitro::image::JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer______cxx::registerNatives();
-    margelo::nitro::image::JFunc_std__shared_ptr_Promise_std__string___cxx::registerNatives();
+    margelo::nitro::image::JFunc_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer____cxx::registerNatives();
+    margelo::nitro::image::JFunc_std__string_cxx::registerNatives();
     margelo::nitro::image::JHybridBaseSpec::registerNatives();
     margelo::nitro::image::JHybridChildSpec::registerNatives();
     margelo::nitro::image::JHybridTestViewSpec::registerNatives();

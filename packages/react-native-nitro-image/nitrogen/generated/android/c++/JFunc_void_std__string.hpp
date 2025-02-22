@@ -10,7 +10,7 @@
 #include <fbjni/fbjni.h>
 #include <functional>
 
-#include <functional>
+#include <NitroModules/Callback.hpp>
 #include <string>
 
 namespace margelo::nitro::image {
@@ -40,7 +40,7 @@ namespace margelo::nitro::image {
    */
   struct JFunc_void_std__string_cxx final: public jni::HybridClass<JFunc_void_std__string_cxx, JFunc_void_std__string> {
   public:
-    static jni::local_ref<JFunc_void_std__string::javaobject> fromCpp(const std::function<void(const std::string& /* valueFromJs */)>& func) {
+    static jni::local_ref<JFunc_void_std__string::javaobject> fromCpp(const Callback<void(const std::string& /* valueFromJs */)>& func) {
       return JFunc_void_std__string_cxx::newObjectCxxArgs(func);
     }
 
@@ -54,7 +54,7 @@ namespace margelo::nitro::image {
 
   public:
     [[nodiscard]]
-    inline const std::function<void(const std::string& /* valueFromJs */)>& getFunction() const {
+    inline const Callback<void(const std::string& /* valueFromJs */)>& getFunction() const {
       return _func;
     }
 
@@ -65,11 +65,11 @@ namespace margelo::nitro::image {
     }
 
   private:
-    explicit JFunc_void_std__string_cxx(const std::function<void(const std::string& /* valueFromJs */)>& func): _func(func) { }
+    explicit JFunc_void_std__string_cxx(const Callback<void(const std::string& /* valueFromJs */)>& func): _func(func) { }
 
   private:
     friend HybridBase;
-    std::function<void(const std::string& /* valueFromJs */)> _func;
+    Callback<void(const std::string& /* valueFromJs */)> _func;
   };
 
 } // namespace margelo::nitro::image

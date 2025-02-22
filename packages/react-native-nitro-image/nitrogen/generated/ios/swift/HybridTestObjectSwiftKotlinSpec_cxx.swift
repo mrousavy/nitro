@@ -313,12 +313,12 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
     }
   }
   
-  public final var optionalCallback: bridge.std__optional_std__function_void_double____value______ {
+  public final var optionalCallback: bridge.std__optional_Callback_void_double____value______ {
     @inline(__always)
     get {
-      return { () -> bridge.std__optional_std__function_void_double____value______ in
+      return { () -> bridge.std__optional_Callback_void_double____value______ in
         if let __unwrappedValue = self.__implementation.optionalCallback {
-          return bridge.create_std__optional_std__function_void_double____value______({ () -> bridge.Func_void_double in
+          return bridge.create_std__optional_Callback_void_double____value______({ () -> bridge.Func_void_double in
             let __closureWrapper = Func_void_double(__unwrappedValue)
             return bridge.create_Func_void_double(__closureWrapper.toUnsafe())
           }())
@@ -956,9 +956,34 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public final func callSumUpNTimes(callback: bridge.Func_std__shared_ptr_Promise_double__, n: Double) -> bridge.Result_std__shared_ptr_Promise_double___ {
+  public final func callSumUpNTimes(callback: bridge.Func_double, n: Double) -> bridge.Result_std__shared_ptr_Promise_double___ {
     do {
-      let __result = try self.__implementation.callSumUpNTimes(callback: { () -> () -> Promise<Double> in
+      let __result = try self.__implementation.callSumUpNTimes(callback: { () -> () -> Double in
+        let __wrappedFunction = bridge.wrap_Func_double(callback)
+        return { () -> Double in
+          let __result = __wrappedFunction.call()
+          return __result
+        }
+      }(), n: n)
+      let __resultCpp = { () -> bridge.std__shared_ptr_Promise_double__ in
+        let __promise = bridge.create_std__shared_ptr_Promise_double__()
+        let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_double__(__promise)
+        __result
+          .then({ __result in __promiseHolder.resolve(__result) })
+          .catch({ __error in __promiseHolder.reject(__error.toCpp()) })
+        return __promise
+      }()
+      return bridge.create_Result_std__shared_ptr_Promise_double___(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__shared_ptr_Promise_double___(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
+  public final func callbackAsyncPromise(callback: bridge.Func_std__shared_ptr_Promise_double__) -> bridge.Result_std__shared_ptr_Promise_double___ {
+    do {
+      let __result = try self.__implementation.callbackAsyncPromise(callback: { () -> () -> Promise<Double> in
         let __wrappedFunction = bridge.wrap_Func_std__shared_ptr_Promise_double__(callback)
         return { () -> Promise<Double> in
           let __result = __wrappedFunction.call()
@@ -984,51 +1009,6 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
             return __promise
           }()
         }
-      }(), n: n)
-      let __resultCpp = { () -> bridge.std__shared_ptr_Promise_double__ in
-        let __promise = bridge.create_std__shared_ptr_Promise_double__()
-        let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_double__(__promise)
-        __result
-          .then({ __result in __promiseHolder.resolve(__result) })
-          .catch({ __error in __promiseHolder.reject(__error.toCpp()) })
-        return __promise
-      }()
-      return bridge.create_Result_std__shared_ptr_Promise_double___(__resultCpp)
-    } catch (let __error) {
-      let __exceptionPtr = __error.toCpp()
-      return bridge.create_Result_std__shared_ptr_Promise_double___(__exceptionPtr)
-    }
-  }
-  
-  @inline(__always)
-  public final func callbackAsyncPromise(callback: bridge.Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double____) -> bridge.Result_std__shared_ptr_Promise_double___ {
-    do {
-      let __result = try self.__implementation.callbackAsyncPromise(callback: { () -> () -> Promise<Promise<Double>> in
-        let __wrappedFunction = bridge.wrap_Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double____(callback)
-        return { () -> Promise<Promise<Double>> in
-          let __result = __wrappedFunction.call()
-          return { () -> Promise<Promise<Double>> in
-            let __promise = Promise<Promise<Double>>()
-            let __resolver = { (__result: Promise<Double>) in
-              __promise.resolve(withResult: __result)
-            }
-            let __rejecter = { (__error: Error) in
-              __promise.reject(withError: __error)
-            }
-            let __resolverCpp = { () -> bridge.Func_void_std__shared_ptr_Promise_double__ in
-              let __closureWrapper = Func_void_std__shared_ptr_Promise_double__(__resolver)
-              return bridge.create_Func_void_std__shared_ptr_Promise_double__(__closureWrapper.toUnsafe())
-            }()
-            let __rejecterCpp = { () -> bridge.Func_void_std__exception_ptr in
-              let __closureWrapper = Func_void_std__exception_ptr(__rejecter)
-              return bridge.create_Func_void_std__exception_ptr(__closureWrapper.toUnsafe())
-            }()
-            let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_std__shared_ptr_Promise_double____(__result)
-            __promiseHolder.addOnResolvedListener(__resolverCpp)
-            __promiseHolder.addOnRejectedListener(__rejecterCpp)
-            return __promise
-          }()
-        }
       }())
       let __resultCpp = { () -> bridge.std__shared_ptr_Promise_double__ in
         let __promise = bridge.create_std__shared_ptr_Promise_double__()
@@ -1046,29 +1026,29 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public final func callbackAsyncPromiseBuffer(callback: bridge.Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____) -> bridge.Result_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer____ {
+  public final func callbackAsyncPromiseBuffer(callback: bridge.Func_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___) -> bridge.Result_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer____ {
     do {
-      let __result = try self.__implementation.callbackAsyncPromiseBuffer(callback: { () -> () -> Promise<Promise<ArrayBufferHolder>> in
-        let __wrappedFunction = bridge.wrap_Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____(callback)
-        return { () -> Promise<Promise<ArrayBufferHolder>> in
+      let __result = try self.__implementation.callbackAsyncPromiseBuffer(callback: { () -> () -> Promise<ArrayBufferHolder> in
+        let __wrappedFunction = bridge.wrap_Func_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___(callback)
+        return { () -> Promise<ArrayBufferHolder> in
           let __result = __wrappedFunction.call()
-          return { () -> Promise<Promise<ArrayBufferHolder>> in
-            let __promise = Promise<Promise<ArrayBufferHolder>>()
-            let __resolver = { (__result: Promise<ArrayBufferHolder>) in
+          return { () -> Promise<ArrayBufferHolder> in
+            let __promise = Promise<ArrayBufferHolder>()
+            let __resolver = { (__result: ArrayBufferHolder) in
               __promise.resolve(withResult: __result)
             }
             let __rejecter = { (__error: Error) in
               __promise.reject(withError: __error)
             }
-            let __resolverCpp = { () -> bridge.Func_void_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___ in
-              let __closureWrapper = Func_void_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___(__resolver)
-              return bridge.create_Func_void_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___(__closureWrapper.toUnsafe())
+            let __resolverCpp = { () -> bridge.Func_void_std__shared_ptr_ArrayBuffer_ in
+              let __closureWrapper = Func_void_std__shared_ptr_ArrayBuffer_(__resolver)
+              return bridge.create_Func_void_std__shared_ptr_ArrayBuffer_(__closureWrapper.toUnsafe())
             }()
             let __rejecterCpp = { () -> bridge.Func_void_std__exception_ptr in
               let __closureWrapper = Func_void_std__exception_ptr(__rejecter)
               return bridge.create_Func_void_std__exception_ptr(__closureWrapper.toUnsafe())
             }()
-            let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____(__result)
+            let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___(__result)
             __promiseHolder.addOnResolvedListener(__resolverCpp)
             __promiseHolder.addOnRejectedListener(__rejecterCpp)
             return __promise
@@ -1091,48 +1071,28 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public final func getComplexCallback() -> bridge.Result_std__function_void_double____value______ {
+  public final func getComplexCallback() -> bridge.Result_Callback_void_double____value______ {
     do {
       let __result = try self.__implementation.getComplexCallback()
       let __resultCpp = { () -> bridge.Func_void_double in
         let __closureWrapper = Func_void_double(__result)
         return bridge.create_Func_void_double(__closureWrapper.toUnsafe())
       }()
-      return bridge.create_Result_std__function_void_double____value______(__resultCpp)
+      return bridge.create_Result_Callback_void_double____value______(__resultCpp)
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
-      return bridge.create_Result_std__function_void_double____value______(__exceptionPtr)
+      return bridge.create_Result_Callback_void_double____value______(__exceptionPtr)
     }
   }
   
   @inline(__always)
-  public final func getValueFromJSCallbackAndWait(getValue: bridge.Func_std__shared_ptr_Promise_double__) -> bridge.Result_std__shared_ptr_Promise_double___ {
+  public final func getValueFromJSCallbackAndWait(getValue: bridge.Func_double) -> bridge.Result_std__shared_ptr_Promise_double___ {
     do {
-      let __result = try self.__implementation.getValueFromJSCallbackAndWait(getValue: { () -> () -> Promise<Double> in
-        let __wrappedFunction = bridge.wrap_Func_std__shared_ptr_Promise_double__(getValue)
-        return { () -> Promise<Double> in
+      let __result = try self.__implementation.getValueFromJSCallbackAndWait(getValue: { () -> () -> Double in
+        let __wrappedFunction = bridge.wrap_Func_double(getValue)
+        return { () -> Double in
           let __result = __wrappedFunction.call()
-          return { () -> Promise<Double> in
-            let __promise = Promise<Double>()
-            let __resolver = { (__result: Double) in
-              __promise.resolve(withResult: __result)
-            }
-            let __rejecter = { (__error: Error) in
-              __promise.reject(withError: __error)
-            }
-            let __resolverCpp = { () -> bridge.Func_void_double in
-              let __closureWrapper = Func_void_double(__resolver)
-              return bridge.create_Func_void_double(__closureWrapper.toUnsafe())
-            }()
-            let __rejecterCpp = { () -> bridge.Func_void_std__exception_ptr in
-              let __closureWrapper = Func_void_std__exception_ptr(__rejecter)
-              return bridge.create_Func_void_std__exception_ptr(__closureWrapper.toUnsafe())
-            }()
-            let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_double__(__result)
-            __promiseHolder.addOnResolvedListenerCopy(__resolverCpp)
-            __promiseHolder.addOnRejectedListener(__rejecterCpp)
-            return __promise
-          }()
+          return __result
         }
       }())
       let __resultCpp = { () -> bridge.std__shared_ptr_Promise_double__ in
@@ -1151,33 +1111,13 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public final func getValueFromJsCallback(callback: bridge.Func_std__shared_ptr_Promise_std__string__, andThenCall: bridge.Func_void_std__string) -> bridge.Result_std__shared_ptr_Promise_void___ {
+  public final func getValueFromJsCallback(callback: bridge.Func_std__string, andThenCall: bridge.Func_void_std__string) -> bridge.Result_std__shared_ptr_Promise_void___ {
     do {
-      let __result = try self.__implementation.getValueFromJsCallback(callback: { () -> () -> Promise<String> in
-        let __wrappedFunction = bridge.wrap_Func_std__shared_ptr_Promise_std__string__(callback)
-        return { () -> Promise<String> in
+      let __result = try self.__implementation.getValueFromJsCallback(callback: { () -> () -> String in
+        let __wrappedFunction = bridge.wrap_Func_std__string(callback)
+        return { () -> String in
           let __result = __wrappedFunction.call()
-          return { () -> Promise<String> in
-            let __promise = Promise<String>()
-            let __resolver = { (__result: String) in
-              __promise.resolve(withResult: __result)
-            }
-            let __rejecter = { (__error: Error) in
-              __promise.reject(withError: __error)
-            }
-            let __resolverCpp = { () -> bridge.Func_void_std__string in
-              let __closureWrapper = Func_void_std__string(__resolver)
-              return bridge.create_Func_void_std__string(__closureWrapper.toUnsafe())
-            }()
-            let __rejecterCpp = { () -> bridge.Func_void_std__exception_ptr in
-              let __closureWrapper = Func_void_std__exception_ptr(__rejecter)
-              return bridge.create_Func_void_std__exception_ptr(__closureWrapper.toUnsafe())
-            }()
-            let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_std__string__(__result)
-            __promiseHolder.addOnResolvedListener(__resolverCpp)
-            __promiseHolder.addOnRejectedListener(__rejecterCpp)
-            return __promise
-          }()
+          return String(__result)
         }
       }(), andThenCall: { () -> (String) -> Void in
         let __wrappedFunction = bridge.wrap_Func_void_std__string(andThenCall)

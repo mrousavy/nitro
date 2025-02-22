@@ -9,7 +9,7 @@
 
 
 
-#include <functional>
+#include <NitroModules/Callback.hpp>
 #include "JFunc_void.hpp"
 
 namespace margelo::nitro::image {
@@ -39,10 +39,10 @@ namespace margelo::nitro::image {
     static const auto method = _javaPart->getClass()->getMethod<void(jboolean /* isBlue */)>("setBlue");
     method(_javaPart, isBlue);
   }
-  std::function<void()> JHybridTestViewSpec::getSomeCallback() {
+  Callback<void()> JHybridTestViewSpec::getSomeCallback() {
     static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JFunc_void::javaobject>()>("getSomeCallback_cxx");
     auto __result = method(_javaPart);
-    return [&]() -> std::function<void()> {
+    return [&]() -> Callback<void()> {
       if (__result->isInstanceOf(JFunc_void_cxx::javaClassStatic())) [[likely]] {
         auto downcast = jni::static_ref_cast<JFunc_void_cxx::javaobject>(__result);
         return downcast->cthis()->getFunction();
@@ -53,7 +53,7 @@ namespace margelo::nitro::image {
       }
     }();
   }
-  void JHybridTestViewSpec::setSomeCallback(const std::function<void()>& someCallback) {
+  void JHybridTestViewSpec::setSomeCallback(const Callback<void()>& someCallback) {
     static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<JFunc_void::javaobject> /* someCallback */)>("setSomeCallback_cxx");
     method(_javaPart, JFunc_void_cxx::fromCpp(someCallback));
   }

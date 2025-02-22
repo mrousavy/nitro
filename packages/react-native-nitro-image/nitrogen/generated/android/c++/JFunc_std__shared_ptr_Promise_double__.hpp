@@ -10,7 +10,7 @@
 #include <fbjni/fbjni.h>
 #include <functional>
 
-#include <functional>
+#include <NitroModules/Callback.hpp>
 #include <NitroModules/Promise.hpp>
 #include <NitroModules/JPromise.hpp>
 
@@ -53,7 +53,7 @@ namespace margelo::nitro::image {
    */
   struct JFunc_std__shared_ptr_Promise_double___cxx final: public jni::HybridClass<JFunc_std__shared_ptr_Promise_double___cxx, JFunc_std__shared_ptr_Promise_double__> {
   public:
-    static jni::local_ref<JFunc_std__shared_ptr_Promise_double__::javaobject> fromCpp(const std::function<std::shared_ptr<Promise<double>>()>& func) {
+    static jni::local_ref<JFunc_std__shared_ptr_Promise_double__::javaobject> fromCpp(const Callback<std::shared_ptr<Promise<double>>()>& func) {
       return JFunc_std__shared_ptr_Promise_double___cxx::newObjectCxxArgs(func);
     }
 
@@ -79,7 +79,7 @@ namespace margelo::nitro::image {
 
   public:
     [[nodiscard]]
-    inline const std::function<std::shared_ptr<Promise<double>>()>& getFunction() const {
+    inline const Callback<std::shared_ptr<Promise<double>>()>& getFunction() const {
       return _func;
     }
 
@@ -90,11 +90,11 @@ namespace margelo::nitro::image {
     }
 
   private:
-    explicit JFunc_std__shared_ptr_Promise_double___cxx(const std::function<std::shared_ptr<Promise<double>>()>& func): _func(func) { }
+    explicit JFunc_std__shared_ptr_Promise_double___cxx(const Callback<std::shared_ptr<Promise<double>>()>& func): _func(func) { }
 
   private:
     friend HybridBase;
-    std::function<std::shared_ptr<Promise<double>>()> _func;
+    Callback<std::shared_ptr<Promise<double>>()> _func;
   };
 
 } // namespace margelo::nitro::image
