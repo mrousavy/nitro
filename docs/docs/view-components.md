@@ -22,12 +22,12 @@ Nitro Views require **react-native 0.78.0** or higher, and require the new archi
 To create a new Nitro View, declare it's props and methods in a `*.nitro.ts` file, and export your `HybridView` type:
 
 ```ts title="Camera.nitro.ts"
-import type { HybridView } from 'react-native-nitro-modules'
+import type { HybridView, HybridViewProps, HybridViewMethods } from 'react-native-nitro-modules'
 
-export interface CameraProps {
+export interface CameraProps extends HybridViewProps {
   enableFlash: boolean
 }
-export interface CameraMethods { }
+export interface CameraMethods extends HybridViewMethods { }
 
 export type CameraView = HybridView<CameraProps, CameraMethods>
 ```
@@ -155,7 +155,7 @@ export interface Image extends HybridObject {
 
 ```ts title="ImageView.nitro.ts"
 import { type Image } from './Image.nitro.ts'
-export interface ImageProps {
+export interface ImageProps extends HybridViewProps {
   image: Image
 }
 export type ImageView = HybridView<ImageProps>
@@ -216,7 +216,7 @@ Unfortunately React Native's renderer does not allow changing this behaviour, so
 So every function (`() => void`) has to be wrapped in an object with one key - `f` - which holds the function: `{ f: () => void }`
 
 ```tsx
-export interface CameraProps {
+export interface CameraProps extends HybridViewProps {
   onCaptured: (image: Image) => void
 }
 export type CameraView = HybridView<CameraProps>
@@ -239,8 +239,8 @@ Since every `HybridView` is also a `HybridObject`, methods can be directly calle
 Assuming our `<Camera>` component has a `takePhoto()` function like so:
 
 ```ts
-export interface CameraProps { ... }
-export interface CameraMethods {
+export interface CameraProps extends HybridViewProps { ... }
+export interface CameraMethods extends HybridViewMethods {
   takePhoto(): Promise<Image>
 }
 
