@@ -7,9 +7,9 @@
 
 #pragma once
 
+#include <sstream>
 #include <string>
 #include <thread>
-#include <sstream>
 
 namespace margelo::nitro {
 
@@ -22,7 +22,7 @@ public:
    * This is implemented differently on iOS and Android.
    */
   static std::string getThreadName();
-  
+
   /**
    * Converts the given `std::thread::id` to a string.
    */

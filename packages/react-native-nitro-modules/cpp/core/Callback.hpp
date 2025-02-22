@@ -4,18 +4,19 @@
 
 #pragma once
 
-#include "NitroDefines.hpp"
-#include "NitroTypeInfo.hpp"
-#include "ThreadPool.hpp"
-#include "Promise.hpp"
 #include "BorrowingReference.hpp"
 #include "Dispatcher.hpp"
+#include "JSIConverter.hpp"
+#include "NitroDefines.hpp"
+#include "NitroTypeInfo.hpp"
+#include "Promise.hpp"
+#include "ThreadPool.hpp"
+#include "ThreadUtils.hpp"
+#include <functional>
 #include <jsi/jsi.h>
 #include <memory>
-#include <functional>
-#include <type_traits>
 #include <thread>
-#include "ThreadUtils.hpp"
+#include <type_traits>
 
 namespace margelo::nitro {
 
@@ -30,7 +31,7 @@ template <typename R, typename... Args>
 class Callback<R(Args...)> {
 private:
   using DefaultReturn = std::conditional_t<std::is_void_v<R>, void, Promise<R>>;
-  
+
 public:
   virtual R callSync(Args... args) const = 0;
   virtual Promise<R> callAsync(Args... args) const = 0;
@@ -48,17 +49,16 @@ public:
   }
 };
 
-
 // ----- NativeCallback (std::function) -----
 
 template <typename Signature>
 class NativeCallback;
 
 template <typename R, typename... Args>
-class NativeCallback<R(Args...)> final: public Callback<R(Args...)> {
+class NativeCallback<R(Args...)> final : public Callback<R(Args...)> {
 public:
   template <typename Func>
-  explicit NativeCallback(Func&& function): _func(std::forward<Func>(function)) { }
+  explicit NativeCallback(Func&& function) : _func(std::forward<Func>(function)) {}
 
 public:
   inline R callSync(Args... args) const override {
@@ -75,25 +75,23 @@ private:
   std::function<R(Args...)> _func;
 };
 
-
 // ----- JSCallback (jsi::Function) -----
 
 template <typename Signature>
 class JSCallback;
 
 template <typename R, typename... Args>
-class JSCallback<R(Args...)> final: public Callback<R(Args...)> {
+class JSCallback<R(Args...)> final : public Callback<R(Args...)> {
 public:
 #ifdef NITRO_DEBUG
-  explicit JSCallback(jsi::Runtime& runtime,
-                      const BorrowingReference<jsi::Function>& function,
-                      const std::shared_ptr<Dispatcher>& dispatcher):
-  _runtime(runtime), _func(function), _dispatcher(dispatcher), _threadId(std::this_thread::get_id()), _threadName(ThreadUtils::getThreadName()) { }
+  explicit JSCallback(jsi::Runtime& runtime, const BorrowingReference<jsi::Function>& function,
+                      const std::shared_ptr<Dispatcher>& dispatcher)
+      : _runtime(runtime), _func(function), _dispatcher(dispatcher), _threadId(std::this_thread::get_id()),
+        _threadName(ThreadUtils::getThreadName()) {}
 #else
-  explicit JSCallback(jsi::Runtime& runtime,
-                      const BorrowingReference<jsi::Function>& function,
-                      const std::shared_ptr<Dispatcher>& dispatcher):
-  _runtime(runtime), _func(function), _dispatcher(dispatcher) { }
+  explicit JSCallback(jsi::Runtime& runtime, const BorrowingReference<jsi::Function>& function,
+                      const std::shared_ptr<Dispatcher>& dispatcher)
+      : _runtime(runtime), _func(function), _dispatcher(dispatcher) {}
 #endif
 
 public:
@@ -101,26 +99,23 @@ public:
 #ifdef NITRO_DEBUG
     if (_threadId != std::this_thread::get_id()) [[unlikely]] {
       std::string typeName = TypeInfo::getFriendlyTypename<JSCallback<R(Args...)>>();
-      throw std::runtime_error("Cannot call " + typeName + " on Thread " + ThreadUtils::getThreadName() + " - expected to run on Thread " + _threadName + "! If you want to call this JSCallback on a different Thread, use `callAsync(...)` instead.");
+      throw std::runtime_error("Cannot call " + typeName + " on Thread " + ThreadUtils::getThreadName() + " - expected to run on Thread " +
+                               _threadName + "! If you want to call this JSCallback on a different Thread, use `callAsync(...)` instead.");
     }
 #endif
     if (!_func) [[unlikely]] {
       std::string typeName = TypeInfo::getFriendlyTypename<JSCallback<R(Args...)>>();
       throw std::runtime_error("Cannot call " + typeName + " - the jsi::Function has already been deleted!");
     }
-    
+
     jsi::Value result = _func->call(_runtime, JSIConverter<Args>::toJSI(std::forward<Args>(args))...);
     return JSIConverter<R>::fromJSI(_runtime, result);
   }
   inline Promise<R> callAync(Args... args) const override {
-    return _dispatcher->runAsyncAwaitable([this, args = std::move(args) ...]() {
-      return this->callSync(args...);
-    });
+    return _dispatcher->runAsyncAwaitable([this, args = std::move(args)...]() { return this->callSync(args...); });
   }
   inline void callAsyncShootAndForget(Args... args) const override {
-    _dispatcher->runAsync([this, args = std::move(args) ...]() {
-      this->callSync(args...);
-    });
+    _dispatcher->runAsync([this, args = std::move(args)...]() { this->callSync(args...); });
   }
 
 private:
