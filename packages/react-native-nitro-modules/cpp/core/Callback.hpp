@@ -47,6 +47,10 @@ private:
 
 public:
   /**
+   * Create a new Callback that does nothing.
+   */
+  Callback() : _data(NativeCallback<R(Args...)>(nullptr)), _isNative(true) {}
+  /**
    * Create a new Callback that points to a `jsi::Function` - this is thread-confined.
    */
   Callback(jsi::Runtime& runtime, const BorrowingReference<jsi::Function>& function, const std::shared_ptr<Dispatcher>& dispatcher)
@@ -55,6 +59,17 @@ public:
    * Create a new Callback that points to a native `std::function<..>` - this can be called from any Thread.
    */
   explicit Callback(std::function<R(Args...)>&& func) : _data(NativeCallback<R(Args...)>(std::move(func))), _isNative(true) {}
+
+  Callback(const Callback& other) : _data(other._data), _isNative(other._isNative) {}
+  Callback(Callback&& other) : _data(std::move(other._data)), _isNative(other._isNative) {}
+
+  ~Callback() {
+    if (_isNative) {
+      _data.nativeCallback.~NativeCallback<R(Args...)>();
+    } else {
+      _data.nativeCallback.~JSCallback<R(Args...)>();
+    }
+  }
 
 public:
   R callSync(Args... args) const {
@@ -97,19 +112,19 @@ template <typename Signature>
 class NativeCallback;
 
 template <typename R, typename... Args>
-class NativeCallback<R(Args...)> final : public Callback<R(Args...)> {
+class NativeCallback<R(Args...)> final {
 public:
   template <typename Func>
   explicit NativeCallback(Func&& function) : _func(std::forward<Func>(function)) {}
 
 public:
-  inline R callSync(Args... args) const override {
+  inline R callSync(Args... args) const {
     return _func(std::forward<Args>(args)...);
   }
-  inline Promise<R> callAync(Args... args) const override {
+  inline Promise<R> callAync(Args... args) const {
     return Promise<R>::resolved(_func(std::forward<Args>(args)...));
   }
-  inline void callAsyncShootAndForget(Args... args) const override {
+  inline void callAsyncShootAndForget(Args... args) const {
     _func(std::forward<Args>(args)...);
   }
 
@@ -123,7 +138,7 @@ template <typename Signature>
 class JSCallback;
 
 template <typename R, typename... Args>
-class JSCallback<R(Args...)> final : public Callback<R(Args...)> {
+class JSCallback<R(Args...)> final {
 public:
 #ifdef NITRO_DEBUG
   explicit JSCallback(jsi::Runtime& runtime, const BorrowingReference<jsi::Function>& function,
@@ -137,7 +152,7 @@ public:
 #endif
 
 public:
-  inline R callSync(Args... args) const override {
+  inline R callSync(Args... args) const {
 #ifdef NITRO_DEBUG
     // Check whether the callee is actually calling from the same Thread this JSCallback<..> was created on
     if (_threadId != std::this_thread::get_id()) [[unlikely]] {
@@ -156,10 +171,10 @@ public:
     jsi::Value result = _func->call(_runtime, JSIConverter<Args>::toJSI(std::forward<Args>(args))...);
     return JSIConverter<R>::fromJSI(_runtime, result);
   }
-  inline Promise<R> callAync(Args... args) const override {
+  inline Promise<R> callAync(Args... args) const {
     return _dispatcher->runAsyncAwaitable([this, ... args = std::move(args)]() { return this->callSync(std::forward<Args>(args)...); });
   }
-  inline void callAsyncShootAndForget(Args... args) const override {
+  inline void callAsyncShootAndForget(Args... args) const {
     _dispatcher->runAsync([this, ... args = std::move(args)]() { this->callSync(std::forward<Args>(args)...); });
   }
 
