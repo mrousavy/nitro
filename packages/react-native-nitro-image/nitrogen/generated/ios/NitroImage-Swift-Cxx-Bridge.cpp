@@ -222,6 +222,15 @@ namespace margelo::nitro::image::bridge::swift {
     return swiftPart.toUnsafe();
   }
   
+  // pragma MARK: std::function<double()>
+  Func_double create_Func_double(void* _Nonnull swiftClosureWrapper) {
+    auto swiftClosure = NitroImage::Func_double::fromUnsafe(swiftClosureWrapper);
+    return [swiftClosure = std::move(swiftClosure)]() mutable -> double {
+      auto __result = swiftClosure.call();
+      return __result;
+    };
+  }
+  
   // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridTestViewSpec>
   std::shared_ptr<margelo::nitro::image::HybridTestViewSpec> create_std__shared_ptr_margelo__nitro__image__HybridTestViewSpec_(void* _Nonnull swiftUnsafePointer) {
     NitroImage::HybridTestViewSpec_cxx swiftPart = NitroImage::HybridTestViewSpec_cxx::fromUnsafe(swiftUnsafePointer);

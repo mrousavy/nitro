@@ -178,6 +178,14 @@ export function addKnownType(
   knownTypes[language].set(key, type)
 }
 
+function isSyncFunction(type: TSMorphType): boolean {
+  if (type.getCallSignatures().length < 1)
+    // not a function.
+    return false
+  const syncTag = type.getProperty('__syncTag')
+  return syncTag != null
+}
+
 /**
  * Create a new type (or return it from cache if it is already known)
  */
@@ -240,7 +248,8 @@ export function createType(
         const isNullable = parameterType.isNullable() || p.isOptional()
         return createNamedType(language, p.getName(), parameterType, isNullable)
       })
-      return new FunctionType(returnType, parameters)
+      const isSync = isSyncFunction(type)
+      return new FunctionType(returnType, parameters, isSync)
     } else if (isPromise(type)) {
       // It's a Promise!
       const [promiseResolvingType] = getArguments(type, 'Promise', 1)
