@@ -64,14 +64,14 @@ Additionally, a view config (`CameraViewConfig.json`) will be generated - this i
 
 ### 3. Implementation
 
-Now it's time to implement the View - simply create a new Swift/Kotlin class/file, extend from `HybridCameraViewSpec` and implement your `.isBlue` property, as well as the common `.view` accessor:
+Now it's time to implement the View - simply create a new Swift/Kotlin class/file, extend from `HybridCameraViewSpec` and implement your `.enableFlash` property, as well as the common `.view` accessor:
 
 <Tabs groupId="native-view-language">
   <TabItem value="swift" label="Swift" default>
     ```swift title="HybridCameraView.swift"
     class HybridCameraView : HybridCameraViewSpec {
       // Props
-      var isBlue: Bool = false
+      var enableFlash: Bool = false
 
       // View
       var view: UIView = UIView()
