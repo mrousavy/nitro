@@ -55,7 +55,7 @@ public:
 
 public:
   std::shared_ptr<Promise<R>> call(Args... args) const {
-    return _dispatcher->runAsyncAwaitable([this, ... args = std::move(args)]() { return this->_callback.call(args...); });
+    return _dispatcher->runAsyncAwaitable<R>([this, ... args = std::move(args)]() { return this->_callback.call(args...); });
   }
   void callAndForget(Args... args) const {
     _dispatcher->runAsync([this, ... args = std::move(args)]() { return this->_callback.call(args...); });

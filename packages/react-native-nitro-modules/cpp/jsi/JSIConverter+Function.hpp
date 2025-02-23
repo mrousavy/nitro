@@ -26,19 +26,19 @@ using namespace facebook;
 template <typename ReturnType, typename... Args>
 struct JSIConverter<std::function<ReturnType(Args...)>> final {
   // Promise<T> -> T
-  using ResultingType = promise_type_v<ReturnType>;
+  using ResultingType = std::conditional_t<is_promise_v<ReturnType>, promise_type_v<ReturnType>, ReturnType>;
 
   static inline std::function<ReturnType(Args...)> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
     // Make function global - it'll be managed by the Runtime's memory, and we only have a weak_ref to it.
     auto cache = JSICache::getOrCreateCache(runtime);
     jsi::Function function = arg.asObject(runtime).asFunction(runtime);
     BorrowingReference<jsi::Function> sharedFunction = cache.makeShared(std::move(function));
-    SyncJSCallback<ReturnType(Args...)> callback(runtime, std::move(sharedFunction));
+    SyncJSCallback<ResultingType(Args...)> callback(runtime, std::move(sharedFunction));
 
     if constexpr (is_promise_v<ReturnType> || std::is_void_v<ReturnType>) {
       // Return type is `Promise<T>` or `void` - it's an async callback!
       std::shared_ptr<Dispatcher> dispatcher = Dispatcher::getRuntimeGlobalDispatcher(runtime);
-      return AsyncJSCallback<ReturnType(Args...)>(std::move(callback), dispatcher);
+      return AsyncJSCallback<ResultingType(Args...)>(std::move(callback), dispatcher);
     } else {
       // Return type is `T` - it's a sync callback!
       return callback;
