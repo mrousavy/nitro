@@ -55,10 +55,10 @@ public:
 
 public:
   std::shared_ptr<Promise<R>> call(Args... args) const {
-    return _dispatcher->runAsyncAwaitable<R>([this, ... args = std::move(args)]() { return this->_callback.call(args...); });
+    return _dispatcher->runAsyncAwaitable<R>([callback = _callback, ... args = std::move(args)]() { return callback.call(args...); });
   }
   void callAndForget(Args... args) const {
-    _dispatcher->runAsync([this, ... args = std::move(args)]() { return this->_callback.call(args...); });
+    _dispatcher->runAsync([callback = _callback, ... args = std::move(args)]() { return callback.call(args...); });
   }
 
 public:
@@ -93,4 +93,4 @@ R SyncJSCallback<R(Args...)>::call(Args... args) const {
   }
 }
 
-}
+} // namespace margelo::nitro
