@@ -77,7 +77,7 @@ uint8_t* JSArrayBuffer::data() {
     return nullptr;
   }
   // JS Part is still alive - we can assume that the jsi::Runtime is safe to access here too.
-  return _jsReference->data(*_runtime);
+  return _jsReference->data(_runtime);
 }
 
 size_t JSArrayBuffer::size() const {
@@ -91,7 +91,7 @@ size_t JSArrayBuffer::size() const {
     return 0;
   }
   // JS Part is still alive - we can assume that the jsi::Runtime is safe to access here too.
-  return _jsReference->size(*_runtime);
+  return _jsReference->size(_runtime);
 }
 
 bool JSArrayBuffer::isOwner() const noexcept {
