@@ -61,7 +61,7 @@ bool NativeArrayBuffer::isOwner() const noexcept {
 
 // 3. JSArrayBuffer
 
-JSArrayBuffer::JSArrayBuffer(jsi::Runtime* runtime, BorrowingReference<jsi::ArrayBuffer> jsReference)
+JSArrayBuffer::JSArrayBuffer(jsi::Runtime& runtime, BorrowingReference<jsi::ArrayBuffer> jsReference)
     : ArrayBuffer(), _runtime(runtime), _jsReference(jsReference), _initialThreadId(std::this_thread::get_id()) {}
 
 JSArrayBuffer::~JSArrayBuffer() {}
