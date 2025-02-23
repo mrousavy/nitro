@@ -13,6 +13,7 @@ struct JSIConverter;
 } // namespace margelo::nitro
 
 #include "BorrowingReference.hpp"
+#include "JSIConverter.hpp"
 #include "Promise.hpp"
 #include <functional>
 #include <jsi/jsi.h>
@@ -30,7 +31,16 @@ public:
   SyncJSCallback(jsi::Runtime& runtime, BorrowingReference<jsi::Function>&& function) : _runtime(runtime), _function(std::move(function)) {}
 
 public:
-  R call(Args... args) const;
+  R call(Args... args) const {
+    jsi::Value result = _function->call(_runtime, JSIConverter<std::decay_t<Args>>::toJSI(_runtime, args)...);
+    if constexpr (std::is_void_v<R>) {
+      // It's returning void. No result
+      return;
+    } else {
+      // It's returning a type `R`, convert it
+      return JSIConverter<R>::fromJSI(_runtime, result);
+    }
+  }
 
 public:
   inline R operator()(Args... args) const {
@@ -74,23 +84,5 @@ private:
   SyncJSCallback<R(Args...)> _callback;
   std::shared_ptr<Dispatcher> _dispatcher;
 };
-
-} // namespace margelo::nitro
-
-#include "JSIConverter.hpp"
-
-namespace margelo::nitro {
-
-template <typename R, typename... Args>
-R SyncJSCallback<R(Args...)>::call(Args... args) const {
-  jsi::Value result = _function->call(_runtime, JSIConverter<std::decay_t<Args>>::toJSI(_runtime, args)...);
-  if constexpr (std::is_void_v<R>) {
-    // It's returning void. No result
-    return;
-  } else {
-    // It's returning a type `R`, convert it
-    return JSIConverter<R>::fromJSI(_runtime, result);
-  }
-}
 
 } // namespace margelo::nitro
