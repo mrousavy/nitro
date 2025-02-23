@@ -77,7 +77,15 @@ private:
   template <size_t... Is>
   static inline jsi::Value callHybridFunction(const std::function<R(Args...)>& function, jsi::Runtime& runtime, const jsi::Value* args,
                                               std::index_sequence<Is...>) {
-    throw std::runtime_error("nope");
+    if constexpr (std::is_void_v<R>) {
+      // it is a void function (will return undefined in JS)
+      function(JSIConverter<std::decay_t<Args>>::fromJSI(runtime, args[Is])...);
+      return jsi::Value::undefined();
+    } else {
+      // it is a custom type, parse it to a JS value
+      R result = function(JSIConverter<std::decay_t<Args>>::fromJSI(runtime, args[Is])...);
+      return JSIConverter<R>::toJSI(runtime, std::forward<R>(result));
+    }
   }
 };
 
