@@ -27,7 +27,9 @@ jsi::Value HybridObjectPrototype::createPrototype(jsi::Runtime& runtime, const s
   auto cachedPrototype = prototypeCache.find(prototype->getNativeInstanceId());
   if (cachedPrototype != prototypeCache.end()) {
     const BorrowingReference<jsi::Object>& cachedObject = cachedPrototype->second;
-    return jsi::Value(runtime, *cachedObject).getObject(runtime);
+    if (cachedObject != nullptr) {
+      return jsi::Value(runtime, *cachedObject);
+    }
   }
 
   // 2. We didn't find the given prototype in cache (either it's a new prototype, or a new runtime),
@@ -66,19 +68,19 @@ jsi::Value HybridObjectPrototype::createPrototype(jsi::Runtime& runtime, const s
                               /* descriptorObj */ property);
   }
 
-  // 6. Throw it into our cache so the next lookup can be cached and therefore faster
-  JSICacheReference jsiCache = JSICache::getOrCreateCache(runtime);
-  BorrowingReference<jsi::Object> cachedObject = jsiCache.makeShared(std::move(object));
-  prototypeCache.emplace(prototype->getNativeInstanceId(), cachedObject);
-
-  // 7. In DEBUG, add a __type info to the prototype object.
+  // 6. In DEBUG, add a __type info to the prototype object.
 #ifdef NITRO_DEBUG
   auto prototypeName = "Prototype<" + typeName + ">";
-  cachedObject->setProperty(runtime, "__type", jsi::String::createFromUtf8(runtime, prototypeName));
+  object.setProperty(runtime, "__type", jsi::String::createFromUtf8(runtime, prototypeName));
 #endif
 
+  // 7. Throw it into our cache so the next lookup can be cached and therefore faster
+  JSICacheReference jsiCache = JSICache::getOrCreateCache(runtime);
+  BorrowingReference<jsi::Object> sharedObject = jsiCache.makeShared(std::move(object));
+  prototypeCache.emplace(prototype->getNativeInstanceId(), sharedObject);
+
   // 8. Return it!
-  return jsi::Value(runtime, *cachedObject);
+  return jsi::Value(runtime, *sharedObject);
 }
 
 jsi::Value HybridObjectPrototype::getPrototype(jsi::Runtime& runtime) {
