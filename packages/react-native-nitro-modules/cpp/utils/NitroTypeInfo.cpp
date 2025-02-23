@@ -13,6 +13,28 @@
 
 namespace margelo::nitro {
 
+std::string TypeInfo::getCurrentExceptionName() {
+#if __has_include(<cxxabi.h>)
+  std::string name = __cxxabiv1::__cxa_current_exception_type()->name();
+  return demangleName(name);
+#else
+  return "<unknown>";
+#endif
+}
+
+std::string TypeInfo::replaceRegex(const std::string& original, const std::string& pattern, const std::string& replacement) {
+  static std::unordered_map<std::string, std::regex> cache;
+
+  auto found = cache.find(pattern);
+  if (found != cache.end()) {
+    return std::regex_replace(original, found->second, replacement);
+  }
+
+  std::regex regex(pattern);
+  cache.emplace(pattern, regex);
+  return std::regex_replace(original, regex, replacement);
+}
+
 std::string TypeInfo::demangleName(const std::string& typeName, bool removeNamespace) {
 #ifdef NITRO_DEBUG
   // In debug, we demangle the name using Cxx ABI and prettify it.
@@ -52,28 +74,6 @@ std::string TypeInfo::demangleName(const std::string& typeName, bool removeNames
 #else
   // In release, we don't do any of that. Just return the ugly name.
   return typeName;
-#endif
-}
-
-std::string TypeInfo::replaceRegex(const std::string& original, const std::string& pattern, const std::string& replacement) {
-  static std::unordered_map<std::string, std::regex> cache;
-
-  auto found = cache.find(pattern);
-  if (found != cache.end()) {
-    return std::regex_replace(original, found->second, replacement);
-  }
-
-  std::regex regex(pattern);
-  cache.emplace(pattern, regex);
-  return std::regex_replace(original, regex, replacement);
-}
-
-std::string TypeInfo::getCurrentExceptionName() {
-#if __has_include(<cxxabi.h>)
-  std::string name = __cxxabiv1::__cxa_current_exception_type()->name();
-  return demangleName(name);
-#else
-  return "<unknown>";
 #endif
 }
 
