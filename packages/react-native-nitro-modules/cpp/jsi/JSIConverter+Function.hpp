@@ -23,31 +23,31 @@ namespace margelo::nitro {
 using namespace facebook;
 
 // [](Args...) -> T {} <> (Args...) => T
-template <typename ReturnType, typename... Args>
-struct JSIConverter<std::function<ReturnType(Args...)>> final {
+template <typename R, typename... Args>
+struct JSIConverter<std::function<R(Args...)>> final {
   // Use AsyncJSCallback or SyncJSCallback
-  inline static constexpr bool isAsync = is_promise_v<ReturnType> || std::is_void_v<ReturnType>;
+  inline static constexpr bool isAsync = is_promise_v<R> || std::is_void_v<R>;
   // Promise<T> -> T
-  using ResultingType = std::conditional_t<isAsync, promise_type_v<ReturnType>, ReturnType>;
+  using ActualR = std::conditional_t<isAsync, promise_type_v<R>, R>;
 
-  static inline std::function<ReturnType(Args...)> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+  static inline std::function<R(Args...)> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
     // Make function global - it'll be managed by the Runtime's memory, and we only have a weak_ref to it.
     auto cache = JSICache::getOrCreateCache(runtime);
     jsi::Function function = arg.asObject(runtime).asFunction(runtime);
     BorrowingReference<jsi::Function> sharedFunction = cache.makeShared(std::move(function));
-    SyncJSCallback<ResultingType(Args...)> callback(runtime, std::move(sharedFunction));
+    SyncJSCallback<ActualR(Args...)> callback(runtime, std::move(sharedFunction));
 
     if constexpr (isAsync) {
       // Return type is `Promise<T>` or `void` - it's an async callback!
       std::shared_ptr<Dispatcher> dispatcher = Dispatcher::getRuntimeGlobalDispatcher(runtime);
-      return AsyncJSCallback<ResultingType(Args...)>(std::move(callback), dispatcher);
+      return AsyncJSCallback<ActualR(Args...)>(std::move(callback), dispatcher);
     } else {
       // Return type is `T` - it's a sync callback!
       return callback;
     }
   }
 
-  static inline jsi::Value toJSI(jsi::Runtime& runtime, std::function<ReturnType(Args...)>&& function) {
+  static inline jsi::Value toJSI(jsi::Runtime& runtime, std::function<R(Args...)>&& function) {
     jsi::HostFunctionType jsFunction = [function = std::move(function)](jsi::Runtime& runtime, const jsi::Value&, const jsi::Value* args,
                                                                         size_t count) -> jsi::Value {
       if (count != sizeof...(Args)) [[unlikely]] {
@@ -60,8 +60,8 @@ struct JSIConverter<std::function<ReturnType(Args...)>> final {
                                                  std::move(jsFunction));
   }
 
-  static inline jsi::Value toJSI(jsi::Runtime& runtime, const std::function<ReturnType(Args...)>& function) {
-    std::function<ReturnType(Args...)> copy = function;
+  static inline jsi::Value toJSI(jsi::Runtime& runtime, const std::function<R(Args...)>& function) {
+    std::function<R(Args...)> copy = function;
     return toJSI(runtime, std::move(copy));
   }
 
@@ -75,8 +75,8 @@ struct JSIConverter<std::function<ReturnType(Args...)>> final {
 
 private:
   template <size_t... Is>
-  static inline jsi::Value callHybridFunction(const std::function<ReturnType(Args...)>& function, jsi::Runtime& runtime,
-                                              const jsi::Value* args, std::index_sequence<Is...>) {
+  static inline jsi::Value callHybridFunction(const std::function<R(Args...)>& function, jsi::Runtime& runtime, const jsi::Value* args,
+                                              std::index_sequence<Is...>) {
     throw std::runtime_error("nope");
   }
 };
