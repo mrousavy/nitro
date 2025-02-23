@@ -122,7 +122,7 @@ private:
  */
 class JSArrayBuffer final : public ArrayBuffer {
 public:
-  explicit JSArrayBuffer(jsi::Runtime* runtime, BorrowingReference<jsi::ArrayBuffer> jsReference);
+  explicit JSArrayBuffer(jsi::Runtime& runtime, BorrowingReference<jsi::ArrayBuffer> jsReference);
   ~JSArrayBuffer();
 
 public:
@@ -140,7 +140,7 @@ public:
   bool isOwner() const noexcept override;
 
 private:
-  jsi::Runtime* _runtime;
+  jsi::Runtime& _runtime;
   BorrowingReference<jsi::ArrayBuffer> _jsReference;
   std::thread::id _initialThreadId;
 };

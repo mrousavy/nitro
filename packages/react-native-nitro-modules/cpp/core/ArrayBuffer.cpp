@@ -61,7 +61,7 @@ bool NativeArrayBuffer::isOwner() const noexcept {
 
 // 3. JSArrayBuffer
 
-JSArrayBuffer::JSArrayBuffer(jsi::Runtime* runtime, BorrowingReference<jsi::ArrayBuffer> jsReference)
+JSArrayBuffer::JSArrayBuffer(jsi::Runtime& runtime, BorrowingReference<jsi::ArrayBuffer> jsReference)
     : ArrayBuffer(), _runtime(runtime), _jsReference(jsReference), _initialThreadId(std::this_thread::get_id()) {}
 
 JSArrayBuffer::~JSArrayBuffer() {}
@@ -77,7 +77,7 @@ uint8_t* JSArrayBuffer::data() {
     return nullptr;
   }
   // JS Part is still alive - we can assume that the jsi::Runtime is safe to access here too.
-  return _jsReference->data(*_runtime);
+  return _jsReference->data(_runtime);
 }
 
 size_t JSArrayBuffer::size() const {
@@ -91,7 +91,7 @@ size_t JSArrayBuffer::size() const {
     return 0;
   }
   // JS Part is still alive - we can assume that the jsi::Runtime is safe to access here too.
-  return _jsReference->size(*_runtime);
+  return _jsReference->size(_runtime);
 }
 
 bool JSArrayBuffer::isOwner() const noexcept {

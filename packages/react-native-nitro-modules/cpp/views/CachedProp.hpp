@@ -22,8 +22,9 @@ public:
 
 public:
   bool equals(jsi::Runtime& runtime, const jsi::Value& other) const {
-    if (!jsiValue)
+    if (jsiValue == nullptr) {
       return false;
+    }
     return jsi::Value::strictEquals(runtime, *jsiValue, other);
   }
 

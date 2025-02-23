@@ -51,7 +51,7 @@ struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_v<T, jsi::MutableBuffer
     JSICacheReference cache = JSICache::getOrCreateCache(runtime);
     auto borrowingArrayBuffer = cache.makeShared(object.getArrayBuffer(runtime));
 
-    return std::make_shared<JSArrayBuffer>(&runtime, borrowingArrayBuffer);
+    return std::make_shared<JSArrayBuffer>(runtime, borrowingArrayBuffer);
   }
   static inline jsi::Value toJSI(jsi::Runtime& runtime, const std::shared_ptr<jsi::MutableBuffer>& buffer) {
     return jsi::ArrayBuffer(runtime, buffer);
