@@ -46,7 +46,7 @@ public:
       throw std::runtime_error("Cannot call " + typeName + " - the underlying `jsi::Function` has already been deleted!");
     }
 
-    jsi::Value result = _function->call(_runtime, JSIConverter<std::decay_t<Args>>::toJSI(_runtime, args)...);
+    jsi::Value result = _function->call(_runtime, JSIConverter<std::decay_t<Args>>::toJSI(_runtime, std::forward<Args>(args))...);
     if constexpr (std::is_void_v<R>) {
       // It's returning void. No result
       return;
@@ -84,13 +84,17 @@ public:
    * This can be called from any Thread.
    * If the Runtime is no longer alive, this method throws.
    */
+  [[nodiscard]]
   std::shared_ptr<Promise<R>> call(Args... args) const {
     std::shared_ptr<Dispatcher> dispatcher = _dispatcher.lock();
     if (dispatcher == nullptr) [[unlikely]] {
       std::string typeName = TypeInfo::getFriendlyTypename<AsyncJSCallback<R(Args...)>>(true);
       throw std::runtime_error("Failed to call " + typeName + " - the Dispatcher has already been destroyed!");
     }
-    return dispatcher->runAsyncAwaitable<R>([callback = _callback, ... args = std::move(args)]() { return callback.call(args...); });
+    return dispatcher->runAsyncAwaitable<R>([callback = _callback, ... args = std::forward<Args>(args)]() mutable {
+      // Call actual JS callback, synchronously now.
+      return callback.call(std::forward<Args>(args)...);
+    });
   }
   /**
    * Calls this `AsyncJSCallback` asynchronously, and ignore
@@ -105,7 +109,10 @@ public:
       Logger::log(LogLevel::Error, "AsyncJSCallback", "Failed to call %s - the Dispatcher has already been destroyed!", typeName.c_str());
       return;
     }
-    dispatcher->runAsync([callback = _callback, ... args = std::move(args)]() { return callback.call(args...); });
+    dispatcher->runAsync([callback = _callback, ... args = std::forward<Args>(args)]() mutable {
+      // Call actual JS callback, synchronously now.
+      return callback.call(std::forward<Args>(args)...);
+    });
   }
 
 public:
