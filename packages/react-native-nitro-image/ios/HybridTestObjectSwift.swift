@@ -318,9 +318,9 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
     guard let view = view as? HybridTestView else { return false }
     return view.isBlue
   }
-  
-  func callbackSync(callback: @escaping () -> Double) throws {
+
+  func callbackSync(callback: @escaping () -> Double) throws -> Double {
     let value = callback()
-    print("Value sync: \(value)")
+    return value
   }
 }

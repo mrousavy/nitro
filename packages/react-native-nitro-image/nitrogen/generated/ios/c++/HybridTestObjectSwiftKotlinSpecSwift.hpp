@@ -582,11 +582,13 @@ namespace margelo::nitro::image {
       auto __value = std::move(__result.value());
       return __value;
     }
-    inline void callbackSync(const std::function<double()>& callback) override {
+    inline double callbackSync(const std::function<double()>& callback) override {
       auto __result = _swiftPart.callbackSync(callback);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
+      auto __value = std::move(__result.value());
+      return __value;
     }
     inline bool getIsViewBlue(const std::shared_ptr<margelo::nitro::image::HybridTestViewSpec>& view) override {
       auto __result = _swiftPart.getIsViewBlue(view);

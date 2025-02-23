@@ -1429,19 +1429,20 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public final func callbackSync(callback: bridge.Func_double) -> bridge.Result_void_ {
+  public final func callbackSync(callback: bridge.Func_double) -> bridge.Result_double_ {
     do {
-      try self.__implementation.callbackSync(callback: { () -> () -> Double in
+      let __result = try self.__implementation.callbackSync(callback: { () -> () -> Double in
         let __wrappedFunction = bridge.wrap_Func_double(callback)
         return { () -> Double in
           let __result = __wrappedFunction.call()
           return __result
         }
       }())
-      return bridge.create_Result_void_()
+      let __resultCpp = __result
+      return bridge.create_Result_double_(__resultCpp)
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
-      return bridge.create_Result_void_(__exceptionPtr)
+      return bridge.create_Result_double_(__exceptionPtr)
     }
   }
   

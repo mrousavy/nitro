@@ -491,9 +491,9 @@ bool HybridTestObjectCpp::getIsViewBlue(const std::shared_ptr<HybridTestViewSpec
   return view->getIsBlue();
 }
 
-void HybridTestObjectCpp::callbackSync(const std::function<double()>& callback) {
+double HybridTestObjectCpp::callbackSync(const std::function<double()>& callback) {
   double value = callback();
-  Logger::log(LogLevel::Info, TAG, "Value: %f", value);
+  return value;
 }
 
 } // namespace margelo::nitro::image

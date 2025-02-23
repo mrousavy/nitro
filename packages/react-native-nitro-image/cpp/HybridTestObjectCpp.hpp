@@ -149,8 +149,9 @@ public:
   std::shared_ptr<HybridBaseSpec> bounceBase(const std::shared_ptr<HybridBaseSpec>& base) override;
   std::shared_ptr<HybridBaseSpec> bounceChildBase(const std::shared_ptr<HybridChildSpec>& child) override;
   std::shared_ptr<HybridChildSpec> castBase(const std::shared_ptr<HybridBaseSpec>& base) override;
+
   bool getIsViewBlue(const std::shared_ptr<HybridTestViewSpec>& view) override;
-  void callbackSync(const std::function<double()>& callback) override;
+  double callbackSync(const std::function<double()>& callback) override;
 
   // Raw JSI functions
   jsi::Value rawJsiFunc(jsi::Runtime& runtime, const jsi::Value& thisValue, const jsi::Value* args, size_t count);
