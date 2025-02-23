@@ -311,4 +311,9 @@ class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
         val cast = view as? HybridTestView ?: return false
         return cast.isBlue
     }
+
+    override fun callbackSync(callback: () -> Double): Unit {
+        val value = callback()
+        Log.i(TAG, "Value sync: $value")
+    }
 }
