@@ -41,12 +41,10 @@ public:
    * In Debug, sanity checks are made to ensure the `jsi::Function` is still alive.
    */
   R call(Args... args) const {
-#ifdef NITRO_DEBUG
     if (!_function) [[unlikely]] {
-      throw std::runtime_error("Cannot call " + TypeInfo::getFriendlyTypename<SyncJSCallback<R(Args...)>>(true) +
-                               " - the underlying `jsi::Function` has already been deleted!");
+      std::string typeName = TypeInfo::getFriendlyTypename<SyncJSCallback<R(Args...)>>(true);
+      throw std::runtime_error("Cannot call " + typeName + " - the underlying `jsi::Function` has already been deleted!");
     }
-#endif
 
     jsi::Value result = _function->call(_runtime, JSIConverter<std::decay_t<Args>>::toJSI(_runtime, args)...);
     if constexpr (std::is_void_v<R>) {
@@ -89,8 +87,8 @@ public:
   std::shared_ptr<Promise<R>> call(Args... args) const {
     std::shared_ptr<Dispatcher> dispatcher = _dispatcher.lock();
     if (dispatcher == nullptr) [[unlikely]] {
-      throw std::runtime_error("Failed to call " + TypeInfo::getFriendlyTypename<AsyncJSCallback<R(Args...)>>(true) +
-                               " - the Dispatcher has already been destroyed!");
+      std::string typeName = TypeInfo::getFriendlyTypename<AsyncJSCallback<R(Args...)>>(true);
+      throw std::runtime_error("Failed to call " + typeName + " - the Dispatcher has already been destroyed!");
     }
     return dispatcher->runAsyncAwaitable<R>([callback = _callback, ... args = std::move(args)]() { return callback.call(args...); });
   }
@@ -103,8 +101,8 @@ public:
   void callAndForget(Args... args) const {
     std::shared_ptr<Dispatcher> dispatcher = _dispatcher.lock();
     if (dispatcher == nullptr) [[unlikely]] {
-      std::string name = TypeInfo::getFriendlyTypename<AsyncJSCallback<R(Args...)>>(true);
-      Logger::log(LogLevel::Error, "AsyncJSCallback", "Failed to call %s - the Dispatcher has already been destroyed!", name.c_str());
+      std::string typeName = TypeInfo::getFriendlyTypename<AsyncJSCallback<R(Args...)>>(true);
+      Logger::log(LogLevel::Error, "AsyncJSCallback", "Failed to call %s - the Dispatcher has already been destroyed!", typeName.c_str());
       return;
     }
     dispatcher->runAsync([callback = _callback, ... args = std::move(args)]() { return callback.call(args...); });

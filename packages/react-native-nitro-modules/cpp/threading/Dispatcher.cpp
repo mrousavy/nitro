@@ -54,11 +54,11 @@ jsi::Value Dispatcher::getRuntimeGlobalDispatcherHolder(jsi::Runtime& runtime) {
 #ifdef NITRO_DEBUG
   if (!runtime.global().hasProperty(runtime, GLOBAL_DISPATCHER_HOLDER_NAME)) [[unlikely]] {
     throw std::runtime_error("Failed to get current Dispatcher - the global Dispatcher "
-                             "holder (global." +
+                             "holder (`global." +
                              std::string(GLOBAL_DISPATCHER_HOLDER_NAME) +
-                             ") "
-                             "does not exist! Was Dispatcher::installDispatcherIntoRuntime() called "
-                             "for this jsi::Runtime?");
+                             "`) "
+                             "does not exist! Was `Dispatcher::installDispatcherIntoRuntime()` called "
+                             "for this `jsi::Runtime`?");
   }
 #endif
   return runtime.global().getProperty(runtime, GLOBAL_DISPATCHER_HOLDER_NAME);
