@@ -72,7 +72,6 @@ uint8_t* JSArrayBuffer::data() {
                              "If you want to access it elsewhere, copy it first.");
   }
 
-  OwningLock<jsi::ArrayBuffer> lock = _jsReference.lock();
   if (!_jsReference) [[unlikely]] {
     // JS Part has been deleted - data is now nullptr.
     return nullptr;
@@ -87,7 +86,6 @@ size_t JSArrayBuffer::size() const {
                              "If you want to access it elsewhere, copy it first.");
   }
 
-  OwningLock<jsi::ArrayBuffer> lock = _jsReference.lock();
   if (!_jsReference) [[unlikely]] {
     // JS Part has been deleted - size is now 0.
     return 0;
