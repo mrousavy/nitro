@@ -45,18 +45,20 @@ std::shared_ptr<Dispatcher> Dispatcher::getRuntimeGlobalDispatcher(jsi::Runtime&
               getRuntimeId(runtime).c_str());
   jsi::Value dispatcherHolderValue = getRuntimeGlobalDispatcherHolder(runtime);
   jsi::Object dispatcherHolder = dispatcherHolderValue.getObject(runtime);
-  return dispatcherHolder.getNativeState<Dispatcher>(runtime);
+  std::shared_ptr<Dispatcher> dispatcher = dispatcherHolder.getNativeState<Dispatcher>(runtime);
+  _globalCache[&runtime] = dispatcher;
+  return dispatcher;
 }
 
 jsi::Value Dispatcher::getRuntimeGlobalDispatcherHolder(jsi::Runtime& runtime) {
 #ifdef NITRO_DEBUG
   if (!runtime.global().hasProperty(runtime, GLOBAL_DISPATCHER_HOLDER_NAME)) [[unlikely]] {
     throw std::runtime_error("Failed to get current Dispatcher - the global Dispatcher "
-                             "holder (global." +
+                             "holder (`global." +
                              std::string(GLOBAL_DISPATCHER_HOLDER_NAME) +
-                             ") "
-                             "does not exist! Was Dispatcher::installDispatcherIntoRuntime() called "
-                             "for this jsi::Runtime?");
+                             "`) "
+                             "does not exist! Was `Dispatcher::installDispatcherIntoRuntime()` called "
+                             "for this `jsi::Runtime`?");
   }
 #endif
   return runtime.global().getProperty(runtime, GLOBAL_DISPATCHER_HOLDER_NAME);

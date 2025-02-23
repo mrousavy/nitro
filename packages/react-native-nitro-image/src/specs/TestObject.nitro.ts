@@ -1,4 +1,8 @@
-import { type HybridObject, type AnyMap } from 'react-native-nitro-modules'
+import {
+  type HybridObject,
+  type AnyMap,
+  type Sync,
+} from 'react-native-nitro-modules'
 import type { TestView } from './TestView.nitro'
 
 // Tuples become `std::tuple<...>` in C++.
@@ -154,6 +158,9 @@ interface SharedTestObjectProps {
   bounceBase(base: Base): Base
   bounceChildBase(child: Child): Base
   castBase(base: Base): Child
+
+  // Sync funcs
+  callbackSync(callback: Sync<() => number>): number
 
   // Views
   getIsViewBlue(view: TestView): boolean

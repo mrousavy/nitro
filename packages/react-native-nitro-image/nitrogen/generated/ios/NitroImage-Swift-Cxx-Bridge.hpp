@@ -828,6 +828,29 @@ namespace margelo::nitro::image::bridge::swift {
   using std__weak_ptr_margelo__nitro__image__HybridChildSpec_ = std::weak_ptr<margelo::nitro::image::HybridChildSpec>;
   inline std__weak_ptr_margelo__nitro__image__HybridChildSpec_ weakify_std__shared_ptr_margelo__nitro__image__HybridChildSpec_(const std::shared_ptr<margelo::nitro::image::HybridChildSpec>& strong) { return strong; }
   
+  // pragma MARK: std::function<double()>
+  /**
+   * Specialized version of `std::function<double()>`.
+   */
+  using Func_double = std::function<double()>;
+  /**
+   * Wrapper class for a `std::function<double()>`, this can be used from Swift.
+   */
+  class Func_double_Wrapper final {
+  public:
+    explicit Func_double_Wrapper(std::function<double()>&& func): _function(std::make_shared<std::function<double()>>(std::move(func))) {}
+    inline double call() const {
+      auto __result = _function->operator()();
+      return __result;
+    }
+  private:
+    std::shared_ptr<std::function<double()>> _function;
+  };
+  Func_double create_Func_double(void* _Nonnull swiftClosureWrapper);
+  inline Func_double_Wrapper wrap_Func_double(Func_double value) {
+    return Func_double_Wrapper(std::move(value));
+  }
+  
   // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridTestViewSpec>
   /**
    * Specialized version of `std::shared_ptr<margelo::nitro::image::HybridTestViewSpec>`.

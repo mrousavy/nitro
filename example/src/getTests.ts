@@ -1264,6 +1264,13 @@ export function getTests(
         .didNotThrow()
         .equals(true)
     ),
+    createTest('callbackSync(() => number) returns same number', () =>
+      it(() => {
+        return testObject.callbackSync(() => 55)
+      })
+        .didNotThrow()
+        .equals(55)
+    ),
     createTest('new T() works', () =>
       it(() => {
         const HybridTestObjectCpp =

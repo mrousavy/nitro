@@ -276,10 +276,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingBottom: 45,
+    marginHorizontal: 30,
   },
   chartsContainer: {
     alignItems: 'stretch',
-    width: '70%',
   },
   nitroResults: {},
   turboResults: {},

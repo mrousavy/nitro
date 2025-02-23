@@ -9,8 +9,8 @@ export class FunctionType implements Type {
   readonly returnType: Type
   readonly parameters: NamedType[]
 
-  constructor(returnType: Type, parameters: NamedType[]) {
-    if (returnType.kind === 'void') {
+  constructor(returnType: Type, parameters: NamedType[], isSync = false) {
+    if (returnType.kind === 'void' || isSync) {
       // void callbacks are async, but we don't care about the result.
       this.returnType = returnType
     } else {
@@ -18,6 +18,13 @@ export class FunctionType implements Type {
       this.returnType = new PromiseType(returnType)
     }
     this.parameters = parameters
+
+    if (isSync && returnType.kind === 'void') {
+      throw new Error(
+        `Function \`${this.jsName}\` cannot be sync (\`Sync<...>\`) AND return \`void\`, as this is ambiguous. ` +
+          `Either return a value (even if it's just a \`boolean\`) to keep it sync, or make it async.`
+      )
+    }
   }
 
   get specializationName(): string {

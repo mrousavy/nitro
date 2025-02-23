@@ -29,7 +29,7 @@ export function stringify(value: unknown): string {
         return `[${items.join(', ')}]`
       }
       try {
-        if ('toString' in value) {
+        if (value.toString instanceof Function) {
           if (isNativeFunction(value.toString)) {
             // It is a native jsi::HostFunction. Since we log Prototypes,
             // it is likely that we need a HybridObject (NativeState) to call it.

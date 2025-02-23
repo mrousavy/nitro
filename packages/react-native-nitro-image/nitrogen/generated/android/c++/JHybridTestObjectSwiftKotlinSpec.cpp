@@ -77,6 +77,7 @@ namespace margelo::nitro::image { class HybridTestViewSpec; }
 #include "JFunc_void_std__string.hpp"
 #include "JsStyleStruct.hpp"
 #include "JJsStyleStruct.hpp"
+#include "JFunc_double.hpp"
 #include "HybridTestViewSpec.hpp"
 #include "JHybridTestViewSpec.hpp"
 
@@ -762,6 +763,11 @@ namespace margelo::nitro::image {
     static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JHybridChildSpec::javaobject>(jni::alias_ref<JHybridBaseSpec::javaobject> /* base */)>("castBase");
     auto __result = method(_javaPart, std::dynamic_pointer_cast<JHybridBaseSpec>(base)->getJavaPart());
     return JNISharedPtr::make_shared_from_jni<JHybridChildSpec>(jni::make_global(__result));
+  }
+  double JHybridTestObjectSwiftKotlinSpec::callbackSync(const std::function<double()>& callback) {
+    static const auto method = _javaPart->getClass()->getMethod<double(jni::alias_ref<JFunc_double::javaobject> /* callback */)>("callbackSync_cxx");
+    auto __result = method(_javaPart, JFunc_double_cxx::fromCpp(callback));
+    return __result;
   }
   bool JHybridTestObjectSwiftKotlinSpec::getIsViewBlue(const std::shared_ptr<margelo::nitro::image::HybridTestViewSpec>& view) {
     static const auto method = _javaPart->getClass()->getMethod<jboolean(jni::alias_ref<JHybridTestViewSpec::javaobject> /* view */)>("getIsViewBlue");

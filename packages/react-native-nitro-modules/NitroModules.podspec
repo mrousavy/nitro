@@ -41,6 +41,7 @@ Pod::Spec.new do |s|
     "cpp/jsi/JSIConverter.hpp",
     "cpp/platform/NitroLogger.hpp",
     "cpp/threading/Dispatcher.hpp",
+    "cpp/utils/JSCallback.hpp",
     "cpp/utils/NitroHash.hpp",
     "cpp/utils/NitroDefines.hpp",
     "cpp/views/CachedProp.hpp",
