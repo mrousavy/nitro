@@ -8,6 +8,7 @@
 #pragma once
 
 #include "NitroDefines.hpp"
+#include "NitroTypeInfo.hpp"
 #include "OwningLock.hpp"
 #include "ReferenceState.hpp"
 #include "WeakReference.hpp"
@@ -161,7 +162,8 @@ public:
   inline T& operator*() const {
 #ifdef NITRO_DEBUG
     if (!hasValue()) [[unlikely]] {
-      throw std::runtime_error("Tried to dereference (*) nullptr BorrowingReference<T>!");
+      std::string typeName = TypeInfo::getFriendlyTypename<T>(true);
+      throw std::runtime_error("Tried to dereference (*) nullptr BorrowingReference<" + typeName + ">!");
     }
 #endif
     return *_value;
@@ -170,7 +172,8 @@ public:
   inline T* operator->() const {
 #ifdef NITRO_DEBUG
     if (!hasValue()) [[unlikely]] {
-      throw std::runtime_error("Tried to dereference (->) nullptr BorrowingReference<T>!");
+      std::string typeName = TypeInfo::getFriendlyTypename<T>(true);
+      throw std::runtime_error("Tried to dereference (->) nullptr BorrowingReference<" + typeName + ">!");
     }
 #endif
     return _value;

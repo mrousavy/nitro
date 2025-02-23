@@ -122,7 +122,8 @@ public:
    */
   void reject(const std::exception_ptr& exception) {
     if (exception == nullptr) [[unlikely]] {
-      throw std::runtime_error("Cannot reject Promise with a null exception_ptr!");
+      std::string typeName = TypeInfo::getFriendlyTypename<TResult>(true);
+      throw std::runtime_error("Cannot reject Promise<" + typeName + "> with a null exception_ptr!");
     }
 
     std::unique_lock lock(_mutex);
@@ -208,7 +209,8 @@ public:
    */
   inline const TResult& getResult() {
     if (!isResolved()) {
-      throw std::runtime_error("Cannot get result when Promise is not yet resolved!");
+      std::string typeName = TypeInfo::getFriendlyTypename<TResult>(true);
+      throw std::runtime_error("Cannot get result when Promise<" + typeName + "> is not yet resolved!");
     }
     return std::get<TResult>(_state);
   }
@@ -218,7 +220,8 @@ public:
    */
   inline const std::exception_ptr& getError() {
     if (!isRejected()) {
-      throw std::runtime_error("Cannot get error when Promise is not yet rejected!");
+      std::string typeName = TypeInfo::getFriendlyTypename<TResult>(true);
+      throw std::runtime_error("Cannot get error when Promise<" + typeName + "> is not yet rejected!");
     }
     return std::get<std::exception_ptr>(_state);
   }
@@ -323,7 +326,7 @@ public:
   }
   void reject(const std::exception_ptr& exception) {
     if (exception == nullptr) [[unlikely]] {
-      throw std::runtime_error("Cannot reject Promise with a null exception_ptr!");
+      throw std::runtime_error("Cannot reject Promise<void> with a null exception_ptr!");
     }
 
     std::unique_lock lock(_mutex);
@@ -383,7 +386,7 @@ public:
 public:
   inline const std::exception_ptr& getError() {
     if (!isRejected()) {
-      throw std::runtime_error("Cannot get error when Promise is not yet rejected!");
+      throw std::runtime_error("Cannot get error when Promise<void> is not yet rejected!");
     }
     return _error;
   }

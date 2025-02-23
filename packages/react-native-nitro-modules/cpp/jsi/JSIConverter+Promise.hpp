@@ -12,7 +12,7 @@ struct JSIConverter;
 } // namespace margelo::nitro
 
 #include "JSIConverter.hpp"
-
+#include "NitroTypeInfo.hpp"
 #include "Promise.hpp"
 #include <exception>
 #include <jsi/jsi.h>
@@ -92,7 +92,8 @@ struct JSIConverter<std::shared_ptr<Promise<TResult>>> final {
       jsi::Value error = JSIConverter<std::exception_ptr>::toJSI(runtime, promise->getError());
       return createRejectedPromise.call(runtime, std::move(error));
     } else {
-      throw std::runtime_error("Promise has invalid state!");
+      std::string typeName = TypeInfo::getFriendlyTypename<TResult>(true);
+      throw std::runtime_error("Promise<" + typeName + "> has invalid state!");
     }
   }
 

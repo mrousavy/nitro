@@ -36,7 +36,7 @@ RCT_EXPORT_MODULE(NitroModules)
   // 1. Get CallInvoker we cached statically
   std::shared_ptr<react::CallInvoker> callInvoker = _callInvoker.lock();
   if (callInvoker == nullptr) {
-    throw std::runtime_error("Cannot install global.NitroModulesProxy - CallInvoker was null!");
+    throw std::runtime_error("Cannot install `global.NitroModulesProxy` - CallInvoker was null!");
   }
 
   // 2. Wrap CallInvoker as Dispatcher
