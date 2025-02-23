@@ -76,7 +76,7 @@ class AsyncJSCallback;
 template <typename R, typename... Args>
 class AsyncJSCallback<R(Args...)> final {
 public:
-  AsyncJSCallback(SyncJSCallback<R(Args...)>&& callback, std::shared_ptr<Dispatcher>& dispatcher)
+  AsyncJSCallback(SyncJSCallback<R(Args...)>&& callback, const std::weak_ptr<Dispatcher>& dispatcher)
       : _callback(std::move(callback)), _dispatcher(dispatcher) {}
 
 public:
@@ -87,7 +87,12 @@ public:
    * If the Runtime is no longer alive, this method throws.
    */
   std::shared_ptr<Promise<R>> call(Args... args) const {
-    return _dispatcher->runAsyncAwaitable<R>([callback = _callback, ... args = std::move(args)]() { return callback.call(args...); });
+    std::shared_ptr<Dispatcher> dispatcher = _dispatcher.lock();
+    if (dispatcher == nullptr) [[unlikely]] {
+      throw std::runtime_error("Failed to call " + TypeInfo::getFriendlyTypename<AsyncJSCallback<R(Args...)>>(true) +
+                               " - the Dispatcher has already been destroyed!");
+    }
+    return dispatcher->runAsyncAwaitable<R>([callback = _callback, ... args = std::move(args)]() { return callback.call(args...); });
   }
   /**
    * Calls this `AsyncJSCallback` asynchronously, and ignore
@@ -96,7 +101,13 @@ public:
    * If the Runtime is no longer alive, this method ignores the function call.
    */
   void callAndForget(Args... args) const {
-    _dispatcher->runAsync([callback = _callback, ... args = std::move(args)]() { return callback.call(args...); });
+    std::shared_ptr<Dispatcher> dispatcher = _dispatcher.lock();
+    if (dispatcher == nullptr) [[unlikely]] {
+      std::string name = TypeInfo::getFriendlyTypename<AsyncJSCallback<R(Args...)>>(true);
+      Logger::log(LogLevel::Error, "AsyncJSCallback", "Failed to call %s - the Dispatcher has already been destroyed!", name.c_str());
+      return;
+    }
+    dispatcher->runAsync([callback = _callback, ... args = std::move(args)]() { return callback.call(args...); });
   }
 
 public:
@@ -110,7 +121,7 @@ public:
 
 private:
   SyncJSCallback<R(Args...)> _callback;
-  std::shared_ptr<Dispatcher> _dispatcher;
+  std::weak_ptr<Dispatcher> _dispatcher;
 };
 
 } // namespace margelo::nitro
