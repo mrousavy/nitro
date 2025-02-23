@@ -28,6 +28,7 @@ jsi::Value HybridObjectPrototype::createPrototype(jsi::Runtime& runtime, const s
   if (cachedPrototype != prototypeCache.end()) {
     const BorrowingReference<jsi::Object>& cachedObject = cachedPrototype->second;
     if (cachedObject != nullptr) {
+      // 1.1. Found it in cache! Copy & return it.
       return jsi::Value(runtime, *cachedObject);
     }
   }
