@@ -45,7 +45,9 @@ std::shared_ptr<Dispatcher> Dispatcher::getRuntimeGlobalDispatcher(jsi::Runtime&
               getRuntimeId(runtime).c_str());
   jsi::Value dispatcherHolderValue = getRuntimeGlobalDispatcherHolder(runtime);
   jsi::Object dispatcherHolder = dispatcherHolderValue.getObject(runtime);
-  return dispatcherHolder.getNativeState<Dispatcher>(runtime);
+  std::shared_ptr<Dispatcher> dispatcher = dispatcherHolder.getNativeState<Dispatcher>(runtime);
+  _globalCache[&runtime] = dispatcher;
+  return dispatcher;
 }
 
 jsi::Value Dispatcher::getRuntimeGlobalDispatcherHolder(jsi::Runtime& runtime) {
