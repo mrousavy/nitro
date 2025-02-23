@@ -59,7 +59,7 @@ public:
     auto instance = _javaClass->newObject(_defaultConstructor);
 #ifdef NITRO_DEBUG
     if (instance == nullptr) [[unlikely]] {
-      throw std::runtime_error("Failed to create an instance of \"JHybridTestObjectSwiftKotlinSpec\" - the constructor returned null!");
+      throw std::runtime_error("Failed to create an instance of \"" + _javaClass->toString() + "\" - the constructor returned null!");
     }
 #endif
     return instance;

@@ -29,9 +29,9 @@ class JSICacheReference;
  * `jsi::Value`s are managed by a `jsi::Runtime`, and will be deleted if the `jsi::Runtime`
  * is deleted - even if there are still strong references to the `jsi::Value`.
  *
- * To access a `BorrowingReference<jsi::Value>` safely, use `lock()` to get an `OwningLock<jsi::Value>`.
- * This will allow you to access the `jsi::Value` as long as the `OwningLock` is alive,
- * and `JSICache` will hold any garbage collection calls until the `OwningLock` is destroyed.
+ * To access a `BorrowingReference<jsi::Value>` safely, make sure you are using it from
+ * the same Thread that it was created on. This ensures that the `jsi::Runtime` cannot
+ * delete it while you are still using it.
  */
 class JSICache final : public jsi::NativeState {
 public:
