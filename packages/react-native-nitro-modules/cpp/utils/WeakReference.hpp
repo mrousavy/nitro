@@ -87,7 +87,9 @@ private:
     if (_state->strongRefCount == 0 && _state->weakRefCount == 0) {
       // free the full memory if there are no more references at all
       if (!_state->isDeleted) [[unlikely]] {
-        throw std::runtime_error("WeakReference<T> encountered a stale _value - BorrowingReference<T> should've already deleted this!");
+        std::string typeName = TypeInfo::getFriendlyTypename<T>(true);
+        throw std::runtime_error("WeakReference<" + typeName + "> encountered a stale `_value` - BorrowingReference<" + typeName +
+                                 "> should've already deleted this!");
       }
       delete _state;
       _state = nullptr;

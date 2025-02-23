@@ -19,7 +19,7 @@ static inline std::exception_ptr makeException(const std::string& message) {
 
 static inline std::string getExceptionMessage(const std::exception_ptr& exception) {
   if (exception == nullptr) [[unlikely]] {
-    throw std::runtime_error("Cannot get error message of an empty exception_ptr!");
+    throw std::runtime_error("Cannot get error message of a nullptr exception_ptr!");
   }
 
   try {
