@@ -15,8 +15,8 @@ struct JSIConverter;
 #include "BorrowingReference.hpp"
 #include "JSIConverter.hpp"
 #include "NitroDefines.hpp"
+#include "NitroTypeInfo.hpp"
 #include "Promise.hpp"
-#include "TypeInfo.hpp"
 #include <functional>
 #include <jsi/jsi.h>
 
@@ -43,7 +43,7 @@ public:
   R call(Args... args) const {
 #ifdef NITRO_DEBUG
     if (!_function) [[unlikely]] {
-      throw std::runtime_error("Cannot call " + TypeInfo::getFriendlyTypename<SyncJSCallback<R(Args...)>>() +
+      throw std::runtime_error("Cannot call " + TypeInfo::getFriendlyTypename<SyncJSCallback<R(Args...)>>(true) +
                                " - the underlying `jsi::Function` has already been deleted!");
     }
 #endif
