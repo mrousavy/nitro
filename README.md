@@ -14,6 +14,31 @@ It consists of two parts:
 - [**react-native-nitro-modules**](packages/react-native-nitro-modules): The core C++ library powering all nitro modules
 - [**nitrogen**](packages/nitrogen): A code-generator for nitro module library authors
 
+## Example
+
+Declaration (TypeScript):
+```ts
+export interface Math extends HybridObject {
+  add(a: number, b: number): number
+}
+```
+
+Implementation (C++, Swift or Kotlin):
+```cpp
+class HybridMath: public HybridMathSpec {
+public:
+  double add(double a, double b) {
+    return a + b;
+  }
+}
+```
+
+Usage (TypeScript):
+```ts
+const math = NitroModules.createHybridObject<Math>('Math')
+const result = math.add(5, 3)
+```
+
 ## Installation
 
 Install [react-native-nitro-modules](https://npmjs.org/react-native-nitro-modules) from npm:
