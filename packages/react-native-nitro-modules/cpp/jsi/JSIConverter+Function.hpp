@@ -12,12 +12,10 @@ template <typename T, typename Enable>
 struct JSIConverter;
 } // namespace margelo::nitro
 
-#include "JSIConverter.hpp"
-
 #include "Dispatcher.hpp"
+#include "JSCallback.hpp"
 #include "JSICache.hpp"
 #include "PromiseType.hpp"
-#include <functional>
 #include <jsi/jsi.h>
 
 namespace margelo::nitro {
@@ -35,36 +33,16 @@ struct JSIConverter<std::function<ReturnType(Args...)>> final {
     auto cache = JSICache::getOrCreateCache(runtime);
     jsi::Function function = arg.asObject(runtime).asFunction(runtime);
     BorrowingReference<jsi::Function> sharedFunction = cache.makeShared(std::move(function));
+    SyncJSCallback<ReturnType(Args...)> callback(runtime, std::move(sharedFunction));
 
-    std::shared_ptr<Dispatcher> strongDispatcher = Dispatcher::getRuntimeGlobalDispatcher(runtime);
-    std::weak_ptr<Dispatcher> weakDispatcher = strongDispatcher;
-
-    // Create a C++ function that can be called by the consumer.
-    // This will call the jsi::Function if it is still alive.
-    return [&runtime, weakDispatcher = std::move(weakDispatcher), sharedFunction = std::move(sharedFunction)](Args... args) -> ReturnType {
-      // Try to get the JS Dispatcher if the Runtime is still alive
-      std::shared_ptr<Dispatcher> dispatcher = weakDispatcher.lock();
-      if (!dispatcher) {
-        if constexpr (std::is_void_v<ResultingType>) {
-          Logger::log(LogLevel::Error, "JSIConverter",
-                      "Tried calling void(..) function, but the JS Dispatcher has already been deleted by JS!");
-          return;
-        } else {
-          throw std::runtime_error("Cannot call the given Function - the JS Dispatcher has already been destroyed by the JS Runtime!");
-        }
-      }
-
-      if constexpr (std::is_void_v<ResultingType>) {
-        dispatcher->runAsync([&runtime, sharedFunction = std::move(sharedFunction), ... args = std::move(args)]() {
-          callJSFunction(runtime, sharedFunction, args...);
-        });
-      } else {
-        return dispatcher->runAsyncAwaitable<ResultingType>(
-            [&runtime, sharedFunction = std::move(sharedFunction), ... args = std::move(args)]() -> ResultingType {
-              return callJSFunction(runtime, sharedFunction, args...);
-            });
-      }
-    };
+    if constexpr (is_promise_v<ReturnType> || std::is_void_v<ReturnType>) {
+      // Return type is `Promise<T>` or `void` - it's an async callback!
+      std::shared_ptr<Dispatcher> dispatcher = Dispatcher::getRuntimeGlobalDispatcher(runtime);
+      return AsyncJSCallback<ReturnType(Args...)>(std::move(callback), dispatcher);
+    } else {
+      // Return type is `T` - it's a sync callback!
+      return callback;
+    }
   }
 
   static inline jsi::Value toJSI(jsi::Runtime& runtime, std::function<ReturnType(Args...)>&& function) {
@@ -94,41 +72,10 @@ struct JSIConverter<std::function<ReturnType(Args...)>> final {
   }
 
 private:
-  static inline ResultingType callJSFunction(jsi::Runtime& runtime, const BorrowingReference<jsi::Function>& function,
-                                             const Args&... args) {
-    if (!function) {
-      if constexpr (std::is_void_v<ResultingType>) {
-        // runtime has already been deleted. since this returns void, we can just ignore it being deleted.
-        Logger::log(LogLevel::Error, "JSIConverter", "Tried calling void(..) function, but it has already been deleted by JS!");
-        return;
-      } else {
-        // runtime has already been deleted, but we are expecting a return value - throw an error in this case.
-        throw std::runtime_error("Cannot call the given Function - the JS Dispatcher has already been destroyed by the JS Runtime!");
-      }
-    }
-
-    if constexpr (std::is_void_v<ResultingType>) {
-      // It returns void. Just call the function
-      function->call(runtime, JSIConverter<std::decay_t<Args>>::toJSI(runtime, args)...);
-    } else {
-      // It returns some kind of value - call the function, and convert the return value.
-      jsi::Value result = function->call(runtime, JSIConverter<std::decay_t<Args>>::toJSI(runtime, args)...);
-      return JSIConverter<ResultingType>::fromJSI(runtime, std::move(result));
-    }
-  }
-
   template <size_t... Is>
   static inline jsi::Value callHybridFunction(const std::function<ReturnType(Args...)>& function, jsi::Runtime& runtime,
                                               const jsi::Value* args, std::index_sequence<Is...>) {
-    if constexpr (std::is_void_v<ReturnType>) {
-      // it is a void function (will return undefined in JS)
-      function(JSIConverter<std::decay_t<Args>>::fromJSI(runtime, args[Is])...);
-      return jsi::Value::undefined();
-    } else {
-      // it is a custom type, parse it to a JS value
-      ReturnType result = function(JSIConverter<std::decay_t<Args>>::fromJSI(runtime, args[Is])...);
-      return JSIConverter<ReturnType>::toJSI(runtime, std::forward<ReturnType>(result));
-    }
+    throw std::runtime_error("nope");
   }
 };
 
