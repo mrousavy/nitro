@@ -42,7 +42,7 @@ public:
     }
   }
 
-  BorrowingReference(BorrowingReference&& ref) : _value(ref._value), _state(ref._state) {
+  BorrowingReference(BorrowingReference&& ref) noexcept : _value(ref._value), _state(ref._state) {
     ref._value = nullptr;
     ref._state = nullptr;
   }
@@ -72,7 +72,7 @@ public:
 
 private:
   // WeakReference<T> -> BorrowingReference<T> Lock-constructor
-  BorrowingReference(const WeakReference<T>& ref) : _value(ref._value), _state(ref._state) {
+  explicit BorrowingReference(const WeakReference<T>& ref) : _value(ref._value), _state(ref._state) {
     _state->strongRefCount++;
   }
 
@@ -114,6 +114,7 @@ public:
   /**
    * Get whether the `BorrowingReference<T>` is still pointing to a valid value, or not.
    */
+  [[nodiscard]]
   inline bool hasValue() const {
     return _value != nullptr && !_state->isDeleted;
   }
@@ -137,10 +138,7 @@ public:
   }
 
 public:
-  explicit inline operator bool() const {
-    return hasValue();
-  }
-
+  // Dereference (*)
   inline T& operator*() const {
 #ifdef NITRO_DEBUG
     if (!hasValue()) [[unlikely]] {
@@ -151,6 +149,7 @@ public:
     return *_value;
   }
 
+  // Dereference (->)
   inline T* operator->() const {
 #ifdef NITRO_DEBUG
     if (!hasValue()) [[unlikely]] {
@@ -161,18 +160,33 @@ public:
     return _value;
   }
 
+  // null-check (bool)
+  explicit inline operator bool() const {
+    return hasValue();
+  }
+  // null-check (== nullptr)
+  inline bool operator==(std::nullptr_t) const {
+    return !hasValue();
+  }
+  // null-check (!= nullptr)
+  inline bool operator!=(std::nullptr_t) const {
+    return hasValue();
+  }
+
+  // comparison (== *)
   inline bool operator==(T* other) const {
     return _value == other;
   }
-
+  // comparison (!= *)
   inline bool operator!=(T* other) const {
     return _value != other;
   }
 
+  // comparison (== BorrowingReference<T>)
   inline bool operator==(const BorrowingReference<T>& other) const {
     return _value == other._value;
   }
-
+  // comparison (!= BorrowingReference<T>)
   inline bool operator!=(const BorrowingReference<T>& other) const {
     return _value != other._value;
   }
@@ -183,7 +197,6 @@ private:
       // free the full memory if there are no more references at all
       delete _state;
       _state = nullptr;
-      return;
     }
   }
 

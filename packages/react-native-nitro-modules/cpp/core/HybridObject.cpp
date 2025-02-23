@@ -46,7 +46,7 @@ jsi::Value HybridObject::toObject(jsi::Runtime& runtime) {
   auto cachedObject = _objectCache.find(&runtime);
   if (cachedObject != _objectCache.end()) {
     // 1.1. We have a WeakObject, try to see if it is still alive
-    if (!cachedObject->second) [[unlikely]] {
+    if (cachedObject->second == nullptr) [[unlikely]] {
       throw std::runtime_error("HybridObject \"" + getName() + "\" was cached, but the reference got destroyed!");
     }
     jsi::Value value = cachedObject->second->lock(runtime);

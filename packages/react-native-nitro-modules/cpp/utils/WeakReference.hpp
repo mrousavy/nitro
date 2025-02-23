@@ -64,13 +64,10 @@ public:
   }
 
   ~WeakReference() {
-    if (_state == nullptr) {
-      // we are just a dangling nullptr.
-      return;
+    if (_state != nullptr) {
+      _state->weakRefCount--;
+      maybeDestroy();
     }
-
-    _state->weakRefCount--;
-    maybeDestroy();
   }
 
   /**
