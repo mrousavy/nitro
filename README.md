@@ -16,14 +16,14 @@ It consists of two parts:
 
 ## Example
 
-Declaration:
+Declaration (TypeScript):
 ```ts
 export interface Math extends HybridObject {
   add(a: number, b: number): number
 }
 ```
 
-Implementation:
+Implementation (C++, Swift or Kotlin):
 ```cpp
 class HybridMath: public HybridMathSpec {
 public:
@@ -33,7 +33,7 @@ public:
 }
 ```
 
-Usage:
+Usage (TypeScript):
 ```ts
 const math = NitroModules.createHybridObject<Math>('Math')
 const result = math.add(5, 3)
