@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include "NitroDefines.hpp"
+#include "NitroTypeInfo.hpp"
 #include <fbjni/fbjni.h>
 #include <memory>
 
@@ -13,7 +15,7 @@ using namespace facebook;
 
 template <typename T>
 struct GlobalRefDeleter {
-  explicit GlobalRefDeleter(jni::global_ref<typename T::javaobject> ref) : _ref(ref) {}
+  explicit GlobalRefDeleter(const jni::global_ref<typename T::javaobject>& ref) : _ref(ref) {}
 
   void operator()(T* /* cthis */) {
     if (_ref) {
@@ -40,7 +42,13 @@ private:
 
 public:
   template <typename T, typename std::enable_if<is_base_template_of<T, jni::HybridClass>::value, int>::type = 0>
-  static std::shared_ptr<T> make_shared_from_jni(jni::global_ref<typename T::javaobject> ref) {
+  static std::shared_ptr<T> make_shared_from_jni(const jni::global_ref<typename T::javaobject>& ref) {
+#ifdef NITRO_DEBUG
+    if (ref == nullptr) [[unlikely]] {
+      throw std::runtime_error("Failed to wrap jni::global_ref<" + TypeInfo::getFriendlyTypename<T>(true) +
+                               "> in std::shared_ptr - it's null!");
+    }
+#endif
     return std::shared_ptr<T>(ref->cthis(), GlobalRefDeleter<T>{ref});
   }
 };
