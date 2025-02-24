@@ -114,6 +114,12 @@ These are all the types Nitro supports out of the box:
     <td><code>(T...) -&gt; <a href="./android/src/main/java/com/margelo/nitro/core/Promise.kt">Promise&lt;R&gt;</a></code></td>
   </tr>
   <tr>
+    <td><code>Sync&lt;(T...) =&gt; R&gt;</code></td>
+    <td><code>std::function&lt;R (T...)&gt;</code></td>
+    <td><code>@escaping (T...) -&gt; R</code></td>
+    <td><code>(T...) -&gt; R</code></td>
+  </tr>
+  <tr>
     <td><code>Record&lt;string, T&gt;</code></td>
     <td><code>std::unordered_map&lt;std::string, T&gt;</code></td>
     <td><code>Dictionary&lt;String, T&gt;</code></td>

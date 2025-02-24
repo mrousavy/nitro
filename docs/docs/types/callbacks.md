@@ -148,6 +148,39 @@ func some(getValue: () -> Promise<Double>) {
 </div>
 </div>
 
+## Synchronous Callbacks
+
+By default, callback functions in Nitro are _asynchronous_. Their execution is scheduled on the JS Thread, and if they return a value they always return a `Promise<T>` wrapping the value.
+This ensures that you can call the callback from any Thread, and it safely executes the actual JS function on the correct JS Thread.
+
+In addition to that, Nitro also supports fully _synchronous_ callbacks. They are considered dangerous, as the caller is responsible for ensuring Thread safety.
+To extend the previous example, we can make `getValue()` synchronous by wrapping it in the `Sync<T>` type provided by Nitro:
+
+<div className="side-by-side-container">
+<div className="side-by-side-block">
+
+```ts title="Math.nitro.ts"
+interface Math extends HybridObject {
+  some(getValue: Sync<() => number>): void
+}
+```
+
+</div>
+<div className="side-by-side-block">
+
+```swift title="HybridMath.swift"
+func some(getValue: () -> Double) {
+  let valueFromJs = getValue()
+}
+```
+
+</div>
+</div>
+
+:::warning
+The `getValue()` callback can now only be called from the JS Thread.
+:::
+
 ## How was it before Nitro?
 
 Conventionally (in legacy React Native Native Modules), a native method could only have a maximum of two callbacks, one "success" and one "failure" callback.
