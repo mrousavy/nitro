@@ -87,7 +87,7 @@ namespace margelo::nitro::image {
   public:
     static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Func_std__shared_ptr_Promise_std__string___cxx;";
     static void registerNatives() {
-      registerHybrid({makeNativeMethod("invoke", JFunc_std__shared_ptr_Promise_std__string___cxx::invoke_cxx)});
+      registerHybrid({makeNativeMethod("invoke_cxx", JFunc_std__shared_ptr_Promise_std__string___cxx::invoke_cxx)});
     }
 
   private:

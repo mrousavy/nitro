@@ -54,8 +54,14 @@ class Func_void_cxx: Func_void {
     mHybridData = hybridData
   }
 
+  @DoNotStrip
+  @Keep
+  override fun invoke(): Unit {
+    return invoke_cxx()
+  }
+
   @FastNative
-  external override fun invoke(): Unit
+  external override fun invoke_cxx(): Unit
 }
 
 /**

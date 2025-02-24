@@ -54,8 +54,14 @@ class Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double_____cxx: Func_
     mHybridData = hybridData
   }
 
+  @DoNotStrip
+  @Keep
+  override fun invoke(): Promise<Promise<Double>> {
+    return invoke_cxx()
+  }
+
   @FastNative
-  external override fun invoke(): Promise<Promise<Double>>
+  external override fun invoke_cxx(): Promise<Promise<Double>>
 }
 
 /**

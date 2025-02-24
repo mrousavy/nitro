@@ -54,8 +54,14 @@ class Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_Array
     mHybridData = hybridData
   }
 
+  @DoNotStrip
+  @Keep
+  override fun invoke(): Promise<Promise<ArrayBuffer>> {
+    return invoke_cxx()
+  }
+
   @FastNative
-  external override fun invoke(): Promise<Promise<ArrayBuffer>>
+  external override fun invoke_cxx(): Promise<Promise<ArrayBuffer>>
 }
 
 /**

@@ -54,8 +54,14 @@ class Func_void_std__vector_Powertrain__cxx: Func_void_std__vector_Powertrain_ {
     mHybridData = hybridData
   }
 
+  @DoNotStrip
+  @Keep
+  override fun invoke(array: Array<Powertrain>): Unit {
+    return invoke_cxx(array)
+  }
+
   @FastNative
-  external override fun invoke(array: Array<Powertrain>): Unit
+  external override fun invoke_cxx(array: Array<Powertrain>): Unit
 }
 
 /**

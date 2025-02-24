@@ -54,8 +54,14 @@ class Func_void_std__optional_double__cxx: Func_void_std__optional_double_ {
     mHybridData = hybridData
   }
 
+  @DoNotStrip
+  @Keep
+  override fun invoke(maybe: Double?): Unit {
+    return invoke_cxx(maybe)
+  }
+
   @FastNative
-  external override fun invoke(maybe: Double?): Unit
+  external override fun invoke_cxx(maybe: Double?): Unit
 }
 
 /**

@@ -60,7 +60,7 @@ namespace margelo::nitro::image {
   public:
     static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Func_void_double_cxx;";
     static void registerNatives() {
-      registerHybrid({makeNativeMethod("invoke", JFunc_void_double_cxx::invoke_cxx)});
+      registerHybrid({makeNativeMethod("invoke_cxx", JFunc_void_double_cxx::invoke_cxx)});
     }
 
   private:

@@ -54,8 +54,14 @@ class Func_void_std__string_cxx: Func_void_std__string {
     mHybridData = hybridData
   }
 
+  @DoNotStrip
+  @Keep
+  override fun invoke(valueFromJs: String): Unit {
+    return invoke_cxx(valueFromJs)
+  }
+
   @FastNative
-  external override fun invoke(valueFromJs: String): Unit
+  external override fun invoke_cxx(valueFromJs: String): Unit
 }
 
 /**
