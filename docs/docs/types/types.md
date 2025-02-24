@@ -110,8 +110,14 @@ These are all the types Nitro supports out of the box:
   <tr>
     <td><code>(T...) =&gt; R</code></td>
     <td><code>std::function&lt;std::shared_ptr&lt;Promise&lt;R&gt;&gt; (T...)&gt;</code></td>
-    <td><code>@escaping (T...) -&gt; <a href="./ios/core/Promise.swift">Promise&lt;R&gt;</a></code></td>
-    <td><code>(T...) -&gt; <a href="./android/src/main/java/com/margelo/nitro/core/Promise.kt">Promise&lt;R&gt;</a></code></td>
+    <td><code>@escaping (T...) -&gt; <a href="https://github.com/mrousavy/nitro/tree/main/packages/react-native-nitro-modules/ios/core/Promise.swift">Promise&lt;R&gt;</a></code></td>
+    <td><code>(T...) -&gt; <a href="https://github.com/mrousavy/nitro/tree/main/packages/react-native-nitro-modules/android/src/main/java/com/margelo/nitro/core/Promise.kt">Promise&lt;R&gt;</a></code></td>
+  </tr>
+  <tr>
+    <td><code>Sync&lt;(T...) =&gt; R&gt;</code></td>
+    <td><code>std::function&lt;R (T...)&gt;</code></td>
+    <td><code>@escaping (T...) -&gt; R</code></td>
+    <td><code>(T...) -&gt; R</code></td>
   </tr>
   <tr>
     <td><code>Record&lt;string, T&gt;</code></td>

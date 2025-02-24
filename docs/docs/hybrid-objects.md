@@ -38,11 +38,19 @@ class HybridMath : HybridMathSpec {
 
 ## Working with Hybrid Objects
 
-Hybrid Objects can be instantiated from JS using `createHybridObject(...)`:
+If a Hybrid Object is _autolinked_ (see ["**Nitrogen**: 5. Register the Hybrid Objects"](nitrogen#5-register-the-hybrid-objects)), it can be created from JS via `createHybridObject<T>(..)`:
 
 ```ts
 const math = NitroModules.createHybridObject<Math>("Math")
 const result = math.add(5, 7)
+```
+
+To enable the usage of `new` and `instanceof`, you can use the `getHybridObjectConstructor<T>(..)` helper method:
+
+```ts
+const HybridMath = getHybridObjectConstructor<Math>("Math")
+const math = new HybridMath()
+const isMath = math instanceof HybridMath
 ```
 
 A Hybrid Object can also create other Hybrid Objects:
