@@ -179,7 +179,7 @@ namespace ${cxxNamespace} {
   }
 
   size_t ${name.JHybridTSpec}::getExternalMemorySize() noexcept {
-    static const auto method = _javaPart->javaClassStatic()->getMethod<jlong()>("getMemorySize");
+    static const auto method = javaClassStatic()->getMethod<jlong()>("getMemorySize");
     return method(_javaPart);
   }
 
@@ -245,14 +245,14 @@ function getFbjniMethodForwardImplementation(
   if (returnJNI.hasType) {
     // return something - we need to parse it
     body = `
-static const auto method = _javaPart->javaClassStatic()->getMethod<${cxxSignature}>("${methodName}");
+static const auto method = javaClassStatic()->getMethod<${cxxSignature}>("${methodName}");
 auto __result = method(${paramsForward.join(', ')});
 return ${returnJNI.parse('__result', 'kotlin', 'c++', 'c++')};
     `
   } else {
     // void method. no return
     body = `
-static const auto method = _javaPart->javaClassStatic()->getMethod<${cxxSignature}>("${methodName}");
+static const auto method = javaClassStatic()->getMethod<${cxxSignature}>("${methodName}");
 method(${paramsForward.join(', ')});
    `
   }
