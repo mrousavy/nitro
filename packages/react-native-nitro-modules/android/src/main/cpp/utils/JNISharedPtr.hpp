@@ -28,7 +28,7 @@ private:
   jni::global_ref<typename T::javaobject> _ref;
 };
 
-class JNISharedPtr {
+class JNISharedPtr final {
 private:
   template <typename T, template <typename, typename...> class Base>
   struct is_base_template_of {
@@ -40,6 +40,10 @@ private:
 
     static constexpr bool value = decltype(test<T>(nullptr))::value;
   };
+
+public:
+  JNISharedPtr() = delete;
+  ~JNISharedPtr() = delete;
 
 public:
   /**
