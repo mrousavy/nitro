@@ -67,11 +67,6 @@ public:
    * Create a new `NativeArrayBuffer` that allocates a new buffer of the given size.
    */
   static std::shared_ptr<ArrayBuffer> allocate(size_t size);
-
-  [[deprecated("Use wrapBuffer(...) instead.")]]
-  static std::shared_ptr<ArrayBuffer> makeBuffer(uint8_t* data, size_t size, DeleteFn&& deleteFunc) {
-    return ArrayBuffer::wrap(data, size, std::move(deleteFunc));
-  }
 };
 
 /**
