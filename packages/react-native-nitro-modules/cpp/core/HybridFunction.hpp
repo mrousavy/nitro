@@ -57,7 +57,8 @@ public:
 public:
   // functions
   inline jsi::Function toJSFunction(jsi::Runtime& runtime) const {
-    return jsi::Function::createFromHostFunction(runtime, jsi::PropNameID::forUtf8(runtime, _name), _paramCount, _function);
+    return jsi::Function::createFromHostFunction(runtime, jsi::PropNameID::forUtf8(runtime, _name), static_cast<unsigned int>(_paramCount),
+                                                 _function);
   }
 
 private:
