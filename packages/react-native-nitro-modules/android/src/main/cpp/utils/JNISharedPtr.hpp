@@ -46,8 +46,9 @@ public:
   static std::shared_ptr<T> make_shared_from_jni(jni::global_ref<typename T::javaobject>&& ref) {
 #ifdef NITRO_DEBUG
     if (ref == nullptr) [[unlikely]] {
-      throw std::runtime_error("Failed to wrap jni::global_ref<" + TypeInfo::getFriendlyTypename<T>(true) +
-                               "> in std::shared_ptr - it's null!");
+      std::string typeName = TypeInfo::getFriendlyTypename<T>(true);
+      throw std::runtime_error("Failed to wrap jni::global_ref<" + typeName + "::javaobject> in std::shared_ptr<" + typeName +
+                               "> - it's null!");
     }
 #endif
     return std::shared_ptr<T>(ref->cthis(), GlobalRefDeleter<T>(std::forward<T>(ref)));
