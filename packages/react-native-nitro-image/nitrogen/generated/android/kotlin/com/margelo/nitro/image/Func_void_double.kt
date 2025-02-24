@@ -61,7 +61,7 @@ class Func_void_double_cxx: Func_void_double {
   }
 
   @FastNative
-  external fun invoke_cxx(num: Double): Unit
+  private external fun invoke_cxx(num: Double): Unit
 }
 
 /**

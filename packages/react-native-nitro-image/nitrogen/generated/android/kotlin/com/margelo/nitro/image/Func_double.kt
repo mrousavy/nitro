@@ -61,7 +61,7 @@ class Func_double_cxx: Func_double {
   }
 
   @FastNative
-  external fun invoke_cxx(): Double
+  private external fun invoke_cxx(): Double
 }
 
 /**

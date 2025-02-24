@@ -61,7 +61,7 @@ class Func_void_std__vector_Powertrain__cxx: Func_void_std__vector_Powertrain_ {
   }
 
   @FastNative
-  external fun invoke_cxx(array: Array<Powertrain>): Unit
+  private external fun invoke_cxx(array: Array<Powertrain>): Unit
 }
 
 /**

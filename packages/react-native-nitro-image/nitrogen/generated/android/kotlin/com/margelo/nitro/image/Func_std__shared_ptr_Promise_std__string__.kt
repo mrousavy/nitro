@@ -61,7 +61,7 @@ class Func_std__shared_ptr_Promise_std__string___cxx: Func_std__shared_ptr_Promi
   }
 
   @FastNative
-  external fun invoke_cxx(): Promise<String>
+  private external fun invoke_cxx(): Promise<String>
 }
 
 /**
