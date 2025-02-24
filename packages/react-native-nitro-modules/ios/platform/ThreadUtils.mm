@@ -1,5 +1,5 @@
 //
-//  ThreadUtils.cpp
+//  ThreadUtils.mm
 //  react-native-nitro
 //
 //  Created by Marc Rousavy on 14.07.24.
@@ -10,13 +10,16 @@
 #include <sstream>
 #include <thread>
 
+// ObjC import
+#import <Foundation/Foundation.h>
+
 namespace margelo::nitro {
 
 std::string ThreadUtils::getThreadName() {
-  // Try using pthread APIs
-  char name[256];
-  if (pthread_getname_np(pthread_self(), name, sizeof(name)) == 0) {
-    return std::string(name);
+  // Try using NSThread APIs
+  NSString* threadName = NSThread.currentThread.name;
+  if (threadName != nil) {
+    return threadName.UTF8String;
   }
 
   // Fall back to this_thread ID
