@@ -26,7 +26,7 @@ class HybridTestViewManager: SimpleViewManager<View>() {
   }
 
   override fun createViewInstance(reactContext: ThemedReactContext): View {
-    val hybridView = HybridTestView()
+    val hybridView = HybridTestView(reactContext)
     val view = hybridView.view
     views[view] = hybridView
     return view

@@ -61,7 +61,7 @@ class ${manager}: SimpleViewManager<View>() {
   }
 
   override fun createViewInstance(reactContext: ThemedReactContext): View {
-    val hybridView = ${viewImplementation}()
+    val hybridView = ${viewImplementation}(reactContext)
     val view = hybridView.view
     views[view] = hybridView
     return view
