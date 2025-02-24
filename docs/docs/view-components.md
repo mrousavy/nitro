@@ -19,7 +19,7 @@ Nitro Views require **react-native 0.78.0** or higher, and require the new archi
 
 ### 1. Declaration
 
-To create a new Nitro View, declare it's props and methods in a `*.nitro.ts` file, and export your `HybridView` type:
+To create a new Nitro View, declare it's props and methods in a `*.nitro.ts` file, and create a type that specializes `HybridView<P, M>` - here `HybridView`:
 
 ```ts title="Camera.nitro.ts"
 import type { HybridView, HybridViewProps, HybridViewMethods } from 'react-native-nitro-modules'
@@ -29,6 +29,7 @@ export interface CameraProps extends HybridViewProps {
 }
 export interface CameraMethods extends HybridViewMethods { }
 
+// highlight-next-line
 export type CameraView = HybridView<CameraProps, CameraMethods>
 ```
 
