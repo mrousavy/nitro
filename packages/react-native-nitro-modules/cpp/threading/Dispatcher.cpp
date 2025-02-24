@@ -22,7 +22,7 @@ void Dispatcher::installRuntimeGlobalDispatcher(jsi::Runtime& runtime, std::shar
   Logger::log(LogLevel::Info, TAG, "Installing global Dispatcher Holder into Runtime \"%s\"...", getRuntimeId(runtime).c_str());
 
   // Store a weak reference in global cache
-  _globalCache[&runtime] = std::weak_ptr(dispatcher);
+  _globalCache.emplace(&runtime, dispatcher);
 
   // Inject the dispatcher into Runtime global (runtime will hold a strong reference)
   jsi::Object dispatcherHolder(runtime);
@@ -31,9 +31,10 @@ void Dispatcher::installRuntimeGlobalDispatcher(jsi::Runtime& runtime, std::shar
 }
 
 std::shared_ptr<Dispatcher> Dispatcher::getRuntimeGlobalDispatcher(jsi::Runtime& runtime) {
-  if (_globalCache.contains(&runtime)) [[likely]] {
+  auto found = _globalCache.find(&runtime);
+  if (found != _globalCache.end()) [[likely]] {
     // the runtime is known - we have something in cache
-    std::weak_ptr<Dispatcher> weakDispatcher = _globalCache[&runtime];
+    std::weak_ptr<Dispatcher> weakDispatcher = found->second;
     std::shared_ptr<Dispatcher> strongDispatcher = weakDispatcher.lock();
     if (strongDispatcher) {
       // the weak reference we cached is still valid - return it!
