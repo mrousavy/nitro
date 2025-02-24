@@ -137,10 +137,5 @@ class ArrayBuffer {
             byteBuffer.rewind()
             return ArrayBuffer(byteBuffer)
         }
-
-        @Deprecated("Use copy(...) instead", level = DeprecationLevel.WARNING)
-        fun copyOf(other: ArrayBuffer): ArrayBuffer {
-            return copy(other)
-        }
     }
 }
