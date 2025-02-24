@@ -15,8 +15,8 @@ using namespace facebook;
 
 template <typename T>
 struct GlobalRefDeleter {
-  explicit GlobalRefDeleter(const jni::global_ref<typename T::javaobject>& ref) : _ref(ref) {}
   explicit GlobalRefDeleter(jni::global_ref<typename T::javaobject>&& ref) : _ref(std::move(ref)) {}
+  explicit GlobalRefDeleter(const jni::global_ref<typename T::javaobject>& ref) : _ref(ref) {}
 
   void operator()(T* /* cthis */) {
     if (_ref) {
@@ -42,8 +42,13 @@ private:
   };
 
 public:
+  /**
+   * Creates a new `std::shared_ptr<T>` from the given `jni::global_ref<T::javaobject>`.
+   */
   template <typename T, typename std::enable_if<is_base_template_of<T, jni::HybridClass>::value, int>::type = 0>
   static std::shared_ptr<T> make_shared_from_jni(jni::global_ref<typename T::javaobject>&& ref) {
+    using RefType = jni::global_ref<typename T::javaobject>;
+
 #ifdef NITRO_DEBUG
     if (ref == nullptr) [[unlikely]] {
       std::string typeName = TypeInfo::getFriendlyTypename<T>(true);
@@ -51,7 +56,16 @@ public:
                                "> - it's null!");
     }
 #endif
-    return std::shared_ptr<T>(ref->cthis(), GlobalRefDeleter<T>(std::forward<T>(ref)));
+    return std::shared_ptr<T>(ref->cthis(), GlobalRefDeleter<T>(std::forward<RefType>(ref)));
+  }
+
+  /**
+   * Creates a new `std::shared_ptr<T>` from the given `jni::global_ref<T::javaobject>` (copy)
+   */
+  template <typename T, typename std::enable_if<is_base_template_of<T, jni::HybridClass>::value, int>::type = 0>
+  static std::shared_ptr<T> make_shared_from_jni(const jni::global_ref<typename T::javaobject>& ref) {
+    auto copy = ref;
+    return make_shared_from_jni<T>(std::move(copy));
   }
 };
 
