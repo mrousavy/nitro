@@ -34,7 +34,7 @@ namespace margelo::nitro::image {
   }
 
   // Properties
-
+  
 
   // Methods
   std::shared_ptr<margelo::nitro::image::HybridImageSpec> JHybridImageFactorySpec::loadImageFromFile(const std::string& path) {
