@@ -78,7 +78,8 @@ jsi::Value HybridObjectPrototype::createPrototype(jsi::Runtime& runtime, const s
   // 7. Throw it into our cache so the next lookup can be cached and therefore faster
   JSICacheReference jsiCache = JSICache::getOrCreateCache(runtime);
   BorrowingReference<jsi::Object> sharedObject = jsiCache.makeShared(std::move(object));
-  prototypeCache.emplace(prototype->getNativeInstanceId(), sharedObject);
+  auto instanceId = prototype->getNativeInstanceId();
+  prototypeCache[instanceId] = sharedObject;
 
   // 8. Return it!
   return jsi::Value(runtime, *sharedObject);
