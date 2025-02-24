@@ -41,6 +41,6 @@ namespace margelo::nitro::image {
   }
 
   // Methods
-
+  
 
 } // namespace margelo::nitro::image
