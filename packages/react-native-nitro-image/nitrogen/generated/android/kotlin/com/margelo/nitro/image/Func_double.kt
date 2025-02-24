@@ -40,7 +40,7 @@ fun interface Func_double: () -> Double {
 @Keep
 @Suppress(
   "KotlinJniMissingFunction", "unused",
-  "RedundantSuppression", "RedundantUnitReturnType",
+  "RedundantSuppression", "RedundantUnitReturnType", "FunctionName",
   "ConvertSecondaryConstructorToPrimary", "ClassName", "LocalVariableName",
 )
 class Func_double_cxx: Func_double {
@@ -56,9 +56,8 @@ class Func_double_cxx: Func_double {
 
   @DoNotStrip
   @Keep
-  override fun invoke(): Double {
-    return invoke_cxx()
-  }
+  override fun invoke(): Double
+    = invoke_cxx()
 
   @FastNative
   private external fun invoke_cxx(): Double

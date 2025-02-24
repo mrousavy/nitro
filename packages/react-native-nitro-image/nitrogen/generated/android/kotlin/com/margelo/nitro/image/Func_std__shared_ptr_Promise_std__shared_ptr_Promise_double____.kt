@@ -40,7 +40,7 @@ fun interface Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double____: (
 @Keep
 @Suppress(
   "KotlinJniMissingFunction", "unused",
-  "RedundantSuppression", "RedundantUnitReturnType",
+  "RedundantSuppression", "RedundantUnitReturnType", "FunctionName",
   "ConvertSecondaryConstructorToPrimary", "ClassName", "LocalVariableName",
 )
 class Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double_____cxx: Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double____ {
@@ -56,9 +56,8 @@ class Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double_____cxx: Func_
 
   @DoNotStrip
   @Keep
-  override fun invoke(): Promise<Promise<Double>> {
-    return invoke_cxx()
-  }
+  override fun invoke(): Promise<Promise<Double>>
+    = invoke_cxx()
 
   @FastNative
   private external fun invoke_cxx(): Promise<Promise<Double>>

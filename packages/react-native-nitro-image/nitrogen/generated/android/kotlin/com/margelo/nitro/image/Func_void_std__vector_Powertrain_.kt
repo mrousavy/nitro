@@ -40,7 +40,7 @@ fun interface Func_void_std__vector_Powertrain_: (Array<Powertrain>) -> Unit {
 @Keep
 @Suppress(
   "KotlinJniMissingFunction", "unused",
-  "RedundantSuppression", "RedundantUnitReturnType",
+  "RedundantSuppression", "RedundantUnitReturnType", "FunctionName",
   "ConvertSecondaryConstructorToPrimary", "ClassName", "LocalVariableName",
 )
 class Func_void_std__vector_Powertrain__cxx: Func_void_std__vector_Powertrain_ {
@@ -56,9 +56,8 @@ class Func_void_std__vector_Powertrain__cxx: Func_void_std__vector_Powertrain_ {
 
   @DoNotStrip
   @Keep
-  override fun invoke(array: Array<Powertrain>): Unit {
-    return invoke_cxx(array)
-  }
+  override fun invoke(array: Array<Powertrain>): Unit
+    = invoke_cxx(array)
 
   @FastNative
   private external fun invoke_cxx(array: Array<Powertrain>): Unit

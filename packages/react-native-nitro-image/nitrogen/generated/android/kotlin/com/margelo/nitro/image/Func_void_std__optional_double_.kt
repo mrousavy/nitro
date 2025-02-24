@@ -40,7 +40,7 @@ fun interface Func_void_std__optional_double_: (Double?) -> Unit {
 @Keep
 @Suppress(
   "KotlinJniMissingFunction", "unused",
-  "RedundantSuppression", "RedundantUnitReturnType",
+  "RedundantSuppression", "RedundantUnitReturnType", "FunctionName",
   "ConvertSecondaryConstructorToPrimary", "ClassName", "LocalVariableName",
 )
 class Func_void_std__optional_double__cxx: Func_void_std__optional_double_ {
@@ -56,9 +56,8 @@ class Func_void_std__optional_double__cxx: Func_void_std__optional_double_ {
 
   @DoNotStrip
   @Keep
-  override fun invoke(maybe: Double?): Unit {
-    return invoke_cxx(maybe)
-  }
+  override fun invoke(maybe: Double?): Unit
+    = invoke_cxx(maybe)
 
   @FastNative
   private external fun invoke_cxx(maybe: Double?): Unit

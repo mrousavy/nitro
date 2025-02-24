@@ -40,7 +40,7 @@ fun interface Func_void: () -> Unit {
 @Keep
 @Suppress(
   "KotlinJniMissingFunction", "unused",
-  "RedundantSuppression", "RedundantUnitReturnType",
+  "RedundantSuppression", "RedundantUnitReturnType", "FunctionName",
   "ConvertSecondaryConstructorToPrimary", "ClassName", "LocalVariableName",
 )
 class Func_void_cxx: Func_void {
@@ -56,9 +56,8 @@ class Func_void_cxx: Func_void {
 
   @DoNotStrip
   @Keep
-  override fun invoke(): Unit {
-    return invoke_cxx()
-  }
+  override fun invoke(): Unit
+    = invoke_cxx()
 
   @FastNative
   private external fun invoke_cxx(): Unit

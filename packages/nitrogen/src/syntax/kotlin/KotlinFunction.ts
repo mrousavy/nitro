@@ -58,7 +58,7 @@ fun interface ${name}: ${lambdaSignature} {
 @Keep
 @Suppress(
   "KotlinJniMissingFunction", "unused",
-  "RedundantSuppression", "RedundantUnitReturnType",
+  "RedundantSuppression", "RedundantUnitReturnType", "FunctionName",
   "ConvertSecondaryConstructorToPrimary", "ClassName", "LocalVariableName",
 )
 class ${name}_cxx: ${name} {
@@ -74,9 +74,8 @@ class ${name}_cxx: ${name} {
 
   @DoNotStrip
   @Keep
-  override fun invoke(${kotlinParams.join(', ')}): ${kotlinReturnType} {
-    return invoke_cxx(${kotlinParamsForward.join(',')})
-  }
+  override fun invoke(${kotlinParams.join(', ')}): ${kotlinReturnType}
+    = invoke_cxx(${kotlinParamsForward.join(',')})
 
   @FastNative
   private external fun invoke_cxx(${kotlinParams.join(', ')}): ${kotlinReturnType}
