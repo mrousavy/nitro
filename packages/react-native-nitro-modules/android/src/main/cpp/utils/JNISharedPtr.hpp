@@ -53,7 +53,7 @@ public:
   template <typename T, typename std::enable_if<is_base_template_of<T, jni::HybridClass>::value, int>::type = 0>
   static std::shared_ptr<T> make_shared_from_jni(const jni::global_ref<typename T::javaobject>& ref) {
 #ifdef NITRO_DEBUG
-    if (ref == nullptr) [[unlikely]] {
+    if (ref == nullptr || ref->cthis() == nullptr) [[unlikely]] {
       std::string typeName = TypeInfo::getFriendlyTypename<T>(true);
       throw std::runtime_error("Failed to wrap jni::global_ref<" + typeName + "::javaobject> in std::shared_ptr<" + typeName +
                                "> - it's null!");
