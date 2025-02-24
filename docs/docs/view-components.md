@@ -81,12 +81,12 @@ Now it's time to implement the View - simply create a new Swift/Kotlin class/fil
   </TabItem>
   <TabItem value="kotlin" label="Kotlin">
     ```kotlin title="HybridCameraView.kt"
-    class HybridCameraView : HybridCameraViewSpec() {
+    class HybridCameraView(val context: ThemedReactContext) : HybridCameraViewSpec() {
       // Props
       override var enableFlash: Boolean = false
 
       // View
-      override val view: View = View(NitroModules.applicationContext)
+      override val view: View = View(context)
     }
     ```
   </TabItem>

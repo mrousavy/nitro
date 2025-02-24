@@ -4,13 +4,13 @@ import android.graphics.Color
 import android.view.View
 import androidx.annotation.Keep
 import com.facebook.proguard.annotations.DoNotStrip
-import com.margelo.nitro.NitroModules
+import com.facebook.react.uimanager.ThemedReactContext
 
 @Keep
 @DoNotStrip
-class HybridTestView: HybridTestViewSpec() {
+class HybridTestView(val context: ThemedReactContext): HybridTestViewSpec() {
     // View
-    override val view: View = View(NitroModules.applicationContext)
+    override val view: View = View(context)
 
     // Props
     private var _isBlue = false
