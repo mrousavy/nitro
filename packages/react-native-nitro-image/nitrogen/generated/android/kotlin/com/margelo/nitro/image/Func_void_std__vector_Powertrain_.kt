@@ -61,7 +61,7 @@ class Func_void_std__vector_Powertrain__cxx: Func_void_std__vector_Powertrain_ {
   }
 
   @FastNative
-  external override fun invoke_cxx(array: Array<Powertrain>): Unit
+  external fun invoke_cxx(array: Array<Powertrain>): Unit
 }
 
 /**

@@ -61,7 +61,7 @@ class Func_void_cxx: Func_void {
   }
 
   @FastNative
-  external override fun invoke_cxx(): Unit
+  external fun invoke_cxx(): Unit
 }
 
 /**

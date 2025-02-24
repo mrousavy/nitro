@@ -61,7 +61,7 @@ class Func_void_std__string_cxx: Func_void_std__string {
   }
 
   @FastNative
-  external override fun invoke_cxx(valueFromJs: String): Unit
+  external fun invoke_cxx(valueFromJs: String): Unit
 }
 
 /**

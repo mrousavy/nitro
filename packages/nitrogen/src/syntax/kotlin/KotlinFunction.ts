@@ -79,7 +79,7 @@ class ${name}_cxx: ${name} {
   }
 
   @FastNative
-  external override fun invoke_cxx(${kotlinParams.join(', ')}): ${kotlinReturnType}
+  external fun invoke_cxx(${kotlinParams.join(', ')}): ${kotlinReturnType}
 }
 
 /**

@@ -61,7 +61,7 @@ class Func_double_cxx: Func_double {
   }
 
   @FastNative
-  external override fun invoke_cxx(): Double
+  external fun invoke_cxx(): Double
 }
 
 /**

@@ -61,7 +61,7 @@ class Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_Array
   }
 
   @FastNative
-  external override fun invoke_cxx(): Promise<Promise<ArrayBuffer>>
+  external fun invoke_cxx(): Promise<Promise<ArrayBuffer>>
 }
 
 /**
