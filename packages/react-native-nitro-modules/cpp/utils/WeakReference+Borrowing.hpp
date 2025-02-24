@@ -1,5 +1,5 @@
 //
-//  WeakReference+Owning.hpp
+//  WeakReference+Borrowing.hpp
 //  react-native-nitro
 //
 //  Created by Marc Rousavy on 23.06.24.
