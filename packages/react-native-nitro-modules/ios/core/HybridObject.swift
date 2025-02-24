@@ -33,13 +33,3 @@ public extension HybridObject {
   // By default, this returns `0`.
   var memorySize: Int { return 0 }
 }
-
-@available(*, deprecated, message: "HybridObjectSpec has been renamed to HybridObject. Update Nitrogen and re-generate your specs.")
-public typealias HybridObjectSpec = HybridObject
-
-public extension HybridObjectSpec {
-  @available(*, deprecated, message: "getSizeOf(...) will now be default-computed. Please remove getSizeOf() from your code.")
-  func getSizeOf<T: AnyObject>(_ instance: T) -> Int {
-    return 0
-  }
-}
