@@ -32,7 +32,7 @@ namespace margelo::nitro::image {
      * Invokes the function this `JFunc_void_std__vector_Powertrain_` instance holds through JNI.
      */
     void invoke(const std::vector<Powertrain>& array) const {
-      static const auto method = getClass()->getMethod<void(jni::alias_ref<jni::JArrayClass<JPowertrain>> /* array */)>("invoke");
+      static const auto method = javaClassStatic()->getMethod<void(jni::alias_ref<jni::JArrayClass<JPowertrain>> /* array */)>("invoke");
       method(self(), [&]() {
         size_t __size = array.size();
         jni::local_ref<jni::JArrayClass<JPowertrain>> __array = jni::JArrayClass<JPowertrain>::newArray(__size);

@@ -30,7 +30,7 @@ namespace margelo::nitro::image {
      * Invokes the function this `JFunc_void_std__optional_double_` instance holds through JNI.
      */
     void invoke(std::optional<double> maybe) const {
-      static const auto method = getClass()->getMethod<void(jni::alias_ref<jni::JDouble> /* maybe */)>("invoke");
+      static const auto method = javaClassStatic()->getMethod<void(jni::alias_ref<jni::JDouble> /* maybe */)>("invoke");
       method(self(), maybe.has_value() ? jni::JDouble::valueOf(maybe.value()) : nullptr);
     }
   };
