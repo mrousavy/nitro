@@ -40,7 +40,7 @@ fun interface Func_void_std__optional_double_: (Double?) -> Unit {
 @Keep
 @Suppress(
   "KotlinJniMissingFunction", "unused",
-  "RedundantSuppression", "RedundantUnitReturnType",
+  "RedundantSuppression", "RedundantUnitReturnType", "FunctionName",
   "ConvertSecondaryConstructorToPrimary", "ClassName", "LocalVariableName",
 )
 class Func_void_std__optional_double__cxx: Func_void_std__optional_double_ {
@@ -54,8 +54,13 @@ class Func_void_std__optional_double__cxx: Func_void_std__optional_double_ {
     mHybridData = hybridData
   }
 
+  @DoNotStrip
+  @Keep
+  override fun invoke(maybe: Double?): Unit
+    = invoke_cxx(maybe)
+
   @FastNative
-  external override fun invoke(maybe: Double?): Unit
+  private external fun invoke_cxx(maybe: Double?): Unit
 }
 
 /**

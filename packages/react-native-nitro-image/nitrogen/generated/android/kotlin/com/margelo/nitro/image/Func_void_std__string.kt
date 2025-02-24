@@ -40,7 +40,7 @@ fun interface Func_void_std__string: (String) -> Unit {
 @Keep
 @Suppress(
   "KotlinJniMissingFunction", "unused",
-  "RedundantSuppression", "RedundantUnitReturnType",
+  "RedundantSuppression", "RedundantUnitReturnType", "FunctionName",
   "ConvertSecondaryConstructorToPrimary", "ClassName", "LocalVariableName",
 )
 class Func_void_std__string_cxx: Func_void_std__string {
@@ -54,8 +54,13 @@ class Func_void_std__string_cxx: Func_void_std__string {
     mHybridData = hybridData
   }
 
+  @DoNotStrip
+  @Keep
+  override fun invoke(valueFromJs: String): Unit
+    = invoke_cxx(valueFromJs)
+
   @FastNative
-  external override fun invoke(valueFromJs: String): Unit
+  private external fun invoke_cxx(valueFromJs: String): Unit
 }
 
 /**

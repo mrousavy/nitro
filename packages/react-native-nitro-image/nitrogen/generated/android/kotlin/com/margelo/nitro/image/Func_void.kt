@@ -40,7 +40,7 @@ fun interface Func_void: () -> Unit {
 @Keep
 @Suppress(
   "KotlinJniMissingFunction", "unused",
-  "RedundantSuppression", "RedundantUnitReturnType",
+  "RedundantSuppression", "RedundantUnitReturnType", "FunctionName",
   "ConvertSecondaryConstructorToPrimary", "ClassName", "LocalVariableName",
 )
 class Func_void_cxx: Func_void {
@@ -54,8 +54,13 @@ class Func_void_cxx: Func_void {
     mHybridData = hybridData
   }
 
+  @DoNotStrip
+  @Keep
+  override fun invoke(): Unit
+    = invoke_cxx()
+
   @FastNative
-  external override fun invoke(): Unit
+  private external fun invoke_cxx(): Unit
 }
 
 /**

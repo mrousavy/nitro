@@ -40,7 +40,7 @@ fun interface Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_p
 @Keep
 @Suppress(
   "KotlinJniMissingFunction", "unused",
-  "RedundantSuppression", "RedundantUnitReturnType",
+  "RedundantSuppression", "RedundantUnitReturnType", "FunctionName",
   "ConvertSecondaryConstructorToPrimary", "ClassName", "LocalVariableName",
 )
 class Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer______cxx: Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____ {
@@ -54,8 +54,13 @@ class Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_Array
     mHybridData = hybridData
   }
 
+  @DoNotStrip
+  @Keep
+  override fun invoke(): Promise<Promise<ArrayBuffer>>
+    = invoke_cxx()
+
   @FastNative
-  external override fun invoke(): Promise<Promise<ArrayBuffer>>
+  private external fun invoke_cxx(): Promise<Promise<ArrayBuffer>>
 }
 
 /**

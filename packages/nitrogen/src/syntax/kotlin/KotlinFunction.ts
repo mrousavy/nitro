@@ -58,7 +58,7 @@ fun interface ${name}: ${lambdaSignature} {
 @Keep
 @Suppress(
   "KotlinJniMissingFunction", "unused",
-  "RedundantSuppression", "RedundantUnitReturnType",
+  "RedundantSuppression", "RedundantUnitReturnType", "FunctionName",
   "ConvertSecondaryConstructorToPrimary", "ClassName", "LocalVariableName",
 )
 class ${name}_cxx: ${name} {
@@ -72,8 +72,13 @@ class ${name}_cxx: ${name} {
     mHybridData = hybridData
   }
 
+  @DoNotStrip
+  @Keep
+  override fun invoke(${kotlinParams.join(', ')}): ${kotlinReturnType}
+    = invoke_cxx(${kotlinParamsForward.join(',')})
+
   @FastNative
-  external override fun invoke(${kotlinParams.join(', ')}): ${kotlinReturnType}
+  private external fun invoke_cxx(${kotlinParams.join(', ')}): ${kotlinReturnType}
 }
 
 /**
@@ -220,7 +225,7 @@ namespace ${cxxNamespace} {
   public:
     static auto constexpr kJavaDescriptor = "L${jniClassDescriptor};";
     static void registerNatives() {
-      registerHybrid({makeNativeMethod("invoke", J${name}_cxx::invoke_cxx)});
+      registerHybrid({makeNativeMethod("invoke_cxx", J${name}_cxx::invoke_cxx)});
     }
 
   private:

@@ -40,7 +40,7 @@ fun interface Func_std__shared_ptr_Promise_std__string__: () -> Promise<String> 
 @Keep
 @Suppress(
   "KotlinJniMissingFunction", "unused",
-  "RedundantSuppression", "RedundantUnitReturnType",
+  "RedundantSuppression", "RedundantUnitReturnType", "FunctionName",
   "ConvertSecondaryConstructorToPrimary", "ClassName", "LocalVariableName",
 )
 class Func_std__shared_ptr_Promise_std__string___cxx: Func_std__shared_ptr_Promise_std__string__ {
@@ -54,8 +54,13 @@ class Func_std__shared_ptr_Promise_std__string___cxx: Func_std__shared_ptr_Promi
     mHybridData = hybridData
   }
 
+  @DoNotStrip
+  @Keep
+  override fun invoke(): Promise<String>
+    = invoke_cxx()
+
   @FastNative
-  external override fun invoke(): Promise<String>
+  private external fun invoke_cxx(): Promise<String>
 }
 
 /**
