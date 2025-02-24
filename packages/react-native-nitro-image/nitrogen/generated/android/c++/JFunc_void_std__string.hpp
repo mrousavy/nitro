@@ -30,7 +30,7 @@ namespace margelo::nitro::image {
      * Invokes the function this `JFunc_void_std__string` instance holds through JNI.
      */
     void invoke(const std::string& valueFromJs) const {
-      static const auto method = getClass()->getMethod<void(jni::alias_ref<jni::JString> /* valueFromJs */)>("invoke");
+      static const auto method = javaClassStatic()->getMethod<void(jni::alias_ref<jni::JString> /* valueFromJs */)>("invoke");
       method(self(), jni::make_jstring(valueFromJs));
     }
   };

@@ -18,7 +18,7 @@ using namespace facebook;
 struct JHybridObjectInitializer : public jni::JavaClass<JHybridObjectInitializer> {
 public:
   jni::local_ref<JHybridObject::javaobject> call() const {
-    const auto method = this->getClass()->getMethod<JHybridObject::javaobject()>("initialize");
+    const auto method = this->javaClassStatic()->getMethod<JHybridObject::javaobject()>("initialize");
     return method(self());
   }
 

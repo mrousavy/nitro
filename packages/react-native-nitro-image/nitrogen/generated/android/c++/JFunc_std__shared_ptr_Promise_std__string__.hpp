@@ -32,7 +32,7 @@ namespace margelo::nitro::image {
      * Invokes the function this `JFunc_std__shared_ptr_Promise_std__string__` instance holds through JNI.
      */
     std::shared_ptr<Promise<std::string>> invoke() const {
-      static const auto method = getClass()->getMethod<jni::local_ref<JPromise::javaobject>()>("invoke");
+      static const auto method = javaClassStatic()->getMethod<jni::local_ref<JPromise::javaobject>()>("invoke");
       auto __result = method(self());
       return [&]() {
         auto __promise = Promise<std::string>::create();
