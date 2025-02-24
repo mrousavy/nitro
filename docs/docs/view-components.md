@@ -181,7 +181,7 @@ Since Nitro bridges props directly to JS, you are responsible for ensuring threa
 
 ### Before/After update
 
-To batch prop changes, you can override `onBeforeUpdate()` and `onAfterUpdate()` in your views:
+To batch prop changes, you can override `beforeUpdate()` and `afterUpdate()` in your views:
 
 <Tabs groupId="native-view-language">
   <TabItem value="swift" label="Swift" default>
