@@ -18,8 +18,18 @@ namespace margelo::nitro {
 std::string ThreadUtils::getThreadName() {
   // Try using NSThread APIs
   NSString* threadName = NSThread.currentThread.name;
-  if (threadName != nil) {
+  if (threadName != nil && threadName.length > 0) {
     return threadName.UTF8String;
+  }
+
+  // Try using DispatchQueue APIs as fallback
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+  dispatch_queue_t queue = dispatch_get_current_queue();
+#pragma clang diagnostic pop
+  const char* label = dispatch_queue_get_label(queue);
+  if (label != nullptr) {
+    return label;
   }
 
   // Fall back to this_thread ID
