@@ -22,7 +22,7 @@ void Dispatcher::installRuntimeGlobalDispatcher(jsi::Runtime& runtime, std::shar
   Logger::log(LogLevel::Info, TAG, "Installing global Dispatcher Holder into Runtime \"%s\"...", getRuntimeId(runtime).c_str());
 
   // Store a weak reference in global cache
-  _globalCache.emplace(&runtime, dispatcher);
+  _globalCache[&runtime] = dispatcher;
 
   // Inject the dispatcher into Runtime global (runtime will hold a strong reference)
   jsi::Object dispatcherHolder(runtime);
