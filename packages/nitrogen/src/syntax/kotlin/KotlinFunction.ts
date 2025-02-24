@@ -147,7 +147,7 @@ class ${name}_java(private val function: ${lambdaSignature}): ${name} {
     // It returns void
     cppCallBody = `_func(${indent(paramsForward.join(', '), '      ')});`
     jniCallBody = `
-static const auto method = javaClassStatic()->getMethod<${jniSignature}>("invoke");
+static const auto method = getClass()->getMethod<${jniSignature}>("invoke");
 method(${jniParamsForward.join(', ')});
     `.trim()
   } else {
@@ -157,7 +157,7 @@ ${functionType.returnType.getCode('c++')} __result = _func(${indent(paramsForwar
 return ${bridgedReturn.parseFromCppToKotlin('__result', 'c++')};
 `.trim()
     jniCallBody = `
-static const auto method = javaClassStatic()->getMethod<${jniSignature}>("invoke");
+static const auto method = getClass()->getMethod<${jniSignature}>("invoke");
 auto __result = method(${jniParamsForward.join(', ')});
 return ${bridgedReturn.parseFromKotlinToCpp('__result', 'c++', false)};
     `.trim()

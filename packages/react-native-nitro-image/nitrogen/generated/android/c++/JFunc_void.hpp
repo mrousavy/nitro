@@ -29,7 +29,7 @@ namespace margelo::nitro::image {
      * Invokes the function this `JFunc_void` instance holds through JNI.
      */
     void invoke() const {
-      static const auto method = javaClassStatic()->getMethod<void()>("invoke");
+      static const auto method = getClass()->getMethod<void()>("invoke");
       method(self());
     }
   };
