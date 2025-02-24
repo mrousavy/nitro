@@ -44,6 +44,10 @@ Pod::Spec.new do |s|
     "cpp/utils/JSCallback.hpp",
     "cpp/utils/NitroHash.hpp",
     "cpp/utils/NitroDefines.hpp",
+    "cpp/utils/BorrowingReference.hpp",
+    "cpp/utils/WeakReference.hpp",
+    "cpp/utils/WeakReference+Borrowing.hpp",
+    "cpp/utils/ReferenceState.hpp",
     "cpp/views/CachedProp.hpp",
     # Public iOS-specific headers that will be exposed in modulemap (for Swift)
     "ios/core/ArrayBufferHolder.hpp",

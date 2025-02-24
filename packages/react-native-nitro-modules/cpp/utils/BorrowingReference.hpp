@@ -220,4 +220,4 @@ private:
 
 } // namespace margelo::nitro
 
-#include "WeakReference+Owning.hpp"
+#include "WeakReference+Borrowing.hpp"
