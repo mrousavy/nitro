@@ -161,10 +161,6 @@ public:
       _onResolvedListeners.push_back(onResolved);
     }
   }
-  [[deprecated("Upgrade Nitro to use PromiseHolder<T> instead.")]]
-  void addOnResolvedListenerCopy(const std::function<void(TResult)>& onResolved) {
-    addOnResolvedListener([=](const TResult& value) { onResolved(value); });
-  }
 
   /**
    * Add a listener that will be called when the Promise gets rejected.
