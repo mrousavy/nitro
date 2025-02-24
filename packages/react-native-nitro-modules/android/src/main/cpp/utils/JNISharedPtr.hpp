@@ -15,13 +15,14 @@ using namespace facebook;
 
 template <typename T>
 struct GlobalRefDeleter {
-  explicit GlobalRefDeleter(jni::global_ref<typename T::javaobject>&& ref) : _ref(std::move(ref)) {}
-  explicit GlobalRefDeleter(const jni::global_ref<typename T::javaobject>& ref) : _ref(ref) {}
+  explicit GlobalRefDeleter(jni::global_ref<typename T::javaobject> ref) : _ref(std::move(ref)) {}
+
+  GlobalRefDeleter(const GlobalRefDeleter& copy) = delete;
+  GlobalRefDeleter(GlobalRefDeleter&& move) = default;
 
   void operator()(T* /* cthis */) {
-    if (_ref) {
-      _ref.release();
-    }
+    // It's RAII - once `GlobalRefDeleter` goes out of scope, `jni::global_ref` will too.
+    _ref = nullptr;
   }
 
 private:
