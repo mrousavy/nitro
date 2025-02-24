@@ -24,18 +24,18 @@ namespace margelo::nitro::image {
   }
 
   size_t JHybridChildSpec::getExternalMemorySize() noexcept {
-    static const auto method = _javaPart->getClass()->getMethod<jlong()>("getMemorySize");
+    static const auto method = javaClassStatic()->getMethod<jlong()>("getMemorySize");
     return method(_javaPart);
   }
 
   // Properties
   double JHybridChildSpec::getChildValue() {
-    static const auto method = _javaPart->getClass()->getMethod<double()>("getChildValue");
+    static const auto method = javaClassStatic()->getMethod<double()>("getChildValue");
     auto __result = method(_javaPart);
     return __result;
   }
   double JHybridChildSpec::getBaseValue() {
-    static const auto method = _javaPart->getClass()->getMethod<double()>("getBaseValue");
+    static const auto method = javaClassStatic()->getMethod<double()>("getBaseValue");
     auto __result = method(_javaPart);
     return __result;
   }
