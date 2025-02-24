@@ -12,6 +12,7 @@ class HybridObject;
 }
 
 #include "HybridObject.hpp"
+#include "NitroConcepts.hpp"
 #include "NitroLogger.hpp"
 #include "NitroTypeInfo.hpp"
 #include <memory>
@@ -30,7 +31,7 @@ public:
   std::weak_ptr<HybridObject> cppPart;
 
 public:
-  template <typename THybridObject, typename TSwiftPart>
+  template <SomeHybridObject THybridObject, typename TSwiftPart>
   static inline std::shared_ptr<THybridObject> getOrCreate(TSwiftPart swiftPart) noexcept {
     auto hybridContext = swiftPart.getHybridContext();
     auto hybridObject = std::dynamic_pointer_cast<THybridObject>(hybridContext.cppPart.lock());

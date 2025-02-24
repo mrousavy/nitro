@@ -5,6 +5,7 @@
 #pragma once
 
 #include "HybridObjectPrototype.hpp"
+#include "NitroConcepts.hpp"
 
 #include <jsi/jsi.h>
 #include <memory>
@@ -64,7 +65,7 @@ public:
    * Get the `std::shared_ptr` instance of this HybridObject.
    * The HybridObject must be managed inside a `shared_ptr` already, otherwise this will fail.
    */
-  template <typename Derived>
+  template <SomeHybridObject Derived>
   std::shared_ptr<Derived> shared() {
     return std::dynamic_pointer_cast<Derived>(shared_from_this());
   }

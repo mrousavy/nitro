@@ -14,6 +14,7 @@ namespace margelo::nitro {
 
 using namespace facebook;
 
+// TODO: Use SomeJavaObject concept for this.
 template <typename T>
 class DefaultConstructableObject {
 public:

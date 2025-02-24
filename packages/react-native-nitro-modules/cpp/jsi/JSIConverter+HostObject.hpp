@@ -15,8 +15,8 @@ namespace margelo::nitro {
 using namespace facebook;
 
 // jsi::HostObject <> {}
-template <typename T>
-struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_v<T, jsi::HostObject>>> final {
+template <SomeHostObjectSharedPtr T>
+struct JSIConverter<T> final {
   using TPointee = typename T::element_type;
 
   static inline T fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
