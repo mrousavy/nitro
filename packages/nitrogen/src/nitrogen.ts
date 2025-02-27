@@ -29,6 +29,7 @@ import type { PlatformSpec } from 'react-native-nitro-modules'
 interface NitrogenOptions {
   baseDirectory: string
   outputDirectory: string
+  modulePath?: string
 }
 
 interface NitrogenResult {
@@ -40,6 +41,7 @@ interface NitrogenResult {
 export async function runNitrogen({
   baseDirectory,
   outputDirectory,
+  modulePath,
 }: NitrogenOptions): Promise<NitrogenResult> {
   let targetSpecs = 0
   let generatedSpecs = 0
@@ -208,7 +210,7 @@ export async function runNitrogen({
   const autolinkingFiles: Autolinking[] = []
 
   if (usedPlatforms.includes('ios')) {
-    autolinkingFiles.push(createIOSAutolinking())
+    autolinkingFiles.push(createIOSAutolinking(outputDirectory, modulePath))
   }
   if (usedPlatforms.includes('android')) {
     autolinkingFiles.push(createAndroidAutolinking(writtenFiles))
