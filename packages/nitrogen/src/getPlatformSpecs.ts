@@ -1,6 +1,6 @@
 import type { PlatformSpec } from 'react-native-nitro-modules'
 import type { InterfaceDeclaration, Type, TypeAliasDeclaration } from 'ts-morph'
-import { Symbol } from 'ts-morph'
+import { Node, Symbol } from 'ts-morph'
 import { getBaseTypes } from './utils.js'
 
 export type Platform = keyof Required<PlatformSpec>
@@ -178,12 +178,25 @@ export function getHybridObjectPlatforms(
 export function getHybridViewPlatforms(
   view: InterfaceDeclaration | TypeAliasDeclaration
 ): PlatformSpec | undefined {
-  const genericArguments = view.getType().getTypeArguments()
-  const platformSpecsArgument = genericArguments[2]
-  if (platformSpecsArgument == null) {
-    // it uses `HybridObject` without generic arguments. This defaults to platform native languages
-    return { ios: 'swift', android: 'kotlin' }
+  if (Node.isTypeAliasDeclaration(view)) {
+    const typeNode = view.getTypeNode()
+
+    const isHybridViewType =
+      Node.isTypeReference(typeNode) &&
+      typeNode.getTypeName().getText() === 'HybridView'
+
+    if (!isHybridViewType) {
+      return
+    }
+
+    const genericArguments = typeNode.getTypeArguments()
+
+    const platformSpecArg = genericArguments[2]
+    if (platformSpecArg != null) {
+      return getPlatformSpec(view.getName(), platformSpecArg.getType())
+    }
   }
 
-  return getPlatformSpec(view.getName(), platformSpecsArgument)
+  // it uses `HybridObject` without generic arguments. This defaults to platform native languages
+  return { ios: 'swift', android: 'kotlin' }
 }
