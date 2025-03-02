@@ -179,17 +179,17 @@ export function getHybridViewPlatforms(
   view: InterfaceDeclaration | TypeAliasDeclaration
 ): PlatformSpec | undefined {
   if (Node.isTypeAliasDeclaration(view)) {
-    const typeNode = view.getTypeNode()
+    const hybridViewTypeNode = view.getTypeNode()
 
     const isHybridViewType =
-      Node.isTypeReference(typeNode) &&
-      typeNode.getTypeName().getText() === 'HybridView'
+      Node.isTypeReference(hybridViewTypeNode) &&
+      hybridViewTypeNode.getTypeName().getText() === 'HybridView'
 
     if (!isHybridViewType) {
       return
     }
 
-    const genericArguments = typeNode.getTypeArguments()
+    const genericArguments = hybridViewTypeNode.getTypeArguments()
 
     const platformSpecArg = genericArguments[2]
     if (platformSpecArg != null) {
