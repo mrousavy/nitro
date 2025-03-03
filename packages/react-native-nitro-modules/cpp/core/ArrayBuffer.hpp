@@ -58,11 +58,11 @@ public:
    * Create a new `NativeArrayBuffer` that copies the given data of the given size
    * into a newly allocated buffer.
    */
-  static std::shared_ptr<ArrayBuffer> copy(uint8_t* data, size_t size);
+  static std::shared_ptr<ArrayBuffer> copy(const uint8_t* data, size_t size);
   /**
    * Create a new `NativeArrayBuffer` that copies the given `std::vector`.
    */
-  static std::shared_ptr<ArrayBuffer> copy(std::vector<uint8_t>& data);
+  static std::shared_ptr<ArrayBuffer> copy(const std::vector<uint8_t>& data);
   /**
    * Create a new `NativeArrayBuffer` that allocates a new buffer of the given size.
    */

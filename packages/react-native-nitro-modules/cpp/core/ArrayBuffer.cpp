@@ -21,13 +21,13 @@ std::shared_ptr<ArrayBuffer> ArrayBuffer::wrap(uint8_t* data, size_t size, Delet
   return std::make_shared<NativeArrayBuffer>(data, size, std::move(deleteFunc));
 }
 
-std::shared_ptr<ArrayBuffer> ArrayBuffer::copy(uint8_t* data, size_t size) {
+std::shared_ptr<ArrayBuffer> ArrayBuffer::copy(const uint8_t* data, size_t size) {
   uint8_t* copy = new uint8_t[size];
   std::memcpy(copy, data, size);
   return ArrayBuffer::wrap(copy, size, [=]() { delete[] copy; });
 }
 
-std::shared_ptr<ArrayBuffer> ArrayBuffer::copy(std::vector<uint8_t>& data) {
+std::shared_ptr<ArrayBuffer> ArrayBuffer::copy(const std::vector<uint8_t>& data) {
   return ArrayBuffer::copy(data.data(), data.size());
 }
 
