@@ -24,25 +24,16 @@ export function createSwiftHybridObject(spec: HybridObjectSpec): SourceFile[] {
   }
 
   const hasBaseClass = classBaseClasses.length > 0
-  const baseMembers: string[] = []
-  baseMembers.push(`private weak var cxxWrapper: ${name.HybridTSpecCxx}? = nil`)
-  baseMembers.push(
-    `
-public ${hasBaseClass ? 'override func' : 'func'} getCxxWrapper() -> ${name.HybridTSpecCxx} {
-#if DEBUG
-  guard self is ${name.HybridTSpec} else {
-    fatalError("\`self\` is not a \`${name.HybridTSpec}\`! Did you accidentally inherit from \`${name.HybridTSpec}_base\` instead of \`${name.HybridTSpec}\`?")
-  }
-#endif
-  if let cxxWrapper = self.cxxWrapper {
-    return cxxWrapper
+  let initFunc: string
+  if (hasBaseClass) {
+    initFunc = `
+public override init() {
+  super.init()
+}
+`.trim()
   } else {
-    let cxxWrapper = ${name.HybridTSpecCxx}(self as! ${name.HybridTSpec})
-    self.cxxWrapper = cxxWrapper
-    return cxxWrapper
+    initFunc = `public init() { }`
   }
-}`.trim()
-  )
 
   const protocolCode = `
 ${createFileMetadataString(`${protocolName}.swift`)}
@@ -61,7 +52,24 @@ public protocol ${protocolName}_protocol: ${protocolBaseClasses.join(', ')} {
 
 /// See \`\`${protocolName}\`\`
 public class ${protocolName}_base${classBaseClasses.length > 0 ? `: ${classBaseClasses.join(',')}` : ''} {
-  ${baseMembers.length > 0 ? indent(baseMembers.join('\n'), '  ') : `/* inherited */`}
+  private weak var cxxWrapper: ${name.HybridTSpecCxx}? = nil
+
+  public ${hasBaseClass ? 'override func' : 'func'} getCxxWrapper() -> ${name.HybridTSpecCxx} {
+  #if DEBUG
+    guard self is ${name.HybridTSpec} else {
+      fatalError("\`self\` is not a \`${name.HybridTSpec}\`! Did you accidentally inherit from \`${name.HybridTSpec}_base\` instead of \`${name.HybridTSpec}\`?")
+    }
+  #endif
+    if let cxxWrapper = self.cxxWrapper {
+      return cxxWrapper
+    } else {
+      let cxxWrapper = ${name.HybridTSpecCxx}(self as! ${name.HybridTSpec})
+      self.cxxWrapper = cxxWrapper
+      return cxxWrapper
+    }
+  }
+
+  ${indent(initFunc, '  ')}
 }
 
 /**
