@@ -85,6 +85,7 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
 /// See ``HybridTestObjectSwiftKotlinSpec``
 public class HybridTestObjectSwiftKotlinSpec_base {
   private weak var cxxWrapper: HybridTestObjectSwiftKotlinSpec_cxx? = nil
+
   public func getCxxWrapper() -> HybridTestObjectSwiftKotlinSpec_cxx {
   #if DEBUG
     guard self is HybridTestObjectSwiftKotlinSpec else {
@@ -99,6 +100,8 @@ public class HybridTestObjectSwiftKotlinSpec_base {
       return cxxWrapper
     }
   }
+
+  public init() { }
 }
 
 /**

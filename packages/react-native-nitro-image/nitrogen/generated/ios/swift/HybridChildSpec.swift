@@ -20,6 +20,7 @@ public protocol HybridChildSpec_protocol: HybridObject, HybridBaseSpec_protocol 
 /// See ``HybridChildSpec``
 public class HybridChildSpec_base: HybridBaseSpec_base {
   private weak var cxxWrapper: HybridChildSpec_cxx? = nil
+
   public override func getCxxWrapper() -> HybridChildSpec_cxx {
   #if DEBUG
     guard self is HybridChildSpec else {
@@ -33,6 +34,10 @@ public class HybridChildSpec_base: HybridBaseSpec_base {
       self.cxxWrapper = cxxWrapper
       return cxxWrapper
     }
+  }
+
+  public override init() {
+    super.init()
   }
 }
 
