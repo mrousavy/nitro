@@ -416,9 +416,9 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
             return bridge.create_std__variant_Person__std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec__(__value)
           case .second(let __value):
             return bridge.create_std__variant_Person__std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec__({ () -> bridge.std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_ in
-            let __cxxWrapped = __value.getCxxWrapper()
-            return __cxxWrapped.getCxxPart()
-          }())
+              let __cxxWrapped = __value.getCxxWrapper()
+              return __cxxWrapped.getCxxPart()
+            }())
         }
       }().variant
       return bridge.create_Result_std__variant_Person__std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec___(__resultCpp)

@@ -742,7 +742,9 @@ case ${i}:
               .map(([label, type]) => {
                 const wrapping = new SwiftCxxBridgedType(type, true)
                 const parse = wrapping.parseFromSwiftToCpp('__value', 'swift')
-                return `case .${label}(let __value):\n  return bridge.${bridge.funcName}(${parse})`
+                return `
+case .${label}(let __value):
+  return bridge.${bridge.funcName}(${indent(parse, '  ')})`.trim()
               })
               .join('\n')
             let code = `
