@@ -52,7 +52,7 @@ export class VariantType implements Type {
       case 'swift':
         return `Variant${types.length}<${types.join(', ')}>`
       case 'kotlin':
-        return `Variant_${types.join('_')}`
+        return `Variant${types.length}<${types.join(', ')}>`
       default:
         throw new Error(
           `Language ${language} is not yet supported for VariantType!`
