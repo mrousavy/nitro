@@ -10,7 +10,7 @@
  * JS type: `number | boolean`
  */
 @frozen
-public enum Variant_Double_Bool {
+public indirect enum Variant_Double_Bool {
   case first(Double)
   case second(Bool)
 }

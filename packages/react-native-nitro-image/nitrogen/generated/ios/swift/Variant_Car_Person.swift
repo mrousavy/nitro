@@ -10,7 +10,7 @@
  * JS type: `struct | struct`
  */
 @frozen
-public enum Variant_Car_Person {
+public indirect enum Variant_Car_Person {
   case first(Car)
   case second(Person)
 }
