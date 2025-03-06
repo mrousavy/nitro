@@ -59,6 +59,7 @@
     "registry": "https://registry.npmjs.org/"
   },
   "scripts": {
+    "prepublishOnly": "bun --filter 'react-native-nitro-example' prepare:android",
     "postinstall": "bun build || exit 0;",
     "write-native-version": "version=$(node -p \"require('./package.json').version\") && sed -i '' \"s/#define NITRO_VERSION \\\".*\\\"/#define NITRO_VERSION \\\"$version\\\"/\" ./cpp/utils/NitroDefines.hpp",
     "postversion": "bun run write-native-version",
