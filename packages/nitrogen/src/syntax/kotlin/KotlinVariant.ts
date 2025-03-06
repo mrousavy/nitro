@@ -1,6 +1,11 @@
 import { NitroConfig } from '../../config/NitroConfig.js'
 import { capitalizeName, indent } from '../../utils.js'
-import { createFileMetadataString, toReferenceType } from '../helpers.js'
+import { includeHeader } from '../c++/includeNitroHeader.js'
+import {
+  createFileMetadataString,
+  isNotDuplicate,
+  toReferenceType,
+} from '../helpers.js'
 import type { SourceFile } from '../SourceFile.js'
 import { type VariantType } from '../types/VariantType.js'
 import { KotlinCxxBridgedType } from './KotlinCxxBridgedType.js'
@@ -113,6 +118,13 @@ public:
 };
     `.trim()
   })
+
+  const includes = new KotlinCxxBridgedType(variant)
+    .getRequiredImports()
+    .filter((i) => i.name !== `J${kotlinName}.hpp`)
+    .map((i) => includeHeader(i, true))
+    .filter(isNotDuplicate)
+
   const fbjniCode = `
 ${createFileMetadataString(`J${kotlinName}.hpp`)}
 
@@ -120,6 +132,8 @@ ${createFileMetadataString(`J${kotlinName}.hpp`)}
 
 #include <fbjni/fbjni.h>
 #include <variant>
+
+${includes.join('\n')}
 
 namespace ${cxxNamespace} {
 

@@ -10,6 +10,9 @@
 #include <fbjni/fbjni.h>
 #include <variant>
 
+#include <variant>
+#include <string>
+
 namespace margelo::nitro::image {
 
   using namespace facebook;

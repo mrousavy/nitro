@@ -10,6 +10,10 @@
 #include <fbjni/fbjni.h>
 #include <variant>
 
+#include <variant>
+#include "OldEnum.hpp"
+#include "JOldEnum.hpp"
+
 namespace margelo::nitro::image {
 
   using namespace facebook;

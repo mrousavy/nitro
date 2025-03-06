@@ -10,6 +10,16 @@
 #include <fbjni/fbjni.h>
 #include <variant>
 
+#include <variant>
+#include "Car.hpp"
+#include "Person.hpp"
+#include "JCar.hpp"
+#include <string>
+#include "Powertrain.hpp"
+#include "JPowertrain.hpp"
+#include <optional>
+#include "JPerson.hpp"
+
 namespace margelo::nitro::image {
 
   using namespace facebook;

@@ -10,6 +10,15 @@
 #include <fbjni/fbjni.h>
 #include <variant>
 
+#include <variant>
+#include "Person.hpp"
+#include <memory>
+#include "HybridTestObjectSwiftKotlinSpec.hpp"
+#include "JPerson.hpp"
+#include <string>
+#include "JHybridTestObjectSwiftKotlinSpec.hpp"
+#include <NitroModules/JNISharedPtr.hpp>
+
 namespace margelo::nitro::image {
 
   using namespace facebook;
