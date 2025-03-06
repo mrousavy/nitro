@@ -1448,14 +1448,33 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public final func passNamedVariant(variant: std.string) -> bridge.Result_std__string_ {
+  public final func passNamedVariant(variant: bridge.std__variant_std__string__Car_) -> bridge.Result_std__variant_std__string__Car__ {
     do {
-      let __result = try self.__implementation.passNamedVariant(variant: String(variant))
-      let __resultCpp = std.string(__result)
-      return bridge.create_Result_std__string_(__resultCpp)
+      let __result = try self.__implementation.passNamedVariant(variant: { () -> NamedVariant in
+        let __variant = variant
+        switch __variant.index() {
+          case 0:
+            let __actual = __variant.get_0()
+            return .first(String(__actual))
+          case 1:
+            let __actual = __variant.get_1()
+            return .second(__actual)
+          default:
+            fatalError("Variant can never have index \(__variant.index())!")
+        }
+      }())
+      let __resultCpp = { () -> bridge.std__variant_std__string__Car_ in
+        switch __result {
+          case .first(let __value):
+            return bridge.create_std__variant_std__string__Car_(std.string(__value))
+          case .second(let __value):
+            return bridge.create_std__variant_std__string__Car_(__value)
+        }
+      }().variant
+      return bridge.create_Result_std__variant_std__string__Car__(__resultCpp)
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
-      return bridge.create_Result_std__string_(__exceptionPtr)
+      return bridge.create_Result_std__variant_std__string__Car__(__exceptionPtr)
     }
   }
   

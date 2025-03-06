@@ -935,6 +935,35 @@ namespace margelo::nitro::image::bridge::swift {
     return std__variant_Car__Person_(value);
   }
   
+  // pragma MARK: std::variant<std::string, Car>
+  /**
+   * Wrapper struct for `std::variant<std::string, Car>`.
+   * std::variant cannot be used in Swift because of a Swift bug.
+   * Not even specializing it works. So we create a wrapper struct.
+   */
+  struct std__variant_std__string__Car_ {
+    std::variant<std::string, Car> variant;
+    std__variant_std__string__Car_(std::variant<std::string, Car> variant): variant(variant) { }
+    operator std::variant<std::string, Car>() const {
+      return variant;
+    }
+    inline size_t index() const {
+      return variant.index();
+    }
+    inline std::string get_0() const {
+      return std::get<0>(variant);
+    }
+    inline Car get_1() const {
+      return std::get<1>(variant);
+    }
+  };
+  inline std__variant_std__string__Car_ create_std__variant_std__string__Car_(const std::string& value) {
+    return std__variant_std__string__Car_(value);
+  }
+  inline std__variant_std__string__Car_ create_std__variant_std__string__Car_(const Car& value) {
+    return std__variant_std__string__Car_(value);
+  }
+  
   // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridBaseSpec>
   /**
    * Specialized version of `std::shared_ptr<margelo::nitro::image::HybridBaseSpec>`.
@@ -1220,6 +1249,15 @@ namespace margelo::nitro::image::bridge::swift {
   }
   inline Result_std__variant_Car__Person__ create_Result_std__variant_Car__Person__(const std::exception_ptr& error) {
     return Result<std::variant<Car, Person>>::withError(error);
+  }
+  
+  // pragma MARK: Result<std::variant<std::string, Car>>
+  using Result_std__variant_std__string__Car__ = Result<std::variant<std::string, Car>>;
+  inline Result_std__variant_std__string__Car__ create_Result_std__variant_std__string__Car__(const std::variant<std::string, Car>& value) {
+    return Result<std::variant<std::string, Car>>::withValue(value);
+  }
+  inline Result_std__variant_std__string__Car__ create_Result_std__variant_std__string__Car__(const std::exception_ptr& error) {
+    return Result<std::variant<std::string, Car>>::withError(error);
   }
   
   // pragma MARK: Result<std::shared_ptr<margelo::nitro::image::HybridChildSpec>>

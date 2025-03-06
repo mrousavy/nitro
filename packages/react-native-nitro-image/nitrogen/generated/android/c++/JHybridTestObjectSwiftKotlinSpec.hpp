@@ -125,7 +125,7 @@ namespace margelo::nitro::image {
     std::variant<std::string, double> passVariant(const std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>>& either) override;
     std::variant<bool, OldEnum> getVariantEnum(const std::variant<bool, OldEnum>& variant) override;
     std::variant<Car, Person> getVariantObjects(const std::variant<Car, Person>& variant) override;
-    std::string passNamedVariant(const std::string& variant) override;
+    std::variant<std::string, Car> passNamedVariant(const std::variant<std::string, Car>& variant) override;
     std::shared_ptr<margelo::nitro::image::HybridChildSpec> createChild() override;
     std::shared_ptr<margelo::nitro::image::HybridBaseSpec> createBase() override;
     std::shared_ptr<margelo::nitro::image::HybridBaseSpec> createBaseActualChild() override;

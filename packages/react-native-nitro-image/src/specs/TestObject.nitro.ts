@@ -12,7 +12,7 @@ export type Float3 = [number, number, number]
 export type TestTuple = [number, string, boolean]
 
 // Variants can have aliases/names
-export type NamedVariant = string | Powertrain
+export type NamedVariant = string | Car
 
 // A discriminating string union becomes an `enum` in C++.
 // This one is string-backed.

@@ -5,14 +5,9 @@ import type { SourceFile } from '../SourceFile.js'
 import { type VariantType } from '../types/VariantType.js'
 import { KotlinCxxBridgedType } from './KotlinCxxBridgedType.js'
 
-export function getVariantName(variant: VariantType): string {
-  const variants = variant.variants.map((v) => v.getCode('kotlin'))
-  return `Variant_` + variants.join('_')
-}
-
 export function createKotlinVariant(variant: VariantType): SourceFile[] {
   const jsName = variant.variants.map((v) => v.getCode('kotlin')).join('|')
-  const kotlinName = getVariantName(variant)
+  const kotlinName = variant.getAliasName('kotlin')
   const namespace = `J${kotlinName}_impl`
 
   const innerClasses = variant.cases.map(([label, v]) => {

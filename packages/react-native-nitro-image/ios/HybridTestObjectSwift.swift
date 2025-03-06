@@ -9,9 +9,36 @@ import Foundation
 import NitroModules
 
 class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
+  func getVariantHybrid(variant: Variant_Person__any_HybridTestObjectSwiftKotlinSpec_) throws -> Variant_Person__any_HybridTestObjectSwiftKotlinSpec_ {
+    return variant
+  }
+  
+  func passVariant(either: Variant_String_Double_Bool__Double___String_) throws -> Variant_String_Double {
+    switch either {
+    case let .first(string):
+      return .first(string)
+    case let .second(double):
+      return .second(double)
+    default:
+      return .first("holds something else!")
+    }
+  }
+  
+  func getVariantEnum(variant: Variant_Bool_OldEnum) throws -> Variant_Bool_OldEnum {
+    return variant
+  }
+  
+  func getVariantObjects(variant: Variant_Car_Person) throws -> Variant_Car_Person {
+    return variant
+  }
+  
+  func passNamedVariant(variant: String) throws -> String {
+    return variant
+  }
+  
   var optionalArray: [String]? = []
 
-  var someVariant: Variant_String_Double = .someDouble(55)
+  var someVariant: Variant_String_Double = .second(55)
 
   var numberValue: Double = 0.0
 

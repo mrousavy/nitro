@@ -558,7 +558,7 @@ namespace margelo::nitro::image {
       auto __value = std::move(__result.value());
       return __value;
     }
-    inline std::string passNamedVariant(const std::string& variant) override {
+    inline std::variant<std::string, Car> passNamedVariant(const std::variant<std::string, Car>& variant) override {
       auto __result = _swiftPart.passNamedVariant(variant);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
