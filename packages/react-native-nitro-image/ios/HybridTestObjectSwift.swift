@@ -11,7 +11,7 @@ import NitroModules
 class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
   var optionalArray: [String]? = []
 
-  var someVariant: Variant_String_Double = .someDouble(55)
+  var someVariant: Variant2<String, Double> = .second(55)
 
   var numberValue: Double = 0.0
 
@@ -184,7 +184,7 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
     return value
   }
 
-  func bounceMap(map: Dictionary<String, Variant_Double_Bool>) throws -> Dictionary<String, Variant_Double_Bool> {
+  func bounceMap(map: Dictionary<String, Variant2<Double, Bool>>) throws -> Dictionary<String, Variant2<Double, Bool>> {
     return map
   }
 

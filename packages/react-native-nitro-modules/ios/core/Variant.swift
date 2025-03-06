@@ -13,7 +13,7 @@ public enum Variant3<First, Second, Third> {
 }
 
 @frozen
-public enum Variant4<First, Second, Third, Fourth> {
+public indirect enum Variant4<First, Second, Third, Fourth> {
   case first(First)
   case second(Second)
   case third(Third)
@@ -21,7 +21,7 @@ public enum Variant4<First, Second, Third, Fourth> {
 }
 
 @frozen
-public enum Variant5<First, Second, Third, Fourth, Fifth> {
+public indirect enum Variant5<First, Second, Third, Fourth, Fifth> {
   case first(First)
   case second(Second)
   case third(Third)
