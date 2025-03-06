@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "Copying headers tp 'android/build/headers' for Android prefab..."
+echo "Copying headers to 'android/build/headers' for Android prefab..."
 
 # Create the target directory if it doesn't exist
 mkdir -p android/build/headers/nitromodules/NitroModules/
