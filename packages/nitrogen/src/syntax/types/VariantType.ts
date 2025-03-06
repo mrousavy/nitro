@@ -5,9 +5,11 @@ import type { Type, TypeKind } from './Type.js'
 
 export class VariantType implements Type {
   readonly variants: Type[]
+  readonly aliasName?: string
 
-  constructor(variants: Type[]) {
+  constructor(variants: Type[], aliasName?: string) {
     this.variants = variants
+    this.aliasName = aliasName
   }
 
   get canBePassedByReference(): boolean {
@@ -28,9 +30,16 @@ export class VariantType implements Type {
       case 'c++':
         return `std::variant<${types.join(', ')}>`
       case 'swift':
-        return `Variant_${types.join('_')}`
       case 'kotlin':
-        return `Variant_${types.join('_')}`
+        if (this.aliasName == null) {
+          const variants = this.variants.map((v) => v.getCode(language))
+          const typename = `Variant<${variants.join(', ')}>`
+          throw new Error(
+            `${typename} needs to have an alias typename to be representable in ${language}! ` +
+              `Instead of \`val: ${variants.join(' | ')}\`, you must alias it first: \`export type MyVariant = ${variants.join(' | ')}\`, then use \`val: MyVariant\`.`
+          )
+        }
+        return this.aliasName
       default:
         throw new Error(
           `Language ${language} is not yet supported for VariantType!`
