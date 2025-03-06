@@ -318,7 +318,8 @@ export function createType(
           return variants[0]!
         }
 
-        return new VariantType(variants)
+        const name = type.getAliasSymbol()?.getName()
+        return new VariantType(variants, name)
       }
     } else if (isAnyHybridSubclass(type)) {
       // It is another HybridObject being referenced!

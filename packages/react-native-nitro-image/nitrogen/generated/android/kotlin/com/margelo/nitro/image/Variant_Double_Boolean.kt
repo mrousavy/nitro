@@ -16,26 +16,26 @@ import com.facebook.proguard.annotations.DoNotStrip
 @DoNotStrip
 sealed class Variant_Double_Boolean {
   @DoNotStrip
-  data class SomeDouble(@DoNotStrip val value: Double): Variant_Double_Boolean()
+  data class First(@DoNotStrip val value: Double): Variant_Double_Boolean()
   @DoNotStrip
-  data class SomeBoolean(@DoNotStrip val value: Boolean): Variant_Double_Boolean()
+  data class Second(@DoNotStrip val value: Boolean): Variant_Double_Boolean()
 
   inline fun <reified T> getAs(): T? = when (this) {
-    is SomeDouble -> value as? T
-    is SomeBoolean -> value as? T
+    is First -> value as? T
+    is Second -> value as? T
   }
 
-  val isDouble: Boolean
-    get() = this is SomeDouble
-  val isBoolean: Boolean
-    get() = this is SomeBoolean
+  val isFirst: Boolean
+    get() = this is First
+  val isSecond: Boolean
+    get() = this is Second
 
   companion object {
     @JvmStatic
     @DoNotStrip
-    fun create(value: Double): Variant_Double_Boolean = SomeDouble(value)
+    fun create(value: Double): Variant_Double_Boolean = First(value)
     @JvmStatic
     @DoNotStrip
-    fun create(value: Boolean): Variant_Double_Boolean = SomeBoolean(value)
+    fun create(value: Boolean): Variant_Double_Boolean = Second(value)
   }
 }

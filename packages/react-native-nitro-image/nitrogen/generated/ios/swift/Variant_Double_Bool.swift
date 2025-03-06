@@ -11,6 +11,6 @@
  */
 @frozen
 public enum Variant_Double_Bool {
-  case someDouble(Double)
-  case someBool(Bool)
+  case first(Double)
+  case second(Bool)
 }

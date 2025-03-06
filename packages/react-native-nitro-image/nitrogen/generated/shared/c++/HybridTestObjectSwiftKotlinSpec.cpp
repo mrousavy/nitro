@@ -42,6 +42,7 @@ namespace margelo::nitro::image {
       prototype.registerHybridGetter("someVariant", &HybridTestObjectSwiftKotlinSpec::getSomeVariant);
       prototype.registerHybridSetter("someVariant", &HybridTestObjectSwiftKotlinSpec::setSomeVariant);
       prototype.registerHybridMethod("newTestObject", &HybridTestObjectSwiftKotlinSpec::newTestObject);
+      prototype.registerHybridMethod("getVariantHybrid", &HybridTestObjectSwiftKotlinSpec::getVariantHybrid);
       prototype.registerHybridMethod("simpleFunc", &HybridTestObjectSwiftKotlinSpec::simpleFunc);
       prototype.registerHybridMethod("addNumbers", &HybridTestObjectSwiftKotlinSpec::addNumbers);
       prototype.registerHybridMethod("addStrings", &HybridTestObjectSwiftKotlinSpec::addStrings);
@@ -85,6 +86,10 @@ namespace margelo::nitro::image {
       prototype.registerHybridMethod("getBufferLastItem", &HybridTestObjectSwiftKotlinSpec::getBufferLastItem);
       prototype.registerHybridMethod("setAllValuesTo", &HybridTestObjectSwiftKotlinSpec::setAllValuesTo);
       prototype.registerHybridMethod("createArrayBufferAsync", &HybridTestObjectSwiftKotlinSpec::createArrayBufferAsync);
+      prototype.registerHybridMethod("passVariant", &HybridTestObjectSwiftKotlinSpec::passVariant);
+      prototype.registerHybridMethod("getVariantEnum", &HybridTestObjectSwiftKotlinSpec::getVariantEnum);
+      prototype.registerHybridMethod("getVariantObjects", &HybridTestObjectSwiftKotlinSpec::getVariantObjects);
+      prototype.registerHybridMethod("passNamedVariant", &HybridTestObjectSwiftKotlinSpec::passNamedVariant);
       prototype.registerHybridMethod("createChild", &HybridTestObjectSwiftKotlinSpec::createChild);
       prototype.registerHybridMethod("createBase", &HybridTestObjectSwiftKotlinSpec::createBase);
       prototype.registerHybridMethod("createBaseActualChild", &HybridTestObjectSwiftKotlinSpec::createBaseActualChild);

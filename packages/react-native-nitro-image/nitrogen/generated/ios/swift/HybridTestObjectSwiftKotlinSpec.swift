@@ -28,6 +28,7 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
 
   // Methods
   func newTestObject() throws -> (any HybridTestObjectSwiftKotlinSpec)
+  func getVariantHybrid(variant: Variant_Person__any_HybridTestObjectSwiftKotlinSpec_) throws -> Variant_Person__any_HybridTestObjectSwiftKotlinSpec_
   func simpleFunc() throws -> Void
   func addNumbers(a: Double, b: Double) throws -> Double
   func addStrings(a: String, b: String) throws -> String
@@ -71,6 +72,10 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
   func getBufferLastItem(buffer: ArrayBufferHolder) throws -> Double
   func setAllValuesTo(buffer: ArrayBufferHolder, value: Double) throws -> Void
   func createArrayBufferAsync() throws -> Promise<ArrayBufferHolder>
+  func passVariant(either: Variant_String_Double_Bool__Double___String_) throws -> Variant_String_Double
+  func getVariantEnum(variant: Variant_Bool_OldEnum) throws -> Variant_Bool_OldEnum
+  func getVariantObjects(variant: Variant_Car_Person) throws -> Variant_Car_Person
+  func passNamedVariant(variant: NamedVariant) throws -> NamedVariant
   func createChild() throws -> (any HybridChildSpec)
   func createBase() throws -> (any HybridBaseSpec)
   func createBaseActualChild() throws -> (any HybridBaseSpec)

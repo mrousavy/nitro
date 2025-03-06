@@ -10,6 +10,8 @@
 #include <fbjni/fbjni.h>
 #include <variant>
 
+#include <variant>
+
 namespace margelo::nitro::image {
 
   using namespace facebook;
@@ -42,9 +44,9 @@ namespace margelo::nitro::image {
   };
 
   namespace JVariant_Double_Boolean_impl {
-    class SomeDouble: public jni::JavaClass<SomeDouble, JVariant_Double_Boolean> {
+    class First: public jni::JavaClass<First, JVariant_Double_Boolean> {
     public:
-      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Variant_Double_Boolean$SomeDouble;";
+      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Variant_Double_Boolean$First;";
     
       [[nodiscard]] double getValue() const {
         static const auto field = javaClassStatic()->getField<double>("value");
@@ -52,9 +54,9 @@ namespace margelo::nitro::image {
       }
     };
     
-    class SomeBoolean: public jni::JavaClass<SomeBoolean, JVariant_Double_Boolean> {
+    class Second: public jni::JavaClass<Second, JVariant_Double_Boolean> {
     public:
-      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Variant_Double_Boolean$SomeBoolean;";
+      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Variant_Double_Boolean$Second;";
     
       [[nodiscard]] jboolean getValue() const {
         static const auto field = javaClassStatic()->getField<jboolean>("value");
@@ -64,11 +66,11 @@ namespace margelo::nitro::image {
   } // namespace JVariant_Double_Boolean_impl
 
   std::variant<double, bool> JVariant_Double_Boolean::toCpp() const {
-    if (isInstanceOf(JVariant_Double_Boolean_impl::SomeDouble::javaClassStatic())) {
-      auto jniValue = static_cast<const JVariant_Double_Boolean_impl::SomeDouble*>(this)->getValue();
+    if (isInstanceOf(JVariant_Double_Boolean_impl::First::javaClassStatic())) {
+      auto jniValue = static_cast<const JVariant_Double_Boolean_impl::First*>(this)->getValue();
       return jniValue;
-    } else if (isInstanceOf(JVariant_Double_Boolean_impl::SomeBoolean::javaClassStatic())) {
-      auto jniValue = static_cast<const JVariant_Double_Boolean_impl::SomeBoolean*>(this)->getValue();
+    } else if (isInstanceOf(JVariant_Double_Boolean_impl::Second::javaClassStatic())) {
+      auto jniValue = static_cast<const JVariant_Double_Boolean_impl::Second*>(this)->getValue();
       return static_cast<bool>(jniValue);
     }
     throw std::invalid_argument("Variant is unknown Kotlin instance!");

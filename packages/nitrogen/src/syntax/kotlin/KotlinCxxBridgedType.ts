@@ -18,7 +18,7 @@ import { getKotlinBoxedPrimitiveType } from './KotlinBoxedPrimitive.js'
 import { createKotlinEnum } from './KotlinEnum.js'
 import { createKotlinFunction } from './KotlinFunction.js'
 import { createKotlinStruct } from './KotlinStruct.js'
-import { createKotlinVariant, getVariantName } from './KotlinVariant.js'
+import { createKotlinVariant } from './KotlinVariant.js'
 
 export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
   readonly type: Type
@@ -113,7 +113,7 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
         break
       case 'variant':
         const variantType = getTypeAs(this.type, VariantType)
-        const variantName = getVariantName(variantType)
+        const variantName = variantType.getAliasName('kotlin')
         imports.push({
           language: 'c++',
           name: `J${variantName}.hpp`,
@@ -305,7 +305,7 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
         }
       case 'variant': {
         const variant = getTypeAs(this.type, VariantType)
-        const name = getVariantName(variant)
+        const name = variant.getAliasName('kotlin')
         switch (language) {
           case 'c++':
             return `J${name}`
@@ -421,7 +421,7 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
         switch (language) {
           case 'c++':
             const variant = getTypeAs(this.type, VariantType)
-            const name = getVariantName(variant)
+            const name = variant.getAliasName('kotlin')
             return `J${name}::fromCpp(${parameterName})`
           default:
             return parameterName

@@ -43,14 +43,11 @@ namespace margelo::nitro::image {
       prototype.registerHybridSetter("optionalCallback", &HybridTestObjectCppSpec::setOptionalCallback);
       prototype.registerHybridGetter("someVariant", &HybridTestObjectCppSpec::getSomeVariant);
       prototype.registerHybridSetter("someVariant", &HybridTestObjectCppSpec::setSomeVariant);
-      prototype.registerHybridMethod("passVariant", &HybridTestObjectCppSpec::passVariant);
-      prototype.registerHybridMethod("getVariantEnum", &HybridTestObjectCppSpec::getVariantEnum);
-      prototype.registerHybridMethod("getVariantObjects", &HybridTestObjectCppSpec::getVariantObjects);
-      prototype.registerHybridMethod("getVariantHybrid", &HybridTestObjectCppSpec::getVariantHybrid);
       prototype.registerHybridMethod("getVariantTuple", &HybridTestObjectCppSpec::getVariantTuple);
       prototype.registerHybridMethod("flip", &HybridTestObjectCppSpec::flip);
       prototype.registerHybridMethod("passTuple", &HybridTestObjectCppSpec::passTuple);
       prototype.registerHybridMethod("newTestObject", &HybridTestObjectCppSpec::newTestObject);
+      prototype.registerHybridMethod("getVariantHybrid", &HybridTestObjectCppSpec::getVariantHybrid);
       prototype.registerHybridMethod("simpleFunc", &HybridTestObjectCppSpec::simpleFunc);
       prototype.registerHybridMethod("addNumbers", &HybridTestObjectCppSpec::addNumbers);
       prototype.registerHybridMethod("addStrings", &HybridTestObjectCppSpec::addStrings);
@@ -94,6 +91,10 @@ namespace margelo::nitro::image {
       prototype.registerHybridMethod("getBufferLastItem", &HybridTestObjectCppSpec::getBufferLastItem);
       prototype.registerHybridMethod("setAllValuesTo", &HybridTestObjectCppSpec::setAllValuesTo);
       prototype.registerHybridMethod("createArrayBufferAsync", &HybridTestObjectCppSpec::createArrayBufferAsync);
+      prototype.registerHybridMethod("passVariant", &HybridTestObjectCppSpec::passVariant);
+      prototype.registerHybridMethod("getVariantEnum", &HybridTestObjectCppSpec::getVariantEnum);
+      prototype.registerHybridMethod("getVariantObjects", &HybridTestObjectCppSpec::getVariantObjects);
+      prototype.registerHybridMethod("passNamedVariant", &HybridTestObjectCppSpec::passNamedVariant);
       prototype.registerHybridMethod("createChild", &HybridTestObjectCppSpec::createChild);
       prototype.registerHybridMethod("createBase", &HybridTestObjectCppSpec::createBase);
       prototype.registerHybridMethod("createBaseActualChild", &HybridTestObjectCppSpec::createBaseActualChild);
