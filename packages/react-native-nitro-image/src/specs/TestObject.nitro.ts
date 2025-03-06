@@ -105,6 +105,9 @@ interface SharedTestObjectProps {
 
   // Variants
   someVariant: number | string
+  passVariant(
+    either: number | string | number[] | string[] | boolean
+  ): number | string
 
   // Promises
   calculateFibonacciSync(value: number): bigint
@@ -172,11 +175,6 @@ interface SharedTestObjectProps {
 export interface TestObjectCpp
   extends HybridObject<{ ios: 'c++' }>,
     SharedTestObjectProps {
-  // Variants
-  passVariant(
-    either: number | string | number[] | string[] | boolean
-  ): number | string
-
   // Complex variants
   getVariantEnum(variant: OldEnum | boolean): OldEnum | boolean
   getVariantObjects(variant: Person | Car): Person | Car

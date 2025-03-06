@@ -123,6 +123,17 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
   func complexEnumCallback(array: [Powertrain], callback: @escaping ((_ array: [Powertrain]) -> Void)) throws -> Void {
     callback(array)
   }
+  
+  func passVariant(either: Variant5<String, Double, Bool, [Double], [String]>) throws -> Variant2<String, Double> {
+    switch either {
+    case let .first(string):
+      return .first(string)
+    case let .second(double):
+      return .second(double)
+    default:
+      return .first("holds something else!")
+    }
+  }
 
   func createMap() throws -> AnyMapHolder {
     let map = AnyMapHolder()

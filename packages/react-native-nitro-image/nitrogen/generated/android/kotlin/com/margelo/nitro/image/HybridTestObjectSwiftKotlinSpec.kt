@@ -215,6 +215,10 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
+  abstract fun passVariant(either: Variant_String_Double_Boolean_DoubleArray_Array<String>): Variant_String_Double
+  
+  @DoNotStrip
+  @Keep
   abstract fun calculateFibonacciSync(value: Double): Long
   
   @DoNotStrip

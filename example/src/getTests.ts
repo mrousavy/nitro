@@ -556,32 +556,34 @@ export function getTests(
       )
     ),
 
+    // More complex variants
+    createTest('passVariant(...) holds something else ([1,2,3])', () =>
+      it(() => testObject.passVariant([1, 2, 3]))
+        .didNotThrow()
+        .equals('holds something else!')
+    ),
+    createTest('passVariant(...) holds string(hello!)', () =>
+      it(() => testObject.passVariant('hello!'))
+        .didNotThrow()
+        .equals('hello!')
+    ),
+    createTest('passVariant(...) holds number (5)', () =>
+      it(() => testObject.passVariant(5))
+        .didNotThrow()
+        .equals(5)
+    ),
+    createTest('passVariant(...) wrong type ({})', () =>
+      it(() =>
+        testObject.passVariant(
+          // @ts-expect-error
+          {}
+        )
+      ).didThrow()
+    ),
+
     // More complex variants...
-    ...('passVariant' in testObject
+    ...('getVariantEnum' in testObject
       ? [
-          createTest('passVariant(...) holds something else ([1,2,3])', () =>
-            it(() => testObject.passVariant([1, 2, 3]))
-              .didNotThrow()
-              .equals('holds something else!')
-          ),
-          createTest('passVariant(...) holds string(hello!)', () =>
-            it(() => testObject.passVariant('hello!'))
-              .didNotThrow()
-              .equals('hello!')
-          ),
-          createTest('passVariant(...) holds number (5)', () =>
-            it(() => testObject.passVariant(5))
-              .didNotThrow()
-              .equals(5)
-          ),
-          createTest('passVariant(...) wrong type ({})', () =>
-            it(() =>
-              testObject.passVariant(
-                // @ts-expect-error
-                {}
-              )
-            ).didThrow()
-          ),
           // Complex variants tests
           createTest('getVariantEnum(...) converts enum', () =>
             it(() => testObject.getVariantEnum(OldEnum.THIRD))

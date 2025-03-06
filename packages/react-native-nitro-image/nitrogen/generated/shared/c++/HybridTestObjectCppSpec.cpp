@@ -43,7 +43,6 @@ namespace margelo::nitro::image {
       prototype.registerHybridSetter("optionalCallback", &HybridTestObjectCppSpec::setOptionalCallback);
       prototype.registerHybridGetter("someVariant", &HybridTestObjectCppSpec::getSomeVariant);
       prototype.registerHybridSetter("someVariant", &HybridTestObjectCppSpec::setSomeVariant);
-      prototype.registerHybridMethod("passVariant", &HybridTestObjectCppSpec::passVariant);
       prototype.registerHybridMethod("getVariantEnum", &HybridTestObjectCppSpec::getVariantEnum);
       prototype.registerHybridMethod("getVariantObjects", &HybridTestObjectCppSpec::getVariantObjects);
       prototype.registerHybridMethod("getVariantHybrid", &HybridTestObjectCppSpec::getVariantHybrid);
@@ -70,6 +69,7 @@ namespace margelo::nitro::image {
       prototype.registerHybridMethod("tryOptionalParams", &HybridTestObjectCppSpec::tryOptionalParams);
       prototype.registerHybridMethod("tryMiddleParam", &HybridTestObjectCppSpec::tryMiddleParam);
       prototype.registerHybridMethod("tryOptionalEnum", &HybridTestObjectCppSpec::tryOptionalEnum);
+      prototype.registerHybridMethod("passVariant", &HybridTestObjectCppSpec::passVariant);
       prototype.registerHybridMethod("calculateFibonacciSync", &HybridTestObjectCppSpec::calculateFibonacciSync);
       prototype.registerHybridMethod("calculateFibonacciAsync", &HybridTestObjectCppSpec::calculateFibonacciAsync);
       prototype.registerHybridMethod("wait", &HybridTestObjectCppSpec::wait);

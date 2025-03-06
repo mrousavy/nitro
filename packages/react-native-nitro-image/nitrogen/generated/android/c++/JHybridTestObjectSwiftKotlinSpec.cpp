@@ -68,6 +68,7 @@ namespace margelo::nitro::image { class HybridTestViewSpec; }
 #include "MapWrapper.hpp"
 #include "JMapWrapper.hpp"
 #include <exception>
+#include "JVariant_String_Double_Boolean_DoubleArray_Array<String>.hpp"
 #include "JFunc_void.hpp"
 #include "JFunc_void_std__optional_double_.hpp"
 #include "JFunc_std__shared_ptr_Promise_double__.hpp"
@@ -443,6 +444,11 @@ namespace margelo::nitro::image {
     static const auto method = javaClassStatic()->getMethod<jni::local_ref<JPowertrain>(jni::alias_ref<JPowertrain> /* value */)>("tryOptionalEnum");
     auto __result = method(_javaPart, value.has_value() ? JPowertrain::fromCpp(value.value()) : nullptr);
     return __result != nullptr ? std::make_optional(__result->toCpp()) : std::nullopt;
+  }
+  std::variant<std::string, double> JHybridTestObjectSwiftKotlinSpec::passVariant(const std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>>& either) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JVariant_String_Double>(jni::alias_ref<JVariant_String_Double_Boolean_DoubleArray_Array<String>> /* either */)>("passVariant");
+    auto __result = method(_javaPart, JVariant_String_Double_Boolean_DoubleArray_Array<String>::fromCpp(either));
+    return __result->toCpp();
   }
   int64_t JHybridTestObjectSwiftKotlinSpec::calculateFibonacciSync(double value) {
     static const auto method = javaClassStatic()->getMethod<int64_t(double /* value */)>("calculateFibonacciSync");

@@ -61,6 +61,7 @@ namespace margelo::nitro::image {
       prototype.registerHybridMethod("tryOptionalParams", &HybridTestObjectSwiftKotlinSpec::tryOptionalParams);
       prototype.registerHybridMethod("tryMiddleParam", &HybridTestObjectSwiftKotlinSpec::tryMiddleParam);
       prototype.registerHybridMethod("tryOptionalEnum", &HybridTestObjectSwiftKotlinSpec::tryOptionalEnum);
+      prototype.registerHybridMethod("passVariant", &HybridTestObjectSwiftKotlinSpec::passVariant);
       prototype.registerHybridMethod("calculateFibonacciSync", &HybridTestObjectSwiftKotlinSpec::calculateFibonacciSync);
       prototype.registerHybridMethod("calculateFibonacciAsync", &HybridTestObjectSwiftKotlinSpec::calculateFibonacciAsync);
       prototype.registerHybridMethod("wait", &HybridTestObjectSwiftKotlinSpec::wait);

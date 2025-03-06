@@ -708,6 +708,46 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
+  public final func passVariant(either: bridge.std__variant_std__string__double__bool__std__vector_double___std__vector_std__string__) -> bridge.Result_std__variant_std__string__double__ {
+    do {
+      let __result = try self.__implementation.passVariant(either: { () -> Variant5<String, Double, Bool, [Double], [String]> in
+        let __variant = either
+        switch __variant.index() {
+          case 0:
+            let __actual = __variant.get_0()
+            return .first(String(__actual))
+          case 1:
+            let __actual = __variant.get_1()
+            return .second(__actual)
+          case 2:
+            let __actual = __variant.get_2()
+            return .third(__actual)
+          case 3:
+            let __actual = __variant.get_3()
+            return .fourth(__actual.map({ __item in __item }))
+          case 4:
+            let __actual = __variant.get_4()
+            return .fifth(__actual.map({ __item in String(__item) }))
+          default:
+            fatalError("Variant can never have index \(__variant.index())!")
+        }
+      }())
+      let __resultCpp = { () -> bridge.std__variant_std__string__double_ in
+        switch __result {
+          case .first(let __value):
+            return bridge.create_std__variant_std__string__double_(std.string(__value))
+          case .second(let __value):
+            return bridge.create_std__variant_std__string__double_(__value)
+        }
+      }().variant
+      return bridge.create_Result_std__variant_std__string__double__(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__variant_std__string__double__(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
   public final func calculateFibonacciSync(value: Double) -> bridge.Result_int64_t_ {
     do {
       let __result = try self.__implementation.calculateFibonacciSync(value: value)

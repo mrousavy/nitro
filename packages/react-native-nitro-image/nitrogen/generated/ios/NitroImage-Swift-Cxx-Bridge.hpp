@@ -475,6 +475,53 @@ namespace margelo::nitro::image::bridge::swift {
     return std__variant_std__string__double_(value);
   }
   
+  // pragma MARK: std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>>
+  /**
+   * Wrapper struct for `std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>>`.
+   * std::variant cannot be used in Swift because of a Swift bug.
+   * Not even specializing it works. So we create a wrapper struct.
+   */
+  struct std__variant_std__string__double__bool__std__vector_double___std__vector_std__string__ {
+    std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>> variant;
+    std__variant_std__string__double__bool__std__vector_double___std__vector_std__string__(std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>> variant): variant(variant) { }
+    operator std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>>() const {
+      return variant;
+    }
+    inline size_t index() const {
+      return variant.index();
+    }
+    inline std::string get_0() const {
+      return std::get<0>(variant);
+    }
+    inline double get_1() const {
+      return std::get<1>(variant);
+    }
+    inline bool get_2() const {
+      return std::get<2>(variant);
+    }
+    inline std::vector<double> get_3() const {
+      return std::get<3>(variant);
+    }
+    inline std::vector<std::string> get_4() const {
+      return std::get<4>(variant);
+    }
+  };
+  inline std__variant_std__string__double__bool__std__vector_double___std__vector_std__string__ create_std__variant_std__string__double__bool__std__vector_double___std__vector_std__string__(const std::string& value) {
+    return std__variant_std__string__double__bool__std__vector_double___std__vector_std__string__(value);
+  }
+  inline std__variant_std__string__double__bool__std__vector_double___std__vector_std__string__ create_std__variant_std__string__double__bool__std__vector_double___std__vector_std__string__(double value) {
+    return std__variant_std__string__double__bool__std__vector_double___std__vector_std__string__(value);
+  }
+  inline std__variant_std__string__double__bool__std__vector_double___std__vector_std__string__ create_std__variant_std__string__double__bool__std__vector_double___std__vector_std__string__(bool value) {
+    return std__variant_std__string__double__bool__std__vector_double___std__vector_std__string__(value);
+  }
+  inline std__variant_std__string__double__bool__std__vector_double___std__vector_std__string__ create_std__variant_std__string__double__bool__std__vector_double___std__vector_std__string__(const std::vector<double>& value) {
+    return std__variant_std__string__double__bool__std__vector_double___std__vector_std__string__(value);
+  }
+  inline std__variant_std__string__double__bool__std__vector_double___std__vector_std__string__ create_std__variant_std__string__double__bool__std__vector_double___std__vector_std__string__(const std::vector<std::string>& value) {
+    return std__variant_std__string__double__bool__std__vector_double___std__vector_std__string__(value);
+  }
+  
   // pragma MARK: std::shared_ptr<Promise<int64_t>>
   /**
    * Specialized version of `std::shared_ptr<Promise<int64_t>>`.
@@ -960,6 +1007,15 @@ namespace margelo::nitro::image::bridge::swift {
   }
   inline Result_std__optional_Powertrain__ create_Result_std__optional_Powertrain__(const std::exception_ptr& error) {
     return Result<std::optional<Powertrain>>::withError(error);
+  }
+  
+  // pragma MARK: Result<std::variant<std::string, double>>
+  using Result_std__variant_std__string__double__ = Result<std::variant<std::string, double>>;
+  inline Result_std__variant_std__string__double__ create_Result_std__variant_std__string__double__(const std::variant<std::string, double>& value) {
+    return Result<std::variant<std::string, double>>::withValue(value);
+  }
+  inline Result_std__variant_std__string__double__ create_Result_std__variant_std__string__double__(const std::exception_ptr& error) {
+    return Result<std::variant<std::string, double>>::withError(error);
   }
   
   // pragma MARK: Result<int64_t>
