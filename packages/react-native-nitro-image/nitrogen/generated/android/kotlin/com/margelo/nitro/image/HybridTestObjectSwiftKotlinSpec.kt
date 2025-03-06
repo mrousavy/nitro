@@ -125,7 +125,7 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   @get:Keep
   @set:DoNotStrip
   @set:Keep
-  abstract var someVariant: Variant_String_Double
+  abstract var someVariant: Variant2<String, Double>
 
   // Methods
   @DoNotStrip
@@ -134,7 +134,7 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
-  abstract fun getVariantHybrid(variant: Variant_Person_HybridTestObjectSwiftKotlinSpec): Variant_Person_HybridTestObjectSwiftKotlinSpec
+  abstract fun getVariantHybrid(variant: Variant2<Person, HybridTestObjectSwiftKotlinSpec>): Variant2<Person, HybridTestObjectSwiftKotlinSpec>
   
   @DoNotStrip
   @Keep
@@ -187,7 +187,7 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
-  abstract fun bounceMap(map: Map<String, Variant_Double_Boolean>): Map<String, Variant_Double_Boolean>
+  abstract fun bounceMap(map: Map<String, Variant2<Double, Boolean>>): Map<String, Variant2<Double, Boolean>>
   
   @DoNotStrip
   @Keep
@@ -219,15 +219,15 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
-  abstract fun passVariant(either: Variant_String_Double_Boolean_DoubleArray_Array<String>): Variant_String_Double
+  abstract fun passVariant(either: Variant5<String, Double, Boolean, DoubleArray, Array<String>>): Variant2<String, Double>
   
   @DoNotStrip
   @Keep
-  abstract fun getVariantEnum(variant: Variant_Boolean_OldEnum): Variant_Boolean_OldEnum
+  abstract fun getVariantEnum(variant: Variant2<Boolean, OldEnum>): Variant2<Boolean, OldEnum>
   
   @DoNotStrip
   @Keep
-  abstract fun getVariantObjects(variant: Variant_Car_Person): Variant_Car_Person
+  abstract fun getVariantObjects(variant: Variant2<Car, Person>): Variant2<Car, Person>
   
   @DoNotStrip
   @Keep
