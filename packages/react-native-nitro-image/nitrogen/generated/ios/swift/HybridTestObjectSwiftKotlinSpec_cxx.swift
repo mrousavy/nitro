@@ -796,7 +796,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
             return .first(__actual)
           case 1:
             let __actual = __variant.get_1()
-            return .second(margelo.nitro.image.OldEnum(rawValue: __actual)!)
+            return .second(__actual)
           default:
             fatalError("Variant can never have index \(__variant.index())!")
         }
@@ -806,7 +806,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
           case .first(let __value):
             return bridge.create_std__variant_bool__OldEnum_(__value)
           case .second(let __value):
-            return bridge.create_std__variant_bool__OldEnum_(__value.rawValue)
+            return bridge.create_std__variant_bool__OldEnum_(__value)
         }
       }().variant
       return bridge.create_Result_std__variant_bool__OldEnum__(__resultCpp)

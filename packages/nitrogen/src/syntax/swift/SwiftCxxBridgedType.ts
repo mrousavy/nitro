@@ -506,7 +506,7 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
           : cppParameterName
         const cases = variant.cases
           .map(([label, type], i) => {
-            const wrapping = new SwiftCxxBridgedType(type)
+            const wrapping = new SwiftCxxBridgedType(type, true)
             return `
 case ${i}:
   let __actual = __variant.get_${i}()
@@ -740,7 +740,7 @@ case ${i}:
           case 'swift':
             const cases = variant.cases
               .map(([label, type]) => {
-                const wrapping = new SwiftCxxBridgedType(type)
+                const wrapping = new SwiftCxxBridgedType(type, true)
                 const parse = wrapping.parseFromSwiftToCpp('__value', 'swift')
                 return `case .${label}(let __value):\n  return bridge.${bridge.funcName}(${parse})`
               })
