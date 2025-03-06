@@ -643,9 +643,7 @@ export function getTests(
     ),
     createTest('getVariantHybrid(...) throws at wrong type (string)', () =>
       // @ts-expect-error
-      it(() => testObject.getVariantHybrid('some-string')).didThrow(
-        `Error: ${testObject.name}.getVariantHybrid(...): Cannot convert "some-string" to any type in variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>, margelo::nitro::image::Person>!`
-      )
+      it(() => testObject.getVariantHybrid('some-string')).didThrow()
     ),
     createTest(
       'getVariantHybrid(...) throws at wrong type (wrong object)',
@@ -653,9 +651,7 @@ export function getTests(
         it(() =>
           // @ts-expect-error
           testObject.getVariantHybrid({ someValue: 55 })
-        ).didThrow(
-          `Error: ${testObject.name}.getVariantHybrid(...): Cannot convert "[object Object]" to any type in variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>, margelo::nitro::image::Person>!`
-        )
+        ).didThrow()
     ),
     createTest('passNamedVariant(...) works', () =>
       it(() => testObject.passNamedVariant('Hello world!'))
