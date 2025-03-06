@@ -24,7 +24,7 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
   var optionalEnum: Powertrain? { get set }
   var optionalOldEnum: OldEnum? { get set }
   var optionalCallback: ((_ value: Double) -> Void)? { get set }
-  var someVariant: Variant_String_Double { get set }
+  var someVariant: Variant2<String, Double> { get set }
 
   // Methods
   func newTestObject() throws -> (any HybridTestObjectSwiftKotlinSpec)
@@ -39,7 +39,7 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
   func complexEnumCallback(array: [Powertrain], callback: @escaping (_ array: [Powertrain]) -> Void) throws -> Void
   func createMap() throws -> AnyMapHolder
   func mapRoundtrip(map: AnyMapHolder) throws -> AnyMapHolder
-  func bounceMap(map: Dictionary<String, Variant_Double_Bool>) throws -> Dictionary<String, Variant_Double_Bool>
+  func bounceMap(map: Dictionary<String, Variant2<Double, Bool>>) throws -> Dictionary<String, Variant2<Double, Bool>>
   func extractMap(mapWrapper: MapWrapper) throws -> Dictionary<String, String>
   func funcThatThrows() throws -> Double
   func funcThatThrowsBeforePromise() throws -> Promise<Void>

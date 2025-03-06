@@ -19,6 +19,28 @@ export class VariantType implements Type {
     return 'variant'
   }
 
+  get cases(): [string, Type][] {
+    const labels = [
+      'first',
+      'second',
+      'third',
+      'fourth',
+      'fifth',
+      'sixth',
+      'seventh',
+      'eigth',
+      'ninth',
+    ]
+    return this.variants.map((v, i) => {
+      const label = labels[i]
+      if (label == null)
+        throw new Error(
+          `Variant does not support ${this.variants.length} items!`
+        )
+      return [label, v]
+    })
+  }
+
   getCode(language: Language): string {
     const types = this.variants
       .map((v) => v.getCode(language))
@@ -28,7 +50,7 @@ export class VariantType implements Type {
       case 'c++':
         return `std::variant<${types.join(', ')}>`
       case 'swift':
-        return `Variant_${types.join('_')}`
+        return `Variant${types.length}<${types.join(', ')}>`
       case 'kotlin':
         return `Variant_${types.join('_')}`
       default:

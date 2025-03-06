@@ -349,24 +349,24 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
     get {
       return { () -> bridge.std__variant_std__string__double_ in
         switch self.__implementation.someVariant {
-          case .someString(let __value):
+          case .first(let __value):
             return bridge.create_std__variant_std__string__double_(std.string(__value))
-          case .someDouble(let __value):
+          case .second(let __value):
             return bridge.create_std__variant_std__string__double_(__value)
         }
       }()
     }
     @inline(__always)
     set {
-      self.__implementation.someVariant = { () -> Variant_String_Double in
+      self.__implementation.someVariant = { () -> Variant2<String, Double> in
         let __variant = newValue
         switch __variant.index() {
           case 0:
             let __actual = __variant.get_0()
-            return .someString(String(__actual))
+            return .first(String(__actual))
           case 1:
             let __actual = __variant.get_1()
-            return .someDouble(__actual)
+            return .second(__actual)
           default:
             fatalError("Variant can never have index \(__variant.index())!")
         }
@@ -557,20 +557,20 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public final func bounceMap(map: bridge.std__unordered_map_std__string__std__variant_double__bool__) -> bridge.Result_std__unordered_map_std__string__std__variant_double__bool___ {
     do {
-      let __result = try self.__implementation.bounceMap(map: { () -> Dictionary<String, Variant_Double_Bool> in
-        var __dictionary = Dictionary<String, Variant_Double_Bool>(minimumCapacity: map.size())
+      let __result = try self.__implementation.bounceMap(map: { () -> Dictionary<String, Variant2<Double, Bool>> in
+        var __dictionary = Dictionary<String, Variant2<Double, Bool>>(minimumCapacity: map.size())
         let __keys = bridge.get_std__unordered_map_std__string__std__variant_double__bool___keys(map)
         for __key in __keys {
           let __value = map[__key]!
-          __dictionary[String(__key)] = { () -> Variant_Double_Bool in
+          __dictionary[String(__key)] = { () -> Variant2<Double, Bool> in
             let __variant = bridge.std__variant_double__bool_(__value)
             switch __variant.index() {
               case 0:
                 let __actual = __variant.get_0()
-                return .someDouble(__actual)
+                return .first(__actual)
               case 1:
                 let __actual = __variant.get_1()
-                return .someBool(__actual)
+                return .second(__actual)
               default:
                 fatalError("Variant can never have index \(__variant.index())!")
             }
@@ -583,9 +583,9 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
         for (__k, __v) in __result {
           bridge.emplace_std__unordered_map_std__string__std__variant_double__bool__(&__map, std.string(__k), { () -> bridge.std__variant_double__bool_ in
             switch __v {
-              case .someDouble(let __value):
+              case .first(let __value):
                 return bridge.create_std__variant_double__bool_(__value)
-              case .someBool(let __value):
+              case .second(let __value):
                 return bridge.create_std__variant_double__bool_(__value)
             }
           }().variant)
