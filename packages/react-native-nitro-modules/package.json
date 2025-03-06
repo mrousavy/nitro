@@ -16,6 +16,7 @@
     "android/gradle.properties",
     "android/CMakeLists.txt",
     "android/src/",
+    "android/build/headers",
     "ios/",
     "cpp/",
     "app.plugin.js",
