@@ -114,6 +114,9 @@ async function runNitrogenCommand(
   console.log(
     `💡  Your code is in ${chalk.underline(prettifyDirectory(outputDirectory))}`
   )
+  if (process.exitCode != null && process.exitCode !== 0) {
+    console.log(`❌  Nitrogen finished with errors!`)
+  }
 
   // 3. Delete all old dangling files
   const addedFiles = generatedFiles.filter((f) => !filesBefore.includes(f))
