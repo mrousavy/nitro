@@ -42,9 +42,9 @@ namespace margelo::nitro::image {
   };
 
   namespace JVariant_String_Double_impl {
-    class SomeString: public jni::JavaClass<SomeString, JVariant_String_Double> {
+    class First: public jni::JavaClass<First, JVariant_String_Double> {
     public:
-      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Variant_String_Double$SomeString;";
+      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Variant_String_Double$First;";
     
       [[nodiscard]] jni::local_ref<jni::JString> getValue() const {
         static const auto field = javaClassStatic()->getField<jni::JString>("value");
@@ -52,9 +52,9 @@ namespace margelo::nitro::image {
       }
     };
     
-    class SomeDouble: public jni::JavaClass<SomeDouble, JVariant_String_Double> {
+    class Second: public jni::JavaClass<Second, JVariant_String_Double> {
     public:
-      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Variant_String_Double$SomeDouble;";
+      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Variant_String_Double$Second;";
     
       [[nodiscard]] double getValue() const {
         static const auto field = javaClassStatic()->getField<double>("value");
@@ -64,11 +64,11 @@ namespace margelo::nitro::image {
   } // namespace JVariant_String_Double_impl
 
   std::variant<std::string, double> JVariant_String_Double::toCpp() const {
-    if (isInstanceOf(JVariant_String_Double_impl::SomeString::javaClassStatic())) {
-      auto jniValue = static_cast<const JVariant_String_Double_impl::SomeString*>(this)->getValue();
+    if (isInstanceOf(JVariant_String_Double_impl::First::javaClassStatic())) {
+      auto jniValue = static_cast<const JVariant_String_Double_impl::First*>(this)->getValue();
       return jniValue->toStdString();
-    } else if (isInstanceOf(JVariant_String_Double_impl::SomeDouble::javaClassStatic())) {
-      auto jniValue = static_cast<const JVariant_String_Double_impl::SomeDouble*>(this)->getValue();
+    } else if (isInstanceOf(JVariant_String_Double_impl::Second::javaClassStatic())) {
+      auto jniValue = static_cast<const JVariant_String_Double_impl::Second*>(this)->getValue();
       return jniValue;
     }
     throw std::invalid_argument("Variant is unknown Kotlin instance!");

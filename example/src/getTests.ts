@@ -556,113 +556,116 @@ export function getTests(
       )
     ),
 
+    createTest('passVariant(...) holds something else ([1,2,3])', () =>
+      it(() => testObject.passVariant([1, 2, 3]))
+        .didNotThrow()
+        .equals('holds something else!')
+    ),
+    createTest('passVariant(...) holds string(hello!)', () =>
+      it(() => testObject.passVariant('hello!'))
+        .didNotThrow()
+        .equals('hello!')
+    ),
+    createTest('passVariant(...) holds number (5)', () =>
+      it(() => testObject.passVariant(5))
+        .didNotThrow()
+        .equals(5)
+    ),
+    createTest('passVariant(...) wrong type ({})', () =>
+      it(() =>
+        testObject.passVariant(
+          // @ts-expect-error
+          {}
+        )
+      ).didThrow()
+    ),
+    // Complex variants tests
+    createTest('getVariantEnum(...) converts enum', () =>
+      it(() => testObject.getVariantEnum(OldEnum.THIRD))
+        .didNotThrow()
+        .equals(OldEnum.THIRD)
+    ),
+    createTest('getVariantEnum(...) converts boolean', () =>
+      it(() => testObject.getVariantEnum(true))
+        .didNotThrow()
+        .equals(true)
+    ),
+    createTest('getVariantEnum(...) throws at wrong type (string)', () =>
+      // @ts-expect-error
+      it(() => testObject.getVariantEnum('string')).didThrow(
+        `Error: ${testObject.name}.getVariantEnum(...): Cannot convert "string" to any type in variant<bool, margelo::nitro::image::OldEnum>!`
+      )
+    ),
+    createTest('getVariantObjects(...) converts Person', () =>
+      it(() => testObject.getVariantObjects(TEST_PERSON))
+        .didNotThrow()
+        .equals(TEST_PERSON)
+    ),
+    createTest('getVariantObjects(...) converts Car', () =>
+      it(() => testObject.getVariantObjects(TEST_CAR))
+        .didNotThrow()
+        .equals(TEST_CAR)
+    ),
+    createTest('getVariantObjects(...) converts Car (+ person)', () =>
+      it(() =>
+        testObject.getVariantObjects({ ...TEST_CAR, driver: TEST_PERSON })
+      )
+        .didNotThrow()
+        .equals({ ...TEST_CAR, driver: TEST_PERSON })
+    ),
+    createTest('getVariantObjects(...) throws at wrong type (string)', () =>
+      // @ts-expect-error
+      it(() => testObject.getVariantObjects('some-string')).didThrow(
+        `Error: ${testObject.name}.getVariantObjects(...): Cannot convert "some-string" to any type in variant<margelo::nitro::image::Car, margelo::nitro::image::Person>!`
+      )
+    ),
+    createTest(
+      'getVariantObjects(...) throws at wrong type (wrong object)',
+      () =>
+        it(() =>
+          // @ts-expect-error
+          testObject.getVariantObjects({ someValue: 55 })
+        ).didThrow(
+          `Error: ${testObject.name}.getVariantObjects(...): Cannot convert "[object Object]" to any type in variant<margelo::nitro::image::Car, margelo::nitro::image::Person>!`
+        )
+    ),
+    createTest('getVariantHybrid(...) converts Hybrid', () =>
+      // @ts-expect-error TypeScript spazzes out since it can be both types of HybridObject
+      it(() => testObject.getVariantHybrid(testObject))
+        .didNotThrow()
+        // @ts-expect-error
+        .toContain('getVariantHybrid')
+    ),
+    createTest('getVariantHybrid(...) converts Person', () =>
+      it(() => testObject.getVariantHybrid(TEST_PERSON))
+        .didNotThrow()
+        .equals(TEST_PERSON)
+    ),
+    createTest('getVariantHybrid(...) throws at wrong type (string)', () =>
+      // @ts-expect-error
+      it(() => testObject.getVariantHybrid('some-string')).didThrow(
+        `Error: ${testObject.name}.getVariantHybrid(...): Cannot convert "some-string" to any type in variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>, margelo::nitro::image::Person>!`
+      )
+    ),
+    createTest(
+      'getVariantHybrid(...) throws at wrong type (wrong object)',
+      () =>
+        it(() =>
+          // @ts-expect-error
+          testObject.getVariantHybrid({ someValue: 55 })
+        ).didThrow(
+          `Error: ${testObject.name}.getVariantHybrid(...): Cannot convert "[object Object]" to any type in variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>, margelo::nitro::image::Person>!`
+        )
+    ),
+    createTest('passNamedVariant(...) works', () =>
+      it(() => testObject.passNamedVariant('Hello world!'))
+        .didNotThrow()
+        .equals('Hello world!')
+    ),
+
     // More complex variants...
-    ...('passVariant' in testObject
+    ...('getVariantTuple' in testObject
       ? [
-          createTest('passVariant(...) holds something else ([1,2,3])', () =>
-            it(() => testObject.passVariant([1, 2, 3]))
-              .didNotThrow()
-              .equals('holds something else!')
-          ),
-          createTest('passVariant(...) holds string(hello!)', () =>
-            it(() => testObject.passVariant('hello!'))
-              .didNotThrow()
-              .equals('hello!')
-          ),
-          createTest('passVariant(...) holds number (5)', () =>
-            it(() => testObject.passVariant(5))
-              .didNotThrow()
-              .equals(5)
-          ),
-          createTest('passVariant(...) wrong type ({})', () =>
-            it(() =>
-              testObject.passVariant(
-                // @ts-expect-error
-                {}
-              )
-            ).didThrow()
-          ),
-          // Complex variants tests
-          createTest('getVariantEnum(...) converts enum', () =>
-            it(() => testObject.getVariantEnum(OldEnum.THIRD))
-              .didNotThrow()
-              .equals(OldEnum.THIRD)
-          ),
-          createTest('getVariantEnum(...) converts boolean', () =>
-            it(() => testObject.getVariantEnum(true))
-              .didNotThrow()
-              .equals(true)
-          ),
-          createTest('getVariantEnum(...) throws at wrong type (string)', () =>
-            // @ts-expect-error
-            it(() => testObject.getVariantEnum('string')).didThrow(
-              `Error: ${testObject.name}.getVariantEnum(...): Cannot convert "string" to any type in variant<bool, margelo::nitro::image::OldEnum>!`
-            )
-          ),
-          createTest('getVariantObjects(...) converts Person', () =>
-            it(() => testObject.getVariantObjects(TEST_PERSON))
-              .didNotThrow()
-              .equals(TEST_PERSON)
-          ),
-          createTest('getVariantObjects(...) converts Car', () =>
-            it(() => testObject.getVariantObjects(TEST_CAR))
-              .didNotThrow()
-              .equals(TEST_CAR)
-          ),
-          createTest('getVariantObjects(...) converts Car (+ person)', () =>
-            it(() =>
-              testObject.getVariantObjects({ ...TEST_CAR, driver: TEST_PERSON })
-            )
-              .didNotThrow()
-              .equals({ ...TEST_CAR, driver: TEST_PERSON })
-          ),
-          createTest(
-            'getVariantObjects(...) throws at wrong type (string)',
-            () =>
-              // @ts-expect-error
-              it(() => testObject.getVariantObjects('some-string')).didThrow(
-                `Error: ${testObject.name}.getVariantObjects(...): Cannot convert "some-string" to any type in variant<margelo::nitro::image::Car, margelo::nitro::image::Person>!`
-              )
-          ),
-          createTest(
-            'getVariantObjects(...) throws at wrong type (wrong object)',
-            () =>
-              it(() =>
-                // @ts-expect-error
-                testObject.getVariantObjects({ someValue: 55 })
-              ).didThrow(
-                `Error: ${testObject.name}.getVariantObjects(...): Cannot convert "[object Object]" to any type in variant<margelo::nitro::image::Car, margelo::nitro::image::Person>!`
-              )
-          ),
-          createTest('getVariantHybrid(...) converts Hybrid', () =>
-            it(() => testObject.getVariantHybrid(testObject))
-              .didNotThrow()
-              // @ts-expect-error
-              .toContain('getVariantHybrid')
-          ),
-          createTest('getVariantHybrid(...) converts Person', () =>
-            it(() => testObject.getVariantHybrid(TEST_PERSON))
-              .didNotThrow()
-              .equals(TEST_PERSON)
-          ),
-          createTest(
-            'getVariantHybrid(...) throws at wrong type (string)',
-            () =>
-              // @ts-expect-error
-              it(() => testObject.getVariantHybrid('some-string')).didThrow(
-                `Error: ${testObject.name}.getVariantHybrid(...): Cannot convert "some-string" to any type in variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>, margelo::nitro::image::Person>!`
-              )
-          ),
-          createTest(
-            'getVariantHybrid(...) throws at wrong type (wrong object)',
-            () =>
-              it(() =>
-                // @ts-expect-error
-                testObject.getVariantHybrid({ someValue: 55 })
-              ).didThrow(
-                `Error: ${testObject.name}.getVariantHybrid(...): Cannot convert "[object Object]" to any type in variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>, margelo::nitro::image::Person>!`
-              )
-          ),
           createTest('getVariantTuple(...) converts Float2', () =>
             it(() => testObject.getVariantTuple([10, 20]))
               .didNotThrow()

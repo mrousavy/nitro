@@ -1,9 +1,8 @@
 import { NitroConfig } from '../../config/NitroConfig.js'
-import { indent } from '../../utils.js'
+import { capitalizeName, indent } from '../../utils.js'
 import { createFileMetadataString, toReferenceType } from '../helpers.js'
 import type { SourceFile } from '../SourceFile.js'
-import type { Type } from '../types/Type.js'
-import type { VariantType } from '../types/VariantType.js'
+import { type VariantType } from '../types/VariantType.js'
 import { KotlinCxxBridgedType } from './KotlinCxxBridgedType.js'
 
 export function getVariantName(variant: VariantType): string {
@@ -11,17 +10,13 @@ export function getVariantName(variant: VariantType): string {
   return `Variant_` + variants.join('_')
 }
 
-function getVariantInnerName(variantType: Type): string {
-  return `Some${variantType.getCode('kotlin')}`
-}
-
 export function createKotlinVariant(variant: VariantType): SourceFile[] {
   const jsName = variant.variants.map((v) => v.getCode('kotlin')).join('|')
   const kotlinName = getVariantName(variant)
   const namespace = `J${kotlinName}_impl`
 
-  const innerClasses = variant.variants.map((v) => {
-    const innerName = getVariantInnerName(v)
+  const innerClasses = variant.cases.map(([label, v]) => {
+    const innerName = capitalizeName(label)
     return `
 @DoNotStrip
 data class ${innerName}(@DoNotStrip val value: ${v.getCode('kotlin')}): ${kotlinName}()
@@ -29,20 +24,20 @@ data class ${innerName}(@DoNotStrip val value: ${v.getCode('kotlin')}): ${kotlin
   })
 
   const packageName = NitroConfig.getAndroidPackage('java/kotlin')
-  const getterCases = variant.variants.map((v) => {
-    const innerName = getVariantInnerName(v)
+  const getterCases = variant.cases.map(([label]) => {
+    const innerName = capitalizeName(label)
     return `is ${innerName} -> value as? T`
   })
-  const isFunctions = variant.variants.map((v) => {
-    const innerName = getVariantInnerName(v)
+  const isFunctions = variant.cases.map(([label, v]) => {
+    const innerName = capitalizeName(label)
     return `
 val is${v.getCode('kotlin')}: Boolean
   get() = this is ${innerName}
     `.trim()
   })
 
-  const createFunctions = variant.variants.map((v) => {
-    const innerName = getVariantInnerName(v)
+  const createFunctions = variant.cases.map(([label, v]) => {
+    const innerName = capitalizeName(label)
     return `
 @JvmStatic
 @DoNotStrip
@@ -94,8 +89,8 @@ static jni::local_ref<J${kotlinName}> create_${i}(${bridge.asJniReferenceType('a
     const bridge = new KotlinCxxBridgedType(v)
     return `case ${i}: return create_${i}(${bridge.parseFromCppToKotlin(`std::get<${i}>(variant)`, 'c++')});`
   })
-  const cppGetIfs = variant.variants.map((v) => {
-    const innerName = getVariantInnerName(v)
+  const cppGetIfs = variant.cases.map(([label, v]) => {
+    const innerName = capitalizeName(label)
     const bridge = new KotlinCxxBridgedType(v)
     return `
 if (isInstanceOf(${namespace}::${innerName}::javaClassStatic())) {
@@ -104,9 +99,9 @@ if (isInstanceOf(${namespace}::${innerName}::javaClassStatic())) {
 }
   `.trim()
   })
-  const cppInnerClasses = variant.variants.map((v) => {
+  const cppInnerClasses = variant.cases.map(([label, v]) => {
     const bridge = new KotlinCxxBridgedType(v)
-    const innerName = getVariantInnerName(v)
+    const innerName = capitalizeName(label)
     const descriptor = NitroConfig.getAndroidPackage(
       'c++/jni',
       `${kotlinName}$${innerName}`

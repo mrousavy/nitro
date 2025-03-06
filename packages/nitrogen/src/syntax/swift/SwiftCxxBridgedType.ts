@@ -26,7 +26,7 @@ import {
 } from './SwiftCxxTypeHelper.js'
 import { createSwiftEnumBridge } from './SwiftEnum.js'
 import { createSwiftStructBridge } from './SwiftStruct.js'
-import { createSwiftVariant, getSwiftVariantCaseName } from './SwiftVariant.js'
+import { createSwiftVariant } from './SwiftVariant.js'
 import { VoidType } from '../types/VoidType.js'
 import { NamedWrappingType } from '../types/NamedWrappingType.js'
 import { ErrorType } from '../types/ErrorType.js'
@@ -511,15 +511,14 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
         const valueInitialization = this.isBridgingToDirectCppTarget
           ? `bridge.${bridge.specializationName}(${cppParameterName})`
           : cppParameterName
-        const cases = variant.variants
-          .map((t, i) => {
-            const wrapping = new SwiftCxxBridgedType(t, true)
-            const caseName = getSwiftVariantCaseName(t)
+        const cases = variant.cases
+          .map(([label, v], i) => {
+            const wrapping = new SwiftCxxBridgedType(v, true)
             const parse = wrapping.parseFromCppToSwift('__actual', 'swift')
             return `
 case ${i}:
   let __actual = __variant.get_${i}()
-  return .${caseName}(${indent(parse, '  ')})`.trim()
+  return .${label}(${indent(parse, '  ')})`.trim()
           })
           .join('\n')
         switch (language) {
@@ -747,13 +746,12 @@ case ${i}:
         const variant = getTypeAs(this.type, VariantType)
         switch (language) {
           case 'swift':
-            const cases = variant.variants
-              .map((t) => {
-                const caseName = getSwiftVariantCaseName(t)
-                const wrapping = new SwiftCxxBridgedType(t, true)
+            const cases = variant.cases
+              .map(([label, v]) => {
+                const wrapping = new SwiftCxxBridgedType(v, true)
                 const parse = wrapping.parseFromSwiftToCpp('__value', 'swift')
                 return `
-case .${caseName}(let __value):
+case .${label}(let __value):
   return bridge.${bridge.funcName}(${indent(parse, '  ')})`.trim()
               })
               .join('\n')

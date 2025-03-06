@@ -78,6 +78,7 @@ namespace margelo::nitro::image {
   public:
     // Methods
     std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec> newTestObject() override;
+    std::variant<Person, std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>> getVariantHybrid(const std::variant<Person, std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>>& variant) override;
     void simpleFunc() override;
     double addNumbers(double a, double b) override;
     std::string addStrings(const std::string& a, const std::string& b) override;
@@ -121,6 +122,10 @@ namespace margelo::nitro::image {
     double getBufferLastItem(const std::shared_ptr<ArrayBuffer>& buffer) override;
     void setAllValuesTo(const std::shared_ptr<ArrayBuffer>& buffer, double value) override;
     std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>> createArrayBufferAsync() override;
+    std::variant<std::string, double> passVariant(const std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>>& either) override;
+    std::variant<bool, OldEnum> getVariantEnum(const std::variant<bool, OldEnum>& variant) override;
+    std::variant<Car, Person> getVariantObjects(const std::variant<Car, Person>& variant) override;
+    std::string passNamedVariant(const std::string& variant) override;
     std::shared_ptr<margelo::nitro::image::HybridChildSpec> createChild() override;
     std::shared_ptr<margelo::nitro::image::HybridBaseSpec> createBase() override;
     std::shared_ptr<margelo::nitro::image::HybridBaseSpec> createBaseActualChild() override;

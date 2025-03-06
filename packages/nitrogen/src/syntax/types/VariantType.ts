@@ -1,7 +1,21 @@
 import type { Language } from '../../getPlatformSpecs.js'
-import { isNotDuplicate } from '../helpers.js'
+import { escapeCppName, isNotDuplicate } from '../helpers.js'
 import { type SourceFile, type SourceImport } from '../SourceFile.js'
 import type { Type, TypeKind } from './Type.js'
+
+export const VariantLabels = [
+  'first',
+  'second',
+  'third',
+  'fourth',
+  'fifth',
+  'sixth',
+  'seventh',
+  'eigth',
+  'ninth',
+  'tenth',
+] as const
+type VariantLabel = (typeof VariantLabels)[number]
 
 export class VariantType implements Type {
   readonly variants: Type[]
@@ -21,6 +35,29 @@ export class VariantType implements Type {
     return 'variant'
   }
 
+  get jsType(): string {
+    return this.variants.map((v) => v.kind).join(' | ')
+  }
+
+  get cases(): [VariantLabel, Type][] {
+    return this.variants.map((v, i) => {
+      const label = VariantLabels[i]
+      if (label == null)
+        throw new Error(
+          `Variant<...> (\`${this.jsType}\`) does not support ${i} cases!`
+        )
+      return [label, v]
+    })
+  }
+
+  getAliasName(language: Language): string {
+    if (this.aliasName == null) {
+      const variants = this.variants.map((v) => v.getCode(language))
+      return escapeCppName(`Variant_${variants.join('_')}`)
+    }
+    return this.aliasName
+  }
+
   getCode(language: Language): string {
     const types = this.variants
       .map((v) => v.getCode(language))
@@ -31,15 +68,7 @@ export class VariantType implements Type {
         return `std::variant<${types.join(', ')}>`
       case 'swift':
       case 'kotlin':
-        if (this.aliasName == null) {
-          const variants = this.variants.map((v) => v.getCode(language))
-          const typename = `Variant<${variants.join(', ')}>`
-          throw new Error(
-            `${typename} needs to have an alias typename to be representable in ${language}! ` +
-              `Instead of \`val: ${variants.join(' | ')}\`, you must alias it first: \`export type MyVariant = ${variants.join(' | ')}\`, then use \`val: MyVariant\`.`
-          )
-        }
-        return this.aliasName
+        return this.getAliasName(language)
       default:
         throw new Error(
           `Language ${language} is not yet supported for VariantType!`

@@ -48,6 +48,7 @@ namespace margelo::nitro::image { class HybridTestViewSpec; }
 #include <variant>
 #include "JVariant_String_Double.hpp"
 #include "Person.hpp"
+#include "JVariant_Person_HybridTestObjectSwiftKotlinSpec.hpp"
 #include "JPerson.hpp"
 #include <NitroModules/AnyMap.hpp>
 #include <NitroModules/JAnyMap.hpp>
@@ -60,6 +61,8 @@ namespace margelo::nitro::image { class HybridTestViewSpec; }
 #include <NitroModules/ArrayBuffer.hpp>
 #include <NitroModules/JArrayBuffer.hpp>
 #include <NitroModules/JUnit.hpp>
+#include "JVariant_Boolean_OldEnum.hpp"
+#include "JVariant_Car_Person.hpp"
 #include "HybridChildSpec.hpp"
 #include "JHybridChildSpec.hpp"
 #include "HybridBaseSpec.hpp"
@@ -77,6 +80,7 @@ namespace margelo::nitro::image { class HybridTestViewSpec; }
 #include "JFunc_void_std__string.hpp"
 #include "JsStyleStruct.hpp"
 #include "JJsStyleStruct.hpp"
+#include "JVariant_String_Double_Boolean_DoubleArray_Array<String>.hpp"
 #include "JFunc_double.hpp"
 #include "HybridTestViewSpec.hpp"
 #include "JHybridTestViewSpec.hpp"
@@ -253,6 +257,11 @@ namespace margelo::nitro::image {
     static const auto method = javaClassStatic()->getMethod<jni::local_ref<JHybridTestObjectSwiftKotlinSpec::javaobject>()>("newTestObject");
     auto __result = method(_javaPart);
     return JNISharedPtr::make_shared_from_jni<JHybridTestObjectSwiftKotlinSpec>(jni::make_global(__result));
+  }
+  std::variant<Person, std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>> JHybridTestObjectSwiftKotlinSpec::getVariantHybrid(const std::variant<Person, std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>>& variant) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JVariant_Person_HybridTestObjectSwiftKotlinSpec>(jni::alias_ref<JVariant_Person_HybridTestObjectSwiftKotlinSpec> /* variant */)>("getVariantHybrid");
+    auto __result = method(_javaPart, JVariant_Person_HybridTestObjectSwiftKotlinSpec::fromCpp(variant));
+    return __result->toCpp();
   }
   void JHybridTestObjectSwiftKotlinSpec::simpleFunc() {
     static const auto method = javaClassStatic()->getMethod<void()>("simpleFunc");
@@ -728,6 +737,26 @@ namespace margelo::nitro::image {
       });
       return __promise;
     }();
+  }
+  std::variant<std::string, double> JHybridTestObjectSwiftKotlinSpec::passVariant(const std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>>& either) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JVariant_String_Double>(jni::alias_ref<JVariant_String_Double_Boolean_DoubleArray_Array<String>> /* either */)>("passVariant");
+    auto __result = method(_javaPart, JVariant_String_Double_Boolean_DoubleArray_Array<String>::fromCpp(either));
+    return __result->toCpp();
+  }
+  std::variant<bool, OldEnum> JHybridTestObjectSwiftKotlinSpec::getVariantEnum(const std::variant<bool, OldEnum>& variant) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JVariant_Boolean_OldEnum>(jni::alias_ref<JVariant_Boolean_OldEnum> /* variant */)>("getVariantEnum");
+    auto __result = method(_javaPart, JVariant_Boolean_OldEnum::fromCpp(variant));
+    return __result->toCpp();
+  }
+  std::variant<Car, Person> JHybridTestObjectSwiftKotlinSpec::getVariantObjects(const std::variant<Car, Person>& variant) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JVariant_Car_Person>(jni::alias_ref<JVariant_Car_Person> /* variant */)>("getVariantObjects");
+    auto __result = method(_javaPart, JVariant_Car_Person::fromCpp(variant));
+    return __result->toCpp();
+  }
+  std::string JHybridTestObjectSwiftKotlinSpec::passNamedVariant(const std::string& variant) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<jni::JString>(jni::alias_ref<jni::JString> /* variant */)>("passNamedVariant");
+    auto __result = method(_javaPart, jni::make_jstring(variant));
+    return __result->toStdString();
   }
   std::shared_ptr<margelo::nitro::image::HybridChildSpec> JHybridTestObjectSwiftKotlinSpec::createChild() {
     static const auto method = javaClassStatic()->getMethod<jni::local_ref<JHybridChildSpec::javaobject>()>("createChild");

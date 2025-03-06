@@ -11,6 +11,9 @@ export type Float2 = [number, number]
 export type Float3 = [number, number, number]
 export type TestTuple = [number, string, boolean]
 
+// Variants can have aliases/names
+export type NamedVariant = string | Powertrain
+
 // A discriminating string union becomes an `enum` in C++.
 // This one is string-backed.
 export type Powertrain = 'electric' | 'gas' | 'hybrid'
@@ -150,6 +153,14 @@ interface SharedTestObjectProps {
   setAllValuesTo(buffer: ArrayBuffer, value: number): void
   createArrayBufferAsync(): Promise<ArrayBuffer>
 
+  // Complex variants
+  passVariant(
+    either: number | string | number[] | string[] | boolean
+  ): number | string
+  getVariantEnum(variant: OldEnum | boolean): OldEnum | boolean
+  getVariantObjects(variant: Person | Car): Person | Car
+  passNamedVariant(variant: NamedVariant): NamedVariant
+
   // Inheritance
   createChild(): Child
   createBase(): Base
@@ -172,15 +183,7 @@ interface SharedTestObjectProps {
 export interface TestObjectCpp
   extends HybridObject<{ ios: 'c++' }>,
     SharedTestObjectProps {
-  // Variants
-  passVariant(
-    either: number | string | number[] | string[] | boolean
-  ): number | string
-
-  // Complex variants
-  getVariantEnum(variant: OldEnum | boolean): OldEnum | boolean
-  getVariantObjects(variant: Person | Car): Person | Car
-  getVariantHybrid(variant: TestObjectCpp | Person): TestObjectCpp | Person
+  // Complex Variants + Tuples
   getVariantTuple(variant: Float2 | Float3): Float2 | Float3
 
   // Tuples
@@ -188,10 +191,11 @@ export interface TestObjectCpp
   flip(tuple: Float3): Float3
   passTuple(tuple: TestTuple): [number, string, boolean]
 
-  // Other HybridObjects
+  // Type-specifics
   readonly thisObject: TestObjectCpp
   newTestObject(): TestObjectCpp
   optionalHybrid?: TestObjectCpp
+  getVariantHybrid(variant: TestObjectCpp | Person): TestObjectCpp | Person
 }
 
 // This is a Swift/Kotlin-based `HybridObject`.
@@ -200,10 +204,13 @@ export interface TestObjectCpp
 export interface TestObjectSwiftKotlin
   extends HybridObject<{ ios: 'swift'; android: 'kotlin' }>,
     SharedTestObjectProps {
-  // Other HybridObjects
+  // Type-specifics
   readonly thisObject: TestObjectSwiftKotlin
   newTestObject(): TestObjectSwiftKotlin
   optionalHybrid?: TestObjectSwiftKotlin
+  getVariantHybrid(
+    variant: TestObjectSwiftKotlin | Person
+  ): TestObjectSwiftKotlin | Person
 }
 
 // This is a simple `HybridObject` with just one value.
