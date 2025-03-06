@@ -251,6 +251,10 @@ HybridTestObjectCpp::getVariantTuple(const std::variant<std::tuple<double, doubl
   return variant;
 }
 
+std::variant<std::string, Car> HybridTestObjectCpp::passNamedVariant(const std::variant<std::string, Car>& variant) {
+  return variant;
+}
+
 std::tuple<double, double, double> HybridTestObjectCpp::flip(const std::tuple<double, double, double>& tuple) {
   return {std::get<2>(tuple), std::get<1>(tuple), std::get<0>(tuple)};
 }
