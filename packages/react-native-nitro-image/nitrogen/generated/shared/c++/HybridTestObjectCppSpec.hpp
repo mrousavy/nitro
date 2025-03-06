@@ -19,14 +19,14 @@ namespace margelo::nitro::image { class HybridTestObjectCppSpec; }
 namespace margelo::nitro::image { enum class Powertrain; }
 // Forward declaration of `OldEnum` to properly resolve imports.
 namespace margelo::nitro::image { enum class OldEnum; }
-// Forward declaration of `Car` to properly resolve imports.
-namespace margelo::nitro::image { struct Car; }
 // Forward declaration of `Person` to properly resolve imports.
 namespace margelo::nitro::image { struct Person; }
 // Forward declaration of `AnyMap` to properly resolve imports.
 namespace NitroModules { class AnyMap; }
 // Forward declaration of `MapWrapper` to properly resolve imports.
 namespace margelo::nitro::image { struct MapWrapper; }
+// Forward declaration of `Car` to properly resolve imports.
+namespace margelo::nitro::image { struct Car; }
 // Forward declaration of `ArrayBuffer` to properly resolve imports.
 namespace NitroModules { class ArrayBuffer; }
 // Forward declaration of `JsStyleStruct` to properly resolve imports.
@@ -48,13 +48,13 @@ namespace margelo::nitro::image { class HybridTestViewSpec; }
 #include "OldEnum.hpp"
 #include <functional>
 #include <variant>
-#include "Car.hpp"
 #include "Person.hpp"
 #include <NitroModules/AnyMap.hpp>
 #include <unordered_map>
 #include "MapWrapper.hpp"
 #include <NitroModules/Promise.hpp>
 #include <exception>
+#include "Car.hpp"
 #include <NitroModules/ArrayBuffer.hpp>
 #include "JsStyleStruct.hpp"
 #include "HybridChildSpec.hpp"
@@ -120,13 +120,11 @@ namespace margelo::nitro::image {
 
     public:
       // Methods
-      virtual std::variant<bool, OldEnum> getVariantEnum(const std::variant<bool, OldEnum>& variant) = 0;
-      virtual std::variant<Car, Person> getVariantObjects(const std::variant<Car, Person>& variant) = 0;
-      virtual std::variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>, Person> getVariantHybrid(const std::variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>, Person>& variant) = 0;
       virtual std::variant<std::tuple<double, double>, std::tuple<double, double, double>> getVariantTuple(const std::variant<std::tuple<double, double>, std::tuple<double, double, double>>& variant) = 0;
       virtual std::tuple<double, double, double> flip(const std::tuple<double, double, double>& tuple) = 0;
       virtual std::tuple<double, std::string, bool> passTuple(const std::tuple<double, std::string, bool>& tuple) = 0;
       virtual std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec> newTestObject() = 0;
+      virtual std::variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>, Person> getVariantHybrid(const std::variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>, Person>& variant) = 0;
       virtual void simpleFunc() = 0;
       virtual double addNumbers(double a, double b) = 0;
       virtual std::string addStrings(const std::string& a, const std::string& b) = 0;
@@ -147,6 +145,8 @@ namespace margelo::nitro::image {
       virtual std::string tryMiddleParam(double num, std::optional<bool> boo, const std::string& str) = 0;
       virtual std::optional<Powertrain> tryOptionalEnum(std::optional<Powertrain> value) = 0;
       virtual std::variant<std::string, double> passVariant(const std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>>& either) = 0;
+      virtual std::variant<bool, OldEnum> getVariantEnum(const std::variant<bool, OldEnum>& variant) = 0;
+      virtual std::variant<Car, Person> getVariantObjects(const std::variant<Car, Person>& variant) = 0;
       virtual int64_t calculateFibonacciSync(double value) = 0;
       virtual std::shared_ptr<Promise<int64_t>> calculateFibonacciAsync(double value) = 0;
       virtual std::shared_ptr<Promise<void>> wait(double seconds) = 0;

@@ -391,6 +391,44 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
+  public final func getVariantHybrid(variant: bridge.std__variant_Person__std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec__) -> bridge.Result_std__variant_Person__std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec___ {
+    do {
+      let __result = try self.__implementation.getVariantHybrid(variant: { () -> Variant2<Person, (any HybridTestObjectSwiftKotlinSpec)> in
+        let __variant = variant
+        switch __variant.index() {
+          case 0:
+            let __actual = __variant.get_0()
+            return .first(__actual)
+          case 1:
+            let __actual = __variant.get_1()
+            return .second({ () -> HybridTestObjectSwiftKotlinSpec in
+              let __unsafePointer = bridge.get_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_(__actual)
+              let __instance = HybridTestObjectSwiftKotlinSpec_cxx.fromUnsafe(__unsafePointer)
+              return __instance.getHybridTestObjectSwiftKotlinSpec()
+            }())
+          default:
+            fatalError("Variant can never have index \(__variant.index())!")
+        }
+      }())
+      let __resultCpp = { () -> bridge.std__variant_Person__std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec__ in
+        switch __result {
+          case .first(let __value):
+            return bridge.create_std__variant_Person__std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec__(__value)
+          case .second(let __value):
+            return bridge.create_std__variant_Person__std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec__({ () -> bridge.std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_ in
+            let __cxxWrapped = __value.getCxxWrapper()
+            return __cxxWrapped.getCxxPart()
+          }())
+        }
+      }().variant
+      return bridge.create_Result_std__variant_Person__std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec___(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__variant_Person__std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec___(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
   public final func simpleFunc() -> bridge.Result_void_ {
     do {
       try self.__implementation.simpleFunc()
@@ -744,6 +782,68 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
       return bridge.create_Result_std__variant_std__string__double__(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
+  public final func getVariantEnum(variant: bridge.std__variant_bool__OldEnum_) -> bridge.Result_std__variant_bool__OldEnum__ {
+    do {
+      let __result = try self.__implementation.getVariantEnum(variant: { () -> Variant2<Bool, OldEnum> in
+        let __variant = variant
+        switch __variant.index() {
+          case 0:
+            let __actual = __variant.get_0()
+            return .first(__actual)
+          case 1:
+            let __actual = __variant.get_1()
+            return .second(margelo.nitro.image.OldEnum(rawValue: __actual)!)
+          default:
+            fatalError("Variant can never have index \(__variant.index())!")
+        }
+      }())
+      let __resultCpp = { () -> bridge.std__variant_bool__OldEnum_ in
+        switch __result {
+          case .first(let __value):
+            return bridge.create_std__variant_bool__OldEnum_(__value)
+          case .second(let __value):
+            return bridge.create_std__variant_bool__OldEnum_(__value.rawValue)
+        }
+      }().variant
+      return bridge.create_Result_std__variant_bool__OldEnum__(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__variant_bool__OldEnum__(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
+  public final func getVariantObjects(variant: bridge.std__variant_Car__Person_) -> bridge.Result_std__variant_Car__Person__ {
+    do {
+      let __result = try self.__implementation.getVariantObjects(variant: { () -> Variant2<Car, Person> in
+        let __variant = variant
+        switch __variant.index() {
+          case 0:
+            let __actual = __variant.get_0()
+            return .first(__actual)
+          case 1:
+            let __actual = __variant.get_1()
+            return .second(__actual)
+          default:
+            fatalError("Variant can never have index \(__variant.index())!")
+        }
+      }())
+      let __resultCpp = { () -> bridge.std__variant_Car__Person_ in
+        switch __result {
+          case .first(let __value):
+            return bridge.create_std__variant_Car__Person_(__value)
+          case .second(let __value):
+            return bridge.create_std__variant_Car__Person_(__value)
+        }
+      }().variant
+      return bridge.create_Result_std__variant_Car__Person__(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__variant_Car__Person__(__exceptionPtr)
     }
   }
   

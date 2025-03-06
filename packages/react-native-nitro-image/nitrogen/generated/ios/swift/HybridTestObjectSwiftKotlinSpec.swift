@@ -28,6 +28,7 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
 
   // Methods
   func newTestObject() throws -> (any HybridTestObjectSwiftKotlinSpec)
+  func getVariantHybrid(variant: Variant2<Person, (any HybridTestObjectSwiftKotlinSpec)>) throws -> Variant2<Person, (any HybridTestObjectSwiftKotlinSpec)>
   func simpleFunc() throws -> Void
   func addNumbers(a: Double, b: Double) throws -> Double
   func addStrings(a: String, b: String) throws -> String
@@ -48,6 +49,8 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
   func tryMiddleParam(num: Double, boo: Bool?, str: String) throws -> String
   func tryOptionalEnum(value: Powertrain?) throws -> Powertrain?
   func passVariant(either: Variant5<String, Double, Bool, [Double], [String]>) throws -> Variant2<String, Double>
+  func getVariantEnum(variant: Variant2<Bool, OldEnum>) throws -> Variant2<Bool, OldEnum>
+  func getVariantObjects(variant: Variant2<Car, Person>) throws -> Variant2<Car, Person>
   func calculateFibonacciSync(value: Double) throws -> Int64
   func calculateFibonacciAsync(value: Double) throws -> Promise<Int64>
   func wait(seconds: Double) throws -> Promise<Void>

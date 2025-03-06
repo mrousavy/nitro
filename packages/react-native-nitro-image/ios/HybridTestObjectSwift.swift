@@ -198,6 +198,18 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
   func bounceMap(map: Dictionary<String, Variant2<Double, Bool>>) throws -> Dictionary<String, Variant2<Double, Bool>> {
     return map
   }
+  
+  func getVariantEnum(variant: Variant2<Bool, OldEnum>) throws -> Variant2<Bool, OldEnum> {
+    return variant
+  }
+  
+  func getVariantObjects(variant: Variant2<Car, Person>) throws -> Variant2<Car, Person> {
+    return variant
+  }
+  
+  func getVariantHybrid(variant: Variant2<Person, (any HybridTestObjectSwiftKotlinSpec)>) throws -> Variant2<Person, (any HybridTestObjectSwiftKotlinSpec)> {
+    return variant
+  }
 
   func extractMap(mapWrapper: MapWrapper) throws -> Dictionary<String, String> {
     return mapWrapper.map

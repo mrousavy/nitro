@@ -118,6 +118,7 @@ namespace margelo::nitro::image {
     public:
       // Methods
       virtual std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec> newTestObject() = 0;
+      virtual std::variant<Person, std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>> getVariantHybrid(const std::variant<Person, std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>>& variant) = 0;
       virtual void simpleFunc() = 0;
       virtual double addNumbers(double a, double b) = 0;
       virtual std::string addStrings(const std::string& a, const std::string& b) = 0;
@@ -138,6 +139,8 @@ namespace margelo::nitro::image {
       virtual std::string tryMiddleParam(double num, std::optional<bool> boo, const std::string& str) = 0;
       virtual std::optional<Powertrain> tryOptionalEnum(std::optional<Powertrain> value) = 0;
       virtual std::variant<std::string, double> passVariant(const std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>>& either) = 0;
+      virtual std::variant<bool, OldEnum> getVariantEnum(const std::variant<bool, OldEnum>& variant) = 0;
+      virtual std::variant<Car, Person> getVariantObjects(const std::variant<Car, Person>& variant) = 0;
       virtual int64_t calculateFibonacciSync(double value) = 0;
       virtual std::shared_ptr<Promise<int64_t>> calculateFibonacciAsync(double value) = 0;
       virtual std::shared_ptr<Promise<void>> wait(double seconds) = 0;

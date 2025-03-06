@@ -78,6 +78,7 @@ namespace margelo::nitro::image {
   public:
     // Methods
     std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec> newTestObject() override;
+    std::variant<Person, std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>> getVariantHybrid(const std::variant<Person, std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>>& variant) override;
     void simpleFunc() override;
     double addNumbers(double a, double b) override;
     std::string addStrings(const std::string& a, const std::string& b) override;
@@ -98,6 +99,8 @@ namespace margelo::nitro::image {
     std::string tryMiddleParam(double num, std::optional<bool> boo, const std::string& str) override;
     std::optional<Powertrain> tryOptionalEnum(std::optional<Powertrain> value) override;
     std::variant<std::string, double> passVariant(const std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>>& either) override;
+    std::variant<bool, OldEnum> getVariantEnum(const std::variant<bool, OldEnum>& variant) override;
+    std::variant<Car, Person> getVariantObjects(const std::variant<Car, Person>& variant) override;
     int64_t calculateFibonacciSync(double value) override;
     std::shared_ptr<Promise<int64_t>> calculateFibonacciAsync(double value) override;
     std::shared_ptr<Promise<void>> wait(double seconds) override;

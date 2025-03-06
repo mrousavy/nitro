@@ -109,6 +109,10 @@ interface SharedTestObjectProps {
     either: number | string | number[] | string[] | boolean
   ): number | string
 
+  // Complex variants
+  getVariantEnum(variant: OldEnum | boolean): OldEnum | boolean
+  getVariantObjects(variant: Person | Car): Person | Car
+
   // Promises
   calculateFibonacciSync(value: number): bigint
   calculateFibonacciAsync(value: number): Promise<bigint>
@@ -175,21 +179,17 @@ interface SharedTestObjectProps {
 export interface TestObjectCpp
   extends HybridObject<{ ios: 'c++' }>,
     SharedTestObjectProps {
-  // Complex variants
-  getVariantEnum(variant: OldEnum | boolean): OldEnum | boolean
-  getVariantObjects(variant: Person | Car): Person | Car
-  getVariantHybrid(variant: TestObjectCpp | Person): TestObjectCpp | Person
-  getVariantTuple(variant: Float2 | Float3): Float2 | Float3
-
   // Tuples
+  getVariantTuple(variant: Float2 | Float3): Float2 | Float3
   someTuple: [number, string]
   flip(tuple: Float3): Float3
   passTuple(tuple: TestTuple): [number, string, boolean]
 
-  // Other HybridObjects
+  // Type-specifics
   readonly thisObject: TestObjectCpp
   newTestObject(): TestObjectCpp
   optionalHybrid?: TestObjectCpp
+  getVariantHybrid(variant: TestObjectCpp | Person): TestObjectCpp | Person
 }
 
 // This is a Swift/Kotlin-based `HybridObject`.
@@ -198,10 +198,13 @@ export interface TestObjectCpp
 export interface TestObjectSwiftKotlin
   extends HybridObject<{ ios: 'swift'; android: 'kotlin' }>,
     SharedTestObjectProps {
-  // Other HybridObjects
+  // Type-specifics
   readonly thisObject: TestObjectSwiftKotlin
   newTestObject(): TestObjectSwiftKotlin
   optionalHybrid?: TestObjectSwiftKotlin
+  getVariantHybrid(
+    variant: TestObjectSwiftKotlin | Person
+  ): TestObjectSwiftKotlin | Person
 }
 
 // This is a simple `HybridObject` with just one value.

@@ -134,6 +134,10 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
+  abstract fun getVariantHybrid(variant: Variant_Person_HybridTestObjectSwiftKotlinSpec): Variant_Person_HybridTestObjectSwiftKotlinSpec
+  
+  @DoNotStrip
+  @Keep
   abstract fun simpleFunc(): Unit
   
   @DoNotStrip
@@ -216,6 +220,14 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   @DoNotStrip
   @Keep
   abstract fun passVariant(either: Variant_String_Double_Boolean_DoubleArray_Array<String>): Variant_String_Double
+  
+  @DoNotStrip
+  @Keep
+  abstract fun getVariantEnum(variant: Variant_Boolean_OldEnum): Variant_Boolean_OldEnum
+  
+  @DoNotStrip
+  @Keep
+  abstract fun getVariantObjects(variant: Variant_Car_Person): Variant_Car_Person
   
   @DoNotStrip
   @Keep
