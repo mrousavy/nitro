@@ -79,11 +79,17 @@ jsi::Value HybridObject::toObject(jsi::Runtime& runtime) {
   object.setProperty(runtime, "__type", jsi::String::createFromUtf8(runtime, "NativeState<" + std::string(_name) + ">"));
 #endif
 
-  // 8. Throw a jsi::WeakObject pointing to our object into cache so subsequent calls can use it from cache
+#ifdef NITRO_DEBUG
+  // 8. Freeze the object to prevent accidentally setting wrong props on it that do nothing.
+  jsi::Function freeze = objectConstructor.getPropertyAsFunction(runtime, "freeze");
+  freeze.call(runtime, object);
+#endif
+
+  // 9. Throw a jsi::WeakObject pointing to our object into cache so subsequent calls can use it from cache
   JSICacheReference cache = JSICache::getOrCreateCache(runtime);
   _objectCache[&runtime] = cache.makeShared(jsi::WeakObject(runtime, object));
 
-  // 9. Return it!
+  // 10. Return it!
   return object;
 }
 
