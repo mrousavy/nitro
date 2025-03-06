@@ -18,16 +18,31 @@ which comes with a tiny overhead compared to all other statically defined types.
 
 ## Custom Alias Names
 
-Each variant is a unique type in Swift/Kotlin. For `string | number`, a variant's name could be `Variant_String_Double`.
+Each variant is a unique type in Swift/Kotlin - for example: `string | number` becomes `Variant_String_Double`.
 
-Since the generated names are hard to read, you can choose to give variants a custom alias name instead by declaring it as an extra `type` alias:
+Since the generated names are hard to read, it is recommended to declare type-aliases with custom names instead:
 
-```ts
+<div className="side-by-side-container">
+<div className="side-by-side-block">
+
+```ts title="Bad ❌"
+export interface Math extends HybridObject {
+  calculate(): string | number
+}
+```
+
+</div>
+<div className="side-by-side-block">
+
+```ts title="Good ✅"
 export type MathOutput = string | number
-export interface Math extends HybridObject<{ ios: 'swift' }> {
+export interface Math extends HybridObject {
   calculate(): MathOutput
 }
 ```
+
+</div>
+</div>
 
 This will then use the easier-to-read type-alias name instead of `Variant_String_Double`:
 
