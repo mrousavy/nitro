@@ -25,9 +25,9 @@ sealed class Variant_Double_Boolean {
     is Second -> value as? T
   }
 
-  val isDouble: Boolean
+  val isFirst: Boolean
     get() = this is First
-  val isBoolean: Boolean
+  val isSecond: Boolean
     get() = this is Second
 
   companion object {

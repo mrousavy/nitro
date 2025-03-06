@@ -25,9 +25,9 @@ sealed class Variant_Car_Person {
     is Second -> value as? T
   }
 
-  val isCar: Boolean
+  val isFirst: Boolean
     get() = this is First
-  val isPerson: Boolean
+  val isSecond: Boolean
     get() = this is Second
 
   companion object {

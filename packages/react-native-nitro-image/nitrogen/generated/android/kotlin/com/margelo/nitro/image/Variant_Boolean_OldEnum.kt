@@ -25,9 +25,9 @@ sealed class Variant_Boolean_OldEnum {
     is Second -> value as? T
   }
 
-  val isBoolean: Boolean
+  val isFirst: Boolean
     get() = this is First
-  val isOldEnum: Boolean
+  val isSecond: Boolean
     get() = this is Second
 
   companion object {

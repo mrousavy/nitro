@@ -25,9 +25,9 @@ sealed class NamedVariant {
     is Second -> value as? T
   }
 
-  val isString: Boolean
+  val isFirst: Boolean
     get() = this is First
-  val isCar: Boolean
+  val isSecond: Boolean
     get() = this is Second
 
   companion object {

@@ -257,6 +257,32 @@ class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
         return Promise.async { createArrayBuffer() }
     }
 
+    override fun passVariant(either: Variant_String_Double_Boolean_DoubleArray_Array_String_): Variant_String_Double {
+        either.getAs<String>()?.let {
+            return Variant_String_Double.create(it)
+        }
+        either.getAs<Double>()?.let {
+            return Variant_String_Double.create(it)
+        }
+        return Variant_String_Double.create("holds something else!")
+    }
+
+    override fun getVariantEnum(variant: Variant_Boolean_OldEnum): Variant_Boolean_OldEnum {
+        return variant
+    }
+
+    override fun getVariantObjects(variant: Variant_Car_Person): Variant_Car_Person {
+        return variant
+    }
+
+    override fun passNamedVariant(variant: NamedVariant): NamedVariant {
+        return variant
+    }
+
+    override fun getVariantHybrid(variant: Variant_Person_HybridTestObjectSwiftKotlinSpec): Variant_Person_HybridTestObjectSwiftKotlinSpec {
+        return variant
+    }
+
     override fun getBufferLastItem(buffer: ArrayBuffer): Double {
         val byteBuffer = buffer.getBuffer(false)
         val lastItem = byteBuffer[buffer.size - 1]

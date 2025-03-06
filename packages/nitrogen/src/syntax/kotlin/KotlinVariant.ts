@@ -23,10 +23,10 @@ data class ${innerName}(@DoNotStrip val value: ${v.getCode('kotlin')}): ${kotlin
     const innerName = capitalizeName(label)
     return `is ${innerName} -> value as? T`
   })
-  const isFunctions = variant.cases.map(([label, v]) => {
+  const isFunctions = variant.cases.map(([label]) => {
     const innerName = capitalizeName(label)
     return `
-val is${v.getCode('kotlin')}: Boolean
+val is${innerName}: Boolean
   get() = this is ${innerName}
     `.trim()
   })

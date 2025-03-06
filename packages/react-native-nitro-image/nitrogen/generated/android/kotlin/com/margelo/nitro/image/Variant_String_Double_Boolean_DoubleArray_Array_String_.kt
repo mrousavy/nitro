@@ -34,15 +34,15 @@ sealed class Variant_String_Double_Boolean_DoubleArray_Array_String_ {
     is Fifth -> value as? T
   }
 
-  val isString: Boolean
+  val isFirst: Boolean
     get() = this is First
-  val isDouble: Boolean
+  val isSecond: Boolean
     get() = this is Second
-  val isBoolean: Boolean
+  val isThird: Boolean
     get() = this is Third
-  val isDoubleArray: Boolean
+  val isFourth: Boolean
     get() = this is Fourth
-  val isArray<String>: Boolean
+  val isFifth: Boolean
     get() = this is Fifth
 
   companion object {

@@ -25,9 +25,9 @@ sealed class Variant_Person_HybridTestObjectSwiftKotlinSpec {
     is Second -> value as? T
   }
 
-  val isPerson: Boolean
+  val isFirst: Boolean
     get() = this is First
-  val isHybridTestObjectSwiftKotlinSpec: Boolean
+  val isSecond: Boolean
     get() = this is Second
 
   companion object {
