@@ -48,6 +48,11 @@ await yargs(hideBin(process.argv))
             'Configures the output path of the generated C++, Swift or Kotlin files.',
           default: './nitrogen/generated',
         })
+        .option('modulePath', {
+          type: 'string',
+          description:
+            'Specifies the path to the module directory where the podspec is located. Used for autolinking the generated C++ and Swift files relative to the podspec.',
+        })
         .option('config', {
           type: 'string',
           description: `A custom path to a ${chalk.underline('nitro.json')} config file.`,
@@ -56,7 +61,8 @@ await yargs(hideBin(process.argv))
     async (argv) => {
       const basePath = argv.basePath
       const outputDirectory = argv.out
-      await runNitrogenCommand(basePath, outputDirectory)
+      const modulePath = argv.modulePath
+      await runNitrogenCommand(basePath, outputDirectory, modulePath)
     }
   )
   // 🔥 nitrogen init <moduleName>
@@ -92,7 +98,8 @@ await yargs(hideBin(process.argv))
 
 async function runNitrogenCommand(
   baseDirectory: string,
-  outputDirectory: string
+  outputDirectory: string,
+  modulePath?: string
 ): Promise<void> {
   // 1. Prepare output folders
   const filesBefore = await getFiles(outputDirectory)
@@ -104,6 +111,7 @@ async function runNitrogenCommand(
     await runNitrogen({
       baseDirectory: baseDirectory,
       outputDirectory: outputDirectory,
+      modulePath: modulePath,
     })
 
   const end = performance.now()
