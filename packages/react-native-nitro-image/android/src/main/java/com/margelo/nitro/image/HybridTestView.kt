@@ -21,7 +21,7 @@ class HybridTestView(val context: ThemedReactContext): HybridTestViewSpec() {
             val color = if (value) Color.BLUE else Color.RED
             view.setBackgroundColor(color)
         }
-    override colorScheme: ColorScheme = ColorScheme.LIGHT
+    override var colorScheme: ColorScheme = ColorScheme.LIGHT
     override var someCallback: () -> Unit = {}
 
     // Methods
