@@ -14,6 +14,8 @@ namespace NitroModules { class AnyMap; }
 namespace NitroModules { class ArrayBuffer; }
 // Forward declaration of `Car` to properly resolve imports.
 namespace margelo::nitro::image { struct Car; }
+// Forward declaration of `ColorScheme` to properly resolve imports.
+namespace margelo::nitro::image { enum class ColorScheme; }
 // Forward declaration of `HybridBaseSpec` to properly resolve imports.
 namespace margelo::nitro::image { class HybridBaseSpec; }
 // Forward declaration of `HybridChildSpec` to properly resolve imports.
@@ -45,6 +47,7 @@ namespace margelo::nitro::image { enum class Powertrain; }
 
 // Include C++ defined types
 #include "Car.hpp"
+#include "ColorScheme.hpp"
 #include "HybridBaseSpec.hpp"
 #include "HybridChildSpec.hpp"
 #include "HybridImageFactorySpec.hpp"

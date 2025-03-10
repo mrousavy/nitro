@@ -76,6 +76,11 @@ using namespace margelo::nitro::image::views;
     swiftPart.setIsBlue(newViewProps.isBlue.value);
     newViewProps.isBlue.isDirty = false;
   }
+  // colorScheme: enum
+  if (newViewProps.colorScheme.isDirty) {
+    swiftPart.setColorScheme(static_cast<int>(newViewProps.colorScheme.value));
+    newViewProps.colorScheme.isDirty = false;
+  }
   // someCallback: function
   if (newViewProps.someCallback.isDirty) {
     swiftPart.setSomeCallback(newViewProps.someCallback.value);

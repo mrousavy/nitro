@@ -18,6 +18,7 @@ class HybridTestView : HybridTestViewSpec {
       view.backgroundColor = isBlue ? .systemBlue : .systemRed
     }
   }
+  var colorScheme: ColorScheme = .light
   var someCallback: () -> Void = { }
 
   // Methods

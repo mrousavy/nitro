@@ -7,8 +7,11 @@
 
 #include "JHybridTestViewSpec.hpp"
 
+// Forward declaration of `ColorScheme` to properly resolve imports.
+namespace margelo::nitro::image { enum class ColorScheme; }
 
-
+#include "ColorScheme.hpp"
+#include "JColorScheme.hpp"
 #include <functional>
 #include "JFunc_void.hpp"
 
@@ -38,6 +41,15 @@ namespace margelo::nitro::image {
   void JHybridTestViewSpec::setIsBlue(bool isBlue) {
     static const auto method = javaClassStatic()->getMethod<void(jboolean /* isBlue */)>("setBlue");
     method(_javaPart, isBlue);
+  }
+  ColorScheme JHybridTestViewSpec::getColorScheme() {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JColorScheme>()>("getColorScheme");
+    auto __result = method(_javaPart);
+    return __result->toCpp();
+  }
+  void JHybridTestViewSpec::setColorScheme(ColorScheme colorScheme) {
+    static const auto method = javaClassStatic()->getMethod<void(jni::alias_ref<JColorScheme> /* colorScheme */)>("setColorScheme");
+    method(_javaPart, JColorScheme::fromCpp(colorScheme));
   }
   std::function<void()> JHybridTestViewSpec::getSomeCallback() {
     static const auto method = javaClassStatic()->getMethod<jni::local_ref<JFunc_void::javaobject>()>("getSomeCallback_cxx");

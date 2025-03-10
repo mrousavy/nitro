@@ -12,8 +12,10 @@
 // Forward declaration of `HybridTestViewSpec_cxx` to properly resolve imports.
 namespace NitroImage { class HybridTestViewSpec_cxx; }
 
+// Forward declaration of `ColorScheme` to properly resolve imports.
+namespace margelo::nitro::image { enum class ColorScheme; }
 
-
+#include "ColorScheme.hpp"
 #include <functional>
 
 #include "NitroImage-Swift-Cxx-Umbrella.hpp"
@@ -56,6 +58,13 @@ namespace margelo::nitro::image {
     }
     inline void setIsBlue(bool isBlue) noexcept override {
       _swiftPart.setIsBlue(std::forward<decltype(isBlue)>(isBlue));
+    }
+    inline ColorScheme getColorScheme() noexcept override {
+      auto __result = _swiftPart.getColorScheme();
+      return static_cast<ColorScheme>(__result);
+    }
+    inline void setColorScheme(ColorScheme colorScheme) noexcept override {
+      _swiftPart.setColorScheme(static_cast<int>(colorScheme));
     }
     inline std::function<void()> getSomeCallback() noexcept override {
       auto __result = _swiftPart.getSomeCallback();

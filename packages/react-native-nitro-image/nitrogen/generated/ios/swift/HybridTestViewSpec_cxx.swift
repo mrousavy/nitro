@@ -108,6 +108,17 @@ public class HybridTestViewSpec_cxx {
     }
   }
   
+  public final var colorScheme: Int32 {
+    @inline(__always)
+    get {
+      return self.__implementation.colorScheme.rawValue
+    }
+    @inline(__always)
+    set {
+      self.__implementation.colorScheme = margelo.nitro.image.ColorScheme(rawValue: newValue)!
+    }
+  }
+  
   public final var someCallback: bridge.Func_void {
     @inline(__always)
     get {

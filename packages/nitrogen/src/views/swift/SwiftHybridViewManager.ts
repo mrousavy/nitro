@@ -13,6 +13,7 @@ import { getUmbrellaHeaderName } from '../../autolinking/ios/createSwiftUmbrella
 import { getHybridObjectName } from '../../syntax/getHybridObjectName.js'
 import { getHybridObjectConstructorCall } from '../../syntax/swift/SwiftHybridObjectRegistration.js'
 import { indent } from '../../utils.js'
+import { SwiftCxxBridgedType } from '../../syntax/swift/SwiftCxxBridgedType.js'
 
 export function createSwiftHybridViewManager(
   spec: HybridObjectSpec
@@ -36,10 +37,15 @@ export function createSwiftHybridViewManager(
   const propAssignments = spec.properties.map((p) => {
     const name = escapeCppName(p.name)
     const setter = p.getSetterName('swift')
+    const bridge = new SwiftCxxBridgedType(p.type, false)
+    const parse = bridge.parseFromCppToSwift(
+      `newViewProps.${name}.value`,
+      'c++'
+    )
     return `
 // ${p.jsSignature}
 if (newViewProps.${name}.isDirty) {
-  swiftPart.${setter}(newViewProps.${name}.value);
+  swiftPart.${setter}(${indent(parse, '  ')});
   newViewProps.${name}.isDirty = false;
 }
 `.trim()
