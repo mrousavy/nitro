@@ -13,8 +13,10 @@
 #error NitroModules cannot be found! Are you sure you installed NitroModules properly?
 #endif
 
+// Forward declaration of `ColorScheme` to properly resolve imports.
+namespace margelo::nitro::image { enum class ColorScheme; }
 
-
+#include "ColorScheme.hpp"
 #include <functional>
 
 namespace margelo::nitro::image {
@@ -46,6 +48,8 @@ namespace margelo::nitro::image {
       // Properties
       virtual bool getIsBlue() = 0;
       virtual void setIsBlue(bool isBlue) = 0;
+      virtual ColorScheme getColorScheme() = 0;
+      virtual void setColorScheme(ColorScheme colorScheme) = 0;
       virtual std::function<void()> getSomeCallback() = 0;
       virtual void setSomeCallback(const std::function<void()>& someCallback) = 0;
 

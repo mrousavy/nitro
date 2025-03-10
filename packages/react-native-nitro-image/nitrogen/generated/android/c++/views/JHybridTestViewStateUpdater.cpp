@@ -32,6 +32,10 @@ void JHybridTestViewStateUpdater::updateViewProps(jni::alias_ref<jni::JClass> /*
     view->setIsBlue(props.isBlue.value);
     // TODO: Set isDirty = false
   }
+  if (props.colorScheme.isDirty) {
+    view->setColorScheme(props.colorScheme.value);
+    // TODO: Set isDirty = false
+  }
   if (props.someCallback.isDirty) {
     view->setSomeCallback(props.someCallback.value);
     // TODO: Set isDirty = false

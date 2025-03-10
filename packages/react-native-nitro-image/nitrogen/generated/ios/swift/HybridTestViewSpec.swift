@@ -12,6 +12,7 @@ import NitroModules
 public protocol HybridTestViewSpec_protocol: HybridObject, HybridView {
   // Properties
   var isBlue: Bool { get set }
+  var colorScheme: ColorScheme { get set }
   var someCallback: () -> Void { get set }
 
   // Methods

@@ -16,6 +16,7 @@
 #include <react/renderer/components/view/ConcreteViewShadowNode.h>
 #include <react/renderer/components/view/ViewProps.h>
 
+#include "ColorScheme.hpp"
 #include <functional>
 #include <optional>
 #include <functional>
@@ -44,6 +45,7 @@ namespace margelo::nitro::image::views {
 
   public:
     CachedProp<bool> isBlue;
+    CachedProp<ColorScheme> colorScheme;
     CachedProp<std::function<void()>> someCallback;
     CachedProp<std::optional<std::function<void(const std::shared_ptr<margelo::nitro::image::HybridTestViewSpec>& /* ref */)>>> hybridRef;
 

@@ -44,6 +44,12 @@ abstract class HybridTestViewSpec: HybridView() {
   @set:Keep
   abstract var isBlue: Boolean
   
+  @get:DoNotStrip
+  @get:Keep
+  @set:DoNotStrip
+  @set:Keep
+  abstract var colorScheme: ColorScheme
+  
   abstract var someCallback: () -> Unit
   
   private var someCallback_cxx: Func_void
