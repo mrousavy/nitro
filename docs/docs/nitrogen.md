@@ -334,3 +334,38 @@ And finally, to initialize `HybridMath` from JS you just need to call `createHyb
 export const MathModule = NitroModules.createHybridObject<Math>("Math")
 const result = MathModule.add(5, 7)
 ```
+
+## CLI Options
+
+<table>
+    <tr>
+        <th>Option</th>
+        <th>Description</th>
+        <th>Type</th>
+        <th>Default</th>
+    </tr>
+    <tr>
+        <td><code>--out</code></td>
+        <td>Configures the output path of the generated C++, Swift or Kotlin files.</td>
+        <td>string</td>
+        <td>"./nitrogen/generated"</td>
+    </tr>
+    <tr>
+        <td><code>--modulePath </code></td>
+        <td>Specifies the path to the module directory where the podspec is located.</td>
+        <td>string</td>
+        <td>"./"</td>
+    </tr>
+    <tr>
+        <td><code>--config</code></td>
+        <td>A custom path to a nitro.json config file</td>
+        <td>string</td>
+        <td>"./nitro.json"</td>
+    </tr>
+    <tr>
+        <td><code>--log-level</code></td>
+        <td>Configures the log-level of nitrogen. Choices: "debug", "info", "warning", "error"</td>
+        <td>string</td>
+        <td>"info"</td>
+    </tr>
+</table>
