@@ -6,7 +6,7 @@ echo "Copying headers to 'android/build/headers' for Android prefab..."
 mkdir -p android/build/headers/nitromodules/NitroModules/
 
 # Copy header files from cpp directory
-find ./android/src/main/cpp -name "*.hpp" -type f -exec cp {} android/build/headers/nitromodules/NitroModules/ \;
+find ./android/src/main/cpp -name "*.hpp" -type f -exec cp -f {} android/build/headers/nitromodules/NitroModules/ \;
 
 # Copy header files from root cpp directory
-find ./cpp -name "*.hpp" -type f -exec cp {} android/build/headers/nitromodules/NitroModules/ \;
+find ./cpp -name "*.hpp" -type f -exec cp -f {} android/build/headers/nitromodules/NitroModules/ \;
