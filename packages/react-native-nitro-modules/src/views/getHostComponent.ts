@@ -18,7 +18,7 @@ export interface ViewConfig<Props> {
 /**
  * Represents all default props a Nitro HybridView has.
  */
-interface DefaultHybridViewProps<RefType> extends ViewProps {
+interface DefaultHybridViewProps<RefType> {
   /**
    * A `ref` to the {@linkcode HybridObject} this Hybrid View is rendering.
    *
@@ -64,7 +64,7 @@ export type ReactNativeView<
 > = HostComponent<
   WrapFunctionsInObjects<
     DefaultHybridViewProps<HybridView<Props, Methods>> & Props
-  >
+  > & ViewProps
 >
 
 /**
