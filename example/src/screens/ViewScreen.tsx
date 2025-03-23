@@ -32,6 +32,12 @@ export function ViewScreenImpl() {
           style={styles.view}
           isBlue={i % 2 === 0}
           someCallback={{ f: () => console.log(`Callback called!`) }}
+          colorScheme="dark"
+          onLayout={(e) => {
+            console.log(
+              `Layout event: ${e.nativeEvent.layout.width} ${e.nativeEvent.layout.height}`
+            )
+          }}
         />
       )),
     [counter]
