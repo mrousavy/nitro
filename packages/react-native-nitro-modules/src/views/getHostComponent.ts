@@ -64,7 +64,8 @@ export type ReactNativeView<
 > = HostComponent<
   WrapFunctionsInObjects<
     DefaultHybridViewProps<HybridView<Props, Methods>> & Props
-  > & ViewProps
+  > &
+    ViewProps
 >
 
 /**
