@@ -1,50 +1,29 @@
-import * as React from 'react'
-
-import { StyleSheet, View, Text, Button, Platform } from 'react-native'
-import { NitroModules } from 'react-native-nitro-modules'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { useColors } from '../useColors'
-import { HybridTestObjectSwiftKotlin, TestView } from 'react-native-nitro-image'
-import { useIsFocused } from '@react-navigation/native'
-
-const VIEWS_X = 15
-const VIEWS_Y = 15
+import * as React from "react";
+import { StyleSheet, View, Text, Button, Platform } from "react-native";
+import { NitroModules } from "react-native-nitro-modules";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useColors } from "../useColors";
+import {
+  HybridTestObjectSwiftKotlin,
+  TestView,
+} from "react-native-nitro-image";
+import { useIsFocused } from "@react-navigation/native";
 
 export function ViewScreenImpl() {
-  const safeArea = useSafeAreaInsets()
-  const colors = useColors()
-  const [counter, setCounter] = React.useState(0)
-  const [isUpdating, setIsUpdating] = React.useState(true)
-
-  const views = React.useMemo(
-    () =>
-      [...Array(counter)].map((_, i) => (
-        <TestView
-          key={i}
-          hybridRef={{
-            f: (ref) => {
-              console.log(`Ref initialized!`)
-              ref.someMethod()
-              const isBlue = HybridTestObjectSwiftKotlin.getIsViewBlue(ref)
-              console.log(`Is View blue: ${isBlue}`)
-            },
-          }}
-          style={styles.view}
-          isBlue={i % 2 === 0}
-          someCallback={{ f: () => console.log(`Callback called!`) }}
-        />
-      )),
-    [counter]
-  )
+  const safeArea = useSafeAreaInsets();
+  const colors = useColors();
+  const [isBlue, setIsBlue] = React.useState(true);
+  const [isUpdating, setIsUpdating] = React.useState(true);
+  const [dimensions, setDimensions] = React.useState<{
+    width: number;
+    height: number;
+  }>({ width: 0, height: 0 });
 
   React.useEffect(() => {
-    if (!isUpdating) return
-    const i = setInterval(
-      () => setCounter((c) => (c >= VIEWS_X * VIEWS_Y ? 0 : c + 1)),
-      10
-    )
-    return () => clearInterval(i)
-  }, [isUpdating])
+    if (!isUpdating) return;
+    const interval = setInterval(() => setIsBlue((prev) => !prev), 10);
+    return () => clearInterval(interval);
+  }, [isUpdating]);
 
   return (
     <View style={[styles.container, { paddingTop: safeArea.top }]}>
@@ -57,32 +36,67 @@ export function ViewScreenImpl() {
       <View style={styles.resultContainer}>
         <View style={[styles.viewShadow]}>
           <View style={[styles.viewBorder, { borderColor: colors.foreground }]}>
-            <View style={styles.viewContainer}>{views}</View>
+            <View style={styles.viewContainer}>
+              <TestView
+                key="single-test-view"
+                hybridRef={{
+                  f: (ref) => {
+                    console.log(`Ref initialized!`);
+                    ref.someMethod();
+                    const isBlue =
+                      HybridTestObjectSwiftKotlin.getIsViewBlue(ref);
+                    console.log(`Is View blue: ${isBlue}`);
+                  },
+                }}
+                style={styles.view}
+                isBlue={isBlue}
+                someCallback={{
+                  f: () =>
+                    console.log(
+                      `Callback called! ${dimensions.width} ${dimensions.height}`,
+                    ),
+                }}
+                onTouchStart={() =>
+                  console.log(
+                    `Touch started! ${dimensions.width} ${dimensions.height}`,
+                  )
+                }
+                onLayout={(e) => {
+                  setDimensions({
+                    width: e.nativeEvent.layout.width,
+                    height: e.nativeEvent.layout.height,
+                  });
+                  console.log(
+                    `Layout width: ${e.nativeEvent.layout.width} height: ${e.nativeEvent.layout.height}`,
+                  );
+                }}
+              />
+            </View>
           </View>
         </View>
       </View>
 
       <View style={[styles.bottomView, { backgroundColor: colors.background }]}>
-        <Text>{isUpdating ? '🔄 Updating...' : '📱 Idle'}</Text>
+        <Text>{isUpdating ? "🔄 Updating..." : "📱 Idle"}</Text>
         <View style={styles.flex} />
         <Button
-          title={isUpdating ? 'Stop Updating' : 'Start Updating'}
+          title={isUpdating ? "Stop Updating" : "Start Updating"}
           onPress={() => setIsUpdating((i) => !i)}
         />
       </View>
     </View>
-  )
+  );
 }
 
 export function ViewScreen() {
-  const isFocused = useIsFocused()
-  return isFocused ? <ViewScreenImpl /> : null
+  const isFocused = useIsFocused();
+  return isFocused ? <ViewScreenImpl /> : null;
 }
 
 const styles = StyleSheet.create({
   header: {
     fontSize: 26,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     paddingBottom: 15,
     marginHorizontal: 15,
   },
@@ -93,16 +107,16 @@ const styles = StyleSheet.create({
   topControls: {
     marginHorizontal: 15,
     marginBottom: 10,
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   buildTypeText: {
     fontFamily: Platform.select({
-      ios: 'Menlo',
-      macos: 'Menlo',
-      android: 'monospace',
+      ios: "Menlo",
+      macos: "Menlo",
+      android: "monospace",
     }),
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   segmentedControl: {
     minWidth: 180,
@@ -113,9 +127,9 @@ const styles = StyleSheet.create({
     marginVertical: 20,
   },
   viewShadow: {
-    width: '80%',
+    width: "80%",
     aspectRatio: 1,
-    shadowColor: 'black',
+    shadowColor: "black",
     shadowOffset: { width: 1, height: 2 },
     shadowOpacity: 0.4,
     shadowRadius: 5,
@@ -128,29 +142,29 @@ const styles = StyleSheet.create({
   },
   viewContainer: {
     flex: 1,
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+    flexDirection: "row",
+    flexWrap: "wrap",
   },
   view: {
-    width: `${100 / VIEWS_X}%`,
-    height: `${100 / VIEWS_Y}%`,
+    width: "100%",
+    height: "100%",
     marginLeft: -0.0001,
   },
   testCase: {
-    width: '100%',
+    width: "100%",
     paddingHorizontal: 15,
     borderBottomWidth: StyleSheet.hairlineWidth,
     paddingVertical: 10,
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   testBox: {
     flexShrink: 1,
-    flexDirection: 'column',
+    flexDirection: "column",
   },
   testName: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   testStatus: {
     fontSize: 14,
@@ -164,18 +178,18 @@ const styles = StyleSheet.create({
   },
   resultContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     paddingBottom: 45,
   },
   chartsContainer: {
-    alignItems: 'stretch',
-    width: '70%',
+    alignItems: "stretch",
+    width: "70%",
   },
   nitroResults: {},
   turboResults: {},
   title: {
-    fontWeight: 'bold',
+    fontWeight: "bold",
     fontSize: 25,
   },
   chart: {
@@ -186,14 +200,14 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   bold: {
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   flex: { flex: 1 },
   bottomView: {
     borderTopRightRadius: 15,
     borderTopLeftRadius: 15,
     elevation: 15,
-    shadowColor: 'black',
+    shadowColor: "black",
     shadowOffset: {
       width: 0,
       height: 5,
@@ -203,7 +217,7 @@ const styles = StyleSheet.create({
 
     paddingHorizontal: 15,
     paddingVertical: 9,
-    alignItems: 'center',
-    flexDirection: 'row',
+    alignItems: "center",
+    flexDirection: "row",
   },
-})
+});
