@@ -1,10 +1,13 @@
 import { z } from 'zod'
-import { capitalizeName } from '../utils.js'
-import path from 'path'
-import { promises as fs } from 'fs'
 
 // Namespaces and package names in C++/Java will be matched with a regex.
 const safeNamePattern = /^[a-zA-Z_][a-zA-Z0-9_]*$/
+
+const isNotReservedKeyword = (val: string) =>
+  !['core', 'nitro', 'NitroModules'].includes(val)
+const isReservedKeywordError = {
+  message: `This value is reserved and cannot be used!`,
+}
 
 export const NitroUserConfigSchema = z.object({
   /**
@@ -13,7 +16,14 @@ export const NitroUserConfigSchema = z.object({
    * This can have multiple sub-namespaces, and is always relative to `margelo::nitro`.
    * @example `['image']` -> `margelo::nitro::image`
    */
-  cxxNamespace: z.array(z.string().regex(safeNamePattern)).min(1),
+  cxxNamespace: z
+    .array(
+      z
+        .string()
+        .regex(safeNamePattern)
+        .refine(isNotReservedKeyword, isReservedKeywordError)
+    )
+    .min(1),
   /**
    * iOS specific options.
    */
@@ -26,7 +36,10 @@ export const NitroUserConfigSchema = z.object({
      * If you are using CocoaPods, this should be the Pod name defined in the `.podspec`.
      * @example `NitroImage`
      */
-    iosModuleName: z.string().regex(safeNamePattern),
+    iosModuleName: z
+      .string()
+      .regex(safeNamePattern)
+      .refine(isNotReservedKeyword, isReservedKeywordError),
   }),
   /**
    * Android specific options.
@@ -38,14 +51,24 @@ export const NitroUserConfigSchema = z.object({
      * This can have multiple sub-namespaces, and is always relative to `com.margelo.nitro`.
      * @example `['image']` -> `com.margelo.nitro.image`
      */
-    androidNamespace: z.array(z.string().regex(safeNamePattern)).min(1),
+    androidNamespace: z
+      .array(
+        z
+          .string()
+          .regex(safeNamePattern)
+          .refine(isNotReservedKeyword, isReservedKeywordError)
+      )
+      .min(1),
 
     /**
-     * Returns the name of the Android C++ library (aka name in CMakeLists.txt `add_library(..)`).
+     * Represents the name of the Android C++ library (aka name in CMakeLists.txt `add_library(..)`).
      * This will be loaded via `System.loadLibrary(...)`.
      * @example `NitroImage`
      */
-    androidCxxLibName: z.string().regex(safeNamePattern),
+    androidCxxLibName: z
+      .string()
+      .regex(safeNamePattern)
+      .refine(isNotReservedKeyword, isReservedKeywordError),
   }),
   /**
    * Configures the code that gets generated for autolinking (registering)
@@ -67,28 +90,14 @@ export const NitroUserConfigSchema = z.object({
    * Nitrogen will not look for `.nitro.ts` files in these directories.
    */
   ignorePaths: z.array(z.string()).optional(),
+  /**
+   * Configures whether a `.gitattributes` file will be generated in
+   * the `nitrogen/generated/` directory to mark files as linguist-generated for GitHub.
+   */
+  createGitAttributes: z.boolean().optional().default(true),
 })
 
 /**
  * Represents the structure of a `nitro.json` config file.
  */
 export type NitroUserConfig = z.infer<typeof NitroUserConfigSchema>
-
-export function writeUserConfigFile(
-  moduleName: string,
-  directory: string
-): Promise<void> {
-  const config: NitroUserConfig = {
-    android: {
-      androidCxxLibName: `Nitro${capitalizeName(moduleName)}`,
-      androidNamespace: [moduleName.toLowerCase()],
-    },
-    cxxNamespace: [moduleName.toLowerCase()],
-    ios: {
-      iosModuleName: `Nitro${capitalizeName(moduleName)}`,
-    },
-    autolinking: {},
-  }
-  const dir = path.join(directory, 'nitro.json')
-  return fs.writeFile(dir, JSON.stringify(config, null, 2))
-}

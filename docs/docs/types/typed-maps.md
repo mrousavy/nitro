@@ -18,13 +18,6 @@ For example, if your API returns a map of users with their ages, you _could_ use
     }
     ```
   </TabItem>
-  <TabItem value="cpp" label="C++">
-    ```cpp
-    class HybridDatabase: public HybridDatabaseSpec {
-      std::unordered_map<std::string, double> getAllUsers();
-    }
-    ```
-  </TabItem>
   <TabItem value="swift" label="Swift">
     ```swift
     class HybridDatabase: HybridDatabaseSpec {
@@ -36,6 +29,13 @@ For example, if your API returns a map of users with their ages, you _could_ use
     ```kotlin
     class HybridDatabase: HybridDatabaseSpec() {
       fun getAllUsers(): Map<String, Double>
+    }
+    ```
+  </TabItem>
+  <TabItem value="cpp" label="C++">
+    ```cpp
+    class HybridDatabase: public HybridDatabaseSpec {
+      std::unordered_map<std::string, double> getAllUsers();
     }
     ```
   </TabItem>

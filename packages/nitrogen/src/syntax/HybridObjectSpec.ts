@@ -8,4 +8,5 @@ export interface HybridObjectSpec {
   properties: Property[]
   methods: Method[]
   baseTypes: HybridObjectSpec[]
+  isHybridView: boolean
 }

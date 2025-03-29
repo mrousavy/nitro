@@ -16,6 +16,14 @@ export class OptionalType implements Type {
   get kind(): TypeKind {
     return 'optional'
   }
+  get needsBraces(): boolean {
+    switch (this.wrappingType.kind) {
+      case 'function':
+        return true
+      default:
+        return false
+    }
+  }
 
   getCode(language: Language): string {
     const wrapping = this.wrappingType.getCode(language)
@@ -23,9 +31,17 @@ export class OptionalType implements Type {
       case 'c++':
         return `std::optional<${wrapping}>`
       case 'swift':
-        return `${wrapping}?`
+        if (this.needsBraces) {
+          return `(${wrapping})?`
+        } else {
+          return `${wrapping}?`
+        }
       case 'kotlin':
-        return `${wrapping}?`
+        if (this.needsBraces) {
+          return `(${wrapping})?`
+        } else {
+          return `${wrapping}?`
+        }
       default:
         throw new Error(
           `Language ${language} is not yet supported for OptionalType!`

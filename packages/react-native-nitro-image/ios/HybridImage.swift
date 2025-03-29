@@ -22,15 +22,11 @@ class HybridImage : HybridImageSpec {
    */
   private let uiImage: UIImage
   /**
-   * Just default initialize HybridContext - this holds the C++ state.
-   */
-  public var hybridContext = margelo.nitro.HybridContext()
-  /**
    * Get the memory size of the Swift class, and the `UIImage` we allocated so JS
    * can efficiently garbage collect it when needed.
    */
   public var memorySize: Int {
-    return getSizeOf(self) + uiImage.memorySize
+    return uiImage.memorySize
   }
 
   /**

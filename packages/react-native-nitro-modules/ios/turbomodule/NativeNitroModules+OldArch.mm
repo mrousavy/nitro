@@ -1,6 +1,6 @@
 //
 //  NativeNitroModules+OldArch.mm
-//  DoubleConversion
+//  react-native-nitro
 //
 //  Created by Marc Rousavy on 21.06.24.
 //
@@ -57,7 +57,7 @@ RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(install) {
     // 5. Install Nitro
     nitro::install(*runtime, dispatcher);
     return nil;
-  } catch (std::exception& error) {
+  } catch (const std::exception& error) {
     // ?. Any C++ error occurred (probably in nitro::install()?)
     return [NSString stringWithCString:error.what() encoding:kCFStringEncodingUTF8];
   } catch (...) {

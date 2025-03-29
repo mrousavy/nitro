@@ -103,6 +103,14 @@ export const NitroConfig = {
   },
 
   /**
+   * Get the autolinking configuration of all HybridObjects.
+   * Those will be generated and default-constructed.
+   */
+  getAutolinkedHybridObjects(): NitroUserConfig['autolinking'] {
+    return getUserConfig().autolinking
+  },
+
+  /**
    * Get the paths that will be ignored when loading the TypeScript project.
    * In most cases, this just contains `node_modules/`.
    */
@@ -110,11 +118,7 @@ export const NitroConfig = {
     return getUserConfig().ignorePaths ?? []
   },
 
-  /**
-   * Get the autolinking configuration of all HybridObjects.
-   * Those will be generated and default-constructed.
-   */
-  getAutolinkedHybridObjects(): NitroUserConfig['autolinking'] {
-    return getUserConfig().autolinking
+  getCreateGitAttributes(): boolean {
+    return getUserConfig().createGitAttributes ?? false
   },
 }

@@ -19,7 +19,7 @@ body:
 
         > Configure project :react-native-nitro-modules
 
-        [NitroModules] Your app is boosted by nitro modules! 🔥
+        [NitroModules] 🔥 Your app is boosted by nitro modules!
 
         ...
     validations:
@@ -31,7 +31,7 @@ body:
       render: json
       placeholder: >
         "dependencies": {
-          "react-native": "^0.75.0",
+          "react-native": "0.75.0",
           "react-native-nitro-modules": "^0.11.0",
           ...
         },
@@ -94,5 +94,6 @@ body:
         - label: I am using Nitrogen (nitro-codegen)
         - label: I have read and followed the [Troubleshooting Guide](https://nitro.margelo.com/docs/troubleshooting).
           required: true
+        - label: I created a reproduction PR to reproduce this issue here in the nitro repo. (See [Contributing](https://nitro.margelo.com/docs/contributing) for more information)
         - label: I searched for [similar issues in this repository](https://github.com/mrousavy/nitro/issues) and found none.
           required: true

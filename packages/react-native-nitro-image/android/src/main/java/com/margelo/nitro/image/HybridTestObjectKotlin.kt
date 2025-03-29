@@ -1,12 +1,16 @@
 package com.margelo.nitro.image
 
 import android.util.Log
+import androidx.annotation.Keep
+import com.facebook.proguard.annotations.DoNotStrip
 import com.margelo.nitro.core.AnyMap
 import com.margelo.nitro.core.AnyValue
 import com.margelo.nitro.core.ArrayBuffer
 import com.margelo.nitro.core.Promise
 import kotlinx.coroutines.delay
 
+@Keep
+@DoNotStrip
 class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
     private val TAG = "HybridTestObjectKotlin"
 
@@ -23,6 +27,8 @@ class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
     override var someVariant: Variant_String_Double = Variant_String_Double.create(55.05)
     override var optionalArray: Array<String>? = null
     override var optionalEnum: Powertrain? = null
+    override var optionalOldEnum: OldEnum? = null
+    override var optionalCallback: ((value: Double) -> Unit)? = null
 
     override fun simpleFunc() {
         // do nothing
@@ -88,6 +94,14 @@ class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
         throw Error("This function will only work after sacrificing seven lambs!")
     }
 
+    override fun funcThatThrowsBeforePromise(): Promise<Unit> {
+        throw Error("This function will only work after sacrificing eight lambs!")
+    }
+
+    override fun throwError(error: Throwable): Unit {
+        throw error
+    }
+
     override fun tryOptionalParams(num: Double, boo: Boolean, str: String?): String {
         return str ?: "value omitted!"
     }
@@ -99,6 +113,14 @@ class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
 
     override fun tryOptionalEnum(value: Powertrain?): Powertrain? {
         return value
+    }
+
+    override fun bounceMap(map: Map<String, Variant_Double_Boolean>): Map<String, Variant_Double_Boolean> {
+        return map
+    }
+
+    override fun extractMap(mapWrapper: MapWrapper): Map<String, String> {
+        return mapWrapper.map
     }
 
     override fun calculateFibonacciSync(value: Double): Long {
@@ -124,6 +146,32 @@ class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
         return Promise.async { delay(seconds.toLong() * 1000) }
     }
 
+    override fun promiseThrows(): Promise<Unit> {
+        return Promise.async {
+            throw Error("Promise throws :)")
+        }
+    }
+
+    override fun awaitAndGetPromise(promise: Promise<Double>): Promise<Double> {
+        return Promise.async {
+            val result = promise.await()
+            return@async result
+        }
+    }
+
+    override fun awaitAndGetComplexPromise(promise: Promise<Car>): Promise<Car> {
+        return Promise.async {
+            val result = promise.await()
+            return@async result
+        }
+    }
+
+    override fun awaitPromise(promise: Promise<Unit>): Promise<Unit> {
+        return Promise.async {
+            promise.await()
+        }
+    }
+
     override fun callCallback(callback: () -> Unit) {
         callback()
     }
@@ -132,11 +180,58 @@ class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
         callback(value)
     }
 
+    override fun getValueFromJSCallbackAndWait(getValue: (() -> Promise<Double>)): Promise<Double> {
+        return Promise.async {
+            val jsResult = getValue().await()
+            return@async jsResult
+        }
+    }
+
+    override fun getValueFromJsCallback(callback: (() -> Promise<String>), andThenCall: ((valueFromJs: String) -> Unit)): Promise<Unit> {
+        return Promise.async {
+            val jsResult = callback().await()
+            andThenCall(jsResult)
+        }
+    }
+
     override fun callAll(first: () -> Unit, second: () -> Unit, third: () -> Unit) {
         first()
         second()
         third()
     }
+
+    override fun callSumUpNTimes(callback: () -> Promise<Double>, n: Double): Promise<Double> {
+        var result = 0.0
+        return Promise.async {
+            for (i in 1..n.toInt()) {
+                val current = callback().await()
+                result += current
+            }
+            return@async result
+        }
+    }
+
+  override fun callbackAsyncPromise(callback: () -> Promise<Promise<Double>>): Promise<Double> {
+    return Promise.async {
+      val promise = callback().await()
+      val result = promise.await()
+      return@async result
+    }
+  }
+
+  override fun callbackAsyncPromiseBuffer(callback: () -> Promise<Promise<ArrayBuffer>>): Promise<ArrayBuffer> {
+    return Promise.async {
+      val promise = callback().await()
+      val result = promise.await()
+      return@async result
+    }
+  }
+
+  override fun getComplexCallback(): (Double) -> Unit {
+    return { value ->
+        Log.i(TAG, "Callback called with $value.")
+    }
+  }
 
     override fun getCar(): Car {
         return Car(2018.0, "Lamborghini", "Huracán", 640.0, Powertrain.GAS, null, true)
@@ -150,8 +245,42 @@ class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
         return car.driver
     }
 
+    override fun jsStyleObjectAsParameters(params: JsStyleStruct): Unit {
+        params.onChanged(params.value)
+    }
+
     override fun createArrayBuffer(): ArrayBuffer {
         return ArrayBuffer.allocate(1024 * 1024 * 10) // 10 MB
+    }
+
+    override fun createArrayBufferAsync(): Promise<ArrayBuffer> {
+        return Promise.async { createArrayBuffer() }
+    }
+
+    override fun passVariant(either: Variant_String_Double_Boolean_DoubleArray_Array_String_): Variant_String_Double {
+        either.getAs<String>()?.let {
+            return Variant_String_Double.create(it)
+        }
+        either.getAs<Double>()?.let {
+            return Variant_String_Double.create(it)
+        }
+        return Variant_String_Double.create("holds something else!")
+    }
+
+    override fun getVariantEnum(variant: Variant_Boolean_OldEnum): Variant_Boolean_OldEnum {
+        return variant
+    }
+
+    override fun getVariantObjects(variant: Variant_Car_Person): Variant_Car_Person {
+        return variant
+    }
+
+    override fun passNamedVariant(variant: NamedVariant): NamedVariant {
+        return variant
+    }
+
+    override fun getVariantHybrid(variant: Variant_Person_HybridTestObjectSwiftKotlinSpec): Variant_Person_HybridTestObjectSwiftKotlinSpec {
+        return variant
     }
 
     override fun getBufferLastItem(buffer: ArrayBuffer): Double {
@@ -204,6 +333,13 @@ class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
         return HybridTestObjectKotlin()
     }
 
-    override val memorySize: Long
-        get() = 0L
+    override fun getIsViewBlue(view: HybridTestViewSpec): Boolean {
+        val cast = view as? HybridTestView ?: return false
+        return cast.isBlue
+    }
+
+    override fun callbackSync(callback: () -> Double): Double {
+        val value = callback()
+        return value
+    }
 }

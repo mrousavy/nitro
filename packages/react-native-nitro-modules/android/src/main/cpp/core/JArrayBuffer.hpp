@@ -38,8 +38,7 @@ public:
   /**
    * Create a new `JArrayBuffer` that wraps the given `ByteBuffer` from Java.
    */
-  static jni::local_ref<JArrayBuffer::jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis,
-                                                              jni::alias_ref<jni::JByteBuffer> buffer) {
+  static jni::local_ref<JArrayBuffer::jhybriddata> initHybrid(jni::alias_ref<jhybridobject>, jni::alias_ref<jni::JByteBuffer> buffer) {
     return makeCxxInstance(buffer);
   }
 

@@ -1,86 +1,93 @@
 //
 //  PromiseHolder.hpp
-//  Nitro
+//  react-native-nitro
 //
-//  Created by Marc Rousavy on 15.08.24.
+//  Created by Marc Rousavy on 14.08.24.
 //
 
 #pragma once
 
-#include <future>
-#include <string>
+#include "NitroDefines.hpp"
+#include "Promise.hpp"
+#include <exception>
+#include <memory>
+#include <type_traits>
 
 namespace margelo::nitro {
 
+using namespace facebook;
+
 /**
- * Holds a `std::promise` that can be accessed from Swift using proper ref management.
+ * Holds instances of `std::shared_ptr<Promise<T>>`.
+ * The reason this exists is for performance optimizations, as well as easier listeners for Swift.
  */
 template <typename T>
-class PromiseHolder {
+class PromiseHolder final {
 public:
-  /**
-   * Create a new PromiseHolder (and a new `std::promise<T>`).
-   */
-  explicit PromiseHolder() {
-    _promise = std::make_shared<std::promise<T>>();
+  PromiseHolder(const std::shared_ptr<Promise<T>>& promise) : _promise(promise) {}
+  PromiseHolder(std::shared_ptr<Promise<T>>&& promise) : _promise(std::move(promise)) {}
+
+public:
+  static PromiseHolder<T> create() {
+    return PromiseHolder<T>(Promise<T>::create());
   }
 
-  /**
-   * Resolve the underlying `std::promise<T>` with `T`.
-   */
-  void resolve(const T& result) const {
-    _promise->set_value(result);
+public:
+  void resolve(T value) const {
+    _promise->resolve(std::move(value));
   }
 
-  /**
-   * Reject the underlying `std::promise<T>` with the given message.
-   */
-  void reject(const std::string& message) const {
-    try {
-      throw std::runtime_error(message);
-    } catch (...) {
-      _promise->set_exception(std::current_exception());
-    }
+  void reject(const std::exception_ptr& exception) const {
+    _promise->reject(exception);
   }
 
-  /**
-   * Get the `std::future<T>` of the underlying `std::promise<T>`.
-   * This can only be called once.
-   */
-  std::future<T> getFuture() {
-    return _promise->get_future();
+public:
+  void addOnResolvedListener(std::function<void(const T&)> onResolved) const {
+    _promise->addOnResolvedListener([onResolved = std::move(onResolved)](const T& result) { onResolved(result); });
+  }
+  void addOnResolvedListenerCopy(std::function<void(T)> onResolved) const {
+    _promise->addOnResolvedListener([onResolved = std::move(onResolved)](const T& result) { onResolved(result); });
+  }
+
+  void addOnRejectedListener(std::function<void(const std::exception_ptr&)> onRejected) const {
+    _promise->addOnRejectedListener([onRejected = std::move(onRejected)](const std::exception_ptr& error) { onRejected(error); });
   }
 
 private:
-  std::shared_ptr<std::promise<T>> _promise;
+  std::shared_ptr<Promise<T>> _promise;
 };
 
-// Specialization for `void` (no args to `resolve()`)
 template <>
-class PromiseHolder<void> {
+class PromiseHolder<void> final {
 public:
-  explicit PromiseHolder() {
-    _promise = std::make_shared<std::promise<void>>();
+  PromiseHolder(const std::shared_ptr<Promise<void>>& promise) : _promise(promise) {}
+  PromiseHolder(std::shared_ptr<Promise<void>>&& promise) : _promise(std::move(promise)) {}
+
+public:
+  static PromiseHolder<void> create() {
+    return PromiseHolder<void>(Promise<void>::create());
   }
 
+public:
   void resolve() const {
-    _promise->set_value();
+    _promise->resolve();
   }
 
-  void reject(const std::string& message) const {
-    try {
-      throw std::runtime_error(message);
-    } catch (...) {
-      _promise->set_exception(std::current_exception());
-    }
+  void reject(const std::exception_ptr& exception) const {
+    _promise->reject(exception);
   }
 
-  std::future<void> getFuture() {
-    return _promise->get_future();
+public:
+  void addOnResolvedListener(std::function<void()> onResolved) const {
+    _promise->addOnResolvedListener([onResolved = std::move(onResolved)]() { onResolved(); });
+  }
+
+  void addOnRejectedListener(std::function<void(const std::exception_ptr&)> onRejected) const {
+    _promise->addOnRejectedListener([onRejected = std::move(onRejected)](const std::exception_ptr& error) { onRejected(error); });
   }
 
 private:
-  std::shared_ptr<std::promise<void>> _promise;
+  std::shared_ptr<Promise<void>> _promise;
 };
 
 } // namespace margelo::nitro

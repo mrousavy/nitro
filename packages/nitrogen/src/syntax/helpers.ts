@@ -1,5 +1,8 @@
 import path from 'path'
 import type { SourceFile } from './SourceFile.js'
+import type { Type } from './types/Type.js'
+import { getTypeAs } from './types/getTypeAs.js'
+import { OptionalType } from './types/OptionalType.js'
 
 type Comment = '///' | '#'
 
@@ -16,6 +19,19 @@ ${comment} https://github.com/mrousavy/nitro
 ${comment} Copyright © ${now.getFullYear()} Marc Rousavy @ Margelo
 ${comment}
 `.trim()
+}
+
+export function isFunction(type: Type): boolean {
+  switch (type.kind) {
+    case 'function':
+      return true
+    case 'optional': {
+      const optional = getTypeAs(type, OptionalType)
+      return isFunction(optional.wrappingType)
+    }
+    default:
+      return false
+  }
 }
 
 export function toReferenceType(type: string): `const ${typeof type}&` {

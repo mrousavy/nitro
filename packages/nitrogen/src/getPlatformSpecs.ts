@@ -1,6 +1,7 @@
 import type { PlatformSpec } from 'react-native-nitro-modules'
-import type { InterfaceDeclaration, Type } from 'ts-morph'
-import { Symbol } from 'ts-morph'
+import type { InterfaceDeclaration, Type, TypeAliasDeclaration } from 'ts-morph'
+import { Node, Symbol } from 'ts-morph'
+import { getBaseTypes } from './utils.js'
 
 export type Platform = keyof Required<PlatformSpec>
 export type Language = Required<PlatformSpec>[keyof PlatformSpec]
@@ -44,10 +45,7 @@ function isValidLanguageForPlatform(
   return platformLanguages[platform].includes(language)
 }
 
-function getPlatformSpec(
-  moduleName: string,
-  platformSpecs: Type
-): PlatformSpec {
+function getPlatformSpec(typeName: string, platformSpecs: Type): PlatformSpec {
   const result: PlatformSpec = {}
 
   // Properties (ios, android)
@@ -57,7 +55,7 @@ function getPlatformSpec(
     const platform = property.getName()
     if (!isValidPlatform(platform)) {
       console.warn(
-        `    ⚠️   ${moduleName} does not properly extend HybridObject<T> - "${platform}" is not a valid Platform! ` +
+        `    ⚠️   ${typeName} does not properly extend HybridObject<T> - "${platform}" is not a valid Platform! ` +
           `Valid platforms are: [${allPlatforms.join(', ')}]`
       )
       continue
@@ -67,7 +65,7 @@ function getPlatformSpec(
     const language = getLiteralValue(property)
     if (!isValidLanguage(language)) {
       console.warn(
-        `    ⚠️   ${moduleName}: Language ${language} is not a valid language for ${platform}! ` +
+        `    ⚠️   ${typeName}: Language ${language} is not a valid language for ${platform}! ` +
           `Valid languages are: [${platformLanguages[platform].join(', ')}]`
       )
       continue
@@ -76,7 +74,7 @@ function getPlatformSpec(
     // Double-check that language works on this platform (android: kotlin/c++, ios: swift/c++)
     if (!isValidLanguageForPlatform(language, platform)) {
       console.warn(
-        `    ⚠️   ${moduleName}: Language ${language} is not a valid language for ${platform}! ` +
+        `    ⚠️   ${typeName}: Language ${language} is not a valid language for ${platform}! ` +
           `Valid languages are: [${platformLanguages[platform].join(', ')}]`
       )
       continue
@@ -89,22 +87,22 @@ function getPlatformSpec(
   return result
 }
 
-export function isDirectlyHybridObject(type: Type): boolean {
+function isDirectlyType(type: Type, name: string): boolean {
   const symbol = type.getSymbol() ?? type.getAliasSymbol()
-  if (symbol?.getName() === 'HybridObject') {
+  if (symbol?.getName() === name) {
     return true
   }
   return false
 }
 
-export function extendsHybridObject(type: Type, recursive: boolean): boolean {
-  for (const base of type.getBaseTypes()) {
-    const isHybrid = isDirectlyHybridObject(base)
+function extendsType(type: Type, name: string, recursive: boolean): boolean {
+  for (const base of getBaseTypes(type)) {
+    const isHybrid = isDirectlyType(base, name)
     if (isHybrid) {
       return true
     }
     if (recursive) {
-      const baseExtends = extendsHybridObject(base, recursive)
+      const baseExtends = extendsType(base, name, recursive)
       if (baseExtends) {
         return true
       }
@@ -113,45 +111,92 @@ export function extendsHybridObject(type: Type, recursive: boolean): boolean {
   return false
 }
 
-function findHybridObjectBase(type: Type): Type | undefined {
-  for (const base of type.getBaseTypes()) {
-    const symbol = base.getSymbol() ?? base.getAliasSymbol()
-    if (symbol?.getName() === 'HybridObject') {
-      return base
-    }
-    const baseBase = findHybridObjectBase(base)
-    if (baseBase != null) {
-      return baseBase
-    }
+export function isDirectlyHybridObject(type: Type): boolean {
+  return isDirectlyType(type, 'HybridObject')
+}
+
+export function extendsHybridObject(type: Type, recursive: boolean): boolean {
+  return extendsType(type, 'HybridObject', recursive)
+}
+
+export function isHybridViewProps(type: Type): boolean {
+  return extendsType(type, 'HybridViewProps', true)
+}
+export function isHybridViewMethods(type: Type): boolean {
+  return extendsType(type, 'HybridViewMethods', true)
+}
+
+export function isHybridView(type: Type): boolean {
+  // HybridViews are type aliases for `HybridView`, and `Props & Methods` are just intersected together.
+  const unionTypes = type.getIntersectionTypes()
+  for (const union of unionTypes) {
+    const symbol = union.getSymbol()
+    if (symbol == null) return false
+    return symbol.getName() === 'HybridViewTag'
   }
-  return undefined
+  return false
+}
+
+export function isAnyHybridSubclass(type: Type): boolean {
+  if (isDirectlyHybridObject(type)) return false
+
+  if (isHybridView(type)) return true
+
+  if (extendsHybridObject(type, true)) return true
+
+  return false
 }
 
 /**
- * If the given interface ({@linkcode module}) extends `HybridObject`,
+ * If the given interface ({@linkcode declaration}) extends `HybridObject`,
  * this method returns the platforms it exists on.
  * If it doesn't extend `HybridObject`, this returns `undefined`.
  */
 export function getHybridObjectPlatforms(
-  module: InterfaceDeclaration
+  declaration: InterfaceDeclaration | TypeAliasDeclaration
 ): PlatformSpec | undefined {
-  const base = findHybridObjectBase(module.getType())
+  const base = getBaseTypes(declaration.getType()).find((t) =>
+    isDirectlyHybridObject(t)
+  )
   if (base == null) {
     // this type does not extend `HybridObject`.
-    return undefined
-  }
-
-  const genericArguments = base.getTypeArguments()
-  if (genericArguments.length === 0) {
-    // it uses `HybridObject` without generic arguments. This defaults to C++
-    return { android: 'c++', ios: 'c++' }
-  }
-  const platformSpecsArgument = genericArguments[0]
-  if (platformSpecsArgument == null) {
     throw new Error(
-      `${module.getName()} does not properly extend HybridObject<T>! ${base.getText()} does not have a single generic type argument for platform spec languages!`
+      `Couldn't find HybridObject<..> base for ${declaration.getName()}! (${declaration.getText()})`
     )
   }
 
-  return getPlatformSpec(module.getName(), platformSpecsArgument)
+  const genericArguments = base.getTypeArguments()
+  const platformSpecsArgument = genericArguments[0]
+  if (platformSpecsArgument == null) {
+    // it uses `HybridObject` without generic arguments. This defaults to C++
+    return { android: 'c++', ios: 'c++' }
+  }
+
+  return getPlatformSpec(declaration.getName(), platformSpecsArgument)
+}
+
+export function getHybridViewPlatforms(
+  view: InterfaceDeclaration | TypeAliasDeclaration
+): PlatformSpec | undefined {
+  if (Node.isTypeAliasDeclaration(view)) {
+    const hybridViewTypeNode = view.getTypeNode()
+
+    const isHybridViewType =
+      Node.isTypeReference(hybridViewTypeNode) &&
+      hybridViewTypeNode.getTypeName().getText() === 'HybridView'
+
+    if (!isHybridViewType) {
+      return
+    }
+
+    const genericArguments = hybridViewTypeNode.getTypeArguments()
+
+    const platformSpecArg = genericArguments[2]
+    if (platformSpecArg != null) {
+      return getPlatformSpec(view.getName(), platformSpecArg.getType())
+    }
+  }
+
+  // it uses `HybridObject` without generic arguments. This defaults to platform native languages
+  return { ios: 'swift', android: 'kotlin' }
 }

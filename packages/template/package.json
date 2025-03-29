@@ -1,7 +1,7 @@
 {
-  "name": "react-native-nitro-template",
+  "name": "$$packageName$$",
   "version": "0.0.1",
-  "description": "A template for Nitro Modules.",
+  "description": "$$packageDescription$$",
   "main": "lib/index",
   "module": "lib/index",
   "types": "lib/index.d.ts",
@@ -11,6 +11,7 @@
     "src",
     "react-native.config.js",
     "lib",
+    "nitrogen",
     "android/build.gradle",
     "android/gradle.properties",
     "android/CMakeLists.txt",
@@ -30,8 +31,8 @@
     "clean": "rm -rf android/build node_modules/**/android/build lib",
     "lint": "eslint \"**/*.{js,ts,tsx}\" --fix",
     "lint-ci": "eslint \"**/*.{js,ts,tsx}\" -f @jamesacarr/github-actions",
-    "typescript": "tsc --noEmit false",
-    "specs": "bun run --filter=\"**\" typescript && bun nitro-codegen --logLevel=\"debug\""
+    "typescript": "tsc",
+    "specs": "typescript && nitro-codegen --logLevel=\"debug\""
   },
   "keywords": [
     "react-native",
@@ -51,22 +52,23 @@
     "registry": "https://registry.npmjs.org/"
   },
   "devDependencies": {
-    "@react-native/eslint-config": "^0.75.2",
+    "@react-native/eslint-config": "0.78.0",
     "@types/jest": "^29.5.12",
-    "@types/react": "^18.3.4",
+    "@types/react": "^19.0.6",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",
     "nitro-codegen": "*",
     "prettier": "^3.3.3",
-    "react": "^18.3.1",
-    "react-native": "^0.75.2",
+    "react": "19.0.0",
+    "react-native": "0.78.0",
     "react-native-nitro-modules": "*",
     "typescript": "^5.5.4"
   },
   "peerDependencies": {
     "react": "*",
-    "react-native": "*"
+    "react-native": "*",
+    "react-native-nitro-modules": "*"
   },
   "eslintConfig": {
     "root": true,
@@ -74,7 +76,9 @@
       "@react-native",
       "prettier"
     ],
-    "plugins": ["prettier"],
+    "plugins": [
+      "prettier"
+    ],
     "rules": {
       "prettier/prettier": [
         "warn",

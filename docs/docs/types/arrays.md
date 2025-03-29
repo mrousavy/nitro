@@ -17,13 +17,6 @@ Arrays of items are represented with the most common, and most efficient array d
     }
     ```
   </TabItem>
-  <TabItem value="cpp" label="C++">
-    ```cpp
-    class HybridContacts : public HybridContactsSpec {
-      std::vector<User> getAllUsers();
-    }
-    ```
-  </TabItem>
   <TabItem value="swift" label="Swift">
     ```swift
     class HybridContacts: HybridContactsSpec {
@@ -35,6 +28,13 @@ Arrays of items are represented with the most common, and most efficient array d
     ```kotlin
     class HybridContacts: HybridContactsSpec() {
       fun getAllUsers(): Array<User>
+    }
+    ```
+  </TabItem>
+  <TabItem value="cpp" label="C++">
+    ```cpp
+    class HybridContacts : public HybridContactsSpec {
+      std::vector<User> getAllUsers();
     }
     ```
   </TabItem>

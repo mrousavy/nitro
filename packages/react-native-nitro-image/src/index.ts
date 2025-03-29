@@ -11,6 +11,8 @@ export * from './specs/TestObject.nitro'
 export * from './specs/Image.nitro'
 export * from './specs/ImageFactory.nitro'
 
+export * from './views/TestView'
+
 /**
  * Constructors for creating instances of `Image`.
  */

@@ -97,6 +97,12 @@ ${spaces}          public virtual ${name.HybridTSpec} {
       _javaPart(jni::make_global(jThis)) {}
 
   public:
+    ~${name.JHybridTSpec}() override {
+      // Hermes GC can destroy JS objects on a non-JNI Thread.
+      jni::ThreadScope::WithClassLoader([&] { _javaPart.reset(); });
+    }
+
+  public:
     size_t getExternalMemorySize() noexcept override;
 
   public:
@@ -136,7 +142,7 @@ ${spaces}          public virtual ${name.HybridTSpec} {
     .map((m) => getFbjniPropertyForwardImplementation(spec, m))
     .join('\n')
   const methodsImpl = methods
-    .map((m) => getFbjniMethodForwardImplementation(spec, m))
+    .map((m) => getFbjniMethodForwardImplementation(spec, m, m.name))
     .join('\n')
   const allTypes = getAllTypes(spec)
   const jniImports = allTypes
@@ -173,7 +179,7 @@ namespace ${cxxNamespace} {
   }
 
   size_t ${name.JHybridTSpec}::getExternalMemorySize() noexcept {
-    static const auto method = _javaPart->getClass()->getMethod<jlong()>("getMemorySize");
+    static const auto method = javaClassStatic()->getMethod<jlong()>("getMemorySize");
     return method(_javaPart);
   }
 
@@ -206,11 +212,19 @@ namespace ${cxxNamespace} {
 
 function getFbjniMethodForwardImplementation(
   spec: HybridObjectSpec,
-  method: Method
+  method: Method,
+  jniMethodName: string
 ): string {
   const name = getHybridObjectName(spec.name)
 
   const returnJNI = new KotlinCxxBridgedType(method.returnType)
+  const requiresBridge =
+    returnJNI.needsSpecialHandling ||
+    method.parameters.some((p) => {
+      const bridged = new KotlinCxxBridgedType(p.type)
+      return bridged.needsSpecialHandling
+    })
+  const methodName = requiresBridge ? `${jniMethodName}_cxx` : jniMethodName
 
   const returnType = returnJNI.asJniReferenceType('local')
   const paramsTypes = method.parameters
@@ -231,14 +245,14 @@ function getFbjniMethodForwardImplementation(
   if (returnJNI.hasType) {
     // return something - we need to parse it
     body = `
-static const auto method = _javaPart->getClass()->getMethod<${cxxSignature}>("${method.name}");
+static const auto method = javaClassStatic()->getMethod<${cxxSignature}>("${methodName}");
 auto __result = method(${paramsForward.join(', ')});
 return ${returnJNI.parse('__result', 'kotlin', 'c++', 'c++')};
     `
   } else {
     // void method. no return
     body = `
-static const auto method = _javaPart->getClass()->getMethod<${cxxSignature}>("${method.name}");
+static const auto method = javaClassStatic()->getMethod<${cxxSignature}>("${methodName}");
 method(${paramsForward.join(', ')});
    `
   }
@@ -256,9 +270,25 @@ function getFbjniPropertyForwardImplementation(
   spec: HybridObjectSpec,
   property: Property
 ): string {
-  const methods = property.cppMethods.map((m) =>
-    getFbjniMethodForwardImplementation(spec, m)
+  const methods: string[] = []
+
+  // getter
+  const getter = getFbjniMethodForwardImplementation(
+    spec,
+    property.cppGetter,
+    property.getGetterName('jvm')
   )
+  methods.push(getter)
+
+  if (property.cppSetter != null) {
+    // setter
+    const setter = getFbjniMethodForwardImplementation(
+      spec,
+      property.cppSetter,
+      property.getSetterName('jvm')
+    )
+    methods.push(setter)
+  }
 
   return methods.join('\n')
 }

@@ -7,16 +7,18 @@
 
 ```json
 {
-  "cxxNamespace": ["<<cxxNamespace>>"],
+  "$schema": "https://nitro.margelo.com/nitro.schema.json",
+  "cxxNamespace": ["$$cxxNamespace$$"],
   "ios": {
-    "iosModuleName": "<<iosModuleName>>"
+    "iosModuleName": "$$iosModuleName$$"
   },
   "android": {
-    "androidNamespace": ["<<androidNamespace>>"],
-    "androidCxxLibName": "<<androidCxxLibName>>"
+    "androidNamespace": ["$$androidNamespace$$"],
+    "androidCxxLibName": "$$androidCxxLibName$$"
   },
   "autolinking": {},
-  "ignorePaths": ["node_modules"]
+  "ignorePaths": ["**/node_modules"],
+  "createGitAttributes": true
 }
 ```
 
@@ -50,7 +52,7 @@ Settings specifically for the iOS platform.
 ### `iosModuleName`
 
 The `iosModuleName` represents the name of the [clang module](https://clang.llvm.org/docs/Modules.html) that will be emitted by the Swift compiler.
-When this Nitro Module is a CocoaPod, this is the same thing as the `<<iosModuleName>>.podspec`'s name:
+When this Nitro Module is a CocoaPod, this is the same thing as the `$$iosModuleName$$.podspec`'s name:
 
 <div className="side-by-side-container">
   <div className="side-by-side-block">
@@ -93,7 +95,7 @@ In most cases, you should keep this in sync with the `namespace` specified in yo
   ```
   </div>
   <div className="side-by-side-block">
-  ```kt
+  ```kotlin
   package com.margelo.nitro.image
 
   // ...
@@ -175,3 +177,7 @@ Here, the Hybrid Object "`Math`" is autolinked to create an instance of `HybridM
 Configures the TypeScript parser to ignore specific given paths when looking for `*.nitro.ts` specs.
 
 By default, this is empty (`[]`), but it can be set to ignore paths like `["node_modules", "lib"]`.
+
+## `createGitAttributes`
+
+Configures whether a `.gitattributes` file will be generated in the `nitrogen/generated/` directory to mark files as [`linguist-generated`](https://docs.github.com/en/repositories/working-with-files/managing-files/customizing-how-changed-files-appear-on-github) for GitHub.

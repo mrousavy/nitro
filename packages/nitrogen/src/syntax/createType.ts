@@ -21,11 +21,14 @@ import { VariantType } from './types/VariantType.js'
 import { MapType } from './types/MapType.js'
 import { TupleType } from './types/TupleType.js'
 import {
-  extendsHybridObject,
+  isAnyHybridSubclass,
   isDirectlyHybridObject,
+  isHybridView,
   type Language,
 } from '../getPlatformSpecs.js'
 import { HybridObjectBaseType } from './types/HybridObjectBaseType.js'
+import { ErrorType } from './types/ErrorType.js'
+import { getBaseTypes } from '../utils.js'
 
 function isSymbol(type: TSMorphType, symbolName: string): boolean {
   const symbol = type.getSymbol()
@@ -53,6 +56,20 @@ function isArrayBuffer(type: TSMorphType): boolean {
 
 function isMap(type: TSMorphType): boolean {
   return isSymbol(type, 'AnyMap')
+}
+
+function isError(type: TSMorphType): boolean {
+  return isSymbol(type, 'Error')
+}
+
+function getHybridObjectName(type: TSMorphType): string {
+  const symbol = isHybridView(type) ? type.getAliasSymbol() : type.getSymbol()
+  if (symbol == null) {
+    throw new Error(
+      `Cannot get name of \`${type.getText()}\` - symbol not found!`
+    )
+  }
+  return symbol.getEscapedName()
 }
 
 function getFunctionCallSignature(func: TSMorphType): Signature {
@@ -149,6 +166,26 @@ function getTypeId(type: TSMorphType, isOptional: boolean): string {
   return key
 }
 
+export function addKnownType(
+  key: string,
+  type: Type,
+  language: Language
+): void {
+  if (knownTypes[language].has(key)) {
+    // type is already known
+    return
+  }
+  knownTypes[language].set(key, type)
+}
+
+function isSyncFunction(type: TSMorphType): boolean {
+  if (type.getCallSignatures().length < 1)
+    // not a function.
+    return false
+  const syncTag = type.getProperty('__syncTag')
+  return syncTag != null
+}
+
 /**
  * Create a new type (or return it from cache if it is already known)
  */
@@ -211,7 +248,8 @@ export function createType(
         const isNullable = parameterType.isNullable() || p.isOptional()
         return createNamedType(language, p.getName(), parameterType, isNullable)
       })
-      return new FunctionType(returnType, parameters)
+      const isSync = isSyncFunction(type)
+      return new FunctionType(returnType, parameters, isSync)
     } else if (isPromise(type)) {
       // It's a Promise!
       const [promiseResolvingType] = getArguments(type, 'Promise', 1)
@@ -233,6 +271,9 @@ export function createType(
     } else if (isMap(type)) {
       // Map
       return new MapType()
+    } else if (isError(type)) {
+      // Error
+      return new ErrorType()
     } else if (type.isEnum()) {
       // It is an enum. We need to generate a C++ declaration for the enum
       const typename = type.getSymbolOrThrow().getEscapedName()
@@ -277,12 +318,17 @@ export function createType(
           return variants[0]!
         }
 
-        return new VariantType(variants)
+        const name = type.getAliasSymbol()?.getName()
+        return new VariantType(variants, name)
       }
-    } else if (extendsHybridObject(type, true)) {
+    } else if (isAnyHybridSubclass(type)) {
       // It is another HybridObject being referenced!
-      const typename = type.getSymbolOrThrow().getEscapedName()
-      return new HybridObjectType(typename, language)
+      const typename = getHybridObjectName(type)
+      const baseTypes = getBaseTypes(type)
+        .filter((t) => isAnyHybridSubclass(t))
+        .map((b) => createType(language, b, false))
+      const baseHybrids = baseTypes.filter((b) => b instanceof HybridObjectType)
+      return new HybridObjectType(typename, language, baseHybrids)
     } else if (isDirectlyHybridObject(type)) {
       // It is a HybridObject directly/literally. Base type
       return new HybridObjectBaseType()
@@ -311,9 +357,19 @@ export function createType(
         `String literal ${type.getText()} cannot be represented in C++ because it is ambiguous between a string and a discriminating union enum.`
       )
     } else {
-      throw new Error(
-        `The TypeScript type "${type.getText()}" cannot be represented in C++!`
-      )
+      if (type.getSymbol() == null) {
+        // There is no declaration for it!
+        // Could be an invalid import, e.g. an alias
+        throw new Error(
+          `The TypeScript type "${type.getText()}" cannot be resolved - is it imported properly? ` +
+            `Make sure to import it properly using fully specified relative or absolute imports, no aliases.`
+        )
+      } else {
+        // A different error
+        throw new Error(
+          `The TypeScript type "${type.getText()}" cannot be represented in C++!`
+        )
+      }
     }
   }
 

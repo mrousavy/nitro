@@ -29,6 +29,10 @@ const config: Config = {
     locales: ['en'],
   },
 
+  future: {
+    experimental_faster: true,
+  },
+
   presets: [
     [
       'classic',
@@ -41,6 +45,12 @@ const config: Config = {
           customCss: './src/css/custom.css',
         },
       } satisfies Preset.Options,
+    ],
+  ],
+  plugins: [
+    [
+      'vercel-analytics',
+      { },
     ],
   ],
 
@@ -95,6 +105,11 @@ const config: Config = {
           docId: 'for-users',
           position: 'right',
           label: 'Installation',
+        },
+        {
+          href: 'https://github.com/mrousavy/nitro/releases/latest',
+          label: 'Latest Release',
+          position: 'right',
         },
         {
           href: 'https://github.com/mrousavy/nitro',

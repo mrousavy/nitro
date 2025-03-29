@@ -33,7 +33,7 @@ Every method in a [Hybrid Object](hybrid-objects) can throw an error using the l
     }
     ```
   </TabItem>
-  <TabItem value="c++" label="C++">
+  <TabItem value="cpp" label="C++">
     ```cpp title="HybridMath.hpp"
     class HybridMath: public HybridMathSpec {
       double add(double a, double b) override {
@@ -87,11 +87,11 @@ Promises can also be rejected using error throwing syntax on the native side:
     }
     ```
   </TabItem>
-  <TabItem value="c++" label="C++">
+  <TabItem value="cpp" label="C++">
     ```cpp title="HybridMath.hpp"
     class HybridMath: public HybridMathSpec {
-      std::future<double> add(double a, double b) override {
-        return std::async(std::launch::async, [=]() -> double {
+      std::shared_ptr<Promise<double>> add(double a, double b) override {
+        return Promise<double>::async([=]() -> double {
           if (a < 0 || b < 0) {
             throw std::runtime_error("Value cannot be negative!");
           }
@@ -113,8 +113,3 @@ try {
   console.log(error)
 }
 ```
-
-## Swift Errors
-
-Due to a Swift compiler bug, Swift Hybrid Objects can currently not throw errors. Instead, they will raise a `fatalError(..)` which can only be seen if the app is running in Xcode (debugger).
-This should be fixed in the next Xcode version.

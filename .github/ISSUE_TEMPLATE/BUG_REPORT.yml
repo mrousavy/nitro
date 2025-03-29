@@ -18,8 +18,7 @@ body:
       render: tsx
       placeholder: >
         class HybridMath: HybridMathSpec {
-          var hybridContext = margelo.nitro.HybridContext()
-          var memorySize: Int { return 0 }
+          ...
         }
     validations:
       required: true
@@ -89,5 +88,6 @@ body:
         - label: I am using Nitrogen (nitro-codegen)
         - label: I have read and followed the [Troubleshooting Guide](https://nitro.margelo.com/docs/troubleshooting).
           required: true
+        - label: I created a reproduction PR to reproduce this issue here in the nitro repo. (See [Contributing](https://nitro.margelo.com/docs/contributing) for more information)
         - label: I searched for [similar issues in this repository](https://github.com/mrousavy/nitro/issues) and found none.
           required: true

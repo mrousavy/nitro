@@ -7,8 +7,8 @@
 
 #pragma once
 
+#include "BorrowingReference.hpp"
 #include "HybridFunction.hpp"
-#include "OwningReference.hpp"
 #include "Prototype.hpp"
 #include "PrototypeChain.hpp"
 #include <functional>
@@ -46,7 +46,7 @@ public:
 
 private:
   static jsi::Value createPrototype(jsi::Runtime& runtime, const std::shared_ptr<Prototype>& prototype);
-  using PrototypeCache = std::unordered_map<NativeInstanceId, OwningReference<jsi::Object>>;
+  using PrototypeCache = std::unordered_map<NativeInstanceId, BorrowingReference<jsi::Object>>;
   static std::unordered_map<jsi::Runtime*, PrototypeCache> _prototypeCache;
 
 protected:
@@ -79,7 +79,7 @@ protected:
    * **Do not conditionally register hybrid methods, getters or setter!**
    */
   template <typename Derived>
-  inline void registerHybrids(Derived* thisInstance, RegisterFn registerFunc) {
+  inline void registerHybrids(Derived* /* this */, RegisterFn registerFunc) {
     const std::shared_ptr<Prototype>& prototype = _prototypeChain.extendPrototype<Derived>();
 
     if (!prototype->hasHybrids()) {

@@ -16,13 +16,6 @@ An untyped map represents a JSON-like structure with a value that can either be 
     }
     ```
   </TabItem>
-  <TabItem value="cpp" label="C++">
-    ```cpp
-    class HybridFetch: public HybridFetchSpec {
-      std::shared_ptr<AnyMap> get(const std::string& url);
-    }
-    ```
-  </TabItem>
   <TabItem value="swift" label="Swift">
     ```swift
     class HybridFetch: HybridFetchSpec {
@@ -34,6 +27,13 @@ An untyped map represents a JSON-like structure with a value that can either be 
     ```kotlin
     class HybridFetch: HybridFetchSpec() {
       fun get(url: String): AnyMap
+    }
+    ```
+  </TabItem>
+  <TabItem value="cpp" label="C++">
+    ```cpp
+    class HybridFetch: public HybridFetchSpec {
+      std::shared_ptr<AnyMap> get(const std::string& url);
     }
     ```
   </TabItem>

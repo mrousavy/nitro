@@ -6,7 +6,7 @@
 //
 
 #include "ArrayBuffer.hpp"
-#include "OwningReference.hpp"
+#include "BorrowingReference.hpp"
 #include <functional>
 #include <jsi/jsi.h>
 #include <thread>
@@ -17,8 +17,23 @@ using namespace facebook;
 
 // 1. ArrayBuffer
 
-std::shared_ptr<ArrayBuffer> ArrayBuffer::makeBuffer(uint8_t* data, size_t size, DeleteFn&& deleteFunc) {
+std::shared_ptr<ArrayBuffer> ArrayBuffer::wrap(uint8_t* data, size_t size, DeleteFn&& deleteFunc) {
   return std::make_shared<NativeArrayBuffer>(data, size, std::move(deleteFunc));
+}
+
+std::shared_ptr<ArrayBuffer> ArrayBuffer::copy(const uint8_t* data, size_t size) {
+  uint8_t* copy = new uint8_t[size];
+  std::memcpy(copy, data, size);
+  return ArrayBuffer::wrap(copy, size, [=]() { delete[] copy; });
+}
+
+std::shared_ptr<ArrayBuffer> ArrayBuffer::copy(const std::vector<uint8_t>& data) {
+  return ArrayBuffer::copy(data.data(), data.size());
+}
+
+std::shared_ptr<ArrayBuffer> ArrayBuffer::allocate(size_t size) {
+  uint8_t* data = new uint8_t[size];
+  return ArrayBuffer::wrap(data, size, [=]() { delete[] data; });
 }
 
 // 2. NativeArrayBuffer
@@ -46,7 +61,7 @@ bool NativeArrayBuffer::isOwner() const noexcept {
 
 // 3. JSArrayBuffer
 
-JSArrayBuffer::JSArrayBuffer(jsi::Runtime* runtime, OwningReference<jsi::ArrayBuffer> jsReference)
+JSArrayBuffer::JSArrayBuffer(jsi::Runtime& runtime, BorrowingReference<jsi::ArrayBuffer> jsReference)
     : ArrayBuffer(), _runtime(runtime), _jsReference(jsReference), _initialThreadId(std::this_thread::get_id()) {}
 
 JSArrayBuffer::~JSArrayBuffer() {}
@@ -57,13 +72,12 @@ uint8_t* JSArrayBuffer::data() {
                              "If you want to access it elsewhere, copy it first.");
   }
 
-  OwningLock<jsi::ArrayBuffer> lock = _jsReference.lock();
   if (!_jsReference) [[unlikely]] {
     // JS Part has been deleted - data is now nullptr.
     return nullptr;
   }
   // JS Part is still alive - we can assume that the jsi::Runtime is safe to access here too.
-  return _jsReference->data(*_runtime);
+  return _jsReference->data(_runtime);
 }
 
 size_t JSArrayBuffer::size() const {
@@ -72,13 +86,12 @@ size_t JSArrayBuffer::size() const {
                              "If you want to access it elsewhere, copy it first.");
   }
 
-  OwningLock<jsi::ArrayBuffer> lock = _jsReference.lock();
   if (!_jsReference) [[unlikely]] {
     // JS Part has been deleted - size is now 0.
     return 0;
   }
   // JS Part is still alive - we can assume that the jsi::Runtime is safe to access here too.
-  return _jsReference->size(*_runtime);
+  return _jsReference->size(_runtime);
 }
 
 bool JSArrayBuffer::isOwner() const noexcept {

@@ -1,6 +1,6 @@
 //
 //  HybridObjectRegistry.hpp
-//  DoubleConversion
+//  react-native-nitro
 //
 //  Created by Marc Rousavy on 22.07.24.
 //
@@ -44,6 +44,7 @@ public:
 
 private:
   static std::unordered_map<std::string, HybridObjectConstructorFn>& getRegistry();
+  static std::string getAllRegisteredHybridObjectNamesToString();
 
 private:
   static constexpr auto TAG = "HybridObjectRegistry";

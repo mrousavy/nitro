@@ -33,6 +33,12 @@ export interface NitroModulesProxy extends HybridObject {
    * preprocessor flag.
    */
   buildType: 'debug' | 'release'
+  /**
+   * Gets the native Nitro Modules core runtime version that this app is built with.
+   * This should be kept in sync with the JS version (package.json), otherwise it could
+   * introduce undefined behaviour.
+   */
+  version: string
 
   /**
    * Boxes the given {@linkcode hybridObject} into a {@linkcode BoxedHybridObject<T>}, which can
@@ -58,4 +64,17 @@ export interface NitroModulesProxy extends HybridObject {
    * ```
    */
   box<T extends HybridObject>(obj: T): BoxedHybridObject<T>
+
+  /**
+   * Returns whether the given {@linkcode object} has NativeState or not.
+   */
+  hasNativeState(object: unknown): boolean
+
+  /**
+   * Re-calculates `memorySize` of the given {@linkcode HybridObject} and notifies
+   * the JS VM about the newly updated memory footprint.
+   *
+   * This is achieved by just doing a round-trip from JS -> native -> JS.
+   */
+  updateMemorySize(obj: HybridObject): HybridObject
 }

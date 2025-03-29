@@ -50,7 +50,7 @@ namespace margelo::nitro {
 
   // C++ ${typename} <> JS ${typename} (enum)
   template <>
-  struct JSIConverter<${typename}> {
+  struct JSIConverter<${typename}> final {
     static inline ${typename} fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       int enumValue = JSIConverter<int>::fromJSI(runtime, arg);
       return static_cast<${typename}>(enumValue);
@@ -59,7 +59,7 @@ namespace margelo::nitro {
       int enumValue = static_cast<int>(arg);
       return JSIConverter<int>::toJSI(runtime, enumValue);
     }
-    static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
+    static inline bool canConvert(jsi::Runtime&, const jsi::Value& value) {
       if (!value.isNumber()) {
         return false;
       }

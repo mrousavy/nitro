@@ -18,7 +18,7 @@ import { getKotlinBoxedPrimitiveType } from './KotlinBoxedPrimitive.js'
 import { createKotlinEnum } from './KotlinEnum.js'
 import { createKotlinFunction } from './KotlinFunction.js'
 import { createKotlinStruct } from './KotlinStruct.js'
-import { createKotlinVariant, getVariantName } from './KotlinVariant.js'
+import { createKotlinVariant } from './KotlinVariant.js'
 
 export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
   readonly type: Type
@@ -37,9 +37,24 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
 
   get needsSpecialHandling(): boolean {
     switch (this.type.kind) {
+      case 'function':
+        // Function needs to be converted from JFunc_... to Lambda
+        return true
       default:
-        return false
+        break
     }
+    // check if any types this type references (e.g. underlying optional, array element, ...)
+    // needs special handling. if yes, we need it as well
+    const referencedTypes = getReferencedTypes(this.type)
+      .filter((t) => t !== this.type)
+      .map((t) => new KotlinCxxBridgedType(t))
+    for (const type of referencedTypes) {
+      if (type.needsSpecialHandling) {
+        return true
+      }
+    }
+    // no special handling needed
+    return false
   }
 
   getRequiredImports(): SourceImport[] {
@@ -76,6 +91,11 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
           name: 'NitroModules/JArrayBuffer.hpp',
           space: 'system',
         })
+        imports.push({
+          language: 'c++',
+          name: 'NitroModules/JUnit.hpp',
+          space: 'system',
+        })
         break
       case 'promise':
         imports.push({
@@ -93,7 +113,7 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
         break
       case 'variant':
         const variantType = getTypeAs(this.type, VariantType)
-        const variantName = getVariantName(variantType)
+        const variantName = variantType.getAliasName('kotlin')
         imports.push({
           language: 'c++',
           name: `J${variantName}.hpp`,
@@ -199,9 +219,10 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
           return this.type.getCode(language)
         }
       case 'array':
+        const array = getTypeAs(this.type, ArrayType)
+        const bridgedItem = new KotlinCxxBridgedType(array.itemType)
         switch (language) {
           case 'c++':
-            const array = getTypeAs(this.type, ArrayType)
             switch (array.itemType.kind) {
               case 'number':
                 return 'jni::JArrayDouble'
@@ -210,9 +231,10 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
               case 'bigint':
                 return 'jni::JArrayLong'
               default:
-                const bridged = new KotlinCxxBridgedType(array.itemType)
-                return `jni::JArrayClass<${bridged.getTypeCode(language)}>`
+                return `jni::JArrayClass<${bridgedItem.getTypeCode(language)}>`
             }
+          case 'kotlin':
+            return `Array<${bridgedItem.getTypeCode(language)}>`
           default:
             return this.type.getCode(language)
         }
@@ -283,7 +305,7 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
         }
       case 'variant': {
         const variant = getTypeAs(this.type, VariantType)
-        const name = getVariantName(variant)
+        const name = variant.getAliasName('kotlin')
         switch (language) {
           case 'c++':
             return `J${name}`
@@ -308,9 +330,12 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
             return this.type.getCode(language)
         }
       case 'optional': {
+        const optional = getTypeAs(this.type, OptionalType)
+        const bridgedWrappingType = new KotlinCxxBridgedType(
+          optional.wrappingType
+        )
         switch (language) {
           case 'c++':
-            const optional = getTypeAs(this.type, OptionalType)
             switch (optional.wrappingType.kind) {
               // primitives need to be boxed to make them nullable
               case 'number':
@@ -320,13 +345,21 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
                 return boxed
               default:
                 // all other types can be nullable as they are objects.
-                const bridge = new KotlinCxxBridgedType(optional.wrappingType)
-                return bridge.getTypeCode('c++')
+                return bridgedWrappingType.getTypeCode('c++')
             }
+          case 'kotlin':
+            return `${bridgedWrappingType.getTypeCode(language)}?`
           default:
             return this.type.getCode(language)
         }
       }
+      case 'error':
+        switch (language) {
+          case 'c++':
+            return 'jni::JThrowable'
+          default:
+            return this.type.getCode(language)
+        }
       default:
         return this.type.getCode(language)
     }
@@ -388,7 +421,7 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
         switch (language) {
           case 'c++':
             const variant = getTypeAs(this.type, VariantType)
-            const name = getVariantName(variant)
+            const name = variant.getAliasName('kotlin')
             return `J${name}::fromCpp(${parameterName})`
           default:
             return parameterName
@@ -407,9 +440,9 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
         switch (language) {
           case 'c++':
             const func = getTypeAs(this.type, FunctionType)
-            return `J${func.specializationName}::fromCpp(${parameterName})`
+            return `J${func.specializationName}_cxx::fromCpp(${parameterName})`
           case 'kotlin':
-            return `${parameterName}.toLambda()`
+            return parameterName
           default:
             return parameterName
         }
@@ -430,6 +463,12 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
         switch (language) {
           case 'c++':
             return `${parameterName}.has_value() ? ${bridge.parseFromCppToKotlin(`${parameterName}.value()`, 'c++', true)} : nullptr`
+          case 'kotlin':
+            if (bridge.needsSpecialHandling) {
+              return `${parameterName}?.let { ${bridge.parseFromCppToKotlin('it', language, isBoxed)} }`
+            } else {
+              return parameterName
+            }
           default:
             return parameterName
         }
@@ -461,10 +500,11 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
               '__entry.second',
               'c++'
             )
-            const javaMapType = `jni::JHashMap<${key.getTypeCode('c++')}, ${value.getTypeCode('c++')}>`
+            const javaMapType = `jni::JMap<${key.getTypeCode('c++')}, ${value.getTypeCode('c++')}>`
+            const javaHashMapType = `jni::JHashMap<${key.getTypeCode('c++')}, ${value.getTypeCode('c++')}>`
             return `
-[&]() {
-  auto __map = ${javaMapType}::create(${parameterName}.size());
+[&]() -> jni::local_ref<${javaMapType}> {
+  auto __map = ${javaHashMapType}::create(${parameterName}.size());
   for (const auto& __entry : ${parameterName}) {
     __map->put(${indent(parseKey, '    ')}, ${indent(parseValue, '    ')});
   }
@@ -476,11 +516,11 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
         }
       }
       case 'array': {
+        const array = getTypeAs(this.type, ArrayType)
+        const arrayType = this.getTypeCode('c++')
+        const bridge = new KotlinCxxBridgedType(array.itemType)
         switch (language) {
           case 'c++': {
-            const array = getTypeAs(this.type, ArrayType)
-            const arrayType = this.getTypeCode('c++')
-            const bridge = new KotlinCxxBridgedType(array.itemType)
             switch (array.itemType.kind) {
               case 'number':
               case 'boolean':
@@ -504,7 +544,7 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
   jni::local_ref<${arrayType}> __array = ${arrayType}::newArray(__size);
   for (size_t __i = 0; __i < __size; __i++) {
     const auto& __element = ${parameterName}[__i];
-    __array->setElement(__i, *${bridge.parseFromCppToKotlin('__element', 'c++')});
+    __array->setElement(__i, *${indent(bridge.parseFromCppToKotlin('__element', 'c++'), '    ')});
   }
   return __array;
 }()
@@ -512,10 +552,67 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
               }
             }
           }
+          case 'kotlin':
+            if (bridge.needsSpecialHandling) {
+              return `${parameterName}.map { ${bridge.parseFromCppToKotlin('it', language, isBoxed)} }`
+            } else {
+              return parameterName
+            }
           default:
             return parameterName
         }
       }
+      case 'promise': {
+        switch (language) {
+          case 'c++': {
+            const promise = getTypeAs(this.type, PromiseType)
+            const resolvingType = promise.resultingType.getCode('c++')
+            const bridge = new KotlinCxxBridgedType(promise.resultingType)
+            if (promise.resultingType.kind === 'void') {
+              // void: resolve()
+              return `
+[&]() {
+  jni::local_ref<JPromise::javaobject> __localPromise = JPromise::create();
+  jni::global_ref<JPromise::javaobject> __promise = jni::make_global(__localPromise);
+  ${parameterName}->addOnResolvedListener([=]() {
+    __promise->cthis()->resolve(JUnit::instance());
+  });
+  ${parameterName}->addOnRejectedListener([=](const std::exception_ptr& __error) {
+    auto __jniError = jni::getJavaExceptionForCppException(__error);
+    __promise->cthis()->reject(__jniError);
+  });
+  return __localPromise;
+}()
+`.trim()
+            } else {
+              // T: resolve(T)
+              return `
+[&]() {
+  jni::local_ref<JPromise::javaobject> __localPromise = JPromise::create();
+  jni::global_ref<JPromise::javaobject> __promise = jni::make_global(__localPromise);
+  ${parameterName}->addOnResolvedListener([=](const ${resolvingType}& __result) {
+    __promise->cthis()->resolve(${indent(bridge.parseFromCppToKotlin('__result', 'c++', true), '    ')});
+  });
+  ${parameterName}->addOnRejectedListener([=](const std::exception_ptr& __error) {
+    auto __jniError = jni::getJavaExceptionForCppException(__error);
+    __promise->cthis()->reject(__jniError);
+  });
+  return __localPromise;
+}()
+`.trim()
+            }
+          }
+          default:
+            return parameterName
+        }
+      }
+      case 'error':
+        switch (language) {
+          case 'c++':
+            return `jni::getJavaExceptionForCppException(${parameterName})`
+          default:
+            return parameterName
+        }
       default:
         // no need to parse anything, just return as is
         return parameterName
@@ -533,16 +630,19 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
       case 'bigint':
         switch (language) {
           case 'c++':
+            let code: string
             if (isBoxed) {
               // unbox an object (JDouble) to a primitive (double)
-              return `${parameterName}->value()`
+              code = `${parameterName}->value()`
             } else {
-              if (this.type.kind === 'boolean') {
-                // jboolean =/= bool (it's a char in Java)
-                return `static_cast<bool>(${parameterName})`
-              }
-              return parameterName
+              // it's just the primitive type directly
+              code = parameterName
             }
+            if (this.type.kind === 'boolean') {
+              // jboolean =/= bool (it's a char in Java)
+              code = `static_cast<bool>(${code})`
+            }
+            return code
           default:
             return parameterName
         }
@@ -554,8 +654,7 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
             return parameterName
         }
       case 'struct':
-      case 'enum':
-      case 'function': {
+      case 'enum': {
         switch (language) {
           case 'c++':
             return `${parameterName}->toCpp()`
@@ -592,6 +691,44 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
               true
             )
             return `${parameterName} != nullptr ? std::make_optional(${parsed}) : std::nullopt`
+          case 'kotlin':
+            if (bridge.needsSpecialHandling) {
+              return `${parameterName}?.let { ${bridge.parseFromKotlinToCpp('it', language, isBoxed)} }`
+            } else {
+              return parameterName
+            }
+          default:
+            return parameterName
+        }
+      }
+      case 'function': {
+        const functionType = getTypeAs(this.type, FunctionType)
+        switch (language) {
+          case 'c++': {
+            const returnType = functionType.returnType.getCode('c++')
+            const params = functionType.parameters.map(
+              (p) => `${p.getCode('c++')} ${p.escapedName}`
+            )
+            const paramsForward = functionType.parameters.map(
+              (p) => p.escapedName
+            )
+            const jniType = `J${functionType.specializationName}_cxx`
+            return `
+[&]() -> ${functionType.getCode('c++')} {
+  if (${parameterName}->isInstanceOf(${jniType}::javaClassStatic())) [[likely]] {
+    auto downcast = jni::static_ref_cast<${jniType}::javaobject>(${parameterName});
+    return downcast->cthis()->getFunction();
+  } else {
+    return [${parameterName}](${params.join(', ')}) -> ${returnType} {
+      return ${parameterName}->invoke(${paramsForward});
+    };
+  }
+}()
+            `.trim()
+          }
+          case 'kotlin': {
+            return `${functionType.specializationName}_java(${parameterName})`
+          }
           default:
             return parameterName
         }
@@ -653,8 +790,7 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
                 return `
 [&]() {
   size_t __size = ${parameterName}->size();
-  std::vector<${itemType}> __vector;
-  __vector.reserve(__size);
+  std::vector<${itemType}> __vector(__size);
   ${parameterName}->getRegion(0, __size, __vector.data());
   return __vector;
 }()
@@ -693,31 +829,38 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
               // it's a Promise<T>
               resolveBody = `
 auto __result = jni::static_ref_cast<${resultingType.getTypeCode('c++', true)}>(__boxedResult);
-__promise->set_value(${resultingType.parseFromKotlinToCpp('__result', 'c++', true)});
+__promise->resolve(${resultingType.parseFromKotlinToCpp('__result', 'c++', true)});
           `.trim()
             } else {
               // it's a Promise<void>
               resolveBody = `
-__promise->set_value();
+__promise->resolve();
           `.trim()
             }
             return `
 [&]() {
-  auto __promise = std::make_shared<std::promise<${actualCppType}>>();
-  ${parameterName}->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
+  auto __promise = Promise<${actualCppType}>::create();
+  ${parameterName}->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& ${resultingType.hasType ? '__boxedResult' : '/* unit */'}) {
     ${indent(resolveBody, '    ')}
   });
-  ${parameterName}->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JString>& __message) {
-    std::runtime_error __error(__message->toStdString());
-    __promise->set_exception(std::make_exception_ptr(__error));
+  ${parameterName}->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {
+    jni::JniException __jniError(__throwable);
+    __promise->reject(std::make_exception_ptr(__jniError));
   });
-  return __promise->get_future();
+  return __promise;
 }()
         `.trim()
           default:
             return parameterName
         }
       }
+      case 'error':
+        switch (language) {
+          case 'c++':
+            return `jni::JniException(${parameterName})`
+          default:
+            return parameterName
+        }
       default:
         // no need to parse anything, just return as is
         return parameterName

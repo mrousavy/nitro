@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 CPP_DIRS=(
   # react-native-nitro-modules
   "packages/react-native-nitro-modules/android/src/main/cpp"

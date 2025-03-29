@@ -34,15 +34,15 @@ public:
    * Called when no more references to the given `HybridObject` exist in both C++ and JS.
    * JS might keep references for longer, as it is a garbage collected language.
    */
-  virtual ~HybridObject();
+  ~HybridObject() override = default;
   /**
    * HybridObjects cannot be copied.
    */
-  HybridObject(const HybridObject& copy) = default;
+  HybridObject(const HybridObject& copy) = delete;
   /**
    * HybridObjects cannot be moved.
    */
-  HybridObject(HybridObject&& move) = default;
+  HybridObject(HybridObject&& move) = delete;
   /**
    * HybridObjects cannot be default-constructed!
    */
@@ -80,7 +80,7 @@ public:
    * While two `jsi::Object`s of the same `HybridObject` might not be equal when compared with `==`,
    * they might still be the same `HybridObject` - in this case `equals(other)` will return true.
    */
-  bool equals(std::shared_ptr<HybridObject> other);
+  bool equals(const std::shared_ptr<HybridObject>& other);
   /**
    * Get a string representation of this `HybridObject` - useful for logging or debugging.
    */
@@ -136,7 +136,7 @@ protected:
 private:
   static constexpr auto TAG = "HybridObject";
   const char* _name = TAG;
-  std::unordered_map<jsi::Runtime*, OwningReference<jsi::WeakObject>> _objectCache;
+  std::unordered_map<jsi::Runtime*, BorrowingReference<jsi::WeakObject>> _objectCache;
 };
 
 } // namespace margelo::nitro

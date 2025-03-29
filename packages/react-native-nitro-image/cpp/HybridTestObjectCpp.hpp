@@ -29,6 +29,8 @@ private:
   std::optional<std::vector<std::string>> _optionalArray;
   std::optional<std::shared_ptr<HybridTestObjectCppSpec>> _optionalHybrid;
   std::optional<Powertrain> _optionalEnum;
+  std::optional<OldEnum> _optionalOldEnum;
+  std::optional<std::function<void(double)>> _optionalCallback;
 
 private:
   static inline uint64_t calculateFibonacci(int count) noexcept {
@@ -60,6 +62,7 @@ public:
   void setOptionalArray(const std::optional<std::vector<std::string>>& optionalArray) override;
   std::variant<std::string, double> getSomeVariant() override;
   void setSomeVariant(const std::variant<std::string, double>& variant) override;
+  std::variant<std::string, Car> passNamedVariant(const std::variant<std::string, Car>& variant) override;
   std::tuple<double, std::string> getSomeTuple() override;
   void setSomeTuple(const std::tuple<double, std::string>& tuple) override;
   std::shared_ptr<HybridTestObjectCppSpec> getThisObject() override;
@@ -67,6 +70,10 @@ public:
   void setOptionalHybrid(const std::optional<std::shared_ptr<HybridTestObjectCppSpec>>& optionalHybrid) override;
   std::optional<Powertrain> getOptionalEnum() override;
   void setOptionalEnum(std::optional<Powertrain> optionalEnum) override;
+  std::optional<OldEnum> getOptionalOldEnum() override;
+  void setOptionalOldEnum(std::optional<OldEnum> optionalOldEnum) override;
+  std::optional<std::function<void(double)>> getOptionalCallback() override;
+  void setOptionalCallback(const std::optional<std::function<void(double)>>& callback) override;
 
 public:
   // Methods
@@ -77,6 +84,8 @@ public:
   std::shared_ptr<AnyMap> createMap() override;
   std::shared_ptr<AnyMap> mapRoundtrip(const std::shared_ptr<AnyMap>& map) override;
   double funcThatThrows() override;
+  std::shared_ptr<Promise<void>> funcThatThrowsBeforePromise() override;
+  void throwError(const std::exception_ptr& error) override;
   std::string tryOptionalParams(double num, bool boo, const std::optional<std::string>& str) override;
   std::string tryMiddleParam(double num, std::optional<bool> boo, const std::string& str) override;
   std::optional<Powertrain> tryOptionalEnum(std::optional<Powertrain> value) override;
@@ -99,21 +108,39 @@ public:
 
   std::tuple<double, double, double> flip(const std::tuple<double, double, double>& tuple) override;
   std::tuple<double, std::string, bool> passTuple(const std::tuple<double, std::string, bool>& tuple) override;
+  std::unordered_map<std::string, std::variant<double, bool>>
+  bounceMap(const std::unordered_map<std::string, std::variant<double, bool>>& map) override;
+  std::unordered_map<std::string, std::string> extractMap(const MapWrapper& mapWrapper) override;
   int64_t calculateFibonacciSync(double value) override;
-  std::future<int64_t> calculateFibonacciAsync(double value) override;
-  std::future<void> wait(double seconds) override;
+  std::shared_ptr<Promise<int64_t>> calculateFibonacciAsync(double value) override;
+  std::shared_ptr<Promise<void>> wait(double seconds) override;
   void callCallback(const std::function<void()>& callback) override;
   void callWithOptional(std::optional<double> value, const std::function<void(std::optional<double> /* maybe */)>& callback) override;
-  std::future<double> getValueFromJSCallbackAndWait(const std::function<std::future<double>()>& getValue) override;
+  std::shared_ptr<Promise<double>>
+  getValueFromJSCallbackAndWait(const std::function<std::shared_ptr<Promise<double>>()>& getValue) override;
   void callAll(const std::function<void()>& first, const std::function<void()>& second, const std::function<void()>& third) override;
-  std::future<void> getValueFromJsCallback(const std::function<std::future<std::string>()>& callback,
-                                           const std::function<void(const std::string& /* valueFromJs */)>& andThenCall) override;
+  std::shared_ptr<Promise<double>> callSumUpNTimes(const std::function<std::shared_ptr<Promise<double>>()>& callback, double n) override;
+  std::shared_ptr<Promise<double>>
+  callbackAsyncPromise(const std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<double>>>>()>& callback) override;
+  std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>> callbackAsyncPromiseBuffer(
+      const std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>>>()>& callback) override;
+  std::function<void(double)> getComplexCallback() override;
+
+  std::shared_ptr<Promise<void>>
+  getValueFromJsCallback(const std::function<std::shared_ptr<Promise<std::string>>()>& callback,
+                         const std::function<void(const std::string& /* valueFromJs */)>& andThenCall) override;
+  std::shared_ptr<Promise<double>> awaitAndGetPromise(const std::shared_ptr<Promise<double>>& promise) override;
+  std::shared_ptr<Promise<Car>> awaitAndGetComplexPromise(const std::shared_ptr<Promise<Car>>& promise) override;
+  std::shared_ptr<Promise<void>> awaitPromise(const std::shared_ptr<Promise<void>>& promise) override;
+  std::shared_ptr<Promise<void>> promiseThrows() override;
   Car getCar() override;
   bool isCarElectric(const Car& car) override;
   std::optional<Person> getDriver(const Car& car) override;
+  void jsStyleObjectAsParameters(const JsStyleStruct& params) override;
   std::shared_ptr<ArrayBuffer> createArrayBuffer() override;
   double getBufferLastItem(const std::shared_ptr<ArrayBuffer>& buffer) override;
   void setAllValuesTo(const std::shared_ptr<ArrayBuffer>& buffer, double value) override;
+  std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>> createArrayBufferAsync() override;
   std::shared_ptr<HybridTestObjectCppSpec> newTestObject() override;
 
   std::shared_ptr<HybridBaseSpec> createBase() override;
@@ -123,6 +150,9 @@ public:
   std::shared_ptr<HybridBaseSpec> bounceBase(const std::shared_ptr<HybridBaseSpec>& base) override;
   std::shared_ptr<HybridBaseSpec> bounceChildBase(const std::shared_ptr<HybridChildSpec>& child) override;
   std::shared_ptr<HybridChildSpec> castBase(const std::shared_ptr<HybridBaseSpec>& base) override;
+
+  bool getIsViewBlue(const std::shared_ptr<HybridTestViewSpec>& view) override;
+  double callbackSync(const std::function<double()>& callback) override;
 
   // Raw JSI functions
   jsi::Value rawJsiFunc(jsi::Runtime& runtime, const jsi::Value& thisValue, const jsi::Value* args, size_t count);

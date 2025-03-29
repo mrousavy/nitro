@@ -33,20 +33,18 @@ export function createJNIHybridObjectRegistration({
         language: 'c++',
         space: 'system',
       },
+      {
+        name: 'NitroModules/DefaultConstructableObject.hpp',
+        language: 'c++',
+        space: 'system',
+      },
     ],
     cppCode: `
 HybridObjectRegistry::registerHybridObjectConstructor(
   "${hybridObjectName}",
   []() -> std::shared_ptr<HybridObject> {
-    static auto javaClass = jni::findClassStatic("${jniNamespace}");
-    static auto defaultConstructor = javaClass->getConstructor<${JHybridTSpec}::javaobject()>();
-
-    auto instance = javaClass->newObject(defaultConstructor);
-#ifdef NITRO_DEBUG
-    if (instance == nullptr) [[unlikely]] {
-      throw std::runtime_error("Failed to create an instance of \\"${JHybridTSpec}\\" - the constructor returned null!");
-    }
-#endif
+    static DefaultConstructableObject<${JHybridTSpec}::javaobject> object("${jniNamespace}");
+    auto instance = object.create();
     auto globalRef = jni::make_global(instance);
     return JNISharedPtr::make_shared_from_jni<${JHybridTSpec}>(globalRef);
   }

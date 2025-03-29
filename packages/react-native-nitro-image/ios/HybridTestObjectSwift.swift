@@ -9,14 +9,9 @@ import Foundation
 import NitroModules
 
 class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
-  var hybridContext: margelo.nitro.HybridContext = .init()
-  var memorySize: Int {
-    return 0
-  }
-
   var optionalArray: [String]? = []
 
-  var someVariant: Variant_String_Double = .someDouble(55)
+  var someVariant: Variant_String_Double = .second(55)
 
   var numberValue: Double = 0.0
 
@@ -35,6 +30,10 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
   var optionalHybrid: (any HybridTestObjectSwiftKotlinSpec)? = nil
 
   var optionalEnum: Powertrain? = nil
+
+  var optionalOldEnum: OldEnum? = nil
+
+  var optionalCallback: ((Double) -> Void)? = nil
 
   func simpleFunc() throws {
     // do nothing
@@ -58,6 +57,51 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
 
   func callWithOptional(value: Double?, callback: @escaping ((_ maybe: Double?) -> Void)) throws -> Void {
     callback(value)
+  }
+
+  func getValueFromJSCallbackAndWait(getValue: @escaping (() -> Promise<Double>)) throws -> Promise<Double> {
+    return .async {
+      let jsResult = try await getValue().await()
+      return jsResult
+    }
+  }
+
+  func getValueFromJsCallback(callback: @escaping (() -> Promise<String>), andThenCall: @escaping ((_ valueFromJs: String) -> Void)) throws -> Promise<Void> {
+    return .async {
+      let jsResult = try await callback().await()
+      andThenCall(jsResult)
+    }
+  }
+
+  func callSumUpNTimes(callback: @escaping (() -> Promise<Double>), n: Double) throws -> Promise<Double> {
+    var result = 0.0
+    return Promise.async {
+      for _ in 1...Int(n) {
+        let current = try await callback().await()
+        result += current
+      }
+      return result
+    }
+  }
+
+  func callbackAsyncPromise(callback: @escaping (() -> Promise<Promise<Double>>)) throws -> Promise<Double> {
+    return Promise.async {
+      let promise = try await callback().await()
+      let result = try await promise.await()
+      return result
+    }
+  }
+
+  func callbackAsyncPromiseBuffer(callback: @escaping (() -> Promise<Promise<ArrayBufferHolder>>)) throws -> Promise<ArrayBufferHolder> {
+    return Promise.async {
+      let promise = try await callback().await()
+      let result = try await promise.await()
+      return result
+    }
+  }
+
+  func getComplexCallback() throws -> (Double) -> Void {
+    return { value in print("Callback called with \(value).") }
   }
 
   func bounceStrings(array: [String]) throws -> [String] {
@@ -113,9 +157,15 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
   }
 
   func funcThatThrows() throws -> Double {
-    // TODO: Swift functions can not throw yet! Errors are not propagated up to C++.
-    // throw RuntimeError.error(withMessage: "This function will only work after sacrificing seven lambs!")
-    return 55
+    throw RuntimeError.error(withMessage: "This function will only work after sacrificing seven lambs!")
+  }
+
+  func funcThatThrowsBeforePromise() throws -> Promise<Void> {
+    throw RuntimeError.error(withMessage: "This function will only work after sacrificing eight lambs!")
+  }
+
+  func throwError(error: Error) throws -> Void {
+    throw error
   }
 
   func tryOptionalParams(num: Double, boo: Bool, str: String?) throws -> String {
@@ -132,6 +182,41 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
 
   func tryOptionalEnum(value: Powertrain?) throws -> Powertrain? {
     return value
+  }
+
+  func bounceMap(map: Dictionary<String, Variant_Double_Bool>) throws -> Dictionary<String, Variant_Double_Bool> {
+    return map
+  }
+
+  func extractMap(mapWrapper: MapWrapper) throws -> Dictionary<String, String> {
+    return mapWrapper.map
+  }
+  
+  func getVariantHybrid(variant: Variant_Person__any_HybridTestObjectSwiftKotlinSpec_) throws -> Variant_Person__any_HybridTestObjectSwiftKotlinSpec_ {
+    return variant
+  }
+  
+  func passVariant(either: Variant_String_Double_Bool__Double___String_) throws -> Variant_String_Double {
+    switch either {
+    case let .first(string):
+      return .first(string)
+    case let .second(double):
+      return .second(double)
+    default:
+      return .first("holds something else!")
+    }
+  }
+  
+  func getVariantEnum(variant: Variant_Bool_OldEnum) throws -> Variant_Bool_OldEnum {
+    return variant
+  }
+  
+  func getVariantObjects(variant: Variant_Car_Person) throws -> Variant_Car_Person {
+    return variant
+  }
+  
+  func passNamedVariant(variant: NamedVariant) throws -> NamedVariant {
+    return variant
   }
 
   func calculateFibonacciSync(value: Double) throws -> Int64 {
@@ -162,6 +247,30 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
     }
   }
 
+  func promiseThrows() throws -> Promise<Void> {
+    return Promise.async {
+      throw RuntimeError.error(withMessage: "Promise throws :)")
+    }
+  }
+
+  func awaitAndGetPromise(promise: Promise<Double>) throws -> Promise<Double> {
+    return .async {
+      let result = try await promise.await()
+      return result
+    }
+  }
+  func awaitAndGetComplexPromise(promise: Promise<Car>) throws -> Promise<Car> {
+    return .async {
+      let result = try await promise.await()
+      return result
+    }
+  }
+  func awaitPromise(promise: Promise<Void>) throws -> Promise<Void> {
+    return .async {
+      try await promise.await()
+    }
+  }
+
   func callAll(first: @escaping (() -> Void), second: @escaping (() -> Void), third: @escaping (() -> Void)) throws {
     first()
     second()
@@ -180,14 +289,21 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
     return car.driver
   }
 
+  func jsStyleObjectAsParameters(params: JsStyleStruct) throws -> Void {
+    params.onChanged(params.value)
+  }
+
   func createArrayBuffer() throws -> ArrayBufferHolder {
     return .allocate(size: 1024 * 1024 * 10) // 10 MB
   }
 
+  func createArrayBufferAsync() throws -> Promise<ArrayBufferHolder> {
+    return Promise.async { try self.createArrayBuffer() }
+  }
+
   func getBufferLastItem(buffer: ArrayBufferHolder) throws -> Double {
-    let lastBytePointer = buffer.data.advanced(by: buffer.size - 1)
-    let lastByte = lastBytePointer.load(as: UInt8.self)
-    return Double(lastByte)
+    let lastByte = buffer.data.advanced(by: buffer.size - 1)
+    return Double(lastByte.pointee)
   }
 
   func setAllValuesTo(buffer: ArrayBufferHolder, value: Double) throws {
@@ -223,5 +339,15 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
       throw RuntimeError.error(withMessage: "Cannot cast Base to Child!")
     }
     return child
+  }
+
+  func getIsViewBlue(view: any HybridTestViewSpec) throws -> Bool {
+    guard let view = view as? HybridTestView else { return false }
+    return view.isBlue
+  }
+
+  func callbackSync(callback: @escaping () -> Double) throws -> Double {
+    let value = callback()
+    return value
   }
 }

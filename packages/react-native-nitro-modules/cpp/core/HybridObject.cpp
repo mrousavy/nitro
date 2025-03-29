@@ -9,7 +9,6 @@
 namespace margelo::nitro {
 
 HybridObject::HybridObject(const char* name) : HybridObjectPrototype(), _name(name) {}
-HybridObject::~HybridObject() {}
 
 std::string HybridObject::toString() {
   return "[HybridObject " + std::string(_name) + "]";
@@ -19,11 +18,11 @@ std::string HybridObject::getName() {
   return _name;
 }
 
-bool HybridObject::equals(std::shared_ptr<HybridObject> other) {
+bool HybridObject::equals(const std::shared_ptr<HybridObject>& other) {
   return this == other.get();
 }
 
-jsi::Value HybridObject::disposeRaw(jsi::Runtime& runtime, const jsi::Value& thisArg, const jsi::Value* args, size_t count) {
+jsi::Value HybridObject::disposeRaw(jsi::Runtime& runtime, const jsi::Value& thisArg, const jsi::Value*, size_t) {
   // 1. Dispose any resources - this might be overridden by child classes to perform manual cleanup.
   dispose();
   // 2. Remove the NativeState from `this`
@@ -47,11 +46,15 @@ jsi::Value HybridObject::toObject(jsi::Runtime& runtime) {
   auto cachedObject = _objectCache.find(&runtime);
   if (cachedObject != _objectCache.end()) {
     // 1.1. We have a WeakObject, try to see if it is still alive
-    OwningLock<jsi::WeakObject> lock = cachedObject->second.lock();
-    jsi::Value object = cachedObject->second->lock(runtime);
-    if (!object.isUndefined()) {
-      // 1.2. It is still alive - we can use it instead of creating a new one!
-      return object;
+    if (cachedObject->second == nullptr) [[unlikely]] {
+      throw std::runtime_error("HybridObject \"" + getName() + "\" was cached, but the reference got destroyed!");
+    }
+    jsi::Value value = cachedObject->second->lock(runtime);
+    if (!value.isUndefined()) {
+      // 1.2. It is still alive - we can use it instead of creating a new one! But first, let's update memory-size
+      value.getObject(runtime).setExternalMemoryPressure(runtime, getExternalMemorySize());
+      // 1.3. Return it now
+      return value;
     }
   }
 
@@ -78,7 +81,7 @@ jsi::Value HybridObject::toObject(jsi::Runtime& runtime) {
 
   // 8. Throw a jsi::WeakObject pointing to our object into cache so subsequent calls can use it from cache
   JSICacheReference cache = JSICache::getOrCreateCache(runtime);
-  _objectCache.emplace(&runtime, cache.makeShared(jsi::WeakObject(runtime, object)));
+  _objectCache[&runtime] = cache.makeShared(jsi::WeakObject(runtime, object));
 
   // 9. Return it!
   return object;

@@ -19,8 +19,9 @@ jsi::Value BoxedHybridObject::get(jsi::Runtime& runtime, const jsi::PropNameID& 
   if (name == "unbox") {
     return jsi::Function::createFromHostFunction(
         runtime, jsi::PropNameID::forUtf8(runtime, "unbox"), 0,
-        [hybridObject = _hybridObject](jsi::Runtime& runtime, const jsi::Value& thisArg, const jsi::Value* args,
-                                       size_t count) -> jsi::Value { return hybridObject->toObject(runtime); });
+        [hybridObject = _hybridObject](jsi::Runtime& runtime, const jsi::Value&, const jsi::Value*, size_t) -> jsi::Value {
+          return hybridObject->toObject(runtime);
+        });
   }
 
   return jsi::Value::undefined();

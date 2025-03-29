@@ -3,26 +3,31 @@ import { SwiftCxxBridgedType } from './SwiftCxxBridgedType.js'
 import type { Property } from '../Property.js'
 import { indent } from '../../utils.js'
 import type { Method } from '../Method.js'
-import { createFileMetadataString, isNotDuplicate } from '../helpers.js'
+import {
+  createFileMetadataString,
+  escapeCppName,
+  isNotDuplicate,
+} from '../helpers.js'
 import type { SourceFile } from '../SourceFile.js'
 import { getHybridObjectName } from '../getHybridObjectName.js'
 import { getForwardDeclaration } from '../c++/getForwardDeclaration.js'
 import { NitroConfig } from '../../config/NitroConfig.js'
-import { includeHeader, includeNitroHeader } from '../c++/includeNitroHeader.js'
+import { includeHeader } from '../c++/includeNitroHeader.js'
 import { getUmbrellaHeaderName } from '../../autolinking/ios/createSwiftUmbrellaHeader.js'
+import { HybridObjectType } from '../types/HybridObjectType.js'
+import { addKnownType } from '../createType.js'
+import { ResultWrappingType } from '../types/ResultWrappingType.js'
 
-export const BRIDGE_NAMESPACE = NitroConfig.getCxxNamespace(
-  'swift',
-  'bridge',
-  'swift'
-)
+export function getBridgeNamespace() {
+  return NitroConfig.getCxxNamespace('swift', 'bridge', 'swift')
+}
 
 /**
  * Creates a Swift class that bridges Swift over to C++.
  * We need this because not all Swift types are accessible in C++, and vice versa.
  *
  * For example, Enums need to be converted to Int32 (because of a Swift compiler bug),
- * std::future<..> has to be converted to a Promise<..>, exceptions have to be handled
+ * Promise<..> has to be converted to a Promise<..>, exceptions have to be handled
  * via custom Result types, etc..
  */
 export function createSwiftHybridObjectCxxBridge(
@@ -31,12 +36,13 @@ export function createSwiftHybridObjectCxxBridge(
   const name = getHybridObjectName(spec.name)
   const moduleName = NitroConfig.getIosModuleName()
 
-  const propertiesBridge = spec.properties
-    .map((p) => getPropertyForwardImplementation(p))
-    .join('\n\n')
-  const methodsBridge = spec.methods
-    .map((m) => getMethodForwardImplementation(m))
-    .join('\n\n')
+  const propertiesBridge = spec.properties.map((p) =>
+    getPropertyForwardImplementation(p)
+  )
+
+  const methodsBridge = spec.methods.map((m) =>
+    getMethodForwardImplementation(m)
+  )
 
   const baseClasses = spec.baseTypes.map((base) => {
     const baseName = getHybridObjectName(base.name)
@@ -44,35 +50,70 @@ export function createSwiftHybridObjectCxxBridge(
   })
   const hasBase = baseClasses.length > 0
 
+  if (spec.isHybridView && !hasBase) {
+    methodsBridge.push(
+      `
+public final func getView() -> UnsafeMutableRawPointer {
+  return Unmanaged.passRetained(__implementation.view).toOpaque()
+}
+`.trim(),
+      `
+public final func beforeUpdate() {
+  __implementation.beforeUpdate()
+}
+  `.trim(),
+      `
+public final func afterUpdate() {
+  __implementation.afterUpdate()
+}
+`.trim()
+    )
+  }
+
+  const hybridObject = new HybridObjectType(spec)
+  const bridgedType = new SwiftCxxBridgedType(hybridObject)
+  const bridge = bridgedType.getRequiredBridge()
+  if (bridge == null) throw new Error(`HybridObject Type should have a bridge!`)
+
+  const weakifyBridge = bridge.dependencies.find((d) =>
+    d.funcName.startsWith('weakify')
+  )
+  if (weakifyBridge == null)
+    throw new Error(
+      `HybridObject ${spec.name} does not have a weakify_..() bridge!`
+    )
+
+  const cppWeakPtrName = escapeCppName(hybridObject.getCode('c++', 'weak'))
+
+  const baseGetCxxPartOverrides = spec.baseTypes.map((base) => {
+    const baseHybridObject = new HybridObjectType(base)
+    const bridgedBase = new SwiftCxxBridgedType(baseHybridObject)
+    const baseBridge = bridgedBase.getRequiredBridge()
+    if (baseBridge == null)
+      throw new Error(`HybridObject ${base.name}'s bridge cannot be null!`)
+
+    const upcastBridge = bridge.dependencies.find(
+      (b) =>
+        b.funcName.includes(escapeCppName(spec.name)) &&
+        b.funcName.includes(escapeCppName(base.name))
+    )
+    if (upcastBridge == null)
+      throw new Error(
+        `HybridObject ${spec.name}'s upcast-bridge cannot be found! ${JSON.stringify(baseBridge)}`
+      )
+
+    return `
+public override func getCxxPart() -> bridge.${baseBridge.specializationName} {
+  let ownCxxPart: bridge.${bridge.specializationName} = getCxxPart()
+  return bridge.${upcastBridge.funcName}(ownCxxPart)
+}`.trim()
+  })
+
   const swiftCxxWrapperCode = `
 ${createFileMetadataString(`${name.HybridTSpecCxx}.swift`)}
 
 import Foundation
 import NitroModules
-
-/**
- * Helper class for converting instances of \`${name.HybridTSpecCxx}\` from- and to unsafe pointers.
- * This is useful to pass Swift classes to C++, without having to strongly type the C++ function signature.
- * The actual Swift type can be included in the .cpp file, without having to forward-declare anything in .hpp.
- */
-public final class ${name.HybridTSpecCxx}Unsafe {
-  /**
-   * Casts a \`${name.HybridTSpecCxx}\` instance to a retained unsafe raw pointer.
-   * This acquires one additional strong reference on the object!
-   */
-  public static func toUnsafe(_ instance: ${name.HybridTSpecCxx}) -> UnsafeMutableRawPointer {
-    return Unmanaged.passRetained(instance).toOpaque()
-  }
-
-  /**
-   * Casts an unsafe pointer to a \`${name.HybridTSpecCxx}\`.
-   * The pointer has to be a retained opaque \`Unmanaged<${name.HybridTSpecCxx}>\`.
-   * This removes one strong reference from the object!
-   */
-  public static func fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> ${name.HybridTSpecCxx} {
-    return Unmanaged<${name.HybridTSpecCxx}>.fromOpaque(pointer).takeRetainedValue()
-  }
-}
 
 /**
  * A class implementation that bridges ${name.HybridTSpec} over to C++.
@@ -89,7 +130,7 @@ ${hasBase ? `public class ${name.HybridTSpecCxx} : ${baseClasses.join(', ')}` : 
    * from \`${moduleName}-Swift-Cxx-Bridge.hpp\`.
    * This contains specialized C++ templates, and C++ helper functions that can be accessed from Swift.
    */
-  public typealias bridge = ${BRIDGE_NAMESPACE}
+  public typealias bridge = ${getBridgeNamespace()}
 
   /**
    * Holds an instance of the \`${name.HybridTSpec}\` Swift protocol.
@@ -97,11 +138,17 @@ ${hasBase ? `public class ${name.HybridTSpecCxx} : ${baseClasses.join(', ')}` : 
   private var __implementation: any ${name.HybridTSpec}
 
   /**
+   * Holds a weak pointer to the C++ class that wraps the Swift class.
+   */
+  private var __cxxPart: bridge.${cppWeakPtrName}
+
+  /**
    * Create a new \`${name.HybridTSpecCxx}\` that wraps the given \`${name.HybridTSpec}\`.
    * All properties and methods bridge to C++ types.
    */
-  public init(_ implementation: some ${name.HybridTSpec}) {
+  public init(_ implementation: any ${name.HybridTSpec}) {
     self.__implementation = implementation
+    self.__cxxPart = .init()
     ${hasBase ? 'super.init(implementation)' : '/* no base class */'}
   }
 
@@ -114,18 +161,38 @@ ${hasBase ? `public class ${name.HybridTSpecCxx} : ${baseClasses.join(', ')}` : 
   }
 
   /**
-   * Contains a (weak) reference to the C++ HybridObject to cache it.
+   * Casts this instance to a retained unsafe raw pointer.
+   * This acquires one additional strong reference on the object!
    */
-  public ${hasBase ? 'override var' : 'var'} hybridContext: margelo.nitro.HybridContext {
-    @inline(__always)
-    get {
-      return self.__implementation.hybridContext
-    }
-    @inline(__always)
-    set {
-      self.__implementation.hybridContext = newValue
+  public ${hasBase ? 'override func' : 'func'} toUnsafe() -> UnsafeMutableRawPointer {
+    return Unmanaged.passRetained(self).toOpaque()
+  }
+
+  /**
+   * Casts an unsafe pointer to a \`${name.HybridTSpecCxx}\`.
+   * The pointer has to be a retained opaque \`Unmanaged<${name.HybridTSpecCxx}>\`.
+   * This removes one strong reference from the object!
+   */
+  public ${hasBase ? 'override class func' : 'class func'} fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> ${name.HybridTSpecCxx} {
+    return Unmanaged<${name.HybridTSpecCxx}>.fromOpaque(pointer).takeRetainedValue()
+  }
+
+  /**
+   * Gets (or creates) the C++ part of this Hybrid Object.
+   * The C++ part is a \`${bridge.cxxType}\`.
+   */
+  public func getCxxPart() -> bridge.${bridge.specializationName} {
+    let cachedCxxPart = self.__cxxPart.lock()
+    if cachedCxxPart.__convertToBool() {
+      return cachedCxxPart
+    } else {
+      let newCxxPart = bridge.${bridge.funcName}(self.toUnsafe())
+      __cxxPart = bridge.${weakifyBridge.funcName}(newCxxPart)
+      return newCxxPart
     }
   }
+
+  ${indent(baseGetCxxPartOverrides.join('\n'), '  ')}
 
   /**
    * Get the memory size of the Swift class (plus size of any other allocations)
@@ -133,14 +200,14 @@ ${hasBase ? `public class ${name.HybridTSpecCxx} : ${baseClasses.join(', ')}` : 
    */
   @inline(__always)
   public ${hasBase ? 'override var' : 'var'} memorySize: Int {
-    return self.__implementation.memorySize
+    return MemoryHelper.getSizeOf(self.__implementation) + self.__implementation.memorySize
   }
 
   // Properties
-  ${indent(propertiesBridge, '  ')}
+  ${indent(propertiesBridge.join('\n\n'), '  ')}
 
   // Methods
-  ${indent(methodsBridge, '  ')}
+  ${indent(methodsBridge.join('\n\n'), '  ')}
 }
   `
 
@@ -150,17 +217,19 @@ ${hasBase ? `public class ${name.HybridTSpecCxx} : ${baseClasses.join(', ')}` : 
       let getter: string
       let setter: string
 
+      const getterName = p.getGetterName('swift')
+      const setterName = p.getSetterName('swift')
       if (bridged.needsSpecialHandling) {
         // we need custom C++ -> Swift conversion code
         getter = `
-auto __result = _swiftPart.${p.cppGetterName}();
+auto __result = _swiftPart.${getterName}();
 return ${bridged.parseFromSwiftToCpp('__result', 'c++')};
 `
-        setter = `_swiftPart.${p.cppSetterName}(${bridged.parseFromCppToSwift(p.name, 'c++')});`
+        setter = `_swiftPart.${setterName}(${bridged.parseFromCppToSwift(p.name, 'c++')});`
       } else {
         // just forward value directly
-        getter = `return _swiftPart.${p.cppGetterName}();`
-        setter = `_swiftPart.${p.cppSetterName}(std::forward<decltype(${p.name})>(${p.name}));`
+        getter = `return _swiftPart.${getterName}();`
+        setter = `_swiftPart.${setterName}(std::forward<decltype(${p.name})>(${p.name}));`
       }
       return p.getCode(
         'c++',
@@ -187,19 +256,26 @@ return ${bridged.parseFromSwiftToCpp('__result', 'c++')};
           }
         })
         .join(', ')
-      const bridgedReturnType = new SwiftCxxBridgedType(m.returnType)
+      const bridgedReturnType = new SwiftCxxBridgedType(m.returnType, true)
       const hasResult = m.returnType.kind !== 'void'
       let body: string
       if (hasResult) {
         // func returns something
         body = `
 auto __result = _swiftPart.${m.name}(${params});
-return ${bridgedReturnType.parseFromSwiftToCpp('__result', 'c++')};
+if (__result.hasError()) [[unlikely]] {
+  std::rethrow_exception(__result.error());
+}
+auto __value = std::move(__result.value());
+return ${bridgedReturnType.parseFromSwiftToCpp('__value', 'c++')};
         `.trim()
       } else {
         // void func
         body = `
-_swiftPart.${m.name}(${params});
+auto __result = _swiftPart.${m.name}(${params});
+if (__result.hasError()) [[unlikely]] {
+  std::rethrow_exception(__result.error());
+}
         `.trim()
       }
 
@@ -261,8 +337,6 @@ ${extraForwardDeclarations.join('\n')}
 
 ${extraIncludes.join('\n')}
 
-${includeNitroHeader('HybridContext.hpp')}
-
 #include "${getUmbrellaHeaderName()}"
 
 namespace ${cxxNamespace} {
@@ -286,7 +360,9 @@ namespace ${cxxNamespace} {
 
   public:
     // Get the Swift part
-    inline ${iosModuleName}::${name.HybridTSpecCxx} getSwiftPart() noexcept { return _swiftPart; }
+    inline ${iosModuleName}::${name.HybridTSpecCxx}& getSwiftPart() noexcept {
+      return _swiftPart;
+    }
 
   public:
     // Get memory pressure
@@ -369,7 +445,7 @@ set {
   }
 
   const code = `
-public var ${property.name}: ${bridgedType.getTypeCode('swift')} {
+public final var ${property.name}: ${bridgedType.getTypeCode('swift')} {
   ${indent(body.join('\n'), '  ')}
 }
   `
@@ -377,7 +453,18 @@ public var ${property.name}: ${bridgedType.getTypeCode('swift')} {
 }
 
 function getMethodForwardImplementation(method: Method): string {
-  const returnType = new SwiftCxxBridgedType(method.returnType)
+  // wrapped return in a std::expected
+  const resultType = new ResultWrappingType(method.returnType)
+  addKnownType(`expected_${resultType.getCode('c++')}`, resultType, 'swift')
+  const bridgedResultType = new SwiftCxxBridgedType(resultType, true)
+  const resultBridge = bridgedResultType.getRequiredBridge()
+  if (resultBridge == null)
+    throw new Error(
+      `Result type (${bridgedResultType.getTypeCode('c++')}) does not have a bridge!`
+    )
+  const bridgedErrorType = new SwiftCxxBridgedType(resultType.error, true)
+
+  const returnType = new SwiftCxxBridgedType(method.returnType, true)
   const params = method.parameters.map((p) => {
     const bridgedType = new SwiftCxxBridgedType(p.type)
     return `${p.name}: ${bridgedType.getTypeCode('swift')}`
@@ -386,19 +473,28 @@ function getMethodForwardImplementation(method: Method): string {
     const bridgedType = new SwiftCxxBridgedType(p.type)
     return `${p.name}: ${bridgedType.parseFromCppToSwift(p.name, 'swift')}`
   })
-  const resultValue = returnType.hasType ? `let __result = ` : ''
-  const returnValue = returnType.hasType
-    ? `${returnType.parseFromSwiftToCpp('__result', 'swift')}`
-    : ''
+  let body: string
+  if (returnType.hasType) {
+    body = `
+let __result = try self.__implementation.${method.name}(${passParams.join(', ')})
+let __resultCpp = ${returnType.parseFromSwiftToCpp('__result', 'swift')}
+return bridge.${resultBridge.funcName}(__resultCpp)
+`.trim()
+  } else {
+    body = `
+try self.__implementation.${method.name}(${passParams.join(', ')})
+return bridge.${resultBridge.funcName}()
+`.trim()
+  }
+
   return `
 @inline(__always)
-public func ${method.name}(${params.join(', ')}) -> ${returnType.getTypeCode('swift')} {
+public final func ${method.name}(${params.join(', ')}) -> ${bridgedResultType.getTypeCode('swift')} {
   do {
-    ${resultValue}try self.__implementation.${method.name}(${indent(passParams.join(', '), '    ')})
-    return ${indent(returnValue, '    ')}
-  } catch {
-    let __message = "\\(error.localizedDescription)"
-    fatalError("Swift errors can currently not be propagated to C++! See https://github.com/swiftlang/swift/issues/75290 (Error: \\(__message))")
+    ${indent(body, '    ')}
+  } catch (let __error) {
+    let __exceptionPtr = ${indent(bridgedErrorType.parseFromSwiftToCpp('__error', 'swift'), '    ')}
+    return bridge.${resultBridge.funcName}(__exceptionPtr)
   }
 }
   `.trim()

@@ -21,13 +21,19 @@ export class State<T> {
     throw new Error(reason)
   }
 
-  didThrow(): State<T> {
+  didThrow(message?: string): State<T> {
     if (this.errorThrown == null) {
       this.onFailed(
         `Expected test to throw an error, but no error was thrown! Instead it returned a result: ${stringify(this.result)}`
       )
     } else {
-      this.onPassed()
+      if (message == null || stringify(this.errorThrown) === message) {
+        this.onPassed()
+      } else {
+        this.onFailed(
+          `Expected test to throw "${message}", but it threw a different error: "${stringify(this.errorThrown)}"`
+        )
+      }
     }
     return this
   }
@@ -68,7 +74,10 @@ export class State<T> {
   toContain(key: keyof T): State<T> {
     if (
       this.result != null &&
-      (this.result[key] != null ||
+      (Object.hasOwn(this.result, key) ||
+        this.result[key] != null ||
+        // @ts-expect-error maybe a TypeScript bug? It's an object, so it's safe
+        (typeof key === 'object' && key in this.result) ||
         Object.keys(this.result).includes(key as string))
     ) {
       this.onPassed()

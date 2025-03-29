@@ -44,7 +44,7 @@ public indirect enum AnyValue {
 /**
  * Represents an `AnyMap` that can be passed to Swift.
  */
-public class AnyMapHolder {
+public final class AnyMapHolder {
   public let cppPart: margelo.nitro.TSharedMap
 
   public init() {
@@ -54,7 +54,7 @@ public class AnyMapHolder {
   public init(withPreallocatedSize size: Int) {
     cppPart = margelo.nitro.AnyMap.make(size)
   }
-  
+
   public init(withCppPart otherCppPart: margelo.nitro.TSharedMap) {
     cppPart = otherCppPart
   }
@@ -120,7 +120,7 @@ public class AnyMapHolder {
     let value = cppPart.pointee.getString(std.string(key))
     return String(value)
   }
-  
+
   /**
    * Gets the array value at the given key.
    * If no value exists at the given key, or if it is not a double,
@@ -130,7 +130,7 @@ public class AnyMapHolder {
     let value = cppPart.pointee.getArray(std.string(key))
     return value.toSwift()
   }
-  
+
   /**
    * Gets the object value at the given key.
    * If no value exists at the given key, or if it is not a double,
@@ -177,14 +177,14 @@ public class AnyMapHolder {
   public func setString(key: String, value: String) {
     cppPart.pointee.setString(std.string(key), std.string(value))
   }
-  
+
   /**
    * Set the given key to the given array value.
    */
   public func setArray(key: String, value: [AnyValue]) {
     cppPart.pointee.setArray(std.string(key), margelo.nitro.AnyArray.create(value))
   }
-  
+
   /**
    * Set the given key to the given object value.
    */
@@ -228,14 +228,14 @@ public class AnyMapHolder {
   public func isString(key: String) -> Bool {
     return cppPart.pointee.isString(std.string(key))
   }
-  
+
   /**
    * Gets whether the given `key` is holding an array value, or not.
    */
   public func isArray(key: String) -> Bool {
     return cppPart.pointee.isArray(std.string(key))
   }
-  
+
   /**
    * Gets whether the given `key` is holding an object value, or not.
    */

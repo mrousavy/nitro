@@ -1,3 +1,5 @@
+import groovy.json.JsonSlurper
+
 buildscript {
   repositories {
     google()
@@ -5,7 +7,7 @@ buildscript {
   }
 
   dependencies {
-    classpath "com.android.tools.build:gradle:8.7.1"
+    classpath "com.android.tools.build:gradle:8.9.0"
   }
 }
 
@@ -33,7 +35,7 @@ def getExtOrIntegerDefault(name) {
   return rootProject.ext.has(name) ? rootProject.ext.get(name) : (project.properties["Nitro_" + name]).toInteger()
 }
 
-logger.warn("[NitroModules] Your app is boosted by nitro modules! 🔥")
+logger.warn("[NitroModules] 🔥 Your app is boosted by nitro modules!")
 
 android {
   namespace "com.margelo.nitro"
@@ -48,9 +50,18 @@ android {
 
     externalNativeBuild {
       cmake {
-        cppFlags "-O2 -frtti -fexceptions -Wall -fstack-protector-all"
+        cppFlags "-frtti -fexceptions -Wall -Wextra -fstack-protector-all"
         arguments "-DANDROID_STL=c++_shared"
         abiFilters (*reactNativeArchitectures())
+
+        buildTypes {
+          debug {
+            cppFlags "-O1 -g"
+          }
+          release {
+            cppFlags "-O2"
+          }
+        }
       }
     }
   }
@@ -80,6 +91,7 @@ android {
             "**/libhermes.so",
             "**/libhermes-executor-debug.so",
             "**/libhermes_executor.so",
+            "**/libreactnative.so",
             "**/libreactnativejni.so",
             "**/libturbomodulejsijni.so",
             "**/libreact_nativemodule_core.so",
@@ -144,7 +156,7 @@ if (isNewArchitectureEnabled()) {
   }
 }
 
-task prepareHeaders(type: Copy) {
+tasks.register('prepareHeaders', Copy) {
   from fileTree('./src/main/cpp').filter { it.isFile() }
   from fileTree('../cpp/').filter { it.isFile() }
   include "*.hpp"

@@ -8,6 +8,9 @@
 #ifndef NitroDefines_h
 #define NitroDefines_h
 
+// Sets the version of the native Nitro core library
+#define NITRO_VERSION "0.25.2"
+
 // Sets whether to use debug or optimized production build flags
 #ifdef DEBUG
 #define NITRO_DEBUG
@@ -28,24 +31,25 @@
 #define _CXX_INTEROP_HAS_ATTRIBUTE(x) 0
 #endif
 
-#if _CXX_INTEROP_HAS_ATTRIBUTE(swift_attr)
-// Rename Type for Swift
-#define SWIFT_NAME(_name) __attribute__((swift_name(#_name)))
-// Make Swift type private
-#define SWIFT_PRIVATE __attribute__((swift_private))
-// Make getter + setter a computed property
-#define SWIFT_COMPUTED_PROPERTY __attribute__((swift_attr("import_computed_property")))
-#else
-#define SWIFT_NAME(_name)
-#define SWIFT_PRIVATE
-#define SWIFT_COMPUTED_PROPERTY
-#endif
-
+// Closed/Final Enums
 #if _CXX_INTEROP_HAS_ATTRIBUTE(enum_extensibility)
 // Enum is marked as closed/not extensible
 #define CLOSED_ENUM __attribute__((enum_extensibility(closed)))
 #else
 #define CLOSED_ENUM
+#endif
+
+// Swift Support
+#if __has_include(<swift/bridging>)
+// Swift's bridging header defines those things
+#include <swift/bridging>
+#define SWIFT_PRIVATE __attribute__((swift_private))
+#else
+// If we don't have Swift bridging header, those macros do nothing
+#define SWIFT_NAME(_name)
+#define SWIFT_PRIVATE
+#define SWIFT_COMPUTED_PROPERTY
+#define SWIFT_NONCOPYABLE
 #endif
 
 #endif /* NitroDefines_h */

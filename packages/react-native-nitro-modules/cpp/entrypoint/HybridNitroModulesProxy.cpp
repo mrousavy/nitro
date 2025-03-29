@@ -7,6 +7,7 @@
 
 #include "HybridNitroModulesProxy.hpp"
 #include "HybridObjectRegistry.hpp"
+#include "JSIConverter.hpp"
 #include "NitroDefines.hpp"
 
 namespace margelo::nitro {
@@ -20,8 +21,12 @@ void HybridNitroModulesProxy::loadHybridMethods() {
     prototype.registerHybridMethod("getAllHybridObjectNames", &HybridNitroModulesProxy::getAllHybridObjectNames);
 
     prototype.registerHybridMethod("box", &HybridNitroModulesProxy::box);
+    prototype.registerHybridMethod("updateMemorySize", &HybridNitroModulesProxy::updateMemorySize);
+
+    prototype.registerRawHybridMethod("hasNativeState", 1, &HybridNitroModulesProxy::hasNativeState);
 
     prototype.registerHybridGetter("buildType", &HybridNitroModulesProxy::getBuildType);
+    prototype.registerHybridGetter("version", &HybridNitroModulesProxy::getVersion);
   });
 }
 
@@ -43,6 +48,19 @@ std::shared_ptr<BoxedHybridObject> HybridNitroModulesProxy::box(const std::share
   return std::make_shared<BoxedHybridObject>(hybridObject);
 }
 
+jsi::Value HybridNitroModulesProxy::hasNativeState(jsi::Runtime& runtime, const jsi::Value&, const jsi::Value* args, size_t size) {
+  if (size != 1 || !args[0].isObject()) {
+    return false;
+  }
+  return args[0].getObject(runtime).hasNativeState(runtime);
+}
+
+std::shared_ptr<HybridObject> HybridNitroModulesProxy::updateMemorySize(const std::shared_ptr<HybridObject>& hybridObject) {
+  // If a hybridObject goes from Native -> JS, it will update it's memory size internally (in `HybridObject::toObject(..)`).
+  // This is all that function does.
+  return hybridObject;
+}
+
 // Build Info
 std::string HybridNitroModulesProxy::getBuildType() {
 #ifdef NITRO_DEBUG
@@ -50,6 +68,10 @@ std::string HybridNitroModulesProxy::getBuildType() {
 #else
   return "release";
 #endif
+}
+
+std::string HybridNitroModulesProxy::getVersion() {
+  return NITRO_VERSION;
 }
 
 } // namespace margelo::nitro

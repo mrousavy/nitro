@@ -17,13 +17,6 @@ For example, a JS `number` is always a 64-bit `double` in C++, a `Double` in Swi
     }
     ```
   </TabItem>
-  <TabItem value="cpp" label="C++">
-    ```cpp
-    class HybridMath : public HybridMathSpec {
-      double add(double a, double b);
-    }
-    ```
-  </TabItem>
   <TabItem value="swift" label="Swift">
     ```swift
     class HybridMath: HybridMathSpec {
@@ -35,6 +28,13 @@ For example, a JS `number` is always a 64-bit `double` in C++, a `Double` in Swi
     ```kotlin
     class HybridMath: HybridMathSpec() {
       fun add(a: Double, b: Double): Double
+    }
+    ```
+  </TabItem>
+  <TabItem value="cpp" label="C++">
+    ```cpp
+    class HybridMath : public HybridMathSpec {
+      double add(double a, double b);
     }
     ```
   </TabItem>

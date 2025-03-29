@@ -36,13 +36,24 @@ if (NitroModules == null) {
   throw new ModuleNotFoundError(cause)
 }
 
+// Double-check native version
+if (__DEV__) {
+  const jsVersion = require('react-native-nitro-modules/package.json').version
+  if (jsVersion !== NitroModules.version) {
+    console.warn(
+      `The native Nitro Modules core runtime version is ${NitroModules.version}, but the JS code is using version ${jsVersion}. ` +
+        `This could lead to undefined behaviour! Make sure to keep your Nitro versions in sync.`
+    )
+  }
+}
+
 declare global {
   var __nitroModulesJSICache: {}
   var __nitroDispatcher: {}
 }
 
 export function isRuntimeAlive() {
-  const cache = global.__nitroModulesJSICache
-  const dispatcher = global.__nitroDispatcher
+  const cache = globalThis.__nitroModulesJSICache
+  const dispatcher = globalThis.__nitroDispatcher
   return cache != null && dispatcher != null
 }

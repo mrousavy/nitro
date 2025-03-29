@@ -31,6 +31,7 @@ export function createSwiftCxxBridge(): SourceFile[] {
       })
     })
     .filter((b) => b != null)
+    .flatMap((b) => [b, ...b?.dependencies])
     .filter(filterDuplicateHelperBridges)
   const headerHelperFunctions = bridges
     .map((b) => `// pragma MARK: ${b.cxxType}\n${b.cxxHeader.code}`)

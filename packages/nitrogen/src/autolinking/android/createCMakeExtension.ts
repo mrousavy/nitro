@@ -1,10 +1,11 @@
 import { NitroConfig } from '../../config/NitroConfig.js'
-import { indent } from '../../utils.js'
+import { indent, toLowerCamelCase, toUnixPath } from '../../utils.js'
 import {
   createFileMetadataString,
   getRelativeDirectory,
   getRelativeDirectoryGenerated,
   isCppFile,
+  isNotDuplicate,
 } from '../../syntax/helpers.js'
 import type { SourceFile } from '../../syntax/SourceFile.js'
 
@@ -12,18 +13,30 @@ export interface CMakeFile extends Omit<SourceFile, 'language'> {
   language: 'cmake'
 }
 
+export function getBuildingWithGeneratedCmakeDefinition(): string {
+  const moduleName = NitroConfig.getAndroidCxxLibName()
+  const upper = toLowerCamelCase(moduleName).toUpperCase()
+  return `BUILDING_${upper}_WITH_GENERATED_CMAKE_PROJECT`
+}
+
 export function createCMakeExtension(files: SourceFile[]): CMakeFile {
   const name = NitroConfig.getAndroidCxxLibName()
   const sharedFiles = files
     .filter((f) => f.platform === 'shared' && isCppFile(f))
     .map((f) => getRelativeDirectory(f))
+    .map((p) => toUnixPath(p))
+    .filter(isNotDuplicate)
   const androidFiles = files
     .filter((f) => f.platform === 'android' && isCppFile(f))
     .map((f) => getRelativeDirectory(f))
-  const autolinkingFile = getRelativeDirectoryGenerated(
+    .map((p) => toUnixPath(p))
+    .filter(isNotDuplicate)
+  const autolinkingFilePath = getRelativeDirectoryGenerated(
     'android',
     `${name}OnLoad.cpp`
   )
+  const autolinkingFile = toUnixPath(autolinkingFilePath)
+  const buildingWithDefinition = getBuildingWithGeneratedCmakeDefinition()
 
   const code = `
 ${createFileMetadataString(`${name}+autolinking.cmake`, '#')}
@@ -53,6 +66,25 @@ target_sources(
   ${indent(sharedFiles.join('\n'), '  ')}
   # Android-specific Nitrogen C++ sources
   ${indent(androidFiles.join('\n'), '  ')}
+)
+
+# Define a flag to check if we are building properly
+add_definitions(-D${buildingWithDefinition})
+
+# From node_modules/react-native/ReactAndroid/cmake-utils/folly-flags.cmake
+# Used in node_modules/react-native/ReactAndroid/cmake-utils/ReactNative-application.cmake
+ target_compile_definitions(
+  ${name} PRIVATE
+  -DFOLLY_NO_CONFIG=1
+  -DFOLLY_HAVE_CLOCK_GETTIME=1
+  -DFOLLY_USE_LIBCPP=1
+  -DFOLLY_CFG_NO_COROUTINES=1
+  -DFOLLY_MOBILE=1
+  -DFOLLY_HAVE_RECVMMSG=1
+  -DFOLLY_HAVE_PTHREAD=1
+  # Once we target android-23 above, we can comment
+  # the following line. NDK uses GNU style stderror_r() after API 23.
+  -DFOLLY_HAVE_XSI_STRERROR_R=1
 )
 
 # Add all libraries required by the generated specs

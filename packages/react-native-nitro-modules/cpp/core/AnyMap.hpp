@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include "NitroDefines.hpp"
 #include <map>
 #include <memory>
 #include <string>
@@ -199,6 +200,6 @@ public:
 
 private:
   std::unordered_map<std::string, AnyValue> _map;
-};
+} SWIFT_NONCOPYABLE;
 
 } // namespace margelo::nitro

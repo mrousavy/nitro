@@ -8,6 +8,7 @@
 #include "HybridObjectPrototype.hpp"
 #include "NitroDefines.hpp"
 #include "NitroLogger.hpp"
+#include "NitroTypeInfo.hpp"
 
 namespace margelo::nitro {
 
@@ -25,8 +26,11 @@ jsi::Value HybridObjectPrototype::createPrototype(jsi::Runtime& runtime, const s
   auto& prototypeCache = _prototypeCache[&runtime];
   auto cachedPrototype = prototypeCache.find(prototype->getNativeInstanceId());
   if (cachedPrototype != prototypeCache.end()) {
-    const OwningReference<jsi::Object>& cachedObject = cachedPrototype->second;
-    return jsi::Value(runtime, *cachedObject).getObject(runtime);
+    const BorrowingReference<jsi::Object>& cachedObject = cachedPrototype->second;
+    if (cachedObject != nullptr) {
+      // 1.1. Found it in cache! Copy & return it.
+      return jsi::Value(runtime, *cachedObject);
+    }
   }
 
   // 2. We didn't find the given prototype in cache (either it's a new prototype, or a new runtime),
@@ -65,19 +69,20 @@ jsi::Value HybridObjectPrototype::createPrototype(jsi::Runtime& runtime, const s
                               /* descriptorObj */ property);
   }
 
-  // 6. Throw it into our cache so the next lookup can be cached and therefore faster
-  JSICacheReference jsiCache = JSICache::getOrCreateCache(runtime);
-  OwningReference<jsi::Object> cachedObject = jsiCache.makeShared(std::move(object));
-  prototypeCache.emplace(prototype->getNativeInstanceId(), cachedObject);
-
-  // 7. In DEBUG, add a __type info to the prototype object.
+  // 6. In DEBUG, add a __type info to the prototype object.
 #ifdef NITRO_DEBUG
   auto prototypeName = "Prototype<" + typeName + ">";
-  cachedObject->setProperty(runtime, "__type", jsi::String::createFromUtf8(runtime, prototypeName));
+  object.setProperty(runtime, "__type", jsi::String::createFromUtf8(runtime, prototypeName));
 #endif
 
+  // 7. Throw it into our cache so the next lookup can be cached and therefore faster
+  JSICacheReference jsiCache = JSICache::getOrCreateCache(runtime);
+  BorrowingReference<jsi::Object> sharedObject = jsiCache.makeShared(std::move(object));
+  auto instanceId = prototype->getNativeInstanceId();
+  prototypeCache[instanceId] = sharedObject;
+
   // 8. Return it!
-  return jsi::Value(runtime, *cachedObject);
+  return jsi::Value(runtime, *sharedObject);
 }
 
 jsi::Value HybridObjectPrototype::getPrototype(jsi::Runtime& runtime) {

@@ -1,8 +1,14 @@
 import { Project } from 'ts-morph'
-import { getHybridObjectPlatforms, type Platform } from './getPlatformSpecs.js'
+import {
+  extendsHybridObject,
+  isHybridView,
+  getHybridObjectPlatforms,
+  getHybridViewPlatforms,
+  type Platform,
+} from './getPlatformSpecs.js'
 import { generatePlatformFiles } from './createPlatformSpec.js'
 import path from 'path'
-import { prettifyDirectory } from './getCurrentDir.js'
+import { prettifyDirectory } from './prettifyDirectory.js'
 import {
   capitalizeName,
   errorToString,
@@ -16,6 +22,9 @@ import { Logger } from './Logger.js'
 import { NitroConfig } from './config/NitroConfig.js'
 import { createIOSAutolinking } from './autolinking/createIOSAutolinking.js'
 import { createAndroidAutolinking } from './autolinking/createAndroidAutolinking.js'
+import type { Autolinking } from './autolinking/Autolinking.js'
+import { createGitAttributes } from './createGitAttributes.js'
+import type { PlatformSpec } from 'react-native-nitro-modules'
 
 interface NitrogenOptions {
   baseDirectory: string
@@ -45,14 +54,14 @@ export async function runNitrogen({
   })
 
   const ignorePaths = NitroConfig.getIgnorePaths()
-  const globPattern = [path.join(baseDirectory, '/**/*.nitro.ts')]
+  const globPattern = [path.join(baseDirectory, '**', '*.nitro.ts')]
   ignorePaths.forEach((ignorePath) => {
     globPattern.push('!' + path.join(baseDirectory, ignorePath))
   })
   project.addSourceFilesAtPaths(globPattern)
 
   // Loop through all source files to log them
-  console.log(
+  Logger.info(
     chalk.reset(
       `🚀  Nitrogen runs at ${chalk.underline(prettifyDirectory(baseDirectory))}`
     )
@@ -60,7 +69,7 @@ export async function runNitrogen({
   for (const dir of project.getDirectories()) {
     const specs = dir.getSourceFiles().length
     const relativePath = prettifyDirectory(dir.getPath())
-    console.log(
+    Logger.info(
       `    🔍  Nitrogen found ${specs} spec${specs === 1 ? '' : 's'} in ${chalk.underline(relativePath)}`
     )
   }
@@ -68,9 +77,9 @@ export async function runNitrogen({
   // If no source files are found, we can exit
   if (project.getSourceFiles().length === 0) {
     const searchDir = prettifyDirectory(
-      path.join(path.resolve(baseDirectory), '**/*.nitro.ts')
+      path.join(path.resolve(baseDirectory), '**', '*.nitro.ts')
     )
-    console.log(
+    Logger.error(
       `❌  Nitrogen didn't find any spec files in ${chalk.underline(searchDir)}! ` +
         `To create a Nitro Module, create a TypeScript file with the "${chalk.underline('.nitro.ts')}" suffix ` +
         'and export an interface that extends HybridObject<T>.'
@@ -78,48 +87,65 @@ export async function runNitrogen({
     process.exit()
   }
 
+  const usedPlatforms: Platform[] = []
   const filesAfter: string[] = []
   const writtenFiles: SourceFile[] = []
 
   for (const sourceFile of project.getSourceFiles()) {
-    console.log(`⏳  Parsing ${sourceFile.getBaseName()}...`)
+    Logger.info(`⏳  Parsing ${sourceFile.getBaseName()}...`)
 
     const startedWithSpecs = generatedSpecs
 
-    // Find all interfaces in the given file
-    const interfaces = sourceFile.getInterfaces()
-    for (const module of interfaces) {
-      let moduleName = '[Unknown Module]'
+    // Find all interfaceDeclarations in the given file
+    const declarations = [
+      ...sourceFile.getInterfaces(),
+      ...sourceFile.getTypeAliases(),
+    ]
+    for (const declaration of declarations) {
+      let typeName = declaration.getName()
       try {
-        // Get name of interface (= our module name)
-        moduleName = module.getName()
-
-        // Find out if it extends HybridObject
-        const platformSpec = getHybridObjectPlatforms(module)
-        if (platformSpec == null) {
-          // It does not extend HybridObject, continue..
+        let platformSpec: PlatformSpec
+        if (isHybridView(declaration.getType())) {
+          // Hybrid View Props
+          const targetPlatforms = getHybridViewPlatforms(declaration)
+          if (targetPlatforms == null) {
+            // It does not extend HybridView, continue..
+            continue
+          }
+          platformSpec = targetPlatforms
+        } else if (extendsHybridObject(declaration.getType(), true)) {
+          // Hybrid View
+          const targetPlatforms = getHybridObjectPlatforms(declaration)
+          if (targetPlatforms == null) {
+            // It does not extend HybridObject, continue..
+            continue
+          }
+          platformSpec = targetPlatforms
+        } else {
           continue
         }
 
         const platforms = Object.keys(platformSpec) as Platform[]
+
         if (platforms.length === 0) {
-          console.warn(
-            `⚠️   ${moduleName} does not declare any platforms in HybridObject<T> - nothing can be generated.`
+          Logger.warn(
+            `⚠️   ${typeName} does not declare any platforms in HybridObject<T> - nothing can be generated.`
           )
           continue
         }
 
         targetSpecs++
 
-        console.log(
-          `    ⚙️   Generating specs for HybridObject "${chalk.bold(moduleName)}"...`
+        Logger.info(
+          `    ⚙️   Generating specs for HybridObject "${chalk.bold(typeName)}"...`
         )
 
         // Create all files and throw it into a big list
         const allFiles = platforms
           .flatMap((p) => {
+            usedPlatforms.push(p)
             const language = platformSpec[p]!
-            return generatePlatformFiles(module.getType(), language)
+            return generatePlatformFiles(declaration.getType(), language)
           })
           .filter(filterDuplicateFiles)
         // Group the files by platform ({ ios: [], android: [], shared: [] })
@@ -158,9 +184,9 @@ export async function runNitrogen({
         generatedSpecs++
       } catch (error) {
         const message = indent(errorToString(error), '    ')
-        console.error(
+        Logger.error(
           chalk.redBright(
-            `        ❌  Failed to generate spec for ${moduleName}! ${message}`
+            `        ❌  Failed to generate spec for ${typeName}! ${message}`
           )
         )
         process.exitCode = 1
@@ -168,7 +194,7 @@ export async function runNitrogen({
     }
 
     if (generatedSpecs === startedWithSpecs) {
-      console.error(
+      Logger.error(
         chalk.redBright(
           `    ❌  No specs found in ${sourceFile.getBaseName()}!`
         )
@@ -178,10 +204,16 @@ export async function runNitrogen({
 
   // Autolinking
   Logger.info(`⛓️   Setting up build configs for autolinking...`)
-  const iosFiles = createIOSAutolinking()
-  const androidFiles = createAndroidAutolinking(writtenFiles)
 
-  const autolinkingFiles = [iosFiles, androidFiles]
+  const autolinkingFiles: Autolinking[] = []
+
+  if (usedPlatforms.includes('ios')) {
+    autolinkingFiles.push(createIOSAutolinking())
+  }
+  if (usedPlatforms.includes('android')) {
+    autolinkingFiles.push(createAndroidAutolinking(writtenFiles))
+  }
+
   for (const autolinking of autolinkingFiles) {
     Logger.info(
       `    Creating autolinking build setup for ${chalk.dim(autolinking.platform)}...`
@@ -194,6 +226,16 @@ export async function runNitrogen({
       )
       filesAfter.push(actualPath)
     }
+  }
+
+  try {
+    if (NitroConfig.getCreateGitAttributes()) {
+      // write a .gitattributes file
+      const file = await createGitAttributes(outputDirectory)
+      filesAfter.push(file)
+    }
+  } catch {
+    Logger.error(`❌ Failed to write ${chalk.dim(`.gitattributes`)}!`)
   }
 
   return {

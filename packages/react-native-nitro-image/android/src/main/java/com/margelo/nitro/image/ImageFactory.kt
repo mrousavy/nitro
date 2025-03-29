@@ -1,7 +1,11 @@
 package com.margelo.nitro.image
 
+import androidx.annotation.Keep
 import android.graphics.Bitmap
+import com.facebook.proguard.annotations.DoNotStrip
 
+@Keep
+@DoNotStrip
 class ImageFactory: HybridImageFactorySpec() {
     override fun loadImageFromFile(path: String): HybridImageSpec {
         return Image(Bitmap.createBitmap(1920, 1080, Bitmap.Config.ARGB_8888))

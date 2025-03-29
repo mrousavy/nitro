@@ -15,7 +15,8 @@ struct JSIConverter;
 #include "CountTrailingOptionals.hpp"
 #include "JSIConverter.hpp"
 #include "NitroDefines.hpp"
-#include "TypeInfo.hpp"
+#include "NitroTypeInfo.hpp"
+#include <exception>
 #include <functional>
 #include <jsi/jsi.h>
 #include <memory>
@@ -56,7 +57,8 @@ public:
 public:
   // functions
   inline jsi::Function toJSFunction(jsi::Runtime& runtime) const {
-    return jsi::Function::createFromHostFunction(runtime, jsi::PropNameID::forUtf8(runtime, _name), _paramCount, _function);
+    return jsi::Function::createFromHostFunction(runtime, jsi::PropNameID::forUtf8(runtime, _name), static_cast<unsigned int>(_paramCount),
+                                                 _function);
   }
 
 private:
@@ -107,6 +109,17 @@ public:
         std::string funcName = getHybridFuncFullName<THybrid>(kind, name, hybridInstance.get());
         std::string message = exception.what();
         throw jsi::JSError(runtime, funcName + ": " + message);
+#ifdef ANDROID
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wexceptions"
+        // Workaround for https://github.com/mrousavy/nitro/issues/382
+      } catch (const std::runtime_error& exception) {
+        // Some exception was thrown - add method name information and re-throw as `JSError`.
+        std::string funcName = getHybridFuncFullName<THybrid>(kind, name, hybridInstance.get());
+        std::string message = exception.what();
+        throw jsi::JSError(runtime, funcName + ": " + message);
+#pragma clang diagnostic pop
+#endif
       } catch (...) {
         // Some unknown exception was thrown - add method name information and re-throw as `JSError`.
         std::string funcName = getHybridFuncFullName<THybrid>(kind, name, hybridInstance.get());
@@ -204,7 +217,7 @@ private:
 #ifdef NITRO_DEBUG
     if (nativeState == nullptr) [[unlikely]] {
       throw jsi::JSError(runtime, "Cannot " + getHybridFuncDebugInfo<THybrid>(funcKind, funcName) +
-                                      " - `this`'s `NativeState` is `nullptr`, "
+                                      " - `this`'s `NativeState` is `null`, "
                                       "did you accidentally call `dispose()` on this object?");
     }
 #endif

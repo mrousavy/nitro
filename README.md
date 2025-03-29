@@ -14,6 +14,31 @@ It consists of two parts:
 - [**react-native-nitro-modules**](packages/react-native-nitro-modules): The core C++ library powering all nitro modules
 - [**nitrogen**](packages/nitrogen): A code-generator for nitro module library authors
 
+## Example
+
+Declaration (TypeScript):
+```ts
+export interface Math extends HybridObject {
+  add(a: number, b: number): number
+}
+```
+
+Implementation (C++, Swift or Kotlin):
+```cpp
+class HybridMath: public HybridMathSpec {
+public:
+  double add(double a, double b) override {
+    return a + b;
+  }
+}
+```
+
+Usage (TypeScript):
+```ts
+const math = NitroModules.createHybridObject<Math>('Math')
+const result = math.add(5, 3)
+```
+
 ## Installation
 
 Install [react-native-nitro-modules](https://npmjs.org/react-native-nitro-modules) from npm:
@@ -29,6 +54,7 @@ cd ios && pod install
 - [**nitrogen**/README.md](./packages/nitrogen/README.md)
 - [**react-native-nitro-modules**/README.md](./packages/react-native-nitro-modules/README.md)
 - [**react-native-nitro-image** example module](./packages/react-native-nitro-image/README.md)
+- [`TestObject.nitro.ts` example playground](./packages/react-native-nitro-image/src/specs/TestObject.nitro.ts)
 
 ## Supported Platforms
 
@@ -49,9 +75,14 @@ Thanks to Swift 5.9, Swift Nitro Modules [bridge directly to C++](https://www.sw
 Android native modules and view components can be written either in pure C++, or pure Kotlin/Java.
 Thanks to fbjni, even complex types can be effortlessly bridged to Kotlin/Java with minimal overhead! 🔥
 
+## Margelo
+
+Nitro is built with ❤️ by Margelo.
+We build fast and beautiful apps. Contact us at [margelo.com](https://margelo.com) for consultancy services.
+
 ## Contributing
 
-See the [contributing guide](CONTRIBUTING.md) to learn how to contribute to the repository and the development workflow.
+See the [contributing guide](https://nitro.margelo.com/docs/contributing) to learn how to contribute to the repository and the development workflow.
 
 ## License
 

@@ -1,6 +1,6 @@
 //
 //  NativeNitroModules+NewArch.mm
-//  DoubleConversion
+//  react-native-nitro
 //
 //  Created by Marc Rousavy on 21.06.24.
 //
@@ -34,9 +34,9 @@ RCT_EXPORT_MODULE(NitroModules)
 
 - (void)installJSIBindingsWithRuntime:(jsi::Runtime&)runtime {
   // 1. Get CallInvoker we cached statically
-  auto callInvoker = _callInvoker.lock();
+  std::shared_ptr<react::CallInvoker> callInvoker = _callInvoker.lock();
   if (callInvoker == nullptr) {
-    throw std::runtime_error("Cannot install global.NitroModulesProxy - CallInvoker was null!");
+    throw std::runtime_error("Cannot install `global.NitroModulesProxy` - CallInvoker was null!");
   }
 
   // 2. Wrap CallInvoker as Dispatcher

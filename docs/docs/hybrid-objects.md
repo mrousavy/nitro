@@ -38,11 +38,19 @@ class HybridMath : HybridMathSpec {
 
 ## Working with Hybrid Objects
 
-Hybrid Objects can be instantiated from JS using `createHybridObject(...)`:
+If a Hybrid Object is _autolinked_ (see ["**Nitrogen**: 5. Register the Hybrid Objects"](nitrogen#5-register-the-hybrid-objects)), it can be created from JS via `createHybridObject<T>(..)`:
 
 ```ts
 const math = NitroModules.createHybridObject<Math>("Math")
 const result = math.add(5, 7)
+```
+
+To enable the usage of `new` and `instanceof`, you can use the `getHybridObjectConstructor<T>(..)` helper method:
+
+```ts
+const HybridMath = getHybridObjectConstructor<Math>("Math")
+const math = new HybridMath()
+const isMath = math instanceof HybridMath
 ```
 
 A Hybrid Object can also create other Hybrid Objects:
@@ -112,11 +120,6 @@ Hybrid Objects can be implemented in C++, Swift or Kotlin:
     <TabItem value="swift" label="Swift" default>
       ```swift title="HybridMath.swift"
       class HybridMath : HybridMathSpec {
-        public var hybridContext = margelo.nitro.HybridContext()
-        public var memorySize: Int {
-          return getSizeOf(self)
-        }
-
         public var pi: Double {
           return Double.pi
         }
@@ -129,9 +132,6 @@ Hybrid Objects can be implemented in C++, Swift or Kotlin:
     <TabItem value="kotlin" label="Kotlin">
       ```kotlin title="HybridMath.kt"
       class HybridMath : HybridMathSpec() {
-        override val memorySize: Long
-            get() = 0L
-
         override var pi: Double
           get() = Double.PI
 
@@ -326,7 +326,7 @@ class HybridImage : HybridImageSpec {
   private var cgImage: CGImage
   public var memorySize: Int {
     let imageSize = cgImage.width * cgImage.height * cgImage.bytesPerPixel
-    return getSizeOf(self) + imageSize
+    return imageSize
   }
 }
 ```

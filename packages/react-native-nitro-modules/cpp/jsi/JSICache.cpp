@@ -14,12 +14,12 @@ namespace margelo::nitro {
 static constexpr auto CACHE_PROP_NAME = "__nitroModulesJSICache";
 
 template <typename T>
-inline void destroyReferences(const std::vector<BorrowingReference<T>>& references) {
+inline void destroyReferences(const std::vector<WeakReference<T>>& references) {
   for (auto& func : references) {
-    OwningReference<T> owning = func.lock();
-    if (owning) {
+    BorrowingReference<T> reference = func.lock();
+    if (reference) {
       // Destroy all functions that we might still have in cache, some callbacks and Promises may now become invalid.
-      owning.destroy();
+      reference.destroy();
     }
   }
 }
@@ -28,6 +28,7 @@ JSICache::~JSICache() {
   Logger::log(LogLevel::Info, TAG, "Destroying JSICache...");
   std::unique_lock lock(_mutex);
 
+  destroyReferences(_valueCache);
   destroyReferences(_objectCache);
   destroyReferences(_functionCache);
   destroyReferences(_weakObjectCache);
@@ -56,7 +57,7 @@ JSICacheReference JSICache::getOrCreateCache(jsi::Runtime& runtime) {
   // Cache doesn't exist yet.
   Logger::log(LogLevel::Info, TAG, "Creating new JSICache<T> for runtime %s..", getRuntimeId(runtime).c_str());
   // Create new cache
-  auto nativeState = std::shared_ptr<JSICache>(new JSICache());
+  std::shared_ptr<JSICache> nativeState(new JSICache());
   // Wrap it in a jsi::Value using NativeState
   jsi::Object cache(runtime);
   cache.setNativeState(runtime, nativeState);

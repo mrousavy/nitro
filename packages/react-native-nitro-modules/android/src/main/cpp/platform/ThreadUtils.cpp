@@ -17,12 +17,12 @@ namespace margelo::nitro {
 std::string ThreadUtils::getThreadName() {
 #ifdef HAVE_ANDROID_PTHREAD_SETNAME_NP
   // Try using pthread APIs
-  pthread_t this_thread = pthread_self();
-  char thread_name[16]; // Thread name length limit in Android is 16 characters
+  pthread_t thisThread = pthread_self();
+  char threadName[16]; // Thread name length limit in Android is 16 characters
 
-  int result = pthread_getname_np(this_thread, thread_name, sizeof(thread_name));
+  int result = pthread_getname_np(thisThread, threadName, sizeof(threadName));
   if (result == 0) {
-    return std::string(thread_name);
+    return std::string(threadName);
   }
 #endif
 

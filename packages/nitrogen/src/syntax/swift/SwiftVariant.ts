@@ -1,30 +1,43 @@
-import { capitalizeName, indent } from '../../utils.js'
-import { createFileMetadataString, escapeCppName } from '../helpers.js'
+import { indent } from '../../utils.js'
+import { createFileMetadataString } from '../helpers.js'
 import type { SourceFile } from '../SourceFile.js'
+import { getTypeAs } from '../types/getTypeAs.js'
+import { OptionalType } from '../types/OptionalType.js'
 import type { Type } from '../types/Type.js'
 import type { VariantType } from '../types/VariantType.js'
 
-export function getSwiftVariantTypename(variant: VariantType): string {
-  const types = variant.variants.map((t) =>
-    escapeCppName(capitalizeName(t.getCode('swift')))
-  )
-  return `Variant_${types.join('_')}`
-}
-
-export function getSwiftVariantCaseName(type: Type): string {
-  const code = type.getCode('swift')
-  return `some${capitalizeName(code)}`
+function isPrimitive(type: Type): boolean {
+  switch (type.kind) {
+    case 'bigint':
+    case 'boolean':
+    case 'number':
+    case 'string':
+    case 'void':
+    case 'enum':
+    case 'result-wrapper':
+    case 'null':
+    case 'error':
+      return true
+    case 'optional':
+      const optional = getTypeAs(type, OptionalType)
+      return isPrimitive(optional.wrappingType)
+    default:
+      return false
+  }
 }
 
 export function createSwiftVariant(variant: VariantType): SourceFile {
-  const typename = getSwiftVariantTypename(variant)
-  const cases = variant.variants
-    .map((t) => {
-      const type = t.getCode('swift')
-      return `case ${getSwiftVariantCaseName(t)}(${type})`
+  const typename = variant.getAliasName('swift')
+  const cases = variant.cases
+    .map(([label, v]) => {
+      const type = v.getCode('swift')
+      return `case ${label}(${type})`
     })
     .join('\n')
   const jsSignature = variant.variants.map((t) => t.kind).join(' | ')
+
+  const allPrimitives = variant.variants.every((v) => isPrimitive(v))
+  const enumDeclaration = allPrimitives ? 'enum' : 'indirect enum'
 
   const code = `
 ${createFileMetadataString(`${typename}.swift`)}
@@ -34,7 +47,7 @@ ${createFileMetadataString(`${typename}.swift`)}
  * JS type: \`${jsSignature}\`
  */
 @frozen
-public enum ${typename} {
+public ${enumDeclaration} ${typename} {
   ${indent(cases, '  ')}
 }
   `.trim()

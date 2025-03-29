@@ -7,7 +7,6 @@
 
 #pragma once
 
-#include <jsi/jsi.h>
 #include <type_traits>
 
 namespace margelo::nitro {

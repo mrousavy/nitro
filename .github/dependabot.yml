@@ -7,10 +7,12 @@ updates:
       interval: "daily"
     labels:
       - "dependencies"
+
   - package-ecosystem: "gradle"
     directories:
       - "/packages/react-native-nitro-modules/android/"
       - "/packages/react-native-nitro-image/android/"
+      - "/packages/template/android/"
       - "/example/android/"
     schedule:
       interval: "daily"
@@ -18,17 +20,31 @@ updates:
       - "nitro-core"
       - "dependencies"
       - "kotlin"
-  - package-ecosystem: "npm"
+    groups:
+      agp:
+        patterns:
+          - "com.android.tools.build:gradle"
+
+  - package-ecosystem: "bun"
     directories:
       - "/docs/"
     schedule:
       interval: "daily"
     labels:
       - "dependencies"
-  - package-ecosystem: "npm"
+    groups:
+      docusaurus:
+        patterns:
+          - "@docusaurus/*"
+      react:
+        patterns:
+          - "react*"
+
+  - package-ecosystem: "bun"
     directories:
       - "/packages/react-native-nitro-modules/"
       - "/packages/react-native-nitro-image/"
+      - "/packages/template/"
       - "/example/"
     schedule:
       interval: "daily"
@@ -36,7 +52,22 @@ updates:
       - "nitro-core"
       - "dependencies"
       - "typescript"
-  - package-ecosystem: "npm"
+    groups:
+      rncli:
+        patterns:
+          - "@react-native-community/cli*"
+      babel:
+        patterns:
+          - "@babel/*"
+      react-native:
+        patterns:
+          - "@react-native/*"
+          - "react-native"
+      react:
+        patterns:
+          - "react"
+
+  - package-ecosystem: "bun"
     directories:
       - "/packages/nitrogen/"
     schedule:

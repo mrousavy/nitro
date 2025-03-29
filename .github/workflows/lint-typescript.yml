@@ -11,6 +11,7 @@ on:
       - main
     paths:
       - '.github/workflows/lint-typescript.yml'
+      - 'config'
       - '**/*.ts'
       - '**/*.tsx'
       - '**/*.js'
@@ -21,6 +22,7 @@ on:
   pull_request:
     paths:
       - '.github/workflows/lint-typescript.yml'
+      - 'config'
       - '**/*.ts'
       - '**/*.tsx'
       - '**/*.js'
@@ -43,7 +45,7 @@ jobs:
 
       - name: Run TypeScript (tsc)
         run: |
-          bun typescript | reviewdog -name="tsc" -efm="%f(%l,%c): error TS%n: %m" -reporter="github-pr-review" -filter-mode="nofilter" -fail-on-error -tee
+          bun typecheck | reviewdog -name="tsc" -efm="%f(%l,%c): error TS%n: %m" -reporter="github-pr-review" -filter-mode="nofilter" -fail-on-error -tee
         env:
           REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

@@ -33,6 +33,7 @@ project.xcworkspace
 
 # Android/IJ
 #
+.kotlin
 .classpath
 .cxx
 .gradle

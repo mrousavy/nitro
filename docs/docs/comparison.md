@@ -307,7 +307,7 @@ Codegen also supports [Flow](https://flow.org), while Nitrogen doesn't.
 ## Legacy Native Modules
 
 Prior to [Turbo Modules](#turbo-modules), React Native provided a default approach for building native modules which was just called ["Native Modules"](https://reactnative.dev/docs/native-modules-intro).
-Instead of using JSI, Native Modules were built ontop of a communication layer that sent events and commands using JSON messages, both asynchronous and batched.
+Instead of using JSI, Native Modules were built on top of a communication layer that sent events and commands using JSON messages, both asynchronous and batched.
 
 Because Turbo Modules are just an evolution of Native Modules, their API is almost identical:
 

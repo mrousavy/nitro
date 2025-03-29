@@ -37,9 +37,12 @@ public:
 
   // Helpers
   std::shared_ptr<BoxedHybridObject> box(const std::shared_ptr<HybridObject>& hybridObject);
+  std::shared_ptr<HybridObject> updateMemorySize(const std::shared_ptr<HybridObject>& hybridObject);
+  jsi::Value hasNativeState(jsi::Runtime& runtime, const jsi::Value& thisValue, const jsi::Value* args, size_t size);
 
   // Build Info
   std::string getBuildType();
+  std::string getVersion();
 
 private:
   static constexpr auto TAG = "NitroModulesProxy";
