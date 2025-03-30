@@ -42,6 +42,10 @@ export function ViewScreenImpl() {
                 hybridRef={{
                   f: (ref) => {
                     console.log(`Ref initialized!`);
+                    // ref.someCallback = () =>
+                    //   console.log(
+                    //     `Callback called from setting ref! ${dimensions.width} ${dimensions.height}`,
+                    //   );
                     ref.someMethod();
                     const isBlue =
                       HybridTestObjectSwiftKotlin.getIsViewBlue(ref);
@@ -53,7 +57,7 @@ export function ViewScreenImpl() {
                 someCallback={{
                   f: () =>
                     console.log(
-                      `Callback called! ${dimensions.width} ${dimensions.height}`,
+                      `Callback called from react! ${dimensions.width} ${dimensions.height}`,
                     ),
                 }}
                 onTouchStart={() =>
