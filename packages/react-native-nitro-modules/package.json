@@ -75,7 +75,7 @@
     "jest": "*",
     "react": "19.0.0",
     "react-native": "0.78.0",
-    "react-native-builder-bob": "^0.37.0"
+    "react-native-builder-bob": "^0.40.3"
   },
   "peerDependencies": {
     "react": "*",
