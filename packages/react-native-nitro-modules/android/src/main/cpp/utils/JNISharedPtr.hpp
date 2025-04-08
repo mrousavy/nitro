@@ -42,6 +42,10 @@ private:
     static constexpr bool value = decltype(test<T>(nullptr))::value;
   };
 
+  // Helper to detect if T inherits from std::enable_shared_from_this
+  template <typename T>
+  struct is_enable_shared_from_this : std::is_base_of<std::enable_shared_from_this<T>, T> {};
+
 public:
   JNISharedPtr() = delete;
   ~JNISharedPtr() = delete;
@@ -49,6 +53,7 @@ public:
 public:
   /**
    * Creates a new `std::shared_ptr<T>` from the given `jni::global_ref<T::javaobject>`.
+   * This version properly supports classes that inherit from std::enable_shared_from_this.
    */
   template <typename T, typename std::enable_if<is_base_template_of<T, jni::HybridClass>::value, int>::type = 0>
   static std::shared_ptr<T> make_shared_from_jni(const jni::global_ref<typename T::javaobject>& ref) {
@@ -59,7 +64,18 @@ public:
                                "> - it's null!");
     }
 #endif
-    return std::shared_ptr<T>(ref->cthis(), GlobalRefDeleter<T>(ref));
+
+    // Create a shared_ptr with our custom deleter
+    std::shared_ptr<T> ptr(ref->cthis(), GlobalRefDeleter<T>(ref));
+
+    // Handle enable_shared_from_this properly if the class supports it
+    if constexpr (is_enable_shared_from_this<T>::value) {
+      // This is the key part: explicitly initialize the weak_ptr in enable_shared_from_this
+      // by using aliasing constructor to create a temporary shared_ptr
+      std::shared_ptr<std::enable_shared_from_this<T>>(ptr, static_cast<std::enable_shared_from_this<T>*>(ptr.get()));
+    }
+
+    return ptr;
   }
 };
 
