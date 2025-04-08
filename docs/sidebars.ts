@@ -12,16 +12,39 @@ import type {SidebarsConfig} from '@docusaurus/plugin-content-docs';
  */
 const sidebars: SidebarsConfig = {
   docs: [
-    'what-is-nitro',
-    'nitro-modules',
-    'hybrid-objects',
-    'nitrogen',
-    'minimum-requirements',
-    'using-nitro-in-your-app',
-    'using-nitro-in-a-library',
-    'configuration-nitro-json',
-    'sync-vs-async',
-    'view-components',
+    {
+      type: 'category',
+      label: 'Getting started',
+      items: [
+        'what-is-nitro',
+        'using-nitro-in-your-app',
+        'using-nitro-in-a-library',
+        'configuration-nitro-json',
+        'minimum-requirements',
+      ]
+    },
+    {
+      type: 'category',
+      label: 'Concepts',
+      items: [
+        'nitro-modules',
+        'hybrid-objects',
+        'nitrogen',
+      ]
+    },
+    {
+      type: 'category',
+      label: 'Guides',
+      items: [
+        'errors',
+        'performance-tips',
+        'worklets',
+        'entry-point',
+        'sync-vs-async',
+        'view-components',
+        'troubleshooting',
+      ]
+    },
     {
       type: 'category',
       label: 'Types',
@@ -41,14 +64,15 @@ const sidebars: SidebarsConfig = {
         'types/custom-types',
       ],
     },
-    'errors',
-    'performance-tips',
-    'worklets',
-    'entry-point',
-    'comparison',
-    'for-users',
-    'troubleshooting',
-    'contributing',
+    {
+      type: 'category',
+      label: 'Resources',
+      items: [
+        'comparison',
+        'for-library-users',
+        'contributing',
+      ]
+    },
   ],
 };
 

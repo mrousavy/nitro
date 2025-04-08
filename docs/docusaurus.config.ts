@@ -102,7 +102,7 @@ const config: Config = {
         },
         {
           type: 'doc',
-          docId: 'for-users',
+          docId: 'for-library-users',
           position: 'right',
           label: 'Installation',
         },
