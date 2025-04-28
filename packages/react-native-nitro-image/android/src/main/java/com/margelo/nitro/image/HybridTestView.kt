@@ -21,11 +21,13 @@ class HybridTestView(val context: ThemedReactContext): HybridTestViewSpec() {
             val color = if (value) Color.BLUE else Color.RED
             view.setBackgroundColor(color)
         }
+    override var hasBeenCalled: Boolean = false
     override var colorScheme: ColorScheme = ColorScheme.LIGHT
     override var someCallback: () -> Unit = {}
 
     // Methods
     override fun someMethod(): Unit {
+        hasBeenCalled = true
         someCallback()
     }
 }

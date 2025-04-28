@@ -18,11 +18,13 @@ class HybridTestView : HybridTestViewSpec {
       view.backgroundColor = isBlue ? .systemBlue : .systemRed
     }
   }
+  var hasBeenCalled: Bool = false
   var colorScheme: ColorScheme = .light
   var someCallback: () -> Void = { }
 
   // Methods
   func someMethod() throws -> Void {
+    hasBeenCalled = true
     someCallback()
   }
 }

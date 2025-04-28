@@ -59,6 +59,12 @@ namespace margelo::nitro::image {
     inline void setIsBlue(bool isBlue) noexcept override {
       _swiftPart.setIsBlue(std::forward<decltype(isBlue)>(isBlue));
     }
+    inline bool getHasBeenCalled() noexcept override {
+      return _swiftPart.hasBeenCalled();
+    }
+    inline void setHasBeenCalled(bool hasBeenCalled) noexcept override {
+      _swiftPart.setHasBeenCalled(std::forward<decltype(hasBeenCalled)>(hasBeenCalled));
+    }
     inline ColorScheme getColorScheme() noexcept override {
       auto __result = _swiftPart.getColorScheme();
       return static_cast<ColorScheme>(__result);
