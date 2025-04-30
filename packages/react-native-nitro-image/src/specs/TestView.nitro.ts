@@ -8,6 +8,7 @@ export type ColorScheme = 'light' | 'dark'
 
 export interface TestViewProps extends HybridViewProps {
   isBlue: boolean
+  hasBeenCalled: boolean
   colorScheme: ColorScheme
   someCallback: () => void
 }

@@ -50,6 +50,10 @@ export function escapeCppName(string: string): string {
   return escapedStr
 }
 
+export function isBooleanPropertyPrefix(name: string): boolean {
+  return name.startsWith('is') || name.startsWith('has')
+}
+
 export function isNotDuplicate<T>(item: T, index: number, array: T[]): boolean {
   return array.indexOf(item) === index
 }

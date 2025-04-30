@@ -108,6 +108,17 @@ public class HybridTestViewSpec_cxx {
     }
   }
   
+  public final var hasBeenCalled: Bool {
+    @inline(__always)
+    get {
+      return self.__implementation.hasBeenCalled
+    }
+    @inline(__always)
+    set {
+      self.__implementation.hasBeenCalled = newValue
+    }
+  }
+  
   public final var colorScheme: Int32 {
     @inline(__always)
     get {
