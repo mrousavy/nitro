@@ -7,10 +7,10 @@
 
 package com.margelo.nitro.image.views
 
-import android.view.View
+import android.view.ViewGroup
 import com.facebook.react.fabric.StateWrapperImpl
 import com.facebook.react.uimanager.ReactStylesDiffMap
-import com.facebook.react.uimanager.SimpleViewManager
+import com.facebook.react.uimanager.ViewGroupManager
 import com.facebook.react.uimanager.StateWrapper
 import com.facebook.react.uimanager.ThemedReactContext
 import com.margelo.nitro.image.*
@@ -18,26 +18,26 @@ import com.margelo.nitro.image.*
 /**
  * Represents the React Native `ViewManager` for the "TestView" Nitro HybridView.
  */
-class HybridTestViewManager: SimpleViewManager<View>() {
-  private val views = hashMapOf<View, HybridTestView>()
+class HybridTestViewManager: ViewGroupManager<ViewGroup>() {
+  private val views = hashMapOf<ViewGroup, HybridTestView>()
 
   override fun getName(): String {
     return "TestView"
   }
 
-  override fun createViewInstance(reactContext: ThemedReactContext): View {
+  override fun createViewInstance(reactContext: ThemedReactContext): ViewGroup {
     val hybridView = HybridTestView(reactContext)
     val view = hybridView.view
     views[view] = hybridView
     return view
   }
 
-  override fun onDropViewInstance(view: View) {
+  override fun onDropViewInstance(view: ViewGroup) {
     super.onDropViewInstance(view)
     views.remove(view)
   }
 
-  override fun updateState(view: View, props: ReactStylesDiffMap, stateWrapper: StateWrapper): Any? {
+  override fun updateState(view: ViewGroup, props: ReactStylesDiffMap, stateWrapper: StateWrapper): Any? {
     // 1. Downcast state
     val stateWrapperImpl = stateWrapper as? StateWrapperImpl ?: throw Error("StateWrapper uses a different implementation!")
     val hybridView = views[view] ?: throw Error("Couldn't find view $view in local views table!")
