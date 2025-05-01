@@ -1,16 +1,19 @@
 package com.margelo.nitro.image
 
 import android.graphics.Color
-import android.view.View
+import android.widget.LinearLayout
 import androidx.annotation.Keep
 import com.facebook.proguard.annotations.DoNotStrip
 import com.facebook.react.uimanager.ThemedReactContext
+
 
 @Keep
 @DoNotStrip
 class HybridTestView(val context: ThemedReactContext): HybridTestViewSpec() {
     // View
-    override val view: View = View(context)
+    override val view = LinearLayout(context).apply {
+        orientation = LinearLayout.VERTICAL
+    }
 
     // Props
     private var _isBlue = false

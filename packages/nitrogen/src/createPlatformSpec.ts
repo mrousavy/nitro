@@ -10,7 +10,10 @@ import {
   isHybridViewProps,
   isHybridViewMethods,
 } from './getPlatformSpecs.js'
-import type { HybridObjectSpec } from './syntax/HybridObjectSpec.js'
+import type {
+  HybridObjectSpec,
+  HybridViewConfig,
+} from './syntax/HybridObjectSpec.js'
 import { Property } from './syntax/Property.js'
 import { Method } from './syntax/Method.js'
 import { createSwiftHybridObject } from './syntax/swift/SwiftHybridObject.js'
@@ -21,9 +24,10 @@ import { getBaseTypes } from './utils.js'
 
 export function generatePlatformFiles(
   interfaceType: Type,
-  language: Language
+  language: Language,
+  viewConfig: HybridViewConfig | undefined
 ): SourceFile[] {
-  const spec = getHybridObjectSpec(interfaceType, language)
+  const spec = getHybridObjectSpec(interfaceType, language, viewConfig)
 
   // TODO: We currently just call this so the HybridObject itself is a "known type".
   // This causes the Swift Umbrella header to properly forward-declare it.
@@ -42,7 +46,11 @@ export function generatePlatformFiles(
   }
 }
 
-function getHybridObjectSpec(type: Type, language: Language): HybridObjectSpec {
+function getHybridObjectSpec(
+  type: Type,
+  language: Language,
+  viewConfig?: HybridViewConfig
+): HybridObjectSpec {
   if (isHybridView(type)) {
     const symbol = type.getAliasSymbolOrThrow()
     const name = symbol.getEscapedName()
@@ -55,9 +63,11 @@ function getHybridObjectSpec(type: Type, language: Language): HybridObjectSpec {
       throw new Error(
         `Props cannot be null! ${name}<...> (HybridView) requires type arguments.`
       )
-    const propsSpec = getHybridObjectSpec(props, language)
+    const propsSpec = getHybridObjectSpec(props, language, viewConfig)
     const methodsSpec =
-      methods != null ? getHybridObjectSpec(methods, language) : undefined
+      methods != null
+        ? getHybridObjectSpec(methods, language, viewConfig)
+        : undefined
 
     return {
       baseTypes: [],
@@ -66,6 +76,7 @@ function getHybridObjectSpec(type: Type, language: Language): HybridObjectSpec {
       methods: methodsSpec?.methods ?? [],
       properties: propsSpec.properties,
       name: name,
+      viewConfig: viewConfig,
     }
   }
 
@@ -136,7 +147,7 @@ function getHybridObjectSpec(type: Type, language: Language): HybridObjectSpec {
 
   const bases = getBaseTypes(type)
     .filter((t) => isAnyHybridSubclass(t))
-    .map((t) => getHybridObjectSpec(t, language))
+    .map((t) => getHybridObjectSpec(t, language, viewConfig))
 
   const spec: HybridObjectSpec = {
     language: language,
@@ -145,6 +156,7 @@ function getHybridObjectSpec(type: Type, language: Language): HybridObjectSpec {
     methods: methods,
     baseTypes: bases,
     isHybridView: isHybridView(type),
+    viewConfig: undefined,
   }
   return spec
 }

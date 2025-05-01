@@ -5,6 +5,7 @@ import {
   getHybridObjectPlatforms,
   getHybridViewPlatforms,
   type Platform,
+  getHybridViewConfig,
 } from './getPlatformSpecs.js'
 import { generatePlatformFiles } from './createPlatformSpec.js'
 import path from 'path'
@@ -25,7 +26,7 @@ import { createAndroidAutolinking } from './autolinking/createAndroidAutolinking
 import type { Autolinking } from './autolinking/Autolinking.js'
 import { createGitAttributes } from './createGitAttributes.js'
 import type { PlatformSpec } from 'react-native-nitro-modules'
-
+import type { HybridViewConfig } from './syntax/HybridObjectSpec.js'
 interface NitrogenOptions {
   baseDirectory: string
   outputDirectory: string
@@ -105,11 +106,18 @@ export async function runNitrogen({
       let typeName = declaration.getName()
       try {
         let platformSpec: PlatformSpec
+        let viewConfig: HybridViewConfig | undefined
         if (isHybridView(declaration.getType())) {
           // Hybrid View Props
           const targetPlatforms = getHybridViewPlatforms(declaration)
           if (targetPlatforms == null) {
             // It does not extend HybridView, continue..
+            continue
+          }
+          // Get the view config
+          viewConfig = getHybridViewConfig(declaration)
+          if (viewConfig == null) {
+            // No view config, continue..
             continue
           }
           platformSpec = targetPlatforms
@@ -145,7 +153,11 @@ export async function runNitrogen({
           .flatMap((p) => {
             usedPlatforms.push(p)
             const language = platformSpec[p]!
-            return generatePlatformFiles(declaration.getType(), language)
+            return generatePlatformFiles(
+              declaration.getType(),
+              language,
+              viewConfig
+            )
           })
           .filter(filterDuplicateFiles)
         // Group the files by platform ({ ios: [], android: [], shared: [] })
