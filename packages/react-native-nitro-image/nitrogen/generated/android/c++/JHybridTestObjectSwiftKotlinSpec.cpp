@@ -237,8 +237,8 @@ namespace margelo::nitro::image {
       return [__resultWeakRef](double value) -> void {
         if (auto __resultStrongRef = __resultWeakRef.lockLocal()) {
           return __resultStrongRef->invoke(value);
-        };
-      }
+        }
+      };
     }()) : std::nullopt;
   }
   void JHybridTestObjectSwiftKotlinSpec::setOptionalCallback(const std::optional<std::function<void(double /* value */)>>& optionalCallback) {
@@ -659,8 +659,8 @@ namespace margelo::nitro::image {
       return [__resultWeakRef](double value) -> void {
         if (auto __resultStrongRef = __resultWeakRef.lockLocal()) {
           return __resultStrongRef->invoke(value);
-        };
-      }
+        }
+      };
     }();
   }
   std::shared_ptr<Promise<double>> JHybridTestObjectSwiftKotlinSpec::getValueFromJSCallbackAndWait(const std::function<std::shared_ptr<Promise<double>>()>& getValue) {

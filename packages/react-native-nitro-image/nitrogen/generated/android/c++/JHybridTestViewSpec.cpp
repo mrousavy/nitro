@@ -63,8 +63,8 @@ namespace margelo::nitro::image {
       return [__resultWeakRef]() -> void {
         if (auto __resultStrongRef = __resultWeakRef.lockLocal()) {
           return __resultStrongRef->invoke();
-        };
-      }
+        }
+      };
     }();
   }
   void JHybridTestViewSpec::setSomeCallback(const std::function<void()>& someCallback) {

@@ -47,8 +47,8 @@ namespace margelo::nitro::image {
           return [onChangedWeakRef](double num) -> void {
             if (auto onChangedStrongRef = onChangedWeakRef.lockLocal()) {
               return onChangedStrongRef->invoke(num);
-            };
-          }
+            }
+          };
         }()
       );
     }

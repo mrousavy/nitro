@@ -723,8 +723,8 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
   return [${parameterName}WeakRef](${params.join(', ')}) -> ${returnType} {
     if (auto ${parameterName}StrongRef = ${parameterName}WeakRef.lockLocal()) {
       return ${parameterName}StrongRef->invoke(${paramsForward});
-    };
-  }
+    }
+  };
 }()
             `.trim()
           }
