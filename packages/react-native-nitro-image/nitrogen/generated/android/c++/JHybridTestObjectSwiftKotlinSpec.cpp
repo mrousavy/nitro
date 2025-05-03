@@ -232,9 +232,11 @@ namespace margelo::nitro::image {
       if (__result->isInstanceOf(JFunc_void_double_cxx::javaClassStatic())) [[likely]] {
         auto downcast = jni::static_ref_cast<JFunc_void_double_cxx::javaobject>(__result);
         return downcast->cthis()->getFunction();
-      } else {
-        return [__result](double value) -> void {
-          return __result->invoke(value);
+      }
+      auto __resultWeakRef = jni::make_weak(__result);
+      return [__resultWeakRef](double value) -> void {
+        if (auto __resultStrongRef = __resultWeakRef.lockLocal()) {
+          return __resultStrongRef->invoke(value);
         };
       }
     }()) : std::nullopt;
@@ -652,9 +654,11 @@ namespace margelo::nitro::image {
       if (__result->isInstanceOf(JFunc_void_double_cxx::javaClassStatic())) [[likely]] {
         auto downcast = jni::static_ref_cast<JFunc_void_double_cxx::javaobject>(__result);
         return downcast->cthis()->getFunction();
-      } else {
-        return [__result](double value) -> void {
-          return __result->invoke(value);
+      }
+      auto __resultWeakRef = jni::make_weak(__result);
+      return [__resultWeakRef](double value) -> void {
+        if (auto __resultStrongRef = __resultWeakRef.lockLocal()) {
+          return __resultStrongRef->invoke(value);
         };
       }
     }();
