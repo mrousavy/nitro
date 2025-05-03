@@ -114,13 +114,9 @@ export async function runNitrogen({
             // It does not extend HybridView, continue..
             continue
           }
+          platformSpec = targetPlatforms
           // Get the view config
           viewConfig = getHybridViewConfig(declaration)
-          if (viewConfig == null) {
-            // No view config, continue..
-            continue
-          }
-          platformSpec = targetPlatforms
         } else if (extendsHybridObject(declaration.getType(), true)) {
           // Hybrid View
           const targetPlatforms = getHybridObjectPlatforms(declaration)

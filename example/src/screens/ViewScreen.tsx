@@ -36,7 +36,9 @@ export function ViewScreenImpl() {
           onTouchEnd={() => {
             console.log(`Touched View #${i}!`)
           }}
-        />
+        >
+          <Text>{i}</Text>
+        </TestView>
       )),
     [counter]
   )
