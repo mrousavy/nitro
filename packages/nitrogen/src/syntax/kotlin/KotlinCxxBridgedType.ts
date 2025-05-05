@@ -718,13 +718,12 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
   if (${parameterName}->isInstanceOf(${jniType}::javaClassStatic())) [[likely]] {
     auto downcast = jni::static_ref_cast<${jniType}::javaobject>(${parameterName});
     return downcast->cthis()->getFunction();
+  } else {
+    auto ${parameterName}Ref = jni::make_global(${parameterName});
+    return [${parameterName}Ref](${params.join(', ')}) -> ${returnType} {
+      return ${parameterName}Ref->invoke(${paramsForward});
+    };
   }
-  auto ${parameterName}WeakRef = jni::make_weak(${parameterName});
-  return [${parameterName}WeakRef](${params.join(', ')}) -> ${returnType} {
-    if (auto ${parameterName}StrongRef = ${parameterName}WeakRef.lockLocal()) {
-      return ${parameterName}StrongRef->invoke(${paramsForward});
-    }
-  };
 }()
             `.trim()
           }

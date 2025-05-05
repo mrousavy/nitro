@@ -42,13 +42,12 @@ namespace margelo::nitro::image {
           if (onChanged->isInstanceOf(JFunc_void_double_cxx::javaClassStatic())) [[likely]] {
             auto downcast = jni::static_ref_cast<JFunc_void_double_cxx::javaobject>(onChanged);
             return downcast->cthis()->getFunction();
+          } else {
+            auto onChangedRef = jni::make_global(onChanged);
+            return [onChangedRef](double num) -> void {
+              return onChangedRef->invoke(num);
+            };
           }
-          auto onChangedWeakRef = jni::make_weak(onChanged);
-          return [onChangedWeakRef](double num) -> void {
-            if (auto onChangedStrongRef = onChangedWeakRef.lockLocal()) {
-              return onChangedStrongRef->invoke(num);
-            }
-          };
         }()
       );
     }

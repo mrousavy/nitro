@@ -232,13 +232,12 @@ namespace margelo::nitro::image {
       if (__result->isInstanceOf(JFunc_void_double_cxx::javaClassStatic())) [[likely]] {
         auto downcast = jni::static_ref_cast<JFunc_void_double_cxx::javaobject>(__result);
         return downcast->cthis()->getFunction();
+      } else {
+        auto __resultRef = jni::make_global(__result);
+        return [__resultRef](double value) -> void {
+          return __resultRef->invoke(value);
+        };
       }
-      auto __resultWeakRef = jni::make_weak(__result);
-      return [__resultWeakRef](double value) -> void {
-        if (auto __resultStrongRef = __resultWeakRef.lockLocal()) {
-          return __resultStrongRef->invoke(value);
-        }
-      };
     }()) : std::nullopt;
   }
   void JHybridTestObjectSwiftKotlinSpec::setOptionalCallback(const std::optional<std::function<void(double /* value */)>>& optionalCallback) {
@@ -654,13 +653,12 @@ namespace margelo::nitro::image {
       if (__result->isInstanceOf(JFunc_void_double_cxx::javaClassStatic())) [[likely]] {
         auto downcast = jni::static_ref_cast<JFunc_void_double_cxx::javaobject>(__result);
         return downcast->cthis()->getFunction();
+      } else {
+        auto __resultRef = jni::make_global(__result);
+        return [__resultRef](double value) -> void {
+          return __resultRef->invoke(value);
+        };
       }
-      auto __resultWeakRef = jni::make_weak(__result);
-      return [__resultWeakRef](double value) -> void {
-        if (auto __resultStrongRef = __resultWeakRef.lockLocal()) {
-          return __resultStrongRef->invoke(value);
-        }
-      };
     }();
   }
   std::shared_ptr<Promise<double>> JHybridTestObjectSwiftKotlinSpec::getValueFromJSCallbackAndWait(const std::function<std::shared_ptr<Promise<double>>()>& getValue) {

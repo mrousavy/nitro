@@ -58,13 +58,12 @@ namespace margelo::nitro::image {
       if (__result->isInstanceOf(JFunc_void_cxx::javaClassStatic())) [[likely]] {
         auto downcast = jni::static_ref_cast<JFunc_void_cxx::javaobject>(__result);
         return downcast->cthis()->getFunction();
+      } else {
+        auto __resultRef = jni::make_global(__result);
+        return [__resultRef]() -> void {
+          return __resultRef->invoke();
+        };
       }
-      auto __resultWeakRef = jni::make_weak(__result);
-      return [__resultWeakRef]() -> void {
-        if (auto __resultStrongRef = __resultWeakRef.lockLocal()) {
-          return __resultStrongRef->invoke();
-        }
-      };
     }();
   }
   void JHybridTestViewSpec::setSomeCallback(const std::function<void()>& someCallback) {
