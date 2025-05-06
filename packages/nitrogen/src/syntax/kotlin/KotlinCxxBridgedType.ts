@@ -719,8 +719,9 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
     auto downcast = jni::static_ref_cast<${jniType}::javaobject>(${parameterName});
     return downcast->cthis()->getFunction();
   } else {
-    return [${parameterName}](${params.join(', ')}) -> ${returnType} {
-      return ${parameterName}->invoke(${paramsForward});
+    auto ${parameterName}Ref = jni::make_global(${parameterName});
+    return [${parameterName}Ref](${params.join(', ')}) -> ${returnType} {
+      return ${parameterName}Ref->invoke(${paramsForward});
     };
   }
 }()

@@ -233,8 +233,9 @@ namespace margelo::nitro::image {
         auto downcast = jni::static_ref_cast<JFunc_void_double_cxx::javaobject>(__result);
         return downcast->cthis()->getFunction();
       } else {
-        return [__result](double value) -> void {
-          return __result->invoke(value);
+        auto __resultRef = jni::make_global(__result);
+        return [__resultRef](double value) -> void {
+          return __resultRef->invoke(value);
         };
       }
     }()) : std::nullopt;
@@ -653,8 +654,9 @@ namespace margelo::nitro::image {
         auto downcast = jni::static_ref_cast<JFunc_void_double_cxx::javaobject>(__result);
         return downcast->cthis()->getFunction();
       } else {
-        return [__result](double value) -> void {
-          return __result->invoke(value);
+        auto __resultRef = jni::make_global(__result);
+        return [__resultRef](double value) -> void {
+          return __resultRef->invoke(value);
         };
       }
     }();

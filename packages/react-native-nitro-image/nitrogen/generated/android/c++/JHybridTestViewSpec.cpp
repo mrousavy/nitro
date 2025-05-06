@@ -68,8 +68,9 @@ namespace margelo::nitro::image {
         auto downcast = jni::static_ref_cast<JFunc_void_cxx::javaobject>(__result);
         return downcast->cthis()->getFunction();
       } else {
-        return [__result]() -> void {
-          return __result->invoke();
+        auto __resultRef = jni::make_global(__result);
+        return [__resultRef]() -> void {
+          return __resultRef->invoke();
         };
       }
     }();

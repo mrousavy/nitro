@@ -43,8 +43,9 @@ namespace margelo::nitro::image {
             auto downcast = jni::static_ref_cast<JFunc_void_double_cxx::javaobject>(onChanged);
             return downcast->cthis()->getFunction();
           } else {
-            return [onChanged](double num) -> void {
-              return onChanged->invoke(num);
+            auto onChangedRef = jni::make_global(onChanged);
+            return [onChangedRef](double num) -> void {
+              return onChangedRef->invoke(num);
             };
           }
         }()
