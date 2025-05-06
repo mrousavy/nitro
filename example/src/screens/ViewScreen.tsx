@@ -1,11 +1,11 @@
 import * as React from 'react'
 
 import { useIsFocused } from '@react-navigation/native'
-import { Alert, Button, Platform, StyleSheet, Text, View } from 'react-native'
+import { Button, Platform, StyleSheet, Text, View } from 'react-native'
 import {
-    HybridTestObjectSwiftKotlin,
-    TestView,
-    ViewWithChildren,
+  HybridTestObjectSwiftKotlin,
+  TestView,
+  ViewWithChildren,
 } from 'react-native-nitro-image'
 import { NitroModules } from 'react-native-nitro-modules'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
@@ -44,14 +44,14 @@ export function ViewScreenImpl() {
     [counter]
   )
 
-    React.useEffect(() => {
-      if (!isUpdating) return
-      const i = setInterval(
-        () => setCounter((c) => (c >= VIEWS_X * VIEWS_Y ? 0 : c + 1)),
-        10
-      )
-      return () => clearInterval(i)
-    }, [isUpdating])
+  React.useEffect(() => {
+    if (!isUpdating) return
+    const i = setInterval(
+      () => setCounter((c) => (c >= VIEWS_X * VIEWS_Y ? 0 : c + 1)),
+      10
+    )
+    return () => clearInterval(i)
+  }, [isUpdating])
 
   return (
     <View style={[styles.container]}>
@@ -89,7 +89,6 @@ const ViewWithChildrenImpl = () => {
         numberOfLines={2}
         onPress={() => {
           console.log('Pressed!')
-          Alert.alert('Pressed!')
         }}
       >
         A Nitro View that can have children and interact with them.
