@@ -1,17 +1,20 @@
 import * as React from 'react'
 
-import { StyleSheet, View, Text, Button, Platform } from 'react-native'
+import { useIsFocused } from '@react-navigation/native'
+import { Alert, Button, Platform, StyleSheet, Text, View } from 'react-native'
+import {
+    HybridTestObjectSwiftKotlin,
+    TestView,
+    ViewWithChildren,
+} from 'react-native-nitro-image'
 import { NitroModules } from 'react-native-nitro-modules'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useColors } from '../useColors'
-import { HybridTestObjectSwiftKotlin, TestView } from 'react-native-nitro-image'
-import { useIsFocused } from '@react-navigation/native'
 
 const VIEWS_X = 15
 const VIEWS_Y = 15
 
 export function ViewScreenImpl() {
-  const safeArea = useSafeAreaInsets()
   const colors = useColors()
   const [counter, setCounter] = React.useState(0)
   const [isUpdating, setIsUpdating] = React.useState(true)
@@ -36,30 +39,22 @@ export function ViewScreenImpl() {
           onTouchEnd={() => {
             console.log(`Touched View #${i}!`)
           }}
-        >
-          <Text>{i}</Text>
-        </TestView>
+        />
       )),
     [counter]
   )
 
-  React.useEffect(() => {
-    if (!isUpdating) return
-    const i = setInterval(
-      () => setCounter((c) => (c >= VIEWS_X * VIEWS_Y ? 0 : c + 1)),
-      10
-    )
-    return () => clearInterval(i)
-  }, [isUpdating])
+    React.useEffect(() => {
+      if (!isUpdating) return
+      const i = setInterval(
+        () => setCounter((c) => (c >= VIEWS_X * VIEWS_Y ? 0 : c + 1)),
+        10
+      )
+      return () => clearInterval(i)
+    }, [isUpdating])
 
   return (
-    <View style={[styles.container, { paddingTop: safeArea.top }]}>
-      <Text style={styles.header}>View</Text>
-      <View style={styles.topControls}>
-        <View style={styles.flex} />
-        <Text style={styles.buildTypeText}>{NitroModules.buildType}</Text>
-      </View>
-
+    <View style={[styles.container]}>
       <View style={styles.resultContainer}>
         <View style={[styles.viewShadow]}>
           <View style={[styles.viewBorder, { borderColor: colors.foreground }]}>
@@ -80,9 +75,44 @@ export function ViewScreenImpl() {
   )
 }
 
+const ViewWithChildrenImpl = () => {
+  const colors = useColors()
+  return (
+    <ViewWithChildren
+      style={[styles.viewWithChildren, { backgroundColor: colors.background }]}
+    >
+      <Text style={[styles.viewWithChildrenText, { color: colors.foreground }]}>
+        Example of a view with children
+      </Text>
+      <Text
+        style={[styles.viewWithChildrenSubtext, { color: colors.foreground }]}
+        numberOfLines={2}
+        onPress={() => {
+          console.log('Pressed!')
+          Alert.alert('Pressed!')
+        }}
+      >
+        A Nitro View that can have children and interact with them.
+      </Text>
+    </ViewWithChildren>
+  )
+}
+
 export function ViewScreen() {
   const isFocused = useIsFocused()
-  return isFocused ? <ViewScreenImpl /> : null
+  const safeArea = useSafeAreaInsets()
+
+  return isFocused ? (
+    <View style={[styles.container, { paddingTop: safeArea.top }]}>
+      <Text style={styles.header}>View</Text>
+      <View style={styles.topControls}>
+        <View style={styles.flex} />
+        <Text style={styles.buildTypeText}>{NitroModules.buildType}</Text>
+      </View>
+      <ViewWithChildrenImpl />
+      <ViewScreenImpl />
+    </View>
+  ) : null
 }
 
 const styles = StyleSheet.create({
@@ -211,5 +241,26 @@ const styles = StyleSheet.create({
     paddingVertical: 9,
     alignItems: 'center',
     flexDirection: 'row',
+  },
+  viewWithChildren: {
+    margin: 15,
+    shadowColor: 'black',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 3,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 15,
+  },
+  viewWithChildrenText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  viewWithChildrenSubtext: {
+    fontSize: 14,
+    textAlign: 'center',
+    width: '80%',
+    marginTop: 10,
   },
 })

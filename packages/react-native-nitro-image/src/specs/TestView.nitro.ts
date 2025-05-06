@@ -15,9 +15,4 @@ export interface TestViewMethods extends HybridViewMethods {
   someMethod(): void
 }
 
-export type TestView = HybridView<
-  TestViewProps,
-  TestViewMethods,
-  { ios: 'swift'; android: 'kotlin' },
-  { allowChildren: true }
->
+export type TestView = HybridView<TestViewProps, TestViewMethods>
