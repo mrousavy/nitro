@@ -21,17 +21,9 @@ class ViewWithChildrenImpl: ReactViewGroup {
 @DoNotStrip
 class HybridViewWithChildren(val context: ThemedReactContext): HybridViewWithChildrenSpec() {
     // View
-    override val view = ReactViewGroup(context)
+    override val view = ViewWithChildrenImpl(context)
 
     // Props
-    private var _isBlue = false
-    override var isBlue: Boolean
-        get() = _isBlue
-        set(value) {
-            _isBlue = value
-            val color = if (value) Color.BLUE else Color.RED
-            view.setBackgroundColor(color)
-        }
     override var colorScheme: ColorScheme = ColorScheme.LIGHT
     override var someCallback: () -> Unit = {}
 
