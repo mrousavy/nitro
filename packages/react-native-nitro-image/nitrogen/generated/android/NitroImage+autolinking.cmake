@@ -35,6 +35,8 @@ target_sources(
   ../nitrogen/generated/shared/c++/HybridChildSpec.cpp
   ../nitrogen/generated/shared/c++/HybridTestViewSpec.cpp
   ../nitrogen/generated/shared/c++/views/HybridTestViewComponent.cpp
+  ../nitrogen/generated/shared/c++/HybridViewWithChildrenSpec.cpp
+  ../nitrogen/generated/shared/c++/views/HybridViewWithChildrenComponent.cpp
   # Android-specific Nitrogen C++ sources
   ../nitrogen/generated/android/c++/JHybridImageSpec.cpp
   ../nitrogen/generated/android/c++/JHybridImageFactorySpec.cpp
@@ -43,6 +45,8 @@ target_sources(
   ../nitrogen/generated/android/c++/JHybridChildSpec.cpp
   ../nitrogen/generated/android/c++/JHybridTestViewSpec.cpp
   ../nitrogen/generated/android/c++/views/JHybridTestViewStateUpdater.cpp
+  ../nitrogen/generated/android/c++/JHybridViewWithChildrenSpec.cpp
+  ../nitrogen/generated/android/c++/views/JHybridViewWithChildrenStateUpdater.cpp
 )
 
 # Define a flag to check if we are building properly

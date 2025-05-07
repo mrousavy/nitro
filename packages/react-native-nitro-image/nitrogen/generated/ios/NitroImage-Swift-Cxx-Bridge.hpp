@@ -28,6 +28,8 @@ namespace margelo::nitro::image { class HybridImageSpec; }
 namespace margelo::nitro::image { class HybridTestObjectSwiftKotlinSpec; }
 // Forward declaration of `HybridTestViewSpec` to properly resolve imports.
 namespace margelo::nitro::image { class HybridTestViewSpec; }
+// Forward declaration of `HybridViewWithChildrenSpec` to properly resolve imports.
+namespace margelo::nitro::image { class HybridViewWithChildrenSpec; }
 // Forward declaration of `OldEnum` to properly resolve imports.
 namespace margelo::nitro::image { enum class OldEnum; }
 // Forward declaration of `Person` to properly resolve imports.
@@ -48,6 +50,8 @@ namespace NitroImage { class HybridImageSpec_cxx; }
 namespace NitroImage { class HybridTestObjectSwiftKotlinSpec_cxx; }
 // Forward declaration of `HybridTestViewSpec_cxx` to properly resolve imports.
 namespace NitroImage { class HybridTestViewSpec_cxx; }
+// Forward declaration of `HybridViewWithChildrenSpec_cxx` to properly resolve imports.
+namespace NitroImage { class HybridViewWithChildrenSpec_cxx; }
 
 // Include C++ defined types
 #include "Car.hpp"
@@ -57,6 +61,7 @@ namespace NitroImage { class HybridTestViewSpec_cxx; }
 #include "HybridImageSpec.hpp"
 #include "HybridTestObjectSwiftKotlinSpec.hpp"
 #include "HybridTestViewSpec.hpp"
+#include "HybridViewWithChildrenSpec.hpp"
 #include "OldEnum.hpp"
 #include "Person.hpp"
 #include "Powertrain.hpp"
@@ -1277,5 +1282,17 @@ namespace margelo::nitro::image::bridge::swift {
   inline Result_std__shared_ptr_margelo__nitro__image__HybridBaseSpec__ create_Result_std__shared_ptr_margelo__nitro__image__HybridBaseSpec__(const std::exception_ptr& error) {
     return Result<std::shared_ptr<margelo::nitro::image::HybridBaseSpec>>::withError(error);
   }
+  
+  // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridViewWithChildrenSpec>
+  /**
+   * Specialized version of `std::shared_ptr<margelo::nitro::image::HybridViewWithChildrenSpec>`.
+   */
+  using std__shared_ptr_margelo__nitro__image__HybridViewWithChildrenSpec_ = std::shared_ptr<margelo::nitro::image::HybridViewWithChildrenSpec>;
+  std::shared_ptr<margelo::nitro::image::HybridViewWithChildrenSpec> create_std__shared_ptr_margelo__nitro__image__HybridViewWithChildrenSpec_(void* _Nonnull swiftUnsafePointer);
+  void* _Nonnull get_std__shared_ptr_margelo__nitro__image__HybridViewWithChildrenSpec_(std__shared_ptr_margelo__nitro__image__HybridViewWithChildrenSpec_ cppType);
+  
+  // pragma MARK: std::weak_ptr<margelo::nitro::image::HybridViewWithChildrenSpec>
+  using std__weak_ptr_margelo__nitro__image__HybridViewWithChildrenSpec_ = std::weak_ptr<margelo::nitro::image::HybridViewWithChildrenSpec>;
+  inline std__weak_ptr_margelo__nitro__image__HybridViewWithChildrenSpec_ weakify_std__shared_ptr_margelo__nitro__image__HybridViewWithChildrenSpec_(const std::shared_ptr<margelo::nitro::image::HybridViewWithChildrenSpec>& strong) { return strong; }
 
 } // namespace margelo::nitro::image::bridge::swift

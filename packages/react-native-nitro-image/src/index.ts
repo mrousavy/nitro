@@ -12,6 +12,7 @@ export * from './specs/Image.nitro'
 export * from './specs/ImageFactory.nitro'
 
 export * from './views/TestView'
+export * from './views/ViewWithChildren'
 
 /**
  * Constructors for creating instances of `Image`.

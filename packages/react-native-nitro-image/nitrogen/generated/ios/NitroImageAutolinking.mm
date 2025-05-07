@@ -16,6 +16,7 @@
 #include "HybridBaseSpecSwift.hpp"
 #include "HybridChildSpecSwift.hpp"
 #include "HybridTestViewSpecSwift.hpp"
+#include "HybridViewWithChildrenSpecSwift.hpp"
 
 @interface NitroImageAutolinking : NSObject
 @end
@@ -67,6 +68,13 @@
     "TestView",
     []() -> std::shared_ptr<HybridObject> {
       std::shared_ptr<margelo::nitro::image::HybridTestViewSpec> hybridObject = NitroImage::NitroImageAutolinking::createTestView();
+      return hybridObject;
+    }
+  );
+  HybridObjectRegistry::registerHybridObjectConstructor(
+    "ViewWithChildren",
+    []() -> std::shared_ptr<HybridObject> {
+      std::shared_ptr<margelo::nitro::image::HybridViewWithChildrenSpec> hybridObject = NitroImage::NitroImageAutolinking::createViewWithChildren();
       return hybridObject;
     }
   );
