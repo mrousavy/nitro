@@ -42,12 +42,6 @@ abstract class HybridViewWithChildrenSpec: HybridView() {
   @get:Keep
   @set:DoNotStrip
   @set:Keep
-  abstract var isBlue: Boolean
-  
-  @get:DoNotStrip
-  @get:Keep
-  @set:DoNotStrip
-  @set:Keep
   abstract var colorScheme: ColorScheme
   
   abstract var someCallback: () -> Unit

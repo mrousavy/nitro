@@ -97,17 +97,6 @@ public class HybridViewWithChildrenSpec_cxx {
   }
 
   // Properties
-  public final var isBlue: Bool {
-    @inline(__always)
-    get {
-      return self.__implementation.isBlue
-    }
-    @inline(__always)
-    set {
-      self.__implementation.isBlue = newValue
-    }
-  }
-  
   public final var colorScheme: Int32 {
     @inline(__always)
     get {

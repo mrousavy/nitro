@@ -28,10 +28,6 @@ void JHybridViewWithChildrenStateUpdater::updateViewProps(jni::alias_ref<jni::JC
     throw std::runtime_error("HybridViewWithChildrenState's data doesn't contain any props!");
   }
   const HybridViewWithChildrenProps& props = maybeProps.value();
-  if (props.isBlue.isDirty) {
-    view->setIsBlue(props.isBlue.value);
-    // TODO: Set isDirty = false
-  }
   if (props.colorScheme.isDirty) {
     view->setColorScheme(props.colorScheme.value);
     // TODO: Set isDirty = false

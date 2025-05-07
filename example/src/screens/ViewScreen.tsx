@@ -3,9 +3,9 @@ import * as React from 'react'
 import { useIsFocused } from '@react-navigation/native'
 import { Button, Platform, StyleSheet, Text, View } from 'react-native'
 import {
-  HybridTestObjectSwiftKotlin,
-  TestView,
-  ViewWithChildren,
+    HybridTestObjectSwiftKotlin,
+    TestView,
+    ViewWithChildren,
 } from 'react-native-nitro-image'
 import { NitroModules } from 'react-native-nitro-modules'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
@@ -80,18 +80,29 @@ const ViewWithChildrenImpl = () => {
   return (
     <ViewWithChildren
       style={[styles.viewWithChildren, { backgroundColor: colors.background }]}
+      hybridRef={{
+        f: (ref) => {
+          console.log(`ViewWithChildrenRef initialized!`)
+          ref.someMethod()
+        },
+      }}
+      someCallback={{
+        f: () => console.log(`ViewWithChildren Callback called!`),
+      }}
+      colorScheme="dark"
+      onTouchEnd={() => {
+        console.log(`Touched ViewWithChildren!`)
+      }}
     >
       <Text style={[styles.viewWithChildrenText, { color: colors.foreground }]}>
-        Example of a view with children
+        What is Nitro?
       </Text>
       <Text
         style={[styles.viewWithChildrenSubtext, { color: colors.foreground }]}
-        numberOfLines={2}
-        onPress={() => {
-          console.log('Pressed!')
-        }}
       >
-        A Nitro View that can have children and interact with them.
+        Nitro is a framework for building powerful and fast native modules for
+        JS. Put simply, a JS object can be implemented in C++, Swift or Kotlin
+        instead of JS by using Nitro.
       </Text>
     </ViewWithChildren>
   )
@@ -255,11 +266,11 @@ const styles = StyleSheet.create({
   viewWithChildrenText: {
     fontSize: 18,
     fontWeight: 'bold',
+    alignSelf: 'flex-start',
   },
   viewWithChildrenSubtext: {
     fontSize: 14,
-    textAlign: 'center',
-    width: '80%',
+    alignSelf: 'flex-start',
     marginTop: 10,
   },
 })

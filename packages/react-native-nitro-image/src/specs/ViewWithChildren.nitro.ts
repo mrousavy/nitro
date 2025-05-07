@@ -7,7 +7,6 @@ import type {
 export type ColorScheme = 'light' | 'dark'
 
 export interface ViewWithChildrenProps extends HybridViewProps {
-  isBlue: boolean
   colorScheme: ColorScheme
   someCallback: () => void
 }

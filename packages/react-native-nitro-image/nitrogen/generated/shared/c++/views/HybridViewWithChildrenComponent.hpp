@@ -44,7 +44,6 @@ namespace margelo::nitro::image::views {
                                 const react::RawProps& rawProps);
 
   public:
-    CachedProp<bool> isBlue;
     CachedProp<ColorScheme> colorScheme;
     CachedProp<std::function<void()>> someCallback;
     CachedProp<std::optional<std::function<void(const std::shared_ptr<margelo::nitro::image::HybridViewWithChildrenSpec>& /* ref */)>>> hybridRef;

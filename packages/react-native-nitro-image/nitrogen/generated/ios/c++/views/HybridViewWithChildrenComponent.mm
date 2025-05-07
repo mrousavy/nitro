@@ -71,11 +71,6 @@ using namespace margelo::nitro::image::views;
   // 2. Update each prop individually
   swiftPart.beforeUpdate();
 
-  // isBlue: boolean
-  if (newViewProps.isBlue.isDirty) {
-    swiftPart.setIsBlue(newViewProps.isBlue.value);
-    newViewProps.isBlue.isDirty = false;
-  }
   // colorScheme: enum
   if (newViewProps.colorScheme.isDirty) {
     swiftPart.setColorScheme(static_cast<int>(newViewProps.colorScheme.value));

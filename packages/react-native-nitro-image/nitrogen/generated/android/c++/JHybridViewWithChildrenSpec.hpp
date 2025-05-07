@@ -47,8 +47,6 @@ namespace margelo::nitro::image {
 
   public:
     // Properties
-    bool getIsBlue() override;
-    void setIsBlue(bool isBlue) override;
     ColorScheme getColorScheme() override;
     void setColorScheme(ColorScheme colorScheme) override;
     std::function<void()> getSomeCallback() override;

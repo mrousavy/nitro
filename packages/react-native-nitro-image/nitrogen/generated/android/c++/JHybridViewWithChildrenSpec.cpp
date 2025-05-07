@@ -33,15 +33,6 @@ namespace margelo::nitro::image {
   }
 
   // Properties
-  bool JHybridViewWithChildrenSpec::getIsBlue() {
-    static const auto method = javaClassStatic()->getMethod<jboolean()>("isBlue");
-    auto __result = method(_javaPart);
-    return static_cast<bool>(__result);
-  }
-  void JHybridViewWithChildrenSpec::setIsBlue(bool isBlue) {
-    static const auto method = javaClassStatic()->getMethod<void(jboolean /* isBlue */)>("setBlue");
-    method(_javaPart, isBlue);
-  }
   ColorScheme JHybridViewWithChildrenSpec::getColorScheme() {
     static const auto method = javaClassStatic()->getMethod<jni::local_ref<JColorScheme>()>("getColorScheme");
     auto __result = method(_javaPart);

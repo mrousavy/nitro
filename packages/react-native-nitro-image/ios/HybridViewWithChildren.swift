@@ -13,11 +13,6 @@ class HybridViewWithChildren : HybridViewWithChildrenSpec {
   var view: UIView = UIView()
 
   // Props
-  var isBlue: Bool = false {
-    didSet {
-      view.backgroundColor = isBlue ? .systemBlue : .systemRed
-    }
-  }
   var colorScheme: ColorScheme = .light
   var someCallback: () -> Void = { }
 

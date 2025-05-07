@@ -7,7 +7,6 @@
 
 package com.margelo.nitro.image.views
 
-import android.view.View
 import android.view.ViewGroup
 import com.facebook.react.fabric.StateWrapperImpl
 import com.facebook.react.uimanager.ReactStylesDiffMap

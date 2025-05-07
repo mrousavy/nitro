@@ -25,16 +25,6 @@ namespace margelo::nitro::image::views {
                                                            const HybridViewWithChildrenProps& sourceProps,
                                                            const react::RawProps& rawProps):
     react::ViewProps(context, sourceProps, rawProps, filterObjectKeys),
-    isBlue([&]() -> CachedProp<bool> {
-      try {
-        const react::RawValue* rawValue = rawProps.at("isBlue", nullptr, nullptr);
-        if (rawValue == nullptr) return sourceProps.isBlue;
-        const auto& [runtime, value] = (std::pair<jsi::Runtime*, jsi::Value>)*rawValue;
-        return CachedProp<bool>::fromRawValue(*runtime, value, sourceProps.isBlue);
-      } catch (const std::exception& exc) {
-        throw std::runtime_error(std::string("ViewWithChildren.isBlue: ") + exc.what());
-      }
-    }()),
     colorScheme([&]() -> CachedProp<ColorScheme> {
       try {
         const react::RawValue* rawValue = rawProps.at("colorScheme", nullptr, nullptr);
@@ -68,14 +58,12 @@ namespace margelo::nitro::image::views {
 
   HybridViewWithChildrenProps::HybridViewWithChildrenProps(const HybridViewWithChildrenProps& other):
     react::ViewProps(),
-    isBlue(other.isBlue),
     colorScheme(other.colorScheme),
     someCallback(other.someCallback),
     hybridRef(other.hybridRef) { }
 
   bool HybridViewWithChildrenProps::filterObjectKeys(const std::string& propName) {
     switch (hashString(propName)) {
-      case hashString("isBlue"): return true;
       case hashString("colorScheme"): return true;
       case hashString("someCallback"): return true;
       case hashString("hybridRef"): return true;

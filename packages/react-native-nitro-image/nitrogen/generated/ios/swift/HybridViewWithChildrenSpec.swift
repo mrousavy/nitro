@@ -11,7 +11,6 @@ import NitroModules
 /// See ``HybridViewWithChildrenSpec``
 public protocol HybridViewWithChildrenSpec_protocol: HybridObject, HybridView {
   // Properties
-  var isBlue: Bool { get set }
   var colorScheme: ColorScheme { get set }
   var someCallback: () -> Void { get set }
 
