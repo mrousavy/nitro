@@ -60,7 +60,7 @@
     "jest": "*",
     "nitro-codegen": "*",
     "react": "19.0.0",
-    "react-native": "0.78.0",
+    "react-native": "0.78.2",
     "react-native-nitro-modules": "*"
   },
   "peerDependencies": {
