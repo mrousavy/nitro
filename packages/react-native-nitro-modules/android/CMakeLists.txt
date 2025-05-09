@@ -39,6 +39,7 @@ include_directories(
   src/main/cpp/turbomodule
   src/main/cpp/platform
   src/main/cpp/utils
+  src/main/cpp/views
 )
 
 # Find required libraries

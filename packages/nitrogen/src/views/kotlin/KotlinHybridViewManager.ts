@@ -73,16 +73,14 @@ class ${manager}: SimpleViewManager<View>() {
   }
 
   override fun updateState(view: View, props: ReactStylesDiffMap, stateWrapper: StateWrapper): Any? {
-    // 1. Downcast state
-    val stateWrapperImpl = stateWrapper as? StateWrapperImpl ?: throw Error("StateWrapper uses a different implementation!")
     val hybridView = views[view] ?: throw Error("Couldn't find view $view in local views table!")
 
-    // 2. Update each prop individually
+    // 1. Update each prop individually
     hybridView.beforeUpdate()
-    ${stateUpdaterName}.updateViewProps(hybridView, stateWrapperImpl)
+    ${stateUpdaterName}.updateViewProps(hybridView, stateWrapper)
     hybridView.afterUpdate()
 
-    // 3. Continue in base View props
+    // 2. Continue in base View props
     return super.updateState(view, props, stateWrapper)
   }
 }
@@ -93,7 +91,7 @@ ${createFileMetadataString(`${stateUpdaterName}.kt`)}
 
 package ${javaSubNamespace}
 
-import com.facebook.react.fabric.StateWrapperImpl
+import com.facebook.react.uimanager.StateWrapper
 import ${javaNamespace}.*
 
 internal class ${stateUpdaterName} {
@@ -104,7 +102,7 @@ internal class ${stateUpdaterName} {
      */
     @Suppress("KotlinJniMissingFunction")
     @JvmStatic
-    external fun updateViewProps(view: ${HybridTSpec}, state: StateWrapperImpl)
+    external fun updateViewProps(view: ${HybridTSpec}, state: StateWrapper)
   }
 }
   `.trim()
@@ -124,6 +122,7 @@ ${createFileMetadataString(`J${stateUpdaterName}.hpp`)}
 #include <react/fabric/CoreComponentsRegistry.h>
 #include <react/renderer/core/ConcreteComponentDescriptor.h>
 #include <NitroModules/NitroDefines.hpp>
+#include <NitroModules/JStateWrapper.hpp>
 #include "${JHybridTSpec}.hpp"
 #include "views/${component}.hpp"
 
@@ -138,7 +137,7 @@ public:
 public:
   static void updateViewProps(jni::alias_ref<jni::JClass> /* class */,
                               jni::alias_ref<${JHybridTSpec}::javaobject> view,
-                              jni::alias_ref<react::StateWrapperImpl::javaobject> stateWrapper);
+                              jni::alias_ref<JStateWrapper::javaobject> stateWrapperInterface);
 
 public:
   static void registerNatives() {
@@ -181,8 +180,17 @@ using ConcreteStateData = react::ConcreteState<${stateClassName}>;
 
 void J${stateUpdaterName}::updateViewProps(jni::alias_ref<jni::JClass> /* class */,
                                            jni::alias_ref<${JHybridTSpec}::javaobject> javaView,
-                                           jni::alias_ref<react::StateWrapperImpl::javaobject> stateWrapper) {
+                                           jni::alias_ref<JStateWrapper::javaobject> stateWrapperInterface) {
   ${JHybridTSpec}* view = javaView->cthis();
+  
+  // Get concrete StateWrapperImpl from passed StateWrapper interface object
+  jobject rawStateWrapper = stateWrapperInterface.get();
+  if (!stateWrapperInterface->isInstanceOf(react::StateWrapperImpl::javaClassStatic())) {
+      throw std::runtime_error("StateWrapper is not a StateWrapperImpl");
+  }
+  auto stateWrapper = jni::alias_ref<react::StateWrapperImpl::javaobject>{
+            static_cast<react::StateWrapperImpl::javaobject>(rawStateWrapper)};
+
   std::shared_ptr<const react::State> state = stateWrapper->cthis()->getState();
   auto concreteState = std::dynamic_pointer_cast<const ConcreteStateData>(state);
   const ${stateClassName}& data = concreteState->getData();
