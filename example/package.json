@@ -3,7 +3,7 @@
   "version": "0.25.2",
   "private": true,
   "scripts": {
-    "start": "react-native start",
+    "start": "react-native start --client-logs",
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "clean": "rm -rf android/build node_modules/**/android/build lib",
@@ -18,15 +18,15 @@
   },
   "dependencies": {
     "@react-native-segmented-control/segmented-control": "^2.5.7",
-    "@react-navigation/bottom-tabs": "^7.2.0",
-    "@react-navigation/native": "^7.0.14",
+    "@react-navigation/bottom-tabs": "^7.3.12",
+    "@react-navigation/native": "^7.1.8",
     "deep-equal": "^2.2.3",
     "react": "19.0.0",
-    "react-native": "0.78.0",
+    "react-native": "0.78.2",
     "react-native-nitro-image": "*",
     "react-native-nitro-modules": "*",
-    "react-native-safe-area-context": "^5.2.0",
-    "react-native-screens": "^4.9.0-beta.0"
+    "react-native-safe-area-context": "5.4.0",
+    "react-native-screens": "^4.10.0"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
@@ -35,10 +35,10 @@
     "@react-native-community/cli": "17.0.0",
     "@react-native-community/cli-platform-android": "17.0.0",
     "@react-native-community/cli-platform-ios": "17.0.0",
-    "@react-native/babel-preset": "0.78.0",
-    "@react-native/eslint-config": "0.78.0",
-    "@react-native/metro-config": "0.78.0",
-    "@react-native/typescript-config": "0.78.0",
+    "@react-native/babel-preset": "0.78.2",
+    "@react-native/eslint-config": "0.78.2",
+    "@react-native/metro-config": "0.78.2",
+    "@react-native/typescript-config": "0.78.2",
     "@types/deep-equal": "^1.0.4",
     "babel-plugin-module-resolver": "^5.0.2",
     "nitro-codegen": "*"
