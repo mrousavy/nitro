@@ -82,7 +82,8 @@ function createTest<T>(
 }
 
 function timeoutedPromise<T>(
-  run: (complete: (value: T) => void) => void | Promise<void>
+  run: (complete: (value: T) => void) => void | Promise<void>,
+  timeout: number = 1500
 ): Promise<T> {
   return new Promise(async (resolve, reject) => {
     let didResolve = false
@@ -91,7 +92,7 @@ function timeoutedPromise<T>(
         setImmediate(() => {
           setTimeout(() => {
             if (!didResolve) reject(new Error(`Timeouted!`))
-          }, 1500)
+          }, timeout)
         })
       })
     })
@@ -990,6 +991,68 @@ export function getTests(
       it(() => testObject.getComplexCallback())
         .didNotThrow()
         .didReturn('function')
+    ),
+    createTest(
+      'Async Promise resolution does does not cause a garbage-collection crash',
+      async () =>
+        (
+          // This test demonstrates a crashing bug seen in Nitro modules 0.25.2, only on
+          // Android (Kotlin). Run this test individually (not in "Run All Tests") after a
+          // fresh launch of NitroExample app for best repeatability of the crash. If
+          // repeated runs of this test do not reproduce a crash, you may need to increase
+          // memory use (or decrease available memory) to encourage garbage collection.
+
+          // The crash logs this message:
+          // "terminating due to uncaught exception of type std::runtime_error: Unable to retrieve jni environment. Is the thread attached?"
+          // from the "hades" thread, which is used for garbage collection in the Hermes JS
+          // engine. The crash results from execution of the C++ Promise destructor on a thread
+          // that's not attached to the JVM. The origin is noted in the native backtrace as:
+          // "(margelo::nitro::Promise<double>::~Promise()+96)"
+
+          await it(async () => {
+            return timeoutedPromise(async (complete) => {
+              // This section creates a Nitro Promise that resolves asynchronously. The crash
+              // seen on Android/Kotlin in Nitro modules 0.25.2 requires that this is resolved
+              // after a delay, and that garbage collection happens after it is resolved.
+              const asyncPromise = testObject.callbackAsyncPromise(() => new Promise((resolve) =>
+                setTimeout(() => {
+                  resolve(13)
+                }, 1_000)
+              ));
+
+              // This section only exists to exercise the JS garbage collector, by creating
+              // large strings that temporarily consume enough memory to trigger GC. Values
+              // can be adjusted to increase memory use.
+              const garbage: Array<string> = []
+              let countdown = 200
+              let resolveGarbagePromise = () => {}
+              const garbagePromise = new Promise<void>(resolve => {
+                resolveGarbagePromise = resolve
+              })
+              let interval = setInterval(() => {
+                if (countdown-- > 0) {
+                  if (countdown % 10 == 0) {
+                    garbage.length = 0
+                  } else {
+                    garbage.push("x".repeat(2_000_000))
+                  }
+                } else {
+                  clearInterval(interval)
+                  resolveGarbagePromise()
+                }
+              }, 50)
+
+              // This section waits on the async things to complete before passing the test.
+              // As of Nitro modules 0.25.2, this test should succeed for Swift and C++, and
+              // and it should frequently crash the Android app for Kotlin.
+              const result = await asyncPromise
+              await garbagePromise
+              complete(result)
+            }, 20_000)
+          })
+        )
+          .didNotThrow()
+          .equals(13)
     ),
 
     // Objects
