@@ -185,7 +185,7 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
   }
 
   func add1Hour(date: Date) throws -> Date {
-    let oneHourInSeconds = 1 * 60 * 60
+    let oneHourInSeconds = 1.0 * 60 * 60
     return date + oneHourInSeconds
   }
   func currentDate() throws -> Date {
