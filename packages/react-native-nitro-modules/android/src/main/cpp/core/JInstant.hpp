@@ -7,9 +7,9 @@
 
 #pragma once
 
+#include <chrono>
 #include <fbjni/fbjni.h>
 #include <jni.h>
-#include <chrono>
 
 namespace margelo::nitro {
 
@@ -19,7 +19,7 @@ using namespace std;
 /**
  * Represents an `Instant` from Kotlin.
  */
-struct JInstant final: public jni::JavaClass<JInstant> {
+struct JInstant final : public jni::JavaClass<JInstant> {
 public:
   static constexpr auto kJavaDescriptor = "Ljava/time/Instant;";
 
