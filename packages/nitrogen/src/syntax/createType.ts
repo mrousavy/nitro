@@ -29,6 +29,7 @@ import {
 import { HybridObjectBaseType } from './types/HybridObjectBaseType.js'
 import { ErrorType } from './types/ErrorType.js'
 import { getBaseTypes } from '../utils.js'
+import { DateType } from './types/DateType.js'
 
 function isSymbol(type: TSMorphType, symbolName: string): boolean {
   const symbol = type.getSymbol()
@@ -52,6 +53,10 @@ function isRecord(type: TSMorphType): boolean {
 
 function isArrayBuffer(type: TSMorphType): boolean {
   return isSymbol(type, 'ArrayBuffer')
+}
+
+function isDate(type: TSMorphType): boolean {
+  return isSymbol(type, 'Date')
 }
 
 function isMap(type: TSMorphType): boolean {
@@ -271,6 +276,9 @@ export function createType(
     } else if (isMap(type)) {
       // Map
       return new MapType()
+    } else if (isDate(type)) {
+      // Date
+      return new DateType()
     } else if (isError(type)) {
       // Error
       return new ErrorType()
