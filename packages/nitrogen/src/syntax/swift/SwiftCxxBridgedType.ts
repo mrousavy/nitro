@@ -256,6 +256,20 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
             return this.type.getCode(language)
         }
       }
+      case 'date':
+        if (this.isBridgingToDirectCppTarget) {
+          return this.type.getCode(language)
+        } else {
+          // milliseconds
+          switch (language) {
+            case 'swift':
+              return 'Double'
+            case 'c++':
+              return 'double'
+            default:
+              return this.type.getCode(language)
+          }
+        }
       case 'array-buffer':
         if (this.isBridgingToDirectCppTarget) {
           return this.type.getCode(language)
@@ -671,6 +685,13 @@ case ${i}:
             return swiftParameterName
         }
       }
+      case 'date':
+        switch (language) {
+          case 'swift':
+            return `margelo.nitro.chronoDateFromMillisecondsSinceEpoch(${swiftParameterName}.timeIntervalSince1970)`
+          default:
+            return swiftParameterName
+        }
       case 'array-buffer': {
         switch (language) {
           case 'swift':
