@@ -403,15 +403,31 @@ export function getTests(
     ),
 
     // Test Dates
-    createTest('add1Hour(...)', () =>
-      it(() => testObject.add1Hour(BASE_DATE))
+    createTest('currentDate(...) is a Date', () =>
+      it(() => {
+        const now = testObject.currentDate()
+        return now instanceof Date
+      })
         .didNotThrow()
-        .equals(DATE_PLUS_1H)
+        .equals(true)
     ),
-    createTest('currentDate(...)', () =>
-      it(() => testObject.currentDate())
+    createTest('add1Hour(...)', () =>
+      it(() => {
+        const added = testObject.add1Hour(BASE_DATE)
+        return added.getTime()
+      })
         .didNotThrow()
-        .toContain('getTime')
+        .equals(DATE_PLUS_1H.getTime())
+    ),
+    createTest('currentDate(...) is roughly same JS value', () =>
+      it(() => {
+        const nativeNow = testObject.currentDate()
+        const jsNow = new Date()
+        const msDiff = Math.abs(jsNow.getTime() - nativeNow.getTime())
+        return msDiff < 10
+      })
+        .didNotThrow()
+        .equals(true)
     ),
 
     // Test Maps
