@@ -30,13 +30,14 @@ export function createSwiftVariant(variant: VariantType): SourceFile {
   const cases = variant.cases
     .map(([label, v]) => {
       const type = v.getCode('swift')
-      return `case ${label}(${type})`
+      if (isPrimitive(v)) {
+        return `case ${label}(${type})`
+      } else {
+        return `indirect case ${label}(${type})`
+      }
     })
     .join('\n')
   const jsSignature = variant.variants.map((t) => t.kind).join(' | ')
-
-  const allPrimitives = variant.variants.every((v) => isPrimitive(v))
-  const enumDeclaration = allPrimitives ? 'enum' : 'indirect enum'
 
   const code = `
 ${createFileMetadataString(`${typename}.swift`)}
@@ -46,7 +47,7 @@ ${createFileMetadataString(`${typename}.swift`)}
  * JS type: \`${jsSignature}\`
  */
 @frozen
-public ${enumDeclaration} ${typename} {
+public enum ${typename} {
   ${indent(cases, '  ')}
 }
   `.trim()

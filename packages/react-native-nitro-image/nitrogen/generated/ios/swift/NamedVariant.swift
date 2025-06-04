@@ -10,7 +10,7 @@
  * JS type: `string | struct`
  */
 @frozen
-public indirect enum NamedVariant {
+public enum NamedVariant {
   case first(String)
-  case second(Car)
+  indirect case second(Car)
 }
