@@ -55,6 +55,13 @@ const TEST_MAP_2: Record<string, string> = {
   'third-key': 'thirdValue',
 }
 
+const BASE_DATE = new Date()
+const DATE_PLUS_1H = (() => {
+  const current = BASE_DATE.getTime()
+  const oneHourInMilliseconds = 1000 * 60 * 60
+  return new Date(current + oneHourInMilliseconds)
+})()
+
 function createTest<T>(
   name: string,
   run: () => State<T> | Promise<State<T>>
@@ -393,6 +400,18 @@ export function getTests(
       )
         .didNotThrow()
         .equals(['gas', 'electric'])
+    ),
+
+    // Test Dates
+    createTest('add1Hour(...)', () =>
+      it(() => testObject.add1Hour(BASE_DATE))
+        .didNotThrow()
+        .equals(DATE_PLUS_1H)
+    ),
+    createTest('currentDate(...)', () =>
+      it(() => testObject.currentDate())
+        .didNotThrow()
+        .toContain('getTime')
     ),
 
     // Test Maps
