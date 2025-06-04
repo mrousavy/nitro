@@ -19,12 +19,11 @@ using namespace std;
 /**
  * Represents an `Instant` from Kotlin.
  */
-struct JInstant final: jni::JavaClass<JInstant> {
-private:
+struct JInstant final: public jni::JavaClass<JInstant> {
+public:
   static constexpr auto kJavaDescriptor = "Ljava/time/Instant;";
 
 public:
-
   static jni::local_ref<JInstant> ofEpochMilliseconds(jlong millisecondsSinceEpoch) {
     static const auto clazz = javaClassStatic();
     static const auto method = clazz->getStaticMethod<jni::local_ref<JInstant>(jlong)>("ofEpochMilliseconds");
