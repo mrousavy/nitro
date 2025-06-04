@@ -19,7 +19,7 @@ export class DateType implements Type {
       case 'swift':
         return 'Date'
       case 'kotlin':
-        return 'Instant'
+        return 'java.time.Instant'
       default:
         throw new Error(
           `Language ${language} is not yet supported for DateType!`

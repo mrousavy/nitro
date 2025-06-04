@@ -219,11 +219,11 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
-  abstract fun add1Hour(date: Instant): Instant
+  abstract fun add1Hour(date: java.time.Instant): java.time.Instant
   
   @DoNotStrip
   @Keep
-  abstract fun currentDate(): Instant
+  abstract fun currentDate(): java.time.Instant
   
   @DoNotStrip
   @Keep

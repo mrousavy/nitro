@@ -462,7 +462,7 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
           case 'c++':
             return `
 [&]() -> double {
-  using std::chrono;
+  using namespace std::chrono;
   auto __ms = duration_cast<milliseconds>(${cppParameterName}.time_since_epoch()).count();
   double __msSinceEpoch = static_cast<double>(__ms);
 }()
