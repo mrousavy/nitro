@@ -49,7 +49,7 @@ struct JSIConverter<std::chrono::system_clock::time_point> final {
 
     // TODO: Cache this
     jsi::Function valueOfFunc = object.getPropertyAsFunction(runtime, "valueOf");
-    double msSinceEpoch = valueOfFunc.call(runtime, object).getNumber();
+    double msSinceEpoch = valueOfFunc.callWithThis(runtime, object).getNumber();
 
     // ms -> std::chrono::system_clock::time_point
     auto duration = chrono::duration<double, std::milli>(msSinceEpoch);
