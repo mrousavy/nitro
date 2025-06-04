@@ -38,16 +38,16 @@ struct JSIConverter<std::chrono::system_clock::time_point> final {
 
     jsi::Object object = arg.asObject(runtime);
 #ifdef NITRO_DEBUG
-    if (!object.hasProperty(runtime, "valueOf")) {
+    if (!object.hasProperty(runtime, "getTime")) {
       throw std::invalid_argument("Object \"" + arg.toString(runtime).utf8(runtime) +
-                                  "\" does not have a .valueOf() function! "
+                                  "\" does not have a .getTime() function! "
                                   "It's not a valid Date object.");
     }
 #endif
 
     // TODO: Cache this
-    jsi::Function valueOfFunc = object.getPropertyAsFunction(runtime, "valueOf");
-    double msSinceEpoch = valueOfFunc.callWithThis(runtime, object).getNumber();
+    jsi::Function getTimeFunc = object.getPropertyAsFunction(runtime, "getTime");
+    double msSinceEpoch = getTimeFunc.callWithThis(runtime, object).getNumber();
 
     // ms -> std::chrono::system_clock::time_point
     auto durationMs = chrono::duration<double, std::milli>(msSinceEpoch);
