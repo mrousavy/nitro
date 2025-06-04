@@ -54,6 +54,7 @@ namespace margelo::nitro::image { class HybridTestViewSpec; }
 #include "MapWrapper.hpp"
 #include <NitroModules/Promise.hpp>
 #include <exception>
+#include <chrono>
 #include "Car.hpp"
 #include <NitroModules/ArrayBuffer.hpp>
 #include <NitroModules/ArrayBufferHolder.hpp>
@@ -346,6 +347,22 @@ namespace margelo::nitro::image {
     }
     inline std::optional<Powertrain> tryOptionalEnum(std::optional<Powertrain> value) override {
       auto __result = _swiftPart.tryOptionalEnum(value);
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline std::chrono::system_clock::time_point add1Hour(std::chrono::system_clock::time_point date) override {
+      auto __result = _swiftPart.add1Hour(std::forward<decltype(date)>(date));
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline std::chrono::system_clock::time_point currentDate() override {
+      auto __result = _swiftPart.currentDate();
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }

@@ -457,6 +457,22 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
             return cppParameterName
         }
       }
+      case 'date': {
+        switch (language) {
+          case 'c++':
+            return `
+[&]() -> double {
+  using std::chrono;
+  auto __ms = duration_cast<milliseconds>(${cppParameterName}.time_since_epoch()).count();
+  double __msSinceEpoch = static_cast<double>(__ms);
+}()
+            `.trim()
+          case 'swift':
+            return `Date(timeIntervalSince1970: ${cppParameterName} / 1_000)`.trim()
+          default:
+            return cppParameterName
+        }
+      }
       case 'array': {
         const array = getTypeAs(this.type, ArrayType)
         const wrapping = new SwiftCxxBridgedType(array.itemType, true)

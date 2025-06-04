@@ -222,6 +222,13 @@ std::optional<Powertrain> HybridTestObjectCpp::tryOptionalEnum(std::optional<Pow
   return value;
 }
 
+std::chrono::system_clock::time_point HybridTestObjectCpp::add1Hour(std::chrono::system_clock::time_point date) {
+  return date + std::chrono::hours(1);
+}
+std::chrono::system_clock::time_point HybridTestObjectCpp::currentDate() {
+  return std::chrono::system_clock::now();
+}
+
 std::variant<std::string, double>
 HybridTestObjectCpp::passVariant(const std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>>& either) {
   if (std::holds_alternative<std::string>(either)) {
