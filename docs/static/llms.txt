@@ -2471,6 +2471,7 @@ These are all the types Nitro supports out of the box:
 | `Promise<T>` | `std::shared_ptr<Promise<T>>` | `Promise<T>` | `Promise<T>` |
 | `object` | `std::shared_ptr<AnyMap>` | `AnyMapHolder` | `AnyMap` |
 | `ArrayBuffer` | `std::shared_ptr<ArrayBuffer>` | `ArrayBufferHolder` | `ArrayBuffer` |
+| `Date` | `std::chrono::system_clock::time_point` | `Date` | `java.time.Instant` |
 | ..any `HybridObject` | `std::shared_ptr<HybridObject>` | `HybridObject` | `HybridObject` |
 | ..any `interface` | `T` | `T` | `T` |
 | ..any `enum` | `T` | `T` | `T` |
