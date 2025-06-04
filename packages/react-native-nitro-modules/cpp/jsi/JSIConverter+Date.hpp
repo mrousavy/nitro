@@ -22,8 +22,10 @@ struct JSIConverter;
 namespace margelo::nitro {
 
 using namespace facebook;
+using namespace std;
 
 // Date <> chrono::system_clock::time_point
+template <>
 struct JSIConverter<std::chrono::system_clock::time_point> final {
   static inline std::chrono::system_clock::time_point fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
     using namespace std::chrono;
@@ -50,8 +52,8 @@ struct JSIConverter<std::chrono::system_clock::time_point> final {
     double msSinceEpoch = valueOfFunc.call(runtime, object).getNumber();
 
     // ms -> std::chrono::system_clock::time_point
-    auto duration = duration<double, std::milli>(msSinceEpoch);
-    auto timePoint = system_clock::time_point(duration_cast<system_clock::duration>(duration));
+    auto duration = chrono::duration<double, std::milli>(msSinceEpoch);
+    auto timePoint = chrono::system_clock::time_point(chrono::duration_cast<chrono::system_clock::duration>(duration));
 
     return timePoint;
   }

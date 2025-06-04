@@ -8,19 +8,20 @@
 #pragma once
 
 #include <fbjni/fbjni.h>
+#include <jni.h>
 #include <chrono>
 
 namespace margelo::nitro {
 
 using namespace facebook;
+using namespace std;
 
 /**
  * Represents an `Instant` from Kotlin.
  */
-class JInstant final {
+struct JInstant final: jni::JavaClass<JInstant> {
 private:
   static constexpr auto kJavaDescriptor = "Ljava/time/Instant;";
-  using namespace std;
 
 public:
 
@@ -31,7 +32,8 @@ public:
   }
 
   static jni::local_ref<JInstant> fromChrono(chrono::system_clock::time_point date) {
-    long milliseconds = chrono::duration_cast<chrono::millis>(date).count();
+    auto timeSinceEpoch = date.time_since_epoch();
+    long long milliseconds = chrono::duration_cast<chrono::milliseconds>(timeSinceEpoch).count();
     return JInstant::ofEpochMilliseconds(static_cast<jlong>(milliseconds));
   }
 
@@ -45,7 +47,7 @@ public:
   chrono::system_clock::time_point toChrono() {
     jlong millisecondsSinceEpoch = toEpochMilliseconds();
     auto duration = chrono::duration<long, std::milli>(static_cast<long>(millisecondsSinceEpoch));
-    auto date = chrono::system_clock::time_point(chrono::duration_cast<system_clock::duration>(duration));
+    auto date = chrono::system_clock::time_point(chrono::duration_cast<chrono::system_clock::duration>(duration));
     return date;
   }
 };
