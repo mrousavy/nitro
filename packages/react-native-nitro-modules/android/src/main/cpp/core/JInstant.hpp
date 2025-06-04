@@ -26,7 +26,7 @@ public:
 public:
   static jni::local_ref<JInstant> ofEpochMilliseconds(jlong millisecondsSinceEpoch) {
     static const auto clazz = javaClassStatic();
-    static const auto method = clazz->getStaticMethod<jni::local_ref<JInstant>(jlong)>("ofEpochMilliseconds");
+    static const auto method = clazz->getStaticMethod<jni::local_ref<JInstant>(jlong)>("ofEpochMilli");
     return method(clazz, millisecondsSinceEpoch);
   }
 
@@ -39,7 +39,7 @@ public:
 public:
   jlong toEpochMilliseconds() {
     static const auto clazz = javaClassStatic();
-    const auto method = clazz->getMethod<jlong()>("toEpochMilliseconds");
+    const auto method = clazz->getMethod<jlong()>("toEpochMilli");
     return method(self());
   }
 
