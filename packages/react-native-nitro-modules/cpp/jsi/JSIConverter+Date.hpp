@@ -27,9 +27,7 @@ using namespace std;
 // Date <> chrono::system_clock::time_point
 template <>
 struct JSIConverter<std::chrono::system_clock::time_point> final {
-  static inline std::chrono::system_clock::time_point fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
-    using namespace std::chrono;
-
+  static inline chrono::system_clock::time_point fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
 #ifdef NITRO_DEBUG
     if (!arg.isObject()) [[unlikely]] {
       throw std::invalid_argument("Value \"" + arg.toString(runtime).utf8(runtime) +
@@ -52,18 +50,17 @@ struct JSIConverter<std::chrono::system_clock::time_point> final {
     double msSinceEpoch = valueOfFunc.callWithThis(runtime, object).getNumber();
 
     // ms -> std::chrono::system_clock::time_point
-    auto duration = chrono::duration<double, std::milli>(msSinceEpoch);
-    auto timePoint = chrono::system_clock::time_point(chrono::duration_cast<chrono::system_clock::duration>(duration));
+    auto durationMs = chrono::duration<double, std::milli>(msSinceEpoch);
+    auto duration = chrono::duration_cast<chrono::system_clock::duration>(durationMs);
+    auto timePoint = chrono::system_clock::time_point(duration);
 
     return timePoint;
   }
 
-  static inline jsi::Value toJSI(jsi::Runtime& runtime, const std::chrono::system_clock::time_point& date) {
-    using namespace std::chrono;
-
+  static inline jsi::Value toJSI(jsi::Runtime& runtime, const chrono::system_clock::time_point& date) {
     // 1. Get milliseconds since epoch as a double
-    auto ms = duration_cast<milliseconds>(date.time_since_epoch()).count();
-    double msSinceEpoch = static_cast<double>(ms);
+    auto ms = chrono::duration_cast<chrono::milliseconds>(date.time_since_epoch()).count();
+    auto msSinceEpoch = static_cast<double>(ms);
 
     // TODO: Cache this
     jsi::Object global = runtime.global();
