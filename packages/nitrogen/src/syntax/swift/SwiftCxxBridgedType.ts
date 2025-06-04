@@ -95,6 +95,9 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
           return false
         }
         return true
+      case 'date':
+        // Date <> double
+        return true
       case 'promise':
         // Promise<T> <> std::shared_ptr<Promise<T>>
         return true
