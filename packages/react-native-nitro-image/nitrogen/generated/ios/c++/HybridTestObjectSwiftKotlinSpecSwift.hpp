@@ -354,11 +354,7 @@ namespace margelo::nitro::image {
       return __value;
     }
     inline std::chrono::system_clock::time_point add1Hour(std::chrono::system_clock::time_point date) override {
-      auto __result = _swiftPart.add1Hour([&]() -> double {
-        using namespace std::chrono;
-        auto __ms = duration_cast<milliseconds>(date.time_since_epoch()).count();
-        double __msSinceEpoch = static_cast<double>(__ms);
-      }());
+      auto __result = _swiftPart.add1Hour(date);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }

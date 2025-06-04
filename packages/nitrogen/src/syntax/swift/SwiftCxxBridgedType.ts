@@ -256,20 +256,6 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
             return this.type.getCode(language)
         }
       }
-      case 'date':
-        if (this.isBridgingToDirectCppTarget) {
-          return this.type.getCode(language)
-        } else {
-          // milliseconds
-          switch (language) {
-            case 'swift':
-              return 'Double'
-            case 'c++':
-              return 'double'
-            default:
-              return this.type.getCode(language)
-          }
-        }
       case 'array-buffer':
         if (this.isBridgingToDirectCppTarget) {
           return this.type.getCode(language)
@@ -286,6 +272,13 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
             throw new Error(`Invalid language! ${language}`)
         }
       }
+      case 'date':
+        switch (language) {
+          case 'swift':
+            return `margelo.nitro.chrono_time`
+          default:
+            return this.type.getCode(language)
+        }
       case 'error':
         switch (language) {
           case 'c++':
@@ -476,16 +469,8 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
       }
       case 'date': {
         switch (language) {
-          case 'c++':
-            return `
-[&]() -> double {
-  using namespace std::chrono;
-  auto __ms = duration_cast<milliseconds>(${cppParameterName}.time_since_epoch()).count();
-  double __msSinceEpoch = static_cast<double>(__ms);
-}()
-            `.trim()
           case 'swift':
-            return `Date(timeIntervalSince1970: ${cppParameterName} / 1_000)`.trim()
+            return `Date(fromChrono: ${cppParameterName})`.trim()
           default:
             return cppParameterName
         }
@@ -685,13 +670,14 @@ case ${i}:
             return swiftParameterName
         }
       }
-      case 'date':
+      case 'date': {
         switch (language) {
           case 'swift':
-            return `margelo.nitro.chronoDateFromMillisecondsSinceEpoch(${swiftParameterName}.timeIntervalSince1970)`
+            return `${swiftParameterName}.toCpp()`
           default:
             return swiftParameterName
         }
+      }
       case 'array-buffer': {
         switch (language) {
           case 'swift':
