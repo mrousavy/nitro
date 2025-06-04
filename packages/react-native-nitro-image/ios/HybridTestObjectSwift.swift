@@ -184,6 +184,14 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
     return value
   }
 
+  func add1Hour(date: Date) throws -> Date {
+    let oneHourInSeconds = 1.0 * 60 * 60
+    return date + oneHourInSeconds
+  }
+  func currentDate() throws -> Date {
+    return .now
+  }
+
   func bounceMap(map: Dictionary<String, Variant_Double_Bool>) throws -> Dictionary<String, Variant_Double_Bool> {
     return map
   }
@@ -191,11 +199,11 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
   func extractMap(mapWrapper: MapWrapper) throws -> Dictionary<String, String> {
     return mapWrapper.map
   }
-  
+
   func getVariantHybrid(variant: Variant_Person__any_HybridTestObjectSwiftKotlinSpec_) throws -> Variant_Person__any_HybridTestObjectSwiftKotlinSpec_ {
     return variant
   }
-  
+
   func passVariant(either: Variant_String_Double_Bool__Double___String_) throws -> Variant_String_Double {
     switch either {
     case let .first(string):
@@ -206,15 +214,15 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
       return .first("holds something else!")
     }
   }
-  
+
   func getVariantEnum(variant: Variant_Bool_OldEnum) throws -> Variant_Bool_OldEnum {
     return variant
   }
-  
+
   func getVariantObjects(variant: Variant_Car_Person) throws -> Variant_Car_Person {
     return variant
   }
-  
+
   func passNamedVariant(variant: NamedVariant) throws -> NamedVariant {
     return variant
   }

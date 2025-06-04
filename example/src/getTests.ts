@@ -55,6 +55,13 @@ const TEST_MAP_2: Record<string, string> = {
   'third-key': 'thirdValue',
 }
 
+const BASE_DATE = new Date()
+const DATE_PLUS_1H = (() => {
+  const current = BASE_DATE.getTime()
+  const oneHourInMilliseconds = 1000 * 60 * 60
+  return new Date(current + oneHourInMilliseconds)
+})()
+
 function createTest<T>(
   name: string,
   run: () => State<T> | Promise<State<T>>
@@ -393,6 +400,34 @@ export function getTests(
       )
         .didNotThrow()
         .equals(['gas', 'electric'])
+    ),
+
+    // Test Dates
+    createTest('currentDate(...) is a Date', () =>
+      it(() => {
+        const now = testObject.currentDate()
+        return now instanceof Date
+      })
+        .didNotThrow()
+        .equals(true)
+    ),
+    createTest('add1Hour(...)', () =>
+      it(() => {
+        const added = testObject.add1Hour(BASE_DATE)
+        return added.getTime()
+      })
+        .didNotThrow()
+        .equals(DATE_PLUS_1H.getTime())
+    ),
+    createTest('currentDate(...) is roughly same JS value', () =>
+      it(() => {
+        const nativeNow = testObject.currentDate()
+        const jsNow = new Date()
+        const msDiff = Math.abs(jsNow.getTime() - nativeNow.getTime())
+        return msDiff < 10
+      })
+        .didNotThrow()
+        .equals(true)
     ),
 
     // Test Maps

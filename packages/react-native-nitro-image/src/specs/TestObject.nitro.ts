@@ -109,6 +109,10 @@ interface SharedTestObjectProps {
   // Variants
   someVariant: number | string
 
+  // Dates
+  add1Hour(date: Date): Date
+  currentDate(): Date
+
   // Promises
   calculateFibonacciSync(value: number): bigint
   calculateFibonacciAsync(value: number): Promise<bigint>

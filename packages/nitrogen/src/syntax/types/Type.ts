@@ -22,6 +22,7 @@ export type TypeKind =
   | 'tuple'
   | 'variant'
   | 'result-wrapper'
+  | 'date'
   | 'void'
 
 /**

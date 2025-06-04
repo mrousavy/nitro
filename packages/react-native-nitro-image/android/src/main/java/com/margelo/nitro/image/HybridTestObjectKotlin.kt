@@ -8,6 +8,7 @@ import com.margelo.nitro.core.AnyValue
 import com.margelo.nitro.core.ArrayBuffer
 import com.margelo.nitro.core.Promise
 import kotlinx.coroutines.delay
+import java.time.Instant
 
 @Keep
 @DoNotStrip
@@ -64,6 +65,15 @@ class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
 
     override fun complexEnumCallback(array: Array<Powertrain>, callback: (array: Array<Powertrain>) -> Unit) {
         callback(array)
+    }
+
+    override fun currentDate(): java.time.Instant {
+        return Instant.now()
+    }
+
+    override fun add1Hour(date: Instant): Instant {
+        val oneHourInSeconds = 1L * 60 * 60
+        return date.plusSeconds(oneHourInSeconds)
     }
 
     override fun createMap(): AnyMap {
