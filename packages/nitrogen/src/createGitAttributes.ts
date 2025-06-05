@@ -8,7 +8,7 @@ export async function createGitAttributes(
   const file = path.join(folder, '.gitattributes')
   // Marks all files in this current folder as "generated"
   const content = `
-* linguist-generated=${markAsGenerated}
+** linguist-generated=${markAsGenerated}
   `.trim()
   await fs.writeFile(file, content + '\n', 'utf-8')
   return file
