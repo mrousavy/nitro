@@ -40,5 +40,5 @@
   "ignorePaths": [
     "**/node_modules"
   ],
-  "gitAttributesGeneratedFlag": false
+  "gitAttributesGeneratedFlag": true
 }

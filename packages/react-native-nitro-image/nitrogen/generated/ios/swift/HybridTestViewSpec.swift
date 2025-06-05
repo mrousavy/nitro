@@ -17,7 +17,7 @@ public protocol HybridTestViewSpec_protocol: HybridObject, HybridView {
   var someCallback: () -> Void { get set }
 
   // Methods
-  func someMethod() throws -> Void
+  func some2Method() throws -> Void
 }
 
 /// See ``HybridTestViewSpec``

@@ -22,7 +22,7 @@ namespace margelo::nitro::image {
       prototype.registerHybridSetter("colorScheme", &HybridTestViewSpec::setColorScheme);
       prototype.registerHybridGetter("someCallback", &HybridTestViewSpec::getSomeCallback);
       prototype.registerHybridSetter("someCallback", &HybridTestViewSpec::setSomeCallback);
-      prototype.registerHybridMethod("someMethod", &HybridTestViewSpec::someMethod);
+      prototype.registerHybridMethod("some2Method", &HybridTestViewSpec::some2Method);
     });
   }
 

@@ -151,9 +151,9 @@ public class HybridTestViewSpec_cxx {
 
   // Methods
   @inline(__always)
-  public final func someMethod() -> bridge.Result_void_ {
+  public final func some2Method() -> bridge.Result_void_ {
     do {
-      try self.__implementation.someMethod()
+      try self.__implementation.some2Method()
       return bridge.create_Result_void_()
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()

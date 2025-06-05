@@ -82,8 +82,8 @@ namespace margelo::nitro::image {
 
   public:
     // Methods
-    inline void someMethod() override {
-      auto __result = _swiftPart.someMethod();
+    inline void some2Method() override {
+      auto __result = _swiftPart.some2Method();
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }

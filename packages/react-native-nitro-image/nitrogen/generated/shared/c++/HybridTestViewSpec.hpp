@@ -57,7 +57,7 @@ namespace margelo::nitro::image {
 
     public:
       // Methods
-      virtual void someMethod() = 0;
+      virtual void some2Method() = 0;
 
     protected:
       // Hybrid Setup

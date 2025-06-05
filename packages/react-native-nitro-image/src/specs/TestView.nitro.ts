@@ -13,7 +13,7 @@ export interface TestViewProps extends HybridViewProps {
   someCallback: () => void
 }
 export interface TestViewMethods extends HybridViewMethods {
-  someMethod(): void
+  some2Method(): void
 }
 
 export type TestView = HybridView<TestViewProps, TestViewMethods>
