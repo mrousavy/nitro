@@ -66,6 +66,7 @@ namespace NitroImage { class HybridTestViewSpec_cxx; }
 #include <NitroModules/Promise.hpp>
 #include <NitroModules/PromiseHolder.hpp>
 #include <NitroModules/Result.hpp>
+#include <chrono>
 #include <exception>
 #include <functional>
 #include <memory>
@@ -1132,6 +1133,15 @@ namespace margelo::nitro::image::bridge::swift {
   }
   inline Result_std__optional_Powertrain__ create_Result_std__optional_Powertrain__(const std::exception_ptr& error) {
     return Result<std::optional<Powertrain>>::withError(error);
+  }
+  
+  // pragma MARK: Result<std::chrono::system_clock::time_point>
+  using Result_std__chrono__system_clock__time_point_ = Result<std::chrono::system_clock::time_point>;
+  inline Result_std__chrono__system_clock__time_point_ create_Result_std__chrono__system_clock__time_point_(std::chrono::system_clock::time_point value) {
+    return Result<std::chrono::system_clock::time_point>::withValue(std::move(value));
+  }
+  inline Result_std__chrono__system_clock__time_point_ create_Result_std__chrono__system_clock__time_point_(const std::exception_ptr& error) {
+    return Result<std::chrono::system_clock::time_point>::withError(error);
   }
   
   // pragma MARK: Result<int64_t>

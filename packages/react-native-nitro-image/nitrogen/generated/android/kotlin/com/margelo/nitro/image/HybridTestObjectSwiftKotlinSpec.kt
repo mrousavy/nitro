@@ -219,6 +219,14 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
+  abstract fun add1Hour(date: java.time.Instant): java.time.Instant
+  
+  @DoNotStrip
+  @Keep
+  abstract fun currentDate(): java.time.Instant
+  
+  @DoNotStrip
+  @Keep
   abstract fun calculateFibonacciSync(value: Double): Long
   
   @DoNotStrip

@@ -57,6 +57,7 @@ const sidebars: SidebarsConfig = {
         'types/variants',
         'types/promises',
         'types/callbacks',
+        'types/dates',
         'types/typed-maps',
         'types/untyped-maps',
         'types/array-buffers',

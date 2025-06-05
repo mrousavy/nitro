@@ -56,6 +56,8 @@ namespace margelo::nitro::image { class HybridTestViewSpec; }
 #include "JVariant_Double_Boolean.hpp"
 #include <NitroModules/Promise.hpp>
 #include <NitroModules/JPromise.hpp>
+#include <chrono>
+#include <NitroModules/JInstant.hpp>
 #include "Car.hpp"
 #include "JCar.hpp"
 #include <NitroModules/ArrayBuffer.hpp>
@@ -454,6 +456,16 @@ namespace margelo::nitro::image {
     static const auto method = javaClassStatic()->getMethod<jni::local_ref<JPowertrain>(jni::alias_ref<JPowertrain> /* value */)>("tryOptionalEnum");
     auto __result = method(_javaPart, value.has_value() ? JPowertrain::fromCpp(value.value()) : nullptr);
     return __result != nullptr ? std::make_optional(__result->toCpp()) : std::nullopt;
+  }
+  std::chrono::system_clock::time_point JHybridTestObjectSwiftKotlinSpec::add1Hour(std::chrono::system_clock::time_point date) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JInstant>(jni::alias_ref<JInstant> /* date */)>("add1Hour");
+    auto __result = method(_javaPart, JInstant::fromChrono(date));
+    return __result->toChrono();
+  }
+  std::chrono::system_clock::time_point JHybridTestObjectSwiftKotlinSpec::currentDate() {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JInstant>()>("currentDate");
+    auto __result = method(_javaPart);
+    return __result->toChrono();
   }
   int64_t JHybridTestObjectSwiftKotlinSpec::calculateFibonacciSync(double value) {
     static const auto method = javaClassStatic()->getMethod<int64_t(double /* value */)>("calculateFibonacciSync");
