@@ -29,6 +29,7 @@ const sidebars: SidebarsConfig = {
       items: [
         'nitro-modules',
         'hybrid-objects',
+        'hybrid-views',
         'nitrogen',
       ]
     },
