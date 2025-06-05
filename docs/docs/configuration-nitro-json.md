@@ -18,7 +18,7 @@
   },
   "autolinking": {},
   "ignorePaths": ["**/node_modules"],
-  "createGitAttributes": true
+  "gitAttributesGeneratedFlag": true
 }
 ```
 
@@ -178,6 +178,7 @@ Configures the TypeScript parser to ignore specific given paths when looking for
 
 By default, this is empty (`[]`), but it can be set to ignore paths like `["node_modules", "lib"]`.
 
-## `createGitAttributes`
+## `gitAttributesGeneratedFlag`
 
-Configures whether a `.gitattributes` file will be generated in the `nitrogen/generated/` directory to mark files as [`linguist-generated`](https://docs.github.com/en/repositories/working-with-files/managing-files/customizing-how-changed-files-appear-on-github) for GitHub.
+Configures whether all nitro-generated files are marked as [`linguist-generated`](https://docs.github.com/en/repositories/working-with-files/managing-files/customizing-how-changed-files-appear-on-github) for GitHub. This disables diffing for generated content and excludes them from language statistics.
+This is controlled via `nitrogen/generated/.gitattributes`.
