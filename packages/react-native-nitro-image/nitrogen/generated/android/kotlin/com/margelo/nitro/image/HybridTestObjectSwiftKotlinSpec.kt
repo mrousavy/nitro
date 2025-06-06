@@ -187,6 +187,10 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
+  abstract fun getMapKeys(map: AnyMap): Array<String>
+  
+  @DoNotStrip
+  @Keep
   abstract fun bounceMap(map: Map<String, Variant_Double_Boolean>): Map<String, Variant_Double_Boolean>
   
   @DoNotStrip

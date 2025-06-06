@@ -40,7 +40,7 @@ private:
   JAnyMap() {
     _map = std::make_shared<AnyMap>();
   }
-  JAnyMap(const std::shared_ptr<AnyMap>& map) : _map(map) {}
+  explicit JAnyMap(const std::shared_ptr<AnyMap>& map) : _map(map) {}
 
 protected:
   bool contains(const std::string& key) {
@@ -51,6 +51,17 @@ protected:
   }
   void clear() {
     _map->clear();
+  }
+  jni::local_ref<jni::JArrayClass<jni::JString>> getAllKeys() {
+    auto& map = _map->getMap();
+    auto array = jni::JArrayClass<jni::JString>::newArray(map.size());
+    size_t index = 0;
+    for (const auto& pair : map) {
+      auto jKey = jni::make_jstring(pair.first);
+      array->setElement(index, *jKey);
+      index++;
+    }
+    return array;
   }
 
 protected:
@@ -163,6 +174,7 @@ public:
         makeNativeMethod("contains", JAnyMap::contains),
         makeNativeMethod("remove", JAnyMap::remove),
         makeNativeMethod("clear", JAnyMap::clear),
+        makeNativeMethod("getAllKeys", JAnyMap::getAllKeys),
         // is
         makeNativeMethod("isNull", JAnyMap::isNull),
         makeNativeMethod("isDouble", JAnyMap::isDouble),

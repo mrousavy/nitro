@@ -194,6 +194,10 @@ std::shared_ptr<AnyMap> HybridTestObjectCpp::mapRoundtrip(const std::shared_ptr<
   return map;
 }
 
+std::vector<std::string> HybridTestObjectCpp::getMapKeys(const std::shared_ptr<AnyMap>& map) {
+  return map->getAllKeys();
+}
+
 double HybridTestObjectCpp::funcThatThrows() {
   throw std::runtime_error("This function will only work after sacrificing seven lambs!");
 }

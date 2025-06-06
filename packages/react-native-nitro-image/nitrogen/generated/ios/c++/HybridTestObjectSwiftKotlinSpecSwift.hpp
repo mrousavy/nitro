@@ -291,6 +291,14 @@ namespace margelo::nitro::image {
       auto __value = std::move(__result.value());
       return __value;
     }
+    inline std::vector<std::string> getMapKeys(const std::shared_ptr<AnyMap>& map) override {
+      auto __result = _swiftPart.getMapKeys(map);
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
     inline std::unordered_map<std::string, std::variant<double, bool>> bounceMap(const std::unordered_map<std::string, std::variant<double, bool>>& map) override {
       auto __result = _swiftPart.bounceMap(map);
       if (__result.hasError()) [[unlikely]] {
