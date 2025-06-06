@@ -75,6 +75,10 @@ public:
    * Deletes all keys and values inside the map.
    */
   void clear() noexcept;
+  /**
+   * Get all keys this `AnyMap` instance contains.
+   */
+  std::vector<std::string> getAllKeys() const;
 
 public:
   /**
