@@ -40,7 +40,7 @@ private:
   JAnyMap() {
     _map = std::make_shared<AnyMap>();
   }
-  JAnyMap(const std::shared_ptr<AnyMap>& map) : _map(map) {}
+  explicit JAnyMap(const std::shared_ptr<AnyMap>& map) : _map(map) {}
 
 protected:
   bool contains(const std::string& key) {
