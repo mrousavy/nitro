@@ -89,6 +89,7 @@ interface SharedTestObjectProps {
   // Maps
   createMap(): AnyMap
   mapRoundtrip(map: AnyMap): AnyMap
+  getMapKeys(map: AnyMap): string[]
 
   // Typed Maps (records)
   bounceMap(

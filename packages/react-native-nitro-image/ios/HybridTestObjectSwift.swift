@@ -35,6 +35,10 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
 
   var optionalCallback: ((Double) -> Void)? = nil
 
+  var thisObject: any HybridTestObjectSwiftKotlinSpec {
+    return self
+  }
+
   func simpleFunc() throws {
     // do nothing
   }
@@ -144,16 +148,16 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
     return map
   }
 
-  var thisObject: any HybridTestObjectSwiftKotlinSpec {
-    return self
+  func mapRoundtrip(map: AnyMapHolder) throws -> AnyMapHolder {
+    return map
+  }
+
+  func getMapKeys(map: AnyMapHolder) throws -> [String] {
+    return map.getAllKeys()
   }
 
   func newTestObject() throws -> any HybridTestObjectSwiftKotlinSpec {
     return HybridTestObjectSwift()
-  }
-
-  func mapRoundtrip(map: AnyMapHolder) throws -> AnyMapHolder {
-    return map
   }
 
   func funcThatThrows() throws -> Double {

@@ -96,6 +96,10 @@ class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
         return map
     }
 
+    override fun getMapKeys(map: AnyMap): Array<String> {
+        return map.getAllKeys()
+    }
+
     override fun mapRoundtrip(map: AnyMap): AnyMap {
         return map
     }

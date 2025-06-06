@@ -83,6 +83,7 @@ public:
   void multipleArguments(double num, const std::string& str, bool boo) override;
   std::shared_ptr<AnyMap> createMap() override;
   std::shared_ptr<AnyMap> mapRoundtrip(const std::shared_ptr<AnyMap>& map) override;
+  std::vector<std::string> getMapKeys(const std::shared_ptr<AnyMap>& map) override;
   double funcThatThrows() override;
   std::shared_ptr<Promise<void>> funcThatThrowsBeforePromise() override;
   void throwError(const std::exception_ptr& error) override;

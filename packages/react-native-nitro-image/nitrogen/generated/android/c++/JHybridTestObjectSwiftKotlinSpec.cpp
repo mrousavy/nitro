@@ -388,6 +388,20 @@ namespace margelo::nitro::image {
     auto __result = method(_javaPart, JAnyMap::create(map));
     return __result->cthis()->getMap();
   }
+  std::vector<std::string> JHybridTestObjectSwiftKotlinSpec::getMapKeys(const std::shared_ptr<AnyMap>& map) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<jni::JArrayClass<jni::JString>>(jni::alias_ref<JAnyMap::javaobject> /* map */)>("getMapKeys");
+    auto __result = method(_javaPart, JAnyMap::create(map));
+    return [&]() {
+      size_t __size = __result->size();
+      std::vector<std::string> __vector;
+      __vector.reserve(__size);
+      for (size_t __i = 0; __i < __size; __i++) {
+        auto __element = __result->getElement(__i);
+        __vector.push_back(__element->toStdString());
+      }
+      return __vector;
+    }();
+  }
   std::unordered_map<std::string, std::variant<double, bool>> JHybridTestObjectSwiftKotlinSpec::bounceMap(const std::unordered_map<std::string, std::variant<double, bool>>& map) {
     static const auto method = javaClassStatic()->getMethod<jni::local_ref<jni::JMap<jni::JString, JVariant_Double_Boolean>>(jni::alias_ref<jni::JMap<jni::JString, JVariant_Double_Boolean>> /* map */)>("bounceMap");
     auto __result = method(_javaPart, [&]() -> jni::local_ref<jni::JMap<jni::JString, JVariant_Double_Boolean>> {
