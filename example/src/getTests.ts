@@ -486,10 +486,13 @@ export function getTests(
     }),
     createTest('getMapKeys(...) works', () => {
       const map = testObject.createMap()
-      const keys = Object.keys(map)
-      return it(() => testObject.getMapKeys(map))
+      const targetKeys = [...Object.keys(map)].sort()
+      return it(() => {
+        const keys = testObject.getMapKeys(map)
+        return [...keys].sort()
+      })
         .didNotThrow()
-        .equals(keys)
+        .equals(targetKeys)
     }),
 
     // Test errors
