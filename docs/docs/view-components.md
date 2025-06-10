@@ -110,6 +110,25 @@ Just like any other Hybrid Object, add the Hybrid View to your `nitro.json`'s au
 
 Now run nitrogen again.
 
+#### 4.1. Android: Register the View Manager
+
+On Android, you need to register the generated view manager in your React Native package:
+
+```java title="CameraPackage.java"
+// ...
+public class CameraPackage extends TurboReactPackage {
+  // ...
+
+  @Override
+  public List<ViewManager> createViewManagers(@NonNull ReactApplicationContext reactContext) {
+    List<ViewManager> viewManagers = new ArrayList<>();
+    // diff-add
+    viewManagers.add(new HybridCameraViewManager());
+    return viewManagers;
+  }
+}
+```
+
 ### 5. Initialization
 
 Then, to use the view in JavaScript, use `getHostComponent(..)`:
