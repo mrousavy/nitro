@@ -9,6 +9,9 @@ import com.facebook.proguard.annotations.DoNotStrip
 import dalvik.annotation.optimization.FastNative
 import java.nio.ByteBuffer
 
+// AHardwareBuffer* needs to be boxed in jobject*
+typealias BoxedHardwareBuffer = Any
+
 /**
  * An ArrayBuffer instance shared between native (Kotlin/C++) and JS.
  *
@@ -45,6 +48,15 @@ class ArrayBuffer {
         get() = getIsByteBuffer()
 
     /**
+     * Whether this `ArrayBuffer` is holding a `HardwareBuffer`, or not.
+     * - If the `ArrayBuffer` holds a `HardwareBuffer`, `getHardwareBuffer()` can safely be called without copy.
+     * - If the `ArrayBuffer` doesn't hold a `HardwareBuffer`, `getHardwareBuffer()` will throw.
+     * You will need to call `getByteBuffer(copyIfNeeded)` instead.
+     */
+    val isHardwareBuffer: Boolean
+        get() = getIsHardwareBuffer()
+
+    /**
      * Get the size of bytes in this `ArrayBuffer`.
      */
     val size: Int
@@ -65,6 +77,16 @@ class ArrayBuffer {
      */
     fun getBuffer(copyIfNeeded: Boolean): ByteBuffer {
         return getByteBuffer(copyIfNeeded)
+    }
+
+    /**
+     * Get the underlying `HardwareBuffer` if this `ArrayBuffer` was created with one.
+     * @throws Error if this `ArrayBuffer` was not created with a `HardwareBuffer`.
+     */
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun getHardwareBuffer(): HardwareBuffer {
+        val boxed = getHardwareBufferBoxed()
+        return boxed as HardwareBuffer
     }
 
     /**
@@ -103,20 +125,24 @@ class ArrayBuffer {
 
     private external fun initHybrid(buffer: ByteBuffer): HybridData
     @RequiresApi(Build.VERSION_CODES.O)
-    private external fun initHybridBoxedHardwareBuffer(hardwareBufferBoxed: /* HardwareBuffer */ Any): HybridData
+    private external fun initHybridBoxedHardwareBuffer(hardwareBufferBoxed: BoxedHardwareBuffer): HybridData
 
     private external fun getByteBuffer(copyIfNeeded: Boolean): ByteBuffer
+    private external fun getHardwareBufferBoxed(): BoxedHardwareBuffer
+
     @FastNative
     private external fun getIsOwner(): Boolean
     @FastNative
     private external fun getIsByteBuffer(): Boolean
+    @FastNative
+    private external fun getIsHardwareBuffer(): Boolean
     @FastNative
     private external fun getBufferSize(): Int
 
     companion object {
         @JvmStatic
         @RequiresApi(Build.VERSION_CODES.O)
-        private external fun copyHardwareBuffer(hardwareBufferBoxed: /* HardwareBuffer */ Any): Any
+        private external fun copyHardwareBuffer(hardwareBufferBoxed: BoxedHardwareBuffer): BoxedHardwareBuffer
 
         /**
          * Allocate a new `ArrayBuffer` with the given [size].

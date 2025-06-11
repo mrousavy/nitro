@@ -69,6 +69,18 @@ public:
   }
 
   /**
+   * Get whether the `ArrayBuffer` is holding data from a `HardwareBuffer`.
+   */
+  bool getIsHardwareBuffer() {
+#if __ANDROID_API__ >= 26
+    auto hardwareBufferArrayBuffer = std::dynamic_pointer_cast<HardwareBufferArrayBuffer>(_arrayBuffer);
+    return hardwareBufferArrayBuffer != nullptr;
+#else
+    return false;
+#endif
+  }
+
+  /**
    * Get whether the `ArrayBuffer` is owning the data and can safely hold onto it longer.
    */
   bool getIsOwner() {
@@ -105,6 +117,21 @@ public:
     }
   }
 
+  [[nodiscard]] jni::local_ref<jni::JObject> getHardwareBuffer() {
+#if __ANDROID_API__ >= 26
+    auto hardwareBufferArrayBuffer = std::dynamic_pointer_cast<HardwareBufferArrayBuffer>(_arrayBuffer);
+    if (hardwareBufferArrayBuffer != nullptr) {
+      AHardwareBuffer* buffer = hardwareBufferArrayBuffer->getBuffer();
+      jobject boxed = AHardwareBuffer_toHardwareBuffer(jni::Environment::current(), buffer);
+      return jni::make_local(boxed);
+    } else {
+      throw std::runtime_error("The underlying buffer is not a HardwareBuffer!");
+    }
+#else
+    throw std::runtime_error("ArrayBuffer(HardwareBuffer) requires NDK API 26 or above! (minSdk >= 26)");
+#endif
+  }
+
   int getBufferSize() {
     return static_cast<int>(_arrayBuffer->size());
   }
@@ -118,7 +145,7 @@ public:
   }
 
 public:
-  static jni::alias_ref<jni::JObject> copyHardwareBuffer(jni::alias_ref<jni::JObject> hardwareBufferBoxed) {
+  static jni::local_ref<jni::JObject> copyHardwareBuffer(jni::alias_ref<jni::JObject> hardwareBufferBoxed) {
 #if __ANDROID_API__ >= 26
     // 1. Get info about input buffer
     AHardwareBuffer* hardwareBuffer = AHardwareBuffer_fromHardwareBuffer(jni::Environment::current(), hardwareBufferBoxed.get());
@@ -148,7 +175,7 @@ public:
 
     // 4. Box it & return it to Java
     jobject boxedResult = AHardwareBuffer_toHardwareBuffer(jni::Environment::current(), result);
-    return boxedResult;
+    return jni::make_local(boxedResult);
 #else
     throw std::runtime_error("ArrayBuffer(HardwareBuffer) requires NDK API 26 or above! (minSdk >= 26)");
 #endif
