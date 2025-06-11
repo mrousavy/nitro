@@ -118,8 +118,8 @@ public:
   }
 
 public:
-#if __ANDROID_API__ >= 26
   static jni::alias_ref<jni::JObject> copyHardwareBuffer(jni::alias_ref<jni::JObject> hardwareBufferBoxed) {
+#if __ANDROID_API__ >= 26
     // 1. Get info about input buffer
     AHardwareBuffer* hardwareBuffer = AHardwareBuffer_fromHardwareBuffer(jni::Environment::current(), hardwareBufferBoxed.get());
     AHardwareBuffer_Desc description;
@@ -149,8 +149,10 @@ public:
     // 4. Box it & return it to Java
     jobject boxedResult = AHardwareBuffer_toHardwareBuffer(jni::Environment::current(), result);
     return boxedResult;
-  }
+#else
+    throw std::runtime_error("ArrayBuffer(HardwareBuffer) requires NDK API 26 or above! (minSdk >= 26)");
 #endif
+  }
 
 private:
   explicit JArrayBuffer(const std::shared_ptr<ArrayBuffer>& arrayBuffer) : _arrayBuffer(arrayBuffer) {}
