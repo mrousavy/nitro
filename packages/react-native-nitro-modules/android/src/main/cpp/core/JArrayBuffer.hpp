@@ -9,6 +9,9 @@
 
 #include "ArrayBuffer.hpp"
 #include "ByteBufferArrayBuffer.hpp"
+#include "HardwareBufferArrayBuffer.hpp"
+#include <android/hardware_buffer.h>
+#include <android/hardware_buffer_jni.h>
 #include <fbjni/ByteBuffer.h>
 #include <fbjni/fbjni.h>
 #include <functional>
@@ -38,8 +41,18 @@ public:
   /**
    * Create a new `JArrayBuffer` that wraps the given `ByteBuffer` from Java.
    */
-  static jni::local_ref<JArrayBuffer::jhybriddata> initHybrid(jni::alias_ref<jhybridobject>, jni::alias_ref<jni::JByteBuffer> buffer) {
+  static jni::local_ref<JArrayBuffer::jhybriddata> initHybridByteBuffer(jni::alias_ref<jhybridobject>,
+                                                                        jni::alias_ref<jni::JByteBuffer> buffer) {
     return makeCxxInstance(buffer);
+  }
+  /**
+   * Create a new `JArrayBuffer` that wraps the given `HardwareBuffer` from Java.
+   */
+  static jni::local_ref<JArrayBuffer::jhybriddata> initHybridHardwareBuffer(jni::alias_ref<jhybridobject>,
+                                                                            jni::alias_ref<jni::JObject> boxedHardwareBuffer) {
+    // Cast jobject* to AHardwareBuffer*. It has a retain count of 0 which will be retained in `HardwareBufferArrayBuffer(..)`.
+    AHardwareBuffer* hardwareBuffer = AHardwareBuffer_fromHardwareBuffer(jni::Environment::current(), boxedHardwareBuffer.get());
+    return makeCxxInstance(hardwareBuffer);
   }
 
 public:
@@ -105,6 +118,9 @@ private:
   JArrayBuffer(jni::alias_ref<jni::JByteBuffer> byteBuffer) {
     _arrayBuffer = std::make_shared<ByteBufferArrayBuffer>(byteBuffer);
   }
+  JArrayBuffer(AHardwareBuffer* /* 0 retain */ hardwareBuffer) {
+    _arrayBuffer = std::make_shared<HardwareBufferArrayBuffer>(hardwareBuffer);
+  }
 
 private:
   friend HybridBase;
@@ -114,9 +130,10 @@ private:
 public:
   static void registerNatives() {
     registerHybrid(
-        {makeNativeMethod("initHybrid", JArrayBuffer::initHybrid), makeNativeMethod("getByteBuffer", JArrayBuffer::getByteBuffer),
-         makeNativeMethod("getIsByteBuffer", JArrayBuffer::getIsByteBuffer), makeNativeMethod("getIsOwner", JArrayBuffer::getIsOwner),
-         makeNativeMethod("getBufferSize", JArrayBuffer::getBufferSize)});
+        {makeNativeMethod("initHybrid", JArrayBuffer::initHybridByteBuffer),
+         makeNativeMethod("initHybrid", JArrayBuffer::initHybridHardwareBuffer),
+         makeNativeMethod("getByteBuffer", JArrayBuffer::getByteBuffer), makeNativeMethod("getIsByteBuffer", JArrayBuffer::getIsByteBuffer),
+         makeNativeMethod("getIsOwner", JArrayBuffer::getIsOwner), makeNativeMethod("getBufferSize", JArrayBuffer::getBufferSize)});
   }
 };
 

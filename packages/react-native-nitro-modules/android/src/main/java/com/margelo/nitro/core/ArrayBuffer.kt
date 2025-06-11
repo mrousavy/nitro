@@ -1,6 +1,7 @@
 package com.margelo.nitro.core
 
 import androidx.annotation.Keep
+import android.hardware.HardwareBuffer
 import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
 import dalvik.annotation.optimization.FastNative
@@ -77,6 +78,17 @@ class ArrayBuffer {
     }
 
     /**
+     * Create a new **owning-** `ArrayBuffer` that holds the given `HardwareBuffer`.
+     * The `HardwareBuffer` needs to remain valid for as long as the `ArrayBuffer` is alive.
+     */
+    constructor(hardwareBuffer: HardwareBuffer) {
+        if (hardwareBuffer.isClosed) {
+            throw Error("Cannot create ArrayBuffer from an already-closed HardwareBuffer!")
+        }
+        mHybridData = initHybrid(hardwareBuffer)
+    }
+
+    /**
      * Create a new **non-owning-** `ArrayBuffer` that holds foreign data, potentially coming from JS.
      */
     @Suppress("unused")
@@ -87,6 +99,7 @@ class ArrayBuffer {
     }
 
     private external fun initHybrid(buffer: ByteBuffer): HybridData
+    private external fun initHybrid(hardwareBuffer: HardwareBuffer): HybridData
     private external fun getByteBuffer(copyIfNeeded: Boolean): ByteBuffer
     @FastNative
     private external fun getIsOwner(): Boolean
@@ -129,6 +142,13 @@ class ArrayBuffer {
             // 5. Create a new `ArrayBuffer`
             return ArrayBuffer(newBuffer)
         }
+        /**
+         * Copy the given `HardwareBuffer` into a new **owning** `ArrayBuffer`.
+         */
+        fun copy(hardwareBuffer: HardwareBuffer): ArrayBuffer {
+            // TODO: Copy hardwareBuffer
+            return ArrayBuffer(hardwareBuffer)
+        }
 
         /**
          * Wrap the given `ByteBuffer` in a new **owning** `ArrayBuffer`.
@@ -136,6 +156,13 @@ class ArrayBuffer {
         fun wrap(byteBuffer: ByteBuffer): ArrayBuffer {
             byteBuffer.rewind()
             return ArrayBuffer(byteBuffer)
+        }
+
+        /**
+         * Wrap the given `HardwareBuffer` in a new **owning** `ArrayBuffer`.
+         */
+        fun wrap(hardwareBuffer: HardwareBuffer): ArrayBuffer {
+            return ArrayBuffer(hardwareBuffer)
         }
     }
 }
