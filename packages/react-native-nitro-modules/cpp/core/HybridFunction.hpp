@@ -181,8 +181,9 @@ private:
    * Get the `NativeState` of the given `value`.
    */
   template <typename THybrid>
-  static inline std::shared_ptr<THybrid> getHybridObjectNativeState(jsi::Runtime& runtime, const jsi::Value& value, FunctionKind funcKind,
-                                                                    const std::string& funcName) {
+  static inline std::shared_ptr<THybrid> getHybridObjectNativeState(jsi::Runtime& runtime, const jsi::Value& value,
+                                                                    [[maybe_unused]] FunctionKind funcKind,
+                                                                    [[maybe_unused]] const std::string& funcName) {
     // 1. Convert jsi::Value to jsi::Object
 #ifdef NITRO_DEBUG
     if (!value.isObject()) [[unlikely]] {
