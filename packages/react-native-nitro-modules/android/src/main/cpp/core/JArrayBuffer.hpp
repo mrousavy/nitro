@@ -117,6 +117,41 @@ public:
     return _arrayBuffer;
   }
 
+public:
+#if __ANDROID_API__ >= 26
+  static jni::alias_ref<jni::JObject> copyHardwareBuffer(jni::alias_ref<jni::JObject> hardwareBufferBoxed) {
+    // 1. Get info about input buffer
+    AHardwareBuffer* hardwareBuffer = AHardwareBuffer_fromHardwareBuffer(jni::Environment::current(), hardwareBufferBoxed.get());
+    AHardwareBuffer_Desc description;
+    AHardwareBuffer_describe(hardwareBuffer, &description);
+    size_t size = description.height * description.stride;
+
+    // 2. Allocate output buffer using same description as input buffer
+    AHardwareBuffer* result;
+    AHardwareBuffer_allocate(&description, &result);
+
+    // 3. Copy data over
+    void* inputData;
+    void* outputData;
+    int lockSource = AHardwareBuffer_lock(hardwareBuffer, AHARDWAREBUFFER_USAGE_CPU_READ_MASK, -1, nullptr, &inputData);
+    if (lockSource != 0) {
+      throw std::runtime_error("Failed to lock input HardwareBuffer!");
+    }
+    int lockDestination = AHardwareBuffer_lock(result, AHARDWAREBUFFER_USAGE_CPU_WRITE_MASK, -1, nullptr, &outputData);
+    if (lockDestination != 0) {
+      AHardwareBuffer_unlock(hardwareBuffer, nullptr);
+      throw std::runtime_error("Failed to lock resulting HardwareBuffer!");
+    }
+    memcpy(outputData, inputData, size);
+    AHardwareBuffer_unlock(hardwareBuffer, nullptr);
+    AHardwareBuffer_unlock(result, nullptr);
+
+    // 4. Box it & return it to Java
+    jobject boxedResult = AHardwareBuffer_toHardwareBuffer(jni::Environment::current(), result);
+    return boxedResult;
+  }
+#endif
+
 private:
   explicit JArrayBuffer(const std::shared_ptr<ArrayBuffer>& arrayBuffer) : _arrayBuffer(arrayBuffer) {}
   explicit JArrayBuffer(const jni::alias_ref<jni::JByteBuffer>& byteBuffer) {
@@ -140,7 +175,8 @@ public:
         {makeNativeMethod("initHybrid", JArrayBuffer::initHybridByteBuffer),
          makeNativeMethod("initHybridBoxedHardwareBuffer", JArrayBuffer::initHybridHardwareBuffer),
          makeNativeMethod("getByteBuffer", JArrayBuffer::getByteBuffer), makeNativeMethod("getIsByteBuffer", JArrayBuffer::getIsByteBuffer),
-         makeNativeMethod("getIsOwner", JArrayBuffer::getIsOwner), makeNativeMethod("getBufferSize", JArrayBuffer::getBufferSize)});
+         makeNativeMethod("getIsOwner", JArrayBuffer::getIsOwner), makeNativeMethod("getBufferSize", JArrayBuffer::getBufferSize),
+         makeNativeMethod("copyHardwareBuffer", JArrayBuffer::copyHardwareBuffer)});
   }
 };
 

@@ -114,6 +114,10 @@ class ArrayBuffer {
     private external fun getBufferSize(): Int
 
     companion object {
+        @JvmStatic
+        @RequiresApi(Build.VERSION_CODES.O)
+        private external fun copyHardwareBuffer(hardwareBufferBoxed: /* HardwareBuffer */ Any): Any
+
         /**
          * Allocate a new `ArrayBuffer` with the given [size].
          */
@@ -152,8 +156,9 @@ class ArrayBuffer {
          */
         @RequiresApi(Build.VERSION_CODES.O)
         fun copy(hardwareBuffer: HardwareBuffer): ArrayBuffer {
-            // TODO: Copy hardwareBuffer
-            return ArrayBuffer(hardwareBuffer)
+            val copyBoxed = copyHardwareBuffer(hardwareBuffer)
+            val copy = copyBoxed as HardwareBuffer
+            return ArrayBuffer(copy)
         }
 
         /**
