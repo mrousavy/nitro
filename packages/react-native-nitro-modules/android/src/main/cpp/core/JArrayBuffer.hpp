@@ -50,9 +50,13 @@ public:
    */
   static jni::local_ref<JArrayBuffer::jhybriddata> initHybridHardwareBuffer(jni::alias_ref<jhybridobject>,
                                                                             jni::alias_ref<jni::JObject> boxedHardwareBuffer) {
+#if __ANDROID_API__ >= 26
     // Cast jobject* to AHardwareBuffer*. It has a retain count of 0 which will be retained in `HardwareBufferArrayBuffer(..)`.
     AHardwareBuffer* hardwareBuffer = AHardwareBuffer_fromHardwareBuffer(jni::Environment::current(), boxedHardwareBuffer.get());
     return makeCxxInstance(hardwareBuffer);
+#else
+    throw std::runtime_error("ArrayBuffer(HardwareBuffer) requires NDK API 26 or above! (minSdk >= 26)");
+#endif
   }
 
 public:
@@ -118,9 +122,12 @@ private:
   JArrayBuffer(jni::alias_ref<jni::JByteBuffer> byteBuffer) {
     _arrayBuffer = std::make_shared<ByteBufferArrayBuffer>(byteBuffer);
   }
+
+#if __ANDROID_API__ >= 26
   JArrayBuffer(AHardwareBuffer* /* 0 retain */ hardwareBuffer) {
     _arrayBuffer = std::make_shared<HardwareBufferArrayBuffer>(hardwareBuffer);
   }
+#endif
 
 private:
   friend HybridBase;

@@ -17,6 +17,7 @@ namespace margelo::nitro {
 
 using namespace facebook;
 
+#if __ANDROID_API__ >= 26
 /**
  * Represents an `ArrayBuffer` that holds a `HardwareBuffer`.
  */
@@ -88,5 +89,6 @@ private:
   uint8_t* _dataCached;
   bool _isLocked;
 };
+#endif
 
 } // namespace margelo::nitro
