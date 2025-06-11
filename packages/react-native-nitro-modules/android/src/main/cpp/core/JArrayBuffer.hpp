@@ -9,6 +9,9 @@
 
 #include "ArrayBuffer.hpp"
 #include "ByteBufferArrayBuffer.hpp"
+#include "HardwareBufferArrayBuffer.hpp"
+#include <android/hardware_buffer.h>
+#include <android/hardware_buffer_jni.h>
 #include <fbjni/ByteBuffer.h>
 #include <fbjni/fbjni.h>
 #include <functional>
@@ -38,8 +41,22 @@ public:
   /**
    * Create a new `JArrayBuffer` that wraps the given `ByteBuffer` from Java.
    */
-  static jni::local_ref<JArrayBuffer::jhybriddata> initHybrid(jni::alias_ref<jhybridobject>, jni::alias_ref<jni::JByteBuffer> buffer) {
+  static jni::local_ref<JArrayBuffer::jhybriddata> initHybridByteBuffer(jni::alias_ref<jhybridobject>,
+                                                                        jni::alias_ref<jni::JByteBuffer> buffer) {
     return makeCxxInstance(buffer);
+  }
+  /**
+   * Create a new `JArrayBuffer` that wraps the given `HardwareBuffer` from Java.
+   */
+  static jni::local_ref<JArrayBuffer::jhybriddata> initHybridHardwareBuffer(jni::alias_ref<jhybridobject>,
+                                                                            jni::alias_ref<jni::JObject> boxedHardwareBuffer) {
+#if __ANDROID_API__ >= 26
+    // Cast jobject* to AHardwareBuffer*. It has a retain count of 0 which will be retained in `HardwareBufferArrayBuffer(..)`.
+    AHardwareBuffer* hardwareBuffer = AHardwareBuffer_fromHardwareBuffer(jni::Environment::current(), boxedHardwareBuffer.get());
+    return makeCxxInstance(hardwareBuffer);
+#else
+    throw std::runtime_error("ArrayBuffer(HardwareBuffer) requires NDK API 26 or above! (minSdk >= 26)");
+#endif
   }
 
 public:
@@ -49,6 +66,18 @@ public:
   bool getIsByteBuffer() {
     auto byteBufferArrayBuffer = std::dynamic_pointer_cast<ByteBufferArrayBuffer>(_arrayBuffer);
     return byteBufferArrayBuffer != nullptr;
+  }
+
+  /**
+   * Get whether the `ArrayBuffer` is holding data from a `HardwareBuffer`.
+   */
+  bool getIsHardwareBuffer() {
+#if __ANDROID_API__ >= 26
+    auto hardwareBufferArrayBuffer = std::dynamic_pointer_cast<HardwareBufferArrayBuffer>(_arrayBuffer);
+    return hardwareBufferArrayBuffer != nullptr;
+#else
+    return false;
+#endif
   }
 
   /**
@@ -67,7 +96,7 @@ public:
    * `ByteBuffer`. In this case, `getBuffer()` will **copy** the data into a new `ByteBuffer` if
    * `copyIfNeeded` is `true`, and **wrap** the data into a new `ByteBuffer` if `copyIfNeeded` is false.
    */
-  jni::local_ref<jni::JByteBuffer> getByteBuffer(bool copyIfNeeded) {
+  [[nodiscard]] jni::local_ref<jni::JByteBuffer> getByteBuffer(bool copyIfNeeded) {
     auto byteBufferArrayBuffer = std::dynamic_pointer_cast<ByteBufferArrayBuffer>(_arrayBuffer);
     if (byteBufferArrayBuffer != nullptr) {
       // It is a `ByteBufferArrayBuffer`, which has a `ByteBuffer` underneath!
@@ -88,6 +117,16 @@ public:
     }
   }
 
+  [[nodiscard]] jni::local_ref<jni::JObject> getHardwareBufferBoxed() {
+#if __ANDROID_API__ >= 26
+    AHardwareBuffer* buffer = getHardwareBuffer();
+    jobject boxed = AHardwareBuffer_toHardwareBuffer(jni::Environment::current(), buffer);
+    return jni::make_local(boxed);
+#else
+    throw std::runtime_error("ArrayBuffer(HardwareBuffer) requires NDK API 26 or above! (minSdk >= 26)");
+#endif
+  }
+
   int getBufferSize() {
     return static_cast<int>(_arrayBuffer->size());
   }
@@ -96,15 +135,37 @@ public:
   /**
    * Get the underlying `ArrayBuffer`.
    */
-  std::shared_ptr<ArrayBuffer> getArrayBuffer() const {
+  [[nodiscard]] std::shared_ptr<ArrayBuffer> getArrayBuffer() const {
     return _arrayBuffer;
+  }
+  /**
+   * Get the underlying `HardwareBuffer` if it has one.
+   * This method will throw if this `ArrayBuffer` was not created with a `HardwareBuffer`.
+   */
+  [[nodiscard]] AHardwareBuffer* getHardwareBuffer() const {
+#if __ANDROID_API__ >= 26
+    auto hardwareBufferArrayBuffer = std::dynamic_pointer_cast<HardwareBufferArrayBuffer>(_arrayBuffer);
+    if (hardwareBufferArrayBuffer != nullptr) {
+      return hardwareBufferArrayBuffer->getBuffer();
+    } else {
+      throw std::runtime_error("The underlying buffer is not a HardwareBuffer!");
+    }
+#else
+    throw std::runtime_error("ArrayBuffer(HardwareBuffer) requires NDK API 26 or above! (minSdk >= 26)");
+#endif
   }
 
 private:
-  JArrayBuffer(const std::shared_ptr<ArrayBuffer>& arrayBuffer) : _arrayBuffer(arrayBuffer) {}
-  JArrayBuffer(jni::alias_ref<jni::JByteBuffer> byteBuffer) {
+  explicit JArrayBuffer(const std::shared_ptr<ArrayBuffer>& arrayBuffer) : _arrayBuffer(arrayBuffer) {}
+  explicit JArrayBuffer(const jni::alias_ref<jni::JByteBuffer>& byteBuffer) {
     _arrayBuffer = std::make_shared<ByteBufferArrayBuffer>(byteBuffer);
   }
+
+#if __ANDROID_API__ >= 26
+  explicit JArrayBuffer(AHardwareBuffer* /* 0 retain */ hardwareBuffer) {
+    _arrayBuffer = std::make_shared<HardwareBufferArrayBuffer>(hardwareBuffer);
+  }
+#endif
 
 private:
   friend HybridBase;
@@ -114,9 +175,12 @@ private:
 public:
   static void registerNatives() {
     registerHybrid(
-        {makeNativeMethod("initHybrid", JArrayBuffer::initHybrid), makeNativeMethod("getByteBuffer", JArrayBuffer::getByteBuffer),
-         makeNativeMethod("getIsByteBuffer", JArrayBuffer::getIsByteBuffer), makeNativeMethod("getIsOwner", JArrayBuffer::getIsOwner),
-         makeNativeMethod("getBufferSize", JArrayBuffer::getBufferSize)});
+        {makeNativeMethod("initHybrid", JArrayBuffer::initHybridByteBuffer),
+         makeNativeMethod("initHybridBoxedHardwareBuffer", JArrayBuffer::initHybridHardwareBuffer),
+         makeNativeMethod("getByteBuffer", JArrayBuffer::getByteBuffer), makeNativeMethod("getIsByteBuffer", JArrayBuffer::getIsByteBuffer),
+         makeNativeMethod("getHardwareBufferBoxed", JArrayBuffer::getHardwareBufferBoxed),
+         makeNativeMethod("getIsHardwareBuffer", JArrayBuffer::getIsHardwareBuffer),
+         makeNativeMethod("getIsOwner", JArrayBuffer::getIsOwner), makeNativeMethod("getBufferSize", JArrayBuffer::getBufferSize)});
   }
 };
 

@@ -72,6 +72,8 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
   func getDriver(car: Car) throws -> Person?
   func jsStyleObjectAsParameters(params: JsStyleStruct) throws -> Void
   func createArrayBuffer() throws -> ArrayBufferHolder
+  func createArrayBufferFromNativeBuffer(copy: Bool) throws -> ArrayBufferHolder
+  func copyBuffer(buffer: ArrayBufferHolder) throws -> ArrayBufferHolder
   func getBufferLastItem(buffer: ArrayBufferHolder) throws -> Double
   func setAllValuesTo(buffer: ArrayBufferHolder, value: Double) throws -> Void
   func createArrayBufferAsync() throws -> Promise<ArrayBufferHolder>

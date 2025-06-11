@@ -1,10 +1,17 @@
 package com.margelo.nitro.core
 
 import androidx.annotation.Keep
+import android.hardware.HardwareBuffer
+import android.os.Build
+import androidx.annotation.RequiresApi
 import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
+import com.margelo.nitro.utils.HardwareBufferUtils
 import dalvik.annotation.optimization.FastNative
 import java.nio.ByteBuffer
+
+// AHardwareBuffer* needs to be boxed in jobject*
+typealias BoxedHardwareBuffer = Any
 
 /**
  * An ArrayBuffer instance shared between native (Kotlin/C++) and JS.
@@ -42,6 +49,15 @@ class ArrayBuffer {
         get() = getIsByteBuffer()
 
     /**
+     * Whether this `ArrayBuffer` is holding a `HardwareBuffer`, or not.
+     * - If the `ArrayBuffer` holds a `HardwareBuffer`, `getHardwareBuffer()` can safely be called without copy.
+     * - If the `ArrayBuffer` doesn't hold a `HardwareBuffer`, `getHardwareBuffer()` will throw.
+     * You will need to call `getByteBuffer(copyIfNeeded)` instead.
+     */
+    val isHardwareBuffer: Boolean
+        get() = getIsHardwareBuffer()
+
+    /**
      * Get the size of bytes in this `ArrayBuffer`.
      */
     val size: Int
@@ -65,6 +81,16 @@ class ArrayBuffer {
     }
 
     /**
+     * Get the underlying `HardwareBuffer` if this `ArrayBuffer` was created with one.
+     * @throws Error if this `ArrayBuffer` was not created with a `HardwareBuffer`.
+     */
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun getHardwareBuffer(): HardwareBuffer {
+        val boxed = getHardwareBufferBoxed()
+        return boxed as HardwareBuffer
+    }
+
+    /**
      * Create a new **owning-** `ArrayBuffer` that holds the given `ByteBuffer`.
      * The `ByteBuffer` needs to remain valid for as long as the `ArrayBuffer` is alive.
      */
@@ -74,6 +100,18 @@ class ArrayBuffer {
                     "and the given ByteBuffer is not direct!")
         }
         mHybridData = initHybrid(byteBuffer)
+    }
+
+    /**
+     * Create a new **owning-** `ArrayBuffer` that holds the given `HardwareBuffer`.
+     * The `HardwareBuffer` needs to remain valid for as long as the `ArrayBuffer` is alive.
+     */
+    @RequiresApi(Build.VERSION_CODES.O)
+    constructor(hardwareBuffer: HardwareBuffer) {
+        if (hardwareBuffer.isClosed) {
+            throw Error("Cannot create ArrayBuffer from an already-closed HardwareBuffer!")
+        }
+        mHybridData = initHybridBoxedHardwareBuffer(hardwareBuffer)
     }
 
     /**
@@ -87,11 +125,18 @@ class ArrayBuffer {
     }
 
     private external fun initHybrid(buffer: ByteBuffer): HybridData
+    @RequiresApi(Build.VERSION_CODES.O)
+    private external fun initHybridBoxedHardwareBuffer(hardwareBufferBoxed: BoxedHardwareBuffer): HybridData
+
     private external fun getByteBuffer(copyIfNeeded: Boolean): ByteBuffer
+    private external fun getHardwareBufferBoxed(): BoxedHardwareBuffer
+
     @FastNative
     private external fun getIsOwner(): Boolean
     @FastNative
     private external fun getIsByteBuffer(): Boolean
+    @FastNative
+    private external fun getIsHardwareBuffer(): Boolean
     @FastNative
     private external fun getBufferSize(): Int
 
@@ -108,8 +153,13 @@ class ArrayBuffer {
          * Copy the given `ArrayBuffer` into a new **owning** `ArrayBuffer`.
          */
         fun copy(other: ArrayBuffer): ArrayBuffer {
-            val byteBuffer = other.getBuffer(false)
-            return copy(byteBuffer)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && other.isHardwareBuffer) {
+                val hardwareBuffer = other.getHardwareBuffer()
+                return copy(hardwareBuffer)
+            } else {
+                val byteBuffer = other.getBuffer(false)
+                return copy(byteBuffer)
+            }
         }
 
         /**
@@ -129,6 +179,14 @@ class ArrayBuffer {
             // 5. Create a new `ArrayBuffer`
             return ArrayBuffer(newBuffer)
         }
+        /**
+         * Copy the given `HardwareBuffer` into a new **owning** `ArrayBuffer`.
+         */
+        @RequiresApi(Build.VERSION_CODES.O)
+        fun copy(hardwareBuffer: HardwareBuffer): ArrayBuffer {
+            val copy = HardwareBufferUtils.copyHardwareBuffer(hardwareBuffer)
+            return ArrayBuffer(copy)
+        }
 
         /**
          * Wrap the given `ByteBuffer` in a new **owning** `ArrayBuffer`.
@@ -136,6 +194,14 @@ class ArrayBuffer {
         fun wrap(byteBuffer: ByteBuffer): ArrayBuffer {
             byteBuffer.rewind()
             return ArrayBuffer(byteBuffer)
+        }
+
+        /**
+         * Wrap the given `HardwareBuffer` in a new **owning** `ArrayBuffer`.
+         */
+        @RequiresApi(Build.VERSION_CODES.O)
+        fun wrap(hardwareBuffer: HardwareBuffer): ArrayBuffer {
+            return ArrayBuffer(hardwareBuffer)
         }
     }
 }
