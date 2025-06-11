@@ -369,6 +369,10 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
+  abstract fun copyBuffer(buffer: ArrayBuffer): ArrayBuffer
+  
+  @DoNotStrip
+  @Keep
   abstract fun getBufferLastItem(buffer: ArrayBuffer): Double
   
   @DoNotStrip

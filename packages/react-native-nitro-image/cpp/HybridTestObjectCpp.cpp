@@ -431,6 +431,10 @@ std::shared_ptr<ArrayBuffer> HybridTestObjectCpp::createArrayBuffer() {
   return std::make_shared<NativeArrayBuffer>(buffer, size, [=]() { delete[] buffer; });
 }
 
+std::shared_ptr<ArrayBuffer> HybridTestObjectCpp::copyBuffer(const std::shared_ptr<ArrayBuffer>& buffer) {
+  return ArrayBuffer::copy(buffer);
+}
+
 double HybridTestObjectCpp::getBufferLastItem(const std::shared_ptr<ArrayBuffer>& buffer) {
   size_t size = buffer->size();
   if (size == 0) {

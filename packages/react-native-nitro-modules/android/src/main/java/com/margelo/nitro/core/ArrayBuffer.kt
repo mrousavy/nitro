@@ -153,8 +153,13 @@ class ArrayBuffer {
          * Copy the given `ArrayBuffer` into a new **owning** `ArrayBuffer`.
          */
         fun copy(other: ArrayBuffer): ArrayBuffer {
-            val byteBuffer = other.getBuffer(false)
-            return copy(byteBuffer)
+            if (other.isHardwareBuffer) {
+                val hardwareBuffer = other.getHardwareBuffer()
+                return copy(hardwareBuffer)
+            } else {
+                val byteBuffer = other.getBuffer(false)
+                return copy(byteBuffer)
+            }
         }
 
         /**

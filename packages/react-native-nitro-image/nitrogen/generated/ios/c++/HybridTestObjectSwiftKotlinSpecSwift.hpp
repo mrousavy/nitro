@@ -545,6 +545,14 @@ namespace margelo::nitro::image {
       auto __value = std::move(__result.value());
       return __value;
     }
+    inline std::shared_ptr<ArrayBuffer> copyBuffer(const std::shared_ptr<ArrayBuffer>& buffer) override {
+      auto __result = _swiftPart.copyBuffer(ArrayBufferHolder(buffer));
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
     inline double getBufferLastItem(const std::shared_ptr<ArrayBuffer>& buffer) override {
       auto __result = _swiftPart.getBufferLastItem(ArrayBufferHolder(buffer));
       if (__result.hasError()) [[unlikely]] {

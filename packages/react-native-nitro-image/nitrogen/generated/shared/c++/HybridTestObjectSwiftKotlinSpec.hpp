@@ -164,6 +164,7 @@ namespace margelo::nitro::image {
       virtual void jsStyleObjectAsParameters(const JsStyleStruct& params) = 0;
       virtual std::shared_ptr<ArrayBuffer> createArrayBuffer() = 0;
       virtual std::shared_ptr<ArrayBuffer> createArrayBufferFromNativeBuffer(bool copy) = 0;
+      virtual std::shared_ptr<ArrayBuffer> copyBuffer(const std::shared_ptr<ArrayBuffer>& buffer) = 0;
       virtual double getBufferLastItem(const std::shared_ptr<ArrayBuffer>& buffer) = 0;
       virtual void setAllValuesTo(const std::shared_ptr<ArrayBuffer>& buffer, double value) = 0;
       virtual std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>> createArrayBufferAsync() = 0;

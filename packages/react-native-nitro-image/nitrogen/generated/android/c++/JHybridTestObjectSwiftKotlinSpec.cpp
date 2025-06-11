@@ -747,6 +747,11 @@ namespace margelo::nitro::image {
     auto __result = method(_javaPart, copy);
     return __result->cthis()->getArrayBuffer();
   }
+  std::shared_ptr<ArrayBuffer> JHybridTestObjectSwiftKotlinSpec::copyBuffer(const std::shared_ptr<ArrayBuffer>& buffer) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JArrayBuffer::javaobject>(jni::alias_ref<JArrayBuffer::javaobject> /* buffer */)>("copyBuffer");
+    auto __result = method(_javaPart, JArrayBuffer::wrap(buffer));
+    return __result->cthis()->getArrayBuffer();
+  }
   double JHybridTestObjectSwiftKotlinSpec::getBufferLastItem(const std::shared_ptr<ArrayBuffer>& buffer) {
     static const auto method = javaClassStatic()->getMethod<double(jni::alias_ref<JArrayBuffer::javaobject> /* buffer */)>("getBufferLastItem");
     auto __result = method(_javaPart, JArrayBuffer::wrap(buffer));
