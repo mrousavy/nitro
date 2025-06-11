@@ -6,6 +6,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
+import com.margelo.nitro.utils.HardwareBufferUtils
 import dalvik.annotation.optimization.FastNative
 import java.nio.ByteBuffer
 
@@ -140,10 +141,6 @@ class ArrayBuffer {
     private external fun getBufferSize(): Int
 
     companion object {
-        @JvmStatic
-        @RequiresApi(Build.VERSION_CODES.O)
-        private external fun copyHardwareBuffer(hardwareBufferBoxed: BoxedHardwareBuffer): BoxedHardwareBuffer
-
         /**
          * Allocate a new `ArrayBuffer` with the given [size].
          */
@@ -182,8 +179,7 @@ class ArrayBuffer {
          */
         @RequiresApi(Build.VERSION_CODES.O)
         fun copy(hardwareBuffer: HardwareBuffer): ArrayBuffer {
-            val copyBoxed = copyHardwareBuffer(hardwareBuffer)
-            val copy = copyBoxed as HardwareBuffer
+            val copy = HardwareBufferUtils.copyHardwareBuffer(hardwareBuffer)
             return ArrayBuffer(copy)
         }
 

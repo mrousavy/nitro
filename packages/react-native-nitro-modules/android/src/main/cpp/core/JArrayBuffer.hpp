@@ -117,19 +117,10 @@ public:
     }
   }
 
-  [[nodiscard]] jni::local_ref<jni::JObject> getHardwareBuffer() {
-#if __ANDROID_API__ >= 26
-    auto hardwareBufferArrayBuffer = std::dynamic_pointer_cast<HardwareBufferArrayBuffer>(_arrayBuffer);
-    if (hardwareBufferArrayBuffer != nullptr) {
-      AHardwareBuffer* buffer = hardwareBufferArrayBuffer->getBuffer();
-      jobject boxed = AHardwareBuffer_toHardwareBuffer(jni::Environment::current(), buffer);
-      return jni::make_local(boxed);
-    } else {
-      throw std::runtime_error("The underlying buffer is not a HardwareBuffer!");
-    }
-#else
-    throw std::runtime_error("ArrayBuffer(HardwareBuffer) requires NDK API 26 or above! (minSdk >= 26)");
-#endif
+  [[nodiscard]] jni::local_ref<jni::JObject> getHardwareBufferBoxed() {
+    AHardwareBuffer* buffer = getHardwareBuffer();
+    jobject boxed = AHardwareBuffer_toHardwareBuffer(jni::Environment::current(), buffer);
+    return jni::make_local(boxed);
   }
 
   int getBufferSize() {
@@ -143,39 +134,18 @@ public:
   [[nodiscard]] std::shared_ptr<ArrayBuffer> getArrayBuffer() const {
     return _arrayBuffer;
   }
-
-public:
-  static jni::local_ref<jni::JObject> copyHardwareBuffer(jni::alias_ref<jni::JClass>, jni::alias_ref<jni::JObject> hardwareBufferBoxed) {
+  /**
+   * Get the underlying `HardwareBuffer` if it has one.
+   * This method will throw if this `ArrayBuffer` was not created with a `HardwareBuffer`.
+   */
+  [[nodiscard]] AHardwareBuffer* getHardwareBuffer() const {
 #if __ANDROID_API__ >= 26
-    // 1. Get info about input buffer
-    AHardwareBuffer* hardwareBuffer = AHardwareBuffer_fromHardwareBuffer(jni::Environment::current(), hardwareBufferBoxed.get());
-    AHardwareBuffer_Desc description;
-    AHardwareBuffer_describe(hardwareBuffer, &description);
-    size_t size = description.height * description.stride;
-
-    // 2. Allocate output buffer using same description as input buffer
-    AHardwareBuffer* result;
-    AHardwareBuffer_allocate(&description, &result);
-
-    // 3. Copy data over
-    void* inputData;
-    void* outputData;
-    int lockSource = AHardwareBuffer_lock(hardwareBuffer, AHARDWAREBUFFER_USAGE_CPU_READ_MASK, -1, nullptr, &inputData);
-    if (lockSource != 0) {
-      throw std::runtime_error("Failed to lock input HardwareBuffer!");
+    auto hardwareBufferArrayBuffer = std::dynamic_pointer_cast<HardwareBufferArrayBuffer>(_arrayBuffer);
+    if (hardwareBufferArrayBuffer != nullptr) {
+      return hardwareBufferArrayBuffer->getBuffer();
+    } else {
+      throw std::runtime_error("The underlying buffer is not a HardwareBuffer!");
     }
-    int lockDestination = AHardwareBuffer_lock(result, AHARDWAREBUFFER_USAGE_CPU_WRITE_MASK, -1, nullptr, &outputData);
-    if (lockDestination != 0) {
-      AHardwareBuffer_unlock(hardwareBuffer, nullptr);
-      throw std::runtime_error("Failed to lock resulting HardwareBuffer!");
-    }
-    memcpy(outputData, inputData, size);
-    AHardwareBuffer_unlock(hardwareBuffer, nullptr);
-    AHardwareBuffer_unlock(result, nullptr);
-
-    // 4. Box it & return it to Java
-    jobject boxedResult = AHardwareBuffer_toHardwareBuffer(jni::Environment::current(), result);
-    return jni::make_local(boxedResult);
 #else
     throw std::runtime_error("ArrayBuffer(HardwareBuffer) requires NDK API 26 or above! (minSdk >= 26)");
 #endif
@@ -204,8 +174,9 @@ public:
         {makeNativeMethod("initHybrid", JArrayBuffer::initHybridByteBuffer),
          makeNativeMethod("initHybridBoxedHardwareBuffer", JArrayBuffer::initHybridHardwareBuffer),
          makeNativeMethod("getByteBuffer", JArrayBuffer::getByteBuffer), makeNativeMethod("getIsByteBuffer", JArrayBuffer::getIsByteBuffer),
-         makeNativeMethod("getIsOwner", JArrayBuffer::getIsOwner), makeNativeMethod("getBufferSize", JArrayBuffer::getBufferSize),
-         makeNativeMethod("copyHardwareBuffer", JArrayBuffer::copyHardwareBuffer)});
+         makeNativeMethod("getHardwareBuffer", JArrayBuffer::getHardwareBufferBoxed),
+         makeNativeMethod("getIsHardwareBuffer", JArrayBuffer::getIsHardwareBuffer),
+         makeNativeMethod("getIsOwner", JArrayBuffer::getIsOwner), makeNativeMethod("getBufferSize", JArrayBuffer::getBufferSize)});
   }
 };
 
