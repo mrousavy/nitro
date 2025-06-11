@@ -2,6 +2,8 @@ package com.margelo.nitro.core
 
 import androidx.annotation.Keep
 import android.hardware.HardwareBuffer
+import android.os.Build
+import androidx.annotation.RequiresApi
 import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
 import dalvik.annotation.optimization.FastNative
@@ -81,11 +83,12 @@ class ArrayBuffer {
      * Create a new **owning-** `ArrayBuffer` that holds the given `HardwareBuffer`.
      * The `HardwareBuffer` needs to remain valid for as long as the `ArrayBuffer` is alive.
      */
+    @RequiresApi(Build.VERSION_CODES.O)
     constructor(hardwareBuffer: HardwareBuffer) {
         if (hardwareBuffer.isClosed) {
             throw Error("Cannot create ArrayBuffer from an already-closed HardwareBuffer!")
         }
-        mHybridData = initHybrid(hardwareBuffer)
+        mHybridData = initHybridBoxedHardwareBuffer(hardwareBuffer)
     }
 
     /**
@@ -99,7 +102,9 @@ class ArrayBuffer {
     }
 
     private external fun initHybrid(buffer: ByteBuffer): HybridData
-    private external fun initHybrid(hardwareBuffer: HardwareBuffer): HybridData
+    @RequiresApi(Build.VERSION_CODES.O)
+    private external fun initHybridBoxedHardwareBuffer(hardwareBufferBoxed: /* HardwareBuffer */ Any): HybridData
+
     private external fun getByteBuffer(copyIfNeeded: Boolean): ByteBuffer
     @FastNative
     private external fun getIsOwner(): Boolean
@@ -145,6 +150,7 @@ class ArrayBuffer {
         /**
          * Copy the given `HardwareBuffer` into a new **owning** `ArrayBuffer`.
          */
+        @RequiresApi(Build.VERSION_CODES.O)
         fun copy(hardwareBuffer: HardwareBuffer): ArrayBuffer {
             // TODO: Copy hardwareBuffer
             return ArrayBuffer(hardwareBuffer)
@@ -161,6 +167,7 @@ class ArrayBuffer {
         /**
          * Wrap the given `HardwareBuffer` in a new **owning** `ArrayBuffer`.
          */
+        @RequiresApi(Build.VERSION_CODES.O)
         fun wrap(hardwareBuffer: HardwareBuffer): ArrayBuffer {
             return ArrayBuffer(hardwareBuffer)
         }

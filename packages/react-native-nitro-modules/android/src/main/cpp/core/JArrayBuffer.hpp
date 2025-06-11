@@ -131,7 +131,7 @@ public:
   static void registerNatives() {
     registerHybrid(
         {makeNativeMethod("initHybrid", JArrayBuffer::initHybridByteBuffer),
-         makeNativeMethod("initHybrid", JArrayBuffer::initHybridHardwareBuffer),
+         makeNativeMethod("initHybridBoxedHardwareBuffer", JArrayBuffer::initHybridHardwareBuffer),
          makeNativeMethod("getByteBuffer", JArrayBuffer::getByteBuffer), makeNativeMethod("getIsByteBuffer", JArrayBuffer::getIsByteBuffer),
          makeNativeMethod("getIsOwner", JArrayBuffer::getIsOwner), makeNativeMethod("getBufferSize", JArrayBuffer::getBufferSize)});
   }
