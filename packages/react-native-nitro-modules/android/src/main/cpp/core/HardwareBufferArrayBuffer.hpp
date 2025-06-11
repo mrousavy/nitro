@@ -8,6 +8,7 @@
 #pragma once
 
 #include "ArrayBuffer.hpp"
+#include "JHardwareBufferUtils.hpp"
 #include <android/hardware_buffer.h>
 #include <android/hardware_buffer_jni.h>
 #include <fbjni/ByteBuffer.h>
@@ -71,10 +72,7 @@ public:
     return _dataCached;
   }
   [[nodiscard]] size_t size() const override {
-    AHardwareBuffer_Desc description;
-    AHardwareBuffer_describe(_hardwareBuffer, &description);
-    size_t size = description.height * description.stride;
-    return size;
+    return JHardwareBufferUtils::getHardwareBufferSize(_hardwareBuffer);
   }
   [[nodiscard]] bool isOwner() const noexcept override {
     return true;

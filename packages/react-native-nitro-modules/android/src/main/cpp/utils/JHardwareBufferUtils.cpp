@@ -12,14 +12,19 @@
 namespace margelo::nitro {
 
 size_t JHardwareBufferUtils::getHardwareBufferSize(AHardwareBuffer* hardwareBuffer) {
+#if __ANDROID_API__ >= 26
   AHardwareBuffer_Desc description;
   AHardwareBuffer_describe(hardwareBuffer, &description);
   size_t sourceSize = description.height * description.stride;
   return sourceSize;
+#else
+  throw std::runtime_error("ArrayBuffer(HardwareBuffer) requires NDK API 26 or above! (minSdk >= 26)");
+#endif
 }
 
 jni::local_ref<jni::JObject> JHardwareBufferUtils::copyHardwareBufferBoxedNew(jni::alias_ref<jni::JClass>,
                                                                               jni::alias_ref<jni::JObject> boxedHardwareBuffer) {
+#if __ANDROID_API__ >= 26
   // 1. Unbox HardwareBuffer from jobject
   AHardwareBuffer* sourceHardwareBuffer = AHardwareBuffer_fromHardwareBuffer(jni::Environment::current(), boxedHardwareBuffer.get());
   // 2. Describe the buffer
@@ -33,16 +38,23 @@ jni::local_ref<jni::JObject> JHardwareBufferUtils::copyHardwareBufferBoxedNew(jn
   // 5. Box it into jobject again
   jobject boxed = AHardwareBuffer_toHardwareBuffer(jni::Environment::current(), destinationHardwareBuffer);
   return jni::make_local(boxed);
+#else
+  throw std::runtime_error("ArrayBuffer(HardwareBuffer) requires NDK API 26 or above! (minSdk >= 26)");
+#endif
 }
 
 void JHardwareBufferUtils::copyHardwareBufferBoxed(jni::alias_ref<jni::JClass>, jni::alias_ref<jni::JObject> boxedSourceHardwareBuffer,
                                                    jni::alias_ref<jni::JObject> boxedDestinationHardwareBuffer) {
+#if __ANDROID_API__ >= 26
   // 1. Unbox HardwareBuffer from jobject
   AHardwareBuffer* sourceHardwareBuffer = AHardwareBuffer_fromHardwareBuffer(jni::Environment::current(), boxedSourceHardwareBuffer.get());
   AHardwareBuffer* destinationHardwareBuffer =
       AHardwareBuffer_fromHardwareBuffer(jni::Environment::current(), boxedDestinationHardwareBuffer.get());
   // 2. Copy data over from source -> destination
   copyHardwareBuffer(sourceHardwareBuffer, destinationHardwareBuffer);
+#else
+  throw std::runtime_error("ArrayBuffer(HardwareBuffer) requires NDK API 26 or above! (minSdk >= 26)");
+#endif
 }
 
 void JHardwareBufferUtils::copyHardwareBuffer(AHardwareBuffer* sourceHardwareBuffer, AHardwareBuffer* destinationHardwareBuffer) {
