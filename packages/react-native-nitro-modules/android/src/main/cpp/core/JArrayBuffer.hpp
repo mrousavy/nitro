@@ -84,7 +84,7 @@ public:
    * `ByteBuffer`. In this case, `getBuffer()` will **copy** the data into a new `ByteBuffer` if
    * `copyIfNeeded` is `true`, and **wrap** the data into a new `ByteBuffer` if `copyIfNeeded` is false.
    */
-  jni::local_ref<jni::JByteBuffer> getByteBuffer(bool copyIfNeeded) {
+  [[nodiscard]] jni::local_ref<jni::JByteBuffer> getByteBuffer(bool copyIfNeeded) {
     auto byteBufferArrayBuffer = std::dynamic_pointer_cast<ByteBufferArrayBuffer>(_arrayBuffer);
     if (byteBufferArrayBuffer != nullptr) {
       // It is a `ByteBufferArrayBuffer`, which has a `ByteBuffer` underneath!
@@ -113,18 +113,18 @@ public:
   /**
    * Get the underlying `ArrayBuffer`.
    */
-  std::shared_ptr<ArrayBuffer> getArrayBuffer() const {
+  [[nodiscard]] std::shared_ptr<ArrayBuffer> getArrayBuffer() const {
     return _arrayBuffer;
   }
 
 private:
-  JArrayBuffer(const std::shared_ptr<ArrayBuffer>& arrayBuffer) : _arrayBuffer(arrayBuffer) {}
-  JArrayBuffer(jni::alias_ref<jni::JByteBuffer> byteBuffer) {
+  explicit JArrayBuffer(const std::shared_ptr<ArrayBuffer>& arrayBuffer) : _arrayBuffer(arrayBuffer) {}
+  explicit JArrayBuffer(const jni::alias_ref<jni::JByteBuffer>& byteBuffer) {
     _arrayBuffer = std::make_shared<ByteBufferArrayBuffer>(byteBuffer);
   }
 
 #if __ANDROID_API__ >= 26
-  JArrayBuffer(AHardwareBuffer* /* 0 retain */ hardwareBuffer) {
+  explicit JArrayBuffer(AHardwareBuffer* /* 0 retain */ hardwareBuffer) {
     _arrayBuffer = std::make_shared<HardwareBufferArrayBuffer>(hardwareBuffer);
   }
 #endif
