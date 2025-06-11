@@ -1132,6 +1132,16 @@ export function getTests(
         .didNotThrow()
         .didReturn('object')
     ),
+    createTest('createArrayBufferFromNativeBuffer(copy)', () =>
+      it(() => testObject.createArrayBufferFromNativeBuffer(true))
+        .didNotThrow()
+        .didReturn('object')
+    ),
+    createTest('createArrayBufferFromNativeBuffer(wrap)', () =>
+      it(() => testObject.createArrayBufferFromNativeBuffer(false))
+        .didNotThrow()
+        .didReturn('object')
+    ),
     createTest('getBufferLastItem(...) == 5', () =>
       it(() => {
         const buffer = new Uint8Array([13, 20, 55])

@@ -420,6 +420,11 @@ void HybridTestObjectCpp::jsStyleObjectAsParameters(const JsStyleStruct& params)
   params.onChanged(params.value);
 }
 
+std::shared_ptr<ArrayBuffer> HybridTestObjectCpp::createArrayBufferFromNativeBuffer(bool /* copy */) {
+  // On C++, we are already using a "native" buffer.
+  return createArrayBuffer();
+}
+
 std::shared_ptr<ArrayBuffer> HybridTestObjectCpp::createArrayBuffer() {
   size_t size = 1024 * 1024 * 10; // 10MB
   uint8_t* buffer = new uint8_t[size];

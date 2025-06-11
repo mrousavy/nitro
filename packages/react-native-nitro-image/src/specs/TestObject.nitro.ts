@@ -154,6 +154,7 @@ interface SharedTestObjectProps {
 
   // ArrayBuffers
   createArrayBuffer(): ArrayBuffer
+  createArrayBufferFromNativeBuffer(copy: boolean): ArrayBuffer
   getBufferLastItem(buffer: ArrayBuffer): number
   setAllValuesTo(buffer: ArrayBuffer, value: number): void
   createArrayBufferAsync(): Promise<ArrayBuffer>

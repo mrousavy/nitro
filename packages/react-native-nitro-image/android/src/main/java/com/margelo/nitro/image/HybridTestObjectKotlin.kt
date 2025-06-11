@@ -1,5 +1,6 @@
 package com.margelo.nitro.image
 
+import android.hardware.HardwareBuffer
 import android.util.Log
 import androidx.annotation.Keep
 import com.facebook.proguard.annotations.DoNotStrip
@@ -261,6 +262,21 @@ class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
 
     override fun jsStyleObjectAsParameters(params: JsStyleStruct): Unit {
         params.onChanged(params.value)
+    }
+
+    override fun createArrayBufferFromNativeBuffer(copy: Boolean): ArrayBuffer {
+        val hardwareBuffer = HardwareBuffer.create(
+            1024,
+            1024,
+            HardwareBuffer.RGBA_8888,
+            1,
+            HardwareBuffer.USAGE_CPU_WRITE_OFTEN or HardwareBuffer.USAGE_CPU_READ_OFTEN
+        )
+        if (copy) {
+            return ArrayBuffer.copy(hardwareBuffer)
+        } else {
+            return ArrayBuffer.wrap(hardwareBuffer)
+        }
     }
 
     override fun createArrayBuffer(): ArrayBuffer {

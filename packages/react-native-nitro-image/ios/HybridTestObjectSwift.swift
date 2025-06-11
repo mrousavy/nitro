@@ -304,9 +304,19 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
   func jsStyleObjectAsParameters(params: JsStyleStruct) throws -> Void {
     params.onChanged(params.value)
   }
+  
+  func createArrayBufferFromNativeBuffer(copy: Bool) throws -> ArrayBufferHolder {
+    let data = Data(count: 1024 * 1024 * 10) // 10 MB
+    if copy {
+      return try ArrayBufferHolder.copy(data: data)
+    } else {
+      // TODO: `Data` cannot be safely wrapped yet on iOS.
+      return try ArrayBufferHolder.copy(data: data)
+    }
+  }
 
   func createArrayBuffer() throws -> ArrayBufferHolder {
-    return .allocate(size: 1024 * 1024 * 10) // 10 MB
+    return ArrayBufferHolder.allocate(size: 1024 * 1024 * 10) // 10 MB
   }
 
   func createArrayBufferAsync() throws -> Promise<ArrayBufferHolder> {
