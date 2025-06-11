@@ -145,7 +145,7 @@ public:
   }
 
 public:
-  static jni::local_ref<jni::JObject> copyHardwareBuffer(jni::alias_ref<jni::JObject> hardwareBufferBoxed) {
+  static jni::local_ref<jni::JObject> copyHardwareBuffer(jni::alias_ref<jni::JClass>, jni::alias_ref<jni::JObject> hardwareBufferBoxed) {
 #if __ANDROID_API__ >= 26
     // 1. Get info about input buffer
     AHardwareBuffer* hardwareBuffer = AHardwareBuffer_fromHardwareBuffer(jni::Environment::current(), hardwareBufferBoxed.get());
