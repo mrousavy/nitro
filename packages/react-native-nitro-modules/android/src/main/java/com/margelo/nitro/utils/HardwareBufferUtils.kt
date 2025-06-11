@@ -11,7 +11,9 @@ typealias BoxedHardwareBuffer = Any
 @Suppress("KotlinJniMissingFunction")
 class HardwareBufferUtils {
     companion object {
+        @JvmStatic
         private external fun copyHardwareBuffer(sourceHardwareBuffer: BoxedHardwareBuffer): BoxedHardwareBuffer
+        @JvmStatic
         private external fun copyHardwareBuffer(sourceHardwareBuffer: BoxedHardwareBuffer, destinationHardwareBuffer: BoxedHardwareBuffer)
 
         /**
