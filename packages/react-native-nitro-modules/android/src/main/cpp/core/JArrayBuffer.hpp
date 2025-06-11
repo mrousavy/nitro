@@ -174,7 +174,7 @@ public:
         {makeNativeMethod("initHybrid", JArrayBuffer::initHybridByteBuffer),
          makeNativeMethod("initHybridBoxedHardwareBuffer", JArrayBuffer::initHybridHardwareBuffer),
          makeNativeMethod("getByteBuffer", JArrayBuffer::getByteBuffer), makeNativeMethod("getIsByteBuffer", JArrayBuffer::getIsByteBuffer),
-         makeNativeMethod("getHardwareBuffer", JArrayBuffer::getHardwareBufferBoxed),
+         makeNativeMethod("getHardwareBufferBoxed", JArrayBuffer::getHardwareBufferBoxed),
          makeNativeMethod("getIsHardwareBuffer", JArrayBuffer::getIsHardwareBuffer),
          makeNativeMethod("getIsOwner", JArrayBuffer::getIsOwner), makeNativeMethod("getBufferSize", JArrayBuffer::getBufferSize)});
   }
