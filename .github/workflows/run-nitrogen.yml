@@ -12,6 +12,7 @@ on:
       - '**/*.jsx'
       - '**/*.json'
       - '**/*.lockb'
+      - '**/nitro.json'
       - '**/package.json'
       - 'packages/nitrogen/**'
   pull_request:
@@ -23,6 +24,7 @@ on:
       - '**/*.jsx'
       - '**/*.json'
       - '**/*.lockb'
+      - '**/nitro.json'
       - '**/package.json'
       - 'packages/nitrogen/**'
 
