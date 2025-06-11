@@ -153,7 +153,7 @@ class ArrayBuffer {
          * Copy the given `ArrayBuffer` into a new **owning** `ArrayBuffer`.
          */
         fun copy(other: ArrayBuffer): ArrayBuffer {
-            if (other.isHardwareBuffer) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && other.isHardwareBuffer) {
                 val hardwareBuffer = other.getHardwareBuffer()
                 return copy(hardwareBuffer)
             } else {
