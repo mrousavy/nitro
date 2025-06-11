@@ -50,6 +50,7 @@ public:
   void unlock() {
     if (_isLocked) {
       AHardwareBuffer_unlock(_hardwareBuffer, nullptr);
+      _isLocked = false;
     }
     _dataCached = nullptr;
   }
