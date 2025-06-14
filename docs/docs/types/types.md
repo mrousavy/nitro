@@ -15,7 +15,7 @@ For example, a JS `number` will always be a `double` on the native side:
 
 ```ts title="Math.nitro.ts"
 interface Math extends HybridObject {
-  add(a: number, b: number): number
+  add(a: number, b: number): number;
 }
 ```
 
@@ -125,6 +125,11 @@ These are all the types Nitro supports out of the box:
     <td><code>Dictionary&lt;String, T&gt;</code></td>
     <td><code>Map&lt;String, T&gt;</code></td>
   </tr>
+  <tr>
+    <td><code>Set&lt;T&gt;</code></td>
+    <td><code>std::unordered_set&lt;T&gt;</code></td>
+    <td><code>Set&lt;T&gt;</code></td>
+    <td><code>Set&lt;T&gt;</code></td>
   <tr>
     <td><code>Error</code></td>
     <td><code>std::exception_ptr</code></td>
