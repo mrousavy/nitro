@@ -1,4 +1,4 @@
-import type {SidebarsConfig} from '@docusaurus/plugin-content-docs';
+import type { SidebarsConfig } from "@docusaurus/plugin-content-docs";
 
 /**
  * Creating a sidebar enables you to:
@@ -13,67 +13,59 @@ import type {SidebarsConfig} from '@docusaurus/plugin-content-docs';
 const sidebars: SidebarsConfig = {
   docs: [
     {
-      type: 'category',
-      label: 'Getting started',
+      type: "category",
+      label: "Getting started",
       items: [
-        'what-is-nitro',
-        'using-nitro-in-your-app',
-        'using-nitro-in-a-library',
-        'configuration-nitro-json',
-        'minimum-requirements',
-      ]
-    },
-    {
-      type: 'category',
-      label: 'Concepts',
-      items: [
-        'nitro-modules',
-        'hybrid-objects',
-        'hybrid-views',
-        'nitrogen',
-      ]
-    },
-    {
-      type: 'category',
-      label: 'Guides',
-      items: [
-        'errors',
-        'performance-tips',
-        'worklets',
-        'entry-point',
-        'sync-vs-async',
-        'view-components',
-        'troubleshooting',
-      ]
-    },
-    {
-      type: 'category',
-      label: 'Types',
-      items: [
-        'types/types',
-        'types/primitives',
-        'types/arrays',
-        'types/optionals',
-        'types/tuples',
-        'types/variants',
-        'types/promises',
-        'types/callbacks',
-        'types/dates',
-        'types/typed-maps',
-        'types/untyped-maps',
-        'types/array-buffers',
-        'types/hybrid-objects',
-        'types/custom-types',
+        "what-is-nitro",
+        "using-nitro-in-your-app",
+        "using-nitro-in-a-library",
+        "configuration-nitro-json",
+        "minimum-requirements",
       ],
     },
     {
-      type: 'category',
-      label: 'Resources',
+      type: "category",
+      label: "Concepts",
+      items: ["nitro-modules", "hybrid-objects", "hybrid-views", "nitrogen"],
+    },
+    {
+      type: "category",
+      label: "Guides",
       items: [
-        'comparison',
-        'for-library-users',
-        'contributing',
-      ]
+        "errors",
+        "performance-tips",
+        "worklets",
+        "entry-point",
+        "sync-vs-async",
+        "view-components",
+        "troubleshooting",
+      ],
+    },
+    {
+      type: "category",
+      label: "Types",
+      items: [
+        "types/types",
+        "types/primitives",
+        "types/arrays",
+        "types/optionals",
+        "types/tuples",
+        "types/variants",
+        "types/promises",
+        "types/callbacks",
+        "types/dates",
+        "types/typed-maps",
+        "types/typed-sets",
+        "types/untyped-maps",
+        "types/array-buffers",
+        "types/hybrid-objects",
+        "types/custom-types",
+      ],
+    },
+    {
+      type: "category",
+      label: "Resources",
+      items: ["comparison", "for-library-users", "contributing"],
     },
   ],
 };
