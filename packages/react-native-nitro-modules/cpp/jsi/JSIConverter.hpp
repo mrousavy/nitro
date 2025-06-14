@@ -192,5 +192,6 @@ struct JSIConverter<std::string> final {
 #include "JSIConverter+Promise.hpp"
 #include "JSIConverter+Tuple.hpp"
 #include "JSIConverter+UnorderedMap.hpp"
+#include "JSIConverter+UnorderedSet.hpp"
 #include "JSIConverter+Variant.hpp"
 #include "JSIConverter+Vector.hpp"
