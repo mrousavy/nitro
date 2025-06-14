@@ -130,6 +130,7 @@ These are all the types Nitro supports out of the box:
     <td><code>std::unordered_set&lt;T&gt;</code></td>
     <td><code>Set&lt;T&gt;</code></td>
     <td><code>Set&lt;T&gt;</code></td>
+  </tr>
   <tr>
     <td><code>Error</code></td>
     <td><code>std::exception_ptr</code></td>
