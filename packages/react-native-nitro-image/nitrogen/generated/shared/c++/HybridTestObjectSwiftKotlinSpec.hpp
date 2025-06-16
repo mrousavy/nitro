@@ -53,6 +53,7 @@ namespace margelo::nitro::image { class HybridTestViewSpec; }
 #include "MapWrapper.hpp"
 #include <NitroModules/Promise.hpp>
 #include <exception>
+#include <chrono>
 #include "Car.hpp"
 #include <NitroModules/ArrayBuffer.hpp>
 #include "JsStyleStruct.hpp"
@@ -130,6 +131,7 @@ namespace margelo::nitro::image {
       virtual void complexEnumCallback(const std::vector<Powertrain>& array, const std::function<void(const std::vector<Powertrain>& /* array */)>& callback) = 0;
       virtual std::shared_ptr<AnyMap> createMap() = 0;
       virtual std::shared_ptr<AnyMap> mapRoundtrip(const std::shared_ptr<AnyMap>& map) = 0;
+      virtual std::vector<std::string> getMapKeys(const std::shared_ptr<AnyMap>& map) = 0;
       virtual std::unordered_map<std::string, std::variant<double, bool>> bounceMap(const std::unordered_map<std::string, std::variant<double, bool>>& map) = 0;
       virtual std::unordered_map<std::string, std::string> extractMap(const MapWrapper& mapWrapper) = 0;
       virtual double funcThatThrows() = 0;
@@ -138,6 +140,8 @@ namespace margelo::nitro::image {
       virtual std::string tryOptionalParams(double num, bool boo, const std::optional<std::string>& str) = 0;
       virtual std::string tryMiddleParam(double num, std::optional<bool> boo, const std::string& str) = 0;
       virtual std::optional<Powertrain> tryOptionalEnum(std::optional<Powertrain> value) = 0;
+      virtual std::chrono::system_clock::time_point add1Hour(std::chrono::system_clock::time_point date) = 0;
+      virtual std::chrono::system_clock::time_point currentDate() = 0;
       virtual int64_t calculateFibonacciSync(double value) = 0;
       virtual std::shared_ptr<Promise<int64_t>> calculateFibonacciAsync(double value) = 0;
       virtual std::shared_ptr<Promise<void>> wait(double seconds) = 0;
@@ -159,6 +163,8 @@ namespace margelo::nitro::image {
       virtual std::optional<Person> getDriver(const Car& car) = 0;
       virtual void jsStyleObjectAsParameters(const JsStyleStruct& params) = 0;
       virtual std::shared_ptr<ArrayBuffer> createArrayBuffer() = 0;
+      virtual std::shared_ptr<ArrayBuffer> createArrayBufferFromNativeBuffer(bool copy) = 0;
+      virtual std::shared_ptr<ArrayBuffer> copyBuffer(const std::shared_ptr<ArrayBuffer>& buffer) = 0;
       virtual double getBufferLastItem(const std::shared_ptr<ArrayBuffer>& buffer) = 0;
       virtual void setAllValuesTo(const std::shared_ptr<ArrayBuffer>& buffer, double value) = 0;
       virtual std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>> createArrayBufferAsync() = 0;

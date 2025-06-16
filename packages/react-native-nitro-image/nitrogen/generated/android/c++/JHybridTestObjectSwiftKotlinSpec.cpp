@@ -56,6 +56,8 @@ namespace margelo::nitro::image { class HybridTestViewSpec; }
 #include "JVariant_Double_Boolean.hpp"
 #include <NitroModules/Promise.hpp>
 #include <NitroModules/JPromise.hpp>
+#include <chrono>
+#include <NitroModules/JInstant.hpp>
 #include "Car.hpp"
 #include "JCar.hpp"
 #include <NitroModules/ArrayBuffer.hpp>
@@ -233,8 +235,9 @@ namespace margelo::nitro::image {
         auto downcast = jni::static_ref_cast<JFunc_void_double_cxx::javaobject>(__result);
         return downcast->cthis()->getFunction();
       } else {
-        return [__result](double value) -> void {
-          return __result->invoke(value);
+        auto __resultRef = jni::make_global(__result);
+        return [__resultRef](double value) -> void {
+          return __resultRef->invoke(value);
         };
       }
     }()) : std::nullopt;
@@ -385,6 +388,20 @@ namespace margelo::nitro::image {
     auto __result = method(_javaPart, JAnyMap::create(map));
     return __result->cthis()->getMap();
   }
+  std::vector<std::string> JHybridTestObjectSwiftKotlinSpec::getMapKeys(const std::shared_ptr<AnyMap>& map) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<jni::JArrayClass<jni::JString>>(jni::alias_ref<JAnyMap::javaobject> /* map */)>("getMapKeys");
+    auto __result = method(_javaPart, JAnyMap::create(map));
+    return [&]() {
+      size_t __size = __result->size();
+      std::vector<std::string> __vector;
+      __vector.reserve(__size);
+      for (size_t __i = 0; __i < __size; __i++) {
+        auto __element = __result->getElement(__i);
+        __vector.push_back(__element->toStdString());
+      }
+      return __vector;
+    }();
+  }
   std::unordered_map<std::string, std::variant<double, bool>> JHybridTestObjectSwiftKotlinSpec::bounceMap(const std::unordered_map<std::string, std::variant<double, bool>>& map) {
     static const auto method = javaClassStatic()->getMethod<jni::local_ref<jni::JMap<jni::JString, JVariant_Double_Boolean>>(jni::alias_ref<jni::JMap<jni::JString, JVariant_Double_Boolean>> /* map */)>("bounceMap");
     auto __result = method(_javaPart, [&]() -> jni::local_ref<jni::JMap<jni::JString, JVariant_Double_Boolean>> {
@@ -453,6 +470,16 @@ namespace margelo::nitro::image {
     static const auto method = javaClassStatic()->getMethod<jni::local_ref<JPowertrain>(jni::alias_ref<JPowertrain> /* value */)>("tryOptionalEnum");
     auto __result = method(_javaPart, value.has_value() ? JPowertrain::fromCpp(value.value()) : nullptr);
     return __result != nullptr ? std::make_optional(__result->toCpp()) : std::nullopt;
+  }
+  std::chrono::system_clock::time_point JHybridTestObjectSwiftKotlinSpec::add1Hour(std::chrono::system_clock::time_point date) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JInstant>(jni::alias_ref<JInstant> /* date */)>("add1Hour");
+    auto __result = method(_javaPart, JInstant::fromChrono(date));
+    return __result->toChrono();
+  }
+  std::chrono::system_clock::time_point JHybridTestObjectSwiftKotlinSpec::currentDate() {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JInstant>()>("currentDate");
+    auto __result = method(_javaPart);
+    return __result->toChrono();
   }
   int64_t JHybridTestObjectSwiftKotlinSpec::calculateFibonacciSync(double value) {
     static const auto method = javaClassStatic()->getMethod<int64_t(double /* value */)>("calculateFibonacciSync");
@@ -653,8 +680,9 @@ namespace margelo::nitro::image {
         auto downcast = jni::static_ref_cast<JFunc_void_double_cxx::javaobject>(__result);
         return downcast->cthis()->getFunction();
       } else {
-        return [__result](double value) -> void {
-          return __result->invoke(value);
+        auto __resultRef = jni::make_global(__result);
+        return [__resultRef](double value) -> void {
+          return __resultRef->invoke(value);
         };
       }
     }();
@@ -712,6 +740,16 @@ namespace margelo::nitro::image {
   std::shared_ptr<ArrayBuffer> JHybridTestObjectSwiftKotlinSpec::createArrayBuffer() {
     static const auto method = javaClassStatic()->getMethod<jni::local_ref<JArrayBuffer::javaobject>()>("createArrayBuffer");
     auto __result = method(_javaPart);
+    return __result->cthis()->getArrayBuffer();
+  }
+  std::shared_ptr<ArrayBuffer> JHybridTestObjectSwiftKotlinSpec::createArrayBufferFromNativeBuffer(bool copy) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JArrayBuffer::javaobject>(jboolean /* copy */)>("createArrayBufferFromNativeBuffer");
+    auto __result = method(_javaPart, copy);
+    return __result->cthis()->getArrayBuffer();
+  }
+  std::shared_ptr<ArrayBuffer> JHybridTestObjectSwiftKotlinSpec::copyBuffer(const std::shared_ptr<ArrayBuffer>& buffer) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JArrayBuffer::javaobject>(jni::alias_ref<JArrayBuffer::javaobject> /* buffer */)>("copyBuffer");
+    auto __result = method(_javaPart, JArrayBuffer::wrap(buffer));
     return __result->cthis()->getArrayBuffer();
   }
   double JHybridTestObjectSwiftKotlinSpec::getBufferLastItem(const std::shared_ptr<ArrayBuffer>& buffer) {

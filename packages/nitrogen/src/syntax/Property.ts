@@ -6,6 +6,7 @@ import type { Type } from './types/Type.js'
 import { Method } from './Method.js'
 import { VoidType } from './types/VoidType.js'
 import { Parameter } from './Parameter.js'
+import { isBooleanPropertyPrefix } from './helpers.js'
 
 export interface PropertyBody {
   getter: string
@@ -72,8 +73,8 @@ export class Property implements CodeNode {
   }
 
   getGetterName(environment: LanguageEnvironment): string {
-    if (this.type.kind === 'boolean' && this.name.startsWith('is')) {
-      // Boolean accessors where the property starts with "is" are renamed in JVM and Swift
+    if (this.type.kind === 'boolean' && isBooleanPropertyPrefix(this.name)) {
+      // Boolean accessors where the property starts with "is" or "has" are renamed in JVM and Swift
       switch (environment) {
         case 'jvm':
         case 'swift':

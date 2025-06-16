@@ -183,6 +183,7 @@ struct JSIConverter<std::string> final {
 
 #include "JSIConverter+AnyMap.hpp"
 #include "JSIConverter+ArrayBuffer.hpp"
+#include "JSIConverter+Date.hpp"
 #include "JSIConverter+Exception.hpp"
 #include "JSIConverter+Function.hpp"
 #include "JSIConverter+HostObject.hpp"

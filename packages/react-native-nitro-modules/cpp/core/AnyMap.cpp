@@ -16,6 +16,14 @@ void AnyMap::remove(const std::string& key) {
 void AnyMap::clear() noexcept {
   _map.clear();
 }
+std::vector<std::string> AnyMap::getAllKeys() const {
+  std::vector<std::string> keys;
+  keys.reserve(_map.size());
+  for (const auto& pair : _map) {
+    keys.push_back(pair.first);
+  }
+  return keys;
+}
 
 // Is
 bool AnyMap::isNull(const std::string& key) const {

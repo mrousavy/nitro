@@ -40,6 +40,7 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
   func complexEnumCallback(array: [Powertrain], callback: @escaping (_ array: [Powertrain]) -> Void) throws -> Void
   func createMap() throws -> AnyMapHolder
   func mapRoundtrip(map: AnyMapHolder) throws -> AnyMapHolder
+  func getMapKeys(map: AnyMapHolder) throws -> [String]
   func bounceMap(map: Dictionary<String, Variant_Double_Bool>) throws -> Dictionary<String, Variant_Double_Bool>
   func extractMap(mapWrapper: MapWrapper) throws -> Dictionary<String, String>
   func funcThatThrows() throws -> Double
@@ -48,6 +49,8 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
   func tryOptionalParams(num: Double, boo: Bool, str: String?) throws -> String
   func tryMiddleParam(num: Double, boo: Bool?, str: String) throws -> String
   func tryOptionalEnum(value: Powertrain?) throws -> Powertrain?
+  func add1Hour(date: Date) throws -> Date
+  func currentDate() throws -> Date
   func calculateFibonacciSync(value: Double) throws -> Int64
   func calculateFibonacciAsync(value: Double) throws -> Promise<Int64>
   func wait(seconds: Double) throws -> Promise<Void>
@@ -69,6 +72,8 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
   func getDriver(car: Car) throws -> Person?
   func jsStyleObjectAsParameters(params: JsStyleStruct) throws -> Void
   func createArrayBuffer() throws -> ArrayBufferHolder
+  func createArrayBufferFromNativeBuffer(copy: Bool) throws -> ArrayBufferHolder
+  func copyBuffer(buffer: ArrayBufferHolder) throws -> ArrayBufferHolder
   func getBufferLastItem(buffer: ArrayBufferHolder) throws -> Double
   func setAllValuesTo(buffer: ArrayBufferHolder, value: Double) throws -> Void
   func createArrayBufferAsync() throws -> Promise<ArrayBufferHolder>

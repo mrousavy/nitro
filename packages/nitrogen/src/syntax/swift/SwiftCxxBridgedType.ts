@@ -95,6 +95,9 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
           return false
         }
         return true
+      case 'date':
+        // Date <> double
+        return true
       case 'promise':
         // Promise<T> <> std::shared_ptr<Promise<T>>
         return true
@@ -269,6 +272,13 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
             throw new Error(`Invalid language! ${language}`)
         }
       }
+      case 'date':
+        switch (language) {
+          case 'swift':
+            return `margelo.nitro.chrono_time`
+          default:
+            return this.type.getCode(language)
+        }
       case 'error':
         switch (language) {
           case 'c++':
@@ -453,6 +463,14 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
         switch (language) {
           case 'swift':
             return `String(${cppParameterName})`
+          default:
+            return cppParameterName
+        }
+      }
+      case 'date': {
+        switch (language) {
+          case 'swift':
+            return `Date(fromChrono: ${cppParameterName})`.trim()
           default:
             return cppParameterName
         }
@@ -648,6 +666,14 @@ case ${i}:
         switch (language) {
           case 'swift':
             return `std.string(${swiftParameterName})`
+          default:
+            return swiftParameterName
+        }
+      }
+      case 'date': {
+        switch (language) {
+          case 'swift':
+            return `${swiftParameterName}.toCpp()`
           default:
             return swiftParameterName
         }

@@ -35,6 +35,10 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
 
   var optionalCallback: ((Double) -> Void)? = nil
 
+  var thisObject: any HybridTestObjectSwiftKotlinSpec {
+    return self
+  }
+
   func simpleFunc() throws {
     // do nothing
   }
@@ -144,16 +148,16 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
     return map
   }
 
-  var thisObject: any HybridTestObjectSwiftKotlinSpec {
-    return self
+  func mapRoundtrip(map: AnyMapHolder) throws -> AnyMapHolder {
+    return map
+  }
+
+  func getMapKeys(map: AnyMapHolder) throws -> [String] {
+    return map.getAllKeys()
   }
 
   func newTestObject() throws -> any HybridTestObjectSwiftKotlinSpec {
     return HybridTestObjectSwift()
-  }
-
-  func mapRoundtrip(map: AnyMapHolder) throws -> AnyMapHolder {
-    return map
   }
 
   func funcThatThrows() throws -> Double {
@@ -184,6 +188,14 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
     return value
   }
 
+  func add1Hour(date: Date) throws -> Date {
+    let oneHourInSeconds = 1.0 * 60 * 60
+    return date + oneHourInSeconds
+  }
+  func currentDate() throws -> Date {
+    return .now
+  }
+
   func bounceMap(map: Dictionary<String, Variant_Double_Bool>) throws -> Dictionary<String, Variant_Double_Bool> {
     return map
   }
@@ -191,11 +203,11 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
   func extractMap(mapWrapper: MapWrapper) throws -> Dictionary<String, String> {
     return mapWrapper.map
   }
-  
+
   func getVariantHybrid(variant: Variant_Person__any_HybridTestObjectSwiftKotlinSpec_) throws -> Variant_Person__any_HybridTestObjectSwiftKotlinSpec_ {
     return variant
   }
-  
+
   func passVariant(either: Variant_String_Double_Bool__Double___String_) throws -> Variant_String_Double {
     switch either {
     case let .first(string):
@@ -206,15 +218,15 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
       return .first("holds something else!")
     }
   }
-  
+
   func getVariantEnum(variant: Variant_Bool_OldEnum) throws -> Variant_Bool_OldEnum {
     return variant
   }
-  
+
   func getVariantObjects(variant: Variant_Car_Person) throws -> Variant_Car_Person {
     return variant
   }
-  
+
   func passNamedVariant(variant: NamedVariant) throws -> NamedVariant {
     return variant
   }
@@ -292,13 +304,27 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
   func jsStyleObjectAsParameters(params: JsStyleStruct) throws -> Void {
     params.onChanged(params.value)
   }
+  
+  func createArrayBufferFromNativeBuffer(copy: Bool) throws -> ArrayBufferHolder {
+    let data = Data(count: 1024 * 1024 * 10) // 10 MB
+    if copy {
+      return try ArrayBufferHolder.copy(data: data)
+    } else {
+      // TODO: `Data` cannot be safely wrapped yet on iOS.
+      return try ArrayBufferHolder.copy(data: data)
+    }
+  }
 
   func createArrayBuffer() throws -> ArrayBufferHolder {
-    return .allocate(size: 1024 * 1024 * 10) // 10 MB
+    return ArrayBufferHolder.allocate(size: 1024 * 1024 * 10) // 10 MB
   }
 
   func createArrayBufferAsync() throws -> Promise<ArrayBufferHolder> {
     return Promise.async { try self.createArrayBuffer() }
+  }
+  
+  func copyBuffer(buffer: ArrayBufferHolder) throws -> ArrayBufferHolder {
+    return ArrayBufferHolder.copy(of: buffer)
   }
 
   func getBufferLastItem(buffer: ArrayBufferHolder) throws -> Double {

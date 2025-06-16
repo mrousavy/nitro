@@ -104,6 +104,13 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
           space: 'system',
         })
         break
+      case 'date':
+        imports.push({
+          language: 'c++',
+          name: 'NitroModules/JInstant.hpp',
+          space: 'system',
+        })
+        break
       case 'map':
         imports.push({
           language: 'c++',
@@ -303,6 +310,13 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
           default:
             return this.type.getCode(language)
         }
+      case 'date':
+        switch (language) {
+          case 'c++':
+            return `JInstant`
+          default:
+            return this.type.getCode(language)
+        }
       case 'variant': {
         const variant = getTypeAs(this.type, VariantType)
         const name = variant.getAliasName('kotlin')
@@ -423,6 +437,14 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
             const variant = getTypeAs(this.type, VariantType)
             const name = variant.getAliasName('kotlin')
             return `J${name}::fromCpp(${parameterName})`
+          default:
+            return parameterName
+        }
+      }
+      case 'date': {
+        switch (language) {
+          case 'c++':
+            return `JInstant::fromChrono(${parameterName})`
           default:
             return parameterName
         }
@@ -670,6 +692,14 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
             return parameterName
         }
       }
+      case 'date': {
+        switch (language) {
+          case 'c++':
+            return `${parameterName}->toChrono()`
+          default:
+            return parameterName
+        }
+      }
       case 'hybrid-object': {
         switch (language) {
           case 'c++':
@@ -719,8 +749,9 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
     auto downcast = jni::static_ref_cast<${jniType}::javaobject>(${parameterName});
     return downcast->cthis()->getFunction();
   } else {
-    return [${parameterName}](${params.join(', ')}) -> ${returnType} {
-      return ${parameterName}->invoke(${paramsForward});
+    auto ${parameterName}Ref = jni::make_global(${parameterName});
+    return [${parameterName}Ref](${params.join(', ')}) -> ${returnType} {
+      return ${parameterName}Ref->invoke(${paramsForward});
     };
   }
 }()

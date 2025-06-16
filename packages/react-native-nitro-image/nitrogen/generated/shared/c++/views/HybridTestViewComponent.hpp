@@ -45,6 +45,7 @@ namespace margelo::nitro::image::views {
 
   public:
     CachedProp<bool> isBlue;
+    CachedProp<bool> hasBeenCalled;
     CachedProp<ColorScheme> colorScheme;
     CachedProp<std::function<void()>> someCallback;
     CachedProp<std::optional<std::function<void(const std::shared_ptr<margelo::nitro::image::HybridTestViewSpec>& /* ref */)>>> hybridRef;

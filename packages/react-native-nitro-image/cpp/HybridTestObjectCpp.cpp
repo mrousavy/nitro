@@ -194,6 +194,10 @@ std::shared_ptr<AnyMap> HybridTestObjectCpp::mapRoundtrip(const std::shared_ptr<
   return map;
 }
 
+std::vector<std::string> HybridTestObjectCpp::getMapKeys(const std::shared_ptr<AnyMap>& map) {
+  return map->getAllKeys();
+}
+
 double HybridTestObjectCpp::funcThatThrows() {
   throw std::runtime_error("This function will only work after sacrificing seven lambs!");
 }
@@ -220,6 +224,13 @@ std::string HybridTestObjectCpp::tryMiddleParam(double /* num */, std::optional<
 
 std::optional<Powertrain> HybridTestObjectCpp::tryOptionalEnum(std::optional<Powertrain> value) {
   return value;
+}
+
+std::chrono::system_clock::time_point HybridTestObjectCpp::add1Hour(std::chrono::system_clock::time_point date) {
+  return date + std::chrono::hours(1);
+}
+std::chrono::system_clock::time_point HybridTestObjectCpp::currentDate() {
+  return std::chrono::system_clock::now();
 }
 
 std::variant<std::string, double>
@@ -409,10 +420,19 @@ void HybridTestObjectCpp::jsStyleObjectAsParameters(const JsStyleStruct& params)
   params.onChanged(params.value);
 }
 
+std::shared_ptr<ArrayBuffer> HybridTestObjectCpp::createArrayBufferFromNativeBuffer(bool /* copy */) {
+  // On C++, we are already using a "native" buffer.
+  return createArrayBuffer();
+}
+
 std::shared_ptr<ArrayBuffer> HybridTestObjectCpp::createArrayBuffer() {
   size_t size = 1024 * 1024 * 10; // 10MB
   uint8_t* buffer = new uint8_t[size];
   return std::make_shared<NativeArrayBuffer>(buffer, size, [=]() { delete[] buffer; });
+}
+
+std::shared_ptr<ArrayBuffer> HybridTestObjectCpp::copyBuffer(const std::shared_ptr<ArrayBuffer>& buffer) {
+  return ArrayBuffer::copy(buffer);
 }
 
 double HybridTestObjectCpp::getBufferLastItem(const std::shared_ptr<ArrayBuffer>& buffer) {

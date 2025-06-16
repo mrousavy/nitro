@@ -42,6 +42,15 @@ namespace margelo::nitro::image {
     static const auto method = javaClassStatic()->getMethod<void(jboolean /* isBlue */)>("setBlue");
     method(_javaPart, isBlue);
   }
+  bool JHybridTestViewSpec::getHasBeenCalled() {
+    static const auto method = javaClassStatic()->getMethod<jboolean()>("hasBeenCalled");
+    auto __result = method(_javaPart);
+    return static_cast<bool>(__result);
+  }
+  void JHybridTestViewSpec::setHasBeenCalled(bool hasBeenCalled) {
+    static const auto method = javaClassStatic()->getMethod<void(jboolean /* hasBeenCalled */)>("setHasBeenCalled");
+    method(_javaPart, hasBeenCalled);
+  }
   ColorScheme JHybridTestViewSpec::getColorScheme() {
     static const auto method = javaClassStatic()->getMethod<jni::local_ref<JColorScheme>()>("getColorScheme");
     auto __result = method(_javaPart);
@@ -59,8 +68,9 @@ namespace margelo::nitro::image {
         auto downcast = jni::static_ref_cast<JFunc_void_cxx::javaobject>(__result);
         return downcast->cthis()->getFunction();
       } else {
-        return [__result]() -> void {
-          return __result->invoke();
+        auto __resultRef = jni::make_global(__result);
+        return [__resultRef]() -> void {
+          return __resultRef->invoke();
         };
       }
     }();

@@ -83,12 +83,15 @@ public:
   void multipleArguments(double num, const std::string& str, bool boo) override;
   std::shared_ptr<AnyMap> createMap() override;
   std::shared_ptr<AnyMap> mapRoundtrip(const std::shared_ptr<AnyMap>& map) override;
+  std::vector<std::string> getMapKeys(const std::shared_ptr<AnyMap>& map) override;
   double funcThatThrows() override;
   std::shared_ptr<Promise<void>> funcThatThrowsBeforePromise() override;
   void throwError(const std::exception_ptr& error) override;
   std::string tryOptionalParams(double num, bool boo, const std::optional<std::string>& str) override;
   std::string tryMiddleParam(double num, std::optional<bool> boo, const std::string& str) override;
   std::optional<Powertrain> tryOptionalEnum(std::optional<Powertrain> value) override;
+  std::chrono::system_clock::time_point add1Hour(std::chrono::system_clock::time_point date) override;
+  std::chrono::system_clock::time_point currentDate() override;
   std::variant<std::string, double>
   passVariant(const std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>>& either) override;
 
@@ -137,7 +140,9 @@ public:
   bool isCarElectric(const Car& car) override;
   std::optional<Person> getDriver(const Car& car) override;
   void jsStyleObjectAsParameters(const JsStyleStruct& params) override;
+  std::shared_ptr<ArrayBuffer> createArrayBufferFromNativeBuffer(bool /* copy */) override;
   std::shared_ptr<ArrayBuffer> createArrayBuffer() override;
+  std::shared_ptr<ArrayBuffer> copyBuffer(const std::shared_ptr<ArrayBuffer>& buffer) override;
   double getBufferLastItem(const std::shared_ptr<ArrayBuffer>& buffer) override;
   void setAllValuesTo(const std::shared_ptr<ArrayBuffer>& buffer, double value) override;
   std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>> createArrayBufferAsync() override;

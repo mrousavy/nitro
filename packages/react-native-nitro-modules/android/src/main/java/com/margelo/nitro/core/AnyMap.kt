@@ -37,6 +37,7 @@ class AnyMap {
   external fun remove(key: String)
   @FastNative
   external fun clear()
+  external fun getAllKeys(): Array<String>
 
   @FastNative
   external fun isNull(key: String): Boolean

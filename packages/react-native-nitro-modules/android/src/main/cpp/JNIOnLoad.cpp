@@ -3,6 +3,7 @@
 #include "JAnyMap.hpp"
 #include "JAnyValue.hpp"
 #include "JArrayBuffer.hpp"
+#include "JHardwareBufferUtils.hpp"
 #include "JNitroModules.hpp"
 #include "JPromise.hpp"
 #include <fbjni/fbjni.h>
@@ -16,6 +17,7 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void*) {
     JArrayBuffer::registerNatives();
     JAnyMap::registerNatives();
     JAnyValue::registerNatives();
+    JHardwareBufferUtils::registerNatives();
     JPromise::registerNatives();
 
     // 2. Initialize the React Native TurboModule C++ part

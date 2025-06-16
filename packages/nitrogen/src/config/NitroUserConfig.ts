@@ -91,10 +91,12 @@ export const NitroUserConfigSchema = z.object({
    */
   ignorePaths: z.array(z.string()).optional(),
   /**
-   * Configures whether a `.gitattributes` file will be generated in
-   * the `nitrogen/generated/` directory to mark files as linguist-generated for GitHub.
+   * Configures whether all nitro-generated files are marked as
+   * [`linguist-generated`](https://docs.github.com/en/repositories/working-with-files/managing-files/customizing-how-changed-files-appear-on-github)
+   * for GitHub. This disables diffing for generated content and excludes them from language statistics.
+   * This is controlled via `nitrogen/generated/.gitattributes`.
    */
-  createGitAttributes: z.boolean().optional().default(true),
+  gitAttributesGeneratedFlag: z.boolean().optional().default(true),
 })
 
 /**

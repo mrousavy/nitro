@@ -118,7 +118,7 @@ export const NitroConfig = {
     return getUserConfig().ignorePaths ?? []
   },
 
-  getCreateGitAttributes(): boolean {
-    return getUserConfig().createGitAttributes ?? false
+  getGitAttributesGeneratedFlag(): boolean {
+    return getUserConfig().gitAttributesGeneratedFlag ?? false
   },
 }

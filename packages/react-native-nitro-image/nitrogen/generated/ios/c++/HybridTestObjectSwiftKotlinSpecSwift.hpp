@@ -54,6 +54,7 @@ namespace margelo::nitro::image { class HybridTestViewSpec; }
 #include "MapWrapper.hpp"
 #include <NitroModules/Promise.hpp>
 #include <exception>
+#include <chrono>
 #include "Car.hpp"
 #include <NitroModules/ArrayBuffer.hpp>
 #include <NitroModules/ArrayBufferHolder.hpp>
@@ -290,6 +291,14 @@ namespace margelo::nitro::image {
       auto __value = std::move(__result.value());
       return __value;
     }
+    inline std::vector<std::string> getMapKeys(const std::shared_ptr<AnyMap>& map) override {
+      auto __result = _swiftPart.getMapKeys(map);
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
     inline std::unordered_map<std::string, std::variant<double, bool>> bounceMap(const std::unordered_map<std::string, std::variant<double, bool>>& map) override {
       auto __result = _swiftPart.bounceMap(map);
       if (__result.hasError()) [[unlikely]] {
@@ -346,6 +355,22 @@ namespace margelo::nitro::image {
     }
     inline std::optional<Powertrain> tryOptionalEnum(std::optional<Powertrain> value) override {
       auto __result = _swiftPart.tryOptionalEnum(value);
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline std::chrono::system_clock::time_point add1Hour(std::chrono::system_clock::time_point date) override {
+      auto __result = _swiftPart.add1Hour(date);
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline std::chrono::system_clock::time_point currentDate() override {
+      auto __result = _swiftPart.currentDate();
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
@@ -506,6 +531,22 @@ namespace margelo::nitro::image {
     }
     inline std::shared_ptr<ArrayBuffer> createArrayBuffer() override {
       auto __result = _swiftPart.createArrayBuffer();
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline std::shared_ptr<ArrayBuffer> createArrayBufferFromNativeBuffer(bool copy) override {
+      auto __result = _swiftPart.createArrayBufferFromNativeBuffer(std::forward<decltype(copy)>(copy));
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline std::shared_ptr<ArrayBuffer> copyBuffer(const std::shared_ptr<ArrayBuffer>& buffer) override {
+      auto __result = _swiftPart.copyBuffer(ArrayBufferHolder(buffer));
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }

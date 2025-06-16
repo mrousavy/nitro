@@ -187,6 +187,10 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
+  abstract fun getMapKeys(map: AnyMap): Array<String>
+  
+  @DoNotStrip
+  @Keep
   abstract fun bounceMap(map: Map<String, Variant_Double_Boolean>): Map<String, Variant_Double_Boolean>
   
   @DoNotStrip
@@ -216,6 +220,14 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   @DoNotStrip
   @Keep
   abstract fun tryOptionalEnum(value: Powertrain?): Powertrain?
+  
+  @DoNotStrip
+  @Keep
+  abstract fun add1Hour(date: java.time.Instant): java.time.Instant
+  
+  @DoNotStrip
+  @Keep
+  abstract fun currentDate(): java.time.Instant
   
   @DoNotStrip
   @Keep
@@ -350,6 +362,14 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   @DoNotStrip
   @Keep
   abstract fun createArrayBuffer(): ArrayBuffer
+  
+  @DoNotStrip
+  @Keep
+  abstract fun createArrayBufferFromNativeBuffer(copy: Boolean): ArrayBuffer
+  
+  @DoNotStrip
+  @Keep
+  abstract fun copyBuffer(buffer: ArrayBuffer): ArrayBuffer
   
   @DoNotStrip
   @Keep

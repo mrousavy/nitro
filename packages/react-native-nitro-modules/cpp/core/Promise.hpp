@@ -106,6 +106,7 @@ public:
     for (const auto& onResolved : _onResolvedListeners) {
       onResolved(std::get<TResult>(_state));
     }
+    didFinish();
   }
   void resolve(const TResult& result) {
     std::unique_lock lock(_mutex);
@@ -116,6 +117,7 @@ public:
     for (const auto& onResolved : _onResolvedListeners) {
       onResolved(std::get<TResult>(_state));
     }
+    didFinish();
   }
   /**
    * Rejects this Promise with the given error, and calls any pending listeners.
@@ -134,6 +136,7 @@ public:
     for (const auto& onRejected : _onRejectedListeners) {
       onRejected(exception);
     }
+    didFinish();
   }
 
 public:
@@ -246,6 +249,12 @@ public:
   }
 
 private:
+  void didFinish() noexcept {
+    _onResolvedListeners.clear();
+    _onRejectedListeners.clear();
+  }
+
+private:
   std::variant<std::monostate, TResult, std::exception_ptr> _state;
   std::vector<OnResolvedFunc> _onResolvedListeners;
   std::vector<OnRejectedFunc> _onRejectedListeners;
@@ -319,6 +328,7 @@ public:
     for (const auto& onResolved : _onResolvedListeners) {
       onResolved();
     }
+    didFinish();
   }
   void reject(const std::exception_ptr& exception) {
     if (exception == nullptr) [[unlikely]] {
@@ -333,6 +343,7 @@ public:
     for (const auto& onRejected : _onRejectedListeners) {
       onRejected(exception);
     }
+    didFinish();
   }
 
 public:
@@ -399,6 +410,12 @@ public:
   [[nodiscard]]
   inline bool isPending() const noexcept {
     return !isResolved() && !isRejected();
+  }
+
+private:
+  void didFinish() noexcept {
+    _onResolvedListeners.clear();
+    _onRejectedListeners.clear();
   }
 
 private:

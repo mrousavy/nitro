@@ -16,6 +16,8 @@ namespace margelo::nitro::image {
     registerHybrids(this, [](Prototype& prototype) {
       prototype.registerHybridGetter("isBlue", &HybridTestViewSpec::getIsBlue);
       prototype.registerHybridSetter("isBlue", &HybridTestViewSpec::setIsBlue);
+      prototype.registerHybridGetter("hasBeenCalled", &HybridTestViewSpec::getHasBeenCalled);
+      prototype.registerHybridSetter("hasBeenCalled", &HybridTestViewSpec::setHasBeenCalled);
       prototype.registerHybridGetter("colorScheme", &HybridTestViewSpec::getColorScheme);
       prototype.registerHybridSetter("colorScheme", &HybridTestViewSpec::setColorScheme);
       prototype.registerHybridGetter("someCallback", &HybridTestViewSpec::getSomeCallback);

@@ -22,7 +22,7 @@ struct GlobalRefDeleter {
 
   void operator()(T* /* cthis */) {
     // It's RAII - once `GlobalRefDeleter` goes out of scope, `jni::global_ref` will too.
-    _ref = nullptr;
+    jni::ThreadScope::WithClassLoader([&] { _ref = nullptr; });
   }
 
 private:

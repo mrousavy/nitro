@@ -1,5 +1,6 @@
 package com.margelo.nitro.image
 
+import android.hardware.HardwareBuffer
 import android.util.Log
 import androidx.annotation.Keep
 import com.facebook.proguard.annotations.DoNotStrip
@@ -8,6 +9,7 @@ import com.margelo.nitro.core.AnyValue
 import com.margelo.nitro.core.ArrayBuffer
 import com.margelo.nitro.core.Promise
 import kotlinx.coroutines.delay
+import java.time.Instant
 
 @Keep
 @DoNotStrip
@@ -66,6 +68,15 @@ class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
         callback(array)
     }
 
+    override fun currentDate(): java.time.Instant {
+        return Instant.now()
+    }
+
+    override fun add1Hour(date: Instant): Instant {
+        val oneHourInSeconds = 1L * 60 * 60
+        return date.plusSeconds(oneHourInSeconds)
+    }
+
     override fun createMap(): AnyMap {
         val map = AnyMap()
         map.setDouble("number", numberValue)
@@ -84,6 +95,10 @@ class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
             "array" to AnyValue(arrayOf(AnyValue(numberValue), AnyValue(boolValue), AnyValue(stringValue), AnyValue(bigintValue), AnyValue(array)))
         ))
         return map
+    }
+
+    override fun getMapKeys(map: AnyMap): Array<String> {
+        return map.getAllKeys()
     }
 
     override fun mapRoundtrip(map: AnyMap): AnyMap {
@@ -249,6 +264,21 @@ class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
         params.onChanged(params.value)
     }
 
+    override fun createArrayBufferFromNativeBuffer(copy: Boolean): ArrayBuffer {
+        val hardwareBuffer = HardwareBuffer.create(
+            1024,
+            1024,
+            HardwareBuffer.RGBA_8888,
+            1,
+            HardwareBuffer.USAGE_CPU_WRITE_OFTEN or HardwareBuffer.USAGE_CPU_READ_OFTEN
+        )
+        if (copy) {
+            return ArrayBuffer.copy(hardwareBuffer)
+        } else {
+            return ArrayBuffer.wrap(hardwareBuffer)
+        }
+    }
+
     override fun createArrayBuffer(): ArrayBuffer {
         return ArrayBuffer.allocate(1024 * 1024 * 10) // 10 MB
     }
@@ -296,6 +326,10 @@ class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
         while (byteBuffer.hasRemaining()) {
             byteBuffer.put(byte)
         }
+    }
+
+    override fun copyBuffer(buffer: ArrayBuffer): ArrayBuffer {
+        return ArrayBuffer.copy(buffer)
     }
 
     override fun createChild(): HybridChildSpec {

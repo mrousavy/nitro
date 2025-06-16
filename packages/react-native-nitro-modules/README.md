@@ -212,6 +212,12 @@ The following C++ / JS types are supported out of the box:
     <td><code><a href="./android/src/main/java/com/margelo/nitro/core/ArrayBuffer.kt">ArrayBuffer</a></code></td>
   </tr>
   <tr>
+    <td><code>Date</code></td>
+    <td><code>std::chrono::system_clock::time_point</code></td>
+    <td><code>Date</code></td>
+    <td><code>java.time.Instant</code></td>
+  </tr>
+  <tr>
     <td>..any <code><a href="./src/HybridObject.ts">HybridObject</a></code></td>
     <td><code>std::shared_ptr&lt;<a href="./cpp/core/HybridObject.hpp">HybridObject</a>&gt;</code></td>
     <td><code><a href="./ios/core/HybridObject.swift">HybridObject</a></code></td>

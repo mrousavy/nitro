@@ -55,6 +55,13 @@ const TEST_MAP_2: Record<string, string> = {
   'third-key': 'thirdValue',
 }
 
+const BASE_DATE = new Date()
+const DATE_PLUS_1H = (() => {
+  const current = BASE_DATE.getTime()
+  const oneHourInMilliseconds = 1000 * 60 * 60
+  return new Date(current + oneHourInMilliseconds)
+})()
+
 function createTest<T>(
   name: string,
   run: () => State<T> | Promise<State<T>>
@@ -395,6 +402,34 @@ export function getTests(
         .equals(['gas', 'electric'])
     ),
 
+    // Test Dates
+    createTest('currentDate(...) is a Date', () =>
+      it(() => {
+        const now = testObject.currentDate()
+        return now instanceof Date
+      })
+        .didNotThrow()
+        .equals(true)
+    ),
+    createTest('add1Hour(...)', () =>
+      it(() => {
+        const added = testObject.add1Hour(BASE_DATE)
+        return added.getTime()
+      })
+        .didNotThrow()
+        .equals(DATE_PLUS_1H.getTime())
+    ),
+    createTest('currentDate(...) is roughly same JS value', () =>
+      it(() => {
+        const nativeNow = testObject.currentDate()
+        const jsNow = new Date()
+        const msDiff = Math.abs(jsNow.getTime() - nativeNow.getTime())
+        return msDiff < 10
+      })
+        .didNotThrow()
+        .equals(true)
+    ),
+
     // Test Maps
     createTest('createMap()', () =>
       it(() => testObject.createMap())
@@ -448,6 +483,16 @@ export function getTests(
       return it(() => testObject.mapRoundtrip(map))
         .didNotThrow()
         .equals(map)
+    }),
+    createTest('getMapKeys(...) works', () => {
+      const map = testObject.createMap()
+      const targetKeys = [...Object.keys(map)].sort()
+      return it(() => {
+        const keys = testObject.getMapKeys(map)
+        return [...keys].sort()
+      })
+        .didNotThrow()
+        .equals(targetKeys)
     }),
 
     // Test errors
@@ -1087,6 +1132,16 @@ export function getTests(
         .didNotThrow()
         .didReturn('object')
     ),
+    createTest('createArrayBufferFromNativeBuffer(copy)', () =>
+      it(() => testObject.createArrayBufferFromNativeBuffer(true))
+        .didNotThrow()
+        .didReturn('object')
+    ),
+    createTest('createArrayBufferFromNativeBuffer(wrap)', () =>
+      it(() => testObject.createArrayBufferFromNativeBuffer(false))
+        .didNotThrow()
+        .didReturn('object')
+    ),
     createTest('getBufferLastItem(...) == 5', () =>
       it(() => {
         const buffer = new Uint8Array([13, 20, 55])
@@ -1104,10 +1159,55 @@ export function getTests(
         .didNotThrow()
         .equals(true)
     ),
-    createTest('createArrayBuffer()', async () =>
+    createTest('createArrayBufferAsync()', async () =>
       (await it(() => testObject.createArrayBufferAsync()))
         .didNotThrow()
         .didReturn('object')
+    ),
+    createTest('copyArrayBuffer(JS buffer) equals', async () =>
+      it(() => {
+        // 1. Create JS buffer where value[73] is 4
+        const original = new ArrayBuffer(1024)
+        const originalArray = new Uint8Array(original)
+        originalArray[73] = 4
+        // 2. Copy the buffer
+        const copyBuffer = testObject.copyBuffer(original)
+        const copyArray = new Uint8Array(copyBuffer)
+        // 3. Compare if the value at [73] is still equal
+        return copyArray[73]
+      })
+        .didNotThrow()
+        .equals(4)
+    ),
+    createTest('copyArrayBuffer(buffer) equals', async () =>
+      it(() => {
+        // 1. Create JS buffer where value[73] is 4
+        const original = testObject.createArrayBuffer()
+        const originalArray = new Uint8Array(original)
+        originalArray[73] = 4
+        // 2. Copy the buffer
+        const copyBuffer = testObject.copyBuffer(original)
+        const copyArray = new Uint8Array(copyBuffer)
+        // 3. Compare if the value at [73] is still equal
+        return copyArray[73]
+      })
+        .didNotThrow()
+        .equals(4)
+    ),
+    createTest('copyArrayBuffer(native buffer) equals', async () =>
+      it(() => {
+        // 1. Create native buffer where value[73] is 4
+        const original = testObject.createArrayBufferFromNativeBuffer(false)
+        const originalArray = new Uint8Array(original)
+        originalArray[73] = 4
+        // 2. Copy the buffer
+        const copyBuffer = testObject.copyBuffer(original)
+        const copyArray = new Uint8Array(copyBuffer)
+        // 3. Compare if the value at [73] is still equal
+        return copyArray[73]
+      })
+        .didNotThrow()
+        .equals(4)
     ),
 
     // Base HybridObject inherited methods

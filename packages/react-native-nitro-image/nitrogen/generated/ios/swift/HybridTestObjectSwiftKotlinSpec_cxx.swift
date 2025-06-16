@@ -593,6 +593,24 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
+  public final func getMapKeys(map: margelo.nitro.TSharedMap) -> bridge.Result_std__vector_std__string__ {
+    do {
+      let __result = try self.__implementation.getMapKeys(map: AnyMapHolder(withCppPart: map))
+      let __resultCpp = { () -> bridge.std__vector_std__string_ in
+        var __vector = bridge.create_std__vector_std__string_(__result.count)
+        for __item in __result {
+          __vector.push_back(std.string(__item))
+        }
+        return __vector
+      }()
+      return bridge.create_Result_std__vector_std__string__(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__vector_std__string__(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
   public final func bounceMap(map: bridge.std__unordered_map_std__string__std__variant_double__bool__) -> bridge.Result_std__unordered_map_std__string__std__variant_double__bool___ {
     do {
       let __result = try self.__implementation.bounceMap(map: { () -> Dictionary<String, Variant_Double_Bool> in
@@ -742,6 +760,30 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
       return bridge.create_Result_std__optional_Powertrain__(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
+  public final func add1Hour(date: margelo.nitro.chrono_time) -> bridge.Result_std__chrono__system_clock__time_point_ {
+    do {
+      let __result = try self.__implementation.add1Hour(date: Date(fromChrono: date))
+      let __resultCpp = __result.toCpp()
+      return bridge.create_Result_std__chrono__system_clock__time_point_(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__chrono__system_clock__time_point_(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
+  public final func currentDate() -> bridge.Result_std__chrono__system_clock__time_point_ {
+    do {
+      let __result = try self.__implementation.currentDate()
+      let __resultCpp = __result.toCpp()
+      return bridge.create_Result_std__chrono__system_clock__time_point_(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__chrono__system_clock__time_point_(__exceptionPtr)
     }
   }
   
@@ -1295,6 +1337,30 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   public final func createArrayBuffer() -> bridge.Result_std__shared_ptr_ArrayBuffer__ {
     do {
       let __result = try self.__implementation.createArrayBuffer()
+      let __resultCpp = __result.getArrayBuffer()
+      return bridge.create_Result_std__shared_ptr_ArrayBuffer__(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__shared_ptr_ArrayBuffer__(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
+  public final func createArrayBufferFromNativeBuffer(copy: Bool) -> bridge.Result_std__shared_ptr_ArrayBuffer__ {
+    do {
+      let __result = try self.__implementation.createArrayBufferFromNativeBuffer(copy: copy)
+      let __resultCpp = __result.getArrayBuffer()
+      return bridge.create_Result_std__shared_ptr_ArrayBuffer__(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__shared_ptr_ArrayBuffer__(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
+  public final func copyBuffer(buffer: ArrayBufferHolder) -> bridge.Result_std__shared_ptr_ArrayBuffer__ {
+    do {
+      let __result = try self.__implementation.copyBuffer(buffer: buffer)
       let __resultCpp = __result.getArrayBuffer()
       return bridge.create_Result_std__shared_ptr_ArrayBuffer__(__resultCpp)
     } catch (let __error) {

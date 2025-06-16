@@ -89,6 +89,7 @@ interface SharedTestObjectProps {
   // Maps
   createMap(): AnyMap
   mapRoundtrip(map: AnyMap): AnyMap
+  getMapKeys(map: AnyMap): string[]
 
   // Typed Maps (records)
   bounceMap(
@@ -108,6 +109,10 @@ interface SharedTestObjectProps {
 
   // Variants
   someVariant: number | string
+
+  // Dates
+  add1Hour(date: Date): Date
+  currentDate(): Date
 
   // Promises
   calculateFibonacciSync(value: number): bigint
@@ -149,6 +154,8 @@ interface SharedTestObjectProps {
 
   // ArrayBuffers
   createArrayBuffer(): ArrayBuffer
+  createArrayBufferFromNativeBuffer(copy: boolean): ArrayBuffer
+  copyBuffer(buffer: ArrayBuffer): ArrayBuffer
   getBufferLastItem(buffer: ArrayBuffer): number
   setAllValuesTo(buffer: ArrayBuffer, value: number): void
   createArrayBufferAsync(): Promise<ArrayBuffer>

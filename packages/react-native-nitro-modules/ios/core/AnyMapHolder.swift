@@ -82,6 +82,19 @@ public final class AnyMapHolder {
     cppPart.pointee.clear()
   }
 
+  /**
+   * Get all keys in this map.
+   */
+  public func getAllKeys() -> [String] {
+    let cppKeys = cppPart.pointee.getAllKeys()
+    var keys = [String]()
+    keys.reserveCapacity(cppKeys.count)
+    for cppKey in cppKeys {
+      keys.append(String(cppKey))
+    }
+    return keys
+  }
+
   // pragma MARK: Getters
 
   /**

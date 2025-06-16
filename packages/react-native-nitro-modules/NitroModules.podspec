@@ -50,6 +50,7 @@ Pod::Spec.new do |s|
     "ios/core/AnyMapHolder.hpp",
     "ios/core/PromiseHolder.hpp",
     "ios/utils/Result.hpp",
+    "ios/utils/DateToChronoDate.hpp",
     "ios/utils/RuntimeError.hpp",
     "ios/utils/SwiftClosure.hpp",
   ]

@@ -762,9 +762,10 @@ Configures the TypeScript parser to ignore specific given paths when looking for
 
 By default, this is empty ( `[]`), but it can be set to ignore paths like `["node_modules", "lib"]`.
 
-## `createGitAttributes` [​](https://nitro.margelo.com/docs/configuration-nitro-json\#creategitattributes "Direct link to creategitattributes")
+## `gitAttributesGeneratedFlag` [​](https://nitro.margelo.com/docs/configuration-nitro-json\#gitattributesgeneratedflag "Direct link to gitattributesgeneratedflag")
 
-Configures whether a `.gitattributes` file will be generated in the `nitrogen/generated/` directory to mark files as [`linguist-generated`](https://docs.github.com/en/repositories/working-with-files/managing-files/customizing-how-changed-files-appear-on-github) for GitHub.
+Configures whether all nitro-generated files are marked as [`linguist-generated`](https://docs.github.com/en/repositories/working-with-files/managing-files/customizing-how-changed-files-appear-on-github) for GitHub. This disables diffing for generated content and excludes them from language statistics.
+This is controlled via `nitrogen/generated/.gitattributes`.
 
 - [`cxxNamespace`](https://nitro.margelo.com/docs/configuration-nitro-json#cxxnamespace)
 - [`ios`](https://nitro.margelo.com/docs/configuration-nitro-json#ios)
@@ -2471,6 +2472,7 @@ These are all the types Nitro supports out of the box:
 | `Promise<T>` | `std::shared_ptr<Promise<T>>` | `Promise<T>` | `Promise<T>` |
 | `object` | `std::shared_ptr<AnyMap>` | `AnyMapHolder` | `AnyMap` |
 | `ArrayBuffer` | `std::shared_ptr<ArrayBuffer>` | `ArrayBufferHolder` | `ArrayBuffer` |
+| `Date` | `std::chrono::system_clock::time_point` | `Date` | `java.time.Instant` |
 | ..any `HybridObject` | `std::shared_ptr<HybridObject>` | `HybridObject` | `HybridObject` |
 | ..any `interface` | `T` | `T` | `T` |
 | ..any `enum` | `T` | `T` | `T` |

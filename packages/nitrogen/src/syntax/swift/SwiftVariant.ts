@@ -13,7 +13,6 @@ function isPrimitive(type: Type): boolean {
     case 'number':
     case 'string':
     case 'void':
-    case 'enum':
     case 'result-wrapper':
     case 'null':
     case 'error':
