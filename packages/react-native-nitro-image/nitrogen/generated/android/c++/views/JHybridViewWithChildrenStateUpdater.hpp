@@ -12,6 +12,7 @@
 #include <react/fabric/CoreComponentsRegistry.h>
 #include <react/renderer/core/ConcreteComponentDescriptor.h>
 #include <NitroModules/NitroDefines.hpp>
+#include <NitroModules/JStateWrapper.hpp>
 #include "JHybridViewWithChildrenSpec.hpp"
 #include "views/HybridViewWithChildrenComponent.hpp"
 
@@ -26,7 +27,7 @@ public:
 public:
   static void updateViewProps(jni::alias_ref<jni::JClass> /* class */,
                               jni::alias_ref<JHybridViewWithChildrenSpec::javaobject> view,
-                              jni::alias_ref<react::StateWrapperImpl::javaobject> stateWrapper);
+                              jni::alias_ref<JStateWrapper::javaobject> stateWrapperInterface);
 
 public:
   static void registerNatives() {

@@ -7,7 +7,7 @@
 
 package com.margelo.nitro.image.views
 
-import com.facebook.react.fabric.StateWrapperImpl
+import com.facebook.react.uimanager.StateWrapper
 import com.margelo.nitro.image.*
 
 internal class HybridViewWithChildrenStateUpdater {
@@ -18,6 +18,6 @@ internal class HybridViewWithChildrenStateUpdater {
      */
     @Suppress("KotlinJniMissingFunction")
     @JvmStatic
-    external fun updateViewProps(view: HybridViewWithChildrenSpec, state: StateWrapperImpl)
+    external fun updateViewProps(view: HybridViewWithChildrenSpec, state: StateWrapper)
   }
 }
