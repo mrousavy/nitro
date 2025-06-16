@@ -12,5 +12,5 @@ export interface HybridObjectSpec {
   methods: Method[]
   baseTypes: HybridObjectSpec[]
   isHybridView: boolean
-  viewConfig: HybridViewConfig | undefined
+  viewConfig?: HybridViewConfig
 }

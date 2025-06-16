@@ -2,7 +2,6 @@ package com.margelo.nitro.image
 
 import android.graphics.Color
 import android.view.View
-import android.widget.LinearLayout
 import androidx.annotation.Keep
 import com.facebook.proguard.annotations.DoNotStrip
 import com.facebook.react.uimanager.ThemedReactContext

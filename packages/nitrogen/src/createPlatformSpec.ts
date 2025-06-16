@@ -156,7 +156,6 @@ function getHybridObjectSpec(
     methods: methods,
     baseTypes: bases,
     isHybridView: isHybridView(type),
-    viewConfig: undefined,
   }
   return spec
 }
