@@ -203,11 +203,11 @@ export function getHybridViewPlatforms(
 }
 
 export function getHybridViewConfig(
-  view: InterfaceDeclaration | TypeAliasDeclaration
+  viewNode: InterfaceDeclaration | TypeAliasDeclaration
 ): HybridViewConfig | undefined {
-  if (!Node.isTypeAliasDeclaration(view)) return
+  if (!Node.isTypeAliasDeclaration(viewNode)) return
   const viewConfig: HybridViewConfig = { allowChildren: false }
-  const hybridViewTypeNode = view.getTypeNode()
+  const hybridViewTypeNode = viewNode.getTypeNode()
 
   if (!Node.isTypeReference(hybridViewTypeNode)) return
 
@@ -220,10 +220,10 @@ export function getHybridViewConfig(
       const properties = type.getProperties()
 
       for (const property of properties) {
-        const propertyType = property?.getTypeAtLocation(view)
+        const propertyType = property?.getTypeAtLocation(viewNode)
+        const propertyValue = propertyType.getText()
+        const propertyName = property?.getName() as keyof HybridViewConfig
         if (propertyType?.isBooleanLiteral()) {
-          const propertyValue = propertyType.getText()
-          const propertyName = property?.getName() as keyof HybridViewConfig
           viewConfig[propertyName] = propertyValue === 'true'
         }
       }
