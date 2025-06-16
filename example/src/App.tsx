@@ -57,7 +57,7 @@ export default function App() {
           name="View"
           component={ViewScreen}
           options={{
-            tabBarLabel: 'View',
+            tabBarLabel: 'Views',
             tabBarIcon: ({ size, focused }) => (
               <Image
                 source={map}

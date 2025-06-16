@@ -1,0 +1,11 @@
+{
+  "uiViewClassName": "ViewWithChildren",
+  "supportsRawText": false,
+  "bubblingEventTypes": {},
+  "directEventTypes": {},
+  "validAttributes": {
+    "colorScheme": true,
+    "someCallback": true,
+    "hybridRef": true
+  }
+}
