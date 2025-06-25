@@ -6,6 +6,7 @@ import androidx.annotation.Keep
 import com.facebook.proguard.annotations.DoNotStrip
 import com.facebook.react.uimanager.ThemedReactContext
 
+
 @Keep
 @DoNotStrip
 class HybridTestView(val context: ThemedReactContext): HybridTestViewSpec() {

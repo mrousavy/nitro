@@ -14,6 +14,7 @@
 #include "HybridImageSpecSwift.hpp"
 #include "HybridTestObjectSwiftKotlinSpecSwift.hpp"
 #include "HybridTestViewSpecSwift.hpp"
+#include "HybridViewWithChildrenSpecSwift.hpp"
 #include "NitroImage-Swift-Cxx-Umbrella.hpp"
 
 namespace margelo::nitro::image::bridge::swift {
@@ -244,6 +245,22 @@ namespace margelo::nitro::image::bridge::swift {
     }
   #endif
     NitroImage::HybridTestViewSpec_cxx& swiftPart = swiftWrapper->getSwiftPart();
+    return swiftPart.toUnsafe();
+  }
+  
+  // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridViewWithChildrenSpec>
+  std::shared_ptr<margelo::nitro::image::HybridViewWithChildrenSpec> create_std__shared_ptr_margelo__nitro__image__HybridViewWithChildrenSpec_(void* _Nonnull swiftUnsafePointer) {
+    NitroImage::HybridViewWithChildrenSpec_cxx swiftPart = NitroImage::HybridViewWithChildrenSpec_cxx::fromUnsafe(swiftUnsafePointer);
+    return std::make_shared<margelo::nitro::image::HybridViewWithChildrenSpecSwift>(swiftPart);
+  }
+  void* _Nonnull get_std__shared_ptr_margelo__nitro__image__HybridViewWithChildrenSpec_(std__shared_ptr_margelo__nitro__image__HybridViewWithChildrenSpec_ cppType) {
+    std::shared_ptr<margelo::nitro::image::HybridViewWithChildrenSpecSwift> swiftWrapper = std::dynamic_pointer_cast<margelo::nitro::image::HybridViewWithChildrenSpecSwift>(cppType);
+  #ifdef NITRO_DEBUG
+    if (swiftWrapper == nullptr) [[unlikely]] {
+      throw std::runtime_error("Class \"HybridViewWithChildrenSpec\" is not implemented in Swift!");
+    }
+  #endif
+    NitroImage::HybridViewWithChildrenSpec_cxx& swiftPart = swiftWrapper->getSwiftPart();
     return swiftPart.toUnsafe();
   }
 
