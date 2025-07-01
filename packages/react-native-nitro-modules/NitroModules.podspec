@@ -63,7 +63,9 @@ Pod::Spec.new do |s|
     # Enables stricter modular headers
     "DEFINES_MODULE" => "YES",
     # C++ compiler flags, mainly for RN version and folly.
-    "GCC_PREPROCESSOR_DEFINITIONS" => "$(inherited) FOLLY_NO_CONFIG FOLLY_CFG_NO_COROUTINES"
+    "GCC_PREPROCESSOR_DEFINITIONS" => "$(inherited) FOLLY_NO_CONFIG FOLLY_CFG_NO_COROUTINES",
+    # Enable stable ABI and library evolution
+    "BUILD_LIBRARY_FOR_DISTRIBUTION" => "YES"
   }
 
   # Nitro depends on JSI.
