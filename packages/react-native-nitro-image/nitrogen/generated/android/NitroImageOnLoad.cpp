@@ -32,6 +32,8 @@
 #include "JHybridChildSpec.hpp"
 #include "JHybridTestViewSpec.hpp"
 #include "views/JHybridTestViewStateUpdater.hpp"
+#include "JHybridViewWithChildrenSpec.hpp"
+#include "views/JHybridViewWithChildrenStateUpdater.hpp"
 #include <NitroModules/JNISharedPtr.hpp>
 #include <NitroModules/DefaultConstructableObject.hpp>
 #include "HybridTestObjectCpp.hpp"
@@ -62,6 +64,8 @@ int initialize(JavaVM* vm) {
     margelo::nitro::image::JHybridChildSpec::registerNatives();
     margelo::nitro::image::JHybridTestViewSpec::registerNatives();
     margelo::nitro::image::views::JHybridTestViewStateUpdater::registerNatives();
+    margelo::nitro::image::JHybridViewWithChildrenSpec::registerNatives();
+    margelo::nitro::image::views::JHybridViewWithChildrenStateUpdater::registerNatives();
 
     // Register Nitro Hybrid Objects
     HybridObjectRegistry::registerHybridObjectConstructor(
@@ -116,6 +120,15 @@ int initialize(JavaVM* vm) {
         auto instance = object.create();
         auto globalRef = jni::make_global(instance);
         return JNISharedPtr::make_shared_from_jni<JHybridTestViewSpec>(globalRef);
+      }
+    );
+    HybridObjectRegistry::registerHybridObjectConstructor(
+      "ViewWithChildren",
+      []() -> std::shared_ptr<HybridObject> {
+        static DefaultConstructableObject<JHybridViewWithChildrenSpec::javaobject> object("com/margelo/nitro/image/HybridViewWithChildren");
+        auto instance = object.create();
+        auto globalRef = jni::make_global(instance);
+        return JNISharedPtr::make_shared_from_jni<JHybridViewWithChildrenSpec>(globalRef);
       }
     );
   });
