@@ -39,15 +39,6 @@ struct JSIConverter<std::exception_ptr> final {
     } catch (const std::exception& e) {
       jsi::JSError error(runtime, e.what());
       return jsi::Value(runtime, error.value());
-#ifdef ANDROID
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wexceptions"
-      // Workaround for https://github.com/mrousavy/nitro/issues/382
-    } catch (const std::runtime_error& e) {
-      jsi::JSError error(runtime, e.what());
-      return jsi::Value(runtime, error.value());
-#pragma clang diagnostic pop
-#endif
     } catch (...) {
       // Some unknown exception was thrown - maybe an Objective-C error?
       std::string errorName = TypeInfo::getCurrentExceptionName();

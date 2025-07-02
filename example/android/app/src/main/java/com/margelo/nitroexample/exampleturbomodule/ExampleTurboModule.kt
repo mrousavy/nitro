@@ -1,4 +1,4 @@
-package com.nitroexample.exampleturbomodule
+package com.margelo.nitroexample.exampleturbomodule
 
 import com.facebook.react.bridge.ReactApplicationContext
 
