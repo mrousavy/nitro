@@ -25,7 +25,7 @@ namespace margelo::nitro::image::bridge::swift {
       swiftClosure.call(path);
     };
   }
-
+  
   // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridImageSpec>
   std::shared_ptr<margelo::nitro::image::HybridImageSpec> create_std__shared_ptr_margelo__nitro__image__HybridImageSpec_(void* _Nonnull swiftUnsafePointer) {
     NitroTest::HybridImageSpec_cxx swiftPart = NitroTest::HybridImageSpec_cxx::fromUnsafe(swiftUnsafePointer);
@@ -41,7 +41,7 @@ namespace margelo::nitro::image::bridge::swift {
     NitroTest::HybridImageSpec_cxx& swiftPart = swiftWrapper->getSwiftPart();
     return swiftPart.toUnsafe();
   }
-
+  
   // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridImageFactorySpec>
   std::shared_ptr<margelo::nitro::image::HybridImageFactorySpec> create_std__shared_ptr_margelo__nitro__image__HybridImageFactorySpec_(void* _Nonnull swiftUnsafePointer) {
     NitroTest::HybridImageFactorySpec_cxx swiftPart = NitroTest::HybridImageFactorySpec_cxx::fromUnsafe(swiftUnsafePointer);
@@ -57,7 +57,7 @@ namespace margelo::nitro::image::bridge::swift {
     NitroTest::HybridImageFactorySpec_cxx& swiftPart = swiftWrapper->getSwiftPart();
     return swiftPart.toUnsafe();
   }
-
+  
   // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>
   std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec> create_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_(void* _Nonnull swiftUnsafePointer) {
     NitroTest::HybridTestObjectSwiftKotlinSpec_cxx swiftPart = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::fromUnsafe(swiftUnsafePointer);
@@ -73,7 +73,7 @@ namespace margelo::nitro::image::bridge::swift {
     NitroTest::HybridTestObjectSwiftKotlinSpec_cxx& swiftPart = swiftWrapper->getSwiftPart();
     return swiftPart.toUnsafe();
   }
-
+  
   // pragma MARK: std::function<void(double /* value */)>
   Func_void_double create_Func_void_double(void* _Nonnull swiftClosureWrapper) {
     auto swiftClosure = NitroTest::Func_void_double::fromUnsafe(swiftClosureWrapper);
@@ -81,7 +81,7 @@ namespace margelo::nitro::image::bridge::swift {
       swiftClosure.call(value);
     };
   }
-
+  
   // pragma MARK: std::function<void(const std::vector<Powertrain>& /* array */)>
   Func_void_std__vector_Powertrain_ create_Func_void_std__vector_Powertrain_(void* _Nonnull swiftClosureWrapper) {
     auto swiftClosure = NitroTest::Func_void_std__vector_Powertrain_::fromUnsafe(swiftClosureWrapper);
@@ -89,7 +89,7 @@ namespace margelo::nitro::image::bridge::swift {
       swiftClosure.call(array);
     };
   }
-
+  
   // pragma MARK: std::function<void()>
   Func_void create_Func_void(void* _Nonnull swiftClosureWrapper) {
     auto swiftClosure = NitroTest::Func_void::fromUnsafe(swiftClosureWrapper);
@@ -97,7 +97,7 @@ namespace margelo::nitro::image::bridge::swift {
       swiftClosure.call();
     };
   }
-
+  
   // pragma MARK: std::function<void(const std::exception_ptr& /* error */)>
   Func_void_std__exception_ptr create_Func_void_std__exception_ptr(void* _Nonnull swiftClosureWrapper) {
     auto swiftClosure = NitroTest::Func_void_std__exception_ptr::fromUnsafe(swiftClosureWrapper);
@@ -105,7 +105,7 @@ namespace margelo::nitro::image::bridge::swift {
       swiftClosure.call(error);
     };
   }
-
+  
   // pragma MARK: std::function<void(int64_t /* result */)>
   Func_void_int64_t create_Func_void_int64_t(void* _Nonnull swiftClosureWrapper) {
     auto swiftClosure = NitroTest::Func_void_int64_t::fromUnsafe(swiftClosureWrapper);
@@ -113,7 +113,7 @@ namespace margelo::nitro::image::bridge::swift {
       swiftClosure.call(result);
     };
   }
-
+  
   // pragma MARK: std::function<void(const Car& /* result */)>
   Func_void_Car create_Func_void_Car(void* _Nonnull swiftClosureWrapper) {
     auto swiftClosure = NitroTest::Func_void_Car::fromUnsafe(swiftClosureWrapper);
@@ -121,7 +121,7 @@ namespace margelo::nitro::image::bridge::swift {
       swiftClosure.call(result);
     };
   }
-
+  
   // pragma MARK: std::function<void(std::optional<double> /* maybe */)>
   Func_void_std__optional_double_ create_Func_void_std__optional_double_(void* _Nonnull swiftClosureWrapper) {
     auto swiftClosure = NitroTest::Func_void_std__optional_double_::fromUnsafe(swiftClosureWrapper);
@@ -129,7 +129,7 @@ namespace margelo::nitro::image::bridge::swift {
       swiftClosure.call(maybe);
     };
   }
-
+  
   // pragma MARK: std::function<std::shared_ptr<Promise<double>>()>
   Func_std__shared_ptr_Promise_double__ create_Func_std__shared_ptr_Promise_double__(void* _Nonnull swiftClosureWrapper) {
     auto swiftClosure = NitroTest::Func_std__shared_ptr_Promise_double__::fromUnsafe(swiftClosureWrapper);
@@ -138,7 +138,7 @@ namespace margelo::nitro::image::bridge::swift {
       return __result;
     };
   }
-
+  
   // pragma MARK: std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<double>>>>()>
   Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double____ create_Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double____(void* _Nonnull swiftClosureWrapper) {
     auto swiftClosure = NitroTest::Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double____::fromUnsafe(swiftClosureWrapper);
@@ -147,7 +147,7 @@ namespace margelo::nitro::image::bridge::swift {
       return __result;
     };
   }
-
+  
   // pragma MARK: std::function<void(const std::shared_ptr<Promise<double>>& /* result */)>
   Func_void_std__shared_ptr_Promise_double__ create_Func_void_std__shared_ptr_Promise_double__(void* _Nonnull swiftClosureWrapper) {
     auto swiftClosure = NitroTest::Func_void_std__shared_ptr_Promise_double__::fromUnsafe(swiftClosureWrapper);
@@ -155,7 +155,7 @@ namespace margelo::nitro::image::bridge::swift {
       swiftClosure.call(result);
     };
   }
-
+  
   // pragma MARK: std::function<void(const std::shared_ptr<ArrayBuffer>& /* result */)>
   Func_void_std__shared_ptr_ArrayBuffer_ create_Func_void_std__shared_ptr_ArrayBuffer_(void* _Nonnull swiftClosureWrapper) {
     auto swiftClosure = NitroTest::Func_void_std__shared_ptr_ArrayBuffer_::fromUnsafe(swiftClosureWrapper);
@@ -163,7 +163,7 @@ namespace margelo::nitro::image::bridge::swift {
       swiftClosure.call(ArrayBufferHolder(result));
     };
   }
-
+  
   // pragma MARK: std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>>>()>
   Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____ create_Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____(void* _Nonnull swiftClosureWrapper) {
     auto swiftClosure = NitroTest::Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____::fromUnsafe(swiftClosureWrapper);
@@ -172,7 +172,7 @@ namespace margelo::nitro::image::bridge::swift {
       return __result;
     };
   }
-
+  
   // pragma MARK: std::function<void(const std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>& /* result */)>
   Func_void_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___ create_Func_void_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___(void* _Nonnull swiftClosureWrapper) {
     auto swiftClosure = NitroTest::Func_void_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___::fromUnsafe(swiftClosureWrapper);
@@ -180,7 +180,7 @@ namespace margelo::nitro::image::bridge::swift {
       swiftClosure.call(result);
     };
   }
-
+  
   // pragma MARK: std::function<std::shared_ptr<Promise<std::string>>()>
   Func_std__shared_ptr_Promise_std__string__ create_Func_std__shared_ptr_Promise_std__string__(void* _Nonnull swiftClosureWrapper) {
     auto swiftClosure = NitroTest::Func_std__shared_ptr_Promise_std__string__::fromUnsafe(swiftClosureWrapper);
@@ -189,7 +189,7 @@ namespace margelo::nitro::image::bridge::swift {
       return __result;
     };
   }
-
+  
   // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridBaseSpec>
   std::shared_ptr<margelo::nitro::image::HybridBaseSpec> create_std__shared_ptr_margelo__nitro__image__HybridBaseSpec_(void* _Nonnull swiftUnsafePointer) {
     NitroTest::HybridBaseSpec_cxx swiftPart = NitroTest::HybridBaseSpec_cxx::fromUnsafe(swiftUnsafePointer);
@@ -205,7 +205,7 @@ namespace margelo::nitro::image::bridge::swift {
     NitroTest::HybridBaseSpec_cxx& swiftPart = swiftWrapper->getSwiftPart();
     return swiftPart.toUnsafe();
   }
-
+  
   // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridChildSpec>
   std::shared_ptr<margelo::nitro::image::HybridChildSpec> create_std__shared_ptr_margelo__nitro__image__HybridChildSpec_(void* _Nonnull swiftUnsafePointer) {
     NitroTest::HybridChildSpec_cxx swiftPart = NitroTest::HybridChildSpec_cxx::fromUnsafe(swiftUnsafePointer);
@@ -221,7 +221,7 @@ namespace margelo::nitro::image::bridge::swift {
     NitroTest::HybridChildSpec_cxx& swiftPart = swiftWrapper->getSwiftPart();
     return swiftPart.toUnsafe();
   }
-
+  
   // pragma MARK: std::function<double()>
   Func_double create_Func_double(void* _Nonnull swiftClosureWrapper) {
     auto swiftClosure = NitroTest::Func_double::fromUnsafe(swiftClosureWrapper);
@@ -230,7 +230,7 @@ namespace margelo::nitro::image::bridge::swift {
       return __result;
     };
   }
-
+  
   // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridTestViewSpec>
   std::shared_ptr<margelo::nitro::image::HybridTestViewSpec> create_std__shared_ptr_margelo__nitro__image__HybridTestViewSpec_(void* _Nonnull swiftUnsafePointer) {
     NitroTest::HybridTestViewSpec_cxx swiftPart = NitroTest::HybridTestViewSpec_cxx::fromUnsafe(swiftUnsafePointer);

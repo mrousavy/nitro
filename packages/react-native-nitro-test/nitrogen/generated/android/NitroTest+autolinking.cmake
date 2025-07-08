@@ -46,7 +46,7 @@ target_sources(
 )
 
 # Define a flag to check if we are building properly
-add_definitions(-DBUILDING_NitroTest_WITH_GENERATED_CMAKE_PROJECT)
+add_definitions(-DBUILDING_NITROTEST_WITH_GENERATED_CMAKE_PROJECT)
 
 # From node_modules/react-native/ReactAndroid/cmake-utils/folly-flags.cmake
 # Used in node_modules/react-native/ReactAndroid/cmake-utils/ReactNative-application.cmake

@@ -58,8 +58,8 @@
         "deep-equal": "^2.2.3",
         "react": "19.0.0",
         "react-native": "0.78.2",
-        "react-native-nitro-image": "*",
         "react-native-nitro-modules": "*",
+        "react-native-nitro-test": "*",
         "react-native-safe-area-context": "5.4.0",
         "react-native-screens": "^4.10.0",
       },
@@ -94,24 +94,6 @@
         "@types/node": "^22.8.4",
       },
     },
-    "packages/react-native-nitro-image": {
-      "name": "react-native-nitro-image",
-      "version": "0.26.3",
-      "devDependencies": {
-        "@types/jest": "*",
-        "@types/react": "*",
-        "jest": "*",
-        "nitro-codegen": "*",
-        "react": "19.0.0",
-        "react-native": "0.78.2",
-        "react-native-nitro-modules": "*",
-      },
-      "peerDependencies": {
-        "react": "*",
-        "react-native": "*",
-        "react-native-nitro-modules": "*",
-      },
-    },
     "packages/react-native-nitro-modules": {
       "name": "react-native-nitro-modules",
       "version": "0.26.3",
@@ -126,6 +108,24 @@
       "peerDependencies": {
         "react": "*",
         "react-native": "*",
+      },
+    },
+    "packages/react-native-nitro-test": {
+      "name": "react-native-nitro-test",
+      "version": "0.26.3",
+      "devDependencies": {
+        "@types/jest": "*",
+        "@types/react": "*",
+        "jest": "*",
+        "nitro-codegen": "*",
+        "react": "19.0.0",
+        "react-native": "0.78.2",
+        "react-native-nitro-modules": "*",
+      },
+      "peerDependencies": {
+        "react": "*",
+        "react-native": "*",
+        "react-native-nitro-modules": "*",
       },
     },
   },
@@ -3124,9 +3124,9 @@
 
     "react-native-nitro-example": ["react-native-nitro-example@workspace:example"],
 
-    "react-native-nitro-image": ["react-native-nitro-image@workspace:packages/react-native-nitro-image"],
-
     "react-native-nitro-modules": ["react-native-nitro-modules@workspace:packages/react-native-nitro-modules"],
+
+    "react-native-nitro-test": ["react-native-nitro-test@workspace:packages/react-native-nitro-test"],
 
     "react-native-safe-area-context": ["react-native-safe-area-context@5.4.0", "", { "peerDependencies": { "react": "*", "react-native": "*" } }, "sha512-JaEThVyJcLhA+vU0NU8bZ0a1ih6GiF4faZ+ArZLqpYbL6j7R3caRqj+mE3lEtKCuHgwjLg3bCxLL1GPUJZVqUA=="],
 

@@ -85,7 +85,7 @@ public class HybridImageFactorySpec_cxx {
     }
   }
 
-
+  
 
   /**
    * Get the memory size of the Swift class (plus size of any other allocations)
@@ -97,7 +97,7 @@ public class HybridImageFactorySpec_cxx {
   }
 
   // Properties
-
+  
 
   // Methods
   @inline(__always)
@@ -114,7 +114,7 @@ public class HybridImageFactorySpec_cxx {
       return bridge.create_Result_std__shared_ptr_margelo__nitro__image__HybridImageSpec__(__exceptionPtr)
     }
   }
-
+  
   @inline(__always)
   public final func loadImageFromURL(path: std.string) -> bridge.Result_std__shared_ptr_margelo__nitro__image__HybridImageSpec__ {
     do {
@@ -129,7 +129,7 @@ public class HybridImageFactorySpec_cxx {
       return bridge.create_Result_std__shared_ptr_margelo__nitro__image__HybridImageSpec__(__exceptionPtr)
     }
   }
-
+  
   @inline(__always)
   public final func loadImageFromSystemName(path: std.string) -> bridge.Result_std__shared_ptr_margelo__nitro__image__HybridImageSpec__ {
     do {
@@ -144,7 +144,7 @@ public class HybridImageFactorySpec_cxx {
       return bridge.create_Result_std__shared_ptr_margelo__nitro__image__HybridImageSpec__(__exceptionPtr)
     }
   }
-
+  
   @inline(__always)
   public final func bounceBack(image: bridge.std__shared_ptr_margelo__nitro__image__HybridImageSpec_) -> bridge.Result_std__shared_ptr_margelo__nitro__image__HybridImageSpec__ {
     do {

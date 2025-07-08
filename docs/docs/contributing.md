@@ -88,7 +88,7 @@ For example, if you have a different setting in your `Podfile`, try changing it 
 The Nitro `example/` app uses a Nitro Module (`packages/react-native-nitro-test/`) which acts as an example contains a lot of test code, like `src/specs/TestObject.nitro.ts` ([link](https://github.com/mrousavy/nitro/blob/main/packages/react-native-nitro-test/src/specs/TestObject.nitro.ts)). If you change something in `TestObject.nitro.ts`, make sure to run nitrogen:
 
 ```sh
-bun image specs
+bun nitro-test specs
 ```
 
 ### Reproduce a runtime error

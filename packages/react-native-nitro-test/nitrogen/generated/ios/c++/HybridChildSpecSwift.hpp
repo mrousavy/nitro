@@ -59,7 +59,7 @@ namespace margelo::nitro::image {
 
   public:
     // Methods
-
+    
 
   private:
     NitroTest::HybridChildSpec_cxx _swiftPart;

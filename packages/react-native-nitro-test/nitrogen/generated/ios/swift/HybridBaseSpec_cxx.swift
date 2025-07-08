@@ -85,7 +85,7 @@ public class HybridBaseSpec_cxx {
     }
   }
 
-
+  
 
   /**
    * Get the memory size of the Swift class (plus size of any other allocations)
@@ -105,5 +105,5 @@ public class HybridBaseSpec_cxx {
   }
 
   // Methods
-
+  
 }

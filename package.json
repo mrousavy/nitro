@@ -16,14 +16,14 @@
     "build": "bun run --cwd packages/react-native-nitro-modules build && bun run --cwd packages/nitrogen build && bun run --cwd packages/react-native-nitro-test build",
     "bootstrap": "bun i && bun run build && cd example && bundle install && bun pods",
     "typecheck": "bun --filter=\"**\" typecheck",
-    "lint": "bun nitro lint && bun nitrogen lint && bun image lint && bun example lint",
+    "lint": "bun nitro lint && bun nitrogen lint && bun nitro-test lint && bun example lint",
     "lint-cpp": "./scripts/clang-format.sh",
     "clean": "git clean -dfx",
     "release": "./scripts/release.sh",
     "docs": "bun --cwd docs",
     "nitro": "bun --cwd packages/react-native-nitro-modules",
     "nitrogen": "bun --cwd packages/nitrogen",
-    "image": "bun --cwd packages/react-native-nitro-test",
+    "nitro-test": "bun --cwd packages/react-native-nitro-test",
     "example": "bun --cwd example"
   },
   "devDependencies": {
