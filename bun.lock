@@ -53,20 +53,20 @@
       "version": "0.26.3",
       "dependencies": {
         "@react-native-segmented-control/segmented-control": "^2.5.7",
-        "@react-navigation/bottom-tabs": "^7.3.12",
-        "@react-navigation/native": "^7.1.8",
+        "@react-navigation/bottom-tabs": "^7.4.2",
+        "@react-navigation/native": "^7.1.14",
         "deep-equal": "^2.2.3",
         "react": "19.0.0",
         "react-native": "0.79.5",
         "react-native-nitro-modules": "*",
         "react-native-nitro-test": "*",
-        "react-native-safe-area-context": "5.4.0",
-        "react-native-screens": "^4.10.0",
+        "react-native-safe-area-context": "^5.5.1",
+        "react-native-screens": "^4.11.1",
       },
       "devDependencies": {
-        "@babel/core": "^7.25.2",
-        "@babel/preset-env": "^7.25.4",
-        "@babel/runtime": "^7.25.4",
+        "@babel/core": "^7.28.0",
+        "@babel/preset-env": "^7.28.0",
+        "@babel/runtime": "^7.27.6",
         "@react-native-community/cli": "18.0.0",
         "@react-native-community/cli-platform-android": "18.0.0",
         "@react-native-community/cli-platform-ios": "18.0.0",
@@ -3128,7 +3128,7 @@
 
     "react-native-nitro-test": ["react-native-nitro-test@workspace:packages/react-native-nitro-test"],
 
-    "react-native-safe-area-context": ["react-native-safe-area-context@5.4.0", "", { "peerDependencies": { "react": "*", "react-native": "*" } }, "sha512-JaEThVyJcLhA+vU0NU8bZ0a1ih6GiF4faZ+ArZLqpYbL6j7R3caRqj+mE3lEtKCuHgwjLg3bCxLL1GPUJZVqUA=="],
+    "react-native-safe-area-context": ["react-native-safe-area-context@5.5.1", "", { "peerDependencies": { "react": "*", "react-native": "*" } }, "sha512-WYxV+mm7SWuapVWxq2071lkQlDUXjSwcu7Cc2bUtNcF80/Bl0WnuWAZ8+tO46M38PclMrQIIgbv83BvDHJNQ5g=="],
 
     "react-native-screens": ["react-native-screens@4.11.1", "", { "dependencies": { "react-freeze": "^1.0.0", "react-native-is-edge-to-edge": "^1.1.7", "warn-once": "^0.1.0" }, "peerDependencies": { "react": "*", "react-native": "*" } }, "sha512-F0zOzRVa3ptZfLpD0J8ROdo+y1fEPw+VBFq1MTY/iyDu08al7qFUO5hLMd+EYMda5VXGaTFCa8q7bOppUszhJw=="],
 
