@@ -11,7 +11,7 @@
 
 namespace margelo::nitro {
 
-size_t JHardwareBufferUtils::getHardwareBufferSize(AHardwareBuffer* hardwareBuffer) {
+size_t JHardwareBufferUtils::getHardwareBufferSize([[maybe_unused]] AHardwareBuffer* hardwareBuffer) {
 #if __ANDROID_API__ >= 26
   AHardwareBuffer_Desc description;
   AHardwareBuffer_describe(hardwareBuffer, &description);
@@ -22,8 +22,9 @@ size_t JHardwareBufferUtils::getHardwareBufferSize(AHardwareBuffer* hardwareBuff
 #endif
 }
 
-jni::local_ref<jni::JObject> JHardwareBufferUtils::copyHardwareBufferBoxedNew(jni::alias_ref<jni::JClass>,
-                                                                              jni::alias_ref<jni::JObject> boxedHardwareBuffer) {
+jni::local_ref<jni::JObject>
+JHardwareBufferUtils::copyHardwareBufferBoxedNew(jni::alias_ref<jni::JClass>,
+                                                 [[maybe_unused]] jni::alias_ref<jni::JObject> boxedHardwareBuffer) {
 #if __ANDROID_API__ >= 26
   // 1. Unbox HardwareBuffer from jobject
   AHardwareBuffer* sourceHardwareBuffer = AHardwareBuffer_fromHardwareBuffer(jni::Environment::current(), boxedHardwareBuffer.get());
@@ -43,8 +44,9 @@ jni::local_ref<jni::JObject> JHardwareBufferUtils::copyHardwareBufferBoxedNew(jn
 #endif
 }
 
-void JHardwareBufferUtils::copyHardwareBufferBoxed(jni::alias_ref<jni::JClass>, jni::alias_ref<jni::JObject> boxedSourceHardwareBuffer,
-                                                   jni::alias_ref<jni::JObject> boxedDestinationHardwareBuffer) {
+void JHardwareBufferUtils::copyHardwareBufferBoxed(jni::alias_ref<jni::JClass>,
+                                                   [[maybe_unused]] jni::alias_ref<jni::JObject> boxedSourceHardwareBuffer,
+                                                   [[maybe_unused]] jni::alias_ref<jni::JObject> boxedDestinationHardwareBuffer) {
 #if __ANDROID_API__ >= 26
   // 1. Unbox HardwareBuffer from jobject
   AHardwareBuffer* sourceHardwareBuffer = AHardwareBuffer_fromHardwareBuffer(jni::Environment::current(), boxedSourceHardwareBuffer.get());
@@ -57,7 +59,8 @@ void JHardwareBufferUtils::copyHardwareBufferBoxed(jni::alias_ref<jni::JClass>, 
 #endif
 }
 
-void JHardwareBufferUtils::copyHardwareBuffer(AHardwareBuffer* sourceHardwareBuffer, AHardwareBuffer* destinationHardwareBuffer) {
+void JHardwareBufferUtils::copyHardwareBuffer([[maybe_unused]] AHardwareBuffer* sourceHardwareBuffer,
+                                              [[maybe_unused]] AHardwareBuffer* destinationHardwareBuffer) {
 #if __ANDROID_API__ >= 26
   // 1. Get info about source buffer
   size_t sourceSize = getHardwareBufferSize(sourceHardwareBuffer);
