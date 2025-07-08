@@ -138,3 +138,4 @@ dependencies {
   implementation project(":react-native-nitro-modules")
 }
 
+project(':react-native-nitro-modules').linkNitroModules(project)

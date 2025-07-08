@@ -145,3 +145,5 @@ if (isNewArchitectureEnabled()) {
     codegenJavaPackageName = "com.margelo.nitro.image"
   }
 }
+
+project(':react-native-nitro-modules').linkNitroModules(project)

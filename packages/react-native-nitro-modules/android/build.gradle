@@ -172,3 +172,48 @@ tasks.register('prepareHeaders', Copy) {
 }
 
 preBuild.dependsOn(prepareHeaders)
+
+// A function called by other libraries that depend on Nitro to properly setup the Gradle + CMake dependency graph.
+// This ensures native building and cleaning works properly and is in-order.
+ext.linkNitroModules = { project ->
+  project.afterEvaluate {
+    // Set up proper project dependency
+    project.dependencies {
+      api project(':react-native-nitro-modules')
+    }
+
+    // Configure CMake tasks to depend on nitro-modules
+    project.tasks.withType(com.android.build.gradle.tasks.ExternalNativeBuildTask) { task ->
+      def buildType = task.name.contains("Debug") ? "Debug" :
+                      task.name.contains("Release") ? "Release" : null
+
+      if (buildType) {
+        // This CMake build depends on Nitro's CMake build
+        def dependencyTask = ":react-native-nitro-modules:buildCMake${buildType}"
+        task.dependsOn dependencyTask
+
+        // ..make sure prefab headers are ready.
+        task.dependsOn ":react-native-nitro-modules:prepareHeaders"
+      }
+    }
+
+    // Configure CMake tasks
+    project.tasks.configureEach { task ->
+      if (task.name.contains("configureCMake")) {
+        task.dependsOn(':react-native-nitro-modules:prepareHeaders')
+        task.inputs.files(project(':react-native-nitro-modules').fileTree('src/main/cpp') {
+          include '**/*.hpp'
+        })
+      }
+    }
+
+    // Ensure headers are available
+    if (project.tasks.findByName('prepareHeaders')) {
+      project.tasks.named('prepareHeaders').configure {
+        dependsOn ':react-native-nitro-modules:prepareHeaders'
+      }
+    }
+
+    project.logger.info("[NitroModules] ✅ Linked ${project.name} to react-native-nitro-modules!")
+  }
+}
