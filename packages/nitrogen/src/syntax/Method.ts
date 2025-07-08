@@ -35,7 +35,7 @@ export interface MethodModifiers {
    */
   doNotStrip?: boolean
   /**
-   * Whether this method has a `@preconcurrency` in Swift attribut in Swift.
+   * Whether this method has a `@preconcurrency` in Swift attribute in Swift.
    * This largely helps with running callbacks in Swift 6 Sendable closures.
    */
   preconcurrency?: boolean
