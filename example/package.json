@@ -18,7 +18,7 @@
   },
   "dependencies": {
     "@react-native-segmented-control/segmented-control": "^2.5.7",
-    "@react-navigation/bottom-tabs": "^7.3.12",
+    "@react-navigation/bottom-tabs": "^7.4.2",
     "@react-navigation/native": "^7.1.8",
     "deep-equal": "^2.2.3",
     "react": "19.0.0",
