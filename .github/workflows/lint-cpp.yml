@@ -30,9 +30,9 @@ jobs:
         - 'packages/react-native-nitro-modules/android/src/main/cpp'
         - 'packages/react-native-nitro-modules/cpp'
         - 'packages/react-native-nitro-modules/ios'
-        - 'packages/react-native-nitro-image/android/src/main/cpp'
-        - 'packages/react-native-nitro-image/cpp'
-        - 'packages/react-native-nitro-image/ios'
+        - 'packages/react-native-nitro-test/android/src/main/cpp'
+        - 'packages/react-native-nitro-test/cpp'
+        - 'packages/react-native-nitro-test/ios'
     steps:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2

@@ -1,4 +1,4 @@
-# react-native-nitro-image
+# react-native-nitro-test
 
 NitroImage is an example nitro module.
 
@@ -8,7 +8,7 @@ Nitro Image is installed in the [`example/`](../../example) app.
 To load an Image, use the exported `ImageConstructors`:
 
 ```ts
-import { ImageConstructors } from 'react-native-nitro-image'
+import { ImageConstructors } from 'react-native-nitro-test'
 
 const image = ImageConstructors.loadImageFromSystemName('heart.fill')
 ```

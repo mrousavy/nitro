@@ -7,10 +7,10 @@ CPP_DIRS=(
   "packages/react-native-nitro-modules/android/src/main/cpp"
   "packages/react-native-nitro-modules/cpp"
   "packages/react-native-nitro-modules/ios"
-  # react-native-nitro-image
-  "packages/react-native-nitro-image/android/src/main/cpp"
-  "packages/react-native-nitro-image/cpp"
-  "packages/react-native-nitro-image/ios"
+  # react-native-nitro-test
+  "packages/react-native-nitro-test/android/src/main/cpp"
+  "packages/react-native-nitro-test/cpp"
+  "packages/react-native-nitro-test/ios"
 )
 
 if which clang-format >/dev/null; then

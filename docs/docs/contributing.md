@@ -10,11 +10,11 @@ If you encounter issues with Nitro, want to fix a bug, or reproduce a bug in the
 
 The nitro repo is a Bun monorepo, and is set up like this:
 
-- `example/`: A react-native app that uses `react-native-nitro-modules` and `react-native-nitro-image`.
+- `example/`: A react-native app that uses `react-native-nitro-modules` and `react-native-nitro-test`.
 - `packages/`
   - `/nitrogen/`: The Node app that generates Nitro bindings. On npm, it is called `nitro-codegen`.
   - `/react-native-nitro-modules/`: The core Nitro Modules library which contains mostly C++ code.
-  - `/react-native-nitro-image/`: An example Nitro Module library that contains a lot of test code.
+  - `/react-native-nitro-test/`: An example Nitro Module library that contains a lot of test code.
   - `/template/`: A template for a Nitro Module library.
 
 ## Run Nitro Example
@@ -85,7 +85,7 @@ For example, if you have a different setting in your `Podfile`, try changing it 
 
 ### Reproduce a nitrogen bug
 
-The Nitro `example/` app uses a Nitro Module (`packages/react-native-nitro-image/`) which acts as an example contains a lot of test code, like `src/specs/TestObject.nitro.ts` ([link](https://github.com/mrousavy/nitro/blob/main/packages/react-native-nitro-image/src/specs/TestObject.nitro.ts)). If you change something in `TestObject.nitro.ts`, make sure to run nitrogen:
+The Nitro `example/` app uses a Nitro Module (`packages/react-native-nitro-test/`) which acts as an example contains a lot of test code, like `src/specs/TestObject.nitro.ts` ([link](https://github.com/mrousavy/nitro/blob/main/packages/react-native-nitro-test/src/specs/TestObject.nitro.ts)). If you change something in `TestObject.nitro.ts`, make sure to run nitrogen:
 
 ```sh
 bun image specs

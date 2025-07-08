@@ -1,6 +1,6 @@
 //
 //  HybridBase.swift
-//  react-native-nitro-image
+//  react-native-nitro-test
 //
 //  Created by Marc Rousavy on 03.10.24.
 //

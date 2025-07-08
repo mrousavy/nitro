@@ -1,5 +1,5 @@
 {
-  "name": "react-native-nitro-image",
+  "name": "react-native-nitro-test",
   "version": "0.26.3",
   "description": "A fast in-memory Image object built with Nitro Modules.",
   "main": "lib/index",

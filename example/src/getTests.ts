@@ -5,7 +5,7 @@ import {
   type Car,
   type Person,
   type Powertrain,
-} from 'react-native-nitro-image'
+} from 'react-native-nitro-test'
 import type { State } from './Testers'
 import { it } from './Testers'
 import { stringify } from './utils'
