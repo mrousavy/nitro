@@ -14,7 +14,7 @@
 #include "HybridBase.hpp"
 #include "HybridChild.hpp"
 
-namespace margelo::nitro::image {
+namespace margelo::nitro::test {
 
 // Properties
 double HybridTestObjectCpp::getNumberValue() {
@@ -520,4 +520,4 @@ double HybridTestObjectCpp::callbackSync(const std::function<double()>& callback
   return value;
 }
 
-} // namespace margelo::nitro::image
+} // namespace margelo::nitro::test

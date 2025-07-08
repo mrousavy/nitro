@@ -10,7 +10,7 @@
 #include "HybridBase.hpp"
 #include "HybridChildSpec.hpp"
 
-namespace margelo::nitro::image {
+namespace margelo::nitro::test {
 
 using namespace facebook;
 
@@ -27,4 +27,4 @@ public:
   }
 };
 
-}; // namespace margelo::nitro::image
+}; // namespace margelo::nitro::test

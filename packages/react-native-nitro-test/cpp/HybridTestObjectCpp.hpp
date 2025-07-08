@@ -10,7 +10,7 @@
 #include "HybridTestObjectCppSpec.hpp"
 #include <jsi/jsi.h>
 
-namespace margelo::nitro::image {
+namespace margelo::nitro::test {
 
 using namespace facebook;
 
@@ -171,4 +171,4 @@ public:
   }
 };
 
-}; // namespace margelo::nitro::image
+}; // namespace margelo::nitro::test

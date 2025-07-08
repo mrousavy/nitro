@@ -638,7 +638,7 @@ export function getTests(
     createTest('getVariantEnum(...) throws at wrong type (string)', () =>
       // @ts-expect-error
       it(() => testObject.getVariantEnum('string')).didThrow(
-        `Error: ${testObject.name}.getVariantEnum(...): Cannot convert "string" to any type in variant<bool, margelo::nitro::image::OldEnum>!`
+        `Error: ${testObject.name}.getVariantEnum(...): Cannot convert "string" to any type in variant<bool, margelo::nitro::test::OldEnum>!`
       )
     ),
     createTest('getVariantObjects(...) converts Person', () =>
@@ -661,7 +661,7 @@ export function getTests(
     createTest('getVariantObjects(...) throws at wrong type (string)', () =>
       // @ts-expect-error
       it(() => testObject.getVariantObjects('some-string')).didThrow(
-        `Error: ${testObject.name}.getVariantObjects(...): Cannot convert "some-string" to any type in variant<margelo::nitro::image::Car, margelo::nitro::image::Person>!`
+        `Error: ${testObject.name}.getVariantObjects(...): Cannot convert "some-string" to any type in variant<margelo::nitro::test::Car, margelo::nitro::test::Person>!`
       )
     ),
     createTest(
@@ -671,7 +671,7 @@ export function getTests(
           // @ts-expect-error
           testObject.getVariantObjects({ someValue: 55 })
         ).didThrow(
-          `Error: ${testObject.name}.getVariantObjects(...): Cannot convert "[object Object]" to any type in variant<margelo::nitro::image::Car, margelo::nitro::image::Person>!`
+          `Error: ${testObject.name}.getVariantObjects(...): Cannot convert "[object Object]" to any type in variant<margelo::nitro::test::Car, margelo::nitro::test::Person>!`
         )
     ),
     createTest('getVariantHybrid(...) converts Hybrid', () =>

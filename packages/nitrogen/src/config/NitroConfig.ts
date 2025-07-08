@@ -49,7 +49,7 @@ export const NitroConfig = {
   /**
    * Represents the C++ namespace of the module that will be generated.
    * This can have multiple sub-namespaces, and is always relative to `margelo::nitro`.
-   * @example `['image']` -> `margelo::nitro::image`
+   * @example `['image']` -> `margelo::nitro::test`
    */
   getCxxNamespace(
     language: 'c++' | 'swift',

@@ -1,7 +1,7 @@
 {
   "name": "react-native-nitro-test",
   "version": "0.26.3",
-  "description": "A fast in-memory Image object built with Nitro Modules.",
+  "description": "A testing playground library for Nitro Modules.",
   "main": "lib/index",
   "module": "lib/index",
   "types": "lib/index.d.ts",
@@ -27,7 +27,9 @@
   "keywords": [
     "react-native",
     "nitro",
-    "image"
+    "test",
+    "playground",
+    "example"
   ],
   "repository": {
     "type": "git",
