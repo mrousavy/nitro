@@ -15,7 +15,7 @@ import {
 import { NitroModules } from 'react-native-nitro-modules'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useColors } from '../useColors'
-import { HybridTestObjectCpp } from 'react-native-nitro-image'
+import { HybridTestObjectCpp } from 'react-native-nitro-test'
 import { ExampleTurboModule } from '../turbo-module/ExampleTurboModule'
 
 declare global {

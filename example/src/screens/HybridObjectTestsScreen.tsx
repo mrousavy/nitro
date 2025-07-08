@@ -13,7 +13,7 @@ import {
   HybridTestObjectSwiftKotlin,
   HybridChild,
   HybridBase,
-} from 'react-native-nitro-image'
+} from 'react-native-nitro-test'
 import { getTests, type TestRunner } from '../getTests'
 import { logPrototypeChain } from '../logPrototypeChain'
 import SegmentedControl from '@react-native-segmented-control/segmented-control'
