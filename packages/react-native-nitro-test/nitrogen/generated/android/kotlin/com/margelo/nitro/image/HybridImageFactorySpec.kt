@@ -5,7 +5,7 @@
 /// Copyright © 2025 Marc Rousavy @ Margelo
 ///
 
-package com.margelo.nitro.image
+package com.margelo.nitro.test
 
 import androidx.annotation.Keep
 import com.facebook.jni.HybridData
@@ -37,21 +37,21 @@ abstract class HybridImageFactorySpec: HybridObject() {
   }
 
   // Properties
-  
+
 
   // Methods
   @DoNotStrip
   @Keep
   abstract fun loadImageFromFile(path: String): HybridImageSpec
-  
+
   @DoNotStrip
   @Keep
   abstract fun loadImageFromURL(path: String): HybridImageSpec
-  
+
   @DoNotStrip
   @Keep
   abstract fun loadImageFromSystemName(path: String): HybridImageSpec
-  
+
   @DoNotStrip
   @Keep
   abstract fun bounceBack(image: HybridImageSpec): HybridImageSpec

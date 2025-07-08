@@ -10,10 +10,10 @@ import NitroModules
 /**
  * Represents an instance of `MapWrapper`, backed by a C++ struct.
  */
-public typealias MapWrapper = margelo.nitro.image.MapWrapper
+public typealias MapWrapper = margelo.nitro.test.MapWrapper
 
 public extension MapWrapper {
-  private typealias bridge = margelo.nitro.image.bridge.swift
+  private typealias bridge = margelo.nitro.test.bridge.swift
 
   /**
    * Create a new instance of `MapWrapper`.

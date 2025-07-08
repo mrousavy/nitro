@@ -10,10 +10,10 @@ import NitroModules
 /**
  * Represents an instance of `Car`, backed by a C++ struct.
  */
-public typealias Car = margelo.nitro.image.Car
+public typealias Car = margelo.nitro.test.Car
 
 public extension Car {
-  private typealias bridge = margelo.nitro.image.bridge.swift
+  private typealias bridge = margelo.nitro.test.bridge.swift
 
   /**
    * Create a new instance of `Car`.
@@ -44,7 +44,7 @@ public extension Car {
       self.__year = newValue
     }
   }
-  
+
   var make: String {
     @inline(__always)
     get {
@@ -55,7 +55,7 @@ public extension Car {
       self.__make = std.string(newValue)
     }
   }
-  
+
   var model: String {
     @inline(__always)
     get {
@@ -66,7 +66,7 @@ public extension Car {
       self.__model = std.string(newValue)
     }
   }
-  
+
   var power: Double {
     @inline(__always)
     get {
@@ -77,7 +77,7 @@ public extension Car {
       self.__power = newValue
     }
   }
-  
+
   var powertrain: Powertrain {
     @inline(__always)
     get {
@@ -88,7 +88,7 @@ public extension Car {
       self.__powertrain = newValue
     }
   }
-  
+
   var driver: Person? {
     @inline(__always)
     get {
@@ -111,7 +111,7 @@ public extension Car {
       }()
     }
   }
-  
+
   var isFast: Bool? {
     @inline(__always)
     get {

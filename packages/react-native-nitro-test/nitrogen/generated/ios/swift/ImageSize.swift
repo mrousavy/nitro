@@ -10,10 +10,10 @@ import NitroModules
 /**
  * Represents an instance of `ImageSize`, backed by a C++ struct.
  */
-public typealias ImageSize = margelo.nitro.image.ImageSize
+public typealias ImageSize = margelo.nitro.test.ImageSize
 
 public extension ImageSize {
-  private typealias bridge = margelo.nitro.image.bridge.swift
+  private typealias bridge = margelo.nitro.test.bridge.swift
 
   /**
    * Create a new instance of `ImageSize`.
@@ -32,7 +32,7 @@ public extension ImageSize {
       self.__width = newValue
     }
   }
-  
+
   var height: Double {
     @inline(__always)
     get {

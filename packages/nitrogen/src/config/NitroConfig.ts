@@ -74,7 +74,7 @@ export const NitroConfig = {
   /**
    * Represents the Android namespace of the module that will be generated.
    * This can have multiple sub-namespaces, and is always relative to `com.margelo.nitro`.
-   * @example `['image']` -> `com.margelo.nitro.image`
+   * @example `['image']` -> `com.margelo.nitro.test`
    */
   getAndroidPackage(
     language: 'java/kotlin' | 'c++/jni',

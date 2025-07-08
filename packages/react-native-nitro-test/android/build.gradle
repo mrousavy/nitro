@@ -35,7 +35,7 @@ def getExtOrIntegerDefault(name) {
 }
 
 android {
-  namespace "com.margelo.nitro.image"
+  namespace "com.margelo.nitro.test"
 
   ndkVersion getExtOrDefault("ndkVersion")
   compileSdkVersion getExtOrIntegerDefault("compileSdkVersion")
@@ -142,6 +142,6 @@ if (isNewArchitectureEnabled()) {
   react {
     jsRootDir = file("../src/")
     libraryName = "NitroTest"
-    codegenJavaPackageName = "com.margelo.nitro.image"
+    codegenJavaPackageName = "com.margelo.nitro.test"
   }
 }

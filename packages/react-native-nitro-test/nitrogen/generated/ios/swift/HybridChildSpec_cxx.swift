@@ -23,7 +23,7 @@ public class HybridChildSpec_cxx : HybridBaseSpec_cxx {
    * from `NitroTest-Swift-Cxx-Bridge.hpp`.
    * This contains specialized C++ templates, and C++ helper functions that can be accessed from Swift.
    */
-  public typealias bridge = margelo.nitro.image.bridge.swift
+  public typealias bridge = margelo.nitro.test.bridge.swift
 
   /**
    * Holds an instance of the `HybridChildSpec` Swift protocol.
@@ -108,5 +108,5 @@ public class HybridChildSpec_cxx : HybridBaseSpec_cxx {
   }
 
   // Methods
-  
+
 }

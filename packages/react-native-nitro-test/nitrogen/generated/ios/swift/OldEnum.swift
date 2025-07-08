@@ -8,7 +8,7 @@
 /**
  * Represents the JS enum `OldEnum`, backed by a C++ enum.
  */
-public typealias OldEnum = margelo.nitro.image.OldEnum
+public typealias OldEnum = margelo.nitro.test.OldEnum
 
 public extension OldEnum {
   /**

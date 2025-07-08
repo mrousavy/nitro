@@ -5,7 +5,7 @@
 /// Copyright © 2025 Marc Rousavy @ Margelo
 ///
 
-package com.margelo.nitro.image
+package com.margelo.nitro.test
 
 import androidx.annotation.Keep
 import com.facebook.jni.HybridData
@@ -42,7 +42,7 @@ abstract class HybridChildSpec: HybridBaseSpec() {
   abstract val childValue: Double
 
   // Methods
-  
+
 
   private external fun initHybrid(): HybridData
 

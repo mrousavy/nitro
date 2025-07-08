@@ -5,7 +5,7 @@
 /// Copyright © 2025 Marc Rousavy @ Margelo
 ///
 
-package com.margelo.nitro.image
+package com.margelo.nitro.test
 
 import androidx.annotation.Keep
 import com.facebook.jni.HybridData
@@ -40,11 +40,11 @@ abstract class HybridImageSpec: HybridObject() {
   @get:DoNotStrip
   @get:Keep
   abstract val size: ImageSize
-  
+
   @get:DoNotStrip
   @get:Keep
   abstract val pixelFormat: PixelFormat
-  
+
   @get:DoNotStrip
   @get:Keep
   @set:DoNotStrip
@@ -55,9 +55,9 @@ abstract class HybridImageSpec: HybridObject() {
   @DoNotStrip
   @Keep
   abstract fun toArrayBuffer(format: ImageFormat): Double
-  
+
   abstract fun saveToFile(path: String, onFinished: (path: String) -> Unit): Unit
-  
+
   @DoNotStrip
   @Keep
   private fun saveToFile_cxx(path: String, onFinished: Func_void_std__string): Unit {

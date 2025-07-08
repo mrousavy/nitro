@@ -8,7 +8,7 @@
 /**
  * Represents the JS union `Powertrain`, backed by a C++ enum.
  */
-public typealias Powertrain = margelo.nitro.image.Powertrain
+public typealias Powertrain = margelo.nitro.test.Powertrain
 
 public extension Powertrain {
   /**

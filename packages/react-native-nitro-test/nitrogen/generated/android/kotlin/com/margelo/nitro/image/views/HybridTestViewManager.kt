@@ -5,14 +5,14 @@
 /// Copyright © 2025 Marc Rousavy @ Margelo
 ///
 
-package com.margelo.nitro.image.views
+package com.margelo.nitro.test.views
 
 import android.view.View
 import com.facebook.react.uimanager.ReactStylesDiffMap
 import com.facebook.react.uimanager.SimpleViewManager
 import com.facebook.react.uimanager.StateWrapper
 import com.facebook.react.uimanager.ThemedReactContext
-import com.margelo.nitro.image.*
+import com.margelo.nitro.test.*
 
 /**
  * Represents the React Native `ViewManager` for the "TestView" Nitro HybridView.

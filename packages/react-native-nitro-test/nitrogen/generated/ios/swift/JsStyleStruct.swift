@@ -10,10 +10,10 @@ import NitroModules
 /**
  * Represents an instance of `JsStyleStruct`, backed by a C++ struct.
  */
-public typealias JsStyleStruct = margelo.nitro.image.JsStyleStruct
+public typealias JsStyleStruct = margelo.nitro.test.JsStyleStruct
 
 public extension JsStyleStruct {
-  private typealias bridge = margelo.nitro.image.bridge.swift
+  private typealias bridge = margelo.nitro.test.bridge.swift
 
   /**
    * Create a new instance of `JsStyleStruct`.
@@ -35,7 +35,7 @@ public extension JsStyleStruct {
       self.__value = newValue
     }
   }
-  
+
   var onChanged: (_ num: Double) -> Void {
     @inline(__always)
     get {

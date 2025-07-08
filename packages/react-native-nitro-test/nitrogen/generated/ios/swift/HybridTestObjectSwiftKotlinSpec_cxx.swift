@@ -23,7 +23,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
    * from `NitroTest-Swift-Cxx-Bridge.hpp`.
    * This contains specialized C++ templates, and C++ helper functions that can be accessed from Swift.
    */
-  public typealias bridge = margelo.nitro.image.bridge.swift
+  public typealias bridge = margelo.nitro.test.bridge.swift
 
   /**
    * Holds an instance of the `HybridTestObjectSwiftKotlinSpec` Swift protocol.
@@ -85,7 +85,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
     }
   }
 
-  
+
 
   /**
    * Get the memory size of the Swift class (plus size of any other allocations)
@@ -106,7 +106,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       }()
     }
   }
-  
+
   public final var optionalHybrid: bridge.std__optional_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec__ {
     @inline(__always)
     get {
@@ -136,7 +136,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       }()
     }
   }
-  
+
   public final var numberValue: Double {
     @inline(__always)
     get {
@@ -147,7 +147,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       self.__implementation.numberValue = newValue
     }
   }
-  
+
   public final var boolValue: Bool {
     @inline(__always)
     get {
@@ -158,7 +158,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       self.__implementation.boolValue = newValue
     }
   }
-  
+
   public final var stringValue: std.string {
     @inline(__always)
     get {
@@ -169,7 +169,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       self.__implementation.stringValue = String(newValue)
     }
   }
-  
+
   public final var bigintValue: Int64 {
     @inline(__always)
     get {
@@ -180,7 +180,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       self.__implementation.bigintValue = newValue
     }
   }
-  
+
   public final var stringOrUndefined: bridge.std__optional_std__string_ {
     @inline(__always)
     get {
@@ -203,7 +203,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       }()
     }
   }
-  
+
   public final var stringOrNull: bridge.std__optional_std__string_ {
     @inline(__always)
     get {
@@ -226,7 +226,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       }()
     }
   }
-  
+
   public final var optionalString: bridge.std__optional_std__string_ {
     @inline(__always)
     get {
@@ -249,7 +249,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       }()
     }
   }
-  
+
   public final var optionalArray: bridge.std__optional_std__vector_std__string__ {
     @inline(__always)
     get {
@@ -278,7 +278,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       }()
     }
   }
-  
+
   public final var optionalEnum: bridge.std__optional_Powertrain_ {
     @inline(__always)
     get {
@@ -295,7 +295,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       self.__implementation.optionalEnum = newValue.value
     }
   }
-  
+
   public final var optionalOldEnum: bridge.std__optional_OldEnum_ {
     @inline(__always)
     get {
@@ -312,7 +312,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       self.__implementation.optionalOldEnum = newValue.has_value() ? newValue.pointee : nil
     }
   }
-  
+
   public final var optionalCallback: bridge.std__optional_std__function_void_double____value______ {
     @inline(__always)
     get {
@@ -343,7 +343,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       }()
     }
   }
-  
+
   public final var someVariant: bridge.std__variant_std__string__double_ {
     @inline(__always)
     get {
@@ -389,7 +389,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       return bridge.create_Result_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec__(__exceptionPtr)
     }
   }
-  
+
   @inline(__always)
   public final func getVariantHybrid(variant: bridge.std__variant_Person__std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec__) -> bridge.Result_std__variant_Person__std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec___ {
     do {
@@ -427,7 +427,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       return bridge.create_Result_std__variant_Person__std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec___(__exceptionPtr)
     }
   }
-  
+
   @inline(__always)
   public final func simpleFunc() -> bridge.Result_void_ {
     do {
@@ -438,7 +438,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       return bridge.create_Result_void_(__exceptionPtr)
     }
   }
-  
+
   @inline(__always)
   public final func addNumbers(a: Double, b: Double) -> bridge.Result_double_ {
     do {
@@ -450,7 +450,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       return bridge.create_Result_double_(__exceptionPtr)
     }
   }
-  
+
   @inline(__always)
   public final func addStrings(a: std.string, b: std.string) -> bridge.Result_std__string_ {
     do {
@@ -462,7 +462,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       return bridge.create_Result_std__string_(__exceptionPtr)
     }
   }
-  
+
   @inline(__always)
   public final func multipleArguments(num: Double, str: std.string, boo: Bool) -> bridge.Result_void_ {
     do {
@@ -473,7 +473,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       return bridge.create_Result_void_(__exceptionPtr)
     }
   }
-  
+
   @inline(__always)
   public final func bounceStrings(array: bridge.std__vector_std__string_) -> bridge.Result_std__vector_std__string__ {
     do {
@@ -491,7 +491,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       return bridge.create_Result_std__vector_std__string__(__exceptionPtr)
     }
   }
-  
+
   @inline(__always)
   public final func bounceNumbers(array: bridge.std__vector_double_) -> bridge.Result_std__vector_double__ {
     do {
@@ -509,7 +509,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       return bridge.create_Result_std__vector_double__(__exceptionPtr)
     }
   }
-  
+
   @inline(__always)
   public final func bounceStructs(array: bridge.std__vector_Person_) -> bridge.Result_std__vector_Person__ {
     do {
@@ -527,7 +527,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       return bridge.create_Result_std__vector_Person__(__exceptionPtr)
     }
   }
-  
+
   @inline(__always)
   public final func bounceEnums(array: bridge.std__vector_Powertrain_) -> bridge.Result_std__vector_Powertrain__ {
     do {
@@ -545,7 +545,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       return bridge.create_Result_std__vector_Powertrain__(__exceptionPtr)
     }
   }
-  
+
   @inline(__always)
   public final func complexEnumCallback(array: bridge.std__vector_Powertrain_, callback: bridge.Func_void_std__vector_Powertrain_) -> bridge.Result_void_ {
     do {
@@ -567,7 +567,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       return bridge.create_Result_void_(__exceptionPtr)
     }
   }
-  
+
   @inline(__always)
   public final func createMap() -> bridge.Result_std__shared_ptr_AnyMap__ {
     do {
@@ -579,7 +579,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       return bridge.create_Result_std__shared_ptr_AnyMap__(__exceptionPtr)
     }
   }
-  
+
   @inline(__always)
   public final func mapRoundtrip(map: margelo.nitro.TSharedMap) -> bridge.Result_std__shared_ptr_AnyMap__ {
     do {
@@ -591,7 +591,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       return bridge.create_Result_std__shared_ptr_AnyMap__(__exceptionPtr)
     }
   }
-  
+
   @inline(__always)
   public final func getMapKeys(map: margelo.nitro.TSharedMap) -> bridge.Result_std__vector_std__string__ {
     do {
@@ -609,7 +609,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       return bridge.create_Result_std__vector_std__string__(__exceptionPtr)
     }
   }
-  
+
   @inline(__always)
   public final func bounceMap(map: bridge.std__unordered_map_std__string__std__variant_double__bool__) -> bridge.Result_std__unordered_map_std__string__std__variant_double__bool___ {
     do {
@@ -654,7 +654,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       return bridge.create_Result_std__unordered_map_std__string__std__variant_double__bool___(__exceptionPtr)
     }
   }
-  
+
   @inline(__always)
   public final func extractMap(mapWrapper: MapWrapper) -> bridge.Result_std__unordered_map_std__string__std__string__ {
     do {
@@ -672,7 +672,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       return bridge.create_Result_std__unordered_map_std__string__std__string__(__exceptionPtr)
     }
   }
-  
+
   @inline(__always)
   public final func funcThatThrows() -> bridge.Result_double_ {
     do {
@@ -684,7 +684,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       return bridge.create_Result_double_(__exceptionPtr)
     }
   }
-  
+
   @inline(__always)
   public final func funcThatThrowsBeforePromise() -> bridge.Result_std__shared_ptr_Promise_void___ {
     do {
@@ -703,7 +703,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       return bridge.create_Result_std__shared_ptr_Promise_void___(__exceptionPtr)
     }
   }
-  
+
   @inline(__always)
   public final func throwError(error: std.exception_ptr) -> bridge.Result_void_ {
     do {
@@ -714,7 +714,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       return bridge.create_Result_void_(__exceptionPtr)
     }
   }
-  
+
   @inline(__always)
   public final func tryOptionalParams(num: Double, boo: Bool, str: bridge.std__optional_std__string_) -> bridge.Result_std__string_ {
     do {
@@ -732,7 +732,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       return bridge.create_Result_std__string_(__exceptionPtr)
     }
   }
-  
+
   @inline(__always)
   public final func tryMiddleParam(num: Double, boo: bridge.std__optional_bool_, str: std.string) -> bridge.Result_std__string_ {
     do {
@@ -744,7 +744,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       return bridge.create_Result_std__string_(__exceptionPtr)
     }
   }
-  
+
   @inline(__always)
   public final func tryOptionalEnum(value: bridge.std__optional_Powertrain_) -> bridge.Result_std__optional_Powertrain__ {
     do {
@@ -762,7 +762,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       return bridge.create_Result_std__optional_Powertrain__(__exceptionPtr)
     }
   }
-  
+
   @inline(__always)
   public final func add1Hour(date: margelo.nitro.chrono_time) -> bridge.Result_std__chrono__system_clock__time_point_ {
     do {
@@ -774,7 +774,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       return bridge.create_Result_std__chrono__system_clock__time_point_(__exceptionPtr)
     }
   }
-  
+
   @inline(__always)
   public final func currentDate() -> bridge.Result_std__chrono__system_clock__time_point_ {
     do {
@@ -786,7 +786,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       return bridge.create_Result_std__chrono__system_clock__time_point_(__exceptionPtr)
     }
   }
-  
+
   @inline(__always)
   public final func calculateFibonacciSync(value: Double) -> bridge.Result_int64_t_ {
     do {
@@ -798,7 +798,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       return bridge.create_Result_int64_t_(__exceptionPtr)
     }
   }
-  
+
   @inline(__always)
   public final func calculateFibonacciAsync(value: Double) -> bridge.Result_std__shared_ptr_Promise_int64_t___ {
     do {
@@ -817,7 +817,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       return bridge.create_Result_std__shared_ptr_Promise_int64_t___(__exceptionPtr)
     }
   }
-  
+
   @inline(__always)
   public final func wait(seconds: Double) -> bridge.Result_std__shared_ptr_Promise_void___ {
     do {
@@ -836,7 +836,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       return bridge.create_Result_std__shared_ptr_Promise_void___(__exceptionPtr)
     }
   }
-  
+
   @inline(__always)
   public final func promiseThrows() -> bridge.Result_std__shared_ptr_Promise_void___ {
     do {
@@ -855,7 +855,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       return bridge.create_Result_std__shared_ptr_Promise_void___(__exceptionPtr)
     }
   }
-  
+
   @inline(__always)
   public final func awaitAndGetPromise(promise: bridge.std__shared_ptr_Promise_double__) -> bridge.Result_std__shared_ptr_Promise_double___ {
     do {
@@ -894,7 +894,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       return bridge.create_Result_std__shared_ptr_Promise_double___(__exceptionPtr)
     }
   }
-  
+
   @inline(__always)
   public final func awaitAndGetComplexPromise(promise: bridge.std__shared_ptr_Promise_Car__) -> bridge.Result_std__shared_ptr_Promise_Car___ {
     do {
@@ -933,7 +933,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       return bridge.create_Result_std__shared_ptr_Promise_Car___(__exceptionPtr)
     }
   }
-  
+
   @inline(__always)
   public final func awaitPromise(promise: bridge.std__shared_ptr_Promise_void__) -> bridge.Result_std__shared_ptr_Promise_void___ {
     do {
@@ -970,7 +970,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       return bridge.create_Result_std__shared_ptr_Promise_void___(__exceptionPtr)
     }
   }
-  
+
   @inline(__always)
   public final func callCallback(callback: bridge.Func_void) -> bridge.Result_void_ {
     do {
@@ -986,7 +986,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       return bridge.create_Result_void_(__exceptionPtr)
     }
   }
-  
+
   @inline(__always)
   public final func callAll(first: bridge.Func_void, second: bridge.Func_void, third: bridge.Func_void) -> bridge.Result_void_ {
     do {
@@ -1012,7 +1012,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       return bridge.create_Result_void_(__exceptionPtr)
     }
   }
-  
+
   @inline(__always)
   public final func callWithOptional(value: bridge.std__optional_double_, callback: bridge.Func_void_std__optional_double_) -> bridge.Result_void_ {
     do {
@@ -1034,7 +1034,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       return bridge.create_Result_void_(__exceptionPtr)
     }
   }
-  
+
   @inline(__always)
   public final func callSumUpNTimes(callback: bridge.Func_std__shared_ptr_Promise_double__, n: Double) -> bridge.Result_std__shared_ptr_Promise_double___ {
     do {
@@ -1079,7 +1079,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       return bridge.create_Result_std__shared_ptr_Promise_double___(__exceptionPtr)
     }
   }
-  
+
   @inline(__always)
   public final func callbackAsyncPromise(callback: bridge.Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double____) -> bridge.Result_std__shared_ptr_Promise_double___ {
     do {
@@ -1124,7 +1124,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       return bridge.create_Result_std__shared_ptr_Promise_double___(__exceptionPtr)
     }
   }
-  
+
   @inline(__always)
   public final func callbackAsyncPromiseBuffer(callback: bridge.Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____) -> bridge.Result_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer____ {
     do {
@@ -1169,7 +1169,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       return bridge.create_Result_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer____(__exceptionPtr)
     }
   }
-  
+
   @inline(__always)
   public final func getComplexCallback() -> bridge.Result_std__function_void_double____value______ {
     do {
@@ -1184,7 +1184,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       return bridge.create_Result_std__function_void_double____value______(__exceptionPtr)
     }
   }
-  
+
   @inline(__always)
   public final func getValueFromJSCallbackAndWait(getValue: bridge.Func_std__shared_ptr_Promise_double__) -> bridge.Result_std__shared_ptr_Promise_double___ {
     do {
@@ -1229,7 +1229,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       return bridge.create_Result_std__shared_ptr_Promise_double___(__exceptionPtr)
     }
   }
-  
+
   @inline(__always)
   public final func getValueFromJsCallback(callback: bridge.Func_std__shared_ptr_Promise_std__string__, andThenCall: bridge.Func_void_std__string) -> bridge.Result_std__shared_ptr_Promise_void___ {
     do {
@@ -1279,7 +1279,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       return bridge.create_Result_std__shared_ptr_Promise_void___(__exceptionPtr)
     }
   }
-  
+
   @inline(__always)
   public final func getCar() -> bridge.Result_Car_ {
     do {
@@ -1291,7 +1291,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       return bridge.create_Result_Car_(__exceptionPtr)
     }
   }
-  
+
   @inline(__always)
   public final func isCarElectric(car: Car) -> bridge.Result_bool_ {
     do {
@@ -1303,7 +1303,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       return bridge.create_Result_bool_(__exceptionPtr)
     }
   }
-  
+
   @inline(__always)
   public final func getDriver(car: Car) -> bridge.Result_std__optional_Person__ {
     do {
@@ -1321,7 +1321,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       return bridge.create_Result_std__optional_Person__(__exceptionPtr)
     }
   }
-  
+
   @inline(__always)
   public final func jsStyleObjectAsParameters(params: JsStyleStruct) -> bridge.Result_void_ {
     do {
@@ -1332,7 +1332,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       return bridge.create_Result_void_(__exceptionPtr)
     }
   }
-  
+
   @inline(__always)
   public final func createArrayBuffer() -> bridge.Result_std__shared_ptr_ArrayBuffer__ {
     do {
@@ -1344,7 +1344,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       return bridge.create_Result_std__shared_ptr_ArrayBuffer__(__exceptionPtr)
     }
   }
-  
+
   @inline(__always)
   public final func createArrayBufferFromNativeBuffer(copy: Bool) -> bridge.Result_std__shared_ptr_ArrayBuffer__ {
     do {
@@ -1356,7 +1356,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       return bridge.create_Result_std__shared_ptr_ArrayBuffer__(__exceptionPtr)
     }
   }
-  
+
   @inline(__always)
   public final func copyBuffer(buffer: ArrayBufferHolder) -> bridge.Result_std__shared_ptr_ArrayBuffer__ {
     do {
@@ -1368,7 +1368,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       return bridge.create_Result_std__shared_ptr_ArrayBuffer__(__exceptionPtr)
     }
   }
-  
+
   @inline(__always)
   public final func getBufferLastItem(buffer: ArrayBufferHolder) -> bridge.Result_double_ {
     do {
@@ -1380,7 +1380,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       return bridge.create_Result_double_(__exceptionPtr)
     }
   }
-  
+
   @inline(__always)
   public final func setAllValuesTo(buffer: ArrayBufferHolder, value: Double) -> bridge.Result_void_ {
     do {
@@ -1391,7 +1391,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       return bridge.create_Result_void_(__exceptionPtr)
     }
   }
-  
+
   @inline(__always)
   public final func createArrayBufferAsync() -> bridge.Result_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer____ {
     do {
@@ -1410,7 +1410,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       return bridge.create_Result_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer____(__exceptionPtr)
     }
   }
-  
+
   @inline(__always)
   public final func passVariant(either: bridge.std__variant_std__string__double__bool__std__vector_double___std__vector_std__string__) -> bridge.Result_std__variant_std__string__double__ {
     do {
@@ -1450,7 +1450,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       return bridge.create_Result_std__variant_std__string__double__(__exceptionPtr)
     }
   }
-  
+
   @inline(__always)
   public final func getVariantEnum(variant: bridge.std__variant_bool__OldEnum_) -> bridge.Result_std__variant_bool__OldEnum__ {
     do {
@@ -1481,7 +1481,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       return bridge.create_Result_std__variant_bool__OldEnum__(__exceptionPtr)
     }
   }
-  
+
   @inline(__always)
   public final func getVariantObjects(variant: bridge.std__variant_Car__Person_) -> bridge.Result_std__variant_Car__Person__ {
     do {
@@ -1512,7 +1512,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       return bridge.create_Result_std__variant_Car__Person__(__exceptionPtr)
     }
   }
-  
+
   @inline(__always)
   public final func passNamedVariant(variant: bridge.std__variant_std__string__Car_) -> bridge.Result_std__variant_std__string__Car__ {
     do {
@@ -1543,7 +1543,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       return bridge.create_Result_std__variant_std__string__Car__(__exceptionPtr)
     }
   }
-  
+
   @inline(__always)
   public final func createChild() -> bridge.Result_std__shared_ptr_margelo__nitro__image__HybridChildSpec__ {
     do {
@@ -1558,7 +1558,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       return bridge.create_Result_std__shared_ptr_margelo__nitro__image__HybridChildSpec__(__exceptionPtr)
     }
   }
-  
+
   @inline(__always)
   public final func createBase() -> bridge.Result_std__shared_ptr_margelo__nitro__image__HybridBaseSpec__ {
     do {
@@ -1573,7 +1573,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       return bridge.create_Result_std__shared_ptr_margelo__nitro__image__HybridBaseSpec__(__exceptionPtr)
     }
   }
-  
+
   @inline(__always)
   public final func createBaseActualChild() -> bridge.Result_std__shared_ptr_margelo__nitro__image__HybridBaseSpec__ {
     do {
@@ -1588,7 +1588,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       return bridge.create_Result_std__shared_ptr_margelo__nitro__image__HybridBaseSpec__(__exceptionPtr)
     }
   }
-  
+
   @inline(__always)
   public final func bounceChild(child: bridge.std__shared_ptr_margelo__nitro__image__HybridChildSpec_) -> bridge.Result_std__shared_ptr_margelo__nitro__image__HybridChildSpec__ {
     do {
@@ -1607,7 +1607,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       return bridge.create_Result_std__shared_ptr_margelo__nitro__image__HybridChildSpec__(__exceptionPtr)
     }
   }
-  
+
   @inline(__always)
   public final func bounceBase(base: bridge.std__shared_ptr_margelo__nitro__image__HybridBaseSpec_) -> bridge.Result_std__shared_ptr_margelo__nitro__image__HybridBaseSpec__ {
     do {
@@ -1626,7 +1626,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       return bridge.create_Result_std__shared_ptr_margelo__nitro__image__HybridBaseSpec__(__exceptionPtr)
     }
   }
-  
+
   @inline(__always)
   public final func bounceChildBase(child: bridge.std__shared_ptr_margelo__nitro__image__HybridChildSpec_) -> bridge.Result_std__shared_ptr_margelo__nitro__image__HybridBaseSpec__ {
     do {
@@ -1645,7 +1645,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       return bridge.create_Result_std__shared_ptr_margelo__nitro__image__HybridBaseSpec__(__exceptionPtr)
     }
   }
-  
+
   @inline(__always)
   public final func castBase(base: bridge.std__shared_ptr_margelo__nitro__image__HybridBaseSpec_) -> bridge.Result_std__shared_ptr_margelo__nitro__image__HybridChildSpec__ {
     do {
@@ -1664,7 +1664,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       return bridge.create_Result_std__shared_ptr_margelo__nitro__image__HybridChildSpec__(__exceptionPtr)
     }
   }
-  
+
   @inline(__always)
   public final func callbackSync(callback: bridge.Func_double) -> bridge.Result_double_ {
     do {
@@ -1682,7 +1682,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       return bridge.create_Result_double_(__exceptionPtr)
     }
   }
-  
+
   @inline(__always)
   public final func getIsViewBlue(view: bridge.std__shared_ptr_margelo__nitro__image__HybridTestViewSpec_) -> bridge.Result_bool_ {
     do {

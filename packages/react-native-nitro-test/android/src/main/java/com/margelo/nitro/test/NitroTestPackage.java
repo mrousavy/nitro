@@ -1,4 +1,4 @@
-package com.margelo.nitro.image;
+package com.margelo.nitro.test;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -8,7 +8,7 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.module.model.ReactModuleInfoProvider;
 import com.facebook.react.TurboReactPackage;
 import com.facebook.react.uimanager.ViewManager;
-import com.margelo.nitro.image.views.HybridTestViewManager;
+import com.margelo.nitro.test.views.HybridTestViewManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;

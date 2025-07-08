@@ -49,7 +49,7 @@ export const NitroUserConfigSchema = z.object({
      * Represents the Android namespace ("package") of the module that will be generated.
      *
      * This can have multiple sub-namespaces, and is always relative to `com.margelo.nitro`.
-     * @example `['image']` -> `com.margelo.nitro.image`
+     * @example `['image']` -> `com.margelo.nitro.test`
      */
     androidNamespace: z
       .array(

@@ -6,7 +6,7 @@
 ///
 
 public final class NitroTestAutolinking {
-  public typealias bridge = margelo.nitro.image.bridge.swift
+  public typealias bridge = margelo.nitro.test.bridge.swift
 
   /**
    * Creates an instance of a Swift class that implements `HybridImageFactorySpec`,
@@ -22,7 +22,7 @@ public final class NitroTestAutolinking {
       return __cxxWrapped.getCxxPart()
     }()
   }
-  
+
   /**
    * Creates an instance of a Swift class that implements `HybridTestObjectSwiftKotlinSpec`,
    * and wraps it in a Swift class that can directly interop with C++ (`HybridTestObjectSwiftKotlinSpec_cxx`)
@@ -37,7 +37,7 @@ public final class NitroTestAutolinking {
       return __cxxWrapped.getCxxPart()
     }()
   }
-  
+
   /**
    * Creates an instance of a Swift class that implements `HybridBaseSpec`,
    * and wraps it in a Swift class that can directly interop with C++ (`HybridBaseSpec_cxx`)
@@ -52,7 +52,7 @@ public final class NitroTestAutolinking {
       return __cxxWrapped.getCxxPart()
     }()
   }
-  
+
   /**
    * Creates an instance of a Swift class that implements `HybridChildSpec`,
    * and wraps it in a Swift class that can directly interop with C++ (`HybridChildSpec_cxx`)
@@ -67,7 +67,7 @@ public final class NitroTestAutolinking {
       return __cxxWrapped.getCxxPart()
     }()
   }
-  
+
   /**
    * Creates an instance of a Swift class that implements `HybridTestViewSpec`,
    * and wraps it in a Swift class that can directly interop with C++ (`HybridTestViewSpec_cxx`)

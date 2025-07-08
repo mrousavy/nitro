@@ -5,7 +5,7 @@
 /// Copyright © 2025 Marc Rousavy @ Margelo
 ///
 
-package com.margelo.nitro.image
+package com.margelo.nitro.test
 
 import androidx.annotation.Keep
 import com.facebook.jni.HybridData
@@ -43,21 +43,21 @@ abstract class HybridTestViewSpec: HybridView() {
   @set:DoNotStrip
   @set:Keep
   abstract var isBlue: Boolean
-  
+
   @get:DoNotStrip
   @get:Keep
   @set:DoNotStrip
   @set:Keep
   abstract var hasBeenCalled: Boolean
-  
+
   @get:DoNotStrip
   @get:Keep
   @set:DoNotStrip
   @set:Keep
   abstract var colorScheme: ColorScheme
-  
+
   abstract var someCallback: () -> Unit
-  
+
   private var someCallback_cxx: Func_void
     @Keep
     @DoNotStrip

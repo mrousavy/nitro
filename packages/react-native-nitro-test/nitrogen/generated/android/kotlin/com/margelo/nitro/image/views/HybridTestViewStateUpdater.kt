@@ -5,10 +5,10 @@
 /// Copyright © 2025 Marc Rousavy @ Margelo
 ///
 
-package com.margelo.nitro.image.views
+package com.margelo.nitro.test.views
 
 import com.facebook.react.uimanager.StateWrapper
-import com.margelo.nitro.image.*
+import com.margelo.nitro.test.*
 
 internal class HybridTestViewStateUpdater {
   companion object {

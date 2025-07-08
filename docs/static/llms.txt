@@ -687,7 +687,7 @@ In most cases, you should keep this in sync with the `namespace` specified in yo
 ```
 
 ```codeBlockLines_AclH
-package com.margelo.nitro.image
+package com.margelo.nitro.test
 
 // ...
 

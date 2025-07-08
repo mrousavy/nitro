@@ -1,4 +1,4 @@
-package com.margelo.nitro.image
+package com.margelo.nitro.test
 
 import android.graphics.Color
 import android.view.View

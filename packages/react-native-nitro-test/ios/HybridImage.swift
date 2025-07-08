@@ -16,7 +16,7 @@ class HybridImage : HybridImageSpec {
   /**
    * Alias the namespace so we don't have to write it out each time.
    */
-  typealias native = margelo.nitro.image
+  typealias native = margelo.nitro.test
   /**
    * The actual implementation uses an iOS `UIImage`.
    */
