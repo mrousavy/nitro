@@ -4,7 +4,7 @@ import { StyleSheet, View, Text, Button, Platform } from 'react-native'
 import { NitroModules } from 'react-native-nitro-modules'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useColors } from '../useColors'
-import { HybridTestObjectSwiftKotlin, TestView } from 'react-native-nitro-image'
+import { HybridTestObjectSwiftKotlin, TestView } from 'react-native-nitro-test'
 import { useIsFocused } from '@react-navigation/native'
 
 const VIEWS_X = 15

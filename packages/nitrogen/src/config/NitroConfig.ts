@@ -32,7 +32,7 @@ export const NitroConfig = {
   /**
    * Returns the name of the Android C++ library (aka name in CMakeLists.txt `add_library(..)`).
    * This will be loaded via `System.loadLibrary(...)`.
-   * @example `NitroImage`
+   * @example `NitroTest`
    */
   getAndroidCxxLibName(): string {
     return getUserConfig().android.androidCxxLibName
@@ -40,7 +40,7 @@ export const NitroConfig = {
 
   /**
    * Returns the iOS module name (aka Pod name) of the module that will be generated.
-   * @example `NitroImage`
+   * @example `NitroTest`
    */
   getIosModuleName(): string {
     return getUserConfig().ios.iosModuleName

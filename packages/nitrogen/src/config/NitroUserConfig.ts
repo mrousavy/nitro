@@ -34,7 +34,7 @@ export const NitroUserConfigSchema = z.object({
      * This will be used to generate Swift bridges, as those are always namespaced within the clang module.
      *
      * If you are using CocoaPods, this should be the Pod name defined in the `.podspec`.
-     * @example `NitroImage`
+     * @example `NitroTest`
      */
     iosModuleName: z
       .string()
@@ -63,7 +63,7 @@ export const NitroUserConfigSchema = z.object({
     /**
      * Represents the name of the Android C++ library (aka name in CMakeLists.txt `add_library(..)`).
      * This will be loaded via `System.loadLibrary(...)`.
-     * @example `NitroImage`
+     * @example `NitroTest`
      */
     androidCxxLibName: z
       .string()

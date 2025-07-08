@@ -53,8 +53,8 @@ cd ios && pod install
 - [**Community Discord** 💬](https://margelo.com/discord)
 - [**nitrogen**/README.md](./packages/nitrogen/README.md)
 - [**react-native-nitro-modules**/README.md](./packages/react-native-nitro-modules/README.md)
-- [**react-native-nitro-image** example module](./packages/react-native-nitro-image/README.md)
-- [`TestObject.nitro.ts` example playground](./packages/react-native-nitro-image/src/specs/TestObject.nitro.ts)
+- [**react-native-nitro-test** example module](./packages/react-native-nitro-test/README.md)
+- [`TestObject.nitro.ts` example playground](./packages/react-native-nitro-test/src/specs/TestObject.nitro.ts)
 
 ## Supported Platforms
 
