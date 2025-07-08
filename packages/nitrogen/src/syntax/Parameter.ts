@@ -6,6 +6,7 @@ import { type SourceFile, type SourceImport } from './SourceFile.js'
 import type { NamedType, Type } from './types/Type.js'
 import { NamedWrappingType } from './types/NamedWrappingType.js'
 import { createNamedType } from './createType.js'
+import { NitroConfig } from '../config/NitroConfig.js'
 
 export class Parameter implements CodeNode {
   readonly type: NamedType
@@ -59,7 +60,11 @@ export class Parameter implements CodeNode {
       case 'swift':
         let flags = ''
         if (this.type.kind === 'function') {
-          flags = '@escaping '
+          if(NitroConfig.getIosUsesSwift6()) {
+            flags = '@escaping @Sendable '
+          } else {
+            flags = '@escaping '
+          }
         }
         return `${name}: ${flags + this.type.getCode('swift')}`
       case 'kotlin':

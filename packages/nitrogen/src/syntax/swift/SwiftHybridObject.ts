@@ -5,12 +5,19 @@ import { createFileMetadataString } from '../helpers.js'
 import type { HybridObjectSpec } from '../HybridObjectSpec.js'
 import type { SourceFile } from '../SourceFile.js'
 import { createSwiftHybridObjectCxxBridge } from './SwiftHybridObjectBridge.js'
+import { NitroConfig } from '../../config/NitroConfig.js'
 
 export function createSwiftHybridObject(spec: HybridObjectSpec): SourceFile[] {
   const name = getHybridObjectName(spec.name)
   const protocolName = name.HybridTSpec
   const properties = spec.properties.map((p) => p.getCode('swift')).join('\n')
-  const methods = spec.methods.map((p) => p.getCode('swift')).join('\n')
+  const methods = spec.methods.map((p) => {
+    let hasCallback = p.parameters.findIndex(e => e.type.kind === 'function') !== -1;
+    if(hasCallback && NitroConfig.getIosUsesSwift6()) {
+      return p.getCode('swift', { preconcurrency: true })
+    }
+      return p.getCode('swift')
+  }).join('\n')
 
   const protocolBaseClasses = ['HybridObject']
   const classBaseClasses: string[] = []

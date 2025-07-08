@@ -34,6 +34,8 @@ export interface MethodModifiers {
    * it from being stripped from the binary by the Java compiler or ProGuard.
    */
   doNotStrip?: boolean
+
+  preconcurrency?: boolean
 }
 
 export class Method implements CodeNode {
@@ -98,8 +100,13 @@ ${signature} {
         const params = this.parameters.map((p) => p.getCode('swift'))
         const returnType = this.returnType.getCode('swift')
         let signature = `func ${this.name}(${params.join(', ')}) throws -> ${returnType}`
+        let attributes = ''
 
-        if (modifiers?.inline) signature = `@inline(__always)\n${signature}`
+        if (modifiers?.inline) signature = `@inline(__always)`
+        if (modifiers?.preconcurrency) attributes = `${attributes}${attributes.length===0?'':' '}@preconcurrency`
+        if(attributes.length > 0) {
+          signature = `${attributes}\n${signature}`
+        }
 
         if (body == null) {
           return signature

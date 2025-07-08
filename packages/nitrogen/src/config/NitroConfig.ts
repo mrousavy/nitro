@@ -47,6 +47,14 @@ export const NitroConfig = {
   },
 
   /**
+   * Returns whether the iOS module uses Swift 6 for callback conversions.
+   * @example `true`
+   */
+  getIosUsesSwift6(): boolean {
+    return getUserConfig().ios.usesSwift6 ?? false
+  },
+
+  /**
    * Represents the C++ namespace of the module that will be generated.
    * This can have multiple sub-namespaces, and is always relative to `margelo::nitro`.
    * @example `['image']` -> `margelo::nitro::image`

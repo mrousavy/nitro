@@ -40,6 +40,19 @@ export const NitroUserConfigSchema = z.object({
       .string()
       .regex(safeNamePattern)
       .refine(isNotReservedKeyword, isReservedKeywordError),
+
+    /**
+     * Represents whether the iOS module uses Swift 6. This is an optional property that defaults to false.
+     * 
+     * This allows alteration of the generated Swift code for callbacks to function with the Swift 6
+     * concurrency model and the Sendable protocol without breaking because of non-sendable to `@Sendable`
+     * coversion.
+     * 
+     * @example `true`
+     */
+    usesSwift6: z
+      .boolean()
+      .optional()
   }),
   /**
    * Android specific options.
