@@ -1,6 +1,6 @@
 //
 //  HybridImageFactory.swift
-//  NitroImage
+//  NitroTest
 //
 //  Created by Marc Rousavy on 22.07.24.
 //

@@ -20,7 +20,7 @@ import NitroModules
 public class HybridTestViewSpec_cxx {
   /**
    * The Swift <> C++ bridge's namespace (`margelo::nitro::image::bridge::swift`)
-   * from `NitroImage-Swift-Cxx-Bridge.hpp`.
+   * from `NitroTest-Swift-Cxx-Bridge.hpp`.
    * This contains specialized C++ templates, and C++ helper functions that can be accessed from Swift.
    */
   public typealias bridge = margelo.nitro.image.bridge.swift
@@ -85,7 +85,7 @@ public class HybridTestViewSpec_cxx {
     }
   }
 
-  
+
 
   /**
    * Get the memory size of the Swift class (plus size of any other allocations)
@@ -107,7 +107,7 @@ public class HybridTestViewSpec_cxx {
       self.__implementation.isBlue = newValue
     }
   }
-  
+
   public final var hasBeenCalled: Bool {
     @inline(__always)
     get {
@@ -118,7 +118,7 @@ public class HybridTestViewSpec_cxx {
       self.__implementation.hasBeenCalled = newValue
     }
   }
-  
+
   public final var colorScheme: Int32 {
     @inline(__always)
     get {
@@ -129,7 +129,7 @@ public class HybridTestViewSpec_cxx {
       self.__implementation.colorScheme = margelo.nitro.image.ColorScheme(rawValue: newValue)!
     }
   }
-  
+
   public final var someCallback: bridge.Func_void {
     @inline(__always)
     get {
@@ -160,15 +160,15 @@ public class HybridTestViewSpec_cxx {
       return bridge.create_Result_void_(__exceptionPtr)
     }
   }
-  
+
   public final func getView() -> UnsafeMutableRawPointer {
     return Unmanaged.passRetained(__implementation.view).toOpaque()
   }
-  
+
   public final func beforeUpdate() {
     __implementation.beforeUpdate()
   }
-  
+
   public final func afterUpdate() {
     __implementation.afterUpdate()
   }

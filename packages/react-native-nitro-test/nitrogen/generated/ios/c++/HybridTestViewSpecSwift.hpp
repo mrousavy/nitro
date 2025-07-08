@@ -10,7 +10,7 @@
 #include "HybridTestViewSpec.hpp"
 
 // Forward declaration of `HybridTestViewSpec_cxx` to properly resolve imports.
-namespace NitroImage { class HybridTestViewSpec_cxx; }
+namespace NitroTest { class HybridTestViewSpec_cxx; }
 
 // Forward declaration of `ColorScheme` to properly resolve imports.
 namespace margelo::nitro::image { enum class ColorScheme; }
@@ -18,7 +18,7 @@ namespace margelo::nitro::image { enum class ColorScheme; }
 #include "ColorScheme.hpp"
 #include <functional>
 
-#include "NitroImage-Swift-Cxx-Umbrella.hpp"
+#include "NitroTest-Swift-Cxx-Umbrella.hpp"
 
 namespace margelo::nitro::image {
 
@@ -35,13 +35,13 @@ namespace margelo::nitro::image {
   class HybridTestViewSpecSwift: public virtual HybridTestViewSpec {
   public:
     // Constructor from a Swift instance
-    explicit HybridTestViewSpecSwift(const NitroImage::HybridTestViewSpec_cxx& swiftPart):
+    explicit HybridTestViewSpecSwift(const NitroTest::HybridTestViewSpec_cxx& swiftPart):
       HybridObject(HybridTestViewSpec::TAG),
       _swiftPart(swiftPart) { }
 
   public:
     // Get the Swift part
-    inline NitroImage::HybridTestViewSpec_cxx& getSwiftPart() noexcept {
+    inline NitroTest::HybridTestViewSpec_cxx& getSwiftPart() noexcept {
       return _swiftPart;
     }
 
@@ -90,7 +90,7 @@ namespace margelo::nitro::image {
     }
 
   private:
-    NitroImage::HybridTestViewSpec_cxx _swiftPart;
+    NitroTest::HybridTestViewSpec_cxx _swiftPart;
   };
 
 } // namespace margelo::nitro::image

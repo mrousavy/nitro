@@ -10,7 +10,7 @@
 #include "HybridImageSpec.hpp"
 
 // Forward declaration of `HybridImageSpec_cxx` to properly resolve imports.
-namespace NitroImage { class HybridImageSpec_cxx; }
+namespace NitroTest { class HybridImageSpec_cxx; }
 
 // Forward declaration of `ImageSize` to properly resolve imports.
 namespace margelo::nitro::image { struct ImageSize; }
@@ -25,7 +25,7 @@ namespace margelo::nitro::image { enum class ImageFormat; }
 #include <string>
 #include <functional>
 
-#include "NitroImage-Swift-Cxx-Umbrella.hpp"
+#include "NitroTest-Swift-Cxx-Umbrella.hpp"
 
 namespace margelo::nitro::image {
 
@@ -42,13 +42,13 @@ namespace margelo::nitro::image {
   class HybridImageSpecSwift: public virtual HybridImageSpec {
   public:
     // Constructor from a Swift instance
-    explicit HybridImageSpecSwift(const NitroImage::HybridImageSpec_cxx& swiftPart):
+    explicit HybridImageSpecSwift(const NitroTest::HybridImageSpec_cxx& swiftPart):
       HybridObject(HybridImageSpec::TAG),
       _swiftPart(swiftPart) { }
 
   public:
     // Get the Swift part
-    inline NitroImage::HybridImageSpec_cxx& getSwiftPart() noexcept {
+    inline NitroTest::HybridImageSpec_cxx& getSwiftPart() noexcept {
       return _swiftPart;
     }
 
@@ -93,7 +93,7 @@ namespace margelo::nitro::image {
     }
 
   private:
-    NitroImage::HybridImageSpec_cxx _swiftPart;
+    NitroTest::HybridImageSpec_cxx _swiftPart;
   };
 
 } // namespace margelo::nitro::image

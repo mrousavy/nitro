@@ -15,7 +15,7 @@
 #import <UIKit/UIKit.h>
 
 #import "HybridTestViewSpecSwift.hpp"
-#import "NitroImage-Swift-Cxx-Umbrella.hpp"
+#import "NitroTest-Swift-Cxx-Umbrella.hpp"
 
 using namespace facebook;
 using namespace margelo::nitro::image;
@@ -42,7 +42,7 @@ using namespace margelo::nitro::image::views;
 
 - (instancetype) init {
   if (self = [super init]) {
-    std::shared_ptr<HybridTestViewSpec> hybridView = NitroImage::NitroImageAutolinking::createTestView();
+    std::shared_ptr<HybridTestViewSpec> hybridView = NitroTest::NitroTestAutolinking::createTestView();
     _hybridView = std::dynamic_pointer_cast<HybridTestViewSpecSwift>(hybridView);
     [self updateView];
   }
@@ -51,7 +51,7 @@ using namespace margelo::nitro::image::views;
 
 - (void) updateView {
   // 1. Get Swift part
-  NitroImage::HybridTestViewSpec_cxx& swiftPart = _hybridView->getSwiftPart();
+  NitroTest::HybridTestViewSpec_cxx& swiftPart = _hybridView->getSwiftPart();
 
   // 2. Get UIView*
   void* viewUnsafe = swiftPart.getView();
@@ -66,7 +66,7 @@ using namespace margelo::nitro::image::views;
   // 1. Downcast props
   const auto& newViewPropsConst = *std::static_pointer_cast<HybridTestViewProps const>(props);
   auto& newViewProps = const_cast<HybridTestViewProps&>(newViewPropsConst);
-  NitroImage::HybridTestViewSpec_cxx& swiftPart = _hybridView->getSwiftPart();
+  NitroTest::HybridTestViewSpec_cxx& swiftPart = _hybridView->getSwiftPart();
 
   // 2. Update each prop individually
   swiftPart.beforeUpdate();

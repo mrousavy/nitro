@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class NitroImagePackage extends TurboReactPackage {
+public class NitroTestPackage extends TurboReactPackage {
   @Nullable
   @Override
   public NativeModule getModule(String name, ReactApplicationContext reactContext) {
@@ -36,6 +36,6 @@ public class NitroImagePackage extends TurboReactPackage {
   }
 
   static {
-    NitroImageOnLoad.initializeNative();
+    NitroTestOnLoad.initializeNative();
   }
 }

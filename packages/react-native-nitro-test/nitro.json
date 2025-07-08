@@ -4,13 +4,13 @@
     "image"
   ],
   "ios": {
-    "iosModuleName": "NitroImage"
+    "iosModuleName": "NitroTest"
   },
   "android": {
     "androidNamespace": [
       "image"
     ],
-    "androidCxxLibName": "NitroImage"
+    "androidCxxLibName": "NitroTest"
   },
   "autolinking": {
     "ImageFactory": {

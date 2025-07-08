@@ -20,7 +20,7 @@ def isNewArchitectureEnabled() {
 
 apply plugin: "com.android.library"
 apply plugin: 'org.jetbrains.kotlin.android'
-apply from: '../nitrogen/generated/android/NitroImage+autolinking.gradle'
+apply from: '../nitrogen/generated/android/NitroTest+autolinking.gradle'
 
 if (isNewArchitectureEnabled()) {
   apply plugin: "com.facebook.react"
@@ -141,7 +141,7 @@ dependencies {
 if (isNewArchitectureEnabled()) {
   react {
     jsRootDir = file("../src/")
-    libraryName = "NitroImage"
+    libraryName = "NitroTest"
     codegenJavaPackageName = "com.margelo.nitro.image"
   }
 }

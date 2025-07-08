@@ -1,6 +1,6 @@
 //
 //  HybridTestObjectSwift.swift
-//  NitroImage
+//  NitroTest
 //
 //  Created by Marc Rousavy on 11.08.24.
 //
@@ -304,7 +304,7 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
   func jsStyleObjectAsParameters(params: JsStyleStruct) throws -> Void {
     params.onChanged(params.value)
   }
-  
+
   func createArrayBufferFromNativeBuffer(copy: Bool) throws -> ArrayBufferHolder {
     let data = Data(count: 1024 * 1024 * 10) // 10 MB
     if copy {
@@ -322,7 +322,7 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
   func createArrayBufferAsync() throws -> Promise<ArrayBufferHolder> {
     return Promise.async { try self.createArrayBuffer() }
   }
-  
+
   func copyBuffer(buffer: ArrayBufferHolder) throws -> ArrayBufferHolder {
     return ArrayBufferHolder.copy(of: buffer)
   }

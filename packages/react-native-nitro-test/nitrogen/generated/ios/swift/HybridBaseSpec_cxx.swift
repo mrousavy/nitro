@@ -20,7 +20,7 @@ import NitroModules
 public class HybridBaseSpec_cxx {
   /**
    * The Swift <> C++ bridge's namespace (`margelo::nitro::image::bridge::swift`)
-   * from `NitroImage-Swift-Cxx-Bridge.hpp`.
+   * from `NitroTest-Swift-Cxx-Bridge.hpp`.
    * This contains specialized C++ templates, and C++ helper functions that can be accessed from Swift.
    */
   public typealias bridge = margelo.nitro.image.bridge.swift
@@ -85,7 +85,7 @@ public class HybridBaseSpec_cxx {
     }
   }
 
-  
+
 
   /**
    * Get the memory size of the Swift class (plus size of any other allocations)
@@ -105,5 +105,5 @@ public class HybridBaseSpec_cxx {
   }
 
   // Methods
-  
+
 }

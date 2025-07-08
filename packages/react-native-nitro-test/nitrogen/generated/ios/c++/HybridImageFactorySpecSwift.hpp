@@ -10,7 +10,7 @@
 #include "HybridImageFactorySpec.hpp"
 
 // Forward declaration of `HybridImageFactorySpec_cxx` to properly resolve imports.
-namespace NitroImage { class HybridImageFactorySpec_cxx; }
+namespace NitroTest { class HybridImageFactorySpec_cxx; }
 
 // Forward declaration of `HybridImageSpec` to properly resolve imports.
 namespace margelo::nitro::image { class HybridImageSpec; }
@@ -19,7 +19,7 @@ namespace margelo::nitro::image { class HybridImageSpec; }
 #include "HybridImageSpec.hpp"
 #include <string>
 
-#include "NitroImage-Swift-Cxx-Umbrella.hpp"
+#include "NitroTest-Swift-Cxx-Umbrella.hpp"
 
 namespace margelo::nitro::image {
 
@@ -36,13 +36,13 @@ namespace margelo::nitro::image {
   class HybridImageFactorySpecSwift: public virtual HybridImageFactorySpec {
   public:
     // Constructor from a Swift instance
-    explicit HybridImageFactorySpecSwift(const NitroImage::HybridImageFactorySpec_cxx& swiftPart):
+    explicit HybridImageFactorySpecSwift(const NitroTest::HybridImageFactorySpec_cxx& swiftPart):
       HybridObject(HybridImageFactorySpec::TAG),
       _swiftPart(swiftPart) { }
 
   public:
     // Get the Swift part
-    inline NitroImage::HybridImageFactorySpec_cxx& getSwiftPart() noexcept {
+    inline NitroTest::HybridImageFactorySpec_cxx& getSwiftPart() noexcept {
       return _swiftPart;
     }
 
@@ -54,7 +54,7 @@ namespace margelo::nitro::image {
 
   public:
     // Properties
-    
+
 
   public:
     // Methods
@@ -92,7 +92,7 @@ namespace margelo::nitro::image {
     }
 
   private:
-    NitroImage::HybridImageFactorySpec_cxx _swiftPart;
+    NitroTest::HybridImageFactorySpec_cxx _swiftPart;
   };
 
 } // namespace margelo::nitro::image

@@ -10,7 +10,7 @@
 #include "HybridTestObjectSwiftKotlinSpec.hpp"
 
 // Forward declaration of `HybridTestObjectSwiftKotlinSpec_cxx` to properly resolve imports.
-namespace NitroImage { class HybridTestObjectSwiftKotlinSpec_cxx; }
+namespace NitroTest { class HybridTestObjectSwiftKotlinSpec_cxx; }
 
 // Forward declaration of `HybridTestObjectSwiftKotlinSpec` to properly resolve imports.
 namespace margelo::nitro::image { class HybridTestObjectSwiftKotlinSpec; }
@@ -63,7 +63,7 @@ namespace margelo::nitro::image { class HybridTestViewSpec; }
 #include "HybridBaseSpec.hpp"
 #include "HybridTestViewSpec.hpp"
 
-#include "NitroImage-Swift-Cxx-Umbrella.hpp"
+#include "NitroTest-Swift-Cxx-Umbrella.hpp"
 
 namespace margelo::nitro::image {
 
@@ -80,13 +80,13 @@ namespace margelo::nitro::image {
   class HybridTestObjectSwiftKotlinSpecSwift: public virtual HybridTestObjectSwiftKotlinSpec {
   public:
     // Constructor from a Swift instance
-    explicit HybridTestObjectSwiftKotlinSpecSwift(const NitroImage::HybridTestObjectSwiftKotlinSpec_cxx& swiftPart):
+    explicit HybridTestObjectSwiftKotlinSpecSwift(const NitroTest::HybridTestObjectSwiftKotlinSpec_cxx& swiftPart):
       HybridObject(HybridTestObjectSwiftKotlinSpec::TAG),
       _swiftPart(swiftPart) { }
 
   public:
     // Get the Swift part
-    inline NitroImage::HybridTestObjectSwiftKotlinSpec_cxx& getSwiftPart() noexcept {
+    inline NitroTest::HybridTestObjectSwiftKotlinSpec_cxx& getSwiftPart() noexcept {
       return _swiftPart;
     }
 
@@ -681,7 +681,7 @@ namespace margelo::nitro::image {
     }
 
   private:
-    NitroImage::HybridTestObjectSwiftKotlinSpec_cxx _swiftPart;
+    NitroTest::HybridTestObjectSwiftKotlinSpec_cxx _swiftPart;
   };
 
 } // namespace margelo::nitro::image

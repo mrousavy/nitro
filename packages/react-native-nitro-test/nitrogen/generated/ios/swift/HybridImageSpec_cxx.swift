@@ -20,7 +20,7 @@ import NitroModules
 public class HybridImageSpec_cxx {
   /**
    * The Swift <> C++ bridge's namespace (`margelo::nitro::image::bridge::swift`)
-   * from `NitroImage-Swift-Cxx-Bridge.hpp`.
+   * from `NitroTest-Swift-Cxx-Bridge.hpp`.
    * This contains specialized C++ templates, and C++ helper functions that can be accessed from Swift.
    */
   public typealias bridge = margelo.nitro.image.bridge.swift
@@ -85,7 +85,7 @@ public class HybridImageSpec_cxx {
     }
   }
 
-  
+
 
   /**
    * Get the memory size of the Swift class (plus size of any other allocations)
@@ -103,14 +103,14 @@ public class HybridImageSpec_cxx {
       return self.__implementation.size
     }
   }
-  
+
   public final var pixelFormat: Int32 {
     @inline(__always)
     get {
       return self.__implementation.pixelFormat.rawValue
     }
   }
-  
+
   public final var someSettableProp: Double {
     @inline(__always)
     get {
@@ -134,7 +134,7 @@ public class HybridImageSpec_cxx {
       return bridge.create_Result_double_(__exceptionPtr)
     }
   }
-  
+
   @inline(__always)
   public final func saveToFile(path: std.string, onFinished: bridge.Func_void_std__string) -> bridge.Result_void_ {
     do {

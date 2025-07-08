@@ -1,6 +1,6 @@
 //
 //  HybridChild.hpp
-//  NitroImage
+//  NitroTest
 //
 //  Created by Marc Rousavy on 03.10.24.
 //

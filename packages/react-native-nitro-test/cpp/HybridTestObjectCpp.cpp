@@ -1,6 +1,6 @@
 //
 //  HybridTestObjectCpp.cpp
-//  NitroImage
+//  NitroTest
 //
 //  Created by Marc Rousavy on 30.07.24.
 //
