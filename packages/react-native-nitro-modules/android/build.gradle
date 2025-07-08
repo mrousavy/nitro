@@ -156,7 +156,14 @@ if (isNewArchitectureEnabled()) {
   }
 }
 
+tasks.register('deleteHeaders', Delete) {
+  // cleans up any directories we manually added
+  delete "${project.buildDir}/headers/nitromodules/NitroModules/"
+}
+
 tasks.register('prepareHeaders', Copy) {
+  finalizedBy deleteHeaders
+
   from fileTree('./src/main/cpp').filter { it.isFile() }
   from fileTree('../cpp/').filter { it.isFile() }
   include "*.hpp"
