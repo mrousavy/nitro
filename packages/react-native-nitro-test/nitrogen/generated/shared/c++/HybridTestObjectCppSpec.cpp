@@ -7,7 +7,7 @@
 
 #include "HybridTestObjectCppSpec.hpp"
 
-namespace margelo::nitro::image {
+namespace margelo::nitro::test {
 
   void HybridTestObjectCppSpec::loadHybridMethods() {
     // load base methods/properties
@@ -112,4 +112,4 @@ namespace margelo::nitro::image {
     });
   }
 
-} // namespace margelo::nitro::image
+} // namespace margelo::nitro::test

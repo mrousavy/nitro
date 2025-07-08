@@ -12,17 +12,17 @@
 #include "HybridChildSpec.hpp"
 
 // Forward declaration of `JHybridBaseSpec` to properly resolve imports.
-namespace margelo::nitro::image { class JHybridBaseSpec; }
+namespace margelo::nitro::test { class JHybridBaseSpec; }
 #include "JHybridBaseSpec.hpp"
 
-namespace margelo::nitro::image {
+namespace margelo::nitro::test {
 
   using namespace facebook;
 
   class JHybridChildSpec: public jni::HybridClass<JHybridChildSpec, JHybridBaseSpec>,
                           public virtual HybridChildSpec {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/HybridChildSpec;";
+    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/HybridChildSpec;";
     static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis);
     static void registerNatives();
 
@@ -62,4 +62,4 @@ namespace margelo::nitro::image {
     jni::global_ref<JHybridChildSpec::javaobject> _javaPart;
   };
 
-} // namespace margelo::nitro::image
+} // namespace margelo::nitro::test

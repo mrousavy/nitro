@@ -10,7 +10,7 @@
 #include <fbjni/fbjni.h>
 #include "ColorScheme.hpp"
 
-namespace margelo::nitro::image {
+namespace margelo::nitro::test {
 
   using namespace facebook;
 
@@ -19,7 +19,7 @@ namespace margelo::nitro::image {
    */
   struct JColorScheme final: public jni::JavaClass<JColorScheme> {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/ColorScheme;";
+    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/ColorScheme;";
 
   public:
     /**
@@ -56,4 +56,4 @@ namespace margelo::nitro::image {
     }
   };
 
-} // namespace margelo::nitro::image
+} // namespace margelo::nitro::test

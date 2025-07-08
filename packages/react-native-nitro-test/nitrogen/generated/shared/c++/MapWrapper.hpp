@@ -23,7 +23,7 @@
 #include <unordered_map>
 #include <string>
 
-namespace margelo::nitro::image {
+namespace margelo::nitro::test {
 
   /**
    * A struct which can be represented as a JavaScript object (MapWrapper).
@@ -37,11 +37,11 @@ namespace margelo::nitro::image {
     explicit MapWrapper(std::unordered_map<std::string, std::string> map): map(map) {}
   };
 
-} // namespace margelo::nitro::image
+} // namespace margelo::nitro::test
 
 namespace margelo::nitro {
 
-  using namespace margelo::nitro::image;
+  using namespace margelo::nitro::test;
 
   // C++ MapWrapper <> JS MapWrapper (object)
   template <>

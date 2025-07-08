@@ -44,7 +44,7 @@ public extension Car {
       self.__year = newValue
     }
   }
-
+  
   var make: String {
     @inline(__always)
     get {
@@ -55,7 +55,7 @@ public extension Car {
       self.__make = std.string(newValue)
     }
   }
-
+  
   var model: String {
     @inline(__always)
     get {
@@ -66,7 +66,7 @@ public extension Car {
       self.__model = std.string(newValue)
     }
   }
-
+  
   var power: Double {
     @inline(__always)
     get {
@@ -77,7 +77,7 @@ public extension Car {
       self.__power = newValue
     }
   }
-
+  
   var powertrain: Powertrain {
     @inline(__always)
     get {
@@ -88,7 +88,7 @@ public extension Car {
       self.__powertrain = newValue
     }
   }
-
+  
   var driver: Person? {
     @inline(__always)
     get {
@@ -111,7 +111,7 @@ public extension Car {
       }()
     }
   }
-
+  
   var isFast: Bool? {
     @inline(__always)
     get {

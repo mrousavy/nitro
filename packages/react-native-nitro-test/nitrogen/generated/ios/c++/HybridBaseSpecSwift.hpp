@@ -18,7 +18,7 @@ namespace NitroTest { class HybridBaseSpec_cxx; }
 
 #include "NitroTest-Swift-Cxx-Umbrella.hpp"
 
-namespace margelo::nitro::image {
+namespace margelo::nitro::test {
 
   /**
    * The C++ part of HybridBaseSpec_cxx.swift.
@@ -63,4 +63,4 @@ namespace margelo::nitro::image {
     NitroTest::HybridBaseSpec_cxx _swiftPart;
   };
 
-} // namespace margelo::nitro::image
+} // namespace margelo::nitro::test

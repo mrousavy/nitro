@@ -42,7 +42,7 @@ abstract class HybridBaseSpec: HybridObject() {
   abstract val baseValue: Double
 
   // Methods
-
+  
 
   private external fun initHybrid(): HybridData
 

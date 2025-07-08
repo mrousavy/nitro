@@ -19,7 +19,7 @@ import NitroModules
  */
 public class HybridBaseSpec_cxx {
   /**
-   * The Swift <> C++ bridge's namespace (`margelo::nitro::image::bridge::swift`)
+   * The Swift <> C++ bridge's namespace (`margelo::nitro::test::bridge::swift`)
    * from `NitroTest-Swift-Cxx-Bridge.hpp`.
    * This contains specialized C++ templates, and C++ helper functions that can be accessed from Swift.
    */
@@ -33,7 +33,7 @@ public class HybridBaseSpec_cxx {
   /**
    * Holds a weak pointer to the C++ class that wraps the Swift class.
    */
-  private var __cxxPart: bridge.std__weak_ptr_margelo__nitro__image__HybridBaseSpec_
+  private var __cxxPart: bridge.std__weak_ptr_margelo__nitro__test__HybridBaseSpec_
 
   /**
    * Create a new `HybridBaseSpec_cxx` that wraps the given `HybridBaseSpec`.
@@ -72,20 +72,20 @@ public class HybridBaseSpec_cxx {
 
   /**
    * Gets (or creates) the C++ part of this Hybrid Object.
-   * The C++ part is a `std::shared_ptr<margelo::nitro::image::HybridBaseSpec>`.
+   * The C++ part is a `std::shared_ptr<margelo::nitro::test::HybridBaseSpec>`.
    */
-  public func getCxxPart() -> bridge.std__shared_ptr_margelo__nitro__image__HybridBaseSpec_ {
+  public func getCxxPart() -> bridge.std__shared_ptr_margelo__nitro__test__HybridBaseSpec_ {
     let cachedCxxPart = self.__cxxPart.lock()
     if cachedCxxPart.__convertToBool() {
       return cachedCxxPart
     } else {
-      let newCxxPart = bridge.create_std__shared_ptr_margelo__nitro__image__HybridBaseSpec_(self.toUnsafe())
-      __cxxPart = bridge.weakify_std__shared_ptr_margelo__nitro__image__HybridBaseSpec_(newCxxPart)
+      let newCxxPart = bridge.create_std__shared_ptr_margelo__nitro__test__HybridBaseSpec_(self.toUnsafe())
+      __cxxPart = bridge.weakify_std__shared_ptr_margelo__nitro__test__HybridBaseSpec_(newCxxPart)
       return newCxxPart
     }
   }
 
-
+  
 
   /**
    * Get the memory size of the Swift class (plus size of any other allocations)
@@ -105,5 +105,5 @@ public class HybridBaseSpec_cxx {
   }
 
   // Methods
-
+  
 }

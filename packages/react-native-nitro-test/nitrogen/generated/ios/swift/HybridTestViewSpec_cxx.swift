@@ -19,7 +19,7 @@ import NitroModules
  */
 public class HybridTestViewSpec_cxx {
   /**
-   * The Swift <> C++ bridge's namespace (`margelo::nitro::image::bridge::swift`)
+   * The Swift <> C++ bridge's namespace (`margelo::nitro::test::bridge::swift`)
    * from `NitroTest-Swift-Cxx-Bridge.hpp`.
    * This contains specialized C++ templates, and C++ helper functions that can be accessed from Swift.
    */
@@ -33,7 +33,7 @@ public class HybridTestViewSpec_cxx {
   /**
    * Holds a weak pointer to the C++ class that wraps the Swift class.
    */
-  private var __cxxPart: bridge.std__weak_ptr_margelo__nitro__image__HybridTestViewSpec_
+  private var __cxxPart: bridge.std__weak_ptr_margelo__nitro__test__HybridTestViewSpec_
 
   /**
    * Create a new `HybridTestViewSpec_cxx` that wraps the given `HybridTestViewSpec`.
@@ -72,20 +72,20 @@ public class HybridTestViewSpec_cxx {
 
   /**
    * Gets (or creates) the C++ part of this Hybrid Object.
-   * The C++ part is a `std::shared_ptr<margelo::nitro::image::HybridTestViewSpec>`.
+   * The C++ part is a `std::shared_ptr<margelo::nitro::test::HybridTestViewSpec>`.
    */
-  public func getCxxPart() -> bridge.std__shared_ptr_margelo__nitro__image__HybridTestViewSpec_ {
+  public func getCxxPart() -> bridge.std__shared_ptr_margelo__nitro__test__HybridTestViewSpec_ {
     let cachedCxxPart = self.__cxxPart.lock()
     if cachedCxxPart.__convertToBool() {
       return cachedCxxPart
     } else {
-      let newCxxPart = bridge.create_std__shared_ptr_margelo__nitro__image__HybridTestViewSpec_(self.toUnsafe())
-      __cxxPart = bridge.weakify_std__shared_ptr_margelo__nitro__image__HybridTestViewSpec_(newCxxPart)
+      let newCxxPart = bridge.create_std__shared_ptr_margelo__nitro__test__HybridTestViewSpec_(self.toUnsafe())
+      __cxxPart = bridge.weakify_std__shared_ptr_margelo__nitro__test__HybridTestViewSpec_(newCxxPart)
       return newCxxPart
     }
   }
 
-
+  
 
   /**
    * Get the memory size of the Swift class (plus size of any other allocations)
@@ -107,7 +107,7 @@ public class HybridTestViewSpec_cxx {
       self.__implementation.isBlue = newValue
     }
   }
-
+  
   public final var hasBeenCalled: Bool {
     @inline(__always)
     get {
@@ -118,7 +118,7 @@ public class HybridTestViewSpec_cxx {
       self.__implementation.hasBeenCalled = newValue
     }
   }
-
+  
   public final var colorScheme: Int32 {
     @inline(__always)
     get {
@@ -129,7 +129,7 @@ public class HybridTestViewSpec_cxx {
       self.__implementation.colorScheme = margelo.nitro.test.ColorScheme(rawValue: newValue)!
     }
   }
-
+  
   public final var someCallback: bridge.Func_void {
     @inline(__always)
     get {
@@ -160,15 +160,15 @@ public class HybridTestViewSpec_cxx {
       return bridge.create_Result_void_(__exceptionPtr)
     }
   }
-
+  
   public final func getView() -> UnsafeMutableRawPointer {
     return Unmanaged.passRetained(__implementation.view).toOpaque()
   }
-
+  
   public final func beforeUpdate() {
     __implementation.beforeUpdate()
   }
-
+  
   public final func afterUpdate() {
     __implementation.afterUpdate()
   }

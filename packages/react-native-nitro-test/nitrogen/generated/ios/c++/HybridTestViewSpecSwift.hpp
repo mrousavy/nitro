@@ -13,14 +13,14 @@
 namespace NitroTest { class HybridTestViewSpec_cxx; }
 
 // Forward declaration of `ColorScheme` to properly resolve imports.
-namespace margelo::nitro::image { enum class ColorScheme; }
+namespace margelo::nitro::test { enum class ColorScheme; }
 
 #include "ColorScheme.hpp"
 #include <functional>
 
 #include "NitroTest-Swift-Cxx-Umbrella.hpp"
 
-namespace margelo::nitro::image {
+namespace margelo::nitro::test {
 
   /**
    * The C++ part of HybridTestViewSpec_cxx.swift.
@@ -93,4 +93,4 @@ namespace margelo::nitro::image {
     NitroTest::HybridTestViewSpec_cxx _swiftPart;
   };
 
-} // namespace margelo::nitro::image
+} // namespace margelo::nitro::test

@@ -7,7 +7,7 @@
 
 #include "HybridTestViewSpec.hpp"
 
-namespace margelo::nitro::image {
+namespace margelo::nitro::test {
 
   void HybridTestViewSpec::loadHybridMethods() {
     // load base methods/properties
@@ -26,4 +26,4 @@ namespace margelo::nitro::image {
     });
   }
 
-} // namespace margelo::nitro::image
+} // namespace margelo::nitro::test

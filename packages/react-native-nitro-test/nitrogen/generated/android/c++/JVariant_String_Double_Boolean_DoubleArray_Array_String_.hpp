@@ -14,7 +14,7 @@
 #include <string>
 #include <vector>
 
-namespace margelo::nitro::image {
+namespace margelo::nitro::test {
 
   using namespace facebook;
 
@@ -23,7 +23,7 @@ namespace margelo::nitro::image {
    */
   class JVariant_String_Double_Boolean_DoubleArray_Array_String_: public jni::JavaClass<JVariant_String_Double_Boolean_DoubleArray_Array_String_> {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Variant_String_Double_Boolean_DoubleArray_Array_String_;";
+    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_String_Double_Boolean_DoubleArray_Array_String_;";
 
     static jni::local_ref<JVariant_String_Double_Boolean_DoubleArray_Array_String_> create_0(jni::alias_ref<jni::JString> value) {
       static const auto method = javaClassStatic()->getStaticMethod<JVariant_String_Double_Boolean_DoubleArray_Array_String_(jni::alias_ref<jni::JString>)>("create");
@@ -76,7 +76,7 @@ namespace margelo::nitro::image {
   namespace JVariant_String_Double_Boolean_DoubleArray_Array_String__impl {
     class First: public jni::JavaClass<First, JVariant_String_Double_Boolean_DoubleArray_Array_String_> {
     public:
-      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Variant_String_Double_Boolean_DoubleArray_Array_String_$First;";
+      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_String_Double_Boolean_DoubleArray_Array_String_$First;";
     
       [[nodiscard]] jni::local_ref<jni::JString> getValue() const {
         static const auto field = javaClassStatic()->getField<jni::JString>("value");
@@ -86,7 +86,7 @@ namespace margelo::nitro::image {
     
     class Second: public jni::JavaClass<Second, JVariant_String_Double_Boolean_DoubleArray_Array_String_> {
     public:
-      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Variant_String_Double_Boolean_DoubleArray_Array_String_$Second;";
+      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_String_Double_Boolean_DoubleArray_Array_String_$Second;";
     
       [[nodiscard]] double getValue() const {
         static const auto field = javaClassStatic()->getField<double>("value");
@@ -96,7 +96,7 @@ namespace margelo::nitro::image {
     
     class Third: public jni::JavaClass<Third, JVariant_String_Double_Boolean_DoubleArray_Array_String_> {
     public:
-      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Variant_String_Double_Boolean_DoubleArray_Array_String_$Third;";
+      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_String_Double_Boolean_DoubleArray_Array_String_$Third;";
     
       [[nodiscard]] jboolean getValue() const {
         static const auto field = javaClassStatic()->getField<jboolean>("value");
@@ -106,7 +106,7 @@ namespace margelo::nitro::image {
     
     class Fourth: public jni::JavaClass<Fourth, JVariant_String_Double_Boolean_DoubleArray_Array_String_> {
     public:
-      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Variant_String_Double_Boolean_DoubleArray_Array_String_$Fourth;";
+      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_String_Double_Boolean_DoubleArray_Array_String_$Fourth;";
     
       [[nodiscard]] jni::local_ref<jni::JArrayDouble> getValue() const {
         static const auto field = javaClassStatic()->getField<jni::JArrayDouble>("value");
@@ -116,7 +116,7 @@ namespace margelo::nitro::image {
     
     class Fifth: public jni::JavaClass<Fifth, JVariant_String_Double_Boolean_DoubleArray_Array_String_> {
     public:
-      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Variant_String_Double_Boolean_DoubleArray_Array_String_$Fifth;";
+      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_String_Double_Boolean_DoubleArray_Array_String_$Fifth;";
     
       [[nodiscard]] jni::local_ref<jni::JArrayClass<jni::JString>> getValue() const {
         static const auto field = javaClassStatic()->getField<jni::JArrayClass<jni::JString>>("value");
@@ -159,4 +159,4 @@ namespace margelo::nitro::image {
     throw std::invalid_argument("Variant is unknown Kotlin instance!");
   }
 
-} // namespace margelo::nitro::image
+} // namespace margelo::nitro::test

@@ -13,31 +13,31 @@
 namespace NitroTest { class HybridTestObjectSwiftKotlinSpec_cxx; }
 
 // Forward declaration of `HybridTestObjectSwiftKotlinSpec` to properly resolve imports.
-namespace margelo::nitro::image { class HybridTestObjectSwiftKotlinSpec; }
+namespace margelo::nitro::test { class HybridTestObjectSwiftKotlinSpec; }
 // Forward declaration of `Powertrain` to properly resolve imports.
-namespace margelo::nitro::image { enum class Powertrain; }
+namespace margelo::nitro::test { enum class Powertrain; }
 // Forward declaration of `OldEnum` to properly resolve imports.
-namespace margelo::nitro::image { enum class OldEnum; }
+namespace margelo::nitro::test { enum class OldEnum; }
 // Forward declaration of `Person` to properly resolve imports.
-namespace margelo::nitro::image { struct Person; }
+namespace margelo::nitro::test { struct Person; }
 // Forward declaration of `AnyMap` to properly resolve imports.
 namespace NitroModules { class AnyMap; }
 // Forward declaration of `MapWrapper` to properly resolve imports.
-namespace margelo::nitro::image { struct MapWrapper; }
+namespace margelo::nitro::test { struct MapWrapper; }
 // Forward declaration of `Car` to properly resolve imports.
-namespace margelo::nitro::image { struct Car; }
+namespace margelo::nitro::test { struct Car; }
 // Forward declaration of `ArrayBuffer` to properly resolve imports.
 namespace NitroModules { class ArrayBuffer; }
 // Forward declaration of `ArrayBufferHolder` to properly resolve imports.
 namespace NitroModules { class ArrayBufferHolder; }
 // Forward declaration of `JsStyleStruct` to properly resolve imports.
-namespace margelo::nitro::image { struct JsStyleStruct; }
+namespace margelo::nitro::test { struct JsStyleStruct; }
 // Forward declaration of `HybridChildSpec` to properly resolve imports.
-namespace margelo::nitro::image { class HybridChildSpec; }
+namespace margelo::nitro::test { class HybridChildSpec; }
 // Forward declaration of `HybridBaseSpec` to properly resolve imports.
-namespace margelo::nitro::image { class HybridBaseSpec; }
+namespace margelo::nitro::test { class HybridBaseSpec; }
 // Forward declaration of `HybridTestViewSpec` to properly resolve imports.
-namespace margelo::nitro::image { class HybridTestViewSpec; }
+namespace margelo::nitro::test { class HybridTestViewSpec; }
 
 #include <memory>
 #include "HybridTestObjectSwiftKotlinSpec.hpp"
@@ -65,7 +65,7 @@ namespace margelo::nitro::image { class HybridTestViewSpec; }
 
 #include "NitroTest-Swift-Cxx-Umbrella.hpp"
 
-namespace margelo::nitro::image {
+namespace margelo::nitro::test {
 
   /**
    * The C++ part of HybridTestObjectSwiftKotlinSpec_cxx.swift.
@@ -98,15 +98,15 @@ namespace margelo::nitro::image {
 
   public:
     // Properties
-    inline std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec> getThisObject() noexcept override {
+    inline std::shared_ptr<margelo::nitro::test::HybridTestObjectSwiftKotlinSpec> getThisObject() noexcept override {
       auto __result = _swiftPart.getThisObject();
       return __result;
     }
-    inline std::optional<std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>> getOptionalHybrid() noexcept override {
+    inline std::optional<std::shared_ptr<margelo::nitro::test::HybridTestObjectSwiftKotlinSpec>> getOptionalHybrid() noexcept override {
       auto __result = _swiftPart.getOptionalHybrid();
       return __result;
     }
-    inline void setOptionalHybrid(const std::optional<std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>>& optionalHybrid) noexcept override {
+    inline void setOptionalHybrid(const std::optional<std::shared_ptr<margelo::nitro::test::HybridTestObjectSwiftKotlinSpec>>& optionalHybrid) noexcept override {
       _swiftPart.setOptionalHybrid(optionalHybrid);
     }
     inline double getNumberValue() noexcept override {
@@ -193,7 +193,7 @@ namespace margelo::nitro::image {
 
   public:
     // Methods
-    inline std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec> newTestObject() override {
+    inline std::shared_ptr<margelo::nitro::test::HybridTestObjectSwiftKotlinSpec> newTestObject() override {
       auto __result = _swiftPart.newTestObject();
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
@@ -201,7 +201,7 @@ namespace margelo::nitro::image {
       auto __value = std::move(__result.value());
       return __value;
     }
-    inline std::variant<Person, std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>> getVariantHybrid(const std::variant<Person, std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>>& variant) override {
+    inline std::variant<Person, std::shared_ptr<margelo::nitro::test::HybridTestObjectSwiftKotlinSpec>> getVariantHybrid(const std::variant<Person, std::shared_ptr<margelo::nitro::test::HybridTestObjectSwiftKotlinSpec>>& variant) override {
       auto __result = _swiftPart.getVariantHybrid(variant);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
@@ -607,7 +607,7 @@ namespace margelo::nitro::image {
       auto __value = std::move(__result.value());
       return __value;
     }
-    inline std::shared_ptr<margelo::nitro::image::HybridChildSpec> createChild() override {
+    inline std::shared_ptr<margelo::nitro::test::HybridChildSpec> createChild() override {
       auto __result = _swiftPart.createChild();
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
@@ -615,7 +615,7 @@ namespace margelo::nitro::image {
       auto __value = std::move(__result.value());
       return __value;
     }
-    inline std::shared_ptr<margelo::nitro::image::HybridBaseSpec> createBase() override {
+    inline std::shared_ptr<margelo::nitro::test::HybridBaseSpec> createBase() override {
       auto __result = _swiftPart.createBase();
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
@@ -623,7 +623,7 @@ namespace margelo::nitro::image {
       auto __value = std::move(__result.value());
       return __value;
     }
-    inline std::shared_ptr<margelo::nitro::image::HybridBaseSpec> createBaseActualChild() override {
+    inline std::shared_ptr<margelo::nitro::test::HybridBaseSpec> createBaseActualChild() override {
       auto __result = _swiftPart.createBaseActualChild();
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
@@ -631,7 +631,7 @@ namespace margelo::nitro::image {
       auto __value = std::move(__result.value());
       return __value;
     }
-    inline std::shared_ptr<margelo::nitro::image::HybridChildSpec> bounceChild(const std::shared_ptr<margelo::nitro::image::HybridChildSpec>& child) override {
+    inline std::shared_ptr<margelo::nitro::test::HybridChildSpec> bounceChild(const std::shared_ptr<margelo::nitro::test::HybridChildSpec>& child) override {
       auto __result = _swiftPart.bounceChild(child);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
@@ -639,7 +639,7 @@ namespace margelo::nitro::image {
       auto __value = std::move(__result.value());
       return __value;
     }
-    inline std::shared_ptr<margelo::nitro::image::HybridBaseSpec> bounceBase(const std::shared_ptr<margelo::nitro::image::HybridBaseSpec>& base) override {
+    inline std::shared_ptr<margelo::nitro::test::HybridBaseSpec> bounceBase(const std::shared_ptr<margelo::nitro::test::HybridBaseSpec>& base) override {
       auto __result = _swiftPart.bounceBase(base);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
@@ -647,7 +647,7 @@ namespace margelo::nitro::image {
       auto __value = std::move(__result.value());
       return __value;
     }
-    inline std::shared_ptr<margelo::nitro::image::HybridBaseSpec> bounceChildBase(const std::shared_ptr<margelo::nitro::image::HybridChildSpec>& child) override {
+    inline std::shared_ptr<margelo::nitro::test::HybridBaseSpec> bounceChildBase(const std::shared_ptr<margelo::nitro::test::HybridChildSpec>& child) override {
       auto __result = _swiftPart.bounceChildBase(child);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
@@ -655,7 +655,7 @@ namespace margelo::nitro::image {
       auto __value = std::move(__result.value());
       return __value;
     }
-    inline std::shared_ptr<margelo::nitro::image::HybridChildSpec> castBase(const std::shared_ptr<margelo::nitro::image::HybridBaseSpec>& base) override {
+    inline std::shared_ptr<margelo::nitro::test::HybridChildSpec> castBase(const std::shared_ptr<margelo::nitro::test::HybridBaseSpec>& base) override {
       auto __result = _swiftPart.castBase(base);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
@@ -671,7 +671,7 @@ namespace margelo::nitro::image {
       auto __value = std::move(__result.value());
       return __value;
     }
-    inline bool getIsViewBlue(const std::shared_ptr<margelo::nitro::image::HybridTestViewSpec>& view) override {
+    inline bool getIsViewBlue(const std::shared_ptr<margelo::nitro::test::HybridTestViewSpec>& view) override {
       auto __result = _swiftPart.getIsViewBlue(view);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
@@ -684,4 +684,4 @@ namespace margelo::nitro::image {
     NitroTest::HybridTestObjectSwiftKotlinSpec_cxx _swiftPart;
   };
 
-} // namespace margelo::nitro::image
+} // namespace margelo::nitro::test

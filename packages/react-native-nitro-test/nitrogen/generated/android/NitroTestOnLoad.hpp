@@ -8,7 +8,7 @@
 #include <jni.h>
 #include <NitroModules/NitroDefines.hpp>
 
-namespace margelo::nitro::image {
+namespace margelo::nitro::test {
 
   /**
    * Initializes the native (C++) part of NitroTest, and autolinks all Hybrid Objects.
@@ -16,10 +16,10 @@ namespace margelo::nitro::image {
    * Example:
    * ```cpp (cpp-adapter.cpp)
    * JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void*) {
-   *   return margelo::nitro::image::initialize(vm);
+   *   return margelo::nitro::test::initialize(vm);
    * }
    * ```
    */
   int initialize(JavaVM* vm);
 
-} // namespace margelo::nitro::image
+} // namespace margelo::nitro::test

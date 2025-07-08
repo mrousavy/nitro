@@ -10,7 +10,7 @@
 #include <fbjni/fbjni.h>
 #include "OldEnum.hpp"
 
-namespace margelo::nitro::image {
+namespace margelo::nitro::test {
 
   using namespace facebook;
 
@@ -19,7 +19,7 @@ namespace margelo::nitro::image {
    */
   struct JOldEnum final: public jni::JavaClass<JOldEnum> {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/OldEnum;";
+    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/OldEnum;";
 
   public:
     /**
@@ -59,4 +59,4 @@ namespace margelo::nitro::image {
     }
   };
 
-} // namespace margelo::nitro::image
+} // namespace margelo::nitro::test

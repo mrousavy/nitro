@@ -17,7 +17,7 @@
 #include <NitroModules/JArrayBuffer.hpp>
 #include <NitroModules/JUnit.hpp>
 
-namespace margelo::nitro::image {
+namespace margelo::nitro::test {
 
   using namespace facebook;
 
@@ -27,7 +27,7 @@ namespace margelo::nitro::image {
    */
   struct JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____: public jni::JavaClass<JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____> {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____;";
+    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____;";
 
   public:
     /**
@@ -109,7 +109,7 @@ namespace margelo::nitro::image {
     }
 
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer______cxx;";
+    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer______cxx;";
     static void registerNatives() {
       registerHybrid({makeNativeMethod("invoke_cxx", JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer______cxx::invoke_cxx)});
     }
@@ -122,4 +122,4 @@ namespace margelo::nitro::image {
     std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>>>()> _func;
   };
 
-} // namespace margelo::nitro::image
+} // namespace margelo::nitro::test

@@ -19,7 +19,7 @@
 #include "JHybridTestObjectSwiftKotlinSpec.hpp"
 #include <NitroModules/JNISharedPtr.hpp>
 
-namespace margelo::nitro::image {
+namespace margelo::nitro::test {
 
   using namespace facebook;
 
@@ -28,7 +28,7 @@ namespace margelo::nitro::image {
    */
   class JVariant_Person_HybridTestObjectSwiftKotlinSpec: public jni::JavaClass<JVariant_Person_HybridTestObjectSwiftKotlinSpec> {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Variant_Person_HybridTestObjectSwiftKotlinSpec;";
+    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_Person_HybridTestObjectSwiftKotlinSpec;";
 
     static jni::local_ref<JVariant_Person_HybridTestObjectSwiftKotlinSpec> create_0(jni::alias_ref<JPerson> value) {
       static const auto method = javaClassStatic()->getStaticMethod<JVariant_Person_HybridTestObjectSwiftKotlinSpec(jni::alias_ref<JPerson>)>("create");
@@ -39,7 +39,7 @@ namespace margelo::nitro::image {
       return method(javaClassStatic(), value);
     }
 
-    static jni::local_ref<JVariant_Person_HybridTestObjectSwiftKotlinSpec> fromCpp(const std::variant<Person, std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>>& variant) {
+    static jni::local_ref<JVariant_Person_HybridTestObjectSwiftKotlinSpec> fromCpp(const std::variant<Person, std::shared_ptr<margelo::nitro::test::HybridTestObjectSwiftKotlinSpec>>& variant) {
       switch (variant.index()) {
         case 0: return create_0(JPerson::fromCpp(std::get<0>(variant)));
         case 1: return create_1(std::dynamic_pointer_cast<JHybridTestObjectSwiftKotlinSpec>(std::get<1>(variant))->getJavaPart());
@@ -47,13 +47,13 @@ namespace margelo::nitro::image {
       }
     }
 
-    [[nodiscard]] std::variant<Person, std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>> toCpp() const;
+    [[nodiscard]] std::variant<Person, std::shared_ptr<margelo::nitro::test::HybridTestObjectSwiftKotlinSpec>> toCpp() const;
   };
 
   namespace JVariant_Person_HybridTestObjectSwiftKotlinSpec_impl {
     class First: public jni::JavaClass<First, JVariant_Person_HybridTestObjectSwiftKotlinSpec> {
     public:
-      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Variant_Person_HybridTestObjectSwiftKotlinSpec$First;";
+      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_Person_HybridTestObjectSwiftKotlinSpec$First;";
     
       [[nodiscard]] jni::local_ref<JPerson> getValue() const {
         static const auto field = javaClassStatic()->getField<JPerson>("value");
@@ -63,7 +63,7 @@ namespace margelo::nitro::image {
     
     class Second: public jni::JavaClass<Second, JVariant_Person_HybridTestObjectSwiftKotlinSpec> {
     public:
-      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Variant_Person_HybridTestObjectSwiftKotlinSpec$Second;";
+      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_Person_HybridTestObjectSwiftKotlinSpec$Second;";
     
       [[nodiscard]] jni::local_ref<JHybridTestObjectSwiftKotlinSpec::javaobject> getValue() const {
         static const auto field = javaClassStatic()->getField<JHybridTestObjectSwiftKotlinSpec::javaobject>("value");
@@ -72,7 +72,7 @@ namespace margelo::nitro::image {
     };
   } // namespace JVariant_Person_HybridTestObjectSwiftKotlinSpec_impl
 
-  std::variant<Person, std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>> JVariant_Person_HybridTestObjectSwiftKotlinSpec::toCpp() const {
+  std::variant<Person, std::shared_ptr<margelo::nitro::test::HybridTestObjectSwiftKotlinSpec>> JVariant_Person_HybridTestObjectSwiftKotlinSpec::toCpp() const {
     if (isInstanceOf(JVariant_Person_HybridTestObjectSwiftKotlinSpec_impl::First::javaClassStatic())) {
       auto jniValue = static_cast<const JVariant_Person_HybridTestObjectSwiftKotlinSpec_impl::First*>(this)->getValue();
       return jniValue->toCpp();
@@ -83,4 +83,4 @@ namespace margelo::nitro::image {
     throw std::invalid_argument("Variant is unknown Kotlin instance!");
   }
 
-} // namespace margelo::nitro::image
+} // namespace margelo::nitro::test

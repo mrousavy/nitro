@@ -20,7 +20,7 @@
 #include <optional>
 #include "JPerson.hpp"
 
-namespace margelo::nitro::image {
+namespace margelo::nitro::test {
 
   using namespace facebook;
 
@@ -29,7 +29,7 @@ namespace margelo::nitro::image {
    */
   class JVariant_Car_Person: public jni::JavaClass<JVariant_Car_Person> {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Variant_Car_Person;";
+    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_Car_Person;";
 
     static jni::local_ref<JVariant_Car_Person> create_0(jni::alias_ref<JCar> value) {
       static const auto method = javaClassStatic()->getStaticMethod<JVariant_Car_Person(jni::alias_ref<JCar>)>("create");
@@ -54,7 +54,7 @@ namespace margelo::nitro::image {
   namespace JVariant_Car_Person_impl {
     class First: public jni::JavaClass<First, JVariant_Car_Person> {
     public:
-      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Variant_Car_Person$First;";
+      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_Car_Person$First;";
     
       [[nodiscard]] jni::local_ref<JCar> getValue() const {
         static const auto field = javaClassStatic()->getField<JCar>("value");
@@ -64,7 +64,7 @@ namespace margelo::nitro::image {
     
     class Second: public jni::JavaClass<Second, JVariant_Car_Person> {
     public:
-      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Variant_Car_Person$Second;";
+      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_Car_Person$Second;";
     
       [[nodiscard]] jni::local_ref<JPerson> getValue() const {
         static const auto field = javaClassStatic()->getField<JPerson>("value");
@@ -84,4 +84,4 @@ namespace margelo::nitro::image {
     throw std::invalid_argument("Variant is unknown Kotlin instance!");
   }
 
-} // namespace margelo::nitro::image
+} // namespace margelo::nitro::test

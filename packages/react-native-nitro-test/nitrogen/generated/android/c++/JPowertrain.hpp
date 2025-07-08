@@ -10,7 +10,7 @@
 #include <fbjni/fbjni.h>
 #include "Powertrain.hpp"
 
-namespace margelo::nitro::image {
+namespace margelo::nitro::test {
 
   using namespace facebook;
 
@@ -19,7 +19,7 @@ namespace margelo::nitro::image {
    */
   struct JPowertrain final: public jni::JavaClass<JPowertrain> {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Powertrain;";
+    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Powertrain;";
 
   public:
     /**
@@ -59,4 +59,4 @@ namespace margelo::nitro::image {
     }
   };
 
-} // namespace margelo::nitro::image
+} // namespace margelo::nitro::test

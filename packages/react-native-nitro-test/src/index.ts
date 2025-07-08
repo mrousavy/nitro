@@ -1,5 +1,4 @@
 import { NitroModules } from 'react-native-nitro-modules'
-import type { ImageFactory } from './specs/ImageFactory.nitro'
 import {
   type Base,
   type Child,
@@ -8,16 +7,8 @@ import {
 } from './specs/TestObject.nitro'
 
 export * from './specs/TestObject.nitro'
-export * from './specs/Image.nitro'
-export * from './specs/ImageFactory.nitro'
 
 export * from './views/TestView'
-
-/**
- * Constructors for creating instances of `Image`.
- */
-export const ImageConstructors =
-  NitroModules.createHybridObject<ImageFactory>('ImageFactory')
 
 /**
  * The Hybrid Test Object in C++

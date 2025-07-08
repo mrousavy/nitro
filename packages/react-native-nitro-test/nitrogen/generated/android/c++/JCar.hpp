@@ -17,7 +17,7 @@
 #include <optional>
 #include <string>
 
-namespace margelo::nitro::image {
+namespace margelo::nitro::test {
 
   using namespace facebook;
 
@@ -26,7 +26,7 @@ namespace margelo::nitro::image {
    */
   struct JCar final: public jni::JavaClass<JCar> {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Car;";
+    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Car;";
 
   public:
     /**
@@ -79,4 +79,4 @@ namespace margelo::nitro::image {
     }
   };
 
-} // namespace margelo::nitro::image
+} // namespace margelo::nitro::test

@@ -13,7 +13,7 @@
 #include <variant>
 #include <string>
 
-namespace margelo::nitro::image {
+namespace margelo::nitro::test {
 
   using namespace facebook;
 
@@ -22,7 +22,7 @@ namespace margelo::nitro::image {
    */
   class JVariant_String_Double: public jni::JavaClass<JVariant_String_Double> {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Variant_String_Double;";
+    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_String_Double;";
 
     static jni::local_ref<JVariant_String_Double> create_0(jni::alias_ref<jni::JString> value) {
       static const auto method = javaClassStatic()->getStaticMethod<JVariant_String_Double(jni::alias_ref<jni::JString>)>("create");
@@ -47,7 +47,7 @@ namespace margelo::nitro::image {
   namespace JVariant_String_Double_impl {
     class First: public jni::JavaClass<First, JVariant_String_Double> {
     public:
-      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Variant_String_Double$First;";
+      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_String_Double$First;";
     
       [[nodiscard]] jni::local_ref<jni::JString> getValue() const {
         static const auto field = javaClassStatic()->getField<jni::JString>("value");
@@ -57,7 +57,7 @@ namespace margelo::nitro::image {
     
     class Second: public jni::JavaClass<Second, JVariant_String_Double> {
     public:
-      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Variant_String_Double$Second;";
+      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_String_Double$Second;";
     
       [[nodiscard]] double getValue() const {
         static const auto field = javaClassStatic()->getField<double>("value");
@@ -77,4 +77,4 @@ namespace margelo::nitro::image {
     throw std::invalid_argument("Variant is unknown Kotlin instance!");
   }
 
-} // namespace margelo::nitro::image
+} // namespace margelo::nitro::test

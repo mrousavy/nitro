@@ -23,7 +23,7 @@
 #error NitroModules cannot be found! Are you sure you installed NitroModules properly?
 #endif
 
-namespace margelo::nitro::image {
+namespace margelo::nitro::test {
 
   /**
    * An enum which can be represented as a JavaScript union (Powertrain).
@@ -34,11 +34,11 @@ namespace margelo::nitro::image {
     HYBRID      SWIFT_NAME(hybrid) = 2,
   } CLOSED_ENUM;
 
-} // namespace margelo::nitro::image
+} // namespace margelo::nitro::test
 
 namespace margelo::nitro {
 
-  using namespace margelo::nitro::image;
+  using namespace margelo::nitro::test;
 
   // C++ Powertrain <> JS Powertrain (union)
   template <>

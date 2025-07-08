@@ -15,35 +15,27 @@ namespace NitroModules { class ArrayBufferHolder; }
 // Forward declaration of `ArrayBuffer` to properly resolve imports.
 namespace NitroModules { class ArrayBuffer; }
 // Forward declaration of `Car` to properly resolve imports.
-namespace margelo::nitro::image { struct Car; }
+namespace margelo::nitro::test { struct Car; }
 // Forward declaration of `HybridBaseSpec` to properly resolve imports.
-namespace margelo::nitro::image { class HybridBaseSpec; }
+namespace margelo::nitro::test { class HybridBaseSpec; }
 // Forward declaration of `HybridChildSpec` to properly resolve imports.
-namespace margelo::nitro::image { class HybridChildSpec; }
-// Forward declaration of `HybridImageFactorySpec` to properly resolve imports.
-namespace margelo::nitro::image { class HybridImageFactorySpec; }
-// Forward declaration of `HybridImageSpec` to properly resolve imports.
-namespace margelo::nitro::image { class HybridImageSpec; }
+namespace margelo::nitro::test { class HybridChildSpec; }
 // Forward declaration of `HybridTestObjectSwiftKotlinSpec` to properly resolve imports.
-namespace margelo::nitro::image { class HybridTestObjectSwiftKotlinSpec; }
+namespace margelo::nitro::test { class HybridTestObjectSwiftKotlinSpec; }
 // Forward declaration of `HybridTestViewSpec` to properly resolve imports.
-namespace margelo::nitro::image { class HybridTestViewSpec; }
+namespace margelo::nitro::test { class HybridTestViewSpec; }
 // Forward declaration of `OldEnum` to properly resolve imports.
-namespace margelo::nitro::image { enum class OldEnum; }
+namespace margelo::nitro::test { enum class OldEnum; }
 // Forward declaration of `Person` to properly resolve imports.
-namespace margelo::nitro::image { struct Person; }
+namespace margelo::nitro::test { struct Person; }
 // Forward declaration of `Powertrain` to properly resolve imports.
-namespace margelo::nitro::image { enum class Powertrain; }
+namespace margelo::nitro::test { enum class Powertrain; }
 
 // Forward declarations of Swift defined types
 // Forward declaration of `HybridBaseSpec_cxx` to properly resolve imports.
 namespace NitroTest { class HybridBaseSpec_cxx; }
 // Forward declaration of `HybridChildSpec_cxx` to properly resolve imports.
 namespace NitroTest { class HybridChildSpec_cxx; }
-// Forward declaration of `HybridImageFactorySpec_cxx` to properly resolve imports.
-namespace NitroTest { class HybridImageFactorySpec_cxx; }
-// Forward declaration of `HybridImageSpec_cxx` to properly resolve imports.
-namespace NitroTest { class HybridImageSpec_cxx; }
 // Forward declaration of `HybridTestObjectSwiftKotlinSpec_cxx` to properly resolve imports.
 namespace NitroTest { class HybridTestObjectSwiftKotlinSpec_cxx; }
 // Forward declaration of `HybridTestViewSpec_cxx` to properly resolve imports.
@@ -53,8 +45,6 @@ namespace NitroTest { class HybridTestViewSpec_cxx; }
 #include "Car.hpp"
 #include "HybridBaseSpec.hpp"
 #include "HybridChildSpec.hpp"
-#include "HybridImageFactorySpec.hpp"
-#include "HybridImageSpec.hpp"
 #include "HybridTestObjectSwiftKotlinSpec.hpp"
 #include "HybridTestViewSpec.hpp"
 #include "OldEnum.hpp"
@@ -80,112 +70,39 @@ namespace NitroTest { class HybridTestViewSpec_cxx; }
  * Contains specialized versions of C++ templated types so they can be accessed from Swift,
  * as well as helper functions to interact with those C++ types from Swift.
  */
-namespace margelo::nitro::image::bridge::swift {
+namespace margelo::nitro::test::bridge::swift {
 
-  // pragma MARK: std::function<void(const std::string& /* path */)>
+  // pragma MARK: std::shared_ptr<margelo::nitro::test::HybridTestObjectSwiftKotlinSpec>
   /**
-   * Specialized version of `std::function<void(const std::string&)>`.
+   * Specialized version of `std::shared_ptr<margelo::nitro::test::HybridTestObjectSwiftKotlinSpec>`.
    */
-  using Func_void_std__string = std::function<void(const std::string& /* path */)>;
+  using std__shared_ptr_margelo__nitro__test__HybridTestObjectSwiftKotlinSpec_ = std::shared_ptr<margelo::nitro::test::HybridTestObjectSwiftKotlinSpec>;
+  std::shared_ptr<margelo::nitro::test::HybridTestObjectSwiftKotlinSpec> create_std__shared_ptr_margelo__nitro__test__HybridTestObjectSwiftKotlinSpec_(void* _Nonnull swiftUnsafePointer);
+  void* _Nonnull get_std__shared_ptr_margelo__nitro__test__HybridTestObjectSwiftKotlinSpec_(std__shared_ptr_margelo__nitro__test__HybridTestObjectSwiftKotlinSpec_ cppType);
+  
+  // pragma MARK: std::weak_ptr<margelo::nitro::test::HybridTestObjectSwiftKotlinSpec>
+  using std__weak_ptr_margelo__nitro__test__HybridTestObjectSwiftKotlinSpec_ = std::weak_ptr<margelo::nitro::test::HybridTestObjectSwiftKotlinSpec>;
+  inline std__weak_ptr_margelo__nitro__test__HybridTestObjectSwiftKotlinSpec_ weakify_std__shared_ptr_margelo__nitro__test__HybridTestObjectSwiftKotlinSpec_(const std::shared_ptr<margelo::nitro::test::HybridTestObjectSwiftKotlinSpec>& strong) { return strong; }
+  
+  // pragma MARK: std::optional<std::shared_ptr<margelo::nitro::test::HybridTestObjectSwiftKotlinSpec>>
   /**
-   * Wrapper class for a `std::function<void(const std::string& / * path * /)>`, this can be used from Swift.
+   * Specialized version of `std::optional<std::shared_ptr<margelo::nitro::test::HybridTestObjectSwiftKotlinSpec>>`.
    */
-  class Func_void_std__string_Wrapper final {
-  public:
-    explicit Func_void_std__string_Wrapper(std::function<void(const std::string& /* path */)>&& func): _function(std::make_shared<std::function<void(const std::string& /* path */)>>(std::move(func))) {}
-    inline void call(std::string path) const {
-      _function->operator()(path);
-    }
-  private:
-    std::shared_ptr<std::function<void(const std::string& /* path */)>> _function;
-  };
-  Func_void_std__string create_Func_void_std__string(void* _Nonnull swiftClosureWrapper);
-  inline Func_void_std__string_Wrapper wrap_Func_void_std__string(Func_void_std__string value) {
-    return Func_void_std__string_Wrapper(std::move(value));
+  using std__optional_std__shared_ptr_margelo__nitro__test__HybridTestObjectSwiftKotlinSpec__ = std::optional<std::shared_ptr<margelo::nitro::test::HybridTestObjectSwiftKotlinSpec>>;
+  inline std::optional<std::shared_ptr<margelo::nitro::test::HybridTestObjectSwiftKotlinSpec>> create_std__optional_std__shared_ptr_margelo__nitro__test__HybridTestObjectSwiftKotlinSpec__(const std::shared_ptr<margelo::nitro::test::HybridTestObjectSwiftKotlinSpec>& value) {
+    return std::optional<std::shared_ptr<margelo::nitro::test::HybridTestObjectSwiftKotlinSpec>>(value);
   }
   
-  // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridImageSpec>
+  // pragma MARK: std::variant<Person, std::shared_ptr<margelo::nitro::test::HybridTestObjectSwiftKotlinSpec>>
   /**
-   * Specialized version of `std::shared_ptr<margelo::nitro::image::HybridImageSpec>`.
-   */
-  using std__shared_ptr_margelo__nitro__image__HybridImageSpec_ = std::shared_ptr<margelo::nitro::image::HybridImageSpec>;
-  std::shared_ptr<margelo::nitro::image::HybridImageSpec> create_std__shared_ptr_margelo__nitro__image__HybridImageSpec_(void* _Nonnull swiftUnsafePointer);
-  void* _Nonnull get_std__shared_ptr_margelo__nitro__image__HybridImageSpec_(std__shared_ptr_margelo__nitro__image__HybridImageSpec_ cppType);
-  
-  // pragma MARK: std::weak_ptr<margelo::nitro::image::HybridImageSpec>
-  using std__weak_ptr_margelo__nitro__image__HybridImageSpec_ = std::weak_ptr<margelo::nitro::image::HybridImageSpec>;
-  inline std__weak_ptr_margelo__nitro__image__HybridImageSpec_ weakify_std__shared_ptr_margelo__nitro__image__HybridImageSpec_(const std::shared_ptr<margelo::nitro::image::HybridImageSpec>& strong) { return strong; }
-  
-  // pragma MARK: Result<double>
-  using Result_double_ = Result<double>;
-  inline Result_double_ create_Result_double_(double value) {
-    return Result<double>::withValue(std::move(value));
-  }
-  inline Result_double_ create_Result_double_(const std::exception_ptr& error) {
-    return Result<double>::withError(error);
-  }
-  
-  // pragma MARK: Result<void>
-  using Result_void_ = Result<void>;
-  inline Result_void_ create_Result_void_() {
-    return Result<void>::withValue();
-  }
-  inline Result_void_ create_Result_void_(const std::exception_ptr& error) {
-    return Result<void>::withError(error);
-  }
-  
-  // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridImageFactorySpec>
-  /**
-   * Specialized version of `std::shared_ptr<margelo::nitro::image::HybridImageFactorySpec>`.
-   */
-  using std__shared_ptr_margelo__nitro__image__HybridImageFactorySpec_ = std::shared_ptr<margelo::nitro::image::HybridImageFactorySpec>;
-  std::shared_ptr<margelo::nitro::image::HybridImageFactorySpec> create_std__shared_ptr_margelo__nitro__image__HybridImageFactorySpec_(void* _Nonnull swiftUnsafePointer);
-  void* _Nonnull get_std__shared_ptr_margelo__nitro__image__HybridImageFactorySpec_(std__shared_ptr_margelo__nitro__image__HybridImageFactorySpec_ cppType);
-  
-  // pragma MARK: std::weak_ptr<margelo::nitro::image::HybridImageFactorySpec>
-  using std__weak_ptr_margelo__nitro__image__HybridImageFactorySpec_ = std::weak_ptr<margelo::nitro::image::HybridImageFactorySpec>;
-  inline std__weak_ptr_margelo__nitro__image__HybridImageFactorySpec_ weakify_std__shared_ptr_margelo__nitro__image__HybridImageFactorySpec_(const std::shared_ptr<margelo::nitro::image::HybridImageFactorySpec>& strong) { return strong; }
-  
-  // pragma MARK: Result<std::shared_ptr<margelo::nitro::image::HybridImageSpec>>
-  using Result_std__shared_ptr_margelo__nitro__image__HybridImageSpec__ = Result<std::shared_ptr<margelo::nitro::image::HybridImageSpec>>;
-  inline Result_std__shared_ptr_margelo__nitro__image__HybridImageSpec__ create_Result_std__shared_ptr_margelo__nitro__image__HybridImageSpec__(const std::shared_ptr<margelo::nitro::image::HybridImageSpec>& value) {
-    return Result<std::shared_ptr<margelo::nitro::image::HybridImageSpec>>::withValue(value);
-  }
-  inline Result_std__shared_ptr_margelo__nitro__image__HybridImageSpec__ create_Result_std__shared_ptr_margelo__nitro__image__HybridImageSpec__(const std::exception_ptr& error) {
-    return Result<std::shared_ptr<margelo::nitro::image::HybridImageSpec>>::withError(error);
-  }
-  
-  // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>
-  /**
-   * Specialized version of `std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>`.
-   */
-  using std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_ = std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>;
-  std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec> create_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_(void* _Nonnull swiftUnsafePointer);
-  void* _Nonnull get_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_(std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_ cppType);
-  
-  // pragma MARK: std::weak_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>
-  using std__weak_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_ = std::weak_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>;
-  inline std__weak_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_ weakify_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_(const std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>& strong) { return strong; }
-  
-  // pragma MARK: std::optional<std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>>
-  /**
-   * Specialized version of `std::optional<std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>>`.
-   */
-  using std__optional_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec__ = std::optional<std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>>;
-  inline std::optional<std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>> create_std__optional_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec__(const std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>& value) {
-    return std::optional<std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>>(value);
-  }
-  
-  // pragma MARK: std::variant<Person, std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>>
-  /**
-   * Wrapper struct for `std::variant<Person, std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>>`.
+   * Wrapper struct for `std::variant<Person, std::shared_ptr<margelo::nitro::test::HybridTestObjectSwiftKotlinSpec>>`.
    * std::variant cannot be used in Swift because of a Swift bug.
    * Not even specializing it works. So we create a wrapper struct.
    */
-  struct std__variant_Person__std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec__ {
-    std::variant<Person, std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>> variant;
-    std__variant_Person__std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec__(std::variant<Person, std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>> variant): variant(variant) { }
-    operator std::variant<Person, std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>>() const {
+  struct std__variant_Person__std__shared_ptr_margelo__nitro__test__HybridTestObjectSwiftKotlinSpec__ {
+    std::variant<Person, std::shared_ptr<margelo::nitro::test::HybridTestObjectSwiftKotlinSpec>> variant;
+    std__variant_Person__std__shared_ptr_margelo__nitro__test__HybridTestObjectSwiftKotlinSpec__(std::variant<Person, std::shared_ptr<margelo::nitro::test::HybridTestObjectSwiftKotlinSpec>> variant): variant(variant) { }
+    operator std::variant<Person, std::shared_ptr<margelo::nitro::test::HybridTestObjectSwiftKotlinSpec>>() const {
       return variant;
     }
     inline size_t index() const {
@@ -194,15 +111,15 @@ namespace margelo::nitro::image::bridge::swift {
     inline Person get_0() const {
       return std::get<0>(variant);
     }
-    inline std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec> get_1() const {
+    inline std::shared_ptr<margelo::nitro::test::HybridTestObjectSwiftKotlinSpec> get_1() const {
       return std::get<1>(variant);
     }
   };
-  inline std__variant_Person__std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec__ create_std__variant_Person__std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec__(const Person& value) {
-    return std__variant_Person__std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec__(value);
+  inline std__variant_Person__std__shared_ptr_margelo__nitro__test__HybridTestObjectSwiftKotlinSpec__ create_std__variant_Person__std__shared_ptr_margelo__nitro__test__HybridTestObjectSwiftKotlinSpec__(const Person& value) {
+    return std__variant_Person__std__shared_ptr_margelo__nitro__test__HybridTestObjectSwiftKotlinSpec__(value);
   }
-  inline std__variant_Person__std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec__ create_std__variant_Person__std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec__(const std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>& value) {
-    return std__variant_Person__std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec__(value);
+  inline std__variant_Person__std__shared_ptr_margelo__nitro__test__HybridTestObjectSwiftKotlinSpec__ create_std__variant_Person__std__shared_ptr_margelo__nitro__test__HybridTestObjectSwiftKotlinSpec__(const std::shared_ptr<margelo::nitro::test::HybridTestObjectSwiftKotlinSpec>& value) {
+    return std__variant_Person__std__shared_ptr_margelo__nitro__test__HybridTestObjectSwiftKotlinSpec__(value);
   }
   
   // pragma MARK: std::optional<std::string>
@@ -831,6 +748,28 @@ namespace margelo::nitro::image::bridge::swift {
     return PromiseHolder<std::string>(std::move(promise));
   }
   
+  // pragma MARK: std::function<void(const std::string& /* result */)>
+  /**
+   * Specialized version of `std::function<void(const std::string&)>`.
+   */
+  using Func_void_std__string = std::function<void(const std::string& /* result */)>;
+  /**
+   * Wrapper class for a `std::function<void(const std::string& / * result * /)>`, this can be used from Swift.
+   */
+  class Func_void_std__string_Wrapper final {
+  public:
+    explicit Func_void_std__string_Wrapper(std::function<void(const std::string& /* result */)>&& func): _function(std::make_shared<std::function<void(const std::string& /* result */)>>(std::move(func))) {}
+    inline void call(std::string result) const {
+      _function->operator()(result);
+    }
+  private:
+    std::shared_ptr<std::function<void(const std::string& /* result */)>> _function;
+  };
+  Func_void_std__string create_Func_void_std__string(void* _Nonnull swiftClosureWrapper);
+  inline Func_void_std__string_Wrapper wrap_Func_void_std__string(Func_void_std__string value) {
+    return Func_void_std__string_Wrapper(std::move(value));
+  }
+  
   // pragma MARK: std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>>
   /**
    * Wrapper struct for `std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>>`.
@@ -965,32 +904,32 @@ namespace margelo::nitro::image::bridge::swift {
     return std__variant_std__string__Car_(value);
   }
   
-  // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridBaseSpec>
+  // pragma MARK: std::shared_ptr<margelo::nitro::test::HybridBaseSpec>
   /**
-   * Specialized version of `std::shared_ptr<margelo::nitro::image::HybridBaseSpec>`.
+   * Specialized version of `std::shared_ptr<margelo::nitro::test::HybridBaseSpec>`.
    */
-  using std__shared_ptr_margelo__nitro__image__HybridBaseSpec_ = std::shared_ptr<margelo::nitro::image::HybridBaseSpec>;
-  std::shared_ptr<margelo::nitro::image::HybridBaseSpec> create_std__shared_ptr_margelo__nitro__image__HybridBaseSpec_(void* _Nonnull swiftUnsafePointer);
-  void* _Nonnull get_std__shared_ptr_margelo__nitro__image__HybridBaseSpec_(std__shared_ptr_margelo__nitro__image__HybridBaseSpec_ cppType);
+  using std__shared_ptr_margelo__nitro__test__HybridBaseSpec_ = std::shared_ptr<margelo::nitro::test::HybridBaseSpec>;
+  std::shared_ptr<margelo::nitro::test::HybridBaseSpec> create_std__shared_ptr_margelo__nitro__test__HybridBaseSpec_(void* _Nonnull swiftUnsafePointer);
+  void* _Nonnull get_std__shared_ptr_margelo__nitro__test__HybridBaseSpec_(std__shared_ptr_margelo__nitro__test__HybridBaseSpec_ cppType);
   
-  // pragma MARK: std::weak_ptr<margelo::nitro::image::HybridBaseSpec>
-  using std__weak_ptr_margelo__nitro__image__HybridBaseSpec_ = std::weak_ptr<margelo::nitro::image::HybridBaseSpec>;
-  inline std__weak_ptr_margelo__nitro__image__HybridBaseSpec_ weakify_std__shared_ptr_margelo__nitro__image__HybridBaseSpec_(const std::shared_ptr<margelo::nitro::image::HybridBaseSpec>& strong) { return strong; }
+  // pragma MARK: std::weak_ptr<margelo::nitro::test::HybridBaseSpec>
+  using std__weak_ptr_margelo__nitro__test__HybridBaseSpec_ = std::weak_ptr<margelo::nitro::test::HybridBaseSpec>;
+  inline std__weak_ptr_margelo__nitro__test__HybridBaseSpec_ weakify_std__shared_ptr_margelo__nitro__test__HybridBaseSpec_(const std::shared_ptr<margelo::nitro::test::HybridBaseSpec>& strong) { return strong; }
   
-  // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridChildSpec>
+  // pragma MARK: std::shared_ptr<margelo::nitro::test::HybridChildSpec>
   /**
-   * Specialized version of `std::shared_ptr<margelo::nitro::image::HybridChildSpec>`.
+   * Specialized version of `std::shared_ptr<margelo::nitro::test::HybridChildSpec>`.
    */
-  using std__shared_ptr_margelo__nitro__image__HybridChildSpec_ = std::shared_ptr<margelo::nitro::image::HybridChildSpec>;
-  std::shared_ptr<margelo::nitro::image::HybridChildSpec> create_std__shared_ptr_margelo__nitro__image__HybridChildSpec_(void* _Nonnull swiftUnsafePointer);
-  void* _Nonnull get_std__shared_ptr_margelo__nitro__image__HybridChildSpec_(std__shared_ptr_margelo__nitro__image__HybridChildSpec_ cppType);
+  using std__shared_ptr_margelo__nitro__test__HybridChildSpec_ = std::shared_ptr<margelo::nitro::test::HybridChildSpec>;
+  std::shared_ptr<margelo::nitro::test::HybridChildSpec> create_std__shared_ptr_margelo__nitro__test__HybridChildSpec_(void* _Nonnull swiftUnsafePointer);
+  void* _Nonnull get_std__shared_ptr_margelo__nitro__test__HybridChildSpec_(std__shared_ptr_margelo__nitro__test__HybridChildSpec_ cppType);
   
-  // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridBaseSpec>
-  inline std::shared_ptr<margelo::nitro::image::HybridBaseSpec> upcast_Child_to_Base(std::shared_ptr<margelo::nitro::image::HybridChildSpec> child) { return child; }
+  // pragma MARK: std::shared_ptr<margelo::nitro::test::HybridBaseSpec>
+  inline std::shared_ptr<margelo::nitro::test::HybridBaseSpec> upcast_Child_to_Base(std::shared_ptr<margelo::nitro::test::HybridChildSpec> child) { return child; }
   
-  // pragma MARK: std::weak_ptr<margelo::nitro::image::HybridChildSpec>
-  using std__weak_ptr_margelo__nitro__image__HybridChildSpec_ = std::weak_ptr<margelo::nitro::image::HybridChildSpec>;
-  inline std__weak_ptr_margelo__nitro__image__HybridChildSpec_ weakify_std__shared_ptr_margelo__nitro__image__HybridChildSpec_(const std::shared_ptr<margelo::nitro::image::HybridChildSpec>& strong) { return strong; }
+  // pragma MARK: std::weak_ptr<margelo::nitro::test::HybridChildSpec>
+  using std__weak_ptr_margelo__nitro__test__HybridChildSpec_ = std::weak_ptr<margelo::nitro::test::HybridChildSpec>;
+  inline std__weak_ptr_margelo__nitro__test__HybridChildSpec_ weakify_std__shared_ptr_margelo__nitro__test__HybridChildSpec_(const std::shared_ptr<margelo::nitro::test::HybridChildSpec>& strong) { return strong; }
   
   // pragma MARK: std::function<double()>
   /**
@@ -1015,34 +954,52 @@ namespace margelo::nitro::image::bridge::swift {
     return Func_double_Wrapper(std::move(value));
   }
   
-  // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridTestViewSpec>
+  // pragma MARK: std::shared_ptr<margelo::nitro::test::HybridTestViewSpec>
   /**
-   * Specialized version of `std::shared_ptr<margelo::nitro::image::HybridTestViewSpec>`.
+   * Specialized version of `std::shared_ptr<margelo::nitro::test::HybridTestViewSpec>`.
    */
-  using std__shared_ptr_margelo__nitro__image__HybridTestViewSpec_ = std::shared_ptr<margelo::nitro::image::HybridTestViewSpec>;
-  std::shared_ptr<margelo::nitro::image::HybridTestViewSpec> create_std__shared_ptr_margelo__nitro__image__HybridTestViewSpec_(void* _Nonnull swiftUnsafePointer);
-  void* _Nonnull get_std__shared_ptr_margelo__nitro__image__HybridTestViewSpec_(std__shared_ptr_margelo__nitro__image__HybridTestViewSpec_ cppType);
+  using std__shared_ptr_margelo__nitro__test__HybridTestViewSpec_ = std::shared_ptr<margelo::nitro::test::HybridTestViewSpec>;
+  std::shared_ptr<margelo::nitro::test::HybridTestViewSpec> create_std__shared_ptr_margelo__nitro__test__HybridTestViewSpec_(void* _Nonnull swiftUnsafePointer);
+  void* _Nonnull get_std__shared_ptr_margelo__nitro__test__HybridTestViewSpec_(std__shared_ptr_margelo__nitro__test__HybridTestViewSpec_ cppType);
   
-  // pragma MARK: std::weak_ptr<margelo::nitro::image::HybridTestViewSpec>
-  using std__weak_ptr_margelo__nitro__image__HybridTestViewSpec_ = std::weak_ptr<margelo::nitro::image::HybridTestViewSpec>;
-  inline std__weak_ptr_margelo__nitro__image__HybridTestViewSpec_ weakify_std__shared_ptr_margelo__nitro__image__HybridTestViewSpec_(const std::shared_ptr<margelo::nitro::image::HybridTestViewSpec>& strong) { return strong; }
+  // pragma MARK: std::weak_ptr<margelo::nitro::test::HybridTestViewSpec>
+  using std__weak_ptr_margelo__nitro__test__HybridTestViewSpec_ = std::weak_ptr<margelo::nitro::test::HybridTestViewSpec>;
+  inline std__weak_ptr_margelo__nitro__test__HybridTestViewSpec_ weakify_std__shared_ptr_margelo__nitro__test__HybridTestViewSpec_(const std::shared_ptr<margelo::nitro::test::HybridTestViewSpec>& strong) { return strong; }
   
-  // pragma MARK: Result<std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>>
-  using Result_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec__ = Result<std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>>;
-  inline Result_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec__ create_Result_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec__(const std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>& value) {
-    return Result<std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>>::withValue(value);
+  // pragma MARK: Result<std::shared_ptr<margelo::nitro::test::HybridTestObjectSwiftKotlinSpec>>
+  using Result_std__shared_ptr_margelo__nitro__test__HybridTestObjectSwiftKotlinSpec__ = Result<std::shared_ptr<margelo::nitro::test::HybridTestObjectSwiftKotlinSpec>>;
+  inline Result_std__shared_ptr_margelo__nitro__test__HybridTestObjectSwiftKotlinSpec__ create_Result_std__shared_ptr_margelo__nitro__test__HybridTestObjectSwiftKotlinSpec__(const std::shared_ptr<margelo::nitro::test::HybridTestObjectSwiftKotlinSpec>& value) {
+    return Result<std::shared_ptr<margelo::nitro::test::HybridTestObjectSwiftKotlinSpec>>::withValue(value);
   }
-  inline Result_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec__ create_Result_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec__(const std::exception_ptr& error) {
-    return Result<std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>>::withError(error);
+  inline Result_std__shared_ptr_margelo__nitro__test__HybridTestObjectSwiftKotlinSpec__ create_Result_std__shared_ptr_margelo__nitro__test__HybridTestObjectSwiftKotlinSpec__(const std::exception_ptr& error) {
+    return Result<std::shared_ptr<margelo::nitro::test::HybridTestObjectSwiftKotlinSpec>>::withError(error);
   }
   
-  // pragma MARK: Result<std::variant<Person, std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>>>
-  using Result_std__variant_Person__std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec___ = Result<std::variant<Person, std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>>>;
-  inline Result_std__variant_Person__std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec___ create_Result_std__variant_Person__std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec___(const std::variant<Person, std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>>& value) {
-    return Result<std::variant<Person, std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>>>::withValue(value);
+  // pragma MARK: Result<std::variant<Person, std::shared_ptr<margelo::nitro::test::HybridTestObjectSwiftKotlinSpec>>>
+  using Result_std__variant_Person__std__shared_ptr_margelo__nitro__test__HybridTestObjectSwiftKotlinSpec___ = Result<std::variant<Person, std::shared_ptr<margelo::nitro::test::HybridTestObjectSwiftKotlinSpec>>>;
+  inline Result_std__variant_Person__std__shared_ptr_margelo__nitro__test__HybridTestObjectSwiftKotlinSpec___ create_Result_std__variant_Person__std__shared_ptr_margelo__nitro__test__HybridTestObjectSwiftKotlinSpec___(const std::variant<Person, std::shared_ptr<margelo::nitro::test::HybridTestObjectSwiftKotlinSpec>>& value) {
+    return Result<std::variant<Person, std::shared_ptr<margelo::nitro::test::HybridTestObjectSwiftKotlinSpec>>>::withValue(value);
   }
-  inline Result_std__variant_Person__std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec___ create_Result_std__variant_Person__std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec___(const std::exception_ptr& error) {
-    return Result<std::variant<Person, std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>>>::withError(error);
+  inline Result_std__variant_Person__std__shared_ptr_margelo__nitro__test__HybridTestObjectSwiftKotlinSpec___ create_Result_std__variant_Person__std__shared_ptr_margelo__nitro__test__HybridTestObjectSwiftKotlinSpec___(const std::exception_ptr& error) {
+    return Result<std::variant<Person, std::shared_ptr<margelo::nitro::test::HybridTestObjectSwiftKotlinSpec>>>::withError(error);
+  }
+  
+  // pragma MARK: Result<void>
+  using Result_void_ = Result<void>;
+  inline Result_void_ create_Result_void_() {
+    return Result<void>::withValue();
+  }
+  inline Result_void_ create_Result_void_(const std::exception_ptr& error) {
+    return Result<void>::withError(error);
+  }
+  
+  // pragma MARK: Result<double>
+  using Result_double_ = Result<double>;
+  inline Result_double_ create_Result_double_(double value) {
+    return Result<double>::withValue(std::move(value));
+  }
+  inline Result_double_ create_Result_double_(const std::exception_ptr& error) {
+    return Result<double>::withError(error);
   }
   
   // pragma MARK: Result<std::string>
@@ -1270,22 +1227,22 @@ namespace margelo::nitro::image::bridge::swift {
     return Result<std::variant<std::string, Car>>::withError(error);
   }
   
-  // pragma MARK: Result<std::shared_ptr<margelo::nitro::image::HybridChildSpec>>
-  using Result_std__shared_ptr_margelo__nitro__image__HybridChildSpec__ = Result<std::shared_ptr<margelo::nitro::image::HybridChildSpec>>;
-  inline Result_std__shared_ptr_margelo__nitro__image__HybridChildSpec__ create_Result_std__shared_ptr_margelo__nitro__image__HybridChildSpec__(const std::shared_ptr<margelo::nitro::image::HybridChildSpec>& value) {
-    return Result<std::shared_ptr<margelo::nitro::image::HybridChildSpec>>::withValue(value);
+  // pragma MARK: Result<std::shared_ptr<margelo::nitro::test::HybridChildSpec>>
+  using Result_std__shared_ptr_margelo__nitro__test__HybridChildSpec__ = Result<std::shared_ptr<margelo::nitro::test::HybridChildSpec>>;
+  inline Result_std__shared_ptr_margelo__nitro__test__HybridChildSpec__ create_Result_std__shared_ptr_margelo__nitro__test__HybridChildSpec__(const std::shared_ptr<margelo::nitro::test::HybridChildSpec>& value) {
+    return Result<std::shared_ptr<margelo::nitro::test::HybridChildSpec>>::withValue(value);
   }
-  inline Result_std__shared_ptr_margelo__nitro__image__HybridChildSpec__ create_Result_std__shared_ptr_margelo__nitro__image__HybridChildSpec__(const std::exception_ptr& error) {
-    return Result<std::shared_ptr<margelo::nitro::image::HybridChildSpec>>::withError(error);
+  inline Result_std__shared_ptr_margelo__nitro__test__HybridChildSpec__ create_Result_std__shared_ptr_margelo__nitro__test__HybridChildSpec__(const std::exception_ptr& error) {
+    return Result<std::shared_ptr<margelo::nitro::test::HybridChildSpec>>::withError(error);
   }
   
-  // pragma MARK: Result<std::shared_ptr<margelo::nitro::image::HybridBaseSpec>>
-  using Result_std__shared_ptr_margelo__nitro__image__HybridBaseSpec__ = Result<std::shared_ptr<margelo::nitro::image::HybridBaseSpec>>;
-  inline Result_std__shared_ptr_margelo__nitro__image__HybridBaseSpec__ create_Result_std__shared_ptr_margelo__nitro__image__HybridBaseSpec__(const std::shared_ptr<margelo::nitro::image::HybridBaseSpec>& value) {
-    return Result<std::shared_ptr<margelo::nitro::image::HybridBaseSpec>>::withValue(value);
+  // pragma MARK: Result<std::shared_ptr<margelo::nitro::test::HybridBaseSpec>>
+  using Result_std__shared_ptr_margelo__nitro__test__HybridBaseSpec__ = Result<std::shared_ptr<margelo::nitro::test::HybridBaseSpec>>;
+  inline Result_std__shared_ptr_margelo__nitro__test__HybridBaseSpec__ create_Result_std__shared_ptr_margelo__nitro__test__HybridBaseSpec__(const std::shared_ptr<margelo::nitro::test::HybridBaseSpec>& value) {
+    return Result<std::shared_ptr<margelo::nitro::test::HybridBaseSpec>>::withValue(value);
   }
-  inline Result_std__shared_ptr_margelo__nitro__image__HybridBaseSpec__ create_Result_std__shared_ptr_margelo__nitro__image__HybridBaseSpec__(const std::exception_ptr& error) {
-    return Result<std::shared_ptr<margelo::nitro::image::HybridBaseSpec>>::withError(error);
+  inline Result_std__shared_ptr_margelo__nitro__test__HybridBaseSpec__ create_Result_std__shared_ptr_margelo__nitro__test__HybridBaseSpec__(const std::exception_ptr& error) {
+    return Result<std::shared_ptr<margelo::nitro::test::HybridBaseSpec>>::withError(error);
   }
 
-} // namespace margelo::nitro::image::bridge::swift
+} // namespace margelo::nitro::test::bridge::swift

@@ -22,7 +22,7 @@
 
 #include <functional>
 
-namespace margelo::nitro::image {
+namespace margelo::nitro::test {
 
   /**
    * A struct which can be represented as a JavaScript object (JsStyleStruct).
@@ -37,11 +37,11 @@ namespace margelo::nitro::image {
     explicit JsStyleStruct(double value, std::function<void(double /* num */)> onChanged): value(value), onChanged(onChanged) {}
   };
 
-} // namespace margelo::nitro::image
+} // namespace margelo::nitro::test
 
 namespace margelo::nitro {
 
-  using namespace margelo::nitro::image;
+  using namespace margelo::nitro::test;
 
   // C++ JsStyleStruct <> JS JsStyleStruct (object)
   template <>

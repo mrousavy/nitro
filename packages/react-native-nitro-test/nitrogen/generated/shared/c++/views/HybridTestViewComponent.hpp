@@ -23,7 +23,7 @@
 #include <memory>
 #include "HybridTestViewSpec.hpp"
 
-namespace margelo::nitro::image::views {
+namespace margelo::nitro::test::views {
 
   using namespace facebook;
 
@@ -48,7 +48,7 @@ namespace margelo::nitro::image::views {
     CachedProp<bool> hasBeenCalled;
     CachedProp<ColorScheme> colorScheme;
     CachedProp<std::function<void()>> someCallback;
-    CachedProp<std::optional<std::function<void(const std::shared_ptr<margelo::nitro::image::HybridTestViewSpec>& /* ref */)>>> hybridRef;
+    CachedProp<std::optional<std::function<void(const std::shared_ptr<margelo::nitro::test::HybridTestViewSpec>& /* ref */)>>> hybridRef;
 
   private:
     static bool filterObjectKeys(const std::string& propName);
@@ -109,4 +109,4 @@ namespace margelo::nitro::image::views {
 
   /* The actual view for "TestView" needs to be implemented in platform-specific code. */
 
-} // namespace margelo::nitro::image::views
+} // namespace margelo::nitro::test::views

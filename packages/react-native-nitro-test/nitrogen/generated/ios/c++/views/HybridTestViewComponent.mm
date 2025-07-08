@@ -18,8 +18,8 @@
 #import "NitroTest-Swift-Cxx-Umbrella.hpp"
 
 using namespace facebook;
-using namespace margelo::nitro::image;
-using namespace margelo::nitro::image::views;
+using namespace margelo::nitro::test;
+using namespace margelo::nitro::test::views;
 
 /**
  * Represents the React Native View holder for the Nitro "TestView" HybridView.

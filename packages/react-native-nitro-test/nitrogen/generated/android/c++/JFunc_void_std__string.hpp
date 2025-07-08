@@ -13,7 +13,7 @@
 #include <functional>
 #include <string>
 
-namespace margelo::nitro::image {
+namespace margelo::nitro::test {
 
   using namespace facebook;
 
@@ -23,7 +23,7 @@ namespace margelo::nitro::image {
    */
   struct JFunc_void_std__string: public jni::JavaClass<JFunc_void_std__string> {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Func_void_std__string;";
+    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Func_void_std__string;";
 
   public:
     /**
@@ -59,7 +59,7 @@ namespace margelo::nitro::image {
     }
 
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Func_void_std__string_cxx;";
+    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Func_void_std__string_cxx;";
     static void registerNatives() {
       registerHybrid({makeNativeMethod("invoke_cxx", JFunc_void_std__string_cxx::invoke_cxx)});
     }
@@ -72,4 +72,4 @@ namespace margelo::nitro::image {
     std::function<void(const std::string& /* valueFromJs */)> _func;
   };
 
-} // namespace margelo::nitro::image
+} // namespace margelo::nitro::test

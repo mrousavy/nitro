@@ -7,5 +7,5 @@
 
 #include "HybridBaseSpecSwift.hpp"
 
-namespace margelo::nitro::image {
-} // namespace margelo::nitro::image
+namespace margelo::nitro::test {
+} // namespace margelo::nitro::test

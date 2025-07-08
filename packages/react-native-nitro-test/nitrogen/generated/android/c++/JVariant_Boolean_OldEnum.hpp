@@ -14,7 +14,7 @@
 #include "OldEnum.hpp"
 #include "JOldEnum.hpp"
 
-namespace margelo::nitro::image {
+namespace margelo::nitro::test {
 
   using namespace facebook;
 
@@ -23,7 +23,7 @@ namespace margelo::nitro::image {
    */
   class JVariant_Boolean_OldEnum: public jni::JavaClass<JVariant_Boolean_OldEnum> {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Variant_Boolean_OldEnum;";
+    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_Boolean_OldEnum;";
 
     static jni::local_ref<JVariant_Boolean_OldEnum> create_0(jboolean value) {
       static const auto method = javaClassStatic()->getStaticMethod<JVariant_Boolean_OldEnum(jboolean)>("create");
@@ -48,7 +48,7 @@ namespace margelo::nitro::image {
   namespace JVariant_Boolean_OldEnum_impl {
     class First: public jni::JavaClass<First, JVariant_Boolean_OldEnum> {
     public:
-      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Variant_Boolean_OldEnum$First;";
+      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_Boolean_OldEnum$First;";
     
       [[nodiscard]] jboolean getValue() const {
         static const auto field = javaClassStatic()->getField<jboolean>("value");
@@ -58,7 +58,7 @@ namespace margelo::nitro::image {
     
     class Second: public jni::JavaClass<Second, JVariant_Boolean_OldEnum> {
     public:
-      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Variant_Boolean_OldEnum$Second;";
+      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_Boolean_OldEnum$Second;";
     
       [[nodiscard]] jni::local_ref<JOldEnum> getValue() const {
         static const auto field = javaClassStatic()->getField<JOldEnum>("value");
@@ -78,4 +78,4 @@ namespace margelo::nitro::image {
     throw std::invalid_argument("Variant is unknown Kotlin instance!");
   }
 
-} // namespace margelo::nitro::image
+} // namespace margelo::nitro::test

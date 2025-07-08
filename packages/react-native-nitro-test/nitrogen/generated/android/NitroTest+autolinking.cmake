@@ -27,8 +27,6 @@ target_sources(
   # Autolinking Setup
   ../nitrogen/generated/android/NitroTestOnLoad.cpp
   # Shared Nitrogen C++ sources
-  ../nitrogen/generated/shared/c++/HybridImageSpec.cpp
-  ../nitrogen/generated/shared/c++/HybridImageFactorySpec.cpp
   ../nitrogen/generated/shared/c++/HybridTestObjectCppSpec.cpp
   ../nitrogen/generated/shared/c++/HybridTestObjectSwiftKotlinSpec.cpp
   ../nitrogen/generated/shared/c++/HybridBaseSpec.cpp
@@ -36,8 +34,6 @@ target_sources(
   ../nitrogen/generated/shared/c++/HybridTestViewSpec.cpp
   ../nitrogen/generated/shared/c++/views/HybridTestViewComponent.cpp
   # Android-specific Nitrogen C++ sources
-  ../nitrogen/generated/android/c++/JHybridImageSpec.cpp
-  ../nitrogen/generated/android/c++/JHybridImageFactorySpec.cpp
   ../nitrogen/generated/android/c++/JHybridTestObjectSwiftKotlinSpec.cpp
   ../nitrogen/generated/android/c++/JHybridBaseSpec.cpp
   ../nitrogen/generated/android/c++/JHybridChildSpec.cpp

@@ -14,14 +14,14 @@
 
 
 
-namespace margelo::nitro::image {
+namespace margelo::nitro::test {
 
   using namespace facebook;
 
   class JHybridTestObjectSwiftKotlinSpec: public jni::HybridClass<JHybridTestObjectSwiftKotlinSpec, JHybridObject>,
                                           public virtual HybridTestObjectSwiftKotlinSpec {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/HybridTestObjectSwiftKotlinSpec;";
+    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/HybridTestObjectSwiftKotlinSpec;";
     static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis);
     static void registerNatives();
 
@@ -47,9 +47,9 @@ namespace margelo::nitro::image {
 
   public:
     // Properties
-    std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec> getThisObject() override;
-    std::optional<std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>> getOptionalHybrid() override;
-    void setOptionalHybrid(const std::optional<std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>>& optionalHybrid) override;
+    std::shared_ptr<margelo::nitro::test::HybridTestObjectSwiftKotlinSpec> getThisObject() override;
+    std::optional<std::shared_ptr<margelo::nitro::test::HybridTestObjectSwiftKotlinSpec>> getOptionalHybrid() override;
+    void setOptionalHybrid(const std::optional<std::shared_ptr<margelo::nitro::test::HybridTestObjectSwiftKotlinSpec>>& optionalHybrid) override;
     double getNumberValue() override;
     void setNumberValue(double numberValue) override;
     bool getBoolValue() override;
@@ -77,8 +77,8 @@ namespace margelo::nitro::image {
 
   public:
     // Methods
-    std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec> newTestObject() override;
-    std::variant<Person, std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>> getVariantHybrid(const std::variant<Person, std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>>& variant) override;
+    std::shared_ptr<margelo::nitro::test::HybridTestObjectSwiftKotlinSpec> newTestObject() override;
+    std::variant<Person, std::shared_ptr<margelo::nitro::test::HybridTestObjectSwiftKotlinSpec>> getVariantHybrid(const std::variant<Person, std::shared_ptr<margelo::nitro::test::HybridTestObjectSwiftKotlinSpec>>& variant) override;
     void simpleFunc() override;
     double addNumbers(double a, double b) override;
     std::string addStrings(const std::string& a, const std::string& b) override;
@@ -131,15 +131,15 @@ namespace margelo::nitro::image {
     std::variant<bool, OldEnum> getVariantEnum(const std::variant<bool, OldEnum>& variant) override;
     std::variant<Car, Person> getVariantObjects(const std::variant<Car, Person>& variant) override;
     std::variant<std::string, Car> passNamedVariant(const std::variant<std::string, Car>& variant) override;
-    std::shared_ptr<margelo::nitro::image::HybridChildSpec> createChild() override;
-    std::shared_ptr<margelo::nitro::image::HybridBaseSpec> createBase() override;
-    std::shared_ptr<margelo::nitro::image::HybridBaseSpec> createBaseActualChild() override;
-    std::shared_ptr<margelo::nitro::image::HybridChildSpec> bounceChild(const std::shared_ptr<margelo::nitro::image::HybridChildSpec>& child) override;
-    std::shared_ptr<margelo::nitro::image::HybridBaseSpec> bounceBase(const std::shared_ptr<margelo::nitro::image::HybridBaseSpec>& base) override;
-    std::shared_ptr<margelo::nitro::image::HybridBaseSpec> bounceChildBase(const std::shared_ptr<margelo::nitro::image::HybridChildSpec>& child) override;
-    std::shared_ptr<margelo::nitro::image::HybridChildSpec> castBase(const std::shared_ptr<margelo::nitro::image::HybridBaseSpec>& base) override;
+    std::shared_ptr<margelo::nitro::test::HybridChildSpec> createChild() override;
+    std::shared_ptr<margelo::nitro::test::HybridBaseSpec> createBase() override;
+    std::shared_ptr<margelo::nitro::test::HybridBaseSpec> createBaseActualChild() override;
+    std::shared_ptr<margelo::nitro::test::HybridChildSpec> bounceChild(const std::shared_ptr<margelo::nitro::test::HybridChildSpec>& child) override;
+    std::shared_ptr<margelo::nitro::test::HybridBaseSpec> bounceBase(const std::shared_ptr<margelo::nitro::test::HybridBaseSpec>& base) override;
+    std::shared_ptr<margelo::nitro::test::HybridBaseSpec> bounceChildBase(const std::shared_ptr<margelo::nitro::test::HybridChildSpec>& child) override;
+    std::shared_ptr<margelo::nitro::test::HybridChildSpec> castBase(const std::shared_ptr<margelo::nitro::test::HybridBaseSpec>& base) override;
     double callbackSync(const std::function<double()>& callback) override;
-    bool getIsViewBlue(const std::shared_ptr<margelo::nitro::image::HybridTestViewSpec>& view) override;
+    bool getIsViewBlue(const std::shared_ptr<margelo::nitro::test::HybridTestViewSpec>& view) override;
 
   private:
     friend HybridBase;
@@ -147,4 +147,4 @@ namespace margelo::nitro::image {
     jni::global_ref<JHybridTestObjectSwiftKotlinSpec::javaobject> _javaPart;
   };
 
-} // namespace margelo::nitro::image
+} // namespace margelo::nitro::test

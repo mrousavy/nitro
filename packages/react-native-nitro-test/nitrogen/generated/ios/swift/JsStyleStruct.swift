@@ -35,7 +35,7 @@ public extension JsStyleStruct {
       self.__value = newValue
     }
   }
-
+  
   var onChanged: (_ num: Double) -> Void {
     @inline(__always)
     get {

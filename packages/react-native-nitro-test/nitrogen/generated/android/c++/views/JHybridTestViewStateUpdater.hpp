@@ -16,13 +16,13 @@
 #include "JHybridTestViewSpec.hpp"
 #include "views/HybridTestViewComponent.hpp"
 
-namespace margelo::nitro::image::views {
+namespace margelo::nitro::test::views {
 
 using namespace facebook;
 
 class JHybridTestViewStateUpdater: public jni::JavaClass<JHybridTestViewStateUpdater> {
 public:
-  static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/image/views/HybridTestViewStateUpdater;";
+  static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/views/HybridTestViewStateUpdater;";
 
 public:
   static void updateViewProps(jni::alias_ref<jni::JClass> /* class */,
@@ -42,4 +42,4 @@ public:
   }
 };
 
-} // namespace margelo::nitro::image::views
+} // namespace margelo::nitro::test::views

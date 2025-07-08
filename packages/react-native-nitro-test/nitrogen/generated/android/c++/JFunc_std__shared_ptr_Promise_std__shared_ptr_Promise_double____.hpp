@@ -14,7 +14,7 @@
 #include <NitroModules/Promise.hpp>
 #include <NitroModules/JPromise.hpp>
 
-namespace margelo::nitro::image {
+namespace margelo::nitro::test {
 
   using namespace facebook;
 
@@ -24,7 +24,7 @@ namespace margelo::nitro::image {
    */
   struct JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_double____: public jni::JavaClass<JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_double____> {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double____;";
+    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double____;";
 
   public:
     /**
@@ -106,7 +106,7 @@ namespace margelo::nitro::image {
     }
 
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double_____cxx;";
+    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double_____cxx;";
     static void registerNatives() {
       registerHybrid({makeNativeMethod("invoke_cxx", JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_double_____cxx::invoke_cxx)});
     }
@@ -119,4 +119,4 @@ namespace margelo::nitro::image {
     std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<double>>>>()> _func;
   };
 
-} // namespace margelo::nitro::image
+} // namespace margelo::nitro::test

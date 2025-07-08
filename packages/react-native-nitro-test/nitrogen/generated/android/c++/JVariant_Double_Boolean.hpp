@@ -12,7 +12,7 @@
 
 #include <variant>
 
-namespace margelo::nitro::image {
+namespace margelo::nitro::test {
 
   using namespace facebook;
 
@@ -21,7 +21,7 @@ namespace margelo::nitro::image {
    */
   class JVariant_Double_Boolean: public jni::JavaClass<JVariant_Double_Boolean> {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Variant_Double_Boolean;";
+    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_Double_Boolean;";
 
     static jni::local_ref<JVariant_Double_Boolean> create_0(double value) {
       static const auto method = javaClassStatic()->getStaticMethod<JVariant_Double_Boolean(double)>("create");
@@ -46,7 +46,7 @@ namespace margelo::nitro::image {
   namespace JVariant_Double_Boolean_impl {
     class First: public jni::JavaClass<First, JVariant_Double_Boolean> {
     public:
-      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Variant_Double_Boolean$First;";
+      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_Double_Boolean$First;";
     
       [[nodiscard]] double getValue() const {
         static const auto field = javaClassStatic()->getField<double>("value");
@@ -56,7 +56,7 @@ namespace margelo::nitro::image {
     
     class Second: public jni::JavaClass<Second, JVariant_Double_Boolean> {
     public:
-      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Variant_Double_Boolean$Second;";
+      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_Double_Boolean$Second;";
     
       [[nodiscard]] jboolean getValue() const {
         static const auto field = javaClassStatic()->getField<jboolean>("value");
@@ -76,4 +76,4 @@ namespace margelo::nitro::image {
     throw std::invalid_argument("Variant is unknown Kotlin instance!");
   }
 
-} // namespace margelo::nitro::image
+} // namespace margelo::nitro::test

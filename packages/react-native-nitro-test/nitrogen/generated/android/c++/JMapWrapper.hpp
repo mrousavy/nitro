@@ -13,7 +13,7 @@
 #include <string>
 #include <unordered_map>
 
-namespace margelo::nitro::image {
+namespace margelo::nitro::test {
 
   using namespace facebook;
 
@@ -22,7 +22,7 @@ namespace margelo::nitro::image {
    */
   struct JMapWrapper final: public jni::JavaClass<JMapWrapper> {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/MapWrapper;";
+    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/MapWrapper;";
 
   public:
     /**
@@ -64,4 +64,4 @@ namespace margelo::nitro::image {
     }
   };
 
-} // namespace margelo::nitro::image
+} // namespace margelo::nitro::test

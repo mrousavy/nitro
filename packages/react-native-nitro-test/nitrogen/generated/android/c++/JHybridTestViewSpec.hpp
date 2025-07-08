@@ -14,14 +14,14 @@
 
 
 
-namespace margelo::nitro::image {
+namespace margelo::nitro::test {
 
   using namespace facebook;
 
   class JHybridTestViewSpec: public jni::HybridClass<JHybridTestViewSpec, JHybridObject>,
                              public virtual HybridTestViewSpec {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/HybridTestViewSpec;";
+    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/HybridTestViewSpec;";
     static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis);
     static void registerNatives();
 
@@ -66,4 +66,4 @@ namespace margelo::nitro::image {
     jni::global_ref<JHybridTestViewSpec::javaobject> _javaPart;
   };
 
-} // namespace margelo::nitro::image
+} // namespace margelo::nitro::test

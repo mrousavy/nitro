@@ -7,7 +7,7 @@
 
 #include "HybridBaseSpec.hpp"
 
-namespace margelo::nitro::image {
+namespace margelo::nitro::test {
 
   void HybridBaseSpec::loadHybridMethods() {
     // load base methods/properties
@@ -18,4 +18,4 @@ namespace margelo::nitro::image {
     });
   }
 
-} // namespace margelo::nitro::image
+} // namespace margelo::nitro::test

@@ -13,54 +13,39 @@ namespace NitroModules { class AnyMap; }
 // Forward declaration of `ArrayBuffer` to properly resolve imports.
 namespace NitroModules { class ArrayBuffer; }
 // Forward declaration of `Car` to properly resolve imports.
-namespace margelo::nitro::image { struct Car; }
+namespace margelo::nitro::test { struct Car; }
 // Forward declaration of `ColorScheme` to properly resolve imports.
-namespace margelo::nitro::image { enum class ColorScheme; }
+namespace margelo::nitro::test { enum class ColorScheme; }
 // Forward declaration of `HybridBaseSpec` to properly resolve imports.
-namespace margelo::nitro::image { class HybridBaseSpec; }
+namespace margelo::nitro::test { class HybridBaseSpec; }
 // Forward declaration of `HybridChildSpec` to properly resolve imports.
-namespace margelo::nitro::image { class HybridChildSpec; }
-// Forward declaration of `HybridImageFactorySpec` to properly resolve imports.
-namespace margelo::nitro::image { class HybridImageFactorySpec; }
-// Forward declaration of `HybridImageSpec` to properly resolve imports.
-namespace margelo::nitro::image { class HybridImageSpec; }
+namespace margelo::nitro::test { class HybridChildSpec; }
 // Forward declaration of `HybridTestObjectSwiftKotlinSpec` to properly resolve imports.
-namespace margelo::nitro::image { class HybridTestObjectSwiftKotlinSpec; }
+namespace margelo::nitro::test { class HybridTestObjectSwiftKotlinSpec; }
 // Forward declaration of `HybridTestViewSpec` to properly resolve imports.
-namespace margelo::nitro::image { class HybridTestViewSpec; }
-// Forward declaration of `ImageFormat` to properly resolve imports.
-namespace margelo::nitro::image { enum class ImageFormat; }
-// Forward declaration of `ImageSize` to properly resolve imports.
-namespace margelo::nitro::image { struct ImageSize; }
+namespace margelo::nitro::test { class HybridTestViewSpec; }
 // Forward declaration of `JsStyleStruct` to properly resolve imports.
-namespace margelo::nitro::image { struct JsStyleStruct; }
+namespace margelo::nitro::test { struct JsStyleStruct; }
 // Forward declaration of `MapWrapper` to properly resolve imports.
-namespace margelo::nitro::image { struct MapWrapper; }
+namespace margelo::nitro::test { struct MapWrapper; }
 // Forward declaration of `OldEnum` to properly resolve imports.
-namespace margelo::nitro::image { enum class OldEnum; }
+namespace margelo::nitro::test { enum class OldEnum; }
 // Forward declaration of `Person` to properly resolve imports.
-namespace margelo::nitro::image { struct Person; }
-// Forward declaration of `PixelFormat` to properly resolve imports.
-namespace margelo::nitro::image { enum class PixelFormat; }
+namespace margelo::nitro::test { struct Person; }
 // Forward declaration of `Powertrain` to properly resolve imports.
-namespace margelo::nitro::image { enum class Powertrain; }
+namespace margelo::nitro::test { enum class Powertrain; }
 
 // Include C++ defined types
 #include "Car.hpp"
 #include "ColorScheme.hpp"
 #include "HybridBaseSpec.hpp"
 #include "HybridChildSpec.hpp"
-#include "HybridImageFactorySpec.hpp"
-#include "HybridImageSpec.hpp"
 #include "HybridTestObjectSwiftKotlinSpec.hpp"
 #include "HybridTestViewSpec.hpp"
-#include "ImageFormat.hpp"
-#include "ImageSize.hpp"
 #include "JsStyleStruct.hpp"
 #include "MapWrapper.hpp"
 #include "OldEnum.hpp"
 #include "Person.hpp"
-#include "PixelFormat.hpp"
 #include "Powertrain.hpp"
 #include <NitroModules/AnyMap.hpp>
 #include <NitroModules/ArrayBuffer.hpp>
@@ -90,10 +75,6 @@ namespace margelo::nitro::image { enum class Powertrain; }
 namespace NitroTest { class HybridBaseSpec_cxx; }
 // Forward declaration of `HybridChildSpec_cxx` to properly resolve imports.
 namespace NitroTest { class HybridChildSpec_cxx; }
-// Forward declaration of `HybridImageFactorySpec_cxx` to properly resolve imports.
-namespace NitroTest { class HybridImageFactorySpec_cxx; }
-// Forward declaration of `HybridImageSpec_cxx` to properly resolve imports.
-namespace NitroTest { class HybridImageSpec_cxx; }
 // Forward declaration of `HybridTestObjectSwiftKotlinSpec_cxx` to properly resolve imports.
 namespace NitroTest { class HybridTestObjectSwiftKotlinSpec_cxx; }
 // Forward declaration of `HybridTestViewSpec_cxx` to properly resolve imports.

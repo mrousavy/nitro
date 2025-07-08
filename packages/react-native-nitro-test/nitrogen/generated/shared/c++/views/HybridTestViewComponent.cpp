@@ -17,7 +17,7 @@
 #include <react/renderer/core/ComponentDescriptor.h>
 #include <react/renderer/components/view/ViewProps.h>
 
-namespace margelo::nitro::image::views {
+namespace margelo::nitro::test::views {
 
   extern const char HybridTestViewComponentName[] = "TestView";
 
@@ -65,12 +65,12 @@ namespace margelo::nitro::image::views {
         throw std::runtime_error(std::string("TestView.someCallback: ") + exc.what());
       }
     }()),
-    hybridRef([&]() -> CachedProp<std::optional<std::function<void(const std::shared_ptr<margelo::nitro::image::HybridTestViewSpec>& /* ref */)>>> {
+    hybridRef([&]() -> CachedProp<std::optional<std::function<void(const std::shared_ptr<margelo::nitro::test::HybridTestViewSpec>& /* ref */)>>> {
       try {
         const react::RawValue* rawValue = rawProps.at("hybridRef", nullptr, nullptr);
         if (rawValue == nullptr) return sourceProps.hybridRef;
         const auto& [runtime, value] = (std::pair<jsi::Runtime*, jsi::Value>)*rawValue;
-        return CachedProp<std::optional<std::function<void(const std::shared_ptr<margelo::nitro::image::HybridTestViewSpec>& /* ref */)>>>::fromRawValue(*runtime, value.asObject(*runtime).getProperty(*runtime, "f"), sourceProps.hybridRef);
+        return CachedProp<std::optional<std::function<void(const std::shared_ptr<margelo::nitro::test::HybridTestViewSpec>& /* ref */)>>>::fromRawValue(*runtime, value.asObject(*runtime).getProperty(*runtime, "f"), sourceProps.hybridRef);
       } catch (const std::exception& exc) {
         throw std::runtime_error(std::string("TestView.hybridRef: ") + exc.what());
       }
@@ -120,4 +120,4 @@ namespace margelo::nitro::image::views {
   }
 #endif
 
-} // namespace margelo::nitro::image::views
+} // namespace margelo::nitro::test::views

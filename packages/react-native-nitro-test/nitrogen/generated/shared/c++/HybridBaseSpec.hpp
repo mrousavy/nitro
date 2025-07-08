@@ -17,7 +17,7 @@
 
 
 
-namespace margelo::nitro::image {
+namespace margelo::nitro::test {
 
   using namespace margelo::nitro;
 
@@ -59,4 +59,4 @@ namespace margelo::nitro::image {
       static constexpr auto TAG = "Base";
   };
 
-} // namespace margelo::nitro::image
+} // namespace margelo::nitro::test

@@ -8,14 +8,14 @@
 #include "JHybridTestViewSpec.hpp"
 
 // Forward declaration of `ColorScheme` to properly resolve imports.
-namespace margelo::nitro::image { enum class ColorScheme; }
+namespace margelo::nitro::test { enum class ColorScheme; }
 
 #include "ColorScheme.hpp"
 #include "JColorScheme.hpp"
 #include <functional>
 #include "JFunc_void.hpp"
 
-namespace margelo::nitro::image {
+namespace margelo::nitro::test {
 
   jni::local_ref<JHybridTestViewSpec::jhybriddata> JHybridTestViewSpec::initHybrid(jni::alias_ref<jhybridobject> jThis) {
     return makeCxxInstance(jThis);
@@ -86,4 +86,4 @@ namespace margelo::nitro::image {
     method(_javaPart);
   }
 
-} // namespace margelo::nitro::image
+} // namespace margelo::nitro::test

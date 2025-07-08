@@ -22,7 +22,7 @@
 
 #include <string>
 
-namespace margelo::nitro::image {
+namespace margelo::nitro::test {
 
   /**
    * A struct which can be represented as a JavaScript object (Person).
@@ -37,11 +37,11 @@ namespace margelo::nitro::image {
     explicit Person(std::string name, double age): name(name), age(age) {}
   };
 
-} // namespace margelo::nitro::image
+} // namespace margelo::nitro::test
 
 namespace margelo::nitro {
 
-  using namespace margelo::nitro::image;
+  using namespace margelo::nitro::test;
 
   // C++ Person <> JS Person (object)
   template <>

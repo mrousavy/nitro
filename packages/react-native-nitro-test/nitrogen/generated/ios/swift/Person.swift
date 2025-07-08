@@ -32,7 +32,7 @@ public extension Person {
       self.__name = std.string(newValue)
     }
   }
-
+  
   var age: Double {
     @inline(__always)
     get {

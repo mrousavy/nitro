@@ -14,12 +14,12 @@
 #endif
 
 // Forward declaration of `ColorScheme` to properly resolve imports.
-namespace margelo::nitro::image { enum class ColorScheme; }
+namespace margelo::nitro::test { enum class ColorScheme; }
 
 #include "ColorScheme.hpp"
 #include <functional>
 
-namespace margelo::nitro::image {
+namespace margelo::nitro::test {
 
   using namespace margelo::nitro;
 
@@ -68,4 +68,4 @@ namespace margelo::nitro::image {
       static constexpr auto TAG = "TestView";
   };
 
-} // namespace margelo::nitro::image
+} // namespace margelo::nitro::test

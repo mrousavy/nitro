@@ -11,7 +11,7 @@
 
 
 
-namespace margelo::nitro::image {
+namespace margelo::nitro::test {
 
   jni::local_ref<JHybridChildSpec::jhybriddata> JHybridChildSpec::initHybrid(jni::alias_ref<jhybridobject> jThis) {
     return makeCxxInstance(jThis);
@@ -43,4 +43,4 @@ namespace margelo::nitro::image {
   // Methods
   
 
-} // namespace margelo::nitro::image
+} // namespace margelo::nitro::test

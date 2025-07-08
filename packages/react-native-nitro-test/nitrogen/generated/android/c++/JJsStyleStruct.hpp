@@ -13,7 +13,7 @@
 #include "JFunc_void_double.hpp"
 #include <functional>
 
-namespace margelo::nitro::image {
+namespace margelo::nitro::test {
 
   using namespace facebook;
 
@@ -22,7 +22,7 @@ namespace margelo::nitro::image {
    */
   struct JJsStyleStruct final: public jni::JavaClass<JJsStyleStruct> {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/JsStyleStruct;";
+    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/JsStyleStruct;";
 
   public:
     /**
@@ -65,4 +65,4 @@ namespace margelo::nitro::image {
     }
   };
 
-} // namespace margelo::nitro::image
+} // namespace margelo::nitro::test

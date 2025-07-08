@@ -15,7 +15,7 @@
 #include "Powertrain.hpp"
 #include "JPowertrain.hpp"
 
-namespace margelo::nitro::image {
+namespace margelo::nitro::test {
 
   using namespace facebook;
 
@@ -25,7 +25,7 @@ namespace margelo::nitro::image {
    */
   struct JFunc_void_std__vector_Powertrain_: public jni::JavaClass<JFunc_void_std__vector_Powertrain_> {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Func_void_std__vector_Powertrain_;";
+    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Func_void_std__vector_Powertrain_;";
 
   public:
     /**
@@ -78,7 +78,7 @@ namespace margelo::nitro::image {
     }
 
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/image/Func_void_std__vector_Powertrain__cxx;";
+    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Func_void_std__vector_Powertrain__cxx;";
     static void registerNatives() {
       registerHybrid({makeNativeMethod("invoke_cxx", JFunc_void_std__vector_Powertrain__cxx::invoke_cxx)});
     }
@@ -91,4 +91,4 @@ namespace margelo::nitro::image {
     std::function<void(const std::vector<Powertrain>& /* array */)> _func;
   };
 
-} // namespace margelo::nitro::image
+} // namespace margelo::nitro::test

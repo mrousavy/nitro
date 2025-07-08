@@ -14,29 +14,29 @@
 #endif
 
 // Forward declaration of `HybridTestObjectCppSpec` to properly resolve imports.
-namespace margelo::nitro::image { class HybridTestObjectCppSpec; }
+namespace margelo::nitro::test { class HybridTestObjectCppSpec; }
 // Forward declaration of `Powertrain` to properly resolve imports.
-namespace margelo::nitro::image { enum class Powertrain; }
+namespace margelo::nitro::test { enum class Powertrain; }
 // Forward declaration of `OldEnum` to properly resolve imports.
-namespace margelo::nitro::image { enum class OldEnum; }
+namespace margelo::nitro::test { enum class OldEnum; }
 // Forward declaration of `Person` to properly resolve imports.
-namespace margelo::nitro::image { struct Person; }
+namespace margelo::nitro::test { struct Person; }
 // Forward declaration of `AnyMap` to properly resolve imports.
 namespace NitroModules { class AnyMap; }
 // Forward declaration of `MapWrapper` to properly resolve imports.
-namespace margelo::nitro::image { struct MapWrapper; }
+namespace margelo::nitro::test { struct MapWrapper; }
 // Forward declaration of `Car` to properly resolve imports.
-namespace margelo::nitro::image { struct Car; }
+namespace margelo::nitro::test { struct Car; }
 // Forward declaration of `ArrayBuffer` to properly resolve imports.
 namespace NitroModules { class ArrayBuffer; }
 // Forward declaration of `JsStyleStruct` to properly resolve imports.
-namespace margelo::nitro::image { struct JsStyleStruct; }
+namespace margelo::nitro::test { struct JsStyleStruct; }
 // Forward declaration of `HybridChildSpec` to properly resolve imports.
-namespace margelo::nitro::image { class HybridChildSpec; }
+namespace margelo::nitro::test { class HybridChildSpec; }
 // Forward declaration of `HybridBaseSpec` to properly resolve imports.
-namespace margelo::nitro::image { class HybridBaseSpec; }
+namespace margelo::nitro::test { class HybridBaseSpec; }
 // Forward declaration of `HybridTestViewSpec` to properly resolve imports.
-namespace margelo::nitro::image { class HybridTestViewSpec; }
+namespace margelo::nitro::test { class HybridTestViewSpec; }
 
 #include <tuple>
 #include <string>
@@ -62,7 +62,7 @@ namespace margelo::nitro::image { class HybridTestViewSpec; }
 #include "HybridBaseSpec.hpp"
 #include "HybridTestViewSpec.hpp"
 
-namespace margelo::nitro::image {
+namespace margelo::nitro::test {
 
   using namespace margelo::nitro;
 
@@ -91,9 +91,9 @@ namespace margelo::nitro::image {
       // Properties
       virtual std::tuple<double, std::string> getSomeTuple() = 0;
       virtual void setSomeTuple(const std::tuple<double, std::string>& someTuple) = 0;
-      virtual std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec> getThisObject() = 0;
-      virtual std::optional<std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>> getOptionalHybrid() = 0;
-      virtual void setOptionalHybrid(const std::optional<std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>>& optionalHybrid) = 0;
+      virtual std::shared_ptr<margelo::nitro::test::HybridTestObjectCppSpec> getThisObject() = 0;
+      virtual std::optional<std::shared_ptr<margelo::nitro::test::HybridTestObjectCppSpec>> getOptionalHybrid() = 0;
+      virtual void setOptionalHybrid(const std::optional<std::shared_ptr<margelo::nitro::test::HybridTestObjectCppSpec>>& optionalHybrid) = 0;
       virtual double getNumberValue() = 0;
       virtual void setNumberValue(double numberValue) = 0;
       virtual bool getBoolValue() = 0;
@@ -124,8 +124,8 @@ namespace margelo::nitro::image {
       virtual std::variant<std::tuple<double, double>, std::tuple<double, double, double>> getVariantTuple(const std::variant<std::tuple<double, double>, std::tuple<double, double, double>>& variant) = 0;
       virtual std::tuple<double, double, double> flip(const std::tuple<double, double, double>& tuple) = 0;
       virtual std::tuple<double, std::string, bool> passTuple(const std::tuple<double, std::string, bool>& tuple) = 0;
-      virtual std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec> newTestObject() = 0;
-      virtual std::variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>, Person> getVariantHybrid(const std::variant<std::shared_ptr<margelo::nitro::image::HybridTestObjectCppSpec>, Person>& variant) = 0;
+      virtual std::shared_ptr<margelo::nitro::test::HybridTestObjectCppSpec> newTestObject() = 0;
+      virtual std::variant<std::shared_ptr<margelo::nitro::test::HybridTestObjectCppSpec>, Person> getVariantHybrid(const std::variant<std::shared_ptr<margelo::nitro::test::HybridTestObjectCppSpec>, Person>& variant) = 0;
       virtual void simpleFunc() = 0;
       virtual double addNumbers(double a, double b) = 0;
       virtual std::string addStrings(const std::string& a, const std::string& b) = 0;
@@ -178,15 +178,15 @@ namespace margelo::nitro::image {
       virtual std::variant<bool, OldEnum> getVariantEnum(const std::variant<bool, OldEnum>& variant) = 0;
       virtual std::variant<Car, Person> getVariantObjects(const std::variant<Car, Person>& variant) = 0;
       virtual std::variant<std::string, Car> passNamedVariant(const std::variant<std::string, Car>& variant) = 0;
-      virtual std::shared_ptr<margelo::nitro::image::HybridChildSpec> createChild() = 0;
-      virtual std::shared_ptr<margelo::nitro::image::HybridBaseSpec> createBase() = 0;
-      virtual std::shared_ptr<margelo::nitro::image::HybridBaseSpec> createBaseActualChild() = 0;
-      virtual std::shared_ptr<margelo::nitro::image::HybridChildSpec> bounceChild(const std::shared_ptr<margelo::nitro::image::HybridChildSpec>& child) = 0;
-      virtual std::shared_ptr<margelo::nitro::image::HybridBaseSpec> bounceBase(const std::shared_ptr<margelo::nitro::image::HybridBaseSpec>& base) = 0;
-      virtual std::shared_ptr<margelo::nitro::image::HybridBaseSpec> bounceChildBase(const std::shared_ptr<margelo::nitro::image::HybridChildSpec>& child) = 0;
-      virtual std::shared_ptr<margelo::nitro::image::HybridChildSpec> castBase(const std::shared_ptr<margelo::nitro::image::HybridBaseSpec>& base) = 0;
+      virtual std::shared_ptr<margelo::nitro::test::HybridChildSpec> createChild() = 0;
+      virtual std::shared_ptr<margelo::nitro::test::HybridBaseSpec> createBase() = 0;
+      virtual std::shared_ptr<margelo::nitro::test::HybridBaseSpec> createBaseActualChild() = 0;
+      virtual std::shared_ptr<margelo::nitro::test::HybridChildSpec> bounceChild(const std::shared_ptr<margelo::nitro::test::HybridChildSpec>& child) = 0;
+      virtual std::shared_ptr<margelo::nitro::test::HybridBaseSpec> bounceBase(const std::shared_ptr<margelo::nitro::test::HybridBaseSpec>& base) = 0;
+      virtual std::shared_ptr<margelo::nitro::test::HybridBaseSpec> bounceChildBase(const std::shared_ptr<margelo::nitro::test::HybridChildSpec>& child) = 0;
+      virtual std::shared_ptr<margelo::nitro::test::HybridChildSpec> castBase(const std::shared_ptr<margelo::nitro::test::HybridBaseSpec>& base) = 0;
       virtual double callbackSync(const std::function<double()>& callback) = 0;
-      virtual bool getIsViewBlue(const std::shared_ptr<margelo::nitro::image::HybridTestViewSpec>& view) = 0;
+      virtual bool getIsViewBlue(const std::shared_ptr<margelo::nitro::test::HybridTestViewSpec>& view) = 0;
 
     protected:
       // Hybrid Setup
@@ -197,4 +197,4 @@ namespace margelo::nitro::image {
       static constexpr auto TAG = "TestObjectCpp";
   };
 
-} // namespace margelo::nitro::image
+} // namespace margelo::nitro::test

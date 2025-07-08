@@ -1,22 +1,18 @@
 {
   "$schema": "https://nitro.margelo.com/nitro.schema.json",
   "cxxNamespace": [
-    "image"
+    "test"
   ],
   "ios": {
     "iosModuleName": "NitroTest"
   },
   "android": {
     "androidNamespace": [
-      "image"
+      "test"
     ],
     "androidCxxLibName": "NitroTest"
   },
   "autolinking": {
-    "ImageFactory": {
-      "swift": "HybridImageFactory",
-      "kotlin": "ImageFactory"
-    },
     "TestObjectCpp": {
       "cpp": "HybridTestObjectCpp"
     },

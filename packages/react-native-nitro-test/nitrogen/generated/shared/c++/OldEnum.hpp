@@ -19,7 +19,7 @@
 #error NitroModules cannot be found! Are you sure you installed NitroModules properly?
 #endif
 
-namespace margelo::nitro::image {
+namespace margelo::nitro::test {
 
   /**
    * An enum which can be represented as a JavaScript enum (OldEnum).
@@ -30,11 +30,11 @@ namespace margelo::nitro::image {
     THIRD      SWIFT_NAME(third) = 2,
   } CLOSED_ENUM;
 
-} // namespace margelo::nitro::image
+} // namespace margelo::nitro::test
 
 namespace margelo::nitro {
 
-  using namespace margelo::nitro::image;
+  using namespace margelo::nitro::test;
 
   // C++ OldEnum <> JS OldEnum (enum)
   template <>

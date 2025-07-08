@@ -13,13 +13,13 @@
 namespace NitroTest { class HybridChildSpec_cxx; }
 
 // Forward declaration of `HybridBaseSpecSwift` to properly resolve imports.
-namespace margelo::nitro::image { class HybridBaseSpecSwift; }
+namespace margelo::nitro::test { class HybridBaseSpecSwift; }
 
 #include "HybridBaseSpecSwift.hpp"
 
 #include "NitroTest-Swift-Cxx-Umbrella.hpp"
 
-namespace margelo::nitro::image {
+namespace margelo::nitro::test {
 
   /**
    * The C++ part of HybridChildSpec_cxx.swift.
@@ -65,4 +65,4 @@ namespace margelo::nitro::image {
     NitroTest::HybridChildSpec_cxx _swiftPart;
   };
 
-} // namespace margelo::nitro::image
+} // namespace margelo::nitro::test

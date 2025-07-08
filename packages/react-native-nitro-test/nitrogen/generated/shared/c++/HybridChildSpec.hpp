@@ -14,12 +14,12 @@
 #endif
 
 // Forward declaration of `HybridBaseSpec` to properly resolve imports.
-namespace margelo::nitro::image { class HybridBaseSpec; }
+namespace margelo::nitro::test { class HybridBaseSpec; }
 
 #include <memory>
 #include "HybridBaseSpec.hpp"
 
-namespace margelo::nitro::image {
+namespace margelo::nitro::test {
 
   using namespace margelo::nitro;
 
@@ -61,4 +61,4 @@ namespace margelo::nitro::image {
       static constexpr auto TAG = "Child";
   };
 
-} // namespace margelo::nitro::image
+} // namespace margelo::nitro::test

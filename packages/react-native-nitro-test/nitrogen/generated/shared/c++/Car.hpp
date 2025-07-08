@@ -19,16 +19,16 @@
 #endif
 
 // Forward declaration of `Powertrain` to properly resolve imports.
-namespace margelo::nitro::image { enum class Powertrain; }
+namespace margelo::nitro::test { enum class Powertrain; }
 // Forward declaration of `Person` to properly resolve imports.
-namespace margelo::nitro::image { struct Person; }
+namespace margelo::nitro::test { struct Person; }
 
 #include <string>
 #include "Powertrain.hpp"
 #include <optional>
 #include "Person.hpp"
 
-namespace margelo::nitro::image {
+namespace margelo::nitro::test {
 
   /**
    * A struct which can be represented as a JavaScript object (Car).
@@ -48,11 +48,11 @@ namespace margelo::nitro::image {
     explicit Car(double year, std::string make, std::string model, double power, Powertrain powertrain, std::optional<Person> driver, std::optional<bool> isFast): year(year), make(make), model(model), power(power), powertrain(powertrain), driver(driver), isFast(isFast) {}
   };
 
-} // namespace margelo::nitro::image
+} // namespace margelo::nitro::test
 
 namespace margelo::nitro {
 
-  using namespace margelo::nitro::image;
+  using namespace margelo::nitro::test;
 
   // C++ Car <> JS Car (object)
   template <>
