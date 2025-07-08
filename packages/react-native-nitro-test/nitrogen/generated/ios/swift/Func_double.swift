@@ -8,15 +8,15 @@
 import NitroModules
 
 /**
- * Wraps a Swift `() -> Double` as a class.
+ * Wraps a Swift `@Sendable () -> Double` as a class.
  * This class can be used from C++, e.g. to wrap the Swift closure as a `std::function`.
  */
 public final class Func_double {
   public typealias bridge = margelo.nitro.test.bridge.swift
 
-  private let closure: () -> Double
+  private let closure: @Sendable () -> Double
 
-  public init(_ closure: @escaping () -> Double) {
+  public init(_ closure: @escaping @Sendable () -> Double) {
     self.closure = closure
   }
 

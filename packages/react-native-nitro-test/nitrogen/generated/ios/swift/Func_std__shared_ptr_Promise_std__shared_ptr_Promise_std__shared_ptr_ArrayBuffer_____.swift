@@ -8,15 +8,15 @@
 import NitroModules
 
 /**
- * Wraps a Swift `() -> Promise<Promise<ArrayBufferHolder>>` as a class.
+ * Wraps a Swift `@Sendable () -> Promise<Promise<ArrayBufferHolder>>` as a class.
  * This class can be used from C++, e.g. to wrap the Swift closure as a `std::function`.
  */
 public final class Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____ {
   public typealias bridge = margelo.nitro.test.bridge.swift
 
-  private let closure: () -> Promise<Promise<ArrayBufferHolder>>
+  private let closure: @Sendable () -> Promise<Promise<ArrayBufferHolder>>
 
-  public init(_ closure: @escaping () -> Promise<Promise<ArrayBufferHolder>>) {
+  public init(_ closure: @escaping @Sendable () -> Promise<Promise<ArrayBufferHolder>>) {
     self.closure = closure
   }
 

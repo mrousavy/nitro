@@ -23,7 +23,7 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
   var optionalArray: [String]? { get set }
   var optionalEnum: Powertrain? { get set }
   var optionalOldEnum: OldEnum? { get set }
-  var optionalCallback: ((_ value: Double) -> Void)? { get set }
+  var optionalCallback: (@Sendable (_ value: Double) -> Void)? { get set }
   var someVariant: Variant_String_Double { get set }
 
   // Methods
@@ -37,7 +37,7 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
   func bounceNumbers(array: [Double]) throws -> [Double]
   func bounceStructs(array: [Person]) throws -> [Person]
   func bounceEnums(array: [Powertrain]) throws -> [Powertrain]
-  func complexEnumCallback(array: [Powertrain], callback: @escaping (_ array: [Powertrain]) -> Void) throws -> Void
+  func complexEnumCallback(array: [Powertrain], callback: @escaping @Sendable (_ array: [Powertrain]) -> Void) throws -> Void
   func createMap() throws -> AnyMapHolder
   func mapRoundtrip(map: AnyMapHolder) throws -> AnyMapHolder
   func getMapKeys(map: AnyMapHolder) throws -> [String]
@@ -58,15 +58,15 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
   func awaitAndGetPromise(promise: Promise<Double>) throws -> Promise<Double>
   func awaitAndGetComplexPromise(promise: Promise<Car>) throws -> Promise<Car>
   func awaitPromise(promise: Promise<Void>) throws -> Promise<Void>
-  func callCallback(callback: @escaping () -> Void) throws -> Void
-  func callAll(first: @escaping () -> Void, second: @escaping () -> Void, third: @escaping () -> Void) throws -> Void
-  func callWithOptional(value: Double?, callback: @escaping (_ maybe: Double?) -> Void) throws -> Void
-  func callSumUpNTimes(callback: @escaping () -> Promise<Double>, n: Double) throws -> Promise<Double>
-  func callbackAsyncPromise(callback: @escaping () -> Promise<Promise<Double>>) throws -> Promise<Double>
-  func callbackAsyncPromiseBuffer(callback: @escaping () -> Promise<Promise<ArrayBufferHolder>>) throws -> Promise<ArrayBufferHolder>
-  func getComplexCallback() throws -> (_ value: Double) -> Void
-  func getValueFromJSCallbackAndWait(getValue: @escaping () -> Promise<Double>) throws -> Promise<Double>
-  func getValueFromJsCallback(callback: @escaping () -> Promise<String>, andThenCall: @escaping (_ valueFromJs: String) -> Void) throws -> Promise<Void>
+  func callCallback(callback: @escaping @Sendable () -> Void) throws -> Void
+  func callAll(first: @escaping @Sendable () -> Void, second: @escaping @Sendable () -> Void, third: @escaping @Sendable () -> Void) throws -> Void
+  func callWithOptional(value: Double?, callback: @escaping @Sendable (_ maybe: Double?) -> Void) throws -> Void
+  func callSumUpNTimes(callback: @escaping @Sendable () -> Promise<Double>, n: Double) throws -> Promise<Double>
+  func callbackAsyncPromise(callback: @escaping @Sendable () -> Promise<Promise<Double>>) throws -> Promise<Double>
+  func callbackAsyncPromiseBuffer(callback: @escaping @Sendable () -> Promise<Promise<ArrayBufferHolder>>) throws -> Promise<ArrayBufferHolder>
+  func getComplexCallback() throws -> @Sendable (_ value: Double) -> Void
+  func getValueFromJSCallbackAndWait(getValue: @escaping @Sendable () -> Promise<Double>) throws -> Promise<Double>
+  func getValueFromJsCallback(callback: @escaping @Sendable () -> Promise<String>, andThenCall: @escaping @Sendable (_ valueFromJs: String) -> Void) throws -> Promise<Void>
   func getCar() throws -> Car
   func isCarElectric(car: Car) throws -> Bool
   func getDriver(car: Car) throws -> Person?
@@ -88,7 +88,7 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
   func bounceBase(base: (any HybridBaseSpec)) throws -> (any HybridBaseSpec)
   func bounceChildBase(child: (any HybridChildSpec)) throws -> (any HybridBaseSpec)
   func castBase(base: (any HybridBaseSpec)) throws -> (any HybridChildSpec)
-  func callbackSync(callback: @escaping () -> Double) throws -> Double
+  func callbackSync(callback: @escaping @Sendable () -> Double) throws -> Double
   func getIsViewBlue(view: (any HybridTestViewSpec)) throws -> Bool
 }
 

@@ -140,9 +140,9 @@ public class HybridTestViewSpec_cxx {
     }
     @inline(__always)
     set {
-      self.__implementation.someCallback = { () -> () -> Void in
+      self.__implementation.someCallback = { () -> @Sendable () -> Void in
         let __wrappedFunction = bridge.wrap_Func_void(newValue)
-        return { () -> Void in
+        return { @Sendable () -> Void in
           __wrappedFunction.call()
         }
       }()

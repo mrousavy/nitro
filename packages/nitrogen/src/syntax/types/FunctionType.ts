@@ -120,7 +120,7 @@ export class FunctionType implements Type {
           })
           .join(', ')
         const returnType = this.returnType.getCode(language)
-        return `(${params}) -> ${returnType}`
+        return `@Sendable (${params}) -> ${returnType}`
       }
       case 'kotlin': {
         const params = this.parameters

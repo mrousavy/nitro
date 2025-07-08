@@ -14,7 +14,7 @@ public protocol HybridTestViewSpec_protocol: HybridObject, HybridView {
   var isBlue: Bool { get set }
   var hasBeenCalled: Bool { get set }
   var colorScheme: ColorScheme { get set }
-  var someCallback: () -> Void { get set }
+  var someCallback: @Sendable () -> Void { get set }
 
   // Methods
   func someMethod() throws -> Void

@@ -20,7 +20,7 @@ class HybridTestView : HybridTestViewSpec {
   }
   var hasBeenCalled: Bool = false
   var colorScheme: ColorScheme = .light
-  var someCallback: () -> Void = { }
+  var someCallback: @Sendable () -> Void = { }
 
   // Methods
   func someMethod() throws -> Void {
