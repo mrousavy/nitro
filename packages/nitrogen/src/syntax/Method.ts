@@ -34,7 +34,6 @@ export interface MethodModifiers {
    * it from being stripped from the binary by the Java compiler or ProGuard.
    */
   doNotStrip?: boolean
-
   /**
    * Whether this method has a `@preconcurrency` in Swift attribut in Swift.
    * This largely helps with running callbacks in Swift 6 Sendable closures.
