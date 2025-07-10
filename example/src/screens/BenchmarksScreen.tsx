@@ -15,7 +15,7 @@ import {
 import { NitroModules } from 'react-native-nitro-modules'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useColors } from '../useColors'
-import { HybridTestObjectCpp } from 'react-native-nitro-test'
+import { HybridTestObjectSwiftKotlin } from 'react-native-nitro-test'
 import { ExampleTurboModule } from '../turbo-module/ExampleTurboModule'
 
 declare global {
@@ -60,7 +60,7 @@ async function runBenchmarks(): Promise<BenchmarksResult> {
   {
     nitroStart = performance.now()
     for (let i = 0; i < ITERATIONS; i++) {
-      nitroResult = HybridTestObjectCpp.addNumbers(3, 5)
+      nitroResult = HybridTestObjectSwiftKotlin.addNumbers(3, 5)
     }
     nitroEnd = performance.now()
   }
