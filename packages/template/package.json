@@ -61,7 +61,7 @@
     "eslint-plugin-prettier": "^5.2.1",
     "nitro-codegen": "*",
     "prettier": "^3.3.3",
-    "react": "19.0.0",
+    "react": "19.1.0",
     "react-native": "0.79.5",
     "react-native-nitro-modules": "*",
     "typescript": "^5.5.4"
