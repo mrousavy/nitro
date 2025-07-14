@@ -57,7 +57,7 @@
         "@react-navigation/bottom-tabs": "^7.4.2",
         "@react-navigation/native": "^7.1.14",
         "deep-equal": "^2.2.3",
-        "react": "19.0.0",
+        "react": "19.1.0",
         "react-native": "0.79.5",
         "react-native-nitro-modules": "*",
         "react-native-nitro-test": "*",
@@ -102,7 +102,7 @@
         "@types/jest": "*",
         "@types/react": "*",
         "jest": "*",
-        "react": "19.0.0",
+        "react": "19.1.0",
         "react-native": "0.79.5",
         "react-native-builder-bob": "^0.37.0",
       },
@@ -119,7 +119,7 @@
         "@types/react": "*",
         "jest": "*",
         "nitro-codegen": "*",
-        "react": "19.0.0",
+        "react": "19.1.0",
         "react-native": "0.79.5",
         "react-native-nitro-modules": "*",
       },
@@ -4664,6 +4664,12 @@
     "react-native-builder-bob/glob": ["glob@8.1.0", "", { "dependencies": { "fs.realpath": "^1.0.0", "inflight": "^1.0.4", "inherits": "2", "minimatch": "^5.0.1", "once": "^1.3.0" } }, "sha512-r8hpEjiQEYlF2QU0df3dS+nxxSIreXQS1qRhMJM0Q5NDdR386C7jb7Hwwod8Fgiuex+k0GFjgft18yvxm5XoCQ=="],
 
     "react-native-builder-bob/metro-config": ["metro-config@0.80.12", "", { "dependencies": { "connect": "^3.6.5", "cosmiconfig": "^5.0.5", "flow-enums-runtime": "^0.0.6", "jest-validate": "^29.6.3", "metro": "0.80.12", "metro-cache": "0.80.12", "metro-core": "0.80.12", "metro-runtime": "0.80.12" } }, "sha512-4rwOWwrhm62LjB12ytiuR5NgK1ZBNr24/He8mqCsC+HXZ+ATbrewLNztzbAZHtFsrxP4D4GLTGgh96pCpYLSAQ=="],
+
+    "react-native-nitro-example/react": ["react@19.1.0", "", {}, "sha512-FS+XFBNvn3GTAWq26joslQgWNoFu08F4kl0J4CgdNKADkdSGXQyTCnKteIAJy96Br6YbpEU1LSzV5dYtjMkMDg=="],
+
+    "react-native-nitro-modules/react": ["react@19.1.0", "", {}, "sha512-FS+XFBNvn3GTAWq26joslQgWNoFu08F4kl0J4CgdNKADkdSGXQyTCnKteIAJy96Br6YbpEU1LSzV5dYtjMkMDg=="],
+
+    "react-native-nitro-test/react": ["react@19.1.0", "", {}, "sha512-FS+XFBNvn3GTAWq26joslQgWNoFu08F4kl0J4CgdNKADkdSGXQyTCnKteIAJy96Br6YbpEU1LSzV5dYtjMkMDg=="],
 
     "react-router/@babel/runtime": ["@babel/runtime@7.27.0", "", { "dependencies": { "regenerator-runtime": "^0.14.0" } }, "sha512-VtPOkrdPHZsKc/clNqyi9WUA8TINkZ4cGk63UUE3u4pmB2k+ZMQRDuIOagv8UVd6j7k0T3+RRIb7beKTebNbcw=="],
 

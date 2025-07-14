@@ -21,7 +21,7 @@
     "@react-navigation/bottom-tabs": "^7.4.2",
     "@react-navigation/native": "^7.1.14",
     "deep-equal": "^2.2.3",
-    "react": "19.0.0",
+    "react": "19.1.0",
     "react-native": "0.79.5",
     "react-native-nitro-test": "*",
     "react-native-nitro-modules": "*",
