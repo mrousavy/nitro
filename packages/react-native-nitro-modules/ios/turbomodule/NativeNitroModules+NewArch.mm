@@ -28,21 +28,15 @@ using namespace margelo;
  */
 @implementation NativeNitroModules {
   bool _didInstall;
-  std::weak_ptr<react::CallInvoker> _callInvoker;
 }
 RCT_EXPORT_MODULE(NitroModules)
 
-- (void)installJSIBindingsWithRuntime:(jsi::Runtime&)runtime {
-  // 1. Get CallInvoker we cached statically
-  std::shared_ptr<react::CallInvoker> callInvoker = _callInvoker.lock();
-  if (callInvoker == nullptr) {
-    throw std::runtime_error("Cannot install `global.NitroModulesProxy` - CallInvoker was null!");
-  }
-
-  // 2. Wrap CallInvoker as Dispatcher
+- (void)installJSIBindingsWithRuntime:(jsi::Runtime &)runtime
+                          callInvoker:(const std::shared_ptr<react::CallInvoker> &)callInvoker {
+  // 1. Wrap CallInvoker as Dispatcher
   auto dispatcher = std::make_shared<nitro::CallInvokerDispatcher>(callInvoker);
 
-  // 3. Install Nitro
+  // 2. Install Nitro
   nitro::install(runtime, dispatcher);
   _didInstall = true;
 }
@@ -57,8 +51,6 @@ RCT_EXPORT_MODULE(NitroModules)
 }
 
 - (std::shared_ptr<react::TurboModule>)getTurboModule:(const react::ObjCTurboModule::InitParams&)params {
-  // Cache the CallInvoker statically (weak) - we use it later in `installJSIBindingsWithRuntime:`.
-  _callInvoker = params.jsInvoker;
   return std::make_shared<react::NativeNitroModulesSpecJSI>(params);
 }
 
