@@ -33,7 +33,7 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
 
   var optionalOldEnum: OldEnum? = nil
 
-  var optionalCallback: ((Double) -> Void)? = nil
+  var optionalCallback: (@Sendable (Double) -> Void)? = nil
 
   var thisObject: any HybridTestObjectSwiftKotlinSpec {
     return self
@@ -104,7 +104,7 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
     }
   }
 
-  func getComplexCallback() throws -> (Double) -> Void {
+  func getComplexCallback() throws -> @Sendable (Double) -> Void {
     return { value in print("Callback called with \(value).") }
   }
 

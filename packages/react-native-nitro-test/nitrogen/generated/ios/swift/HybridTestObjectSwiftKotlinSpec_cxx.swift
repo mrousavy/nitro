@@ -329,11 +329,11 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
     }
     @inline(__always)
     set {
-      self.__implementation.optionalCallback = { () -> ((_ value: Double) -> Void)? in
+      self.__implementation.optionalCallback = { () -> (@Sendable (_ value: Double) -> Void)? in
         if let __unwrapped = newValue.value {
-          return { () -> (Double) -> Void in
+          return { () -> @Sendable (Double) -> Void in
             let __wrappedFunction = bridge.wrap_Func_void_double(__unwrapped)
-            return { (__value: Double) -> Void in
+            return { @Sendable (__value: Double) -> Void in
               __wrappedFunction.call(__value)
             }
           }()
@@ -549,9 +549,9 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public final func complexEnumCallback(array: bridge.std__vector_Powertrain_, callback: bridge.Func_void_std__vector_Powertrain_) -> bridge.Result_void_ {
     do {
-      try self.__implementation.complexEnumCallback(array: array.map({ __item in __item }), callback: { () -> ([Powertrain]) -> Void in
+      try self.__implementation.complexEnumCallback(array: array.map({ __item in __item }), callback: { () -> @Sendable ([Powertrain]) -> Void in
         let __wrappedFunction = bridge.wrap_Func_void_std__vector_Powertrain_(callback)
-        return { (__array: [Powertrain]) -> Void in
+        return { @Sendable (__array: [Powertrain]) -> Void in
           __wrappedFunction.call({ () -> bridge.std__vector_Powertrain_ in
             var __vector = bridge.create_std__vector_Powertrain_(__array.count)
             for __item in __array {
@@ -861,10 +861,10 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
     do {
       let __result = try self.__implementation.awaitAndGetPromise(promise: { () -> Promise<Double> in
         let __promise = Promise<Double>()
-        let __resolver = { (__result: Double) in
+        let __resolver = { @Sendable (__result: Double) in
           __promise.resolve(withResult: __result)
         }
-        let __rejecter = { (__error: Error) in
+        let __rejecter = { @Sendable (__error: Error) in
           __promise.reject(withError: __error)
         }
         let __resolverCpp = { () -> bridge.Func_void_double in
@@ -900,10 +900,10 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
     do {
       let __result = try self.__implementation.awaitAndGetComplexPromise(promise: { () -> Promise<Car> in
         let __promise = Promise<Car>()
-        let __resolver = { (__result: Car) in
+        let __resolver = { @Sendable (__result: Car) in
           __promise.resolve(withResult: __result)
         }
-        let __rejecter = { (__error: Error) in
+        let __rejecter = { @Sendable (__error: Error) in
           __promise.reject(withError: __error)
         }
         let __resolverCpp = { () -> bridge.Func_void_Car in
@@ -939,8 +939,10 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
     do {
       let __result = try self.__implementation.awaitPromise(promise: { () -> Promise<Void> in
         let __promise = Promise<Void>()
-        let __resolver = { __promise.resolve(withResult: ()) }
-        let __rejecter = { (__error: Error) in
+        let __resolver = { @Sendable in
+          __promise.resolve(withResult: ())
+        }
+        let __rejecter = { @Sendable (__error: Error) in
           __promise.reject(withError: __error)
         }
         let __resolverCpp = { () -> bridge.Func_void in
@@ -974,9 +976,9 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public final func callCallback(callback: bridge.Func_void) -> bridge.Result_void_ {
     do {
-      try self.__implementation.callCallback(callback: { () -> () -> Void in
+      try self.__implementation.callCallback(callback: { () -> @Sendable () -> Void in
         let __wrappedFunction = bridge.wrap_Func_void(callback)
-        return { () -> Void in
+        return { @Sendable () -> Void in
           __wrappedFunction.call()
         }
       }())
@@ -990,19 +992,19 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public final func callAll(first: bridge.Func_void, second: bridge.Func_void, third: bridge.Func_void) -> bridge.Result_void_ {
     do {
-      try self.__implementation.callAll(first: { () -> () -> Void in
+      try self.__implementation.callAll(first: { () -> @Sendable () -> Void in
         let __wrappedFunction = bridge.wrap_Func_void(first)
-        return { () -> Void in
+        return { @Sendable () -> Void in
           __wrappedFunction.call()
         }
-      }(), second: { () -> () -> Void in
+      }(), second: { () -> @Sendable () -> Void in
         let __wrappedFunction = bridge.wrap_Func_void(second)
-        return { () -> Void in
+        return { @Sendable () -> Void in
           __wrappedFunction.call()
         }
-      }(), third: { () -> () -> Void in
+      }(), third: { () -> @Sendable () -> Void in
         let __wrappedFunction = bridge.wrap_Func_void(third)
-        return { () -> Void in
+        return { @Sendable () -> Void in
           __wrappedFunction.call()
         }
       }())
@@ -1016,9 +1018,9 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public final func callWithOptional(value: bridge.std__optional_double_, callback: bridge.Func_void_std__optional_double_) -> bridge.Result_void_ {
     do {
-      try self.__implementation.callWithOptional(value: value.value, callback: { () -> (Double?) -> Void in
+      try self.__implementation.callWithOptional(value: value.value, callback: { () -> @Sendable (Double?) -> Void in
         let __wrappedFunction = bridge.wrap_Func_void_std__optional_double_(callback)
-        return { (__maybe: Double?) -> Void in
+        return { @Sendable (__maybe: Double?) -> Void in
           __wrappedFunction.call({ () -> bridge.std__optional_double_ in
             if let __unwrappedValue = __maybe {
               return bridge.create_std__optional_double_(__unwrappedValue)
@@ -1038,16 +1040,16 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public final func callSumUpNTimes(callback: bridge.Func_std__shared_ptr_Promise_double__, n: Double) -> bridge.Result_std__shared_ptr_Promise_double___ {
     do {
-      let __result = try self.__implementation.callSumUpNTimes(callback: { () -> () -> Promise<Double> in
+      let __result = try self.__implementation.callSumUpNTimes(callback: { () -> @Sendable () -> Promise<Double> in
         let __wrappedFunction = bridge.wrap_Func_std__shared_ptr_Promise_double__(callback)
-        return { () -> Promise<Double> in
+        return { @Sendable () -> Promise<Double> in
           let __result = __wrappedFunction.call()
           return { () -> Promise<Double> in
             let __promise = Promise<Double>()
-            let __resolver = { (__result: Double) in
+            let __resolver = { @Sendable (__result: Double) in
               __promise.resolve(withResult: __result)
             }
-            let __rejecter = { (__error: Error) in
+            let __rejecter = { @Sendable (__error: Error) in
               __promise.reject(withError: __error)
             }
             let __resolverCpp = { () -> bridge.Func_void_double in
@@ -1083,16 +1085,16 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public final func callbackAsyncPromise(callback: bridge.Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double____) -> bridge.Result_std__shared_ptr_Promise_double___ {
     do {
-      let __result = try self.__implementation.callbackAsyncPromise(callback: { () -> () -> Promise<Promise<Double>> in
+      let __result = try self.__implementation.callbackAsyncPromise(callback: { () -> @Sendable () -> Promise<Promise<Double>> in
         let __wrappedFunction = bridge.wrap_Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double____(callback)
-        return { () -> Promise<Promise<Double>> in
+        return { @Sendable () -> Promise<Promise<Double>> in
           let __result = __wrappedFunction.call()
           return { () -> Promise<Promise<Double>> in
             let __promise = Promise<Promise<Double>>()
-            let __resolver = { (__result: Promise<Double>) in
+            let __resolver = { @Sendable (__result: Promise<Double>) in
               __promise.resolve(withResult: __result)
             }
-            let __rejecter = { (__error: Error) in
+            let __rejecter = { @Sendable (__error: Error) in
               __promise.reject(withError: __error)
             }
             let __resolverCpp = { () -> bridge.Func_void_std__shared_ptr_Promise_double__ in
@@ -1128,16 +1130,16 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public final func callbackAsyncPromiseBuffer(callback: bridge.Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____) -> bridge.Result_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer____ {
     do {
-      let __result = try self.__implementation.callbackAsyncPromiseBuffer(callback: { () -> () -> Promise<Promise<ArrayBufferHolder>> in
+      let __result = try self.__implementation.callbackAsyncPromiseBuffer(callback: { () -> @Sendable () -> Promise<Promise<ArrayBufferHolder>> in
         let __wrappedFunction = bridge.wrap_Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____(callback)
-        return { () -> Promise<Promise<ArrayBufferHolder>> in
+        return { @Sendable () -> Promise<Promise<ArrayBufferHolder>> in
           let __result = __wrappedFunction.call()
           return { () -> Promise<Promise<ArrayBufferHolder>> in
             let __promise = Promise<Promise<ArrayBufferHolder>>()
-            let __resolver = { (__result: Promise<ArrayBufferHolder>) in
+            let __resolver = { @Sendable (__result: Promise<ArrayBufferHolder>) in
               __promise.resolve(withResult: __result)
             }
-            let __rejecter = { (__error: Error) in
+            let __rejecter = { @Sendable (__error: Error) in
               __promise.reject(withError: __error)
             }
             let __resolverCpp = { () -> bridge.Func_void_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___ in
@@ -1188,16 +1190,16 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public final func getValueFromJSCallbackAndWait(getValue: bridge.Func_std__shared_ptr_Promise_double__) -> bridge.Result_std__shared_ptr_Promise_double___ {
     do {
-      let __result = try self.__implementation.getValueFromJSCallbackAndWait(getValue: { () -> () -> Promise<Double> in
+      let __result = try self.__implementation.getValueFromJSCallbackAndWait(getValue: { () -> @Sendable () -> Promise<Double> in
         let __wrappedFunction = bridge.wrap_Func_std__shared_ptr_Promise_double__(getValue)
-        return { () -> Promise<Double> in
+        return { @Sendable () -> Promise<Double> in
           let __result = __wrappedFunction.call()
           return { () -> Promise<Double> in
             let __promise = Promise<Double>()
-            let __resolver = { (__result: Double) in
+            let __resolver = { @Sendable (__result: Double) in
               __promise.resolve(withResult: __result)
             }
-            let __rejecter = { (__error: Error) in
+            let __rejecter = { @Sendable (__error: Error) in
               __promise.reject(withError: __error)
             }
             let __resolverCpp = { () -> bridge.Func_void_double in
@@ -1233,16 +1235,16 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public final func getValueFromJsCallback(callback: bridge.Func_std__shared_ptr_Promise_std__string__, andThenCall: bridge.Func_void_std__string) -> bridge.Result_std__shared_ptr_Promise_void___ {
     do {
-      let __result = try self.__implementation.getValueFromJsCallback(callback: { () -> () -> Promise<String> in
+      let __result = try self.__implementation.getValueFromJsCallback(callback: { () -> @Sendable () -> Promise<String> in
         let __wrappedFunction = bridge.wrap_Func_std__shared_ptr_Promise_std__string__(callback)
-        return { () -> Promise<String> in
+        return { @Sendable () -> Promise<String> in
           let __result = __wrappedFunction.call()
           return { () -> Promise<String> in
             let __promise = Promise<String>()
-            let __resolver = { (__result: String) in
+            let __resolver = { @Sendable (__result: String) in
               __promise.resolve(withResult: __result)
             }
-            let __rejecter = { (__error: Error) in
+            let __rejecter = { @Sendable (__error: Error) in
               __promise.reject(withError: __error)
             }
             let __resolverCpp = { () -> bridge.Func_void_std__string in
@@ -1259,9 +1261,9 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
             return __promise
           }()
         }
-      }(), andThenCall: { () -> (String) -> Void in
+      }(), andThenCall: { () -> @Sendable (String) -> Void in
         let __wrappedFunction = bridge.wrap_Func_void_std__string(andThenCall)
-        return { (__valueFromJs: String) -> Void in
+        return { @Sendable (__valueFromJs: String) -> Void in
           __wrappedFunction.call(std.string(__valueFromJs))
         }
       }())
@@ -1668,9 +1670,9 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public final func callbackSync(callback: bridge.Func_double) -> bridge.Result_double_ {
     do {
-      let __result = try self.__implementation.callbackSync(callback: { () -> () -> Double in
+      let __result = try self.__implementation.callbackSync(callback: { () -> @Sendable () -> Double in
         let __wrappedFunction = bridge.wrap_Func_double(callback)
-        return { () -> Double in
+        return { @Sendable () -> Double in
           let __result = __wrappedFunction.call()
           return __result
         }

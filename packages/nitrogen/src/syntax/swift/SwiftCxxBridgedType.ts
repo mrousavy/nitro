@@ -87,7 +87,7 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
         // SomeStruct (Swift extension) <> SomeStruct (C++)
         return true
       case 'function':
-        // (@ecaping () -> Void) <> std::function<...>
+        // (@ecaping @Sendable () -> Void) <> std::function<...>
         return true
       case 'array-buffer':
         // ArrayBufferHolder <> std::shared_ptr<ArrayBuffer>
@@ -382,8 +382,10 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
               return `
 { () -> ${promise.getCode('swift')} in
   let __promise = ${promise.getCode('swift')}()
-  let __resolver = { __promise.resolve(withResult: ()) }
-  let __rejecter = { (__error: Error) in
+  let __resolver = { @Sendable in
+    __promise.resolve(withResult: ())
+  }
+  let __rejecter = { @Sendable (__error: Error) in
     __promise.reject(withError: __error)
   }
   let __resolverCpp = ${indent(resolverFuncBridge.parseFromSwiftToCpp('__resolver', 'swift'), '  ')}
@@ -410,10 +412,10 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
               return `
 { () -> ${promise.getCode('swift')} in
   let __promise = ${promise.getCode('swift')}()
-  let __resolver = { (__result: ${promise.resultingType.getCode('swift')}) in
+  let __resolver = { @Sendable (__result: ${promise.resultingType.getCode('swift')}) in
     __promise.resolve(withResult: __result)
   }
-  let __rejecter = { (__error: Error) in
+  let __rejecter = { @Sendable (__error: Error) in
     __promise.reject(withError: __error)
   }
   let __resolverCpp = ${indent(resolverFuncBridge.parseFromSwiftToCpp('__resolver', 'swift'), '  ')}
@@ -574,7 +576,7 @@ case ${i}:
               return `
 { () -> ${swiftClosureType} in
   let __wrappedFunction = bridge.wrap_${bridge.specializationName}(${cppParameterName})
-  return { ${signature} in
+  return { @Sendable ${signature} in
     __wrappedFunction.call(${indent(paramsForward.join(', '), '    ')})
   }
 }()`.trim()
@@ -586,7 +588,7 @@ case ${i}:
               return `
 { () -> ${swiftClosureType} in
   let __wrappedFunction = bridge.wrap_${bridge.specializationName}(${cppParameterName})
-  return { ${signature} in
+  return { @Sendable ${signature} in
     let __result = __wrappedFunction.call(${indent(paramsForward.join(', '), '    ')})
     return ${indent(resultBridged.parseFromCppToSwift('__result', 'swift'), '    ')}
   }

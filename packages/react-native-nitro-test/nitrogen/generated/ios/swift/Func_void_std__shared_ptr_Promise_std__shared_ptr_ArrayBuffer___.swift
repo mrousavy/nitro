@@ -8,15 +8,15 @@
 import NitroModules
 
 /**
- * Wraps a Swift `(_ value: Promise<ArrayBufferHolder>) -> Void` as a class.
+ * Wraps a Swift `@Sendable (_ value: Promise<ArrayBufferHolder>) -> Void` as a class.
  * This class can be used from C++, e.g. to wrap the Swift closure as a `std::function`.
  */
 public final class Func_void_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___ {
   public typealias bridge = margelo.nitro.test.bridge.swift
 
-  private let closure: (_ value: Promise<ArrayBufferHolder>) -> Void
+  private let closure: @Sendable (_ value: Promise<ArrayBufferHolder>) -> Void
 
-  public init(_ closure: @escaping (_ value: Promise<ArrayBufferHolder>) -> Void) {
+  public init(_ closure: @escaping @Sendable (_ value: Promise<ArrayBufferHolder>) -> Void) {
     self.closure = closure
   }
 
@@ -24,10 +24,10 @@ public final class Func_void_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer
   public func call(value: bridge.std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___) -> Void {
     self.closure({ () -> Promise<ArrayBufferHolder> in
       let __promise = Promise<ArrayBufferHolder>()
-      let __resolver = { (__result: ArrayBufferHolder) in
+      let __resolver = { @Sendable (__result: ArrayBufferHolder) in
         __promise.resolve(withResult: __result)
       }
-      let __rejecter = { (__error: Error) in
+      let __rejecter = { @Sendable (__error: Error) in
         __promise.reject(withError: __error)
       }
       let __resolverCpp = { () -> bridge.Func_void_std__shared_ptr_ArrayBuffer_ in
