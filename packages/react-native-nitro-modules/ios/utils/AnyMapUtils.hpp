@@ -13,7 +13,8 @@ namespace margelo::nitro {
 
 using SharedAnyMap = std::shared_ptr<AnyMap>;
 
-[[deprecated("Use AnyMap instead")]]
+// TODO: Remove - this is deprecated
+/// @deprecated !!
 using TSharedMap = SharedAnyMap;
 
 namespace AnyMapUtils {
