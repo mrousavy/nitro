@@ -58,6 +58,15 @@ const config: Config = {
       {
         generateLLMsTxt: true,
         generateLLMsFullTxt: true,
+        includeOrder: [
+          'what-is-nitro.md',
+          'nitro-modules.md',
+          'hybrid-objects.md',
+          'hybrid-views.md',
+          'nitrogen.md',
+          'using-nitro-in-a-library.md',
+          'using-nitro-in-your-app.md',
+        ]
       },
     ],
   ],
