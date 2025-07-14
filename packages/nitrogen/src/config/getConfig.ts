@@ -30,7 +30,7 @@ function readFile(configPath: string): string {
   }
 }
 
-function propPathToString(propPath: (string | number)[]): string {
+function propPathToString(propPath: PropertyKey[]): string {
   if (propPath.length === 0) return ''
   const prop = propPath.reduce<string>((prev, curr) => {
     if (typeof curr === 'string') {
@@ -65,8 +65,10 @@ function parseConfig(json: string): NitroUserConfig {
         const prop = propPathToString(i.path)
         switch (i.code) {
           case 'invalid_type':
-            return `\`${prop}\` must be ${i.expected}, but is ${i.received}.`
-          case 'invalid_string':
+            return `\`${prop}\` must be ${i.expected}, but is ${i.input}.`
+          case 'invalid_value':
+          case 'invalid_union':
+          case 'invalid_element':
             return `\`${prop}\` is not a valid & safe string. It must only contain alphanumeric characters and must not start with a number.`
           default:
             return `\`${prop}\`: ${i.message} (${i.code})`
