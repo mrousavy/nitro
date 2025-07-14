@@ -19,7 +19,7 @@ An untyped map represents a JSON-like structure with a value that can either be 
   <TabItem value="swift" label="Swift">
     ```swift
     class HybridFetch: HybridFetchSpec {
-      func get(url: String) -> AnyMapHolder
+      func get(url: String) -> AnyMap
     }
     ```
   </TabItem>

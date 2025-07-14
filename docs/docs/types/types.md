@@ -140,13 +140,13 @@ These are all the types Nitro supports out of the box:
   <tr>
     <td><code>object</code></td>
     <td><code>std::shared_ptr&lt;<a href="https://github.com/mrousavy/nitro/blob/main/packages/react-native-nitro-modules/cpp/core/AnyMap.hpp">AnyMap</a>&gt;</code></td>
-    <td><code><a href="https://github.com/mrousavy/nitro/blob/main/packages/react-native-nitro-modules/ios/core/AnyMapHolder.swift">AnyMapHolder</a></code></td>
+    <td><code><a href="https://github.com/mrousavy/nitro/blob/main/packages/react-native-nitro-modules/ios/core/AnyMap.swift">AnyMap</a></code></td>
     <td><code><a href="https://github.com/mrousavy/nitro/blob/main/packages/react-native-nitro-modules/android/src/main/java/com/margelo/nitro/core/AnyMap.kt">AnyMap</a></code></td>
   </tr>
   <tr>
     <td><code>ArrayBuffer</code></td>
     <td><code>std::shared_ptr&lt;<a href="https://github.com/mrousavy/nitro/blob/main/packages/react-native-nitro-modules/cpp/core/ArrayBuffer.hpp">ArrayBuffer</a>&gt;</code></td>
-    <td><code><a href="https://github.com/mrousavy/nitro/blob/main/packages/react-native-nitro-modules/ios/core/ArrayBufferHolder.swift">ArrayBufferHolder</a></code></td>
+    <td><code><a href="https://github.com/mrousavy/nitro/blob/main/packages/react-native-nitro-modules/ios/core/ArrayBuffer.swift">ArrayBuffer</a></code></td>
     <td><code><a href="https://github.com/mrousavy/nitro/blob/main/packages/react-native-nitro-modules/android/src/main/java/com/margelo/nitro/core/ArrayBuffer.kt">ArrayBuffer</a></code></td>
   </tr>
   <tr>

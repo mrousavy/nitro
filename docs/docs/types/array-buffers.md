@@ -20,7 +20,7 @@ Passing an `ArrayBuffer` from native to JS and back does not involve any copies,
   <TabItem value="swift" label="Swift">
     ```swift
     class HybridImage: HybridImageSpec {
-      func getData() -> ArrayBufferHolder
+      func getData() -> ArrayBuffer
     }
     ```
   </TabItem>
@@ -52,9 +52,9 @@ An `ArrayBuffer` that was created on the native side is **owning**, which means 
 It can be safely held strong for longer, e.g. as a class property/member, and accessed from different Threads.
 
 ```swift
-func doSomething() -> ArrayBufferHolder {
+func doSomething() -> ArrayBuffer {
   // highlight-next-line
-  let buffer = ArrayBufferHolder.allocate(1024 * 10)
+  let buffer = ArrayBuffer.allocate(1024 * 10)
   let data = buffer.data   // <-- ✅ safe to do because we own it!
   self.buffer = buffer     // <-- ✅ safe to use it later!
   DispatchQueue.global().async {
@@ -70,7 +70,7 @@ An `ArrayBuffer` that was received as a parameter from JS cannot be safely kept 
 It's data can only be safely accessed before the synchronous function returned, as this will stay within the JS bounds.
 
 ```swift
-func doSomething(buffer: ArrayBufferHolder) {
+func doSomething(buffer: ArrayBuffer) {
   let data = buffer.data   // <-- ✅ safe to do because we're still sync
   DispatchQueue.global().async {
     // code-error
@@ -80,9 +80,9 @@ func doSomething(buffer: ArrayBufferHolder) {
 ```
 If you need a non-owning buffer's data for longer, **copy it first**:
 ```swift
-func doSomething(buffer: ArrayBufferHolder) {
+func doSomething(buffer: ArrayBuffer) {
   // diff-add
-  let copy = ArrayBufferHolder.copy(of: buffer)
+  let copy = ArrayBuffer.copy(of: buffer)
   let data = copy.data   // <-- ✅ safe now because we have a owning copy
   DispatchQueue.global().async {
     let data = copy.data // <-- ✅ still safe now because we have a owning copy
@@ -109,13 +109,13 @@ On the native side, an **owning** `ArrayBuffer` can either **wrap-**, or **copy-
     let myData = UnsafeMutablePointer<UInt8>.allocate(capacity: 4096)
 
     // wrap (no copy)
-    let wrappingArrayBuffer = ArrayBufferHolder.wrap(dataWithoutCopy: myData,
-                                                     size: 4096,
-                                                     onDelete: { myData.deallocate() })
+    let wrappingArrayBuffer = ArrayBuffer.wrap(dataWithoutCopy: myData,
+                                               size: 4096,
+                                               onDelete: { myData.deallocate() })
     // copy
-    let copiedArrayBuffer = ArrayBufferHolder.copy(of: wrappingArrayBuffer)
+    let copiedArrayBuffer = ArrayBuffer.copy(of: wrappingArrayBuffer)
     // new blank buffer
-    let newArrayBuffer = ArrayBufferHolder.allocate(size: 4096)
+    let newArrayBuffer = ArrayBuffer.allocate(size: 4096)
     ```
   </TabItem>
   <TabItem value="kotlin" label="Kotlin">
@@ -157,7 +157,7 @@ ArrayBuffers also provide helper and conversion methods for the language-native 
     Swift often uses [`Data`](https://developer.apple.com/documentation/foundation/data) to represent Data.
     ```swift
     let data = Data(capacity: 1024)
-    let buffer = ArrayBufferHolder.copy(data: data)
+    let buffer = ArrayBuffer.copy(data: data)
     let dataAgain = buffer.toData(copyIfNeeded: true)
     ```
   </TabItem>

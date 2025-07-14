@@ -1,5 +1,5 @@
 //
-//  ArrayBufferHolder.swift
+//  ArrayBuffer.swift
 //  NitroModules
 //
 //  Created by Marc Rousavy on 17.07.24.
@@ -13,36 +13,39 @@ import Foundation
  *
  * See `data`, `size` and `isOwning`.
  */
-public typealias ArrayBufferHolder = margelo.nitro.ArrayBufferHolder
+public typealias ArrayBuffer = margelo.nitro.ArrayBufferHolder
+
+@available(*, deprecated, renamed: "ArrayBuffer")
+public typealias ArrayBufferHolder = ArrayBuffer
 
 // pragma MARK: Wrap
 
-public extension ArrayBufferHolder {
+public extension ArrayBuffer {
   /**
-   * Create a new `ArrayBufferHolder` that wraps the given `data` of the given `size`
+   * Create a new `ArrayBuffer` that wraps the given `data` of the given `size`
    * without performing a copy.
    * When the `ArrayBuffer` is no longer used, `onDelete` will be called, in which
    * you as a caller are responsible for deleting `data`.
    */
   static func wrap(dataWithoutCopy data: UnsafeMutablePointer<UInt8>,
                    size: Int,
-                   onDelete delete: @escaping () -> Void) -> ArrayBufferHolder {
+                   onDelete delete: @escaping () -> Void) -> ArrayBuffer {
     // Convert escaping Swift closure to a `void*`
     let swiftClosure = SwiftClosure(wrappingClosure: delete)
-    // Create ArrayBufferHolder with our wrapped Swift closure to make it callable as a C-function pointer
-    return ArrayBufferHolder.wrap(data, size, swiftClosure)
+    // Create ArrayBuffer with our wrapped Swift closure to make it callable as a C-function pointer
+    return ArrayBuffer.wrap(data, size, swiftClosure)
   }
 
   /**
-   * Create a new `ArrayBufferHolder` that wraps the given `data` of the given `size`
+   * Create a new `ArrayBuffer` that wraps the given `data` of the given `size`
    * without performing a copy.
    * When the `ArrayBuffer` is no longer used, `onDelete` will be called, in which
    * you as a caller are responsible for deleting `data`.
    */
   static func wrap(dataWithoutCopy data: UnsafeMutableRawPointer,
                    size: Int,
-                   onDelete delete: @escaping () -> Void) -> ArrayBufferHolder {
-    return ArrayBufferHolder.wrap(dataWithoutCopy: data.assumingMemoryBound(to: UInt8.self),
+                   onDelete delete: @escaping () -> Void) -> ArrayBuffer {
+    return ArrayBuffer.wrap(dataWithoutCopy: data.assumingMemoryBound(to: UInt8.self),
                                   size: size,
                                   onDelete: delete)
   }
@@ -50,12 +53,12 @@ public extension ArrayBufferHolder {
 
 // pragma MARK: Allocate
 
-public extension ArrayBufferHolder {
+public extension ArrayBuffer {
   /**
    * Allocate a new buffer of the given `size`.
    * If `initializeToZero` is `true`, all bytes are set to `0`, otherwise they are left untouched.
    */
-  static func allocate(size: Int, initializeToZero: Bool = false) -> ArrayBufferHolder {
+  static func allocate(size: Int, initializeToZero: Bool = false) -> ArrayBuffer {
     let data = UnsafeMutablePointer<UInt8>.allocate(capacity: size)
     if initializeToZero {
       data.initialize(repeating: 0, count: size)
@@ -63,18 +66,18 @@ public extension ArrayBufferHolder {
     let deleteFunc = SwiftClosure {
       data.deallocate()
     }
-    return ArrayBufferHolder.wrap(data, size, deleteFunc)
+    return ArrayBuffer.wrap(data, size, deleteFunc)
   }
 }
 
 // pragma MARK: Copy
 
-public extension ArrayBufferHolder {
+public extension ArrayBuffer {
   /**
-   * Copy the given `UnsafeMutablePointer<UInt8>` into a new **owning** `ArrayBufferHolder`.
+   * Copy the given `UnsafeMutablePointer<UInt8>` into a new **owning** `ArrayBuffer`.
    */
   static func copy(of other: UnsafeMutablePointer<UInt8>,
-                   size: Int) -> ArrayBufferHolder {
+                   size: Int) -> ArrayBuffer {
     // 1. Create new `UnsafeMutablePointer<UInt8>`
     let copy = UnsafeMutablePointer<UInt8>.allocate(capacity: size)
     // 2. Copy over data
@@ -83,32 +86,32 @@ public extension ArrayBufferHolder {
     let deleteFunc = SwiftClosure {
       copy.deallocate()
     }
-    return ArrayBufferHolder.wrap(copy, size, deleteFunc)
+    return ArrayBuffer.wrap(copy, size, deleteFunc)
   }
 
   /**
-   * Copy the given `UnsafeMutableRawPointer` into a new **owning** `ArrayBufferHolder`.
+   * Copy the given `UnsafeMutableRawPointer` into a new **owning** `ArrayBuffer`.
    */
   static func copy(of other: UnsafeMutableRawPointer,
-                   size: Int) -> ArrayBufferHolder {
-    return ArrayBufferHolder.copy(of: other.assumingMemoryBound(to: UInt8.self),
+                   size: Int) -> ArrayBuffer {
+    return ArrayBuffer.copy(of: other.assumingMemoryBound(to: UInt8.self),
                                   size: size)
   }
 
   /**
-   * Copy the given `ArrayBufferHolder` into a new **owning** `ArrayBufferHolder`.
+   * Copy the given `ArrayBuffer` into a new **owning** `ArrayBuffer`.
    */
-  static func copy(of other: ArrayBufferHolder) -> ArrayBufferHolder {
-    return ArrayBufferHolder.copy(of: other.data, size: other.size)
+  static func copy(of other: ArrayBuffer) -> ArrayBuffer {
+    return ArrayBuffer.copy(of: other.data, size: other.size)
   }
 
   /**
-   * Copy the given `Data` into a new **owning** `ArrayBufferHolder`.
+   * Copy the given `Data` into a new **owning** `ArrayBuffer`.
    */
-  static func copy(data: Data) throws -> ArrayBufferHolder {
+  static func copy(data: Data) throws -> ArrayBuffer {
     // 1. Create new `ArrayBuffer` of same size
     let size = data.count
-    let arrayBuffer = ArrayBufferHolder.allocate(size: size)
+    let arrayBuffer = ArrayBuffer.allocate(size: size)
     // 2. Copy all bytes from `Data` into our new `ArrayBuffer`
     try data.withUnsafeBytes { rawPointer in
       guard let baseAddress = rawPointer.baseAddress else {
@@ -123,9 +126,9 @@ public extension ArrayBufferHolder {
 
 // pragma MARK: Data
 
-public extension ArrayBufferHolder {
+public extension ArrayBuffer {
   /**
-   * Wrap this `ArrayBufferHolder` in a `Data` instance, without performing a copy.
+   * Wrap this `ArrayBuffer` in a `Data` instance, without performing a copy.
    * - `copyIfNeeded`: If this `ArrayBuffer` is **non-owning**, the foreign
    *                   data may needs to be copied to be safely used outside of the scope of the caller function.
    *                   This flag controls that.

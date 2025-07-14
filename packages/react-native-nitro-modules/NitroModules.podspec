@@ -47,8 +47,8 @@ Pod::Spec.new do |s|
     "cpp/views/CachedProp.hpp",
     # Public iOS-specific headers that will be exposed in modulemap (for Swift)
     "ios/core/ArrayBufferHolder.hpp",
-    "ios/core/AnyMapHolder.hpp",
     "ios/core/PromiseHolder.hpp",
+    "ios/utils/AnyMapUtils.hpp",
     "ios/utils/Result.hpp",
     "ios/utils/DateToChronoDate.hpp",
     "ios/utils/RuntimeError.hpp",

@@ -24,7 +24,7 @@ using namespace facebook;
  * Passing around instances of `ArrayBufferHolder` (or `std::shared_ptr<ArrayBuffer>`)
  * does not involve any data copies and is almost zero-overhead - even when passed to JS.
  */
-class ArrayBufferHolder {
+class ArrayBufferHolder final {
 public:
   ArrayBufferHolder(const std::shared_ptr<ArrayBuffer>& arrayBuffer) : _arrayBuffer(arrayBuffer) {}
 

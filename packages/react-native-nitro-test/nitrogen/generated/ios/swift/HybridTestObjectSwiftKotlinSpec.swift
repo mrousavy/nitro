@@ -38,9 +38,9 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
   func bounceStructs(array: [Person]) throws -> [Person]
   func bounceEnums(array: [Powertrain]) throws -> [Powertrain]
   func complexEnumCallback(array: [Powertrain], callback: @escaping (_ array: [Powertrain]) -> Void) throws -> Void
-  func createMap() throws -> AnyMapHolder
-  func mapRoundtrip(map: AnyMapHolder) throws -> AnyMapHolder
-  func getMapKeys(map: AnyMapHolder) throws -> [String]
+  func createMap() throws -> AnyMap
+  func mapRoundtrip(map: AnyMap) throws -> AnyMap
+  func getMapKeys(map: AnyMap) throws -> [String]
   func bounceMap(map: Dictionary<String, Variant_Double_Bool>) throws -> Dictionary<String, Variant_Double_Bool>
   func extractMap(mapWrapper: MapWrapper) throws -> Dictionary<String, String>
   func funcThatThrows() throws -> Double
@@ -63,7 +63,7 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
   func callWithOptional(value: Double?, callback: @escaping (_ maybe: Double?) -> Void) throws -> Void
   func callSumUpNTimes(callback: @escaping () -> Promise<Double>, n: Double) throws -> Promise<Double>
   func callbackAsyncPromise(callback: @escaping () -> Promise<Promise<Double>>) throws -> Promise<Double>
-  func callbackAsyncPromiseBuffer(callback: @escaping () -> Promise<Promise<ArrayBufferHolder>>) throws -> Promise<ArrayBufferHolder>
+  func callbackAsyncPromiseBuffer(callback: @escaping () -> Promise<Promise<ArrayBuffer>>) throws -> Promise<ArrayBuffer>
   func getComplexCallback() throws -> (_ value: Double) -> Void
   func getValueFromJSCallbackAndWait(getValue: @escaping () -> Promise<Double>) throws -> Promise<Double>
   func getValueFromJsCallback(callback: @escaping () -> Promise<String>, andThenCall: @escaping (_ valueFromJs: String) -> Void) throws -> Promise<Void>
@@ -71,12 +71,12 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
   func isCarElectric(car: Car) throws -> Bool
   func getDriver(car: Car) throws -> Person?
   func jsStyleObjectAsParameters(params: JsStyleStruct) throws -> Void
-  func createArrayBuffer() throws -> ArrayBufferHolder
-  func createArrayBufferFromNativeBuffer(copy: Bool) throws -> ArrayBufferHolder
-  func copyBuffer(buffer: ArrayBufferHolder) throws -> ArrayBufferHolder
-  func getBufferLastItem(buffer: ArrayBufferHolder) throws -> Double
-  func setAllValuesTo(buffer: ArrayBufferHolder, value: Double) throws -> Void
-  func createArrayBufferAsync() throws -> Promise<ArrayBufferHolder>
+  func createArrayBuffer() throws -> ArrayBuffer
+  func createArrayBufferFromNativeBuffer(copy: Bool) throws -> ArrayBuffer
+  func copyBuffer(buffer: ArrayBuffer) throws -> ArrayBuffer
+  func getBufferLastItem(buffer: ArrayBuffer) throws -> Double
+  func setAllValuesTo(buffer: ArrayBuffer, value: Double) throws -> Void
+  func createArrayBufferAsync() throws -> Promise<ArrayBuffer>
   func passVariant(either: Variant_String_Double_Bool__Double___String_) throws -> Variant_String_Double
   func getVariantEnum(variant: Variant_Bool_OldEnum) throws -> Variant_Bool_OldEnum
   func getVariantObjects(variant: Variant_Car_Person) throws -> Variant_Car_Person

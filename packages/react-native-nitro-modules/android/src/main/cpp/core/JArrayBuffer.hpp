@@ -48,8 +48,8 @@ public:
   /**
    * Create a new `JArrayBuffer` that wraps the given `HardwareBuffer` from Java.
    */
-  static jni::local_ref<JArrayBuffer::jhybriddata> initHybridHardwareBuffer(jni::alias_ref<jhybridobject>,
-                                                                            [[maybe_unused]] jni::alias_ref<jni::JObject> boxedHardwareBuffer) {
+  static jni::local_ref<JArrayBuffer::jhybriddata>
+  initHybridHardwareBuffer(jni::alias_ref<jhybridobject>, [[maybe_unused]] jni::alias_ref<jni::JObject> boxedHardwareBuffer) {
 #if __ANDROID_API__ >= 26
     // Cast jobject* to AHardwareBuffer*. It has a retain count of 0 which will be retained in `HardwareBufferArrayBuffer(..)`.
     AHardwareBuffer* hardwareBuffer = AHardwareBuffer_fromHardwareBuffer(jni::Environment::current(), boxedHardwareBuffer.get());

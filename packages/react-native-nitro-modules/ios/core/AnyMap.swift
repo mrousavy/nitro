@@ -1,5 +1,5 @@
 //
-//  AnyMapHolder.swift
+//  AnyMap.swift
 //  NitroModules
 //
 //  Created by Marc Rousavy on 20.08.24.
@@ -21,20 +21,20 @@ public indirect enum AnyValue {
   case object(Dictionary<String, AnyValue>)
 
   static func create(_ value: margelo.nitro.AnyValue) -> AnyValue {
-    if margelo.nitro.is_AnyValue_null(value) {
+    if margelo.nitro.AnyMapUtils.is_AnyValue_null(value) {
       return .null
-    } else if margelo.nitro.is_AnyValue_bool(value) {
-      return .bool(margelo.nitro.get_AnyValue_bool(value))
-    } else if margelo.nitro.is_AnyValue_number(value) {
-      return .number(margelo.nitro.get_AnyValue_number(value))
-    } else if margelo.nitro.is_AnyValue_bigint(value) {
-      return .bigint(margelo.nitro.get_AnyValue_bigint(value))
-    } else if margelo.nitro.is_AnyValue_string(value) {
-      return .string(margelo.nitro.get_AnyValue_string(value).toSwift())
-    } else if margelo.nitro.is_AnyValue_AnyArray(value) {
-      return .array(margelo.nitro.get_AnyValue_AnyArray(value).toSwift())
-    } else if margelo.nitro.is_AnyValue_AnyObject(value) {
-      return .object(margelo.nitro.get_AnyValue_AnyObject(value).toSwift())
+    } else if margelo.nitro.AnyMapUtils.is_AnyValue_bool(value) {
+      return .bool(margelo.nitro.AnyMapUtils.get_AnyValue_bool(value))
+    } else if margelo.nitro.AnyMapUtils.is_AnyValue_number(value) {
+      return .number(margelo.nitro.AnyMapUtils.get_AnyValue_number(value))
+    } else if margelo.nitro.AnyMapUtils.is_AnyValue_bigint(value) {
+      return .bigint(margelo.nitro.AnyMapUtils.get_AnyValue_bigint(value))
+    } else if margelo.nitro.AnyMapUtils.is_AnyValue_string(value) {
+      return .string(margelo.nitro.AnyMapUtils.get_AnyValue_string(value).toSwift())
+    } else if margelo.nitro.AnyMapUtils.is_AnyValue_AnyArray(value) {
+      return .array(margelo.nitro.AnyMapUtils.get_AnyValue_AnyArray(value).toSwift())
+    } else if margelo.nitro.AnyMapUtils.is_AnyValue_AnyObject(value) {
+      return .object(margelo.nitro.AnyMapUtils.get_AnyValue_AnyObject(value).toSwift())
     } else {
       fatalError("AnyValue has unknown type!")
     }
@@ -42,10 +42,11 @@ public indirect enum AnyValue {
 }
 
 /**
- * Represents an `AnyMap` that can be passed to Swift.
+ * Represents an `AnyMap`- an untyped map instance.
+ * See C++ `AnyMap.hpp` for more information.
  */
-public final class AnyMapHolder {
-  public let cppPart: margelo.nitro.TSharedMap
+public final class AnyMap {
+  public let cppPart: margelo.nitro.SharedAnyMap
 
   public init() {
     cppPart = margelo.nitro.AnyMap.make()
@@ -55,7 +56,7 @@ public final class AnyMapHolder {
     cppPart = margelo.nitro.AnyMap.make(size)
   }
 
-  public init(withCppPart otherCppPart: margelo.nitro.TSharedMap) {
+  public init(withCppPart otherCppPart: margelo.nitro.SharedAnyMap) {
     cppPart = otherCppPart
   }
 
@@ -279,25 +280,25 @@ extension margelo.nitro.AnyValue {
     }
   }
   static func create() -> margelo.nitro.AnyValue {
-    return margelo.nitro.create_AnyValue()
+    return margelo.nitro.AnyMapUtils.create_AnyValue()
   }
   static func create(_ value: Bool) -> margelo.nitro.AnyValue {
-    return margelo.nitro.create_AnyValue(value)
+    return margelo.nitro.AnyMapUtils.create_AnyValue(value)
   }
   static func create(_ value: Double) -> margelo.nitro.AnyValue {
-    return margelo.nitro.create_AnyValue(value)
+    return margelo.nitro.AnyMapUtils.create_AnyValue(value)
   }
   static func create(_ value: Int64) -> margelo.nitro.AnyValue {
-    return margelo.nitro.create_AnyValue(value)
+    return margelo.nitro.AnyMapUtils.create_AnyValue(value)
   }
   static func create(_ value: String) -> margelo.nitro.AnyValue {
-    return margelo.nitro.create_AnyValue(std.string(value))
+    return margelo.nitro.AnyMapUtils.create_AnyValue(std.string(value))
   }
   static func create(_ value: [AnyValue]) -> margelo.nitro.AnyValue {
-    return margelo.nitro.create_AnyValue(margelo.nitro.AnyArray.create(value))
+    return margelo.nitro.AnyMapUtils.create_AnyValue(margelo.nitro.AnyArray.create(value))
   }
   static func create(_ value: Dictionary<String, AnyValue>) -> margelo.nitro.AnyValue {
-    return margelo.nitro.create_AnyValue(margelo.nitro.AnyObject.create(value))
+    return margelo.nitro.AnyMapUtils.create_AnyValue(margelo.nitro.AnyObject.create(value))
   }
 }
 
@@ -344,12 +345,16 @@ extension margelo.nitro.AnyObject {
   }
 
   func toSwift() -> Dictionary<String, AnyValue> {
-    let keys = margelo.nitro.getAnyObjectKeys(self)
+    let keys = margelo.nitro.AnyMapUtils.getAnyObjectKeys(self)
     var dictionary = Dictionary<String, AnyValue>(minimumCapacity: keys.size())
     for key in keys {
-      let value = margelo.nitro.getAnyObjectValue(self, key)
+      let value = margelo.nitro.AnyMapUtils.getAnyObjectValue(self, key)
       dictionary[String(key)] = AnyValue.create(value)
     }
     return dictionary
   }
 }
+
+
+@available(*, deprecated, renamed: "AnyMap")
+public typealias AnyMapHolder = AnyMap
