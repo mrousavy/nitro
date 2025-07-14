@@ -128,7 +128,7 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
     callback(array)
   }
 
-  func createMap() throws -> AnyMapHolder {
+  func createMap() throws -> AnyMap {
     let map = AnyMapHolder()
     map.setDouble(key: "number", value: numberValue)
     map.setBoolean(key: "bool", value: boolValue)

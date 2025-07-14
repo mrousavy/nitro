@@ -1,5 +1,5 @@
 //
-//  AnyMapHolder.swift
+//  AnyMap.swift
 //  NitroModules
 //
 //  Created by Marc Rousavy on 20.08.24.
@@ -42,9 +42,10 @@ public indirect enum AnyValue {
 }
 
 /**
- * Represents an `AnyMap` that can be passed to Swift.
+ * Represents an `AnyMap`- an untyped map instance.
+ * See C++ `AnyMap.hpp` for more information.
  */
-public final class AnyMapHolder {
+public final class AnyMap {
   public let cppPart: margelo.nitro.TSharedMap
 
   public init() {
@@ -353,3 +354,7 @@ extension margelo.nitro.AnyObject {
     return dictionary
   }
 }
+
+
+@available(*, deprecated, renamed: "AnyMap")
+public typealias AnyMapHolder = AnyMap
