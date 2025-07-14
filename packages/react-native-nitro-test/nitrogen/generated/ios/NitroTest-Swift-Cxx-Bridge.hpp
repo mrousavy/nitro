@@ -645,7 +645,7 @@ namespace margelo::nitro::test::bridge::swift {
   class Func_void_std__shared_ptr_ArrayBuffer__Wrapper final {
   public:
     explicit Func_void_std__shared_ptr_ArrayBuffer__Wrapper(std::function<void(const std::shared_ptr<ArrayBuffer>& /* result */)>&& func): _function(std::make_shared<std::function<void(const std::shared_ptr<ArrayBuffer>& /* result */)>>(std::move(func))) {}
-    inline void call(ArrayBuffer result) const {
+    inline void call(ArrayBufferHolder result) const {
       _function->operator()(result.getArrayBuffer());
     }
   private:
