@@ -363,13 +363,13 @@ using ${name} = ${actualType};
  */
 class ${wrapperName} final {
 public:
-  explicit ${wrapperName}(${actualType}&& func): _function(std::make_shared<${actualType}>(std::move(func))) {}
+  explicit ${wrapperName}(${actualType}&& func): _function(std::make_unique<${actualType}>(std::move(func))) {}
   inline ${callFuncReturnType} call(${callCppFuncParamsSignature.join(', ')}) const {
     ${indent(callCppFuncBody, '    ')}
   }
 private:
-  std::shared_ptr<${actualType}> _function;
-};
+  std::unique_ptr<${actualType}> _function;
+} SWIFT_NONCOPYABLE;
 ${name} create_${name}(void* _Nonnull swiftClosureWrapper);
 inline ${wrapperName} wrap_${name}(${name} value) {
   return ${wrapperName}(std::move(value));
