@@ -18,7 +18,7 @@ export class ArrayBufferType implements Type {
       case 'c++':
         return 'std::shared_ptr<ArrayBuffer>'
       case 'swift':
-        return 'ArrayBufferHolder'
+        return 'ArrayBuffer'
       case 'kotlin':
         return 'ArrayBuffer'
       default:

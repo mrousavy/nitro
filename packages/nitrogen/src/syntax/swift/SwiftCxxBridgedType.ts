@@ -232,7 +232,7 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
       case 'map': {
         switch (language) {
           case 'swift':
-            return 'margelo.nitro.TSharedMap'
+            return 'margelo.nitro.SharedAnyMap'
           default:
             return this.type.getCode(language)
         }
@@ -260,7 +260,7 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
         if (this.isBridgingToDirectCppTarget) {
           return this.type.getCode(language)
         } else {
-          return `ArrayBufferHolder`
+          return `ArrayBuffer`
         }
       case 'string': {
         switch (language) {
@@ -352,7 +352,7 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
         switch (language) {
           case 'swift':
             if (this.isBridgingToDirectCppTarget) {
-              return `ArrayBufferHolder(${cppParameterName})`
+              return `ArrayBuffer(${cppParameterName})`
             } else {
               return cppParameterName
             }
@@ -488,7 +488,7 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
       case 'map': {
         switch (language) {
           case 'swift':
-            return `AnyMapHolder(withCppPart: ${cppParameterName})`
+            return `AnyMap(withCppPart: ${cppParameterName})`
           default:
             return cppParameterName
         }

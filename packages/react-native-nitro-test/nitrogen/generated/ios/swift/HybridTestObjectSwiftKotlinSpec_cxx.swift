@@ -581,9 +581,9 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public final func mapRoundtrip(map: margelo.nitro.TSharedMap) -> bridge.Result_std__shared_ptr_AnyMap__ {
+  public final func mapRoundtrip(map: margelo.nitro.SharedAnyMap) -> bridge.Result_std__shared_ptr_AnyMap__ {
     do {
-      let __result = try self.__implementation.mapRoundtrip(map: AnyMapHolder(withCppPart: map))
+      let __result = try self.__implementation.mapRoundtrip(map: AnyMap(withCppPart: map))
       let __resultCpp = __result.cppPart
       return bridge.create_Result_std__shared_ptr_AnyMap__(__resultCpp)
     } catch (let __error) {
@@ -593,9 +593,9 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public final func getMapKeys(map: margelo.nitro.TSharedMap) -> bridge.Result_std__vector_std__string__ {
+  public final func getMapKeys(map: margelo.nitro.SharedAnyMap) -> bridge.Result_std__vector_std__string__ {
     do {
-      let __result = try self.__implementation.getMapKeys(map: AnyMapHolder(withCppPart: map))
+      let __result = try self.__implementation.getMapKeys(map: AnyMap(withCppPart: map))
       let __resultCpp = { () -> bridge.std__vector_std__string_ in
         var __vector = bridge.create_std__vector_std__string_(__result.count)
         for __item in __result {
@@ -1128,13 +1128,13 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public final func callbackAsyncPromiseBuffer(callback: bridge.Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____) -> bridge.Result_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer____ {
     do {
-      let __result = try self.__implementation.callbackAsyncPromiseBuffer(callback: { () -> () -> Promise<Promise<ArrayBufferHolder>> in
+      let __result = try self.__implementation.callbackAsyncPromiseBuffer(callback: { () -> () -> Promise<Promise<ArrayBuffer>> in
         let __wrappedFunction = bridge.wrap_Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____(callback)
-        return { () -> Promise<Promise<ArrayBufferHolder>> in
+        return { () -> Promise<Promise<ArrayBuffer>> in
           let __result = __wrappedFunction.call()
-          return { () -> Promise<Promise<ArrayBufferHolder>> in
-            let __promise = Promise<Promise<ArrayBufferHolder>>()
-            let __resolver = { (__result: Promise<ArrayBufferHolder>) in
+          return { () -> Promise<Promise<ArrayBuffer>> in
+            let __promise = Promise<Promise<ArrayBuffer>>()
+            let __resolver = { (__result: Promise<ArrayBuffer>) in
               __promise.resolve(withResult: __result)
             }
             let __rejecter = { (__error: Error) in
@@ -1358,7 +1358,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public final func copyBuffer(buffer: ArrayBufferHolder) -> bridge.Result_std__shared_ptr_ArrayBuffer__ {
+  public final func copyBuffer(buffer: ArrayBuffer) -> bridge.Result_std__shared_ptr_ArrayBuffer__ {
     do {
       let __result = try self.__implementation.copyBuffer(buffer: buffer)
       let __resultCpp = __result.getArrayBuffer()
@@ -1370,7 +1370,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public final func getBufferLastItem(buffer: ArrayBufferHolder) -> bridge.Result_double_ {
+  public final func getBufferLastItem(buffer: ArrayBuffer) -> bridge.Result_double_ {
     do {
       let __result = try self.__implementation.getBufferLastItem(buffer: buffer)
       let __resultCpp = __result
@@ -1382,7 +1382,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public final func setAllValuesTo(buffer: ArrayBufferHolder, value: Double) -> bridge.Result_void_ {
+  public final func setAllValuesTo(buffer: ArrayBuffer, value: Double) -> bridge.Result_void_ {
     do {
       try self.__implementation.setAllValuesTo(buffer: buffer, value: value)
       return bridge.create_Result_void_()

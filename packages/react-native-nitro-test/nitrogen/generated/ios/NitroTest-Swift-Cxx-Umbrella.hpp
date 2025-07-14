@@ -66,7 +66,7 @@ namespace margelo::nitro::test { enum class Powertrain; }
 
 // Common C++ types used in Swift
 #include <NitroModules/ArrayBufferHolder.hpp>
-#include <NitroModules/AnyMapHolder.hpp>
+#include <NitroModules/AnyMapUtils.hpp>
 #include <NitroModules/RuntimeError.hpp>
 #include <NitroModules/DateToChronoDate.hpp>
 

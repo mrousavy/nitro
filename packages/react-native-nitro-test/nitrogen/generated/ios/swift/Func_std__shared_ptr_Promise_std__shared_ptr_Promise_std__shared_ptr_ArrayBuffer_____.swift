@@ -8,21 +8,21 @@
 import NitroModules
 
 /**
- * Wraps a Swift `() -> Promise<Promise<ArrayBufferHolder>>` as a class.
+ * Wraps a Swift `() -> Promise<Promise<ArrayBuffer>>` as a class.
  * This class can be used from C++, e.g. to wrap the Swift closure as a `std::function`.
  */
 public final class Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____ {
   public typealias bridge = margelo.nitro.test.bridge.swift
 
-  private let closure: () -> Promise<Promise<ArrayBufferHolder>>
+  private let closure: () -> Promise<Promise<ArrayBuffer>>
 
-  public init(_ closure: @escaping () -> Promise<Promise<ArrayBufferHolder>>) {
+  public init(_ closure: @escaping () -> Promise<Promise<ArrayBuffer>>) {
     self.closure = closure
   }
 
   @inline(__always)
   public func call() -> bridge.std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____ {
-    let __result: Promise<Promise<ArrayBufferHolder>> = self.closure()
+    let __result: Promise<Promise<ArrayBuffer>> = self.closure()
     return { () -> bridge.std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____ in
       let __promise = bridge.create_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____()
       let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____(__promise)

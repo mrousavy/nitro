@@ -202,13 +202,13 @@ The following C++ / JS types are supported out of the box:
   <tr>
     <td><code>{ ... }</code></td>
     <td><code>std::shared_ptr&lt;<a href="./cpp/core/AnyMap.hpp">AnyMap</a>&gt;</code></td>
-    <td><code><a href="./ios/core/AnyMapHolder.swift">AnyMapHolder</a></code></td>
+    <td><code><a href="./ios/core/AnyMap.swift">AnyMap</a></code></td>
     <td><code><a href="./android/src/main/java/com/margelo/nitro/core/AnyMap.kt">AnyMap</a></code></td>
   </tr>
   <tr>
     <td><code>ArrayBuffer</code></td>
     <td><code>std::shared_ptr&lt;<a href="./cpp/core/ArrayBuffer.hpp">ArrayBuffer</a>&gt;</code></td>
-    <td><code><a href="./ios/core/ArrayBufferHolder.swift">ArrayBufferHolder</a></code></td>
+    <td><code><a href="./ios/core/ArrayBuffer.swift">ArrayBuffer</a></code></td>
     <td><code><a href="./android/src/main/java/com/margelo/nitro/core/ArrayBuffer.kt">ArrayBuffer</a></code></td>
   </tr>
   <tr>
