@@ -1226,7 +1226,7 @@ export function getTests(
     createTest('bounceArrayBuffer(native buffer) equals [73]', async () =>
       it(() => {
         // 1. Create js buffer where value[73] is 4
-        const original = testObject.createArrayBufferFromNativeBuffer(false)
+        const original = testObject.createArrayBuffer()
         const originalArray = new Uint8Array(original)
         originalArray[73] = 4
         // 2. Do JS -> native -> JS roundtrip
