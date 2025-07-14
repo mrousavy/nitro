@@ -53,6 +53,10 @@ const config: Config = {
       'vercel-analytics',
       { },
     ],
+    [
+      "@signalwire/docusaurus-plugin-llms-txt",
+      { },
+    ],
   ],
 
   markdown: {
