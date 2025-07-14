@@ -31,8 +31,7 @@ using namespace margelo;
 }
 RCT_EXPORT_MODULE(NitroModules)
 
-- (void)installJSIBindingsWithRuntime:(jsi::Runtime &)runtime
-                          callInvoker:(const std::shared_ptr<react::CallInvoker> &)callInvoker {
+- (void)installJSIBindingsWithRuntime:(jsi::Runtime&)runtime callInvoker:(const std::shared_ptr<react::CallInvoker>&)callInvoker {
   // 1. Wrap CallInvoker as Dispatcher
   auto dispatcher = std::make_shared<nitro::CallInvokerDispatcher>(callInvoker);
 
