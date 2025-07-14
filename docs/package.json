@@ -31,7 +31,7 @@
     "@docusaurus/module-type-aliases": "3.8.1",
     "@docusaurus/tsconfig": "3.8.1",
     "@docusaurus/types": "3.8.1",
-    "@signalwire/docusaurus-plugin-llms-txt": "^1.2.1",
+    "docusaurus-plugin-llms": "^0.1.5",
     "typescript": "~5.7.2"
   },
   "browserslist": {

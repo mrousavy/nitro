@@ -54,8 +54,11 @@ const config: Config = {
       { },
     ],
     [
-      "@signalwire/docusaurus-plugin-llms-txt",
-      { },
+      'docusaurus-plugin-llms',
+      {
+        generateLLMsTxt: true,
+        generateLLMsFullTxt: true,
+      },
     ],
   ],
 
