@@ -27,6 +27,12 @@ namespace margelo::nitro {
 
 using namespace facebook;
 
+struct MutableBufferNativeState final: public jsi::NativeState {
+public:
+  explicit MutableBufferNativeState(const std::shared_ptr<jsi::MutableBuffer>& buffer): buffer(buffer) {}
+  std::shared_ptr<jsi::MutableBuffer> buffer;
+};
+
 // MutableBuffer <> ArrayBuffer
 template <typename T>
 struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_v<T, jsi::MutableBuffer>>> final {
@@ -47,6 +53,15 @@ struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_v<T, jsi::MutableBuffer
                                   "Are you maybe passing a TypedArray (e.g. Uint8Array)? Try to pass it's `.buffer` value.");
     }
 #endif
+    if (object.hasNativeState<MutableBufferNativeState>(runtime)) {
+      // fast path - the jsi::Object has a jsi::NativeState which holds it's native jsi::MutableBuffer!
+      auto mutableBufferHolder = object.getNativeState<MutableBufferNativeState>(runtime);
+      auto mutableBuffer = mutableBufferHolder->buffer;
+      auto arrayBuffer = std::dynamic_pointer_cast<ArrayBuffer>(mutableBuffer);
+      if (arrayBuffer != nullptr) [[likely]] {
+        return arrayBuffer;
+      }
+    }
 
     JSICacheReference cache = JSICache::getOrCreateCache(runtime);
     auto borrowingArrayBuffer = cache.makeShared(object.getArrayBuffer(runtime));
@@ -54,7 +69,13 @@ struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_v<T, jsi::MutableBuffer
     return std::make_shared<JSArrayBuffer>(runtime, borrowingArrayBuffer);
   }
   static inline jsi::Value toJSI(jsi::Runtime& runtime, const std::shared_ptr<jsi::MutableBuffer>& buffer) {
-    return jsi::ArrayBuffer(runtime, buffer);
+    // 1. Create jsi::ArrayBuffer
+    jsi::ArrayBuffer arrayBuffer(runtime, buffer);
+    // 2. Wrap jsi::MutableBuffer in jsi::NativeState holder & attach it
+    auto mutableBufferHolder = std::make_shared<MutableBufferNativeState>(buffer);
+    arrayBuffer.setNativeState(runtime, mutableBufferHolder);
+    // 3. Return jsi::ArrayBuffer (with jsi::NativeState) to JS
+    return arrayBuffer;
   }
   static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
     if (value.isObject()) {
