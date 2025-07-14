@@ -77,6 +77,7 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
   func getBufferLastItem(buffer: ArrayBuffer) throws -> Double
   func setAllValuesTo(buffer: ArrayBuffer, value: Double) throws -> Void
   func createArrayBufferAsync() throws -> Promise<ArrayBuffer>
+  func bounceArrayBuffer(buffer: ArrayBuffer) throws -> ArrayBuffer
   func passVariant(either: Variant_String_Double_Bool__Double___String_) throws -> Variant_String_Double
   func getVariantEnum(variant: Variant_Bool_OldEnum) throws -> Variant_Bool_OldEnum
   func getVariantObjects(variant: Variant_Car_Person) throws -> Variant_Car_Person

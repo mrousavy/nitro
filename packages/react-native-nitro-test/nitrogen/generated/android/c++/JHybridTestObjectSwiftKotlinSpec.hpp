@@ -127,6 +127,7 @@ namespace margelo::nitro::test {
     double getBufferLastItem(const std::shared_ptr<ArrayBuffer>& buffer) override;
     void setAllValuesTo(const std::shared_ptr<ArrayBuffer>& buffer, double value) override;
     std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>> createArrayBufferAsync() override;
+    std::shared_ptr<ArrayBuffer> bounceArrayBuffer(const std::shared_ptr<ArrayBuffer>& buffer) override;
     std::variant<std::string, double> passVariant(const std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>>& either) override;
     std::variant<bool, OldEnum> getVariantEnum(const std::variant<bool, OldEnum>& variant) override;
     std::variant<Car, Person> getVariantObjects(const std::variant<Car, Person>& variant) override;

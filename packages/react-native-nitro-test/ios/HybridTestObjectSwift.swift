@@ -322,9 +322,13 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
   func createArrayBufferAsync() throws -> Promise<ArrayBufferHolder> {
     return Promise.async { try self.createArrayBuffer() }
   }
-
+  
   func copyBuffer(buffer: ArrayBufferHolder) throws -> ArrayBufferHolder {
     return ArrayBufferHolder.copy(of: buffer)
+  }
+  
+  func bounceArrayBuffer(buffer: ArrayBuffer) throws -> ArrayBuffer {
+    return buffer
   }
 
   func getBufferLastItem(buffer: ArrayBufferHolder) throws -> Double {

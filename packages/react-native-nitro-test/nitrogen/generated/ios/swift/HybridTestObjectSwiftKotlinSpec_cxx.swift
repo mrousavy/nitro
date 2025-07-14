@@ -1412,6 +1412,18 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
+  public final func bounceArrayBuffer(buffer: ArrayBufferHolder) -> bridge.Result_std__shared_ptr_ArrayBuffer__ {
+    do {
+      let __result = try self.__implementation.bounceArrayBuffer(buffer: buffer)
+      let __resultCpp = __result.getArrayBuffer()
+      return bridge.create_Result_std__shared_ptr_ArrayBuffer__(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__shared_ptr_ArrayBuffer__(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
   public final func passVariant(either: bridge.std__variant_std__string__double__bool__std__vector_double___std__vector_std__string__) -> bridge.Result_std__variant_std__string__double__ {
     do {
       let __result = try self.__implementation.passVariant(either: { () -> Variant_String_Double_Bool__Double___String_ in

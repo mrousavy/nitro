@@ -435,6 +435,10 @@ std::shared_ptr<ArrayBuffer> HybridTestObjectCpp::copyBuffer(const std::shared_p
   return ArrayBuffer::copy(buffer);
 }
 
+std::shared_ptr<ArrayBuffer> HybridTestObjectCpp::bounceArrayBuffer(const std::shared_ptr<ArrayBuffer>& buffer) {
+  return buffer;
+}
+
 double HybridTestObjectCpp::getBufferLastItem(const std::shared_ptr<ArrayBuffer>& buffer) {
   size_t size = buffer->size();
   if (size == 0) {
