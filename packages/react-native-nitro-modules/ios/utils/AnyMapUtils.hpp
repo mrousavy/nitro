@@ -15,7 +15,7 @@ using SharedAnyMap = std::shared_ptr<AnyMap>;
 
 // TODO: Remove TSharedMap.
 /// @deprecated
-struct [[deprecated("Use SharedAnyMap instead. Upgrade to latest Nitro!")]] TSharedMap : public SharedAnyMap {};
+using TSharedMap = SharedAnyMap;
 
 namespace AnyMapUtils {
 
