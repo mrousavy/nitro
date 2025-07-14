@@ -54,11 +54,10 @@ struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_v<T, jsi::MutableBuffer
     }
 #endif
     if (object.hasNativeState<MutableBufferNativeState>(runtime)) {
-      // fast path - the jsi::Object has a jsi::NativeState which holds it's native jsi::MutableBuffer!
+      // It already is a NativeBuffer! Let's get the jsi::MutableBuffer from the jsi::NativeState...
       auto mutableBufferHolder = object.getNativeState<MutableBufferNativeState>(runtime);
       auto mutableBuffer = mutableBufferHolder->buffer;
-      auto arrayBuffer = std::dynamic_pointer_cast<ArrayBuffer>(mutableBuffer);
-      if (arrayBuffer != nullptr) [[likely]] {
+      if (auto arrayBuffer = std::dynamic_pointer_cast<ArrayBuffer>(mutableBuffer)) [[likely]] {
         return arrayBuffer;
       }
     }
@@ -69,6 +68,14 @@ struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_v<T, jsi::MutableBuffer
     return std::make_shared<JSArrayBuffer>(runtime, borrowingArrayBuffer);
   }
   static inline jsi::Value toJSI(jsi::Runtime& runtime, const std::shared_ptr<jsi::MutableBuffer>& buffer) {
+    if (auto jsBuffer = std::dynamic_pointer_cast<JSArrayBuffer>(buffer)) {
+      // It already is a JSBuffer! Let's try to just get it's existing jsi::Value...
+      auto jsValue = jsBuffer->getJSReference();
+      if (jsValue != nullptr) [[likely]] {
+        return jsi::Value(runtime, *jsValue);
+      }
+    }
+    
     // 1. Create jsi::ArrayBuffer
     jsi::ArrayBuffer arrayBuffer(runtime, buffer);
     // 2. Wrap jsi::MutableBuffer in jsi::NativeState holder & attach it

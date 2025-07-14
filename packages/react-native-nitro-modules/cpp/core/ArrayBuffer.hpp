@@ -137,6 +137,11 @@ public:
    * Returns `false` for JS-based ArrayBuffers.
    */
   bool isOwner() const noexcept override;
+  
+public:
+  BorrowingReference<jsi::ArrayBuffer> getJSReference() const noexcept {
+    return _jsReference;
+  }
 
 private:
   jsi::Runtime& _runtime;
