@@ -27,9 +27,9 @@ namespace margelo::nitro {
 
 using namespace facebook;
 
-struct MutableBufferNativeState final: public jsi::NativeState {
+struct MutableBufferNativeState final : public jsi::NativeState {
 public:
-  explicit MutableBufferNativeState(const std::shared_ptr<jsi::MutableBuffer>& buffer): buffer(buffer) {}
+  explicit MutableBufferNativeState(const std::shared_ptr<jsi::MutableBuffer>& buffer) : buffer(buffer) {}
   std::shared_ptr<jsi::MutableBuffer> buffer;
 };
 
@@ -75,7 +75,7 @@ struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_v<T, jsi::MutableBuffer
         return jsi::Value(runtime, *jsValue);
       }
     }
-    
+
     // 1. Create jsi::ArrayBuffer
     jsi::ArrayBuffer arrayBuffer(runtime, buffer);
     // 2. Wrap jsi::MutableBuffer in jsi::NativeState holder & attach it
