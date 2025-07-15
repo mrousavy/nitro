@@ -3,6 +3,9 @@ import path from 'path'
 import type { SwiftCxxHelper } from './syntax/swift/SwiftCxxTypeHelper.js'
 import type { Type } from 'ts-morph'
 import { isNotDuplicate } from './syntax/helpers.js'
+import pkg from '../package.json' with { type: 'json' }
+
+export const NITROGEN_VERSION = pkg.version
 
 export function capitalizeName(name: string): string {
   if (name.length === 0) return name

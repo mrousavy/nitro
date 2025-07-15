@@ -14,6 +14,7 @@ import {
   errorToString,
   filterDuplicateFiles,
   indent,
+  NITROGEN_VERSION,
 } from './utils.js'
 import { writeFile } from './writeFile.js'
 import chalk from 'chalk'
@@ -63,7 +64,7 @@ export async function runNitrogen({
   // Loop through all source files to log them
   Logger.info(
     chalk.reset(
-      `🚀  Nitrogen runs at ${chalk.underline(prettifyDirectory(baseDirectory))}`
+      `🚀  Nitrogen ${chalk.bold(NITROGEN_VERSION)} runs at ${chalk.underline(prettifyDirectory(baseDirectory))}`
     )
   )
   for (const dir of project.getDirectories()) {

@@ -96,7 +96,7 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
     }
   }
 
-  func callbackAsyncPromiseBuffer(callback: @escaping (() -> Promise<Promise<ArrayBufferHolder>>)) throws -> Promise<ArrayBufferHolder> {
+  func callbackAsyncPromiseBuffer(callback: @escaping (() -> Promise<Promise<ArrayBuffer>>)) throws -> Promise<ArrayBuffer> {
     return Promise.async {
       let promise = try await callback().await()
       let result = try await promise.await()
@@ -129,7 +129,7 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
   }
 
   func createMap() throws -> AnyMap {
-    let map = AnyMapHolder()
+    let map = AnyMap()
     map.setDouble(key: "number", value: numberValue)
     map.setBoolean(key: "bool", value: boolValue)
     map.setString(key: "string", value: stringValue)
@@ -148,11 +148,11 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
     return map
   }
 
-  func mapRoundtrip(map: AnyMapHolder) throws -> AnyMapHolder {
+  func mapRoundtrip(map: AnyMap) throws -> AnyMap {
     return map
   }
 
-  func getMapKeys(map: AnyMapHolder) throws -> [String] {
+  func getMapKeys(map: AnyMap) throws -> [String] {
     return map.getAllKeys()
   }
 
@@ -305,38 +305,38 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
     params.onChanged(params.value)
   }
 
-  func createArrayBufferFromNativeBuffer(copy: Bool) throws -> ArrayBufferHolder {
+  func createArrayBufferFromNativeBuffer(copy: Bool) throws -> ArrayBuffer {
     let data = Data(count: 1024 * 1024 * 10) // 10 MB
     if copy {
-      return try ArrayBufferHolder.copy(data: data)
+      return try ArrayBuffer.copy(data: data)
     } else {
       // TODO: `Data` cannot be safely wrapped yet on iOS.
-      return try ArrayBufferHolder.copy(data: data)
+      return try ArrayBuffer.copy(data: data)
     }
   }
 
-  func createArrayBuffer() throws -> ArrayBufferHolder {
-    return ArrayBufferHolder.allocate(size: 1024 * 1024 * 10) // 10 MB
+  func createArrayBuffer() throws -> ArrayBuffer {
+    return ArrayBuffer.allocate(size: 1024 * 1024 * 10) // 10 MB
   }
 
-  func createArrayBufferAsync() throws -> Promise<ArrayBufferHolder> {
+  func createArrayBufferAsync() throws -> Promise<ArrayBuffer> {
     return Promise.async { try self.createArrayBuffer() }
   }
   
-  func copyBuffer(buffer: ArrayBufferHolder) throws -> ArrayBufferHolder {
-    return ArrayBufferHolder.copy(of: buffer)
+  func copyBuffer(buffer: ArrayBuffer) throws -> ArrayBuffer {
+    return ArrayBuffer.copy(of: buffer)
   }
   
   func bounceArrayBuffer(buffer: ArrayBuffer) throws -> ArrayBuffer {
     return buffer
   }
 
-  func getBufferLastItem(buffer: ArrayBufferHolder) throws -> Double {
+  func getBufferLastItem(buffer: ArrayBuffer) throws -> Double {
     let lastByte = buffer.data.advanced(by: buffer.size - 1)
     return Double(lastByte.pointee)
   }
 
-  func setAllValuesTo(buffer: ArrayBufferHolder, value: Double) throws {
+  func setAllValuesTo(buffer: ArrayBuffer, value: Double) throws {
     memset(buffer.data, Int32(value), buffer.size)
   }
 

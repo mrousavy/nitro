@@ -9,6 +9,7 @@ import { runNitrogen } from './nitrogen.js'
 import { promises as fs } from 'fs'
 import { isValidLogLevel, setLogLevel } from './Logger.js'
 import { initNewNitroModule } from './init.js'
+import { NITROGEN_VERSION } from './utils.js'
 
 const commandName = 'nitro-codegen'
 
@@ -84,7 +85,8 @@ await yargs(hideBin(process.argv))
     `Usage: ${chalk.bold('$0 [options]')}\n` +
       `$0 is a code-generater for Nitro Modules (${chalk.underline('https://github.com/mrousavy/nitro')})\n` +
       `It converts all TypeScript specs found in ${chalk.underline('**/*.nitro.ts')} to C++, Swift or Kotlin specs.\n` +
-      `Each library/module must have a ${chalk.underline('nitro.json')} configuration file in it's root directory.`
+      `Each library/module must have a ${chalk.underline('nitro.json')} configuration file in it's root directory.\n` +
+      `$Nitrogen Version: ${chalk.bold(NITROGEN_VERSION)}`
   )
   .help()
   .strict()
