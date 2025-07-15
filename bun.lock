@@ -61,7 +61,7 @@
         "react-native": "0.80.1",
         "react-native-nitro-modules": "*",
         "react-native-nitro-test": "*",
-        "react-native-safe-area-context": "^5.5.1",
+        "react-native-safe-area-context": "^5.5.2",
         "react-native-screens": "^4.11.1",
       },
       "devDependencies": {
@@ -3131,7 +3131,7 @@
 
     "react-native-nitro-test": ["react-native-nitro-test@workspace:packages/react-native-nitro-test"],
 
-    "react-native-safe-area-context": ["react-native-safe-area-context@5.5.1", "", { "peerDependencies": { "react": "*", "react-native": "*" } }, "sha512-WYxV+mm7SWuapVWxq2071lkQlDUXjSwcu7Cc2bUtNcF80/Bl0WnuWAZ8+tO46M38PclMrQIIgbv83BvDHJNQ5g=="],
+    "react-native-safe-area-context": ["react-native-safe-area-context@5.5.2", "", { "peerDependencies": { "react": "*", "react-native": "*" } }, "sha512-t4YVbHa9uAGf+pHMabGrb0uHrD5ogAusSu842oikJ3YKXcYp6iB4PTGl0EZNkUIR3pCnw/CXKn42OCfhsS0JIw=="],
 
     "react-native-screens": ["react-native-screens@4.11.1", "", { "dependencies": { "react-freeze": "^1.0.0", "react-native-is-edge-to-edge": "^1.1.7", "warn-once": "^0.1.0" }, "peerDependencies": { "react": "*", "react-native": "*" } }, "sha512-F0zOzRVa3ptZfLpD0J8ROdo+y1fEPw+VBFq1MTY/iyDu08al7qFUO5hLMd+EYMda5VXGaTFCa8q7bOppUszhJw=="],
 

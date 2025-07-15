@@ -25,7 +25,7 @@
     "react-native": "0.80.1",
     "react-native-nitro-test": "*",
     "react-native-nitro-modules": "*",
-    "react-native-safe-area-context": "^5.5.1",
+    "react-native-safe-area-context": "^5.5.2",
     "react-native-screens": "^4.11.1"
   },
   "devDependencies": {
