@@ -159,6 +159,7 @@ interface SharedTestObjectProps {
   getBufferLastItem(buffer: ArrayBuffer): number
   setAllValuesTo(buffer: ArrayBuffer, value: number): void
   createArrayBufferAsync(): Promise<ArrayBuffer>
+  bounceArrayBuffer(buffer: ArrayBuffer): ArrayBuffer
 
   // Complex variants
   passVariant(

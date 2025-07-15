@@ -777,6 +777,11 @@ namespace margelo::nitro::test {
       return __promise;
     }();
   }
+  std::shared_ptr<ArrayBuffer> JHybridTestObjectSwiftKotlinSpec::bounceArrayBuffer(const std::shared_ptr<ArrayBuffer>& buffer) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JArrayBuffer::javaobject>(jni::alias_ref<JArrayBuffer::javaobject> /* buffer */)>("bounceArrayBuffer");
+    auto __result = method(_javaPart, JArrayBuffer::wrap(buffer));
+    return __result->cthis()->getArrayBuffer();
+  }
   std::variant<std::string, double> JHybridTestObjectSwiftKotlinSpec::passVariant(const std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>>& either) {
     static const auto method = javaClassStatic()->getMethod<jni::local_ref<JVariant_String_Double>(jni::alias_ref<JVariant_String_Double_Boolean_DoubleArray_Array_String_> /* either */)>("passVariant");
     auto __result = method(_javaPart, JVariant_String_Double_Boolean_DoubleArray_Array_String_::fromCpp(either));

@@ -138,6 +138,11 @@ public:
    */
   bool isOwner() const noexcept override;
 
+public:
+  BorrowingReference<jsi::ArrayBuffer> getJSReference() const noexcept {
+    return _jsReference;
+  }
+
 private:
   jsi::Runtime& _runtime;
   BorrowingReference<jsi::ArrayBuffer> _jsReference;

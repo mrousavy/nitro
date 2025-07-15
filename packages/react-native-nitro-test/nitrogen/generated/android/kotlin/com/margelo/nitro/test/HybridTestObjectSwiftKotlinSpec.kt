@@ -385,6 +385,10 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
+  abstract fun bounceArrayBuffer(buffer: ArrayBuffer): ArrayBuffer
+  
+  @DoNotStrip
+  @Keep
   abstract fun passVariant(either: Variant_String_Double_Boolean_DoubleArray_Array_String_): Variant_String_Double
   
   @DoNotStrip

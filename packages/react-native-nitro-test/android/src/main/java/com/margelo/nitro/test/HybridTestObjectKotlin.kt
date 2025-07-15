@@ -332,6 +332,10 @@ class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
         return ArrayBuffer.copy(buffer)
     }
 
+    override fun bounceArrayBuffer(buffer: ArrayBuffer): ArrayBuffer {
+        return buffer
+    }
+
     override fun createChild(): HybridChildSpec {
         return HybridChild()
     }

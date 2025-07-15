@@ -96,6 +96,7 @@ namespace margelo::nitro::test {
       prototype.registerHybridMethod("getBufferLastItem", &HybridTestObjectCppSpec::getBufferLastItem);
       prototype.registerHybridMethod("setAllValuesTo", &HybridTestObjectCppSpec::setAllValuesTo);
       prototype.registerHybridMethod("createArrayBufferAsync", &HybridTestObjectCppSpec::createArrayBufferAsync);
+      prototype.registerHybridMethod("bounceArrayBuffer", &HybridTestObjectCppSpec::bounceArrayBuffer);
       prototype.registerHybridMethod("passVariant", &HybridTestObjectCppSpec::passVariant);
       prototype.registerHybridMethod("getVariantEnum", &HybridTestObjectCppSpec::getVariantEnum);
       prototype.registerHybridMethod("getVariantObjects", &HybridTestObjectCppSpec::getVariantObjects);
