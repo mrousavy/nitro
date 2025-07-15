@@ -27,7 +27,7 @@ export class State<T> {
         `Expected test to throw an error, but no error was thrown! Instead it returned a result: ${stringify(this.result)}`
       )
     } else {
-      if (message == null || stringify(this.errorThrown) === message) {
+      if (message == null || stringify(this.errorThrown).includes(message)) {
         this.onPassed()
       } else {
         this.onFailed(

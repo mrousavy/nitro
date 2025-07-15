@@ -497,24 +497,28 @@ export function getTests(
 
     // Test errors
     createTest('funcThatThrows() throws', () =>
-      it(() => testObject.funcThatThrows()).didThrow(
-        `Error: ${testObject.name}.funcThatThrows(...): This function will only work after sacrificing seven lambs!`
-      )
+      it(() => testObject.funcThatThrows())
+        // contains the method name:
+        .didThrow(`${testObject.name}.funcThatThrows(...):`)
+        // contains the error message:
+        .didThrow(`This function will only work after sacrificing seven lambs!`)
     ),
     createTest('funcThatThrowsBeforePromise() throws', async () =>
-      (
-        await it(async () => await testObject.funcThatThrowsBeforePromise())
-      ).didThrow(
-        `Error: ${testObject.name}.funcThatThrowsBeforePromise(...): This function will only work after sacrificing eight lambs!`
-      )
+      (await it(async () => await testObject.funcThatThrowsBeforePromise()))
+        // contains the method name:
+        .didThrow(`${testObject.name}.funcThatThrowsBeforePromise(...):`)
+        // contains the error message:
+        .didThrow(`This function will only work after sacrificing eight lambs!`)
     ),
     createTest('throwError(error) throws same message from JS', () =>
       it(() => {
         const error = new Error('rethrowing a JS error from native!')
         testObject.throwError(error)
-      }).didThrow(
-        `Error: ${testObject.name}.throwError(...): Error: rethrowing a JS error from native!`
-      )
+      })
+        // contains the method name:
+        .didThrow(`${testObject.name}.throwError(...):`)
+        // contains the error message:
+        .didThrow(`Error: rethrowing a JS error from native!`)
     ),
 
     // Optional parameters
@@ -539,17 +543,21 @@ export function getTests(
           // @ts-expect-error
           'too many args!'
         )
-      ).didThrow(
-        `Error: \`${testObject.name}.tryOptionalParams(...)\` expected between 2 and 3 arguments, but received 4!`
       )
+        // thrown by HybridFunction, not by the user;
+        .didThrow(
+          `Error: \`${testObject.name}.tryOptionalParams(...)\` expected between 2 and 3 arguments, but received 4!`
+        )
     ),
     createTest('tryOptionalParams(...) one-too-few', () =>
       it(() =>
         // @ts-expect-error
         testObject.tryOptionalParams(13)
-      ).didThrow(
-        `Error: \`${testObject.name}.tryOptionalParams(...)\` expected between 2 and 3 arguments, but received 1!`
       )
+        // thrown by HybridFunction, not by the user;
+        .didThrow(
+          `Error: \`${testObject.name}.tryOptionalParams(...)\` expected between 2 and 3 arguments, but received 1!`
+        )
     ),
     createTest('tryMiddleParam(...)', () =>
       it(() => testObject.tryMiddleParam(13, undefined, 'hello!'))

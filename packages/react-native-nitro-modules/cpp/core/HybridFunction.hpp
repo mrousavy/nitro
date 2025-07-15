@@ -109,17 +109,6 @@ public:
         std::string funcName = getHybridFuncFullName<THybrid>(kind, name, hybridInstance.get());
         std::string message = exception.what();
         throw jsi::JSError(runtime, funcName + ": " + message);
-#ifdef ANDROID
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wexceptions"
-        // Workaround for https://github.com/mrousavy/nitro/issues/382
-      } catch (const std::runtime_error& exception) {
-        // Some exception was thrown - add method name information and re-throw as `JSError`.
-        std::string funcName = getHybridFuncFullName<THybrid>(kind, name, hybridInstance.get());
-        std::string message = exception.what();
-        throw jsi::JSError(runtime, funcName + ": " + message);
-#pragma clang diagnostic pop
-#endif
       } catch (...) {
         // Some unknown exception was thrown - add method name information and re-throw as `JSError`.
         std::string funcName = getHybridFuncFullName<THybrid>(kind, name, hybridInstance.get());
