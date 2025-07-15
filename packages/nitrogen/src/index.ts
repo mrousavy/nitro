@@ -86,7 +86,7 @@ await yargs(hideBin(process.argv))
       `$0 is a code-generater for Nitro Modules (${chalk.underline('https://github.com/mrousavy/nitro')})\n` +
       `It converts all TypeScript specs found in ${chalk.underline('**/*.nitro.ts')} to C++, Swift or Kotlin specs.\n` +
       `Each library/module must have a ${chalk.underline('nitro.json')} configuration file in it's root directory.\n` +
-      `${chalk.dim(`Nitrogen Version: ${NITROGEN_VERSION}`)}`
+      `$Nitrogen Version: ${chalk.bold(NITROGEN_VERSION)}`
   )
   .help()
   .strict()

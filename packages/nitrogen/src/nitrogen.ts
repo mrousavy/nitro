@@ -64,7 +64,7 @@ export async function runNitrogen({
   // Loop through all source files to log them
   Logger.info(
     chalk.reset(
-      `🚀  Nitrogen ${chalk.dim(NITROGEN_VERSION)} runs at ${chalk.underline(prettifyDirectory(baseDirectory))}`
+      `🚀  Nitrogen ${chalk.bold(NITROGEN_VERSION)} runs at ${chalk.underline(prettifyDirectory(baseDirectory))}`
     )
   )
   for (const dir of project.getDirectories()) {
