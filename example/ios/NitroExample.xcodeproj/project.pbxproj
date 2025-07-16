@@ -409,7 +409,7 @@
 				PRODUCT_NAME = NitroExample;
 				SWIFT_OBJC_INTEROP_MODE = objc;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -439,7 +439,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.mrousavy.nitro.example;
 				PRODUCT_NAME = NitroExample;
 				SWIFT_OBJC_INTEROP_MODE = objc;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;

@@ -20,6 +20,7 @@ Pod::Spec.new do |s|
     :tvos => 13.4,
   }
 
+  s.swift_version = '6.0'
   s.source_files = [
     # Shared C++ codebase
     "cpp/**/*.{h,hpp}",
