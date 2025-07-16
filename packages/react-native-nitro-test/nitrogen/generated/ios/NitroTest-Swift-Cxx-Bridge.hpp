@@ -493,18 +493,18 @@ namespace margelo::nitro::test::bridge::swift {
   /**
    * Specialized version of `std::function<void(const Car&)>`.
    */
-  using Func_void_Car = std::function<void(const Car& /* result */)>;
+  using Func_void_Car = std::function<void(Car /* result */)>;
   /**
    * Wrapper class for a `std::function<void(const Car& / * result * /)>`, this can be used from Swift.
    */
   class Func_void_Car_Wrapper final {
   public:
-    explicit Func_void_Car_Wrapper(std::function<void(const Car& /* result */)>&& func): _function(std::make_unique<std::function<void(const Car& /* result */)>>(std::move(func))) {}
+    explicit Func_void_Car_Wrapper(std::function<void(Car /* result */)>&& func): _function(std::make_unique<std::function<void(Car /* result */)>>(std::move(func))) {}
     inline void call(Car result) const {
       _function->operator()(result);
     }
   private:
-    std::unique_ptr<std::function<void(const Car& /* result */)>> _function;
+    std::unique_ptr<std::function<void(Car /* result */)>> _function;
   } SWIFT_NONCOPYABLE;
   Func_void_Car create_Func_void_Car(void* _Nonnull swiftClosureWrapper);
   inline Func_void_Car_Wrapper wrap_Func_void_Car(Func_void_Car value) {
