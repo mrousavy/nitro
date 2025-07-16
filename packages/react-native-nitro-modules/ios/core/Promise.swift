@@ -17,7 +17,7 @@ import Foundation
  * - `Promise<T>.rejected(withError:)` - Creates a new already rejected Promise.
  * - `Promise<T>()` - Creates a new Promise with fully manual control over the `resolve(..)`/`reject(..)` functions.
  */
-public final actor Promise<T>: Sendable {
+public final actor Promise<T> {
   private enum State {
     case result(T)
     case error(Error)
@@ -34,7 +34,6 @@ public final actor Promise<T>: Sendable {
   public init() {
     state = nil
   }
-  
   public init(resolved result: T) {
     state = .result(result)
   }
@@ -118,9 +117,9 @@ extension Promise {
     queue.async {
       do {
         let result = try run()
-        promise.resolve(withResult: result)
+        Task { await promise.resolve(withResult: result) }
       } catch {
-        promise.reject(withError: error)
+        Task { await promise.reject(withError: error) }
       }
     }
     return promise
