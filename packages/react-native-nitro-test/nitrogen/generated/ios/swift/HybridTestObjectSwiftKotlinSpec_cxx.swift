@@ -1186,31 +1186,23 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public final func callbacksPutPersonInCar(first: bridge.Func_void_Person, second: bridge.Func_void_Car) -> bridge.Result_std__shared_ptr_Promise_Car___ {
+  public final func callbackBothStructs(first: bridge.Func_void_Person, second: bridge.Func_void) -> bridge.Result_void_ {
     do {
-      let __result = try self.__implementation.callbacksPutPersonInCar(first: { () -> (Person) -> Void in
+      try self.__implementation.callbackBothStructs(first: { () -> (Person) -> Void in
         let __wrappedFunction = bridge.wrap_Func_void_Person(first)
         return { (__person: Person) -> Void in
           __wrappedFunction.call(__person)
         }
-      }(), second: { () -> (Car) -> Void in
-        let __wrappedFunction = bridge.wrap_Func_void_Car(second)
-        return { (__car: Car) -> Void in
-          __wrappedFunction.call(__car)
+      }(), second: { () -> () -> Void in
+        let __wrappedFunction = bridge.wrap_Func_void(second)
+        return { () -> Void in
+          __wrappedFunction.call()
         }
       }())
-      let __resultCpp = { () -> bridge.std__shared_ptr_Promise_Car__ in
-        let __promise = bridge.create_std__shared_ptr_Promise_Car__()
-        let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_Car__(__promise)
-        __result
-          .then({ __result in __promiseHolder.resolve(__result) })
-          .catch({ __error in __promiseHolder.reject(__error.toCpp()) })
-        return __promise
-      }()
-      return bridge.create_Result_std__shared_ptr_Promise_Car___(__resultCpp)
+      return bridge.create_Result_void_()
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
-      return bridge.create_Result_std__shared_ptr_Promise_Car___(__exceptionPtr)
+      return bridge.create_Result_void_(__exceptionPtr)
     }
   }
   

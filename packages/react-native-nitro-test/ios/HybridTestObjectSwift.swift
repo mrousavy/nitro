@@ -107,6 +107,13 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
   func getComplexCallback() throws -> (Double) -> Void {
     return { value in print("Callback called with \(value).") }
   }
+  
+  func callbackBothStructs(first: @escaping (Person) -> Void, second: @escaping () -> Void) throws -> Void {
+    let person = Person(name: "Marc", age: 25)
+    
+    first(person)
+    second()
+  }
 
   func bounceStrings(array: [String]) throws -> [String] {
     return array

@@ -400,6 +400,14 @@ HybridTestObjectCpp::getValueFromJsCallback(const std::function<std::shared_ptr<
   });
 }
 
+
+void HybridTestObjectCpp::callbackBothStructs(const std::function<void(const Person& /* person */)>& first,
+                                              const std::function<void()>& second) {
+  Person person("Marc", 25);
+  first(person);
+  second();
+}
+
 Car HybridTestObjectCpp::getCar() {
   return Car(2018, "Lamborghini", "Huracan Performante", 640, Powertrain::GAS, std::nullopt, true);
 }
