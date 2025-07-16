@@ -1044,6 +1044,32 @@ export function getTests(
         .didNotThrow()
         .didReturn('function')
     ),
+    createTest('Pass two callbacks that receive native structs', async () =>
+      (
+        await it(async () => {
+          return timeoutedPromise<boolean>(async (complete) => {
+            let car: Car | undefined
+            let person: Person | undefined
+            const maybeComplete = () => {
+              if (car != null && person != null) {
+                complete(true)
+              }
+            }
+            testObject.callbackBothStructs(
+              (p) => {
+                person = p
+                maybeComplete()
+              },
+              () => {
+                maybeComplete()
+              }
+            )
+          })
+        })
+      )
+        .didNotThrow()
+        .equals(true)
+    ),
 
     // Objects
     createTest('getCar()', () =>
