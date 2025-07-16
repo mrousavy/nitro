@@ -260,7 +260,14 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
         if (this.isBridgingToDirectCppTarget) {
           return this.type.getCode(language)
         } else {
-          return `ArrayBufferHolder`
+          switch (language) {
+            case 'swift':
+              return 'ArrayBuffer'
+            case 'c++':
+              return `ArrayBufferHolder`
+            default:
+              throw new Error(`Invalid language! ${language}`)
+          }
         }
       case 'string': {
         switch (language) {
