@@ -69,7 +69,7 @@ class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
     }
 
     override fun callbackBothStructs(first: (person: Person) -> Unit, second: () -> Unit) {
-        val person = Person("Marc", 25)
+        val person = Person("Marc", 25.0)
         first(person)
         second()
     }
