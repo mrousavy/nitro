@@ -40,6 +40,9 @@ jobs:
     name: Build iOS Example App (new architecture)
     runs-on: macOS-15
     steps:
+      - name: Log Xcode version
+        run: xcodebuild -version
+
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2
 
