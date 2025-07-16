@@ -1186,6 +1186,35 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
+  public final func callbacksPutPersonInCar(first: bridge.Func_void_Person, second: bridge.Func_void_Car) -> bridge.Result_std__shared_ptr_Promise_Car___ {
+    do {
+      let __result = try self.__implementation.callbacksPutPersonInCar(first: { () -> (Person) -> Void in
+        let __wrappedFunction = bridge.wrap_Func_void_Person(first)
+        return { (__person: Person) -> Void in
+          __wrappedFunction.call(__person)
+        }
+      }(), second: { () -> (Car) -> Void in
+        let __wrappedFunction = bridge.wrap_Func_void_Car(second)
+        return { (__car: Car) -> Void in
+          __wrappedFunction.call(__car)
+        }
+      }())
+      let __resultCpp = { () -> bridge.std__shared_ptr_Promise_Car__ in
+        let __promise = bridge.create_std__shared_ptr_Promise_Car__()
+        let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_Car__(__promise)
+        __result
+          .then({ __result in __promiseHolder.resolve(__result) })
+          .catch({ __error in __promiseHolder.reject(__error.toCpp()) })
+        return __promise
+      }()
+      return bridge.create_Result_std__shared_ptr_Promise_Car___(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__shared_ptr_Promise_Car___(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
   public final func getValueFromJSCallbackAndWait(getValue: bridge.Func_std__shared_ptr_Promise_double__) -> bridge.Result_std__shared_ptr_Promise_double___ {
     do {
       let __result = try self.__implementation.getValueFromJSCallbackAndWait(getValue: { () -> () -> Promise<Double> in

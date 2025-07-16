@@ -320,6 +320,15 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
     return Func_void_double_java(__result)
   }
   
+  abstract fun callbacksPutPersonInCar(first: (person: Person) -> Unit, second: (car: Car) -> Unit): Promise<Car>
+  
+  @DoNotStrip
+  @Keep
+  private fun callbacksPutPersonInCar_cxx(first: Func_void_Person, second: Func_void_Car): Promise<Car> {
+    val __result = callbacksPutPersonInCar(first, second)
+    return __result
+  }
+  
   abstract fun getValueFromJSCallbackAndWait(getValue: () -> Promise<Double>): Promise<Double>
   
   @DoNotStrip

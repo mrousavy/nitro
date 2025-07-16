@@ -79,6 +79,8 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 #include "JFunc_std__shared_ptr_Promise_double__.hpp"
 #include "JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_double____.hpp"
 #include "JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____.hpp"
+#include "JFunc_void_Person.hpp"
+#include "JFunc_void_Car.hpp"
 #include "JFunc_std__shared_ptr_Promise_std__string__.hpp"
 #include "JFunc_void_std__string.hpp"
 #include "JsStyleStruct.hpp"
@@ -685,6 +687,22 @@ namespace margelo::nitro::test {
           return __resultRef->invoke(value);
         };
       }
+    }();
+  }
+  std::shared_ptr<Promise<Car>> JHybridTestObjectSwiftKotlinSpec::callbacksPutPersonInCar(const std::function<void(const Person& /* person */)>& first, const std::function<void(const Car& /* car */)>& second) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JPromise::javaobject>(jni::alias_ref<JFunc_void_Person::javaobject> /* first */, jni::alias_ref<JFunc_void_Car::javaobject> /* second */)>("callbacksPutPersonInCar_cxx");
+    auto __result = method(_javaPart, JFunc_void_Person_cxx::fromCpp(first), JFunc_void_Car_cxx::fromCpp(second));
+    return [&]() {
+      auto __promise = Promise<Car>::create();
+      __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
+        auto __result = jni::static_ref_cast<JCar>(__boxedResult);
+        __promise->resolve(__result->toCpp());
+      });
+      __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {
+        jni::JniException __jniError(__throwable);
+        __promise->reject(std::make_exception_ptr(__jniError));
+      });
+      return __promise;
     }();
   }
   std::shared_ptr<Promise<double>> JHybridTestObjectSwiftKotlinSpec::getValueFromJSCallbackAndWait(const std::function<std::shared_ptr<Promise<double>>()>& getValue) {

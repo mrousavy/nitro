@@ -713,6 +713,28 @@ namespace margelo::nitro::test::bridge::swift {
     return Func_void_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer____Wrapper(std::move(value));
   }
   
+  // pragma MARK: std::function<void(const Person& /* person */)>
+  /**
+   * Specialized version of `std::function<void(const Person&)>`.
+   */
+  using Func_void_Person = std::function<void(const Person& /* person */)>;
+  /**
+   * Wrapper class for a `std::function<void(const Person& / * person * /)>`, this can be used from Swift.
+   */
+  class Func_void_Person_Wrapper final {
+  public:
+    explicit Func_void_Person_Wrapper(std::function<void(const Person& /* person */)>&& func): _function(std::make_unique<std::function<void(const Person& /* person */)>>(std::move(func))) {}
+    inline void call(Person person) const {
+      _function->operator()(person);
+    }
+  private:
+    std::unique_ptr<std::function<void(const Person& /* person */)>> _function;
+  } SWIFT_NONCOPYABLE;
+  Func_void_Person create_Func_void_Person(void* _Nonnull swiftClosureWrapper);
+  inline Func_void_Person_Wrapper wrap_Func_void_Person(Func_void_Person value) {
+    return Func_void_Person_Wrapper(std::move(value));
+  }
+  
   // pragma MARK: std::function<std::shared_ptr<Promise<std::string>>()>
   /**
    * Specialized version of `std::function<std::shared_ptr<Promise<std::string>>()>`.

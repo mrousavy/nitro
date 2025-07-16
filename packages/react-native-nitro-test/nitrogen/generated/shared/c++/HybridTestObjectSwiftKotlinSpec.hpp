@@ -156,6 +156,7 @@ namespace margelo::nitro::test {
       virtual std::shared_ptr<Promise<double>> callbackAsyncPromise(const std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<double>>>>()>& callback) = 0;
       virtual std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>> callbackAsyncPromiseBuffer(const std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>>>()>& callback) = 0;
       virtual std::function<void(double /* value */)> getComplexCallback() = 0;
+      virtual std::shared_ptr<Promise<Car>> callbacksPutPersonInCar(const std::function<void(const Person& /* person */)>& first, const std::function<void(const Car& /* car */)>& second) = 0;
       virtual std::shared_ptr<Promise<double>> getValueFromJSCallbackAndWait(const std::function<std::shared_ptr<Promise<double>>()>& getValue) = 0;
       virtual std::shared_ptr<Promise<void>> getValueFromJsCallback(const std::function<std::shared_ptr<Promise<std::string>>()>& callback, const std::function<void(const std::string& /* valueFromJs */)>& andThenCall) = 0;
       virtual Car getCar() = 0;
