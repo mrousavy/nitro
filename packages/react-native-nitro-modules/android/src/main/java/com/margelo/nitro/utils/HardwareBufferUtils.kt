@@ -1,5 +1,7 @@
 package com.margelo.nitro.utils
 
+import androidx.annotation.Keep
+import com.facebook.proguard.annotations.DoNotStrip
 import android.hardware.HardwareBuffer
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -11,6 +13,8 @@ import androidx.annotation.RequiresApi
 typealias BoxedHardwareBuffer = Any
 
 @Suppress("KotlinJniMissingFunction")
+@Keep
+@DoNotStrip
 class HardwareBufferUtils {
     companion object {
         @JvmStatic
