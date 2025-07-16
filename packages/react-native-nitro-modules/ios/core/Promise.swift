@@ -17,7 +17,7 @@ import Foundation
  * - `Promise<T>.rejected(withError:)` - Creates a new already rejected Promise.
  * - `Promise<T>()` - Creates a new Promise with fully manual control over the `resolve(..)`/`reject(..)` functions.
  */
-public final class Promise<T> {
+public final actor Promise<T>: Sendable {
   private enum State {
     case result(T)
     case error(Error)
@@ -34,11 +34,19 @@ public final class Promise<T> {
   public init() {
     state = nil
   }
+  
+  public init(resolved result: T) {
+    state = .result(result)
+  }
+  public init(rejected error: Error) {
+    state = .error(error)
+  }
 
   deinit {
     if state == nil {
       let message = "Timeouted: Promise<\(String(describing: T.self))> was destroyed!"
-      reject(withError: RuntimeError.error(withMessage: message))
+      let error = RuntimeError.error(withMessage: message)
+      onRejectedListeners.forEach { listener in listener(error) }
     }
   }
 
@@ -73,18 +81,14 @@ extension Promise {
    * Create a new `Promise<T>` already resolved with the given `T`.
    */
   public static func resolved(withResult result: T) -> Promise {
-    let promise = Promise()
-    promise.state = .result(result)
-    return promise
+    return Promise(resolved: result)
   }
 
   /**
    * Create a new `Promise<T>` already rejected with the given `Error`.
    */
   public static func rejected(withError error: Error) -> Promise {
-    let promise = Promise()
-    promise.state = .error(error)
-    return promise
+    return Promise(rejected: error)
   }
 
   /**
@@ -97,9 +101,9 @@ extension Promise {
     Task(priority: priority) {
       do {
         let result = try await run()
-        promise.resolve(withResult: result)
+        await promise.resolve(withResult: result)
       } catch {
-        promise.reject(withError: error)
+        await promise.reject(withError: error)
       }
     }
     return promise
@@ -175,7 +179,8 @@ extension Promise {
     return try await withUnsafeThrowingContinuation { continuation in
       self.then { result in
         continuation.resume(returning: result)
-      }.catch { error in
+      }
+      self.catch { error in
         continuation.resume(throwing: error)
       }
     }
