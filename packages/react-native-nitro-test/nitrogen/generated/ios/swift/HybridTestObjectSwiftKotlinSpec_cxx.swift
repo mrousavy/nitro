@@ -915,7 +915,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
           return bridge.create_Func_void_std__exception_ptr(__closureWrapper.toUnsafe())
         }()
         let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_Car__(promise)
-        __promiseHolder.addOnResolvedListener(__resolverCpp)
+        __promiseHolder.addOnResolvedListenerCopy(__resolverCpp)
         __promiseHolder.addOnRejectedListener(__rejecterCpp)
         return __promise
       }())
