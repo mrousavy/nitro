@@ -483,7 +483,7 @@ namespace margelo::nitro::test {
       auto __value = std::move(__result.value());
       return __value;
     }
-    inline void callbackBothStructs(const std::function<void(const Person& /* person */)>& first, const std::function<void()>& second) override {
+    inline void callbackBothStructs(const std::function<void(const Person& /* person */)>& first, const std::function<void(const Car& /* car */)>& second) override {
       auto __result = _swiftPart.callbackBothStructs(first, second);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());

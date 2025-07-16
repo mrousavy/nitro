@@ -8,21 +8,21 @@
 import NitroModules
 
 /**
- * Wraps a Swift `(_ value: Car) -> Void` as a class.
+ * Wraps a Swift `(_ car: Car) -> Void` as a class.
  * This class can be used from C++, e.g. to wrap the Swift closure as a `std::function`.
  */
 public final class Func_void_Car {
   public typealias bridge = margelo.nitro.test.bridge.swift
 
-  private let closure: (_ value: Car) -> Void
+  private let closure: (_ car: Car) -> Void
 
-  public init(_ closure: @escaping (_ value: Car) -> Void) {
+  public init(_ closure: @escaping (_ car: Car) -> Void) {
     self.closure = closure
   }
 
   @inline(__always)
-  public func call(value: Car) -> Void {
-    self.closure(value)
+  public func call(car: Car) -> Void {
+    self.closure(car)
   }
 
   /**

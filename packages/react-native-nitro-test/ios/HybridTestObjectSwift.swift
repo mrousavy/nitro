@@ -108,11 +108,12 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
     return { value in print("Callback called with \(value).") }
   }
   
-  func callbackBothStructs(first: @escaping (Person) -> Void, second: @escaping () -> Void) throws -> Void {
+  func callbackBothStructs(first: @escaping (Person) -> Void, second: @escaping (Car) -> Void) throws -> Void {
     let person = Person(name: "Marc", age: 25)
-    
     first(person)
-    second()
+    
+    let car = try self.getCar()
+    second(car)
   }
 
   func bounceStrings(array: [String]) throws -> [String] {

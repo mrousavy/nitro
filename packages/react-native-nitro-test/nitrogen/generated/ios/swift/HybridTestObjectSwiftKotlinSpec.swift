@@ -65,7 +65,7 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
   func callbackAsyncPromise(callback: @escaping () -> Promise<Promise<Double>>) throws -> Promise<Double>
   func callbackAsyncPromiseBuffer(callback: @escaping () -> Promise<Promise<ArrayBuffer>>) throws -> Promise<ArrayBuffer>
   func getComplexCallback() throws -> (_ value: Double) -> Void
-  func callbackBothStructs(first: @escaping (_ person: Person) -> Void, second: @escaping () -> Void) throws -> Void
+  func callbackBothStructs(first: @escaping (_ person: Person) -> Void, second: @escaping (_ car: Car) -> Void) throws -> Void
   func getValueFromJSCallbackAndWait(getValue: @escaping () -> Promise<Double>) throws -> Promise<Double>
   func getValueFromJsCallback(callback: @escaping () -> Promise<String>, andThenCall: @escaping (_ valueFromJs: String) -> Void) throws -> Promise<Void>
   func getCar() throws -> Car

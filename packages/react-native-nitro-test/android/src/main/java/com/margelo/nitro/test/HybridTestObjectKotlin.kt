@@ -68,10 +68,12 @@ class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
         callback(array)
     }
 
-    override fun callbackBothStructs(first: (person: Person) -> Unit, second: () -> Unit) {
+    override fun callbackBothStructs(first: (person: Person) -> Unit, second: (car: Car) -> Unit) {
         val person = Person("Marc", 25.0)
         first(person)
-        second()
+
+        val car = getCar()
+        second(car)
     }
 
     override fun currentDate(): java.time.Instant {

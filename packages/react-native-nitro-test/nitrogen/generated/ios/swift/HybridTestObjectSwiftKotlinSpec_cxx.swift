@@ -1186,17 +1186,17 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public final func callbackBothStructs(first: bridge.Func_void_Person, second: bridge.Func_void) -> bridge.Result_void_ {
+  public final func callbackBothStructs(first: bridge.Func_void_Person, second: bridge.Func_void_Car) -> bridge.Result_void_ {
     do {
       try self.__implementation.callbackBothStructs(first: { () -> (Person) -> Void in
         let __wrappedFunction = bridge.wrap_Func_void_Person(first)
         return { (__person: Person) -> Void in
           __wrappedFunction.call(__person)
         }
-      }(), second: { () -> () -> Void in
-        let __wrappedFunction = bridge.wrap_Func_void(second)
-        return { () -> Void in
-          __wrappedFunction.call()
+      }(), second: { () -> (Car) -> Void in
+        let __wrappedFunction = bridge.wrap_Func_void_Car(second)
+        return { (__car: Car) -> Void in
+          __wrappedFunction.call(__car)
         }
       }())
       return bridge.create_Result_void_()

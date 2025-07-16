@@ -402,10 +402,12 @@ HybridTestObjectCpp::getValueFromJsCallback(const std::function<std::shared_ptr<
 
 
 void HybridTestObjectCpp::callbackBothStructs(const std::function<void(const Person& /* person */)>& first,
-                                              const std::function<void()>& second) {
+                                              const std::function<void(const Car& /* car */)>& second) {
   Person person("Marc", 25);
   first(person);
-  second();
+  
+  Car car = getCar();
+  second(car);
 }
 
 Car HybridTestObjectCpp::getCar() {

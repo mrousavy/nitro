@@ -115,7 +115,7 @@ namespace margelo::nitro::test {
     std::shared_ptr<Promise<double>> callbackAsyncPromise(const std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<double>>>>()>& callback) override;
     std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>> callbackAsyncPromiseBuffer(const std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>>>()>& callback) override;
     std::function<void(double /* value */)> getComplexCallback() override;
-    void callbackBothStructs(const std::function<void(const Person& /* person */)>& first, const std::function<void()>& second) override;
+    void callbackBothStructs(const std::function<void(const Person& /* person */)>& first, const std::function<void(const Car& /* car */)>& second) override;
     std::shared_ptr<Promise<double>> getValueFromJSCallbackAndWait(const std::function<std::shared_ptr<Promise<double>>()>& getValue) override;
     std::shared_ptr<Promise<void>> getValueFromJsCallback(const std::function<std::shared_ptr<Promise<std::string>>()>& callback, const std::function<void(const std::string& /* valueFromJs */)>& andThenCall) override;
     Car getCar() override;
