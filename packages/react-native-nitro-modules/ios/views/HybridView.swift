@@ -19,17 +19,20 @@ public protocol HybridView: HybridObject {
    *
    * This value should not change during the lifetime of this ``HybridView``.
    */
+  @MainActor
   var view: UIView { get }
 
   /**
    * Called right before updating props.
    * React props are updated in a single batch/transaction.
    */
+  @MainActor
   func beforeUpdate()
   /**
    * Called right after updating props.
    * React props are updated in a single batch/transaction.
    */
+  @MainActor
   func afterUpdate()
 }
 
