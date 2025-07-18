@@ -17,7 +17,7 @@ import Foundation
  * - `Promise<T>.rejected(withError:)` - Creates a new already rejected Promise.
  * - `Promise<T>()` - Creates a new Promise with fully manual control over the `resolve(..)`/`reject(..)` functions.
  */
-public final class Promise<T> {
+public final class Promise<T>: @unchecked Sendable {
   private enum State {
     case result(T)
     case error(Error)

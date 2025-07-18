@@ -21,7 +21,7 @@ public protocol HybridTestViewSpec_protocol: HybridObject, HybridView {
 }
 
 /// See ``HybridTestViewSpec``
-public class HybridTestViewSpec_base {
+public class HybridTestViewSpec_base: @unchecked Sendable {
   private weak var cxxWrapper: HybridTestViewSpec_cxx? = nil
   public func getCxxWrapper() -> HybridTestViewSpec_cxx {
   #if DEBUG
