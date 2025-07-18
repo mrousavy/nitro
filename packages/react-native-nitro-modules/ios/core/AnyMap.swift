@@ -45,7 +45,7 @@ public indirect enum AnyValue {
  * Represents an `AnyMap`- an untyped map instance.
  * See C++ `AnyMap.hpp` for more information.
  */
-public final class AnyMap {
+public final class AnyMap: @unchecked Sendable {
   public let cppPart: margelo.nitro.SharedAnyMap
 
   public init() {
