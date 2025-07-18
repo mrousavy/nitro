@@ -24,11 +24,11 @@ public final class Func_void_std__shared_ptr_Promise_double__ {
   public func call(value: bridge.std__shared_ptr_Promise_double__) -> Void {
     self.closure({ () -> Promise<Double> in
       let __promise = Promise<Double>()
-      let __resolver = { (__result: Double) in
-        __promise.resolve(withResult: __result)
+      let __resolver = { (__result: Double) -> Void in
+        Task { await __promise.resolve(withResult: __result) }
       }
-      let __rejecter = { (__error: Error) in
-        __promise.reject(withError: __error)
+      let __rejecter = { (__error: Error) -> Void in
+        Task { await __promise.reject(withError: __error) }
       }
       let __resolverCpp = { () -> bridge.Func_void_double in
         let __closureWrapper = Func_void_double(__resolver)

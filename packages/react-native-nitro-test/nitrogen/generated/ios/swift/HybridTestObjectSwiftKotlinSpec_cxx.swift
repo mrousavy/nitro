@@ -692,9 +692,10 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       let __resultCpp = { () -> bridge.std__shared_ptr_Promise_void__ in
         let __promise = bridge.create_std__shared_ptr_Promise_void__()
         let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_void__(__promise)
-        __result
-          .then({ __result in __promiseHolder.resolve() })
-          .catch({ __error in __promiseHolder.reject(__error.toCpp()) })
+        Task {
+          await __result.then({ __result in __promiseHolder.resolve() })
+          await __result.catch({ __error in __promiseHolder.reject(__error.toCpp()) })
+        }
         return __promise
       }()
       return bridge.create_Result_std__shared_ptr_Promise_void___(__resultCpp)
@@ -806,9 +807,10 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       let __resultCpp = { () -> bridge.std__shared_ptr_Promise_int64_t__ in
         let __promise = bridge.create_std__shared_ptr_Promise_int64_t__()
         let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_int64_t__(__promise)
-        __result
-          .then({ __result in __promiseHolder.resolve(__result) })
-          .catch({ __error in __promiseHolder.reject(__error.toCpp()) })
+        Task {
+          await __result.then({ __result in __promiseHolder.resolve(__result) })
+          await __result.catch({ __error in __promiseHolder.reject(__error.toCpp()) })
+        }
         return __promise
       }()
       return bridge.create_Result_std__shared_ptr_Promise_int64_t___(__resultCpp)
@@ -825,9 +827,10 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       let __resultCpp = { () -> bridge.std__shared_ptr_Promise_void__ in
         let __promise = bridge.create_std__shared_ptr_Promise_void__()
         let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_void__(__promise)
-        __result
-          .then({ __result in __promiseHolder.resolve() })
-          .catch({ __error in __promiseHolder.reject(__error.toCpp()) })
+        Task {
+          await __result.then({ __result in __promiseHolder.resolve() })
+          await __result.catch({ __error in __promiseHolder.reject(__error.toCpp()) })
+        }
         return __promise
       }()
       return bridge.create_Result_std__shared_ptr_Promise_void___(__resultCpp)
@@ -844,9 +847,10 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       let __resultCpp = { () -> bridge.std__shared_ptr_Promise_void__ in
         let __promise = bridge.create_std__shared_ptr_Promise_void__()
         let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_void__(__promise)
-        __result
-          .then({ __result in __promiseHolder.resolve() })
-          .catch({ __error in __promiseHolder.reject(__error.toCpp()) })
+        Task {
+          await __result.then({ __result in __promiseHolder.resolve() })
+          await __result.catch({ __error in __promiseHolder.reject(__error.toCpp()) })
+        }
         return __promise
       }()
       return bridge.create_Result_std__shared_ptr_Promise_void___(__resultCpp)
@@ -861,11 +865,11 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
     do {
       let __result = try self.__implementation.awaitAndGetPromise(promise: { () -> Promise<Double> in
         let __promise = Promise<Double>()
-        let __resolver = { (__result: Double) in
-          __promise.resolve(withResult: __result)
+        let __resolver = { (__result: Double) -> Void in
+          Task { await __promise.resolve(withResult: __result) }
         }
-        let __rejecter = { (__error: Error) in
-          __promise.reject(withError: __error)
+        let __rejecter = { (__error: Error) -> Void in
+          Task { await __promise.reject(withError: __error) }
         }
         let __resolverCpp = { () -> bridge.Func_void_double in
           let __closureWrapper = Func_void_double(__resolver)
@@ -883,9 +887,10 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       let __resultCpp = { () -> bridge.std__shared_ptr_Promise_double__ in
         let __promise = bridge.create_std__shared_ptr_Promise_double__()
         let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_double__(__promise)
-        __result
-          .then({ __result in __promiseHolder.resolve(__result) })
-          .catch({ __error in __promiseHolder.reject(__error.toCpp()) })
+        Task {
+          await __result.then({ __result in __promiseHolder.resolve(__result) })
+          await __result.catch({ __error in __promiseHolder.reject(__error.toCpp()) })
+        }
         return __promise
       }()
       return bridge.create_Result_std__shared_ptr_Promise_double___(__resultCpp)
@@ -900,11 +905,11 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
     do {
       let __result = try self.__implementation.awaitAndGetComplexPromise(promise: { () -> Promise<Car> in
         let __promise = Promise<Car>()
-        let __resolver = { (__result: Car) in
-          __promise.resolve(withResult: __result)
+        let __resolver = { (__result: Car) -> Void in
+          Task { await __promise.resolve(withResult: __result) }
         }
-        let __rejecter = { (__error: Error) in
-          __promise.reject(withError: __error)
+        let __rejecter = { (__error: Error) -> Void in
+          Task { await __promise.reject(withError: __error) }
         }
         let __resolverCpp = { () -> bridge.Func_void_Car in
           let __closureWrapper = Func_void_Car(__resolver)
@@ -922,9 +927,10 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       let __resultCpp = { () -> bridge.std__shared_ptr_Promise_Car__ in
         let __promise = bridge.create_std__shared_ptr_Promise_Car__()
         let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_Car__(__promise)
-        __result
-          .then({ __result in __promiseHolder.resolve(__result) })
-          .catch({ __error in __promiseHolder.reject(__error.toCpp()) })
+        Task {
+          await __result.then({ __result in __promiseHolder.resolve(__result) })
+          await __result.catch({ __error in __promiseHolder.reject(__error.toCpp()) })
+        }
         return __promise
       }()
       return bridge.create_Result_std__shared_ptr_Promise_Car___(__resultCpp)
@@ -939,9 +945,11 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
     do {
       let __result = try self.__implementation.awaitPromise(promise: { () -> Promise<Void> in
         let __promise = Promise<Void>()
-        let __resolver = { __promise.resolve(withResult: ()) }
-        let __rejecter = { (__error: Error) in
-          __promise.reject(withError: __error)
+        let __resolver = { () -> Void in
+          Task { await __promise.resolve(withResult: ()) }
+        }
+        let __rejecter = { (__error: Error) -> Void in
+          Task { await __promise.reject(withError: __error) }
         }
         let __resolverCpp = { () -> bridge.Func_void in
           let __closureWrapper = Func_void(__resolver)
@@ -959,9 +967,10 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       let __resultCpp = { () -> bridge.std__shared_ptr_Promise_void__ in
         let __promise = bridge.create_std__shared_ptr_Promise_void__()
         let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_void__(__promise)
-        __result
-          .then({ __result in __promiseHolder.resolve() })
-          .catch({ __error in __promiseHolder.reject(__error.toCpp()) })
+        Task {
+          await __result.then({ __result in __promiseHolder.resolve() })
+          await __result.catch({ __error in __promiseHolder.reject(__error.toCpp()) })
+        }
         return __promise
       }()
       return bridge.create_Result_std__shared_ptr_Promise_void___(__resultCpp)
@@ -1044,11 +1053,11 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
           let __result = __wrappedFunction.call()
           return { () -> Promise<Double> in
             let __promise = Promise<Double>()
-            let __resolver = { (__result: Double) in
-              __promise.resolve(withResult: __result)
+            let __resolver = { (__result: Double) -> Void in
+              Task { await __promise.resolve(withResult: __result) }
             }
-            let __rejecter = { (__error: Error) in
-              __promise.reject(withError: __error)
+            let __rejecter = { (__error: Error) -> Void in
+              Task { await __promise.reject(withError: __error) }
             }
             let __resolverCpp = { () -> bridge.Func_void_double in
               let __closureWrapper = Func_void_double(__resolver)
@@ -1068,9 +1077,10 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       let __resultCpp = { () -> bridge.std__shared_ptr_Promise_double__ in
         let __promise = bridge.create_std__shared_ptr_Promise_double__()
         let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_double__(__promise)
-        __result
-          .then({ __result in __promiseHolder.resolve(__result) })
-          .catch({ __error in __promiseHolder.reject(__error.toCpp()) })
+        Task {
+          await __result.then({ __result in __promiseHolder.resolve(__result) })
+          await __result.catch({ __error in __promiseHolder.reject(__error.toCpp()) })
+        }
         return __promise
       }()
       return bridge.create_Result_std__shared_ptr_Promise_double___(__resultCpp)
@@ -1089,11 +1099,11 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
           let __result = __wrappedFunction.call()
           return { () -> Promise<Promise<Double>> in
             let __promise = Promise<Promise<Double>>()
-            let __resolver = { (__result: Promise<Double>) in
-              __promise.resolve(withResult: __result)
+            let __resolver = { (__result: Promise<Double>) -> Void in
+              Task { await __promise.resolve(withResult: __result) }
             }
-            let __rejecter = { (__error: Error) in
-              __promise.reject(withError: __error)
+            let __rejecter = { (__error: Error) -> Void in
+              Task { await __promise.reject(withError: __error) }
             }
             let __resolverCpp = { () -> bridge.Func_void_std__shared_ptr_Promise_double__ in
               let __closureWrapper = Func_void_std__shared_ptr_Promise_double__(__resolver)
@@ -1113,9 +1123,10 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       let __resultCpp = { () -> bridge.std__shared_ptr_Promise_double__ in
         let __promise = bridge.create_std__shared_ptr_Promise_double__()
         let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_double__(__promise)
-        __result
-          .then({ __result in __promiseHolder.resolve(__result) })
-          .catch({ __error in __promiseHolder.reject(__error.toCpp()) })
+        Task {
+          await __result.then({ __result in __promiseHolder.resolve(__result) })
+          await __result.catch({ __error in __promiseHolder.reject(__error.toCpp()) })
+        }
         return __promise
       }()
       return bridge.create_Result_std__shared_ptr_Promise_double___(__resultCpp)
@@ -1134,11 +1145,11 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
           let __result = __wrappedFunction.call()
           return { () -> Promise<Promise<ArrayBuffer>> in
             let __promise = Promise<Promise<ArrayBuffer>>()
-            let __resolver = { (__result: Promise<ArrayBuffer>) in
-              __promise.resolve(withResult: __result)
+            let __resolver = { (__result: Promise<ArrayBuffer>) -> Void in
+              Task { await __promise.resolve(withResult: __result) }
             }
-            let __rejecter = { (__error: Error) in
-              __promise.reject(withError: __error)
+            let __rejecter = { (__error: Error) -> Void in
+              Task { await __promise.reject(withError: __error) }
             }
             let __resolverCpp = { () -> bridge.Func_void_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___ in
               let __closureWrapper = Func_void_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___(__resolver)
@@ -1158,9 +1169,10 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       let __resultCpp = { () -> bridge.std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___ in
         let __promise = bridge.create_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___()
         let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___(__promise)
-        __result
-          .then({ __result in __promiseHolder.resolve(__result.getArrayBuffer()) })
-          .catch({ __error in __promiseHolder.reject(__error.toCpp()) })
+        Task {
+          await __result.then({ __result in __promiseHolder.resolve(__result.getArrayBuffer()) })
+          await __result.catch({ __error in __promiseHolder.reject(__error.toCpp()) })
+        }
         return __promise
       }()
       return bridge.create_Result_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer____(__resultCpp)
@@ -1194,11 +1206,11 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
           let __result = __wrappedFunction.call()
           return { () -> Promise<Double> in
             let __promise = Promise<Double>()
-            let __resolver = { (__result: Double) in
-              __promise.resolve(withResult: __result)
+            let __resolver = { (__result: Double) -> Void in
+              Task { await __promise.resolve(withResult: __result) }
             }
-            let __rejecter = { (__error: Error) in
-              __promise.reject(withError: __error)
+            let __rejecter = { (__error: Error) -> Void in
+              Task { await __promise.reject(withError: __error) }
             }
             let __resolverCpp = { () -> bridge.Func_void_double in
               let __closureWrapper = Func_void_double(__resolver)
@@ -1218,9 +1230,10 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       let __resultCpp = { () -> bridge.std__shared_ptr_Promise_double__ in
         let __promise = bridge.create_std__shared_ptr_Promise_double__()
         let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_double__(__promise)
-        __result
-          .then({ __result in __promiseHolder.resolve(__result) })
-          .catch({ __error in __promiseHolder.reject(__error.toCpp()) })
+        Task {
+          await __result.then({ __result in __promiseHolder.resolve(__result) })
+          await __result.catch({ __error in __promiseHolder.reject(__error.toCpp()) })
+        }
         return __promise
       }()
       return bridge.create_Result_std__shared_ptr_Promise_double___(__resultCpp)
@@ -1239,11 +1252,11 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
           let __result = __wrappedFunction.call()
           return { () -> Promise<String> in
             let __promise = Promise<String>()
-            let __resolver = { (__result: String) in
-              __promise.resolve(withResult: __result)
+            let __resolver = { (__result: String) -> Void in
+              Task { await __promise.resolve(withResult: __result) }
             }
-            let __rejecter = { (__error: Error) in
-              __promise.reject(withError: __error)
+            let __rejecter = { (__error: Error) -> Void in
+              Task { await __promise.reject(withError: __error) }
             }
             let __resolverCpp = { () -> bridge.Func_void_std__string in
               let __closureWrapper = Func_void_std__string(__resolver)
@@ -1268,9 +1281,10 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       let __resultCpp = { () -> bridge.std__shared_ptr_Promise_void__ in
         let __promise = bridge.create_std__shared_ptr_Promise_void__()
         let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_void__(__promise)
-        __result
-          .then({ __result in __promiseHolder.resolve() })
-          .catch({ __error in __promiseHolder.reject(__error.toCpp()) })
+        Task {
+          await __result.then({ __result in __promiseHolder.resolve() })
+          await __result.catch({ __error in __promiseHolder.reject(__error.toCpp()) })
+        }
         return __promise
       }()
       return bridge.create_Result_std__shared_ptr_Promise_void___(__resultCpp)
@@ -1399,9 +1413,10 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       let __resultCpp = { () -> bridge.std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___ in
         let __promise = bridge.create_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___()
         let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___(__promise)
-        __result
-          .then({ __result in __promiseHolder.resolve(__result.getArrayBuffer()) })
-          .catch({ __error in __promiseHolder.reject(__error.toCpp()) })
+        Task {
+          await __result.then({ __result in __promiseHolder.resolve(__result.getArrayBuffer()) })
+          await __result.catch({ __error in __promiseHolder.reject(__error.toCpp()) })
+        }
         return __promise
       }()
       return bridge.create_Result_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer____(__resultCpp)

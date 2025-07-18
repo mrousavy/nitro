@@ -24,11 +24,11 @@ public final class Func_void_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer
   public func call(value: bridge.std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___) -> Void {
     self.closure({ () -> Promise<ArrayBuffer> in
       let __promise = Promise<ArrayBuffer>()
-      let __resolver = { (__result: ArrayBuffer) in
-        __promise.resolve(withResult: __result)
+      let __resolver = { (__result: ArrayBuffer) -> Void in
+        Task { await __promise.resolve(withResult: __result) }
       }
-      let __rejecter = { (__error: Error) in
-        __promise.reject(withError: __error)
+      let __rejecter = { (__error: Error) -> Void in
+        Task { await __promise.reject(withError: __error) }
       }
       let __resolverCpp = { () -> bridge.Func_void_std__shared_ptr_ArrayBuffer_ in
         let __closureWrapper = Func_void_std__shared_ptr_ArrayBuffer_(__resolver)
