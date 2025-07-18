@@ -18,7 +18,7 @@ public protocol HybridBaseSpec_protocol: HybridObject {
 }
 
 /// See ``HybridBaseSpec``
-public class HybridBaseSpec_base {
+public class HybridBaseSpec_base: @unchecked Sendable {
   private weak var cxxWrapper: HybridBaseSpec_cxx? = nil
   public func getCxxWrapper() -> HybridBaseSpec_cxx {
   #if DEBUG

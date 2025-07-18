@@ -17,7 +17,7 @@ import NitroModules
  * - Other HybridObjects need to be wrapped/unwrapped from the Swift TCxx wrapper
  * - Throwing methods need to be wrapped with a Result<T, Error> type, as exceptions cannot be propagated to C++
  */
-public class HybridChildSpec_cxx : HybridBaseSpec_cxx {
+public class HybridChildSpec_cxx: HybridBaseSpec_cxx, @unchecked Sendable {
   /**
    * The Swift <> C++ bridge's namespace (`margelo::nitro::test::bridge::swift`)
    * from `NitroTest-Swift-Cxx-Bridge.hpp`.
