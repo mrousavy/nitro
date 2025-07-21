@@ -15,7 +15,8 @@ export function createHybridObjectIntializer(): [ObjcFile, SwiftFile] | [] {
   const autolinkingClassName = `${NitroConfig.current.getIosModuleName()}Autolinking`
   const umbrellaHeaderName = getUmbrellaHeaderName()
 
-  const autolinkedHybridObjects = NitroConfig.current.getAutolinkedHybridObjects()
+  const autolinkedHybridObjects =
+    NitroConfig.current.getAutolinkedHybridObjects()
 
   const swiftFunctions: string[] = []
   const cppRegistrations: string[] = []

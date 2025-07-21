@@ -72,10 +72,16 @@ export function createSwiftCxxBridge(): SourceFile[] {
     .filter((t) => t.type.kind === 'hybrid-object')
     .map((t) => {
       const hybridObject = getTypeAs(t.type, HybridObjectType)
+      const hybridObjectModuleName =
+        hybridObject.sourceConfig.getIosModuleName()
       const { HybridTSpecCxx } = getHybridObjectName(
         hybridObject.hybridObjectName
       )
-      return getForwardDeclaration('class', HybridTSpecCxx, moduleName)
+      return getForwardDeclaration(
+        'class',
+        HybridTSpecCxx,
+        hybridObjectModuleName
+      )
     })
     .filter(isNotDuplicate)
 
