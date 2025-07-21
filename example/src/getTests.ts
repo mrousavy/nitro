@@ -659,7 +659,7 @@ export function getTests(
     createTest('getVariantWeirdNumbersEnum(...) converts enum', () =>
       it(() => testObject.getVariantWeirdNumbersEnum(WeirdNumbersEnum.C))
         .didNotThrow()
-        .equals(WeirdNumbersEnum.A)
+        .equals(WeirdNumbersEnum.C)
     ),
     createTest('getVariantWeirdNumbersEnum(...) converts boolean', () =>
       it(() => testObject.getVariantWeirdNumbersEnum(true))
