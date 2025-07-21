@@ -48,7 +48,7 @@ public ${hasBaseClass ? 'override func' : 'func'} getCxxWrapper() -> ${name.Hybr
     ...spec.properties.flatMap((p) => p.getRequiredImports('swift')),
     ...spec.methods.flatMap((m) => m.getRequiredImports('swift')),
   ]
-  const imports = ['import Foundation', 'import NitroModules']
+  const imports = ['import NitroModules']
   imports.push(
     ...extraImports.map((i) => `import ${i.name}`).filter(isNotDuplicate)
   )
@@ -56,6 +56,7 @@ public ${hasBaseClass ? 'override func' : 'func'} getCxxWrapper() -> ${name.Hybr
   const protocolCode = `
 ${createFileMetadataString(`${protocolName}.swift`)}
 
+import Foundation
 ${imports.join('\n')}
 
 /// See \`\`${protocolName}\`\`
