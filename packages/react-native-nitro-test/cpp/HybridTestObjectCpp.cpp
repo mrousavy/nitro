@@ -248,6 +248,10 @@ std::variant<bool, OldEnum> HybridTestObjectCpp::getVariantEnum(const std::varia
   return variant;
 }
 
+std::variant<bool, WeirdNumbersEnum> HybridTestObjectCpp::getVariantWeirdNumbersEnum(const std::variant<bool, WeirdNumbersEnum>& variant) {
+  return variant;
+}
+
 std::variant<Car, Person> HybridTestObjectCpp::getVariantObjects(const std::variant<Car, Person>& variant) {
   return variant;
 }

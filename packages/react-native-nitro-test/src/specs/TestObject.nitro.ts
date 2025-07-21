@@ -26,6 +26,13 @@ export enum OldEnum {
   THIRD,
 }
 
+// Backed by numbers, but with custom number values.
+export enum WeirdNumbersEnum {
+  A = 0,
+  B = 32,
+  C = 64,
+}
+
 // A plain interface that does not inherit from `HybridObject` becomes a `struct` in C++.
 // They can only have properties (get + set). No methods or native state.
 export interface Car {
@@ -166,6 +173,9 @@ interface SharedTestObjectProps {
     either: number | string | number[] | string[] | boolean
   ): number | string
   getVariantEnum(variant: OldEnum | boolean): OldEnum | boolean
+  getVariantWeirdNumbersEnum(
+    variant: WeirdNumbersEnum | boolean
+  ): WeirdNumbersEnum | boolean
   getVariantObjects(variant: Person | Car): Person | Car
   passNamedVariant(variant: NamedVariant): NamedVariant
 

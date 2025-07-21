@@ -130,6 +130,7 @@ namespace margelo::nitro::test {
     std::shared_ptr<ArrayBuffer> bounceArrayBuffer(const std::shared_ptr<ArrayBuffer>& buffer) override;
     std::variant<std::string, double> passVariant(const std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>>& either) override;
     std::variant<bool, OldEnum> getVariantEnum(const std::variant<bool, OldEnum>& variant) override;
+    std::variant<bool, WeirdNumbersEnum> getVariantWeirdNumbersEnum(const std::variant<bool, WeirdNumbersEnum>& variant) override;
     std::variant<Car, Person> getVariantObjects(const std::variant<Car, Person>& variant) override;
     std::variant<std::string, Car> passNamedVariant(const std::variant<std::string, Car>& variant) override;
     std::shared_ptr<margelo::nitro::test::HybridChildSpec> createChild() override;

@@ -5,6 +5,7 @@ import {
   type Car,
   type Person,
   type Powertrain,
+  WeirdNumbersEnum,
 } from 'react-native-nitro-test'
 import type { State } from './Testers'
 import { it } from './Testers'
@@ -648,6 +649,38 @@ export function getTests(
       it(() => testObject.getVariantEnum('string')).didThrow(
         `Error: ${testObject.name}.getVariantEnum(...): Cannot convert "string" to any type in variant<bool, margelo::nitro::test::OldEnum>!`
       )
+    ),
+    createTest('getVariantEnum(...) throws at too high numerical value', () =>
+      // @ts-expect-error
+      it(() => testObject.getVariantEnum(9999)).didThrow(
+        `Error: ${testObject.name}.getVariantEnum(...): Cannot convert "9999" to any type in variant<bool, margelo::nitro::test::OldEnum>!`
+      )
+    ),
+    createTest('getVariantWeirdNumbersEnum(...) converts enum', () =>
+      it(() => testObject.getVariantWeirdNumbersEnum(WeirdNumbersEnum.C))
+        .didNotThrow()
+        .equals(WeirdNumbersEnum.C)
+    ),
+    createTest('getVariantWeirdNumbersEnum(...) converts boolean', () =>
+      it(() => testObject.getVariantWeirdNumbersEnum(true))
+        .didNotThrow()
+        .equals(true)
+    ),
+    createTest(
+      'getVariantWeirdNumbersEnum(...) throws at wrong type (string)',
+      () =>
+        // @ts-expect-error
+        it(() => testObject.getVariantWeirdNumbersEnum('string')).didThrow(
+          `Error: ${testObject.name}.getVariantWeirdNumbersEnum(...): Cannot convert "string" to any type in variant<bool, margelo::nitro::test::WeirdNumbersEnum>!`
+        )
+    ),
+    createTest(
+      'getVariantWeirdNumbersEnum(...) throws at too high numerical value',
+      () =>
+        // @ts-expect-error
+        it(() => testObject.getVariantWeirdNumbersEnum(99999)).didThrow(
+          `Error: ${testObject.name}.getVariantWeirdNumbersEnum(...): Cannot convert "99999" to any type in variant<bool, margelo::nitro::test::WeirdNumbersEnum>!`
+        )
     ),
     createTest('getVariantObjects(...) converts Person', () =>
       it(() => testObject.getVariantObjects(TEST_PERSON))

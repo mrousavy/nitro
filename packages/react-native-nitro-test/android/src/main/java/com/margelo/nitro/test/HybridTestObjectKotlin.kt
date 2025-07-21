@@ -301,6 +301,10 @@ class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
         return variant
     }
 
+    override fun getVariantWeirdNumbersEnum(variant: Variant_Boolean_WeirdNumbersEnum): Variant_Boolean_WeirdNumbersEnum {
+        return variant
+    }
+
     override fun getVariantObjects(variant: Variant_Car_Person): Variant_Car_Person {
         return variant
     }

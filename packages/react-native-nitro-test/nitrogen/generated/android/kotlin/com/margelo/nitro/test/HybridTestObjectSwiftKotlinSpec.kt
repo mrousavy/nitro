@@ -397,6 +397,10 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
+  abstract fun getVariantWeirdNumbersEnum(variant: Variant_Boolean_WeirdNumbersEnum): Variant_Boolean_WeirdNumbersEnum
+  
+  @DoNotStrip
+  @Keep
   abstract fun getVariantObjects(variant: Variant_Car_Person): Variant_Car_Person
   
   @DoNotStrip
