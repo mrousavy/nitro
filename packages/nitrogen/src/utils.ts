@@ -63,8 +63,14 @@ export function toUnixPath(p: string): string {
   return p.replaceAll('\\', '/')
 }
 
+const sep = path.sep
+function unsafeFastJoin(...segments: string[]): string {
+  // this function should really not take any unsafe strings like `/` or `\`.
+  return segments.join(sep)
+}
+
 function getFullPath(file: SourceFile): string {
-  return path.join(
+  return unsafeFastJoin(
     file.platform,
     file.language,
     ...file.subdirectory,
