@@ -17,7 +17,10 @@ export function createKotlinHybridViewManager(
   spec: HybridObjectSpec
 ): SourceFile[] {
   const cppFiles = createViewComponentShadowNodeFiles(spec)
-  const javaSubNamespace = NitroConfig.current.getAndroidPackage('java/kotlin', 'views')
+  const javaSubNamespace = NitroConfig.current.getAndroidPackage(
+    'java/kotlin',
+    'views'
+  )
   const javaNamespace = NitroConfig.current.getAndroidPackage('java/kotlin')
   const cxxNamespace = NitroConfig.current.getCxxNamespace('c++', 'views')
   const { JHybridTSpec, HybridTSpec } = getHybridObjectName(spec.name)

@@ -23,7 +23,10 @@ export function createJNIHybridObjectRegistration({
   jniClassName,
 }: Props): JNIHybridObjectRegistration {
   const { JHybridTSpec } = getHybridObjectName(hybridObjectName)
-  const jniNamespace = NitroConfig.current.getAndroidPackage('c++/jni', jniClassName)
+  const jniNamespace = NitroConfig.current.getAndroidPackage(
+    'c++/jni',
+    jniClassName
+  )
 
   return {
     requiredImports: [
