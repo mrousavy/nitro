@@ -55,7 +55,7 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 #include "JVariant_Person_HybridTestObjectSwiftKotlinSpec.hpp"
 #include "JPerson.hpp"
 #include <NitroImage/HybridImageSpec.hpp>
-#include "JHybridImageSpec.hpp"
+#include <NitroImage/JHybridImageSpec.hpp>
 #include <NitroModules/AnyMap.hpp>
 #include <NitroModules/JAnyMap.hpp>
 #include <unordered_map>
@@ -277,9 +277,9 @@ namespace margelo::nitro::test {
     return __result->toCpp();
   }
   std::shared_ptr<margelo::nitro::image::HybridImageSpec> JHybridTestObjectSwiftKotlinSpec::getExternal() {
-    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JHybridImageSpec::javaobject>()>("getExternal");
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<margelo::nitro::image::JHybridImageSpec::javaobject>()>("getExternal");
     auto __result = method(_javaPart);
-    return JNISharedPtr::make_shared_from_jni<JHybridImageSpec>(jni::make_global(__result));
+    return JNISharedPtr::make_shared_from_jni<margelo::nitro::image::JHybridImageSpec>(jni::make_global(__result));
   }
   void JHybridTestObjectSwiftKotlinSpec::simpleFunc() {
     static const auto method = javaClassStatic()->getMethod<void()>("simpleFunc");

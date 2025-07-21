@@ -7,6 +7,7 @@
 
 import Foundation
 import NitroModules
+import NitroImage
 
 /**
  * A class implementation that bridges HybridTestObjectSwiftKotlinSpec over to C++.

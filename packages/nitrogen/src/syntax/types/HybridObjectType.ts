@@ -82,10 +82,23 @@ export class HybridObjectType implements Type {
         }
       }
       case 'swift': {
-        return `(any ${name.HybridTSpec})`
+        if (this.sourceConfig.isExternalConfig) {
+          return `(any ${this.sourceConfig.getIosModuleName()}.${name.HybridTSpec})`
+        } else {
+          return `(any ${name.HybridTSpec})`
+        }
       }
       case 'kotlin': {
-        return name.HybridTSpec
+        if (this.sourceConfig.isExternalConfig) {
+          // full qualified name: "com.margelo.nitro.image.Image"
+          return this.sourceConfig.getAndroidPackage(
+            'java/kotlin',
+            name.HybridTSpec
+          )
+        } else {
+          // "Image"
+          return name.HybridTSpec
+        }
       }
       default:
         throw new Error(

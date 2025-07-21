@@ -109,11 +109,20 @@ public override func getCxxPart() -> bridge.${baseBridge.specializationName} {
 }`.trim()
   })
 
+  const imports = ['import NitroModules']
+  const extraSwiftImports = [
+    ...spec.properties.flatMap((p) => p.getRequiredImports('swift')),
+    ...spec.methods.flatMap((m) => m.getRequiredImports('swift')),
+  ]
+  imports.push(
+    ...extraSwiftImports.map((i) => `import ${i.name}`).filter(isNotDuplicate)
+  )
+
   const swiftCxxWrapperCode = `
 ${createFileMetadataString(`${name.HybridTSpecCxx}.swift`)}
 
 import Foundation
-import NitroModules
+${imports.join('\n')}
 
 /**
  * A class implementation that bridges ${name.HybridTSpec} over to C++.

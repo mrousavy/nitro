@@ -139,7 +139,7 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
-  abstract fun getExternal(): HybridImageSpec
+  abstract fun getExternal(): com.margelo.nitro.image.HybridImageSpec
   
   @DoNotStrip
   @Keep

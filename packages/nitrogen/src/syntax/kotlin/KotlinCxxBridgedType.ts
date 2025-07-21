@@ -133,11 +133,21 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
         case 'hybrid-object': {
           const hybridObjectType = getTypeAs(this.type, HybridObjectType)
           const name = getHybridObjectName(hybridObjectType.hybridObjectName)
-          imports.push({
-            language: 'c++',
-            name: `${name.JHybridTSpec}.hpp`,
-            space: 'user',
-          })
+          if (hybridObjectType.sourceConfig.isExternalConfig) {
+            // It's an externally imported type
+            imports.push({
+              language: 'c++',
+              name: `${hybridObjectType.sourceConfig.getAndroidCxxLibName()}/${name.JHybridTSpec}.hpp`,
+              space: 'system',
+            })
+          } else {
+            // It's our custom type
+            imports.push({
+              language: 'c++',
+              name: `${name.JHybridTSpec}.hpp`,
+              space: 'user',
+            })
+          }
           imports.push({
             language: 'c++',
             name: 'NitroModules/JNISharedPtr.hpp',
@@ -301,8 +311,8 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
         switch (language) {
           case 'c++':
             const hybridObjectType = getTypeAs(this.type, HybridObjectType)
-            const name = getHybridObjectName(hybridObjectType.hybridObjectName)
-            return `${name.JHybridTSpec}::javaobject`
+            const fullName = this.getFullJHybridObjectName(hybridObjectType)
+            return `${fullName}::javaobject`
           default:
             return this.type.getCode(language)
         }
@@ -477,8 +487,8 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
         switch (language) {
           case 'c++':
             const hybrid = getTypeAs(this.type, HybridObjectType)
-            const name = getHybridObjectName(hybrid.hybridObjectName)
-            return `std::dynamic_pointer_cast<${name.JHybridTSpec}>(${parameterName})->getJavaPart()`
+            const fullName = this.getFullJHybridObjectName(hybrid)
+            return `std::dynamic_pointer_cast<${fullName}>(${parameterName})->getJavaPart()`
           default:
             return parameterName
         }
@@ -708,8 +718,8 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
         switch (language) {
           case 'c++':
             const hybrid = getTypeAs(this.type, HybridObjectType)
-            const name = getHybridObjectName(hybrid.hybridObjectName)
-            return `JNISharedPtr::make_shared_from_jni<${name.JHybridTSpec}>(jni::make_global(${parameterName}))`
+            const fullName = this.getFullJHybridObjectName(hybrid)
+            return `JNISharedPtr::make_shared_from_jni<${fullName}>(jni::make_global(${parameterName}))`
           default:
             return parameterName
         }
@@ -899,6 +909,21 @@ __promise->resolve();
       default:
         // no need to parse anything, just return as is
         return parameterName
+    }
+  }
+
+  private getFullJHybridObjectName(hybridObject: HybridObjectType): string {
+    const name = getHybridObjectName(hybridObject.hybridObjectName)
+    if (hybridObject.sourceConfig.isExternalConfig) {
+      // fully qualified name like "margelo::nitro::image::JImage"
+      const fullName = hybridObject.sourceConfig.getCxxNamespace(
+        'c++',
+        name.JHybridTSpec
+      )
+      return fullName
+    } else {
+      // relative name like "JImage"
+      return name.JHybridTSpec
     }
   }
 }
