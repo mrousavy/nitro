@@ -21,6 +21,8 @@ namespace NitroModules { class AnyMap; }
 namespace margelo::nitro::test { struct Car; }
 // Forward declaration of `ArrayBuffer` to properly resolve imports.
 namespace NitroModules { class ArrayBuffer; }
+// Forward declaration of `WeirdNumbersEnum` to properly resolve imports.
+namespace margelo::nitro::test { enum class WeirdNumbersEnum; }
 // Forward declaration of `HybridChildSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridChildSpec; }
 // Forward declaration of `HybridBaseSpec` to properly resolve imports.
@@ -64,6 +66,9 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 #include <NitroModules/JArrayBuffer.hpp>
 #include <NitroModules/JUnit.hpp>
 #include "JVariant_Boolean_OldEnum.hpp"
+#include "WeirdNumbersEnum.hpp"
+#include "JVariant_Boolean_WeirdNumbersEnum.hpp"
+#include "JWeirdNumbersEnum.hpp"
 #include "JVariant_Car_Person.hpp"
 #include "JNamedVariant.hpp"
 #include "HybridChildSpec.hpp"
@@ -790,6 +795,11 @@ namespace margelo::nitro::test {
   std::variant<bool, OldEnum> JHybridTestObjectSwiftKotlinSpec::getVariantEnum(const std::variant<bool, OldEnum>& variant) {
     static const auto method = javaClassStatic()->getMethod<jni::local_ref<JVariant_Boolean_OldEnum>(jni::alias_ref<JVariant_Boolean_OldEnum> /* variant */)>("getVariantEnum");
     auto __result = method(_javaPart, JVariant_Boolean_OldEnum::fromCpp(variant));
+    return __result->toCpp();
+  }
+  std::variant<bool, WeirdNumbersEnum> JHybridTestObjectSwiftKotlinSpec::getVariantWeirdNumbersEnum(const std::variant<bool, WeirdNumbersEnum>& variant) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JVariant_Boolean_WeirdNumbersEnum>(jni::alias_ref<JVariant_Boolean_WeirdNumbersEnum> /* variant */)>("getVariantWeirdNumbersEnum");
+    auto __result = method(_javaPart, JVariant_Boolean_WeirdNumbersEnum::fromCpp(variant));
     return __result->toCpp();
   }
   std::variant<Car, Person> JHybridTestObjectSwiftKotlinSpec::getVariantObjects(const std::variant<Car, Person>& variant) {

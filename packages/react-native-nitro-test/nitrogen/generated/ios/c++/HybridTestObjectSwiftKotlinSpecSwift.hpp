@@ -32,6 +32,8 @@ namespace NitroModules { class ArrayBuffer; }
 namespace NitroModules { class ArrayBufferHolder; }
 // Forward declaration of `JsStyleStruct` to properly resolve imports.
 namespace margelo::nitro::test { struct JsStyleStruct; }
+// Forward declaration of `WeirdNumbersEnum` to properly resolve imports.
+namespace margelo::nitro::test { enum class WeirdNumbersEnum; }
 // Forward declaration of `HybridChildSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridChildSpec; }
 // Forward declaration of `HybridBaseSpec` to properly resolve imports.
@@ -59,6 +61,7 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 #include <NitroModules/ArrayBuffer.hpp>
 #include <NitroModules/ArrayBufferHolder.hpp>
 #include "JsStyleStruct.hpp"
+#include "WeirdNumbersEnum.hpp"
 #include "HybridChildSpec.hpp"
 #include "HybridBaseSpec.hpp"
 #include "HybridTestViewSpec.hpp"
@@ -593,6 +596,14 @@ namespace margelo::nitro::test {
     }
     inline std::variant<bool, OldEnum> getVariantEnum(const std::variant<bool, OldEnum>& variant) override {
       auto __result = _swiftPart.getVariantEnum(variant);
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline std::variant<bool, WeirdNumbersEnum> getVariantWeirdNumbersEnum(const std::variant<bool, WeirdNumbersEnum>& variant) override {
+      auto __result = _swiftPart.getVariantWeirdNumbersEnum(variant);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }

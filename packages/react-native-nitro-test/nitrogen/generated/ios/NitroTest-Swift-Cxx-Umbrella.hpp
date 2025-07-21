@@ -34,6 +34,8 @@ namespace margelo::nitro::test { enum class OldEnum; }
 namespace margelo::nitro::test { struct Person; }
 // Forward declaration of `Powertrain` to properly resolve imports.
 namespace margelo::nitro::test { enum class Powertrain; }
+// Forward declaration of `WeirdNumbersEnum` to properly resolve imports.
+namespace margelo::nitro::test { enum class WeirdNumbersEnum; }
 
 // Include C++ defined types
 #include "Car.hpp"
@@ -47,6 +49,7 @@ namespace margelo::nitro::test { enum class Powertrain; }
 #include "OldEnum.hpp"
 #include "Person.hpp"
 #include "Powertrain.hpp"
+#include "WeirdNumbersEnum.hpp"
 #include <NitroModules/AnyMap.hpp>
 #include <NitroModules/ArrayBuffer.hpp>
 #include <NitroModules/Promise.hpp>

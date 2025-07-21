@@ -5,6 +5,7 @@ import {
   type Car,
   type Person,
   type Powertrain,
+  WeirdNumbersEnum,
 } from 'react-native-nitro-test'
 import type { State } from './Testers'
 import { it } from './Testers'
@@ -115,6 +116,19 @@ function timeoutedPromise<T>(
       reject(e)
     }
   })
+}
+
+function getHighestEnumValue<T extends object>(enumObj: T): number {
+  const numericValues = Object.values(enumObj).filter(
+    (v) => typeof v === 'number'
+  ) as number[]
+
+  if (numericValues.length === 0)
+    throw new Error(
+      `Enum ${JSON.stringify(enumObj)} does not contain any numerical values!`
+    )
+
+  return Math.max(...numericValues)
 }
 
 export function getTests(
@@ -648,6 +662,42 @@ export function getTests(
       it(() => testObject.getVariantEnum('string')).didThrow(
         `Error: ${testObject.name}.getVariantEnum(...): Cannot convert "string" to any type in variant<bool, margelo::nitro::test::OldEnum>!`
       )
+    ),
+    createTest('getVariantEnum(...) throws at wrong numerical value', () =>
+      it(() => {
+        const highestPossibleValue = getHighestEnumValue(OldEnum)
+        return testObject.getVariantEnum(highestPossibleValue + 1)
+      }).didThrow(
+        `Error: ${testObject.name}.getVariantEnum(...): Cannot convert "string" to any type in variant<bool, margelo::nitro::test::OldEnum>!`
+      )
+    ),
+    createTest('getVariantWeirdNumbersEnum(...) converts enum', () =>
+      it(() => testObject.getVariantWeirdNumbersEnum(WeirdNumbersEnum.A))
+        .didNotThrow()
+        .equals(WeirdNumbersEnum.A)
+    ),
+    createTest('getVariantWeirdNumbersEnum(...) converts boolean', () =>
+      it(() => testObject.getVariantWeirdNumbersEnum(true))
+        .didNotThrow()
+        .equals(true)
+    ),
+    createTest(
+      'getVariantWeirdNumbersEnum(...) throws at wrong type (string)',
+      () =>
+        // @ts-expect-error
+        it(() => testObject.getVariantWeirdNumbersEnum('string')).didThrow(
+          `Error: ${testObject.name}.getVariantWeirdNumbersEnum(...): Cannot convert "string" to any type in variant<bool, margelo::nitro::test::WeirdNumbersEnum>!`
+        )
+    ),
+    createTest(
+      'getVariantWeirdNumbersEnum(...) throws at wrong numerical value',
+      () =>
+        it(() => {
+          const highestPossibleValue = getHighestEnumValue(WeirdNumbersEnum)
+          return testObject.getVariantWeirdNumbersEnum(highestPossibleValue + 1)
+        }).didThrow(
+          `Error: ${testObject.name}.getVariantWeirdNumbersEnum(...): Cannot convert "string" to any type in variant<bool, margelo::nitro::test::WeirdNumbersEnum>!`
+        )
     ),
     createTest('getVariantObjects(...) converts Person', () =>
       it(() => testObject.getVariantObjects(TEST_PERSON))
