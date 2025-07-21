@@ -12,10 +12,10 @@ type ObjcFile = Omit<SourceFile, 'language'> & { language: 'objective-c++' }
 type SwiftFile = Omit<SourceFile, 'language'> & { language: 'swift' }
 
 export function createHybridObjectIntializer(): [ObjcFile, SwiftFile] | [] {
-  const autolinkingClassName = `${NitroConfig.getIosModuleName()}Autolinking`
+  const autolinkingClassName = `${NitroConfig.current.getIosModuleName()}Autolinking`
   const umbrellaHeaderName = getUmbrellaHeaderName()
 
-  const autolinkedHybridObjects = NitroConfig.getAutolinkedHybridObjects()
+  const autolinkedHybridObjects = NitroConfig.current.getAutolinkedHybridObjects()
 
   const swiftFunctions: string[] = []
   const cppRegistrations: string[] = []
@@ -74,7 +74,7 @@ ${imports}
 
 + (void) load {
   using namespace margelo::nitro;
-  using namespace ${NitroConfig.getCxxNamespace('c++')};
+  using namespace ${NitroConfig.current.getCxxNamespace('c++')};
 
   ${indent(cppRegistrations.join('\n'), '  ')}
 }

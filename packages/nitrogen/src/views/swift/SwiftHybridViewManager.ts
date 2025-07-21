@@ -19,14 +19,14 @@ export function createSwiftHybridViewManager(
   spec: HybridObjectSpec
 ): SourceFile[] {
   const cppFiles = createViewComponentShadowNodeFiles(spec)
-  const namespace = NitroConfig.getCxxNamespace('c++')
-  const swiftNamespace = NitroConfig.getIosModuleName()
+  const namespace = NitroConfig.current.getCxxNamespace('c++')
+  const swiftNamespace = NitroConfig.current.getIosModuleName()
   const { HybridTSpec, HybridTSpecSwift, HybridTSpecCxx } = getHybridObjectName(
     spec.name
   )
   const { component, descriptorClassName, propsClassName } =
     getViewComponentNames(spec)
-  const autolinking = NitroConfig.getAutolinkedHybridObjects()
+  const autolinking = NitroConfig.current.getAutolinkedHybridObjects()
   const viewImplementation = autolinking[spec.name]?.swift
   if (viewImplementation == null) {
     throw new Error(

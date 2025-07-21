@@ -9,7 +9,7 @@ import { KotlinCxxBridgedType } from './KotlinCxxBridgedType.js'
 
 export function createKotlinFunction(functionType: FunctionType): SourceFile[] {
   const name = functionType.specializationName
-  const packageName = NitroConfig.getAndroidPackage('java/kotlin')
+  const packageName = NitroConfig.current.getAndroidPackage('java/kotlin')
   const kotlinReturnType = functionType.returnType.getCode('kotlin')
   const kotlinParams = functionType.parameters.map(
     (p) => `${p.escapedName}: ${p.getCode('kotlin')}`
@@ -98,13 +98,13 @@ class ${name}_java(private val function: ${lambdaSignature}): ${name} {
 }
   `.trim()
 
-  const jniInterfaceDescriptor = NitroConfig.getAndroidPackage('c++/jni', name)
-  const jniClassDescriptor = NitroConfig.getAndroidPackage(
+  const jniInterfaceDescriptor = NitroConfig.current.getAndroidPackage('c++/jni', name)
+  const jniClassDescriptor = NitroConfig.current.getAndroidPackage(
     'c++/jni',
     `${name}_cxx`
   )
   const bridgedReturn = new KotlinCxxBridgedType(functionType.returnType)
-  const cxxNamespace = NitroConfig.getCxxNamespace('c++')
+  const cxxNamespace = NitroConfig.current.getCxxNamespace('c++')
   const typename = functionType.getCode('c++')
 
   // call() Java -> C++
@@ -255,7 +255,7 @@ namespace ${cxxNamespace} {
     content: kotlinCode,
     language: 'kotlin',
     name: `${name}.kt`,
-    subdirectory: NitroConfig.getAndroidPackageDirectory(),
+    subdirectory: NitroConfig.current.getAndroidPackageDirectory(),
     platform: 'android',
   })
   files.push({

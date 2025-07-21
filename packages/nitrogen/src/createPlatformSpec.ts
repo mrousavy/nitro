@@ -18,6 +18,7 @@ import { createKotlinHybridObject } from './syntax/kotlin/KotlinHybridObject.js'
 import { createType } from './syntax/createType.js'
 import { Parameter } from './syntax/Parameter.js'
 import { getBaseTypes } from './utils.js'
+import { NitroConfig } from './config/NitroConfig.js'
 
 export function generatePlatformFiles(
   interfaceType: Type,
@@ -66,6 +67,7 @@ function getHybridObjectSpec(type: Type, language: Language): HybridObjectSpec {
       methods: methodsSpec?.methods ?? [],
       properties: propsSpec.properties,
       name: name,
+      config: NitroConfig.current,
     }
   }
 
@@ -145,6 +147,7 @@ function getHybridObjectSpec(type: Type, language: Language): HybridObjectSpec {
     methods: methods,
     baseTypes: bases,
     isHybridView: isHybridView(type),
+    config: NitroConfig.current,
   }
   return spec
 }

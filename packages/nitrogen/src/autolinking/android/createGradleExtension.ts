@@ -7,7 +7,7 @@ export interface GradleFile extends Omit<SourceFile, 'language'> {
 }
 
 export function createGradleExtension(): GradleFile {
-  const name = NitroConfig.getAndroidCxxLibName()
+  const name = NitroConfig.current.getAndroidCxxLibName()
 
   const code = `
 ${createFileMetadataString(`${name}+autolinking.gradle`)}

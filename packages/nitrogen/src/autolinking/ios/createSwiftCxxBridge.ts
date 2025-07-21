@@ -17,7 +17,7 @@ import { getHybridObjectName } from '../../syntax/getHybridObjectName.js'
 const SWIFT_BRIDGE_NAMESPACE = ['bridge', 'swift']
 
 export function createSwiftCxxBridge(): SourceFile[] {
-  const moduleName = NitroConfig.getIosModuleName()
+  const moduleName = NitroConfig.current.getIosModuleName()
   const bridgeName = `${moduleName}-Swift-Cxx-Bridge`
 
   const types = getAllKnownTypes('swift').map((t) => new SwiftCxxBridgedType(t))
@@ -63,7 +63,7 @@ export function createSwiftCxxBridge(): SourceFile[] {
     .map((i) => includeHeader(i, true))
     .filter(isNotDuplicate)
 
-  const namespace = NitroConfig.getCxxNamespace(
+  const namespace = NitroConfig.current.getCxxNamespace(
     'c++',
     ...SWIFT_BRIDGE_NAMESPACE
   )

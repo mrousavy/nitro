@@ -31,7 +31,7 @@ export function createCppUnion(
   const cppCanConvertCases = enumMembers
     .map((m) => `case hashString("${m.stringValue}"):`)
     .join('\n')
-  const cxxNamespace = NitroConfig.getCxxNamespace('c++')
+  const cxxNamespace = NitroConfig.current.getCxxNamespace('c++')
 
   const cppCode = `
 ${createFileMetadataString(`${typename}.hpp`)}

@@ -107,7 +107,7 @@ export class EnumType implements Type {
     return [this.declarationFile]
   }
   getRequiredImports(): SourceImport[] {
-    const cxxNamespace = NitroConfig.getCxxNamespace('c++')
+    const cxxNamespace = NitroConfig.current.getCxxNamespace('c++')
     const extraImport: SourceImport = {
       name: this.declarationFile.name,
       language: this.declarationFile.language,

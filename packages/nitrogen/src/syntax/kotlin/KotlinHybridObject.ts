@@ -20,7 +20,7 @@ export function createKotlinHybridObject(spec: HybridObjectSpec): SourceFile[] {
     .map((m) => getMethodForwardImplementation(m))
     .join('\n\n')
 
-  const javaPackage = NitroConfig.getAndroidPackage('java/kotlin')
+  const javaPackage = NitroConfig.current.getAndroidPackage('java/kotlin')
 
   let kotlinBase = spec.isHybridView ? 'HybridView' : 'HybridObject'
   if (spec.baseTypes.length > 0) {
@@ -101,7 +101,7 @@ abstract class ${name.HybridTSpec}: ${kotlinBase}() {
     content: abstractClassCode,
     language: 'kotlin',
     name: `${name.HybridTSpec}.kt`,
-    subdirectory: NitroConfig.getAndroidPackageDirectory(),
+    subdirectory: NitroConfig.current.getAndroidPackageDirectory(),
     platform: 'android',
   })
   files.push(...cppFiles)

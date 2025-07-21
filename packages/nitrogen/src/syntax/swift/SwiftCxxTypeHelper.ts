@@ -69,11 +69,11 @@ function createCxxHybridObjectSwiftHelper(
   type: HybridObjectType
 ): SwiftCxxHelper {
   const actualType = type.getCode('c++')
-  const modulename = NitroConfig.getIosModuleName()
+  const modulename = NitroConfig.current.getIosModuleName()
   const { HybridTSpecCxx, HybridTSpecSwift, HybridTSpec } = getHybridObjectName(
     type.hybridObjectName
   )
-  const swiftWrappingType = NitroConfig.getCxxNamespace('c++', HybridTSpecSwift)
+  const swiftWrappingType = NitroConfig.current.getCxxNamespace('c++', HybridTSpecSwift)
   const swiftPartType = `${modulename}::${HybridTSpecCxx}`
   const name = escapeCppName(actualType)
 
@@ -313,7 +313,7 @@ function createCxxFunctionSwiftHelper(type: FunctionType): SwiftCxxHelper {
   })
   const name = type.specializationName
   const wrapperName = `${name}_Wrapper`
-  const swiftClassName = `${NitroConfig.getIosModuleName()}::${type.specializationName}`
+  const swiftClassName = `${NitroConfig.current.getIosModuleName()}::${type.specializationName}`
 
   const callParamsForward = type.parameters.map((p) => {
     const bridge = new SwiftCxxBridgedType(p)

@@ -50,7 +50,7 @@ export function createCppStruct(
   const cppExtraIncludes = includedTypes
     .map((i) => includeHeader(i))
     .filter(isNotDuplicate)
-  const cxxNamespace = NitroConfig.getCxxNamespace('c++')
+  const cxxNamespace = NitroConfig.current.getCxxNamespace('c++')
 
   const cppCode = `
 ${createFileMetadataString(`${typename}.hpp`)}

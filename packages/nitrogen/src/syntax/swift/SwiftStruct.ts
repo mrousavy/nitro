@@ -10,7 +10,7 @@ import { getBridgeNamespace } from './SwiftHybridObjectBridge.js'
 export function createSwiftStructBridge(
   struct: StructType
 ): FileWithReferencedTypes {
-  const fullName = NitroConfig.getCxxNamespace('swift', struct.structName)
+  const fullName = NitroConfig.current.getCxxNamespace('swift', struct.structName)
   const init = createSwiftBridgedConstructor(struct)
   const bridgedProps = struct.properties
     .map((p) => {

@@ -8,7 +8,7 @@ import type { StructType } from '../types/StructType.js'
 import { KotlinCxxBridgedType } from './KotlinCxxBridgedType.js'
 
 export function createKotlinStruct(structType: StructType): SourceFile[] {
-  const packageName = NitroConfig.getAndroidPackage('java/kotlin')
+  const packageName = NitroConfig.current.getAndroidPackage('java/kotlin')
   const values = structType.properties.map(
     (p) => `val ${p.escapedName}: ${p.getCode('kotlin')}`
   )
@@ -71,8 +71,8 @@ data class ${structType.structName}
 }
   `.trim()
 
-  const cxxNamespace = NitroConfig.getCxxNamespace('c++')
-  const jniClassDescriptor = NitroConfig.getAndroidPackage(
+  const cxxNamespace = NitroConfig.current.getCxxNamespace('c++')
+  const jniClassDescriptor = NitroConfig.current.getAndroidPackage(
     'c++/jni',
     structType.structName
   )
@@ -139,7 +139,7 @@ namespace ${cxxNamespace} {
     content: code,
     language: 'kotlin',
     name: `${structType.structName}.kt`,
-    subdirectory: NitroConfig.getAndroidPackageDirectory(),
+    subdirectory: NitroConfig.current.getAndroidPackageDirectory(),
     platform: 'android',
   })
   files.push({

@@ -1,8 +1,11 @@
 import type { SourceFile } from './syntax/SourceFile.js'
 import path from 'path'
+import fs from 'fs'
 import type { SwiftCxxHelper } from './syntax/swift/SwiftCxxTypeHelper.js'
 import type { Type } from 'ts-morph'
 import { isNotDuplicate } from './syntax/helpers.js'
+import { readUserConfig } from './config/getConfig.js'
+import { NitroConfig } from './config/NitroConfig.js'
 
 export const NITROGEN_VERSION = process.env.npm_package_version ?? '?.?.?'
 
@@ -115,4 +118,36 @@ export function getBaseTypes(type: Type): Type[] {
   }
   const recursive = baseTypes.flatMap((b) => [b, ...getBaseTypes(b)])
   return recursive.filter(isNotDuplicate)
+}
+
+export function getHybridObjectNitroModuleConfig(
+  type: Type
+): NitroConfig | undefined {
+  const symbol = type.getSymbol()
+  if (!symbol) return undefined
+
+  const declarations =
+    symbol.getValueDeclaration() || symbol.getDeclarations()[0]
+  if (!declarations) return undefined
+
+  const sourceFile = declarations.getSourceFile()
+  let filePath: string = sourceFile.getFilePath()
+
+  while (true) {
+    // go up one dir
+    const newFilePath = path.resolve(path.join(filePath, '..'))
+    if (filePath === newFilePath) {
+      // going 'cd ..' in that path didn't change a thing - so we
+      // reached the root directory. we didn't find a nitro.json anywhere.
+      return undefined
+    }
+    filePath = newFilePath
+
+    const nitroJsonPath = path.join(filePath, 'nitro.json')
+    const hasNitroJson = fs.existsSync(nitroJsonPath)
+    if (hasNitroJson) {
+      const config = readUserConfig(nitroJsonPath)
+      return new NitroConfig(config)
+    }
+  }
 }

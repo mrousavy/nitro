@@ -330,7 +330,7 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
           case 'c++':
             return `static_cast<int>(${cppParameterName})`
           case 'swift':
-            const fullName = NitroConfig.getCxxNamespace(
+            const fullName = NitroConfig.current.getCxxNamespace(
               'swift',
               enumType.enumName
             )
@@ -760,7 +760,7 @@ case ${i}:
       case 'tuple': {
         const tuple = getTypeAs(this.type, TupleType)
         const bridge = this.getBridgeOrThrow()
-        const makeFunc = NitroConfig.getCxxNamespace(language, bridge.funcName)
+        const makeFunc = NitroConfig.current.getCxxNamespace(language, bridge.funcName)
         switch (language) {
           case 'swift':
             const typesForward = tuple.itemTypes

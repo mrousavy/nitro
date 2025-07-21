@@ -1,3 +1,4 @@
+import type { NitroConfig } from '../config/NitroConfig.js'
 import type { Language } from '../getPlatformSpecs.js'
 import type { Method } from './Method.js'
 import type { Property } from './Property.js'
@@ -9,4 +10,5 @@ export interface HybridObjectSpec {
   methods: Method[]
   baseTypes: HybridObjectSpec[]
   isHybridView: boolean
+  config: NitroConfig
 }

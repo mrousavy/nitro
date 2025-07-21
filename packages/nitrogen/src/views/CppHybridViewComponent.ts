@@ -69,7 +69,7 @@ export function createViewComponentShadowNodeFiles(
     component,
   } = getViewComponentNames(spec)
 
-  const namespace = NitroConfig.getCxxNamespace('c++', 'views')
+  const namespace = NitroConfig.current.getCxxNamespace('c++', 'views')
 
   const props = [...spec.properties, getHybridRefProperty(spec)]
   const properties = props.map(

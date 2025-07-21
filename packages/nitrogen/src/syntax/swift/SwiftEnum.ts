@@ -5,7 +5,7 @@ import type { SourceFile } from '../SourceFile.js'
 import type { EnumType } from '../types/EnumType.js'
 
 export function createSwiftEnumBridge(enumType: EnumType): SourceFile {
-  const fullName = NitroConfig.getCxxNamespace('swift', enumType.enumName)
+  const fullName = NitroConfig.current.getCxxNamespace('swift', enumType.enumName)
 
   const initializeCases = enumType.enumMembers.map((m) =>
     `

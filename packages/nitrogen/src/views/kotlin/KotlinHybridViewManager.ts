@@ -17,9 +17,9 @@ export function createKotlinHybridViewManager(
   spec: HybridObjectSpec
 ): SourceFile[] {
   const cppFiles = createViewComponentShadowNodeFiles(spec)
-  const javaSubNamespace = NitroConfig.getAndroidPackage('java/kotlin', 'views')
-  const javaNamespace = NitroConfig.getAndroidPackage('java/kotlin')
-  const cxxNamespace = NitroConfig.getCxxNamespace('c++', 'views')
+  const javaSubNamespace = NitroConfig.current.getAndroidPackage('java/kotlin', 'views')
+  const javaNamespace = NitroConfig.current.getAndroidPackage('java/kotlin')
+  const cxxNamespace = NitroConfig.current.getCxxNamespace('c++', 'views')
   const { JHybridTSpec, HybridTSpec } = getHybridObjectName(spec.name)
   const {
     manager,
@@ -29,7 +29,7 @@ export function createKotlinHybridViewManager(
     descriptorClassName,
   } = getViewComponentNames(spec)
   const stateUpdaterName = `${stateClassName}Updater`
-  const autolinking = NitroConfig.getAutolinkedHybridObjects()
+  const autolinking = NitroConfig.current.getAutolinkedHybridObjects()
   const viewImplementation = autolinking[spec.name]?.kotlin
   if (viewImplementation == null) {
     throw new Error(
@@ -106,7 +106,7 @@ internal class ${stateUpdaterName} {
 }
   `.trim()
 
-  const updaterJniDescriptor = NitroConfig.getAndroidPackage(
+  const updaterJniDescriptor = NitroConfig.current.getAndroidPackage(
     'c++/jni',
     'views',
     stateUpdaterName
@@ -181,7 +181,7 @@ void J${stateUpdaterName}::updateViewProps(jni::alias_ref<jni::JClass> /* class 
                                            jni::alias_ref<${JHybridTSpec}::javaobject> javaView,
                                            jni::alias_ref<JStateWrapper::javaobject> stateWrapperInterface) {
   ${JHybridTSpec}* view = javaView->cthis();
-  
+
   // Get concrete StateWrapperImpl from passed StateWrapper interface object
   jobject rawStateWrapper = stateWrapperInterface.get();
   if (!stateWrapperInterface->isInstanceOf(react::StateWrapperImpl::javaClassStatic())) {

@@ -24,7 +24,7 @@ export function createCppHybridObject(spec: HybridObjectSpec): SourceFile[] {
   const cppExtraIncludes = extraIncludes
     .map((i) => includeHeader(i))
     .filter(isNotDuplicate)
-  const cxxNamespace = NitroConfig.getCxxNamespace('c++')
+  const cxxNamespace = NitroConfig.current.getCxxNamespace('c++')
   const name = getHybridObjectName(spec.name)
 
   const bases = ['public virtual HybridObject']

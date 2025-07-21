@@ -6,7 +6,7 @@ import { EnumType } from '../types/EnumType.js'
 
 export function createKotlinEnum(enumType: EnumType): SourceFile[] {
   const members = enumType.enumMembers.map((m) => m.name.toUpperCase())
-  const packageName = NitroConfig.getAndroidPackage('java/kotlin')
+  const packageName = NitroConfig.current.getAndroidPackage('java/kotlin')
   const code = `
 ${createFileMetadataString(`${enumType.enumName}.kt`)}
 
@@ -29,8 +29,8 @@ enum class ${enumType.enumName} {
 }
   `.trim()
 
-  const cxxNamespace = NitroConfig.getCxxNamespace('c++')
-  const jniClassDescriptor = NitroConfig.getAndroidPackage(
+  const cxxNamespace = NitroConfig.current.getCxxNamespace('c++')
+  const jniClassDescriptor = NitroConfig.current.getAndroidPackage(
     'c++/jni',
     enumType.enumName
   )
@@ -86,7 +86,7 @@ namespace ${cxxNamespace} {
     content: code,
     language: 'kotlin',
     name: `${enumType.enumName}.kt`,
-    subdirectory: NitroConfig.getAndroidPackageDirectory(),
+    subdirectory: NitroConfig.current.getAndroidPackageDirectory(),
     platform: 'android',
   })
   files.push({

@@ -19,7 +19,7 @@ void JHybridTestViewStateUpdater::updateViewProps(jni::alias_ref<jni::JClass> /*
                                            jni::alias_ref<JHybridTestViewSpec::javaobject> javaView,
                                            jni::alias_ref<JStateWrapper::javaobject> stateWrapperInterface) {
   JHybridTestViewSpec* view = javaView->cthis();
-  
+
   // Get concrete StateWrapperImpl from passed StateWrapper interface object
   jobject rawStateWrapper = stateWrapperInterface.get();
   if (!stateWrapperInterface->isInstanceOf(react::StateWrapperImpl::javaClassStatic())) {

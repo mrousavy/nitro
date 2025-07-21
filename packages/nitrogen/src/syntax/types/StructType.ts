@@ -60,7 +60,7 @@ export class StructType implements Type {
     return [this.declarationFile, ...referencedTypes]
   }
   getRequiredImports(): SourceImport[] {
-    const cxxNamespace = NitroConfig.getCxxNamespace('c++')
+    const cxxNamespace = NitroConfig.current.getCxxNamespace('c++')
     return [
       {
         name: this.declarationFile.name,

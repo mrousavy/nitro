@@ -31,11 +31,11 @@ export function createFbjniHybridObject(spec: HybridObjectSpec): SourceFile[] {
   const methodsDecl = methods
     .map((p) => p.getCode('c++', { override: true }))
     .join('\n')
-  const jniClassDescriptor = NitroConfig.getAndroidPackage(
+  const jniClassDescriptor = NitroConfig.current.getAndroidPackage(
     'c++/jni',
     name.HybridTSpec
   )
-  const cxxNamespace = NitroConfig.getCxxNamespace('c++')
+  const cxxNamespace = NitroConfig.current.getCxxNamespace('c++')
   const spaces = createIndentation(name.JHybridTSpec.length)
 
   let cppBase = 'JHybridObject'
@@ -59,7 +59,7 @@ export function createFbjniHybridObject(spec: HybridObjectSpec): SourceFile[] {
       forwardDeclaration: getForwardDeclaration(
         'class',
         JHybridTSpec,
-        NitroConfig.getCxxNamespace('c++')
+        NitroConfig.current.getCxxNamespace('c++')
       ),
     })
   }

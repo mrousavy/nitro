@@ -39,7 +39,7 @@ export function createCppEnum(
         `${m.name}      SWIFT_NAME(${toLowerCamelCase(m.name)}) = ${m.value},`
     )
     .join('\n')
-  const cxxNamespace = NitroConfig.getCxxNamespace('c++')
+  const cxxNamespace = NitroConfig.current.getCxxNamespace('c++')
 
   let isInsideValidValues: string | undefined
   if (isIncrementingEnum(enumMembers)) {
