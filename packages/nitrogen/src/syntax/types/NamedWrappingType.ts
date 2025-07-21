@@ -27,7 +27,7 @@ export class NamedWrappingType<T extends Type> implements NamedType {
   getExtraFiles(): SourceFile[] {
     return this.type.getExtraFiles()
   }
-  getRequiredImports(): SourceImport[] {
-    return this.type.getRequiredImports()
+  getRequiredImports(language: Language): SourceImport[] {
+    return this.type.getRequiredImports(language)
   }
 }

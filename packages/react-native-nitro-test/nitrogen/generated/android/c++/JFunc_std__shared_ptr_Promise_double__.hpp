@@ -10,8 +10,8 @@
 #include <fbjni/fbjni.h>
 #include <functional>
 
-#include <functional>
 #include <NitroModules/Promise.hpp>
+#include <functional>
 #include <NitroModules/JPromise.hpp>
 
 namespace margelo::nitro::test {

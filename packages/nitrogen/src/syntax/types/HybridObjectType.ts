@@ -96,57 +96,79 @@ export class HybridObjectType implements Type {
   getExtraFiles(): SourceFile[] {
     return []
   }
-  getRequiredImports(): SourceImport[] {
+
+  private getExternalCxxImportName(): string {
+    // TODO: We currently don't have a xplat way of handling import paths, therefore iosModuleName and androidCxxLibName need to have the same value.
+    if (
+      this.sourceConfig.getIosModuleName() !==
+      this.sourceConfig.getAndroidCxxLibName()
+    ) {
+      throw new Error(
+        `Cannot import external HybridObject "${this.hybridObjectName}" if it's nitro.json's iosModuleName and androidCxxLibName are not the same value!`
+      )
+    }
+    return this.sourceConfig.getIosModuleName()
+  }
+
+  getRequiredImports(language: Language): SourceImport[] {
     const name = getHybridObjectName(this.hybridObjectName)
     const cxxNamespace = this.sourceConfig.getCxxNamespace('c++')
-    const imports: SourceImport[] = [
-      {
-        language: 'c++',
-        name: 'memory',
-        space: 'system',
-      },
-    ]
+    const imports: SourceImport[] = []
 
-    if (this.sourceConfig.isExternalConfig) {
-      // It's an imported type - we need to import the source definitions too!
-      imports.push(
-        {
+    switch (language) {
+      case 'c++': {
+        imports.push({
+          language: 'c++',
+          name: 'memory',
+          space: 'system',
+        })
+        if (this.sourceConfig.isExternalConfig) {
+          const cxxImport = this.getExternalCxxImportName()
+          imports.push({
+            name: `${cxxImport}/${name.HybridTSpec}.hpp`,
+            forwardDeclaration: getForwardDeclaration(
+              'class',
+              name.HybridTSpec,
+              cxxNamespace
+            ),
+            language: 'c++',
+            space: 'system',
+          })
+        } else {
+          imports.push({
+            name: `${name.HybridTSpec}.hpp`,
+            forwardDeclaration: getForwardDeclaration(
+              'class',
+              name.HybridTSpec,
+              cxxNamespace
+            ),
+            language: 'c++',
+            space: 'user',
+          })
+        }
+        break
+      }
+
+      case 'kotlin': {
+        imports.push({
           language: 'kotlin',
           name: this.sourceConfig.getAndroidPackage(
             'java/kotlin',
             this.hybridObjectName
           ),
           space: 'system',
-        },
-        {
+        })
+        break
+      }
+
+      case 'swift': {
+        imports.push({
           language: 'swift',
           name: this.sourceConfig.getIosModuleName(),
           space: 'system',
-        },
-        {
-          // TODO: This import might not work on Android...
-          name: `${this.sourceConfig.getIosModuleName()}/${name.HybridTSpec}.hpp`,
-          forwardDeclaration: getForwardDeclaration(
-            'class',
-            name.HybridTSpec,
-            cxxNamespace
-          ),
-          language: 'c++',
-          space: 'system',
-        }
-      )
-    } else {
-      // It's in our own package. We can just import like this
-      imports.push({
-        name: `${name.HybridTSpec}.hpp`,
-        forwardDeclaration: getForwardDeclaration(
-          'class',
-          name.HybridTSpec,
-          cxxNamespace
-        ),
-        language: 'c++',
-        space: 'user',
-      })
+        })
+        break
+      }
     }
 
     return imports

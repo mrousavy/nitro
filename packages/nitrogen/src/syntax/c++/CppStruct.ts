@@ -42,7 +42,7 @@ export function createCppStruct(
     .join('\n')
 
   // Get C++ includes for each extra-file we need to include
-  const includedTypes = properties.flatMap((r) => r.getRequiredImports())
+  const includedTypes = properties.flatMap((r) => r.getRequiredImports('c++'))
   const cppForwardDeclarations = includedTypes
     .map((i) => i.forwardDeclaration)
     .filter((v) => v != null)

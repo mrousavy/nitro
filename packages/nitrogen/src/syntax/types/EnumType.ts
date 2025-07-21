@@ -106,18 +106,21 @@ export class EnumType implements Type {
   getExtraFiles(): SourceFile[] {
     return [this.declarationFile]
   }
-  getRequiredImports(): SourceImport[] {
-    const cxxNamespace = NitroConfig.current.getCxxNamespace('c++')
-    const extraImport: SourceImport = {
-      name: this.declarationFile.name,
-      language: this.declarationFile.language,
-      forwardDeclaration: getForwardDeclaration(
-        'enum class',
-        this.enumName,
-        cxxNamespace
-      ),
-      space: 'user',
+  getRequiredImports(language: Language): SourceImport[] {
+    const imports: SourceImport[] = []
+    if (language === 'c++') {
+      const cxxNamespace = NitroConfig.current.getCxxNamespace('c++')
+      imports.push({
+        name: this.declarationFile.name,
+        language: this.declarationFile.language,
+        forwardDeclaration: getForwardDeclaration(
+          'enum class',
+          this.enumName,
+          cxxNamespace
+        ),
+        space: 'user',
+      })
     }
-    return [extraImport]
+    return imports
   }
 }

@@ -57,14 +57,16 @@ export class PromiseType implements Type {
   getExtraFiles(): SourceFile[] {
     return this.resultingType.getExtraFiles()
   }
-  getRequiredImports(): SourceImport[] {
-    return [
-      {
+  getRequiredImports(language: Language): SourceImport[] {
+    const imports: SourceImport[] =
+      this.resultingType.getRequiredImports(language)
+    if (language === 'c++') {
+      imports.push({
         language: 'c++',
         name: 'NitroModules/Promise.hpp',
         space: 'system',
-      },
-      ...this.resultingType.getRequiredImports(),
-    ]
+      })
+    }
+    return imports
   }
 }

@@ -59,10 +59,11 @@ export class StructType implements Type {
     )
     return [this.declarationFile, ...referencedTypes]
   }
-  getRequiredImports(): SourceImport[] {
-    const cxxNamespace = NitroConfig.current.getCxxNamespace('c++')
-    return [
-      {
+  getRequiredImports(language: Language): SourceImport[] {
+    const imports: SourceImport[] = []
+    if (language === 'c++') {
+      const cxxNamespace = NitroConfig.current.getCxxNamespace('c++')
+      imports.push({
         name: this.declarationFile.name,
         language: this.declarationFile.language,
         forwardDeclaration: getForwardDeclaration(
@@ -71,7 +72,8 @@ export class StructType implements Type {
           cxxNamespace
         ),
         space: 'user',
-      },
-    ]
+      })
+    }
+    return imports
   }
 }

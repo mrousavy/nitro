@@ -98,7 +98,10 @@ class ${name}_java(private val function: ${lambdaSignature}): ${name} {
 }
   `.trim()
 
-  const jniInterfaceDescriptor = NitroConfig.current.getAndroidPackage('c++/jni', name)
+  const jniInterfaceDescriptor = NitroConfig.current.getAndroidPackage(
+    'c++/jni',
+    name
+  )
   const jniClassDescriptor = NitroConfig.current.getAndroidPackage(
     'c++/jni',
     `${name}_cxx`
@@ -164,7 +167,7 @@ return ${bridgedReturn.parseFromKotlinToCpp('__result', 'c++', false)};
 
   const bridged = new KotlinCxxBridgedType(functionType)
   const imports = bridged
-    .getRequiredImports()
+    .getRequiredImports('c++')
     .filter((i) => i.name !== `J${name}.hpp`)
   const includes = imports.map((i) => includeHeader(i)).filter(isNotDuplicate)
 

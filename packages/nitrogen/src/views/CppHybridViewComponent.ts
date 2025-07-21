@@ -77,7 +77,7 @@ export function createViewComponentShadowNodeFiles(
   )
   const cases = props.map((p) => `case hashString("${p.name}"): return true;`)
   const includes = props.flatMap((p) =>
-    p.getRequiredImports().map((i) => includeHeader(i, true))
+    p.getRequiredImports('c++').map((i) => includeHeader(i, true))
   )
 
   // .hpp code

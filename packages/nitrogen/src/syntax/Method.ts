@@ -144,9 +144,11 @@ ${signature} {
     return [...returnTypeExtraFiles, ...paramsExtraFiles]
   }
 
-  getRequiredImports(): SourceImport[] {
-    const returnTypeFiles = this.returnType.getRequiredImports()
-    const paramsImports = this.parameters.flatMap((p) => p.getRequiredImports())
+  getRequiredImports(language: Language): SourceImport[] {
+    const returnTypeFiles = this.returnType.getRequiredImports(language)
+    const paramsImports = this.parameters.flatMap((p) =>
+      p.getRequiredImports(language)
+    )
     return [...returnTypeFiles, ...paramsImports]
   }
 }

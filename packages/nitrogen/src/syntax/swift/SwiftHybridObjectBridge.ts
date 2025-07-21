@@ -295,7 +295,9 @@ if (__result.hasError()) [[unlikely]] {
   ]
   const cxxNamespace = NitroConfig.current.getCxxNamespace('c++')
   const iosModuleName = NitroConfig.current.getIosModuleName()
-  const extraImports = allBridgedTypes.flatMap((b) => b.getRequiredImports())
+  const extraImports = allBridgedTypes.flatMap((b) =>
+    b.getRequiredImports('c++')
+  )
 
   const cppBaseClasses = [`public virtual ${name.HybridTSpec}`]
   const cppBaseCtorCalls = [`HybridObject(${name.HybridTSpec}::TAG)`]

@@ -120,7 +120,7 @@ public:
   })
 
   const includes = new KotlinCxxBridgedType(variant)
-    .getRequiredImports()
+    .getRequiredImports('c++')
     .filter((i) => i.name !== `J${kotlinName}.hpp`)
     .map((i) => includeHeader(i, true))
     .filter(isNotDuplicate)

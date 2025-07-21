@@ -147,7 +147,7 @@ ${spaces}          public virtual ${name.HybridTSpec} {
   const allTypes = getAllTypes(spec)
   const jniImports = allTypes
     .map((t) => new KotlinCxxBridgedType(t))
-    .flatMap((t) => t.getRequiredImports())
+    .flatMap((t) => t.getRequiredImports('c++'))
     .filter((i) => i != null)
   const cppIncludes = jniImports
     .map((i) => includeHeader(i))

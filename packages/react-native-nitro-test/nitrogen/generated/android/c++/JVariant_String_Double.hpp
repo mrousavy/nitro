@@ -10,8 +10,8 @@
 #include <fbjni/fbjni.h>
 #include <variant>
 
-#include <variant>
 #include <string>
+#include <variant>
 
 namespace margelo::nitro::test {
 

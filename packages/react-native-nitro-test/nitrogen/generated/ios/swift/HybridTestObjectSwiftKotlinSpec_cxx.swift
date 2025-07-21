@@ -429,6 +429,21 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
+  public final func getExternal() -> bridge.Result_std__shared_ptr_margelo__nitro__image__HybridImageSpec__ {
+    do {
+      let __result = try self.__implementation.getExternal()
+      let __resultCpp = { () -> bridge.std__shared_ptr_margelo__nitro__image__HybridImageSpec_ in
+        let __cxxWrapped = __result.getCxxWrapper()
+        return __cxxWrapped.getCxxPart()
+      }()
+      return bridge.create_Result_std__shared_ptr_margelo__nitro__image__HybridImageSpec__(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__shared_ptr_margelo__nitro__image__HybridImageSpec__(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
   public final func simpleFunc() -> bridge.Result_void_ {
     do {
       try self.__implementation.simpleFunc()

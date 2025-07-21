@@ -78,14 +78,15 @@ export class VariantType implements Type {
   getExtraFiles(): SourceFile[] {
     return this.variants.flatMap((v) => v.getExtraFiles())
   }
-  getRequiredImports(): SourceImport[] {
-    return [
-      {
+  getRequiredImports(language: Language): SourceImport[] {
+    const imports = this.variants.flatMap((v) => v.getRequiredImports(language))
+    if (language === 'c++') {
+      imports.push({
         language: 'c++',
         name: 'variant',
         space: 'system',
-      },
-      ...this.variants.flatMap((v) => v.getRequiredImports()),
-    ]
+      })
+    }
+    return imports
   }
 }

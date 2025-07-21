@@ -14,8 +14,8 @@ export function createCppHybridObject(spec: HybridObjectSpec): SourceFile[] {
     ...spec.methods.flatMap((m) => m.getExtraFiles()),
   ]
   const extraIncludes = [
-    ...spec.properties.flatMap((p) => p.getRequiredImports()),
-    ...spec.methods.flatMap((m) => m.getRequiredImports()),
+    ...spec.properties.flatMap((p) => p.getRequiredImports('c++')),
+    ...spec.methods.flatMap((m) => m.getRequiredImports('c++')),
   ]
   const cppForwardDeclarations = extraIncludes
     .map((i) => i.forwardDeclaration)
@@ -31,7 +31,7 @@ export function createCppHybridObject(spec: HybridObjectSpec): SourceFile[] {
   for (const base of spec.baseTypes) {
     const hybridObject = new HybridObjectType(base)
     bases.push(`public virtual ${getHybridObjectName(base.name).HybridTSpec}`)
-    const imports = hybridObject.getRequiredImports()
+    const imports = hybridObject.getRequiredImports('c++')
     cppForwardDeclarations.push(
       ...imports.map((i) => i.forwardDeclaration).filter((f) => f != null)
     )

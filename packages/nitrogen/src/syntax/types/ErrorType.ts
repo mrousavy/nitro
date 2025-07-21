@@ -30,13 +30,15 @@ export class ErrorType implements Type {
   getExtraFiles(): SourceFile[] {
     return []
   }
-  getRequiredImports(): SourceImport[] {
-    return [
-      {
+  getRequiredImports(language: Language): SourceImport[] {
+    const imports: SourceImport[] = []
+    if (language === 'c++') {
+      imports.push({
         language: 'c++',
         name: 'exception',
         space: 'system',
-      },
-    ]
+      })
+    }
+    return imports
   }
 }

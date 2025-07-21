@@ -20,6 +20,8 @@ namespace margelo::nitro::test { enum class Powertrain; }
 namespace margelo::nitro::test { enum class OldEnum; }
 // Forward declaration of `Person` to properly resolve imports.
 namespace margelo::nitro::test { struct Person; }
+// Forward declaration of `HybridImageSpec` to properly resolve imports.
+namespace margelo::nitro::image { class HybridImageSpec; }
 // Forward declaration of `AnyMap` to properly resolve imports.
 namespace NitroModules { class AnyMap; }
 // Forward declaration of `MapWrapper` to properly resolve imports.
@@ -51,6 +53,7 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 #include <functional>
 #include <variant>
 #include "Person.hpp"
+#include <NitroImage/HybridImageSpec.hpp>
 #include <NitroModules/AnyMap.hpp>
 #include <unordered_map>
 #include "MapWrapper.hpp"
@@ -206,6 +209,14 @@ namespace margelo::nitro::test {
     }
     inline std::variant<Person, std::shared_ptr<margelo::nitro::test::HybridTestObjectSwiftKotlinSpec>> getVariantHybrid(const std::variant<Person, std::shared_ptr<margelo::nitro::test::HybridTestObjectSwiftKotlinSpec>>& variant) override {
       auto __result = _swiftPart.getVariantHybrid(variant);
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline std::shared_ptr<margelo::nitro::image::HybridImageSpec> getExternal() override {
+      auto __result = _swiftPart.getExternal();
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }

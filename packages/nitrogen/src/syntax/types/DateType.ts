@@ -29,13 +29,15 @@ export class DateType implements Type {
   getExtraFiles(): SourceFile[] {
     return []
   }
-  getRequiredImports(): SourceImport[] {
-    return [
-      {
+  getRequiredImports(language: Language): SourceImport[] {
+    const imports: SourceImport[] = []
+    if (language === 'c++') {
+      imports.push({
         name: 'chrono',
         language: 'c++',
         space: 'system',
-      },
-    ]
+      })
+    }
+    return imports
   }
 }

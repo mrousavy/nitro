@@ -28,23 +28,27 @@ export class HybridObjectBaseType implements Type {
   getExtraFiles(): SourceFile[] {
     return []
   }
-  getRequiredImports(): SourceImport[] {
-    return [
-      {
-        language: 'c++',
-        name: 'memory',
-        space: 'system',
-      },
-      {
-        name: `NitroModules/HybridObject.hpp`,
-        forwardDeclaration: getForwardDeclaration(
-          'class',
-          'HybridObject',
-          'margelo::nitro'
-        ),
-        language: 'c++',
-        space: 'system',
-      },
-    ]
+  getRequiredImports(language: Language): SourceImport[] {
+    const imports: SourceImport[] = []
+    if (language === 'c++') {
+      imports.push(
+        {
+          language: 'c++',
+          name: 'memory',
+          space: 'system',
+        },
+        {
+          name: `NitroModules/HybridObject.hpp`,
+          forwardDeclaration: getForwardDeclaration(
+            'class',
+            'HybridObject',
+            'margelo::nitro'
+          ),
+          language: 'c++',
+          space: 'system',
+        }
+      )
+    }
+    return imports
   }
 }

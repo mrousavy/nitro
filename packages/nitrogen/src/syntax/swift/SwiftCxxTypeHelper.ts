@@ -73,7 +73,10 @@ function createCxxHybridObjectSwiftHelper(
   const { HybridTSpecCxx, HybridTSpecSwift, HybridTSpec } = getHybridObjectName(
     type.hybridObjectName
   )
-  const swiftWrappingType = NitroConfig.current.getCxxNamespace('c++', HybridTSpecSwift)
+  const swiftWrappingType = NitroConfig.current.getCxxNamespace(
+    'c++',
+    HybridTSpecSwift
+  )
   const swiftPartType = `${modulename}::${HybridTSpecCxx}`
   const name = escapeCppName(actualType)
 
@@ -94,7 +97,7 @@ using ${name} = ${actualType};
 ${actualType} create_${name}(void* _Nonnull swiftUnsafePointer);
 void* _Nonnull get_${name}(${name} cppType);
     `.trim(),
-      requiredIncludes: type.getRequiredImports(),
+      requiredIncludes: type.getRequiredImports('c++'),
     },
     cxxImplementation: {
       code: `
@@ -201,7 +204,7 @@ inline ${actualType} create_${name}(const ${wrappedBridge.getTypeCode('c++')}& v
           space: 'system',
           language: 'c++',
         },
-        ...wrappedBridge.getRequiredImports(),
+        ...wrappedBridge.getRequiredImports('c++'),
       ],
     },
     dependencies: [],
@@ -237,7 +240,7 @@ inline ${actualType} create_${name}(size_t size) {
           space: 'system',
           language: 'c++',
         },
-        ...bridgedType.getRequiredImports(),
+        ...bridgedType.getRequiredImports('c++'),
       ],
     },
     dependencies: [],
@@ -286,7 +289,7 @@ inline void emplace_${name}(${name}& map, const ${keyType}& key, const ${valueTy
           space: 'system',
           language: 'c++',
         },
-        ...bridgedType.getRequiredImports(),
+        ...bridgedType.getRequiredImports('c++'),
       ],
     },
     dependencies: [],
@@ -386,7 +389,7 @@ inline ${wrapperName} wrap_${name}(${name} value) {
           space: 'system',
           language: 'c++',
         },
-        ...bridgedType.getRequiredImports(),
+        ...bridgedType.getRequiredImports('c++'),
       ],
     },
     cxxImplementation: {
@@ -466,7 +469,7 @@ ${createFunctions.join('\n')}
           space: 'system',
           language: 'c++',
         },
-        ...bridgedType.getRequiredImports(),
+        ...bridgedType.getRequiredImports('c++'),
       ],
     },
     dependencies: [],
@@ -507,7 +510,7 @@ inline ${actualType} create_${name}(${typesSignature}) {
           space: 'system',
           language: 'c++',
         },
-        ...bridgedType.getRequiredImports(),
+        ...bridgedType.getRequiredImports('c++'),
       ],
     },
     dependencies: [],
@@ -559,7 +562,7 @@ inline ${name} ${funcName}(const ${type.error.getCode('c++')}& error) {
 using ${name} = ${actualType};
 ${functions.join('\n')}
       `.trim(),
-      requiredIncludes: type.getRequiredImports(),
+      requiredIncludes: type.getRequiredImports('c++'),
     },
     dependencies: [],
   }
@@ -606,7 +609,7 @@ inline PromiseHolder<${resultingType}> wrap_${name}(${actualType} promise) {
           space: 'system',
           language: 'c++',
         },
-        ...bridgedType.getRequiredImports(),
+        ...bridgedType.getRequiredImports('c++'),
       ],
     },
     dependencies: [

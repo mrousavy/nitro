@@ -138,6 +138,10 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
+  abstract fun getExternal(): HybridImageSpec
+  
+  @DoNotStrip
+  @Keep
   abstract fun simpleFunc(): Unit
   
   @DoNotStrip

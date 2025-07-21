@@ -84,7 +84,7 @@ data class ${structType.structName}
   const imports = structType.properties
     .flatMap((p) => getReferencedTypes(p))
     .map((t) => new KotlinCxxBridgedType(t))
-    .flatMap((t) => t.getRequiredImports())
+    .flatMap((t) => t.getRequiredImports('c++'))
   const includes = imports
     .map((i) => includeHeader(i))
     .filter(isNotDuplicate)

@@ -1,0 +1,20 @@
+{
+  "$schema": "https://nitro.margelo.com/nitro.schema.json",
+  "cxxNamespace": [
+    "image"
+  ],
+  "ios": {
+    "iosModuleName": "NitroImage"
+  },
+  "android": {
+    "androidNamespace": [
+      "image"
+    ],
+    "androidCxxLibName": "NitroImage"
+  },
+  "autolinking": { },
+  "ignorePaths": [
+    "**/node_modules"
+  ],
+  "gitAttributesGeneratedFlag": false
+}

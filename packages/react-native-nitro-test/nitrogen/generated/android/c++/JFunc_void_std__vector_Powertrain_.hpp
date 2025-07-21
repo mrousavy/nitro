@@ -10,9 +10,9 @@
 #include <fbjni/fbjni.h>
 #include <functional>
 
-#include <functional>
-#include <vector>
 #include "Powertrain.hpp"
+#include <vector>
+#include <functional>
 #include "JPowertrain.hpp"
 
 namespace margelo::nitro::test {

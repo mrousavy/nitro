@@ -10,14 +10,14 @@
 #include <fbjni/fbjni.h>
 #include <variant>
 
-#include <variant>
 #include <string>
 #include "Car.hpp"
+#include <variant>
 #include "JCar.hpp"
 #include "Powertrain.hpp"
 #include "JPowertrain.hpp"
-#include <optional>
 #include "Person.hpp"
+#include <optional>
 #include "JPerson.hpp"
 
 namespace margelo::nitro::test {

@@ -145,15 +145,18 @@ export class FunctionType implements Type {
       ...this.parameters.flatMap((p) => p.getExtraFiles()),
     ]
   }
-  getRequiredImports(): SourceImport[] {
-    return [
-      {
+  getRequiredImports(language: Language): SourceImport[] {
+    const imports: SourceImport[] = [
+      ...this.returnType.getRequiredImports(language),
+      ...this.parameters.flatMap((p) => p.getRequiredImports(language)),
+    ]
+    if (language === 'c++') {
+      imports.push({
         language: 'c++',
         name: 'functional',
         space: 'system',
-      },
-      ...this.returnType.getRequiredImports(),
-      ...this.parameters.flatMap((p) => p.getRequiredImports()),
-    ]
+      })
+    }
+    return imports
   }
 }

@@ -4,6 +4,7 @@ import {
   type Sync,
 } from 'react-native-nitro-modules'
 import type { TestView } from './TestView.nitro'
+import type { Image } from '../../../../external/Image.nitro'
 
 // Tuples become `std::tuple<...>` in C++.
 // In contrast to arrays, they are length-checked, and can have different types inside them.
@@ -76,6 +77,8 @@ interface SharedTestObjectProps {
   optionalEnum?: Powertrain
   optionalOldEnum?: OldEnum
   optionalCallback?: (value: number) => void
+
+  getExternal(): Image
 
   // Basic function tests
   simpleFunc(): void

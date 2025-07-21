@@ -25,8 +25,8 @@ namespace margelo::nitro::test { struct Person; }
 
 #include <string>
 #include "Powertrain.hpp"
-#include <optional>
 #include "Person.hpp"
+#include <optional>
 
 namespace margelo::nitro::test {
 

@@ -10,9 +10,9 @@
 #include <fbjni/fbjni.h>
 #include <variant>
 
-#include <variant>
 #include "Car.hpp"
 #include "Person.hpp"
+#include <variant>
 #include "JCar.hpp"
 #include <string>
 #include "Powertrain.hpp"
