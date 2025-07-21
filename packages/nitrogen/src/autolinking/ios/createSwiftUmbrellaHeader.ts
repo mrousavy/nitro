@@ -26,8 +26,14 @@ export function createSwiftUmbrellaHeader(): SourceFile {
     .filter((t) => t.kind === 'hybrid-object')
     .map((t) => {
       const hybridObjectType = getTypeAs(t, HybridObjectType)
+      const hybridObjectModuleName =
+        hybridObjectType.sourceConfig.getIosModuleName()
       const name = getHybridObjectName(hybridObjectType.hybridObjectName)
-      return getForwardDeclaration('class', name.HybridTSpecCxx, moduleName)
+      return getForwardDeclaration(
+        'class',
+        name.HybridTSpecCxx,
+        hybridObjectModuleName
+      )
     })
     .filter(isNotDuplicate)
 

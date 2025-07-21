@@ -167,7 +167,7 @@ export class HybridObjectType implements Type {
             language: 'kotlin',
             name: this.sourceConfig.getAndroidPackage(
               'java/kotlin',
-              this.hybridObjectName
+              name.HybridTSpec
             ),
             space: 'system',
           })

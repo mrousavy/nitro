@@ -69,11 +69,11 @@ function createCxxHybridObjectSwiftHelper(
   type: HybridObjectType
 ): SwiftCxxHelper {
   const actualType = type.getCode('c++')
-  const modulename = NitroConfig.current.getIosModuleName()
+  const modulename = type.sourceConfig.getIosModuleName()
   const { HybridTSpecCxx, HybridTSpecSwift, HybridTSpec } = getHybridObjectName(
     type.hybridObjectName
   )
-  const swiftWrappingType = NitroConfig.current.getCxxNamespace(
+  const swiftWrappingType = type.sourceConfig.getCxxNamespace(
     'c++',
     HybridTSpecSwift
   )
@@ -83,6 +83,23 @@ function createCxxHybridObjectSwiftHelper(
   const upcastHelpers = type.baseTypes.map((base) =>
     createCxxUpcastHelper(base, type)
   )
+
+  let include: SourceImport
+  if (type.sourceConfig.isExternalConfig) {
+    // import from external module
+    include = {
+      language: 'c++',
+      name: `${type.sourceConfig.getIosModuleName()}/${HybridTSpecSwift}.hpp`,
+      space: 'system',
+    }
+  } else {
+    include = {
+      language: 'c++',
+      // Hybrid Object Swift C++ class wrapper
+      name: `${HybridTSpecSwift}.hpp`,
+      space: 'user',
+    }
+  }
 
   return {
     cxxType: actualType,
@@ -117,12 +134,7 @@ void* _Nonnull get_${name}(${name} cppType) {
 }
     `.trim(),
       requiredIncludes: [
-        {
-          language: 'c++',
-          // Hybrid Object Swift C++ class wrapper
-          name: `${HybridTSpecSwift}.hpp`,
-          space: 'user',
-        },
+        include,
         {
           language: 'c++',
           // Swift umbrella header
