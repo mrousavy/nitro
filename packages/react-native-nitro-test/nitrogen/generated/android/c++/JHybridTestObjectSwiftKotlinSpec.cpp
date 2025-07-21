@@ -15,8 +15,6 @@ namespace margelo::nitro::test { enum class Powertrain; }
 namespace margelo::nitro::test { enum class OldEnum; }
 // Forward declaration of `Person` to properly resolve imports.
 namespace margelo::nitro::test { struct Person; }
-// Forward declaration of `HybridImageSpec` to properly resolve imports.
-namespace margelo::nitro::image { class HybridImageSpec; }
 // Forward declaration of `AnyMap` to properly resolve imports.
 namespace NitroModules { class AnyMap; }
 // Forward declaration of `Car` to properly resolve imports.
@@ -54,8 +52,6 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 #include "Person.hpp"
 #include "JVariant_Person_HybridTestObjectSwiftKotlinSpec.hpp"
 #include "JPerson.hpp"
-#include <NitroImage/HybridImageSpec.hpp>
-#include <NitroImage/JHybridImageSpec.hpp>
 #include <NitroModules/AnyMap.hpp>
 #include <NitroModules/JAnyMap.hpp>
 #include <unordered_map>
@@ -275,11 +271,6 @@ namespace margelo::nitro::test {
     static const auto method = javaClassStatic()->getMethod<jni::local_ref<JVariant_Person_HybridTestObjectSwiftKotlinSpec>(jni::alias_ref<JVariant_Person_HybridTestObjectSwiftKotlinSpec> /* variant */)>("getVariantHybrid");
     auto __result = method(_javaPart, JVariant_Person_HybridTestObjectSwiftKotlinSpec::fromCpp(variant));
     return __result->toCpp();
-  }
-  std::shared_ptr<margelo::nitro::image::HybridImageSpec> JHybridTestObjectSwiftKotlinSpec::getExternal() {
-    static const auto method = javaClassStatic()->getMethod<jni::local_ref<margelo::nitro::image::JHybridImageSpec::javaobject>()>("getExternal");
-    auto __result = method(_javaPart);
-    return JNISharedPtr::make_shared_from_jni<margelo::nitro::image::JHybridImageSpec>(jni::make_global(__result));
   }
   void JHybridTestObjectSwiftKotlinSpec::simpleFunc() {
     static const auto method = javaClassStatic()->getMethod<void()>("simpleFunc");

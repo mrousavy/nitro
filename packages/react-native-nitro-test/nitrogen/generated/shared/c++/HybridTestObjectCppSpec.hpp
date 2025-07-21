@@ -21,8 +21,6 @@ namespace margelo::nitro::test { enum class Powertrain; }
 namespace margelo::nitro::test { enum class OldEnum; }
 // Forward declaration of `Person` to properly resolve imports.
 namespace margelo::nitro::test { struct Person; }
-// Forward declaration of `HybridImageSpec` to properly resolve imports.
-namespace margelo::nitro::image { class HybridImageSpec; }
 // Forward declaration of `AnyMap` to properly resolve imports.
 namespace NitroModules { class AnyMap; }
 // Forward declaration of `MapWrapper` to properly resolve imports.
@@ -53,7 +51,6 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 #include <functional>
 #include <variant>
 #include "Person.hpp"
-#include <NitroImage/HybridImageSpec.hpp>
 #include <NitroModules/AnyMap.hpp>
 #include <unordered_map>
 #include "MapWrapper.hpp"
@@ -132,7 +129,6 @@ namespace margelo::nitro::test {
       virtual std::tuple<double, std::string, bool> passTuple(const std::tuple<double, std::string, bool>& tuple) = 0;
       virtual std::shared_ptr<margelo::nitro::test::HybridTestObjectCppSpec> newTestObject() = 0;
       virtual std::variant<std::shared_ptr<margelo::nitro::test::HybridTestObjectCppSpec>, Person> getVariantHybrid(const std::variant<std::shared_ptr<margelo::nitro::test::HybridTestObjectCppSpec>, Person>& variant) = 0;
-      virtual std::shared_ptr<margelo::nitro::image::HybridImageSpec> getExternal() = 0;
       virtual void simpleFunc() = 0;
       virtual double addNumbers(double a, double b) = 0;
       virtual std::string addStrings(const std::string& a, const std::string& b) = 0;

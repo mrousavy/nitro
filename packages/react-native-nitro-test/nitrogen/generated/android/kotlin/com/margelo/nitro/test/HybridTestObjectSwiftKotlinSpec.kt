@@ -11,7 +11,6 @@ import androidx.annotation.Keep
 import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
 import com.margelo.nitro.core.*
-import com.margelo.nitro.image.Image
 
 /**
  * A Kotlin class representing the TestObjectSwiftKotlin HybridObject.
@@ -136,10 +135,6 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   @DoNotStrip
   @Keep
   abstract fun getVariantHybrid(variant: Variant_Person_HybridTestObjectSwiftKotlinSpec): Variant_Person_HybridTestObjectSwiftKotlinSpec
-  
-  @DoNotStrip
-  @Keep
-  abstract fun getExternal(): com.margelo.nitro.image.HybridImageSpec
   
   @DoNotStrip
   @Keep
