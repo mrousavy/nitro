@@ -118,19 +118,6 @@ function timeoutedPromise<T>(
   })
 }
 
-function getHighestEnumValue<T extends object>(enumObj: T): number {
-  const numericValues = Object.values(enumObj).filter(
-    (v) => typeof v === 'number'
-  ) as number[]
-
-  if (numericValues.length === 0)
-    throw new Error(
-      `Enum ${JSON.stringify(enumObj)} does not contain any numerical values!`
-    )
-
-  return Math.max(...numericValues)
-}
-
 export function getTests(
   testObject: TestObjectCpp | TestObjectSwiftKotlin
 ): TestRunner[] {
@@ -663,16 +650,14 @@ export function getTests(
         `Error: ${testObject.name}.getVariantEnum(...): Cannot convert "string" to any type in variant<bool, margelo::nitro::test::OldEnum>!`
       )
     ),
-    createTest('getVariantEnum(...) throws at wrong numerical value', () =>
-      it(() => {
-        const highestPossibleValue = getHighestEnumValue(OldEnum)
-        return testObject.getVariantEnum(highestPossibleValue + 1)
-      }).didThrow(
-        `Error: ${testObject.name}.getVariantEnum(...): Cannot convert "string" to any type in variant<bool, margelo::nitro::test::OldEnum>!`
+    createTest('getVariantEnum(...) throws at too high numerical value', () =>
+      // @ts-expect-error
+      it(() => testObject.getVariantEnum(9999)).didThrow(
+        `Error: ${testObject.name}.getVariantEnum(...): Cannot convert "9999" to any type in variant<bool, margelo::nitro::test::OldEnum>!`
       )
     ),
     createTest('getVariantWeirdNumbersEnum(...) converts enum', () =>
-      it(() => testObject.getVariantWeirdNumbersEnum(WeirdNumbersEnum.A))
+      it(() => testObject.getVariantWeirdNumbersEnum(WeirdNumbersEnum.C))
         .didNotThrow()
         .equals(WeirdNumbersEnum.A)
     ),
@@ -690,13 +675,11 @@ export function getTests(
         )
     ),
     createTest(
-      'getVariantWeirdNumbersEnum(...) throws at wrong numerical value',
+      'getVariantWeirdNumbersEnum(...) throws at too high numerical value',
       () =>
-        it(() => {
-          const highestPossibleValue = getHighestEnumValue(WeirdNumbersEnum)
-          return testObject.getVariantWeirdNumbersEnum(highestPossibleValue + 1)
-        }).didThrow(
-          `Error: ${testObject.name}.getVariantWeirdNumbersEnum(...): Cannot convert "string" to any type in variant<bool, margelo::nitro::test::WeirdNumbersEnum>!`
+        // @ts-expect-error
+        it(() => testObject.getVariantWeirdNumbersEnum(99999)).didThrow(
+          `Error: ${testObject.name}.getVariantWeirdNumbersEnum(...): Cannot convert "99999" to any type in variant<bool, margelo::nitro::test::WeirdNumbersEnum>!`
         )
     ),
     createTest('getVariantObjects(...) converts Person', () =>
