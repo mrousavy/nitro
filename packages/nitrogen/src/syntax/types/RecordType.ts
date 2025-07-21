@@ -39,15 +39,18 @@ export class RecordType implements Type {
   getExtraFiles(): SourceFile[] {
     return [...this.keyType.getExtraFiles(), ...this.valueType.getExtraFiles()]
   }
-  getRequiredImports(): SourceImport[] {
-    return [
-      {
+  getRequiredImports(language: Language): SourceImport[] {
+    const imports: SourceImport[] = [
+      ...this.keyType.getRequiredImports(language),
+      ...this.valueType.getRequiredImports(language),
+    ]
+    if (language === 'c++') {
+      imports.push({
         language: 'c++',
         name: 'unordered_map',
         space: 'system',
-      },
-      ...this.keyType.getRequiredImports(),
-      ...this.valueType.getRequiredImports(),
-    ]
+      })
+    }
+    return imports
   }
 }

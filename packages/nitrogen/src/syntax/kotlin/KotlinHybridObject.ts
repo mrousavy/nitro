@@ -1,9 +1,8 @@
-import { NitroConfig } from '../../config/NitroConfig.js'
 import { indent } from '../../utils.js'
 import { createKotlinHybridViewManager } from '../../views/kotlin/KotlinHybridViewManager.js'
 import { getAllTypes } from '../getAllTypes.js'
 import { getHybridObjectName } from '../getHybridObjectName.js'
-import { createFileMetadataString } from '../helpers.js'
+import { createFileMetadataString, isNotDuplicate } from '../helpers.js'
 import type { HybridObjectSpec } from '../HybridObjectSpec.js'
 import { Method } from '../Method.js'
 import { Property } from '../Property.js'
@@ -20,7 +19,7 @@ export function createKotlinHybridObject(spec: HybridObjectSpec): SourceFile[] {
     .map((m) => getMethodForwardImplementation(m))
     .join('\n\n')
 
-  const javaPackage = NitroConfig.getAndroidPackage('java/kotlin')
+  const javaPackage = spec.config.getAndroidPackage('java/kotlin')
 
   let kotlinBase = spec.isHybridView ? 'HybridView' : 'HybridObject'
   if (spec.baseTypes.length > 0) {
@@ -38,6 +37,14 @@ export function createKotlinHybridObject(spec: HybridObjectSpec): SourceFile[] {
   if (spec.isHybridView) {
     imports.push('import com.margelo.nitro.views.*')
   }
+
+  const extraImports = [
+    ...spec.properties.flatMap((p) => p.getRequiredImports('kotlin')),
+    ...spec.methods.flatMap((m) => m.getRequiredImports('kotlin')),
+  ]
+  imports.push(
+    ...extraImports.map((i) => `import ${i.name}`).filter(isNotDuplicate)
+  )
 
   // 1. Create Kotlin abstract class definition
   const abstractClassCode = `
@@ -101,7 +108,7 @@ abstract class ${name.HybridTSpec}: ${kotlinBase}() {
     content: abstractClassCode,
     language: 'kotlin',
     name: `${name.HybridTSpec}.kt`,
-    subdirectory: NitroConfig.getAndroidPackageDirectory(),
+    subdirectory: spec.config.getAndroidPackageDirectory(),
     platform: 'android',
   })
   files.push(...cppFiles)

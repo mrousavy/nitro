@@ -52,7 +52,7 @@ export interface Type {
   /**
    * Get all required extra imports that need to be **imported** for this type to properly work.
    */
-  getRequiredImports(): SourceImport[]
+  getRequiredImports(language: Language): SourceImport[]
 }
 
 export interface NamedType extends Type {

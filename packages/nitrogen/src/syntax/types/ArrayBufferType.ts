@@ -30,9 +30,10 @@ export class ArrayBufferType implements Type {
   getExtraFiles(): SourceFile[] {
     return []
   }
-  getRequiredImports(): SourceImport[] {
-    return [
-      {
+  getRequiredImports(language: Language): SourceImport[] {
+    const imports: SourceImport[] = []
+    if (language === 'c++') {
+      imports.push({
         name: 'NitroModules/ArrayBuffer.hpp',
         forwardDeclaration: getForwardDeclaration(
           'class',
@@ -41,7 +42,8 @@ export class ArrayBufferType implements Type {
         ),
         language: 'c++',
         space: 'system',
-      },
-    ]
+      })
+    }
+    return imports
   }
 }

@@ -8,7 +8,6 @@ import {
   createFileMetadataString,
   escapeCppName,
 } from '../../syntax/helpers.js'
-import { NitroConfig } from '../../config/NitroConfig.js'
 import { getHybridObjectName } from '../../syntax/getHybridObjectName.js'
 import { addJNINativeRegistration } from '../../syntax/kotlin/JNINativeRegistrations.js'
 import { indent } from '../../utils.js'
@@ -17,9 +16,9 @@ export function createKotlinHybridViewManager(
   spec: HybridObjectSpec
 ): SourceFile[] {
   const cppFiles = createViewComponentShadowNodeFiles(spec)
-  const javaSubNamespace = NitroConfig.getAndroidPackage('java/kotlin', 'views')
-  const javaNamespace = NitroConfig.getAndroidPackage('java/kotlin')
-  const cxxNamespace = NitroConfig.getCxxNamespace('c++', 'views')
+  const javaSubNamespace = spec.config.getAndroidPackage('java/kotlin', 'views')
+  const javaNamespace = spec.config.getAndroidPackage('java/kotlin')
+  const cxxNamespace = spec.config.getCxxNamespace('c++', 'views')
   const { JHybridTSpec, HybridTSpec } = getHybridObjectName(spec.name)
   const {
     manager,
@@ -29,7 +28,7 @@ export function createKotlinHybridViewManager(
     descriptorClassName,
   } = getViewComponentNames(spec)
   const stateUpdaterName = `${stateClassName}Updater`
-  const autolinking = NitroConfig.getAutolinkedHybridObjects()
+  const autolinking = spec.config.getAutolinkedHybridObjects()
   const viewImplementation = autolinking[spec.name]?.kotlin
   if (viewImplementation == null) {
     throw new Error(
@@ -106,7 +105,7 @@ internal class ${stateUpdaterName} {
 }
   `.trim()
 
-  const updaterJniDescriptor = NitroConfig.getAndroidPackage(
+  const updaterJniDescriptor = spec.config.getAndroidPackage(
     'c++/jni',
     'views',
     stateUpdaterName
@@ -181,7 +180,7 @@ void J${stateUpdaterName}::updateViewProps(jni::alias_ref<jni::JClass> /* class 
                                            jni::alias_ref<${JHybridTSpec}::javaobject> javaView,
                                            jni::alias_ref<JStateWrapper::javaobject> stateWrapperInterface) {
   ${JHybridTSpec}* view = javaView->cthis();
-  
+
   // Get concrete StateWrapperImpl from passed StateWrapper interface object
   jobject rawStateWrapper = stateWrapperInterface.get();
   if (!stateWrapperInterface->isInstanceOf(react::StateWrapperImpl::javaClassStatic())) {

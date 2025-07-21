@@ -28,8 +28,9 @@ import {
 } from '../getPlatformSpecs.js'
 import { HybridObjectBaseType } from './types/HybridObjectBaseType.js'
 import { ErrorType } from './types/ErrorType.js'
-import { getBaseTypes } from '../utils.js'
+import { getBaseTypes, getHybridObjectNitroModuleConfig } from '../utils.js'
 import { DateType } from './types/DateType.js'
+import { NitroConfig } from '../config/NitroConfig.js'
 
 function isSymbol(type: TSMorphType, symbolName: string): boolean {
   const symbol = type.getSymbol()
@@ -336,7 +337,9 @@ export function createType(
         .filter((t) => isAnyHybridSubclass(t))
         .map((b) => createType(language, b, false))
       const baseHybrids = baseTypes.filter((b) => b instanceof HybridObjectType)
-      return new HybridObjectType(typename, language, baseHybrids)
+      const sourceConfig =
+        getHybridObjectNitroModuleConfig(type) ?? NitroConfig.current
+      return new HybridObjectType(typename, language, baseHybrids, sourceConfig)
     } else if (isDirectlyHybridObject(type)) {
       // It is a HybridObject directly/literally. Base type
       return new HybridObjectBaseType()

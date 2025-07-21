@@ -3,7 +3,6 @@ import { createFileMetadataString, isNotDuplicate } from '../helpers.js'
 import { indent } from '../../utils.js'
 import type { HybridObjectSpec } from '../HybridObjectSpec.js'
 import { includeHeader, includeNitroHeader } from './includeNitroHeader.js'
-import { NitroConfig } from '../../config/NitroConfig.js'
 import { getHybridObjectName } from '../getHybridObjectName.js'
 import { HybridObjectType } from '../types/HybridObjectType.js'
 
@@ -14,8 +13,8 @@ export function createCppHybridObject(spec: HybridObjectSpec): SourceFile[] {
     ...spec.methods.flatMap((m) => m.getExtraFiles()),
   ]
   const extraIncludes = [
-    ...spec.properties.flatMap((p) => p.getRequiredImports()),
-    ...spec.methods.flatMap((m) => m.getRequiredImports()),
+    ...spec.properties.flatMap((p) => p.getRequiredImports('c++')),
+    ...spec.methods.flatMap((m) => m.getRequiredImports('c++')),
   ]
   const cppForwardDeclarations = extraIncludes
     .map((i) => i.forwardDeclaration)
@@ -24,14 +23,14 @@ export function createCppHybridObject(spec: HybridObjectSpec): SourceFile[] {
   const cppExtraIncludes = extraIncludes
     .map((i) => includeHeader(i))
     .filter(isNotDuplicate)
-  const cxxNamespace = NitroConfig.getCxxNamespace('c++')
+  const cxxNamespace = spec.config.getCxxNamespace('c++')
   const name = getHybridObjectName(spec.name)
 
   const bases = ['public virtual HybridObject']
   for (const base of spec.baseTypes) {
     const hybridObject = new HybridObjectType(base)
     bases.push(`public virtual ${getHybridObjectName(base.name).HybridTSpec}`)
-    const imports = hybridObject.getRequiredImports()
+    const imports = hybridObject.getRequiredImports('c++')
     cppForwardDeclarations.push(
       ...imports.map((i) => i.forwardDeclaration).filter((f) => f != null)
     )

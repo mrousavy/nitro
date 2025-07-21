@@ -40,8 +40,8 @@ namespace margelo::nitro::test { class HybridBaseSpec; }
 // Forward declaration of `HybridTestViewSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridTestViewSpec; }
 
-#include <tuple>
 #include <string>
+#include <tuple>
 #include <memory>
 #include "HybridTestObjectCppSpec.hpp"
 #include <optional>

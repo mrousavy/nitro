@@ -25,8 +25,8 @@ interface SwiftHybridObjectRegistration {
 export function getHybridObjectConstructorCall(
   hybridObjectName: string
 ): string {
-  const swiftNamespace = NitroConfig.getIosModuleName()
-  const autolinkingClassName = `${NitroConfig.getIosModuleName()}Autolinking`
+  const swiftNamespace = NitroConfig.current.getIosModuleName()
+  const autolinkingClassName = `${swiftNamespace}Autolinking`
   return `${swiftNamespace}::${autolinkingClassName}::create${hybridObjectName}();`
 }
 
@@ -37,7 +37,12 @@ export function createSwiftHybridObjectRegistration({
   const { HybridTSpecCxx, HybridTSpecSwift, HybridTSpec } =
     getHybridObjectName(hybridObjectName)
 
-  const type = new HybridObjectType(hybridObjectName, 'swift', [])
+  const type = new HybridObjectType(
+    hybridObjectName,
+    'swift',
+    [],
+    NitroConfig.current
+  )
   const bridge = new SwiftCxxBridgedType(type)
 
   return {

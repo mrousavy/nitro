@@ -8,7 +8,6 @@ import {
   createFileMetadataString,
   escapeCppName,
 } from '../../syntax/helpers.js'
-import { NitroConfig } from '../../config/NitroConfig.js'
 import { getUmbrellaHeaderName } from '../../autolinking/ios/createSwiftUmbrellaHeader.js'
 import { getHybridObjectName } from '../../syntax/getHybridObjectName.js'
 import { getHybridObjectConstructorCall } from '../../syntax/swift/SwiftHybridObjectRegistration.js'
@@ -19,14 +18,14 @@ export function createSwiftHybridViewManager(
   spec: HybridObjectSpec
 ): SourceFile[] {
   const cppFiles = createViewComponentShadowNodeFiles(spec)
-  const namespace = NitroConfig.getCxxNamespace('c++')
-  const swiftNamespace = NitroConfig.getIosModuleName()
+  const namespace = spec.config.getCxxNamespace('c++')
+  const swiftNamespace = spec.config.getIosModuleName()
   const { HybridTSpec, HybridTSpecSwift, HybridTSpecCxx } = getHybridObjectName(
     spec.name
   )
   const { component, descriptorClassName, propsClassName } =
     getViewComponentNames(spec)
-  const autolinking = NitroConfig.getAutolinkedHybridObjects()
+  const autolinking = spec.config.getAutolinkedHybridObjects()
   const viewImplementation = autolinking[spec.name]?.swift
   if (viewImplementation == null) {
     throw new Error(

@@ -1,3 +1,4 @@
+import type { Language } from '../../getPlatformSpecs.js'
 import { indent } from '../../utils.js'
 import type { BridgedType } from '../BridgedType.js'
 import { getHybridObjectName } from '../getHybridObjectName.js'
@@ -57,90 +58,103 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
     return false
   }
 
-  getRequiredImports(): SourceImport[] {
-    const imports = this.type.getRequiredImports()
+  getRequiredImports(language: Language): SourceImport[] {
+    const imports = this.type.getRequiredImports(language)
 
-    switch (this.type.kind) {
-      case 'enum':
-        const enumType = getTypeAs(this.type, EnumType)
-        imports.push({
-          language: 'c++',
-          name: `J${enumType.enumName}.hpp`,
-          space: 'user',
-        })
-        break
-      case 'struct':
-        const structType = getTypeAs(this.type, StructType)
-        imports.push({
-          language: 'c++',
-          name: `J${structType.structName}.hpp`,
-          space: 'user',
-        })
-        break
-      case 'function':
-        const functionType = getTypeAs(this.type, FunctionType)
-        imports.push({
-          language: 'c++',
-          name: `J${functionType.specializationName}.hpp`,
-          space: 'user',
-        })
-        break
-      case 'array-buffer':
-        imports.push({
-          language: 'c++',
-          name: 'NitroModules/JArrayBuffer.hpp',
-          space: 'system',
-        })
-        imports.push({
-          language: 'c++',
-          name: 'NitroModules/JUnit.hpp',
-          space: 'system',
-        })
-        break
-      case 'promise':
-        imports.push({
-          language: 'c++',
-          name: 'NitroModules/JPromise.hpp',
-          space: 'system',
-        })
-        break
-      case 'date':
-        imports.push({
-          language: 'c++',
-          name: 'NitroModules/JInstant.hpp',
-          space: 'system',
-        })
-        break
-      case 'map':
-        imports.push({
-          language: 'c++',
-          name: 'NitroModules/JAnyMap.hpp',
-          space: 'system',
-        })
-        break
-      case 'variant':
-        const variantType = getTypeAs(this.type, VariantType)
-        const variantName = variantType.getAliasName('kotlin')
-        imports.push({
-          language: 'c++',
-          name: `J${variantName}.hpp`,
-          space: 'user',
-        })
-        break
-      case 'hybrid-object': {
-        const hybridObjectType = getTypeAs(this.type, HybridObjectType)
-        const name = getHybridObjectName(hybridObjectType.hybridObjectName)
-        imports.push({
-          language: 'c++',
-          name: `${name.JHybridTSpec}.hpp`,
-          space: 'user',
-        })
-        imports.push({
-          language: 'c++',
-          name: 'NitroModules/JNISharedPtr.hpp',
-          space: 'system',
-        })
-        break
+    if (language === 'c++') {
+      // All C++ imports we need for the JNI bridge
+      switch (this.type.kind) {
+        case 'enum':
+          const enumType = getTypeAs(this.type, EnumType)
+          imports.push({
+            language: 'c++',
+            name: `J${enumType.enumName}.hpp`,
+            space: 'user',
+          })
+          break
+        case 'struct':
+          const structType = getTypeAs(this.type, StructType)
+          imports.push({
+            language: 'c++',
+            name: `J${structType.structName}.hpp`,
+            space: 'user',
+          })
+          break
+        case 'function':
+          const functionType = getTypeAs(this.type, FunctionType)
+          imports.push({
+            language: 'c++',
+            name: `J${functionType.specializationName}.hpp`,
+            space: 'user',
+          })
+          break
+        case 'array-buffer':
+          imports.push({
+            language: 'c++',
+            name: 'NitroModules/JArrayBuffer.hpp',
+            space: 'system',
+          })
+          imports.push({
+            language: 'c++',
+            name: 'NitroModules/JUnit.hpp',
+            space: 'system',
+          })
+          break
+        case 'promise':
+          imports.push({
+            language: 'c++',
+            name: 'NitroModules/JPromise.hpp',
+            space: 'system',
+          })
+          break
+        case 'date':
+          imports.push({
+            language: 'c++',
+            name: 'NitroModules/JInstant.hpp',
+            space: 'system',
+          })
+          break
+        case 'map':
+          imports.push({
+            language: 'c++',
+            name: 'NitroModules/JAnyMap.hpp',
+            space: 'system',
+          })
+          break
+        case 'variant':
+          const variantType = getTypeAs(this.type, VariantType)
+          const variantName = variantType.getAliasName('kotlin')
+          imports.push({
+            language: 'c++',
+            name: `J${variantName}.hpp`,
+            space: 'user',
+          })
+          break
+        case 'hybrid-object': {
+          const hybridObjectType = getTypeAs(this.type, HybridObjectType)
+          const name = getHybridObjectName(hybridObjectType.hybridObjectName)
+          if (hybridObjectType.sourceConfig.isExternalConfig) {
+            // It's an externally imported type
+            imports.push({
+              language: 'c++',
+              name: `${hybridObjectType.sourceConfig.getAndroidCxxLibName()}/${name.JHybridTSpec}.hpp`,
+              space: 'system',
+            })
+          } else {
+            // It's our custom type
+            imports.push({
+              language: 'c++',
+              name: `${name.JHybridTSpec}.hpp`,
+              space: 'user',
+            })
+          }
+          imports.push({
+            language: 'c++',
+            name: 'NitroModules/JNISharedPtr.hpp',
+            space: 'system',
+          })
+          break
+        }
       }
     }
 
@@ -152,7 +166,7 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
         return
       }
       const bridged = new KotlinCxxBridgedType(t)
-      imports.push(...bridged.getRequiredImports())
+      imports.push(...bridged.getRequiredImports(language))
     })
 
     return imports
@@ -297,8 +311,8 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
         switch (language) {
           case 'c++':
             const hybridObjectType = getTypeAs(this.type, HybridObjectType)
-            const name = getHybridObjectName(hybridObjectType.hybridObjectName)
-            return `${name.JHybridTSpec}::javaobject`
+            const fullName = this.getFullJHybridObjectName(hybridObjectType)
+            return `${fullName}::javaobject`
           default:
             return this.type.getCode(language)
         }
@@ -473,8 +487,8 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
         switch (language) {
           case 'c++':
             const hybrid = getTypeAs(this.type, HybridObjectType)
-            const name = getHybridObjectName(hybrid.hybridObjectName)
-            return `std::dynamic_pointer_cast<${name.JHybridTSpec}>(${parameterName})->getJavaPart()`
+            const fullName = this.getFullJHybridObjectName(hybrid)
+            return `std::dynamic_pointer_cast<${fullName}>(${parameterName})->getJavaPart()`
           default:
             return parameterName
         }
@@ -704,8 +718,8 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
         switch (language) {
           case 'c++':
             const hybrid = getTypeAs(this.type, HybridObjectType)
-            const name = getHybridObjectName(hybrid.hybridObjectName)
-            return `JNISharedPtr::make_shared_from_jni<${name.JHybridTSpec}>(jni::make_global(${parameterName}))`
+            const fullName = this.getFullJHybridObjectName(hybrid)
+            return `JNISharedPtr::make_shared_from_jni<${fullName}>(jni::make_global(${parameterName}))`
           default:
             return parameterName
         }
@@ -895,6 +909,21 @@ __promise->resolve();
       default:
         // no need to parse anything, just return as is
         return parameterName
+    }
+  }
+
+  private getFullJHybridObjectName(hybridObject: HybridObjectType): string {
+    const name = getHybridObjectName(hybridObject.hybridObjectName)
+    if (hybridObject.sourceConfig.isExternalConfig) {
+      // fully qualified name like "margelo::nitro::image::JImage"
+      const fullName = hybridObject.sourceConfig.getCxxNamespace(
+        'c++',
+        name.JHybridTSpec
+      )
+      return fullName
+    } else {
+      // relative name like "JImage"
+      return name.JHybridTSpec
     }
   }
 }

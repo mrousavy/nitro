@@ -1,4 +1,3 @@
-import { NitroConfig } from '../../config/NitroConfig.js'
 import { createIndentation, indent } from '../../utils.js'
 import { getForwardDeclaration } from '../c++/getForwardDeclaration.js'
 import { includeHeader } from '../c++/includeNitroHeader.js'
@@ -31,11 +30,11 @@ export function createFbjniHybridObject(spec: HybridObjectSpec): SourceFile[] {
   const methodsDecl = methods
     .map((p) => p.getCode('c++', { override: true }))
     .join('\n')
-  const jniClassDescriptor = NitroConfig.getAndroidPackage(
+  const jniClassDescriptor = spec.config.getAndroidPackage(
     'c++/jni',
     name.HybridTSpec
   )
-  const cxxNamespace = NitroConfig.getCxxNamespace('c++')
+  const cxxNamespace = spec.config.getCxxNamespace('c++')
   const spaces = createIndentation(name.JHybridTSpec.length)
 
   let cppBase = 'JHybridObject'
@@ -59,7 +58,7 @@ export function createFbjniHybridObject(spec: HybridObjectSpec): SourceFile[] {
       forwardDeclaration: getForwardDeclaration(
         'class',
         JHybridTSpec,
-        NitroConfig.getCxxNamespace('c++')
+        spec.config.getCxxNamespace('c++')
       ),
     })
   }
@@ -147,7 +146,7 @@ ${spaces}          public virtual ${name.HybridTSpec} {
   const allTypes = getAllTypes(spec)
   const jniImports = allTypes
     .map((t) => new KotlinCxxBridgedType(t))
-    .flatMap((t) => t.getRequiredImports())
+    .flatMap((t) => t.getRequiredImports('c++'))
     .filter((i) => i != null)
   const cppIncludes = jniImports
     .map((i) => includeHeader(i))

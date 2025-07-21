@@ -31,6 +31,7 @@ import { VoidType } from '../types/VoidType.js'
 import { NamedWrappingType } from '../types/NamedWrappingType.js'
 import { ErrorType } from '../types/ErrorType.js'
 import { createSwiftFunctionBridge } from './SwiftFunction.js'
+import type { Language } from '../../getPlatformSpecs.js'
 
 // TODO: Remove enum bridge once Swift fixes bidirectional enums crashing the `-Swift.h` header.
 
@@ -130,20 +131,22 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
     return bridge
   }
 
-  getRequiredImports(): SourceImport[] {
-    const imports = this.type.getRequiredImports()
+  getRequiredImports(language: Language): SourceImport[] {
+    const imports = this.type.getRequiredImports(language)
 
-    if (this.type.kind === 'array-buffer') {
-      imports.push({
-        name: 'NitroModules/ArrayBufferHolder.hpp',
-        forwardDeclaration: getForwardDeclaration(
-          'class',
-          'ArrayBufferHolder',
-          'NitroModules'
-        ),
-        language: 'c++',
-        space: 'system',
-      })
+    if (language === 'c++') {
+      if (this.type.kind === 'array-buffer') {
+        imports.push({
+          name: 'NitroModules/ArrayBufferHolder.hpp',
+          forwardDeclaration: getForwardDeclaration(
+            'class',
+            'ArrayBufferHolder',
+            'NitroModules'
+          ),
+          language: 'c++',
+          space: 'system',
+        })
+      }
     }
 
     // Recursively look into referenced types (e.g. the `T` of a `optional<T>`, or `T` of a `T[]`)
@@ -154,7 +157,7 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
         return
       }
       const bridged = new SwiftCxxBridgedType(t)
-      imports.push(...bridged.getRequiredImports())
+      imports.push(...bridged.getRequiredImports(language))
     })
 
     return imports
@@ -330,7 +333,7 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
           case 'c++':
             return `static_cast<int>(${cppParameterName})`
           case 'swift':
-            const fullName = NitroConfig.getCxxNamespace(
+            const fullName = NitroConfig.current.getCxxNamespace(
               'swift',
               enumType.enumName
             )
@@ -760,7 +763,10 @@ case ${i}:
       case 'tuple': {
         const tuple = getTypeAs(this.type, TupleType)
         const bridge = this.getBridgeOrThrow()
-        const makeFunc = NitroConfig.getCxxNamespace(language, bridge.funcName)
+        const makeFunc = NitroConfig.current.getCxxNamespace(
+          language,
+          bridge.funcName
+        )
         switch (language) {
           case 'swift':
             const typesForward = tuple.itemTypes

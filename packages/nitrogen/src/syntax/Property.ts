@@ -68,8 +68,8 @@ export class Property implements CodeNode {
     return this.type.getExtraFiles()
   }
 
-  getRequiredImports(): SourceImport[] {
-    return this.type.getRequiredImports()
+  getRequiredImports(language: Language): SourceImport[] {
+    return this.type.getRequiredImports(language)
   }
 
   getGetterName(environment: LanguageEnvironment): string {

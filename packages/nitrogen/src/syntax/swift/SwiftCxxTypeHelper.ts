@@ -69,17 +69,37 @@ function createCxxHybridObjectSwiftHelper(
   type: HybridObjectType
 ): SwiftCxxHelper {
   const actualType = type.getCode('c++')
-  const modulename = NitroConfig.getIosModuleName()
+  const modulename = type.sourceConfig.getIosModuleName()
   const { HybridTSpecCxx, HybridTSpecSwift, HybridTSpec } = getHybridObjectName(
     type.hybridObjectName
   )
-  const swiftWrappingType = NitroConfig.getCxxNamespace('c++', HybridTSpecSwift)
+  const swiftWrappingType = type.sourceConfig.getCxxNamespace(
+    'c++',
+    HybridTSpecSwift
+  )
   const swiftPartType = `${modulename}::${HybridTSpecCxx}`
   const name = escapeCppName(actualType)
 
   const upcastHelpers = type.baseTypes.map((base) =>
     createCxxUpcastHelper(base, type)
   )
+
+  let include: SourceImport
+  if (type.sourceConfig.isExternalConfig) {
+    // import from external module
+    include = {
+      language: 'c++',
+      name: `${modulename}/${HybridTSpecSwift}.hpp`,
+      space: 'system',
+    }
+  } else {
+    include = {
+      language: 'c++',
+      // Hybrid Object Swift C++ class wrapper
+      name: `${HybridTSpecSwift}.hpp`,
+      space: 'user',
+    }
+  }
 
   return {
     cxxType: actualType,
@@ -94,7 +114,7 @@ using ${name} = ${actualType};
 ${actualType} create_${name}(void* _Nonnull swiftUnsafePointer);
 void* _Nonnull get_${name}(${name} cppType);
     `.trim(),
-      requiredIncludes: type.getRequiredImports(),
+      requiredIncludes: type.getRequiredImports('c++'),
     },
     cxxImplementation: {
       code: `
@@ -114,12 +134,7 @@ void* _Nonnull get_${name}(${name} cppType) {
 }
     `.trim(),
       requiredIncludes: [
-        {
-          language: 'c++',
-          // Hybrid Object Swift C++ class wrapper
-          name: `${HybridTSpecSwift}.hpp`,
-          space: 'user',
-        },
+        include,
         {
           language: 'c++',
           // Swift umbrella header
@@ -201,7 +216,7 @@ inline ${actualType} create_${name}(const ${wrappedBridge.getTypeCode('c++')}& v
           space: 'system',
           language: 'c++',
         },
-        ...wrappedBridge.getRequiredImports(),
+        ...wrappedBridge.getRequiredImports('c++'),
       ],
     },
     dependencies: [],
@@ -237,7 +252,7 @@ inline ${actualType} create_${name}(size_t size) {
           space: 'system',
           language: 'c++',
         },
-        ...bridgedType.getRequiredImports(),
+        ...bridgedType.getRequiredImports('c++'),
       ],
     },
     dependencies: [],
@@ -286,7 +301,7 @@ inline void emplace_${name}(${name}& map, const ${keyType}& key, const ${valueTy
           space: 'system',
           language: 'c++',
         },
-        ...bridgedType.getRequiredImports(),
+        ...bridgedType.getRequiredImports('c++'),
       ],
     },
     dependencies: [],
@@ -313,7 +328,7 @@ function createCxxFunctionSwiftHelper(type: FunctionType): SwiftCxxHelper {
   })
   const name = type.specializationName
   const wrapperName = `${name}_Wrapper`
-  const swiftClassName = `${NitroConfig.getIosModuleName()}::${type.specializationName}`
+  const swiftClassName = `${NitroConfig.current.getIosModuleName()}::${type.specializationName}`
 
   const callParamsForward = type.parameters.map((p) => {
     const bridge = new SwiftCxxBridgedType(p)
@@ -386,7 +401,7 @@ inline ${wrapperName} wrap_${name}(${name} value) {
           space: 'system',
           language: 'c++',
         },
-        ...bridgedType.getRequiredImports(),
+        ...bridgedType.getRequiredImports('c++'),
       ],
     },
     cxxImplementation: {
@@ -466,7 +481,7 @@ ${createFunctions.join('\n')}
           space: 'system',
           language: 'c++',
         },
-        ...bridgedType.getRequiredImports(),
+        ...bridgedType.getRequiredImports('c++'),
       ],
     },
     dependencies: [],
@@ -507,7 +522,7 @@ inline ${actualType} create_${name}(${typesSignature}) {
           space: 'system',
           language: 'c++',
         },
-        ...bridgedType.getRequiredImports(),
+        ...bridgedType.getRequiredImports('c++'),
       ],
     },
     dependencies: [],
@@ -559,7 +574,7 @@ inline ${name} ${funcName}(const ${type.error.getCode('c++')}& error) {
 using ${name} = ${actualType};
 ${functions.join('\n')}
       `.trim(),
-      requiredIncludes: type.getRequiredImports(),
+      requiredIncludes: type.getRequiredImports('c++'),
     },
     dependencies: [],
   }
@@ -606,7 +621,7 @@ inline PromiseHolder<${resultingType}> wrap_${name}(${actualType} promise) {
           space: 'system',
           language: 'c++',
         },
-        ...bridgedType.getRequiredImports(),
+        ...bridgedType.getRequiredImports('c++'),
       ],
     },
     dependencies: [

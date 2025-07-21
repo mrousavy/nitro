@@ -35,15 +35,18 @@ export class ResultWrappingType implements Type {
   getExtraFiles(): SourceFile[] {
     return [...this.result.getExtraFiles(), ...this.error.getExtraFiles()]
   }
-  getRequiredImports(): SourceImport[] {
-    return [
-      {
+  getRequiredImports(language: Language): SourceImport[] {
+    const imports: SourceImport[] = [
+      ...this.result.getRequiredImports(language),
+      ...this.error.getRequiredImports(language),
+    ]
+    if (language === 'c++') {
+      imports.push({
         language: 'c++',
         name: 'NitroModules/Result.hpp',
         space: 'system',
-      },
-      ...this.result.getRequiredImports(),
-      ...this.error.getRequiredImports(),
-    ]
+      })
+    }
+    return imports
   }
 }

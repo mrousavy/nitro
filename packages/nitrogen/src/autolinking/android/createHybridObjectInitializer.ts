@@ -12,16 +12,17 @@ import { indent } from '../../utils.js'
 import { getBuildingWithGeneratedCmakeDefinition } from './createCMakeExtension.js'
 
 export function createHybridObjectIntializer(): SourceFile[] {
-  const cxxNamespace = NitroConfig.getCxxNamespace('c++')
-  const cppLibName = NitroConfig.getAndroidCxxLibName()
-  const javaNamespace = NitroConfig.getAndroidPackage('java/kotlin')
-  const autolinkingClassName = `${NitroConfig.getAndroidCxxLibName()}OnLoad`
+  const cxxNamespace = NitroConfig.current.getCxxNamespace('c++')
+  const cppLibName = NitroConfig.current.getAndroidCxxLibName()
+  const javaNamespace = NitroConfig.current.getAndroidPackage('java/kotlin')
+  const autolinkingClassName = `${NitroConfig.current.getAndroidCxxLibName()}OnLoad`
 
   const jniRegistrations = getJNINativeRegistrations()
     .map((r) => `${r.namespace}::${r.className}::registerNatives();`)
     .filter(isNotDuplicate)
 
-  const autolinkedHybridObjects = NitroConfig.getAutolinkedHybridObjects()
+  const autolinkedHybridObjects =
+    NitroConfig.current.getAutolinkedHybridObjects()
 
   const cppHybridObjectImports: SourceImport[] = []
   const cppRegistrations: string[] = []

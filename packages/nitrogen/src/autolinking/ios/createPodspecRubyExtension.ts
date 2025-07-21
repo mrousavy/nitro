@@ -7,7 +7,7 @@ export interface RubyFile extends Omit<SourceFile, 'language'> {
 }
 
 export function createPodspecRubyExtension(): RubyFile {
-  const name = NitroConfig.getIosModuleName()
+  const name = NitroConfig.current.getIosModuleName()
 
   const code = `
 ${createFileMetadataString(`${name}+autolinking.rb`, '#')}

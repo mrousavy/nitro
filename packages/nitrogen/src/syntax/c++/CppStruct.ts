@@ -42,7 +42,7 @@ export function createCppStruct(
     .join('\n')
 
   // Get C++ includes for each extra-file we need to include
-  const includedTypes = properties.flatMap((r) => r.getRequiredImports())
+  const includedTypes = properties.flatMap((r) => r.getRequiredImports('c++'))
   const cppForwardDeclarations = includedTypes
     .map((i) => i.forwardDeclaration)
     .filter((v) => v != null)
@@ -50,7 +50,7 @@ export function createCppStruct(
   const cppExtraIncludes = includedTypes
     .map((i) => includeHeader(i))
     .filter(isNotDuplicate)
-  const cxxNamespace = NitroConfig.getCxxNamespace('c++')
+  const cxxNamespace = NitroConfig.current.getCxxNamespace('c++')
 
   const cppCode = `
 ${createFileMetadataString(`${typename}.hpp`)}

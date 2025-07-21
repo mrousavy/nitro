@@ -19,7 +19,7 @@ import { addKnownType } from '../createType.js'
 import { ResultWrappingType } from '../types/ResultWrappingType.js'
 
 export function getBridgeNamespace() {
-  return NitroConfig.getCxxNamespace('swift', 'bridge', 'swift')
+  return NitroConfig.current.getCxxNamespace('swift', 'bridge', 'swift')
 }
 
 /**
@@ -34,7 +34,7 @@ export function createSwiftHybridObjectCxxBridge(
   spec: HybridObjectSpec
 ): SourceFile[] {
   const name = getHybridObjectName(spec.name)
-  const moduleName = NitroConfig.getIosModuleName()
+  const moduleName = spec.config.getIosModuleName()
 
   const propertiesBridge = spec.properties.map((p) =>
     getPropertyForwardImplementation(p)
@@ -109,11 +109,20 @@ public override func getCxxPart() -> bridge.${baseBridge.specializationName} {
 }`.trim()
   })
 
+  const imports = ['import NitroModules']
+  const extraSwiftImports = [
+    ...spec.properties.flatMap((p) => p.getRequiredImports('swift')),
+    ...spec.methods.flatMap((m) => m.getRequiredImports('swift')),
+  ]
+  imports.push(
+    ...extraSwiftImports.map((i) => `import ${i.name}`).filter(isNotDuplicate)
+  )
+
   const swiftCxxWrapperCode = `
 ${createFileMetadataString(`${name.HybridTSpecCxx}.swift`)}
 
 import Foundation
-import NitroModules
+${imports.join('\n')}
 
 /**
  * A class implementation that bridges ${name.HybridTSpec} over to C++.
@@ -126,7 +135,7 @@ import NitroModules
  */
 ${hasBase ? `public class ${name.HybridTSpecCxx} : ${baseClasses.join(', ')}` : `public class ${name.HybridTSpecCxx}`} {
   /**
-   * The Swift <> C++ bridge's namespace (\`${NitroConfig.getCxxNamespace('c++', 'bridge', 'swift')}\`)
+   * The Swift <> C++ bridge's namespace (\`${NitroConfig.current.getCxxNamespace('c++', 'bridge', 'swift')}\`)
    * from \`${moduleName}-Swift-Cxx-Bridge.hpp\`.
    * This contains specialized C++ templates, and C++ helper functions that can be accessed from Swift.
    */
@@ -293,9 +302,11 @@ if (__result.hasError()) [[unlikely]] {
       return [bridgedReturn, ...bridgedParams]
     }),
   ]
-  const cxxNamespace = NitroConfig.getCxxNamespace('c++')
-  const iosModuleName = NitroConfig.getIosModuleName()
-  const extraImports = allBridgedTypes.flatMap((b) => b.getRequiredImports())
+  const cxxNamespace = spec.config.getCxxNamespace('c++')
+  const iosModuleName = spec.config.getIosModuleName()
+  const extraImports = allBridgedTypes.flatMap((b) =>
+    b.getRequiredImports('c++')
+  )
 
   const cppBaseClasses = [`public virtual ${name.HybridTSpec}`]
   const cppBaseCtorCalls = [`HybridObject(${name.HybridTSpec}::TAG)`]

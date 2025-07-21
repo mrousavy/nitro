@@ -23,7 +23,7 @@ data class ${innerName}(@DoNotStrip val value: ${v.getCode('kotlin')}): ${kotlin
       `.trim()
   })
 
-  const packageName = NitroConfig.getAndroidPackage('java/kotlin')
+  const packageName = NitroConfig.current.getAndroidPackage('java/kotlin')
   const getterCases = variant.cases.map(([label]) => {
     const innerName = capitalizeName(label)
     return `is ${innerName} -> value as? T`
@@ -71,8 +71,8 @@ sealed class ${kotlinName} {
 }
   `.trim()
 
-  const cxxNamespace = NitroConfig.getCxxNamespace('c++')
-  const jniClassDescriptor = NitroConfig.getAndroidPackage(
+  const cxxNamespace = NitroConfig.current.getCxxNamespace('c++')
+  const jniClassDescriptor = NitroConfig.current.getAndroidPackage(
     'c++/jni',
     kotlinName
   )
@@ -102,7 +102,7 @@ if (isInstanceOf(${namespace}::${innerName}::javaClassStatic())) {
   const cppInnerClasses = variant.cases.map(([label, v]) => {
     const bridge = new KotlinCxxBridgedType(v)
     const innerName = capitalizeName(label)
-    const descriptor = NitroConfig.getAndroidPackage(
+    const descriptor = NitroConfig.current.getAndroidPackage(
       'c++/jni',
       `${kotlinName}$${innerName}`
     )
@@ -120,7 +120,7 @@ public:
   })
 
   const includes = new KotlinCxxBridgedType(variant)
-    .getRequiredImports()
+    .getRequiredImports('c++')
     .filter((i) => i.name !== `J${kotlinName}.hpp`)
     .map((i) => includeHeader(i, true))
     .filter(isNotDuplicate)
@@ -175,7 +175,7 @@ namespace ${cxxNamespace} {
     content: code,
     language: 'kotlin',
     name: `${kotlinName}.kt`,
-    subdirectory: NitroConfig.getAndroidPackageDirectory(),
+    subdirectory: NitroConfig.current.getAndroidPackageDirectory(),
     platform: 'android',
   })
   files.push({

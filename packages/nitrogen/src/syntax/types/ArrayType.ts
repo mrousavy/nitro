@@ -46,14 +46,17 @@ export class ArrayType implements Type {
   getExtraFiles(): SourceFile[] {
     return this.itemType.getExtraFiles()
   }
-  getRequiredImports(): SourceImport[] {
-    return [
-      {
-        language: 'c++',
-        name: 'vector',
-        space: 'system',
-      },
-      ...this.itemType.getRequiredImports(),
+  getRequiredImports(language: Language): SourceImport[] {
+    const imports: SourceImport[] = [
+      ...this.itemType.getRequiredImports(language),
     ]
+    if (language === 'c++') {
+      imports.push({
+        name: 'vector',
+        language: 'c++',
+        space: 'system',
+      })
+    }
+    return imports
   }
 }

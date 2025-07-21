@@ -54,7 +54,7 @@ export async function runNitrogen({
     },
   })
 
-  const ignorePaths = NitroConfig.getIgnorePaths()
+  const ignorePaths = NitroConfig.current.getIgnorePaths()
   const globPattern = [path.join(baseDirectory, '**', '*.nitro.ts')]
   ignorePaths.forEach((ignorePath) => {
     globPattern.push('!' + path.join(baseDirectory, ignorePath))
@@ -231,7 +231,7 @@ export async function runNitrogen({
 
   try {
     // write a .gitattributes file
-    const markAsGenerated = NitroConfig.getGitAttributesGeneratedFlag()
+    const markAsGenerated = NitroConfig.current.getGitAttributesGeneratedFlag()
     const file = await createGitAttributes(markAsGenerated, outputDirectory)
     filesAfter.push(file)
   } catch {

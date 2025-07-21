@@ -14,13 +14,13 @@ export interface CMakeFile extends Omit<SourceFile, 'language'> {
 }
 
 export function getBuildingWithGeneratedCmakeDefinition(): string {
-  const moduleName = NitroConfig.getAndroidCxxLibName()
+  const moduleName = NitroConfig.current.getAndroidCxxLibName()
   const upper = toLowerCamelCase(moduleName).toUpperCase()
   return `BUILDING_${upper}_WITH_GENERATED_CMAKE_PROJECT`
 }
 
 export function createCMakeExtension(files: SourceFile[]): CMakeFile {
-  const name = NitroConfig.getAndroidCxxLibName()
+  const name = NitroConfig.current.getAndroidCxxLibName()
   const sharedFiles = files
     .filter((f) => f.platform === 'shared' && isCppFile(f))
     .map((f) => getRelativeDirectory(f))
