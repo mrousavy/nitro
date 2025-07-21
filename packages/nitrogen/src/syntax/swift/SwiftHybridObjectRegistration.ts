@@ -26,7 +26,7 @@ export function getHybridObjectConstructorCall(
   hybridObjectName: string
 ): string {
   const swiftNamespace = NitroConfig.current.getIosModuleName()
-  const autolinkingClassName = `${NitroConfig.current.getIosModuleName()}Autolinking`
+  const autolinkingClassName = `${swiftNamespace}Autolinking`
   return `${swiftNamespace}::${autolinkingClassName}::create${hybridObjectName}();`
 }
 

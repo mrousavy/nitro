@@ -89,7 +89,7 @@ function createCxxHybridObjectSwiftHelper(
     // import from external module
     include = {
       language: 'c++',
-      name: `${type.sourceConfig.getIosModuleName()}/${HybridTSpecSwift}.hpp`,
+      name: `${modulename}/${HybridTSpecSwift}.hpp`,
       space: 'system',
     }
   } else {

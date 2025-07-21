@@ -21,7 +21,8 @@ export function createHybridObjectIntializer(): SourceFile[] {
     .map((r) => `${r.namespace}::${r.className}::registerNatives();`)
     .filter(isNotDuplicate)
 
-  const autolinkedHybridObjects = NitroConfig.current.getAutolinkedHybridObjects()
+  const autolinkedHybridObjects =
+    NitroConfig.current.getAutolinkedHybridObjects()
 
   const cppHybridObjectImports: SourceImport[] = []
   const cppRegistrations: string[] = []

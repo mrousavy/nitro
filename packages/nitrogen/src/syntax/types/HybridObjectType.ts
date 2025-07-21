@@ -83,7 +83,8 @@ export class HybridObjectType implements Type {
       }
       case 'swift': {
         if (this.sourceConfig.isExternalConfig) {
-          return `(any ${this.sourceConfig.getIosModuleName()}.${name.HybridTSpec})`
+          const moduleName = this.sourceConfig.getIosModuleName()
+          return `(any ${moduleName}.${name.HybridTSpec})`
         } else {
           return `(any ${name.HybridTSpec})`
         }

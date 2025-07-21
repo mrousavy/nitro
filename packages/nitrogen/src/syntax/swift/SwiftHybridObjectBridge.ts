@@ -34,7 +34,7 @@ export function createSwiftHybridObjectCxxBridge(
   spec: HybridObjectSpec
 ): SourceFile[] {
   const name = getHybridObjectName(spec.name)
-  const moduleName = NitroConfig.current.getIosModuleName()
+  const moduleName = spec.config.getIosModuleName()
 
   const propertiesBridge = spec.properties.map((p) =>
     getPropertyForwardImplementation(p)
@@ -302,8 +302,8 @@ if (__result.hasError()) [[unlikely]] {
       return [bridgedReturn, ...bridgedParams]
     }),
   ]
-  const cxxNamespace = NitroConfig.current.getCxxNamespace('c++')
-  const iosModuleName = NitroConfig.current.getIosModuleName()
+  const cxxNamespace = spec.config.getCxxNamespace('c++')
+  const iosModuleName = spec.config.getIosModuleName()
   const extraImports = allBridgedTypes.flatMap((b) =>
     b.getRequiredImports('c++')
   )

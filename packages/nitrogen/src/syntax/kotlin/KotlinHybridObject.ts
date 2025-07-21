@@ -1,4 +1,3 @@
-import { NitroConfig } from '../../config/NitroConfig.js'
 import { indent } from '../../utils.js'
 import { createKotlinHybridViewManager } from '../../views/kotlin/KotlinHybridViewManager.js'
 import { getAllTypes } from '../getAllTypes.js'
@@ -20,7 +19,7 @@ export function createKotlinHybridObject(spec: HybridObjectSpec): SourceFile[] {
     .map((m) => getMethodForwardImplementation(m))
     .join('\n\n')
 
-  const javaPackage = NitroConfig.current.getAndroidPackage('java/kotlin')
+  const javaPackage = spec.config.getAndroidPackage('java/kotlin')
 
   let kotlinBase = spec.isHybridView ? 'HybridView' : 'HybridObject'
   if (spec.baseTypes.length > 0) {
@@ -109,7 +108,7 @@ abstract class ${name.HybridTSpec}: ${kotlinBase}() {
     content: abstractClassCode,
     language: 'kotlin',
     name: `${name.HybridTSpec}.kt`,
-    subdirectory: NitroConfig.current.getAndroidPackageDirectory(),
+    subdirectory: spec.config.getAndroidPackageDirectory(),
     platform: 'android',
   })
   files.push(...cppFiles)

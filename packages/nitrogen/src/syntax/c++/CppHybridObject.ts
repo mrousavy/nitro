@@ -3,7 +3,6 @@ import { createFileMetadataString, isNotDuplicate } from '../helpers.js'
 import { indent } from '../../utils.js'
 import type { HybridObjectSpec } from '../HybridObjectSpec.js'
 import { includeHeader, includeNitroHeader } from './includeNitroHeader.js'
-import { NitroConfig } from '../../config/NitroConfig.js'
 import { getHybridObjectName } from '../getHybridObjectName.js'
 import { HybridObjectType } from '../types/HybridObjectType.js'
 
@@ -24,7 +23,7 @@ export function createCppHybridObject(spec: HybridObjectSpec): SourceFile[] {
   const cppExtraIncludes = extraIncludes
     .map((i) => includeHeader(i))
     .filter(isNotDuplicate)
-  const cxxNamespace = NitroConfig.current.getCxxNamespace('c++')
+  const cxxNamespace = spec.config.getCxxNamespace('c++')
   const name = getHybridObjectName(spec.name)
 
   const bases = ['public virtual HybridObject']

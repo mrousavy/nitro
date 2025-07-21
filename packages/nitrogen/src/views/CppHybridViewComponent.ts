@@ -6,7 +6,6 @@ import {
   escapeCppName,
   isFunction,
 } from '../syntax/helpers.js'
-import { NitroConfig } from '../config/NitroConfig.js'
 import { getHybridObjectName } from '../syntax/getHybridObjectName.js'
 import { includeHeader } from '../syntax/c++/includeNitroHeader.js'
 import { createHostComponentJs } from './createHostComponentJs.js'
@@ -69,7 +68,7 @@ export function createViewComponentShadowNodeFiles(
     component,
   } = getViewComponentNames(spec)
 
-  const namespace = NitroConfig.current.getCxxNamespace('c++', 'views')
+  const namespace = spec.config.getCxxNamespace('c++', 'views')
 
   const props = [...spec.properties, getHybridRefProperty(spec)]
   const properties = props.map(
