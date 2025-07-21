@@ -103,6 +103,7 @@ public:
                            const std::function<void(const std::vector<Powertrain>& /* array */)>& callback) override;
 
   std::variant<bool, OldEnum> getVariantEnum(const std::variant<bool, OldEnum>& variant) override;
+  std::variant<bool, WeirdNumbersEnum> getVariantWeirdNumbersEnum(const std::variant<bool, WeirdNumbersEnum>& variant) override;
   std::variant<Car, Person> getVariantObjects(const std::variant<Car, Person>& variant) override;
   std::variant<std::shared_ptr<HybridTestObjectCppSpec>, Person>
   getVariantHybrid(const std::variant<std::shared_ptr<HybridTestObjectCppSpec>, Person>& variant) override;

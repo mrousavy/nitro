@@ -222,6 +222,10 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
   func getVariantEnum(variant: Variant_Bool_OldEnum) throws -> Variant_Bool_OldEnum {
     return variant
   }
+  
+  func getVariantWeirdNumbersEnum(variant: Variant_Bool_WeirdNumbersEnum) throws -> Variant_Bool_WeirdNumbersEnum {
+    return variant
+  }
 
   func getVariantObjects(variant: Variant_Car_Person) throws -> Variant_Car_Person {
     return variant
