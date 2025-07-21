@@ -7,7 +7,6 @@
 
 #pragma once
 
-#include <cmath>
 #if __has_include(<NitroModules/JSIConverter.hpp>)
 #include <NitroModules/JSIConverter.hpp>
 #else
@@ -51,14 +50,19 @@ namespace margelo::nitro {
       if (!value.isNumber()) {
         return false;
       }
-      double integer;
-      double fraction = modf(value.getNumber(), &integer);
-      if (fraction != 0.0) {
-        // It is some kind of floating point number - our enums are ints.
+      double number = value.getNumber();
+      int integer = static_cast<int>(number);
+      if (number != integer) {
+        // The integer is not the same value as the double - we truncated floating points.
+        // Enums are all integers, so the input floating point number is obviously invalid.
         return false;
       }
-      // Check if we are within the bounds of the enum.
-      return integer >= 0 && integer <= 2;
+      switch (integer) {
+        case 0 /* A */: return true;
+        case 32 /* B */: return true;
+        case 64 /* C */: return true;
+        default: return false;
+      }
     }
   };
 
