@@ -3,7 +3,7 @@ import { indent } from '../../utils.js'
 import { createKotlinHybridViewManager } from '../../views/kotlin/KotlinHybridViewManager.js'
 import { getAllTypes } from '../getAllTypes.js'
 import { getHybridObjectName } from '../getHybridObjectName.js'
-import { createFileMetadataString } from '../helpers.js'
+import { createFileMetadataString, isNotDuplicate } from '../helpers.js'
 import type { HybridObjectSpec } from '../HybridObjectSpec.js'
 import { Method } from '../Method.js'
 import { Property } from '../Property.js'
@@ -38,6 +38,14 @@ export function createKotlinHybridObject(spec: HybridObjectSpec): SourceFile[] {
   if (spec.isHybridView) {
     imports.push('import com.margelo.nitro.views.*')
   }
+
+  const extraImports = [
+    ...spec.properties.flatMap((p) => p.getRequiredImports('kotlin')),
+    ...spec.methods.flatMap((m) => m.getRequiredImports('kotlin')),
+  ]
+  imports.push(
+    ...extraImports.map((i) => `import ${i.name}`).filter(isNotDuplicate)
+  )
 
   // 1. Create Kotlin abstract class definition
   const abstractClassCode = `

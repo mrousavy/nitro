@@ -7,6 +7,7 @@
 
 import Foundation
 import NitroModules
+import NitroImage
 
 /// See ``HybridTestObjectSwiftKotlinSpec``
 public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {

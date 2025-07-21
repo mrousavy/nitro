@@ -1,7 +1,7 @@
 import { indent } from '../../utils.js'
 import { createSwiftHybridViewManager } from '../../views/swift/SwiftHybridViewManager.js'
 import { getHybridObjectName } from '../getHybridObjectName.js'
-import { createFileMetadataString } from '../helpers.js'
+import { createFileMetadataString, isNotDuplicate } from '../helpers.js'
 import type { HybridObjectSpec } from '../HybridObjectSpec.js'
 import type { SourceFile } from '../SourceFile.js'
 import { createSwiftHybridObjectCxxBridge } from './SwiftHybridObjectBridge.js'
@@ -44,11 +44,19 @@ public ${hasBaseClass ? 'override func' : 'func'} getCxxWrapper() -> ${name.Hybr
 }`.trim()
   )
 
+  const extraImports = [
+    ...spec.properties.flatMap((p) => p.getRequiredImports('swift')),
+    ...spec.methods.flatMap((m) => m.getRequiredImports('swift')),
+  ]
+  const imports = ['import Foundation', 'import NitroModules']
+  imports.push(
+    ...extraImports.map((i) => `import ${i.name}`).filter(isNotDuplicate)
+  )
+
   const protocolCode = `
 ${createFileMetadataString(`${protocolName}.swift`)}
 
-import Foundation
-import NitroModules
+${imports.join('\n')}
 
 /// See \`\`${protocolName}\`\`
 public protocol ${protocolName}_protocol: ${protocolBaseClasses.join(', ')} {

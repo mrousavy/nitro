@@ -11,6 +11,7 @@ import androidx.annotation.Keep
 import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
 import com.margelo.nitro.core.*
+import com.margelo.nitro.image.Image
 
 /**
  * A Kotlin class representing the TestObjectSwiftKotlin HybridObject.

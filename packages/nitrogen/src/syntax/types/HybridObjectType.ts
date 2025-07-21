@@ -148,25 +148,27 @@ export class HybridObjectType implements Type {
         }
         break
       }
-
       case 'kotlin': {
-        imports.push({
-          language: 'kotlin',
-          name: this.sourceConfig.getAndroidPackage(
-            'java/kotlin',
-            this.hybridObjectName
-          ),
-          space: 'system',
-        })
+        if (this.sourceConfig.isExternalConfig) {
+          imports.push({
+            language: 'kotlin',
+            name: this.sourceConfig.getAndroidPackage(
+              'java/kotlin',
+              this.hybridObjectName
+            ),
+            space: 'system',
+          })
+        }
         break
       }
-
       case 'swift': {
-        imports.push({
-          language: 'swift',
-          name: this.sourceConfig.getIosModuleName(),
-          space: 'system',
-        })
+        if (this.sourceConfig.isExternalConfig) {
+          imports.push({
+            language: 'swift',
+            name: this.sourceConfig.getIosModuleName(),
+            space: 'system',
+          })
+        }
         break
       }
     }
