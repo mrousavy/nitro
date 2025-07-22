@@ -26,16 +26,18 @@ public final class Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__sha
     return { () -> bridge.std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____ in
       let __promise = bridge.create_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____()
       let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____(__promise)
-      __result
-        .then({ __result in __promiseHolder.resolve({ () -> bridge.std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___ in
-            let __promise = bridge.create_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___()
-            let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___(__promise)
-            __result
-              .then({ __result in __promiseHolder.resolve(__result.getArrayBuffer()) })
-              .catch({ __error in __promiseHolder.reject(__error.toCpp()) })
-            return __promise
-          }()) })
-        .catch({ __error in __promiseHolder.reject(__error.toCpp()) })
+      Task {
+        await __result.then({ __result in __promiseHolder.resolve({ () -> bridge.std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___ in
+          let __promise = bridge.create_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___()
+          let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___(__promise)
+          Task {
+            await __result.then({ __result in __promiseHolder.resolve(__result.getArrayBuffer()) })
+            await __result.catch({ __error in __promiseHolder.reject(__error.toCpp()) })
+          }
+          return __promise
+        }()) })
+        await __result.catch({ __error in __promiseHolder.reject(__error.toCpp()) })
+      }
       return __promise
     }()
   }

@@ -392,9 +392,11 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
               return `
 { () -> ${promise.getCode('swift')} in
   let __promise = ${promise.getCode('swift')}()
-  let __resolver = { __promise.resolve(withResult: ()) }
-  let __rejecter = { (__error: Error) in
-    __promise.reject(withError: __error)
+  let __resolver = { () -> Void in
+    Task { await __promise.resolve(withResult: ()) }
+  }
+  let __rejecter = { (__error: Error) -> Void in
+    Task { await __promise.reject(withError: __error) }
   }
   let __resolverCpp = ${indent(resolverFuncBridge.parseFromSwiftToCpp('__resolver', 'swift'), '  ')}
   let __rejecterCpp = ${indent(rejecterFuncBridge.parseFromSwiftToCpp('__rejecter', 'swift'), '  ')}
@@ -420,11 +422,11 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
               return `
 { () -> ${promise.getCode('swift')} in
   let __promise = ${promise.getCode('swift')}()
-  let __resolver = { (__result: ${promise.resultingType.getCode('swift')}) in
-    __promise.resolve(withResult: __result)
+  let __resolver = { (__result: ${promise.resultingType.getCode('swift')}) -> Void in
+    Task { await __promise.resolve(withResult: __result) }
   }
-  let __rejecter = { (__error: Error) in
-    __promise.reject(withError: __error)
+  let __rejecter = { (__error: Error) -> Void in
+    Task { await __promise.reject(withError: __error) }
   }
   let __resolverCpp = ${indent(resolverFuncBridge.parseFromSwiftToCpp('__resolver', 'swift'), '  ')}
   let __rejecterCpp = ${indent(rejecterFuncBridge.parseFromSwiftToCpp('__rejecter', 'swift'), '  ')}
@@ -732,9 +734,10 @@ case ${i}:
 { () -> bridge.${bridge.specializationName} in
   let __promise = ${makePromise}()
   let __promiseHolder = bridge.wrap_${bridge.specializationName}(__promise)
-  ${swiftParameterName}
-    .then({ __result in __promiseHolder.resolve(${indent(arg, '      ')}) })
-    .catch({ __error in __promiseHolder.reject(__error.toCpp()) })
+  Task {
+    await ${swiftParameterName}.then({ __result in __promiseHolder.resolve(${indent(arg, '    ')}) })
+    await ${swiftParameterName}.catch({ __error in __promiseHolder.reject(__error.toCpp()) })
+  }
   return __promise
 }()`.trim()
           default:
