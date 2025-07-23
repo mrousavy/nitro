@@ -386,7 +386,8 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
   }
 
   func dispose() {
-    // just reset numberValue back to 0
-    self.numberValue = 0
+    if let optionalCallback {
+      optionalCallback(13.0)
+    }
   }
 }
