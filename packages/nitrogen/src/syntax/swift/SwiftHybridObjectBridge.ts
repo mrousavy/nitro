@@ -49,7 +49,6 @@ export function createSwiftHybridObjectCxxBridge(
     return baseName.HybridTSpecCxx
   })
   const hasBase = baseClasses.length > 0
-  baseClasses.push('@unchecked Sendable')
 
   if (spec.isHybridView && !hasBase) {
     methodsBridge.push(
@@ -125,7 +124,7 @@ import NitroModules
  * - Other HybridObjects need to be wrapped/unwrapped from the Swift TCxx wrapper
  * - Throwing methods need to be wrapped with a Result<T, Error> type, as exceptions cannot be propagated to C++
  */
-public class ${name.HybridTSpecCxx}: ${baseClasses.join(', ')} {
+${hasBase ? `public class ${name.HybridTSpecCxx} : ${baseClasses.join(', ')}` : `public class ${name.HybridTSpecCxx}`} {
   /**
    * The Swift <> C++ bridge's namespace (\`${NitroConfig.getCxxNamespace('c++', 'bridge', 'swift')}\`)
    * from \`${moduleName}-Swift-Cxx-Bridge.hpp\`.

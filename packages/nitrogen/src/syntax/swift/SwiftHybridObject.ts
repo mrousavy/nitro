@@ -22,9 +22,8 @@ export function createSwiftHybridObject(spec: HybridObjectSpec): SourceFile[] {
   if (spec.isHybridView) {
     protocolBaseClasses.push('HybridView')
   }
-  const hasBaseClass = classBaseClasses.length > 0
-  classBaseClasses.push('@unchecked Sendable')
 
+  const hasBaseClass = classBaseClasses.length > 0
   const baseMembers: string[] = []
   baseMembers.push(`private weak var cxxWrapper: ${name.HybridTSpecCxx}? = nil`)
   baseMembers.push(
@@ -61,7 +60,7 @@ public protocol ${protocolName}_protocol: ${protocolBaseClasses.join(', ')} {
 }
 
 /// See \`\`${protocolName}\`\`
-public class ${protocolName}_base: ${classBaseClasses.join(',')} {
+public class ${protocolName}_base${classBaseClasses.length > 0 ? `: ${classBaseClasses.join(',')}` : ''} {
   ${baseMembers.length > 0 ? indent(baseMembers.join('\n'), '  ') : `/* inherited */`}
 }
 
