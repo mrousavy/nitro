@@ -389,7 +389,7 @@ namespace ${cxxNamespace} {
       return _swiftPart.getMemorySize();
     }
     void dispose() noexcept override {
-      return _swiftPart.dispose();
+      _swiftPart.dispose();
     }
 
   public:
