@@ -529,7 +529,7 @@ double HybridTestObjectCpp::callbackSync(const std::function<double()>& callback
 }
 
 void HybridTestObjectCpp::dispose() {
-  this->numberValue = 0;
+  this->_number = 0;
 }
 
 } // namespace margelo::nitro::test

@@ -387,6 +387,6 @@ class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
 
     override fun dispose() {
         // just reset numberValue back to 0
-        this.numberValue = 0
+        this.numberValue = 0.0
     }
 }
