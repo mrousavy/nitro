@@ -1505,6 +1505,17 @@ export function getTests(
         .didNotThrow()
         .equals(true)
     ),
+    createTest('testObject.dispose() properly resets this.numberValue', () =>
+      it(() => {
+        const hybridObject = testObject.newTestObject()
+        hybridObject.numberValue = 13
+        // dispose sets this.numberValue back to 0
+        hybridObject.dispose()
+        return hybridObject.numberValue
+      })
+        .didNotThrow()
+        .equals(0)
+    ),
     createTest('NitroModules.updateMemorySize(obj) works (roundtrip)', () =>
       it(() => {
         NitroModules.updateMemorySize(testObject)
