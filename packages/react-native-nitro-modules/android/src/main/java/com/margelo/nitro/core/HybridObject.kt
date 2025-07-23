@@ -40,6 +40,7 @@ abstract class HybridObject {
      *
      * By default, this method does nothing. It can be overridden to perform actual disposing/cleanup
      * if required.
+     * This method must not throw.
      */
     @DoNotStrip
     @Keep

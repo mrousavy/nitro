@@ -41,7 +41,7 @@ namespace margelo::nitro::test {
 
   public:
     size_t getExternalMemorySize() noexcept override;
-    void dispose() override;
+    void dispose() noexcept override;
 
   public:
     inline const jni::global_ref<JHybridChildSpec::javaobject>& getJavaPart() const noexcept {

@@ -102,7 +102,7 @@ public class HybridBaseSpec_cxx {
    */
   @inline(__always)
   public func dispose() {
-    return self.__implementation.dispose()
+    self.__implementation.dispose()
   }
 
   // Properties

@@ -32,7 +32,7 @@ namespace margelo::nitro::test {
     return method(_javaPart);
   }
 
-  void JHybridTestViewSpec::dispose() {
+  void JHybridTestViewSpec::dispose() noexcept {
     static const auto method = javaClassStatic()->getMethod<void()>("dispose");
     method(_javaPart);
   }

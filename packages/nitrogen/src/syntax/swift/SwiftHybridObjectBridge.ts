@@ -218,7 +218,7 @@ ${hasBase ? `public class ${name.HybridTSpecCxx} : ${baseClasses.join(', ')}` : 
    */
   @inline(__always)
   public ${hasBase ? 'override func' : 'func'} dispose() {
-    return self.__implementation.dispose()
+    self.__implementation.dispose()
   }
 
   // Properties

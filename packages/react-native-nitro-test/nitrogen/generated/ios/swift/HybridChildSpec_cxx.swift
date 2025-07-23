@@ -105,7 +105,7 @@ public class HybridChildSpec_cxx : HybridBaseSpec_cxx {
    */
   @inline(__always)
   public override func dispose() {
-    return self.__implementation.dispose()
+    self.__implementation.dispose()
   }
 
   // Properties
