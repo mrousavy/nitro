@@ -96,6 +96,15 @@ public class HybridBaseSpec_cxx {
     return MemoryHelper.getSizeOf(self.__implementation) + self.__implementation.memorySize
   }
 
+  /**
+   * Call dispose() on the Swift class.
+   * This _may_ be called manually from JS.
+   */
+  @inline(__always)
+  public func dispose() {
+    return self.__implementation.dispose()
+  }
+
   // Properties
   public final var baseValue: Double {
     @inline(__always)

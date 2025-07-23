@@ -27,9 +27,23 @@ public protocol HybridObject: AnyObject {
    * ```
    */
   var memorySize: Int { get }
+
+  /**
+   * Eagerly- (and manually-) dispose all native resources this `HybridObject` holds.
+   * This method can only be manually called from JS using `dispose()`.
+   *
+   * If this method is never manually called, a `HybridObject` is expected to disposes it's
+   * resources as usual via the object's destructor (`~HybridObject()`, `deinit` or `finalize()`).
+   *
+   * By default, this method does nothing. It can be overridden to perform actual disposing/cleanup
+   * if required.
+   */
+  func dispose()
 }
 
 public extension HybridObject {
   // By default, this returns `0`.
   var memorySize: Int { return 0 }
+  // By default, this does nothing.
+  func dispose() { }
 }

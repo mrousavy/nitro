@@ -94,9 +94,11 @@ namespace margelo::nitro::test {
     }
 
   public:
-    // Get memory pressure
     inline size_t getExternalMemorySize() noexcept override {
       return _swiftPart.getMemorySize();
+    }
+    void dispose() noexcept override {
+      return _swiftPart.dispose();
     }
 
   public:

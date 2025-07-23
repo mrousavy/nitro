@@ -212,6 +212,15 @@ ${hasBase ? `public class ${name.HybridTSpecCxx} : ${baseClasses.join(', ')}` : 
     return MemoryHelper.getSizeOf(self.__implementation) + self.__implementation.memorySize
   }
 
+  /**
+   * Call dispose() on the Swift class.
+   * This _may_ be called manually from JS.
+   */
+  @inline(__always)
+  public ${hasBase ? 'override func' : 'func'} dispose() {
+    return self.__implementation.dispose()
+  }
+
   // Properties
   ${indent(propertiesBridge.join('\n\n'), '  ')}
 
@@ -376,9 +385,11 @@ namespace ${cxxNamespace} {
     }
 
   public:
-    // Get memory pressure
     inline size_t getExternalMemorySize() noexcept override {
       return _swiftPart.getMemorySize();
+    }
+    void dispose() noexcept override {
+      return _swiftPart.dispose();
     }
 
   public:
