@@ -38,4 +38,11 @@ public extension HybridView {
   func afterUpdate() { /* noop */ }
 }
 
+public extension HybridView {
+  // In a View, this could be the size of the UIView.
+  var memorySize: Int {
+    return MemoryHelper.getSizeOf(self.view)
+  }
+}
+
 #endif
