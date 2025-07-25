@@ -145,3 +145,13 @@ if (isNewArchitectureEnabled()) {
     codegenJavaPackageName = "com.margelo.nitro.test"
   }
 }
+
+// This fixes linking errors due to undefined symbols from libNitroModules.so.
+// During Gradle Sync, Android Gradle Plugin runs Prefab and treats worklets
+// like a header-only library. During build, config files are not regenerated
+// because the cache key does not change and AGP thinks that they are up-to-date.
+// source: https://github.com/Expensify/react-native-live-markdown/blob/8323019c2811ebf81dce4e5273c8e4d3d0e3f9f3/android/build.gradle#L181C1-L188C2
+afterEvaluate {
+  prepareKotlinBuildScriptModel.dependsOn(":react-native-nitro-modules:prefabDebugPackage")
+  prepareKotlinBuildScriptModel.dependsOn(":react-native-nitro-modules:prefabReleasePackage")
+}
