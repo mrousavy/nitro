@@ -81,6 +81,7 @@ jobs:
 
   build_old:
     name: Build iOS Example App (old architecture)
+    needs: build_new
     runs-on: macOS-15
     steps:
       - uses: actions/checkout@v4

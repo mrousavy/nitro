@@ -67,6 +67,7 @@ jobs:
 
   build_old:
     name: Build Android Example App (old architecture)
+    needs: build_new
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
