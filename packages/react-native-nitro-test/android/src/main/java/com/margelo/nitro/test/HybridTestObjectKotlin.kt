@@ -384,4 +384,10 @@ class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
         val value = callback()
         return value
     }
+
+    override fun dispose() {
+        this.optionalCallback?.let { callback ->
+            callback(13.0)
+        }
+    }
 }

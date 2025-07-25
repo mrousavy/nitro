@@ -28,6 +28,11 @@ namespace margelo::nitro::test {
     return method(_javaPart);
   }
 
+  void JHybridBaseSpec::dispose() noexcept {
+    static const auto method = javaClassStatic()->getMethod<void()>("dispose");
+    method(_javaPart);
+  }
+
   // Properties
   double JHybridBaseSpec::getBaseValue() {
     static const auto method = javaClassStatic()->getMethod<double()>("getBaseValue");

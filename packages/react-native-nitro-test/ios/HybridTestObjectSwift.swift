@@ -222,7 +222,7 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
   func getVariantEnum(variant: Variant_Bool_OldEnum) throws -> Variant_Bool_OldEnum {
     return variant
   }
-  
+
   func getVariantWeirdNumbersEnum(variant: Variant_Bool_WeirdNumbersEnum) throws -> Variant_Bool_WeirdNumbersEnum {
     return variant
   }
@@ -326,11 +326,11 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
   func createArrayBufferAsync() throws -> Promise<ArrayBuffer> {
     return Promise.async { try self.createArrayBuffer() }
   }
-  
+
   func copyBuffer(buffer: ArrayBuffer) throws -> ArrayBuffer {
     return ArrayBuffer.copy(of: buffer)
   }
-  
+
   func bounceArrayBuffer(buffer: ArrayBuffer) throws -> ArrayBuffer {
     return buffer
   }
@@ -383,5 +383,11 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
   func callbackSync(callback: @escaping () -> Double) throws -> Double {
     let value = callback()
     return value
+  }
+
+  func dispose() {
+    if let optionalCallback {
+      optionalCallback(13.0)
+    }
   }
 }

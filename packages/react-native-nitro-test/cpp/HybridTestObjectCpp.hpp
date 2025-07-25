@@ -164,6 +164,8 @@ public:
   // Raw JSI functions
   jsi::Value rawJsiFunc(jsi::Runtime& runtime, const jsi::Value& thisValue, const jsi::Value* args, size_t count);
 
+  void dispose() override;
+
   void loadHybridMethods() override {
     // call base protoype
     HybridTestObjectCppSpec::loadHybridMethods();

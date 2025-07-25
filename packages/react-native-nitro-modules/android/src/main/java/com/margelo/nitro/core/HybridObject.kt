@@ -32,6 +32,21 @@ abstract class HybridObject {
         get() = 0L
 
     /**
+     * Eagerly- (and manually-) dispose all native resources this `HybridObject` holds.
+     * This method can only be manually called from JS using `dispose()`.
+     *
+     * If this method is never manually called, a `HybridObject` is expected to disposes it's
+     * resources as usual via the object's destructor (`~HybridObject()`, `deinit` or `finalize()`).
+     *
+     * By default, this method does nothing. It can be overridden to perform actual disposing/cleanup
+     * if required.
+     * This method must not throw.
+     */
+    @DoNotStrip
+    @Keep
+    open fun dispose() { }
+
+    /**
      * Holds the native C++ instance.
      * In `HybridObject`, the C++ instance is a sub-class of `JHybridObject`, such as one of it's specs.
      * This is `null`, until `updateNative(..)` is called.

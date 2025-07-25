@@ -1505,6 +1505,22 @@ export function getTests(
         .didNotThrow()
         .equals(true)
     ),
+    createTest('testObject.dispose() works and calls callback', async () =>
+      (
+        await it(() =>
+          timeoutedPromise<boolean>((complete) => {
+            const hybridObject = testObject.newTestObject()
+            hybridObject.optionalCallback = () => {
+              complete(true)
+            }
+            // dispose() will call this.optionalCallback() one last time then the object is gone
+            hybridObject.dispose()
+          })
+        )
+      )
+        .didNotThrow()
+        .equals(true)
+    ),
     createTest('NitroModules.updateMemorySize(obj) works (roundtrip)', () =>
       it(() => {
         NitroModules.updateMemorySize(testObject)

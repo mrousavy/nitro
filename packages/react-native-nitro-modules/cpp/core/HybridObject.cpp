@@ -28,6 +28,8 @@ jsi::Value HybridObject::disposeRaw(jsi::Runtime& runtime, const jsi::Value& thi
   // 2. Remove the NativeState from `this`
   jsi::Object thisObject = thisArg.asObject(runtime);
   thisObject.setNativeState(runtime, nullptr);
+  // 3. Clear our object cache
+  _objectCache.clear();
 
   return jsi::Value::undefined();
 }
