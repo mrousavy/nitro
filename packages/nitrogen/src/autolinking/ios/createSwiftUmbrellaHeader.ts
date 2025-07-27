@@ -64,6 +64,11 @@ ${includes.sort().join('\n')}
 #include <NitroModules/RuntimeError.hpp>
 #include <NitroModules/DateToChronoDate.hpp>
 
+// If using Views
+#if __has_include(<UIKit/UIKit.h>)
+#include <UIKit/UIKit.h>
+#endif
+
 // Forward declarations of Swift defined types
 ${swiftForwardDeclares.sort().join('\n')}
 

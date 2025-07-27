@@ -73,6 +73,11 @@ namespace margelo::nitro::test { enum class WeirdNumbersEnum; }
 #include <NitroModules/RuntimeError.hpp>
 #include <NitroModules/DateToChronoDate.hpp>
 
+// If using Views
+#if __has_include(<UIKit/UIKit.h>)
+#include <UIKit/UIKit.h>
+#endif
+
 // Forward declarations of Swift defined types
 // Forward declaration of `HybridBaseSpec_cxx` to properly resolve imports.
 namespace NitroTest { class HybridBaseSpec_cxx; }
