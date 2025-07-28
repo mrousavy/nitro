@@ -8,6 +8,7 @@ import type { HybridObjectSpec } from '../HybridObjectSpec.js'
 import { Method } from '../Method.js'
 import type { Property } from '../Property.js'
 import type { SourceFile, SourceImport } from '../SourceFile.js'
+import type { Type } from '../types/Type.js'
 import { addJNINativeRegistration } from './JNINativeRegistrations.js'
 import { KotlinCxxBridgedType } from './KotlinCxxBridgedType.js'
 
@@ -154,6 +155,7 @@ ${spaces}          public virtual ${name.HybridTSpec} {
     .map((m) => getFbjniMethodForwardImplementation(spec, m, m.name))
     .join('\n')
   const allTypes = getAllTypes(spec)
+  allTypes.push(...getAllBaseTypes(spec)) // <-- remember, we copy all base methods & properties over too
   const jniImports = allTypes
     .map((t) => new KotlinCxxBridgedType(t))
     .flatMap((t) => t.getRequiredImports('c++'))
@@ -305,4 +307,8 @@ function getFbjniPropertyForwardImplementation(
   }
 
   return methods.join('\n')
+}
+
+function getAllBaseTypes(spec: HybridObjectSpec): Type[] {
+  return spec.baseTypes.flatMap((b) => getAllTypes(b))
 }
