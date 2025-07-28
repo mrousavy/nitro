@@ -28,8 +28,13 @@ export function createKotlinHybridObject(spec: HybridObjectSpec): SourceFile[] {
         `${name.T}: Inheriting from multiple HybridObject bases is not yet supported in Kotlin!`
       )
     }
-    const base = spec.baseTypes[0]!.name
-    kotlinBase = getHybridObjectName(base).HybridTSpec
+    const base = spec.baseTypes[0]!
+    let baseName = getHybridObjectName(base.name).HybridTSpec
+    if (base.config.isExternalConfig) {
+      // Inheriting from external type, we need package prefix
+      baseName = base.config.getAndroidPackage('java/kotlin', baseName)
+    }
+    kotlinBase = baseName
   }
 
   const imports: string[] = []
