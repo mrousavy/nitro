@@ -48,7 +48,7 @@ export function createFbjniHybridObject(spec: HybridObjectSpec): SourceFile[] {
     cppBase = getHybridObjectName(base.name).JHybridTSpec
     if (base.config.isExternalConfig) {
       // It's an external type we inherit from - we have to prefix the namespace
-      cppBase = base.config.getAndroidPackage('c++/jni', cppBase)
+      cppBase = base.config.getCxxNamespace('c++', cppBase)
     }
   }
   const cppImports: SourceImport[] = []
