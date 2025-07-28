@@ -47,6 +47,10 @@ private constructor(${indent(params.join(', '), 20)})
     secondaryConstructor = `/* main constructor */`
   }
 
+  const extraImports = structType.properties
+    .flatMap((t) => t.getRequiredImports('kotlin'))
+    .map((i) => `import ${i.name}`)
+
   const code = `
 ${createFileMetadataString(`${structType.structName}.kt`)}
 
@@ -55,6 +59,7 @@ package ${packageName}
 import androidx.annotation.Keep
 import com.facebook.proguard.annotations.DoNotStrip
 import com.margelo.nitro.core.*
+${extraImports.join('\n')}
 
 /**
  * Represents the JavaScript object/struct "${structType.structName}".

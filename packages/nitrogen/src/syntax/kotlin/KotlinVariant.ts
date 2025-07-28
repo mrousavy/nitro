@@ -44,12 +44,18 @@ val is${innerName}: Boolean
 fun create(value: ${v.getCode('kotlin')}): ${kotlinName} = ${innerName}(value)
     `.trim()
   })
+
+  const extraImports = variant.variants
+    .flatMap((t) => t.getRequiredImports('kotlin'))
+    .map((i) => `import ${i.name}`)
+
   const code = `
 ${createFileMetadataString(`${kotlinName}.kt`)}
 
 package ${packageName}
 
 import com.facebook.proguard.annotations.DoNotStrip
+${extraImports.join('\n')}
 
 /**
  * Represents the TypeScript variant "${jsName}".

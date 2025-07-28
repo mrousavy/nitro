@@ -38,8 +38,14 @@ export function createSwiftVariant(variant: VariantType): SourceFile {
   const allPrimitives = variant.variants.every((v) => isPrimitive(v))
   const enumDeclaration = allPrimitives ? 'enum' : 'indirect enum'
 
+  const extraImports = variant.variants
+    .flatMap((t) => t.getRequiredImports('swift'))
+    .map((i) => `import ${i.name}`)
+
   const code = `
 ${createFileMetadataString(`${typename}.swift`)}
+
+${extraImports.join('\n')}
 
 /**
  * An Swift enum with associated values representing a Variant/Union type.
