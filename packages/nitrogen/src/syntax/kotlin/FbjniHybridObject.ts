@@ -56,14 +56,18 @@ export function createFbjniHybridObject(spec: HybridObjectSpec): SourceFile[] {
   for (const base of spec.baseTypes) {
     const { JHybridTSpec } = getHybridObjectName(base.name)
     cppConstructorCalls.push('HybridBase(jThis)')
+
+    const headerName = base.config.isExternalConfig
+      ? `${base.config.getAndroidCxxLibName()}/${JHybridTSpec}.hpp`
+      : `${JHybridTSpec}.hpp`
     cppImports.push({
       language: 'c++',
-      name: `${JHybridTSpec}.hpp`,
-      space: 'user',
+      name: headerName,
+      space: base.config.isExternalConfig ? 'system' : 'user',
       forwardDeclaration: getForwardDeclaration(
         'class',
         JHybridTSpec,
-        spec.config.getCxxNamespace('c++')
+        base.config.getCxxNamespace('c++')
       ),
     })
   }
