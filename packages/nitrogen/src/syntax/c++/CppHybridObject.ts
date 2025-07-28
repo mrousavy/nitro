@@ -15,6 +15,9 @@ export function createCppHybridObject(spec: HybridObjectSpec): SourceFile[] {
   const extraIncludes = [
     ...spec.properties.flatMap((p) => p.getRequiredImports('c++')),
     ...spec.methods.flatMap((m) => m.getRequiredImports('c++')),
+    ...spec.baseTypes.flatMap((b) =>
+      new HybridObjectType(b).getRequiredImports('c++')
+    ),
   ]
   const cppForwardDeclarations = extraIncludes
     .map((i) => i.forwardDeclaration)
@@ -28,13 +31,11 @@ export function createCppHybridObject(spec: HybridObjectSpec): SourceFile[] {
 
   const bases = ['public virtual HybridObject']
   for (const base of spec.baseTypes) {
-    const hybridObject = new HybridObjectType(base)
-    bases.push(`public virtual ${getHybridObjectName(base.name).HybridTSpec}`)
-    const imports = hybridObject.getRequiredImports('c++')
-    cppForwardDeclarations.push(
-      ...imports.map((i) => i.forwardDeclaration).filter((f) => f != null)
-    )
-    cppExtraIncludes.push(...imports.map((i) => includeHeader(i)))
+    const baseName = getHybridObjectName(base.name).HybridTSpec
+    const fullName = base.config.isExternalConfig
+      ? base.config.getCxxNamespace('c++', baseName)
+      : baseName
+    bases.push(`public virtual ${fullName}`)
   }
 
   // Generate the full header / code

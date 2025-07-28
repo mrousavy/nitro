@@ -17,7 +17,7 @@ import { createSwiftHybridObject } from './syntax/swift/SwiftHybridObject.js'
 import { createKotlinHybridObject } from './syntax/kotlin/KotlinHybridObject.js'
 import { createType } from './syntax/createType.js'
 import { Parameter } from './syntax/Parameter.js'
-import { getBaseTypes } from './utils.js'
+import { getBaseTypes, getHybridObjectNitroModuleConfig } from './utils.js'
 import { NitroConfig } from './config/NitroConfig.js'
 
 export function generatePlatformFiles(
@@ -44,6 +44,8 @@ export function generatePlatformFiles(
 }
 
 function getHybridObjectSpec(type: Type, language: Language): HybridObjectSpec {
+  const config = getHybridObjectNitroModuleConfig(type) ?? NitroConfig.current
+
   if (isHybridView(type)) {
     const symbol = type.getAliasSymbolOrThrow()
     const name = symbol.getEscapedName()
@@ -67,7 +69,7 @@ function getHybridObjectSpec(type: Type, language: Language): HybridObjectSpec {
       methods: methodsSpec?.methods ?? [],
       properties: propsSpec.properties,
       name: name,
-      config: NitroConfig.current,
+      config: config,
     }
   }
 
@@ -147,7 +149,7 @@ function getHybridObjectSpec(type: Type, language: Language): HybridObjectSpec {
     methods: methods,
     baseTypes: bases,
     isHybridView: isHybridView(type),
-    config: NitroConfig.current,
+    config: config,
   }
   return spec
 }

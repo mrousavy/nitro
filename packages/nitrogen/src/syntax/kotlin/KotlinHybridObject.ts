@@ -7,6 +7,7 @@ import type { HybridObjectSpec } from '../HybridObjectSpec.js'
 import { Method } from '../Method.js'
 import { Property } from '../Property.js'
 import type { SourceFile } from '../SourceFile.js'
+import { HybridObjectType } from '../types/HybridObjectType.js'
 import { createFbjniHybridObject } from './FbjniHybridObject.js'
 import { KotlinCxxBridgedType } from './KotlinCxxBridgedType.js'
 
@@ -19,7 +20,13 @@ export function createKotlinHybridObject(spec: HybridObjectSpec): SourceFile[] {
     .map((m) => getMethodForwardImplementation(m))
     .join('\n\n')
 
-  const javaPackage = spec.config.getAndroidPackage('java/kotlin')
+  const extraImports = [
+    ...spec.properties.flatMap((p) => p.getRequiredImports('kotlin')),
+    ...spec.methods.flatMap((m) => m.getRequiredImports('kotlin')),
+    ...spec.baseTypes.flatMap((b) =>
+      new HybridObjectType(b).getRequiredImports('kotlin')
+    ),
+  ]
 
   let kotlinBase = spec.isHybridView ? 'HybridView' : 'HybridObject'
   if (spec.baseTypes.length > 0) {
@@ -28,8 +35,9 @@ export function createKotlinHybridObject(spec: HybridObjectSpec): SourceFile[] {
         `${name.T}: Inheriting from multiple HybridObject bases is not yet supported in Kotlin!`
       )
     }
-    const base = spec.baseTypes[0]!.name
-    kotlinBase = getHybridObjectName(base).HybridTSpec
+    const base = spec.baseTypes[0]!
+    const baseHybrid = new HybridObjectType(base)
+    kotlinBase = baseHybrid.getCode('kotlin')
   }
 
   const imports: string[] = []
@@ -37,14 +45,11 @@ export function createKotlinHybridObject(spec: HybridObjectSpec): SourceFile[] {
   if (spec.isHybridView) {
     imports.push('import com.margelo.nitro.views.*')
   }
-
-  const extraImports = [
-    ...spec.properties.flatMap((p) => p.getRequiredImports('kotlin')),
-    ...spec.methods.flatMap((m) => m.getRequiredImports('kotlin')),
-  ]
   imports.push(
     ...extraImports.map((i) => `import ${i.name}`).filter(isNotDuplicate)
   )
+
+  const javaPackage = spec.config.getAndroidPackage('java/kotlin')
 
   // 1. Create Kotlin abstract class definition
   const abstractClassCode = `

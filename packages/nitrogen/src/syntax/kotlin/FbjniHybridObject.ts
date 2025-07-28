@@ -8,6 +8,7 @@ import type { HybridObjectSpec } from '../HybridObjectSpec.js'
 import { Method } from '../Method.js'
 import type { Property } from '../Property.js'
 import type { SourceFile, SourceImport } from '../SourceFile.js'
+import type { Type } from '../types/Type.js'
 import { addJNINativeRegistration } from './JNINativeRegistrations.js'
 import { KotlinCxxBridgedType } from './KotlinCxxBridgedType.js'
 
@@ -44,21 +45,30 @@ export function createFbjniHybridObject(spec: HybridObjectSpec): SourceFile[] {
         `${name.T}: Inheriting from multiple HybridObject bases is not yet supported on Kotlin!`
       )
     }
-    cppBase = getHybridObjectName(spec.baseTypes[0]!.name).JHybridTSpec
+    const base = spec.baseTypes[0]!
+    cppBase = getHybridObjectName(base.name).JHybridTSpec
+    if (base.config.isExternalConfig) {
+      // It's an external type we inherit from - we have to prefix the namespace
+      cppBase = base.config.getCxxNamespace('c++', cppBase)
+    }
   }
   const cppImports: SourceImport[] = []
   const cppConstructorCalls = [`HybridObject(${name.HybridTSpec}::TAG)`]
   for (const base of spec.baseTypes) {
     const { JHybridTSpec } = getHybridObjectName(base.name)
     cppConstructorCalls.push('HybridBase(jThis)')
+
+    const headerName = base.config.isExternalConfig
+      ? `${base.config.getAndroidCxxLibName()}/${JHybridTSpec}.hpp`
+      : `${JHybridTSpec}.hpp`
     cppImports.push({
       language: 'c++',
-      name: `${JHybridTSpec}.hpp`,
-      space: 'user',
+      name: headerName,
+      space: base.config.isExternalConfig ? 'system' : 'user',
       forwardDeclaration: getForwardDeclaration(
         'class',
         JHybridTSpec,
-        spec.config.getCxxNamespace('c++')
+        base.config.getCxxNamespace('c++')
       ),
     })
   }
@@ -145,6 +155,7 @@ ${spaces}          public virtual ${name.HybridTSpec} {
     .map((m) => getFbjniMethodForwardImplementation(spec, m, m.name))
     .join('\n')
   const allTypes = getAllTypes(spec)
+  allTypes.push(...getAllBaseTypes(spec)) // <-- remember, we copy all base methods & properties over too
   const jniImports = allTypes
     .map((t) => new KotlinCxxBridgedType(t))
     .flatMap((t) => t.getRequiredImports('c++'))
@@ -296,4 +307,8 @@ function getFbjniPropertyForwardImplementation(
   }
 
   return methods.join('\n')
+}
+
+function getAllBaseTypes(spec: HybridObjectSpec): Type[] {
+  return spec.baseTypes.flatMap((b) => getAllTypes(b))
 }
