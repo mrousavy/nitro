@@ -50,4 +50,4 @@ jobs:
         run: bun i && bun specs-ci
 
       - name: Verify no files have changed after nitrogen
-        run: git diff --exit-code HEAD -- . ':(exclude)bun.lockb'
+        run: git diff --exit-code HEAD -- . ':(exclude)bun.lock'

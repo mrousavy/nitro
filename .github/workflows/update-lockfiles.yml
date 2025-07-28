@@ -1,4 +1,4 @@
-name: 'Update Lockfiles (bun.lockb + Podfile.lock)'
+name: 'Update Lockfiles (bun.lock + Podfile.lock)'
 
 on:
   push:
