@@ -21,6 +21,7 @@ def isNewArchitectureEnabled() {
 apply plugin: "com.android.library"
 apply plugin: 'org.jetbrains.kotlin.android'
 apply from: '../nitrogen/generated/android/$$androidCxxLibName$$+autolinking.gradle'
+apply from: "./fix-prefab.gradle"
 
 if (isNewArchitectureEnabled()) {
   apply plugin: "com.facebook.react"
