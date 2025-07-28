@@ -14,10 +14,9 @@ import { HybridObjectType } from '../../syntax/types/HybridObjectType.js'
 import { getForwardDeclaration } from '../../syntax/c++/getForwardDeclaration.js'
 import { getHybridObjectName } from '../../syntax/getHybridObjectName.js'
 
-const SWIFT_BRIDGE_NAMESPACE = ['bridge', 'swift']
-
 export function createSwiftCxxBridge(): SourceFile[] {
   const bridgeName = NitroConfig.current.getSwiftBridgeHeaderName()
+  const bridgeNamespace = NitroConfig.current.getSwiftBridgeNamespace('c++')
 
   const types = getAllKnownTypes('swift').map((t) => new SwiftCxxBridgedType(t))
 
@@ -62,11 +61,6 @@ export function createSwiftCxxBridge(): SourceFile[] {
     .map((i) => includeHeader(i, true))
     .filter(isNotDuplicate)
 
-  const namespace = NitroConfig.current.getCxxNamespace(
-    'c++',
-    ...SWIFT_BRIDGE_NAMESPACE
-  )
-
   const forwardDeclaredSwiftTypes = types
     .filter((t) => t.type.kind === 'hybrid-object')
     .map((t) => {
@@ -102,11 +96,11 @@ ${includesHeader.sort().join('\n')}
  * Contains specialized versions of C++ templated types so they can be accessed from Swift,
  * as well as helper functions to interact with those C++ types from Swift.
  */
-namespace ${namespace} {
+namespace ${bridgeNamespace} {
 
   ${indent(headerHelperFunctions, '  ')}
 
-} // namespace ${namespace}
+} // namespace ${bridgeNamespace}
 `
 
   const source = `
@@ -117,11 +111,11 @@ ${createFileMetadataString(`${bridgeName}.cpp`)}
 // Include C++ implementation defined types
 ${includesImplementation.sort().join('\n')}
 
-namespace ${namespace} {
+namespace ${bridgeNamespace} {
 
   ${indent(implementationHelperFunctions, '  ')}
 
-} // namespace ${namespace}
+} // namespace ${bridgeNamespace}
 `
 
   const files: SourceFile[] = []
