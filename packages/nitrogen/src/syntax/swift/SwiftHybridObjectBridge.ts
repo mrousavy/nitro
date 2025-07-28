@@ -133,7 +133,7 @@ ${imports.join('\n')}
  * - Other HybridObjects need to be wrapped/unwrapped from the Swift TCxx wrapper
  * - Throwing methods need to be wrapped with a Result<T, Error> type, as exceptions cannot be propagated to C++
  */
-${hasBase ? `public class ${name.HybridTSpecCxx} : ${baseClasses.join(', ')}` : `public class ${name.HybridTSpecCxx}`} {
+${hasBase ? `open class ${name.HybridTSpecCxx} : ${baseClasses.join(', ')}` : `open class ${name.HybridTSpecCxx}`} {
   /**
    * The Swift <> C++ bridge's namespace (\`${NitroConfig.current.getCxxNamespace('c++', 'bridge', 'swift')}\`)
    * from \`${moduleName}-Swift-Cxx-Bridge.hpp\`.
