@@ -129,7 +129,7 @@ export function getBaseTypes(type: Type): Type[] {
 export function getHybridObjectNitroModuleConfig(
   type: Type
 ): NitroConfig | undefined {
-  const symbol = type.getSymbol()
+  const symbol = type.getSymbol() ?? type.getAliasSymbol()
   if (!symbol) return undefined
 
   const declarations =
