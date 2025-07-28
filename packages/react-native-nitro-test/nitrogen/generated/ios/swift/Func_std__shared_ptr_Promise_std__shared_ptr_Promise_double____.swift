@@ -7,6 +7,7 @@
 
 import NitroModules
 
+
 /**
  * Wraps a Swift `() -> Promise<Promise<Double>>` as a class.
  * This class can be used from C++, e.g. to wrap the Swift closure as a `std::function`.

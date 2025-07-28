@@ -20,6 +20,10 @@ export function createKotlinFunction(functionType: FunctionType): SourceFile[] {
   const kotlinParamsForward = functionType.parameters.map((p) => p.escapedName)
   const lambdaSignature = `(${kotlinParamTypes.join(', ')}) -> ${kotlinReturnType}`
 
+  const extraImports = functionType
+    .getRequiredImports('kotlin')
+    .map((i) => `import ${i.name}`)
+
   const kotlinCode = `
 ${createFileMetadataString(`${name}.kt`)}
 
@@ -30,6 +34,7 @@ import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
 import com.margelo.nitro.core.*
 import dalvik.annotation.optimization.FastNative
+${extraImports.join('\n')}
 
 /**
  * Represents the JavaScript callback \`${functionType.jsName}\`.

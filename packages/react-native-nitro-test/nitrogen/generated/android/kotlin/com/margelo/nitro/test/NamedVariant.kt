@@ -9,6 +9,7 @@ package com.margelo.nitro.test
 
 import com.facebook.proguard.annotations.DoNotStrip
 
+
 /**
  * Represents the TypeScript variant "String|Car".
  */

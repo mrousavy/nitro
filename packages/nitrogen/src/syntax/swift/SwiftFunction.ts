@@ -31,10 +31,15 @@ return ${returnType.parseFromSwiftToCpp('__result', 'swift')}
     `.trim()
   }
 
+  const extraImports = functionType
+    .getRequiredImports('swift')
+    .map((i) => `import ${i.name}`)
+
   const code = `
 ${createFileMetadataString(`${swiftClassName}.swift`)}
 
 import NitroModules
+${extraImports.join('\n')}
 
 /**
  * Wraps a Swift \`${functionType.getCode('swift')}\` as a class.
