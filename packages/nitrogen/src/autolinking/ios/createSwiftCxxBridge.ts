@@ -17,7 +17,8 @@ import { getHybridObjectName } from '../../syntax/getHybridObjectName.js'
 const SWIFT_BRIDGE_NAMESPACE = ['bridge', 'swift']
 
 export function createSwiftCxxBridge(): SourceFile[] {
-  const bridgeName = NitroConfig.current.getSwiftBridgeHeaderName()
+  const moduleName = NitroConfig.current.getIosModuleName()
+  const bridgeName = `${moduleName}-Swift-Cxx-Bridge`
 
   const types = getAllKnownTypes('swift').map((t) => new SwiftCxxBridgedType(t))
 

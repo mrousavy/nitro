@@ -84,47 +84,21 @@ function createCxxHybridObjectSwiftHelper(
     createCxxUpcastHelper(base, type)
   )
 
-  const includes: SourceImport[] = []
-  if (!type.sourceConfig.isExternalConfig) {
-    // we are including our Swift helper internally. this is a private header so we can include just fine.
-    includes.push({
+  let include: SourceImport
+  if (type.sourceConfig.isExternalConfig) {
+    // import from external module
+    include = {
+      language: 'c++',
+      name: `${modulename}/${HybridTSpecSwift}.hpp`,
+      space: 'system',
+    }
+  } else {
+    include = {
       language: 'c++',
       // Hybrid Object Swift C++ class wrapper
       name: `${HybridTSpecSwift}.hpp`,
       space: 'user',
-    })
-  } else {
-    // it's an external type - we need to include the external module's bridge as the *Swift.hpp header is private.
-    const externalBridgeName = type.sourceConfig.getSwiftBridgeHeaderName()
-    const moduleName = type.sourceConfig.getIosModuleName()
-    includes.push({
-      language: 'c++',
-      name: `${moduleName}/${externalBridgeName}.hpp`,
-      space: 'system',
-    })
-  }
-
-  let getImplementation: string
-  let createImplementation: string
-  if (!type.sourceConfig.isExternalConfig) {
-    createImplementation = `
-${swiftPartType} swiftPart = ${swiftPartType}::fromUnsafe(swiftUnsafePointer);
-return std::make_shared<${swiftWrappingType}>(swiftPart);
-    `.trim()
-    getImplementation = `
-std::shared_ptr<${swiftWrappingType}> swiftWrapper = std::dynamic_pointer_cast<${swiftWrappingType}>(cppType);
-#ifdef NITRO_DEBUG
-if (swiftWrapper == nullptr) [[unlikely]] {
-  throw std::runtime_error("Class \\"${HybridTSpec}\\" is not implemented in Swift!");
-}
-#endif
-${swiftPartType}& swiftPart = swiftWrapper->getSwiftPart();
-return swiftPart.toUnsafe();
-`.trim()
-  } else {
-    const cxxNamespace = type.sourceConfig.getCxxNamespace('c++')
-    createImplementation = `return ${cxxNamespace}::create_${name}(swiftUnsafePointer);`
-    getImplementation = `return ${cxxNamespace}::get_${name}(cppType);`
+    }
   }
 
   return {
@@ -145,14 +119,22 @@ void* _Nonnull get_${name}(${name} cppType);
     cxxImplementation: {
       code: `
 ${actualType} create_${name}(void* _Nonnull swiftUnsafePointer) {
-  ${indent(createImplementation, '  ')}
+  ${swiftPartType} swiftPart = ${swiftPartType}::fromUnsafe(swiftUnsafePointer);
+  return std::make_shared<${swiftWrappingType}>(swiftPart);
 }
 void* _Nonnull get_${name}(${name} cppType) {
-  ${indent(getImplementation, '  ')}
+  std::shared_ptr<${swiftWrappingType}> swiftWrapper = std::dynamic_pointer_cast<${swiftWrappingType}>(cppType);
+#ifdef NITRO_DEBUG
+  if (swiftWrapper == nullptr) [[unlikely]] {
+    throw std::runtime_error("Class \\"${HybridTSpec}\\" is not implemented in Swift!");
+  }
+#endif
+  ${swiftPartType}& swiftPart = swiftWrapper->getSwiftPart();
+  return swiftPart.toUnsafe();
 }
     `.trim(),
       requiredIncludes: [
-        ...includes,
+        include,
         {
           language: 'c++',
           // Swift umbrella header

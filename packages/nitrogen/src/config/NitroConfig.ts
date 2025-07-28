@@ -127,9 +127,4 @@ export class NitroConfig {
       this.getCxxNamespace('c++') !== NitroConfig.current.getCxxNamespace('c++')
     )
   }
-
-  getSwiftBridgeHeaderName(): string {
-    const moduleName = this.getIosModuleName()
-    return `${moduleName}-Swift-Cxx-Bridge`
-  }
 }
