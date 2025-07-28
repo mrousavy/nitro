@@ -44,7 +44,12 @@ export function createFbjniHybridObject(spec: HybridObjectSpec): SourceFile[] {
         `${name.T}: Inheriting from multiple HybridObject bases is not yet supported on Kotlin!`
       )
     }
-    cppBase = getHybridObjectName(spec.baseTypes[0]!.name).JHybridTSpec
+    const base = spec.baseTypes[0]!
+    cppBase = getHybridObjectName(base.name).JHybridTSpec
+    if (base.config.isExternalConfig) {
+      // It's an external type we inherit from - we have to prefix the namespace
+      cppBase = base.config.getAndroidPackage('c++/jni', cppBase)
+    }
   }
   const cppImports: SourceImport[] = []
   const cppConstructorCalls = [`HybridObject(${name.HybridTSpec}::TAG)`]
