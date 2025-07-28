@@ -8,7 +8,7 @@ PODS:
   - hermes-engine (0.80.1):
     - hermes-engine/Pre-built (= 0.80.1)
   - hermes-engine/Pre-built (0.80.1)
-  - NitroModules (0.26.4):
+  - NitroModules (0.27.0):
     - boost
     - DoubleConversion
     - fast_float
@@ -38,7 +38,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - NitroTest (0.26.4):
+  - NitroTest (0.27.0):
     - boost
     - DoubleConversion
     - fast_float
@@ -2275,7 +2275,7 @@ PODS:
     - React-perflogger (= 0.80.1)
     - React-utils (= 0.80.1)
     - SocketRocket
-  - RNScreens (4.11.1):
+  - RNScreens (4.13.0):
     - boost
     - DoubleConversion
     - fast_float
@@ -2303,10 +2303,10 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - RNScreens/common (= 4.11.1)
+    - RNScreens/common (= 4.13.0)
     - SocketRocket
     - Yoga
-  - RNScreens/common (4.11.1):
+  - RNScreens/common (4.13.0):
     - boost
     - DoubleConversion
     - fast_float
@@ -2589,8 +2589,8 @@ SPEC CHECKSUMS:
   fmt: a40bb5bd0294ea969aaaba240a927bd33d878cdd
   glog: 5683914934d5b6e4240e497e0f4a3b42d1854183
   hermes-engine: 4f07404533b808de66cf48ac4200463068d0e95a
-  NitroModules: 3bde410eb629c653649093886b1024bc3f10ff21
-  NitroTest: 81443fea366efcacdb4cd318b5718adacfd54ae3
+  NitroModules: adc38156a264af550bc8f04c0b0f1ca35ee1d47c
+  NitroTest: e0ec57e1fc7e609e5819e2baa8656f137e91b0c0
   RCT-Folly: 59ec0ac1f2f39672a0c6e6cecdd39383b764646f
   RCTDeprecation: efa5010912100e944a7ac9a93a157e1def1988fe
   RCTRequired: bbc4cf999ddc4a4b076e076c74dd1d39d0254630
@@ -2657,7 +2657,7 @@ SPEC CHECKSUMS:
   ReactAppDependencyProvider: ba631a31783569c13056dd57ff39e19764abdd6f
   ReactCodegen: 29793d65236cf0f06b1f3a7ffb2f63da13ce391e
   ReactCommon: 96684b90b235d6ae340d126141edd4563b7a446a
-  RNScreens: 45a4564413205e2a1695d40bbc0297f6eefc9b74
+  RNScreens: 54fc58ad2c8a37a8a33d72fdf23ddb57e5c76433
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   Yoga: 703055a9f39562521cdb8657162dfd80f8c174c3
 
