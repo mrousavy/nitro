@@ -18,7 +18,7 @@ public protocol HybridChildSpec_protocol: HybridObject, HybridBaseSpec_protocol 
 }
 
 /// See ``HybridChildSpec``
-public class HybridChildSpec_base: HybridBaseSpec_base {
+open class HybridChildSpec_base: HybridBaseSpec_base {
   private weak var cxxWrapper: HybridChildSpec_cxx? = nil
   public override func getCxxWrapper() -> HybridChildSpec_cxx {
   #if DEBUG

@@ -69,7 +69,7 @@ public protocol ${protocolName}_protocol: ${protocolBaseClasses.join(', ')} {
 }
 
 /// See \`\`${protocolName}\`\`
-public class ${protocolName}_base${classBaseClasses.length > 0 ? `: ${classBaseClasses.join(',')}` : ''} {
+open class ${protocolName}_base${classBaseClasses.length > 0 ? `: ${classBaseClasses.join(',')}` : ''} {
   ${baseMembers.length > 0 ? indent(baseMembers.join('\n'), '  ') : `/* inherited */`}
 }
 
