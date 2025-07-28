@@ -23,6 +23,7 @@ public protocol HybridTestViewSpec_protocol: HybridObject, HybridView {
 /// See ``HybridTestViewSpec``
 open class HybridTestViewSpec_base {
   private weak var cxxWrapper: HybridTestViewSpec_cxx? = nil
+  public init() { }
   public func getCxxWrapper() -> HybridTestViewSpec_cxx {
   #if DEBUG
     guard self is HybridTestViewSpec else {

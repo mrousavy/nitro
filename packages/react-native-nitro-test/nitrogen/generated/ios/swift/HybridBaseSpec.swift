@@ -20,6 +20,7 @@ public protocol HybridBaseSpec_protocol: HybridObject {
 /// See ``HybridBaseSpec``
 open class HybridBaseSpec_base {
   private weak var cxxWrapper: HybridBaseSpec_cxx? = nil
+  public init() { }
   public func getCxxWrapper() -> HybridBaseSpec_cxx {
   #if DEBUG
     guard self is HybridBaseSpec else {

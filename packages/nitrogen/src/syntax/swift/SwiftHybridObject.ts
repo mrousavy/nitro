@@ -40,6 +40,11 @@ export function createSwiftHybridObject(spec: HybridObjectSpec): SourceFile[] {
   const hasBaseClass = classBaseClasses.length > 0
   const baseMembers: string[] = []
   baseMembers.push(`private weak var cxxWrapper: ${name.HybridTSpecCxx}? = nil`)
+  if (hasBaseClass) {
+    baseMembers.push(`public override init() { super.init() }`)
+  } else {
+    baseMembers.push(`public init() { }`)
+  }
   baseMembers.push(
     `
 public ${hasBaseClass ? 'override func' : 'func'} getCxxWrapper() -> ${name.HybridTSpecCxx} {
@@ -80,7 +85,7 @@ public protocol ${protocolName}_protocol: ${protocolBaseClasses.join(', ')} {
 
 /// See \`\`${protocolName}\`\`
 open class ${protocolName}_base${classBaseClasses.length > 0 ? `: ${classBaseClasses.join(',')}` : ''} {
-  ${baseMembers.length > 0 ? indent(baseMembers.join('\n'), '  ') : `/* inherited */`}
+  ${indent(baseMembers.join('\n'), '  ')}
 }
 
 /**
