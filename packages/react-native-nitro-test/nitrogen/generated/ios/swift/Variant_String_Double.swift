@@ -5,6 +5,8 @@
 /// Copyright © 2025 Marc Rousavy @ Margelo
 ///
 
+
+
 /**
  * An Swift enum with associated values representing a Variant/Union type.
  * JS type: `string | number`
