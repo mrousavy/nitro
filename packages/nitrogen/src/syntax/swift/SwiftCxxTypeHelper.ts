@@ -122,7 +122,7 @@ ${swiftPartType}& swiftPart = swiftWrapper->getSwiftPart();
 return swiftPart.toUnsafe();
 `.trim()
   } else {
-    const cxxNamespace = type.sourceConfig.getCxxNamespace('c++')
+    const cxxNamespace = type.sourceConfig.getSwiftBridgeNamespace('c++')
     createImplementation = `return ${cxxNamespace}::create_${name}(swiftUnsafePointer);`
     getImplementation = `return ${cxxNamespace}::get_${name}(cppType);`
   }

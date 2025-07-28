@@ -18,10 +18,6 @@ import { HybridObjectType } from '../types/HybridObjectType.js'
 import { addKnownType } from '../createType.js'
 import { ResultWrappingType } from '../types/ResultWrappingType.js'
 
-export function getBridgeNamespace() {
-  return NitroConfig.current.getCxxNamespace('swift', 'bridge', 'swift')
-}
-
 /**
  * Creates a Swift class that bridges Swift over to C++.
  * We need this because not all Swift types are accessible in C++, and vice versa.
@@ -35,6 +31,7 @@ export function createSwiftHybridObjectCxxBridge(
 ): SourceFile[] {
   const name = getHybridObjectName(spec.name)
   const moduleName = spec.config.getIosModuleName()
+  const bridgeNamespace = spec.config.getSwiftBridgeNamespace('swift')
 
   const propertiesBridge = spec.properties.map((p) =>
     getPropertyForwardImplementation(p)
@@ -135,11 +132,11 @@ ${imports.join('\n')}
  */
 ${hasBase ? `open class ${name.HybridTSpecCxx} : ${baseClasses.join(', ')}` : `open class ${name.HybridTSpecCxx}`} {
   /**
-   * The Swift <> C++ bridge's namespace (\`${NitroConfig.current.getCxxNamespace('c++', 'bridge', 'swift')}\`)
+   * The Swift <> C++ bridge's namespace (\`${NitroConfig.current.getSwiftBridgeNamespace('c++')}\`)
    * from \`${moduleName}-Swift-Cxx-Bridge.hpp\`.
    * This contains specialized C++ templates, and C++ helper functions that can be accessed from Swift.
    */
-  public typealias bridge = ${getBridgeNamespace()}
+  public typealias bridge = ${bridgeNamespace}
 
   /**
    * Holds an instance of the \`${name.HybridTSpec}\` Swift protocol.
