@@ -5,7 +5,6 @@ import { Parameter } from '../Parameter.js'
 import type { FileWithReferencedTypes } from '../SourceFile.js'
 import { StructType } from '../types/StructType.js'
 import { SwiftCxxBridgedType } from './SwiftCxxBridgedType.js'
-import { getBridgeNamespace } from './SwiftHybridObjectBridge.js'
 
 export function createSwiftStructBridge(
   struct: StructType
@@ -14,6 +13,7 @@ export function createSwiftStructBridge(
     'swift',
     struct.structName
   )
+  const bridgeNamespace = NitroConfig.current.getSwiftBridgeNamespace('swift')
   const init = createSwiftBridgedConstructor(struct)
   const bridgedProps = struct.properties
     .map((p) => {
@@ -45,7 +45,7 @@ import NitroModules
 public typealias ${struct.structName} = ${fullName}
 
 public extension ${struct.structName} {
-  private typealias bridge = ${getBridgeNamespace()}
+  private typealias bridge = ${bridgeNamespace}
 
   ${indent(init, '  ')}
 
