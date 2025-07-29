@@ -42,7 +42,7 @@
     "zod": "^4.0.5"
   },
   "devDependencies": {
-    "@types/node": "^22.8.4"
+    "@types/node": "^24.1.0"
   },
   "release-it": {
     "npm": {
