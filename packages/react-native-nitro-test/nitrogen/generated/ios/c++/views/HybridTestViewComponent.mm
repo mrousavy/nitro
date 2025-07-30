@@ -61,8 +61,8 @@ using namespace margelo::nitro::test::views;
   [self setContentView:view];
 }
 
-- (void) updateProps:(const react::Props::Shared&)props
-            oldProps:(const react::Props::Shared&)oldProps {
+- (void) updateProps:(const std::shared_ptr<const react::Props>&)props
+            oldProps:(const std::shared_ptr<const react::Props>&)oldProps {
   // 1. Downcast props
   const auto& newViewPropsConst = *std::static_pointer_cast<HybridTestViewProps const>(props);
   auto& newViewProps = const_cast<HybridTestViewProps&>(newViewPropsConst);
