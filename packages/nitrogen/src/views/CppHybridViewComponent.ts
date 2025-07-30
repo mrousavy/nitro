@@ -169,9 +169,9 @@ namespace ${namespace} {
     /**
      * A faster path for cloning props - reuses the caching logic from \`${propsClassName}\`.
      */
-    std::shared_ptr<react::Props> cloneProps(const react::PropsParserContext& context,
-                                             const std::shared_ptr<const react::Props>& props,
-                                             react::RawProps rawProps) const override;
+    std::shared_ptr<const react::Props> cloneProps(const react::PropsParserContext& context,
+                                                   const std::shared_ptr<const react::Props>& props,
+                                                   react::RawProps rawProps) const override;
 #ifdef ANDROID
     void adopt(react::ShadowNode& shadowNode) const override;
 #endif
@@ -255,9 +255,9 @@ namespace ${namespace} {
     : ConcreteComponentDescriptor(parameters,
                                   react::RawPropsParser(/* enableJsiParser */ true)) {}
 
-  std::shared_ptr<react::Props> ${descriptorClassName}::cloneProps(const react::PropsParserContext& context,
-                                ${descriptorIndent}             const std::shared_ptr<react::Props>& props,
-                                ${descriptorIndent}             react::RawProps rawProps) const {
+  std::shared_ptr<const react::Props> ${descriptorClassName}::cloneProps(const react::PropsParserContext& context,
+                                      ${descriptorIndent}             const std::shared_ptr<react::Props>& props,
+                                      ${descriptorIndent}             react::RawProps rawProps) const {
     // 1. Prepare raw props parser
     rawProps.parse(rawPropsParser_);
     // 2. Copy props with Nitro's cached copy constructor

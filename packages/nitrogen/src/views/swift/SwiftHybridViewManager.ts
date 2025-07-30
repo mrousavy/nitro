@@ -109,8 +109,8 @@ using namespace ${namespace}::views;
   [self setContentView:view];
 }
 
-- (void) updateProps:(const std::shared_ptr<react::Props>&)props
-            oldProps:(const std::shared_ptr<react::Props>&)oldProps {
+- (void) updateProps:(const std::shared_ptr<const react::Props>&)props
+            oldProps:(const std::shared_ptr<const react::Props>&)oldProps {
   // 1. Downcast props
   const auto& newViewPropsConst = *std::static_pointer_cast<${propsClassName} const>(props);
   auto& newViewProps = const_cast<${propsClassName}&>(newViewPropsConst);
