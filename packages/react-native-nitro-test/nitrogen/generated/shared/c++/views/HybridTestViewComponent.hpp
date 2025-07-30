@@ -100,7 +100,7 @@ namespace margelo::nitro::test::views {
      * A faster path for cloning props - reuses the caching logic from `HybridTestViewProps`.
      */
     std::shared_ptr<const react::Props> cloneProps(const react::PropsParserContext& context,
-                                                   const std::shared_ptr<react::Props>& props,
+                                                   const std::shared_ptr<const react::Props>& props,
                                                    react::RawProps rawProps) const override;
 #ifdef ANDROID
     void adopt(react::ShadowNode& shadowNode) const override;
