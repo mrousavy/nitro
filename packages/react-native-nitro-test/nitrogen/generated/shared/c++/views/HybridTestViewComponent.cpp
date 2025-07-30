@@ -99,9 +99,9 @@ namespace margelo::nitro::test::views {
     : ConcreteComponentDescriptor(parameters,
                                   react::RawPropsParser(/* enableJsiParser */ true)) {}
 
-  react::Props::Shared HybridTestViewComponentDescriptor::cloneProps(const react::PropsParserContext& context,
-                                                                     const react::Props::Shared& props,
-                                                                     react::RawProps rawProps) const {
+  std::shared_ptr<react::Props> HybridTestViewComponentDescriptor::cloneProps(const react::PropsParserContext& context,
+                                                                              const std::shared_ptr<react::Props>& props,
+                                                                              react::RawProps rawProps) const {
     // 1. Prepare raw props parser
     rawProps.parse(rawPropsParser_);
     // 2. Copy props with Nitro's cached copy constructor
