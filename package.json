@@ -21,6 +21,7 @@
     "clean": "git clean -dfx",
     "release": "./scripts/release.sh",
     "docs": "bun --cwd docs",
+    "specs": "bun nitro-test specs",
     "nitro": "bun --cwd packages/react-native-nitro-modules",
     "nitrogen": "bun --cwd packages/nitrogen",
     "nitro-test": "bun --cwd packages/react-native-nitro-test",
