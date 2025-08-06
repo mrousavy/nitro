@@ -85,6 +85,7 @@ namespace margelo::nitro::test {
       prototype.registerHybridMethod("isCarElectric", &HybridTestObjectSwiftKotlinSpec::isCarElectric);
       prototype.registerHybridMethod("getDriver", &HybridTestObjectSwiftKotlinSpec::getDriver);
       prototype.registerHybridMethod("jsStyleObjectAsParameters", &HybridTestObjectSwiftKotlinSpec::jsStyleObjectAsParameters);
+      prototype.registerHybridMethod("bounceWrappedJsStyleStruct", &HybridTestObjectSwiftKotlinSpec::bounceWrappedJsStyleStruct);
       prototype.registerHybridMethod("createArrayBuffer", &HybridTestObjectSwiftKotlinSpec::createArrayBuffer);
       prototype.registerHybridMethod("createArrayBufferFromNativeBuffer", &HybridTestObjectSwiftKotlinSpec::createArrayBufferFromNativeBuffer);
       prototype.registerHybridMethod("copyBuffer", &HybridTestObjectSwiftKotlinSpec::copyBuffer);

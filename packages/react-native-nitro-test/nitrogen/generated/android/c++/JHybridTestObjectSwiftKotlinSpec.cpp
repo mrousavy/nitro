@@ -21,6 +21,10 @@ namespace NitroModules { class AnyMap; }
 namespace margelo::nitro::test { struct Car; }
 // Forward declaration of `ArrayBuffer` to properly resolve imports.
 namespace NitroModules { class ArrayBuffer; }
+// Forward declaration of `WrappedJsStruct` to properly resolve imports.
+namespace margelo::nitro::test { struct WrappedJsStruct; }
+// Forward declaration of `JsStyleStruct` to properly resolve imports.
+namespace margelo::nitro::test { struct JsStyleStruct; }
 // Forward declaration of `WeirdNumbersEnum` to properly resolve imports.
 namespace margelo::nitro::test { enum class WeirdNumbersEnum; }
 // Forward declaration of `HybridChildSpec` to properly resolve imports.
@@ -29,8 +33,6 @@ namespace margelo::nitro::test { class HybridChildSpec; }
 namespace margelo::nitro::test { class HybridBaseSpec; }
 // Forward declaration of `MapWrapper` to properly resolve imports.
 namespace margelo::nitro::test { struct MapWrapper; }
-// Forward declaration of `JsStyleStruct` to properly resolve imports.
-namespace margelo::nitro::test { struct JsStyleStruct; }
 // Forward declaration of `HybridTestViewSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridTestViewSpec; }
 
@@ -65,6 +67,10 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 #include <NitroModules/ArrayBuffer.hpp>
 #include <NitroModules/JArrayBuffer.hpp>
 #include <NitroModules/JUnit.hpp>
+#include "WrappedJsStruct.hpp"
+#include "JWrappedJsStruct.hpp"
+#include "JsStyleStruct.hpp"
+#include "JJsStyleStruct.hpp"
 #include "JVariant_Boolean_OldEnum.hpp"
 #include "WeirdNumbersEnum.hpp"
 #include "JVariant_Boolean_WeirdNumbersEnum.hpp"
@@ -86,8 +92,6 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 #include "JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____.hpp"
 #include "JFunc_std__shared_ptr_Promise_std__string__.hpp"
 #include "JFunc_void_std__string.hpp"
-#include "JsStyleStruct.hpp"
-#include "JJsStyleStruct.hpp"
 #include "JVariant_String_Double_Boolean_DoubleArray_Array_String_.hpp"
 #include "JFunc_double.hpp"
 #include "HybridTestViewSpec.hpp"
@@ -746,6 +750,11 @@ namespace margelo::nitro::test {
   void JHybridTestObjectSwiftKotlinSpec::jsStyleObjectAsParameters(const JsStyleStruct& params) {
     static const auto method = javaClassStatic()->getMethod<void(jni::alias_ref<JJsStyleStruct> /* params */)>("jsStyleObjectAsParameters");
     method(_javaPart, JJsStyleStruct::fromCpp(params));
+  }
+  WrappedJsStruct JHybridTestObjectSwiftKotlinSpec::bounceWrappedJsStyleStruct(const WrappedJsStruct& value) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JWrappedJsStruct>(jni::alias_ref<JWrappedJsStruct> /* value */)>("bounceWrappedJsStyleStruct");
+    auto __result = method(_javaPart, JWrappedJsStruct::fromCpp(value));
+    return __result->toCpp();
   }
   std::shared_ptr<ArrayBuffer> JHybridTestObjectSwiftKotlinSpec::createArrayBuffer() {
     static const auto method = javaClassStatic()->getMethod<jni::local_ref<JArrayBuffer::javaobject>()>("createArrayBuffer");

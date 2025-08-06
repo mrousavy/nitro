@@ -32,6 +32,8 @@ namespace margelo::nitro::test { struct Person; }
 namespace margelo::nitro::test { enum class Powertrain; }
 // Forward declaration of `WeirdNumbersEnum` to properly resolve imports.
 namespace margelo::nitro::test { enum class WeirdNumbersEnum; }
+// Forward declaration of `WrappedJsStruct` to properly resolve imports.
+namespace margelo::nitro::test { struct WrappedJsStruct; }
 
 // Forward declarations of Swift defined types
 // Forward declaration of `HybridBaseSpec_cxx` to properly resolve imports.
@@ -53,6 +55,7 @@ namespace NitroTest { class HybridTestViewSpec_cxx; }
 #include "Person.hpp"
 #include "Powertrain.hpp"
 #include "WeirdNumbersEnum.hpp"
+#include "WrappedJsStruct.hpp"
 #include <NitroModules/AnyMap.hpp>
 #include <NitroModules/ArrayBuffer.hpp>
 #include <NitroModules/ArrayBufferHolder.hpp>
@@ -1212,6 +1215,15 @@ namespace margelo::nitro::test::bridge::swift {
   }
   inline Result_std__optional_Person__ create_Result_std__optional_Person__(const std::exception_ptr& error) {
     return Result<std::optional<Person>>::withError(error);
+  }
+  
+  // pragma MARK: Result<WrappedJsStruct>
+  using Result_WrappedJsStruct_ = Result<WrappedJsStruct>;
+  inline Result_WrappedJsStruct_ create_Result_WrappedJsStruct_(const WrappedJsStruct& value) {
+    return Result<WrappedJsStruct>::withValue(value);
+  }
+  inline Result_WrappedJsStruct_ create_Result_WrappedJsStruct_(const std::exception_ptr& error) {
+    return Result<WrappedJsStruct>::withError(error);
   }
   
   // pragma MARK: Result<std::shared_ptr<ArrayBuffer>>

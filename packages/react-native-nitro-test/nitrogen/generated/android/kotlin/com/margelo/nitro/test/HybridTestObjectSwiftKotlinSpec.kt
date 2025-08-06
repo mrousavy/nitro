@@ -356,6 +356,10 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
+  abstract fun bounceWrappedJsStyleStruct(value: WrappedJsStruct): WrappedJsStruct
+  
+  @DoNotStrip
+  @Keep
   abstract fun createArrayBuffer(): ArrayBuffer
   
   @DoNotStrip

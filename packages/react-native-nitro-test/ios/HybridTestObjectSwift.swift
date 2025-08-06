@@ -309,6 +309,10 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
     params.onChanged(params.value)
   }
 
+  func bounceWrappedJsStyleStruct(value: WrappedJsStruct) throws -> WrappedJsStruct {
+    return value
+  }
+
   func createArrayBufferFromNativeBuffer(copy: Bool) throws -> ArrayBuffer {
     let data = Data(count: 1024 * 1024 * 10) // 10 MB
     if copy {
