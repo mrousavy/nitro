@@ -350,14 +350,9 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   @Keep
   abstract fun getDriver(car: Car): Person?
   
-  abstract fun jsStyleObjectAsParameters(params: JsStyleStruct): Unit
-  
   @DoNotStrip
   @Keep
-  private fun jsStyleObjectAsParameters_cxx(params: JsStyleStruct): Unit {
-    val __result = jsStyleObjectAsParameters(params)
-    return __result
-  }
+  abstract fun jsStyleObjectAsParameters(params: JsStyleStruct): Unit
   
   @DoNotStrip
   @Keep
