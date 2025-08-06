@@ -744,7 +744,7 @@ namespace margelo::nitro::test {
     return __result != nullptr ? std::make_optional(__result->toCpp()) : std::nullopt;
   }
   void JHybridTestObjectSwiftKotlinSpec::jsStyleObjectAsParameters(const JsStyleStruct& params) {
-    static const auto method = javaClassStatic()->getMethod<void(jni::alias_ref<JJsStyleStruct> /* params */)>("jsStyleObjectAsParameters_cxx");
+    static const auto method = javaClassStatic()->getMethod<void(jni::alias_ref<JJsStyleStruct> /* params */)>("jsStyleObjectAsParameters");
     method(_javaPart, JJsStyleStruct::fromCpp(params));
   }
   std::shared_ptr<ArrayBuffer> JHybridTestObjectSwiftKotlinSpec::createArrayBuffer() {
