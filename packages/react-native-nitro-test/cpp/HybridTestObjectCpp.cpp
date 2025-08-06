@@ -424,6 +424,10 @@ void HybridTestObjectCpp::jsStyleObjectAsParameters(const JsStyleStruct& params)
   params.onChanged(params.value);
 }
 
+WrappedJsStruct HybridTestObjectCpp::bounceWrappedJsStyleStruct(const WrappedJsStruct& value) {
+  return value;
+}
+
 std::shared_ptr<ArrayBuffer> HybridTestObjectCpp::createArrayBufferFromNativeBuffer(bool /* copy */) {
   // On C++, we are already using a "native" buffer.
   return createArrayBuffer();

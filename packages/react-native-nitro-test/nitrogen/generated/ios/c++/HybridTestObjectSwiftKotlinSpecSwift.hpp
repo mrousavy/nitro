@@ -32,6 +32,8 @@ namespace NitroModules { class ArrayBuffer; }
 namespace NitroModules { class ArrayBufferHolder; }
 // Forward declaration of `JsStyleStruct` to properly resolve imports.
 namespace margelo::nitro::test { struct JsStyleStruct; }
+// Forward declaration of `WrappedJsStruct` to properly resolve imports.
+namespace margelo::nitro::test { struct WrappedJsStruct; }
 // Forward declaration of `WeirdNumbersEnum` to properly resolve imports.
 namespace margelo::nitro::test { enum class WeirdNumbersEnum; }
 // Forward declaration of `HybridChildSpec` to properly resolve imports.
@@ -61,6 +63,7 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 #include <NitroModules/ArrayBuffer.hpp>
 #include <NitroModules/ArrayBufferHolder.hpp>
 #include "JsStyleStruct.hpp"
+#include "WrappedJsStruct.hpp"
 #include "WeirdNumbersEnum.hpp"
 #include "HybridChildSpec.hpp"
 #include "HybridBaseSpec.hpp"
@@ -533,6 +536,14 @@ namespace margelo::nitro::test {
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
+    }
+    inline WrappedJsStruct bounceWrappedJsStyleStruct(const WrappedJsStruct& value) override {
+      auto __result = _swiftPart.bounceWrappedJsStyleStruct(value);
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
     }
     inline std::shared_ptr<ArrayBuffer> createArrayBuffer() override {
       auto __result = _swiftPart.createArrayBuffer();

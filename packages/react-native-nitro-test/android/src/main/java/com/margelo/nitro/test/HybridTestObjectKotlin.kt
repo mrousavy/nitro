@@ -264,6 +264,10 @@ class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
         params.onChanged(params.value)
     }
 
+    override fun bounceWrappedJsStyleStruct(value: WrappedJsStruct): WrappedJsStruct {
+        return value
+    }
+
     override fun createArrayBufferFromNativeBuffer(copy: Boolean): ArrayBuffer {
         val hardwareBuffer = HardwareBuffer.create(
             1024,

@@ -71,6 +71,7 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
   func isCarElectric(car: Car) throws -> Bool
   func getDriver(car: Car) throws -> Person?
   func jsStyleObjectAsParameters(params: JsStyleStruct) throws -> Void
+  func bounceWrappedJsStyleStruct(value: WrappedJsStruct) throws -> WrappedJsStruct
   func createArrayBuffer() throws -> ArrayBuffer
   func createArrayBufferFromNativeBuffer(copy: Bool) throws -> ArrayBuffer
   func copyBuffer(buffer: ArrayBuffer) throws -> ArrayBuffer

@@ -55,6 +55,12 @@ const TEST_MAP_2: Record<string, string> = {
   'anotherKey': 'another-value',
   'third-key': 'thirdValue',
 }
+const TEST_WRAPPED_STRUCT = {
+  value: {
+    value: 55.3,
+    onChanged: () => {},
+  },
+}
 
 const BASE_DATE = new Date()
 const DATE_PLUS_1H = (() => {
@@ -387,6 +393,12 @@ export function getTests(
           { age: 24, name: 'Marc' },
           { age: 5, name: 'Ben' },
         ])
+    ),
+    createTest('bounceWrappedJsStyleStruct(...) equals', () =>
+      it(() => testObject.bounceWrappedJsStyleStruct(TEST_WRAPPED_STRUCT))
+        .didNotThrow()
+        .didReturn('object')
+        .equals(TEST_WRAPPED_STRUCT)
     ),
 
     createTest('complexEnumCallback(...)', async () =>

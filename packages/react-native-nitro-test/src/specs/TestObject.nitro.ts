@@ -55,6 +55,9 @@ interface JsStyleStruct {
   value: number
   onChanged: (num: number) => void
 }
+interface WrappedJsStruct {
+  value: JsStyleStruct
+}
 
 interface MapWrapper {
   map: Record<string, string>
@@ -158,6 +161,7 @@ interface SharedTestObjectProps {
   isCarElectric(car: Car): boolean
   getDriver(car: Car): Person | undefined
   jsStyleObjectAsParameters(params: JsStyleStruct): void
+  bounceWrappedJsStyleStruct(value: WrappedJsStruct): WrappedJsStruct
 
   // ArrayBuffers
   createArrayBuffer(): ArrayBuffer
