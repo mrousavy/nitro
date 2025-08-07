@@ -17,6 +17,7 @@
     "android/fix-prefab.gradle",
     "android/CMakeLists.txt",
     "android/src/",
+    "android/build/headers",
     "ios/",
     "cpp/",
     "app.plugin.js",
@@ -59,6 +60,7 @@
     "registry": "https://registry.npmjs.org/"
   },
   "scripts": {
+    "prepublishOnly": "./scripts/prepareAndroidHeaders.sh",
     "postinstall": "bun build || exit 0;",
     "write-native-version": "version=$(node -p \"require('./package.json').version\") && sed -i '' \"s/#define NITRO_VERSION \\\".*\\\"/#define NITRO_VERSION \\\"$version\\\"/\" ./cpp/utils/NitroDefines.hpp",
     "postversion": "bun run write-native-version",
