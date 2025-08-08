@@ -64,7 +64,7 @@ export function toUnixPath(p: string): string {
 }
 
 const sep = path.sep
-function unsafeFastJoin(...segments: string[]): string {
+export function unsafeFastJoin(...segments: string[]): string {
   // this function should really not take any unsafe strings like `/` or `\`.
   return segments.join(sep)
 }
@@ -74,21 +74,24 @@ function getFullPath(file: SourceFile): string {
     file.platform,
     file.language,
     ...file.subdirectory,
-    file.content
+    file.name
   )
 }
-export function filterDuplicateFiles(
-  f: SourceFile,
-  i: number,
-  array: SourceFile[]
-): boolean {
-  const otherIndex = array.findIndex((f2) => getFullPath(f) === getFullPath(f2))
-  if (otherIndex !== i) {
-    if (array[i]?.content !== array[otherIndex]?.content) {
-      throw new Error(`File "${f.name}"'s content differs!`)
+
+/**
+ * Deduplicates all files via their full path.
+ * If content differs, you are f*cked.
+ */
+export function deduplicateFiles(files: SourceFile[]): SourceFile[] {
+  const map = new Map<string, SourceFile>()
+  for (const file of files) {
+    const filePath = getFullPath(file)
+
+    if (!map.has(filePath)) {
+      map.set(filePath, file)
     }
   }
-  return otherIndex === i
+  return [...map.values()]
 }
 
 export function filterDuplicateHelperBridges(

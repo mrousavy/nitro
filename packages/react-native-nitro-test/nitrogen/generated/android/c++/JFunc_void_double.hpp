@@ -17,7 +17,7 @@ namespace margelo::nitro::test {
   using namespace facebook;
 
   /**
-   * Represents the Java/Kotlin callback `(num: Double) -> Unit`.
+   * Represents the Java/Kotlin callback `(value: Double) -> Unit`.
    * This can be passed around between C++ and Java/Kotlin.
    */
   struct JFunc_void_double: public jni::JavaClass<JFunc_void_double> {
@@ -28,9 +28,9 @@ namespace margelo::nitro::test {
     /**
      * Invokes the function this `JFunc_void_double` instance holds through JNI.
      */
-    void invoke(double num) const {
-      static const auto method = javaClassStatic()->getMethod<void(double /* num */)>("invoke");
-      method(self(), num);
+    void invoke(double value) const {
+      static const auto method = javaClassStatic()->getMethod<void(double /* value */)>("invoke");
+      method(self(), value);
     }
   };
 
@@ -39,7 +39,7 @@ namespace margelo::nitro::test {
    */
   struct JFunc_void_double_cxx final: public jni::HybridClass<JFunc_void_double_cxx, JFunc_void_double> {
   public:
-    static jni::local_ref<JFunc_void_double::javaobject> fromCpp(const std::function<void(double /* num */)>& func) {
+    static jni::local_ref<JFunc_void_double::javaobject> fromCpp(const std::function<void(double /* value */)>& func) {
       return JFunc_void_double_cxx::newObjectCxxArgs(func);
     }
 
@@ -47,13 +47,13 @@ namespace margelo::nitro::test {
     /**
      * Invokes the C++ `std::function<...>` this `JFunc_void_double_cxx` instance holds.
      */
-    void invoke_cxx(double num) {
-      _func(num);
+    void invoke_cxx(double value) {
+      _func(value);
     }
 
   public:
     [[nodiscard]]
-    inline const std::function<void(double /* num */)>& getFunction() const {
+    inline const std::function<void(double /* value */)>& getFunction() const {
       return _func;
     }
 
@@ -64,11 +64,11 @@ namespace margelo::nitro::test {
     }
 
   private:
-    explicit JFunc_void_double_cxx(const std::function<void(double /* num */)>& func): _func(func) { }
+    explicit JFunc_void_double_cxx(const std::function<void(double /* value */)>& func): _func(func) { }
 
   private:
     friend HybridBase;
-    std::function<void(double /* num */)> _func;
+    std::function<void(double /* value */)> _func;
   };
 
 } // namespace margelo::nitro::test
