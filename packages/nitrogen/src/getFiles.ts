@@ -1,9 +1,9 @@
 import { Dirent, promises as fs } from 'fs'
-import path from 'path'
+import { unsafeFastJoin } from './utils.js'
 
 function getFilePath(file: Dirent, rootDir: string): string {
   const dir = file.parentPath ?? file.path ?? rootDir
-  return path.join(dir, file.name)
+  return unsafeFastJoin(dir, file.name)
 }
 
 export async function getFiles(directory: string): Promise<string[]> {
