@@ -11,8 +11,8 @@ import path from 'path'
 import { prettifyDirectory } from './prettifyDirectory.js'
 import {
   capitalizeName,
+  deduplicateFiles,
   errorToString,
-  filterDuplicateFiles,
   indent,
   NITROGEN_VERSION,
 } from './utils.js'
@@ -142,13 +142,13 @@ export async function runNitrogen({
         )
 
         // Create all files and throw it into a big list
-        const allFiles = platforms
-          .flatMap((p) => {
-            usedPlatforms.push(p)
-            const language = platformSpec[p]!
-            return generatePlatformFiles(declaration.getType(), language)
-          })
-          .filter(filterDuplicateFiles)
+        let allFiles = platforms.flatMap((p) => {
+          usedPlatforms.push(p)
+          const language = platformSpec[p]!
+          const r = generatePlatformFiles(declaration.getType(), language)
+          return r
+        })
+        allFiles = deduplicateFiles(allFiles)
         // Group the files by platform ({ ios: [], android: [], shared: [] })
         const filesPerPlatform = groupByPlatform(allFiles)
         // Loop through each platform one by one so that it has some kind of order (per-platform)
