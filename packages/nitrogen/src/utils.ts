@@ -64,7 +64,7 @@ export function toUnixPath(p: string): string {
 }
 
 const sep = path.sep
-function unsafeFastJoin(...segments: string[]): string {
+export function unsafeFastJoin(...segments: string[]): string {
   // this function should really not take any unsafe strings like `/` or `\`.
   return segments.join(sep)
 }
