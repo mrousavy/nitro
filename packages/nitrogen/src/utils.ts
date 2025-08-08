@@ -74,7 +74,7 @@ function getFullPath(file: SourceFile): string {
     file.platform,
     file.language,
     ...file.subdirectory,
-    file.content
+    file.name
   )
 }
 export function filterDuplicateFiles(
