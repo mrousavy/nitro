@@ -70,8 +70,18 @@ jsi::Value HybridObject::toObject(jsi::Runtime& runtime) {
   // 4. Create the object using Object.create(...)
   jsi::Object object = create.call(runtime, prototype).asObject(runtime);
 
+  std::shared_ptr<HybridObject> selfPtr;
+  // Use weak_from_this() to check if the object is managed by shared_ptr
+  std::weak_ptr<HybridObject> weakPtr = weak_from_this();
+  if (!weakPtr.expired()) {
+    // Object is managed by shared_ptr and still alive
+    selfPtr = weakPtr.lock();
+  } else {
+    selfPtr = std::shared_ptr<HybridObject>(std::shared_ptr<void>(this, [this](void*) {}), this);
+  }
+
   // 5. Assign NativeState to the object so the prototype can resolve the native methods
-  object.setNativeState(runtime, shared_from_this());
+  object.setNativeState(runtime, selfPtr);
 
   // 6. Set memory size so Hermes GC knows about actual memory
   object.setExternalMemoryPressure(runtime, getExternalMemorySize());
