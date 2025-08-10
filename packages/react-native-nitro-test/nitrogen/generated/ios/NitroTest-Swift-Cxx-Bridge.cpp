@@ -139,6 +139,14 @@ namespace margelo::nitro::test::bridge::swift {
     };
   }
   
+  // pragma MARK: std::function<void(const Person& /* person */)>
+  Func_void_Person create_Func_void_Person(void* _Nonnull swiftClosureWrapper) {
+    auto swiftClosure = NitroTest::Func_void_Person::fromUnsafe(swiftClosureWrapper);
+    return [swiftClosure = std::move(swiftClosure)](const Person& person) mutable -> void {
+      swiftClosure.call(person);
+    };
+  }
+  
   // pragma MARK: std::function<std::shared_ptr<Promise<std::string>>()>
   Func_std__shared_ptr_Promise_std__string__ create_Func_std__shared_ptr_Promise_std__string__(void* _Nonnull swiftClosureWrapper) {
     auto swiftClosure = NitroTest::Func_std__shared_ptr_Promise_std__string__::fromUnsafe(swiftClosureWrapper);

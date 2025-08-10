@@ -90,6 +90,8 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 #include "JFunc_std__shared_ptr_Promise_double__.hpp"
 #include "JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_double____.hpp"
 #include "JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____.hpp"
+#include "JFunc_void_Person.hpp"
+#include "JFunc_void_Car.hpp"
 #include "JFunc_std__shared_ptr_Promise_std__string__.hpp"
 #include "JFunc_void_std__string.hpp"
 #include "JVariant_String_Double_Boolean_DoubleArray_Array_String_.hpp"
@@ -700,6 +702,10 @@ namespace margelo::nitro::test {
         };
       }
     }();
+  }
+  void JHybridTestObjectSwiftKotlinSpec::callbackBothStructs(const std::function<void(const Person& /* person */)>& first, const std::function<void(const Car& /* car */)>& second) {
+    static const auto method = javaClassStatic()->getMethod<void(jni::alias_ref<JFunc_void_Person::javaobject> /* first */, jni::alias_ref<JFunc_void_Car::javaobject> /* second */)>("callbackBothStructs_cxx");
+    method(_javaPart, JFunc_void_Person_cxx::fromCpp(first), JFunc_void_Car_cxx::fromCpp(second));
   }
   std::shared_ptr<Promise<double>> JHybridTestObjectSwiftKotlinSpec::getValueFromJSCallbackAndWait(const std::function<std::shared_ptr<Promise<double>>()>& getValue) {
     static const auto method = javaClassStatic()->getMethod<jni::local_ref<JPromise::javaobject>(jni::alias_ref<JFunc_std__shared_ptr_Promise_double__::javaobject> /* getValue */)>("getValueFromJSCallbackAndWait_cxx");

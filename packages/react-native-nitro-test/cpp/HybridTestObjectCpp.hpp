@@ -129,6 +129,8 @@ public:
   std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>> callbackAsyncPromiseBuffer(
       const std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>>>()>& callback) override;
   std::function<void(double)> getComplexCallback() override;
+  void callbackBothStructs(const std::function<void(const Person& /* person */)>& first,
+                           const std::function<void(const Car& /* car */)>& second) override;
 
   std::shared_ptr<Promise<void>>
   getValueFromJsCallback(const std::function<std::shared_ptr<Promise<std::string>>()>& callback,
