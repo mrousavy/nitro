@@ -49,7 +49,19 @@ export function stringify(value: unknown): string {
         // toString() threw - maybe because we accessed it on a prototype.
         console.warn(`Failed to stringify [${typeof value}]!`)
       }
-      return `{ [Object] ${Object.keys(value).join(', ')} }`
+      try {
+        return JSON.stringify(value, (_, v) => {
+          if (typeof v === 'bigint') {
+            return v.toLocaleString()
+          } else if (typeof v === 'function') {
+            return v.toString()
+          } else {
+            return v
+          }
+        })
+      } catch {
+        return `{ [Object] ${Object.keys(value).join(', ')} }`
+      }
     default:
       return `${value}`
   }
