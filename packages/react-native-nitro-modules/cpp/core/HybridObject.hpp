@@ -65,7 +65,7 @@ public:
    * The HybridObject must be managed inside a `shared_ptr` already, otherwise this will fail.
    */
   template <typename Derived>
-  std::shared_ptr<Derived> shared() {
+  std::shared_ptr<Derived> shared_cast() {
     return std::dynamic_pointer_cast<Derived>(shared());
   }
   /**

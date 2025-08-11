@@ -17,7 +17,6 @@
 #include "JPerson.hpp"
 #include <string>
 #include "JHybridTestObjectSwiftKotlinSpec.hpp"
-#include <NitroModules/JNISharedPtr.hpp>
 
 namespace margelo::nitro::test {
 
@@ -78,7 +77,7 @@ namespace margelo::nitro::test {
       return jniValue->toCpp();
     } else if (isInstanceOf(JVariant_Person_HybridTestObjectSwiftKotlinSpec_impl::Second::javaClassStatic())) {
       auto jniValue = static_cast<const JVariant_Person_HybridTestObjectSwiftKotlinSpec_impl::Second*>(this)->getValue();
-      return JNISharedPtr::make_shared_from_jni<JHybridTestObjectSwiftKotlinSpec>(jni::make_global(jniValue));
+      return jniValue->cthis()->shared_cast<JHybridTestObjectSwiftKotlinSpec>();
     }
     throw std::invalid_argument("Variant is unknown Kotlin instance!");
   }

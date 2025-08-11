@@ -31,7 +31,6 @@
 #include "JHybridTestViewSpec.hpp"
 #include "views/JHybridTestViewStateUpdater.hpp"
 #include "HybridTestObjectCpp.hpp"
-#include <NitroModules/JNISharedPtr.hpp>
 #include <NitroModules/DefaultConstructableObject.hpp>
 
 namespace margelo::nitro::test {
@@ -75,7 +74,7 @@ int initialize(JavaVM* vm) {
         static DefaultConstructableObject<JHybridTestObjectSwiftKotlinSpec::javaobject> object("com/margelo/nitro/test/HybridTestObjectKotlin");
         auto instance = object.create();
         auto globalRef = jni::make_global(instance);
-        return JNISharedPtr::make_shared_from_jni<JHybridTestObjectSwiftKotlinSpec>(globalRef);
+        return globalRef->cthis()->shared();
       }
     );
     HybridObjectRegistry::registerHybridObjectConstructor(
@@ -84,7 +83,7 @@ int initialize(JavaVM* vm) {
         static DefaultConstructableObject<JHybridBaseSpec::javaobject> object("com/margelo/nitro/test/HybridBase");
         auto instance = object.create();
         auto globalRef = jni::make_global(instance);
-        return JNISharedPtr::make_shared_from_jni<JHybridBaseSpec>(globalRef);
+        return globalRef->cthis()->shared();
       }
     );
     HybridObjectRegistry::registerHybridObjectConstructor(
@@ -93,7 +92,7 @@ int initialize(JavaVM* vm) {
         static DefaultConstructableObject<JHybridChildSpec::javaobject> object("com/margelo/nitro/test/HybridChild");
         auto instance = object.create();
         auto globalRef = jni::make_global(instance);
-        return JNISharedPtr::make_shared_from_jni<JHybridChildSpec>(globalRef);
+        return globalRef->cthis()->shared();
       }
     );
     HybridObjectRegistry::registerHybridObjectConstructor(
@@ -102,7 +101,7 @@ int initialize(JavaVM* vm) {
         static DefaultConstructableObject<JHybridTestViewSpec::javaobject> object("com/margelo/nitro/test/HybridTestView");
         auto instance = object.create();
         auto globalRef = jni::make_global(instance);
-        return JNISharedPtr::make_shared_from_jni<JHybridTestViewSpec>(globalRef);
+        return globalRef->cthis()->shared();
       }
     );
   });

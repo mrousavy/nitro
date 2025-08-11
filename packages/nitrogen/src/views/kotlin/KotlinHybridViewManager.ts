@@ -169,7 +169,6 @@ ${createFileMetadataString(`J${stateUpdaterName}.cpp`)}
 #include "J${stateUpdaterName}.hpp"
 #include "views/${component}.hpp"
 #include <NitroModules/NitroDefines.hpp>
-#include <NitroModules/JNISharedPtr.hpp>
 
 namespace ${cxxNamespace} {
 
@@ -205,7 +204,7 @@ void J${stateUpdaterName}::updateViewProps(jni::alias_ref<jni::JClass> /* class 
     // hybridRef changed - call it with new this
     const auto& maybeFunc = props.hybridRef.value;
     if (maybeFunc.has_value()) {
-      auto shared = JNISharedPtr::make_shared_from_jni<${JHybridTSpec}>(jni::make_global(javaView));
+      std::shared_ptr<${JHybridTSpec}> shared = javaView->cthis()->shared_cast<${JHybridTSpec}>();
       maybeFunc.value()(shared);
     }
     // TODO: Set isDirty = false
