@@ -61,13 +61,17 @@ public:
 
 public:
   /**
-   * Get the `std::shared_ptr` instance of this HybridObject.
+   * Get the `std::shared_ptr` instance of this HybridObject as it's concrete type.
    * The HybridObject must be managed inside a `shared_ptr` already, otherwise this will fail.
    */
   template <typename Derived>
   std::shared_ptr<Derived> shared() {
-    return std::dynamic_pointer_cast<Derived>(shared_from_this());
+    return std::dynamic_pointer_cast<Derived>(shared());
   }
+  /**
+   * Get the `std::shared_ptr` instance of this HybridObject.
+   */
+  std::shared_ptr<HybridObject> shared();
 
 public:
   /**
