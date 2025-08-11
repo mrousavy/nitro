@@ -29,7 +29,7 @@ std::shared_ptr<HybridObject> HybridObject::shared() {
     return shared;
   }
   // We are not managed inside a shared_ptr..
-  throw std::runtime_error("HybridObject \"" + _name + "\" is not managed inside a std::shared_ptr - cannot access shared()!");
+  throw std::runtime_error(std::string("HybridObject \"") + _name + "\" is not managed inside a std::shared_ptr - cannot access shared()!");
 }
 
 jsi::Value HybridObject::disposeRaw(jsi::Runtime& runtime, const jsi::Value& thisArg, const jsi::Value*, size_t) {
