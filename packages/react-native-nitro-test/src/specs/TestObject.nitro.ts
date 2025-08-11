@@ -55,7 +55,7 @@ interface JsStyleStruct {
   value: number
   onChanged: (num: number) => void
 }
-interface WrappedJsStruct {
+export interface WrappedJsStruct {
   value: JsStyleStruct
 }
 

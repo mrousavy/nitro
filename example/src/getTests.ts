@@ -5,6 +5,7 @@ import {
   type Car,
   type Person,
   type Powertrain,
+  type WrappedJsStyleStruct,
   WeirdNumbersEnum,
 } from 'react-native-nitro-test'
 import type { State } from './Testers'
@@ -55,10 +56,10 @@ const TEST_MAP_2: Record<string, string> = {
   'anotherKey': 'another-value',
   'third-key': 'thirdValue',
 }
-const TEST_WRAPPED_STRUCT = {
+const TEST_WRAPPED_STRUCT: WrappedJsStyleStruct = {
   value: {
     value: 55.3,
-    onChanged: () => {},
+    onChanged: (_num: number) => {},
   },
 }
 
