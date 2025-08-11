@@ -21,6 +21,8 @@ data class MapWrapper
   @DoNotStrip
   @Keep
   constructor(
+    @DoNotStrip
+    @Keep
     val map: Map<String, String>
   ) {
   /* main constructor */
