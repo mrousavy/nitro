@@ -180,11 +180,7 @@ ${cppIncludes.join('\n')}
 namespace ${cxxNamespace} {
 
   jni::local_ref<${name.JHybridTSpec}::jhybriddata> ${name.JHybridTSpec}::initHybrid(jni::alias_ref<jhybridobject> jThis) {
-    // Initialize the C++ class
-    auto ref = makeCxxInstance(jThis);
-    // Initialize the std::shared_from_this base class (we are still JNI ref counting)
-    ref->cthis()->initSharedBase(ref);
-    return ref;
+    return makeCxxInstance(jThis);
   }
 
   void ${name.JHybridTSpec}::registerNatives() {
