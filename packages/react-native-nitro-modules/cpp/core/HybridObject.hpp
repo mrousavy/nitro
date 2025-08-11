@@ -71,7 +71,7 @@ public:
   /**
    * Get the `std::shared_ptr` instance of this HybridObject.
    */
-  std::shared_ptr<HybridObject> shared();
+  virtual std::shared_ptr<HybridObject> shared();
 
 public:
   /**
