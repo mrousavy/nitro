@@ -15,12 +15,8 @@ import com.facebook.proguard.annotations.DoNotStrip
  */
 @DoNotStrip
 @Keep
-enum class OldEnum {
-  FIRST,
-  SECOND,
-  THIRD;
-
-  @DoNotStrip
-  @Keep
-  private val _ordinal = ordinal
+enum class OldEnum(@DoNotStrip @Keep val value: Int) {
+  FIRST(0),
+  SECOND(1),
+  THIRD(2);
 }

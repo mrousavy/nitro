@@ -5,7 +5,9 @@ import type { SourceFile } from '../SourceFile.js'
 import { EnumType } from '../types/EnumType.js'
 
 export function createKotlinEnum(enumType: EnumType): SourceFile[] {
-  const members = enumType.enumMembers.map((m) => m.name.toUpperCase())
+  const members = enumType.enumMembers.map(
+    (m) => `${m.name.toUpperCase()}(${m.value})`
+  )
   const packageName = NitroConfig.current.getAndroidPackage('java/kotlin')
   const code = `
 ${createFileMetadataString(`${enumType.enumName}.kt`)}
@@ -20,12 +22,8 @@ import com.facebook.proguard.annotations.DoNotStrip
  */
 @DoNotStrip
 @Keep
-enum class ${enumType.enumName} {
+enum class ${enumType.enumName}(@DoNotStrip @Keep val value: Int) {
   ${indent(members.join(',\n'), '  ')};
-
-  @DoNotStrip
-  @Keep
-  private val _ordinal = ordinal
 }
   `.trim()
 
@@ -63,7 +61,7 @@ namespace ${cxxNamespace} {
     [[nodiscard]]
     ${enumType.enumName} toCpp() const {
       static const auto clazz = javaClassStatic();
-      static const auto fieldOrdinal = clazz->getField<int>("_ordinal");
+      static const auto fieldOrdinal = clazz->getField<int>("value");
       int ordinal = this->getFieldValue(fieldOrdinal);
       return static_cast<${enumType.enumName}>(ordinal);
     }
