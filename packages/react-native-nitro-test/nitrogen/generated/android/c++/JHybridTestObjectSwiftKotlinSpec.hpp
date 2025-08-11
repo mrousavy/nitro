@@ -29,6 +29,7 @@ namespace margelo::nitro::test {
     // C++ constructor (called from Java via `initHybrid()`)
     explicit JHybridTestObjectSwiftKotlinSpec(jni::alias_ref<jhybridobject> jThis) :
       HybridObject(HybridTestObjectSwiftKotlinSpec::TAG),
+      HybridBase(jThis),
       _javaPart(jni::make_global(jThis)) {}
 
   public:

@@ -22,6 +22,16 @@ bool HybridObject::equals(const std::shared_ptr<HybridObject>& other) {
   return this == other.get();
 }
 
+std::shared_ptr<HybridObject> HybridObject::shared() {
+  std::weak_ptr<HybridObject> weak = weak_from_this();
+  if (auto shared = weak.lock()) [[likely]] {
+    // We can lock to a shared_ptr!
+    return shared;
+  }
+  // We are not managed inside a shared_ptr..
+  throw std::runtime_error(std::string("HybridObject \"") + _name + "\" is not managed inside a std::shared_ptr - cannot access shared()!");
+}
+
 jsi::Value HybridObject::disposeRaw(jsi::Runtime& runtime, const jsi::Value& thisArg, const jsi::Value*, size_t) {
   // 1. Dispose any resources - this might be overridden by child classes to perform manual cleanup.
   dispose();
@@ -71,7 +81,7 @@ jsi::Value HybridObject::toObject(jsi::Runtime& runtime) {
   jsi::Object object = create.call(runtime, prototype).asObject(runtime);
 
   // 5. Assign NativeState to the object so the prototype can resolve the native methods
-  object.setNativeState(runtime, shared_from_this());
+  object.setNativeState(runtime, shared());
 
   // 6. Set memory size so Hermes GC knows about actual memory
   object.setExternalMemoryPressure(runtime, getExternalMemorySize());
