@@ -21,6 +21,8 @@ data class WrappedJsStruct
   @DoNotStrip
   @Keep
   constructor(
+    @DoNotStrip
+    @Keep
     val value: JsStyleStruct
   ) {
   /* main constructor */

@@ -9,29 +9,28 @@ import { KotlinCxxBridgedType } from './KotlinCxxBridgedType.js'
 
 export function createKotlinStruct(structType: StructType): SourceFile[] {
   const packageName = NitroConfig.current.getAndroidPackage('java/kotlin')
-  const values = structType.properties.map(
-    (p) => `val ${p.escapedName}: ${p.getCode('kotlin')}`
-  )
+  const values = structType.properties.map((p) => {
+    const bridged = new KotlinCxxBridgedType(p)
+    return `
+@DoNotStrip
+@Keep
+val ${p.escapedName}: ${bridged.getTypeCode('kotlin', false)}
+`.trim()
+  })
   let secondaryConstructor: string
   const needsSpecialHandling = structType.properties.some(
     (p) => new KotlinCxxBridgedType(p).needsSpecialHandling
   )
   if (needsSpecialHandling) {
-    const params = structType.properties.map((p) => {
-      const bridged = new KotlinCxxBridgedType(p)
-      return `${p.escapedName}: ${bridged.getTypeCode('kotlin')}`
-    })
+    // If we need special handling for any of our properties, we need to add a convenience initializer.
+    const params = structType.properties.map(
+      (p) => `${p.escapedName}: ${p.getCode('kotlin')}`
+    )
     const paramsForward = structType.properties.map((p) => {
       const bridged = new KotlinCxxBridgedType(p)
       if (bridged.needsSpecialHandling) {
         // We need special parsing for this type
-        const parsed = bridged.parseFromCppToKotlin(
-          p.escapedName,
-          'kotlin',
-          false
-        )
-        // we explicitly `as`-cast this to avoid ambiguous upcasts/cyclic this() calls.
-        return `${parsed} as ${p.getCode('kotlin')}`
+        return bridged.parseFromKotlinToCpp(p.escapedName, 'kotlin', false)
       } else {
         return p.escapedName
       }

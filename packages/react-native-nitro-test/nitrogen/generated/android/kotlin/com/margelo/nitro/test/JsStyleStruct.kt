@@ -21,12 +21,16 @@ data class JsStyleStruct
   @DoNotStrip
   @Keep
   constructor(
+    @DoNotStrip
+    @Keep
     val value: Double,
-    val onChanged: (num: Double) -> Unit
+    @DoNotStrip
+    @Keep
+    val onChanged: Func_void_double
   ) {
   @DoNotStrip
   @Keep
   @Suppress("unused")
-  private constructor(value: Double, onChanged: Func_void_double)
-               : this(value, onChanged as (num: Double) -> Unit)
+  private constructor(value: Double, onChanged: (num: Double) -> Unit)
+               : this(value, Func_void_double_java(onChanged))
 }
