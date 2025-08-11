@@ -6,8 +6,8 @@
 //
 
 #include "JHybridObject.hpp"
-#include <fbjni/fbjni.h>
 #include "JNISharedPtr.hpp"
+#include <fbjni/fbjni.h>
 
 namespace margelo::nitro {
 

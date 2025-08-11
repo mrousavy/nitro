@@ -24,7 +24,7 @@ public:
   static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/core/HybridObject;";
 
   // C++ constructor (called from Java via `initHybrid()`)
-  explicit JHybridObject(jni::alias_ref<jhybridobject> jThis): _javaPart(jni::make_global(jThis)) {}
+  explicit JHybridObject(jni::alias_ref<jhybridobject> jThis) : _javaPart(jni::make_global(jThis)) {}
   // C++ default constructor used by older Nitro versions (deprecated in favor of the jThis one)
   [[deprecated]] JHybridObject() = default;
   ~JHybridObject() override = default;
