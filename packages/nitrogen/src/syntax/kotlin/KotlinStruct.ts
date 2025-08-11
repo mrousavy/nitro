@@ -36,11 +36,11 @@ val ${p.escapedName}: ${bridged.getTypeCode('kotlin', false)}
       }
     })
     secondaryConstructor = `
-@DoNotStrip
-@Keep
-@Suppress("unused")
-private constructor(${indent(params.join(', '), 20)})
-             : this(${indent(paramsForward.join(', '), 20)})
+/**
+ * Initialize a new instance of \`${structType.structName}\` from Kotlin.
+ */
+constructor(${indent(params.join(', '), 12)})
+     : this(${indent(paramsForward.join(', '), 12)})
     `.trim()
   } else {
     secondaryConstructor = `/* main constructor */`

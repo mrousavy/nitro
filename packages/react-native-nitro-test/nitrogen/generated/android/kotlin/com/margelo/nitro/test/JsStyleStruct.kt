@@ -28,9 +28,9 @@ data class JsStyleStruct
     @Keep
     val onChanged: Func_void_double
   ) {
-  @DoNotStrip
-  @Keep
-  @Suppress("unused")
-  private constructor(value: Double, onChanged: (num: Double) -> Unit)
-               : this(value, Func_void_double_java(onChanged))
+  /**
+   * Initialize a new instance of `JsStyleStruct` from Kotlin.
+   */
+  constructor(value: Double, onChanged: (num: Double) -> Unit)
+       : this(value, Func_void_double_java(onChanged))
 }
