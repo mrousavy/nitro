@@ -101,7 +101,7 @@ function createTest<T>(
  * This is used for testing the C++ type names, which are obfuscated in release.
  */
 function debugOnly(string: string): string {
-  return __DEV__ ? string : ''
+  return NitroModules.buildType === 'debug' ? string : ''
 }
 
 function timeoutedPromise<T>(
@@ -1441,7 +1441,7 @@ export function getTests(
     ),
     createTest('bounceChild(Base) throws', () =>
       it(() => {
-        if (__DEV__) {
+        if (NitroModules.buildType === 'debug') {
           const child = testObject.createBase()
           // @ts-expect-error
           testObject.bounceChild(child)
