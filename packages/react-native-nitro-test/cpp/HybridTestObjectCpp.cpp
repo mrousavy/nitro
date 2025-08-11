@@ -106,7 +106,7 @@ void HybridTestObjectCpp::setSomeTuple(const std::tuple<double, std::string>& tu
 }
 
 std::shared_ptr<HybridTestObjectCppSpec> HybridTestObjectCpp::getThisObject() {
-  return shared<HybridTestObjectCppSpec>();
+  return shared_cast<HybridTestObjectCppSpec>();
 }
 
 std::optional<Powertrain> HybridTestObjectCpp::getOptionalEnum() {

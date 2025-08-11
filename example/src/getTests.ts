@@ -851,7 +851,12 @@ export function getTests(
         .equals(TEST_MAP)
     ),
     createTest('extractMap(mapWrapper) === mapWrapper.map', () =>
-      it(() => testObject.extractMap({ map: TEST_MAP_2 }))
+      it(() =>
+        testObject.extractMap({
+          map: TEST_MAP_2,
+          secondMap: { second: TEST_MAP_2 },
+        })
+      )
         .didNotThrow()
         .didReturn('object')
         .equals(TEST_MAP_2)
