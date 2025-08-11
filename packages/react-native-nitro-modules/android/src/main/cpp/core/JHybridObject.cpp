@@ -18,7 +18,7 @@ std::shared_ptr<HybridObject> JHybridObject::shared() {
     // We have a cached shared_ptr
     return shared;
   }
-  if (_javaPart == nullptr) {
+  if (_javaPart == nullptr) [[unlikely]] {
     // We don't have a _javaPart! Maybe the implementing JHybridObject
     // was generated with an old version of nitrogen which doesn't call the JHybridObject(…)
     // constructor yet. This is bad!
