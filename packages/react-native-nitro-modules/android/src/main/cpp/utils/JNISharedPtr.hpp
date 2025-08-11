@@ -61,6 +61,12 @@ public:
 #endif
     return std::shared_ptr<T>(ref->cthis(), GlobalRefDeleter<T>(ref));
   }
+
+  template <typename T, typename std::enable_if<is_base_template_of<T, jni::HybridClass>::value, int>::type = 0>
+  static std::shared_ptr<T> make_shared_from_jni(const jni::local_ref<typename T::javaobject>& ref) {
+    jni::global_ref<typename T::javaobject> global = jni::make_global(ref);
+    return make_shared_from_jni(global);
+  }
 };
 
 } // namespace margelo::nitro

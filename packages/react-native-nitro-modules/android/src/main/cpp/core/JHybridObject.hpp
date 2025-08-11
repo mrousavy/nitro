@@ -25,6 +25,8 @@ public:
 
   ~JHybridObject() override = default;
 
+  void initSharedBase(const jni::local_ref<JHybridObject>& self);
+
 private:
   friend HybridBase;
 };
