@@ -100,11 +100,7 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 namespace margelo::nitro::test {
 
   jni::local_ref<JHybridTestObjectSwiftKotlinSpec::jhybriddata> JHybridTestObjectSwiftKotlinSpec::initHybrid(jni::alias_ref<jhybridobject> jThis) {
-    // Initialize the C++ class
-    jni::local_ref<JHybridTestObjectSwiftKotlinSpec::jhybriddata> ref = makeCxxInstance(jThis);
-    // Initialize the std::shared_from_this base class (we are still JNI ref counting)
-    ref->cthis()->initSharedBase(ref);
-    return ref;
+    return makeCxxInstance(jThis);
   }
 
   void JHybridTestObjectSwiftKotlinSpec::registerNatives() {
