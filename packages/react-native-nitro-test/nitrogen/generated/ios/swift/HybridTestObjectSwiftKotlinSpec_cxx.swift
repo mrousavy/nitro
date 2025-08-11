@@ -626,7 +626,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
         var __dictionary = Dictionary<String, Variant_Double_Bool>(minimumCapacity: map.size())
         let __keys = bridge.get_std__unordered_map_std__string__std__variant_double__bool___keys(map)
         for __key in __keys {
-          let __value = map[__key]!
+          let __value = bridge.get_std__unordered_map_std__string__std__variant_double__bool___value(map, __key)
           __dictionary[String(__key)] = { () -> Variant_Double_Bool in
             let __variant = bridge.std__variant_double__bool_(__value)
             switch __variant.index() {

@@ -24,6 +24,8 @@ namespace margelo::nitro::test { struct Person; }
 namespace NitroModules { class AnyMap; }
 // Forward declaration of `MapWrapper` to properly resolve imports.
 namespace margelo::nitro::test { struct MapWrapper; }
+// Forward declaration of `SecondMapWrapper` to properly resolve imports.
+namespace margelo::nitro::test { struct SecondMapWrapper; }
 // Forward declaration of `Car` to properly resolve imports.
 namespace margelo::nitro::test { struct Car; }
 // Forward declaration of `ArrayBuffer` to properly resolve imports.
@@ -56,6 +58,7 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 #include <NitroModules/AnyMap.hpp>
 #include <unordered_map>
 #include "MapWrapper.hpp"
+#include "SecondMapWrapper.hpp"
 #include <NitroModules/Promise.hpp>
 #include <exception>
 #include <chrono>

@@ -59,8 +59,12 @@ export interface WrappedJsStruct {
   value: JsStyleStruct
 }
 
+interface SecondMapWrapper {
+  second: Record<string, string>
+}
 interface MapWrapper {
   map: Record<string, string>
+  secondMap: SecondMapWrapper
 }
 
 // This is an `interface` we're going to use as a base in both of our `HybridObject`s later.

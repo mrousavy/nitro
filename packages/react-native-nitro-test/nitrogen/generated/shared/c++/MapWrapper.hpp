@@ -18,10 +18,12 @@
 #error NitroModules cannot be found! Are you sure you installed NitroModules properly?
 #endif
 
-
+// Forward declaration of `SecondMapWrapper` to properly resolve imports.
+namespace margelo::nitro::test { struct SecondMapWrapper; }
 
 #include <string>
 #include <unordered_map>
+#include "SecondMapWrapper.hpp"
 
 namespace margelo::nitro::test {
 
@@ -31,10 +33,11 @@ namespace margelo::nitro::test {
   struct MapWrapper {
   public:
     std::unordered_map<std::string, std::string> map     SWIFT_PRIVATE;
+    SecondMapWrapper secondMap     SWIFT_PRIVATE;
 
   public:
     MapWrapper() = default;
-    explicit MapWrapper(std::unordered_map<std::string, std::string> map): map(map) {}
+    explicit MapWrapper(std::unordered_map<std::string, std::string> map, SecondMapWrapper secondMap): map(map), secondMap(secondMap) {}
   };
 
 } // namespace margelo::nitro::test
@@ -49,12 +52,14 @@ namespace margelo::nitro {
     static inline MapWrapper fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       jsi::Object obj = arg.asObject(runtime);
       return MapWrapper(
-        JSIConverter<std::unordered_map<std::string, std::string>>::fromJSI(runtime, obj.getProperty(runtime, "map"))
+        JSIConverter<std::unordered_map<std::string, std::string>>::fromJSI(runtime, obj.getProperty(runtime, "map")),
+        JSIConverter<SecondMapWrapper>::fromJSI(runtime, obj.getProperty(runtime, "secondMap"))
       );
     }
     static inline jsi::Value toJSI(jsi::Runtime& runtime, const MapWrapper& arg) {
       jsi::Object obj(runtime);
       obj.setProperty(runtime, "map", JSIConverter<std::unordered_map<std::string, std::string>>::toJSI(runtime, arg.map));
+      obj.setProperty(runtime, "secondMap", JSIConverter<SecondMapWrapper>::toJSI(runtime, arg.secondMap));
       return obj;
     }
     static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
@@ -63,6 +68,7 @@ namespace margelo::nitro {
       }
       jsi::Object obj = value.getObject(runtime);
       if (!JSIConverter<std::unordered_map<std::string, std::string>>::canConvert(runtime, obj.getProperty(runtime, "map"))) return false;
+      if (!JSIConverter<SecondMapWrapper>::canConvert(runtime, obj.getProperty(runtime, "secondMap"))) return false;
       return true;
     }
   };

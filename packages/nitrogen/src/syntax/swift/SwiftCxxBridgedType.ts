@@ -506,6 +506,7 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
       case 'record': {
         const bridge = this.getBridgeOrThrow()
         const getKeysFunc = `bridge.get_${bridge.specializationName}_keys`
+        const getValueFunc = `bridge.get_${bridge.specializationName}_value`
         const record = getTypeAs(this.type, RecordType)
         const wrappingKey = new SwiftCxxBridgedType(record.keyType, true)
         const wrappingValue = new SwiftCxxBridgedType(record.valueType, true)
@@ -516,7 +517,7 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
   var __dictionary = ${record.getCode('swift')}(minimumCapacity: ${cppParameterName}.size())
   let __keys = ${getKeysFunc}(${cppParameterName})
   for __key in __keys {
-    let __value = ${cppParameterName}[__key]!
+    let __value = ${getValueFunc}(${cppParameterName}, __key)
     __dictionary[${indent(wrappingKey.parseFromCppToSwift('__key', 'swift'), '    ')}] = ${indent(wrappingValue.parseFromCppToSwift('__value', 'swift'), '    ')}
   }
   return __dictionary
