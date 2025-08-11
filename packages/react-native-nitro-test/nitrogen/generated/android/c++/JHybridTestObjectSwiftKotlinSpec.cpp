@@ -33,6 +33,8 @@ namespace margelo::nitro::test { class HybridChildSpec; }
 namespace margelo::nitro::test { class HybridBaseSpec; }
 // Forward declaration of `MapWrapper` to properly resolve imports.
 namespace margelo::nitro::test { struct MapWrapper; }
+// Forward declaration of `SecondMapWrapper` to properly resolve imports.
+namespace margelo::nitro::test { struct SecondMapWrapper; }
 // Forward declaration of `HybridTestViewSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridTestViewSpec; }
 
@@ -84,6 +86,8 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 #include "JFunc_void_std__vector_Powertrain_.hpp"
 #include "MapWrapper.hpp"
 #include "JMapWrapper.hpp"
+#include "SecondMapWrapper.hpp"
+#include "JSecondMapWrapper.hpp"
 #include <exception>
 #include "JFunc_void.hpp"
 #include "JFunc_void_std__optional_double_.hpp"

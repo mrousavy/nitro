@@ -10,6 +10,8 @@
 #include <fbjni/fbjni.h>
 #include "MapWrapper.hpp"
 
+#include "JSecondMapWrapper.hpp"
+#include "SecondMapWrapper.hpp"
 #include <string>
 #include <unordered_map>
 
@@ -34,6 +36,8 @@ namespace margelo::nitro::test {
       static const auto clazz = javaClassStatic();
       static const auto fieldMap = clazz->getField<jni::JMap<jni::JString, jni::JString>>("map");
       jni::local_ref<jni::JMap<jni::JString, jni::JString>> map = this->getFieldValue(fieldMap);
+      static const auto fieldSecondMap = clazz->getField<JSecondMapWrapper>("secondMap");
+      jni::local_ref<JSecondMapWrapper> secondMap = this->getFieldValue(fieldSecondMap);
       return MapWrapper(
         [&]() {
           std::unordered_map<std::string, std::string> __map;
@@ -42,7 +46,8 @@ namespace margelo::nitro::test {
             __map.emplace(__entry.first->toStdString(), __entry.second->toStdString());
           }
           return __map;
-        }()
+        }(),
+        secondMap->toCpp()
       );
     }
 
@@ -59,7 +64,8 @@ namespace margelo::nitro::test {
             __map->put(jni::make_jstring(__entry.first), jni::make_jstring(__entry.second));
           }
           return __map;
-        }()
+        }(),
+        JSecondMapWrapper::fromCpp(value.secondMap)
       );
     }
   };
