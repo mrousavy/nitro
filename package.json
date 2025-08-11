@@ -61,7 +61,7 @@
       "release": true
     },
     "hooks": {
-      "before:release": "bun run --cwd packages/react-native-nitro-test build && bun example bundle-install && bun example pods && git add example/ios/Podfile.lock"
+      "before:release": "bun i && bun run --cwd packages/react-native-nitro-test build && bun example bundle-install && bun example pods && git add example/ios/Podfile.lock"
     },
     "plugins": {
       "@release-it/bumper": {
