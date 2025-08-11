@@ -28,6 +28,7 @@ export function stringify(value: unknown): string {
         const items = value.map((v) => stringify(v))
         return `[${items.join(', ')}]`
       }
+      // Try to use .toString()
       try {
         if (value.toString instanceof Function) {
           if (isNativeFunction(value.toString)) {
@@ -39,6 +40,7 @@ export function stringify(value: unknown): string {
               if (string !== '[object Object]') return string
             } else {
               // We don't have NativeState - we cannot safely call toString()..
+              return `[empty-object HybridObject]`
             }
           } else {
             const string = value.toString()
