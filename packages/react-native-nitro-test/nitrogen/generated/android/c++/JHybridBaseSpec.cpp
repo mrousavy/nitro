@@ -14,7 +14,11 @@
 namespace margelo::nitro::test {
 
   jni::local_ref<JHybridBaseSpec::jhybriddata> JHybridBaseSpec::initHybrid(jni::alias_ref<jhybridobject> jThis) {
-    return makeCxxInstance(jThis);
+    // Initialize the C++ class
+    jni::local_ref<JHybridBaseSpec::jhybriddata> ref = makeCxxInstance(jThis);
+    // Initialize the std::shared_from_this base class (we are still JNI ref counting)
+    ref->cthis()->initSharedBase(ref);
+    return ref;
   }
 
   void JHybridBaseSpec::registerNatives() {
