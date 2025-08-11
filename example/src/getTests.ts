@@ -96,6 +96,14 @@ function createTest<T>(
   }
 }
 
+/**
+ * Returns the given {@linkcode string} in debug, and `''` in release.
+ * This is used for testing the C++ type names, which are obfuscated in release.
+ */
+function debugOnly(string: string): string {
+  return __DEV__ ? string : ''
+}
+
 function timeoutedPromise<T>(
   run: (complete: (value: T) => void) => void | Promise<void>
 ): Promise<T> {
@@ -620,7 +628,7 @@ export function getTests(
           // @ts-expect-error
           (testObject.someVariant = false)
       ).didThrow(
-        `Error: ${testObject.name}.someVariant: Cannot convert "false" to any type in variant<std::string, double>!`
+        `Error: ${testObject.name}.someVariant: Cannot convert "false" to any type in ${debugOnly('variant<std::string, double>!')}`
       )
     ),
 
@@ -661,13 +669,13 @@ export function getTests(
     createTest('getVariantEnum(...) throws at wrong type (string)', () =>
       // @ts-expect-error
       it(() => testObject.getVariantEnum('string')).didThrow(
-        `Error: ${testObject.name}.getVariantEnum(...): Cannot convert "string" to any type in variant<bool, margelo::nitro::test::OldEnum>!`
+        `Error: ${testObject.name}.getVariantEnum(...): Cannot convert "string" to any type in ${debugOnly('variant<bool, margelo::nitro::test::OldEnum>!')}`
       )
     ),
     createTest('getVariantEnum(...) throws at too high numerical value', () =>
       // @ts-expect-error
       it(() => testObject.getVariantEnum(9999)).didThrow(
-        `Error: ${testObject.name}.getVariantEnum(...): Cannot convert "9999" to any type in variant<bool, margelo::nitro::test::OldEnum>!`
+        `Error: ${testObject.name}.getVariantEnum(...): Cannot convert "9999" to any type in ${debugOnly('variant<bool, margelo::nitro::test::OldEnum>!')}`
       )
     ),
     createTest('getVariantWeirdNumbersEnum(...) converts enum', () =>
@@ -685,7 +693,7 @@ export function getTests(
       () =>
         // @ts-expect-error
         it(() => testObject.getVariantWeirdNumbersEnum('string')).didThrow(
-          `Error: ${testObject.name}.getVariantWeirdNumbersEnum(...): Cannot convert "string" to any type in variant<bool, margelo::nitro::test::WeirdNumbersEnum>!`
+          `Error: ${testObject.name}.getVariantWeirdNumbersEnum(...): Cannot convert "string" to any type in ${debugOnly('variant<bool, margelo::nitro::test::WeirdNumbersEnum>!')}`
         )
     ),
     createTest(
@@ -693,7 +701,7 @@ export function getTests(
       () =>
         // @ts-expect-error
         it(() => testObject.getVariantWeirdNumbersEnum(99999)).didThrow(
-          `Error: ${testObject.name}.getVariantWeirdNumbersEnum(...): Cannot convert "99999" to any type in variant<bool, margelo::nitro::test::WeirdNumbersEnum>!`
+          `Error: ${testObject.name}.getVariantWeirdNumbersEnum(...): Cannot convert "99999" to any type in ${debugOnly('variant<bool, margelo::nitro::test::WeirdNumbersEnum>!')}`
         )
     ),
     createTest('getVariantObjects(...) converts Person', () =>
@@ -716,7 +724,7 @@ export function getTests(
     createTest('getVariantObjects(...) throws at wrong type (string)', () =>
       // @ts-expect-error
       it(() => testObject.getVariantObjects('some-string')).didThrow(
-        `Error: ${testObject.name}.getVariantObjects(...): Cannot convert "some-string" to any type in variant<margelo::nitro::test::Car, margelo::nitro::test::Person>!`
+        `Error: ${testObject.name}.getVariantObjects(...): Cannot convert "some-string" to any type in ${debugOnly('variant<margelo::nitro::test::Car, margelo::nitro::test::Person>!')}`
       )
     ),
     createTest(
@@ -726,7 +734,7 @@ export function getTests(
           // @ts-expect-error
           testObject.getVariantObjects({ someValue: 55 })
         ).didThrow(
-          `Error: ${testObject.name}.getVariantObjects(...): Cannot convert "[object Object]" to any type in variant<margelo::nitro::test::Car, margelo::nitro::test::Person>!`
+          `Error: ${testObject.name}.getVariantObjects(...): Cannot convert "[object Object]" to any type in ${debugOnly('variant<margelo::nitro::test::Car, margelo::nitro::test::Person>!')}`
         )
     ),
     createTest('getVariantHybrid(...) converts Hybrid', () =>
@@ -820,9 +828,11 @@ export function getTests(
                 // @ts-expect-error
                 [10, 20]
               )
-            ).didThrow(
-              `Error: ${testObject.name}.flip(...): The given JS Array has 2 items, but std::tuple<double, double, double> expects 3 items.`
             )
+              .didThrow(
+                `Error: ${testObject.name}.flip(...): The given JS Array has 2 items, but ${debugOnly('std::tuple<double, double, double>')}`
+              )
+              .didThrow('expects 3 items')
           ),
           createTest('passTuple(...)', () =>
             it(() => testObject.passTuple([13, 'hello', true]))
