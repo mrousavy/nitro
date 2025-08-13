@@ -51,6 +51,7 @@ cd ios && pod install
 
 - [**Nitro** docs 📚](https://nitro.margelo.com)
 - [**Community Discord** 💬](https://margelo.com/discord)
+- [**Nitro Module Builder** AI GPT 🤖](https://chatgpt.com/g/g-6870125d0fcc8191925bd20a02c78bcf-nitro-module-builder)
 - [**nitrogen**/README.md](./packages/nitrogen/README.md)
 - [**react-native-nitro-modules**/README.md](./packages/react-native-nitro-modules/README.md)
 - [**react-native-nitro-test** example module](./packages/react-native-nitro-test/README.md)

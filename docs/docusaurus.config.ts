@@ -124,6 +124,11 @@ const config: Config = {
           label: 'Installation',
         },
         {
+          href: 'https://chatgpt.com/g/g-6870125d0fcc8191925bd20a02c78bcf-nitro-module-builder',
+          label: 'Ask AI',
+          position: 'right',
+        },
+        {
           href: 'https://github.com/mrousavy/nitro/releases/latest',
           label: 'Latest Release',
           position: 'right',
