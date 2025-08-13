@@ -10,7 +10,7 @@ While Nitro's primary environment is React Native, it also works in any other en
 
 - A [**Nitro Module**](nitro-modules) is a library built with Nitro. It contains one or more **Hybrid Objects**.
 - A [**Hybrid Object**](hybrid-objects) is a native object in Nitro, implemented in either C++, Swift or Kotlin.
-- [**Nitrogen**](nitrogen) is a code-generator a library author can use to generate native bindings from a custom TypeScript interface.
+- [**Nitrogen**](nitrogen) is an optional code-generator library authors can use to generate native bindings from a TypeScript interface.
 
 <div className="side-by-side-container">
 <div className="side-by-side-block">
