@@ -4,7 +4,7 @@
 # What is Nitro?
 
 Nitro is a framework for building powerful and fast native modules for JS.
-Put simply, a JS object can be implemented in C++, Swift or Kotlin instead of JS by using Nitro.
+Simply put, a JS object can be implemented in C++, Swift or Kotlin instead of JS by using Nitro.
 
 While Nitro's primary environment is React Native, it also works in any other environment that uses JSI.
 
