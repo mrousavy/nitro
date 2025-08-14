@@ -7,7 +7,7 @@
 
 #include "HybridSomeExternalObjectSpec.hpp"
 
-namespace margelo::nitro::nitrotestexternal {
+namespace margelo::nitro::test::external {
 
   void HybridSomeExternalObjectSpec::loadHybridMethods() {
     // load base methods/properties
@@ -18,4 +18,4 @@ namespace margelo::nitro::nitrotestexternal {
     });
   }
 
-} // namespace margelo::nitro::nitrotestexternal
+} // namespace margelo::nitro::test::external

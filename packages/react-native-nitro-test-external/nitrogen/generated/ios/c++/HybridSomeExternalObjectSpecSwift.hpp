@@ -18,7 +18,7 @@ namespace NitroTestExternal { class HybridSomeExternalObjectSpec_cxx; }
 
 #include "NitroTestExternal-Swift-Cxx-Umbrella.hpp"
 
-namespace margelo::nitro::nitrotestexternal {
+namespace margelo::nitro::test::external {
 
   /**
    * The C++ part of HybridSomeExternalObjectSpec_cxx.swift.
@@ -70,4 +70,4 @@ namespace margelo::nitro::nitrotestexternal {
     NitroTestExternal::HybridSomeExternalObjectSpec_cxx _swiftPart;
   };
 
-} // namespace margelo::nitro::nitrotestexternal
+} // namespace margelo::nitro::test::external

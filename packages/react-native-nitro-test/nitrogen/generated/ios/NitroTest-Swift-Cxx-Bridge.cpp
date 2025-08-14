@@ -214,14 +214,14 @@ namespace margelo::nitro::test::bridge::swift {
     return swiftPart.toUnsafe();
   }
   
-  // pragma MARK: std::shared_ptr<margelo::nitro::nitrotestexternal::HybridSomeExternalObjectSpec>
-  std::shared_ptr<margelo::nitro::nitrotestexternal::HybridSomeExternalObjectSpec> create_std__shared_ptr_margelo__nitro__nitrotestexternal__HybridSomeExternalObjectSpec_(void* _Nonnull swiftUnsafePointer) {
+  // pragma MARK: std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>
+  std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec> create_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_(void* _Nonnull swiftUnsafePointer) {
     // Implemented in NitroTestExternal
-    return margelo::nitro::nitrotestexternal::bridge::swift::create_std__shared_ptr_HybridSomeExternalObjectSpec_(swiftUnsafePointer);
+    return margelo::nitro::test::external::bridge::swift::create_std__shared_ptr_HybridSomeExternalObjectSpec_(swiftUnsafePointer);
   }
-  void* _Nonnull get_std__shared_ptr_margelo__nitro__nitrotestexternal__HybridSomeExternalObjectSpec_(std__shared_ptr_margelo__nitro__nitrotestexternal__HybridSomeExternalObjectSpec_ cppType) {
+  void* _Nonnull get_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_(std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_ cppType) {
     // Implemented in NitroTestExternal
-    return margelo::nitro::nitrotestexternal::bridge::swift::get_std__shared_ptr_HybridSomeExternalObjectSpec_(cppType);
+    return margelo::nitro::test::external::bridge::swift::get_std__shared_ptr_HybridSomeExternalObjectSpec_(cppType);
   }
 
 } // namespace margelo::nitro::test::bridge::swift

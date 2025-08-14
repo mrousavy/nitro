@@ -7,5 +7,5 @@
 
 #include "HybridSomeExternalObjectSpecSwift.hpp"
 
-namespace margelo::nitro::nitrotestexternal {
-} // namespace margelo::nitro::nitrotestexternal
+namespace margelo::nitro::test::external {
+} // namespace margelo::nitro::test::external

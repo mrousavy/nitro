@@ -21,7 +21,7 @@ namespace margelo::nitro::test { class HybridBaseSpec; }
 // Forward declaration of `HybridChildSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridChildSpec; }
 // Forward declaration of `HybridSomeExternalObjectSpec` to properly resolve imports.
-namespace margelo::nitro::nitrotestexternal { class HybridSomeExternalObjectSpec; }
+namespace margelo::nitro::test::external { class HybridSomeExternalObjectSpec; }
 // Forward declaration of `HybridTestObjectSwiftKotlinSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridTestObjectSwiftKotlinSpec; }
 // Forward declaration of `HybridTestViewSpec` to properly resolve imports.

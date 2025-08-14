@@ -32,7 +32,7 @@ namespace margelo::nitro::test { class HybridChildSpec; }
 // Forward declaration of `HybridBaseSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridBaseSpec; }
 // Forward declaration of `HybridSomeExternalObjectSpec` to properly resolve imports.
-namespace margelo::nitro::nitrotestexternal { class HybridSomeExternalObjectSpec; }
+namespace margelo::nitro::test::external { class HybridSomeExternalObjectSpec; }
 // Forward declaration of `MapWrapper` to properly resolve imports.
 namespace margelo::nitro::test { struct MapWrapper; }
 // Forward declaration of `SecondMapWrapper` to properly resolve imports.
@@ -878,10 +878,10 @@ namespace margelo::nitro::test {
     auto __result = method(_javaPart, std::dynamic_pointer_cast<JHybridTestViewSpec>(view)->getJavaPart());
     return static_cast<bool>(__result);
   }
-  std::shared_ptr<margelo::nitro::nitrotestexternal::HybridSomeExternalObjectSpec> JHybridTestObjectSwiftKotlinSpec::bounceExternalHybrid(const std::shared_ptr<margelo::nitro::nitrotestexternal::HybridSomeExternalObjectSpec>& externalObject) {
-    static const auto method = javaClassStatic()->getMethod<jni::local_ref<margelo::nitro::nitrotestexternal::JHybridSomeExternalObjectSpec::javaobject>(jni::alias_ref<margelo::nitro::nitrotestexternal::JHybridSomeExternalObjectSpec::javaobject> /* externalObject */)>("bounceExternalHybrid");
-    auto __result = method(_javaPart, std::dynamic_pointer_cast<margelo::nitro::nitrotestexternal::JHybridSomeExternalObjectSpec>(externalObject)->getJavaPart());
-    return __result->cthis()->shared_cast<margelo::nitro::nitrotestexternal::JHybridSomeExternalObjectSpec>();
+  std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec> JHybridTestObjectSwiftKotlinSpec::bounceExternalHybrid(const std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>& externalObject) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<margelo::nitro::test::external::JHybridSomeExternalObjectSpec::javaobject>(jni::alias_ref<margelo::nitro::test::external::JHybridSomeExternalObjectSpec::javaobject> /* externalObject */)>("bounceExternalHybrid");
+    auto __result = method(_javaPart, std::dynamic_pointer_cast<margelo::nitro::test::external::JHybridSomeExternalObjectSpec>(externalObject)->getJavaPart());
+    return __result->cthis()->shared_cast<margelo::nitro::test::external::JHybridSomeExternalObjectSpec>();
   }
 
 } // namespace margelo::nitro::test

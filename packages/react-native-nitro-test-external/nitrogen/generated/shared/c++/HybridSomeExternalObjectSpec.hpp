@@ -17,7 +17,7 @@
 
 #include <string>
 
-namespace margelo::nitro::nitrotestexternal {
+namespace margelo::nitro::test::external {
 
   using namespace margelo::nitro;
 
@@ -59,4 +59,4 @@ namespace margelo::nitro::nitrotestexternal {
       static constexpr auto TAG = "SomeExternalObject";
   };
 
-} // namespace margelo::nitro::nitrotestexternal
+} // namespace margelo::nitro::test::external

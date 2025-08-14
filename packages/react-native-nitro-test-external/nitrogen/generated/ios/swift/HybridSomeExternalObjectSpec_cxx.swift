@@ -19,11 +19,11 @@ import NitroModules
  */
 open class HybridSomeExternalObjectSpec_cxx {
   /**
-   * The Swift <> C++ bridge's namespace (`margelo::nitro::nitrotestexternal::bridge::swift`)
+   * The Swift <> C++ bridge's namespace (`margelo::nitro::test::external::bridge::swift`)
    * from `NitroTestExternal-Swift-Cxx-Bridge.hpp`.
    * This contains specialized C++ templates, and C++ helper functions that can be accessed from Swift.
    */
-  public typealias bridge = margelo.nitro.nitrotestexternal.bridge.swift
+  public typealias bridge = margelo.nitro.test.external.bridge.swift
 
   /**
    * Holds an instance of the `HybridSomeExternalObjectSpec` Swift protocol.

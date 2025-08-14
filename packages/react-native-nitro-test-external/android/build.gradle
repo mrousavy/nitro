@@ -94,6 +94,13 @@ android {
   buildFeatures {
     buildConfig true
     prefab true
+    prefabPublishing true
+  }
+
+  prefab {
+    NitroTestExternal {
+      headers "${project.buildDir}/headers/nitrotestexternal/"
+    }
   }
 
   buildTypes {
@@ -139,3 +146,13 @@ dependencies {
   implementation project(":react-native-nitro-modules")
 }
 
+
+tasks.register('prepareHeaders', Copy) {
+  from fileTree('./src/main/cpp').filter { it.isFile() }
+  from fileTree('../cpp/').filter { it.isFile() }
+  include "*.hpp"
+  into "${project.buildDir}/headers/nitrotestexternal/NitroTestExternal/"
+  includeEmptyDirs = false
+}
+
+preBuild.dependsOn(prepareHeaders)

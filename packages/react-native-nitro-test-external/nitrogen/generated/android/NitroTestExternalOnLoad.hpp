@@ -8,7 +8,7 @@
 #include <jni.h>
 #include <NitroModules/NitroDefines.hpp>
 
-namespace margelo::nitro::nitrotestexternal {
+namespace margelo::nitro::test::external {
 
   /**
    * Initializes the native (C++) part of NitroTestExternal, and autolinks all Hybrid Objects.
@@ -16,10 +16,10 @@ namespace margelo::nitro::nitrotestexternal {
    * Example:
    * ```cpp (cpp-adapter.cpp)
    * JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void*) {
-   *   return margelo::nitro::nitrotestexternal::initialize(vm);
+   *   return margelo::nitro::test::external::initialize(vm);
    * }
    * ```
    */
   int initialize(JavaVM* vm);
 
-} // namespace margelo::nitro::nitrotestexternal
+} // namespace margelo::nitro::test::external

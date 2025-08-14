@@ -9,7 +9,7 @@
 
 // Forward declarations of C++ defined types
 // Forward declaration of `HybridSomeExternalObjectSpec` to properly resolve imports.
-namespace margelo::nitro::nitrotestexternal { class HybridSomeExternalObjectSpec; }
+namespace margelo::nitro::test::external { class HybridSomeExternalObjectSpec; }
 
 // Include C++ defined types
 #include "HybridSomeExternalObjectSpec.hpp"

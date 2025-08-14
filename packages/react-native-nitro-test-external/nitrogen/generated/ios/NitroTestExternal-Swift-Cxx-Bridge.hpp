@@ -9,7 +9,7 @@
 
 // Forward declarations of C++ defined types
 // Forward declaration of `HybridSomeExternalObjectSpec` to properly resolve imports.
-namespace margelo::nitro::nitrotestexternal { class HybridSomeExternalObjectSpec; }
+namespace margelo::nitro::test::external { class HybridSomeExternalObjectSpec; }
 
 // Forward declarations of Swift defined types
 // Forward declaration of `HybridSomeExternalObjectSpec_cxx` to properly resolve imports.
@@ -26,7 +26,7 @@ namespace NitroTestExternal { class HybridSomeExternalObjectSpec_cxx; }
  * Contains specialized versions of C++ templated types so they can be accessed from Swift,
  * as well as helper functions to interact with those C++ types from Swift.
  */
-namespace margelo::nitro::nitrotestexternal::bridge::swift {
+namespace margelo::nitro::test::external::bridge::swift {
 
   // pragma MARK: std::shared_ptr<HybridSomeExternalObjectSpec>
   /**
@@ -49,4 +49,4 @@ namespace margelo::nitro::nitrotestexternal::bridge::swift {
     return Result<std::string>::withError(error);
   }
 
-} // namespace margelo::nitro::nitrotestexternal::bridge::swift
+} // namespace margelo::nitro::test::external::bridge::swift

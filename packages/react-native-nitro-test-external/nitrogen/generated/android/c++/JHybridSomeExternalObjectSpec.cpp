@@ -11,7 +11,7 @@
 
 #include <string>
 
-namespace margelo::nitro::nitrotestexternal {
+namespace margelo::nitro::test::external {
 
   jni::local_ref<JHybridSomeExternalObjectSpec::jhybriddata> JHybridSomeExternalObjectSpec::initHybrid(jni::alias_ref<jhybridobject> jThis) {
     return makeCxxInstance(jThis);
@@ -43,4 +43,4 @@ namespace margelo::nitro::nitrotestexternal {
     return __result->toStdString();
   }
 
-} // namespace margelo::nitro::nitrotestexternal
+} // namespace margelo::nitro::test::external

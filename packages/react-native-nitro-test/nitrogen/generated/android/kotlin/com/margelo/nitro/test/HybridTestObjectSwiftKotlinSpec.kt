@@ -11,7 +11,7 @@ import androidx.annotation.Keep
 import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
 import com.margelo.nitro.core.*
-import com.margelo.nitro.nitrotestexternal.HybridSomeExternalObjectSpec
+import com.margelo.nitro.test.external.HybridSomeExternalObjectSpec
 
 /**
  * A Kotlin class representing the TestObjectSwiftKotlin HybridObject.
@@ -450,7 +450,7 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
-  abstract fun bounceExternalHybrid(externalObject: com.margelo.nitro.nitrotestexternal.HybridSomeExternalObjectSpec): com.margelo.nitro.nitrotestexternal.HybridSomeExternalObjectSpec
+  abstract fun bounceExternalHybrid(externalObject: com.margelo.nitro.test.external.HybridSomeExternalObjectSpec): com.margelo.nitro.test.external.HybridSomeExternalObjectSpec
 
   private external fun initHybrid(): HybridData
 

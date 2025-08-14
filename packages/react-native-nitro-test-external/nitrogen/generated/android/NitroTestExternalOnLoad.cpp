@@ -16,21 +16,30 @@
 #include <NitroModules/HybridObjectRegistry.hpp>
 
 #include "JHybridSomeExternalObjectSpec.hpp"
+#include <NitroModules/DefaultConstructableObject.hpp>
 
-namespace margelo::nitro::nitrotestexternal {
+namespace margelo::nitro::test::external {
 
 int initialize(JavaVM* vm) {
   using namespace margelo::nitro;
-  using namespace margelo::nitro::nitrotestexternal;
+  using namespace margelo::nitro::test::external;
   using namespace facebook;
 
   return facebook::jni::initialize(vm, [] {
     // Register native JNI methods
-    margelo::nitro::nitrotestexternal::JHybridSomeExternalObjectSpec::registerNatives();
+    margelo::nitro::test::external::JHybridSomeExternalObjectSpec::registerNatives();
 
     // Register Nitro Hybrid Objects
-    
+    HybridObjectRegistry::registerHybridObjectConstructor(
+      "SomeExternalObject",
+      []() -> std::shared_ptr<HybridObject> {
+        static DefaultConstructableObject<JHybridSomeExternalObjectSpec::javaobject> object("com/margelo/nitro/test/external/HybridSomeExternalObject");
+        auto instance = object.create();
+        auto globalRef = jni::make_global(instance);
+        return globalRef->cthis()->shared();
+      }
+    );
   });
 }
 
-} // namespace margelo::nitro::nitrotestexternal
+} // namespace margelo::nitro::test::external
