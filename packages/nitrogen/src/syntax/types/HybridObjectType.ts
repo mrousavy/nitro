@@ -7,7 +7,7 @@ import type { SourceFile, SourceImport } from '../SourceFile.js'
 import type { GetCodeOptions, Type, TypeKind } from './Type.js'
 
 interface GetHybridObjectCodeOptions extends GetCodeOptions {
-  mode: 'strong' | 'weak'
+  mode?: 'strong' | 'weak'
 }
 
 export class HybridObjectType implements Type {
