@@ -72,9 +72,11 @@ export class HybridObjectType implements Type {
 
   getCode(
     language: Language,
-    { mode, fullyQualified }: GetHybridObjectCodeOptions = { mode: 'strong' }
+    options: GetHybridObjectCodeOptions = {}
   ): string {
     const name = getHybridObjectName(this.hybridObjectName)
+    const mode = options.mode ?? 'strong'
+    const fullyQualified = options.fullyQualified ?? false
 
     switch (language) {
       case 'c++': {
