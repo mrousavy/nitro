@@ -4,7 +4,11 @@ import { getForwardDeclaration } from '../c++/getForwardDeclaration.js'
 import { getHybridObjectName } from '../getHybridObjectName.js'
 import type { HybridObjectSpec } from '../HybridObjectSpec.js'
 import type { SourceFile, SourceImport } from '../SourceFile.js'
-import type { Type, TypeKind } from './Type.js'
+import type { GetCodeOptions, Type, TypeKind } from './Type.js'
+
+interface GetHybridObjectCodeOptions extends GetCodeOptions {
+  mode: 'strong' | 'weak'
+}
 
 export class HybridObjectType implements Type {
   readonly hybridObjectName: string
@@ -66,26 +70,30 @@ export class HybridObjectType implements Type {
     return 'hybrid-object'
   }
 
-  getCode(language: Language, mode: 'strong' | 'weak' = 'strong'): string {
+  getCode(
+    language: Language,
+    { mode, fullyQualified }: GetHybridObjectCodeOptions = { mode: 'strong' }
+  ): string {
     const name = getHybridObjectName(this.hybridObjectName)
 
     switch (language) {
       case 'c++': {
-        const fullName = this.sourceConfig.getCxxNamespace(
-          'c++',
-          name.HybridTSpec
-        )
-        if (mode === 'strong') {
-          return `std::shared_ptr<${fullName}>`
+        const ptrType = mode === 'strong' ? 'std::shared_ptr' : 'std::weak_ptr'
+        if (fullyQualified || this.sourceConfig.isExternalConfig) {
+          const fullName = this.sourceConfig.getCxxNamespace(
+            'c++',
+            name.HybridTSpec
+          )
+          return `${ptrType}<${fullName}>`
         } else {
-          return `std::weak_ptr<${fullName}>`
+          return `${ptrType}<${name.HybridTSpec}>`
         }
       }
       case 'swift': {
         return `(any ${name.HybridTSpec})`
       }
       case 'kotlin': {
-        if (this.sourceConfig.isExternalConfig) {
+        if (fullyQualified || this.sourceConfig.isExternalConfig) {
           // full qualified name: "com.margelo.nitro.image.Image"
           return this.sourceConfig.getAndroidPackage(
             'java/kotlin',

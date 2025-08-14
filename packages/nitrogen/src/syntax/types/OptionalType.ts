@@ -1,6 +1,6 @@
 import type { Language } from '../../getPlatformSpecs.js'
 import { type SourceFile, type SourceImport } from '../SourceFile.js'
-import type { Type, TypeKind } from './Type.js'
+import type { GetCodeOptions, Type, TypeKind } from './Type.js'
 
 export class OptionalType implements Type {
   readonly wrappingType: Type
@@ -25,8 +25,8 @@ export class OptionalType implements Type {
     }
   }
 
-  getCode(language: Language): string {
-    const wrapping = this.wrappingType.getCode(language)
+  getCode(language: Language, options?: GetCodeOptions): string {
+    const wrapping = this.wrappingType.getCode(language, options)
     switch (language) {
       case 'c++':
         return `std::optional<${wrapping}>`

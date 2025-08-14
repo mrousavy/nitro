@@ -32,6 +32,11 @@ export function createCppEnum(
   typename: string,
   enumMembers: EnumMember[]
 ): SourceFile {
+  // Namespace typename
+  const fullyQualifiedTypename = NitroConfig.current.getCxxNamespace(
+    'c++',
+    typename
+  )
   // Map enum to C++ code
   const cppEnumMembers = enumMembers
     .map(
@@ -88,12 +93,12 @@ namespace margelo::nitro {
 
   // C++ ${typename} <> JS ${typename} (enum)
   template <>
-  struct JSIConverter<${typename}> final {
-    static inline ${typename} fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+  struct JSIConverter<${fullyQualifiedTypename}> final {
+    static inline ${fullyQualifiedTypename} fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       int enumValue = JSIConverter<int>::fromJSI(runtime, arg);
-      return static_cast<${typename}>(enumValue);
+      return static_cast<${fullyQualifiedTypename}>(enumValue);
     }
-    static inline jsi::Value toJSI(jsi::Runtime& runtime, ${typename} arg) {
+    static inline jsi::Value toJSI(jsi::Runtime& runtime, ${fullyQualifiedTypename} arg) {
       int enumValue = static_cast<int>(arg);
       return JSIConverter<int>::toJSI(runtime, enumValue);
     }

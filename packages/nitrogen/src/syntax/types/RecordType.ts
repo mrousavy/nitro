@@ -1,6 +1,6 @@
 import type { Language } from '../../getPlatformSpecs.js'
 import { type SourceFile, type SourceImport } from '../SourceFile.js'
-import type { Type, TypeKind } from './Type.js'
+import type { GetCodeOptions, Type, TypeKind } from './Type.js'
 
 export class RecordType implements Type {
   readonly keyType: Type
@@ -19,9 +19,9 @@ export class RecordType implements Type {
     return 'record'
   }
 
-  getCode(language: Language): string {
-    const keyCode = this.keyType.getCode(language)
-    const valueCode = this.valueType.getCode(language)
+  getCode(language: Language, options?: GetCodeOptions): string {
+    const keyCode = this.keyType.getCode(language, options)
+    const valueCode = this.valueType.getCode(language, options)
 
     switch (language) {
       case 'c++':

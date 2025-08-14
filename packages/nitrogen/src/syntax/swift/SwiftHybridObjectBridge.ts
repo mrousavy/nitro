@@ -80,7 +80,9 @@ public final func afterUpdate() {
       `HybridObject ${spec.name} does not have a weakify_..() bridge!`
     )
 
-  const cppWeakPtrName = escapeCppName(hybridObject.getCode('c++', 'weak'))
+  const cppWeakPtrName = escapeCppName(
+    hybridObject.getCode('c++', { mode: 'weak' })
+  )
 
   const baseGetCxxPartOverrides = spec.baseTypes.map((base) => {
     const baseHybridObject = new HybridObjectType(base)

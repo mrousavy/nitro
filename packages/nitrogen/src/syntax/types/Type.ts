@@ -25,6 +25,14 @@ export type TypeKind =
   | 'date'
   | 'void'
 
+export interface GetCodeOptions {
+  /**
+   * Specifies whether the name (e.g. a C++ class name)
+   * should use the fully qualified namespace name prefix.
+   */
+  fullyQualified?: boolean
+}
+
 /**
  * Represents a TypeScript Type that can be represented in a native language (C++, Swift, Kotlin)
  */
@@ -41,8 +49,10 @@ export interface Type {
    * Get the native code required to represent this type for the given language (C++, Swift, Kotlin).
    *
    * E.g. for a `number` type, this would return `'double'` in C++.
+   *
+   * The `options` parameter can specify custom options. Subclasses may have more options.
    */
-  getCode(language: Language): string
+  getCode(language: Language, options?: GetCodeOptions): string
   /**
    * Get all required extra files that need to be **created** for this type to properly work.
    *

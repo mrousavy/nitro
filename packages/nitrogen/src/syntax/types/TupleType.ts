@@ -1,6 +1,6 @@
 import type { Language } from '../../getPlatformSpecs.js'
 import { type SourceFile, type SourceImport } from '../SourceFile.js'
-import type { Type, TypeKind } from './Type.js'
+import type { GetCodeOptions, Type, TypeKind } from './Type.js'
 
 export class TupleType implements Type {
   readonly itemTypes: Type[]
@@ -18,8 +18,8 @@ export class TupleType implements Type {
     return 'tuple'
   }
 
-  getCode(language: Language): string {
-    const types = this.itemTypes.map((t) => t.getCode(language))
+  getCode(language: Language, options?: GetCodeOptions): string {
+    const types = this.itemTypes.map((t) => t.getCode(language, options))
 
     switch (language) {
       case 'c++':
