@@ -113,6 +113,7 @@ namespace margelo::nitro::test {
       prototype.registerHybridMethod("callbackSync", &HybridTestObjectCppSpec::callbackSync);
       prototype.registerHybridMethod("getIsViewBlue", &HybridTestObjectCppSpec::getIsViewBlue);
       prototype.registerHybridMethod("bounceExternalHybrid", &HybridTestObjectCppSpec::bounceExternalHybrid);
+      prototype.registerHybridMethod("createInternalObject", &HybridTestObjectCppSpec::createInternalObject);
     });
   }
 

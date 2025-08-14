@@ -1782,4 +1782,19 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
       return bridge.create_Result_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec__(__exceptionPtr)
     }
   }
+  
+  @inline(__always)
+  public final func createInternalObject() -> bridge.Result_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec__ {
+    do {
+      let __result = try self.__implementation.createInternalObject()
+      let __resultCpp = { () -> bridge.std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_ in
+        let __cxxWrapped = __result.getCxxWrapper()
+        return __cxxWrapped.getCxxPart()
+      }()
+      return bridge.create_Result_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec__(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec__(__exceptionPtr)
+    }
+  }
 }
