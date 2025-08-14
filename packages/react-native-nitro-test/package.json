@@ -64,12 +64,14 @@
     "nitro-codegen": "*",
     "react": "19.1.0",
     "react-native": "0.81.0",
-    "react-native-nitro-modules": "*"
+    "react-native-nitro-modules": "*",
+    "react-native-nitro-test-external": "*"
   },
   "peerDependencies": {
     "react": "*",
     "react-native": "*",
-    "react-native-nitro-modules": "*"
+    "react-native-nitro-modules": "*",
+    "react-native-nitro-test-external": "*"
   },
   "jest": {
     "preset": "react-native",
