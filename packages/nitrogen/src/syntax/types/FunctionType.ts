@@ -5,7 +5,7 @@ import { type SourceFile, type SourceImport } from '../SourceFile.js'
 import { PromiseType } from './PromiseType.js'
 import type { GetCodeOptions, NamedType, Type, TypeKind } from './Type.js'
 
-interface GetFunctionCodeOptions extends GetCodeOptions {
+export interface GetFunctionCodeOptions extends GetCodeOptions {
   includeNameInfo?: boolean
 }
 
@@ -101,17 +101,15 @@ export class FunctionType implements Type {
     return `${returnType}(*${name})(${params})`
   }
 
-  getCode(
-    language: Language,
-    options: GetFunctionCodeOptions = { includeNameInfo: true }
-  ): string {
+  getCode(language: Language, options: GetFunctionCodeOptions = {}): string {
+    const includeNameInfo = options.includeNameInfo ?? true
     switch (language) {
       case 'c++': {
         const params = this.parameters
           .map((p) => {
             const type = p.getCode('c++', options)
             const code = p.canBePassedByReference ? toReferenceType(type) : type
-            if (options.includeNameInfo) return `${code} /* ${p.name} */`
+            if (includeNameInfo) return `${code} /* ${p.name} */`
             else return code
           })
           .join(', ')
@@ -121,7 +119,7 @@ export class FunctionType implements Type {
       case 'swift': {
         const params = this.parameters
           .map((p) => {
-            if (options.includeNameInfo)
+            if (includeNameInfo)
               return `_ ${p.escapedName}: ${p.getCode(language, options)}`
             else return p.getCode(language, options)
           })
@@ -132,7 +130,7 @@ export class FunctionType implements Type {
       case 'kotlin': {
         const params = this.parameters
           .map((p) => {
-            if (options.includeNameInfo)
+            if (includeNameInfo)
               return `${p.escapedName}: ${p.getCode(language, options)}`
             else return p.getCode(language, options)
           })

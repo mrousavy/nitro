@@ -4,6 +4,7 @@ import { createFileMetadataString, isNotDuplicate } from '../helpers.js'
 import type { NamedType } from '../types/Type.js'
 import { includeHeader, includeNitroHeader } from './includeNitroHeader.js'
 import { NitroConfig } from '../../config/NitroConfig.js'
+import type { GetFunctionCodeOptions } from '../types/FunctionType.js'
 
 export function createCppStruct(
   typename: string,
@@ -25,24 +26,28 @@ export function createCppStruct(
     .map((p) => `${p.escapedName}(${p.escapedName})`)
     .join(', ')
   // Get C++ code for converting each member from a jsi::Value
+  const codeOptions: GetFunctionCodeOptions = {
+    fullyQualified: true,
+    includeNameInfo: false,
+  }
   const cppFromJsiParams = properties
     .map(
       (p) =>
-        `JSIConverter<${p.getCode('c++', { fullyQualified: true })}>::fromJSI(runtime, obj.getProperty(runtime, "${p.name}"))`
+        `JSIConverter<${p.getCode('c++', codeOptions)}>::fromJSI(runtime, obj.getProperty(runtime, "${p.name}"))`
     )
     .join(',\n')
   // Get C++ code for converting each member to a jsi::Value
   const cppToJsiCalls = properties
     .map(
       (p) =>
-        `obj.setProperty(runtime, "${p.name}", JSIConverter<${p.getCode('c++', { fullyQualified: true })}>::toJSI(runtime, arg.${p.escapedName}));`
+        `obj.setProperty(runtime, "${p.name}", JSIConverter<${p.getCode('c++', codeOptions)}>::toJSI(runtime, arg.${p.escapedName}));`
     )
     .join('\n')
   // Get C++ code for verifying if jsi::Value can be converted to type
   const cppCanConvertCalls = properties
     .map(
       (p) =>
-        `if (!JSIConverter<${p.getCode('c++', { fullyQualified: true })}>::canConvert(runtime, obj.getProperty(runtime, "${p.name}"))) return false;`
+        `if (!JSIConverter<${p.getCode('c++', codeOptions)}>::canConvert(runtime, obj.getProperty(runtime, "${p.name}"))) return false;`
     )
     .join('\n')
 
