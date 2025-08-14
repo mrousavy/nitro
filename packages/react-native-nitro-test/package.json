@@ -54,7 +54,6 @@
     "build-nitrogen-first": "cd ../react-native-nitro-modules && bun tsc && cd ../nitrogen && bun tsc",
     "generate-external-first": "cd ../react-native-nitro-test-external && bun run build && bun run specs",
     "specs": "bun build-nitrogen-first && bun generate-external-first && nitro-codegen --logLevel=\"debug\"",
-    "specs-ci": "nitro-codegen --logLevel=\"debug\"",
     "clean": "rm -rf android/build node_modules/**/android/build lib"
   },
   "devDependencies": {
