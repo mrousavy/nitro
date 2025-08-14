@@ -394,6 +394,10 @@ class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
         return externalObject
     }
 
+    override fun createInternalObject(): HybridSomeExternalObjectSpec {
+        return HybridSomeInternalObject()
+    }
+
     override fun dispose() {
         this.optionalCallback?.let { callback ->
             callback(13.0)

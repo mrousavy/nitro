@@ -393,6 +393,10 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
   func bounceExternalHybrid(externalObject: (any HybridSomeExternalObjectSpec)) throws -> (any HybridSomeExternalObjectSpec) {
     return externalObject
   }
+  
+  func createInternalObject() -> any HybridSomeExternalObjectSpec {
+    return HybridSomeInternalObject()
+  }
 
   func dispose() {
     if let optionalCallback {

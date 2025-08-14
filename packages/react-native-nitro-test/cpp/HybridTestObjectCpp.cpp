@@ -13,6 +13,7 @@
 
 #include "HybridBase.hpp"
 #include "HybridChild.hpp"
+#include "HybridSomeInternalObject.hpp"
 
 namespace margelo::nitro::test {
 
@@ -532,15 +533,19 @@ double HybridTestObjectCpp::callbackSync(const std::function<double()>& callback
   return value;
 }
 
+std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec> HybridTestObjectCpp::bounceExternalHybrid(
+    const std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>& externalObject) {
+  return externalObject;
+}
+
+std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec> HybridTestObjectCpp::createInternalObject() {
+  return std::make_shared<HybridSomeInternalObject>();
+}
+
 void HybridTestObjectCpp::dispose() {
   if (this->_optionalCallback.has_value()) {
     this->_optionalCallback.value()(13.0);
   }
-}
-
-std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec> HybridTestObjectCpp::bounceExternalHybrid(
-    const std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>& externalObject) {
-  return externalObject;
 }
 
 } // namespace margelo::nitro::test
