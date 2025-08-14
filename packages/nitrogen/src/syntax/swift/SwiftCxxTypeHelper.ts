@@ -68,7 +68,7 @@ export function createSwiftCxxHelpers(type: Type): SwiftCxxHelper | undefined {
 function createCxxHybridObjectSwiftHelper(
   type: HybridObjectType
 ): SwiftCxxHelper {
-  const actualType = type.getCode('c++', { fullyQualified: false })
+  const actualType = type.getCode('c++')
   const modulename = type.sourceConfig.getIosModuleName()
   const { HybridTSpecCxx, HybridTSpecSwift, HybridTSpec } = getHybridObjectName(
     type.hybridObjectName
@@ -123,8 +123,10 @@ return swiftPart.toUnsafe();
 `.trim()
   } else {
     const cxxNamespace = type.sourceConfig.getSwiftBridgeNamespace('c++')
-    createImplementation = `return ${cxxNamespace}::create_${name}(swiftUnsafePointer);`
-    getImplementation = `return ${cxxNamespace}::get_${name}(cppType);`
+    const internalType = type.getCode('c++', { fullyQualified: false })
+    const internalName = escapeCppName(internalType)
+    createImplementation = `return ${cxxNamespace}::create_${internalName}(swiftUnsafePointer);`
+    getImplementation = `return ${cxxNamespace}::get_${internalName}(cppType);`
   }
 
   return {
