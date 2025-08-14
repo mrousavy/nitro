@@ -235,7 +235,7 @@ export async function runNitrogen({
     const file = await createGitAttributes(markAsGenerated, outputDirectory)
     filesAfter.push(file)
   } catch {
-    Logger.error(`❌ Failed to write ${chalk.dim(`.gitattributes`)}!`)
+    Logger.error(`❌  Failed to write ${chalk.dim(`.gitattributes`)}!`)
   }
 
   return {

@@ -1,0 +1,19 @@
+{
+  "$schema": "https://nitro.margelo.com/nitro.schema.json",
+  "cxxNamespace": [
+    "nitrotestexternal"
+  ],
+  "ios": {
+    "iosModuleName": "NitroTestExternal"
+  },
+  "android": {
+    "androidNamespace": [
+      "nitrotestexternal"
+    ],
+    "androidCxxLibName": "NitroTestExternal"
+  },
+  "autolinking": {},
+  "ignorePaths": [
+    "**/node_modules"
+  ]
+}

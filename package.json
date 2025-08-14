@@ -9,6 +9,7 @@
     "packages/react-native-nitro-modules",
     "packages/nitrogen",
     "packages/react-native-nitro-test",
+    "packages/react-native-nitro-test-external",
     "example",
     "docs"
   ],
