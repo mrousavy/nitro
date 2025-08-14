@@ -538,4 +538,8 @@ void HybridTestObjectCpp::dispose() {
   }
 }
 
+std::shared_ptr<margelo::nitro::nitrotestexternal::HybridSomeExternalObjectSpec> HybridTestObjectCpp::bounceExternalHybrid(const std::shared_ptr<margelo::nitro::nitrotestexternal::HybridSomeExternalObjectSpec>& externalObject) {
+  return externalObject;
+}
+
 } // namespace margelo::nitro::test

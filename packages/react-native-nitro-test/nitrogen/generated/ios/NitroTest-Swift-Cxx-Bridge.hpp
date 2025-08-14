@@ -20,6 +20,8 @@ namespace margelo::nitro::test { struct Car; }
 namespace margelo::nitro::test { class HybridBaseSpec; }
 // Forward declaration of `HybridChildSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridChildSpec; }
+// Forward declaration of `HybridSomeExternalObjectSpec` to properly resolve imports.
+namespace margelo::nitro::nitrotestexternal { class HybridSomeExternalObjectSpec; }
 // Forward declaration of `HybridTestObjectSwiftKotlinSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridTestObjectSwiftKotlinSpec; }
 // Forward declaration of `HybridTestViewSpec` to properly resolve imports.
@@ -40,6 +42,8 @@ namespace margelo::nitro::test { struct WrappedJsStruct; }
 namespace NitroTest { class HybridBaseSpec_cxx; }
 // Forward declaration of `HybridChildSpec_cxx` to properly resolve imports.
 namespace NitroTest { class HybridChildSpec_cxx; }
+// Forward declaration of `HybridSomeExternalObjectSpec_cxx` to properly resolve imports.
+namespace NitroTestExternal { class HybridSomeExternalObjectSpec_cxx; }
 // Forward declaration of `HybridTestObjectSwiftKotlinSpec_cxx` to properly resolve imports.
 namespace NitroTest { class HybridTestObjectSwiftKotlinSpec_cxx; }
 // Forward declaration of `HybridTestViewSpec_cxx` to properly resolve imports.
@@ -62,6 +66,7 @@ namespace NitroTest { class HybridTestViewSpec_cxx; }
 #include <NitroModules/Promise.hpp>
 #include <NitroModules/PromiseHolder.hpp>
 #include <NitroModules/Result.hpp>
+#include <NitroTestExternal/HybridSomeExternalObjectSpec.hpp>
 #include <chrono>
 #include <exception>
 #include <functional>
@@ -1007,6 +1012,18 @@ namespace margelo::nitro::test::bridge::swift {
   using std__weak_ptr_HybridTestViewSpec_ = std::weak_ptr<HybridTestViewSpec>;
   inline std__weak_ptr_HybridTestViewSpec_ weakify_std__shared_ptr_HybridTestViewSpec_(const std::shared_ptr<HybridTestViewSpec>& strong) { return strong; }
   
+  // pragma MARK: std::shared_ptr<margelo::nitro::nitrotestexternal::HybridSomeExternalObjectSpec>
+  /**
+   * Specialized version of `std::shared_ptr<margelo::nitro::nitrotestexternal::HybridSomeExternalObjectSpec>`.
+   */
+  using std__shared_ptr_margelo__nitro__nitrotestexternal__HybridSomeExternalObjectSpec_ = std::shared_ptr<margelo::nitro::nitrotestexternal::HybridSomeExternalObjectSpec>;
+  std::shared_ptr<margelo::nitro::nitrotestexternal::HybridSomeExternalObjectSpec> create_std__shared_ptr_margelo__nitro__nitrotestexternal__HybridSomeExternalObjectSpec_(void* _Nonnull swiftUnsafePointer);
+  void* _Nonnull get_std__shared_ptr_margelo__nitro__nitrotestexternal__HybridSomeExternalObjectSpec_(std__shared_ptr_margelo__nitro__nitrotestexternal__HybridSomeExternalObjectSpec_ cppType);
+  
+  // pragma MARK: std::weak_ptr<margelo::nitro::nitrotestexternal::HybridSomeExternalObjectSpec>
+  using std__weak_ptr_margelo__nitro__nitrotestexternal__HybridSomeExternalObjectSpec_ = std::weak_ptr<margelo::nitro::nitrotestexternal::HybridSomeExternalObjectSpec>;
+  inline std__weak_ptr_margelo__nitro__nitrotestexternal__HybridSomeExternalObjectSpec_ weakify_std__shared_ptr_margelo__nitro__nitrotestexternal__HybridSomeExternalObjectSpec_(const std::shared_ptr<margelo::nitro::nitrotestexternal::HybridSomeExternalObjectSpec>& strong) { return strong; }
+  
   // pragma MARK: Result<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>>
   using Result_std__shared_ptr_HybridTestObjectSwiftKotlinSpec__ = Result<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>>;
   inline Result_std__shared_ptr_HybridTestObjectSwiftKotlinSpec__ create_Result_std__shared_ptr_HybridTestObjectSwiftKotlinSpec__(const std::shared_ptr<HybridTestObjectSwiftKotlinSpec>& value) {
@@ -1302,6 +1319,15 @@ namespace margelo::nitro::test::bridge::swift {
   }
   inline Result_std__shared_ptr_HybridBaseSpec__ create_Result_std__shared_ptr_HybridBaseSpec__(const std::exception_ptr& error) {
     return Result<std::shared_ptr<HybridBaseSpec>>::withError(error);
+  }
+  
+  // pragma MARK: Result<std::shared_ptr<margelo::nitro::nitrotestexternal::HybridSomeExternalObjectSpec>>
+  using Result_std__shared_ptr_margelo__nitro__nitrotestexternal__HybridSomeExternalObjectSpec__ = Result<std::shared_ptr<margelo::nitro::nitrotestexternal::HybridSomeExternalObjectSpec>>;
+  inline Result_std__shared_ptr_margelo__nitro__nitrotestexternal__HybridSomeExternalObjectSpec__ create_Result_std__shared_ptr_margelo__nitro__nitrotestexternal__HybridSomeExternalObjectSpec__(const std::shared_ptr<margelo::nitro::nitrotestexternal::HybridSomeExternalObjectSpec>& value) {
+    return Result<std::shared_ptr<margelo::nitro::nitrotestexternal::HybridSomeExternalObjectSpec>>::withValue(value);
+  }
+  inline Result_std__shared_ptr_margelo__nitro__nitrotestexternal__HybridSomeExternalObjectSpec__ create_Result_std__shared_ptr_margelo__nitro__nitrotestexternal__HybridSomeExternalObjectSpec__(const std::exception_ptr& error) {
+    return Result<std::shared_ptr<margelo::nitro::nitrotestexternal::HybridSomeExternalObjectSpec>>::withError(error);
   }
 
 } // namespace margelo::nitro::test::bridge::swift

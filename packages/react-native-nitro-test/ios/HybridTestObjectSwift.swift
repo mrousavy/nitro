@@ -7,6 +7,7 @@
 
 import Foundation
 import NitroModules
+import NitroTestExternal
 
 class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
   var optionalArray: [String]? = []
@@ -387,6 +388,10 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
   func callbackSync(callback: @escaping () -> Double) throws -> Double {
     let value = callback()
     return value
+  }
+  
+  func bounceExternalHybrid(externalObject: (any HybridSomeExternalObjectSpec)) throws -> (any HybridSomeExternalObjectSpec) {
+    return externalObject
   }
 
   func dispose() {

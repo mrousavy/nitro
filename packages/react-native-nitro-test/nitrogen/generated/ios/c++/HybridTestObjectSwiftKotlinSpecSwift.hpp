@@ -44,6 +44,8 @@ namespace margelo::nitro::test { class HybridChildSpec; }
 namespace margelo::nitro::test { class HybridBaseSpec; }
 // Forward declaration of `HybridTestViewSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridTestViewSpec; }
+// Forward declaration of `HybridSomeExternalObjectSpec` to properly resolve imports.
+namespace margelo::nitro::nitrotestexternal { class HybridSomeExternalObjectSpec; }
 
 #include <memory>
 #include "HybridTestObjectSwiftKotlinSpec.hpp"
@@ -71,6 +73,7 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 #include "HybridChildSpec.hpp"
 #include "HybridBaseSpec.hpp"
 #include "HybridTestViewSpec.hpp"
+#include <NitroTestExternal/HybridSomeExternalObjectSpec.hpp>
 
 #include "NitroTest-Swift-Cxx-Umbrella.hpp"
 
@@ -708,6 +711,14 @@ namespace margelo::nitro::test {
     }
     inline bool getIsViewBlue(const std::shared_ptr<HybridTestViewSpec>& view) override {
       auto __result = _swiftPart.getIsViewBlue(view);
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline std::shared_ptr<margelo::nitro::nitrotestexternal::HybridSomeExternalObjectSpec> bounceExternalHybrid(const std::shared_ptr<margelo::nitro::nitrotestexternal::HybridSomeExternalObjectSpec>& externalObject) override {
+      auto __result = _swiftPart.bounceExternalHybrid(externalObject);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
