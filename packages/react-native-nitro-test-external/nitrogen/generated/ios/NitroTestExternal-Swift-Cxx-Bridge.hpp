@@ -28,17 +28,17 @@ namespace NitroTestExternal { class HybridSomeExternalObjectSpec_cxx; }
  */
 namespace margelo::nitro::nitrotestexternal::bridge::swift {
 
-  // pragma MARK: std::shared_ptr<margelo::nitro::nitrotestexternal::HybridSomeExternalObjectSpec>
+  // pragma MARK: std::shared_ptr<HybridSomeExternalObjectSpec>
   /**
-   * Specialized version of `std::shared_ptr<margelo::nitro::nitrotestexternal::HybridSomeExternalObjectSpec>`.
+   * Specialized version of `std::shared_ptr<HybridSomeExternalObjectSpec>`.
    */
-  using std__shared_ptr_margelo__nitro__nitrotestexternal__HybridSomeExternalObjectSpec_ = std::shared_ptr<margelo::nitro::nitrotestexternal::HybridSomeExternalObjectSpec>;
-  std::shared_ptr<margelo::nitro::nitrotestexternal::HybridSomeExternalObjectSpec> create_std__shared_ptr_margelo__nitro__nitrotestexternal__HybridSomeExternalObjectSpec_(void* _Nonnull swiftUnsafePointer);
-  void* _Nonnull get_std__shared_ptr_margelo__nitro__nitrotestexternal__HybridSomeExternalObjectSpec_(std__shared_ptr_margelo__nitro__nitrotestexternal__HybridSomeExternalObjectSpec_ cppType);
+  using std__shared_ptr_HybridSomeExternalObjectSpec_ = std::shared_ptr<HybridSomeExternalObjectSpec>;
+  std::shared_ptr<HybridSomeExternalObjectSpec> create_std__shared_ptr_HybridSomeExternalObjectSpec_(void* _Nonnull swiftUnsafePointer);
+  void* _Nonnull get_std__shared_ptr_HybridSomeExternalObjectSpec_(std__shared_ptr_HybridSomeExternalObjectSpec_ cppType);
   
-  // pragma MARK: std::weak_ptr<margelo::nitro::nitrotestexternal::HybridSomeExternalObjectSpec>
-  using std__weak_ptr_margelo__nitro__nitrotestexternal__HybridSomeExternalObjectSpec_ = std::weak_ptr<margelo::nitro::nitrotestexternal::HybridSomeExternalObjectSpec>;
-  inline std__weak_ptr_margelo__nitro__nitrotestexternal__HybridSomeExternalObjectSpec_ weakify_std__shared_ptr_margelo__nitro__nitrotestexternal__HybridSomeExternalObjectSpec_(const std::shared_ptr<margelo::nitro::nitrotestexternal::HybridSomeExternalObjectSpec>& strong) { return strong; }
+  // pragma MARK: std::weak_ptr<HybridSomeExternalObjectSpec>
+  using std__weak_ptr_HybridSomeExternalObjectSpec_ = std::weak_ptr<HybridSomeExternalObjectSpec>;
+  inline std__weak_ptr_HybridSomeExternalObjectSpec_ weakify_std__shared_ptr_HybridSomeExternalObjectSpec_(const std::shared_ptr<HybridSomeExternalObjectSpec>& strong) { return strong; }
   
   // pragma MARK: Result<std::string>
   using Result_std__string_ = Result<std::string>;

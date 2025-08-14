@@ -132,7 +132,7 @@
     },
     "packages/react-native-nitro-test-external": {
       "name": "react-native-nitro-test-external",
-      "version": "0.0.1",
+      "version": "0.27.6",
       "devDependencies": {
         "@react-native/eslint-config": "0.81.0",
         "@types/jest": "^29.5.12",

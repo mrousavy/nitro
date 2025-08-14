@@ -29,6 +29,7 @@ namespace margelo::nitro::nitrotestexternal {
     // C++ constructor (called from Java via `initHybrid()`)
     explicit JHybridSomeExternalObjectSpec(jni::alias_ref<jhybridobject> jThis) :
       HybridObject(HybridSomeExternalObjectSpec::TAG),
+      HybridBase(jThis),
       _javaPart(jni::make_global(jThis)) {}
 
   public:
