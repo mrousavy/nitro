@@ -7,7 +7,7 @@ import {
   type SourceFile,
   type SourceImport,
 } from '../SourceFile.js'
-import type { NamedType, Type, TypeKind } from './Type.js'
+import type { GetCodeOptions, NamedType, Type, TypeKind } from './Type.js'
 
 export class StructType implements Type {
   readonly structName: string
@@ -39,10 +39,14 @@ export class StructType implements Type {
     return 'struct'
   }
 
-  getCode(language: Language): string {
+  getCode(language: Language, { fullyQualified }: GetCodeOptions = {}): string {
     switch (language) {
       case 'c++':
-        return this.structName
+        if (fullyQualified) {
+          return NitroConfig.current.getCxxNamespace('c++', this.structName)
+        } else {
+          return this.structName
+        }
       case 'swift':
         return this.structName
       case 'kotlin':

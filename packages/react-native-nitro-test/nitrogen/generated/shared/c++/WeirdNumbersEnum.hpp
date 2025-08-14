@@ -33,16 +33,14 @@ namespace margelo::nitro::test {
 
 namespace margelo::nitro {
 
-  using namespace margelo::nitro::test;
-
   // C++ WeirdNumbersEnum <> JS WeirdNumbersEnum (enum)
   template <>
-  struct JSIConverter<WeirdNumbersEnum> final {
-    static inline WeirdNumbersEnum fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+  struct JSIConverter<margelo::nitro::test::WeirdNumbersEnum> final {
+    static inline margelo::nitro::test::WeirdNumbersEnum fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       int enumValue = JSIConverter<int>::fromJSI(runtime, arg);
-      return static_cast<WeirdNumbersEnum>(enumValue);
+      return static_cast<margelo::nitro::test::WeirdNumbersEnum>(enumValue);
     }
-    static inline jsi::Value toJSI(jsi::Runtime& runtime, WeirdNumbersEnum arg) {
+    static inline jsi::Value toJSI(jsi::Runtime& runtime, margelo::nitro::test::WeirdNumbersEnum arg) {
       int enumValue = static_cast<int>(arg);
       return JSIConverter<int>::toJSI(runtime, enumValue);
     }

@@ -33,16 +33,14 @@ namespace margelo::nitro::test {
 
 namespace margelo::nitro {
 
-  using namespace margelo::nitro::test;
-
   // C++ OldEnum <> JS OldEnum (enum)
   template <>
-  struct JSIConverter<OldEnum> final {
-    static inline OldEnum fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+  struct JSIConverter<margelo::nitro::test::OldEnum> final {
+    static inline margelo::nitro::test::OldEnum fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       int enumValue = JSIConverter<int>::fromJSI(runtime, arg);
-      return static_cast<OldEnum>(enumValue);
+      return static_cast<margelo::nitro::test::OldEnum>(enumValue);
     }
-    static inline jsi::Value toJSI(jsi::Runtime& runtime, OldEnum arg) {
+    static inline jsi::Value toJSI(jsi::Runtime& runtime, margelo::nitro::test::OldEnum arg) {
       int enumValue = static_cast<int>(arg);
       return JSIConverter<int>::toJSI(runtime, enumValue);
     }

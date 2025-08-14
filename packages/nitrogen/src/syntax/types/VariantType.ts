@@ -1,7 +1,7 @@
 import type { Language } from '../../getPlatformSpecs.js'
 import { escapeCppName, isNotDuplicate } from '../helpers.js'
 import { type SourceFile, type SourceImport } from '../SourceFile.js'
-import type { Type, TypeKind } from './Type.js'
+import type { GetCodeOptions, Type, TypeKind } from './Type.js'
 
 export const VariantLabels = [
   'first',
@@ -50,17 +50,17 @@ export class VariantType implements Type {
     })
   }
 
-  getAliasName(language: Language): string {
+  getAliasName(language: Language, options?: GetCodeOptions): string {
     if (this.aliasName == null) {
-      const variants = this.variants.map((v) => v.getCode(language))
+      const variants = this.variants.map((v) => v.getCode(language, options))
       return escapeCppName(`Variant_${variants.join('_')}`)
     }
     return this.aliasName
   }
 
-  getCode(language: Language): string {
+  getCode(language: Language, options?: GetCodeOptions): string {
     const types = this.variants
-      .map((v) => v.getCode(language))
+      .map((v) => v.getCode(language, options))
       .filter(isNotDuplicate)
 
     switch (language) {
@@ -68,7 +68,7 @@ export class VariantType implements Type {
         return `std::variant<${types.join(', ')}>`
       case 'swift':
       case 'kotlin':
-        return this.getAliasName(language)
+        return this.getAliasName(language, options)
       default:
         throw new Error(
           `Language ${language} is not yet supported for VariantType!`

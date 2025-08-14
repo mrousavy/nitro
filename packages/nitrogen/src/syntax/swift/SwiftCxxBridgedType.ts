@@ -569,7 +569,9 @@ case ${i}:
         const funcType = getTypeAs(this.type, FunctionType)
         switch (language) {
           case 'swift':
-            const swiftClosureType = funcType.getCode('swift', false)
+            const swiftClosureType = funcType.getCode('swift', {
+              includeNameInfo: false,
+            })
             const bridge = this.getBridgeOrThrow()
             const paramsSignature = funcType.parameters.map(
               (p) => `__${p.escapedName}: ${p.getCode('swift')}`

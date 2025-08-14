@@ -107,6 +107,7 @@ function createCxxHybridObjectSwiftHelper(
   let getImplementation: string
   let createImplementation: string
   if (!type.sourceConfig.isExternalConfig) {
+    // We own the implementation - we call into Swift to convert it internally
     createImplementation = `
 ${swiftPartType} swiftPart = ${swiftPartType}::fromUnsafe(swiftUnsafePointer);
 return std::make_shared<${swiftWrappingType}>(swiftPart);
@@ -122,9 +123,18 @@ ${swiftPartType}& swiftPart = swiftWrapper->getSwiftPart();
 return swiftPart.toUnsafe();
 `.trim()
   } else {
+    // It's an external type - we have to delegate the call to the external library's functions
     const cxxNamespace = type.sourceConfig.getSwiftBridgeNamespace('c++')
-    createImplementation = `return ${cxxNamespace}::create_${name}(swiftUnsafePointer);`
-    getImplementation = `return ${cxxNamespace}::get_${name}(cppType);`
+    const internalType = type.getCode('c++', { fullyQualified: false })
+    const internalName = escapeCppName(internalType)
+    createImplementation = `
+// Implemented in ${type.sourceConfig.getIosModuleName()}
+return ${cxxNamespace}::create_${internalName}(swiftUnsafePointer);
+`.trim()
+    getImplementation = `
+// Implemented in ${type.sourceConfig.getIosModuleName()}
+return ${cxxNamespace}::get_${internalName}(cppType);
+`.trim()
   }
 
   return {
@@ -189,9 +199,10 @@ inline ${cppBaseType} ${funcName}(${cppChildType} child) { return child; }
 }
 
 function createCxxWeakPtrHelper(type: HybridObjectType): SwiftCxxHelper {
-  const actualType = type.getCode('c++', 'weak')
+  const actualType = type.getCode('c++', { mode: 'weak' })
   const specializationName = escapeCppName(actualType)
   const funcName = `weakify_${escapeCppName(type.getCode('c++'))}`
+  const parameterType = type.getCode('c++', { mode: 'strong' })
   return {
     cxxType: actualType,
     funcName: funcName,
@@ -199,7 +210,7 @@ function createCxxWeakPtrHelper(type: HybridObjectType): SwiftCxxHelper {
     cxxHeader: {
       code: `
 using ${specializationName} = ${actualType};
-inline ${specializationName} ${funcName}(const ${type.getCode('c++', 'strong')}& strong) { return strong; }
+inline ${specializationName} ${funcName}(const ${parameterType}& strong) { return strong; }
 `.trim(),
       requiredIncludes: [],
     },
@@ -391,7 +402,7 @@ return ${returnBridge.parseFromSwiftToCpp('__result', 'c++')};
     cxxHeader: {
       code: `
 /**
- * Specialized version of \`${type.getCode('c++', false)}\`.
+ * Specialized version of \`${type.getCode('c++', { includeNameInfo: false })}\`.
  */
 using ${name} = ${actualType};
 /**

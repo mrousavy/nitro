@@ -4,11 +4,17 @@ import { createFileMetadataString, isNotDuplicate } from '../helpers.js'
 import type { NamedType } from '../types/Type.js'
 import { includeHeader, includeNitroHeader } from './includeNitroHeader.js'
 import { NitroConfig } from '../../config/NitroConfig.js'
+import type { GetFunctionCodeOptions } from '../types/FunctionType.js'
 
 export function createCppStruct(
   typename: string,
   properties: NamedType[]
 ): FileWithReferencedTypes {
+  // Namespace typename
+  const fullyQualifiedTypename = NitroConfig.current.getCxxNamespace(
+    'c++',
+    typename
+  )
   // Get C++ code for all struct members
   const cppStructProps = properties
     .map((p) => `${p.getCode('c++')} ${p.escapedName}     SWIFT_PRIVATE;`)
@@ -20,24 +26,28 @@ export function createCppStruct(
     .map((p) => `${p.escapedName}(${p.escapedName})`)
     .join(', ')
   // Get C++ code for converting each member from a jsi::Value
+  const codeOptions: GetFunctionCodeOptions = {
+    fullyQualified: true,
+    includeNameInfo: false,
+  }
   const cppFromJsiParams = properties
     .map(
       (p) =>
-        `JSIConverter<${p.getCode('c++')}>::fromJSI(runtime, obj.getProperty(runtime, "${p.name}"))`
+        `JSIConverter<${p.getCode('c++', codeOptions)}>::fromJSI(runtime, obj.getProperty(runtime, "${p.name}"))`
     )
     .join(',\n')
   // Get C++ code for converting each member to a jsi::Value
   const cppToJsiCalls = properties
     .map(
       (p) =>
-        `obj.setProperty(runtime, "${p.name}", JSIConverter<${p.getCode('c++')}>::toJSI(runtime, arg.${p.escapedName}));`
+        `obj.setProperty(runtime, "${p.name}", JSIConverter<${p.getCode('c++', codeOptions)}>::toJSI(runtime, arg.${p.escapedName}));`
     )
     .join('\n')
   // Get C++ code for verifying if jsi::Value can be converted to type
   const cppCanConvertCalls = properties
     .map(
       (p) =>
-        `if (!JSIConverter<${p.getCode('c++')}>::canConvert(runtime, obj.getProperty(runtime, "${p.name}"))) return false;`
+        `if (!JSIConverter<${p.getCode('c++', codeOptions)}>::canConvert(runtime, obj.getProperty(runtime, "${p.name}"))) return false;`
     )
     .join('\n')
 
@@ -82,18 +92,16 @@ namespace ${cxxNamespace} {
 
 namespace margelo::nitro {
 
-  using namespace ${cxxNamespace};
-
   // C++ ${typename} <> JS ${typename} (object)
   template <>
-  struct JSIConverter<${typename}> final {
-    static inline ${typename} fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+  struct JSIConverter<${fullyQualifiedTypename}> final {
+    static inline ${fullyQualifiedTypename} fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       jsi::Object obj = arg.asObject(runtime);
-      return ${typename}(
+      return ${fullyQualifiedTypename}(
         ${indent(cppFromJsiParams, '        ')}
       );
     }
-    static inline jsi::Value toJSI(jsi::Runtime& runtime, const ${typename}& arg) {
+    static inline jsi::Value toJSI(jsi::Runtime& runtime, const ${fullyQualifiedTypename}& arg) {
       jsi::Object obj(runtime);
       ${indent(cppToJsiCalls, '      ')}
       return obj;

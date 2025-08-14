@@ -41,20 +41,18 @@ namespace margelo::nitro::test {
 
 namespace margelo::nitro {
 
-  using namespace margelo::nitro::test;
-
   // C++ WrappedJsStruct <> JS WrappedJsStruct (object)
   template <>
-  struct JSIConverter<WrappedJsStruct> final {
-    static inline WrappedJsStruct fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+  struct JSIConverter<margelo::nitro::test::WrappedJsStruct> final {
+    static inline margelo::nitro::test::WrappedJsStruct fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       jsi::Object obj = arg.asObject(runtime);
-      return WrappedJsStruct(
-        JSIConverter<JsStyleStruct>::fromJSI(runtime, obj.getProperty(runtime, "value"))
+      return margelo::nitro::test::WrappedJsStruct(
+        JSIConverter<margelo::nitro::test::JsStyleStruct>::fromJSI(runtime, obj.getProperty(runtime, "value"))
       );
     }
-    static inline jsi::Value toJSI(jsi::Runtime& runtime, const WrappedJsStruct& arg) {
+    static inline jsi::Value toJSI(jsi::Runtime& runtime, const margelo::nitro::test::WrappedJsStruct& arg) {
       jsi::Object obj(runtime);
-      obj.setProperty(runtime, "value", JSIConverter<JsStyleStruct>::toJSI(runtime, arg.value));
+      obj.setProperty(runtime, "value", JSIConverter<margelo::nitro::test::JsStyleStruct>::toJSI(runtime, arg.value));
       return obj;
     }
     static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
@@ -62,7 +60,7 @@ namespace margelo::nitro {
         return false;
       }
       jsi::Object obj = value.getObject(runtime);
-      if (!JSIConverter<JsStyleStruct>::canConvert(runtime, obj.getProperty(runtime, "value"))) return false;
+      if (!JSIConverter<margelo::nitro::test::JsStyleStruct>::canConvert(runtime, obj.getProperty(runtime, "value"))) return false;
       return true;
     }
   };

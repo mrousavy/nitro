@@ -109,15 +109,15 @@ namespace margelo::nitro::test {
 
   public:
     // Properties
-    inline std::shared_ptr<margelo::nitro::test::HybridTestObjectSwiftKotlinSpec> getThisObject() noexcept override {
+    inline std::shared_ptr<HybridTestObjectSwiftKotlinSpec> getThisObject() noexcept override {
       auto __result = _swiftPart.getThisObject();
       return __result;
     }
-    inline std::optional<std::shared_ptr<margelo::nitro::test::HybridTestObjectSwiftKotlinSpec>> getOptionalHybrid() noexcept override {
+    inline std::optional<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>> getOptionalHybrid() noexcept override {
       auto __result = _swiftPart.getOptionalHybrid();
       return __result;
     }
-    inline void setOptionalHybrid(const std::optional<std::shared_ptr<margelo::nitro::test::HybridTestObjectSwiftKotlinSpec>>& optionalHybrid) noexcept override {
+    inline void setOptionalHybrid(const std::optional<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>>& optionalHybrid) noexcept override {
       _swiftPart.setOptionalHybrid(optionalHybrid);
     }
     inline double getNumberValue() noexcept override {
@@ -204,7 +204,7 @@ namespace margelo::nitro::test {
 
   public:
     // Methods
-    inline std::shared_ptr<margelo::nitro::test::HybridTestObjectSwiftKotlinSpec> newTestObject() override {
+    inline std::shared_ptr<HybridTestObjectSwiftKotlinSpec> newTestObject() override {
       auto __result = _swiftPart.newTestObject();
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
@@ -212,7 +212,7 @@ namespace margelo::nitro::test {
       auto __value = std::move(__result.value());
       return __value;
     }
-    inline std::variant<Person, std::shared_ptr<margelo::nitro::test::HybridTestObjectSwiftKotlinSpec>> getVariantHybrid(const std::variant<Person, std::shared_ptr<margelo::nitro::test::HybridTestObjectSwiftKotlinSpec>>& variant) override {
+    inline std::variant<Person, std::shared_ptr<HybridTestObjectSwiftKotlinSpec>> getVariantHybrid(const std::variant<Person, std::shared_ptr<HybridTestObjectSwiftKotlinSpec>>& variant) override {
       auto __result = _swiftPart.getVariantHybrid(variant);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
@@ -642,7 +642,7 @@ namespace margelo::nitro::test {
       auto __value = std::move(__result.value());
       return __value;
     }
-    inline std::shared_ptr<margelo::nitro::test::HybridChildSpec> createChild() override {
+    inline std::shared_ptr<HybridChildSpec> createChild() override {
       auto __result = _swiftPart.createChild();
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
@@ -650,7 +650,7 @@ namespace margelo::nitro::test {
       auto __value = std::move(__result.value());
       return __value;
     }
-    inline std::shared_ptr<margelo::nitro::test::HybridBaseSpec> createBase() override {
+    inline std::shared_ptr<HybridBaseSpec> createBase() override {
       auto __result = _swiftPart.createBase();
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
@@ -658,7 +658,7 @@ namespace margelo::nitro::test {
       auto __value = std::move(__result.value());
       return __value;
     }
-    inline std::shared_ptr<margelo::nitro::test::HybridBaseSpec> createBaseActualChild() override {
+    inline std::shared_ptr<HybridBaseSpec> createBaseActualChild() override {
       auto __result = _swiftPart.createBaseActualChild();
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
@@ -666,7 +666,7 @@ namespace margelo::nitro::test {
       auto __value = std::move(__result.value());
       return __value;
     }
-    inline std::shared_ptr<margelo::nitro::test::HybridChildSpec> bounceChild(const std::shared_ptr<margelo::nitro::test::HybridChildSpec>& child) override {
+    inline std::shared_ptr<HybridChildSpec> bounceChild(const std::shared_ptr<HybridChildSpec>& child) override {
       auto __result = _swiftPart.bounceChild(child);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
@@ -674,7 +674,7 @@ namespace margelo::nitro::test {
       auto __value = std::move(__result.value());
       return __value;
     }
-    inline std::shared_ptr<margelo::nitro::test::HybridBaseSpec> bounceBase(const std::shared_ptr<margelo::nitro::test::HybridBaseSpec>& base) override {
+    inline std::shared_ptr<HybridBaseSpec> bounceBase(const std::shared_ptr<HybridBaseSpec>& base) override {
       auto __result = _swiftPart.bounceBase(base);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
@@ -682,7 +682,7 @@ namespace margelo::nitro::test {
       auto __value = std::move(__result.value());
       return __value;
     }
-    inline std::shared_ptr<margelo::nitro::test::HybridBaseSpec> bounceChildBase(const std::shared_ptr<margelo::nitro::test::HybridChildSpec>& child) override {
+    inline std::shared_ptr<HybridBaseSpec> bounceChildBase(const std::shared_ptr<HybridChildSpec>& child) override {
       auto __result = _swiftPart.bounceChildBase(child);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
@@ -690,7 +690,7 @@ namespace margelo::nitro::test {
       auto __value = std::move(__result.value());
       return __value;
     }
-    inline std::shared_ptr<margelo::nitro::test::HybridChildSpec> castBase(const std::shared_ptr<margelo::nitro::test::HybridBaseSpec>& base) override {
+    inline std::shared_ptr<HybridChildSpec> castBase(const std::shared_ptr<HybridBaseSpec>& base) override {
       auto __result = _swiftPart.castBase(base);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
@@ -706,7 +706,7 @@ namespace margelo::nitro::test {
       auto __value = std::move(__result.value());
       return __value;
     }
-    inline bool getIsViewBlue(const std::shared_ptr<margelo::nitro::test::HybridTestViewSpec>& view) override {
+    inline bool getIsViewBlue(const std::shared_ptr<HybridTestViewSpec>& view) override {
       auto __result = _swiftPart.getIsViewBlue(view);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());

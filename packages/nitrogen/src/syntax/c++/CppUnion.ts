@@ -12,6 +12,11 @@ export function createCppUnion(
   typename: string,
   enumMembers: EnumMember[]
 ): SourceFile {
+  // Namespace typename
+  const fullyQualifiedTypename = NitroConfig.current.getCxxNamespace(
+    'c++',
+    typename
+  )
   const cppEnumMembers = enumMembers
     .map(
       (m, i) => `${m.name}      SWIFT_NAME(${toLowerCamelCase(m.name)}) = ${i},`
@@ -19,13 +24,13 @@ export function createCppUnion(
     .join('\n')
   const cppFromJsiHashCases = enumMembers
     .map((v) =>
-      `case hashString("${v.stringValue}"): return ${typename}::${v.name};`.trim()
+      `case hashString("${v.stringValue}"): return ${fullyQualifiedTypename}::${v.name};`.trim()
     )
     .join('\n')
   const cppToJsiCases = enumMembers
     .map(
       (v) =>
-        `case ${typename}::${v.name}: return JSIConverter<std::string>::toJSI(runtime, "${v.stringValue}");`
+        `case ${fullyQualifiedTypename}::${v.name}: return JSIConverter<std::string>::toJSI(runtime, "${v.stringValue}");`
     )
     .join('\n')
   const cppCanConvertCases = enumMembers
@@ -55,12 +60,10 @@ namespace ${cxxNamespace} {
 
 namespace margelo::nitro {
 
-  using namespace ${cxxNamespace};
-
   // C++ ${typename} <> JS ${typename} (union)
   template <>
-  struct JSIConverter<${typename}> final {
-    static inline ${typename} fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+  struct JSIConverter<${fullyQualifiedTypename}> final {
+    static inline ${fullyQualifiedTypename} fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       std::string unionValue = JSIConverter<std::string>::fromJSI(runtime, arg);
       switch (hashString(unionValue.c_str(), unionValue.size())) {
         ${indent(cppFromJsiHashCases, '        ')}
@@ -68,7 +71,7 @@ namespace margelo::nitro {
           throw std::invalid_argument("Cannot convert \\"" + unionValue + "\\" to enum ${typename} - invalid value!");
       }
     }
-    static inline jsi::Value toJSI(jsi::Runtime& runtime, ${typename} arg) {
+    static inline jsi::Value toJSI(jsi::Runtime& runtime, ${fullyQualifiedTypename} arg) {
       switch (arg) {
         ${indent(cppToJsiCases, '        ')}
         default: [[unlikely]]
