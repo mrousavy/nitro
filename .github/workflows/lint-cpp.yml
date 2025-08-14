@@ -36,7 +36,7 @@ jobs:
         - 'packages/react-native-nitro-test-external/android/src/main/cpp'
         - 'packages/react-native-nitro-test-external/ios'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: oven-sh/setup-bun@v2
 
       - name: Install npm dependencies (bun)
