@@ -41,19 +41,17 @@ namespace margelo::nitro::test {
 
 namespace margelo::nitro {
 
-  using namespace margelo::nitro::test;
-
   // C++ Person <> JS Person (object)
   template <>
-  struct JSIConverter<Person> final {
-    static inline Person fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+  struct JSIConverter<margelo::nitro::test::Person> final {
+    static inline margelo::nitro::test::Person fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       jsi::Object obj = arg.asObject(runtime);
-      return Person(
+      return margelo::nitro::test::Person(
         JSIConverter<std::string>::fromJSI(runtime, obj.getProperty(runtime, "name")),
         JSIConverter<double>::fromJSI(runtime, obj.getProperty(runtime, "age"))
       );
     }
-    static inline jsi::Value toJSI(jsi::Runtime& runtime, const Person& arg) {
+    static inline jsi::Value toJSI(jsi::Runtime& runtime, const margelo::nitro::test::Person& arg) {
       jsi::Object obj(runtime);
       obj.setProperty(runtime, "name", JSIConverter<std::string>::toJSI(runtime, arg.name));
       obj.setProperty(runtime, "age", JSIConverter<double>::toJSI(runtime, arg.age));

@@ -33,7 +33,7 @@ open class HybridTestViewSpec_cxx {
   /**
    * Holds a weak pointer to the C++ class that wraps the Swift class.
    */
-  private var __cxxPart: bridge.std__weak_ptr_margelo__nitro__test__HybridTestViewSpec_
+  private var __cxxPart: bridge.std__weak_ptr_HybridTestViewSpec_
 
   /**
    * Create a new `HybridTestViewSpec_cxx` that wraps the given `HybridTestViewSpec`.
@@ -72,15 +72,15 @@ open class HybridTestViewSpec_cxx {
 
   /**
    * Gets (or creates) the C++ part of this Hybrid Object.
-   * The C++ part is a `std::shared_ptr<margelo::nitro::test::HybridTestViewSpec>`.
+   * The C++ part is a `std::shared_ptr<HybridTestViewSpec>`.
    */
-  public func getCxxPart() -> bridge.std__shared_ptr_margelo__nitro__test__HybridTestViewSpec_ {
+  public func getCxxPart() -> bridge.std__shared_ptr_HybridTestViewSpec_ {
     let cachedCxxPart = self.__cxxPart.lock()
     if cachedCxxPart.__convertToBool() {
       return cachedCxxPart
     } else {
-      let newCxxPart = bridge.create_std__shared_ptr_margelo__nitro__test__HybridTestViewSpec_(self.toUnsafe())
-      __cxxPart = bridge.weakify_std__shared_ptr_margelo__nitro__test__HybridTestViewSpec_(newCxxPart)
+      let newCxxPart = bridge.create_std__shared_ptr_HybridTestViewSpec_(self.toUnsafe())
+      __cxxPart = bridge.weakify_std__shared_ptr_HybridTestViewSpec_(newCxxPart)
       return newCxxPart
     }
   }

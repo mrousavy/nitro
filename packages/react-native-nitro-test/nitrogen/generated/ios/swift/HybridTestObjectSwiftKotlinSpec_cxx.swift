@@ -33,7 +33,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   /**
    * Holds a weak pointer to the C++ class that wraps the Swift class.
    */
-  private var __cxxPart: bridge.std__weak_ptr_margelo__nitro__test__HybridTestObjectSwiftKotlinSpec_
+  private var __cxxPart: bridge.std__weak_ptr_HybridTestObjectSwiftKotlinSpec_
 
   /**
    * Create a new `HybridTestObjectSwiftKotlinSpec_cxx` that wraps the given `HybridTestObjectSwiftKotlinSpec`.
@@ -72,15 +72,15 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
 
   /**
    * Gets (or creates) the C++ part of this Hybrid Object.
-   * The C++ part is a `std::shared_ptr<margelo::nitro::test::HybridTestObjectSwiftKotlinSpec>`.
+   * The C++ part is a `std::shared_ptr<HybridTestObjectSwiftKotlinSpec>`.
    */
-  public func getCxxPart() -> bridge.std__shared_ptr_margelo__nitro__test__HybridTestObjectSwiftKotlinSpec_ {
+  public func getCxxPart() -> bridge.std__shared_ptr_HybridTestObjectSwiftKotlinSpec_ {
     let cachedCxxPart = self.__cxxPart.lock()
     if cachedCxxPart.__convertToBool() {
       return cachedCxxPart
     } else {
-      let newCxxPart = bridge.create_std__shared_ptr_margelo__nitro__test__HybridTestObjectSwiftKotlinSpec_(self.toUnsafe())
-      __cxxPart = bridge.weakify_std__shared_ptr_margelo__nitro__test__HybridTestObjectSwiftKotlinSpec_(newCxxPart)
+      let newCxxPart = bridge.create_std__shared_ptr_HybridTestObjectSwiftKotlinSpec_(self.toUnsafe())
+      __cxxPart = bridge.weakify_std__shared_ptr_HybridTestObjectSwiftKotlinSpec_(newCxxPart)
       return newCxxPart
     }
   }
@@ -106,22 +106,22 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   }
 
   // Properties
-  public final var thisObject: bridge.std__shared_ptr_margelo__nitro__test__HybridTestObjectSwiftKotlinSpec_ {
+  public final var thisObject: bridge.std__shared_ptr_HybridTestObjectSwiftKotlinSpec_ {
     @inline(__always)
     get {
-      return { () -> bridge.std__shared_ptr_margelo__nitro__test__HybridTestObjectSwiftKotlinSpec_ in
+      return { () -> bridge.std__shared_ptr_HybridTestObjectSwiftKotlinSpec_ in
         let __cxxWrapped = self.__implementation.thisObject.getCxxWrapper()
         return __cxxWrapped.getCxxPart()
       }()
     }
   }
   
-  public final var optionalHybrid: bridge.std__optional_std__shared_ptr_margelo__nitro__test__HybridTestObjectSwiftKotlinSpec__ {
+  public final var optionalHybrid: bridge.std__optional_std__shared_ptr_HybridTestObjectSwiftKotlinSpec__ {
     @inline(__always)
     get {
-      return { () -> bridge.std__optional_std__shared_ptr_margelo__nitro__test__HybridTestObjectSwiftKotlinSpec__ in
+      return { () -> bridge.std__optional_std__shared_ptr_HybridTestObjectSwiftKotlinSpec__ in
         if let __unwrappedValue = self.__implementation.optionalHybrid {
-          return bridge.create_std__optional_std__shared_ptr_margelo__nitro__test__HybridTestObjectSwiftKotlinSpec__({ () -> bridge.std__shared_ptr_margelo__nitro__test__HybridTestObjectSwiftKotlinSpec_ in
+          return bridge.create_std__optional_std__shared_ptr_HybridTestObjectSwiftKotlinSpec__({ () -> bridge.std__shared_ptr_HybridTestObjectSwiftKotlinSpec_ in
             let __cxxWrapped = __unwrappedValue.getCxxWrapper()
             return __cxxWrapped.getCxxPart()
           }())
@@ -135,7 +135,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
       self.__implementation.optionalHybrid = { () -> (any HybridTestObjectSwiftKotlinSpec)? in
         if let __unwrapped = newValue.value {
           return { () -> HybridTestObjectSwiftKotlinSpec in
-            let __unsafePointer = bridge.get_std__shared_ptr_margelo__nitro__test__HybridTestObjectSwiftKotlinSpec_(__unwrapped)
+            let __unsafePointer = bridge.get_std__shared_ptr_HybridTestObjectSwiftKotlinSpec_(__unwrapped)
             let __instance = HybridTestObjectSwiftKotlinSpec_cxx.fromUnsafe(__unsafePointer)
             return __instance.getHybridTestObjectSwiftKotlinSpec()
           }()
@@ -385,22 +385,22 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
 
   // Methods
   @inline(__always)
-  public final func newTestObject() -> bridge.Result_std__shared_ptr_margelo__nitro__test__HybridTestObjectSwiftKotlinSpec__ {
+  public final func newTestObject() -> bridge.Result_std__shared_ptr_HybridTestObjectSwiftKotlinSpec__ {
     do {
       let __result = try self.__implementation.newTestObject()
-      let __resultCpp = { () -> bridge.std__shared_ptr_margelo__nitro__test__HybridTestObjectSwiftKotlinSpec_ in
+      let __resultCpp = { () -> bridge.std__shared_ptr_HybridTestObjectSwiftKotlinSpec_ in
         let __cxxWrapped = __result.getCxxWrapper()
         return __cxxWrapped.getCxxPart()
       }()
-      return bridge.create_Result_std__shared_ptr_margelo__nitro__test__HybridTestObjectSwiftKotlinSpec__(__resultCpp)
+      return bridge.create_Result_std__shared_ptr_HybridTestObjectSwiftKotlinSpec__(__resultCpp)
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
-      return bridge.create_Result_std__shared_ptr_margelo__nitro__test__HybridTestObjectSwiftKotlinSpec__(__exceptionPtr)
+      return bridge.create_Result_std__shared_ptr_HybridTestObjectSwiftKotlinSpec__(__exceptionPtr)
     }
   }
   
   @inline(__always)
-  public final func getVariantHybrid(variant: bridge.std__variant_Person__std__shared_ptr_margelo__nitro__test__HybridTestObjectSwiftKotlinSpec__) -> bridge.Result_std__variant_Person__std__shared_ptr_margelo__nitro__test__HybridTestObjectSwiftKotlinSpec___ {
+  public final func getVariantHybrid(variant: bridge.std__variant_Person__std__shared_ptr_HybridTestObjectSwiftKotlinSpec__) -> bridge.Result_std__variant_Person__std__shared_ptr_HybridTestObjectSwiftKotlinSpec___ {
     do {
       let __result = try self.__implementation.getVariantHybrid(variant: { () -> Variant_Person__any_HybridTestObjectSwiftKotlinSpec_ in
         let __variant = variant
@@ -411,7 +411,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
           case 1:
             let __actual = __variant.get_1()
             return .second({ () -> HybridTestObjectSwiftKotlinSpec in
-              let __unsafePointer = bridge.get_std__shared_ptr_margelo__nitro__test__HybridTestObjectSwiftKotlinSpec_(__actual)
+              let __unsafePointer = bridge.get_std__shared_ptr_HybridTestObjectSwiftKotlinSpec_(__actual)
               let __instance = HybridTestObjectSwiftKotlinSpec_cxx.fromUnsafe(__unsafePointer)
               return __instance.getHybridTestObjectSwiftKotlinSpec()
             }())
@@ -419,21 +419,21 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
             fatalError("Variant can never have index \(__variant.index())!")
         }
       }())
-      let __resultCpp = { () -> bridge.std__variant_Person__std__shared_ptr_margelo__nitro__test__HybridTestObjectSwiftKotlinSpec__ in
+      let __resultCpp = { () -> bridge.std__variant_Person__std__shared_ptr_HybridTestObjectSwiftKotlinSpec__ in
         switch __result {
           case .first(let __value):
-            return bridge.create_std__variant_Person__std__shared_ptr_margelo__nitro__test__HybridTestObjectSwiftKotlinSpec__(__value)
+            return bridge.create_std__variant_Person__std__shared_ptr_HybridTestObjectSwiftKotlinSpec__(__value)
           case .second(let __value):
-            return bridge.create_std__variant_Person__std__shared_ptr_margelo__nitro__test__HybridTestObjectSwiftKotlinSpec__({ () -> bridge.std__shared_ptr_margelo__nitro__test__HybridTestObjectSwiftKotlinSpec_ in
+            return bridge.create_std__variant_Person__std__shared_ptr_HybridTestObjectSwiftKotlinSpec__({ () -> bridge.std__shared_ptr_HybridTestObjectSwiftKotlinSpec_ in
               let __cxxWrapped = __value.getCxxWrapper()
               return __cxxWrapped.getCxxPart()
             }())
         }
       }().variant
-      return bridge.create_Result_std__variant_Person__std__shared_ptr_margelo__nitro__test__HybridTestObjectSwiftKotlinSpec___(__resultCpp)
+      return bridge.create_Result_std__variant_Person__std__shared_ptr_HybridTestObjectSwiftKotlinSpec___(__resultCpp)
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
-      return bridge.create_Result_std__variant_Person__std__shared_ptr_margelo__nitro__test__HybridTestObjectSwiftKotlinSpec___(__exceptionPtr)
+      return bridge.create_Result_std__variant_Person__std__shared_ptr_HybridTestObjectSwiftKotlinSpec___(__exceptionPtr)
     }
   }
   
@@ -1609,123 +1609,123 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public final func createChild() -> bridge.Result_std__shared_ptr_margelo__nitro__test__HybridChildSpec__ {
+  public final func createChild() -> bridge.Result_std__shared_ptr_HybridChildSpec__ {
     do {
       let __result = try self.__implementation.createChild()
-      let __resultCpp = { () -> bridge.std__shared_ptr_margelo__nitro__test__HybridChildSpec_ in
+      let __resultCpp = { () -> bridge.std__shared_ptr_HybridChildSpec_ in
         let __cxxWrapped = __result.getCxxWrapper()
         return __cxxWrapped.getCxxPart()
       }()
-      return bridge.create_Result_std__shared_ptr_margelo__nitro__test__HybridChildSpec__(__resultCpp)
+      return bridge.create_Result_std__shared_ptr_HybridChildSpec__(__resultCpp)
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
-      return bridge.create_Result_std__shared_ptr_margelo__nitro__test__HybridChildSpec__(__exceptionPtr)
+      return bridge.create_Result_std__shared_ptr_HybridChildSpec__(__exceptionPtr)
     }
   }
   
   @inline(__always)
-  public final func createBase() -> bridge.Result_std__shared_ptr_margelo__nitro__test__HybridBaseSpec__ {
+  public final func createBase() -> bridge.Result_std__shared_ptr_HybridBaseSpec__ {
     do {
       let __result = try self.__implementation.createBase()
-      let __resultCpp = { () -> bridge.std__shared_ptr_margelo__nitro__test__HybridBaseSpec_ in
+      let __resultCpp = { () -> bridge.std__shared_ptr_HybridBaseSpec_ in
         let __cxxWrapped = __result.getCxxWrapper()
         return __cxxWrapped.getCxxPart()
       }()
-      return bridge.create_Result_std__shared_ptr_margelo__nitro__test__HybridBaseSpec__(__resultCpp)
+      return bridge.create_Result_std__shared_ptr_HybridBaseSpec__(__resultCpp)
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
-      return bridge.create_Result_std__shared_ptr_margelo__nitro__test__HybridBaseSpec__(__exceptionPtr)
+      return bridge.create_Result_std__shared_ptr_HybridBaseSpec__(__exceptionPtr)
     }
   }
   
   @inline(__always)
-  public final func createBaseActualChild() -> bridge.Result_std__shared_ptr_margelo__nitro__test__HybridBaseSpec__ {
+  public final func createBaseActualChild() -> bridge.Result_std__shared_ptr_HybridBaseSpec__ {
     do {
       let __result = try self.__implementation.createBaseActualChild()
-      let __resultCpp = { () -> bridge.std__shared_ptr_margelo__nitro__test__HybridBaseSpec_ in
+      let __resultCpp = { () -> bridge.std__shared_ptr_HybridBaseSpec_ in
         let __cxxWrapped = __result.getCxxWrapper()
         return __cxxWrapped.getCxxPart()
       }()
-      return bridge.create_Result_std__shared_ptr_margelo__nitro__test__HybridBaseSpec__(__resultCpp)
+      return bridge.create_Result_std__shared_ptr_HybridBaseSpec__(__resultCpp)
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
-      return bridge.create_Result_std__shared_ptr_margelo__nitro__test__HybridBaseSpec__(__exceptionPtr)
+      return bridge.create_Result_std__shared_ptr_HybridBaseSpec__(__exceptionPtr)
     }
   }
   
   @inline(__always)
-  public final func bounceChild(child: bridge.std__shared_ptr_margelo__nitro__test__HybridChildSpec_) -> bridge.Result_std__shared_ptr_margelo__nitro__test__HybridChildSpec__ {
+  public final func bounceChild(child: bridge.std__shared_ptr_HybridChildSpec_) -> bridge.Result_std__shared_ptr_HybridChildSpec__ {
     do {
       let __result = try self.__implementation.bounceChild(child: { () -> HybridChildSpec in
-        let __unsafePointer = bridge.get_std__shared_ptr_margelo__nitro__test__HybridChildSpec_(child)
+        let __unsafePointer = bridge.get_std__shared_ptr_HybridChildSpec_(child)
         let __instance = HybridChildSpec_cxx.fromUnsafe(__unsafePointer)
         return __instance.getHybridChildSpec()
       }())
-      let __resultCpp = { () -> bridge.std__shared_ptr_margelo__nitro__test__HybridChildSpec_ in
+      let __resultCpp = { () -> bridge.std__shared_ptr_HybridChildSpec_ in
         let __cxxWrapped = __result.getCxxWrapper()
         return __cxxWrapped.getCxxPart()
       }()
-      return bridge.create_Result_std__shared_ptr_margelo__nitro__test__HybridChildSpec__(__resultCpp)
+      return bridge.create_Result_std__shared_ptr_HybridChildSpec__(__resultCpp)
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
-      return bridge.create_Result_std__shared_ptr_margelo__nitro__test__HybridChildSpec__(__exceptionPtr)
+      return bridge.create_Result_std__shared_ptr_HybridChildSpec__(__exceptionPtr)
     }
   }
   
   @inline(__always)
-  public final func bounceBase(base: bridge.std__shared_ptr_margelo__nitro__test__HybridBaseSpec_) -> bridge.Result_std__shared_ptr_margelo__nitro__test__HybridBaseSpec__ {
+  public final func bounceBase(base: bridge.std__shared_ptr_HybridBaseSpec_) -> bridge.Result_std__shared_ptr_HybridBaseSpec__ {
     do {
       let __result = try self.__implementation.bounceBase(base: { () -> HybridBaseSpec in
-        let __unsafePointer = bridge.get_std__shared_ptr_margelo__nitro__test__HybridBaseSpec_(base)
+        let __unsafePointer = bridge.get_std__shared_ptr_HybridBaseSpec_(base)
         let __instance = HybridBaseSpec_cxx.fromUnsafe(__unsafePointer)
         return __instance.getHybridBaseSpec()
       }())
-      let __resultCpp = { () -> bridge.std__shared_ptr_margelo__nitro__test__HybridBaseSpec_ in
+      let __resultCpp = { () -> bridge.std__shared_ptr_HybridBaseSpec_ in
         let __cxxWrapped = __result.getCxxWrapper()
         return __cxxWrapped.getCxxPart()
       }()
-      return bridge.create_Result_std__shared_ptr_margelo__nitro__test__HybridBaseSpec__(__resultCpp)
+      return bridge.create_Result_std__shared_ptr_HybridBaseSpec__(__resultCpp)
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
-      return bridge.create_Result_std__shared_ptr_margelo__nitro__test__HybridBaseSpec__(__exceptionPtr)
+      return bridge.create_Result_std__shared_ptr_HybridBaseSpec__(__exceptionPtr)
     }
   }
   
   @inline(__always)
-  public final func bounceChildBase(child: bridge.std__shared_ptr_margelo__nitro__test__HybridChildSpec_) -> bridge.Result_std__shared_ptr_margelo__nitro__test__HybridBaseSpec__ {
+  public final func bounceChildBase(child: bridge.std__shared_ptr_HybridChildSpec_) -> bridge.Result_std__shared_ptr_HybridBaseSpec__ {
     do {
       let __result = try self.__implementation.bounceChildBase(child: { () -> HybridChildSpec in
-        let __unsafePointer = bridge.get_std__shared_ptr_margelo__nitro__test__HybridChildSpec_(child)
+        let __unsafePointer = bridge.get_std__shared_ptr_HybridChildSpec_(child)
         let __instance = HybridChildSpec_cxx.fromUnsafe(__unsafePointer)
         return __instance.getHybridChildSpec()
       }())
-      let __resultCpp = { () -> bridge.std__shared_ptr_margelo__nitro__test__HybridBaseSpec_ in
+      let __resultCpp = { () -> bridge.std__shared_ptr_HybridBaseSpec_ in
         let __cxxWrapped = __result.getCxxWrapper()
         return __cxxWrapped.getCxxPart()
       }()
-      return bridge.create_Result_std__shared_ptr_margelo__nitro__test__HybridBaseSpec__(__resultCpp)
+      return bridge.create_Result_std__shared_ptr_HybridBaseSpec__(__resultCpp)
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
-      return bridge.create_Result_std__shared_ptr_margelo__nitro__test__HybridBaseSpec__(__exceptionPtr)
+      return bridge.create_Result_std__shared_ptr_HybridBaseSpec__(__exceptionPtr)
     }
   }
   
   @inline(__always)
-  public final func castBase(base: bridge.std__shared_ptr_margelo__nitro__test__HybridBaseSpec_) -> bridge.Result_std__shared_ptr_margelo__nitro__test__HybridChildSpec__ {
+  public final func castBase(base: bridge.std__shared_ptr_HybridBaseSpec_) -> bridge.Result_std__shared_ptr_HybridChildSpec__ {
     do {
       let __result = try self.__implementation.castBase(base: { () -> HybridBaseSpec in
-        let __unsafePointer = bridge.get_std__shared_ptr_margelo__nitro__test__HybridBaseSpec_(base)
+        let __unsafePointer = bridge.get_std__shared_ptr_HybridBaseSpec_(base)
         let __instance = HybridBaseSpec_cxx.fromUnsafe(__unsafePointer)
         return __instance.getHybridBaseSpec()
       }())
-      let __resultCpp = { () -> bridge.std__shared_ptr_margelo__nitro__test__HybridChildSpec_ in
+      let __resultCpp = { () -> bridge.std__shared_ptr_HybridChildSpec_ in
         let __cxxWrapped = __result.getCxxWrapper()
         return __cxxWrapped.getCxxPart()
       }()
-      return bridge.create_Result_std__shared_ptr_margelo__nitro__test__HybridChildSpec__(__resultCpp)
+      return bridge.create_Result_std__shared_ptr_HybridChildSpec__(__resultCpp)
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
-      return bridge.create_Result_std__shared_ptr_margelo__nitro__test__HybridChildSpec__(__exceptionPtr)
+      return bridge.create_Result_std__shared_ptr_HybridChildSpec__(__exceptionPtr)
     }
   }
   
@@ -1748,10 +1748,10 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public final func getIsViewBlue(view: bridge.std__shared_ptr_margelo__nitro__test__HybridTestViewSpec_) -> bridge.Result_bool_ {
+  public final func getIsViewBlue(view: bridge.std__shared_ptr_HybridTestViewSpec_) -> bridge.Result_bool_ {
     do {
       let __result = try self.__implementation.getIsViewBlue(view: { () -> HybridTestViewSpec in
-        let __unsafePointer = bridge.get_std__shared_ptr_margelo__nitro__test__HybridTestViewSpec_(view)
+        let __unsafePointer = bridge.get_std__shared_ptr_HybridTestViewSpec_(view)
         let __instance = HybridTestViewSpec_cxx.fromUnsafe(__unsafePointer)
         return __instance.getHybridTestViewSpec()
       }())

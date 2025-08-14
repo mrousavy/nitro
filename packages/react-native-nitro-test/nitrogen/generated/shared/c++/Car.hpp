@@ -52,31 +52,29 @@ namespace margelo::nitro::test {
 
 namespace margelo::nitro {
 
-  using namespace margelo::nitro::test;
-
   // C++ Car <> JS Car (object)
   template <>
-  struct JSIConverter<Car> final {
-    static inline Car fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+  struct JSIConverter<margelo::nitro::test::Car> final {
+    static inline margelo::nitro::test::Car fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       jsi::Object obj = arg.asObject(runtime);
-      return Car(
+      return margelo::nitro::test::Car(
         JSIConverter<double>::fromJSI(runtime, obj.getProperty(runtime, "year")),
         JSIConverter<std::string>::fromJSI(runtime, obj.getProperty(runtime, "make")),
         JSIConverter<std::string>::fromJSI(runtime, obj.getProperty(runtime, "model")),
         JSIConverter<double>::fromJSI(runtime, obj.getProperty(runtime, "power")),
-        JSIConverter<Powertrain>::fromJSI(runtime, obj.getProperty(runtime, "powertrain")),
-        JSIConverter<std::optional<Person>>::fromJSI(runtime, obj.getProperty(runtime, "driver")),
+        JSIConverter<margelo::nitro::test::Powertrain>::fromJSI(runtime, obj.getProperty(runtime, "powertrain")),
+        JSIConverter<std::optional<margelo::nitro::test::Person>>::fromJSI(runtime, obj.getProperty(runtime, "driver")),
         JSIConverter<std::optional<bool>>::fromJSI(runtime, obj.getProperty(runtime, "isFast"))
       );
     }
-    static inline jsi::Value toJSI(jsi::Runtime& runtime, const Car& arg) {
+    static inline jsi::Value toJSI(jsi::Runtime& runtime, const margelo::nitro::test::Car& arg) {
       jsi::Object obj(runtime);
       obj.setProperty(runtime, "year", JSIConverter<double>::toJSI(runtime, arg.year));
       obj.setProperty(runtime, "make", JSIConverter<std::string>::toJSI(runtime, arg.make));
       obj.setProperty(runtime, "model", JSIConverter<std::string>::toJSI(runtime, arg.model));
       obj.setProperty(runtime, "power", JSIConverter<double>::toJSI(runtime, arg.power));
-      obj.setProperty(runtime, "powertrain", JSIConverter<Powertrain>::toJSI(runtime, arg.powertrain));
-      obj.setProperty(runtime, "driver", JSIConverter<std::optional<Person>>::toJSI(runtime, arg.driver));
+      obj.setProperty(runtime, "powertrain", JSIConverter<margelo::nitro::test::Powertrain>::toJSI(runtime, arg.powertrain));
+      obj.setProperty(runtime, "driver", JSIConverter<std::optional<margelo::nitro::test::Person>>::toJSI(runtime, arg.driver));
       obj.setProperty(runtime, "isFast", JSIConverter<std::optional<bool>>::toJSI(runtime, arg.isFast));
       return obj;
     }
@@ -89,8 +87,8 @@ namespace margelo::nitro {
       if (!JSIConverter<std::string>::canConvert(runtime, obj.getProperty(runtime, "make"))) return false;
       if (!JSIConverter<std::string>::canConvert(runtime, obj.getProperty(runtime, "model"))) return false;
       if (!JSIConverter<double>::canConvert(runtime, obj.getProperty(runtime, "power"))) return false;
-      if (!JSIConverter<Powertrain>::canConvert(runtime, obj.getProperty(runtime, "powertrain"))) return false;
-      if (!JSIConverter<std::optional<Person>>::canConvert(runtime, obj.getProperty(runtime, "driver"))) return false;
+      if (!JSIConverter<margelo::nitro::test::Powertrain>::canConvert(runtime, obj.getProperty(runtime, "powertrain"))) return false;
+      if (!JSIConverter<std::optional<margelo::nitro::test::Person>>::canConvert(runtime, obj.getProperty(runtime, "driver"))) return false;
       if (!JSIConverter<std::optional<bool>>::canConvert(runtime, obj.getProperty(runtime, "isFast"))) return false;
       return true;
     }

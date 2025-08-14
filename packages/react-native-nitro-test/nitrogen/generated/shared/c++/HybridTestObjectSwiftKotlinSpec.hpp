@@ -94,9 +94,9 @@ namespace margelo::nitro::test {
 
     public:
       // Properties
-      virtual std::shared_ptr<margelo::nitro::test::HybridTestObjectSwiftKotlinSpec> getThisObject() = 0;
-      virtual std::optional<std::shared_ptr<margelo::nitro::test::HybridTestObjectSwiftKotlinSpec>> getOptionalHybrid() = 0;
-      virtual void setOptionalHybrid(const std::optional<std::shared_ptr<margelo::nitro::test::HybridTestObjectSwiftKotlinSpec>>& optionalHybrid) = 0;
+      virtual std::shared_ptr<HybridTestObjectSwiftKotlinSpec> getThisObject() = 0;
+      virtual std::optional<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>> getOptionalHybrid() = 0;
+      virtual void setOptionalHybrid(const std::optional<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>>& optionalHybrid) = 0;
       virtual double getNumberValue() = 0;
       virtual void setNumberValue(double numberValue) = 0;
       virtual bool getBoolValue() = 0;
@@ -124,8 +124,8 @@ namespace margelo::nitro::test {
 
     public:
       // Methods
-      virtual std::shared_ptr<margelo::nitro::test::HybridTestObjectSwiftKotlinSpec> newTestObject() = 0;
-      virtual std::variant<Person, std::shared_ptr<margelo::nitro::test::HybridTestObjectSwiftKotlinSpec>> getVariantHybrid(const std::variant<Person, std::shared_ptr<margelo::nitro::test::HybridTestObjectSwiftKotlinSpec>>& variant) = 0;
+      virtual std::shared_ptr<HybridTestObjectSwiftKotlinSpec> newTestObject() = 0;
+      virtual std::variant<Person, std::shared_ptr<HybridTestObjectSwiftKotlinSpec>> getVariantHybrid(const std::variant<Person, std::shared_ptr<HybridTestObjectSwiftKotlinSpec>>& variant) = 0;
       virtual void simpleFunc() = 0;
       virtual double addNumbers(double a, double b) = 0;
       virtual std::string addStrings(const std::string& a, const std::string& b) = 0;
@@ -181,15 +181,15 @@ namespace margelo::nitro::test {
       virtual std::variant<bool, WeirdNumbersEnum> getVariantWeirdNumbersEnum(const std::variant<bool, WeirdNumbersEnum>& variant) = 0;
       virtual std::variant<Car, Person> getVariantObjects(const std::variant<Car, Person>& variant) = 0;
       virtual std::variant<std::string, Car> passNamedVariant(const std::variant<std::string, Car>& variant) = 0;
-      virtual std::shared_ptr<margelo::nitro::test::HybridChildSpec> createChild() = 0;
-      virtual std::shared_ptr<margelo::nitro::test::HybridBaseSpec> createBase() = 0;
-      virtual std::shared_ptr<margelo::nitro::test::HybridBaseSpec> createBaseActualChild() = 0;
-      virtual std::shared_ptr<margelo::nitro::test::HybridChildSpec> bounceChild(const std::shared_ptr<margelo::nitro::test::HybridChildSpec>& child) = 0;
-      virtual std::shared_ptr<margelo::nitro::test::HybridBaseSpec> bounceBase(const std::shared_ptr<margelo::nitro::test::HybridBaseSpec>& base) = 0;
-      virtual std::shared_ptr<margelo::nitro::test::HybridBaseSpec> bounceChildBase(const std::shared_ptr<margelo::nitro::test::HybridChildSpec>& child) = 0;
-      virtual std::shared_ptr<margelo::nitro::test::HybridChildSpec> castBase(const std::shared_ptr<margelo::nitro::test::HybridBaseSpec>& base) = 0;
+      virtual std::shared_ptr<HybridChildSpec> createChild() = 0;
+      virtual std::shared_ptr<HybridBaseSpec> createBase() = 0;
+      virtual std::shared_ptr<HybridBaseSpec> createBaseActualChild() = 0;
+      virtual std::shared_ptr<HybridChildSpec> bounceChild(const std::shared_ptr<HybridChildSpec>& child) = 0;
+      virtual std::shared_ptr<HybridBaseSpec> bounceBase(const std::shared_ptr<HybridBaseSpec>& base) = 0;
+      virtual std::shared_ptr<HybridBaseSpec> bounceChildBase(const std::shared_ptr<HybridChildSpec>& child) = 0;
+      virtual std::shared_ptr<HybridChildSpec> castBase(const std::shared_ptr<HybridBaseSpec>& base) = 0;
       virtual double callbackSync(const std::function<double()>& callback) = 0;
-      virtual bool getIsViewBlue(const std::shared_ptr<margelo::nitro::test::HybridTestViewSpec>& view) = 0;
+      virtual bool getIsViewBlue(const std::shared_ptr<HybridTestViewSpec>& view) = 0;
 
     protected:
       // Hybrid Setup

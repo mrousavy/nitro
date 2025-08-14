@@ -16,12 +16,12 @@
 
 namespace margelo::nitro::test::bridge::swift {
 
-  // pragma MARK: std::shared_ptr<margelo::nitro::test::HybridTestObjectSwiftKotlinSpec>
-  std::shared_ptr<margelo::nitro::test::HybridTestObjectSwiftKotlinSpec> create_std__shared_ptr_margelo__nitro__test__HybridTestObjectSwiftKotlinSpec_(void* _Nonnull swiftUnsafePointer) {
+  // pragma MARK: std::shared_ptr<HybridTestObjectSwiftKotlinSpec>
+  std::shared_ptr<HybridTestObjectSwiftKotlinSpec> create_std__shared_ptr_HybridTestObjectSwiftKotlinSpec_(void* _Nonnull swiftUnsafePointer) {
     NitroTest::HybridTestObjectSwiftKotlinSpec_cxx swiftPart = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::fromUnsafe(swiftUnsafePointer);
     return std::make_shared<margelo::nitro::test::HybridTestObjectSwiftKotlinSpecSwift>(swiftPart);
   }
-  void* _Nonnull get_std__shared_ptr_margelo__nitro__test__HybridTestObjectSwiftKotlinSpec_(std__shared_ptr_margelo__nitro__test__HybridTestObjectSwiftKotlinSpec_ cppType) {
+  void* _Nonnull get_std__shared_ptr_HybridTestObjectSwiftKotlinSpec_(std__shared_ptr_HybridTestObjectSwiftKotlinSpec_ cppType) {
     std::shared_ptr<margelo::nitro::test::HybridTestObjectSwiftKotlinSpecSwift> swiftWrapper = std::dynamic_pointer_cast<margelo::nitro::test::HybridTestObjectSwiftKotlinSpecSwift>(cppType);
     #ifdef NITRO_DEBUG
     if (swiftWrapper == nullptr) [[unlikely]] {
@@ -156,12 +156,12 @@ namespace margelo::nitro::test::bridge::swift {
     };
   }
   
-  // pragma MARK: std::shared_ptr<margelo::nitro::test::HybridBaseSpec>
-  std::shared_ptr<margelo::nitro::test::HybridBaseSpec> create_std__shared_ptr_margelo__nitro__test__HybridBaseSpec_(void* _Nonnull swiftUnsafePointer) {
+  // pragma MARK: std::shared_ptr<HybridBaseSpec>
+  std::shared_ptr<HybridBaseSpec> create_std__shared_ptr_HybridBaseSpec_(void* _Nonnull swiftUnsafePointer) {
     NitroTest::HybridBaseSpec_cxx swiftPart = NitroTest::HybridBaseSpec_cxx::fromUnsafe(swiftUnsafePointer);
     return std::make_shared<margelo::nitro::test::HybridBaseSpecSwift>(swiftPart);
   }
-  void* _Nonnull get_std__shared_ptr_margelo__nitro__test__HybridBaseSpec_(std__shared_ptr_margelo__nitro__test__HybridBaseSpec_ cppType) {
+  void* _Nonnull get_std__shared_ptr_HybridBaseSpec_(std__shared_ptr_HybridBaseSpec_ cppType) {
     std::shared_ptr<margelo::nitro::test::HybridBaseSpecSwift> swiftWrapper = std::dynamic_pointer_cast<margelo::nitro::test::HybridBaseSpecSwift>(cppType);
     #ifdef NITRO_DEBUG
     if (swiftWrapper == nullptr) [[unlikely]] {
@@ -172,12 +172,12 @@ namespace margelo::nitro::test::bridge::swift {
     return swiftPart.toUnsafe();
   }
   
-  // pragma MARK: std::shared_ptr<margelo::nitro::test::HybridChildSpec>
-  std::shared_ptr<margelo::nitro::test::HybridChildSpec> create_std__shared_ptr_margelo__nitro__test__HybridChildSpec_(void* _Nonnull swiftUnsafePointer) {
+  // pragma MARK: std::shared_ptr<HybridChildSpec>
+  std::shared_ptr<HybridChildSpec> create_std__shared_ptr_HybridChildSpec_(void* _Nonnull swiftUnsafePointer) {
     NitroTest::HybridChildSpec_cxx swiftPart = NitroTest::HybridChildSpec_cxx::fromUnsafe(swiftUnsafePointer);
     return std::make_shared<margelo::nitro::test::HybridChildSpecSwift>(swiftPart);
   }
-  void* _Nonnull get_std__shared_ptr_margelo__nitro__test__HybridChildSpec_(std__shared_ptr_margelo__nitro__test__HybridChildSpec_ cppType) {
+  void* _Nonnull get_std__shared_ptr_HybridChildSpec_(std__shared_ptr_HybridChildSpec_ cppType) {
     std::shared_ptr<margelo::nitro::test::HybridChildSpecSwift> swiftWrapper = std::dynamic_pointer_cast<margelo::nitro::test::HybridChildSpecSwift>(cppType);
     #ifdef NITRO_DEBUG
     if (swiftWrapper == nullptr) [[unlikely]] {
@@ -197,12 +197,12 @@ namespace margelo::nitro::test::bridge::swift {
     };
   }
   
-  // pragma MARK: std::shared_ptr<margelo::nitro::test::HybridTestViewSpec>
-  std::shared_ptr<margelo::nitro::test::HybridTestViewSpec> create_std__shared_ptr_margelo__nitro__test__HybridTestViewSpec_(void* _Nonnull swiftUnsafePointer) {
+  // pragma MARK: std::shared_ptr<HybridTestViewSpec>
+  std::shared_ptr<HybridTestViewSpec> create_std__shared_ptr_HybridTestViewSpec_(void* _Nonnull swiftUnsafePointer) {
     NitroTest::HybridTestViewSpec_cxx swiftPart = NitroTest::HybridTestViewSpec_cxx::fromUnsafe(swiftUnsafePointer);
     return std::make_shared<margelo::nitro::test::HybridTestViewSpecSwift>(swiftPart);
   }
-  void* _Nonnull get_std__shared_ptr_margelo__nitro__test__HybridTestViewSpec_(std__shared_ptr_margelo__nitro__test__HybridTestViewSpec_ cppType) {
+  void* _Nonnull get_std__shared_ptr_HybridTestViewSpec_(std__shared_ptr_HybridTestViewSpec_ cppType) {
     std::shared_ptr<margelo::nitro::test::HybridTestViewSpecSwift> swiftWrapper = std::dynamic_pointer_cast<margelo::nitro::test::HybridTestViewSpecSwift>(cppType);
     #ifdef NITRO_DEBUG
     if (swiftWrapper == nullptr) [[unlikely]] {
