@@ -4,6 +4,7 @@ import {
   type Sync,
 } from 'react-native-nitro-modules'
 import type { TestView } from './TestView.nitro'
+import type { SomeExternalObject } from 'react-native-nitro-test-external'
 
 // Tuples become `std::tuple<...>` in C++.
 // In contrast to arrays, they are length-checked, and can have different types inside them.
@@ -201,6 +202,9 @@ interface SharedTestObjectProps {
 
   // Views
   getIsViewBlue(view: TestView): boolean
+
+  // External HybridObjects
+  bounceExternalHybrid(externalObject: SomeExternalObject): SomeExternalObject
 }
 
 // This is a C++-based `HybridObject`.

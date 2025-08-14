@@ -16,6 +16,7 @@ import {
   NitroModules,
 } from 'react-native-nitro-modules'
 import { InteractionManager } from 'react-native'
+import { HybridSomeExternalObject } from 'react-native-nitro-test-external'
 
 type TestResult =
   | {
@@ -1482,6 +1483,13 @@ export function getTests(
       })
         .didNotThrow()
         .equals(55)
+    ),
+    createTest('bounceExternalHybrid(...) works', () =>
+      it(() => {
+        return testObject.bounceExternalHybrid(HybridSomeExternalObject)
+      })
+        .didNotThrow()
+        .equals(HybridSomeExternalObject)
     ),
     createTest('new T() works', () =>
       it(() => {

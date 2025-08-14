@@ -162,6 +162,9 @@ public:
   bool getIsViewBlue(const std::shared_ptr<HybridTestViewSpec>& view) override;
   double callbackSync(const std::function<double()>& callback) override;
 
+  std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>
+  bounceExternalHybrid(const std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>& externalObject) override;
+
   // Raw JSI functions
   jsi::Value rawJsiFunc(jsi::Runtime& runtime, const jsi::Value& thisValue, const jsi::Value* args, size_t count);
 

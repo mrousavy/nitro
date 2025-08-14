@@ -13,6 +13,7 @@
 #include "HybridTestObjectSwiftKotlinSpecSwift.hpp"
 #include "HybridTestViewSpecSwift.hpp"
 #include "NitroTest-Swift-Cxx-Umbrella.hpp"
+#include <NitroTestExternal/NitroTestExternal-Swift-Cxx-Bridge.hpp>
 
 namespace margelo::nitro::test::bridge::swift {
 
@@ -211,6 +212,16 @@ namespace margelo::nitro::test::bridge::swift {
     #endif
     NitroTest::HybridTestViewSpec_cxx& swiftPart = swiftWrapper->getSwiftPart();
     return swiftPart.toUnsafe();
+  }
+  
+  // pragma MARK: std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>
+  std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec> create_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_(void* _Nonnull swiftUnsafePointer) {
+    // Implemented in NitroTestExternal
+    return margelo::nitro::test::external::bridge::swift::create_std__shared_ptr_HybridSomeExternalObjectSpec_(swiftUnsafePointer);
+  }
+  void* _Nonnull get_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_(std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_ cppType) {
+    // Implemented in NitroTestExternal
+    return margelo::nitro::test::external::bridge::swift::get_std__shared_ptr_HybridSomeExternalObjectSpec_(cppType);
   }
 
 } // namespace margelo::nitro::test::bridge::swift

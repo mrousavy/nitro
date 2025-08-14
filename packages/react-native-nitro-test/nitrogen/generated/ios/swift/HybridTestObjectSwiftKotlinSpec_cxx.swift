@@ -7,6 +7,7 @@
 
 import Foundation
 import NitroModules
+import NitroTestExternal
 
 /**
  * A class implementation that bridges HybridTestObjectSwiftKotlinSpec over to C++.
@@ -1760,6 +1761,25 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
       return bridge.create_Result_bool_(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
+  public final func bounceExternalHybrid(externalObject: bridge.std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_) -> bridge.Result_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec__ {
+    do {
+      let __result = try self.__implementation.bounceExternalHybrid(externalObject: { () -> HybridSomeExternalObjectSpec in
+        let __unsafePointer = bridge.get_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_(externalObject)
+        let __instance = HybridSomeExternalObjectSpec_cxx.fromUnsafe(__unsafePointer)
+        return __instance.getHybridSomeExternalObjectSpec()
+      }())
+      let __resultCpp = { () -> bridge.std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_ in
+        let __cxxWrapped = __result.getCxxWrapper()
+        return __cxxWrapped.getCxxPart()
+      }()
+      return bridge.create_Result_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec__(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec__(__exceptionPtr)
     }
   }
 }

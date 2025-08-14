@@ -11,6 +11,9 @@ CPP_DIRS=(
   "packages/react-native-nitro-test/android/src/main/cpp"
   "packages/react-native-nitro-test/cpp"
   "packages/react-native-nitro-test/ios"
+  # react-native-nitro-test-external
+  "packages/react-native-nitro-test-external/android/src/main/cpp"
+  "packages/react-native-nitro-test-external/ios"
 )
 
 if which clang-format >/dev/null; then

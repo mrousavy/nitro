@@ -8,6 +8,7 @@ import com.margelo.nitro.core.AnyMap
 import com.margelo.nitro.core.AnyValue
 import com.margelo.nitro.core.ArrayBuffer
 import com.margelo.nitro.core.Promise
+import com.margelo.nitro.test.external.HybridSomeExternalObjectSpec
 import kotlinx.coroutines.delay
 import java.time.Instant
 
@@ -387,6 +388,10 @@ class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
     override fun callbackSync(callback: () -> Double): Double {
         val value = callback()
         return value
+    }
+
+    override fun bounceExternalHybrid(externalObject: HybridSomeExternalObjectSpec): HybridSomeExternalObjectSpec {
+        return externalObject
     }
 
     override fun dispose() {
