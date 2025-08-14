@@ -66,6 +66,9 @@ jobs:
       - name: Install Pods
         working-directory: example/ios
         run: pod install
+
+      - name: Select Xcode 16.4
+        run: sudo xcode-select -s "/Applications/Xcode_16.4.app/Contents/Developer"
       - name: Build App
         working-directory: example/ios
         run: "set -o pipefail && xcodebuild \
@@ -111,6 +114,9 @@ jobs:
           key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock', '**/Gemfile.lock') }}
           restore-keys: |
             ${{ runner.os }}-pods-
+
+      - name: Select Xcode 16.4
+        run: sudo xcode-select -s "/Applications/Xcode_16.4.app/Contents/Developer"
       - name: Install Pods
         working-directory: example/ios
         run: pod install
