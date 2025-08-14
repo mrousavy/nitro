@@ -1491,6 +1491,14 @@ export function getTests(
         .didNotThrow()
         .equals(HybridSomeExternalObject)
     ),
+    createTest('createInternalObject(...) returns a different subclass', () =>
+      it(() => {
+        const object = testObject.createInternalObject()
+        return object.getValue()
+      })
+        .didNotThrow()
+        .equals('This is overridden!')
+    ),
     createTest('new T() works', () =>
       it(() => {
         const HybridTestObjectCpp =
