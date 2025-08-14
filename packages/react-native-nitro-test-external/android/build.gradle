@@ -150,6 +150,8 @@ dependencies {
 tasks.register('prepareHeaders', Copy) {
   from fileTree('./src/main/cpp').filter { it.isFile() }
   from fileTree('../cpp/').filter { it.isFile() }
+  from fileTree('../nitrogen/generated/android/c++/').filter { it.isFile() }
+  from fileTree('../nitrogen/generated/shared/c++/').filter { it.isFile() }
   include "*.hpp"
   into "${project.buildDir}/headers/nitrotestexternal/NitroTestExternal/"
   includeEmptyDirs = false
