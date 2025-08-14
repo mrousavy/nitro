@@ -4,6 +4,9 @@ cmake_minimum_required(VERSION 3.9.0)
 set (CMAKE_VERBOSE_MAKEFILE ON)
 set (CMAKE_CXX_STANDARD 20)
 
+# Enable Raw Props parsing in react-native (for Nitro Views)
+add_compile_options(-DRN_SERIALIZABLE_STATE=1)
+
 # Find all C++ files (shared and platform specifics)
 file(GLOB_RECURSE shared_files RELATIVE ${CMAKE_SOURCE_DIR}
      "../cpp/**.cpp"

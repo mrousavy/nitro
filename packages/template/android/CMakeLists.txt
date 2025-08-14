@@ -5,6 +5,9 @@ set (PACKAGE_NAME $$androidCxxLibName$$)
 set (CMAKE_VERBOSE_MAKEFILE ON)
 set (CMAKE_CXX_STANDARD 20)
 
+# Enable Raw Props parsing in react-native (for Nitro Views)
+add_compile_options(-DRN_SERIALIZABLE_STATE=1)
+
 # Define C++ library and add all sources
 add_library(${PACKAGE_NAME} SHARED
         src/main/cpp/cpp-adapter.cpp
