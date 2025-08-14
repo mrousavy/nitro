@@ -76,12 +76,13 @@ export class HybridObjectType implements Type {
   ): string {
     const name = getHybridObjectName(this.hybridObjectName)
     const mode = options.mode ?? 'strong'
-    const fullyQualified = options.fullyQualified ?? false
+    const fullyQualified =
+      options.fullyQualified ?? this.sourceConfig.isExternalConfig
 
     switch (language) {
       case 'c++': {
         const ptrType = mode === 'strong' ? 'std::shared_ptr' : 'std::weak_ptr'
-        if (fullyQualified || this.sourceConfig.isExternalConfig) {
+        if (fullyQualified) {
           const fullName = this.sourceConfig.getCxxNamespace(
             'c++',
             name.HybridTSpec
@@ -95,7 +96,7 @@ export class HybridObjectType implements Type {
         return `(any ${name.HybridTSpec})`
       }
       case 'kotlin': {
-        if (fullyQualified || this.sourceConfig.isExternalConfig) {
+        if (fullyQualified) {
           // full qualified name: "com.margelo.nitro.image.Image"
           return this.sourceConfig.getAndroidPackage(
             'java/kotlin',
