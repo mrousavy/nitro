@@ -89,8 +89,6 @@ namespace ${cxxNamespace} {
 
 namespace margelo::nitro {
 
-  using namespace ${cxxNamespace};
-
   // C++ ${typename} <> JS ${typename} (enum)
   template <>
   struct JSIConverter<${fullyQualifiedTypename}> final {

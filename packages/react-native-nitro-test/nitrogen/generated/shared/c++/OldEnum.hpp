@@ -33,8 +33,6 @@ namespace margelo::nitro::test {
 
 namespace margelo::nitro {
 
-  using namespace margelo::nitro::test;
-
   // C++ OldEnum <> JS OldEnum (enum)
   template <>
   struct JSIConverter<margelo::nitro::test::OldEnum> final {

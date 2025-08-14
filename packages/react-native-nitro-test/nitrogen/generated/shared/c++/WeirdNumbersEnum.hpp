@@ -33,8 +33,6 @@ namespace margelo::nitro::test {
 
 namespace margelo::nitro {
 
-  using namespace margelo::nitro::test;
-
   // C++ WeirdNumbersEnum <> JS WeirdNumbersEnum (enum)
   template <>
   struct JSIConverter<margelo::nitro::test::WeirdNumbersEnum> final {
