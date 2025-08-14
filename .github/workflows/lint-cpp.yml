@@ -34,7 +34,6 @@ jobs:
         - 'packages/react-native-nitro-test/cpp'
         - 'packages/react-native-nitro-test/ios'
         - 'packages/react-native-nitro-test-external/android/src/main/cpp'
-        - 'packages/react-native-nitro-test-external/cpp'
         - 'packages/react-native-nitro-test-external/ios'
     steps:
       - uses: actions/checkout@v4
