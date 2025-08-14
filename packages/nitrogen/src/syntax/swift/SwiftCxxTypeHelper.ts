@@ -107,6 +107,7 @@ function createCxxHybridObjectSwiftHelper(
   let getImplementation: string
   let createImplementation: string
   if (!type.sourceConfig.isExternalConfig) {
+    // We own the implementation - we call into Swift to convert it internally
     createImplementation = `
 ${swiftPartType} swiftPart = ${swiftPartType}::fromUnsafe(swiftUnsafePointer);
 return std::make_shared<${swiftWrappingType}>(swiftPart);
@@ -122,11 +123,18 @@ ${swiftPartType}& swiftPart = swiftWrapper->getSwiftPart();
 return swiftPart.toUnsafe();
 `.trim()
   } else {
+    // It's an external type - we have to delegate the call to the external library's functions
     const cxxNamespace = type.sourceConfig.getSwiftBridgeNamespace('c++')
     const internalType = type.getCode('c++', { fullyQualified: false })
     const internalName = escapeCppName(internalType)
-    createImplementation = `return ${cxxNamespace}::create_${internalName}(swiftUnsafePointer);`
-    getImplementation = `return ${cxxNamespace}::get_${internalName}(cppType);`
+    createImplementation = `
+// Implemented in ${type.sourceConfig.getIosModuleName()}
+return ${cxxNamespace}::create_${internalName}(swiftUnsafePointer);
+`.trim()
+    getImplementation = `
+// Implemented in ${type.sourceConfig.getIosModuleName()}
+return ${cxxNamespace}::get_${internalName}(cppType);
+`.trim()
   }
 
   return {
