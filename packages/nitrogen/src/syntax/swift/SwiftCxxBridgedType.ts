@@ -636,6 +636,7 @@ case ${i}:
         if (this.isBridgingToDirectCppTarget) {
           return swiftParameterName
         }
+        // TODO: Remove the int casting once https://github.com/swiftlang/swift/issues/75330 is fixed.
         switch (language) {
           case 'c++':
             return `static_cast<${this.type.getCode('c++')}>(${swiftParameterName})`

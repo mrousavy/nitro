@@ -225,6 +225,8 @@ function createCxxOptionalSwiftHelper(type: OptionalType): SwiftCxxHelper {
   const actualType = type.getCode('c++')
   const wrappedBridge = new SwiftCxxBridgedType(type.wrappingType, true)
   const name = escapeCppName(actualType)
+  // TODO: Remove has_ and get_ wrappers once https://github.com/swiftlang/swift/issues/83801 is fixed.
+  // TODO: Remove create_ wrapper once https://github.com/swiftlang/swift/issues/75834 is fixed.
   return {
     cxxType: actualType,
     funcName: `create_${name}`,
@@ -401,6 +403,7 @@ return ${returnBridge.parseFromSwiftToCpp('__result', 'c++')};
     `.trim()
   }
 
+  // TODO: Remove our std::function wrapper once https://github.com/swiftlang/swift/issues/75844 is fixed.
   return {
     cxxType: actualType,
     funcName: `create_${name}`,
@@ -573,6 +576,7 @@ inline ${actualType} create_${name}(${typesSignature}) {
 function createCxxResultWrapperSwiftHelper(
   type: ResultWrappingType
 ): SwiftCxxHelper {
+  // TODO: Remove the ResultWrappingType once https://github.com/swiftlang/swift/issues/75290 is fixed.
   const actualType = type.getCode('c++')
   const name = escapeCppName(type.getCode('c++'))
   const funcName = `create_${name}`
