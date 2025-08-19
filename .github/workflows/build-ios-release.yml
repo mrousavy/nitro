@@ -58,7 +58,9 @@ jobs:
             CODE_SIGNING_ALLOWED=NO
 
       - name: Package .app for Simulator
-        run: zip -r NitroExample-Release-Simulator.zip example/ios/build/Build/Products/Release-iphonesimulator/NitroExample.app
+        run: |
+          cd example/ios/build/Build/Products/Release-iphonesimulator
+          zip -r ../../../../../../NitroExample-Release-Simulator.zip NitroExample.app
 
       - name: Upload artifact (.app.zip)
         uses: actions/upload-artifact@v4
