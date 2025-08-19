@@ -99,7 +99,7 @@ public extension Car {
     @inline(__always)
     get {
       return { () -> Person? in
-        if bridge.has_std__optional_Person_(self.__driver) {
+        if bridge.has_value_std__optional_Person_(self.__driver) {
           let __unwrapped = bridge.get_std__optional_Person_(self.__driver)
           return __unwrapped
         } else {
@@ -140,7 +140,7 @@ public extension Car {
     @inline(__always)
     get {
       return { () -> String? in
-        if bridge.has_std__optional_std__string_(self.__favouriteTrack) {
+        if bridge.has_value_std__optional_std__string_(self.__favouriteTrack) {
           let __unwrapped = bridge.get_std__optional_std__string_(self.__favouriteTrack)
           return String(__unwrapped)
         } else {

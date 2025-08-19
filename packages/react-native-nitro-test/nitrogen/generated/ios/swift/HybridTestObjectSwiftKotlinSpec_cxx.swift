@@ -134,7 +134,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
     @inline(__always)
     set {
       self.__implementation.optionalHybrid = { () -> (any HybridTestObjectSwiftKotlinSpec)? in
-        if bridge.has_std__optional_std__shared_ptr_HybridTestObjectSwiftKotlinSpec__(newValue) {
+        if bridge.has_value_std__optional_std__shared_ptr_HybridTestObjectSwiftKotlinSpec__(newValue) {
           let __unwrapped = bridge.get_std__optional_std__shared_ptr_HybridTestObjectSwiftKotlinSpec__(newValue)
           return { () -> HybridTestObjectSwiftKotlinSpec in
             let __unsafePointer = bridge.get_std__shared_ptr_HybridTestObjectSwiftKotlinSpec_(__unwrapped)
@@ -206,7 +206,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
     @inline(__always)
     set {
       self.__implementation.stringOrUndefined = { () -> String? in
-        if bridge.has_std__optional_std__string_(newValue) {
+        if bridge.has_value_std__optional_std__string_(newValue) {
           let __unwrapped = bridge.get_std__optional_std__string_(newValue)
           return String(__unwrapped)
         } else {
@@ -230,7 +230,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
     @inline(__always)
     set {
       self.__implementation.stringOrNull = { () -> String? in
-        if bridge.has_std__optional_std__string_(newValue) {
+        if bridge.has_value_std__optional_std__string_(newValue) {
           let __unwrapped = bridge.get_std__optional_std__string_(newValue)
           return String(__unwrapped)
         } else {
@@ -254,7 +254,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
     @inline(__always)
     set {
       self.__implementation.optionalString = { () -> String? in
-        if bridge.has_std__optional_std__string_(newValue) {
+        if bridge.has_value_std__optional_std__string_(newValue) {
           let __unwrapped = bridge.get_std__optional_std__string_(newValue)
           return String(__unwrapped)
         } else {
@@ -284,7 +284,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
     @inline(__always)
     set {
       self.__implementation.optionalArray = { () -> [String]? in
-        if bridge.has_std__optional_std__vector_std__string__(newValue) {
+        if bridge.has_value_std__optional_std__vector_std__string__(newValue) {
           let __unwrapped = bridge.get_std__optional_std__vector_std__string__(newValue)
           return __unwrapped.map({ __item in String(__item) })
         } else {
@@ -345,7 +345,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
     @inline(__always)
     set {
       self.__implementation.optionalCallback = { () -> ((_ value: Double) -> Void)? in
-        if bridge.has_std__optional_std__function_void_double____value______(newValue) {
+        if bridge.has_value_std__optional_std__function_void_double____value______(newValue) {
           let __unwrapped = bridge.get_std__optional_std__function_void_double____value______(newValue)
           return { () -> (Double) -> Void in
             let __wrappedFunction = bridge.wrap_Func_void_double(__unwrapped)
@@ -735,7 +735,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   public final func tryOptionalParams(num: Double, boo: Bool, str: bridge.std__optional_std__string_) -> bridge.Result_std__string_ {
     do {
       let __result = try self.__implementation.tryOptionalParams(num: num, boo: boo, str: { () -> String? in
-        if bridge.has_std__optional_std__string_(str) {
+        if bridge.has_value_std__optional_std__string_(str) {
           let __unwrapped = bridge.get_std__optional_std__string_(str)
           return String(__unwrapped)
         } else {

@@ -459,7 +459,7 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
             }
             return `
 { () -> ${optional.getCode('swift')} in
-  if bridge.has_${bridge.specializationName}(${cppParameterName}) {
+  if bridge.has_value_${bridge.specializationName}(${cppParameterName}) {
     let __unwrapped = bridge.get_${bridge.specializationName}(${cppParameterName})
     return ${indent(wrapping.parseFromCppToSwift('__unwrapped', language), '    ')}
   } else {

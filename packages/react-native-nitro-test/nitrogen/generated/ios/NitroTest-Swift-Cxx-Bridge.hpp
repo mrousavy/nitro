@@ -106,7 +106,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline bool has_value_std__optional_std__shared_ptr_HybridTestObjectSwiftKotlinSpec__(const std::optional<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>>& optional) {
     return optional.has_value();
   }
-  inline const std::shared_ptr<HybridTestObjectSwiftKotlinSpec>& get_std__optional_std__shared_ptr_HybridTestObjectSwiftKotlinSpec__(const std::optional<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>>& optional) {
+  inline std::shared_ptr<HybridTestObjectSwiftKotlinSpec> get_std__optional_std__shared_ptr_HybridTestObjectSwiftKotlinSpec__(const std::optional<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>>& optional) {
     return *optional;
   }
   
@@ -150,7 +150,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline bool has_value_std__optional_std__string_(const std::optional<std::string>& optional) {
     return optional.has_value();
   }
-  inline const std::string& get_std__optional_std__string_(const std::optional<std::string>& optional) {
+  inline std::string get_std__optional_std__string_(const std::optional<std::string>& optional) {
     return *optional;
   }
   
@@ -176,7 +176,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline bool has_value_std__optional_std__vector_std__string__(const std::optional<std::vector<std::string>>& optional) {
     return optional.has_value();
   }
-  inline const std::vector<std::string>& get_std__optional_std__vector_std__string__(const std::optional<std::vector<std::string>>& optional) {
+  inline std::vector<std::string> get_std__optional_std__vector_std__string__(const std::optional<std::vector<std::string>>& optional) {
     return *optional;
   }
   
@@ -243,7 +243,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline bool has_value_std__optional_std__function_void_double____value______(const std::optional<std::function<void(double /* value */)>>& optional) {
     return optional.has_value();
   }
-  inline const std::function<void(double /* value */)>& get_std__optional_std__function_void_double____value______(const std::optional<std::function<void(double /* value */)>>& optional) {
+  inline std::function<void(double /* value */)> get_std__optional_std__function_void_double____value______(const std::optional<std::function<void(double /* value */)>>& optional) {
     return *optional;
   }
   
@@ -538,7 +538,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline bool has_value_std__optional_Person_(const std::optional<Person>& optional) {
     return optional.has_value();
   }
-  inline const Person& get_std__optional_Person_(const std::optional<Person>& optional) {
+  inline Person get_std__optional_Person_(const std::optional<Person>& optional) {
     return *optional;
   }
   
