@@ -33,6 +33,7 @@ public:
   // Hybrid Object Registry
   std::shared_ptr<HybridObject> createHybridObject(const std::string& name);
   bool hasHybridObject(const std::string& name);
+  jsi::Value isHybridObject(jsi::Runtime& runtime, const jsi::Value& thisValue, const jsi::Value* args, size_t size);
   std::vector<std::string> getAllHybridObjectNames();
 
   // Helpers

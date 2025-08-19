@@ -18,6 +18,7 @@ void HybridNitroModulesProxy::loadHybridMethods() {
   registerHybrids(this, [](Prototype& prototype) {
     prototype.registerHybridMethod("createHybridObject", &HybridNitroModulesProxy::createHybridObject);
     prototype.registerHybridMethod("hasHybridObject", &HybridNitroModulesProxy::hasHybridObject);
+    prototype.registerRawHybridMethod("isHybridObject", 1, &HybridNitroModulesProxy::isHybridObject);
     prototype.registerHybridMethod("getAllHybridObjectNames", &HybridNitroModulesProxy::getAllHybridObjectNames);
 
     prototype.registerHybridMethod("box", &HybridNitroModulesProxy::box);
@@ -37,6 +38,20 @@ std::shared_ptr<HybridObject> HybridNitroModulesProxy::createHybridObject(const 
 
 bool HybridNitroModulesProxy::hasHybridObject(const std::string& name) {
   return HybridObjectRegistry::hasHybridObject(name);
+}
+
+jsi::Value HybridNitroModulesProxy::isHybridObject(jsi::Runtime& runtime, const jsi::Value&, const jsi::Value* args, size_t size) {
+  if (size != 1 || !args[0].isObject()) {
+    return false;
+  }
+  jsi::Object object = args[0].getObject(runtime);
+  if (!object.hasNativeState(runtime)) {
+    return false;
+  }
+  std::shared_ptr<jsi::NativeState> nativeState = object.getNativeState(runtime);
+  std::shared_ptr<HybridObject> maybeHybridObject = std::dynamic_pointer_cast<HybridObject>(nativeState);
+  bool isHybrid = maybeHybridObject != nullptr;
+  return jsi::Value(isHybrid);
 }
 
 std::vector<std::string> HybridNitroModulesProxy::getAllHybridObjectNames() {

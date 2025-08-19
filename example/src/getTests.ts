@@ -1617,6 +1617,13 @@ export function getTests(
         .didNotThrow()
         .equals(true)
     ),
+    createTest('NitroModules.isHybridObject(testObject) to be true', () =>
+      it(() => {
+        return NitroModules.isHybridObject(testObject)
+      })
+        .didNotThrow()
+        .equals(true)
+    ),
     createTest('NitroModules.hasNativeState(testObject) to be true', () =>
       it(() => {
         return NitroModules.hasNativeState(testObject)
