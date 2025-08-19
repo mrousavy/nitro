@@ -45,6 +45,7 @@ const TEST_CAR: Car = {
   powertrain: 'gas',
   driver: undefined, // <-- value needs to be explicitly set, to equal it with native's std::optional<..>
   isFast: true,
+  favouriteTrack: undefined,
 }
 const TEST_MAP: Record<string, number | boolean> = {
   someKey: 55,
