@@ -64,8 +64,6 @@ Pod::Spec.new do |s|
     "SWIFT_OBJC_INTEROP_MODE" => "objcxx",
     # Prebuild all dependent modules first
     "SWIFT_ENABLE_EXPLICIT_MODULES" => "YES",
-    # Precompile the -Swift.h header for faster builds
-    "SWIFT_PRECOMPILE_BRIDGING_HEADER" => "YES",
     # Enables stricter modular headers
     "DEFINES_MODULE" => "YES",
   }
