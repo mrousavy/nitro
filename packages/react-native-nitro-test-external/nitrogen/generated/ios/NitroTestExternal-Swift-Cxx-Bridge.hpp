@@ -33,19 +33,19 @@ namespace margelo::nitro::test::external::bridge::swift {
    * Specialized version of `std::shared_ptr<HybridSomeExternalObjectSpec>`.
    */
   using std__shared_ptr_HybridSomeExternalObjectSpec_ = std::shared_ptr<HybridSomeExternalObjectSpec>;
-  std::shared_ptr<HybridSomeExternalObjectSpec> create_std__shared_ptr_HybridSomeExternalObjectSpec_(void* _Nonnull swiftUnsafePointer);
-  void* _Nonnull get_std__shared_ptr_HybridSomeExternalObjectSpec_(std__shared_ptr_HybridSomeExternalObjectSpec_ cppType);
+  std::shared_ptr<HybridSomeExternalObjectSpec> create_std__shared_ptr_HybridSomeExternalObjectSpec_(void* _Nonnull swiftUnsafePointer) noexcept;
+  void* _Nonnull get_std__shared_ptr_HybridSomeExternalObjectSpec_(std__shared_ptr_HybridSomeExternalObjectSpec_ cppType) noexcept;
   
   // pragma MARK: std::weak_ptr<HybridSomeExternalObjectSpec>
   using std__weak_ptr_HybridSomeExternalObjectSpec_ = std::weak_ptr<HybridSomeExternalObjectSpec>;
-  inline std__weak_ptr_HybridSomeExternalObjectSpec_ weakify_std__shared_ptr_HybridSomeExternalObjectSpec_(const std::shared_ptr<HybridSomeExternalObjectSpec>& strong) { return strong; }
+  inline std__weak_ptr_HybridSomeExternalObjectSpec_ weakify_std__shared_ptr_HybridSomeExternalObjectSpec_(const std::shared_ptr<HybridSomeExternalObjectSpec>& strong) noexcept { return strong; }
   
   // pragma MARK: Result<std::string>
   using Result_std__string_ = Result<std::string>;
-  inline Result_std__string_ create_Result_std__string_(const std::string& value) {
+  inline Result_std__string_ create_Result_std__string_(const std::string& value) noexcept {
     return Result<std::string>::withValue(value);
   }
-  inline Result_std__string_ create_Result_std__string_(const std::exception_ptr& error) {
+  inline Result_std__string_ create_Result_std__string_(const std::exception_ptr& error) noexcept {
     return Result<std::string>::withError(error);
   }
 
