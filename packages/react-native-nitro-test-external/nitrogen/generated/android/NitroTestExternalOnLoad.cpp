@@ -35,8 +35,7 @@ int initialize(JavaVM* vm) {
       []() -> std::shared_ptr<HybridObject> {
         static DefaultConstructableObject<JHybridSomeExternalObjectSpec::javaobject> object("com/margelo/nitro/test/external/HybridSomeExternalObject");
         auto instance = object.create();
-        auto globalRef = jni::make_global(instance);
-        return globalRef->cthis()->shared();
+        return instance->cthis()->shared();
       }
     );
   });
