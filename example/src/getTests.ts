@@ -1119,6 +1119,7 @@ export function getTests(
         .toContain('power')
         .toContain('powertrain')
         .toContain('driver')
+        .toContain('favouriteTrack')
     ),
     createTest('isCarElectric(...)', () =>
       it(() =>

@@ -18,7 +18,7 @@ public extension Car {
   /**
    * Create a new instance of `Car`.
    */
-  init(year: Double, make: String, model: String, power: Double, powertrain: Powertrain, driver: Person?, isFast: Bool?) {
+  init(year: Double, make: String, model: String, power: Double, powertrain: Powertrain, driver: Person?, isFast: Bool?, favouriteTrack: String?) {
     self.init(year, std.string(make), std.string(model), power, powertrain, { () -> bridge.std__optional_Person_ in
       if let __unwrappedValue = driver {
         return bridge.create_std__optional_Person_(__unwrappedValue)
@@ -28,6 +28,12 @@ public extension Car {
     }(), { () -> bridge.std__optional_bool_ in
       if let __unwrappedValue = isFast {
         return bridge.create_std__optional_bool_(__unwrappedValue)
+      } else {
+        return .init()
+      }
+    }(), { () -> bridge.std__optional_std__string_ in
+      if let __unwrappedValue = favouriteTrack {
+        return bridge.create_std__optional_std__string_(std.string(__unwrappedValue))
       } else {
         return .init()
       }
@@ -123,6 +129,30 @@ public extension Car {
       self.__isFast = { () -> bridge.std__optional_bool_ in
         if let __unwrappedValue = newValue {
           return bridge.create_std__optional_bool_(__unwrappedValue)
+        } else {
+          return .init()
+        }
+      }()
+    }
+  }
+  
+  var favouriteTrack: String? {
+    @inline(__always)
+    get {
+      return { () -> String? in
+        if bridge.has_std__optional_std__string_(self.__favouriteTrack) {
+          let __unwrapped = bridge.get_std__optional_std__string_(self.__favouriteTrack)
+          return String(__unwrapped)
+        } else {
+          return nil
+        }
+      }()
+    }
+    @inline(__always)
+    set {
+      self.__favouriteTrack = { () -> bridge.std__optional_std__string_ in
+        if let __unwrappedValue = newValue {
+          return bridge.create_std__optional_std__string_(std.string(__unwrappedValue))
         } else {
           return .init()
         }
