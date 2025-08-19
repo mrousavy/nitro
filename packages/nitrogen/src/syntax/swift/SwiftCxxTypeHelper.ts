@@ -248,7 +248,7 @@ inline bool has_value_${name}(const ${actualType}& optional) {
   return optional.has_value();
 }
 inline ${getResult} get_${name}(const ${actualType}& optional) {
-  return optional.value();
+  return *optional;
 }
     `.trim(),
       requiredIncludes: [
