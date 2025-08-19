@@ -50,6 +50,8 @@ namespace margelo::nitro::test {
       jni::local_ref<JPerson> driver = this->getFieldValue(fieldDriver);
       static const auto fieldIsFast = clazz->getField<jni::JBoolean>("isFast");
       jni::local_ref<jni::JBoolean> isFast = this->getFieldValue(fieldIsFast);
+      static const auto fieldFavouriteTrack = clazz->getField<jni::JString>("favouriteTrack");
+      jni::local_ref<jni::JString> favouriteTrack = this->getFieldValue(fieldFavouriteTrack);
       return Car(
         year,
         make->toStdString(),
@@ -57,7 +59,8 @@ namespace margelo::nitro::test {
         power,
         powertrain->toCpp(),
         driver != nullptr ? std::make_optional(driver->toCpp()) : std::nullopt,
-        isFast != nullptr ? std::make_optional(static_cast<bool>(isFast->value())) : std::nullopt
+        isFast != nullptr ? std::make_optional(static_cast<bool>(isFast->value())) : std::nullopt,
+        favouriteTrack != nullptr ? std::make_optional(favouriteTrack->toStdString()) : std::nullopt
       );
     }
 
@@ -74,7 +77,8 @@ namespace margelo::nitro::test {
         value.power,
         JPowertrain::fromCpp(value.powertrain),
         value.driver.has_value() ? JPerson::fromCpp(value.driver.value()) : nullptr,
-        value.isFast.has_value() ? jni::JBoolean::valueOf(value.isFast.value()) : nullptr
+        value.isFast.has_value() ? jni::JBoolean::valueOf(value.isFast.value()) : nullptr,
+        value.favouriteTrack.has_value() ? jni::make_jstring(value.favouriteTrack.value()) : nullptr
       );
     }
   };

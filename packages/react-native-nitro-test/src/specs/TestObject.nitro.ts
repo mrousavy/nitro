@@ -44,6 +44,7 @@ export interface Car {
   powertrain: Powertrain
   driver?: Person
   isFast?: boolean
+  favouriteTrack?: string
 }
 
 // A `type T = { ... }` declaration is the same as a `interface T { ... }` - it's a `struct` in C++.

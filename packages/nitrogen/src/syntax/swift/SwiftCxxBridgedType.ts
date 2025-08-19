@@ -442,6 +442,7 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
       case 'optional': {
         const optional = getTypeAs(this.type, OptionalType)
         const wrapping = new SwiftCxxBridgedType(optional.wrappingType, true)
+        const bridge = this.getBridgeOrThrow()
         switch (language) {
           case 'swift':
             if (wrapping.type.kind === 'enum') {
@@ -458,7 +459,8 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
             }
             return `
 { () -> ${optional.getCode('swift')} in
-  if let __unwrapped = ${cppParameterName}.value {
+  if bridge.has_value_${bridge.specializationName}(${cppParameterName}) {
+    let __unwrapped = bridge.get_${bridge.specializationName}(${cppParameterName})
     return ${indent(wrapping.parseFromCppToSwift('__unwrapped', language), '    ')}
   } else {
     return nil
@@ -634,6 +636,7 @@ case ${i}:
         if (this.isBridgingToDirectCppTarget) {
           return swiftParameterName
         }
+        // TODO: Remove the int casting once https://github.com/swiftlang/swift/issues/75330 is fixed.
         switch (language) {
           case 'c++':
             return `static_cast<${this.type.getCode('c++')}>(${swiftParameterName})`

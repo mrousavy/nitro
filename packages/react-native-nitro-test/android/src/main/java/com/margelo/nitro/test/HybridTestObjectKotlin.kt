@@ -250,7 +250,7 @@ class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
   }
 
     override fun getCar(): Car {
-        return Car(2018.0, "Lamborghini", "Huracán", 640.0, Powertrain.GAS, null, true)
+        return Car(2018.0, "Lamborghini", "Huracán", 640.0, Powertrain.GAS, null, true, null)
     }
 
     override fun isCarElectric(car: Car): Boolean {

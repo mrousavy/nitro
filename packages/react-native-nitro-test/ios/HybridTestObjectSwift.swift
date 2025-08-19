@@ -295,7 +295,7 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
   }
 
   func getCar() throws -> Car {
-    return Car(year: 2018, make: "Lamborghini", model: "Huracán", power: 640, powertrain: .gas, driver: nil, isFast: true)
+    return Car(year: 2018, make: "Lamborghini", model: "Huracán", power: 640, powertrain: .gas, driver: nil, isFast: true, favouriteTrack: nil)
   }
 
   func isCarElectric(car: Car) throws -> Bool {
@@ -389,11 +389,11 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
     let value = callback()
     return value
   }
-  
+
   func bounceExternalHybrid(externalObject: (any HybridSomeExternalObjectSpec)) throws -> (any HybridSomeExternalObjectSpec) {
     return externalObject
   }
-  
+
   func createInternalObject() -> any HybridSomeExternalObjectSpec {
     return HybridSomeInternalObject()
   }
