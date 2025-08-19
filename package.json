@@ -14,9 +14,9 @@
     "docs"
   ],
   "scripts": {
-    "build": "bun nitro build && bun nitrogen build && bun nitro-test-external build && bun nitro-test build",
     "link-all-binaries": "bun --filter=\"**\" i",
-    "bootstrap": "bun i && bun link-all-binaries && bun run build && cd example && bundle install && bun pods",
+    "build": "bun run link-all-binaries && bun nitro build && bun nitrogen build && bun nitro-test-external build && bun nitro-test build",
+    "bootstrap": "bun i && bun run build && cd example && bundle install && bun pods",
     "typecheck": "bun --filter=\"**\" typecheck",
     "lint": "bun nitro lint && bun nitrogen lint && bun nitro-test lint && bun example lint",
     "lint-cpp": "./scripts/clang-format.sh",
