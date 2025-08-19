@@ -238,6 +238,12 @@ using ${name} = ${actualType};
 inline ${actualType} create_${name}(const ${wrappedBridge.getTypeCode('c++')}& value) {
   return ${actualType}(${indent(wrappedBridge.parseFromSwiftToCpp('value', 'c++'), '    ')});
 }
+inline bool has_value_${name}(const ${actualType}& optional) {
+  return optional.has_value();
+}
+inline const ${wrappedBridge.getTypeCode('c++')}& get_${name}(const ${actualType}& optional) {
+  return optional.value();
+}
     `.trim(),
       requiredIncludes: [
         {
