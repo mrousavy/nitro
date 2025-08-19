@@ -42,9 +42,6 @@ jobs:
       - name: Install npm dependencies (bun)
         run: bun install
 
-      - name: Link nitrogen binary
-        run: bun run link-all-binaries
-
       - name: Build all packages
         run: bun run build
 
