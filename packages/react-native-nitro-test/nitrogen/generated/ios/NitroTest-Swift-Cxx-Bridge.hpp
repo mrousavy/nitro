@@ -191,7 +191,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline bool has_value_std__optional_Powertrain_(const std::optional<Powertrain>& optional) {
     return optional.has_value();
   }
-  inline const Powertrain& get_std__optional_Powertrain_(const std::optional<Powertrain>& optional) {
+  inline Powertrain get_std__optional_Powertrain_(const std::optional<Powertrain>& optional) {
     return optional.value();
   }
   
@@ -206,7 +206,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline bool has_value_std__optional_OldEnum_(const std::optional<OldEnum>& optional) {
     return optional.has_value();
   }
-  inline const OldEnum& get_std__optional_OldEnum_(const std::optional<OldEnum>& optional) {
+  inline OldEnum get_std__optional_OldEnum_(const std::optional<OldEnum>& optional) {
     return optional.value();
   }
   
@@ -448,7 +448,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline bool has_value_std__optional_bool_(const std::optional<bool>& optional) {
     return optional.has_value();
   }
-  inline const bool& get_std__optional_bool_(const std::optional<bool>& optional) {
+  inline bool get_std__optional_bool_(const std::optional<bool>& optional) {
     return optional.value();
   }
   
@@ -587,7 +587,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline bool has_value_std__optional_double_(const std::optional<double>& optional) {
     return optional.has_value();
   }
-  inline const double& get_std__optional_double_(const std::optional<double>& optional) {
+  inline double get_std__optional_double_(const std::optional<double>& optional) {
     return optional.value();
   }
   

@@ -225,6 +225,10 @@ function createCxxOptionalSwiftHelper(type: OptionalType): SwiftCxxHelper {
   const actualType = type.getCode('c++')
   const wrappedBridge = new SwiftCxxBridgedType(type.wrappingType, true)
   const name = escapeCppName(actualType)
+  let getResult = wrappedBridge.getTypeCode('c++')
+  if (wrappedBridge.canBePassedByReference) {
+    getResult = `const ${getResult}&`
+  }
   // TODO: Remove has_ and get_ wrappers once https://github.com/swiftlang/swift/issues/83801 is fixed.
   // TODO: Remove create_ wrapper once https://github.com/swiftlang/swift/issues/75834 is fixed.
   return {
@@ -243,7 +247,7 @@ inline ${actualType} create_${name}(const ${wrappedBridge.getTypeCode('c++')}& v
 inline bool has_value_${name}(const ${actualType}& optional) {
   return optional.has_value();
 }
-inline const ${wrappedBridge.getTypeCode('c++')}& get_${name}(const ${actualType}& optional) {
+inline ${getResult} get_${name}(const ${actualType}& optional) {
   return optional.value();
 }
     `.trim(),
