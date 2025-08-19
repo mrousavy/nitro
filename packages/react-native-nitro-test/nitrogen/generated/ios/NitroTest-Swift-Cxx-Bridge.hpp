@@ -349,7 +349,7 @@ namespace margelo::nitro::test::bridge::swift {
     }
     return keys;
   }
-  inline std::variant<double, bool> get_std__unordered_map_std__string__std__variant_double__bool___value(const std__unordered_map_std__string__std__variant_double__bool__& map, const std::string& key) {
+  inline std::variant<double, bool> get_std__unordered_map_std__string__std__variant_double__bool___value(const std__unordered_map_std__string__std__variant_double__bool__& map, const std::string& key) noexcept {
     return map.find(key)->second;
   }
   inline void emplace_std__unordered_map_std__string__std__variant_double__bool__(std__unordered_map_std__string__std__variant_double__bool__& map, const std::string& key, const std::variant<double, bool>& value) noexcept {
@@ -374,7 +374,7 @@ namespace margelo::nitro::test::bridge::swift {
     }
     return keys;
   }
-  inline std::string get_std__unordered_map_std__string__std__string__value(const std__unordered_map_std__string__std__string_& map, const std::string& key) {
+  inline std::string get_std__unordered_map_std__string__std__string__value(const std__unordered_map_std__string__std__string_& map, const std::string& key) noexcept {
     return map.find(key)->second;
   }
   inline void emplace_std__unordered_map_std__string__std__string_(std__unordered_map_std__string__std__string_& map, const std::string& key, const std::string& value) noexcept {

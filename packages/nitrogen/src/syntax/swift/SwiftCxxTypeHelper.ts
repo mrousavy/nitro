@@ -328,7 +328,7 @@ inline std::vector<${keyType}> get_${name}_keys(const ${name}& map) noexcept {
   }
   return keys;
 }
-inline ${valueType} get_${name}_value(const ${name}& map, const ${keyType}& key) {
+inline ${valueType} get_${name}_value(const ${name}& map, const ${keyType}& key) noexcept {
   return map.find(key)->second;
 }
 inline void emplace_${name}(${name}& map, const ${keyType}& key, const ${valueType}& value) noexcept {
