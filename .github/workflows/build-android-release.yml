@@ -3,6 +3,9 @@ name: Build Android (Release)
 on:
   release:
     types: [published]
+  pull_request:
+    paths:
+      - '.github/workflows/build-android-release.yml'
 
 jobs:
   build_release:
