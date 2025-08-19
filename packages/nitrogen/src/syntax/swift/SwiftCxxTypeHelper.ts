@@ -240,10 +240,10 @@ using ${name} = ${actualType};
 inline ${actualType} create_${name}(const ${wrappedBridge.getTypeCode('c++')}& value) noexcept {
   return ${actualType}(${indent(wrappedBridge.parseFromSwiftToCpp('value', 'c++'), '    ')});
 }
-inline bool has_value_${name}(const ${actualType}& optional) {
+inline bool has_value_${name}(const ${actualType}& optional) noexcept {
   return optional.has_value();
 }
-inline ${wrappedBridge.getTypeCode('c++')} get_${name}(const ${actualType}& optional) {
+inline ${wrappedBridge.getTypeCode('c++')} get_${name}(const ${actualType}& optional) noexcept {
   return *optional;
 }
     `.trim(),
