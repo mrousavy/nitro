@@ -321,7 +321,7 @@ inline std::vector<${keyType}> get_${name}_keys(const ${name}& map) {
   return keys;
 }
 inline ${valueType} get_${name}_value(const ${name}& map, const ${keyType}& key) {
-  return map.at(key);
+  return map.find(key)->second;
 }
 inline void emplace_${name}(${name}& map, const ${keyType}& key, const ${valueType}& value) {
   map.emplace(key, value);
