@@ -45,10 +45,12 @@ public:
   HybridObject(HybridObject&& move) = delete;
   /**
    * HybridObjects cannot be default-constructed!
+   * Use this instead;
+   * ```cpp
+   * MyHybridObject(): HybridObject(TAG) {}
+   * ```
    */
-  HybridObject() {
-    throw std::runtime_error("Cannot default-construct HybridObject!");
-  }
+  HybridObject() = delete;
 
 public:
   /**
