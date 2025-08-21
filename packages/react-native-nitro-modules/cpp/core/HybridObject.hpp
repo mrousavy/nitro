@@ -50,7 +50,10 @@ public:
    * MyHybridObject(): HybridObject(TAG) {}
    * ```
    */
-  HybridObject() = delete;
+  HybridObject() {
+    throw std::runtime_error("Cannot default-construct HybridObject! "
+                             "Did you forget to add the `HybridObject(TAG)` base-constructor call to your Hybrid Object's constructor?");
+  }
 
 public:
   /**
