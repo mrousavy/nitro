@@ -15,7 +15,9 @@ class HybridTestView : HybridTestViewSpec {
   // Props
   var isBlue: Bool = false {
     didSet {
-      view.backgroundColor = isBlue ? .systemBlue : .systemRed
+      Task { @MainActor in
+        self.view.backgroundColor = isBlue ? .systemBlue : .systemRed
+      }
     }
   }
   var hasBeenCalled: Bool = false
