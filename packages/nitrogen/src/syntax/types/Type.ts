@@ -6,6 +6,7 @@ export type TypeKind =
   | 'array'
   | 'bigint'
   | 'boolean'
+  | 'custom-type'
   | 'enum'
   | 'error'
   | 'function'

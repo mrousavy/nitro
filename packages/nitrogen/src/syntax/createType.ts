@@ -31,6 +31,7 @@ import { ErrorType } from './types/ErrorType.js'
 import { getBaseTypes, getHybridObjectNitroModuleConfig } from '../utils.js'
 import { DateType } from './types/DateType.js'
 import { NitroConfig } from '../config/NitroConfig.js'
+import { CustomType } from './types/CustomType.js'
 
 function isSymbol(type: TSMorphType, symbolName: string): boolean {
   const symbol = type.getSymbol()
@@ -66,6 +67,10 @@ function isMap(type: TSMorphType): boolean {
 
 function isError(type: TSMorphType): boolean {
   return isSymbol(type, 'Error')
+}
+
+function isCustomType(type: TSMorphType): boolean {
+  return isSymbol(type, 'CustomType')
 }
 
 function getHybridObjectName(type: TSMorphType): string {
@@ -283,6 +288,20 @@ export function createType(
     } else if (isError(type)) {
       // Error
       return new ErrorType()
+    } else if (isCustomType(type)) {
+      // Custom C++ type (manually written)
+      const [typeNameType, headerNameType] = getArguments(type, 'CustomType', 2)
+      const typeName = typeNameType.getLiteralValue()
+      const headerName = headerNameType.getLiteralValue()
+      if (typeof typeName !== 'string')
+        throw new Error(
+          `CustomType's first argument (TypeName) needs to be a string!`
+        )
+      if (typeof headerName !== 'string')
+        throw new Error(
+          `CustomType's second argument (HeaderName) needs to be a string!`
+        )
+      return new CustomType(false, typeName, headerName)
     } else if (type.isEnum()) {
       // It is an enum. We need to generate a C++ declaration for the enum
       const typename = type.getSymbolOrThrow().getEscapedName()

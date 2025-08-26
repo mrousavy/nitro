@@ -2,6 +2,7 @@ import {
   type HybridObject,
   type AnyMap,
   type Sync,
+  type CustomType,
 } from 'react-native-nitro-modules'
 import type { TestView } from './TestView.nitro'
 import type { SomeExternalObject } from 'react-native-nitro-test-external'
@@ -228,6 +229,10 @@ export interface TestObjectCpp
   newTestObject(): TestObjectCpp
   optionalHybrid?: TestObjectCpp
   getVariantHybrid(variant: TestObjectCpp | Person): TestObjectCpp | Person
+
+  bounceNativeType(
+    value: CustomType<'SomeType', 'SomeType.hpp'>
+  ): CustomType<'SomeType', 'SomeType.hpp'>
 }
 
 // This is a Swift/Kotlin-based `HybridObject`.
