@@ -6,7 +6,7 @@ import TabItem from '@theme/TabItem';
 
 # Using Nitro in a library
 
-Nitro can be used as a simple C++ library in your React Native library, which is very lightweight and simple.
+Nitro can be used as a simple lightweight C++/Swift/Kotlin dependency in your React Native library.
 
 ## 1. Create a Nitro Module
 
