@@ -69,6 +69,11 @@ interface MapWrapper {
   map: Record<string, string>
   secondMap: SecondMapWrapper
 }
+export type SomeCustomType = CustomType<
+  string,
+  'SomeType',
+  { include: 'SomeType.hpp' }
+>
 
 // This is an `interface` we're going to use as a base in both of our `HybridObject`s later.
 // In this case, the `HybridObject`s will just flatten out and copy over all properties here.
@@ -230,9 +235,7 @@ export interface TestObjectCpp
   optionalHybrid?: TestObjectCpp
   getVariantHybrid(variant: TestObjectCpp | Person): TestObjectCpp | Person
 
-  bounceNativeType(
-    value: CustomType<'SomeType', 'SomeType.hpp'>
-  ): CustomType<'SomeType', 'SomeType.hpp'>
+  bounceCustomType(value: SomeCustomType): SomeCustomType
 }
 
 // This is a Swift/Kotlin-based `HybridObject`.

@@ -1,20 +1,19 @@
+import type { CustomTypeConfig } from 'react-native-nitro-modules'
 import type { Language } from '../../getPlatformSpecs.js'
 import type { SourceFile, SourceImport } from '../SourceFile.js'
 import type { Type, TypeKind } from './Type.js'
 
 export class CustomType implements Type {
-  canBePassedByReference: boolean
+  typeConfig: CustomTypeConfig
   typeName: string
-  headerImport: string
 
-  constructor(
-    canBePassedByReference: boolean,
-    typeName: string,
-    headerImport: string
-  ) {
-    this.canBePassedByReference = canBePassedByReference
+  constructor(typeName: string, typeConfig: CustomTypeConfig) {
     this.typeName = typeName
-    this.headerImport = headerImport
+    this.typeConfig = typeConfig
+  }
+
+  get canBePassedByReference() {
+    return this.typeConfig.canBePassedByReference ?? false
   }
 
   get kind(): TypeKind {
@@ -38,7 +37,7 @@ export class CustomType implements Type {
     const imports: SourceImport[] = []
     if (language === 'c++') {
       imports.push({
-        name: this.headerImport,
+        name: this.typeConfig.include,
         language: 'c++',
         space: 'user',
       })

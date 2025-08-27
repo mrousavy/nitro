@@ -290,18 +290,26 @@ export function createType(
       return new ErrorType()
     } else if (isCustomType(type)) {
       // Custom C++ type (manually written)
-      const [typeNameType, headerNameType] = getArguments(type, 'CustomType', 2)
+      const [_tsType, typeNameType, typeConfigType] = getArguments(
+        type,
+        'CustomType',
+        3
+      )
       const typeName = typeNameType.getLiteralValue()
-      const headerName = headerNameType.getLiteralValue()
-      if (typeof typeName !== 'string')
+      if (typeof typeName !== 'string') {
         throw new Error(
-          `CustomType's first argument (TypeName) needs to be a string!`
+          `CustomType's second argument (TypeName) needs to be a string!`
         )
-      if (typeof headerName !== 'string')
+      }
+      if (!typeConfigType.isObject()) {
         throw new Error(
-          `CustomType's second argument (HeaderName) needs to be a string!`
+          `CustomType's third argument (TypeConfig) needs to be an object!`
         )
-      return new CustomType(false, typeName, headerName)
+      }
+      return new CustomType(typeName, {
+        include: 'TODO',
+        canBePassedByReference: true,
+      })
     } else if (type.isEnum()) {
       // It is an enum. We need to generate a C++ declaration for the enum
       const typename = type.getSymbolOrThrow().getEscapedName()
