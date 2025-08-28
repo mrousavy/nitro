@@ -14,6 +14,7 @@ class HybridObject;
 #include "NitroTypeInfo.hpp"
 #include <jsi/jsi.h>
 #include <type_traits>
+#include "JSIConverter+NativeState.hpp"
 
 namespace margelo::nitro {
 
@@ -21,34 +22,11 @@ using namespace facebook;
 
 // HybridObject(NativeState) <> {}
 template <typename T>
-struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_v<T, jsi::NativeState>>> final {
+struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_v<T, HybridObject>>> final {
   using TPointee = typename T::element_type;
 
   static inline T fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
-#ifdef NITRO_DEBUG
-    if (!arg.isObject()) [[unlikely]] {
-      if (arg.isUndefined()) [[unlikely]] {
-        throw jsi::JSError(runtime, invalidTypeErrorMessage("undefined", "It is undefined!"));
-      } else {
-        std::string stringRepresentation = arg.toString(runtime).utf8(runtime);
-        throw jsi::JSError(runtime, invalidTypeErrorMessage(stringRepresentation, "It is not an object!"));
-      }
-    }
-#endif
-    jsi::Object object = arg.asObject(runtime);
-
-#ifdef NITRO_DEBUG
-    if (!object.hasNativeState<TPointee>(runtime)) [[unlikely]] {
-      if (!object.hasNativeState(runtime)) [[unlikely]] {
-        std::string stringRepresentation = arg.toString(runtime).utf8(runtime);
-        throw jsi::JSError(runtime, invalidTypeErrorMessage(stringRepresentation, "It does not have a NativeState!"));
-      } else {
-        std::string stringRepresentation = arg.toString(runtime).utf8(runtime);
-        throw jsi::JSError(runtime, invalidTypeErrorMessage(stringRepresentation, "It has a different NativeState<T>!"));
-      }
-    }
-#endif
-    std::shared_ptr<jsi::NativeState> nativeState = object.getNativeState(runtime);
+    auto nativeState = JSIConverter<std::shared_ptr<jsi::NativeState>>::fromJSI(runtime, arg);
     return std::dynamic_pointer_cast<TPointee>(nativeState);
   }
 
@@ -58,15 +36,8 @@ struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_v<T, jsi::NativeState>>
       throw jsi::JSError(runtime, "Cannot convert `nullptr` to NativeState<" + typeName + ">!");
     }
 
-    if constexpr (std::is_base_of_v<HybridObject, TPointee>) {
-      // It's a HybridObject - use it's internal constructor which caches jsi::Objects for proper memory management!
-      return arg->toObject(runtime);
-    } else {
-      // It's any other kind of jsi::NativeState - just create it as normal. This will not have a prototype then!
-      jsi::Object object(runtime);
-      object.setNativeState(runtime, arg);
-      return object;
-    }
+    // This uses a smart caching impl using jsi::WeakObject
+    return arg->toObject(runtime);
   }
 
   static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
@@ -75,12 +46,6 @@ struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_v<T, jsi::NativeState>>
       return object.hasNativeState<TPointee>(runtime);
     }
     return false;
-  }
-
-private:
-  static std::string invalidTypeErrorMessage(const std::string& typeDescription, const std::string& reason) {
-    std::string typeName = TypeInfo::getFriendlyTypename<TPointee>();
-    return "Cannot convert \"" + typeDescription + "\" to NativeState<" + typeName + ">! " + reason;
   }
 };
 
