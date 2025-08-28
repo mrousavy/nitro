@@ -7,7 +7,7 @@ import TabItem from '@theme/TabItem';
 # Strings (`string`)
 
 A `string` handles like a [primitive](primitive), but technically isn't one.
-In C++, a `string` is represented using `std::string`.
+In C++, a `string` is represented using a UTF-8 `std::string`.
 
 <Tabs>
   <TabItem value="ts" label="TypeScript" default>
