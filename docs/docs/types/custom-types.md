@@ -94,49 +94,6 @@ Then just use it in your methods:
   </TabItem>
 </Tabs>
 
-## Complex types (e.g. `struct`)
-
-The same goes for any complex type, like a custom typed `struct`:
-
-```cpp title="JSIConverter+Person.hpp"
-struct Person {
-  std::string name;
-  double age;
-};
-
-namespace margelo::nitro {
-  template <>
-  struct JSIConverter<Person> {
-    static Person fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
-      jsi::Object obj = arg.asObject(runtime);
-      return Person(
-        JSIConverter<std::string>::fromJSI(runtime, obj.getProperty(runtime, "name")),
-        JSIConverter<double>::fromJSI(runtime, obj.getProperty(runtime, "age"))
-      );
-    }
-    static jsi::Value toJSI(jsi::Runtime& runtime, const Person& arg) {
-      jsi::Object obj(runtime);
-      obj.setProperty(runtime, "name", JSIConverter<std::string>::toJSI(runtime, arg.name));
-      obj.setProperty(runtime, "age", JSIConverter<double>::toJSI(runtime, arg.age));
-      return obj;
-    }
-    static bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
-      if (!value.isObject())
-        return false;
-      jsi::Object obj = value.getObject(runtime);
-      if (!JSIConverter<std::string>::canConvert(runtime, obj.getProperty(runtime, "name")))
-        return false;
-      if (!JSIConverter<double>::canConvert(runtime, obj.getProperty(runtime, "age")))
-        return false;
-      return true;
-    }
-  };
-}
-```
-
-..which can now safely be called with any JS value.
-If the given JS value is not an object of exactly the shape of `Person` (that is, a `name: string` and an `age: number` values), Nitro will throw an error.
-
 ## Foreign types (e.g. `react::ShadowNodeWrapper`)
 
 Since you have full control over the conversion part, you can even safely use foreign types like React Native's core types. For example, let's use `react::ShadowNodeWrapper`, which is stored as a `jsi::NativeState` on a `jsi::Object`:
