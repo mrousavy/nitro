@@ -9,7 +9,7 @@ import TabItem from '@theme/TabItem';
 The `JSIConverter<T>` is Nitro's implementation for converting JS values to native values, and back.
 It's implemented as a C++ template, which allows it to be extended with any custom type.
 
-For example, if you want to use `float` directly you can tell Nitro how to convert a `jsi::Value` to `float` by implementing `JSIConverter<float>`:
+For example, if you want to use `float` directly you can tell Nitro how to convert a `jsi::Value` to `float` by implementing `margelo::nitro::JSIConverter<float>`:
 
 ```cpp title="JSIConverter+Float.hpp"
 namespace margelo::nitro {
@@ -99,14 +99,18 @@ Then just use it in your methods:
 Since you have full control over the conversion part, you can even safely use foreign types like React Native's core types. For example, let's use `react::ShadowNodeWrapper`, which is stored as a `jsi::NativeState` on a `jsi::Object`:
 
 ```cpp title="JSIConverter+ShadowNode.hpp"
+#include <react/...>
+// ...
 namespace margelo::nitro {
   template <>
   struct JSIConverter<std::shared_ptr<react::ShadowNodeWrapper>> {
-    static std::shared_ptr<react::ShadowNodeWrapper> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+    static std::shared_ptr<react::ShadowNodeWrapper> fromJSI(jsi::Runtime& runtime,
+                                                             const jsi::Value& arg) {
       jsi::Object obj = arg.asObject(runtime);
       return obj.getNativeState<react::ShadowNodeWrapper>(runtime);
     }
-    static jsi::Value toJSI(jsi::Runtime& runtime, std::shared_ptr<react::ShadowNodeWrapper> arg) {
+    static jsi::Value toJSI(jsi::Runtime& runtime,
+                            std::shared_ptr<react::ShadowNodeWrapper> arg) {
       jsi::Object obj(runtime);
       obj.setNativeState(runtime, arg);
       return obj;
