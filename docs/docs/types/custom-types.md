@@ -118,7 +118,8 @@ namespace margelo::nitro {
     static bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
       if (!value.isObject())
         return false;
-      return value.hasNativeState<react::ShadowNodeWrapper>(runtime);
+      jsi::Object obj = value.getObject(runtime);
+      return obj.hasNativeState<react::ShadowNodeWrapper>(runtime);
     }
   };
 }
