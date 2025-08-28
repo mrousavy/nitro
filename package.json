@@ -63,7 +63,8 @@
       "release": true
     },
     "hooks": {
-      "before:release": "bun i && bun nitro-test-external build && bun nitro-test build && bun example bundle-install && bun example pods && git add example/ios/Podfile.lock"
+      "before:release": "bun i && bun nitro-test-external build && bun nitro-test build",
+      "before:git": "bun i && bun example bundle-install && bun example pods && git add bun.lock && git add example/ios/Podfile.lock"
     },
     "plugins": {
       "@release-it/bumper": {
