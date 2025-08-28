@@ -163,20 +163,20 @@ These are all the types Nitro supports out of the box:
   </tr>
   <tr>
     <td>..any <code>interface</code></td>
-    <td><code>T</code></td>
-    <td><code>T</code></td>
-    <td><code>T</code></td>
+    <td><code>struct T</code></td>
+    <td><code>struct T</code></td>
+    <td><code>data class T</code></td>
   </tr>
   <tr>
     <td>..any <code>enum</code></td>
-    <td><code>T</code></td>
-    <td><code>T</code></td>
-    <td><code>T</code></td>
+    <td><code>enum T</code></td>
+    <td><code>enum T</code></td>
+    <td><code>enum T</code></td>
   </tr>
   <tr>
     <td>..any <code>union</code></td>
-    <td><code>T</code></td>
-    <td><code>T</code></td>
-    <td><code>T</code></td>
+    <td><code>enum T</code></td>
+    <td><code>enum T</code></td>
+    <td><code>enum T</code></td>
   </tr>
 </table>
