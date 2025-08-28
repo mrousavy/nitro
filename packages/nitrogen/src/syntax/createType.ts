@@ -84,16 +84,17 @@ function getArguments<N extends number>(
   count: N
 ): Tuple<TSMorphType<ts.Type>, N> {
   const typeArguments = type.getTypeArguments()
-  const aliasTypeArguments = type.getAliasTypeArguments()
-
   if (typeArguments.length === count) {
     return typeArguments as Tuple<TSMorphType<ts.Type>, N>
   }
+
+  const aliasTypeArguments = type.getAliasTypeArguments()
   if (aliasTypeArguments.length === count) {
     return aliasTypeArguments as Tuple<TSMorphType<ts.Type>, N>
   }
+
   throw new Error(
-    `Type ${type.getText()} looks like a ${typename}, but has ${typeArguments.length} type arguments instead of ${count}!`
+    `Type ${type.getText()} looks like a ${typename}, but has ${typeArguments.length} or ${aliasTypeArguments.length} type arguments instead of ${count}!`
   )
 }
 
@@ -252,26 +253,65 @@ export function createType(
       return new ErrorType()
     } else if (isCustomType(type)) {
       // Custom C++ type (manually written)
-      const [_tsType, typeNameType, typeConfigType] = getArguments(
-        type,
-        'CustomType',
-        3
+      const parts = type.getIntersectionTypes()
+      for (const part of parts) {
+        const typeNameProperty = part.getProperty('__customTypeName')
+        if (typeNameProperty == null) continue
+        const typeConfigProperty = part.getProperty('__customTypeConfig')
+        if (typeConfigProperty == null) continue
+
+        const declaration = type.getAliasSymbolOrThrow().getDeclarations()[0]
+        if (declaration == null)
+          throw new Error(`Type has no declaration! ${type.getText()}`)
+
+        const typeNameTypeOrUndefined =
+          typeNameProperty.getTypeAtLocation(declaration)
+        const typeConfigTypeOrUndefined =
+          typeConfigProperty.getTypeAtLocation(declaration)
+
+        const typeNameType = typeNameTypeOrUndefined
+          .getUnionTypes()
+          .find((t) => t.isLiteral())
+        if (typeNameType == null) continue
+        const typeConfigType = typeConfigTypeOrUndefined
+          .getUnionTypes()
+          .find((t) => t.isObject())
+        if (typeConfigType == null) continue
+
+        const typeName = typeNameType.getLiteralValue()
+        if (typeof typeName !== 'string') {
+          throw new Error(
+            `CustomType's second argument (TypeName) needs to be a string! Instead, it is a ${typeof typeName} (${typeName})`
+          )
+        }
+        const includeType = typeConfigType
+          .getPropertyOrThrow('include')
+          .getTypeAtLocation(declaration)
+        const include = includeType.getLiteralValue()
+        if (typeof include !== 'string')
+          throw new Error(
+            `CustomType's third argument (Config) needs to contain { include }, which should be a string! (It is ${includeType.getText()} instead)`
+          )
+        const canBePassedByReferenceType = typeConfigType
+          .getProperty('canBePassedByReference')
+          ?.getTypeAtLocation(declaration)
+          .getUnionTypes()
+          .find((u) => u.isBooleanLiteral())
+          ?.getLiteralValue()
+        const canBePassedByReference =
+          typeof canBePassedByReferenceType === 'boolean'
+            ? canBePassedByReferenceType
+            : false
+
+        return new CustomType(typeName, {
+          include: include,
+          canBePassedByReference: canBePassedByReference,
+        })
+      }
+
+      throw new Error(
+        `Type looks like a CustomType<...>, but doesn't have generic arguments! ${type.getText()}`
       )
-      const typeName = typeNameType.getLiteralValue()
-      if (typeof typeName !== 'string') {
-        throw new Error(
-          `CustomType's second argument (TypeName) needs to be a string!`
-        )
-      }
-      if (!typeConfigType.isObject()) {
-        throw new Error(
-          `CustomType's third argument (TypeConfig) needs to be an object!`
-        )
-      }
-      return new CustomType(typeName, {
-        include: 'TODO',
-        canBePassedByReference: true,
-      })
     } else if (type.isEnum()) {
       // It is an enum. We need to generate a C++ declaration for the enum
       const typename = type.getSymbolOrThrow().getEscapedName()

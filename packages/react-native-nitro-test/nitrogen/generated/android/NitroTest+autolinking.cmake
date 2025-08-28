@@ -27,6 +27,7 @@ target_sources(
   # Autolinking Setup
   ../nitrogen/generated/android/NitroTestOnLoad.cpp
   # Shared Nitrogen C++ sources
+  ../nitrogen/generated/shared/c++/HybridTestObjectCppSpec.cpp
   ../nitrogen/generated/shared/c++/HybridTestObjectSwiftKotlinSpec.cpp
   ../nitrogen/generated/shared/c++/HybridBaseSpec.cpp
   ../nitrogen/generated/shared/c++/HybridChildSpec.cpp

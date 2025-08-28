@@ -56,6 +56,6 @@ export type CustomType<
   TypeName extends string,
   Config extends CustomTypeConfig,
 > = T & {
-  __typeName?: TypeName
-  __config?: Config
+  readonly __customTypeName?: TypeName
+  readonly __customTypeConfig?: Config
 }

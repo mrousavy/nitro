@@ -45,7 +45,10 @@ export function isError(type: TSMorphType): boolean {
 }
 
 export function isCustomType(type: TSMorphType): boolean {
-  return isSymbol(type, 'CustomType')
+  return (
+    type.getProperty('__customTypeName') != null &&
+    type.getProperty('__customTypeConfig') != null
+  )
 }
 
 export function isSyncFunction(type: TSMorphType): boolean {
