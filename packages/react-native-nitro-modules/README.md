@@ -200,7 +200,7 @@ The following C++ / JS types are supported out of the box:
     <td><code><a href="./android/src/main/java/com/margelo/nitro/core/Promise.kt">Promise&lt;T&gt;</a></code></td>
   </tr>
   <tr>
-    <td><code>{ ... }</code></td>
+    <td><code><a href="./src/AnyMap.ts">AnyMap</a></code></td>
     <td><code>std::shared_ptr&lt;<a href="./cpp/core/AnyMap.hpp">AnyMap</a>&gt;</code></td>
     <td><code><a href="./ios/core/AnyMap.swift">AnyMap</a></code></td>
     <td><code><a href="./android/src/main/java/com/margelo/nitro/core/AnyMap.kt">AnyMap</a></code></td>
