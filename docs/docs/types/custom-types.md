@@ -12,6 +12,8 @@ It's implemented as a C++ template, which allows it to be extended with any cust
 For example, if you want to use `float` directly you can tell Nitro how to convert a `jsi::Value` to `float` by implementing `margelo::nitro::JSIConverter<float>`:
 
 ```cpp title="JSIConverter+Float.hpp"
+#pragma once
+// ...
 namespace margelo::nitro {
   template <>
   struct JSIConverter<float> final {
@@ -27,6 +29,9 @@ namespace margelo::nitro {
   };
 }
 ```
+:::tip
+Make sure you overload `JSIConverter<...>` within the `margelo::nitro` namespace!
+:::
 
 Then just use it in your methods:
 
@@ -63,13 +68,14 @@ Then just use it in your methods:
     </div>
 
     :::info
-    Make sure the `JSIConverter+Float.hpp` header is included in your project's user-search-path so it can be included.
+    Make sure the `JSIConverter+Float.hpp` header you wrote is included in your project's user-search-path so it can be included.
     :::
 
   </TabItem>
   <TabItem value="manually" label="Manually">
 
     ```cpp title="HybridMath.hpp"
+    #pragma once
     #include "JSIConverter+Float.hpp"
     // ...
     class HybridMath : public HybridObject {
@@ -99,6 +105,7 @@ Then just use it in your methods:
 Since you have full control over the conversion part, you can even safely use foreign types like React Native's core types. For example, let's use `react::ShadowNodeWrapper`, which is stored as a `jsi::NativeState` on a `jsi::Object`:
 
 ```cpp title="JSIConverter+ShadowNode.hpp"
+#pragma once
 #include <react/...>
 // ...
 namespace margelo::nitro {
@@ -167,6 +174,7 @@ Then just use it in your methods:
   <TabItem value="manually" label="Manually">
 
     ```cpp title="MyHybrid.hpp"
+    #pragma once
     #include "JSIConverter+ShadowNode.hpp"
     // ...
 
