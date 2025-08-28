@@ -187,6 +187,7 @@ Then just use it in your methods:
 
     ```cpp title="MyHybrid.hpp"
     class MyHybrid: public MyHybridSpec {
+    public:
       void doSomething(std::shared_ptr<react::ShadowNodeWrapper> view) override {
         // ...
       }
@@ -207,9 +208,17 @@ Then just use it in your methods:
     #include "JSIConverter+ShadowNode.hpp"
     // ...
 
-    class MyHybrid: public MyHybridSpec {
+    class MyHybrid: public HybridObject {
+    public:
       void doSomething(std::shared_ptr<react::ShadowNodeWrapper> view) override {
         // ...
+      }
+
+      void loadHybridMethods() {
+        HybridObject::loadHybridMethods();
+        registerHybrids(this, [](Prototype& prototype) {
+          prototype.registerHybridMethod("doSomething", &MyHybrid::doSomething);
+        });
       }
     };
     ```
