@@ -137,19 +137,21 @@ namespace margelo::nitro {
 ..which can now safely be called with any JS value.
 If the given JS value is not an object of exactly the shape of `Person` (that is, a `name: string` and an `age: number` values), Nitro will throw an error.
 
-## Foreign types (e.g. `react::ShadowNode`)
+## Foreign types (e.g. `react::ShadowNodeWrapper`)
 
-Since you have full control over the conversion part, you can even safely use foreign types like React Native's core types.
+Since you have full control over the conversion part, you can even safely use foreign types like React Native's core types. For example, let's use `react::ShadowNodeWrapper`, which is stored as a `jsi::NativeState` on a `jsi::Object`:
 
 ```cpp title="JSIConverter+ShadowNode.hpp"
 namespace margelo::nitro {
+  using ShadowNode = std::shared_ptr<react::ShadowNodeWrapper>;
+
   template <>
-  struct JSIConverter<std::shared_ptr<react::ShadowNode>> {
-    static std::shared_ptr<react::ShadowNode> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+  struct JSIConverter<ShadowNode> {
+    static ShadowNode fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       jsi::Object obj = arg.asObject(runtime);
-      return obj.getNativeState<react::ShadowNode>(runtime);
+      return obj.getNativeState<react::ShadowNodeWrapper>(runtime);
     }
-    static jsi::Value toJSI(jsi::Runtime& runtime, std::shared_ptr<react::ShadowNode> arg) {
+    static jsi::Value toJSI(jsi::Runtime& runtime, ShadowNode arg) {
       jsi::Object obj(runtime);
       obj.setNativeState(runtime, arg);
       return obj;
