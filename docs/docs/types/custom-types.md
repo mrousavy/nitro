@@ -7,7 +7,7 @@ import TabItem from '@theme/TabItem';
 # Custom Types (manually written `T`)
 
 The `JSIConverter<T>` is Nitro's implementation for converting JS values to native values, and back.
-It's implemented as a C++ template, which can be extended with any custom type.
+It's implemented as a C++ template, which allows it to be extended with any custom type.
 
 For example, if you want to use `float` directly you can tell Nitro how to convert a `jsi::Value` to `float` by implementing `JSIConverter<float>`:
 
@@ -37,7 +37,11 @@ Then just use it in your methods:
     <div className="side-by-side-block">
 
     ```ts title="Math.nitro.ts"
-    type Float = CustomType<number, 'float', { include: 'JSIConverter+Float.hpp' }>
+    type Float = CustomType<
+      number,
+      'float',
+      { include: 'JSIConverter+Float.hpp' }
+    >
     interface Math extends HybridObject {
       add(a: Float, b: Float): Float
     }
@@ -48,6 +52,7 @@ Then just use it in your methods:
 
     ```cpp title="HybridMath.hpp"
     class HybridMath: public HybridMathSpec {
+    public:
       float add(float a, float b) override {
         return a + b;
       }
@@ -65,6 +70,8 @@ Then just use it in your methods:
   <TabItem value="manually" label="Manually">
 
     ```cpp title="HybridMath.hpp"
+    #include "JSIConverter+Float.hpp"
+    // ...
     class HybridMath : public HybridObject {
     public:
       float add(float a, float b) {
