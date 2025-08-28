@@ -6,7 +6,7 @@ import TabItem from '@theme/TabItem';
 
 # Strings (`string`)
 
-A `string` handles like a [primitive](primitive), but technically isn't one.
+A `string` handles like a [primitive](primitives), but technically isn't one.
 In C++, a `string` is represented using a UTF-8 `std::string`.
 
 <Tabs>
