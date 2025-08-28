@@ -34,14 +34,22 @@ import { NitroConfig } from '../config/NitroConfig.js'
 import { CustomType } from './types/CustomType.js'
 
 function isSymbol(type: TSMorphType, symbolName: string): boolean {
+  // check the symbol directly
   const symbol = type.getSymbol()
   if (symbol?.getName() === symbolName) {
     return true
   }
-  const aliasSymbol = type.getAliasSymbol()
-  if (aliasSymbol?.getName() === symbolName) {
-    return true
+
+  // loop through the alias symbol alias chain to test each one
+  let aliasSymbol = type.getAliasSymbol()
+  while (aliasSymbol != null) {
+    if (aliasSymbol.getName() === symbolName) {
+      return true
+    }
+    aliasSymbol = aliasSymbol.getAliasedSymbol()
   }
+
+  // nothing found.
   return false
 }
 
