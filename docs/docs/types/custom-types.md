@@ -143,15 +143,13 @@ Since you have full control over the conversion part, you can even safely use fo
 
 ```cpp title="JSIConverter+ShadowNode.hpp"
 namespace margelo::nitro {
-  using ShadowNode = std::shared_ptr<react::ShadowNodeWrapper>;
-
   template <>
-  struct JSIConverter<ShadowNode> {
-    static ShadowNode fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+  struct JSIConverter<std::shared_ptr<react::ShadowNodeWrapper>> {
+    static std::shared_ptr<react::ShadowNodeWrapper> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       jsi::Object obj = arg.asObject(runtime);
       return obj.getNativeState<react::ShadowNodeWrapper>(runtime);
     }
-    static jsi::Value toJSI(jsi::Runtime& runtime, ShadowNode arg) {
+    static jsi::Value toJSI(jsi::Runtime& runtime, std::shared_ptr<react::ShadowNodeWrapper> arg) {
       jsi::Object obj(runtime);
       obj.setNativeState(runtime, arg);
       return obj;
@@ -159,7 +157,7 @@ namespace margelo::nitro {
     static bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
       if (!value.isObject())
         return false;
-      return value.hasNativeState<react::ShadowNode>(runtime);
+      return value.hasNativeState<react::ShadowNodeWrapper>(runtime);
     }
   };
 }
@@ -210,7 +208,7 @@ Then just use it in your methods:
     // ...
 
     class MyHybrid: public MyHybridSpec {
-      void doSomething(std::shared_ptr<react::ShadowNode> view) override {
+      void doSomething(std::shared_ptr<react::ShadowNodeWrapper> view) override {
         // ...
       }
     };
