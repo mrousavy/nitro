@@ -6,7 +6,7 @@ import TabItem from '@theme/TabItem';
 
 # Custom Enums (`A | B`)
 
-There's two different types of enums - [enum](typescript-enums) and [unions](typescript-unions).
+There's two different types of enums - [enum](#typescript-enums) and [unions](#typescript-unions).
 
 ## TypeScript enums
 
