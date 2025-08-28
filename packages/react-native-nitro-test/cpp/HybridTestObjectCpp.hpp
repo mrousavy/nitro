@@ -80,6 +80,7 @@ public:
   double addNumbers(double a, double b) override;
   std::string addStrings(const std::string& a, const std::string& b) override;
   void simpleFunc() override;
+  CustomString bounceCustomType(CustomString value) override;
   void multipleArguments(double num, const std::string& str, bool boo) override;
   std::shared_ptr<AnyMap> createMap() override;
   std::shared_ptr<AnyMap> mapRoundtrip(const std::shared_ptr<AnyMap>& map) override;

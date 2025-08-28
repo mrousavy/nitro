@@ -147,6 +147,10 @@ void HybridTestObjectCpp::simpleFunc() {
   // do nothing
 }
 
+CustomString HybridTestObjectCpp::bounceCustomType(CustomString value) {
+  return value;
+}
+
 void HybridTestObjectCpp::multipleArguments(double num, const std::string& str, bool boo) {
   Logger::log(LogLevel::Info, TAG, "Arguments received! num: %f | str: %s | boo: %i", num, str.c_str(), boo);
 }
