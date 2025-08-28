@@ -52,6 +52,7 @@ const sidebars: SidebarsConfig = {
       items: [
         'types/types',
         'types/primitives',
+        'types/strings',
         'types/arrays',
         'types/optionals',
         'types/tuples',
