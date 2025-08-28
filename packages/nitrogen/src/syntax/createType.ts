@@ -31,42 +31,18 @@ import { ErrorType } from './types/ErrorType.js'
 import { getBaseTypes, getHybridObjectNitroModuleConfig } from '../utils.js'
 import { DateType } from './types/DateType.js'
 import { NitroConfig } from '../config/NitroConfig.js'
-
-function isSymbol(type: TSMorphType, symbolName: string): boolean {
-  const symbol = type.getSymbol()
-  if (symbol?.getName() === symbolName) {
-    return true
-  }
-  const aliasSymbol = type.getAliasSymbol()
-  if (aliasSymbol?.getName() === symbolName) {
-    return true
-  }
-  return false
-}
-
-function isPromise(type: TSMorphType): boolean {
-  return isSymbol(type, 'Promise')
-}
-
-function isRecord(type: TSMorphType): boolean {
-  return isSymbol(type, 'Record')
-}
-
-function isArrayBuffer(type: TSMorphType): boolean {
-  return isSymbol(type, 'ArrayBuffer')
-}
-
-function isDate(type: TSMorphType): boolean {
-  return isSymbol(type, 'Date')
-}
-
-function isMap(type: TSMorphType): boolean {
-  return isSymbol(type, 'AnyMap')
-}
-
-function isError(type: TSMorphType): boolean {
-  return isSymbol(type, 'Error')
-}
+import { CustomType } from './types/CustomType.js'
+import {
+  isSyncFunction,
+  isArrayBuffer,
+  isCustomType,
+  isDate,
+  isError,
+  isMap,
+  isPromise,
+  isRecord,
+} from './isCoreType.js'
+import { getCustomTypeConfig } from './getCustomTypeConfig.js'
 
 function getHybridObjectName(type: TSMorphType): string {
   const symbol = isHybridView(type) ? type.getAliasSymbol() : type.getSymbol()
@@ -109,16 +85,17 @@ function getArguments<N extends number>(
   count: N
 ): Tuple<TSMorphType<ts.Type>, N> {
   const typeArguments = type.getTypeArguments()
-  const aliasTypeArguments = type.getAliasTypeArguments()
-
   if (typeArguments.length === count) {
     return typeArguments as Tuple<TSMorphType<ts.Type>, N>
   }
+
+  const aliasTypeArguments = type.getAliasTypeArguments()
   if (aliasTypeArguments.length === count) {
     return aliasTypeArguments as Tuple<TSMorphType<ts.Type>, N>
   }
+
   throw new Error(
-    `Type ${type.getText()} looks like a ${typename}, but has ${typeArguments.length} type arguments instead of ${count}!`
+    `Type ${type.getText()} looks like a ${typename}, but has ${typeArguments.length} or ${aliasTypeArguments.length} type arguments instead of ${count}!`
   )
 }
 
@@ -182,14 +159,6 @@ export function addKnownType(
     return
   }
   knownTypes[language].set(key, type)
-}
-
-function isSyncFunction(type: TSMorphType): boolean {
-  if (type.getCallSignatures().length < 1)
-    // not a function.
-    return false
-  const syncTag = type.getProperty('__syncTag')
-  return syncTag != null
 }
 
 /**
@@ -283,6 +252,10 @@ export function createType(
     } else if (isError(type)) {
       // Error
       return new ErrorType()
+    } else if (isCustomType(type)) {
+      // Custom C++ type (manually written)
+      const { name, config } = getCustomTypeConfig(type)
+      return new CustomType(name, config)
     } else if (type.isEnum()) {
       // It is an enum. We need to generate a C++ declaration for the enum
       const typename = type.getSymbolOrThrow().getEscapedName()

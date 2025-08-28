@@ -138,7 +138,7 @@ These are all the types Nitro supports out of the box:
     <td><code><a href="https://github.com/mrousavy/nitro/blob/main/packages/react-native-nitro-modules/android/src/main/java/com/margelo/nitro/core/Promise.kt">Promise&lt;T&gt;</a></code></td>
   </tr>
   <tr>
-    <td><code>object</code></td>
+    <td><code><a href="https://github.com/mrousavy/nitro/blob/main/packages/react-native-nitro-modules/src/AnyMap.ts">AnyMap</a></code></td>
     <td><code>std::shared_ptr&lt;<a href="https://github.com/mrousavy/nitro/blob/main/packages/react-native-nitro-modules/cpp/core/AnyMap.hpp">AnyMap</a>&gt;</code></td>
     <td><code><a href="https://github.com/mrousavy/nitro/blob/main/packages/react-native-nitro-modules/ios/core/AnyMap.swift">AnyMap</a></code></td>
     <td><code><a href="https://github.com/mrousavy/nitro/blob/main/packages/react-native-nitro-modules/android/src/main/java/com/margelo/nitro/core/AnyMap.kt">AnyMap</a></code></td>
@@ -163,20 +163,20 @@ These are all the types Nitro supports out of the box:
   </tr>
   <tr>
     <td>..any <code>interface</code></td>
-    <td><code>T</code></td>
-    <td><code>T</code></td>
-    <td><code>T</code></td>
+    <td><code>struct T</code></td>
+    <td><code>struct T</code></td>
+    <td><code>data class T</code></td>
   </tr>
   <tr>
     <td>..any <code>enum</code></td>
-    <td><code>T</code></td>
-    <td><code>T</code></td>
-    <td><code>T</code></td>
+    <td><code>enum T</code></td>
+    <td><code>enum T</code></td>
+    <td><code>enum T</code></td>
   </tr>
   <tr>
     <td>..any <code>union</code></td>
-    <td><code>T</code></td>
-    <td><code>T</code></td>
-    <td><code>T</code></td>
+    <td><code>enum T</code></td>
+    <td><code>enum T</code></td>
+    <td><code>enum T</code></td>
   </tr>
 </table>

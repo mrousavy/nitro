@@ -52,6 +52,7 @@ const sidebars: SidebarsConfig = {
       items: [
         'types/types',
         'types/primitives',
+        'types/strings',
         'types/arrays',
         'types/optionals',
         'types/tuples',
@@ -63,6 +64,8 @@ const sidebars: SidebarsConfig = {
         'types/untyped-maps',
         'types/array-buffers',
         'types/hybrid-objects',
+        'types/custom-structs',
+        'types/custom-enums',
         'types/custom-types',
       ],
     },

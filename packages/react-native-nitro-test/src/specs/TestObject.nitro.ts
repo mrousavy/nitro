@@ -2,6 +2,7 @@ import {
   type HybridObject,
   type AnyMap,
   type Sync,
+  type CustomType,
 } from 'react-native-nitro-modules'
 import type { TestView } from './TestView.nitro'
 import type { SomeExternalObject } from 'react-native-nitro-test-external'
@@ -68,6 +69,11 @@ interface MapWrapper {
   map: Record<string, string>
   secondMap: SecondMapWrapper
 }
+export type CustomString = CustomType<
+  string,
+  'CustomString',
+  { include: 'CustomString.hpp' }
+>
 
 // This is an `interface` we're going to use as a base in both of our `HybridObject`s later.
 // In this case, the `HybridObject`s will just flatten out and copy over all properties here.
@@ -228,6 +234,8 @@ export interface TestObjectCpp
   newTestObject(): TestObjectCpp
   optionalHybrid?: TestObjectCpp
   getVariantHybrid(variant: TestObjectCpp | Person): TestObjectCpp | Person
+
+  bounceCustomType(value: CustomString): CustomString
 }
 
 // This is a Swift/Kotlin-based `HybridObject`.

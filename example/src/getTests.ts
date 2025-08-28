@@ -7,6 +7,7 @@ import {
   type Powertrain,
   type WrappedJsStruct,
   WeirdNumbersEnum,
+  SomeCustomType,
 } from 'react-native-nitro-test'
 import type { State } from './Testers'
 import { it } from './Testers'
@@ -64,6 +65,7 @@ const TEST_WRAPPED_STRUCT: WrappedJsStruct = {
     onChanged: (_num: number) => {},
   },
 }
+const TEST_CUSTOM_TYPE: SomeCustomType = 'hello world!'
 
 const BASE_DATE = new Date()
 const DATE_PLUS_1H = (() => {
@@ -844,6 +846,19 @@ export function getTests(
         ]
       : [
           // Swift/Kotlin Test Object does not have tuples yet!
+        ]),
+
+    // Custom Types tests
+    ...('bounceCustomType' in testObject
+      ? [
+          createTest('bounceCustomType(...) works', () =>
+            it(() => testObject.bounceCustomType(TEST_CUSTOM_TYPE))
+              .didNotThrow()
+              .equals(TEST_CUSTOM_TYPE)
+          ),
+        ]
+      : [
+          // Swift/Kotlin Test Object does not have CustomTypes!
         ]),
 
     createTest('bounceMap(map) === map', () =>

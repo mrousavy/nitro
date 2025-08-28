@@ -4,112 +4,74 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Custom Types (...any `T`)
+# Custom Types (manually written `T`)
+
+The `JSIConverter<T>` is Nitro's implementation for converting JS values to native values, and back.
+It's implemented as a C++ template, which allows it to be extended with any custom type.
+
+For example, if you want to use `float` directly you can tell Nitro how to convert a `jsi::Value` to `float` by implementing `margelo::nitro::JSIConverter<float>`:
+
+```cpp title="JSIConverter+Float.hpp"
+namespace margelo::nitro {
+  template <>
+  struct JSIConverter<float> final {
+    static inline float fromJSI(jsi::Runtime&, const jsi::Value& arg) {
+      return static_cast<float>(arg.asNumber());
+    }
+    static inline jsi::Value toJSI(jsi::Runtime&, float arg) {
+      return jsi::Value(arg);
+    }
+    static inline bool canConvert(jsi::Runtime&, const jsi::Value& value) {
+      return value.isNumber();
+    }
+  };
+}
+```
+
+Then just use it in your methods:
 
 <Tabs groupId="nitrogen-or-not">
   <TabItem value="nitrogen" label="With Nitrogen ✨" default>
 
-
-    Nitrogen can ✨**automagically**✨ generate custom types and their respective bindings for any types used in your specs.
-
-    ## Custom interfaces (structs)
-
-    Any custom `interface` or `type` will be represented as a fully type-safe `struct` in C++/Swift/Kotlin. Simply define the type in your `.nitro.ts` spec:
-
     <div className="side-by-side-container">
     <div className="side-by-side-block">
 
-    ```ts title="Nitro.nitro.ts"
-    interface Person {
-      name: string
-      age: number
-    }
-
-    interface Nitro extends HybridObject {
-      getAuthor(): Person
+    ```ts title="Math.nitro.ts"
+    type Float = CustomType<
+      number,
+      'float',
+      { include: 'JSIConverter+Float.hpp' }
+    >
+    interface Math extends HybridObject {
+      add(a: Float, b: Float): Float
     }
     ```
 
     </div>
     <div className="side-by-side-block">
 
-    ```swift title="HybridNitro.swift"
-    class HybridNitro: HybridNitroSpec {
-      func getAuthor() -> Person {
-        return Person(name: "Marc", age: 24)
-      }
-    }
-
-
-
-    ```
-
-    </div>
-    </div>
-
-    Nitro enforces full type-safety to avoid passing or returning wrong types.
-    Both `name` and `age` are always part of `Person`, they are never a different type than a `string`/`number`, and never null or undefined.
-
-    This makes the TypeScript definition the **single source of truth**, allowing you to rely on types! 🤩
-
-    ## Enums (TypeScript enum)
-
-    A [TypeScript enum](https://www.typescriptlang.org/docs/handbook/enums.html) is essentially just an object where each key has an incrementing integer value,
-    so Nitrogen will just generate a C++ enum natively, and bridges to JS using simple integers:
-
-    ```ts
-    enum Gender {
-      MALE,
-      FEMALE
-    }
-    interface Person extends HybridObject {
-      getGender(): Gender
-    }
-    ```
-
-    This is efficient because `MALE` is the number `0`, `FEMALE` is the number `1`, and all other values are invalid.
-
-    ## Enums (TypeScript union)
-
-    A [TypeScript union](https://www.typescriptlang.org/docs/handbook/unions-and-intersections.html#intersection-types) is essentially just a string, which is only "typed" via TypeScript.
-
-    ```ts
-    type Gender = 'male' | 'female'
-    interface Person extends HybridObject {
-      getGender(): Gender
-    }
-    ```
-
-    Nitrogen statically generates hashes for the strings `"male"` and `"female"` at compile-time, allowing for very efficient conversions between JS `string`s and native `enum`s.
-
-
-  </TabItem>
-  <TabItem value="manually" label="Manually">
-
-    ## Overloading a simple type
-
-    The `JSIConverter<T>` is a template which can be extended with any custom type.
-
-    For example, if you want to use `float` directly you can tell Nitro how to convert a `jsi::Value` to `float` by implementing `JSIConverter<float>`:
-
-    ```cpp title="JSIConverter+Float.hpp"
-    template <>
-    struct JSIConverter<float> final {
-      static inline float fromJSI(jsi::Runtime&, const jsi::Value& arg) {
-        return static_cast<float>(arg.asNumber());
-      }
-      static inline jsi::Value toJSI(jsi::Runtime&, float arg) {
-        return jsi::Value(arg);
-      }
-      static inline bool canConvert(jsi::Runtime&, const jsi::Value& value) {
-        return value.isNumber();
+    ```cpp title="HybridMath.hpp"
+    class HybridMath: public HybridMathSpec {
+    public:
+      float add(float a, float b) override {
+        return a + b;
       }
     };
     ```
 
-    Then just use it in your methods:
+    </div>
+    </div>
+
+    :::info
+    Make sure the `JSIConverter+Float.hpp` header is included in your project's user-search-path so it can be included.
+    :::
+
+  </TabItem>
+  <TabItem value="manually" label="Manually">
 
     ```cpp title="HybridMath.hpp"
+    #include "JSIConverter+Float.hpp"
+    // ...
     class HybridMath : public HybridObject {
     public:
       float add(float a, float b) {
@@ -129,46 +91,102 @@ import TabItem from '@theme/TabItem';
     Make sure the compiler knows about `JSIConverter<float>` at the time when `HybridMath` is declared, so import your `JSIConverter+Float.hpp` in your Hybrid Object's header file as well!
     :::
 
-    ## Complex types (e.g. `struct`)
+  </TabItem>
+</Tabs>
 
-    The same goes for any complex type, like a custom typed `struct`:
+## Foreign types (e.g. `react::ShadowNodeWrapper`)
 
-    ```cpp title="JSIConverter+Person.hpp"
-    struct Person {
-      std::string name;
-      double age;
-    };
+Since you have full control over the conversion part, you can even safely use foreign types like React Native's core types. For example, let's use `react::ShadowNodeWrapper`, which is stored as a `jsi::NativeState` on a `jsi::Object`:
 
-    template <>
-    struct JSIConverter<Person> {
-      static Person fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
-        jsi::Object obj = arg.asObject(runtime);
-        return Person(
-          JSIConverter<std::string>::fromJSI(runtime, obj.getProperty(runtime, "name")),
-          JSIConverter<double>::fromJSI(runtime, obj.getProperty(runtime, "age"))
-        );
-      }
-      static jsi::Value toJSI(jsi::Runtime& runtime, const Person& arg) {
-        jsi::Object obj(runtime);
-        obj.setProperty(runtime, "name", JSIConverter<std::string>::toJSI(runtime, arg.name));
-        obj.setProperty(runtime, "age", JSIConverter<double>::toJSI(runtime, arg.age));
-        return obj;
-      }
-      static bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
-        if (!value.isObject())
-          return false;
-        jsi::Object obj = value.getObject(runtime);
-        if (!JSIConverter<std::string>::canConvert(runtime, obj.getProperty(runtime, "name")))
-          return false;
-        if (!JSIConverter<double>::canConvert(runtime, obj.getProperty(runtime, "age")))
-          return false;
-        return true;
+```cpp title="JSIConverter+ShadowNode.hpp"
+#include <react/...>
+// ...
+namespace margelo::nitro {
+  template <>
+  struct JSIConverter<std::shared_ptr<react::ShadowNodeWrapper>> {
+    static std::shared_ptr<react::ShadowNodeWrapper> fromJSI(jsi::Runtime& runtime,
+                                                             const jsi::Value& arg) {
+      jsi::Object obj = arg.asObject(runtime);
+      return obj.getNativeState<react::ShadowNodeWrapper>(runtime);
+    }
+    static jsi::Value toJSI(jsi::Runtime& runtime,
+                            std::shared_ptr<react::ShadowNodeWrapper> arg) {
+      jsi::Object obj(runtime);
+      obj.setNativeState(runtime, arg);
+      return obj;
+    }
+    static bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
+      if (!value.isObject())
+        return false;
+      return value.hasNativeState<react::ShadowNodeWrapper>(runtime);
+    }
+  };
+}
+```
+
+Then just use it in your methods:
+
+<Tabs groupId="nitrogen-or-not">
+  <TabItem value="nitrogen" label="With Nitrogen ✨" default>
+
+    <div className="side-by-side-container">
+    <div className="side-by-side-block">
+
+    ```ts title="MyHybrid.nitro.ts"
+    type ShadowNode = CustomType<
+      {},
+      'std::shared_ptr<react::ShadowNodeWrapper>',
+      { include: 'JSIConverter+ShadowNode.hpp' }
+    >
+    interface MyHybrid extends HybridObject {
+      doSomething(view: ShadowNode): void
+    }
+    ```
+
+    </div>
+    <div className="side-by-side-block">
+
+    ```cpp title="MyHybrid.hpp"
+    class MyHybrid: public MyHybridSpec {
+    public:
+      void doSomething(std::shared_ptr<react::ShadowNodeWrapper> view) override {
+        // ...
       }
     };
     ```
 
-    ..which can now safely be called with any JS value.
-    If the given JS value is not an object of exactly the shape of `Person` (that is, a `name: string` and an `age: number` values), Nitro will throw an error.
+    </div>
+    </div>
+
+    :::info
+    Make sure the `JSIConverter+ShadowNode.hpp` header is included in your project's user-search-path so it can be included.
+    :::
+
+  </TabItem>
+  <TabItem value="manually" label="Manually">
+
+    ```cpp title="MyHybrid.hpp"
+    #include "JSIConverter+ShadowNode.hpp"
+    // ...
+
+    class MyHybrid: public HybridObject {
+    public:
+      void doSomething(std::shared_ptr<react::ShadowNodeWrapper> view) override {
+        // ...
+      }
+
+      void loadHybridMethods() {
+        HybridObject::loadHybridMethods();
+        registerHybrids(this, [](Prototype& prototype) {
+          prototype.registerHybridMethod("doSomething", &MyHybrid::doSomething);
+        });
+      }
+    };
+    ```
+
+    :::info
+    Make sure the compiler knows about `JSIConverter<ShadowNode>` at the time when `MyHybrid` is declared, so import your `JSIConverter+ShadowNode.hpp` in your Hybrid Object's header file as well!
+    :::
 
   </TabItem>
 </Tabs>

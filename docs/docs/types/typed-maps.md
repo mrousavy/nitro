@@ -43,5 +43,5 @@ For example, if your API returns a map of users with their ages, you _could_ use
 
 :::tip
 While typed maps are very efficient, Nitro cannot sufficiently optimize the object as keys are not known in advance.
-If possible, **avoid typed maps** and use [arrays](arrays) for unknown number of items, or [strongly typed objects](custom-types) for known number of items instead.
+If possible, **avoid typed maps** and use [arrays](arrays) for unknown number of items, or [strongly typed objects](custom-structs) for known number of items instead.
 :::
