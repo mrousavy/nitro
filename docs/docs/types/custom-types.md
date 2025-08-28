@@ -176,7 +176,7 @@ Then just use it in your methods:
     ```ts title="MyHybrid.nitro.ts"
     type ShadowNode = CustomType<
       {},
-      'std::shared_ptr<react::ShadowNode>',
+      'std::shared_ptr<react::ShadowNodeWrapper>',
       { include: 'JSIConverter+ShadowNode.hpp' }
     >
     interface MyHybrid extends HybridObject {
@@ -189,7 +189,7 @@ Then just use it in your methods:
 
     ```cpp title="MyHybrid.hpp"
     class MyHybrid: public MyHybridSpec {
-      void doSomething(std::shared_ptr<react::ShadowNode> view) override {
+      void doSomething(std::shared_ptr<react::ShadowNodeWrapper> view) override {
         // ...
       }
     };
