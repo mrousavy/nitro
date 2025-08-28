@@ -32,54 +32,16 @@ import { getBaseTypes, getHybridObjectNitroModuleConfig } from '../utils.js'
 import { DateType } from './types/DateType.js'
 import { NitroConfig } from '../config/NitroConfig.js'
 import { CustomType } from './types/CustomType.js'
-
-function isSymbol(type: TSMorphType, symbolName: string): boolean {
-  // check the symbol directly
-  const symbol = type.getSymbol()
-  if (symbol?.getName() === symbolName) {
-    return true
-  }
-
-  // loop through the alias symbol alias chain to test each one
-  let aliasSymbol = type.getAliasSymbol()
-  while (aliasSymbol != null) {
-    if (aliasSymbol.getName() === symbolName) {
-      return true
-    }
-    aliasSymbol = aliasSymbol.getAliasedSymbol()
-  }
-
-  // nothing found.
-  return false
-}
-
-function isPromise(type: TSMorphType): boolean {
-  return isSymbol(type, 'Promise')
-}
-
-function isRecord(type: TSMorphType): boolean {
-  return isSymbol(type, 'Record')
-}
-
-function isArrayBuffer(type: TSMorphType): boolean {
-  return isSymbol(type, 'ArrayBuffer')
-}
-
-function isDate(type: TSMorphType): boolean {
-  return isSymbol(type, 'Date')
-}
-
-function isMap(type: TSMorphType): boolean {
-  return isSymbol(type, 'AnyMap')
-}
-
-function isError(type: TSMorphType): boolean {
-  return isSymbol(type, 'Error')
-}
-
-function isCustomType(type: TSMorphType): boolean {
-  return isSymbol(type, 'CustomType')
-}
+import {
+  isSyncFunction,
+  isArrayBuffer,
+  isCustomType,
+  isDate,
+  isError,
+  isMap,
+  isPromise,
+  isRecord,
+} from './isCoreType.js'
 
 function getHybridObjectName(type: TSMorphType): string {
   const symbol = isHybridView(type) ? type.getAliasSymbol() : type.getSymbol()
@@ -195,14 +157,6 @@ export function addKnownType(
     return
   }
   knownTypes[language].set(key, type)
-}
-
-function isSyncFunction(type: TSMorphType): boolean {
-  if (type.getCallSignatures().length < 1)
-    // not a function.
-    return false
-  const syncTag = type.getProperty('__syncTag')
-  return syncTag != null
 }
 
 /**
