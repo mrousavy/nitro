@@ -8,11 +8,16 @@
 #include "JVariant_Person_HybridTestObjectSwiftKotlinSpec.hpp"
 
 namespace margelo::nitro::test {
+  /**
+   * Converts JVariant_Person_HybridTestObjectSwiftKotlinSpec to std::variant<Person, std::shared_ptr<HybridTestObjectSwiftKotlinSpec>>
+   */
   std::variant<Person, std::shared_ptr<HybridTestObjectSwiftKotlinSpec>> JVariant_Person_HybridTestObjectSwiftKotlinSpec::toCpp() const {
     if (isInstanceOf(JVariant_Person_HybridTestObjectSwiftKotlinSpec_impl::First::javaClassStatic())) {
+      // It's a `Person`
       auto jniValue = static_cast<const JVariant_Person_HybridTestObjectSwiftKotlinSpec_impl::First*>(this)->getValue();
       return jniValue->toCpp();
     } else if (isInstanceOf(JVariant_Person_HybridTestObjectSwiftKotlinSpec_impl::Second::javaClassStatic())) {
+      // It's a `std::shared_ptr<HybridTestObjectSwiftKotlinSpec>`
       auto jniValue = static_cast<const JVariant_Person_HybridTestObjectSwiftKotlinSpec_impl::Second*>(this)->getValue();
       return jniValue->cthis()->shared_cast<JHybridTestObjectSwiftKotlinSpec>();
     }

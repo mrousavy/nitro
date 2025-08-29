@@ -8,11 +8,16 @@
 #include "JVariant_Boolean_OldEnum.hpp"
 
 namespace margelo::nitro::test {
+  /**
+   * Converts JVariant_Boolean_OldEnum to std::variant<bool, OldEnum>
+   */
   std::variant<bool, OldEnum> JVariant_Boolean_OldEnum::toCpp() const {
     if (isInstanceOf(JVariant_Boolean_OldEnum_impl::First::javaClassStatic())) {
+      // It's a `bool`
       auto jniValue = static_cast<const JVariant_Boolean_OldEnum_impl::First*>(this)->getValue();
       return static_cast<bool>(jniValue);
     } else if (isInstanceOf(JVariant_Boolean_OldEnum_impl::Second::javaClassStatic())) {
+      // It's a `OldEnum`
       auto jniValue = static_cast<const JVariant_Boolean_OldEnum_impl::Second*>(this)->getValue();
       return jniValue->toCpp();
     }

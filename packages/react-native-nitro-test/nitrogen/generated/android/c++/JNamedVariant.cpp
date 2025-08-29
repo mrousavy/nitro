@@ -8,11 +8,16 @@
 #include "JNamedVariant.hpp"
 
 namespace margelo::nitro::test {
+  /**
+   * Converts JNamedVariant to std::variant<std::string, Car>
+   */
   std::variant<std::string, Car> JNamedVariant::toCpp() const {
     if (isInstanceOf(JNamedVariant_impl::First::javaClassStatic())) {
+      // It's a `std::string`
       auto jniValue = static_cast<const JNamedVariant_impl::First*>(this)->getValue();
       return jniValue->toStdString();
     } else if (isInstanceOf(JNamedVariant_impl::Second::javaClassStatic())) {
+      // It's a `Car`
       auto jniValue = static_cast<const JNamedVariant_impl::Second*>(this)->getValue();
       return jniValue->toCpp();
     }

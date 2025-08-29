@@ -8,11 +8,16 @@
 #include "JVariant_String_Double.hpp"
 
 namespace margelo::nitro::test {
+  /**
+   * Converts JVariant_String_Double to std::variant<std::string, double>
+   */
   std::variant<std::string, double> JVariant_String_Double::toCpp() const {
     if (isInstanceOf(JVariant_String_Double_impl::First::javaClassStatic())) {
+      // It's a `std::string`
       auto jniValue = static_cast<const JVariant_String_Double_impl::First*>(this)->getValue();
       return jniValue->toStdString();
     } else if (isInstanceOf(JVariant_String_Double_impl::Second::javaClassStatic())) {
+      // It's a `double`
       auto jniValue = static_cast<const JVariant_String_Double_impl::Second*>(this)->getValue();
       return jniValue;
     }

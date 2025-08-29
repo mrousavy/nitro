@@ -8,17 +8,24 @@
 #include "JVariant_String_Double_Boolean_DoubleArray_Array_String_.hpp"
 
 namespace margelo::nitro::test {
+  /**
+   * Converts JVariant_String_Double_Boolean_DoubleArray_Array_String_ to std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>>
+   */
   std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>> JVariant_String_Double_Boolean_DoubleArray_Array_String_::toCpp() const {
     if (isInstanceOf(JVariant_String_Double_Boolean_DoubleArray_Array_String__impl::First::javaClassStatic())) {
+      // It's a `std::string`
       auto jniValue = static_cast<const JVariant_String_Double_Boolean_DoubleArray_Array_String__impl::First*>(this)->getValue();
       return jniValue->toStdString();
     } else if (isInstanceOf(JVariant_String_Double_Boolean_DoubleArray_Array_String__impl::Second::javaClassStatic())) {
+      // It's a `double`
       auto jniValue = static_cast<const JVariant_String_Double_Boolean_DoubleArray_Array_String__impl::Second*>(this)->getValue();
       return jniValue;
     } else if (isInstanceOf(JVariant_String_Double_Boolean_DoubleArray_Array_String__impl::Third::javaClassStatic())) {
+      // It's a `bool`
       auto jniValue = static_cast<const JVariant_String_Double_Boolean_DoubleArray_Array_String__impl::Third*>(this)->getValue();
       return static_cast<bool>(jniValue);
     } else if (isInstanceOf(JVariant_String_Double_Boolean_DoubleArray_Array_String__impl::Fourth::javaClassStatic())) {
+      // It's a `std::vector<double>`
       auto jniValue = static_cast<const JVariant_String_Double_Boolean_DoubleArray_Array_String__impl::Fourth*>(this)->getValue();
       return [&]() {
       size_t __size = jniValue->size();
@@ -27,6 +34,7 @@ namespace margelo::nitro::test {
       return __vector;
     }();
     } else if (isInstanceOf(JVariant_String_Double_Boolean_DoubleArray_Array_String__impl::Fifth::javaClassStatic())) {
+      // It's a `std::vector<std::string>`
       auto jniValue = static_cast<const JVariant_String_Double_Boolean_DoubleArray_Array_String__impl::Fifth*>(this)->getValue();
       return [&]() {
       size_t __size = jniValue->size();

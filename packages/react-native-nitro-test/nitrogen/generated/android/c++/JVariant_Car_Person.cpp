@@ -8,11 +8,16 @@
 #include "JVariant_Car_Person.hpp"
 
 namespace margelo::nitro::test {
+  /**
+   * Converts JVariant_Car_Person to std::variant<Car, Person>
+   */
   std::variant<Car, Person> JVariant_Car_Person::toCpp() const {
     if (isInstanceOf(JVariant_Car_Person_impl::First::javaClassStatic())) {
+      // It's a `Car`
       auto jniValue = static_cast<const JVariant_Car_Person_impl::First*>(this)->getValue();
       return jniValue->toCpp();
     } else if (isInstanceOf(JVariant_Car_Person_impl::Second::javaClassStatic())) {
+      // It's a `Person`
       auto jniValue = static_cast<const JVariant_Car_Person_impl::Second*>(this)->getValue();
       return jniValue->toCpp();
     }

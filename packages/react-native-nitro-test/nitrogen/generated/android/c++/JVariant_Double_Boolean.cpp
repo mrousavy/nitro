@@ -8,11 +8,16 @@
 #include "JVariant_Double_Boolean.hpp"
 
 namespace margelo::nitro::test {
+  /**
+   * Converts JVariant_Double_Boolean to std::variant<double, bool>
+   */
   std::variant<double, bool> JVariant_Double_Boolean::toCpp() const {
     if (isInstanceOf(JVariant_Double_Boolean_impl::First::javaClassStatic())) {
+      // It's a `double`
       auto jniValue = static_cast<const JVariant_Double_Boolean_impl::First*>(this)->getValue();
       return jniValue;
     } else if (isInstanceOf(JVariant_Double_Boolean_impl::Second::javaClassStatic())) {
+      // It's a `bool`
       auto jniValue = static_cast<const JVariant_Double_Boolean_impl::Second*>(this)->getValue();
       return static_cast<bool>(jniValue);
     }

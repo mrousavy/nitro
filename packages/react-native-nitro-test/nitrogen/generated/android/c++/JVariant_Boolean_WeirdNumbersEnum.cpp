@@ -8,11 +8,16 @@
 #include "JVariant_Boolean_WeirdNumbersEnum.hpp"
 
 namespace margelo::nitro::test {
+  /**
+   * Converts JVariant_Boolean_WeirdNumbersEnum to std::variant<bool, WeirdNumbersEnum>
+   */
   std::variant<bool, WeirdNumbersEnum> JVariant_Boolean_WeirdNumbersEnum::toCpp() const {
     if (isInstanceOf(JVariant_Boolean_WeirdNumbersEnum_impl::First::javaClassStatic())) {
+      // It's a `bool`
       auto jniValue = static_cast<const JVariant_Boolean_WeirdNumbersEnum_impl::First*>(this)->getValue();
       return static_cast<bool>(jniValue);
     } else if (isInstanceOf(JVariant_Boolean_WeirdNumbersEnum_impl::Second::javaClassStatic())) {
+      // It's a `WeirdNumbersEnum`
       auto jniValue = static_cast<const JVariant_Boolean_WeirdNumbersEnum_impl::Second*>(this)->getValue();
       return jniValue->toCpp();
     }

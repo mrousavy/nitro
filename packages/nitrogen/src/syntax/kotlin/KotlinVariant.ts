@@ -100,6 +100,7 @@ static jni::local_ref<J${kotlinName}> create_${i}(${bridge.asJniReferenceType('a
     const bridge = new KotlinCxxBridgedType(v)
     return `
 if (isInstanceOf(${namespace}::${innerName}::javaClassStatic())) {
+  // It's a \`${v.getCode('c++')}\`
   auto jniValue = static_cast<const ${namespace}::${innerName}*>(this)->getValue();
   return ${bridge.parseFromKotlinToCpp('jniValue', 'c++')};
 }
@@ -175,6 +176,9 @@ ${createFileMetadataString(`J${kotlinName}.cpp`)}
 #include "J${kotlinName}.hpp"
 
 namespace ${cxxNamespace} {
+  /**
+   * Converts J${kotlinName} to ${variant.getCode('c++')}
+   */
   ${variant.getCode('c++')} J${kotlinName}::toCpp() const {
     ${indent(cppGetIfs.join(' else '), '    ')}
     throw std::invalid_argument("Variant is unknown Kotlin instance!");
