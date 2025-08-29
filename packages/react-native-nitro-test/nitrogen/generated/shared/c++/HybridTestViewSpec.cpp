@@ -9,9 +9,9 @@
 
 namespace margelo::nitro::test {
 
-  void HybridTestViewSpec::loadHybridMethods() {
+  void HybridTestViewSpecPrototype::loadHybridMethods() {
     // load base methods/properties
-    HybridObject::loadHybridMethods();
+    HybridObjectPrototype::loadHybridMethods();
     // load custom methods/properties
     registerHybrids(this, [](Prototype& prototype) {
       prototype.registerHybridGetter("isBlue", &HybridTestViewSpec::getIsBlue);

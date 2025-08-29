@@ -24,6 +24,18 @@ namespace margelo::nitro::test {
   using namespace margelo::nitro;
 
   /**
+   * Describes the prototype of `TestView`.
+   */
+  class HybridTestViewSpecPrototype: public HybridObjectPrototype {
+  public:
+    static HybridTestViewSpecPrototype singleton;
+
+  protected:
+    // Hybrid Setup
+    void loadHybridMethods() override;
+  };
+
+  /**
    * An abstract base class for `TestView`
    * Inherit this class to create instances of `HybridTestViewSpec` in C++.
    * You must explicitly call `HybridObject`'s constructor yourself, because it is virtual.
@@ -45,6 +57,12 @@ namespace margelo::nitro::test {
       ~HybridTestViewSpec() override = default;
 
     public:
+      // Prototype
+      const HybridObjectPrototype& getPrototype() const noexcept override {
+        return HybridTestViewSpecPrototype::singleton;
+      }
+
+    public:
       // Properties
       virtual bool getIsBlue() = 0;
       virtual void setIsBlue(bool isBlue) = 0;
@@ -58,10 +76,6 @@ namespace margelo::nitro::test {
     public:
       // Methods
       virtual void someMethod() = 0;
-
-    protected:
-      // Hybrid Setup
-      void loadHybridMethods() override;
 
     protected:
       // Tag for logging

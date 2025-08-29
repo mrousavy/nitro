@@ -75,6 +75,18 @@ namespace margelo::nitro::test {
   using namespace margelo::nitro;
 
   /**
+   * Describes the prototype of `TestObjectSwiftKotlin`.
+   */
+  class HybridTestObjectSwiftKotlinSpecPrototype: public HybridObjectPrototype {
+  public:
+    static HybridTestObjectSwiftKotlinSpecPrototype singleton;
+
+  protected:
+    // Hybrid Setup
+    void loadHybridMethods() override;
+  };
+
+  /**
    * An abstract base class for `TestObjectSwiftKotlin`
    * Inherit this class to create instances of `HybridTestObjectSwiftKotlinSpec` in C++.
    * You must explicitly call `HybridObject`'s constructor yourself, because it is virtual.
@@ -94,6 +106,12 @@ namespace margelo::nitro::test {
 
       // Destructor
       ~HybridTestObjectSwiftKotlinSpec() override = default;
+
+    public:
+      // Prototype
+      const HybridObjectPrototype& getPrototype() const noexcept override {
+        return HybridTestObjectSwiftKotlinSpecPrototype::singleton;
+      }
 
     public:
       // Properties
@@ -195,10 +213,6 @@ namespace margelo::nitro::test {
       virtual bool getIsViewBlue(const std::shared_ptr<HybridTestViewSpec>& view) = 0;
       virtual std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec> bounceExternalHybrid(const std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>& externalObject) = 0;
       virtual std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec> createInternalObject() = 0;
-
-    protected:
-      // Hybrid Setup
-      void loadHybridMethods() override;
 
     protected:
       // Tag for logging
