@@ -7,9 +7,23 @@
 
 #include "JHybridChildSpec.hpp"
 
+// Forward declaration of `Car` to properly resolve imports.
+namespace margelo::nitro::test { struct Car; }
+// Forward declaration of `Powertrain` to properly resolve imports.
+namespace margelo::nitro::test { enum class Powertrain; }
+// Forward declaration of `Person` to properly resolve imports.
+namespace margelo::nitro::test { struct Person; }
 
-
-
+#include <string>
+#include "Car.hpp"
+#include <variant>
+#include "JNamedVariant.hpp"
+#include "JCar.hpp"
+#include "Powertrain.hpp"
+#include "JPowertrain.hpp"
+#include "Person.hpp"
+#include <optional>
+#include "JPerson.hpp"
 
 namespace margelo::nitro::test {
 
@@ -46,6 +60,10 @@ namespace margelo::nitro::test {
   }
 
   // Methods
-  
+  std::variant<std::string, Car> JHybridChildSpec::bounceVariant(const std::variant<std::string, Car>& variant) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JNamedVariant>(jni::alias_ref<JNamedVariant> /* variant */)>("bounceVariant");
+    auto __result = method(_javaPart, JNamedVariant::fromCpp(variant));
+    return __result->toCpp();
+  }
 
 } // namespace margelo::nitro::test

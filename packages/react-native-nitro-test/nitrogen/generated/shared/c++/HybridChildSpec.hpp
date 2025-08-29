@@ -13,9 +13,14 @@
 #error NitroModules cannot be found! Are you sure you installed NitroModules properly?
 #endif
 
+// Forward declaration of `Car` to properly resolve imports.
+namespace margelo::nitro::test { struct Car; }
 // Forward declaration of `HybridBaseSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridBaseSpec; }
 
+#include <string>
+#include "Car.hpp"
+#include <variant>
 #include <memory>
 #include "HybridBaseSpec.hpp"
 
@@ -50,7 +55,7 @@ namespace margelo::nitro::test {
 
     public:
       // Methods
-      
+      virtual std::variant<std::string, Car> bounceVariant(const std::variant<std::string, Car>& variant) = 0;
 
     protected:
       // Hybrid Setup
