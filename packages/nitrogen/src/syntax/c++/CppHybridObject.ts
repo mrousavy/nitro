@@ -100,7 +100,7 @@ namespace ${cxxNamespace} {
 
     public:
       // Prototype
-      const HybridObjectPrototype& getPrototype() const noexcept override {
+      HybridObjectPrototype& getPrototype() const noexcept override {
         return ${name.HybridTSpecPrototype}::singleton;
       }
 

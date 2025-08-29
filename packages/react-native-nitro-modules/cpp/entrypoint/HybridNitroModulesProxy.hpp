@@ -14,6 +14,13 @@
 
 namespace margelo::nitro {
 
+class HybridNitroModulesProxyPrototype final: public HybridObjectPrototype {
+public:
+  static HybridNitroModulesProxyPrototype singleton;
+  
+  void loadHybridMethods() override;
+};
+
 /**
  * Represents the entry point for all other HybridObjects.
  * The flow is as following:
@@ -23,11 +30,14 @@ namespace margelo::nitro {
  * 4. From JS, you can access methods on this HybridObject to create all other HybridObjects.
  */
 class HybridNitroModulesProxy final : public HybridObject {
+  friend HybridNitroModulesProxyPrototype;
 public:
   explicit HybridNitroModulesProxy() : HybridObject(TAG) {}
 
 public:
-  void loadHybridMethods() override;
+  HybridObjectPrototype& getPrototype() const noexcept override {
+    return HybridNitroModulesProxyPrototype::singleton;
+  }
 
 public:
   // Hybrid Object Registry

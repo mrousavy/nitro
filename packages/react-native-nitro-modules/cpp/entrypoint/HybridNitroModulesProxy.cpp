@@ -12,8 +12,8 @@
 
 namespace margelo::nitro {
 
-void HybridNitroModulesProxy::loadHybridMethods() {
-  HybridObject::loadHybridMethods();
+void HybridNitroModulesProxyPrototype::loadHybridMethods() {
+  HybridObjectPrototype::loadHybridMethods();
 
   registerHybrids(this, [](Prototype& prototype) {
     prototype.registerHybridMethod("createHybridObject", &HybridNitroModulesProxy::createHybridObject);
