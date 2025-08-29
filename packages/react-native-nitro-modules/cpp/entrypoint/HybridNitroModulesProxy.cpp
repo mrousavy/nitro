@@ -46,6 +46,23 @@ std::vector<std::string> HybridNitroModulesProxy::getAllHybridObjectNames() {
   return HybridObjectRegistry::getAllHybridObjectNames();
 }
 
+jsi::Value HybridNitroModulesProxy::getHybridObjectConstructor(jsi::Runtime& runtime, const jsi::Value& thisValue, const jsi::Value* args, size_t size) {
+  jsi::Function constructor = jsi::Function::createFromHostFunction(runtime,
+                                                                    jsi::PropNameID::forAscii(runtime, "TODO: HybridObjectName"),
+                                                                    0,
+                                                                    [=](jsi::Runtime& runtime,
+                                                                        const jsi::Value& thisValue,
+                                                                        const jsi::Value* args,
+                                                                        size_t size) -> jsi::Value {
+    auto instance = createHybridObject("TestObjectCpp");
+    return instance->toObject(runtime);
+  });
+  constructor.setProperty(runtime,
+                          jsi::String::createFromAscii(runtime, "TestObjectCpp"),
+                          HybridObjectPrototype::singleton.toJSI(runtime));
+  return std::move(constructor);
+}
+
 // Helpers
 std::shared_ptr<BoxedHybridObject> HybridNitroModulesProxy::box(const std::shared_ptr<HybridObject>& hybridObject) {
   return std::make_shared<BoxedHybridObject>(hybridObject);
