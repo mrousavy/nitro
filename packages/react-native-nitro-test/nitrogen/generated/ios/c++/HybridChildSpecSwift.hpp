@@ -12,9 +12,21 @@
 // Forward declaration of `HybridChildSpec_cxx` to properly resolve imports.
 namespace NitroTest { class HybridChildSpec_cxx; }
 
+// Forward declaration of `Car` to properly resolve imports.
+namespace margelo::nitro::test { struct Car; }
+// Forward declaration of `Powertrain` to properly resolve imports.
+namespace margelo::nitro::test { enum class Powertrain; }
+// Forward declaration of `Person` to properly resolve imports.
+namespace margelo::nitro::test { struct Person; }
 // Forward declaration of `HybridBaseSpecSwift` to properly resolve imports.
 namespace margelo::nitro::test { class HybridBaseSpecSwift; }
 
+#include <string>
+#include "Car.hpp"
+#include <variant>
+#include "Powertrain.hpp"
+#include "Person.hpp"
+#include <optional>
 #include "HybridBaseSpecSwift.hpp"
 
 #include "NitroTest-Swift-Cxx-Umbrella.hpp"
@@ -61,7 +73,14 @@ namespace margelo::nitro::test {
 
   public:
     // Methods
-    
+    inline std::variant<std::string, Car> bounceVariant(const std::variant<std::string, Car>& variant) override {
+      auto __result = _swiftPart.bounceVariant(variant);
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
 
   private:
     NitroTest::HybridChildSpec_cxx _swiftPart;

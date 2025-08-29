@@ -7,7 +7,7 @@ import {
   type Powertrain,
   type WrappedJsStruct,
   WeirdNumbersEnum,
-  SomeCustomType,
+  CustomString,
 } from 'react-native-nitro-test'
 import type { State } from './Testers'
 import { it } from './Testers'
@@ -65,7 +65,7 @@ const TEST_WRAPPED_STRUCT: WrappedJsStruct = {
     onChanged: (_num: number) => {},
   },
 }
-const TEST_CUSTOM_TYPE: SomeCustomType = 'hello world!'
+const TEST_CUSTOM_TYPE: CustomString = 'hello world!'
 
 const BASE_DATE = new Date()
 const DATE_PLUS_1H = (() => {
@@ -658,6 +658,11 @@ export function getTests(
           {}
         )
       ).didThrow()
+    ),
+    createTest('createChild().bounceVariant(...) works', () =>
+      it(() => testObject.createChild().bounceVariant('hello!'))
+        .didNotThrow()
+        .equals('hello!')
     ),
     // Complex variants tests
     createTest('getVariantEnum(...) converts enum', () =>

@@ -42,7 +42,9 @@ abstract class HybridChildSpec: HybridBaseSpec() {
   abstract val childValue: Double
 
   // Methods
-  
+  @DoNotStrip
+  @Keep
+  abstract fun bounceVariant(variant: NamedVariant): NamedVariant
 
   private external fun initHybrid(): HybridData
 

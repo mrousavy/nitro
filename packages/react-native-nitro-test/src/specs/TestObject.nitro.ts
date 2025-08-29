@@ -264,4 +264,6 @@ export interface Base
 // The native `Child` Swift/Kotlin class will inherit from the `Base` Swift/Kotlin class.
 export interface Child extends Base {
   readonly childValue: number
+  // tests if the same variant can be used in a different HybridObject
+  bounceVariant(variant: NamedVariant): NamedVariant
 }

@@ -14,7 +14,7 @@ public protocol HybridChildSpec_protocol: HybridObject, HybridBaseSpec_protocol 
   var childValue: Double { get }
 
   // Methods
-  
+  func bounceVariant(variant: NamedVariant) throws -> NamedVariant
 }
 
 /// See ``HybridChildSpec``

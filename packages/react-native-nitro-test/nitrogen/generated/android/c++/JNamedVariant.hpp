@@ -72,16 +72,4 @@ namespace margelo::nitro::test {
       }
     };
   } // namespace JNamedVariant_impl
-
-  std::variant<std::string, Car> JNamedVariant::toCpp() const {
-    if (isInstanceOf(JNamedVariant_impl::First::javaClassStatic())) {
-      auto jniValue = static_cast<const JNamedVariant_impl::First*>(this)->getValue();
-      return jniValue->toStdString();
-    } else if (isInstanceOf(JNamedVariant_impl::Second::javaClassStatic())) {
-      auto jniValue = static_cast<const JNamedVariant_impl::Second*>(this)->getValue();
-      return jniValue->toCpp();
-    }
-    throw std::invalid_argument("Variant is unknown Kotlin instance!");
-  }
-
 } // namespace margelo::nitro::test

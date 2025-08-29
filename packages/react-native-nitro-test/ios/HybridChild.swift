@@ -14,4 +14,8 @@ class HybridChild : HybridChildSpec {
   var childValue: Double {
     return 30
   }
+
+  func bounceVariant(variant: NamedVariant) throws -> NamedVariant {
+    return variant
+  }
 }
