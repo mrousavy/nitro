@@ -97,7 +97,7 @@ jsi::Value HybridObjectPrototype::createPrototype(jsi::Runtime& runtime, const s
   return jsi::Value(runtime, *sharedObject);
 }
 
-jsi::Value HybridObjectPrototype::toJS(jsi::Runtime& runtime) {
+jsi::Value HybridObjectPrototype::toJSI(jsi::Runtime& runtime) {
   ensureInitialized();
 
   return createPrototype(runtime, _prototypeChain.getPrototype());

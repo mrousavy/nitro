@@ -41,7 +41,7 @@ public:
   HybridObjectPrototype(const HybridObjectPrototype&) = delete;
   // no move
   HybridObjectPrototype(HybridObjectPrototype&&) = delete;
-  
+
 public:
   static HybridObjectPrototype singleton;
 
@@ -50,7 +50,7 @@ public:
    * Get a fully initialized jsi::Object that represents this prototype to JS.
    * The result of this value will be cached per Runtime, so it's safe to call this often.
    */
-  jsi::Value toJS(jsi::Runtime& runtime);
+  jsi::Value toJSI(jsi::Runtime& runtime);
 
 private:
   static jsi::Value createPrototype(jsi::Runtime& runtime, const std::shared_ptr<Prototype>& prototype);

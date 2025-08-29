@@ -63,7 +63,7 @@ jsi::Value HybridObject::toObject(jsi::Runtime& runtime) {
 
   // 2. Get the object's base prototype (statically cached)
   HybridObjectPrototype& prototype = getPrototype();
-  jsi::Value prototypeValue = prototype.toJS(runtime);
+  jsi::Value prototypeValue = prototype.toJSI(runtime);
 
   // 3. Get the global JS Object.create(...) constructor so we can create an object from the given prototype
   jsi::Object objectConstructor = runtime.global().getPropertyAsObject(runtime, "Object");
