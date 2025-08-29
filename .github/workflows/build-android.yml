@@ -40,10 +40,10 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        new_arch:
+        new-arch:
           - true
           - false
-        min_sdk:
+        min-sdk:
           - '23'
           - '26'
     steps:
@@ -54,10 +54,10 @@ jobs:
         run: bun install
 
       - name: Set new architecture in gradle.properties
-        run: sed -i "s/newArchEnabled=true/newArchEnabled=${{ matrix.new_arch }}/g" example/android/gradle.properties
+        run: sed -i "s/newArchEnabled=true/newArchEnabled=${{ matrix.new-arch }}/g" example/android/gradle.properties
 
       - name: Set minSdk in build.gradle
-        run: sed -i "s/minSdkVersion = 24/minSdkVersion = ${{ matrix.min_sdk }}/g" example/android/build.gradle
+        run: sed -i "s/minSdkVersion = 24/minSdkVersion = ${{ matrix.min-sdk }}/g" example/android/build.gradle
 
       - name: Setup JDK 17
         uses: actions/setup-java@v5
