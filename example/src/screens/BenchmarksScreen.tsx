@@ -8,7 +8,6 @@ import {
   Text,
   Button,
   Platform,
-  InteractionManager,
   Animated,
   useWindowDimensions,
 } from 'react-native'
@@ -38,50 +37,32 @@ function delay(ms: number): Promise<void> {
 async function waitForGc(): Promise<void> {
   gc()
   await delay(500)
-  return new Promise((resolve) => {
-    requestAnimationFrame(() => {
-      InteractionManager.runAfterInteractions(() => {
-        resolve()
-      })
-    })
-  })
 }
 
-function warmupNitroModule() {
-  HybridTestObjectSwiftKotlin.addNumbers(5, 13)
+interface BenchmarkableObject {
+  addNumbers(a: number, b: number): number
 }
-function warmupTurboModule() {
-  ExampleTurboModule.addNumbers(5, 13)
+function benchmark(obj: BenchmarkableObject): number {
+  // warmup
+  obj.addNumbers(0, 3)
+
+  // run addNumbers(...) ITERATIONS amount of times
+  const start = performance.now()
+  let num = 0
+  for (let i = 0; i < ITERATIONS; i++) {
+    num = obj.addNumbers(num, 3)
+  }
+  const end = performance.now()
+  return end - start
 }
 
 const ITERATIONS = 100_000
 async function runBenchmarks(): Promise<BenchmarksResult> {
   console.log(`Running benchmarks ${ITERATIONS}x...`)
-  waitForGc()
+  await waitForGc()
 
-  warmupTurboModule()
-  let turboTime = 0
-  {
-    const start = performance.now()
-    let num = 0
-    for (let i = 0; i < ITERATIONS; i++) {
-      num = ExampleTurboModule.addNumbers(num, 3)
-    }
-    const end = performance.now()
-    turboTime = end - start
-  }
-
-  warmupNitroModule()
-  let nitroTime = 0
-  {
-    const start = performance.now()
-    let num = 0
-    for (let i = 0; i < ITERATIONS; i++) {
-      num = HybridTestObjectSwiftKotlin.addNumbers(num, 3)
-    }
-    const end = performance.now()
-    nitroTime = end - start
-  }
+  const turboTime = benchmark(ExampleTurboModule)
+  const nitroTime = benchmark(HybridTestObjectSwiftKotlin)
 
   console.log(
     `Benchmarks finished! Nitro: ${nitroTime.toFixed(2)}ms | Turbo: ${turboTime.toFixed(2)}ms`
