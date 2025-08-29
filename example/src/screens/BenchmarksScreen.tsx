@@ -96,18 +96,16 @@ export function BenchmarksScreen() {
     const r = await runBenchmarks()
     setResults(r)
 
-    const maxWidth = dimensions.width * 0.7
-    const smallerScale =
-      Math.min(r.nitroExecutionTimeMs, r.turboExecutionTimeMs) /
-      Math.max(r.nitroExecutionTimeMs, r.turboExecutionTimeMs)
-    Animated.spring(nitroWidth, {
-      toValue: maxWidth,
+    const slowest = Math.max(r.nitroExecutionTimeMs, r.turboExecutionTimeMs)
+    const maxWidth = dimensions.width * 0.65
+    Animated.spring(turboWidth, {
+      toValue: (r.turboExecutionTimeMs / slowest) * maxWidth,
       friction: 10,
       tension: 40,
       useNativeDriver: false,
     }).start()
-    Animated.spring(turboWidth, {
-      toValue: smallerScale * maxWidth,
+    Animated.spring(nitroWidth, {
+      toValue: (r.nitroExecutionTimeMs / slowest) * maxWidth,
       friction: 10,
       tension: 40,
       useNativeDriver: false,
