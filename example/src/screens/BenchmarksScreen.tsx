@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-/* eslint-disable no-lone-blocks */
+
 import * as React from 'react'
 
 import {
@@ -8,7 +8,6 @@ import {
   Text,
   Button,
   Platform,
-  InteractionManager,
   Animated,
   useWindowDimensions,
 } from 'react-native'
@@ -29,8 +28,6 @@ interface BenchmarksResult {
   numberOfIterations: number
   nitroExecutionTimeMs: number
   turboExecutionTimeMs: number
-  nitroResult: number
-  turboResult: number
 }
 
 function delay(ms: number): Promise<void> {
@@ -40,53 +37,40 @@ function delay(ms: number): Promise<void> {
 async function waitForGc(): Promise<void> {
   gc()
   await delay(500)
-  return new Promise((resolve) => {
-    requestAnimationFrame(() => {
-      InteractionManager.runAfterInteractions(() => {
-        resolve()
-      })
-    })
-  })
+}
+
+interface BenchmarkableObject {
+  addNumbers(a: number, b: number): number
+}
+function benchmark(obj: BenchmarkableObject): number {
+  // warmup
+  obj.addNumbers(0, 3)
+
+  // run addNumbers(...) ITERATIONS amount of times
+  const start = performance.now()
+  let num = 0
+  for (let i = 0; i < ITERATIONS; i++) {
+    num = obj.addNumbers(num, 3)
+  }
+  const end = performance.now()
+  return end - start
 }
 
 const ITERATIONS = 100_000
 async function runBenchmarks(): Promise<BenchmarksResult> {
   console.log(`Running benchmarks ${ITERATIONS}x...`)
-
   await waitForGc()
-  let nitroResult = 0,
-    nitroStart = 0,
-    nitroEnd = 0
-  {
-    nitroStart = performance.now()
-    for (let i = 0; i < ITERATIONS; i++) {
-      nitroResult = HybridTestObjectSwiftKotlin.addNumbers(3, 5)
-    }
-    nitroEnd = performance.now()
-  }
 
-  await waitForGc()
-  let turboResult = 0,
-    turboStart = 0,
-    turboEnd = 0
-  {
-    turboStart = performance.now()
-    for (let i = 0; i < ITERATIONS; i++) {
-      turboResult = ExampleTurboModule.addNumbers(3, 5)
-    }
-    turboEnd = performance.now()
-  }
+  const turboTime = benchmark(ExampleTurboModule)
+  const nitroTime = benchmark(HybridTestObjectSwiftKotlin)
 
-  waitForGc()
   console.log(
-    `Benchmarks finished! Nitro: ${(nitroEnd - nitroStart).toFixed(2)}ms | Turbo: ${(turboEnd - turboStart).toFixed(2)}ms`
+    `Benchmarks finished! Nitro: ${nitroTime.toFixed(2)}ms | Turbo: ${turboTime.toFixed(2)}ms`
   )
   return {
-    nitroExecutionTimeMs: nitroEnd - nitroStart,
-    turboExecutionTimeMs: turboEnd - turboStart,
+    nitroExecutionTimeMs: nitroTime,
+    turboExecutionTimeMs: turboTime,
     numberOfIterations: ITERATIONS,
-    turboResult: turboResult,
-    nitroResult: nitroResult,
   }
 }
 
@@ -112,18 +96,16 @@ export function BenchmarksScreen() {
     const r = await runBenchmarks()
     setResults(r)
 
-    const maxWidth = dimensions.width * 0.7
-    const smallerScale =
-      Math.min(r.nitroExecutionTimeMs, r.turboExecutionTimeMs) /
-      Math.max(r.nitroExecutionTimeMs, r.turboExecutionTimeMs)
-    Animated.spring(nitroWidth, {
-      toValue: maxWidth,
+    const slowest = Math.max(r.nitroExecutionTimeMs, r.turboExecutionTimeMs)
+    const maxWidth = dimensions.width * 0.65
+    Animated.spring(turboWidth, {
+      toValue: (r.turboExecutionTimeMs / slowest) * maxWidth,
       friction: 10,
       tension: 40,
       useNativeDriver: false,
     }).start()
-    Animated.spring(turboWidth, {
-      toValue: smallerScale * maxWidth,
+    Animated.spring(nitroWidth, {
+      toValue: (r.nitroExecutionTimeMs / slowest) * maxWidth,
       friction: 10,
       tension: 40,
       useNativeDriver: false,
