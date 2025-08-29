@@ -44,7 +44,7 @@ jobs:
           - true
           - false
         min-sdk:
-          - '23'
+          - '24'
           - '26'
     steps:
       - uses: actions/checkout@v5
