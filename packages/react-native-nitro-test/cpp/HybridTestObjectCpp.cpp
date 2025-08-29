@@ -17,6 +17,8 @@
 
 namespace margelo::nitro::test {
 
+HybridTestObjectCppPrototype HybridTestObjectCppPrototype::singleton;
+
 void HybridTestObjectCppPrototype::loadHybridMethods() {
   // call base protoype
   HybridTestObjectCppSpecPrototype::loadHybridMethods();

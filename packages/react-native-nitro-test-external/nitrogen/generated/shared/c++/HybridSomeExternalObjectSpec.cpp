@@ -9,6 +9,8 @@
 
 namespace margelo::nitro::test::external {
 
+  HybridSomeExternalObjectSpecPrototype HybridSomeExternalObjectSpecPrototype::singleton;
+
   void HybridSomeExternalObjectSpecPrototype::loadHybridMethods() {
     // load base methods/properties
     HybridObjectPrototype::loadHybridMethods();

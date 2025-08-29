@@ -9,6 +9,8 @@
 
 namespace margelo::nitro::test {
 
+  HybridChildSpecPrototype HybridChildSpecPrototype::singleton;
+
   void HybridChildSpecPrototype::loadHybridMethods() {
     // load base methods/properties
     HybridBaseSpecPrototype::loadHybridMethods();

@@ -163,6 +163,8 @@ ${createFileMetadataString(`${name.HybridTSpec}.cpp`)}
 
 namespace ${cxxNamespace} {
 
+  ${name.HybridTSpecPrototype} ${name.HybridTSpecPrototype}::singleton;
+
   void ${name.HybridTSpecPrototype}::loadHybridMethods() {
     // load base methods/properties
     ${indent(basePrototypeRegistrations.join('\n'), '    ')}
