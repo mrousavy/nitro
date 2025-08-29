@@ -13,6 +13,8 @@
 
 namespace margelo::nitro {
 
+HybridObjectPrototype HybridObjectPrototype::singleton;
+
 std::unordered_map<jsi::Runtime*, HybridObjectPrototype::PrototypeCache> HybridObjectPrototype::_prototypeCache;
 
 void HybridObjectPrototype::loadHybridMethods() {
