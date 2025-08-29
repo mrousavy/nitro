@@ -14,9 +14,20 @@ namespace margelo::nitro::test {
 
 using namespace facebook;
 
+class HybridTestObjectCppPrototype: public HybridTestObjectCppSpecPrototype {
+public:
+  static HybridTestObjectCppPrototype singleton;
+  void loadHybridMethods() override;
+};
+
 class HybridTestObjectCpp : public HybridTestObjectCppSpec {
 public:
   HybridTestObjectCpp() : HybridObject(TAG) {}
+  
+public:
+  HybridObjectPrototype& getPrototype() const noexcept override {
+    return HybridTestObjectCppPrototype::singleton;
+  }
 
 private:
   double _number;
@@ -171,14 +182,6 @@ public:
   jsi::Value rawJsiFunc(jsi::Runtime& runtime, const jsi::Value& thisValue, const jsi::Value* args, size_t count);
 
   void dispose() override;
-
-  void loadHybridMethods() override {
-    // call base protoype
-    HybridTestObjectCppSpec::loadHybridMethods();
-    // register all methods we override here
-    registerHybrids(this,
-                    [](Prototype& prototype) { prototype.registerRawHybridMethod("rawJsiFunc", 0, &HybridTestObjectCpp::rawJsiFunc); });
-  }
 };
 
 }; // namespace margelo::nitro::test
