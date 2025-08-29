@@ -22,6 +22,18 @@ namespace margelo::nitro::test::external {
   using namespace margelo::nitro;
 
   /**
+   * Describes the prototype of `SomeExternalObject`.
+   */
+  class HybridSomeExternalObjectSpecPrototype: public HybridObjectPrototype {
+  public:
+    static HybridSomeExternalObjectSpecPrototype singleton;
+
+  protected:
+    // Hybrid Setup
+    void loadHybridMethods() override;
+  };
+
+  /**
    * An abstract base class for `SomeExternalObject`
    * Inherit this class to create instances of `HybridSomeExternalObjectSpec` in C++.
    * You must explicitly call `HybridObject`'s constructor yourself, because it is virtual.
@@ -43,16 +55,18 @@ namespace margelo::nitro::test::external {
       ~HybridSomeExternalObjectSpec() override = default;
 
     public:
+      // Prototype
+      const HybridObjectPrototype& getPrototype() const noexcept override {
+        return HybridSomeExternalObjectSpecPrototype::singleton;
+      }
+
+    public:
       // Properties
       
 
     public:
       // Methods
       virtual std::string getValue() = 0;
-
-    protected:
-      // Hybrid Setup
-      void loadHybridMethods() override;
 
     protected:
       // Tag for logging

@@ -55,6 +55,18 @@ namespace ${cxxNamespace} {
   using namespace margelo::nitro;
 
   /**
+   * Describes the prototype of \`${spec.name}\`.
+   */
+  class ${name.HybridTSpecPrototype}: public HybridObjectPrototype {
+  public:
+    static ${name.HybridTSpecPrototype} singleton;
+
+  protected:
+    // Hybrid Setup
+    void loadHybridMethods() override;
+  };
+
+  /**
    * An abstract base class for \`${spec.name}\`
    * Inherit this class to create instances of \`${name.HybridTSpec}\` in C++.
    * You must explicitly call \`HybridObject\`'s constructor yourself, because it is virtual.
@@ -76,16 +88,18 @@ namespace ${cxxNamespace} {
       ~${name.HybridTSpec}() override = default;
 
     public:
+      // Prototype
+      const HybridObjectPrototype& getPrototype() const noexcept override {
+        return ${name.HybridTSpecPrototype}::singleton;
+      }
+
+    public:
       // Properties
       ${indent(spec.properties.map((p) => p.getCode('c++', { virtual: true })).join('\n'), '      ')}
 
     public:
       // Methods
       ${indent(spec.methods.map((m) => m.getCode('c++', { virtual: true })).join('\n'), '      ')}
-
-    protected:
-      // Hybrid Setup
-      void loadHybridMethods() override;
 
     protected:
       // Tag for logging
@@ -118,11 +132,16 @@ namespace ${cxxNamespace} {
     )
   }
 
-  const basePrototypeRegistrations = ['HybridObject::loadHybridMethods();']
+  const basePrototypeRegistrations: string[] = []
   for (const base of spec.baseTypes) {
     const hybridObjectName = getHybridObjectName(base.name)
     basePrototypeRegistrations.push(
-      `${hybridObjectName.HybridTSpec}::loadHybridMethods();`
+      `${hybridObjectName.HybridTSpecPrototype}::loadHybridMethods();`
+    )
+  }
+  if (basePrototypeRegistrations.length === 0) {
+    basePrototypeRegistrations.push(
+      'HybridObjectPrototype::loadHybridMethods();'
     )
   }
 
@@ -133,7 +152,7 @@ ${createFileMetadataString(`${name.HybridTSpec}.cpp`)}
 
 namespace ${cxxNamespace} {
 
-  void ${name.HybridTSpec}::loadHybridMethods() {
+  void ${name.HybridTSpecPrototype}::loadHybridMethods() {
     // load base methods/properties
     ${indent(basePrototypeRegistrations.join('\n'), '    ')}
     // load custom methods/properties

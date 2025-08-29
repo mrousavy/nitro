@@ -106,6 +106,16 @@ public:
    */
   virtual void dispose() {}
 
+public:
+  /**
+   * Get this `HybridObject`'s Prototype.
+   * For legacy `HybridObject`s, this is stored in `this`.
+   * For modern `HybridObject`s, this should be a separate class, that holds a singleton.
+   */
+  virtual const HybridObjectPrototype& getPrototype() const noexcept {
+    return *this;
+  }
+
 private:
   /**
    * The actual `dispose()` function from JS.
