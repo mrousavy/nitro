@@ -61,7 +61,7 @@ jsi::Value HybridObject::toObject(jsi::Runtime& runtime) {
     }
   }
 
-  // 2. Get the object's base prototype (global & shared)
+  // 2. Get the object's base prototype (statically cached)
   HybridObjectPrototype& prototype = getPrototype();
   jsi::Value prototypeValue = prototype.toJS(runtime);
 
@@ -70,7 +70,7 @@ jsi::Value HybridObject::toObject(jsi::Runtime& runtime) {
   jsi::Function create = objectConstructor.getPropertyAsFunction(runtime, "create");
 
   // 4. Create the object using Object.create(...)
-  jsi::Object object = create.call(runtime, prototype).asObject(runtime);
+  jsi::Object object = create.call(runtime, prototypeValue).asObject(runtime);
 
   // 5. Assign NativeState to the object so the prototype can resolve the native methods
   object.setNativeState(runtime, shared());

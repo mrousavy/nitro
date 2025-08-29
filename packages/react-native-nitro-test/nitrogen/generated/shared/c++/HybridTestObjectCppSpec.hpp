@@ -111,7 +111,7 @@ namespace margelo::nitro::test {
 
     public:
       // Prototype
-      const HybridObjectPrototype& getPrototype() const noexcept override {
+      HybridObjectPrototype& getPrototype() const noexcept override {
         return HybridTestObjectCppSpecPrototype::singleton;
       }
 
