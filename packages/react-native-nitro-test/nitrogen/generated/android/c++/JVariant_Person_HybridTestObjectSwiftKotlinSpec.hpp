@@ -70,16 +70,4 @@ namespace margelo::nitro::test {
       }
     };
   } // namespace JVariant_Person_HybridTestObjectSwiftKotlinSpec_impl
-
-  std::variant<Person, std::shared_ptr<HybridTestObjectSwiftKotlinSpec>> JVariant_Person_HybridTestObjectSwiftKotlinSpec::toCpp() const {
-    if (isInstanceOf(JVariant_Person_HybridTestObjectSwiftKotlinSpec_impl::First::javaClassStatic())) {
-      auto jniValue = static_cast<const JVariant_Person_HybridTestObjectSwiftKotlinSpec_impl::First*>(this)->getValue();
-      return jniValue->toCpp();
-    } else if (isInstanceOf(JVariant_Person_HybridTestObjectSwiftKotlinSpec_impl::Second::javaClassStatic())) {
-      auto jniValue = static_cast<const JVariant_Person_HybridTestObjectSwiftKotlinSpec_impl::Second*>(this)->getValue();
-      return jniValue->cthis()->shared_cast<JHybridTestObjectSwiftKotlinSpec>();
-    }
-    throw std::invalid_argument("Variant is unknown Kotlin instance!");
-  }
-
 } // namespace margelo::nitro::test

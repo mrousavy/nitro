@@ -131,7 +131,7 @@ public:
     .map((i) => includeHeader(i, true))
     .filter(isNotDuplicate)
 
-  const fbjniCode = `
+  const fbjniHeaderCode = `
 ${createFileMetadataString(`J${kotlinName}.hpp`)}
 
 #pragma once
@@ -167,12 +167,18 @@ namespace ${cxxNamespace} {
   namespace ${namespace} {
     ${indent(cppInnerClasses.join('\n\n'), '    ')}
   } // namespace ${namespace}
+} // namespace ${cxxNamespace}
+  `.trim()
+  const fbjniImplementationCode = `
+${createFileMetadataString(`J${kotlinName}.cpp`)}
 
+#include "J${kotlinName}.hpp"
+
+namespace ${cxxNamespace} {
   ${variant.getCode('c++')} J${kotlinName}::toCpp() const {
     ${indent(cppGetIfs.join(' else '), '    ')}
     throw std::invalid_argument("Variant is unknown Kotlin instance!");
   }
-
 } // namespace ${cxxNamespace}
   `.trim()
 
@@ -185,9 +191,16 @@ namespace ${cxxNamespace} {
     platform: 'android',
   })
   files.push({
-    content: fbjniCode,
+    content: fbjniHeaderCode,
     language: 'c++',
     name: `J${kotlinName}.hpp`,
+    subdirectory: [],
+    platform: 'android',
+  })
+  files.push({
+    content: fbjniImplementationCode,
+    language: 'c++',
+    name: `J${kotlinName}.cpp`,
     subdirectory: [],
     platform: 'android',
   })

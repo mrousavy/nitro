@@ -35,6 +35,14 @@ target_sources(
   ../nitrogen/generated/shared/c++/views/HybridTestViewComponent.cpp
   # Android-specific Nitrogen C++ sources
   ../nitrogen/generated/android/c++/JHybridTestObjectSwiftKotlinSpec.cpp
+  ../nitrogen/generated/android/c++/JVariant_String_Double.cpp
+  ../nitrogen/generated/android/c++/JVariant_Person_HybridTestObjectSwiftKotlinSpec.cpp
+  ../nitrogen/generated/android/c++/JVariant_Double_Boolean.cpp
+  ../nitrogen/generated/android/c++/JVariant_Boolean_OldEnum.cpp
+  ../nitrogen/generated/android/c++/JVariant_Boolean_WeirdNumbersEnum.cpp
+  ../nitrogen/generated/android/c++/JVariant_Car_Person.cpp
+  ../nitrogen/generated/android/c++/JNamedVariant.cpp
+  ../nitrogen/generated/android/c++/JVariant_String_Double_Boolean_DoubleArray_Array_String_.cpp
   ../nitrogen/generated/android/c++/JHybridBaseSpec.cpp
   ../nitrogen/generated/android/c++/JHybridChildSpec.cpp
   ../nitrogen/generated/android/c++/JHybridTestViewSpec.cpp

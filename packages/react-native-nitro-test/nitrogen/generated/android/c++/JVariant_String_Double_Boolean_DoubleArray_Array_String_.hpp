@@ -124,39 +124,4 @@ namespace margelo::nitro::test {
       }
     };
   } // namespace JVariant_String_Double_Boolean_DoubleArray_Array_String__impl
-
-  std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>> JVariant_String_Double_Boolean_DoubleArray_Array_String_::toCpp() const {
-    if (isInstanceOf(JVariant_String_Double_Boolean_DoubleArray_Array_String__impl::First::javaClassStatic())) {
-      auto jniValue = static_cast<const JVariant_String_Double_Boolean_DoubleArray_Array_String__impl::First*>(this)->getValue();
-      return jniValue->toStdString();
-    } else if (isInstanceOf(JVariant_String_Double_Boolean_DoubleArray_Array_String__impl::Second::javaClassStatic())) {
-      auto jniValue = static_cast<const JVariant_String_Double_Boolean_DoubleArray_Array_String__impl::Second*>(this)->getValue();
-      return jniValue;
-    } else if (isInstanceOf(JVariant_String_Double_Boolean_DoubleArray_Array_String__impl::Third::javaClassStatic())) {
-      auto jniValue = static_cast<const JVariant_String_Double_Boolean_DoubleArray_Array_String__impl::Third*>(this)->getValue();
-      return static_cast<bool>(jniValue);
-    } else if (isInstanceOf(JVariant_String_Double_Boolean_DoubleArray_Array_String__impl::Fourth::javaClassStatic())) {
-      auto jniValue = static_cast<const JVariant_String_Double_Boolean_DoubleArray_Array_String__impl::Fourth*>(this)->getValue();
-      return [&]() {
-      size_t __size = jniValue->size();
-      std::vector<double> __vector(__size);
-      jniValue->getRegion(0, __size, __vector.data());
-      return __vector;
-    }();
-    } else if (isInstanceOf(JVariant_String_Double_Boolean_DoubleArray_Array_String__impl::Fifth::javaClassStatic())) {
-      auto jniValue = static_cast<const JVariant_String_Double_Boolean_DoubleArray_Array_String__impl::Fifth*>(this)->getValue();
-      return [&]() {
-      size_t __size = jniValue->size();
-      std::vector<std::string> __vector;
-      __vector.reserve(__size);
-      for (size_t __i = 0; __i < __size; __i++) {
-        auto __element = jniValue->getElement(__i);
-        __vector.push_back(__element->toStdString());
-      }
-      return __vector;
-    }();
-    }
-    throw std::invalid_argument("Variant is unknown Kotlin instance!");
-  }
-
 } // namespace margelo::nitro::test
