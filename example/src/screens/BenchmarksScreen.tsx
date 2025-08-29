@@ -60,19 +60,6 @@ async function runBenchmarks(): Promise<BenchmarksResult> {
   warmupNitroModule()
   warmupTurboModule()
 
-  await waitForGc()
-  let nitroTime = 0
-  {
-    const start = performance.now()
-    let num = 0
-    for (let i = 0; i < ITERATIONS; i++) {
-      num = HybridTestObjectSwiftKotlin.addNumbers(num, 3)
-    }
-    const end = performance.now()
-    nitroTime = end - start
-  }
-
-  await waitForGc()
   let turboTime = 0
   {
     const start = performance.now()
@@ -84,7 +71,17 @@ async function runBenchmarks(): Promise<BenchmarksResult> {
     turboTime = end - start
   }
 
-  waitForGc()
+  let nitroTime = 0
+  {
+    const start = performance.now()
+    let num = 0
+    for (let i = 0; i < ITERATIONS; i++) {
+      num = HybridTestObjectSwiftKotlin.addNumbers(num, 3)
+    }
+    const end = performance.now()
+    nitroTime = end - start
+  }
+
   console.log(
     `Benchmarks finished! Nitro: ${nitroTime.toFixed(2)}ms | Turbo: ${turboTime.toFixed(2)}ms`
   )
