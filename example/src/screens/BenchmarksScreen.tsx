@@ -29,8 +29,6 @@ interface BenchmarksResult {
   numberOfIterations: number
   nitroExecutionTimeMs: number
   turboExecutionTimeMs: number
-  nitroResult: number
-  turboResult: number
 }
 
 function delay(ms: number): Promise<void> {
@@ -49,44 +47,51 @@ async function waitForGc(): Promise<void> {
   })
 }
 
+function warmupNitroModule() {
+  HybridTestObjectSwiftKotlin.addNumbers(5, 13)
+}
+function warmupTurboModule() {
+  ExampleTurboModule.addNumbers(5, 13)
+}
+
 const ITERATIONS = 100_000
 async function runBenchmarks(): Promise<BenchmarksResult> {
   console.log(`Running benchmarks ${ITERATIONS}x...`)
+  warmupNitroModule()
+  warmupTurboModule()
 
   await waitForGc()
-  let nitroResult = 0,
-    nitroStart = 0,
-    nitroEnd = 0
+  let nitroTime = 0
   {
-    nitroStart = performance.now()
+    const start = performance.now()
+    let num = 0
     for (let i = 0; i < ITERATIONS; i++) {
-      nitroResult = HybridTestObjectSwiftKotlin.addNumbers(3, 5)
+      num = HybridTestObjectSwiftKotlin.addNumbers(num, 3)
     }
-    nitroEnd = performance.now()
+    const end = performance.now()
+    nitroTime = end - start
   }
 
   await waitForGc()
-  let turboResult = 0,
-    turboStart = 0,
-    turboEnd = 0
+  let turboTime = 0
   {
-    turboStart = performance.now()
+    const start = performance.now()
+    let num = 0
     for (let i = 0; i < ITERATIONS; i++) {
-      turboResult = ExampleTurboModule.addNumbers(3, 5)
+      num = ExampleTurboModule.addNumbers(num, 3)
     }
-    turboEnd = performance.now()
+    const end = performance.now()
+    turboTime = end - start
   }
 
   waitForGc()
   console.log(
-    `Benchmarks finished! Nitro: ${(nitroEnd - nitroStart).toFixed(2)}ms | Turbo: ${(turboEnd - turboStart).toFixed(2)}ms`
+    `Benchmarks finished! Nitro: ${nitroTime.toFixed(2)}ms | Turbo: ${turboTime.toFixed(2)}ms`
   )
   return {
-    nitroExecutionTimeMs: nitroEnd - nitroStart,
-    turboExecutionTimeMs: turboEnd - turboStart,
+    nitroExecutionTimeMs: nitroTime,
+    turboExecutionTimeMs: turboTime,
     numberOfIterations: ITERATIONS,
-    turboResult: turboResult,
-    nitroResult: nitroResult,
   }
 }
 
