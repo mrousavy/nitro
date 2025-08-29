@@ -12,6 +12,8 @@
 
 namespace margelo::nitro {
 
+HybridNitroModulesProxyPrototype HybridNitroModulesProxyPrototype::singleton;
+
 void HybridNitroModulesProxyPrototype::loadHybridMethods() {
   HybridObjectPrototype::loadHybridMethods();
 
