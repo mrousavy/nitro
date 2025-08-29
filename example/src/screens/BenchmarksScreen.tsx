@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-/* eslint-disable no-lone-blocks */
+
 import * as React from 'react'
 
 import {
