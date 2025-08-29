@@ -17,6 +17,14 @@
 
 namespace margelo::nitro::test {
 
+void HybridTestObjectCppPrototype::loadHybridMethods() {
+  // call base protoype
+  HybridTestObjectCppSpecPrototype::loadHybridMethods();
+  // register all methods we override here
+  registerHybrids(this,
+                  [](Prototype& prototype) { prototype.registerRawHybridMethod("rawJsiFunc", 0, &HybridTestObjectCpp::rawJsiFunc); });
+}
+
 // Properties
 double HybridTestObjectCpp::getNumberValue() {
   return _number;
