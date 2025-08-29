@@ -23,7 +23,8 @@ using namespace facebook;
  *
  * The new class can then be passed to JS using the `JSIConverter<HybridObject>`.
  */
-class HybridObject : public virtual jsi::NativeState, public HybridObjectPrototype, public std::enable_shared_from_this<HybridObject> {
+class HybridObject : public virtual jsi::NativeState, public std::enable_shared_from_this<HybridObject> {
+  friend HybridObjectPrototype;
 public:
   /**
    * Create a new instance of a `HybridObject`.
@@ -112,8 +113,8 @@ public:
    * For legacy `HybridObject`s, this is stored in `this`.
    * For modern `HybridObject`s, this should be a separate class, that holds a singleton.
    */
-  virtual const HybridObjectPrototype& getPrototype() const noexcept {
-    return *this;
+  virtual HybridObjectPrototype& getPrototype() const noexcept {
+    return HybridObjectPrototype::singleton;
   }
 
 private:
@@ -131,26 +132,6 @@ protected:
   virtual inline size_t getExternalMemorySize() noexcept {
     return 0;
   }
-
-protected:
-  /**
-   * Loads all native methods of this `HybridObject` to be exposed to JavaScript.
-   * The base implementation registers a `toString()` method and `name` property.
-   *
-   * Example:
-   *
-   * ```cpp
-   * int User::getAge() {
-   *   return 23;
-   * }
-   *
-   * void User::loadHybridMethods() {
-   *   HybridObject::loadHybridMethods();
-   *   registerHybridMethod("getAge", &User::getAge);
-   * }
-   * ```
-   */
-  virtual void loadHybridMethods() override;
 
 private:
   static constexpr auto TAG = "HybridObject";

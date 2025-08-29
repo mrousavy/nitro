@@ -31,7 +31,7 @@ namespace margelo::nitro::test {
   /**
    * Describes the prototype of `Child`.
    */
-  class HybridChildSpecPrototype: public HybridObjectPrototype {
+  class HybridChildSpecPrototype: public HybridBaseSpecPrototype {
   public:
     static HybridChildSpecPrototype singleton;
 

@@ -8,7 +8,7 @@
 
 namespace margelo::nitro {
 
-HybridObject::HybridObject(const char* name) : HybridObjectPrototype(), _name(name) {}
+HybridObject::HybridObject(const char* name) : _name(name) {}
 
 std::string HybridObject::toString() {
   return "[HybridObject " + std::string(_name) + "]";
@@ -44,15 +44,6 @@ jsi::Value HybridObject::disposeRaw(jsi::Runtime& runtime, const jsi::Value& thi
   return jsi::Value::undefined();
 }
 
-void HybridObject::loadHybridMethods() {
-  registerHybrids(this, [](Prototype& prototype) {
-    prototype.registerHybridGetter("name", &HybridObject::getName);
-    prototype.registerHybridMethod("equals", &HybridObject::equals);
-    prototype.registerHybridMethod("toString", &HybridObject::toString);
-    prototype.registerRawHybridMethod("dispose", 0, &HybridObject::disposeRaw);
-  });
-}
-
 jsi::Value HybridObject::toObject(jsi::Runtime& runtime) {
   // 1. Check if we have a jsi::WeakObject in cache that we can use to avoid re-creating the object each time
   auto cachedObject = _objectCache.find(&runtime);
@@ -71,7 +62,8 @@ jsi::Value HybridObject::toObject(jsi::Runtime& runtime) {
   }
 
   // 2. Get the object's base prototype (global & shared)
-  jsi::Value prototype = getPrototype(runtime);
+  HybridObjectPrototype& prototype = getPrototype();
+  jsi::Value prototypeValue = prototype.toJS(runtime);
 
   // 3. Get the global JS Object.create(...) constructor so we can create an object from the given prototype
   jsi::Object objectConstructor = runtime.global().getPropertyAsObject(runtime, "Object");

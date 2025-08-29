@@ -30,12 +30,23 @@ export function createCppHybridObject(spec: HybridObjectSpec): SourceFile[] {
   const name = getHybridObjectName(spec.name)
 
   const bases = ['public virtual HybridObject']
-  for (const base of spec.baseTypes) {
-    const baseName = getHybridObjectName(base.name).HybridTSpec
-    const fullName = base.config.isExternalConfig
-      ? base.config.getCxxNamespace('c++', baseName)
-      : baseName
-    bases.push(`public virtual ${fullName}`)
+  const prototypeBaseClasses: string[] = []
+  if (spec.baseTypes.length === 0) {
+    // we are the base class.
+    prototypeBaseClasses.push('public HybridObjectPrototype')
+  } else {
+    // we have custom base classes
+    for (const base of spec.baseTypes) {
+      const baseName = getHybridObjectName(base.name)
+      const fullName = base.config.isExternalConfig
+        ? base.config.getCxxNamespace('c++', baseName.HybridTSpec)
+        : baseName.HybridTSpec
+      const fullPrototypeName = base.config.isExternalConfig
+        ? base.config.getCxxNamespace('c++', baseName.HybridTSpecPrototype)
+        : baseName.HybridTSpecPrototype
+      bases.push(`public virtual ${fullName}`)
+      prototypeBaseClasses.push(`public ${fullPrototypeName}`)
+    }
   }
 
   // Generate the full header / code
@@ -57,7 +68,7 @@ namespace ${cxxNamespace} {
   /**
    * Describes the prototype of \`${spec.name}\`.
    */
-  class ${name.HybridTSpecPrototype}: public HybridObjectPrototype {
+  class ${name.HybridTSpecPrototype}: ${prototypeBaseClasses.join(', ')} {
   public:
     static ${name.HybridTSpecPrototype} singleton;
 
