@@ -9,6 +9,8 @@
 
 namespace margelo::nitro::test {
 
+  HybridTestViewSpecPrototype HybridTestViewSpecPrototype::singleton;
+
   void HybridTestViewSpecPrototype::loadHybridMethods() {
     // load base methods/properties
     HybridObjectPrototype::loadHybridMethods();
