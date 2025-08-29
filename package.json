@@ -33,9 +33,9 @@
     "@eslint/js": "^9.30.1",
     "@jamesacarr/eslint-formatter-github-actions": "^0.2.0",
     "@react-native/eslint-config": "0.81.0",
-    "@release-it-plugins/workspaces": "^4.2.1",
-    "@release-it/bumper": "^6.0.1",
-    "@release-it/conventional-changelog": "^8.0.2",
+    "@release-it-plugins/workspaces": "^5.0.3",
+    "@release-it/bumper": "^7.0.5",
+    "@release-it/conventional-changelog": "^10.0.1",
     "@tsconfig/react-native": "^2.0.3",
     "@types/eslint__js": "^8.42.3",
     "@types/jest": "^29.5.14",
@@ -46,7 +46,7 @@
     "prettier": "^3.6.2",
     "react": "19.1.0",
     "react-native": "0.81.0",
-    "release-it": "^17.11.0",
+    "release-it": "^19.0.4",
     "typescript": "~5.8.3",
     "typescript-eslint": "^8.36.0"
   },
@@ -63,7 +63,8 @@
       "release": true
     },
     "hooks": {
-      "before:release": "bun i && bun nitro-test-external build && bun nitro-test build && bun example bundle-install && bun example pods && git add example/ios/Podfile.lock"
+      "before:release": "bun i && bun nitro-test-external build && bun nitro-test build",
+      "before:git": "bun i && bun example bundle-install && bun example pods && git add bun.lock && git add example/ios/Podfile.lock"
     },
     "plugins": {
       "@release-it/bumper": {
