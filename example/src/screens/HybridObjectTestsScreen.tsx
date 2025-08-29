@@ -191,7 +191,7 @@ export function HybridObjectTestsScreen() {
       </ScrollView>
 
       <View style={[styles.bottomView, { backgroundColor: colors.background }]}>
-        <Text>{status}</Text>
+        <Text numberOfLines={2}>{status}</Text>
         <View style={styles.flex} />
         <Button title="Run all tests" onPress={runAllTests} />
       </View>
