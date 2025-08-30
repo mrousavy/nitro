@@ -32,6 +32,11 @@ export interface HybridObjectName {
    * @example "HybridImageSwift"
    */
   HybridTSpecSwift: string
+  /**
+   * The name of the C++ class that holds the prototype for the C++ HybridObject.
+   * @example "HybridImagePrototype"
+   */
+  HybridTSpecPrototype: string
 }
 
 export function getHybridObjectName(
@@ -41,6 +46,7 @@ export function getHybridObjectName(
     T: hybridObjectName,
     HybridT: `Hybrid${hybridObjectName}`,
     HybridTSpec: `Hybrid${hybridObjectName}Spec`,
+    HybridTSpecPrototype: `Hybrid${hybridObjectName}SpecPrototype`,
     HybridTSpecCxx: `Hybrid${hybridObjectName}Spec_cxx`,
     JHybridTSpec: `JHybrid${hybridObjectName}Spec`,
     HybridTSpecSwift: `Hybrid${hybridObjectName}SpecSwift`,
