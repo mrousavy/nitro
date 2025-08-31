@@ -70,7 +70,10 @@ Pod::Spec.new do |s|
     react_native_version = get_react_native_version()
     if (react_native_version < 80)
       # C++ compiler flags, for folly when building as static framework:
+      current_header_search_paths = Array(xcconfig["HEADER_SEARCH_PATHS"])
+      xcconfig["HEADER_SEARCH_PATHS"] = current_header_search_paths + ["${PODS_ROOT}/RCT-Folly"]
       xcconfig["GCC_PREPROCESSOR_DEFINITIONS"] = "$(inherited) FOLLY_NO_CONFIG FOLLY_CFG_NO_COROUTINES"
+      xcconfig["OTHER_CPLUSPLUSFLAGS"] = "$(inherited) -DFOLLY_NO_CONFIG -DFOLLY_MOBILE=1 -DFOLLY_USE_LIBCPP=1"
     end
   end
 
