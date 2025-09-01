@@ -55,7 +55,7 @@ type WrapFunctionsInObjects<Props> = {
  *
  * @note Every React Native view has a {@linkcode DefaultHybridViewProps.hybridRef hybridRef} which can be used to gain access
  *       to the underlying Nitro {@linkcode HybridView}.
- * @note Every function/callback is wrapped as a `{ f: … }` object.
+ * @note Every function/callback is wrapped as a `{ f: … }` object. Use {@linkcode callback | callback(...)} for this.
  * @note Every method can be called on the Ref. Including setting properties directly.
  */
 export type ReactNativeView<
@@ -86,4 +86,18 @@ export function getHostComponent<
     )
   }
   return NativeComponentRegistry.get(name, getViewConfig)
+}
+
+/**
+ * Wrap the given {@linkcode func} in a Nitro callback.
+ * - For older versions of react-native, this wraps the callback in a `{ f: T }` object.
+ * - For newer versions of react-native, this just returns the function as-is.
+ */
+export function callback<T extends (...args: any[]) => any>(func: T): { f: T }
+export function callback<T>(func: T): T
+export function callback(func: unknown) {
+  if (typeof func === 'function') {
+    return { f: func }
+  }
+  return func
 }
