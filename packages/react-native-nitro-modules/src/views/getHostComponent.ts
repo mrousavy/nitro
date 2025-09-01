@@ -7,12 +7,21 @@ import type {
   HybridViewProps,
 } from './HybridView'
 
+type AttributeValue<T, V = T> =
+  | boolean
+  | {
+      diff?: (arg1: T, arg2: T) => boolean
+      process?: (arg1: V) => T
+    }
+
 export interface ViewConfig<Props> {
   uiViewClassName: string
   supportsRawText?: boolean
   bubblingEventTypes: Record<string, unknown>
   directEventTypes: Record<string, unknown>
-  validAttributes: Record<keyof Props, boolean>
+  validAttributes: {
+    [K in keyof Props]: AttributeValue<Props[K]>
+  }
 }
 
 /**
@@ -55,7 +64,7 @@ type WrapFunctionsInObjects<Props> = {
  *
  * @note Every React Native view has a {@linkcode DefaultHybridViewProps.hybridRef hybridRef} which can be used to gain access
  *       to the underlying Nitro {@linkcode HybridView}.
- * @note Every function/callback is wrapped as a `{ f: … }` object.
+ * @note Every function/callback is wrapped as a `{ f: … }` object. Use {@linkcode callback | callback(...)} for this.
  * @note Every method can be called on the Ref. Including setting properties directly.
  */
 export type ReactNativeView<
@@ -67,6 +76,24 @@ export type ReactNativeView<
   > &
     ViewProps
 >
+
+type ValidAttributes<Props> = ViewConfig<Props>['validAttributes']
+/**
+ * Wraps all valid attributes of {@linkcode TProps} using Nitro's
+ * default `diff` and `process` functions.
+ */
+function wrapValidAttributes<TProps>(
+  attributes: ValidAttributes<TProps>
+): ValidAttributes<TProps> {
+  const keys = Object.keys(attributes) as (keyof ValidAttributes<TProps>)[]
+  for (const key of keys) {
+    attributes[key] = {
+      diff: (a, b) => a !== b,
+      process: (i) => i,
+    }
+  }
+  return attributes
+}
 
 /**
  * Finds and returns a native view (aka "HostComponent") via the given {@linkcode name}.
@@ -85,5 +112,23 @@ export function getHostComponent<
       `NativeComponentRegistry is not available on ${Platform.OS}!`
     )
   }
-  return NativeComponentRegistry.get(name, getViewConfig)
+  return NativeComponentRegistry.get(name, () => {
+    const config = getViewConfig()
+    config.validAttributes = wrapValidAttributes(config.validAttributes)
+    return config
+  })
+}
+
+/**
+ * Wrap the given {@linkcode func} in a Nitro callback.
+ * - For older versions of react-native, this wraps the callback in a `{ f: T }` object.
+ * - For newer versions of react-native, this just returns the function as-is.
+ */
+export function callback<T extends (...args: any[]) => any>(func: T): { f: T }
+export function callback<T>(func: T): T
+export function callback(func: unknown) {
+  if (typeof func === 'function') {
+    return { f: func }
+  }
+  return func
 }
