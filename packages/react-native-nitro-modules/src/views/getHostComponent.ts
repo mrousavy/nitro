@@ -77,6 +77,24 @@ export type ReactNativeView<
     ViewProps
 >
 
+type ValidAttributes<Props> = ViewConfig<Props>['validAttributes']
+/**
+ * Wraps all valid attributes of {@linkcode TProps} using Nitro's
+ * default `diff` and `process` functions.
+ */
+function wrapValidAttributes<TProps>(
+  attributes: ValidAttributes<TProps>
+): ValidAttributes<TProps> {
+  const keys = Object.keys(attributes) as (keyof ValidAttributes<TProps>)[]
+  for (const key of keys) {
+    attributes[key] = {
+      diff: (a, b) => a !== b,
+      process: (i) => i,
+    }
+  }
+  return attributes
+}
+
 /**
  * Finds and returns a native view (aka "HostComponent") via the given {@linkcode name}.
  *
@@ -94,7 +112,11 @@ export function getHostComponent<
       `NativeComponentRegistry is not available on ${Platform.OS}!`
     )
   }
-  return NativeComponentRegistry.get(name, getViewConfig)
+  return NativeComponentRegistry.get(name, () => {
+    const config = getViewConfig()
+    config.validAttributes = wrapValidAttributes(config.validAttributes)
+    return config
+  })
 }
 
 /**
@@ -106,7 +128,7 @@ export function callback<T extends (...args: any[]) => any>(func: T): { f: T }
 export function callback<T>(func: T): T
 export function callback(func: unknown) {
   if (typeof func === 'function') {
-    return { f: func, __dummyInvalidateDiff: Date.now() }
+    return { f: func }
   }
   return func
 }
