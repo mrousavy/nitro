@@ -7,12 +7,21 @@ import type {
   HybridViewProps,
 } from './HybridView'
 
+type AttributeValue<T, V = T> =
+  | true
+  | {
+      diff?: (arg1: T, arg2: T) => boolean
+      process?: (arg1: V) => T
+    }
+
 export interface ViewConfig<Props> {
   uiViewClassName: string
   supportsRawText?: boolean
   bubblingEventTypes: Record<string, unknown>
   directEventTypes: Record<string, unknown>
-  validAttributes: Record<keyof Props, boolean>
+  validAttributes: {
+    [K in keyof Props]: AttributeValue<Props[K]>
+  }
 }
 
 /**
