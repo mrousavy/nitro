@@ -97,7 +97,7 @@ export function callback<T extends (...args: any[]) => any>(func: T): { f: T }
 export function callback<T>(func: T): T
 export function callback(func: unknown) {
   if (typeof func === 'function') {
-    return { f: func }
+    return { f: func, __dummyInvalidateDiff: Date.now() }
   }
   return func
 }
