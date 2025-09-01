@@ -8,7 +8,7 @@ import type {
 } from './HybridView'
 
 type AttributeValue<T, V = T> =
-  | true
+  | boolean
   | {
       diff?: (arg1: T, arg2: T) => boolean
       process?: (arg1: V) => T
