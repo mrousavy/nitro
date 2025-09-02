@@ -132,7 +132,7 @@ namespace margelo::nitro {
 }
 ```
 
-Then just use it in your methods:
+Then just use the type in your methods:
 
 <Tabs groupId="nitrogen-or-not">
   <TabItem value="nitrogen" label="With Nitrogen ✨" default>
@@ -199,3 +199,17 @@ Then just use it in your methods:
 
   </TabItem>
 </Tabs>
+
+And lastly you'd pass the JS value that maps to this native type - in our case, `react::ShadowNodeWrapper` is stored on a View ref's `state` property:
+
+```tsx
+function App() {
+  const ref = useRef<View>(null)
+
+  const call = () => {
+    myHybrid.doSomething(ref.current.state)
+  }
+
+  return <View ref={ref} />
+}
+```
