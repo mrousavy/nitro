@@ -26,7 +26,7 @@ export function getHybridObjectConstructor<T extends HybridObject>(
 
   // A function that creates the HybridObject.
   // This can be called with `new`, and internally sets the prototype.
-  const constructorFunc = function constructorFuncImpl() {
+  const constructorFunc = function () {
     const instance = NitroModules.createHybridObject<T>(name)
     const prototype = Object.getPrototypeOf(instance)
     if (constructorFunc.prototype !== prototype) {
