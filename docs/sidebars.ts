@@ -17,7 +17,7 @@ const sidebars: SidebarsConfig = {
       label: 'Getting started',
       items: [
         'what-is-nitro',
-        'using-nitro-in-a-library',
+        'how-to-build-a-nitro-module',
         'configuration-nitro-json',
         'minimum-requirements',
       ]

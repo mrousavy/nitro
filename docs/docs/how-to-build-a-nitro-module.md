@@ -4,9 +4,12 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Using Nitro in a library
+# How to build a Nitro Module
 
-Nitro can be used as a simple lightweight C++/Swift/Kotlin dependency in your React Native library.
+A [Nitro Module](nitro-modules) is essentially just a react-native library that depends on react-native-nitro-modules and exposes one or more [Hybrid Objects](hybrid-objects).
+It can either just use react-native-nitro-modules directly from C++, or use [Nitrogen](nitrogen) to generate bindings from TypeScript to native - in this case you can even use Swift and Kotlin.
+
+This is a quick guide to build a Nitro Module from start to finish:
 
 ## 1. Create a Nitro Module
 
@@ -35,16 +38,16 @@ First, you need to create a [Nitro Module](nitro-modules) - either by bootstrapp
 
     Then, you need to decide if you want to use Nitro's C++ library directly, or use [nitrogen](nitrogen) to generate specs:
 
-    <Tabs groupId="no-nitro-at-all">
+    <Tabs>
       <TabItem value="with-nitrogen" label="I will use Nitrogen later on" default>
 
         ### 1.2. Create a `nitro.json` file
 
-        Then, create a `nitro.json` file. See [Configuration (`nitro.json`)](configuration-nitro-json) for a full guide.
+        Next, create a `nitro.json` file. See [Configuration (`nitro.json`)](configuration-nitro-json) for a full guide.
 
         ### 1.3. Run nitrogen once
 
-        To initialize the project (and add all files required for autolinking), run nitrogen once:
+        After creating a `nitro.json` file, run nitrogen once to generate the autolinking setup:
 
         ```sh
         npx nitro-codegen
@@ -100,7 +103,7 @@ First, you need to create a [Nitro Module](nitro-modules) - either by bootstrapp
       </TabItem>
       <TabItem value="without-nitrogen-at-all" label="I will not use Nitrogen">
 
-        When you use Nitro's C++ library directly, you do not need to set up any autolinking files since you will be responsible for exposing your `HybridObject`s to JS.
+        If you don't plan on using Nitrogen at all - and instead write your [Hybrid Objects](hybrid-objects) manually using C++, you do not need to set up any autolinking files since you will be responsible for exposing your Hybrid Objects to JS.
 
       </TabItem>
     </Tabs>
@@ -171,37 +174,126 @@ To actually use Nitro, you need to create [Hybrid Objects](hybrid-objects) - eit
   </TabItem>
   <TabItem value="manually" label="Manually">
 
-    If you don't want to use nitrogen, you
+    To create new [Hybrid Objects](hybrid-objects) manually, you simply create a new C++ class that meets the following requirements:
+
+    1. It **public**-inherits from `HybridObject`
+    2. It calls the `HybridObject` constructor with it's name
+    3. It overrides `loadHybridMethods()` and registers it's JS-callable methods & properties
 
     ```cpp title="HybridMath.hpp"
     #pragma once
-    #include "JSIConverter+Float.hpp"
-    // ...
+    #include <NitroModules/HybridObject.hpp>
+
+    // diff-add
+    // 1. Public-inherit from HybridObject
     class HybridMath : public HybridObject {
     public:
-      float add(float a, float b) {
+      // diff-add
+      // 2. Call the HybridObject constructor with the name "Math"
+      HybridMath(): HybridObject("Math") { }
+
+      double add(double a, double b) {
         return a + b;
       }
 
-      void loadHybridMethods() {
+      // diff-add
+      // 3. Override loadHybridMethods()
+      void loadHybridMethods() override {
+        // register base methods (toString, ...)
         HybridObject::loadHybridMethods();
-        registerHybrids(this, [](Prototype& prototype) {
-          prototype.registerHybridMethod("add", &HybridMath::add);
+        // register custom methods (add)
+        registerHybrids(this, [](Prototype& proto) {
+          proto.registerHybridMethod("add", &HybridMath::add);
         });
       }
-    }
+    };
     ```
-
-    :::info
-    Make sure the compiler knows about `JSIConverter<float>` at the time when `HybridMath` is declared, so import your `JSIConverter+Float.hpp` in your Hybrid Object's header file as well!
-    :::
 
   </TabItem>
 </Tabs>
 
-## 3. Register Hybrid Objects
+## 3. (Optional) Register Hybrid Objects
 
-Each Hybrid Object you want to initialize from JS has to be registered in Nitro - either by autolinking them with Nitrogen (see [Configuration (Autolinking)](configuration-nitro-json#autolinking)), or by manually registering the constructors in the [`HybridObjectRegistry`](https://github.com/mrousavy/nitro/blob/main/packages/react-native-nitro-modules/cpp/registry/HybridObjectRegistry.hpp).
+Each Hybrid Object you want to be able to construct from JS has to be registered in Nitro's [`HybridObjectRegistry`](https://github.com/mrousavy/nitro/blob/main/packages/react-native-nitro-modules/cpp/registry/HybridObjectRegistry.hpp).
+If you don't want to register this Hybrid Object, you can skip this part - you will still be able to create it from another Hybrid Object's function (e.g. using the Factory-pattern).
+
+You can either use [Nitrogen](nitrogen) to automatically generate bindings for your [Hybrid Object](hybrid-object)'s constructor, or manually register them using the C++ API for `HybridObjectRegistry`:
+
+<Tabs groupId="nitrogen-or-not">
+  <TabItem value="nitrogen" label="With Nitrogen ✨" default>
+
+  In your [`nitro.json` config](configuration-nitro-json), you can connect the name of the [Hybrid Object](hybrid-objects) (`"Math"`) with the name of the native C++/Swift/Kotlin class that you used to implement the spec (`HybridMath`) using the `autolinking` section:
+
+    <Tabs groupId="native-language">
+      <TabItem value="swift" label="Swift" default>
+        ```json title="nitro.json"
+        {
+          ...
+          "autolinking": {
+            // diff-add
+            "Math": {
+              // diff-add
+              "swift": "HybridMath"
+            // diff-add
+            }
+          }
+        }
+        ```
+      </TabItem>
+      <TabItem value="kotlin" label="Kotlin">
+        ```json title="nitro.json"
+        {
+          ...
+          "autolinking": {
+            // diff-add
+            "Math": {
+              // diff-add
+              "kotlin": "HybridMath"
+            // diff-add
+            }
+          }
+        }
+        ```
+      </TabItem>
+      <TabItem value="cpp" label="C++">
+        ```json title="nitro.json"
+        {
+          ...
+          "autolinking": {
+            // diff-add
+            "Math": {
+              // diff-add
+              "cpp": "HybridMath"
+            // diff-add
+            }
+          }
+        }
+        ```
+      </TabItem>
+    </Tabs>
+
+    Now, just run [Nitrogen](nitrogen) again to generate the native bindings:
+
+    ```sh
+    npx nitro-codegen
+    ```
+
+  </TabItem>
+  <TabItem value="manually" label="Manually">
+
+    To manually register a C++ class inside the `HybridObjectRegistry`, you need to call `HybridObjectRegistry::registerHybridObjectConstructor(...)` at some point before your JS code runs - e.g. at app startup:
+
+    ```cpp
+    HybridObjectRegistry::registerHybridObjectConstructor(
+      "Math",
+      []() -> std::shared_ptr<HybridObject> {
+        return std::make_shared<HybridMath>();
+      }
+    );
+    ```
+
+  </TabItem>
+</Tabs>
 
 ## 4. Use your Hybrid Objects in JS
 
@@ -213,18 +305,32 @@ interface Math extends HybridObject {
 }
 
 const math = NitroModules.createHybridObject<Math>("Math")
-const value = math.add(5, 7) // --> 12
+const result = math.add(5, 7) // --> 12
 ```
 
 ## 5. Run it
 
 To test the library you just created, you now need to set up an example app for it.
-There's multiple different ways to set up a react-native app nowadays, either via Expo, RN CLI, or bare brownfield iOS/Android apps.
 
-For example, to create a new Expo app, run `create-expo-app`:
+<Tabs groupId="template-bootstrap-cli">
+  <TabItem value="nitrogen" label="nitrogen" default>
 
-```sh
-npx create-expo-app@latest
-```
+    Nitro's template does not include an example app by default, which makes it easier to be used in monorepos.
+    To create an example app yourself - for example with [Expo](https://expo.dev) - run `create-expo-app`:
 
-Then add the Nitro Module you created in step 1 as a local library (aka _linking it_), and run it.
+    ```sh
+    npx create-expo-app@latest
+    ```
+
+    Then, install the library in the example app - e.g. via:
+
+    ```
+    cd example
+    npm install ../
+    ```
+  </TabItem>
+  <TabItem value="bob" label="react-native-builder-bob">
+    The Bob template already includes an example app.
+    Simply run the react-native app inside the `example/` folder.
+  </TabItem>
+</Tabs>
