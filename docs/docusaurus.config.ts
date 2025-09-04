@@ -64,8 +64,7 @@ const config: Config = {
           'hybrid-objects.md',
           'hybrid-views.md',
           'nitrogen.md',
-          'using-nitro-in-a-library.md',
-          'using-nitro-in-your-app.md',
+          'how-to-build-a-nitro-module.md',
         ]
       },
     ],
