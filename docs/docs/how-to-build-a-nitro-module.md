@@ -13,7 +13,7 @@ This is a quick guide to build a Nitro Module from start to finish:
 
 ## 1. Create a Nitro Module
 
-First, you need to create a [Nitro Module](nitro-modules) - either by bootstrapping a template using [nitrogen](nitrogen) or [react-native-builder-bob](https://github.com/callstack/react-native-builder-bob), or by manually adding Nitro to your existing library/app.
+First, you need to create a [Nitro Module](nitro-modules) - either by bootstrapping a template using [nitrogen](nitrogen), [react-native-builder-bob](https://github.com/callstack/react-native-builder-bob) or [create-nitro-module](https://github.com/patrickkabwe/create-nitro-module) - or by manually adding Nitro to your existing library/app.
 
 <Tabs groupId="template-bootstrap-cli">
   <TabItem value="nitrogen" label="nitrogen" default>
@@ -24,6 +24,11 @@ First, you need to create a [Nitro Module](nitro-modules) - either by bootstrapp
   <TabItem value="bob" label="react-native-builder-bob">
     ```sh
     npx create-react-native-library@latest
+    ```
+  </TabItem>
+  <TabItem value="create-nitro-module" label="create-nitro-module">
+    ```sh
+    npx create-nitro-module@latest
     ```
   </TabItem>
   <TabItem value="manually" label="Manually">
@@ -330,7 +335,11 @@ To test the library you just created, you now need to set up an example app for 
     ```
   </TabItem>
   <TabItem value="bob" label="react-native-builder-bob">
-    The Bob template already includes an example app.
+    The [Builder Bob](https://github.com/callstack/react-native-builder-bob) template already includes an example app.
+    Simply run the react-native app inside the `example/` folder.
+  </TabItem>
+  <TabItem value="create-nitro-module" label="create-nitro-module">
+    The [create-nitro-module](https://github.com/patrickkabwe/create-nitro-module) template already includes an example app.
     Simply run the react-native app inside the `example/` folder.
   </TabItem>
 </Tabs>
