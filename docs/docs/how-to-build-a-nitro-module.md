@@ -146,6 +146,9 @@ To actually use Nitro, you need to create [Hybrid Objects](hybrid-objects) - eit
 
     <Tabs groupId="native-language">
       <TabItem value="swift" label="Swift" default>
+
+        Create a new file (e.g. `ios/HybridMath.swift`), and implement the `HybridMathSpec` protocol:
+
         ```swift title="HybridMath.swift"
         class HybridMath : HybridMathSpec {
           public func add(a: Double, b: Double) throws -> Double {
@@ -155,6 +158,9 @@ To actually use Nitro, you need to create [Hybrid Objects](hybrid-objects) - eit
         ```
       </TabItem>
       <TabItem value="kotlin" label="Kotlin">
+
+        Create a new file (e.g. `android/.../HybridMath.kt`), and implement the `HybridMathSpec` interface:
+
         ```kotlin title="HybridMath.kt"
         class HybridMath : HybridMathSpec() {
           override fun add(a: Double, b: Double): Double {
@@ -164,7 +170,10 @@ To actually use Nitro, you need to create [Hybrid Objects](hybrid-objects) - eit
         ```
       </TabItem>
       <TabItem value="cpp" label="C++">
-        ```kotlin title="HybridMath.hpp"
+
+        Create a new file (e.g. `cpp/HybridMath.hpp`), and implement the virtual `HybridMathSpec` class:
+
+        ```cpp title="HybridMath.hpp"
         class HybridMath: public HybridMathSpec {
         public:
           double add(double a, double b) override {
