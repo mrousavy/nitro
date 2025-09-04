@@ -217,7 +217,7 @@ To actually use Nitro, you need to create [Hybrid Objects](hybrid-objects) - eit
 Each Hybrid Object you want to be able to construct from JS has to be registered in Nitro's [`HybridObjectRegistry`](https://github.com/mrousavy/nitro/blob/main/packages/react-native-nitro-modules/cpp/registry/HybridObjectRegistry.hpp).
 If you don't want to register this Hybrid Object, you can skip this part - you will still be able to create it from another Hybrid Object's function (e.g. using the Factory-pattern).
 
-You can either use [Nitrogen](nitrogen) to automatically generate bindings for your [Hybrid Object](hybrid-object)'s constructor, or manually register them using the C++ API for `HybridObjectRegistry`:
+You can either use [Nitrogen](nitrogen) to automatically generate bindings for your [Hybrid Object](hybrid-objects)'s constructor, or manually register them using the C++ API for `HybridObjectRegistry`:
 
 <Tabs groupId="nitrogen-or-not">
   <TabItem value="nitrogen" label="With Nitrogen ✨" default>
