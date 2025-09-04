@@ -295,7 +295,7 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
   }
 
   func getCar() throws -> Car {
-    return Car(year: 2018, make: "Lamborghini", model: "Huracán", power: 640, powertrain: .gas, driver: nil, isFast: true, favouriteTrack: nil)
+    return Car(year: 2018, make: "Lamborghini", model: "Huracán", power: 640, powertrain: .gas, driver: nil, isFast: true, favouriteTrack: nil, performanceScores: [100, 10])
   }
 
   func isCarElectric(car: Car) throws -> Bool {

@@ -16,6 +16,7 @@
 #include "Powertrain.hpp"
 #include <optional>
 #include <string>
+#include <vector>
 
 namespace margelo::nitro::test {
 
@@ -52,6 +53,8 @@ namespace margelo::nitro::test {
       jni::local_ref<jni::JBoolean> isFast = this->getFieldValue(fieldIsFast);
       static const auto fieldFavouriteTrack = clazz->getField<jni::JString>("favouriteTrack");
       jni::local_ref<jni::JString> favouriteTrack = this->getFieldValue(fieldFavouriteTrack);
+      static const auto fieldPerformanceScores = clazz->getField<jni::JArrayDouble>("performanceScores");
+      jni::local_ref<jni::JArrayDouble> performanceScores = this->getFieldValue(fieldPerformanceScores);
       return Car(
         year,
         make->toStdString(),
@@ -60,7 +63,13 @@ namespace margelo::nitro::test {
         powertrain->toCpp(),
         driver != nullptr ? std::make_optional(driver->toCpp()) : std::nullopt,
         isFast != nullptr ? std::make_optional(static_cast<bool>(isFast->value())) : std::nullopt,
-        favouriteTrack != nullptr ? std::make_optional(favouriteTrack->toStdString()) : std::nullopt
+        favouriteTrack != nullptr ? std::make_optional(favouriteTrack->toStdString()) : std::nullopt,
+        [&]() {
+          size_t __size = performanceScores->size();
+          std::vector<double> __vector(__size);
+          performanceScores->getRegion(0, __size, __vector.data());
+          return __vector;
+        }()
       );
     }
 
@@ -78,7 +87,13 @@ namespace margelo::nitro::test {
         JPowertrain::fromCpp(value.powertrain),
         value.driver.has_value() ? JPerson::fromCpp(value.driver.value()) : nullptr,
         value.isFast.has_value() ? jni::JBoolean::valueOf(value.isFast.value()) : nullptr,
-        value.favouriteTrack.has_value() ? jni::make_jstring(value.favouriteTrack.value()) : nullptr
+        value.favouriteTrack.has_value() ? jni::make_jstring(value.favouriteTrack.value()) : nullptr,
+        [&]() {
+          size_t __size = value.performanceScores.size();
+          jni::local_ref<jni::JArrayDouble> __array = jni::JArrayDouble::newArray(__size);
+          __array->setRegion(0, __size, value.performanceScores.data());
+          return __array;
+        }()
       );
     }
   };

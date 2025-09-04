@@ -24,6 +24,7 @@ namespace margelo::nitro::test { struct Person; }
 #include "Person.hpp"
 #include <optional>
 #include "JPerson.hpp"
+#include <vector>
 
 namespace margelo::nitro::test {
 
