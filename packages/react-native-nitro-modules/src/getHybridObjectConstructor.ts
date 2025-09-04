@@ -26,7 +26,7 @@ export function getHybridObjectConstructor<T extends HybridObject>(
 
   // A function that creates the HybridObject.
   // This can be called with `new`, and internally sets the prototype.
-  const constructorFunc = (() => {
+  const constructorFunc = function () {
     const instance = NitroModules.createHybridObject<T>(name)
     const prototype = Object.getPrototypeOf(instance)
     if (constructorFunc.prototype !== prototype) {
@@ -34,7 +34,7 @@ export function getHybridObjectConstructor<T extends HybridObject>(
       constructorFunc.prototypeInitialized = true
     }
     return instance
-  }) as unknown as { new (): T } & { prototypeInitialized?: boolean }
+  } as unknown as { new (): T } & { prototypeInitialized?: boolean }
 
   // Configure lazy prototype. If `instanceof` is called before a `T`
   // has been created, we just lazy-create a new `T` instance to set the proto.
