@@ -27,6 +27,7 @@ namespace margelo::nitro::test { class HybridBaseSpecSwift; }
 #include "Powertrain.hpp"
 #include "Person.hpp"
 #include <optional>
+#include <vector>
 #include "HybridBaseSpecSwift.hpp"
 
 #include "NitroTest-Swift-Cxx-Umbrella.hpp"

@@ -18,7 +18,7 @@ public extension Car {
   /**
    * Create a new instance of `Car`.
    */
-  init(year: Double, make: String, model: String, power: Double, powertrain: Powertrain, driver: Person?, isFast: Bool?, favouriteTrack: String?) {
+  init(year: Double, make: String, model: String, power: Double, powertrain: Powertrain, driver: Person?, isFast: Bool?, favouriteTrack: String?, performanceScores: [Double]) {
     self.init(year, std.string(make), std.string(model), power, powertrain, { () -> bridge.std__optional_Person_ in
       if let __unwrappedValue = driver {
         return bridge.create_std__optional_Person_(__unwrappedValue)
@@ -37,6 +37,12 @@ public extension Car {
       } else {
         return .init()
       }
+    }(), { () -> bridge.std__vector_double_ in
+      var __vector = bridge.create_std__vector_double_(performanceScores.count)
+      for __item in performanceScores {
+        __vector.push_back(__item)
+      }
+      return __vector
     }())
   }
 
@@ -156,6 +162,23 @@ public extension Car {
         } else {
           return .init()
         }
+      }()
+    }
+  }
+  
+  var performanceScores: [Double] {
+    @inline(__always)
+    get {
+      return self.__performanceScores.map({ __item in __item })
+    }
+    @inline(__always)
+    set {
+      self.__performanceScores = { () -> bridge.std__vector_double_ in
+        var __vector = bridge.create_std__vector_double_(newValue.count)
+        for __item in newValue {
+          __vector.push_back(__item)
+        }
+        return __vector
       }()
     }
   }

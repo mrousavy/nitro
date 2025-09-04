@@ -44,7 +44,10 @@ data class Car
     val isFast: Boolean?,
     @DoNotStrip
     @Keep
-    val favouriteTrack: String?
+    val favouriteTrack: String?,
+    @DoNotStrip
+    @Keep
+    val performanceScores: DoubleArray
   ) {
   /* main constructor */
 }

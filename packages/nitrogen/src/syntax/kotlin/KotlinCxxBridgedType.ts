@@ -259,7 +259,16 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
                 return `jni::JArrayClass<${bridgedItem.getTypeCode(language)}>`
             }
           case 'kotlin':
-            return `Array<${bridgedItem.getTypeCode(language)}>`
+            switch (array.itemType.kind) {
+              case 'number':
+                return 'DoubleArray'
+              case 'boolean':
+                return 'BooleanArray'
+              case 'bigint':
+                return 'LongArray'
+              default:
+                return `Array<${bridgedItem.getTypeCode(language)}>`
+            }
           default:
             return this.type.getCode(language)
         }
