@@ -21,7 +21,8 @@ export function createSwiftHybridObject(spec: HybridObjectSpec): SourceFile[] {
   ]
 
   const protocolBaseClasses = ['HybridObject']
-  const classBaseClasses: string[] = []
+  // Always inherit from NSObject so the generated base class is Objective-C compatible.
+  let classBaseClasses: string[] = ['NSObject'] // will adjust if inheriting from another hybrid base
   if (spec.baseTypes.length > 0) {
     if (spec.baseTypes.length > 1) {
       throw new Error(
@@ -31,26 +32,29 @@ export function createSwiftHybridObject(spec: HybridObjectSpec): SourceFile[] {
     const base = spec.baseTypes[0]!
     const baseName = getHybridObjectName(base.name)
     protocolBaseClasses.push(`${baseName.HybridTSpec}_protocol`)
-    classBaseClasses.push(`${baseName.HybridTSpec}_base`)
+    // If inheriting from another HybridObject base, replace NSObject with that base class (it already inherits from NSObject)
+    classBaseClasses = [`${baseName.HybridTSpec}_base`]
   }
   if (spec.isHybridView) {
     protocolBaseClasses.push('HybridView')
   }
 
+  // We always have at least NSObject in classBaseClasses for ObjC compatibility.
   const hasBaseClass = classBaseClasses.length > 0
+  // Only override getCxxWrapper if we actually inherit from another generated Hybrid base (not just NSObject).
+  const shouldOverrideGetCxxWrapper = spec.baseTypes.length > 0 // multiple inheritance not supported above
   const baseMembers: string[] = []
   baseMembers.push(`private weak var cxxWrapper: ${name.HybridTSpecCxx}? = nil`)
+  // Always override init (now that we always inherit from NSObject) to make intent explicit.
   if (hasBaseClass) {
     baseMembers.push(`public override init() { super.init() }`)
-  } else {
-    baseMembers.push(`public init() { }`)
   }
   baseMembers.push(
     `
-public ${hasBaseClass ? 'override func' : 'func'} getCxxWrapper() -> ${name.HybridTSpecCxx} {
+public ${shouldOverrideGetCxxWrapper ? 'override func' : 'func'} getCxxWrapper() -> ${name.HybridTSpecCxx} {
 #if DEBUG
   guard self is ${name.HybridTSpec} else {
-    fatalError("\`self\` is not a \`${name.HybridTSpec}\`! Did you accidentally inherit from \`${name.HybridTSpec}_base\` instead of \`${name.HybridTSpec}\`?")
+    fatalError("self is not a ${name.HybridTSpec}! Did you accidentally inherit from ${name.HybridTSpec}_base instead of ${name.HybridTSpec}?")
   }
 #endif
   if let cxxWrapper = self.cxxWrapper {

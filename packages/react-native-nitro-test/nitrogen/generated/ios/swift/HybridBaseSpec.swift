@@ -18,13 +18,13 @@ public protocol HybridBaseSpec_protocol: HybridObject {
 }
 
 /// See ``HybridBaseSpec``
-open class HybridBaseSpec_base {
+open class HybridBaseSpec_base: NSObject {
   private weak var cxxWrapper: HybridBaseSpec_cxx? = nil
-  public init() { }
+  public override init() { super.init() }
   public func getCxxWrapper() -> HybridBaseSpec_cxx {
   #if DEBUG
     guard self is HybridBaseSpec else {
-      fatalError("`self` is not a `HybridBaseSpec`! Did you accidentally inherit from `HybridBaseSpec_base` instead of `HybridBaseSpec`?")
+      fatalError("self is not a HybridBaseSpec! Did you accidentally inherit from HybridBaseSpec_base instead of HybridBaseSpec?")
     }
   #endif
     if let cxxWrapper = self.cxxWrapper {

@@ -18,13 +18,13 @@ public protocol HybridSomeExternalObjectSpec_protocol: HybridObject {
 }
 
 /// See ``HybridSomeExternalObjectSpec``
-open class HybridSomeExternalObjectSpec_base {
+open class HybridSomeExternalObjectSpec_base: NSObject {
   private weak var cxxWrapper: HybridSomeExternalObjectSpec_cxx? = nil
-  public init() { }
+  public override init() { super.init() }
   public func getCxxWrapper() -> HybridSomeExternalObjectSpec_cxx {
   #if DEBUG
     guard self is HybridSomeExternalObjectSpec else {
-      fatalError("`self` is not a `HybridSomeExternalObjectSpec`! Did you accidentally inherit from `HybridSomeExternalObjectSpec_base` instead of `HybridSomeExternalObjectSpec`?")
+      fatalError("self is not a HybridSomeExternalObjectSpec! Did you accidentally inherit from HybridSomeExternalObjectSpec_base instead of HybridSomeExternalObjectSpec?")
     }
   #endif
     if let cxxWrapper = self.cxxWrapper {

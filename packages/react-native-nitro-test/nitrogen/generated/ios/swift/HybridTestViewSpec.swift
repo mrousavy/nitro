@@ -21,13 +21,13 @@ public protocol HybridTestViewSpec_protocol: HybridObject, HybridView {
 }
 
 /// See ``HybridTestViewSpec``
-open class HybridTestViewSpec_base {
+open class HybridTestViewSpec_base: NSObject {
   private weak var cxxWrapper: HybridTestViewSpec_cxx? = nil
-  public init() { }
+  public override init() { super.init() }
   public func getCxxWrapper() -> HybridTestViewSpec_cxx {
   #if DEBUG
     guard self is HybridTestViewSpec else {
-      fatalError("`self` is not a `HybridTestViewSpec`! Did you accidentally inherit from `HybridTestViewSpec_base` instead of `HybridTestViewSpec`?")
+      fatalError("self is not a HybridTestViewSpec! Did you accidentally inherit from HybridTestViewSpec_base instead of HybridTestViewSpec?")
     }
   #endif
     if let cxxWrapper = self.cxxWrapper {

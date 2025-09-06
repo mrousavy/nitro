@@ -99,13 +99,13 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
 }
 
 /// See ``HybridTestObjectSwiftKotlinSpec``
-open class HybridTestObjectSwiftKotlinSpec_base {
+open class HybridTestObjectSwiftKotlinSpec_base: NSObject {
   private weak var cxxWrapper: HybridTestObjectSwiftKotlinSpec_cxx? = nil
-  public init() { }
+  public override init() { super.init() }
   public func getCxxWrapper() -> HybridTestObjectSwiftKotlinSpec_cxx {
   #if DEBUG
     guard self is HybridTestObjectSwiftKotlinSpec else {
-      fatalError("`self` is not a `HybridTestObjectSwiftKotlinSpec`! Did you accidentally inherit from `HybridTestObjectSwiftKotlinSpec_base` instead of `HybridTestObjectSwiftKotlinSpec`?")
+      fatalError("self is not a HybridTestObjectSwiftKotlinSpec! Did you accidentally inherit from HybridTestObjectSwiftKotlinSpec_base instead of HybridTestObjectSwiftKotlinSpec?")
     }
   #endif
     if let cxxWrapper = self.cxxWrapper {
