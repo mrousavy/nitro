@@ -12,9 +12,9 @@ struct JSIConverter;
 } // namespace margelo::nitro
 
 #include "JSIConverter.hpp"
+#include "JSPromise.hpp"
 #include "NitroTypeInfo.hpp"
 #include "Promise.hpp"
-#include "JSIPromise.hpp"
 #include <exception>
 #include <jsi/jsi.h>
 #include <memory>
@@ -51,8 +51,11 @@ struct JSIConverter<std::shared_ptr<Promise<TResult>>> final {
 
   static inline jsi::Value toJSI(jsi::Runtime& runtime, const std::shared_ptr<Promise<TResult>>& promise) {
     if (promise->isPending()) {
-      // Get Promise ctor from global
-      jsi::Function promiseCtor = runtime.global().getPropertyAsFunction(runtime, "Promise");
+      //
+      //
+      // Promise is still pending, we need to attach listeners (.then & .catch)
+      //
+      //
       jsi::HostFunctionType executor = [promise](jsi::Runtime& runtime, const jsi::Value&, const jsi::Value* arguments,
                                                  size_t) -> jsi::Value {
         // Add resolver listener
@@ -72,10 +75,15 @@ struct JSIConverter<std::shared_ptr<Promise<TResult>>> final {
         return jsi::Value::undefined();
       };
       // Call `Promise` constructor (aka create promise), and pass `executor` function
-      return promiseCtor.callAsConstructor(
-          runtime, jsi::Function::createFromHostFunction(runtime, jsi::PropNameID::forUtf8(runtime, "executor"), 2, executor));
+      jsi::Function executorFunc =
+          jsi::Function::createFromHostFunction(runtime, jsi::PropNameID::forUtf8(runtime, "executor"), 2, executor);
+      return JSPromise::create(runtime, std::move(executorFunc));
     } else if (promise->isResolved()) {
+      //
+      //
       // Promise is already resolved - just return immediately
+      //
+      //
       if constexpr (std::is_void_v<TResult>) {
         // It's resolving to void.
         return JSPromise::resolved(runtime);
@@ -85,7 +93,11 @@ struct JSIConverter<std::shared_ptr<Promise<TResult>>> final {
         return JSPromise::resolved(runtime, std::move(result));
       }
     } else if (promise->isRejected()) {
+      //
+      //
       // Promise is already rejected - just return immediately
+      //
+      //
       jsi::Value error = JSIConverter<std::exception_ptr>::toJSI(runtime, promise->getError());
       return JSPromise::rejected(runtime, std::move(error));
     } else {

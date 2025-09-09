@@ -7,9 +7,9 @@
 
 #pragma once
 
+#include "BorrowingReference.hpp"
 #include <jsi/jsi.h>
 #include <unordered_map>
-#include "BorrowingReference.hpp"
 
 namespace margelo::nitro {
 
@@ -22,12 +22,12 @@ class JSPromise {
 public:
   JSPromise() = delete;
   ~JSPromise() = delete;
-  
+
   static jsi::Value create(jsi::Runtime& runtime, jsi::Function&& execute);
   static jsi::Value resolved(jsi::Runtime& runtime);
   static jsi::Value resolved(jsi::Runtime& runtime, jsi::Value&& result);
   static jsi::Value rejected(jsi::Runtime& runtime, jsi::Value&& error);
-  
+
 private:
   static BorrowingReference<jsi::Function>& getPromiseConstructorFromCache(jsi::Runtime& runtime);
   static BorrowingReference<jsi::Function>& getPromiseResolveFromCache(jsi::Runtime& runtime);

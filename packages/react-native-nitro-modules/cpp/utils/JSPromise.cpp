@@ -4,6 +4,10 @@
 
 namespace margelo::nitro {
 
+std::unordered_map<jsi::Runtime*, BorrowingReference<jsi::Function>> JSPromise::_constructorsCache;
+std::unordered_map<jsi::Runtime*, BorrowingReference<jsi::Function>> JSPromise::_resolvedCache;
+std::unordered_map<jsi::Runtime*, BorrowingReference<jsi::Function>> JSPromise::_rejectedCache;
+
 jsi::Value JSPromise::create(jsi::Runtime& runtime, jsi::Function&& execute) {
   // Call new Promise(...) constructor
   auto& constructor = getPromiseConstructorFromCache(runtime);
