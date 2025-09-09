@@ -267,12 +267,22 @@ function createCxxVectorSwiftHelper(type: ArrayType): SwiftCxxHelper {
   const actualType = type.getCode('c++')
   const bridgedType = new SwiftCxxBridgedType(type)
   const name = escapeCppName(actualType)
-  return {
-    cxxType: actualType,
-    funcName: `create_${name}`,
-    specializationName: name,
-    cxxHeader: {
-      code: `
+  let code: string
+  let funcName: string
+  if (type.isPrimitivelyCopyable) {
+    const itemType = type.itemType.getCode('c++')
+    funcName = `copy_${name}`
+    code = `
+/**
+ * Specialized version of \`${escapeComments(actualType)}\`.
+ */
+using ${name} = ${actualType};
+inline ${actualType} copy_${name}(const ${itemType}* _Nonnull data, size_t size) noexcept {
+  return ${actualType}(data, data + size);
+}`.trim()
+  } else {
+    funcName = `create_${name}`
+    code = `
 /**
  * Specialized version of \`${escapeComments(actualType)}\`.
  */
@@ -281,8 +291,15 @@ inline ${actualType} create_${name}(size_t size) noexcept {
   ${actualType} vector;
   vector.reserve(size);
   return vector;
-}
-    `.trim(),
+}`.trim()
+  }
+
+  return {
+    cxxType: actualType,
+    funcName: funcName,
+    specializationName: name,
+    cxxHeader: {
+      code: code,
       requiredIncludes: [
         {
           name: 'vector',

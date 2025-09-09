@@ -512,13 +512,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   public final func bounceNumbers(array: bridge.std__vector_double_) -> bridge.Result_std__vector_double__ {
     do {
       let __result = try self.__implementation.bounceNumbers(array: array.map({ __item in __item }))
-      let __resultCpp = { () -> bridge.std__vector_double_ in
-        var __vector = bridge.create_std__vector_double_(__result.count)
-        for __item in __result {
-          __vector.push_back(__item)
-        }
-        return __vector
-      }()
+      let __resultCpp = bridge.copy_std__vector_double_(__result, __result.count)
       return bridge.create_Result_std__vector_double__(__resultCpp)
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
@@ -530,13 +524,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   public final func bounceStructs(array: bridge.std__vector_Person_) -> bridge.Result_std__vector_Person__ {
     do {
       let __result = try self.__implementation.bounceStructs(array: array.map({ __item in __item }))
-      let __resultCpp = { () -> bridge.std__vector_Person_ in
-        var __vector = bridge.create_std__vector_Person_(__result.count)
-        for __item in __result {
-          __vector.push_back(__item)
-        }
-        return __vector
-      }()
+      let __resultCpp = bridge.copy_std__vector_Person_(__result, __result.count)
       return bridge.create_Result_std__vector_Person__(__resultCpp)
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
@@ -548,13 +536,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   public final func bounceEnums(array: bridge.std__vector_Powertrain_) -> bridge.Result_std__vector_Powertrain__ {
     do {
       let __result = try self.__implementation.bounceEnums(array: array.map({ __item in __item }))
-      let __resultCpp = { () -> bridge.std__vector_Powertrain_ in
-        var __vector = bridge.create_std__vector_Powertrain_(__result.count)
-        for __item in __result {
-          __vector.push_back(__item)
-        }
-        return __vector
-      }()
+      let __resultCpp = bridge.copy_std__vector_Powertrain_(__result, __result.count)
       return bridge.create_Result_std__vector_Powertrain__(__resultCpp)
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
@@ -568,13 +550,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
       try self.__implementation.complexEnumCallback(array: array.map({ __item in __item }), callback: { () -> ([Powertrain]) -> Void in
         let __wrappedFunction = bridge.wrap_Func_void_std__vector_Powertrain_(callback)
         return { (__array: [Powertrain]) -> Void in
-          __wrappedFunction.call({ () -> bridge.std__vector_Powertrain_ in
-            var __vector = bridge.create_std__vector_Powertrain_(__array.count)
-            for __item in __array {
-              __vector.push_back(__item)
-            }
-            return __vector
-          }())
+          __wrappedFunction.call(bridge.copy_std__vector_Powertrain_(__array, __array.count))
         }
       }())
       return bridge.create_Result_void_()

@@ -37,13 +37,7 @@ public extension Car {
       } else {
         return .init()
       }
-    }(), { () -> bridge.std__vector_double_ in
-      var __vector = bridge.create_std__vector_double_(performanceScores.count)
-      for __item in performanceScores {
-        __vector.push_back(__item)
-      }
-      return __vector
-    }())
+    }(), bridge.copy_std__vector_double_(performanceScores, performanceScores.count))
   }
 
   var year: Double {
@@ -173,13 +167,7 @@ public extension Car {
     }
     @inline(__always)
     set {
-      self.__performanceScores = { () -> bridge.std__vector_double_ in
-        var __vector = bridge.create_std__vector_double_(newValue.count)
-        for __item in newValue {
-          __vector.push_back(__item)
-        }
-        return __vector
-      }()
+      self.__performanceScores = bridge.copy_std__vector_double_(newValue, newValue.count)
     }
   }
 }
