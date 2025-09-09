@@ -516,7 +516,9 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
         let size = array.size()
         return Array(UnsafeBufferPointer(start: data, count: size))
       }())
-      let __resultCpp = __result.withUnsafeBufferPointer { pointer in bridge.copy_std__vector_double_(pointer.baseAddress!, __result.count) }
+      let __resultCpp = __result.withUnsafeBufferPointer { pointer -> bridge.std__vector_double_ in
+        return bridge.copy_std__vector_double_(pointer.baseAddress!, __result.count)
+      }
       return bridge.create_Result_std__vector_double__(__resultCpp)
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
@@ -532,7 +534,9 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
         let size = array.size()
         return Array(UnsafeBufferPointer(start: data, count: size))
       }())
-      let __resultCpp = __result.withUnsafeBufferPointer { pointer in bridge.copy_std__vector_Person_(pointer.baseAddress!, __result.count) }
+      let __resultCpp = __result.withUnsafeBufferPointer { pointer -> bridge.std__vector_Person_ in
+        return bridge.copy_std__vector_Person_(pointer.baseAddress!, __result.count)
+      }
       return bridge.create_Result_std__vector_Person__(__resultCpp)
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
@@ -548,7 +552,9 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
         let size = array.size()
         return Array(UnsafeBufferPointer(start: data, count: size))
       }())
-      let __resultCpp = __result.withUnsafeBufferPointer { pointer in bridge.copy_std__vector_Powertrain_(pointer.baseAddress!, __result.count) }
+      let __resultCpp = __result.withUnsafeBufferPointer { pointer -> bridge.std__vector_Powertrain_ in
+        return bridge.copy_std__vector_Powertrain_(pointer.baseAddress!, __result.count)
+      }
       return bridge.create_Result_std__vector_Powertrain__(__resultCpp)
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
@@ -566,7 +572,9 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
       }(), callback: { () -> ([Powertrain]) -> Void in
         let __wrappedFunction = bridge.wrap_Func_void_std__vector_Powertrain_(callback)
         return { (__array: [Powertrain]) -> Void in
-          __wrappedFunction.call(__array.withUnsafeBufferPointer { pointer in bridge.copy_std__vector_Powertrain_(pointer.baseAddress!, __array.count) })
+          __wrappedFunction.call(__array.withUnsafeBufferPointer { pointer -> bridge.std__vector_Powertrain_ in
+            return bridge.copy_std__vector_Powertrain_(pointer.baseAddress!, __array.count)
+          })
         }
       }())
       return bridge.create_Result_void_()
