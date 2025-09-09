@@ -37,7 +37,7 @@ public extension Car {
       } else {
         return .init()
       }
-    }(), bridge.copy_std__vector_double_(performanceScores, performanceScores.count))
+    }(), performanceScores.withUnsafeBufferPointer { pointer in bridge.copy_std__vector_double_(pointer.baseAddress!, performanceScores.count) })
   }
 
   var year: Double {
@@ -171,7 +171,7 @@ public extension Car {
     }
     @inline(__always)
     set {
-      self.__performanceScores = bridge.copy_std__vector_double_(newValue, newValue.count)
+      self.__performanceScores = newValue.withUnsafeBufferPointer { pointer in bridge.copy_std__vector_double_(pointer.baseAddress!, newValue.count) }
     }
   }
 }
