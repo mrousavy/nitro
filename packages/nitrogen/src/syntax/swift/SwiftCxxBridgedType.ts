@@ -766,7 +766,10 @@ case ${i}:
             if (array.isPrimitivelyCopyable) {
               // memory can be copied primitively
               const copyFunc = `bridge.${bridge.funcName}`
-              return `${swiftParameterName}.withUnsafeBufferPointer { pointer in ${copyFunc}(pointer.baseAddress!, ${swiftParameterName}.count) }`
+              return `
+${swiftParameterName}.withUnsafeBufferPointer { pointer -> bridge.${bridge.specializationName} in
+  return ${copyFunc}(pointer.baseAddress!, ${swiftParameterName}.count)
+}`.trim()
             } else {
               // array has to be iterated and converted one-by-one
               const makeFunc = `bridge.${bridge.funcName}`
