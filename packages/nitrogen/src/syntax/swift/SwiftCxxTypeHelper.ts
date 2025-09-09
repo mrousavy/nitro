@@ -279,7 +279,11 @@ function createCxxVectorSwiftHelper(type: ArrayType): SwiftCxxHelper {
 using ${name} = ${actualType};
 inline ${actualType} copy_${name}(const ${itemType}* _Nonnull data, size_t size) noexcept {
   return ${actualType}(data, data + size);
-}`.trim()
+}
+inline const ${itemType}* _Nonnull get_data_${name}(const ${actualType}& vector) noexcept {
+  return vector.data();
+}
+`.trim()
   } else {
     funcName = `create_${name}`
     code = `
