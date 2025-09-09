@@ -746,12 +746,18 @@ case ${i}:
       }
       case 'array': {
         const bridge = this.getBridgeOrThrow()
-        const makeFunc = `bridge.${bridge.funcName}`
         const array = getTypeAs(this.type, ArrayType)
         const wrapping = new SwiftCxxBridgedType(array.itemType, true)
         switch (language) {
           case 'swift':
-            return `
+            if (array.isPrimitivelyCopyable) {
+              // memory can be copied primitively
+              const copyFunc = `bridge.${bridge.funcName}`
+              return `${copyFunc}(${swiftParameterName}, ${swiftParameterName}.count)`
+            } else {
+              // array has to be iterated and converted one-by-one
+              const makeFunc = `bridge.${bridge.funcName}`
+              return `
 { () -> bridge.${bridge.specializationName} in
   var __vector = ${makeFunc}(${swiftParameterName}.count)
   for __item in ${swiftParameterName} {
@@ -759,6 +765,7 @@ case ${i}:
   }
   return __vector
 }()`.trim()
+            }
           default:
             return swiftParameterName
         }
