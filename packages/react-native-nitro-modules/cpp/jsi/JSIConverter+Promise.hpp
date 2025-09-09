@@ -32,7 +32,7 @@ struct JSIConverter<std::shared_ptr<Promise<TResult>>> final {
     auto thenCallback = [&]() {
       if constexpr (std::is_void_v<TResult>) {
         // void: resolve()
-        // note: this has to be std::monostate, because it needs to accept 1 argument - which will just be undefined.
+        // note: this has to still take 1 argument (just std::monostate/undefined), because the Promise.then(..) func needs an argument.
         return JSIConverter<std::function<void(std::monostate)>>::toJSI(runtime, [=](std::monostate) { promise->resolve(); });
       } else {
         // T: resolve(T)
