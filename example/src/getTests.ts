@@ -47,6 +47,7 @@ const TEST_CAR: Car = {
   driver: undefined, // <-- value needs to be explicitly set, to equal it with native's std::optional<..>
   isFast: true,
   favouriteTrack: undefined,
+  performanceScores: [100, 0],
 }
 const TEST_MAP: Record<string, number | boolean> = {
   someKey: 55,
@@ -1151,6 +1152,7 @@ export function getTests(
           power: 640,
           powertrain: 'gas',
           isFast: true,
+          performanceScores: [100, 0],
         })
       )
         .didNotThrow()
@@ -1165,6 +1167,7 @@ export function getTests(
           power: 640,
           powertrain: 'gas',
           isFast: true,
+          performanceScores: [100, 0],
         })
       )
         .didNotThrow()
@@ -1180,6 +1183,7 @@ export function getTests(
           powertrain: 'gas',
           driver: { age: 24, name: 'marc' },
           isFast: true,
+          performanceScores: [100, 0],
         })
       )
         .didNotThrow()
