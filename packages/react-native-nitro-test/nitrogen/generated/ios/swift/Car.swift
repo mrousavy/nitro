@@ -163,7 +163,11 @@ public extension Car {
   var performanceScores: [Double] {
     @inline(__always)
     get {
-      return self.__performanceScores.map({ __item in __item })
+      return { () -> [Double] in
+        let data = bridge.get_data_std__vector_double_(self.__performanceScores)
+        let size = self.__performanceScores.size()
+        return Array(UnsafeBufferPointer(start: data, count: size))
+      }()
     }
     @inline(__always)
     set {

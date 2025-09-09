@@ -489,7 +489,20 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
         const wrapping = new SwiftCxxBridgedType(array.itemType, true)
         switch (language) {
           case 'swift':
-            return `${cppParameterName}.map({ __item in ${wrapping.parseFromCppToSwift('__item', 'swift')} })`.trim()
+            if (array.isPrimitivelyCopyable) {
+              // We can primitively copy the data, raw:
+              const bridge = this.getBridgeOrThrow()
+              const getDataFunc = `bridge.get_data_${bridge.specializationName}`
+              return `
+{ () -> ${array.getCode('swift')} in
+  let data = ${getDataFunc}(${cppParameterName})
+  let size = ${cppParameterName}.size()
+  return Array(UnsafeBufferPointer(start: data, count: size))
+}()`.trim()
+            } else {
+              // We have to iterate the element one by one to create a resulting Array (mapped)
+              return `${cppParameterName}.map({ __item in ${wrapping.parseFromCppToSwift('__item', 'swift')} })`.trim()
+            }
           default:
             return cppParameterName
         }
