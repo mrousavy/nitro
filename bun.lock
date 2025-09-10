@@ -78,11 +78,11 @@
         "@react-native/typescript-config": "0.81.1",
         "@types/deep-equal": "^1.0.4",
         "babel-plugin-module-resolver": "^5.0.2",
-        "nitro-codegen": "*",
+        "nitrogen": "*",
       },
     },
     "packages/nitrogen": {
-      "name": "nitro-codegen",
+      "name": "nitrogen",
       "version": "0.29.3",
       "bin": "./lib/index.js",
       "dependencies": {
@@ -119,7 +119,7 @@
         "@types/jest": "*",
         "@types/react": "*",
         "jest": "*",
-        "nitro-codegen": "*",
+        "nitrogen": "*",
         "react": "19.1.0",
         "react-native": "0.81.1",
         "react-native-nitro-modules": "*",
@@ -142,7 +142,7 @@
         "eslint": "^8.57.0",
         "eslint-config-prettier": "^9.1.0",
         "eslint-plugin-prettier": "^5.2.1",
-        "nitro-codegen": "*",
+        "nitrogen": "*",
         "prettier": "^3.3.3",
         "react": "19.1.0",
         "react-native": "0.81.1",
@@ -2789,7 +2789,7 @@
 
     "nitro": ["nitro@workspace:docs"],
 
-    "nitro-codegen": ["nitro-codegen@workspace:packages/nitrogen"],
+    "nitrogen": ["nitrogen@workspace:packages/nitrogen"],
 
     "no-case": ["no-case@3.0.4", "", { "dependencies": { "lower-case": "^2.0.2", "tslib": "^2.0.3" } }, "sha512-fgAN3jGAh+RoxUGZHTSOLJIqUc2wmoBwGR4tbpNAKmmovFoWq0OdRkb0VkldReO2a2iBT/OEulG9XSUc10r3zg=="],
 

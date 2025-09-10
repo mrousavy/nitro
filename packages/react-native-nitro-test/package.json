@@ -53,14 +53,14 @@
     "lint-ci": "eslint \"**/*.{js,ts,tsx}\" -f @jamesacarr/github-actions",
     "build-nitrogen-first": "cd ../react-native-nitro-modules && bun tsc && cd ../nitrogen && bun tsc",
     "generate-external-first": "cd ../react-native-nitro-test-external && bun run build && bun run specs",
-    "specs": "bun build-nitrogen-first && bun generate-external-first && nitro-codegen --logLevel=\"debug\"",
+    "specs": "bun build-nitrogen-first && bun generate-external-first && nitrogen --logLevel=\"debug\"",
     "clean": "rm -rf android/build node_modules/**/android/build lib"
   },
   "devDependencies": {
     "@types/jest": "*",
     "@types/react": "*",
     "jest": "*",
-    "nitro-codegen": "*",
+    "nitrogen": "*",
     "react": "19.1.0",
     "react-native": "0.81.1",
     "react-native-nitro-modules": "*",

@@ -20,7 +20,7 @@ NitroTest also contains a platform specific hybrid test object (`HybridTestObjec
 When any of the HybridObjects specs (`*.nitro.ts`) change, you must re-run nitrogen:
 
 ```ts
-npx nitro-codegen
+npx nitrogen
 ```
 
 ## Structure

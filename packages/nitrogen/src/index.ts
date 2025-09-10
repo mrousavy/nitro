@@ -11,7 +11,7 @@ import { isValidLogLevel, setLogLevel } from './Logger.js'
 import { initNewNitroModule } from './init.js'
 import { NITROGEN_VERSION } from './utils.js'
 
-const commandName = 'nitro-codegen'
+const commandName = 'nitrogen'
 
 // Maximum of 100 col width
 const cliWidth = Math.min(process.stdout.columns * 0.9, 100)

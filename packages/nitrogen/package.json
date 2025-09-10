@@ -1,5 +1,5 @@
 {
-  "name": "nitro-codegen",
+  "name": "nitrogen",
   "version": "0.29.3",
   "description": "The code-generator for react-native-nitro-modules.",
   "main": "lib/index",

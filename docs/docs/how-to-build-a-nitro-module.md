@@ -20,7 +20,7 @@ First, you need to create a [Nitro Module](nitro-modules) - either by bootstrapp
 <Tabs groupId="template-bootstrap-cli">
   <TabItem value="nitrogen" label="nitrogen" default>
     ```sh
-    npx nitro-codegen@latest init
+    npx nitrogen@latest init
     ```
   </TabItem>
   <TabItem value="bob" label="react-native-builder-bob">
@@ -40,7 +40,7 @@ First, you need to create a [Nitro Module](nitro-modules) - either by bootstrapp
     In your existing react-native library, install nitro and nitrogen as dev dependencies:
     ```sh
     npm install react-native-nitro-modules --save-dev
-    npm install nitro-codegen --save-dev
+    npm install nitrogen --save-dev
     ```
 
     Then, you need to decide if you want to use Nitro's C++ library directly, or use [nitrogen](nitrogen) to generate specs:
@@ -57,7 +57,7 @@ First, you need to create a [Nitro Module](nitro-modules) - either by bootstrapp
         After creating a `nitro.json` file, run nitrogen once to generate the autolinking setup:
 
         ```sh
-        npx nitro-codegen
+        npx nitrogen
         ```
 
         ### 1.4. Add nitro's generated autolinking files to your project
@@ -139,7 +139,7 @@ To actually use Nitro, you need to create [Hybrid Objects](hybrid-objects) - eit
     After writing specs, re-generate the generated code by running [nitrogen](nitrogen):
 
     ```sh
-    npx nitro-codegen
+    npx nitrogen
     ```
 
     This then will generate a native specs which you can implement - in C++, that'd be `HybridMathSpec.hpp`.
@@ -291,7 +291,7 @@ You can either use [Nitrogen](nitrogen) to automatically generate bindings for y
     Now, just run [Nitrogen](nitrogen) again to generate the native bindings:
 
     ```sh
-    npx nitro-codegen
+    npx nitrogen
     ```
 
   </TabItem>
