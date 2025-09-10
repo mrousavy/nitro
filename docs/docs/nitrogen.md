@@ -72,10 +72,6 @@ Nitrogen should be installed as a dev-dependency in the Nitro Module (library).
   </TabItem>
 </Tabs>
 
-:::warning
-Nitrogen is currently named `nitrogen` instead of `nitrogen` on npm.
-:::
-
 Each Nitro Module needs to have a `nitro.json` configuration file.
 
 Create a `nitro.json` file in the root directory of your Nitro Module (next to `package.json`), and add the following content:
@@ -139,10 +135,6 @@ Now run nitrogen:
     ```
   </TabItem>
 </Tabs>
-
-:::warning
-Nitrogen is currently named `nitrogen` instead of `nitrogen` on npm.
-:::
 
 This will always generate a shared C++ interface, and then optionall also Swift and Kotlin sub-classes. The specs go into `./nitrogen/generated/`:
 
