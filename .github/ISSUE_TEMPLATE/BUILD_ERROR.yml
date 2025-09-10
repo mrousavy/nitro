@@ -47,7 +47,7 @@ body:
   - type: input
     attributes:
       label: Nitrogen Version
-      description: Which version of nitro-codegen are you using? (if you are using it!)
+      description: Which version of nitrogen are you using? (if you are using it!)
       placeholder: ex. 0.11.0
     validations:
       required: false
@@ -91,7 +91,7 @@ body:
       description: Please check all the boxes that apply
       options:
         - label: I am using Expo
-        - label: I am using Nitrogen (nitro-codegen)
+        - label: I am using Nitrogen (nitrogen)
         - label: I have read and followed the [Troubleshooting Guide](https://nitro.margelo.com/docs/troubleshooting).
           required: true
         - label: I created a reproduction PR to reproduce this issue here in the nitro repo. (See [Contributing](https://nitro.margelo.com/docs/contributing) for more information)

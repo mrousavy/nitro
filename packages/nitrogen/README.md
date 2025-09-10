@@ -14,10 +14,8 @@
 
 Install [nitrogen](https://npmjs.org/nitrogen) as a `devDependency` in your react-native library:
 ```sh
-npm i nitro-codegen -D
+npm i nitrogen -D
 ```
-> [!WARNING]
-> Nitrogen is currently named `nitro-codegen` instead of `nitrogen` on npm.
 
 
 

@@ -20,10 +20,10 @@ In addition to the base react-native library template, a Nitro Module also conta
 
 ### 1. Initialize the template
 
-To create a new Nitro Module, simply run `nitro-codegen init <moduleName>`:
+To create a new Nitro Module, simply run `nitrogen init <moduleName>`:
 
 ```sh
-npx nitro-codegen@latest init react-native-math
+npx nitrogen@latest init react-native-math
 ```
 
 ### 2. Implement your Hybrid Objects

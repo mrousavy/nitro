@@ -30,6 +30,6 @@ jobs:
       - name: Build all packages
         run: bun run build
 
-      - name: Run nitro-codegen init in packages/nitrogen
+      - name: Run nitrogen init in packages/nitrogen
         working-directory: packages/nitrogen
-        run: bun i && bun run nitro-codegen init react-native-math
+        run: bun i && bun run nitrogen init react-native-math

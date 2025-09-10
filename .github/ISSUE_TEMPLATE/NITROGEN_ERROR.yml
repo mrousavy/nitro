@@ -15,7 +15,7 @@ body:
       description: Share the full logs that appear in the console when running nitrogen with the `--logLevel="debug"` flag.
       render: tsx
       placeholder: >
-        $ npx nitro-codegen --logLevel="debug"
+        $ npx nitrogen --logLevel="debug"
 
         🔧  Loading nitro.json config...
 
@@ -46,7 +46,7 @@ body:
   - type: input
     attributes:
       label: Nitrogen Version
-      description: Which version of nitro-codegen are you using?
+      description: Which version of nitrogen are you using?
       placeholder: ex. 0.11.0
     validations:
       required: true

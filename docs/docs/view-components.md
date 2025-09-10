@@ -40,22 +40,22 @@ Then, run [nitrogen](nitrogen):
 <Tabs groupId="package-manager">
   <TabItem value="npm" label="npm" default>
     ```sh
-    npx nitro-codegen
+    npx nitrogen
     ```
   </TabItem>
   <TabItem value="yarn" label="yarn">
     ```sh
-    yarn nitro-codegen
+    yarn nitrogen
     ```
   </TabItem>
   <TabItem value="pnpm" label="pnpm">
     ```sh
-    pnpm nitro-codegen
+    pnpm nitrogen
     ```
   </TabItem>
   <TabItem value="bun" label="bun">
     ```sh
-    bun nitro-codegen
+    bun nitrogen
     ```
   </TabItem>
 </Tabs>

@@ -34,7 +34,7 @@
     "lint": "eslint \"**/*.{js,ts,tsx}\" --fix",
     "lint-ci": "eslint \"**/*.{js,ts,tsx}\" -f @jamesacarr/github-actions",
     "build": "tsc",
-    "specs": "tsc && nitro-codegen --logLevel=\"debug\""
+    "specs": "tsc && nitrogen --logLevel=\"debug\""
   },
   "keywords": [
     "react-native",
@@ -60,7 +60,7 @@
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",
-    "nitro-codegen": "*",
+    "nitrogen": "*",
     "prettier": "^3.3.3",
     "react": "19.1.0",
     "react-native": "0.81.1",

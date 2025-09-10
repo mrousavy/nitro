@@ -12,7 +12,7 @@ The nitro repo is a Bun monorepo, and is set up like this:
 
 - `example/`: A react-native app that uses `react-native-nitro-modules` and `react-native-nitro-test`.
 - `packages/`
-  - `/nitrogen/`: The Node app that generates Nitro bindings. On npm, it is called `nitro-codegen`.
+  - `/nitrogen/`: The Node app that generates Nitro bindings. On npm, it is called `nitrogen`.
   - `/react-native-nitro-modules/`: The core Nitro Modules library which contains mostly C++ code.
   - `/react-native-nitro-test/`: An example Nitro Module library that contains a lot of test code.
   - `/template/`: A template for a Nitro Module library.
