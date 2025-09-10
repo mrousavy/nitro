@@ -12,12 +12,16 @@
 
 ## Installation
 
-Install [nitrogen](https://npmjs.org/nitrogen) as a `devDependency` in your react-native library:
+Install [nitrogen](https://npmjs.org/nitrogen) as a `devDependency` in your Nitro Module:
 ```sh
 npm i nitrogen -D
 ```
 
+Then, generate your specs;
 
+```sh
+npx nitrogen
+```
 
 ## Usage
 
