@@ -22,6 +22,18 @@ namespace margelo::nitro::test {
   using namespace margelo::nitro;
 
   /**
+   * Describes the prototype of `Base`.
+   */
+  class HybridBaseSpecPrototype: public HybridObjectPrototype {
+  public:
+    static HybridBaseSpecPrototype singleton;
+
+  protected:
+    // Hybrid Setup
+    void loadHybridMethods() override;
+  };
+
+  /**
    * An abstract base class for `Base`
    * Inherit this class to create instances of `HybridBaseSpec` in C++.
    * You must explicitly call `HybridObject`'s constructor yourself, because it is virtual.
@@ -43,16 +55,18 @@ namespace margelo::nitro::test {
       ~HybridBaseSpec() override = default;
 
     public:
+      // Prototype
+      HybridObjectPrototype& getPrototype() const noexcept override {
+        return HybridBaseSpecPrototype::singleton;
+      }
+
+    public:
       // Properties
       virtual double getBaseValue() = 0;
 
     public:
       // Methods
       
-
-    protected:
-      // Hybrid Setup
-      void loadHybridMethods() override;
 
     protected:
       // Tag for logging
