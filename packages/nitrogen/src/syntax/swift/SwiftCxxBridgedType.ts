@@ -492,7 +492,20 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
         const wrapping = new SwiftCxxBridgedType(array.itemType, true)
         switch (language) {
           case 'swift':
-            return `${cppParameterName}.map({ __item in ${wrapping.parseFromCppToSwift('__item', 'swift')} })`.trim()
+            if (array.isPrimitivelyCopyable) {
+              // We can primitively copy the data, raw:
+              const bridge = this.getBridgeOrThrow()
+              const getDataFunc = `bridge.get_data_${bridge.specializationName}`
+              return `
+{ () -> ${array.getCode('swift')} in
+  let data = ${getDataFunc}(${cppParameterName})
+  let size = ${cppParameterName}.size()
+  return Array(UnsafeBufferPointer(start: data, count: size))
+}()`.trim()
+            } else {
+              // We have to iterate the element one by one to create a resulting Array (mapped)
+              return `${cppParameterName}.map({ __item in ${wrapping.parseFromCppToSwift('__item', 'swift')} })`.trim()
+            }
           default:
             return cppParameterName
         }
@@ -749,12 +762,21 @@ case ${i}:
       }
       case 'array': {
         const bridge = this.getBridgeOrThrow()
-        const makeFunc = `bridge.${bridge.funcName}`
         const array = getTypeAs(this.type, ArrayType)
         const wrapping = new SwiftCxxBridgedType(array.itemType, true)
         switch (language) {
           case 'swift':
-            return `
+            if (array.isPrimitivelyCopyable) {
+              // memory can be copied primitively
+              const copyFunc = `bridge.${bridge.funcName}`
+              return `
+${swiftParameterName}.withUnsafeBufferPointer { pointer -> bridge.${bridge.specializationName} in
+  return ${copyFunc}(pointer.baseAddress!, ${swiftParameterName}.count)
+}`.trim()
+            } else {
+              // array has to be iterated and converted one-by-one
+              const makeFunc = `bridge.${bridge.funcName}`
+              return `
 { () -> bridge.${bridge.specializationName} in
   var __vector = ${makeFunc}(${swiftParameterName}.count)
   for __item in ${swiftParameterName} {
@@ -762,6 +784,7 @@ case ${i}:
   }
   return __vector
 }()`.trim()
+            }
           default:
             return swiftParameterName
         }

@@ -252,10 +252,11 @@ namespace margelo::nitro::test::bridge::swift {
    * Specialized version of `std::vector<double>`.
    */
   using std__vector_double_ = std::vector<double>;
-  inline std::vector<double> create_std__vector_double_(size_t size) noexcept {
-    std::vector<double> vector;
-    vector.reserve(size);
-    return vector;
+  inline std::vector<double> copy_std__vector_double_(const double* _Nonnull data, size_t size) noexcept {
+    return std::vector<double>(data, data + size);
+  }
+  inline const double* _Nonnull get_data_std__vector_double_(const std::vector<double>& vector) noexcept {
+    return vector.data();
   }
   
   // pragma MARK: std::vector<Person>
@@ -263,10 +264,11 @@ namespace margelo::nitro::test::bridge::swift {
    * Specialized version of `std::vector<Person>`.
    */
   using std__vector_Person_ = std::vector<Person>;
-  inline std::vector<Person> create_std__vector_Person_(size_t size) noexcept {
-    std::vector<Person> vector;
-    vector.reserve(size);
-    return vector;
+  inline std::vector<Person> copy_std__vector_Person_(const Person* _Nonnull data, size_t size) noexcept {
+    return std::vector<Person>(data, data + size);
+  }
+  inline const Person* _Nonnull get_data_std__vector_Person_(const std::vector<Person>& vector) noexcept {
+    return vector.data();
   }
   
   // pragma MARK: std::vector<Powertrain>
@@ -274,10 +276,11 @@ namespace margelo::nitro::test::bridge::swift {
    * Specialized version of `std::vector<Powertrain>`.
    */
   using std__vector_Powertrain_ = std::vector<Powertrain>;
-  inline std::vector<Powertrain> create_std__vector_Powertrain_(size_t size) noexcept {
-    std::vector<Powertrain> vector;
-    vector.reserve(size);
-    return vector;
+  inline std::vector<Powertrain> copy_std__vector_Powertrain_(const Powertrain* _Nonnull data, size_t size) noexcept {
+    return std::vector<Powertrain>(data, data + size);
+  }
+  inline const Powertrain* _Nonnull get_data_std__vector_Powertrain_(const std::vector<Powertrain>& vector) noexcept {
+    return vector.data();
   }
   
   // pragma MARK: std::function<void(const std::vector<Powertrain>& /* array */)>
