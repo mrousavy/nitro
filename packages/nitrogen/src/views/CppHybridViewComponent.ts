@@ -76,13 +76,6 @@ export function createViewComponentShadowNodeFiles(
   )
   const cases = props.map((p) => `case hashString("${p.name}"): return true;`)
   // Collect and dedupe dynamic includes, excluding ones already added statically above
-  const dynamicIncludes = Array.from(
-    new Set(
-      props.flatMap((p) =>
-        p.getRequiredImports('c++').map((i) => includeHeader(i, true))
-      )
-    )
-  )
   const fixedHeaderIncludes = new Set<string>([
     '#include <optional>',
     '#include <NitroModules/NitroDefines.hpp>',
@@ -93,9 +86,16 @@ export function createViewComponentShadowNodeFiles(
     '#include <react/renderer/components/view/ConcreteViewShadowNode.h>',
     '#include <react/renderer/components/view/ViewProps.h>',
   ])
-  const includes = dynamicIncludes.filter(
-    (inc) => !fixedHeaderIncludes.has(inc)
-  )
+  const dynamicIncludesSet = new Set<string>()
+  for (const prop of props) {
+    for (const import_ of prop.getRequiredImports('c++')) {
+      const include = includeHeader(import_, true)
+      if (!fixedHeaderIncludes.has(include)) {
+        dynamicIncludesSet.add(include)
+      }
+    }
+  }
+  const includes = Array.from(dynamicIncludesSet)
 
   // .hpp code
   const shadowIndent = createIndentation(shadowNodeClassName.length)
