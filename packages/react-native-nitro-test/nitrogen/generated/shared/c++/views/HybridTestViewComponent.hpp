@@ -20,8 +20,6 @@
 #include <functional>
 #include <memory>
 #include "HybridTestViewSpec.hpp"
-#include <functional>
-#include <optional>
 
 namespace margelo::nitro::test::views {
 

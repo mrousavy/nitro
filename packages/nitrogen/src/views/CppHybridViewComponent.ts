@@ -75,8 +75,26 @@ export function createViewComponentShadowNodeFiles(
     (p) => `CachedProp<${p.type.getCode('c++')}> ${escapeCppName(p.name)};`
   )
   const cases = props.map((p) => `case hashString("${p.name}"): return true;`)
-  const includes = props.flatMap((p) =>
-    p.getRequiredImports('c++').map((i) => includeHeader(i, true))
+  // Collect and dedupe dynamic includes, excluding ones already added statically above
+  const dynamicIncludes = Array.from(
+    new Set(
+      props.flatMap((p) =>
+        p.getRequiredImports('c++').map((i) => includeHeader(i, true))
+      )
+    )
+  )
+  const fixedHeaderIncludes = new Set<string>([
+    '#include <optional>',
+    '#include <NitroModules/NitroDefines.hpp>',
+    '#include <NitroModules/NitroHash.hpp>',
+    '#include <NitroModules/CachedProp.hpp>',
+    '#include <react/renderer/core/ConcreteComponentDescriptor.h>',
+    '#include <react/renderer/core/PropsParserContext.h>',
+    '#include <react/renderer/components/view/ConcreteViewShadowNode.h>',
+    '#include <react/renderer/components/view/ViewProps.h>',
+  ])
+  const includes = dynamicIncludes.filter(
+    (inc) => !fixedHeaderIncludes.has(inc)
   )
 
   // .hpp code
@@ -86,14 +104,7 @@ ${createFileMetadataString(`${component}.hpp`)}
 
 #pragma once
 
-#include <optional>
-#include <NitroModules/NitroDefines.hpp>
-#include <NitroModules/NitroHash.hpp>
-#include <NitroModules/CachedProp.hpp>
-#include <react/renderer/core/ConcreteComponentDescriptor.h>
-#include <react/renderer/core/PropsParserContext.h>
-#include <react/renderer/components/view/ConcreteViewShadowNode.h>
-#include <react/renderer/components/view/ViewProps.h>
+${Array.from(fixedHeaderIncludes).join('\n')}
 
 ${includes.join('\n')}
 
