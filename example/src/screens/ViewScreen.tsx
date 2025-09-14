@@ -1,7 +1,7 @@
 import * as React from 'react'
 
 import { StyleSheet, View, Text, Button, Platform } from 'react-native'
-import { NitroModules } from 'react-native-nitro-modules'
+import { callback, NitroModules } from 'react-native-nitro-modules'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useColors } from '../useColors'
 import { HybridTestObjectSwiftKotlin, TestView } from 'react-native-nitro-test'
@@ -31,7 +31,7 @@ export function ViewScreenImpl() {
           }}
           style={styles.view}
           isBlue={i % 2 === 0}
-          someCallback={{ f: () => console.log(`Callback called!`) }}
+          someCallback={callback(() => console.log(`Callback called!`))}
           colorScheme="dark"
           hasBeenCalled={false}
           onTouchEnd={() => {
