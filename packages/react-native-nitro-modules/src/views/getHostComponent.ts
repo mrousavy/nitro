@@ -1,5 +1,6 @@
 import { Platform, type HostComponent, type ViewProps } from 'react-native'
 // @ts-expect-error this unfortunately isn't typed or default-exported.
+// eslint-disable-next-line @react-native/no-deep-imports
 import * as NativeComponentRegistry from 'react-native/Libraries/NativeComponent/NativeComponentRegistry'
 import type {
   HybridView,
