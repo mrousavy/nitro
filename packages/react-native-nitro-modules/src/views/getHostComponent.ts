@@ -124,8 +124,9 @@ export function getHostComponent<
  * - For older versions of react-native, this wraps the callback in a `{ f: T }` object.
  * - For newer versions of react-native, this just returns the function as-is.
  */
-export function callback<T extends (...args: any[]) => any>(func: T): { f: T }
-export function callback<T>(func: T): T
+export function callback<T>(
+  func: T
+): T extends (...args: any[]) => any ? { f: T } : T
 export function callback(func: unknown) {
   if (typeof func === 'function') {
     return { f: func }
