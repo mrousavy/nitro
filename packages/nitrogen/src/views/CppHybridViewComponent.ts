@@ -5,6 +5,7 @@ import {
   createFileMetadataString,
   escapeCppName,
   isFunction,
+  isNotDuplicate,
 } from '../syntax/helpers.js'
 import { getHybridObjectName } from '../syntax/getHybridObjectName.js'
 import { includeHeader } from '../syntax/c++/includeNitroHeader.js'
@@ -75,9 +76,11 @@ export function createViewComponentShadowNodeFiles(
     (p) => `CachedProp<${p.type.getCode('c++')}> ${escapeCppName(p.name)};`
   )
   const cases = props.map((p) => `case hashString("${p.name}"): return true;`)
-  const includes = props.flatMap((p) =>
-    p.getRequiredImports('c++').map((i) => includeHeader(i, true))
-  )
+  const includes = props
+    .flatMap((p) =>
+      p.getRequiredImports('c++').map((i) => includeHeader(i, true))
+    )
+    .filter(isNotDuplicate)
 
   // .hpp code
   const shadowIndent = createIndentation(shadowNodeClassName.length)
