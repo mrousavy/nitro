@@ -6,7 +6,11 @@ toc_max_heading_level: 3
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-<img align="right" src="/img/nitro-example-ios-simulator.png" width="33%" />
+<img
+    align="right"
+    alt="Screenshot of the Nitro Example app running in an iOS Simulator"
+    src="/img/nitro-example-ios-simulator.png"
+    width="33%" />
 
 # Running the Example app
 
