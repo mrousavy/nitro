@@ -107,15 +107,6 @@ First, you need to create a [Nitro Module](nitro-modules) - either by bootstrapp
           return margelo::nitro::$$cxxNamespace$$::initialize(vm);
         }
         ```
-
-        ##### Android Views
-
-        If you plan on using [Nitro Views](hybrid-views), you also need to add the `RN_SERIALIZABLE_STATE` flag to your `CMakeLists.txt` - this enables raw JSI props parsing:
-
-        ```cmake
-        // diff-add
-        add_compile_options(-DRN_SERIALIZABLE_STATE=1)
-        ```
       </TabItem>
       <TabItem value="without-nitrogen-at-all" label="I will not use Nitrogen">
 

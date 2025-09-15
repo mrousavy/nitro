@@ -129,15 +129,6 @@ public class CameraPackage extends TurboReactPackage {
 }
 ```
 
-#### 4.2. Android: Make sure `RN_SERIALIZABLE_STATE` is enabled
-
-Additionally, make sure that your CMake project sets the `RN_SERIALIZABLE_STATE` flag. In your `CMakeLists.txt`, check;
-
-```cmake
-// diff-add
-add_compile_options(-DRN_SERIALIZABLE_STATE=1)
-```
-
 ### 5. Initialization
 
 Then, to use the view in JavaScript, use `getHostComponent(..)`:
