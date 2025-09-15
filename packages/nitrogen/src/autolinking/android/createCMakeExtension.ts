@@ -71,6 +71,9 @@ target_sources(
 # Define a flag to check if we are building properly
 add_definitions(-D${buildingWithDefinition})
 
+# Enable Raw Props parsing in react-native (for Nitro Views)
+add_compile_options(-DRN_SERIALIZABLE_STATE=1)
+
 # From node_modules/react-native/ReactAndroid/cmake-utils/folly-flags.cmake
 # Used in node_modules/react-native/ReactAndroid/cmake-utils/ReactNative-application.cmake
  target_compile_definitions(
