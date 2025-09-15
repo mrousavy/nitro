@@ -18,7 +18,7 @@
     "build:android-release": "cd android && ./gradlew assembleRelease --no-daemon",
     "build:ios": "cd ios && xcodebuild -workspace NitroExample.xcworkspace -scheme NitroExample -configuration Debug -sdk iphonesimulator CC=clang CPLUSPLUS=clang++ LD=clang LDPLUSPLUS=clang++ GCC_OPTIMIZATION_LEVEL=0 GCC_PRECOMPILE_PREFIX_HEADER=YES ASSETCATALOG_COMPILER_OPTIMIZATION=time DEBUG_INFORMATION_FORMAT=dwarf COMPILER_INDEX_STORE_ENABLE=NO",
     "maestro": "maestro test maestro/maestro.yaml",
-     "maestro:ci": "node maestro/scripts/run-maestro.js"
+    "maestro:ci": "node maestro/scripts/run-maestro.android.js"
   },
   "dependencies": {
     "@react-native-segmented-control/segmented-control": "^2.5.7",
