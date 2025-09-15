@@ -16,6 +16,10 @@
 #include <react/renderer/components/view/ConcreteViewShadowNode.h>
 #include <react/renderer/components/view/ViewProps.h>
 
+#ifndef RN_SERIALIZABLE_STATE
+#error NitroTest was compiled without the 'RN_SERIALIZABLE_STATE' flag. This flag is needed for HybridViews!
+#endif
+
 #include "ColorScheme.hpp"
 #include <functional>
 #include <memory>

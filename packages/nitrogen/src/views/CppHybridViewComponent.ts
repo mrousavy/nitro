@@ -98,6 +98,10 @@ ${createFileMetadataString(`${component}.hpp`)}
 #include <react/renderer/components/view/ConcreteViewShadowNode.h>
 #include <react/renderer/components/view/ViewProps.h>
 
+#ifndef RN_SERIALIZABLE_STATE
+#error ${spec.config.getAndroidCxxLibName()} was compiled without the 'RN_SERIALIZABLE_STATE' flag. This flag is needed for HybridViews!
+#endif
+
 ${includes.join('\n')}
 
 namespace ${namespace} {
