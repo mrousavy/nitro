@@ -15,12 +15,10 @@
 #include <react/renderer/core/PropsParserContext.h>
 #include <react/renderer/components/view/ConcreteViewShadowNode.h>
 #include <react/renderer/components/view/ViewProps.h>
-
 #include "ColorScheme.hpp"
 #include <functional>
 #include <memory>
 #include "HybridTestViewSpec.hpp"
-#include <optional>
 
 namespace margelo::nitro::test::views {
 
