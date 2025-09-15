@@ -57,7 +57,7 @@ target_sources(
 
 # From node_modules/react-native/ReactAndroid/cmake-utils/folly-flags.cmake
 # Used in node_modules/react-native/ReactAndroid/cmake-utils/ReactNative-application.cmake
- target_compile_definitions(
+target_compile_definitions(
   NitroTest PRIVATE
   -DFOLLY_NO_CONFIG=1
   -DFOLLY_HAVE_CLOCK_GETTIME=1
