@@ -12,7 +12,7 @@ import { EvalScreen } from './screens/EvalScreen'
 const dna = require('./img/dna.png')
 const rocket = require('./img/rocket.png')
 const map = require('./img/map.png')
-const terminal = require('./img/terminal.webp')
+const terminal = require('./img/terminal.png')
 
 const Tabs = createBottomTabNavigator()
 
