@@ -186,7 +186,9 @@ export function BenchmarksScreen() {
       </View>
 
       <View style={[styles.bottomView, { backgroundColor: colors.background }]}>
-        <Text>{status}</Text>
+        <Text style={styles.resultText} numberOfLines={2}>
+          {status}
+        </Text>
         <View style={styles.flex} />
         <Button title="Run" onPress={run} />
       </View>
@@ -238,6 +240,9 @@ const styles = StyleSheet.create({
   testBox: {
     flexShrink: 1,
     flexDirection: 'column',
+  },
+  resultText: {
+    flexShrink: 1,
   },
   testName: {
     fontSize: 16,
