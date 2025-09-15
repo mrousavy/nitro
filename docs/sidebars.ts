@@ -43,6 +43,7 @@ const sidebars: SidebarsConfig = {
         'sync-vs-async',
         'view-components',
         'troubleshooting',
+        'running-example-app',
       ]
     },
     {
