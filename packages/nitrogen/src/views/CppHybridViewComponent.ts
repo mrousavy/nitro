@@ -76,22 +76,11 @@ export function createViewComponentShadowNodeFiles(
     (p) => `CachedProp<${p.type.getCode('c++')}> ${escapeCppName(p.name)};`
   )
   const cases = props.map((p) => `case hashString("${p.name}"): return true;`)
-  const requiredIncludes = props.flatMap((p) =>
-    p.getRequiredImports('c++').map((i) => includeHeader(i, true))
-  )
-  const defaultIncludes = [
-    'optional',
-    'NitroModules/NitroDefines.hpp',
-    'NitroModules/NitroHash.hpp',
-    'NitroModules/CachedProp.hpp',
-    'react/renderer/core/ConcreteComponentDescriptor.h',
-    'react/renderer/core/PropsParserContext.h',
-    'react/renderer/components/view/ConcreteViewShadowNode.h',
-    'react/renderer/components/view/ViewProps.h',
-  ].map((i) => includeHeader({ language: 'c++', name: i, space: 'system' }))
-  const includes = [...defaultIncludes, ...requiredIncludes].filter(
-    isNotDuplicate
-  )
+  const includes = props
+    .flatMap((p) =>
+      p.getRequiredImports('c++').map((i) => includeHeader(i, true))
+    )
+    .filter(isNotDuplicate)
 
   // .hpp code
   const shadowIndent = createIndentation(shadowNodeClassName.length)
@@ -99,6 +88,15 @@ export function createViewComponentShadowNodeFiles(
 ${createFileMetadataString(`${component}.hpp`)}
 
 #pragma once
+
+#include <optional>
+#include <NitroModules/NitroDefines.hpp>
+#include <NitroModules/NitroHash.hpp>
+#include <NitroModules/CachedProp.hpp>
+#include <react/renderer/core/ConcreteComponentDescriptor.h>
+#include <react/renderer/core/PropsParserContext.h>
+#include <react/renderer/components/view/ConcreteViewShadowNode.h>
+#include <react/renderer/components/view/ViewProps.h>
 
 ${includes.join('\n')}
 
