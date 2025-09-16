@@ -52,10 +52,14 @@ async function main() {
 	const command = `${MAESTRO_PATH} test   maestro/maestro.yaml`
 
 
-	const recordingProcess = spawn('xcrun simctl io booted recordVideo maestro.mov', {
+	const recordingArgs =`simctl io booted recordVideo maestro.mov`.split(
+      ' ',
+    );
+	const recordingProcess = spawn('xcrun', recordingArgs, {
 		detached: true,
 		stdio: 'ignore',
-	  });
+	});
+
 
     console.log('✅ Screen recording started',recordingProcess.pid)
     try {
