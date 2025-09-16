@@ -17,7 +17,8 @@ async function main() {
 	execSync(`xcrun simctl boot "iPhone 16"`)
 
 	console.log('📱 Installing app...')
-	execSync('xcrun simctl install booted ./ios/build/Build/Products/Debug-iphonesimulator/NitroExample.app', {
+	
+	execSync('xcrun simctl install booted ./NitroExample.app', {
 		stdio: 'inherit',
 		env: process.env,
 	})
