@@ -35,8 +35,8 @@ jobs:
           path: example/android/app/build/outputs/apk/debug/app-debug.apk
           retention-days: 1
 
-  run_maestro_tests:
-    name: Run Maestro tests
+  run_maestro_tests_android:
+    name: Run Maestro tests Android
     runs-on: ubuntu-latest
     needs: build_android
     steps:

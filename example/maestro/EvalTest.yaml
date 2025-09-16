@@ -1,4 +1,4 @@
-appId:  com.margelo.nitroexample
+appId:  com.mrousavy.nitro.example
 ---
 - tapOn:
     id: "eval-screen-icon"

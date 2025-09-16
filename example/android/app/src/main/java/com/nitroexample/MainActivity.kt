@@ -1,4 +1,4 @@
-package com.margelo.nitroexample
+package com.mrousavy.nitro.example
 
 import android.os.Bundle
 import com.facebook.react.ReactActivity

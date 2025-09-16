@@ -47,7 +47,7 @@ async function main() {
     console.log('✅ Metro Server started')
     await sleep(5000); // Wait for Metro Server to start
     
-    execSync(`adb shell monkey -p com.margelo.nitroexample 1`, {stdio: 'ignore'});
+    execSync(`adb shell monkey -p com.mrousavy.nitro.example 1`, {stdio: 'ignore'});
     console.log('✅ App started')
     await sleep(60000); // Wait for app to start and sync with Metro Server
 
