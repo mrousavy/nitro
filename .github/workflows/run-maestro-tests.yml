@@ -145,7 +145,6 @@ jobs:
           cd example/ios/build/Build/Products/Debug-iphonesimulator
           zip -r ../../../../../../NitroExample-Debug-Simulator.zip NitroExample.app
 
-
       - name: Upload iOS .app artifact
         uses: actions/upload-artifact@v4
         with:
@@ -204,8 +203,7 @@ jobs:
         uses: actions/upload-artifact@v4.3.4
         if: always()
         with:
-          name: TestResult
-          path: |
+          name: TestResult          path: |
             example/*.mov
             example/maestro/*.mov
       
