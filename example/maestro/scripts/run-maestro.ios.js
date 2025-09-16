@@ -14,7 +14,7 @@ function sleep(ms) {
 async function main() {
     let metroProcess = null
 	console.log('📱 Starting simulator...')
-	execSync(`xcrun simctl boot "iPhone 15"`)
+	execSync(`xcrun simctl boot "iPhone 16"`)
 
 	console.log('📱 Installing app...')
 	
@@ -39,6 +39,7 @@ async function main() {
         stdio: 'ignore',
         detached: true,
       });
+
     console.log('✅ Metro Server started')
     await sleep(5000); // Wait for Metro Server to start
     
@@ -51,12 +52,12 @@ async function main() {
 	const command = `maestro test   maestro/maestro.yaml`
 
 
-	const recordingPid = spawn('xcrun simctl io booted recordVideo maestro.mov', {
+	const recordingProcess = spawn('xcrun simctl io booted recordVideo maestro.mov', {
 		detached: true,
 		stdio: 'ignore',
 	  });
 
-    console.log('✅ Screen recording started')
+    console.log('✅ Screen recording started',recordingProcess.pid)
     try {
         console.log(`\n🔄 Starting test suite.`)
         execSync(command, { stdio: 'inherit', env: process.env })
@@ -68,8 +69,9 @@ async function main() {
         if (metroProcess) {
             process.kill(metroProcess.pid)
         }
-		if (recordingPid) {
-			process.kill(recordingPid.pid)
+		if (recordingProcess) {
+			recordingProcess.kill('SIGINT');
+		
 		}
     }
 }
