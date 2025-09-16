@@ -205,6 +205,15 @@ jobs:
           cd example
           bun run maestro:ci:ios
       
+      - name: Store tests result
+        uses: actions/upload-artifact@v4.3.4
+        if: always()
+        with:
+          name: TestResult
+          path: |
+            example/*.mov
+            example/maestro/*.mov
+      
       
     
       
