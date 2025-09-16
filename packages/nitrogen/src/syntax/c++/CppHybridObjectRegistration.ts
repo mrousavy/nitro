@@ -27,11 +27,14 @@ export function createCppHybridObjectRegistration({
     cppCode: `
 HybridObjectRegistry::registerHybridObjectConstructor(
   "${hybridObjectName}",
-  []() -> std::shared_ptr<HybridObject> {
-    static_assert(std::is_default_constructible_v<${cppClassName}>,
-                  "The HybridObject \\"${cppClassName}\\" is not default-constructible! "
-                  "Create a public constructor that takes zero arguments to be able to autolink this HybridObject.");
-    return std::make_shared<${cppClassName}>();
+  {
+    .create = []() -> std::shared_ptr<HybridObject> {
+      static_assert(std::is_default_constructible_v<${cppClassName}>,
+                    "The HybridObject \\"${cppClassName}\\" is not default-constructible! "
+                    "Create a public constructor that takes zero arguments to be able to autolink this HybridObject.");
+      return std::make_shared<${cppClassName}>();
+    },
+    .prototype = ${hybridObjectName}SpecPrototype
   }
 );
       `.trim(),

@@ -35,14 +35,22 @@ private:
   static constexpr auto TAG = "HybridObjectPrototype";
 
 public:
-  HybridObjectPrototype() {}
+  HybridObjectPrototype() = default;
+  virtual ~HybridObjectPrototype() = default;
+  // no copy
+  HybridObjectPrototype(const HybridObjectPrototype&) = delete;
+  // no move
+  HybridObjectPrototype(HybridObjectPrototype&&) = delete;
+
+public:
+  static HybridObjectPrototype singleton;
 
 public:
   /**
    * Get a fully initialized jsi::Object that represents this prototype to JS.
    * The result of this value will be cached per Runtime, so it's safe to call this often.
    */
-  jsi::Value getPrototype(jsi::Runtime& runtime);
+  jsi::Value toJSI(jsi::Runtime& runtime);
 
 private:
   static jsi::Value createPrototype(jsi::Runtime& runtime, const std::shared_ptr<Prototype>& prototype);
@@ -55,7 +63,7 @@ protected:
    * This will only be called once for the first time the Prototype will be created,
    * so don't conditionally register methods.
    */
-  virtual void loadHybridMethods() = 0;
+  virtual void loadHybridMethods();
 
 private:
   /**
