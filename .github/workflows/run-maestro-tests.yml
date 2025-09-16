@@ -125,31 +125,26 @@ jobs:
         working-directory: example
         run: bun pods
 
-      # - name: Build App (Release, Simulator)
-      #   working-directory: example/ios
-      #   run: |
-      #     set -o pipefail
-      #     xcodebuild \
-      #       CC=clang CPLUSPLUS=clang++ LD=clang LDPLUSPLUS=clang++ \
-      #       -derivedDataPath build -UseModernBuildSystem=YES \
-      #       -workspace NitroExample.xcworkspace \
-      #       -scheme NitroExample \
-      #       -sdk iphonesimulator \
-      #       -configuration Debug \
-      #       -destination 'generic/platform=iOS Simulator' \
-      #       build \
-      #       CODE_SIGNING_ALLOWED=NO
-
-      # - name: Package .app for Simulator
-      #   run: |
-      #     cd example/ios/build/Build/Products/Debug-iphonesimulator
-      #     zip -r ../../../../../../NitroExample-Debug-Simulator.zip NitroExample.app
+      - name: Build App (Release, Simulator)
+        working-directory: example/ios
+        run: |
+          set -o pipefail
+          xcodebuild \
+            CC=clang CPLUSPLUS=clang++ LD=clang LDPLUSPLUS=clang++ \
+            -derivedDataPath build -UseModernBuildSystem=YES \
+            -workspace NitroExample.xcworkspace \
+            -scheme NitroExample \
+            -sdk iphonesimulator \
+            -configuration Debug \
+            -destination 'generic/platform=iOS Simulator' \
+            build \
+            CODE_SIGNING_ALLOWED=NO
 
       - name: Package .app for Simulator
         run: |
-          cd example
-          unzip NitroExample.zip
-          zip -r ../NitroExample-Debug-Simulator.zip NitroExample.app
+          cd example/ios/build/Build/Products/Debug-iphonesimulator
+          zip -r ../../../../../../NitroExample-Debug-Simulator.zip NitroExample.app
+
 
       - name: Upload iOS .app artifact
         uses: actions/upload-artifact@v4
@@ -159,7 +154,7 @@ jobs:
           retention-days: 1
 
   maestro_ios:
-    name: Run Maestro iOS
+    name: Run Maestro iO
     runs-on: macos-latest
     needs: build_ios
     steps:
