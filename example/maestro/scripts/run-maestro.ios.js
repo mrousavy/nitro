@@ -49,7 +49,7 @@ async function main() {
 
 
     const MAESTRO_PATH = path.join(process.env.HOME, '.maestro', 'bin', 'maestro')
-	const command = `maestro test   maestro/maestro.yaml`
+	const command = `${MAESTRO_PATH} test   maestro/maestro.yaml`
 
 
 	const recordingProcess = spawn('xcrun simctl io booted recordVideo maestro.mov', {
