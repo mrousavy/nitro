@@ -45,11 +45,11 @@ async function main() {
     
    
 	execSync(`xcrun simctl launch "${udid}" com.mrousavy.nitro.example`)
-	await sleep(5000); // Wait for app to start and sync with Metro Server
+	await sleep(20000); // Wait for app to start and sync with Metro Server
 
 
     const MAESTRO_PATH = path.join(process.env.HOME, '.maestro', 'bin', 'maestro')
-	const command = `${MAESTRO_PATH} test   maestro/maestro.yaml`
+	const command = `maestro test   maestro/maestro.yaml`
 
 
 	const recordingArgs =`simctl io booted recordVideo maestro.mov`.split(
