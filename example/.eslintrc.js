@@ -5,4 +5,7 @@ module.exports = {
     tsconfigRootDir: __dirname,
     project: true,
   },
+  ignorePatterns: [
+    'maestro/scripts/**/*.js'
+  ],
 }
