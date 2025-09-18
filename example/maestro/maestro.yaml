@@ -3,6 +3,9 @@ appId:  com.mrousavy.nitro.example
 - tapOn:
     text: "Wait" # Sometimes Emulator doesnt responsd. We press wait and not kill the app
     optional: true
-- runFlow: ./HybridObjectsTest.yaml
+- runFlow:
+    when:
+      true: ${maestro.platform == 'android'}
+    file: ./HybridObjectsTest.yaml
 - runFlow: ./EvalTest.yaml
 - runFlow: ./ViewsTest.yaml
