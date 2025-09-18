@@ -127,8 +127,7 @@ jobs:
 
       - name: Build App (Release, Simulator)
         working-directory: example/ios
-        run: |
-         "set -o pipefail && xcodebuild \
+        run: "set -o pipefail && xcodebuild \
           CC=clang CPLUSPLUS=clang++ LD=clang LDPLUSPLUS=clang++ \
           -derivedDataPath build -UseModernBuildSystem=YES \
           -workspace NitroExample.xcworkspace \
