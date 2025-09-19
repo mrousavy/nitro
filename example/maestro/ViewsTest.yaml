@@ -1,0 +1,19 @@
+appId:  com.mrousavy.nitro.example
+---
+# Run C++ tests
+- tapOn:
+    id: "view-screen-icon"
+
+- assertVisible:
+    id: "view-0"
+
+- assertVisible:
+    id: "view-1"
+
+- assertVisible:
+    id: "view-10"
+
+- assertVisible:
+    id: "view-20" 
+
+    

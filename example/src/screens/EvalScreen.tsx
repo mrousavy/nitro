@@ -56,6 +56,7 @@ export function EvalScreen() {
         <TextInput
           onChangeText={setCode}
           defaultValue={DEFAULT_CODE}
+          testID="eval-screen-text-input"
           multiline={true}
           autoCapitalize="none"
           autoCorrect={false}
@@ -73,7 +74,7 @@ export function EvalScreen() {
           Result: <Text style={styles.monospace}>{stringify(result)}</Text>
         </Text>
         <View style={styles.flex} />
-        <Button title={'Run'} onPress={run} />
+        <Button title={'Run'} onPress={run} testID="eval-screen-run-button" />
       </View>
     </View>
   )

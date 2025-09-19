@@ -1,0 +1,49 @@
+appId:  com.mrousavy.nitro.example
+---
+# Run C++ tests
+- tapOn:
+    id: "hybrid-object-tests-screen-run-all-tests-button"
+
+# this is a quick hack to add delay in maestro tests
+- tapOn: 
+    text: randText  # Any random text that does not exist in the UI
+    optional: true  # This should be true so that the test won't fail
+    repeat: 2
+    delay: 2000
+
+
+- copyTextFrom:
+    id: "hybrid-object-tests-screen-status-text"
+
+- runScript: 
+    file: ./scripts/check-test-result.js    
+    env:
+        passThresholdFromEnv: 80 # 80% pass threshold . 80% test cases should pass.
+
+- runScript: 
+    file: ./scripts/platform-check.js  
+
+  
+- tapOn:
+    text:  ${output.language}
+   
+# Run Kotlin tests
+- tapOn:
+    id: "hybrid-object-tests-screen-run-all-tests-button"
+
+
+# this is a quick hack to add delay in maestro tests
+- tapOn: 
+    text: randText  # Any random text that does not exist in the UI
+    optional: true  # This should be true so that the test won't fail
+    repeat: 2
+    delay: 2000
+
+
+- copyTextFrom:
+    id: "hybrid-object-tests-screen-status-text"
+
+- runScript: 
+    file: ./scripts/check-test-result.js    
+    env:
+        passThresholdFromEnv: 80 # 80% pass threshold . 80% test cases should pass.
