@@ -11,10 +11,6 @@ import UIKit
 class HybridViewWithChildren : HybridViewWithChildrenSpec {
   // UIView
   var view: UIView = UIView()
-    
-    override public init() {
-        // view.backgroundColor = .red
-    }
 
   // Props
   var colorScheme: ColorScheme = .light
