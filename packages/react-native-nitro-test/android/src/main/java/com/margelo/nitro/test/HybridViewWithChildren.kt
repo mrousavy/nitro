@@ -8,12 +8,6 @@ import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.views.view.ReactViewGroup
 
 
-/*
- * ViewWithChildrenImpl extends ReactViewGroup to inherit React Native's layout system,
- * allowing style properties like flex, justifyContent, alignItems, and padding to be applied.
- * This class could alternatively extend other ViewGroup classes like LinearLayout if different
- * layout behavior is needed.
- */
 class ViewWithChildrenImpl(context: Context) : ReactViewGroup(context) {}
 
 @Keep
