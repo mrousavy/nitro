@@ -9,6 +9,7 @@ import com.facebook.react.module.model.ReactModuleInfoProvider;
 import com.facebook.react.TurboReactPackage;
 import com.facebook.react.uimanager.ViewManager;
 import com.margelo.nitro.test.views.HybridTestViewManager;
+import com.margelo.nitro.test.views.HybridViewWithChildrenManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,6 +33,7 @@ public class NitroTestPackage extends TurboReactPackage {
   public List<ViewManager> createViewManagers(@NonNull ReactApplicationContext reactContext) {
     List<ViewManager> viewManagers = new ArrayList<>();
     viewManagers.add(new HybridTestViewManager());
+    viewManagers.add(new HybridViewWithChildrenManager());
     return viewManagers;
   }
 

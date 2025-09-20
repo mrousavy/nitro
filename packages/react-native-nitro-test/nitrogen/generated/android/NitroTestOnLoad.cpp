@@ -30,6 +30,8 @@
 #include "JHybridChildSpec.hpp"
 #include "JHybridTestViewSpec.hpp"
 #include "views/JHybridTestViewStateUpdater.hpp"
+#include "JHybridViewWithChildrenSpec.hpp"
+#include "views/JHybridViewWithChildrenStateUpdater.hpp"
 #include "HybridTestObjectCpp.hpp"
 #include <NitroModules/DefaultConstructableObject.hpp>
 
@@ -57,6 +59,8 @@ int initialize(JavaVM* vm) {
     margelo::nitro::test::JHybridChildSpec::registerNatives();
     margelo::nitro::test::JHybridTestViewSpec::registerNatives();
     margelo::nitro::test::views::JHybridTestViewStateUpdater::registerNatives();
+    margelo::nitro::test::JHybridViewWithChildrenSpec::registerNatives();
+    margelo::nitro::test::views::JHybridViewWithChildrenStateUpdater::registerNatives();
 
     // Register Nitro Hybrid Objects
     HybridObjectRegistry::registerHybridObjectConstructor(
@@ -96,6 +100,14 @@ int initialize(JavaVM* vm) {
       "TestView",
       []() -> std::shared_ptr<HybridObject> {
         static DefaultConstructableObject<JHybridTestViewSpec::javaobject> object("com/margelo/nitro/test/HybridTestView");
+        auto instance = object.create();
+        return instance->cthis()->shared();
+      }
+    );
+    HybridObjectRegistry::registerHybridObjectConstructor(
+      "ViewWithChildren",
+      []() -> std::shared_ptr<HybridObject> {
+        static DefaultConstructableObject<JHybridViewWithChildrenSpec::javaobject> object("com/margelo/nitro/test/HybridViewWithChildren");
         auto instance = object.create();
         return instance->cthis()->shared();
       }

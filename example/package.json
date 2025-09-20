@@ -5,7 +5,7 @@
   "scripts": {
     "start": "react-native start --client-logs",
     "android": "react-native run-android",
-    "ios": "react-native run-ios",
+    "ios": "react-native run-ios --simulator 'iPhone 16'",
     "clean": "rm -rf android/build node_modules/**/android/build lib",
     "typescript": "tsc",
     "typecheck": "tsc --noEmit",

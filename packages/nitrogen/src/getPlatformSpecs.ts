@@ -1,6 +1,7 @@
 import type { PlatformSpec } from 'react-native-nitro-modules'
 import type { InterfaceDeclaration, Type, TypeAliasDeclaration } from 'ts-morph'
 import { Node, Symbol } from 'ts-morph'
+import type { HybridViewConfig } from './syntax/HybridObjectSpec.js'
 import { getBaseTypes } from './utils.js'
 
 export type Platform = keyof Required<PlatformSpec>
@@ -199,4 +200,49 @@ export function getHybridViewPlatforms(
 
   // it uses `HybridObject` without generic arguments. This defaults to platform native languages
   return { ios: 'swift', android: 'kotlin' }
+}
+
+function isTypeLiteral(type: Type): boolean {
+  const symbol = type.getSymbol()
+  if (!symbol) return false
+
+  const hasProperties = type.getProperties().length > 0
+  const isObjectType = type.isObject()
+
+  if (!hasProperties || !isObjectType) return false
+
+  const symbolName = symbol.getName()
+  const isSyntheticName = symbolName === '__type' || symbolName === '{}'
+
+  return isSyntheticName
+}
+
+export function getHybridViewConfig(type: Type): HybridViewConfig | undefined {
+  const viewConfig: HybridViewConfig = { allowChildren: false }
+  const intersectionTypes = type.getIntersectionTypes()
+
+  for (const intersectionType of intersectionTypes) {
+    if (isTypeLiteral(intersectionType)) {
+      const properties = intersectionType.getProperties()
+
+      for (const property of properties) {
+        const propertyName = property.getName() as keyof HybridViewConfig
+        const declarations = property.getDeclarations()
+
+        if (declarations.length > 0 && declarations[0]) {
+          const propertyType = property.getTypeAtLocation(declarations[0])
+
+          if (propertyType.isBooleanLiteral()) {
+            const propertyValue = propertyType.getText()
+            viewConfig[propertyName] = propertyValue === 'true'
+          } else {
+            // @ts-expect-error because we don't know the type of the property yet.
+            viewConfig[propertyName] = propertyType.getLiteralValue()
+          }
+        }
+      }
+    }
+  }
+
+  return viewConfig
 }

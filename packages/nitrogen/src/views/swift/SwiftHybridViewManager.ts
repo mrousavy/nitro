@@ -33,6 +33,8 @@ export function createSwiftHybridViewManager(
     )
   }
 
+  const isChildrenAllowed = spec.viewConfig?.allowChildren
+
   const propAssignments = spec.properties.map((p) => {
     const name = escapeCppName(p.name)
     const setter = p.getSetterName('swift')
@@ -136,7 +138,28 @@ using namespace ${namespace}::views;
   // 4. Continue in base class
   [super updateProps:props oldProps:oldProps];
 }
+${
+  isChildrenAllowed
+    ? `
+// updates ${component}'s frame to match RCTViewComponentView's bounds
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    self.contentView.frame = self.bounds;
+}
 
+// Make sure ${component} is never overlaid by RCTViewComponentView
+- (void)mountChildComponentView:(UIView<RCTComponentViewProtocol>*)childComponentView
+                          index:(NSInteger)index {
+    [self.contentView mountChildComponentView:childComponentView index:index];
+}
+
+- (void)unmountChildComponentView:(UIView<RCTComponentViewProtocol>*)childComponentView
+                            index:(NSInteger)index {
+    [self.contentView unmountChildComponentView:childComponentView index:index];
+}
+`
+    : ''
+}
 @end
   `
 

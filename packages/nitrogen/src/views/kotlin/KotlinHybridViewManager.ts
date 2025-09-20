@@ -36,14 +36,20 @@ export function createKotlinHybridViewManager(
     )
   }
 
+  const isChildrenAllowed = spec.viewConfig?.allowChildren
+  const view = isChildrenAllowed ? 'ReactViewGroup' : 'View'
+  const viewManager = isChildrenAllowed
+    ? 'ReactViewManager'
+    : 'SimpleViewManager'
+
   const viewManagerCode = `
 ${createFileMetadataString(`${manager}.kt`)}
 
 package ${javaSubNamespace}
 
-import android.view.View
+${isChildrenAllowed ? 'import com.facebook.react.views.view.ReactViewGroup' : 'import android.view.View'}
 import com.facebook.react.uimanager.ReactStylesDiffMap
-import com.facebook.react.uimanager.SimpleViewManager
+${isChildrenAllowed ? 'import com.facebook.react.views.view.ReactViewManager' : 'import com.facebook.react.uimanager.SimpleViewManager'}
 import com.facebook.react.uimanager.StateWrapper
 import com.facebook.react.uimanager.ThemedReactContext
 import ${javaNamespace}.*
@@ -51,26 +57,26 @@ import ${javaNamespace}.*
 /**
  * Represents the React Native \`ViewManager\` for the "${spec.name}" Nitro HybridView.
  */
-class ${manager}: SimpleViewManager<View>() {
-  private val views = hashMapOf<View, ${viewImplementation}>()
+class ${manager}: ${viewManager}${isChildrenAllowed ? '' : '<View>'}() {
+  private val views = hashMapOf<${view}, ${viewImplementation}>()
 
   override fun getName(): String {
     return "${spec.name}"
   }
 
-  override fun createViewInstance(reactContext: ThemedReactContext): View {
+  override fun createViewInstance(reactContext: ThemedReactContext): ${view} {
     val hybridView = ${viewImplementation}(reactContext)
     val view = hybridView.view
     views[view] = hybridView
     return view
   }
 
-  override fun onDropViewInstance(view: View) {
+  override fun onDropViewInstance(view: ${view}) {
     super.onDropViewInstance(view)
     views.remove(view)
   }
 
-  override fun updateState(view: View, props: ReactStylesDiffMap, stateWrapper: StateWrapper): Any? {
+  override fun updateState(view: ${view}, props: ReactStylesDiffMap, stateWrapper: StateWrapper): Any? {
     val hybridView = views[view] ?: throw Error("Couldn't find view $view in local views table!")
 
     // 1. Update each prop individually

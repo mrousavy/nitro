@@ -15,6 +15,7 @@
 #include "HybridBaseSpecSwift.hpp"
 #include "HybridChildSpecSwift.hpp"
 #include "HybridTestViewSpecSwift.hpp"
+#include "HybridViewWithChildrenSpecSwift.hpp"
 
 @interface NitroTestAutolinking : NSObject
 @end
@@ -59,6 +60,13 @@
     "TestView",
     []() -> std::shared_ptr<HybridObject> {
       std::shared_ptr<HybridTestViewSpec> hybridObject = NitroTest::NitroTestAutolinking::createTestView();
+      return hybridObject;
+    }
+  );
+  HybridObjectRegistry::registerHybridObjectConstructor(
+    "ViewWithChildren",
+    []() -> std::shared_ptr<HybridObject> {
+      std::shared_ptr<HybridViewWithChildrenSpec> hybridObject = NitroTest::NitroTestAutolinking::createViewWithChildren();
       return hybridObject;
     }
   );
