@@ -100,14 +100,7 @@ public extension Car {
   var driver: Person? {
     @inline(__always)
     get {
-      return { () -> Person? in
-        if bridge.has_value_std__optional_Person_(self.__driver) {
-          let __unwrapped = bridge.get_std__optional_Person_(self.__driver)
-          return __unwrapped
-        } else {
-          return nil
-        }
-      }()
+      return self.__driver.value
     }
     @inline(__always)
     set {

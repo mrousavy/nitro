@@ -260,6 +260,11 @@ inline ${wrappedBridge.getTypeCode('c++')} get_${name}(const ${actualType}& opti
   }
 }
 
+export function isPrimitivelyCopyable(type: Type): boolean {
+  const bridgedType = new SwiftCxxBridgedType(type, true)
+  return !bridgedType.needsSpecialHandling
+}
+
 /**
  * Creates a C++ `create_vector_T<T>(size)` function that can be called from Swift.
  */
@@ -269,7 +274,7 @@ function createCxxVectorSwiftHelper(type: ArrayType): SwiftCxxHelper {
   const name = escapeCppName(actualType)
   let code: string
   let funcName: string
-  if (type.isPrimitivelyCopyable) {
+  if (isPrimitivelyCopyable(type.itemType)) {
     const itemType = type.itemType.getCode('c++')
     funcName = `copy_${name}`
     code = `

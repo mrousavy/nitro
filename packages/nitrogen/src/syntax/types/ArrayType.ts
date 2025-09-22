@@ -18,19 +18,6 @@ export class ArrayType implements Type {
     return 'array'
   }
 
-  get isPrimitivelyCopyable(): boolean {
-    switch (this.itemType.kind) {
-      case 'number':
-      case 'boolean':
-      case 'bigint':
-      case 'enum':
-      case 'struct':
-        return true
-      default:
-        return false
-    }
-  }
-
   getCode(language: Language, options?: GetCodeOptions): string {
     const itemCode = this.itemType.getCode(language, options)
 

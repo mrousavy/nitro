@@ -22,6 +22,7 @@ import { VariantType } from '../types/VariantType.js'
 import { getReferencedTypes } from '../getReferencedTypes.js'
 import {
   createSwiftCxxHelpers,
+  isPrimitivelyCopyable,
   type SwiftCxxHelper,
 } from './SwiftCxxTypeHelper.js'
 import { createSwiftEnumBridge } from './SwiftEnum.js'
@@ -83,9 +84,6 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
         return true
       case 'tuple':
         // (A, B) <> std::tuple<A, B>
-        return true
-      case 'struct':
-        // SomeStruct (Swift extension) <> SomeStruct (C++)
         return true
       case 'function':
         // (@ecaping () -> Void) <> std::function<...>
@@ -489,7 +487,7 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
         const wrapping = new SwiftCxxBridgedType(array.itemType, true)
         switch (language) {
           case 'swift':
-            if (array.isPrimitivelyCopyable) {
+            if (isPrimitivelyCopyable(array.itemType)) {
               // We can primitively copy the data, raw:
               const bridge = this.getBridgeOrThrow()
               const getDataFunc = `bridge.get_data_${bridge.specializationName}`
@@ -763,7 +761,7 @@ case ${i}:
         const wrapping = new SwiftCxxBridgedType(array.itemType, true)
         switch (language) {
           case 'swift':
-            if (array.isPrimitivelyCopyable) {
+            if (isPrimitivelyCopyable(array.itemType)) {
               // memory can be copied primitively
               const copyFunc = `bridge.${bridge.funcName}`
               return `
