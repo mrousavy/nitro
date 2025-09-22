@@ -18,7 +18,7 @@
         "eslint-plugin-prettier": "^5.5.1",
         "jest": "^29.7.0",
         "prettier": "^3.6.2",
-        "react": "19.1.1",
+        "react": "19.1.0",
         "react-native": "0.81.1",
         "release-it": "^19.0.4",
         "typescript": "~5.8.3",
@@ -38,8 +38,8 @@
         "@mdx-js/react": "^3.1.1",
         "clsx": "^2.0.0",
         "prism-react-renderer": "^2.3.0",
-        "react": "19.1.1",
-        "react-dom": "19.1.1",
+        "react": "19.1.0",
+        "react-dom": "19.1.0",
       },
       "devDependencies": {
         "@docusaurus/module-type-aliases": "3.8.1",
@@ -57,7 +57,7 @@
         "@react-navigation/bottom-tabs": "^7.4.5",
         "@react-navigation/native": "^7.1.17",
         "deep-equal": "^2.2.3",
-        "react": "19.1.1",
+        "react": "19.1.0",
         "react-native": "0.81.1",
         "react-native-nitro-modules": "*",
         "react-native-nitro-test": "*",
@@ -103,7 +103,7 @@
         "@types/jest": "*",
         "@types/react": "*",
         "jest": "*",
-        "react": "19.1.1",
+        "react": "19.1.0",
         "react-native": "0.81.1",
         "react-native-builder-bob": "^0.37.0",
       },
@@ -120,7 +120,7 @@
         "@types/react": "*",
         "jest": "*",
         "nitrogen": "*",
-        "react": "19.1.1",
+        "react": "19.1.0",
         "react-native": "0.81.1",
         "react-native-nitro-modules": "*",
         "react-native-nitro-test-external": "*",
@@ -138,13 +138,13 @@
       "devDependencies": {
         "@react-native/eslint-config": "0.81.1",
         "@types/jest": "^29.5.12",
-        "@types/react": "^19.1.13",
+        "@types/react": "^19.1.03",
         "eslint": "^8.57.0",
         "eslint-config-prettier": "^9.1.0",
         "eslint-plugin-prettier": "^5.2.1",
         "nitrogen": "*",
         "prettier": "^3.3.3",
-        "react": "19.1.1",
+        "react": "19.1.0",
         "react-native": "0.81.1",
         "react-native-nitro-modules": "*",
         "typescript": "^5.8.3",
@@ -3171,11 +3171,11 @@
 
     "rc9": ["rc9@2.1.2", "", { "dependencies": { "defu": "^6.1.4", "destr": "^2.0.3" } }, "sha512-btXCnMmRIBINM2LDZoEmOogIZU7Qe7zn4BpomSKZ/ykbLObuBdvG+mFq11DL6fjH1DRwHhrlgtYWG96bJiC7Cg=="],
 
-    "react": ["react@19.1.1", "", {}, "sha512-w8nqGImo45dmMIfljjMwOGtbmC/mk4CMYhWIicdSflH91J9TyCyczcPFXJzrZ/ZXcgGRFeP6BU0BEJTw6tZdfQ=="],
+    "react": ["react@19.1.0", "", {}, "sha512-FS+XFBNvn3GTAWq26joslQgWNoFu08F4kl0J4CgdNKADkdSGXQyTCnKteIAJy96Br6YbpEU1LSzV5dYtjMkMDg=="],
 
     "react-devtools-core": ["react-devtools-core@6.1.5", "", { "dependencies": { "shell-quote": "^1.6.1", "ws": "^7" } }, "sha512-ePrwPfxAnB+7hgnEr8vpKxL9cmnp7F322t8oqcPshbIQQhDKgFDW4tjhF2wjVbdXF9O/nyuy3sQWd9JGpiLPvA=="],
 
-    "react-dom": ["react-dom@19.1.1", "", { "dependencies": { "scheduler": "^0.26.0" }, "peerDependencies": { "react": "^19.1.1" } }, "sha512-Dlq/5LAZgF0Gaz6yiqZCf6VCcZs1ghAJyrsu84Q/GT0gV+mCxbfmKNoGRKBYMJ8IEdGPqu49YWXD02GCknEDkw=="],
+    "react-dom": ["react-dom@19.1.0", "", { "dependencies": { "scheduler": "^0.26.0" }, "peerDependencies": { "react": "^19.1.0" } }, "sha512-Xs1hdnE+DyKgeHJeJznQmYMIBG3TKIHJJT95Q58nHLSrElKlGQqDTR2HQ9fx5CN/Gk6Vh/kupBTDLU11/nDk/g=="],
 
     "react-fast-compare": ["react-fast-compare@3.2.2", "", {}, "sha512-nsO+KSNgo1SbJqJEYRE9ERzo7YtYbou/OqjSQKxV7jcKox7+usiUVZOAC+XnDOABXggQTno0Y1CpVnuWEc1boQ=="],
 
