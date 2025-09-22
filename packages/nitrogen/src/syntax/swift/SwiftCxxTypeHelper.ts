@@ -278,8 +278,17 @@ function createCxxVectorSwiftHelper(type: ArrayType): SwiftCxxHelper {
  */
 using ${name} = ${actualType};
 inline ${actualType} copy_${name}(const ${itemType}* _Nonnull data, size_t size) noexcept {
-  std::span<const ${itemType}> span(data, size);
-  return ${actualType}(span.begin(), span.end());
+  if constexpr (std::is_trivially_copyable_v<${itemType}>) {
+    // FAST: Type does not have a copy constructor - simply memcpy it
+    std::vector<${itemType}> vector;
+    vector.reserve(size);
+    std::memcpy(vector.data(), data, size * sizeof(${itemType}));
+    return vector;
+  } else {
+    // SLOW: Type needs to be iterated to copy-construct it
+    std::span<const ${itemType}> span(data, size);
+    return ${actualType}(span.begin(), span.end());
+  }
 }
 inline const ${itemType}* _Nonnull get_data_${name}(const ${actualType}& vector) noexcept {
   return vector.data();
@@ -308,6 +317,11 @@ inline ${actualType} create_${name}(size_t size) noexcept {
       requiredIncludes: [
         {
           name: 'vector',
+          space: 'system',
+          language: 'c++',
+        },
+        {
+          name: 'type_traits',
           space: 'system',
           language: 'c++',
         },
