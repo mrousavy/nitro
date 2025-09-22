@@ -66,6 +66,7 @@ namespace NitroTest { class HybridTestViewSpec_cxx; }
 #include <NitroModules/AnyMap.hpp>
 #include <NitroModules/ArrayBuffer.hpp>
 #include <NitroModules/ArrayBufferHolder.hpp>
+#include <NitroModules/FastVectorCopy.hpp>
 #include <NitroModules/Promise.hpp>
 #include <NitroModules/PromiseHolder.hpp>
 #include <NitroModules/Result.hpp>
@@ -75,9 +76,7 @@ namespace NitroTest { class HybridTestViewSpec_cxx; }
 #include <functional>
 #include <memory>
 #include <optional>
-#include <span>
 #include <string>
-#include <type_traits>
 #include <unordered_map>
 #include <variant>
 #include <vector>
@@ -258,17 +257,7 @@ namespace margelo::nitro::test::bridge::swift {
    */
   using std__vector_double_ = std::vector<double>;
   inline std::vector<double> copy_std__vector_double_(const double* _Nonnull data, size_t size) noexcept {
-    if constexpr (std::is_trivially_copyable_v<double>) {
-      // FAST: Type does not have a copy constructor - simply memcpy it
-      std::vector<double> vector;
-      vector.reserve(size);
-      std::memcpy(vector.data(), data, size * sizeof(double));
-      return vector;
-    } else {
-      // SLOW: Type needs to be iterated to copy-construct it
-      std::span<const double> span(data, size);
-      return std::vector<double>(span.begin(), span.end());
-    }
+    return margelo::nitro::FastVectorCopy<double>(data, size);
   }
   inline const double* _Nonnull get_data_std__vector_double_(const std::vector<double>& vector) noexcept {
     return vector.data();
@@ -280,17 +269,7 @@ namespace margelo::nitro::test::bridge::swift {
    */
   using std__vector_Person_ = std::vector<Person>;
   inline std::vector<Person> copy_std__vector_Person_(const Person* _Nonnull data, size_t size) noexcept {
-    if constexpr (std::is_trivially_copyable_v<Person>) {
-      // FAST: Type does not have a copy constructor - simply memcpy it
-      std::vector<Person> vector;
-      vector.reserve(size);
-      std::memcpy(vector.data(), data, size * sizeof(Person));
-      return vector;
-    } else {
-      // SLOW: Type needs to be iterated to copy-construct it
-      std::span<const Person> span(data, size);
-      return std::vector<Person>(span.begin(), span.end());
-    }
+    return margelo::nitro::FastVectorCopy<Person>(data, size);
   }
   inline const Person* _Nonnull get_data_std__vector_Person_(const std::vector<Person>& vector) noexcept {
     return vector.data();
@@ -302,17 +281,7 @@ namespace margelo::nitro::test::bridge::swift {
    */
   using std__vector_Powertrain_ = std::vector<Powertrain>;
   inline std::vector<Powertrain> copy_std__vector_Powertrain_(const Powertrain* _Nonnull data, size_t size) noexcept {
-    if constexpr (std::is_trivially_copyable_v<Powertrain>) {
-      // FAST: Type does not have a copy constructor - simply memcpy it
-      std::vector<Powertrain> vector;
-      vector.reserve(size);
-      std::memcpy(vector.data(), data, size * sizeof(Powertrain));
-      return vector;
-    } else {
-      // SLOW: Type needs to be iterated to copy-construct it
-      std::span<const Powertrain> span(data, size);
-      return std::vector<Powertrain>(span.begin(), span.end());
-    }
+    return margelo::nitro::FastVectorCopy<Powertrain>(data, size);
   }
   inline const Powertrain* _Nonnull get_data_std__vector_Powertrain_(const std::vector<Powertrain>& vector) noexcept {
     return vector.data();
