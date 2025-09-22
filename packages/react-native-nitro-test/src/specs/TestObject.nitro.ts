@@ -62,6 +62,10 @@ interface JsStyleStruct {
 export interface WrappedJsStruct {
   value: JsStyleStruct
 }
+interface OptionalWrapper {
+  optionalArrayBuffer?: ArrayBuffer
+  optionalString?: string
+}
 
 interface SecondMapWrapper {
   second: Record<string, string>
@@ -175,6 +179,7 @@ interface SharedTestObjectProps {
   getDriver(car: Car): Person | undefined
   jsStyleObjectAsParameters(params: JsStyleStruct): void
   bounceWrappedJsStyleStruct(value: WrappedJsStruct): WrappedJsStruct
+  bounceOptionalWrapper(wrapper: OptionalWrapper): OptionalWrapper
 
   // ArrayBuffers
   createArrayBuffer(): ArrayBuffer
