@@ -37,7 +37,14 @@ public extension OptionalWrapper {
   var optionalArrayBuffer: ArrayBuffer? {
     @inline(__always)
     get {
-      return self.__optionalArrayBuffer.value
+      return { () -> ArrayBuffer? in
+        if bridge.has_value_std__optional_std__shared_ptr_ArrayBuffer__(self.__optionalArrayBuffer) {
+          let __unwrapped = bridge.get_std__optional_std__shared_ptr_ArrayBuffer__(self.__optionalArrayBuffer)
+          return ArrayBuffer(__unwrapped)
+        } else {
+          return nil
+        }
+      }()
     }
     @inline(__always)
     set {
