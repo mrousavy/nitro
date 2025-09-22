@@ -28,8 +28,7 @@ std::vector<T> FastVectorCopy(const T* data, size_t size) {
 
   if constexpr (std::is_trivially_copyable_v<T>) {
     // FAST: Type does not have a copy constructor - simply memcpy it
-    std::vector<T> vector;
-    vector.reserve(size);
+    std::vector<T> vector(size);
     std::memcpy(vector.data(), data, size * sizeof(T));
     return vector;
   } else {
