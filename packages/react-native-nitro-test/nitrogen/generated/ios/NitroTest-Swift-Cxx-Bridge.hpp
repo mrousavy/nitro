@@ -285,6 +285,7 @@ namespace margelo::nitro::test::bridge::swift {
       std::vector<Person> vector;
       vector.reserve(size);
       std::memcpy(vector.data(), data, size * sizeof(Person));
+      return vector;
     } else {
       // SLOW: Type needs to be iterated to copy-construct it
       std::span<const Person> span(data, size);
