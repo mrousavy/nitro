@@ -14,7 +14,7 @@ namespace margelo::nitro {
  * Represents a Result from a function. It's either a value (`T`), or an error (`std::exception_ptr`).
  */
 template <typename T>
-class Result {
+struct Result final {
 public:
   // Constructors
   Result(const Result& other) : _hasError(other._hasError) {
@@ -132,7 +132,7 @@ private:
 
 // Specialization for void
 template <>
-class Result<void> {
+struct Result<void> final {
 public:
   // Constructors
   Result(const Result& other) : _hasError(other._hasError), _error(other._error) {}
