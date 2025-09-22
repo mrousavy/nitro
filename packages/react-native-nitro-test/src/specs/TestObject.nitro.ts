@@ -62,7 +62,7 @@ interface JsStyleStruct {
 export interface WrappedJsStruct {
   value: JsStyleStruct
 }
-interface OptionalWrapper {
+export interface OptionalWrapper {
   optionalArrayBuffer?: ArrayBuffer
   optionalString?: string
 }
