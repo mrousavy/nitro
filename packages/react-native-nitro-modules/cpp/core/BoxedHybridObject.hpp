@@ -21,7 +21,7 @@ using namespace facebook;
  *
  * Simply call `unbox()` on this `jsi::HostObject` from the new Runtime/context to get the `HybridObject` again.
  */
-class BoxedHybridObject : public jsi::HostObject {
+class BoxedHybridObject final : public jsi::HostObject {
 public:
   explicit BoxedHybridObject(const std::shared_ptr<HybridObject>& hybridObject) : _hybridObject(hybridObject) {}
 
