@@ -278,7 +278,8 @@ function createCxxVectorSwiftHelper(type: ArrayType): SwiftCxxHelper {
  */
 using ${name} = ${actualType};
 inline ${actualType} copy_${name}(const ${itemType}* _Nonnull data, size_t size) noexcept {
-  return ${actualType}(data, data + size);
+  std::span<const ${itemType}> span(data, size);
+  return ${actualType}(span.begin(), span.end());
 }
 inline const ${itemType}* _Nonnull get_data_${name}(const ${actualType}& vector) noexcept {
   return vector.data();
@@ -307,6 +308,11 @@ inline ${actualType} create_${name}(size_t size) noexcept {
       requiredIncludes: [
         {
           name: 'vector',
+          space: 'system',
+          language: 'c++',
+        },
+        {
+          name: 'span',
           space: 'system',
           language: 'c++',
         },

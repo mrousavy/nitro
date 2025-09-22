@@ -75,6 +75,7 @@ namespace NitroTest { class HybridTestViewSpec_cxx; }
 #include <functional>
 #include <memory>
 #include <optional>
+#include <span>
 #include <string>
 #include <unordered_map>
 #include <variant>
@@ -256,7 +257,8 @@ namespace margelo::nitro::test::bridge::swift {
    */
   using std__vector_double_ = std::vector<double>;
   inline std::vector<double> copy_std__vector_double_(const double* _Nonnull data, size_t size) noexcept {
-    return std::vector<double>(data, data + size);
+    std::span<const double> span(data, size);
+    return std::vector<double>(span.begin(), span.end());
   }
   inline const double* _Nonnull get_data_std__vector_double_(const std::vector<double>& vector) noexcept {
     return vector.data();
@@ -268,7 +270,8 @@ namespace margelo::nitro::test::bridge::swift {
    */
   using std__vector_Person_ = std::vector<Person>;
   inline std::vector<Person> copy_std__vector_Person_(const Person* _Nonnull data, size_t size) noexcept {
-    return std::vector<Person>(data, data + size);
+    std::span<const Person> span(data, size);
+    return std::vector<Person>(span.begin(), span.end());
   }
   inline const Person* _Nonnull get_data_std__vector_Person_(const std::vector<Person>& vector) noexcept {
     return vector.data();
@@ -280,7 +283,8 @@ namespace margelo::nitro::test::bridge::swift {
    */
   using std__vector_Powertrain_ = std::vector<Powertrain>;
   inline std::vector<Powertrain> copy_std__vector_Powertrain_(const Powertrain* _Nonnull data, size_t size) noexcept {
-    return std::vector<Powertrain>(data, data + size);
+    std::span<const Powertrain> span(data, size);
+    return std::vector<Powertrain>(span.begin(), span.end());
   }
   inline const Powertrain* _Nonnull get_data_std__vector_Powertrain_(const std::vector<Powertrain>& vector) noexcept {
     return vector.data();
