@@ -7,9 +7,9 @@
 
 #pragma once
 
-#include <vector>
-#include <type_traits>
 #include <span>
+#include <type_traits>
+#include <vector>
 
 namespace margelo::nitro {
 
@@ -25,7 +25,7 @@ std::vector<T> FastVectorCopy(const T* data, size_t size) {
     // It's an empty vector.
     return std::vector<T>();
   }
-  
+
   if constexpr (std::is_trivially_copyable_v<T>) {
     // FAST: Type does not have a copy constructor - simply memcpy it
     std::vector<T> vector;
