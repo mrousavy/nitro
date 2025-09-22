@@ -37,8 +37,8 @@ public extension Car {
       } else {
         return .init()
       }
-    }(), performanceScores.withUnsafeBufferPointer { pointer -> bridge.std__vector_double_ in
-      return bridge.copy_std__vector_double_(pointer.baseAddress!, performanceScores.count)
+    }(), performanceScores.withUnsafeBufferPointer { __pointer -> bridge.std__vector_double_ in
+      return bridge.copy_std__vector_double_(__pointer.baseAddress!, performanceScores.count)
     })
   }
 
@@ -159,15 +159,15 @@ public extension Car {
     @inline(__always)
     get {
       return { () -> [Double] in
-        let data = bridge.get_data_std__vector_double_(self.__performanceScores)
-        let size = self.__performanceScores.size()
-        return Array(UnsafeBufferPointer(start: data, count: size))
+        let __data = bridge.get_data_std__vector_double_(self.__performanceScores)
+        let __size = self.__performanceScores.size()
+        return Array(UnsafeBufferPointer(start: __data, count: __size))
       }()
     }
     @inline(__always)
     set {
-      self.__performanceScores = newValue.withUnsafeBufferPointer { pointer -> bridge.std__vector_double_ in
-        return bridge.copy_std__vector_double_(pointer.baseAddress!, newValue.count)
+      self.__performanceScores = newValue.withUnsafeBufferPointer { __pointer -> bridge.std__vector_double_ in
+        return bridge.copy_std__vector_double_(__pointer.baseAddress!, newValue.count)
       }
     }
   }

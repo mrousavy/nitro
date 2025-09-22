@@ -493,9 +493,9 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
               const getDataFunc = `bridge.get_data_${bridge.specializationName}`
               return `
 { () -> ${array.getCode('swift')} in
-  let data = ${getDataFunc}(${cppParameterName})
-  let size = ${cppParameterName}.size()
-  return Array(UnsafeBufferPointer(start: data, count: size))
+  let __data = ${getDataFunc}(${cppParameterName})
+  let __size = ${cppParameterName}.size()
+  return Array(UnsafeBufferPointer(start: __data, count: __size))
 }()`.trim()
             } else {
               // We have to iterate the element one by one to create a resulting Array (mapped)
@@ -765,8 +765,8 @@ case ${i}:
               // memory can be copied primitively
               const copyFunc = `bridge.${bridge.funcName}`
               return `
-${swiftParameterName}.withUnsafeBufferPointer { pointer -> bridge.${bridge.specializationName} in
-  return ${copyFunc}(pointer.baseAddress!, ${swiftParameterName}.count)
+${swiftParameterName}.withUnsafeBufferPointer { __pointer -> bridge.${bridge.specializationName} in
+  return ${copyFunc}(__pointer.baseAddress!, ${swiftParameterName}.count)
 }`.trim()
             } else {
               // array has to be iterated and converted one-by-one
