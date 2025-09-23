@@ -11,6 +11,7 @@ import {
 import { getHybridObjectName } from '../../syntax/getHybridObjectName.js'
 import { addJNINativeRegistration } from '../../syntax/kotlin/JNINativeRegistrations.js'
 import { indent } from '../../utils.js'
+import { getAndroidViewConfiguration } from '../getViewConfiguration.js'
 
 export function createKotlinHybridViewManager(
   spec: HybridObjectSpec
@@ -36,20 +37,17 @@ export function createKotlinHybridViewManager(
     )
   }
 
-  const isChildrenAllowed = spec.viewConfig?.allowChildren
-  const view = isChildrenAllowed ? 'ReactViewGroup' : 'View'
-  const viewManager = isChildrenAllowed
-    ? 'ReactViewManager'
-    : 'SimpleViewManager'
+  const { view, viewManager, viewImport, viewManagerImport, genericTypeParam } =
+    getAndroidViewConfiguration(spec)
 
   const viewManagerCode = `
 ${createFileMetadataString(`${manager}.kt`)}
 
 package ${javaSubNamespace}
 
-${isChildrenAllowed ? 'import com.facebook.react.views.view.ReactViewGroup' : 'import android.view.View'}
+${viewImport}
 import com.facebook.react.uimanager.ReactStylesDiffMap
-${isChildrenAllowed ? 'import com.facebook.react.views.view.ReactViewManager' : 'import com.facebook.react.uimanager.SimpleViewManager'}
+${viewManagerImport}
 import com.facebook.react.uimanager.StateWrapper
 import com.facebook.react.uimanager.ThemedReactContext
 import ${javaNamespace}.*
@@ -57,7 +55,7 @@ import ${javaNamespace}.*
 /**
  * Represents the React Native \`ViewManager\` for the "${spec.name}" Nitro HybridView.
  */
-class ${manager}: ${viewManager}${isChildrenAllowed ? '' : '<View>'}() {
+class ${manager}: ${viewManager}${genericTypeParam}() {
   private val views = hashMapOf<${view}, ${viewImplementation}>()
 
   override fun getName(): String {

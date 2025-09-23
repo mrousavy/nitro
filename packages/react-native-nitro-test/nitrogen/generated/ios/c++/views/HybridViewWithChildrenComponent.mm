@@ -106,7 +106,7 @@ using namespace margelo::nitro::test::views;
 
 // Make sure HybridViewWithChildrenComponent is never overlaid by RCTViewComponentView
 - (void)mountChildComponentView:(UIView<RCTComponentViewProtocol>*)childComponentView
-                          index:(NSInteger)index {
+                            index:(NSInteger)index {
     [self.contentView mountChildComponentView:childComponentView index:index];
 }
 

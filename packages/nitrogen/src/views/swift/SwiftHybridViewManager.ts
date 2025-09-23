@@ -13,6 +13,7 @@ import { getHybridObjectName } from '../../syntax/getHybridObjectName.js'
 import { getHybridObjectConstructorCall } from '../../syntax/swift/SwiftHybridObjectRegistration.js'
 import { indent } from '../../utils.js'
 import { SwiftCxxBridgedType } from '../../syntax/swift/SwiftCxxBridgedType.js'
+import { getIOSViewConfiguration } from '../getViewConfiguration.js'
 
 export function createSwiftHybridViewManager(
   spec: HybridObjectSpec
@@ -33,7 +34,7 @@ export function createSwiftHybridViewManager(
     )
   }
 
-  const isChildrenAllowed = spec.viewConfig?.allowChildren
+  const { childComponentMethods } = getIOSViewConfiguration(spec, component)
 
   const propAssignments = spec.properties.map((p) => {
     const name = escapeCppName(p.name)
@@ -138,28 +139,7 @@ using namespace ${namespace}::views;
   // 4. Continue in base class
   [super updateProps:props oldProps:oldProps];
 }
-${
-  isChildrenAllowed
-    ? `
-// updates ${component}'s frame to match RCTViewComponentView's bounds
-- (void)layoutSubviews {
-    [super layoutSubviews];
-    self.contentView.frame = self.bounds;
-}
-
-// Make sure ${component} is never overlaid by RCTViewComponentView
-- (void)mountChildComponentView:(UIView<RCTComponentViewProtocol>*)childComponentView
-                          index:(NSInteger)index {
-    [self.contentView mountChildComponentView:childComponentView index:index];
-}
-
-- (void)unmountChildComponentView:(UIView<RCTComponentViewProtocol>*)childComponentView
-                            index:(NSInteger)index {
-    [self.contentView unmountChildComponentView:childComponentView index:index];
-}
-`
-    : ''
-}
+${childComponentMethods}
 @end
   `
 
