@@ -25,6 +25,8 @@ namespace NitroModules { class ArrayBuffer; }
 namespace margelo::nitro::test { struct WrappedJsStruct; }
 // Forward declaration of `JsStyleStruct` to properly resolve imports.
 namespace margelo::nitro::test { struct JsStyleStruct; }
+// Forward declaration of `OptionalWrapper` to properly resolve imports.
+namespace margelo::nitro::test { struct OptionalWrapper; }
 // Forward declaration of `WeirdNumbersEnum` to properly resolve imports.
 namespace margelo::nitro::test { enum class WeirdNumbersEnum; }
 // Forward declaration of `HybridChildSpec` to properly resolve imports.
@@ -74,6 +76,8 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 #include "JWrappedJsStruct.hpp"
 #include "JsStyleStruct.hpp"
 #include "JJsStyleStruct.hpp"
+#include "OptionalWrapper.hpp"
+#include "JOptionalWrapper.hpp"
 #include "JVariant_Boolean_OldEnum.hpp"
 #include "WeirdNumbersEnum.hpp"
 #include "JVariant_Boolean_WeirdNumbersEnum.hpp"
@@ -761,6 +765,11 @@ namespace margelo::nitro::test {
   WrappedJsStruct JHybridTestObjectSwiftKotlinSpec::bounceWrappedJsStyleStruct(const WrappedJsStruct& value) {
     static const auto method = javaClassStatic()->getMethod<jni::local_ref<JWrappedJsStruct>(jni::alias_ref<JWrappedJsStruct> /* value */)>("bounceWrappedJsStyleStruct");
     auto __result = method(_javaPart, JWrappedJsStruct::fromCpp(value));
+    return __result->toCpp();
+  }
+  OptionalWrapper JHybridTestObjectSwiftKotlinSpec::bounceOptionalWrapper(const OptionalWrapper& wrapper) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JOptionalWrapper>(jni::alias_ref<JOptionalWrapper> /* wrapper */)>("bounceOptionalWrapper");
+    auto __result = method(_javaPart, JOptionalWrapper::fromCpp(wrapper));
     return __result->toCpp();
   }
   std::shared_ptr<ArrayBuffer> JHybridTestObjectSwiftKotlinSpec::createArrayBuffer() {
