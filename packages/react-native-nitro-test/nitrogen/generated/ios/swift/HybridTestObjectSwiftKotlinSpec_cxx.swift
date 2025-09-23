@@ -1363,6 +1363,18 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
+  public final func bounceOptionalWrapper(wrapper: OptionalWrapper) -> bridge.Result_OptionalWrapper_ {
+    do {
+      let __result = try self.__implementation.bounceOptionalWrapper(wrapper: wrapper)
+      let __resultCpp = __result
+      return bridge.create_Result_OptionalWrapper_(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_OptionalWrapper_(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
   public final func createArrayBuffer() -> bridge.Result_std__shared_ptr_ArrayBuffer__ {
     do {
       let __result = try self.__implementation.createArrayBuffer()

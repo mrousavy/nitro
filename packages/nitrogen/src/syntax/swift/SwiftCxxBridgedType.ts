@@ -92,9 +92,6 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
         return true
       case 'array-buffer':
         // ArrayBufferHolder <> std::shared_ptr<ArrayBuffer>
-        if (this.isBridgingToDirectCppTarget) {
-          return false
-        }
         return true
       case 'date':
         // Date <> double

@@ -30,6 +30,8 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 namespace margelo::nitro::test { class HybridViewWithChildrenSpec; }
 // Forward declaration of `OldEnum` to properly resolve imports.
 namespace margelo::nitro::test { enum class OldEnum; }
+// Forward declaration of `OptionalWrapper` to properly resolve imports.
+namespace margelo::nitro::test { struct OptionalWrapper; }
 // Forward declaration of `Person` to properly resolve imports.
 namespace margelo::nitro::test { struct Person; }
 // Forward declaration of `Powertrain` to properly resolve imports.
@@ -61,6 +63,7 @@ namespace NitroTest { class HybridViewWithChildrenSpec_cxx; }
 #include "HybridTestViewSpec.hpp"
 #include "HybridViewWithChildrenSpec.hpp"
 #include "OldEnum.hpp"
+#include "OptionalWrapper.hpp"
 #include "Person.hpp"
 #include "Powertrain.hpp"
 #include "WeirdNumbersEnum.hpp"
@@ -846,6 +849,21 @@ namespace margelo::nitro::test::bridge::swift {
     return Func_void_std__string_Wrapper(std::move(value));
   }
   
+  // pragma MARK: std::optional<std::shared_ptr<ArrayBuffer>>
+  /**
+   * Specialized version of `std::optional<std::shared_ptr<ArrayBuffer>>`.
+   */
+  using std__optional_std__shared_ptr_ArrayBuffer__ = std::optional<std::shared_ptr<ArrayBuffer>>;
+  inline std::optional<std::shared_ptr<ArrayBuffer>> create_std__optional_std__shared_ptr_ArrayBuffer__(const std::shared_ptr<ArrayBuffer>& value) noexcept {
+    return std::optional<std::shared_ptr<ArrayBuffer>>(value);
+  }
+  inline bool has_value_std__optional_std__shared_ptr_ArrayBuffer__(const std::optional<std::shared_ptr<ArrayBuffer>>& optional) noexcept {
+    return optional.has_value();
+  }
+  inline std::shared_ptr<ArrayBuffer> get_std__optional_std__shared_ptr_ArrayBuffer__(const std::optional<std::shared_ptr<ArrayBuffer>>& optional) noexcept {
+    return *optional;
+  }
+  
   // pragma MARK: std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>>
   /**
    * Wrapper struct for `std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>>`.
@@ -1306,6 +1324,15 @@ namespace margelo::nitro::test::bridge::swift {
   }
   inline Result_WrappedJsStruct_ create_Result_WrappedJsStruct_(const std::exception_ptr& error) noexcept {
     return Result<WrappedJsStruct>::withError(error);
+  }
+  
+  // pragma MARK: Result<OptionalWrapper>
+  using Result_OptionalWrapper_ = Result<OptionalWrapper>;
+  inline Result_OptionalWrapper_ create_Result_OptionalWrapper_(const OptionalWrapper& value) noexcept {
+    return Result<OptionalWrapper>::withValue(value);
+  }
+  inline Result_OptionalWrapper_ create_Result_OptionalWrapper_(const std::exception_ptr& error) noexcept {
+    return Result<OptionalWrapper>::withError(error);
   }
   
   // pragma MARK: Result<std::shared_ptr<ArrayBuffer>>
