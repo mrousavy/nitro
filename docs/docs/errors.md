@@ -14,7 +14,7 @@ Every method in a [Hybrid Object](hybrid-objects) can throw an error using the l
     class HybridMath : HybridMathSpec {
       public func add(a: Double, b: Double) throws -> Double {
         if a < 0 || b < 0 {
-          throw RuntimeError.error("Value cannot be negative!")
+          throw RuntimeError.error(withMessage: "Value cannot be negative!")
         }
         return a + b
       }
@@ -65,7 +65,7 @@ Promises can also be rejected using error throwing syntax on the native side:
       public func add(a: Double, b: Double) throws -> Promise<Double> {
         return Promise.async {
           if a < 0 || b < 0 {
-            throw RuntimeError.error("Value cannot be negative!")
+            throw RuntimeError.error(withMessage: "Value cannot be negative!")
           }
           return a + b
         }
