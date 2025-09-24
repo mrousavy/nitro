@@ -9,9 +9,11 @@
 
 namespace margelo::nitro::test {
 
-  void HybridTestObjectSwiftKotlinSpec::loadHybridMethods() {
+  HybridTestObjectSwiftKotlinSpecPrototype HybridTestObjectSwiftKotlinSpecPrototype::singleton;
+
+  void HybridTestObjectSwiftKotlinSpecPrototype::loadHybridMethods() {
     // load base methods/properties
-    HybridObject::loadHybridMethods();
+    HybridObjectPrototype::loadHybridMethods();
     // load custom methods/properties
     registerHybrids(this, [](Prototype& prototype) {
       prototype.registerHybridGetter("thisObject", &HybridTestObjectSwiftKotlinSpec::getThisObject);

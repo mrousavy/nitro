@@ -188,6 +188,7 @@ struct JSIConverter<std::string> final {
 #include "JSIConverter+Function.hpp"
 #include "JSIConverter+HostObject.hpp"
 #include "JSIConverter+HybridObject.hpp"
+#include "JSIConverter+HybridObjectPrototype.hpp"
 #include "JSIConverter+Optional.hpp"
 #include "JSIConverter+Promise.hpp"
 #include "JSIConverter+Tuple.hpp"

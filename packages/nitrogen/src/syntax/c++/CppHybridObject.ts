@@ -30,12 +30,23 @@ export function createCppHybridObject(spec: HybridObjectSpec): SourceFile[] {
   const name = getHybridObjectName(spec.name)
 
   const bases = ['public virtual HybridObject']
-  for (const base of spec.baseTypes) {
-    const baseName = getHybridObjectName(base.name).HybridTSpec
-    const fullName = base.config.isExternalConfig
-      ? base.config.getCxxNamespace('c++', baseName)
-      : baseName
-    bases.push(`public virtual ${fullName}`)
+  const prototypeBaseClasses: string[] = []
+  if (spec.baseTypes.length === 0) {
+    // we are the base class.
+    prototypeBaseClasses.push('public HybridObjectPrototype')
+  } else {
+    // we have custom base classes
+    for (const base of spec.baseTypes) {
+      const baseName = getHybridObjectName(base.name)
+      const fullName = base.config.isExternalConfig
+        ? base.config.getCxxNamespace('c++', baseName.HybridTSpec)
+        : baseName.HybridTSpec
+      const fullPrototypeName = base.config.isExternalConfig
+        ? base.config.getCxxNamespace('c++', baseName.HybridTSpecPrototype)
+        : baseName.HybridTSpecPrototype
+      bases.push(`public virtual ${fullName}`)
+      prototypeBaseClasses.push(`public ${fullPrototypeName}`)
+    }
   }
 
   // Generate the full header / code
@@ -53,6 +64,18 @@ ${cppExtraIncludes.join('\n')}
 namespace ${cxxNamespace} {
 
   using namespace margelo::nitro;
+
+  /**
+   * Describes the prototype of \`${spec.name}\`.
+   */
+  class ${name.HybridTSpecPrototype}: ${prototypeBaseClasses.join(', ')} {
+  public:
+    static ${name.HybridTSpecPrototype} singleton;
+
+  protected:
+    // Hybrid Setup
+    void loadHybridMethods() override;
+  };
 
   /**
    * An abstract base class for \`${spec.name}\`
@@ -76,16 +99,18 @@ namespace ${cxxNamespace} {
       ~${name.HybridTSpec}() override = default;
 
     public:
+      // Prototype
+      HybridObjectPrototype& getPrototype() const noexcept override {
+        return ${name.HybridTSpecPrototype}::singleton;
+      }
+
+    public:
       // Properties
       ${indent(spec.properties.map((p) => p.getCode('c++', { virtual: true })).join('\n'), '      ')}
 
     public:
       // Methods
       ${indent(spec.methods.map((m) => m.getCode('c++', { virtual: true })).join('\n'), '      ')}
-
-    protected:
-      // Hybrid Setup
-      void loadHybridMethods() override;
 
     protected:
       // Tag for logging
@@ -118,11 +143,16 @@ namespace ${cxxNamespace} {
     )
   }
 
-  const basePrototypeRegistrations = ['HybridObject::loadHybridMethods();']
+  const basePrototypeRegistrations: string[] = []
   for (const base of spec.baseTypes) {
     const hybridObjectName = getHybridObjectName(base.name)
     basePrototypeRegistrations.push(
-      `${hybridObjectName.HybridTSpec}::loadHybridMethods();`
+      `${hybridObjectName.HybridTSpecPrototype}::loadHybridMethods();`
+    )
+  }
+  if (basePrototypeRegistrations.length === 0) {
+    basePrototypeRegistrations.push(
+      'HybridObjectPrototype::loadHybridMethods();'
     )
   }
 
@@ -133,7 +163,9 @@ ${createFileMetadataString(`${name.HybridTSpec}.cpp`)}
 
 namespace ${cxxNamespace} {
 
-  void ${name.HybridTSpec}::loadHybridMethods() {
+  ${name.HybridTSpecPrototype} ${name.HybridTSpecPrototype}::singleton;
+
+  void ${name.HybridTSpecPrototype}::loadHybridMethods() {
     // load base methods/properties
     ${indent(basePrototypeRegistrations.join('\n'), '    ')}
     // load custom methods/properties

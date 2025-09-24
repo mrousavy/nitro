@@ -80,6 +80,18 @@ namespace margelo::nitro::test {
   using namespace margelo::nitro;
 
   /**
+   * Describes the prototype of `TestObjectCpp`.
+   */
+  class HybridTestObjectCppSpecPrototype: public HybridObjectPrototype {
+  public:
+    static HybridTestObjectCppSpecPrototype singleton;
+
+  protected:
+    // Hybrid Setup
+    void loadHybridMethods() override;
+  };
+
+  /**
    * An abstract base class for `TestObjectCpp`
    * Inherit this class to create instances of `HybridTestObjectCppSpec` in C++.
    * You must explicitly call `HybridObject`'s constructor yourself, because it is virtual.
@@ -99,6 +111,12 @@ namespace margelo::nitro::test {
 
       // Destructor
       ~HybridTestObjectCppSpec() override = default;
+
+    public:
+      // Prototype
+      HybridObjectPrototype& getPrototype() const noexcept override {
+        return HybridTestObjectCppSpecPrototype::singleton;
+      }
 
     public:
       // Properties
@@ -207,10 +225,6 @@ namespace margelo::nitro::test {
       virtual bool getIsViewBlue(const std::shared_ptr<HybridTestViewSpec>& view) = 0;
       virtual std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec> bounceExternalHybrid(const std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>& externalObject) = 0;
       virtual std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec> createInternalObject() = 0;
-
-    protected:
-      // Hybrid Setup
-      void loadHybridMethods() override;
 
     protected:
       // Tag for logging

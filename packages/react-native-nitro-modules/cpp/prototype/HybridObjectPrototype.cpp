@@ -9,10 +9,22 @@
 #include "NitroDefines.hpp"
 #include "NitroLogger.hpp"
 #include "NitroTypeInfo.hpp"
+#include "HybridObject.hpp"
 
 namespace margelo::nitro {
 
+HybridObjectPrototype HybridObjectPrototype::singleton;
+
 std::unordered_map<jsi::Runtime*, HybridObjectPrototype::PrototypeCache> HybridObjectPrototype::_prototypeCache;
+
+void HybridObjectPrototype::loadHybridMethods() {
+  registerHybrids(this, [](Prototype& prototype) {
+    prototype.registerHybridGetter("name", &HybridObject::getName);
+    prototype.registerHybridMethod("equals", &HybridObject::equals);
+    prototype.registerHybridMethod("toString", &HybridObject::toString);
+    prototype.registerRawHybridMethod("dispose", 0, &HybridObject::disposeRaw);
+  });
+}
 
 jsi::Value HybridObjectPrototype::createPrototype(jsi::Runtime& runtime, const std::shared_ptr<Prototype>& prototype) {
   // 0. Check if we're at the highest level of our prototype chain
@@ -85,7 +97,7 @@ jsi::Value HybridObjectPrototype::createPrototype(jsi::Runtime& runtime, const s
   return jsi::Value(runtime, *sharedObject);
 }
 
-jsi::Value HybridObjectPrototype::getPrototype(jsi::Runtime& runtime) {
+jsi::Value HybridObjectPrototype::toJSI(jsi::Runtime& runtime) {
   ensureInitialized();
 
   return createPrototype(runtime, _prototypeChain.getPrototype());

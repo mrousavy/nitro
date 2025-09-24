@@ -12,8 +12,10 @@
 
 namespace margelo::nitro {
 
-void HybridNitroModulesProxy::loadHybridMethods() {
-  HybridObject::loadHybridMethods();
+HybridNitroModulesProxyPrototype HybridNitroModulesProxyPrototype::singleton;
+
+void HybridNitroModulesProxyPrototype::loadHybridMethods() {
+  HybridObjectPrototype::loadHybridMethods();
 
   registerHybrids(this, [](Prototype& prototype) {
     prototype.registerHybridMethod("createHybridObject", &HybridNitroModulesProxy::createHybridObject);
@@ -42,6 +44,23 @@ bool HybridNitroModulesProxy::hasHybridObject(const std::string& name) {
 
 std::vector<std::string> HybridNitroModulesProxy::getAllHybridObjectNames() {
   return HybridObjectRegistry::getAllHybridObjectNames();
+}
+
+jsi::Value HybridNitroModulesProxy::getHybridObjectConstructor(jsi::Runtime& runtime, const jsi::Value& thisValue, const jsi::Value* args, size_t size) {
+  jsi::Function constructor = jsi::Function::createFromHostFunction(runtime,
+                                                                    jsi::PropNameID::forAscii(runtime, "TODO: HybridObjectName"),
+                                                                    0,
+                                                                    [=](jsi::Runtime& runtime,
+                                                                        const jsi::Value& thisValue,
+                                                                        const jsi::Value* args,
+                                                                        size_t size) -> jsi::Value {
+    auto instance = createHybridObject("TestObjectCpp");
+    return instance->toObject(runtime);
+  });
+  constructor.setProperty(runtime,
+                          jsi::String::createFromAscii(runtime, "TestObjectCpp"),
+                          HybridObjectPrototype::singleton.toJSI(runtime));
+  return std::move(constructor);
 }
 
 // Helpers
