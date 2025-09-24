@@ -260,6 +260,11 @@ inline ${wrappedBridge.getTypeCode('c++')} get_${name}(const ${actualType}& opti
   }
 }
 
+export function isPrimitivelyCopyable(type: Type): boolean {
+  const bridgedType = new SwiftCxxBridgedType(type, true)
+  return !bridgedType.needsSpecialHandling
+}
+
 /**
  * Creates a C++ `create_vector_T<T>(size)` function that can be called from Swift.
  */
@@ -267,12 +272,26 @@ function createCxxVectorSwiftHelper(type: ArrayType): SwiftCxxHelper {
   const actualType = type.getCode('c++')
   const bridgedType = new SwiftCxxBridgedType(type)
   const name = escapeCppName(actualType)
-  return {
-    cxxType: actualType,
-    funcName: `create_${name}`,
-    specializationName: name,
-    cxxHeader: {
-      code: `
+  let code: string
+  let funcName: string
+  if (isPrimitivelyCopyable(type.itemType)) {
+    const itemType = type.itemType.getCode('c++')
+    funcName = `copy_${name}`
+    code = `
+/**
+ * Specialized version of \`${escapeComments(actualType)}\`.
+ */
+using ${name} = ${actualType};
+inline ${actualType} copy_${name}(const ${itemType}* _Nonnull data, size_t size) noexcept {
+  return margelo::nitro::FastVectorCopy<${itemType}>(data, size);
+}
+inline const ${itemType}* _Nonnull get_data_${name}(const ${actualType}& vector) noexcept {
+  return vector.data();
+}
+`.trim()
+  } else {
+    funcName = `create_${name}`
+    code = `
 /**
  * Specialized version of \`${escapeComments(actualType)}\`.
  */
@@ -281,11 +300,23 @@ inline ${actualType} create_${name}(size_t size) noexcept {
   ${actualType} vector;
   vector.reserve(size);
   return vector;
-}
-    `.trim(),
+}`.trim()
+  }
+
+  return {
+    cxxType: actualType,
+    funcName: funcName,
+    specializationName: name,
+    cxxHeader: {
+      code: code,
       requiredIncludes: [
         {
           name: 'vector',
+          space: 'system',
+          language: 'c++',
+        },
+        {
+          name: 'NitroModules/FastVectorCopy.hpp',
           space: 'system',
           language: 'c++',
         },
