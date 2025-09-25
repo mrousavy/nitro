@@ -4,8 +4,22 @@ function getDocsMain(): HTMLElement | null {
   // match "docMainContainer_<hash>" no matter where it appears in class attr
   return document.querySelector(
     'main[class^="docMainContainer_"], main[class*=" docMainContainer_"]'
-  ) as HTMLElement | null;
+  )
 }
+function scrollIntoView(element: HTMLElement) {
+  // let layout settle first
+  requestAnimationFrame(() => {
+    element.scrollIntoView({behavior: 'smooth', block: 'start'})
+  });
+}
+function runFadeInAnimation(element: HTMLElement) {
+  element.classList.remove('doc-fade--run')
+  void element.offsetWidth; // reflow
+  requestAnimationFrame(() => {
+    element.classList.add('doc-fade--run')
+  });
+}
+
 
 const client: ClientModule = {
   onRouteDidUpdate({ location, previousLocation }) {
@@ -15,6 +29,10 @@ const client: ClientModule = {
     }
     const pathChanged = location.pathname !== previousLocation.pathname;
     const hashChanged = location.hash !== previousLocation.hash;
+    if (!hashChanged && !pathChanged) {
+      // nothing changed, do nothing
+      return;
+    }
 
     const mainElement = getDocsMain();
     if (mainElement == null) {
@@ -23,22 +41,19 @@ const client: ClientModule = {
     }
 
     if (hashChanged && !pathChanged) {
+      // anchor changed - smoothly scroll to new anchor
       const id = decodeURIComponent(location.hash.replace(/^#/, ''));
       const target = id ? document.getElementById(id) : null;
-      if (target) {
-        // let layout settle first
-        requestAnimationFrame(() => {
-          target.scrollIntoView({behavior: 'smooth', block: 'start'});
-        });
+      if (target != null) {
+        scrollIntoView(target);
       }
       return;
     }
 
-    mainElement.classList.remove('doc-fade--run');
-    void mainElement.offsetWidth; // reflow
-    requestAnimationFrame(() => {
-      mainElement.classList.add('doc-fade--run');
-    });
+    if (pathChanged) {
+      // page changed - run fade-in animation
+      runFadeInAnimation(mainElement)
+    }
   }
 }
 export default client
