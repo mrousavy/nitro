@@ -69,6 +69,7 @@ function getHybridObjectSpec(type: Type, language: Language): HybridObjectSpec {
       methods: methodsSpec?.methods ?? [],
       properties: propsSpec.properties,
       name: name,
+      isFinal: true,
       config: config,
     }
   }
@@ -138,6 +139,9 @@ function getHybridObjectSpec(type: Type, language: Language): HybridObjectSpec {
     }
   }
 
+  const jsDocs = symbol.getJsDocTags()
+  const isFinal = jsDocs.some((j) => j.getName() === 'final')
+
   const bases = getBaseTypes(type)
     .filter((t) => isAnyHybridSubclass(t))
     .map((t) => getHybridObjectSpec(t, language))
@@ -149,6 +153,7 @@ function getHybridObjectSpec(type: Type, language: Language): HybridObjectSpec {
     methods: methods,
     baseTypes: bases,
     isHybridView: isHybridView(type),
+    isFinal: isFinal,
     config: config,
   }
   return spec

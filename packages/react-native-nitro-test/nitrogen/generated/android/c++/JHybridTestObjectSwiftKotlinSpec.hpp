@@ -18,7 +18,7 @@ namespace margelo::nitro::test {
 
   using namespace facebook;
 
-  class JHybridTestObjectSwiftKotlinSpec: public jni::HybridClass<JHybridTestObjectSwiftKotlinSpec, JHybridObject>,
+  class JHybridTestObjectSwiftKotlinSpec : public jni::HybridClass<JHybridTestObjectSwiftKotlinSpec, JHybridObject>,
                                           public virtual HybridTestObjectSwiftKotlinSpec {
   public:
     static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/HybridTestObjectSwiftKotlinSpec;";

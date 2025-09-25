@@ -36,7 +36,8 @@ export function createFbjniHybridObject(spec: HybridObjectSpec): SourceFile[] {
     name.HybridTSpec
   )
   const cxxNamespace = spec.config.getCxxNamespace('c++')
-  const spaces = createIndentation(name.JHybridTSpec.length)
+  const maybeFinal = spec.isFinal ? `final` : ``
+  const spaces = createIndentation(name.JHybridTSpec.length + maybeFinal.length)
 
   let cppBase = 'JHybridObject'
   if (spec.baseTypes.length > 0) {
@@ -90,7 +91,7 @@ namespace ${cxxNamespace} {
 
   using namespace facebook;
 
-  class ${name.JHybridTSpec}: public jni::HybridClass<${name.JHybridTSpec}, ${cppBase}>,
+  class ${name.JHybridTSpec} ${maybeFinal}: public jni::HybridClass<${name.JHybridTSpec}, ${cppBase}>,
 ${spaces}          public virtual ${name.HybridTSpec} {
   public:
     static auto constexpr kJavaDescriptor = "L${jniClassDescriptor};";

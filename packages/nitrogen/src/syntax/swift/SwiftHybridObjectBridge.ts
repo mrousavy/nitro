@@ -117,6 +117,9 @@ public override func getCxxPart() -> bridge.${baseBridge.specializationName} {
     ...extraSwiftImports.map((i) => `import ${i.name}`).filter(isNotDuplicate)
   )
 
+  const classModifier = spec.isFinal ? `public final class` : `open class`
+  const inheritance = hasBase ? `: ${baseClasses.join(', ')}` : ``
+
   const swiftCxxWrapperCode = `
 ${createFileMetadataString(`${name.HybridTSpecCxx}.swift`)}
 
@@ -132,7 +135,7 @@ ${imports.join('\n')}
  * - Other HybridObjects need to be wrapped/unwrapped from the Swift TCxx wrapper
  * - Throwing methods need to be wrapped with a Result<T, Error> type, as exceptions cannot be propagated to C++
  */
-${hasBase ? `open class ${name.HybridTSpecCxx} : ${baseClasses.join(', ')}` : `open class ${name.HybridTSpecCxx}`} {
+${classModifier} ${name.HybridTSpecCxx}${inheritance} {
   /**
    * The Swift <> C++ bridge's namespace (\`${NitroConfig.current.getSwiftBridgeNamespace('c++')}\`)
    * from \`${moduleName}-Swift-Cxx-Bridge.hpp\`.
