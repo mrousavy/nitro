@@ -39,6 +39,15 @@
 #define CLOSED_ENUM
 #endif
 
+// Nullability
+#if defined(__clang__)
+#define NON_NULL _Nonnull
+#define NULLABLE _Nullable
+#else
+#define NON_NULL
+#define NULLABLE
+#endif
+
 // Swift Support
 #if __has_include(<swift/bridging>)
 // Swift's bridging header defines those things

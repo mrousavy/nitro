@@ -19,7 +19,7 @@ namespace margelo::nitro {
  * This function can be used at compile time as a constexpr to build
  * statically optimized switch statements.
  */
-constexpr uint64_t hashString(const char* str, size_t length) {
+constexpr uint64_t hashString(const char* NON_NULL str, size_t length) {
   uint64_t hash = 14695981039346656037ull; // FNV offset basis
   const uint64_t fnv_prime = 1099511628211ull;
 

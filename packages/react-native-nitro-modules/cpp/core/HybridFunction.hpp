@@ -73,10 +73,11 @@ public:
    * The object's `this` needs to be a `NativeState`.
    */
   template <typename THybrid, typename ReturnType, typename... Args>
-  static inline HybridFunction createHybridFunction(const std::string& name, ReturnType (THybrid::*method)(Args...), FunctionKind kind) {
+  static inline HybridFunction createHybridFunction(const std::string& name, ReturnType (THybrid::* NON_NULL method)(Args...),
+                                                    FunctionKind kind) {
     jsi::HostFunctionType hostFunction = [name, method, kind](/* JS Runtime */ jsi::Runtime& runtime,
                                                               /* HybridObject */ const jsi::Value& thisValue,
-                                                              /* JS arguments */ const jsi::Value* args,
+                                                              /* JS arguments */ const jsi::Value* NON_NULL args,
                                                               /* argument size */ size_t count) -> jsi::Value {
       // 1. Get actual `HybridObject` instance from `thisValue` (it's stored as `NativeState`)
       std::shared_ptr<THybrid> hybridInstance = getHybridObjectNativeState<THybrid>(runtime, thisValue, kind, name);
@@ -126,9 +127,10 @@ public:
    * It is a raw-, untyped JSI method, and the user is expected to manually handle arguments and return values.
    */
   template <typename Derived>
-  static inline HybridFunction createRawHybridFunction(const std::string& name, size_t expectedArgumentsCount,
-                                                       jsi::Value (Derived::*method)(jsi::Runtime& runtime, const jsi::Value& thisArg,
-                                                                                     const jsi::Value* args, size_t count)) {
+  static inline HybridFunction
+  createRawHybridFunction(const std::string& name, size_t expectedArgumentsCount,
+                          jsi::Value (Derived::* NON_NULL method)(jsi::Runtime& runtime, const jsi::Value& thisArg,
+                                                                  const jsi::Value* NON_NULL args, size_t count)) {
     jsi::HostFunctionType hostFunction = [name, method](/* JS Runtime */ jsi::Runtime& runtime,
                                                         /* HybridObject */ const jsi::Value& thisValue,
                                                         /* JS arguments */ const jsi::Value* args,
@@ -150,8 +152,8 @@ private:
    * The given method's return value will be converted to a `jsi::Value` again.
    */
   template <typename Derived, typename ReturnType, typename... Args, size_t... Is>
-  static inline jsi::Value callMethod(Derived* obj, ReturnType (Derived::*method)(Args...), jsi::Runtime& runtime, const jsi::Value* args,
-                                      size_t argsSize, std::index_sequence<Is...>) {
+  static inline jsi::Value callMethod(Derived* NON_NULL obj, ReturnType (Derived::* NON_NULL method)(Args...), jsi::Runtime& runtime,
+                                      const jsi::Value* NON_NULL args, size_t argsSize, std::index_sequence<Is...>) {
     static const jsi::Value defaultValue;
 
     if constexpr (std::is_void_v<ReturnType>) {
@@ -226,7 +228,7 @@ private:
 private:
   template <typename THybrid>
   static inline std::string getHybridFuncFullName(FunctionKind kind, const std::string& registrationName,
-                                                  THybrid* hybridInstance = nullptr) {
+                                                  THybrid* NULLABLE hybridInstance = nullptr) {
     std::string typeName = hybridInstance != nullptr ? hybridInstance->getName() : TypeInfo::getFriendlyTypename<THybrid>(true);
     switch (kind) {
       case FunctionKind::METHOD:
@@ -238,7 +240,7 @@ private:
   }
   template <typename THybrid>
   static inline std::string getHybridFuncDebugInfo(FunctionKind kind, const std::string& registrationName,
-                                                   THybrid* hybridInstance = nullptr) {
+                                                   THybrid* NULLABLE hybridInstance = nullptr) {
     auto funcName = getHybridFuncFullName<THybrid>(kind, registrationName, hybridInstance);
     switch (kind) {
       case FunctionKind::METHOD:

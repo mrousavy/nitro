@@ -33,7 +33,7 @@ class BorrowingReference final {
 public:
   BorrowingReference() : _value(nullptr), _state(nullptr) {}
 
-  explicit BorrowingReference(T* value) : _value(value), _state(new ReferenceState()) {}
+  explicit BorrowingReference(T* NULLABLE value) : _value(value), _state(new ReferenceState()) {}
 
   BorrowingReference(const BorrowingReference& ref) : _value(ref._value), _state(ref._state) {
     if (_state != nullptr) {
@@ -79,7 +79,7 @@ private:
 private:
   // BorrowingReference<C> -> BorrowingReference<T> Cast-constructor
   template <typename OldT>
-  BorrowingReference(T* value, const BorrowingReference<OldT>& originalRef) : _value(value), _state(originalRef._state) {
+  BorrowingReference(T* NULLABLE value, const BorrowingReference<OldT>& originalRef) : _value(value), _state(originalRef._state) {
     _state->strongRefCount++;
   }
 
@@ -150,7 +150,7 @@ public:
   }
 
   // Dereference (->)
-  inline T* operator->() const {
+  inline T* NON_NULL operator->() const {
 #ifdef NITRO_DEBUG
     if (!hasValue()) [[unlikely]] {
       std::string typeName = TypeInfo::getFriendlyTypename<T>(true);
@@ -174,11 +174,11 @@ public:
   }
 
   // comparison (== *)
-  inline bool operator==(T* other) const {
+  inline bool operator==(T* NULLABLE other) const {
     return _value == other;
   }
   // comparison (!= *)
-  inline bool operator!=(T* other) const {
+  inline bool operator!=(T* NULLABLE other) const {
     return _value != other;
   }
 
@@ -214,8 +214,8 @@ public:
   friend class WeakReference<T>;
 
 private:
-  T* _value;
-  ReferenceState* _state;
+  T* NULLABLE _value;
+  ReferenceState* NON_NULL _state;
 };
 
 } // namespace margelo::nitro

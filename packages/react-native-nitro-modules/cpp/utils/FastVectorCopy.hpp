@@ -20,8 +20,10 @@ namespace margelo::nitro {
  * the data will be bulk-memcopied.
  */
 template <typename T>
-std::vector<T> FastVectorCopy(const T* data, size_t size) {
-  if (data == nullptr || size == 0) [[unlikely]] {
+std::vector<T> FastVectorCopy(const T* NON_NULL data, size_t size) {
+  assert(data != nullptr && "FastVectoryCopy: data cannot be null!");
+
+  if (size == 0) [[unlikely]] {
     // It's an empty vector.
     return std::vector<T>();
   }

@@ -47,7 +47,7 @@ public:
 private:
   static jsi::Value createPrototype(jsi::Runtime& runtime, const std::shared_ptr<Prototype>& prototype);
   using PrototypeCache = std::unordered_map<NativeInstanceId, BorrowingReference<jsi::Object>>;
-  static std::unordered_map<jsi::Runtime*, PrototypeCache> _prototypeCache;
+  static std::unordered_map<jsi::Runtime * NON_NULL, PrototypeCache> _prototypeCache;
 
 protected:
   /**
@@ -70,7 +70,7 @@ private:
   }
 
 protected:
-  using RegisterFn = void (*)(Prototype&);
+  using RegisterFn = void (*NON_NULL)(Prototype&);
   /**
    * Registers the given methods inside the Hybrid Object's prototype.
    *
@@ -79,7 +79,7 @@ protected:
    * **Do not conditionally register hybrid methods, getters or setter!**
    */
   template <typename Derived>
-  inline void registerHybrids(Derived* /* this */, RegisterFn registerFunc) {
+  inline void registerHybrids(Derived* NON_NULL /* this */, RegisterFn registerFunc) {
     const std::shared_ptr<Prototype>& prototype = _prototypeChain.extendPrototype<Derived>();
 
     if (!prototype->hasHybrids()) {

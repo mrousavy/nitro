@@ -110,7 +110,7 @@ public:
    * ```
    */
   template <typename Derived, typename ReturnType>
-  inline void registerHybridGetter(std::string name, ReturnType (Derived::*method)()) {
+  inline void registerHybridGetter(std::string name, ReturnType (Derived::* NON_NULL method)()) {
     if (_getters.contains(name)) [[unlikely]] {
       throw std::runtime_error("Cannot add Hybrid Property Getter \"" + name + "\" - a getter with that name already exists!");
     }
@@ -129,7 +129,7 @@ public:
    * ```
    */
   template <typename Derived, typename ValueType>
-  inline void registerHybridSetter(std::string name, void (Derived::*method)(ValueType)) {
+  inline void registerHybridSetter(std::string name, void (Derived::* NON_NULL method)(ValueType)) {
     if (_setters.contains(name)) [[unlikely]] {
       throw std::runtime_error("Cannot add Hybrid Property Setter \"" + name + "\" - a setter with that name already exists!");
     }
@@ -148,7 +148,7 @@ public:
    * ```
    */
   template <typename Derived, typename ReturnType, typename... Args>
-  inline void registerHybridMethod(std::string name, ReturnType (Derived::*method)(Args...)) {
+  inline void registerHybridMethod(std::string name, ReturnType (Derived::* NON_NULL method)(Args...)) {
     if (_getters.contains(name) || _setters.contains(name)) [[unlikely]] {
       throw std::runtime_error("Cannot add Hybrid Method \"" + name + "\" - a property with that name already exists!");
     }
@@ -168,8 +168,8 @@ public:
    */
   template <typename Derived>
   inline void registerRawHybridMethod(std::string name, size_t expectedArgumentsCount,
-                                      jsi::Value (Derived::*method)(jsi::Runtime& runtime, const jsi::Value& thisArg,
-                                                                    const jsi::Value* args, size_t count)) {
+                                      jsi::Value (Derived::* NON_NULL method)(jsi::Runtime& runtime, const jsi::Value& thisArg,
+                                                                              const jsi::Value* NON_NULL args, size_t count)) {
     if (_getters.contains(name) || _setters.contains(name)) [[unlikely]] {
       throw std::runtime_error("Cannot add Hybrid Method \"" + name + "\" - a property with that name already exists!");
     }
