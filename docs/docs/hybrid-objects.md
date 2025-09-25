@@ -266,6 +266,18 @@ A Hybrid Object can either inherit from other Hybrid Objects, or satisfy a commo
   interface Video extends HybridObject, Media {}
   ```
 
+  ### Final HybridObjects
+
+  By default, all Hybrid Objects are subclassable. To make a Hybrid Object final (and therefore non-subclassable), you can add the `@final` JS-Doc annotation to it's declaration:
+
+  ```ts
+  interface Subclassable extends HybridObject {}
+  /**
+   * @final
+   */
+  interface NotSubclassable extends HybridObject {}
+  ```
+
   </TabItem>
   <TabItem value="manually" label="Manually">
 
