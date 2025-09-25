@@ -19,7 +19,7 @@ namespace margelo::nitro::test::external {
   using namespace facebook;
 
   class JHybridSomeExternalObjectSpec : public jni::HybridClass<JHybridSomeExternalObjectSpec, JHybridObject>,
-                                       public virtual HybridSomeExternalObjectSpec {
+                                        public virtual HybridSomeExternalObjectSpec {
   public:
     static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/external/HybridSomeExternalObjectSpec;";
     static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis);

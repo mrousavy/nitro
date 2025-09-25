@@ -92,7 +92,7 @@ namespace ${cxxNamespace} {
   using namespace facebook;
 
   class ${name.JHybridTSpec} ${maybeFinal}: public jni::HybridClass<${name.JHybridTSpec}, ${cppBase}>,
-${spaces}          public virtual ${name.HybridTSpec} {
+${spaces}           public virtual ${name.HybridTSpec} {
   public:
     static auto constexpr kJavaDescriptor = "L${jniClassDescriptor};";
     static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis);

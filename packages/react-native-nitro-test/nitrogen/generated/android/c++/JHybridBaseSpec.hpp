@@ -19,7 +19,7 @@ namespace margelo::nitro::test {
   using namespace facebook;
 
   class JHybridBaseSpec : public jni::HybridClass<JHybridBaseSpec, JHybridObject>,
-                         public virtual HybridBaseSpec {
+                          public virtual HybridBaseSpec {
   public:
     static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/HybridBaseSpec;";
     static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis);

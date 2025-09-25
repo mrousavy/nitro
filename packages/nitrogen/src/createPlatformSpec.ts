@@ -146,6 +146,15 @@ function getHybridObjectSpec(type: Type, language: Language): HybridObjectSpec {
     .filter((t) => isAnyHybridSubclass(t))
     .map((t) => getHybridObjectSpec(t, language))
 
+  for (const base of bases) {
+    if (base.isFinal) {
+      throw new Error(
+        `HybridObject "${base.name}" is final (@final) and cannot be subclassed! ` +
+          `(Subclassed in "${name}")`
+      )
+    }
+  }
+
   const spec: HybridObjectSpec = {
     language: language,
     name: name,
