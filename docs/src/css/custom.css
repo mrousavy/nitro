@@ -32,6 +32,8 @@
   --ifm-toc-link-color: #232a3f;
 }
 
+html { scroll-behavior: smooth; }
+
 @media (prefers-reduced-motion: no-preference) {
   .doc-fade--run {
     animation: doc-fade-in 200ms ease-out;
