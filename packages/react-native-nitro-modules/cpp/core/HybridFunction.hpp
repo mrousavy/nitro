@@ -13,6 +13,7 @@ struct JSIConverter;
 } // namespace margelo::nitro
 
 #include "CountTrailingOptionals.hpp"
+#include "InstanceMethod.hpp"
 #include "JSIConverter.hpp"
 #include "NitroDefines.hpp"
 #include "NitroTypeInfo.hpp"
@@ -152,8 +153,11 @@ private:
    * The given method's return value will be converted to a `jsi::Value` again.
    */
   template <typename Derived, typename ReturnType, typename... Args, size_t... Is>
-  static inline jsi::Value callMethod(Derived* NON_NULL obj, ReturnType (Derived::* NON_NULL method)(Args...), jsi::Runtime& runtime,
-                                      const jsi::Value* NON_NULL args, size_t argsSize, std::index_sequence<Is...>) {
+  static inline jsi::Value callMethod(/* The instance to call the method on */ Derived* NON_NULL obj,
+                                      /* The method to call */ InstanceMethod<Derived, ReturnType, Args...> method,
+                                      /* JS Runtime */ jsi::Runtime& runtime,
+                                      /* JS Arguments */ const jsi::Value* NON_NULL args,
+                                      /* JS Arguments count */ size_t argsSize, std::index_sequence<Is...>) {
     static const jsi::Value defaultValue;
 
     if constexpr (std::is_void_v<ReturnType>) {
