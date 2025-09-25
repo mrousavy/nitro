@@ -35,6 +35,15 @@ using namespace facebook;
 enum class FunctionKind { METHOD, GETTER, SETTER };
 
 /**
+ * A helper for an `InstanceMethod` that doesn't have a typed return value or arguments, but instead uses raw JSI values.
+ */
+template <typename T>
+using RawInstanceMethod = InstanceMethod<
+    /* instance type */ T,
+    /* return value */ jsi::Value,
+    /* jsi::HostFunction arguments */ jsi::Runtime&, const jsi::Value&, const jsi::Value*, size_t>;
+
+/**
  * Represents a Hybrid Function.
  */
 class HybridFunction final {
@@ -74,8 +83,9 @@ public:
    * The object's `this` needs to be a `NativeState`.
    */
   template <typename THybrid, typename ReturnType, typename... Args>
-  static inline HybridFunction createHybridFunction(const std::string& name, ReturnType (THybrid::* NON_NULL method)(Args...),
-                                                    FunctionKind kind) {
+  static inline HybridFunction createHybridFunction(/* The name of the method */ const std::string& name,
+                                                    /* The method on THybrid */ InstanceMethod<THybrid, ReturnType, Args...> method,
+                                                    /* The type of the method */ FunctionKind kind) {
     jsi::HostFunctionType hostFunction = [name, method, kind](/* JS Runtime */ jsi::Runtime& runtime,
                                                               /* HybridObject */ const jsi::Value& thisValue,
                                                               /* JS arguments */ const jsi::Value* NON_NULL args,
@@ -128,10 +138,9 @@ public:
    * It is a raw-, untyped JSI method, and the user is expected to manually handle arguments and return values.
    */
   template <typename Derived>
-  static inline HybridFunction
-  createRawHybridFunction(const std::string& name, size_t expectedArgumentsCount,
-                          jsi::Value (Derived::* NON_NULL method)(jsi::Runtime& runtime, const jsi::Value& thisArg,
-                                                                  const jsi::Value* NON_NULL args, size_t count)) {
+  static inline HybridFunction createRawHybridFunction(/* The name of the raw method */ const std::string& name,
+                                                       /* The number of expected arguments */ size_t expectedArgumentsCount,
+                                                       /* The raw JSI method on the instance */ RawInstanceMethod<Derived> method) {
     jsi::HostFunctionType hostFunction = [name, method](/* JS Runtime */ jsi::Runtime& runtime,
                                                         /* HybridObject */ const jsi::Value& thisValue,
                                                         /* JS arguments */ const jsi::Value* args,
