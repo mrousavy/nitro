@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include "NitroDefines.hpp"
 #include <span>
 #include <type_traits>
 #include <vector>
@@ -20,7 +21,7 @@ namespace margelo::nitro {
  * the data will be bulk-memcopied.
  */
 template <typename T>
-std::vector<T> FastVectorCopy(const T* NON_NULL data, size_t size) {
+std::vector<T> FastVectorCopy(const T* CONTIGUOUS_MEMORY NON_NULL data, size_t size) {
   assert(data != nullptr && "FastVectoryCopy: data cannot be null!");
 
   if (size == 0) [[unlikely]] {

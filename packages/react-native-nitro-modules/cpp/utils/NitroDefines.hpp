@@ -48,6 +48,15 @@
 #define NULLABLE
 #endif
 
+// Contiguous memory in pointers (__restrict)
+#if defined(__clang__)
+#define CONTIGUOUS_MEMORY __restrict__
+#elif defined(_MSC_VER)
+#define CONTIGUOUS_MEMORY __restrict
+#else
+#define CONTIGUOUS_MEMORY
+#endif
+
 // Swift Support
 #if __has_include(<swift/bridging>)
 // Swift's bridging header defines those things
