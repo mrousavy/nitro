@@ -1,17 +1,17 @@
 import * as React from 'react'
 
-import { StyleSheet, View, Text, Button, Platform } from 'react-native'
-import { callback, NitroModules } from 'react-native-nitro-modules'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { useColors } from '../useColors'
-import { HybridTestObjectSwiftKotlin, TestView } from 'react-native-nitro-test'
 import { useIsFocused } from '@react-navigation/native'
+import { Button, Platform, StyleSheet, Text, View } from 'react-native'
+import { callback, NitroModules } from 'react-native-nitro-modules'
+import { HybridTestObjectSwiftKotlin, TestView } from 'react-native-nitro-test'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { NitroInfoCard } from '../components/NitroInfoCard'
+import { useColors } from '../useColors'
 
 const VIEWS_X = 15
 const VIEWS_Y = 15
 
 export function ViewScreenImpl() {
-  const safeArea = useSafeAreaInsets()
   const colors = useColors()
   const [counter, setCounter] = React.useState(0)
   const [isUpdating, setIsUpdating] = React.useState(true)
@@ -52,13 +52,7 @@ export function ViewScreenImpl() {
   }, [isUpdating])
 
   return (
-    <View style={[styles.container, { paddingTop: safeArea.top }]}>
-      <Text style={styles.header}>View</Text>
-      <View style={styles.topControls}>
-        <View style={styles.flex} />
-        <Text style={styles.buildTypeText}>{NitroModules.buildType}</Text>
-      </View>
-
+    <View style={[styles.container]}>
       <View style={styles.resultContainer}>
         <View style={[styles.viewShadow]}>
           <View style={[styles.viewBorder, { borderColor: colors.foreground }]}>
@@ -68,9 +62,7 @@ export function ViewScreenImpl() {
       </View>
 
       <View style={[styles.bottomView, { backgroundColor: colors.background }]}>
-        <Text style={styles.resultText} numberOfLines={2}>
-          {isUpdating ? '🔄 Updating...' : '📱 Idle'}
-        </Text>
+        <Text>{isUpdating ? '🔄 Updating...' : '📱 Idle'}</Text>
         <View style={styles.flex} />
         <Button
           title={isUpdating ? 'Stop Updating' : 'Start Updating'}
@@ -83,7 +75,19 @@ export function ViewScreenImpl() {
 
 export function ViewScreen() {
   const isFocused = useIsFocused()
-  return isFocused ? <ViewScreenImpl /> : null
+  const safeArea = useSafeAreaInsets()
+
+  return isFocused ? (
+    <View style={[styles.container, { paddingTop: safeArea.top }]}>
+      <Text style={styles.header}>View</Text>
+      <View style={styles.topControls}>
+        <View style={styles.flex} />
+        <Text style={styles.buildTypeText}>{NitroModules.buildType}</Text>
+      </View>
+      <NitroInfoCard />
+      <ViewScreenImpl />
+    </View>
+  ) : null
 }
 
 const styles = StyleSheet.create({
@@ -154,9 +158,6 @@ const styles = StyleSheet.create({
   testBox: {
     flexShrink: 1,
     flexDirection: 'column',
-  },
-  resultText: {
-    flexShrink: 1,
   },
   testName: {
     fontSize: 16,

@@ -9,6 +9,7 @@ import {
   type Language,
   isHybridViewProps,
   isHybridViewMethods,
+  getHybridViewConfig,
 } from './getPlatformSpecs.js'
 import type { HybridObjectSpec } from './syntax/HybridObjectSpec.js'
 import { Property } from './syntax/Property.js'
@@ -61,6 +62,7 @@ function getHybridObjectSpec(type: Type, language: Language): HybridObjectSpec {
     const propsSpec = getHybridObjectSpec(props, language)
     const methodsSpec =
       methods != null ? getHybridObjectSpec(methods, language) : undefined
+    const viewConfig = getHybridViewConfig(type)
 
     return {
       baseTypes: [],
@@ -70,6 +72,7 @@ function getHybridObjectSpec(type: Type, language: Language): HybridObjectSpec {
       properties: propsSpec.properties,
       name: name,
       config: config,
+      viewConfig: viewConfig,
     }
   }
 

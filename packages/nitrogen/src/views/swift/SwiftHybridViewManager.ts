@@ -13,6 +13,7 @@ import { getHybridObjectName } from '../../syntax/getHybridObjectName.js'
 import { getHybridObjectConstructorCall } from '../../syntax/swift/SwiftHybridObjectRegistration.js'
 import { indent } from '../../utils.js'
 import { SwiftCxxBridgedType } from '../../syntax/swift/SwiftCxxBridgedType.js'
+import { getIOSViewConfiguration } from '../getViewConfiguration.js'
 
 export function createSwiftHybridViewManager(
   spec: HybridObjectSpec
@@ -32,6 +33,8 @@ export function createSwiftHybridViewManager(
       `Cannot create Swift HybridView ViewManager for ${spec.name} - it is not autolinked in nitro.json!`
     )
   }
+
+  const { childComponentMethods } = getIOSViewConfiguration(spec, component)
 
   const propAssignments = spec.properties.map((p) => {
     const name = escapeCppName(p.name)
@@ -136,7 +139,7 @@ using namespace ${namespace}::views;
   // 4. Continue in base class
   [super updateProps:props oldProps:oldProps];
 }
-
+${childComponentMethods}
 @end
   `
 

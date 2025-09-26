@@ -9,6 +9,14 @@ export interface ViewPlatformSpec {
 }
 
 /**
+ * Describes the configuration for a Hybrid View.
+ * This is used to pass additional information to the native implementation.
+ */
+export interface HybridViewConfig {
+  allowChildren?: boolean
+}
+
+/**
  * Represents props for a Hybrid View.
  * Such props are implemented on the native side, and can be
  * set from JS using React props.
@@ -112,4 +120,5 @@ export type HybridView<
   Props extends HybridViewProps,
   Methods extends HybridViewMethods = {},
   Platforms extends ViewPlatformSpec = { ios: 'swift'; android: 'kotlin' },
-> = HybridViewTag & HybridObject<Platforms> & Props & Methods
+  ViewConfig extends HybridViewConfig = { allowChildren: boolean },
+> = HybridViewTag & HybridObject<Platforms> & ViewConfig & Props & Methods

@@ -39,6 +39,8 @@ target_sources(
   ../nitrogen/generated/shared/c++/HybridChildSpec.cpp
   ../nitrogen/generated/shared/c++/HybridTestViewSpec.cpp
   ../nitrogen/generated/shared/c++/views/HybridTestViewComponent.cpp
+  ../nitrogen/generated/shared/c++/HybridViewWithChildrenSpec.cpp
+  ../nitrogen/generated/shared/c++/views/HybridViewWithChildrenComponent.cpp
   # Android-specific Nitrogen C++ sources
   ../nitrogen/generated/android/c++/JHybridTestObjectSwiftKotlinSpec.cpp
   ../nitrogen/generated/android/c++/JVariant_String_Double.cpp
@@ -53,6 +55,8 @@ target_sources(
   ../nitrogen/generated/android/c++/JHybridChildSpec.cpp
   ../nitrogen/generated/android/c++/JHybridTestViewSpec.cpp
   ../nitrogen/generated/android/c++/views/JHybridTestViewStateUpdater.cpp
+  ../nitrogen/generated/android/c++/JHybridViewWithChildrenSpec.cpp
+  ../nitrogen/generated/android/c++/views/JHybridViewWithChildrenStateUpdater.cpp
 )
 
 # From node_modules/react-native/ReactAndroid/cmake-utils/folly-flags.cmake

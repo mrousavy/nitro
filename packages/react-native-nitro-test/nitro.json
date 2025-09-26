@@ -27,6 +27,10 @@
     "TestView": {
       "swift": "HybridTestView",
       "kotlin": "HybridTestView"
+    },
+    "ViewWithChildren": {
+      "swift": "HybridViewWithChildren",
+      "kotlin": "HybridViewWithChildren"
     }
   },
   "ignorePaths": [
