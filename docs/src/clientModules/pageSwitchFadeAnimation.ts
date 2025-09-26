@@ -3,7 +3,7 @@ import { ClientModule } from '@docusaurus/types';
 function getDocsMain(): HTMLElement | null {
   // match "docMainContainer_<hash>" no matter where it appears in class attr
   return document.querySelector(
-    'main[class^="docMainContainer_"], main[class*=" docMainContainer_"]'
+    'div[class^="docItemContainer_"], div[class*=" docItemContainer_"]'
   )
 }
 function scrollIntoView(element: HTMLElement) {
