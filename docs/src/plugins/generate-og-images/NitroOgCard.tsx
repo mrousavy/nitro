@@ -14,12 +14,11 @@ export function NitroOgCard({ title }: Props): React.ReactElement {
         flexDirection: 'column',
         justifyContent: 'flex-end',
         padding: '64px',
-        backgroundColor: '#0A84FF', // blue background
-        color: 'white',
+        color: 'black',
       }}
     >
-      <div style={{ fontSize: 64, fontWeight: 600, lineHeight: 1.1, maxWidth: '100%' }}>
-        {title}
+      <div style={{ fontSize: 64, color: "black", maxWidth: '100%' }}>
+        Hello world!
       </div>
     </div>
   )
