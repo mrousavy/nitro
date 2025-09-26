@@ -34,10 +34,15 @@ jsi::Value HybridObjectPrototype::createPrototype(jsi::Runtime& runtime, const s
   }
 
   // 2. We didn't find the given prototype in cache (either it's a new prototype, or a new runtime),
-  //    so we need to create it. First, create a new JS Object inheriting from the base prototype (recursively!)
+  //    so we need to create it. First, we need some helper methods from JS
   std::string typeName = TypeInfo::getFriendlyTypename(prototype->getNativeInstanceId(), true);
   Logger::log(LogLevel::Info, TAG, "Creating new JS prototype for C++ instance type \"%s\"...", typeName.c_str());
-  jsi::Object object = jsi::Object::create(runtime, createPrototype(runtime, prototype->getBase()));
+  jsi::Object objectConstructor = runtime.global().getPropertyAsObject(runtime, "Object");
+  jsi::Function objectCreate = objectConstructor.getPropertyAsFunction(runtime, "create");
+  jsi::Function objectDefineProperty = objectConstructor.getPropertyAsFunction(runtime, "defineProperty");
+
+  // 3. Create an empty JS Object, inheriting from the base prototype (recursively!)
+  jsi::Object object = objectCreate.call(runtime, createPrototype(runtime, prototype->getBase())).getObject(runtime);
 
   // 4. Add all Hybrid Methods to it
   for (const auto& method : prototype->getMethods()) {
@@ -58,9 +63,10 @@ jsi::Value HybridObjectPrototype::createPrototype(jsi::Runtime& runtime, const s
     }
 
     property.setProperty(runtime, "name", jsi::String::createFromUtf8(runtime, getter.first.c_str()));
-    object.defineProperty(runtime,
-                          /* propName */ jsi::String::createFromUtf8(runtime, getter.first.c_str()),
-                          /* descriptorObj */ property);
+    objectDefineProperty.call(runtime,
+                              /* obj */ object,
+                              /* propName */ jsi::String::createFromUtf8(runtime, getter.first.c_str()),
+                              /* descriptorObj */ property);
   }
 
   // 6. In DEBUG, add a __type info to the prototype object.
