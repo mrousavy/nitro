@@ -23,7 +23,7 @@
     "@react-navigation/native": "^7.1.17",
     "deep-equal": "^2.2.3",
     "react": "19.1.0",
-    "react-native": "0.81.1",
+    "react-native": "0.81.4",
     "react-native-nitro-test": "*",
     "react-native-nitro-test-external": "*",
     "react-native-nitro-modules": "*",
