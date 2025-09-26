@@ -29,7 +29,7 @@ public:
    * Create a new instance of a `HybridObject`.
    * The given `name` will be used for logging and stringifying.
    */
-  explicit HybridObject(const char* name);
+  explicit HybridObject(const char* NON_NULL name);
   /**
    * Called when no more references to the given `HybridObject` exist in both C++ and JS.
    * JS might keep references for longer, as it is a garbage collected language.
@@ -111,7 +111,7 @@ private:
    * The actual `dispose()` function from JS.
    * This needs to be a raw JSI function as we remove the NativeState here.
    */
-  jsi::Value disposeRaw(jsi::Runtime& runtime, const jsi::Value& thisArg, const jsi::Value* args, size_t count);
+  jsi::Value disposeRaw(jsi::Runtime& runtime, const jsi::Value& thisArg, const jsi::Value* NON_NULL args, size_t count);
 
 protected:
   /**
@@ -144,7 +144,7 @@ protected:
 
 private:
   static constexpr auto TAG = "HybridObject";
-  const char* _name = TAG;
+  const char* NON_NULL _name = TAG;
   std::unordered_map<jsi::Runtime*, BorrowingReference<jsi::WeakObject>> _objectCache;
 };
 
