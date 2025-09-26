@@ -1,0 +1,18 @@
+appId:  com.mrousavy.nitro.example
+---
+- tapOn:
+    id: "eval-screen-icon"
+
+# - tapOn:
+#     id: "eval-screen-text-input"
+
+# - hideKeyboard
+
+- tapOn:
+    id: "eval-screen-run-button"
+
+- assertVisible: 
+   text: "Result: {\"__type\":\"NativeState<TestObjectCpp>\"}"
+
+
+    

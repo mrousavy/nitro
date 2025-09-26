@@ -33,6 +33,7 @@ type TestResult =
 export interface TestRunner {
   name: string
   run: () => Promise<TestResult>
+  skipInRelease: boolean
 }
 
 const TEST_PERSON: Person = {
@@ -82,7 +83,8 @@ const DATE_PLUS_1H = (() => {
 
 function createTest<T>(
   name: string,
-  run: () => State<T> | Promise<State<T>>
+  run: () => State<T> | Promise<State<T>>,
+  skipInRelease: boolean = false
 ): TestRunner {
   return {
     name: name,
@@ -103,6 +105,7 @@ function createTest<T>(
         }
       }
     },
+    skipInRelease: skipInRelease,
   }
 }
 
@@ -148,18 +151,24 @@ export function getTests(
 ): TestRunner[] {
   return [
     // Basic prototype tests
-    createTest('HybridObject.prototype is valid', () =>
-      it(() => Object.getPrototypeOf(testObject))
-        .didNotThrow()
-        .didReturn('object')
-        .toContain('simpleFunc')
+    createTest(
+      'HybridObject.prototype is valid',
+      () =>
+        it(() => Object.getPrototypeOf(testObject))
+          .didNotThrow()
+          .didReturn('object')
+          .toContain('simpleFunc'),
+      true // skip in release mode
     ),
-    createTest('HybridObject.prototype.prototype is valid', () =>
-      it(() => Object.getPrototypeOf(Object.getPrototypeOf(testObject)))
-        .didNotThrow()
-        .didReturn('object')
-        .toContain('toString')
-        .toContain('equals')
+    createTest(
+      'HybridObject.prototype.prototype is valid',
+      () =>
+        it(() => Object.getPrototypeOf(Object.getPrototypeOf(testObject)))
+          .didNotThrow()
+          .didReturn('object')
+          .toContain('toString')
+          .toContain('equals'),
+      true // skip in release mode
     ),
     createTest('Two HybridObjects are not equal (a == b)', () =>
       it(

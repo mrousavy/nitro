@@ -1,0 +1,217 @@
+name: Build Android and run Maestro tests
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build_android:
+    name: Build Android Example App
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: oven-sh/setup-bun@v2
+
+      - name: Install npm dependencies (bun)
+        run: bun install
+      - name: Install npm dependencies in example/ (bun)
+        working-directory: example
+        run: bun install
+
+      - name: Setup JDK 17
+        uses: actions/setup-java@v5
+        with:
+          distribution: 'zulu'
+          java-version: 17
+          java-package: jdk
+
+      - name: Run Gradle Build for example/android/
+        working-directory: example
+        run: bun run build:android-x86-64
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-apk
+          path: example/android/app/build/outputs/apk/debug/app-debug.apk
+          retention-days: 1
+
+  run_maestro_tests_android:
+    name: Run Maestro tests Android
+    runs-on: ubuntu-latest
+    needs: build_android
+    steps:
+      - uses: actions/checkout@v5
+      - uses: oven-sh/setup-bun@v2
+
+      - name: Install npm dependencies (bun)
+        run: bun install
+      - name: Install npm dependencies in example/ (bun)
+        working-directory: example
+        run: bun install
+
+      - name: Setup JDK 17
+        uses: actions/setup-java@v5
+        with:
+          distribution: 'zulu'
+          java-version: 17
+          java-package: jdk
+      
+      - name: Download APK artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: android-apk
+          path: example/android/app/build/outputs/apk/debug/
+
+      - name: Installing Maestro
+        shell: bash
+        run: export MAESTRO_VERSION=1.40.0; curl -Ls "https://get.maestro.mobile.dev" | bash
+      
+      - name: Enable KVM group perms
+        shell: bash
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      
+      - name: Run e2e tests
+        id: run-tests
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: '34'
+          target: google_apis
+          arch: x86_64
+          profile: Nexus 6
+          ram-size: '16G'
+          heap-size: '10G'
+          disk-size: '10G'
+          cores: '12'
+          disable-animations: false
+          avd-name: e2e_emulator
+          script: |
+            cd example && bun run maestro:ci:android
+
+      - name: Store tests result
+        uses: actions/upload-artifact@v4.3.4
+        if: always()
+        with:
+          name: TestResult-Android
+          path: |
+            example/*.mp4
+            example/maestro/*.mp4
+  build_ios:
+    name: Build iOS Example App (Release, Simulator)
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: oven-sh/setup-bun@v2
+
+      - name: Install npm dependencies (bun)
+        run: bun install
+      - name: Install npm dependencies in example/ (bun)
+        working-directory: example
+        run: bun install
+
+      - name: Setup Ruby (bundle)
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.7.2
+          bundler-cache: true
+          working-directory: example
+
+      - name: Select Xcode 16.4
+        run: sudo xcode-select -s "/Applications/Xcode_16.4.app/Contents/Developer"
+
+      - name: Install Pods
+        working-directory: example
+        run: bun pods
+
+      - name: Build App (Release, Simulator)
+        working-directory: example/ios
+        run: |
+          set -o pipefail
+          xcodebuild \
+            CC=clang CPLUSPLUS=clang++ LD=clang LDPLUSPLUS=clang++ \
+            -derivedDataPath build -UseModernBuildSystem=YES \
+            -workspace NitroExample.xcworkspace \
+            -scheme NitroExample \
+            -sdk iphonesimulator \
+            -configuration Release \
+            -destination 'generic/platform=iOS Simulator' \
+            build \
+            CODE_SIGNING_ALLOWED=NO
+
+
+      - name: Package .app for Simulator
+        run: |
+          cd example/ios/build/Build/Products/Release-iphonesimulator
+          zip -r ../../../../../../NitroExample-Debug-Simulator.zip NitroExample.app
+
+      - name: Upload iOS .app artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-app
+          path: NitroExample-Debug-Simulator.zip
+          retention-days: 1
+
+  maestro_ios:
+    name: Run Maestro iO
+    runs-on: macos-latest
+    needs: build_ios
+    steps:
+      - uses: actions/checkout@v5
+      - uses: oven-sh/setup-bun@v2
+
+      - name: Install npm dependencies (bun)
+        run: bun install
+      - name: Install npm dependencies in example/ (bun)
+        working-directory: example
+        run: bun install
+
+      - name: Setup Ruby (bundle)
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.7.2
+          bundler-cache: true
+          working-directory: example
+
+      - name: Select Xcode 16.4
+        run: sudo xcode-select -s "/Applications/Xcode_16.4.app/Contents/Developer"
+
+      - name: Download iOS .app artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ios-app
+          path: ./
+      - name: Unzip iOS .app into artifacts folder
+        run: |
+          unzip -o NitroExample-Debug-Simulator.zip -d example
+      
+      - name: Installing Maestro
+        shell: bash
+        run: export MAESTRO_VERSION=1.40.0; curl -Ls "https://get.maestro.mobile.dev" | bash
+      - name: Installing Maestro dependencies
+        shell: bash
+        run: |
+          brew tap facebook/fb
+          brew install facebook/fb/idb-companion
+          
+      - name: Run Maestro tests
+        run: |
+          cd example
+          bun run maestro:ci:ios
+      
+      - name: Store tests result
+        uses: actions/upload-artifact@v4.3.4
+        if: always()
+        with:
+          name: TestResult-iOS     
+          path: |
+            example/*.mov
+            example/maestro/*.mov
+      
+      
+    
+      
+
+      
+    
