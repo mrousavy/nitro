@@ -31,14 +31,6 @@ function generateTextShadow(distanceH: number, distanceV: number): string {
 
 const textShadow = generateTextShadow(-20, 15)
 
-const steps = 28;                 // extrusion length
-const color = '#223048';          // shadow color
-const dx = -1, dy = 1;            // direction: bottom-left
-const extrude = Array.from({length: steps},
-  (_, i) => `drop-shadow(${dx*(i+1)}px ${dy*(i+1)}px 0 ${color})`
-).join(' ');
-console.log(extrude)
-
 export function NitroOgCard({ title }: Props): React.ReactElement {
   return (
     <div
@@ -86,10 +78,7 @@ export function NitroOgCard({ title }: Props): React.ReactElement {
               fontSize: 120,
               color: "white",
               maxWidth: '100%',
-              WebkitTextStrokeColor: BLACK,
-              WebkitTextStrokeWidth: 14,
-              paintOrder: 'stroke fill',
-              filter: `${extrude} drop-shadow(0 6px 8px rgba(0,0,0,.25))`, // soft ambient
+              textShadow: textShadow,
             }}
           >
             NitroModules
