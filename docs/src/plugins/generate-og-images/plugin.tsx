@@ -3,12 +3,13 @@ import satori, { Font } from "satori";
 import { NitroOgCard, NitroOgCardProps } from "./NitroOgCard";
 import fs from 'fs/promises'
 import path from 'path'
+import { DocsPage } from ".";
 
 interface Options {
   width: number
   height: number
-  docsDirectory: string
-  routes: string[]
+  outDirectory: string
+  docsPages: DocsPage[]
 }
 
 async function loadFont(fontName: string, filename: string): Promise<Font> {
@@ -45,19 +46,24 @@ async function renderSVG({ fonts, width, height, cardConfig, outputPath }: Rende
     <NitroOgCard {...cardConfig} />,
     { fonts: fonts, width: width, height: height }
   )
-  console.log('Writing file...')
+  const directory = path.dirname(outputPath)
+  console.log(`Creating folder for "${directory}"...`)
+  await fs.mkdir(directory, { recursive: true })
+  console.log(`Writing file "${outputPath}"...`)
   await fs.writeFile(outputPath, svg)
   console.log('Done!')
 }
 
-export async function runPlugin({ width, height, docsDirectory, routes }: Options): Promise<void> {
+export async function runPlugin({ width, height, outDirectory, docsPages }: Options): Promise<void> {
   const fonts = await Promise.all([
     loadFont('ClashDisplay', 'fonts/ClashDisplay-Bold.otf'),
     loadFont('Inter', 'fonts/Inter-Medium.ttf')
   ])
+  const imgOutDirectory = path.join(outDirectory, 'img', 'social-cards')
+  await fs.mkdir(imgOutDirectory, { recursive: true })
 
-  console.log(`Generating SVGs in ${docsDirectory}`)
-  const defaultCardPath = path.join(docsDirectory, 'img', 'og-card.svg')
+  console.log(`Generating SVGs in ${outDirectory}`)
+  const defaultCardPath = path.join(imgOutDirectory, 'og-card.svg')
   await renderSVG({
     fonts: fonts,
     width: width,
@@ -65,4 +71,18 @@ export async function runPlugin({ width, height, docsDirectory, routes }: Option
     cardConfig: defaultCard,
     outputPath: defaultCardPath
   })
+
+  const promises = docsPages.map(async (route) => {
+    const outputPath = path.join(imgOutDirectory, `${route.id}.svg`)
+    await renderSVG({
+      fonts: fonts,
+      width: width,
+      height: height,
+      cardConfig: {
+        title: route.title,
+      },
+      outputPath: outputPath
+    })
+  })
+  await Promise.all(promises)
 }
