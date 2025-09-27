@@ -1,9 +1,5 @@
 import React from "react";
 
-export interface Props {
-  title: string
-}
-
 const BORDER_WIDTH = 5
 const BORDER_RADIUS = 15
 const LAYERS_SPACING = 29
@@ -42,10 +38,15 @@ function Header({ text }: HeaderProps): React.ReactElement {
       )
     })}
   </>)
-
 }
 
-export function NitroOgCard({ title }: Props): React.ReactElement {
+export interface NitroOgCardProps {
+  title: string
+  subtitle?: string
+  url?: string
+}
+
+export function NitroOgCard({ title, subtitle, url }: NitroOgCardProps): React.ReactElement {
   return (
     <div
       style={{
@@ -86,30 +87,34 @@ export function NitroOgCard({ title }: Props): React.ReactElement {
             flexDirection: 'column'
           }}
         >
-          <Header text="NitroModules" />
+          <Header text={title} />
 
-          <div
-            style={{
-              paddingTop: '5%',
-              maxWidth: '70%',
-              fontFamily: 'Inter',
-              color: BLACK,
-              fontSize: 39
-            }}
-          >
-            A framework to build mindblowingly fast native modules with type-safe statically compiled JS bindings.
-          </div>
+          {subtitle != null && (
+            <div
+              style={{
+                paddingTop: '5%',
+                maxWidth: '70%',
+                fontFamily: 'Inter',
+                color: BLACK,
+                fontSize: 39
+              }}
+            >
+              {subtitle}
+            </div>
+          )}
 
-          <div
-            style={{
-              paddingTop: '6%',
-              fontFamily: 'Inter',
-              color: GRAY,
-              fontSize: 38
-            }}
-          >
-            margelo.com
-          </div>
+          {url != null && (
+            <div
+              style={{
+                paddingTop: '6%',
+                fontFamily: 'Inter',
+                color: GRAY,
+                fontSize: 38
+              }}
+            >
+              {url}
+            </div>
+          )}
         </div>
       </div>
     </div>

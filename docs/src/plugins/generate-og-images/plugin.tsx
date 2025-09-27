@@ -1,6 +1,6 @@
 import React from "react";
 import satori, { Font } from "satori";
-import { NitroOgCard } from "./NitroOgCard";
+import { NitroOgCard, NitroOgCardProps } from "./NitroOgCard";
 import fs from 'fs/promises'
 import path from 'path'
 
@@ -17,6 +17,12 @@ async function loadFont(fontName: string, filename: string): Promise<Font> {
   return { name: fontName, data: fontData }
 }
 
+const defaultCard: NitroOgCardProps = {
+  title: 'NitroModules',
+  subtitle: 'A framework to build mindblowingly fast native modules with type-safe statically compiled JS bindings.',
+  url: 'margelo.com'
+}
+
 export async function runPlugin({ width, height }: Options): Promise<void> {
   const fonts = await Promise.all([
     loadFont('ClashDisplay', 'fonts/ClashDisplay-Bold.otf'),
@@ -25,10 +31,9 @@ export async function runPlugin({ width, height }: Options): Promise<void> {
 
   console.log('Rendering SVG...')
   const svg = await satori(
-    <NitroOgCard title="Hello world!" />,
+    <NitroOgCard {...defaultCard} />,
     { fonts: fonts, width: width, height: height }
   )
-  console.log(svg)
   console.log('Writing file...')
   await fs.writeFile('/tmp/image.svg', svg)
   console.log('Done!')
