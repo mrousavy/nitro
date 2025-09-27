@@ -31,6 +31,37 @@ function generateTextShadow(distanceH: number, distanceV: number): string {
 
 const textShadow = generateTextShadow(-20, 15)
 
+interface HeaderProps {
+  text: string
+}
+
+function Header({ text }: HeaderProps): React.ReactElement {
+  const SHADOW_STEPS = 20
+  return (<>
+    {Array(SHADOW_STEPS).fill(0).map((_, i) => {
+      const isLast = i === (SHADOW_STEPS - 1)
+      return (
+        <div
+          key={i}
+          style={{
+            position: isLast ? 'relative' : 'absolute',
+            fontFamily: 'ClashDisplay',
+            fontSize: 120,
+            color: isLast ? "white" : BLACK,
+            transform: `translate(${i}px, -${i}px)`,
+            maxWidth: '100%',
+            WebkitTextStrokeColor: BLACK,
+            WebkitTextStrokeWidth: 24,
+          }}
+        >
+          {text}
+        </div>
+      )
+    })}
+  </>)
+
+}
+
 export function NitroOgCard({ title }: Props): React.ReactElement {
   return (
     <div
@@ -72,17 +103,7 @@ export function NitroOgCard({ title }: Props): React.ReactElement {
             flexDirection: 'column'
           }}
         >
-          <div
-            style={{
-              fontFamily: 'ClashDisplay',
-              fontSize: 120,
-              color: "white",
-              maxWidth: '100%',
-              textShadow: textShadow,
-            }}
-          >
-            NitroModules
-          </div>
+          <Header text="NitroModules" />
 
           <div
             style={{
