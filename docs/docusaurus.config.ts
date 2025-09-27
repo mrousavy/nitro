@@ -19,7 +19,8 @@ const config: Config = {
   projectName: 'nitro',
   trailingSlash: false,
   onBrokenLinks: 'throw',
-  onBrokenMarkdownLinks: 'warn',
+  onBrokenAnchors: 'throw',
+  onBrokenMarkdownLinks: 'throw',
 
   // Runs animations on page change
   clientModules: ['./src/clientModules/pageSwitchFadeAnimation.ts'],
@@ -71,6 +72,15 @@ const config: Config = {
         ]
       },
     ],
+    [
+      require('./src/plugins/generate-og-images'),
+      {
+        docsDir: "docs",
+        outDir: "static/og",
+        width: 1200,
+        height: 630,
+      },
+    ]
   ],
 
   markdown: {
