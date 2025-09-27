@@ -8,8 +8,11 @@ const BORDER_WIDTH = 5
 const BORDER_RADIUS = 15
 const LAYERS_SPACING = 29
 
-const BLACK = 'rgb(32, 37, 56)'
-const GRAY = 'rgb(91, 123, 155)'
+const BLACK = 'rgb(34, 42, 65)'
+const GRAY = 'rgb(93, 136, 167)'
+const BLUE_1 = 'rgb(131, 199, 235)'
+const BLUE_2 = 'rgb(81, 159, 199)'
+const BLUE_3 = 'rgb(30, 106, 140)'
 
 export function NitroOgCard({ title }: Props): React.ReactElement {
   return (
@@ -18,7 +21,7 @@ export function NitroOgCard({ title }: Props): React.ReactElement {
         display: 'flex',
         flex: 1,
         height: '100%',
-        backgroundColor: 'rgb(46, 93, 127)',
+        backgroundColor: BLUE_3,
         paddingRight: LAYERS_SPACING,
         paddingBottom: LAYERS_SPACING,
       }}
@@ -28,7 +31,7 @@ export function NitroOgCard({ title }: Props): React.ReactElement {
           display: 'flex',
           flex: 1,
           height: '100%',
-          backgroundColor: 'rgb(89, 146, 189)',
+          backgroundColor: BLUE_2,
           borderBottomWidth: BORDER_WIDTH,
           borderRightWidth: BORDER_WIDTH,
           borderColor: BLACK,
@@ -42,7 +45,7 @@ export function NitroOgCard({ title }: Props): React.ReactElement {
             display: 'flex',
             flex: 1,
             height: '100%',
-            backgroundColor: 'rgb(134, 189, 229)',
+            backgroundColor: BLUE_1,
             borderBottomWidth: BORDER_WIDTH,
             borderRightWidth: BORDER_WIDTH,
             borderColor: BLACK,
