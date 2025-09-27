@@ -24,6 +24,8 @@ function Header({ text }: HeaderProps): React.ReactElement {
           key={i}
           style={{
             position: isLast ? 'relative' : 'absolute',
+            maxLines: 3,
+            textOverflow: 'ellipsis',
             fontFamily: 'ClashDisplay',
             fontSize: 120,
             color: isLast ? "white" : BLACK,
