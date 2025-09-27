@@ -7,6 +7,8 @@ import path from 'path'
 interface Options {
   width: number
   height: number
+  docsDirectory: string
+  routes: string[]
 }
 
 async function loadFont(fontName: string, filename: string): Promise<Font> {
@@ -23,18 +25,44 @@ const defaultCard: NitroOgCardProps = {
   url: 'margelo.com'
 }
 
-export async function runPlugin({ width, height }: Options): Promise<void> {
+async function getCardConfig(docsPage: string): Promise<NitroOgCardProps> {
+  const buffer = await fs.readFile(docsPage)
+  const content = buffer.toString()
+  return defaultCard
+}
+
+interface RenderProps {
+  fonts: Font[]
+  width: number
+  height: number
+  cardConfig: NitroOgCardProps
+  outputPath: string
+}
+
+async function renderSVG({ fonts, width, height, cardConfig, outputPath }: RenderProps): Promise<void> {
+  console.log(`Rendering card with text "${cardConfig.title}"...`)
+  const svg = await satori(
+    <NitroOgCard {...cardConfig} />,
+    { fonts: fonts, width: width, height: height }
+  )
+  console.log('Writing file...')
+  await fs.writeFile(outputPath, svg)
+  console.log('Done!')
+}
+
+export async function runPlugin({ width, height, docsDirectory, routes }: Options): Promise<void> {
   const fonts = await Promise.all([
     loadFont('ClashDisplay', 'fonts/ClashDisplay-Bold.otf'),
     loadFont('Inter', 'fonts/Inter-Medium.ttf')
   ])
 
-  console.log('Rendering SVG...')
-  const svg = await satori(
-    <NitroOgCard {...defaultCard} />,
-    { fonts: fonts, width: width, height: height }
-  )
-  console.log('Writing file...')
-  await fs.writeFile('/tmp/image.svg', svg)
-  console.log('Done!')
+  console.log(`Generating SVGs in ${docsDirectory}`)
+  const defaultCardPath = path.join(docsDirectory, 'img', 'og-card.svg')
+  await renderSVG({
+    fonts: fonts,
+    width: width,
+    height: height,
+    cardConfig: defaultCard,
+    outputPath: defaultCardPath
+  })
 }
