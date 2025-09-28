@@ -18,12 +18,11 @@ interface HeaderProps {
 function Header({ text }: HeaderProps): React.ReactElement {
   const SHADOW_STEPS = 15
   return (
-    <div style={{ display: 'flex', flex: '1 1 auto' }}>
+    <div style={{ display: 'flex', flex: 1 }}>
       <div style={{
         display: 'flex',
         position: 'relative',
-        flex: '1 1 auto',
-        overflow: 'hidden', // clamp + ellipsis can cut cleanly
+        flex: 1,
       }}>
         {Array(SHADOW_STEPS).fill(0).map((_, i) => {
           const isLast = i === (SHADOW_STEPS - 1)
@@ -33,7 +32,6 @@ function Header({ text }: HeaderProps): React.ReactElement {
               style={{
                 // position in parent
                 position: 'absolute',
-                inset: 0,
                 width: '100%',
                 // text layout
                 fontFamily: 'ClashDisplay',
