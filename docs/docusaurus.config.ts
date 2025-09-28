@@ -231,20 +231,20 @@ const config: Config = {
           'react, native, nitro, modules, react-native, native, turbo, expo, documentation, fast, hybrid, hybrid-object, objects, nitrogen, coding, docs, guides, marc, rousavy, mrousavy',
       },
       {
-        name: 'og:title',
+        property: 'og:title',
         content: 'Nitro Documentation',
       },
       {
-        name: 'og:type',
+        property: 'og:type',
         content: 'application',
       },
       {
-        name: 'og:description',
+        property: 'og:description',
         content:
           'A framework to build mindblowingly fast native modules with type-safe statically compiled JS bindings.',
       },
       {
-        name: 'og:image',
+        property: 'og:image',
         content: '/img/social-card.png',
       },
     ],

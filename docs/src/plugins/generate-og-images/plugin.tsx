@@ -5,6 +5,7 @@ import fs from 'fs/promises'
 import path from 'path'
 import { DocsPage } from ".";
 import sharp from "sharp";
+import * as cheerio from 'cheerio';
 
 interface Options {
   width: number
@@ -25,12 +26,6 @@ const defaultCard: NitroOgCardProps = {
   title: 'NitroModules',
   subtitle: 'A framework to build mindblowingly fast native modules with type-safe statically compiled JS bindings.',
   url: 'nitro.margelo.com'
-}
-
-async function getCardConfig(docsPage: string): Promise<NitroOgCardProps> {
-  const buffer = await fs.readFile(docsPage)
-  const content = buffer.toString()
-  return defaultCard
 }
 
 interface RenderProps {
@@ -63,12 +58,23 @@ async function svgToPng(svg: string): Promise<Buffer<ArrayBufferLike>> {
   return png
 }
 
+async function replaceMetaTags(fileName: string, tagNames: string[], tagValue: string): Promise<void> {
+  const html = await fs.readFile(fileName, "utf8");
+  const $ = cheerio.load(html);
+  const queries = tagNames.map((tagName) => `meta[${tagName}]`)
+  const $meta = $(queries.join(', '));
+  $meta.attr('content', tagValue)
+  const updatedHtml = $.html()
+  await fs.writeFile(fileName, updatedHtml)
+}
+
 export async function runPlugin({ width, height, outDirectory, docsPages }: Options): Promise<void> {
   const fonts = await Promise.all([
     loadFont('ClashDisplay', 'fonts/ClashDisplay-Bold.otf'),
     loadFont('Inter', 'fonts/Inter-Medium.ttf')
   ])
-  const imgOutDirectory = path.join(outDirectory, 'img', 'social-cards')
+  const rootImgDirectory = path.join('/img', 'social-cards')
+  const imgOutDirectory = path.join(outDirectory, rootImgDirectory)
   await fs.mkdir(imgOutDirectory, { recursive: true })
 
   console.log(`Generating SVGs in ${outDirectory}`)
@@ -95,4 +101,23 @@ export async function runPlugin({ width, height, outDirectory, docsPages }: Opti
     })
   })
   await Promise.all(promises)
+
+  console.log(`Generated ${promises.length + 1} cards!`)
+
+  const docsDirectory = path.join(outDirectory, 'docs')
+  const docsFiles = await fs.readdir(docsDirectory, { recursive: true, withFileTypes: true })
+  for (const filename of docsFiles) {
+    if (!filename.isFile()) {
+      // skip non-files
+      continue
+    }
+    const filePath = path.join(filename.parentPath, filename.name)
+    // /Users/mrousavy/Projects/nitro/docs/build/docs/example.html -> example.html
+    const relativeDocsPath = path.relative(docsDirectory, filePath)
+    // example.html -> example
+    const routeId = relativeDocsPath.split('.')[0]
+    // example -> /img/example.png
+    const cardPath = path.join(rootImgDirectory, `${routeId}.png`)
+    await replaceMetaTags(filePath, ['property="og:image"', 'name="twitter:image"'], cardPath)
+  }
 }

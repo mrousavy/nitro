@@ -52,7 +52,7 @@ export default function plugin(context: LoadContext, { width, height }: Options 
   console.log(`Plugin running!!!!`)
   return {
     name: 'generate-og-images',
-    async postBuild({ outDir, routesPaths, routes }) {
+    async postBuild({ outDir, routes }) {
       const docsPages = routes.flatMap((r) => getAllDocsRoutes(r))
       // @ts-expect-error we enabled .tsx import in esbuild at the top
       const { runPlugin } = (await import("./plugin.tsx"));
