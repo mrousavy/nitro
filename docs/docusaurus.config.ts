@@ -88,7 +88,7 @@ const config: Config = {
   },
   themes: ['@docusaurus/theme-mermaid'],
   themeConfig: {
-    image: 'img/social-card.png',
+    image: 'img/social-cards/og-image.png',
     tableOfContents: {
       minHeadingLevel: 2,
       maxHeadingLevel: 5,
@@ -245,7 +245,7 @@ const config: Config = {
       },
       {
         property: 'og:image',
-        content: '/img/social-card.png',
+        content: '/img/social-cards/og-image.png',
       },
     ],
     prism: {
