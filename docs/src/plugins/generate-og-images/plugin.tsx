@@ -23,7 +23,7 @@ async function loadFont(fontName: string, filename: string): Promise<Font> {
 const defaultCard: NitroOgCardProps = {
   title: 'NitroModules',
   subtitle: 'A framework to build mindblowingly fast native modules with type-safe statically compiled JS bindings.',
-  url: 'margelo.com'
+  url: 'nitro.margelo.com'
 }
 
 async function getCardConfig(docsPage: string): Promise<NitroOgCardProps> {
@@ -80,6 +80,7 @@ export async function runPlugin({ width, height, outDirectory, docsPages }: Opti
       height: height,
       cardConfig: {
         title: route.title,
+        url: 'nitro.margelo.com'
       },
       outputPath: outputPath
     })

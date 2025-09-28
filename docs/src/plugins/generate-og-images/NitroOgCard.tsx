@@ -105,7 +105,7 @@ export function NitroOgCard({ title, subtitle, url }: NitroOgCardProps): React.R
             borderBottomRightRadius: BORDER_RADIUS,
             paddingLeft: '9%',
             paddingTop: '6%',
-            paddingRight: '5%',
+            paddingRight: '9%',
             flexDirection: 'column'
           }}
         >
@@ -115,6 +115,7 @@ export function NitroOgCard({ title, subtitle, url }: NitroOgCardProps): React.R
             <div
               style={{
                 paddingTop: '5%',
+                paddingBottom: '3%',
                 maxWidth: '70%',
                 fontFamily: 'Inter',
                 color: BLACK,
@@ -129,6 +130,7 @@ export function NitroOgCard({ title, subtitle, url }: NitroOgCardProps): React.R
             <div
               style={{
                 paddingTop: '6%',
+                paddingBottom: '3%',
                 fontFamily: 'Inter',
                 color: GRAY,
                 fontSize: 38
