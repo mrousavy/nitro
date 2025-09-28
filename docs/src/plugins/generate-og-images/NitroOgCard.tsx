@@ -104,7 +104,7 @@ export function NitroOgCard({ title, subtitle, url }: NitroOgCardProps): React.R
             borderColor: BLACK,
             borderBottomRightRadius: BORDER_RADIUS,
             paddingLeft: '9%',
-            paddingTop: '6%',
+            paddingTop: '7%',
             paddingRight: '9%',
             flexDirection: 'column'
           }}
