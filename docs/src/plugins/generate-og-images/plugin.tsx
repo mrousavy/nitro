@@ -4,6 +4,7 @@ import { NitroOgCard, NitroOgCardProps } from "./NitroOgCard";
 import fs from 'fs/promises'
 import path from 'path'
 import { DocsPage } from ".";
+import { Resvg } from "@resvg/resvg-js";
 
 interface Options {
   width: number
@@ -40,18 +41,26 @@ interface RenderProps {
   outputPath: string
 }
 
-async function renderSVG({ fonts, width, height, cardConfig, outputPath }: RenderProps): Promise<void> {
+async function renderCard({ fonts, width, height, cardConfig, outputPath }: RenderProps): Promise<void> {
   console.log(`Rendering card with text "${cardConfig.title}"...`)
   const svg = await satori(
     <NitroOgCard {...cardConfig} />,
     { fonts: fonts, width: width, height: height }
   )
   const directory = path.dirname(outputPath)
+  console.log('Converting SVG to PNG...')
+  const png = svgToPng(svg)
   console.log(`Creating folder for "${directory}"...`)
   await fs.mkdir(directory, { recursive: true })
   console.log(`Writing file "${outputPath}"...`)
-  await fs.writeFile(outputPath, svg)
+  await fs.writeFile(outputPath, png)
   console.log('Done!')
+}
+
+function svgToPng(svg: string): Buffer<ArrayBufferLike> {
+  const resvg = new Resvg(svg, { fitTo: { mode: 'original' } })
+  const image = resvg.render()
+  return image.asPng()
 }
 
 export async function runPlugin({ width, height, outDirectory, docsPages }: Options): Promise<void> {
@@ -63,8 +72,8 @@ export async function runPlugin({ width, height, outDirectory, docsPages }: Opti
   await fs.mkdir(imgOutDirectory, { recursive: true })
 
   console.log(`Generating SVGs in ${outDirectory}`)
-  const defaultCardPath = path.join(imgOutDirectory, 'og-card.svg')
-  await renderSVG({
+  const defaultCardPath = path.join(imgOutDirectory, 'og-card.png')
+  await renderCard({
     fonts: fonts,
     width: width,
     height: height,
@@ -73,8 +82,8 @@ export async function runPlugin({ width, height, outDirectory, docsPages }: Opti
   })
 
   const promises = docsPages.map(async (route) => {
-    const outputPath = path.join(imgOutDirectory, `${route.id}.svg`)
-    await renderSVG({
+    const outputPath = path.join(imgOutDirectory, `${route.id}.png`)
+    await renderCard({
       fonts: fonts,
       width: width,
       height: height,
