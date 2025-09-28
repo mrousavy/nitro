@@ -1,7 +1,7 @@
 import React from "react";
 
 const BORDER_WIDTH = 5
-const BORDER_RADIUS = 15
+const BORDER_RADIUS = 17
 const LAYERS_SPACING = 29
 
 const BLACK = 'rgb(34, 42, 65)'

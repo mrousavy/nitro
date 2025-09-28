@@ -49,7 +49,7 @@ async function renderCard({ fonts, width, height, cardConfig, outputPath }: Rend
   await fs.mkdir(directory, { recursive: true })
   console.log(`Writing file "${outputPath}"...`)
   await fs.writeFile(outputPath, png)
-  console.log('Done!')
+  console.log(`Successfully generated card: ${outputPath}`)
 }
 
 async function svgToPng(svg: string): Promise<Buffer<ArrayBufferLike>> {
