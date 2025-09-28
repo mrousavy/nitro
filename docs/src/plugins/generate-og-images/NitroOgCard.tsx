@@ -5,6 +5,7 @@ const BORDER_RADIUS = 15
 const LAYERS_SPACING = 29
 
 const BLACK = 'rgb(34, 42, 65)'
+const WHITE = 'rgb(255, 255, 255)'
 const GRAY = 'rgb(93, 136, 167)'
 const BLUE_1 = 'rgb(131, 199, 235)'
 const BLUE_2 = 'rgb(81, 159, 199)'
@@ -16,30 +17,50 @@ interface HeaderProps {
 
 function Header({ text }: HeaderProps): React.ReactElement {
   const SHADOW_STEPS = 15
-  return (<>
-    {Array(SHADOW_STEPS).fill(0).map((_, i) => {
-      const isLast = i === (SHADOW_STEPS - 1)
-      return (
-        <div
-          key={i}
-          style={{
-            position: isLast ? 'relative' : 'absolute',
-            maxLines: 3,
-            textOverflow: 'ellipsis',
-            fontFamily: 'ClashDisplay',
-            fontSize: 120,
-            color: isLast ? "white" : BLACK,
-            transform: `translate(${i}px, -${i}px)`,
-            maxWidth: '100%',
-            WebkitTextStrokeColor: BLACK,
-            WebkitTextStrokeWidth: 15,
-          }}
-        >
-          {text}
-        </div>
-      )
-    })}
-  </>)
+  return (
+    <div style={{ display: 'flex', flex: '1 1 auto' }}>
+      <div style={{
+        display: 'flex',
+        position: 'relative',
+        flex: '1 1 auto',
+        overflow: 'hidden', // clamp + ellipsis can cut cleanly
+      }}>
+        {Array(SHADOW_STEPS).fill(0).map((_, i) => {
+          const isLast = i === (SHADOW_STEPS - 1)
+          return (
+            <div
+              key={i}
+              style={{
+                // position in parent
+                position: 'absolute',
+                inset: 0,
+                width: '100%',
+                // text layout
+                fontFamily: 'ClashDisplay',
+                fontSize: 120,
+                lineHeight: 1,
+                whiteSpace: 'normal',
+                overflowWrap: 'anywhere',
+                wordBreak: 'break-word',
+                hyphens: 'auto',
+                // truncation
+                maxLines: 3,
+                textOverflow: 'ellipsis',
+                // styling
+                color: isLast ? WHITE : BLACK,
+                WebkitTextStrokeColor: BLACK,
+                WebkitTextStrokeWidth: 15,
+                transform: `translate(${i}px, -${i}px)`,
+                pointerEvents: 'none',  // layers don't catch events
+              }}
+            >
+              {text}
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
 }
 
 export interface NitroOgCardProps {
@@ -86,6 +107,7 @@ export function NitroOgCard({ title, subtitle, url }: NitroOgCardProps): React.R
             borderBottomRightRadius: BORDER_RADIUS,
             paddingLeft: '9%',
             paddingTop: '6%',
+            paddingRight: '5%',
             flexDirection: 'column'
           }}
         >
