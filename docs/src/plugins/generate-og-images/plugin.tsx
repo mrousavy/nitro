@@ -4,7 +4,7 @@ import { NitroOgCard, NitroOgCardProps } from "./NitroOgCard";
 import fs from 'fs/promises'
 import path from 'path'
 import { DocsPage } from ".";
-import { Resvg } from "@resvg/resvg-js";
+import sharp from "sharp";
 
 interface Options {
   width: number
@@ -49,7 +49,7 @@ async function renderCard({ fonts, width, height, cardConfig, outputPath }: Rend
   )
   const directory = path.dirname(outputPath)
   console.log('Converting SVG to PNG...')
-  const png = svgToPng(svg)
+  const png = await svgToPng(svg)
   console.log(`Creating folder for "${directory}"...`)
   await fs.mkdir(directory, { recursive: true })
   console.log(`Writing file "${outputPath}"...`)
@@ -57,10 +57,10 @@ async function renderCard({ fonts, width, height, cardConfig, outputPath }: Rend
   console.log('Done!')
 }
 
-function svgToPng(svg: string): Buffer<ArrayBufferLike> {
-  const resvg = new Resvg(svg, { fitTo: { mode: 'original' } })
-  const image = resvg.render()
-  return image.asPng()
+async function svgToPng(svg: string): Promise<Buffer<ArrayBufferLike>> {
+  const buffer = Buffer.from(svg)
+  const png = await sharp(buffer).png().toBuffer()
+  return png
 }
 
 export async function runPlugin({ width, height, outDirectory, docsPages }: Options): Promise<void> {
