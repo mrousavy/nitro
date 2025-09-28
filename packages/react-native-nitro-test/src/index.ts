@@ -9,6 +9,7 @@ import {
 export * from './specs/TestObject.nitro'
 
 export * from './views/TestView'
+export * from './views/ViewWithChildren'
 
 /**
  * The Hybrid Test Object in C++

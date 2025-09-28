@@ -26,6 +26,8 @@ namespace margelo::nitro::test::external { class HybridSomeExternalObjectSpec; }
 namespace margelo::nitro::test { class HybridTestObjectSwiftKotlinSpec; }
 // Forward declaration of `HybridTestViewSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridTestViewSpec; }
+// Forward declaration of `HybridViewWithChildrenSpec` to properly resolve imports.
+namespace margelo::nitro::test { class HybridViewWithChildrenSpec; }
 // Forward declaration of `OldEnum` to properly resolve imports.
 namespace margelo::nitro::test { enum class OldEnum; }
 // Forward declaration of `OptionalWrapper` to properly resolve imports.
@@ -50,6 +52,8 @@ namespace NitroTestExternal { class HybridSomeExternalObjectSpec_cxx; }
 namespace NitroTest { class HybridTestObjectSwiftKotlinSpec_cxx; }
 // Forward declaration of `HybridTestViewSpec_cxx` to properly resolve imports.
 namespace NitroTest { class HybridTestViewSpec_cxx; }
+// Forward declaration of `HybridViewWithChildrenSpec_cxx` to properly resolve imports.
+namespace NitroTest { class HybridViewWithChildrenSpec_cxx; }
 
 // Include C++ defined types
 #include "Car.hpp"
@@ -57,6 +61,7 @@ namespace NitroTest { class HybridTestViewSpec_cxx; }
 #include "HybridChildSpec.hpp"
 #include "HybridTestObjectSwiftKotlinSpec.hpp"
 #include "HybridTestViewSpec.hpp"
+#include "HybridViewWithChildrenSpec.hpp"
 #include "OldEnum.hpp"
 #include "OptionalWrapper.hpp"
 #include "Person.hpp"
@@ -1414,5 +1419,17 @@ namespace margelo::nitro::test::bridge::swift {
   inline Result_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec__ create_Result_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec__(const std::exception_ptr& error) noexcept {
     return Result<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>>::withError(error);
   }
+  
+  // pragma MARK: std::shared_ptr<HybridViewWithChildrenSpec>
+  /**
+   * Specialized version of `std::shared_ptr<HybridViewWithChildrenSpec>`.
+   */
+  using std__shared_ptr_HybridViewWithChildrenSpec_ = std::shared_ptr<HybridViewWithChildrenSpec>;
+  std::shared_ptr<HybridViewWithChildrenSpec> create_std__shared_ptr_HybridViewWithChildrenSpec_(void* _Nonnull swiftUnsafePointer) noexcept;
+  void* _Nonnull get_std__shared_ptr_HybridViewWithChildrenSpec_(std__shared_ptr_HybridViewWithChildrenSpec_ cppType) noexcept;
+  
+  // pragma MARK: std::weak_ptr<HybridViewWithChildrenSpec>
+  using std__weak_ptr_HybridViewWithChildrenSpec_ = std::weak_ptr<HybridViewWithChildrenSpec>;
+  inline std__weak_ptr_HybridViewWithChildrenSpec_ weakify_std__shared_ptr_HybridViewWithChildrenSpec_(const std::shared_ptr<HybridViewWithChildrenSpec>& strong) noexcept { return strong; }
 
 } // namespace margelo::nitro::test::bridge::swift

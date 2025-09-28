@@ -26,6 +26,8 @@ namespace margelo::nitro::test::external { class HybridSomeExternalObjectSpec; }
 namespace margelo::nitro::test { class HybridTestObjectSwiftKotlinSpec; }
 // Forward declaration of `HybridTestViewSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridTestViewSpec; }
+// Forward declaration of `HybridViewWithChildrenSpec` to properly resolve imports.
+namespace margelo::nitro::test { class HybridViewWithChildrenSpec; }
 // Forward declaration of `JsStyleStruct` to properly resolve imports.
 namespace margelo::nitro::test { struct JsStyleStruct; }
 // Forward declaration of `MapWrapper` to properly resolve imports.
@@ -52,6 +54,7 @@ namespace margelo::nitro::test { struct WrappedJsStruct; }
 #include "HybridChildSpec.hpp"
 #include "HybridTestObjectSwiftKotlinSpec.hpp"
 #include "HybridTestViewSpec.hpp"
+#include "HybridViewWithChildrenSpec.hpp"
 #include "JsStyleStruct.hpp"
 #include "MapWrapper.hpp"
 #include "OldEnum.hpp"
@@ -96,6 +99,8 @@ namespace NitroTestExternal { class HybridSomeExternalObjectSpec_cxx; }
 namespace NitroTest { class HybridTestObjectSwiftKotlinSpec_cxx; }
 // Forward declaration of `HybridTestViewSpec_cxx` to properly resolve imports.
 namespace NitroTest { class HybridTestViewSpec_cxx; }
+// Forward declaration of `HybridViewWithChildrenSpec_cxx` to properly resolve imports.
+namespace NitroTest { class HybridViewWithChildrenSpec_cxx; }
 
 // Include Swift defined types
 #if __has_include("NitroTest-Swift.h")
