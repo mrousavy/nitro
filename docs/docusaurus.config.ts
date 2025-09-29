@@ -249,7 +249,7 @@ const config: Config = {
           'react, native, nitro, modules, react-native, native, turbo, expo, documentation, fast, hybrid, hybrid-object, objects, nitrogen, coding, docs, guides, marc, rousavy, mrousavy',
       },
       {
-        property: 'og:title',
+        property: 'og:site_name',
         content: 'Nitro Documentation',
       },
       {
@@ -264,6 +264,10 @@ const config: Config = {
       {
         property: 'og:image',
         content: '/img/social-cards/og-card.png',
+      },
+      {
+        property: 'twitter:creator',
+        content: '@mrousavy',
       },
     ],
     prism: {
