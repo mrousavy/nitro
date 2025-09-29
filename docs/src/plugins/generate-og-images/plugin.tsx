@@ -42,12 +42,18 @@ async function svgToPng(svg: string): Promise<Buffer<ArrayBufferLike>> {
   return png
 }
 
-async function replaceMetaTags(fileName: string, tagNames: string[], tagValue: string): Promise<void> {
+interface MetaTag {
+  selector: string
+  value: string
+}
+
+async function replaceMetaTags(fileName: string, replacementTags: MetaTag[]): Promise<void> {
   const html = await fs.readFile(fileName, "utf8");
   const $ = cheerio.load(html);
-  const queries = tagNames.map((tagName) => `meta[${tagName}]`)
-  const $meta = $(queries.join(', '));
-  $meta.attr('content', tagValue)
+  for (const tag of replacementTags) {
+    const $meta = $(`meta[${tag.selector}]`);
+    $meta.attr('content', tag.value)
+  }
   const updatedHtml = $.html()
   await fs.writeFile(fileName, updatedHtml)
 }
@@ -127,7 +133,16 @@ export async function runPlugin({ width, height, outDirectory, docsPages, baseUr
       throw new Error(`The og-image card at "${cardPath}" (${path.join(outDirectory, cardPath)}) does not exist!`)
     }
     const cardUrl = new URL(cardPath, baseUrl)
-    await replaceMetaTags(filePath, ['property="og:image"', 'name="twitter:image"'], cardUrl.href)
+    await replaceMetaTags(filePath, [
+      {
+        selector: 'property="og:image"',
+        value: cardPath
+      },
+      {
+        selector: 'name="twitter:image"',
+        value: cardUrl.href
+      }
+    ])
   }))
 
   console.log(`Successfully created and injected all social-cards!`)
