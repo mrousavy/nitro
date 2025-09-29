@@ -1,5 +1,6 @@
 import type { LoadContext, Plugin, RouteConfig } from "@docusaurus/types";
 import type { PropVersionDoc, PropVersionMetadata } from "@docusaurus/plugin-content-docs";
+import { URL } from "url";
 
 // register loaders for .ts/.tsx (sync)
 import { register } from "esbuild-register/dist/node";
@@ -45,16 +46,18 @@ interface Options {
 export default function plugin(context: LoadContext, { width, height }: Options = {}): Plugin {
   return {
     name: 'generate-og-images',
-    async postBuild({ outDir, routes }) {
+    async postBuild({ outDir, routes, siteConfig }) {
       const docsPages = routes.flatMap((r) => getAllDocsRoutes(r))
       if (docsPages.length === 0) {
         throw new Error(`Failed to generate og-images for ${outDir} - no docs pages were found!`)
       }
+      const baseUrl = new URL(siteConfig.baseUrl, siteConfig.url)
       // @ts-expect-error we enabled .tsx import in esbuild at the top
       const { runPlugin } = (await import("./plugin.tsx"));
       await runPlugin({
         width: width ?? 1200,
         height: height ?? 640,
+        baseUrl: baseUrl.href,
         outDirectory: outDir,
         docsPages: docsPages
       })
