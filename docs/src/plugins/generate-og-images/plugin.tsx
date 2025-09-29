@@ -66,13 +66,14 @@ interface Options {
   height: number
   outDirectory: string
   docsPages: PropVersionDoc[]
+  baseUrl: string
 }
 
 interface CardConfig extends NitroOgCardProps {
   filePath: string
 }
 
-export async function runPlugin({ width, height, outDirectory, docsPages }: Options): Promise<void> {
+export async function runPlugin({ width, height, outDirectory, docsPages, baseUrl }: Options): Promise<void> {
   const fonts = await Promise.all([
     loadFont('ClashDisplay', 'fonts/ClashDisplay-Bold.otf'),
     loadFont('Inter', 'fonts/Inter-Medium.ttf')
@@ -125,7 +126,8 @@ export async function runPlugin({ width, height, outDirectory, docsPages }: Opti
     if (!exists) {
       throw new Error(`The og-image card at "${cardPath}" (${path.join(outDirectory, cardPath)}) does not exist!`)
     }
-    await replaceMetaTags(filePath, ['property="og:image"', 'name="twitter:image"'], cardPath)
+    const cardUrl = new URL(cardPath, baseUrl)
+    await replaceMetaTags(filePath, ['property="og:image"', 'name="twitter:image"'], cardUrl.href)
   }))
 
   console.log(`Successfully created and injected all social-cards!`)
