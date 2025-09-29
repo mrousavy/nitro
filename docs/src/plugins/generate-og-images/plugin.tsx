@@ -7,12 +7,6 @@ import sharp from "sharp";
 import * as cheerio from 'cheerio';
 import type { PropVersionDoc } from "@docusaurus/plugin-content-docs";
 
-interface Options {
-  width: number
-  height: number
-  outDirectory: string
-  docsPages: PropVersionDoc[]
-}
 
 async function loadFont(fontName: string, filename: string): Promise<Font> {
   console.log(`Loading font '${fontName}' from ${filename}...`)
@@ -68,6 +62,22 @@ async function replaceMetaTags(fileName: string, tagNames: string[], tagValue: s
   await fs.writeFile(fileName, updatedHtml)
 }
 
+async function fileExists(file: string): Promise<boolean> {
+  try {
+    const stat = await fs.stat(file)
+    return stat.isFile()
+  } catch {
+    return false
+  }
+}
+
+interface Options {
+  width: number
+  height: number
+  outDirectory: string
+  docsPages: PropVersionDoc[]
+}
+
 export async function runPlugin({ width, height, outDirectory, docsPages }: Options): Promise<void> {
   const fonts = await Promise.all([
     loadFont('ClashDisplay', 'fonts/ClashDisplay-Bold.otf'),
@@ -118,6 +128,11 @@ export async function runPlugin({ width, height, outDirectory, docsPages }: Opti
     const routeId = relativeDocsPath.split('.')[0]
     // example -> /img/example.png
     const cardPath = path.join(rootImgDirectory, `${routeId}.png`)
+    // double-check if the card even exists
+    const exists = await fileExists(path.join(outDirectory, cardPath))
+    if (!exists) {
+      throw new Error(`The og-image card at "${cardPath}" (${path.join(outDirectory, cardPath)}) does not exist!`)
+    }
     await replaceMetaTags(filePath, ['property="og:image"', 'name="twitter:image"'], cardPath)
   })
   await Promise.all(replacePromises)
