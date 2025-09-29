@@ -3,15 +3,15 @@ import satori, { Font } from "satori";
 import { NitroOgCard, NitroOgCardProps } from "./NitroOgCard";
 import fs from 'fs/promises'
 import path from 'path'
-import { DocsPage } from ".";
 import sharp from "sharp";
 import * as cheerio from 'cheerio';
+import type { PropVersionDoc } from "@docusaurus/plugin-content-docs";
 
 interface Options {
   width: number
   height: number
   outDirectory: string
-  docsPages: DocsPage[]
+  docsPages: PropVersionDoc[]
 }
 
 async function loadFont(fontName: string, filename: string): Promise<Font> {
@@ -106,10 +106,10 @@ export async function runPlugin({ width, height, outDirectory, docsPages }: Opti
 
   const docsDirectory = path.join(outDirectory, 'docs')
   const docsFiles = await fs.readdir(docsDirectory, { recursive: true, withFileTypes: true })
-  for (const filename of docsFiles) {
+  const replacePromises = docsFiles.map(async (filename) => {
     if (!filename.isFile()) {
       // skip non-files
-      continue
+      return
     }
     const filePath = path.join(filename.parentPath, filename.name)
     // /Users/mrousavy/Projects/nitro/docs/build/docs/example.html -> example.html
@@ -119,5 +119,6 @@ export async function runPlugin({ width, height, outDirectory, docsPages }: Opti
     // example -> /img/example.png
     const cardPath = path.join(rootImgDirectory, `${routeId}.png`)
     await replaceMetaTags(filePath, ['property="og:image"', 'name="twitter:image"'], cardPath)
-  }
+  })
+  await Promise.all(replacePromises)
 }
