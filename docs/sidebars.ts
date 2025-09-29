@@ -50,7 +50,7 @@ const sidebars: SidebarsConfig = {
       type: 'category',
       label: 'Types',
       items: [
-        'types/types',
+        'types/typing-system',
         'types/primitives',
         'types/strings',
         'types/arrays',
