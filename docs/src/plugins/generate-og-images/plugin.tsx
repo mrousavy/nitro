@@ -16,12 +16,6 @@ async function loadFont(fontName: string, filename: string): Promise<Font> {
   return { name: fontName, data: fontData }
 }
 
-const defaultCard: NitroOgCardProps = {
-  title: 'NitroModules',
-  subtitle: 'A framework to build mindblowingly fast native modules with type-safe statically compiled JS bindings.',
-  url: 'nitro.margelo.com'
-}
-
 interface RenderProps {
   fonts: Font[]
   width: number
@@ -31,19 +25,15 @@ interface RenderProps {
 }
 
 async function renderCard({ fonts, width, height, cardConfig, outputPath }: RenderProps): Promise<void> {
-  console.log(`Rendering card with text "${cardConfig.title}"...`)
+  console.log(`Rendering social-card "${cardConfig.title}"...`)
   const svg = await satori(
     <NitroOgCard {...cardConfig} />,
     { fonts: fonts, width: width, height: height }
   )
   const directory = path.dirname(outputPath)
-  console.log('Converting SVG to PNG...')
   const png = await svgToPng(svg)
-  console.log(`Creating folder for "${directory}"...`)
   await fs.mkdir(directory, { recursive: true })
-  console.log(`Writing file "${outputPath}"...`)
   await fs.writeFile(outputPath, png)
-  console.log(`Successfully generated card: ${outputPath}`)
 }
 
 async function svgToPng(svg: string): Promise<Buffer<ArrayBufferLike>> {
@@ -78,6 +68,10 @@ interface Options {
   docsPages: PropVersionDoc[]
 }
 
+interface CardConfig extends NitroOgCardProps {
+  filePath: string
+}
+
 export async function runPlugin({ width, height, outDirectory, docsPages }: Options): Promise<void> {
   const fonts = await Promise.all([
     loadFont('ClashDisplay', 'fonts/ClashDisplay-Bold.otf'),
@@ -87,36 +81,34 @@ export async function runPlugin({ width, height, outDirectory, docsPages }: Opti
   const imgOutDirectory = path.join(outDirectory, rootImgDirectory)
   await fs.mkdir(imgOutDirectory, { recursive: true })
 
-  console.log(`Generating SVGs in ${outDirectory}`)
-  const defaultCardPath = path.join(imgOutDirectory, 'og-card.png')
-  await renderCard({
-    fonts: fonts,
-    width: width,
-    height: height,
-    cardConfig: defaultCard,
-    outputPath: defaultCardPath
-  })
-
-  const promises = docsPages.map(async (route) => {
-    const outputPath = path.join(imgOutDirectory, `${route.id}.png`)
+  console.log(`Generating social-cards in ${outDirectory}...`)
+  const cardConfigs: CardConfig[] = [
+    {
+      title: 'NitroModules',
+      subtitle: 'A framework to build mindblowingly fast native modules with type-safe statically compiled JS bindings.',
+      url: 'nitro.margelo.com',
+      filePath: path.join(imgOutDirectory, 'og-card.png')
+    },
+    ...docsPages.map((page) => ({
+      title: page.title,
+      url: 'nitro.margelo.com',
+      filePath: path.join(imgOutDirectory, `${page.id}.png`)
+    }))
+  ]
+  const promises = await Promise.all(cardConfigs.map(async (card) => {
     await renderCard({
       fonts: fonts,
       width: width,
       height: height,
-      cardConfig: {
-        title: route.title,
-        url: 'nitro.margelo.com'
-      },
-      outputPath: outputPath
+      cardConfig: card,
+      outputPath: card.filePath
     })
-  })
-  await Promise.all(promises)
-
-  console.log(`Generated ${promises.length + 1} cards!`)
+  }))
+  console.log(`Generated ${promises.length} social-cards!`)
 
   const docsDirectory = path.join(outDirectory, 'docs')
   const docsFiles = await fs.readdir(docsDirectory, { recursive: true, withFileTypes: true })
-  const replacePromises = docsFiles.map(async (filename) => {
+  await Promise.all(docsFiles.map(async (filename) => {
     if (!filename.isFile()) {
       // skip non-files
       return
@@ -134,6 +126,7 @@ export async function runPlugin({ width, height, outDirectory, docsPages }: Opti
       throw new Error(`The og-image card at "${cardPath}" (${path.join(outDirectory, cardPath)}) does not exist!`)
     }
     await replaceMetaTags(filePath, ['property="og:image"', 'name="twitter:image"'], cardPath)
-  })
-  await Promise.all(replacePromises)
+  }))
+
+  console.log(`Successfully created and injected all social-cards!`)
 }
