@@ -3,16 +3,10 @@ import satori, { Font } from "satori";
 import { NitroOgCard, NitroOgCardProps } from "./NitroOgCard";
 import fs from 'fs/promises'
 import path from 'path'
-import { DocsPage } from ".";
 import sharp from "sharp";
 import * as cheerio from 'cheerio';
+import type { PropVersionDoc } from "@docusaurus/plugin-content-docs";
 
-interface Options {
-  width: number
-  height: number
-  outDirectory: string
-  docsPages: DocsPage[]
-}
 
 async function loadFont(fontName: string, filename: string): Promise<Font> {
   console.log(`Loading font '${fontName}' from ${filename}...`)
@@ -20,12 +14,6 @@ async function loadFont(fontName: string, filename: string): Promise<Font> {
   const fontData = await fs.readFile(fontPath);
   console.log(`Font '${fontName}' loaded!`)
   return { name: fontName, data: fontData }
-}
-
-const defaultCard: NitroOgCardProps = {
-  title: 'NitroModules',
-  subtitle: 'A framework to build mindblowingly fast native modules with type-safe statically compiled JS bindings.',
-  url: 'nitro.margelo.com'
 }
 
 interface RenderProps {
@@ -37,19 +25,15 @@ interface RenderProps {
 }
 
 async function renderCard({ fonts, width, height, cardConfig, outputPath }: RenderProps): Promise<void> {
-  console.log(`Rendering card with text "${cardConfig.title}"...`)
+  console.log(`Rendering social-card "${cardConfig.title}"...`)
   const svg = await satori(
     <NitroOgCard {...cardConfig} />,
     { fonts: fonts, width: width, height: height }
   )
   const directory = path.dirname(outputPath)
-  console.log('Converting SVG to PNG...')
   const png = await svgToPng(svg)
-  console.log(`Creating folder for "${directory}"...`)
   await fs.mkdir(directory, { recursive: true })
-  console.log(`Writing file "${outputPath}"...`)
   await fs.writeFile(outputPath, png)
-  console.log(`Successfully generated card: ${outputPath}`)
 }
 
 async function svgToPng(svg: string): Promise<Buffer<ArrayBufferLike>> {
@@ -68,6 +52,26 @@ async function replaceMetaTags(fileName: string, tagNames: string[], tagValue: s
   await fs.writeFile(fileName, updatedHtml)
 }
 
+async function fileExists(file: string): Promise<boolean> {
+  try {
+    const stat = await fs.stat(file)
+    return stat.isFile()
+  } catch {
+    return false
+  }
+}
+
+interface Options {
+  width: number
+  height: number
+  outDirectory: string
+  docsPages: PropVersionDoc[]
+}
+
+interface CardConfig extends NitroOgCardProps {
+  filePath: string
+}
+
 export async function runPlugin({ width, height, outDirectory, docsPages }: Options): Promise<void> {
   const fonts = await Promise.all([
     loadFont('ClashDisplay', 'fonts/ClashDisplay-Bold.otf'),
@@ -77,39 +81,37 @@ export async function runPlugin({ width, height, outDirectory, docsPages }: Opti
   const imgOutDirectory = path.join(outDirectory, rootImgDirectory)
   await fs.mkdir(imgOutDirectory, { recursive: true })
 
-  console.log(`Generating SVGs in ${outDirectory}`)
-  const defaultCardPath = path.join(imgOutDirectory, 'og-card.png')
-  await renderCard({
-    fonts: fonts,
-    width: width,
-    height: height,
-    cardConfig: defaultCard,
-    outputPath: defaultCardPath
-  })
-
-  const promises = docsPages.map(async (route) => {
-    const outputPath = path.join(imgOutDirectory, `${route.id}.png`)
+  console.log(`Generating social-cards in ${outDirectory}...`)
+  const cardConfigs: CardConfig[] = [
+    {
+      title: 'NitroModules',
+      subtitle: 'A framework to build mindblowingly fast native modules with type-safe statically compiled JS bindings.',
+      url: 'nitro.margelo.com',
+      filePath: path.join(imgOutDirectory, 'og-card.png')
+    },
+    ...docsPages.map((page) => ({
+      title: page.title,
+      url: 'nitro.margelo.com',
+      filePath: path.join(imgOutDirectory, `${page.id}.png`)
+    }))
+  ]
+  const promises = await Promise.all(cardConfigs.map(async (card) => {
     await renderCard({
       fonts: fonts,
       width: width,
       height: height,
-      cardConfig: {
-        title: route.title,
-        url: 'nitro.margelo.com'
-      },
-      outputPath: outputPath
+      cardConfig: card,
+      outputPath: card.filePath
     })
-  })
-  await Promise.all(promises)
-
-  console.log(`Generated ${promises.length + 1} cards!`)
+  }))
+  console.log(`Generated ${promises.length} social-cards!`)
 
   const docsDirectory = path.join(outDirectory, 'docs')
   const docsFiles = await fs.readdir(docsDirectory, { recursive: true, withFileTypes: true })
-  for (const filename of docsFiles) {
+  await Promise.all(docsFiles.map(async (filename) => {
     if (!filename.isFile()) {
       // skip non-files
-      continue
+      return
     }
     const filePath = path.join(filename.parentPath, filename.name)
     // /Users/mrousavy/Projects/nitro/docs/build/docs/example.html -> example.html
@@ -118,6 +120,13 @@ export async function runPlugin({ width, height, outDirectory, docsPages }: Opti
     const routeId = relativeDocsPath.split('.')[0]
     // example -> /img/example.png
     const cardPath = path.join(rootImgDirectory, `${routeId}.png`)
+    // double-check if the card even exists
+    const exists = await fileExists(path.join(outDirectory, cardPath))
+    if (!exists) {
+      throw new Error(`The og-image card at "${cardPath}" (${path.join(outDirectory, cardPath)}) does not exist!`)
+    }
     await replaceMetaTags(filePath, ['property="og:image"', 'name="twitter:image"'], cardPath)
-  }
+  }))
+
+  console.log(`Successfully created and injected all social-cards!`)
 }
