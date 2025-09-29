@@ -17,7 +17,7 @@ import com.margelo.nitro.test.*
 /**
  * Represents the React Native `ViewManager` for the "TestView" Nitro HybridView.
  */
-class HybridTestViewManager: SimpleViewManager<View>() {
+open class HybridTestViewManager: SimpleViewManager<View>() {
   private val views = hashMapOf<View, HybridTestView>()
 
   override fun getName(): String {

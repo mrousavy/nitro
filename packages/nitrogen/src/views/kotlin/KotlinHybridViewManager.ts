@@ -51,7 +51,7 @@ import ${javaNamespace}.*
 /**
  * Represents the React Native \`ViewManager\` for the "${spec.name}" Nitro HybridView.
  */
-class ${manager}: SimpleViewManager<View>() {
+open class ${manager}: SimpleViewManager<View>() {
   private val views = hashMapOf<View, ${viewImplementation}>()
 
   override fun getName(): String {
