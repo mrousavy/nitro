@@ -35,7 +35,7 @@ export function EvalScreen() {
     try {
       console.log(`Running code: ${code}`)
       // eslint-disable-next-line no-eval
-      const r = eval(PRE_CODE + '\n' + DEFAULT_CODE)
+      const r = eval(PRE_CODE + '\n' + code)
       console.log(`Result:`, r)
       setResult(r)
     } catch (error) {
