@@ -2,19 +2,6 @@ import { themes as prismThemes } from 'prism-react-renderer';
 import type { Config, HtmlTagObject } from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 
-function preloadFont(path: string): HtmlTagObject {
-  return {
-    tagName: 'link',
-    attributes: {
-      rel: 'preload',
-      href: path,
-      as: 'font',
-      type: 'font/woff2',
-      crossorigin: 'anonymous'
-    }
-  }
-}
-
 const config: Config = {
   title: 'Nitro Modules',
   tagline:
@@ -50,11 +37,6 @@ const config: Config = {
     experimental_faster: true,
     v4: true
   },
-
-  headTags: [
-    preloadFont('/fonts/ClashDisplay-Variable.woff2'),
-    preloadFont('/fonts/Satoshi-Variable.woff2'),
-  ],
 
   presets: [
     [
