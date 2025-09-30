@@ -59,6 +59,7 @@ export function EvalScreen() {
           multiline={true}
           autoCapitalize="none"
           autoCorrect={false}
+          keyboardType="ascii-capable"
           textAlignVertical="top"
           style={[
             styles.textInput,
