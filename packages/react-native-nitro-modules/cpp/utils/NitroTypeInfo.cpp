@@ -35,7 +35,7 @@ std::string TypeInfo::replaceRegex(const std::string& original, const std::strin
   return std::regex_replace(original, regex, replacement);
 }
 
-std::string TypeInfo::demangleName(const std::string& typeName, bool removeNamespace) {
+std::string TypeInfo::demangleName(const std::string& typeName, [[maybe_unused]] bool removeNamespace) {
 #ifdef NITRO_DEBUG
   // In debug, we demangle the name using Cxx ABI and prettify it.
   std::string name = typeName;
