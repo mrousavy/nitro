@@ -2,6 +2,7 @@
 toc_min_heading_level: 2
 toc_max_heading_level: 3
 title: Running the Example app
+description: This guide will help you understand the Nitro Example app's role, and teach you how to run it both in debug and in release.
 ---
 
 import Tabs from '@theme/Tabs';
