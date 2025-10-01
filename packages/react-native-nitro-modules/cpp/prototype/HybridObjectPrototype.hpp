@@ -9,6 +9,7 @@
 
 #include "BorrowingReference.hpp"
 #include "HybridFunction.hpp"
+#include "NitroDefines.hpp"
 #include "Prototype.hpp"
 #include "PrototypeChain.hpp"
 #include <functional>

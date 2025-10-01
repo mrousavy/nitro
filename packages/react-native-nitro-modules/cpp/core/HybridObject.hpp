@@ -6,6 +6,7 @@
 
 #include "HybridObjectPrototype.hpp"
 
+#include "NitroDefines.hpp"
 #include <jsi/jsi.h>
 #include <memory>
 #include <type_traits>

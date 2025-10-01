@@ -7,6 +7,7 @@
 
 #include "ArrayBuffer.hpp"
 #include "BorrowingReference.hpp"
+#include "NitroDefines.hpp"
 #include <functional>
 #include <jsi/jsi.h>
 #include <thread>
