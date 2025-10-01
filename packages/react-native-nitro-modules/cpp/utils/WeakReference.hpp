@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include "NitroDefines.hpp"
 #include "ReferenceState.hpp"
 #include <atomic>
 #include <cstddef>
