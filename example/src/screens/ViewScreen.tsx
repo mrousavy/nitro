@@ -21,6 +21,7 @@ export function ViewScreenImpl() {
       [...Array(counter)].map((_, i) => (
         <TestView
           key={i}
+          testID={`view-${i}`}
           hybridRef={{
             f: (ref) => {
               console.log(`Ref initialized!`)

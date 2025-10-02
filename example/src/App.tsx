@@ -4,10 +4,14 @@ import { HybridObjectTestsScreen } from './screens/HybridObjectTestsScreen'
 import { NavigationContainer } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { useColors } from './useColors'
-import { Image } from 'react-native'
+import { Image, View } from 'react-native'
 import { BenchmarksScreen } from './screens/BenchmarksScreen'
 import { ViewScreen } from './screens/ViewScreen'
 import { EvalScreen } from './screens/EvalScreen'
+
+import { LogBox } from 'react-native'
+
+LogBox.ignoreAllLogs()
 
 const dna = require('./img/dna.png')
 const rocket = require('./img/rocket.png')
@@ -33,11 +37,14 @@ export default function App() {
           options={{
             tabBarLabel: 'Tests',
             tabBarIcon: ({ size, focused }) => (
-              <Image
-                source={dna}
-                tintColor={focused ? undefined : 'grey'}
-                style={{ width: size * 1.2, height: size * 1.2 }}
-              />
+              <View testID="tests-screen-icon">
+                <Image
+                  testID="tests-screen-icon"
+                  source={dna}
+                  tintColor={focused ? undefined : 'grey'}
+                  style={{ width: size * 1.2, height: size * 1.2 }}
+                />
+              </View>
             ),
           }}
         />
@@ -47,11 +54,13 @@ export default function App() {
           options={{
             tabBarLabel: 'Benchmarks',
             tabBarIcon: ({ size, focused }) => (
-              <Image
-                source={rocket}
-                tintColor={focused ? undefined : 'grey'}
-                style={{ width: size * 1.4, height: size * 1.4 }}
-              />
+              <View testID="benchmarks-screen-icon">
+                <Image
+                  source={rocket}
+                  tintColor={focused ? undefined : 'grey'}
+                  style={{ width: size * 1.4, height: size * 1.4 }}
+                />
+              </View>
             ),
           }}
         />
@@ -61,11 +70,14 @@ export default function App() {
           options={{
             tabBarLabel: 'View',
             tabBarIcon: ({ size, focused }) => (
-              <Image
-                source={map}
-                tintColor={focused ? undefined : 'grey'}
-                style={{ width: size, height: size }}
-              />
+              <View testID="view-screen-icon">
+                <Image
+                  testID="view-screen-icon"
+                  source={map}
+                  tintColor={focused ? undefined : 'grey'}
+                  style={{ width: size, height: size }}
+                />
+              </View>
             ),
           }}
         />
@@ -75,11 +87,13 @@ export default function App() {
           options={{
             tabBarLabel: 'Eval',
             tabBarIcon: ({ size, focused }) => (
-              <Image
-                source={terminal}
-                tintColor={focused ? undefined : 'grey'}
-                style={{ width: size, height: size }}
-              />
+              <View testID="eval-screen-icon">
+                <Image
+                  source={terminal}
+                  tintColor={focused ? undefined : 'grey'}
+                  style={{ width: size, height: size }}
+                />
+              </View>
             ),
           }}
         />
