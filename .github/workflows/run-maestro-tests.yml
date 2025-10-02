@@ -175,7 +175,7 @@ jobs:
 
       - uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: '16.4'
+          xcode-version: 'latest-stable'
 
       - name: Download iOS .app artifact
         uses: actions/download-artifact@v4
