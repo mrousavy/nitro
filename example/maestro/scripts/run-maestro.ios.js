@@ -14,7 +14,7 @@ function sleep(ms) {
 async function main() {
     let metroProcess = null
 	console.log('📱 Starting simulator...')
-	execSync(`xcrun simctl boot "iPhone 16"`)
+	execSync(`xcrun simctl boot "iPhone 17"`)
 
 	console.log('📱 Installing app...')
 	
@@ -34,18 +34,18 @@ async function main() {
 
 	
 
-    console.log('📱 Starting Metro Server...')
-    metroProcess = spawn('bun', ['start', '&'], {
-        stdio: 'ignore',
-        detached: true,
-      });
+    // console.log('📱 Starting Metro Server...')
+    // metroProcess = spawn('bun', ['start', '&'], {
+    //     stdio: 'ignore',
+    //     detached: true,
+    //   });
 
-    console.log('✅ Metro Server started')
-    await sleep(5000); // Wait for Metro Server to start
+    // console.log('✅ Metro Server started')
+    // await sleep(5000); // Wait for Metro Server to start
     
    
 	execSync(`xcrun simctl launch "${udid}" com.mrousavy.nitro.example`)
-	await sleep(20000); // Wait for app to start and sync with Metro Server
+	// await sleep(20000); // Wait for app to start and sync with Metro Server
 
 
     const MAESTRO_PATH = path.join(process.env.HOME, '.maestro', 'bin', 'maestro')
