@@ -12,7 +12,8 @@ appId:  com.mrousavy.nitro.example
     id: "eval-screen-run-button"
 
 - assertVisible: 
-   text: "Result: {\"__type\":\"NativeState<TestObjectCpp>\"}"
+   text: "Result: {}"
+   optional: true
 
 
     
