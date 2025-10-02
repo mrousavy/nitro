@@ -1,5 +1,6 @@
 appId:  com.mrousavy.nitro.example
 ---
+- launchApp
 - tapOn:
     text: "Wait" # Sometimes Emulator doesnt responsd. We press wait and not kill the app
     optional: true
