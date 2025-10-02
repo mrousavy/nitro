@@ -14,7 +14,7 @@ function sleep(ms) {
 async function main() {
     let metroProcess = null
 	console.log('📱 Starting simulator...')
-	execSync(`xcrun simctl boot "iPhone 17"`)
+	execSync(`xcrun simctl boot "iPhone 16"`)
 
 	console.log('📱 Installing app...')
 	
