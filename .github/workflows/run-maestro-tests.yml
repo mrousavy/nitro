@@ -154,7 +154,7 @@ jobs:
 
   maestro_ios:
     name: Run Maestro iO
-    runs-on: macos-latest
+    runs-on: macos-14-large
     needs: build_ios
     steps:
       - uses: actions/checkout@v5
