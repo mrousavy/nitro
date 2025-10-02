@@ -1,7 +1,9 @@
 import { Dirent, promises as fs } from 'fs'
 import path from 'path'
 
-function getFilePath(file: Dirent, rootDir: string): string {
+type DirentCompat = Dirent & { path?: string }
+
+function getFilePath(file: DirentCompat, rootDir: string): string {
   const dir = file.parentPath ?? file.path ?? rootDir
   return path.join(dir, file.name)
 }

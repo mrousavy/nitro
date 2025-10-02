@@ -124,6 +124,7 @@ namespace margelo::nitro::test {
     std::optional<Person> getDriver(const Car& car) override;
     void jsStyleObjectAsParameters(const JsStyleStruct& params) override;
     WrappedJsStruct bounceWrappedJsStyleStruct(const WrappedJsStruct& value) override;
+    OptionalWrapper bounceOptionalWrapper(const OptionalWrapper& wrapper) override;
     std::shared_ptr<ArrayBuffer> createArrayBuffer() override;
     std::shared_ptr<ArrayBuffer> createArrayBufferFromNativeBuffer(bool copy) override;
     std::shared_ptr<ArrayBuffer> copyBuffer(const std::shared_ptr<ArrayBuffer>& buffer) override;

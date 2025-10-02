@@ -1,6 +1,6 @@
 {
   "name": "react-native-nitro-example",
-  "version": "0.29.6",
+  "version": "0.29.8",
   "private": true,
   "scripts": {
     "start": "react-native start --client-logs",
@@ -35,12 +35,12 @@
     "react-native-screens": "^4.14.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.28.0",
-    "@babel/preset-env": "^7.28.0",
-    "@babel/runtime": "^7.27.6",
-    "@react-native-community/cli": "20.0.0",
-    "@react-native-community/cli-platform-android": "20.0.0",
-    "@react-native-community/cli-platform-ios": "20.0.0",
+    "@babel/core": "^7.28.4",
+    "@babel/preset-env": "^7.28.3",
+    "@babel/runtime": "^7.28.4",
+    "@react-native-community/cli": "20.0.2",
+    "@react-native-community/cli-platform-android": "20.0.2",
+    "@react-native-community/cli-platform-ios": "20.0.2",
     "@react-native/babel-preset": "0.81.1",
     "@react-native/eslint-config": "0.81.1",
     "@react-native/metro-config": "0.81.1",

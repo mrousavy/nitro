@@ -6,6 +6,7 @@ import {
   type Person,
   type Powertrain,
   type WrappedJsStruct,
+  type OptionalWrapper,
   WeirdNumbersEnum,
   CustomString,
 } from 'react-native-nitro-test'
@@ -65,6 +66,10 @@ const TEST_WRAPPED_STRUCT: WrappedJsStruct = {
     value: 55.3,
     onChanged: (_num: number) => {},
   },
+}
+const TEST_OPTIONAL_WRAPPER: OptionalWrapper = {
+  optionalArrayBuffer: new ArrayBuffer(1024),
+  optionalString: 'hello!',
 }
 const TEST_CUSTOM_TYPE: CustomString = 'hello world!'
 
@@ -414,6 +419,12 @@ export function getTests(
         .didReturn('object')
         // TODO: We can't do .equals(...) here because of how Functions are deep-equal'd
         .toContain('value')
+    ),
+    createTest('bounceOptionalWrapper(...) equals', () =>
+      it(() => testObject.bounceOptionalWrapper(TEST_OPTIONAL_WRAPPER))
+        .didNotThrow()
+        .didReturn('object')
+        .equals(TEST_OPTIONAL_WRAPPER)
     ),
 
     createTest('complexEnumCallback(...)', async () =>

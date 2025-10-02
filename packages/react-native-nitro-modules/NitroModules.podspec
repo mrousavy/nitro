@@ -43,6 +43,7 @@ Pod::Spec.new do |s|
     "cpp/platform/NitroLogger.hpp",
     "cpp/threading/Dispatcher.hpp",
     "cpp/utils/JSCallback.hpp",
+    "cpp/utils/FastVectorCopy.hpp",
     "cpp/utils/NitroHash.hpp",
     "cpp/utils/NitroDefines.hpp",
     "cpp/views/CachedProp.hpp",

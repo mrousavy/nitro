@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include "NitroDefines.hpp"
 #include "ReferenceState.hpp"
 #include <atomic>
 #include <cstddef>
@@ -94,8 +95,8 @@ private:
   }
 
 private:
-  T* _value;
-  ReferenceState* _state;
+  T* NULLABLE _value;
+  ReferenceState* NON_NULL _state;
 };
 
 } // namespace margelo::nitro

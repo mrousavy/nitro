@@ -9,7 +9,7 @@
 #define NitroDefines_h
 
 // Sets the version of the native Nitro core library
-#define NITRO_VERSION "0.29.6"
+#define NITRO_VERSION "0.29.8"
 
 // Sets whether to use debug or optimized production build flags
 #ifdef DEBUG
@@ -37,6 +37,24 @@
 #define CLOSED_ENUM __attribute__((enum_extensibility(closed)))
 #else
 #define CLOSED_ENUM
+#endif
+
+// Nullability
+#if defined(__clang__)
+#define NON_NULL _Nonnull
+#define NULLABLE _Nullable
+#else
+#define NON_NULL
+#define NULLABLE
+#endif
+
+// Contiguous memory in pointers (__restrict)
+#if defined(__clang__)
+#define CONTIGUOUS_MEMORY __restrict__
+#elif defined(_MSC_VER)
+#define CONTIGUOUS_MEMORY __restrict
+#else
+#define CONTIGUOUS_MEMORY
 #endif
 
 // Swift Support

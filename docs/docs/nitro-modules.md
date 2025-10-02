@@ -68,6 +68,6 @@ After creating a Nitro Module, it's time to set up an example app to test your l
 
 :::tip
 The Hybrid Objects from your Nitro Module will be registered in the `HybridObjectRegistry`. This registration process needs to be called from somewhere:
-- In React Native, this happens in the `*Package.java` file which calls `.initializeNative()`.
+- In React Native, this happens in the `*Package.kt` file which calls `.initializeNative()`.
 - If you are not using React Native, you need to manually call `.initializeNative()` in your library's entry point.
 :::

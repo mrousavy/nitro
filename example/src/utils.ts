@@ -5,24 +5,6 @@ export function isNativeFunction(func: Function): boolean {
   return func.toString().includes('[native code]')
 }
 
-function isObjectSubclass(object: object): boolean {
-  let prototype = Object.getPrototypeOf(object)
-  if (prototype === Object) {
-    // It's a plain JS object directly as there is only one thing in the prototype chain: `Object`.
-    return false
-  }
-  do {
-    prototype = Object.getPrototypeOf(prototype)
-    if (prototype === Object) {
-      // After looking further up in the prototype chain, it is now subclassing `Object` (but
-      // not `Object` directly), so we are good now!
-      return true
-    }
-  } while (prototype != null)
-  // We looked all the way up in the prototype chain and it is not an `Object` at all! Weird...
-  return false
-}
-
 export function stringify(value: unknown): string {
   if (value == null) {
     return 'null'
@@ -49,7 +31,7 @@ export function stringify(value: unknown): string {
       // Try to use .toString()
       try {
         if (value.toString instanceof Function) {
-          if (isNativeFunction(value.toString) && isObjectSubclass(value)) {
+          if (isNativeFunction(value.toString)) {
             // It is a native jsi::HostFunction. Since we log Prototypes,
             // it is likely that we need a HybridObject (NativeState) to call it.
             if (NitroModules.hasNativeState(value)) {

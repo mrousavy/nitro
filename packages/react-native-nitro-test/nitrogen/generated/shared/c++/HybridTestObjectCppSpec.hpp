@@ -33,6 +33,8 @@ namespace NitroModules { class ArrayBuffer; }
 namespace margelo::nitro::test { struct JsStyleStruct; }
 // Forward declaration of `WrappedJsStruct` to properly resolve imports.
 namespace margelo::nitro::test { struct WrappedJsStruct; }
+// Forward declaration of `OptionalWrapper` to properly resolve imports.
+namespace margelo::nitro::test { struct OptionalWrapper; }
 // Forward declaration of `WeirdNumbersEnum` to properly resolve imports.
 namespace margelo::nitro::test { enum class WeirdNumbersEnum; }
 // Forward declaration of `HybridChildSpec` to properly resolve imports.
@@ -66,6 +68,7 @@ namespace margelo::nitro::test::external { class HybridSomeExternalObjectSpec; }
 #include <NitroModules/ArrayBuffer.hpp>
 #include "JsStyleStruct.hpp"
 #include "WrappedJsStruct.hpp"
+#include "OptionalWrapper.hpp"
 #include "WeirdNumbersEnum.hpp"
 #include "HybridChildSpec.hpp"
 #include "HybridBaseSpec.hpp"
@@ -180,6 +183,7 @@ namespace margelo::nitro::test {
       virtual std::optional<Person> getDriver(const Car& car) = 0;
       virtual void jsStyleObjectAsParameters(const JsStyleStruct& params) = 0;
       virtual WrappedJsStruct bounceWrappedJsStyleStruct(const WrappedJsStruct& value) = 0;
+      virtual OptionalWrapper bounceOptionalWrapper(const OptionalWrapper& wrapper) = 0;
       virtual std::shared_ptr<ArrayBuffer> createArrayBuffer() = 0;
       virtual std::shared_ptr<ArrayBuffer> createArrayBufferFromNativeBuffer(bool copy) = 0;
       virtual std::shared_ptr<ArrayBuffer> copyBuffer(const std::shared_ptr<ArrayBuffer>& buffer) = 0;

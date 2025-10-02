@@ -114,17 +114,16 @@ Now run nitrogen again.
 
 On Android, you need to register the generated view manager in your React Native package:
 
-```java title="CameraPackage.java"
+```kotlin title="CameraPackage.kt"
 // ...
-public class CameraPackage extends TurboReactPackage {
+public class CameraPackage: TurboReactPackage() {
   // ...
 
-  @Override
-  public List<ViewManager> createViewManagers(@NonNull ReactApplicationContext reactContext) {
-    List<ViewManager> viewManagers = new ArrayList<>();
+  override fun createViewManagers(reactContext: ReactApplicationContext): List<ViewManager<*, *>> {
+    val viewManagers = ArrayList<ViewManager<*, *>>()
     // diff-add
-    viewManagers.add(new HybridCameraViewManager());
-    return viewManagers;
+    viewManagers.add(HybridCameraViewManager())
+    return viewManagers
   }
 }
 ```

@@ -147,17 +147,17 @@ return ${cxxNamespace}::get_${internalName}(cppType);
  * Specialized version of \`${escapeComments(actualType)}\`.
  */
 using ${name} = ${actualType};
-${actualType} create_${name}(void* _Nonnull swiftUnsafePointer) noexcept;
-void* _Nonnull get_${name}(${name} cppType) noexcept;
+${actualType} create_${name}(void* NON_NULL swiftUnsafePointer) noexcept;
+void* NON_NULL get_${name}(${name} cppType) noexcept;
     `.trim(),
       requiredIncludes: type.getRequiredImports('c++'),
     },
     cxxImplementation: {
       code: `
-${actualType} create_${name}(void* _Nonnull swiftUnsafePointer) noexcept {
+${actualType} create_${name}(void* NON_NULL swiftUnsafePointer) noexcept {
   ${indent(createImplementation, '  ')}
 }
-void* _Nonnull get_${name}(${name} cppType) noexcept {
+void* NON_NULL get_${name}(${name} cppType) noexcept {
   ${indent(getImplementation, '  ')}
 }
     `.trim(),
@@ -260,6 +260,11 @@ inline ${wrappedBridge.getTypeCode('c++')} get_${name}(const ${actualType}& opti
   }
 }
 
+export function isPrimitivelyCopyable(type: Type): boolean {
+  const bridgedType = new SwiftCxxBridgedType(type, true)
+  return !bridgedType.needsSpecialHandling
+}
+
 /**
  * Creates a C++ `create_vector_T<T>(size)` function that can be called from Swift.
  */
@@ -267,12 +272,26 @@ function createCxxVectorSwiftHelper(type: ArrayType): SwiftCxxHelper {
   const actualType = type.getCode('c++')
   const bridgedType = new SwiftCxxBridgedType(type)
   const name = escapeCppName(actualType)
-  return {
-    cxxType: actualType,
-    funcName: `create_${name}`,
-    specializationName: name,
-    cxxHeader: {
-      code: `
+  let code: string
+  let funcName: string
+  if (isPrimitivelyCopyable(type.itemType)) {
+    const itemType = type.itemType.getCode('c++')
+    funcName = `copy_${name}`
+    code = `
+/**
+ * Specialized version of \`${escapeComments(actualType)}\`.
+ */
+using ${name} = ${actualType};
+inline ${actualType} copy_${name}(const ${itemType}* CONTIGUOUS_MEMORY NON_NULL data, size_t size) noexcept {
+  return margelo::nitro::FastVectorCopy<${itemType}>(data, size);
+}
+inline const ${itemType}* CONTIGUOUS_MEMORY NON_NULL get_data_${name}(const ${actualType}& vector) noexcept {
+  return vector.data();
+}
+`.trim()
+  } else {
+    funcName = `create_${name}`
+    code = `
 /**
  * Specialized version of \`${escapeComments(actualType)}\`.
  */
@@ -281,11 +300,23 @@ inline ${actualType} create_${name}(size_t size) noexcept {
   ${actualType} vector;
   vector.reserve(size);
   return vector;
-}
-    `.trim(),
+}`.trim()
+  }
+
+  return {
+    cxxType: actualType,
+    funcName: funcName,
+    specializationName: name,
+    cxxHeader: {
+      code: code,
       requiredIncludes: [
         {
           name: 'vector',
+          space: 'system',
+          language: 'c++',
+        },
+        {
+          name: 'NitroModules/FastVectorCopy.hpp',
           space: 'system',
           language: 'c++',
         },
@@ -426,7 +457,7 @@ public:
 private:
   std::unique_ptr<${actualType}> _function;
 } SWIFT_NONCOPYABLE;
-${name} create_${name}(void* _Nonnull swiftClosureWrapper) noexcept;
+${name} create_${name}(void* NON_NULL swiftClosureWrapper) noexcept;
 inline ${wrapperName} wrap_${name}(${name} value) noexcept {
   return ${wrapperName}(std::move(value));
 }
@@ -447,7 +478,7 @@ inline ${wrapperName} wrap_${name}(${name} value) noexcept {
     },
     cxxImplementation: {
       code: `
-${name} create_${name}(void* _Nonnull swiftClosureWrapper) noexcept {
+${name} create_${name}(void* NON_NULL swiftClosureWrapper) noexcept {
   auto swiftClosure = ${swiftClassName}::fromUnsafe(swiftClosureWrapper);
   return [swiftClosure = std::move(swiftClosure)](${paramsSignature.join(', ')}) mutable -> ${type.returnType.getCode('c++')} {
     ${indent(body, '    ')}

@@ -36,6 +36,8 @@ namespace NitroModules { class ArrayBufferHolder; }
 namespace margelo::nitro::test { struct JsStyleStruct; }
 // Forward declaration of `WrappedJsStruct` to properly resolve imports.
 namespace margelo::nitro::test { struct WrappedJsStruct; }
+// Forward declaration of `OptionalWrapper` to properly resolve imports.
+namespace margelo::nitro::test { struct OptionalWrapper; }
 // Forward declaration of `WeirdNumbersEnum` to properly resolve imports.
 namespace margelo::nitro::test { enum class WeirdNumbersEnum; }
 // Forward declaration of `HybridChildSpec` to properly resolve imports.
@@ -69,6 +71,7 @@ namespace margelo::nitro::test::external { class HybridSomeExternalObjectSpec; }
 #include <NitroModules/ArrayBufferHolder.hpp>
 #include "JsStyleStruct.hpp"
 #include "WrappedJsStruct.hpp"
+#include "OptionalWrapper.hpp"
 #include "WeirdNumbersEnum.hpp"
 #include "HybridChildSpec.hpp"
 #include "HybridBaseSpec.hpp"
@@ -322,7 +325,7 @@ namespace margelo::nitro::test {
       return __value;
     }
     inline std::unordered_map<std::string, std::string> extractMap(const MapWrapper& mapWrapper) override {
-      auto __result = _swiftPart.extractMap(mapWrapper);
+      auto __result = _swiftPart.extractMap(std::forward<decltype(mapWrapper)>(mapWrapper));
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
@@ -522,7 +525,7 @@ namespace margelo::nitro::test {
       return __value;
     }
     inline bool isCarElectric(const Car& car) override {
-      auto __result = _swiftPart.isCarElectric(car);
+      auto __result = _swiftPart.isCarElectric(std::forward<decltype(car)>(car));
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
@@ -530,7 +533,7 @@ namespace margelo::nitro::test {
       return __value;
     }
     inline std::optional<Person> getDriver(const Car& car) override {
-      auto __result = _swiftPart.getDriver(car);
+      auto __result = _swiftPart.getDriver(std::forward<decltype(car)>(car));
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
@@ -538,13 +541,21 @@ namespace margelo::nitro::test {
       return __value;
     }
     inline void jsStyleObjectAsParameters(const JsStyleStruct& params) override {
-      auto __result = _swiftPart.jsStyleObjectAsParameters(params);
+      auto __result = _swiftPart.jsStyleObjectAsParameters(std::forward<decltype(params)>(params));
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
     }
     inline WrappedJsStruct bounceWrappedJsStyleStruct(const WrappedJsStruct& value) override {
-      auto __result = _swiftPart.bounceWrappedJsStyleStruct(value);
+      auto __result = _swiftPart.bounceWrappedJsStyleStruct(std::forward<decltype(value)>(value));
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline OptionalWrapper bounceOptionalWrapper(const OptionalWrapper& wrapper) override {
+      auto __result = _swiftPart.bounceOptionalWrapper(std::forward<decltype(wrapper)>(wrapper));
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }

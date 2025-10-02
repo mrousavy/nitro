@@ -7,6 +7,7 @@
 
 #include "ArrayBuffer.hpp"
 #include "BorrowingReference.hpp"
+#include "NitroDefines.hpp"
 #include <functional>
 #include <jsi/jsi.h>
 #include <thread>
@@ -17,11 +18,11 @@ using namespace facebook;
 
 // 1. ArrayBuffer
 
-std::shared_ptr<ArrayBuffer> ArrayBuffer::wrap(uint8_t* data, size_t size, DeleteFn&& deleteFunc) {
+std::shared_ptr<ArrayBuffer> ArrayBuffer::wrap(uint8_t* NON_NULL data, size_t size, DeleteFn&& deleteFunc) {
   return std::make_shared<NativeArrayBuffer>(data, size, std::move(deleteFunc));
 }
 
-std::shared_ptr<ArrayBuffer> ArrayBuffer::copy(const uint8_t* data, size_t size) {
+std::shared_ptr<ArrayBuffer> ArrayBuffer::copy(const uint8_t* NON_NULL data, size_t size) {
   uint8_t* copy = new uint8_t[size];
   std::memcpy(copy, data, size);
   return ArrayBuffer::wrap(copy, size, [=]() { delete[] copy; });
@@ -42,7 +43,7 @@ std::shared_ptr<ArrayBuffer> ArrayBuffer::allocate(size_t size) {
 
 // 2. NativeArrayBuffer
 
-NativeArrayBuffer::NativeArrayBuffer(uint8_t* data, size_t size, DeleteFn&& deleteFunc)
+NativeArrayBuffer::NativeArrayBuffer(uint8_t* NON_NULL data, size_t size, DeleteFn&& deleteFunc)
     : ArrayBuffer(), _data(data), _size(size), _deleteFunc(std::move(deleteFunc)) {}
 
 NativeArrayBuffer::~NativeArrayBuffer() {
@@ -51,7 +52,7 @@ NativeArrayBuffer::~NativeArrayBuffer() {
   }
 }
 
-uint8_t* NativeArrayBuffer::data() {
+uint8_t* NON_NULL NativeArrayBuffer::data() {
   return _data;
 }
 
@@ -70,7 +71,7 @@ JSArrayBuffer::JSArrayBuffer(jsi::Runtime& runtime, BorrowingReference<jsi::Arra
 
 JSArrayBuffer::~JSArrayBuffer() {}
 
-uint8_t* JSArrayBuffer::data() {
+uint8_t* NULLABLE JSArrayBuffer::data() {
   if (_initialThreadId != std::this_thread::get_id()) [[unlikely]] {
     throw std::runtime_error("`data()` can only be accessed synchronously on the JS Thread! "
                              "If you want to access it elsewhere, copy it first.");
