@@ -159,7 +159,7 @@ export function HybridObjectTestsScreen() {
 
   const runAllTests = () => {
     gc()
-    for(const t of tests) {
+    for (const t of tests) {
       runTest(t)
     }
     gc()
@@ -194,11 +194,19 @@ export function HybridObjectTestsScreen() {
       </ScrollView>
 
       <View style={[styles.bottomView, { backgroundColor: colors.background }]}>
-        <Text style={styles.resultText} numberOfLines={2} testID="hybrid-object-tests-screen-status-text">
+        <Text
+          style={styles.resultText}
+          numberOfLines={2}
+          testID="hybrid-object-tests-screen-status-text"
+        >
           {status}
         </Text>
         <View style={styles.flex} />
-        <Button title="Run all tests" onPress={runAllTests} testID="hybrid-object-tests-screen-run-all-tests-button" />
+        <Button
+          title="Run all tests"
+          onPress={runAllTests}
+          testID="hybrid-object-tests-screen-run-all-tests-button"
+        />
       </View>
     </View>
   )

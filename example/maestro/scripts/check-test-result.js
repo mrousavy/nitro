@@ -1,3 +1,4 @@
+/* eslint-disable */
 /*
   This script is invoked by Maestro's runScript step right after copyTextFrom.
   Maestro exports the last copied text as the environment variable maestro.copiedText.

@@ -4,7 +4,7 @@ import { HybridObjectTestsScreen } from './screens/HybridObjectTestsScreen'
 import { NavigationContainer } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { useColors } from './useColors'
-import { Image, Text, View } from 'react-native'
+import { Image, View } from 'react-native'
 import { BenchmarksScreen } from './screens/BenchmarksScreen'
 import { ViewScreen } from './screens/ViewScreen'
 import { EvalScreen } from './screens/EvalScreen'
@@ -39,11 +39,11 @@ export default function App() {
             tabBarIcon: ({ size, focused }) => (
               <View testID="tests-screen-icon">
                 <Image
-                testID="tests-screen-icon"
-                source={dna}
-                tintColor={focused ? undefined : 'grey'}
-                style={{ width: size * 1.2, height: size * 1.2 }}
-              />
+                  testID="tests-screen-icon"
+                  source={dna}
+                  tintColor={focused ? undefined : 'grey'}
+                  style={{ width: size * 1.2, height: size * 1.2 }}
+                />
               </View>
             ),
           }}
@@ -51,16 +51,15 @@ export default function App() {
         <Tabs.Screen
           name="Benchmarks"
           component={BenchmarksScreen}
-
           options={{
             tabBarLabel: 'Benchmarks',
             tabBarIcon: ({ size, focused }) => (
               <View testID="benchmarks-screen-icon">
-              <Image
-                source={rocket}
-                tintColor={focused ? undefined : 'grey'}
-                style={{ width: size * 1.4, height: size * 1.4 }}
-              />
+                <Image
+                  source={rocket}
+                  tintColor={focused ? undefined : 'grey'}
+                  style={{ width: size * 1.4, height: size * 1.4 }}
+                />
               </View>
             ),
           }}
@@ -73,13 +72,12 @@ export default function App() {
             tabBarIcon: ({ size, focused }) => (
               <View testID="view-screen-icon">
                 <Image
-                testID="view-screen-icon"
-                source={map}
-                tintColor={focused ? undefined : 'grey'}
-                style={{ width: size, height: size }}
-              />
+                  testID="view-screen-icon"
+                  source={map}
+                  tintColor={focused ? undefined : 'grey'}
+                  style={{ width: size, height: size }}
+                />
               </View>
-              
             ),
           }}
         />
@@ -92,13 +90,10 @@ export default function App() {
               <View testID="eval-screen-icon">
                 <Image
                   source={terminal}
-                  
                   tintColor={focused ? undefined : 'grey'}
                   style={{ width: size, height: size }}
                 />
-              
               </View>
-              
             ),
           }}
         />
