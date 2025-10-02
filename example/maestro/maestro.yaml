@@ -4,6 +4,6 @@ appId:  com.mrousavy.nitro.example
 - tapOn:
     text: "Wait" # Sometimes Emulator doesnt responsd. We press wait and not kill the app
     optional: true
-- runFlow: ./EvalTest.yaml
 - runFlow: ./HybridObjectsTest.yaml
 - runFlow: ./ViewsTest.yaml
+- runFlow: ./EvalTest.yaml
