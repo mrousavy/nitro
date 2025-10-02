@@ -49,7 +49,7 @@ async function main() {
 
 
     const MAESTRO_PATH = path.join(process.env.HOME, '.maestro', 'bin', 'maestro')
-	const command = `${MAESTRO_PATH} test   maestro/maestro.yaml`
+	const command = `MAESTRO_DRIVER_STARTUP_TIMEOUT=1500000 ${MAESTRO_PATH} test maestro/maestro.yaml --format junit`
 
 
 	const recordingArgs =`simctl io booted recordVideo maestro.mov`.split(
