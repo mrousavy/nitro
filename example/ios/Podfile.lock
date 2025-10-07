@@ -1927,6 +1927,36 @@ PODS:
     - Yoga
   - react-native-segmented-control (2.5.7):
     - React-Core
+  - react-native-skia (2.3.0):
+    - boost
+    - DoubleConversion
+    - fast_float
+    - fmt
+    - glog
+    - hermes-engine
+    - RCT-Folly
+    - RCT-Folly/Fabric
+    - RCTRequired
+    - RCTTypeSafety
+    - React
+    - React-callinvoker
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-jsi
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-renderercss
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - SocketRocket
+    - Yoga
   - React-NativeModulesApple (0.81.1):
     - boost
     - DoubleConversion
@@ -2541,6 +2571,7 @@ DEPENDENCIES:
   - React-microtasksnativemodule (from `../../node_modules/react-native/ReactCommon/react/nativemodule/microtasks`)
   - react-native-safe-area-context (from `../../node_modules/react-native-safe-area-context`)
   - "react-native-segmented-control (from `../../node_modules/@react-native-segmented-control/segmented-control`)"
+  - "react-native-skia (from `../../node_modules/@shopify/react-native-skia`)"
   - React-NativeModulesApple (from `../../node_modules/react-native/ReactCommon/react/nativemodule/core/platform/ios`)
   - React-oscompat (from `../../node_modules/react-native/ReactCommon/oscompat`)
   - React-perflogger (from `../../node_modules/react-native/ReactCommon/reactperflogger`)
@@ -2671,6 +2702,8 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/react-native-safe-area-context"
   react-native-segmented-control:
     :path: "../../node_modules/@react-native-segmented-control/segmented-control"
+  react-native-skia:
+    :path: "../../node_modules/@shopify/react-native-skia"
   React-NativeModulesApple:
     :path: "../../node_modules/react-native/ReactCommon/react/nativemodule/core/platform/ios"
   React-oscompat:
@@ -2782,6 +2815,7 @@ SPEC CHECKSUMS:
   React-microtasksnativemodule: b0fb3f97372df39bda3e657536039f1af227cc29
   react-native-safe-area-context: 2249e17382bd5a97cbccaa89e22af8756188c0fb
   react-native-segmented-control: 44d14c6899ee12de3384517f4fa1cf4a66ae105c
+  react-native-skia: 2f1d7c2aa4005fb2c94ea0a0c2723fcf17e96ab9
   React-NativeModulesApple: 9ec9240159974c94886ebbe4caec18e3395f6aef
   React-oscompat: b12c633e9c00f1f99467b1e0e0b8038895dae436
   React-perflogger: ccf4fd2664b00818645e588623c7531a8b32d114
@@ -2814,7 +2848,7 @@ SPEC CHECKSUMS:
   ReactCommon: e897f9a1b4afab370cfefaaf5fb3c80371bc3937
   RNScreens: c12236cebe3a06dbf879a6258432dc6657f3eabf
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
-  Yoga: fa23995c18b65978347b096d0836f4f5093df545
+  Yoga: 11c9686a21e2cd82a094a723649d9f4507200fb0
 
 PODFILE CHECKSUM: 205a5dcc178bd52bc8f2d549f38ecbb697373aaf
 
