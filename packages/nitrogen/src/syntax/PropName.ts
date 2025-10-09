@@ -1,4 +1,4 @@
-import type { Symbol } from 'ts-morph'
+import { Node, type PropertyName } from 'ts-morph'
 
 export class PropName {
   readonly name: string
@@ -50,7 +50,41 @@ export class PropName {
   }
 }
 
-export function symbolToPropName(symbol: Symbol): PropName {
-  const type = symbol.getDeclaredType()
-  return new PropName(symbol.getName())
+/**
+ * If the given ts-morph {@linkcode PropertyName} is a well-known Symbol property,
+ * this returns the name of the well-known symbol.
+ *
+ * In all other cases (plain string keys, other type keys, ...), this returns `undefined`.
+ *
+ * @example
+ * `[Symbol.dispose]` -> `"dispose"`
+ * `"whatever"`       -> `undefined`
+ */
+function getWellKnownSymbolName(
+  propertyName: PropertyName
+): string | undefined {
+  if (Node.isComputedPropertyName(propertyName)) {
+    // It's a computed property (`[...]`) instead of a plain string property (`"..."`)
+    const expression = propertyName.getExpression()
+    if (Node.isPropertyAccessExpression(expression)) {
+      // It's a property access - so `[X.Y]`. Let's see if `X` === `Symbol`...
+      const leftHandSide = expression.getExpression().getText()
+      if (leftHandSide === 'Symbol') {
+        // It's an access on `[Symbol.Y]` - where `Y` is the well-known Symbol!
+        const rightHandSide = expression.getName()
+        return rightHandSide
+      }
+    }
+  }
+  return undefined
+}
+
+export function propertyNameToPropName(propertyName: PropertyName): PropName {
+  const wellKnownSymbolName = getWellKnownSymbolName(propertyName)
+  if (wellKnownSymbolName != null) {
+    // It's a well known Symbol! e.g. `[Symbol.dispose]`.
+    return new PropName(wellKnownSymbolName, true)
+  }
+  // It's a plain string key
+  return new PropName(propertyName.getText())
 }
