@@ -119,7 +119,7 @@ public:
       throw std::runtime_error("Cannot add Hybrid Property Getter \"" + name.toString() + "\" - a method with that name already exists!");
     }
 
-    _getters.emplace(name, HybridFunction::createHybridFunction(name, method, FunctionKind::GETTER));
+    _getters.emplace(name, HybridFunction::createHybridFunction(name.toString(), method, FunctionKind::GETTER));
   }
 
   /**
@@ -138,7 +138,7 @@ public:
       throw std::runtime_error("Cannot add Hybrid Property Setter \"" + name.toString() + "\" - a method with that name already exists!");
     }
 
-    _setters.emplace(name, HybridFunction::createHybridFunction(name, method, FunctionKind::SETTER));
+    _setters.emplace(name, HybridFunction::createHybridFunction(name.toString(), method, FunctionKind::SETTER));
   }
 
   /**
@@ -157,7 +157,7 @@ public:
       throw std::runtime_error("Cannot add Hybrid Method \"" + name.toString() + "\" - a method with that name already exists!");
     }
 
-    _methods.emplace(name, HybridFunction::createHybridFunction(name, method, FunctionKind::METHOD));
+    _methods.emplace(name, HybridFunction::createHybridFunction(name.toString(), method, FunctionKind::METHOD));
   }
 
   /**
@@ -176,7 +176,7 @@ public:
       throw std::runtime_error("Cannot add Hybrid Method \"" + name.toString() + "\" - a method with that name already exists!");
     }
 
-    _methods.emplace(name, HybridFunction::createRawHybridFunction(name, expectedArgumentsCount, method));
+    _methods.emplace(name, HybridFunction::createRawHybridFunction(name.toString(), expectedArgumentsCount, method));
   }
 };
 

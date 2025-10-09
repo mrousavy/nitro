@@ -9,6 +9,7 @@
 #include "NitroDefines.hpp"
 #include "NitroLogger.hpp"
 #include "NitroTypeInfo.hpp"
+#include "PropName.hpp"
 
 namespace margelo::nitro {
 
@@ -46,7 +47,7 @@ jsi::Value HybridObjectPrototype::createPrototype(jsi::Runtime& runtime, const s
 
   // 4. Add all Hybrid Methods to it
   for (const auto& method : prototype->getMethods()) {
-    object.setProperty(runtime, method.first.c_str(), method.second.toJSFunction(runtime));
+    object.setProperty(runtime, method.first.toJSPropNameID(runtime), method.second.toJSFunction(runtime));
   }
 
   // 5. Add all properties (getter + setter) to it using defineProperty
@@ -62,10 +63,10 @@ jsi::Value HybridObjectPrototype::createPrototype(jsi::Runtime& runtime, const s
       property.setProperty(runtime, "set", setter->second.toJSFunction(runtime));
     }
 
-    property.setProperty(runtime, "name", jsi::String::createFromUtf8(runtime, getter.first.c_str()));
+    property.setProperty(runtime, "name", jsi::String::createFromUtf8(runtime, getter.first.toString()));
     objectDefineProperty.call(runtime,
                               /* obj */ object,
-                              /* propName */ jsi::String::createFromUtf8(runtime, getter.first.c_str()),
+                              /* propName */ getter.first.toJS(runtime),
                               /* descriptorObj */ property);
   }
 
