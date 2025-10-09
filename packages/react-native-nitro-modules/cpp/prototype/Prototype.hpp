@@ -8,6 +8,7 @@
 #pragma once
 
 #include "HybridFunction.hpp"
+#include "PropName.hpp"
 #include <memory>
 #include <string>
 #include <typeindex>
@@ -40,9 +41,9 @@ struct Prototype final {
 private:
   NativeInstanceId _instanceTypeId;
   std::shared_ptr<Prototype> _base = nullptr;
-  std::unordered_map<std::string, HybridFunction> _methods;
-  std::unordered_map<std::string, HybridFunction> _getters;
-  std::unordered_map<std::string, HybridFunction> _setters;
+  std::unordered_map<PropName, HybridFunction> _methods;
+  std::unordered_map<PropName, HybridFunction> _getters;
+  std::unordered_map<PropName, HybridFunction> _setters;
 
 private:
   Prototype(const NativeInstanceId& typeId, const std::shared_ptr<Prototype>& base) : _instanceTypeId(typeId), _base(base) {}
@@ -91,13 +92,13 @@ public:
   inline const NativeInstanceId& getNativeInstanceId() const noexcept {
     return _instanceTypeId;
   }
-  inline const std::unordered_map<std::string, HybridFunction>& getMethods() const noexcept {
+  inline const std::unordered_map<PropName, HybridFunction>& getMethods() const noexcept {
     return _methods;
   }
-  inline const std::unordered_map<std::string, HybridFunction>& getGetters() const noexcept {
+  inline const std::unordered_map<PropName, HybridFunction>& getGetters() const noexcept {
     return _getters;
   }
-  inline const std::unordered_map<std::string, HybridFunction>& getSetters() const noexcept {
+  inline const std::unordered_map<PropName, HybridFunction>& getSetters() const noexcept {
     return _setters;
   }
 
@@ -110,12 +111,12 @@ public:
    * ```
    */
   template <typename Derived, typename ReturnType>
-  inline void registerHybridGetter(std::string name, InstanceMethod<Derived, ReturnType> method) {
+  inline void registerHybridGetter(PropName name, InstanceMethod<Derived, ReturnType> method) {
     if (_getters.contains(name)) [[unlikely]] {
-      throw std::runtime_error("Cannot add Hybrid Property Getter \"" + name + "\" - a getter with that name already exists!");
+      throw std::runtime_error("Cannot add Hybrid Property Getter \"" + name.toString() + "\" - a getter with that name already exists!");
     }
     if (_methods.contains(name)) [[unlikely]] {
-      throw std::runtime_error("Cannot add Hybrid Property Getter \"" + name + "\" - a method with that name already exists!");
+      throw std::runtime_error("Cannot add Hybrid Property Getter \"" + name.toString() + "\" - a method with that name already exists!");
     }
 
     _getters.emplace(name, HybridFunction::createHybridFunction(name, method, FunctionKind::GETTER));
@@ -129,12 +130,12 @@ public:
    * ```
    */
   template <typename Derived, typename ValueType>
-  inline void registerHybridSetter(std::string name, InstanceMethod<Derived, void, ValueType> method) {
+  inline void registerHybridSetter(PropName name, InstanceMethod<Derived, void, ValueType> method) {
     if (_setters.contains(name)) [[unlikely]] {
-      throw std::runtime_error("Cannot add Hybrid Property Setter \"" + name + "\" - a setter with that name already exists!");
+      throw std::runtime_error("Cannot add Hybrid Property Setter \"" + name.toString() + "\" - a setter with that name already exists!");
     }
     if (_methods.contains(name)) [[unlikely]] {
-      throw std::runtime_error("Cannot add Hybrid Property Setter \"" + name + "\" - a method with that name already exists!");
+      throw std::runtime_error("Cannot add Hybrid Property Setter \"" + name.toString() + "\" - a method with that name already exists!");
     }
 
     _setters.emplace(name, HybridFunction::createHybridFunction(name, method, FunctionKind::SETTER));
@@ -148,12 +149,12 @@ public:
    * ```
    */
   template <typename Derived, typename ReturnType, typename... Args>
-  inline void registerHybridMethod(std::string name, InstanceMethod<Derived, ReturnType, Args...> method) {
+  inline void registerHybridMethod(PropName name, InstanceMethod<Derived, ReturnType, Args...> method) {
     if (_getters.contains(name) || _setters.contains(name)) [[unlikely]] {
-      throw std::runtime_error("Cannot add Hybrid Method \"" + name + "\" - a property with that name already exists!");
+      throw std::runtime_error("Cannot add Hybrid Method \"" + name.toString() + "\" - a property with that name already exists!");
     }
     if (_methods.contains(name)) [[unlikely]] {
-      throw std::runtime_error("Cannot add Hybrid Method \"" + name + "\" - a method with that name already exists!");
+      throw std::runtime_error("Cannot add Hybrid Method \"" + name.toString() + "\" - a method with that name already exists!");
     }
 
     _methods.emplace(name, HybridFunction::createHybridFunction(name, method, FunctionKind::METHOD));
@@ -167,12 +168,12 @@ public:
    * ```
    */
   template <typename Derived>
-  inline void registerRawHybridMethod(std::string name, size_t expectedArgumentsCount, RawInstanceMethod<Derived> method) {
+  inline void registerRawHybridMethod(PropName name, size_t expectedArgumentsCount, RawInstanceMethod<Derived> method) {
     if (_getters.contains(name) || _setters.contains(name)) [[unlikely]] {
-      throw std::runtime_error("Cannot add Hybrid Method \"" + name + "\" - a property with that name already exists!");
+      throw std::runtime_error("Cannot add Hybrid Method \"" + name.toString() + "\" - a property with that name already exists!");
     }
     if (_methods.contains(name)) [[unlikely]] {
-      throw std::runtime_error("Cannot add Hybrid Method \"" + name + "\" - a method with that name already exists!");
+      throw std::runtime_error("Cannot add Hybrid Method \"" + name.toString() + "\" - a method with that name already exists!");
     }
 
     _methods.emplace(name, HybridFunction::createRawHybridFunction(name, expectedArgumentsCount, method));
