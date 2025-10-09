@@ -49,7 +49,7 @@ void HybridObject::loadHybridMethods() {
     prototype.registerHybridGetter("name", &HybridObject::getName);
     prototype.registerHybridMethod("equals", &HybridObject::equals);
     prototype.registerHybridMethod("toString", &HybridObject::toString);
-    prototype.registerRawHybridMethod("dispose", 0, &HybridObject::disposeRaw);
+    prototype.registerRawHybridMethod(PropName::symbol("dispose"), 0, &HybridObject::disposeRaw);
   });
 }
 
