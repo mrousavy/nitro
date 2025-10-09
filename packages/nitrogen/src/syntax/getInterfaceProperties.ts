@@ -1,4 +1,4 @@
-import type { ts, Type } from 'ts-morph'
+import { ts, Type } from 'ts-morph'
 import type { NamedType } from './types/Type.js'
 import { createNamedType } from './createType.js'
 import type { Language } from '../getPlatformSpecs.js'
@@ -9,7 +9,21 @@ export function getInterfaceProperties(
 ): NamedType[] {
   return interfaceType.getProperties().map((prop) => {
     const declaration = prop.getValueDeclarationOrThrow()
-    const propType = prop.getTypeAtLocation(declaration)
+
+    let propType = prop.getTypeAtLocation(declaration)
+
+    if (
+      prop.isOptional() &&
+      (declaration.isKind(ts.SyntaxKind.PropertySignature) ||
+      declaration.isKind(ts.SyntaxKind.PropertyDeclaration))
+    ) {
+      const typeNode = declaration.getTypeNode()
+      
+      if (typeNode != null) {
+        propType = typeNode.getType()
+      }
+    }
+
     const refType = createNamedType(
       language,
       prop.getName(),

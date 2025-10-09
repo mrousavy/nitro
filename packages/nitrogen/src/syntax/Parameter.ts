@@ -23,7 +23,17 @@ export class Parameter implements CodeNode {
       // constructor(...) #2
       const [param, language] = args
       const name = param.getSymbolOrThrow().getEscapedName()
-      const type = param.getType()
+
+      let type = param.getType()
+
+      if (param.hasQuestionToken()) {
+        const typeNode = param.getTypeNode()
+        
+        if (typeNode != null) {
+          type = typeNode.getType()
+        } 
+      }
+
       const isOptional =
         param.hasQuestionToken() || param.isOptional() || type.isNullable()
       this.type = createNamedType(language, name, type, isOptional)
