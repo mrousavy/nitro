@@ -32,6 +32,8 @@ namespace margelo::nitro::test { struct JsStyleStruct; }
 namespace margelo::nitro::test { struct MapWrapper; }
 // Forward declaration of `OldEnum` to properly resolve imports.
 namespace margelo::nitro::test { enum class OldEnum; }
+// Forward declaration of `OptionalVariantWrapper` to properly resolve imports.
+namespace margelo::nitro::test { struct OptionalVariantWrapper; }
 // Forward declaration of `OptionalWrapper` to properly resolve imports.
 namespace margelo::nitro::test { struct OptionalWrapper; }
 // Forward declaration of `Person` to properly resolve imports.
@@ -55,6 +57,7 @@ namespace margelo::nitro::test { struct WrappedJsStruct; }
 #include "JsStyleStruct.hpp"
 #include "MapWrapper.hpp"
 #include "OldEnum.hpp"
+#include "OptionalVariantWrapper.hpp"
 #include "OptionalWrapper.hpp"
 #include "Person.hpp"
 #include "Powertrain.hpp"

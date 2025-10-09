@@ -38,6 +38,8 @@ namespace margelo::nitro::test { struct JsStyleStruct; }
 namespace margelo::nitro::test { struct WrappedJsStruct; }
 // Forward declaration of `OptionalWrapper` to properly resolve imports.
 namespace margelo::nitro::test { struct OptionalWrapper; }
+// Forward declaration of `OptionalVariantWrapper` to properly resolve imports.
+namespace margelo::nitro::test { struct OptionalVariantWrapper; }
 // Forward declaration of `WeirdNumbersEnum` to properly resolve imports.
 namespace margelo::nitro::test { enum class WeirdNumbersEnum; }
 // Forward declaration of `HybridBaseSpec` to properly resolve imports.
@@ -72,6 +74,7 @@ namespace margelo::nitro::test::external { class HybridSomeExternalObjectSpec; }
 #include "JsStyleStruct.hpp"
 #include "WrappedJsStruct.hpp"
 #include "OptionalWrapper.hpp"
+#include "OptionalVariantWrapper.hpp"
 #include "WeirdNumbersEnum.hpp"
 #include "HybridBaseSpec.hpp"
 #include "HybridChildSpec.hpp"
@@ -562,6 +565,14 @@ namespace margelo::nitro::test {
       auto __value = std::move(__result.value());
       return __value;
     }
+    inline OptionalVariantWrapper bounceOptionalWrapperWithVariant(const OptionalVariantWrapper& wrapper) override {
+      auto __result = _swiftPart.bounceOptionalWrapperWithVariant(std::forward<decltype(wrapper)>(wrapper));
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
     inline std::shared_ptr<ArrayBuffer> createArrayBuffer() override {
       auto __result = _swiftPart.createArrayBuffer();
       if (__result.hasError()) [[unlikely]] {
@@ -658,6 +669,14 @@ namespace margelo::nitro::test {
     }
     inline std::variant<OptionalWrapper, std::shared_ptr<HybridBaseSpec>> passAllEmptyObjectVariant(const std::variant<OptionalWrapper, std::shared_ptr<HybridBaseSpec>>& variant) override {
       auto __result = _swiftPart.passAllEmptyObjectVariant(variant);
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline std::variant<std::string, Car> optionalNamedVariant(const std::optional<std::variant<std::string, Car>>& variant) override {
+      auto __result = _swiftPart.optionalNamedVariant(variant);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }

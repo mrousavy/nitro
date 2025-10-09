@@ -16,6 +16,10 @@ export type TestTuple = [number, string, boolean]
 // Variants can have aliases/names
 export type NamedVariant = string | Car
 
+interface OptionalVariantWrapper {
+  variant?: NamedVariant;
+}
+
 // A discriminating string union becomes an `enum` in C++.
 // This one is string-backed.
 export type Powertrain = 'electric' | 'gas' | 'hybrid'
@@ -181,6 +185,7 @@ interface SharedTestObjectProps {
   jsStyleObjectAsParameters(params: JsStyleStruct): void
   bounceWrappedJsStyleStruct(value: WrappedJsStruct): WrappedJsStruct
   bounceOptionalWrapper(wrapper: OptionalWrapper): OptionalWrapper
+  bounceOptionalWrapperWithVariant(wrapper: OptionalVariantWrapper): OptionalVariantWrapper
 
   // ArrayBuffers
   createArrayBuffer(): ArrayBuffer
@@ -204,6 +209,7 @@ interface SharedTestObjectProps {
   passAllEmptyObjectVariant(
     variant: OptionalWrapper | Base
   ): OptionalWrapper | Base
+  optionalNamedVariant(variant?: NamedVariant): NamedVariant
 
   // Inheritance
   createChild(): Child

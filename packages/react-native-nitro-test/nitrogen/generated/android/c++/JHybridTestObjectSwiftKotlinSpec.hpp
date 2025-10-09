@@ -125,6 +125,7 @@ namespace margelo::nitro::test {
     void jsStyleObjectAsParameters(const JsStyleStruct& params) override;
     WrappedJsStruct bounceWrappedJsStyleStruct(const WrappedJsStruct& value) override;
     OptionalWrapper bounceOptionalWrapper(const OptionalWrapper& wrapper) override;
+    OptionalVariantWrapper bounceOptionalWrapperWithVariant(const OptionalVariantWrapper& wrapper) override;
     std::shared_ptr<ArrayBuffer> createArrayBuffer() override;
     std::shared_ptr<ArrayBuffer> createArrayBufferFromNativeBuffer(bool copy) override;
     std::shared_ptr<ArrayBuffer> copyBuffer(const std::shared_ptr<ArrayBuffer>& buffer) override;
@@ -138,6 +139,7 @@ namespace margelo::nitro::test {
     std::variant<Car, Person> getVariantObjects(const std::variant<Car, Person>& variant) override;
     std::variant<std::string, Car> passNamedVariant(const std::variant<std::string, Car>& variant) override;
     std::variant<OptionalWrapper, std::shared_ptr<HybridBaseSpec>> passAllEmptyObjectVariant(const std::variant<OptionalWrapper, std::shared_ptr<HybridBaseSpec>>& variant) override;
+    std::variant<std::string, Car> optionalNamedVariant(const std::optional<std::variant<std::string, Car>>& variant) override;
     std::shared_ptr<HybridChildSpec> createChild() override;
     std::shared_ptr<HybridBaseSpec> createBase() override;
     std::shared_ptr<HybridBaseSpec> createBaseActualChild() override;

@@ -87,6 +87,7 @@ namespace margelo::nitro::test {
       prototype.registerHybridMethod("jsStyleObjectAsParameters", &HybridTestObjectSwiftKotlinSpec::jsStyleObjectAsParameters);
       prototype.registerHybridMethod("bounceWrappedJsStyleStruct", &HybridTestObjectSwiftKotlinSpec::bounceWrappedJsStyleStruct);
       prototype.registerHybridMethod("bounceOptionalWrapper", &HybridTestObjectSwiftKotlinSpec::bounceOptionalWrapper);
+      prototype.registerHybridMethod("bounceOptionalWrapperWithVariant", &HybridTestObjectSwiftKotlinSpec::bounceOptionalWrapperWithVariant);
       prototype.registerHybridMethod("createArrayBuffer", &HybridTestObjectSwiftKotlinSpec::createArrayBuffer);
       prototype.registerHybridMethod("createArrayBufferFromNativeBuffer", &HybridTestObjectSwiftKotlinSpec::createArrayBufferFromNativeBuffer);
       prototype.registerHybridMethod("copyBuffer", &HybridTestObjectSwiftKotlinSpec::copyBuffer);
@@ -100,6 +101,7 @@ namespace margelo::nitro::test {
       prototype.registerHybridMethod("getVariantObjects", &HybridTestObjectSwiftKotlinSpec::getVariantObjects);
       prototype.registerHybridMethod("passNamedVariant", &HybridTestObjectSwiftKotlinSpec::passNamedVariant);
       prototype.registerHybridMethod("passAllEmptyObjectVariant", &HybridTestObjectSwiftKotlinSpec::passAllEmptyObjectVariant);
+      prototype.registerHybridMethod("optionalNamedVariant", &HybridTestObjectSwiftKotlinSpec::optionalNamedVariant);
       prototype.registerHybridMethod("createChild", &HybridTestObjectSwiftKotlinSpec::createChild);
       prototype.registerHybridMethod("createBase", &HybridTestObjectSwiftKotlinSpec::createBase);
       prototype.registerHybridMethod("createBaseActualChild", &HybridTestObjectSwiftKotlinSpec::createBaseActualChild);

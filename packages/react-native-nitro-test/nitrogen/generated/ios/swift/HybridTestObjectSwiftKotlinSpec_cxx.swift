@@ -1375,6 +1375,18 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
+  public final func bounceOptionalWrapperWithVariant(wrapper: OptionalVariantWrapper) -> bridge.Result_OptionalVariantWrapper_ {
+    do {
+      let __result = try self.__implementation.bounceOptionalWrapperWithVariant(wrapper: wrapper)
+      let __resultCpp = __result
+      return bridge.create_Result_OptionalVariantWrapper_(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_OptionalVariantWrapper_(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
   public final func createArrayBuffer() -> bridge.Result_std__shared_ptr_ArrayBuffer__ {
     do {
       let __result = try self.__implementation.createArrayBuffer()
@@ -1667,6 +1679,44 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
       return bridge.create_Result_std__variant_OptionalWrapper__std__shared_ptr_HybridBaseSpec___(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
+  public final func optionalNamedVariant(variant: bridge.std__optional_std__variant_std__string__Car__) -> bridge.Result_std__variant_std__string__Car__ {
+    do {
+      let __result = try self.__implementation.optionalNamedVariant(variant: { () -> NamedVariant? in
+        if bridge.has_value_std__optional_std__variant_std__string__Car__(variant) {
+          let __unwrapped = bridge.get_std__optional_std__variant_std__string__Car__(variant)
+          return { () -> NamedVariant in
+            let __variant = bridge.std__variant_std__string__Car_(__unwrapped)
+            switch __variant.index() {
+              case 0:
+                let __actual = __variant.get_0()
+                return .first(String(__actual))
+              case 1:
+                let __actual = __variant.get_1()
+                return .second(__actual)
+              default:
+                fatalError("Variant can never have index \(__variant.index())!")
+            }
+          }()
+        } else {
+          return nil
+        }
+      }())
+      let __resultCpp = { () -> bridge.std__variant_std__string__Car_ in
+        switch __result {
+          case .first(let __value):
+            return bridge.create_std__variant_std__string__Car_(std.string(__value))
+          case .second(let __value):
+            return bridge.create_std__variant_std__string__Car_(__value)
+        }
+      }().variant
+      return bridge.create_Result_std__variant_std__string__Car__(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__variant_std__string__Car__(__exceptionPtr)
     }
   }
   

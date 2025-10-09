@@ -35,6 +35,8 @@ namespace margelo::nitro::test { struct JsStyleStruct; }
 namespace margelo::nitro::test { struct WrappedJsStruct; }
 // Forward declaration of `OptionalWrapper` to properly resolve imports.
 namespace margelo::nitro::test { struct OptionalWrapper; }
+// Forward declaration of `OptionalVariantWrapper` to properly resolve imports.
+namespace margelo::nitro::test { struct OptionalVariantWrapper; }
 // Forward declaration of `WeirdNumbersEnum` to properly resolve imports.
 namespace margelo::nitro::test { enum class WeirdNumbersEnum; }
 // Forward declaration of `HybridBaseSpec` to properly resolve imports.
@@ -69,6 +71,7 @@ namespace margelo::nitro::test::external { class HybridSomeExternalObjectSpec; }
 #include "JsStyleStruct.hpp"
 #include "WrappedJsStruct.hpp"
 #include "OptionalWrapper.hpp"
+#include "OptionalVariantWrapper.hpp"
 #include "WeirdNumbersEnum.hpp"
 #include "HybridBaseSpec.hpp"
 #include "HybridChildSpec.hpp"
@@ -184,6 +187,7 @@ namespace margelo::nitro::test {
       virtual void jsStyleObjectAsParameters(const JsStyleStruct& params) = 0;
       virtual WrappedJsStruct bounceWrappedJsStyleStruct(const WrappedJsStruct& value) = 0;
       virtual OptionalWrapper bounceOptionalWrapper(const OptionalWrapper& wrapper) = 0;
+      virtual OptionalVariantWrapper bounceOptionalWrapperWithVariant(const OptionalVariantWrapper& wrapper) = 0;
       virtual std::shared_ptr<ArrayBuffer> createArrayBuffer() = 0;
       virtual std::shared_ptr<ArrayBuffer> createArrayBufferFromNativeBuffer(bool copy) = 0;
       virtual std::shared_ptr<ArrayBuffer> copyBuffer(const std::shared_ptr<ArrayBuffer>& buffer) = 0;
@@ -197,6 +201,7 @@ namespace margelo::nitro::test {
       virtual std::variant<Car, Person> getVariantObjects(const std::variant<Car, Person>& variant) = 0;
       virtual std::variant<std::string, Car> passNamedVariant(const std::variant<std::string, Car>& variant) = 0;
       virtual std::variant<OptionalWrapper, std::shared_ptr<HybridBaseSpec>> passAllEmptyObjectVariant(const std::variant<OptionalWrapper, std::shared_ptr<HybridBaseSpec>>& variant) = 0;
+      virtual std::variant<std::string, Car> optionalNamedVariant(const std::optional<std::variant<std::string, Car>>& variant) = 0;
       virtual std::shared_ptr<HybridChildSpec> createChild() = 0;
       virtual std::shared_ptr<HybridBaseSpec> createBase() = 0;
       virtual std::shared_ptr<HybridBaseSpec> createBaseActualChild() = 0;

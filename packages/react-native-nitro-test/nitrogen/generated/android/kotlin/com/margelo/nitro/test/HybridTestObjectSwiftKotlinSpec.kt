@@ -365,6 +365,10 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
+  abstract fun bounceOptionalWrapperWithVariant(wrapper: OptionalVariantWrapper): OptionalVariantWrapper
+  
+  @DoNotStrip
+  @Keep
   abstract fun createArrayBuffer(): ArrayBuffer
   
   @DoNotStrip
@@ -414,6 +418,10 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   @DoNotStrip
   @Keep
   abstract fun passAllEmptyObjectVariant(variant: Variant_OptionalWrapper_HybridBaseSpec): Variant_OptionalWrapper_HybridBaseSpec
+  
+  @DoNotStrip
+  @Keep
+  abstract fun optionalNamedVariant(variant: NamedVariant?): NamedVariant
   
   @DoNotStrip
   @Keep
