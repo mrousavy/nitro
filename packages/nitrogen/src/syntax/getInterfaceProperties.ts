@@ -1,4 +1,4 @@
-import { ts, Type } from 'ts-morph'
+import { ts, type Type } from 'ts-morph'
 import type { NamedType } from './types/Type.js'
 import { createNamedType } from './createType.js'
 import type { Language } from '../getPlatformSpecs.js'
