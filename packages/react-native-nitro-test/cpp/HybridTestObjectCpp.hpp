@@ -31,6 +31,7 @@ private:
   std::optional<Powertrain> _optionalEnum;
   std::optional<OldEnum> _optionalOldEnum;
   std::optional<std::function<void(double)>> _optionalCallback;
+  std::vector<RNLatLng> _coordinates;
 
 private:
   static inline uint64_t calculateFibonacci(int count) noexcept {
@@ -74,6 +75,9 @@ public:
   void setOptionalOldEnum(std::optional<OldEnum> optionalOldEnum) override;
   std::optional<std::function<void(double)>> getOptionalCallback() override;
   void setOptionalCallback(const std::optional<std::function<void(double)>>& callback) override;
+  
+  std::vector<RNLatLng> getCoordinates() override;
+  void setCoordinates(const std::vector<RNLatLng>& coordinates) override;
 
 public:
   // Methods

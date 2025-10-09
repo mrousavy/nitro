@@ -360,6 +360,23 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
     }
   }
   
+  public final var coordinates: bridge.std__vector_RNLatLng_ {
+    @inline(__always)
+    get {
+      return self.__implementation.coordinates.withUnsafeBufferPointer { __pointer -> bridge.std__vector_RNLatLng_ in
+        return bridge.copy_std__vector_RNLatLng_(__pointer.baseAddress!, self.__implementation.coordinates.count)
+      }
+    }
+    @inline(__always)
+    set {
+      self.__implementation.coordinates = { () -> [RNLatLng] in
+        let __data = bridge.get_data_std__vector_RNLatLng_(newValue)
+        let __size = newValue.size()
+        return Array(UnsafeBufferPointer(start: __data, count: __size))
+      }()
+    }
+  }
+  
   public final var someVariant: bridge.std__variant_std__string__double_ {
     @inline(__always)
     get {

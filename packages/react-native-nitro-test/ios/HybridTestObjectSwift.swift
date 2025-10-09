@@ -35,6 +35,8 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
   var optionalOldEnum: OldEnum? = nil
 
   var optionalCallback: ((Double) -> Void)? = nil
+  
+  var coordinates: [RNLatLng] = []
 
   var thisObject: any HybridTestObjectSwiftKotlinSpec {
     return self

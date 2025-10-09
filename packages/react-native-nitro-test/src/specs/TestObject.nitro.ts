@@ -55,6 +55,8 @@ export type Person = {
   age: number
 }
 
+type RNLatLng = { latitude: number; longitude: number }
+
 interface JsStyleStruct {
   value: number
   onChanged: (num: number) => void
@@ -96,6 +98,8 @@ interface SharedTestObjectProps {
   optionalEnum?: Powertrain
   optionalOldEnum?: OldEnum
   optionalCallback?: (value: number) => void
+
+  coordinates: RNLatLng[]
 
   // Basic function tests
   simpleFunc(): void

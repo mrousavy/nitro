@@ -34,6 +34,8 @@ namespace margelo::nitro::test { struct OptionalWrapper; }
 namespace margelo::nitro::test { struct Person; }
 // Forward declaration of `Powertrain` to properly resolve imports.
 namespace margelo::nitro::test { enum class Powertrain; }
+// Forward declaration of `RNLatLng` to properly resolve imports.
+namespace margelo::nitro::test { struct RNLatLng; }
 // Forward declaration of `WeirdNumbersEnum` to properly resolve imports.
 namespace margelo::nitro::test { enum class WeirdNumbersEnum; }
 // Forward declaration of `WrappedJsStruct` to properly resolve imports.
@@ -61,6 +63,7 @@ namespace NitroTest { class HybridTestViewSpec_cxx; }
 #include "OptionalWrapper.hpp"
 #include "Person.hpp"
 #include "Powertrain.hpp"
+#include "RNLatLng.hpp"
 #include "WeirdNumbersEnum.hpp"
 #include "WrappedJsStruct.hpp"
 #include <NitroModules/AnyMap.hpp>
@@ -249,6 +252,18 @@ namespace margelo::nitro::test::bridge::swift {
   }
   inline std::function<void(double /* value */)> get_std__optional_std__function_void_double____value______(const std::optional<std::function<void(double /* value */)>>& optional) noexcept {
     return *optional;
+  }
+  
+  // pragma MARK: std::vector<RNLatLng>
+  /**
+   * Specialized version of `std::vector<RNLatLng>`.
+   */
+  using std__vector_RNLatLng_ = std::vector<RNLatLng>;
+  inline std::vector<RNLatLng> copy_std__vector_RNLatLng_(const RNLatLng* CONTIGUOUS_MEMORY NON_NULL data, size_t size) noexcept {
+    return margelo::nitro::FastVectorCopy<RNLatLng>(data, size);
+  }
+  inline const RNLatLng* CONTIGUOUS_MEMORY NON_NULL get_data_std__vector_RNLatLng_(const std::vector<RNLatLng>& vector) noexcept {
+    return vector.data();
   }
   
   // pragma MARK: std::vector<double>

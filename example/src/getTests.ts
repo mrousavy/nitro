@@ -143,10 +143,30 @@ function timeoutedPromise<T>(
   })
 }
 
+type Coord = { latitude: number; longitude: number }
+
+const coords: Coord[] = [
+  { latitude: 345, longitude: 32865 },
+  { latitude: 6, longitude: 21865.325 },
+  { latitude: 643, longitude: 4235 },
+  { latitude: 12894.4231, longitude: 25365 },
+  { latitude: 81274, longitude: 65765 },
+  { latitude: 124.3421, longitude: 7865 },
+]
+
 export function getTests(
   testObject: TestObjectCpp | TestObjectSwiftKotlin
 ): TestRunner[] {
   return [
+    createTest('coordinates bounce works', () =>
+      it(() => {
+        testObject.coordinates = coords
+        return testObject.coordinates
+      })
+        .didNotThrow()
+        .equals(coords)
+    ),
+
     // Basic prototype tests
     createTest('HybridObject.prototype is valid', () =>
       it(() => Object.getPrototypeOf(testObject))

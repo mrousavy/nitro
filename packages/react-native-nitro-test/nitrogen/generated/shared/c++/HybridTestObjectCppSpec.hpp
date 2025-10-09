@@ -19,6 +19,8 @@ namespace margelo::nitro::test { class HybridTestObjectCppSpec; }
 namespace margelo::nitro::test { enum class Powertrain; }
 // Forward declaration of `OldEnum` to properly resolve imports.
 namespace margelo::nitro::test { enum class OldEnum; }
+// Forward declaration of `RNLatLng` to properly resolve imports.
+namespace margelo::nitro::test { struct RNLatLng; }
 // Forward declaration of `Person` to properly resolve imports.
 namespace margelo::nitro::test { struct Person; }
 // Forward declaration of `AnyMap` to properly resolve imports.
@@ -55,6 +57,7 @@ namespace margelo::nitro::test::external { class HybridSomeExternalObjectSpec; }
 #include "Powertrain.hpp"
 #include "OldEnum.hpp"
 #include <functional>
+#include "RNLatLng.hpp"
 #include <variant>
 #include "Person.hpp"
 #include "CustomString.hpp"
@@ -129,6 +132,8 @@ namespace margelo::nitro::test {
       virtual void setOptionalOldEnum(std::optional<OldEnum> optionalOldEnum) = 0;
       virtual std::optional<std::function<void(double /* value */)>> getOptionalCallback() = 0;
       virtual void setOptionalCallback(const std::optional<std::function<void(double /* value */)>>& optionalCallback) = 0;
+      virtual std::vector<RNLatLng> getCoordinates() = 0;
+      virtual void setCoordinates(const std::vector<RNLatLng>& coordinates) = 0;
       virtual std::variant<std::string, double> getSomeVariant() = 0;
       virtual void setSomeVariant(const std::variant<std::string, double>& someVariant) = 0;
 

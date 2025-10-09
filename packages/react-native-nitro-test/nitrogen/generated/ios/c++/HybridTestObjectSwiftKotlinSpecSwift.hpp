@@ -18,6 +18,8 @@ namespace margelo::nitro::test { class HybridTestObjectSwiftKotlinSpec; }
 namespace margelo::nitro::test { enum class Powertrain; }
 // Forward declaration of `OldEnum` to properly resolve imports.
 namespace margelo::nitro::test { enum class OldEnum; }
+// Forward declaration of `RNLatLng` to properly resolve imports.
+namespace margelo::nitro::test { struct RNLatLng; }
 // Forward declaration of `Person` to properly resolve imports.
 namespace margelo::nitro::test { struct Person; }
 // Forward declaration of `AnyMap` to properly resolve imports.
@@ -57,6 +59,7 @@ namespace margelo::nitro::test::external { class HybridSomeExternalObjectSpec; }
 #include "Powertrain.hpp"
 #include "OldEnum.hpp"
 #include <functional>
+#include "RNLatLng.hpp"
 #include <variant>
 #include "Person.hpp"
 #include <NitroModules/AnyMap.hpp>
@@ -199,6 +202,13 @@ namespace margelo::nitro::test {
     }
     inline void setOptionalCallback(const std::optional<std::function<void(double /* value */)>>& optionalCallback) noexcept override {
       _swiftPart.setOptionalCallback(optionalCallback);
+    }
+    inline std::vector<RNLatLng> getCoordinates() noexcept override {
+      auto __result = _swiftPart.getCoordinates();
+      return __result;
+    }
+    inline void setCoordinates(const std::vector<RNLatLng>& coordinates) noexcept override {
+      _swiftPart.setCoordinates(coordinates);
     }
     inline std::variant<std::string, double> getSomeVariant() noexcept override {
       auto __result = _swiftPart.getSomeVariant();

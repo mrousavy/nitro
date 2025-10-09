@@ -13,6 +13,8 @@ namespace margelo::nitro::test { class HybridTestObjectSwiftKotlinSpec; }
 namespace margelo::nitro::test { enum class Powertrain; }
 // Forward declaration of `OldEnum` to properly resolve imports.
 namespace margelo::nitro::test { enum class OldEnum; }
+// Forward declaration of `RNLatLng` to properly resolve imports.
+namespace margelo::nitro::test { struct RNLatLng; }
 // Forward declaration of `Person` to properly resolve imports.
 namespace margelo::nitro::test { struct Person; }
 // Forward declaration of `AnyMap` to properly resolve imports.
@@ -54,6 +56,8 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 #include "JOldEnum.hpp"
 #include <functional>
 #include "JFunc_void_double.hpp"
+#include "RNLatLng.hpp"
+#include "JRNLatLng.hpp"
 #include <variant>
 #include "JVariant_String_Double.hpp"
 #include "Person.hpp"
@@ -270,6 +274,32 @@ namespace margelo::nitro::test {
   void JHybridTestObjectSwiftKotlinSpec::setOptionalCallback(const std::optional<std::function<void(double /* value */)>>& optionalCallback) {
     static const auto method = javaClassStatic()->getMethod<void(jni::alias_ref<JFunc_void_double::javaobject> /* optionalCallback */)>("setOptionalCallback_cxx");
     method(_javaPart, optionalCallback.has_value() ? JFunc_void_double_cxx::fromCpp(optionalCallback.value()) : nullptr);
+  }
+  std::vector<RNLatLng> JHybridTestObjectSwiftKotlinSpec::getCoordinates() {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<jni::JArrayClass<JRNLatLng>>()>("getCoordinates");
+    auto __result = method(_javaPart);
+    return [&]() {
+      size_t __size = __result->size();
+      std::vector<RNLatLng> __vector;
+      __vector.reserve(__size);
+      for (size_t __i = 0; __i < __size; __i++) {
+        auto __element = __result->getElement(__i);
+        __vector.push_back(__element->toCpp());
+      }
+      return __vector;
+    }();
+  }
+  void JHybridTestObjectSwiftKotlinSpec::setCoordinates(const std::vector<RNLatLng>& coordinates) {
+    static const auto method = javaClassStatic()->getMethod<void(jni::alias_ref<jni::JArrayClass<JRNLatLng>> /* coordinates */)>("setCoordinates");
+    method(_javaPart, [&]() {
+      size_t __size = coordinates.size();
+      jni::local_ref<jni::JArrayClass<JRNLatLng>> __array = jni::JArrayClass<JRNLatLng>::newArray(__size);
+      for (size_t __i = 0; __i < __size; __i++) {
+        const auto& __element = coordinates[__i];
+        __array->setElement(__i, *JRNLatLng::fromCpp(__element));
+      }
+      return __array;
+    }());
   }
   std::variant<std::string, double> JHybridTestObjectSwiftKotlinSpec::getSomeVariant() {
     static const auto method = javaClassStatic()->getMethod<jni::local_ref<JVariant_String_Double>()>("getSomeVariant");

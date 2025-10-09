@@ -17,6 +17,15 @@
 
 namespace margelo::nitro::test {
 
+
+std::vector<RNLatLng> HybridTestObjectCpp::getCoordinates() {
+  return _coordinates;
+}
+
+void HybridTestObjectCpp::setCoordinates(const std::vector<RNLatLng>& coordinates) {
+  _coordinates = coordinates;
+}
+
 // Properties
 double HybridTestObjectCpp::getNumberValue() {
   return _number;
