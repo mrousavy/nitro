@@ -16,6 +16,7 @@ import { VoidType } from '../syntax/types/VoidType.js'
 import { HybridObjectType } from '../syntax/types/HybridObjectType.js'
 import { NamedWrappingType } from '../syntax/types/NamedWrappingType.js'
 import { OptionalType } from '../syntax/types/OptionalType.js'
+import { PropName } from '../syntax/PropName.js'
 
 interface ViewComponentNames {
   propsClassName: `${string}Props`
@@ -47,7 +48,8 @@ function getHybridRefProperty(spec: HybridObjectSpec): Property {
   const type = new FunctionType(new VoidType(), [
     new NamedWrappingType('ref', hybrid),
   ])
-  return new Property('hybridRef', new OptionalType(type), false)
+  const propName = new PropName('hybridRef')
+  return new Property(propName, new OptionalType(type), false)
 }
 
 export function createViewComponentShadowNodeFiles(
@@ -73,7 +75,7 @@ export function createViewComponentShadowNodeFiles(
 
   const props = [...spec.properties, getHybridRefProperty(spec)]
   const properties = props.map(
-    (p) => `CachedProp<${p.type.getCode('c++')}> ${escapeCppName(p.name)};`
+    (p) => `CachedProp<${p.type.getCode('c++')}> ${escapeCppName(p.name.name)};`
   )
   const cases = props.map((p) => `case hashString("${p.name}"): return true;`)
   const includes = props
@@ -191,7 +193,7 @@ namespace ${namespace} {
   ]
   const propCopyInitializers = ['react::ViewProps()']
   for (const prop of props) {
-    const name = escapeCppName(prop.name)
+    const name = escapeCppName(prop.name.name)
     const type = prop.type.getCode('c++')
 
     let valueConversion = `value`

@@ -102,19 +102,19 @@ namespace ${cxxNamespace} {
     const setterMethod = property.getSetterName('other')
     // getter
     registrations.push(
-      `prototype.registerHybridGetter("${property.name}", &${name.HybridTSpec}::${getterMethod});`
+      `prototype.registerHybridGetter(${property.name.toCppPropName()}, &${name.HybridTSpec}::${getterMethod});`
     )
     if (!property.isReadonly) {
       // setter
       registrations.push(
-        `prototype.registerHybridSetter("${property.name}", &${name.HybridTSpec}::${setterMethod});`
+        `prototype.registerHybridSetter(${property.name.toCppPropName()}, &${name.HybridTSpec}::${setterMethod});`
       )
     }
   }
   for (const method of spec.methods) {
     // method
     registrations.push(
-      `prototype.registerHybridMethod("${method.name}", &${name.HybridTSpec}::${method.name});`
+      `prototype.registerHybridMethod(${method.name.toCppPropName()}, &${name.HybridTSpec}::${method.name});`
     )
   }
 

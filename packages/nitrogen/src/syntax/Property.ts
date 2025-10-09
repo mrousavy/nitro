@@ -7,6 +7,7 @@ import { Method } from './Method.js'
 import { VoidType } from './types/VoidType.js'
 import { Parameter } from './Parameter.js'
 import { isBooleanPropertyPrefix } from './helpers.js'
+import { PropName } from './PropName.js'
 
 export interface PropertyBody {
   getter: string
@@ -45,15 +46,15 @@ export interface PropertyModifiers {
 }
 
 export class Property implements CodeNode {
-  readonly name: string
+  readonly name: PropName
   readonly type: Type
   readonly isReadonly: boolean
 
-  constructor(name: string, type: Type, isReadonly: boolean) {
+  constructor(name: PropName, type: Type, isReadonly: boolean) {
     this.name = name
     this.type = type
     this.isReadonly = isReadonly
-    if (this.name.startsWith('__')) {
+    if (this.name.name.startsWith('__')) {
       throw new Error(
         `Property names are not allowed to start with two underscores (__)! (In ${this.jsSignature})`
       )
@@ -61,7 +62,7 @@ export class Property implements CodeNode {
   }
 
   get jsSignature(): string {
-    return `${this.name}: ${this.type.kind}`
+    return `${this.name.toJSKey()}: ${this.type.kind}`
   }
 
   getExtraFiles(): SourceFile[] {
@@ -79,36 +80,40 @@ export class Property implements CodeNode {
         case 'jvm':
         case 'swift':
           // isSomething -> isSomething()
-          return this.name
+          return this.name.toString()
         default:
           break
       }
     }
     // isSomething -> getIsSomething()
-    return `get${capitalizeName(this.name)}`
+    return `get${capitalizeName(this.name.name)}`
   }
 
   getSetterName(environment: LanguageEnvironment): string {
-    if (this.type.kind === 'boolean' && this.name.startsWith('is')) {
+    if (this.type.kind === 'boolean' && this.name.name.startsWith('is')) {
       // Boolean accessors where the property starts with "is" are renamed in JVM
       if (environment === 'jvm') {
         // isSomething -> setSomething()
-        const cleanName = this.name.replace('is', '')
+        const cleanName = this.name.name.replace('is', '')
         return `set${capitalizeName(cleanName)}`
       }
     }
     // isSomething -> setIsSomething()
-    return `set${capitalizeName(this.name)}`
+    return `set${capitalizeName(this.name.name)}`
   }
 
   get cppGetter(): Method {
-    return new Method(this.getGetterName('other'), this.type, [])
+    const getterName = this.getGetterName('other')
+    const propName = new PropName(getterName)
+    return new Method(propName, this.type, [])
   }
 
   get cppSetter(): Method | undefined {
     if (this.isReadonly) return undefined
-    const parameter = new Parameter(this.name, this.type)
-    return new Method(this.getSetterName('other'), new VoidType(), [parameter])
+    const setterName = this.getSetterName('other')
+    const propName = new PropName(setterName)
+    const parameter = new Parameter(this.name.name, this.type)
+    return new Method(propName, new VoidType(), [parameter])
   }
 
   getCppMethods(): [getter: Method] | [getter: Method, setter: Method] {

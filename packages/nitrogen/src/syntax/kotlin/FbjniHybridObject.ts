@@ -151,7 +151,7 @@ ${spaces}          public virtual ${name.HybridTSpec} {
     .map((m) => getFbjniPropertyForwardImplementation(spec, m))
     .join('\n')
   const methodsImpl = methods
-    .map((m) => getFbjniMethodForwardImplementation(spec, m, m.name))
+    .map((m) => getFbjniMethodForwardImplementation(spec, m, m.name.name))
     .join('\n')
   const allTypes = getAllTypes(spec)
   allTypes.push(...getAllBaseTypes(spec)) // <-- remember, we copy all base methods & properties over too

@@ -19,6 +19,7 @@ import { createType } from './syntax/createType.js'
 import { Parameter } from './syntax/Parameter.js'
 import { getBaseTypes, getHybridObjectNitroModuleConfig } from './utils.js'
 import { NitroConfig } from './config/NitroConfig.js'
+import { propertyNameToPropName } from './syntax/PropName.js'
 
 export function generatePlatformFiles(
   interfaceType: Type,
@@ -116,7 +117,11 @@ function getHybridObjectSpec(type: Type, language: Language): HybridObjectSpec {
         prop.isOptional() || t.isNullable()
       )
       properties.push(
-        new Property(prop.getName(), propType, declaration.isReadonly())
+        new Property(
+          propertyNameToPropName(declaration.getNameNode()),
+          propType,
+          declaration.isReadonly()
+        )
       )
     } else if (Node.isMethodSignature(declaration)) {
       const returnType = declaration.getReturnType()
@@ -129,7 +134,11 @@ function getHybridObjectSpec(type: Type, language: Language): HybridObjectSpec {
         .getParameters()
         .map((p) => new Parameter(p, language))
       methods.push(
-        new Method(prop.getName(), methodReturnType, methodParameters)
+        new Method(
+          propertyNameToPropName(declaration.getNameNode()),
+          methodReturnType,
+          methodParameters
+        )
       )
     } else {
       throw new Error(

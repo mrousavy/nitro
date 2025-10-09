@@ -14,15 +14,15 @@ namespace margelo::nitro::test {
     HybridObject::loadHybridMethods();
     // load custom methods/properties
     registerHybrids(this, [](Prototype& prototype) {
-      prototype.registerHybridGetter("isBlue", &HybridTestViewSpec::getIsBlue);
-      prototype.registerHybridSetter("isBlue", &HybridTestViewSpec::setIsBlue);
-      prototype.registerHybridGetter("hasBeenCalled", &HybridTestViewSpec::getHasBeenCalled);
-      prototype.registerHybridSetter("hasBeenCalled", &HybridTestViewSpec::setHasBeenCalled);
-      prototype.registerHybridGetter("colorScheme", &HybridTestViewSpec::getColorScheme);
-      prototype.registerHybridSetter("colorScheme", &HybridTestViewSpec::setColorScheme);
-      prototype.registerHybridGetter("someCallback", &HybridTestViewSpec::getSomeCallback);
-      prototype.registerHybridSetter("someCallback", &HybridTestViewSpec::setSomeCallback);
-      prototype.registerHybridMethod("someMethod", &HybridTestViewSpec::someMethod);
+      prototype.registerHybridGetter(PropName::string("isBlue"), &HybridTestViewSpec::getIsBlue);
+      prototype.registerHybridSetter(PropName::string("isBlue"), &HybridTestViewSpec::setIsBlue);
+      prototype.registerHybridGetter(PropName::string("hasBeenCalled"), &HybridTestViewSpec::getHasBeenCalled);
+      prototype.registerHybridSetter(PropName::string("hasBeenCalled"), &HybridTestViewSpec::setHasBeenCalled);
+      prototype.registerHybridGetter(PropName::string("colorScheme"), &HybridTestViewSpec::getColorScheme);
+      prototype.registerHybridSetter(PropName::string("colorScheme"), &HybridTestViewSpec::setColorScheme);
+      prototype.registerHybridGetter(PropName::string("someCallback"), &HybridTestViewSpec::getSomeCallback);
+      prototype.registerHybridSetter(PropName::string("someCallback"), &HybridTestViewSpec::setSomeCallback);
+      prototype.registerHybridMethod(PropName::string("someMethod"), &HybridTestViewSpec::someMethod);
     });
   }
 

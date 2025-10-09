@@ -176,7 +176,7 @@ function getPropertyForwardImplementation(property: Property): string {
 @Keep
 @DoNotStrip
 get() {
-  return ${indent(bridged.parseFromKotlinToCpp(property.name, 'kotlin'), '  ')}
+  return ${indent(bridged.parseFromKotlinToCpp(property.name.name, 'kotlin'), '  ')}
 }
     `.trim()
     )

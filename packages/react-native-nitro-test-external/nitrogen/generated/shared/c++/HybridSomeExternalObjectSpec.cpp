@@ -14,7 +14,7 @@ namespace margelo::nitro::test::external {
     HybridObject::loadHybridMethods();
     // load custom methods/properties
     registerHybrids(this, [](Prototype& prototype) {
-      prototype.registerHybridMethod("getValue", &HybridSomeExternalObjectSpec::getValue);
+      prototype.registerHybridMethod(PropName::string("getValue"), &HybridSomeExternalObjectSpec::getValue);
     });
   }
 

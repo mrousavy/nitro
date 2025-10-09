@@ -95,5 +95,5 @@ export interface HybridObject<Platforms extends PlatformSpec = {}> {
    * Garbage Collector automatically disposes and releases any resources when needed.
    * It is purely optional to eagerly-, and manually-, call {@linkcode dispose()} here - **use with caution!**
    */
-  dispose(): void
+  [Symbol.dispose](): void
 }
