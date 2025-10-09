@@ -21,14 +21,20 @@ public:
   /**
    * Implicitly create a new `PropName` from a string.
    * This is not a `Symbol`.
-   * @deprecated This API is deprecated - use the new `PropName::string(...)` method instead.
    */
-  [[deprecated]]
-  PropName(const char* name)
-      : PropName(name, false) {}
+  PropName(const char* name): PropName(name, false) {}
 
 public:
+  /**
+   * Create a new string-`PropName` for the given string.
+   */
   static PropName string(const char* name);
+  /**
+   * Create a new symbol-`PropName` for the given string.
+   *
+   * This is the same as writing `Symbol.X ?? "X"` in JS, where
+   * `X` is your Symbol's name.
+   */
   static PropName symbol(const char* name);
 
 private:
