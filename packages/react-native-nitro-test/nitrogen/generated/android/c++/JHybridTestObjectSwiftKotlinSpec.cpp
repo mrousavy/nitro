@@ -35,6 +35,14 @@ namespace margelo::nitro::test { class HybridChildSpec; }
 namespace margelo::nitro::test { class HybridBaseSpec; }
 // Forward declaration of `HybridSomeExternalObjectSpec` to properly resolve imports.
 namespace margelo::nitro::test::external { class HybridSomeExternalObjectSpec; }
+// Forward declaration of `NitroNestedObjectTest` to properly resolve imports.
+namespace margelo::nitro::test { struct NitroNestedObjectTest; }
+// Forward declaration of `NitroSection` to properly resolve imports.
+namespace margelo::nitro::test { struct NitroSection; }
+// Forward declaration of `NitroRow` to properly resolve imports.
+namespace margelo::nitro::test { struct NitroRow; }
+// Forward declaration of `NitroText` to properly resolve imports.
+namespace margelo::nitro::test { struct NitroText; }
 // Forward declaration of `MapWrapper` to properly resolve imports.
 namespace margelo::nitro::test { struct MapWrapper; }
 // Forward declaration of `SecondMapWrapper` to properly resolve imports.
@@ -90,6 +98,14 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 #include "JHybridBaseSpec.hpp"
 #include <NitroTestExternal/HybridSomeExternalObjectSpec.hpp>
 #include <NitroTestExternal/JHybridSomeExternalObjectSpec.hpp>
+#include "NitroNestedObjectTest.hpp"
+#include "JNitroNestedObjectTest.hpp"
+#include "NitroSection.hpp"
+#include "JNitroSection.hpp"
+#include "NitroRow.hpp"
+#include "JNitroRow.hpp"
+#include "NitroText.hpp"
+#include "JNitroText.hpp"
 #include "JFunc_void_std__vector_Powertrain_.hpp"
 #include "MapWrapper.hpp"
 #include "JMapWrapper.hpp"
@@ -291,6 +307,11 @@ namespace margelo::nitro::test {
     static const auto method = javaClassStatic()->getMethod<jni::local_ref<JVariant_Person_HybridTestObjectSwiftKotlinSpec>(jni::alias_ref<JVariant_Person_HybridTestObjectSwiftKotlinSpec> /* variant */)>("getVariantHybrid");
     auto __result = method(_javaPart, JVariant_Person_HybridTestObjectSwiftKotlinSpec::fromCpp(variant));
     return __result->toCpp();
+  }
+  std::string JHybridTestObjectSwiftKotlinSpec::nestedObjectTest(const NitroNestedObjectTest& config) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<jni::JString>(jni::alias_ref<JNitroNestedObjectTest> /* config */)>("nestedObjectTest");
+    auto __result = method(_javaPart, JNitroNestedObjectTest::fromCpp(config));
+    return __result->toStdString();
   }
   void JHybridTestObjectSwiftKotlinSpec::simpleFunc() {
     static const auto method = javaClassStatic()->getMethod<void()>("simpleFunc");

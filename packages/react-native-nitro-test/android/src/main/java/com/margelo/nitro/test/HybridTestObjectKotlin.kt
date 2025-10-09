@@ -326,6 +326,11 @@ class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
         return variant
     }
 
+    override fun nestedObjectTest(config: NitroNestedObjectTest): String {
+        val response = "${config.sections?.size ?: 0}-${config.sections?.first()?.title ?: "null"}-${config.sections?.first()?.items?.size ?: 0}-${config.sections?.first()?.items?.first()?.title?.text}"
+        return response
+    }
+
     override fun getBufferLastItem(buffer: ArrayBuffer): Double {
         val byteBuffer = buffer.getBuffer(false)
         val lastItem = byteBuffer[buffer.size - 1]

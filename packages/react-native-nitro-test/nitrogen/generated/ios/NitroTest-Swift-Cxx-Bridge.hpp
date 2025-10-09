@@ -26,6 +26,12 @@ namespace margelo::nitro::test::external { class HybridSomeExternalObjectSpec; }
 namespace margelo::nitro::test { class HybridTestObjectSwiftKotlinSpec; }
 // Forward declaration of `HybridTestViewSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridTestViewSpec; }
+// Forward declaration of `NitroRow` to properly resolve imports.
+namespace margelo::nitro::test { struct NitroRow; }
+// Forward declaration of `NitroSection` to properly resolve imports.
+namespace margelo::nitro::test { struct NitroSection; }
+// Forward declaration of `NitroText` to properly resolve imports.
+namespace margelo::nitro::test { struct NitroText; }
 // Forward declaration of `OldEnum` to properly resolve imports.
 namespace margelo::nitro::test { enum class OldEnum; }
 // Forward declaration of `OptionalWrapper` to properly resolve imports.
@@ -57,6 +63,9 @@ namespace NitroTest { class HybridTestViewSpec_cxx; }
 #include "HybridChildSpec.hpp"
 #include "HybridTestObjectSwiftKotlinSpec.hpp"
 #include "HybridTestViewSpec.hpp"
+#include "NitroRow.hpp"
+#include "NitroSection.hpp"
+#include "NitroText.hpp"
 #include "OldEnum.hpp"
 #include "OptionalWrapper.hpp"
 #include "Person.hpp"
@@ -155,6 +164,45 @@ namespace margelo::nitro::test::bridge::swift {
     return optional.has_value();
   }
   inline std::string get_std__optional_std__string_(const std::optional<std::string>& optional) noexcept {
+    return *optional;
+  }
+  
+  // pragma MARK: std::vector<NitroRow>
+  /**
+   * Specialized version of `std::vector<NitroRow>`.
+   */
+  using std__vector_NitroRow_ = std::vector<NitroRow>;
+  inline std::vector<NitroRow> copy_std__vector_NitroRow_(const NitroRow* CONTIGUOUS_MEMORY NON_NULL data, size_t size) noexcept {
+    return margelo::nitro::FastVectorCopy<NitroRow>(data, size);
+  }
+  inline const NitroRow* CONTIGUOUS_MEMORY NON_NULL get_data_std__vector_NitroRow_(const std::vector<NitroRow>& vector) noexcept {
+    return vector.data();
+  }
+  
+  // pragma MARK: std::vector<NitroSection>
+  /**
+   * Specialized version of `std::vector<NitroSection>`.
+   */
+  using std__vector_NitroSection_ = std::vector<NitroSection>;
+  inline std::vector<NitroSection> copy_std__vector_NitroSection_(const NitroSection* CONTIGUOUS_MEMORY NON_NULL data, size_t size) noexcept {
+    return margelo::nitro::FastVectorCopy<NitroSection>(data, size);
+  }
+  inline const NitroSection* CONTIGUOUS_MEMORY NON_NULL get_data_std__vector_NitroSection_(const std::vector<NitroSection>& vector) noexcept {
+    return vector.data();
+  }
+  
+  // pragma MARK: std::optional<std::vector<NitroSection>>
+  /**
+   * Specialized version of `std::optional<std::vector<NitroSection>>`.
+   */
+  using std__optional_std__vector_NitroSection__ = std::optional<std::vector<NitroSection>>;
+  inline std::optional<std::vector<NitroSection>> create_std__optional_std__vector_NitroSection__(const std::vector<NitroSection>& value) noexcept {
+    return std::optional<std::vector<NitroSection>>(value);
+  }
+  inline bool has_value_std__optional_std__vector_NitroSection__(const std::optional<std::vector<NitroSection>>& optional) noexcept {
+    return optional.has_value();
+  }
+  inline std::vector<NitroSection> get_std__optional_std__vector_NitroSection__(const std::optional<std::vector<NitroSection>>& optional) noexcept {
     return *optional;
   }
   
@@ -1118,6 +1166,15 @@ namespace margelo::nitro::test::bridge::swift {
     return Result<std::variant<Person, std::shared_ptr<HybridTestObjectSwiftKotlinSpec>>>::withError(error);
   }
   
+  // pragma MARK: Result<std::string>
+  using Result_std__string_ = Result<std::string>;
+  inline Result_std__string_ create_Result_std__string_(const std::string& value) noexcept {
+    return Result<std::string>::withValue(value);
+  }
+  inline Result_std__string_ create_Result_std__string_(const std::exception_ptr& error) noexcept {
+    return Result<std::string>::withError(error);
+  }
+  
   // pragma MARK: Result<void>
   using Result_void_ = Result<void>;
   inline Result_void_ create_Result_void_() noexcept {
@@ -1134,15 +1191,6 @@ namespace margelo::nitro::test::bridge::swift {
   }
   inline Result_double_ create_Result_double_(const std::exception_ptr& error) noexcept {
     return Result<double>::withError(error);
-  }
-  
-  // pragma MARK: Result<std::string>
-  using Result_std__string_ = Result<std::string>;
-  inline Result_std__string_ create_Result_std__string_(const std::string& value) noexcept {
-    return Result<std::string>::withValue(value);
-  }
-  inline Result_std__string_ create_Result_std__string_(const std::exception_ptr& error) noexcept {
-    return Result<std::string>::withError(error);
   }
   
   // pragma MARK: Result<std::vector<std::string>>

@@ -10,6 +10,12 @@ import NitroModules
 import NitroTestExternal
 
 class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
+    func nestedObjectTest(config: NitroNestedObjectTest) throws -> String {
+        let response = "\(config.sections?.count ?? 0)-\(config.sections?.first?.title ?? "nil")-\(config.sections?.first?.items.count ?? 0)-\(config.sections?.first?.items.first?.title.text ?? "nil")"
+
+        return response
+    }
+    
   var optionalArray: [String]? = []
 
   var someVariant: Variant_String_Double = .second(55)

@@ -30,6 +30,7 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
   // Methods
   func newTestObject() throws -> (any HybridTestObjectSwiftKotlinSpec)
   func getVariantHybrid(variant: Variant_Person__any_HybridTestObjectSwiftKotlinSpec_) throws -> Variant_Person__any_HybridTestObjectSwiftKotlinSpec_
+  func nestedObjectTest(config: NitroNestedObjectTest) throws -> String
   func simpleFunc() throws -> Void
   func addNumbers(a: Double, b: Double) throws -> Double
   func addStrings(a: String, b: String) throws -> String

@@ -445,6 +445,18 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
+  public final func nestedObjectTest(config: NitroNestedObjectTest) -> bridge.Result_std__string_ {
+    do {
+      let __result = try self.__implementation.nestedObjectTest(config: config)
+      let __resultCpp = std.string(__result)
+      return bridge.create_Result_std__string_(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__string_(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
   public final func simpleFunc() -> bridge.Result_void_ {
     do {
       try self.__implementation.simpleFunc()

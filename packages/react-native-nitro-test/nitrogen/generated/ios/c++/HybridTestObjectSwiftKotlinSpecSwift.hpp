@@ -20,6 +20,14 @@ namespace margelo::nitro::test { enum class Powertrain; }
 namespace margelo::nitro::test { enum class OldEnum; }
 // Forward declaration of `Person` to properly resolve imports.
 namespace margelo::nitro::test { struct Person; }
+// Forward declaration of `NitroNestedObjectTest` to properly resolve imports.
+namespace margelo::nitro::test { struct NitroNestedObjectTest; }
+// Forward declaration of `NitroSection` to properly resolve imports.
+namespace margelo::nitro::test { struct NitroSection; }
+// Forward declaration of `NitroRow` to properly resolve imports.
+namespace margelo::nitro::test { struct NitroRow; }
+// Forward declaration of `NitroText` to properly resolve imports.
+namespace margelo::nitro::test { struct NitroText; }
 // Forward declaration of `AnyMap` to properly resolve imports.
 namespace NitroModules { class AnyMap; }
 // Forward declaration of `MapWrapper` to properly resolve imports.
@@ -59,6 +67,10 @@ namespace margelo::nitro::test::external { class HybridSomeExternalObjectSpec; }
 #include <functional>
 #include <variant>
 #include "Person.hpp"
+#include "NitroNestedObjectTest.hpp"
+#include "NitroSection.hpp"
+#include "NitroRow.hpp"
+#include "NitroText.hpp"
 #include <NitroModules/AnyMap.hpp>
 #include <unordered_map>
 #include "MapWrapper.hpp"
@@ -220,6 +232,14 @@ namespace margelo::nitro::test {
     }
     inline std::variant<Person, std::shared_ptr<HybridTestObjectSwiftKotlinSpec>> getVariantHybrid(const std::variant<Person, std::shared_ptr<HybridTestObjectSwiftKotlinSpec>>& variant) override {
       auto __result = _swiftPart.getVariantHybrid(variant);
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline std::string nestedObjectTest(const NitroNestedObjectTest& config) override {
+      auto __result = _swiftPart.nestedObjectTest(std::forward<decltype(config)>(config));
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }

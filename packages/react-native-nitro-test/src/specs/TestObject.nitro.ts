@@ -80,6 +80,23 @@ export type CustomString = CustomType<
   { include: 'CustomString.hpp' }
 >
 
+export type NitroText = {
+  text: string
+}
+
+export type NitroRow = {
+  title: NitroText
+}
+
+export type NitroSection = {
+  title?: string
+  items: Array<NitroRow>
+}
+
+export interface NitroNestedObjectTest {
+  sections?: Array<NitroSection>
+}
+
 // This is an `interface` we're going to use as a base in both of our `HybridObject`s later.
 // In this case, the `HybridObject`s will just flatten out and copy over all properties here.
 // There is no separate type for `SharedTestObjectProps` on the native side.
@@ -257,6 +274,7 @@ export interface TestObjectSwiftKotlin
   getVariantHybrid(
     variant: TestObjectSwiftKotlin | Person
   ): TestObjectSwiftKotlin | Person
+  nestedObjectTest(config: NitroNestedObjectTest): string
 }
 
 // This is a simple `HybridObject` with just one value.

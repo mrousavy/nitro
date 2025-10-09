@@ -139,6 +139,10 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
+  abstract fun nestedObjectTest(config: NitroNestedObjectTest): String
+  
+  @DoNotStrip
+  @Keep
   abstract fun simpleFunc(): Unit
   
   @DoNotStrip

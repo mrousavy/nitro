@@ -9,7 +9,6 @@ import {
   Platform,
 } from 'react-native'
 import {
-  HybridTestObjectCpp,
   HybridTestObjectSwiftKotlin,
   HybridChild,
   HybridBase,
@@ -26,7 +25,7 @@ console.log(HybridBase.baseValue)
 console.log(HybridChild.baseValue)
 console.log(HybridChild.childValue)
 
-logPrototypeChain(HybridTestObjectCpp)
+logPrototypeChain(HybridTestObjectSwiftKotlin)
 
 interface TestState {
   runner: TestRunner
@@ -77,12 +76,10 @@ export function HybridObjectTestsScreen() {
   const safeArea = useSafeAreaInsets()
   const colors = useColors()
   const [selectedIndex, setSelectedIndex] = React.useState(0)
-  const selectedObject = [HybridTestObjectCpp, HybridTestObjectSwiftKotlin][
-    selectedIndex
-  ]
+  const selectedObject = [HybridTestObjectSwiftKotlin][selectedIndex]
   console.log(`Showing Tests for HybridObject "${selectedObject?.name}"`)
   const allTests = React.useMemo(
-    () => getTests(selectedObject ?? HybridTestObjectCpp),
+    () => getTests(selectedObject),
     [selectedObject]
   )
   const [tests, setTests] = React.useState<TestState[]>(() =>
@@ -169,7 +166,7 @@ export function HybridObjectTestsScreen() {
       <View style={styles.topControls}>
         <SegmentedControl
           style={styles.segmentedControl}
-          values={['C++', PLATFORM_LANGUAGE]}
+          values={[PLATFORM_LANGUAGE]}
           selectedIndex={selectedIndex}
           onChange={({ nativeEvent: { selectedSegmentIndex } }) => {
             setSelectedIndex(selectedSegmentIndex)

@@ -30,6 +30,14 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 namespace margelo::nitro::test { struct JsStyleStruct; }
 // Forward declaration of `MapWrapper` to properly resolve imports.
 namespace margelo::nitro::test { struct MapWrapper; }
+// Forward declaration of `NitroNestedObjectTest` to properly resolve imports.
+namespace margelo::nitro::test { struct NitroNestedObjectTest; }
+// Forward declaration of `NitroRow` to properly resolve imports.
+namespace margelo::nitro::test { struct NitroRow; }
+// Forward declaration of `NitroSection` to properly resolve imports.
+namespace margelo::nitro::test { struct NitroSection; }
+// Forward declaration of `NitroText` to properly resolve imports.
+namespace margelo::nitro::test { struct NitroText; }
 // Forward declaration of `OldEnum` to properly resolve imports.
 namespace margelo::nitro::test { enum class OldEnum; }
 // Forward declaration of `OptionalWrapper` to properly resolve imports.
@@ -54,6 +62,10 @@ namespace margelo::nitro::test { struct WrappedJsStruct; }
 #include "HybridTestViewSpec.hpp"
 #include "JsStyleStruct.hpp"
 #include "MapWrapper.hpp"
+#include "NitroNestedObjectTest.hpp"
+#include "NitroRow.hpp"
+#include "NitroSection.hpp"
+#include "NitroText.hpp"
 #include "OldEnum.hpp"
 #include "OptionalWrapper.hpp"
 #include "Person.hpp"

@@ -21,6 +21,8 @@ namespace margelo::nitro::test { enum class Powertrain; }
 namespace margelo::nitro::test { enum class OldEnum; }
 // Forward declaration of `Person` to properly resolve imports.
 namespace margelo::nitro::test { struct Person; }
+// Forward declaration of `NitroNestedObjectTest` to properly resolve imports.
+namespace margelo::nitro::test { struct NitroNestedObjectTest; }
 // Forward declaration of `AnyMap` to properly resolve imports.
 namespace NitroModules { class AnyMap; }
 // Forward declaration of `MapWrapper` to properly resolve imports.
@@ -56,6 +58,7 @@ namespace margelo::nitro::test::external { class HybridSomeExternalObjectSpec; }
 #include <functional>
 #include <variant>
 #include "Person.hpp"
+#include "NitroNestedObjectTest.hpp"
 #include <NitroModules/AnyMap.hpp>
 #include <unordered_map>
 #include "MapWrapper.hpp"
@@ -132,6 +135,7 @@ namespace margelo::nitro::test {
       // Methods
       virtual std::shared_ptr<HybridTestObjectSwiftKotlinSpec> newTestObject() = 0;
       virtual std::variant<Person, std::shared_ptr<HybridTestObjectSwiftKotlinSpec>> getVariantHybrid(const std::variant<Person, std::shared_ptr<HybridTestObjectSwiftKotlinSpec>>& variant) = 0;
+      virtual std::string nestedObjectTest(const NitroNestedObjectTest& config) = 0;
       virtual void simpleFunc() = 0;
       virtual double addNumbers(double a, double b) = 0;
       virtual std::string addStrings(const std::string& a, const std::string& b) = 0;
