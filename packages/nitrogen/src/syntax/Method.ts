@@ -4,6 +4,7 @@ import { type SourceFile, type SourceImport } from './SourceFile.js'
 import { Parameter } from './Parameter.js'
 import type { Type } from './types/Type.js'
 import { indent } from '../utils.js'
+import type { PropName } from './PropName.js'
 
 export type MethodBody = string
 
@@ -37,15 +38,15 @@ export interface MethodModifiers {
 }
 
 export class Method implements CodeNode {
-  readonly name: string
+  readonly name: PropName
   readonly returnType: Type
   readonly parameters: Parameter[]
 
-  constructor(name: string, returnType: Type, parameters: Parameter[]) {
+  constructor(name: PropName, returnType: Type, parameters: Parameter[]) {
     this.name = name
     this.returnType = returnType
     this.parameters = parameters
-    if (this.name.startsWith('__')) {
+    if (this.name.name.startsWith('__')) {
       throw new Error(
         `Method names are not allowed to start with two underscores (__)! (In ${this.jsSignature})`
       )
@@ -55,7 +56,7 @@ export class Method implements CodeNode {
   get jsSignature(): string {
     const returnType = this.returnType.kind
     const params = this.parameters.map((p) => `${p.name}: ${p.type.kind}`)
-    return `${this.name}(${params.join(', ')}): ${returnType}`
+    return `${this.name.toJSKey()}(${params.join(', ')}): ${returnType}`
   }
 
   getCode(
@@ -73,7 +74,7 @@ export class Method implements CodeNode {
         // C++ modifiers start in the beginning
         const name = modifiers?.classDefinitionName
           ? `${modifiers.classDefinitionName}::${this.name}`
-          : this.name
+          : this.name.toString()
         let signature = `${returnType} ${name}(${params.join(', ')})`
         if (modifiers?.inline) signature = `inline ${signature}`
         if (modifiers?.virtual) signature = `virtual ${signature}`

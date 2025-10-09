@@ -242,7 +242,7 @@ ${hasBase ? `open class ${name.HybridTSpecCxx} : ${baseClasses.join(', ')}` : `o
 auto __result = _swiftPart.${getterName}();
 return ${bridged.parseFromSwiftToCpp('__result', 'c++')};
 `
-        setter = `_swiftPart.${setterName}(${bridged.parseFromCppToSwift(p.name, 'c++')});`
+        setter = `_swiftPart.${setterName}(${bridged.parseFromCppToSwift(p.name.name, 'c++')});`
       } else {
         // just forward value directly
         getter = `return _swiftPart.${getterName}();`

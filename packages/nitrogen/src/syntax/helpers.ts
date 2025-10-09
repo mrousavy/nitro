@@ -3,6 +3,7 @@ import type { SourceFile } from './SourceFile.js'
 import type { Type } from './types/Type.js'
 import { getTypeAs } from './types/getTypeAs.js'
 import { OptionalType } from './types/OptionalType.js'
+import type { PropName } from './PropName.js'
 
 type Comment = '///' | '#'
 
@@ -50,8 +51,8 @@ export function escapeCppName(string: string): string {
   return escapedStr
 }
 
-export function isBooleanPropertyPrefix(name: string): boolean {
-  return name.startsWith('is') || name.startsWith('has')
+export function isBooleanPropertyPrefix(propName: PropName): boolean {
+  return propName.name.startsWith('is') || propName.name.startsWith('has')
 }
 
 export function isNotDuplicate<T>(item: T, index: number, array: T[]): boolean {

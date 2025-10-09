@@ -14,7 +14,7 @@ namespace margelo::nitro::test {
     HybridObject::loadHybridMethods();
     // load custom methods/properties
     registerHybrids(this, [](Prototype& prototype) {
-      prototype.registerHybridGetter("baseValue", &HybridBaseSpec::getBaseValue);
+      prototype.registerHybridGetter(PropName::string("baseValue"), &HybridBaseSpec::getBaseValue);
     });
   }
 

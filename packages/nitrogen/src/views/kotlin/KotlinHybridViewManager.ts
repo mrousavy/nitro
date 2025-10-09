@@ -158,7 +158,7 @@ public:
   `.trim()
 
   const propsUpdaterCalls = spec.properties.map((p) => {
-    const name = escapeCppName(p.name)
+    const name = escapeCppName(p.name.name)
     const setter = p.getSetterName('other')
     return `
 if (props.${name}.isDirty) {
