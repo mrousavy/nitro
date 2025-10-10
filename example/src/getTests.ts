@@ -144,35 +144,10 @@ function timeoutedPromise<T>(
   })
 }
 
-export function getTests(testObject: TestObjectSwiftKotlin): TestRunner[] {
+export function getTests(
+  testObject: TestObjectCpp | TestObjectSwiftKotlin
+): TestRunner[] {
   return [
-    createTest('HybridObject.nestedObjectTest is valid', () =>
-      it(() => {
-        const config: NitroNestedObjectTest = {
-          sections: [
-            {
-              title: 'section title',
-              items: [
-                {
-                  title: { text: '#1' },
-                },
-                {
-                  title: { text: '#2' },
-                },
-                {
-                  title: { text: '#3' },
-                },
-              ],
-            },
-          ],
-        }
-        const response = testObject.nestedObjectTest(config)
-        console.log(response)
-        return response === '1-section title-3-#1'
-      })
-        .didNotThrow()
-        .equals(true)
-    ),
     // Basic prototype tests
     createTest('HybridObject.prototype is valid', () =>
       it(() => Object.getPrototypeOf(testObject))
@@ -785,6 +760,7 @@ export function getTests(testObject: TestObjectSwiftKotlin): TestRunner[] {
         )
     ),
     createTest('getVariantHybrid(...) converts Hybrid', () =>
+      // @ts-expect-error TypeScript spazzes out since it can be both types of HybridObject
       it(() => testObject.getVariantHybrid(testObject))
         .didNotThrow()
         // @ts-expect-error
@@ -813,95 +789,95 @@ export function getTests(testObject: TestObjectSwiftKotlin): TestRunner[] {
         .equals('Hello world!')
     ),
 
-    // // More complex variants...
-    // ...('getVariantTuple' in testObject
-    //   ? [
-    //       createTest('getVariantTuple(...) converts Float2', () =>
-    //         it(() => testObject.getVariantTuple([10, 20]))
-    //           .didNotThrow()
-    //           .equals([10, 20])
-    //       ),
-    //       createTest('getVariantTuple(...) converts Float3', () =>
-    //         it(() => testObject.getVariantTuple([10, 20, 30]))
-    //           .didNotThrow()
-    //           .equals([10, 20, 30])
-    //       ),
-    //       createTest(
-    //         'getVariantTuple(...) throws at wrong size (4 items)',
-    //         () =>
-    //           it(() =>
-    //             // @ts-expect-error
-    //             testObject.getVariantTuple([10, 20, 30, 40, 50])
-    //           ).didThrow()
-    //       ),
-    //       createTest('getVariantTuple(...) throws at wrong type (string)', () =>
-    //         // @ts-expect-error
-    //         it(() => testObject.getVariantTuple('hello')).didThrow()
-    //       ),
-    //       createTest(
-    //         'getVariantTuple(...) throws at wrong type (string[])',
-    //         () =>
-    //           it(() =>
-    //             // @ts-expect-error
-    //             testObject.getVariantTuple(['hello', 'world'])
-    //           ).didThrow()
-    //       ),
-    //     ]
-    //   : [
-    //       // Swift/Kotlin test object does not have variants yet.
-    //     ]),
+    // More complex variants...
+    ...('getVariantTuple' in testObject
+      ? [
+          createTest('getVariantTuple(...) converts Float2', () =>
+            it(() => testObject.getVariantTuple([10, 20]))
+              .didNotThrow()
+              .equals([10, 20])
+          ),
+          createTest('getVariantTuple(...) converts Float3', () =>
+            it(() => testObject.getVariantTuple([10, 20, 30]))
+              .didNotThrow()
+              .equals([10, 20, 30])
+          ),
+          createTest(
+            'getVariantTuple(...) throws at wrong size (4 items)',
+            () =>
+              it(() =>
+                // @ts-expect-error
+                testObject.getVariantTuple([10, 20, 30, 40, 50])
+              ).didThrow()
+          ),
+          createTest('getVariantTuple(...) throws at wrong type (string)', () =>
+            // @ts-expect-error
+            it(() => testObject.getVariantTuple('hello')).didThrow()
+          ),
+          createTest(
+            'getVariantTuple(...) throws at wrong type (string[])',
+            () =>
+              it(() =>
+                // @ts-expect-error
+                testObject.getVariantTuple(['hello', 'world'])
+              ).didThrow()
+          ),
+        ]
+      : [
+          // Swift/Kotlin test object does not have variants yet.
+        ]),
 
-    // // Tuples Tests
-    // ...('someTuple' in testObject
-    //   ? [
-    //       createTest("set someTuple to [55, 'hello']", () =>
-    //         it(() => (testObject.someTuple = [55, 'hello'])).didNotThrow()
-    //       ),
-    //       createTest("get someTuple (== [55, 'hello'])", () =>
-    //         it(() => {
-    //           testObject.someTuple = [55, 'hello']
-    //           return testObject.someTuple
-    //         }).equals([55, 'hello'])
-    //       ),
-    //       createTest('flip([10, 20, 30])', () =>
-    //         it(() => testObject.flip([10, 20, 30]))
-    //           .didNotThrow()
-    //           .equals([30, 20, 10])
-    //       ),
-    //       createTest('flip([10, 20]) throws', () =>
-    //         it(() =>
-    //           testObject.flip(
-    //             // @ts-expect-error
-    //             [10, 20]
-    //           )
-    //         )
-    //           .didThrow(
-    //             `Error: ${testObject.name}.flip(...): The given JS Array has 2 items, but ${debugOnly('std::tuple<double, double, double>')}`
-    //           )
-    //           .didThrow('expects 3 items')
-    //       ),
-    //       createTest('passTuple(...)', () =>
-    //         it(() => testObject.passTuple([13, 'hello', true]))
-    //           .didNotThrow()
-    //           .equals([13, 'hello', true])
-    //       ),
-    //     ]
-    //   : [
-    //       // Swift/Kotlin Test Object does not have tuples yet!
-    //     ]),
+    // Tuples Tests
+    ...('someTuple' in testObject
+      ? [
+          createTest("set someTuple to [55, 'hello']", () =>
+            it(() => (testObject.someTuple = [55, 'hello'])).didNotThrow()
+          ),
+          createTest("get someTuple (== [55, 'hello'])", () =>
+            it(() => {
+              testObject.someTuple = [55, 'hello']
+              return testObject.someTuple
+            }).equals([55, 'hello'])
+          ),
+          createTest('flip([10, 20, 30])', () =>
+            it(() => testObject.flip([10, 20, 30]))
+              .didNotThrow()
+              .equals([30, 20, 10])
+          ),
+          createTest('flip([10, 20]) throws', () =>
+            it(() =>
+              testObject.flip(
+                // @ts-expect-error
+                [10, 20]
+              )
+            )
+              .didThrow(
+                `Error: ${testObject.name}.flip(...): The given JS Array has 2 items, but ${debugOnly('std::tuple<double, double, double>')}`
+              )
+              .didThrow('expects 3 items')
+          ),
+          createTest('passTuple(...)', () =>
+            it(() => testObject.passTuple([13, 'hello', true]))
+              .didNotThrow()
+              .equals([13, 'hello', true])
+          ),
+        ]
+      : [
+          // Swift/Kotlin Test Object does not have tuples yet!
+        ]),
 
-    // // Custom Types tests
-    // ...('bounceCustomType' in testObject
-    //   ? [
-    //       createTest('bounceCustomType(...) works', () =>
-    //         it(() => testObject.bounceCustomType(TEST_CUSTOM_TYPE))
-    //           .didNotThrow()
-    //           .equals(TEST_CUSTOM_TYPE)
-    //       ),
-    //     ]
-    //   : [
-    //       // Swift/Kotlin Test Object does not have CustomTypes!
-    //     ]),
+    // Custom Types tests
+    ...('bounceCustomType' in testObject
+      ? [
+          createTest('bounceCustomType(...) works', () =>
+            it(() => testObject.bounceCustomType(TEST_CUSTOM_TYPE))
+              .didNotThrow()
+              .equals(TEST_CUSTOM_TYPE)
+          ),
+        ]
+      : [
+          // Swift/Kotlin Test Object does not have CustomTypes!
+        ]),
 
     createTest('bounceMap(map) === map', () =>
       it(() => testObject.bounceMap(TEST_MAP))
@@ -1693,5 +1669,38 @@ export function getTests(testObject: TestObjectSwiftKotlin): TestRunner[] {
         .didNotThrow()
         .equals(true)
     ),
+    ...('nestedObjectTest' in testObject
+      ? [
+          createTest('', () =>
+            it(() => {
+              const config: NitroNestedObjectTest = {
+                sections: [
+                  {
+                    title: 'section title',
+                    items: [
+                      {
+                        title: { text: '#1' },
+                      },
+                      {
+                        title: { text: '#2' },
+                      },
+                      {
+                        title: { text: '#3' },
+                      },
+                    ],
+                  },
+                ],
+              }
+              const response = testObject.nestedObjectTest(config)
+              console.log(response)
+              return response === '1-section title-3-#1'
+            })
+              .didNotThrow()
+              .equals(true)
+          ),
+        ]
+      : [
+          // #930 was a swift issue only so we skip the cpp test
+        ]),
   ]
 }
