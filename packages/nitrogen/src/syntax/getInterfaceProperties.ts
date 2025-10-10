@@ -10,21 +10,22 @@ export function getInterfaceProperties(
   return interfaceType.getProperties().map((prop) => {
     const declaration = prop.getValueDeclarationOrThrow()
 
-    if (!declaration.isKind(ts.SyntaxKind.PropertySignature)) {
-      throw new Error(
-        `Property "${prop.getName()}" has an unsupported declaration kind. Make sure it's declared as "propertyName: Type" in an interface or type declaration.`
-      )
+    let propType: Type;
+
+    if (declaration.isKind(ts.SyntaxKind.PropertySignature)) {
+      const typeNode = declaration.getTypeNode();
+  
+      if (typeNode == null) {
+        throw new Error(
+          `Property "${prop.getName()}" has no explicit type annotation. All properties in Nitro specs must have explicit type annotations.`
+        )
+      } 
+  
+      propType = typeNode.getType()
+    } else {
+      propType = prop.getTypeAtLocation(declaration)
     }
-
-    const typeNode = declaration.getTypeNode()
-
-    if (typeNode == null) {
-      throw new Error(
-        `Property "${prop.getName()}" has no explicit type annotation. All properties in Nitro specs must have explicit type annotations.`
-      )
-    }
-
-    const propType = typeNode.getType()
+   
 
     const refType = createNamedType(
       language,
@@ -35,3 +36,4 @@ export function getInterfaceProperties(
     return refType
   })
 }
+
