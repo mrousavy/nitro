@@ -63,6 +63,8 @@ public:
   std::variant<std::string, double> getSomeVariant() override;
   void setSomeVariant(const std::variant<std::string, double>& variant) override;
   std::variant<std::string, Car> passNamedVariant(const std::variant<std::string, Car>& variant) override;
+  std::variant<OptionalWrapper, std::shared_ptr<HybridBaseSpec>>
+  passAllEmptyObjectVariant(const std::variant<OptionalWrapper, std::shared_ptr<HybridBaseSpec>>& variant) override;
   std::tuple<double, std::string> getSomeTuple() override;
   void setSomeTuple(const std::tuple<double, std::string>& tuple) override;
   std::shared_ptr<HybridTestObjectCppSpec> getThisObject() override;

@@ -1053,6 +1053,35 @@ namespace margelo::nitro::test::bridge::swift {
   using std__weak_ptr_HybridBaseSpec_ = std::weak_ptr<HybridBaseSpec>;
   inline std__weak_ptr_HybridBaseSpec_ weakify_std__shared_ptr_HybridBaseSpec_(const std::shared_ptr<HybridBaseSpec>& strong) noexcept { return strong; }
   
+  // pragma MARK: std::variant<OptionalWrapper, std::shared_ptr<HybridBaseSpec>>
+  /**
+   * Wrapper struct for `std::variant<OptionalWrapper, std::shared_ptr<HybridBaseSpec>>`.
+   * std::variant cannot be used in Swift because of a Swift bug.
+   * Not even specializing it works. So we create a wrapper struct.
+   */
+  struct std__variant_OptionalWrapper__std__shared_ptr_HybridBaseSpec__ {
+    std::variant<OptionalWrapper, std::shared_ptr<HybridBaseSpec>> variant;
+    std__variant_OptionalWrapper__std__shared_ptr_HybridBaseSpec__(std::variant<OptionalWrapper, std::shared_ptr<HybridBaseSpec>> variant): variant(variant) { }
+    operator std::variant<OptionalWrapper, std::shared_ptr<HybridBaseSpec>>() const noexcept {
+      return variant;
+    }
+    inline size_t index() const noexcept {
+      return variant.index();
+    }
+    inline OptionalWrapper get_0() const noexcept {
+      return std::get<0>(variant);
+    }
+    inline std::shared_ptr<HybridBaseSpec> get_1() const noexcept {
+      return std::get<1>(variant);
+    }
+  };
+  inline std__variant_OptionalWrapper__std__shared_ptr_HybridBaseSpec__ create_std__variant_OptionalWrapper__std__shared_ptr_HybridBaseSpec__(const OptionalWrapper& value) noexcept {
+    return std__variant_OptionalWrapper__std__shared_ptr_HybridBaseSpec__(value);
+  }
+  inline std__variant_OptionalWrapper__std__shared_ptr_HybridBaseSpec__ create_std__variant_OptionalWrapper__std__shared_ptr_HybridBaseSpec__(const std::shared_ptr<HybridBaseSpec>& value) noexcept {
+    return std__variant_OptionalWrapper__std__shared_ptr_HybridBaseSpec__(value);
+  }
+  
   // pragma MARK: std::shared_ptr<HybridChildSpec>
   /**
    * Specialized version of `std::shared_ptr<HybridChildSpec>`.
@@ -1401,6 +1430,15 @@ namespace margelo::nitro::test::bridge::swift {
   }
   inline Result_std__variant_std__string__Car__ create_Result_std__variant_std__string__Car__(const std::exception_ptr& error) noexcept {
     return Result<std::variant<std::string, Car>>::withError(error);
+  }
+  
+  // pragma MARK: Result<std::variant<OptionalWrapper, std::shared_ptr<HybridBaseSpec>>>
+  using Result_std__variant_OptionalWrapper__std__shared_ptr_HybridBaseSpec___ = Result<std::variant<OptionalWrapper, std::shared_ptr<HybridBaseSpec>>>;
+  inline Result_std__variant_OptionalWrapper__std__shared_ptr_HybridBaseSpec___ create_Result_std__variant_OptionalWrapper__std__shared_ptr_HybridBaseSpec___(const std::variant<OptionalWrapper, std::shared_ptr<HybridBaseSpec>>& value) noexcept {
+    return Result<std::variant<OptionalWrapper, std::shared_ptr<HybridBaseSpec>>>::withValue(value);
+  }
+  inline Result_std__variant_OptionalWrapper__std__shared_ptr_HybridBaseSpec___ create_Result_std__variant_OptionalWrapper__std__shared_ptr_HybridBaseSpec___(const std::exception_ptr& error) noexcept {
+    return Result<std::variant<OptionalWrapper, std::shared_ptr<HybridBaseSpec>>>::withError(error);
   }
   
   // pragma MARK: Result<std::shared_ptr<HybridChildSpec>>

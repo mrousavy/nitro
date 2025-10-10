@@ -26,7 +26,6 @@
 
 
 #include <string>
-#include <optional>
 
 namespace margelo::nitro::test {
 
@@ -35,12 +34,12 @@ namespace margelo::nitro::test {
    */
   struct Person {
   public:
-    std::optional<std::string> name     SWIFT_PRIVATE;
-    std::optional<double> age     SWIFT_PRIVATE;
+    std::string name     SWIFT_PRIVATE;
+    double age     SWIFT_PRIVATE;
 
   public:
     Person() = default;
-    explicit Person(std::optional<std::string> name, std::optional<double> age): name(name), age(age) {}
+    explicit Person(std::string name, double age): name(name), age(age) {}
   };
 
 } // namespace margelo::nitro::test
@@ -53,14 +52,14 @@ namespace margelo::nitro {
     static inline margelo::nitro::test::Person fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       jsi::Object obj = arg.asObject(runtime);
       return margelo::nitro::test::Person(
-        JSIConverter<std::optional<std::string>>::fromJSI(runtime, obj.getProperty(runtime, "name")),
-        JSIConverter<std::optional<double>>::fromJSI(runtime, obj.getProperty(runtime, "age"))
+        JSIConverter<std::string>::fromJSI(runtime, obj.getProperty(runtime, "name")),
+        JSIConverter<double>::fromJSI(runtime, obj.getProperty(runtime, "age"))
       );
     }
     static inline jsi::Value toJSI(jsi::Runtime& runtime, const margelo::nitro::test::Person& arg) {
       jsi::Object obj(runtime);
-      obj.setProperty(runtime, "name", JSIConverter<std::optional<std::string>>::toJSI(runtime, arg.name));
-      obj.setProperty(runtime, "age", JSIConverter<std::optional<double>>::toJSI(runtime, arg.age));
+      obj.setProperty(runtime, "name", JSIConverter<std::string>::toJSI(runtime, arg.name));
+      obj.setProperty(runtime, "age", JSIConverter<double>::toJSI(runtime, arg.age));
       return obj;
     }
     static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
@@ -71,8 +70,8 @@ namespace margelo::nitro {
       if (!nitro::isPlainObject(runtime, obj)) {
         return false;
       }
-      if (!JSIConverter<std::optional<std::string>>::canConvert(runtime, obj.getProperty(runtime, "name"))) return false;
-      if (!JSIConverter<std::optional<double>>::canConvert(runtime, obj.getProperty(runtime, "age"))) return false;
+      if (!JSIConverter<std::string>::canConvert(runtime, obj.getProperty(runtime, "name"))) return false;
+      if (!JSIConverter<double>::canConvert(runtime, obj.getProperty(runtime, "age"))) return false;
       return true;
     }
   };

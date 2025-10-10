@@ -37,10 +37,10 @@ namespace margelo::nitro::test { struct WrappedJsStruct; }
 namespace margelo::nitro::test { struct OptionalWrapper; }
 // Forward declaration of `WeirdNumbersEnum` to properly resolve imports.
 namespace margelo::nitro::test { enum class WeirdNumbersEnum; }
-// Forward declaration of `HybridChildSpec` to properly resolve imports.
-namespace margelo::nitro::test { class HybridChildSpec; }
 // Forward declaration of `HybridBaseSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridBaseSpec; }
+// Forward declaration of `HybridChildSpec` to properly resolve imports.
+namespace margelo::nitro::test { class HybridChildSpec; }
 // Forward declaration of `HybridTestViewSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridTestViewSpec; }
 // Forward declaration of `HybridSomeExternalObjectSpec` to properly resolve imports.
@@ -70,8 +70,8 @@ namespace margelo::nitro::test::external { class HybridSomeExternalObjectSpec; }
 #include "WrappedJsStruct.hpp"
 #include "OptionalWrapper.hpp"
 #include "WeirdNumbersEnum.hpp"
-#include "HybridChildSpec.hpp"
 #include "HybridBaseSpec.hpp"
+#include "HybridChildSpec.hpp"
 #include "HybridTestViewSpec.hpp"
 #include <NitroTestExternal/HybridSomeExternalObjectSpec.hpp>
 
@@ -196,6 +196,7 @@ namespace margelo::nitro::test {
       virtual std::variant<bool, WeirdNumbersEnum> getVariantWeirdNumbersEnum(const std::variant<bool, WeirdNumbersEnum>& variant) = 0;
       virtual std::variant<Car, Person> getVariantObjects(const std::variant<Car, Person>& variant) = 0;
       virtual std::variant<std::string, Car> passNamedVariant(const std::variant<std::string, Car>& variant) = 0;
+      virtual std::variant<OptionalWrapper, std::shared_ptr<HybridBaseSpec>> passAllEmptyObjectVariant(const std::variant<OptionalWrapper, std::shared_ptr<HybridBaseSpec>>& variant) = 0;
       virtual std::shared_ptr<HybridChildSpec> createChild() = 0;
       virtual std::shared_ptr<HybridBaseSpec> createBase() = 0;
       virtual std::shared_ptr<HybridBaseSpec> createBaseActualChild() = 0;

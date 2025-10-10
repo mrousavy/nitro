@@ -1633,6 +1633,44 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
+  public final func passAllEmptyObjectVariant(variant: bridge.std__variant_OptionalWrapper__std__shared_ptr_HybridBaseSpec__) -> bridge.Result_std__variant_OptionalWrapper__std__shared_ptr_HybridBaseSpec___ {
+    do {
+      let __result = try self.__implementation.passAllEmptyObjectVariant(variant: { () -> Variant_OptionalWrapper__any_HybridBaseSpec_ in
+        let __variant = variant
+        switch __variant.index() {
+          case 0:
+            let __actual = __variant.get_0()
+            return .first(__actual)
+          case 1:
+            let __actual = __variant.get_1()
+            return .second({ () -> HybridBaseSpec in
+              let __unsafePointer = bridge.get_std__shared_ptr_HybridBaseSpec_(__actual)
+              let __instance = HybridBaseSpec_cxx.fromUnsafe(__unsafePointer)
+              return __instance.getHybridBaseSpec()
+            }())
+          default:
+            fatalError("Variant can never have index \(__variant.index())!")
+        }
+      }())
+      let __resultCpp = { () -> bridge.std__variant_OptionalWrapper__std__shared_ptr_HybridBaseSpec__ in
+        switch __result {
+          case .first(let __value):
+            return bridge.create_std__variant_OptionalWrapper__std__shared_ptr_HybridBaseSpec__(__value)
+          case .second(let __value):
+            return bridge.create_std__variant_OptionalWrapper__std__shared_ptr_HybridBaseSpec__({ () -> bridge.std__shared_ptr_HybridBaseSpec_ in
+              let __cxxWrapped = __value.getCxxWrapper()
+              return __cxxWrapped.getCxxPart()
+            }())
+        }
+      }().variant
+      return bridge.create_Result_std__variant_OptionalWrapper__std__shared_ptr_HybridBaseSpec___(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__variant_OptionalWrapper__std__shared_ptr_HybridBaseSpec___(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
   public final func createChild() -> bridge.Result_std__shared_ptr_HybridChildSpec__ {
     do {
       let __result = try self.__implementation.createChild()
