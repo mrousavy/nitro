@@ -40,10 +40,10 @@ namespace margelo::nitro::test { struct WrappedJsStruct; }
 namespace margelo::nitro::test { struct OptionalWrapper; }
 // Forward declaration of `WeirdNumbersEnum` to properly resolve imports.
 namespace margelo::nitro::test { enum class WeirdNumbersEnum; }
-// Forward declaration of `HybridChildSpec` to properly resolve imports.
-namespace margelo::nitro::test { class HybridChildSpec; }
 // Forward declaration of `HybridBaseSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridBaseSpec; }
+// Forward declaration of `HybridChildSpec` to properly resolve imports.
+namespace margelo::nitro::test { class HybridChildSpec; }
 // Forward declaration of `HybridTestViewSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridTestViewSpec; }
 // Forward declaration of `HybridSomeExternalObjectSpec` to properly resolve imports.
@@ -73,8 +73,8 @@ namespace margelo::nitro::test::external { class HybridSomeExternalObjectSpec; }
 #include "WrappedJsStruct.hpp"
 #include "OptionalWrapper.hpp"
 #include "WeirdNumbersEnum.hpp"
-#include "HybridChildSpec.hpp"
 #include "HybridBaseSpec.hpp"
+#include "HybridChildSpec.hpp"
 #include "HybridTestViewSpec.hpp"
 #include <NitroTestExternal/HybridSomeExternalObjectSpec.hpp>
 
@@ -650,6 +650,14 @@ namespace margelo::nitro::test {
     }
     inline std::variant<std::string, Car> passNamedVariant(const std::variant<std::string, Car>& variant) override {
       auto __result = _swiftPart.passNamedVariant(variant);
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline std::variant<OptionalWrapper, std::shared_ptr<HybridBaseSpec>> passAllEmptyObjectVariant(const std::variant<OptionalWrapper, std::shared_ptr<HybridBaseSpec>>& variant) override {
+      auto __result = _swiftPart.passAllEmptyObjectVariant(variant);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }

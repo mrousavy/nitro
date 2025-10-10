@@ -413,6 +413,10 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
+  abstract fun passAllEmptyObjectVariant(variant: Variant_OptionalWrapper_HybridBaseSpec): Variant_OptionalWrapper_HybridBaseSpec
+  
+  @DoNotStrip
+  @Keep
   abstract fun createChild(): HybridChildSpec
   
   @DoNotStrip

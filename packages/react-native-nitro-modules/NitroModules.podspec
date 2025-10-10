@@ -40,6 +40,7 @@ Pod::Spec.new do |s|
     "cpp/entrypoint/InstallNitro.hpp",
     "cpp/registry/HybridObjectRegistry.hpp",
     "cpp/jsi/JSIConverter.hpp",
+    "cpp/jsi/JSIHelpers.hpp",
     "cpp/platform/NitroLogger.hpp",
     "cpp/threading/Dispatcher.hpp",
     "cpp/utils/JSCallback.hpp",

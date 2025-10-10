@@ -220,6 +220,10 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
     }
   }
 
+  func passAllEmptyObjectVariant(variant: Variant_OptionalWrapper__any_HybridBaseSpec_) throws -> Variant_OptionalWrapper__any_HybridBaseSpec_ {
+    return variant
+  }
+
   func getVariantEnum(variant: Variant_Bool_OldEnum) throws -> Variant_Bool_OldEnum {
     return variant
   }
@@ -313,7 +317,7 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
   func bounceWrappedJsStyleStruct(value: WrappedJsStruct) throws -> WrappedJsStruct {
     return value
   }
-  
+
   func bounceOptionalWrapper(wrapper: OptionalWrapper) throws -> OptionalWrapper {
     return wrapper
   }

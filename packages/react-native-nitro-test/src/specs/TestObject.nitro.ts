@@ -201,6 +201,9 @@ interface SharedTestObjectProps {
   ): WeirdNumbersEnum | boolean
   getVariantObjects(variant: Person | Car): Person | Car
   passNamedVariant(variant: NamedVariant): NamedVariant
+  passAllEmptyObjectVariant(
+    variant: OptionalWrapper | Base
+  ): OptionalWrapper | Base
 
   // Inheritance
   createChild(): Child
