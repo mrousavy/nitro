@@ -249,7 +249,6 @@ HybridTestObjectCpp::passVariant(const std::variant<std::string, double, bool, s
   }
 }
 
-
 std::vector<NitroSection> HybridTestObjectCpp::getSections() {
   return _sections;
 }
