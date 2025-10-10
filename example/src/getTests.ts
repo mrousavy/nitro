@@ -151,6 +151,26 @@ export function getTests(
   testObject: TestObjectCpp | TestObjectSwiftKotlin
 ): TestRunner[] {
   return [
+    createTest('NitroSection[]', () =>
+      it(() => {
+        testObject.sections = [
+          {
+            items: [{ title: 'Hi!', onPress: () => {} }],
+            title: 'Hello world! #1235',
+          },
+        ]
+        return testObject.sections
+      })
+        .didNotThrow()
+        .didReturn('object')
+        .equals([
+          {
+            items: [{ title: 'Hi!', onPress: () => {} }],
+            title: 'Hello world! #1235',
+          },
+        ])
+    ),
+
     // Basic prototype tests
     createTest('HybridObject.prototype is valid', () =>
       it(() => Object.getPrototypeOf(testObject))
