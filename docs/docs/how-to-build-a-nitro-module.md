@@ -20,7 +20,7 @@ First, you need to create a [Nitro Module](nitro-modules) - either by bootstrapp
 <Tabs groupId="template-bootstrap-cli">
   <TabItem value="nitrogen" label="nitrogen" default>
     ```sh
-    npx nitrogen@latest init
+    npx nitrogen@latest init <name>
     ```
   </TabItem>
   <TabItem value="bob" label="react-native-builder-bob">
