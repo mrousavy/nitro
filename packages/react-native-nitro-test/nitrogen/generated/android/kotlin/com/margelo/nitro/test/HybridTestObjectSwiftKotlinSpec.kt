@@ -122,6 +122,20 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
       optionalCallback = value?.let { it }
     }
   
+  abstract var sections: Array<NitroSection>
+  
+  private var sections_cxx: Array<NitroSection>
+    @Keep
+    @DoNotStrip
+    get() {
+      return sections
+    }
+    @Keep
+    @DoNotStrip
+    set(value) {
+      sections = value
+    }
+  
   @get:DoNotStrip
   @get:Keep
   @set:DoNotStrip

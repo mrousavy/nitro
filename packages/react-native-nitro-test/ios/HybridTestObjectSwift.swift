@@ -40,6 +40,8 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
     return self
   }
 
+  var sections: [NitroSection] = []
+  
   func simpleFunc() throws {
     // do nothing
   }

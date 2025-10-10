@@ -249,6 +249,15 @@ HybridTestObjectCpp::passVariant(const std::variant<std::string, double, bool, s
   }
 }
 
+
+std::vector<NitroSection> HybridTestObjectCpp::getSections() {
+  return _sections;
+}
+
+void HybridTestObjectCpp::setSections(const std::vector<NitroSection>& sections) {
+  _sections = sections;
+}
+
 std::variant<OptionalWrapper, std::shared_ptr<HybridBaseSpec>>
 HybridTestObjectCpp::passAllEmptyObjectVariant(const std::variant<OptionalWrapper, std::shared_ptr<HybridBaseSpec>>& variant) {
   return variant;

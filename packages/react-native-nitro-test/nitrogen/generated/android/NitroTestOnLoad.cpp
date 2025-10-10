@@ -17,6 +17,7 @@
 
 #include "JHybridTestObjectSwiftKotlinSpec.hpp"
 #include "JFunc_void_double.hpp"
+#include "JFunc_void_std__optional_bool_.hpp"
 #include "JFunc_void_std__vector_Powertrain_.hpp"
 #include "JFunc_void.hpp"
 #include "JFunc_void_std__optional_double_.hpp"
@@ -44,6 +45,7 @@ int initialize(JavaVM* vm) {
     // Register native JNI methods
     margelo::nitro::test::JHybridTestObjectSwiftKotlinSpec::registerNatives();
     margelo::nitro::test::JFunc_void_double_cxx::registerNatives();
+    margelo::nitro::test::JFunc_void_std__optional_bool__cxx::registerNatives();
     margelo::nitro::test::JFunc_void_std__vector_Powertrain__cxx::registerNatives();
     margelo::nitro::test::JFunc_void_cxx::registerNatives();
     margelo::nitro::test::JFunc_void_std__optional_double__cxx::registerNatives();

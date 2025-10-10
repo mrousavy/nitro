@@ -28,6 +28,10 @@ namespace margelo::nitro::test { class HybridTestObjectSwiftKotlinSpec; }
 namespace margelo::nitro::test { class HybridTestViewSpec; }
 // Forward declaration of `JsStyleStruct` to properly resolve imports.
 namespace margelo::nitro::test { struct JsStyleStruct; }
+// Forward declaration of `NitroRow` to properly resolve imports.
+namespace margelo::nitro::test { struct NitroRow; }
+// Forward declaration of `NitroSection` to properly resolve imports.
+namespace margelo::nitro::test { struct NitroSection; }
 // Forward declaration of `OldEnum` to properly resolve imports.
 namespace margelo::nitro::test { enum class OldEnum; }
 // Forward declaration of `OptionalWrapper` to properly resolve imports.
@@ -60,6 +64,8 @@ namespace NitroTest { class HybridTestViewSpec_cxx; }
 #include "HybridTestObjectSwiftKotlinSpec.hpp"
 #include "HybridTestViewSpec.hpp"
 #include "JsStyleStruct.hpp"
+#include "NitroRow.hpp"
+#include "NitroSection.hpp"
 #include "OldEnum.hpp"
 #include "OptionalWrapper.hpp"
 #include "Person.hpp"
@@ -254,6 +260,67 @@ namespace margelo::nitro::test::bridge::swift {
     return *optional;
   }
   
+  // pragma MARK: std::optional<bool>
+  /**
+   * Specialized version of `std::optional<bool>`.
+   */
+  using std__optional_bool_ = std::optional<bool>;
+  inline std::optional<bool> create_std__optional_bool_(const bool& value) noexcept {
+    return std::optional<bool>(value);
+  }
+  inline bool has_value_std__optional_bool_(const std::optional<bool>& optional) noexcept {
+    return optional.has_value();
+  }
+  inline bool get_std__optional_bool_(const std::optional<bool>& optional) noexcept {
+    return *optional;
+  }
+  
+  // pragma MARK: std::function<void(std::optional<bool> /* checked */)>
+  /**
+   * Specialized version of `std::function<void(std::optional<bool>)>`.
+   */
+  using Func_void_std__optional_bool_ = std::function<void(std::optional<bool> /* checked */)>;
+  /**
+   * Wrapper class for a `std::function<void(std::optional<bool> / * checked * /)>`, this can be used from Swift.
+   */
+  class Func_void_std__optional_bool__Wrapper final {
+  public:
+    explicit Func_void_std__optional_bool__Wrapper(std::function<void(std::optional<bool> /* checked */)>&& func): _function(std::make_unique<std::function<void(std::optional<bool> /* checked */)>>(std::move(func))) {}
+    inline void call(std::optional<bool> checked) const noexcept {
+      _function->operator()(checked);
+    }
+  private:
+    std::unique_ptr<std::function<void(std::optional<bool> /* checked */)>> _function;
+  } SWIFT_NONCOPYABLE;
+  Func_void_std__optional_bool_ create_Func_void_std__optional_bool_(void* NON_NULL swiftClosureWrapper) noexcept;
+  inline Func_void_std__optional_bool__Wrapper wrap_Func_void_std__optional_bool_(Func_void_std__optional_bool_ value) noexcept {
+    return Func_void_std__optional_bool__Wrapper(std::move(value));
+  }
+  
+  // pragma MARK: std::vector<NitroRow>
+  /**
+   * Specialized version of `std::vector<NitroRow>`.
+   */
+  using std__vector_NitroRow_ = std::vector<NitroRow>;
+  inline std::vector<NitroRow> copy_std__vector_NitroRow_(const NitroRow* CONTIGUOUS_MEMORY NON_NULL data, size_t size) noexcept {
+    return margelo::nitro::FastVectorCopy<NitroRow>(data, size);
+  }
+  inline const NitroRow* CONTIGUOUS_MEMORY NON_NULL get_data_std__vector_NitroRow_(const std::vector<NitroRow>& vector) noexcept {
+    return vector.data();
+  }
+  
+  // pragma MARK: std::vector<NitroSection>
+  /**
+   * Specialized version of `std::vector<NitroSection>`.
+   */
+  using std__vector_NitroSection_ = std::vector<NitroSection>;
+  inline std::vector<NitroSection> copy_std__vector_NitroSection_(const NitroSection* CONTIGUOUS_MEMORY NON_NULL data, size_t size) noexcept {
+    return margelo::nitro::FastVectorCopy<NitroSection>(data, size);
+  }
+  inline const NitroSection* CONTIGUOUS_MEMORY NON_NULL get_data_std__vector_NitroSection_(const std::vector<NitroSection>& vector) noexcept {
+    return vector.data();
+  }
+  
   // pragma MARK: std::vector<double>
   /**
    * Specialized version of `std::vector<double>`.
@@ -445,21 +512,6 @@ namespace margelo::nitro::test::bridge::swift {
   Func_void_std__exception_ptr create_Func_void_std__exception_ptr(void* NON_NULL swiftClosureWrapper) noexcept;
   inline Func_void_std__exception_ptr_Wrapper wrap_Func_void_std__exception_ptr(Func_void_std__exception_ptr value) noexcept {
     return Func_void_std__exception_ptr_Wrapper(std::move(value));
-  }
-  
-  // pragma MARK: std::optional<bool>
-  /**
-   * Specialized version of `std::optional<bool>`.
-   */
-  using std__optional_bool_ = std::optional<bool>;
-  inline std::optional<bool> create_std__optional_bool_(const bool& value) noexcept {
-    return std::optional<bool>(value);
-  }
-  inline bool has_value_std__optional_bool_(const std::optional<bool>& optional) noexcept {
-    return optional.has_value();
-  }
-  inline bool get_std__optional_bool_(const std::optional<bool>& optional) noexcept {
-    return *optional;
   }
   
   // pragma MARK: std::variant<std::string, double>

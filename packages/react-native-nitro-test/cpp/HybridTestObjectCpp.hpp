@@ -31,6 +31,7 @@ private:
   std::optional<Powertrain> _optionalEnum;
   std::optional<OldEnum> _optionalOldEnum;
   std::optional<std::function<void(double)>> _optionalCallback;
+  std::vector<NitroSection> _sections;
 
 private:
   static inline uint64_t calculateFibonacci(int count) noexcept {
@@ -50,6 +51,8 @@ public:
   void setBoolValue(bool boolValue) override;
   std::string getStringValue() override;
   void setStringValue(const std::string& stringValue) override;
+  std::vector<NitroSection> getSections() override;
+  void setSections(const std::vector<NitroSection>& sections) override;
   int64_t getBigintValue() override;
   void setBigintValue(int64_t bigintValue) override;
   std::optional<std::string> getStringOrUndefined() override;

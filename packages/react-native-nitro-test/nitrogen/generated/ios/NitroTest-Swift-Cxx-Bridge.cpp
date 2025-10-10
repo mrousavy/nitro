@@ -41,6 +41,14 @@ namespace margelo::nitro::test::bridge::swift {
     };
   }
   
+  // pragma MARK: std::function<void(std::optional<bool> /* checked */)>
+  Func_void_std__optional_bool_ create_Func_void_std__optional_bool_(void* NON_NULL swiftClosureWrapper) noexcept {
+    auto swiftClosure = NitroTest::Func_void_std__optional_bool_::fromUnsafe(swiftClosureWrapper);
+    return [swiftClosure = std::move(swiftClosure)](std::optional<bool> checked) mutable -> void {
+      swiftClosure.call(checked);
+    };
+  }
+  
   // pragma MARK: std::function<void(const std::vector<Powertrain>& /* array */)>
   Func_void_std__vector_Powertrain_ create_Func_void_std__vector_Powertrain_(void* NON_NULL swiftClosureWrapper) noexcept {
     auto swiftClosure = NitroTest::Func_void_std__vector_Powertrain_::fromUnsafe(swiftClosureWrapper);

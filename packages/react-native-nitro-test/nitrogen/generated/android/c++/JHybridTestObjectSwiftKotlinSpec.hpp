@@ -74,6 +74,8 @@ namespace margelo::nitro::test {
     void setOptionalOldEnum(std::optional<OldEnum> optionalOldEnum) override;
     std::optional<std::function<void(double /* value */)>> getOptionalCallback() override;
     void setOptionalCallback(const std::optional<std::function<void(double /* value */)>>& optionalCallback) override;
+    std::vector<NitroSection> getSections() override;
+    void setSections(const std::vector<NitroSection>& sections) override;
     std::variant<std::string, double> getSomeVariant() override;
     void setSomeVariant(const std::variant<std::string, double>& someVariant) override;
 

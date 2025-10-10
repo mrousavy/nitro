@@ -25,6 +25,7 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
   var optionalEnum: Powertrain? { get set }
   var optionalOldEnum: OldEnum? { get set }
   var optionalCallback: ((_ value: Double) -> Void)? { get set }
+  var sections: [NitroSection] { get set }
   var someVariant: Variant_String_Double { get set }
 
   // Methods

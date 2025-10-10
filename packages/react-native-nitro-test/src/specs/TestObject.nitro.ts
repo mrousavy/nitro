@@ -81,6 +81,16 @@ export type CustomString = CustomType<
   { include: 'CustomString.hpp' }
 >
 
+type NitroRow = {
+  title: string
+  onPress: (checked?: boolean) => void
+}
+
+type NitroSection = {
+  title?: string
+  items: Array<NitroRow>
+}
+
 // This is an `interface` we're going to use as a base in both of our `HybridObject`s later.
 // In this case, the `HybridObject`s will just flatten out and copy over all properties here.
 // There is no separate type for `SharedTestObjectProps` on the native side.
@@ -97,6 +107,8 @@ interface SharedTestObjectProps {
   optionalEnum?: Powertrain
   optionalOldEnum?: OldEnum
   optionalCallback?: (value: number) => void
+
+  sections: NitroSection[]
 
   // Basic function tests
   simpleFunc(): void
