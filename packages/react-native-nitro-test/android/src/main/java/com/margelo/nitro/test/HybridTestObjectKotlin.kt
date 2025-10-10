@@ -273,6 +273,10 @@ class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
         return wrapper
     }
 
+    override fun bounceOptionalWrapperWithVariant(wrapper: OptionalVariantWrapper): OptionalVariantWrapper {
+        return wrapper
+    }
+
     override fun createArrayBufferFromNativeBuffer(copy: Boolean): ArrayBuffer {
         val hardwareBuffer = HardwareBuffer.create(
             1024,
@@ -324,6 +328,10 @@ class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
 
     override fun passNamedVariant(variant: NamedVariant): NamedVariant {
         return variant
+    }
+
+    override fun passOptionalNamedVariant(variant: NamedVariant?): NamedVariant {
+        return variant ?: NamedVariant.create("empty")
     }
 
     override fun getVariantHybrid(variant: Variant_Person_HybridTestObjectSwiftKotlinSpec): Variant_Person_HybridTestObjectSwiftKotlinSpec {

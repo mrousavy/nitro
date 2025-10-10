@@ -88,7 +88,7 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
   func getVariantObjects(variant: Variant_Car_Person) throws -> Variant_Car_Person
   func passNamedVariant(variant: NamedVariant) throws -> NamedVariant
   func passAllEmptyObjectVariant(variant: Variant_OptionalWrapper__any_HybridBaseSpec_) throws -> Variant_OptionalWrapper__any_HybridBaseSpec_
-  func optionalNamedVariant(variant: NamedVariant?) throws -> NamedVariant
+  func passOptionalNamedVariant(variant: NamedVariant?) throws -> NamedVariant
   func createChild() throws -> (any HybridChildSpec)
   func createBase() throws -> (any HybridBaseSpec)
   func createBaseActualChild() throws -> (any HybridBaseSpec)

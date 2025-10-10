@@ -675,8 +675,8 @@ namespace margelo::nitro::test {
       auto __value = std::move(__result.value());
       return __value;
     }
-    inline std::variant<std::string, Car> optionalNamedVariant(const std::optional<std::variant<std::string, Car>>& variant) override {
-      auto __result = _swiftPart.optionalNamedVariant(variant);
+    inline std::variant<std::string, Car> passOptionalNamedVariant(const std::optional<std::variant<std::string, Car>>& variant) override {
+      auto __result = _swiftPart.passOptionalNamedVariant(variant);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }

@@ -421,7 +421,7 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
-  abstract fun optionalNamedVariant(variant: NamedVariant?): NamedVariant
+  abstract fun passOptionalNamedVariant(variant: NamedVariant?): NamedVariant
   
   @DoNotStrip
   @Keep

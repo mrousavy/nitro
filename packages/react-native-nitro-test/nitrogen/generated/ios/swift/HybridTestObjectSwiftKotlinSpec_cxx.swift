@@ -1683,9 +1683,9 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public final func optionalNamedVariant(variant: bridge.std__optional_std__variant_std__string__Car__) -> bridge.Result_std__variant_std__string__Car__ {
+  public final func passOptionalNamedVariant(variant: bridge.std__optional_std__variant_std__string__Car__) -> bridge.Result_std__variant_std__string__Car__ {
     do {
-      let __result = try self.__implementation.optionalNamedVariant(variant: { () -> NamedVariant? in
+      let __result = try self.__implementation.passOptionalNamedVariant(variant: { () -> NamedVariant? in
         if bridge.has_value_std__optional_std__variant_std__string__Car__(variant) {
           let __unwrapped = bridge.get_std__optional_std__variant_std__string__Car__(variant)
           return { () -> NamedVariant in

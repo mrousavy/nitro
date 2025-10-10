@@ -139,7 +139,7 @@ namespace margelo::nitro::test {
     std::variant<Car, Person> getVariantObjects(const std::variant<Car, Person>& variant) override;
     std::variant<std::string, Car> passNamedVariant(const std::variant<std::string, Car>& variant) override;
     std::variant<OptionalWrapper, std::shared_ptr<HybridBaseSpec>> passAllEmptyObjectVariant(const std::variant<OptionalWrapper, std::shared_ptr<HybridBaseSpec>>& variant) override;
-    std::variant<std::string, Car> optionalNamedVariant(const std::optional<std::variant<std::string, Car>>& variant) override;
+    std::variant<std::string, Car> passOptionalNamedVariant(const std::optional<std::variant<std::string, Car>>& variant) override;
     std::shared_ptr<HybridChildSpec> createChild() override;
     std::shared_ptr<HybridBaseSpec> createBase() override;
     std::shared_ptr<HybridBaseSpec> createBaseActualChild() override;

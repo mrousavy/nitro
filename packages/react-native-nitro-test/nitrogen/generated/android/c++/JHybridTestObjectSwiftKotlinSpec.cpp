@@ -857,8 +857,8 @@ namespace margelo::nitro::test {
     auto __result = method(_javaPart, JVariant_OptionalWrapper_HybridBaseSpec::fromCpp(variant));
     return __result->toCpp();
   }
-  std::variant<std::string, Car> JHybridTestObjectSwiftKotlinSpec::optionalNamedVariant(const std::optional<std::variant<std::string, Car>>& variant) {
-    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JNamedVariant>(jni::alias_ref<JNamedVariant> /* variant */)>("optionalNamedVariant");
+  std::variant<std::string, Car> JHybridTestObjectSwiftKotlinSpec::passOptionalNamedVariant(const std::optional<std::variant<std::string, Car>>& variant) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JNamedVariant>(jni::alias_ref<JNamedVariant> /* variant */)>("passOptionalNamedVariant");
     auto __result = method(_javaPart, variant.has_value() ? JNamedVariant::fromCpp(variant.value()) : nullptr);
     return __result->toCpp();
   }
