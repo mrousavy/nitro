@@ -28,9 +28,5 @@ data class WrappedJsStruct
     @Keep
     val items: Array<JsStyleStruct>
   ) {
-  /**
-   * Initialize a new instance of `WrappedJsStruct` from Kotlin.
-   */
-  constructor(value: JsStyleStruct, items: Array<JsStyleStruct>)
-       : this(value, items)
+  /* main constructor */
 }
