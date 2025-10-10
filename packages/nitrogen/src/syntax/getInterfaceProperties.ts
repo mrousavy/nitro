@@ -12,8 +12,7 @@ export function getInterfaceProperties(
 
     if (!declaration.isKind(ts.SyntaxKind.PropertySignature)) {
       throw new Error(
-        `Property "${prop.getName()}" has an unsupported declaration kind.
-        Make sure it's declared as "propertyName: Type" in an interface or type declaration.`
+        `Property "${prop.getName()}" has an unsupported declaration kind. Make sure it's declared as "propertyName: Type" in an interface or type declaration.`
       )
     }
 
@@ -21,8 +20,7 @@ export function getInterfaceProperties(
 
     if (typeNode == null) {
       throw new Error(
-        `Property "${prop.getName()}" has no explicit type annotation.
-        All properties in Nitro specs must have explicit type annotations.`
+        `Property "${prop.getName()}" has no explicit type annotation. All properties in Nitro specs must have explicit type annotations.`
       )
     }
 

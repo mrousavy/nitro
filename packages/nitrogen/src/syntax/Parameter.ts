@@ -28,8 +28,7 @@ export class Parameter implements CodeNode {
 
       if (typeNode == null) {
         throw new Error(
-          `Parameter "${name}" has no explicit type annotation.
-          All parameters in Nitro specs must have explicit type annotations.`
+          `Parameter "${name}" has no explicit type annotation. All parameters in Nitro specs must have explicit type annotations.`
         )
       }
 
