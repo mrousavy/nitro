@@ -325,7 +325,7 @@ namespace margelo::nitro::test {
       return __value;
     }
     inline std::unordered_map<std::string, std::string> extractMap(const MapWrapper& mapWrapper) override {
-      auto __result = _swiftPart.extractMap(std::forward<decltype(mapWrapper)>(mapWrapper));
+      auto __result = _swiftPart.extractMap(mapWrapper);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
@@ -525,7 +525,7 @@ namespace margelo::nitro::test {
       return __value;
     }
     inline bool isCarElectric(const Car& car) override {
-      auto __result = _swiftPart.isCarElectric(std::forward<decltype(car)>(car));
+      auto __result = _swiftPart.isCarElectric(car);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
@@ -533,7 +533,7 @@ namespace margelo::nitro::test {
       return __value;
     }
     inline std::optional<Person> getDriver(const Car& car) override {
-      auto __result = _swiftPart.getDriver(std::forward<decltype(car)>(car));
+      auto __result = _swiftPart.getDriver(car);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
@@ -541,13 +541,13 @@ namespace margelo::nitro::test {
       return __value;
     }
     inline void jsStyleObjectAsParameters(const JsStyleStruct& params) override {
-      auto __result = _swiftPart.jsStyleObjectAsParameters(std::forward<decltype(params)>(params));
+      auto __result = _swiftPart.jsStyleObjectAsParameters(params);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
     }
     inline WrappedJsStruct bounceWrappedJsStyleStruct(const WrappedJsStruct& value) override {
-      auto __result = _swiftPart.bounceWrappedJsStyleStruct(std::forward<decltype(value)>(value));
+      auto __result = _swiftPart.bounceWrappedJsStyleStruct(value);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
@@ -555,7 +555,7 @@ namespace margelo::nitro::test {
       return __value;
     }
     inline OptionalWrapper bounceOptionalWrapper(const OptionalWrapper& wrapper) override {
-      auto __result = _swiftPart.bounceOptionalWrapper(std::forward<decltype(wrapper)>(wrapper));
+      auto __result = _swiftPart.bounceOptionalWrapper(wrapper);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }

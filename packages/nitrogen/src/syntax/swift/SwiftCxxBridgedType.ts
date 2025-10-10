@@ -106,6 +106,8 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
       case 'result-wrapper':
         // Result<T> <> T
         return true
+      case 'struct':
+        return true
       default:
         return false
     }
