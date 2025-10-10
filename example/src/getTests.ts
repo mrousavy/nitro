@@ -1671,7 +1671,7 @@ export function getTests(
     ),
     ...('nestedObjectTest' in testObject
       ? [
-          createTest('', () =>
+          createTest('HybridObject.nestedObjectTest is valid', () =>
             it(() => {
               const config: NitroNestedObjectTest = {
                 sections: [
