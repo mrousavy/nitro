@@ -19,6 +19,7 @@ import { VoidType } from '../types/VoidType.js'
 import { NamedWrappingType } from '../types/NamedWrappingType.js'
 import { ErrorType } from '../types/ErrorType.js'
 import { ResultWrappingType } from '../types/ResultWrappingType.js'
+import { isPrimitivelyCopyable } from './isPrimitivelyCopyable.js'
 
 export interface SwiftCxxHelper {
   cxxHeader: {
@@ -258,11 +259,6 @@ inline ${wrappedBridge.getTypeCode('c++')} get_${name}(const ${actualType}& opti
     },
     dependencies: [],
   }
-}
-
-export function isPrimitivelyCopyable(type: Type): boolean {
-  const bridgedType = new SwiftCxxBridgedType(type, true)
-  return !bridgedType.needsSpecialHandling
 }
 
 /**
