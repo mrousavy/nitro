@@ -18,9 +18,17 @@ val ${p.escapedName}: ${bridged.getTypeCode('kotlin', false)}
 `.trim()
   })
   let secondaryConstructor: string
-  const needsSpecialHandling = structType.properties.some(
-    (p) => new KotlinCxxBridgedType(p).needsSpecialHandling
-  )
+
+  const needsSpecialHandling = structType.properties.some((p) => {
+    const bridged = new KotlinCxxBridgedType(p)
+    const parseCode = bridged.parseFromKotlinToCpp(
+      p.escapedName,
+      'kotlin',
+      false
+    )
+    return parseCode !== p.escapedName
+  })
+
   if (needsSpecialHandling) {
     // If we need special handling for any of our properties, we need to add a convenience initializer.
     const params = structType.properties.map(

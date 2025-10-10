@@ -23,7 +23,10 @@ data class WrappedJsStruct
   constructor(
     @DoNotStrip
     @Keep
-    val value: JsStyleStruct
+    val value: JsStyleStruct,
+    @DoNotStrip
+    @Keep
+    val items: Array<JsStyleStruct>
   ) {
   /* main constructor */
 }

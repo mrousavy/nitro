@@ -22,6 +22,7 @@
 namespace margelo::nitro::test { struct JsStyleStruct; }
 
 #include "JsStyleStruct.hpp"
+#include <vector>
 
 namespace margelo::nitro::test {
 
@@ -31,10 +32,11 @@ namespace margelo::nitro::test {
   struct WrappedJsStruct {
   public:
     JsStyleStruct value     SWIFT_PRIVATE;
+    std::vector<JsStyleStruct> items     SWIFT_PRIVATE;
 
   public:
     WrappedJsStruct() = default;
-    explicit WrappedJsStruct(JsStyleStruct value): value(value) {}
+    explicit WrappedJsStruct(JsStyleStruct value, std::vector<JsStyleStruct> items): value(value), items(items) {}
   };
 
 } // namespace margelo::nitro::test
@@ -47,12 +49,14 @@ namespace margelo::nitro {
     static inline margelo::nitro::test::WrappedJsStruct fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       jsi::Object obj = arg.asObject(runtime);
       return margelo::nitro::test::WrappedJsStruct(
-        JSIConverter<margelo::nitro::test::JsStyleStruct>::fromJSI(runtime, obj.getProperty(runtime, "value"))
+        JSIConverter<margelo::nitro::test::JsStyleStruct>::fromJSI(runtime, obj.getProperty(runtime, "value")),
+        JSIConverter<std::vector<margelo::nitro::test::JsStyleStruct>>::fromJSI(runtime, obj.getProperty(runtime, "items"))
       );
     }
     static inline jsi::Value toJSI(jsi::Runtime& runtime, const margelo::nitro::test::WrappedJsStruct& arg) {
       jsi::Object obj(runtime);
       obj.setProperty(runtime, "value", JSIConverter<margelo::nitro::test::JsStyleStruct>::toJSI(runtime, arg.value));
+      obj.setProperty(runtime, "items", JSIConverter<std::vector<margelo::nitro::test::JsStyleStruct>>::toJSI(runtime, arg.items));
       return obj;
     }
     static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
@@ -61,6 +65,7 @@ namespace margelo::nitro {
       }
       jsi::Object obj = value.getObject(runtime);
       if (!JSIConverter<margelo::nitro::test::JsStyleStruct>::canConvert(runtime, obj.getProperty(runtime, "value"))) return false;
+      if (!JSIConverter<std::vector<margelo::nitro::test::JsStyleStruct>>::canConvert(runtime, obj.getProperty(runtime, "items"))) return false;
       return true;
     }
   };

@@ -66,6 +66,7 @@ const TEST_WRAPPED_STRUCT: WrappedJsStruct = {
     value: 55.3,
     onChanged: (_num: number) => {},
   },
+  items: [],
 }
 const TEST_OPTIONAL_WRAPPER: OptionalWrapper = {
   optionalArrayBuffer: new ArrayBuffer(1024),

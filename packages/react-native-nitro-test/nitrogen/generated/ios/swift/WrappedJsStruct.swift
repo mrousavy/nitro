@@ -18,8 +18,10 @@ public extension WrappedJsStruct {
   /**
    * Create a new instance of `WrappedJsStruct`.
    */
-  init(value: JsStyleStruct) {
-    self.init(value)
+  init(value: JsStyleStruct, items: [JsStyleStruct]) {
+    self.init(value, items.withUnsafeBufferPointer { __pointer -> bridge.std__vector_JsStyleStruct_ in
+      return bridge.copy_std__vector_JsStyleStruct_(__pointer.baseAddress!, items.count)
+    })
   }
 
   var value: JsStyleStruct {
@@ -30,6 +32,23 @@ public extension WrappedJsStruct {
     @inline(__always)
     set {
       self.__value = newValue
+    }
+  }
+  
+  var items: [JsStyleStruct] {
+    @inline(__always)
+    get {
+      return { () -> [JsStyleStruct] in
+        let __data = bridge.get_data_std__vector_JsStyleStruct_(self.__items)
+        let __size = self.__items.size()
+        return Array(UnsafeBufferPointer(start: __data, count: __size))
+      }()
+    }
+    @inline(__always)
+    set {
+      self.__items = newValue.withUnsafeBufferPointer { __pointer -> bridge.std__vector_JsStyleStruct_ in
+        return bridge.copy_std__vector_JsStyleStruct_(__pointer.baseAddress!, newValue.count)
+      }
     }
   }
 }
