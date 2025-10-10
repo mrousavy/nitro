@@ -25,13 +25,9 @@ public extension NitroSection {
       } else {
         return .init()
       }
-    }(), { () -> bridge.std__vector_NitroRow_ in
-      var __vector = bridge.create_std__vector_NitroRow_(items.count)
-      for __item in items {
-        __vector.push_back(__item)
-      }
-      return __vector
-    }())
+    }(), items.withUnsafeBufferPointer { __pointer -> bridge.std__vector_NitroRow_ in
+      return bridge.copy_std__vector_NitroRow_(__pointer.baseAddress!, items.count)
+    })
   }
 
   var title: String? {
@@ -61,17 +57,17 @@ public extension NitroSection {
   var items: [NitroRow] {
     @inline(__always)
     get {
-      return self.__items.map({ __item in __item })
+      return { () -> [NitroRow] in
+        let __data = bridge.get_data_std__vector_NitroRow_(self.__items)
+        let __size = self.__items.size()
+        return Array(UnsafeBufferPointer(start: __data, count: __size))
+      }()
     }
     @inline(__always)
     set {
-      self.__items = { () -> bridge.std__vector_NitroRow_ in
-        var __vector = bridge.create_std__vector_NitroRow_(newValue.count)
-        for __item in newValue {
-          __vector.push_back(__item)
-        }
-        return __vector
-      }()
+      self.__items = newValue.withUnsafeBufferPointer { __pointer -> bridge.std__vector_NitroRow_ in
+        return bridge.copy_std__vector_NitroRow_(__pointer.baseAddress!, newValue.count)
+      }
     }
   }
 }

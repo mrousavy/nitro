@@ -21,13 +21,9 @@ public extension NitroNestedObjectTest {
   init(sections: [NitroSection]?) {
     self.init({ () -> bridge.std__optional_std__vector_NitroSection__ in
       if let __unwrappedValue = sections {
-        return bridge.create_std__optional_std__vector_NitroSection__({ () -> bridge.std__vector_NitroSection_ in
-          var __vector = bridge.create_std__vector_NitroSection_(__unwrappedValue.count)
-          for __item in __unwrappedValue {
-            __vector.push_back(__item)
-          }
-          return __vector
-        }())
+        return bridge.create_std__optional_std__vector_NitroSection__(__unwrappedValue.withUnsafeBufferPointer { __pointer -> bridge.std__vector_NitroSection_ in
+          return bridge.copy_std__vector_NitroSection_(__pointer.baseAddress!, __unwrappedValue.count)
+        })
       } else {
         return .init()
       }
@@ -40,7 +36,11 @@ public extension NitroNestedObjectTest {
       return { () -> [NitroSection]? in
         if bridge.has_value_std__optional_std__vector_NitroSection__(self.__sections) {
           let __unwrapped = bridge.get_std__optional_std__vector_NitroSection__(self.__sections)
-          return __unwrapped.map({ __item in __item })
+          return { () -> [NitroSection] in
+            let __data = bridge.get_data_std__vector_NitroSection_(__unwrapped)
+            let __size = __unwrapped.size()
+            return Array(UnsafeBufferPointer(start: __data, count: __size))
+          }()
         } else {
           return nil
         }
@@ -50,13 +50,9 @@ public extension NitroNestedObjectTest {
     set {
       self.__sections = { () -> bridge.std__optional_std__vector_NitroSection__ in
         if let __unwrappedValue = newValue {
-          return bridge.create_std__optional_std__vector_NitroSection__({ () -> bridge.std__vector_NitroSection_ in
-            var __vector = bridge.create_std__vector_NitroSection_(__unwrappedValue.count)
-            for __item in __unwrappedValue {
-              __vector.push_back(__item)
-            }
-            return __vector
-          }())
+          return bridge.create_std__optional_std__vector_NitroSection__(__unwrappedValue.withUnsafeBufferPointer { __pointer -> bridge.std__vector_NitroSection_ in
+            return bridge.copy_std__vector_NitroSection_(__pointer.baseAddress!, __unwrappedValue.count)
+          })
         } else {
           return .init()
         }

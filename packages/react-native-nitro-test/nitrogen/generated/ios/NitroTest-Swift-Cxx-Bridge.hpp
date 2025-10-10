@@ -172,10 +172,11 @@ namespace margelo::nitro::test::bridge::swift {
    * Specialized version of `std::vector<NitroRow>`.
    */
   using std__vector_NitroRow_ = std::vector<NitroRow>;
-  inline std::vector<NitroRow> create_std__vector_NitroRow_(size_t size) noexcept {
-    std::vector<NitroRow> vector;
-    vector.reserve(size);
-    return vector;
+  inline std::vector<NitroRow> copy_std__vector_NitroRow_(const NitroRow* CONTIGUOUS_MEMORY NON_NULL data, size_t size) noexcept {
+    return margelo::nitro::FastVectorCopy<NitroRow>(data, size);
+  }
+  inline const NitroRow* CONTIGUOUS_MEMORY NON_NULL get_data_std__vector_NitroRow_(const std::vector<NitroRow>& vector) noexcept {
+    return vector.data();
   }
   
   // pragma MARK: std::vector<NitroSection>
@@ -183,10 +184,11 @@ namespace margelo::nitro::test::bridge::swift {
    * Specialized version of `std::vector<NitroSection>`.
    */
   using std__vector_NitroSection_ = std::vector<NitroSection>;
-  inline std::vector<NitroSection> create_std__vector_NitroSection_(size_t size) noexcept {
-    std::vector<NitroSection> vector;
-    vector.reserve(size);
-    return vector;
+  inline std::vector<NitroSection> copy_std__vector_NitroSection_(const NitroSection* CONTIGUOUS_MEMORY NON_NULL data, size_t size) noexcept {
+    return margelo::nitro::FastVectorCopy<NitroSection>(data, size);
+  }
+  inline const NitroSection* CONTIGUOUS_MEMORY NON_NULL get_data_std__vector_NitroSection_(const std::vector<NitroSection>& vector) noexcept {
+    return vector.data();
   }
   
   // pragma MARK: std::optional<std::vector<NitroSection>>
@@ -314,10 +316,11 @@ namespace margelo::nitro::test::bridge::swift {
    * Specialized version of `std::vector<Person>`.
    */
   using std__vector_Person_ = std::vector<Person>;
-  inline std::vector<Person> create_std__vector_Person_(size_t size) noexcept {
-    std::vector<Person> vector;
-    vector.reserve(size);
-    return vector;
+  inline std::vector<Person> copy_std__vector_Person_(const Person* CONTIGUOUS_MEMORY NON_NULL data, size_t size) noexcept {
+    return margelo::nitro::FastVectorCopy<Person>(data, size);
+  }
+  inline const Person* CONTIGUOUS_MEMORY NON_NULL get_data_std__vector_Person_(const std::vector<Person>& vector) noexcept {
+    return vector.data();
   }
   
   // pragma MARK: std::vector<Powertrain>
