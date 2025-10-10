@@ -813,6 +813,41 @@ export function getTests(
         .didNotThrow()
         .equals('Hello world!')
     ),
+    createTest('bounceOptionalWrapperWithVariant(...) with string', () =>
+      it(() =>
+        testObject.bounceOptionalWrapperWithVariant({ variant: 'test string' })
+      )
+        .didNotThrow()
+        .equals({ variant: 'test string' })
+    ),
+    createTest('bounceOptionalWrapperWithVariant(...) with Car', () =>
+      it(() =>
+        testObject.bounceOptionalWrapperWithVariant({ variant: TEST_CAR })
+      )
+        .didNotThrow()
+        .equals({ variant: TEST_CAR })
+    ),
+    createTest('bounceOptionalWrapperWithVariant(...) with optional', () =>
+      it(() => testObject.bounceOptionalWrapperWithVariant({}))
+        .didNotThrow()
+        .didReturn('object')
+        .equals({ variant: undefined })
+    ),
+    createTest('passOptionalNamedVariant(...) with string', () =>
+      it(() => testObject.passOptionalNamedVariant('test'))
+        .didNotThrow()
+        .equals('test')
+    ),
+    createTest('passOptionalNamedVariant(...) with Car', () =>
+      it(() => testObject.passOptionalNamedVariant(TEST_CAR))
+        .didNotThrow()
+        .equals(TEST_CAR)
+    ),
+    createTest('passOptionalNamedVariant(...) with optional', () =>
+      it(() => testObject.passOptionalNamedVariant())
+        .didNotThrow()
+        .equals('empty')
+    ),
 
     // More complex variants...
     ...('getVariantTuple' in testObject
