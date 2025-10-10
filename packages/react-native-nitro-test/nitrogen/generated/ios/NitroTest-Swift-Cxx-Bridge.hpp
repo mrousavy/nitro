@@ -26,6 +26,8 @@ namespace margelo::nitro::test::external { class HybridSomeExternalObjectSpec; }
 namespace margelo::nitro::test { class HybridTestObjectSwiftKotlinSpec; }
 // Forward declaration of `HybridTestViewSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridTestViewSpec; }
+// Forward declaration of `JsStyleStruct` to properly resolve imports.
+namespace margelo::nitro::test { struct JsStyleStruct; }
 // Forward declaration of `OldEnum` to properly resolve imports.
 namespace margelo::nitro::test { enum class OldEnum; }
 // Forward declaration of `OptionalWrapper` to properly resolve imports.
@@ -57,6 +59,7 @@ namespace NitroTest { class HybridTestViewSpec_cxx; }
 #include "HybridChildSpec.hpp"
 #include "HybridTestObjectSwiftKotlinSpec.hpp"
 #include "HybridTestViewSpec.hpp"
+#include "JsStyleStruct.hpp"
 #include "OldEnum.hpp"
 #include "OptionalWrapper.hpp"
 #include "Person.hpp"
@@ -846,6 +849,18 @@ namespace margelo::nitro::test::bridge::swift {
   Func_void_std__string create_Func_void_std__string(void* NON_NULL swiftClosureWrapper) noexcept;
   inline Func_void_std__string_Wrapper wrap_Func_void_std__string(Func_void_std__string value) noexcept {
     return Func_void_std__string_Wrapper(std::move(value));
+  }
+  
+  // pragma MARK: std::vector<JsStyleStruct>
+  /**
+   * Specialized version of `std::vector<JsStyleStruct>`.
+   */
+  using std__vector_JsStyleStruct_ = std::vector<JsStyleStruct>;
+  inline std::vector<JsStyleStruct> copy_std__vector_JsStyleStruct_(const JsStyleStruct* CONTIGUOUS_MEMORY NON_NULL data, size_t size) noexcept {
+    return margelo::nitro::FastVectorCopy<JsStyleStruct>(data, size);
+  }
+  inline const JsStyleStruct* CONTIGUOUS_MEMORY NON_NULL get_data_std__vector_JsStyleStruct_(const std::vector<JsStyleStruct>& vector) noexcept {
+    return vector.data();
   }
   
   // pragma MARK: std::optional<std::shared_ptr<ArrayBuffer>>

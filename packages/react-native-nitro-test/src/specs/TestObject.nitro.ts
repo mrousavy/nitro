@@ -61,6 +61,7 @@ interface JsStyleStruct {
 }
 export interface WrappedJsStruct {
   value: JsStyleStruct
+  items: JsStyleStruct[]
 }
 export interface OptionalWrapper {
   optionalArrayBuffer?: ArrayBuffer

@@ -23,7 +23,14 @@ data class WrappedJsStruct
   constructor(
     @DoNotStrip
     @Keep
-    val value: JsStyleStruct
+    val value: JsStyleStruct,
+    @DoNotStrip
+    @Keep
+    val items: Array<JsStyleStruct>
   ) {
-  /* main constructor */
+  /**
+   * Initialize a new instance of `WrappedJsStruct` from Kotlin.
+   */
+  constructor(value: JsStyleStruct, items: Array<JsStyleStruct>)
+       : this(value, items)
 }
