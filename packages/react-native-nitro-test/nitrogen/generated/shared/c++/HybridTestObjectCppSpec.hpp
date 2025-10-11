@@ -21,12 +21,14 @@ namespace margelo::nitro::test { enum class Powertrain; }
 namespace margelo::nitro::test { enum class OldEnum; }
 // Forward declaration of `Person` to properly resolve imports.
 namespace margelo::nitro::test { struct Person; }
-// Forward declaration of `Car` to properly resolve imports.
-namespace margelo::nitro::test { struct Car; }
+// Forward declaration of `Garage` to properly resolve imports.
+namespace margelo::nitro::test { struct Garage; }
 // Forward declaration of `AnyMap` to properly resolve imports.
 namespace NitroModules { class AnyMap; }
 // Forward declaration of `MapWrapper` to properly resolve imports.
 namespace margelo::nitro::test { struct MapWrapper; }
+// Forward declaration of `Car` to properly resolve imports.
+namespace margelo::nitro::test { struct Car; }
 // Forward declaration of `ArrayBuffer` to properly resolve imports.
 namespace NitroModules { class ArrayBuffer; }
 // Forward declaration of `JsStyleStruct` to properly resolve imports.
@@ -58,13 +60,14 @@ namespace margelo::nitro::test::external { class HybridSomeExternalObjectSpec; }
 #include <variant>
 #include "Person.hpp"
 #include "CustomString.hpp"
-#include "Car.hpp"
+#include "Garage.hpp"
 #include <NitroModules/AnyMap.hpp>
 #include <unordered_map>
 #include "MapWrapper.hpp"
 #include <NitroModules/Promise.hpp>
 #include <exception>
 #include <chrono>
+#include "Car.hpp"
 #include <NitroModules/ArrayBuffer.hpp>
 #include "JsStyleStruct.hpp"
 #include "WrappedJsStruct.hpp"
@@ -147,7 +150,7 @@ namespace margelo::nitro::test {
       virtual std::vector<std::string> bounceStrings(const std::vector<std::string>& array) = 0;
       virtual std::vector<double> bounceNumbers(const std::vector<double>& array) = 0;
       virtual std::vector<Person> bounceStructs(const std::vector<Person>& array) = 0;
-      virtual std::vector<Car> bounceNestedStructs(const std::vector<Car>& array) = 0;
+      virtual std::string sumUpAllCarNames(const Garage& garage) = 0;
       virtual std::vector<Powertrain> bounceEnums(const std::vector<Powertrain>& array) = 0;
       virtual void complexEnumCallback(const std::vector<Powertrain>& array, const std::function<void(const std::vector<Powertrain>& /* array */)>& callback) = 0;
       virtual std::shared_ptr<AnyMap> createMap() = 0;

@@ -428,11 +428,17 @@ export function getTests(
           { age: 5, name: 'Ben' },
         ])
     ),
-    createTest('bounceNestedStructs(...) equals', () =>
-      it(() => testObject.bounceNestedStructs([TEST_CAR, TEST_CAR_2]))
+    createTest('sumUpAllCarNames(...) equals', () =>
+      it(() =>
+        testObject.sumUpAllCarNames({
+          cars: [TEST_CAR, TEST_CAR_2],
+        })
+      )
         .didNotThrow()
-        .didReturn('object')
-        .equals([TEST_CAR, TEST_CAR_2])
+        .didReturn('string')
+        .equals(
+          `${TEST_CAR.make} ${TEST_CAR.model}, ${TEST_CAR_2.make} ${TEST_CAR_2.model}`
+        )
     ),
     createTest('bounceWrappedJsStyleStruct(...) equals', () =>
       it(() => testObject.bounceWrappedJsStyleStruct(TEST_WRAPPED_STRUCT))

@@ -9,6 +9,7 @@
 #include <NitroModules/AnyMap.hpp>
 #include <NitroModules/NitroLogger.hpp>
 #include <chrono>
+#include <sstream>
 #include <thread>
 
 #include "HybridBase.hpp"
@@ -167,8 +168,22 @@ std::vector<Person> HybridTestObjectCpp::bounceStructs(const std::vector<Person>
   return array;
 }
 
-std::vector<Car> HybridTestObjectCpp::bounceNestedStructs(const std::vector<Car>& array) {
-  return array;
+std::string HybridTestObjectCpp::sumUpAllCarNames(const Garage& garage) {
+  const auto& cars = garage.cars;
+  if (!cars.has_value() || cars->empty()) {
+    throw std::runtime_error("No cars in garage!");
+  }
+
+  std::ostringstream oss;
+  for (size_t i = 0; i < cars->size(); ++i) {
+    const auto& car = (*cars)[i];
+    oss << car.make << " " << car.model;
+    if (i + 1 < cars->size()) {
+      oss << ", ";
+    }
+  }
+
+  return oss.str();
 }
 
 std::vector<Powertrain> HybridTestObjectCpp::bounceEnums(const std::vector<Powertrain>& array) {

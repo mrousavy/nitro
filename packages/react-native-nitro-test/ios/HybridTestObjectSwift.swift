@@ -121,8 +121,11 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
     return array
   }
 
-  func bounceNestedStructs(array: [Car]) throws -> [Car] {
-    return array
+  func sumUpAllCarNames(garage: Garage) throws -> String {
+    guard let cars = garage.cars else {
+      throw RuntimeError.error(withMessage: "No cars in garage!")
+    }
+    return cars.map { "\($0.make) \($0.model)" }.joined(separator: ", ")
   }
 
   func bounceEnums(array: [Powertrain]) throws -> [Powertrain] {

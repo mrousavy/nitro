@@ -167,7 +167,7 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
-  abstract fun bounceNestedStructs(array: Array<Car>): Array<Car>
+  abstract fun sumUpAllCarNames(garage: Garage): String
   
   @DoNotStrip
   @Keep

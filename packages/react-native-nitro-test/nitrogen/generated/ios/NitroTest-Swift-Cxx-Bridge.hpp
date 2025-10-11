@@ -320,6 +320,21 @@ namespace margelo::nitro::test::bridge::swift {
     return vector.data();
   }
   
+  // pragma MARK: std::optional<std::vector<Car>>
+  /**
+   * Specialized version of `std::optional<std::vector<Car>>`.
+   */
+  using std__optional_std__vector_Car__ = std::optional<std::vector<Car>>;
+  inline std::optional<std::vector<Car>> create_std__optional_std__vector_Car__(const std::vector<Car>& value) noexcept {
+    return std::optional<std::vector<Car>>(value);
+  }
+  inline bool has_value_std__optional_std__vector_Car__(const std::optional<std::vector<Car>>& optional) noexcept {
+    return optional.has_value();
+  }
+  inline std::vector<Car> get_std__optional_std__vector_Car__(const std::optional<std::vector<Car>>& optional) noexcept {
+    return *optional;
+  }
+  
   // pragma MARK: std::vector<Powertrain>
   /**
    * Specialized version of `std::vector<Powertrain>`.
@@ -1226,15 +1241,6 @@ namespace margelo::nitro::test::bridge::swift {
   }
   inline Result_std__vector_Person__ create_Result_std__vector_Person__(const std::exception_ptr& error) noexcept {
     return Result<std::vector<Person>>::withError(error);
-  }
-  
-  // pragma MARK: Result<std::vector<Car>>
-  using Result_std__vector_Car__ = Result<std::vector<Car>>;
-  inline Result_std__vector_Car__ create_Result_std__vector_Car__(const std::vector<Car>& value) noexcept {
-    return Result<std::vector<Car>>::withValue(value);
-  }
-  inline Result_std__vector_Car__ create_Result_std__vector_Car__(const std::exception_ptr& error) noexcept {
-    return Result<std::vector<Car>>::withError(error);
   }
   
   // pragma MARK: Result<std::vector<Powertrain>>

@@ -48,6 +48,9 @@ export interface Car {
   favouriteTrack?: string
   performanceScores: number[]
 }
+interface Garage {
+  cars?: Car[]
+}
 
 // A `type T = { ... }` declaration is the same as a `interface T { ... }` - it's a `struct` in C++.
 export type Person = {
@@ -108,7 +111,7 @@ interface SharedTestObjectProps {
   bounceStrings(array: string[]): string[]
   bounceNumbers(array: number[]): number[]
   bounceStructs(array: Person[]): Person[]
-  bounceNestedStructs(array: Car[]): Car[]
+  sumUpAllCarNames(garage: Garage): string
   bounceEnums(array: Powertrain[]): Powertrain[]
   complexEnumCallback(
     array: Powertrain[],
