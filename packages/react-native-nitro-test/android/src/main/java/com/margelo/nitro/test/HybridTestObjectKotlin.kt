@@ -61,6 +61,10 @@ class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
         return array
     }
 
+    override fun bounceNestedStructs(array: Array<Car>): Array<Car> {
+        return array
+    }
+
     override fun bounceEnums(array: Array<Powertrain>): Array<Powertrain> {
         return array
     }

@@ -101,6 +101,7 @@ public:
   std::vector<std::string> bounceStrings(const std::vector<std::string>& array) override;
   std::vector<double> bounceNumbers(const std::vector<double>& array) override;
   std::vector<Person> bounceStructs(const std::vector<Person>& array) override;
+  std::vector<Car> bounceNestedStructs(const std::vector<Car>& array) override;
   std::vector<Powertrain> bounceEnums(const std::vector<Powertrain>& array) override;
   void complexEnumCallback(const std::vector<Powertrain>& array,
                            const std::function<void(const std::vector<Powertrain>& /* array */)>& callback) override;

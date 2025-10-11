@@ -167,6 +167,10 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
+  abstract fun bounceNestedStructs(array: Array<Car>): Array<Car>
+  
+  @DoNotStrip
+  @Keep
   abstract fun bounceEnums(array: Array<Powertrain>): Array<Powertrain>
   
   abstract fun complexEnumCallback(array: Array<Powertrain>, callback: (array: Array<Powertrain>) -> Unit): Unit

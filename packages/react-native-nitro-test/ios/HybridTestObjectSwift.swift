@@ -121,6 +121,10 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
     return array
   }
 
+  func bounceNestedStructs(array: [Car]) throws -> [Car] {
+    return array
+  }
+
   func bounceEnums(array: [Powertrain]) throws -> [Powertrain] {
     return array
   }

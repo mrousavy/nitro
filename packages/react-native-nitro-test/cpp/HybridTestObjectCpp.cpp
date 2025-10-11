@@ -167,6 +167,10 @@ std::vector<Person> HybridTestObjectCpp::bounceStructs(const std::vector<Person>
   return array;
 }
 
+std::vector<Car> HybridTestObjectCpp::bounceNestedStructs(const std::vector<Car>& array) {
+  return array;
+}
+
 std::vector<Powertrain> HybridTestObjectCpp::bounceEnums(const std::vector<Powertrain>& array) {
   return array;
 }

@@ -51,6 +51,17 @@ const TEST_CAR: Car = {
   favouriteTrack: undefined,
   performanceScores: [100, 0],
 }
+const TEST_CAR_2: Car = {
+  year: 2006,
+  make: 'Mitsubishi',
+  model: 'Evolution IX',
+  power: 280,
+  powertrain: 'gas',
+  driver: TEST_PERSON,
+  isFast: true,
+  favouriteTrack: 'the road',
+  performanceScores: [2, 5],
+}
 const TEST_MAP: Record<string, number | boolean> = {
   someKey: 55,
   some_other_key: 123,
@@ -416,6 +427,12 @@ export function getTests(
           { age: 24, name: 'Marc' },
           { age: 5, name: 'Ben' },
         ])
+    ),
+    createTest('bounceNestedStructs(...) equals', () =>
+      it(() => testObject.bounceNestedStructs([TEST_CAR, TEST_CAR_2]))
+        .didNotThrow()
+        .didReturn('object')
+        .equals([TEST_CAR, TEST_CAR_2])
     ),
     createTest('bounceWrappedJsStyleStruct(...) equals', () =>
       it(() => testObject.bounceWrappedJsStyleStruct(TEST_WRAPPED_STRUCT))

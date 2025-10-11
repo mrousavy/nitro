@@ -15,10 +15,10 @@ namespace margelo::nitro::test { enum class Powertrain; }
 namespace margelo::nitro::test { enum class OldEnum; }
 // Forward declaration of `Person` to properly resolve imports.
 namespace margelo::nitro::test { struct Person; }
-// Forward declaration of `AnyMap` to properly resolve imports.
-namespace NitroModules { class AnyMap; }
 // Forward declaration of `Car` to properly resolve imports.
 namespace margelo::nitro::test { struct Car; }
+// Forward declaration of `AnyMap` to properly resolve imports.
+namespace NitroModules { class AnyMap; }
 // Forward declaration of `ArrayBuffer` to properly resolve imports.
 namespace NitroModules { class ArrayBuffer; }
 // Forward declaration of `WrappedJsStruct` to properly resolve imports.
@@ -59,6 +59,8 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 #include "Person.hpp"
 #include "JVariant_Person_HybridTestObjectSwiftKotlinSpec.hpp"
 #include "JPerson.hpp"
+#include "Car.hpp"
+#include "JCar.hpp"
 #include <NitroModules/AnyMap.hpp>
 #include <NitroModules/JAnyMap.hpp>
 #include <unordered_map>
@@ -67,8 +69,6 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 #include <NitroModules/JPromise.hpp>
 #include <chrono>
 #include <NitroModules/JInstant.hpp>
-#include "Car.hpp"
-#include "JCar.hpp"
 #include <NitroModules/ArrayBuffer.hpp>
 #include <NitroModules/JArrayBuffer.hpp>
 #include <NitroModules/JUnit.hpp>
@@ -362,6 +362,28 @@ namespace margelo::nitro::test {
     return [&]() {
       size_t __size = __result->size();
       std::vector<Person> __vector;
+      __vector.reserve(__size);
+      for (size_t __i = 0; __i < __size; __i++) {
+        auto __element = __result->getElement(__i);
+        __vector.push_back(__element->toCpp());
+      }
+      return __vector;
+    }();
+  }
+  std::vector<Car> JHybridTestObjectSwiftKotlinSpec::bounceNestedStructs(const std::vector<Car>& array) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<jni::JArrayClass<JCar>>(jni::alias_ref<jni::JArrayClass<JCar>> /* array */)>("bounceNestedStructs");
+    auto __result = method(_javaPart, [&]() {
+      size_t __size = array.size();
+      jni::local_ref<jni::JArrayClass<JCar>> __array = jni::JArrayClass<JCar>::newArray(__size);
+      for (size_t __i = 0; __i < __size; __i++) {
+        const auto& __element = array[__i];
+        __array->setElement(__i, *JCar::fromCpp(__element));
+      }
+      return __array;
+    }());
+    return [&]() {
+      size_t __size = __result->size();
+      std::vector<Car> __vector;
       __vector.reserve(__size);
       for (size_t __i = 0; __i < __size; __i++) {
         auto __element = __result->getElement(__i);
