@@ -112,7 +112,7 @@ interface SharedTestObjectProps {
   bounceStrings(array: string[]): string[]
   bounceNumbers(array: number[]): number[]
   bounceStructs(array: Person[]): Person[]
-  sumUpAllCarNames(garage: Garage): string
+  sumUpAllPassengers(garage: Garage): string
   bounceEnums(array: Powertrain[]): Powertrain[]
   complexEnumCallback(
     array: Powertrain[],

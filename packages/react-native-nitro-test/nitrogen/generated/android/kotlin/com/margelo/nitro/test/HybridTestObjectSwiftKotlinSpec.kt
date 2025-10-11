@@ -167,7 +167,7 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
-  abstract fun sumUpAllCarNames(garage: Garage): String
+  abstract fun sumUpAllPassengers(garage: Garage): String
   
   @DoNotStrip
   @Keep

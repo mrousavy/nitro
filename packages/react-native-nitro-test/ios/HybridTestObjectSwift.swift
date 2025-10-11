@@ -121,11 +121,13 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
     return array
   }
 
-  func sumUpAllCarNames(garage: Garage) throws -> String {
+  func sumUpAllPassengers(garage: Garage) throws -> String {
     guard let cars = garage.cars else {
       throw RuntimeError.error(withMessage: "No cars in garage!")
     }
-    return cars.map { "\($0.make) \($0.model)" }.joined(separator: ", ")
+    let passengers = cars.flatMap { car in car.passengers }
+    let stringified = passengers.map { passenger in "\(passenger.name) (\(passenger.age))" }
+    return stringified.joined(separator: ", ")
   }
 
   func bounceEnums(array: [Powertrain]) throws -> [Powertrain] {

@@ -281,8 +281,8 @@ namespace margelo::nitro::test {
       auto __value = std::move(__result.value());
       return __value;
     }
-    inline std::string sumUpAllCarNames(const Garage& garage) override {
-      auto __result = _swiftPart.sumUpAllCarNames(std::forward<decltype(garage)>(garage));
+    inline std::string sumUpAllPassengers(const Garage& garage) override {
+      auto __result = _swiftPart.sumUpAllPassengers(std::forward<decltype(garage)>(garage));
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }

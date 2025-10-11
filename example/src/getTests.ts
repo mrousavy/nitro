@@ -47,7 +47,11 @@ const TEST_CAR: Car = {
   power: 640,
   powertrain: 'gas',
   driver: undefined, // <-- value needs to be explicitly set, to equal it with native's std::optional<..>
-  passengers: [],
+  passengers: [
+    { age: 42, name: 'Steven-#5' },
+    { age: 66, name: 'Marc-#1' },
+    { age: 24, name: '#55-Robot' },
+  ],
   isFast: true,
   favouriteTrack: undefined,
   performanceScores: [100, 0],
@@ -59,7 +63,11 @@ const TEST_CAR_2: Car = {
   power: 280,
   powertrain: 'gas',
   driver: TEST_PERSON,
-  passengers: [],
+  passengers: [
+    { age: 325, name: 'Steven-#1' },
+    { age: 24, name: 'Marc-#68' },
+    { age: 69, name: '#42-Robot' },
+  ],
   isFast: true,
   favouriteTrack: 'the road',
   performanceScores: [2, 5],
@@ -96,6 +104,12 @@ const DATE_PLUS_1H = (() => {
 })()
 
 const BASE = NitroModules.createHybridObject<Base>('Base')
+
+function sumUpAllPassengers(cars: Car[]): string {
+  return cars
+    .flatMap((c) => c.passengers.flatMap((p) => `${p.name} (${p.age})`))
+    .join(', ')
+}
 
 function createTest<T>(
   name: string,
@@ -430,17 +444,15 @@ export function getTests(
           { age: 5, name: 'Ben' },
         ])
     ),
-    createTest('sumUpAllCarNames(...) equals', () =>
+    createTest('sumUpAllPassengers(...) equals', () =>
       it(() =>
-        testObject.sumUpAllCarNames({
+        testObject.sumUpAllPassengers({
           cars: [TEST_CAR, TEST_CAR_2],
         })
       )
         .didNotThrow()
         .didReturn('string')
-        .equals(
-          `${TEST_CAR.make} ${TEST_CAR.model}, ${TEST_CAR_2.make} ${TEST_CAR_2.model}`
-        )
+        .equals(sumUpAllPassengers([TEST_CAR, TEST_CAR_2]))
     ),
     createTest('bounceWrappedJsStyleStruct(...) equals', () =>
       it(() => testObject.bounceWrappedJsStyleStruct(TEST_WRAPPED_STRUCT))

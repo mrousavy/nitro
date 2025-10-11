@@ -545,9 +545,9 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public final func sumUpAllCarNames(garage: Garage) -> bridge.Result_std__string_ {
+  public final func sumUpAllPassengers(garage: Garage) -> bridge.Result_std__string_ {
     do {
-      let __result = try self.__implementation.sumUpAllCarNames(garage: garage)
+      let __result = try self.__implementation.sumUpAllPassengers(garage: garage)
       let __resultCpp = std.string(__result)
       return bridge.create_Result_std__string_(__resultCpp)
     } catch (let __error) {

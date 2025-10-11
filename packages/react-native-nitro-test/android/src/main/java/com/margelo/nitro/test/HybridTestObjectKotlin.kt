@@ -61,9 +61,11 @@ class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
         return array
     }
 
-    override fun sumUpAllCarNames(garage: Garage): String {
+    override fun sumUpAllPassengers(garage: Garage): String {
         val cars = garage.cars ?: throw Error("No cars in garage!")
-        return cars.joinToString(separator = ", ") { "${it.make} ${it.model}" }
+        val passengers = cars.flatMap { it.passengers }
+        val stringified = passengers.map { "${it.make} ${it.model}" }
+        return stringified.joinToString(separator = ", ")
     }
 
     override fun bounceEnums(array: Array<Powertrain>): Array<Powertrain> {

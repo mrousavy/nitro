@@ -374,8 +374,8 @@ namespace margelo::nitro::test {
       return __vector;
     }();
   }
-  std::string JHybridTestObjectSwiftKotlinSpec::sumUpAllCarNames(const Garage& garage) {
-    static const auto method = javaClassStatic()->getMethod<jni::local_ref<jni::JString>(jni::alias_ref<JGarage> /* garage */)>("sumUpAllCarNames");
+  std::string JHybridTestObjectSwiftKotlinSpec::sumUpAllPassengers(const Garage& garage) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<jni::JString>(jni::alias_ref<JGarage> /* garage */)>("sumUpAllPassengers");
     auto __result = method(_javaPart, JGarage::fromCpp(garage));
     return __result->toStdString();
   }
