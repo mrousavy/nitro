@@ -82,9 +82,9 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace "com.margelo.nitroexample"
+    namespace "com.mrousavy.nitro.example"
     defaultConfig {
-        applicationId "com.margelo.nitroexample"
+        applicationId "com.mrousavy.nitro.example"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

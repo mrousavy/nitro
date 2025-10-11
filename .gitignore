@@ -86,3 +86,7 @@ lib/
 
 # TypeScript
 tsconfig.tsbuildinfo
+
+
+# Maestro
+maestro.mp4
