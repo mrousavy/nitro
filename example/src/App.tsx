@@ -1,13 +1,14 @@
 /* eslint-disable react/no-unstable-nested-components */
-import * as React from 'react'
-import { HybridObjectTestsScreen } from './screens/HybridObjectTestsScreen'
-import { NavigationContainer } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { useColors } from './useColors'
+import { NavigationContainer } from '@react-navigation/native'
+import * as React from 'react'
 import { Image } from 'react-native'
 import { BenchmarksScreen } from './screens/BenchmarksScreen'
-import { ViewScreen } from './screens/ViewScreen'
 import { EvalScreen } from './screens/EvalScreen'
+import HelloWorld from './screens/HelloWorld'
+import { HybridObjectTestsScreen } from './screens/HybridObjectTestsScreen'
+import { ViewScreen } from './screens/ViewScreen'
+import { useColors } from './useColors'
 
 const dna = require('./img/dna.png')
 const rocket = require('./img/rocket.png')
@@ -74,6 +75,20 @@ export default function App() {
           component={EvalScreen}
           options={{
             tabBarLabel: 'Eval',
+            tabBarIcon: ({ size, focused }) => (
+              <Image
+                source={terminal}
+                tintColor={focused ? undefined : 'grey'}
+                style={{ width: size, height: size }}
+              />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="HelloWorld"
+          component={HelloWorld}
+          options={{
+            tabBarLabel: 'HelloWorld',
             tabBarIcon: ({ size, focused }) => (
               <Image
                 source={terminal}
