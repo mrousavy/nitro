@@ -48,9 +48,8 @@ const TEST_CAR: Car = {
   powertrain: 'gas',
   driver: undefined, // <-- value needs to be explicitly set, to equal it with native's std::optional<..>
   passengers: [
-    { age: 42, name: 'Steven-#5' },
-    { age: 66, name: 'Marc-#1' },
-    { age: 24, name: '#55-Robot' },
+    { age: 25, name: 'Sebastian' },
+    { age: 27, name: 'Daniel' },
   ],
   isFast: true,
   favouriteTrack: undefined,
@@ -64,9 +63,8 @@ const TEST_CAR_2: Car = {
   powertrain: 'gas',
   driver: TEST_PERSON,
   passengers: [
-    { age: 325, name: 'Steven-#1' },
-    { age: 24, name: 'Marc-#68' },
-    { age: 69, name: '#42-Robot' },
+    { age: 18, name: 'Lukas' },
+    { age: 23, name: 'Simon' },
   ],
   isFast: true,
   favouriteTrack: 'the road',
