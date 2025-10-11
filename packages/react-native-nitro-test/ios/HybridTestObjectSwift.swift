@@ -123,7 +123,10 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
 
   func sumUpAllPassengers(cars: [Car]) throws -> String {
     let passengers = cars.flatMap { car in car.passengers }
-    let stringified = passengers.map { passenger in "\(passenger.name) (\(passenger.age))" }
+    let stringified = passengers.map { passenger in
+      let ageString = String(format: "%.0f", passenger.age)
+      return "\(passenger.name) (\(ageString))"
+    }
     return stringified.joined(separator: ", ")
   }
 

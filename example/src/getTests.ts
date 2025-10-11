@@ -105,7 +105,9 @@ const BASE = NitroModules.createHybridObject<Base>('Base')
 
 function sumUpAllPassengers(cars: Car[]): string {
   return cars
-    .flatMap((c) => c.passengers.flatMap((p) => `${p.name} (${p.age})`))
+    .flatMap((c) =>
+      c.passengers.flatMap((p) => `${p.name} (${p.age.toFixed(0)})`)
+    )
     .join(', ')
 }
 
