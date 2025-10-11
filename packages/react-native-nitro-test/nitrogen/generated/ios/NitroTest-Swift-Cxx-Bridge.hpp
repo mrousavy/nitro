@@ -271,11 +271,10 @@ namespace margelo::nitro::test::bridge::swift {
    * Specialized version of `std::vector<Person>`.
    */
   using std__vector_Person_ = std::vector<Person>;
-  inline std::vector<Person> copy_std__vector_Person_(const Person* CONTIGUOUS_MEMORY NON_NULL data, size_t size) noexcept {
-    return margelo::nitro::FastVectorCopy<Person>(data, size);
-  }
-  inline const Person* CONTIGUOUS_MEMORY NON_NULL get_data_std__vector_Person_(const std::vector<Person>& vector) noexcept {
-    return vector.data();
+  inline std::vector<Person> create_std__vector_Person_(size_t size) noexcept {
+    std::vector<Person> vector;
+    vector.reserve(size);
+    return vector;
   }
   
   // pragma MARK: std::optional<Person>
