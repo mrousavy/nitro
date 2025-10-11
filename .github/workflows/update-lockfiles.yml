@@ -27,6 +27,8 @@ jobs:
           ref: ${{ github.event.pull_request.head.ref }}
 
       - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.2
 
       - name: Setup Ruby (bundle)
         uses: ruby/setup-ruby@v1
