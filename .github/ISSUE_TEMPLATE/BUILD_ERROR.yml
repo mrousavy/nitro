@@ -32,7 +32,7 @@ body:
       placeholder: >
         "dependencies": {
           "react-native": "0.75.0",
-          "react-native-nitro-modules": "^0.11.0",
+          "react-native-nitro-modules": "0.11.0",
           ...
         },
     validations:
