@@ -312,11 +312,10 @@ namespace margelo::nitro::test::bridge::swift {
    * Specialized version of `std::vector<Car>`.
    */
   using std__vector_Car_ = std::vector<Car>;
-  inline std::vector<Car> copy_std__vector_Car_(const Car* CONTIGUOUS_MEMORY NON_NULL data, size_t size) noexcept {
-    return margelo::nitro::FastVectorCopy<Car>(data, size);
-  }
-  inline const Car* CONTIGUOUS_MEMORY NON_NULL get_data_std__vector_Car_(const std::vector<Car>& vector) noexcept {
-    return vector.data();
+  inline std::vector<Car> create_std__vector_Car_(size_t size) noexcept {
+    std::vector<Car> vector;
+    vector.reserve(size);
+    return vector;
   }
   
   // pragma MARK: std::vector<Powertrain>
@@ -867,11 +866,10 @@ namespace margelo::nitro::test::bridge::swift {
    * Specialized version of `std::vector<JsStyleStruct>`.
    */
   using std__vector_JsStyleStruct_ = std::vector<JsStyleStruct>;
-  inline std::vector<JsStyleStruct> copy_std__vector_JsStyleStruct_(const JsStyleStruct* CONTIGUOUS_MEMORY NON_NULL data, size_t size) noexcept {
-    return margelo::nitro::FastVectorCopy<JsStyleStruct>(data, size);
-  }
-  inline const JsStyleStruct* CONTIGUOUS_MEMORY NON_NULL get_data_std__vector_JsStyleStruct_(const std::vector<JsStyleStruct>& vector) noexcept {
-    return vector.data();
+  inline std::vector<JsStyleStruct> create_std__vector_JsStyleStruct_(size_t size) noexcept {
+    std::vector<JsStyleStruct> vector;
+    vector.reserve(size);
+    return vector;
   }
   
   // pragma MARK: std::optional<std::shared_ptr<ArrayBuffer>>

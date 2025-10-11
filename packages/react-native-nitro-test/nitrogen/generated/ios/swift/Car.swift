@@ -25,9 +25,13 @@ public extension Car {
       } else {
         return .init()
       }
-    }(), passengers.withUnsafeBufferPointer { __pointer -> bridge.std__vector_Person_ in
-      return bridge.copy_std__vector_Person_(__pointer.baseAddress!, passengers.count)
-    }, { () -> bridge.std__optional_bool_ in
+    }(), { () -> bridge.std__vector_Person_ in
+      var __vector = bridge.create_std__vector_Person_(passengers.count)
+      for __item in passengers {
+        __vector.push_back(__item)
+      }
+      return __vector
+    }(), { () -> bridge.std__optional_bool_ in
       if let __unwrappedValue = isFast {
         return bridge.create_std__optional_bool_(__unwrappedValue)
       } else {
@@ -119,17 +123,17 @@ public extension Car {
   var passengers: [Person] {
     @inline(__always)
     get {
-      return { () -> [Person] in
-        let __data = bridge.get_data_std__vector_Person_(self.__passengers)
-        let __size = self.__passengers.size()
-        return Array(UnsafeBufferPointer(start: __data, count: __size))
-      }()
+      return self.__passengers.map({ __item in __item })
     }
     @inline(__always)
     set {
-      self.__passengers = newValue.withUnsafeBufferPointer { __pointer -> bridge.std__vector_Person_ in
-        return bridge.copy_std__vector_Person_(__pointer.baseAddress!, newValue.count)
-      }
+      self.__passengers = { () -> bridge.std__vector_Person_ in
+        var __vector = bridge.create_std__vector_Person_(newValue.count)
+        for __item in newValue {
+          __vector.push_back(__item)
+        }
+        return __vector
+      }()
     }
   }
   
