@@ -40,9 +40,6 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        new-arch:
-          - true
-          - false
         min-sdk:
           - '24'
           - '26'
@@ -52,9 +49,6 @@ jobs:
 
       - name: Install npm dependencies (bun)
         run: bun install
-
-      - name: Set new architecture in gradle.properties
-        run: sed -i "s/newArchEnabled=true/newArchEnabled=${{ matrix.new-arch }}/g" example/android/gradle.properties
 
       - name: Set minSdk in build.gradle
         run: sed -i "s/minSdkVersion = 24/minSdkVersion = ${{ matrix.min-sdk }}/g" example/android/build.gradle

@@ -61,8 +61,8 @@
     "@types/react": "*",
     "jest": "*",
     "nitrogen": "*",
-    "react": "19.1.0",
-    "react-native": "0.81.1",
+    "react": "19.1.1",
+    "react-native": "0.82.0",
     "react-native-nitro-modules": "*",
     "react-native-nitro-test-external": "*"
   },
