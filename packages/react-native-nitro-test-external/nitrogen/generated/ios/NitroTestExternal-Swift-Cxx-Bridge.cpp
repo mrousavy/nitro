@@ -18,7 +18,7 @@ namespace margelo::nitro::test::external::bridge::swift {
     NitroTestExternal::HybridSomeExternalObjectSpec_cxx swiftPart = NitroTestExternal::HybridSomeExternalObjectSpec_cxx::fromUnsafe(swiftUnsafePointer);
     return std::make_shared<margelo::nitro::test::external::HybridSomeExternalObjectSpecSwift>(swiftPart);
   }
-  void* NON_NULL get_std__shared_ptr_HybridSomeExternalObjectSpec_(std__shared_ptr_HybridSomeExternalObjectSpec_ cppType) noexcept {
+  void* NON_NULL get_std__shared_ptr_HybridSomeExternalObjectSpec_(std__shared_ptr_HybridSomeExternalObjectSpec_ cppType) {
     std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpecSwift> swiftWrapper = std::dynamic_pointer_cast<margelo::nitro::test::external::HybridSomeExternalObjectSpecSwift>(cppType);
     #ifdef NITRO_DEBUG
     if (swiftWrapper == nullptr) [[unlikely]] {

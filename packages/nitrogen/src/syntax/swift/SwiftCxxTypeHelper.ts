@@ -148,7 +148,7 @@ return ${cxxNamespace}::get_${internalName}(cppType);
  */
 using ${name} = ${actualType};
 ${actualType} create_${name}(void* NON_NULL swiftUnsafePointer) noexcept;
-void* NON_NULL get_${name}(${name} cppType) noexcept;
+void* NON_NULL get_${name}(${name} cppType);
     `.trim(),
       requiredIncludes: type.getRequiredImports('c++'),
     },
@@ -157,7 +157,7 @@ void* NON_NULL get_${name}(${name} cppType) noexcept;
 ${actualType} create_${name}(void* NON_NULL swiftUnsafePointer) noexcept {
   ${indent(createImplementation, '  ')}
 }
-void* NON_NULL get_${name}(${name} cppType) noexcept {
+void* NON_NULL get_${name}(${name} cppType) {
   ${indent(getImplementation, '  ')}
 }
     `.trim(),
