@@ -26,6 +26,8 @@ namespace margelo::nitro::test::external { class HybridSomeExternalObjectSpec; }
 namespace margelo::nitro::test { class HybridTestObjectSwiftKotlinSpec; }
 // Forward declaration of `HybridTestViewSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridTestViewSpec; }
+// Forward declaration of `JsStyleStruct` to properly resolve imports.
+namespace margelo::nitro::test { struct JsStyleStruct; }
 // Forward declaration of `OldEnum` to properly resolve imports.
 namespace margelo::nitro::test { enum class OldEnum; }
 // Forward declaration of `OptionalWrapper` to properly resolve imports.
@@ -57,6 +59,7 @@ namespace NitroTest { class HybridTestViewSpec_cxx; }
 #include "HybridChildSpec.hpp"
 #include "HybridTestObjectSwiftKotlinSpec.hpp"
 #include "HybridTestViewSpec.hpp"
+#include "JsStyleStruct.hpp"
 #include "OldEnum.hpp"
 #include "OptionalWrapper.hpp"
 #include "Person.hpp"
@@ -848,6 +851,18 @@ namespace margelo::nitro::test::bridge::swift {
     return Func_void_std__string_Wrapper(std::move(value));
   }
   
+  // pragma MARK: std::vector<JsStyleStruct>
+  /**
+   * Specialized version of `std::vector<JsStyleStruct>`.
+   */
+  using std__vector_JsStyleStruct_ = std::vector<JsStyleStruct>;
+  inline std::vector<JsStyleStruct> copy_std__vector_JsStyleStruct_(const JsStyleStruct* CONTIGUOUS_MEMORY NON_NULL data, size_t size) noexcept {
+    return margelo::nitro::FastVectorCopy<JsStyleStruct>(data, size);
+  }
+  inline const JsStyleStruct* CONTIGUOUS_MEMORY NON_NULL get_data_std__vector_JsStyleStruct_(const std::vector<JsStyleStruct>& vector) noexcept {
+    return vector.data();
+  }
+  
   // pragma MARK: std::optional<std::shared_ptr<ArrayBuffer>>
   /**
    * Specialized version of `std::optional<std::shared_ptr<ArrayBuffer>>`.
@@ -1037,6 +1052,35 @@ namespace margelo::nitro::test::bridge::swift {
   // pragma MARK: std::weak_ptr<HybridBaseSpec>
   using std__weak_ptr_HybridBaseSpec_ = std::weak_ptr<HybridBaseSpec>;
   inline std__weak_ptr_HybridBaseSpec_ weakify_std__shared_ptr_HybridBaseSpec_(const std::shared_ptr<HybridBaseSpec>& strong) noexcept { return strong; }
+  
+  // pragma MARK: std::variant<OptionalWrapper, std::shared_ptr<HybridBaseSpec>>
+  /**
+   * Wrapper struct for `std::variant<OptionalWrapper, std::shared_ptr<HybridBaseSpec>>`.
+   * std::variant cannot be used in Swift because of a Swift bug.
+   * Not even specializing it works. So we create a wrapper struct.
+   */
+  struct std__variant_OptionalWrapper__std__shared_ptr_HybridBaseSpec__ {
+    std::variant<OptionalWrapper, std::shared_ptr<HybridBaseSpec>> variant;
+    std__variant_OptionalWrapper__std__shared_ptr_HybridBaseSpec__(std::variant<OptionalWrapper, std::shared_ptr<HybridBaseSpec>> variant): variant(variant) { }
+    operator std::variant<OptionalWrapper, std::shared_ptr<HybridBaseSpec>>() const noexcept {
+      return variant;
+    }
+    inline size_t index() const noexcept {
+      return variant.index();
+    }
+    inline OptionalWrapper get_0() const noexcept {
+      return std::get<0>(variant);
+    }
+    inline std::shared_ptr<HybridBaseSpec> get_1() const noexcept {
+      return std::get<1>(variant);
+    }
+  };
+  inline std__variant_OptionalWrapper__std__shared_ptr_HybridBaseSpec__ create_std__variant_OptionalWrapper__std__shared_ptr_HybridBaseSpec__(const OptionalWrapper& value) noexcept {
+    return std__variant_OptionalWrapper__std__shared_ptr_HybridBaseSpec__(value);
+  }
+  inline std__variant_OptionalWrapper__std__shared_ptr_HybridBaseSpec__ create_std__variant_OptionalWrapper__std__shared_ptr_HybridBaseSpec__(const std::shared_ptr<HybridBaseSpec>& value) noexcept {
+    return std__variant_OptionalWrapper__std__shared_ptr_HybridBaseSpec__(value);
+  }
   
   // pragma MARK: std::shared_ptr<HybridChildSpec>
   /**
@@ -1386,6 +1430,15 @@ namespace margelo::nitro::test::bridge::swift {
   }
   inline Result_std__variant_std__string__Car__ create_Result_std__variant_std__string__Car__(const std::exception_ptr& error) noexcept {
     return Result<std::variant<std::string, Car>>::withError(error);
+  }
+  
+  // pragma MARK: Result<std::variant<OptionalWrapper, std::shared_ptr<HybridBaseSpec>>>
+  using Result_std__variant_OptionalWrapper__std__shared_ptr_HybridBaseSpec___ = Result<std::variant<OptionalWrapper, std::shared_ptr<HybridBaseSpec>>>;
+  inline Result_std__variant_OptionalWrapper__std__shared_ptr_HybridBaseSpec___ create_Result_std__variant_OptionalWrapper__std__shared_ptr_HybridBaseSpec___(const std::variant<OptionalWrapper, std::shared_ptr<HybridBaseSpec>>& value) noexcept {
+    return Result<std::variant<OptionalWrapper, std::shared_ptr<HybridBaseSpec>>>::withValue(value);
+  }
+  inline Result_std__variant_OptionalWrapper__std__shared_ptr_HybridBaseSpec___ create_Result_std__variant_OptionalWrapper__std__shared_ptr_HybridBaseSpec___(const std::exception_ptr& error) noexcept {
+    return Result<std::variant<OptionalWrapper, std::shared_ptr<HybridBaseSpec>>>::withError(error);
   }
   
   // pragma MARK: Result<std::shared_ptr<HybridChildSpec>>

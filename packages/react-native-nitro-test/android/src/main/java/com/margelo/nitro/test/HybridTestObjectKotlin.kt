@@ -306,6 +306,10 @@ class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
         return Variant_String_Double.create("holds something else!")
     }
 
+    override fun passAllEmptyObjectVariant(variant: Variant_OptionalWrapper_HybridBaseSpec): Variant_OptionalWrapper_HybridBaseSpec {
+        return variant
+    }
+
     override fun getVariantEnum(variant: Variant_Boolean_OldEnum): Variant_Boolean_OldEnum {
         return variant
     }

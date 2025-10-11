@@ -17,6 +17,11 @@
 #else
 #error NitroModules cannot be found! Are you sure you installed NitroModules properly?
 #endif
+#if __has_include(<NitroModules/JSIHelpers.hpp>)
+#include <NitroModules/JSIHelpers.hpp>
+#else
+#error NitroModules cannot be found! Are you sure you installed NitroModules properly?
+#endif
 
 // Forward declaration of `SecondMapWrapper` to properly resolve imports.
 namespace margelo::nitro::test { struct SecondMapWrapper; }
@@ -65,6 +70,9 @@ namespace margelo::nitro {
         return false;
       }
       jsi::Object obj = value.getObject(runtime);
+      if (!nitro::isPlainObject(runtime, obj)) {
+        return false;
+      }
       if (!JSIConverter<std::unordered_map<std::string, std::string>>::canConvert(runtime, obj.getProperty(runtime, "map"))) return false;
       if (!JSIConverter<margelo::nitro::test::SecondMapWrapper>::canConvert(runtime, obj.getProperty(runtime, "secondMap"))) return false;
       return true;

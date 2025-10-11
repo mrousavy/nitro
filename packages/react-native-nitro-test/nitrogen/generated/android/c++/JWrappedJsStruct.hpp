@@ -14,6 +14,7 @@
 #include "JJsStyleStruct.hpp"
 #include "JsStyleStruct.hpp"
 #include <functional>
+#include <vector>
 
 namespace margelo::nitro::test {
 
@@ -36,8 +37,20 @@ namespace margelo::nitro::test {
       static const auto clazz = javaClassStatic();
       static const auto fieldValue = clazz->getField<JJsStyleStruct>("value");
       jni::local_ref<JJsStyleStruct> value = this->getFieldValue(fieldValue);
+      static const auto fieldItems = clazz->getField<jni::JArrayClass<JJsStyleStruct>>("items");
+      jni::local_ref<jni::JArrayClass<JJsStyleStruct>> items = this->getFieldValue(fieldItems);
       return WrappedJsStruct(
-        value->toCpp()
+        value->toCpp(),
+        [&]() {
+          size_t __size = items->size();
+          std::vector<JsStyleStruct> __vector;
+          __vector.reserve(__size);
+          for (size_t __i = 0; __i < __size; __i++) {
+            auto __element = items->getElement(__i);
+            __vector.push_back(__element->toCpp());
+          }
+          return __vector;
+        }()
       );
     }
 
@@ -48,7 +61,16 @@ namespace margelo::nitro::test {
     [[maybe_unused]]
     static jni::local_ref<JWrappedJsStruct::javaobject> fromCpp(const WrappedJsStruct& value) {
       return newInstance(
-        JJsStyleStruct::fromCpp(value.value)
+        JJsStyleStruct::fromCpp(value.value),
+        [&]() {
+          size_t __size = value.items.size();
+          jni::local_ref<jni::JArrayClass<JJsStyleStruct>> __array = jni::JArrayClass<JJsStyleStruct>::newArray(__size);
+          for (size_t __i = 0; __i < __size; __i++) {
+            const auto& __element = value.items[__i];
+            __array->setElement(__i, *JJsStyleStruct::fromCpp(__element));
+          }
+          return __array;
+        }()
       );
     }
   };

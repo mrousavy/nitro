@@ -69,6 +69,7 @@ ${createFileMetadataString(`${typename}.hpp`)}
 
 ${includeNitroHeader('JSIConverter.hpp')}
 ${includeNitroHeader('NitroDefines.hpp')}
+${includeNitroHeader('JSIHelpers.hpp')}
 
 ${cppForwardDeclarations.join('\n')}
 
@@ -111,6 +112,9 @@ namespace margelo::nitro {
         return false;
       }
       jsi::Object obj = value.getObject(runtime);
+      if (!nitro::isPlainObject(runtime, obj)) {
+        return false;
+      }
       ${indent(cppCanConvertCalls, '      ')}
       return true;
     }

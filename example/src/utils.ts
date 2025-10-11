@@ -30,7 +30,10 @@ export function stringify(value: unknown): string {
       }
       // Try to use .toString()
       try {
-        if (value.toString instanceof Function) {
+        if (
+          Object.hasOwn(value, 'toString') &&
+          value.toString instanceof Function
+        ) {
           if (isNativeFunction(value.toString)) {
             // It is a native jsi::HostFunction. Since we log Prototypes,
             // it is likely that we need a HybridObject (NativeState) to call it.

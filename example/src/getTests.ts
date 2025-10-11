@@ -9,6 +9,7 @@ import {
   type OptionalWrapper,
   WeirdNumbersEnum,
   CustomString,
+  Base,
 } from 'react-native-nitro-test'
 import type { State } from './Testers'
 import { it } from './Testers'
@@ -66,6 +67,7 @@ const TEST_WRAPPED_STRUCT: WrappedJsStruct = {
     value: 55.3,
     onChanged: (_num: number) => {},
   },
+  items: [],
 }
 const TEST_OPTIONAL_WRAPPER: OptionalWrapper = {
   optionalArrayBuffer: new ArrayBuffer(1024),
@@ -79,6 +81,8 @@ const DATE_PLUS_1H = (() => {
   const oneHourInMilliseconds = 1000 * 60 * 60
   return new Date(current + oneHourInMilliseconds)
 })()
+
+const BASE = NitroModules.createHybridObject<Base>('Base')
 
 function createTest<T>(
   name: string,
@@ -670,6 +674,28 @@ export function getTests(
           {}
         )
       ).didThrow()
+    ),
+    createTest('passAllEmptyObjectVariant(...) with empty obj ({})', () =>
+      it(() => testObject.passAllEmptyObjectVariant({}))
+        .didNotThrow()
+        .didReturn('object')
+    ),
+    createTest('passAllEmptyObjectVariant(...) with first obj', () =>
+      it(() =>
+        testObject.passAllEmptyObjectVariant({
+          optionalString: 'optional string!',
+        })
+      )
+        .didNotThrow()
+        .didReturn('object')
+        // @ts-expect-error idk why this keyof is `never`...
+        .toContain('optionalString')
+    ),
+    createTest('passAllEmptyObjectVariant(...) with second obj', () =>
+      it(() => testObject.passAllEmptyObjectVariant(BASE))
+        .didNotThrow()
+        .didReturn('object')
+        .equals(BASE)
     ),
     createTest('createChild().bounceVariant(...) works', () =>
       it(() => testObject.createChild().bounceVariant('hello!'))
