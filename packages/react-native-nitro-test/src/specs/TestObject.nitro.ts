@@ -44,6 +44,7 @@ export interface Car {
   power: number
   powertrain: Powertrain
   driver?: Person
+  passengers: Person[]
   isFast?: boolean
   favouriteTrack?: string
   performanceScores: number[]
