@@ -47,9 +47,28 @@ const TEST_CAR: Car = {
   power: 640,
   powertrain: 'gas',
   driver: undefined, // <-- value needs to be explicitly set, to equal it with native's std::optional<..>
+  passengers: [
+    { age: 25, name: 'Sebastian' },
+    { age: 27, name: 'Daniel' },
+  ],
   isFast: true,
   favouriteTrack: undefined,
   performanceScores: [100, 0],
+}
+const TEST_CAR_2: Car = {
+  year: 2006,
+  make: 'Mitsubishi',
+  model: 'Evolution IX',
+  power: 280,
+  powertrain: 'gas',
+  driver: TEST_PERSON,
+  passengers: [
+    { age: 18, name: 'Lukas' },
+    { age: 23, name: 'Simon' },
+  ],
+  isFast: true,
+  favouriteTrack: 'the road',
+  performanceScores: [2, 5],
 }
 const TEST_MAP: Record<string, number | boolean> = {
   someKey: 55,
@@ -83,6 +102,14 @@ const DATE_PLUS_1H = (() => {
 })()
 
 const BASE = NitroModules.createHybridObject<Base>('Base')
+
+function sumUpAllPassengers(cars: Car[]): string {
+  return cars
+    .flatMap((c) =>
+      c.passengers.flatMap((p) => `${p.name} (${p.age.toFixed(0)})`)
+    )
+    .join(', ')
+}
 
 function createTest<T>(
   name: string,
@@ -416,6 +443,12 @@ export function getTests(
           { age: 24, name: 'Marc' },
           { age: 5, name: 'Ben' },
         ])
+    ),
+    createTest('sumUpAllPassengers(...) equals', () =>
+      it(() => testObject.sumUpAllPassengers([TEST_CAR, TEST_CAR_2]))
+        .didNotThrow()
+        .didReturn('string')
+        .equals(sumUpAllPassengers([TEST_CAR, TEST_CAR_2]))
     ),
     createTest('bounceWrappedJsStyleStruct(...) equals', () =>
       it(() => testObject.bounceWrappedJsStyleStruct(TEST_WRAPPED_STRUCT))
@@ -1187,6 +1220,7 @@ export function getTests(
           year: 2018,
           model: 'Huracan Performante',
           power: 640,
+          passengers: [],
           powertrain: 'gas',
           isFast: true,
           performanceScores: [100, 0],
@@ -1202,6 +1236,7 @@ export function getTests(
           year: 2018,
           model: 'Huracan Performante',
           power: 640,
+          passengers: [],
           powertrain: 'gas',
           isFast: true,
           performanceScores: [100, 0],
@@ -1217,6 +1252,7 @@ export function getTests(
           year: 2018,
           model: 'Huracan Performante',
           power: 640,
+          passengers: [],
           powertrain: 'gas',
           driver: { age: 24, name: 'marc' },
           isFast: true,

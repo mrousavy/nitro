@@ -44,6 +44,7 @@ export interface Car {
   power: number
   powertrain: Powertrain
   driver?: Person
+  passengers: Person[]
   isFast?: boolean
   favouriteTrack?: string
   performanceScores: number[]
@@ -108,6 +109,7 @@ interface SharedTestObjectProps {
   bounceStrings(array: string[]): string[]
   bounceNumbers(array: number[]): number[]
   bounceStructs(array: Person[]): Person[]
+  sumUpAllPassengers(cars: Car[]): string
   bounceEnums(array: Powertrain[]): Powertrain[]
   complexEnumCallback(
     array: Powertrain[],

@@ -41,6 +41,9 @@ data class Car
     val driver: Person?,
     @DoNotStrip
     @Keep
+    val passengers: Array<Person>,
+    @DoNotStrip
+    @Keep
     val isFast: Boolean?,
     @DoNotStrip
     @Keep

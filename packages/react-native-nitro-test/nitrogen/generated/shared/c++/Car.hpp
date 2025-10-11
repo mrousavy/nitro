@@ -47,13 +47,14 @@ namespace margelo::nitro::test {
     double power     SWIFT_PRIVATE;
     Powertrain powertrain     SWIFT_PRIVATE;
     std::optional<Person> driver     SWIFT_PRIVATE;
+    std::vector<Person> passengers     SWIFT_PRIVATE;
     std::optional<bool> isFast     SWIFT_PRIVATE;
     std::optional<std::string> favouriteTrack     SWIFT_PRIVATE;
     std::vector<double> performanceScores     SWIFT_PRIVATE;
 
   public:
     Car() = default;
-    explicit Car(double year, std::string make, std::string model, double power, Powertrain powertrain, std::optional<Person> driver, std::optional<bool> isFast, std::optional<std::string> favouriteTrack, std::vector<double> performanceScores): year(year), make(make), model(model), power(power), powertrain(powertrain), driver(driver), isFast(isFast), favouriteTrack(favouriteTrack), performanceScores(performanceScores) {}
+    explicit Car(double year, std::string make, std::string model, double power, Powertrain powertrain, std::optional<Person> driver, std::vector<Person> passengers, std::optional<bool> isFast, std::optional<std::string> favouriteTrack, std::vector<double> performanceScores): year(year), make(make), model(model), power(power), powertrain(powertrain), driver(driver), passengers(passengers), isFast(isFast), favouriteTrack(favouriteTrack), performanceScores(performanceScores) {}
   };
 
 } // namespace margelo::nitro::test
@@ -72,6 +73,7 @@ namespace margelo::nitro {
         JSIConverter<double>::fromJSI(runtime, obj.getProperty(runtime, "power")),
         JSIConverter<margelo::nitro::test::Powertrain>::fromJSI(runtime, obj.getProperty(runtime, "powertrain")),
         JSIConverter<std::optional<margelo::nitro::test::Person>>::fromJSI(runtime, obj.getProperty(runtime, "driver")),
+        JSIConverter<std::vector<margelo::nitro::test::Person>>::fromJSI(runtime, obj.getProperty(runtime, "passengers")),
         JSIConverter<std::optional<bool>>::fromJSI(runtime, obj.getProperty(runtime, "isFast")),
         JSIConverter<std::optional<std::string>>::fromJSI(runtime, obj.getProperty(runtime, "favouriteTrack")),
         JSIConverter<std::vector<double>>::fromJSI(runtime, obj.getProperty(runtime, "performanceScores"))
@@ -85,6 +87,7 @@ namespace margelo::nitro {
       obj.setProperty(runtime, "power", JSIConverter<double>::toJSI(runtime, arg.power));
       obj.setProperty(runtime, "powertrain", JSIConverter<margelo::nitro::test::Powertrain>::toJSI(runtime, arg.powertrain));
       obj.setProperty(runtime, "driver", JSIConverter<std::optional<margelo::nitro::test::Person>>::toJSI(runtime, arg.driver));
+      obj.setProperty(runtime, "passengers", JSIConverter<std::vector<margelo::nitro::test::Person>>::toJSI(runtime, arg.passengers));
       obj.setProperty(runtime, "isFast", JSIConverter<std::optional<bool>>::toJSI(runtime, arg.isFast));
       obj.setProperty(runtime, "favouriteTrack", JSIConverter<std::optional<std::string>>::toJSI(runtime, arg.favouriteTrack));
       obj.setProperty(runtime, "performanceScores", JSIConverter<std::vector<double>>::toJSI(runtime, arg.performanceScores));
@@ -104,6 +107,7 @@ namespace margelo::nitro {
       if (!JSIConverter<double>::canConvert(runtime, obj.getProperty(runtime, "power"))) return false;
       if (!JSIConverter<margelo::nitro::test::Powertrain>::canConvert(runtime, obj.getProperty(runtime, "powertrain"))) return false;
       if (!JSIConverter<std::optional<margelo::nitro::test::Person>>::canConvert(runtime, obj.getProperty(runtime, "driver"))) return false;
+      if (!JSIConverter<std::vector<margelo::nitro::test::Person>>::canConvert(runtime, obj.getProperty(runtime, "passengers"))) return false;
       if (!JSIConverter<std::optional<bool>>::canConvert(runtime, obj.getProperty(runtime, "isFast"))) return false;
       if (!JSIConverter<std::optional<std::string>>::canConvert(runtime, obj.getProperty(runtime, "favouriteTrack"))) return false;
       if (!JSIConverter<std::vector<double>>::canConvert(runtime, obj.getProperty(runtime, "performanceScores"))) return false;

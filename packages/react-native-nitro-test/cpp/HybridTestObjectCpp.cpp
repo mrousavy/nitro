@@ -9,6 +9,7 @@
 #include <NitroModules/AnyMap.hpp>
 #include <NitroModules/NitroLogger.hpp>
 #include <chrono>
+#include <sstream>
 #include <thread>
 
 #include "HybridBase.hpp"
@@ -165,6 +166,24 @@ std::vector<double> HybridTestObjectCpp::bounceNumbers(const std::vector<double>
 
 std::vector<Person> HybridTestObjectCpp::bounceStructs(const std::vector<Person>& array) {
   return array;
+}
+
+std::string HybridTestObjectCpp::sumUpAllPassengers(const std::vector<Car>& cars) {
+  std::ostringstream oss;
+  bool first = true;
+
+  for (const auto& car : cars) {
+    for (const auto& passenger : car.passengers) {
+      if (!first) {
+        // separator
+        oss << ", ";
+      }
+      oss << passenger.name << " (" << passenger.age << ")";
+      first = false;
+    }
+  }
+
+  return oss.str();
 }
 
 std::vector<Powertrain> HybridTestObjectCpp::bounceEnums(const std::vector<Powertrain>& array) {
@@ -415,7 +434,7 @@ HybridTestObjectCpp::getValueFromJsCallback(const std::function<std::shared_ptr<
 }
 
 Car HybridTestObjectCpp::getCar() {
-  return Car(2018, "Lamborghini", "Huracan Performante", 640, Powertrain::GAS, std::nullopt, true, std::nullopt, {100, 10});
+  return Car(2018, "Lamborghini", "Huracan Performante", 640, Powertrain::GAS, std::nullopt, {}, true, std::nullopt, {100, 10});
 }
 
 bool HybridTestObjectCpp::isCarElectric(const Car& car) {

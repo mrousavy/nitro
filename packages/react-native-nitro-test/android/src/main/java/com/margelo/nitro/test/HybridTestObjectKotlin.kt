@@ -10,6 +10,7 @@ import com.margelo.nitro.core.ArrayBuffer
 import com.margelo.nitro.core.Promise
 import com.margelo.nitro.test.external.HybridSomeExternalObjectSpec
 import kotlinx.coroutines.delay
+import java.math.BigDecimal
 import java.time.Instant
 
 @Keep
@@ -59,6 +60,16 @@ class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
 
     override fun bounceStructs(array: Array<Person>): Array<Person> {
         return array
+    }
+
+    override fun sumUpAllPassengers(cars: Array<Car>): String {
+        val strings = cars.flatMap { car ->
+            return@flatMap car.passengers.map { passenger ->
+                val ageString = stringify(passenger.age)
+                return@map "${passenger.name} ($ageString)"
+            }
+        }
+        return strings.joinToString(separator = ", ")
     }
 
     override fun bounceEnums(array: Array<Powertrain>): Array<Powertrain> {
@@ -250,7 +261,7 @@ class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
   }
 
     override fun getCar(): Car {
-        return Car(2018.0, "Lamborghini", "Huracán", 640.0, Powertrain.GAS, null, true, null, doubleArrayOf(100.0, 10.0))
+        return Car(2018.0, "Lamborghini", "Huracán", 640.0, Powertrain.GAS, null, emptyArray(), true, null, doubleArrayOf(100.0, 10.0))
     }
 
     override fun isCarElectric(car: Car): Boolean {
@@ -410,5 +421,11 @@ class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
         this.optionalCallback?.let { callback ->
             callback(13.0)
         }
+    }
+
+    private fun stringify(value: Double): String {
+        return BigDecimal.valueOf(value)
+            .stripTrailingZeros()
+            .toPlainString()
     }
 }

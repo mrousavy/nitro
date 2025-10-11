@@ -121,6 +121,15 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
     return array
   }
 
+  func sumUpAllPassengers(cars: [Car]) throws -> String {
+    let passengers = cars.flatMap { car in car.passengers }
+    let stringified = passengers.map { passenger in
+      let ageString = stringify(passenger.age)
+      return "\(passenger.name) (\(ageString))"
+    }
+    return stringified.joined(separator: ", ")
+  }
+
   func bounceEnums(array: [Powertrain]) throws -> [Powertrain] {
     return array
   }
@@ -299,7 +308,7 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
   }
 
   func getCar() throws -> Car {
-    return Car(year: 2018, make: "Lamborghini", model: "Huracán", power: 640, powertrain: .gas, driver: nil, isFast: true, favouriteTrack: nil, performanceScores: [100, 10])
+    return Car(year: 2018, make: "Lamborghini", model: "Huracán", power: 640, powertrain: .gas, driver: nil, passengers: [], isFast: true, favouriteTrack: nil, performanceScores: [100, 10])
   }
 
   func isCarElectric(car: Car) throws -> Bool {
@@ -410,5 +419,17 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
     if let optionalCallback {
       optionalCallback(13.0)
     }
+  }
+  
+  private let formatter: NumberFormatter = {
+    let formatter = NumberFormatter()
+    formatter.minimumFractionDigits = 0
+    formatter.maximumFractionDigits = 16
+    formatter.minimumIntegerDigits = 1
+    formatter.numberStyle = .decimal
+    return formatter
+  }()
+  private func stringify(_ value: Double) -> String {
+    return formatter.string(for: value) ?? "\(value)"
   }
 }
