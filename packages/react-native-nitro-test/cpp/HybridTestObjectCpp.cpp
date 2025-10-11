@@ -173,11 +173,14 @@ std::string HybridTestObjectCpp::sumUpAllPassengers(const std::vector<Car>& cars
   bool first = true;
 
   for (const auto& car : cars) {
-      for (const auto& passenger : car.passengers) {
-          if (!first) oss << ", ";
-          oss << passenger.name << " (" << passenger.age << ")";
-          first = false;
+    for (const auto& passenger : car.passengers) {
+      if (!first) {
+        // separator
+        oss << ", ";
       }
+      oss << passenger.name << " (" << passenger.age << ")";
+      first = false;
+    }
   }
 
   return oss.str();

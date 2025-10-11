@@ -124,7 +124,7 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
   func sumUpAllPassengers(cars: [Car]) throws -> String {
     let passengers = cars.flatMap { car in car.passengers }
     let stringified = passengers.map { passenger in
-      let ageString = String(format: "%.0f", passenger.age)
+      let ageString = stringify(passenger.age)
       return "\(passenger.name) (\(ageString))"
     }
     return stringified.joined(separator: ", ")
@@ -419,5 +419,17 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
     if let optionalCallback {
       optionalCallback(13.0)
     }
+  }
+  
+  private let formatter: NumberFormatter = {
+    let formatter = NumberFormatter()
+    formatter.minimumFractionDigits = 0
+    formatter.maximumFractionDigits = 16
+    formatter.minimumIntegerDigits = 1
+    formatter.numberStyle = .decimal
+    return formatter
+  }()
+  private func stringify(_ value: Double) -> String {
+    return formatter.string(for: value) ?? "\(value)"
   }
 }
