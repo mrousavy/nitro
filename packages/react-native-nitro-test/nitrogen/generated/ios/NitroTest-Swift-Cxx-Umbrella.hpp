@@ -16,8 +16,6 @@ namespace NitroModules { class ArrayBuffer; }
 namespace margelo::nitro::test { struct Car; }
 // Forward declaration of `ColorScheme` to properly resolve imports.
 namespace margelo::nitro::test { enum class ColorScheme; }
-// Forward declaration of `Garage` to properly resolve imports.
-namespace margelo::nitro::test { struct Garage; }
 // Forward declaration of `HybridBaseSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridBaseSpec; }
 // Forward declaration of `HybridChildSpec` to properly resolve imports.
@@ -50,7 +48,6 @@ namespace margelo::nitro::test { struct WrappedJsStruct; }
 // Include C++ defined types
 #include "Car.hpp"
 #include "ColorScheme.hpp"
-#include "Garage.hpp"
 #include "HybridBaseSpec.hpp"
 #include "HybridChildSpec.hpp"
 #include "HybridTestObjectSwiftKotlinSpec.hpp"

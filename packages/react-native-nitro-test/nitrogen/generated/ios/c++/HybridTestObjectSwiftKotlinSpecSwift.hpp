@@ -20,8 +20,6 @@ namespace margelo::nitro::test { enum class Powertrain; }
 namespace margelo::nitro::test { enum class OldEnum; }
 // Forward declaration of `Person` to properly resolve imports.
 namespace margelo::nitro::test { struct Person; }
-// Forward declaration of `Garage` to properly resolve imports.
-namespace margelo::nitro::test { struct Garage; }
 // Forward declaration of `Car` to properly resolve imports.
 namespace margelo::nitro::test { struct Car; }
 // Forward declaration of `AnyMap` to properly resolve imports.
@@ -61,7 +59,6 @@ namespace margelo::nitro::test::external { class HybridSomeExternalObjectSpec; }
 #include <functional>
 #include <variant>
 #include "Person.hpp"
-#include "Garage.hpp"
 #include "Car.hpp"
 #include <NitroModules/AnyMap.hpp>
 #include <unordered_map>
@@ -281,8 +278,8 @@ namespace margelo::nitro::test {
       auto __value = std::move(__result.value());
       return __value;
     }
-    inline std::string sumUpAllPassengers(const Garage& garage) override {
-      auto __result = _swiftPart.sumUpAllPassengers(std::forward<decltype(garage)>(garage));
+    inline std::string sumUpAllPassengers(const std::vector<Car>& cars) override {
+      auto __result = _swiftPart.sumUpAllPassengers(cars);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }

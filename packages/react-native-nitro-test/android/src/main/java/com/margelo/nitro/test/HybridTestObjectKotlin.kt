@@ -61,8 +61,7 @@ class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
         return array
     }
 
-    override fun sumUpAllPassengers(garage: Garage): String {
-        val cars = garage.cars ?: throw Error("No cars in garage!")
+    override fun sumUpAllPassengers(cars: Array<Garage>): String {
         val passengers = cars.flatMap { it.passengers }
         val stringified = passengers.map { "${it.make} ${it.model}" }
         return stringified.joinToString(separator = ", ")

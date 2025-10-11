@@ -121,10 +121,7 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
     return array
   }
 
-  func sumUpAllPassengers(garage: Garage) throws -> String {
-    guard let cars = garage.cars else {
-      throw RuntimeError.error(withMessage: "No cars in garage!")
-    }
+  func sumUpAllPassengers(cars: [Car]) throws -> String {
     let passengers = cars.flatMap { car in car.passengers }
     let stringified = passengers.map { passenger in "\(passenger.name) (\(passenger.age))" }
     return stringified.joined(separator: ", ")

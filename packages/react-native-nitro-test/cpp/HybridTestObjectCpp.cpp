@@ -168,15 +168,11 @@ std::vector<Person> HybridTestObjectCpp::bounceStructs(const std::vector<Person>
   return array;
 }
 
-std::string HybridTestObjectCpp::sumUpAllPassengers(const Garage& garage) {
-  if (!garage.cars.has_value()) {
-    throw std::runtime_error("No cars in garage!");
-  }
-
+std::string HybridTestObjectCpp::sumUpAllPassengers(const std::vector<Car>& cars) {
   std::ostringstream oss;
   bool first = true;
 
-  for (const auto& car : *garage.cars) {
+  for (const auto& car : cars) {
       for (const auto& passenger : car.passengers) {
           if (!first) oss << ", ";
           oss << passenger.name << " (" << passenger.age << ")";

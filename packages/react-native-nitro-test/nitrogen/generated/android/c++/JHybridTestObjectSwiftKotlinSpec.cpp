@@ -35,8 +35,6 @@ namespace margelo::nitro::test { class HybridBaseSpec; }
 namespace margelo::nitro::test { class HybridChildSpec; }
 // Forward declaration of `HybridSomeExternalObjectSpec` to properly resolve imports.
 namespace margelo::nitro::test::external { class HybridSomeExternalObjectSpec; }
-// Forward declaration of `Garage` to properly resolve imports.
-namespace margelo::nitro::test { struct Garage; }
 // Forward declaration of `MapWrapper` to properly resolve imports.
 namespace margelo::nitro::test { struct MapWrapper; }
 // Forward declaration of `SecondMapWrapper` to properly resolve imports.
@@ -93,8 +91,6 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 #include "JHybridChildSpec.hpp"
 #include <NitroTestExternal/HybridSomeExternalObjectSpec.hpp>
 #include <NitroTestExternal/JHybridSomeExternalObjectSpec.hpp>
-#include "Garage.hpp"
-#include "JGarage.hpp"
 #include "JFunc_void_std__vector_Powertrain_.hpp"
 #include "MapWrapper.hpp"
 #include "JMapWrapper.hpp"
@@ -374,9 +370,17 @@ namespace margelo::nitro::test {
       return __vector;
     }();
   }
-  std::string JHybridTestObjectSwiftKotlinSpec::sumUpAllPassengers(const Garage& garage) {
-    static const auto method = javaClassStatic()->getMethod<jni::local_ref<jni::JString>(jni::alias_ref<JGarage> /* garage */)>("sumUpAllPassengers");
-    auto __result = method(_javaPart, JGarage::fromCpp(garage));
+  std::string JHybridTestObjectSwiftKotlinSpec::sumUpAllPassengers(const std::vector<Car>& cars) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<jni::JString>(jni::alias_ref<jni::JArrayClass<JCar>> /* cars */)>("sumUpAllPassengers");
+    auto __result = method(_javaPart, [&]() {
+      size_t __size = cars.size();
+      jni::local_ref<jni::JArrayClass<JCar>> __array = jni::JArrayClass<JCar>::newArray(__size);
+      for (size_t __i = 0; __i < __size; __i++) {
+        const auto& __element = cars[__i];
+        __array->setElement(__i, *JCar::fromCpp(__element));
+      }
+      return __array;
+    }());
     return __result->toStdString();
   }
   std::vector<Powertrain> JHybridTestObjectSwiftKotlinSpec::bounceEnums(const std::vector<Powertrain>& array) {

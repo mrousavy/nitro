@@ -443,11 +443,7 @@ export function getTests(
         ])
     ),
     createTest('sumUpAllPassengers(...) equals', () =>
-      it(() =>
-        testObject.sumUpAllPassengers({
-          cars: [TEST_CAR, TEST_CAR_2],
-        })
-      )
+      it(() => testObject.sumUpAllPassengers([TEST_CAR, TEST_CAR_2]))
         .didNotThrow()
         .didReturn('string')
         .equals(sumUpAllPassengers([TEST_CAR, TEST_CAR_2]))
