@@ -38,6 +38,8 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version-file: ".bun-version"
       - uses: reviewdog/action-setup@v1
 
       - name: Install npm dependencies (bun)
@@ -55,6 +57,8 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version-file: ".bun-version"
       - uses: reviewdog/action-setup@v1
 
       - name: Install npm dependencies (bun)
