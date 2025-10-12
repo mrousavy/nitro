@@ -42,7 +42,12 @@ jobs:
             ${{ runner.os }}-pods-
       - name: Install Pods
         working-directory: example
-        run: bun pods
+        run: |
+          cd ios
+          bundle install
+          RCT_USE_RN_DEP=1 RCT_USE_PREBUILT_RNCORE=1 bundle exec pod install
+          cd ..
+
 
       - name: Build App (Release, Simulator)
         working-directory: example/ios

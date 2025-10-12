@@ -159,7 +159,9 @@ export function HybridObjectTestsScreen() {
 
   const runAllTests = () => {
     gc()
-    tests.forEach((t) => runTest(t))
+    for (const t of tests) {
+      runTest(t)
+    }
     gc()
   }
 
@@ -169,6 +171,7 @@ export function HybridObjectTestsScreen() {
       <View style={styles.topControls}>
         <SegmentedControl
           style={styles.segmentedControl}
+          testID="hybrid-object-tests-screen-segmented-control"
           values={['C++', PLATFORM_LANGUAGE]}
           selectedIndex={selectedIndex}
           onChange={({ nativeEvent: { selectedSegmentIndex } }) => {
@@ -191,11 +194,19 @@ export function HybridObjectTestsScreen() {
       </ScrollView>
 
       <View style={[styles.bottomView, { backgroundColor: colors.background }]}>
-        <Text style={styles.resultText} numberOfLines={2}>
+        <Text
+          style={styles.resultText}
+          numberOfLines={2}
+          testID="hybrid-object-tests-screen-status-text"
+        >
           {status}
         </Text>
         <View style={styles.flex} />
-        <Button title="Run all tests" onPress={runAllTests} />
+        <Button
+          title="Run all tests"
+          onPress={runAllTests}
+          testID="hybrid-object-tests-screen-run-all-tests-button"
+        />
       </View>
     </View>
   )
