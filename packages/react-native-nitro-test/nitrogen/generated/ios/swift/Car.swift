@@ -140,7 +140,14 @@ public extension Car {
   var isFast: Bool? {
     @inline(__always)
     get {
-      return self.__isFast.value
+      return { () -> Bool? in
+        if bridge.has_value_std__optional_bool_(self.__isFast) {
+          let __unwrapped = bridge.get_std__optional_bool_(self.__isFast)
+          return __unwrapped
+        } else {
+          return nil
+        }
+      }()
     }
     @inline(__always)
     set {
