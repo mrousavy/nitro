@@ -7,9 +7,8 @@
 #include "Dispatcher.hpp"
 
 // This is react-native specific
-#if __has_include(<React-callinvoker/ReactCommon/CallInvoker.h>)
-#include <React-callinvoker/ReactCommon/CallInvoker.h>
-#include <React-callinvoker/ReactCommon/SchedulerPriority.h>
+#if __has_include(<ReactCommon/CallInvoker.h>)
+#include <ReactCommon/CallInvoker.h>
 
 namespace margelo::nitro {
 
