@@ -68,11 +68,11 @@ public:
    * and return a `Promise<T>` that will hold the result of the function.
    */
   template <typename T>
-  std::shared_ptr<Promise<T>> runAsyncAwaitable(std::function<T()>&& function) {
+  std::shared_ptr<Promise<T>> runAsyncAwaitable(Priority priority, std::function<T()>&& function) {
     // 1. Create Promise that can be shared between this and dispatcher thread
     auto promise = Promise<T>::create();
 
-    runAsync([function = std::move(function), promise]() {
+    runAsync(priority, [function = std::move(function), promise]() {
       try {
         if constexpr (std::is_void_v<T>) {
           // 4. Call the actual function on the new Thread
