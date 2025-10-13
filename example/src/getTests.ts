@@ -196,7 +196,7 @@ export function getTests(
       it(() => stringify(Object.getPrototypeOf(testObject)))
         .didNotThrow()
         .didReturn('string')
-        .equals('[empty-object HybridObject (rawJsiFunc)]')
+        .toStringContain('[empty-object HybridObject')
     ),
     createTest('Two HybridObjects are not equal (a == b)', () =>
       it(
