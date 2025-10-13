@@ -167,6 +167,10 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
+  abstract fun sumUpAllPassengers(cars: Array<Car>): String
+  
+  @DoNotStrip
+  @Keep
   abstract fun bounceEnums(array: Array<Powertrain>): Array<Powertrain>
   
   abstract fun complexEnumCallback(array: Array<Powertrain>, callback: (array: Array<Powertrain>) -> Unit): Unit
@@ -221,6 +225,10 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   @DoNotStrip
   @Keep
   abstract fun tryOptionalEnum(value: Powertrain?): Powertrain?
+  
+  @DoNotStrip
+  @Keep
+  abstract fun tryTrailingOptional(num: Double, str: String, boo: Boolean?): Boolean
   
   @DoNotStrip
   @Keep

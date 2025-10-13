@@ -100,6 +100,23 @@ export class State<T> {
     return this
   }
 
+  toStringContain(string: string): State<T> {
+    if (typeof this.result !== 'string') {
+      this.onFailed(
+        `Expected "${stringify(this.result)}" (${typeof this.result}) to be a string, but it isn't!`
+      )
+    } else {
+      if (!this.result.includes(string)) {
+        this.onFailed(
+          `Expected "${this.result}" to contain the string "${string}", but it didn't!`
+        )
+      } else {
+        this.onPassed()
+      }
+    }
+    return this
+  }
+
   cleanup(func: () => void): State<T> {
     setTimeout(() => {
       func()

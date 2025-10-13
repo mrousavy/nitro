@@ -37,6 +37,7 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
   func bounceStrings(array: [String]) throws -> [String]
   func bounceNumbers(array: [Double]) throws -> [Double]
   func bounceStructs(array: [Person]) throws -> [Person]
+  func sumUpAllPassengers(cars: [Car]) throws -> String
   func bounceEnums(array: [Powertrain]) throws -> [Powertrain]
   func complexEnumCallback(array: [Powertrain], callback: @escaping (_ array: [Powertrain]) -> Void) throws -> Void
   func createMap() throws -> AnyMap
@@ -50,6 +51,7 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
   func tryOptionalParams(num: Double, boo: Bool, str: String?) throws -> String
   func tryMiddleParam(num: Double, boo: Bool?, str: String) throws -> String
   func tryOptionalEnum(value: Powertrain?) throws -> Powertrain?
+  func tryTrailingOptional(num: Double, str: String, boo: Bool?) throws -> Bool
   func add1Hour(date: Date) throws -> Date
   func currentDate() throws -> Date
   func calculateFibonacciSync(value: Double) throws -> Int64

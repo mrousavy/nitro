@@ -44,6 +44,7 @@ export interface Car {
   power: number
   powertrain: Powertrain
   driver?: Person
+  passengers: Person[]
   isFast?: boolean
   favouriteTrack?: string
   performanceScores: number[]
@@ -108,6 +109,7 @@ interface SharedTestObjectProps {
   bounceStrings(array: string[]): string[]
   bounceNumbers(array: number[]): number[]
   bounceStructs(array: Person[]): Person[]
+  sumUpAllPassengers(cars: Car[]): string
   bounceEnums(array: Powertrain[]): Powertrain[]
   complexEnumCallback(
     array: Powertrain[],
@@ -134,6 +136,7 @@ interface SharedTestObjectProps {
   tryOptionalParams(num: number, boo: boolean, str?: string): string
   tryMiddleParam(num: number, boo: boolean | undefined, str: string): string
   tryOptionalEnum(value?: Powertrain): Powertrain | undefined
+  tryTrailingOptional(num: number, str: string, boo?: boolean): boolean
 
   // Variants
   someVariant: number | string

@@ -18,13 +18,19 @@ public extension Car {
   /**
    * Create a new instance of `Car`.
    */
-  init(year: Double, make: String, model: String, power: Double, powertrain: Powertrain, driver: Person?, isFast: Bool?, favouriteTrack: String?, performanceScores: [Double]) {
+  init(year: Double, make: String, model: String, power: Double, powertrain: Powertrain, driver: Person?, passengers: [Person], isFast: Bool?, favouriteTrack: String?, performanceScores: [Double]) {
     self.init(year, std.string(make), std.string(model), power, powertrain, { () -> bridge.std__optional_Person_ in
       if let __unwrappedValue = driver {
         return bridge.create_std__optional_Person_(__unwrappedValue)
       } else {
         return .init()
       }
+    }(), { () -> bridge.std__vector_Person_ in
+      var __vector = bridge.create_std__vector_Person_(passengers.count)
+      for __item in passengers {
+        __vector.push_back(__item)
+      }
+      return __vector
     }(), { () -> bridge.std__optional_bool_ in
       if let __unwrappedValue = isFast {
         return bridge.create_std__optional_bool_(__unwrappedValue)
@@ -110,6 +116,23 @@ public extension Car {
         } else {
           return .init()
         }
+      }()
+    }
+  }
+  
+  var passengers: [Person] {
+    @inline(__always)
+    get {
+      return self.__passengers.map({ __item in __item })
+    }
+    @inline(__always)
+    set {
+      self.__passengers = { () -> bridge.std__vector_Person_ in
+        var __vector = bridge.create_std__vector_Person_(newValue.count)
+        for __item in newValue {
+          __vector.push_back(__item)
+        }
+        return __vector
       }()
     }
   }

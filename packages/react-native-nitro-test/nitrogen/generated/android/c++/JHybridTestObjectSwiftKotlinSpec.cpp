@@ -370,6 +370,19 @@ namespace margelo::nitro::test {
       return __vector;
     }();
   }
+  std::string JHybridTestObjectSwiftKotlinSpec::sumUpAllPassengers(const std::vector<Car>& cars) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<jni::JString>(jni::alias_ref<jni::JArrayClass<JCar>> /* cars */)>("sumUpAllPassengers");
+    auto __result = method(_javaPart, [&]() {
+      size_t __size = cars.size();
+      jni::local_ref<jni::JArrayClass<JCar>> __array = jni::JArrayClass<JCar>::newArray(__size);
+      for (size_t __i = 0; __i < __size; __i++) {
+        const auto& __element = cars[__i];
+        __array->setElement(__i, *JCar::fromCpp(__element));
+      }
+      return __array;
+    }());
+    return __result->toStdString();
+  }
   std::vector<Powertrain> JHybridTestObjectSwiftKotlinSpec::bounceEnums(const std::vector<Powertrain>& array) {
     static const auto method = javaClassStatic()->getMethod<jni::local_ref<jni::JArrayClass<JPowertrain>>(jni::alias_ref<jni::JArrayClass<JPowertrain>> /* array */)>("bounceEnums");
     auto __result = method(_javaPart, [&]() {
@@ -496,6 +509,11 @@ namespace margelo::nitro::test {
     static const auto method = javaClassStatic()->getMethod<jni::local_ref<JPowertrain>(jni::alias_ref<JPowertrain> /* value */)>("tryOptionalEnum");
     auto __result = method(_javaPart, value.has_value() ? JPowertrain::fromCpp(value.value()) : nullptr);
     return __result != nullptr ? std::make_optional(__result->toCpp()) : std::nullopt;
+  }
+  bool JHybridTestObjectSwiftKotlinSpec::tryTrailingOptional(double num, const std::string& str, std::optional<bool> boo) {
+    static const auto method = javaClassStatic()->getMethod<jboolean(double /* num */, jni::alias_ref<jni::JString> /* str */, jni::alias_ref<jni::JBoolean> /* boo */)>("tryTrailingOptional");
+    auto __result = method(_javaPart, num, jni::make_jstring(str), boo.has_value() ? jni::JBoolean::valueOf(boo.value()) : nullptr);
+    return static_cast<bool>(__result);
   }
   std::chrono::system_clock::time_point JHybridTestObjectSwiftKotlinSpec::add1Hour(std::chrono::system_clock::time_point date) {
     static const auto method = javaClassStatic()->getMethod<jni::local_ref<JInstant>(jni::alias_ref<JInstant> /* date */)>("add1Hour");

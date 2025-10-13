@@ -19,6 +19,7 @@ import { VoidType } from '../types/VoidType.js'
 import { NamedWrappingType } from '../types/NamedWrappingType.js'
 import { ErrorType } from '../types/ErrorType.js'
 import { ResultWrappingType } from '../types/ResultWrappingType.js'
+import { isPrimitivelyCopyable } from './isPrimitivelyCopyable.js'
 
 export interface SwiftCxxHelper {
   cxxHeader: {
@@ -148,7 +149,7 @@ return ${cxxNamespace}::get_${internalName}(cppType);
  */
 using ${name} = ${actualType};
 ${actualType} create_${name}(void* NON_NULL swiftUnsafePointer) noexcept;
-void* NON_NULL get_${name}(${name} cppType) noexcept;
+void* NON_NULL get_${name}(${name} cppType);
     `.trim(),
       requiredIncludes: type.getRequiredImports('c++'),
     },
@@ -157,7 +158,7 @@ void* NON_NULL get_${name}(${name} cppType) noexcept;
 ${actualType} create_${name}(void* NON_NULL swiftUnsafePointer) noexcept {
   ${indent(createImplementation, '  ')}
 }
-void* NON_NULL get_${name}(${name} cppType) noexcept {
+void* NON_NULL get_${name}(${name} cppType) {
   ${indent(getImplementation, '  ')}
 }
     `.trim(),
@@ -258,11 +259,6 @@ inline ${wrappedBridge.getTypeCode('c++')} get_${name}(const ${actualType}& opti
     },
     dependencies: [],
   }
-}
-
-export function isPrimitivelyCopyable(type: Type): boolean {
-  const bridgedType = new SwiftCxxBridgedType(type, true)
-  return !bridgedType.needsSpecialHandling
 }
 
 /**

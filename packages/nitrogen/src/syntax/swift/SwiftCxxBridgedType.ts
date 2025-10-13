@@ -22,7 +22,6 @@ import { VariantType } from '../types/VariantType.js'
 import { getReferencedTypes } from '../getReferencedTypes.js'
 import {
   createSwiftCxxHelpers,
-  isPrimitivelyCopyable,
   type SwiftCxxHelper,
 } from './SwiftCxxTypeHelper.js'
 import { createSwiftEnumBridge } from './SwiftEnum.js'
@@ -33,6 +32,7 @@ import { NamedWrappingType } from '../types/NamedWrappingType.js'
 import { ErrorType } from '../types/ErrorType.js'
 import { createSwiftFunctionBridge } from './SwiftFunction.js'
 import type { Language } from '../../getPlatformSpecs.js'
+import { isPrimitivelyCopyable } from './isPrimitivelyCopyable.js'
 
 // TODO: Remove enum bridge once Swift fixes bidirectional enums crashing the `-Swift.h` header.
 

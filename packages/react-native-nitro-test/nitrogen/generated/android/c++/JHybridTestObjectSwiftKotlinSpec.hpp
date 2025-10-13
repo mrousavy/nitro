@@ -88,6 +88,7 @@ namespace margelo::nitro::test {
     std::vector<std::string> bounceStrings(const std::vector<std::string>& array) override;
     std::vector<double> bounceNumbers(const std::vector<double>& array) override;
     std::vector<Person> bounceStructs(const std::vector<Person>& array) override;
+    std::string sumUpAllPassengers(const std::vector<Car>& cars) override;
     std::vector<Powertrain> bounceEnums(const std::vector<Powertrain>& array) override;
     void complexEnumCallback(const std::vector<Powertrain>& array, const std::function<void(const std::vector<Powertrain>& /* array */)>& callback) override;
     std::shared_ptr<AnyMap> createMap() override;
@@ -101,6 +102,7 @@ namespace margelo::nitro::test {
     std::string tryOptionalParams(double num, bool boo, const std::optional<std::string>& str) override;
     std::string tryMiddleParam(double num, std::optional<bool> boo, const std::string& str) override;
     std::optional<Powertrain> tryOptionalEnum(std::optional<Powertrain> value) override;
+    bool tryTrailingOptional(double num, const std::string& str, std::optional<bool> boo) override;
     std::chrono::system_clock::time_point add1Hour(std::chrono::system_clock::time_point date) override;
     std::chrono::system_clock::time_point currentDate() override;
     int64_t calculateFibonacciSync(double value) override;

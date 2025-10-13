@@ -19,9 +19,13 @@ public extension WrappedJsStruct {
    * Create a new instance of `WrappedJsStruct`.
    */
   init(value: JsStyleStruct, items: [JsStyleStruct]) {
-    self.init(value, items.withUnsafeBufferPointer { __pointer -> bridge.std__vector_JsStyleStruct_ in
-      return bridge.copy_std__vector_JsStyleStruct_(__pointer.baseAddress!, items.count)
-    })
+    self.init(value, { () -> bridge.std__vector_JsStyleStruct_ in
+      var __vector = bridge.create_std__vector_JsStyleStruct_(items.count)
+      for __item in items {
+        __vector.push_back(__item)
+      }
+      return __vector
+    }())
   }
 
   var value: JsStyleStruct {
@@ -38,17 +42,17 @@ public extension WrappedJsStruct {
   var items: [JsStyleStruct] {
     @inline(__always)
     get {
-      return { () -> [JsStyleStruct] in
-        let __data = bridge.get_data_std__vector_JsStyleStruct_(self.__items)
-        let __size = self.__items.size()
-        return Array(UnsafeBufferPointer(start: __data, count: __size))
-      }()
+      return self.__items.map({ __item in __item })
     }
     @inline(__always)
     set {
-      self.__items = newValue.withUnsafeBufferPointer { __pointer -> bridge.std__vector_JsStyleStruct_ in
-        return bridge.copy_std__vector_JsStyleStruct_(__pointer.baseAddress!, newValue.count)
-      }
+      self.__items = { () -> bridge.std__vector_JsStyleStruct_ in
+        var __vector = bridge.create_std__vector_JsStyleStruct_(newValue.count)
+        for __item in newValue {
+          __vector.push_back(__item)
+        }
+        return __vector
+      }()
     }
   }
 }
