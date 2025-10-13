@@ -23,11 +23,11 @@ public:
   explicit CallInvokerDispatcher(std::shared_ptr<react::CallInvoker> callInvoker) : _callInvoker(callInvoker) {}
 
   void runAsync(Priority priority, std::function<void()>&& function) override {
-    _callInvoker->invokeAsync(std::move(function));
+    _callInvoker->invokeAsync(nitroPriorityToReactPriority(priority), [function = std::move(function)](jsi::Runtime&) { function(); });
   }
 
-  void runSync(Priority priority, std::function<void()>&& function) override {
-    _callInvoker->invokeSync(std::move(function));
+  void runSync(std::function<void()>&& function) override {
+    _callInvoker->invokeSync([function = std::move(function)](jsi::Runtime&) { function(); });
   }
 
 private:

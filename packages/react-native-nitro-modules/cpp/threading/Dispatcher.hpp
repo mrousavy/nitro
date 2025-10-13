@@ -46,17 +46,12 @@ public:
   /**
    * Run the given void function synchronously on the Thread this Dispatcher is managing.
    */
-  virtual void runSync(Priority priority, std::function<void()>&& function) = 0;
+  virtual void runSync(std::function<void()>&& function) = 0;
 
   /**
    * Run the given void function asynchronously on the Thread this Dispatcher is managing.
    */
   virtual void runAsync(Priority priority, std::function<void()>&& function) = 0;
-
-  [[deprecated]]
-  virtual void runSync(std::function<void()>&& function) {
-    return runSync(Priority::NormalPriority, std::move(function));
-  }
 
   [[deprecated]]
   virtual void runAsync(std::function<void()>&& function) {
