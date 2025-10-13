@@ -74,7 +74,8 @@ export function stringify(value: unknown): string {
               if (string !== '[object Object]') return string
             } else {
               // We don't have NativeState - we cannot safely call toString()..
-              return `[empty-object HybridObject]`
+              const keys = Object.keys(value)
+              return `[empty-object HybridObject (${keys.join(', ')})]`
             }
           } else {
             const string = value.toString()
