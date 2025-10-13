@@ -386,6 +386,14 @@ namespace margelo::nitro::test {
       auto __value = std::move(__result.value());
       return __value;
     }
+    inline bool tryTrailingOptional(double num, const std::string& str, std::optional<bool> boo) override {
+      auto __result = _swiftPart.tryTrailingOptional(std::forward<decltype(num)>(num), str, boo);
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
     inline std::chrono::system_clock::time_point add1Hour(std::chrono::system_clock::time_point date) override {
       auto __result = _swiftPart.add1Hour(date);
       if (__result.hasError()) [[unlikely]] {

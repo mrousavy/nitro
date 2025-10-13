@@ -510,6 +510,11 @@ namespace margelo::nitro::test {
     auto __result = method(_javaPart, value.has_value() ? JPowertrain::fromCpp(value.value()) : nullptr);
     return __result != nullptr ? std::make_optional(__result->toCpp()) : std::nullopt;
   }
+  bool JHybridTestObjectSwiftKotlinSpec::tryTrailingOptional(double num, const std::string& str, std::optional<bool> boo) {
+    static const auto method = javaClassStatic()->getMethod<jboolean(double /* num */, jni::alias_ref<jni::JString> /* str */, jni::alias_ref<jni::JBoolean> /* boo */)>("tryTrailingOptional");
+    auto __result = method(_javaPart, num, jni::make_jstring(str), boo.has_value() ? jni::JBoolean::valueOf(boo.value()) : nullptr);
+    return static_cast<bool>(__result);
+  }
   std::chrono::system_clock::time_point JHybridTestObjectSwiftKotlinSpec::add1Hour(std::chrono::system_clock::time_point date) {
     static const auto method = javaClassStatic()->getMethod<jni::local_ref<JInstant>(jni::alias_ref<JInstant> /* date */)>("add1Hour");
     auto __result = method(_javaPart, JInstant::fromChrono(date));

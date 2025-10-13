@@ -153,6 +153,7 @@ namespace margelo::nitro::test {
       virtual std::string tryOptionalParams(double num, bool boo, const std::optional<std::string>& str) = 0;
       virtual std::string tryMiddleParam(double num, std::optional<bool> boo, const std::string& str) = 0;
       virtual std::optional<Powertrain> tryOptionalEnum(std::optional<Powertrain> value) = 0;
+      virtual bool tryTrailingOptional(double num, const std::string& str, std::optional<bool> boo) = 0;
       virtual std::chrono::system_clock::time_point add1Hour(std::chrono::system_clock::time_point date) = 0;
       virtual std::chrono::system_clock::time_point currentDate() = 0;
       virtual int64_t calculateFibonacciSync(double value) = 0;

@@ -228,6 +228,10 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
+  abstract fun tryTrailingOptional(num: Double, str: String, boo: Boolean?): Boolean
+  
+  @DoNotStrip
+  @Keep
   abstract fun add1Hour(date: java.time.Instant): java.time.Instant
   
   @DoNotStrip
