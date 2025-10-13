@@ -192,6 +192,12 @@ export function getTests(
         .toContain('toString')
         .toContain('equals')
     ),
+    createTest('Logging HybridObject.prototype works', () =>
+      it(() => stringify(Object.getPrototypeOf(testObject)))
+        .didNotThrow()
+        .didReturn('string')
+        .toStringContain('[empty-object HybridObject')
+    ),
     createTest('Two HybridObjects are not equal (a == b)', () =>
       it(
         () =>
