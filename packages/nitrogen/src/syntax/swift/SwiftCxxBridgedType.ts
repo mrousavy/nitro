@@ -449,7 +449,10 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
                 return `${cppParameterName}.has_value() ? ${cppParameterName}.pointee : nil`
               }
             }
-            if (!wrapping.needsSpecialHandling) {
+            // TODO: Remove this check for booleans once https://github.com/swiftlang/swift/issues/84848 is fixed.
+            const swiftBug84848Workaround =
+              optional.wrappingType.kind === 'boolean'
+            if (!wrapping.needsSpecialHandling && !swiftBug84848Workaround) {
               return `${cppParameterName}.value`
             }
             return `
