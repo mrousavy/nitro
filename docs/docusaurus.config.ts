@@ -136,6 +136,11 @@ const config: Config = {
           label: 'Installation',
         },
         {
+          href: 'https://youtu.be/528SxTGnIlc?si=IxH7n09ZVe4iwRPv',
+          label: 'YouTube Tutorial',
+          position: 'right',
+        },
+        {
           href: 'https://chatgpt.com/g/g-6870125d0fcc8191925bd20a02c78bcf-nitro-module-builder',
           label: 'Ask AI',
           position: 'right',
