@@ -142,6 +142,11 @@ class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
         return value
     }
 
+
+    override fun tryTrailingOptional(num: Double, str: String, boo: Boolean?): Boolean {
+        return boo ?: false
+    }
+
     override fun bounceMap(map: Map<String, Variant_Double_Boolean>): Map<String, Variant_Double_Boolean> {
         return map
     }

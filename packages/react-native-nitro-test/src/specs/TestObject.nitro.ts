@@ -136,6 +136,7 @@ interface SharedTestObjectProps {
   tryOptionalParams(num: number, boo: boolean, str?: string): string
   tryMiddleParam(num: number, boo: boolean | undefined, str: string): string
   tryOptionalEnum(value?: Powertrain): Powertrain | undefined
+  tryTrailingOptional(num: number, str: string, boo?: boolean): boolean
 
   // Variants
   someVariant: number | string

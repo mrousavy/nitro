@@ -70,6 +70,7 @@ namespace margelo::nitro::test {
       prototype.registerHybridMethod("tryOptionalParams", &HybridTestObjectCppSpec::tryOptionalParams);
       prototype.registerHybridMethod("tryMiddleParam", &HybridTestObjectCppSpec::tryMiddleParam);
       prototype.registerHybridMethod("tryOptionalEnum", &HybridTestObjectCppSpec::tryOptionalEnum);
+      prototype.registerHybridMethod("tryTrailingOptional", &HybridTestObjectCppSpec::tryTrailingOptional);
       prototype.registerHybridMethod("add1Hour", &HybridTestObjectCppSpec::add1Hour);
       prototype.registerHybridMethod("currentDate", &HybridTestObjectCppSpec::currentDate);
       prototype.registerHybridMethod("calculateFibonacciSync", &HybridTestObjectCppSpec::calculateFibonacciSync);

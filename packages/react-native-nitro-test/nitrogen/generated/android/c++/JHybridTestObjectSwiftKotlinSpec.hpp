@@ -102,6 +102,7 @@ namespace margelo::nitro::test {
     std::string tryOptionalParams(double num, bool boo, const std::optional<std::string>& str) override;
     std::string tryMiddleParam(double num, std::optional<bool> boo, const std::string& str) override;
     std::optional<Powertrain> tryOptionalEnum(std::optional<Powertrain> value) override;
+    bool tryTrailingOptional(double num, const std::string& str, std::optional<bool> boo) override;
     std::chrono::system_clock::time_point add1Hour(std::chrono::system_clock::time_point date) override;
     std::chrono::system_clock::time_point currentDate() override;
     int64_t calculateFibonacciSync(double value) override;

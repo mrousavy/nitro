@@ -793,6 +793,18 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
+  public final func tryTrailingOptional(num: Double, str: std.string, boo: bridge.std__optional_bool_) -> bridge.Result_bool_ {
+    do {
+      let __result = try self.__implementation.tryTrailingOptional(num: num, str: String(str), boo: boo.value)
+      let __resultCpp = __result
+      return bridge.create_Result_bool_(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_bool_(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
   public final func add1Hour(date: margelo.nitro.chrono_time) -> bridge.Result_std__chrono__system_clock__time_point_ {
     do {
       let __result = try self.__implementation.add1Hour(date: Date(fromChrono: date))

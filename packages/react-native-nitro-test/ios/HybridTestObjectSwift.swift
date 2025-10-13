@@ -198,6 +198,10 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
     return value
   }
 
+  func tryTrailingOptional(num: Double, str: String, boo: Bool?) throws -> Bool {
+    return boo ?? false
+  }
+
   func add1Hour(date: Date) throws -> Date {
     let oneHourInSeconds = 1.0 * 60 * 60
     return date + oneHourInSeconds
@@ -420,7 +424,7 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
       optionalCallback(13.0)
     }
   }
-  
+
   private let formatter: NumberFormatter = {
     let formatter = NumberFormatter()
     formatter.minimumFractionDigits = 0

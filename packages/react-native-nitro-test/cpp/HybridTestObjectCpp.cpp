@@ -250,6 +250,10 @@ std::optional<Powertrain> HybridTestObjectCpp::tryOptionalEnum(std::optional<Pow
   return value;
 }
 
+bool HybridTestObjectCpp::tryTrailingOptional(double /* num */, const std::string& /* str */, std::optional<bool> boo) {
+  return boo.has_value() ? boo.value() : false;
+}
+
 std::chrono::system_clock::time_point HybridTestObjectCpp::add1Hour(std::chrono::system_clock::time_point date) {
   return date + std::chrono::hours(1);
 }

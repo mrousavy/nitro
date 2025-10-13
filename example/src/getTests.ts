@@ -661,6 +661,16 @@ export function getTests(
         .didNotThrow()
         .equals(undefined)
     ),
+    createTest('tryTrailingOptional(...)', () =>
+      it(() => testObject.tryTrailingOptional(0, '', false))
+        .didNotThrow()
+        .equals(false)
+    ),
+    createTest('tryTrailingOptional(...)', () =>
+      it(() => testObject.tryTrailingOptional(0, '', true))
+        .didNotThrow()
+        .equals(true)
+    ),
 
     // Variants tests
     createTest('set someVariant to 55', () =>

@@ -51,6 +51,7 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
   func tryOptionalParams(num: Double, boo: Bool, str: String?) throws -> String
   func tryMiddleParam(num: Double, boo: Bool?, str: String) throws -> String
   func tryOptionalEnum(value: Powertrain?) throws -> Powertrain?
+  func tryTrailingOptional(num: Double, str: String, boo: Bool?) throws -> Bool
   func add1Hour(date: Date) throws -> Date
   func currentDate() throws -> Date
   func calculateFibonacciSync(value: Double) throws -> Int64
