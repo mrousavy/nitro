@@ -1173,11 +1173,11 @@ export function getTests(
       async () =>
         (
           await it(async () => {
-            return new Promise<void>((resolve) => {
+            return new Promise((resolve) => {
               let counter = 0
               const onWasCalled = () => {
                 counter++
-                if (counter === 2) resolve()
+                if (counter === 2) resolve(counter)
               }
               testObject.twoOptionalCallbacks(
                 55,
@@ -1186,7 +1186,9 @@ export function getTests(
               )
             })
           })
-        ).didNotThrow()
+        )
+          .didNotThrow()
+          .equals(2)
     ),
     createTest('Calling twoOptionalCallbacks(...) works with undefined', () =>
       it(() => testObject.twoOptionalCallbacks(55)).didNotThrow()
