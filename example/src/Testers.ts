@@ -125,6 +125,36 @@ export class State<T> {
   }
 }
 
+function timeoutedPromise<T>(
+  promise: Promise<T>,
+  timeout: number = 1500
+): Promise<T> {
+  return new Promise(async (resolve, reject) => {
+    let didResolve = false
+    requestAnimationFrame(() => {
+      setImmediate(() => {
+        setTimeout(() => {
+          if (!didResolve) reject(new Error(`Timeouted!`))
+        }, timeout)
+      })
+    })
+    try {
+      const r = await promise
+      if (didResolve) {
+        throw new Error(`Tried resolving Promise after it already timeouted!`)
+      }
+      didResolve = true
+      resolve(r)
+    } catch (e) {
+      if (didResolve) {
+        throw new Error(`Tried rejecting Promise after it already timeouted!`)
+      }
+      didResolve = true
+      reject(e)
+    }
+  })
+}
+
 export function it<T>(action: () => Promise<T>): Promise<State<T>>
 export function it<T>(action: () => T): State<T>
 export function it<T>(
@@ -133,7 +163,8 @@ export function it<T>(
   try {
     const syncResult = action()
     if (syncResult instanceof Promise) {
-      return syncResult
+      const wrapped = timeoutedPromise<T>(syncResult)
+      return wrapped
         .then((asyncResult) => new State<T>(asyncResult, undefined))
         .catch((error) => new State<T>(undefined, error))
     }
