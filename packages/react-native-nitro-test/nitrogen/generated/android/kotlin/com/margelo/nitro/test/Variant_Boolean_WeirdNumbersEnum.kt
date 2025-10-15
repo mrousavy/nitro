@@ -11,7 +11,7 @@ import com.facebook.proguard.annotations.DoNotStrip
 
 
 /**
- * Represents the TypeScript variant "Boolean|WeirdNumbersEnum".
+ * Represents the TypeScript variant "boolean | enum".
  */
 @Suppress("ClassName")
 @DoNotStrip
@@ -30,6 +30,22 @@ sealed class Variant_Boolean_WeirdNumbersEnum {
     get() = this is First
   val isSecond: Boolean
     get() = this is Second
+
+  fun asFirstOrNull(): Boolean? {
+    val value = (this as? First)?.value ?: return null
+    return value
+  }
+  fun asSecondOrNull(): WeirdNumbersEnum? {
+    val value = (this as? Second)?.value ?: return null
+    return value
+  }
+
+  inline fun <R> fold(first: (Boolean) -> R, second: (WeirdNumbersEnum) -> R): R {
+    return when (this) {
+      is First -> first(value)
+      is Second -> second(value)
+    }
+  }
 
   companion object {
     @JvmStatic

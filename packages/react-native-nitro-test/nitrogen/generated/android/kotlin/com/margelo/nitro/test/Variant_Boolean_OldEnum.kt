@@ -11,7 +11,7 @@ import com.facebook.proguard.annotations.DoNotStrip
 
 
 /**
- * Represents the TypeScript variant "Boolean|OldEnum".
+ * Represents the TypeScript variant "boolean | enum".
  */
 @Suppress("ClassName")
 @DoNotStrip
@@ -30,6 +30,22 @@ sealed class Variant_Boolean_OldEnum {
     get() = this is First
   val isSecond: Boolean
     get() = this is Second
+
+  fun asFirstOrNull(): Boolean? {
+    val value = (this as? First)?.value ?: return null
+    return value
+  }
+  fun asSecondOrNull(): OldEnum? {
+    val value = (this as? Second)?.value ?: return null
+    return value
+  }
+
+  inline fun <R> fold(first: (Boolean) -> R, second: (OldEnum) -> R): R {
+    return when (this) {
+      is First -> first(value)
+      is Second -> second(value)
+    }
+  }
 
   companion object {
     @JvmStatic

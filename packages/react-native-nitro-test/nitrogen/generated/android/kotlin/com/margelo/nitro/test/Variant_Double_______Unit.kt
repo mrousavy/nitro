@@ -11,7 +11,7 @@ import com.facebook.proguard.annotations.DoNotStrip
 
 
 /**
- * Represents the TypeScript variant "Double|() -> Unit".
+ * Represents the TypeScript variant "number | function".
  */
 @Suppress("ClassName")
 @DoNotStrip
@@ -19,7 +19,7 @@ sealed class Variant_Double_______Unit {
   @DoNotStrip
   data class First(@DoNotStrip val value: Double): Variant_Double_______Unit()
   @DoNotStrip
-  data class Second(@DoNotStrip val value: () -> Unit): Variant_Double_______Unit()
+  data class Second(@DoNotStrip val value: Func_void): Variant_Double_______Unit()
 
   inline fun <reified T> getAs(): T? = when (this) {
     is First -> value as? T
@@ -31,12 +31,28 @@ sealed class Variant_Double_______Unit {
   val isSecond: Boolean
     get() = this is Second
 
+  fun asFirstOrNull(): Double? {
+    val value = (this as? First)?.value ?: return null
+    return value
+  }
+  fun asSecondOrNull(): (() -> Unit)? {
+    val value = (this as? Second)?.value ?: return null
+    return value
+  }
+
+  inline fun <R> fold(first: (Double) -> R, second: (() -> Unit) -> R): R {
+    return when (this) {
+      is First -> first(value)
+      is Second -> second(value)
+    }
+  }
+
   companion object {
     @JvmStatic
     @DoNotStrip
     fun create(value: Double): Variant_Double_______Unit = First(value)
     @JvmStatic
     @DoNotStrip
-    fun create(value: () -> Unit): Variant_Double_______Unit = Second(value)
+    fun create(value: Func_void): Variant_Double_______Unit = Second(value)
   }
 }

@@ -11,7 +11,7 @@ import com.facebook.proguard.annotations.DoNotStrip
 
 
 /**
- * Represents the TypeScript variant "OptionalWrapper|HybridBaseSpec".
+ * Represents the TypeScript variant "struct | hybrid-object".
  */
 @Suppress("ClassName")
 @DoNotStrip
@@ -30,6 +30,22 @@ sealed class Variant_OptionalWrapper_HybridBaseSpec {
     get() = this is First
   val isSecond: Boolean
     get() = this is Second
+
+  fun asFirstOrNull(): OptionalWrapper? {
+    val value = (this as? First)?.value ?: return null
+    return value
+  }
+  fun asSecondOrNull(): HybridBaseSpec? {
+    val value = (this as? Second)?.value ?: return null
+    return value
+  }
+
+  inline fun <R> fold(first: (OptionalWrapper) -> R, second: (HybridBaseSpec) -> R): R {
+    return when (this) {
+      is First -> first(value)
+      is Second -> second(value)
+    }
+  }
 
   companion object {
     @JvmStatic

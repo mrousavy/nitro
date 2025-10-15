@@ -11,7 +11,7 @@ import com.facebook.proguard.annotations.DoNotStrip
 
 
 /**
- * Represents the TypeScript variant "Double|Boolean".
+ * Represents the TypeScript variant "number | boolean".
  */
 @Suppress("ClassName")
 @DoNotStrip
@@ -30,6 +30,22 @@ sealed class Variant_Double_Boolean {
     get() = this is First
   val isSecond: Boolean
     get() = this is Second
+
+  fun asFirstOrNull(): Double? {
+    val value = (this as? First)?.value ?: return null
+    return value
+  }
+  fun asSecondOrNull(): Boolean? {
+    val value = (this as? Second)?.value ?: return null
+    return value
+  }
+
+  inline fun <R> fold(first: (Double) -> R, second: (Boolean) -> R): R {
+    return when (this) {
+      is First -> first(value)
+      is Second -> second(value)
+    }
+  }
 
   companion object {
     @JvmStatic

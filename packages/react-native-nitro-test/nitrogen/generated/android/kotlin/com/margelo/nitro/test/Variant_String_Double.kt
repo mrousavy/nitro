@@ -11,7 +11,7 @@ import com.facebook.proguard.annotations.DoNotStrip
 
 
 /**
- * Represents the TypeScript variant "String|Double".
+ * Represents the TypeScript variant "string | number".
  */
 @Suppress("ClassName")
 @DoNotStrip
@@ -30,6 +30,22 @@ sealed class Variant_String_Double {
     get() = this is First
   val isSecond: Boolean
     get() = this is Second
+
+  fun asFirstOrNull(): String? {
+    val value = (this as? First)?.value ?: return null
+    return value
+  }
+  fun asSecondOrNull(): Double? {
+    val value = (this as? Second)?.value ?: return null
+    return value
+  }
+
+  inline fun <R> fold(first: (String) -> R, second: (Double) -> R): R {
+    return when (this) {
+      is First -> first(value)
+      is Second -> second(value)
+    }
+  }
 
   companion object {
     @JvmStatic
