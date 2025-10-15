@@ -26,7 +26,7 @@ jobs:
         run: bun install
 
       - name: Run swift format
-        run: bun swift-format
+        run: bun run lint-swift
 
       - name: Verify no files have changed after format
         run: git diff --exit-code HEAD -- . ':(exclude)bun.lock'
