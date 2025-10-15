@@ -91,7 +91,7 @@ extension Promise {
    */
   public static func `async`(
     _ priority: TaskPriority? = nil,
-    _ run: @escaping () async throws -> T
+    _ run: sending @escaping @isolated(any) () async throws -> T
   ) -> Promise {
     let promise = Promise()
     Task(priority: priority) {
@@ -110,7 +110,7 @@ extension Promise {
    */
   public static func parallel(
     _ queue: DispatchQueue = .global(),
-    _ run: @escaping () throws -> T
+    _ run: @escaping @Sendable () throws -> T
   ) -> Promise {
     let promise = Promise()
     queue.async {
