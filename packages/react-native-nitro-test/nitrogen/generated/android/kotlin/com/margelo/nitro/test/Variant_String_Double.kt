@@ -11,7 +11,7 @@ import com.facebook.proguard.annotations.DoNotStrip
 
 
 /**
- * Represents the TypeScript variant "string | number".
+ * Represents the TypeScript variant "String | Double".
  */
 @Suppress("ClassName")
 @DoNotStrip

@@ -11,7 +11,7 @@ import com.facebook.proguard.annotations.DoNotStrip
 
 
 /**
- * Represents the TypeScript variant "struct | hybrid-object".
+ * Represents the TypeScript variant "OptionalWrapper | HybridBaseSpec".
  */
 @Suppress("ClassName")
 @DoNotStrip

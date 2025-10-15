@@ -11,7 +11,7 @@ import com.facebook.proguard.annotations.DoNotStrip
 
 
 /**
- * Represents the TypeScript variant "boolean | enum".
+ * Represents the TypeScript variant "Boolean | OldEnum".
  */
 @Suppress("ClassName")
 @DoNotStrip

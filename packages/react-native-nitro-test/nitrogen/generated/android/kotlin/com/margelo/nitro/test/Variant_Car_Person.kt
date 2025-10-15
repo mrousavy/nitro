@@ -11,7 +11,7 @@ import com.facebook.proguard.annotations.DoNotStrip
 
 
 /**
- * Represents the TypeScript variant "struct | struct".
+ * Represents the TypeScript variant "Car | Person".
  */
 @Suppress("ClassName")
 @DoNotStrip

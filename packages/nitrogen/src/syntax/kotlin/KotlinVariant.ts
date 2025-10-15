@@ -12,6 +12,7 @@ import { type VariantType } from '../types/VariantType.js'
 import { KotlinCxxBridgedType } from './KotlinCxxBridgedType.js'
 
 export function createKotlinVariant(variant: VariantType): SourceFile[] {
+  const jsName = variant.variants.map((v) => v.getCode('kotlin')).join(' | ')
   const kotlinName = variant.getAliasName('kotlin')
   const namespace = `J${kotlinName}_impl`
 
@@ -81,7 +82,7 @@ import com.facebook.proguard.annotations.DoNotStrip
 ${extraImports.join('\n')}
 
 /**
- * Represents the TypeScript variant "${variant.jsType}".
+ * Represents the TypeScript variant "${jsName}".
  */
 @Suppress("ClassName")
 @DoNotStrip
