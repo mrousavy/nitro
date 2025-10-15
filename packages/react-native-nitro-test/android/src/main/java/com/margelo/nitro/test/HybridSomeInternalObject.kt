@@ -5,5 +5,5 @@ import com.facebook.proguard.annotations.DoNotStrip
 import com.margelo.nitro.test.external.HybridSomeExternalObjectSpec
 
 class HybridSomeInternalObject : HybridSomeExternalObjectSpec() {
-    override fun getValue(): String = "This is overridden!"
+  override fun getValue(): String = "This is overridden!"
 }

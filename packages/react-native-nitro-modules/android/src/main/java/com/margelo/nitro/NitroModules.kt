@@ -14,62 +14,62 @@ import com.facebook.react.turbomodule.core.interfaces.CallInvokerHolder
 @OptIn(FrameworkAPI::class)
 @Suppress("KotlinJniMissingFunction")
 class NitroModules internal constructor(
-    val context: ReactApplicationContext,
+  val context: ReactApplicationContext,
 ) : NitroModulesSpec(context) {
-    private val mHybridData: HybridData
+  private val mHybridData: HybridData
+
+  init {
+    mHybridData = initHybrid()
+    applicationContext = context
+  }
+
+  override fun getName(): String = NAME
+
+  @ReactMethod(isBlockingSynchronousMethod = true)
+  override fun install(): String? {
+    try {
+      // 1. Get jsi::Runtime pointer
+      val jsContext =
+        context.javaScriptContextHolder
+          ?: return "ReactApplicationContext.javaScriptContextHolder is null!"
+
+      // 2. Get CallInvokerHolder
+      val callInvokerHolder =
+        context.jsCallInvokerHolder as? CallInvokerHolderImpl
+          ?: return "ReactApplicationContext.jsCallInvokerHolder is null!"
+
+      // 3. Install Nitro
+      install(jsContext.get(), callInvokerHolder)
+
+      return null
+    } catch (e: Throwable) {
+      // ?. Something went wrong! Maybe a JNI error?
+      return e.message
+    }
+  }
+
+  private external fun initHybrid(): HybridData
+
+  private external fun install(
+    jsRuntimePointer: Long,
+    callInvokerHolder: CallInvokerHolderImpl,
+  )
+
+  companion object {
+    /**
+     * The TurboModule's name.
+     */
+    const val NAME = "NitroModules"
+
+    /**
+     * Get the current `ReactApplicationContext`, or `null` if none is available.
+     */
+    @JvmStatic
+    var applicationContext: ReactApplicationContext? = null
 
     init {
-        mHybridData = initHybrid()
-        applicationContext = context
+      // Make sure Nitro's C++ library is loaded
+      JNIOnLoad.initializeNativeNitro()
     }
-
-    override fun getName(): String = NAME
-
-    @ReactMethod(isBlockingSynchronousMethod = true)
-    override fun install(): String? {
-        try {
-            // 1. Get jsi::Runtime pointer
-            val jsContext =
-                context.javaScriptContextHolder
-                    ?: return "ReactApplicationContext.javaScriptContextHolder is null!"
-
-            // 2. Get CallInvokerHolder
-            val callInvokerHolder =
-                context.jsCallInvokerHolder as? CallInvokerHolderImpl
-                    ?: return "ReactApplicationContext.jsCallInvokerHolder is null!"
-
-            // 3. Install Nitro
-            install(jsContext.get(), callInvokerHolder)
-
-            return null
-        } catch (e: Throwable) {
-            // ?. Something went wrong! Maybe a JNI error?
-            return e.message
-        }
-    }
-
-    private external fun initHybrid(): HybridData
-
-    private external fun install(
-        jsRuntimePointer: Long,
-        callInvokerHolder: CallInvokerHolderImpl,
-    )
-
-    companion object {
-        /**
-         * The TurboModule's name.
-         */
-        const val NAME = "NitroModules"
-
-        /**
-         * Get the current `ReactApplicationContext`, or `null` if none is available.
-         */
-        @JvmStatic
-        var applicationContext: ReactApplicationContext? = null
-
-        init {
-            // Make sure Nitro's C++ library is loaded
-            JNIOnLoad.initializeNativeNitro()
-        }
-    }
+  }
 }

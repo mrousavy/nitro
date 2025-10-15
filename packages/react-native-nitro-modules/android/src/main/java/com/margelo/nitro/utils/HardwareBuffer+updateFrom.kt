@@ -10,5 +10,5 @@ import androidx.annotation.RequiresApi
  */
 @RequiresApi(Build.VERSION_CODES.O)
 fun HardwareBuffer.updateFrom(hardwareBuffer: HardwareBuffer) {
-    HardwareBufferUtils.copyHardwareBuffer(hardwareBuffer, this)
+  HardwareBufferUtils.copyHardwareBuffer(hardwareBuffer, this)
 }

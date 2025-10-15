@@ -12,24 +12,24 @@ import com.margelo.nitro.core.HybridObject
 @Keep
 @DoNotStrip
 abstract class HybridView : HybridObject() {
-    /**
-     * Get the `UIView` this HybridView is holding.
-     *
-     * This value should not change during the lifetime of this `HybridView`.
-     */
-    @get:DoNotStrip
-    @get:Keep
-    abstract val view: View
+  /**
+   * Get the `UIView` this HybridView is holding.
+   *
+   * This value should not change during the lifetime of this `HybridView`.
+   */
+  @get:DoNotStrip
+  @get:Keep
+  abstract val view: View
 
-    /**
-     * Called right before updating props.
-     * React props are updated in a single batch/transaction.
-     */
-    open fun beforeUpdate() { /* noop */ }
+  /**
+   * Called right before updating props.
+   * React props are updated in a single batch/transaction.
+   */
+  open fun beforeUpdate() { /* noop */ }
 
-    /**
-     * Called right after updating props.
-     * React props are updated in a single batch/transaction.
-     */
-    open fun afterUpdate() { /* noop */ }
+  /**
+   * Called right after updating props.
+   * React props are updated in a single batch/transaction.
+   */
+  open fun afterUpdate() { /* noop */ }
 }
