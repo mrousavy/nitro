@@ -27,6 +27,7 @@ sealed class Variant_String_Double_Boolean_DoubleArray_Array_String_ {
   @DoNotStrip
   data class Fifth(@DoNotStrip val value: Array<String>): Variant_String_Double_Boolean_DoubleArray_Array_String_()
 
+  @Deprecated("getAs() is not type-safe. Use fold/asFirstOrNull/asSecondOrNull instead.", level = DeprecationLevel.ERROR)
   inline fun <reified T> getAs(): T? = when (this) {
     is First -> value as? T
     is Second -> value as? T

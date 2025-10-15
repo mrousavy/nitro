@@ -88,6 +88,7 @@ ${extraImports.join('\n')}
 sealed class ${kotlinName} {
   ${indent(innerClasses.join('\n'), '  ')}
 
+  @Deprecated("getAs() is not type-safe. Use fold/asFirstOrNull/asSecondOrNull instead.", level = DeprecationLevel.ERROR)
   inline fun <reified T> getAs(): T? = when (this) {
     ${indent(getterCases.join('\n'), '    ')}
   }

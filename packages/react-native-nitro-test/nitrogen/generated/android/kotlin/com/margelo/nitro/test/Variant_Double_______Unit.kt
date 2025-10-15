@@ -21,6 +21,7 @@ sealed class Variant_Double_______Unit {
   @DoNotStrip
   data class Second(@DoNotStrip val value: Func_void): Variant_Double_______Unit()
 
+  @Deprecated("getAs() is not type-safe. Use fold/asFirstOrNull/asSecondOrNull instead.", level = DeprecationLevel.ERROR)
   inline fun <reified T> getAs(): T? = when (this) {
     is First -> value as? T
     is Second -> value as? T

@@ -21,6 +21,7 @@ sealed class Variant_Boolean_WeirdNumbersEnum {
   @DoNotStrip
   data class Second(@DoNotStrip val value: WeirdNumbersEnum): Variant_Boolean_WeirdNumbersEnum()
 
+  @Deprecated("getAs() is not type-safe. Use fold/asFirstOrNull/asSecondOrNull instead.", level = DeprecationLevel.ERROR)
   inline fun <reified T> getAs(): T? = when (this) {
     is First -> value as? T
     is Second -> value as? T

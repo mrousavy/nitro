@@ -21,6 +21,7 @@ sealed class Variant_Person_HybridTestObjectSwiftKotlinSpec {
   @DoNotStrip
   data class Second(@DoNotStrip val value: HybridTestObjectSwiftKotlinSpec): Variant_Person_HybridTestObjectSwiftKotlinSpec()
 
+  @Deprecated("getAs() is not type-safe. Use fold/asFirstOrNull/asSecondOrNull instead.", level = DeprecationLevel.ERROR)
   inline fun <reified T> getAs(): T? = when (this) {
     is First -> value as? T
     is Second -> value as? T
