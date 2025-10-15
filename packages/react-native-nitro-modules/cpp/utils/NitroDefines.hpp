@@ -24,6 +24,9 @@
 #endif
 #endif
 
+// Enables (1) or disables (0) the NitroLogger.
+#define NITRO_ENABLE_LOGS 1
+
 // Helper to find out if a C++ compiler attribute is available
 #ifdef __has_attribute
 #define _CXX_INTEROP_HAS_ATTRIBUTE(x) __has_attribute(x)
