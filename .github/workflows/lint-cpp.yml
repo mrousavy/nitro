@@ -30,9 +30,6 @@ jobs:
         with:
           bun-version-file: ".bun-version"
 
-      - name: Install clang-format
-        run: brew install clang-format
-
       - name: Install npm dependencies (bun)
         run: bun install
 
