@@ -7,16 +7,14 @@
 
 import Foundation
 
-/**
- * Represents a Promise that can be passed to JS.
- *
- * Create a new Promise with the following APIs:
- * - `Promise<T>.async { ... }` - Creates a new Promise that runs the given code in a Swift `async`/`await` Task.
- * - `Promise<T>.parallel { ... }` - Creates a new Promise that runs the given code in a parallel `DispatchQueue`.
- * - `Promise<T>.resolved(withResult:)` - Creates a new already resolved Promise.
- * - `Promise<T>.rejected(withError:)` - Creates a new already rejected Promise.
- * - `Promise<T>()` - Creates a new Promise with fully manual control over the `resolve(..)`/`reject(..)` functions.
- */
+/// Represents a Promise that can be passed to JS.
+///
+/// Create a new Promise with the following APIs:
+/// - `Promise<T>.async { ... }` - Creates a new Promise that runs the given code in a Swift `async`/`await` Task.
+/// - `Promise<T>.parallel { ... }` - Creates a new Promise that runs the given code in a parallel `DispatchQueue`.
+/// - `Promise<T>.resolved(withResult:)` - Creates a new already resolved Promise.
+/// - `Promise<T>.rejected(withError:)` - Creates a new already rejected Promise.
+/// - `Promise<T>()` - Creates a new Promise with fully manual control over the `resolve(..)`/`reject(..)` functions.
 public final class Promise<T>: @unchecked Sendable {
   private enum State {
     case result(T)
@@ -47,7 +45,8 @@ public final class Promise<T>: @unchecked Sendable {
    */
   public func resolve(withResult result: T) {
     guard state == nil else {
-      fatalError("Failed to resolve promise with \(result) - it has already been resolved or rejected!")
+      fatalError(
+        "Failed to resolve promise with \(result) - it has already been resolved or rejected!")
     }
     state = .result(result)
     onResolvedListeners.forEach { listener in listener(result) }
@@ -58,16 +57,15 @@ public final class Promise<T>: @unchecked Sendable {
    */
   public func reject(withError error: Error) {
     guard state == nil else {
-      fatalError("Failed to reject promise with \(error) - it has already been resolved or rejected!")
+      fatalError(
+        "Failed to reject promise with \(error) - it has already been resolved or rejected!")
     }
     state = .error(error)
     onRejectedListeners.forEach { listener in listener(error) }
   }
 }
 
-/**
- * Extensions to easily create new Promises.
- */
+/// Extensions to easily create new Promises.
 extension Promise {
   /**
    * Create a new `Promise<T>` already resolved with the given `T`.
@@ -91,8 +89,10 @@ extension Promise {
    * Create a new `Promise<T>` that runs the given `async` code in a `Task`.
    * This does not necessarily run the code in a different Thread, but supports Swift's `async`/`await`.
    */
-  public static func `async`(_ priority: TaskPriority? = nil,
-                             _ run: @escaping () async throws -> T) -> Promise {
+  public static func `async`(
+    _ priority: TaskPriority? = nil,
+    _ run: @escaping () async throws -> T
+  ) -> Promise {
     let promise = Promise()
     Task(priority: priority) {
       do {
@@ -108,8 +108,10 @@ extension Promise {
   /**
    * Create a new `Promise<T>` that runs the given `run` function on a parallel Thread/`DispatchQueue`.
    */
-  public static func parallel(_ queue: DispatchQueue = .global(),
-                              _ run: @escaping () throws -> T) -> Promise {
+  public static func parallel(
+    _ queue: DispatchQueue = .global(),
+    _ run: @escaping () throws -> T
+  ) -> Promise {
     let promise = Promise()
     queue.async {
       do {
@@ -123,9 +125,7 @@ extension Promise {
   }
 }
 
-/**
- * Extensions to support then/catch syntax.
- */
+/// Extensions to support then/catch syntax.
 extension Promise {
   /**
    * Add a continuation listener to this `Promise<T>`.
@@ -162,9 +162,7 @@ extension Promise {
   }
 }
 
-/**
- * Extensions to support await syntax.
- */
+/// Extensions to support await syntax.
 extension Promise {
   /**
    * Asynchronously await the result of the Promise.
