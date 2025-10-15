@@ -109,6 +109,16 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
     return { value in print("Callback called with \(value).") }
   }
 
+  func twoOptionalCallbacks(value: Double, first: ((_ value: Double) -> Void)?, second: ((_ value: String) -> Void)?) throws -> Void {
+    if let first {
+      first(value)
+    }
+    if let second {
+      second("Hello")
+    }
+  }
+
+
   func bounceStrings(array: [String]) throws -> [String] {
     return array
   }

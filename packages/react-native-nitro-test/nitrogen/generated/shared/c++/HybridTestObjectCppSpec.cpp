@@ -87,6 +87,7 @@ namespace margelo::nitro::test {
       prototype.registerHybridMethod("callbackAsyncPromise", &HybridTestObjectCppSpec::callbackAsyncPromise);
       prototype.registerHybridMethod("callbackAsyncPromiseBuffer", &HybridTestObjectCppSpec::callbackAsyncPromiseBuffer);
       prototype.registerHybridMethod("getComplexCallback", &HybridTestObjectCppSpec::getComplexCallback);
+      prototype.registerHybridMethod("twoOptionalCallbacks", &HybridTestObjectCppSpec::twoOptionalCallbacks);
       prototype.registerHybridMethod("getValueFromJSCallbackAndWait", &HybridTestObjectCppSpec::getValueFromJSCallbackAndWait);
       prototype.registerHybridMethod("getValueFromJsCallback", &HybridTestObjectCppSpec::getValueFromJsCallback);
       prototype.registerHybridMethod("getCar", &HybridTestObjectCppSpec::getCar);
