@@ -1,4 +1,4 @@
-import type { ts, Type } from 'ts-morph'
+import { ts, type Type } from 'ts-morph'
 import type { NamedType } from './types/Type.js'
 import { createNamedType } from './createType.js'
 import type { Language } from '../getPlatformSpecs.js'
@@ -9,7 +9,23 @@ export function getInterfaceProperties(
 ): NamedType[] {
   return interfaceType.getProperties().map((prop) => {
     const declaration = prop.getValueDeclarationOrThrow()
-    const propType = prop.getTypeAtLocation(declaration)
+
+    if (!declaration.isKind(ts.SyntaxKind.PropertySignature)) {
+      throw new Error(
+        `Property "${prop.getName()}" has an unsupported declaration kind. Make sure it's declared as "propertyName: Type" in an interface or type declaration.`
+      )
+    }
+
+    const typeNode = declaration.getTypeNode()
+
+    if (typeNode == null) {
+      throw new Error(
+        `Property "${prop.getName()}" has no explicit type annotation. All properties in Nitro specs must have explicit type annotations.`
+      )
+    }
+
+    const propType = typeNode.getType()
+
     const refType = createNamedType(
       language,
       prop.getName(),

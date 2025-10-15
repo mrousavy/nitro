@@ -96,6 +96,7 @@ namespace margelo::nitro::test {
       prototype.registerHybridMethod("jsStyleObjectAsParameters", &HybridTestObjectCppSpec::jsStyleObjectAsParameters);
       prototype.registerHybridMethod("bounceWrappedJsStyleStruct", &HybridTestObjectCppSpec::bounceWrappedJsStyleStruct);
       prototype.registerHybridMethod("bounceOptionalWrapper", &HybridTestObjectCppSpec::bounceOptionalWrapper);
+      prototype.registerHybridMethod("bounceOptionalWrapperWithVariant", &HybridTestObjectCppSpec::bounceOptionalWrapperWithVariant);
       prototype.registerHybridMethod("createArrayBuffer", &HybridTestObjectCppSpec::createArrayBuffer);
       prototype.registerHybridMethod("createArrayBufferFromNativeBuffer", &HybridTestObjectCppSpec::createArrayBufferFromNativeBuffer);
       prototype.registerHybridMethod("copyBuffer", &HybridTestObjectCppSpec::copyBuffer);
@@ -109,6 +110,7 @@ namespace margelo::nitro::test {
       prototype.registerHybridMethod("getVariantObjects", &HybridTestObjectCppSpec::getVariantObjects);
       prototype.registerHybridMethod("passNamedVariant", &HybridTestObjectCppSpec::passNamedVariant);
       prototype.registerHybridMethod("passAllEmptyObjectVariant", &HybridTestObjectCppSpec::passAllEmptyObjectVariant);
+      prototype.registerHybridMethod("passOptionalNamedVariant", &HybridTestObjectCppSpec::passOptionalNamedVariant);
       prototype.registerHybridMethod("createChild", &HybridTestObjectCppSpec::createChild);
       prototype.registerHybridMethod("createBase", &HybridTestObjectCppSpec::createBase);
       prototype.registerHybridMethod("createBaseActualChild", &HybridTestObjectCppSpec::createBaseActualChild);

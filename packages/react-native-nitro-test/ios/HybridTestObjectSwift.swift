@@ -263,6 +263,14 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
     return variant
   }
 
+  func passOptionalNamedVariant(variant: NamedVariant?) throws -> NamedVariant { 
+    guard let variant = variant else {
+      return NamedVariant.first("empty")
+    }
+      
+    return variant
+  }
+
   func calculateFibonacciSync(value: Double) throws -> Int64 {
     let n = Int64(value)
     if n <= 1 {
@@ -342,6 +350,10 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
   }
 
   func bounceOptionalWrapper(wrapper: OptionalWrapper) throws -> OptionalWrapper {
+    return wrapper
+  }
+
+  func bounceOptionalWrapperWithVariant(wrapper: OptionalVariantWrapper) throws -> OptionalVariantWrapper {
     return wrapper
   }
 

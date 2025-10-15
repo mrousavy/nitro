@@ -23,7 +23,17 @@ export class Parameter implements CodeNode {
       // constructor(...) #2
       const [param, language] = args
       const name = param.getSymbolOrThrow().getEscapedName()
-      const type = param.getType()
+
+      const typeNode = param.getTypeNode()
+
+      if (typeNode == null) {
+        throw new Error(
+          `Parameter "${name}" has no explicit type annotation. All parameters in Nitro specs must have explicit type annotations.`
+        )
+      }
+
+      const type = typeNode.getType()
+
       const isOptional =
         param.hasQuestionToken() || param.isOptional() || type.isNullable()
       this.type = createNamedType(language, name, type, isOptional)

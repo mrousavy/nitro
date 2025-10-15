@@ -303,6 +303,14 @@ std::variant<std::string, Car> HybridTestObjectCpp::passNamedVariant(const std::
   return variant;
 }
 
+std::variant<std::string, Car> HybridTestObjectCpp::passOptionalNamedVariant(const std::optional<std::variant<std::string, Car>>& variant) {
+  if (variant.has_value()) {
+    return variant.value();
+  } else {
+    return std::variant<std::string, Car>("empty");
+  }
+}
+
 std::tuple<double, double, double> HybridTestObjectCpp::flip(const std::tuple<double, double, double>& tuple) {
   return {std::get<2>(tuple), std::get<1>(tuple), std::get<0>(tuple)};
 }
@@ -472,6 +480,10 @@ WrappedJsStruct HybridTestObjectCpp::bounceWrappedJsStyleStruct(const WrappedJsS
 }
 
 OptionalWrapper HybridTestObjectCpp::bounceOptionalWrapper(const OptionalWrapper& wrapper) {
+  return wrapper;
+}
+
+OptionalVariantWrapper HybridTestObjectCpp::bounceOptionalWrapperWithVariant(const OptionalVariantWrapper& wrapper) {
   return wrapper;
 }
 
