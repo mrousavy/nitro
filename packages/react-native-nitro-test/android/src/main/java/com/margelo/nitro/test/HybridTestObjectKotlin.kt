@@ -265,6 +265,16 @@ class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
     }
   }
 
+    override fun twoOptionalCallbacks(value: Double, first: ((value: Double) -> Unit)?, second: ((value: String) -> Unit)?): Unit {
+        first?.let { first ->
+            first(value)
+        }
+        second?.let { second ->
+            second("Hello!")
+        }
+    }
+
+
     override fun getCar(): Car {
         return Car(2018.0, "Lamborghini", "Huracán", 640.0, Powertrain.GAS, null, emptyArray(), true, null, doubleArrayOf(100.0, 10.0))
     }

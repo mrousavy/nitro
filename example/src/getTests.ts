@@ -1168,6 +1168,31 @@ export function getTests(
         .didNotThrow()
         .didReturn('function')
     ),
+    createTest(
+      'Calling twoOptionalCallbacks(...) works with callbacks',
+      async () =>
+        (
+          await it(async () => {
+            return timeoutedPromise<void>(() => {
+              return new Promise((resolve) => {
+                let counter = 0
+                const onWasCalled = () => {
+                  counter++
+                  if (counter === 2) resolve()
+                }
+                testObject.twoOptionalCallbacks(
+                  55,
+                  () => onWasCalled(),
+                  () => onWasCalled()
+                )
+              })
+            })
+          })
+        ).didNotThrow()
+    ),
+    createTest('Calling twoOptionalCallbacks(...) works with undefined', () =>
+      it(() => testObject.twoOptionalCallbacks(55)).didNotThrow()
+    ),
 
     // Objects
     createTest('getCar()', () =>

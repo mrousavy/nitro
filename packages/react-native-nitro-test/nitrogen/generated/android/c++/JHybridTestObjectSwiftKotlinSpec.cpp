@@ -102,8 +102,8 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 #include "JFunc_std__shared_ptr_Promise_double__.hpp"
 #include "JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_double____.hpp"
 #include "JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____.hpp"
-#include "JFunc_std__shared_ptr_Promise_std__string__.hpp"
 #include "JFunc_void_std__string.hpp"
+#include "JFunc_std__shared_ptr_Promise_std__string__.hpp"
 #include "JVariant_String_Double_Boolean_DoubleArray_Array_String_.hpp"
 #include "JFunc_double.hpp"
 #include "HybridTestViewSpec.hpp"
@@ -730,6 +730,10 @@ namespace margelo::nitro::test {
         };
       }
     }();
+  }
+  void JHybridTestObjectSwiftKotlinSpec::twoOptionalCallbacks(double value, const std::optional<std::function<void(double /* value */)>>& first, const std::optional<std::function<void(const std::string& /* value */)>>& second) {
+    static const auto method = javaClassStatic()->getMethod<void(double /* value */, jni::alias_ref<JFunc_void_double::javaobject> /* first */, jni::alias_ref<JFunc_void_std__string::javaobject> /* second */)>("twoOptionalCallbacks_cxx");
+    method(_javaPart, value, first.has_value() ? JFunc_void_double_cxx::fromCpp(first.value()) : nullptr, second.has_value() ? JFunc_void_std__string_cxx::fromCpp(second.value()) : nullptr);
   }
   std::shared_ptr<Promise<double>> JHybridTestObjectSwiftKotlinSpec::getValueFromJSCallbackAndWait(const std::function<std::shared_ptr<Promise<double>>()>& getValue) {
     static const auto method = javaClassStatic()->getMethod<jni::local_ref<JPromise::javaobject>(jni::alias_ref<JFunc_std__shared_ptr_Promise_double__::javaobject> /* getValue */)>("getValueFromJSCallbackAndWait_cxx");

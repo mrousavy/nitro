@@ -383,6 +383,16 @@ std::function<void(double)> HybridTestObjectCpp::getComplexCallback() {
   return [](double value) { Logger::log(LogLevel::Info, TAG, "Callback called with %f", value); };
 }
 
+void HybridTestObjectCpp::twoOptionalCallbacks(double value, const std::optional<std::function<void(double /* value */)>>& first,
+                                               const std::optional<std::function<void(const std::string& /* value */)>>& second) {
+  if (first.has_value()) {
+    *first(value);
+  }
+  if (second.has_value()) {
+    *second("Hello!");
+  }
+}
+
 std::shared_ptr<Promise<double>>
 HybridTestObjectCpp::getValueFromJSCallbackAndWait(const std::function<std::shared_ptr<Promise<double>>()>& getValue) {
   return Promise<double>::async([=]() -> double {
