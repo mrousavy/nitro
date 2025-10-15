@@ -70,9 +70,9 @@ void JHardwareBufferUtils::copyHardwareBuffer([[maybe_unused]] AHardwareBuffer* 
 #ifdef NITRO_DEBUG
   size_t destinationSize = getHardwareBufferSize(sourceHardwareBuffer);
   if (sourceSize != destinationSize) {
-    std::string errorMessage =
-        nitro::format("Source HardwareBuffer ({0} bytes) and destination HardwareBuffer ({1} bytes) are not the same size!", sourceSize,
-                      destinationSize) throw std::runtime_error(errorMessage);
+    std::string errorMessage = nitro::format(
+        "Source HardwareBuffer ({0} bytes) and destination HardwareBuffer ({1} bytes) are not the same size!", sourceSize, destinationSize);
+    throw std::runtime_error(errorMessage);
   }
 #endif
 
