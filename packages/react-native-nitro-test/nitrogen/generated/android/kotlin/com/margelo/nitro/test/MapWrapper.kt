@@ -17,16 +17,24 @@ import com.margelo.nitro.core.*
  */
 @DoNotStrip
 @Keep
-data class MapWrapper
+data class MapWrapper(
   @DoNotStrip
   @Keep
-  constructor(
+  val map: Map<String, String>,
+  @DoNotStrip
+  @Keep
+  val secondMap: SecondMapWrapper
+) {
+  private companion object {
+    /**
+     * Constructor called from C++
+     */
     @DoNotStrip
     @Keep
-    val map: Map<String, String>,
-    @DoNotStrip
-    @Keep
-    val secondMap: SecondMapWrapper
-  ) {
-  /* main constructor */
+    @Suppress("unused")
+    @JvmStatic
+    private fun fromCpp(map: Map<String, String>, secondMap: SecondMapWrapper): MapWrapper {
+      return MapWrapper(map, secondMap)
+    }
+  }
 }

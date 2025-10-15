@@ -17,17 +17,21 @@ import com.margelo.nitro.core.*
  */
 @DoNotStrip
 @Keep
-data class OptionalCallback
+data class OptionalCallback(
   @DoNotStrip
   @Keep
-  constructor(
+  val callback: Variant_Double_______Unit?
+) {
+  private companion object {
+    /**
+     * Constructor called from C++
+     */
     @DoNotStrip
     @Keep
-    val callback: Variant_Double_______Unit?
-  ) {
-  /**
-   * Initialize a new instance of `OptionalCallback` from Kotlin.
-   */
-  constructor(callback: Variant_Double_______Unit?)
-       : this(callback?.let { it })
+    @Suppress("unused")
+    @JvmStatic
+    private fun fromCpp(callback: Variant_Double_______Unit?): OptionalCallback {
+      return OptionalCallback(callback?.let { it })
+    }
+  }
 }

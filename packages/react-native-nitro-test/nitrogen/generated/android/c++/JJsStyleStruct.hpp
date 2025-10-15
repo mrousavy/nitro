@@ -58,7 +58,11 @@ namespace margelo::nitro::test {
      */
     [[maybe_unused]]
     static jni::local_ref<JJsStyleStruct::javaobject> fromCpp(const JsStyleStruct& value) {
-      return newInstance(
+      using JSignature = JJsStyleStruct(double, jni::alias_ref<JFunc_void_double::javaobject>);
+      static const auto clazz = javaClassStatic();
+      static const auto create = clazz->getStaticMethod<JSignature>("fromCpp");
+      return create(
+        clazz,
         value.value,
         JFunc_void_double_cxx::fromCpp(value.onChanged)
       );

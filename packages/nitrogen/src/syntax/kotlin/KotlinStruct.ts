@@ -9,50 +9,28 @@ import { KotlinCxxBridgedType } from './KotlinCxxBridgedType.js'
 
 export function createKotlinStruct(structType: StructType): SourceFile[] {
   const packageName = NitroConfig.current.getAndroidPackage('java/kotlin')
-  const values = structType.properties.map((p) => {
-    const bridged = new KotlinCxxBridgedType(p)
-    return `
+  const parameters = structType.properties
+    .map((p) =>
+      `
 @DoNotStrip
 @Keep
-val ${p.escapedName}: ${bridged.getTypeCode('kotlin', false)}
+val ${p.escapedName}: ${p.getCode('kotlin')}
 `.trim()
-  })
-  let secondaryConstructor: string
-
-  const needsSpecialHandling = structType.properties.some((p) => {
-    const bridged = new KotlinCxxBridgedType(p)
-    const parseCode = bridged.parseFromKotlinToCpp(
-      p.escapedName,
-      'kotlin',
-      false
     )
-    return parseCode !== p.escapedName
-  })
+    .join(',\n')
 
-  if (needsSpecialHandling) {
-    // If we need special handling for any of our properties, we need to add a convenience initializer.
-    const params = structType.properties.map(
-      (p) => `${p.escapedName}: ${p.getCode('kotlin')}`
-    )
-    const paramsForward = structType.properties.map((p) => {
+  const cxxCreateFunctionParameters = structType.properties
+    .map((p) => {
       const bridged = new KotlinCxxBridgedType(p)
-      if (bridged.needsSpecialHandling) {
-        // We need special parsing for this type
-        return bridged.parseFromKotlinToCpp(p.escapedName, 'kotlin', false)
-      } else {
-        return p.escapedName
-      }
+      return `${p.escapedName}: ${bridged.getTypeCode('kotlin', false)}`
     })
-    secondaryConstructor = `
-/**
- * Initialize a new instance of \`${structType.structName}\` from Kotlin.
- */
-constructor(${indent(params.join(', '), 12)})
-     : this(${indent(paramsForward.join(', '), 12)})
-    `.trim()
-  } else {
-    secondaryConstructor = `/* main constructor */`
-  }
+    .join(', ')
+  const cxxCreateFunctionForward = structType.properties
+    .map((p) => {
+      const bridged = new KotlinCxxBridgedType(p)
+      return bridged.parseFromCppToKotlin(p.escapedName, 'kotlin', false)
+    })
+    .join(', ')
 
   const extraImports = structType.properties
     .flatMap((t) => t.getRequiredImports('kotlin'))
@@ -73,13 +51,21 @@ ${extraImports.join('\n')}
  */
 @DoNotStrip
 @Keep
-data class ${structType.structName}
-  @DoNotStrip
-  @Keep
-  constructor(
-    ${indent(values.join(',\n'), '    ')}
-  ) {
-  ${indent(secondaryConstructor, '  ')}
+data class ${structType.structName}(
+  ${indent(parameters, '  ')}
+) {
+  private companion object {
+    /**
+     * Constructor called from C++
+     */
+    @DoNotStrip
+    @Keep
+    @Suppress("unused")
+    @JvmStatic
+    private fun fromCpp(${cxxCreateFunctionParameters}): ${structType.structName} {
+      return ${structType.structName}(${cxxCreateFunctionForward})
+    }
+  }
 }
   `.trim()
 
@@ -193,14 +179,27 @@ function createCppStructInitializer(
   cppValueName: string,
   structType: StructType
 ): string {
-  const lines: string[] = []
-  lines.push(`return newInstance(`)
-  const names = structType.properties.map((p) => {
-    const name = `${cppValueName}.${p.escapedName}`
-    const bridge = new KotlinCxxBridgedType(p)
-    return bridge.parse(name, 'c++', 'kotlin', 'c++')
-  })
-  lines.push(`  ${indent(names.join(',\n'), '  ')}`)
-  lines.push(');')
-  return lines.join('\n')
+  const jniTypes = structType.properties
+    .map((p) => {
+      const bridge = new KotlinCxxBridgedType(p)
+      return bridge.asJniReferenceType('alias')
+    })
+    .join(', ')
+  const params = structType.properties
+    .map((p) => {
+      const name = `${cppValueName}.${p.escapedName}`
+      const bridge = new KotlinCxxBridgedType(p)
+      return bridge.parse(name, 'c++', 'kotlin', 'c++')
+    })
+    .join(',\n')
+
+  return `
+using JSignature = J${structType.structName}(${jniTypes});
+static const auto clazz = javaClassStatic();
+static const auto create = clazz->getStaticMethod<JSignature>("fromCpp");
+return create(
+  clazz,
+  ${indent(params, '  ')}
+);
+  `.trim()
 }

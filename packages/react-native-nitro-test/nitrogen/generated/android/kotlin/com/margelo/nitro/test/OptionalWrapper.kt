@@ -17,16 +17,24 @@ import com.margelo.nitro.core.*
  */
 @DoNotStrip
 @Keep
-data class OptionalWrapper
+data class OptionalWrapper(
   @DoNotStrip
   @Keep
-  constructor(
+  val optionalArrayBuffer: ArrayBuffer?,
+  @DoNotStrip
+  @Keep
+  val optionalString: String?
+) {
+  private companion object {
+    /**
+     * Constructor called from C++
+     */
     @DoNotStrip
     @Keep
-    val optionalArrayBuffer: ArrayBuffer?,
-    @DoNotStrip
-    @Keep
-    val optionalString: String?
-  ) {
-  /* main constructor */
+    @Suppress("unused")
+    @JvmStatic
+    private fun fromCpp(optionalArrayBuffer: ArrayBuffer?, optionalString: String?): OptionalWrapper {
+      return OptionalWrapper(optionalArrayBuffer, optionalString)
+    }
+  }
 }

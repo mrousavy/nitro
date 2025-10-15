@@ -48,7 +48,11 @@ namespace margelo::nitro::test {
      */
     [[maybe_unused]]
     static jni::local_ref<JOptionalCallback::javaobject> fromCpp(const OptionalCallback& value) {
-      return newInstance(
+      using JSignature = JOptionalCallback(jni::alias_ref<JVariant_Double_______Unit>);
+      static const auto clazz = javaClassStatic();
+      static const auto create = clazz->getStaticMethod<JSignature>("fromCpp");
+      return create(
+        clazz,
         value.callback.has_value() ? JVariant_Double_______Unit::fromCpp(value.callback.value()) : nullptr
       );
     }

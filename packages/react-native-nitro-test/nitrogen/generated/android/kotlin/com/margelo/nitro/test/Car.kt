@@ -17,40 +17,48 @@ import com.margelo.nitro.core.*
  */
 @DoNotStrip
 @Keep
-data class Car
+data class Car(
   @DoNotStrip
   @Keep
-  constructor(
+  val year: Double,
+  @DoNotStrip
+  @Keep
+  val make: String,
+  @DoNotStrip
+  @Keep
+  val model: String,
+  @DoNotStrip
+  @Keep
+  val power: Double,
+  @DoNotStrip
+  @Keep
+  val powertrain: Powertrain,
+  @DoNotStrip
+  @Keep
+  val driver: Person?,
+  @DoNotStrip
+  @Keep
+  val passengers: Array<Person>,
+  @DoNotStrip
+  @Keep
+  val isFast: Boolean?,
+  @DoNotStrip
+  @Keep
+  val favouriteTrack: String?,
+  @DoNotStrip
+  @Keep
+  val performanceScores: DoubleArray
+) {
+  private companion object {
+    /**
+     * Constructor called from C++
+     */
     @DoNotStrip
     @Keep
-    val year: Double,
-    @DoNotStrip
-    @Keep
-    val make: String,
-    @DoNotStrip
-    @Keep
-    val model: String,
-    @DoNotStrip
-    @Keep
-    val power: Double,
-    @DoNotStrip
-    @Keep
-    val powertrain: Powertrain,
-    @DoNotStrip
-    @Keep
-    val driver: Person?,
-    @DoNotStrip
-    @Keep
-    val passengers: Array<Person>,
-    @DoNotStrip
-    @Keep
-    val isFast: Boolean?,
-    @DoNotStrip
-    @Keep
-    val favouriteTrack: String?,
-    @DoNotStrip
-    @Keep
-    val performanceScores: DoubleArray
-  ) {
-  /* main constructor */
+    @Suppress("unused")
+    @JvmStatic
+    private fun fromCpp(year: Double, make: String, model: String, power: Double, powertrain: Powertrain, driver: Person?, passengers: Array<Person>, isFast: Boolean?, favouriteTrack: String?, performanceScores: DoubleArray): Car {
+      return Car(year, make, model, power, powertrain, driver, passengers, isFast, favouriteTrack, performanceScores)
+    }
+  }
 }
