@@ -30,6 +30,8 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 namespace margelo::nitro::test { struct JsStyleStruct; }
 // Forward declaration of `OldEnum` to properly resolve imports.
 namespace margelo::nitro::test { enum class OldEnum; }
+// Forward declaration of `OptionalCallback` to properly resolve imports.
+namespace margelo::nitro::test { struct OptionalCallback; }
 // Forward declaration of `OptionalWrapper` to properly resolve imports.
 namespace margelo::nitro::test { struct OptionalWrapper; }
 // Forward declaration of `Person` to properly resolve imports.
@@ -61,6 +63,7 @@ namespace NitroTest { class HybridTestViewSpec_cxx; }
 #include "HybridTestViewSpec.hpp"
 #include "JsStyleStruct.hpp"
 #include "OldEnum.hpp"
+#include "OptionalCallback.hpp"
 #include "OptionalWrapper.hpp"
 #include "Person.hpp"
 #include "Powertrain.hpp"
@@ -1400,6 +1403,15 @@ namespace margelo::nitro::test::bridge::swift {
   }
   inline Result_OptionalWrapper_ create_Result_OptionalWrapper_(const std::exception_ptr& error) noexcept {
     return Result<OptionalWrapper>::withError(error);
+  }
+  
+  // pragma MARK: Result<OptionalCallback>
+  using Result_OptionalCallback_ = Result<OptionalCallback>;
+  inline Result_OptionalCallback_ create_Result_OptionalCallback_(const OptionalCallback& value) noexcept {
+    return Result<OptionalCallback>::withValue(value);
+  }
+  inline Result_OptionalCallback_ create_Result_OptionalCallback_(const std::exception_ptr& error) noexcept {
+    return Result<OptionalCallback>::withError(error);
   }
   
   // pragma MARK: Result<std::shared_ptr<ArrayBuffer>>

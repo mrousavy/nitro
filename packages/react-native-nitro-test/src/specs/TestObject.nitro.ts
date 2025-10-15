@@ -69,6 +69,10 @@ export interface OptionalWrapper {
   optionalString?: string
 }
 
+interface OptionalCallback {
+  callback: () => void
+}
+
 interface SecondMapWrapper {
   second: Record<string, string>
 }
@@ -189,6 +193,7 @@ interface SharedTestObjectProps {
   jsStyleObjectAsParameters(params: JsStyleStruct): void
   bounceWrappedJsStyleStruct(value: WrappedJsStruct): WrappedJsStruct
   bounceOptionalWrapper(wrapper: OptionalWrapper): OptionalWrapper
+  bounceOptionalCallback(value: OptionalCallback): OptionalCallback
 
   // ArrayBuffers
   createArrayBuffer(): ArrayBuffer

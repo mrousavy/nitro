@@ -439,6 +439,12 @@ export function getTests(
         .didReturn('object')
         .equals(TEST_OPTIONAL_WRAPPER)
     ),
+    createTest('bounceOptionalCallback(...) works', () =>
+      it(() => testObject.bounceOptionalCallback({ callback: () => {} }))
+        .didNotThrow()
+        .didReturn('object')
+        .toContain('callback')
+    ),
 
     createTest('complexEnumCallback(...)', async () =>
       (
