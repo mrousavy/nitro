@@ -373,6 +373,9 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
     return either.match(
       { string -> Variant_String_Double.create(string) },
       { double -> Variant_String_Double.create(double) },
+      { bool -> Variant_String_Double.create("Holds something else.") },
+      { doubleArray -> Variant_String_Double.create("Holds something else.") },
+      { stringArray -> Variant_String_Double.create("Holds something else.") },
     )
   }
 
