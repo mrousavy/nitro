@@ -70,7 +70,7 @@ async function isGitInstalled(): Promise<boolean> {
   try {
     execSync('git --version')
     return true
-  } catch (error) {
+  } catch {
     return false
   }
 }

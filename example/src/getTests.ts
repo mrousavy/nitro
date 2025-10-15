@@ -18,7 +18,6 @@ import {
   getHybridObjectConstructor,
   NitroModules,
 } from 'react-native-nitro-modules'
-import { InteractionManager } from 'react-native'
 import { HybridSomeExternalObject } from 'react-native-nitro-test-external'
 
 type TestResult =
@@ -143,35 +142,6 @@ function createTest<T>(
  */
 function debugOnly(string: string): string {
   return NitroModules.buildType === 'debug' ? string : ''
-}
-
-function timeoutedPromise<T>(
-  run: (complete: (value: T) => void) => void | Promise<void>
-): Promise<T> {
-  return new Promise(async (resolve, reject) => {
-    let didResolve = false
-    InteractionManager.runAfterInteractions(() => {
-      requestAnimationFrame(() => {
-        setImmediate(() => {
-          setTimeout(() => {
-            if (!didResolve) reject(new Error(`Timeouted!`))
-          }, 1500)
-        })
-      })
-    })
-    try {
-      await run((value) => {
-        if (didResolve) {
-          throw new Error(`Promise was already rejected!`)
-        }
-        didResolve = true
-        resolve(value)
-      })
-    } catch (e) {
-      didResolve = true
-      reject(e)
-    }
-  })
 }
 
 export function getTests(
@@ -472,10 +442,10 @@ export function getTests(
 
     createTest('complexEnumCallback(...)', async () =>
       (
-        await it<Powertrain[]>(async () => {
-          return timeoutedPromise((complete) => {
+        await it<Powertrain[]>(() => {
+          return new Promise((resolve) => {
             testObject.complexEnumCallback(['gas', 'electric'], (result) => {
-              complete(result)
+              resolve(result)
             })
           })
         })
@@ -1006,17 +976,14 @@ export function getTests(
     ),
     createTest('JS Promise<number> can be awaited on native side', async () =>
       (
-        await it(() => {
-          return timeoutedPromise(async (complete) => {
-            let resolve = (_: number) => {}
-            const promise = new Promise<number>((r) => {
-              resolve = r
-            })
-            const nativePromise = testObject.awaitAndGetPromise(promise)
-            resolve(5)
-            const result = await nativePromise
-            complete(result)
+        await it(async () => {
+          let resolve = (_: number) => {}
+          const promise = new Promise<number>((r) => {
+            resolve = r
           })
+          const nativePromise = testObject.awaitAndGetPromise(promise)
+          resolve(5)
+          return await nativePromise
         })
       )
         .didNotThrow()
@@ -1024,17 +991,14 @@ export function getTests(
     ),
     createTest('JS Promise<Car> can be awaited on native side', async () =>
       (
-        await it(() => {
-          return timeoutedPromise(async (complete) => {
-            let resolve = (_: Car) => {}
-            const promise = new Promise<Car>((r) => {
-              resolve = r
-            })
-            const nativePromise = testObject.awaitAndGetComplexPromise(promise)
-            resolve(TEST_CAR)
-            const result = await nativePromise
-            complete(result)
+        await it(async () => {
+          let resolve = (_: Car) => {}
+          const promise = new Promise<Car>((r) => {
+            resolve = r
           })
+          const nativePromise = testObject.awaitAndGetComplexPromise(promise)
+          resolve(TEST_CAR)
+          return await nativePromise
         })
       )
         .didNotThrow()
@@ -1042,17 +1006,14 @@ export function getTests(
     ),
     createTest('JS Promise<void> can be awaited on native side', async () =>
       (
-        await it(() => {
-          return timeoutedPromise(async (complete) => {
-            let resolve = () => {}
-            const promise = new Promise<void>((r) => {
-              resolve = r
-            })
-            const nativePromise = testObject.awaitPromise(promise)
-            resolve()
-            const result = await nativePromise
-            complete(result)
+        await it(async () => {
+          let resolve = () => {}
+          const promise = new Promise<void>((r) => {
+            resolve = r
           })
+          const nativePromise = testObject.awaitPromise(promise)
+          resolve()
+          return await nativePromise
         })
       )
         .didNotThrow()
@@ -1062,16 +1023,14 @@ export function getTests(
       'JS Promise<void> that rejects will also reject on native',
       async () =>
         (
-          await it(() => {
-            return timeoutedPromise(async () => {
-              let reject = (_: Error) => {}
-              const promise = new Promise<void>((_, r) => {
-                reject = r
-              })
-              const nativePromise = testObject.awaitPromise(promise)
-              reject(new Error(`rejected from JS!`))
-              await nativePromise
+          await it(async () => {
+            let reject = (_: Error) => {}
+            const promise = new Promise<void>((_, r) => {
+              reject = r
             })
+            const nativePromise = testObject.awaitPromise(promise)
+            reject(new Error(`rejected from JS!`))
+            return await nativePromise
           })
         ).didThrow()
     ),
@@ -1080,9 +1039,9 @@ export function getTests(
     createTest('callCallback(...)', async () =>
       (
         await it<boolean>(async () => {
-          return timeoutedPromise((complete) => {
+          return new Promise((resolve) => {
             testObject.callCallback(() => {
-              complete(true)
+              resolve(true)
             })
           })
         })
@@ -1092,10 +1051,10 @@ export function getTests(
     ),
     createTest('callWithOptional(undefined)', async () =>
       (
-        await it<number | undefined>(async () => {
-          return timeoutedPromise((complete) => {
+        await it<number | undefined>(() => {
+          return new Promise((resolve) => {
             testObject.callWithOptional(undefined, (val) => {
-              complete(val)
+              resolve(val)
             })
           })
         })
@@ -1105,10 +1064,10 @@ export function getTests(
     ),
     createTest('callWithOptional(433)', async () =>
       (
-        await it<number | undefined>(async () => {
-          return timeoutedPromise((complete) => {
+        await it<number | undefined>(() => {
+          return new Promise((resolve) => {
             testObject.callWithOptional(433, (val) => {
-              complete(val)
+              resolve(val)
             })
           })
         })
@@ -1141,12 +1100,12 @@ export function getTests(
     ),
     createTest('Multiple callbacks are all called: callAll(...)', async () =>
       (
-        await it(async () => {
-          return timeoutedPromise((complete) => {
+        await it(() => {
+          return new Promise((resolve) => {
             let calledCount = 0
             const func = () => {
               calledCount++
-              if (calledCount === 3) complete(calledCount)
+              if (calledCount === 3) resolve(calledCount)
             }
             testObject.callAll(func, func, func)
           })
@@ -1167,12 +1126,10 @@ export function getTests(
       async () =>
         (
           await it(async () => {
-            return timeoutedPromise(async (complete) => {
-              const result = await testObject.callbackAsyncPromise(async () => {
-                return 13
-              })
-              complete(result)
+            const result = await testObject.callbackAsyncPromise(async () => {
+              return 13
             })
+            return result
           })
         )
           .didNotThrow()
@@ -1183,14 +1140,12 @@ export function getTests(
       async () =>
         (
           await it(async () => {
-            return timeoutedPromise<ArrayBuffer>(async (complete) => {
-              const result = await testObject.callbackAsyncPromiseBuffer(
-                async () => {
-                  return await testObject.createArrayBufferAsync()
-                }
-              )
-              complete(result)
-            })
+            const result = await testObject.callbackAsyncPromiseBuffer(
+              async () => {
+                return await testObject.createArrayBufferAsync()
+              }
+            )
+            return result
           })
         )
           .didNotThrow()
@@ -1202,10 +1157,8 @@ export function getTests(
       async () =>
         (
           await it(async () => {
-            return timeoutedPromise<ArrayBuffer>(async () => {
-              await testObject.callbackAsyncPromise(() => {
-                throw new Error(`throwing in JS!`)
-              })
+            await testObject.callbackAsyncPromise(() => {
+              throw new Error(`throwing in JS!`)
             })
           })
         ).didThrow()
@@ -1214,6 +1167,31 @@ export function getTests(
       it(() => testObject.getComplexCallback())
         .didNotThrow()
         .didReturn('function')
+    ),
+    createTest(
+      'Calling twoOptionalCallbacks(...) works with callbacks',
+      async () =>
+        (
+          await it(async () => {
+            return new Promise((resolve) => {
+              let counter = 0
+              const onWasCalled = () => {
+                counter++
+                if (counter === 2) resolve(counter)
+              }
+              testObject.twoOptionalCallbacks(
+                55,
+                () => onWasCalled(),
+                () => onWasCalled()
+              )
+            })
+          })
+        )
+          .didNotThrow()
+          .equals(2)
+    ),
+    createTest('Calling twoOptionalCallbacks(...) works with undefined', () =>
+      it(() => testObject.twoOptionalCallbacks(55)).didNotThrow()
     ),
 
     // Objects
@@ -1280,14 +1258,14 @@ export function getTests(
     ),
     createTest('jsStyleObjectAsParameters()', async () =>
       (
-        await it(() =>
-          timeoutedPromise<number>((complete) => {
+        await it(() => {
+          return new Promise((resolve) => {
             testObject.jsStyleObjectAsParameters({
               value: 55,
-              onChanged: (num) => complete(num),
+              onChanged: (num) => resolve(num),
             })
           })
-        )
+        })
       )
         .didNotThrow()
         .didReturn('number')
@@ -1667,16 +1645,16 @@ export function getTests(
     ),
     createTest('testObject.dispose() works and calls callback', async () =>
       (
-        await it(() =>
-          timeoutedPromise<boolean>((complete) => {
+        await it(() => {
+          return new Promise((resolve) => {
             const hybridObject = testObject.newTestObject()
             hybridObject.optionalCallback = () => {
-              complete(true)
+              resolve(true)
             }
             // dispose() will call this.optionalCallback() one last time then the object is gone
             hybridObject.dispose()
           })
-        )
+        })
       )
         .didNotThrow()
         .equals(true)

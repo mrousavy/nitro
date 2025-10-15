@@ -134,4 +134,16 @@ For C++, we use clang-format:
 bun lint-cpp
 ```
 
+For Swift, we use swift format:
+
+```sh
+bun lint-swift
+```
+
+For Kotlin, we use ktlint:
+
+```sh
+bun lint-kotlin
+```
+
 Make sure to lint your files everytime before creating a PR. This is also enforced in the CI, but linting beforehand also applies auto-fixes.

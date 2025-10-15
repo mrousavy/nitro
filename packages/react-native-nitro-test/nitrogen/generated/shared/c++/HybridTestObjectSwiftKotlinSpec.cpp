@@ -81,6 +81,7 @@ namespace margelo::nitro::test {
       prototype.registerHybridMethod("callbackAsyncPromise", &HybridTestObjectSwiftKotlinSpec::callbackAsyncPromise);
       prototype.registerHybridMethod("callbackAsyncPromiseBuffer", &HybridTestObjectSwiftKotlinSpec::callbackAsyncPromiseBuffer);
       prototype.registerHybridMethod("getComplexCallback", &HybridTestObjectSwiftKotlinSpec::getComplexCallback);
+      prototype.registerHybridMethod("twoOptionalCallbacks", &HybridTestObjectSwiftKotlinSpec::twoOptionalCallbacks);
       prototype.registerHybridMethod("getValueFromJSCallbackAndWait", &HybridTestObjectSwiftKotlinSpec::getValueFromJSCallbackAndWait);
       prototype.registerHybridMethod("getValueFromJsCallback", &HybridTestObjectSwiftKotlinSpec::getValueFromJsCallback);
       prototype.registerHybridMethod("getCar", &HybridTestObjectSwiftKotlinSpec::getCar);

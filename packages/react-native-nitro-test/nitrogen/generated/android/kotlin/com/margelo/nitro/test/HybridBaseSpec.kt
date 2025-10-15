@@ -47,6 +47,6 @@ abstract class HybridBaseSpec: HybridObject() {
   private external fun initHybrid(): HybridData
 
   companion object {
-    private const val TAG = "HybridBaseSpec"
+    protected const val TAG = "HybridBaseSpec"
   }
 }
