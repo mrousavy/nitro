@@ -18,7 +18,7 @@ template <class... Args>
 inline std::string format(fmt::format_string<Args...> fmt, Args&&... args) {
   return fmt::format(fmt, std::forward<Args>(args)...);
 }
-}
+} // namespace margelo::nitro
 #else
 
 // Outside of Apple, we can use C++ 20 std::format
@@ -29,5 +29,5 @@ template <class... Args>
 inline std::string format(std::format_string<Args...> fmt, Args&&... args) {
   return std::format(fmt, std::forward<Args>(args)...);
 }
-}
+} // namespace margelo::nitro
 #endif

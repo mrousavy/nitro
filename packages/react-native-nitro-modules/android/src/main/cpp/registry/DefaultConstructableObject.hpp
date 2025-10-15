@@ -8,6 +8,7 @@
 #pragma once
 
 #include "NitroDefines.hpp"
+#include "NitroFormat.hpp"
 #include <fbjni/fbjni.h>
 
 namespace margelo::nitro {
@@ -28,25 +29,23 @@ public:
       std::string className = findClassName(descriptor);
       if (message.find("ClassNotFoundException")) {
         // Java class cannot be found
-        throw std::runtime_error(
-            "Couldn't find class `" + descriptor +
-            "`!\n"
+        std::string errorMessage = nitro::format(
+            "Couldn't find class `{0}`!\n"
             "- Make sure the class exists in the specified namespace.\n"
-            "- Make sure the class is not stripped. If you are using ProGuard, add `@Keep` and `@DoNotStrip` annotations to `" +
-            className + "`.");
+            "- Make sure the class is not stripped. If you are using ProGuard, add `@Keep` and `@DoNotStrip` annotations to `{1}`.",
+            descriptor, className);
+        throw std::runtime_error(errorMessage);
       } else if (message.find("NoSuchMethodError")) {
         // Default Constructor cannot be found
-        throw std::runtime_error(
-            "Couldn't find " + className +
-            "'s default constructor!\n"
-            "- If you want to autolink " +
-            className +
-            ", add a default constructor that takes zero arguments.\n"
-            "- If you need arguments to create instances of " +
-            className +
-            ", create a separate HybridObject that acts as a factory for this HybridObject to create instances of it with parameters.\n"
+        std::string errorMessage = nitro::format(
+            "Couldn't find {0}'s default constructor!\n"
+            "- If you want to autolink {0}, add a default constructor that takes zero arguments.\n"
+            "- If you need arguments to create instances of {0}, create a separate HybridObject that acts as a factory for this "
+            "HybridObject to create instances of it with parameters.\n"
             "- If you already have a default constructor, make sure it is not being stripped. If you are using ProGuard, add `@Keep` and "
-            "`@DoNotStrip` annotations to the default constructor.");
+            "`@DoNotStrip` annotations to the default constructor.",
+            className);
+        throw std::runtime_error(errorMessage);
       } else {
         throw;
       }

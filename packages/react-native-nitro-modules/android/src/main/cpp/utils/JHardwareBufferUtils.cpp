@@ -7,6 +7,7 @@
 
 #include "JHardwareBufferUtils.hpp"
 #include "NitroDefines.hpp"
+#include "NitroFormat.hpp"
 #include <android/hardware_buffer_jni.h>
 
 namespace margelo::nitro {
@@ -69,8 +70,9 @@ void JHardwareBufferUtils::copyHardwareBuffer([[maybe_unused]] AHardwareBuffer* 
 #ifdef NITRO_DEBUG
   size_t destinationSize = getHardwareBufferSize(sourceHardwareBuffer);
   if (sourceSize != destinationSize) {
-    throw std::runtime_error("Source HardwareBuffer (" + std::to_string(sourceSize) + " bytes) and destination HardwareBuffer (" +
-                             std::to_string(destinationSize) + " bytes) are not the same size!");
+    std::string errorMessage =
+        nitro::format("Source HardwareBuffer ({0} bytes) and destination HardwareBuffer ({1} bytes) are not the same size!", sourceSize,
+                      destinationSize) throw std::runtime_error(errorMessage);
   }
 #endif
 
