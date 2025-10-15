@@ -18,6 +18,7 @@ struct JSIConverter;
 #include "NitroDefines.hpp"
 #include "NitroTypeInfo.hpp"
 #include <exception>
+#include <format>
 #include <functional>
 #include <jsi/jsi.h>
 #include <memory>
@@ -191,17 +192,16 @@ private:
     // 1. Convert jsi::Value to jsi::Object
 #ifdef NITRO_DEBUG
     if (!value.isObject()) [[unlikely]] {
-      throw jsi::JSError(runtime, "Cannot " + getHybridFuncDebugInfo<THybrid>(funcKind, funcName) +
-                                      " - `this` is not bound! Suggestions:\n"
-                                      "- Did you accidentally destructure the `HybridObject`? (`const { " +
-                                      funcName +
-                                      " } = ...`)\n"
-                                      "- Did you accidentally pass the function as-is to a consumer? (`doSomething(MyHybrid." +
-                                      funcName +
-                                      "`)\n"
-                                      "- Did you call `dispose()` on the `HybridObject` before?\n"
-                                      "- Did you accidentally call `" +
-                                      funcName + "` on the prototype directly?");
+      std::string typeName = TypeInfo::getFriendlyTypename<THybrid>(true);
+      std::string errorMessage = std::format("Cannot {0} - `this` is not bound! Suggestions:\n"
+                                             "- Did you accidentally destructure the `HybridObject`? (`const { {1} } = {2}`)\n"
+                                             "  └ Avoid destructuring: `const {1} = {2}.{1}`\n"
+                                             "- Did you accidentally pass the function as-is to a consumer? (`doSomething({2}.{1})`)\n"
+                                             "  └ Call bound-function directly: `doSomething(() => {2}.{1}())`\n"
+                                             "- Did you call `dispose()` on the `HybridObject` before?\n"
+                                             "- Did you accidentally call `{1}` on the prototype directly?",
+                                             getHybridFuncDebugInfo<THybrid>(funcKind, funcName), funcName, typeName);
+      throw jsi::JSError(runtime, errorMessage);
     }
 #endif
     jsi::Object object = value.getObject(runtime);
@@ -209,17 +209,16 @@ private:
     // 2. Check if it even has any kind of `NativeState`
 #ifdef NITRO_DEBUG
     if (!object.hasNativeState(runtime)) [[unlikely]] {
-      throw jsi::JSError(runtime, "Cannot " + getHybridFuncDebugInfo<THybrid>(funcKind, funcName) +
-                                      " - `this` does not have a NativeState! Suggestions:\n"
-                                      "- Did you accidentally destructure the `HybridObject`? (`const { " +
-                                      funcName +
-                                      " } = ...`)\n"
-                                      "- Did you accidentally pass the function as-is to a consumer? (`doSomething(MyHybrid." +
-                                      funcName +
-                                      "`)\n"
-                                      "- Did you call `dispose()` on the `HybridObject` before?\b"
-                                      "- Did you accidentally call `" +
-                                      funcName + "` on the prototype directly?");
+      std::string typeName = TypeInfo::getFriendlyTypename<THybrid>(true);
+      std::string errorMessage = std::format("Cannot {0} - `this` does not have a NativeState! Suggestions:\n"
+                                             "- Did you accidentally destructure the `HybridObject`? (`const { {1} } = {2}`)\n"
+                                             "  └ Avoid destructuring: `const {1} = {2}.{1}`\n"
+                                             "- Did you accidentally pass the function as-is to a consumer? (`doSomething({2}.{1})`)\n"
+                                             "  └ Call bound-function directly: `doSomething(() => {2}.{1}())`\n"
+                                             "- Did you call `dispose()` on the `HybridObject` before?\n"
+                                             "- Did you accidentally call `{1}` on the prototype directly?",
+                                             getHybridFuncDebugInfo<THybrid>(funcKind, funcName), funcName, typeName);
+      throw jsi::JSError(runtime, errorMessage);
     }
 #endif
 
