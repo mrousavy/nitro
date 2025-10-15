@@ -1,28 +1,20 @@
-name: Lint C++
+name: Lint Kotlin
 
 on:
   push:
     branches:
       - main
     paths:
-      - '.github/workflows/lint-cpp.yml'
-      - '**/*.h'
-      - '**/*.hpp'
-      - '**/*.cpp'
-      - '**/*.c'
-      - '**/*.mm'
+      - '.github/workflows/lint-kotlin.yml'
+      - '**/*.kt'
   pull_request:
     paths:
-      - '.github/workflows/lint-cpp.yml'
-      - '**/*.h'
-      - '**/*.hpp'
-      - '**/*.cpp'
-      - '**/*.c'
-      - '**/*.mm'
+      - '.github/workflows/lint-kotlin.yml'
+      - '**/*.kt'
 
 jobs:
   lint:
-    name: Format C++
+    name: Format Kotlin
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
@@ -30,14 +22,14 @@ jobs:
         with:
           bun-version-file: ".bun-version"
 
-      - name: Install clang-format
-        run: brew install clang-format
+      - name: Install ktlint
+        run: brew install ktlint
 
       - name: Install npm dependencies (bun)
         run: bun install
 
-      - name: Run clang-format
-        run: bun run lint-cpp
+      - name: Run ktlint
+        run: bun run lint-kotlin
 
       - name: Verify no files have changed after format
         run: git diff --exit-code HEAD -- . ':(exclude)bun.lock'
