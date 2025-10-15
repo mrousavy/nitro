@@ -14,7 +14,7 @@ KOTLIN_DIRS=(
 if which ktlint >/dev/null; then
   DIRS=$(printf "%s " "${KOTLIN_DIRS[@]}")
   find $DIRS -type f \( -name "*.kt" \) -print0 | while read -d $'\0' file; do
-    ktlint --format "$file"
+    ktlint --editorconfig=./config/.editorconfig --format "$file"
   done
   echo "Kotlin Format done!"
 else
