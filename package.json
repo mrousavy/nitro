@@ -19,7 +19,7 @@
     "typecheck": "bun --filter=\"**\" typecheck",
     "lint": "bun nitro lint && bun nitrogen lint && bun nitro-test lint && bun example lint",
     "lint-cpp": "./scripts/clang-format.sh",
-    "lint-swift": "swift format --in-place --recursive \"**/*.swift\"",
+    "lint-swift": "./scripts/swift-format.sh",
     "clean": "git clean -dfx",
     "release": "./scripts/release.sh",
     "docs": "bun --cwd docs",
