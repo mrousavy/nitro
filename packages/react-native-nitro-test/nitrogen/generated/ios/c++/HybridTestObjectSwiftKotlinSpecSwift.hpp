@@ -38,6 +38,8 @@ namespace margelo::nitro::test { struct JsStyleStruct; }
 namespace margelo::nitro::test { struct WrappedJsStruct; }
 // Forward declaration of `OptionalWrapper` to properly resolve imports.
 namespace margelo::nitro::test { struct OptionalWrapper; }
+// Forward declaration of `OptionalCallback` to properly resolve imports.
+namespace margelo::nitro::test { struct OptionalCallback; }
 // Forward declaration of `WeirdNumbersEnum` to properly resolve imports.
 namespace margelo::nitro::test { enum class WeirdNumbersEnum; }
 // Forward declaration of `HybridBaseSpec` to properly resolve imports.
@@ -72,6 +74,7 @@ namespace margelo::nitro::test::external { class HybridSomeExternalObjectSpec; }
 #include "JsStyleStruct.hpp"
 #include "WrappedJsStruct.hpp"
 #include "OptionalWrapper.hpp"
+#include "OptionalCallback.hpp"
 #include "WeirdNumbersEnum.hpp"
 #include "HybridBaseSpec.hpp"
 #include "HybridChildSpec.hpp"
@@ -578,6 +581,14 @@ namespace margelo::nitro::test {
     }
     inline OptionalWrapper bounceOptionalWrapper(const OptionalWrapper& wrapper) override {
       auto __result = _swiftPart.bounceOptionalWrapper(std::forward<decltype(wrapper)>(wrapper));
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline OptionalCallback bounceOptionalCallback(const OptionalCallback& value) override {
+      auto __result = _swiftPart.bounceOptionalCallback(std::forward<decltype(value)>(value));
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }

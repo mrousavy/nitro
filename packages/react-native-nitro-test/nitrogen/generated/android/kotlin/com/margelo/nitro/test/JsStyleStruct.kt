@@ -17,20 +17,24 @@ import com.margelo.nitro.core.*
  */
 @DoNotStrip
 @Keep
-data class JsStyleStruct
+data class JsStyleStruct(
   @DoNotStrip
   @Keep
-  constructor(
+  val value: Double,
+  @DoNotStrip
+  @Keep
+  val onChanged: (num: Double) -> Unit
+) {
+  private companion object {
+    /**
+     * Constructor called from C++
+     */
     @DoNotStrip
     @Keep
-    val value: Double,
-    @DoNotStrip
-    @Keep
-    val onChanged: Func_void_double
-  ) {
-  /**
-   * Initialize a new instance of `JsStyleStruct` from Kotlin.
-   */
-  constructor(value: Double, onChanged: (num: Double) -> Unit)
-       : this(value, Func_void_double_java(onChanged))
+    @Suppress("unused")
+    @JvmStatic
+    private fun fromCpp(value: Double, onChanged: Func_void_double): JsStyleStruct {
+      return JsStyleStruct(value, onChanged)
+    }
+  }
 }

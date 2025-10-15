@@ -290,6 +290,8 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
 
   override fun bounceOptionalWrapper(wrapper: OptionalWrapper): OptionalWrapper = wrapper
 
+  override fun bounceOptionalCallback(value: OptionalCallback): OptionalCallback = value
+
   override fun createArrayBufferFromNativeBuffer(copy: Boolean): ArrayBuffer {
     val hardwareBuffer =
       HardwareBuffer.create(

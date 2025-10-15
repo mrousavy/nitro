@@ -27,6 +27,8 @@ namespace margelo::nitro::test { struct WrappedJsStruct; }
 namespace margelo::nitro::test { struct JsStyleStruct; }
 // Forward declaration of `OptionalWrapper` to properly resolve imports.
 namespace margelo::nitro::test { struct OptionalWrapper; }
+// Forward declaration of `OptionalCallback` to properly resolve imports.
+namespace margelo::nitro::test { struct OptionalCallback; }
 // Forward declaration of `WeirdNumbersEnum` to properly resolve imports.
 namespace margelo::nitro::test { enum class WeirdNumbersEnum; }
 // Forward declaration of `HybridBaseSpec` to properly resolve imports.
@@ -78,6 +80,10 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 #include "JJsStyleStruct.hpp"
 #include "OptionalWrapper.hpp"
 #include "JOptionalWrapper.hpp"
+#include "OptionalCallback.hpp"
+#include "JOptionalCallback.hpp"
+#include "JVariant_Double_______Unit.hpp"
+#include "JFunc_void.hpp"
 #include "JVariant_Boolean_OldEnum.hpp"
 #include "WeirdNumbersEnum.hpp"
 #include "JVariant_Boolean_WeirdNumbersEnum.hpp"
@@ -97,7 +103,6 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 #include "SecondMapWrapper.hpp"
 #include "JSecondMapWrapper.hpp"
 #include <exception>
-#include "JFunc_void.hpp"
 #include "JFunc_void_std__optional_double_.hpp"
 #include "JFunc_std__shared_ptr_Promise_double__.hpp"
 #include "JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_double____.hpp"
@@ -793,6 +798,11 @@ namespace margelo::nitro::test {
   OptionalWrapper JHybridTestObjectSwiftKotlinSpec::bounceOptionalWrapper(const OptionalWrapper& wrapper) {
     static const auto method = javaClassStatic()->getMethod<jni::local_ref<JOptionalWrapper>(jni::alias_ref<JOptionalWrapper> /* wrapper */)>("bounceOptionalWrapper");
     auto __result = method(_javaPart, JOptionalWrapper::fromCpp(wrapper));
+    return __result->toCpp();
+  }
+  OptionalCallback JHybridTestObjectSwiftKotlinSpec::bounceOptionalCallback(const OptionalCallback& value) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JOptionalCallback>(jni::alias_ref<JOptionalCallback> /* value */)>("bounceOptionalCallback");
+    auto __result = method(_javaPart, JOptionalCallback::fromCpp(value));
     return __result->toCpp();
   }
   std::shared_ptr<ArrayBuffer> JHybridTestObjectSwiftKotlinSpec::createArrayBuffer() {

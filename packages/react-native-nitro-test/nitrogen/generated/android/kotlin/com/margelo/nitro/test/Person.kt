@@ -17,16 +17,24 @@ import com.margelo.nitro.core.*
  */
 @DoNotStrip
 @Keep
-data class Person
+data class Person(
   @DoNotStrip
   @Keep
-  constructor(
+  val name: String,
+  @DoNotStrip
+  @Keep
+  val age: Double
+) {
+  private companion object {
+    /**
+     * Constructor called from C++
+     */
     @DoNotStrip
     @Keep
-    val name: String,
-    @DoNotStrip
-    @Keep
-    val age: Double
-  ) {
-  /* main constructor */
+    @Suppress("unused")
+    @JvmStatic
+    private fun fromCpp(name: String, age: Double): Person {
+      return Person(name, age)
+    }
+  }
 }

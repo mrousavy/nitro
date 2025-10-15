@@ -91,7 +91,11 @@ namespace margelo::nitro::test {
      */
     [[maybe_unused]]
     static jni::local_ref<JCar::javaobject> fromCpp(const Car& value) {
-      return newInstance(
+      using JSignature = JCar(double, jni::alias_ref<jni::JString>, jni::alias_ref<jni::JString>, double, jni::alias_ref<JPowertrain>, jni::alias_ref<JPerson>, jni::alias_ref<jni::JArrayClass<JPerson>>, jni::alias_ref<jni::JBoolean>, jni::alias_ref<jni::JString>, jni::alias_ref<jni::JArrayDouble>);
+      static const auto clazz = javaClassStatic();
+      static const auto create = clazz->getStaticMethod<JSignature>("fromCpp");
+      return create(
+        clazz,
         value.year,
         jni::make_jstring(value.make),
         jni::make_jstring(value.model),

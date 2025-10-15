@@ -439,6 +439,23 @@ export function getTests(
         .didReturn('object')
         .equals(TEST_OPTIONAL_WRAPPER)
     ),
+    createTest('bounceOptionalCallback(...) works for function', () =>
+      it(
+        () => testObject.bounceOptionalCallback({ callback: () => {} }).callback
+      )
+        .didNotThrow()
+        .didReturn('function')
+    ),
+    createTest('bounceOptionalCallback(...) works for number', () =>
+      it(() => testObject.bounceOptionalCallback({ callback: 55 }).callback)
+        .didNotThrow()
+        .didReturn('number')
+    ),
+    createTest('bounceOptionalCallback(...) works for undefined', () =>
+      it(() => testObject.bounceOptionalCallback({}).callback)
+        .didNotThrow()
+        .didReturn('undefined')
+    ),
 
     createTest('complexEnumCallback(...)', async () =>
       (

@@ -380,6 +380,10 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
     return wrapper
   }
 
+  func bounceOptionalCallback(value: OptionalCallback) throws -> OptionalCallback {
+    return value
+  }
+
   func createArrayBufferFromNativeBuffer(copy: Bool) throws -> ArrayBuffer {
     let data = Data(count: 1024 * 1024 * 10)  // 10 MB
     if copy {

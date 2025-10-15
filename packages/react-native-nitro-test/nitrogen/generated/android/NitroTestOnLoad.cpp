@@ -17,8 +17,8 @@
 
 #include "JHybridTestObjectSwiftKotlinSpec.hpp"
 #include "JFunc_void_double.hpp"
-#include "JFunc_void_std__vector_Powertrain_.hpp"
 #include "JFunc_void.hpp"
+#include "JFunc_void_std__vector_Powertrain_.hpp"
 #include "JFunc_void_std__optional_double_.hpp"
 #include "JFunc_std__shared_ptr_Promise_double__.hpp"
 #include "JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_double____.hpp"
@@ -44,8 +44,8 @@ int initialize(JavaVM* vm) {
     // Register native JNI methods
     margelo::nitro::test::JHybridTestObjectSwiftKotlinSpec::registerNatives();
     margelo::nitro::test::JFunc_void_double_cxx::registerNatives();
-    margelo::nitro::test::JFunc_void_std__vector_Powertrain__cxx::registerNatives();
     margelo::nitro::test::JFunc_void_cxx::registerNatives();
+    margelo::nitro::test::JFunc_void_std__vector_Powertrain__cxx::registerNatives();
     margelo::nitro::test::JFunc_void_std__optional_double__cxx::registerNatives();
     margelo::nitro::test::JFunc_std__shared_ptr_Promise_double___cxx::registerNatives();
     margelo::nitro::test::JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_double_____cxx::registerNatives();

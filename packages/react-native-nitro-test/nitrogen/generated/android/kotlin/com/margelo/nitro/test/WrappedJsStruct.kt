@@ -17,16 +17,24 @@ import com.margelo.nitro.core.*
  */
 @DoNotStrip
 @Keep
-data class WrappedJsStruct
+data class WrappedJsStruct(
   @DoNotStrip
   @Keep
-  constructor(
+  val value: JsStyleStruct,
+  @DoNotStrip
+  @Keep
+  val items: Array<JsStyleStruct>
+) {
+  private companion object {
+    /**
+     * Constructor called from C++
+     */
     @DoNotStrip
     @Keep
-    val value: JsStyleStruct,
-    @DoNotStrip
-    @Keep
-    val items: Array<JsStyleStruct>
-  ) {
-  /* main constructor */
+    @Suppress("unused")
+    @JvmStatic
+    private fun fromCpp(value: JsStyleStruct, items: Array<JsStyleStruct>): WrappedJsStruct {
+      return WrappedJsStruct(value, items)
+    }
+  }
 }

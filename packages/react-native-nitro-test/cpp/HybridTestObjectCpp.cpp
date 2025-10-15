@@ -475,6 +475,10 @@ OptionalWrapper HybridTestObjectCpp::bounceOptionalWrapper(const OptionalWrapper
   return wrapper;
 }
 
+OptionalCallback HybridTestObjectCpp::bounceOptionalCallback(const OptionalCallback& value) {
+  return value;
+}
+
 std::shared_ptr<ArrayBuffer> HybridTestObjectCpp::createArrayBufferFromNativeBuffer(bool /* copy */) {
   // On C++, we are already using a "native" buffer.
   return createArrayBuffer();

@@ -30,6 +30,8 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 namespace margelo::nitro::test { struct JsStyleStruct; }
 // Forward declaration of `OldEnum` to properly resolve imports.
 namespace margelo::nitro::test { enum class OldEnum; }
+// Forward declaration of `OptionalCallback` to properly resolve imports.
+namespace margelo::nitro::test { struct OptionalCallback; }
 // Forward declaration of `OptionalWrapper` to properly resolve imports.
 namespace margelo::nitro::test { struct OptionalWrapper; }
 // Forward declaration of `Person` to properly resolve imports.
@@ -61,6 +63,7 @@ namespace NitroTest { class HybridTestViewSpec_cxx; }
 #include "HybridTestViewSpec.hpp"
 #include "JsStyleStruct.hpp"
 #include "OldEnum.hpp"
+#include "OptionalCallback.hpp"
 #include "OptionalWrapper.hpp"
 #include "Person.hpp"
 #include "Powertrain.hpp"
@@ -902,6 +905,50 @@ namespace margelo::nitro::test::bridge::swift {
     return *optional;
   }
   
+  // pragma MARK: std::variant<double, std::function<void()>>
+  /**
+   * Wrapper struct for `std::variant<double, std::function<void()>>`.
+   * std::variant cannot be used in Swift because of a Swift bug.
+   * Not even specializing it works. So we create a wrapper struct.
+   */
+  struct std__variant_double__std__function_void____ {
+    std::variant<double, std::function<void()>> variant;
+    std__variant_double__std__function_void____(std::variant<double, std::function<void()>> variant): variant(variant) { }
+    operator std::variant<double, std::function<void()>>() const noexcept {
+      return variant;
+    }
+    inline size_t index() const noexcept {
+      return variant.index();
+    }
+    inline double get_0() const noexcept {
+      return std::get<0>(variant);
+    }
+    inline std::function<void()> get_1() const noexcept {
+      return std::get<1>(variant);
+    }
+  };
+  inline std__variant_double__std__function_void____ create_std__variant_double__std__function_void____(double value) noexcept {
+    return std__variant_double__std__function_void____(value);
+  }
+  inline std__variant_double__std__function_void____ create_std__variant_double__std__function_void____(const std::function<void()>& value) noexcept {
+    return std__variant_double__std__function_void____(value);
+  }
+  
+  // pragma MARK: std::optional<std::variant<double, std::function<void()>>>
+  /**
+   * Specialized version of `std::optional<std::variant<double, std::function<void()>>>`.
+   */
+  using std__optional_std__variant_double__std__function_void_____ = std::optional<std::variant<double, std::function<void()>>>;
+  inline std::optional<std::variant<double, std::function<void()>>> create_std__optional_std__variant_double__std__function_void_____(const std::variant<double, std::function<void()>>& value) noexcept {
+    return std::optional<std::variant<double, std::function<void()>>>(value);
+  }
+  inline bool has_value_std__optional_std__variant_double__std__function_void_____(const std::optional<std::variant<double, std::function<void()>>>& optional) noexcept {
+    return optional.has_value();
+  }
+  inline std::variant<double, std::function<void()>> get_std__optional_std__variant_double__std__function_void_____(const std::optional<std::variant<double, std::function<void()>>>& optional) noexcept {
+    return *optional;
+  }
+  
   // pragma MARK: std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>>
   /**
    * Wrapper struct for `std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>>`.
@@ -1400,6 +1447,15 @@ namespace margelo::nitro::test::bridge::swift {
   }
   inline Result_OptionalWrapper_ create_Result_OptionalWrapper_(const std::exception_ptr& error) noexcept {
     return Result<OptionalWrapper>::withError(error);
+  }
+  
+  // pragma MARK: Result<OptionalCallback>
+  using Result_OptionalCallback_ = Result<OptionalCallback>;
+  inline Result_OptionalCallback_ create_Result_OptionalCallback_(const OptionalCallback& value) noexcept {
+    return Result<OptionalCallback>::withValue(value);
+  }
+  inline Result_OptionalCallback_ create_Result_OptionalCallback_(const std::exception_ptr& error) noexcept {
+    return Result<OptionalCallback>::withError(error);
   }
   
   // pragma MARK: Result<std::shared_ptr<ArrayBuffer>>
