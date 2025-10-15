@@ -16,8 +16,10 @@ struct JSIConverter;
 #include "InstanceMethod.hpp"
 #include "JSIConverter.hpp"
 #include "NitroDefines.hpp"
+#include "NitroFormat.hpp"
 #include "NitroTypeInfo.hpp"
 #include <exception>
+#include <format>
 #include <functional>
 #include <jsi/jsi.h>
 #include <memory>
@@ -103,12 +105,13 @@ public:
         std::string funcName = getHybridFuncFullName<THybrid>(kind, name, hybridInstance.get());
         if constexpr (minArgsCount == maxArgsCount) {
           // min and max args length is the same, so we don't have any optional parameters. fixed count
-          throw jsi::JSError(runtime, "`" + funcName + "` expected " + std::to_string(maxArgsCount) + " arguments, but received " +
-                                          std::to_string(count) + "!");
+          std::string errorMessage = nitro::format("`{0}` expected {1} arguments, but received {2}!", funcName, maxArgsCount, count);
+          throw jsi::JSError(runtime, errorMessage);
         } else {
           // min and max args length are different, so we have optional parameters - variable length arguments.
-          throw jsi::JSError(runtime, "`" + funcName + "` expected between " + std::to_string(minArgsCount) + " and " +
-                                          std::to_string(maxArgsCount) + " arguments, but received " + std::to_string(count) + "!");
+          std::string errorMessage =
+              nitro::format("`{0}` expected between {1} and {2} arguments, but received {3}!", funcName, minArgsCount, maxArgsCount, count);
+          throw jsi::JSError(runtime, errorMessage);
         }
       }
 
@@ -125,7 +128,8 @@ public:
         // Some unknown exception was thrown - add method name information and re-throw as `JSError`.
         std::string funcName = getHybridFuncFullName<THybrid>(kind, name, hybridInstance.get());
         std::string errorName = TypeInfo::getCurrentExceptionName();
-        throw jsi::JSError(runtime, "`" + funcName + "` threw an unknown " + errorName + " error.");
+        std::string errorMessage = nitro::format("`{0}` threw an unknown {1} error.", funcName, errorName);
+        throw jsi::JSError(runtime, errorMessage);
       }
     };
 
@@ -191,14 +195,16 @@ private:
     // 1. Convert jsi::Value to jsi::Object
 #ifdef NITRO_DEBUG
     if (!value.isObject()) [[unlikely]] {
-      throw jsi::JSError(runtime, "Cannot " + getHybridFuncDebugInfo<THybrid>(funcKind, funcName) +
-                                      " - `this` is not bound! Suggestions:\n"
-                                      "- Did you accidentally destructure the `HybridObject`? (`const { " +
-                                      funcName +
-                                      " } = ...`)\n"
-                                      "- Did you call `dispose()` on the `HybridObject` before?"
-                                      "- Did you accidentally call `" +
-                                      funcName + "` on the prototype directly?");
+      std::string typeName = TypeInfo::getFriendlyTypename<THybrid>(true);
+      std::string errorMessage = nitro::format("Cannot {0} - `this` is not bound! Suggestions:\n"
+                                               "- Did you accidentally destructure the `HybridObject`? (`const {{ {1} }} = {2}`)\n"
+                                               "  └ Avoid destructuring: `const {1} = {2}.{1}`\n"
+                                               "- Did you accidentally pass the function as-is to a consumer? (`doSomething({2}.{1})`)\n"
+                                               "  └ Call bound-function directly: `doSomething(() => {2}.{1}())`\n"
+                                               "- Did you call `dispose()` on the `HybridObject` before?\n"
+                                               "- Did you accidentally call `{1}` on the prototype directly?",
+                                               getHybridFuncDebugInfo<THybrid>(funcKind, funcName), funcName, typeName);
+      throw jsi::JSError(runtime, errorMessage);
     }
 #endif
     jsi::Object object = value.getObject(runtime);
@@ -206,14 +212,16 @@ private:
     // 2. Check if it even has any kind of `NativeState`
 #ifdef NITRO_DEBUG
     if (!object.hasNativeState(runtime)) [[unlikely]] {
-      throw jsi::JSError(runtime, "Cannot " + getHybridFuncDebugInfo<THybrid>(funcKind, funcName) +
-                                      " - `this` does not have a NativeState! Suggestions:\n"
-                                      "- Did you accidentally destructure the `HybridObject`? (`const { " +
-                                      funcName +
-                                      " } = ...`)\n"
-                                      "- Did you call `dispose()` on the `HybridObject` before?"
-                                      "- Did you accidentally call `" +
-                                      funcName + "` on the prototype directly?");
+      std::string typeName = TypeInfo::getFriendlyTypename<THybrid>(true);
+      std::string errorMessage = nitro::format("Cannot {0} - `this` does not have a NativeState! Suggestions:\n"
+                                               "- Did you accidentally destructure the `HybridObject`? (`const {{ {1} }} = {2}`)\n"
+                                               "  └ Avoid destructuring: `const {1} = {2}.{1}`\n"
+                                               "- Did you accidentally pass the function as-is to a consumer? (`doSomething({2}.{1})`)\n"
+                                               "  └ Call bound-function directly: `doSomething(() => {2}.{1}())`\n"
+                                               "- Did you call `dispose()` on the `HybridObject` before?\n"
+                                               "- Did you accidentally call `{1}` on the prototype directly?",
+                                               getHybridFuncDebugInfo<THybrid>(funcKind, funcName), funcName, typeName);
+      throw jsi::JSError(runtime, errorMessage);
     }
 #endif
 
@@ -221,9 +229,10 @@ private:
     std::shared_ptr<jsi::NativeState> nativeState = object.getNativeState(runtime);
 #ifdef NITRO_DEBUG
     if (nativeState == nullptr) [[unlikely]] {
-      throw jsi::JSError(runtime, "Cannot " + getHybridFuncDebugInfo<THybrid>(funcKind, funcName) +
-                                      " - `this`'s `NativeState` is `null`, "
-                                      "did you accidentally call `dispose()` on this object?");
+      std::string errorMessage =
+          nitro::format("Cannot {0} - `this`'s `NativeState` is `null`, did you accidentally call `dispose()` on this object?",
+                        getHybridFuncDebugInfo<THybrid>(funcKind, funcName));
+      throw jsi::JSError(runtime, errorMessage);
     }
 #endif
 
@@ -231,8 +240,9 @@ private:
     std::shared_ptr<THybrid> hybridInstance = std::dynamic_pointer_cast<THybrid>(nativeState);
 #ifdef NITRO_DEBUG
     if (hybridInstance == nullptr) [[unlikely]] {
-      throw jsi::JSError(runtime, "Cannot " + getHybridFuncDebugInfo<THybrid>(funcKind, funcName) +
-                                      " - `this` has a NativeState, but it's the wrong type!");
+      std::string errorMessage = nitro::format("Cannot {0} - `this` has a NativeState, but it's the wrong type!",
+                                               getHybridFuncDebugInfo<THybrid>(funcKind, funcName));
+      throw jsi::JSError(runtime, errorMessage);
     }
 #endif
     return hybridInstance;

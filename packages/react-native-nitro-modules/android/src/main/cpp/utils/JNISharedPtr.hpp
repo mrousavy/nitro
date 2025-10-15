@@ -5,6 +5,7 @@
 #pragma once
 
 #include "NitroDefines.hpp"
+#include "NitroFormat.hpp"
 #include "NitroTypeInfo.hpp"
 #include <fbjni/fbjni.h>
 #include <memory>
@@ -58,8 +59,8 @@ public:
 #ifdef NITRO_DEBUG
     if (ref == nullptr || ref->cthis() == nullptr) [[unlikely]] {
       std::string typeName = TypeInfo::getFriendlyTypename<T>(true);
-      throw std::runtime_error("Failed to wrap jni::global_ref<" + typeName + "::javaobject> in std::shared_ptr<" + typeName +
-                               "> - it's null!");
+      auto errorMessage = nitro::format("Failed to wrap jni::global_ref<{0}::javaobject> in std::shared_ptr<{0}> - it's null!", typeName);
+      throw std::runtime_error(errorMessage);
     }
 #endif
     return std::shared_ptr<T>(ref->cthis(), GlobalRefDeleter<T>(ref));
