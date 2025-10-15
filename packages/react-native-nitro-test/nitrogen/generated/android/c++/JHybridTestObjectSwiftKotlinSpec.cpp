@@ -82,6 +82,7 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 #include "JOptionalWrapper.hpp"
 #include "OptionalCallback.hpp"
 #include "JOptionalCallback.hpp"
+#include "JVariant_Double_______Unit.hpp"
 #include "JFunc_void.hpp"
 #include "JVariant_Boolean_OldEnum.hpp"
 #include "WeirdNumbersEnum.hpp"

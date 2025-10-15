@@ -44,6 +44,7 @@ target_sources(
   ../nitrogen/generated/android/c++/JVariant_String_Double.cpp
   ../nitrogen/generated/android/c++/JVariant_Person_HybridTestObjectSwiftKotlinSpec.cpp
   ../nitrogen/generated/android/c++/JVariant_Double_Boolean.cpp
+  ../nitrogen/generated/android/c++/JVariant_Double_______Unit.cpp
   ../nitrogen/generated/android/c++/JVariant_Boolean_OldEnum.cpp
   ../nitrogen/generated/android/c++/JVariant_Boolean_WeirdNumbersEnum.cpp
   ../nitrogen/generated/android/c++/JVariant_Car_Person.cpp

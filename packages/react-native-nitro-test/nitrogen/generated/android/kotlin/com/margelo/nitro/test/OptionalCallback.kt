@@ -23,11 +23,11 @@ data class OptionalCallback
   constructor(
     @DoNotStrip
     @Keep
-    val callback: Func_void
+    val callback: Variant_Double_______Unit?
   ) {
   /**
    * Initialize a new instance of `OptionalCallback` from Kotlin.
    */
-  constructor(callback: () -> Unit)
-       : this(Func_void_java(callback))
+  constructor(callback: Variant_Double_______Unit?)
+       : this(callback?.let { it })
 }

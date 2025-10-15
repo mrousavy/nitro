@@ -70,7 +70,7 @@ export interface OptionalWrapper {
 }
 
 interface OptionalCallback {
-  callback: () => void
+  callback?: (() => void) | number
 }
 
 interface SecondMapWrapper {

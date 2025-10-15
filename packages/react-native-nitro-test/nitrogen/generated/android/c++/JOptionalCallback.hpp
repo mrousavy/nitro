@@ -11,7 +11,10 @@
 #include "OptionalCallback.hpp"
 
 #include "JFunc_void.hpp"
+#include "JVariant_Double_______Unit.hpp"
 #include <functional>
+#include <optional>
+#include <variant>
 
 namespace margelo::nitro::test {
 
@@ -32,20 +35,10 @@ namespace margelo::nitro::test {
     [[nodiscard]]
     OptionalCallback toCpp() const {
       static const auto clazz = javaClassStatic();
-      static const auto fieldCallback = clazz->getField<JFunc_void::javaobject>("callback");
-      jni::local_ref<JFunc_void::javaobject> callback = this->getFieldValue(fieldCallback);
+      static const auto fieldCallback = clazz->getField<JVariant_Double_______Unit>("callback");
+      jni::local_ref<JVariant_Double_______Unit> callback = this->getFieldValue(fieldCallback);
       return OptionalCallback(
-        [&]() -> std::function<void()> {
-          if (callback->isInstanceOf(JFunc_void_cxx::javaClassStatic())) [[likely]] {
-            auto downcast = jni::static_ref_cast<JFunc_void_cxx::javaobject>(callback);
-            return downcast->cthis()->getFunction();
-          } else {
-            auto callbackRef = jni::make_global(callback);
-            return [callbackRef]() -> void {
-              return callbackRef->invoke();
-            };
-          }
-        }()
+        callback != nullptr ? std::make_optional(callback->toCpp()) : std::nullopt
       );
     }
 
@@ -56,7 +49,7 @@ namespace margelo::nitro::test {
     [[maybe_unused]]
     static jni::local_ref<JOptionalCallback::javaobject> fromCpp(const OptionalCallback& value) {
       return newInstance(
-        JFunc_void_cxx::fromCpp(value.callback)
+        value.callback.has_value() ? JVariant_Double_______Unit::fromCpp(value.callback.value()) : nullptr
       );
     }
   };

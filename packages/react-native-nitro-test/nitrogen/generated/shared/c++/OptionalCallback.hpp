@@ -26,6 +26,8 @@
 
 
 #include <functional>
+#include <variant>
+#include <optional>
 
 namespace margelo::nitro::test {
 
@@ -34,11 +36,11 @@ namespace margelo::nitro::test {
    */
   struct OptionalCallback {
   public:
-    std::function<void()> callback     SWIFT_PRIVATE;
+    std::optional<std::variant<double, std::function<void()>>> callback     SWIFT_PRIVATE;
 
   public:
     OptionalCallback() = default;
-    explicit OptionalCallback(std::function<void()> callback): callback(callback) {}
+    explicit OptionalCallback(std::optional<std::variant<double, std::function<void()>>> callback): callback(callback) {}
   };
 
 } // namespace margelo::nitro::test
@@ -51,12 +53,12 @@ namespace margelo::nitro {
     static inline margelo::nitro::test::OptionalCallback fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       jsi::Object obj = arg.asObject(runtime);
       return margelo::nitro::test::OptionalCallback(
-        JSIConverter<std::function<void()>>::fromJSI(runtime, obj.getProperty(runtime, "callback"))
+        JSIConverter<std::optional<std::variant<double, std::function<void()>>>>::fromJSI(runtime, obj.getProperty(runtime, "callback"))
       );
     }
     static inline jsi::Value toJSI(jsi::Runtime& runtime, const margelo::nitro::test::OptionalCallback& arg) {
       jsi::Object obj(runtime);
-      obj.setProperty(runtime, "callback", JSIConverter<std::function<void()>>::toJSI(runtime, arg.callback));
+      obj.setProperty(runtime, "callback", JSIConverter<std::optional<std::variant<double, std::function<void()>>>>::toJSI(runtime, arg.callback));
       return obj;
     }
     static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
@@ -67,7 +69,7 @@ namespace margelo::nitro {
       if (!nitro::isPlainObject(runtime, obj)) {
         return false;
       }
-      if (!JSIConverter<std::function<void()>>::canConvert(runtime, obj.getProperty(runtime, "callback"))) return false;
+      if (!JSIConverter<std::optional<std::variant<double, std::function<void()>>>>::canConvert(runtime, obj.getProperty(runtime, "callback"))) return false;
       return true;
     }
   };
