@@ -41,10 +41,6 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
       case 'function':
         // Function needs to be converted from JFunc_... to Lambda
         return true
-      case 'struct':
-        // Structs don't need special handling - they have direct mappings
-        // Returning false prevents secondary constructor generation that causes duplicates
-        return false
       case 'optional':
         // Optionals need special handling if the wrapped type needs special handling
         const optional = getTypeAs(this.type, OptionalType)
@@ -52,16 +48,6 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
           .needsSpecialHandling
       default:
         break
-    }
-    // check if any types this type references (e.g. underlying optional, array element, ...)
-    // needs special handling. if yes, we need it as well
-    const referencedTypes = getReferencedTypes(this.type)
-      .filter((t) => t !== this.type)
-      .map((t) => new KotlinCxxBridgedType(t))
-    for (const type of referencedTypes) {
-      if (type.needsSpecialHandling) {
-        return true
-      }
     }
     // no special handling needed
     return false

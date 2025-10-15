@@ -31,7 +31,7 @@ data class OptionalCallback(
     @Suppress("unused")
     @JvmStatic
     private fun fromCpp(callback: Variant_Double_______Unit?): OptionalCallback {
-      return OptionalCallback(callback?.let { it })
+      return OptionalCallback(callback)
     }
   }
 }
