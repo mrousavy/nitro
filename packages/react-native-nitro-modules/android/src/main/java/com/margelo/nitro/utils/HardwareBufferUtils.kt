@@ -1,10 +1,10 @@
 package com.margelo.nitro.utils
 
-import androidx.annotation.Keep
-import com.facebook.proguard.annotations.DoNotStrip
 import android.hardware.HardwareBuffer
 import android.os.Build
+import androidx.annotation.Keep
 import androidx.annotation.RequiresApi
+import com.facebook.proguard.annotations.DoNotStrip
 
 /**
  * HardwareBuffers are special types in JNI (`AHardwareBuffer*`)
@@ -20,9 +20,13 @@ class HardwareBufferUtils {
         @JvmStatic
         @RequiresApi(Build.VERSION_CODES.O)
         private external fun copyHardwareBuffer(sourceHardwareBuffer: BoxedHardwareBuffer): BoxedHardwareBuffer
+
         @JvmStatic
         @RequiresApi(Build.VERSION_CODES.O)
-        private external fun copyHardwareBuffer(sourceHardwareBuffer: BoxedHardwareBuffer, destinationHardwareBuffer: BoxedHardwareBuffer)
+        private external fun copyHardwareBuffer(
+            sourceHardwareBuffer: BoxedHardwareBuffer,
+            destinationHardwareBuffer: BoxedHardwareBuffer,
+        )
 
         /**
          * Copies the given [[hardwareBuffer]] into a new, identically shaped [[HardwareBuffer]].
@@ -39,7 +43,10 @@ class HardwareBufferUtils {
          */
         @Throws
         @RequiresApi(Build.VERSION_CODES.O)
-        fun copyHardwareBuffer(source: HardwareBuffer, destination: HardwareBuffer) {
+        fun copyHardwareBuffer(
+            source: HardwareBuffer,
+            destination: HardwareBuffer,
+        ) {
             copyHardwareBuffer(source as Any, destination as Any)
         }
     }

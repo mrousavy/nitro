@@ -8,7 +8,10 @@ import com.facebook.react.uimanager.ViewManager
 import com.margelo.nitro.test.views.HybridTestViewManager
 
 class NitroTestPackage : TurboReactPackage() {
-    override fun getModule(name: String, reactContext: ReactApplicationContext): NativeModule? = null
+    override fun getModule(
+        name: String,
+        reactContext: ReactApplicationContext,
+    ): NativeModule? = null
 
     override fun getReactModuleInfoProvider(): ReactModuleInfoProvider = ReactModuleInfoProvider { HashMap() }
 

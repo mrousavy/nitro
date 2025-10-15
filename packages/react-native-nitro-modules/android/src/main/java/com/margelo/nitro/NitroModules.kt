@@ -13,7 +13,9 @@ import com.facebook.react.turbomodule.core.interfaces.CallInvokerHolder
 @Keep
 @OptIn(FrameworkAPI::class)
 @Suppress("KotlinJniMissingFunction")
-class NitroModules internal constructor(val context: ReactApplicationContext) : NitroModulesSpec(context) {
+class NitroModules internal constructor(
+    val context: ReactApplicationContext,
+) : NitroModulesSpec(context) {
     private val mHybridData: HybridData
 
     init {
@@ -21,20 +23,20 @@ class NitroModules internal constructor(val context: ReactApplicationContext) : 
         applicationContext = context
     }
 
-    override fun getName(): String {
-        return NAME
-    }
+    override fun getName(): String = NAME
 
     @ReactMethod(isBlockingSynchronousMethod = true)
     override fun install(): String? {
         try {
             // 1. Get jsi::Runtime pointer
-            val jsContext = context.javaScriptContextHolder
-                ?: return "ReactApplicationContext.javaScriptContextHolder is null!"
+            val jsContext =
+                context.javaScriptContextHolder
+                    ?: return "ReactApplicationContext.javaScriptContextHolder is null!"
 
             // 2. Get CallInvokerHolder
-            val callInvokerHolder = context.jsCallInvokerHolder as? CallInvokerHolderImpl
-                ?: return "ReactApplicationContext.jsCallInvokerHolder is null!"
+            val callInvokerHolder =
+                context.jsCallInvokerHolder as? CallInvokerHolderImpl
+                    ?: return "ReactApplicationContext.jsCallInvokerHolder is null!"
 
             // 3. Install Nitro
             install(jsContext.get(), callInvokerHolder)
@@ -47,7 +49,11 @@ class NitroModules internal constructor(val context: ReactApplicationContext) : 
     }
 
     private external fun initHybrid(): HybridData
-    private external fun install(jsRuntimePointer: Long, callInvokerHolder: CallInvokerHolderImpl)
+
+    private external fun install(
+        jsRuntimePointer: Long,
+        callInvokerHolder: CallInvokerHolderImpl,
+    )
 
     companion object {
         /**

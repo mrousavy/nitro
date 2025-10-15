@@ -8,7 +8,9 @@ import com.facebook.react.uimanager.ThemedReactContext
 
 @Keep
 @DoNotStrip
-class HybridTestView(val context: ThemedReactContext): HybridTestViewSpec() {
+class HybridTestView(
+    val context: ThemedReactContext,
+) : HybridTestViewSpec() {
     // View
     override val view: View = View(context)
 
@@ -26,7 +28,7 @@ class HybridTestView(val context: ThemedReactContext): HybridTestViewSpec() {
     override var someCallback: () -> Unit = {}
 
     // Methods
-    override fun someMethod(): Unit {
+    override fun someMethod() {
         hasBeenCalled = true
         someCallback()
     }

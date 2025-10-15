@@ -5,7 +5,7 @@ import com.facebook.proguard.annotations.DoNotStrip
 
 @Keep
 @DoNotStrip
-class HybridBase: HybridBaseSpec() {
+class HybridBase : HybridBaseSpec() {
     override val baseValue: Double
         get() = 10.0
 }

@@ -155,10 +155,16 @@ class AnyValue {
     external fun asAnyObject(): AnyObject
 
     private external fun initHybrid(): HybridData
+
     private external fun initHybrid(value: Double): HybridData
+
     private external fun initHybrid(value: Boolean): HybridData
+
     private external fun initHybrid(value: Long): HybridData
+
     private external fun initHybrid(value: String): HybridData
+
     private external fun initHybrid(value: AnyArray): HybridData
+
     private external fun initHybrid(value: AnyObject): HybridData
 }

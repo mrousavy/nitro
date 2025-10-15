@@ -11,7 +11,7 @@ import com.margelo.nitro.core.HybridObject
  */
 @Keep
 @DoNotStrip
-abstract class HybridView: HybridObject() {
+abstract class HybridView : HybridObject() {
     /**
      * Get the `UIView` this HybridView is holding.
      *
@@ -26,6 +26,7 @@ abstract class HybridView: HybridObject() {
      * React props are updated in a single batch/transaction.
      */
     open fun beforeUpdate() { /* noop */ }
+
     /**
      * Called right after updating props.
      * React props are updated in a single batch/transaction.

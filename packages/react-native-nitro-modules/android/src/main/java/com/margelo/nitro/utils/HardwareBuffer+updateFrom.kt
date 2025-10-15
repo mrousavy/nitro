@@ -12,4 +12,3 @@ import androidx.annotation.RequiresApi
 fun HardwareBuffer.updateFrom(hardwareBuffer: HardwareBuffer) {
     HardwareBufferUtils.copyHardwareBuffer(hardwareBuffer, this)
 }
-

@@ -1,8 +1,8 @@
 package com.margelo.nitro.core
 
-import androidx.annotation.Keep
 import android.hardware.HardwareBuffer
 import android.os.Build
+import androidx.annotation.Keep
 import androidx.annotation.RequiresApi
 import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
@@ -76,9 +76,7 @@ class ArrayBuffer {
      * the foreign data needs to be either _wrapped_, or _copied_ to be represented as a `ByteBuffer`.
      * This flag controls that behaviour.
      */
-    fun getBuffer(copyIfNeeded: Boolean): ByteBuffer {
-        return getByteBuffer(copyIfNeeded)
-    }
+    fun getBuffer(copyIfNeeded: Boolean): ByteBuffer = getByteBuffer(copyIfNeeded)
 
     /**
      * Get the underlying `HardwareBuffer` if this `ArrayBuffer` was created with one.
@@ -96,8 +94,10 @@ class ArrayBuffer {
      */
     constructor(byteBuffer: ByteBuffer) {
         if (!byteBuffer.isDirect) {
-            throw Error("ArrayBuffers can only be created from direct ByteBuffers, " +
-                    "and the given ByteBuffer is not direct!")
+            throw Error(
+                "ArrayBuffers can only be created from direct ByteBuffers, " +
+                    "and the given ByteBuffer is not direct!",
+            )
         }
         mHybridData = initHybrid(byteBuffer)
     }
@@ -125,18 +125,23 @@ class ArrayBuffer {
     }
 
     private external fun initHybrid(buffer: ByteBuffer): HybridData
+
     @RequiresApi(Build.VERSION_CODES.O)
     private external fun initHybridBoxedHardwareBuffer(hardwareBufferBoxed: BoxedHardwareBuffer): HybridData
 
     private external fun getByteBuffer(copyIfNeeded: Boolean): ByteBuffer
+
     private external fun getHardwareBufferBoxed(): BoxedHardwareBuffer
 
     @FastNative
     private external fun getIsOwner(): Boolean
+
     @FastNative
     private external fun getIsByteBuffer(): Boolean
+
     @FastNative
     private external fun getIsHardwareBuffer(): Boolean
+
     @FastNative
     private external fun getBufferSize(): Int
 
@@ -179,6 +184,7 @@ class ArrayBuffer {
             // 5. Create a new `ArrayBuffer`
             return ArrayBuffer(newBuffer)
         }
+
         /**
          * Copy the given `HardwareBuffer` into a new **owning** `ArrayBuffer`.
          */
@@ -200,8 +206,6 @@ class ArrayBuffer {
          * Wrap the given `HardwareBuffer` in a new **owning** `ArrayBuffer`.
          */
         @RequiresApi(Build.VERSION_CODES.O)
-        fun wrap(hardwareBuffer: HardwareBuffer): ArrayBuffer {
-            return ArrayBuffer(hardwareBuffer)
-        }
+        fun wrap(hardwareBuffer: HardwareBuffer): ArrayBuffer = ArrayBuffer(hardwareBuffer)
     }
 }
