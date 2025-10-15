@@ -78,6 +78,6 @@ abstract class HybridTestViewSpec: HybridView() {
   private external fun initHybrid(): HybridData
 
   companion object {
-    private const val TAG = "HybridTestViewSpec"
+    protected const val TAG = "HybridTestViewSpec"
   }
 }
