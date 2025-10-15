@@ -20,6 +20,7 @@
     "lint": "bun nitro lint && bun nitrogen lint && bun nitro-test lint && bun example lint",
     "lint-cpp": "./scripts/clang-format.sh",
     "lint-swift": "./scripts/swift-format.sh",
+    "lint-kotlin": "./scripts/kotlin-format.sh",
     "clean": "git clean -dfx",
     "release": "./scripts/release.sh",
     "docs": "bun --cwd docs",
