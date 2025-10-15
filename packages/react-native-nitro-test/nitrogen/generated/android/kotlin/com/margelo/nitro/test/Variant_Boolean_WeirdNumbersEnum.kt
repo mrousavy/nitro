@@ -41,7 +41,7 @@ sealed class Variant_Boolean_WeirdNumbersEnum {
     return value
   }
 
-  inline fun <R> fold(first: (Boolean) -> R, second: (WeirdNumbersEnum) -> R): R {
+  inline fun <R> match(first: (Boolean) -> R, second: (WeirdNumbersEnum) -> R): R {
     return when (this) {
       is First -> first(value)
       is Second -> second(value)

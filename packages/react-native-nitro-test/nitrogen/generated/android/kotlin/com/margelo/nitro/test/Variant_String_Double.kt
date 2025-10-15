@@ -41,7 +41,7 @@ sealed class Variant_String_Double {
     return value
   }
 
-  inline fun <R> fold(first: (String) -> R, second: (Double) -> R): R {
+  inline fun <R> match(first: (String) -> R, second: (Double) -> R): R {
     return when (this) {
       is First -> first(value)
       is Second -> second(value)

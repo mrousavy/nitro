@@ -41,7 +41,7 @@ sealed class NamedVariant {
     return value
   }
 
-  inline fun <R> fold(first: (String) -> R, second: (Car) -> R): R {
+  inline fun <R> match(first: (String) -> R, second: (Car) -> R): R {
     return when (this) {
       is First -> first(value)
       is Second -> second(value)

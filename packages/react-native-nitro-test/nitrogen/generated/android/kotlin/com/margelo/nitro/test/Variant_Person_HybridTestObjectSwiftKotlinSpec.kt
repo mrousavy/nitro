@@ -41,7 +41,7 @@ sealed class Variant_Person_HybridTestObjectSwiftKotlinSpec {
     return value
   }
 
-  inline fun <R> fold(first: (Person) -> R, second: (HybridTestObjectSwiftKotlinSpec) -> R): R {
+  inline fun <R> match(first: (Person) -> R, second: (HybridTestObjectSwiftKotlinSpec) -> R): R {
     return when (this) {
       is First -> first(value)
       is Second -> second(value)

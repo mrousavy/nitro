@@ -41,7 +41,7 @@ sealed class Variant_OptionalWrapper_HybridBaseSpec {
     return value
   }
 
-  inline fun <R> fold(first: (OptionalWrapper) -> R, second: (HybridBaseSpec) -> R): R {
+  inline fun <R> match(first: (OptionalWrapper) -> R, second: (HybridBaseSpec) -> R): R {
     return when (this) {
       is First -> first(value)
       is Second -> second(value)

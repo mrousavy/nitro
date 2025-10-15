@@ -68,7 +68,7 @@ sealed class Variant_String_Double_Boolean_DoubleArray_Array_String_ {
     return value
   }
 
-  inline fun <R> fold(first: (String) -> R, second: (Double) -> R, third: (Boolean) -> R, fourth: (DoubleArray) -> R, fifth: (Array<String>) -> R): R {
+  inline fun <R> match(first: (String) -> R, second: (Double) -> R, third: (Boolean) -> R, fourth: (DoubleArray) -> R, fifth: (Array<String>) -> R): R {
     return when (this) {
       is First -> first(value)
       is Second -> second(value)

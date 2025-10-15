@@ -41,7 +41,7 @@ sealed class Variant_Car_Person {
     return value
   }
 
-  inline fun <R> fold(first: (Car) -> R, second: (Person) -> R): R {
+  inline fun <R> match(first: (Car) -> R, second: (Person) -> R): R {
     return when (this) {
       is First -> first(value)
       is Second -> second(value)

@@ -41,7 +41,7 @@ sealed class Variant_Double_Boolean {
     return value
   }
 
-  inline fun <R> fold(first: (Double) -> R, second: (Boolean) -> R): R {
+  inline fun <R> match(first: (Double) -> R, second: (Boolean) -> R): R {
     return when (this) {
       is First -> first(value)
       is Second -> second(value)

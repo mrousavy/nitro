@@ -41,7 +41,7 @@ sealed class Variant_Double_______Unit {
     return value
   }
 
-  inline fun <R> fold(first: (Double) -> R, second: (() -> Unit) -> R): R {
+  inline fun <R> match(first: (Double) -> R, second: (() -> Unit) -> R): R {
     return when (this) {
       is First -> first(value)
       is Second -> second(value)

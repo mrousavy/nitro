@@ -41,7 +41,7 @@ sealed class Variant_Boolean_OldEnum {
     return value
   }
 
-  inline fun <R> fold(first: (Boolean) -> R, second: (OldEnum) -> R): R {
+  inline fun <R> match(first: (Boolean) -> R, second: (OldEnum) -> R): R {
     return when (this) {
       is First -> first(value)
       is Second -> second(value)

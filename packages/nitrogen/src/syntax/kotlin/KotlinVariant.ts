@@ -47,10 +47,10 @@ fun as${innerName}OrNull(): ${optional.getCode('kotlin')} {
 }
     `.trim()
   })
-  const foldParameters = variant.cases.map(([label, v]) => {
+  const matchParameters = variant.cases.map(([label, v]) => {
     return `${label}: (${v.getCode('kotlin')}) -> R`
   })
-  const foldCases = variant.cases.map(([label, v]) => {
+  const matchCases = variant.cases.map(([label, v]) => {
     const innerName = capitalizeName(label)
     const bridge = new KotlinCxxBridgedType(v)
     return `
@@ -97,9 +97,9 @@ sealed class ${kotlinName} {
 
   ${indent(asFunctions.join('\n'), '  ')}
 
-  inline fun <R> fold(${foldParameters.join(', ')}): R {
+  inline fun <R> match(${matchParameters.join(', ')}): R {
     return when (this) {
-      ${indent(foldCases.join('\n'), '      ')}
+      ${indent(matchCases.join('\n'), '      ')}
     }
   }
 
