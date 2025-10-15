@@ -386,10 +386,10 @@ std::function<void(double)> HybridTestObjectCpp::getComplexCallback() {
 void HybridTestObjectCpp::twoOptionalCallbacks(double value, const std::optional<std::function<void(double /* value */)>>& first,
                                                const std::optional<std::function<void(const std::string& /* value */)>>& second) {
   if (first.has_value()) {
-    *first(value);
+    first.value()(value);
   }
   if (second.has_value()) {
-    *second("Hello!");
+    second.value()("Hello!");
   }
 }
 
