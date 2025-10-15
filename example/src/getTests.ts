@@ -1173,19 +1173,17 @@ export function getTests(
       async () =>
         (
           await it(async () => {
-            return timeoutedPromise<void>(() => {
-              return new Promise((resolve) => {
-                let counter = 0
-                const onWasCalled = () => {
-                  counter++
-                  if (counter === 2) resolve()
-                }
-                testObject.twoOptionalCallbacks(
-                  55,
-                  () => onWasCalled(),
-                  () => onWasCalled()
-                )
-              })
+            return new Promise<void>((resolve) => {
+              let counter = 0
+              const onWasCalled = () => {
+                counter++
+                if (counter === 2) resolve()
+              }
+              testObject.twoOptionalCallbacks(
+                55,
+                () => onWasCalled(),
+                () => onWasCalled()
+              )
             })
           })
         ).didNotThrow()
