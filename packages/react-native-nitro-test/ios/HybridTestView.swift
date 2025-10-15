@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class HybridTestView : HybridTestViewSpec {
+class HybridTestView: HybridTestViewSpec {
   // UIView
   var view: UIView = UIView()
 
@@ -20,10 +20,10 @@ class HybridTestView : HybridTestViewSpec {
   }
   var hasBeenCalled: Bool = false
   var colorScheme: ColorScheme = .light
-  var someCallback: () -> Void = { }
+  var someCallback: () -> Void = {}
 
   // Methods
-  func someMethod() throws -> Void {
+  func someMethod() throws {
     hasBeenCalled = true
     someCallback()
   }
