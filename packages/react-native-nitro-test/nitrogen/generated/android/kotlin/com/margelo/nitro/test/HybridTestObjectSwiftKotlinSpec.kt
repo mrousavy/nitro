@@ -484,6 +484,6 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   private external fun initHybrid(): HybridData
 
   companion object {
-    private const val TAG = "HybridTestObjectSwiftKotlinSpec"
+    protected const val TAG = "HybridTestObjectSwiftKotlinSpec"
   }
 }

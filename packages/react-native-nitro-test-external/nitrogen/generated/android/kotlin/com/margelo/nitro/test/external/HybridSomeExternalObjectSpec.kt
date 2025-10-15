@@ -47,6 +47,6 @@ abstract class HybridSomeExternalObjectSpec: HybridObject() {
   private external fun initHybrid(): HybridData
 
   companion object {
-    private const val TAG = "HybridSomeExternalObjectSpec"
+    protected const val TAG = "HybridSomeExternalObjectSpec"
   }
 }

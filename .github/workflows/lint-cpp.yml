@@ -24,29 +24,15 @@ jobs:
   lint:
     name: Format C++
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        path:
-        - 'packages/react-native-nitro-modules/android/src/main/cpp'
-        - 'packages/react-native-nitro-modules/cpp'
-        - 'packages/react-native-nitro-modules/ios'
-        - 'packages/react-native-nitro-test/android/src/main/cpp'
-        - 'packages/react-native-nitro-test/cpp'
-        - 'packages/react-native-nitro-test/ios'
-        - 'packages/react-native-nitro-test-external/android/src/main/cpp'
-        - 'packages/react-native-nitro-test-external/ios'
     steps:
       - uses: actions/checkout@v5
       - uses: oven-sh/setup-bun@v2
         with:
           bun-version-file: ".bun-version"
 
-      - name: Install npm dependencies (bun)
-        run: bun install
+      - name: Run clang-format
+        run: bun run lint-cpp
 
-      - name: Run clang-format style check
-        uses: jidicula/clang-format-action@v4.15.0
-        with:
-          clang-format-version: '18'
-          check-path: ${{ matrix.path }}
+      - name: Verify no files have changed after format
+        run: git diff --exit-code HEAD -- . ':(exclude)bun.lock'
 
