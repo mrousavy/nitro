@@ -16,6 +16,7 @@ if which ktlint >/dev/null; then
   find $DIRS -type f \( -name "*.kt" \) -print0 | while read -d $'\0' file; do
     ktlint --format "$file"
   done
+  echo "Kotlin Format done!"
 else
   echo "error: ktlint not installed, install with 'brew install ktlint' (see https://github.com/pinterest/ktlint)"
   exit 1
