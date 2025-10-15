@@ -804,6 +804,43 @@ namespace margelo::nitro::test::bridge::swift {
     return Func_void_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer____Wrapper(std::move(value));
   }
   
+  // pragma MARK: std::function<void(const std::string& /* value */)>
+  /**
+   * Specialized version of `std::function<void(const std::string&)>`.
+   */
+  using Func_void_std__string = std::function<void(const std::string& /* value */)>;
+  /**
+   * Wrapper class for a `std::function<void(const std::string& / * value * /)>`, this can be used from Swift.
+   */
+  class Func_void_std__string_Wrapper final {
+  public:
+    explicit Func_void_std__string_Wrapper(std::function<void(const std::string& /* value */)>&& func): _function(std::make_unique<std::function<void(const std::string& /* value */)>>(std::move(func))) {}
+    inline void call(std::string value) const noexcept {
+      _function->operator()(value);
+    }
+  private:
+    std::unique_ptr<std::function<void(const std::string& /* value */)>> _function;
+  } SWIFT_NONCOPYABLE;
+  Func_void_std__string create_Func_void_std__string(void* NON_NULL swiftClosureWrapper) noexcept;
+  inline Func_void_std__string_Wrapper wrap_Func_void_std__string(Func_void_std__string value) noexcept {
+    return Func_void_std__string_Wrapper(std::move(value));
+  }
+  
+  // pragma MARK: std::optional<std::function<void(const std::string& /* value */)>>
+  /**
+   * Specialized version of `std::optional<std::function<void(const std::string& / * value * /)>>`.
+   */
+  using std__optional_std__function_void_const_std__string_____value______ = std::optional<std::function<void(const std::string& /* value */)>>;
+  inline std::optional<std::function<void(const std::string& /* value */)>> create_std__optional_std__function_void_const_std__string_____value______(const std::function<void(const std::string& /* value */)>& value) noexcept {
+    return std::optional<std::function<void(const std::string& /* value */)>>(value);
+  }
+  inline bool has_value_std__optional_std__function_void_const_std__string_____value______(const std::optional<std::function<void(const std::string& /* value */)>>& optional) noexcept {
+    return optional.has_value();
+  }
+  inline std::function<void(const std::string& /* value */)> get_std__optional_std__function_void_const_std__string_____value______(const std::optional<std::function<void(const std::string& /* value */)>>& optional) noexcept {
+    return *optional;
+  }
+  
   // pragma MARK: std::function<std::shared_ptr<Promise<std::string>>()>
   /**
    * Specialized version of `std::function<std::shared_ptr<Promise<std::string>>()>`.
@@ -837,28 +874,6 @@ namespace margelo::nitro::test::bridge::swift {
   }
   inline PromiseHolder<std::string> wrap_std__shared_ptr_Promise_std__string__(std::shared_ptr<Promise<std::string>> promise) noexcept {
     return PromiseHolder<std::string>(std::move(promise));
-  }
-  
-  // pragma MARK: std::function<void(const std::string& /* result */)>
-  /**
-   * Specialized version of `std::function<void(const std::string&)>`.
-   */
-  using Func_void_std__string = std::function<void(const std::string& /* result */)>;
-  /**
-   * Wrapper class for a `std::function<void(const std::string& / * result * /)>`, this can be used from Swift.
-   */
-  class Func_void_std__string_Wrapper final {
-  public:
-    explicit Func_void_std__string_Wrapper(std::function<void(const std::string& /* result */)>&& func): _function(std::make_unique<std::function<void(const std::string& /* result */)>>(std::move(func))) {}
-    inline void call(std::string result) const noexcept {
-      _function->operator()(result);
-    }
-  private:
-    std::unique_ptr<std::function<void(const std::string& /* result */)>> _function;
-  } SWIFT_NONCOPYABLE;
-  Func_void_std__string create_Func_void_std__string(void* NON_NULL swiftClosureWrapper) noexcept;
-  inline Func_void_std__string_Wrapper wrap_Func_void_std__string(Func_void_std__string value) noexcept {
-    return Func_void_std__string_Wrapper(std::move(value));
   }
   
   // pragma MARK: std::vector<JsStyleStruct>

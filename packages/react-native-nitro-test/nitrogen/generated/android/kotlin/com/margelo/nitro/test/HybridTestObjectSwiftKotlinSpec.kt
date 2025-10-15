@@ -329,6 +329,15 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
     return Func_void_double_java(__result)
   }
   
+  abstract fun twoOptionalCallbacks(value: Double, first: ((value: Double) -> Unit)?, second: ((value: String) -> Unit)?): Unit
+  
+  @DoNotStrip
+  @Keep
+  private fun twoOptionalCallbacks_cxx(value: Double, first: Func_void_double?, second: Func_void_std__string?): Unit {
+    val __result = twoOptionalCallbacks(value, first?.let { it }, second?.let { it })
+    return __result
+  }
+  
   abstract fun getValueFromJSCallbackAndWait(getValue: () -> Promise<Double>): Promise<Double>
   
   @DoNotStrip

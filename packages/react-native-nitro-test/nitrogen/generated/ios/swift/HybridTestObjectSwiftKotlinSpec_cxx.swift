@@ -1241,6 +1241,41 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
+  public final func twoOptionalCallbacks(value: Double, first: bridge.std__optional_std__function_void_double____value______, second: bridge.std__optional_std__function_void_const_std__string_____value______) -> bridge.Result_void_ {
+    do {
+      try self.__implementation.twoOptionalCallbacks(value: value, first: { () -> ((_ value: Double) -> Void)? in
+        if bridge.has_value_std__optional_std__function_void_double____value______(first) {
+          let __unwrapped = bridge.get_std__optional_std__function_void_double____value______(first)
+          return { () -> (Double) -> Void in
+            let __wrappedFunction = bridge.wrap_Func_void_double(__unwrapped)
+            return { (__value: Double) -> Void in
+              __wrappedFunction.call(__value)
+            }
+          }()
+        } else {
+          return nil
+        }
+      }(), second: { () -> ((_ value: String) -> Void)? in
+        if bridge.has_value_std__optional_std__function_void_const_std__string_____value______(second) {
+          let __unwrapped = bridge.get_std__optional_std__function_void_const_std__string_____value______(second)
+          return { () -> (String) -> Void in
+            let __wrappedFunction = bridge.wrap_Func_void_std__string(__unwrapped)
+            return { (__value: String) -> Void in
+              __wrappedFunction.call(std.string(__value))
+            }
+          }()
+        } else {
+          return nil
+        }
+      }())
+      return bridge.create_Result_void_()
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_void_(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
   public final func getValueFromJSCallbackAndWait(getValue: bridge.Func_std__shared_ptr_Promise_double__) -> bridge.Result_std__shared_ptr_Promise_double___ {
     do {
       let __result = try self.__implementation.getValueFromJSCallbackAndWait(getValue: { () -> () -> Promise<Double> in

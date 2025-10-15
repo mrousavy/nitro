@@ -516,6 +516,12 @@ namespace margelo::nitro::test {
       auto __value = std::move(__result.value());
       return __value;
     }
+    inline void twoOptionalCallbacks(double value, const std::optional<std::function<void(double /* value */)>>& first, const std::optional<std::function<void(const std::string& /* value */)>>& second) override {
+      auto __result = _swiftPart.twoOptionalCallbacks(std::forward<decltype(value)>(value), first, second);
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+    }
     inline std::shared_ptr<Promise<double>> getValueFromJSCallbackAndWait(const std::function<std::shared_ptr<Promise<double>>()>& getValue) override {
       auto __result = _swiftPart.getValueFromJSCallbackAndWait(getValue);
       if (__result.hasError()) [[unlikely]] {
