@@ -196,7 +196,10 @@ private:
                                       "- Did you accidentally destructure the `HybridObject`? (`const { " +
                                       funcName +
                                       " } = ...`)\n"
-                                      "- Did you call `dispose()` on the `HybridObject` before?"
+                                      "- Did you accidentally pass the function as-is to a consumer? (`doSomething(MyHybrid." +
+                                      funcName +
+                                      "`)\n"
+                                      "- Did you call `dispose()` on the `HybridObject` before?\n"
                                       "- Did you accidentally call `" +
                                       funcName + "` on the prototype directly?");
     }
@@ -211,7 +214,10 @@ private:
                                       "- Did you accidentally destructure the `HybridObject`? (`const { " +
                                       funcName +
                                       " } = ...`)\n"
-                                      "- Did you call `dispose()` on the `HybridObject` before?"
+                                      "- Did you accidentally pass the function as-is to a consumer? (`doSomething(MyHybrid." +
+                                      funcName +
+                                      "`)\n"
+                                      "- Did you call `dispose()` on the `HybridObject` before?\b"
                                       "- Did you accidentally call `" +
                                       funcName + "` on the prototype directly?");
     }
