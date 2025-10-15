@@ -11,5 +11,7 @@ class HybridChild : HybridChildSpec() {
   override val childValue: Double
     get() = 30.0
 
-  override fun bounceVariant(variant: NamedVariant): NamedVariant = variant
+  override fun bounceVariant(variant: NamedVariant): NamedVariant {
+    return variant
+  }
 }

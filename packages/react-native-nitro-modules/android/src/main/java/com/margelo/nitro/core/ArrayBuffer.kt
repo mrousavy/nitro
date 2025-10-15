@@ -76,7 +76,9 @@ class ArrayBuffer {
    * the foreign data needs to be either _wrapped_, or _copied_ to be represented as a `ByteBuffer`.
    * This flag controls that behaviour.
    */
-  fun getBuffer(copyIfNeeded: Boolean): ByteBuffer = getByteBuffer(copyIfNeeded)
+  fun getBuffer(copyIfNeeded: Boolean): ByteBuffer {
+    return getByteBuffer(copyIfNeeded)
+  }
 
   /**
    * Get the underlying `HardwareBuffer` if this `ArrayBuffer` was created with one.
@@ -206,6 +208,8 @@ class ArrayBuffer {
      * Wrap the given `HardwareBuffer` in a new **owning** `ArrayBuffer`.
      */
     @RequiresApi(Build.VERSION_CODES.O)
-    fun wrap(hardwareBuffer: HardwareBuffer): ArrayBuffer = ArrayBuffer(hardwareBuffer)
+    fun wrap(hardwareBuffer: HardwareBuffer): ArrayBuffer {
+      return ArrayBuffer(hardwareBuffer)
+    }
   }
 }

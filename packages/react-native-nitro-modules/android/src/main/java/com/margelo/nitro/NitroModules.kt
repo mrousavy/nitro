@@ -23,7 +23,9 @@ class NitroModules internal constructor(
     applicationContext = context
   }
 
-  override fun getName(): String = NAME
+  override fun getName(): String {
+    return NAME
+  }
 
   @ReactMethod(isBlockingSynchronousMethod = true)
   override fun install(): String? {

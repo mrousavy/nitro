@@ -119,9 +119,7 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
         "bigint" to AnyValue(bigintValue),
         "null" to AnyValue(),
         "array" to
-          AnyValue(
-            arrayOf(AnyValue(numberValue), AnyValue(boolValue), AnyValue(stringValue), AnyValue(bigintValue), AnyValue(array)),
-          ),
+          AnyValue(arrayOf(AnyValue(numberValue), AnyValue(boolValue), AnyValue(stringValue), AnyValue(bigintValue), AnyValue(array))),
       ),
     )
     return map
