@@ -39,12 +39,16 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
   override fun addNumbers(
     a: Double,
     b: Double,
-  ): Double = a + b
+  ): Double {
+    return a + b
+  }
 
   override fun addStrings(
     a: String,
     b: String,
-  ): String = a + b
+  ): String {
+    return a + b
+  }
 
   override fun multipleArguments(
     num: Double,
@@ -54,11 +58,17 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
     Log.i(TAG, "Arguments received! num: $num | str: $str | boo: $boo")
   }
 
-  override fun bounceStrings(array: Array<String>): Array<String> = array
+  override fun bounceStrings(array: Array<String>): Array<String> {
+    return array
+  }
 
-  override fun bounceNumbers(array: DoubleArray): DoubleArray = array
+  override fun bounceNumbers(array: DoubleArray): DoubleArray {
+    return array
+  }
 
-  override fun bounceStructs(array: Array<Person>): Array<Person> = array
+  override fun bounceStructs(array: Array<Person>): Array<Person> {
+    return array
+  }
 
   override fun sumUpAllPassengers(cars: Array<Car>): String {
     val strings =
@@ -71,7 +81,9 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
     return strings.joinToString(separator = ", ")
   }
 
-  override fun bounceEnums(array: Array<Powertrain>): Array<Powertrain> = array
+  override fun bounceEnums(array: Array<Powertrain>): Array<Powertrain> {
+    return array
+  }
 
   override fun complexEnumCallback(
     array: Array<Powertrain>,
@@ -80,7 +92,9 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
     callback(array)
   }
 
-  override fun currentDate(): java.time.Instant = Instant.now()
+  override fun currentDate(): java.time.Instant {
+    return Instant.now()
+  }
 
   override fun add1Hour(date: Instant): Instant {
     val oneHourInSeconds = 1L * 60 * 60
@@ -113,39 +127,61 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
     return map
   }
 
-  override fun getMapKeys(map: AnyMap): Array<String> = map.getAllKeys()
+  override fun getMapKeys(map: AnyMap): Array<String> {
+    return map.getAllKeys()
+  }
 
-  override fun mapRoundtrip(map: AnyMap): AnyMap = map
+  override fun mapRoundtrip(map: AnyMap): AnyMap {
+    return map
+  }
 
-  override fun funcThatThrows(): Double = throw Error("This function will only work after sacrificing seven lambs!")
+  override fun funcThatThrows(): Double {
+    throw Error("This function will only work after sacrificing seven lambs!")
+  }
 
-  override fun funcThatThrowsBeforePromise(): Promise<Unit> = throw Error("This function will only work after sacrificing eight lambs!")
+  override fun funcThatThrowsBeforePromise(): Promise<Unit> {
+    throw Error("This function will only work after sacrificing eight lambs!")
+  }
 
-  override fun throwError(error: Throwable): Unit = throw error
+  override fun throwError(error: Throwable) {
+    throw error
+  }
 
   override fun tryOptionalParams(
     num: Double,
     boo: Boolean,
     str: String?,
-  ): String = str ?: "value omitted!"
+  ): String {
+    return str ?: "value omitted!"
+  }
 
   override fun tryMiddleParam(
     num: Double,
     boo: Boolean?,
     str: String,
-  ): String = str
+  ): String {
+    return str
+  }
 
-  override fun tryOptionalEnum(value: Powertrain?): Powertrain? = value
+  override fun tryOptionalEnum(value: Powertrain?): Powertrain? {
+    return value
+  }
 
   override fun tryTrailingOptional(
     num: Double,
     str: String,
     boo: Boolean?,
-  ): Boolean = boo ?: false
+  ): Boolean {
+    return boo ?: false
+  }
 
-  override fun bounceMap(map: Map<String, Variant_Double_Boolean>): Map<String, Variant_Double_Boolean> = map
+  override fun bounceMap(map: Map<String, Variant_Double_Boolean>): Map<String, Variant_Double_Boolean> {
+    return map
+  }
 
-  override fun extractMap(mapWrapper: MapWrapper): Map<String, String> = mapWrapper.map
+  override fun extractMap(mapWrapper: MapWrapper): Map<String, String> {
+    return mapWrapper.map
+  }
 
   override fun calculateFibonacciSync(value: Double): Long {
     val n = value.toInt()
@@ -162,14 +198,19 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
     return b
   }
 
-  override fun calculateFibonacciAsync(value: Double): Promise<Long> = Promise.parallel { calculateFibonacciSync(value) }
+  override fun calculateFibonacciAsync(value: Double): Promise<Long> {
+    return Promise.parallel { calculateFibonacciSync(value) }
+  }
 
-  override fun wait(seconds: Double): Promise<Unit> = Promise.async { delay(seconds.toLong() * 1000) }
+  override fun wait(seconds: Double): Promise<Unit> {
+    return Promise.async { delay(seconds.toLong() * 1000) }
+  }
 
-  override fun promiseThrows(): Promise<Unit> =
-    Promise.async {
+  override fun promiseThrows(): Promise<Unit> {
+    return Promise.async {
       throw Error("Promise throws :)")
     }
+  }
 
   override fun awaitAndGetPromise(promise: Promise<Double>): Promise<Double> {
     return Promise.async {
@@ -185,10 +226,11 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
     }
   }
 
-  override fun awaitPromise(promise: Promise<Unit>): Promise<Unit> =
-    Promise.async {
+  override fun awaitPromise(promise: Promise<Unit>): Promise<Unit> {
+    return Promise.async {
       promise.await()
     }
+  }
 
   override fun callCallback(callback: () -> Unit) {
     callback()
@@ -211,11 +253,12 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
   override fun getValueFromJsCallback(
     callback: (() -> Promise<String>),
     andThenCall: ((valueFromJs: String) -> Unit),
-  ): Promise<Unit> =
-    Promise.async {
+  ): Promise<Unit> {
+    return Promise.async {
       val jsResult = callback().await()
       andThenCall(jsResult)
     }
+  }
 
   override fun callAll(
     first: () -> Unit,
@@ -257,10 +300,11 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
     }
   }
 
-  override fun getComplexCallback(): (Double) -> Unit =
-    { value ->
+  override fun getComplexCallback(): (Double) -> Unit {
+    return { value ->
       Log.i(TAG, "Callback called with $value.")
     }
+  }
 
   override fun twoOptionalCallbacks(
     value: Double,
@@ -275,22 +319,33 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
     }
   }
 
-  override fun getCar(): Car =
-    Car(2018.0, "Lamborghini", "Huracán", 640.0, Powertrain.GAS, null, emptyArray(), true, null, doubleArrayOf(100.0, 10.0))
+  override fun getCar(): Car {
+    return Car(2018.0, "Lamborghini", "Huracán", 640.0, Powertrain.GAS, null, emptyArray(), true, null, doubleArrayOf(100.0, 10.0))
+  }
 
-  override fun isCarElectric(car: Car): Boolean = car.powertrain == Powertrain.ELECTRIC
+  override fun isCarElectric(car: Car): Boolean {
+    return car.powertrain == Powertrain.ELECTRIC
+  }
 
-  override fun getDriver(car: Car): Person? = car.driver
+  override fun getDriver(car: Car): Person? {
+    return car.driver
+  }
 
   override fun jsStyleObjectAsParameters(params: JsStyleStruct) {
     params.onChanged(params.value)
   }
 
-  override fun bounceWrappedJsStyleStruct(value: WrappedJsStruct): WrappedJsStruct = value
+  override fun bounceWrappedJsStyleStruct(value: WrappedJsStruct): WrappedJsStruct {
+    return value
+  }
 
-  override fun bounceOptionalWrapper(wrapper: OptionalWrapper): OptionalWrapper = wrapper
+  override fun bounceOptionalWrapper(wrapper: OptionalWrapper): OptionalWrapper {
+    return wrapper
+  }
 
-  override fun bounceOptionalCallback(value: OptionalCallback): OptionalCallback = value
+  override fun bounceOptionalCallback(value: OptionalCallback): OptionalCallback {
+    return value
+  }
 
   override fun createArrayBufferFromNativeBuffer(copy: Boolean): ArrayBuffer {
     val hardwareBuffer =
@@ -312,30 +367,40 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
     return ArrayBuffer.allocate(1024 * 1024 * 10) // 10 MB
   }
 
-  override fun createArrayBufferAsync(): Promise<ArrayBuffer> = Promise.async { createArrayBuffer() }
-
-  override fun passVariant(either: Variant_String_Double_Boolean_DoubleArray_Array_String_): Variant_String_Double {
-    either.getAs<String>()?.let {
-      return Variant_String_Double.create(it)
-    }
-    either.getAs<Double>()?.let {
-      return Variant_String_Double.create(it)
-    }
-    return Variant_String_Double.create("holds something else!")
+  override fun createArrayBufferAsync(): Promise<ArrayBuffer> {
+    return Promise.async { createArrayBuffer() }
   }
 
-  override fun passAllEmptyObjectVariant(variant: Variant_OptionalWrapper_HybridBaseSpec): Variant_OptionalWrapper_HybridBaseSpec = variant
+  override fun passVariant(either: Variant_String_Double_Boolean_DoubleArray_Array_String_): Variant_String_Double {
+    return either.match(
+      { string -> Variant_String_Double.create(string) },
+      { double -> Variant_String_Double.create(double) },
+    )
+  }
 
-  override fun getVariantEnum(variant: Variant_Boolean_OldEnum): Variant_Boolean_OldEnum = variant
+  override fun passAllEmptyObjectVariant(variant: Variant_OptionalWrapper_HybridBaseSpec): Variant_OptionalWrapper_HybridBaseSpec {
+    return variant
+  }
 
-  override fun getVariantWeirdNumbersEnum(variant: Variant_Boolean_WeirdNumbersEnum): Variant_Boolean_WeirdNumbersEnum = variant
+  override fun getVariantEnum(variant: Variant_Boolean_OldEnum): Variant_Boolean_OldEnum {
+    return variant
+  }
 
-  override fun getVariantObjects(variant: Variant_Car_Person): Variant_Car_Person = variant
+  override fun getVariantWeirdNumbersEnum(variant: Variant_Boolean_WeirdNumbersEnum): Variant_Boolean_WeirdNumbersEnum {
+    return variant
+  }
 
-  override fun passNamedVariant(variant: NamedVariant): NamedVariant = variant
+  override fun getVariantObjects(variant: Variant_Car_Person): Variant_Car_Person {
+    return variant
+  }
 
-  override fun getVariantHybrid(variant: Variant_Person_HybridTestObjectSwiftKotlinSpec): Variant_Person_HybridTestObjectSwiftKotlinSpec =
-    variant
+  override fun passNamedVariant(variant: NamedVariant): NamedVariant {
+    return variant
+  }
+
+  override fun getVariantHybrid(variant: Variant_Person_HybridTestObjectSwiftKotlinSpec): Variant_Person_HybridTestObjectSwiftKotlinSpec {
+    return variant
+  }
 
   override fun getBufferLastItem(buffer: ArrayBuffer): Double {
     val byteBuffer = buffer.getBuffer(false)
@@ -355,21 +420,37 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
     }
   }
 
-  override fun copyBuffer(buffer: ArrayBuffer): ArrayBuffer = ArrayBuffer.copy(buffer)
+  override fun copyBuffer(buffer: ArrayBuffer): ArrayBuffer {
+    return ArrayBuffer.copy(buffer)
+  }
 
-  override fun bounceArrayBuffer(buffer: ArrayBuffer): ArrayBuffer = buffer
+  override fun bounceArrayBuffer(buffer: ArrayBuffer): ArrayBuffer {
+    return buffer
+  }
 
-  override fun createChild(): HybridChildSpec = HybridChild()
+  override fun createChild(): HybridChildSpec {
+    return HybridChild()
+  }
 
-  override fun createBase(): HybridBaseSpec = HybridBase()
+  override fun createBase(): HybridBaseSpec {
+    return HybridBase()
+  }
 
-  override fun createBaseActualChild(): HybridBaseSpec = HybridChild()
+  override fun createBaseActualChild(): HybridBaseSpec {
+    return HybridChild()
+  }
 
-  override fun bounceChild(child: HybridChildSpec): HybridChildSpec = child
+  override fun bounceChild(child: HybridChildSpec): HybridChildSpec {
+    return child
+  }
 
-  override fun bounceBase(base: HybridBaseSpec): HybridBaseSpec = base
+  override fun bounceBase(base: HybridBaseSpec): HybridBaseSpec {
+    return base
+  }
 
-  override fun bounceChildBase(child: HybridChildSpec): HybridBaseSpec = child
+  override fun bounceChildBase(child: HybridChildSpec): HybridBaseSpec {
+    return child
+  }
 
   override fun castBase(base: HybridBaseSpec): HybridChildSpec {
     if (base !is HybridChildSpec) {
@@ -378,7 +459,9 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
     return base
   }
 
-  override fun newTestObject(): HybridTestObjectSwiftKotlinSpec = HybridTestObjectKotlin()
+  override fun newTestObject(): HybridTestObjectSwiftKotlinSpec {
+    return HybridTestObjectKotlin()
+  }
 
   override fun getIsViewBlue(view: HybridTestViewSpec): Boolean {
     val cast = view as? HybridTestView ?: return false
@@ -390,9 +473,13 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
     return value
   }
 
-  override fun bounceExternalHybrid(externalObject: HybridSomeExternalObjectSpec): HybridSomeExternalObjectSpec = externalObject
+  override fun bounceExternalHybrid(externalObject: HybridSomeExternalObjectSpec): HybridSomeExternalObjectSpec {
+    return externalObject
+  }
 
-  override fun createInternalObject(): HybridSomeExternalObjectSpec = HybridSomeInternalObject()
+  override fun createInternalObject(): HybridSomeExternalObjectSpec {
+    return HybridSomeInternalObject()
+  }
 
   override fun dispose() {
     this.optionalCallback?.let { callback ->
@@ -400,9 +487,10 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
     }
   }
 
-  private fun stringify(value: Double): String =
-    BigDecimal
+  private fun stringify(value: Double): String {
+    return BigDecimal
       .valueOf(value)
       .stripTrailingZeros()
       .toPlainString()
+  }
 }

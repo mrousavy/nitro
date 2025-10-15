@@ -11,7 +11,7 @@ import com.facebook.proguard.annotations.DoNotStrip
 
 
 /**
- * Represents the TypeScript variant "String|Double|Boolean|DoubleArray|Array<String>".
+ * Represents the TypeScript variant "String | Double | Boolean | DoubleArray | Array<String>".
  */
 @Suppress("ClassName")
 @DoNotStrip
@@ -27,6 +27,7 @@ sealed class Variant_String_Double_Boolean_DoubleArray_Array_String_ {
   @DoNotStrip
   data class Fifth(@DoNotStrip val value: Array<String>): Variant_String_Double_Boolean_DoubleArray_Array_String_()
 
+  @Deprecated("getAs() is not type-safe. Use fold/asFirstOrNull/asSecondOrNull instead.", level = DeprecationLevel.ERROR)
   inline fun <reified T> getAs(): T? = when (this) {
     is First -> value as? T
     is Second -> value as? T
@@ -45,6 +46,37 @@ sealed class Variant_String_Double_Boolean_DoubleArray_Array_String_ {
     get() = this is Fourth
   val isFifth: Boolean
     get() = this is Fifth
+
+  fun asFirstOrNull(): String? {
+    val value = (this as? First)?.value ?: return null
+    return value
+  }
+  fun asSecondOrNull(): Double? {
+    val value = (this as? Second)?.value ?: return null
+    return value
+  }
+  fun asThirdOrNull(): Boolean? {
+    val value = (this as? Third)?.value ?: return null
+    return value
+  }
+  fun asFourthOrNull(): DoubleArray? {
+    val value = (this as? Fourth)?.value ?: return null
+    return value
+  }
+  fun asFifthOrNull(): Array<String>? {
+    val value = (this as? Fifth)?.value ?: return null
+    return value
+  }
+
+  inline fun <R> match(first: (String) -> R, second: (Double) -> R, third: (Boolean) -> R, fourth: (DoubleArray) -> R, fifth: (Array<String>) -> R): R {
+    return when (this) {
+      is First -> first(value)
+      is Second -> second(value)
+      is Third -> third(value)
+      is Fourth -> fourth(value)
+      is Fifth -> fifth(value)
+    }
+  }
 
   companion object {
     @JvmStatic

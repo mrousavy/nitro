@@ -1,5 +1,6 @@
 [*.{kt,kts}]
 ktlint_standard_filename = disabled
+ktlint_standard_function-expression-body = disabled
 
 [*]
 indent_style = space
