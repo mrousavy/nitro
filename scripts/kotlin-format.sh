@@ -18,6 +18,6 @@ if which ktlint >/dev/null; then
   done
   echo "Kotlin Format done!"
 else
-  echo "error: ktlint not installed, install with 'brew install ktlint' (see https://github.com/pinterest/ktlint)"
+  echo "error: ktlint not installed, install with 'brew install ktlint' (see https://github.com/pinterest/ktlint )"
   exit 1
 fi

@@ -23,6 +23,6 @@ if which clang-format >/dev/null; then
   done
   echo "C++ Format done!"
 else
-  echo "error: clang-format not installed, install with 'brew install clang-format' (or manually from https://clang.llvm.org/docs/ClangFormat.html)"
+  echo "error: clang-format not installed, install with 'brew install clang-format' (or manually from https://clang.llvm.org/docs/ClangFormat.html )"
   exit 1
 fi
