@@ -1,4 +1,4 @@
-name: Validate C++
+name: Lint C++
 
 on:
   push:
@@ -22,7 +22,7 @@ on:
 
 jobs:
   lint:
-    name: Check clang-format
+    name: Format C++
     runs-on: ubuntu-latest
     strategy:
       matrix:

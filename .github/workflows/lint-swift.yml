@@ -1,4 +1,4 @@
-name: Validate Swift
+name: Lint Swift
 
 on:
   push:
@@ -14,7 +14,7 @@ on:
 
 jobs:
   lint:
-    name: Check swift format
+    name: Format Swift
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
