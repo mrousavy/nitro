@@ -315,13 +315,10 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
   override fun createArrayBufferAsync(): Promise<ArrayBuffer> = Promise.async { createArrayBuffer() }
 
   override fun passVariant(either: Variant_String_Double_Boolean_DoubleArray_Array_String_): Variant_String_Double {
-    either.getAs<String>()?.let {
-      return Variant_String_Double.create(it)
-    }
-    either.getAs<Double>()?.let {
-      return Variant_String_Double.create(it)
-    }
-    return Variant_String_Double.create("holds something else!")
+    return either.match(
+      { string -> Variant_String_Double.create(string) }
+      { double -> Variant_String_Double.create(double) }
+    )
   }
 
   override fun passAllEmptyObjectVariant(variant: Variant_OptionalWrapper_HybridBaseSpec): Variant_OptionalWrapper_HybridBaseSpec = variant
