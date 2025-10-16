@@ -6,7 +6,7 @@
 //
 
 #include "Dispatcher.hpp"
-#include "JSIConverter+HybridObject.hpp"
+#include "JSIConverter.hpp"
 #include "JSIHelpers.hpp"
 #include "NitroDefines.hpp"
 #include "NitroLogger.hpp"
