@@ -6,6 +6,7 @@
 //
 
 #include "Dispatcher.hpp"
+#include "JSIConverter+HybridObject.hpp"
 #include "JSIHelpers.hpp"
 #include "NitroDefines.hpp"
 #include "NitroLogger.hpp"
@@ -25,8 +26,7 @@ void Dispatcher::installRuntimeGlobalDispatcher(jsi::Runtime& runtime, std::shar
   _globalCache[&runtime] = dispatcher;
 
   // Inject the dispatcher into Runtime global (runtime will hold a strong reference)
-  jsi::Object dispatcherHolder(runtime);
-  dispatcherHolder.setNativeState(runtime, dispatcher);
+  jsi::Value dispatcherHolder = JSIConverter<Dispatcher>::toJSI(runtime, dispatcher);
   runtime.global().setProperty(runtime, GLOBAL_DISPATCHER_HOLDER_NAME, dispatcherHolder);
 }
 
@@ -45,14 +45,12 @@ std::shared_ptr<Dispatcher> Dispatcher::getRuntimeGlobalDispatcher(jsi::Runtime&
   Logger::log(LogLevel::Warning, TAG, "Unknown Runtime (%s), looking for Dispatcher through JSI global lookup...",
               getRuntimeId(runtime).c_str());
   jsi::Value dispatcherHolderValue = getRuntimeGlobalDispatcherHolder(runtime);
-  jsi::Object dispatcherHolder = dispatcherHolderValue.getObject(runtime);
-  std::shared_ptr<Dispatcher> dispatcher = dispatcherHolder.getNativeState<Dispatcher>(runtime);
+  std::shared_ptr<Dispatcher> dispatcher = JSIConverter<Dispatcher>::fromJSI(runtime, dispatcher);
   _globalCache[&runtime] = dispatcher;
   return dispatcher;
 }
 
 jsi::Value Dispatcher::getRuntimeGlobalDispatcherHolder(jsi::Runtime& runtime) {
-#ifdef NITRO_DEBUG
   if (!runtime.global().hasProperty(runtime, GLOBAL_DISPATCHER_HOLDER_NAME)) [[unlikely]] {
     throw std::runtime_error("Failed to get current Dispatcher - the global Dispatcher "
                              "holder (`global." +
@@ -61,7 +59,6 @@ jsi::Value Dispatcher::getRuntimeGlobalDispatcherHolder(jsi::Runtime& runtime) {
                              "does not exist! Was `Dispatcher::installDispatcherIntoRuntime()` called "
                              "for this `jsi::Runtime`?");
   }
-#endif
   return runtime.global().getProperty(runtime, GLOBAL_DISPATCHER_HOLDER_NAME);
 }
 
