@@ -1,5 +1,5 @@
 import { NitroConfig } from '../../config/NitroConfig.js'
-import { indent, toLowerCamelCase } from '../../utils.js'
+import { indent, toSafeCamelCase } from '../../utils.js'
 import type { SourceFile } from '../SourceFile.js'
 import { createFileMetadataString } from '../helpers.js'
 import type { EnumMember } from '../types/EnumType.js'
@@ -39,10 +39,9 @@ export function createCppEnum(
   )
   // Map enum to C++ code
   const cppEnumMembers = enumMembers
-    .map(
-      (m) =>
-        `${m.name}      SWIFT_NAME(${toLowerCamelCase(m.name)}) = ${m.value},`
-    )
+    .map((m) => {
+      return `${m.name}      SWIFT_NAME(${toSafeCamelCase(m.name)}) = ${m.value},`
+    })
     .join('\n')
   const cxxNamespace = NitroConfig.current.getCxxNamespace('c++')
 

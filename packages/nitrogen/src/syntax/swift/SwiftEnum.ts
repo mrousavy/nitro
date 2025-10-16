@@ -1,5 +1,5 @@
 import { NitroConfig } from '../../config/NitroConfig.js'
-import { indent, toLowerCamelCase } from '../../utils.js'
+import { indent, toSafeCamelCase } from '../../utils.js'
 import { createFileMetadataString } from '../helpers.js'
 import type { SourceFile } from '../SourceFile.js'
 import type { EnumType } from '../types/EnumType.js'
@@ -13,12 +13,12 @@ export function createSwiftEnumBridge(enumType: EnumType): SourceFile {
   const initializeCases = enumType.enumMembers.map((m) =>
     `
 case "${m.stringValue}":
-  self = .${toLowerCamelCase(m.name)}
+  self = .${toSafeCamelCase(m.name)}
     `.trim()
   )
   const toStringCases = enumType.enumMembers.map((m) =>
     `
-case .${toLowerCamelCase(m.name)}:
+case .${toSafeCamelCase(m.name)}:
   return "${m.stringValue}"
 `.trim()
   )

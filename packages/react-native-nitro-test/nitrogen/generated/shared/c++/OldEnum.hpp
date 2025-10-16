@@ -27,7 +27,7 @@ namespace margelo::nitro::test {
     FIRST      SWIFT_NAME(first) = 0,
     SECOND      SWIFT_NAME(second) = 1,
     THIRD      SWIFT_NAME(third) = 2,
-    _0_INVALID      SWIFT_NAME(0Invalid) = 3,
+    _0_INVALID      SWIFT_NAME(_0Invalid) = 3,
   } CLOSED_ENUM;
 
 } // namespace margelo::nitro::test

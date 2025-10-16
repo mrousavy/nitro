@@ -27,7 +27,7 @@ namespace margelo::nitro::test {
     A      SWIFT_NAME(a) = 0,
     B      SWIFT_NAME(b) = 32,
     C      SWIFT_NAME(c) = 64,
-    _0_INVALID      SWIFT_NAME(0Invalid) = 65,
+    _0_INVALID      SWIFT_NAME(_0Invalid) = 65,
   } CLOSED_ENUM;
 
 } // namespace margelo::nitro::test
