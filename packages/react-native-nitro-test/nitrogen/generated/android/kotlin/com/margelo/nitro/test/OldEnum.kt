@@ -18,5 +18,6 @@ import com.facebook.proguard.annotations.DoNotStrip
 enum class OldEnum(@DoNotStrip @Keep val value: Int) {
   FIRST(0),
   SECOND(1),
-  THIRD(2);
+  THIRD(2),
+  _0_INVALID(3);
 }

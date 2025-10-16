@@ -23,6 +23,8 @@ public extension WeirdNumbersEnum {
         self = .b
       case "C":
         self = .c
+      case "0_INVALID":
+        self = .0Invalid
       default:
         return nil
     }
@@ -39,6 +41,8 @@ public extension WeirdNumbersEnum {
         return "B"
       case .c:
         return "C"
+      case .0Invalid:
+        return "0_INVALID"
     }
   }
 }

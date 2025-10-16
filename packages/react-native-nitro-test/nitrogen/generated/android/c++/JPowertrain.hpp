@@ -44,6 +44,7 @@ namespace margelo::nitro::test {
       static const auto fieldELECTRIC = clazz->getStaticField<JPowertrain>("ELECTRIC");
       static const auto fieldGAS = clazz->getStaticField<JPowertrain>("GAS");
       static const auto fieldHYBRID = clazz->getStaticField<JPowertrain>("HYBRID");
+      static const auto field_0_INVALID = clazz->getStaticField<JPowertrain>("_0_INVALID");
       
       switch (value) {
         case Powertrain::ELECTRIC:
@@ -52,6 +53,8 @@ namespace margelo::nitro::test {
           return clazz->getStaticFieldValue(fieldGAS);
         case Powertrain::HYBRID:
           return clazz->getStaticFieldValue(fieldHYBRID);
+        case Powertrain::_0_INVALID:
+          return clazz->getStaticFieldValue(field_0_INVALID);
         default:
           std::string stringValue = std::to_string(static_cast<int>(value));
           throw std::invalid_argument("Invalid enum value (" + stringValue + "!");

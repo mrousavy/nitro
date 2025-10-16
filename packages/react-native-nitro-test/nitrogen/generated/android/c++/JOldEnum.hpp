@@ -44,6 +44,7 @@ namespace margelo::nitro::test {
       static const auto fieldFIRST = clazz->getStaticField<JOldEnum>("FIRST");
       static const auto fieldSECOND = clazz->getStaticField<JOldEnum>("SECOND");
       static const auto fieldTHIRD = clazz->getStaticField<JOldEnum>("THIRD");
+      static const auto field_0_INVALID = clazz->getStaticField<JOldEnum>("_0_INVALID");
       
       switch (value) {
         case OldEnum::FIRST:
@@ -52,6 +53,8 @@ namespace margelo::nitro::test {
           return clazz->getStaticFieldValue(fieldSECOND);
         case OldEnum::THIRD:
           return clazz->getStaticFieldValue(fieldTHIRD);
+        case OldEnum::_0_INVALID:
+          return clazz->getStaticFieldValue(field_0_INVALID);
         default:
           std::string stringValue = std::to_string(static_cast<int>(value));
           throw std::invalid_argument("Invalid enum value (" + stringValue + "!");

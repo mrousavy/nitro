@@ -18,5 +18,6 @@ import com.facebook.proguard.annotations.DoNotStrip
 enum class WeirdNumbersEnum(@DoNotStrip @Keep val value: Int) {
   A(0),
   B(32),
-  C(64);
+  C(64),
+  _0_INVALID(65);
 }

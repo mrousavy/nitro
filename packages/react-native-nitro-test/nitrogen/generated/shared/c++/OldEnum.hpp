@@ -27,6 +27,7 @@ namespace margelo::nitro::test {
     FIRST      SWIFT_NAME(first) = 0,
     SECOND      SWIFT_NAME(second) = 1,
     THIRD      SWIFT_NAME(third) = 2,
+    _0_INVALID      SWIFT_NAME(0Invalid) = 3,
   } CLOSED_ENUM;
 
 } // namespace margelo::nitro::test
@@ -56,7 +57,7 @@ namespace margelo::nitro {
         return false;
       }
       // Check if we are within the bounds of the enum.
-      return integer >= 0 && integer <= 2;
+      return integer >= 0 && integer <= 3;
     }
   };
 

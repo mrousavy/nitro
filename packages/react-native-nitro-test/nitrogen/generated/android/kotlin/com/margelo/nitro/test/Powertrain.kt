@@ -18,5 +18,6 @@ import com.facebook.proguard.annotations.DoNotStrip
 enum class Powertrain(@DoNotStrip @Keep val value: Int) {
   ELECTRIC(0),
   GAS(1),
-  HYBRID(2);
+  HYBRID(2),
+  _0_INVALID(3);
 }
