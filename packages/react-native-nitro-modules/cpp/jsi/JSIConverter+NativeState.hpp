@@ -4,6 +4,10 @@
 
 #pragma once
 
+namespace margelo::nitro {
+class HybridObject;
+} // namespace margelo::nitro
+
 #include "IsSharedPtrTo.hpp"
 #include "NitroDefines.hpp"
 #include "NitroTypeInfo.hpp"
@@ -30,21 +34,28 @@ struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_v<T, jsi::NativeState>>
       }
     }
 #endif
-    jsi::Object object = arg.asObject(runtime);
 
+    jsi::Object object = arg.asObject(runtime);
 #ifdef NITRO_DEBUG
-    if (!object.hasNativeState<TPointee>(runtime)) [[unlikely]] {
-      if (!object.hasNativeState(runtime)) [[unlikely]] {
-        std::string stringRepresentation = arg.toString(runtime).utf8(runtime);
-        throw jsi::JSError(runtime, invalidTypeErrorMessage(stringRepresentation, "It does not have a NativeState!"));
-      } else {
-        std::string stringRepresentation = arg.toString(runtime).utf8(runtime);
-        throw jsi::JSError(runtime, invalidTypeErrorMessage(stringRepresentation, "It has a different NativeState<T>!"));
-      }
+    if (!object.hasNativeState(runtime)) [[unlikely]] {
+      std::string stringRepresentation = arg.toString(runtime).utf8(runtime);
+      throw jsi::JSError(runtime, invalidTypeErrorMessage(stringRepresentation, "It does not have a NativeState!"));
     }
 #endif
+
     std::shared_ptr<jsi::NativeState> nativeState = object.getNativeState(runtime);
-    return std::dynamic_pointer_cast<TPointee>(nativeState);
+    std::shared_ptr<TPointee> result = std::dynamic_pointer_cast<TPointee>(nativeState);
+    if (result == nullptr) [[unlikely]] {
+      std::string stringRepresentation = arg.toString(runtime).utf8(runtime);
+      std::string typeName = TypeInfo::getFriendlyTypename<TPointee>();
+      throw jsi::JSError(runtime, invalidTypeErrorMessage(stringRepresentation, "Downcasting failed - It has a different NativeState<T>!\n"
+                                                                                "- Did you accidentally pass a different type?\n"
+                                                                                "- Is react-native-nitro-modules linked multiple times? "
+                                                                                "Ensure you don't have any duplicate symbols for `" +
+                                                                                    typeName + "` in your app's binary."));
+    }
+
+    return result;
   }
 
   static inline jsi::Value toJSI(jsi::Runtime& runtime, const T& arg) {
@@ -53,9 +64,15 @@ struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_v<T, jsi::NativeState>>
       throw jsi::JSError(runtime, "Cannot convert `nullptr` to NativeState<" + typeName + ">!");
     }
 
-    jsi::Object object(runtime);
-    object.setNativeState(runtime, arg);
-    return object;
+    if constexpr (std::is_base_of_v<HybridObject, TPointee>) {
+      // It's a HybridObject - use it's internal constructor which caches jsi::Objects for proper memory management!
+      return arg->toObject(runtime);
+    } else {
+      // It's any other kind of jsi::NativeState - just create it as normal. This will not have a prototype then!
+      jsi::Object object(runtime);
+      object.setNativeState(runtime, arg);
+      return object;
+    }
   }
 
   static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {

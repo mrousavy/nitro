@@ -6,6 +6,7 @@
 //
 
 #include "Dispatcher.hpp"
+#include "JSIConverter.hpp"
 #include "JSIHelpers.hpp"
 #include "NitroDefines.hpp"
 #include "NitroLogger.hpp"
@@ -29,8 +30,7 @@ void Dispatcher::installRuntimeGlobalDispatcher(jsi::Runtime& runtime, std::shar
   _globalCache[&runtime] = dispatcher;
 
   // Inject the dispatcher into Runtime global (runtime will hold a strong reference)
-  jsi::Object dispatcherHolder(runtime);
-  dispatcherHolder.setNativeState(runtime, dispatcher);
+  jsi::Value dispatcherHolder = JSIConverter<std::shared_ptr<Dispatcher>>::toJSI(runtime, dispatcher);
   runtime.global().setProperty(runtime, GLOBAL_DISPATCHER_HOLDER_NAME, std::move(dispatcherHolder));
 }
 
@@ -51,24 +51,8 @@ std::shared_ptr<Dispatcher> Dispatcher::getRuntimeGlobalDispatcher(jsi::Runtime&
   // 1. Get global.__nitroDispatcher
   jsi::Value dispatcherHolderValue = getRuntimeGlobalDispatcherHolder(runtime);
   // 2. Cast it to the jsi::Object
-  jsi::Object dispatcherHolder = dispatcherHolderValue.asObject(runtime);
-  // 3. Check if it has a `NativeState`
-  if (!dispatcherHolder.hasNativeState(runtime)) [[unlikely]] {
-    throw std::runtime_error("Failed to get the global `Dispatcher` - the value exists on `global." +
-                             std::string(GLOBAL_DISPATCHER_HOLDER_NAME) + "`, but it doesn't contain any `NativeState`!");
-  }
-  // 4. Get the `NativeState` (without downcasting)
-  std::shared_ptr<jsi::NativeState> dispatcherBoxed = dispatcherHolder.getNativeState(runtime);
-  // 5. Downcast `NativeState` to `Dispatcher` (this only fails if we linked it twice)
-  std::shared_ptr<Dispatcher> dispatcher = std::dynamic_pointer_cast<Dispatcher>(dispatcherBoxed);
-  // 6. Ensure the downcast succeeded - if not, Nitro might be linked twice (`Dispatcher` is a duplicate symbol)
-  if (dispatcher == nullptr) [[unlikely]] {
-    throw std::runtime_error("Failed to downcast the global `Dispatcher` - it has a `NativeState`, but it's not `NativeState<Dispatcher>`. "
-                             "Is react-native-nitro-modules linked twice? "
-                             "Is `Dispatcher` a duplicate symbol in your binary? "
-                             "Ensure your build process does not cause duplicate symbols.");
-  }
-  // 7. Throw it in our cache and return
+  std::shared_ptr<Dispatcher> dispatcher = JSIConverter<std::shared_ptr<Dispatcher>>::fromJSI(runtime, dispatcherHolderValue);
+  // 3. Throw it in our cache and return
   _globalCache[&runtime] = dispatcher;
   return dispatcher;
 }
