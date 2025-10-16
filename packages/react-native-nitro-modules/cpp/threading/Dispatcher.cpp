@@ -45,7 +45,7 @@ std::shared_ptr<Dispatcher> Dispatcher::getRuntimeGlobalDispatcher(jsi::Runtime&
   Logger::log(LogLevel::Warning, TAG, "Unknown Runtime (%s), looking for Dispatcher through JSI global lookup...",
               getRuntimeId(runtime).c_str());
   jsi::Value dispatcherHolderValue = getRuntimeGlobalDispatcherHolder(runtime);
-  std::shared_ptr<Dispatcher> dispatcher = JSIConverter<Dispatcher>::fromJSI(runtime, dispatcher);
+  std::shared_ptr<Dispatcher> dispatcher = JSIConverter<Dispatcher>::fromJSI(runtime, dispatcherHolderValue);
   _globalCache[&runtime] = dispatcher;
   return dispatcher;
 }
@@ -56,7 +56,7 @@ jsi::Value Dispatcher::getRuntimeGlobalDispatcherHolder(jsi::Runtime& runtime) {
                              "holder (`global." +
                              std::string(GLOBAL_DISPATCHER_HOLDER_NAME) +
                              "`) "
-                             "does not exist! Was `Dispatcher::installDispatcherIntoRuntime()` called "
+                             "does not exist! Was `Dispatcher::installRuntimeGlobalDispatcher(...)` called "
                              "for this `jsi::Runtime`?");
   }
   return runtime.global().getProperty(runtime, GLOBAL_DISPATCHER_HOLDER_NAME);
