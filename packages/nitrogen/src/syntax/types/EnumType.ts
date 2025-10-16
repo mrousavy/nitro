@@ -8,6 +8,7 @@ import { createCppEnum } from '../c++/CppEnum.js'
 import { escapeCppName } from '../helpers.js'
 import { createCppUnion } from '../c++/CppUnion.js'
 import { NitroConfig } from '../../config/NitroConfig.js'
+import { startsWithValidCharacters } from '../../utils.js'
 
 export interface EnumMember {
   name: string
@@ -77,6 +78,13 @@ export class EnumType implements Type {
       throw new Error(
         `Enum name cannot start with two underscores (__) as this is reserved syntax for Nitrogen! (In ${this.enumName}: ${this.enumMembers.map((m) => m.name).join(' | ')})`
       )
+    }
+    for (const member of this.enumMembers) {
+      if (!startsWithValidCharacters(member.stringValue)) {
+        throw new Error(
+          `Enum case "${member.stringValue}" does not start with a safe character (a-Z or _). Instead it starts with "${member.stringValue[0]}". (in ${this.enumName})`
+        )
+      }
     }
   }
 

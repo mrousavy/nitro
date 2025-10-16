@@ -105,6 +105,10 @@ export function filterDuplicateHelperBridges(
   return otherIndex === i
 }
 
+export function startsWithValidCharacters(str: string): boolean {
+  return /^[A-z_]/.test(str)
+}
+
 export function toLowerCamelCase(string: string): string {
   const parts = string.split('_').filter((part) => part !== '')
 
