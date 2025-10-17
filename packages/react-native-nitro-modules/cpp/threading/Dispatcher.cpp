@@ -32,6 +32,15 @@ void Dispatcher::installRuntimeGlobalDispatcher(jsi::Runtime& runtime, std::shar
 
   // Inject the dispatcher into Runtime global (runtime will hold a strong reference)
   jsi::Value dispatcherHolder = JSIConverter<std::shared_ptr<Dispatcher>>::toJSI(runtime, dispatcher);
+#ifdef NITRO_DEBUG
+  // In debug, let's do some additional safety checks
+  if (runtime.global().hasProperty(runtime, GLOBAL_DISPATCHER_HOLDER_NAME)) [[unlikely]] {
+    throw std::runtime_error("Failed to install Dispatcher into jsi::Runtime \"" + getRuntimeId(runtime) +
+                             "\" - it already has a Dispatcher installed! (`global." + std::string(GLOBAL_DISPATCHER_HOLDER_NAME) +
+                             "`)\n"
+                             "- Are you calling `installRuntimeGlobalDispatcher(...)` twice? "
+                             "- Are you linking Nitro twice? Ensure you don't have any duplicate symbols for `Dispatcher`.");
+  }
   ObjectUtils::defineProperty(runtime, runtime.global(), GLOBAL_DISPATCHER_HOLDER_NAME,
                               PlainPropertyDescriptor{
                                   .enumerable = true,
@@ -39,6 +48,10 @@ void Dispatcher::installRuntimeGlobalDispatcher(jsi::Runtime& runtime, std::shar
                                   .value = std::move(dispatcherHolder),
                                   .writable = false,
                               });
+#else
+  // In release, just install.
+  runtime.global().setProperty(runtime, GLOBAL_DISPATCHER_HOLDER_NAME, std::move(dispatcherHolder));
+#endif
 }
 
 std::shared_ptr<Dispatcher> Dispatcher::getRuntimeGlobalDispatcher(jsi::Runtime& runtime) {
