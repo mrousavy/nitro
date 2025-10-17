@@ -7,7 +7,9 @@
 
 #pragma once
 
+#include "BorrowingReference.hpp"
 #include <jsi/jsi.h>
+#include <unordered_map>
 
 namespace margelo::nitro {
 
@@ -66,6 +68,14 @@ public:
    * Freezes all values of the given `object`.
    */
   static void freeze(jsi::Runtime& runtime, const jsi::Object& object);
+
+private:
+  struct Cache {
+    BorrowingReference<jsi::Function> objectCreate;
+    BorrowingReference<jsi::Function> objectDefineProperty;
+    BorrowingReference<jsi::Function> objectFreeze;
+  };
+  static std::unordered_map<jsi::Runtime*, Cache> _cache;
 };
 
 } // namespace margelo::nitro
