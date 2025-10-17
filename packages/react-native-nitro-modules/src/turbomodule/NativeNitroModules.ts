@@ -61,18 +61,12 @@ if (__DEV__) {
   }
 
   protectGlobal('__nitroDispatcher')
-  protectGlobal('__nitroModulesJSICache')
+  protectGlobal('__nitroJsiCache')
   protectGlobal('NitroModulesProxy')
 }
 
-declare global {
-  var __nitroModulesJSICache: {}
-  var __nitroDispatcher: {}
-  var NitroModulesProxy: {}
-}
-
 export function isRuntimeAlive() {
-  const cache = globalThis.__nitroModulesJSICache
+  const cache = globalThis.__nitroJsiCache
   const dispatcher = globalThis.__nitroDispatcher
   return cache != null && dispatcher != null
 }
