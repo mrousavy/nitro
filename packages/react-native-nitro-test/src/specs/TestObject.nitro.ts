@@ -18,7 +18,7 @@ export type NamedVariant = string | Car
 
 // A discriminating string union becomes an `enum` in C++.
 // This one is string-backed.
-export type Powertrain = 'electric' | 'gas' | 'hybrid'
+export type Powertrain = 'electric' | 'gas' | 'hybrid' | '0-invalid'
 
 // A classic TypeScript enum also becomes an `enum` in C++.
 // This one is number-backed.
@@ -26,6 +26,7 @@ export enum OldEnum {
   FIRST,
   SECOND,
   THIRD,
+  '0_INVALID',
 }
 
 // Backed by numbers, but with custom number values.
@@ -33,6 +34,7 @@ export enum WeirdNumbersEnum {
   A = 0,
   B = 32,
   C = 64,
+  '0_INVALID',
 }
 
 // A plain interface that does not inherit from `HybridObject` becomes a `struct` in C++.

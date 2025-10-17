@@ -364,6 +364,29 @@ export function getTests(
         .didNotThrow()
         .didReturn('function')
     ),
+    createTest('Test union enum weird value (0-invalid)', () =>
+      it(() => {
+        testObject.optionalEnum = '0-invalid'
+        return testObject.optionalEnum
+      })
+        .didNotThrow()
+        .equals('0-invalid')
+    ),
+    createTest('Test OldEnum weird value (0_INVALID)', () =>
+      it(() => {
+        testObject.optionalOldEnum = OldEnum['0_INVALID']
+        return testObject.optionalOldEnum
+      })
+        .didNotThrow()
+        .equals(OldEnum['0_INVALID'])
+    ),
+    createTest('Test enum weird value (0_INVALID)', () =>
+      it(() =>
+        testObject.getVariantWeirdNumbersEnum(WeirdNumbersEnum['0_INVALID'])
+      )
+        .didNotThrow()
+        .equals(WeirdNumbersEnum['0_INVALID'])
+    ),
 
     // Test basic functions
     createTest('addNumbers(5, 13) = 18', () =>

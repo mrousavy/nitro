@@ -3,7 +3,7 @@ import path from 'path'
 import fs from 'fs'
 import type { SwiftCxxHelper } from './syntax/swift/SwiftCxxTypeHelper.js'
 import type { Type } from 'ts-morph'
-import { isNotDuplicate } from './syntax/helpers.js'
+import { escapeCppName, isNotDuplicate } from './syntax/helpers.js'
 import { readUserConfig } from './config/getConfig.js'
 import { NitroConfig } from './config/NitroConfig.js'
 
@@ -117,6 +117,12 @@ export function toLowerCamelCase(string: string): string {
     .map((part) => part.charAt(0).toUpperCase() + part.slice(1).toLowerCase())
 
   return camelCaseString + camelCased.join('')
+}
+
+export function toSafeCamelCase(string: string): string {
+  const camelCased = toLowerCamelCase(string)
+  const safe = escapeCppName(camelCased)
+  return safe
 }
 
 export function getBaseTypes(type: Type): Type[] {
