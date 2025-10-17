@@ -68,8 +68,14 @@ jsi::Value HybridObjectPrototype::createPrototype(jsi::Runtime& runtime, const s
 
   // 6. In DEBUG, add a __type info to the prototype object.
 #ifdef NITRO_DEBUG
-  auto prototypeName = "Prototype<" + typeName + ">";
-  object.setProperty(runtime, "__type", jsi::String::createFromUtf8(runtime, prototypeName));
+  std::string prototypeName = "Prototype<" + typeName + ">";
+  ObjectUtils::defineProperty(runtime, object, "__type",
+                              PlainPropertyDescriptor{
+                                  .configurable = false,
+                                  .enumerable = true,
+                                  .value = jsi::String::createFromUtf8(runtime, prototypeName),
+                                  .writable = false,
+                              });
 #endif
 
   // 7. In DEBUG, freeze the prototype.

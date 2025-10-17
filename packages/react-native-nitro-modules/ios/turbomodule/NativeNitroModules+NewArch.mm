@@ -11,6 +11,7 @@
 
 #import "CallInvokerDispatcher.hpp"
 #import "InstallNitro.hpp"
+#import "NitroLogger.hpp"
 
 #import <ReactCommon/CallInvoker.h>
 #import <ReactCommon/RCTTurboModuleWithJSIBindings.h>
@@ -43,8 +44,13 @@ RCT_EXPORT_MODULE(NitroModules)
   auto dispatcher = std::make_shared<nitro::CallInvokerDispatcher>(callInvoker);
 
   // 3. Install Nitro
-  nitro::install(runtime, dispatcher);
-  _didInstall = true;
+  try {
+    nitro::install(runtime, dispatcher);
+    _didInstall = true;
+  } catch (const std::exception& exc) {
+    nitro::Logger::log(nitro::LogLevel::Error, "NativeNitroModules", "Failed to install Nitro! %s", exc.what());
+    _didInstall = false;
+  }
 }
 
 - (NSString*)install {

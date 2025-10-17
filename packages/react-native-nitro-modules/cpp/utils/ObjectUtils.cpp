@@ -43,7 +43,7 @@ void ObjectUtils::defineProperty(jsi::Runtime& runtime, const jsi::Object& objec
   descriptorJs.setProperty(runtime, "value", std::move(descriptor.value));
   descriptorJs.setProperty(runtime, "writable", jsi::Value(descriptor.writable));
 
-  definePropertyFn.call(runtime, std::move(nameJs), std::move(descriptorJs));
+  definePropertyFn.call(runtime, object, std::move(nameJs), std::move(descriptorJs));
 }
 
 void ObjectUtils::defineProperty(jsi::Runtime& runtime, const jsi::Object& object, const char* propertyName,
@@ -59,7 +59,7 @@ void ObjectUtils::defineProperty(jsi::Runtime& runtime, const jsi::Object& objec
   descriptorJs.setProperty(runtime, "enumerable", jsi::Value(descriptor.enumerable));
   descriptorJs.setProperty(runtime, "get", std::move(descriptor.get));
 
-  definePropertyFn.call(runtime, std::move(nameJs), std::move(descriptorJs));
+  definePropertyFn.call(runtime, object, std::move(nameJs), std::move(descriptorJs));
 }
 
 void ObjectUtils::defineProperty(jsi::Runtime& runtime, const jsi::Object& object, const char* propertyName,
@@ -76,7 +76,7 @@ void ObjectUtils::defineProperty(jsi::Runtime& runtime, const jsi::Object& objec
   descriptorJs.setProperty(runtime, "get", std::move(descriptor.get));
   descriptorJs.setProperty(runtime, "set", std::move(descriptor.set));
 
-  definePropertyFn.call(runtime, std::move(nameJs), std::move(descriptorJs));
+  definePropertyFn.call(runtime, object, std::move(nameJs), std::move(descriptorJs));
 }
 
 void ObjectUtils::freeze(jsi::Runtime& runtime, const jsi::Object& object) {

@@ -85,7 +85,14 @@ jsi::Value HybridObject::toObject(jsi::Runtime& runtime) {
 
 #ifdef NITRO_DEBUG
   // 6. Assign a private __type property for debugging - this will be used so users know it's not just an empty object.
-  object.setProperty(runtime, "__type", jsi::String::createFromUtf8(runtime, "NativeState<" + std::string(_name) + ">"));
+  std::string typeName = "HybridObject<" + std::string(_name) + ">";
+  ObjectUtils::defineProperty(runtime, object, "__type",
+                              PlainPropertyDescriptor{
+                                  .configurable = false,
+                                  .enumerable = true,
+                                  .value = jsi::String::createFromUtf8(runtime, typeName),
+                                  .writable = false,
+                              });
 #endif
 
   // 7. Throw a jsi::WeakObject pointing to our object into cache so subsequent calls can use it from cache
