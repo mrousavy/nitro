@@ -10,12 +10,11 @@
 #include "JSIHelpers.hpp"
 #include "NitroDefines.hpp"
 #include "NitroLogger.hpp"
+#include "ObjectUtils.hpp"
 
 namespace margelo::nitro {
 
 using namespace facebook;
-
-static constexpr auto GLOBAL_DISPATCHER_HOLDER_NAME = "__nitroDispatcher";
 
 /**
  * This map is only statically linked once to this library.
@@ -31,7 +30,7 @@ void Dispatcher::installRuntimeGlobalDispatcher(jsi::Runtime& runtime, std::shar
 
   // Inject the dispatcher into Runtime global (runtime will hold a strong reference)
   jsi::Value dispatcherHolder = JSIConverter<std::shared_ptr<Dispatcher>>::toJSI(runtime, dispatcher);
-  runtime.global().setProperty(runtime, GLOBAL_DISPATCHER_HOLDER_NAME, std::move(dispatcherHolder));
+  ObjectUtils::defineGlobal(runtime, KnownGlobalPropertyName::DISPATCHER, std::move(dispatcherHolder));
 }
 
 std::shared_ptr<Dispatcher> Dispatcher::getRuntimeGlobalDispatcher(jsi::Runtime& runtime) {
@@ -58,14 +57,15 @@ std::shared_ptr<Dispatcher> Dispatcher::getRuntimeGlobalDispatcher(jsi::Runtime&
 }
 
 jsi::Value Dispatcher::getRuntimeGlobalDispatcherHolder(jsi::Runtime& runtime) {
-  if (!runtime.global().hasProperty(runtime, GLOBAL_DISPATCHER_HOLDER_NAME)) [[unlikely]] {
+  const char* dispatcherHolderName = ObjectUtils::getKnownGlobalPropertyNameString(KnownGlobalPropertyName::DISPATCHER);
+  if (!runtime.global().hasProperty(runtime, dispatcherHolderName)) [[unlikely]] {
     throw std::runtime_error("The `jsi::Runtime` \"" + getRuntimeId(runtime) +
                              "\" does not support Callbacks or Promises because it does not have a `Dispatcher` installed!\n"
                              "To use Callbacks and Promises follow these steps;\n"
                              "1. Subclass `Dispatcher` with your implementation of `runAsync`/`runSync` for your Thread.\n"
                              "2. Call `Dispatcher::installRuntimeGlobalDispatcher(...)` with your `Runtime` and your `Dispatcher`.");
   }
-  return runtime.global().getProperty(runtime, GLOBAL_DISPATCHER_HOLDER_NAME);
+  return runtime.global().getProperty(runtime, dispatcherHolderName);
 }
 
 } // namespace margelo::nitro

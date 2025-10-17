@@ -47,32 +47,8 @@ if (__DEV__) {
   }
 }
 
-// Freeze the globals we need
-if (__DEV__) {
-  function protectGlobal(key: keyof typeof globalThis): void {
-    const value = globalThis[key]
-    if (value == null) return
-    Object.freeze(value)
-    Object.defineProperty(globalThis, key, {
-      value: value,
-      writable: false,
-      configurable: false,
-    })
-  }
-
-  protectGlobal('__nitroDispatcher')
-  protectGlobal('__nitroModulesJSICache')
-  protectGlobal('NitroModulesProxy')
-}
-
-declare global {
-  var __nitroModulesJSICache: {}
-  var __nitroDispatcher: {}
-  var NitroModulesProxy: {}
-}
-
 export function isRuntimeAlive() {
-  const cache = globalThis.__nitroModulesJSICache
+  const cache = globalThis.__nitroJsiCache
   const dispatcher = globalThis.__nitroDispatcher
   return cache != null && dispatcher != null
 }

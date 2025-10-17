@@ -5,6 +5,7 @@
 #include "HybridObject.hpp"
 #include "JSIConverter.hpp"
 #include "NitroDefines.hpp"
+#include "ObjectUtils.hpp"
 
 namespace margelo::nitro {
 
@@ -73,29 +74,32 @@ jsi::Value HybridObject::toObject(jsi::Runtime& runtime) {
   // 2. Get the object's base prototype (global & shared)
   jsi::Value prototype = getPrototype(runtime);
 
-  // 3. Get the global JS Object.create(...) constructor so we can create an object from the given prototype
-  jsi::Object objectConstructor = runtime.global().getPropertyAsObject(runtime, "Object");
-  jsi::Function create = objectConstructor.getPropertyAsFunction(runtime, "create");
+  // 3. Create the object using Object.create(...)
+  jsi::Object object = ObjectUtils::create(runtime, prototype);
 
-  // 4. Create the object using Object.create(...)
-  jsi::Object object = create.call(runtime, prototype).asObject(runtime);
-
-  // 5. Assign NativeState to the object so the prototype can resolve the native methods
+  // 4. Assign NativeState to the object so the prototype can resolve the native methods
   object.setNativeState(runtime, shared());
 
-  // 6. Set memory size so Hermes GC knows about actual memory
+  // 5. Set memory size so Hermes GC knows about actual memory
   object.setExternalMemoryPressure(runtime, getExternalMemorySize());
 
 #ifdef NITRO_DEBUG
-  // 7. Assign a private __type property for debugging - this will be used so users know it's not just an empty object.
-  object.setProperty(runtime, "__type", jsi::String::createFromUtf8(runtime, "NativeState<" + std::string(_name) + ">"));
+  // 6. Assign a private __type property for debugging - this will be used so users know it's not just an empty object.
+  std::string typeName = "HybridObject<" + std::string(_name) + ">";
+  ObjectUtils::defineProperty(runtime, object, "__type",
+                              PlainPropertyDescriptor{
+                                  .configurable = false,
+                                  .enumerable = true,
+                                  .value = jsi::String::createFromUtf8(runtime, typeName),
+                                  .writable = false,
+                              });
 #endif
 
-  // 8. Throw a jsi::WeakObject pointing to our object into cache so subsequent calls can use it from cache
+  // 7. Throw a jsi::WeakObject pointing to our object into cache so subsequent calls can use it from cache
   JSICacheReference cache = JSICache::getOrCreateCache(runtime);
   _objectCache[&runtime] = cache.makeShared(jsi::WeakObject(runtime, object));
 
-  // 9. Return it!
+  // 8. Return it!
   return object;
 }
 
