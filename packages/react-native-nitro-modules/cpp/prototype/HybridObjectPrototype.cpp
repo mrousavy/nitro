@@ -9,6 +9,7 @@
 #include "NitroDefines.hpp"
 #include "NitroLogger.hpp"
 #include "NitroTypeInfo.hpp"
+#include "ObjectUtils.hpp"
 
 namespace margelo::nitro {
 
@@ -33,16 +34,12 @@ jsi::Value HybridObjectPrototype::createPrototype(jsi::Runtime& runtime, const s
     }
   }
 
-  // 2. We didn't find the given prototype in cache (either it's a new prototype, or a new runtime),
-  //    so we need to create it. First, we need some helper methods from JS
+  // 2. Get the base prototype of this prototype (recursively), then create the individual prototypes downwards
+  //    until we reach our current prototype.
   std::string typeName = TypeInfo::getFriendlyTypename(prototype->getNativeInstanceId(), true);
   Logger::log(LogLevel::Info, TAG, "Creating new JS prototype for C++ instance type \"%s\"...", typeName.c_str());
-  jsi::Object objectConstructor = runtime.global().getPropertyAsObject(runtime, "Object");
-  jsi::Function objectCreate = objectConstructor.getPropertyAsFunction(runtime, "create");
-  jsi::Function objectDefineProperty = objectConstructor.getPropertyAsFunction(runtime, "defineProperty");
-
-  // 3. Create an empty JS Object, inheriting from the base prototype (recursively!)
-  jsi::Object object = objectCreate.call(runtime, createPrototype(runtime, prototype->getBase())).getObject(runtime);
+  jsi::Value basePrototype = createPrototype(runtime, prototype->getBase());
+  jsi::Object object = ObjectUtils::create(runtime, basePrototype);
 
   // 4. Add all Hybrid Methods to it
   for (const auto& method : prototype->getMethods()) {
@@ -51,22 +48,22 @@ jsi::Value HybridObjectPrototype::createPrototype(jsi::Runtime& runtime, const s
 
   // 5. Add all properties (getter + setter) to it using defineProperty
   for (const auto& getter : prototype->getGetters()) {
-    jsi::Object property(runtime);
-    property.setProperty(runtime, "configurable", false);
-    property.setProperty(runtime, "enumerable", true);
-    property.setProperty(runtime, "get", getter.second.toJSFunction(runtime));
-
     const auto& setter = prototype->getSetters().find(getter.first);
-    if (setter != prototype->getSetters().end()) {
-      // there also is a setter for this property!
-      property.setProperty(runtime, "set", setter->second.toJSFunction(runtime));
+    bool isReadonly = setter == prototype->getSetters().end();
+    const std::string& name = getter.first;
+    if (isReadonly) {
+      // get
+      ObjectUtils::defineProperty(
+          runtime, object, name.c_str(),
+          ComputedReadonlyPropertyDescriptor{.configurable = false, .enumerable = false, .get = getter.second.toJSFunction(runtime)});
+    } else {
+      // get + set
+      ObjectUtils::defineProperty(runtime, object, name.c_str(),
+                                  ComputedPropertyDescriptor{.configurable = false,
+                                                             .enumerable = false,
+                                                             .get = getter.second.toJSFunction(runtime),
+                                                             .set = setter->second.toJSFunction(runtime)});
     }
-
-    property.setProperty(runtime, "name", jsi::String::createFromUtf8(runtime, getter.first.c_str()));
-    objectDefineProperty.call(runtime,
-                              /* obj */ object,
-                              /* propName */ jsi::String::createFromUtf8(runtime, getter.first.c_str()),
-                              /* descriptorObj */ property);
   }
 
   // 6. In DEBUG, add a __type info to the prototype object.
@@ -75,13 +72,18 @@ jsi::Value HybridObjectPrototype::createPrototype(jsi::Runtime& runtime, const s
   object.setProperty(runtime, "__type", jsi::String::createFromUtf8(runtime, prototypeName));
 #endif
 
-  // 7. Throw it into our cache so the next lookup can be cached and therefore faster
+  // 7. In DEBUG, freeze the prototype.
+#ifdef NITRO_DEBUG
+  ObjectUtils::freeze(runtime, object);
+#endif
+
+  // 8. Throw it into our cache so the next lookup can be cached and therefore faster
   JSICacheReference jsiCache = JSICache::getOrCreateCache(runtime);
   BorrowingReference<jsi::Object> sharedObject = jsiCache.makeShared(std::move(object));
   auto instanceId = prototype->getNativeInstanceId();
   prototypeCache[instanceId] = sharedObject;
 
-  // 8. Return it!
+  // 9. Return it!
   return jsi::Value(runtime, *sharedObject);
 }
 

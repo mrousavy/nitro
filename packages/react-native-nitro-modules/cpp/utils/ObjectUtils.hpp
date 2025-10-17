@@ -22,13 +22,11 @@ struct PlainPropertyDescriptor {
 struct ComputedReadonlyPropertyDescriptor {
   bool configurable;
   bool enumerable;
-  bool writable;
   jsi::Function get;
 };
 struct ComputedPropertyDescriptor {
   bool configurable;
   bool enumerable;
-  bool writable;
   jsi::Function get;
   jsi::Function set;
 };
@@ -37,44 +35,37 @@ class ObjectUtils {
 public:
   ObjectUtils() = delete;
   ~ObjectUtils() = delete;
-  
+
 public:
   /**
    * Create a new `jsi::Object` with the given `prototype`.
    * Uses a native implementation if possible.
    */
-  static jsi::Value create(jsi::Runtime& runtime, const jsi::Value& prototype);
-  
+  static jsi::Object create(jsi::Runtime& runtime, const jsi::Value& prototype);
+
   /**
    * Define a plain property on the given `object` with the given `propertyName`.
    * The `descriptor` defines the attributes of this property.
    */
-  static void defineProperty(jsi::Runtime& runtime,
-                             const jsi::Object& object,
-                             const char* propertyName,
-                             const PlainPropertyDescriptor& descriptor);
+  static void defineProperty(jsi::Runtime& runtime, const jsi::Object& object, const char* propertyName,
+                             PlainPropertyDescriptor&& descriptor);
   /**
    * Define a plain property on the given `object` with the given `propertyName`.
    * The `descriptor` defines the attributes of this property.
    */
-  static void defineProperty(jsi::Runtime& runtime,
-                             const jsi::Object& object,
-                             const char* propertyName,
-                             const ComputedReadonlyPropertyDescriptor& descriptor);
+  static void defineProperty(jsi::Runtime& runtime, const jsi::Object& object, const char* propertyName,
+                             ComputedReadonlyPropertyDescriptor&& descriptor);
   /**
    * Define a plain property on the given `object` with the given `propertyName`.
    * The `descriptor` defines the attributes of this property.
    */
-  static void defineProperty(jsi::Runtime& runtime,
-                             const jsi::Object& object,
-                             const char* propertyName,
-                             const ComputedPropertyDescriptor& descriptor);
-  
+  static void defineProperty(jsi::Runtime& runtime, const jsi::Object& object, const char* propertyName,
+                             ComputedPropertyDescriptor&& descriptor);
+
   /**
-   * Freezes all values of the given `value` (Object).
+   * Freezes all values of the given `object`.
    */
-  static void freeze(jsi::Runtime& runtime, jsi::Value& value);
+  static void freeze(jsi::Runtime& runtime, const jsi::Object& object);
 };
 
-
-}
+} // namespace margelo::nitro
