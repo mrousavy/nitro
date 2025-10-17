@@ -16,8 +16,6 @@ namespace margelo::nitro {
 
 using namespace facebook;
 
-static constexpr auto GLOBAL_DISPATCHER_HOLDER_NAME = "__nitroDispatcher";
-
 /**
  * This map is only statically linked once to this library.
  * If multiple versions of react-native-nitro-modules are linked, there would be multiple maps. We catch that issue later.
@@ -32,26 +30,7 @@ void Dispatcher::installRuntimeGlobalDispatcher(jsi::Runtime& runtime, std::shar
 
   // Inject the dispatcher into Runtime global (runtime will hold a strong reference)
   jsi::Value dispatcherHolder = JSIConverter<std::shared_ptr<Dispatcher>>::toJSI(runtime, dispatcher);
-#ifdef NITRO_DEBUG
-  // In debug, let's do some additional safety checks
-  if (runtime.global().hasProperty(runtime, GLOBAL_DISPATCHER_HOLDER_NAME)) [[unlikely]] {
-    throw std::runtime_error("Failed to install Dispatcher into jsi::Runtime \"" + getRuntimeId(runtime) +
-                             "\" - it already has a Dispatcher installed! (`global." + std::string(GLOBAL_DISPATCHER_HOLDER_NAME) +
-                             "`)\n"
-                             "- Are you calling `installRuntimeGlobalDispatcher(...)` twice? "
-                             "- Are you linking Nitro twice? Ensure you don't have any duplicate symbols for `Dispatcher`.");
-  }
-  ObjectUtils::defineProperty(runtime, runtime.global(), GLOBAL_DISPATCHER_HOLDER_NAME,
-                              PlainPropertyDescriptor{
-                                  .enumerable = true,
-                                  .configurable = false,
-                                  .value = std::move(dispatcherHolder),
-                                  .writable = false,
-                              });
-#else
-  // In release, just install.
-  runtime.global().setProperty(runtime, GLOBAL_DISPATCHER_HOLDER_NAME, std::move(dispatcherHolder));
-#endif
+  ObjectUtils::defineGlobal(runtime, KnownGlobalPropertyName::DISPATCHER, std::move(dispatcherHolder));
 }
 
 std::shared_ptr<Dispatcher> Dispatcher::getRuntimeGlobalDispatcher(jsi::Runtime& runtime) {
@@ -78,14 +57,15 @@ std::shared_ptr<Dispatcher> Dispatcher::getRuntimeGlobalDispatcher(jsi::Runtime&
 }
 
 jsi::Value Dispatcher::getRuntimeGlobalDispatcherHolder(jsi::Runtime& runtime) {
-  if (!runtime.global().hasProperty(runtime, GLOBAL_DISPATCHER_HOLDER_NAME)) [[unlikely]] {
+  const char* dispatcherHolderName = ObjectUtils::getKnownGlobalPropertyNameString(KnownGlobalPropertyName::DISPATCHER);
+  if (!runtime.global().hasProperty(runtime, dispatcherHolderName)) [[unlikely]] {
     throw std::runtime_error("The `jsi::Runtime` \"" + getRuntimeId(runtime) +
                              "\" does not support Callbacks or Promises because it does not have a `Dispatcher` installed!\n"
                              "To use Callbacks and Promises follow these steps;\n"
                              "1. Subclass `Dispatcher` with your implementation of `runAsync`/`runSync` for your Thread.\n"
                              "2. Call `Dispatcher::installRuntimeGlobalDispatcher(...)` with your `Runtime` and your `Dispatcher`.");
   }
-  return runtime.global().getProperty(runtime, GLOBAL_DISPATCHER_HOLDER_NAME);
+  return runtime.global().getProperty(runtime, dispatcherHolderName);
 }
 
 } // namespace margelo::nitro

@@ -23,7 +23,7 @@ using namespace facebook;
 
 std::unordered_map<jsi::Runtime*, ObjectUtils::FunctionCache> ObjectUtils::_cache;
 
-jsi::Object ObjectUtils::create(jsi::Runtime& runtime, const jsi::Value& prototype) {
+jsi::Object ObjectUtils::create(jsi::Runtime& runtime, const jsi::Value& prototype, bool allowCache) {
 #ifdef ENABLE_NATIVE_OBJECT_CREATE
   return jsi::Object::create(runtime, prototype);
 #else
@@ -34,7 +34,7 @@ jsi::Object ObjectUtils::create(jsi::Runtime& runtime, const jsi::Value& prototy
 #endif
 }
 
-const char* getKnownGlobalPropertyNameString(KnownGlobalPropertyName name) {
+const char* ObjectUtils::getKnownGlobalPropertyNameString(KnownGlobalPropertyName name) {
   switch (name) {
     case KnownGlobalPropertyName::DISPATCHER:
       return "__nitroDispatcher";
@@ -45,7 +45,7 @@ const char* getKnownGlobalPropertyNameString(KnownGlobalPropertyName name) {
   }
 }
 
-void ObjectUtils::defineGlobal(jsi::Runtime& runtime, KnownGlobalPropertyName name, jsi::Value&& value) {
+void ObjectUtils::defineGlobal(jsi::Runtime& runtime, KnownGlobalPropertyName name, jsi::Value&& value, bool allowCache) {
   const char* nameString = getKnownGlobalPropertyNameString(name);
 
 #ifdef NITRO_DEBUG
@@ -56,7 +56,8 @@ void ObjectUtils::defineGlobal(jsi::Runtime& runtime, KnownGlobalPropertyName na
                              "\")` twice? Did you link Nitro Modules twice?");
   }
   defineProperty(runtime, runtime.global(), nameString,
-                 PlainPropertyDescriptor{.configurable = false, .enumerable = true, .value = std::move(value), .writable = false});
+                 PlainPropertyDescriptor{.configurable = false, .enumerable = true, .value = std::move(value), .writable = false},
+                 allowCache);
 #else
   // In release, just set the property.
   runtime.global().setProperty(runtime, nameString, std::move(value));
@@ -64,10 +65,13 @@ void ObjectUtils::defineGlobal(jsi::Runtime& runtime, KnownGlobalPropertyName na
 }
 
 void ObjectUtils::defineProperty(jsi::Runtime& runtime, const jsi::Object& object, const char* propertyName,
-                                 PlainPropertyDescriptor&& descriptor) {
-  BorrowingReference<jsi::Function> definePropertyFn = getGlobalFunction(runtime, "Object.defineProperty", [](jsi::Runtime& runtime) {
-    return runtime.global().getPropertyAsObject(runtime, "Object").getPropertyAsFunction(runtime, "defineProperty");
-  });
+                                 PlainPropertyDescriptor&& descriptor, bool allowCache) {
+  BorrowingReference<jsi::Function> definePropertyFn = getGlobalFunction(
+      runtime, "Object.defineProperty",
+      [](jsi::Runtime& runtime) {
+        return runtime.global().getPropertyAsObject(runtime, "Object").getPropertyAsFunction(runtime, "defineProperty");
+      },
+      allowCache);
 
   jsi::String nameJs = jsi::String::createFromAscii(runtime, propertyName);
 
@@ -81,10 +85,13 @@ void ObjectUtils::defineProperty(jsi::Runtime& runtime, const jsi::Object& objec
 }
 
 void ObjectUtils::defineProperty(jsi::Runtime& runtime, const jsi::Object& object, const char* propertyName,
-                                 ComputedReadonlyPropertyDescriptor&& descriptor) {
-  BorrowingReference<jsi::Function> definePropertyFn = getGlobalFunction(runtime, "Object.defineProperty", [](jsi::Runtime& runtime) {
-    return runtime.global().getPropertyAsObject(runtime, "Object").getPropertyAsFunction(runtime, "defineProperty");
-  });
+                                 ComputedReadonlyPropertyDescriptor&& descriptor, bool allowCache) {
+  BorrowingReference<jsi::Function> definePropertyFn = getGlobalFunction(
+      runtime, "Object.defineProperty",
+      [](jsi::Runtime& runtime) {
+        return runtime.global().getPropertyAsObject(runtime, "Object").getPropertyAsFunction(runtime, "defineProperty");
+      },
+      allowCache);
 
   jsi::String nameJs = jsi::String::createFromAscii(runtime, propertyName);
 
@@ -97,10 +104,13 @@ void ObjectUtils::defineProperty(jsi::Runtime& runtime, const jsi::Object& objec
 }
 
 void ObjectUtils::defineProperty(jsi::Runtime& runtime, const jsi::Object& object, const char* propertyName,
-                                 ComputedPropertyDescriptor&& descriptor) {
-  BorrowingReference<jsi::Function> definePropertyFn = getGlobalFunction(runtime, "Object.defineProperty", [](jsi::Runtime& runtime) {
-    return runtime.global().getPropertyAsObject(runtime, "Object").getPropertyAsFunction(runtime, "defineProperty");
-  });
+                                 ComputedPropertyDescriptor&& descriptor, bool allowCache) {
+  BorrowingReference<jsi::Function> definePropertyFn = getGlobalFunction(
+      runtime, "Object.defineProperty",
+      [](jsi::Runtime& runtime) {
+        return runtime.global().getPropertyAsObject(runtime, "Object").getPropertyAsFunction(runtime, "defineProperty");
+      },
+      allowCache);
 
   jsi::String nameJs = jsi::String::createFromAscii(runtime, propertyName);
 
@@ -113,10 +123,13 @@ void ObjectUtils::defineProperty(jsi::Runtime& runtime, const jsi::Object& objec
   definePropertyFn->call(runtime, object, std::move(nameJs), std::move(descriptorJs));
 }
 
-void ObjectUtils::freeze(jsi::Runtime& runtime, const jsi::Object& object) {
-  BorrowingReference<jsi::Function> freezeFn = getGlobalFunction(runtime, "Object.freeze", [](jsi::Runtime& runtime) {
-    return runtime.global().getPropertyAsObject(runtime, "Object").getPropertyAsFunction(runtime, "freeze");
-  });
+void ObjectUtils::freeze(jsi::Runtime& runtime, const jsi::Object& object, bool allowCache) {
+  BorrowingReference<jsi::Function> freezeFn = getGlobalFunction(
+      runtime, "Object.freeze",
+      [](jsi::Runtime& runtime) {
+        return runtime.global().getPropertyAsObject(runtime, "Object").getPropertyAsFunction(runtime, "freeze");
+      },
+      allowCache);
 
   freezeFn->call(runtime, object);
 }

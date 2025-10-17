@@ -45,37 +45,42 @@ public:
    * Create a new `jsi::Object` with the given `prototype`.
    * Uses a native implementation if possible.
    */
-  static jsi::Object create(jsi::Runtime& runtime, const jsi::Value& prototype);
+  static jsi::Object create(jsi::Runtime& runtime, const jsi::Value& prototype, bool allowCache = true);
 
   /**
    * Define a global value for the given Runtime.
    * In debug, this performs additional safety checks such as freezing the property.
    */
-  static void defineGlobal(jsi::Runtime& runtime, KnownGlobalPropertyName name, jsi::Value&& value);
+  static void defineGlobal(jsi::Runtime& runtime, KnownGlobalPropertyName name, jsi::Value&& value, bool allowCache = true);
 
   /**
    * Define a plain property on the given `object` with the given `propertyName`.
    * The `descriptor` defines the attributes of this property.
    */
   static void defineProperty(jsi::Runtime& runtime, const jsi::Object& object, const char* propertyName,
-                             PlainPropertyDescriptor&& descriptor);
+                             PlainPropertyDescriptor&& descriptor, bool allowCache = true);
   /**
    * Define a plain property on the given `object` with the given `propertyName`.
    * The `descriptor` defines the attributes of this property.
    */
   static void defineProperty(jsi::Runtime& runtime, const jsi::Object& object, const char* propertyName,
-                             ComputedReadonlyPropertyDescriptor&& descriptor);
+                             ComputedReadonlyPropertyDescriptor&& descriptor, bool allowCache = true);
   /**
    * Define a plain property on the given `object` with the given `propertyName`.
    * The `descriptor` defines the attributes of this property.
    */
   static void defineProperty(jsi::Runtime& runtime, const jsi::Object& object, const char* propertyName,
-                             ComputedPropertyDescriptor&& descriptor);
+                             ComputedPropertyDescriptor&& descriptor, bool allowCache = true);
 
   /**
    * Freezes all values of the given `object`.
    */
-  static void freeze(jsi::Runtime& runtime, const jsi::Object& object);
+  static void freeze(jsi::Runtime& runtime, const jsi::Object& object, bool allowCache = true);
+
+  /**
+   * Get a string name for a known global property name.
+   */
+  static const char* getKnownGlobalPropertyNameString(KnownGlobalPropertyName name);
 
 private:
   using FunctionCache = std::unordered_map<std::string, BorrowingReference<jsi::Function>>;
