@@ -10,6 +10,7 @@
 #include "JSIHelpers.hpp"
 #include "NitroDefines.hpp"
 #include "NitroLogger.hpp"
+#include "ObjectUtils.hpp"
 
 namespace margelo::nitro {
 
@@ -31,7 +32,13 @@ void Dispatcher::installRuntimeGlobalDispatcher(jsi::Runtime& runtime, std::shar
 
   // Inject the dispatcher into Runtime global (runtime will hold a strong reference)
   jsi::Value dispatcherHolder = JSIConverter<std::shared_ptr<Dispatcher>>::toJSI(runtime, dispatcher);
-  runtime.global().setProperty(runtime, GLOBAL_DISPATCHER_HOLDER_NAME, std::move(dispatcherHolder));
+  ObjectUtils::defineProperty(runtime, runtime.global(), GLOBAL_DISPATCHER_HOLDER_NAME,
+                              PlainPropertyDescriptor{
+                                  .enumerable = true,
+                                  .configurable = false,
+                                  .value = std::move(dispatcherHolder),
+                                  .writable = false,
+                              });
 }
 
 std::shared_ptr<Dispatcher> Dispatcher::getRuntimeGlobalDispatcher(jsi::Runtime& runtime) {
