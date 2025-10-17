@@ -29,6 +29,7 @@ using namespace margelo;
  */
 @implementation NativeNitroModules {
   bool _didInstall;
+  NSString* _Nullable _errorMessage;
   std::weak_ptr<react::CallInvoker> _callInvoker;
 }
 RCT_EXPORT_MODULE(NitroModules)
@@ -48,7 +49,8 @@ RCT_EXPORT_MODULE(NitroModules)
     nitro::install(runtime, dispatcher);
     _didInstall = true;
   } catch (const std::exception& exc) {
-    nitro::Logger::log(nitro::LogLevel::Error, "NativeNitroModules", "Failed to install Nitro! %s", exc.what());
+    nitro::Logger::log(nitro::LogLevel::Error, "NitroModules", "Failed to install Nitro! %s", exc.what());
+    _errorMessage = [NSString stringWithCString:exc.what() encoding:kCFStringEncodingUTF8];
     _didInstall = false;
   }
 }
@@ -58,6 +60,9 @@ RCT_EXPORT_MODULE(NitroModules)
     // installJSIBindingsWithRuntime ran successfully.
     return nil;
   } else {
+    if (_errorMessage != nil) {
+      return _errorMessage;
+    }
     return @"installJSIBindingsWithRuntime: was not called - JSI Bindings could not be installed!";
   }
 }
