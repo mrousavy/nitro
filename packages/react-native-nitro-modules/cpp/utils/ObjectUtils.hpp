@@ -33,6 +33,8 @@ struct ComputedPropertyDescriptor {
   jsi::Function set;
 };
 
+enum class KnownGlobalPropertyName { DISPATCHER, JSI_CACHE, NITRO_MODULES_PROXY };
+
 class ObjectUtils {
 public:
   ObjectUtils() = delete;
@@ -44,6 +46,12 @@ public:
    * Uses a native implementation if possible.
    */
   static jsi::Object create(jsi::Runtime& runtime, const jsi::Value& prototype);
+
+  /**
+   * Define a global value for the given Runtime.
+   * In debug, this performs additional safety checks such as freezing the property.
+   */
+  static void defineGlobal(jsi::Runtime& runtime, KnownGlobalPropertyName name, jsi::Value&& value);
 
   /**
    * Define a plain property on the given `object` with the given `propertyName`.
@@ -70,17 +78,12 @@ public:
   static void freeze(jsi::Runtime& runtime, const jsi::Object& object);
 
 private:
-  struct Cache {
-    BorrowingReference<jsi::Function> objectCreate;
-    BorrowingReference<jsi::Function> objectDefineProperty;
-    BorrowingReference<jsi::Function> objectFreeze;
-    // no copy
-    Cache(const Cache&) = delete;
-    Cache(Cache&&) = default;
-    Cache() = default;
-    ~Cache() = default;
-  };
-  static std::unordered_map<jsi::Runtime*, Cache> _cache;
+  using FunctionCache = std::unordered_map<std::string, BorrowingReference<jsi::Function>>;
+  static std::unordered_map<jsi::Runtime*, FunctionCache> _cache;
+
+  static BorrowingReference<jsi::Function> getGlobalFunction(jsi::Runtime& runtime, const char* key,
+                                                             std::function<jsi::Function(jsi::Runtime&)> getFunction,
+                                                             bool allowCache = true);
 };
 
 } // namespace margelo::nitro
