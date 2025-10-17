@@ -4,7 +4,7 @@ import type {
   HybridViewMethods,
   HybridViewProps,
 } from './HybridView'
-import { NativeComponentRegistry } from './NativeComponentRegistry'
+import { ReactNativeComponentRegistry } from './ReactNativeComponentRegistry'
 
 type AttributeValue<T, V = T> =
   | boolean
@@ -106,12 +106,12 @@ export function getHostComponent<
   name: string,
   getViewConfig: () => ViewConfig<Props>
 ): ReactNativeView<Props, Methods> {
-  if (NativeComponentRegistry == null) {
+  if (ReactNativeComponentRegistry == null) {
     throw new Error(
       `NativeComponentRegistry is not available on ${Platform.OS}!`
     )
   }
-  return NativeComponentRegistry.get(name, () => {
+  return ReactNativeComponentRegistry.get(name, () => {
     const config = getViewConfig()
     config.validAttributes = wrapValidAttributes(config.validAttributes)
     return config

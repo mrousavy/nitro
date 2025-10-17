@@ -16,4 +16,4 @@ const registry: RegistryType | undefined =
 /**
  * `NativeComponentRegistry` from react-native core
  */
-export const NativeComponentRegistry = registry
+export const ReactNativeComponentRegistry = registry
