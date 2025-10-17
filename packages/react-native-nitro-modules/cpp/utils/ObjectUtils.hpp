@@ -74,6 +74,11 @@ private:
     BorrowingReference<jsi::Function> objectCreate;
     BorrowingReference<jsi::Function> objectDefineProperty;
     BorrowingReference<jsi::Function> objectFreeze;
+    // no copy
+    Cache(const Cache&) = delete;
+    Cache(Cache&&) = default;
+    Cache() = default;
+    ~Cache() = default;
   };
   static std::unordered_map<jsi::Runtime*, Cache> _cache;
 };

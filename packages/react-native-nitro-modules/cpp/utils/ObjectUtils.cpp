@@ -25,7 +25,7 @@ jsi::Object ObjectUtils::create(jsi::Runtime& runtime, const jsi::Value& prototy
 #ifdef ENABLE_NATIVE_OBJECT_CREATE
   return jsi::Object::create(runtime, prototype);
 #else
-  Cache cache = _cache[&runtime];
+  Cache& cache = _cache[&runtime];
   if (cache.objectCreate == nullptr) {
     auto jsiCache = JSICache::getOrCreateCache(runtime);
     jsi::Object objectCtor = runtime.global().getPropertyAsObject(runtime, "Object");
@@ -38,7 +38,7 @@ jsi::Object ObjectUtils::create(jsi::Runtime& runtime, const jsi::Value& prototy
 
 void ObjectUtils::defineProperty(jsi::Runtime& runtime, const jsi::Object& object, const char* propertyName,
                                  PlainPropertyDescriptor&& descriptor) {
-  Cache cache = _cache[&runtime];
+  Cache& cache = _cache[&runtime];
   if (cache.objectDefineProperty == nullptr) {
     auto jsiCache = JSICache::getOrCreateCache(runtime);
     jsi::Object objectCtor = runtime.global().getPropertyAsObject(runtime, "Object");
@@ -59,7 +59,7 @@ void ObjectUtils::defineProperty(jsi::Runtime& runtime, const jsi::Object& objec
 
 void ObjectUtils::defineProperty(jsi::Runtime& runtime, const jsi::Object& object, const char* propertyName,
                                  ComputedReadonlyPropertyDescriptor&& descriptor) {
-  Cache cache = _cache[&runtime];
+  Cache& cache = _cache[&runtime];
   if (cache.objectDefineProperty == nullptr) {
     auto jsiCache = JSICache::getOrCreateCache(runtime);
     jsi::Object objectCtor = runtime.global().getPropertyAsObject(runtime, "Object");
@@ -79,7 +79,7 @@ void ObjectUtils::defineProperty(jsi::Runtime& runtime, const jsi::Object& objec
 
 void ObjectUtils::defineProperty(jsi::Runtime& runtime, const jsi::Object& object, const char* propertyName,
                                  ComputedPropertyDescriptor&& descriptor) {
-  Cache cache = _cache[&runtime];
+  Cache& cache = _cache[&runtime];
   if (cache.objectDefineProperty == nullptr) {
     auto jsiCache = JSICache::getOrCreateCache(runtime);
     jsi::Object objectCtor = runtime.global().getPropertyAsObject(runtime, "Object");
@@ -99,7 +99,7 @@ void ObjectUtils::defineProperty(jsi::Runtime& runtime, const jsi::Object& objec
 }
 
 void ObjectUtils::freeze(jsi::Runtime& runtime, const jsi::Object& object) {
-  Cache cache = _cache[&runtime];
+  Cache& cache = _cache[&runtime];
   if (cache.objectFreeze == nullptr) {
     auto jsiCache = JSICache::getOrCreateCache(runtime);
     jsi::Object objectCtor = runtime.global().getPropertyAsObject(runtime, "Object");
