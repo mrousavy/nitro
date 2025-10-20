@@ -14,7 +14,8 @@ namespace margelo::nitro::test {
 
 using namespace facebook;
 
-using ComplexVariant = std::variant<std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>, WrappedJsStruct, std::chrono::system_clock::time_point, std::shared_ptr<Promise<double>>, std::shared_ptr<AnyMap>>;
+using ComplexVariant = std::variant<std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>, WrappedJsStruct,
+                                    std::chrono::system_clock::time_point, std::shared_ptr<Promise<double>>, std::shared_ptr<AnyMap>>;
 
 class HybridTestObjectCpp : public HybridTestObjectCppSpec {
 public:

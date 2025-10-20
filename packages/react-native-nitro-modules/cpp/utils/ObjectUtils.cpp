@@ -23,17 +23,6 @@ using namespace facebook;
 
 std::unordered_map<jsi::Runtime*, ObjectUtils::FunctionCache> ObjectUtils::_cache;
 
-jsi::Object ObjectUtils::create(jsi::Runtime& runtime, const jsi::Value& prototype, bool allowCache) {
-#ifdef ENABLE_NATIVE_OBJECT_CREATE
-  return jsi::Object::create(runtime, prototype);
-#else
-  BorrowingReference<jsi::Function> createFn = getGlobalFunction(runtime, "Object.create", [](jsi::Runtime& runtime) {
-    return runtime.global().getPropertyAsObject(runtime, "Object").getPropertyAsFunction(runtime, "create");
-  });
-  return createFn->call(runtime, prototype).getObject(runtime);
-#endif
-}
-
 const char* ObjectUtils::getKnownGlobalPropertyNameString(KnownGlobalPropertyName name) {
   switch (name) {
     case KnownGlobalPropertyName::DISPATCHER:
@@ -43,6 +32,20 @@ const char* ObjectUtils::getKnownGlobalPropertyNameString(KnownGlobalPropertyNam
     case KnownGlobalPropertyName::NITRO_MODULES_PROXY:
       return "NitroModulesProxy";
   }
+}
+
+jsi::Object ObjectUtils::create(jsi::Runtime& runtime, const jsi::Value& prototype, bool allowCache) {
+#ifdef ENABLE_NATIVE_OBJECT_CREATE
+  return jsi::Object::create(runtime, prototype);
+#else
+  BorrowingReference<jsi::Function> createFn = getGlobalFunction(
+      runtime, "Object.create",
+      [](jsi::Runtime& runtime) {
+        return runtime.global().getPropertyAsObject(runtime, "Object").getPropertyAsFunction(runtime, "create");
+      },
+      allowCache);
+  return createFn->call(runtime, prototype).getObject(runtime);
+#endif
 }
 
 void ObjectUtils::defineGlobal(jsi::Runtime& runtime, KnownGlobalPropertyName name, jsi::Value&& value, bool allowCache) {

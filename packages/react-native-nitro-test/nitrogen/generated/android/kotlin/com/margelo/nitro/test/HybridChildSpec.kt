@@ -12,7 +12,6 @@ import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
 import com.margelo.nitro.core.HybridObject
 
-
 /**
  * A Kotlin class representing the Child HybridObject.
  * Implement this abstract class to create Kotlin-based instances of Child.
