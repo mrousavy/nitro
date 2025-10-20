@@ -13,6 +13,10 @@ import { KotlinCxxBridgedType } from './KotlinCxxBridgedType.js'
 
 export function createKotlinVariant(variant: VariantType): SourceFile[] {
   const jsName = variant.variants.map((v) => v.getCode('kotlin')).join(' | ')
+  const cxxName = variant
+    .getCode('c++')
+    .replaceAll('/* ', '')
+    .replaceAll(' */', '')
   const kotlinName = variant.getAliasName('kotlin')
   const namespace = `J${kotlinName}_impl`
 
@@ -211,7 +215,7 @@ ${createFileMetadataString(`J${kotlinName}.cpp`)}
 
 namespace ${cxxNamespace} {
   /**
-   * Converts J${kotlinName} to ${variant.getCode('c++')}
+   * Converts J${kotlinName} to ${cxxName}
    */
   ${variant.getCode('c++')} J${kotlinName}::toCpp() const {
     ${indent(cppGetIfs.join(' else '), '    ')}

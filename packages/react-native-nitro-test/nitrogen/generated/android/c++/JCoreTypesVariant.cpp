@@ -9,7 +9,7 @@
 
 namespace margelo::nitro::test {
   /**
-   * Converts JCoreTypesVariant to std::variant<std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>, WrappedJsStruct, std::chrono::system_clock::time_point, std::shared_ptr<Promise<double>>, std::shared_ptr<AnyMap>>
+   * Converts JCoreTypesVariant to std::variant<std::shared_ptr<ArrayBuffer>, std::function<void(double value)>, WrappedJsStruct, std::chrono::system_clock::time_point, std::shared_ptr<Promise<double>>, std::shared_ptr<AnyMap>>
    */
   std::variant<std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>, WrappedJsStruct, std::chrono::system_clock::time_point, std::shared_ptr<Promise<double>>, std::shared_ptr<AnyMap>> JCoreTypesVariant::toCpp() const {
     if (isInstanceOf(JCoreTypesVariant_impl::First::javaClassStatic())) {
