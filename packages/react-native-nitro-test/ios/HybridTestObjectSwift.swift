@@ -276,6 +276,10 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
     return variant
   }
 
+  func bounceComplexVariant(variant: CoreTypesVariant) throws -> CoreTypesVariant {
+    return variant
+  }
+
   func getVariantEnum(variant: Variant_Bool_OldEnum) throws -> Variant_Bool_OldEnum {
     return variant
   }

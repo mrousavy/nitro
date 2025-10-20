@@ -383,6 +383,10 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
     return variant
   }
 
+  override fun bounceComplexVariant(variant: CoreTypesVariant): CoreTypesVariant {
+    return variant
+  }
+
   override fun getVariantEnum(variant: Variant_Boolean_OldEnum): Variant_Boolean_OldEnum {
     return variant
   }

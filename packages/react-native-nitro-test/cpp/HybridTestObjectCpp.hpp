@@ -65,6 +65,11 @@ public:
   std::variant<std::string, Car> passNamedVariant(const std::variant<std::string, Car>& variant) override;
   std::variant<OptionalWrapper, std::shared_ptr<HybridBaseSpec>>
   passAllEmptyObjectVariant(const std::variant<OptionalWrapper, std::shared_ptr<HybridBaseSpec>>& variant) override;
+  std::variant<OptionalCallback, std::shared_ptr<AnyMap>, std::shared_ptr<Promise<void>>, std::chrono::system_clock::time_point,
+               std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>>
+  bounceComplexVariant(
+      const std::variant<OptionalCallback, std::shared_ptr<AnyMap>, std::shared_ptr<Promise<void>>, std::chrono::system_clock::time_point,
+                         std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>>& variant) override;
   std::tuple<double, std::string> getSomeTuple() override;
   void setSomeTuple(const std::tuple<double, std::string>& tuple) override;
   std::shared_ptr<HybridTestObjectCppSpec> getThisObject() override;

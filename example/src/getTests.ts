@@ -733,6 +733,44 @@ export function getTests(
         .didReturn('object')
         .equals(BASE)
     ),
+    createTest('bounceComplexVariant(...) with ArrayBuffer', () =>
+      it(() => testObject.bounceComplexVariant(testObject.createArrayBuffer()))
+        .didNotThrow()
+        .didReturn('object')
+        .isInstanceOf(ArrayBuffer)
+    ),
+    createTest('bounceComplexVariant(...) with Promise', () =>
+      it(() => testObject.bounceComplexVariant(new Promise<void>(() => {})))
+        .didNotThrow()
+        .didReturn('object')
+        .isInstanceOf(Promise)
+    ),
+    createTest('bounceComplexVariant(...) with Callback', () =>
+      it(() => testObject.bounceComplexVariant(() => {}))
+        .didNotThrow()
+        .didReturn('function')
+    ),
+    createTest('bounceComplexVariant(...) with struct', () =>
+      it(() => testObject.bounceComplexVariant({ callback: undefined }))
+        .didNotThrow()
+        .didReturn('object')
+        // @ts-expect-error
+        .toContain('callback')
+    ),
+    createTest('bounceComplexVariant(...) with AnyMap', () =>
+      it(() => testObject.bounceComplexVariant({ whateverValue: 55 }))
+        .didNotThrow()
+        .didReturn('object')
+        // @ts-expect-error
+        .toContain('whateverValue')
+        .equals({ whateverValue: 55 })
+    ),
+    createTest('bounceComplexVariant(...) with Date', () =>
+      it(() => testObject.bounceComplexVariant(new Date()))
+        .didNotThrow()
+        .didReturn('object')
+        .isInstanceOf(Date)
+    ),
     createTest('createChild().bounceVariant(...) works', () =>
       it(() => testObject.createChild().bounceVariant('hello!'))
         .didNotThrow()

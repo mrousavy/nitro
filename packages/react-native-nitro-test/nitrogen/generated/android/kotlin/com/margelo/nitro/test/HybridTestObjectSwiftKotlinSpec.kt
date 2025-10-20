@@ -438,6 +438,10 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
+  abstract fun bounceComplexVariant(variant: CoreTypesVariant): CoreTypesVariant
+  
+  @DoNotStrip
+  @Keep
   abstract fun createChild(): HybridChildSpec
   
   @DoNotStrip

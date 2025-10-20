@@ -196,6 +196,7 @@ namespace margelo::nitro::test {
       virtual std::variant<Car, Person> getVariantObjects(const std::variant<Car, Person>& variant) = 0;
       virtual std::variant<std::string, Car> passNamedVariant(const std::variant<std::string, Car>& variant) = 0;
       virtual std::variant<OptionalWrapper, std::shared_ptr<HybridBaseSpec>> passAllEmptyObjectVariant(const std::variant<OptionalWrapper, std::shared_ptr<HybridBaseSpec>>& variant) = 0;
+      virtual std::variant<OptionalCallback, std::shared_ptr<AnyMap>, std::shared_ptr<Promise<void>>, std::chrono::system_clock::time_point, std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>> bounceComplexVariant(const std::variant<OptionalCallback, std::shared_ptr<AnyMap>, std::shared_ptr<Promise<void>>, std::chrono::system_clock::time_point, std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>>& variant) = 0;
       virtual std::shared_ptr<HybridChildSpec> createChild() = 0;
       virtual std::shared_ptr<HybridBaseSpec> createBase() = 0;
       virtual std::shared_ptr<HybridBaseSpec> createBaseActualChild() = 0;

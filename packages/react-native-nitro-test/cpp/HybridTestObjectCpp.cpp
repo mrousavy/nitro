@@ -277,6 +277,14 @@ HybridTestObjectCpp::passAllEmptyObjectVariant(const std::variant<OptionalWrappe
   return variant;
 }
 
+std::variant<OptionalCallback, std::shared_ptr<AnyMap>, std::shared_ptr<Promise<void>>, std::chrono::system_clock::time_point,
+             std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>>
+HybridTestObjectCpp::bounceComplexVariant(
+    const std::variant<OptionalCallback, std::shared_ptr<AnyMap>, std::shared_ptr<Promise<void>>, std::chrono::system_clock::time_point,
+                       std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>>& variant) {
+  return variant;
+}
+
 std::variant<bool, OldEnum> HybridTestObjectCpp::getVariantEnum(const std::variant<bool, OldEnum>& variant) {
   return variant;
 }

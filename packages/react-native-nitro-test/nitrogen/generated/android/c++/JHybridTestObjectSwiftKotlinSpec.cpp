@@ -93,6 +93,7 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 #include "HybridBaseSpec.hpp"
 #include "JVariant_OptionalWrapper_HybridBaseSpec.hpp"
 #include "JHybridBaseSpec.hpp"
+#include "JCoreTypesVariant.hpp"
 #include "HybridChildSpec.hpp"
 #include "JHybridChildSpec.hpp"
 #include <NitroTestExternal/HybridSomeExternalObjectSpec.hpp>
@@ -878,6 +879,11 @@ namespace margelo::nitro::test {
   std::variant<OptionalWrapper, std::shared_ptr<HybridBaseSpec>> JHybridTestObjectSwiftKotlinSpec::passAllEmptyObjectVariant(const std::variant<OptionalWrapper, std::shared_ptr<HybridBaseSpec>>& variant) {
     static const auto method = javaClassStatic()->getMethod<jni::local_ref<JVariant_OptionalWrapper_HybridBaseSpec>(jni::alias_ref<JVariant_OptionalWrapper_HybridBaseSpec> /* variant */)>("passAllEmptyObjectVariant");
     auto __result = method(_javaPart, JVariant_OptionalWrapper_HybridBaseSpec::fromCpp(variant));
+    return __result->toCpp();
+  }
+  std::variant<OptionalCallback, std::shared_ptr<AnyMap>, std::shared_ptr<Promise<void>>, std::chrono::system_clock::time_point, std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>> JHybridTestObjectSwiftKotlinSpec::bounceComplexVariant(const std::variant<OptionalCallback, std::shared_ptr<AnyMap>, std::shared_ptr<Promise<void>>, std::chrono::system_clock::time_point, std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>>& variant) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JCoreTypesVariant>(jni::alias_ref<JCoreTypesVariant> /* variant */)>("bounceComplexVariant");
+    auto __result = method(_javaPart, JCoreTypesVariant::fromCpp(variant));
     return __result->toCpp();
   }
   std::shared_ptr<HybridChildSpec> JHybridTestObjectSwiftKotlinSpec::createChild() {
