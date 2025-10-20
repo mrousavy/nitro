@@ -6,8 +6,8 @@ import TabItem from '@theme/TabItem';
 
 # ArrayBuffers (`ArrayBuffer`)
 
-Array Buffers allow highly efficient access to the same data from both JS and native.
-Passing an `ArrayBuffer` from native to JS and back does not involve any copies, and is therefore the fastest way of passing around data in Nitro.
+Array Buffers allow highly efficient access to shared raw binary data from both JS and native.
+Passing an `ArrayBuffer` from native to JS and back is zero-copy.
 
 <Tabs>
   <TabItem value="ts" label="TypeScript" default>
