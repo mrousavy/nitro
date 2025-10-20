@@ -84,7 +84,9 @@ If you need a non-owning buffer's data for longer, **copy it first**:
 ```swift
 func doSomething(buffer: ArrayBuffer) {
   // diff-add
-  let copy = ArrayBuffer.copy(of: buffer)
+  let copy = buffer.isOwning
+               ? buffer
+               : ArrayBuffer.copy(of: buffer)
   let data = copy.data   // <-- ✅ safe now because we have an owning copy
   DispatchQueue.global().async {
     let data = copy.data // <-- ✅ still safe now because we have an owning copy
