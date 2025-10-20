@@ -739,11 +739,22 @@ export function getTests(
         .didReturn('object')
         .isInstanceOf(ArrayBuffer)
     ),
-    createTest('bounceComplexVariant(...) with Promise', () =>
-      it(() => testObject.bounceComplexVariant(new Promise<void>(() => {})))
+    createTest('bounceComplexVariant(...) with Promise', async () =>
+      (
+        await it(async () => {
+          const result = testObject.bounceComplexVariant(
+            new Promise<number>((resolve) => {
+              setTimeout(() => resolve(55), 100)
+            })
+          )
+          if (!(result instanceof Promise))
+            throw new Error(`Not a Promise! (${stringify(result)})`)
+          return await result
+        })
+      )
         .didNotThrow()
-        .didReturn('object')
-        .isInstanceOf(Promise)
+        .didReturn('number')
+        .equals(55)
     ),
     createTest('bounceComplexVariant(...) with Callback', () =>
       it(() => testObject.bounceComplexVariant(() => {}))

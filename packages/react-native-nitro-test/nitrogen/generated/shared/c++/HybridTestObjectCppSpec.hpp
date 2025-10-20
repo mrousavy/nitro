@@ -200,7 +200,7 @@ namespace margelo::nitro::test {
       virtual std::variant<Car, Person> getVariantObjects(const std::variant<Car, Person>& variant) = 0;
       virtual std::variant<std::string, Car> passNamedVariant(const std::variant<std::string, Car>& variant) = 0;
       virtual std::variant<std::shared_ptr<HybridBaseSpec>, OptionalWrapper> passAllEmptyObjectVariant(const std::variant<std::shared_ptr<HybridBaseSpec>, OptionalWrapper>& variant) = 0;
-      virtual std::variant<std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>, WrappedJsStruct, std::shared_ptr<Promise<void>>, std::chrono::system_clock::time_point, std::shared_ptr<AnyMap>> bounceComplexVariant(const std::variant<std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>, WrappedJsStruct, std::shared_ptr<Promise<void>>, std::chrono::system_clock::time_point, std::shared_ptr<AnyMap>>& variant) = 0;
+      virtual std::variant<std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>, WrappedJsStruct, std::chrono::system_clock::time_point, std::shared_ptr<Promise<double>>, std::shared_ptr<AnyMap>> bounceComplexVariant(const std::variant<std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>, WrappedJsStruct, std::chrono::system_clock::time_point, std::shared_ptr<Promise<double>>, std::shared_ptr<AnyMap>>& variant) = 0;
       virtual std::shared_ptr<HybridChildSpec> createChild() = 0;
       virtual std::shared_ptr<HybridBaseSpec> createBase() = 0;
       virtual std::shared_ptr<HybridBaseSpec> createBaseActualChild() = 0;

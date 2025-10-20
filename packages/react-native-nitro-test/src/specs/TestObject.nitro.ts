@@ -88,7 +88,7 @@ export type CustomString = CustomType<
 
 type CoreTypesVariant =
   | ArrayBuffer
-  | Promise<void>
+  | Promise<number>
   | ((value: number) => void)
   | WrappedJsStruct
   | Date

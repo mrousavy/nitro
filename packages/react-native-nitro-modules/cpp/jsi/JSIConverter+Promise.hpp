@@ -102,7 +102,8 @@ struct JSIConverter<std::shared_ptr<Promise<TResult>>> final {
       return false;
     }
     jsi::Object object = value.getObject(runtime);
-    return object.hasProperty(runtime, "then");
+    jsi::Function promiseCtor = runtime.global().getPropertyAsFunction(runtime, "Promise");
+    return object.instanceOf(runtime, promiseCtor);
   }
 };
 

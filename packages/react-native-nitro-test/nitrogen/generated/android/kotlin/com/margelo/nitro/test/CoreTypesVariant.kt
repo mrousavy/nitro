@@ -13,7 +13,7 @@ import com.margelo.nitro.core.Promise
 import com.margelo.nitro.core.AnyMap
 
 /**
- * Represents the TypeScript variant "ArrayBuffer | (value: Double) -> Unit | WrappedJsStruct | Promise<Unit> | java.time.Instant | AnyMap".
+ * Represents the TypeScript variant "ArrayBuffer | (value: Double) -> Unit | WrappedJsStruct | java.time.Instant | Promise<Double> | AnyMap".
  */
 @Suppress("ClassName")
 @DoNotStrip
@@ -25,9 +25,9 @@ sealed class CoreTypesVariant {
   @DoNotStrip
   data class Third(@DoNotStrip val value: WrappedJsStruct): CoreTypesVariant()
   @DoNotStrip
-  data class Fourth(@DoNotStrip val value: Promise<Unit>): CoreTypesVariant()
+  data class Fourth(@DoNotStrip val value: java.time.Instant): CoreTypesVariant()
   @DoNotStrip
-  data class Fifth(@DoNotStrip val value: java.time.Instant): CoreTypesVariant()
+  data class Fifth(@DoNotStrip val value: Promise<Double>): CoreTypesVariant()
   @DoNotStrip
   data class Sixth(@DoNotStrip val value: AnyMap): CoreTypesVariant()
 
@@ -66,11 +66,11 @@ sealed class CoreTypesVariant {
     val value = (this as? Third)?.value ?: return null
     return value
   }
-  fun asFourthOrNull(): Promise<Unit>? {
+  fun asFourthOrNull(): java.time.Instant? {
     val value = (this as? Fourth)?.value ?: return null
     return value
   }
-  fun asFifthOrNull(): java.time.Instant? {
+  fun asFifthOrNull(): Promise<Double>? {
     val value = (this as? Fifth)?.value ?: return null
     return value
   }
@@ -79,7 +79,7 @@ sealed class CoreTypesVariant {
     return value
   }
 
-  inline fun <R> match(first: (ArrayBuffer) -> R, second: ((value: Double) -> Unit) -> R, third: (WrappedJsStruct) -> R, fourth: (Promise<Unit>) -> R, fifth: (java.time.Instant) -> R, sixth: (AnyMap) -> R): R {
+  inline fun <R> match(first: (ArrayBuffer) -> R, second: ((value: Double) -> Unit) -> R, third: (WrappedJsStruct) -> R, fourth: (java.time.Instant) -> R, fifth: (Promise<Double>) -> R, sixth: (AnyMap) -> R): R {
     return when (this) {
       is First -> first(value)
       is Second -> second(value)
@@ -102,10 +102,10 @@ sealed class CoreTypesVariant {
     fun create(value: WrappedJsStruct): CoreTypesVariant = Third(value)
     @JvmStatic
     @DoNotStrip
-    fun create(value: Promise<Unit>): CoreTypesVariant = Fourth(value)
+    fun create(value: java.time.Instant): CoreTypesVariant = Fourth(value)
     @JvmStatic
     @DoNotStrip
-    fun create(value: java.time.Instant): CoreTypesVariant = Fifth(value)
+    fun create(value: Promise<Double>): CoreTypesVariant = Fifth(value)
     @JvmStatic
     @DoNotStrip
     fun create(value: AnyMap): CoreTypesVariant = Sixth(value)
