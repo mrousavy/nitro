@@ -751,11 +751,18 @@ export function getTests(
         .didReturn('function')
     ),
     createTest('bounceComplexVariant(...) with struct', () =>
-      it(() => testObject.bounceComplexVariant({ callback: undefined }))
+      it(() =>
+        testObject.bounceComplexVariant({
+          items: [],
+          value: { onChanged: () => {}, value: 55 },
+        })
+      )
         .didNotThrow()
         .didReturn('object')
         // @ts-expect-error
-        .toContain('callback')
+        .toContain('items')
+        // @ts-expect-error
+        .toContain('value')
     ),
     createTest('bounceComplexVariant(...) with AnyMap', () =>
       it(() => testObject.bounceComplexVariant({ whateverValue: 55 }))

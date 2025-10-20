@@ -877,7 +877,7 @@ namespace margelo::nitro::test {
     auto __result = method(_javaPart, JVariant_OptionalWrapper_HybridBaseSpec::fromCpp(variant));
     return __result->toCpp();
   }
-  std::variant<OptionalCallback, std::shared_ptr<AnyMap>, std::shared_ptr<Promise<void>>, std::chrono::system_clock::time_point, std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>> JHybridTestObjectSwiftKotlinSpec::bounceComplexVariant(const std::variant<OptionalCallback, std::shared_ptr<AnyMap>, std::shared_ptr<Promise<void>>, std::chrono::system_clock::time_point, std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>>& variant) {
+  std::variant<WrappedJsStruct, std::shared_ptr<AnyMap>, std::shared_ptr<Promise<void>>, std::chrono::system_clock::time_point, std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>> JHybridTestObjectSwiftKotlinSpec::bounceComplexVariant(const std::variant<WrappedJsStruct, std::shared_ptr<AnyMap>, std::shared_ptr<Promise<void>>, std::chrono::system_clock::time_point, std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>>& variant) {
     static const auto method = javaClassStatic()->getMethod<jni::local_ref<JCoreTypesVariant>(jni::alias_ref<JCoreTypesVariant> /* variant */)>("bounceComplexVariant");
     auto __result = method(_javaPart, JCoreTypesVariant::fromCpp(variant));
     return __result->toCpp();

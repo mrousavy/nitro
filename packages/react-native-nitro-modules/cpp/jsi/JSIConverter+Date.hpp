@@ -72,7 +72,7 @@ struct JSIConverter<std::chrono::system_clock::time_point> final {
   static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
     if (value.isObject()) {
       jsi::Object object = value.getObject(runtime);
-      
+
       jsi::Function dateCtor = runtime.global().getPropertyAsFunction(runtime, "Date");
       return object.instanceOf(runtime, dateCtor);
     }

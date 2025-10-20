@@ -13,7 +13,7 @@ import NitroModules
  */
 @frozen
 public indirect enum CoreTypesVariant {
-  case first(OptionalCallback)
+  case first(WrappedJsStruct)
   case second(AnyMap)
   case third(Promise<Void>)
   case fourth(Date)

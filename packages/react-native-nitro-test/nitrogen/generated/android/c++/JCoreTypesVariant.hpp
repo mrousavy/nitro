@@ -10,23 +10,23 @@
 #include <fbjni/fbjni.h>
 #include <variant>
 
-#include "OptionalCallback.hpp"
+#include "WrappedJsStruct.hpp"
 #include <NitroModules/AnyMap.hpp>
 #include <NitroModules/Promise.hpp>
 #include <chrono>
 #include <NitroModules/ArrayBuffer.hpp>
 #include <functional>
 #include <variant>
-#include "JOptionalCallback.hpp"
-#include <optional>
-#include "JVariant_Double_______Unit.hpp"
-#include "JFunc_void.hpp"
+#include "JWrappedJsStruct.hpp"
+#include "JsStyleStruct.hpp"
+#include "JJsStyleStruct.hpp"
+#include "JFunc_void_double.hpp"
+#include <vector>
 #include <NitroModules/JAnyMap.hpp>
 #include <NitroModules/JPromise.hpp>
 #include <NitroModules/JInstant.hpp>
 #include <NitroModules/JArrayBuffer.hpp>
 #include <NitroModules/JUnit.hpp>
-#include "JFunc_void_double.hpp"
 
 namespace margelo::nitro::test {
 
@@ -39,8 +39,8 @@ namespace margelo::nitro::test {
   public:
     static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/CoreTypesVariant;";
 
-    static jni::local_ref<JCoreTypesVariant> create_0(jni::alias_ref<JOptionalCallback> value) {
-      static const auto method = javaClassStatic()->getStaticMethod<JCoreTypesVariant(jni::alias_ref<JOptionalCallback>)>("create");
+    static jni::local_ref<JCoreTypesVariant> create_0(jni::alias_ref<JWrappedJsStruct> value) {
+      static const auto method = javaClassStatic()->getStaticMethod<JCoreTypesVariant(jni::alias_ref<JWrappedJsStruct>)>("create");
       return method(javaClassStatic(), value);
     }
     static jni::local_ref<JCoreTypesVariant> create_1(jni::alias_ref<JAnyMap::javaobject> value) {
@@ -64,9 +64,9 @@ namespace margelo::nitro::test {
       return method(javaClassStatic(), value);
     }
 
-    static jni::local_ref<JCoreTypesVariant> fromCpp(const std::variant<OptionalCallback, std::shared_ptr<AnyMap>, std::shared_ptr<Promise<void>>, std::chrono::system_clock::time_point, std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>>& variant) {
+    static jni::local_ref<JCoreTypesVariant> fromCpp(const std::variant<WrappedJsStruct, std::shared_ptr<AnyMap>, std::shared_ptr<Promise<void>>, std::chrono::system_clock::time_point, std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>>& variant) {
       switch (variant.index()) {
-        case 0: return create_0(JOptionalCallback::fromCpp(std::get<0>(variant)));
+        case 0: return create_0(JWrappedJsStruct::fromCpp(std::get<0>(variant)));
         case 1: return create_1(JAnyMap::create(std::get<1>(variant)));
         case 2: return create_2([&]() {
           jni::local_ref<JPromise::javaobject> __localPromise = JPromise::create();
@@ -87,7 +87,7 @@ namespace margelo::nitro::test {
       }
     }
 
-    [[nodiscard]] std::variant<OptionalCallback, std::shared_ptr<AnyMap>, std::shared_ptr<Promise<void>>, std::chrono::system_clock::time_point, std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>> toCpp() const;
+    [[nodiscard]] std::variant<WrappedJsStruct, std::shared_ptr<AnyMap>, std::shared_ptr<Promise<void>>, std::chrono::system_clock::time_point, std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>> toCpp() const;
   };
 
   namespace JCoreTypesVariant_impl {
@@ -95,8 +95,8 @@ namespace margelo::nitro::test {
     public:
       static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/CoreTypesVariant$First;";
     
-      [[nodiscard]] jni::local_ref<JOptionalCallback> getValue() const {
-        static const auto field = javaClassStatic()->getField<JOptionalCallback>("value");
+      [[nodiscard]] jni::local_ref<JWrappedJsStruct> getValue() const {
+        static const auto field = javaClassStatic()->getField<JWrappedJsStruct>("value");
         return getFieldValue(field);
       }
     };

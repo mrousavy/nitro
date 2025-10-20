@@ -1149,22 +1149,22 @@ namespace margelo::nitro::test::bridge::swift {
     return std__variant_OptionalWrapper__std__shared_ptr_HybridBaseSpec__(value);
   }
   
-  // pragma MARK: std::variant<OptionalCallback, std::shared_ptr<AnyMap>, std::shared_ptr<Promise<void>>, std::chrono::system_clock::time_point, std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>>
+  // pragma MARK: std::variant<WrappedJsStruct, std::shared_ptr<AnyMap>, std::shared_ptr<Promise<void>>, std::chrono::system_clock::time_point, std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>>
   /**
-   * Wrapper struct for `std::variant<OptionalCallback, std::shared_ptr<AnyMap>, std::shared_ptr<Promise<void>>, std::chrono::system_clock::time_point, std::shared_ptr<ArrayBuffer>, std::function<void(double / * value * /)>>`.
+   * Wrapper struct for `std::variant<WrappedJsStruct, std::shared_ptr<AnyMap>, std::shared_ptr<Promise<void>>, std::chrono::system_clock::time_point, std::shared_ptr<ArrayBuffer>, std::function<void(double / * value * /)>>`.
    * std::variant cannot be used in Swift because of a Swift bug.
    * Not even specializing it works. So we create a wrapper struct.
    */
-  struct std__variant_OptionalCallback__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value______ {
-    std::variant<OptionalCallback, std::shared_ptr<AnyMap>, std::shared_ptr<Promise<void>>, std::chrono::system_clock::time_point, std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>> variant;
-    std__variant_OptionalCallback__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value______(std::variant<OptionalCallback, std::shared_ptr<AnyMap>, std::shared_ptr<Promise<void>>, std::chrono::system_clock::time_point, std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>> variant): variant(variant) { }
-    operator std::variant<OptionalCallback, std::shared_ptr<AnyMap>, std::shared_ptr<Promise<void>>, std::chrono::system_clock::time_point, std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>>() const noexcept {
+  struct std__variant_WrappedJsStruct__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value______ {
+    std::variant<WrappedJsStruct, std::shared_ptr<AnyMap>, std::shared_ptr<Promise<void>>, std::chrono::system_clock::time_point, std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>> variant;
+    std__variant_WrappedJsStruct__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value______(std::variant<WrappedJsStruct, std::shared_ptr<AnyMap>, std::shared_ptr<Promise<void>>, std::chrono::system_clock::time_point, std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>> variant): variant(variant) { }
+    operator std::variant<WrappedJsStruct, std::shared_ptr<AnyMap>, std::shared_ptr<Promise<void>>, std::chrono::system_clock::time_point, std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>>() const noexcept {
       return variant;
     }
     inline size_t index() const noexcept {
       return variant.index();
     }
-    inline OptionalCallback get_0() const noexcept {
+    inline WrappedJsStruct get_0() const noexcept {
       return std::get<0>(variant);
     }
     inline std::shared_ptr<AnyMap> get_1() const noexcept {
@@ -1183,23 +1183,23 @@ namespace margelo::nitro::test::bridge::swift {
       return std::get<5>(variant);
     }
   };
-  inline std__variant_OptionalCallback__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value______ create_std__variant_OptionalCallback__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value______(const OptionalCallback& value) noexcept {
-    return std__variant_OptionalCallback__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value______(value);
+  inline std__variant_WrappedJsStruct__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value______ create_std__variant_WrappedJsStruct__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value______(const WrappedJsStruct& value) noexcept {
+    return std__variant_WrappedJsStruct__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value______(value);
   }
-  inline std__variant_OptionalCallback__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value______ create_std__variant_OptionalCallback__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value______(const std::shared_ptr<AnyMap>& value) noexcept {
-    return std__variant_OptionalCallback__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value______(value);
+  inline std__variant_WrappedJsStruct__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value______ create_std__variant_WrappedJsStruct__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value______(const std::shared_ptr<AnyMap>& value) noexcept {
+    return std__variant_WrappedJsStruct__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value______(value);
   }
-  inline std__variant_OptionalCallback__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value______ create_std__variant_OptionalCallback__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value______(const std::shared_ptr<Promise<void>>& value) noexcept {
-    return std__variant_OptionalCallback__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value______(value);
+  inline std__variant_WrappedJsStruct__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value______ create_std__variant_WrappedJsStruct__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value______(const std::shared_ptr<Promise<void>>& value) noexcept {
+    return std__variant_WrappedJsStruct__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value______(value);
   }
-  inline std__variant_OptionalCallback__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value______ create_std__variant_OptionalCallback__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value______(std::chrono::system_clock::time_point value) noexcept {
-    return std__variant_OptionalCallback__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value______(value);
+  inline std__variant_WrappedJsStruct__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value______ create_std__variant_WrappedJsStruct__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value______(std::chrono::system_clock::time_point value) noexcept {
+    return std__variant_WrappedJsStruct__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value______(value);
   }
-  inline std__variant_OptionalCallback__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value______ create_std__variant_OptionalCallback__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value______(const std::shared_ptr<ArrayBuffer>& value) noexcept {
-    return std__variant_OptionalCallback__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value______(value);
+  inline std__variant_WrappedJsStruct__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value______ create_std__variant_WrappedJsStruct__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value______(const std::shared_ptr<ArrayBuffer>& value) noexcept {
+    return std__variant_WrappedJsStruct__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value______(value);
   }
-  inline std__variant_OptionalCallback__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value______ create_std__variant_OptionalCallback__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value______(const std::function<void(double /* value */)>& value) noexcept {
-    return std__variant_OptionalCallback__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value______(value);
+  inline std__variant_WrappedJsStruct__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value______ create_std__variant_WrappedJsStruct__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value______(const std::function<void(double /* value */)>& value) noexcept {
+    return std__variant_WrappedJsStruct__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value______(value);
   }
   
   // pragma MARK: std::shared_ptr<HybridChildSpec>
@@ -1570,13 +1570,13 @@ namespace margelo::nitro::test::bridge::swift {
     return Result<std::variant<OptionalWrapper, std::shared_ptr<HybridBaseSpec>>>::withError(error);
   }
   
-  // pragma MARK: Result<std::variant<OptionalCallback, std::shared_ptr<AnyMap>, std::shared_ptr<Promise<void>>, std::chrono::system_clock::time_point, std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>>>
-  using Result_std__variant_OptionalCallback__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value_______ = Result<std::variant<OptionalCallback, std::shared_ptr<AnyMap>, std::shared_ptr<Promise<void>>, std::chrono::system_clock::time_point, std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>>>;
-  inline Result_std__variant_OptionalCallback__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value_______ create_Result_std__variant_OptionalCallback__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value_______(const std::variant<OptionalCallback, std::shared_ptr<AnyMap>, std::shared_ptr<Promise<void>>, std::chrono::system_clock::time_point, std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>>& value) noexcept {
-    return Result<std::variant<OptionalCallback, std::shared_ptr<AnyMap>, std::shared_ptr<Promise<void>>, std::chrono::system_clock::time_point, std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>>>::withValue(value);
+  // pragma MARK: Result<std::variant<WrappedJsStruct, std::shared_ptr<AnyMap>, std::shared_ptr<Promise<void>>, std::chrono::system_clock::time_point, std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>>>
+  using Result_std__variant_WrappedJsStruct__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value_______ = Result<std::variant<WrappedJsStruct, std::shared_ptr<AnyMap>, std::shared_ptr<Promise<void>>, std::chrono::system_clock::time_point, std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>>>;
+  inline Result_std__variant_WrappedJsStruct__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value_______ create_Result_std__variant_WrappedJsStruct__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value_______(const std::variant<WrappedJsStruct, std::shared_ptr<AnyMap>, std::shared_ptr<Promise<void>>, std::chrono::system_clock::time_point, std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>>& value) noexcept {
+    return Result<std::variant<WrappedJsStruct, std::shared_ptr<AnyMap>, std::shared_ptr<Promise<void>>, std::chrono::system_clock::time_point, std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>>>::withValue(value);
   }
-  inline Result_std__variant_OptionalCallback__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value_______ create_Result_std__variant_OptionalCallback__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value_______(const std::exception_ptr& error) noexcept {
-    return Result<std::variant<OptionalCallback, std::shared_ptr<AnyMap>, std::shared_ptr<Promise<void>>, std::chrono::system_clock::time_point, std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>>>::withError(error);
+  inline Result_std__variant_WrappedJsStruct__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value_______ create_Result_std__variant_WrappedJsStruct__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value_______(const std::exception_ptr& error) noexcept {
+    return Result<std::variant<WrappedJsStruct, std::shared_ptr<AnyMap>, std::shared_ptr<Promise<void>>, std::chrono::system_clock::time_point, std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>>>::withError(error);
   }
   
   // pragma MARK: Result<std::shared_ptr<HybridChildSpec>>

@@ -9,11 +9,11 @@
 
 namespace margelo::nitro::test {
   /**
-   * Converts JCoreTypesVariant to std::variant<OptionalCallback, std::shared_ptr<AnyMap>, std::shared_ptr<Promise<void>>, std::chrono::system_clock::time_point, std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>>
+   * Converts JCoreTypesVariant to std::variant<WrappedJsStruct, std::shared_ptr<AnyMap>, std::shared_ptr<Promise<void>>, std::chrono::system_clock::time_point, std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>>
    */
-  std::variant<OptionalCallback, std::shared_ptr<AnyMap>, std::shared_ptr<Promise<void>>, std::chrono::system_clock::time_point, std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>> JCoreTypesVariant::toCpp() const {
+  std::variant<WrappedJsStruct, std::shared_ptr<AnyMap>, std::shared_ptr<Promise<void>>, std::chrono::system_clock::time_point, std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>> JCoreTypesVariant::toCpp() const {
     if (isInstanceOf(JCoreTypesVariant_impl::First::javaClassStatic())) {
-      // It's a `OptionalCallback`
+      // It's a `WrappedJsStruct`
       auto jniValue = static_cast<const JCoreTypesVariant_impl::First*>(this)->getValue();
       return jniValue->toCpp();
     } else if (isInstanceOf(JCoreTypesVariant_impl::Second::javaClassStatic())) {

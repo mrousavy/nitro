@@ -1757,7 +1757,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public final func bounceComplexVariant(variant: bridge.std__variant_OptionalCallback__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value______) -> bridge.Result_std__variant_OptionalCallback__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value_______ {
+  public final func bounceComplexVariant(variant: bridge.std__variant_WrappedJsStruct__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value______) -> bridge.Result_std__variant_WrappedJsStruct__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value_______ {
     do {
       let __result = try self.__implementation.bounceComplexVariant(variant: { () -> CoreTypesVariant in
         let __variant = variant
@@ -1807,14 +1807,14 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
             fatalError("Variant can never have index \(__variant.index())!")
         }
       }())
-      let __resultCpp = { () -> bridge.std__variant_OptionalCallback__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value______ in
+      let __resultCpp = { () -> bridge.std__variant_WrappedJsStruct__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value______ in
         switch __result {
           case .first(let __value):
-            return bridge.create_std__variant_OptionalCallback__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value______(__value)
+            return bridge.create_std__variant_WrappedJsStruct__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value______(__value)
           case .second(let __value):
-            return bridge.create_std__variant_OptionalCallback__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value______(__value.cppPart)
+            return bridge.create_std__variant_WrappedJsStruct__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value______(__value.cppPart)
           case .third(let __value):
-            return bridge.create_std__variant_OptionalCallback__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value______({ () -> bridge.std__shared_ptr_Promise_void__ in
+            return bridge.create_std__variant_WrappedJsStruct__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value______({ () -> bridge.std__shared_ptr_Promise_void__ in
               let __promise = bridge.create_std__shared_ptr_Promise_void__()
               let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_void__(__promise)
               __value
@@ -1823,20 +1823,20 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
               return __promise
             }())
           case .fourth(let __value):
-            return bridge.create_std__variant_OptionalCallback__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value______(__value.toCpp())
+            return bridge.create_std__variant_WrappedJsStruct__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value______(__value.toCpp())
           case .fifth(let __value):
-            return bridge.create_std__variant_OptionalCallback__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value______(__value.getArrayBuffer())
+            return bridge.create_std__variant_WrappedJsStruct__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value______(__value.getArrayBuffer())
           case .sixth(let __value):
-            return bridge.create_std__variant_OptionalCallback__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value______({ () -> bridge.Func_void_double in
+            return bridge.create_std__variant_WrappedJsStruct__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value______({ () -> bridge.Func_void_double in
               let __closureWrapper = Func_void_double(__value)
               return bridge.create_Func_void_double(__closureWrapper.toUnsafe())
             }())
         }
       }().variant
-      return bridge.create_Result_std__variant_OptionalCallback__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value_______(__resultCpp)
+      return bridge.create_Result_std__variant_WrappedJsStruct__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value_______(__resultCpp)
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
-      return bridge.create_Result_std__variant_OptionalCallback__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value_______(__exceptionPtr)
+      return bridge.create_Result_std__variant_WrappedJsStruct__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value_______(__exceptionPtr)
     }
   }
   

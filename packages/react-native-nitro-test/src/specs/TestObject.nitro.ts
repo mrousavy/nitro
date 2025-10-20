@@ -90,9 +90,9 @@ type CoreTypesVariant =
   | ArrayBuffer
   | Promise<void>
   | ((value: number) => void)
-  | OptionalCallback
-  | AnyMap
+  | WrappedJsStruct
   | Date
+  | AnyMap
 
 // This is an `interface` we're going to use as a base in both of our `HybridObject`s later.
 // In this case, the `HybridObject`s will just flatten out and copy over all properties here.

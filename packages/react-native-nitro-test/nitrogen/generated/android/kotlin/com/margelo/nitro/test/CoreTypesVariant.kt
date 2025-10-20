@@ -13,13 +13,13 @@ import com.margelo.nitro.core.Promise
 import com.margelo.nitro.core.ArrayBuffer
 
 /**
- * Represents the TypeScript variant "OptionalCallback | AnyMap | Promise<Unit> | java.time.Instant | ArrayBuffer | (value: Double) -> Unit".
+ * Represents the TypeScript variant "WrappedJsStruct | AnyMap | Promise<Unit> | java.time.Instant | ArrayBuffer | (value: Double) -> Unit".
  */
 @Suppress("ClassName")
 @DoNotStrip
 sealed class CoreTypesVariant {
   @DoNotStrip
-  data class First(@DoNotStrip val value: OptionalCallback): CoreTypesVariant()
+  data class First(@DoNotStrip val value: WrappedJsStruct): CoreTypesVariant()
   @DoNotStrip
   data class Second(@DoNotStrip val value: AnyMap): CoreTypesVariant()
   @DoNotStrip
@@ -54,7 +54,7 @@ sealed class CoreTypesVariant {
   val isSixth: Boolean
     get() = this is Sixth
 
-  fun asFirstOrNull(): OptionalCallback? {
+  fun asFirstOrNull(): WrappedJsStruct? {
     val value = (this as? First)?.value ?: return null
     return value
   }
@@ -79,7 +79,7 @@ sealed class CoreTypesVariant {
     return value
   }
 
-  inline fun <R> match(first: (OptionalCallback) -> R, second: (AnyMap) -> R, third: (Promise<Unit>) -> R, fourth: (java.time.Instant) -> R, fifth: (ArrayBuffer) -> R, sixth: ((value: Double) -> Unit) -> R): R {
+  inline fun <R> match(first: (WrappedJsStruct) -> R, second: (AnyMap) -> R, third: (Promise<Unit>) -> R, fourth: (java.time.Instant) -> R, fifth: (ArrayBuffer) -> R, sixth: ((value: Double) -> Unit) -> R): R {
     return when (this) {
       is First -> first(value)
       is Second -> second(value)
@@ -93,7 +93,7 @@ sealed class CoreTypesVariant {
   companion object {
     @JvmStatic
     @DoNotStrip
-    fun create(value: OptionalCallback): CoreTypesVariant = First(value)
+    fun create(value: WrappedJsStruct): CoreTypesVariant = First(value)
     @JvmStatic
     @DoNotStrip
     fun create(value: AnyMap): CoreTypesVariant = Second(value)
