@@ -44,6 +44,13 @@ export class ArrayBufferType implements Type {
         space: 'system',
       })
     }
+    if (language === 'kotlin') {
+      imports.push({
+        name: 'com.margelo.nitro.core.ArrayBuffer',
+        space: 'system',
+        language: 'kotlin',
+      })
+    }
     return imports
   }
 }
