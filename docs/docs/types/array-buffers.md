@@ -48,7 +48,7 @@ There's two types of `ArrayBuffer`s, **owning** and **non-owning**:
 
 ### Owning
 
-An `ArrayBuffer` that was created on the native side is **owning**, which means you can safely access it's data as long as the `ArrayBuffer` reference is alive.
+An `ArrayBuffer` that was created on the native side is **owning** (`isOwning = true`), which means you can safely access it's data as long as the `ArrayBuffer` reference is alive.
 It can be safely held strong for longer, e.g. as a class property/member, and accessed from different Threads.
 
 ```swift
@@ -66,11 +66,12 @@ func doSomething() -> ArrayBuffer {
 
 ### Non-owning
 
-An `ArrayBuffer` that was received as a parameter from JS cannot be safely kept strong as the JS VM can delete it at any point, hence it is **non-owning**.
+An `ArrayBuffer` that was created in JS cannot be safely kept strong as the JS VM can delete it at any point, hence it is **non-owning**.
 It's data can only be safely accessed before the synchronous function returned, as this will stay within the JS bounds.
 
 ```swift
 func doSomething(buffer: ArrayBuffer) {
+  print(buffer.isOwning)   // <-- false
   let data = buffer.data   // <-- ✅ safe to do because we're still sync
   DispatchQueue.global().async {
     // code-error
@@ -89,6 +90,12 @@ func doSomething(buffer: ArrayBuffer) {
   }
 }
 ```
+
+:::note
+Not every `ArrayBuffer` received from JS is **non-owning**, eg if the buffer was created in native and then did a JS-roundtrip it is still **owning**!
+
+Always check the `ArrayBuffer.isOwning` flag.
+:::
 
 ## Threading
 
