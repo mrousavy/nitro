@@ -210,6 +210,16 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
     }
   }
 
+  override fun promiseReturnsInstantly(): Promise<Double> {
+    return Promise.resolved(55.0)
+  }
+
+  override fun promiseReturnsInstantlyAsync(): Promise<Double> {
+    return Promise.async {
+      return@async 55.0
+    }
+  }
+
   override fun awaitAndGetPromise(promise: Promise<Double>): Promise<Double> {
     return Promise.async {
       val result = promise.await()

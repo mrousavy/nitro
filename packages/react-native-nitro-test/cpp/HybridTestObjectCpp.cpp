@@ -433,6 +433,14 @@ std::shared_ptr<Promise<void>> HybridTestObjectCpp::promiseThrows() {
   return Promise<void>::async([=]() { throw std::runtime_error("Promise throws :)"); });
 }
 
+std::shared_ptr<Promise<double>> HybridTestObjectCpp::promiseReturnsInstantly() {
+  return Promise<double>::resolved(55);
+}
+
+std::shared_ptr<Promise<double>> HybridTestObjectCpp::promiseReturnsInstantlyAsync() {
+  return Promise<double>::async([=]() { return 55; });
+}
+
 void HybridTestObjectCpp::callAll(const std::function<void()>& first, const std::function<void()>& second,
                                   const std::function<void()>& third) {
   first();

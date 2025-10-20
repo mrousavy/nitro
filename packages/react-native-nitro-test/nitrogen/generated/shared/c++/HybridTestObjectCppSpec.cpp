@@ -77,6 +77,8 @@ namespace margelo::nitro::test {
       prototype.registerHybridMethod("calculateFibonacciAsync", &HybridTestObjectCppSpec::calculateFibonacciAsync);
       prototype.registerHybridMethod("wait", &HybridTestObjectCppSpec::wait);
       prototype.registerHybridMethod("promiseThrows", &HybridTestObjectCppSpec::promiseThrows);
+      prototype.registerHybridMethod("promiseReturnsInstantly", &HybridTestObjectCppSpec::promiseReturnsInstantly);
+      prototype.registerHybridMethod("promiseReturnsInstantlyAsync", &HybridTestObjectCppSpec::promiseReturnsInstantlyAsync);
       prototype.registerHybridMethod("awaitAndGetPromise", &HybridTestObjectCppSpec::awaitAndGetPromise);
       prototype.registerHybridMethod("awaitAndGetComplexPromise", &HybridTestObjectCppSpec::awaitAndGetComplexPromise);
       prototype.registerHybridMethod("awaitPromise", &HybridTestObjectCppSpec::awaitPromise);

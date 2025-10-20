@@ -148,6 +148,8 @@ public:
   std::shared_ptr<Promise<Car>> awaitAndGetComplexPromise(const std::shared_ptr<Promise<Car>>& promise) override;
   std::shared_ptr<Promise<void>> awaitPromise(const std::shared_ptr<Promise<void>>& promise) override;
   std::shared_ptr<Promise<void>> promiseThrows() override;
+  std::shared_ptr<Promise<double>> promiseReturnsInstantly() override;
+  std::shared_ptr<Promise<double>> promiseReturnsInstantlyAsync() override;
   Car getCar() override;
   bool isCarElectric(const Car& car) override;
   std::optional<Person> getDriver(const Car& car) override;
