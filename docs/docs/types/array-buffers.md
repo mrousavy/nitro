@@ -44,7 +44,7 @@ It is important to understand the ownership, and threading concerns around such 
 
 ## Ownership
 
-There's two types of `ArrayBuffer`s, **owning** and **non-owning**:
+There's two kinds of `ArrayBuffer`s, **owning** and **non-owning**:
 
 ### Owning
 
@@ -66,7 +66,7 @@ func doSomething() -> ArrayBuffer {
 
 ### Non-owning
 
-An `ArrayBuffer` that was created in JS cannot be safely kept strong as the JS VM can delete it at any point, hence it is **non-owning**.
+An `ArrayBuffer` that was created in JS cannot be safely kept strong as the JS VM can delete it at any point, hence it is **non-owning** (`isOwning = false`).
 It's data can only be safely accessed before the synchronous function returned, as this will stay within the JS bounds.
 
 ```swift
