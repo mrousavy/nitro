@@ -7,7 +7,7 @@ import TabItem from '@theme/TabItem';
 # ArrayBuffers (`ArrayBuffer`)
 
 Array Buffers allow highly efficient access to shared raw binary data from both JS and native.
-Passing an `ArrayBuffer` from native to JS and back is zero-copy.
+Passing an `ArrayBuffer` between JS and native is zero-copy.
 
 <Tabs>
   <TabItem value="ts" label="TypeScript" default>
@@ -40,7 +40,7 @@ Passing an `ArrayBuffer` from native to JS and back is zero-copy.
   </TabItem>
 </Tabs>
 
-It is important to understand the ownership, and threading concerns around such shared memory access.
+It is crucial to understand the ownership and threading concerns around shared memory access.
 
 ## Ownership
 
