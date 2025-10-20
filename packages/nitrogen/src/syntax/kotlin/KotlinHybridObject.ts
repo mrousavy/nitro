@@ -55,6 +55,7 @@ package ${javaPackage}
 import androidx.annotation.Keep
 import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
+import com.margelo.nitro.core.HybridObject
 ${imports.join('\n')}
 
 /**

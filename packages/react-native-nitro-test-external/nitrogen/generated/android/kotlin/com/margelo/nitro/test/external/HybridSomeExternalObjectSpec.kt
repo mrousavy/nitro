@@ -10,6 +10,7 @@ package com.margelo.nitro.test.external
 import androidx.annotation.Keep
 import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
+import com.margelo.nitro.core.HybridObject
 
 
 /**
