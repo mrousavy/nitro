@@ -116,33 +116,33 @@ namespace margelo::nitro::test::bridge::swift {
     return *optional;
   }
   
-  // pragma MARK: std::variant<Person, std::shared_ptr<HybridTestObjectSwiftKotlinSpec>>
+  // pragma MARK: std::variant<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>, Person>
   /**
-   * Wrapper struct for `std::variant<Person, std::shared_ptr<HybridTestObjectSwiftKotlinSpec>>`.
+   * Wrapper struct for `std::variant<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>, Person>`.
    * std::variant cannot be used in Swift because of a Swift bug.
    * Not even specializing it works. So we create a wrapper struct.
    */
-  struct std__variant_Person__std__shared_ptr_HybridTestObjectSwiftKotlinSpec__ {
-    std::variant<Person, std::shared_ptr<HybridTestObjectSwiftKotlinSpec>> variant;
-    std__variant_Person__std__shared_ptr_HybridTestObjectSwiftKotlinSpec__(std::variant<Person, std::shared_ptr<HybridTestObjectSwiftKotlinSpec>> variant): variant(variant) { }
-    operator std::variant<Person, std::shared_ptr<HybridTestObjectSwiftKotlinSpec>>() const noexcept {
+  struct std__variant_std__shared_ptr_HybridTestObjectSwiftKotlinSpec___Person_ {
+    std::variant<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>, Person> variant;
+    std__variant_std__shared_ptr_HybridTestObjectSwiftKotlinSpec___Person_(std::variant<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>, Person> variant): variant(variant) { }
+    operator std::variant<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>, Person>() const noexcept {
       return variant;
     }
     inline size_t index() const noexcept {
       return variant.index();
     }
-    inline Person get_0() const noexcept {
+    inline std::shared_ptr<HybridTestObjectSwiftKotlinSpec> get_0() const noexcept {
       return std::get<0>(variant);
     }
-    inline std::shared_ptr<HybridTestObjectSwiftKotlinSpec> get_1() const noexcept {
+    inline Person get_1() const noexcept {
       return std::get<1>(variant);
     }
   };
-  inline std__variant_Person__std__shared_ptr_HybridTestObjectSwiftKotlinSpec__ create_std__variant_Person__std__shared_ptr_HybridTestObjectSwiftKotlinSpec__(const Person& value) noexcept {
-    return std__variant_Person__std__shared_ptr_HybridTestObjectSwiftKotlinSpec__(value);
+  inline std__variant_std__shared_ptr_HybridTestObjectSwiftKotlinSpec___Person_ create_std__variant_std__shared_ptr_HybridTestObjectSwiftKotlinSpec___Person_(const std::shared_ptr<HybridTestObjectSwiftKotlinSpec>& value) noexcept {
+    return std__variant_std__shared_ptr_HybridTestObjectSwiftKotlinSpec___Person_(value);
   }
-  inline std__variant_Person__std__shared_ptr_HybridTestObjectSwiftKotlinSpec__ create_std__variant_Person__std__shared_ptr_HybridTestObjectSwiftKotlinSpec__(const std::shared_ptr<HybridTestObjectSwiftKotlinSpec>& value) noexcept {
-    return std__variant_Person__std__shared_ptr_HybridTestObjectSwiftKotlinSpec__(value);
+  inline std__variant_std__shared_ptr_HybridTestObjectSwiftKotlinSpec___Person_ create_std__variant_std__shared_ptr_HybridTestObjectSwiftKotlinSpec___Person_(const Person& value) noexcept {
+    return std__variant_std__shared_ptr_HybridTestObjectSwiftKotlinSpec___Person_(value);
   }
   
   // pragma MARK: std::optional<std::string>
@@ -1120,86 +1120,86 @@ namespace margelo::nitro::test::bridge::swift {
   using std__weak_ptr_HybridBaseSpec_ = std::weak_ptr<HybridBaseSpec>;
   inline std__weak_ptr_HybridBaseSpec_ weakify_std__shared_ptr_HybridBaseSpec_(const std::shared_ptr<HybridBaseSpec>& strong) noexcept { return strong; }
   
-  // pragma MARK: std::variant<OptionalWrapper, std::shared_ptr<HybridBaseSpec>>
+  // pragma MARK: std::variant<std::shared_ptr<HybridBaseSpec>, OptionalWrapper>
   /**
-   * Wrapper struct for `std::variant<OptionalWrapper, std::shared_ptr<HybridBaseSpec>>`.
+   * Wrapper struct for `std::variant<std::shared_ptr<HybridBaseSpec>, OptionalWrapper>`.
    * std::variant cannot be used in Swift because of a Swift bug.
    * Not even specializing it works. So we create a wrapper struct.
    */
-  struct std__variant_OptionalWrapper__std__shared_ptr_HybridBaseSpec__ {
-    std::variant<OptionalWrapper, std::shared_ptr<HybridBaseSpec>> variant;
-    std__variant_OptionalWrapper__std__shared_ptr_HybridBaseSpec__(std::variant<OptionalWrapper, std::shared_ptr<HybridBaseSpec>> variant): variant(variant) { }
-    operator std::variant<OptionalWrapper, std::shared_ptr<HybridBaseSpec>>() const noexcept {
+  struct std__variant_std__shared_ptr_HybridBaseSpec___OptionalWrapper_ {
+    std::variant<std::shared_ptr<HybridBaseSpec>, OptionalWrapper> variant;
+    std__variant_std__shared_ptr_HybridBaseSpec___OptionalWrapper_(std::variant<std::shared_ptr<HybridBaseSpec>, OptionalWrapper> variant): variant(variant) { }
+    operator std::variant<std::shared_ptr<HybridBaseSpec>, OptionalWrapper>() const noexcept {
       return variant;
     }
     inline size_t index() const noexcept {
       return variant.index();
     }
-    inline OptionalWrapper get_0() const noexcept {
+    inline std::shared_ptr<HybridBaseSpec> get_0() const noexcept {
       return std::get<0>(variant);
     }
-    inline std::shared_ptr<HybridBaseSpec> get_1() const noexcept {
+    inline OptionalWrapper get_1() const noexcept {
       return std::get<1>(variant);
     }
   };
-  inline std__variant_OptionalWrapper__std__shared_ptr_HybridBaseSpec__ create_std__variant_OptionalWrapper__std__shared_ptr_HybridBaseSpec__(const OptionalWrapper& value) noexcept {
-    return std__variant_OptionalWrapper__std__shared_ptr_HybridBaseSpec__(value);
+  inline std__variant_std__shared_ptr_HybridBaseSpec___OptionalWrapper_ create_std__variant_std__shared_ptr_HybridBaseSpec___OptionalWrapper_(const std::shared_ptr<HybridBaseSpec>& value) noexcept {
+    return std__variant_std__shared_ptr_HybridBaseSpec___OptionalWrapper_(value);
   }
-  inline std__variant_OptionalWrapper__std__shared_ptr_HybridBaseSpec__ create_std__variant_OptionalWrapper__std__shared_ptr_HybridBaseSpec__(const std::shared_ptr<HybridBaseSpec>& value) noexcept {
-    return std__variant_OptionalWrapper__std__shared_ptr_HybridBaseSpec__(value);
+  inline std__variant_std__shared_ptr_HybridBaseSpec___OptionalWrapper_ create_std__variant_std__shared_ptr_HybridBaseSpec___OptionalWrapper_(const OptionalWrapper& value) noexcept {
+    return std__variant_std__shared_ptr_HybridBaseSpec___OptionalWrapper_(value);
   }
   
-  // pragma MARK: std::variant<WrappedJsStruct, std::shared_ptr<AnyMap>, std::shared_ptr<Promise<void>>, std::chrono::system_clock::time_point, std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>>
+  // pragma MARK: std::variant<std::shared_ptr<Promise<void>>, std::chrono::system_clock::time_point, std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>, WrappedJsStruct, std::shared_ptr<AnyMap>>
   /**
-   * Wrapper struct for `std::variant<WrappedJsStruct, std::shared_ptr<AnyMap>, std::shared_ptr<Promise<void>>, std::chrono::system_clock::time_point, std::shared_ptr<ArrayBuffer>, std::function<void(double / * value * /)>>`.
+   * Wrapper struct for `std::variant<std::shared_ptr<Promise<void>>, std::chrono::system_clock::time_point, std::shared_ptr<ArrayBuffer>, std::function<void(double / * value * /)>, WrappedJsStruct, std::shared_ptr<AnyMap>>`.
    * std::variant cannot be used in Swift because of a Swift bug.
    * Not even specializing it works. So we create a wrapper struct.
    */
-  struct std__variant_WrappedJsStruct__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value______ {
-    std::variant<WrappedJsStruct, std::shared_ptr<AnyMap>, std::shared_ptr<Promise<void>>, std::chrono::system_clock::time_point, std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>> variant;
-    std__variant_WrappedJsStruct__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value______(std::variant<WrappedJsStruct, std::shared_ptr<AnyMap>, std::shared_ptr<Promise<void>>, std::chrono::system_clock::time_point, std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>> variant): variant(variant) { }
-    operator std::variant<WrappedJsStruct, std::shared_ptr<AnyMap>, std::shared_ptr<Promise<void>>, std::chrono::system_clock::time_point, std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>>() const noexcept {
+  struct std__variant_std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value_______WrappedJsStruct__std__shared_ptr_AnyMap__ {
+    std::variant<std::shared_ptr<Promise<void>>, std::chrono::system_clock::time_point, std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>, WrappedJsStruct, std::shared_ptr<AnyMap>> variant;
+    std__variant_std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value_______WrappedJsStruct__std__shared_ptr_AnyMap__(std::variant<std::shared_ptr<Promise<void>>, std::chrono::system_clock::time_point, std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>, WrappedJsStruct, std::shared_ptr<AnyMap>> variant): variant(variant) { }
+    operator std::variant<std::shared_ptr<Promise<void>>, std::chrono::system_clock::time_point, std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>, WrappedJsStruct, std::shared_ptr<AnyMap>>() const noexcept {
       return variant;
     }
     inline size_t index() const noexcept {
       return variant.index();
     }
-    inline WrappedJsStruct get_0() const noexcept {
+    inline std::shared_ptr<Promise<void>> get_0() const noexcept {
       return std::get<0>(variant);
     }
-    inline std::shared_ptr<AnyMap> get_1() const noexcept {
+    inline std::chrono::system_clock::time_point get_1() const noexcept {
       return std::get<1>(variant);
     }
-    inline std::shared_ptr<Promise<void>> get_2() const noexcept {
+    inline std::shared_ptr<ArrayBuffer> get_2() const noexcept {
       return std::get<2>(variant);
     }
-    inline std::chrono::system_clock::time_point get_3() const noexcept {
+    inline std::function<void(double /* value */)> get_3() const noexcept {
       return std::get<3>(variant);
     }
-    inline std::shared_ptr<ArrayBuffer> get_4() const noexcept {
+    inline WrappedJsStruct get_4() const noexcept {
       return std::get<4>(variant);
     }
-    inline std::function<void(double /* value */)> get_5() const noexcept {
+    inline std::shared_ptr<AnyMap> get_5() const noexcept {
       return std::get<5>(variant);
     }
   };
-  inline std__variant_WrappedJsStruct__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value______ create_std__variant_WrappedJsStruct__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value______(const WrappedJsStruct& value) noexcept {
-    return std__variant_WrappedJsStruct__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value______(value);
+  inline std__variant_std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value_______WrappedJsStruct__std__shared_ptr_AnyMap__ create_std__variant_std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value_______WrappedJsStruct__std__shared_ptr_AnyMap__(const std::shared_ptr<Promise<void>>& value) noexcept {
+    return std__variant_std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value_______WrappedJsStruct__std__shared_ptr_AnyMap__(value);
   }
-  inline std__variant_WrappedJsStruct__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value______ create_std__variant_WrappedJsStruct__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value______(const std::shared_ptr<AnyMap>& value) noexcept {
-    return std__variant_WrappedJsStruct__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value______(value);
+  inline std__variant_std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value_______WrappedJsStruct__std__shared_ptr_AnyMap__ create_std__variant_std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value_______WrappedJsStruct__std__shared_ptr_AnyMap__(std::chrono::system_clock::time_point value) noexcept {
+    return std__variant_std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value_______WrappedJsStruct__std__shared_ptr_AnyMap__(value);
   }
-  inline std__variant_WrappedJsStruct__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value______ create_std__variant_WrappedJsStruct__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value______(const std::shared_ptr<Promise<void>>& value) noexcept {
-    return std__variant_WrappedJsStruct__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value______(value);
+  inline std__variant_std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value_______WrappedJsStruct__std__shared_ptr_AnyMap__ create_std__variant_std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value_______WrappedJsStruct__std__shared_ptr_AnyMap__(const std::shared_ptr<ArrayBuffer>& value) noexcept {
+    return std__variant_std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value_______WrappedJsStruct__std__shared_ptr_AnyMap__(value);
   }
-  inline std__variant_WrappedJsStruct__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value______ create_std__variant_WrappedJsStruct__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value______(std::chrono::system_clock::time_point value) noexcept {
-    return std__variant_WrappedJsStruct__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value______(value);
+  inline std__variant_std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value_______WrappedJsStruct__std__shared_ptr_AnyMap__ create_std__variant_std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value_______WrappedJsStruct__std__shared_ptr_AnyMap__(const std::function<void(double /* value */)>& value) noexcept {
+    return std__variant_std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value_______WrappedJsStruct__std__shared_ptr_AnyMap__(value);
   }
-  inline std__variant_WrappedJsStruct__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value______ create_std__variant_WrappedJsStruct__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value______(const std::shared_ptr<ArrayBuffer>& value) noexcept {
-    return std__variant_WrappedJsStruct__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value______(value);
+  inline std__variant_std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value_______WrappedJsStruct__std__shared_ptr_AnyMap__ create_std__variant_std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value_______WrappedJsStruct__std__shared_ptr_AnyMap__(const WrappedJsStruct& value) noexcept {
+    return std__variant_std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value_______WrappedJsStruct__std__shared_ptr_AnyMap__(value);
   }
-  inline std__variant_WrappedJsStruct__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value______ create_std__variant_WrappedJsStruct__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value______(const std::function<void(double /* value */)>& value) noexcept {
-    return std__variant_WrappedJsStruct__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value______(value);
+  inline std__variant_std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value_______WrappedJsStruct__std__shared_ptr_AnyMap__ create_std__variant_std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value_______WrappedJsStruct__std__shared_ptr_AnyMap__(const std::shared_ptr<AnyMap>& value) noexcept {
+    return std__variant_std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value_______WrappedJsStruct__std__shared_ptr_AnyMap__(value);
   }
   
   // pragma MARK: std::shared_ptr<HybridChildSpec>
@@ -1273,13 +1273,13 @@ namespace margelo::nitro::test::bridge::swift {
     return Result<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>>::withError(error);
   }
   
-  // pragma MARK: Result<std::variant<Person, std::shared_ptr<HybridTestObjectSwiftKotlinSpec>>>
-  using Result_std__variant_Person__std__shared_ptr_HybridTestObjectSwiftKotlinSpec___ = Result<std::variant<Person, std::shared_ptr<HybridTestObjectSwiftKotlinSpec>>>;
-  inline Result_std__variant_Person__std__shared_ptr_HybridTestObjectSwiftKotlinSpec___ create_Result_std__variant_Person__std__shared_ptr_HybridTestObjectSwiftKotlinSpec___(const std::variant<Person, std::shared_ptr<HybridTestObjectSwiftKotlinSpec>>& value) noexcept {
-    return Result<std::variant<Person, std::shared_ptr<HybridTestObjectSwiftKotlinSpec>>>::withValue(value);
+  // pragma MARK: Result<std::variant<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>, Person>>
+  using Result_std__variant_std__shared_ptr_HybridTestObjectSwiftKotlinSpec___Person__ = Result<std::variant<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>, Person>>;
+  inline Result_std__variant_std__shared_ptr_HybridTestObjectSwiftKotlinSpec___Person__ create_Result_std__variant_std__shared_ptr_HybridTestObjectSwiftKotlinSpec___Person__(const std::variant<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>, Person>& value) noexcept {
+    return Result<std::variant<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>, Person>>::withValue(value);
   }
-  inline Result_std__variant_Person__std__shared_ptr_HybridTestObjectSwiftKotlinSpec___ create_Result_std__variant_Person__std__shared_ptr_HybridTestObjectSwiftKotlinSpec___(const std::exception_ptr& error) noexcept {
-    return Result<std::variant<Person, std::shared_ptr<HybridTestObjectSwiftKotlinSpec>>>::withError(error);
+  inline Result_std__variant_std__shared_ptr_HybridTestObjectSwiftKotlinSpec___Person__ create_Result_std__variant_std__shared_ptr_HybridTestObjectSwiftKotlinSpec___Person__(const std::exception_ptr& error) noexcept {
+    return Result<std::variant<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>, Person>>::withError(error);
   }
   
   // pragma MARK: Result<void>
@@ -1561,22 +1561,22 @@ namespace margelo::nitro::test::bridge::swift {
     return Result<std::variant<std::string, Car>>::withError(error);
   }
   
-  // pragma MARK: Result<std::variant<OptionalWrapper, std::shared_ptr<HybridBaseSpec>>>
-  using Result_std__variant_OptionalWrapper__std__shared_ptr_HybridBaseSpec___ = Result<std::variant<OptionalWrapper, std::shared_ptr<HybridBaseSpec>>>;
-  inline Result_std__variant_OptionalWrapper__std__shared_ptr_HybridBaseSpec___ create_Result_std__variant_OptionalWrapper__std__shared_ptr_HybridBaseSpec___(const std::variant<OptionalWrapper, std::shared_ptr<HybridBaseSpec>>& value) noexcept {
-    return Result<std::variant<OptionalWrapper, std::shared_ptr<HybridBaseSpec>>>::withValue(value);
+  // pragma MARK: Result<std::variant<std::shared_ptr<HybridBaseSpec>, OptionalWrapper>>
+  using Result_std__variant_std__shared_ptr_HybridBaseSpec___OptionalWrapper__ = Result<std::variant<std::shared_ptr<HybridBaseSpec>, OptionalWrapper>>;
+  inline Result_std__variant_std__shared_ptr_HybridBaseSpec___OptionalWrapper__ create_Result_std__variant_std__shared_ptr_HybridBaseSpec___OptionalWrapper__(const std::variant<std::shared_ptr<HybridBaseSpec>, OptionalWrapper>& value) noexcept {
+    return Result<std::variant<std::shared_ptr<HybridBaseSpec>, OptionalWrapper>>::withValue(value);
   }
-  inline Result_std__variant_OptionalWrapper__std__shared_ptr_HybridBaseSpec___ create_Result_std__variant_OptionalWrapper__std__shared_ptr_HybridBaseSpec___(const std::exception_ptr& error) noexcept {
-    return Result<std::variant<OptionalWrapper, std::shared_ptr<HybridBaseSpec>>>::withError(error);
+  inline Result_std__variant_std__shared_ptr_HybridBaseSpec___OptionalWrapper__ create_Result_std__variant_std__shared_ptr_HybridBaseSpec___OptionalWrapper__(const std::exception_ptr& error) noexcept {
+    return Result<std::variant<std::shared_ptr<HybridBaseSpec>, OptionalWrapper>>::withError(error);
   }
   
-  // pragma MARK: Result<std::variant<WrappedJsStruct, std::shared_ptr<AnyMap>, std::shared_ptr<Promise<void>>, std::chrono::system_clock::time_point, std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>>>
-  using Result_std__variant_WrappedJsStruct__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value_______ = Result<std::variant<WrappedJsStruct, std::shared_ptr<AnyMap>, std::shared_ptr<Promise<void>>, std::chrono::system_clock::time_point, std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>>>;
-  inline Result_std__variant_WrappedJsStruct__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value_______ create_Result_std__variant_WrappedJsStruct__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value_______(const std::variant<WrappedJsStruct, std::shared_ptr<AnyMap>, std::shared_ptr<Promise<void>>, std::chrono::system_clock::time_point, std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>>& value) noexcept {
-    return Result<std::variant<WrappedJsStruct, std::shared_ptr<AnyMap>, std::shared_ptr<Promise<void>>, std::chrono::system_clock::time_point, std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>>>::withValue(value);
+  // pragma MARK: Result<std::variant<std::shared_ptr<Promise<void>>, std::chrono::system_clock::time_point, std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>, WrappedJsStruct, std::shared_ptr<AnyMap>>>
+  using Result_std__variant_std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value_______WrappedJsStruct__std__shared_ptr_AnyMap___ = Result<std::variant<std::shared_ptr<Promise<void>>, std::chrono::system_clock::time_point, std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>, WrappedJsStruct, std::shared_ptr<AnyMap>>>;
+  inline Result_std__variant_std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value_______WrappedJsStruct__std__shared_ptr_AnyMap___ create_Result_std__variant_std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value_______WrappedJsStruct__std__shared_ptr_AnyMap___(const std::variant<std::shared_ptr<Promise<void>>, std::chrono::system_clock::time_point, std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>, WrappedJsStruct, std::shared_ptr<AnyMap>>& value) noexcept {
+    return Result<std::variant<std::shared_ptr<Promise<void>>, std::chrono::system_clock::time_point, std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>, WrappedJsStruct, std::shared_ptr<AnyMap>>>::withValue(value);
   }
-  inline Result_std__variant_WrappedJsStruct__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value_______ create_Result_std__variant_WrappedJsStruct__std__shared_ptr_AnyMap___std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value_______(const std::exception_ptr& error) noexcept {
-    return Result<std::variant<WrappedJsStruct, std::shared_ptr<AnyMap>, std::shared_ptr<Promise<void>>, std::chrono::system_clock::time_point, std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>>>::withError(error);
+  inline Result_std__variant_std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value_______WrappedJsStruct__std__shared_ptr_AnyMap___ create_Result_std__variant_std__shared_ptr_Promise_void____std__chrono__system_clock__time_point__std__shared_ptr_ArrayBuffer___std__function_void_double____value_______WrappedJsStruct__std__shared_ptr_AnyMap___(const std::exception_ptr& error) noexcept {
+    return Result<std::variant<std::shared_ptr<Promise<void>>, std::chrono::system_clock::time_point, std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>, WrappedJsStruct, std::shared_ptr<AnyMap>>>::withError(error);
   }
   
   // pragma MARK: Result<std::shared_ptr<HybridChildSpec>>

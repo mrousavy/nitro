@@ -8,28 +8,28 @@
 package com.margelo.nitro.test
 
 import com.facebook.proguard.annotations.DoNotStrip
-import com.margelo.nitro.core.AnyMap
 import com.margelo.nitro.core.Promise
 import com.margelo.nitro.core.ArrayBuffer
+import com.margelo.nitro.core.AnyMap
 
 /**
- * Represents the TypeScript variant "WrappedJsStruct | AnyMap | Promise<Unit> | java.time.Instant | ArrayBuffer | (value: Double) -> Unit".
+ * Represents the TypeScript variant "Promise<Unit> | java.time.Instant | ArrayBuffer | (value: Double) -> Unit | WrappedJsStruct | AnyMap".
  */
 @Suppress("ClassName")
 @DoNotStrip
 sealed class CoreTypesVariant {
   @DoNotStrip
-  data class First(@DoNotStrip val value: WrappedJsStruct): CoreTypesVariant()
+  data class First(@DoNotStrip val value: Promise<Unit>): CoreTypesVariant()
   @DoNotStrip
-  data class Second(@DoNotStrip val value: AnyMap): CoreTypesVariant()
+  data class Second(@DoNotStrip val value: java.time.Instant): CoreTypesVariant()
   @DoNotStrip
-  data class Third(@DoNotStrip val value: Promise<Unit>): CoreTypesVariant()
+  data class Third(@DoNotStrip val value: ArrayBuffer): CoreTypesVariant()
   @DoNotStrip
-  data class Fourth(@DoNotStrip val value: java.time.Instant): CoreTypesVariant()
+  data class Fourth(@DoNotStrip val value: Func_void_double): CoreTypesVariant()
   @DoNotStrip
-  data class Fifth(@DoNotStrip val value: ArrayBuffer): CoreTypesVariant()
+  data class Fifth(@DoNotStrip val value: WrappedJsStruct): CoreTypesVariant()
   @DoNotStrip
-  data class Sixth(@DoNotStrip val value: Func_void_double): CoreTypesVariant()
+  data class Sixth(@DoNotStrip val value: AnyMap): CoreTypesVariant()
 
   @Deprecated("getAs() is not type-safe. Use fold/asFirstOrNull/asSecondOrNull instead.", level = DeprecationLevel.ERROR)
   inline fun <reified T> getAs(): T? = when (this) {
@@ -54,32 +54,32 @@ sealed class CoreTypesVariant {
   val isSixth: Boolean
     get() = this is Sixth
 
-  fun asFirstOrNull(): WrappedJsStruct? {
+  fun asFirstOrNull(): Promise<Unit>? {
     val value = (this as? First)?.value ?: return null
     return value
   }
-  fun asSecondOrNull(): AnyMap? {
+  fun asSecondOrNull(): java.time.Instant? {
     val value = (this as? Second)?.value ?: return null
     return value
   }
-  fun asThirdOrNull(): Promise<Unit>? {
+  fun asThirdOrNull(): ArrayBuffer? {
     val value = (this as? Third)?.value ?: return null
     return value
   }
-  fun asFourthOrNull(): java.time.Instant? {
+  fun asFourthOrNull(): ((value: Double) -> Unit)? {
     val value = (this as? Fourth)?.value ?: return null
     return value
   }
-  fun asFifthOrNull(): ArrayBuffer? {
+  fun asFifthOrNull(): WrappedJsStruct? {
     val value = (this as? Fifth)?.value ?: return null
     return value
   }
-  fun asSixthOrNull(): ((value: Double) -> Unit)? {
+  fun asSixthOrNull(): AnyMap? {
     val value = (this as? Sixth)?.value ?: return null
     return value
   }
 
-  inline fun <R> match(first: (WrappedJsStruct) -> R, second: (AnyMap) -> R, third: (Promise<Unit>) -> R, fourth: (java.time.Instant) -> R, fifth: (ArrayBuffer) -> R, sixth: ((value: Double) -> Unit) -> R): R {
+  inline fun <R> match(first: (Promise<Unit>) -> R, second: (java.time.Instant) -> R, third: (ArrayBuffer) -> R, fourth: ((value: Double) -> Unit) -> R, fifth: (WrappedJsStruct) -> R, sixth: (AnyMap) -> R): R {
     return when (this) {
       is First -> first(value)
       is Second -> second(value)
@@ -93,21 +93,21 @@ sealed class CoreTypesVariant {
   companion object {
     @JvmStatic
     @DoNotStrip
-    fun create(value: WrappedJsStruct): CoreTypesVariant = First(value)
+    fun create(value: Promise<Unit>): CoreTypesVariant = First(value)
     @JvmStatic
     @DoNotStrip
-    fun create(value: AnyMap): CoreTypesVariant = Second(value)
+    fun create(value: java.time.Instant): CoreTypesVariant = Second(value)
     @JvmStatic
     @DoNotStrip
-    fun create(value: Promise<Unit>): CoreTypesVariant = Third(value)
+    fun create(value: ArrayBuffer): CoreTypesVariant = Third(value)
     @JvmStatic
     @DoNotStrip
-    fun create(value: java.time.Instant): CoreTypesVariant = Fourth(value)
+    fun create(value: Func_void_double): CoreTypesVariant = Fourth(value)
     @JvmStatic
     @DoNotStrip
-    fun create(value: ArrayBuffer): CoreTypesVariant = Fifth(value)
+    fun create(value: WrappedJsStruct): CoreTypesVariant = Fifth(value)
     @JvmStatic
     @DoNotStrip
-    fun create(value: Func_void_double): CoreTypesVariant = Sixth(value)
+    fun create(value: AnyMap): CoreTypesVariant = Sixth(value)
   }
 }

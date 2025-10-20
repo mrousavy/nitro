@@ -137,7 +137,7 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
-  abstract fun getVariantHybrid(variant: Variant_Person_HybridTestObjectSwiftKotlinSpec): Variant_Person_HybridTestObjectSwiftKotlinSpec
+  abstract fun getVariantHybrid(variant: Variant_HybridTestObjectSwiftKotlinSpec_Person): Variant_HybridTestObjectSwiftKotlinSpec_Person
   
   @DoNotStrip
   @Keep
@@ -436,7 +436,7 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
-  abstract fun passAllEmptyObjectVariant(variant: Variant_OptionalWrapper_HybridBaseSpec): Variant_OptionalWrapper_HybridBaseSpec
+  abstract fun passAllEmptyObjectVariant(variant: Variant_HybridBaseSpec_OptionalWrapper): Variant_HybridBaseSpec_OptionalWrapper
   
   @DoNotStrip
   @Keep
