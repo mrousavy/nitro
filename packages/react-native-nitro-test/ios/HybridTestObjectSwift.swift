@@ -333,12 +333,12 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
   }
 
   func promiseReturnsInstantly() throws -> Promise<Double> {
-    return Promise.resolved(withResult: 55)
+    return Promise.resolved(withResult: 55.0)
   }
 
   func promiseReturnsInstantlyAsync() throws -> Promise<Double> {
     return Promise.async {
-      return 55
+      return 55.0
     }
   }
 
