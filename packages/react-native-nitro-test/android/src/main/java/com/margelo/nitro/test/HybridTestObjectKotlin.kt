@@ -371,9 +371,9 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
 
   override fun passVariant(either: Variant_Boolean_DoubleArray_Array_String__String_Double): Variant_String_Double {
     return either.match(
-      { bool -> Variant_String_Double.create("Holds something else.") },
-      { doubleArray -> Variant_String_Double.create("Holds something else.") },
-      { stringArray -> Variant_String_Double.create("Holds something else.") },
+      { bool -> Variant_String_Double.create("holds something else!") },
+      { doubleArray -> Variant_String_Double.create("holds something else!") },
+      { stringArray -> Variant_String_Double.create("holds something else!") },
       { string -> Variant_String_Double.create(string) },
       { double -> Variant_String_Double.create(double) },
     )
