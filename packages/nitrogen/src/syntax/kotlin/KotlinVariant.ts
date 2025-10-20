@@ -72,6 +72,7 @@ fun create(value: ${bridge.getTypeCode('kotlin')}): ${kotlinName} = ${innerName}
   const extraImports = variant.variants
     .flatMap((t) => t.getRequiredImports('kotlin'))
     .map((i) => `import ${i.name}`)
+    .filter(isNotDuplicate)
 
   const code = `
 ${createFileMetadataString(`${kotlinName}.kt`)}

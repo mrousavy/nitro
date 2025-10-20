@@ -23,6 +23,7 @@ export function createKotlinFunction(functionType: FunctionType): SourceFile[] {
   const extraImports = functionType
     .getRequiredImports('kotlin')
     .map((i) => `import ${i.name}`)
+    .filter(isNotDuplicate)
 
   const kotlinCode = `
 ${createFileMetadataString(`${name}.kt`)}

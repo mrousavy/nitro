@@ -1,5 +1,4 @@
 import type { Language } from '../../getPlatformSpecs.js'
-import { getForwardDeclaration } from '../c++/getForwardDeclaration.js'
 import type { SourceFile, SourceImport } from '../SourceFile.js'
 import type { Type, TypeKind } from './Type.js'
 
@@ -32,24 +31,28 @@ export class ArrayBufferType implements Type {
   }
   getRequiredImports(language: Language): SourceImport[] {
     const imports: SourceImport[] = []
-    if (language === 'c++') {
-      imports.push({
-        name: 'NitroModules/ArrayBuffer.hpp',
-        forwardDeclaration: getForwardDeclaration(
-          'class',
-          'ArrayBuffer',
-          'NitroModules'
-        ),
-        language: 'c++',
-        space: 'system',
-      })
-    }
-    if (language === 'kotlin') {
-      imports.push({
-        name: 'com.margelo.nitro.core.ArrayBuffer',
-        space: 'system',
-        language: 'kotlin',
-      })
+    switch (language) {
+      case 'c++':
+        imports.push({
+          language: 'c++',
+          name: 'NitroModules/ArrayBuffer.hpp',
+          space: 'system',
+        })
+        break
+      case 'swift':
+        imports.push({
+          name: 'NitroModules',
+          language: 'swift',
+          space: 'system',
+        })
+        break
+      case 'kotlin':
+        imports.push({
+          name: 'com.margelo.nitro.core.ArrayBuffer',
+          language: 'kotlin',
+          space: 'system',
+        })
+        break
     }
     return imports
   }

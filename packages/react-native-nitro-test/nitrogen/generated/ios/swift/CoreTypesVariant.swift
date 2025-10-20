@@ -5,7 +5,7 @@
 /// Copyright © 2025 Marc Rousavy @ Margelo
 ///
 
-
+import NitroModules
 
 /**
  * An Swift enum with associated values representing a Variant/Union type.

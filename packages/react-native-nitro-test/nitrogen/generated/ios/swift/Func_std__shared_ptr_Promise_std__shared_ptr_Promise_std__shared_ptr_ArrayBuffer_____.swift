@@ -6,7 +6,7 @@
 ///
 
 import NitroModules
-
+import NitroModules
 
 /**
  * Wraps a Swift `() -> Promise<Promise<ArrayBuffer>>` as a class.

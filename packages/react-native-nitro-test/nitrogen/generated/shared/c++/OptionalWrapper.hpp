@@ -23,8 +23,7 @@
 #error NitroModules cannot be found! Are you sure you installed NitroModules properly?
 #endif
 
-// Forward declaration of `ArrayBuffer` to properly resolve imports.
-namespace NitroModules { class ArrayBuffer; }
+
 
 #include <NitroModules/ArrayBuffer.hpp>
 #include <optional>
