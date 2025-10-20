@@ -216,7 +216,7 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
 
   override fun promiseReturnsInstantlyAsync(): Promise<Double> {
     return Promise.async {
-      return 55
+      return@async 55
     }
   }
 
