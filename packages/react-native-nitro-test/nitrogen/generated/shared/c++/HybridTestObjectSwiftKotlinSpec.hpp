@@ -159,6 +159,8 @@ namespace margelo::nitro::test {
       virtual std::shared_ptr<Promise<int64_t>> calculateFibonacciAsync(double value) = 0;
       virtual std::shared_ptr<Promise<void>> wait(double seconds) = 0;
       virtual std::shared_ptr<Promise<void>> promiseThrows() = 0;
+      virtual std::shared_ptr<Promise<double>> promiseReturnsInstantly() = 0;
+      virtual std::shared_ptr<Promise<double>> promiseReturnsInstantlyAsync() = 0;
       virtual std::shared_ptr<Promise<double>> awaitAndGetPromise(const std::shared_ptr<Promise<double>>& promise) = 0;
       virtual std::shared_ptr<Promise<Car>> awaitAndGetComplexPromise(const std::shared_ptr<Promise<Car>>& promise) = 0;
       virtual std::shared_ptr<Promise<void>> awaitPromise(const std::shared_ptr<Promise<void>>& promise) = 0;

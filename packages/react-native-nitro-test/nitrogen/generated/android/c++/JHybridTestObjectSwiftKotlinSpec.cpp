@@ -578,6 +578,38 @@ namespace margelo::nitro::test {
       return __promise;
     }();
   }
+  std::shared_ptr<Promise<double>> JHybridTestObjectSwiftKotlinSpec::promiseReturnsInstantly() {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JPromise::javaobject>()>("promiseReturnsInstantly");
+    auto __result = method(_javaPart);
+    return [&]() {
+      auto __promise = Promise<double>::create();
+      __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
+        auto __result = jni::static_ref_cast<jni::JDouble>(__boxedResult);
+        __promise->resolve(__result->value());
+      });
+      __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {
+        jni::JniException __jniError(__throwable);
+        __promise->reject(std::make_exception_ptr(__jniError));
+      });
+      return __promise;
+    }();
+  }
+  std::shared_ptr<Promise<double>> JHybridTestObjectSwiftKotlinSpec::promiseReturnsInstantlyAsync() {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JPromise::javaobject>()>("promiseReturnsInstantlyAsync");
+    auto __result = method(_javaPart);
+    return [&]() {
+      auto __promise = Promise<double>::create();
+      __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
+        auto __result = jni::static_ref_cast<jni::JDouble>(__boxedResult);
+        __promise->resolve(__result->value());
+      });
+      __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {
+        jni::JniException __jniError(__throwable);
+        __promise->reject(std::make_exception_ptr(__jniError));
+      });
+      return __promise;
+    }();
+  }
   std::shared_ptr<Promise<double>> JHybridTestObjectSwiftKotlinSpec::awaitAndGetPromise(const std::shared_ptr<Promise<double>>& promise) {
     static const auto method = javaClassStatic()->getMethod<jni::local_ref<JPromise::javaobject>(jni::alias_ref<JPromise::javaobject> /* promise */)>("awaitAndGetPromise");
     auto __result = method(_javaPart, [&]() {

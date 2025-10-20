@@ -1033,6 +1033,16 @@ export function getTests(
         'Error: Promise throws :)'
       )
     ),
+    createTest('promiseReturnsInstantly() works', async () =>
+      (await it(() => testObject.promiseReturnsInstantly()))
+        .didNotThrow()
+        .equals(55)
+    ),
+    createTest('promiseReturnsInstantlyAsync() works', async () =>
+      (await it(() => testObject.promiseReturnsInstantlyAsync()))
+        .didNotThrow()
+        .equals(55)
+    ),
     createTest('twoPromises can run in parallel', async () =>
       (
         await it(async () => {

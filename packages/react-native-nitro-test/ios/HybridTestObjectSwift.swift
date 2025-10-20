@@ -332,6 +332,16 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
     }
   }
 
+  func promiseReturnsInstantly() throws -> Promise<Double> {
+    return Promise.resolved(withResult: 55)
+  }
+
+  func promiseReturnsInstantlyAsync() throws -> Promise<Double> {
+    return Promise.async {
+      return 55
+    }
+  }
+
   func awaitAndGetPromise(promise: Promise<Double>) throws -> Promise<Double> {
     return .async {
       let result = try await promise.await()

@@ -109,6 +109,8 @@ namespace margelo::nitro::test {
     std::shared_ptr<Promise<int64_t>> calculateFibonacciAsync(double value) override;
     std::shared_ptr<Promise<void>> wait(double seconds) override;
     std::shared_ptr<Promise<void>> promiseThrows() override;
+    std::shared_ptr<Promise<double>> promiseReturnsInstantly() override;
+    std::shared_ptr<Promise<double>> promiseReturnsInstantlyAsync() override;
     std::shared_ptr<Promise<double>> awaitAndGetPromise(const std::shared_ptr<Promise<double>>& promise) override;
     std::shared_ptr<Promise<Car>> awaitAndGetComplexPromise(const std::shared_ptr<Promise<Car>>& promise) override;
     std::shared_ptr<Promise<void>> awaitPromise(const std::shared_ptr<Promise<void>>& promise) override;
