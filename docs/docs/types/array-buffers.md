@@ -55,6 +55,7 @@ It can be safely held strong for longer, e.g. as a class property/member, and ac
 func doSomething() -> ArrayBuffer {
   // highlight-next-line
   let buffer = ArrayBuffer.allocate(1024 * 10)
+  print(buffer.isOwning)   // <-- ✅ true
   let data = buffer.data   // <-- ✅ safe to do because we own it!
   self.buffer = buffer     // <-- ✅ safe to use it later!
   DispatchQueue.global().async {
@@ -71,7 +72,7 @@ It's data can only be safely accessed before the synchronous function returned, 
 
 ```swift
 func doSomething(buffer: ArrayBuffer) {
-  print(buffer.isOwning)   // <-- false
+  print(buffer.isOwning)   // <-- ❌ false
   let data = buffer.data   // <-- ✅ safe to do because we're still sync
   DispatchQueue.global().async {
     // code-error
