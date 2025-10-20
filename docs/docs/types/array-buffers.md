@@ -99,7 +99,7 @@ func doSomething(buffer: ArrayBuffer) {
 :::note
 Not every `ArrayBuffer` received from JS is **non-owning**, eg if the buffer was created in native and then did a JS-roundtrip it is still **owning**!
 
-Always check the `isOwning` to prevent unnecessary copies.
+Always check the `isOwning` property to prevent unnecessary copies.
 :::
 
 ## Threading
