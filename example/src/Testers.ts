@@ -75,7 +75,7 @@ export class State<T> {
   isInstanceOf(constructor: Function): State<T> {
     if (!(this.result instanceof constructor)) {
       this.onFailed(
-        `Expected ${stringify(this.result)}'s to be an instance of ${constructor.name}!`
+        `Expected ${stringify(this.result)} to be an instance of ${constructor.name}!`
       )
     } else {
       this.onPassed()
