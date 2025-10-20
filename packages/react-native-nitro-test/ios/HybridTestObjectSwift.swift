@@ -243,7 +243,7 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
     return .now
   }
 
-  func bounceMap(map: [String: Variant_Double_Bool]) throws -> [String: Variant_Double_Bool] {
+  func bounceMap(map: [String: Variant_Bool_Double]) throws -> [String: Variant_Bool_Double] {
     return map
   }
 
@@ -251,28 +251,32 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
     return mapWrapper.map
   }
 
-  func getVariantHybrid(variant: Variant_Person__any_HybridTestObjectSwiftKotlinSpec_) throws
-    -> Variant_Person__any_HybridTestObjectSwiftKotlinSpec_
+  func getVariantHybrid(variant: Variant__any_HybridTestObjectSwiftKotlinSpec__Person) throws
+    -> Variant__any_HybridTestObjectSwiftKotlinSpec__Person
   {
     return variant
   }
 
-  func passVariant(either: Variant_String_Double_Bool__Double___String_) throws
+  func passVariant(either: Variant_Bool__Double___String__String_Double) throws
     -> Variant_String_Double
   {
     switch either {
-    case .first(let string):
+    case .fourth(let string):
       return .first(string)
-    case .second(let double):
+    case .fifth(let double):
       return .second(double)
     default:
       return .first("holds something else!")
     }
   }
 
-  func passAllEmptyObjectVariant(variant: Variant_OptionalWrapper__any_HybridBaseSpec_) throws
-    -> Variant_OptionalWrapper__any_HybridBaseSpec_
+  func passAllEmptyObjectVariant(variant: Variant__any_HybridBaseSpec__OptionalWrapper) throws
+    -> Variant__any_HybridBaseSpec__OptionalWrapper
   {
+    return variant
+  }
+
+  func bounceComplexVariant(variant: CoreTypesVariant) throws -> CoreTypesVariant {
     return variant
   }
 

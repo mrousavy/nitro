@@ -1,5 +1,5 @@
 import { indent } from '../../utils.js'
-import { createFileMetadataString } from '../helpers.js'
+import { createFileMetadataString, isNotDuplicate } from '../helpers.js'
 import type { SourceFile } from '../SourceFile.js'
 import { getTypeAs } from '../types/getTypeAs.js'
 import { OptionalType } from '../types/OptionalType.js'
@@ -41,6 +41,7 @@ export function createSwiftVariant(variant: VariantType): SourceFile {
   const extraImports = variant.variants
     .flatMap((t) => t.getRequiredImports('swift'))
     .map((i) => `import ${i.name}`)
+    .filter(isNotDuplicate)
 
   const code = `
 ${createFileMetadataString(`${typename}.swift`)}

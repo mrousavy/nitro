@@ -14,6 +14,9 @@ namespace margelo::nitro::test {
 
 using namespace facebook;
 
+using ComplexVariant = std::variant<std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>, WrappedJsStruct,
+                                    std::chrono::system_clock::time_point, std::shared_ptr<Promise<double>>, std::shared_ptr<AnyMap>>;
+
 class HybridTestObjectCpp : public HybridTestObjectCppSpec {
 public:
   HybridTestObjectCpp() : HybridObject(TAG) {}
@@ -63,8 +66,9 @@ public:
   std::variant<std::string, double> getSomeVariant() override;
   void setSomeVariant(const std::variant<std::string, double>& variant) override;
   std::variant<std::string, Car> passNamedVariant(const std::variant<std::string, Car>& variant) override;
-  std::variant<OptionalWrapper, std::shared_ptr<HybridBaseSpec>>
-  passAllEmptyObjectVariant(const std::variant<OptionalWrapper, std::shared_ptr<HybridBaseSpec>>& variant) override;
+  std::variant<std::shared_ptr<HybridBaseSpec>, OptionalWrapper>
+  passAllEmptyObjectVariant(const std::variant<std::shared_ptr<HybridBaseSpec>, OptionalWrapper>& variant) override;
+  ComplexVariant bounceComplexVariant(const ComplexVariant& variant) override;
   std::tuple<double, std::string> getSomeTuple() override;
   void setSomeTuple(const std::tuple<double, std::string>& tuple) override;
   std::shared_ptr<HybridTestObjectCppSpec> getThisObject() override;
@@ -97,7 +101,7 @@ public:
   std::chrono::system_clock::time_point add1Hour(std::chrono::system_clock::time_point date) override;
   std::chrono::system_clock::time_point currentDate() override;
   std::variant<std::string, double>
-  passVariant(const std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>>& either) override;
+  passVariant(const std::variant<bool, std::vector<double>, std::vector<std::string>, std::string, double>& either) override;
 
   std::vector<std::string> bounceStrings(const std::vector<std::string>& array) override;
   std::vector<double> bounceNumbers(const std::vector<double>& array) override;
@@ -117,8 +121,8 @@ public:
 
   std::tuple<double, double, double> flip(const std::tuple<double, double, double>& tuple) override;
   std::tuple<double, std::string, bool> passTuple(const std::tuple<double, std::string, bool>& tuple) override;
-  std::unordered_map<std::string, std::variant<double, bool>>
-  bounceMap(const std::unordered_map<std::string, std::variant<double, bool>>& map) override;
+  std::unordered_map<std::string, std::variant<bool, double>>
+  bounceMap(const std::unordered_map<std::string, std::variant<bool, double>>& map) override;
   std::unordered_map<std::string, std::string> extractMap(const MapWrapper& mapWrapper) override;
   int64_t calculateFibonacciSync(double value) override;
   std::shared_ptr<Promise<int64_t>> calculateFibonacciAsync(double value) override;

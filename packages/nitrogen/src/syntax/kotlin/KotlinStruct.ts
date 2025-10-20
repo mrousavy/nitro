@@ -35,6 +35,7 @@ val ${p.escapedName}: ${p.getCode('kotlin')}
   const extraImports = structType.properties
     .flatMap((t) => t.getRequiredImports('kotlin'))
     .map((i) => `import ${i.name}`)
+    .filter(isNotDuplicate)
 
   const code = `
 ${createFileMetadataString(`${structType.structName}.kt`)}
@@ -43,7 +44,6 @@ package ${packageName}
 
 import androidx.annotation.Keep
 import com.facebook.proguard.annotations.DoNotStrip
-import com.margelo.nitro.core.*
 ${extraImports.join('\n')}
 
 /**

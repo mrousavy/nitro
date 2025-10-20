@@ -173,7 +173,7 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
     return boo ?: false
   }
 
-  override fun bounceMap(map: Map<String, Variant_Double_Boolean>): Map<String, Variant_Double_Boolean> {
+  override fun bounceMap(map: Map<String, Variant_Boolean_Double>): Map<String, Variant_Boolean_Double> {
     return map
   }
 
@@ -369,17 +369,21 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
     return Promise.async { createArrayBuffer() }
   }
 
-  override fun passVariant(either: Variant_String_Double_Boolean_DoubleArray_Array_String_): Variant_String_Double {
+  override fun passVariant(either: Variant_Boolean_DoubleArray_Array_String__String_Double): Variant_String_Double {
     return either.match(
+      { bool -> Variant_String_Double.create("holds something else!") },
+      { doubleArray -> Variant_String_Double.create("holds something else!") },
+      { stringArray -> Variant_String_Double.create("holds something else!") },
       { string -> Variant_String_Double.create(string) },
       { double -> Variant_String_Double.create(double) },
-      { bool -> Variant_String_Double.create("Holds something else.") },
-      { doubleArray -> Variant_String_Double.create("Holds something else.") },
-      { stringArray -> Variant_String_Double.create("Holds something else.") },
     )
   }
 
-  override fun passAllEmptyObjectVariant(variant: Variant_OptionalWrapper_HybridBaseSpec): Variant_OptionalWrapper_HybridBaseSpec {
+  override fun passAllEmptyObjectVariant(variant: Variant_HybridBaseSpec_OptionalWrapper): Variant_HybridBaseSpec_OptionalWrapper {
+    return variant
+  }
+
+  override fun bounceComplexVariant(variant: CoreTypesVariant): CoreTypesVariant {
     return variant
   }
 
@@ -399,7 +403,7 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
     return variant
   }
 
-  override fun getVariantHybrid(variant: Variant_Person_HybridTestObjectSwiftKotlinSpec): Variant_Person_HybridTestObjectSwiftKotlinSpec {
+  override fun getVariantHybrid(variant: Variant_HybridTestObjectSwiftKotlinSpec_Person): Variant_HybridTestObjectSwiftKotlinSpec_Person {
     return variant
   }
 

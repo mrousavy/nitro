@@ -7,6 +7,7 @@
 
 import Foundation
 import NitroModules
+import NitroModules
 import NitroTestExternal
 
 /**
@@ -407,40 +408,40 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public final func getVariantHybrid(variant: bridge.std__variant_Person__std__shared_ptr_HybridTestObjectSwiftKotlinSpec__) -> bridge.Result_std__variant_Person__std__shared_ptr_HybridTestObjectSwiftKotlinSpec___ {
+  public final func getVariantHybrid(variant: bridge.std__variant_std__shared_ptr_HybridTestObjectSwiftKotlinSpec___Person_) -> bridge.Result_std__variant_std__shared_ptr_HybridTestObjectSwiftKotlinSpec___Person__ {
     do {
-      let __result = try self.__implementation.getVariantHybrid(variant: { () -> Variant_Person__any_HybridTestObjectSwiftKotlinSpec_ in
+      let __result = try self.__implementation.getVariantHybrid(variant: { () -> Variant__any_HybridTestObjectSwiftKotlinSpec__Person in
         let __variant = variant
         switch __variant.index() {
           case 0:
             let __actual = __variant.get_0()
-            return .first(__actual)
-          case 1:
-            let __actual = __variant.get_1()
-            return .second({ () -> HybridTestObjectSwiftKotlinSpec in
+            return .first({ () -> HybridTestObjectSwiftKotlinSpec in
               let __unsafePointer = bridge.get_std__shared_ptr_HybridTestObjectSwiftKotlinSpec_(__actual)
               let __instance = HybridTestObjectSwiftKotlinSpec_cxx.fromUnsafe(__unsafePointer)
               return __instance.getHybridTestObjectSwiftKotlinSpec()
             }())
+          case 1:
+            let __actual = __variant.get_1()
+            return .second(__actual)
           default:
             fatalError("Variant can never have index \(__variant.index())!")
         }
       }())
-      let __resultCpp = { () -> bridge.std__variant_Person__std__shared_ptr_HybridTestObjectSwiftKotlinSpec__ in
+      let __resultCpp = { () -> bridge.std__variant_std__shared_ptr_HybridTestObjectSwiftKotlinSpec___Person_ in
         switch __result {
           case .first(let __value):
-            return bridge.create_std__variant_Person__std__shared_ptr_HybridTestObjectSwiftKotlinSpec__(__value)
-          case .second(let __value):
-            return bridge.create_std__variant_Person__std__shared_ptr_HybridTestObjectSwiftKotlinSpec__({ () -> bridge.std__shared_ptr_HybridTestObjectSwiftKotlinSpec_ in
+            return bridge.create_std__variant_std__shared_ptr_HybridTestObjectSwiftKotlinSpec___Person_({ () -> bridge.std__shared_ptr_HybridTestObjectSwiftKotlinSpec_ in
               let __cxxWrapped = __value.getCxxWrapper()
               return __cxxWrapped.getCxxPart()
             }())
+          case .second(let __value):
+            return bridge.create_std__variant_std__shared_ptr_HybridTestObjectSwiftKotlinSpec___Person_(__value)
         }
       }().variant
-      return bridge.create_Result_std__variant_Person__std__shared_ptr_HybridTestObjectSwiftKotlinSpec___(__resultCpp)
+      return bridge.create_Result_std__variant_std__shared_ptr_HybridTestObjectSwiftKotlinSpec___Person__(__resultCpp)
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
-      return bridge.create_Result_std__variant_Person__std__shared_ptr_HybridTestObjectSwiftKotlinSpec___(__exceptionPtr)
+      return bridge.create_Result_std__variant_std__shared_ptr_HybridTestObjectSwiftKotlinSpec___Person__(__exceptionPtr)
     }
   }
   
@@ -639,15 +640,15 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public final func bounceMap(map: bridge.std__unordered_map_std__string__std__variant_double__bool__) -> bridge.Result_std__unordered_map_std__string__std__variant_double__bool___ {
+  public final func bounceMap(map: bridge.std__unordered_map_std__string__std__variant_bool__double__) -> bridge.Result_std__unordered_map_std__string__std__variant_bool__double___ {
     do {
-      let __result = try self.__implementation.bounceMap(map: { () -> Dictionary<String, Variant_Double_Bool> in
-        var __dictionary = Dictionary<String, Variant_Double_Bool>(minimumCapacity: map.size())
-        let __keys = bridge.get_std__unordered_map_std__string__std__variant_double__bool___keys(map)
+      let __result = try self.__implementation.bounceMap(map: { () -> Dictionary<String, Variant_Bool_Double> in
+        var __dictionary = Dictionary<String, Variant_Bool_Double>(minimumCapacity: map.size())
+        let __keys = bridge.get_std__unordered_map_std__string__std__variant_bool__double___keys(map)
         for __key in __keys {
-          let __value = bridge.get_std__unordered_map_std__string__std__variant_double__bool___value(map, __key)
-          __dictionary[String(__key)] = { () -> Variant_Double_Bool in
-            let __variant = bridge.std__variant_double__bool_(__value)
+          let __value = bridge.get_std__unordered_map_std__string__std__variant_bool__double___value(map, __key)
+          __dictionary[String(__key)] = { () -> Variant_Bool_Double in
+            let __variant = bridge.std__variant_bool__double_(__value)
             switch __variant.index() {
               case 0:
                 let __actual = __variant.get_0()
@@ -662,24 +663,24 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
         }
         return __dictionary
       }())
-      let __resultCpp = { () -> bridge.std__unordered_map_std__string__std__variant_double__bool__ in
-        var __map = bridge.create_std__unordered_map_std__string__std__variant_double__bool__(__result.count)
+      let __resultCpp = { () -> bridge.std__unordered_map_std__string__std__variant_bool__double__ in
+        var __map = bridge.create_std__unordered_map_std__string__std__variant_bool__double__(__result.count)
         for (__k, __v) in __result {
-          bridge.emplace_std__unordered_map_std__string__std__variant_double__bool__(&__map, std.string(__k), { () -> bridge.std__variant_double__bool_ in
+          bridge.emplace_std__unordered_map_std__string__std__variant_bool__double__(&__map, std.string(__k), { () -> bridge.std__variant_bool__double_ in
             switch __v {
               case .first(let __value):
-                return bridge.create_std__variant_double__bool_(__value)
+                return bridge.create_std__variant_bool__double_(__value)
               case .second(let __value):
-                return bridge.create_std__variant_double__bool_(__value)
+                return bridge.create_std__variant_bool__double_(__value)
             }
           }().variant)
         }
         return __map
       }()
-      return bridge.create_Result_std__unordered_map_std__string__std__variant_double__bool___(__resultCpp)
+      return bridge.create_Result_std__unordered_map_std__string__std__variant_bool__double___(__resultCpp)
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
-      return bridge.create_Result_std__unordered_map_std__string__std__variant_double__bool___(__exceptionPtr)
+      return bridge.create_Result_std__unordered_map_std__string__std__variant_bool__double___(__exceptionPtr)
     }
   }
   
@@ -1550,30 +1551,30 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public final func passVariant(either: bridge.std__variant_std__string__double__bool__std__vector_double___std__vector_std__string__) -> bridge.Result_std__variant_std__string__double__ {
+  public final func passVariant(either: bridge.std__variant_bool__std__vector_double___std__vector_std__string___std__string__double_) -> bridge.Result_std__variant_std__string__double__ {
     do {
-      let __result = try self.__implementation.passVariant(either: { () -> Variant_String_Double_Bool__Double___String_ in
+      let __result = try self.__implementation.passVariant(either: { () -> Variant_Bool__Double___String__String_Double in
         let __variant = either
         switch __variant.index() {
           case 0:
             let __actual = __variant.get_0()
-            return .first(String(__actual))
+            return .first(__actual)
           case 1:
             let __actual = __variant.get_1()
-            return .second(__actual)
-          case 2:
-            let __actual = __variant.get_2()
-            return .third(__actual)
-          case 3:
-            let __actual = __variant.get_3()
-            return .fourth({ () -> [Double] in
+            return .second({ () -> [Double] in
               let __data = bridge.get_data_std__vector_double_(__actual)
               let __size = __actual.size()
               return Array(UnsafeBufferPointer(start: __data, count: __size))
             }())
+          case 2:
+            let __actual = __variant.get_2()
+            return .third(__actual.map({ __item in String(__item) }))
+          case 3:
+            let __actual = __variant.get_3()
+            return .fourth(String(__actual))
           case 4:
             let __actual = __variant.get_4()
-            return .fifth(__actual.map({ __item in String(__item) }))
+            return .fifth(__actual)
           default:
             fatalError("Variant can never have index \(__variant.index())!")
         }
@@ -1718,40 +1719,126 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public final func passAllEmptyObjectVariant(variant: bridge.std__variant_OptionalWrapper__std__shared_ptr_HybridBaseSpec__) -> bridge.Result_std__variant_OptionalWrapper__std__shared_ptr_HybridBaseSpec___ {
+  public final func passAllEmptyObjectVariant(variant: bridge.std__variant_std__shared_ptr_HybridBaseSpec___OptionalWrapper_) -> bridge.Result_std__variant_std__shared_ptr_HybridBaseSpec___OptionalWrapper__ {
     do {
-      let __result = try self.__implementation.passAllEmptyObjectVariant(variant: { () -> Variant_OptionalWrapper__any_HybridBaseSpec_ in
+      let __result = try self.__implementation.passAllEmptyObjectVariant(variant: { () -> Variant__any_HybridBaseSpec__OptionalWrapper in
         let __variant = variant
         switch __variant.index() {
           case 0:
             let __actual = __variant.get_0()
-            return .first(__actual)
-          case 1:
-            let __actual = __variant.get_1()
-            return .second({ () -> HybridBaseSpec in
+            return .first({ () -> HybridBaseSpec in
               let __unsafePointer = bridge.get_std__shared_ptr_HybridBaseSpec_(__actual)
               let __instance = HybridBaseSpec_cxx.fromUnsafe(__unsafePointer)
               return __instance.getHybridBaseSpec()
             }())
+          case 1:
+            let __actual = __variant.get_1()
+            return .second(__actual)
           default:
             fatalError("Variant can never have index \(__variant.index())!")
         }
       }())
-      let __resultCpp = { () -> bridge.std__variant_OptionalWrapper__std__shared_ptr_HybridBaseSpec__ in
+      let __resultCpp = { () -> bridge.std__variant_std__shared_ptr_HybridBaseSpec___OptionalWrapper_ in
         switch __result {
           case .first(let __value):
-            return bridge.create_std__variant_OptionalWrapper__std__shared_ptr_HybridBaseSpec__(__value)
-          case .second(let __value):
-            return bridge.create_std__variant_OptionalWrapper__std__shared_ptr_HybridBaseSpec__({ () -> bridge.std__shared_ptr_HybridBaseSpec_ in
+            return bridge.create_std__variant_std__shared_ptr_HybridBaseSpec___OptionalWrapper_({ () -> bridge.std__shared_ptr_HybridBaseSpec_ in
               let __cxxWrapped = __value.getCxxWrapper()
               return __cxxWrapped.getCxxPart()
             }())
+          case .second(let __value):
+            return bridge.create_std__variant_std__shared_ptr_HybridBaseSpec___OptionalWrapper_(__value)
         }
       }().variant
-      return bridge.create_Result_std__variant_OptionalWrapper__std__shared_ptr_HybridBaseSpec___(__resultCpp)
+      return bridge.create_Result_std__variant_std__shared_ptr_HybridBaseSpec___OptionalWrapper__(__resultCpp)
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
-      return bridge.create_Result_std__variant_OptionalWrapper__std__shared_ptr_HybridBaseSpec___(__exceptionPtr)
+      return bridge.create_Result_std__variant_std__shared_ptr_HybridBaseSpec___OptionalWrapper__(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
+  public final func bounceComplexVariant(variant: bridge.std__variant_std__shared_ptr_ArrayBuffer___std__function_void_double____value_______WrappedJsStruct__std__chrono__system_clock__time_point__std__shared_ptr_Promise_double____std__shared_ptr_AnyMap__) -> bridge.Result_std__variant_std__shared_ptr_ArrayBuffer___std__function_void_double____value_______WrappedJsStruct__std__chrono__system_clock__time_point__std__shared_ptr_Promise_double____std__shared_ptr_AnyMap___ {
+    do {
+      let __result = try self.__implementation.bounceComplexVariant(variant: { () -> CoreTypesVariant in
+        let __variant = variant
+        switch __variant.index() {
+          case 0:
+            let __actual = __variant.get_0()
+            return .first(ArrayBuffer(__actual))
+          case 1:
+            let __actual = __variant.get_1()
+            return .second({ () -> (Double) -> Void in
+              let __wrappedFunction = bridge.wrap_Func_void_double(__actual)
+              return { (__value: Double) -> Void in
+                __wrappedFunction.call(__value)
+              }
+            }())
+          case 2:
+            let __actual = __variant.get_2()
+            return .third(__actual)
+          case 3:
+            let __actual = __variant.get_3()
+            return .fourth(Date(fromChrono: __actual))
+          case 4:
+            let __actual = __variant.get_4()
+            return .fifth({ () -> Promise<Double> in
+              let __promise = Promise<Double>()
+              let __resolver = { (__result: Double) in
+                __promise.resolve(withResult: __result)
+              }
+              let __rejecter = { (__error: Error) in
+                __promise.reject(withError: __error)
+              }
+              let __resolverCpp = { () -> bridge.Func_void_double in
+                let __closureWrapper = Func_void_double(__resolver)
+                return bridge.create_Func_void_double(__closureWrapper.toUnsafe())
+              }()
+              let __rejecterCpp = { () -> bridge.Func_void_std__exception_ptr in
+                let __closureWrapper = Func_void_std__exception_ptr(__rejecter)
+                return bridge.create_Func_void_std__exception_ptr(__closureWrapper.toUnsafe())
+              }()
+              let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_double__(__actual)
+              __promiseHolder.addOnResolvedListenerCopy(__resolverCpp)
+              __promiseHolder.addOnRejectedListener(__rejecterCpp)
+              return __promise
+            }())
+          case 5:
+            let __actual = __variant.get_5()
+            return .sixth(AnyMap(withCppPart: __actual))
+          default:
+            fatalError("Variant can never have index \(__variant.index())!")
+        }
+      }())
+      let __resultCpp = { () -> bridge.std__variant_std__shared_ptr_ArrayBuffer___std__function_void_double____value_______WrappedJsStruct__std__chrono__system_clock__time_point__std__shared_ptr_Promise_double____std__shared_ptr_AnyMap__ in
+        switch __result {
+          case .first(let __value):
+            return bridge.create_std__variant_std__shared_ptr_ArrayBuffer___std__function_void_double____value_______WrappedJsStruct__std__chrono__system_clock__time_point__std__shared_ptr_Promise_double____std__shared_ptr_AnyMap__(__value.getArrayBuffer())
+          case .second(let __value):
+            return bridge.create_std__variant_std__shared_ptr_ArrayBuffer___std__function_void_double____value_______WrappedJsStruct__std__chrono__system_clock__time_point__std__shared_ptr_Promise_double____std__shared_ptr_AnyMap__({ () -> bridge.Func_void_double in
+              let __closureWrapper = Func_void_double(__value)
+              return bridge.create_Func_void_double(__closureWrapper.toUnsafe())
+            }())
+          case .third(let __value):
+            return bridge.create_std__variant_std__shared_ptr_ArrayBuffer___std__function_void_double____value_______WrappedJsStruct__std__chrono__system_clock__time_point__std__shared_ptr_Promise_double____std__shared_ptr_AnyMap__(__value)
+          case .fourth(let __value):
+            return bridge.create_std__variant_std__shared_ptr_ArrayBuffer___std__function_void_double____value_______WrappedJsStruct__std__chrono__system_clock__time_point__std__shared_ptr_Promise_double____std__shared_ptr_AnyMap__(__value.toCpp())
+          case .fifth(let __value):
+            return bridge.create_std__variant_std__shared_ptr_ArrayBuffer___std__function_void_double____value_______WrappedJsStruct__std__chrono__system_clock__time_point__std__shared_ptr_Promise_double____std__shared_ptr_AnyMap__({ () -> bridge.std__shared_ptr_Promise_double__ in
+              let __promise = bridge.create_std__shared_ptr_Promise_double__()
+              let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_double__(__promise)
+              __value
+                .then({ __result in __promiseHolder.resolve(__result) })
+                .catch({ __error in __promiseHolder.reject(__error.toCpp()) })
+              return __promise
+            }())
+          case .sixth(let __value):
+            return bridge.create_std__variant_std__shared_ptr_ArrayBuffer___std__function_void_double____value_______WrappedJsStruct__std__chrono__system_clock__time_point__std__shared_ptr_Promise_double____std__shared_ptr_AnyMap__(__value.cppPart)
+        }
+      }().variant
+      return bridge.create_Result_std__variant_std__shared_ptr_ArrayBuffer___std__function_void_double____value_______WrappedJsStruct__std__chrono__system_clock__time_point__std__shared_ptr_Promise_double____std__shared_ptr_AnyMap___(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__variant_std__shared_ptr_ArrayBuffer___std__function_void_double____value_______WrappedJsStruct__std__chrono__system_clock__time_point__std__shared_ptr_Promise_double____std__shared_ptr_AnyMap___(__exceptionPtr)
     }
   }
   

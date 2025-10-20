@@ -7,6 +7,7 @@
 
 import Foundation
 import NitroModules
+import NitroModules
 import NitroTestExternal
 
 /// See ``HybridTestObjectSwiftKotlinSpec``
@@ -29,7 +30,7 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
 
   // Methods
   func newTestObject() throws -> (any HybridTestObjectSwiftKotlinSpec)
-  func getVariantHybrid(variant: Variant_Person__any_HybridTestObjectSwiftKotlinSpec_) throws -> Variant_Person__any_HybridTestObjectSwiftKotlinSpec_
+  func getVariantHybrid(variant: Variant__any_HybridTestObjectSwiftKotlinSpec__Person) throws -> Variant__any_HybridTestObjectSwiftKotlinSpec__Person
   func simpleFunc() throws -> Void
   func addNumbers(a: Double, b: Double) throws -> Double
   func addStrings(a: String, b: String) throws -> String
@@ -43,7 +44,7 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
   func createMap() throws -> AnyMap
   func mapRoundtrip(map: AnyMap) throws -> AnyMap
   func getMapKeys(map: AnyMap) throws -> [String]
-  func bounceMap(map: Dictionary<String, Variant_Double_Bool>) throws -> Dictionary<String, Variant_Double_Bool>
+  func bounceMap(map: Dictionary<String, Variant_Bool_Double>) throws -> Dictionary<String, Variant_Bool_Double>
   func extractMap(mapWrapper: MapWrapper) throws -> Dictionary<String, String>
   func funcThatThrows() throws -> Double
   func funcThatThrowsBeforePromise() throws -> Promise<Void>
@@ -85,12 +86,13 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
   func setAllValuesTo(buffer: ArrayBuffer, value: Double) throws -> Void
   func createArrayBufferAsync() throws -> Promise<ArrayBuffer>
   func bounceArrayBuffer(buffer: ArrayBuffer) throws -> ArrayBuffer
-  func passVariant(either: Variant_String_Double_Bool__Double___String_) throws -> Variant_String_Double
+  func passVariant(either: Variant_Bool__Double___String__String_Double) throws -> Variant_String_Double
   func getVariantEnum(variant: Variant_Bool_OldEnum) throws -> Variant_Bool_OldEnum
   func getVariantWeirdNumbersEnum(variant: Variant_Bool_WeirdNumbersEnum) throws -> Variant_Bool_WeirdNumbersEnum
   func getVariantObjects(variant: Variant_Car_Person) throws -> Variant_Car_Person
   func passNamedVariant(variant: NamedVariant) throws -> NamedVariant
-  func passAllEmptyObjectVariant(variant: Variant_OptionalWrapper__any_HybridBaseSpec_) throws -> Variant_OptionalWrapper__any_HybridBaseSpec_
+  func passAllEmptyObjectVariant(variant: Variant__any_HybridBaseSpec__OptionalWrapper) throws -> Variant__any_HybridBaseSpec__OptionalWrapper
+  func bounceComplexVariant(variant: CoreTypesVariant) throws -> CoreTypesVariant
   func createChild() throws -> (any HybridChildSpec)
   func createBase() throws -> (any HybridBaseSpec)
   func createBaseActualChild() throws -> (any HybridBaseSpec)

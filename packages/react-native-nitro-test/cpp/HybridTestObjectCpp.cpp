@@ -262,7 +262,7 @@ std::chrono::system_clock::time_point HybridTestObjectCpp::currentDate() {
 }
 
 std::variant<std::string, double>
-HybridTestObjectCpp::passVariant(const std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>>& either) {
+HybridTestObjectCpp::passVariant(const std::variant<bool, std::vector<double>, std::vector<std::string>, std::string, double>& either) {
   if (std::holds_alternative<std::string>(either)) {
     return std::get<std::string>(either);
   } else if (std::holds_alternative<double>(either)) {
@@ -272,8 +272,12 @@ HybridTestObjectCpp::passVariant(const std::variant<std::string, double, bool, s
   }
 }
 
-std::variant<OptionalWrapper, std::shared_ptr<HybridBaseSpec>>
-HybridTestObjectCpp::passAllEmptyObjectVariant(const std::variant<OptionalWrapper, std::shared_ptr<HybridBaseSpec>>& variant) {
+std::variant<std::shared_ptr<HybridBaseSpec>, OptionalWrapper>
+HybridTestObjectCpp::passAllEmptyObjectVariant(const std::variant<std::shared_ptr<HybridBaseSpec>, OptionalWrapper>& variant) {
+  return variant;
+}
+
+ComplexVariant HybridTestObjectCpp::bounceComplexVariant(const ComplexVariant& variant) {
   return variant;
 }
 
@@ -315,8 +319,8 @@ int64_t HybridTestObjectCpp::calculateFibonacciSync(double value) {
   return calculateFibonacci(value);
 }
 
-std::unordered_map<std::string, std::variant<double, bool>>
-HybridTestObjectCpp::bounceMap(const std::unordered_map<std::string, std::variant<double, bool>>& map) {
+std::unordered_map<std::string, std::variant<bool, double>>
+HybridTestObjectCpp::bounceMap(const std::unordered_map<std::string, std::variant<bool, double>>& map) {
   return map;
 }
 

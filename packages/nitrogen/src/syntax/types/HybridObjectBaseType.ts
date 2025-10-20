@@ -30,24 +30,33 @@ export class HybridObjectBaseType implements Type {
   }
   getRequiredImports(language: Language): SourceImport[] {
     const imports: SourceImport[] = []
-    if (language === 'c++') {
-      imports.push(
-        {
-          language: 'c++',
-          name: 'memory',
+    switch (language) {
+      case 'c++':
+        imports.push(
+          {
+            language: 'c++',
+            name: 'memory',
+            space: 'system',
+          },
+          {
+            name: `NitroModules/HybridObject.hpp`,
+            forwardDeclaration: getForwardDeclaration(
+              'class',
+              'HybridObject',
+              'margelo::nitro'
+            ),
+            language: 'c++',
+            space: 'system',
+          }
+        )
+        break
+      case 'kotlin':
+        imports.push({
+          name: 'com.margelo.nitro.core.HybridObject',
           space: 'system',
-        },
-        {
-          name: `NitroModules/HybridObject.hpp`,
-          forwardDeclaration: getForwardDeclaration(
-            'class',
-            'HybridObject',
-            'margelo::nitro'
-          ),
-          language: 'c++',
-          space: 'system',
-        }
-      )
+          language: 'kotlin',
+        })
+        break
     }
     return imports
   }

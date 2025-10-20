@@ -10,8 +10,7 @@ package com.margelo.nitro.test
 import androidx.annotation.Keep
 import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
-import com.margelo.nitro.core.*
-import com.margelo.nitro.views.*
+import com.margelo.nitro.views.HybridView
 
 /**
  * A Kotlin class representing the TestView HybridObject.

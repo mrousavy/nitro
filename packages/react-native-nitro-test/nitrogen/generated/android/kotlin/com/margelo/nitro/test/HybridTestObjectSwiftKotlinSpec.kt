@@ -10,8 +10,11 @@ package com.margelo.nitro.test
 import androidx.annotation.Keep
 import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
-import com.margelo.nitro.core.*
+import com.margelo.nitro.core.AnyMap
+import com.margelo.nitro.core.Promise
+import com.margelo.nitro.core.ArrayBuffer
 import com.margelo.nitro.test.external.HybridSomeExternalObjectSpec
+import com.margelo.nitro.core.HybridObject
 
 /**
  * A Kotlin class representing the TestObjectSwiftKotlin HybridObject.
@@ -135,7 +138,7 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
-  abstract fun getVariantHybrid(variant: Variant_Person_HybridTestObjectSwiftKotlinSpec): Variant_Person_HybridTestObjectSwiftKotlinSpec
+  abstract fun getVariantHybrid(variant: Variant_HybridTestObjectSwiftKotlinSpec_Person): Variant_HybridTestObjectSwiftKotlinSpec_Person
   
   @DoNotStrip
   @Keep
@@ -196,7 +199,7 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
-  abstract fun bounceMap(map: Map<String, Variant_Double_Boolean>): Map<String, Variant_Double_Boolean>
+  abstract fun bounceMap(map: Map<String, Variant_Boolean_Double>): Map<String, Variant_Boolean_Double>
   
   @DoNotStrip
   @Keep
@@ -414,7 +417,7 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
-  abstract fun passVariant(either: Variant_String_Double_Boolean_DoubleArray_Array_String_): Variant_String_Double
+  abstract fun passVariant(either: Variant_Boolean_DoubleArray_Array_String__String_Double): Variant_String_Double
   
   @DoNotStrip
   @Keep
@@ -434,7 +437,11 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
-  abstract fun passAllEmptyObjectVariant(variant: Variant_OptionalWrapper_HybridBaseSpec): Variant_OptionalWrapper_HybridBaseSpec
+  abstract fun passAllEmptyObjectVariant(variant: Variant_HybridBaseSpec_OptionalWrapper): Variant_HybridBaseSpec_OptionalWrapper
+  
+  @DoNotStrip
+  @Keep
+  abstract fun bounceComplexVariant(variant: CoreTypesVariant): CoreTypesVariant
   
   @DoNotStrip
   @Keep

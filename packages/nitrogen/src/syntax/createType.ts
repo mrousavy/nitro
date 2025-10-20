@@ -43,6 +43,7 @@ import {
   isRecord,
 } from './isCoreType.js'
 import { getCustomTypeConfig } from './getCustomTypeConfig.js'
+import { compareLooselyness } from './helpers.js'
 
 function getHybridObjectName(type: TSMorphType): string {
   const symbol = isHybridView(type) ? type.getAliasSymbol() : type.getSymbol()
@@ -302,6 +303,7 @@ export function createType(
           // Filter out any nulls or undefineds, as those are already treated as `isOptional`.
           .filter((t) => !t.isNull() && !t.isUndefined() && !t.isVoid())
           .map((t) => createType(language, t, false))
+          .toSorted(compareLooselyness)
         variants = removeDuplicates(variants)
 
         if (variants.length === 1) {

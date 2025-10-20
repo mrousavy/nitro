@@ -86,6 +86,14 @@ export type CustomString = CustomType<
   { include: 'CustomString.hpp' }
 >
 
+type CoreTypesVariant =
+  | ArrayBuffer
+  | Promise<number>
+  | ((value: number) => void)
+  | WrappedJsStruct
+  | Date
+  | AnyMap
+
 // This is an `interface` we're going to use as a base in both of our `HybridObject`s later.
 // In this case, the `HybridObject`s will just flatten out and copy over all properties here.
 // There is no separate type for `SharedTestObjectProps` on the native side.
@@ -217,6 +225,7 @@ interface SharedTestObjectProps {
   passAllEmptyObjectVariant(
     variant: OptionalWrapper | Base
   ): OptionalWrapper | Base
+  bounceComplexVariant(variant: CoreTypesVariant): CoreTypesVariant
 
   // Inheritance
   createChild(): Child

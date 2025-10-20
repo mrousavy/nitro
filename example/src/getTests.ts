@@ -733,6 +733,62 @@ export function getTests(
         .didReturn('object')
         .equals(BASE)
     ),
+    createTest('bounceComplexVariant(...) with ArrayBuffer', () =>
+      it(() => testObject.bounceComplexVariant(testObject.createArrayBuffer()))
+        .didNotThrow()
+        .didReturn('object')
+        .isInstanceOf(ArrayBuffer)
+    ),
+    createTest('bounceComplexVariant(...) with Promise', async () =>
+      (
+        await it(async () => {
+          const result = testObject.bounceComplexVariant(
+            new Promise<number>((resolve) => {
+              setTimeout(() => resolve(55), 100)
+            })
+          )
+          if (!(result instanceof Promise))
+            throw new Error(`Not a Promise! (${stringify(result)})`)
+          return await result
+        })
+      )
+        .didNotThrow()
+        .didReturn('number')
+        .equals(55)
+    ),
+    createTest('bounceComplexVariant(...) with Callback', () =>
+      it(() => testObject.bounceComplexVariant(() => {}))
+        .didNotThrow()
+        .didReturn('function')
+    ),
+    createTest('bounceComplexVariant(...) with struct', () =>
+      it(() =>
+        testObject.bounceComplexVariant({
+          items: [],
+          value: { onChanged: () => {}, value: 55 },
+        })
+      )
+        .didNotThrow()
+        .didReturn('object')
+        // @ts-expect-error
+        .toContain('items')
+        // @ts-expect-error
+        .toContain('value')
+    ),
+    createTest('bounceComplexVariant(...) with AnyMap', () =>
+      it(() => testObject.bounceComplexVariant({ whateverValue: 55 }))
+        .didNotThrow()
+        .didReturn('object')
+        // @ts-expect-error
+        .toContain('whateverValue')
+        .equals({ whateverValue: 55 })
+    ),
+    createTest('bounceComplexVariant(...) with Date', () =>
+      it(() => testObject.bounceComplexVariant(new Date()))
+        .didNotThrow()
+        .didReturn('object')
+        .isInstanceOf(Date)
+    ),
     createTest('createChild().bounceVariant(...) works', () =>
       it(() => testObject.createChild().bounceVariant('hello!'))
         .didNotThrow()
