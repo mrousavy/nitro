@@ -7,6 +7,7 @@ import {
   ScrollView,
   Button,
   Platform,
+  TextInput,
 } from 'react-native'
 import {
   HybridTestObjectCpp,
@@ -77,6 +78,7 @@ export function HybridObjectTestsScreen() {
   const safeArea = useSafeAreaInsets()
   const colors = useColors()
   const [selectedIndex, setSelectedIndex] = React.useState(0)
+  const [searchQuery, setSearchQuery] = React.useState('')
   const selectedObject = [HybridTestObjectCpp, HybridTestObjectSwiftKotlin][
     selectedIndex
   ]
@@ -102,6 +104,16 @@ export function HybridObjectTestsScreen() {
       }))
     )
   }, [allTests])
+
+  const filteredTests = React.useMemo(() => {
+    if (!searchQuery.trim()) {
+      return tests
+    }
+    const query = searchQuery.toLowerCase()
+    return tests.filter((t) =>
+      t.runner.name.toLowerCase().includes(query)
+    )
+  }, [tests, searchQuery])
 
   const status = React.useMemo(() => {
     const passed = tests.filter((t) => t.state === '✅ Passed').length
@@ -179,8 +191,26 @@ export function HybridObjectTestsScreen() {
         <Text style={styles.buildTypeText}>{NitroModules.buildType}</Text>
       </View>
 
+      <View style={styles.searchContainer}>
+        <TextInput
+          style={[styles.searchInput, { color: colors.text, borderColor: colors.border }]}
+          placeholder="Search tests..."
+          placeholderTextColor={colors.textSecondary}
+          value={searchQuery}
+          onChangeText={setSearchQuery}
+          autoCapitalize="none"
+          autoCorrect={false}
+          clearButtonMode="while-editing"
+        />
+        {searchQuery.length > 0 && (
+          <Text style={styles.searchResultsText}>
+            {filteredTests.length} of {tests.length} tests
+          </Text>
+        )}
+      </View>
+
       <ScrollView>
-        {tests.map((t, i) => (
+        {filteredTests.map((t, i) => (
           <TestCase
             key={`test-${i}`}
             test={t}
@@ -227,6 +257,22 @@ const styles = StyleSheet.create({
   },
   segmentedControl: {
     minWidth: 180,
+  },
+  searchContainer: {
+    marginHorizontal: 15,
+    marginBottom: 10,
+  },
+  searchInput: {
+    height: 40,
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    fontSize: 16,
+  },
+  searchResultsText: {
+    fontSize: 12,
+    marginTop: 4,
+    opacity: 0.7,
   },
   box: {
     width: 60,
