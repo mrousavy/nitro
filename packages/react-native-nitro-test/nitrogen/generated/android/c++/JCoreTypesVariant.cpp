@@ -9,34 +9,16 @@
 
 namespace margelo::nitro::test {
   /**
-   * Converts JCoreTypesVariant to std::variant<std::shared_ptr<Promise<void>>, std::chrono::system_clock::time_point, std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>, WrappedJsStruct, std::shared_ptr<AnyMap>>
+   * Converts JCoreTypesVariant to std::variant<std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>, WrappedJsStruct, std::shared_ptr<Promise<void>>, std::chrono::system_clock::time_point, std::shared_ptr<AnyMap>>
    */
-  std::variant<std::shared_ptr<Promise<void>>, std::chrono::system_clock::time_point, std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>, WrappedJsStruct, std::shared_ptr<AnyMap>> JCoreTypesVariant::toCpp() const {
+  std::variant<std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>, WrappedJsStruct, std::shared_ptr<Promise<void>>, std::chrono::system_clock::time_point, std::shared_ptr<AnyMap>> JCoreTypesVariant::toCpp() const {
     if (isInstanceOf(JCoreTypesVariant_impl::First::javaClassStatic())) {
-      // It's a `std::shared_ptr<Promise<void>>`
-      auto jniValue = static_cast<const JCoreTypesVariant_impl::First*>(this)->getValue();
-      return [&]() {
-      auto __promise = Promise<void>::create();
-      jniValue->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& /* unit */) {
-        __promise->resolve();
-      });
-      jniValue->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {
-        jni::JniException __jniError(__throwable);
-        __promise->reject(std::make_exception_ptr(__jniError));
-      });
-      return __promise;
-    }();
-    } else if (isInstanceOf(JCoreTypesVariant_impl::Second::javaClassStatic())) {
-      // It's a `std::chrono::system_clock::time_point`
-      auto jniValue = static_cast<const JCoreTypesVariant_impl::Second*>(this)->getValue();
-      return jniValue->toChrono();
-    } else if (isInstanceOf(JCoreTypesVariant_impl::Third::javaClassStatic())) {
       // It's a `std::shared_ptr<ArrayBuffer>`
-      auto jniValue = static_cast<const JCoreTypesVariant_impl::Third*>(this)->getValue();
+      auto jniValue = static_cast<const JCoreTypesVariant_impl::First*>(this)->getValue();
       return jniValue->cthis()->getArrayBuffer();
-    } else if (isInstanceOf(JCoreTypesVariant_impl::Fourth::javaClassStatic())) {
+    } else if (isInstanceOf(JCoreTypesVariant_impl::Second::javaClassStatic())) {
       // It's a `std::function<void(double /* value */)>`
-      auto jniValue = static_cast<const JCoreTypesVariant_impl::Fourth*>(this)->getValue();
+      auto jniValue = static_cast<const JCoreTypesVariant_impl::Second*>(this)->getValue();
       return [&]() -> std::function<void(double /* value */)> {
       if (jniValue->isInstanceOf(JFunc_void_double_cxx::javaClassStatic())) [[likely]] {
         auto downcast = jni::static_ref_cast<JFunc_void_double_cxx::javaobject>(jniValue);
@@ -48,10 +30,28 @@ namespace margelo::nitro::test {
         };
       }
     }();
-    } else if (isInstanceOf(JCoreTypesVariant_impl::Fifth::javaClassStatic())) {
+    } else if (isInstanceOf(JCoreTypesVariant_impl::Third::javaClassStatic())) {
       // It's a `WrappedJsStruct`
-      auto jniValue = static_cast<const JCoreTypesVariant_impl::Fifth*>(this)->getValue();
+      auto jniValue = static_cast<const JCoreTypesVariant_impl::Third*>(this)->getValue();
       return jniValue->toCpp();
+    } else if (isInstanceOf(JCoreTypesVariant_impl::Fourth::javaClassStatic())) {
+      // It's a `std::shared_ptr<Promise<void>>`
+      auto jniValue = static_cast<const JCoreTypesVariant_impl::Fourth*>(this)->getValue();
+      return [&]() {
+      auto __promise = Promise<void>::create();
+      jniValue->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& /* unit */) {
+        __promise->resolve();
+      });
+      jniValue->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {
+        jni::JniException __jniError(__throwable);
+        __promise->reject(std::make_exception_ptr(__jniError));
+      });
+      return __promise;
+    }();
+    } else if (isInstanceOf(JCoreTypesVariant_impl::Fifth::javaClassStatic())) {
+      // It's a `std::chrono::system_clock::time_point`
+      auto jniValue = static_cast<const JCoreTypesVariant_impl::Fifth*>(this)->getValue();
+      return jniValue->toChrono();
     } else if (isInstanceOf(JCoreTypesVariant_impl::Sixth::javaClassStatic())) {
       // It's a `std::shared_ptr<AnyMap>`
       auto jniValue = static_cast<const JCoreTypesVariant_impl::Sixth*>(this)->getValue();

@@ -144,7 +144,7 @@ namespace margelo::nitro::test {
       virtual std::shared_ptr<AnyMap> createMap() = 0;
       virtual std::shared_ptr<AnyMap> mapRoundtrip(const std::shared_ptr<AnyMap>& map) = 0;
       virtual std::vector<std::string> getMapKeys(const std::shared_ptr<AnyMap>& map) = 0;
-      virtual std::unordered_map<std::string, std::variant<double, bool>> bounceMap(const std::unordered_map<std::string, std::variant<double, bool>>& map) = 0;
+      virtual std::unordered_map<std::string, std::variant<bool, double>> bounceMap(const std::unordered_map<std::string, std::variant<bool, double>>& map) = 0;
       virtual std::unordered_map<std::string, std::string> extractMap(const MapWrapper& mapWrapper) = 0;
       virtual double funcThatThrows() = 0;
       virtual std::shared_ptr<Promise<void>> funcThatThrowsBeforePromise() = 0;
@@ -186,13 +186,13 @@ namespace margelo::nitro::test {
       virtual void setAllValuesTo(const std::shared_ptr<ArrayBuffer>& buffer, double value) = 0;
       virtual std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>> createArrayBufferAsync() = 0;
       virtual std::shared_ptr<ArrayBuffer> bounceArrayBuffer(const std::shared_ptr<ArrayBuffer>& buffer) = 0;
-      virtual std::variant<std::string, double> passVariant(const std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>>& either) = 0;
+      virtual std::variant<std::string, double> passVariant(const std::variant<bool, std::vector<double>, std::vector<std::string>, std::string, double>& either) = 0;
       virtual std::variant<bool, OldEnum> getVariantEnum(const std::variant<bool, OldEnum>& variant) = 0;
       virtual std::variant<bool, WeirdNumbersEnum> getVariantWeirdNumbersEnum(const std::variant<bool, WeirdNumbersEnum>& variant) = 0;
       virtual std::variant<Car, Person> getVariantObjects(const std::variant<Car, Person>& variant) = 0;
       virtual std::variant<std::string, Car> passNamedVariant(const std::variant<std::string, Car>& variant) = 0;
       virtual std::variant<std::shared_ptr<HybridBaseSpec>, OptionalWrapper> passAllEmptyObjectVariant(const std::variant<std::shared_ptr<HybridBaseSpec>, OptionalWrapper>& variant) = 0;
-      virtual std::variant<std::shared_ptr<Promise<void>>, std::chrono::system_clock::time_point, std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>, WrappedJsStruct, std::shared_ptr<AnyMap>> bounceComplexVariant(const std::variant<std::shared_ptr<Promise<void>>, std::chrono::system_clock::time_point, std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>, WrappedJsStruct, std::shared_ptr<AnyMap>>& variant) = 0;
+      virtual std::variant<std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>, WrappedJsStruct, std::shared_ptr<Promise<void>>, std::chrono::system_clock::time_point, std::shared_ptr<AnyMap>> bounceComplexVariant(const std::variant<std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>, WrappedJsStruct, std::shared_ptr<Promise<void>>, std::chrono::system_clock::time_point, std::shared_ptr<AnyMap>>& variant) = 0;
       virtual std::shared_ptr<HybridChildSpec> createChild() = 0;
       virtual std::shared_ptr<HybridBaseSpec> createBase() = 0;
       virtual std::shared_ptr<HybridBaseSpec> createBaseActualChild() = 0;

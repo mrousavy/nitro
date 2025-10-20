@@ -9,14 +9,14 @@ import NitroModules
 
 /**
  * An Swift enum with associated values representing a Variant/Union type.
- * JS type: `promise | date | array-buffer | function | struct | map`
+ * JS type: `array-buffer | function | struct | promise | date | map`
  */
 @frozen
 public indirect enum CoreTypesVariant {
-  case first(Promise<Void>)
-  case second(Date)
-  case third(ArrayBuffer)
-  case fourth((_ value: Double) -> Void)
-  case fifth(WrappedJsStruct)
+  case first(ArrayBuffer)
+  case second((_ value: Double) -> Void)
+  case third(WrappedJsStruct)
+  case fourth(Promise<Void>)
+  case fifth(Date)
   case sixth(AnyMap)
 }

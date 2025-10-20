@@ -19,7 +19,7 @@ import com.facebook.proguard.annotations.DoNotStrip
 data class OptionalCallback(
   @DoNotStrip
   @Keep
-  val callback: Variant_Double_______Unit?
+  val callback: Variant_______Unit_Double?
 ) {
   private companion object {
     /**
@@ -29,7 +29,7 @@ data class OptionalCallback(
     @Keep
     @Suppress("unused")
     @JvmStatic
-    private fun fromCpp(callback: Variant_Double_______Unit?): OptionalCallback {
+    private fun fromCpp(callback: Variant_______Unit_Double?): OptionalCallback {
       return OptionalCallback(callback)
     }
   }

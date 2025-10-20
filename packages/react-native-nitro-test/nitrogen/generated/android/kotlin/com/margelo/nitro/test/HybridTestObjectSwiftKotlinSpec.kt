@@ -198,7 +198,7 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
-  abstract fun bounceMap(map: Map<String, Variant_Double_Boolean>): Map<String, Variant_Double_Boolean>
+  abstract fun bounceMap(map: Map<String, Variant_Boolean_Double>): Map<String, Variant_Boolean_Double>
   
   @DoNotStrip
   @Keep
@@ -416,7 +416,7 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
-  abstract fun passVariant(either: Variant_String_Double_Boolean_DoubleArray_Array_String_): Variant_String_Double
+  abstract fun passVariant(either: Variant_Boolean_DoubleArray_Array_String__String_Double): Variant_String_Double
   
   @DoNotStrip
   @Keep

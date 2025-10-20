@@ -18,18 +18,18 @@ public extension OptionalCallback {
   /**
    * Create a new instance of `OptionalCallback`.
    */
-  init(callback: Variant_Double_______Void?) {
-    self.init({ () -> bridge.std__optional_std__variant_double__std__function_void_____ in
+  init(callback: Variant_______Void_Double?) {
+    self.init({ () -> bridge.std__optional_std__variant_std__function_void_____double__ in
       if let __unwrappedValue = callback {
-        return bridge.create_std__optional_std__variant_double__std__function_void_____({ () -> bridge.std__variant_double__std__function_void____ in
+        return bridge.create_std__optional_std__variant_std__function_void_____double__({ () -> bridge.std__variant_std__function_void_____double_ in
           switch __unwrappedValue {
             case .first(let __value):
-              return bridge.create_std__variant_double__std__function_void____(__value)
-            case .second(let __value):
-              return bridge.create_std__variant_double__std__function_void____({ () -> bridge.Func_void in
+              return bridge.create_std__variant_std__function_void_____double_({ () -> bridge.Func_void in
                 let __closureWrapper = Func_void(__value)
                 return bridge.create_Func_void(__closureWrapper.toUnsafe())
               }())
+            case .second(let __value):
+              return bridge.create_std__variant_std__function_void_____double_(__value)
           }
         }().variant)
       } else {
@@ -38,26 +38,26 @@ public extension OptionalCallback {
     }())
   }
 
-  var callback: Variant_Double_______Void? {
+  var callback: Variant_______Void_Double? {
     @inline(__always)
     get {
-      return { () -> Variant_Double_______Void? in
-        if bridge.has_value_std__optional_std__variant_double__std__function_void_____(self.__callback) {
-          let __unwrapped = bridge.get_std__optional_std__variant_double__std__function_void_____(self.__callback)
-          return { () -> Variant_Double_______Void in
-            let __variant = bridge.std__variant_double__std__function_void____(__unwrapped)
+      return { () -> Variant_______Void_Double? in
+        if bridge.has_value_std__optional_std__variant_std__function_void_____double__(self.__callback) {
+          let __unwrapped = bridge.get_std__optional_std__variant_std__function_void_____double__(self.__callback)
+          return { () -> Variant_______Void_Double in
+            let __variant = bridge.std__variant_std__function_void_____double_(__unwrapped)
             switch __variant.index() {
               case 0:
                 let __actual = __variant.get_0()
-                return .first(__actual)
-              case 1:
-                let __actual = __variant.get_1()
-                return .second({ () -> () -> Void in
+                return .first({ () -> () -> Void in
                   let __wrappedFunction = bridge.wrap_Func_void(__actual)
                   return { () -> Void in
                     __wrappedFunction.call()
                   }
                 }())
+              case 1:
+                let __actual = __variant.get_1()
+                return .second(__actual)
               default:
                 fatalError("Variant can never have index \(__variant.index())!")
             }
@@ -69,17 +69,17 @@ public extension OptionalCallback {
     }
     @inline(__always)
     set {
-      self.__callback = { () -> bridge.std__optional_std__variant_double__std__function_void_____ in
+      self.__callback = { () -> bridge.std__optional_std__variant_std__function_void_____double__ in
         if let __unwrappedValue = newValue {
-          return bridge.create_std__optional_std__variant_double__std__function_void_____({ () -> bridge.std__variant_double__std__function_void____ in
+          return bridge.create_std__optional_std__variant_std__function_void_____double__({ () -> bridge.std__variant_std__function_void_____double_ in
             switch __unwrappedValue {
               case .first(let __value):
-                return bridge.create_std__variant_double__std__function_void____(__value)
-              case .second(let __value):
-                return bridge.create_std__variant_double__std__function_void____({ () -> bridge.Func_void in
+                return bridge.create_std__variant_std__function_void_____double_({ () -> bridge.Func_void in
                   let __closureWrapper = Func_void(__value)
                   return bridge.create_Func_void(__closureWrapper.toUnsafe())
                 }())
+              case .second(let __value):
+                return bridge.create_std__variant_std__function_void_____double_(__value)
             }
           }().variant)
         } else {
