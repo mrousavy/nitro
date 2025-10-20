@@ -43,7 +43,6 @@ package ${packageName}
 
 import androidx.annotation.Keep
 import com.facebook.proguard.annotations.DoNotStrip
-import com.margelo.nitro.core.*
 ${extraImports.join('\n')}
 
 /**

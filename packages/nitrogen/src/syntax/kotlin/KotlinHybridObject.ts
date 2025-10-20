@@ -40,14 +40,9 @@ export function createKotlinHybridObject(spec: HybridObjectSpec): SourceFile[] {
     kotlinBase = baseHybrid.getCode('kotlin')
   }
 
-  const imports: string[] = []
-  imports.push('import com.margelo.nitro.core.*')
-  if (spec.isHybridView) {
-    imports.push('import com.margelo.nitro.views.*')
-  }
-  imports.push(
-    ...extraImports.map((i) => `import ${i.name}`).filter(isNotDuplicate)
-  )
+  const imports = extraImports
+    .map((i) => `import ${i.name}`)
+    .filter(isNotDuplicate)
 
   const javaPackage = spec.config.getAndroidPackage('java/kotlin')
 
