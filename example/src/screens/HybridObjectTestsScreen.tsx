@@ -8,6 +8,7 @@ import {
   Button,
   Platform,
   TextInput,
+  FlatList,
 } from 'react-native'
 import {
   HybridTestObjectCpp,
@@ -283,16 +284,17 @@ export function HybridObjectTestsScreen() {
         />
       </View>
 
-      <ScrollView>
-        {statusFilteredTests.map((t, i) => (
+      <FlatList
+        data={statusFilteredTests}
+        keyExtractor={(test) => test.runner.name}
+        renderItem={({ item: test, index }) => (
           <TestCase
-            key={`test-${i}`}
-            test={t}
-            onRunPressed={() => runTest(t)}
-            isOdd={i % 2 === 0}
+            test={test}
+            onRunPressed={() => runTest(test)}
+            isOdd={index % 2 === 0}
           />
-        ))}
-      </ScrollView>
+        )}
+      />
 
       <View style={[styles.bottomView, { backgroundColor: colors.background }]}>
         <Text style={styles.resultText} numberOfLines={2}>
