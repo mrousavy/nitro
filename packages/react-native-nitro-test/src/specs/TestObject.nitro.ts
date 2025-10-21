@@ -301,3 +301,18 @@ export interface Child extends Base {
   // tests if the same variant can be used in a different HybridObject
   bounceVariant(variant: NamedVariant): NamedVariant
 }
+
+export interface MyCallback {
+  onSimpleEvent(message: string): void
+  onMaybeData(data: ArrayBuffer): void
+}
+
+// This is a HybridObject for testing callbacks with events
+export interface CallbackTester
+  extends HybridObject<{ android: "kotlin"; ios: "swift" }> {
+  createBuilder(callback: MyCallback): CallbackBuilder;
+}
+
+// Builder HybridObject that triggers callbacks on construction
+export interface CallbackBuilder
+  extends HybridObject<{ android: "kotlin"; ios: "swift" }> {}
