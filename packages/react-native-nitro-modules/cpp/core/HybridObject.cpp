@@ -88,7 +88,8 @@ jsi::Value HybridObject::toObject(jsi::Runtime& runtime) {
   std::string typeName = "HybridObject<" + std::string(_name) + ">";
   ObjectUtils::defineProperty(runtime, object, "__type",
                               PlainPropertyDescriptor{
-                                  .configurable = false,
+                                  // .configurable has to be true because this property is non-frozen
+                                  .configurable = true,
                                   .enumerable = true,
                                   .value = jsi::String::createFromUtf8(runtime, typeName),
                                   .writable = false,
