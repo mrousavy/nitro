@@ -115,7 +115,7 @@ export function HybridObjectTestsScreen() {
     const failed = tests.filter((t) => t.state === '❌ Failed').length
     const pending = tests.filter((t) => t.state === '📱 Click to run').length
     const running = tests.filter((t) => t.state === '⏳ Running').length
-    
+
     return { passed, failed, pending, running, total: tests.length }
   }, [tests])
 
@@ -234,7 +234,10 @@ export function HybridObjectTestsScreen() {
 
       <View style={styles.searchContainer}>
         <TextInput
-          style={[styles.searchInput, { color: colors.text, borderColor: colors.border }]}
+          style={[
+            styles.searchInput,
+            { color: colors.text, borderColor: colors.border },
+          ]}
           placeholder="Search tests..."
           placeholderTextColor={colors.textSecondary}
           value={searchQuery}
