@@ -23,11 +23,7 @@ public final class Func_void_std__vector_Powertrain_ {
 
   @inline(__always)
   public func call(array: bridge.std__vector_Powertrain_) -> Void {
-    self.closure({ () -> [Powertrain] in
-      let __data = bridge.get_data_std__vector_Powertrain_(array)
-      let __size = array.size()
-      return Array(UnsafeBufferPointer(start: __data, count: __size))
-    }())
+    self.closure(array.map({ __item in __item }))
   }
 
   /**

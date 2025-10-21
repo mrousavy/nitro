@@ -21,6 +21,7 @@ namespace margelo::nitro {
  * the data will be bulk-memcopied.
  */
 template <typename T>
+[[deprecated("FastVectorCopy is not safe for Swift - upgrade Nitro!")]]
 std::vector<T> FastVectorCopy(const T* CONTIGUOUS_MEMORY NON_NULL data, size_t size) {
   assert(data != nullptr && "FastVectoryCopy: data cannot be null!");
 
