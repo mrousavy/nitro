@@ -8,6 +8,7 @@
 #pragma once
 
 #include "NitroDefines.hpp"
+#include <cstring>
 #include <span>
 #include <type_traits>
 #include <vector>
@@ -24,7 +25,7 @@ static constexpr bool enableFastVectorCopy = false;
  */
 template <typename T>
 std::vector<T> FastVectorCopy(const T* CONTIGUOUS_MEMORY NON_NULL data, size_t size) {
-  assert(data != nullptr && "FastVectoryCopy: data cannot be null!");
+  assert(data != nullptr && "FastVectorCopy: data cannot be null!");
 
   if (size == 0) [[unlikely]] {
     // It's an empty vector.
