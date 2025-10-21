@@ -4,7 +4,6 @@ import {
   StyleSheet,
   View,
   Text,
-  ScrollView,
   Button,
   Platform,
   TextInput,
@@ -22,6 +21,7 @@ import SegmentedControl from '@react-native-segmented-control/segmented-control'
 import { NitroModules } from 'react-native-nitro-modules'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useColors } from '../useColors'
+import { TestCase, TestState } from '../components/TestCase'
 
 logPrototypeChain(HybridChild)
 console.log(HybridBase.baseValue)
@@ -30,50 +30,12 @@ console.log(HybridChild.childValue)
 
 logPrototypeChain(HybridTestObjectCpp)
 
-interface TestState {
-  runner: TestRunner
-  state: '📱 Click to run' | '⏳ Running' | '❌ Failed' | '✅ Passed'
-  extraMessage: string
-}
-
-interface TestCaseProps {
-  test: TestState
-  onRunPressed: () => void
-  isOdd: boolean
-}
-
 const PLATFORM_LANGUAGE =
   Platform.select({
     android: 'Kotlin',
     ios: 'Swift',
     macos: 'Swift',
   }) ?? '???'
-
-function TestCase({
-  test,
-  onRunPressed,
-  isOdd,
-}: TestCaseProps): React.ReactElement {
-  const colors = useColors()
-  return (
-    <View
-      style={[
-        styles.testCase,
-        { backgroundColor: isOdd ? colors.oddBackground : colors.background },
-      ]}
-    >
-      <View style={styles.testBox}>
-        <Text style={styles.testName}>{test.runner.name}</Text>
-        <View style={styles.smallVSpacer} />
-        <Text style={styles.testStatus} numberOfLines={6}>
-          {test.state} ({test.extraMessage})
-        </Text>
-      </View>
-      <View style={styles.flex} />
-      <Button title="Run" onPress={onRunPressed} />
-    </View>
-  )
-}
 
 type TestFilter = 'all' | 'passed' | 'failed' | 'pending'
 
@@ -356,34 +318,6 @@ const styles = StyleSheet.create({
   },
   filterSegmentedControl: {
     height: 32,
-  },
-  box: {
-    width: 60,
-    height: 60,
-    marginVertical: 20,
-  },
-  testCase: {
-    width: '100%',
-    paddingHorizontal: 15,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    paddingVertical: 10,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  testBox: {
-    flexShrink: 1,
-    flexDirection: 'column',
-  },
-  testName: {
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  testStatus: {
-    fontSize: 14,
-    flex: 1,
-  },
-  smallVSpacer: {
-    height: 5,
   },
   resultText: {
     flexShrink: 1,
