@@ -249,6 +249,11 @@ export function HybridObjectTestsScreen() {
       <FlatList
         data={statusFilteredTests}
         keyExtractor={(test) => test.runner.name}
+        ListEmptyComponent={
+          <View style={styles.emptyContainer}>
+            <Text>Nothing selected.</Text>
+          </View>
+        }
         renderItem={({ item: test, index }) => (
           <TestCase
             test={test}
@@ -278,6 +283,12 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
+  },
+  emptyContainer: {
+    flex: 1,
+    paddingTop: 150,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   topControls: {
     marginHorizontal: 15,
