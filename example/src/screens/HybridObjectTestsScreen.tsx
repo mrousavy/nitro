@@ -8,7 +8,6 @@ import {
   Button,
   Platform,
   TextInput,
-  TouchableOpacity,
 } from 'react-native'
 import {
   HybridTestObjectCpp,
@@ -75,59 +74,9 @@ function TestCase({
   )
 }
 
-interface FilterButtonProps {
-  label: string
-  count: number
-  isActive: boolean
-  onPress: () => void
-  colors: ReturnType<typeof useColors>
-}
-
-function FilterButton({
-  label,
-  count,
-  isActive,
-  onPress,
-  colors,
-}: FilterButtonProps): React.ReactElement {
-  return (
-    <TouchableOpacity
-      onPress={onPress}
-      style={[
-        styles.filterButton,
-        {
-          backgroundColor: isActive ? colors.activeSegment : 'transparent',
-        },
-      ]}
-      activeOpacity={0.6}
-    >
-      <Text
-        style={[
-          styles.filterButtonText,
-          {
-            color: isActive ? 'white' : colors.text,
-            fontWeight: isActive ? '700' : '500',
-          },
-        ]}
-      >
-        {label}
-      </Text>
-      <Text
-        style={[
-          styles.filterButtonCount,
-          {
-            color: isActive ? 'white' : colors.textSecondary,
-            fontWeight: isActive ? '700' : '600',
-          },
-        ]}
-      >
-        {count}
-      </Text>
-    </TouchableOpacity>
-  )
-}
-
 type TestFilter = 'all' | 'passed' | 'failed' | 'pending'
+
+const FILTER_OPTIONS: TestFilter[] = ['all', 'passed', 'failed', 'pending']
 
 export function HybridObjectTestsScreen() {
   const safeArea = useSafeAreaInsets()
@@ -169,6 +118,17 @@ export function HybridObjectTestsScreen() {
     
     return { passed, failed, pending, running, total: tests.length }
   }, [tests])
+
+  const filterLabels = React.useMemo(() => {
+    return [
+      `All (${testCounts.total})`,
+      `✅ ${testCounts.passed}`,
+      `❌ ${testCounts.failed}`,
+      `📱 ${testCounts.pending}`,
+    ]
+  }, [testCounts])
+
+  const selectedFilterIndex = FILTER_OPTIONS.indexOf(statusFilter)
 
   const filteredTests = React.useMemo(() => {
     let filtered = tests
@@ -291,43 +251,14 @@ export function HybridObjectTestsScreen() {
       </View>
 
       <View style={styles.filterContainer}>
-        <View
-          style={[
-            styles.filterSegmentedControl,
-            {
-              backgroundColor: colors.segmentedControlBackground,
-            },
-          ]}
-        >
-          <FilterButton
-            label="All"
-            count={testCounts.total}
-            isActive={statusFilter === 'all'}
-            onPress={() => setStatusFilter('all')}
-            colors={colors}
-          />
-          <FilterButton
-            label="✅ Passed"
-            count={testCounts.passed}
-            isActive={statusFilter === 'passed'}
-            onPress={() => setStatusFilter('passed')}
-            colors={colors}
-          />
-          <FilterButton
-            label="❌ Failed"
-            count={testCounts.failed}
-            isActive={statusFilter === 'failed'}
-            onPress={() => setStatusFilter('failed')}
-            colors={colors}
-          />
-          <FilterButton
-            label="📱 Pending"
-            count={testCounts.pending}
-            isActive={statusFilter === 'pending'}
-            onPress={() => setStatusFilter('pending')}
-            colors={colors}
-          />
-        </View>
+        <SegmentedControl
+          style={styles.filterSegmentedControl}
+          values={filterLabels}
+          selectedIndex={selectedFilterIndex}
+          onChange={({ nativeEvent: { selectedSegmentIndex } }) => {
+            setStatusFilter(FILTER_OPTIONS[selectedSegmentIndex]!)
+          }}
+        />
       </View>
 
       <ScrollView>
@@ -400,34 +331,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   filterSegmentedControl: {
-    flexDirection: 'row',
-    borderRadius: 10,
-    padding: 3,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 2,
-  },
-  filterButton: {
-    flex: 1,
-    paddingVertical: 10,
-    paddingHorizontal: 8,
-    borderRadius: 7,
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'column',
-    gap: 3,
-  },
-  filterButtonText: {
-    fontSize: 12,
-  },
-  filterButtonCount: {
-    fontSize: 18,
-    fontWeight: '700',
+    height: 32,
   },
   box: {
     width: 60,
