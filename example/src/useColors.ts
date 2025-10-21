@@ -9,6 +9,8 @@ type ColorScheme = {
   text: string
   textSecondary: string
   border: string
+  segmentedControlBackground: string
+  activeSegment: string
 }
 type ColorSchemeName = 'light' | 'dark'
 type ColorSchemes = Record<ColorSchemeName, ColorScheme>
@@ -23,6 +25,8 @@ export const Colors: ColorSchemes = {
     text: 'rgb(36, 42, 63)',
     textSecondary: 'rgb(100, 116, 139)',
     border: 'rgb(203, 213, 225)',
+    segmentedControlBackground: 'rgba(203, 213, 225, 0.3)',
+    activeSegment: 'rgb(59, 130, 246)',
   },
   dark: {
     background: 'rgb(17, 22, 37)',
@@ -33,6 +37,8 @@ export const Colors: ColorSchemes = {
     text: 'rgb(189, 206, 219)',
     textSecondary: 'rgb(148, 163, 184)',
     border: 'rgb(51, 65, 85)',
+    segmentedControlBackground: 'rgba(51, 65, 85, 0.5)',
+    activeSegment: 'rgb(96, 165, 250)',
   },
 }
 

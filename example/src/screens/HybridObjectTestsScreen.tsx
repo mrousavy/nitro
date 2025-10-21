@@ -8,6 +8,7 @@ import {
   Button,
   Platform,
   TextInput,
+  TouchableOpacity,
 } from 'react-native'
 import {
   HybridTestObjectCpp,
@@ -74,11 +75,66 @@ function TestCase({
   )
 }
 
+interface FilterButtonProps {
+  label: string
+  count: number
+  isActive: boolean
+  onPress: () => void
+  colors: ReturnType<typeof useColors>
+}
+
+function FilterButton({
+  label,
+  count,
+  isActive,
+  onPress,
+  colors,
+}: FilterButtonProps): React.ReactElement {
+  return (
+    <TouchableOpacity
+      onPress={onPress}
+      style={[
+        styles.filterButton,
+        {
+          backgroundColor: isActive ? colors.activeSegment : 'transparent',
+        },
+      ]}
+      activeOpacity={0.6}
+    >
+      <Text
+        style={[
+          styles.filterButtonText,
+          {
+            color: isActive ? 'white' : colors.text,
+            fontWeight: isActive ? '700' : '500',
+          },
+        ]}
+      >
+        {label}
+      </Text>
+      <Text
+        style={[
+          styles.filterButtonCount,
+          {
+            color: isActive ? 'white' : colors.textSecondary,
+            fontWeight: isActive ? '700' : '600',
+          },
+        ]}
+      >
+        {count}
+      </Text>
+    </TouchableOpacity>
+  )
+}
+
+type TestFilter = 'all' | 'passed' | 'failed' | 'pending'
+
 export function HybridObjectTestsScreen() {
   const safeArea = useSafeAreaInsets()
   const colors = useColors()
   const [selectedIndex, setSelectedIndex] = React.useState(0)
   const [searchQuery, setSearchQuery] = React.useState('')
+  const [statusFilter, setStatusFilter] = React.useState<TestFilter>('all')
   const selectedObject = [HybridTestObjectCpp, HybridTestObjectSwiftKotlin][
     selectedIndex
   ]
@@ -105,35 +161,60 @@ export function HybridObjectTestsScreen() {
     )
   }, [allTests])
 
-  const filteredTests = React.useMemo(() => {
-    if (!searchQuery.trim()) {
-      return tests
-    }
-    const query = searchQuery.toLowerCase()
-    return tests.filter((t) =>
-      t.runner.name.toLowerCase().includes(query)
-    )
-  }, [tests, searchQuery])
-
-  const status = React.useMemo(() => {
+  const testCounts = React.useMemo(() => {
     const passed = tests.filter((t) => t.state === '✅ Passed').length
     const failed = tests.filter((t) => t.state === '❌ Failed').length
+    const pending = tests.filter((t) => t.state === '📱 Click to run').length
     const running = tests.filter((t) => t.state === '⏳ Running').length
+    
+    return { passed, failed, pending, running, total: tests.length }
+  }, [tests])
 
-    if (running > 0) {
-      return `⏳ Running ${running}/${tests.length} tests...`
+  const filteredTests = React.useMemo(() => {
+    let filtered = tests
+
+    // Apply status filter
+    if (statusFilter !== 'all') {
+      filtered = filtered.filter((t) => {
+        switch (statusFilter) {
+          case 'passed':
+            return t.state === '✅ Passed'
+          case 'failed':
+            return t.state === '❌ Failed'
+          case 'pending':
+            return t.state === '📱 Click to run'
+          default:
+            return true
+        }
+      })
     }
-    if (passed > 0 || failed > 0) {
-      if (passed > 0 && failed > 0) {
-        return `✅ Passed ${passed}/${tests.length} tests, ❌ failed ${failed}/${tests.length} tests.`
-      } else if (passed > 0) {
-        return `✅ Passed ${passed}/${tests.length} tests.`
-      } else if (failed > 0) {
-        return `❌ Failed ${failed}/${tests.length} tests.`
+
+    // Apply search filter
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase()
+      filtered = filtered.filter((t) =>
+        t.runner.name.toLowerCase().includes(query)
+      )
+    }
+
+    return filtered
+  }, [tests, searchQuery, statusFilter])
+
+  const status = React.useMemo(() => {
+    if (testCounts.running > 0) {
+      return `⏳ Running ${testCounts.running}/${testCounts.total} tests...`
+    }
+    if (testCounts.passed > 0 || testCounts.failed > 0) {
+      if (testCounts.passed > 0 && testCounts.failed > 0) {
+        return `✅ Passed ${testCounts.passed}/${testCounts.total} tests, ❌ failed ${testCounts.failed}/${testCounts.total} tests.`
+      } else if (testCounts.passed > 0) {
+        return `✅ Passed ${testCounts.passed}/${testCounts.total} tests.`
+      } else if (testCounts.failed > 0) {
+        return `❌ Failed ${testCounts.failed}/${testCounts.total} tests.`
       }
     }
     return `📱 Idle`
-  }, [tests])
+  }, [testCounts])
 
   const updateTest = (
     runner: TestRunner,
@@ -202,11 +283,51 @@ export function HybridObjectTestsScreen() {
           autoCorrect={false}
           clearButtonMode="while-editing"
         />
-        {searchQuery.length > 0 && (
+        {(searchQuery.length > 0 || statusFilter !== 'all') && (
           <Text style={styles.searchResultsText}>
-            {filteredTests.length} of {tests.length} tests
+            Showing {filteredTests.length} of {tests.length} tests
           </Text>
         )}
+      </View>
+
+      <View style={styles.filterContainer}>
+        <View
+          style={[
+            styles.filterSegmentedControl,
+            {
+              backgroundColor: colors.segmentedControlBackground,
+            },
+          ]}
+        >
+          <FilterButton
+            label="All"
+            count={testCounts.total}
+            isActive={statusFilter === 'all'}
+            onPress={() => setStatusFilter('all')}
+            colors={colors}
+          />
+          <FilterButton
+            label="✅ Passed"
+            count={testCounts.passed}
+            isActive={statusFilter === 'passed'}
+            onPress={() => setStatusFilter('passed')}
+            colors={colors}
+          />
+          <FilterButton
+            label="❌ Failed"
+            count={testCounts.failed}
+            isActive={statusFilter === 'failed'}
+            onPress={() => setStatusFilter('failed')}
+            colors={colors}
+          />
+          <FilterButton
+            label="📱 Pending"
+            count={testCounts.pending}
+            isActive={statusFilter === 'pending'}
+            onPress={() => setStatusFilter('pending')}
+            colors={colors}
+          />
+        </View>
       </View>
 
       <ScrollView>
@@ -273,6 +394,40 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginTop: 4,
     opacity: 0.7,
+  },
+  filterContainer: {
+    marginHorizontal: 15,
+    marginBottom: 10,
+  },
+  filterSegmentedControl: {
+    flexDirection: 'row',
+    borderRadius: 10,
+    padding: 3,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+  filterButton: {
+    flex: 1,
+    paddingVertical: 10,
+    paddingHorizontal: 8,
+    borderRadius: 7,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'column',
+    gap: 3,
+  },
+  filterButtonText: {
+    fontSize: 12,
+  },
+  filterButtonCount: {
+    fontSize: 18,
+    fontWeight: '700',
   },
   box: {
     width: 60,
