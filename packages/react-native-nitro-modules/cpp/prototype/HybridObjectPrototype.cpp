@@ -53,13 +53,16 @@ jsi::Value HybridObjectPrototype::createPrototype(jsi::Runtime& runtime, const s
     const std::string& name = getter.first;
     if (isReadonly) {
       // get
-      ObjectUtils::defineProperty(
-          runtime, object, name.c_str(),
-          ComputedReadonlyPropertyDescriptor{.configurable = false, .enumerable = false, .get = getter.second.toJSFunction(runtime)});
+      ObjectUtils::defineProperty(runtime, object, name.c_str(),
+                                  ComputedReadonlyPropertyDescriptor{// readonly
+                                                                     .configurable = false,
+                                                                     .enumerable = true,
+                                                                     .get = getter.second.toJSFunction(runtime)});
     } else {
       // get + set
       ObjectUtils::defineProperty(runtime, object, name.c_str(),
-                                  ComputedPropertyDescriptor{.configurable = false,
+                                  ComputedPropertyDescriptor{// readonly with setter
+                                                             .configurable = false,
                                                              .enumerable = false,
                                                              .get = getter.second.toJSFunction(runtime),
                                                              .set = setter->second.toJSFunction(runtime)});
