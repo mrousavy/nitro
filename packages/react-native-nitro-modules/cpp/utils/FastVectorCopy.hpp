@@ -39,8 +39,7 @@ std::vector<T> FastVectorCopy(const T* CONTIGUOUS_MEMORY NON_NULL data, size_t s
     return vector;
   } else {
     // SLOW: Type needs to be iterated to copy-construct it
-    std::span<const T> span(data, size);
-    return std::vector<T>(span.begin(), span.end());
+    return std::vector<T>(data, data + size);
   }
 }
 
