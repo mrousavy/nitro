@@ -628,32 +628,32 @@ export function getTests(
           `Error: \`${testObject.name}.tryOptionalParams(...)\` expected between 2 and 3 arguments, but received 1!`
         )
     ),
-    createTest('tryMiddleParam(...)', () =>
+    createTest('tryMiddleParam(...) undefined', () =>
       it(() => testObject.tryMiddleParam(13, undefined, 'hello!'))
         .didNotThrow()
         .equals('hello!')
     ),
-    createTest('tryMiddleParam(...)', () =>
+    createTest('tryMiddleParam(...) true', () =>
       it(() => testObject.tryMiddleParam(13, true, 'passed'))
         .didNotThrow()
         .equals('passed')
     ),
-    createTest('tryOptionalEnum(...)', () =>
+    createTest('tryOptionalEnum(...) gas', () =>
       it(() => testObject.tryOptionalEnum('gas'))
         .didNotThrow()
         .equals('gas')
     ),
-    createTest('tryOptionalEnum(...)', () =>
+    createTest('tryOptionalEnum(...) undefined', () =>
       it(() => testObject.tryOptionalEnum(undefined))
         .didNotThrow()
         .equals(undefined)
     ),
-    createTest('tryTrailingOptional(...)', () =>
+    createTest('tryTrailingOptional(...) false', () =>
       it(() => testObject.tryTrailingOptional(0, '', false))
         .didNotThrow()
         .equals(false)
     ),
-    createTest('tryTrailingOptional(...)', () =>
+    createTest('tryTrailingOptional(...) true', () =>
       it(() => testObject.tryTrailingOptional(0, '', true))
         .didNotThrow()
         .equals(true)

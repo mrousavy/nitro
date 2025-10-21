@@ -6,6 +6,11 @@ type ColorScheme = {
   card: string
   foreground: string
   button: string
+  text: string
+  textSecondary: string
+  border: string
+  segmentedControlBackground: string
+  activeSegment: string
 }
 type ColorSchemeName = 'light' | 'dark'
 type ColorSchemes = Record<ColorSchemeName, ColorScheme>
@@ -17,6 +22,11 @@ export const Colors: ColorSchemes = {
     card: 'rgb(131, 199, 235)',
     foreground: 'rgb(36, 42, 63)',
     button: 'rgb(211, 46, 94)',
+    text: 'rgb(36, 42, 63)',
+    textSecondary: 'rgb(100, 116, 139)',
+    border: 'rgb(203, 213, 225)',
+    segmentedControlBackground: 'rgba(203, 213, 225, 0.3)',
+    activeSegment: 'rgb(59, 130, 246)',
   },
   dark: {
     background: 'rgb(17, 22, 37)',
@@ -24,13 +34,18 @@ export const Colors: ColorSchemes = {
     card: 'rgb(22, 30, 49)',
     foreground: 'rgb(189, 206, 219)',
     button: 'rgb(232, 72, 124)',
+    text: 'rgb(189, 206, 219)',
+    textSecondary: 'rgb(148, 163, 184)',
+    border: 'rgb(51, 65, 85)',
+    segmentedControlBackground: 'rgba(51, 65, 85, 0.5)',
+    activeSegment: 'rgb(96, 165, 250)',
   },
 }
 
 export function useColors(): ColorScheme {
   const scheme = useColorScheme()
-  if (scheme == null) {
-    return Colors.light
+  if (scheme === 'dark') {
+    return Colors.dark
   }
-  return Colors[scheme]
+  return Colors.light
 }
