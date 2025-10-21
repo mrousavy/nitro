@@ -14,6 +14,10 @@ namespace NitroModules { class ArrayBufferHolder; }
 namespace margelo::nitro::test { struct Car; }
 // Forward declaration of `HybridBaseSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridBaseSpec; }
+// Forward declaration of `HybridCallbackBuilderSpec` to properly resolve imports.
+namespace margelo::nitro::test { class HybridCallbackBuilderSpec; }
+// Forward declaration of `HybridCallbackTesterSpec` to properly resolve imports.
+namespace margelo::nitro::test { class HybridCallbackTesterSpec; }
 // Forward declaration of `HybridChildSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridChildSpec; }
 // Forward declaration of `HybridSomeExternalObjectSpec` to properly resolve imports.
@@ -42,6 +46,10 @@ namespace margelo::nitro::test { struct WrappedJsStruct; }
 // Forward declarations of Swift defined types
 // Forward declaration of `HybridBaseSpec_cxx` to properly resolve imports.
 namespace NitroTest { class HybridBaseSpec_cxx; }
+// Forward declaration of `HybridCallbackBuilderSpec_cxx` to properly resolve imports.
+namespace NitroTest { class HybridCallbackBuilderSpec_cxx; }
+// Forward declaration of `HybridCallbackTesterSpec_cxx` to properly resolve imports.
+namespace NitroTest { class HybridCallbackTesterSpec_cxx; }
 // Forward declaration of `HybridChildSpec_cxx` to properly resolve imports.
 namespace NitroTest { class HybridChildSpec_cxx; }
 // Forward declaration of `HybridSomeExternalObjectSpec_cxx` to properly resolve imports.
@@ -54,6 +62,8 @@ namespace NitroTest { class HybridTestViewSpec_cxx; }
 // Include C++ defined types
 #include "Car.hpp"
 #include "HybridBaseSpec.hpp"
+#include "HybridCallbackBuilderSpec.hpp"
+#include "HybridCallbackTesterSpec.hpp"
 #include "HybridChildSpec.hpp"
 #include "HybridTestObjectSwiftKotlinSpec.hpp"
 #include "HybridTestViewSpec.hpp"
@@ -1604,6 +1614,39 @@ namespace margelo::nitro::test::bridge::swift {
   }
   inline Result_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec__ create_Result_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec__(const std::exception_ptr& error) noexcept {
     return Result<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>>::withError(error);
+  }
+  
+  // pragma MARK: std::shared_ptr<HybridCallbackBuilderSpec>
+  /**
+   * Specialized version of `std::shared_ptr<HybridCallbackBuilderSpec>`.
+   */
+  using std__shared_ptr_HybridCallbackBuilderSpec_ = std::shared_ptr<HybridCallbackBuilderSpec>;
+  std::shared_ptr<HybridCallbackBuilderSpec> create_std__shared_ptr_HybridCallbackBuilderSpec_(void* NON_NULL swiftUnsafePointer) noexcept;
+  void* NON_NULL get_std__shared_ptr_HybridCallbackBuilderSpec_(std__shared_ptr_HybridCallbackBuilderSpec_ cppType);
+  
+  // pragma MARK: std::weak_ptr<HybridCallbackBuilderSpec>
+  using std__weak_ptr_HybridCallbackBuilderSpec_ = std::weak_ptr<HybridCallbackBuilderSpec>;
+  inline std__weak_ptr_HybridCallbackBuilderSpec_ weakify_std__shared_ptr_HybridCallbackBuilderSpec_(const std::shared_ptr<HybridCallbackBuilderSpec>& strong) noexcept { return strong; }
+  
+  // pragma MARK: std::shared_ptr<HybridCallbackTesterSpec>
+  /**
+   * Specialized version of `std::shared_ptr<HybridCallbackTesterSpec>`.
+   */
+  using std__shared_ptr_HybridCallbackTesterSpec_ = std::shared_ptr<HybridCallbackTesterSpec>;
+  std::shared_ptr<HybridCallbackTesterSpec> create_std__shared_ptr_HybridCallbackTesterSpec_(void* NON_NULL swiftUnsafePointer) noexcept;
+  void* NON_NULL get_std__shared_ptr_HybridCallbackTesterSpec_(std__shared_ptr_HybridCallbackTesterSpec_ cppType);
+  
+  // pragma MARK: std::weak_ptr<HybridCallbackTesterSpec>
+  using std__weak_ptr_HybridCallbackTesterSpec_ = std::weak_ptr<HybridCallbackTesterSpec>;
+  inline std__weak_ptr_HybridCallbackTesterSpec_ weakify_std__shared_ptr_HybridCallbackTesterSpec_(const std::shared_ptr<HybridCallbackTesterSpec>& strong) noexcept { return strong; }
+  
+  // pragma MARK: Result<std::shared_ptr<HybridCallbackBuilderSpec>>
+  using Result_std__shared_ptr_HybridCallbackBuilderSpec__ = Result<std::shared_ptr<HybridCallbackBuilderSpec>>;
+  inline Result_std__shared_ptr_HybridCallbackBuilderSpec__ create_Result_std__shared_ptr_HybridCallbackBuilderSpec__(const std::shared_ptr<HybridCallbackBuilderSpec>& value) noexcept {
+    return Result<std::shared_ptr<HybridCallbackBuilderSpec>>::withValue(value);
+  }
+  inline Result_std__shared_ptr_HybridCallbackBuilderSpec__ create_Result_std__shared_ptr_HybridCallbackBuilderSpec__(const std::exception_ptr& error) noexcept {
+    return Result<std::shared_ptr<HybridCallbackBuilderSpec>>::withError(error);
   }
 
 } // namespace margelo::nitro::test::bridge::swift

@@ -28,6 +28,9 @@
 #include "JFunc_double.hpp"
 #include "JHybridBaseSpec.hpp"
 #include "JHybridChildSpec.hpp"
+#include "JHybridCallbackTesterSpec.hpp"
+#include "JFunc_void_std__shared_ptr_ArrayBuffer_.hpp"
+#include "JHybridCallbackBuilderSpec.hpp"
 #include "JHybridTestViewSpec.hpp"
 #include "views/JHybridTestViewStateUpdater.hpp"
 #include "HybridTestObjectCpp.hpp"
@@ -55,6 +58,9 @@ int initialize(JavaVM* vm) {
     margelo::nitro::test::JFunc_double_cxx::registerNatives();
     margelo::nitro::test::JHybridBaseSpec::registerNatives();
     margelo::nitro::test::JHybridChildSpec::registerNatives();
+    margelo::nitro::test::JHybridCallbackTesterSpec::registerNatives();
+    margelo::nitro::test::JFunc_void_std__shared_ptr_ArrayBuffer__cxx::registerNatives();
+    margelo::nitro::test::JHybridCallbackBuilderSpec::registerNatives();
     margelo::nitro::test::JHybridTestViewSpec::registerNatives();
     margelo::nitro::test::views::JHybridTestViewStateUpdater::registerNatives();
 
