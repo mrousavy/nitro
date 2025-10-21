@@ -14,6 +14,8 @@
 
 namespace margelo::nitro {
 
+static constexpr bool enableFastVectorCopy = false;
+
 /**
  * Copies `data` into an `std::vector` as fast as possible.
  *
@@ -29,7 +31,7 @@ std::vector<T> FastVectorCopy(const T* CONTIGUOUS_MEMORY NON_NULL data, size_t s
     return std::vector<T>();
   }
 
-  if constexpr (std::is_trivially_copyable_v<T>) {
+  if constexpr (std::is_trivially_copyable_v<T> && enableFastVectorCopy) {
     // FAST: Type does not have a copy constructor - simply memcpy it
     std::vector<T> vector(size);
     std::memcpy(vector.data(), data, size * sizeof(T));
