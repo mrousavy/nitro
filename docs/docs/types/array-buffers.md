@@ -6,8 +6,8 @@ import TabItem from '@theme/TabItem';
 
 # ArrayBuffers (`ArrayBuffer`)
 
-Array Buffers allow highly efficient access to the same data from both JS and native.
-Passing an `ArrayBuffer` from native to JS and back does not involve any copies, and is therefore the fastest way of passing around data in Nitro.
+Array Buffers allow highly efficient access to shared raw binary data from both JS and native.
+Passing an `ArrayBuffer` between JS and native is zero-copy.
 
 <Tabs>
   <TabItem value="ts" label="TypeScript" default>
@@ -40,21 +40,22 @@ Passing an `ArrayBuffer` from native to JS and back does not involve any copies,
   </TabItem>
 </Tabs>
 
-It is important to understand the ownership, and threading concerns around such shared memory access.
+It is crucial to understand the ownership and threading concerns around shared memory access.
 
 ## Ownership
 
-There's two types of `ArrayBuffer`s, **owning** and **non-owning**:
+There's two kinds of `ArrayBuffer`s, **owning** and **non-owning**:
 
 ### Owning
 
-An `ArrayBuffer` that was created on the native side is **owning**, which means you can safely access it's data as long as the `ArrayBuffer` reference is alive.
+An `ArrayBuffer` that was created on the native side is **owning** (`isOwning = true`), which means you can safely access it's data as long as the `ArrayBuffer` reference is alive.
 It can be safely held strong for longer, e.g. as a class property/member, and accessed from different Threads.
 
 ```swift
 func doSomething() -> ArrayBuffer {
   // highlight-next-line
   let buffer = ArrayBuffer.allocate(1024 * 10)
+  print(buffer.isOwning)   // <-- ✅ true
   let data = buffer.data   // <-- ✅ safe to do because we own it!
   self.buffer = buffer     // <-- ✅ safe to use it later!
   DispatchQueue.global().async {
@@ -66,11 +67,12 @@ func doSomething() -> ArrayBuffer {
 
 ### Non-owning
 
-An `ArrayBuffer` that was received as a parameter from JS cannot be safely kept strong as the JS VM can delete it at any point, hence it is **non-owning**.
+An `ArrayBuffer` that was created in JS cannot be safely kept strong as the JS VM can delete it at any point, hence it is **non-owning** (`isOwning = false`).
 It's data can only be safely accessed before the synchronous function returned, as this will stay within the JS bounds.
 
 ```swift
 func doSomething(buffer: ArrayBuffer) {
+  print(buffer.isOwning)   // <-- ❌ false
   let data = buffer.data   // <-- ✅ safe to do because we're still sync
   DispatchQueue.global().async {
     // code-error
@@ -82,13 +84,23 @@ If you need a non-owning buffer's data for longer, **copy it first**:
 ```swift
 func doSomething(buffer: ArrayBuffer) {
   // diff-add
-  let copy = ArrayBuffer.copy(of: buffer)
+  let copy = buffer.isOwning
+  // diff-add
+      ? buffer
+  // diff-add
+      : ArrayBuffer.copy(of: buffer)
   let data = copy.data   // <-- ✅ safe now because we have an owning copy
   DispatchQueue.global().async {
     let data = copy.data // <-- ✅ still safe now because we have an owning copy
   }
 }
 ```
+
+:::note
+Not every `ArrayBuffer` received from JS is **non-owning**, eg if the buffer was created in native and then did a JS-roundtrip it is still **owning**!
+
+Always check the `isOwning` property to prevent unnecessary copies.
+:::
 
 ## Threading
 
