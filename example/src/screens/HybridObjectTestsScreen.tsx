@@ -92,7 +92,7 @@ export function HybridObjectTestsScreen() {
     () => getTests(selectedObject ?? HybridTestObjectCpp),
     [selectedObject]
   )
-  const [tests, setTests] = React.useState<TestState[]>(() =>
+  const [unfilteredTests, setTests] = React.useState<TestState[]>(() =>
     allTests.map((t) => ({
       runner: t,
       state: '📱 Click to run',
@@ -110,14 +110,64 @@ export function HybridObjectTestsScreen() {
     )
   }, [allTests])
 
-  const testCounts = React.useMemo(() => {
-    const passed = tests.filter((t) => t.state === '✅ Passed').length
-    const failed = tests.filter((t) => t.state === '❌ Failed').length
-    const pending = tests.filter((t) => t.state === '📱 Click to run').length
-    const running = tests.filter((t) => t.state === '⏳ Running').length
+  const selectedFilterIndex = FILTER_OPTIONS.indexOf(statusFilter)
 
-    return { passed, failed, pending, running, total: tests.length }
-  }, [tests])
+  const searchFilteredTests = React.useMemo(() => {
+    // as a base we take all unfiltered tests
+    const tests = unfilteredTests
+
+    const query = searchQuery.trim().toLowerCase()
+    if (query === '') {
+      // no search query
+      return tests
+    }
+    return tests.filter((t) => t.runner.name.toLowerCase().includes(query))
+  }, [searchQuery, unfilteredTests])
+
+  const statusFilteredTests = React.useMemo(() => {
+    // as a base, we take all tests filtered by our search query
+    const tests = searchFilteredTests
+
+    if (statusFilter === 'all') {
+      return tests
+    }
+
+    return tests.filter((t) => {
+      switch (statusFilter) {
+        case 'passed':
+          return t.state === '✅ Passed'
+        case 'failed':
+          return t.state === '❌ Failed'
+        case 'pending':
+          return t.state === '📱 Click to run'
+        default:
+          return true
+      }
+    })
+  }, [searchFilteredTests, statusFilter])
+
+  const testCounts = React.useMemo(() => {
+    const passed = searchFilteredTests.filter(
+      (t) => t.state === '✅ Passed'
+    ).length
+    const failed = searchFilteredTests.filter(
+      (t) => t.state === '❌ Failed'
+    ).length
+    const pending = searchFilteredTests.filter(
+      (t) => t.state === '📱 Click to run'
+    ).length
+    const running = searchFilteredTests.filter(
+      (t) => t.state === '⏳ Running'
+    ).length
+
+    return {
+      passed,
+      failed,
+      pending,
+      running,
+      total: searchFilteredTests.length,
+    }
+  }, [searchFilteredTests])
 
   const filterLabels = React.useMemo(() => {
     return [
@@ -127,38 +177,6 @@ export function HybridObjectTestsScreen() {
       `📱 ${testCounts.pending}`,
     ]
   }, [testCounts])
-
-  const selectedFilterIndex = FILTER_OPTIONS.indexOf(statusFilter)
-
-  const filteredTests = React.useMemo(() => {
-    let filtered = tests
-
-    // Apply status filter
-    if (statusFilter !== 'all') {
-      filtered = filtered.filter((t) => {
-        switch (statusFilter) {
-          case 'passed':
-            return t.state === '✅ Passed'
-          case 'failed':
-            return t.state === '❌ Failed'
-          case 'pending':
-            return t.state === '📱 Click to run'
-          default:
-            return true
-        }
-      })
-    }
-
-    // Apply search filter
-    if (searchQuery.trim()) {
-      const query = searchQuery.toLowerCase()
-      filtered = filtered.filter((t) =>
-        t.runner.name.toLowerCase().includes(query)
-      )
-    }
-
-    return filtered
-  }, [tests, searchQuery, statusFilter])
 
   const status = React.useMemo(() => {
     if (testCounts.running > 0) {
@@ -212,7 +230,7 @@ export function HybridObjectTestsScreen() {
 
   const runAllTests = () => {
     gc()
-    tests.forEach((t) => runTest(t))
+    searchFilteredTests.forEach((t) => runTest(t))
     gc()
   }
 
@@ -246,9 +264,10 @@ export function HybridObjectTestsScreen() {
           autoCorrect={false}
           clearButtonMode="while-editing"
         />
-        {(searchQuery.length > 0 || statusFilter !== 'all') && (
+        {searchQuery.length > 0 && (
           <Text style={styles.searchResultsText}>
-            Showing {filteredTests.length} of {tests.length} tests
+            Showing {searchFilteredTests.length} of {unfilteredTests.length}{' '}
+            tests
           </Text>
         )}
       </View>
@@ -265,7 +284,7 @@ export function HybridObjectTestsScreen() {
       </View>
 
       <ScrollView>
-        {filteredTests.map((t, i) => (
+        {statusFilteredTests.map((t, i) => (
           <TestCase
             key={`test-${i}`}
             test={t}
