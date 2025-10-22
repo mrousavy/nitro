@@ -492,8 +492,13 @@ OptionalCallback HybridTestObjectCpp::bounceOptionalCallback(const OptionalCallb
 }
 
 std::shared_ptr<ArrayBuffer> HybridTestObjectCpp::createArrayBufferFromNativeBuffer(bool /* copy */) {
-  // On C++, we are already using a "native" buffer.
-  return createArrayBuffer();
+  // Let's just use the move method here for native buffer to test this too.
+  std::vector<uint8_t> data;
+  data.resize(1024 * 1024 * 10); // 10 MB
+  for (size_t i = 0; i < data.size(); i++) {
+    data[i] = i % 255;
+  }
+  return ArrayBuffer::move(std::move(data));
 }
 
 std::shared_ptr<ArrayBuffer> HybridTestObjectCpp::createArrayBuffer() {
