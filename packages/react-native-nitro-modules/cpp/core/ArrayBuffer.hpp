@@ -65,6 +65,10 @@ public:
    */
   static std::shared_ptr<ArrayBuffer> copy(const std::vector<uint8_t>& data);
   /**
+   * Create a new `NativeArrayBuffer` that moves the given `std::vector`.
+   */
+  static std::shared_ptr<ArrayBuffer> move(std::vector<uint8_t>&& data);
+  /**
    * Create a new `NativeArrayBuffer` that copies the given `std::shared_ptr<ArrayBuffer>`.
    */
   static std::shared_ptr<ArrayBuffer> copy(const std::shared_ptr<ArrayBuffer>& buffer);
