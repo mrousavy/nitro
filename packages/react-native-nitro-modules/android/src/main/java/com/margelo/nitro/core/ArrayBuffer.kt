@@ -130,7 +130,7 @@ class ArrayBuffer {
    * Create a new **owning-** `ArrayBuffer` that holds the given `ByteBuffer`.
    * The `ByteBuffer` needs to remain valid for as long as the `ArrayBuffer` is alive.
    */
-  constructor(byteBuffer: ByteBuffer) {
+  internal constructor(byteBuffer: ByteBuffer) {
     if (!byteBuffer.isDirect) {
       throw Error(
         "ArrayBuffers can only be created from direct ByteBuffers, " +
@@ -145,7 +145,7 @@ class ArrayBuffer {
    * The `HardwareBuffer` needs to remain valid for as long as the `ArrayBuffer` is alive.
    */
   @RequiresApi(Build.VERSION_CODES.O)
-  constructor(hardwareBuffer: HardwareBuffer) {
+  internal constructor(hardwareBuffer: HardwareBuffer) {
     if (hardwareBuffer.isClosed) {
       throw Error("Cannot create ArrayBuffer from an already-closed HardwareBuffer!")
     }
